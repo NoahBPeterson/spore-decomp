@@ -26,6 +26,8 @@ static void TestHash() {
   CHECK(HashName("") == 0x811C9DC5u);
   CHECK(HashName("a") == 0x050C5D7Eu);  // FNV-1 32 reference vector
   CHECK(HashName("PROP") == HashName("prop"));
+  CHECK(HashName("Prop") == 0x74DA5446u);       // value computed by the original 0x0068C680
+  CHECK(HashName("Caf\xE9") == 0xE5B65CE2u);    // high byte sign-extended, as the original
 }
 
 static void TestRefPack() {

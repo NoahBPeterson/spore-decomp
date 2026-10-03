@@ -65,3 +65,4 @@
 00925fe0 ICoreAllocator_Alloc_Named                              # dc: (size, allocator, name)
 00f473a0 EASTL_allocator_allocate                                # str: EASTL/allocator.h
 00f47380 EASTL_allocator_deallocate                              # dc
+0068c680 Resource::HashNameN                                      # dc: FNV-1 over towlower((short)(signed char)c), length-based; difftested
