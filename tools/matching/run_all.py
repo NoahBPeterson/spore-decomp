@@ -16,6 +16,7 @@ def winpath(p):
     return "Z:" + p.replace("/", "\\")
 
 def main():
+    """Run as script."""
     ap = argparse.ArgumentParser()
     ap.add_argument("--filter", default=""); ap.add_argument("-v", action="store_true")
     ap.add_argument("--manifest", help="only this manifest (default: match/manifest.txt + match/slices/*/manifest.txt)")
@@ -23,7 +24,8 @@ def main():
     rows = []
     import glob
     manifests = [a.manifest] if a.manifest else [os.path.join(ROOT, "match", "manifest.txt")] + sorted(
-        glob.glob(os.path.join(ROOT, "match", "slices", "*", "manifest.txt")))
+        glob.glob(os.path.join(ROOT, "match", "slices", "*", "manifest.txt"))) + (
+        [os.path.join(ROOT, "match", "clones.txt")] if os.path.exists(os.path.join(ROOT, "match", "clones.txt")) else [])
     for line in (l for m in manifests for l in open(m)):
         line = line.split("#", 1)[0].split()
         if len(line) >= 3 and a.filter in " ".join(line):

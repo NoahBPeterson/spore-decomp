@@ -23,12 +23,15 @@ for f in glob.glob(W("work/oss/*_matches.csv")):
     for r in csv.DictReader(open(f)):
         if r["status"] == "unique":
             skip.add(int(r["va"], 16))
-for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")) + glob.glob(W("match/slices/*/nonmatching.txt")):
+for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")):
     for line in open(m):
         p = line.split("#", 1)[0].split()
         if len(p) >= 3:
             skip.add(int(p[2], 16))
-        elif len(p) == 1:
+for m in glob.glob(W("match/slices/*/nonmatching.txt")):
+    for line in open(m):
+        p = line.split("#", 1)[0].split()
+        if p:
             skip.add(int(p[0], 16))
 
 slices, cur, cur_bytes = [], [], 0

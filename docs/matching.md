@@ -68,3 +68,25 @@ Writing matchable source:
   and evaluation order of conditions.
 - Budget your effort: up to ~6 variant rounds per function. If it won't match, keep the best
   behaviorally-correct version (it must compile) and list it in nonmatching.txt.
+
+### Lessons from the pilot (12 agents)
+- **Module flags vary**; check the disassembly first:
+  - `/Od /Ob1`: `push ebp; mov ebp,esp`, ecx spilled to `[ebp-N]`, every local in memory, but small
+    helpers still inlined (EASTL containers). Local *names* can reorder `/Od` stack slots.
+  - `/arch:SSE` or `/arch:SSE2`: scalar `movss`/`xorps` for float copies, x87 still used for float
+    args/returns. Float arithmetic in `ucomiss`/`subss` without `cvtps2pd` needs `/arch:SSE /fp:fast`.
+  - `/GS-`: an old-style EH prolog (`push -1; push handler; mov eax,fs:[0]`) without a cookie xor.
+  - A manifest flags override replaces the **whole** list; write it out in full,
+    e.g. `/O2 /MD /Gy /EHsc /TP /arch:SSE2`.
+- Some regions look like a **different toolset** (VC8 / prebuilt libs): memory-indirect
+  `call [reg+N]`, `mov dl,[m]; test dl,dl`, non-dllimport CRT. Check one call site before investing.
+- `char pad[]` in a stack local triggers `/GS` cookies; use `uint32_t pad[]` in stub structs.
+- For functions with EH, put the **exact mangled name** in the manifest (substrings also hit
+  `__ehhandler$` / `__unwindfunclet$`). Declaring a dealloc helper `throw()` removes extra EH stores.
+- EASTL: strings are 16 bytes (incl. a 4-byte allocator); tag args are derived empty structs passed
+  as `const T&`; `clear()` must go through an inline `erase(first,last)` to get the right schedule.
+- IAT calls in naked asm: `call dword ptr [g_imp]` against an `extern void*`.
+- `tools/matching/cmpdis.py <obj> <symbol> <va>`: instruction-level diff (beats byte counts for
+  frame-offset and scheduling puzzles). Under load, wine compiles are slow: batch variants per run.
+- Under zsh a flags string in a variable is one argument unless written `${=var}`.
+- Scratch files must have unique names (`work/match/scratch_<slice>_*`); never use shared tmp paths.
