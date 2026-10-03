@@ -19,12 +19,15 @@ for line in open(W("symbols/lib_names.txt")):
 lib_in_funcs = {a: v for a, v in lib.items() if a in funcs}
 
 exact = set()
-nonmatching = set()
-for f in glob.glob(W("match/slices/*/nonmatching.txt")):
+import re as _re
+nonmatching = set(); partial = set()
+_PARTIAL = _re.compile(r"approx|stub|partial|omit|skeleton|incomplete|placeholder|loose|thin|structural|sketch", _re.I)
+for f in glob.glob(W("match/slices/*/nonmatching.txt")) + glob.glob(W("match/slices/*/partial.txt")):
     for line in open(f):
         p = line.split("#", 1)[0].split()
         if p:
-            nonmatching.add(int(p[0], 16))
+            va = int(p[0], 16)
+            (partial if (f.endswith("partial.txt") or _PARTIAL.search(line)) else nonmatching).add(va)
 clones = set()
 if os.path.exists(W("match/clones.txt")):
     for line in open(W("match/clones.txt")):
@@ -92,7 +95,8 @@ out = ["# Status", "",
        row("Compilable source, byte-exact via clone (same code, different globals)", clones - exact),
        row("Compilable source, byte-exact, template-generated, original form", synth_orig - exact - clones),
        row("Compilable source, byte-exact, template-generated, shape-only (static initializer written as a plain function)", synth_shape - synth_orig - exact - clones),
-       row("Compilable source, behavioral only (not yet byte-exact)", nonmatching - exact),
+       row("Compilable source, behavioral only (complete, not yet byte-exact)", nonmatching - exact),
+       row("Partial / approximate source (NOT counted)", partial - exact - nonmatching),
        row("**Total with compilable source**", has_src),
        "", "Excluded third-party library functions: %d (%s)" % (len(lib_in_funcs), ", ".join("%s %d" % kv for kv in sorted(by_lib.items()))), ""]
 open(W("docs/STATUS.md"), "w").write("\n".join(out))

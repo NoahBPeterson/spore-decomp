@@ -1,0 +1,9 @@
+00437b00 Tracker::Place  # raycast-places tracker target; uses entity flag bit 10, model flag bit 0, kind hash 0x9183dc9b
+00437f70 Model::SetFlag  # sets/clears bit 0 of bitset at +4
+00437ff0 Tracker::SetOffsetA  # rotates by transposed entity rotation unless abs
+004380a0 Tracker::SetOffsetB  # subtracts origin (+0x48) unless abs
+00438120 Tracker::GetOffsetA  # inverse of SetOffsetA
+004381e0 Tracker::GetOffsetB  # adds origin (+0x48) unless abs
+00438270 Tracker::SetVecC  # stores Vector3 at +0x3cc
+004382a0 Tracker::HasRelevantPoints  # list A contains hull point and list B does not
+00438420 Tracker::HasRelevantPoints2  # thin wrapper

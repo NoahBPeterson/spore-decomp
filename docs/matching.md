@@ -48,7 +48,9 @@ Each slice `sXXXXXXXX` is a contiguous run of functions. All output goes in:
 - `match/slices/<id>/manifest.txt`: one line per **byte-exact** function:
   `slices/<id>/<id>.cpp  <symbol-substring>  <va>  [flags override]`
 - `match/slices/<id>/nonmatching.txt`: `<va>  <diff-bytes>  <short reason>` for functions written
-  as behaviorally-equivalent source that is not byte-exact (yet).
+  as COMPLETE behaviorally-equivalent source (every path and call of the original) that is not byte-exact (yet).
+- `match/slices/<id>/partial.txt`: same format, for anything incomplete or approximate (stubbed blocks,
+  skeletons, omitted paths). Partial source is not counted as decompiled, so never list it in nonmatching.txt.
 - `symbols/slices/<id>.txt`: `<va> <Name>  # evidence` for names you are confident in.
 Never edit shared files (match/include, tools, docs, other slices), and never run git or Ghidra.
 

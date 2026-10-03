@@ -1,0 +1,1 @@
+00437b00  148  Tracker::Place: all logic and local layout match (named locals found by name-hash order search); only frame size differs: original reserves ~9 extra unused 4-byte inline-expansion spill slots (3 around the vector-like Query ctor, 6 near the end), so every spill offset below -0x88 differs

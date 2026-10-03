@@ -56,6 +56,7 @@ struct Model {
     Bits32 flags;       // 4
     char pad1[8];
     void SetFlag(bool v);   // 0x00437f70
+    bool GetFlag() { return flags.test(0); }
 };
 
 struct Entity {
@@ -71,18 +72,22 @@ struct Entity {
 struct Target;
 struct Vec3List { V3* b; V3* e; V3* c; bool IsEmpty(); };   // 0x00526430
 
-struct Alloc {};
+struct Alloc { Alloc() {} };
 struct Cont { Cont(const Alloc& a); int x, y; };    // 0x00429360
-struct Query {
+struct QueryBase {
     int a, b, c;
     Cont cont;
-    Query() : a(0), b(0), c(0), cont(Alloc()) {}
+    QueryBase(const Alloc& al) : a(0), b(0), c(0), cont(al) {}
+};
+struct Query : QueryBase {
+    Query(const Alloc& al = Alloc()) : QueryBase(al) {}
     ~Query();                          // 0x00453eb0
     void Add(Entity** e);              // 0x004541f0
 };
 struct Target {
     char pad0[4];
     int mId;                            // 4
+    int GetId() const { return mId; }
     bool Check(Entity* e, int part, bool flag);   // 0x004e9500
 };
 struct Hull { int a, b, c; };
@@ -137,8 +142,7 @@ bool Tracker::Place(Vector3 a, Vector3 b)
     if (GetEntity()) {
         if (!GetEntity()->mFlags.test(10)) {
             if (GetEntity()->GetModel()) {
-                bool restore;
-                restore = GetEntity()->GetModel()->flags.test(0);
+                bool restore = GetEntity()->GetModel()->GetFlag();
                 GetEntity()->GetModel()->SetFlag(true);
                 Query query;
                 query.Add(&mEntity);
@@ -148,7 +152,7 @@ bool Tracker::Place(Vector3 a, Vector3 b)
                     if (owner != GetEntity())
                         owner->Attach(this);
                     if (mTarget->Check(GetEntity(), hitId, hitFlag)) {
-                        ApplyHit(mTarget->mId, position, a, false);
+                        ApplyHit(mTarget->GetId(), position, a, false);
                         SetOffsetB(b, false);
                         ok = true;
                     }

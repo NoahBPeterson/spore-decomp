@@ -1,0 +1,9 @@
+# source symbol va flags
+slices/s00437b00/s00437b00.cpp  ?SetFlag@Model@@  00437f70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?SetOffsetA@Tracker@@  00437ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?SetOffsetB@Tracker@@  004380a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?GetOffsetA@Tracker@@  00438120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?GetOffsetB@Tracker@@  004381e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?SetVecC@Tracker@@  00438270  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?HasRelevantPoints@Tracker@@  004382a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00437b00/s00437b00.cpp  ?HasRelevantPoints2@Tracker@@  00438420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

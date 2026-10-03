@@ -1,0 +1,4 @@
+00437400 SceneObject::SyncTransform  # per-frame transform sync: anchor->Compute, optional negate, ApplyTarget/Check/Finish
+00437890 SceneObject::ClearNodeState  # flag 46 set -> SetNodeState(GetStateA()), else clears node flag bit 8
+00437990 SceneObject::SetNodeState  # sets node flag bit 8 and node->state (+0x5d); state 2 falls back to 4 if owner->Query() fails
+00437a60 SceneObject::SetNodeStateChecked  # flag 47 and !b -> SetNodeState(GetStateB()), else SetNodeState(s)
