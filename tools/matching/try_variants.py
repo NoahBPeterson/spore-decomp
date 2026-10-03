@@ -12,7 +12,9 @@ import pefile
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 src, va = sys.argv[1], int(sys.argv[2], 16)
 flags = sys.argv[3:] or ["/O2", "/MD", "/Gy", "/EHsc", "/TP"]
-obj = os.path.join(ROOT, "work", "match", "variants.obj")
+os.makedirs(os.path.join(ROOT, "work", "match", "variants"), exist_ok=True)
+obj = os.path.join(ROOT, "work", "match", "variants",
+                   os.path.abspath(src).replace(ROOT, "").strip("/").replace("/", "_") + ".obj")
 w = lambda p: "Z:" + os.path.abspath(p).replace("/", "\\")
 r = subprocess.run([os.path.join(ROOT, "tools/matching/cl.sh"), "/nologo", "/c", *flags, "/I" + w(os.path.join(ROOT, "match", "include")), "/Fo" + w(obj), w(src)],
                    capture_output=True, text=True)

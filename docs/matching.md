@@ -37,3 +37,34 @@
 
 ## Tally
 `run_all.py` prints it. Currently **4 / 4 attempted byte-exact**, out of ~96,420 functions.
+
+## Agent playbook (fan-out slices)
+Each slice `sXXXXXXXX` is a contiguous run of functions. All output goes in:
+- `match/slices/<id>/<id>.cpp` (plus optional `<id>.h`): source for **every** function in the slice.
+- `match/slices/<id>/manifest.txt`: one line per **byte-exact** function:
+  `slices/<id>/<id>.cpp  <symbol-substring>  <va>  [flags override]`
+- `match/slices/<id>/nonmatching.txt`: `<va>  <diff-bytes>  <short reason>` for functions written
+  as behaviorally-equivalent source that is not byte-exact (yet).
+- `symbols/slices/<id>.txt`: `<va> <Name>  # evidence` for names you are confident in.
+Never edit shared files (match/include, tools, docs, other slices), and never run git or Ghidra.
+
+Tools (from repo root):
+- `.venv/bin/python tools/matching/card.py <va> [...]`: annotated disassembly + Ghidra decompile
+- `.venv/bin/python tools/matching/try_variants.py <scratch.cpp> <va>`: rank candidate spellings
+  (use `work/match/scratch_<id>_N.cpp` files; every function symbol in the file is compared)
+- `.venv/bin/python tools/matching/cmpobj.py work/SporeApp.analysis.bin <obj> <symbol> <va>`
+- `.venv/bin/python tools/matching/run_all.py --manifest match/slices/<id>/manifest.txt` (final check)
+
+Writing matchable source:
+- Default flags `/O2 /MD /Gy /EHsc /TP`; include `types.h` from match/include for fixed-width types.
+- Calling conventions are visible in the epilogue: `ret N` with ECX used as `this` = `__thiscall`
+  member (declare a local stub class with fields at the right offsets, `char pad[N]` gaps);
+  `ret N` without ECX = `__stdcall`; ECX+EDX args = `__fastcall`; plain `ret` = `__cdecl`.
+- Callees, globals and vtable targets are masked relocations, so any declaration with the right
+  calling convention and argument types works. Virtual calls need a stub class with the vtable
+  slot at the right index (pad with placeholder virtuals).
+- Prefer the levers listed above: intrinsics, explicit `return true/false`, loop shapes,
+  `while (n--)`, field types (`bool` vs `int`), signedness (`movsx`/`movzx`, `sar`/`shr`, `jl`/`jb`),
+  and evaluation order of conditions.
+- Budget your effort: up to ~6 variant rounds per function. If it won't match, keep the best
+  behaviorally-correct version (it must compile) and list it in nonmatching.txt.

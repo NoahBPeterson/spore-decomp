@@ -12,11 +12,10 @@ total = len(funcs)
 decomp = sum(1 for v in funcs.values() if v["status"] == "ok")
 
 lib = {}
-for f in glob.glob(W("work/oss/*_matches.csv")):
-    tag = os.path.basename(f).split("_")[0]
-    for r in csv.DictReader(open(f)):
-        if r["status"] == "unique":
-            lib[int(r["va"], 16)] = (tag, r["name"])
+for line in open(W("symbols/lib_names.txt")):
+    p = line.split("#", 1)[0].split()
+    if len(p) >= 2:
+        lib[int(p[0], 16)] = (p[1].split("::")[0].replace("lib_", ""), p[1])
 lib_in_funcs = {a: v for a, v in lib.items() if a in funcs}
 
 exact = set()
@@ -26,7 +25,7 @@ for line in open(W("match/manifest.txt")):
         exact.add(int(p[2], 16))
 
 named = set()
-for line in open(W("symbols/names.txt")):
+for line in (l for f in glob.glob(W("symbols/*.txt")) for l in open(f)):
     p = line.split("#", 1)[0].split()
     if p:
         named.add(int(p[0], 16))

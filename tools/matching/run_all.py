@@ -18,9 +18,13 @@ def winpath(p):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--filter", default=""); ap.add_argument("-v", action="store_true")
+    ap.add_argument("--manifest", help="only this manifest (default: match/manifest.txt + match/slices/*/manifest.txt)")
     a = ap.parse_args()
     rows = []
-    for line in open(os.path.join(ROOT, "match", "manifest.txt")):
+    import glob
+    manifests = [a.manifest] if a.manifest else [os.path.join(ROOT, "match", "manifest.txt")] + sorted(
+        glob.glob(os.path.join(ROOT, "match", "slices", "*", "manifest.txt")))
+    for line in (l for m in manifests for l in open(m)):
         line = line.split("#", 1)[0].split()
         if len(line) >= 3 and a.filter in " ".join(line):
             rows.append((line[0], line[1], line[2], line[3:] or DEFAULT_FLAGS))
