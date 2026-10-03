@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (all compiled /Od /Ob1 /MD /Gy /TP, no /EHsc)
+00405000  64  BakerCommand scalar deleting dtor: instruction-identical, only frame size differs (sub esp 0x98 vs 0x58: slots reserved by the failed inline of ~OptionParser)
+00405050  185  ~OptionParser (implicit): instruction-identical, frame 0x98 vs 0x8c (failed-inline slots of the three eastl::vector dtors: 22 vs 19), so every later slot offset shifts
+004051e0  38  Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
+00405440  50  BakeEntry::operator= (implicit): instruction-identical, frame 0x5c vs 0x54 (AddRef's value is a named local here, a compiler temp in the original)
+004055b0  43  Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)

@@ -1,0 +1,1 @@
+00406570  1054  EditorLoader::Load: control flow, calls, inline slots (-0xcf0..-0xd38) match; frame layout differs: original puts the EditorData temporary (0xccc bytes) above the named locals, cl 15.00.30729 always places temps below named locals, so named/return-temp slots shift (disp8 vs disp32) and 3 unused dwords above `this` are missing

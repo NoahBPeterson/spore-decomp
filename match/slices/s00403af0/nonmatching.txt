@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00403af0  86  cBaker::Initialize (/Od /Ob1 /MD /Gy /TP, no /EH): instruction stream identical after normalization, every named local at the right slot; only stack temps differ: the PropertyID arg temp sits in the statement-temp region (orig -0x17c in the inline-expansion region), and orig has unreferenced temp gaps (-0x134..-0x174, -0x18c..-0x1c0, -0x1c8..-0x1d0) that are absent here

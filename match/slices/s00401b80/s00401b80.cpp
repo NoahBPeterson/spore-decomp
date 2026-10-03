@@ -1,15 +1,17 @@
 // Startup module, 0x00401B80..0x0040246A: a hashed "field set" key (FNV-1 hash + equality
-// functors), a key-range predicate, a small Vector3-valued ability object, and a loader
+// functors), a key-range predicate, a small ResourceKey-valued ability object, and a loader
 // object that collects resources by ResourceKey.
 //
 // Built without optimization, like the rest of this module:
 //   /Od /Ob1 /MD /Gy /TP /arch:SSE   (no /EHsc: no EH frames even around smart-pointer locals)
 //
 // /Od notes learned here:
-//  - Stack slots are handed out scope by scope in declaration order: the function's own
-//    locals first, then each inlined function's locals as it is expanded, and finally the
-//    inlined member's spilled `this`. Unused *arrays* keep their slots (unused scalars at
-//    inline scope are dropped; at function scope they are kept). The original inline
+//  - Stack slots are handed out scope by scope: the function's own locals first (their
+//    order within a scope depends on the local NAMES, not on declaration order; the names
+//    in AddResource were found by search), then each inlined function's locals as it is
+//    expanded (nested scopes after the enclosing one), and finally the inlined member's
+//    spilled `this`. Unused *arrays* keep their slots (unused scalars at inline scope are
+//    dropped; at function scope they are kept). The original inline
 //    helpers evidently had dead locals (compiled-out debug code); the `deadN[]` arrays
 //    below stand in for them so the frame layout matches.
 //  - `m()` value-initialization of a POD member emits `xor eax,eax; mov [ecx],eax`.
@@ -51,7 +53,9 @@ template <class T> struct intrusive_ptr {
             mpObject = 0;
             pTemp->Release();
         }
-        uint32_t dead[4];
+        {
+            uint32_t dead[4];
+        }
         return &mpObject;
     }
 };
@@ -92,7 +96,9 @@ struct Object690120 {
 };
 
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
-#pragma intrinsic(_InterlockedExchangeAdd)
+extern "C" long __cdecl _InterlockedIncrement(volatile long*);
+extern "C" long __cdecl _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
 
 // Thread-safe reference count at +8.
 struct AtomicRefCounted {
@@ -100,16 +106,16 @@ struct AtomicRefCounted {
     uint32_t mField4;
     volatile long mnRefCount;
 
-    void AddRef() { _InterlockedExchangeAdd(&mnRefCount, 1); }
+    void AddRef() { _InterlockedIncrement(&mnRefCount); }
     int Release();
 };
 
 // @ 0x00402420
 int AtomicRefCounted::Release()
 {
-    _InterlockedExchangeAdd(&mnRefCount, -1);
+    _InterlockedDecrement(&mnRefCount);
     if (_InterlockedExchangeAdd(&mnRefCount, 0) < 1) {
-        _InterlockedExchangeAdd(&mnRefCount, 1);
+        _InterlockedIncrement(&mnRefCount);
         return 1;
     }
     return _InterlockedExchangeAdd(&mnRefCount, 0);
@@ -231,11 +237,17 @@ bool IsOutsideReservedRange(const PackedIdHolder* holder)
 }
 
 // ---------------------------------------------------------------------------
-// Ability object holding a Vector3 value
+// Ability object holding a ResourceKey value (12 bytes, integer-zeroed, copied whole)
 // ---------------------------------------------------------------------------
-struct Vector3 {
-    float x, y, z;
-    Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+
+// Zero-initialized ResourceKey member
+struct ResourceKeyValue : ResourceKey {
+    ResourceKeyValue() { instanceID = 0; typeID = 0; groupID = 0; }
 };
 
 // Base vtable 0x013EF094
@@ -247,25 +259,25 @@ struct AbilityBase {
 };
 
 // vtable 0x013EB2D8
-struct Vector3Ability : AbilityBase {
-    Vector3 mValue;
+struct ResourceKeyAbility : AbilityBase {
+    ResourceKeyValue mValue;
     bool mbDirty;
 
-    Vector3Ability();
-    virtual ~Vector3Ability();
-    bool SetValue(const Vector3& value);
+    ResourceKeyAbility();
+    virtual ~ResourceKeyAbility();
+    bool SetValue(const ResourceKeyValue& value);
 };
 
 // @ 0x00401e40
-Vector3Ability::Vector3Ability() : mbDirty(false) {}
+ResourceKeyAbility::ResourceKeyAbility() : mbDirty(false) {}
 
 // @ 0x00401ea0 is the compiler-generated scalar deleting destructor (??_G)
 
 // @ 0x00401ed0
-Vector3Ability::~Vector3Ability() {}
+ResourceKeyAbility::~ResourceKeyAbility() {}
 
 // @ 0x00401ef0
-bool Vector3Ability::SetValue(const Vector3& value)
+bool ResourceKeyAbility::SetValue(const ResourceKeyValue& value)
 {
     mValue = value;
     mbDirty = false;
@@ -296,12 +308,6 @@ ReferenceHolder::~ReferenceHolder() {}
 // ---------------------------------------------------------------------------
 // Resource collector
 // ---------------------------------------------------------------------------
-struct ResourceKey {
-    uint32_t instanceID;
-    uint32_t typeID;
-    uint32_t groupID;
-};
-
 struct Resource : IRefCounted {};
 
 struct IResourceManager {
@@ -411,31 +417,33 @@ ResourceCollector::~ResourceCollector() {}
 // @ 0x004021a0
 void ResourceCollector::AddResource(ResourceKey key)
 {
-    intrusive_ptr<Resource> resource;
+    intrusive_ptr<Resource> pResource;
 
     key.typeID = 0x2f4e681b;
-    if (ResourceManager()->GetResource(key, resource.GetAddressForWrite()))
-        mResources.push_back(resource);
+    if (ResourceManager()->GetResource(key, pResource.GetAddressForWrite()))
+        mResources.push_back(pResource);
     else
         mMissingKeys.push_back(key);
 
-    uint32_t groupID = key.groupID;
-    uint32_t group = groupID;
-    if (((group >> 30) & 3) == 1 && ((group >> 16) & 0xff) == 0x60 && ((group >> 24) & 0x1f) == 0) {
-        ResourceKey altKey = key;
-        ConvertKey(&altKey, 1);
-        if (ResourceManager()->GetResource(altKey, resource.GetAddressForWrite()))
-            mResources.push_back(resource);
+    uint32_t gid = key.groupID;
+    uint32_t groupID = gid;
+    ResourceKey tempKey;
+    if (((groupID >> 30) & 3) == 1 && ((groupID >> 16) & 0xff) == 0x60 &&
+        ((groupID >> 24) & 0x1f) == 0) {
+        tempKey = key;
+        ConvertKey(&tempKey, 1);
+        if (ResourceManager()->GetResource(tempKey, pResource.GetAddressForWrite()))
+            mResources.push_back(pResource);
         else
-            mMissingKeys.push_back(altKey);
+            mMissingKeys.push_back(tempKey);
     }
 
     if (!gbLoadExtraResources)
         return;
 
     key.typeID = 0x01c135da;
-    if (ResourceManager()->GetResource(key, resource.GetAddressForWrite()))
-        mResources.push_back(resource);
+    if (ResourceManager()->GetResource(key, pResource.GetAddressForWrite()))
+        mResources.push_back(pResource);
     else
         mMissingKeys.push_back(key);
 }

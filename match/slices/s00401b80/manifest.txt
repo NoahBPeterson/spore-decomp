@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00401b80/s00401b80.cpp  ??0PropertyRecord@@QAE@ABU0@@Z                          00401b80  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??RFieldSetHash@@QBEIABUFieldSet@@@Z                    00401bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??RFieldSetEqualTo@@QBE_NABUFieldSet@@0@Z               00401ca0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ?IsOutsideReservedRange@@YA_NPBUPackedIdHolder@@@Z      00401d90  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??0ResourceKeyAbility@@QAE@XZ                           00401e40  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??_GResourceKeyAbility@@UAEPAXI@Z                       00401ea0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??1ResourceKeyAbility@@UAE@XZ                           00401ed0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ?SetValue@ResourceKeyAbility@@QAE_NABUResourceKeyValue@@@Z  00401ef0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??1ReferenceHolder@@QAE@XZ                              00401f20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??0ResourceCollector@@QAE@XZ                            00401ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ??1ResourceCollector@@QAE@XZ                            004020e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ?AddResource@ResourceCollector@@QAEXUResourceKey@@@Z    004021a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ?AddCreated@ResourceCollector@@QAEXIIPBX@Z              00402390  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401b80/s00401b80.cpp  ?Release@AtomicRefCounted@@QAEHXZ                       00402420  /Od /Ob1 /MD /Gy /TP /arch:SSE

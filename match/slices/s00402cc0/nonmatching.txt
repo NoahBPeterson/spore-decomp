@@ -1,0 +1,2 @@
+00402cc0  439  BlockLoader::Update (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 4 extra dead temp slots (2 before each `mSlots[i] = 0` intrusive_ptr assign), shifting [ebp-N] offsets past 0x4c
+00403240  611  EditorBlockData::EditorBlockData (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 12 dead temp slots (3 after base locals, 8 after the Slot2C array, 1 in the Container20[6] loop)

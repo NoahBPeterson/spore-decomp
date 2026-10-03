@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00404660  58  BakerCommand::ParseLine: instruction stream identical (571 insns, same length); only ebp offsets of dead-slot-adjacent temps differ (destruct loop ptrs at -0xc4/-0xf8, `this` -0x108 and the tv temps). Original reserves 2/2 dead slots around the early-return vector destruct but 3/3 around the final one (inliner gave up differently per site); not reproducible from one header model
