@@ -57,6 +57,14 @@ def main(devp, retp, outp):
         if r not in r2d and d not in d2r:
             r2d[r], d2r[d], how[r] = d, r, "anchor"
     anchors = len(r2d)
+    import os, random
+    holdout = {}
+    frac = float(os.environ.get("XMATCH_HOLDOUT", "0"))
+    if frac > 0:
+        rnd = random.Random(1)
+        for r in sorted(r2d):
+            if rnd.random() < frac:
+                holdout[r] = r2d.pop(r); d2r.pop(holdout[r]); how.pop(r)
 
     # call graph (callees + callers)
     def graph(side):
@@ -94,6 +102,16 @@ def main(devp, retp, outp):
             dmod.setdefault("%08x" % f["va"], f["module"])
     dsorted = sorted(dev)
     rsorted = sorted(ret)
+
+    def evidence(x, y):
+        fr, fd = ret[x], dev[y]
+        nr, nd = len(set(fr["calls"])), len(set(fd["calls"]))
+        if abs(nr - nd) > max(1, 0.2 * max(nr, nd)):
+            return False
+        if set(fr["strs"]) & set(fd["strs"]) or set(fr["consts"]) & set(fd["consts"]) or set(fr["imps"]) & set(fd["imps"]):
+            return True
+        dcalls = set(fd["calls"])
+        return any(r2d.get(c) in dcalls for c in set(fr["calls"]))
 
     def gapfill():
         added = 0
@@ -136,7 +154,7 @@ def main(devp, retp, outp):
                 b = bt[i][j]
                 if b == 0:
                     x, y = R[i - 1], D[j - 1]
-                    if pc(x, y) < math.log(1.8) and x not in r2d and y not in d2r:
+                    if pc(x, y) < math.log(1.8) and x not in r2d and y not in d2r and evidence(x, y):
                         r2d[x], d2r[y], how[x] = y, x, "gap-align"; added += 1
                     i, j = i - 1, j - 1
                 elif b == 1:
@@ -170,6 +188,16 @@ def main(devp, retp, outp):
         if not changed and syms:
             if gapfill():
                 changed = True
+    if holdout:
+        res = collections.defaultdict(lambda: [0, 0, 0])
+        for r, d in holdout.items():
+            if r not in r2d:
+                res["(not recovered)"][2] += 1
+            else:
+                res[how[r]][0 if r2d[r] == d else 1] += 1
+        print("HOLD-OUT (%d hidden anchors): correct / wrong per method:" % len(holdout))
+        for k, (c, w, n) in sorted(res.items()):
+            print("  %-16s correct %4d wrong %4d%s" % (k, c, w, ("  not recovered %d" % n) if n else ""))
     out = {r: {"dev": d, "name": dev[d]["name"], "how": how[r]} for r, d in r2d.items()}
     json.dump(out, open(outp, "w"))
     c = collections.Counter(how.values())

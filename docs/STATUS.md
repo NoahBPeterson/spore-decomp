@@ -8,7 +8,7 @@ which are excluded as freebies (built byte-exact from upstream source).
 |---|---:|---:|
 | Game functions (denominator) | 89353 | 100% |
 | Ghidra pseudocode (readable, NOT compilable) | 89350 | 100.00% |
-| Named (recovered class/method/global names; incl. high-confidence dev-PDB matches) | 6087 | 6.81% |
+| Named (recovered class/method/global names; incl. high-confidence dev-PDB matches) | 7329 | 8.20% |
 | **Compilable source, byte-exact (hand/agent-written)** | 649 | 0.73% |
 | Compilable source, byte-exact via clone (same code, different globals) | 6630 | 7.42% |
 | Compilable source, byte-exact, template-generated, original form | 22548 | 25.23% |

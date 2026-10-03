@@ -12,6 +12,15 @@ from ghidra.program.model.listing import CodeUnit
 args = getScriptArgs()
 m = json.load(open(args[0]))
 high = set(args[1].split(","))
+# optional 3rd arg: previously applied names; any not high-confidence now get demoted
+if len(args) > 2:
+    for r, v in json.load(open(args[2])).items():
+        if r not in m or m[r]["how"] not in high:
+            m.setdefault(r, dict(v, how="dropped"))
+            if m[r]["how"] in high:
+                pass
+            else:
+                m[r] = dict(m[r], how=m[r]["how"] if r in m and m[r]["how"] != "dropped" else "dropped")
 prog = currentProgram
 fm, st = prog.getFunctionManager(), prog.getSymbolTable()
 sp = prog.getAddressFactory().getDefaultAddressSpace()
@@ -46,7 +55,19 @@ for r, v in m.items():
             f.setName(p.getName().replace(" ", "_")[:2000], SourceType.IMPORTED)
             named += 1
         else:
+            # demote: undo a PDB name applied by an earlier, less strict run
+            if f.getSymbol().getSource() == SourceType.IMPORTED:
+                prev = f.getComment() or ""
+                old = [l[len("Previous name: "):] for l in prev.split("\n") if l.startswith("Previous name: ")]
+                f.setParentNamespace(prog.getGlobalNamespace())
+                if old:
+                    f.setName(old[-1].split("::")[-1], SourceType.USER_DEFINED)
+                else:
+                    f.setName("FUN_%08x" % int(r, 16), SourceType.ANALYSIS)
             prev = f.getComment() or ""
+            if v["how"] == "dropped":
+                commented += 1
+                continue
             if "PDB candidate" not in prev:
                 f.setComment((prev + "\n" if prev else "") + "PDB candidate (%s): %s" % (v["how"], v["name"]))
                 commented += 1
