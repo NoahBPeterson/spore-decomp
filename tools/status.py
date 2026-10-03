@@ -69,6 +69,9 @@ for line in (l for f in glob.glob(W("symbols/*.txt")) for l in open(f)):
     if p:
         named.add(int(p[0], 16))
 named |= set(lib_in_funcs)
+if os.path.exists(W("symbols/pdb_names.json")):
+    import json as _j
+    named |= set(int(k, 16) for k in _j.load(open(W("symbols/pdb_names.json"))))
 
 bytes_total = sum(v["size"] for v in funcs.values())
 def pct(n, d): return "%.2f%%" % (100.0 * n / d) if d else "-"
@@ -90,7 +93,7 @@ out = ["# Status", "",
        "| Tier | Functions | Share of game code |", "|---|---:|---:|",
        "| Game functions (denominator) | %d | 100%% |" % G,
        row("Ghidra pseudocode (readable, NOT compilable)", set(a for a, v in funcs.items() if v["status"] == "ok")),
-       row("Named (recovered class/method/global names)", named),
+       row("Named (recovered class/method/global names; incl. high-confidence dev-PDB matches)", named),
        row("**Compilable source, byte-exact (hand/agent-written)**", exact),
        row("Compilable source, byte-exact via clone (same code, different globals)", clones - exact),
        row("Compilable source, byte-exact, template-generated, original form", synth_orig - exact - clones),
