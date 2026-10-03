@@ -39,6 +39,10 @@
 `run_all.py` prints it. Currently **4 / 4 attempted byte-exact**, out of ~96,420 functions.
 
 ## Agent playbook (fan-out slices)
+**Papercuts:** before finishing, append any real friction you hit (tooling bugs, unclear docs, tricks you had
+to rediscover) to `docs/Papercuts.md`, following the instructions at the top of that file. Read its Open
+section first. It may already have the answer to something you're stuck on.
+
 Each slice `sXXXXXXXX` is a contiguous run of functions. All output goes in:
 - `match/slices/<id>/<id>.cpp` (plus optional `<id>.h`): source for **every** function in the slice.
 - `match/slices/<id>/manifest.txt`: one line per **byte-exact** function:
