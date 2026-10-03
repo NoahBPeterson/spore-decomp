@@ -117,3 +117,19 @@ unless their header comment says the real `??__E` form was reproduced.
   D overriding f (declared only), out-of-line `D::D() {}` to force the vtable; mangled `?f@D@@W<N>AEXXZ`.
 - Templates that write `extern` globals named from addresses never collide between instances.
 - Use `/GR-` in templates that emit many vtables (fewer COMDATs); cmpobj now reads >32k sections.
+
+### /Od frame layout (from Papercuts; this cost agents 1-3 h each)
+- At /Od, a scope's named locals are laid out by a **hash of their names**, not by declaration order.
+  Don't hand-search: run `tools/matching/od_names.py fit K` for a scope with K locals. It prints name
+  sets measured in a real K-local scope, already in slot order from highest address (ebp-4) down.
+  Assign your roles to one line in order. The order depends on K, so always measure at your exact K.
+- Unused slots/holes come from unused locals inside inlined helpers: an inlined
+  `template<int N> inline void ScratchSlots(){ uint32_t s[N]; }` call reproduces a gap of N dwords.
+- Inline-arg temps get slots only for params the callee modifies or takes the address of, or that are
+  converted; an inline helper's return value gets a slot only if the helper stores it in a named local.
+- Tag args: pass `const Tag&` with a derived empty struct that has a user ctor (`AllocTag(){}`), or cl stores 0.
+- `memcpy` is non-dllimport (E8 call), `memmove` is dllimport (call [iat]); `n*4 + (int)memcpy(...)` keeps
+  n in esi across the call, while pointer arithmetic doesn't.
+- Some /Od modules have no `/EHsc` (with it, `new (p) T(v)` adds a temp slot). A `return true` temp byte before
+  dtor calls means RAII locals with inline dtors. An inline member `void Begin(){ p->Begin(); }` gives the
+  ecx-first vcall order.
