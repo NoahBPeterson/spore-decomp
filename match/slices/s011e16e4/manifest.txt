@@ -1,0 +1,2 @@
+slices/s011e16e4/s011e16e4.cpp  _GetStubResult_011e1720  011e1720
+slices/s011e16e4/s011e16e4.cpp  _StubInit_011e1726  011e1726

@@ -1,0 +1,1 @@
+slices/s007e20a0/s007e20a0.cpp  ?FUN_007e20a0@cModeManager@@QAE_NPB_WPAUICommandLine@@_N@Z  007e20a0  /O2 /MD /Gy /EHsc /TP /GS-

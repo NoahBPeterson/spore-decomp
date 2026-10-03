@@ -1,0 +1,1 @@
+010a6860  541  behaviorally equivalent; module uses memory-indirect vcalls (call [reg+N]) and load+test bool idioms that VS2008 SP1 /O2 never emits (likely different toolset, e.g. VC8 static lib), so regalloc/layout diverge

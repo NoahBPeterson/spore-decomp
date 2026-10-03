@@ -1,0 +1,1 @@
+# none: every real function in this slice is byte-exact (see manifest.txt); other listed VAs are interior addresses

@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004ce770/s004ce770.cpp  ?DoAllocateNode@Hashtable@@        004ce770  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004ce770/s004ce770.cpp  ?DoAllocateBuckets@Hashtable@@     004ce7e0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004ce770/s004ce770.cpp  ?allocate@FixedPool@@QAEPAXXZ      004ce850  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004ce770/s004ce770.cpp  ?DoRehash@Hashtable@@              004ce8b0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004ce770/s004ce770.cpp  ??0FixedVectorPtr4@@               004ce9d0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004ce770/s004ce770.cpp  ?DoInsertValues@VectorPtr@@        004cea40  /Od /Ob1 /MD /Gy /EHsc /TP

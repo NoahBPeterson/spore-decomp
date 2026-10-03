@@ -1,0 +1,9 @@
+009515e0 AnimationCurveFactory_GetName  # returns "AnimationCurve"; next to Create in factory vtable 0x14402d0
+00951780 AnimationCurve_scalar_deleting_dtor  # vtable 0x14402f0 slot 2
+009517c0 AnimationPath2D_scalar_deleting_dtor  # vtable 0x1440320 slot 2
+00951850 AnimationPath2DFactory_Create  # allocs 0x20 named "UTFWin/EA::UTFWin::AnimationPath2D", installs vtable 0x1440320
+00951960 AnimationCurveFactory_Create  # allocs 0x20 named "UTFWin/EA::UTFWin::AnimationCurve", installs vtable 0x14402f0
+009518a0 eastl_vector_CurvePoint_DoRealloc  # EASTL_allocator_allocate(n*8,"EASTL",...) + uninitialized_copy
+00951900 eastl_vector_Vector3_DoRealloc  # EASTL_allocator_allocate(n*12,"EASTL",...) + uninitialized_copy
+009519b0 eastl_vector_CurvePoint_DoAssignFromIterator  # EASTL assign shape, 8-byte elements
+00951a80 eastl_vector_Vector3_DoAssignFromIterator  # EASTL assign shape, 12-byte elements

@@ -1,0 +1,6 @@
+004ce770 eastl_hashtable_DoAllocateNode  # allocate_memory(mAllocator,0x10,4,0) + placement-new value + mpNext=0; EASTL hashtable shape
+004ce7e0 eastl_hashtable_DoAllocateBuckets  # (n+1)*4 alloc, memset, sentinel ~0 at [n]
+004ce850 eastl_fixed_pool_with_overflow_allocate  # pop free list else overflow allocate; EASTL/allocator.h string
+004ce8b0 eastl_hashtable_DoRehash  # rehash loop key%n, DoFreeBuckets, sets bucket array/count
+004ce9d0 eastl_fixed_vector_ctor  # begin=end=buffer, capacity=begin+4, pool begin=buffer
+004cea40 eastl_vector_DoInsertValues  # EASTL vector insert(n, value) with grow path (2x capacity)

@@ -1,0 +1,5 @@
+0137e1b0 dynamic_init_cSPAttachment_ClassDesc  # registers "cSPAttachment" with field table 0x16B21B0 via ctor 0x00E4A7D0
+0137e1f0 dynamic_init_cSPAttachment_Fields  # field table incl. "color"
+0137e310 dynamic_init_structure_ClassDesc  # registers "structure" with field table 0x15A6478
+0137e350 dynamic_init_structure_Fields  # fields structure/model/effect/creature/.../onStartHatch
+00932e80 FNVHash  # FNV-1 with seed 0x811C9DC5, prime 0x1000193, mode arg

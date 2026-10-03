@@ -1,0 +1,9 @@
+slices/s00c44a20/s00c44a20.cpp  Read_c44a20  00c44a20
+slices/s00c44a20/s00c44a20.cpp  Write_c44ad0  00c44ad0
+slices/s00c44a20/s00c44a20.cpp  Serialize_c44b40  00c44b40
+slices/s00c44a20/s00c44a20.cpp  RegisterIds_c44b80  00c44b80
+slices/s00c44a20/s00c44a20.cpp  ForwardToResource_c44c40  00c44c40
+slices/s00c44a20/s00c44a20.cpp  CallV48_c44c60  00c44c60
+slices/s00c44a20/s00c44a20.cpp  CallV42_c44c90  00c44c90
+slices/s00c44a20/s00c44a20.cpp  GetTypeId_c44cb0  00c44cb0
+slices/s00c44a20/s00c44a20.cpp  GetFactor_c44d00  00c44d00  /O2 /MD /Gy /EHsc /TP /arch:SSE2

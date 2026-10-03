@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+# None. Every VA in the slice except 007e20a0 is a mid-function address, not a function
+# start, so there is no source to write for it (skipped):
+#   007e2120 007e21c0 007e2200 007e2230 007e2290 -> inside 007e20a0
+#   007e22f0 007e2340 007e23a0 007e2420         -> inside 007e22c0 (real start)
+#   007e2480 -> inside 007e2450; 007e24d0 -> inside 007e24b0
+#   007e2560 -> inside 007e2520; 007e25f0 -> inside 007e25a0

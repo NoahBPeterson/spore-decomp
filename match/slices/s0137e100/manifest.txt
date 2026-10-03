@@ -1,0 +1,5 @@
+slices/s0137e100/s0137e100.cpp  ??__Eg_fields_16b1530@@  0137e100
+slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  0137e1b0
+slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_fields@@  0137e1f0
+slices/s0137e100/s0137e100.cpp  ??__Estructure_desc@@  0137e310
+slices/s0137e100/s0137e100.cpp  ??__Estructure_fields@@  0137e350
