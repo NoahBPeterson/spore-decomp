@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00404480/s00404480.cpp  ?Allocate@LinearAllocator@@QAEPAXI_N@Z   00404480  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00404480/s00404480.cpp  ??0BakerCommand@@QAE@PAX@Z               00404500  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00404480/s00404480.cpp  ?Description@BakerCommand@@QAEXPAX@Z     00404630  /Od /Ob1 /MD /Gy /EHsc /TP

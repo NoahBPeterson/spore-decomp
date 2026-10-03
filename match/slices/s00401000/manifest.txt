@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00401000/s00401000.cpp  ?GetSetting0@@YAHXZ  00401000  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting1@@YAHXZ  00401010  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting2@@YAHXZ  00401020  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting3@@YAHXZ  00401030  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting4@@YAHXZ  00401040  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting5@@YAHXZ  00401050  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting6@@YAHXZ  00401060  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting7@@YAHXZ  00401070  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting8@@YAHXZ  00401080  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting9@@YAHXZ  00401090  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?GetSetting10@@YAHXZ  004010a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  004010b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting1@@YAXH@Z  004010c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting2@@YAXH@Z  004010d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting3@@YAXH@Z  004010e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting4@@YAXH@Z  004010f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting5@@YAXH@Z  00401100  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting6@@YAXH@Z  00401110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting7@@YAXH@Z  00401120  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting8@@YAXH@Z  00401130  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting9@@YAXH@Z  00401140  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?SetSetting10@@YAXH@Z  00401150  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?Vector2_SetZero@@  00401160  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?Vector2_SetOne@@  00401190  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00401000/s00401000.cpp  ?Vector3_SetUnitX@@  004011c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

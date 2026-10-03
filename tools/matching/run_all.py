@@ -25,7 +25,8 @@ def main():
     import glob
     manifests = [a.manifest] if a.manifest else [os.path.join(ROOT, "match", "manifest.txt")] + sorted(
         glob.glob(os.path.join(ROOT, "match", "slices", "*", "manifest.txt"))) + (
-        [os.path.join(ROOT, "match", "clones.txt")] if os.path.exists(os.path.join(ROOT, "match", "clones.txt")) else [])
+        [os.path.join(ROOT, "match", "clones.txt")] if os.path.exists(os.path.join(ROOT, "match", "clones.txt")) else []) + sorted(
+        glob.glob(os.path.join(ROOT, "match", "synth", "*.manifest")))
     for line in (l for m in manifests for l in open(m)):
         line = line.split("#", 1)[0].split()
         if len(line) >= 3 and a.filter in " ".join(line):

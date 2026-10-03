@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004035d0/s004035d0.cpp  ??0RangeSettings@@QAE@XZ        004035d0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004035d0/s004035d0.cpp  ?AddRef@GameSystem@@UAEHXZ      004036a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004035d0/s004035d0.cpp  ??0KeyedRecord@@QAE@XZ          004036e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004035d0/s004035d0.cpp  ??1GameSystem@@UAE@XZ           004037b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004035d0/s004035d0.cpp  ?Flush@PendingBatch@@QAE_NXZ    004039f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004035d0/s004035d0.cpp  ??1SlotArray8@@QAE@XZ           00403aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE
