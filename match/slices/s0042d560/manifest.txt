@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042d560/s0042d560.cpp  ?FreeNode@NodeOwner@@QAEXPAURcNode@@@Z  0042d560  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?Advance@Iter30@@QAEAAU1@H@Z  0042d5c0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?SetSubarray@Iter30@@QAEXPAPAUItem30@@@Z  0042d650  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?DequeCopyThunk3@@YAPAXPAXUDequeIter@@11@Z  0042d690  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?DequeCopyThunk2@@YAPAXPAXUDequeIter@@11@Z  0042d6e0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?DoPopBack@Deque30@@QAEXXZ  0042d730  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?AllocateSubarray@Deque30@@QAEPAUItem30@@XZ  0042d7a0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?DoReallocPtrArray@Deque30@@QAEXIH@Z  0042d7d0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ??4RcVector@@QAEAAU0@ABU0@@Z  0042d990  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?LowerBound@@YAPAUKeyPair@@PAU1@0ABU1@@Z  0042dd00  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042d560/s0042d560.cpp  ?PartialSort@@YAXPAUElem12@@00UCompare@@@Z  0042dd80  /Od /Ob1 /MD /Gy /EHsc /TP

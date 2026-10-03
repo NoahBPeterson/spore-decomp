@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042e860/s0042e860.cpp  ?UninitializedCopyCounted@@  0042e860  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedFillCounted@@  0042e910  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?DestroyElem32Range@@  0042e9a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?ForwardStringRecs3@@  0042ea00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?ForwardStringRecs3b@@  0042ea50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?CopyAssignAtomic@@  0042eaa0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?CopyAssignAtomicBackward@@  0042eb20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedCopyPairs@@  0042ec30  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?CopyAssignIntrusive@@  0042ece0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedFillIntrusive@@  0042ed50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?MakeHeap@@  0042edd0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?AdjustHeap@@  0042ee60  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedFillFloat@@  0042efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042e860/s0042e860.cpp  ?UninitializedFillHeapRec@@  0042f100  /Od /Ob1 /MD /Gy /TP /arch:SSE

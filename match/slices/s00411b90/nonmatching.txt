@@ -1,0 +1,2 @@
+00411b90 371 /Od frame layout: original uses distinct inlined-helper temp slots (frame 0x70 vs 0x30); partially structured
+00411e50 1026 wrong inlining/layout of big Tick routine; behavioral approximation only (1149 vs 1627 bytes)

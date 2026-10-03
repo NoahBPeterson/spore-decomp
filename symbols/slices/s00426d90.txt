@@ -1,0 +1,11 @@
+00426d90 SortedPairVector_Find  # lower-bound wrapper returning iterator pair, advances by 8 bytes on hit
+00426e30 Elem24Vector_Insert  # EASTL vector insert with copy_backward and 2x capacity growth
+00427100 Elem24Vector_AllocateAndCopy  # allocate n*0x18 then uninitialized_copy
+00427160 UninitializedCopyElem24  # generic_iterator uninitialized_copy
+00427210 Elem16Vector_AllocateAndCopy  # allocate n<<4 then uninitialized_copy
+00427270 UninitializedCopyElem16  # 16-byte POD uninitialized_copy
+00427320 Hashtable_DoRehash  # EASTL hashtable rehash, same shape as 0x4CE8B0
+004273f0 DestroyVector32  # EASTL vector dtor, 32-byte elements
+00427440 DestroyVector56  # EASTL vector dtor, 56-byte elements
+004274a0 Sort_Item12  # eastl::sort: introsort loop + insertion sort, kQuickSortLimit 28
+00427600 CallHandler  # member-pointer call thunk to 0x40AC70

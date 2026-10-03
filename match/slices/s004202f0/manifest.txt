@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004202f0/s004202f0.cpp  ?MakeIter@HashSet@@QAE?AURangeIter@@XZ  004202f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?MakeEnd@HashSet@@QAE?AURangeIter@@XZ  00420350  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?ResetAll@Pool@@QAEXXZ  00420440  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?TotalSize@Pool@@QAEHXZ  00420480  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?SetA@Pool@@QAEXHH@Z  004204d0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?SetB@Pool@@QAEXHH@Z  004204f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?AllEmpty@Pool@@QAE_NXZ  00420510  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?ActivateFirstNonEmpty@Pool@@QAEXXZ  00420560  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?ProcessFirstNonEmpty@Pool@@QAEHXZ  004205b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ??1RefVector@@QAE@XZ  00420600  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?push_back@RefVector@@QAEXABU?$intrusive_ptr@UAtomicRefCounted@@@@@Z  00420660  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?push_back@TripleVector@@QAEXABUTriple@@@Z  004206f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?emplace_back@BigVector@@QAEXH@Z  00420770  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?FreeRange@RangeFreeVector@@QAEXXZ  004208f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?Run@RangeOpVector@@QAEXXZ  00420980  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ??1TrivialVector@@QAE@XZ  004209b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ??0SmallBuffer@@QAE@IUPad24@@@Z  004209f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ??1SmallBuffer@@QAE@XZ  00420ab0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ??4SmallBuffer@@QAEAAU0@ABU0@@Z  00420b10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004202f0/s004202f0.cpp  ?find@FieldHashSet@@QAE?AUHashIter@@ABH@Z  00420b50  /Od /Ob1 /MD /Gy /TP /arch:SSE

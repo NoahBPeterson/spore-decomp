@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00424010/s00424010.cpp  ?DestroyRange@RefVec@@QAEXPAURef@@0@Z  004243e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00424010/s00424010.cpp  ?DoInsertValue@RefVec@@QAEXPAURef@@ABU2@@Z  00424430  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00424010/s00424010.cpp  ?CopyVec4@@YAPAUVec4@@PAU1@00@Z  00424770  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00424010/s00424010.cpp  ?erase@RcVec@@QAEPAURcPtr@@PAU2@0@Z  004247f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

@@ -1,0 +1,2 @@
+0040ae50 VectorLength  # sqrt(x*x+y*y+z*z) via _CIsqrt
+0040a9c0 KeyCopier::Copy  # copies resource properties from src key to dst key via "Editor" cPropertyList

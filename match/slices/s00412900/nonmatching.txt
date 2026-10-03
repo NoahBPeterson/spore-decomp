@@ -1,0 +1,1 @@
+00412900 3612 5053-byte /Od rope-builder; behavioral approximation (4188 vs 5053 bytes), inlined vec helpers/temps not reproduced, Builder layout and some helper arities approximate

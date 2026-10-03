@@ -1,0 +1,5 @@
+00417d60 ToolState::ToolState  # large state object ctor, embedded sub-state at +0xfc calls 0x418120
+00417fe0 ToolState::~ToolState  # mirror of ctor; calls sub-state dtor 0x418240 first
+00418120 SubState::SubState  # sub-state ctor (+0xfc of ToolState), sets float fields to kZero and +0xcc8=-1
+00418240 SubState::~SubState  # inlined vector dtor loops over members
+00418500 Loader::LoadAll  # manager vtable load then 4 property-key lookups pushing ref-counted objects

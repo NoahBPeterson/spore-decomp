@@ -1,0 +1,1 @@
+0041aa40 CollectAndDestroy  # local vector of 24-byte elems, Collect + dtor

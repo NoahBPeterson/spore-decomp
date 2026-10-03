@@ -1,0 +1,2 @@
+004111e0 EditorPanel_PostSelectionMessages  # posts msgs 0x4d18324/0x695e243 via "Editor" allocs
+00411890 EditorPanel_CommitAndReset  # posts 0x695e243 msg then resets preloader/state

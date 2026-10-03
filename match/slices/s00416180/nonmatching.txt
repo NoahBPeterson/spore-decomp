@@ -1,0 +1,1 @@
+004165a0  26  EditorPanel::Activate: byte layout matches (1006 B) but /Od stack-slot assignment differs (msg/new temps vs inline temps order)

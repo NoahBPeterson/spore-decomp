@@ -1,0 +1,6 @@
+00427FD0 Variant_SetInt  # Variant type 10 setter; same shape as 00428060 (type 13, float) with Variant::Set/Clear callees 0x93DD80/0x93DB80
+00428060 Variant_SetFloat  # fld/fstp copy, type 13
+00428130 Vector48_Free  # frees EASTL storage of 48-byte elements unless it is the fixed inline buffer
+004281D0 PtrVector_Insert  # vector<uint32>::insert, memmove/memcpy trivial paths, growth x2
+00428450 HandlerC_Run  # sets flag at +0xC, sends message 0x29D3C4C on the bus, returns true
+004284D0 HandlerD_Run  # resolves two refs, sets properties, posts behavior message 0xF62DEF

@@ -1,0 +1,4 @@
+00436d80 SceneObject::SnapToAnchor  # transforms offset by anchor basis, attaches via physics
+00436fa0 SceneObject::MoveTo  # checks physics then calls Reposition
+004370a0 SceneObject::Reposition  # attach + child update
+00437310 SceneObject::UpdateOthers  # loop over item vector at +0x6cc

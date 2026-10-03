@@ -1,0 +1,8 @@
+00416990 EditorPanel::ActivateById  # posts "Editor" message 0x695e243 for pending entries with id
+00416c60 EditorPanel::ActivateByKey  # same, matched by ResourceKey
+00416e30 EditorPanel::AdjustPressCount  # counter at +0xc4, flag +0xc0
+00416eb0 EditorPanel::CountPending  # entries.size + active flag
+00416f00 EditorPanel::CountWithId  # counts entries with id
+00416fb0 EditorPanel::GetActiveKey  # copies key at +0x228
+00417010 EditorPanel::CollectAll  # pushes active + all entries into sink
+00417150 EditorPanel::GetSlotValue  # hash lookup in slots[tag-0x61] (stride 0x20 at +0x1184)

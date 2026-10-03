@@ -1,0 +1,2 @@
+00417010  253  CollectAll: instruction stream matches but /Od frame layout differs (orig frame 0x84 vs 0x74; extra 3 temp slots unexplained)
+00417150  142  GetSlotValue: inline hash-iterator End() temporaries (orig frame 0x6c) not reproduced

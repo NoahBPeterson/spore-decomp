@@ -1,0 +1,2 @@
+00430450  865  BuildMaterials: frame/slot layout differs (orig 0xc8 locals) and the bit-field key helper constant-folds differently on 2 of 3 inlined calls; stream otherwise follows original
+00430900  209  BuildAbility: instruction stream equivalent but named-local stack slots are allocated in reverse order vs original (radius/props lowest, refs highest)

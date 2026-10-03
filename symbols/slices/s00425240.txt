@@ -1,0 +1,12 @@
+00425240 HashTable_DoAllocateNode  # allocates 0x18-byte node, copies 16-byte value, next=0
+004252b0 HashTable_DoRehash  # moves nodes into new bucket array, frees old if count>1
+00425380 DequeIter_PostIncrement  # copies iterator, calls operator++
+004253c0 DequeIter_PreIncrement  # stride 0x30, subarray 4 elems
+00425430 Deque_empty  # itBegin.cur == itEnd.cur
+00425450 Deque_size  # EASTL deque iterator difference
+004254c0 Deque_push_front
+00425530 Deque_push_back
+004255a0 Deque_pop_front
+00425600 Deque_erase
+004256e0 Deque_clear
+00425860 Deque_ctor

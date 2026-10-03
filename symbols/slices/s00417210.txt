@@ -1,0 +1,2 @@
+00417210 ExportResources  # exports resource files to disk, p4.exe edit/add around copy
+0067dcd0 GetManager  # returns global DAT_015fd894

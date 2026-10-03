@@ -1,0 +1,3 @@
+00405000 BakerCommand::`scalar deleting destructor'  # vtable 0x13eb80c store, ~OptionParser at +0x14, ICommand dtor, delete on flag&1
+00405050 ArgScript::OptionParser::~OptionParser  # member of BakerCommand at +0x14; strings + vectors of options
+004055b0 Baker::Shutdown  # unregisters "baker" cheat, removes message listeners 0x227d899/0x227d89a

@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00427fd0/s00427fd0.cpp  ?SetInt@Variant@@QAEPAU1@PBH@Z  00427FD0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?SetFloat@Variant@@QAEPAU1@PBM@Z  00428060  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?CallHandlerA@@YAXHPAUHandlerA@@@Z  004280F0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?Vector48_Free@@YIXPAUVector48@@@Z  00428130  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?CallHandlerB@@YAXHPAUHandlerB@@@Z  00428190  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?Insert@PtrVector@@QAEXPAIPBI@Z  004281D0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?CallHandlerC@@YAXHPAUHandlerC@@@Z  00428410  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?Run@HandlerC@@QAE_NH@Z  00428450  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?CallHandlerD@@YAXHPAUHandlerD@@@Z  00428490  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427fd0/s00427fd0.cpp  ?CallHandlerE@@YAXHPAUHandlerE@@@Z  004288C0  /Od /Ob1 /MD /Gy /EHsc /TP

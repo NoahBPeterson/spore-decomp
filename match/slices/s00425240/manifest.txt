@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00425240/s00425240.cpp  DoAllocateNode  00425240  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  DoRehash  004252b0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ??EDequeIter@@QAE?AU0@H@Z  00425380  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ??EDequeIter@@QAEAAU0@XZ  004253c0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?empty@Deque  00425430  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?size@Deque  00425450  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?pop_front@Deque  004255a0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?clear@Deque  004256e0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ??0Deque  00425860  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ??0SegIter  004258b0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425240/s00425240.cpp  ?Normalize@SegIter  004258f0  /Od /Ob1 /MD /Gy /EHsc /TP

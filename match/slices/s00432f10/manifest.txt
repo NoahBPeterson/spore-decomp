@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00432f10/s00432f10.cpp  ?RemapTypeId@@YAHH@Z  00432f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00432f10/s00432f10.cpp  ?IsSpecialId@@YA_NI@Z  00433660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00432f10/s00432f10.cpp  ?FindSlotIndex@@YAHI@Z  004336a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00432f10/s00432f10.cpp  ?InitSlotWeights@@YAXPAUWeightVector@@I@Z  004335c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00432f10/s00432f10.cpp  ?NormalizeSlotWeights@@YAXPAUWeightVector@@MM@Z  00433720  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

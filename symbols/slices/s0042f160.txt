@@ -1,0 +1,5 @@
+0042f160 MergeRanges  # sorted-range merge of 12-byte records, key compare
+0042f2e0 UIntVectorBase_ctor  # vector base: allocate n*4 via allocator
+0042f360 WString_SetCapacity  # basic_string set_capacity, EASTL allocator.h line 0xd1, "Editor"
+0042f840 DequeIter_PreDecrement  # 0x30-byte elements, 4 per sub-array
+0042f620 WString_Swap  # swaps begin/end/capacity

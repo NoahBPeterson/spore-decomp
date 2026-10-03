@@ -1,0 +1,8 @@
+0042f9d0 WideFixedBuf::append  # EASTL basic_string<wchar_t>::append(pBegin,pEnd) with "Editor" allocator name
+0042fc40 BakeSpritesLoadAndBuild  # reads props 0x4c6ba3c/0x4c6ba29, calls builder vtbl+0x38
+0042ff00 BakeSpritesCreateThunk  # forwards 8 args to 0x0042ffb0
+0042ff30 BakeSpritesResource::Run  # sets +0x80, calls 0x0042fc40
+0042ffb0 BakeSpritesCreate  # allocates 0x84-byte "Graphics" object, ctor 0x004301e0
+004301e0 BakeSpritesResource::BakeSpritesResource  # vtbl_Graphics::BakeSprites, cEditorResource, cCreatureAbility
+004302f0 BakeSpritesResource::scalar_deleting_dtor  # calls dtor 0x00430320 then deallocate
+00430320 BakeSpritesResource::~BakeSpritesResource  # restores vtbl_Simulator::cCreatureAbility / cEditorResource

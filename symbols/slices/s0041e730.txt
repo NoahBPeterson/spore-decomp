@@ -1,0 +1,12 @@
+0041e730 Vec24::~Vec24  # empty destruct loop over 0x18-byte elements, then base dtor 0x4fd940
+0041e770 Vec24::reserve  # allocates n*0x18 via allocator at +0xc, moves, frees old
+0041e8b0 Vec24::push_back  # end<cap ? placement copy-construct : DoInsertValue
+0041e920 Property::GetBool  # type 1 or 0x10 else default
+0041e990 Property::GetInt  # type 9
+0041ea00 Property::GetUInt  # type 10
+0041ea70 Property::GetFloat  # type 13
+0041eae0 RefVector::RefVector  # copy ctor, vector of ThreadedObject refs
+0041eb80 RefVector::~RefVector  # calls Resource::ThreadedObject::Release per element
+0041ebe0 RefVector::operator=  # EASTL vector assignment
+0041ee90 RefVector::resize  # insert null refs or erase
+0041ef20 RefVector::push_back  # AddRef via lock xadd

@@ -1,0 +1,5 @@
+00423960 Record56Vector_DoInsertValue  # vector of 0x38-byte elems, grow path uses allocator at this+0xc, deallocate via EASTL_allocator_deallocate
+00423be0 ByteBuffer_ctor  # begin/end/cap from n-byte allocation; byte-exact
+00423c40 CountedPtrVector_DoInsertValue  # intrusive ptrs, refcount +0x40, Counted::Release call
+00423ef0 AtomicPtrVector_DoAllocateAndCopy  # allocate n*4 then uninitialized-copy; byte-exact
+00423f50 UninitializedCopyAtomic  # copy loop with lock xadd on [obj+4]

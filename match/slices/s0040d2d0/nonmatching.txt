@@ -1,0 +1,1 @@
+0040d2d0  2893  4824-byte /Od function; equivalent source (3309 bytes), original inlines property-variant helpers not reproduced; no byte-exact attempt beyond first compile

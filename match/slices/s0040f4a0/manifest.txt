@@ -1,0 +1,6 @@
+# source symbol va flags
+slices/s0040f4a0/s0040f4a0.cpp  ?Fn40f820@Obj@@QAE_NPAUMsgIn@@@Z  0040f820  /Od /Ob1 /MD /Gy /TP
+slices/s0040f4a0/s0040f4a0.cpp  ?Fn40fc00@Obj@@QAE_NPAUMsgIn@@@Z  0040fc00  /Od /Ob1 /MD /Gy /TP
+slices/s0040f4a0/s0040f4a0.cpp  ?Ctor@MsgRefInit@@QAEPAU1@XZ  0040fd50  /Od /Ob1 /MD /Gy /TP
+slices/s0040f4a0/s0040f4a0.cpp  ?DelBase@MsgDel@@QAEPAU1@I@Z  0040fd90  /Od /Ob1 /MD /Gy /TP
+slices/s0040f4a0/s0040f4a0.cpp  ?DelRef@MsgDel@@QAEPAU1@I@Z  0040fdc0  /Od /Ob1 /MD /Gy /TP

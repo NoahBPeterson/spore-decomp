@@ -1,0 +1,16 @@
+00401200 Vector3_SetUnitY  # writes (0,1,0) and returns out ptr; byte-exact
+00401240 Vector3_SetUnitZ  # writes (0,0,1)
+00401280 Vector3_SetZero  # writes (0,0,0)
+004012c0 Vector3_SetOne  # writes (1,1,1)
+00401300 Vector4_SetUnitX  # writes (1,0,0,0)
+00401350 Vector4_SetUnitY  # writes (0,1,0,0)
+004013a0 Vector4_SetUnitZ  # writes (0,0,1,0)
+004013f0 Vector4_SetZero  # writes (0,0,0,0)
+00401440 Vector4_SetOne  # writes (1,1,1,1)
+00401490 Matrix3_SetIdentity  # 3x3 identity
+00401540 Matrix3_SetZero  # 3x3 zero
+004015f0 Matrix4_SetIdentity  # 4x4 identity
+00401720 Matrix4_SetZero  # 4x4 zero
+00401850 Vector4_SetUnitW  # writes (0,0,0,1)
+00401930 `vector_constructor_iterator'  # Ghidra library match (VS), ??_H
+00401960 `vector_destructor_iterator'  # Ghidra library match (VS2008), ??_I

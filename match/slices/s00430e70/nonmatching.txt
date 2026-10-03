@@ -1,0 +1,1 @@
+00430e70  2499  /Od /Ob1 /arch:SSE sprite-bake function (6577 bytes original, 2951 ours); behavioural reconstruction with vcall macros, not matched; original inlines min/max/array-ctor loops with EH

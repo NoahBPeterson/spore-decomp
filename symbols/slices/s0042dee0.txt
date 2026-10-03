@@ -1,0 +1,13 @@
+0042dee0 EASTL_Allocate  # picks EASTL_allocator_allocate vs aligned variant, "Editor" name, allocator.h lines 0xd1/0xe5
+0042df50 UninitializedCopy48  # uninitialized_copy_ptr of 0x30-byte elements via copy ctor 0042cbf0
+0042dff0 UninitializedMove48  # copy pass then empty destroy pass
+0042e090 MergeSortBuffer  # recursive merge sort over 12-byte elements, calls merge 0042f160
+0042e240 FillN32  # fill_n of dwords
+0042e2f0 WString_erase  # memmove tail incl. terminator, shrink end
+0042e610 WString_reserve  # max(n,size)+1 then grow
+0042e410 UninitializedCopy16  # 0x10-byte elements
+0042e510 UninitializedCopy56  # 0x38-byte elements, ctor 0040ce80
+0042e680 UninitializedFillN56  # placement copy-construct n times
+0042e6e0 CopyBackwardCounted  # intrusive ptr assign, refcount at +0x40, Release 0040f360
+0042e760 CopyBackwardThreaded  # intrusive ptr assign, atomic refcount at +4, Release 00404f90
+0042e7e0 UninitializedFillNThreaded  # copy-construct refs with lock xadd

@@ -1,0 +1,6 @@
+# va diff-bytes reason (flags /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00423110 33 LocaleMessage ctor: stores [this+0x28]=arg before the vptr stores, then vptr A, vptr B, xchg [this+4],0, vptr B; base/member init order not reproduced
+00423160 9 TransformVector3: layout/slots match; only the addss order differs (orig (A+B)+C with C,B,A loaded; best source gives C+(B+A))
+00423320 10 Matrix3Multiply: all slots match; same addss order issue as 00423160 plus frame is 0x6c vs 0x40 (unknown extra locals)
+004234b0 4 AppendSprintfVa: only the two inline temps (remaining at -0x20, end at -0x1c) have swapped stack slots
+004238c0 40 Elem38Vector::erase: copy/destroy inline helper temp ordering (end,bools,dst,src slots) not reproduced

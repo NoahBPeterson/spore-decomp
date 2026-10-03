@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (compile with /Od /Ob1 /MD /Gy /TP /arch:SSE)
+00417d60 57 ToolState::ToolState: instruction stream identical except frame size (orig 0x50, ours 0x4c: one unexplained unused /Od slot) and shifted local slots
+00417fe0 221 ToolState::~ToolState: instruction stream identical; orig frame 0x68 vs ours 0x18 (~20 unused /Od temp slots from inlined member dtors not reproducible), slot offsets differ
+00418120 216 SubState::SubState: identical stream; orig frame 0x4c has ~15 unused temp slots (PhantomTemps hack gets 2-3 bytes but local order still differs)
+00418240 375 SubState::~SubState: identical stream; orig frame 0x9c vs 0x40, unused temp slots and loop-local slot order differ (jump offsets shift with frame-size encodings)
+00418440 166 CheckMatchingProps: identical stream; only /Od local slot order differs (name-hash search got to 12 bytes)
+00418500 383 Loader::LoadAll: identical stream/size (435 bytes); orig frame 0x50 vs 0x40 with 4 unused temp slots, slot order differs

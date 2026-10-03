@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0040eb70/s0040eb70.cpp  ?ProcessBatch@EditorPartList@@QAE_NXZ  0040eb70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040eb70/s0040eb70.cpp  ?Invert@PartTransform@@QAEXXZ  0040efa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040eb70/s0040eb70.cpp  ??0PartHolder@@QAE@PBU0@@Z  0040f070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040eb70/s0040eb70.cpp  ?Rescan@EditorPartList@@QAE_NXZ  0040f110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040eb70/s0040eb70.cpp  ?Release@Counted@@QAEHXZ  0040f360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040eb70/s0040eb70.cpp  ?Execute@SelectCommand@@QAE_NH@Z  0040f3f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

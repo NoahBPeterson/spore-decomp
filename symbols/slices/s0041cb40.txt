@@ -1,0 +1,5 @@
+0041cb40 Matrix3::Assign  # three Vector3 rows copied via Vector3 copy ctor
+0041cc20 VirtualRefPtr::VirtualRefPtr  # stores ptr, virtual slot 0 AddRef
+0041cc60 TargetPtr::Assign  # refcount at +4, DefaultRefCounted::Release call
+0041ccc0 TargetPtr::Init
+0041cd60 HashMap_Key8_VirtualRefPtr::operator[]  # find / end / insert pattern

@@ -1,0 +1,7 @@
+slices/s004186c0/s004186c0.cpp  ?CreateEditorResource@@YAPAUEditorResource@@PAUEditorSource@@PAIPAPAULoadHandle@@@Z  004186c0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ??0EditorResource@@QAE@XZ  00418870  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ??_GEditorResource@@UAEPAXI@Z  00418960  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ??1EditorResource@@UAE@XZ  00418990  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ??1SubObject@@QAE@XZ  00418a10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ?NotifyA@EditorResource@@QAEXPAULoadHandle@@@Z  00418f90  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004186c0/s004186c0.cpp  ?NotifyB@EditorResource@@QAE_NPAULoadHandle@@@Z  00418fd0  /Od /Ob1 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041f940/s0041f940.cpp  ?Destroy@HashTable@@QAEXXZ  0041fac0  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?PushBackDefault@TripleVec@@QAEXXZ  0041ffc0  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ??0SubIter@@QAE@ABU0@@Z  00420050  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  00420090  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?Destroy@IterOwner@@QAEXXZ  004200b0  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?IterAt@Ring@@QAE?AUIter@@H@Z  00420120  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?IterFirst@Ring@@QAE?AUConstIter@@XZ  004201a0  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?IterBegin@Ring@@QAE?AUIter@@XZ  00420200  /Od /Ob1 /MD /Gy /TP
+slices/s0041f940/s0041f940.cpp  ?IterAtEnd@Ring@@QAE?AUIter@@H@Z  00420270  /Od /Ob1 /MD /Gy /TP

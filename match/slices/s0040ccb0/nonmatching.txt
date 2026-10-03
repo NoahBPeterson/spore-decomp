@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0040ce80  24  Modifier copy ctor: original frame reserves 0x28 extra dead bytes of inline temporaries and spills the Matrix3 member 'this' before evaluating the argument
+0040d230   5  ListAbility scalar deleting dtor (compiler generated): original frame is 0x50 bytes vs 4 (dead inline slots from the vector member dtors)
+0040d260  15  ListAbility implicit dtor: original frame 0x5c vs 0xc (same dead inline slots); body otherwise identical

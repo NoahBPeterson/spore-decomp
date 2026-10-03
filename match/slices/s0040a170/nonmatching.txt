@@ -1,0 +1,2 @@
+0040a170  413  EditorList::ApplyEntry; /Od inlined smart-ptr/EASTL map code not reproduced (ours 468B vs 1041B orig)
+0040a590  675  EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 760B vs 1072B orig)

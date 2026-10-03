@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00433800  18  ApplyIntProperties: only stack-slot order of locals differs (value/idx/prop/id/ok/f); same instructions
+004338e0  6   StatVec::Resize: orig frame has 0x18 extra bytes of inlined-temp slots; instruction stream otherwise identical
+00433b30  837 FadeController::Update: stack layout of the inlined XformMsg temps (src/msg objects) and frame size differ; control flow and calls match
+00434040  4   XformMsg::XformMsg: orig frame 0x34 (extra temps) vs 0x34-slot placement of the Vector3 inline temp

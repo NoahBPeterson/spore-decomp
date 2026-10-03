@@ -1,0 +1,4 @@
+00435480 Timer::StartIfUnset  # rdtsc or QueryPerformanceCounter if start==0
+004354e0 Simulator::cContentValidationSummarizer::scalar_deleting_dtor  # vtbl_Simulator::cContentValidationSummarizer
+00435510 Simulator::cContentValidationSummarizer::~cContentValidationSummarizer  # sets vtbl_Simulator::cContentValidationSummarizer and Editor::cEditorResource
+00435a10 Simulator::cContentValidationSummarizer::SetFlag  # sets bit in 60-bit set, mirrors into linked object

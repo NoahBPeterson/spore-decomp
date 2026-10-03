@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004248c0/s004248c0.cpp  ?DoInsertValue@Vec124@@QAEXPAUElem124@@PBU2@@Z  004248c0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?Free@Vec124@@QAEXXZ  00424b40  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?DoAllocateAndCopy@Vec124@@QAEPAUElem124@@IPAU2@0@Z  00424ba0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?UninitializedCopy124@@YAPAUElem124@@PAU1@00@Z  00424c00  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?Free@SmallVec16@@QAEXXZ  00424ca0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?DoInsertValue@Vec32@@QAEXPAUElem32@@PBU2@@Z  00424cf0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ??4Elem32@@QAEAAU0@ABU0@@Z  00424f10  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?Assign@Handle@@QAEPAU1@PBU1@@Z  00424f70  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?UninitializedCopy32@@YAPAUElem32@@PAU1@00@Z  00425010  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?Free@Vec140@@QAEXXZ  004250b0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?UninitializedCopy140@@YAPAUElem140@@PAU1@00@Z  00425110  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004248c0/s004248c0.cpp  ?DoCreateNode@RefNodeList@@QAEPAURefNode@@PBU2@@Z  004251b0  /Od /Ob1 /MD /Gy /EHsc /TP

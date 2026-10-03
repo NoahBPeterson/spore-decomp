@@ -1,0 +1,1 @@
+00417600  356  Panel::Apply (/Od /Ob1 /MD /Gy /TP): instruction stream identical modulo register choice (eax/ecx/edx rotation after the first Contains call), frame slot layout (sub esp 0x120 vs 0xe8: dead temps / slot ordering not controllable by declaration order) and one extra vptr store in the inlined ~Query

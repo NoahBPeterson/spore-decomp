@@ -1,0 +1,2 @@
+00410dd0  347  /Od function: local slot layout and temp count differ (frame 0x54 vs 0x88); inlined copy-ctor/smart-pointer structure not reproduced
+00410f90  473  /Od function: inlined helper members (timer/vector/intrusive-ptr release with dead refcount block) not reproduced; float add uses x87 instead of addss

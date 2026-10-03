@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00420c70/s00420c70.cpp  ?assign@ByteVec@@QAEAAU1@ABU1@@Z  00420e30  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
+slices/s00420c70/s00420c70.cpp  ?push_back@ByteVec@@QAEXABE@Z  00421080  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
+slices/s00420c70/s00420c70.cpp  ??1IdPtrVec@@QAE@XZ  00421190  /Od /Ob1 /MD /Gy /EHsc /TP /GS-
+slices/s00420c70/s00420c70.cpp  ??1Elem24Vec@@QAE@XZ  00421230  /Od /Ob1 /MD /Gy /EHsc /TP /GS-

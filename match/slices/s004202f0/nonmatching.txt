@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00420390  9  HashSet::Build: extra 4-byte frame slot and by-value Key16 arg copy scheduled after sub esp (orig computes lea of source first)
+004207e0  28  PtrVector::reserve: two inline-local bools land in different frame slots; rest of the schedule matches
+00420920  9  ThreadedRefVector dtor: right size and code, but end/p frame slots sit 12 bytes lower than original

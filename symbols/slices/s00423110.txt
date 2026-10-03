@@ -1,0 +1,7 @@
+00423250 Matrix3Equal  # compares three Vector3 rows via 004232c0
+004232c0 Vector3Equal  # float x/y/z equality
+00423650 WString_Assign  # eastl wide string assign(first,last) with memcpy/append/erase
+00423700 WString_Find  # eastl basic_string<wchar_t>::find(p,pos,n)
+004237d0 WString_FreeBuffer  # deallocates when capacity>1
+00423820 WString_AllocateSelf  # allocate n+1 and copy range
+00423890 RFindWChar  # backward search

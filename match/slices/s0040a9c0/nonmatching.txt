@@ -1,0 +1,2 @@
+0040a9c0  317  KeyCopier::Copy: /Od frame layout and virtual-call operand order (ecx-first) not reproduced; structure otherwise equivalent
+0040ac70  333  NearbyObjectList::Refresh: /Od local slot assignment and Vector3 temp copies differ (frame 0x64 vs 0x84)

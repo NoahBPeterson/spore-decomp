@@ -1,0 +1,1 @@
+00404430 Skinner::PaintSystem::scalar_deleting_dtor  # slot 0 of vtbl_Skinner::PaintSystem (0x013EB394); sets vtable, deletes if flag&1

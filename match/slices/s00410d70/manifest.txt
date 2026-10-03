@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00410d70/s00410d70.cpp  ??1BakeJobDtor@@QAE@XZ  00410d70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

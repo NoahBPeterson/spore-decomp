@@ -1,0 +1,4 @@
+0041bd50 BoundingBox::Extend  # grows min/max box by a point, seeds when empty (lo.x > hi.x)
+0041bf30 Vector3_MaxComponent  # max of three floats
+0041bfb0 Vector3_MaxVec  # component-wise max
+0041c0c0 Vector3_MinVec  # component-wise min

@@ -1,0 +1,8 @@
+00428900 EASTL_vector_Elem20_DoInsertValue  # grows by doubling, 0x14-byte elements, EASTL allocator header check on free
+00428b90 EASTL_wstring_Insert_range  # memmove/memcpy of 2-byte chars, allocator tag "Editor", EASTL allocator.h line 0xd1
+004290c0 EASTL_rbtree_ResourceKey_DoInsertValue_unique  # compares keys instance, group, type; returns pair<iterator,bool>
+00428ec0 CallEditorSetup  # member-pointer thunk to EditorResource::Setup (0x418ae0)
+00428f00 CallEditorNotifyA  # member-pointer thunk to EditorResource::NotifyA (0x418f90)
+00428fc0 CallEditorNotifyB  # member-pointer thunk to EditorResource::NotifyB (0x418fd0)
+00429000 CallUpdaterUpdateModels  # member-pointer thunk to Updater::UpdateModels (0x419780)
+00429040 CallUpdaterDispatch  # member-pointer thunk to Updater::Dispatch (0x419ff0)

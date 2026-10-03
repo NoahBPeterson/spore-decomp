@@ -1,0 +1,1 @@
+00403240 EditorBlockData::EditorBlockData  # ctor; "Editor/BlockData" pool name, three vtables at +0/+4/+8

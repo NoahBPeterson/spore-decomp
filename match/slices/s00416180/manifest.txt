@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00416180/s00416180.cpp  ?HasHandler@EditorPanel@@QAE_NPAUResourceKey@@H@Z  00416180  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416180/s00416180.cpp  ?HasId@EditorPanel@@QAE_NH@Z  00416320  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416180/s00416180.cpp  ?HasHandlerNormalized@EditorPanel@@QAE_NPAUResourceKey@@@Z  004163f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

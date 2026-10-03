@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0040ccb0/s0040ccb0.cpp  ?Accumulate@Modifier@@QAEXABU1@@Z  0040ccb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ?AccumulateScaled@Modifier@@QAEXABU1@@Z  0040cd80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ?GetFloatProperty@@YA_NPAVPropertyList@@IAAM@Z  0040cf10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??0ColorKey@@QAE@XZ  0040cf60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??0CreatureAbility@@QAE@GGPAX@Z  0040cfd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??0SlotAbility@@QAE@XZ  0040d010  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??_GSlotAbility@@UAEPAXI@Z  0040d0c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??1SlotTable@@QAE@XZ  0040d100  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0040ccb0/s0040ccb0.cpp  ??0ListAbility@@QAE@XZ  0040d160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

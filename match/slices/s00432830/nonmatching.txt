@@ -1,0 +1,4 @@
+# va diff-bytes reason
+00432d60 9 RefVec::~RefVec: body matches; only stack slot offsets differ (original has 3 unused slots above the loop begin/end temps and 3 below)
+00432de0 13 TObjVecVec::~TObjVecVec: same stack-slot layout issue (orig frame 0x38)
+00432e80 9 TObjVec::~TObjVec: same stack-slot layout issue as 00432d60

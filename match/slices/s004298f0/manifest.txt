@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004298f0/s004298f0.cpp  ?UninitCopyIt56@@YA?AUGIt@@U1@00Utag@@@Z  00429d80  /Od /Ob1 /MD /Gy /TP

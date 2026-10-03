@@ -1,0 +1,3 @@
+0042eba0  ~90  PairAllocator::AllocateCopy: code identical in shape but frame is 0x44 vs 0x30; original has extra by-value iterator-param slots from forwarding layers whose copies are elided; could not reproduce (tried 2-5 inline layers, struct params with/without dtor/copy ctor)
+0042f020  3  UninitializedCopyElem48: instruction-identical; only frame size (0x24 vs 0xc) and result-temp slot differ (an unexplained 16-byte hidden temp in the original)
+0042f0a0  3  UninitializedFillElem48: instruction-identical; only frame size (0x20 vs 0x10) and result-temp slot differ (same unexplained 16-byte hidden temp)

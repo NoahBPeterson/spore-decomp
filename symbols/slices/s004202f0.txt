@@ -1,0 +1,13 @@
+004202f0 HashSet::MakeIter  # returns RangeIter by copying MakeEnd()
+00420350 HashSet::MakeEnd  # builds end iterator from this+0x160
+00420440 Pool::ResetAll  # loops 8 entries of 0x2c bytes
+00420480 Pool::TotalSize  # sums entry sizes
+00420510 Pool::AllEmpty  # all 8 entries empty
+00420600 RefVector::~RefVector  # releases refcounted pointers then frees storage
+00420660 RefVector::push_back  # intrusive_ptr copy with lock xadd addref
+004206f0 TripleVector::push_back  # 12-byte element
+004207e0 PtrVector::reserve  # AllocateAligned + memcpy + free old
+004209f0 SmallBuffer::SmallBuffer  # inits params 1.0f/2.0f, inline buffer if n<2
+00420ab0 SmallBuffer::~SmallBuffer  # frees when capacity>1
+00420b10 SmallBuffer::operator=  # copy and swap
+00420b50 FieldHashSet::find  # FieldSetHash/FieldSetEqualTo names from callees

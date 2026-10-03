@@ -1,0 +1,6 @@
+00427640 VecPair_DoInsertValue  # EASTL vector insert, 0x18-byte elements
+00427970 VecPair_Free  # vector storage free (0x18 elems, inline-buffer check)
+004279d0 Variant_Assign  # 16-byte variant, flags/type 0x13
+00427a50 VecFloat_DoAssign  # vector<float> fill-assign
+00427c70 VecV3_DoInsertValue  # EASTL vector insert, 0x0c-byte elements
+00427f70 VecV3_Free  # vector storage free (0xc elems)

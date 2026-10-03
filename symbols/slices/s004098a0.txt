@@ -1,0 +1,10 @@
+004098a0 Vector3_CopyCtor  # fld/fstp memberwise copy, ret 4, ecx=this
+004098e0 Vector3_MulMatrixAssign  # dst = dst * Matrix3 (calls 0x41daf0 -> 0x423160)
+00409930 Transform_Ctor  # flags/version=0, pos=zero, scale=1.0, rot=identity (0x15d1434)
+004099b0 Transform_RotateY  # _CIsin/_CIcos, mixes rows 0 and 1, flags|=2
+00409b30 Transform_Scale  # scale*=s; pos*=s; flags|=1; version++
+00409b90 BoundingBox_GetCenter  # (min+max)*0.5
+00409c00 BoundingBox_Reset  # min=+FLT_MAX, max=-FLT_MAX
+00409ce0 BoundingBox_SetCenterRadius  # center -/+ r
+00409dd0 BoundingBox_TransformBy  # applies Transform (scale/rotate/translate)
+0040a0f0 Matrix3_Abs  # elementwise fabs of 9 floats

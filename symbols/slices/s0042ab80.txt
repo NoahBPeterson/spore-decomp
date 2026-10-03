@@ -1,0 +1,6 @@
+0042ab80 Deque_DoInit  # EASTL deque init: ptr array size max(8,n/4+3), subarrays of 4 x 0x30
+0042ac80 HashNodeOwner_ClearBuckets  # releases ThreadedObject per node, frees nodes, zeroes bucket
+0042ad20 IdPtrVecBase_CopyCtor  # vector copy ctor of 8-byte records, calls uninitialized_copy
+0042adf0 UninitializedMove_IdPtrVec  # copy-construct 0x18-byte elements then destroy sources
+0042aeb0 RefPtrVec_DoInsertValues  # vector<RefPtr> insert n copies; AddRef/Release via vtable slots 0/1
+0042b2d0 IntroSortLoop_Elem12  # median-of-3 quicksort, depth limit, falls back to FUN_0042dd80

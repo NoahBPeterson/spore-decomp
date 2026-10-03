@@ -1,0 +1,6 @@
+00430320 CreatureEditorResource::~CreatureEditorResource  # dtor: two vtbls, notifies debug log 0x355dad8, destroys vectors
+004303e0 PostEditorEvent  # posts event 0x245801e through notifier vtbl+0x3c
+00430450 BuildMaterials  # allocates 'Graphics' Material/MaterialParams objects from texture keys 0x29xx
+00430900 BuildAbility  # allocates 'App' ability, radius property 0xf9efb9
+00430c20 SimpleAbility::SimpleAbility  # vtbl 0x13ebc60, mKind=4
+00430c60 VecAbility::scalar_deleting_dtor  # destroys member vec at +0xc then deletes

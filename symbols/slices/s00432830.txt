@@ -1,0 +1,5 @@
+00432a50 Object::AddRef  # lock xadd +1 on [this+4]
+00432a70 Object::Release  # decrement, delete this via vtable+8
+00432940 PropertyList::GetRefCount  # xadd 0 >> 1 on [this+4]
+00432be0 PropertyList::AddRef  # refcount kept shifted (+2)
+00432b50 ResourceList::Release  # -2 decrement, delete this at 0

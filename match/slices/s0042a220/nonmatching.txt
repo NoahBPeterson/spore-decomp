@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <short reason>
+0042a220 317 vector<RcPtr>::DoInsertValues: instruction stream aligned (248 insns) but /Od stack-slot layout differs: tag-byte temps (CopyBack flags, FillN/PodMove tags) and hash-ordered local names not fully reproduced; frame 0xEC vs 0xF4
+0042a680 1 UninitMove7c: byte-exact except the 2nd tag temp slot ([ebp-6] vs original [ebp-0x29]); frame size, all other slots and code identical
+0042a730 1 UninitMove20: byte-exact except the 2nd tag temp slot ([ebp-6] vs original [ebp-0x19]); everything else identical

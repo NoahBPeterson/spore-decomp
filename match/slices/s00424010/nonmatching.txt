@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00424010  628  Vec24::DoInsertValue: right algorithm and mostly the same instruction sequence, but the original frame is 0xa0 vs 0x78 (dead inline slots) and the inline copy of the two Vector3 members stores &this->b in a temp before the call (not reproduced)
+00424340  8  UninitCopy24: same length/instructions; only the stack slot of the placement-new null-check temp (-0xc in the original) and the loop destination pointer (-0x1c) are swapped
+004246e0  8  Vec4Vec::DoAllocateAndCopy: same length/instructions; the three by-value param copies of the innermost wrapper sit at -0x28..-0x20 instead of -0x18..-0x10 (4 dead dwords allocated above instead of below)

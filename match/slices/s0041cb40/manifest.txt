@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041cb40/s0041cb40.cpp  ?Assign@Matrix3@@QAEAAU1@ABU1@@Z  0041cb40  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0VirtualRefPtr@@QAE@PAUVirtualRefObject@@@Z  0041cc20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ?Assign@TargetPtr@@QAEAAU1@PAUDefaultRefCounted@@@Z  0041cc60  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ?Init@TargetPtr@@QAEAAU1@PAUDefaultRefCounted@@@Z  0041ccc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ?Assign@SharedPtr@@QAEAAU1@PAUSharedObject@@@Z  0041cd10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0MA@@@QAE@XZ  0041cf00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0DIA@@@QAE@XZ  0041cf70  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0EA@@@QAE@XZ  0041cfe0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0BAA@@@QAE@XZ  0041d050  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0BAA@@@QAE@I@Z  0041d0c0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0FlagObject@@QAE@PAX@Z  0041d1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedBuffer@$0CAA@@@QAE@XZ  0041d360  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedBuffer@$0KA@@@QAE@XZ  0041d3c0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0041cb40/s0041cb40.cpp  ??0?$FixedVector@$0BIA@@@QAE@XZ  0041d420  /Od /Ob1 /MD /Gy /TP /arch:SSE

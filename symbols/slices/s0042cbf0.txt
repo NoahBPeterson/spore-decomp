@@ -1,0 +1,10 @@
+0042cbf0 Matrix34::operator=  # copies 12 floats (three float4 rows), returns this; byte-exact
+0042ccb0 FixedIdVector6::FixedIdVector6  # fixed_vector ctor: buffer at +0x18, capacity 6, assigns from {first,last}
+0042cd50 FixedIdVector6::DoAssign  # EASTL vector::DoAssign for 4-byte elements; byte-exact
+0042cf80 FixedEntryVector3::FixedEntryVector3  # same, 16-byte entries, capacity 3
+0042d020 FixedEntryVector3::DoAssign  # EASTL vector::DoAssign for 16-byte entries with refcounted ptr at +0xc; byte-exact
+0042d2e0 WString::append_n_char  # basic_string<char16_t>::append(n, c): grows via reserve(max(2*cap,8, size+n)), fills, NUL-terminates
+0042d3f0 RFindChar16  # scans backwards from last to first for a char16, returns last if missing; byte-exact
+0042d430 FillIntrusivePtrs  # assigns one intrusive ptr (lock xadd on +4, Release old) to every slot in [first,last); byte-exact
+0042d4a0 CopyIntrusivePtrs  # element-wise intrusive ptr assign from [first,last) to dest, returns dest end; byte-exact
+0042d520 UninitializedCopyIntrusivePtrs  # wrapper around 0x0042e860 returning the end pointer

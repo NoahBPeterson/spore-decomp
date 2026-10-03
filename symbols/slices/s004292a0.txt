@@ -1,0 +1,9 @@
+004292a0 WideFixedBuf::ReleaseHeap  # frees heap buffer unless it is the fixed buffer at +0x10, 16-bit elems
+00429300 ByteFixedBuf::ReleaseHeap  # same, byte elems
+00429370 Record::Assign  # copies two 0x38 blocks, int, intrusive ptr, smart ptr
+00429410 ByteFixedBuf::DeletingDtor  # flags&1 -> deallocate(this)
+00429480 Holder::~Holder  # two byte vectors + Elem32Vec
+00429520 WStr::Resize  # erase / append-fill by size compare
+00429580 WStr::Append  # append(first,last) with growth, "Editor" allocator tag
+00429760 WStr::AllocateSelf  # allocate(n*2,"Editor"), else shared empty string
+004297f0 WSearch  # char16 substring search

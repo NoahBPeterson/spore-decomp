@@ -1,0 +1,5 @@
+00422950 QueryByHolder  # calls vtable slot 3 (QueryInterface-style) with id 0x226A1DE on sub-object at +4
+00422b00 KeyTree_Find  # lower_bound on 3-field key, then not-less check, returns iterator
+00422e20 Variant_SetChar  # type tag 1, size 1
+00422eb0 Variant_SetU32  # type tag 9, size 4
+00422f40 Variant_SetVec12  # type tag 0x20, size 12

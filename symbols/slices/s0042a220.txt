@@ -1,0 +1,10 @@
+0042a220 VecRcPtr_DoInsertValues  # EASTL vector<RcPtr>::DoInsertValues(pos, n, value): realloc path, memcpy-move, fill, DefaultRefCounted AddRef inline
+0042a680 UninitMove_Elem7c  # copy-construct 0x7C-byte elements (Elem7c copy ctor 0x422FD0) then destroy sources (dtor 0x41F2D0)
+0042a730 UninitMove_Elem20  # copy-construct 0x20-byte elements (copy ctor 0x423080), then destroy range
+0042a7b0 HashTable_ClearBuckets  # walks bucket array, frees chained nodes via next at +0x10, zeroes each bucket
+0042a820 DequeIter_CtorAdvance  # 16-byte deque iterator copy then PreIncrement (0x4253C0)
+0042a870 DequeIter_Add  # copy iterator, += n (0x42D5C0), copy to result
+0042a950 Deque_PopBack  # EASTL deque::pop_back, fallback to PopBackSub (0x42D730)
+0042a9b0 Deque_PushFront  # EASTL deque::push_front: copy value, realloc ptr array when at front, allocate subarray
+0042aa60 Deque_PushBack  # EASTL deque::push_back
+0042ab10 Deque_PopFront  # EASTL deque::pop_front crossing a subarray boundary, frees the subarray

@@ -1,0 +1,8 @@
+# source symbol va flags
+slices/s00423110/s00423110.cpp  Matrix3Equal  00423250  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  Vector3Equal  004232c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  ?Assign@WString  00423650  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  ?Find@WString  00423700  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  FreeBuffer  004237d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  AllocateSelf  00423820  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00423110/s00423110.cpp  RFindChar  00423890  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+00419780 Updater::UpdateModels  # time-budgeted loop over 0x8c-byte model records, QueryPerformanceCounter deadline
+00419FF0 Updater::Dispatch  # packs flag bytes 0x71/0x62, submits scene, queues request

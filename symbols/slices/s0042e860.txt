@@ -1,0 +1,12 @@
+0042e860 UninitializedCopyCounted  # copy-construct range of ref-counted ptrs (non-atomic count at +4)
+0042e910 UninitializedFillCounted  # fill-construct range of ref-counted ptrs
+0042e9a0 DestroyElem32Range  # releases owner at +0x1c via vtable slot 1, stride 0x20
+0042eaa0 CopyAssignAtomic  # forward range assign of AtomicRefCounted ptrs (lock xadd at +8, AtomicRefCounted::Release)
+0042eb20 CopyAssignAtomicBackward  # backward variant
+0042ec30 UninitializedCopyPairs  # 8-byte {key, atomic-counted ptr} records
+0042ece0 CopyAssignIntrusive  # range assign of ptrs with virtual AddRef/Release
+0042ed50 UninitializedFillIntrusive
+0042edd0 MakeHeap  # 12-byte records keyed by uint, calls AdjustHeap
+0042ee60 AdjustHeap  # sift-down then push_heap style sift-up
+0042efc0 UninitializedFillFloat
+0042f100 UninitializedFillHeapRec

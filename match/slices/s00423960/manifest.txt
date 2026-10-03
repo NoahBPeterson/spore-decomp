@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00423960/s00423960.cpp  ??0ByteBuffer@@QAE@IPBUAllocator@@@Z  00423be0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00423960/s00423960.cpp  ?DoAllocateAndCopy@AtomicPtrVector@@QAEPAPAUAtomicRefCounted@@IPAPAU2@0@Z  00423ef0  /Od /Ob1 /MD /Gy /EHsc /TP

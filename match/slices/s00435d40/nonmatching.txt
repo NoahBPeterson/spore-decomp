@@ -1,0 +1,3 @@
+004360f0  7  SyncFlagsFromProps: right size and logic; inline-helper slot holes between the two property lookups differ (-0x14/-0x20)
+004362a0  118  GetWorldTransform: orig has 0xe0 frame, inline-this temp at -0xe0 with uninit-local copy; not reproduced
+004363d0  118  GetAccumulatedTransform: same inline-this temp / frame layout puzzle as 004362a0

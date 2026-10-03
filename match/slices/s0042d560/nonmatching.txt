@@ -1,0 +1,1 @@
+0042dcc0  2  UninitCopyEntries wrapper: instruction-identical except frame size (0x30 vs 0x2c) and tag-byte slot ([ebp-0x15] vs [ebp-6]); unused-slot layout not reproduced

@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00426430/s00426430.cpp  ?swap@SmallBuffer@@QAEXAAU1@@Z  00426430  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ?DoAllocateNode@RefPairTable@@QAEPAURefPairNode@@ABURefPairValue@@@Z  004265b0  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ?DoRehash@HashTable@@QAEXI@Z  00426640  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ?DoInsertValue@ByteVector@@QAEXPADPBD@Z  00426730  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ?DoAllocateAndCopy@ByteVector@@QAEPADIPBD0@Z  00426950  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ??4Vector8@@QAEAAU0@ABU0@@Z  004269b0  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ??1VectorBase8@@QAE@XZ  00426c70  /Od /Ob1 /MD /Gy /TP
+slices/s00426430/s00426430.cpp  ?InsertHint@SortedVector@@QAEPAHPAHPBH@Z  00426cc0  /Od /Ob1 /MD /Gy /TP

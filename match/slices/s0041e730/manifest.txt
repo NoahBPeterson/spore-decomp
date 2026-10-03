@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041e730/s0041e730.cpp  ??1Vec24@@QAE@XZ  0041e730  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?push_back@Vec24@@QAEXABUElem24@@@Z  0041e8b0  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?GetBool@Property@@QAEPA_NXZ  0041e920  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?GetInt@Property@@QAEPAHXZ  0041e990  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?GetUInt@Property@@QAEPAIXZ  0041ea00  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?GetFloat@Property@@QAEPAMXZ  0041ea70  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ??0RefVector@@QAE@ABU0@@Z  0041eae0  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ??1RefVector@@QAE@XZ  0041eb80  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?resize@RefVector@@QAEXI@Z  0041ee90  /Od /Ob1 /MD /Gy /TP
+slices/s0041e730/s0041e730.cpp  ?push_back@RefVector@@QAEXABURef@@@Z  0041ef20  /Od /Ob1 /MD /Gy /TP

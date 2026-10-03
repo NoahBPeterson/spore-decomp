@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00432830/s00432830.cpp  ??0SpriteBlock@@QAE@XZ  00432830  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ??0SpriteBuffer@@QAE@HH@Z  004328d0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?GetRefCount@PropertyList@@  00432940  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ??0SpriteGrid@@QAE@HH@Z  00432960  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ??0PropertyList@@QAE@XZ  004329e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?AddRef@Object@@  00432a50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?Release@Object@@  00432a70  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?Cast@Queryable@@  00432ad0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ??_GPropertyList@@  00432b10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?Release@ResourceList@@  00432b50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?AddRef@PropertyList@@  00432be0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?ReleaseThunk@SpriteGrid@@  00432c00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?Destroy@Holder@@  00432c20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ??0CreatureAbility@@QAE@XZ  00432cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?Init@HandlerFunctor@@  00432dc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  ?CallHandler@@  00432e40  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  AdjustThunk_00432EE0  00432ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  AdjustThunk_00432EF0  00432ef0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00432830/s00432830.cpp  AdjustThunk_00432F00  00432f00  /Od /Ob1 /MD /Gy /TP /arch:SSE

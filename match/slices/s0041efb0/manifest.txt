@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041efb0/s0041efb0.cpp  ??1Elem7c@@QAE@XZ  0041f2d0  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??1?$Vec@UElem7c@@@@QAE@XZ  0041f270  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ?push_back@?$Vec@UElem7c@@@@QAEXABUElem7c@@@Z  0041f650  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??1?$Vec@UElem20@@@@QAE@XZ  0041f760  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ?push_back@?$Vec@UElem20@@@@QAEXABUElem20@@@Z  0041f7d0  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??0?$Vec@UElem20@@@@QAE@ABU0@@Z  0041f6c0  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??0?$Vec@UElem8c@@@@QAE@ABU0@@Z  0041f840  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??1?$Vec@UElem8c@@@@QAE@XZ  0041f8e0  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ?resize@VecP@@QAEXI@Z  0041f1e0  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??4?$Vec@UElem7c@@@@QAEAAU0@ABU0@@Z  0041f320  /Od /Ob1 /MD /Gy /TP
+slices/s0041efb0/s0041efb0.cpp  ??4?$Vec@UElem16@@@@QAEAAU0@ABU0@@Z  0041efb0  /Od /Ob1 /MD /Gy /TP

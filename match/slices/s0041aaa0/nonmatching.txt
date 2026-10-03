@@ -1,0 +1,1 @@
+0041aaa0  2400  4776-byte /Od function (/Od /Ob1 /MD /Gy /EHsc); behaviorally approximate, structure differs (orig 4776 bytes vs ours ~2845 with diffs from early prologue onward: inlined min/max/ceil and stack layout not reproduced)

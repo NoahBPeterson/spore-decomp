@@ -1,0 +1,7 @@
+00424010 Vec24_DoInsertValue  # EASTL vector<24-byte record (2x Vector3)>::DoInsertValue: realloc-insert, grows 2x, calls UninitCopy at 0x424340
+00424340 Vec24_UninitCopy  # uninitialized_copy of 24-byte records, loop calls copy ctor 0x511140
+004243e0 RefVec_DestroyRange  # releases each ThreadedObject* in [first,last) via 0x404f90
+00424430 RefVec_DoInsertValue  # vector<intrusive ref> insert-with-grow, AddRef via lock xadd, memcpy-based relocation; byte-exact
+004246e0 Vec4Vec_DoAllocateAndCopy  # allocates n*16 bytes through allocator at this+0xc then uninitialized_copy 0x47a500
+00424770 Vec4_CopyRange  # copies 16-byte (4 float) records [first,last) to dest, returns end of dest; byte-exact
+004247f0 RcVec_erase  # vector<DefaultRefCounted*>::erase(first,last): assign tail down, Release tail, shrink end; byte-exact

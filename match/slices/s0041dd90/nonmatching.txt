@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0041e0d0  138  TransformVec::assign (vector<Transform>::operator=): logic and calls match; /Od stack-slot layout differs (inlined-helper slot gaps unresolved; frame 0xb4 vs 0xa8)
+0041e6a0   6   IPtrVec::push_back(): only the order of the placement-new temp vs the local pointer differs (two stack slots swapped)

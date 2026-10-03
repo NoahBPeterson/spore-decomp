@@ -1,0 +1,7 @@
+00432f10 RemapTypeId  # big switch on ids, many identity cases, one case reads settings flag 0x46
+00433660 IsSpecialId  # ids 0x6329468..0x632946a and 0x11b78a72
+004336a0 FindSlotIndex  # searches g_slotIds[3] at 0x13ebd5c
+004335c0 InitSlotWeights  # fills 3 id/weight pairs, weights zeroed
+00433720 NormalizeSlotWeights  # scales weights to a total
+00433210 ApplyOwnerEntries  # walks 0x1d8-byte entries at owner+0x98
+004333c0 ApplyOwnerEntries2  # walks entries via accessors at 0x4accb0/0x4accf0

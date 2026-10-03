@@ -1,0 +1,5 @@
+0042c2a0 Vector<Vector3>::assign  # eastl vector assign(first,last): 12-byte elements, DoAllocateAndCopy 0x0056a140, uninit copy 0x0050eb40
+0042c500 Vector<Transform>::assign  # 0x38-byte elements; element copy is Transform::operator= 0x00537dc0
+0042c750 DwordVector::assign  # 4-byte POD elements copied with memcpy
+0042c950 ObjPtrVector::assign  # ThreadedObject* elements, destruct calls Resource::ThreadedObject::Release 0x00404f90
+0042cba0 PropertyEntry::PropertyEntry(const PropertyEntry&)  # copy ctor: PropertyRecord 0x00401b80, dword, two fixed_vectors 0x0042ccb0/0x0042cf80

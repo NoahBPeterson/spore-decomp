@@ -1,0 +1,4 @@
+004298f0 Vec56_DoInsertValues  # EASTL vector insert(pos,n,value), 0x38-byte elements, grow policy 2x/max, EASTL_allocator_deallocate
+00429ce0 UninitCopy56  # uninitialized_copy of 0x38-byte records via copy ctor FUN_0040ce80
+00429d80 UninitCopyIt56  # uninitialized_copy with generic_iterator args, returns iterator via sret
+00429e00 RefVector_DoInsertN  # insert(pos,n,value) of intrusive refs (lock xadd refcount, Resource::ThreadedObject::Release)

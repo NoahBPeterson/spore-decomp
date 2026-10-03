@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (all compiled /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00413de0  964  ClipPlayer::BuildBlend: opcode stream identical (slot-insensitive diff is clean apart from frame-size disp8/disp32 effects); only stack-slot offsets differ: original has a ~0x110-byte dead hole between the 7 top-level locals (-4..-0x1c) and the nested locals (-0x134..), and local slot order depends on names

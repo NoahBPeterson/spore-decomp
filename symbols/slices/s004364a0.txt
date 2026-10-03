@@ -1,0 +1,2 @@
+00436ca0 Vector3_Ctor3  # stores three floats to this[0..2], thiscall ret 0xc
+00436ce0 Vector3_Normalize  # v / sqrt(dot(v,v))

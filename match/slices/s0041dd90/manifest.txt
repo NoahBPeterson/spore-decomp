@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041dd90/s0041dd90.cpp  ?NotEqual@@YA_NPBX0@Z  0041dd90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?Vector3_Add@@YAPAUVector3@@PAU1@PBU1@@Z  0041ddb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?CopyRangeRet@@YAPAXPAX00@Z  0041de20  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?Vector3_Scale@@YAPAUVector3@@PAU1@PBMPBU1@@Z  0041de40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?Matrix3_Transposed@@YAPAUMat3Target@@PAU1@PBUMatrix3@@@Z  0041ded0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ??0WStr@@QAE@PB_WH@Z  0041df50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?rfind@WStr@@QAEH_WI@Z  0041dfc0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?WStr_Format@@YAPAUWStr@@PAU1@PB_WZZ  0041e050  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?clearDtors@TransformVec@@QAEXXZ  0041e090  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?resize@TransformVec@@QAEXI@Z  0041e3b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?push_back@TransformVec@@QAEXABUTransform@@@Z  0041e460  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ?reserve@Vec3Vec@@QAEXI@Z  0041e4d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ??1ByteVec@@QAE@XZ  0041e5d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0041dd90/s0041dd90.cpp  ??1IPtrVec@@QAE@XZ  0041e640  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

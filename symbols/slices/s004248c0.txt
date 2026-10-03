@@ -1,0 +1,11 @@
+004248c0 Vec124_DoInsertValue  # EASTL vector DoInsertValue, 0x7c-byte elements (idiv 0x7c, growth x2)
+00424b40 Vec124_DoFree  # frees mBegin block when header word nonzero
+00424ba0 Vec124_DoAllocateAndCopy  # allocate n*0x7c then uninitialized_copy
+00424c00 UninitializedCopy124  # placement-copy loop, 0x7c stride
+00424cf0 Vec32_DoInsertValue  # same, 0x20-byte elements
+00424f10 Elem32_operator_assign  # copies 16 bytes then Handle::Assign at +0x10
+00424f70 Handle_Assign  # copy fields, swap intrusive ref (AddRef/Release vtable slots 0/1)
+00425010 UninitializedCopy32  # placement-copy loop, 0x20 stride
+004250b0 Vec140_DoFree  # 0x8c-byte elements
+00425110 UninitializedCopy140  # placement-copy loop, 0x8c stride
+004251b0 RefNodeList_DoCreateNode  # allocates 0x18 node, copies key+ref, AddRefs, mpNext=0

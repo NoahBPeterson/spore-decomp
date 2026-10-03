@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00426d90/s00426d90.cpp  ?Find@SortedPairVector@@QAEPAUIntPair@@PAU2@PBH@Z 00426d90    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?AllocateAndCopy@Elem24Vector@@QAEPAUElem24@@IPAU2@0@Z 00427100    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?AllocateAndCopy@Elem16Vector@@QAEPAUElem16@@IPAU2@0@Z 00427210    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?UninitializedCopyElem16@@YAPAUElem16@@PAU1@00@Z 00427270    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?DoRehash@Hashtable@@QAEXI@Z 00427320    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?DestroyVector32@@YIXPAU?$PodVector@UBlock32@@@@@Z 004273f0    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?DestroyVector56@@YIXPAU?$PodVector@UBlock56@@@@@Z 00427440    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?Sort@@YAXPAUItem12@@0Uless_uint@@@Z 004274a0    /Od /Ob1 /MD /Gy /TP
+slices/s00426d90/s00426d90.cpp  ?CallHandler@@YAXHPAVTarget@@@Z 00427600    /Od /Ob1 /MD /Gy /TP

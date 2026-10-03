@@ -1,0 +1,5 @@
+004254c0  3  Deque::push_front: only frame slot offsets differ (orig has 0x24 unused bytes below the new-temp)
+00425530  5  Deque::push_back: same frame slot issue as push_front
+00425600  2  Deque::erase(iterator): instruction-identical, only t0 tag temp frame slot differs
+00425990  5  PtrVector::Free: instruction-identical, p/q frame slots swapped
+004259e0  2  PtrVector::erase(first,last): instruction-identical, only 2 tag-byte frame slots differ

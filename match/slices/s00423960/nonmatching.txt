@@ -1,0 +1,3 @@
+00423960  411  Record56Vector::DoInsertValue (vector of 0x38-byte records); original is 640 bytes vs ~461 mine: original has several layers of inlined EASTL helpers (tag bytes, spilled arg temps, 0xc8 frame) not reproduced
+00423c40  496  CountedPtrVector::DoInsertValue (intrusive ptrs, refcount +0x40); original 683 bytes vs ~548 mine: nested inlined helper layers with spilled temporaries, memcpy-based growth path
+00423f50  99   UninitializedCopyAtomic: logic and lock-xadd form right, but original spills args through 2 inline layers (0x38 frame, slot order); mine 112 bytes vs 181

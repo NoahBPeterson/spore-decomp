@@ -1,0 +1,11 @@
+0041ddb0 Vector3_Add  # a+=b via temp, per-field movss
+0041de40 Vector3_Scale  # v*s into out
+0041df50 WStr_Ctor  # strlen then Assign(begin,end)
+0041dfc0 WStr_rfind  # returns -1 when not found
+0041e050 WStr_Format  # va_start + AppendVPrintf
+0041e0d0 TransformVec_Assign  # 0x38-byte elements, EASTL operator=
+0041e3b0 TransformVec_Resize  # insert default Transform or erase tail
+0041e460 TransformVec_PushBack  # placement copy-construct or DoInsertValue
+0041e4d0 Vec3Vec_Reserve  # 12-byte elements, allocator at +0xc
+0041e640 IPtrVec_Dtor  # releases each Counted* then frees storage
+0041e6a0 IPtrVec_PushBackNull

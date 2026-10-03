@@ -1,0 +1,8 @@
+00426430 SmallBuffer::swap  # copy-and-swap fallback calling ~SmallBuffer 0x420ab0
+004265b0 RefPairTable::DoAllocateNode  # allocates 0xc node, atomic refcount increment at +4
+00426640 HashTable::DoRehash  # calls FieldSetHash::operator() 0x401bf0, buckets freed via EASTL dealloc
+00426730 ByteVector::DoInsertValue  # vector<char> grow path with memcpy/memmove
+00426950 ByteVector::DoAllocateAndCopy  # allocate(n,1) then uninitialized copy
+004269b0 Vector8::operator=  # vector of 8-byte elements assignment
+00426c70 VectorBase8::~VectorBase8  # frees begin with (cap-begin)*8
+00426cc0 SortedVector::InsertHint  # sorted int vector insert with hint

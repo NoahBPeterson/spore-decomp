@@ -1,0 +1,1 @@
+00413d60 Vector3_MinComponent  # min(min(v[0],v[1]),v[2]) returned as float

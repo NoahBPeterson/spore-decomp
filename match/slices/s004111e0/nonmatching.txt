@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+004111e0  1147  /Od /Ob1 /arch:SSE /GS- (no EH); structure matches but inlined-helper stack slot order (frame 0x134 vs 0x150) and SetBool/Variant ctor inlining differ
+00411890  132  same /Od flags; instruction sequence matches except stack slot layout (frame 0xe34 vs 0xe74, missing ~0x40 bytes of hidden temp slots) and dead xor/je branch in smart-pointer reset

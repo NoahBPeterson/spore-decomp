@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004145c0/s004145c0.cpp  ?SetItem@PaletteEditor@@QAE_NPAUItemBase@@@Z  004145c0  /Od /Ob1 /MD /Gy /TP
+slices/s004145c0/s004145c0.cpp  ?AddEntry@PaletteEditor@@QAE_NPAUDefRef@@PAUExtraInfo@@PAUIRefCounted@@@Z  004147b0  /Od /Ob1 /MD /Gy /TP
+slices/s004145c0/s004145c0.cpp  ?GetField78@EditorObject@@QAEHXZ  00414e10  /Od /Ob1 /MD /Gy /TP

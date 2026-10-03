@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0042ccb0  3  FixedIdVector6 ctor: logic and instruction sequence identical; only the stack slots of the inlined range-assign locals (first/last/tag byte) differ
+0042cf80  3  FixedEntryVector3 ctor: same 3-byte stack-slot difference as 0042ccb0
+0042d2e0  7  wstring append(n, c): instruction stream identical, loop locals p/pEnd of the inlined fill sit in swapped stack slots
+0042d520  2  UninitializedCopyIntrusivePtrs wrapper: frame is 0x14 instead of 0x28 and the uninitialized tag byte sits at -5 instead of -6

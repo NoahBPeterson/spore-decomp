@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00435d40/s00435d40.cpp  HasAnyBlockFlag  00435d40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  GetRecorderState  00435e90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  RecordEvent2  00435ed0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  RecordEvent4  00435f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  SetLink  00435fd0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  InitDefaultFlags  00436060  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  GetRotation  004361c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  GetPosition  00436210  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00435d40/s00435d40.cpp  GetLocalTransform  00436380  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

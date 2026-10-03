@@ -1,0 +1,1 @@
+004124b0 ResourceTable_Rebuild  # rebuilds entries/pools from resource manager keys, props 0xf05faa79/0x105f5302-4

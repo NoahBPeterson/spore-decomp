@@ -1,0 +1,3 @@
+00420c70  86  FieldSet hashtable unique insert: logic and slot layout right, but eq-arg temp slots swapped and iterator copy order (bucket then node) differs
+004210f0  4   int-keyed map operator[]: only the first/last temp slots (-0x18/-0x1c) are swapped
+00421290  75  vector<24-byte> operator=: instruction stream identical, but the stack slots of the inlined DoCopy bools/temp byte are laid out differently

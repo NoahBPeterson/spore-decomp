@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0040e5b0  47  Obj::OnA: same size (592); stack-slot order of inlined Query() params/id const and the 0x60-byte local gap differ
+0040eab0  11  Obj::OnReset: same size (185); slot order of inlined clear() temp vs prov/prop locals differs

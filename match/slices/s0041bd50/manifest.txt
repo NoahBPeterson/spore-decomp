@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0041bd50/s0041bd50.cpp  ?Extend@BoundingBox@@QAEXABUVector3@@@Z  0041bd50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041bd50/s0041bd50.cpp  ?MaxComponent@@YAMPBUVector3@@@Z  0041bf30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041bd50/s0041bd50.cpp  ?MaxVec@@YA?AUVector3@@ABU1@0@Z  0041bfb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041bd50/s0041bd50.cpp  ?MinVec@@YA?AUVector3@@ABU1@0@Z  0041c0c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0041cd60  214  hash_map<Key8,VirtualRefPtr>::operator[]: structure right (find/end/insert, virtual AddRef/Release of copy), frame layout off: original has an unexplained 4-byte temp slot and more dead inline temps (frame 0x80 vs 0x78)
+0041ce60  24  hash_map<Key8,int>::operator[]: instruction stream identical, only stack offsets differ (original has one extra 4-byte temp between end iterator and value_type temp; frame 0x70 vs 0x6c)
+0041d140  3  range assign: instruction stream identical, only 3 frame offsets differ (order of first/last/tag temps)
+0041d1f0  165  hash_map<ThreadedPtr,int>::operator[]: frame 0x80 vs 0x70 and lock xadd register choice (edx addr/eax 1 in original)
+0041d2c0  11  hash_map<uint32,float>::operator[]: instruction stream identical, frame offsets off by the same unexplained temp slots

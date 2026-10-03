@@ -1,0 +1,3 @@
+0040fd50 UI::BehaviorMessage::BehaviorMessage  # sets vtbl 0x13eb918 then 0x13eb90c, zeroes refcount at +4 via xchg
+0040fd90 MessageBase::scalar_deleting_dtor  # vptr=0x13eb918; if (flags&1) EASTL_allocator_deallocate(this)
+0040fdc0 BehaviorMessage::scalar_deleting_dtor  # vptr=0x13eb90c then 0x13eb918; free if flags&1

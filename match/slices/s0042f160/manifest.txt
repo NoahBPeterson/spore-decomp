@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042f160/s0042f160.cpp  ?MergeRanges@@YAPAUMergeElem@@PBU1@000PAU1@@Z  0042f160  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ??0UIntVector@@QAE@ABU0@@Z  0042f280  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ??0UIntVectorBase@@QAE@IABUAlloc@@@Z  0042f2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?SetCapacity@WString@@QAEXI@Z  0042f360  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?DequeCopy@@YA?AUDequeIter@@U1@00@Z  0042f490  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?DequeCopyBackward@@YA?AUDequeIter@@U1@00@Z  0042f4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?CopyPtrs@@YAPAPAUIRefCounted@@PAPAU1@00@Z  0042f530  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?CopyPtrsBackward@@YAPAPAUIRefCounted@@PAPAU1@00@Z  0042f5b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?Swap@WString@@QAEXAAU1@@Z  0042f620  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?DequeCopyImpl@@YA?AUDequeIter@@U1@00@Z  0042f720  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?DequeCopyBackwardImpl@@YA?AUDequeIter@@U1@00@Z  0042f780  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ??0WString@@QAE@ABU0@@Z  0042f7e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ??FDequeIter@@QAEAAU0@XZ  0042f840  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ??4ThreadedHolder@@QAEAAU0@ABU0@@Z  0042f8b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f160/s0042f160.cpp  ?AssignRange@WString@@QAEAAU1@PBG0@Z  0042f920  /Od /Ob1 /MD /Gy /TP /arch:SSE

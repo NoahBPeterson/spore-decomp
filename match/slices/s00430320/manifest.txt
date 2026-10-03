@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00430320/s00430320.cpp  ?PostEditorEvent@@YAXIIIE@Z  004303e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00430320/s00430320.cpp  ??1CreatureEditorResource@@UAE@XZ  00430320  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00430320/s00430320.cpp  ??0SimpleAbility@@QAE@XZ  00430c20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00430320/s00430320.cpp  ??_GVecAbility@@UAEPAXI@Z  00430c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

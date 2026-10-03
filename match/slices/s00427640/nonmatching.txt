@@ -1,0 +1,3 @@
+00427640  587  /Od vector<2xVector3 pair> DoInsertValue: structure matches (branches, calls, copy-backward) but inlined element copy-ctor temp slot (this+0xc stored) and many nested-inline stack slots differ; frame 0x6c vs 0xa0
+00427a50  356  /Od /arch:SSE vector<float> fill-assign: control flow and calls identical, stack slot layout of nested inlined helpers (frame 0xd0 in original) not reproduced
+00427c70  10  /Od vector<Vector3> DoInsertValue: all code identical except 4 stack-slot offsets of the inlined uninitialized-move helper locals (r/tag/d/f)

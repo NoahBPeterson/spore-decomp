@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+004298f0 707 Vec56::DoInsertValues (vector<0x38-byte rec>::insert(pos,n,value)): logic, call sequence and inline layers match; stack frame 0xbc vs 0x134 because dead slots of nested EASTL inline layers are not reproduced, so every offset shifts
+00429ce0 23 UninitCopy56: same instruction sequence, only stack slot offsets differ (frame 0x58; slot order is hash-of-name dependent)
+00429e00 312 RefVector::DoInsertN (vector of intrusive refs insert(pos,n,value)): same structure and calls; frame 0x9c vs 0xf0, dead-slot layout of inline layers differs

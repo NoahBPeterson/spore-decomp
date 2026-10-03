@@ -1,0 +1,5 @@
+00422020 Vector3_Negate  # unary minus: xorps sign mask on three floats
+004224b0 CatmullRom  # constants 3,4,5,2,0.5 and t,t^2,t^3 polynomial over four control points
+00422430 LowerBound12  # binary search over 12-byte records keyed by first dword
+004221f0 RecMatcher_Match  # compares 20-byte record id/tag and 3-dword key
+00422140 FindIf_RecIter  # find_if loop over iterator with predicate

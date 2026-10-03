@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0041f940  17  Owner dtor: orig frame 0x34 has dead slack slots (3+5 dwords) around inlined PtrVec dtor locals; ours 0x10 (code otherwise identical)
+0041f9b0   5  ElemList dtor: orig frame 0x1c has 3 extra dead dword slots; ours 0x10 (code otherwise identical)
+0041fa20  14  vector copy-ctor: orig frame 0x3c has 0x2c bytes of dead slots (inlined helpers); ours 0xc
+0041fb20 162  hash find: orig spills by-ref args of inlined key-equality predicate and copies iterator via stack temps; unresolved
+0041fc40 344  hash insert (AllocNode 0x4251b0): same unresolved predicate/iterator temp pattern as find, plus pair result copies
+0041fe00 344  hash insert (AllocNode 0x425240): clone of 0x41fc40 with different node allocator

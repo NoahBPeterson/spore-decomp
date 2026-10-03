@@ -1,0 +1,6 @@
+00425a80 RefPtrVec_DoInsertValue  # EASTL vector::DoInsertValue for intrusive_ptr elements (lock xadd on +8, AtomicRefCounted::Release)
+00425d30 Vec12_DoInsertValue  # EASTL vector::DoInsertValue, 12-byte elements, fixed-buffer pointer at +0x10
+00425f90 Vec56_DoInsertValue  # EASTL vector::DoInsertValue, 0x38-byte elements
+00426220 Vec56_Free  # EASTL vector DoFree: frees unless block is the fixed buffer at +0x10
+00426280 ThreadedVec_erase  # vector<intrusive_ptr<Resource::ThreadedObject>>::erase(first,last)
+00426320 PtrHashtable_CopyCtor  # EASTL hashtable copy constructor (bucket array, node chain copy, gEmptyBucketArray at 0x154df28)

@@ -1,0 +1,2 @@
+0042b9e0  635  VecU32::InsertRange (vector<uint32_t> range insert): equivalent source, but the original inlines many nested /Od helper scopes (dozens of param-copy locals, 0x144-byte frame); mine compiles to 699 vs 1280 bytes
+0042bfa0  352  VecU32::Assign (fill-assign): control flow and calls match, but the original frame is 0xd0 bytes with unknown dead inline locals; mine is 0x54

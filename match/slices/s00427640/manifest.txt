@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00427640/s00427640.cpp  ?Free@VecPair@@QAEXXZ  00427970  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427640/s00427640.cpp  ?Assign@Variant@@QAEPAU1@PBU1@@Z  004279d0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00427640/s00427640.cpp  ?Free@VecV3@@QAEXXZ  00427f70  /Od /Ob1 /MD /Gy /EHsc /TP

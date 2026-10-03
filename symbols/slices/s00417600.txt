@@ -1,0 +1,2 @@
+00417d10 CreateEditorBlockData  # allocates 0x1248 bytes from "Editor" pool then calls EditorBlockData::EditorBlockData (0x403240)
+00417cf0 EditorBlockData::GetSlotArea  # returns this+0x1100

@@ -1,0 +1,10 @@
+004215f0 Item24Vec::push_back  # vector push_back: placement-new copy of 0x18-byte element, else DoInsertValue
+00421670 QuadVec::assign  # vector<16-byte POD>::operator=
+00421950 HashTable::find  # hashtable find by uint32 key, returns iterator (node, bucket)
+00421a50 HashTable::insert  # hashtable insert with rehash policy, returns pair<iterator,bool>
+00421bf0 IPtrVec::resize  # vector<intrusive_ptr>::resize (InsertFill / erase)
+00421c80 SlotMessage::Construct  # message ctor, vtables vtbl_App::cLocaleChangeMessage / vtbl_UI::BehaviorMessage
+00421cf0 SlotMessage::Destruct  # releases up to 32 listener slots, restores base vtables
+00421d70 Elem32Vec::~Elem32Vec  # destroys 0x20-byte elements, frees storage
+00421dd0 Elem56Vec::~Elem56Vec  # destroys 0x38-byte elements, frees storage
+00421e30 Elem24Vec2::~Elem24Vec2  # destroys 0x18-byte elements, frees storage

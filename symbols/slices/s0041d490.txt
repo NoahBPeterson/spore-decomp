@@ -1,0 +1,2 @@
+0041d490 Simulator::cCreatureAbility::cCreatureAbility  # sets vtbl_Simulator::cCreatureAbility, id 0x21c
+0041d780 Simulator::cCreatureAbility::_virtual_dtor  # already named by Ghidra; deleting-dtor flag in param

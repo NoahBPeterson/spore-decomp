@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00425a80/s00425a80.cpp  ?DoInsertValue@Vec12@@QAEXPAURec12@@ABU2@@Z  00425d30  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425a80/s00425a80.cpp  ?DoInsertValue@Vec56@@QAEXPAURec56@@ABU2@@Z  00425f90  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425a80/s00425a80.cpp  ?Free@Vec56@@QAEXXZ  00426220  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425a80/s00425a80.cpp  ?erase@ThreadedVec@@QAEPAUThreadedPtr@@PAU2@0@Z  00426280  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s00425a80/s00425a80.cpp  ??0PtrHashtable@@QAE@ABU0@@Z  00426320  /Od /Ob1 /MD /Gy /EHsc /TP

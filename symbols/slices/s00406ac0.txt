@@ -1,0 +1,1 @@
+00407190 GetBoolProperty  # PropertyList vcall +0x24 (GetProperty), checks Property type==1 (bool), copies *GetValueBool() to out param, returns true/false

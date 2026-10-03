@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00435510  821  Summ destructor (995 vs 1169 bytes): head (detach/pool free) matches; /Od inline-temp stack slots for member releases differ (about 8 extra unused temps in original), EH-free flags /Od /Ob1 /MD /Gy /TP
+00435a10  28  Summ::SetFlag: instruction stream identical except stack slot numbering of inlined bitset temps/pointers

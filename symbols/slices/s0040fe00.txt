@@ -1,0 +1,2 @@
+0040fe00 EditorHandler::HandleMessage  # thiscall, ret 4; classifies msg target against 3 registry objects, FindObject + notify/perform
+00410370 TryGetUIntProperty  # cdecl; vcall slot 9 lookup, entry type 9 -> *out = *GetValue()

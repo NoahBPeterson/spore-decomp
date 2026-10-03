@@ -1,0 +1,6 @@
+00435d40 Entity::HasAnyBlockFlag  # walks +0x33c link chain (max 100) testing flag bits 7,8,35
+00435e90 GetRecorderState  # GetRecorder()->vcall+0x20 or 0
+00435fd0 Entity::SetLink  # refcounted pointer assign at +0x33c (AddRef +4 / Release +8)
+004361c0 Entity::GetRotation  # Matrix3 from source+0x1c or this+0x60
+00436210 Entity::GetPosition  # Vector3 from source+0xc or this+0x48
+00436380 Entity::GetLocalTransform  # Transform copy of source+8 or default

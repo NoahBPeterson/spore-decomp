@@ -1,0 +1,7 @@
+00420c70 FieldSetHashTable_DoInsertValue  # calls FieldSetHash/FieldSetEqualTo, rehash policy, node alloc
+00420e30 ByteVec_assign  # vector<uint8_t>::operator=, memcpy
+00421080 ByteVec_push_back  # end<cap placement-new else realloc
+004210f0 IntMap_operator_index  # lower_bound then insert default
+00421190 IdPtrVec_dtor  # releases ThreadedObject at +4 of 8-byte elements
+00421230 Elem24Vec_dtor  # destroys 24-byte elements
+00421290 Elem24Vec_assign  # vector<24-byte>::operator=

@@ -1,0 +1,3 @@
+# <va>  <diff-bytes>  <short reason>
+00426e30  16  Elem24Vector::Insert: all structure/frame matches; only the inlined Elem24 copy-ctor flag copy (src loaded before this) differs, 2 sites
+00427160  8   uninitialized_copy<Elem24>: frame and flow match; flag copy in inlined Elem24 copy-ctor loads this before src

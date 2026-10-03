@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042f9d0/s0042f9d0.cpp  ?f@ThunkD_4036a0@@W3AEXXZ  0042fbb0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?f@ThunkD_410d40@@W3AEXXZ  0042fbc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?f@ThunkD_41a9f0@@W3AEXXZ  0042fbd0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??_EDelObj@@W3AEPAXI@Z  0042fbe0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??_GDelObj@@UAEPAXI@Z  0042fbf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??_EEditorResourceD@@W3AEPAXI@Z  0042fc20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??_EDelObj@@W7AEPAXI@Z  0042fc30  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?BakeSpritesLoadAndBuild@@YA_NPAXIII0000@Z  0042fc40  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?BakeSpritesCreateThunk@@YAXPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ff00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?Run@BakeSpritesResource@@QAEXH@Z  0042ff30  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??0BakeSpritesResource@@QAE@XZ  004301e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?append@WideFixedBuf@@QAEAAU1@PB_W0@Z  0042f9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ??_GBakeSpritesResource@@UAEPAXI@Z  004302f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042f9d0/s0042f9d0.cpp  ?BakeSpritesCreate@@YA_NPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ffb0  /Od /Ob1 /MD /Gy /TP /arch:SSE

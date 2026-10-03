@@ -1,0 +1,9 @@
+0042d560 NodeOwner::FreeNode  # ~node (RcPtr member released via vtable slot 1) then EASTL allocator deallocate
+0042d5c0 Iter30::Advance  # deque iterator += n, 0x30-byte elems, 4 per subarray (EASTL DequeIterator::operator+=)
+0042d650 Iter30::SetSubarray  # sets sub, begin=*p, end=begin+0xC0
+0042d730 Deque30::DoPopBack  # free end subarray, step back, destroy element
+0042d7a0 Deque30::AllocateSubarray  # allocator alloc 0xC0 bytes, align 4
+0042d7d0 Deque30::DoReallocPtrArray  # memcpy/memmove/alloc of ptr array (EASTL DoReallocPtrArray)
+0042d990 RcVector::operator=  # vector<{key, RcPtr}> assign: Release loops, 0x42eba0 alloc+copy
+0042dd00 LowerBound  # binary search on 8-byte {int key, value} elements
+0042dd80 PartialSort  # make_heap + sift + sort_heap on 12-byte elements (unsigned key)

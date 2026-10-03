@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042cbf0/s0042cbf0.cpp  ??4Matrix34@@QAEAAU0@ABU0@@Z  0042cbf0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ?DoAssign@FixedIdVector6@@QAEXPBUIdHandle@@0Ufwd_tag@@@Z  0042cd50  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ?DoAssign@FixedEntryVector3@@QAEXPBUHandleEntry@@0Ufwd_tag@@@Z  0042d020  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ?RFindChar@@YAPBGPBG0G@Z  0042d3f0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ?FillIntrusivePtrs@@YAXPAUIntrusivePtr@@0ABU1@@Z  0042d430  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s0042cbf0/s0042cbf0.cpp  ?CopyIntrusivePtrs@@YAPAUIntrusivePtr@@PBU1@0PAU1@@Z  0042d4a0  /Od /Ob1 /MD /Gy /EHsc /TP

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00414e30  24  BoundsLibrary::Query: code identical, only frame size/slot offsets differ (original frame 0x110 has ~88 bytes of dead inline-hashtable locals)
+00415030  480  BoundsSampler::Init: original clamp compiles to xorps/maxss/minss and a 0xE0 frame (unknown inline helper); mine uses branches
+00415230  34  BoundsSampler::CellRange: identical instructions except local slot order (n/i/float/base slots)
+00415310  6  BoundsSampler::Collect: identical except mn2/mx2/tmp slot offsets (dead locals placed to reproduce frame size 0xA8)
+00415660  10  PropertyListCache::Get: identical except the map-slot local offset (dead locals reproduce frame size 0x90)

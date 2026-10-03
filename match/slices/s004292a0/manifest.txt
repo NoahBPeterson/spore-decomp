@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004292a0/s004292a0.cpp  ?ReleaseHeap@WideFixedBuf@@QAEXXZ 004292a0    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?ReleaseHeap@ByteFixedBuf@@QAEXXZ 00429300    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?Identity@ByteFixedBuf@@QAEPAU1@H@Z 00429360    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ??1Holder@@QAE@XZ 00429480    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?Assign@Record@@QAEAAU1@ABU1@@Z 00429370    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?DeletingDtor@ByteFixedBuf@@QAEPAU1@I@Z 00429410    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?Resize@WStr@@QAEXI@Z 00429520    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?Append@WStr@@QAEPAU1@PBG0@Z 00429580    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?AllocateSelf@WStr@@QAEXI@Z 00429760    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s004292a0/s004292a0.cpp  ?WSearch@@YAPAGPAG000@Z 004297f0    /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

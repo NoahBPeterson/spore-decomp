@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00416990/s00416990.cpp  ?ActivateById@EditorPanel@@QAE_NH@Z  00416990  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416990/s00416990.cpp  ?ActivateByKey@EditorPanel@@QAE_NPAUResourceKey@@@Z  00416c60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416990/s00416990.cpp  ?AdjustPressCount@EditorPanel@@QAEX_N@Z  00416e30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416990/s00416990.cpp  ?CountPending@EditorPanel@@QAEHXZ  00416eb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416990/s00416990.cpp  ?CountWithId@EditorPanel@@QAEHH@Z  00416f00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00416990/s00416990.cpp  ?GetActiveKey@EditorPanel@@QAE_NPAUResourceKey@@@Z  00416fb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE

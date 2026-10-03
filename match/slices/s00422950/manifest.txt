@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+slices/s00422950/s00422950.cpp  ?QueryByHolder@@  00422950  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Init@FunctorA@@  00422990  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Init@FunctorB@@  004229b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Init@FunctorC@@  004229d0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  004229f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterB@CallbackRegistry@@  00422a10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterC@CallbackRegistry@@  00422a30  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterD@CallbackRegistry@@  00422a50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterE@CallbackRegistry@@  00422a70  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?RegisterF@CallbackRegistry@@  00422a90  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?QueryByHolderPtr@@  00422ab0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Find@KeyTree@@  00422b00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Advance@NodeCursor@@  00422c50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ??0EmptyString2@@  00422c80  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ??0EmptyString1@@  00422cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Fwd1@Forwarder@@  00422d60  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Fwd2@Forwarder@@  00422d90  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Fwd3@Forwarder@@  00422dc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Fwd4@Forwarder@@  00422df0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?SetChar@Variant@@  00422e20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?SetU32@Variant@@  00422eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?SetVec12@Variant@@  00422f40  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ??0RecordEntry@@  00423080  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00422950/s00422950.cpp  ?Destroy@Deletable@@  004230e0  /Od /Ob1 /MD /Gy /TP /arch:SSE

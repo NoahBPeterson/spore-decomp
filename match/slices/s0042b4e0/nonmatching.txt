@@ -1,0 +1,1 @@
+0042b600  655  vector<48-byte>::insert_n: nested inline wrapper temporaries, tag locals and /Od slot order not reproduced (frame 0x78 vs 0x128)

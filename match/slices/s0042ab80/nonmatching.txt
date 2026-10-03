@@ -1,0 +1,5 @@
+# <va> <diff-bytes> <reason>
+0042ad20 5 IdPtrVecBase copy ctor; only the stack-slot order of the inlined uninitialized_copy params/tag differs
+0042adf0 12 uninitialized move of IdPtrVec; size matches (189), stack slot of result/tag bytes and flag-copy register order differ
+0042aeb0 764 vector<RefPtr>::DoInsertValues; behavioral only, /Od inlined-helper temps (uninitialized_move flags, iterator wrappers) not reproduced (853 vs 1043 bytes)
+0042b2d0 285 introsort loop on 12-byte records; behavioral, median-of-3/partition inline temp slot order differs (518 vs 522 bytes)

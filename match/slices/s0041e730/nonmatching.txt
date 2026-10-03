@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0041e770  28  Vec24::reserve: structure and instructions match, only stack slot offsets differ (dead-slot layout of the nested uninitialized_move/destruct inlines)
+0041ebe0  46  RefVector::operator=: same length, same instruction sequence; stack slot offsets differ (dead inline slots in the copy wrappers, frame 0xb8 vs 0xe8)

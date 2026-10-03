@@ -1,0 +1,2 @@
+004341c0 168 Effect::Stop; /Od intrusive-ptr inline temps land in different stack slots (frame 0x30 same, slot order differs)
+004342f0 504 Effect::Start; /Od with many inlined temps (vtable renderer calls, ParamBuilder ctor/struct copies) only approximated; behaviorally equivalent

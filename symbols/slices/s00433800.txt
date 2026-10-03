@@ -1,0 +1,9 @@
+00433960 Bounds::Bounds  # two Vector3 from global default, zero fields
+004339f0 FadeController::FadeController  # defaults, handle ptr at +0x30
+00433a80 FadeController::SetOwner  # stores owner at +0x2c
+00433aa0 FadeController::ReleaseHandle  # clears owner, Stop(0)+Release handle
+00433b30 FadeController::Update  # advances time, SetValue/SetFade on mixer
+004340c0 FadeController::IsActive  # playing && !fadingOut
+00434100 FadeController::IsPlaying  # returns byte +0x11
+00434120 FadeController::Stop  # time=0, release handle, fadingOut=1
+00434040 XformMsg::XformMsg  # flags/count, default pos, scale 1.0, identity rot

@@ -1,0 +1,11 @@
+0041efb0 Vec_Elem16_operator_assign  # EASTL-style vector<16-byte POD> copy assignment (inlined copy/uninitialized_copy/destroy)
+0041f1e0 VecRcPtr_resize  # vector of intrusive ptrs: insert n copies or erase tail
+0041f270 Vec_Elem7c_dtor  # destroy range of 0x7c elems then free
+0041f2d0 Elem7c_dtor  # releases refs at +0x78 (DefaultRefCounted::Release) and +0x74 (vtable slot 1)
+0041f320 Vec_Elem7c_operator_assign  # same shape as 0041efb0 for 0x7c elements
+0041f650 Vec_Elem7c_push_back  # placement copy-construct at end or DoInsertValue
+0041f6c0 Vec_Elem20_copy_ctor  # allocate n*0x20, uninitialized_copy
+0041f760 Vec_Elem20_dtor  # releases ref at +0x1c via vtable slot 1
+0041f7d0 Vec_Elem20_push_back  # same shape as 0041f650
+0041f840 Vec_Elem8c_copy_ctor  # allocate n*0x8c, uninitialized_copy
+0041f8e0 Vec_Elem8c_dtor  # calls Elem8c dtor 0041f940 per element

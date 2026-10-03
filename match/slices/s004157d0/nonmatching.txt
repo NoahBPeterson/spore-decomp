@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004157d0  2400  2474-byte /Od function (inlined smart-ptr/EASTL helpers, EH); source is a compiling, behaviorally approximate sketch (~420 bytes vs 2474 original), not byte-exact

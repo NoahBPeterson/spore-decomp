@@ -1,0 +1,25 @@
+# source symbol va flags
+slices/s0041d490/s0041d490.cpp  ??0cCreatureAbility@@QAE@PBM@Z  0041d490  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??0PoolVec3072@@QAE@H@Z  0041d510  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??0FixedVec8@@QAE@XZ  0041d590  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@WStr768@@QAEPAU1@XZ  0041d600  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@WStr512@@QAEPAU1@XZ  0041d660  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@WStr1024@@QAEPAU1@XZ  0041d6c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@Str512@@QAEPAU1@XZ  0041d720  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Destroy@cCreatureAbility@@QAEPAU1@I@Z  0041d780  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?CopyRows@AbilityBlockCopy@@QAEPAU1@PBM@Z  0041d7b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@FixedVec192@@QAEXXZ  0041d830  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Reset@OwnPtrV1@@QAEPAU1@XZ  0041d870  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Assign@ThreadedRef@@QAEPAU1@PAUThreadedObject@@@Z  0041d8b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Reset@RcRef@@QAEPAU1@XZ  0041d900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Reset@ExtRef@@QAEPAU1@XZ  0041d940  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Reset@RcHolderRef@@QAEPAU1@XZ  0041d9f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Reset@OwnPtrV2@@QAEPAU1@XZ  0041da30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@FixedVec1536@@QAEXXZ  0041da70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Init@FixedVec896@@QAEXXZ  0041dab0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?Unchecked_idl0@@YAHHHH@Z  0041daf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??G@YA?AUVector3@@ABU0@0@Z  0041db10  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ?ScaleInPlace@@YAPAUVector3@@PAU1@PBM@Z  0041dba0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??H@YA?AUVector3@@ABU0@0@Z  0041dc10  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??D@YA?AUVector3@@ABU0@ABM@Z  0041dca0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0041d490/s0041d490.cpp  ??9@YA_NABUVector3@@0@Z  0041dd30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0042dee0/s0042dee0.cpp  ?EASTL_Allocate@@YAPAXPAXIII@Z  0042dee0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedCopy48@@YAPAUElem48@@PAU1@00@Z  0042df50  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedMove48@@YAPAUElem48@@PAU1@00@Z  0042dff0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?MergeSortBuffer@@YAXPAUElem12@@00_N@Z  0042e090  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?FillN32@@YAPAIPAIIPBI@Z  0042e240  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?AllocateNode@Elem12List@@QAEPAUNode@1@ABUElem12@@@Z  0042e290  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?erase@WString@@QAEPA_WPA_W0@Z  0042e2f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?AllocCopy@Vec2Base@@QAEPAIIPAI0@Z  0042e350  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?AllocCopy@Vec16Base@@QAEPAUElem16@@IPAU2@0@Z  0042e3b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedCopy16@@YAPAUElem16@@PAU1@00@Z  0042e410  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?AllocCopy@Vec56Base@@QAEPAUElem56@@IPAU2@0@Z  0042e4b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedCopy56@@YAPAUElem56@@PAU1@00@Z  0042e510  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?AllocCopyB@Vec4Base@@QAEPAIIPAI0@Z  0042e5b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?reserve@WString@@QAEXI@Z  0042e610  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedFillN56@@YAXU?$It@UElem56@@@@IPBUElem56@@UTag@@@Z  0042e680  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?CopyBackwardCounted@@YAPAUCountedRef@@PAU1@00@Z  0042e6e0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?CopyBackwardThreaded@@YAPAUThreadedRef@@PAU1@00@Z  0042e760  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s0042dee0/s0042dee0.cpp  ?UninitializedFillNThreaded@@YAXU?$It@UThreadedRef@@@@IPBUThreadedRef@@UTag@@@Z  0042e7e0  /Od /Ob1 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,1 @@
+00406540 `vector copy constructor iterator'  # stdcall (dst,src,size,count,ctor) ret 0x14; byte-identical to cl-emitted ??__G@YGXPAX0IHP6EPAX00@Z@Z

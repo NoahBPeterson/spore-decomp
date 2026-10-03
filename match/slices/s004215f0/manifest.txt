@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004215f0/s004215f0.cpp  ?push_back@Item24Vec@@QAEXABUItem24@@@Z  004215f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?assign@QuadVec@@QAEAAU1@ABU1@@Z  00421670  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?find@HashTable@@QAE?AUHashIter@@PBI@Z  00421950  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?insert@HashTable@@QAE?AUHashInsertResult@@PBII@Z  00421a50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?resize@IPtrVec@@QAEXI@Z  00421bf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?Construct@SlotMessage@@QAEPAU1@I@Z  00421c80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?Destruct@SlotMessage@@QAEXXZ  00421cf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ??1Elem32Vec@@QAE@XZ  00421d70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ??1Elem56Vec@@QAE@XZ  00421dd0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ??1Elem24Vec2@@QAE@XZ  00421e30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?Set@Holder@@QAEXII@Z  00421e80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?QueryA@@YAPAXPAPAUUnknown@@@Z  00421eb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?Reset@Resetter@@QAEPAU1@XZ  00421f00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?Init@Thunk@@QAEXI@Z  00421f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s004215f0/s004215f0.cpp  ?QueryB@@YAPAXPAPAUUnknown@@@Z  00421f60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

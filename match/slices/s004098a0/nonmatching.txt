@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+00409930 21 Transform::Transform(): original frame is 0x38 with a spilled this+0x14 temp before the Matrix3 copy-ctor call; mine keeps ecx directly (no source form found that reproduces the extra 0x28-byte frame)
+00409dd0 316 BoundingBox::TransformBy(const Transform&): all calls/ops/copies agree, but /Od local slot order (extent,sum,half,absRot) and pointer-spill slots differ; declaration order and local names do not change the layout
+0040a0f0 14 Matrix3_Abs: instruction sequence identical, only the stack-slot assignment of the 5 locals differs (sr/s/dr/d/i); declaration order/name permutations did not fix it

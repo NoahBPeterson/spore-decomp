@@ -1,0 +1,7 @@
+00414e30 BoundsLibrary::Query  # hash lookup of a 64-bit key then BoundsSampler::Init, fills min/max or +-0.1 defaults
+00415030 BoundsSampler::Init  # per-axis dims bytes at +0x1C, builds ranges, calls Collect
+00415230 BoundsSampler::CellRange  # int(n*t) cell index and fraction
+00415310 BoundsSampler::Collect  # recursive lerp of corner bounds over levels
+004154b0 BoundsSampler::CellBounds  # unpack 4-bit min/max offsets times quantization step
+00415660 PropertyListCache::Get  # cached PropManager::GetPropertyList by 64-bit key
+00415730 ConfigManager::FindModelKey  # property 0xF9EFBB key, convert type 0x61, check resource exists

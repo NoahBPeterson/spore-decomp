@@ -1,0 +1,3 @@
+00404660 BakerCommand::ParseLine  # "No key -- you need to save the model first.", "queuing %ls for bake\n"; option bits match BakerCommand ctor (0x00404500) option ids
+00404f10 ResourceKeyFilter::IsValid  # slot 1 of vtable 0x013eb898; wildcard 0xffffffff instance/type/group-with-mask compare used by ParseLine's key filter
+00404f90 Resource::ThreadedObject::Release  # existing symbol; atomic decrement, reset to 1, virtual deleting dtor

@@ -1,0 +1,2 @@
+0041a0c0  1505  /Od frame; locals/stack slot order differ from original (0x1c4 frame, many inline temps), cleanup/smart-pointer shape not reproduced
+0041a980  5  /Od; original has one extra unused 4-byte local slot (this at -0x10 vs ours)
