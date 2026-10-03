@@ -1,6 +1,6 @@
 # @runtime PyGhidra
 # Apply symbols/names.txt: "addr name  # comment". Creates functions where missing for code addresses.
-# Args: <names.txt>
+# Args: <names.txt> [<names.txt> ...]
 from ghidra.program.model.symbol import SourceType
 from ghidra.app.cmd.function import CreateFunctionCmd
 
@@ -9,7 +9,10 @@ space = prog.getAddressFactory().getDefaultAddressSpace()
 fm, st, mem = prog.getFunctionManager(), prog.getSymbolTable(), prog.getMemory()
 text = mem.getBlock(".text")
 n = 0
-for line in open(getScriptArgs()[0]):
+import itertools
+lines = itertools.chain.from_iterable(open(p) for p in " ".join(getScriptArgs()).split())
+errors = 0
+for line in lines:
     line = line.split("#", 1)[0].strip()
     if not line:
         continue
@@ -20,7 +23,8 @@ for line in open(getScriptArgs()[0]):
     if ns:
         from ghidra.app.util import NamespaceUtils
         namespace = NamespaceUtils.createNamespaceHierarchy(ns, None, prog, SourceType.USER_DEFINED)
-    if text.contains(addr):
+    try:
+      if text.contains(addr):
         f = fm.getFunctionAt(addr)
         if f is None:
             CreateFunctionCmd(addr).applyTo(prog, monitor)
@@ -30,6 +34,8 @@ for line in open(getScriptArgs()[0]):
             f.setName(short, SourceType.USER_DEFINED)
             n += 1
             continue
-    st.createLabel(addr, short, namespace, SourceType.USER_DEFINED)
-    n += 1
-println("applied %d names" % n)
+      st.createLabel(addr, short, namespace, SourceType.USER_DEFINED)
+      n += 1
+    except Exception as e:
+      errors += 1
+println("applied %d names (%d errors)" % (n, errors))
