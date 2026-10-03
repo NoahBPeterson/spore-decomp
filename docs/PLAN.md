@@ -33,7 +33,7 @@ Target: `SporeBin/SporeApp.exe` (Steam, PE timestamp 2024-09-30, PDB `SporeEP1_R
 | # | Subsystem | Status |
 |---|-----------|--------|
 | 0 | Triage, SteamStub analysis image, Ghidra project | done (analysis running) |
-| 1 | Resources: DBPF container, RefPack, name hash | portable impl + corpus tests pass (108,918 entries / 70,149 compressed). Next: map to exe functions |
+| 1 | Resources: DBPF container, RefPack, name hash | DBPF read path + RefPack reimplemented from decompile (addresses annotated), unit + corpus tests pass. Next: differential tests vs original code (Unicorn) |
 | 1b | `.prop` property lists, locale `.locale` tables, config `.txt` | todo |
 | 2 | Whole-binary map: library identification (EASTL, zlib, Lua, …), ModAPI type import, subsystem tagging | todo |
 | 3 | Boot path: CRT → WinMain → App framework → config → window/device | todo |

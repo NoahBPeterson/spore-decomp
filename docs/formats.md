@@ -1,6 +1,21 @@
 # File formats (observed; confirm each field against the exe loader before marking verified)
 
-## DBPF (.package) — VERIFIED by corpus (108,918 entries, 70,149 compressed)
+## DBPF (.package) — VERIFIED against exe decompile + corpus (108,918 entries, 70,149 compressed)
+Implementation: `src/resource/DBPF.cpp`, each function annotated with its original address.
+Exe rules (beyond the basic layout below):
+- Header accepted iff magic, major<4, count<0x7FFFFFF, indexOffset<fileSize,
+  (u32)(indexOffset+indexSize)<=fileSize, indexMinor(0x3C)!=0. If legacy offset 0x28 is also
+  set, the result is instead (0x40==0x28 && 0x44==0).
+- If the header fails, the file is scanned for the 16-byte marker
+  `80 9D 88 EC 8F 24 03 6C C9 A6 31 56 5B CF 77 20`; the package starts right after it and
+  index/record offsets are relative to that position (integrity checks still use absolute ones).
+- Index: flags bit 2 is required and the constant third field must be 0. Entries are
+  variable-length: the {u16 compression, u8 committed} dword exists only when size has bit 31;
+  otherwise compression = (diskSize != memSize) ? 0xFFFF : 0. Any nonzero compression = RefPack.
+- Duplicate keys: first entry wins (hash_map insert-unique, hash = instance ^ group).
+- Integrity: every entry with diskSize != 0 must lie inside [0, fileSize).
+- RefPack header must satisfy (b0 & 0x1F) == 0x10 && b1 == 0xFB (the 0x01 flag is rejected);
+  declared size must equal the index memSize. The exe's decoder has no bounds checks.
 - Header 0x60 bytes LE: `DBPF`, major@0x04 (=3), minor@0x08 (=0), index count@0x24,
   index size@0x2C, index minor@0x3C (=3), index offset@0x40.
 - Index: u32 flags; bits 0..2 mean type/group/unknown is constant, and each constant

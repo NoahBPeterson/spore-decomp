@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
   if (!std::strcmp(argv[1], "list")) {
     for (const auto& e : pkg.Entries())
       std::printf("%08X %08X %08X off=%08X disk=%u mem=%u %s\n", e.key.type, e.key.group,
-                  e.key.instance, e.offset, e.diskSize, e.memSize, e.compressed ? "Z" : "-");
+                  e.key.instance, e.offset, e.diskSize, e.memSize, e.IsCompressed() ? "Z" : "-");
     return 0;
   }
   if (!std::strcmp(argv[1], "extract") && argc == 7) {

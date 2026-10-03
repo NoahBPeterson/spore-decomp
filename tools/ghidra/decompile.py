@@ -9,8 +9,9 @@ flat = FlatProgramAPI(currentProgram, monitor)
 di = DecompInterface()
 di.openProgram(currentProgram)
 with open(args[0], "w") as fh:
-    for a in args[1:]:
-        f = flat.getFunctionContaining(flat.toAddr(int(a, 16)))
+    space = currentProgram.getAddressFactory().getDefaultAddressSpace()
+    for a in " ".join(args[1:]).split():
+        f = flat.getFunctionContaining(space.getAddress(int(a, 16)))
         if f is None:
             fh.write("/* no function at %s */\n" % a)
             continue

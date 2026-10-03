@@ -1,0 +1,67 @@
+# address  name  [# provenance]
+# Provenance tags: vt=vtable slot matched to ModAPI declaration order; dc=read from decompile; str=string xref
+011e11a0 entry_oep                                              # SteamStub header OEP
+00926060 operator_delete                                        # dc: called by scalar deleting dtors
+014367b0 vtbl_Resource_DatabasePackedFile                       # data
+008d9990 Resource::DatabasePackedFile::scalar_deleting_dtor     # vt 00h
+008d93e0 Resource::DatabasePackedFile::~DatabasePackedFile      # dc
+006bbdd0 Resource::DatabasePackedFile::Initialize               # vt 04h (shared impl)
+008d8650 Resource::DatabasePackedFile::Dispose                  # vt 08h
+008d9480 Resource::DatabasePackedFile::GetDatabaseType          # vt 0Ch
+0069d3f0 Resource::DatabasePackedFile::GetRefCount              # vt 10h (shared impl)
+008d81d0 Resource::DatabasePackedFile::Lock                     # vt 14h
+008d8980 Resource::DatabasePackedFile::Open                     # vt 18h
+008d99b0 Resource::DatabasePackedFile::Close                    # vt 1Ch
+00ff0420 Resource::DatabasePackedFile::GetAccessFlags           # vt 20h (shared impl)
+008daba0 Resource::DatabasePackedFile::Flush                    # vt 24h
+00a42730 Resource::DatabasePackedFile::GetLocation              # vt 28h (shared impl)
+008d99c0 Resource::DatabasePackedFile::SetLocation              # vt 2Ch
+008d8710 Resource::DatabasePackedFile::GetKeyList               # vt 30h
+008da3d0 Resource::DatabasePackedFile::OpenRecord               # vt 34h
+008d9560 Resource::DatabasePackedFile::GetOpenCount             # vt 38h
+008d9a10 Resource::DatabasePackedFile::CloseRecord              # vt 3Ch
+008d8b70 Resource::DatabasePackedFile::DeleteRecord             # vt 40h
+008d85a0 Resource::DatabasePackedFile::Attach                   # vt 44h
+007f54d0 Resource::DatabasePackedFile::GetAllocator             # vt 48h (shared impl)
+008d86b0 Resource::DatabasePackedFile::GetStream                # vt 4Ch
+008d86c0 Resource::DatabasePackedFile::SetStream                # vt 50h
+008d82e0 Resource::DatabasePackedFile::CreateRecordRead         # vt 54h
+008d82a0 Resource::DatabasePackedFile::CreateRecordReadCopy     # vt 58h
+008d8250 Resource::DatabasePackedFile::CreateRecordWriteData    # vt 5Ch
+008d8200 Resource::DatabasePackedFile::CreateRecordWrite        # vt 60h
+008d8320 Resource::DatabasePackedFile::ReadHeaders              # vt 64h
+008d8c50 Resource::DatabasePackedFile::ReadHeaderRecord         # vt 68h
+008d8e20 Resource::DatabasePackedFile::WriteEmptyHeaderRecord   # vt 6Ch
+008d8ee0 Resource::DatabasePackedFile::WriteHeaderRecord        # vt 70h
+008d8d90 Resource::DatabasePackedFile::VerifyHeaderRecordIntegrity # vt 74h
+008da750 Resource::DatabasePackedFile::ReadIndexRecord          # vt 78h
+008d95f0 Resource::DatabasePackedFile::WriteIndexRecord         # vt 7Ch
+008d9000 Resource::DatabasePackedFile::VerifyIndexRecordIntegrity # vt 80h
+008d8360 Resource::DatabasePackedFile::CreateIndex              # vt 84h
+008d8390 Resource::DatabasePackedFile::DestroyIndex             # vt 88h
+008d83b0 Resource::DatabasePackedFile::MakeIndexModifiable      # vt 8Ch
+008d9770 Resource::DatabasePackedFile::InitializeHoleTable      # vt 90h
+01436878 vtbl_Resource_PFIndexModifiable                        # data, from ctor 0x008DB730
+008db730 Resource::PFIndexModifiable::PFIndexModifiable          # dc: CreateIndex allocs 0x4C "Resource/PFIndexModifiable"
+008db9b0 Resource::PFIndexModifiable::Read                       # vt 34h; dc: index record parser
+008db280 Resource::PFIndexModifiable::VerifyIntegrity            # vt 40h; dc: offset/size vs [lo,hi)
+008db450 Resource::PFIndexModifiable::InsertUnique               # dc: hash_map insert, key hash instance^group
+01436900 vtbl_Resource_PFRecordRead                              # data, from ctor 0x008DCDC0
+014368c4 vtbl_Resource_PFRecordRead_IStream                      # data
+008dcdc0 Resource::PFRecordRead::PFRecordRead                    # dc
+008dcb70 Resource::PFRecordRead::Read                            # IStream vt 30h
+008dc510 Resource::PFRecordRead::EnsureLoaded                    # dc: reads/decompresses on first access
+008d88d0 Resource::DatabasePackedFile::ReadBytes                 # dc: memory-or-stream read
+008d9050 Resource::DatabasePackedFile::ReadAt                    # dc: seek headerPos+offset then ReadBytes
+008d9320 Resource::DatabasePackedFile::ReadCompressed            # dc: "Resource/Raw" temp then Decompress
+008d8820 Resource::DatabasePackedFile::Decompress                # dc: RefPack validate + size==memSize + decode
+008dd510 Resource::FindEmbeddedPackageHeader                     # dc: 16-byte marker scan
+01436998 g_EmbeddedPackageMarker                                 # data, first byte stored inverted
+01667a90 g_ReadHeaderRecordReentrancyGuard                       # data
+0092c270 RefPack::ReadBigEndian                                  # dc
+0092c340 RefPack::DecodeUnchecked                                # dc
+0092ca60 RefPack::Decompress                                     # dc
+0092cad0 RefPack::IsValidHeader                                  # dc
+00925fe0 ICoreAllocator_Alloc_Named                              # dc: (size, allocator, name)
+00f473a0 EASTL_allocator_allocate                                # str: EASTL/allocator.h
+00f47380 EASTL_allocator_deallocate                              # dc
