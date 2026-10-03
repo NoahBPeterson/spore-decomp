@@ -1,0 +1,10 @@
+# Anything derived from the copyrighted binary or game data stays local-only.
+work/
+*.exe
+*.dll
+*.gpr
+*.rep/
+.venv/
+__pycache__/
+build/
+.DS_Store
