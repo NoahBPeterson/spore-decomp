@@ -20,9 +20,14 @@ Target: `SporeBin/SporeApp.exe` (Steam, PE timestamp 2024-09-30, PDB `SporeEP1_R
    - corpus tests against the shipped data (does every file parse the same way?), and
    - differential tests: run the original function and ours on the same inputs
      (harness: load the analysis image under wine/x86 emulation, call by address).
-2. **Instruction-exact matching.** Compile per-function with the original toolchain
-   (VS2008 SP1 `cl.exe` 15.00.30729, run under wine; flags still to be recovered from
-   codegen: likely `/O2 /Oy- /GS /EHsc /MD`). Diff each function's bytes against the
+2. **Instruction-exact matching.** Compile per-function with the original toolchain,
+   run under wine. SporeApp.exe's manifest binds `Microsoft.VC90.CRT` **9.0.21022.8**,
+   the CRT Spore ships, so the build used **VS2008 RTM (cl 15.00.21022.08)**, not SP1.
+   SP1's cl 15.00.30729 (in the free Windows SDK 7.0) is a near fallback but may differ
+   on some functions. Flags still need recovering from codegen: likely `/O2 /GS /EHsc /MD`
+   for most modules, with some modules unoptimized.
+   The VC++ 2008 redistributable (9.0.30729.6161) provides only runtime DLLs, no compiler.
+   It can still serve as runtime for wine-run test binaries. Diff each function's bytes against the
    image with relocations masked, and track a `matched` percentage per subsystem.
 3. **Portability.** Swap the Win32/D3D9/DirectInput/DirectSound/WinSock layers for
    platform abstractions (SDL3 + a GL/Vulkan or bgfx renderer) behind the same
