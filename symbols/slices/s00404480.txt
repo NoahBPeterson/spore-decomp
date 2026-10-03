@@ -1,0 +1,2 @@
+00404500 BakerCommand::BakerCommand  # registers "-bake^" options, "Baker system management." help string
+00404630 BakerCommand::Description  # passes "baker" command name to option parser usage

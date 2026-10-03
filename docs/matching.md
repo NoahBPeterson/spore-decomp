@@ -90,3 +90,10 @@ Writing matchable source:
   frame-offset and scheduling puzzles). Under load, wine compiles are slow: batch variants per run.
 - Under zsh a flags string in a variable is one argument unless written `${=var}`.
 - Scratch files must have unique names (`work/match/scratch_<slice>_*`); never use shared tmp paths.
+
+### Static ResourceKey initializers (8,374 functions, pattern `xor eax,eax; mov [g],imm; mov [g+4],eax; mov [g+8],eax`)
+The immediate is an FNV hash of a resource name: `0x4133FE05` = "interplanetarydrive"
+(`tools/hashnames.py`, 7,031/8,374 named into `symbols/key_globals.txt`). So the source was something like
+`ResourceKey kX(id("InterplanetaryDrive"), 0, 0)`: the front end can't evaluate the hash (hence a runtime
+initializer) but the optimizer folds it to an immediate. A plain constant folds to static data under /O2,
+and neither a loop hash nor a `__forceinline` recursive hash folds fully in cl 15.00.30729.
