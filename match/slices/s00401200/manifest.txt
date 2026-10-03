@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00401200/s00401200.cpp  ?Vector3_SetUnitY@@  00401200  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector3_SetUnitZ@@  00401240  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector3_SetZero@@  00401280  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector3_SetOne@@  004012c0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetUnitX@@  00401300  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetUnitY@@  00401350  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetUnitZ@@  004013a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetZero@@  004013f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetOne@@  00401440  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Matrix3_SetIdentity@@  00401490  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Matrix3_SetZero@@  00401540  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Matrix4_SetIdentity@@  004015f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Matrix4_SetZero@@  00401720  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?Vector4_SetUnitW@@  00401850  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?MakePackedKey@@  004018a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?VectorConstructorIterator@@  00401930  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?VectorDestructorIterator@@  00401960  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00401200/s00401200.cpp  ?ConvertObjectIdsToIndices@@  00401990  /Od /Ob1 /MD /Gy /TP /arch:SSE

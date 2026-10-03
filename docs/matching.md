@@ -97,3 +97,8 @@ The immediate is an FNV hash of a resource name: `0x4133FE05` = "interplanetaryd
 `ResourceKey kX(id("InterplanetaryDrive"), 0, 0)`: the front end can't evaluate the hash (hence a runtime
 initializer) but the optimizer folds it to an immediate. A plain constant folds to static data under /O2,
 and neither a loop hash nor a `__forceinline` recursive hash folds fully in cl 15.00.30729.
+Resolution (pattern agent): `tools/matching/synth_templates/key_init_store3.py` matches all 8,374 instances
+with a plain function doing the three stores. This is **shape-equivalent**, not the original syntax: the
+original is a compiler-generated dynamic initializer. Bytes and behavior are identical, but a relinked build
+must register these functions in `.CRT$XCU` explicitly. Other initializer templates carry the same caveat
+unless their header comment says the real `??__E` form was reproduced.
