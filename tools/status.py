@@ -31,12 +31,30 @@ if os.path.exists(W("match/clones.txt")):
         p = line.split("#", 1)[0].split()
         if len(p) >= 3:
             clones.add(int(p[2], 16))
-synth = set()
+# C++ static-initializer table (__xc_a..__xc_z), the range passed to _initterm at 0x011E0F98.
+import struct as _st
+_img = open(W("work/SporeApp.analysis.bin"), "rb").read()
+def _rva_off(rva):
+    e = _st.unpack_from("<I", _img, 0x3C)[0]; n = _st.unpack_from("<H", _img, e + 6)[0]
+    o = e + 24 + _st.unpack_from("<H", _img, e + 20)[0]
+    for i in range(n):
+        vs, va, rs, rp = _st.unpack_from("<IIII", _img, o + 40 * i + 8)
+        if va <= rva < va + max(vs, rs):
+            return rp + rva - va
+XC_A, XC_Z = 0x013CC80C, 0x013EB098
+xcu = set()
+for a in range(XC_A, XC_Z, 4):
+    v = _st.unpack_from("<I", _img, _rva_off(a - 0x400000))[0]
+    if v:
+        xcu.add(v)
+synth = set(); synth_orig = set(); synth_shape = set()
 for f in glob.glob(W("match/synth/*.manifest")):
     for line in open(f):
         p = line.split("#", 1)[0].split()
         if len(p) >= 3:
-            synth.add(int(p[2], 16))
+            va = int(p[2], 16)
+            synth.add(va)
+            (synth_shape if (va in xcu and not p[1].startswith("??__E")) else synth_orig).add(va)
 for line in [l for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")) for l in open(m)]:
     p = line.split("#", 1)[0].split()
     if len(p) >= 3:
@@ -72,7 +90,8 @@ out = ["# Status", "",
        row("Named (recovered class/method/global names)", named),
        row("**Compilable source, byte-exact (hand/agent-written)**", exact),
        row("Compilable source, byte-exact via clone (same code, different globals)", clones - exact),
-       row("Compilable source, byte-exact, synthesized from pattern templates", synth - exact - clones),
+       row("Compilable source, byte-exact, template-generated, original form", synth_orig - exact - clones),
+       row("Compilable source, byte-exact, template-generated, shape-only (static initializer written as a plain function)", synth_shape - synth_orig - exact - clones),
        row("Compilable source, behavioral only (not yet byte-exact)", nonmatching - exact),
        row("**Total with compilable source**", has_src),
        "", "Excluded third-party library functions: %d (%s)" % (len(lib_in_funcs), ", ".join("%s %d" % kv for kv in sorted(by_lib.items()))), ""]
