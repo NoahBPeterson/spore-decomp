@@ -23,7 +23,7 @@ for f in glob.glob(W("work/oss/*_matches.csv")):
     for r in csv.DictReader(open(f)):
         if r["status"] == "unique":
             skip.add(int(r["va"], 16))
-for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")):
+for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/manifest.txt")) + glob.glob(W("match/synth/*.manifest")) + glob.glob(W("match/clones.txt")):
     for line in open(m):
         p = line.split("#", 1)[0].split()
         if len(p) >= 3:
@@ -34,6 +34,14 @@ for m in glob.glob(W("match/slices/*/nonmatching.txt")):
         if p:
             skip.add(int(p[0], 16))
 
+# functions already handed to a batch (attempted or in flight) are never re-planned
+import json as _json
+for bf in glob.glob(W("work/batches/*.json")) + [W("work/pilot.json")]:
+    if os.path.exists(bf):
+        for sl in _json.load(open(bf)):
+            for v in sl.get("vas") or [f["va"] for f in sl.get("functions", [])]:
+                skip.add(int(v, 16))
+
 slices, cur, cur_bytes = [], [], 0
 text_end = 0x13CC000
 def flush():
@@ -43,8 +51,7 @@ def flush():
     cur, cur_bytes = [], 0
 for i, va in enumerate(starts):
     if va in skip or va >= text_end:
-        flush()  # never let a slice span a gap
-        continue
+        continue  # done functions are simply left out; a slice may straddle them
     nxt = starts[i + 1] if i + 1 < len(starts) else va + 16
     size = nxt - va
     if size > a.big:

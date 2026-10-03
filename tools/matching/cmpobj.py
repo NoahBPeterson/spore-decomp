@@ -39,7 +39,8 @@ def parse_coff(path):
     i = 0
     while i < nsym:
         o = symptr + 18 * i
-        value, secno, typ, cls, naux = struct.unpack_from("<IhHBB", d, o + 8)
+        value, secno, typ, cls, naux = struct.unpack_from("<IHHBB", d, o + 8)
+        secno = secno if secno < 0xFF00 else secno - 0x10000
         nm = name_of(d[o:o + 8])
         if secno > 0 and cls in (2, 3) and (typ >> 4) == 2:  # function symbols
             syms.setdefault(nm, (secno - 1, value))

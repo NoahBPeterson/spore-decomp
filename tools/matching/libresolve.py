@@ -28,7 +28,8 @@ def obj_functions(path):
             nm = d[strtab + off:d.index(b"\0", strtab + off)].decode()
         else:
             nm = raw.split(b"\0")[0].decode()
-        value, secno, typ, cls, naux = struct.unpack_from("<IhHBB", d, o + 8)
+        value, secno, typ, cls, naux = struct.unpack_from("<IHHBB", d, o + 8)
+        secno = secno if secno < 0xFF00 else secno - 0x10000
         symname[i] = (nm, cls, secno)
         if secno > 0 and (typ >> 4) == 2 and cls in (2, 3):
             per[secno - 1].append((value, nm))

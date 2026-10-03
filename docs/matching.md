@@ -102,3 +102,14 @@ with a plain function doing the three stores. This is **shape-equivalent**, not 
 original is a compiler-generated dynamic initializer. Bytes and behavior are identical, but a relinked build
 must register these functions in `.CRT$XCU` explicitly. Other initializer templates carry the same caveat
 unless their header comment says the real `??__E` form was reproduced.
+
+### Pattern-template lessons (tier 1, 24 templates, 25,407 functions)
+- Dynamic initializers `??__E<var>@@YAXXZ`: a file-scope global initialized from an `extern const` defined in
+  another TU stays a runtime copy under /O2 (float/vector copies; Vector3 needs a user copy-ctor that copies
+  per field, or the implicit copy uses integer regs). Constant-folding kills ctor-with-literal forms.
+- Unoptimized modules (`push ebp; mov ebp,esp` frames) use `/Od /Ob1 [/arch:SSE]`; constants load from
+  `__real@` and nothing folds, so the real `Vector3 g(1.0f, ...)` form works there.
+- MI adjustor thunks `sub ecx,N; jmp`: class D : B0, B1 with B1 at offset N, both declaring virtual f,
+  D overriding f (declared only), out-of-line `D::D() {}` to force the vtable; mangled `?f@D@@W<N>AEXXZ`.
+- Templates that write `extern` globals named from addresses never collide between instances.
+- Use `/GR-` in templates that emit many vtables (fewer COMDATs); cmpobj now reads >32k sections.

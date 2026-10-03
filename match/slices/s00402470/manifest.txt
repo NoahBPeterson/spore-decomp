@@ -1,0 +1,6 @@
+slices/s00402470/s00402470.cpp  ?Gather@Preloader@@QAEXPAUPreloadSource@@_N@Z  00402470  /Od /Ob1 /MD /Gy /TP
+slices/s00402470/s00402470.cpp  ?Start@Preloader@@QAEXABUResourceKey@@_N@Z  004029f0  /Od /Ob1 /MD /Gy /TP
+slices/s00402470/s00402470.cpp  ?GetHandle@Preloader@@QAEPAULoadHandle@@XZ  00402a90  /Od /Ob1 /MD /Gy /TP
+slices/s00402470/s00402470.cpp  ?Self@Preloader@@QAEPAU1@XZ  00402ab0  /Od /Ob1 /MD /Gy /TP
+slices/s00402470/s00402470.cpp  ?IsFinished@Preloader@@QAE_NXZ  00402ac0  /Od /Ob1 /MD /Gy /TP
+slices/s00402470/s00402470.cpp  ?Reset@Preloader@@QAEXXZ  00402b30  /Od /Ob1 /MD /Gy /TP
