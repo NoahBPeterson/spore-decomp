@@ -10,11 +10,11 @@ which are excluded as freebies (built byte-exact from upstream source).
 | Ghidra pseudocode (readable, NOT compilable) | 89350 | 100.00% |
 | Named (recovered class/method/global names) | 1252 | 1.40% |
 | **Compilable source, byte-exact (hand/agent-written)** | 649 | 0.73% |
-| Compilable source, byte-exact via clone (same code, different globals) | 6511 | 7.29% |
-| Compilable source, byte-exact, template-generated, original form | 22613 | 25.31% |
+| Compilable source, byte-exact via clone (same code, different globals) | 6630 | 7.42% |
+| Compilable source, byte-exact, template-generated, original form | 22548 | 25.23% |
 | Compilable source, byte-exact, template-generated, shape-only (static initializer written as a plain function) | 16626 | 18.61% |
 | Compilable source, behavioral only (complete, not yet byte-exact) | 145 | 0.16% |
 | Partial / approximate source (NOT counted) | 12 | 0.01% |
-| **Total with compilable source** | 46544 | 52.09% |
+| **Total with compilable source** | 46596 | 52.15% |
 
 Excluded third-party library functions: 1119 (crt 28, jpeg 31, openssl 918, png 113, zlib 29)
