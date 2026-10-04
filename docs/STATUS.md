@@ -22,7 +22,7 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
-Checked against PDB-named functions, that heuristic labels 79%% of member functions as class code and 88%% of
+Checked against PDB-named functions, that heuristic labels 79% of member functions as class code and 88% of
 free functions as functions, so for unnamed code the split between the first two kinds is approximate.
 Kind totals: functions 21150, classes/templates 36791, globals/other 31412.
 
