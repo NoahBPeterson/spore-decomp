@@ -138,10 +138,14 @@ def comp_rows():
     comps = _json.load(open(W("symbols/components.json")))
     for name, ranges in comps.items():
         if name.startswith("_"): continue
-        items = set(a for a in game if any(int(lo, 16) <= a < int(hi, 16) for lo, hi in ranges))
+        if isinstance(ranges, dict):  # {"list": file of VAs}
+            vas = set(int(l.split()[0], 16) for l in open(W(ranges["list"])) if l.strip() and not l.startswith("#"))
+            items = (vas & game) - set().union(*[r[1] for r in rows]) if rows else vas & game
+        else:
+            items = set(a for a in game if any(int(lo, 16) <= a < int(hi, 16) for lo, hi in ranges))
         rest -= items
         rows.append((name, items))
-    rows.append(("Spore + EA framework (everything else)", rest))
+    rows.append(("Spore game code (everything else)", rest))
     out = []
     for name, items in rows:
         b = sum(funcs[a]["size"] for a in items); src = items & (byte_exact | equiv)

@@ -24,7 +24,8 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 |---|---:|---:|---:|---:|
 | Havok 3.1.0 | 2121 | 1025 (48.33%) | 0.66 MB | 15.95% |
 | RenderWare | 1976 | 289 (14.63%) | 0.43 MB | 1.06% |
-| Spore + EA framework (everything else) | 84508 | 48470 (57.36%) | 13.18 MB | 17.43% |
+| EA framework (UTFSpore) | 6573 | 1344 (20.45%) | 1.23 MB | 4.14% |
+| Spore game code (everything else) | 77935 | 47126 (60.47%) | 11.95 MB | 18.80% |
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
@@ -32,6 +33,6 @@ Checked against PDB-named functions, that heuristic labels 79% of member functio
 free functions as functions, so for unnamed code the split between the first two kinds is approximate.
 Kind totals: functions 20454, classes/templates 36747, globals/other 31404.
 
-Named (recovered real names, incl. high-confidence dev-PDB matches): 12201 (13.77%). This is orthogonal to the tiers.
+Named (recovered real names, incl. high-confidence dev-PDB matches): 16161 (18.24%). This is orthogonal to the tiers.
 
 Excluded third-party library functions: 1867 (cblock 748, crt 28, jpeg 31, openssl 918, png 113, zlib 29)
