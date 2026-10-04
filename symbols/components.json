@@ -1,0 +1,5 @@
+{
+  "_comment": "Retail address ranges of middleware blocks (contiguous in link order). Havok 3.1.0 found by instruction-identical code to the dev build's prebuilt hk*.lib; RenderWare by dev-PDB module of matched functions. Still counted as game code (they must be decompiled for a portable build).",
+  "Havok 3.1.0": [["0107d740", "0112c500"]],
+  "RenderWare": [["0112c500", "01176a90"], ["011e2000", "0120bc50"]]
+}

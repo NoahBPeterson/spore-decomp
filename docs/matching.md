@@ -68,6 +68,10 @@ Tools (from repo root):
   dev-build PDB as a C++ declaration with byte offsets (real member names!). Retail may differ in a few
   fields, so confirm offsets against the disassembly. Many retail functions now carry real names from that
   PDB (see docs/xmatch.md); the card shows them. Use these real names for classes, methods and members.
+- Spore ModAPI headers (community reverse engineering of the 2017 Steam build, much closer to retail than the
+  2008 PDB, and covering Galactic Adventures): `grep -rn "<Class or method>" "work/ext/Spore-ModAPI/Spore ModAPI/Spore"`.
+  Class names differ from the PDB's (ModAPI `Simulator::cCreatureBase` = PDB `SP::cSPCreatureBase`), but
+  member names, virtual method order and enums are a good reference. Its addresses are for the 2017 build, NOT ours.
 - `.venv/bin/python tools/matching/od_names.py fit K`: local-variable slot order for /Od functions (below).
 
 Writing matchable source:
@@ -144,3 +148,45 @@ unless their header comment says the real `??__E` form was reproduced.
 - Some /Od modules have no `/EHsc` (with it, `new (p) T(v)` adds a temp slot). A `return true` temp byte before
   dtor calls means RAII locals with inline dtors. An inline member `void Begin(){ p->Begin(); }` gives the
   ecx-first vcall order.
+
+### Batch-2 lessons (100 slices, 1,708 byte-exact; condensed from Papercuts)
+
+**Flags by region (check the card's code shape, then confirm with chk.py):**
+- Editor `/Od` region (about 0x484e40-0x4a6660): `/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast`, with no /EHsc. Many editor modules also need `/GS-`; a `wchar_t buf[64]` with no cookie tells you that.
+- `/Od` code with 16-byte-aligned locals (Havok hkVector4, prologue `and esp,-16`) needs `/Oy` added. It doesn't change ordinary frames, so the whole slice can use it.
+- UI modules: no `/arch:SSE` (fld/fstp float pushes) and no /EHsc (a string local with a dtor gets no EH frame).
+- A float return without fstp/fld rounding needs a per-line `/fp:fast`. One slice can mix modules: use a second .cpp with per-line manifest flags.
+
+**EASTL: write the real EASTL code, not shape hacks.** The template instances (vector::DoInsertValue, rbtree insert/lower_bound/DoNuke, uninitialized_copy/relocate, basic_string append/rfind, hashtable find/bucket_index) match when written as literal EASTL source with EASTL's own local names: extractKey, pCurrent, pRangeEnd, pNodeLeft, bValueLessThanNode, `const size_type nCapacity = (mpCapacity - mpBegin) - 1;`. cl then makes the original's inline/no-inline choices on its own. `work/ext/Spore-ModAPI/EASTL-3.02.01` is a close reference: ModAPI uses it because its layout is compatible with Spore's. The 2008 code differs in details, so verify.
+- `template class eastl::map<K,V>;` (explicit instantiation) emits every member at once. If an implicit dtor then goes out of line, add a user `~vector() {}`.
+- Explicit specializations of in-class members are never emitted. Emit them through a `#pragma inline_depth(0)` helper that calls them.
+- Iterators: rbtree_iterator and hashtable_iterator need their user copy ctors (and hashtable_iterator its base class), or by-value args and sret stores come out wrong. generic_iterator wrappers produce the temp slots in uninitialized_copy and fill.
+- Tags: the three `const bool` locals in copy/copy_backward, declared in the order bOutputIsPointer, bInputIsPointer, bHasTrivialCopy. is_integral (false_type) emits no store; true_type() does. A tag with no user ctor gets a stored 0 byte, and one with a user ctor gets nothing.
+- `xor r,r; shl r,2` is an inlined `operator[](int)` called with 0. memcpy/memset are direct E8 calls; memmove is dllimport. 0x011e0744 is the memcpy thunk.
+
+**`/Od` frame layout (on top of the section above):**
+- Slot order is a hash bucket per name; within a bucket, later-declared names come first. `od_names.py fit` is only a start, because params and inline locals count too. What works: compile many renamed copies of one function in a single object, rank them with chk.py `-a`, and search whole name sets rather than swaps. Same-type pairs often ignore renames, so swap the declaration order instead. For-init loop variables are allocated after the enclosing scope.
+- **Holes are the reserved frames of inline callees that cl declined** (called out of line), such as RefCountTemplate::Release, VectorBase dtor, vector::insert, hashtable::find and string operator==. Give those helpers their real inline bodies and the holes appear by themselves; declaring them extern loses the hole. A helper defined out of class without `inline` leaves no hole. Otherwise use `ScratchSlots<N>()` exactly where the call sits. A named unused local gives a hole above the other slots, ScratchSlots one at the bottom. One value type copied at several sites can share a single hole block.
+- cl /Ob1 never inlines a function containing `delete this` (Release, removeReference) unless it's `__forceinline` (Havok HK_FORCE_INLINE).
+- An inline's param or `this` gets a slot only if it is used more than once or modified. Returned refs, pointers and floats of inline accessors get a slot. A 2-level accessor gives the "slot, then copy into a named local" pattern.
+- `p->~T()` always goes through the scalar deleting dtor `??_GT(0)` (`xor ecx,ecx; and ecx,1; je`). A compiler-generated dtor skips the vptr store at entry; `~X(){}` adds it.
+- Refcounts: `AddRef(){ return mnRefCount++ + 1; }` and `int n = mnRefCount - 1; mnRefCount = mnRefCount - 1;` (temp, then store). bool to byte is `v ? 1 : 0`.
+- An empty POD default-arg temporary (`hash_allocator()`) blocks ctor inlining. Give the class a user ctor `{}`.
+- `throw E(fmt, ...)` constructs in place only if E has a user copy ctor. A variadic ctor is __cdecl with `this` pushed.
+- A union of two 8-byte structs gives the "64-bit copy twice" pattern (`#pragma pack(4)` if it holds a uint64).
+
+**`/O2` levers (register choice, reloads, ordering):**
+- A member loaded into a callee-saved register before a call: copy it to a local at that point in the source. Calls can modify members, so source order pins the load.
+- Test-then-reload (`cmp [r],0; je; mov ecx,[r]`) means the member chain is written twice without a local. A kept `lea` means a `T& ref = v[i];` local. Calling a trivial inline accessor instead of the raw member fixes stubborn register swaps.
+- Refcount release `mov eax,[ecx+4]; add eax,-1; mov [ecx+4],eax` = `int n = (*(volatile int*)&mnRefCount += -1);`.
+- `cond ? A : B` constant args fold to setne or neg/sbb, while the original's per-arm pushes come from `if (c) f(A); else f(B);`. Switch case order and case-body order change the compare tree, so brute-force orderings in one compile. A common tail `push; jmp common` per case is a `__forceinline` helper.
+- `return k == 0xd;` emits `xor eax,eax` first, while `if (k == 0xd) return true; return false;` doesn't. A shared final `return false;` keeps ebx saved in the prologue.
+- Overloaded virtuals are laid out in REVERSE declaration order. An IHandler::HandleMessage override sees `this` as the IHandler subobject (offsets shifted by -8). Dump vtables straight from the binary before writing stub classes.
+- Without /GL, `static` functions get register calling conventions (an arg in eax/edi means a static helper in the same TU). A function with ecx=this and `ret 4` that uses no members is still a thiscall member.
+- Struct copies: a user copy ctor compiles to movss, a user `operator=` to fld/fstp. `T x(...); return x;` (NRVO) and `return T(...)` differ. Try a const copy against a const reference.
+- `/arch:SSE` modules use `__asm` float helpers (Floor/CeilToInt with cvtss2si/cmovb, and Min/Max/Clamp with minss/maxss), not `_mm_*`, which forces an aligned frame.
+- EA `new("Editor",0,0,0,0) T()` must be a real new-expression against the 6-arg operator new with no matching delete.
+- An out-of-line same-TU helper that receives a local's address: give it its real body as a `__declspec(noinline)` specialization, so cl knows it doesn't write the object.
+- Parameter types: a float forwarded by `push reg` is an int param. `cvttss2si` vs fistp-qword tells int from unsigned. `(x>>n)&1` (shr; test r,1) is an inline helper, while bitfields give `test byte [m],mask`.
+
+**Tool notes:** anonymous-namespace classes mangle as `?A0x<hash-of-path>`, so give manifests the prefix up to the class name, and quote `?`-symbols in zsh. In cmpdis, relocated zero immediates (`push 0` vs `<addr>`) aren't real diffs.
