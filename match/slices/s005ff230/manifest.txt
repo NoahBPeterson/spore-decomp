@@ -1,0 +1,14 @@
+slices/s005ff230/s005ff230.cpp  ?Shutdown@cAudioTab@SP@@QAEXXZ  005ff2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?RestoreSettingsFromEntry@cAudioTab@SP@@QAEXXZ  005ff2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?DoMessageTab@cGameTab@SP@@QAE_NPAVIWindow@UTFWin@EA@@PBUMessage@45@@Z  005ff370  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?RestoreSettingsFromEntry@cGameTab@SP@@QAEXXZ  005ff460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?Shutdown@cOnlineTab@SP@@QAEXXZ  005ff4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?RestoreSettingsFromEntry@cOnlineTab@SP@@QAEXXZ  005ff560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?Shutdown@cGameTab@SP@@QAEXXZ  005ff630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?RestoreSettingsFromEntry@cOptionTab@SP@@QAEXXZ  005ff640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?SaveOnlineSettings@cSPUISettings@SP@@QAEXXZ  005ff850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?Init@cSettingsTab@SP@@UAEXIPAVIWinProc@UTFWin@EA@@I@Z  005ff8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?Shutdown@cGraphicsTab@SP@@QAEXXZ  005ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?Init@cAudioTab@SP@@UAEXIPAVIWinProc@UTFWin@EA@@I@Z  005ffa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?DoMessageTab@cAudioTab@SP@@QAE_NPAVIWindow@UTFWin@EA@@PBUMessage@45@@Z  005ffee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ff230/s005ff230.cpp  ?UpdateFullscreenControls@cGraphicsTab@SP@@QAEXXZ  00600180  /O2 /MD /Gy /TP /arch:SSE /fp:fast

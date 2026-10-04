@@ -1,0 +1,13 @@
+004b6870 eastl::rbtree<Key16>::DoInsertValue_hint  # byte-exact
+004b69d0 eastl::fixed_vector<Entry32>::operator=  # byte-exact
+004b6a30 eastl::uninitialized_copy_ptr<Record11c>  # byte-exact
+004b6ae0 eastl::uninitialized_relocate_commit<Record11c>  # byte-exact
+004b6bf0 eastl::uninitialized_relocate_start<Vec3>  # byte-exact
+004b6d00 eastl::rbtree<Key16>::DoInsertValueImpl  # byte-exact
+004b6d90 eastl::rbtree<uint32_t,pair>::DoCreateNode  # byte-exact
+004b6f30 eastl::rbtree<Element28,pair>::DoCreateNode  # byte-exact
+004b70d0 eastl::rbtree<Key16>::DoCreateNode  # byte-exact
+004b7150 eastl::rbtree<Key16>::DoInsertValue_unique  # byte-exact
+004b7290 eastl::vector<Entry32,fixed_vector_allocator>::DoAssignFromIterator  # byte-exact
+004b7530 eastl::uninitialized_copy_ptr<Entry32>  # byte-exact
+004b76c0 SP::EditorUtils::ApplySkinPaintThemeToModel  # card PDB candidate (caller-scored); body sets skin effect/seed/color per channel

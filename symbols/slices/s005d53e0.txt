@@ -1,0 +1,2 @@
+005d5e40 SP::cEditorsTokenTranslator::cEditorsTokenTranslator  # base ctor 0x6b5870 + two L"UnsetName" strings; byte-exact
+005d5e90 SP::cEditorsTokenTranslator::`scalar deleting destructor'  # frees mNewModelName/mOldModelName, base dtor 0x5725a0; byte-exact

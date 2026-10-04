@@ -1,0 +1,17 @@
+slices/s004a5970/s004a5970.cpp  ?FindSymmetricSpine@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a5970  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?FindRootSpine@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAUcSPEditorModel@2@@Z  004a5a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?AddBlockScale@EditorUtils@SP@@YAXPAUcSPEditorBlock@2@M@Z  004a5b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetExactSkinRadiusFromVertebra@EditorUtils@SP@@YAMM@Z  004a5b70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetExactSkinRadius@EditorUtils@SP@@YAMPAUcSPEditorBlock@2@@Z  004a5bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetSkinRadiusFromVertebra@EditorUtils@SP@@YAMM@Z  004a5c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetSkinRadius@EditorUtils@SP@@YAMPAUcSPEditorBlock@2@@Z  004a5c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetSkinPoint@EditorUtils@SP@@YA?AUcSPVector3@@ABU3@0M@Z  004a5c70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetSkinTip@EditorUtils@SP@@YA?AUcSPVector3@@PAUcSPEditorBlock@2@@Z  004a5d10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetRootBlock@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a5db0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetLimbRoot@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a5e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?AreInSameLimb@EditorUtils@SP@@YA_NPAUcSPEditorBlock@2@0@Z  004a60a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?IsLimbConnected@EditorUtils@SP@@YA_NPAUcSPEditorBlock@2@@Z  004a6120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?IsLimbPart@EditorUtils@SP@@YA_NPAUcSPEditorBlock@2@@Z  004a6270  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?GetSymmetryRoot@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a6310  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?RebuildLimbSkins@EditorUtils@SP@@YAXPAUcSPEditorBlock@2@PAUcSkinOwner@2@@Z  004a6640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a5970/s004a5970.cpp  ?RefreshLimbSkins@EditorUtils@SP@@YAXPAUcSPEditorBlock@2@_N@Z  004a6660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

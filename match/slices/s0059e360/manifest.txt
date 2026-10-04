@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0059e360/s0059e360.cpp  ?CanAfford@cSPEditorAppEconomy@SP@@QAE_NABUResourceKey@@@Z  0059e360  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?AddBlockValue@cSPEditorAppEconomy@SP@@UAEXPAVcSPEditorBlock@2@@Z  0059e380  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?DeductBlockValue@cSPEditorAppEconomy@SP@@UAEXPAVcSPEditorBlock@2@@Z  0059e3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?SetBalanceCap@cSPEditorAppEconomy@SP@@UAEXHH@Z  0059e3c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?EnforceBalanceCap@cSPEditorAppEconomy@SP@@UAEXH@Z  0059e3e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?AdjustWealth@cSPEditorAppEconomy@SP@@UAEXHH@Z  0059e400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?SetWealth@cSPEditorAppEconomy@SP@@UAEXHH@Z  0059e430  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?CanAfford@cSPEditorAppEconomy@SP@@UAE_NHH@Z  0059e470  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?Init@cSPEditorAppEconomy@SP@@UAEXH@Z  0059ec80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360.cpp  ?SetVehicle@cSPEditorVehicleAbilities@SP@@QAEXUResourceKey@@I@Z  0059ece0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0059e360/s0059e360_b.cpp  ??$uninitialized_relocate_commit@VcSPEditorVerbIconData@SP@@@eastl@@YAPAVcSPEditorVerbIconData@SP@@PAV12@00@Z  0059ed20  /O2 /MD /Gy /TP /GS-
+slices/s0059e360/s0059e360_b.cpp  ??1?$vector@VcSPEditorVerbIconData@SP@@@eastl@@QAE@XZ  0059eec0  /O2 /MD /Gy /TP /GS-
+slices/s0059e360/s0059e360_b.cpp  ??1cSPEditorVerbIconData@SP@@UAE@XZ  0059efa0  /O2 /MD /Gy /TP /GS-
+slices/s0059e360/s0059e360_b.cpp  ??4cSPEditorVerbIconData@SP@@QAEAAV01@ABV01@@Z  0059f0e0  /O2 /MD /Gy /TP /GS-
+slices/s0059e360/s0059e360_b.cpp  ??0cSPEditorVerbIconData@SP@@QAE@ABV01@@Z  0059f2a0  /O2 /MD /Gy /TP /GS-
+slices/s0059e360/s0059e360_b.cpp  ?erase@?$vector@VcSPUILayout@SP@@@eastl@@QAEPAVcSPUILayout@SP@@PAV34@0@Z  0059f4a0  /O2 /MD /Gy /TP /GS-

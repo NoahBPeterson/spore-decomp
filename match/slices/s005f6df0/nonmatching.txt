@@ -1,0 +1,2 @@
+005f6f40  933  cSPSwatch::Update: complete; ~70 instr diffs (ebx saved in prologue in original, viewport-distance temps in SSE+spill, x87 snap copies); byte count inflated by shifts
+005f7490  61  cSPAnimatedSwatch::Update: complete; model flag writes merged into one RMW (original: and [m],-3 / or [m],8) plus xmm/push scheduling

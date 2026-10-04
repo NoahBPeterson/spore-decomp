@@ -1,0 +1,3 @@
+00572680  20  RefCountedPtr::operator=: Release decrement emitted as RMW add [m],-1 (orig load/add/store) and epilogue duplicated
+00572cf0  164  EditorGroundSampler: normalize done fully in x87 (orig x87 sqrt + SSE scale), creature-path layout differs
+00573070  9  CanUseModel: mpModel lands in eax instead of reusing ebp (this); one extra jmp in group-pair test

@@ -1,0 +1,5 @@
+005ff2a0 SP::cAudioTab::Shutdown  # releases the mhSound slot at +0x24 (also used by cAudioTab::DoMessageTab) then mLayout.Shutdown
+005ff4e0 SP::cOnlineTab::Shutdown  # removes IHandler (+0x24) from MessageServer for 3 ids, PDB candidate
+005ff560 SP::cOnlineTab::RestoreSettingsFromEntry  # PDB candidate (caller-scored)
+005ff8e0 SP::cSettingsTab::Init  # body inlined verbatim at the start of SP::cAudioTab::Init
+005ffee0 SP::cAudioTab::DoMessageTab  # PDB candidate (caller-single); uses cAudioPreferences setters

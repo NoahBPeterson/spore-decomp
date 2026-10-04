@@ -1,0 +1,7 @@
+004f7660 eastl::rbtree<uint32_t,pair<const uint32_t,vector<Elem16>>>::DoAllocateNode  # byte-exact
+004f7800 eastl::make_heap<ResourceMan::Key*>  # byte-exact
+004f7890 eastl::adjust_heap<ResourceMan::Key*,int,Key>  # byte-exact
+004f79d0 eastl::sort_heap<ResourceMan::Key*>  # pop_heap inlined, byte-exact
+004f7a70 eastl::promote_heap<ResourceMan::Key*,int,Key>  # byte-exact
+004f7b50 eastl::rbtree<uint32_t,...>::DoNuke  # byte-exact
+004f8120 GetSimdLevel  # cpuid SSE/SSE2/FXSR + fxsave MXCSR_MASK DAZ probe, byte-exact

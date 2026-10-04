@@ -1,0 +1,1 @@
+0043bd80 282 complete; original spills outgoing-arg esp to a stack slot before copy-constructing the by-value Matrix3 arg (one extra slot shifts later offsets); otherwise instruction-identical

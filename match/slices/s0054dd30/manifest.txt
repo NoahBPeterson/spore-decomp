@@ -1,0 +1,17 @@
+slices/s0054dd30/s0054dd30.cpp  ?CreateMetadataFactory@Pollen@SP@@YAPAVcAssetMetadataResourceFactory@12@PAVcAssetDirectory@12@@Z  0054dd30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetSupportedTypes@cAssetMetadataResourceFactory@Pollen@SP@@UBEIPAII@Z  0054ddc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ??0cAssetDirectory@Pollen@SP@@QAE@XZ  0054ddf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?Init@cAssetDirectory@Pollen@SP@@QAE_NXZ  0054df60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?Shutdown@cAssetDirectory@Pollen@SP@@QAE_NXZ  0054e020  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?HandleMessage@cAssetDirectory@Pollen@SP@@UAE_NIPAX@Z  0054e0b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?AddMapping@cAssetDirectory@Pollen@SP@@QAE_N_KABUKey@ResourceMan@EA@@@Z  0054e250  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetLocalKey@cAssetDirectory@Pollen@SP@@QBE_N_KPAUKey@ResourceMan@EA@@@Z  0054e460  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetServerId@cAssetDirectory@Pollen@SP@@QBE_NABUKey@ResourceMan@EA@@PA_K_N@Z  0054e530  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?IsPending@cAssetDirectory@Pollen@SP@@QBE_N_K@Z  0054e740  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?SetPending@cAssetDirectory@Pollen@SP@@QAEX_K_N@Z  0054e7b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?IsPending2@cAssetDirectory@Pollen@SP@@QBE_N_K@Z  0054e800  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?AddPending2@cAssetDirectory@Pollen@SP@@QAEX_K@Z  0054e870  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetAuthorA@cAssetDirectory@Pollen@SP@@QAE_KI@Z  0054e8f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetAuthorB@cAssetDirectory@Pollen@SP@@QAE_KI@Z  0054e9a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?SetAuthorFlag@cAssetDirectory@Pollen@SP@@QAE_NI_N@Z  0054ea20  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0054dd30/s0054dd30.cpp  ?GetAuthorFlag@cAssetDirectory@Pollen@SP@@QAE_NI@Z  0054eac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00542980/s00542980.cpp  ??4Variant@EA@@QAEAAU01@ABU01@@Z  00542b80  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?Construct@Variant@EA@@QAEXABU12@G@Z  00542c30  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?StartParentAuthor@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542cb0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndTime38@AtomParser@Feed@SP@@QAEXXZ  00542e80  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?StartOriginalAuthor@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542ee0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndTime58@AtomParser@Feed@SP@@QAEXXZ  005430b0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndTitle@AtomParser@Feed@SP@@QAEXXZ  00543110  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndSubtitle@AtomParser@Feed@SP@@QAEXXZ  005431a0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndSubcount@AtomParser@Feed@SP@@QAEXXZ  005431f0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndFlagsCC@AtomParser@Feed@SP@@QAEXXZ  00543240  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndName@AtomParser@Feed@SP@@QAEXXZ  00543280  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndUserID@AtomParser@Feed@SP@@QAEXXZ  005432e0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndId@AtomParser@Feed@SP@@QAEXXZ  00543330  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndSummary@AtomParser@Feed@SP@@QAEXXZ  005433f0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndUpdated@AtomParser@Feed@SP@@QAEXXZ  00543440  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndPublished@AtomParser@Feed@SP@@QAEXXZ  005434a0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndFlag110@AtomParser@Feed@SP@@QAEXXZ  005434e0  /Od /Ob1 /MD /Gy /TP
+slices/s00542980/s00542980.cpp  ?EndText78@AtomParser@Feed@SP@@QAEXXZ  00543520  /Od /Ob1 /MD /Gy /TP

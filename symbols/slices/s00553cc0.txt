@@ -1,0 +1,13 @@
+00553cc0 eastl::vector<eastl::string,eastl::sp_vector_allocator>::push_back  # byte-exact
+00553d60 eastl::vector<eastl::string,eastl::sp_vector_allocator>::erase  # erase(iterator), byte-exact
+00553e00 eastl::vector<eastl::string16,eastl::sp_vector_allocator>::~vector  # destruct + ~VectorBase (0x554b10)
+00553e60 eastl::vector<eastl::string16,eastl::sp_vector_allocator>::resize  # insert(n, value_type()) / erase
+00554170 eastl::basic_string<wchar_t>::ltrim  # erase(0, find_first_not_of(L" \t"))
+005541e0 eastl::basic_string<wchar_t>::rtrim  # erase(find_last_not_of(L" \t") + 1)
+005542d0 eastl::hashtable<unsigned __int64,...>::DoRehash  # byte-exact
+00554410 eastl::hashtable<unsigned __int64,...>::DoAllocateBuckets  # allocator.h line 209 alloc + memset + sentinel
+00554480 eastl::hashtable<EA::ResourceMan::Key,...>::DoRehash  # hash = mInstance ^ mGroup
+00554760 eastl::vector<eastl::string,eastl::sp_vector_allocator>::erase  # erase(first, last)
+00554820 eastl::vector<eastl::string,eastl::sp_vector_allocator>::DoInsertValue  # byte-exact
+00554b10 eastl::VectorBase<eastl::string16,eastl::sp_vector_allocator>::~VectorBase  # sp allocator header check
+00554b60 eastl::vector<eastl::string16,eastl::sp_vector_allocator>::erase  # erase(first, last)

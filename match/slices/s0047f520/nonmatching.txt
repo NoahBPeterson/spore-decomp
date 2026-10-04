@@ -1,0 +1,16 @@
+0047f520 24 Dtor; written at /O2 only, original is /Od (not attempted at /Od)
+0047f550 45 interface-id switch; /O2 compile, original /Od
+0047f5a0 167 push pos+rot to both models; /O2 compile, original /Od
+0047f720 183 BallConnector::Init; /O2 compile, original /Od
+0047f960 48 block offset getter; /O2 compile, original /Od (SSE movss)
+0047f9e0 35 tuning vec getter; /O2 compile, original /Od
+0047fa30 147 Deform ctor; /O2 compile, original /Od
+0047fc10 79 Deform dtor; /O2 compile, original /Od
+0047fcb0 27 Deform shutdown; /O2 compile, original /Od
+0047fce0 45 interface-id switch; /O2 compile, original /Od
+0047fd30 87 Deform_SetData; /O2 compile, original /Od
+0047fda0 77 handle data copy; /O2 compile, original /Od
+0047fe20 237 update direction; /O2 compile, original /Od
+0047ff90 72 3 dot products; /O2 compile, original /Od
+00480030 205 Deform::Init; /O2 compile, original /Od
+00480280 104 tuning vec by pinning type; /O2 compile, original /Od

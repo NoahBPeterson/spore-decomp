@@ -1,0 +1,16 @@
+slices/s005f2780/s005f2780.cpp  ?HandleMessage@cSPSwatch@SP@@UAE_NIPAX@Z  005f2780  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?UpdateSwatchPosition@cSPSwatch@SP@@QAEXI@Z  005f2bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?Show3DModel@cSPSwatch@SP@@QAEXXZ  005f2e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?Hide3DModel@cSPSwatch@SP@@QAEXXZ  005f2eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?StartModelEffects@cSPSwatch@SP@@QAEXXZ  005f2ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?IsAnimating@cSPSwatch@SP@@QAE_NXZ  005f2f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?TakeCapture@cSPSwatch@SP@@QAE_NXZ  005f2fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?EndInteraction@cSPSwatch@SP@@QAEXXZ  005f3040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?HasCapture@cSPSwatch@SP@@QAE_NXZ  005f3060  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?IsBusy@cSPSwatch@SP@@QAEHXZ  005f3150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?UpdateViewport@cSPSwatch@SP@@QAEXI@Z  005f31a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?OnRolloverEnd@cSPPaletteSwatch@SP@@QAEXXZ  005f30b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?IsMouseOutside@cSPPaletteSwatch@SP@@QAE_NXZ  005f3320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?IsItemAvailable@cSPPaletteSwatch@SP@@QAE_NXZ  005f33c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?UpdateCursor@cSPPaletteSwatch@SP@@QAEXXZ  005f3600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f2780/s005f2780.cpp  ?DoDestroyValues@?$vector@V?$AutoRefCount@VcMWModel@SP@@@EA@@@eastl@@QAEXPAV?$AutoRefCount@VcMWModel@SP@@@EA@@0@Z  005f3680  /O2 /MD /Gy /TP /arch:SSE /fp:fast

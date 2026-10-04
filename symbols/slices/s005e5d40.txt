@@ -1,0 +1,3 @@
+005e5d40 SP::cSPEditorVerbIconData::GetIconDescription  # PDB caller-scored candidate; reads text property 0x3249a320 into a wstring
+005e6200 SP::cSPEditorVerbIconTray::SetParent  # PDB caller-scored candidate; reparents mWinRoot and resizes to the parent
+005e6ae0 SP::cSPEditorVerbIconTray::GetTrayDescription  # PDB caller-scored candidate; sibling of GetTrayName (property 0x4acedf9)

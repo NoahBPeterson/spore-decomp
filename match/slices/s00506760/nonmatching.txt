@@ -1,0 +1,2 @@
+00506760  532  temporaries/inline layout of insert(value_type(id, TextureSet())) and registry getter differ
+00507380  31  one allocator temp (member +0xd0) lives outside the shared temp area in the original

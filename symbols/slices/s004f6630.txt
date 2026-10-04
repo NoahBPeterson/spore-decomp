@@ -1,0 +1,14 @@
+004f6630 eastl::vector<Elem16>::reserve  # EASTL reserve shape (DoAllocate/uninitialized_copy_ptr/DoFree), byte-exact
+004f6720 eastl::map<uint32_t,vector<Elem16>>::operator[]  # lower_bound/end/insert(value_type(key,T())), byte-exact
+004f6830 eastl::unique<ResourceMan::Key*>  # calls adjacent_find 0x4f6c30, byte-exact
+004f6ab0 eastl::basic_string<wchar_t>::find(wchar_t,size_t)  # byte-exact
+004f6b70 eastl::sort<ResourceMan::Key*>  # quick_sort_impl + insertion_sort(28), byte-exact
+004f6c30 eastl::adjacent_find<ResourceMan::Key*>  # byte-exact
+004f6cc0 eastl::vector<Elem16>::vector(const vector&)  # byte-exact
+004f6d60 eastl::rbtree<uint32_t,...>::DoInsertValue(iterator,const value_type&,true_type)  # hint insert, byte-exact
+004f6ec0 eastl::Internal::quick_sort_impl<ResourceMan::Key*>  # byte-exact
+004f6f80 eastl::insertion_sort<ResourceMan::Key*>  # byte-exact
+004f7090 eastl::insertion_sort_simple<ResourceMan::Key*>  # byte-exact
+004f7210 eastl::median<ResourceMan::Key>  # byte-exact
+004f7420 eastl::get_partition<ResourceMan::Key*>  # byte-exact
+004f7550 eastl::partial_sort<ResourceMan::Key*>  # byte-exact

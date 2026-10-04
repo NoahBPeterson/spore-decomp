@@ -1,0 +1,1 @@
+00546f80  345  AtomEntry::~AtomEntry: /Ob1 inline/decline pattern of member dtors differs (orig inlines ~vector<uint/string16/IDString> but calls their VectorBase dtors and string16 dtors out of line)

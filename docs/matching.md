@@ -56,6 +56,10 @@ Never edit shared files (match/include, tools, docs, other slices), and never ru
 
 Tools (from repo root):
 - `.venv/bin/python tools/matching/card.py <va> [...]`: annotated disassembly + Ghidra decompile
+- `.venv/bin/python tools/matching/chk.py <file.cpp> <slice-id | va,va,...> --flags "<cl flags>" [-a]`: ONE
+  compile, best symbol + diff count for every VA of the slice (no global lock; use this to iterate, and
+  run_all.py --manifest only for the final check). Put scratch files only under `work/match/scratch_<id>_*`
+  (the session scratchpad is shared between concurrent agents and gets clobbered).
 - `.venv/bin/python tools/matching/try_variants.py <scratch.cpp> <va>`: rank candidate spellings
   (use `work/match/scratch_<id>_N.cpp` files; every function symbol in the file is compared)
 - `.venv/bin/python tools/matching/cmpobj.py work/SporeApp.analysis.bin <obj> <symbol> <va>`

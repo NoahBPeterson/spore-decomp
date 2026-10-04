@@ -1,0 +1,3 @@
+00599c40  1008  SetupTooltip: register allocation differs (original keeps this in a spilled slot with esi/ebp=0; ours keeps this in ebp); calls and order otherwise follow the original
+0059a230  6  cSPUIWindowAnimation scalar deleting dtor: original stores both vptrs before loading the member pointer; ours hoists the load
+0059a500  501  Update: GetElapsedSeconds arg-pop merging and one addss operand order differ (offset shifts inflate the count)

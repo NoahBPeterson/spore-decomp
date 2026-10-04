@@ -1,0 +1,3 @@
+00534cf0  53   OnRegister: 5th command's cCommandStateT ctor is called out of line (0x53b1f0) in the original, inlined here
+00534f80  720  cFloodDiffuseColorCommand::ParseLine: clamp is SSE maxss/minss in the original (not reproduced; intrinsics get the helper declined), shifts all slots
+00535880  15   block ParseLine: one extra unused dword per AutoRefCount assignment in the original

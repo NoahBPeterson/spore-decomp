@@ -1,0 +1,5 @@
+005582a0 SP::cContentValidationSummarizer::ExtractParameters  # PDB caller-scored candidate; byte-exact
+005587f0 SP::FunctionalMatch::Constraint::Constraint  # sets kTerminal, matches PDB eType
+00558830 SP::FunctionalMatch::Constraint::Constraint  # (Sentinel) overload
+00558b70 SP::FunctionalMatch::DeclareParam::DeclareParam  # default ctor, kTerminal
+00558d50 SP::WritePillRecord  # PDB caller-scored candidate; writes pill record to save area

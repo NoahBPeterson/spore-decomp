@@ -1,0 +1,1 @@
+00532fe0  155  barycentric: code identical; float named-slot order + cSPVector3Copy param slot shift frame (copy of (a-point) via out-of-line Vector3 copy ctor not reproduced without extra slot)

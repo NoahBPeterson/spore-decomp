@@ -1,0 +1,2 @@
+005cb380  27  ToggleExpanded: original spills the !IsExpanded() bool through a stack slot (push ecx; mov [esp+4],al; mov ecx,[esp+4]) instead of movzx
+005cb5a0  522  cSPPaletteUI::Init: frame/size close; push_back of AutoRefCount locals reloads from memory where original reuses the register, loop-local slot order differs

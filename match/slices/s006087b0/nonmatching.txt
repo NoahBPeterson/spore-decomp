@@ -1,0 +1,2 @@
+006087b0  48  Init: same size and shape; esi/edi register assignment swapped (this vs. string end pointer)
+00608cc0  11  SavePrefs: zeroing order of the first Property temporary's flags/type words

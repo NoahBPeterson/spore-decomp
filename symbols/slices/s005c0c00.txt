@@ -1,0 +1,8 @@
+005c0c80 SP::cSPEditorPaintLikeThis::OnRollover  # dev PDB method; forwards to OneClickPaint::OnRollover when mModelChosen
+005c0c90 SP::cSPEditorPaintLikeThis::OffRollover  # same pattern, OffRollover
+005c0ca0 SP::cSPEditorPaintLikeThis::OnLeftMouseUp  # dev PDB method list
+005c0d20 SP::cSPEditorPaintLikeThis::DoMessage  # IWinProc override (this = +0xc)
+005c0f40 SP::cSPEditorPaintLikeThis::cSPEditorPaintLikeThis  # vtables + field init
+005c1340 SP::cSPEditorPaintLikeThis::OnAssetBrowserSelection  # cSPUIAssetBrowserCallback override (this = +0x78), byte-exact
+005c1570 SP::cSPEditorPaintLikeThis::SetModel  # dev PDB method
+005c1870 SP::cSPEditorPaintLikeThis::HandleMessage  # IHandlerRC override (this = +0x20)

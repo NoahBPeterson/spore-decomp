@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00595320  338  same template as s0057bfb0 0x0057C770: short-circuit chain/stack slots differ
+005954f0  338  same template as s0057bfb0 0x0057C770: short-circuit chain/stack slots differ
+00595870  255  copy_backward/GetNewCapacity codegen differs (original spills new capacity to the stack)
+005957d0  38  64-bit element copy loads high dword first in original
+00595d40  101  value_type temporary construction order differs
+00595eb0  37  value_type temporary construction order differs
+00595ff0  41  value_type temporary construction order differs
+00595a90  378  register allocation and AutoRefCount temporaries differ

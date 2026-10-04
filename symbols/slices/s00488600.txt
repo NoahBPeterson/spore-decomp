@@ -1,0 +1,3 @@
+00488850 SP::cSPEditorLimbStructure::cSPEditorLimbStructure  # ctor init matches dev-PDB layout (mPileList, mBaseBlock.., mFeet, mHands)
+00488900 SP::cSPEditorLimbStructure::~cSPEditorLimbStructure  # destroys mHands, mFeet, mPileList
+00488c30 SP::cSPEditorLimbStructure::DeleteJoint  # recursive delete of cSPEditorLimbJoint tree

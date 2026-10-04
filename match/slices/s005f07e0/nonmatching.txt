@@ -1,0 +1,4 @@
+005f0a60  53  ReleaseSwatch: same instructions, register assignment permuted (ebx/ebp/edi)
+005f0b40  57  SwatchIDMap::operator[]: retail keeps the result iterator in the dead key slot and folds the null temp dtor; mine reloads the temp
+005f0bc0  85  SwatchFloatMap::operator[]: retail forwards the temp key pointer across DoInsertValue (no reload); mine reloads, extra frame slot
+005f1240  349  OnRollover: switch compare subtrees laid out after the default block (shifts all offsets); data kept in memory instead of edi

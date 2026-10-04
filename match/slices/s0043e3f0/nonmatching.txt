@@ -1,0 +1,3 @@
+0043e3f0 539 complete; original uses an and-esp aligned ebp frame with esp-relative locals, ours gets the ebx-aligned frame from inline asm Clamp; also copy of operator- result into a named local
+0043eef0 267 complete; frame layout only (original has 0x20 extra temp bytes, 0x18-byte hole) - all instructions otherwise identical
+0043f250 3 complete; original frame is 0x10 bytes larger (unknown extra temp)

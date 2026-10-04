@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00501240/s00501240.cpp  ?Clear@Owner501240@@QAEXXZ  00501240  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ??4Vec4f@@QAEAAU0@ABU0@@Z  00501290  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ??0FixedVec256@@QAE@I@Z  005012d0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?resize@?$vector@UE48@@@@QAEXI@Z  00501350  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?resize@?$vector@UTransform@@@@QAEXI@Z  00501430  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?resize@?$vector@UEd8@@@@QAEXI@Z  005014e0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?reserve@?$vector@UEd8@@@@QAEXI@Z  005015f0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?push_back@?$vector@N@@QAEXABN@Z  005016f0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ??0Ed8@@QAE@XZ  00501760  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?erase@?$vector@UE48@@@@QAEPAUE48@@PAU2@0@Z  00501780  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?erase@?$vector@UTransform@@@@QAEPAUTransform@@PAU2@0@Z  00501870  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?erase@?$vector@UEd8@@@@QAEPAUEd8@@PAU2@0@Z  00501910  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?erase@?$vector@N@@QAEPANPAN0@Z  00501aa0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?DoInsertValue@?$vector@N@@QAEXPANABN@Z  00501b30  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?erase@?$vector@UE30@@@@QAEPAUE30@@PAU2@0@Z  00501d70  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?Destroy@Holder501e20@@QAEXXZ  00501e20  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?push_back@Deque4@@QAEXABI@Z  00501e40  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?push_back@Deque4b@@QAEXXZ  00501eb0  /Od /Ob1 /MD /Gy /TP
+slices/s00501240/s00501240.cpp  ?Destroy@DequeBase@@QAEXXZ  00501ef0  /Od /Ob1 /MD /Gy /TP

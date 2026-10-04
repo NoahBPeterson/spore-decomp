@@ -1,0 +1,1 @@
+005e2960  16  SetArea: xmm register allocation differs (sx/sy in xmm4/xmm3 vs xmm3/xmm2); logic identical

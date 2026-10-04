@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004cc190/s004cc190.cpp  ??0cSPEditorSkinPart@SP@@QAE@XZ  004cc190  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?AddRef@cSPEditorSkinPart@SP@@UAEHXZ  004cc330  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?Release@cSPEditorSkinPart@SP@@UAEHXZ  004cc350  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ??1cSPEditorSkinPart@SP@@UAE@XZ  004cc3a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?SetModel@cSPEditorSkinPart@SP@@QAEXII_N@Z  004cc470  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?Update@cSPEditorSkinPart@SP@@QAEXAAU?$vector@PAVcSPEditorBlock@SP@@@eastl@@_N@Z  004cc540  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?RestartQualityTimer@cSPEditorSkinPart@SP@@QAEXXZ  004cc6f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?IsHighQualityPending@cSPEditorSkinPart@SP@@QAE_NXZ  004cc760  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?UpdateSceneObject@cSPEditorSkinPart@SP@@QAEXPAVcIModelWorld@2@@Z  004cc7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?SetVisible@cSPEditorSkinPart@SP@@QAEX_N@Z  004cca40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?Raycast@cSkinObject@SP@@QAE_NUVector3@@0HHH_N@Z  004ccae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?ReleaseModel@cSPEditorSkinPart@SP@@QAEXXZ  004cced0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?SetDrawMaterial@cSPEditorSkinPart@SP@@QAEXI@Z  004cd020  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cc190/s004cc190.cpp  ?SetSkinResolution@cSPEditorSkinPart@SP@@QAEXMM@Z  004cd060  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

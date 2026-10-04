@@ -1,0 +1,7 @@
+005e8e80 eastl::basic_string<wchar_t>::make_lower  # byte-exact EASTL make_lower/CharToLower body
+005e9170 eastl::basic_string<wchar_t>::find  # byte-exact find(const T*, pos, n) calling eastl::search
+005e9260 eastl::basic_string<wchar_t>::compare  # byte-exact static compare(b1,e1,b2,e2) with min_alt
+005e93a0 eastl::basic_string<wchar_t>::AllocateSelf  # gEmptyString begin/end, capacity=+1, no return value
+005e92c0 eastl::VectorBase<uint16_t>::VectorBase  # (n, allocator) ctor, byte-exact
+005e90a0 eastl::rbtree<uint16_t>::find  # byte-exact EASTL rbtree::find
+005e8980 SP::cSPEditorVerbTrayCollection::Init  # thiscall thunk forwarding (Key,a,b) to cSPVerbTrayCollection::InitTrays

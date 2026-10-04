@@ -1,0 +1,7 @@
+00605b20 eastl::map<EA::AutoRefCount<IWindow>,eastl::vector<EA::AutoRefCount<SP::cSPEditorVerbIconTray>>>::DoNukeSubtree  # recursive node free, value = window key + tray vector (cSPVerbTrayCollection::mWindowsToVerbTrays)
+00605cb0 SP::cSPVerbTrayCollection::~cSPVerbTrayCollection  # destroys map at +0x28, AutoRefCounts +0x24/+0x20, tray vector +0xc
+00605e60 SP::cSPVerbTrayCollection::cSPVerbTrayCollection  # inits mImageGroup 0xb5ac9c22 as InitTrays does
+00605ee0 eastl::map<EA::AutoRefCount<IWindow>,eastl::vector<EA::AutoRefCount<SP::cSPEditorVerbIconTray>>>::operator[]  # called from InitTrays on this+0x28
+006064c0 IsSporeDisc  # GetDriveTypeA==CDROM, volume label xor 0x2a == "yzexo" ("SPORE"), >=2GB
+00606590 FindSporeDisc  # scans GetLogicalDrives with IsSporeDisc
+00606730 eastl::uninitialized_relocate_commit<SP::FunctionalMatch::ConstraintNode*>  # destroys sources, advances dest by 0x24

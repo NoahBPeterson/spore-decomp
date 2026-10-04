@@ -1,0 +1,5 @@
+005bfc90 SP::cSPEditorNaming::SetTagField  # dev PDB order (SetTagField 37 bytes between Shutdown and SetDataProvider)
+005bfff0 SP::cSPEditorNaming::cSPEditorNaming  # vtables + mNamePrompt empty string init, byte-exact
+005c0070 SP::cSPEditorNaming::~cSPEditorNaming  # byte-exact
+005c0100 SP::cSPEditorNaming::DoMessage  # dev PDB DoMessage (IWinProc::HandleUIMessage override)
+005c0770 SP::cSPEditorPageControls::cSPEditorPageControls  # byte-exact

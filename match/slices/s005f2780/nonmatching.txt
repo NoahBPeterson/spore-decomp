@@ -1,0 +1,3 @@
+005f27c0  8  DoMessage: complete (both switches, jump tables match); one pop edi scheduled after instead of before the captured-button store
+005f2d00  204  SetImage: retail zeroes eax up front (overlay loaded into al) and keeps imageID in edx; mine swaps registers, shifting all offsets by 1 byte
+005f3400  4  UpdateCostDisplay: default case loads both material globals before storing (mine interleaves load/store)

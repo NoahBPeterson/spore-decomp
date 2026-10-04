@@ -1,0 +1,6 @@
+005d53e0  496  cPathShape::FindNextIntersection: x87/SSE mix (sqrt, acos) scheduling and frame differ; logic complete
+005d5630  266  CircleLineIntersection: same math, fp:fast reorders x87 dy*dy/dx*dx and register assignment
+005d5830  8    vector<PathIntersection>::DoInsertValue (s005d53e0_nosse.cpp, /O2 /MD /Gy /TP): eax/edx/ecx register choice only
+005d59c0  3    cPathSegmentList::~cPathSegmentList: memmove size temp lands in ecx instead of eax
+005d5b60  105  cPathShape::AddIntersection: original forwards the entry fields from registers into the in-place copy; mine reloads the local
+005d5be0  195  cPathShape::IntersectWith: same store-forwarding difference in the first inline push_back

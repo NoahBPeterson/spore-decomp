@@ -1,0 +1,17 @@
+0059e360 SP::cSPEditorAppEconomy::CanAfford  # (key) CanAffordWithReason(key,0)==1; dev-build has two CanAfford overloads
+0059e380 SP::cSPEditorAppEconomy::AddBlockValue  # AdjustWealth(0, block cost +0x5e4); dev-build name, same TU order
+0059e3a0 SP::cSPEditorAppEconomy::DeductBlockValue  # AdjustWealth(0, -cost)
+0059e3c0 SP::cSPEditorAppEconomy::SetBalanceCap  # mBalanceCaps[type] = cap (24-byte dev twin)
+0059e3e0 SP::cSPEditorAppEconomy::EnforceBalanceCap  # clamp mBalances[type] to nonzero cap
+0059e400 SP::cSPEditorAppEconomy::AdjustWealth  # += delta, enforce cap, SendChangedMessage
+0059e430 SP::cSPEditorAppEconomy::SetWealth  # set if changed, enforce cap, SendChangedMessage
+0059e470 SP::cSPEditorAppEconomy::CanAfford  # (type, amount) mBalances[type] >= amount
+0059e490 SP::cSPEditorAppEconomy::CanAffordBlock  # per-currency checks over block costs
+0059e8d0 SP::cSPEditorAppEconomy::CanAffordBlockPile  # gathers block pile (+symmetric block) and sums costs
+0059eb40 SP::cSPEditorAppEconomy::DeductBlockPileValue  # mode 2: AdjustWealth(-pile value); mode 0: DeductBlockValue per block
+0059ec80 SP::cSPEditorAppEconomy::Init  # resize mBalances/mBalanceCaps to numTypes with 0
+0059ece0 SP::cSPEditorVehicleAbilities::SetVehicle  # writes key +0xc..0x14 and +0x5c (name guessed)
+0059ed20 eastl::uninitialized_relocate_commit<SP::cSPEditorVerbIconData>  # destroys sources (dtor slot 2), returns dest+n
+0059eec0 eastl::vector<SP::cSPEditorVerbIconData,eastl::sp_vector_allocator>::~vector
+0059f0e0 SP::cSPEditorVerbIconData::operator=  # implicit copy assignment (retail 0xC4 layout)
+0059f2a0 SP::cSPEditorVerbIconData::cSPEditorVerbIconData  # implicit copy constructor

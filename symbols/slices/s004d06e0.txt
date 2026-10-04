@@ -1,0 +1,20 @@
+004d06e0 eastl::vector<uint8_t>::DoAssignFromIterator<const uint8_t*>  # shape of EASTL DoAssignFromIterator; byte-exact
+004d0960 eastl::uninitialized_copy_ptr<pair<int,int>*>  # generic_iterator wrapper + inlined impl; byte-exact
+004d0a40 eastl::uninitialized_move<Elem34*>  # move_start + move_commit; byte-exact
+004d0ac0 eastl::uninitialized_move<Rec14*>  # byte-exact
+004d0b20 eastl::copy_backward<Vec4*>  # byte-exact
+004d0b90 eastl::uninitialized_copy_ptr<Word32*>  # byte-exact
+004d0c20 eastl::hashtable::DoFreeNode  # fixed_hashtable_allocator::deallocate inlined; byte-exact
+004d0c90 eastl::uninitialized_copy_impl<generic_iterator<const Elem34*>>  # byte-exact
+004d0d40 eastl::uninitialized_fill_n_impl<generic_iterator<Elem34*>>  # byte-exact
+004d0dd0 eastl::uninitialized_copy_impl<generic_iterator<const Rec14*>>  # byte-exact
+004d0e90 eastl::uninitialized_fill_n_impl<generic_iterator<Rec14*>>  # byte-exact
+004d0f30 eastl::uninitialized_move_start<Rec14*>  # byte-exact
+004d0f60 eastl::uninitialized_copy_impl<generic_iterator<const Word32*>>  # byte-exact
+004d0fd0 eastl::uninitialized_fill_n_impl<generic_iterator<Word32*>>  # byte-exact
+004d1030 Elem34::operator=  # Vector3 + fixed_vector<uint32_t,4> member-wise assign; byte-exact
+004d10b0 eastl::uninitialized_move_impl<false,Elem34*,Elem34*>::do_move_start  # byte-exact
+004d1130 eastl::uninitialized_move_impl<false,Elem34*,Elem34*>::do_move_commit  # byte-exact
+004d11a0 eastl::uninitialized_move_impl<false,Rec14*,Rec14*>::do_move_start  # byte-exact
+004d1240 eastl::copy<generic_iterator<const Word32*>, generic_iterator<Word32*>>  # memmove path; byte-exact
+004d08c0 eastl::fixed_vector<uint32_t,4>::fixed_vector(const fixed_vector&)  # reproduced byte-exact in slice s004d06e0 source (not in its manifest)

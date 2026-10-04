@@ -1,0 +1,9 @@
+005f07e0 SP::cSPSwatchManager::~cSPSwatchManager  # member dtors match PDB members (maps, rollover, anim world, camera manager)
+005f0850 SP::cSPSwatchManager::Shutdown  # removes grab cursors, clears maps, shuts down members
+005f0940 SP::cSPSwatchManager::Update  # deltaTime*0.001, swatch timeout map, anim world step clamped to 0.2
+005f0ac0 SP::cSPSwatchManager::cSPSwatchManager  # same vtable as dtor, map anchors
+005f0ca0 SP::cSPSwatchManager::CreateSwatch  # new cSPSwatch (0x17c), mIDToSwatchMap[mCurrentID++]
+005f0d80 SP::cSPSwatchPlanner::cSPSwatchPlanner  # vtables shared with PDB-named dtor 0x5f0e30
+005f0ef0 SP::cSPSwatchPlanner::Shutdown  # tail-calls cSPPaletteItemUI::Shutdown, tooltips removed
+005f1430 SP::cSPSwatchPlanner::OffRollover  # tail-calls cSPPaletteItemUI::OffRollover
+005f1630 SP::cSPSwatchPlanner::HandleMessage  # IHandler thunk at +0x20

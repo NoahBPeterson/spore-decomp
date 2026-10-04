@@ -1,0 +1,3 @@
+006068c0  261  PurgeDownloadedContent: same control flow and calls; frame is 4 bytes smaller (one spill slot) so most esp offsets shift, plus register choices
+00606d00  14  cAuthManager::AsInterface: original copies this to eax before loading the type id into ecx; mine loads the id into edx
+00606f30  15  scalar deleting dtor: original has no vptr store before delete (novtable class); a novtable class here does not emit the function

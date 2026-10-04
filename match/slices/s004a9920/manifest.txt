@@ -1,0 +1,17 @@
+slices/s004a9920/s004a9920.cpp  ?FindSymmetricFoot@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a9920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?FindSymmetricSkinnedPart@EditorUtils@SP@@YAPAUcSPEditorBlock@2@PAU32@@Z  004a9a00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?KeyMatches@SP@@YA_NABUResourceKey@1@0@Z  004a9a90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??1?$AutoRefCountR@UcRefCountedResource@SP@@@SP@@QAE@XZ  004a9ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??1?$AutoRefCountV@UcVirtualRefCounted@SP@@@SP@@QAE@XZ  004a9b10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?QuaternionToMatrix@SP@@YAAAUMatrix33T@@AAU2@ABUQuaternion@1@@Z  004a9b40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??_0SP@@YAAAUVector3T@@AAU1@ABM@Z  004a9d20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??0OrientedPoint@SP@@QAE@ABU01@@Z  004aa2f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?push_back@?$evector@UWeightedPoint@SP@@@SP@@QAEXABUWeightedPoint@2@@Z  004a9e40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?push_back@?$evector@UOrientedPoint@SP@@@SP@@QAEXABUOrientedPoint@2@@Z  004a9f30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?push_back@?$evector@UKeyedPair@SP@@@SP@@QAEXABUKeyedPair@2@@Z  004a9fa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?push_back@?$evector@UcSPMatrix3@@@SP@@QAEXABUcSPMatrix3@@@Z  004aa080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??1?$deque@PAUcSPEditorPart@SP@@@SP@@QAE@XZ  004aa120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?GetSize@?$deque@PAUcSPEditorPart@SP@@@SP@@QBEIXZ  004aa170  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??A?$deque@PAUcSPEditorPart@SP@@@SP@@QAEAAPAUcSPEditorPart@1@I@Z  004aa1d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ?push_front@?$deque@PAUcSPEditorPart@SP@@@SP@@QAEXABQAUcSPEditorPart@2@@Z  004aa230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a9920/s004a9920.cpp  ??0?$evector@PAUcSPEditorPart@SP@@@SP@@QAE@IABI@Z  004aa350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

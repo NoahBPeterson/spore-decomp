@@ -1,0 +1,16 @@
+slices/s005ad9a0/s005ad9a0.cpp  ??0cSPEditorManipulationInterpenetration@SP@@QAE@XZ  005ad9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?DoOnMouseDown@cSPEditorManipulationInterpenetration@SP@@QAE_NHMMH@Z  005ada50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ??4cSPEditortLimbTry@SP@@QAEAAU01@ABU01@@Z  005ae840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?ClearSymmetricHighlights@cSPEditorManipulationLimb@SP@@QAEXXZ  005adb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?OnMouseUp@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  005adb20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?GetMaxLimbPlacementHeight@cSPEditorManipulationLimb@SP@@QAEMXZ  005addb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?UpdateSymmetricJointPositions@cSPEditorManipulationLimb@SP@@QAEXXZ  005addf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?CopyJointsToSymmetricLimbs@cSPEditorManipulationLimb@SP@@QAEXXZ  005adf10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?Mirror@cSPEditorJointMirror@SP@@QAEXPAVcSPEditorLimbJoint@2@@Z  005adfd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?DoOnMouseMove@cSPEditorManipulationLimb@SP@@QAE_NMMH@Z  005ae0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?Shutdown@cSPEditorManipulationLimb@SP@@QAEXXZ  005ae120  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ??1cSPEditorManipulationLimb@SP@@UAE@XZ  005ae1b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?RecalculateLimbMissPlane@cSPEditorManipulationLimb@SP@@QAEXXZ  005ae300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?DoOnMouseDown@cSPEditorManipulationLimb@SP@@QAE_NHMMH@Z  005ae480  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ??0cSPEditorManipulationLimb@SP@@QAE@XZ  005ae610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ad9a0/s005ad9a0.cpp  ?RefreshJointLists@cSPEditorManipulationLimb@SP@@QAEXXZ  005ae750  /O2 /MD /Gy /TP /arch:SSE /fp:fast

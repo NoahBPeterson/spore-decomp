@@ -1,0 +1,2 @@
+005c31c0  165  UpdatePreviewSwatch: orig defers the AddBoundingBox arg pop into the final add esp,0x28 and uses or [mem],8; mine pops immediately (8-byte shift)
+005c3a50  6    OnPageChanged: message mID store scheduled after the base vptr store (orig stores the id first)

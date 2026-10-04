@@ -1,0 +1,23 @@
+004b8af0 SP::cSPEditorPhysicsWorld::cSPEditorPhysicsWorld  # devbuild PDB symbol + layout; byte-exact
+004b8bd0 SP::cSPEditorPhysicsWorld::~cSPEditorPhysicsWorld  # byte-exact
+004b8c10 SP::cSPEditorPhysicsWorld::Init  # profiler string cSPEditorPhysicsWorld__Init; byte-exact
+004b8ef0 hkReferencedObject::`scalar deleting destructor'  # vtable chain 0x13ef7f4 -> 0x13ef094; byte-exact
+004b8f50 hkWorldCinfo::`scalar deleting destructor'  # byte-exact
+004b9010 hkCollisionFilter::hkCollisionFilter  # 5 vptrs; byte-exact
+004b90c0 hkCollisionFilter::`scalar deleting destructor'  # byte-exact
+004b9140 SP::cSPEditorPhysicsWorld::Clear  # byte-exact
+004b91c0 SP::cSPEditorPhysicsWorld::World  # returns mPhysicsWorld (+8)
+004b91e0 SP::cSPEditorPhysicsWorld::CreateFloor  # byte-exact
+004b9420 SP::cSPEditorPhysicsWorld::UpdateCollisionFilters  # byte-exact
+004b9440 SP::cSPEditorPhysicsWorld::SetFloorFilter  # byte-exact
+004b9470 SP::cSPEditorPhysicsWorld::SetDefaultFloorFilter  # byte-exact
+004b94a0 SP::cSPEditorPhysicsWorld::AddModel  # byte-exact
+004b9570 SP::cSPEditorPhysicsWorld::RemoveModel  # byte-exact
+004b95c0 SP::cSPEditorPhysicsWorld::UpdatePhysics  # byte-exact
+004b96d0 eastl::vector<EA::AutoRefCount<SP::cSPEditorModel>>::~vector  # byte-exact
+004b9740 eastl::vector<EA::AutoRefCount<SP::cSPEditorModel>>::push_back  # byte-exact
+004b97e0 eastl::vector<EA::AutoRefCount<SP::cSPEditorModel>>::erase  # byte-exact
+004b98b0 eastl::remove<EA::AutoRefCount<SP::cSPEditorModel>*, SP::cSPEditorModel*>  # byte-exact
+00453540 EA::RefCountTemplate<int>::Release  # body reproduced byte-exact in scratch
+0041d980 EA::AutoRefCount<SP::cSPEditorModel>::operator=(T*)  # reproduced byte-exact in scratch
+004ad4e0 SP::cSPEditorModel::NumberBlocks  # loops SetIndex(i+1) over blocks

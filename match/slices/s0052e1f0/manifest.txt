@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0052e1f0/s0052e1f0.cpp  ?WriteClearDescription@@YAXPAUIStream@IO@EA@@PAUcSPSkinPaintClearDescription@@@Z  0052e1f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ??0cSPSkinPaintClearEffect@@QAE@PAUcSPSkinPaintClearDescription@@@Z  0052e5b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?SetParams@cSPSkinPaintClearEffect@@UAEXPAX00@Z  0052e620  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Bind@cSPSkinPaintClearEffect@@UAEXPAX0@Z  0052e630  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Unbind@cSPSkinPaintClearEffect@@UAEXPAX@Z  0052e650  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Start@cSPSkinPaintClearEffect@@UAEXPAX@Z  0052e660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Update@cSPSkinPaintClearEffect@@UAEXPAX00@Z  0052e680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ??_GcComponentBase@Swarm@EA@@UAEPAXI@Z  0052e980  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ??0cSPSkinPaintDistributeDescription@@QAE@XZ  0052ea60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ??1cSPSkinPaintDistributeDescription@@QAE@XZ  0052eb40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ??1?$RefCountTemplate@H@EA@@QAE@XZ  0052ec00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?ReadDistributeDescriptionCommand@@YAPAUcSPSkinPaintDistributeDescription@@PAUIStream@IO@EA@@H@Z  0052e9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?WriteDistributeDescriptionCommand@@YAXPAUcSPSkinPaintDistributeDescription@@PAUIStream@IO@EA@@@Z  0052ec20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@?$cCommandStateT@UcEffectsParser@Swarm@EA@@UcCommandBase@ArgScript@3@@ArgScript@EA@@QAEXPAUcIParser@23@PAUcState@23@@Z  0052e520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?OnRegister@cSPSkinPaintDistributeEffectCommand@?A0xc23ec0bd@@QAEXPAUcIParser@ArgScript@EA@@PAUcState@45@@Z  0052ec40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticleCommand@?A0xc23ec0bd@@UAEXAAUcArguments@ArgScript@EA@@@Z  0052ef40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Execute@cSPSkinPaintDistributeParticlesCommand@?A0xc23ec0bd@@UAEXAAUcArguments@ArgScript@EA@@@Z  0052efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
+slices/s0052e1f0/s0052e1f0.cpp  ?Parse@cSPSkinPaintDistributeParticlesCommand@?A0xc23ec0bd@@UAE_NABULine@ArgScript@EA@@@Z  0052f040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc

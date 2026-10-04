@@ -1,0 +1,5 @@
+0059e490  208  CanAffordBlock: flag test shape (orig shr 7/test al,1), register allocation, and the ceil-to-int float idiom (orig: movss spill/reload + cvtss2si + ucomiss/cmovb) not reproduced
+0059e580  749  CanAffordWithReason: same ceil idiom (aligned frame from the __m128 intrinsic shifts everything), block layout differs
+0059e8d0  575  CanAffordBlockPile: same ceil idiom causes an aligned ebp frame; otherwise same calls/order
+0059eb40  146  DeductBlockPileValue: original keeps the AutoRefCount temp in a register across AddRef; mine reloads it
+0059f030  36  cSPEditorVehicleAbilities ctor: register permutation only (orig zero in eax, map ptr in edx)

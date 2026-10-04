@@ -1,0 +1,2 @@
+005dd250  33  ShowSaveDialog: register allocation (eax/edx swap) around GetCreatorType arg and dialog id loads
+005dd860  214  GetWarning: bitset<128> masking scheduled differently; GetPartFlags result goes through a temp in the original

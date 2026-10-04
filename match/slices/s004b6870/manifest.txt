@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004b6870/s004b6870.cpp  ??4EntryFixedVector@@QAEAAU0@ABU0@@Z  004b69d0  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoInsertValue@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE?AU?$rbtree_iterator@UKey16@@@2@U32@ABUKey16@@U?$integral_constant@_N$00@2@@Z  004b6870  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ??$uninitialized_copy_ptr@PBURecord11c@@PBU1@PAU1@@eastl@@YAPAURecord11c@@PBU1@0PAU1@@Z  004b6a30  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ??$uninitialized_relocate_commit@URecord11c@@@eastl@@YAPAURecord11c@@PAU1@00@Z  004b6ae0  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ??$uninitialized_relocate_start@UVec3f@@@eastl@@YAPAUVec3f@@PAU1@00@Z  004b6bf0  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoInsertValueImpl@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE?AU?$rbtree_iterator@UKey16@@@2@PAU?$rbtree_node@UKey16@@@2@ABUKey16@@_N@Z  004b6d00  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@IUPair14@@U?$less@I@eastl@@U?$use_first@UPair14@@@3@@eastl@@QAEPAU?$rbtree_node@UPair14@@@2@ABUPair14@@@Z  004b6d90  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@UElement28@@UPair28@@U?$less@UElement28@@@eastl@@U?$use_first@UPair28@@@4@@eastl@@QAEPAU?$rbtree_node@UPair28@@@2@ABUPair28@@@Z  004b6f30  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoCreateNode@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAEPAU?$rbtree_node@UKey16@@@2@ABUKey16@@@Z  004b70d0  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoInsertValue@?$rbtree@UKey16@@U1@U?$less@UKey16@@@eastl@@U?$use_self@UKey16@@@3@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@UKey16@@@eastl@@_N@2@ABUKey16@@U?$integral_constant@_N$00@2@@Z  004b7150  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ?DoAssignFromIterator@?$vector@UEntry32@@Ufixed_vector_allocator@eastl@@@eastl@@QAEXPBUEntry32@@0Uinput_iterator_tag@2@@Z  004b7290  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870.cpp  ??$uninitialized_copy_ptr@PBUEntry32@@PBU1@PAU1@@eastl@@YAPAUEntry32@@PBU1@0PAU1@@Z  004b7530  /Od /Ob1 /MD /Gy /TP
+slices/s004b6870/s004b6870_editor.cpp  ?SkinPaintCurve@EditorUtils@SP@@YAMM@Z  004b7600  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004b6870/s004b6870_editor.cpp  ?UpdateModelSkin@EditorUtils@SP@@YAXPAUcSPEditorModel@2@@Z  004b7660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

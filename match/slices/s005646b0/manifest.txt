@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005646b0/s005646b0.cpp  ??1?$vector@URecord50@@Vallocator@eastl@@@eastl@@QAE@XZ  005646b0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?reserve@?$vector@UPod50@@Vallocator@eastl@@@eastl@@QAEXI@Z  00564720  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?push_back@?$vector@URecord50@@Vallocator@eastl@@@eastl@@QAEXXZ  00564820  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?erase@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAEIABI@Z  005648c0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?insert@?$vector_set@IU?$less@I@eastl@@Vallocator@2@V?$vector@IVallocator@eastl@@@2@@eastl@@QAE?AU?$pair@PAI_N@2@ABI@Z  00564960  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??A?$vector_map@IIU?$less@I@eastl@@Vallocator@2@V?$vector@U?$pair@II@eastl@@Vallocator@2@@2@@eastl@@QAEAAIABI@Z  00564a10  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?find@?$rbtree@HHU?$less@H@eastl@@U?$use_self@H@2@@eastl@@QAE?AU?$rbtree_iterator@HPAH@2@ABH@Z  00564ab0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?find@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAE?AU?$rbtree_iterator@IPAI@2@ABI@Z  00564b50  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?find@?$rbtree@MMU?$less@M@eastl@@U?$use_self@M@2@@eastl@@QAE?AU?$rbtree_iterator@MPAM@2@ABM@Z  00564bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005646b0/s005646b0.cpp  ??0?$multiset@IIU?$less@I@eastl@@@eastl@@QAE@ABVallocator@1@@Z  00564cb0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?clear@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAEXXZ  00564cd0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?equal_range@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@IPBI@eastl@@U12@@2@ABI@Z  00564d20  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?push_back@?$vector@UElem28@@Vallocator@eastl@@@eastl@@QAEXABUElem28@@@Z  00564d80  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?erase@?$vector@UElem28@@Vallocator@eastl@@@eastl@@QAEPAUElem28@@PAU3@@Z  00564df0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??C?$rbtree_iterator@UMapValueU@@PBU1@@eastl@@QBEPAUMapValueU@@XZ  00564f50  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??1?$vectorI@UPod10@@Vallocator@eastl@@@eastl@@QAE@XZ  00564fd0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?insert@?$vector_multiset@IU?$less@I@eastl@@Vallocator@2@V?$vector@IVallocator@eastl@@@2@@eastl@@QAE?AU?$pair@PAI_N@2@ABI@Z  00565040  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??$set_intersection@PAIPAIV?$insert_iterator@UUIntVectorI@@@eastl@@@eastl@@YA?AV?$insert_iterator@UUIntVectorI@@@0@PAI000V10@@Z  00565380  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??$set_difference@PAIPAIV?$insert_iterator@UUIntVectorI@@@eastl@@@eastl@@YA?AV?$insert_iterator@UUIntVectorI@@@0@PAI000V10@@Z  00565410  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?AddFirst@ConstraintList@FunctionalMatch@SP@@QAEXIPBUConstraint@23@I@Z  00565500  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?AddFirst@ConstraintList@FunctionalMatch@SP@@QAEXIUConstraintCursor@23@I@Z  00565560  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?Set@ConstraintList@FunctionalMatch@SP@@QAEXIPBUConstraint@23@I@Z  005655f0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?Set@ConstraintList@FunctionalMatch@SP@@QAEXIUConstraintCursor@23@I@Z  00565660  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ??1?$deque@UPod4@@@eastl@@QAE@XZ  005656f0  /Od /Ob1 /MD /Gy /TP
+slices/s005646b0/s005646b0.cpp  ?begin@?$deque@UPod4@@@eastl@@QAE?AU?$DequeIterator@UPod4@@@2@XZ  00565740  /Od /Ob1 /MD /Gy /TP

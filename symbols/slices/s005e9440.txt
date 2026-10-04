@@ -1,0 +1,18 @@
+005e9440 eastl::rbtree<uint16_t,set>::DoInsertValueImpl  # byte-exact real EASTL body, node 0x14
+005e94c0 eastl::rbtree<Key3,map<Key3,uint32>>::DoInsertValueImpl  # byte-exact, node 0x1c, less<Key3> out of line
+005e9550 eastl::uninitialized_relocate_commit<eastl::wstring*>  # byte-exact
+005e95a0 eastl::rbtree<Key3,map>::DoInsertValue(value,true_type)  # byte-exact unique insert
+005e96a0 eastl::basic_string<char>::basic_string(const char*,size_t)  # byte-exact RangeInitialize ctor
+005e9890 eastl::rbtree<uint16_t,set>::DoInsertValue(value,true_type)  # byte-exact
+005e99c0 eastl::copy_backward<eastl::wstring*>  # byte-exact
+005e9a00 eastl::vector<wchar_t,sp_vector_allocator>::DoInsertValue  # byte-exact
+005e9c40 eastl::rbtree<Key3,map>::DoInsertValue(position,value,true_type)  # byte-exact hint insert
+005e9d50 eastl::rbtree<wstring,map<wstring,int>>::DoInsertValueImpl  # byte-exact
+005e9de0 eastl::rbtree<wstring,map<wstring,int>>::DoInsertValue(value,true_type)  # byte-exact
+005e9f10 eastl::rbtree<wstring,set>::insert(first,last)  # byte-exact
+005e9f50 eastl::vector<bool,sp_vector_allocator>::vector(size_t)  # byte-exact
+005e9fb0 eastl::rbtree<uint32_t,map>::DoNuke  # byte-exact; mapped type holds two sp vectors
+005ea010 eastl::rbtree<wstring,set>::clear  # byte-exact
+005ea040 eastl::map<Key3,uint32_t>::operator[]  # byte-exact
+005ea0d0 eastl::rbtree<wstring,map<wstring,int>>::DoInsertValue(position,value,true_type)  # byte-exact
+005ea200 eastl::vector<eastl::wstring,sp_vector_allocator>::DoInsertFromIterator  # complete, 71 bytes off

@@ -1,0 +1,11 @@
+00606c40 SP::Pollen::`anonymous namespace'::cConnectingDialog::Init  # mLayout at +0x2c (cConnectingDialog layout), root window gets AddWinProc(this)
+00606cd0 SP::Pollen::`anonymous namespace'::cOfflineConfirmationDialog::Show  # BeginModal on 0x50f92d8, the root id used by cOfflineConfirmationDialog::Init
+00606d70 SP::Pollen::cAuthManager::GetUserServerID  # returns uint64 at full+0x50 (written as -2 by SetOfflineUserID) via the +0x1c base
+00606de0 SP::Pollen::cAuthManager::SetLoginDialogVisible  # PDB candidate; layout ptr at full+0x60 via the +0x1c base
+00606e60 eastl::basic_string<wchar_t>::make_upper  # toupper for chars <= 0xff
+00606ea0 eastl::CompareI  # tolower compare, returns -1/0/1
+00607190 SP::Pollen::cAuthManager::Shutdown  # PDB candidate
+00607310 SP::Pollen::cAuthManager::ShowLoginDialog  # creates UI/cRegistrationDialog (0x6c bytes) into +0x6c
+006073a0 SP::Pollen::cAuthManager::InitialLogin  # PDB candidate
+006074b0 SP::Pollen::cAuthManager::OnModalWindowEnd  # PDB candidate
+00607580 eastl::basic_string<char>::find  # find(char, pos)

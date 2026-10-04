@@ -1,0 +1,14 @@
+00607a60 SP::Pollen::AuthManager  # returns service-registry Get(0x7201461) = IAuthManager; byte-exact
+00607a80 eastl::basic_string<char>::compare(const char*)  # EASTL compare shape; byte-exact
+00607b70 SP::Pollen::cOfflinePromptDialog::HandleUIMessage  # dialog DoMessage calling ProcessLoginResults(6) (class name guessed)
+00607be0 SP::Pollen::cLoginPromptDialog::HandleUIMessage  # dialog DoMessage, layout at +0xc (class name guessed)
+00608090 SP::Pollen::cAuthManager::~cAuthManager  # frees mUser/mPassword/mScreenName, releases pReg; byte-exact
+006082a0 eastl::basic_string<char>::substr  # EASTL substr shape
+00608310 eastl::basic_string<char>::left  # substr(0,n) or copy; byte-exact
+006083b0 GetEmptyString8  # function-local static string8; byte-exact
+006083f0 SP::Pollen::OnAuthMessage  # reads registry path, strips quotes, calls cPollinator::Login; byte-exact
+00608550 SP::Pollen::cAuthManager::SetUserPassword  # IAuthManager vtable slot 6 (vtbl 0x13faea0); byte-exact
+00608590 SP::Pollen::cAuthManager::GetUserPassword  # IAuthManager vtable slot 7; byte-exact
+006085d0 SP::Pollen::cAuthManager::AddAuthentication  # IAuthenticationService slot 1; sets Spore-User/Spore-Password headers; byte-exact
+006086b0 SP::Pollen::cAuthManager::TranslateToken  # cStringTokenTranslator slot 4; byte-exact
+00608710 SP::Pollen::cConnectingDialog::Show  # PDB-candidate name, layout at +0x2c; byte-exact

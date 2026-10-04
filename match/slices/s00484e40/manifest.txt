@@ -1,0 +1,16 @@
+slices/s00484e40/s00484e40.cpp  ?GetRotationAxis@cSPEditorHandleRotationRing@SP@@QAE?AUcSPVector3@@_N@Z  00484e40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?GetForwardVector@cSPEditorHandleRotationRing@SP@@QAE?AUcSPVector3@@_N@Z  00484ee0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?GetHandleDirection@cSPEditorHandleRotationRing@SP@@QAE?AUcSPVector3@@_N@Z  00484f80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?GetRadius@cSPEditorHandleRotationRing@SP@@QAEMXZ  00485110  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?SetBoundingBox@cSPEditorHandleRotationRing@SP@@QAEXABUcSPBoundingBox@@@Z  00485200  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?CalculateAnimTime@cSPEditorHandleRotationRing@SP@@QAEMXZ  00485420  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?UpdateAnimTime@cSPEditorHandleRotationRing@SP@@QAEXXZ  00485650  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?SetState@cSPEditorHandleRotationRing@SP@@QAEXH_N@Z  00485690  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?AnimateOn@cSPEditorHandleRotationRing@SP@@QAEXXZ  004856d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?SetModelScale@cSPEditorHandleRotationRing@SP@@QAEXM@Z  00485850  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?Shutdown@cSPEditorHandleRotationRing@SP@@QAEXXZ  004858b0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?GetUpperUpperJoint@cSPEditorLimbJoint@SP@@QAEPAU12@XZ  00485900  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?SetTargetPosition@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00485930  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?Move@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@_N@Z  00485960  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?MoveLowerJoints@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00485a60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00484e40/s00484e40.cpp  ?Translate@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00485af0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00599c40/s00599c40.cpp  ??1cSPUIAnimTarget@@UAE@XZ  0059a1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ??1cSPUIWindowAnimation@@UAE@XZ  0059a1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ??0cEditorBudgetPanel@SP@@QAE@XZ  0059a270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ??1cEditorBudgetPanel@SP@@QAE@XZ  0059a320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?Shutdown@cEditorBudgetPanel@SP@@QAEXXZ  0059a3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?UpdateCostText@cEditorBudgetPanel@SP@@QAEXXZ  0059a400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?UpdateTimeText@cEditorBudgetPanel@SP@@QAEXXZ  0059a470  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?HandleMessage@cEditorBudgetPanel@SP@@UAE_NIPAX@Z  0059a770  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?Init@cEditorBudgetPanel@SP@@QAEXPAVIWindow@@@Z  0059a7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?SetCreature@cEditorBudgetPanel@SP@@QAEXIPAUcCreatureData@2@I@Z  0059a980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?IsFiniteFloat@@YAHM@Z  0059ab10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?Clamp@@YAMMMM@Z  0059ab50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?IsFiniteVector@@YAHABUVector3@@@Z  0059ab70  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?WrapAngle@@YAMM@Z  0059ac00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?SetTarget@cSmoothedVector@@QAEXABUVector3@@_N@Z  0059ac60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00599c40/s00599c40.cpp  ?IsID@cIDHolder@@QBE_NI@Z  0059ac90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

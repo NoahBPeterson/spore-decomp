@@ -1,0 +1,14 @@
+slices/s005bfb90/s005bfb90.cpp  ?Shutdown@cSPEditorNaming@  005bfb90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?SetTagField@cSPEditorNaming@  005bfc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?SetDataProvider@cSPEditorNaming@  005bfcc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?Init@cSPEditorNaming@  005bfd40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ??0cSPEditorNaming@  005bfff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ??1cSPEditorNaming@  005c0070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?SetPrompt@cSPEditorNaming@  005c0320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ??0cSPEditorPageControls@  005c0770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ??1cSPEditorPageControls@  005c07d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?Init@cSPEditorPageControls@  005c0840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?Shutdown@cSPEditorPageControls@  005c0990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?HandleUIMessage@cSPEditorPageControls@  005c0a00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?Update@cSPEditorPageControls@  005c0a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bfb90/s005bfb90.cpp  ?SetImage@cSPEditorPaintLikeThis@  005c0ba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

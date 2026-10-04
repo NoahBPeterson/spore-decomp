@@ -1,0 +1,15 @@
+slices/s00561970/s00561970.cpp  ?DecreasePopulation@cSPObjectTemplateDB@SP@@QAEXH@Z  00561970  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?CheckForMinPopulations@cSPObjectTemplateDB@SP@@QAEXXZ  00561bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?RebuildFreeList@cSPObjectTemplateDB@SP@@QAEXXZ  00561cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?GetFloatParameterValues@cSPObjectTemplateDB@SP@@QAE_NIAAV?$vector@MUallocator@eastl@@@eastl@@@Z  00561d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?GetIntParameterValues@cSPObjectTemplateDB@SP@@QAE_NIAAV?$vector@HUallocator@eastl@@@eastl@@@Z  00561ea0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?GetFloatParameterTable@cSPObjectTemplateDB@SP@@QAE_NIAAV?$vector@MUallocator@eastl@@@eastl@@AAV?$vector@UResourceKey@@Uallocator@eastl@@@4@@Z  00561fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?GetIntParameterTable@cSPObjectTemplateDB@SP@@QAE_NIAAV?$vector@HUallocator@eastl@@@eastl@@AAV?$vector@UResourceKey@@Uallocator@eastl@@@4@@Z  00562120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?FindMatching@cSPObjectTemplateDB@SP@@QAEXPAV?$vector_set@IU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@ABUConstraint@FunctionalMatch@2@@Z  00562280  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?FilterByConstraint@cSPObjectTemplateDB@SP@@QAEXAAV?$vector_set@IU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@ABUConstraint@FunctionalMatch@2@@Z  005623f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?GetAssetKeys@cSPObjectTemplateDB@SP@@QAE_NAAV?$vector@IUallocator@eastl@@@eastl@@AAV?$vector@UResourceKey@@Uallocator@eastl@@@4@@Z  00562510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?ExcludeCandidates@cSPObjectTemplateDB@SP@@QAEXAAV?$vector_set@IU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@_N@Z  005625a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?AddPriorityConstraint@cSPObjectTemplateDB@SP@@QAEXABUConstraint@FunctionalMatch@2@I@Z  00562680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?RemovePriorityConstraint@cSPObjectTemplateDB@SP@@QAEXI@Z  00562710  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?SetExcludedParameter@cSPObjectTemplateDB@SP@@QAEXH@Z  00562790  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00561970/s00561970.cpp  ?ClearExcludedParameter@cSPObjectTemplateDB@SP@@QAEXXZ  005628b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

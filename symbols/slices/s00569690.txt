@@ -1,0 +1,8 @@
+00569690 eastl::vector<Vector3>::operator=  # EASTL operator= shape, 12-byte elems, DoRealloc 0x56a140 (see symbols Vector<Vector3>::assign)
+00569d20 eastl::DequeBase<T>::DoPushFront  # EASTL deque shape: DoReallocPtrArray(1,kSideFront), SetSubarray(begin-1)
+00569dc0 eastl::DequeBase<T>::DoPushBack  # EASTL deque shape: DoReallocPtrArray(1,kSideBack)
+00569f90 eastl::DequeBase<T>::DoInit  # kMinPtrArraySize 8, subarray 32
+0056a240 eastl::DequeBase<T>::DoAllocatePtrArray  # allocate n*4 from mAllocator
+0056a270 eastl::DequeIterator<T>::operator+=  # 16777216/32 subarray index trick
+0056a440 eastl::copy_chooser<DequeIterator>  # generic copy loop over deque iterators
+0056a4d0 eastl::copy_backward_chooser<DequeIterator>  # generic copy_backward loop

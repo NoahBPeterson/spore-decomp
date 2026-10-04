@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00576140/s00576140.cpp  ?PickHover@cAppModeEditorBase@SP@@QAEIABUVector3@@@Z  00576550  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??1cOwnedObjectPtr@@QAE@XZ  005765e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??1cAtomicRefPtr@@QAE@XZ  00576620  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??4cAtomicRefPtr@@QAEAAU0@PAUcAtomicRefObject@@@Z  00576650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??4cRefCountedPtr@@QAEAAU0@ABU0@@Z  005766e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??0?$basic_string@DUallocator@eastl@@@eastl@@QAE@ABUallocator@1@@Z  00576750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??0?$basic_string@_WUallocator@eastl@@@eastl@@QAE@ABUallocator@1@@Z  00576770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??4cEditorSnapshot@@QAEAAU0@ABU0@@Z  00576900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?compare@?$basic_string@_WUallocator@eastl@@@eastl@@SAHPB_W000@Z  00576970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?uninitialized_fill_n_ref@@YAXPAU?$AutoRefCount@VIRefCounted@@@EA@@IABU12@@Z  005769d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?ColorToVector3@@YAPAUVector3@@PAU1@I@Z  00576ab0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?RotationMatrix@@YA?AUMatrix3@@ABUVector3@@M@Z  00576b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ??0BoundingBox@@QAE@XZ  00576b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?ParseLine@cEditorBudgetCheat@?A0xc021b765@@QAEXABVcArguments@ArgScript@EA@@@Z  00576bb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00576140/s00576140.cpp  ?Execute@cEditorAddDNACheat@?A0xc021b765@@QAEXABVcArguments@ArgScript@EA@@@Z  00576c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,15 @@
+slices/s005c0c00/s005c0c00.cpp  ?OnSelected@cSPEditorPaintLikeThis@  005c0c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?OnRollover@cSPEditorPaintLikeThis@  005c0c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?OffRollover@cSPEditorPaintLikeThis@  005c0c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?OnLeftMouseUp@cSPEditorPaintLikeThis@  005c0ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?LaunchSporepedia@cSPEditorPaintLikeThis@  005c0cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??1cSPPaletteItemUIOneClickPaint@  005c0e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??0cSPEditorPaintLikeThis@  005c0f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??1cSPEditorPaintLikeThis@  005c1050  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?Shutdown@cSPEditorPaintLikeThis@  005c1130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??0cPaletteItemMessage@  005c1280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??1cPaletteItemMessage@  005c12c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??_GcPaletteItemMessage@  005c12f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?OnAssetBrowserSelection@cSPEditorPaintLikeThis@  005c1340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?SendPaletteItemMessage@cSPEditorPaintLikeThis@  005c13b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ??$find@PAPAVcSPPaletteItem@  005c1cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

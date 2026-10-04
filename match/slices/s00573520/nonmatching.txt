@@ -1,0 +1,6 @@
+00573520  16  ShowBlockAbilities: one bbox-center add has swapped operands (max.x+min.x)
+00573a10  11  GetSelectableBlock: rollover-handle null path laid out inverted
+00573a60  212  IsMousedOverModel: xmm register assignment in dir normalize and shared return-true block differ (frame/stack layout matches)
+00573c00  7  SetActiveBlock: activate goto block layout inverted; eax/ecx swap on IsSameAssembly arg
+00574110  8  CreateEffects: begin-pointer load for mbActive store scheduled after (orig before) the size store
+00574460  50  HasEffect: begin pointer kept in esi from size computation (orig reloads in loop prolog)

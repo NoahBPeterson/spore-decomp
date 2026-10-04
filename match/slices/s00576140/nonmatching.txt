@@ -1,0 +1,7 @@
+00576140  281  GetEditorCategory: both switch trees identical; only the cross-switch tail-merge direction differs (offset shifts inflate the count)
+00576440  104  UpdateBackgroundLayer: ours reuses the zero in eax for AddLayer args and clobbers esi; original pushes literal 0s
+005766b0  2  RefCount Reset: original decrements with `add eax,-1`, ours emits `sub eax,1`
+005767f0  104  WriteBoolVector: original packs count/bool locals into the dead param slot and tail-calls EndBlock; ours allocates a frame slot
+00576880  71  ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
+00576a10  120  uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
+00576c50  912  Shutdown: register allocation differs (ours keeps constant 1 in ebp; original spills ebx around owner-free calls); same calls/order

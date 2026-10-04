@@ -1,0 +1,5 @@
+00516ac0 `anonymous_namespace'::FastMemCopy  # card PDB name; MMX movntq block copy; byte-exact
+00516eb0 nSPSkinner::cMeshAORender::Rebuild  # card PDB name; byte-exact
+00516ba0 nSPSkinner::cMeshAORender::cMeshAORender  # cDynamicDrawBaseRC vtables + two AutoRefCounts; byte-exact
+00516c30 nSPSkinner::cMeshAORender::~cMeshAORender  # releases +0x10, +0x0c, restores RefCountTemplate vtable; byte-exact
+00516da0 nSPSkinner::cMeshAORender::Dispatch  # PDB candidate from card; draws with material 0x320adfd3; byte-exact

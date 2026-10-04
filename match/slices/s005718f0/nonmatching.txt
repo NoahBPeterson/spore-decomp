@@ -1,0 +1,2 @@
+00572110  21  switch on 5 hashes: same compares, default block laid out after last case (tried switch/if orders)
+00572260  5  id lands in eax instead of reusing esi (this) in the mode switch

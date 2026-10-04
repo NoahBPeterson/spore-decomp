@@ -1,0 +1,23 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0059c4c0/s0059c4c0.cpp  ?DoNukeSubtree@?$map@IV?$AutoRefCount@VcSPEditorAnimatedCreatureData@SP@@@EA@@@eastl@@  0059c4c0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ??1cSPEditorAnimatedCreatureManager@SP@@UAE@XZ  0059c5f0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?Shutdown@cSPEditorAnimatedCreatureManager@SP@@QAEXXZ  0059c640  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ??0cSPEditorAnimatedCreatureManager@SP@@QAE@XZ  0059c7c0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?AddCreature@cSPEditorAnimatedCreatureManager@SP@@QAEIPBX@Z  0059c9c0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?GetCreature@cSPEditorAnimatedCreatureManager@SP@@QAEPAVcAnimatingCreature@2@I@Z  0059ca70  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?GetCreatureStructure@cSPEditorAnimatedCreatureManager@SP@@  0059cac0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?PlayAnimation@cSPEditorAnimatedCreatureManager@SP@@QAEXII@Z  0059cb10  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?AddDelayedEvent@cSPEditorAnimatedCreatureManager@SP@@  0059cb80  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?IsAnimationDone@cSPEditorAnimatedCreatureManager@SP@@QAE_NI@Z  0059cdb0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureVisible@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  0059ce30  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureTargetAngle@cSPEditorAnimatedCreatureManager@SP@@QAEXIM_N@Z  0059cea0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureTargetPosition@cSPEditorAnimatedCreatureManager@SP@@  0059cf00  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreaturePreserveHeight@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  0059cf60  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureLookAtTarget@cSPEditorAnimatedCreatureManager@SP@@  0059cfb0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureIsTurning@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  0059d010  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureLookAtEnabled@cSPEditorAnimatedCreatureManager@SP@@QAEXIH@Z  0059d060  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureSpeeds@cSPEditorAnimatedCreatureManager@SP@@QAEXIMM@Z  0059d0b0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?GetCreaturePosition@cSPEditorAnimatedCreatureManager@SP@@  0059d110  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureTurnRate@cSPEditorAnimatedCreatureManager@SP@@QAEXIH@Z  0059d180  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?SetCreatureMoving@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  0059d1e0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s0059c4c0/s0059c4c0.cpp  ?ResetCreature@cSPEditorAnimatedCreatureManager@SP@@QAEXI@Z  0059d240  /O2 /MD /Gy /TP /GS- /arch:SSE

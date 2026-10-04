@@ -1,0 +1,6 @@
+005c6c50 SP::cSPPaletteItemUI::~cSPPaletteItemUI  # resets cSPPaletteItemUI then base vptrs, releases mWinRoot/mPaletteItem; byte-exact
+005c7370 SP::cSPPaletteItemUI::`scalar deleting destructor'  # inlined ~cSPPaletteItemUI + flag&1 delete; byte-exact
+005c6a30 SP::cSPPaletteItemUI::Cast  # IWinProc-subobject override returning this-0xc / IWinProc for type IDs; byte-exact
+005c6a70 SP::cSPPaletteItemUISelectable::Cast  # adds 0x47a9a1c then defers to cSPPaletteItemUI::Cast; byte-exact
+005c6ad0 SP::cSPPaletteItemUISelectable::SetIsSelected  # PDB caller-scored candidate; posts 0x47a9a20 / clears mSelected
+005c6b10 SP::cSPPaletteItemUISelectable::HandleMessage  # IHandlerRC at +0x20, message 0x47a9a20, compares mSelectionGroup

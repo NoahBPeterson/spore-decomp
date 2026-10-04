@@ -1,0 +1,2 @@
+0048a580  2  /Od; complete. reserved slot of the local AutoRefCount vector sits one dword lower than original
+0048a690  1237  /Od; complete. ~25 named locals in hash order + reserved inline slots not reproduced

@@ -1,0 +1,11 @@
+005c1d70 SP::cSPPaletteCategory::FindSubCategory  # recursive search over mSubCategories by mCategoryId
+005c2020 SP::cSPPaletteCategory::cSPPaletteCategory  # field defaults match PDB layout
+005c20b0 SP::cSPPaletteCategory::~cSPPaletteCategory  # destroys mCategoryName/vectors
+005c2230 SP::cSPPaletteCategory::Shutdown  # dev-build symbol exists; clears pages/packs/subcategories
+005c2390 SP::cSPPaletteCategory::AddPage  # dev-build symbol; inserts by mSequenceNumber
+005c2590 SP::cSPPaletteCategoryUI::SetVisibleChunk  # dev-build symbol
+005c28b0 SP::cSPPaletteCategoryUI::Update  # PDB candidate (caller-single)
+005c2960 SP::cSPPaletteCategoryUI::SetVisibility  # dev-build symbol
+005c29e0 SP::cSPPaletteCategoryUI::GetPageIndexForPackID  # dev-build symbol
+005c2cd0 SP::cSPPaletteCategoryUI::IsPaintByNumber  # dev-build symbol (14 bytes)
+005c2ce0 SP::cSPPaletteCategoryUI::GetRegionFilterID  # dev-build symbol

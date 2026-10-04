@@ -1,0 +1,17 @@
+slices/s005634e0/s005634e0.cpp  ??0OTDB@Editor@@QAE@XZ  005640d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?Query@cQueryHost@SP@@QAEIII@Z  00563df0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ??0?$hash_map@II@eastl@@QAE@ABUallocator@1@@Z  005640f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?begin@?$hashtable@IU?$pair@$$CBII@eastl@@Uallocator@2@U?$use_first@U?$pair@$$CBII@eastl@@@2@U?$equal_to@I@2@U?$hash@I@2@Umod_range_hashing@2@Udefault_ranged_hash@2@@eastl@@QAE?AU?$hashtable_iterator@U?$pair@$$CBII@eastl@@@2@XZ  00564140  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?resize@?$vector@UDeclareParam@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXI@Z  00564350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?erase@?$vector@UDeclareParam@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEPAUDeclareParam@FunctionalMatch@SP@@PAU345@@Z  005643e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ??1?$vector@UDeclareParam@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAE@XZ  00564470  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?resize@?$vector@UWeightedID@@Usp_vector_allocator@eastl@@@eastl@@QAEXI@Z  005644e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ??1?$vector@U?$pair@IM@eastl@@Usp_vector_allocator@2@@eastl@@QAE@XZ  00564580  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ??A?$vector_map@IMU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@QAEAAMABI@Z  005645f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?GetFeatureVector@cSPObjectTemplateDB@SP@@UAE_NIAAVcFeatureVector@Traits@2@@Z  00563910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?FindSummaryByID@cSPObjectTemplateDB@SP@@UAEPAXABI@Z  005639a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?FindSummary@cSPObjectTemplateDB@SP@@UAEPAXI@Z  00563a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?SetClassifierWeights@cSPObjectTemplateDB@SP@@UAEXABV?$vector_map@IMU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@@Z  00563c80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?GetDefaultClassifierWeights@cSPObjectTemplateDB@SP@@UAEXAAV?$vector_map@IMU?$less@I@eastl@@Usp_vector_allocator@2@@eastl@@@Z  00563d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?ValidateResource@cSPObjectTemplateDB@SP@@UAE_NABUResourceKey@@H@Z  00563ac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005634e0/s005634e0.cpp  ?SaveGroupRecords@cSPObjectTemplateDB@SP@@QAEXXZ  00563e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

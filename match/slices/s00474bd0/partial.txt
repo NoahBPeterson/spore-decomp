@@ -1,0 +1,4 @@
+004751a0 0 temp fill-object (ref-counted local) modeled as uninitialized stub; not faithful
+00475260 0 temp fill-object (ref-counted local) modeled as uninitialized stub; not faithful
+00475550 0 callee signature/calling convention guessed
+004755a0 0 field types and vtable call guessed

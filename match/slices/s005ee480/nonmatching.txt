@@ -1,0 +1,1 @@
+005ee880  71  complete OneClickPaint::Init; frame 0xc smaller than original (unidentified dead temp), rest is offset-only

@@ -1,0 +1,7 @@
+005f2780 SP::cSPSwatch::HandleMessage  # IHandler thunk at +0xc, message 0x695e243 compares mModelKey
+005f27c0 SP::cSPSwatch::DoMessage  # IWinProc override; camera-controller forwarding + mouse enter/leave/click
+005f2eb0 SP::cSPSwatch::Hide3DModel  # PDB name on card
+005f2e00 SP::cSPSwatch::Show3DModel  # PDB name on card
+005f3040 SP::cSPSwatch::EndInteraction  # PDB name on card
+005f2bf0 SP::cSPSwatch::UpdateSwatchPosition  # PDB name on card
+005f3680 eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator>::DoDestroyValues  # PDB name on card

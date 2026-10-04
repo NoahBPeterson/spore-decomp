@@ -1,0 +1,3 @@
+00484e40 SP::cSPEditorHandleRotationRing::GetRotationAxis  # returns mRotationAxis (+0x54) * block orientation
+00484ee0 SP::cSPEditorHandleRotationRing::GetForwardVector  # same shape on mForwardVector (+0x60)
+00485200 SP::cSPEditorHandleRotationRing::SetBoundingBox  # writes mUnscaledRadius, calls GetHandleRadiusBasedOnBoundingBox

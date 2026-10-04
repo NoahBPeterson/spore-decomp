@@ -1,0 +1,22 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005419c0/s005419c0.cpp  ?GetFeedTypeFromURI@Feed@SP@@YA?AW4FeedType@12@PBD@Z  005419c0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ??0AtomParser@Feed@SP@@QAE@XZ  00541d10  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?SetSize@AtomParser@Feed@SP@@UAE_NI@Z  00541ea0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?SetPosition@AtomParser@Feed@SP@@UAE_NHW4PositionType@IO@EA@@@Z  00541eb0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ??1AtomParser@Feed@SP@@UAE@XZ  00541f20  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?SetDocument@AtomParser@Feed@SP@@QAE_NPAUAtomDocument@23@@Z  00541fc0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?ResetParser@AtomParser@Feed@SP@@QAE_NXZ  00542030  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?Open@AtomParser@Feed@SP@@QAE_NXZ  005420c0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?Write@AtomParser@Feed@SP@@UAE_NPBXI@Z  00542190  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?Close@AtomParser@Feed@SP@@UAE_NXZ  00542200  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?GetAccessFlags@AtomParser@Feed@SP@@UBEHXZ  00542270  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?GetState@AtomParser@Feed@SP@@UBEHXZ  005422a0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?GetPosition@AtomParser@Feed@SP@@UBEHW4PositionType@IO@EA@@@Z  005422e0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?StartDoc@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542330  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?EndDoc@AtomParser@Feed@SP@@QAEXXZ  005423f0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?StartEntry@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542460  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?EndEntry@AtomParser@Feed@SP@@QAEXXZ  005424e0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?StartAuthor@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542540  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ??0Person@Feed@SP@@QAE@XZ  00542610  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?EndAuthor@AtomParser@Feed@SP@@QAEXXZ  005426d0  /Od /Ob1 /MD /Gy /TP
+slices/s005419c0/s005419c0.cpp  ?StartLink@AtomParser@Feed@SP@@QAEXPAPB_W@Z  00542730  /Od /Ob1 /MD /Gy /TP

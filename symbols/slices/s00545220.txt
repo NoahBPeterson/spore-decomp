@@ -1,0 +1,29 @@
+00545220 SP::Feed::AtomParser::StartElementHandler  # dev PDB static handler; registered by Open/ResetParser
+005452b0 SP::Feed::AtomParser::EndElementHandler  # dev PDB static handler
+005453c0 SP::Feed::HandshakeParser::HandshakeParser  # byte-exact; dev PDB layout + retail extra fields
+005455b0 SP::Feed::HandshakeParser::~HandshakeParser  # byte-exact
+00545620 SP::Feed::HandshakeParser::SetLists  # dev PDB method (retail takes 4 args)
+00545680 SP::Feed::HandshakeParser::ResetParser
+00545710 SP::Feed::HandshakeParser::Open
+005457e0 SP::Feed::HandshakeParser::Write
+00545850 SP::Feed::HandshakeParser::Close
+005458e0 SP::Feed::HandshakeParser::GetAccessFlags
+00545910 SP::Feed::HandshakeParser::GetState
+00545950 SP::Feed::HandshakeParser::GetPosition
+00545520 SP::Feed::HandshakeParser::SetPosition
+005459a0 SP::Feed::HandshakeParser::StartDoc
+00545aa0 SP::Feed::HandshakeParser::EndDoc
+00545ad0 SP::Feed::HandshakeParser::StartFeed
+00545b20 SP::Feed::HandshakeParser::EndFeed
+00545bd0 SP::Feed::HandshakeParser::StartAuthor
+00545bf0 SP::Feed::HandshakeParser::EndAuthor
+00545c10 SP::Feed::HandshakeParser::EndName
+00545ce0 SP::Feed::HandshakeParser::EndTitle
+00545d30 SP::Feed::HandshakeParser::EndSubtitle
+00545d80 SP::Feed::HandshakeParser::EndSubcount
+00545dc0 SP::Feed::HandshakeParser::StartLink
+00545fa0 SP::Feed::HandshakeParser::EndId
+00546020 SP::Feed::HandshakeParser::EndUpdated
+00546050 SP::Feed::HandshakeParser::EndNextID  # HandshakeData::mnNextID
+00546090 SP::Feed::HandshakeParser::EndUserID  # HandshakeData::mnUserID
+00546110 SP::Feed::HandshakeParser::EndScreenName  # HandshakeData::mScreenName

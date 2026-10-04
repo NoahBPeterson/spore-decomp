@@ -1,0 +1,11 @@
+005ad9a0 SP::cSPEditorManipulationInterpenetration::cSPEditorManipulationInterpenetration  # vtable 0x13f72bc slots match dev-build class; byte-exact
+005ada50 SP::cSPEditorManipulationInterpenetration::DoOnMouseDown  # vtable slot 6; same size as dev (113)
+005adb20 SP::cSPEditorManipulationLimb::OnMouseUp  # vtable 0x13f7358 slot 4
+005addb0 SP::cSPEditorManipulationLimb::GetMaxLimbPlacementHeight  # returns model height * 0.95, inlined in RecalculateLimbMissPlane
+005ae0b0 SP::cSPEditorManipulationLimb::DoOnMouseMove  # vtable slot 8
+005ae120 SP::cSPEditorManipulationLimb::Shutdown  # vtable slot 12
+005ae1b0 SP::cSPEditorManipulationLimb::~cSPEditorManipulationLimb  # destroys mTries[400]
+005ae300 SP::cSPEditorManipulationLimb::RecalculateLimbMissPlane  # writes mLimbMissPlanePosition/Normal
+005ae480 SP::cSPEditorManipulationLimb::DoOnMouseDown  # vtable slot 6
+005ae610 SP::cSPEditorManipulationLimb::cSPEditorManipulationLimb  # sets vtable 0x13f7358
+005ae840 SP::cSPEditortLimbTry::operator=  # mLoc, mBadness, mDebugVals copy

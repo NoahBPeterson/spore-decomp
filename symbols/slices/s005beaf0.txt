@@ -1,0 +1,4 @@
+005beaf0 SP::cSPEditorManipulationTranslateCreature::DoOnMouseDown  # dev PDB method (622 bytes), same body
+005bf950 SP::cSPEditorNaming::SetDisplayText  # PDB name, byte-exact
+005bf9d0 SP::cSPEditorNaming::HandleMessage  # dev PDB method; IHandlerRC this (+4), message switch
+005bfb70 SP::cSPEditorNaming::ResetParentWin  # PDB name, byte-exact

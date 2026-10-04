@@ -1,0 +1,15 @@
+slices/s004ac610/s004ac610.cpp  ?GetRootSpine@cSPEditorModel@SP@@QAEPAUcSPEditorBlock@2@XZ  004ac610  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?GetUnmatchedSpine@cSPEditorModel@SP@@QAEPAUcSPEditorBlock@2@XZ  004ac710  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?RemoveBlock@cSPEditorModel@SP@@QAEXPAUcSPEditorBlock@2@_N1@Z  004ac8b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?DeleteBlock@cSPEditorModel@SP@@QAE_NPAUcSPEditorBlock@2@_N@Z  004acab0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?GetBlock@cSPEditorModel@SP@@QAEPAUcSPEditorBlock@2@I@Z  004accb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?GetStats@cSPEditorModel@SP@@QAEXPAH00PAM0@Z  004acd20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?IsAnyBlockAnimating@cSPEditorModel@SP@@QAE_NXZ  004acfd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?IsAnyBlockPlaying@cSPEditorModel@SP@@QAE_NXZ  004ad070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?StopAnimations@cSPEditorModel@SP@@QAEXXZ  004ad110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?ResetAnimations@cSPEditorModel@SP@@QAEXXZ  004ad1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?SetModelFlags@cSPEditorModel@SP@@QAEXH@Z  004ad210  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?ClearBlocks@cSPEditorModel@SP@@QAEXXZ  004ad280  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?Clear@cSPEditorModel@SP@@QAEXXZ  004ad330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?SetIndices@cSPEditorModel@SP@@QAEXH@Z  004ad470  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004ac610/s004ac610.cpp  ?NumberBlocks@cSPEditorModel@SP@@QAEXXZ  004ad4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

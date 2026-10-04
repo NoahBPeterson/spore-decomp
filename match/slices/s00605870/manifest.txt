@@ -1,0 +1,17 @@
+slices/s00605870/s00605870.cpp  ?SetValue@cSPVerbTrayCollection@SP@@QAEXPAX@Z  00605870  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?GetTotalLevel@cSPVerbTrayCollection@SP@@QAEMXZ  006058b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?FindWindow@cSPVerbTrayCollection@SP@@QAEPAVIWindow@UTFWin@EA@@I@Z  00605900  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?SetVerbIconList@cSPVerbTrayCollection@SP@@QAEXPAX@Z  00605940  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?Init@cSPVerbTrayCollection@SP@@QAEXPAVIWindow@UTFWin@EA@@UResourceKey@@PBU6@H_N@Z  00605980  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?DoNukeSubtree@?$map@V?$AutoRefCount@VIWindow@UTFWin@EA@@@EA@@V?$vector@V?$AutoRefCount@VcSPEditorVerbIconTray@SP@@@EA@@@eastl@@@eastl@@QAEXPAU?$rbtree_node@U?$pair@$$CBV?$AutoRefCount@VIWindow@UTFWin@EA@@@EA@@V?$vector@V?$AutoRefCount@VcSPEditorVerbIconTray@SP@@@EA@@@eastl@@@eastl@@@2@@Z  00605b20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ??1cSPVerbTrayCollection@SP@@UAE@XZ  00605cb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?ShutdownTrays@cSPVerbTrayCollection@SP@@QAEXXZ  00605d10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ??0cSPVerbTrayCollection@SP@@QAE@XZ  00605e60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?IsSporeDisc@@YA_NPBD@Z  006064c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?FindSporeDisc@@YA_NPADPBD@Z  00606590  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?CheckSporeDisc@@YAHPBD@Z  00606610  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?GetResourceAs30bdee3@@YAPAXABUResourceKey@@@Z  00606640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ??1ConstraintNode@FunctionalMatch@SP@@QAE@XZ  006066f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ??$uninitialized_relocate_commit@UConstraintNode@FunctionalMatch@SP@@@eastl@@YAPAUConstraintNode@FunctionalMatch@SP@@PAU123@00@Z  00606730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ?GetArchiveFolder@@YA_NAAUWStr@@@Z  00606790  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00605870/s00605870.cpp  ??0ConstraintNode@FunctionalMatch@SP@@QAE@ABU012@@Z  00606880  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

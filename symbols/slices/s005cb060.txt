@@ -1,0 +1,4 @@
+005cb3b0 SP::cSPPaletteUI::cSPPaletteUI  # vptr pair IWinProc/RefCountVTemplate, zeroes members to +0x69; byte-exact
+005cb420 SP::cSPPaletteUI::~cSPPaletteUI  # destroys mCategoryButtons/mCategoryUIs vectors, mInfo/mData/mLayout; byte-exact
+005cb4a0 SP::cSPPaletteUI::DoMessage  # PDB caller-scored candidate; chunk prev/next buttons 0x5aec4b8/9, expand 0x7bce6e8
+005cb1b0 SP::cSPPaletteUI::GetCategoryInfo  # returns current category's info (index + two Vector3) or defaults

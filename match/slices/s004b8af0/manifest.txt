@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004b8af0/s004b8af0.cpp  ??0cSPEditorPhysicsWorld@SP@@QAE@XZ  004b8af0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??1cSPEditorPhysicsWorld@SP@@UAE@XZ  004b8bd0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?Init@cSPEditorPhysicsWorld@SP@@QAEXXZ  004b8c10  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??_GhkReferencedObject@@UAEPAXI@Z  004b8ef0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??_GhkWorldCinfo@@UAEPAXI@Z  004b8f50  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??0hkCollisionFilter@@QAE@XZ  004b9010  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??_GhkCollisionFilter@@UAEPAXI@Z  004b90c0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?Clear@cSPEditorPhysicsWorld@SP@@QAEXXZ  004b9140  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?CreateFloor@cSPEditorPhysicsWorld@SP@@QAEXM@Z  004b91e0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?UpdateCollisionFilters@cSPEditorPhysicsWorld@SP@@QAEXXZ  004b9420  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?SetFloorFilter@cSPEditorPhysicsWorld@SP@@QAEXI@Z  004b9440  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?SetDefaultFloorFilter@cSPEditorPhysicsWorld@SP@@QAEXXZ  004b9470  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?AddModel@cSPEditorPhysicsWorld@SP@@QAEXPAVcSPEditorModel@2@@Z  004b94a0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?RemoveModel@cSPEditorPhysicsWorld@SP@@QAEXPAVcSPEditorModel@2@@Z  004b9570  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?UpdatePhysics@cSPEditorPhysicsWorld@SP@@QAEXI@Z  004b95c0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??1?$vector@V?$AutoRefCount@VcSPEditorModel@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@QAE@XZ  004b96d0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?push_back@?$vector@V?$AutoRefCount@VcSPEditorModel@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@QAEXABV?$AutoRefCount@VcSPEditorModel@SP@@@EA@@@Z  004b9740  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ?erase@?$vector@V?$AutoRefCount@VcSPEditorModel@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@QAEPAV?$AutoRefCount@VcSPEditorModel@SP@@@EA@@PAV34@0@Z  004b97e0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004b8af0/s004b8af0.cpp  ??$remove@PAV?$AutoRefCount@VcSPEditorModel@SP@@@EA@@PAVcSPEditorModel@SP@@@eastl@@YAPAV?$AutoRefCount@VcSPEditorModel@SP@@@EA@@PAV12@0ABQAVcSPEditorModel@SP@@@Z  004b98b0  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

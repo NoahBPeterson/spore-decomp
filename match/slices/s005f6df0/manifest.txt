@@ -1,0 +1,13 @@
+slices/s005f6df0/s005f6df0.cpp  ??1cSPSwatch@SP@@UAE@XZ  005f6df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ??0cSPAnimatedSwatch@SP@@QAE@XZ  005f7380  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ??1cSPAnimatedSwatch@SP@@UAE@XZ  005f7400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?Compare@eastl@@YAHPBD0I@Z  005f7870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ??9ResourceMan@EA@@YA_NABUKey@01@0@Z  005f78f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ??0?$pair@UKey@ResourceMan@EA@@U123@@eastl@@QAE@ABUKey@ResourceMan@EA@@0@Z  005f7940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?NormalizePath@@YAXAAVstring16@eastl@@@Z  005f7970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ??E?$hashtable_iterator@UKeyRecord@@U?$hash_node@UKeyRecord@@@eastl@@@eastl@@QAEAAU01@XZ  005f79b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?comparei@string@eastl@@QBEHPBD@Z  005f79e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?erase@?$hashtable@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@eastl@@QAE?AU?$hashtable_iterator@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@U?$hash_node@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@2@@2@U32@@Z  005f7a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?DoAllocateNode@?$hashtable@UKeyPairEntry@@@eastl@@QAEPAU?$hash_node@UKeyPairEntry@@@2@ABUKeyPairEntry@@@Z  005f7b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?DoRehash@?$hashtable@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@eastl@@QAEXI@Z  005f7be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f6df0/s005f6df0.cpp  ?DoAllocateNode@?$hashtable@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@eastl@@QAEPAU?$hash_node@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@2@ABU?$pair@UKey@ResourceMan@EA@@U123@@2@@Z  005f7c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast

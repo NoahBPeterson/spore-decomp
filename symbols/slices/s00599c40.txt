@@ -1,0 +1,2 @@
+00599c40 SP::cSPEditorVerbIcon::SetupTooltip  # PDB caller-scored candidate cSPEditorVerbIcon::DoMessage; fills the verb tooltip (name, title, category, description) from property lists
+0059ac00 WrapAngle  # fmod(a, 2*pi) wrapped into [-pi, pi], byte-exact

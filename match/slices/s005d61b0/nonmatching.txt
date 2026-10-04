@@ -1,0 +1,4 @@
+005d61b0  6  cEditorSystem::Shutdown: cSPSwatchManager inline Release emits sub/flags instead of dec + cmp eax,ebx
+005d6850  2  cEditorSystem::~cEditorSystem: swatch Release emits sub eax,1 where original has add eax,-1
+005d7270  9  fixed_string<wchar_t,97>(const string16&): store scheduling of the capacity lea
+005d72b0  11  cSPUIXHTMLFileResourceHandler ctor: same fixed_string capacity scheduling

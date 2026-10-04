@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a8d20/s005a8d20.cpp  ?UpdateModelTransforms@cSPEditorRigblockModel@SP@@QAEXXZ  005a8d20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?none@?$bitset@$0IA@@eastl@@QBE_NXZ  005a8ea0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?FindEditorPropertyLists@@  005a9050  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ??0cEditorLaunchData@Editor@SP@@QAE@XZ  005a9080  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ??1cEditorLaunchData@Editor@SP@@UAE@XZ  005a9170  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?Launch@Editor@SP@@YA_NIABUResourceKey@@IPAVIUnknown32@COM@EA@@U?$bitset@$0IA@@eastl@@_N@Z  005a94d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?DoNukeSubtree@?$map@IV?$vector@V?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@@eastl@@  005a97a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?ClearEditorPropertyLists@@YAXXZ  005a98f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?RegisterEditorPropertyLists@@YAXI@Z  005a9a00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?RegisterAllEditorPropertyLists@@YAXXZ  005a9b60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?HandleMessage@cEditorSelectionHandler@@QAE_NIIII@Z  005a9bc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a8d20/s005a8d20.cpp  ?IntersectRaySphere@@YA_NABUVector3@@00MPAM@Z  005a9c40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

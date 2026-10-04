@@ -1,0 +1,14 @@
+slices/s0048a4e0/s0048a4e0.cpp  ?UpdateLimbModels@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@@Z  0048a4e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?SetUIState@cSPEditorLimbStructure@SP@@QAEXH@Z  0048a560  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?SetJointTarget@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@UcSPVector3@@@Z  0048a650  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?UpdateSymmetryModels@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@_N1@Z  0048ad20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?UpdateSymmetryModels@cSPEditorLimbStructure@SP@@QAEX_N0@Z  0048ae30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?AreJointsValid@cSPEditorLimbStructure@SP@@QAE_NPAU?$vector@PAUcSPEditorLimbJoint@SP@@@@@Z  0048ae60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?FixJoints@cSPEditorLimbStructure@SP@@QAE_NPAU?$vector@PAUcSPEditorLimbJoint@SP@@@@@Z  0048af00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?FixJoint@cSPEditorLimbStructure@SP@@QAE_NPAUcSPEditorLimbJoint@2@@Z  0048afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?UpdateLengths@cSPEditorLimbStructure@SP@@QAE_NPAU?$vector@PAUcSPEditorLimbJoint@SP@@@@@Z  0048b080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?FixZeroLengthJoints@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@@Z  0048b120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?CollectLimbJoints@cSPEditorLimbStructure@SP@@QAEXPAU?$vector@PAUcSPEditorLimbJoint@SP@@@@@Z  0048b1e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?CollectLimbJoints@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@PAU?$vector@PAUcSPEditorLimbJoint@SP@@@@@Z  0048b200  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?FindJoint@cSPEditorLimbStructure@SP@@QAEPAUcSPEditorLimbJoint@2@PAUcSPEditorBlock@2@@Z  0048b2c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0048a4e0/s0048a4e0.cpp  ?FindJoint@cSPEditorLimbStructure@SP@@QAEPAUcSPEditorLimbJoint@2@PAUcSPEditorBlock@2@PAU32@@Z  0048b2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,6 @@
+005d61b0 SP::cEditorSystem::Shutdown  # PDB caller-single candidate; tears down every editor subsystem
+005d6510 SP::cEditorSystem::HandleMessage  # PDB caller-scored candidate; byte-exact with IHandler slot 1 signature
+005d67f0 SP::cEditorSystem::cEditorSystem  # stores ??_7cEditorSystem vtables, zeroes all members
+005d6f90 SP::cEditorSystem::PreInit  # PDB caller-single candidate; calls InitHavokBaseSystem
+005d6ae0 hkDefaultError::hkDefaultError  # stores ??_7hkDefaultError, Havok hkDefaultError.h layout
+005d7110 hkDefaultError::`scalar deleting destructor'  # hkArray/hkPointerMap teardown + hkMemory deallocateChunk

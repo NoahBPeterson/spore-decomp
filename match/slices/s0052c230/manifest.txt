@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0052c230/s0052c230.cpp  ??$uninitialized_fill_n_impl@U?$generic_iterator@U?$pair@HM@eastl@@@eastl@@U?$pair@HM@2@@eastl@@YAXU?$generic_iterator@U?$pair@HM@eastl@@@0@IABU?$pair@HM@0@U?$integral_constant@_N$0A@@0@@Z  0052c8f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ??$fill_n@PAU?$pair@HM@eastl@@U12@@eastl@@YAPAU?$pair@HM@0@PAU10@IABU10@@Z  0052cbc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ??0?$VectorBase@U?$pair@HM@eastl@@@eastl@@QAE@IABUsp_vector_allocator@@@Z  0052ce90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ??0?$vector@U?$pair@HM@eastl@@@eastl@@QAE@IABUsp_vector_allocator@@@Z  0052c230  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?insert@?$vector@U?$pair@HM@eastl@@@eastl@@QAEPAU?$pair@HM@2@PAU32@ABU32@@Z  0052c2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?DoAssignValues@?$vector@U?$pair@HM@eastl@@@eastl@@QAEXIABU?$pair@HM@2@@Z  0052c570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?DoAssignValues@?$vector@M@eastl@@QAEXIABM@Z  0052c380  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?get_partition@eastl@@YAPAU?$pair@HM@1@PAU21@0U21@USecondGreater@1@@Z  0052cc10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?adjust_heap@eastl@@YAXPAU?$pair@HM@1@HHHU21@USecondGreater@1@@Z  0052cf80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?make_heap@eastl@@YAXPAU?$pair@HM@1@0USecondGreater@1@@Z  0052cf00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?partial_sort@eastl@@YAXPAU?$pair@HM@1@00USecondGreater@1@@Z  0052ccd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?quick_sort_impl_helper@eastl@@YAXPAU?$pair@HM@1@0HUSecondGreater@1@@Z  0052c950  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ??0cSPSkinPaintClearDescription@@QAE@XZ  0052d160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?WriteClearDescriptionCommand@@YAXPAUcSPSkinPaintClearDescription@@PAUIStream@@@Z  0052d310  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052c230/s0052c230.cpp  ?ReadClearDescriptionCommand@@YAPAUcSPSkinPaintClearDescription@@PAUIStream@@H@Z  0052d0d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc /GS-
+slices/s0052c230/s0052c230.cpp  ?SWARM_SPSkinPaintClearAddCommands@@YAXPAUcFormatParser@ArgScript@@@Z  0052d330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /EHsc /GS-

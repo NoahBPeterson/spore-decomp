@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00525360/s00525360.cpp  ??1PoolPtr@@QAE@XZ  005266a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ??4PoolPtr@@QAEAAU0@PAUPooledObj@@@Z  00525d90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ??1Elem38@@QAE@XZ  00526660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ??1VectorElem38@@QAE@XZ  00525e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?resize@VectorElem38@@QAEXI@Z  00525e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?push_back@VectorElem38@@QAEXXZ  00525f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?push_back@VectorVec2@@QAEXABUcSPVector2@@@Z  00525ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?pop_front@DequeElem48@@QAEXXZ  005263f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?empty@VectorU32@@QBE_NXZ  00526430  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?resize@VectorElem40@@QAEXI@Z  00526450  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?set_capacity@VectorElem40@@QAEXI@Z  005264d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?BuildMeshes@cSkinnerBuilder@@QAEXPAUcSkinnerSource@@PAPAUcSkinnerResult@@@Z  00525360  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?IsBusy@cPaintJob@@QAE_NXZ  00525a40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?GetTextureHandle@cSkinPaintTarget@@QAEIXZ  00525aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?RegisterSkinPaintCommands@@YAXXZ  00525b40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00525360/s00525360.cpp  ?InitSkinPaintCommands@@YAXXZ  00525ce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

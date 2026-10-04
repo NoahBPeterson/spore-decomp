@@ -1,0 +1,29 @@
+00609790 SP::Pollen::cEncryptedStream::cEncryptedStream  # AES IStream wrapper (class name guessed); byte-exact
+006097f0 SP::Pollen::cEncryptedStream::Init  # EVP_EncryptInit_ex with deobfuscated key; byte-exact
+00609910 SP::Pollen::cEncryptedStream::GetAccessFlags  # IStream slot 4; byte-exact
+00609930 SP::Pollen::cEncryptedStream::GetState  # IStream slot 5; byte-exact
+00609960 SP::Pollen::cEncryptedStream::Close  # IStream slot 6; byte-exact
+006099b0 SP::Pollen::cEncryptedStream::GetSize  # IStream slot 7; byte-exact
+006099d0 SP::Pollen::cEncryptedStream::GetPosition  # IStream slot 9; byte-exact
+00609a00 SP::Pollen::cEncryptedStream::SetPosition  # IStream slot 10; byte-exact
+00609a70 SP::Pollen::cEncryptedStream::GetAvailable  # IStream slot 11; byte-exact
+00609a90 SP::Pollen::cEncryptedStream::Read  # EVP_DecryptUpdate; byte-exact
+00609b50 SP::Pollen::cEncryptedStream::SetSize  # IStream slot 8; byte-exact
+00609b80 SP::Pollen::cEncryptedStream::Flush  # IStream slot 13; byte-exact
+00609ba0 SP::Pollen::cEncryptedStream::Write  # EVP_EncryptUpdate; byte-exact
+00609c70 SP::Pollen::cEncryptedStream::`scalar deleting destructor'  # byte-exact
+00609cc0 SP::Pollen::TrimWhitespace  # static, arg in eax; byte-exact
+00609d50 eastl::find_first_of<char*,const char*>  # byte-exact
+00609d90 eastl::search<char*,const char*>  # byte-exact
+00609e40 EA::Thread::AutoFutex::~AutoFutex  # LeaveCriticalSection(mpFutex); byte-exact
+00609e50 SP::Pollen::DomainMatches  # cookie domain suffix match (static)
+00609ea0 EA::COM::AutoRefCount<SP::Pollen::cCookie>::operator=  # byte-exact
+00609ee0 eastl::basic_string<char>::comparei  # byte-exact
+00609f40 eastl::basic_string<char>::rfind(char,size_type)  # byte-exact
+00609f90 eastl::basic_string<char>::find(const basic_string&,size_type)  # byte-exact
+00609fe0 eastl::basic_string<char>::compare(const basic_string&)  # byte-exact
+0060a040 SP::Pollen::cCookie::cCookie  # PDB layout cCookie (0x54); byte-exact
+0060a080 SP::Pollen::cCookie::~cCookie  # byte-exact
+0060a150 eastl::fixed_string<char>::append(const char*,const char*)  # fixed allocator (pool ptr at +0x10); byte-exact
+0060a2c0 eastl::fixed_string<char>::assign(const char*,const char*)  # byte-exact
+0060a600 eastl::fixed_vector<T*>::DoInsertValue  # byte-exact

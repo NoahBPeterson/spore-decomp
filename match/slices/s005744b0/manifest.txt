@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005744b0/s005744b0.cpp  ?ShowBudgetWindows@cAppModeEditorBase@SP@@QAEXH@Z 005744b0    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetLaunchSelectedIndex@cAppModeEditorBase@SP@@QAEHXZ 00574570    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetCurrentCameraContext@cAppModeEditorBase@SP@@QAEPAXXZ 00574590    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetBudgetFraction@cAppModeEditorBase@SP@@QAEMXZ 005745c0    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?PurchaseBlock@cAppModeEditorBase@SP@@QAEXPAUcSPEditorBlock@2@@Z 00574850    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetRandomBackground@cAppModeEditorBase@SP@@QAE?AUResourceKey@@XZ 00574900    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?GetNextBackground@cAppModeEditorBase@SP@@QAE?AUResourceKey@@XZ 00574990    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?FlushFactory@cAppModeEditorBase@SP@@QAEHPAVcSPEditorResourceFactory@2@@Z 00574a20    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?SwitchToPlayModeCamera@cAppModeEditorBase@SP@@QAEXXZ 00574a60    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?CanPublish@cAppModeEditorBase@SP@@QAEHXZ 00574d60    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?ExitEditorUI@cAppModeEditorBase@SP@@QAEXXZ 00575120    /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005744b0/s005744b0.cpp  ?SetupGameViewLayers@cAppModeEditorBase@SP@@SAXXZ 005751b0    /O2 /MD /Gy /TP /arch:SSE /fp:fast

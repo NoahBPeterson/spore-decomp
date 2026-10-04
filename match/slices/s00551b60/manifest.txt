@@ -1,0 +1,15 @@
+slices/s00551b60/s00551b60.cpp  ?SetParentAssetID@cAssetMetadata@Pollen@SP@@QAEX_K@Z  00551b60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?SetOriginalParentAssetID@cAssetMetadata@Pollen@SP@@QAEX_K@Z  00551b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?UpdateFromEntry@cAssetMetadata@Pollen@SP@@QAE_NPBUAtomEntry@Feed@3@ABU?$basic_string@D@eastl@@@Z  00551ba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?RemoveFeedURI@cAssetMetadata@Pollen@SP@@QAE_NABU?$basic_string@D@eastl@@@Z  00551ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?GetParentServerID@Pollen@SP@@YA_NPAVcAssetMetadata@12@PA_K1@Z  00552080  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?GetAssetState@Pollen@SP@@YAHABUKey@ResourceMan@EA@@@Z  00552300  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?GetAssetMetadata@Pollen@SP@@YA_NABUKey@ResourceMan@EA@@PAPAVcAssetMetadata@12@@Z  00552450  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?GetAssetName@Pollen@SP@@YAPB_WABUKey@ResourceMan@EA@@@Z  00552580  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ??0?$hash_map@_KUKey@ResourceMan@EA@@@eastl@@QAE@ABUallocator@1@@Z  00552650  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ??A?$hash_map@I_K@eastl@@QAEAA_KABI@Z  005526a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?increment_bucket@?$hashtable_iterator_base@U?$hash_node@U?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@@eastl@@@eastl@@QAEXXZ  00552750  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?resize@?$basic_string@D@eastl@@QAEXID@Z  005527a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?resize@?$basic_string@_W@eastl@@QAEXI_W@Z  00552800  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?find@?$hashtable@_KU?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@U?$use_first@U?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@@2@@eastl@@QBE?AU?$hashtable_const_iterator@U?$hash_node@U?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@@eastl@@@2@AB_K@Z  005528c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00551b60/s00551b60.cpp  ?find@?$hashtable@_KU?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@U?$use_first@U?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@@2@@eastl@@QAE?AU?$hashtable_iterator@U?$hash_node@U?$pair@$$CB_KUKey@ResourceMan@EA@@@eastl@@@eastl@@@2@AB_K@Z  005529d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

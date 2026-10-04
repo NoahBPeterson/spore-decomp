@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00506760/s00506760.cpp  ??0?$intrusive_ptr@URefCounted@@@@QAE@ABU0@@Z  00506f80  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??0TextureSetData@@QAE@ABU0@@Z  00506f10  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??0fixed_hashtable_allocator@eastl@@QAE@ABU01@@Z  00506fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?allocate_memory@eastl@@YAPAXAAUfixed_hashtable_allocator@1@III@Z  005072a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?set_max_load_factor@?$rehash_base@Uhashtable@eastl@@@eastl@@QAEXM@Z  00506b80  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??0hashtable@eastl@@QAE@IABU?$hash@I@1@ABUmod_range_hashing@1@ABUdefault_ranged_hash@1@ABU?$equal_to@I@1@ABU?$use_first@U?$pair@IUTextureSet@@@eastl@@@1@ABUfixed_hashtable_allocator@1@@Z  00506c00  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?clear@hashtable@eastl@@QAEXXZ  00506cd0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?DoAllocateNode@hashtable@eastl@@QAEPAUnode_type@2@ABU?$pair@IUTextureSet@@@2@@Z  00507030  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?DoAllocateBuckets@hashtable@eastl@@QAEPAPAUnode_type@2@I@Z  005070a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?DoRehash@hashtable@eastl@@QAEXI@Z  00507110  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?DoFreeNodes@hashtable@eastl@@QAEXPAPAUnode_type@2@I@Z  00507230  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ?DoFreeNode@hashtable@eastl@@QAEXPAUnode_type@2@@Z  005072f0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??0hash_map_base@eastl@@QAE@IABU?$hash@I@1@ABU?$equal_to@I@1@ABUfixed_hashtable_allocator@1@@Z  00506b30  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??0fixed_hash_map@eastl@@QAE@ABU?$hash@I@1@ABU?$equal_to@I@1@@Z  00506aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s00506760/s00506760.cpp  ??1TextureSetData@@QAE@XZ  00506a40  /Od /Ob1 /MD /Gy /TP /arch:SSE

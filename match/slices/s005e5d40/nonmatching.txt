@@ -1,0 +1,2 @@
+005e6400  48  LayoutTray: icon-slot address recomputed in original; xmm0/xmm1 swapped for left/top in the per-icon loop
+005e5e80  24  SetLayoutID: original loads the id through esi (push/pop esi), mine uses eax; 2 bytes shorter so the rest shifts

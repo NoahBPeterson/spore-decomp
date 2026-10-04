@@ -1,0 +1,2 @@
+00511f70  8  eastl::uninitialized_copy_ptr<uint32_t*> memmove path: last inline level's param slots below its bool (orig: bool first, ascending block)
+005121c0  23  TriMesh::GetTriangleNormal: operator- temporaries interleaved with edge locals + 9 unused slots in orig frame

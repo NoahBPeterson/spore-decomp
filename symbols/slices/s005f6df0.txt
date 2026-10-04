@@ -1,0 +1,6 @@
+005f6df0 SP::cSPSwatch::~cSPSwatch  # PDB caller-single candidate; member teardown matches retail layout
+005f6f40 SP::cSPSwatch::Update  # calls LoadModel/OnModelLoad/FrameModel, per-frame lerp of viewport/angle/scale
+005f7870 eastl::Compare  # memcmp wrapper used by basic_string::compare
+005f78f0 EA::ResourceMan::operator!=  # card name
+005f79e0 eastl::basic_string<char>::compare  # compare(const char*) via strlen + Compare
+005f7be0 eastl::hashtable::DoRehash  # EASTL rehash loop shape

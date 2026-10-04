@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004f6630/s004f6630.cpp  ?reserve@Elem16Vector@@QAEXI@Z  004f6630  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ??AUIntMap@@QAEAAUElem16Vector@@ABI@Z  004f6720  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?unique@@YAPAUKey@ResourceMan@EA@@PAU123@0@Z  004f6830  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?find@string16@@QBEI_WI@Z  004f6ab0  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?sort@@YAXPAUKey@ResourceMan@EA@@0@Z  004f6b70  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?adjacent_find@@YAPAUKey@ResourceMan@EA@@PAU123@0@Z  004f6c30  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ??0Elem16Vector@@QAE@ABU0@@Z  004f6cc0  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?DoInsertValue@UIntMap@@QAE?AUMapIterator@@U2@ABUvalue_type@@Utrue_type@@@Z  004f6d60  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?quick_sort_impl@@YAXPAUKey@ResourceMan@EA@@0H@Z  004f6ec0  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?insertion_sort@@YAXPAUKey@ResourceMan@EA@@0@Z  004f6f80  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?insertion_sort_simple@@YAXPAUKey@ResourceMan@EA@@0@Z  004f7090  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?median@@YAABUKey@ResourceMan@EA@@ABU123@00@Z  004f7210  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?get_partition@@YAPAUKey@ResourceMan@EA@@PAU123@0U123@@Z  004f7420  /Od /Ob1 /MD /Gy /TP
+slices/s004f6630/s004f6630.cpp  ?partial_sort@@YAXPAUKey@ResourceMan@EA@@00@Z  004f7550  /Od /Ob1 /MD /Gy /TP

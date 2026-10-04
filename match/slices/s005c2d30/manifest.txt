@@ -1,0 +1,15 @@
+slices/s005c2d30/s005c2d30.cpp  ?uninitialized_copy_ptr@SP@@YAPAUPageUIEntry@1@PAU21@00@Z  005c2ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?copy@SP@@YAPAV?$AutoRefPtr@VcSPEditorPaintLikeThis@SP@@@EA@@PAV23@00@Z  005c2f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?copy_backward@SP@@YAPAV?$AutoRefPtr@VcSPEditorPaintLikeThis@SP@@@EA@@PAV23@00@Z  005c2fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?copy@SP@@YAPAUPageUIEntry@1@PAU21@00@Z  005c3610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?copy_backward@SP@@YAPAUPageUIEntry@1@PAU21@00@Z  005c3680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ??4PageUIEntryAssign@SP@@QAEAAU01@ABU01@@Z  005c35c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?GetSelectedPaint@cSPPaletteCategoryUI@SP@@QAE?AUtSPEditorPaint@2@XZ  005c2d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?GetSkinPaintIndex@cSPPaletteCategoryUI@SP@@QAEIXZ  005c2e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?IsColor1Default@cSPPaletteCategoryUI@SP@@QAE_NXZ  005c2e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?SetPackPaneVisible@cSPPaletteCategoryUI@SP@@QAEX_N@Z  005c2ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?SetWindowPositions@cSPPaletteCategoryUI@SP@@QAEXXZ  005c3000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?SetSelectedPaint@cSPPaletteCategoryUI@SP@@QAEXABUtSPEditorPaint@2@@Z  005c34e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?HandleMessage@cSPPaletteCategoryUI@SP@@QAE_NIPAX@Z  005c36f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?SetPageIndex@cSPPaletteCategoryUI@SP@@QAE_NH@Z  005c3bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c2d30/s005c2d30.cpp  ?CyclePage@cSPPaletteCategoryUI@SP@@QAE_NH@Z  005c3c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

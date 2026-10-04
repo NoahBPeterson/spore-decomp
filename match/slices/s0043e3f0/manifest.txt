@@ -1,0 +1,16 @@
+# source symbol va flags
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e760@cSPEditorBlock@SP@@QAEXI@Z  0043e760  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e7e0@cSPEditorBlock@SP@@QAEXI_N@Z  0043e7e0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e8d0@cSPEditorBlock@SP@@QAE_NH@Z  0043e8d0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e920@cSPEditorBlock@SP@@QAE_NXZ  0043e920  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e940@cSPEditorBlock@SP@@QAEXIIH@Z  0043e940  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43e9c0@cSPEditorBlock@SP@@QAEXXZ  0043e9c0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43ea20@cSPEditorBlock@SP@@QAEXXZ  0043ea20  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43ea40@cSPEditorBlock@SP@@QAEXH@Z  0043ea40  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43eaa0@cSPEditorBlock@SP@@QAEXH@Z  0043eaa0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43eae0@cSPEditorBlock@SP@@QAEXM@Z  0043eae0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43eb50@cSPEditorBlock@SP@@QAEXM@Z  0043eb50  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43ebc0@cSPEditorBlock@SP@@QAE_NXZ  0043ebc0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?F_43ecb0@cSPEditorBlock@SP@@QAE_NXZ  0043ecb0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?Add@cSPBoundingBox@@QAEXABU1@@Z  0043f050  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043e3f0/s0043e3f0.cpp  ?GetCorner@cSPBoundingBox@@QBE?AUcSPVector3@@I@Z  0043f290  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy

@@ -1,0 +1,12 @@
+00511670 eastl::partial_sort<Obj**,ExtentCompare>  # byte-exact EASTL partial_sort body (make_heap/adjust_heap/sort_heap calls)
+00511900 eastl::partial_sort<uint32_t*>  # byte-exact EASTL partial_sort, operator<
+005119f0 eastl::make_heap<Obj**,ExtentCompare>  # byte-exact EASTL make_heap
+00511a50 eastl::adjust_heap<Obj**,int,Obj*,ExtentCompare>  # byte-exact EASTL adjust_heap
+00511b80 eastl::sort_heap<Obj**,ExtentCompare>  # byte-exact EASTL sort_heap
+005120d0 eastl::promote_heap<Obj**,int,Obj*,ExtentCompare>  # byte-exact EASTL promote_heap
+00511dd0 eastl::make_heap<uint32_t*>  # byte-exact
+00511e30 eastl::adjust_heap<uint32_t*,int,uint32_t>  # byte-exact (promote_heap inlined)
+00511f10 eastl::sort_heap<uint32_t*>  # byte-exact
+00511880 eastl::uninitialized_relocate_commit<Elem100>  # destroys source range, returns dest end; byte-exact
+00511d00 eastl::copy_backward<Elem100*,Elem100*>  # operator= loop backwards; byte-exact
+00512330 Owner_Vectors_Deque::~Owner  # Clear() then member dtors (deque @+0x28, vectors @+0x14/+0x00); byte-exact

@@ -1,0 +1,5 @@
+005dc310 SP::cSPEditorUI::FindWindowByID  # card name; searches mLayout (+0x14) then the second layout (+0x2c)
+005dc380 SP::cSPEditorUI::StartListeningToMessages  # card name; AutoHandler at +0x118 registers 7 message IDs
+005dc6c0 SP::cSPEditorUI::~cSPEditorUI  # 4 base vtables, AutoHandler unregister, 3 cSPUILayout dtors
+005dc800 SP::cSPEditorUI::UpdateSaveButtons  # Claude-named: toggles windows 0x612efea/0x612efeb from saveability
+005dbf80 SP::cSPEditorInputWinProc::HandleUIMessage  # Claude-named class; IWinProc slot, forwards mouse events to listener at +0xc

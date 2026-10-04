@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00594260  8  value halves loaded after the destination pointers (original loads value first)
+00593ba0  69  register assignment of first/last swapped in adjacent_find/unique
+005948d0  2  node size loaded into eax instead of ecx before the overflow allocation
+00594920  2  node size loaded into eax instead of ecx before the overflow allocation
+00594980  2  node size loaded into eax instead of ecx before the overflow allocation
+00594b60  40  scheduling of the bucket/element-count stores at the end differs
+00593890  15  version store scheduled before the GetStreamHolder call
+00595040  76  result kept in edi:ebx in original; register allocation differs
+00595230  171  register allocation (this/vector end in different registers)
+00593a40  177  register allocation and iterator scheduling differ

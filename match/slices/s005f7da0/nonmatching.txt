@@ -1,0 +1,2 @@
+005f8ad0  593  cKeyMappingTable::Save: complete; first loop's "ok && ..." chains are jump-threaded in ours (original materializes the string-write result in al before the key writes), begin()/end() register allocation differs
+005f8840  12  DequeBase::DoInit: complete; vtable slot load scheduled earlier (edx vs eax for the Alloc call target)

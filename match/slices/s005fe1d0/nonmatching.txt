@@ -1,0 +1,3 @@
+005fe1d0  63  cSPUIIDCollector::Shutdown: complete; atomic refcount sequence uses one pointer register (original copies the address before each lock xadd)
+005fe500  70  cSPUICredits::GetCreditName: complete; block layout of the literal/lookup branches and register choice differ
+005fe8e0  2  cSPUIChoiceDialog::HandleUIMessage: complete; case 2/5 "return true" jumps to a different (equivalent) return block

@@ -1,0 +1,15 @@
+slices/s00488600/s00488600.cpp  ??0cSPEditorLimbStructure@SP@@QAE@XZ  00488850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ??1cSPEditorLimbStructure@SP@@QAE@XZ  00488900  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?Clear@cSPEditorLimbStructure@SP@@QAEXXZ  00488980  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?UpdateSymmetry@cSPEditorLimbStructure@SP@@QAEXXZ  00488a50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?FindInvalidJoint@cSPEditorLimbStructure@SP@@QAEPAUcSPEditorLimbJoint@2@XZ  00488b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?DeleteJoint@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@@Z  00488c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure@SP@@QAEX_N@Z  00488d00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@_N@Z  00488d30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?MoveToBlock@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorBlock@2@@Z  00488e80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?Translate@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@UcSPVector3@@@Z  00488f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?RelocateTargets@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@0@Z  00488fe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?Refresh@cSPEditorLimbStructure@SP@@QAEX_N@Z  004890e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?Init@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorBlock@2@_N1@Z  004891a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?MirrorOriginal@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@M@Z  004893f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00488600/s00488600.cpp  ?MirrorCreation@cSPEditorLimbStructure@SP@@QAEXPAUcSPEditorLimbJoint@2@M@Z  00489490  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

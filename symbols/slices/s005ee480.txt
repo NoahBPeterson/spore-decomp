@@ -1,0 +1,8 @@
+005ee480 cSPUIPropertyLayout::SetItem  # byte-exact; called from palette rollovers with (item, paletteInfo, content, show)
+005ee500 SP::cSPPaletteItemUIDrag::Cast  # in cSPPaletteItemUIDrag IWinProc vtable slot 3 (0x13f98dc+0xc), byte-exact
+005ee590 SP::cSPPaletteItemUIDrag::`scalar deleting destructor'  # vtable 0x13f98f8 slot 0, byte-exact
+005ee660 SP::cSPPaletteItemUIDrag::Shutdown  # vtable 0x13f98f8 slot 2, byte-exact
+005ee6d0 SP::cSPPaletteItemUIDrag::OnDeselected  # vtable 0x13f98f8 slot 0x34 (pairs with OnSelected at 0x30)
+005eece0 SP::cSPPaletteItemUIOneClickPaint::Update  # vtable 0x13f7d40 slot 0x18, byte-exact
+005ef1b0 SP::cSPPaletteItemUIPlannerEdit::Cast  # type id 0xb4e4f69b, byte-exact
+005ef2d0 SP::cSPPaletteItemUIPlannerEdit::OnRollover  # mirrors cSPPaletteItemRollover::OnRollover, byte-exact

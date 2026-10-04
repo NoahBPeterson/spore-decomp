@@ -1,0 +1,39 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005718f0/s005718f0.cpp  ?insert@KeyVector@@QAEPAUKey12@@PAU2@ABU2@@Z  005718f0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ??1KeyVector@@QAE@XZ  005719a0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?DoInsertValue@KeyVector@@QAEXPAUKey12@@ABU2@@Z  005719f0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?lower_bound@@YAPAUKey12@@PAU1@0ABU1@@Z  00571c40  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Fabs@@YAMM@Z  00571ce0  /O2 /MD /Gy /EHsc /TP /fp:fast
+slices/s005718f0/s005718f0.cpp  ?Exp@@YAMM@Z  00571cc0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SPIDFromName@@YAIPBD@Z  00571cf0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?deallocate@ArrayAllocator@@QAEXPAXI@Z  00571d10  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SetBlock@DirtyState@@QAEXABUBlock36@@@Z  00571d20  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SetKey@DirtyState@@QAEXABUKey12@@@Z  00571d40  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ??4VecPair@@QAEAAU0@ABU0@@Z  00571d60  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Notify@OwnerHandle@@QAEXXZ  00571d90  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?RemoveHandler@Messaging@EA@@YA_NPAUIServer@12@PAUIHandler@12@PBIIH@Z  00571db0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Strlen16@@YAHPB_W@Z  00571e00  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Memset16@@YAPA_WPA_WH_W@Z  00571e20  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?GetStopwatchCycle@@YA_KXZ  00571e60  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Restart@Stopwatch@EA@@QAEXXZ  00571e80  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?RandomUint32@@YAII@Z  00571ed0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Clear@Variant@EA@@QAEXXZ  00571ee0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?AsUint32@Variant@EA@@QBEIXZ  00571ef0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?WriteBool@@YAPAUIStream@@PAU1@_N@Z  00571f10  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ??6@YAAAUISerializer@@AAU0@ABI@Z  00571f40  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?Start3dSoundByName@@YAXIIMMM@Z  00571f80  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?PostSoundMessage@@YAXII@Z  00572020  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SetSoundSymbol@@YAXIIPBD@Z  00572070  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SetCullBackfaces@@YAXH@Z  005720f0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?GetDefaultColor@ColorSource@@QBE?AUVec4@@XZ  00572160  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?GetColor@ColorSource@@QBE?AUVec4@@XZ  00572190  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?HandleRects@@YGXURect16@@0@Z  005721b0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?UpdateAllItems@@YGXPAUcItemList@@@Z  00572220  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?InitBrain@cAppModeEditorBase@SP@@QAEXI@Z  005722f0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?OnCursor@cAppModeEditorBase@SP@@QAEXPAUcCursor@2@@Z  00572330  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?ActivateEditorMode@SP@@YAXXZ  00572400  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?PostDone@cAppModeEditorBase@SP@@QAEXPAX@Z  00572430  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?SetRanges@cAppModeEditorBase@SP@@QAEXAB_K00@Z  00572450  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?StopFade@cAppModeEditorBase@SP@@QAEXXZ  005724a0  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?IsSporepediaModal@SP@@YA_NXZ  00572520  /O2 /MD /Gy /EHsc /TP
+slices/s005718f0/s005718f0.cpp  ?ResetUIIfReady@@YAXXZ  00572550  /O2 /MD /Gy /EHsc /TP

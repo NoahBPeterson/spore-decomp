@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+005962e0  519  string temporaries/flag handling and stack layout differ
+005966e0  327  insert-n paths: register allocation and helper inlining differ
+00596900  253  vector clear and filter branch layout differ
+00596a30  265  visibility test and counter pointer handling differ
+00596be0  320  push_back/unique-erase register allocation differs
+00596e60  97  counting-map iteration register allocation differs
+00596fc0  167  category compare reloads argument each iteration in original
+00597060  72  local slot layout of the two counters differs
+005970d0  210  aligned frame (and esp,-8) and inlined operator[] differ

@@ -1,0 +1,17 @@
+004e2f20 eastl::fixed_hashtable_allocator::fixed_hashtable_allocator(const&)  # re-inits the 32x0x1C node pool; byte-exact
+004e2f90 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::DoAllocateNode  # allocate_memory + placement copy
+004e3010 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::DoFreeNodes
+004e3080 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::DoAllocateBuckets  # memset + ~0 sentinel
+004e30f0 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::DoRehash
+004e3260 eastl::vector<EA::AutoRefCount<T>>::DoInsertValue
+004e3520 eastl::hashtable<ResourceKey,cSpeciesProfile*>::DoAllocateNode
+004e3590 eastl::hashtable<ResourceKey,cSpeciesProfile*>::DoFreeNodes
+004e3600 eastl::hashtable<ResourceKey,cSpeciesProfile*>::DoRehash
+004e36e0 eastl::hashtable<uint32_t,SP::cSpeciesArchetype>::DoAllocateNode
+004e3760 eastl::hashtable<uint32_t,SP::cSpeciesArchetype>::DoFreeNodes
+004e37f0 eastl::hashtable<uint32_t,SP::cSpeciesArchetype>::DoRehash
+004e38d0 eastl::vector<SP::FunctionalMatch::Constraint>::vector(const vector&)
+004e39d0 eastl::vector<SP::FunctionalMatch::Constraint>::DoInsertValue
+004e3cf0 eastl::VectorBase<SP::FunctionalMatch::Constraint>::VectorBase(n, allocator)
+004e3d60 eastl::uninitialized_fill_n_ptr<SP::FunctionalMatch::Constraint>
+004e3d90 eastl::uninitialized_relocate<SP::FunctionalMatch::Constraint*>  # relocate_start (copy) then commit (destroy sources)

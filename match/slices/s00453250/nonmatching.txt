@@ -1,0 +1,6 @@
+00453250 294 complete; original has a plain "push ebp; and esp,-16" frame with esp-relative locals, our cl emits the ebx-based aligned frame (all stores otherwise the same)
+00453630 12 complete; original frame has one extra dword slot (unknown temp)
+00453920 32 complete; /Od slot order of the y/z locals and the 9-float array not reproduced
+00453d20 18 complete; original frame has an extra hole at [ebp-4] (unknown inline temp)
+00453e20 74 complete; original evaluates all DoInsertValues args into temps after constructing the Bounds temporary and has a larger frame
+00453f20 519 complete; EASTL operator= inline copy/destruct/DoFree temps and holes not reproduced

@@ -9,12 +9,12 @@ which are excluded as freebies (built byte-exact from upstream source).
 | Game functions (denominator) | 89353 | 100% |
 | Ghidra pseudocode (readable, NOT compilable) | 89350 | 100.00% |
 | Named (recovered class/method/global names; incl. high-confidence dev-PDB matches) | 10969 | 12.28% |
-| **Compilable source, byte-exact (hand/agent-written)** | 649 | 0.73% |
-| Compilable source, byte-exact via clone (same code, different globals) | 6630 | 7.42% |
+| **Compilable source, byte-exact (hand/agent-written)** | 2357 | 2.64% |
+| Compilable source, byte-exact via clone (same code, different globals) | 6712 | 7.51% |
 | Compilable source, byte-exact, template-generated, original form | 22548 | 25.23% |
 | Compilable source, byte-exact, template-generated, shape-only (static initializer written as a plain function) | 16626 | 18.61% |
-| Compilable source, behavioral only (complete, not yet byte-exact) | 145 | 0.16% |
-| Partial / approximate source (NOT counted) | 12 | 0.01% |
-| **Total with compilable source** | 46596 | 52.15% |
+| Compilable source, behavioral only (complete, not yet byte-exact) | 431 | 0.48% |
+| Partial / approximate source (NOT counted) | 40 | 0.04% |
+| **Total with compilable source** | 48667 | 54.47% |
 
 Excluded third-party library functions: 1119 (crt 28, jpeg 31, openssl 918, png 113, zlib 29)

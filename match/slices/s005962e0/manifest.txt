@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005962e0/s005962e0.cpp  ?DoRealloc@fixed_vector_u64@SP@@QAEPA_KIPA_K0@Z  005968b0  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?IsSetInState@cCollectableItems@SP@@QAE_N_KHH@Z  00596b70  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?LockItem@cCollectableItems@SP@@QAEX_K@Z  00596d70  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?UnlockItem@cCollectableItems@SP@@QAE_N_KH@Z  00596da0  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?ResetItem@cCollectableItems@SP@@QAE_N_K@Z  00596e10  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?GetItemFlags@cCollectableItems@SP@@QAEI_K@Z  00596e40  /O2 /MD /Gy /TP /GS-
+slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  005965b0  /O2 /MD /Gy /TP /GS-

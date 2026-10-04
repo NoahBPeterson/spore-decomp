@@ -1,0 +1,30 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00572580/s00572580.cpp  ?RandomRange@@YAMMM@Z  00572a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00572580/s00572580.cpp  ?RandomSigned@@YAMM@Z  00572a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00572580/s00572580.cpp  ?GetComplexityFraction@@YAMABUBlockPtrVector@@@Z  00572b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00572580/s00572580.cpp  ?EditorGroundHeight@@YAMPAUcEditorGround@@ABUVector2@@@Z  00572f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00572580/s00572580.cpp  ?At@UintArray@@QAEPAIH@Z  00572580  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?Self@UintArray@@QAEPAU1@XZ  00572590  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??0AtomicRefPtr@@QAE@PAUAtomicRefCounted@@@Z  005725b0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??0ObjectPtr@@QAE@ABU0@@Z  005725d0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??4?$RectT@M@EA@@QAEAAU01@ABU01@@Z  00572600  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??0IRefCountPtr@@QAE@PAUIRefCount@@@Z  00572660  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?clear@String16@@QAEXXZ  005726c0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?SetIRefCount@?$MessageBasicRC@$04@SP@@QAEXHPAUIRefCount@@@Z  005726e0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?WriteUint32Value@@YA_NPAUISerializer@@PBI@Z  00572840  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?WriteUint32Array6@@YA_NPAUISerializer@@PBI@Z  00572880  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?FindLastOf@@YAPB_WPB_W000@Z  005728f0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?CompareI16@@YAHPB_W0I@Z  00572930  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?CopyVecPairs@@YAPAUVecPair@@PAU1@00@Z  005729b0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?Unregister@HandlerRegistration@Messaging@EA@@QAEXXZ  00572ab0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ??0cThemeMusicManager@Simulator@@QAE@XZ  00572ae0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?GetEntryCount@ComplexityBlock@@QAEHXZ  00572b10  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?IDFromName16@@YAIPB_W@Z  00572c50  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?GetSize@BlockPtrVector@@QAEHXZ  00572c90  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?GetDescription@cEditorLimitsCheat@@QBEPBDH@Z  00572cd0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?IsLimitAllowed@cEditor@@QAE_NXZ  00573050  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?ReleaseRefs@cEditor@@QAEXXZ  005732f0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?HideCreature@cEditor@@QAEXXZ  00573330  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?ShowCreature@cEditor@@QAEXXZ  00573390  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?UpdateCursor@cEditor@@QAEXXZ  005733d0  /O2 /MD /Gy /EHsc /TP
+slices/s00572580/s00572580.cpp  ?SetSymmetryMode@cEditor@@QAEXH@Z  00573480  /O2 /MD /Gy /EHsc /TP

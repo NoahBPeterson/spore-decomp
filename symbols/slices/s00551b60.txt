@@ -1,0 +1,9 @@
+00551b60 SP::Pollen::cAssetMetadata::SetParentAssetID  # stores uint64 at +0x38 (read back by 0x550800 in GetParentServerID)
+00551b80 SP::Pollen::cAssetMetadata::SetOriginalParentAssetID  # stores uint64 at +0x40 (0x550820)
+00551ba0 SP::Pollen::cAssetMetadata::UpdateFromEntry  # merges a feed AtomEntry: feed URI list, AssembledContent tag, title/summary/tags
+00551ff0 SP::Pollen::cAssetMetadata::RemoveFeedURI  # find + vector<string>::erase on mFeedURITable
+00552450 SP::Pollen::GetAssetMetadata  # loads cAssetMetadata resource (type 0x030BDEE3) for a key, AddRef'd out-param
+00552580 SP::Pollen::GetAssetName  # metadata resource -> name string
+005527a0 eastl::basic_string<char>::resize  # erase/append(n, c) pattern
+00552800 eastl::basic_string<wchar_t>::resize  # erase/append(n, c) pattern
+00552750 eastl::hashtable_iterator_base::increment_bucket  # ++mpBucket until non-null

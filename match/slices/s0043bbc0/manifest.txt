@@ -1,0 +1,23 @@
+# source symbol va flags
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bbc0@cSPEditorBlock@SP@@QAE_NH@Z  0043bbc0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bc40@cSPEditorBlock@SP@@QAEXM@Z  0043bc40  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bcf0@cSPEditorBlock@SP@@QAE_NMM@Z  0043bcf0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bd50@cSPEditorBlock@SP@@QAEXUcSPVector3@@M@Z  0043bd50  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bf20@cSPEditorBlock@SP@@QAE_NI@Z  0043bf20  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bf90@cSPEditorBlock@SP@@QAEXI_N@Z  0043bf90  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c040@cSPEditorBlock@SP@@QAEHXZ  0043c040  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c0a0@cSPEditorBlock@SP@@QAEHXZ  0043c0a0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c120@cSPEditorBlock@SP@@QAEHI@Z  0043c120  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c1a0@cSPEditorBlock@SP@@QAEPAUcSPEditorHandleDeform@2@XZ  0043c1a0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c1e0@cSPEditorBlock@SP@@QAEPAUcSPEditorHandleDeform@2@XZ  0043c1e0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c210@cSPEditorBlock@SP@@QAEPAUcSPEditorHandleDeform@2@XZ  0043c210  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c240@cSPEditorBlock@SP@@QAEPAUcSPEditorHandleDeform@2@XZ  0043c240  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c270@cSPEditorBlock@SP@@QAEPAUcSPEditorHandleDeform@2@H@Z  0043c270  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c2d0@cSPEditorBlock@SP@@QAEMI@Z  0043c2d0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c340@cSPEditorBlock@SP@@QAEII@Z  0043c340  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c3d0@cSPEditorBlock@SP@@QAEHPAUcSPEditorHandleDeform@2@@Z  0043c3d0  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c450@cSPEditorBlock@SP@@QAE_NPAUcSPEditorHandleDeform@2@MPAM_N@Z  0043c450  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c510@cSPEditorBlock@SP@@QAE_NXZ  0043c510  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43c710@cSPEditorBlock@SP@@QAEXXZ  0043c710  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43ca10@cSPEditorBlock@SP@@QAE_NXZ  0043ca10  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy
+slices/s0043bbc0/s0043bbc0.cpp  ?F_43bc70@cSPEditorBlock@SP@@QAE_NMM@Z  0043bc70  /Od /Ob1 /Oi /MD /EHsc /TP /arch:SSE /fp:fast /Gy

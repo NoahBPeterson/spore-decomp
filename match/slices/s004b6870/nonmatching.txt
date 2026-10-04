@@ -1,0 +1,1 @@
+004b76c0  867  ApplySkinPaintThemeToModel (s004b6870_editor.cpp): complete; temp-slot order differs (orig allocates the PropertyManager() temp last, extra unused slots) and the HSV args go through an inline helper

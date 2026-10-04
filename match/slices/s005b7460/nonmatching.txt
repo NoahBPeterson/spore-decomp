@@ -1,0 +1,3 @@
+005b7b80  42  UpdatePlanePoint: y/z register roles swapped in the ray/plane dot, fail-path store order
+005b7cf0  403  RepinSimple: matrix temp copies / loop register allocation differ (stack frame 0x4c vs 0x6c)
+005b8410  60  eastl::quick_sort_impl<float*,int>: median() result lands in ecx instead of eax

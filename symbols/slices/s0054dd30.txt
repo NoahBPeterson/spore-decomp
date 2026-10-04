@@ -1,0 +1,7 @@
+0054ddf0 SP::Pollen::cAssetDirectory::cAssetDirectory  # ctor: IHandler vtbl, Mutex, 6 hash containers, LimitStopwatch(5,2); byte-exact
+0054def0 SP::Pollen::cAssetDirectory::~cAssetDirectory  # reverse member destruction of the same layout
+0054df60 SP::Pollen::cAssetDirectory::Init  # PDB candidate (caller-single); registers metadata factory, RestoreMappings, AddHandler x3
+0054e0b0 SP::Pollen::cAssetDirectory::HandleMessage  # IHandler override; message 0x1EE100A flush timer
+0054e250 SP::Pollen::cAssetDirectory::AddMapping  # inserts into both id->key and key->id maps
+0054e460 SP::Pollen::cAssetDirectory::GetLocalKey  # server id -> ResourceKey lookup under mutex
+0054e530 SP::Pollen::cAssetDirectory::GetServerId  # key -> server id; falls back to loading cAssetMetadata (type 0x030BDEE3)

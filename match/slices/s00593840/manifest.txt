@@ -1,0 +1,25 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00593840/s00593840.cpp  ?push_back@?$list@UItemId@@@eastl@@QAEXABUItemId@@@Z  00594b10  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?remove@?$list@UItemId@@@eastl@@QAEXABUItemId@@@Z  005945b0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ??$fill_n@U?$generic_iterator@UItemId@@@eastl@@IUItemId@@@eastl@@YA?AU?$generic_iterator@UItemId@@@0@U10@IABUItemId@@@Z  00594290  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ??$reverse_impl@UItemId@@@eastl@@YAXPAUItemId@@0@Z  00595000  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoRehash@?$hashtable@UcStaticItemInfo@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAEXI@Z  00593d60  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoRehash@?$hashtable@UcItemSetRow@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAEXI@Z  00593e70  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoRehash@?$hashtable@UcItemBig@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAEXI@Z  00594030  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?DoRehash@?$hashtable@UcItemSmall@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAEXI@Z  00594150  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ??$find@_K@?$hashtable@UcStaticItemInfo@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAE?AU?$hashtable_iterator@UcStaticItemInfo@@U?$hash_node@UcStaticItemInfo@@@eastl@@@1@AB_K@Z  005949d0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?begin@?$hashtable@UcItemSetRow@@Ufixed_hashtable_allocator@eastl@@I@eastl@@QAE?AU?$hashtable_iterator@UcItemSetRow@@U?$hash_node@UcItemSetRow@@@eastl@@@2@XZ  00594410  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ??$distance@U?$hashtable_iterator@UcItemSetRow@@U?$hash_node@UcItemSetRow@@@eastl@@@eastl@@@eastl@@YAHU?$hashtable_iterator@UcItemSetRow@@U?$hash_node@UcItemSetRow@@@eastl@@@0@0@Z  005939d0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?HashBytes@SP@@YA_NPBXI@Z  00593840  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?SplitItemId@SP@@YAX_KPAI1@Z  00593960  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?MakeItemId@SP@@YA_KII@Z  00593980  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?AddUnlockPoints@cCollectableItems@SP@@QAEXH@Z  005939b0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?GetDefaultItemGroupId@cCollectableItems@SP@@QAE_KXZ  005939c0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?ClearNewFlags@cCollectableItems@SP@@QAEXXZ  005942e0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?AreAllUnlockedHidden@cCollectableItems@SP@@QAE_NXZ  00594330  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?CountUnlocked@cCollectableItems@SP@@QAEHXZ  005943b0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?IsItemVisible@cCollectableItems@SP@@QAE_N_K@Z  005950c0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?IsItemUnlocked@cCollectableItems@SP@@QAE_N_K@Z  00595110  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?IsItemNew@cCollectableItems@SP@@QAE_N_K@Z  00595190  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?IsKnownItem@cCollectableItems@SP@@QAE_N_K@Z  005951f0  /O2 /MD /Gy /TP /GS-
+slices/s00593840/s00593840.cpp  ?ReadItemList@SP@@YAXPAVISerializer@1@AAV?$list@UItemId@@@eastl@@@Z  00594c70  /O2 /MD /Gy /TP /GS-

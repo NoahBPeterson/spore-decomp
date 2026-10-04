@@ -1,0 +1,1 @@
+005ef850  6  virtual SetCaption slot address computed early (sub ebp,-0x80) vs [ebp+0x80]; all else exact

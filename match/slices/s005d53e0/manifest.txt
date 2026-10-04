@@ -1,0 +1,13 @@
+slices/s005d53e0/s005d53e0.cpp  ??0cPathSegmentList@@QAE@XZ  005d57b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ??0cPathShape@@QAE@HPBX@Z  005d57d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?AddArc@cPathSegmentList@@QAEXABUPoint2@@M0M@Z  005d5a30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?AddLine@cPathSegmentList@@QAEXABUPoint2@@0@Z  005d5ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?IntersectLine@cPathShape@@QAEXABUVector2@@0PAV1@@Z  005d5cf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ??0cEditorsTokenTranslator@SP@@QAE@XZ  005d5e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ??_GcEditorsTokenTranslator@SP@@UAEPAXI@Z  005d5e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?TranslateToken@cEditorsTokenTranslator@SP@@UAE_NPB_WAAVstring16@eastl@@@Z  005d5ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?LoadResource@@YAPAXPAX0@Z  005d60f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?SetSharedObject@@YAXPAVcSharedObject@@@Z  005d6120  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?GetDirectoryName@cDataDirectory@@QAEPB_WH@Z  005d6170  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0.cpp  ?PreShutdown@cEditorSystem@SP@@QAE_NXZ  005d6190  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005d53e0/s005d53e0_nosse.cpp  ?push_back@?$sp_vector@UPathIntersection@@@eastl@@QAEXABUPathIntersection@@@Z  005d5970  /O2 /MD /Gy /TP

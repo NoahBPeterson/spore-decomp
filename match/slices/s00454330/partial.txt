@@ -1,0 +1,5 @@
+# va  reason
+004544d0 behavior reconstructed from Ghidra with guessed callee roles (set find/insert); inline temp cleanup loops omitted
+00454cb0 callee roles (DoInsertValue labeled by PDB is really a memmove-style helper) guessed; append/terminate call args approximate
+00454d50 callee 0x455f50 is a wide-string search; argument order inferred
+00454ee0 insert-value slow path: helper roles (0x11e0744 copy-backward) inferred, not verified

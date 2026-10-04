@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00597e00  172  constructor member initialisers modelled with explicit helper calls; base-class vtables simplified

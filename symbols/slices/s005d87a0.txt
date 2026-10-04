@@ -1,0 +1,5 @@
+005d87b0 SP::cSPEditorTactilityManager::UpdateComponent  # static float tactile lerp (linear/spring/overshoot), reads cSPEditorTactileComponent fields
+005d8f10 SP::cSPEditorTactilityManager::UpdateComponent  # transform overload: slerp of two cSPTransform rotations + translation lerp
+005d8cc0 SP::cSPEditorTactileTransform::cSPEditorTactileTransform  # two inline cSPTransform ctors (+0x38, +0x70)
+005d96d0 SP::cSPEditorTactilityManager::cSPEditorTactilityManager  # vtable 0x13F9120 + five eastl::map ctors at PDB offsets
+005d9770 SP::cSPEditorTactilityManager::`scalar deleting destructor'  # destroys the five maps in reverse member order

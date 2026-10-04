@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00598260  37  pool-pop and value copy-construction scheduling differ
+00597290  7  value copy uses edx instead of ecx for the key
+00597d00  172  temporary fixed_hash_map construction/destruction order differs
+005973a0  82  rbtree find call/result handling differs
+00597410  161  result-flag bookkeeping and inlined push_back differ
+005976d0  509  register allocation and erase/push_back inlining differ
+00597910  224  fixed_vector<uint64,64> local modelled by hand; frame layout differs
+00597a20  110  container clear sequence scheduling differs
+00597b80  239  member destruction modelled explicitly; vtable stores and order differ
+00597f00  723  summary loop: duplicate find calls and 64-bit shifts schedule differently

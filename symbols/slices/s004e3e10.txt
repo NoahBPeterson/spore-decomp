@@ -1,0 +1,13 @@
+004e40b0 eastl::rbtree<Key,pair<const Key,KeyValue>>::lower_bound  # EASTL rbtree lower_bound shape (extract_key, Key operator<), byte-exact
+004e4170 eastl::rbtree<Key,pair<const Key,KeyValue>>::DoNuke  # recursive right / free node / go left, byte-exact
+004e4350 eastl::intrusive_ptr<DefaultRefCounted>::operator=  # calls DefaultRefCounted::Release 0x453540, byte-exact
+004e43c0 eastl::allocate_memory<fixed_node_allocator>  # alignment<=8 dispatch, byte-exact
+004e4410 eastl::vector<TreeItem>::operator=  # EASTL vector::operator= three-branch shape, byte-exact
+004e4700 eastl::uninitialized_fill_n<TreeItem>  # byte-exact
+004e47a0 eastl::rbtree<Key,...>::DoInsertValue(iterator,const value_type&,true_type)  # hint insert, byte-exact
+004e4a40 eastl::vector<TreeItem>::DoAllocateAndCopy  # byte-exact
+004e4ad0 eastl::uninitialized_copy_impl<generic_iterator<TreeItem*>>  # byte-exact
+004e4d10 eastl::rbtree<Key,...>::DoAllocateNode  # byte-exact
+004e4d80 eastl::rbtree<Key,...>::DoInsertValue(const value_type&,true_type)  # byte-exact
+004e4f60 eastl::copy_backward_impl<TreeItem*>  # byte-exact
+004e4fd0 eastl::copy_impl<TreeItem*>  # byte-exact

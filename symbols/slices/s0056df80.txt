@@ -1,0 +1,8 @@
+0056e2d0 eastl::basic_string<wchar_t,eastl::allocator>::basic_string  # PDB name (copy ctor shape: RangeInitialize(x.begin,x.end))
+0056e320 eastl::hashtable<SP::Traits::cRigBlockTag::BlockKey,...>::DoInsertValue  # BlockKeyHash = mnGroup^mnInstance, hash_map member of cRigBlockTag (PDB layout)
+0056f4e0 eastl::hashtable<SP::Traits::cRigBlockTag::BlockKey,...>::DoAllocateNode  # 0x24-byte node, mpNext at +0x20
+0056f560 eastl::hashtable<SP::Traits::cRigBlockTag::BlockKey,...>::DoRehash  # EASTL DoRehash shape
+0056e4d0 eastl::vector_map<unsigned int,eastl::vector_set<unsigned int>>::insert  # cTextureTag::mTagsMap type (PDB)
+0056f640 eastl::vector<eastl::pair<unsigned int,eastl::vector_set<unsigned int>>>::~vector  # PDB name
+0056ee90 SP::Traits::cRigBlockTag factory Create  # new 0x28 bytes, vtable ??_7cRigBlockTag@Traits@SP@@6B@ (0x13f4dc0)
+0056ef30 SP::Traits::cTextureTag factory Create  # new 0x20 bytes, vtable ??_7cTextureTag@Traits@SP@@6B@ (0x13f4df8)

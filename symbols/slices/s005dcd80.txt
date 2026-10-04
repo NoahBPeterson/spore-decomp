@@ -1,0 +1,1 @@
+005dd070 SP::cSPEditorUI::Show  # PDB caller-single candidate; mirrors Hide (StartListening + SetVisibility(true) on both layouts)

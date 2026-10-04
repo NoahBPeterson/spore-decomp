@@ -1,0 +1,12 @@
+004e0560 eastl::hash_map<ResourceKey,cSpeciesProfile*>::operator[]  # find/end/insert(value_type(k, T())) shape; byte-exact
+004e0600 eastl::hash_map<uint32_t,SP::cSpeciesArchetype>::operator[]  # same shape, cSpeciesArchetype ctor/copy/dtor calls
+004e0700 eastl::hash_map<uint32_t,T,hash,fixed_hashtable_allocator>::hash_map  # forwards to hashtable ctor with tag temps
+004e0750 eastl::rehash_base::set_max_load_factor  # prime_rehash_policy(f) then GetBucketCount/DoRehash
+004e0880 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::sp_vector_allocator>::reserve  # PDB name
+004e0990 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::hashtable  # reset()/GetNextBucketCount/DoAllocateBuckets
+004e0a60 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::~hashtable  # clear + DoFreeBuckets (fixed pool deallocate)
+004e0be0 eastl::hashtable<uint32_t,...>::find  # DoFindNode inline, iterator copy ctor on return
+004e0e80 eastl::vector<EA::AutoRefCount<T>>::push_back  # placement new copy + DoInsertValue
+004e0f80 eastl::hashtable<ResourceKey,...>::find  # KeyHash = instance ^ group
+004e10a0 eastl::hashtable<ResourceKey,...>::erase(const key_type&)  # returns count erased
+004e11e0 eastl::hashtable<ResourceKey,...>::erase(iterator)  # returns next iterator

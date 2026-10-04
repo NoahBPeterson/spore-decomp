@@ -1,0 +1,15 @@
+slices/s005beaf0/s005beaf0.cpp  ??0cSPEditorRolloverAttachment@@QAE@XZ  005bed80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?Initialize@cSPEditorRolloverAttachment@  005bedf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?Show@cSPEditorRolloverAttachment@  005bee80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?IsVisible@cSPEditorRolloverAttachment@  005beeb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?SetText@cSPEditorRolloverAttachment@  005bef50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?GetResType@cSpeciesSummarizer@  005bf080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?HasEditorPropertyList@  005bf0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?GetEditorPropertyList@  005bf0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?LoadCollectableItems@  005bf1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?CopyEditorPropertyList@  005bf3a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?ConvertKeyProperty@  005bf7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?SetKeyProperty@  005bf860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?IsValid@cResourceFilter@  005bf8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?SetDisplayText@cSPEditorNaming@  005bf950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005beaf0/s005beaf0.cpp  ?ResetParentWin@cSPEditorNaming@  005bfb70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

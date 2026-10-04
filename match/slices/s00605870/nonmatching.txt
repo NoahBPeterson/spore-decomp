@@ -1,0 +1,4 @@
+00605a60  9  pair<const AutoRefCount<IWindow>, vector> copy ctor: register assignment of the uninitialized_copy arguments differs (same as s005a8d20 0x5a9610)
+00605ac0  16  pair(const T1&, const T2&) ctor: same uninitialized_copy register-assignment difference
+00605ee0  14  map::operator[]: insert()'s returned iterator gets its own frame slot (+4) instead of reusing the dead argument slot
+00605f90  737  cSPVerbTrayCollection::InitTrays: same control flow; frame slot assignment of the per-tray locals and block order differ, original also skips the null test when copying the new tray into the map vector

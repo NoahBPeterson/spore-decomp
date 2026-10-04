@@ -1,0 +1,12 @@
+0x00534f80 `anonymous namespace'::cFloodDiffuseColorCommand::ParseLine  # PDB caller-scored candidate; strings color/identity
+0x00535280 `anonymous namespace'::cPaintVariableCommand<cSPSkinPaintFloodEffectBlockCommand>::ParseLine  # writes mBlendModes[mVarNum]
+0x00535320 nSPSkinner::Read(IStream*,int,cSPSkinPaintFloodDescription*)  # field-by-field reads of the flood description
+0x005353c0 nSPSkinner::Write(IStream*,const cSPSkinPaintFloodDescription*)  # matching writes
+0x00535500 nSPSkinner::cSPSkinPaintFloodDescription::cSPSkinPaintFloodDescription  # ctor defaults
+0x00535b30 nSPSkinner::cSPSkinPaintFloodDescription::cSPSkinPaintFloodDescription(const&)  # implicit copy ctor
+0x005355e0 nSPSkinner::cPaintVarEvalList::cPaintVarEvalList  # 3 vector inits
+0x00535660 nSPSkinner::cPaintVarEvalList::~cPaintVarEvalList  # 3 vector dtors
+0x00535c60 nSPSkinner::cPaintVarEvalList::cPaintVarEvalList(const&)  # 3 vector copies
+0x005357e0 `anonymous namespace'::cSPSkinPaintFloodEffectBlockCommand::cSPSkinPaintFloodEffectBlockCommand  # kStateID 0x2c1642d at +0x34
+0x00535880 `anonymous namespace'::cSPSkinPaintFloodEffectBlockCommand::ParseLine  # GetInheritedDescription(…,0x27), mName.assign
+0x00535be0 `anonymous namespace'::cSPSkinPaintFloodEffectBlockCommand::~cSPSkinPaintFloodEffectBlockCommand  # string + AutoRefCount dtors, base dtor

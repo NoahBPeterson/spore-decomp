@@ -1,0 +1,11 @@
+004b5ad0 eastl::vector<Vec3,sp_vector_allocator>::DoInsertValue  # byte-exact EASTL DoInsertValue reconstruction
+004b6000 eastl::vector<EA::AutoRefCount<SP::cPropertyList>,sp_vector_allocator>::DoInsertValue  # PDB name, byte-exact
+004b66b0 eastl::uninitialized_relocate<Vec3>  # byte-exact
+004b64b0 eastl::uninitialized_relocate<Record11c>  # byte-exact
+004b5980 eastl::rbtree<Key16>::rbtree  # byte-exact ctor (mAnchor(), mnSize(0), reset())
+004b5a20 eastl::rbtree<Key16>::reset  # byte-exact
+004b5a60 eastl::rbtree<uint32_t,pair>::DoNuke  # byte-exact
+004b5e90 eastl::rbtree<uint32_t,pair>::lower_bound  # byte-exact
+004b5f40 eastl::rbtree<Key16>::lower_bound  # byte-exact
+004b6550 eastl::rbtree<uint32_t,pair>::DoInsertValue_hint  # byte-exact (iterator hint, unique keys)
+004b6710 eastl::rbtree<uint32_t,pair>::DoInsertValue_hint  # byte-exact (iterator hint, unique keys)

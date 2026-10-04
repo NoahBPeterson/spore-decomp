@@ -1,0 +1,6 @@
+005beaf0  361  cSPEditorManipulationTranslateCreature::DoOnMouseDown: history copies scheduled differently, frame 0x44 vs 0x38
+005bf120  93  SaveEditorPropertyList: esi/edi swapped (group vs db), branch layout of db fallback
+005bf470  21  AddToIntProperty: return value read before Variant dtor instead of after
+005bf500  116  GetBoolParams: AutoRefCount out-param reset and push_back scheduling differ
+005bf610  381  SaveCollectableItems: two-vector push_back register allocation differs
+005bf9d0  308  cSPEditorNaming::HandleMessage: switch/branch layout and register allocation differ

@@ -1,0 +1,13 @@
+005ef440 SP::cSPPaletteItemUIPlannerEdit::OffRollover  # tail-calls cSPPaletteItemUI::OffRollover, vtable slot
+005ef470 SP::cSPPaletteItemUIPlannerEdit::SetLocked  # writes mLocked (+0x68), toggles mWinLockedIcon/mWinIcon/mWinSwatch/mWinEditButton
+005ef590 SP::cSPPaletteItemUIPlannerEdit::HandleMessage  # IHandlerRC thunk at +0x20, message 0x53850baf
+005efcb0 SP::cSPPaletteItemUIPlannerEdit::DoMessage  # IWinProc override, calls cSPPaletteItemUI::DoMessage
+005efd40 hkCollisionFilter::~hkCollisionFilter  # interface vtable restores, hkBaseObject vptr
+005efd80 SP::SPSpineCollisionFilter::isCollisionEnabled  # (infoA, infoB) layer table at +0x1c, hkpGroupFilter layout
+005efe30 SP::SPSpineCollisionFilter::isCollisionEnabled  # hkpShapeCollectionFilter override (this-0xc)
+005eff00 SP::SPSpineCollisionFilter::isCollisionEnabled  # hkpRayShapeCollectionFilter override (this-0x10)
+005eff70 SP::SPSpineCollisionFilter::enableCollisionsBetween  # hkpGroupFilter body
+005effa0 SP::SPSpineCollisionFilter::disableCollisionsUsingBitfield  # hkpGroupFilter body
+005effe0 SP::SPSpineCollisionFilter::SPSpineCollisionFilter  # table filled with -1, m_nextFreeSystemGroup=0
+005f00f0 hkCollisionFilter::`scalar deleting destructor'  # hkMemory deallocateChunk(p, m_memSizeAndFlags, 0x24)
+005f0390 eastl::rbtree<unsigned_int,pair<unsigned_int_const,AutoRefCount<SP::cSPSwatch>>>::DoInsertValueImpl  # mIDToSwatchMap node insert

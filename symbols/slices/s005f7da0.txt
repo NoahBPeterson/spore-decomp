@@ -1,0 +1,9 @@
+005f7da0 eastl::basic_string<wchar_t>::insert  # card name; byte-exact EASTL insert(iterator,const T*,const T*)
+005f8400 eastl::basic_string<wchar_t>::replace  # byte-exact EASTL replace(iterator,iterator,const T*,const T*); calls insert
+005f8f80 eastl::basic_string<wchar_t>::replace  # replace(size_type,size_type,const T*) forwarding to 0x5f8400
+005f8f30 eastl::basic_string<char>::basic_string  # (size_type n, char c, const allocator&) fill ctor
+005f7fa0 eastl::hashtable::equal_range  # multimap equal_range shape (increment_bucket on miss)
+005f8050 eastl::hashtable::find  # byte-exact find
+005f80d0 eastl::hashtable::erase  # erase(const key&) returning count
+005f8170 eastl::hashtable::DoInsertValue  # calls GetRehashRequired/DoAllocateNode/DoRehash
+005f8840 eastl::DequeBase::DoInit  # EASTL deque init shape (ptr array min 8, subarray 4 x 0x30)

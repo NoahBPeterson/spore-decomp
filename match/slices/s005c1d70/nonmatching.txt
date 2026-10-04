@@ -1,0 +1,3 @@
+005c22b0  166  AddSubCategory: push_back copy re-reads the AutoRefCount temp from memory (orig forwards the known pointer, unguarded AddRef); prologue scheduling
+005c2390  314  AddPage: same push_back temp-forwarding difference as AddSubCategory, shifts the rest
+005c2a30  53   GetChunkIndexForPackID: register allocation (orig keeps index on stack, this in ebp; reloads packs[i] via address)

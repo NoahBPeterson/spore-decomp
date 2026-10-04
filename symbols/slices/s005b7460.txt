@@ -1,0 +1,15 @@
+005b7460 SP::cSPEditorManipulationSpine::Init  # dev PDB method list (39 bytes), byte-exact
+005b7490 SP::cSPEditorManipulationSpine::cSPEditorManipulationSpine  # ctor shape, size 67 = dev 67
+005b74f0 SP::cSPEditorManipulationSpine::OnMouseUp  # dev PDB method, 4-arg mouse handler
+005b75e0 SP::cSPEditorManipulationSpine::DoOnMouseDown  # dev PDB method
+005b7720 SP::cSPEditorManipulationSpine::DoOnMouseMove  # dev PDB method
+005b7880 eastl::insertion_sort<float*>  # called by quick_sort<float*>
+005b78d0 eastl::insertion_sort_simple<float*>  # called by quick_sort<float*>
+005b7a40 SP::cSPEditorManipulationSpineResize::GetNextVertebra  # dev PDB, 37 bytes
+005b7a70 SP::cSPEditorManipulationSpineResize::Init  # dev PDB
+005b7af0 eastl::adjust_heap<float*,int,float>  # EASTL heap.h shape, byte-exact
+005b7cf0 SP::cSPEditorManipulationSpineResize::RepinSimple  # dev PDB method (526 bytes in dev)
+005b81a0 eastl::make_heap<float*>  # byte-exact
+005b81e0 eastl::sort_heap<float*>  # byte-exact
+005b8310 eastl::rbtree<SP::cSPEditorBlock*,...>::clear  # DoNukeSubtree + reset, byte-exact
+005b8560 eastl::quick_sort<float*>  # byte-exact

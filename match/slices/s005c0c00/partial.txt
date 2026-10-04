@@ -1,0 +1,2 @@
+005c1570  677  SetModel: tooltip text/model-name helpers (0x006b55c0, 0x00414e10, 0x005d60c0) semantics guessed
+005c1960  724  Init: tooltip construction args (UI::Tooltip ctor, cString text helper) guessed

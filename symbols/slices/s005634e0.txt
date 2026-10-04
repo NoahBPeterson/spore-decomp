@@ -1,0 +1,2 @@
+005634e0 SP::cSPObjectTemplateDB::BanAsset  # PDB caller-scored candidate; deletes save records, posts ban message
+005640d0 Editor::OTDB::OTDB  # PDB name on card; byte-exact

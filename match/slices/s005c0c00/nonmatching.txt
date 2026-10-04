@@ -1,0 +1,6 @@
+005c0c00  80  OnPaintThemeSelected: themeID kept in edi instead of reloaded from the stack
+005c0d20  59  cSPEditorPaintLikeThis::HandleUIMessage (IWinProc): early-return block placement
+005c14f0  78  SendPaintMessage: message object layout/ctor (UI::BehaviorMessage) approximated
+005c1870  108  cSPEditorPaintLikeThis::HandleMessage (IHandlerRC): branch layout differs
+005c1d10  39  page count loop: begin/end load order and register roles differ
+005c1d40  12  HasItem: find()!=end() materialised directly instead of via setne cl

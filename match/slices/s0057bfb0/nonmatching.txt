@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0057c590  233  skin->mpMesh is reloaded instead of kept in eax; model pointer lands in ecx instead of edi
+0057c4b0  40  atomic ops reuse one pointer register (original copies eax per op); extra epilogue
+0057ccf0  4  base vptr stores emitted in order +0,+4 (original +4,+0)
+0057ce20  79  original omits the entry vptr stores (only base vptrs restored at the end)
+0057c770  231  element/attribute short-circuit chain and stack slots of the string temporaries differ
+0057c940  231  element/attribute short-circuit chain and stack slots of the string temporaries differ

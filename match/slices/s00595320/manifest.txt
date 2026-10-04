@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00595320/s00595320.cpp  ?clear@?$fixed_vector_base@_K@eastl@@QAEXXZ  005962b0  /O2 /MD /Gy /TP /GS-
+slices/s00595320/s00595320.cpp  ?ReadItemFlagMap@SP@@YAXPAVISerializer@1@AAV?$hashtable@U?$pair@_K_N@eastl@@Ufixed_hashtable_allocator@2@I@eastl@@@Z  005956c0  /O2 /MD /Gy /TP /GS-
+slices/s00595320/s00595320.cpp  ?Destroy@cItemFlagMapHolder@SP@@QAEXXZ  00596190  /O2 /MD /Gy /TP /GS-

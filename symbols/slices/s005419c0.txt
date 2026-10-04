@@ -1,0 +1,21 @@
+005419c0 SP::Feed::GetFeedTypeFromURI  # dev PDB SPFeedXml.obj; byte-exact
+00541d10 SP::Feed::AtomParser::AtomParser  # byte-exact, AtomParser layout
+00541ea0 SP::Feed::AtomParser::SetSize  # IStream vtable override
+00541eb0 SP::Feed::AtomParser::SetPosition
+00541f20 SP::Feed::AtomParser::~AtomParser
+00541fc0 SP::Feed::AtomParser::SetDocument
+00542030 SP::Feed::AtomParser::ResetParser
+005420c0 SP::Feed::AtomParser::Open
+00542190 SP::Feed::AtomParser::Write
+00542200 SP::Feed::AtomParser::Close
+00542270 SP::Feed::AtomParser::GetAccessFlags
+005422a0 SP::Feed::AtomParser::GetState
+005422e0 SP::Feed::AtomParser::GetPosition
+00542330 SP::Feed::AtomParser::StartDoc
+005423f0 SP::Feed::AtomParser::EndDoc
+00542460 SP::Feed::AtomParser::StartEntry
+005424e0 SP::Feed::AtomParser::EndEntry
+00542540 SP::Feed::AtomParser::StartAuthor
+00542610 SP::Feed::Person::Person
+005426d0 SP::Feed::AtomParser::EndAuthor
+00542730 SP::Feed::AtomParser::StartLink

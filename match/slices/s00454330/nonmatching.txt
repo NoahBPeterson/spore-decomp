@@ -1,0 +1,19 @@
+# va  diff-bytes  reason (compiled with /Od /Ob1 /arch:SSE; free fastcall wrappers stand in for thiscall members, so counts are inflated)
+00454330 19 ref-ptr vector erase; wrapper form not member
+00454400 14 ctor-style wrapper
+00454420 102 rbtree find-or-insert (int key), locals/slot order not fitted
+00454640 193 vector reserve, slot order not fitted
+00454730 14 ctor-style wrapper
+00454750 108 rbtree find-or-insert (uint key)
+004547f0 77 vector push_back, float copy via fld/fstp not reproduced
+004548d0 115 vector<Key> resize
+004549b0 158 remove(first,last,value) for intrusive ptrs
+00454aa0 99 angle between vectors (acos)
+00454b10 89 VariantTypeTraits<Key>::GetTPTR
+00454b80 97 vector resize
+00454c00 148 cross product
+00454dc0 178 erase range of 32-byte elements
+00454e90 50 release range
+004551e0 75 uninitialized copy of intrusive ptrs
+00455290 37 free storage unless fixed buffer
+004552e0 129 rbtree insert with hint

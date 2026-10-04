@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004e3e10/s004e3e10.cpp  ?DoInsertValue@KeyVector@@QAEXPAUKey@ResourceMan@EA@@ABU234@@Z  004e3e10  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?lower_bound@KeyMap@@QAE?AUMapIterator@@ABUKey@ResourceMan@EA@@@Z  004e40b0  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?DoNuke@KeyMap@@QAEXPAUNode@@@Z  004e4170  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ??_GTreeItem@@QAEPAXI@Z  004e4310  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ??4?$intrusive_ptr@UDefaultRefCounted@@@@QAEAAU0@ABU0@@Z  004e4350  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?allocate_memory@@YAPAXAAUFixedNodeAllocator@@II@Z  004e43c0  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ??4TreeItemVector@@QAEAAU0@ABU0@@Z  004e4410  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?uninitialized_fill_n@@YAXPAUTreeItem@@IABU1@@Z  004e4700  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?DoInsertValue@KeyMap@@QAE?AUMapIterator@@U2@ABUvalue_type@@Utrue_type@@@Z  004e47a0  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ??_GNode@@QAEPAXI@Z  004e49e0  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?DoAllocateAndCopy@TreeItemVector@@QAEPAUTreeItem@@IPAU2@0@Z  004e4a40  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?uninitialized_copy_impl@@YA?AU?$generic_iterator@PAUTreeItem@@@@U1@00Ufalse_type@@@Z  004e4ad0  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?uninitialized_copy_TreeItem@@YAPAUTreeItem@@PAU1@00@Z  004e4b90  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?DoAllocateNode@KeyMap@@QAEPAUNode@@ABUvalue_type@@@Z  004e4d10  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?DoInsertValue@KeyMap@@QAE?AUInsertResult@@ABUvalue_type@@Utrue_type@@@Z  004e4d80  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?copy_backward_impl@@YAPAUTreeItem@@PAU1@00@Z  004e4f60  /Od /Ob1 /MD /Gy /TP
+slices/s004e3e10/s004e3e10.cpp  ?copy_impl@@YAPAUTreeItem@@PAU1@00@Z  004e4fd0  /Od /Ob1 /MD /Gy /TP

@@ -1,0 +1,6 @@
+0059c740  83  map::operator[]: original has no destructor for the value_type(key, T()) temporary; mine releases it
+0059c6e0  71  RemoveCreature: iterator kept in esi in original; stack slot/register allocation differs
+0059c830  322  AddCreature(skin, model): register allocation (this spilled, skinned kept in ebx) and frame size 0x48 vs 0x44
+0059cbd0  17  SetCreatureIdle: original tail-calls SetIdle(0) (jmp, arg written over the id slot); mine calls + ret
+0059cc40  199  IsAnimationPlaying: original packs count into the id param slot (frame 4 vs 8), shifts all offsets
+0059cd20  3  IsPlayingAnimation: count stored in id param slot in original, in the local slot in mine

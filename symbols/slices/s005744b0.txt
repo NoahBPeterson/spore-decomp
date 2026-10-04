@@ -1,0 +1,1 @@
+00574da0 SP::cAppModeEditorBase::SetupThumbnailModelWorld  # PDB caller-scored candidate; body builds include/exclude model-group bitsets for a model world

@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004f7660/s004f7660.cpp  ?DoAllocateNode@UIntMap@@QAEPAUNode@@ABUvalue_type@@@Z  004f7660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?make_heap@@YAXPAUKey@ResourceMan@EA@@0@Z  004f7800  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?adjust_heap@@YAXPAUKey@ResourceMan@EA@@HHHU123@@Z  004f7890  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?sort_heap@@YAXPAUKey@ResourceMan@EA@@0@Z  004f79d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?promote_heap@@YAXPAUKey@ResourceMan@EA@@HHU123@@Z  004f7a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?DoNuke@UIntMap@@QAEXPAUNode@@@Z  004f7b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ??_GNode@@QAEPAXI@Z  004f7ba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?IntersectRayTriangles@@YA_NPBDHPBIIABUVector3@@2_N3PAIPAMPAUVector2@@PAU1@@Z  004f7c00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?FindClosestTriangle@@YAXPBDHPBIIABUVector3@@PAMPAIPAUVector2@@PAU1@@Z  004f7e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?AlignedFree@@YAXPAX@Z  004f80b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?GetSimdLevel@@YAHXZ  004f8120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?Clear@SphereFields@@QAEXH@Z  004f81a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?Set@SphereFields@@QAEXHABUVector3@@MMI@Z  004f8270  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?SetRadius@SphereFields@@QAEXHM@Z  004f8300  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?Copy@SphereFields@@QAEXHABU1@H@Z  004f8370  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?Apply@SphereFields@@QAEXABUVector3@@PAUFieldAccumulator@@@Z  004f8420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f7660/s004f7660.cpp  ?Set@FloatPair@@QAEXM@Z  004f8580  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

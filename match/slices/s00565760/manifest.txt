@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00565760/s00565760.cpp  ??0Elem28@@QAE@ABU0@@Z  00565920  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ??0Record50@@QAE@XZ  005658c0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?end@?$deque2@UPod8@@@eastl@@QAE?AU?$DequeIterator2@UPod8@@@2@XZ  00565760  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?size@?$deque2@UPod8@@@eastl@@QAEIXZ  00565780  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?back@?$deque2@UPod8@@@eastl@@QAEAAUPod8@@XZ  005657e0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?pop_back@?$deque2@UPod8@@@eastl@@QAEXXZ  00565810  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?insert@?$deque_multiset@UPod8@@@eastl@@QAE?AU?$pair@U?$DequeIterator2@UPod8@@@eastl@@_N@2@ABUPod8@@@Z  00565850  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ??D?$DequeIterator2@UPod8@@@eastl@@QBEAAUPod8@@XZ  005658b0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?FindRange@UIntRangeMap@@QAE?AU?$pair@U?$rbtree_iterator@UMapValueU@@PBU1@@eastl@@U12@@eastl@@II@Z  005659e0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?FindRange@FloatRangeMap@@QAE?AU?$pair@U?$rbtree_iterator@UMapValueF@@PBU1@@eastl@@U12@@eastl@@MM@Z  00565a30  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ??4?$insert_iterator@UUIntVectorSet@@@eastl@@QAEAAV01@ABI@Z  00565a80  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?insert@?$vector2@MVallocator@eastl@@@eastl@@QAEPAMPAMABM@Z  00565ac0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?erase@?$vector2@UConstraint@FunctionalMatch@SP@@Vallocator@eastl@@@eastl@@QAEPAUConstraint@FunctionalMatch@SP@@PAU345@0@Z  00565b50  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?insert@?$vector2@U?$pair@II@eastl@@Vallocator@2@@eastl@@QAEPAU?$pair@II@2@PAU32@ABU32@@Z  00565c80  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?insert@?$vector_map2@IIU?$less@I@eastl@@Vallocator@2@V?$vector2@U?$pair@II@eastl@@Vallocator@2@@2@@eastl@@QAEPAU?$pair@II@2@PAU32@ABU32@@Z  00565d20  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?swap@?$vector2@IVallocator@eastl@@@eastl@@QAEXAAV12@@Z  00565df0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?insert@?$vector_set2@IU?$less@I@eastl@@Vallocator@2@V?$vector@IVallocator@eastl@@@2@@eastl@@QAEPAIPAIABI@Z  00566060  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?erase@?$vector2@URecord50@@Vallocator@eastl@@@eastl@@QAEPAURecord50@@PAU3@0@Z  005660e0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?DoInsertValue@?$vector2@URecord50@@Vallocator@eastl@@@eastl@@QAEXPAURecord50@@ABU3@@Z  005661b0  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ??$uninitialized_copy_ptr2@URecord50@@@eastl@@YAPAURecord50@@PAU1@00@Z  00566490  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?erase@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@U?$rbtree_iterator@IPAI@2@@eastl@@QAE?AU?$rbtree_iterator@IPAI@2@U32@@Z  00566510  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?erase@?$rbtree@IUMapValueU@@U?$less@I@eastl@@U?$use_first@UMapValueU@@@3@U?$rbtree_iterator@UMapValueU@@PBU1@@3@@eastl@@QAE?AU?$rbtree_iterator@UMapValueU@@PBU1@@2@U32@@Z  00566570  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?DoInsertKey@?$rbtree@HHU?$less@H@eastl@@U?$use_self@H@2@U?$rbtree_iterator@HPBH@2@@eastl@@QAE?AU?$pair@U?$rbtree_iterator@HPBH@eastl@@_N@2@ABHUtrue_type@2@@Z  00566600  /Od /Ob1 /MD /Gy /TP
+slices/s00565760/s00565760.cpp  ?lower_bound@?$rbtree@MMU?$less@M@eastl@@U?$use_self@M@2@U?$rbtree_iterator@MPBM@2@@eastl@@QAE?AU?$rbtree_iterator@MPBM@2@ABM@Z  00566880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00565760/s00565760.cpp  ?DoNukeSubtree@?$rbtree@IUMapValueU@@U?$less@I@eastl@@U?$use_first@UMapValueU@@@3@U?$rbtree_iterator@UMapValueU@@PBU1@@3@@eastl@@QAEXPAU?$rbtree_node@UMapValueU@@@2@@Z  00566900  /Od /Ob1 /MD /Gy /TP

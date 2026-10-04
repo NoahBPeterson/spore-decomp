@@ -1,0 +1,8 @@
+005c2d30 SP::cSPPaletteCategoryUI::GetSelectedPaint  # returns tSPEditorPaint {mSelectedItemID, colors}, recurses to parent UI
+005c2e00 SP::cSPPaletteCategoryUI::GetSkinPaintIndex  # dev-build symbol (67 bytes); reads mData->mSkinPaintIndex
+005c2e80 SP::cSPPaletteCategoryUI::IsColor1Default  # returns mIsColor1Default of the root UI
+005c3000 SP::cSPPaletteCategoryUI::SetWindowPositions  # PDB candidate; lays out EP holder / color pickers / palette page
+005c31c0 SP::cSPPaletteCategoryUI::UpdatePreviewSwatch  # dev-build symbol; updates pickers and swatch material
+005c34e0 SP::cSPPaletteCategoryUI::SetSelectedPaint  # dev-build symbol
+005c36f0 SP::cSPPaletteCategoryUI::HandleMessage  # dev-build symbol; handles 0xb2e18705 (item selected) / 0x90e08f60 (picker)
+005c3c20 SP::cSPPaletteCategoryUI::CyclePage  # real name in card

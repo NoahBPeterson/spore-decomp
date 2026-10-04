@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004ad550/s004ad550.cpp  ?GetBoundingBox@cSPEditorModel@SP@@QAE?AUcSPBoundingBox@@_N@Z  004ad550  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?GetBlockBoundingBoxes@cSPEditorModel@SP@@QAEXAAU?$vector@UcSPBoundingBox@@@@@Z  004ad6f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetBBoxesOverride@cSPEditorModel@SP@@QAEXABU?$vector@UcSPBoundingBox@@@@@Z  004ada40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?GetSkinEffect@cSPEditorModel@SP@@QAEIH@Z  004adc60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?GetSkinEffectSeed@cSPEditorModel@SP@@QAEIH@Z  004adc80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?GetSkinColor@cSPEditorModel@SP@@QAE?AUcSPColorRGB@@H@Z  004adca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetSkinEffect@cSPEditorModel@SP@@QAEXHI@Z  004adcf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetSkinEffectSeed@cSPEditorModel@SP@@QAEXHI@Z  004add10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetSkinColor@cSPEditorModel@SP@@QAEXHUcSPColorRGB@@@Z  004add30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetName@cSPEditorModel@SP@@UAEXPB_W@Z  004add60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetDescription@cSPEditorModel@SP@@UAEXPB_W@Z  004adf20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?ClearHighlights@cSPEditorModel@SP@@QAEXXZ  004ae040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SetHighlights@cSPEditorModel@SP@@QAEXH@Z  004ae090  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?SnapBlocks@cSPEditorModel@SP@@QAE_NXZ  004ae0f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?Update@cSPEditorModel@SP@@QAEXXZ  004ae250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s004ad550/s004ad550.cpp  ?LoadBlocks@cSPEditorModel@SP@@QAE_NPAXPAUcSPEditorPhysicsWorld@2@_N2@Z  004ae260  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

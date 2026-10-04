@@ -1,0 +1,4 @@
+00576c50 SP::cAppModeEditorBase::Shutdown  # PDB caller-scored candidate; removes editor cheats, releases worlds/models/viewers, saves editor settings
+00576970 eastl::basic_string<wchar_t>::compare  # static range compare (wchar_t: sar 1), byte-exact
+00576750 eastl::basic_string<char>::basic_string(const allocator&)  # empty-string ctor, byte-exact
+00576770 eastl::basic_string<wchar_t>::basic_string(const allocator&)  # empty-string ctor (+2 capacity), byte-exact

@@ -1,0 +1,16 @@
+slices/s005dcd80/s005dcd80.cpp  ?SetUIDisabled@cSPEditorUI@SP@@QAEX_N@Z  005dcd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?EnableRedoButton@cSPEditorUI@SP@@QAEX_N@Z  005dce40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?EnableUndoButton@cSPEditorUI@SP@@QAEX_N@Z  005dceb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?SetSelected@cSPEditorUI@SP@@QAEXI_N0@Z  005dcf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?EnablePlayModeButton@cSPEditorUI@SP@@QAEX_N@Z  005dcf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?Hide@cSPEditorUI@SP@@QAEXXZ  005dd050  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?Show@cSPEditorUI@SP@@QAEXXZ  005dd070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?SetInputBlocked@cSPEditorUI@SP@@QAEX_N@Z  005dd090  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?SelectCurrentTypeInGrid@cSPEditorUI@SP@@QAEXXZ  005dd1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?OnSaveRequested@cSPEditorUI@SP@@QAEXXZ  005dd300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?OnLoginResult@cSPEditorUI@SP@@QAEX_N@Z  005dd360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?CloseModalLayout@cSPEditorUI@SP@@QAEXXZ  005dd390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?OpenModalLayout@cSPEditorUI@SP@@QAEXXZ  005dd4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?SetPaintMode@cSPEditorUI@SP@@QAEX_N@Z  005dd610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?UpdateUIBasedOnModelSaveability@cSPEditorUI@SP@@QAEXXZ  005dd7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005dcd80/s005dcd80.cpp  ?SetMode@cSPEditorUI@SP@@QAEXH@Z  005dda30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

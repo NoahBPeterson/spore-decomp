@@ -1,0 +1,16 @@
+slices/s005f07e0/s005f07e0.cpp  ??1cSPSwatchManager@SP@@UAE@XZ  005f07e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?Shutdown@cSPSwatchManager@SP@@QAEXXZ  005f0850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?Update@cSPSwatchManager@SP@@QAEXI@Z  005f0940  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ??0cSPSwatchManager@SP@@QAE@XZ  005f0ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?SetSwatchTimeout@cSPSwatchManager@SP@@QAEXPAVcSPSwatch@2@M@Z  005f0c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?CreateSwatch@cSPSwatchManager@SP@@QAEPAVcSPSwatch@2@PAV32@@Z  005f0ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ??0cSPSwatchPlanner@SP@@QAE@XZ  005f0d80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ??1cSPSwatchPlanner@SP@@UAE@XZ  005f0e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?Shutdown@cSPSwatchPlanner@SP@@UAEXXZ  005f0ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?UpdateCost@cSPSwatchPlanner@SP@@QAEXXZ  005f10b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?UpdateButtonStatus@cSPSwatchPlanner@SP@@QAEXXZ  005f1110  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?OffRollover@cSPSwatchPlanner@SP@@UAEXXZ  005f1430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?CanDrag@cSPSwatchPlanner@SP@@QAE_NXZ  005f1460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?GetImageWindow@cSPSwatchPlanner@SP@@QAEPAVIWindow@UTFWin@EA@@XZ  005f14a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?SetImage@cSPSwatchPlanner@SP@@QAEXABUKey@ResourceMan@EA@@@Z  005f1500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f07e0/s005f07e0.cpp  ?HandleMessage@cSPSwatchPlanner@SP@@UAE_NIPAX@Z  005f1630  /O2 /MD /Gy /TP /arch:SSE /fp:fast

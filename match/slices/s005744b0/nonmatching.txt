@@ -1,0 +1,3 @@
+00574b40  207  ScoreCreatureForZCorp: frame 0x30 vs 0x2c (inlined property-float helper locals not packed like original); bbox max-extent scheduling differs
+00574da0  24  SetupThumbnailModelWorld: vptr cached in edi for both lighting-world vcalls in original; ours reloads it
+00574f30  30  UpdateModelSounds: original loads vptr before pushing args for GetPropertyList/GetProperty vcalls (scheduling only)

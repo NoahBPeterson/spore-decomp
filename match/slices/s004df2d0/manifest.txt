@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004df2d0/s004df2d0.cpp  ?RandomInRange@SP@@YAMABUVector2@@@Z  004df2d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?SetAvatarSpecies@cSPEditorSpeciesManager@SP@@QAEXABUKey@ResourceMan@EA@@@Z  004df310  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?SetAvatarProfile@cSPEditorSpeciesManager@SP@@QAEXPAVcSpeciesProfile@2@@Z  004df3e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetAvatarProfile@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesProfile@2@XZ  004df420  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetPlantProfile@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesProfile@2@ABUKey@ResourceMan@EA@@@Z  004df440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetProfile@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesProfile@2@ABUKey@ResourceMan@EA@@@Z  004df550  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?FindProfile@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesProfile@2@AAVSpeciesMap@eastl@@ABUKey@ResourceMan@EA@@@Z  004df6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetDefaultReplacementKey@cSPEditorSpeciesManager@SP@@QAE_NABUKey@ResourceMan@EA@@AAU345@@Z  004df790  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetReplacementKey@cSPEditorSpeciesManager@SP@@QAE_NABUKey@ResourceMan@EA@@IAAU345@@Z  004df7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?UpdateProfile@cSPEditorSpeciesManager@SP@@QAE_NPAVcSpeciesProfile@2@ABUKey@ResourceMan@EA@@@Z  004dfb50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetMatchingCreatureKeys@cSPEditorSpeciesManager@SP@@QAEHAAUProfileVector@2@IHH_N@Z  004dff50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetMatchingCreatureKeys@cSPEditorSpeciesManager@SP@@QAEHAAUProfileVector@2@PAVcSpeciesArchetype@2@HH_N@Z  004dfff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetSpeciesArchetype@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesArchetype@2@II@Z  004e0050  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004df2d0/s004df2d0.cpp  ?GetDefaultArchetype@cSPEditorSpeciesManager@SP@@QAEPAVcSpeciesArchetype@2@XZ  004e01b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

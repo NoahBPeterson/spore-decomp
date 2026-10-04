@@ -1,0 +1,3 @@
+0054def0  32  ~cAssetDirectory: original omits the derived vptr store at destructor entry (only IHandler vptr restored at end)
+0054e8c0  3   SetAuthorA: frame 0x7c vs 0x74 (hole left by declined inline hash_map::operator[] is 2 dwords too big)
+0054e970  3   SetAuthorB: same frame-size difference as SetAuthorA

@@ -1,0 +1,2 @@
+00561970 SP::cSPObjectTemplateDB::DecreasePopulation  # PDB caller-scored candidate; byte-exact, decrements mPopulationCount/mTypePopulation
+00561bd0 SP::cSPObjectTemplateDB::CheckForMinPopulations  # PDB name on card

@@ -1,0 +1,3 @@
+00545220  8    AtomParser::StartElementHandler: complete; frame 0x20 smaller (string16::resize, 0x00429520, reserves nested-inline slots not reproduced)
+005452b0  18   AtomParser::EndElementHandler: complete; frame smaller for the same reason (find_*_not_of / erase wrappers' reserved slots)
+005459a0  173  HandshakeParser::StartDoc: complete; the three FeedList::clear() expansions reserve 0x28/0x40/0x68 bytes in retail (erase(first,last) 0x00548a30 locals), not reproduced, so all offsets shift

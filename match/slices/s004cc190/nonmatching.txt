@@ -1,0 +1,2 @@
+004ccb70  387  complete; residual is /Od slot layout (AllocTag temp placed among named locals)
+004cd0c0  86  complete; fixed_vector ctor frame has 10 dead slots and a pre-computed buffer arg slot

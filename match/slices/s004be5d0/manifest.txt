@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004be5d0/s004be5d0.cpp  ?Validate@XmlParseContext@@QAE_NXZ  004be5d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseBoolAttr@@YA_NPAVXmlParseContext@@PAXH@Z  004be820  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseUIntAttr@@YA_NPAVXmlParseContext@@PAXH@Z  004be8d0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseFloatAttr@@YA_NPAVXmlParseContext@@PAXH@Z  004be910  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseVector3Attr@@YA_NPAVXmlParseContext@@PAXH@Z  004be950  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseKindAndType@@YA_NPAVXmlParseContext@@@Z  004be9c0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseChild@@YA_NPAVXmlParseContext@@@Z  004bea50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseValue@@YA_NPAVXmlParseContext@@@Z  004bead0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseSlotUInt@@YA_NPAVXmlParseContext@@PADH@Z  004beb70  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ParseSlotVector3@@YA_NPAVXmlParseContext@@PADH@Z  004bebd0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?EndSlot@@YA_NPAVXmlParseContext@@@Z  004bec30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?FormatFloat@?A0x  004beca0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteElement@@YA_NPAVIXmlWriter@@PB_W1@Z  004bede0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteBool@?A0x  004bee50  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteUInt@@YA_NPAVIXmlWriter@@PB_WK@Z  004bee90  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteHex@?A0x  004beec0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteFloat@@YA_NPAVIXmlWriter@@PB_WM@Z  004bef40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?XmlWriteVector3@@YA_NPAVIXmlWriter@@PB_WABUVector3@@@Z  004bef80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?WriteRLE@@YA_NPAVIStream@@PBEI@Z  004bf0a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s004be5d0/s004be5d0.cpp  ?ReadRLE@@YA_NPAVIStream@@PAEI@Z  004bf2a0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

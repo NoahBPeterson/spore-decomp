@@ -1,0 +1,7 @@
+0052e5b0 cSPSkinPaintClearEffect::cSPSkinPaintClearEffect  # PDB cSPSkinPaintClearEffect (0x14): cComponentBase + mDesc/mActive, byte-exact
+0052e980 EA::Swarm::cComponentBase::`scalar deleting destructor'  # vptr pair of cComponentBase then RefCountTemplate<int>, byte-exact
+0052e520 EA::ArgScript::cCommandStateT<EA::Swarm::cEffectsParser,EA::ArgScript::cCommandBase>::OnRegister  # mState(+0xc)=static_cast(state) then base OnRegister
+0052ea60 cSPSkinPaintDistributeDescription::cSPSkinPaintDistributeDescription  # string mEffect +8, vector mParticleSelect +0x3c, byte-exact
+0052eb40 cSPSkinPaintDistributeDescription::~cSPSkinPaintDistributeDescription  # EH dtor of the same members, byte-exact
+0052ec40 `anonymous namespace'::cSPSkinPaintDistributeEffectCommand::OnRegister  # card PDB candidate; registers particle/particleSelect/spacing/limit/region
+0052ef40 `anonymous namespace'::cSPSkinPaintDistributeParticleCommand::Execute  # card PDB candidate; writes mDesc.mParticleDescId

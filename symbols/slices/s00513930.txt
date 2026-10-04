@@ -1,0 +1,12 @@
+00513e40 eastl::deque<Elem48,eastl::allocator,4>::~deque  # iterator loop + ~DequeBase; byte-exact
+00513e90 eastl::deque<Elem48,eastl::allocator,4>::back  # *iterator(mItEnd, Decrement); byte-exact
+00513ec0 eastl::deque<Elem48,eastl::allocator,4>::push_back  # no-arg push_back; byte-exact
+00513f20 eastl::deque<Elem48,eastl::allocator,4>::clear  # EASTL deque::clear body; byte-exact
+00514570 eastl::deque<Elem48,eastl::allocator,4>::DoPushBack  # DoReallocPtrArray(1,kSideBack)/DoAllocateSubarray/SetSubarray; byte-exact
+005146e0 eastl::DequeIterator<Elem48,Elem48*,Elem48&,4>::operator++  # subarray size 4 (0x120/0x48); byte-exact
+005142b0 eastl::vector<Elem18>::DoInsertValue  # EASTL vector::DoInsertValue (memmove/memcpy paths); byte-exact
+00514110 eastl::vector<Elem1C>::erase  # erase(first,last); byte-exact
+00514210 eastl::vector<Elem18>::erase  # erase(first,last); byte-exact
+00514750 eastl::vector<uint8_t>::erase  # erase(first,last); byte-exact
+00514030 eastl::vector<uint8_t>::resize  # resize(n, value): insert or erase; byte-exact
+00513930 FastAcos  # polynomial acos approximation: sqrt(1-|x|)*poly, PI - ... for x<0; byte-exact

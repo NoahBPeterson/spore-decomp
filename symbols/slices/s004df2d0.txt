@@ -1,0 +1,7 @@
+004df310 SP::cSPEditorSpeciesManager::SetAvatarSpecies  # PDB name (callee-scored); byte-exact
+004df420 SP::cSPEditorSpeciesManager::GetAvatarProfile  # PDB has a 13-byte GetAvatarProfile = GetProfile(mAvatarSpeciesKey); byte-exact
+004df550 SP::cSPEditorSpeciesManager::GetProfile  # reads mSpecies, falls back to mAvatarSpeciesKey, creates cSpeciesProfile(key,false)
+004df440 SP::cSPEditorSpeciesManager::GetPlantProfile  # same shape on mPlantSpecies, cSpeciesProfile(key,true)
+004dfb50 SP::cSPEditorSpeciesManager::UpdateProfile  # re-keys a profile in mSpecies/mOldSpeciesMapping, updates avatar
+004dfd50 SP::cSPEditorSpeciesManager::GetMatchingPlantProfiles  # PDB name (callee-scored)
+004e0050 SP::cSPEditorSpeciesManager::GetSpeciesArchetype  # mArchetypes lookup by id, optional parent level

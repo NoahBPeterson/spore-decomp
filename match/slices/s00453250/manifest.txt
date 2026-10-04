@@ -1,0 +1,13 @@
+# source symbol va flags
+slices/s00453250/s00453250.cpp  ??0Pair16_12@@QAE@XZ  00453400  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??1Pair16_12@@QAE@XZ  00453460  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?Release@DefaultRefCounted@@QAEHXZ  00453540  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??4?$AutoRefCountI@UIRefCounted@@@@QAEAAU0@PAUIRefCounted@@@Z  004535d0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??4string32@@QAEAAU0@PBD@Z  00453690  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?Pow_int@@YAMMH@Z  004537f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??K@YA?AUVector3@@ABU0@ABM@Z  00453880  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?Matrix33FromAxisAngle@@YA?AUMatrix33@@ABUVector3@@M@Z  00453b20  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??1BoundsVector@eastl@@QAE@XZ  00453dc0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ??1BlockVector@eastl@@QAE@XZ  00453eb0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?push_back@BlockVector@eastl@@QAEXABU?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@@Z  004541f0  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy
+slices/s00453250/s00453250.cpp  ?erase@BlockVector@eastl@@QAEPAU?$AutoRefCount@UcSPEditorBlock@SP@@@EA@@PAU34@0@Z  00454280  /Od /Ob1 /Oi /MD /TP /arch:SSE /fp:fast /Gy

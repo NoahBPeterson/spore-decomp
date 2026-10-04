@@ -1,0 +1,15 @@
+0059c4c0 eastl::rbtree<uint,pair<uint const,AutoRefCount<SP::cSPEditorAnimatedCreatureData>>>::DoNukeSubtree  # recursive right/left nuke, releases node+0x14; byte-exact
+0059c5f0 SP::cSPEditorAnimatedCreatureManager::~cSPEditorAnimatedCreatureManager  # releases +0x40/+0x3c/+0x38, vector dtor, map nuke; byte-exact
+0059c640 SP::cSPEditorAnimatedCreatureManager::Shutdown  # removes all creatures from anim world, clears map, drops world/manager
+0059c6e0 SP::cSPEditorAnimatedCreatureManager::RemoveCreature  # find(id) + erase
+0059c740 eastl::map<uint,AutoRefCount<SP::cSPEditorAnimatedCreatureData>>::operator[]  # lower_bound + DoInsertValue(0x59c520)
+0059c7c0 SP::cSPEditorAnimatedCreatureManager::cSPEditorAnimatedCreatureManager  # mCurrentID=1; byte-exact
+0059c9c0 SP::cSPEditorAnimatedCreatureManager::AddCreature  # (key) creates via anim world slot 12; byte-exact
+0059cb10 SP::cSPEditorAnimatedCreatureManager::PlayAnimation  # creature vslot1 + SetLastAnimationPlayed
+0059cb80 SP::cSPEditorAnimatedCreatureManager::AddDelayedEvent  # push_back into mDelayedAnimatedEvents
+0059ce30 SP::cSPEditorAnimatedCreatureManager::SetCreatureVisible  # toggles creature flags bit 0
+0059cea0 SP::cSPEditorAnimatedCreatureManager::SetCreatureTargetAngle
+0059cf00 SP::cSPEditorAnimatedCreatureManager::SetCreatureTargetPosition  # forwards to cSPEditorAnimatedCreatureData::SetTargetPosition
+0059cf60 SP::cSPEditorAnimatedCreatureManager::SetCreaturePreserveHeight  # callee writes mPreserveHeight (+0x54)
+0059cfb0 SP::cSPEditorAnimatedCreatureManager::SetCreatureLookAtTarget  # callee writes mTargetLookAtPosition (+0x58)
+0059d110 SP::cSPEditorAnimatedCreatureManager::GetCreaturePosition
