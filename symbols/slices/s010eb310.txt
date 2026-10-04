@@ -1,0 +1,3 @@
+010eb440 ??0hkConvexPieceShape@@QAE@M@Z  # ctor stores vtable 0x014A5274 (slots 3,5,7 are hkConvexPieceShape methods)
+010ebb30 ?registerBridgeAgent3@hkAgent3Bridge@@SAXPAVhkCollisionDispatcher@@@Z  # fills Agent3Funcs with hkAgent3Bridge::* and calls registerAgent3(-1,-1)
+010ebc80 ?staticLinearCast@hkIterativeLinearCastAgent@@SAXABVhkCdBody@@0ABUhkLinearCastCollisionInput@@AAVhkCdPointCollector@@PAV4@@Z  # sits before hkIterativeLinearCastAgent::linearCast (0x010EC0A0); uses getClosestPoints iteratively

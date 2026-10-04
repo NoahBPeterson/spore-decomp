@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+01129d50 0 havok-equivalent
+01129e10 0 havok-equivalent
+01129e30 0 havok-equivalent
+01129f40 0 havok-equivalent
+01129fc0 0 havok-equivalent
+0112a200 0 havok-equivalent
+0112a2b0 0 havok-equivalent
+0112a300 0 havok-equivalent
+0112a340 0 havok-equivalent
+0112a3c0 0 havok-equivalent
+0112a430 0 havok-equivalent
+0112a5c0 0 havok-equivalent
+0112a610 0 havok-equivalent
+0112a890 0 havok-equivalent
+0112a910 0 havok-equivalent
+0112a940 0 havok-equivalent
+0112a990 0 havok-equivalent
+0112a9c0 0 havok-equivalent
+0112aab0 0 havok-equivalent
+0112ac40 0 havok-equivalent
+0112ad10 0 havok-equivalent

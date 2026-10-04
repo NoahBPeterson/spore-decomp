@@ -1,0 +1,5 @@
+010979d0 ?calcStatistics@hkCachingShapePhantom@@UBEXPAVhkStatisticsCollector@@@Z  # beginObject("CachngPhantm"), "AgentPtr" array, "Agent" refs; vtbl slot 1 of 0x14a1dcc
+01097a60 finishLoadedObject_hkCachingShapePhantom  # null check + finish-loaded ctor (vtbl 0x14a1dcc, empty arrays); separate function inside the 0x010979d0 card
+01097b20 ?clone@hkCachingShapePhantom@@UBEPAVhkPhantom@@XZ  # vtbl slot 9, allocates 0x130/class 0x2e, copies listener arrays + properties
+010980d0 ??_GhkBreakableConstraintData@@UAEPAXI@Z  # releases m_constraintData (+0xc), deallocateChunk class 0x29; vtbl 0x14a1e08 slot 0
+01098140 ??0hkBoxMotion@@QAE@ABVhkVector4@@ABVhkQuaternion@@@Z  # hkRigidMotion ctor + inertiaAndMassInv (+0xf0) = 1

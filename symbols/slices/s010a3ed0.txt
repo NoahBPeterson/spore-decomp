@@ -1,0 +1,5 @@
+010a4290 hkIdMgrA::newUid  # reuse highest 0xff slot of an hkArray<hkUint8> else append; called with this=m_idMgrA (+0xc) from allocateContactPoint
+010a49e0 hkConstraintSolverSetup_resetSolverBuffers  # zeroes res[7]..res[0x13] dwords, then re-zeroes via 0x010b48b0 from the 0xc/0x10 cursors
+010a4a70 hkConstraintSolverSetup_layoutBuffer  # computes 6 buffer pointers/sizes into a 0x20-byte struct, writes fixed accumulator + end marker (type 2)
+010a4b30 hkConstraintSolverSetup_calcBufferSize  # layoutBuffer(info, 0, 0, &tmp): size query
+010a4c60 hkConstraintSolverSetup_integrateBatch  # per entity motion->vtbl[6](step, base+accOffset), no pre-copy (cf. oneStepIntegrate)

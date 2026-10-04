@@ -86,6 +86,8 @@ slices/s0042dee0/s0042dee0.cpp  ?UninitializedCopy56@@YAPAUElem56@@PAU1@00@Z  00
 slices/s0042dee0/s0042dee0.cpp  ?UninitializedFillN56@@YAXU?$It@UElem56@@@@IPBUElem56@@UTag@@@Z  004c2400  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 0042e680
 slices/s006068c0/s006068c0.cpp  ??0cOfflineConfirmationDialog@  0060b730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00607450
 slices/s004f6630/s004f6630.cpp  ?DoInsertValue@UIntMap@@QAE?AUMapIterator@@U2@ABUvalue_type@@Utrue_type@@@Z  00456490  /Od /Ob1 /MD /Gy /TP  # clone of 004f6d60
+slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  010c8fe0  /O2 /MD /Gy /TP  # clone of 01087e20
+slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  010ef560  /O2 /MD /Gy /TP  # clone of 01087e20
 slices/s0060d860/s0060d860.cpp  ??H?$DequeIterator@UcTextureAsyncQueueEntry@@$0EA@@eastl@@QBE?AU01@H@Z  00883d90  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060da40
 slices/s0060d860/s0060d860.cpp  ?DoPushBackSlow@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  00e30010  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060dbd0
 slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  0052a3e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 004010b0
@@ -144,6 +146,7 @@ slices/s00609790/s00609790.cpp  ?DoInsertValue@?$fixed_vector_base@PAVcCookie@Po
 slices/s00609790/s00609790.cpp  ?DoInsertValue@?$fixed_vector_base@PAVcCookie@Pollen@SP@@@eastl@@QAEXPAPAVcCookie@Pollen@SP@@ABQAV345@@Z  00899480  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060a600
 slices/s00609790/s00609790.cpp  ?DoInsertValue@?$fixed_vector_base@PAVcCookie@Pollen@SP@@@eastl@@QAEXPAPAVcCookie@Pollen@SP@@ABQAV345@@Z  00cd0550  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060a600
 slices/s0042b9e0/s0042b9e0.cpp  ?InsertNode@Tree@@QAEPAUTreeIter@@PAU2@PAUTreeNode@@PBUKey@@_N@Z  004e4c30  /Od /Ob1 /MD /Gy /TP  # clone of 0042c1c0
+slices/s010bfbe0/s010bfbe0.cpp  _hkSolverGetSystemTime  00941bb0  /O2 /MD /Gy /TP  # clone of 010bfe20
 slices/s004cd1b0/s004cd1b0.cpp  ?resize@?$vector@PAX@eastl@@QAEXI@Z  00454b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004cd3c0
 slices/s004cd1b0/s004cd1b0.cpp  ?push_back@?$vector@M@eastl@@QAEXABM@Z  004547f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004cd810
 slices/s0062f6e0/s0062f6e0.cpp  ??0SharedLibList@@QAE@XZ  00ac03d0  /O2 /MD /Gy /TP /GS-  # clone of 0062f8c0
@@ -232,6 +235,8 @@ slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00885fa0  /O2 /M
 slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00b1ffd0  /O2 /MD /Gy /TP  # clone of 00616aa0
 slices/s00616360/s00616360.cpp  ?Destroy@cPoolTxA@@QAEPAXI@Z  00a17130  /O2 /MD /Gy /TP  # clone of 00616b00
 slices/s004d06e0/s004d06e0.cpp  ??$uninitialized_move_start@PAURec14@eastl@@PAU12@@eastl@@YAPAURec14@0@PAU10@00@Z  004ab4a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004d0f30
+slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01090370  /O2 /MD /Gy /TP  # clone of 01087010
+slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01097110  /O2 /MD /Gy /TP  # clone of 01087010
 slices/s00488600/s00488600.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure@SP@@QAEX_N@Z  0048bf40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 00488d00
 slices/s005d87a0/s005d87a0.cpp  ??0?$pair@QAMU?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@QAE@ABU01@@Z  00889400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 005d9680
 slices/s005d87a0/s005d87a0.cpp  ??0?$pair@QAMU?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@QAE@ABU01@@Z  009fd7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 005d9680

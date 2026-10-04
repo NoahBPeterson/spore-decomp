@@ -1,0 +1,8 @@
+010cbaa0 hkBvShape::calcStatistics  # beginObject("BvShape")/addReferencedObject("Child") on vtable slot 1 of hkBvShape
+010cbd40 hkMoppUtility::buildCode  # caller 0x00b63ee4 passes its result to hkMoppBvTreeShape ctor 0x010c8130
+010cbed0 hkMoppFitToleranceRequirements::getAbsoluteFitToleranceOfAxisAlignedTriangles  # copies the vector at +0x10
+010cbf00 hkMoppFitToleranceRequirements::hkMoppFitToleranceRequirements  # layout matches PDB; defaults 0.05/0.4/0.1/0.3
+010cbfb0 hkAllRayHitCollector::addRayHit  # vtable slot 0 of the hkAllRayHitCollector vtable at 0x0146494C, pushes 0x30-byte hits
+010cc020 hkAlgorithm::quickSortRecursive<hkWorldRayCastOutput>  # keyed on m_hitFraction (+0x14) of 0x30-byte elements
+010cc160 hkAllRayHitCollector::sortHits  # calls the quick sort over m_hits
+010cc560 hkTypedBroadPhaseDispatcher::removeDuplicates  # hkPointerMapBase<hkUint64> over handle pairs, small case quadratic

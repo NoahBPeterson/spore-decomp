@@ -1,0 +1,7 @@
+010813d0 ?setTransformedInversePos@hkVector4@@QAEXABVhkTransform@@ABV1@@Z  # (v - trans) dotted with the rotation columns; inverse of setTransformedPos (0x01081360)
+01081440 ?setRotatedInverseDir@hkVector4@@QAEXABVhkRotation@@ABV1@@Z  # dots v with rotation columns (R^T v)
+010814a0 ?setRotatedDir@hkVector4@@QAEXABVhkRotation@@ABV1@@Z  # dots v with rotation rows (R v)
+01081ad0 ?add@hkMatrix3@@QAEXABV1@@Z  # elementwise this += m over 12 floats
+01081b40 ?sub@hkMatrix3@@QAEXABV1@@Z  # elementwise this -= m over 12 floats
+01082160 ?acos@hkMath@@YAMM@Z  # |x|<1 ? CRT acos : (x>0 ? 0 : pi)
+010821a0 ?normalize@hkQuaternion@@QAEXXZ  # 4D length, zero-safe 1/sqrt

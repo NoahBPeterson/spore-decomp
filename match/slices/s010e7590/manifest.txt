@@ -1,0 +1,2 @@
+slices/s010e7590/s010e7590.cpp  ?registerAlternateShapeTypes@hkAgentRegisterUtil@@  010e7d70  /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?hkShapeType_toString@@YAPBDH@Z  010e7e30  /O2 /MD /Gy /TP

@@ -1,0 +1,2 @@
+slices/s0111c7f0/s0111c7f0.cpp  ?addFourBytes@MoppAssembler@@QAEXPBX@Z  0111cfe0  /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addJump@MoppAssembler@@QAEXH@Z  0111d260  /O2 /MD /Gy /TP

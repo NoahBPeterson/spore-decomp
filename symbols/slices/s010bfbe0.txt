@@ -1,0 +1,7 @@
+010bfbe0 hkSolverCheckKeycode  # name inferred: checks "CLIENT.Ph.Spore" key hash 0x731521cf against 3 seeds, "Havok Prime"/component messages, 180-day time limit; sits next to _hkSolverGetSystemTime
+010bfe30 ?getCollisionSpheresInfo@hkConvexTranslateShape@@UBEXAAUhkCollisionSpheresInfo@hkSphereRepShape@@@Z  # child->getCollisionSpheresInfo then info.m_useBuffer = true
+010bfe50 ?calcStatistics@hkConvexTranslateShape@@UBEXPAVhkStatisticsCollector@@@Z  # beginObject("CvxTranslate"), addReferencedObject("Child"), endObject
+010c0110 ??_GhkConvexTranslateShape@@UAEPAXI@Z  # releases child (+0x10), deallocateChunk class 0x24
+010c0360 ?calcStatistics@hkBoxShape@@UBEXPAVhkStatisticsCollector@@@Z  # beginObject("BoxShape"), endObject
+010c05d0 ??0hkBoxShape@@QAE@ABVhkVector4@@M@Z  # vtbl 0x14a2790 (hkBoxShape), halfExtents at +0x10 with w = min(x,y,z), radius at +0xc
+010c0640 ?getFirstVertex@hkBoxShape@@UBEXAAVhkVector4@@@Z  # copies halfExtents

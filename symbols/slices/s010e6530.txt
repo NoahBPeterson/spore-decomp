@@ -1,0 +1,8 @@
+010e6530 hkMultiSphereAgent::hkMultiSphereAgent  # vtable 0x014A4E54; one sub agent per sphere of the shape (count +0xc, spheres +0x10 stride 0x10), 0x38 bytes
+010e67d0 hkSymmetricAgent<hkMultiSphereAgent>::getPenetrations  # vtable 0x014A4E88 slot 2: flip body collector around hkMultiSphereAgent::getPenetrations
+010e6810 hkSymmetricAgent<hkMultiSphereAgent>::getClosestPoints  # slot 3: flip point collector (vtbl 0x14A43A4) around hkMultiSphereAgent::getClosestPoints
+010e6850 hkSymmetricAgent<hkMultiSphereAgent>::processCollision  # slot 5: setFlipped over the new contact points, toi normal negated when the toi time changed
+010e68d0 hkMultiSphereAgent::createListAAgent  # new hkMultiSphereAgent(A,B,input,mgr), 0x38 bytes class 0x1c (6.x name)
+010e6910 hkSymmetricAgent<hkMultiSphereAgent>::linearCast  # slot 4: negated path, flip cast collectors, bodies swapped
+010e6a30 hkMultiSphereAgent::createListBAgent  # symmetric agent (vtable 0x014A4E88) built with the bodies swapped
+010e6c00 hkBvAgent::hkBvAgent  # vtable 0x014A4EC0; creates the bounding volume agent from the bv shape (+0xc), m_childAgent (+0x10) = 0

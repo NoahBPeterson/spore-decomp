@@ -1,0 +1,14 @@
+0109f930 hkWorldOperationUtil::addConstraintImmediately  # fixNullEntities, lock count, hkWorldConstraintUtil::addConstraint, fireConstraintAdded (6.x name)
+0109fa10 hkWorldOperationUtil::removeConstraintImmediately  # lock count, fireConstraintRemoved (+0x100 listeners), hkWorldConstraintUtil::removeConstraint (6.x name)
+0109fab0 hkWorldOperationUtil::removeAttachedAgentsConnectingTheEntityAndAFixedPartnerEntityPlus  # walks entity collision entries, moves agent entries between tracks (6.x name)
+0109fc70 hkWorldOperationUtil::removeAttachedActionsFromFixedIsland  # entity actions whose island is the fixed island, moved into the caller's array
+0109fdd0 hkWorldOperationUtil::removeAttachedConstraints  # master (0x1c stride) and slave constraints removed and collected
+0109ff50 hkWorldOperationUtil::internalActivateIsland  # inactive -> active array swap, setTimeInformation(0,0), warpTime, fireIslandActivated
+010a03c0 hkWorldOperationUtil::removeEntitySI  # internalRemoveEntity, removeIsland + delete when empty
+010a3810 hkWorldAgentUtil::getIslandFromAgentEntry  # picks the island whose agent track contains the entry (6.x name)
+010a38c0 hkWorldAgentUtil::warpTime  # walks the island agent track calling _hkAgentNnMachine_WarpTimeInAgent
+010a2250 hkSimulationIsland::internalAddEntity  # sets entity island/index, appends, calls owner info slots
+010a20b0 hkSimulationIsland::removeAction  # finds action, nulls the slot, clears action island, sets cleanup + split flags
+01097110 hkFixedRigidMotion::hkFixedRigidMotion  # ctor (position, rotation); neighbours are hkFixedRigidMotion scalar dtor/clone
+01095b60 hkKeyframedRigidMotion::hkKeyframedRigidMotion  # ctor (position, rotation); neighbours are hkKeyframedRigidMotion methods
+0108bff0 hkConstraintInstance::fixNullEntities  # empty entity slot gets the world's fixed rigid body (+0x34) with addReference

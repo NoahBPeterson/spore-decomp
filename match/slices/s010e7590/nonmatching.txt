@@ -1,0 +1,17 @@
+010e7590 0 havok-equivalent
+010e7750 0 havok-equivalent
+010e7830 0 havok-equivalent
+010e7930 0 havok-equivalent
+010e79b0 0 havok-equivalent
+010e7b30 0 havok-equivalent
+010e7bb0 0 havok-equivalent
+010e7ca0 0 havok-equivalent
+010e7f80 0 havok-equivalent
+010e7fb0 0 havok-equivalent
+010e7fd0 0 havok-equivalent
+010e8000 0 havok-equivalent
+010e8190 0 havok-equivalent
+010e8390 0 havok-equivalent
+010e84a0 0 havok-equivalent
+010e8630 0 havok-equivalent
+010e8680 0 havok-equivalent

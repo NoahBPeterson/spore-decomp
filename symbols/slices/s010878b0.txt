@@ -1,0 +1,10 @@
+010878b0 ??0hkRigidBody@@QAE@ABVhkRigidBodyCinfo@@@Z  # builds hkEntity from cinfo (shape at cinfo+4), vtbl 0x149e00c, motion by createMotion/hkFixedRigidMotion
+01087d50 ??0hkEntity@@QAE@UhkFinishLoadedObjectFlag@@@Z  # hkWorldObject finishLoaded ctor + empty hkArrays at 0x70/7c/88/9c/a8/b4/c0
+01087e20 finishLoadedObject_hkRigidBody  # null check, hkEntity finish ctor, vtbl 0x149e00c
+01087ed0 ??0hkRigidBodyCinfo@@QAE@XZ  # defaults: mass 1, friction .5, restitution .4, maxVel 200, penetration -1
+01087fd0 ?setSolverType@hkWorldCinfo@@QAEXW4SolverType@1@@Z  # switch 1..9 -> tau/damp/iterations at +0x6c/+0x70/+0x74
+01088200 finishLoadedObject_hkWorldCinfo  # vtbl 0x13ef7fc, fixes contactRestingVelocity==0
+01088350 ?setDeactivationClass@hkRigidMotion@@QAEXG@Z  # writes motionState.m_deactivationClass (+0xbc); called from hkRigidBody ctor with cinfo.solverDeactivation
+01088410 hkTransform_assign  # 16 dword copy used by hkMotionState::operator=
+01088500 ??0hkRigidMotion@@QAE@ABVhkVector4@@ABVhkQuaternion@@@Z  # vtbl 0x149e070 (hkRigidMotion), initMotionState(pos,rot), velocities/damping 0
+010888c0 ??4hkMotionState@@QAEAAV0@ABV0@@Z  # transform + swept transform + deltaAngle + radius/maxvel + deactivation words

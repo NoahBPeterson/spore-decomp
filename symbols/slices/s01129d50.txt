@@ -1,0 +1,6 @@
+01129d50 ??0hkDisableEntityCollisionFilter@@QAE@UhkFinishLoadedObjectFlag@@@Z  # stores hkCollisionFilter bases + hkEntityListener at +0x18 + hkArray<hkEntity*> at +0x1c; neighbours are hkDisableEntityCollisionFilter methods
+01129e10 finishLoadedObject_hkDisableEntityCollisionFilter  # null-check wrapper calling the 1-arg ctor
+01129e30 ??1hkDisableEntityCollisionFilter@@UAE@XZ  # removes listener at this+0x18 from each entity then frees m_disabledEntities
+01129f40 ??0hkDashpotAction@@QAE@PAVhkEntity@@0I@Z  # calls hkBinaryAction ctor, strength 0.1 damping 0.01, size 0x60 in clone
+0112a3c0 ??_GhkConstrainedSystemFilter@@UAEPAXI@Z  # releases m_otherFilter(+0x18), ~hkCollisionFilter, deallocateChunk class 0x24
+0112a5c0 ??0hkAngularDashpotAction@@QAE@PAVhkEntity@@0I@Z  # called from hkAngularDashpotAction::clone, rotation=(0,0,0,1)

@@ -21,3 +21,5 @@
 01082ee0 0 havok-equivalent
 01083110 0 havok-equivalent
 01083320 123 havok-equivalent
+01082910 0 havok-equivalent
+01082d20 0 havok-equivalent

@@ -1,0 +1,2 @@
+slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01087010  /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ??0hkStabilizedSphereMotion@@  01087030  /O2 /MD /Gy /TP

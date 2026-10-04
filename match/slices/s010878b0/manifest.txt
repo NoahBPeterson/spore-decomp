@@ -1,0 +1,4 @@
+slices/s010878b0/s010878b0.cpp  ??0hkEntity@@QAE@UhkFinishLoadedObjectFlag@@@Z  01087d50  /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?finishLoadedObject_hkRigidBody@@YAXPAX@Z  01087e20  /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?setPositionAndRotation@hkRigidMotion@@UAEXABUhkVector4@@ABUhkQuaternion@@@Z  01088310  /O2 /MD /Gy /TP
+slices/s010878b0/s010878b0.cpp  ?setDeactivationClass@hkRigidMotion@@QAEXG@Z  01088350  /O2 /MD /Gy /TP

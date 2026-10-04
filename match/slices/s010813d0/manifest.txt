@@ -1,0 +1,1 @@
+slices/s010813d0/s010813d0.cpp  ?setTranspose@hkRotation@@QAEXABU1@@Z  01081550  /O2 /MD /Gy /TP

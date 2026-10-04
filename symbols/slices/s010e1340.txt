@@ -1,0 +1,13 @@
+010e1090 hkShapeCollectionAgent::hkShapeCollectionAgent  # 0x38-byte object built by createListAAgent/createListBAgent (callee, not in this slice)
+010e1340 hkShapeCollectionAgent::createListAAgent  # new hkShapeCollectionAgent(A,B,input,mgr); 6.x name
+010e1380 hkShapeCollectionAgent::~hkShapeCollectionAgent  # scalar deleting dtor in vtable 0x014A4D24 slot 0 (also hkMultiSphereAgent slot 0), frees 8-byte-element array at +0xc
+010e13e0 hkSymmetricAgent<hkShapeCollectionAgent>::linearCast  # vtable 0x014A4D58 slot 4: negated path, flip cast collectors (vtbl 0x14A43AC), bodies swapped
+010e14d0 hkShapeCollectionAgent::createListBAgent  # new symmetric agent (vtable 0x014A4D58) built with the bodies swapped
+010e1720 hkBvTreeAgent::registerPredictiveAgent  # registers hkBvTreeStreamAgent factories with isPredictive=1 (name is descriptive, not a retail symbol)
+010e19f0 hkBvTreeAgent::~hkBvTreeAgent  # scalar deleting destructor, vtable 0x014A4D9C slot 0
+010e1a50 hkBvTreeAgent::~hkBvTreeAgent  # destructor body (frees 12-byte-element array at +0xc), called by the symmetric agent's deleting dtor
+010e1aa0 hkSymmetricAgent<hkMoppAgent>::getPenetrations  # vtable 0x014A4E0C slot 2: flip body collector (vtbl 0x14A43B4) around hkBvTreeAgent::getPenetrations
+010e1ae0 hkSymmetricAgent<hkMoppAgent>::linearCast  # vtable 0x014A4E0C slot 4
+010e1c70 hkBvTreeAgent::registerAgent  # three registerCollisionAgent calls with hkBvTreeAgent factories, BV tree type 0x18
+010e5130 hkBvTreeAgent::staticGetPenetrations  # registered next to staticGetClosestPoints 0x010E4D50 (callee, not in this slice)
+010cd8d0 hkNullAgent::getNullAgent  # returned singleton compared against each partner agent in updateShapeCollectionFilter

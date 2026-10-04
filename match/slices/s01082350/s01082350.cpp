@@ -179,6 +179,15 @@ struct hkLinkedCollidable {                            // size 0x30
     hkArray<void*[2]> m_collisionEntries;              // +0x24  (8-byte entries)
 };
 struct hkMultiThreadLock { uint32_t m_threadId; int m_lockCount; };
+class hkBool
+{
+public:
+    hkBool(bool b) : m_bool(b ? 1 : 0) {}
+    operator bool() const { return m_bool != 0; }
+private:
+    char m_bool;
+};
+
 
 struct hkWorldObject : hkReferencedObject {
     void* m_world;                                     // +0x08
@@ -443,6 +452,11 @@ struct hkEntity : hkWorldObject {
 };
 struct hkPhantom : hkWorldObject {
     void firePhantomAdded();                           // 0x0108e370
+    // hkPhantom virtual slots after the four hkWorldObject ones (used by hkWorld_updatePhantomOverlap, 0x01082910)
+    virtual void slot5() = 0;
+    virtual void addOverlappingCollidable(hkLinkedCollidable* c) = 0;                          // slot 6 (+0x18)
+    virtual hkBool isOverlappingCollidableAdded(const hkLinkedCollidable* c) = 0;              // slot 7 (+0x1c)
+    virtual void removeOverlappingCollidable(hkLinkedCollidable* c) = 0;                       // slot 8 (+0x20)
 };
 
 // External (identical-code) callees, from the real mangled names.
@@ -599,23 +613,65 @@ void hkNullContactMgrFactory_deletingDtor(hkNullContactMgrFactory* self, unsigne
 }
 
 // @ 0x01082d20
-// Constructor of a multiply-inherited object with four listener-interface sub-objects at +8..+0x14.
-struct hkListenerBase { virtual void s0(); virtual void s1(); };
-struct hkMultiListenerObject : hkReferencedObject {
-    hkListenerBase m_l0, m_l1, m_l2, m_l3;                 // +8, +0xc, +0x10, +0x14
-    hkMultiListenerObject();
+// hkNullCollisionFilter: hkCollisionFilter is hkReferencedObject plus four filter interfaces (collidable pair
+// at +8, shape collection at +0xc, ray shape collection at +0x10, ray collidable at +0x14), 0x18 bytes in all.
+// The constructor stores the interface vtables of the abstract bases (0x013EF82C / 0x013EF824, dead stores the
+// compiler left in) and then the hkNullCollisionFilter ones: 0x0149DBA0 (hkReferencedObject part) and
+// 0x0149DB98 / 0x0149DB90 / 0x0149DB88 / 0x0149DB80 for the four interfaces (slot 0 of each is a shared
+// destructor-like stub, slot 1 is isCollisionEnabled, which the null filter answers with "true").
+// Named from those vtables: the same layout is used by hkWorld::setCollisionFilter(null) (slice s010869e0).
+struct hkCollidableCollidableFilter
+{
+    virtual void s0();
+    virtual hkBool isCollisionEnabled(const struct hkLinkedCollidable& a, const struct hkLinkedCollidable& b) const = 0;   // slot 1
 };
-hkMultiListenerObject::hkMultiListenerObject() {}
+struct hkShapeCollectionFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* a, const void* b, const void* bContainer, uint32_t bKey) const = 0; };
+struct hkRayShapeCollectionFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const void* collection, uint32_t key) const = 0; };
+struct hkRayCollidableFilter { virtual void s0(); virtual hkBool isCollisionEnabled(const void* input, const hkLinkedCollidable& c) const = 0; };
+struct hkCollisionFilter : hkReferencedObject, hkCollidableCollidableFilter, hkShapeCollectionFilter,
+                           hkRayShapeCollectionFilter, hkRayCollidableFilter
+{
+    hkCollisionFilter() {}
+};
+struct hkNullCollisionFilter : hkCollisionFilter
+{
+    hkNullCollisionFilter();                                                                    // 0x01082D20
+    virtual hkBool isCollisionEnabled(const hkLinkedCollidable& a, const hkLinkedCollidable& b) const;
+};
+hkNullCollisionFilter::hkNullCollisionFilter() {}    // m_referenceCount = 1 comes from the hkReferencedObject base constructor
 
 // @ 0x01082910
-// PARTIAL: this is a fragment (register-allocated, unbalanced stack) of a larger function; the
-// transcription below covers the two branches that are visible. EDI = this, ESI = argument.
-struct hkEntityLike : hkWorldObject {
-    char pad[0x24 - 0x0];
-};
-void hkWorldObject_fragment_01082910(hkWorldObject* self, hkWorldObject* other)
+// Custom register convention (whole-program optimisation): this = EDI (the phantom), the other collidable = ESI,
+// the collision filter is the single stack argument (caller pops it). Called from hkWorld::updateCollisionFilterOnPhantom.
+// It makes the phantom's overlap bookkeeping agree with the filter: add the pair when the filter now allows it and the
+// phantom does not know the collidable yet, remove it in the opposite case, and mirror the change on the other side
+// when that collidable belongs to a phantom (broad phase handle type 2).
+void hkWorld_updatePhantomOverlap(hkPhantom* phantom, hkLinkedCollidable* other, const hkCollisionFilter* filter)
 {
-    (void)self; (void)other;
+    hkBool added = phantom->isOverlappingCollidableAdded(other);
+    // the filter call goes through the hkCollidableCollidableFilter sub-object (filter + 8), slot 1
+    hkBool enabled = static_cast<const hkCollidableCollidableFilter*>(filter)->isCollisionEnabled(phantom->m_collidable, *other);
+    if (enabled)
+    {
+        if (!added)
+        {
+            phantom->addOverlappingCollidable(other);
+            if (other->m_broadPhaseHandle.m_type == 2)
+            {
+                hkPhantom* otherPhantom = (hkPhantom*)((char*)other + other->m_ownerOffset);   // hkCollidable::getOwner
+                otherPhantom->addOverlappingCollidable(&phantom->m_collidable);
+            }
+        }
+    }
+    else if (added)
+    {
+        phantom->removeOverlappingCollidable(other);
+        if (other->m_broadPhaseHandle.m_type == 2)
+        {
+            hkPhantom* otherPhantom = (hkPhantom*)((char*)other + other->m_ownerOffset);
+            otherPhantom->removeOverlappingCollidable(&phantom->m_collidable);
+        }
+    }
 }
 
 // ------------------------------------------------------------ register the default contact managers

@@ -15,3 +15,4 @@
 01082ca0 hkWorld::calcMaxIslandSizeEstimate  # max over +0x38 islands
 01082ce0 hkNullContactMgrFactory::createContactMgr  # returns this+8
 01082df0 hkWorld_registerContactMgrFactories  # simple(1), reactive(2), null(3) factories
+01082910 hkWorld_updatePhantomOverlap  # custom regs this=EDI(phantom) other=ESI(collidable), filter on stack; isOverlappingCollidableAdded (slot 7) + filter slot 1 decide add (slot 6) / remove (slot 8), mirrored on a phantom partner (handle type 2); called from hkWorld::updateCollisionFilterOnPhantom

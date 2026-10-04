@@ -1,0 +1,2 @@
+0108c750 ??0hkSimpleShapePhantom@@QAE@PBVhkShape@@ABVhkTransform@@I@Z  # stores vtable 0x0149E3B8 (hkSimpleShapePhantom's: slot 0 is ??_GhkSimpleShapePhantom) and inits the 4-byte-element array at +0x120; havok_names.txt labels it hkCachingShapePhantom (identical-code ambiguity)
+0108c7e0 ?clone@hkSimpleShapePhantom@@UBEPAVhkPhantom@@XZ  # vtable slot 9 of hkSimpleShapePhantom; builds a new phantom from shape/transform/filterInfo and copies listener arrays + properties

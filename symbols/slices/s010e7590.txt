@@ -1,0 +1,8 @@
+010e7930 hkSymmetricAgent<hkBvAgent>::getPenetrations  # vtable 0x014a4f1c slot 2; flip body collector (vtbl 0x14a43b4) around hkBvAgent::getPenetrations
+010e79b0 hkSymmetricAgent<hkBvAgent>::getClosestPoints  # vtable slot 3; flip collector (vtbl 0x14a43a4) around hkBvAgent::getClosestPoints
+010e7b30 hkSymmetricAgent<hkBvAgent>::processCollision  # vtable slot 5; setFlipped over new contact points + toi normal negate
+010e7bb0 hkSymmetricAgent<hkBvAgent>::linearCast  # vtable slot 4; negated path + FlipCastCollector (vtbl 0x14a43ac)
+010e7d70 hkAgentRegisterUtil::registerAlternateShapeTypes  # 16 calls of hkCollisionDispatcher::registerAlternateShapeType (6.x name)
+010e7e30 hkShapeType_toString  # switch over shape type -> HK_SHAPE_* names
+010e7fb0 hkShapeCollection::calcStatistics  # vtable 0x14a3dbc slot 1; beginObject("Collection")
+010e8630 hkBvTreeShape::calcStatistics  # beginObject("BvTreeShape") + addReferencedObject("Collection", +0xc)
