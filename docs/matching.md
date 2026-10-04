@@ -69,7 +69,7 @@ Tools (from repo root):
   fields, so confirm offsets against the disassembly. Many retail functions now carry real names from that
   PDB (see docs/xmatch.md); the card shows them. Use these real names for classes, methods and members.
 - Spore ModAPI headers (community reverse engineering of the 2017 Steam build, much closer to retail than the
-  2008 PDB, and covering Galactic Adventures): `grep -rn "<Class or method>" "work/ext/Spore-ModAPI/Spore ModAPI/Spore"`.
+  2008 PDB, and covering Galactic Adventures): `rg --no-ignore -n "<Class or method>" "work/ext/Spore-ModAPI/Spore ModAPI/Spore"` (use rg, not grep, for all searches).
   Class names differ from the PDB's (ModAPI `Simulator::cCreatureBase` = PDB `SP::cSPCreatureBase`), but
   member names, virtual method order and enums are a good reference. Its addresses are for the 2017 build, NOT ours.
 - `.venv/bin/python tools/matching/od_names.py fit K`: local-variable slot order for /Od functions (below).
