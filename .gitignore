@@ -8,3 +8,4 @@ work/
 __pycache__/
 build/
 .DS_Store
+vc90.pdb

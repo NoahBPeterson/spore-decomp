@@ -21,7 +21,8 @@ def load(which):
         for f in syms["functions"]:
             fn.setdefault(f["va"], (f["size"], f["name"]))
         starts = sorted(fn)
-        return pe, [(a, fn[a][0], fn[a][1]) for a in starts]
+        thunks = {int(k, 16): v for k, v in syms.get("thunks", {}).items()}
+        return pe, [(a, fn[a][0], fn[a][1]) for a in starts], thunks
     pe = pefile.PE(W("work/SporeApp.analysis.bin"))
     starts = set()
     for f in glob.glob(W("work/decomp_all/index_*.csv")):
@@ -32,11 +33,11 @@ def load(which):
     for i, a in enumerate(starts):
         n = (starts[i + 1] if i + 1 < len(starts) else a + 64) - a
         out.append((a, min(n, 0x20000), ""))
-    return pe, out
+    return pe, out, {}
 
 
 def main(which, outp):
-    pe, funcs = load(which)
+    pe, funcs, thunks = load(which)  # thunks: dev ILT stub -> real target (SecuROM encrypted the stubs)
     base = pe.OPTIONAL_HEADER.ImageBase
     img = pe.get_memory_mapped_image()
     secs = [(base + s.VirtualAddress, base + s.VirtualAddress + max(s.Misc_VirtualSize, s.SizeOfRawData),
@@ -70,19 +71,31 @@ def main(which, outp):
                 pass
         return None
 
+    rdata = next(((lo, hi) for lo, hi, n, c in secs if n == ".rdata"), (0, 0))
+
+    def fnv(st):
+        h = 0x811C9DC5
+        for ch in st.encode("latin-1", "replace"):
+            c = (ch - 256 if ch >= 128 else ch) & 0xFFFF
+            if 0x41 <= c <= 0x5A:
+                c += 32
+            h = ((h * 0x01000193) & 0xFFFFFFFF) ^ c
+        return h
+
     md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
     out = {}
     for a, size, name in funcs:
         if not (code_lo <= a < code_hi) or size <= 0:
             continue
         code = img[a - base:a - base + size]
-        strs, imps, consts, calls = set(), set(), set(), []
+        strs, imps, consts, calls, vals = set(), set(), set(), [], set()
         for ins in md.disasm(code, a):
             ops = ins.op_str
             if ins.mnemonic == "call":
                 m = re.fullmatch(r"0x([0-9a-f]+)", ops)
                 if m:
-                    calls.append(int(m.group(1), 16))
+                    t = int(m.group(1), 16)
+                    calls.append(thunks.get(t, t))
                     continue
                 m = re.search(r"\[0x([0-9a-f]+)\]", ops)
                 if m and int(m.group(1), 16) in imports:
@@ -99,10 +112,16 @@ def main(which, outp):
                     s = string_at(v)
                     if s:
                         strs.add(s)
+                        if which == "dev" and not s.startswith("L:"):
+                            consts.add(fnv(s))  # bridge: retail folds id("name") into the FNV immediate
+                    elif rdata[0] <= v < rdata[1]:
+                        o2 = v - base
+                        if 0 <= o2 + 4 <= len(img):
+                            vals.add(struct.unpack_from("<I", img, o2)[0])  # constant-pool value (floats etc.)
                 elif v >= 0x10000 and not (base <= v < base + 0x2000000) and v not in (0xFFFFFFFF, 0x7FFFFFFF, 0x80000000):
                     consts.add(v)
         out["%08x" % a] = {"size": size, "name": name, "strs": sorted(strs), "imps": sorted(imps),
-                           "consts": sorted(consts), "calls": ["%08x" % c for c in calls]}
+                           "consts": sorted(consts), "vals": sorted(vals), "calls": ["%08x" % c for c in calls]}
     json.dump(out, open(outp, "w"))
     print("%s: %d functions, with strings %d, with consts %d" % (
         which, len(out), sum(1 for v in out.values() if v["strs"]), sum(1 for v in out.values() if v["consts"])))

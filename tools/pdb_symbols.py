@@ -4,7 +4,8 @@
 usage: pdb_symbols.py <pdb> <exe> <out.json>
 Reads S_PUB32 from the DBI symbol-record stream and S_GPROC32/S_LPROC32 (with code size) from
 every module stream. Addresses are converted to VAs using the exe's section table.
-Output: {"functions": [{va, size, name, module}], "publics": [{va, name, code}]}
+Output: {"functions": [{va, size, name, module}], "publics": [{va, name, code}], "globals": [...],
+         "thunks": {thunk_va: target_va}}  (ILT jmp stubs; vtables and calls point at these in /INCREMENTAL builds)
 """
 import json, os, struct, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -12,6 +13,7 @@ from msf import MSF
 import pefile
 
 S_PUB32, S_GPROC32, S_LPROC32, S_GDATA32, S_LDATA32 = 0x110E, 0x1110, 0x110F, 0x110D, 0x110C
+S_TRAMPOLINE = 0x112C  # "* Linker *" module: incremental-link thunk -> target
 
 def records(buf, start=0):
     o = start
@@ -44,7 +46,7 @@ for kind, r in records(m.stream(symrec)):
 
 mods = json.load(open(os.path.join(os.path.dirname(out), "modules.json"))) if os.path.exists(
     os.path.join(os.path.dirname(out), "modules.json")) else []
-funcs, globs = [], []
+funcs, globs, thunks = [], [], {}
 for mod in mods:
     s = mod["sym_stream"]
     if s == 0xFFFF or s >= len(m.sizes):
@@ -59,11 +61,16 @@ for mod in mods:
             if a:
                 funcs.append({"va": a, "size": ln, "name": cstr(r, 35), "module": mod["module"],
                               "local": kind == S_LPROC32})
+        elif kind == S_TRAMPOLINE:
+            ttype, cb, othunk, otarget, sthunk, starget = struct.unpack_from("<HHIIHH", r, 0)
+            a, t = va(sthunk, othunk), va(starget, otarget)
+            if a and t:
+                thunks["%08x" % a] = t
         elif kind in (S_GDATA32, S_LDATA32):
             typ, off, seg = struct.unpack_from("<IIH", r, 0)
             a = va(seg, off)
             if a:
                 globs.append({"va": a, "name": cstr(r, 10), "module": mod["module"]})
-json.dump({"functions": funcs, "publics": publics, "globals": globs}, open(out, "w"))
-print("functions %d (from module streams), publics %d (%d code), module globals %d" % (
-    len(funcs), len(publics), sum(p["code"] for p in publics), len(globs)))
+json.dump({"functions": funcs, "publics": publics, "globals": globs, "thunks": thunks}, open(out, "w"))
+print("functions %d (from module streams), publics %d (%d code), module globals %d, ILT thunks %d" % (
+    len(funcs), len(publics), sum(p["code"] for p in publics), len(globs), len(thunks)))

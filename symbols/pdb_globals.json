@@ -1,0 +1,4198 @@
+{
+"013fe718": {
+"name": "HK_REAL_EPSILON",
+"votes": 39
+},
+"015fd918": {
+"name": "?sAppProperties@SP@@3PAVcDirectPropertyList@1@A",
+"votes": 12
+},
+"013fc1ec": {
+"name": "kVideoURLMessageText",
+"votes": 1
+},
+"0143eec0": {
+"name": "?kIID@cIObjectDatabase@SP@@2W4InterfaceId@COM@EA@@B",
+"votes": 1
+},
+"013f8d30": {
+"name": "sMsgIds",
+"votes": 1
+},
+"01448424": {
+"name": "?Members@hkEntity@@2QBUhkInternalClassMember@@B",
+"votes": 1
+},
+"01408928": {
+"name": "?kNumBits@?$sp_bit_vector_const_iterator@I@spstl@@1IB",
+"votes": 1
+},
+"01408830": {
+"name": "?Members@hkSpatialRigidBodyDeactivator@@2QBUhkInternalClassMember@@B",
+"votes": 1
+},
+"015ee380": {
+"name": "?kSpineHavokMetricsEnabled@SP@@3_NA",
+"votes": 1
+},
+"013f8930": {
+"name": "kSpineFrictionConstant",
+"votes": 1
+},
+"013f891c": {
+"name": "kSpineNewVertebraRelativeScale",
+"votes": 1
+},
+"013f893c": {
+"name": "kSpineWallShellRadius",
+"votes": 1
+},
+"013f8980": {
+"name": "kSpineTightAngularDamping",
+"votes": 1
+},
+"013f8954": {
+"name": "kSpineVertebraHavokPaddingFactor",
+"votes": 1
+},
+"015180dc": {
+"name": "kSpineHingeMinAngleLimit",
+"votes": 1
+},
+"015180e0": {
+"name": "kSpineHingeMaxAngleLimit",
+"votes": 1
+},
+"013f8958": {
+"name": "kSpineHingeMinFlexFactor",
+"votes": 1
+},
+"013f8928": {
+"name": "kSpineHavokWorldSolverDamp",
+"votes": 1
+},
+"013f8910": {
+"name": "HK_REAL_DEG_TO_RAD",
+"votes": 2
+},
+"015b1658": {
+"name": "kLavaThreshold",
+"votes": 2
+},
+"015b165c": {
+"name": "kLavaMaxCoverage",
+"votes": 1
+},
+"015b1660": {
+"name": "kTerraformRadiusT1",
+"votes": 1
+},
+"015b1664": {
+"name": "kTerraformRadiusT2",
+"votes": 1
+},
+"015b1668": {
+"name": "kTerraformRadiusT3",
+"votes": 1
+},
+"016d6f0c": {
+"name": "kMinWaterWithPerfectScore",
+"votes": 1
+},
+"016d6f10": {
+"name": "kMinWaterRadius",
+"votes": 1
+},
+"016d6f14": {
+"name": "kMinWaterIceThreshold",
+"votes": 1
+},
+"016d6f18": {
+"name": "kMinWaterIceVacuum",
+"votes": 1
+},
+"016d6f1c": {
+"name": "kMinWaterIceAtmosphere",
+"votes": 1
+},
+"016d6f20": {
+"name": "kMinWaterAtmosphere",
+"votes": 1
+},
+"016d6f24": {
+"name": "kMinWaterVacuumThreshold",
+"votes": 1
+},
+"016d6f28": {
+"name": "kMinWaterHeatThresholdLow",
+"votes": 1
+},
+"016d6f2c": {
+"name": "kMinWaterHeatThresholdHigh",
+"votes": 1
+},
+"016d6f30": {
+"name": "kMaxWater",
+"votes": 1
+},
+"016d6f34": {
+"name": "kMaxWaterThreshold2",
+"votes": 1
+},
+"0151042c": {
+"name": "kGroupEditorLimbTuning",
+"votes": 1
+},
+"015b4654": {
+"name": "HALF_PI",
+"votes": 1
+},
+"01675524": {
+"name": "sPlaySymbol",
+"votes": 4
+},
+"01675544": {
+"name": "sStealSymbol",
+"votes": 2
+},
+"0167554c": {
+"name": "sBlockSymbol",
+"votes": 2
+},
+"01675564": {
+"name": "sSetplayingSymbol",
+"votes": 2
+},
+"0167556c": {
+"name": "sSetnextSymbol",
+"votes": 2
+},
+"0167553c": {
+"name": "sInorderSymbol",
+"votes": 2
+},
+"01675534": {
+"name": "sRandomSymbol",
+"votes": 2
+},
+"0167552c": {
+"name": "sNorepeatSymbol",
+"votes": 2
+},
+"0167555c": {
+"name": "spPlayClass",
+"votes": 7
+},
+"016754f0": {
+"name": "?gpTextClass@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 2
+},
+"016754fc": {
+"name": "spMessageClass",
+"votes": 13
+},
+"013f2770": {
+"name": "kBlendTypes",
+"votes": 1
+},
+"016754f8": {
+"name": "spMessresponderClass",
+"votes": 5
+},
+"016754f4": {
+"name": "spGatomClass",
+"votes": 8
+},
+"01554380": {
+"name": "gatom_widgetbehavior",
+"votes": 1
+},
+"0143accc": {
+"name": "externalSubsetName",
+"votes": 5
+},
+"0143acd0": {
+"name": "atypeCDATA",
+"votes": 1
+},
+"0143acdc": {
+"name": "atypeID",
+"votes": 1
+},
+"0143ace4": {
+"name": "atypeIDREF",
+"votes": 1
+},
+"0143acf0": {
+"name": "atypeIDREFS",
+"votes": 1
+},
+"0143ad00": {
+"name": "atypeENTITY",
+"votes": 1
+},
+"0143ad10": {
+"name": "atypeENTITIES",
+"votes": 1
+},
+"0143ad24": {
+"name": "atypeNMTOKEN",
+"votes": 1
+},
+"0143ad34": {
+"name": "atypeNMTOKENS",
+"votes": 1
+},
+"0143ad5c": {
+"name": "enumValueSep",
+"votes": 1
+},
+"0143ad48": {
+"name": "notationPrefix",
+"votes": 1
+},
+"0143ad60": {
+"name": "enumValueStart",
+"votes": 1
+},
+"0167550c": {
+"name": "spMtofClass",
+"votes": 2
+},
+"01675500": {
+"name": "spFtomClass",
+"votes": 2
+},
+"01675504": {
+"name": "spPowtodbClass",
+"votes": 2
+},
+"01675510": {
+"name": "spRmstodbClass",
+"votes": 2
+},
+"01675514": {
+"name": "spDbtopowClass",
+"votes": 2
+},
+"01675508": {
+"name": "spDbtormsClass",
+"votes": 2
+},
+"016b0f8c": {
+"name": "DT_LOOT_TABLE_ENTRY_TABLE",
+"votes": 2
+},
+"015a7958": {
+"name": "?FIELDS_DT_LOOT_TABLE@SP@@3PAUcFieldDef@1@A",
+"votes": 110
+},
+"016b0a54": {
+"name": "DT_LOOT_TABLE_ENTRY_CELL",
+"votes": 1
+},
+"016b0ea8": {
+"name": "DT_LOOT_TABLE_ENTRY_NOTHING",
+"votes": 2
+},
+"013f25d8": {
+"name": "?kAlignment@?$VectorBase@PAUcTreeClumpData@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"0140b7ac": {
+"name": "?kAlignment@?$VectorBase@UcFragmentDecl@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 26
+},
+"0157d2bc": {
+"name": "kPurposeString",
+"votes": 1
+},
+"0157d2b0": {
+"name": "kLocomotionString",
+"votes": 1
+},
+"0157d29c": {
+"name": "kCargoTypeString",
+"votes": 1
+},
+"01514dd0": {
+"name": "kGroupEditorPalettes",
+"votes": 1
+},
+"016b0ad8": {
+"name": "DT_EFFECTMAP_ENTRY_BACKGROUND",
+"votes": 2
+},
+"015a6798": {
+"name": "?FIELDS_DT_EFFECTMAP@SP@@3PAUcFieldDef@1@A",
+"votes": 70
+},
+"016ad5e4": {
+"name": "DT_EFFECTMAP_ENTRY_FOREGROUND",
+"votes": 2
+},
+"016b0b8c": {
+"name": "DT_EFFECTMAP_ENTRY_TRACER",
+"votes": 2
+},
+"016ad614": {
+"name": "DT_EFFECTMAP_ENTRY_TRACER_BACKGROUND",
+"votes": 2
+},
+"016ad484": {
+"name": "DT_EFFECTMAP_ENTRY_SKYBOX",
+"votes": 2
+},
+"016b0cd0": {
+"name": "DT_EFFECTMAP_ENTRY_TILE_BACKGROUND",
+"votes": 2
+},
+"015d0930": {
+"name": "deviceInfoPtr",
+"votes": 25
+},
+"014f7cf4": {
+"name": "SupportedFormats",
+"votes": 5
+},
+"016acf60": {
+"name": "?debugKeyBuffer@SP@@3PADA",
+"votes": 11
+},
+"015a5cf0": {
+"name": "?gHashCatalog@SP@@3V?$map@HV?$basic_string@DVallocator@eastl@@@eastl@@U?$less@H@2@Vallocator@2@@eastl@@A",
+"votes": 3
+},
+"01601760": {
+"name": "?sMathRandom@SP@@3VRandomLinearCongruential@Random@EA@@A",
+"votes": 21
+},
+"01675464": {
+"name": "?gpCanvasList@Eapd@Audio@EA@@3PAU_glist@123@A",
+"votes": 1
+},
+"01667b80": {
+"name": "pageSize",
+"votes": 3
+},
+"016b1a08": {
+"name": "?FIELDS_DT_RANDOM_CREATURE_ENTRY_POLLINATED@SP@@3PAUcFieldDef@1@A",
+"votes": 70
+},
+"0146eed8": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xefa56200@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xefa56200@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 2
+},
+"01675490": {
+"name": "?gpCanvasClass@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 28
+},
+"0167589c": {
+"name": "?gEmptySymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 48
+},
+"01675474": {
+"name": "sNewFileNameSymbol",
+"votes": 2
+},
+"01675488": {
+"name": "sLoadbangSymbol",
+"votes": 6
+},
+"01675468": {
+"name": "sPauseSymbol",
+"votes": 6
+},
+"01675408": {
+"name": "?gpCanvasMaker@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 2
+},
+"0145460c": {
+"name": "?kAlignment@?$VectorBase@PAVIPerimeterStep@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"014f9174": {
+"name": "__TI1?AVcError@ArgScript@EA@@",
+"votes": 42
+},
+"0153d820": {
+"name": "kSplitCommandsEnum",
+"votes": 1
+},
+"0163703c": {
+"name": "kFX2Pi",
+"votes": 9
+},
+"0140bd40": {
+"name": "kLogGroup",
+"votes": 47
+},
+"015a841c": {
+"name": "?gCellSkyboxLayer@SP@@3VcCellSkyboxDrawLayer@1@A",
+"votes": 1
+},
+"015a8420": {
+"name": "?gCellBackgroundLayer@SP@@3VcCellBackgroundDrawLayer@1@A",
+"votes": 1
+},
+"015a8424": {
+"name": "?gCellMainLayer@SP@@3VcMainDrawLayer@1@A",
+"votes": 1
+},
+"015a8428": {
+"name": "?gCellForegroundLayer@SP@@3VcForegroundDrawLayer@1@A",
+"votes": 1
+},
+"016b3c08": {
+"name": "?gspCellGfx@SP@@3PAUcCellGfx@1@A",
+"votes": 15
+},
+"016755ec": {
+"name": "spBinop1PlusClass",
+"votes": 3
+},
+"016755f0": {
+"name": "spBinop1MinusClass",
+"votes": 3
+},
+"01675574": {
+"name": "binop1_times_class",
+"votes": 3
+},
+"01675590": {
+"name": "spBinop1DivClass",
+"votes": 3
+},
+"0167558c": {
+"name": "spBinop1PowClass",
+"votes": 3
+},
+"016755b8": {
+"name": "spBinop1MaxClass",
+"votes": 3
+},
+"016755a8": {
+"name": "spBinop1MinClass",
+"votes": 3
+},
+"016755b0": {
+"name": "spBinop2EeClass",
+"votes": 3
+},
+"01675584": {
+"name": "spBinop2NeClass",
+"votes": 3
+},
+"016755c8": {
+"name": "spBinop2GtClass",
+"votes": 3
+},
+"01675594": {
+"name": "spBinop2LtClass",
+"votes": 3
+},
+"016755d0": {
+"name": "spBinop2GeClass",
+"votes": 3
+},
+"01675580": {
+"name": "spBinop2LeClass",
+"votes": 3
+},
+"0143ebbc": {
+"name": "?kIID@IStreamSSLSocket@SSL@EA@@2W4InterfaceId@COM@3@B",
+"votes": 1
+},
+"016755e8": {
+"name": "spBinop3BaClass",
+"votes": 3
+},
+"016755e4": {
+"name": "spBinop3LaClass",
+"votes": 3
+},
+"016755c0": {
+"name": "spBinop3BoClass",
+"votes": 3
+},
+"01675598": {
+"name": "spBinop3LoClass",
+"votes": 3
+},
+"016755b4": {
+"name": "spBinop3LsClass",
+"votes": 3
+},
+"016755d8": {
+"name": "spBinop3RsClass",
+"votes": 3
+},
+"016755dc": {
+"name": "spBinop3PcClass",
+"votes": 3
+},
+"016755bc": {
+"name": "spBinop3ModClass",
+"votes": 3
+},
+"016755a0": {
+"name": "spBinop3DivClass",
+"votes": 3
+},
+"016755d4": {
+"name": "spSinClass",
+"votes": 2
+},
+"016755a4": {
+"name": "spCosClass",
+"votes": 2
+},
+"016755cc": {
+"name": "spTanClass",
+"votes": 2
+},
+"0167559c": {
+"name": "spAtanClass",
+"votes": 2
+},
+"01675588": {
+"name": "spAtan2Class",
+"votes": 2
+},
+"016755e0": {
+"name": "spSqrtClass",
+"votes": 2
+},
+"016755c4": {
+"name": "spLogClass",
+"votes": 2
+},
+"016755ac": {
+"name": "spExpClass",
+"votes": 2
+},
+"0167557c": {
+"name": "spAbsClass",
+"votes": 2
+},
+"0166ef0c": {
+"name": "s_trixie",
+"votes": 4
+},
+"0166ef04": {
+"name": "s_shuffler",
+"votes": 2
+},
+"0166ef34": {
+"name": "s_rythm",
+"votes": 2
+},
+"0166ef44": {
+"name": "spTrixieClass",
+"votes": 2
+},
+"01667b7c": {
+"name": "mpThis",
+"votes": 1
+},
+"0143ad9c": {
+"name": "KW_ENTITY",
+"votes": 1
+},
+"0143ad68": {
+"name": "KW_ATTLIST",
+"votes": 1
+},
+"0143ad80": {
+"name": "KW_ELEMENT",
+"votes": 1
+},
+"0143adf4": {
+"name": "KW_NOTATION",
+"votes": 2
+},
+"0143adc8": {
+"name": "KW_IMPLIED",
+"votes": 1
+},
+"0143ae10": {
+"name": "KW_REQUIRED",
+"votes": 1
+},
+"0143ada4": {
+"name": "KW_FIXED",
+"votes": 1
+},
+"0143a0c8": {
+"name": "?kTypeStreamEncoding@StreamEncoding@IO@EA@@2IB",
+"votes": 13
+},
+"0140e1b8": {
+"name": "hex",
+"votes": 1
+},
+"015a6680": {
+"name": "?FIELDS_DT_EAT_DATA@SP@@3PAUcFieldDef@1@A",
+"votes": 50
+},
+"016d8188": {
+"name": "dither",
+"votes": 3
+},
+"016d8178": {
+"name": "dither_switch",
+"votes": 4
+},
+"016d7160": {
+"name": "rg_mask",
+"votes": 4
+},
+"01675860": {
+"name": "spInstanceClass",
+"votes": 2
+},
+"0167580c": {
+"name": "sGuiEmptySymbol",
+"votes": 6
+},
+"01675814": {
+"name": "sHsliderSymbol",
+"votes": 2
+},
+"0167581c": {
+"name": "sHslSymbol",
+"votes": 2
+},
+"01675824": {
+"name": "spSliderClass",
+"votes": 4
+},
+"01675804": {
+"name": "spFunctionClass",
+"votes": 4
+},
+"01675674": {
+"name": "spSwapClass",
+"votes": 4
+},
+"016754a0": {
+"name": "spGfxstubClass",
+"votes": 3
+},
+"016753ec": {
+"name": "sExternLoadSymbol",
+"votes": 2
+},
+"016753f8": {
+"name": "sExternDirectory",
+"votes": 2
+},
+"01675400": {
+"name": "sHelpDirectory",
+"votes": 2
+},
+"016753e8": {
+"name": "?gpObjectMaker@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 2
+},
+"01453e6c": {
+"name": "?kAlignment@?$VectorBase@PAVcEventModifierPrimitive@Audio@SP@@USP_STL_Sound@3@@eastl@@2IB",
+"votes": 2
+},
+"013ffec0": {
+"name": "?value@?$CTStringHash@$0GG@$0GF@$0GF@$0GE@$0GF@$0GE@$0GJ@$0HE@$0GO@$0HF@$0GN@$0HA@$0GB@$0GH@$0GF@$0HD@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@$0A@@Hash@EA@@2IB",
+"votes": 1
+},
+"0143f600": {
+"name": "?kKeyAlignment@?$rbtree@V?$basic_string@_WVallocator@eastl@@@eastl@@U?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@J@2@U?$less@V?$basic_string@_WVallocator@eastl@@@eastl@@@2@Vallocator@2@U?$use_first@U?$pair@$$CBV?$basic_string@_WVallocator@eastl@@@eastl@@J@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 2
+},
+"0143f61c": {
+"name": "kDefaultIniFileSection",
+"votes": 2
+},
+"0143c960": {
+"name": "KW_version",
+"votes": 1
+},
+"0143c968": {
+"name": "KW_encoding",
+"votes": 1
+},
+"0143c974": {
+"name": "KW_standalone",
+"votes": 1
+},
+"0143c980": {
+"name": "KW_yes",
+"votes": 1
+},
+"0143c984": {
+"name": "KW_no",
+"votes": 1
+},
+"0143add0": {
+"name": "KW_INCLUDE",
+"votes": 1
+},
+"0143adc0": {
+"name": "KW_IGNORE",
+"votes": 1
+},
+"013ef1b0": {
+"name": "kOne",
+"votes": 3
+},
+"0154d810": {
+"name": "fontSizeTable",
+"votes": 1
+},
+"0154c6f4": {
+"name": "kAttrNameDisabled",
+"votes": 1
+},
+"013cc50c": {
+"name": "kAttrNameType",
+"votes": 1
+},
+"01436f88": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VWinXHTML@UTFWinExtras@EA@@VWindow@UTFWin@3@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 3
+},
+"0154c700": {
+"name": "kAttrNameValue",
+"votes": 1
+},
+"0154c6f8": {
+"name": "kAttrNameName",
+"votes": 2
+},
+"0141a130": {
+"name": "sIUnknown32TypeInfo",
+"votes": 1
+},
+"01422034": {
+"name": "short_months",
+"votes": 2
+},
+"01410258": {
+"name": "tga_id_length",
+"votes": 2
+},
+"013eb89c": {
+"name": "?kFreeBit@?$slot_vector_entry@UcOccluderInfo@cModelWorld@SP@@@spstl@@2IB",
+"votes": 1
+},
+"016b2e08": {
+"name": "?FIELDS_DT_LEVEL_ENTRY@SP@@3PAUcFieldDef@1@A",
+"votes": 40
+},
+"016b0a80": {
+"name": "?DT_CELL_POPULATION@SP@@3VcTypeDef@1@B",
+"votes": 1
+},
+"01482a78": {
+"name": "?kTilings@SP@@3QBUcEnumParseInfo@ArgScript@EA@@B",
+"votes": 1
+},
+"016b2c50": {
+"name": "?FIELDS_DT_LOOT_TABLE_ENTRY_CELL@SP@@3PAUcFieldDef@1@A",
+"votes": 69
+},
+"016ad4b0": {
+"name": "?DT_CELL@SP@@3VcTypeDef@1@B",
+"votes": 1
+},
+"01490250": {
+"name": "half",
+"votes": 1
+},
+"015b0cb0": {
+"name": "kFXMaxFloat",
+"votes": 1
+},
+"0148f1e8": {
+"name": "kDistributeTypesEnum",
+"votes": 1
+},
+"016a1344": {
+"name": "kGUI_PanelIDs",
+"votes": 1
+},
+"0169e3e8": {
+"name": "?gpCreatureTokenTranslator@SP@@3PAVcCreatureTokenTranslator@1@A",
+"votes": 1
+},
+"016758c4": {
+"name": "?gFloatSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 31
+},
+"01675894": {
+"name": "?gSymbolSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 11
+},
+"016758b4": {
+"name": "?gBangSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 3
+},
+"016758ac": {
+"name": "?gListSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 39
+},
+"016758cc": {
+"name": "?gAnythingSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 3
+},
+"016758bc": {
+"name": "?gHashXSymbol@Eapd@Audio@EA@@3VSymbol@123@A",
+"votes": 13
+},
+"01675840": {
+"name": "spTabwriteClass",
+"votes": 4
+},
+"01675844": {
+"name": "spTabreadClass",
+"votes": 4
+},
+"01675838": {
+"name": "spRandweightedClass",
+"votes": 10
+},
+"01675854": {
+"name": "spRandWeightedSymbol",
+"votes": 2
+},
+"014552dc": {
+"name": "_EC_PRIVATEKEY_it",
+"votes": 3
+},
+"01675834": {
+"name": "spMenuClass",
+"votes": 4
+},
+"01675808": {
+"name": "spToggleClass",
+"votes": 4
+},
+"016757fc": {
+"name": "spPipeClass",
+"votes": 4
+},
+"016757f0": {
+"name": "spTimerClass",
+"votes": 4
+},
+"016757f8": {
+"name": "spLineClass",
+"votes": 6
+},
+"016757f4": {
+"name": "spMetroClass",
+"votes": 5
+},
+"016756c0": {
+"name": "spRandomClass",
+"votes": 2
+},
+"016756c4": {
+"name": "spFloatRandomClass",
+"votes": 3
+},
+"016756fc": {
+"name": "sSystemRandom",
+"votes": 1
+},
+"016756ac": {
+"name": "spPolyClass",
+"votes": 3
+},
+"016756b8": {
+"name": "spMakenoteClass",
+"votes": 3
+},
+"0167569c": {
+"name": "spCputimeClass",
+"votes": 3
+},
+"01675644": {
+"name": "spUntilClass",
+"votes": 3
+},
+"01675520": {
+"name": "spGroupClass",
+"votes": 1
+},
+"0167551c": {
+"name": "?spGroupsizeClass@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 2
+},
+"01675518": {
+"name": "spControlClass",
+"votes": 4
+},
+"01675470": {
+"name": "?gpEditingCanvas@Eapd@Audio@EA@@3PAU_glist@123@A",
+"votes": 1
+},
+"016754e8": {
+"name": "spGuiconnectClass",
+"votes": 4
+},
+"016754e4": {
+"name": "guiconnectlist",
+"votes": 3
+},
+"0166eec4": {
+"name": "s_pixie",
+"votes": 4
+},
+"0166eeb8": {
+"name": "spPixieClass",
+"votes": 2
+},
+"01453514": {
+"name": "_X509_CERT_PAIR_it",
+"votes": 1
+},
+"016f198c": {
+"name": "_gpBIO_new_file",
+"votes": 1
+},
+"016f1990": {
+"name": "_gpBIO_new_fp",
+"votes": 1
+},
+"016f1994": {
+"name": "_gpBIO_s_file",
+"votes": 1
+},
+"01669948": {
+"name": "gpSharedLibraryRegistry",
+"votes": 1
+},
+"01401b3c": {
+"name": "?kAlignment@?$VectorBase@UcStateDependence@SP@@V?$fixed_vector_allocator@$0CE@$07$03$0A@$00@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"01526954": {
+"name": "?kFrameName@FeedEdit@SP@@3PB_WB",
+"votes": 1
+},
+"01522318": {
+"name": "kGroupEditorArenas",
+"votes": 1
+},
+"015b85a0": {
+"name": "?smDataSerializerListcStarMap_ReadWrite@cStarMap@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"015b7fe0": {
+"name": "?smDataSerializerListSpaceTradeRouteManager_ReadWrite@cSpaceTradeRouteManager@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"016b1c38": {
+"name": "?FIELDS_DT_ATTACHMENT_MODEL@SP@@3PAUcFieldDef@1@A",
+"votes": 50
+},
+"016b0c4c": {
+"name": "DT_RANDOM_CREATURE_ENTRY_LOCAL",
+"votes": 2
+},
+"015a78e0": {
+"name": "?FIELDS_DT_RANDOM_CREATURE_TABLE@SP@@3PAUcFieldDef@1@A",
+"votes": 29
+},
+"016b0fb8": {
+"name": "DT_RANDOM_CREATURE_ENTRY_POLLINATED",
+"votes": 2
+},
+"016b10a4": {
+"name": "DT_LEVEL_ENTRY",
+"votes": 2
+},
+"015a7750": {
+"name": "?FIELDS_DT_CELL_WORLD@SP@@3PAUcFieldDef@1@A",
+"votes": 29
+},
+"016b0f3c": {
+"name": "DT_ADVECT_ENTRY",
+"votes": 2
+},
+"016b1440": {
+"name": "?FIELDS_DT_LOOT_TABLE_ENTRY_TABLE@SP@@3PAUcFieldDef@1@A",
+"votes": 60
+},
+"016b1020": {
+"name": "?DT_LOOT_TABLE@SP@@3VcTypeDef@1@B",
+"votes": 2
+},
+"01581cc8": {
+"name": "?smDataSerializerListcEventLogCommManager_ReadWrite@cEventLogCommManager@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"014732f4": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xb987e96c@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xb987e96c@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 2
+},
+"01577530": {
+"name": "?smDataSerializerListcSPMissionTradeRoute_ReadWrite@cSPMissionTradeRoute@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"014701f8": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x88c8fc0c@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x88c8fc0c@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"01573a60": {
+"name": "?smDataSerializerList1@cGamePlant@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01572a18": {
+"name": "?smDataSerializerListSPTribeToTribeMission_ReadWrite@cSPTribeToTribeMission@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"0156c370": {
+"name": "?smDataSerializerListSpeciesRelationships_ReadWrite@cSpeciesRelationshipManager@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01569a10": {
+"name": "?smDataSerializerListGonzagoPhysics_ReadWrite@cGonzagoPhysics@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"0167be28": {
+"name": "?sInstanceIDGenerator@cGameData@SP@@0IA",
+"votes": 1
+},
+"0171c0c0": {
+"name": "?D3D9HLSLTextBuffer@graphics@rw@@3PADA",
+"votes": 6
+},
+"0171a538": {
+"name": "?D3D9VertexShaderEffectDefs@graphics@rw@@3PAUD3D9VertexShaderEffectDefinition@12@A",
+"votes": 2
+},
+"0171bd38": {
+"name": "?D3D9VertexShaderEffectTexCoords@graphics@rw@@3PAEA",
+"votes": 2
+},
+"0171bf38": {
+"name": "?D3D9VertexShaderEffectTexCoordsDimensions@graphics@rw@@3PAEA",
+"votes": 1
+},
+"016f6568": {
+"name": "?m_shader@ActiveState@graphics@rw@@2PBVShader@23@B",
+"votes": 5
+},
+"016f89d0": {
+"name": "?m_d3d9Device@ActiveState@graphics@rw@@2PAUIDirect3DDevice9@@A",
+"votes": 19
+},
+"01718c08": {
+"name": "?D3D9PixelShaderEffectDefs@graphics@rw@@3PAUD3D9PixelShaderEffectDefinition@12@A",
+"votes": 2
+},
+"01718b08": {
+"name": "?D3D9PixelShaderEffectSamplers@graphics@rw@@3PAEA",
+"votes": 3
+},
+"015b17c0": {
+"name": "?FCC_movi@AVIUtils@movie@rw@@2IB",
+"votes": 2
+},
+"015b179c": {
+"name": "?FCC_RIFF@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"015b17a4": {
+"name": "?FCC_LIST@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"015b17ac": {
+"name": "?FCC_avih@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"015b17b4": {
+"name": "?FCC_strh@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"015b17cc": {
+"name": "?FCC_vids@AVIUtils@movie@rw@@2IB",
+"votes": 2
+},
+"015b17d0": {
+"name": "?FCC_auds@AVIUtils@movie@rw@@2IB",
+"votes": 2
+},
+"015b17b8": {
+"name": "?FCC_strf@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"016b3c04": {
+"name": "?gspCellGame@SP@@3PAUcCellGame@1@A",
+"votes": 22
+},
+"01481654": {
+"name": "kRolloverRootPadding",
+"votes": 3
+},
+"01567dc0": {
+"name": "kSPQuarterPi",
+"votes": 1
+},
+"01412c38": {
+"name": "kMousePitchSensitivityNewFactor",
+"votes": 1
+},
+"01675848": {
+"name": "spHashASymbol",
+"votes": 2
+},
+"0167583c": {
+"name": "spTableClass",
+"votes": 8
+},
+"01675828": {
+"name": "spBngClass",
+"votes": 6
+},
+"01675800": {
+"name": "spDelayClass",
+"votes": 6
+},
+"016756b4": {
+"name": "spBagClass",
+"votes": 4
+},
+"016754d0": {
+"name": "copy_binbuf",
+"votes": 1
+},
+"01667a30": {
+"name": "$S23",
+"votes": 7
+},
+"01667a2d": {
+"name": "Sign",
+"votes": 1
+},
+"01667a44": {
+"name": "Digit",
+"votes": 3
+},
+"01667a2c": {
+"name": "LetterX",
+"votes": 1
+},
+"013f1f94": {
+"name": "kSPSkinPaintClearAltToken",
+"votes": 1
+},
+"01636e18": {
+"name": "sGroundCoverConfig",
+"votes": 6
+},
+"0153d638": {
+"name": "sCoverInfo",
+"votes": 2
+},
+"01636c20": {
+"name": "sGroundCoverConfigModCount",
+"votes": 2
+},
+"01523310": {
+"name": "kCSAPhotoGroup",
+"votes": 1
+},
+"0150cbc0": {
+"name": "?sCommandInfos@?A0xf64d442b@SP@@3PAUcGameCommandInfo@cICommandServer@2@A",
+"votes": 2
+},
+"013f490c": {
+"name": "?kAlignment@?$ListBase@V?$AutoRefCount@VResource@ResourceMan@EA@@@COM@EA@@Vallocator@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"016f4df8": {
+"name": "?NullFileDriverInst@filesys@core@rw@@3VNullFileDriver@123@A",
+"votes": 2
+},
+"015a6ab8": {
+"name": "?FIELDS_DT_CELL_GLOBALS@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0b5c": {
+"name": "DT_CELL_GLOBALS",
+"votes": 1
+},
+"016b0d80": {
+"name": "DT_EFFECTMAP",
+"votes": 1
+},
+"015a6748": {
+"name": "?FIELDS_DT_BACKGROUNDMAP@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b104c": {
+"name": "DT_BACKGROUNDMAP",
+"votes": 1
+},
+"016b17b0": {
+"name": "?FIELDS_DT_BACKGROUNDMAP_ENTRY@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad66c": {
+"name": "DT_BACKGROUNDMAP_ENTRY",
+"votes": 1
+},
+"015a63d8": {
+"name": "?FIELDS_DT_LOOK_ALGORITHM@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b1078": {
+"name": "DT_LOOK_ALGORITHM",
+"votes": 1
+},
+"015a68b0": {
+"name": "?FIELDS_DT_LOOK_TABLE@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad3a4": {
+"name": "DT_LOOK_TABLE",
+"votes": 1
+},
+"016b2098": {
+"name": "?FIELDS_DT_ADVECT_ENTRY@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b1828": {
+"name": "?FIELDS_DT_LOCALIZED_STRING@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b116c": {
+"name": "DT_LOCALIZED_STRING",
+"votes": 1
+},
+"016b0ee4": {
+"name": "DT_EAT_DATA",
+"votes": 1
+},
+"016b3128": {
+"name": "?FIELDS_DT_AI_DATA@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0a28": {
+"name": "DT_AI_DATA",
+"votes": 1
+},
+"016ac508": {
+"name": "kSetMaterialRecursively",
+"votes": 5
+},
+"015a55e8": {
+"name": "sProgressBarProperties",
+"votes": 28
+},
+"016ac468": {
+"name": "kProgressBarTextColorReturnTimeEnd",
+"votes": 5
+},
+"016ac458": {
+"name": "kProgressBarTextColorReturnTimeStart",
+"votes": 5
+},
+"016ac448": {
+"name": "kProgressBarTextColorTimeEnd",
+"votes": 5
+},
+"016ac428": {
+"name": "kProgressBarTextColor",
+"votes": 5
+},
+"016ac418": {
+"name": "kProgressBarTextScale",
+"votes": 5
+},
+"016ac408": {
+"name": "kProgressBarTextDeflateTimeEnd",
+"votes": 5
+},
+"016ac3f8": {
+"name": "kProgressBarTextDeflateTimeStart",
+"votes": 5
+},
+"016ac3e8": {
+"name": "kProgressBarTextInflateTimeEnd",
+"votes": 5
+},
+"016ac3d8": {
+"name": "kProgressBarGameLevelWindowColorBlack",
+"votes": 5
+},
+"016ac3b8": {
+"name": "kProgressBarGameLevelWindowColorTime",
+"votes": 5
+},
+"016ac3a8": {
+"name": "kProgressBarGreenSubFillMoveTime",
+"votes": 5
+},
+"016ac398": {
+"name": "kProgressBarGreenSubFillIncreaseSizeTime",
+"votes": 5
+},
+"016ac348": {
+"name": "kProgressBarCursorMoveTime",
+"votes": 5
+},
+"016ac2ac": {
+"name": "kPosseItemInitScaleFrequency",
+"votes": 5
+},
+"015a5524": {
+"name": "sPosseUIProperties",
+"votes": 6
+},
+"016ac29c": {
+"name": "kPosseItemInitScaleTime",
+"votes": 5
+},
+"016ac28c": {
+"name": "kPosseItemInitScaleStartScale",
+"votes": 5
+},
+"016a0dec": {
+"name": "kGalaxyShowDifficultySetting",
+"votes": 5
+},
+"015a2ff8": {
+"name": "sGGEProperties",
+"votes": 20
+},
+"016a0ddc": {
+"name": "kMaxPlanetNameLength",
+"votes": 5
+},
+"016a0db4": {
+"name": "kShowPlaceholder",
+"votes": 5
+},
+"016a0da4": {
+"name": "kNumThemeIcons",
+"votes": 5
+},
+"016a0d94": {
+"name": "kGalaxyPlanetSmallImpostorScale",
+"votes": 5
+},
+"016a0d84": {
+"name": "kGalaxyPlanetLargeImpostorScale",
+"votes": 5
+},
+"016a0d74": {
+"name": "kGalaxyPlanetImpostorRotationRate",
+"votes": 5
+},
+"016a0d64": {
+"name": "kGalaxyCamAngularVelocity",
+"votes": 5
+},
+"016a0d54": {
+"name": "kGalaxyShowStarterWorldSelector",
+"votes": 5
+},
+"016a0d08": {
+"name": "sGameRolloverLayout",
+"votes": 1
+},
+"016a0cf8": {
+"name": "sNewGameFlowLayout",
+"votes": 1
+},
+"016a0a60": {
+"name": "kEventLogFadeTextAlphaWhenModalUI",
+"votes": 5
+},
+"015a2ca8": {
+"name": "sEventLogProperties",
+"votes": 26
+},
+"016a0a50": {
+"name": "kEventLogIconicModeTextDuration",
+"votes": 5
+},
+"016a0a40": {
+"name": "kEventLogActiveGroupTopMargin",
+"votes": 5
+},
+"016a0a30": {
+"name": "kEventLogPermanentGroupTopMargin",
+"votes": 5
+},
+"016a0a20": {
+"name": "kEventLogHistoryRolloverItemIconicShrinkMargin",
+"votes": 5
+},
+"016a0a10": {
+"name": "kEventLogVisible",
+"votes": 5
+},
+"016a0a00": {
+"name": "kEventLogHistoryAlpha",
+"votes": 5
+},
+"016a09f0": {
+"name": "kEventLogHistoryRolloverItemAreaBottomMargin",
+"votes": 5
+},
+"016a09e0": {
+"name": "kEventLogHistoryRolloverItemAreaTopMargin",
+"votes": 5
+},
+"016a09d0": {
+"name": "kEventLogHistoryRolloverAreaWidth",
+"votes": 5
+},
+"016a09c0": {
+"name": "kEventLogHistoryRolloverAreaTopBottomMargin",
+"votes": 5
+},
+"016a09b0": {
+"name": "kEventLogDefaultLogTop",
+"votes": 5
+},
+"016a09a0": {
+"name": "kEventLogItemAnimationTime",
+"votes": 5
+},
+"0157e888": {
+"name": "?smDataSerializerList1@cICBM@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"0157ca50": {
+"name": "?smDataSerializerListtWeaponInfo_ReadWrite@tWeaponInfo@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01579ed8": {
+"name": "?smDataSerializerListSpaceInventory_ReadWrite@cSPSpaceInventory@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01578ba0": {
+"name": "?smDataSerializerListVisiblePlanet_ReadWrite@cVisiblePlanet@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01577008": {
+"name": "?smDataSerializerListcSPMissionScan_ReadWrite@cSPMissionScan@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"0146fbcc": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x301bc86d@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x301bc86d@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"0156fa30": {
+"name": "?smDataSerializerListcCultureSet_ReadWrite@cCultureSet@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01568d40": {
+"name": "?smDataSerializerList1@cGamePlantManager@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"0167df60": {
+"name": "?sDefaultSavedGameFilename@?A0x1a9995f5@SP@@3V?$basic_string@_WVallocator@eastl@@@eastl@@A",
+"votes": 1
+},
+"01565c60": {
+"name": "?smDataSerializerList1@cBundleManager@SP@@2PAUcDataSerializerGeneric@2@A",
+"votes": 1
+},
+"01679034": {
+"name": "kTimestepFlags",
+"votes": 2
+},
+"0141ae54": {
+"name": "?kTypeInfo@?$SerObjectType@VcSPUITooltipWinProc@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 4
+},
+"0164f470": {
+"name": "kTooltipShowDetailTime",
+"votes": 6
+},
+"01548560": {
+"name": "sTooltipProperties",
+"votes": 8
+},
+"0164f440": {
+"name": "kTooltipHoverTime",
+"votes": 6
+},
+"0164f450": {
+"name": "kTooltipFastSwitchTime",
+"votes": 6
+},
+"0164f460": {
+"name": "kTooltipTimeoutTime",
+"votes": 6
+},
+"0164dd90": {
+"name": "kPopupMenuMouseWheelSkip",
+"votes": 5
+},
+"01546030": {
+"name": "sPopupMenuProperties",
+"votes": 6
+},
+"0164dd80": {
+"name": "kPopupMenuScrollButtonTimerMS",
+"votes": 8
+},
+"0164dd70": {
+"name": "kPopupMenuBackgroundWindowExtraHeight",
+"votes": 5
+},
+"015f35e8": {
+"name": "kLoginPropertiesInstance",
+"votes": 1
+},
+"014f7c90": {
+"name": "?m_currentVersion@Device@graphics@rw@@0IB",
+"votes": 2
+},
+"0171243c": {
+"name": "?m_state@Device@graphics@rw@@0W4State@123@A",
+"votes": 2
+},
+"016f658c": {
+"name": "?m_windowHandle@ActiveState@graphics@rw@@2PAUHWND__@@A",
+"votes": 4
+},
+"01712444": {
+"name": "?m_parameters@Device@graphics@rw@@0VParameters@123@A",
+"votes": 14
+},
+"015d0838": {
+"name": "?m_defaultCameraRaster@Device@graphics@rw@@0PAVRaster@23@A",
+"votes": 5
+},
+"015d083c": {
+"name": "?m_defaultZBufferRaster@Device@graphics@rw@@0PAVRaster@23@A",
+"votes": 5
+},
+"016f96a0": {
+"name": "?m_transformType@GlobalState@graphics@rw@@0W4MatrixType@vpu@math@3@A",
+"votes": 1
+},
+"016f91e0": {
+"name": "?m_renderState@GlobalState@graphics@rw@@0PAIA",
+"votes": 110
+},
+"016f9598": {
+"name": "?m_ambient@GlobalState@graphics@rw@@0URwRGBRealTag@@A",
+"votes": 3
+},
+"016f9634": {
+"name": "?rwg_D3D9RenderStateToUpdate@?A0x1ebd7c49@graphics@rw@@3PAIA",
+"votes": 31
+},
+"016fa38c": {
+"name": "?m_renderStateDirty@GlobalState@graphics@rw@@0PAIA",
+"votes": 80
+},
+"016f9528": {
+"name": "?m_softStateDirty@GlobalState@graphics@rw@@0IA",
+"votes": 10
+},
+"016fa380": {
+"name": "?m_transform@GlobalState@graphics@rw@@0PAVMatrix44Affine@vpu@math@3@A",
+"votes": 1
+},
+"016fa4f0": {
+"name": "?m_transformLocalCopy@GlobalState@graphics@rw@@0VMatrix44Affine@vpu@math@3@A",
+"votes": 5
+},
+"016f96a8": {
+"name": "?m_color@GlobalState@graphics@rw@@0URwRGBARealTag@@A",
+"votes": 4
+},
+"016fa4c0": {
+"name": "?rwg_D3D9AllValidRenderState@?A0x1ebd7c49@graphics@rw@@3PAIA",
+"votes": 12
+},
+"016fa4dc": {
+"name": "?rwg_D3D9AllValidTextureStageState@?A0x1ebd7c49@graphics@rw@@3IA",
+"votes": 4
+},
+"016fa3a8": {
+"name": "?m_rasterStageDirty@GlobalState@graphics@rw@@0IA",
+"votes": 13
+},
+"016f9650": {
+"name": "?m_raster@GlobalState@graphics@rw@@0PAPBVRaster@23@A",
+"votes": 5
+},
+"016fa384": {
+"name": "?m_paletteDirty@GlobalState@graphics@rw@@0IA",
+"votes": 9
+},
+"016f96a4": {
+"name": "?m_palette@GlobalState@graphics@rw@@0PBVPalette@23@B",
+"votes": 4
+},
+"016f95a8": {
+"name": "?rwg_D3D9TextureStageStateToUpdate@?A0x1ebd7c49@graphics@rw@@3PAIA",
+"votes": 7
+},
+"016f96b8": {
+"name": "?m_textureStageState@GlobalState@graphics@rw@@0PAY0CB@IA",
+"votes": 37
+},
+"016f9f80": {
+"name": "?m_textureStageStateDirty@GlobalState@graphics@rw@@0PAIA",
+"votes": 49
+},
+"016fa4e0": {
+"name": "?rwg_D3D9AllValidSamplerState@?A0x1ebd7c49@graphics@rw@@3IA",
+"votes": 2
+},
+"016f95f0": {
+"name": "?rwg_D3D9SamplerStateToUpdate@?A0x1ebd7c49@graphics@rw@@3PAIA",
+"votes": 6
+},
+"016f9fc8": {
+"name": "?m_samplerState@GlobalState@graphics@rw@@0PAY0O@IA",
+"votes": 15
+},
+"016f9530": {
+"name": "?m_samplerStateDirty@GlobalState@graphics@rw@@0PAIA",
+"votes": 44
+},
+"016f9594": {
+"name": "?m_fogStartDensity@GlobalState@graphics@rw@@0MA",
+"votes": 1
+},
+"016f9f7c": {
+"name": "?m_fogType@GlobalState@graphics@rw@@0W4FogType@23@A",
+"votes": 1
+},
+"016fa388": {
+"name": "?m_fogEnd@GlobalState@graphics@rw@@0MA",
+"votes": 1
+},
+"016f9694": {
+"name": "?m_fogColor@GlobalState@graphics@rw@@0URwRGBRealTag@@A",
+"votes": 3
+},
+"014e626c": {
+"name": "_DHparams_it",
+"votes": 1
+},
+"016f4adc": {
+"name": "$S13",
+"votes": 3
+},
+"016f49a4": {
+"name": "nullArena",
+"votes": 9
+},
+"016e8070": {
+"name": "_sndmix",
+"votes": 3
+},
+"016e7bf0": {
+"name": "?sndgs@@3USNDGLOBALSTATE@@A",
+"votes": 3
+},
+"014ce534": {
+"name": "HELPER_MPEG_AUDIO_LAYER_LATENCY",
+"votes": 1
+},
+"015bffe0": {
+"name": "?sButterworthPolynomials@Butterworth@core@audio@rw@@0PAY04MA",
+"votes": 1
+},
+"015bfee0": {
+"name": "?sndcents@@3PAEA",
+"votes": 1
+},
+"014a7f28": {
+"name": "MPEG_AUDIO_LAYER_LATENCY",
+"votes": 1
+},
+"013f9850": {
+"name": "?kAlignment@?$basic_string@DV?$fixed_vector_allocator@$00$0IA@$00$0A@$00@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"015b751c": {
+"name": "?mTargetPlanetIndex@cAttackRequestConversationData@SP@@2HA",
+"votes": 1
+},
+"016decac": {
+"name": "?mAttackRequestPlanets@cAttackRequestConversationData@SP@@0V?$vector@V?$AutoRefCount@VcPlanetRecord@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@A",
+"votes": 1
+},
+"015b7510": {
+"name": "?gSpaceCombatTuning@SP@@3VcSPSpaceCombatTuning@1@A",
+"votes": 5
+},
+"01495840": {
+"name": "?kIID@cWalkAroundInputStrategy@SP@@2W4InterfaceId@COM@EA@@B",
+"votes": 1
+},
+"016dbebc": {
+"name": "kToolHealthUpgrade10",
+"votes": 1
+},
+"016dbeb0": {
+"name": "kToolHealthUpgrade9",
+"votes": 1
+},
+"016dbea4": {
+"name": "kToolHealthUpgrade8",
+"votes": 1
+},
+"016dbe98": {
+"name": "kToolHealthUpgrade7",
+"votes": 1
+},
+"016dbe8c": {
+"name": "kToolHealthUpgrade6",
+"votes": 1
+},
+"016dbe80": {
+"name": "kToolHealthUpgrade5",
+"votes": 1
+},
+"016dbe74": {
+"name": "kToolHealthUpgrade4",
+"votes": 1
+},
+"016dbe68": {
+"name": "kToolHealthUpgrade3",
+"votes": 1
+},
+"016dbe5c": {
+"name": "kToolHealthUpgrade2",
+"votes": 1
+},
+"016dbe50": {
+"name": "kToolHealthUpgrade1",
+"votes": 1
+},
+"01494258": {
+"name": "?kIID@cSPUISpaceTrading@SP@@2W4InterfaceId@COM@EA@@B",
+"votes": 1
+},
+"01491d48": {
+"name": "?VP6_CoeffToBand@@3QBHB",
+"votes": 12
+},
+"0148600c": {
+"name": "?kAlignment@?$ListBase@UcResourceHandle@SP@@Vallocator@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"013f6a20": {
+"name": "kGlobalMultiplier",
+"votes": 1
+},
+"01483bd0": {
+"name": "kLevelSize",
+"votes": 1
+},
+"014851d0": {
+"name": "?kClassId@CellSaveGame@SP@@2W4ClassId@COM@EA@@B",
+"votes": 1
+},
+"01479b2c": {
+"name": "?kAlignment@?$ListBase@V?$AutoRefCount@VIWindow@UTFWin@EA@@@EA@@Vallocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"0157a9d0": {
+"name": "kSPColorRed",
+"votes": 1
+},
+"01694c54": {
+"name": "?sProperties@cSolarSystem@SP@@0V?$vector@V?$AutoRefCount@VcPropertyList@SP@@@EA@@Usp_vector_allocator@eastl@@@eastl@@A",
+"votes": 4
+},
+"01675850": {
+"name": "spTabread4Class",
+"votes": 3
+},
+"01675830": {
+"name": "?gpVoutletClass@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 7
+},
+"016756b0": {
+"name": "spStripnoteClass",
+"votes": 2
+},
+"01675698": {
+"name": "spListMessageClass",
+"votes": 2
+},
+"0167568c": {
+"name": "?list_trim_class@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 4
+},
+"01675688": {
+"name": "?list_split_class@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 4
+},
+"01675694": {
+"name": "?list_prepend_class@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 4
+},
+"01675684": {
+"name": "?list_append_class@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 4
+},
+"01675690": {
+"name": "?spAlistClass@Eapd@Audio@EA@@3PAU_class@123@A",
+"votes": 4
+},
+"01455218": {
+"name": "?Members@hkClassEnum@@2QBUhkInternalClassMember@@B",
+"votes": 2
+},
+"01675634": {
+"name": "spValueClass",
+"votes": 3
+},
+"01675680": {
+"name": "spVcommonClass",
+"votes": 3
+},
+"01675650": {
+"name": "spChangeClass",
+"votes": 4
+},
+"01675628": {
+"name": "spMakefilenameClass",
+"votes": 4
+},
+"01675658": {
+"name": "spSwitchClass",
+"votes": 1
+},
+"0167567c": {
+"name": "spGateClass",
+"votes": 5
+},
+"01675670": {
+"name": "spSpigotClass",
+"votes": 6
+},
+"0167563c": {
+"name": "spUnpackClass",
+"votes": 2
+},
+"01675668": {
+"name": "spRouteClass",
+"votes": 2
+},
+"01675648": {
+"name": "spReceiveClass",
+"votes": 7
+},
+"01675654": {
+"name": "spSendClass",
+"votes": 6
+},
+"014335c4": {
+"name": "_DSAPublicKey_it",
+"votes": 1
+},
+"0167549c": {
+"name": "spSavepanelClass",
+"votes": 3
+},
+"01675498": {
+"name": "spOpenpanelClass",
+"votes": 3
+},
+"01675494": {
+"name": "gfxstub_list",
+"votes": 3
+},
+"0166eeec": {
+"name": "spSendGameClass",
+"votes": 1
+},
+"0166ee90": {
+"name": "s_mixer",
+"votes": 4
+},
+"0166eea0": {
+"name": "spMixerClass",
+"votes": 2
+},
+"01433544": {
+"name": "?Members@hkConvexVerticesShape@@2QBUhkInternalClassMember@@B",
+"votes": 2
+},
+"01445ac4": {
+"name": "?kIID@TreeNode@UTFWinControls@EA@@2W4InterfaceId@COM@3@B",
+"votes": 2
+},
+"01444e04": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VWinSpinner@UTFWinControls@EA@@VWindow@UTFWin@3@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 1
+},
+"01444418": {
+"name": "?kTypeInfo@?$SerObjectType@VRotateEffect@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01443e1c": {
+"name": "?kTypeInfo@?$SerObjectType@VModulateEffect@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 2
+},
+"01443680": {
+"name": "?kTypeInfo@?$SerObjectType@VProportionalLayout@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 9
+},
+"01443618": {
+"name": "?kPropTable@ProportionalLayout@UTFWinControls@EA@@1QBUSerPropertyInfo@UTFWin@3@B",
+"votes": 1
+},
+"014435b8": {
+"name": "k_min_scale",
+"votes": 1
+},
+"0144355c": {
+"name": "?kTypeInfo@?$SerObjectType@VInflateEffect@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"0144247c": {
+"name": "?kTypeInfo@?$SerObjectType@VFrameDrawable@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 4
+},
+"0144212c": {
+"name": "?kTypeInfo@?$SerNoRefCountMarshaller@VIWindow@UTFWin@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"0154f514": {
+"name": "?sQuality@cDropShadowDescriptor@UTFWin@EA@@0PAW4eQuality@123@A",
+"votes": 4
+},
+"0140d97c": {
+"name": "kPlazaRadius",
+"votes": 2
+},
+"014415bc": {
+"name": "?kShadowedType@ComboBoxValueListMarshaller@UTFWinControls@EA@@2GB",
+"votes": 1
+},
+"01440f2c": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VWinButton@UTFWinControls@EA@@VWindow@UTFWin@3@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 2
+},
+"0144026c": {
+"name": "?kIID@IAnimationCurve@UTFWin@EA@@2W4InterfaceId@COM@3@B",
+"votes": 1
+},
+"0166aa74": {
+"name": "spManagerForDial",
+"votes": 2
+},
+"0143f5f8": {
+"name": "kDefaultCacheDirectoryName",
+"votes": 4
+},
+"01669530": {
+"name": "?crc32Table@Hash@EA@@3PAIA",
+"votes": 1
+},
+"01668ea0": {
+"name": "gTraceDialogEnabled",
+"votes": 1
+},
+"0143ad88": {
+"name": "KW_EMPTY",
+"votes": 1
+},
+"0143ad64": {
+"name": "KW_ANY",
+"votes": 1
+},
+"0143add8": {
+"name": "KW_NDATA",
+"votes": 1
+},
+"0143a264": {
+"name": "kTokenStreamVersion",
+"votes": 1
+},
+"0143a1f8": {
+"name": "sIndentString",
+"votes": 7
+},
+"01434ac8": {
+"name": "StdSIDStrings",
+"votes": 1
+},
+"01430610": {
+"name": "gThaiCharPairingTable",
+"votes": 2
+},
+"01430218": {
+"name": "gHebrewClusterTable",
+"votes": 2
+},
+"0143021c": {
+"name": "gLaoCharAdjustment",
+"votes": 2
+},
+"0142f990": {
+"name": "gWeakStateActionTable",
+"votes": 2
+},
+"0142f670": {
+"name": "gWeakStateTable",
+"votes": 1
+},
+"0142f228": {
+"name": "gLineBreakCategoryTable256",
+"votes": 1
+},
+"0142ece0": {
+"name": "base_dist",
+"votes": 1
+},
+"0142f028": {
+"name": "gBidiClassTable256",
+"votes": 1
+},
+"0142e968": {
+"name": "__dist_code",
+"votes": 1
+},
+"01549518": {
+"name": "?propertyTable@Text@EA@@3PAU?$IStaticDefinition@$$CBDW4TextStylePropertyID@Text@EA@@@Lexer@12@A",
+"votes": 1
+},
+"015495f0": {
+"name": "fontStyleTable",
+"votes": 2
+},
+"01549628": {
+"name": "fontVariantTable",
+"votes": 2
+},
+"01549638": {
+"name": "fontPitchTable",
+"votes": 1
+},
+"015496d8": {
+"name": "fontSmoothTable",
+"votes": 1
+},
+"01549760": {
+"name": "emphasisStyleTable",
+"votes": 1
+},
+"01549788": {
+"name": "emphasisPositionTable",
+"votes": 1
+},
+"01549648": {
+"name": "textDecorationTable",
+"votes": 2
+},
+"01549718": {
+"name": "textJustifyTable",
+"votes": 1
+},
+"01549680": {
+"name": "hAlignmentTable",
+"votes": 1
+},
+"015496a0": {
+"name": "wrapOptionTable",
+"votes": 1
+},
+"01549748": {
+"name": "textOverflowTable",
+"votes": 1
+},
+"01549798": {
+"name": "digitSubstitutionTable",
+"votes": 1
+},
+"015497c0": {
+"name": "passwordModeTable",
+"votes": 1
+},
+"014281b8": {
+"name": "pTrueTypeFont",
+"votes": 1
+},
+"016514d8": {
+"name": "gpFontServer",
+"votes": 3
+},
+"016514dc": {
+"name": "gpFontServerAllocated",
+"votes": 2
+},
+"016514ec": {
+"name": "?gpCoreAllocator@Text@EA@@3PAVICoreAllocator@Allocator@2@A",
+"votes": 3
+},
+"01423c08": {
+"name": "_png_PLTE",
+"votes": 1
+},
+"01421f1c": {
+"name": "png_digit",
+"votes": 2
+},
+"015446c8": {
+"name": "sImageToAtlasMap",
+"votes": 1
+},
+"014169c4": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VcSPUIBehaviorTimeFunctionSmoothRamp@@VcSPUIBehaviorTimeFunctionRamp@@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 1
+},
+"014168d8": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VcSPUIBehaviorWinBoolStateEvent@@VcSPUIBehaviorWinEventBase@@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 1
+},
+"014168b0": {
+"name": "?kCustomPropInfo@?$SerBaseAdapter@VcSPUIBehaviorWinEventBase@@VcSPUIBehaviorEventBase@@@UTFWin@EA@@2USerCustomPropInfo@23@B",
+"votes": 1
+},
+"01541f8c": {
+"name": "sIMETextStyle",
+"votes": 5
+},
+"0153f1c8": {
+"name": "kSplitModelKernelTypeCommands",
+"votes": 1
+},
+"0153d7c8": {
+"name": "kModelSplitterTypeCommands",
+"votes": 1
+},
+"0153d7e8": {
+"name": "kModelSplitterFuzzyModeCommands",
+"votes": 1
+},
+"0140e2cc": {
+"name": "kRTTDumpCheatName",
+"votes": 2
+},
+"016f89c8": {
+"name": "?m_d3d9@ActiveState@graphics@rw@@2PAUIDirect3D9@@A",
+"votes": 4
+},
+"0152ee58": {
+"name": "kPropertyTypeEnum",
+"votes": 1
+},
+"01529058": {
+"name": "kScrollbarLayoutKey",
+"votes": 1
+},
+"013fb06c": {
+"name": "?kAlignment@?$VectorBase@U?$pair@IV?$basic_string@DVallocator@eastl@@@eastl@@@eastl@@Vallocator@2@@eastl@@2IB",
+"votes": 1
+},
+"014859e0": {
+"name": "?kAlignment@?$VectorBase@UcLayerInfo@cLayerGroup@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"013f90e0": {
+"name": "?kKeyAlignment@?$rbtree@V?$AutoRefCount@VcSPEditorBlock@SP@@@EA@@U?$pair@$$CBV?$AutoRefCount@VcSPEditorBlock@SP@@@EA@@V?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@U?$less@V?$AutoRefCount@VcSPEditorBlock@SP@@@EA@@@4@Vallocator@4@U?$use_first@U?$pair@$$CBV?$AutoRefCount@VcSPEditorBlock@SP@@@EA@@V?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@@4@$00$00@eastl@@2IB",
+"votes": 2
+},
+"015d97ac": {
+"name": "kCreatureEditorModelGroup",
+"votes": 1
+},
+"015d9760": {
+"name": "kFloraEditorModelGroup",
+"votes": 1
+},
+"013f0244": {
+"name": "?kIndentSpacesDefault@XmlTextWriter@XML@EA@@2IB",
+"votes": 4
+},
+"016f85a8": {
+"name": "?m_primitiveType@ActiveState@graphics@rw@@2W4PrimitiveType@23@A",
+"votes": 1
+},
+"016f8af8": {
+"name": "?m_softStateDelta@ActiveState@graphics@rw@@2IA",
+"votes": 4
+},
+"016f89d8": {
+"name": "?m_renderStateDelta@ActiveState@graphics@rw@@2PAIA",
+"votes": 31
+},
+"016f8b00": {
+"name": "?m_rasterDelta@ActiveState@graphics@rw@@2IA",
+"votes": 5
+},
+"016f85b0": {
+"name": "?m_paletteDelta@ActiveState@graphics@rw@@2IA",
+"votes": 6
+},
+"016f8b58": {
+"name": "?m_textureStageStateDelta@ActiveState@graphics@rw@@2PAIA",
+"votes": 4
+},
+"016f8cb0": {
+"name": "?m_samplerStateDelta@ActiveState@graphics@rw@@2PAIA",
+"votes": 4
+},
+"016f9110": {
+"name": "?m_softStateUpdated@ActiveState@graphics@rw@@2IA",
+"votes": 32
+},
+"01409b1c": {
+"name": "sDefaultCStr",
+"votes": 1
+},
+"015fcc4c": {
+"name": "sWindowManager",
+"votes": 1
+},
+"015fd8a8": {
+"name": "sPropertyManager",
+"votes": 1
+},
+"015fd8cc": {
+"name": "sModelManager",
+"votes": 1
+},
+"013f7f28": {
+"name": "kExpansionPackButtonSpacing",
+"votes": 1
+},
+"015fd91c": {
+"name": "?sAppPreferences@SP@@3PAVcPropertyList@1@A",
+"votes": 16
+},
+"015fd8e8": {
+"name": "sEffectsManager",
+"votes": 1
+},
+"013f6a98": {
+"name": "?kAlignment@?$VectorBase@UcFilterDesc@Swarm@EA@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"015da960": {
+"name": "sLegalParts",
+"votes": 1
+},
+"015da884": {
+"name": "sLegalPaints",
+"votes": 1
+},
+"015da880": {
+"name": "kGroupEditorPaints",
+"votes": 2
+},
+"014f6450": {
+"name": "rw_ArenaFileHeader",
+"votes": 1
+},
+"01634100": {
+"name": "kSH_Y_00",
+"votes": 2
+},
+"0163414c": {
+"name": "kSH_Y_1x",
+"votes": 2
+},
+"016340a4": {
+"name": "kSH_Y_2_2",
+"votes": 2
+},
+"01634088": {
+"name": "kSH_Y_2_1",
+"votes": 2
+},
+"01634058": {
+"name": "kSH_Y_20",
+"votes": 2
+},
+"01634138": {
+"name": "kSH_Y_21",
+"votes": 2
+},
+"0163406c": {
+"name": "kSH_Y_22",
+"votes": 2
+},
+"01634050": {
+"name": "kSH_Y_3_3",
+"votes": 2
+},
+"016340c4": {
+"name": "kSH_Y_3_2",
+"votes": 2
+},
+"016340f4": {
+"name": "kSH_Y_3_1",
+"votes": 2
+},
+"01634118": {
+"name": "kSH_Y_30",
+"votes": 2
+},
+"01634060": {
+"name": "kSH_Y_31",
+"votes": 2
+},
+"0163416c": {
+"name": "kSH_Y_32",
+"votes": 2
+},
+"016340f0": {
+"name": "kSH_Y_33",
+"votes": 2
+},
+"0163408c": {
+"name": "kSH_Y_4_4",
+"votes": 2
+},
+"01634128": {
+"name": "kSH_Y_4_3",
+"votes": 2
+},
+"016341e4": {
+"name": "kSH_Y_4_2",
+"votes": 2
+},
+"01634070": {
+"name": "kSH_Y_4_1",
+"votes": 2
+},
+"0163400c": {
+"name": "kSH_Y_40",
+"votes": 2
+},
+"016340b8": {
+"name": "kSH_Y_41",
+"votes": 2
+},
+"016341f0": {
+"name": "kSH_Y_42",
+"votes": 2
+},
+"0163412c": {
+"name": "kSH_Y_43",
+"votes": 2
+},
+"01634110": {
+"name": "kSH_Y_44",
+"votes": 2
+},
+"014f64ac": {
+"name": "?RWHASH32_INIT@rw@@3IB",
+"votes": 1
+},
+"01712480": {
+"name": "?rwg_RasterCameraObj@?A0x18a9c682@graphics@rw@@3PAVuint128_t@3@A",
+"votes": 1
+},
+"017124a0": {
+"name": "?rwg_RasterZBufferObj@?A0x18a9c682@graphics@rw@@3PAVuint128_t@3@A",
+"votes": 1
+},
+"016f8b9c": {
+"name": "?m_presentParams@ActiveState@graphics@rw@@2U_D3DPRESENT_PARAMETERS_@@A",
+"votes": 20
+},
+"016f9128": {
+"name": "?m_timeSinceStart@ActiveState@graphics@rw@@2_JA",
+"votes": 1
+},
+"0143e65c": {
+"name": "kTempPathPrefix",
+"votes": 3
+},
+"01432238": {
+"name": "FntAnglePoint",
+"votes": 1
+},
+"014322d8": {
+"name": "FntAngleDistance",
+"votes": 1
+},
+"01667b68": {
+"name": "gpDasmX86_cleanup",
+"votes": 1
+},
+"01668e9c": {
+"name": "gTraceHelperTable",
+"votes": 4
+},
+"0166aaa8": {
+"name": "?spSSLManager@SSLManager@SSL@EA@@2PAV123@A",
+"votes": 12
+},
+"01419fb0": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIUSymbol@MapFileMSVC@Callstack@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIUSymbol@MapFileMSVC@Callstack@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"016754a4": {
+"name": "canvas_last_glist",
+"votes": 1
+},
+"016754c8": {
+"name": "canvas_last_glist_x",
+"votes": 1
+},
+"016754cc": {
+"name": "canvas_last_glist_y",
+"votes": 1
+},
+"01675578": {
+"name": "spClipClass",
+"votes": 1
+},
+"016514cc": {
+"name": "?gpServer@Messaging@EA@@3PAVServer@12@A",
+"votes": 1
+},
+"013eb608": {
+"name": "?kAlignment@?$VectorBase@UcActionMessage@cAppStateManager@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 9
+},
+"016e0d08": {
+"name": "?gpSpaceTokenTranslator@SP@@3PAVcSpaceTokenTranslator@1@A",
+"votes": 5
+},
+"01694c1c": {
+"name": "kHitSphereModelGroup",
+"votes": 1
+},
+"01579eac": {
+"name": "kGasGiantRadius",
+"votes": 1
+},
+"01579ea8": {
+"name": "kRockyRadius",
+"votes": 1
+},
+"013ebbd0": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x654a2f3c@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x654a2f3c@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"015fd928": {
+"name": "?sTestSystem@SP@@3PAVcTestSystem@1@A",
+"votes": 1
+},
+"01583f5c": {
+"name": "sTribeFightSlotsPool",
+"votes": 2
+},
+"0147e4d8": {
+"name": "kGUI_PanelButtonIDs",
+"votes": 2
+},
+"015a7b90": {
+"name": "SMOOTHING_RADIUS_INV",
+"votes": 1
+},
+"01581208": {
+"name": "?gTribeTuningData@SP@@3VcTribeTuningData@1@A",
+"votes": 1
+},
+"013ebbd4": {
+"name": "?kKeyAlignment@?$rbtree@W4eCreatureSchedulerVerb@SP@@U?$pair@$$CBW4eCreatureSchedulerVerb@SP@@UcActivity@cCreatureScheduler@2@@eastl@@U?$less@W4eCreatureSchedulerVerb@SP@@@4@Vallocator@4@U?$use_first@U?$pair@$$CBW4eCreatureSchedulerVerb@SP@@UcActivity@cCreatureScheduler@2@@eastl@@@4@$00$0A@@eastl@@2IB",
+"votes": 2
+},
+"015fd8d0": {
+"name": "sLightingManager",
+"votes": 1
+},
+"016778dc": {
+"name": "?sRandom@Swarm@EA@@3VRandomLinearCongruential@Random@2@A",
+"votes": 4
+},
+"016f65a0": {
+"name": "?m_vertexDescriptor@ActiveState@graphics@rw@@2PBVVertexDescriptor@23@B",
+"votes": 7
+},
+"016c9e78": {
+"name": "?mMultipleStreamsVertexDesc@cTerrainSphere@SP@@1PAVVertexDescriptor@graphics@rw@@A",
+"votes": 1
+},
+"015d0358": {
+"name": "?mStopwatchFrequency@timer@core@rw@@3_KA",
+"votes": 3
+},
+"015d0360": {
+"name": "?mCPUFrequency@timer@core@rw@@3_KA",
+"votes": 1
+},
+"016dda8c": {
+"name": "?gspBackgroundSimManager@SP@@3PAVcSPBackgroundSimManager@1@A",
+"votes": 8
+},
+"015b9420": {
+"name": "kUnscannableSpeciesKey",
+"votes": 3
+},
+"016f85c8": {
+"name": "?m_renderStateShadow@ActiveState@graphics@rw@@2PAIA",
+"votes": 5
+},
+"016f5c58": {
+"name": "?m_rasterShadow@ActiveState@graphics@rw@@2PAPBVRaster@23@A",
+"votes": 20
+},
+"016f5ca0": {
+"name": "?m_textureStageStateShadow@ActiveState@graphics@rw@@2PAY0CB@IA",
+"votes": 3
+},
+"016f8d08": {
+"name": "?m_samplerStateShadow@ActiveState@graphics@rw@@2PAY0O@IA",
+"votes": 1
+},
+"016f6564": {
+"name": "?m_vertexShader@ActiveState@graphics@rw@@2PBXB",
+"votes": 2
+},
+"016f85ac": {
+"name": "?m_transform@ActiveState@graphics@rw@@2PAVMatrix44Affine@vpu@math@3@A",
+"votes": 5
+},
+"016f6590": {
+"name": "?m_color@ActiveState@graphics@rw@@2URwRGBARealTag@@A",
+"votes": 12
+},
+"016f5c40": {
+"name": "?m_ambient@ActiveState@graphics@rw@@2URwRGBARealTag@@A",
+"votes": 9
+},
+"016f90c4": {
+"name": "?m_numLights@ActiveState@graphics@rw@@2HA",
+"votes": 3
+},
+"016f656c": {
+"name": "?m_light@ActiveState@graphics@rw@@2PAPBVLight@23@A",
+"votes": 10
+},
+"016f9130": {
+"name": "?m_paletteShadow@ActiveState@graphics@rw@@2PBVPalette@23@B",
+"votes": 6
+},
+"016f89cc": {
+"name": "?m_pixelShader@ActiveState@graphics@rw@@2PBXB",
+"votes": 2
+},
+"0171e744": {
+"name": "$S1",
+"votes": 3
+},
+"0171e73c": {
+"name": "sharedData",
+"votes": 1
+},
+"015fd894": {
+"name": "gpManager",
+"votes": 1
+},
+"0164cf5c": {
+"name": "spLayoutManager",
+"votes": 4
+},
+"015fd8ac": {
+"name": "sAppSystem",
+"votes": 1
+},
+"013fe288": {
+"name": "kAnimButtonMap",
+"votes": 3
+},
+"013fe2e8": {
+"name": "kAnimPanelIconMap",
+"votes": 2
+},
+"013fe2f8": {
+"name": "kAnimPanelIconShadowMap",
+"votes": 2
+},
+"015d0c0c": {
+"name": "sAssetBrowser",
+"votes": 1
+},
+"015d0c10": {
+"name": "sSporeGuide",
+"votes": 1
+},
+"01632bf0": {
+"name": "sShaderDataStackTop",
+"votes": 2
+},
+"016312f0": {
+"name": "sShaderDataStack",
+"votes": 2
+},
+"016f65a8": {
+"name": "?m_shaderData@ActiveState@graphics@rw@@2PAPBXA",
+"votes": 3
+},
+"0166b18c": {
+"name": "spManager",
+"votes": 1
+},
+"0152c864": {
+"name": "sGroupNameMap",
+"votes": 1
+},
+"0142fd28": {
+"name": "gNeutralStateActionTable",
+"votes": 3
+},
+"0142fcb0": {
+"name": "gNeutralStateTable",
+"votes": 1
+},
+"0154bbc8": {
+"name": "?kOTFTableTypeNames@Text@EA@@3PAPBDA",
+"votes": 1
+},
+"01669934": {
+"name": "gOSGlobalRefs",
+"votes": 2
+},
+"01669930": {
+"name": "gpOSGlobalManager",
+"votes": 8
+},
+"0143ea68": {
+"name": "kStringNull8",
+"votes": 1
+},
+"01475dbc": {
+"name": "?kIID@cUIBanningContent@SP@@2W4InterfaceId@COM@EA@@B",
+"votes": 2
+},
+"01675450": {
+"name": "spInletClass",
+"votes": 6
+},
+"01675458": {
+"name": "spFloatinletClass",
+"votes": 2
+},
+"01675454": {
+"name": "spSymbolinletClass",
+"votes": 2
+},
+"01675678": {
+"name": "spPdfloatClass",
+"votes": 5
+},
+"01675640": {
+"name": "spPdsymbolClass",
+"votes": 4
+},
+"01675664": {
+"name": "spBangClass",
+"votes": 7
+},
+"01414950": {
+"name": "?Members@hkStorageMeshShape@@2QBUhkInternalClassMember@@B",
+"votes": 1
+},
+"01675630": {
+"name": "spForwardClass",
+"votes": 6
+},
+"01675638": {
+"name": "spTriggerClass",
+"votes": 6
+},
+"016756a8": {
+"name": "spLoadbangClass",
+"votes": 2
+},
+"0145513c": {
+"name": "_PKCS7_ATTR_VERIFY_it",
+"votes": 1
+},
+"016756a0": {
+"name": "spSerialClass",
+"votes": 2
+},
+"0157c3a0": {
+"name": "kHutDamageHi",
+"votes": 2
+},
+"0157c39c": {
+"name": "kHutDamageMd",
+"votes": 2
+},
+"0157c398": {
+"name": "kHutDamageLo",
+"votes": 2
+},
+"01581f30": {
+"name": "sPersonalityTuning",
+"votes": 3
+},
+"01483c14": {
+"name": "kCubeRootOfTen",
+"votes": 4
+},
+"015a8bfc": {
+"name": "kSaveDialogLayoutKey",
+"votes": 1
+},
+"015a8c08": {
+"name": "kThumbnailLayoutKey",
+"votes": 1
+},
+"016dbe14": {
+"name": "kToolEnergyUpgrade10",
+"votes": 1
+},
+"016dbe08": {
+"name": "kToolEnergyUpgrade9",
+"votes": 1
+},
+"016dbdfc": {
+"name": "kToolEnergyUpgrade8",
+"votes": 1
+},
+"016dbdf0": {
+"name": "kToolEnergyUpgrade7",
+"votes": 1
+},
+"016dbde4": {
+"name": "kToolEnergyUpgrade6",
+"votes": 1
+},
+"016dbdd8": {
+"name": "kToolEnergyUpgrade5",
+"votes": 1
+},
+"016dbdcc": {
+"name": "kToolEnergyUpgrade4",
+"votes": 1
+},
+"016dbdc0": {
+"name": "kToolEnergyUpgrade3",
+"votes": 1
+},
+"016dbdb4": {
+"name": "kToolEnergyUpgrade2",
+"votes": 1
+},
+"016dbda8": {
+"name": "kToolEnergyUpgrade1",
+"votes": 1
+},
+"016f8b50": {
+"name": "?m_transformType@ActiveState@graphics@rw@@2W4MatrixType@vpu@math@3@A",
+"votes": 1
+},
+"016f9120": {
+"name": "?m_inverseTransform@ActiveState@graphics@rw@@2PBVMatrix44Affine@vpu@math@3@B",
+"votes": 1
+},
+"016f8cf4": {
+"name": "?m_transposedTransform@ActiveState@graphics@rw@@2PBVMatrix44@vpu@math@3@B",
+"votes": 1
+},
+"016f9114": {
+"name": "?m_inverseNormalizedTransform@ActiveState@graphics@rw@@2PBVMatrix44Affine@vpu@math@3@B",
+"votes": 1
+},
+"016f89f8": {
+"name": "?m_shaderDataDirty@ActiveState@graphics@rw@@2PAIA",
+"votes": 2
+},
+"016f89c4": {
+"name": "?m_colorIsWhite@ActiveState@graphics@rw@@2IA",
+"votes": 2
+},
+"016f89d4": {
+"name": "?m_ambientIsBlack@ActiveState@graphics@rw@@2IA",
+"votes": 2
+},
+"016f85b4": {
+"name": "?m_UVMapping@ActiveState@graphics@rw@@2PAEA",
+"votes": 5
+},
+"016f90c0": {
+"name": "?m_fogType@ActiveState@graphics@rw@@2W4FogType@23@A",
+"votes": 1
+},
+"016f9168": {
+"name": "?m_fogColor@ActiveState@graphics@rw@@2URwRGBRealTag@@A",
+"votes": 3
+},
+"016f5c54": {
+"name": "?m_fogStartDensity@ActiveState@graphics@rw@@2MA",
+"votes": 1
+},
+"016f8d00": {
+"name": "?m_fogEnd@ActiveState@graphics@rw@@2MA",
+"votes": 1
+},
+"016fa3c0": {
+"name": "?rwgD3D9BitShiftTable@graphics@rw@@3PAEA",
+"votes": 5
+},
+"015fd8b0": {
+"name": "sApp",
+"votes": 1
+},
+"015fd89c": {
+"name": "sCanvas",
+"votes": 1
+},
+"015fd8b8": {
+"name": "sConfigManager",
+"votes": 1
+},
+"015474a0": {
+"name": "?sShaderProxyCoreAllocator@SPUIShader@@3V?$CoreAllocatorFixed@VcSPUIShaderProxy@@@Allocator@EA@@A",
+"votes": 1
+},
+"0154744c": {
+"name": "sLayerRCs",
+"votes": 1
+},
+"0166b190": {
+"name": "?sGetChildWindowCache@UTFWin@EA@@3UcGetChildWindowCache@12@A",
+"votes": 2
+},
+"01435578": {
+"name": "ff_ColorTable",
+"votes": 1
+},
+"016758d4": {
+"name": "spEapdSystem",
+"votes": 3
+},
+"0167562c": {
+"name": "spPdintClass",
+"votes": 3
+},
+"014cbd80": {
+"name": "?gTwoToNegativeQuarterPower@core@audio@rw@@3QBMB",
+"votes": 3
+},
+"016f5c50": {
+"name": "?m_UVUsed@ActiveState@graphics@rw@@2IA",
+"votes": 3
+},
+"016f9134": {
+"name": "?m_numUsedUV@ActiveState@graphics@rw@@2EA",
+"votes": 2
+},
+"016f5c0c": {
+"name": "?D3D9UnmanagedList@Raster@graphics@rw@@0PAV123@A",
+"votes": 3
+},
+"0170a83c": {
+"name": "?s_currentBuffer@DynamicIndexBufferManager@graphics@rw@@1PAIA",
+"votes": 6
+},
+"0170a80c": {
+"name": "?s_internalIB@DynamicIndexBufferManager@graphics@rw@@1PAUInternalIBDetail@123@A",
+"votes": 4
+},
+"015fd8c8": {
+"name": "sMaterialManager",
+"votes": 1
+},
+"015fcc68": {
+"name": "sMovieSystem",
+"votes": 1
+},
+"01668ea4": {
+"name": "gTracer",
+"votes": 2
+},
+"0169e294": {
+"name": "?spInstance@cCreatureModeStrategy@SP@@2PAV12@A",
+"votes": 1
+},
+"015fd8a4": {
+"name": "sCheatManager",
+"votes": 1
+},
+"015b9268": {
+"name": "kJettisonCargoDialogKey",
+"votes": 1
+},
+"016f4b10": {
+"name": "?sAllocator@Manager@filesys@core@rw@@0PAVIResourceAllocator@4@A",
+"votes": 3
+},
+"016ad064": {
+"name": "?gspTypes@SP@@3PAVcTypeDef@1@A",
+"votes": 3
+},
+"016699a0": {
+"name": "mnStopwatchCycleReadingOverhead",
+"votes": 2
+},
+"0154eae8": {
+"name": "mnStopwatchFrequency",
+"votes": 2
+},
+"0154eaf0": {
+"name": "mnCPUFrequency",
+"votes": 2
+},
+"01669958": {
+"name": "mfStopwatchCyclesToNanosecondsCoefficient",
+"votes": 1
+},
+"01669974": {
+"name": "mfStopwatchCyclesToMicrosecondsCoefficient",
+"votes": 1
+},
+"0166996c": {
+"name": "mfStopwatchCyclesToMillisecondsCoefficient",
+"votes": 1
+},
+"01669980": {
+"name": "mfStopwatchCyclesToSecondsCoefficient",
+"votes": 1
+},
+"0166995c": {
+"name": "mfStopwatchCyclesToMinutesCoefficient",
+"votes": 1
+},
+"015826ac": {
+"name": "sLastLoadedScenario",
+"votes": 1
+},
+"01582f88": {
+"name": "?kCheckForMateTimer@cCreatureModeTuning@SP@@2MA",
+"votes": 2
+},
+"016dac64": {
+"name": "?sInstance@cSPMissionManager@SP@@2PAV12@A",
+"votes": 1
+},
+"016f8910": {
+"name": "?m_lightsArray@ActiveState@graphics@rw@@2ULightsArrayType@23@A",
+"votes": 20
+},
+"015fcc74": {
+"name": "sObjectTemplateDB",
+"votes": 1
+},
+"01668eac": {
+"name": "gpCoreAllocator",
+"votes": 2
+},
+"0154df80": {
+"name": "sCoreAlloc",
+"votes": 6
+},
+"016f8cfc": {
+"name": "?m_shaderFlags@ActiveState@graphics@rw@@2IA",
+"votes": 1
+},
+"013f7700": {
+"name": "kSoundGroupCreatureSpineResize",
+"votes": 2
+},
+"013f7dd0": {
+"name": "kMinDragDistance",
+"votes": 4
+},
+"016e4178": {
+"name": "?s_instance@hkMemory@@1PAV1@A",
+"votes": 3
+},
+"013f9484": {
+"name": "kVerbIconMinScale",
+"votes": 4
+},
+"015f5294": {
+"name": "gAllocatorYouTubeVideoUpload",
+"votes": 2
+},
+"015f54fc": {
+"name": "gAllocatorYouTubeAuthentication",
+"votes": 2
+},
+"015f5604": {
+"name": "gAllocatorFeedUnsubscribe",
+"votes": 2
+},
+"015f53c4": {
+"name": "gAllocatorDeleteMyFeed",
+"votes": 2
+},
+"01521b64": {
+"name": "kDefaultMouseLookMinPhi",
+"votes": 1
+},
+"01521b68": {
+"name": "kDefaultMouseLookMaxPhi",
+"votes": 1
+},
+"013fe0a8": {
+"name": "kAnimCreatureDefaultMovementSpeed",
+"votes": 1
+},
+"013fe044": {
+"name": "?kAlignment@?$VectorBase@UcSHObject@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 3
+},
+"013fee38": {
+"name": "MAX_CLIP_LENGTH",
+"votes": 2
+},
+"013fec3c": {
+"name": "kWritingExtraLength",
+"votes": 3
+},
+"015285a4": {
+"name": "kXHTMLErrorDialogKey",
+"votes": 1
+},
+"0152fdc4": {
+"name": "sSPSaveAreas",
+"votes": 9
+},
+"0140d9b0": {
+"name": "?kAlignment@?$VectorBase@UcLayerInfoExtra@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"0140eadc": {
+"name": "kSH_A1",
+"votes": 1
+},
+"0140eae0": {
+"name": "kSH_A2",
+"votes": 1
+},
+"0140eae4": {
+"name": "kSH_A4",
+"votes": 1
+},
+"0140f598": {
+"name": "componentCount",
+"votes": 1
+},
+"015451e8": {
+"name": "?sMouseXScale@cSPUIMainWin@@1MA",
+"votes": 3
+},
+"015451ec": {
+"name": "?sMouseYScale@cSPUIMainWin@@1MA",
+"votes": 3
+},
+"013fc29c": {
+"name": "?kAlignment@?$VectorBase@PAVcSPCreatureAnimal@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"013fc694": {
+"name": "?kCacheHashCode@?$hashtable@IU?$pair@$$CBIPAVcTribePlannerWindow@SP@@@eastl@@Vallocator@2@U?$use_first@U?$pair@$$CBIPAVcTribePlannerWindow@SP@@@eastl@@@2@U?$equal_to@I@2@U?$hash@I@2@Umod_range_hashing@2@Udefault_ranged_hash@2@Uprime_rehash_policy@2@$0A@$00$00@eastl@@2_NB",
+"votes": 1
+},
+"01549180": {
+"name": "?sLanguageDataMap@?A0x3d21633c@Locale@EA@@3V?$map@V?$fixed_string@_W$0BA@$00@eastl@@V?$fixed_string@_W$0CAA@$00@2@U?$less@V?$fixed_string@_W$0BA@$00@eastl@@@2@Vallocator@2@@eastl@@A",
+"votes": 1
+},
+"0154919c": {
+"name": "?sCountryDataMap@?A0x3d21633c@Locale@EA@@3V?$map@V?$fixed_string@_W$0BA@$00@eastl@@V?$fixed_string@_W$0CAA@$00@2@U?$less@V?$fixed_string@_W$0BA@$00@eastl@@@2@Vallocator@2@@eastl@@A",
+"votes": 3
+},
+"0142e410": {
+"name": "?Members@hkPoweredRagdollConstraintData@@2QBUhkInternalClassMember@@B",
+"votes": 1
+},
+"013f6a60": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xa0938de6@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xa0938de6@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"01435138": {
+"name": "ExpertSubsetSID",
+"votes": 1
+},
+"014350f0": {
+"name": "ExpertSID",
+"votes": 1
+},
+"014350e4": {
+"name": "ISOAdobeSID",
+"votes": 1
+},
+"01435198": {
+"name": "standarEncodingData",
+"votes": 1
+},
+"01436640": {
+"name": "kDDFMapFileNameOnly",
+"votes": 1
+},
+"01436668": {
+"name": "kDDFListFileNameOnly",
+"votes": 1
+},
+"0143678c": {
+"name": "kPFHeaderFileBusyIdentifierArray",
+"votes": 1
+},
+"0154da58": {
+"name": "positionTable",
+"votes": 2
+},
+"0154da10": {
+"name": "listStyleTypeTable",
+"votes": 1
+},
+"0143ae1c": {
+"name": "KW_SYSTEM",
+"votes": 2
+},
+"0143ae08": {
+"name": "KW_PUBLIC",
+"votes": 2
+},
+"0143b328": {
+"name": "nmstrtPages",
+"votes": 16
+},
+"0143ae28": {
+"name": "namingBitmap",
+"votes": 30
+},
+"0143b428": {
+"name": "namePages",
+"votes": 15
+},
+"0143e990": {
+"name": "kDefaultSharedLibraryVersionInfo",
+"votes": 2
+},
+"0154ec00": {
+"name": "sBioMethodFunctionTable",
+"votes": 1
+},
+"0166ae78": {
+"name": "?gTextStyleDefault@?A0xd5db2a14@UTFWin@EA@@3UTextStyle@Text@3@A",
+"votes": 1
+},
+"0166aacc": {
+"name": "?g_fontCacheImage@?A0xd5db2a14@UTFWin@EA@@3VImage@23@A",
+"votes": 2
+},
+"0166b100": {
+"name": "?gMutex@HeapsInternal@UTFWin@EA@@3VMutex@Thread@3@A",
+"votes": 6
+},
+"0154ed20": {
+"name": "?gFreeDLEntries@HeapsInternal@UTFWin@EA@@3V?$intrusive_list@VDisplayListEntry@UTFWin@EA@@@eastl@@A",
+"votes": 4
+},
+"0154eea0": {
+"name": "?kSerTypeTable@SerPropertyInfo@UTFWin@EA@@1PAPBUSerTypeInfo@23@A",
+"votes": 1
+},
+"01550a48": {
+"name": "?ik_permute_altitudes_num@nSPCreatureAnim@@3HA",
+"votes": 1
+},
+"01675444": {
+"name": "gstack_head",
+"votes": 3
+},
+"01476188": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xb21bc935@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0xb21bc935@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"016753f4": {
+"name": "?gpNewestObject@Eapd@Audio@EA@@3PAPAU_class@123@A",
+"votes": 4
+},
+"0167564c": {
+"name": "spMosesClass",
+"votes": 1
+},
+"016779fc": {
+"name": "kFXZero2",
+"votes": 4
+},
+"015716e8": {
+"name": "kBodyParts",
+"votes": 1
+},
+"01565b68": {
+"name": "?gAStarSearchLandAvoidCities@SP@@3UcAStarSearchMethod@1@A",
+"votes": 1
+},
+"0146e114": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x448d10ce@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x448d10ce@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"01582e8c": {
+"name": "?kCreatureFoodSearchTravelDistance@cCreatureModeTuning@SP@@2MA",
+"votes": 1
+},
+"01578c18": {
+"name": "kScale",
+"votes": 1
+},
+"016953f8": {
+"name": "?sFishTimer@cTribe@SP@@2VcGonzagoTimer@2@A",
+"votes": 2
+},
+"0169a1a8": {
+"name": "kMilitaryWeaponID",
+"votes": 2
+},
+"015825e0": {
+"name": "?kCommandName@cCommandGameplayMarker@SP@@2PBDB",
+"votes": 1
+},
+"0169dca8": {
+"name": "?sInstance@cGameEditModeStrategy@SP@@0PAV12@A",
+"votes": 1
+},
+"0147aef4": {
+"name": "sDramaEventToBitArray",
+"votes": 1
+},
+"0169e5b8": {
+"name": "?sInstance@cPosseSimulator@SP@@0PAV12@A",
+"votes": 1
+},
+"015935a8": {
+"name": "gSocialBandPool",
+"votes": 3
+},
+"0147c170": {
+"name": "kSocialGroupRadiusSq",
+"votes": 1
+},
+"016a0058": {
+"name": "sVehiclesToRemove",
+"votes": 6
+},
+"015a28e4": {
+"name": "sInstance",
+"votes": 7
+},
+"016ad060": {
+"name": "?gspAppDataGlobals@SP@@3PAUcSPAppDataGlobals@1@A",
+"votes": 7
+},
+"016ad0a0": {
+"name": "?gParseBuffer@SP@@3UcParseBuffers@1@A",
+"votes": 9
+},
+"016ad1f0": {
+"name": "?gspCellDataGlobals@SP@@3PAUcCellDataGlobals@1@A",
+"votes": 4
+},
+"015a5dd4": {
+"name": "?kCommand@cCommandImportAdvectMap@SP@@2PBDB",
+"votes": 1
+},
+"015a5dd8": {
+"name": "?kCommandShort@cCommandImportAdvectMap@SP@@2PBDB",
+"votes": 1
+},
+"016c8b40": {
+"name": "gpSharedData",
+"votes": 3
+},
+"015b17e0": {
+"name": "?TCC_chunkTypeDIBcompressed@AVIUtils@movie@rw@@2GB",
+"votes": 2
+},
+"01491808": {
+"name": "?AVIINDEXFLAG_KEYFRAME@AVIUtils@movie@rw@@2IB",
+"votes": 1
+},
+"016dc060": {
+"name": "kPosseFlockOffsets",
+"votes": 4
+},
+"013f9728": {
+"name": "?kAlignment@?$VectorBase@MV?$fixed_vector_allocator@$03$0BIA@$03$0A@$00@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"016dc798": {
+"name": "?sInstance@cSimulatorUniverse@SP@@2PAV12@A",
+"votes": 2
+},
+"014da860": {
+"name": "HELPER_win",
+"votes": 1
+},
+"015d034c": {
+"name": "?runtimeUnfixRefixToGlobalAtomTable@?A0x4054e31d@arena@core@rw@@3VDefaultRuntimeUnfixRefixAtoms@234@A",
+"votes": 1
+},
+"016f49a0": {
+"name": "$S10",
+"votes": 3
+},
+"016f95a4": {
+"name": "?rwg_D3D9RasterToUpdate@?A0x1ebd7c49@graphics@rw@@3IA",
+"votes": 3
+},
+"016a0dc4": {
+"name": "kImpostorOffset",
+"votes": 7
+},
+"016b2f20": {
+"name": "?FIELDS_DT_LOOT_TABLE_ENTRY_NOTHING@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b2778": {
+"name": "?FIELDS_DT_CELL_ENCOUNTER@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0ca4": {
+"name": "DT_CELL_ENCOUNTER",
+"votes": 1
+},
+"016b1580": {
+"name": "?FIELDS_DT_CELL_PLANT@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0bb8": {
+"name": "DT_CELL_PLANT",
+"votes": 1
+},
+"016b2228": {
+"name": "?FIELDS_DT_CELL_CLUSTER@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0d28": {
+"name": "DT_CELL_CLUSTER",
+"votes": 1
+},
+"016b1198": {
+"name": "?FIELDS_DT_CELL_DISTRIBUTE@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad3fc": {
+"name": "DT_CELL_DISTRIBUTE",
+"votes": 1
+},
+"016b2ea8": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_DESTINATION@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0c10": {
+"name": "DT_LOOK_TABLE_ENTRY_DESTINATION",
+"votes": 1
+},
+"016b1738": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_PREDATOR@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0c78": {
+"name": "DT_LOOK_TABLE_ENTRY_PREDATOR",
+"votes": 1
+},
+"016b1eb8": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_FOOD@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016ad560": {
+"name": "DT_LOOK_TABLE_ENTRY_FOOD",
+"votes": 1
+},
+"016b2020": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_OBJECT@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0b30": {
+"name": "DT_LOOK_TABLE_ENTRY_OBJECT",
+"votes": 1
+},
+"016b2700": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_FLEE_TARGET@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0b04": {
+"name": "DT_LOOK_TABLE_ENTRY_FLEE_TARGET",
+"votes": 1
+},
+"016b2f98": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_PURSUE_TARGET@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0f10": {
+"name": "DT_LOOK_TABLE_ENTRY_PURSUE_TARGET",
+"votes": 1
+},
+"016b1990": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_RIGHT@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016ad58c": {
+"name": "DT_LOOK_TABLE_ENTRY_RIGHT",
+"votes": 1
+},
+"016b3920": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_LEFT@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0e44": {
+"name": "DT_LOOK_TABLE_ENTRY_LEFT",
+"votes": 1
+},
+"016b18a0": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_FORWARD@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016ad5b8": {
+"name": "DT_LOOK_TABLE_ENTRY_FORWARD",
+"votes": 1
+},
+"016b1bc0": {
+"name": "?FIELDS_DT_LOOK_TABLE_ENTRY_UP@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0dac": {
+"name": "DT_LOOK_TABLE_ENTRY_UP",
+"votes": 1
+},
+"016b2430": {
+"name": "?FIELDS_DT_RANDOM_CREATURE_ENTRY_LOCAL@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b2d68": {
+"name": "?FIELDS_DT_LOOK_ALGORITHM_ENTRY_PLAYER@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b10d0": {
+"name": "DT_LOOK_ALGORITHM_ENTRY_PLAYER",
+"votes": 1
+},
+"016b25e8": {
+"name": "?FIELDS_DT_LOOK_ALGORITHM_ENTRY_NPC@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b0fe8": {
+"name": "DT_LOOK_ALGORITHM_ENTRY_NPC",
+"votes": 1
+},
+"016b28e0": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_TILE_BACKGROUND@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b24d0": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_SKYBOX@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b2a20": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_TRACER_BACKGROUND@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b2b38": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_TRACER@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b3010": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_FOREGROUND@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b1d00": {
+"name": "?FIELDS_DT_EFFECTMAP_ENTRY_BACKGROUND@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad534": {
+"name": "DT_ATTACHMENT_MODEL",
+"votes": 1
+},
+"016b1350": {
+"name": "?FIELDS_DT_ATTACHMENT_EFFECT@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad4dc": {
+"name": "DT_ATTACHMENT_EFFECT",
+"votes": 1
+},
+"016b1b20": {
+"name": "?FIELDS_DT_ATTACHMENT_STRUCTURE@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad640": {
+"name": "DT_ATTACHMENT_STRUCTURE",
+"votes": 1
+},
+"016b21b0": {
+"name": "?FIELDS_DT_ATTACHMENT_DEBUG_DRAW@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016b1140": {
+"name": "DT_ATTACHMENT_DEBUG_DRAW",
+"votes": 1
+},
+"016b1918": {
+"name": "?FIELDS_DT_ATTACHMENT_RANDOM_CREATURE@SP@@3PAUcFieldDef@1@A",
+"votes": 1
+},
+"016ad508": {
+"name": "DT_ATTACHMENT_RANDOM_CREATURE",
+"votes": 1
+},
+"016b2688": {
+"name": "?FIELDS_DT_ATTACHMENT_CREATURE@SP@@3PAUcFieldDef@1@A",
+"votes": 30
+},
+"016b0aac": {
+"name": "DT_ATTACHMENT_CREATURE",
+"votes": 1
+},
+"0140eaf4": {
+"name": "?kAlignment@?$VectorBase@UcSHSample@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 7
+},
+"0153a670": {
+"name": "?kBasisTriples5@SP@@3PAUcBasisTriple@1@A",
+"votes": 1
+},
+"0153a400": {
+"name": "?kBasisTriples4@SP@@3PAUcBasisTriple@1@A",
+"votes": 1
+},
+"0153a330": {
+"name": "?kBasisTriples3@SP@@3PAUcBasisTriple@1@A",
+"votes": 1
+},
+"0171241c": {
+"name": "?rwg_D3D9DesktopDisplayMode@?A0x18a9c682@graphics@rw@@3U_D3DDISPLAYMODE@@A",
+"votes": 4
+},
+"0154d848": {
+"name": "backgroundRepeatTable",
+"votes": 1
+},
+"01554364": {
+"name": "?text_widgetbehavior@Eapd@Audio@EA@@3U_widgetbehavior@123@A",
+"votes": 1
+},
+"01675420": {
+"name": "sdLogicalTime",
+"votes": 5
+},
+"016ad068": {
+"name": "kSPZero2",
+"votes": 2
+},
+"016dc0fc": {
+"name": "?sInstance@cSPSimulatorSpaceGame@SP@@2PAV12@A",
+"votes": 1
+},
+"015fcc64": {
+"name": "sAudioSystem",
+"votes": 1
+},
+"0140fbc8": {
+"name": "MMX_divby3",
+"votes": 1
+},
+"0140fbd0": {
+"name": "MMX_lowrgb",
+"votes": 1
+},
+"01667b24": {
+"name": "gResourceProvider",
+"votes": 2
+},
+"0166b0f8": {
+"name": "?gFreeRLChunk@HeapsInternal@UTFWin@EA@@3PAURenderableListChunk@23@A",
+"votes": 2
+},
+"0165039c": {
+"name": "?mpImports@Importer@Gimex@EA@@2PAU123@A",
+"votes": 2
+},
+"014338c8": {
+"name": "sfnt_CharToNameTable",
+"votes": 3
+},
+"01454408": {
+"name": "EAPD_TIME_UNIT_PER_MSEC",
+"votes": 2
+},
+"01402d54": {
+"name": "kSwizzleTable",
+"votes": 4
+},
+"016c8eb0": {
+"name": "sTerrainEditor",
+"votes": 1
+},
+"015b4df8": {
+"name": "?sStoredModelKeys@@3PAIA",
+"votes": 1
+},
+"01675410": {
+"name": "?clock_setlist@Eapd@Audio@EA@@3PAU_clock@123@A",
+"votes": 2
+},
+"0169b2c8": {
+"name": "?spInstance@cTribeModeStrategy@SP@@0PAV12@A",
+"votes": 1
+},
+"013f9550": {
+"name": "kVerbStatMaxVehicleLevel",
+"votes": 4
+},
+"0162fc64": {
+"name": "sRenderJobId",
+"votes": 4
+},
+"015ddc84": {
+"name": "?spInstance@?$SingletonBase@VcStaticBufferDraw@SP@@$0A@@EA@@0PAV12@A",
+"votes": 1
+},
+"0154220c": {
+"name": "sIMEService",
+"votes": 6
+},
+"0154d2e0": {
+"name": "?unitsTable@Style@XHTML@EA@@3PAU?$IStaticDefinition@$$CB_WW4Units@Style@XHTML@EA@@@Lexer@Text@3@A",
+"votes": 1
+},
+"0154d020": {
+"name": "?propertyTable@Style@XHTML@EA@@3PAU?$IStaticDefinition@$$CB_WW4CSSPropertyID@Style@XHTML@EA@@@Lexer@Text@3@A",
+"votes": 1
+},
+"016754ec": {
+"name": "rtext_entered",
+"votes": 2
+},
+"01476a58": {
+"name": "?kAlignment@?$VectorBase@U?$pair@IUcReservedSpot@cReservationGrid@SP@@@eastl@@V?$fixed_vector_allocator@$0BI@$0HJ@$03$0A@$00@2@@eastl@@2IB",
+"votes": 1
+},
+"01582bcc": {
+"name": "mouseDoubleClickThreshold",
+"votes": 1
+},
+"0169e43c": {
+"name": "?sInstance@cSPDramaManager@SP@@0PAV12@A",
+"votes": 1
+},
+"01473c70": {
+"name": "kFlagellaTurnSpeed",
+"votes": 1
+},
+"016e61e0": {
+"name": "?sndss@@3USNDSTREAMSTATE@@A",
+"votes": 1
+},
+"016f4b14": {
+"name": "requestidcounter",
+"votes": 4
+},
+"01605354": {
+"name": "?sColorLocalized@cString@SP@@1_NA",
+"votes": 1
+},
+"0141a760": {
+"name": "?kTypeInfo@?$SerAutoRefCountMarshaller@UcSPUIStdDrawableImageInfo@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 3
+},
+"0152ba34": {
+"name": "sSPDirectories",
+"votes": 1
+},
+"013eae30": {
+"name": "?kCacheHashCode@?$hashtable@_KU?$pair@$$CB_KPAUcBlockApproxData@cEditorBaker@SP@@@eastl@@Vallocator@2@U?$use_first@U?$pair@$$CB_KPAUcBlockApproxData@cEditorBaker@SP@@@eastl@@@2@U?$equal_to@_K@2@U?$hash@_K@2@Umod_range_hashing@2@Udefault_ranged_hash@2@Uprime_rehash_policy@2@$0A@$00$00@eastl@@2_NB",
+"votes": 1
+},
+"0140f67c": {
+"name": "?kAlignment@?$VectorBase@UcTextureItem@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"0167540c": {
+"name": "classlist",
+"votes": 2
+},
+"016b3c14": {
+"name": "?keyDefaultFood@SP@@3PAUcResourceHandle@1@A",
+"votes": 1
+},
+"015b8450": {
+"name": "?gSpaceRelationshipTuning@@3VcSpaceRelationshipTuning@SP@@A",
+"votes": 1
+},
+"014084ec": {
+"name": "kMaxCRCDataLength",
+"votes": 1
+},
+"0143200c": {
+"name": "?m_maxFeaturesToReject@hkBoxBoxCollisionDetection@@1HB",
+"votes": 1
+},
+"01675554": {
+"name": "?sPlayLocation@Play@Eapd@Audio@EA@@0VSymbol@234@A",
+"votes": 4
+},
+"013f1c1c": {
+"name": "kSecondsPerTick",
+"votes": 1
+},
+"015de718": {
+"name": "kMovePerTick",
+"votes": 1
+},
+"01637ce8": {
+"name": "?mCurrentModelName@cAppModeModelViewer@SP@@1V?$basic_string@_WVallocator@eastl@@@eastl@@A",
+"votes": 1
+},
+"01668f00": {
+"name": "?gClipboard@?A0xc037134c@Clipboard@EA@@3V?$AutoOSGlobalPtr@PAVClipboard@1EA@@$0DFJNLEO@@3@A",
+"votes": 1
+},
+"01668f1c": {
+"name": "pReadDirectoryChangesW",
+"votes": 3
+},
+"0166b0f0": {
+"name": "?g_GraphicsDevice@?A0xd5db2a14@UTFWin@EA@@3V?$AutoOSGlobalPtr@V?$AutoRefCount@VIGraphicsDevice@UTFWin@EA@@@EA@@$0CPEDHKO@@3@A",
+"votes": 1
+},
+"016dc0a0": {
+"name": "kMaxPhi",
+"votes": 1
+},
+"016f4bf0": {
+"name": "fdd_a",
+"votes": 2
+},
+"016f4cf4": {
+"name": "fdd_b",
+"votes": 2
+},
+"016f4d1c": {
+"name": "fdd_c",
+"votes": 2
+},
+"016f4c18": {
+"name": "fdd_d",
+"votes": 2
+},
+"016f4cb8": {
+"name": "fdd_e",
+"votes": 2
+},
+"016f4c40": {
+"name": "fdd_f",
+"votes": 2
+},
+"016f4c7c": {
+"name": "fdd_g",
+"votes": 2
+},
+"016f4c90": {
+"name": "fdd_h",
+"votes": 2
+},
+"016f4d80": {
+"name": "fdd_i",
+"votes": 2
+},
+"016f4c68": {
+"name": "fdd_j",
+"votes": 2
+},
+"016f4c04": {
+"name": "fdd_k",
+"votes": 2
+},
+"016f4ce0": {
+"name": "fdd_l",
+"votes": 2
+},
+"016f4dd0": {
+"name": "fdd_m",
+"votes": 2
+},
+"016f4da8": {
+"name": "fdd_n",
+"votes": 2
+},
+"016f4d30": {
+"name": "fdd_o",
+"votes": 2
+},
+"016f4c54": {
+"name": "fdd_p",
+"votes": 2
+},
+"016f4d58": {
+"name": "fdd_q",
+"votes": 2
+},
+"016f4ca4": {
+"name": "fdd_r",
+"votes": 2
+},
+"016f4d94": {
+"name": "fdd_s",
+"votes": 2
+},
+"016f4c2c": {
+"name": "fdd_t",
+"votes": 2
+},
+"016f4d6c": {
+"name": "fdd_u",
+"votes": 2
+},
+"016f4dbc": {
+"name": "fdd_v",
+"votes": 2
+},
+"016f4d44": {
+"name": "fdd_w",
+"votes": 2
+},
+"016f4ccc": {
+"name": "fdd_x",
+"votes": 2
+},
+"016f4d08": {
+"name": "fdd_y",
+"votes": 2
+},
+"016f4de4": {
+"name": "fdd_z",
+"votes": 2
+},
+"0167bd0c": {
+"name": "kCameraPitchMin",
+"votes": 1
+},
+"0167df50": {
+"name": "?sLoadingFileName@?A0x1a9995f5@SP@@3V?$basic_string@_WVallocator@eastl@@@eastl@@A",
+"votes": 1
+},
+"01476c24": {
+"name": "?kKeyAlignment@?$rbtree@IU?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x230e217e@@@EA@@@eastl@@U?$less@I@2@Vallocator@2@U?$use_first@U?$pair@$$CBIV?$AutoRefCount@UcFeedbackEvent@?A0x230e217e@@@EA@@@eastl@@@2@$00$00@eastl@@2IB",
+"votes": 1
+},
+"0169b214": {
+"name": "kTribeEditorLayoutFilename",
+"votes": 1
+},
+"016b3ca0": {
+"name": "?gCellGameBackgroundExtents@SP@@3UcSPBoundingBox@@A",
+"votes": 6
+},
+"016b3c88": {
+"name": "?gCellGameExtents@SP@@3UcSPBoundingBox@@A",
+"votes": 6
+},
+"0143a2ac": {
+"name": "kEATextEncoding",
+"votes": 1
+},
+"01667a90": {
+"name": "bHereAlready",
+"votes": 3
+},
+"016393a4": {
+"name": "sSuppressAppSwitchHook",
+"votes": 4
+},
+"01445b0c": {
+"name": "?kTypeInfo@?$SerObjectType@VWinTreeView@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01444e30": {
+"name": "?kTypeInfo@?$SerObjectType@VWinSpinner@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"0151c428": {
+"name": "TWO_PI",
+"votes": 2
+},
+"01493868": {
+"name": "PITCHLINEARTOCENTSCONST",
+"votes": 2
+},
+"01440b08": {
+"name": "?kTypeInfo@?$SerObjectType@VWindow@UTFWin@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01444c04": {
+"name": "?kTypeInfo@?$SerObjectType@VWinSlider@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01444794": {
+"name": "?kTypeInfo@?$SerObjectType@VWinScrollbar@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01441d3c": {
+"name": "?kTypeInfo@?$SerObjectType@VWinDialog@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"014415e4": {
+"name": "?kTypeInfo@?$SerObjectType@VWinComboBox@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01440f88": {
+"name": "?kTypeInfo@?$SerObjectType@VWinButton@UTFWinControls@EA@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"0153cd9c": {
+"name": "kGroupTypeCameraConfig",
+"votes": 1
+},
+"01675e78": {
+"name": "sTraceHelper",
+"votes": 1
+},
+"014194b4": {
+"name": "?kTypeInfo@?$SerObjectType@VcSPUIPopupMenuItemWin@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"01412adc": {
+"name": "kDefaultFarClip",
+"votes": 1
+},
+"01412980": {
+"name": "?kIID@cCreatureModeInputStrategy@SP@@2W4InterfaceId@COM@EA@@B",
+"votes": 1
+},
+"0140e000": {
+"name": "kRasterRecordTypes",
+"votes": 1
+},
+"0140dfe0": {
+"name": "kSupportedTypes",
+"votes": 1
+},
+"015ff660": {
+"name": "gpCommandServer",
+"votes": 1
+},
+"015f5274": {
+"name": "gAllocatorEditFeed",
+"votes": 2
+},
+"015f551c": {
+"name": "gAllocatorSnapshotUpload",
+"votes": 2
+},
+"015f52b4": {
+"name": "gAllocatorTelemetryUpload",
+"votes": 2
+},
+"016e4174": {
+"name": "?s_threadMemoryInstance@hkThreadMemory@@2V?$hkThreadLocalData@PAVhkThreadMemory@@@@A",
+"votes": 1
+},
+"015d0c1c": {
+"name": "sEditorTuning",
+"votes": 1
+},
+"013f7850": {
+"name": "HK_REAL_MAX",
+"votes": 2
+},
+"0140c648": {
+"name": "?kAlignment@?$VectorBase@VVector4@vpu@math@rw@@V?$fixed_vector_allocator@$0BA@$0EA@$0BA@$0A@$00@eastl@@@eastl@@2IB",
+"votes": 3
+},
+"0140c0f4": {
+"name": "?kAlignment@?$VectorBase@UcExternalRef@cMaterialManager@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 2
+},
+"01711fd0": {
+"name": "?rwg_D3D9AdapterIdentifier@?A0x18a9c682@graphics@rw@@3U_D3DADAPTER_IDENTIFIER9@@A",
+"votes": 2
+},
+"0140dfb4": {
+"name": "?kAlignment@?$VectorBase@PAEV?$fixed_vector_allocator@$03$0BA@$03$0A@$00@eastl@@@eastl@@2IB",
+"votes": 1
+},
+"015fd900": {
+"name": "sIDGenerator",
+"votes": 1
+},
+"01415630": {
+"name": "?kTypeInfo@?$SerMarshaller@VcISPUIBehaviorPredicate@@@UTFWin@EA@@2USerTypeInfo@23@B",
+"votes": 1
+},
+"016032a8": {
+"name": "sLRUCaches",
+"votes": 2
+},
+"01603118": {
+"name": "sRegistry",
+"votes": 1
+},
+"014184b8": {
+"name": "?kAlignment@?$VectorBase@UcWarningInfo@cPerfWarnings@SP@@Usp_vector_allocator@eastl@@@eastl@@2IB",
+"votes": 4
+},
+"01418edc": {
+"name": "kTextPaddingSize",
+"votes": 2
+},
+"0169ebc0": {
+"name": "?sAirRaidTimer@cBehaviorSpaceTurret@SP@@0VcGonzagoTimer@2@A",
+"votes": 1
+},
+"0169ebe0": {
+"name": "?sAirRaidEffect@cBehaviorSpaceTurret@SP@@0V?$AutoRefCount@VcIVisualEffect@Swarm@EA@@@EA@@A",
+"votes": 1
+},
+"016f4b68": {
+"name": "?mStopwatchCycleReadingOverhead@timer@core@rw@@3_KA",
+"votes": 2
+},
+"016d9938": {
+"name": "?sInstance@cAppModeSpace@SP@@1PAV12@A",
+"votes": 1
+},
+"01667afc": {
+"name": "$S20",
+"votes": 4
+},
+"01676930": {
+"name": "kFXIdentity4",
+"votes": 1
+},
+"0158167c": {
+"name": "?kCommandName@cCommandMakeTradeRoutes@SP@@2PBDB",
+"votes": 1
+},
+"01581680": {
+"name": "?kCommandName@cCommandToggleShowPaths@SP@@2PBDB",
+"votes": 1
+},
+"01581684": {
+"name": "?kCommandName@cCommandSetVehicleWeapons@SP@@2PBDB",
+"votes": 1
+},
+"015b6d88": {
+"name": "kHeightTransition",
+"votes": 1
+},
+"0167a3d0": {
+"name": "?sTribeBehaviorDistribution@?A0x85fc995f@SP@@3VcArithmeticaProgram@@A",
+"votes": 1
+},
+"0167e7e0": {
+"name": "?sTerrainCursorProgram@?A0xffe46805@SP@@3VcArithmeticaProgram@@A",
+"votes": 1
+},
+"0167e7c0": {
+"name": "?sSelectionTimer@?A0xffe46805@SP@@3VcGonzagoTimer@2@A",
+"votes": 1
+},
+"0167e908": {
+"name": "sBaseTimer",
+"votes": 1
+},
+"0168d128": {
+"name": "sRandom",
+"votes": 1
+},
+"0152f7bc": {
+"name": "sNullCache",
+"votes": 1
+},
+"0152f7c0": {
+"name": "sManualExplicitCache",
+"votes": 1
+},
+"0154cf28": {
+"name": "numbers",
+"votes": 1
+},
+"0154c740": {
+"name": "sEntityTable",
+"votes": 1
+},
+"01667af8": {
+"name": "$S19",
+"votes": 5
+},
+"01695454": {
+"name": "?sTribeArchetypeData@SP@@3PAVcSPTribeArchetypeData@1@A",
+"votes": 1
+},
+"016c69f4": {
+"name": "?gAmbienceTagAllocator@Audio@SP@@3V?$FixedAllocator@VcAmbienceTag@Audio@SP@@$0A@@Allocator@EA@@A",
+"votes": 8
+},
+"0168e81c": {
+"name": "?gPathFailures@SP@@3V?$vector@UcSPVector3@@Usp_vector_allocator@eastl@@@eastl@@A",
+"votes": 8
+},
+"01574244": {
+"name": "kTooCloseToGoalToFlock",
+"votes": 1
+},
+"015d0968": {
+"name": "?sm_vTable@Interpolator@oldanimation@rw@@1UVTable@Controller@23@A",
+"votes": 1
+},
+"0169c930": {
+"name": "?gVehicleStatsFormula@nCityGameFormulas@SP@@3VcVehicleStatFormula@12@A",
+"votes": 2
+},
+"0169c898": {
+"name": "?gWanderFormula@nCityGameFormulas@SP@@3VcWanderFormula@12@A",
+"votes": 2
+},
+"0169c800": {
+"name": "?gRaidFarmFormula@nCityGameFormulas@SP@@3VcRaidFarmFormula@12@A",
+"votes": 2
+},
+"0169c768": {
+"name": "?gLurkFormula@nCityGameFormulas@SP@@3VcLurkFormula@12@A",
+"votes": 2
+},
+"0169c6d0": {
+"name": "?gTribeAttackWhenApproached@nCityGameFormulas@SP@@3VcTribeAttackWhenApproached@12@A",
+"votes": 2
+},
+"0169c638": {
+"name": "?gAttackChanceToDieFormula@nCityGameFormulas@SP@@3VcAttackChanceToDieFormula@12@A",
+"votes": 2
+},
+"0169c5a0": {
+"name": "?gTribeFoodFormula@nCityGameFormulas@SP@@3VcTribeFoodFormula@12@A",
+"votes": 2
+},
+"0169c508": {
+"name": "?gChancePlayerRaidSuccessful@nCityGameFormulas@SP@@3VcChancePlayerRaidSuccessful@12@A",
+"votes": 2
+},
+"0169c470": {
+"name": "?gTribeChanceToRaid@nCityGameFormulas@SP@@3VcTribeChanceToRaid@12@A",
+"votes": 2
+},
+"0169c3d8": {
+"name": "?gChancePlayerRecruitSuccessful@nCityGameFormulas@SP@@3VcChancePlayerRecruitSuccessful@12@A",
+"votes": 2
+},
+"0169c340": {
+"name": "?gTribeChanceToRecruit@nCityGameFormulas@SP@@3VcTribeChanceToRecruit@12@A",
+"votes": 2
+},
+"0169c2a8": {
+"name": "?gRecruitFromTribe@nCityGameFormulas@SP@@3VcRecruitFromTribe@12@A",
+"votes": 2
+},
+"016027d0": {
+"name": "sNullVariant",
+"votes": 1
+},
+"01486cf8": {
+"name": "?kAlignment@?$VectorBase@MV?$fixed_vector_allocator@$03$0DD@$03$0A@$00@eastl@@@eastl@@2IB",
+"votes": 2
+}
+}
