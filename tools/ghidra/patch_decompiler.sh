@@ -1,6 +1,7 @@
 #!/bin/sh
 # Rebuild Ghidra's native decompiler with our patches and install it (original kept as decompile.orig).
-# Patch: float-nonassociative.patch. IEEE float + and * are not associative, but Ghidra printed them
+# Patches: float-nonassociative.patch (keep float +,* grouping) and nan-exact.patch (exact NaN semantics of float
+# compares, see docs/floating_point.md). float-nonassociative.patch:
 # with the integer tokens marked associative, so `a + (b + c)` came out as `a + b + c` (= (a+b)+c),
 # silently changing evaluation order of x87/SSE float sums. Re-run after every Ghidra upgrade.
 set -e

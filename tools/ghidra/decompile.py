@@ -1,12 +1,15 @@
 # @runtime PyGhidra
 # Decompile functions by address to a C file.
 # Args: <out.c> <hex addr> [<hex addr> ...]
-from ghidra.app.decompiler import DecompInterface
+from ghidra.app.decompiler import DecompInterface, DecompileOptions
 from ghidra.program.flatapi import FlatProgramAPI
 
 args = getScriptArgs()
 flat = FlatProgramAPI(currentProgram, monitor)
 di = DecompInterface()
+opts = DecompileOptions()
+opts.grabFromProgram(currentProgram)
+di.setOptions(opts)
 di.openProgram(currentProgram)
 with open(args[0], "w") as fh:
     space = currentProgram.getAddressFactory().getDefaultAddressSpace()

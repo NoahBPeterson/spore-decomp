@@ -56,3 +56,27 @@ Ghidra printed `x*m0 + y*m4 + z*m8`; patched Ghidra prints `x*m0 + (y*m4 + z*m8)
 order within one `+` may be swapped, which is exact in IEEE). Patch: tools/ghidra/patches/float-nonassociative.patch;
 build+install: tools/ghidra/patch_decompiler.sh (re-run after any Ghidra upgrade). Decompiles exported before
 2026-10-04 15:00 may show regrouped float sums, so take grouping from the disassembly for those.
+
+## Ghidra decompiler patch (NaN-exact float comparisons)
+
+x87 code compares with `fcom; fnstsw ax; test ah,<mask>; j<cc>`. The flags encode four outcomes
+(less, equal, greater, unordered = a NaN operand). Stock Ghidra's default ("NaN operations: Compare") assumed NaN
+tests are always false, and its negation rule rewrote `!(a < b)` as `b <= a`. Both are wrong when an operand is
+NaN. Example, hkBoxShape ctor (0x010c05d0), a min of floats: the code takes the left value only for an ordered
+`a < b`, but Ghidra printed `(b <= a) ? b : a`.
+
+tools/ghidra/patches/nan-exact.patch (built and installed by tools/ghidra/patch_decompiler.sh):
+- **RuleIgnoreNan** removes a NaN test only when the result is unchanged. Otherwise it rewrites exactly
+  (`NAN(a)||NAN(b)||a<b` becomes `!(b<=a)`) or keeps the test.
+- **get_booleanflip** no longer flips float `<`/`<=` (no exact complement exists), so `!(a < b)` stays.
+- **RuleFloatAndChain** drops `!NAN(x)` when an ordered compare on x is in the same `&&` chain, and turns
+  `a<=b && a!=b` into `a<b`.
+- **RuleFloatCompareTable** handles any boolean combination of compares and NaN tests on one pair (a,b). It
+  evaluates the truth table over {less, equal, greater, unordered} and replaces it with the single exact C
+  comparison when one exists: `a<b`, `b<a`, `a==b`, `a<=b`, `b<=a`, `a!=b`, `!(b<=a)`, `!(a<=b)`, `!(b<a)`,
+  `!(a<b)`. Otherwise the expression is left unchanged.
+
+Result on 300 random functions with x87 compares: 825 `NAN(...)` terms (exact but unreadable with NaN handling
+on) or silently-wrong compares (stock default) became plain exact C comparisons, with 0 decompile failures.
+Read the C as C: `<`, `<=`, `==` are false on NaN and `!=` is true, so `!(b <= a)` really means "less or
+unordered".
