@@ -1,0 +1,5 @@
+0062f7f0 SP::cSPPlayModeBGMgr::HandleButton  # card: PDB candidate (caller-single); switch over the 4 thumbnail buttons + prev/next page ids
+0062fbc0 SP::cSPPlayModeBGMgr::LoadAllBGInfoFromGroup  # card: PDB candidate (caller-single); enumerates resource keys then calls LoadBackground
+0062fd60 SP::cSPPlayModePhotoBrowser::IsSendPhotoWinVisible  # card: PDB candidate (caller-single); tests visibility of editor window 0x3f67620
+0062fe40 SP::cSPPlayModePhotoBrowser::EnterDeleteMode  # card: PDB candidate; identical to EnterMoveMode except mode value 2
+0062f8c0 SharedLibList::SharedLibList  # vtable + empty eastl::vector ctor; dtor at 0062f8e0 calls ~vector

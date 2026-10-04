@@ -1,0 +1,6 @@
+010df160 hkSymmetricAgent<hkListAgent>::linearCast  # flipped path + FlipCastCollector, tail call hkListAgent::linearCast (named callee)
+010df500 hkPhantomAgent::registerAgent  # registers createPhantomAgent/staticGetPenetrations for shape type 0x1a both ways
+010df5d0 hkMotionState::operator=  # word-wise copy of 0xb0 bytes, used by createTransformAAgent
+010e0200 hkSymmetricAgent<hkTransformAgent>::getPenetrations  # flip body collector around hkTransformAgent::getPenetrations
+010e0240 hkSymmetricAgent<hkTransformAgent>::getClosestPoints  # flip collector around hkTransformAgent::getClosestPoints
+010e0280 hkSymmetricAgent<hkTransformAgent>::processCollision  # flips contact points and toi normal around hkTransformAgent::processCollision

@@ -1,0 +1,13 @@
+006181c0  104  YouTubeAuthentication ConstructRequest: complete; vptr reload/register assignment around the AddField vcalls (shared Release tail)
+006184c0  112  YouTubeVideoURL ConstructRequest: same shape as 006181c0 (multipart body)
+00618670  120  upload ConstructRequest (retail layout): complete; AddRef/Release xadd scheduling and one null-check on the failure Release
+006188f0  186  eastl string append_sprintf_va_list: arg loads hoisted before the empty-string branch
+006189e0  130  EASTL unguarded partition on index array (descending by int64 key at entry+0x30): swap temp reloaded instead of CSE'd
+00618a60  41   EASTL make_heap: comparator reloaded from stack in loop instead of kept in ebp
+00618aa0  55   EASTL sort_heap (pop_heap loop): value load/store order
+00618b90  3    cMsgString8 scalar deleting dtor: base vptr stores in reverse order ([+0] then [+4] vs original [+4] then [+0])
+00618bd0  32   SetMessageString8: ctor stores ordered base-vptrs-then-string instead of string-then-base-vptrs
+00618c70  28   FillFeedInfo: copy of feed record, register assignment
+00618d40  29   cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores
+00618da0  74   cFeedTransactionBase ctor (string arg): same scheduling issue
+00618f60  362  feed-entry asset ConstructRequest: complete; register allocation (this in edi, doc in ebp originally)

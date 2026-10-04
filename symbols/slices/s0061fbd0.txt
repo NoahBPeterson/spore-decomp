@@ -1,0 +1,6 @@
+00620050 SP::Pollen::cRegistrationDialog::Show  # byte-exact: SetFlag(1,b) on the root window then Begin/EndModal
+00620380 SP::Pollen::cRegistrationDialog::End  # byte-exact: removes the two listeners, shuts down the frameset and layout
+006205f0 SP::Pollen::cRegistrationDialog::ConfirmLogin  # byte-exact: ShowLoginDialog(true), SavePrefs, post 0x5b98f52, End
+006208c0 SP::Pollen::cRegistrationDialog::Show2  # PDB name Show; byte-exact: layout init, frameset creation, load the registration URL
+00620b30 SP::Pollen::cRegistrationDialog::FormParamCallback  # PDB name; byte-exact
+00620230 eastl::intrusive_list_base::~intrusive_list_base  # byte-exact

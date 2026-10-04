@@ -1,0 +1,5 @@
+00641500 SP::cSPAssetDataOTDB::GetThumbnailBackdrop  # PDB name; 28-way switch on asset type
+006414e0 SP::cSPAssetDataOTDB::GetKey  # builds {instance, 0x2f7d0004, group}
+00641900 SP::EditorUtils::GetCreatorType  # PDB name
+00642100 UI::TimelineSporepediaCardData::TimelineSporepediaCardData  # PDB name
+00642190 UI::TimelineSporepediaCardData::~TimelineSporepediaCardData  # vptr stores + base dtor tail call

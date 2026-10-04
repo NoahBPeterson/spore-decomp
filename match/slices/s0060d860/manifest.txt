@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0060d860/s0060d860.cpp  ??H?$DequeIterator@UcTextureAsyncQueueEntry@@$0EA@@eastl@@QBE?AU01@H@Z  0060da40  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ??G?$DequeIterator@UcTextureAsyncQueueEntry@@$0EA@@eastl@@QBE?AU01@H@Z  0060da90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?pop_back@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXXZ  0060dae0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?DoPushFrontSlow@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  0060db40  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?DoPushBackSlow@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  0060dbd0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ??$remove_copy_if@UCancelByIdPred@@@eastl@@YA?AU?$DequeIterator@UQueuedPtr@@$0EA@@0@U10@00UCancelByI  0060dc70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ??$remove_copy_if@UCancelCancelledPred@@@eastl@@YA?AU?$DequeIterator@UQueuedPtr@@$0EA@@0@U10@00UCanc  0060dd60  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?PostBehaviorFloat@@YAXM@Z  0060e540  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ?UpdatePropertyInt@cPollinator@SP@@QAEXIPBUKey@ResourceMan@EA@@II@Z  0060e600  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060d860/s0060d860.cpp  ??1?$deque@UQueuedPtr@@$0EA@@eastl@@QAE@XZ  0060e660  /O2 /MD /Gy /TP /arch:SSE /GS-

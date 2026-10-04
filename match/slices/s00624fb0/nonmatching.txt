@@ -1,0 +1,6 @@
+006252c0  49  NormalizeTheta; complete, register allocation differs (c/K/t in different xmm regs)
+00625380  145  HandleMessage; complete (two jump-table switches), copy of mAnim->mCameraInputState goes through edx in original; most diff bytes are jump-table data
+00625750  98  UpdateOffsets (depends); complete, original interleaves the 3-component lerp through Vector3 operators
+00625830  193  InitCameraData; complete, original schedules Vector3 ops differently (stores y,z,x; base edi reuse)
+00625a90  285  camera look-at lerp; complete, original uses Vector3 operator temps (different register scheduling)
+00625bf0  449  platform velocity integrator; complete, x87/SSE mix and temp scheduling differ

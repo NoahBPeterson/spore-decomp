@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0062da00/s0062da00.cpp  ?SetPositionOffset@cSPCasual_Path@@QAEXMM@Z  0062da00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00.cpp  ?StartPath@cSPCasual_Path@@QAE_NXZ  0062dbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00.cpp  ?RemoveFromOpenList@cSPCasual_Path@@QAEXPAUPathNode@@@Z  0062dc10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00.cpp  ??0cSPCasual_Path@@QAE@XZ  0062de70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00.cpp  ??_GcSPCasual_Path@@UAEPAXI@Z  0062dea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00.cpp  ?push_back@NodeVector@@QAEXABQAUPathNode@@@Z  0062dee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0062da00/s0062da00_ui.cpp  ??_GcNamedRefCount@@UAEPAXI@Z  0062e2b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062da00/s0062da00_ui.cpp  ?IsExtraAnims@cSPPlayModeAnimation@@QAE_NXZ  0062e5f0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062da00/s0062da00_ui.cpp  ?UpdatePageCount@cSPPlayModeAnimation@@QAEXXZ  0062e600  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062da00/s0062da00_ui.cpp  ?Activate@cSPPlayModeAnimation@@QAEXXZ  0062e6c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062da00/s0062da00_ui.cpp  ?ResetCurAnimWindow@cSPPlayModeAnimation@@QAEXXZ  0062e7a0  /O2 /MD /Gy /TP /arch:SSE

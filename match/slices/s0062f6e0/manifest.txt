@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0062f6e0/s0062f6e0.cpp  ??0SharedLibList@@QAE@XZ  0062f8c0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ??1SharedLibList@@QAE@XZ  0062f8e0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?LoadAllBGInfoFromGroup@cSPPlayModeBGMgr@@QAEXE@Z  0062fbc0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?Init@cSPPlayModeBGMgr@@QAEXIIIIE@Z  0062fc90  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?IsSendPhotoWinVisible@cSPPlayModePhotoBrowser@@QAEEXZ  0062fd60  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?EnterMoveMode@cSPPlayModePhotoBrowser@@QAEXXZ  0062fda0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?EnterDeleteMode@cSPPlayModePhotoBrowser@@QAEXXZ  0062fe40  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?RFindFirstOf@@YAPBDPBD000@Z  0062ff90  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?GetPhotoAt@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I_N@Z  00630060  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?SelectAll@cSPPlayModePhotoBrowser@@QAEX_N@Z  00630090  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  006300d0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?ExitDeleteMode@cSPPlayModePhotoBrowser@@QAEXXZ  006301a0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?ExitMoveMode@cSPPlayModePhotoBrowser@@QAEXXZ  00630280  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?ReleaseAsyncHandle@cSPPlayModePhotoBrowser@@QAEXXZ  006303a0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?CancelAllPendingLoadJobs@cSPPlayModePhotoBrowser@@QAEPAUcJob@@XZ  00630410  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?AnyWriteJobActive@cSPPlayModePhotoBrowser@@QAE_NXZ  006304e0  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ??4JobRef@@QAEAAU0@ABU0@@Z  00630540  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?UpdatePageButtons@cSPPlayModePhotoBrowser@@QAEXH@Z  00630580  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?find_first_of@wstring16@@QBEIPB_WI@Z  00630630  /O2 /MD /Gy /TP /GS-
+slices/s0062f6e0/s0062f6e0.cpp  ?compare@wstring16@@QBEHIIPB_W@Z  00630690  /O2 /MD /Gy /TP /GS-

@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00628d50/s00628d50.cpp  ?HandleButton@cSPPlayMode@@QAE_NH@Z  00628d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?GetLatestBabyID@cSPPlayMode@@QAEIXZ  00629110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?GetLatestBabyIndex@cSPPlayMode@@QAEHXZ  00629150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?GetAnimatedBabyIndex@cSPPlayMode@@QAEII@Z  00629180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?FUN_006291d0@cSPPlayMode@@QAEII@Z  006291d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?SetBabySpawned@cSPPlayMode@@QAEXIE@Z  00629380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?SetBabySocialCallState@cSPPlayMode@@QAEXIIM@Z  006293d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?FUN_006298b0@cSPPlayMode@@QAEXI@Z  006298b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00628d50/s00628d50.cpp  ?FUN_00629bd0@cSPPlayMode@@QAEMPAUCreatureStruct@@@Z  00629bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

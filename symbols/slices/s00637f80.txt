@@ -1,0 +1,4 @@
+00637f80 SP::cSPPlayModeUI::LayoutYouTubeUploadButton  # loads "YouTube Upload (PLACEHOLDER)", splits on <youtubeicon>, lays out two windows (card name cString::~cString is wrong)
+00638790 SP::cSPPlayModeSubModeAction::UpdateBabyCelebrationTimes  # PDB candidate caller-single
+006389b0 SP::cSPPlayModeSubModeAction::AnyKeyDown  # ORs the six mKeyInputButtonState bytes
+00638e10 RayPlaneIntersectZ  # ray/plane intersection at z=planeZ

@@ -1,0 +1,3 @@
+00634b60 RectF::Intersect  # clipped-rectangle intersection, returns false and zeroes the output when disjoint
+00634640 FixSlashes  # static helper (edi = wstring*): normalizes \ and / to the property-selected separator and collapses runs
+00634dc0 SP::cSPPlayModeUI::FindPlayModeUIWindow  # existing PDB name from card

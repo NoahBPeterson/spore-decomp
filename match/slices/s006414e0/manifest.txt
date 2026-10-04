@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006414e0/s006414e0.cpp  ?FUN_00641780@cSPAssetDataOTDB@@QAEHXZ  00641780  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?GetMetadataKey@cSPAssetDataOTDB@@QAE_NPA_K@Z  006417d0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641830@cSPAssetDataOTDB@@QAE_KXZ  00641830  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641870@cSPAssetDataOTDB@@QAE_KXZ  00641870  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641890@cSPAssetDataOTDB@@QAE_KXZ  00641890  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_006418b0@cSPAssetDataOTDB@@QAE_NXZ  006418b0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_006418e0@cSPAssetDataOTDB@@QAEHXZ  006418e0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?GetCreatorTypeEx@@YA_NPBUResourceKey@@@Z  006419f0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641af0@cTimelineSporepediaCardData@@QAEHXZ  00641af0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641e10@cTimelineSporepediaCardData@@QAEXXZ  00641e10  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641fa0@cTimelineSporepediaCardData@@QAE_NXZ  00641fa0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ?FUN_00641fd0@cTimelineSporepediaCardData@@QAEPAUIRefCounted@@XZ  00641fd0  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ??0cTimelineSporepediaCardData@@QAE@XZ  00642100  /O2 /MD /Gy /TP
+slices/s006414e0/s006414e0.cpp  ??1cTimelineSporepediaCardData@@QAE@XZ  00642190  /O2 /MD /Gy /TP

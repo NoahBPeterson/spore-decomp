@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00624fb0/s00624fb0.cpp  ?OnMouseUp@cCreatureCameraBase@SP@@QAE_NHMMH@Z  00624fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?OnMouseMove@cCreatureCameraBase@SP@@QAE_NMMH@Z  00625010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?OnMouseWheel@cCreatureCameraBase@SP@@QAE_NHMMH@Z  006251f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?AddDistanceScale@cCreatureCameraBase@SP@@QAEXM@Z  00625270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?AddTheta@cCreatureCameraBase@SP@@QAEXM@Z  006252a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?SetHeightCallback@cCreatureCameraBase@SP@@QAEXPAX0@Z  00625350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?OnMouseDown@cCreatureCameraBase@SP@@QAE_NHMMH@Z  006254f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?SetCurrentCamera@cCreatureCameraBase@SP@@QAEXMMM@Z  00625560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?QueryHeight@cCreatureCameraBase@SP@@QAEMPBUcSPVector3@@@Z  00625600  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00624fb0/s00624fb0.cpp  ?InitAvatarData@cCreatureCameraDepends@SP@@QAEXXZ  006256a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,7 @@
+0060c780 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormData  # 5-arg overload (name, stream, content type, file name, transfer encoding), vtable +0x50
+0060c9c0 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormDataVideo  # vtable +0x5c
+0060cb90 EA::Internet::HTTPMultipartRelatedPostBodyStream::CommitTextSegment  # vtable +0x68; wraps the buffered text as a sub-stream and queues it
+0060ccf0 SP::GetTypeFromName  # FNV hash of a lowercase type name, accepted only if it is one of 28 known type hashes
+0060cec0 SP::cPollinator::SetEnabledState  # switch on 0x4c4d2c3/cd/df; posts 0x3743e04 when enabling
+0060d7a0 Pollinator::cJobResultMessage::cJobResultMessage  # (jobID, result, ref-counted data)
+0060d800 Pollinator::NotificationFunction  # msg 0x700af301 -> posts a cJobResultMessage

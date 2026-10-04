@@ -1,0 +1,4 @@
+00644b90 SP::cSPUIAssetBrowser::SetWebBrowserVisibility  # PDB name on card, matches class layout
+00644df0 SP::cSPUIAssetBrowser::CanSporepediaShowSporeGuide  # PDB name on card, byte-exact
+00645010 SP::cSPUIAssetBrowser::PreloadTextures  # PDB candidate on card, function-local static key table + cTexturePreload
+006455b0 SP::cSPUIAssetBrowser::SetCallToActionMessage  # PDB name on card, byte-exact

@@ -1,0 +1,2 @@
+0063bf80  64  cConnectingDialog::Update: complete; the original advances ESI (this) by 0x1C and reuses it for &mRotation, mine takes a second register (EDI); also push/pop order differs
+0063c200  ~350  cSPPlayModeSubModeMovie ctor: complete; the original's string-table init is a 52x unrolled-by-5 loop (0x50-byte stride) while the dtor is a flat 260-string loop; flat array gives a 0x103-iteration loop and different registers

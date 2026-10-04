@@ -1,0 +1,5 @@
+00613530 SP::cPropertyBag::cPropertyBag  # default ctor: vptr, refcount xchg, uint64 id=-1, fixed vector_map<uint32,Variant> storage (0xf0 bytes)
+00613580 SP::cPropertyBag::`scalar deleting destructor'  # releases fixed-vector storage, vptr, deallocate if flag&1
+006135d0 SP::cPropertyBag::GetFloat  # Variant types 0xd/0x10 -> float, default global otherwise
+00613660 SP::cPropertyBag::GetInt32  # Variant types 9/0x10 -> int
+00613d20 eastl::vector_map<unsigned int,EA::Variant>::operator[]  # lower_bound + insert default Variant

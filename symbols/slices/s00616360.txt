@@ -1,0 +1,4 @@
+00616960 eastl::basic_string<char>::append(size_type, char)  # reserve growth and memset fill; byte-exact
+00616aa0 eastl::basic_string<char>::AllocateSelf  # allocates n bytes or points at the shared empty buffer; byte-exact
+006167a0 eastl::insertion_sort<unsigned*, TimeGreater>  # sorts asset indices by 64-bit timestamp; byte-exact
+00616a00 eastl::promote_heap<unsigned*, int, unsigned, TimeGreater>  # byte-exact with EASTL source

@@ -1,0 +1,4 @@
+00612a20 SP::cPropertyListFactory::GetSupportedTypes  # writes type id 0xfd60f0c1 (property list)
+00612a70 eastl::pair<unsigned int,EA::Variant>::~pair  # Variant dtor at +4
+00612e50 SP::cPropertyListWriter::WriteResource  # typeId 0xfd60f0c1 gate, QueryInterface 0xaaff1cde, then Write
+00613020 eastl::vector<eastl::pair<unsigned int,EA::Variant>,fixed_vector_allocator>::reserve  # 24-byte elements, fixed pool

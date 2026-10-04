@@ -1,0 +1,7 @@
+0112b050 hkPointerMultiMap_dtor  # array+hkPointerMapBase teardown, called from tracker dtor
+0112b460 hkPackfileObjectUpdateTracker_ctor  # sets vtable, two maps, +0x30/+0x34 top-level
+0112b620 hkPointerMultiMap_insert  # called by objectPointedBy
+0112bb40 hkFinishLoadedObjectRegistry_merge  # string map copy loop (vtable slot 4)
+0112bbf0 hkVtableClassRegistry_deletingDtor  # ptrmap at +8
+0112bc30 hkClassNameRegistry_deletingDtor  # stringmap at +8, shared by finish registry
+0112bdf0 hkDefaultBuiltinTypeRegistry_create  # alloc 0x14 class 0x15 then ctor

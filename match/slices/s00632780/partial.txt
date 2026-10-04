@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+006330b0 196 LoadPhotoThumb: approximate; the 4 args of FUN_006312f0 (three out pointers + by-value string) and the CheckGuidAndType argument sources were inferred, not recovered exactly
+006332c0 283 LoadPhotoByKey: approximate; same string/out-param plumbing as LoadPhotoThumb plus an inlined string copy (AllocateSelf + memcpy) replaced by a copy ctor

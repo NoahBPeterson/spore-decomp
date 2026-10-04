@@ -1,0 +1,15 @@
+00622f40  4    HandleLinkMessage: complete; register choice for the inline wcslen loop (ecx/edx swapped)
+00623070  16   RefCounted release (ref-- ; delete via vslot 2): complete; sub vs add -1 and store order around the virtual delete call
+00623260  26   DomHook -> Node conversion helper: complete; original stores via the pre-loaded out pointer, zero via ecx
+00623370  13   cXHTMLWin::DestroyFormControl: complete; list clear is not CSE'd in the original (separate empty test and loop-entry test)
+006233f0  275  cXHTMLWin::FocusNextControl (tab order via the tabindex attribute): complete; block layout of the first scan loop
+00623570  96   FindSubmitChild: complete; original keeps a top-tested loop with two back-jumps (no loop inversion)
+00623610  58   FindFormChild: same loop shape issue
+00623660  116  cXHTMLWin::SubmitForm: complete; register assignment (edi/ebx) and click-struct slot
+00623730  24   cSPHoverTitle ctor: complete; store scheduling (movss hoisted)
+006237d0  64   change notifier (NotifyAll with modification-count check): complete; scheduling
+00623830  336  cSPHoverTitle::Layout (position tooltip near the cursor): complete; SSE operand order of (w + pad + x) and SPPoint arg copies
+00623af0  9    ~cSPHoverTitle: complete; trailing base-vptr stores order
+00623be0  60   cXHTMLWin ctor: complete; store scheduling around the base ctor
+00623c90  566  cXHTMLWin::SetFormControlValue (select/option handling): complete; list end iterator kept as a null-checked value in the original
+00623ef0  67   cXHTMLWin::OnKeyDown plus (in the same VA range, separate function at 0x623f40) CreateXHTMLWin: complete; the 145-byte original range contains two functions, so it can never match as one symbol

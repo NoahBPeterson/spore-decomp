@@ -1,0 +1,7 @@
+0060b730  9    cInsertDiscDialog ctor: complete; original delays the [this+8]=0 store until after the member-layout lea (store scheduling only)
+0060bae0  27   InsertDisc::Show: complete; stack-message ctor stores (+0x30 before vptr) and one push ebp/eax register choice differ
+0060c110  23   WriteToStream: complete; original reuses esi for the vtable pointer and has no jmp over the loop alignment pad
+0060c4e0  25   basic_string::append(const char*): complete; original keeps this in ecx (loop char in dl), cl is chosen here
+0060c510  169  HTTPMultipartRelatedPostBodyStream ctor: complete; identical apart from list/string base registers (edi/ebp swapped) and push order
+0060c6d0  45   SetBoundary: complete; same this-in-ecx register allocation difference as append
+0060c730  1    GetContentTypeString: complete; one lea base register (ecx vs eax)

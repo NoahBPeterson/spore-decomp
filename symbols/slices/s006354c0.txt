@@ -1,0 +1,4 @@
+00635520 SP::cSPPlayModeUI::ResetSendEmailWindow  # PDB candidate caller-scored; mirror of SetUpSendEmailWindow
+00635700 SP::cSPPlayModeUI::scalar_deleting_destructor  # releases members +0x68/+0x64, destroys layouts, vptr reset, delete
+006360e0 SP::cSPPlayModeUI::ShowYouTubeLoginDialog  # PDB candidate caller-scored; BeginModal on 0x5650568
+00636260 SP::cSPPlayModeUI::HideYouTubeLoginDialog  # PDB candidate caller-scored; EndModal

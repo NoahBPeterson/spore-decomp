@@ -1,0 +1,3 @@
+slices/s01082350/s01082350.cpp  ?addReference@hkReferencedObject@@QAEXXZ  01082590  /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ??0hkMultithreadConfig@@QAE@XZ  01082900  /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?createContactMgr@hkNullContactMgrFactory@@UAEPAUhkNullContactMgr@@HHH@Z  01082ce0  /O2 /MD /Gy /TP

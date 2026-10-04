@@ -1,0 +1,11 @@
+slices/s00637f80/s00637f80.cpp  ?OnMouseUp@cSPPlayModeSubModeAction@SP@@QAE_NHMMH@Z  00638750  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?OnMouseMove@cSPPlayModeSubModeAction@SP@@QAE_NMMH@Z  00638770  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?ReachedMomTargetAngle@cSPPlayModeSubModeAction@SP@@QAE_NI@Z  00638810  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?IsLookAroundIdle@cSPPlayModeSubModeAction@SP@@QAE_NI@Z  00638890  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?AnyKeyDown@cSPPlayModeSubModeAction@SP@@QAE_NXZ  006389b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?HandleExpansionAnim@cSPPlayModeSubModeAction@SP@@QAEXI@Z  00638a00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?Shutdown@cSPPlayModeSubModeAction@SP@@QAEXXZ  00638ad0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?OnMouseDown@cSPPlayModeSubModeAction@SP@@QAE_NHMMH@Z  00638ba0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?OnKeyUp@cSPPlayModeSubModeAction@SP@@QAE_NII@Z  00638c90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?IsIdle@cSPPlayModeSubModeAction@SP@@QAE_NXZ  00638d90  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00637f80/s00637f80.cpp  ?RayPlaneIntersectZ@@YA_NPBUVec3f@@0PAU1@M@Z  00638e10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

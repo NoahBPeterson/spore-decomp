@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00643b50/s00643b50.cpp  ?ClearAll@Hub3@@QAEXXZ  00643d30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?Create@Hub3@@QAE_NIPAPAURCObj@@@Z  00643db0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?GetFlag@@YAEXZ  006448e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?Query910@@YGEPBUKey3@@PAU1@@Z  00644910  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?Fn_a40@HubD@@QAEXXZ  00644a40  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ??0LocaleMsg@@QAE@PAURCBase@@PBUKey3@@E@Z  00644a80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?Dtor@LocaleMsg@@QAEXXZ  00644af0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00643b50/s00643b50.cpp  ?Release2@TwoRef@@QAEXXZ  00644b60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

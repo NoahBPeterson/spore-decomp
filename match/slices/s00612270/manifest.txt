@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00612270/s00612270.cpp  ?GetSupportedTypes@cPropertyListFactory@@UBEHPAII@Z  00612a20  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ??1?$pair@IUVariant@EA@@@eastl@@QAE@XZ  00612a70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?DestructRange@@YAPAU?$pair@IUVariant@EA@@@eastl@@PAU12@00@Z  00612a90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?UninitializedCopyElem16@@YAPAUElem16@@PBU1@0PAU1@@Z  00612ad0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ??1Elem16VectorD@@QAE@XZ  00612d10  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?UninitializedCopy@@YAPAU?$pair@IUVariant@EA@@@eastl@@PBU12@0PAU12@@Z  00612d50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?LowerBound@@YAPBU?$pair@IUVariant@EA@@@eastl@@PBU12@0ABI@Z  00612db0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?WriteResource@cPropertyListWriter@@QAE_NPAX0HI@Z  00612e50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00612270/s00612270.cpp  ?reserve@PropVector@eastl@@QAEXI@Z  00613020  /O2 /MD /Gy /TP /arch:SSE /GS-

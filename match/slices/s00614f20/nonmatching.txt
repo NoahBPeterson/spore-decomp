@@ -1,0 +1,7 @@
+00614f20  4    StrMap::DoInsertValue (rbtree insert-unique): complete; only the order of two spill reloads after the loop differs
+00615330  23   cServerResponse::EndElementHandler: complete; cl keeps one shared epilogue instead of the original tail jump
+006155f0  160  cServerResponse::SetupDict: complete; handler pair construction/store order and clear() load order differ
+00615d30  15   cAssetUploadTransaction ctor: complete; parameter load scheduling differs
+00615db0  21   cModelUploadTransaction::OnFailure: complete; esi/edi register assignment swapped
+00615e50  15   cModelUploadTransaction ctor: complete; parameter load scheduling differs
+00615ed0  19   cModelUploadTransaction::HandleResult: complete; only register choice for the AddMapping arguments and key copy differs

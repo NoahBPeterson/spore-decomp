@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0063ba50/s0063ba50.cpp  ?Show@cConnectingDialog@@QAEXH@Z  0063ba50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?SetWindow@cConnectingDialog@@QAE_NPAUIWindow@@@Z  0063bab0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?HandleResults@cConnectingDialog@@QAEX_N@Z  0063baf0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?Shutdown@cSPPlayModeSubModeMovie@@QAEXXZ  0063bb90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?SetUpYouTubeErrorMessage@cSPPlayModeSubModeMovie@@SAXH@Z  0063bc10  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?CreateConnectingDialog@@YAXXZ  0063bc70  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?ShowLoginToYouTubeDialog@cSPPlayModeSubModeMovie@@SAXXZ  0063bd50  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?ShowYouTubeUploadVideoDialog@cSPPlayModeSubModeMovie@@SAXXZ  0063be00  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?ShowYouTubeLoginDialog@cSPPlayModeSubModeMovie@@QAEXXZ  0063bec0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?End@cConnectingDialog@@QAEX_N@Z  0063bf20  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?DestroyConnectingDialog@@YAX_N@Z  0063c060  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?IsLocaleEnglish@cSPPlayModeSubModeMovie@@SA_NXZ  0063c0a0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?HandleUIMessage@cConnectingDialog@@QAE_NPAX0@Z  0063c190  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ??1cSPPlayModeSubModeMovie@@UAE@XZ  0063c3f0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?SetStatusText@cSPPlayModeSubModeMovie@@QAEX_NH@Z  0063c590  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?ShowMovieSavedDialog@cSPPlayModeSubModeMovie@@QAEXXZ  0063c640  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ??1cEditorYouTubeAuthenticationMessage@@QAE@XZ  0063c700  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ??1cEditorYouTubeVideoUploadMessage@@QAE@XZ  0063c750  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?LoadYouTubeCredentials@cSPPlayModeSubModeMovie@@QAEXXZ  0063c7f0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0063ba50/s0063ba50.cpp  ?OnMovieRecorded@cSPPlayModeSubModeMovie@@QAEXXZ  0063c8f0  /O2 /MD /Gy /TP /arch:SSE /GS-

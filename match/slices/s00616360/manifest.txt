@@ -1,0 +1,21 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00616360/s00616360.cpp  ?Dtor@cTxC@@QAEXXZ  00616360  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Init@cTxD@@QAEPAU1@UResourceKey@@PAUIAddRef@@PAURCObj@@I_N@Z  006163e0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Dtor@cTxD@@QAEXXZ  00616460  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Dtor@cTxE@@QAEXXZ  00616500  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?HandleResult@cTxF@@QAE_NHPAX0@Z  00616580  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?HandleResult@cTxG@@QAE_NHPAUcHttpResult@@PAX@Z  00616610  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Init@cTxH@@QAEPAU1@PAUIAddRef1@@HH@Z  00616660  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?HandleResult@cTxI@@QAE_NHPAUcHttpResult@@PAX@Z  006166b0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Init@cTxJ@@QAEPAU1@PAUIAddRef1@@0@Z  006166e0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?HandleResult@cTxK@@QAE_NHPAUcHttpResult2@@PAX@Z  00616730  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?insertion_sort@@YAXPAI0UcTimeGreaterInl@@@Z  006167a0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?insertion_sort_unguarded@@YAXPAI0UcTimeGreaterInl@@@Z  00616820  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?median@@YAABIABI00UcTimeGreaterInl@@@Z  006168a0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  00616960  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?promote_heap@@YAXPAIHHIUcTimeGreaterInl@@@Z  00616a00  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00616aa0  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Destroy@cPoolTxA@@QAEPAXI@Z  00616b00  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Destroy@cPoolTxB@@QAEPAXI@Z  00616b20  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Destroy@cTxUp1@@QAEPAXI@Z  00616b40  /O2 /MD /Gy /TP
+slices/s00616360/s00616360.cpp  ?Destroy@cTxUp2@@QAEPAXI@Z  00616d20  /O2 /MD /Gy /TP

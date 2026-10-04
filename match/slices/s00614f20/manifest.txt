@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00614f20/s00614f20.cpp  ?insert@HandlerMap@@QAE?AUHandlerInsertResult@@ABUHandlerPair@@@Z  00615080  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?DoNukeSubtree@StrMap@@QAEXPAUStrNode@@@Z  00615110  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?DefaultEndTag@cServerResponse@Pollen@SP@@QAEXPB_W@Z  00615180  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ??1cServerResponse@Pollen@SP@@UAE@XZ  00615380  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Read@cServerResponse@Pollen@SP@@UAEIPAXI@Z  00615430  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Open@cServerResponse@Pollen@SP@@QAE_NXZ  00615450  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?SetPosition@cServerResponse@Pollen@SP@@UAE_NHH@Z  006154c0  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?IDListElement@cServerResponse@Pollen@SP@@QAEXXZ  00615520  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ??0cServerResponse@Pollen@SP@@QAE@XZ  00615790  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Save@cResourceSaveRequest@@QAE_NPAUcSaveListener@@@Z  00615870  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?ReleaseStream@cSubHolder@@QAEXXZ  00615bb0  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?UpdateThrottle@@YG_NPAUcThrottleOwner@@@Z  00615c70  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Init@cTripleObj@@QAEPAU1@XZ  00616160  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Destroy@cTripleObj@@QAEPAU1@I@Z  006161c0  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ??RcTimeGreater@@QBE_NII@Z  00616220  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Init@cSmallA@@QAEPAU1@HH_N@Z  00616260  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?HandleResult@cHandlerStub@@QAE_NHPAUcHttpResult@@PAX@Z  006162a0  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Init@cSmallB@@QAEPAU1@HH@Z  006162d0  /O2 /MD /Gy /TP
+slices/s00614f20/s00614f20.cpp  ?Init@cSmallC@@QAEPAU1@PBUsTriple@@PAHH@Z  00616300  /O2 /MD /Gy /TP

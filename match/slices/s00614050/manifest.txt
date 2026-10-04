@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00614050/s00614050.cpp  ?RemoveAsset@cAssetCache@@QAE_N_K@Z  006144c0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?ReadRecord@cAssetCache@@QAE_NPAXPAUcPollenAsset@@II@Z  00614560  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?Init@cAssetCache@@QAEXPAUcPollinator@@@Z  006145d0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?Write@cServerResponse@Pollen@SP@@UAE_NPBXI@Z  00614840  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?Close@cServerResponse@Pollen@SP@@UAE_NXZ  00614880  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?GetAccessFlags@cServerResponse@Pollen@SP@@UBEHXZ  006148c0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?GetState@cServerResponse@Pollen@SP@@UBEHXZ  006148d0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?GetPosition@cServerResponse@Pollen@SP@@UBEHH@Z  00614900  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?compare_out@string16@@QBEHPB_W@Z  00614950  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ??0StrPair@@QAE@ABU0@@Z  00614990  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?lower_bound@@YAPAUHandlerPair@@PAU1@0ABQB_WUchar16less@@@Z  00614a30  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?GetStatus@cServerResponse@Pollen@SP@@QAEXXZ  00614ab0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ??1StrPair@@QAE@XZ  00614c00  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?DoReallocate@HandlerMap@@QAEXI@Z  00614c40  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?MakeStrPair@@YA?AUStrPair@@Ustring16@@0@Z  00614cc0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?equal_range@HandlerMap@@QAE?AUHandlerRange@@ABQB_W@Z  00614d20  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?CharacterData@cServerResponse@Pollen@SP@@SAXPAV123@PB_WH@Z  00614da0  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?GetField@cServerResponse@Pollen@SP@@QAEPB_WPB_W@Z  00614e50  /O2 /MD /Gy /TP
+slices/s00614050/s00614050.cpp  ?StartElement@cServerResponse@Pollen@SP@@SAXPAV123@PB_W@Z  00614ed0  /O2 /MD /Gy /TP

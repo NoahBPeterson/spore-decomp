@@ -1,0 +1,14 @@
+00627d50  6  cCreatureCameraBase::UpdateCamera; complete, zoom constants multiply order (dt*K1)*K2 differs
+00627eb0  347  cCreatureCameraBase::Update; complete, original lerps pre-translate through Vector3 operator temps (different schedule)
+00628100  112  cCreatureCameraDepends::SetLocalExtents; complete, original builds extents through three Vector3 temps (0x18 frame)
+006281c0  10  cCreatureCameraDepends ctor; complete, temp/store interleave of the FLT_MAX vectors differs
+00628520  56  cSPPlayMode::OnMouseUp; complete, original tests [slot] in memory then reloads it
+00628570  52  cSPPlayMode::OnMouseMove; complete, same slot-reload difference
+006285c0  39  cSPPlayMode::OnKeyUp; complete, same slot-reload difference
+00628780  20  cSPPlayMode::SetMomCelebrationAnim; complete, original loads the animator vtable pointer before pushing args
+00628830  43  cSPPlayMode::SetMomCrouchAnimation; complete, same vtable-load ordering difference
+006288a0  21  cSPPlayMode::SetAllBabyPhotoModes; complete, 16-bit or/shl scheduling differs
+00628a40  2  cSPPlayMode::GetHeightOffset; complete, eax vs edx for the second arg load
+00628a80  89  cSPPlayMode::GetMouthPartIdx; complete, stack key/buffer layout differs
+00628af0  300  cSPPlayMode::OnKeyDown; complete, tab-focus branch layout and slot-reload differ
+00628ca0  130  cAppModeEditorBase::SendButtonEventToBabies; complete, original keeps the vector base pointer in esi and recomputes element addresses

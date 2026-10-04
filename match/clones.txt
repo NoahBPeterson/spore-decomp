@@ -72,17 +72,22 @@ slices/s00403af0/s00403af0.cpp  ??_GPaintSystem@Skinner@@UAEPAXI@Z  004bc000  /O
 slices/s00403af0/s00403af0.cpp  ??_GPaintSystem@Skinner@@UAEPAXI@Z  00517400  /Od /Ob1 /MD /Gy /TP  # clone of 00404430
 slices/s00403af0/s00403af0.cpp  ??_GPaintSystem@Skinner@@UAEPAXI@Z  00541e60  /Od /Ob1 /MD /Gy /TP  # clone of 00404430
 slices/s00403af0/s00403af0.cpp  ??_GPaintSystem@Skinner@@UAEPAXI@Z  0055bf80  /Od /Ob1 /MD /Gy /TP  # clone of 00404430
+slices/s00614050/s00614050.cpp  ?DoReallocate@HandlerMap@@QAEXI@Z  00b95ef0  /O2 /MD /Gy /TP  # clone of 00614c40
 slices/s00553cc0/s00553cc0.cpp  ?push_back@?$vector@U?$basic_string@D@eastl@@Usp_vector_allocator@2@@eastl@@QAEXABU?$basic_string@D@2@@Z  00546a60  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 00553cc0
 slices/s00553cc0/s00553cc0.cpp  ?DoInsertValue@?$vector@U?$basic_string@D@eastl@@Usp_vector_allocator@2@@eastl@@QAEXPAU?$basic_string@D@2@ABU32@@Z  00554c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 00554820
 slices/s00437b00/s00437b00.cpp  ?HasRelevantPoints2@Tracker@@  004d9010  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 00438420
 slices/s00437b00/s00437b00.cpp  ?HasRelevantPoints2@Tracker@@  004d9030  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 00438420
 slices/s00437b00/s00437b00.cpp  ?HasRelevantPoints2@Tracker@@  004d9050  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 00438420
+slices/s00644b90/s00644b90.cpp  ?AllocNode12@@YGPAUNode12@@PBU1@@Z  00960550  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00645340
+slices/s00644b90/s00644b90.cpp  ?AllocNode12@@YGPAUNode12@@PBU1@@Z  00b6f890  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00645340
+slices/s00622f20/s00622f20.cpp  ?ToDouble@Pollen@SP@@YANPB_W@Z  00692700  /O2 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 00622f20
 slices/s0042dee0/s0042dee0.cpp  ?EASTL_Allocate@@YAPAXPAXIII@Z  00511810  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 0042dee0
 slices/s0042dee0/s0042dee0.cpp  ?UninitializedCopy56@@YAPAUElem56@@PAU1@00@Z  00475c60  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 0042e510
 slices/s0042dee0/s0042dee0.cpp  ?UninitializedFillN56@@YAXU?$It@UElem56@@@@IPBUElem56@@UTag@@@Z  004c2400  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 0042e680
 slices/s006068c0/s006068c0.cpp  ??0cOfflineConfirmationDialog@  0060b730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00607450
-slices/s006068c0/s006068c0.cpp  ??0cOfflineConfirmationDialog@  006204b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00607450
 slices/s004f6630/s004f6630.cpp  ?DoInsertValue@UIntMap@@QAE?AUMapIterator@@U2@ABUvalue_type@@Utrue_type@@@Z  00456490  /Od /Ob1 /MD /Gy /TP  # clone of 004f6d60
+slices/s0060d860/s0060d860.cpp  ??H?$DequeIterator@UcTextureAsyncQueueEntry@@$0EA@@eastl@@QBE?AU01@H@Z  00883d90  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060da40
+slices/s0060d860/s0060d860.cpp  ?DoPushBackSlow@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  00e30010  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060dbd0
 slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  0052a3e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 004010b0
 slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  0052a3f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 004010b0
 slices/s00c44a20/s00c44a20.cpp  Serialize_c44b40  005724e0    # clone of 00c44b40
@@ -141,8 +146,15 @@ slices/s00609790/s00609790.cpp  ?DoInsertValue@?$fixed_vector_base@PAVcCookie@Po
 slices/s0042b9e0/s0042b9e0.cpp  ?InsertNode@Tree@@QAEPAUTreeIter@@PAU2@PAUTreeNode@@PBUKey@@_N@Z  004e4c30  /Od /Ob1 /MD /Gy /TP  # clone of 0042c1c0
 slices/s004cd1b0/s004cd1b0.cpp  ?resize@?$vector@PAX@eastl@@QAEXI@Z  00454b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004cd3c0
 slices/s004cd1b0/s004cd1b0.cpp  ?push_back@?$vector@M@eastl@@QAEXABM@Z  004547f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004cd810
+slices/s0062f6e0/s0062f6e0.cpp  ??0SharedLibList@@QAE@XZ  00ac03d0  /O2 /MD /Gy /TP /GS-  # clone of 0062f8c0
+slices/s0062f6e0/s0062f6e0.cpp  ??0SharedLibList@@QAE@XZ  00d59580  /O2 /MD /Gy /TP /GS-  # clone of 0062f8c0
+slices/s0062f6e0/s0062f6e0.cpp  ??4JobRef@@QAEAAU0@ABU0@@Z  009aa4c0  /O2 /MD /Gy /TP /GS-  # clone of 00630540
+slices/s0062f6e0/s0062f6e0.cpp  ??4JobRef@@QAEAAU0@ABU0@@Z  00a056f0  /O2 /MD /Gy /TP /GS-  # clone of 00630540
 slices/s005d61b0/s005d61b0.cpp  ?DoInsertValue@?$hashtable@PB_WPB_W@eastl@@  008fbc80  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 005d6ff0
 slices/s004292a0/s004292a0.cpp  ?Resize@WStr@@QAEXI@Z  004c1c80  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 00429520
+slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  00836850  /O2 /MD /Gy /TP  # clone of 00618af0
+slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  00886780  /O2 /MD /Gy /TP  # clone of 00618af0
+slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  00b20c00  /O2 /MD /Gy /TP  # clone of 00618af0
 slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  0137d7e0    # clone of 0137e1b0
 slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  0137d990    # clone of 0137e1b0
 slices/s0137e100/s0137e100.cpp  ??__EcSPAttachment_desc@@  0137dc10    # clone of 0137e1b0
@@ -159,6 +171,7 @@ slices/s0041f940/s0041f940.cpp  ?Destroy@HashTable@@QAEXXZ  0056f480  /Od /Ob1 /
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  004aa100  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  00513e20  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  00567680  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
+slices/s0062e7e0/s0062e7e0.cpp  ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  00fca0b0  /O2 /MD /Gy /TP /arch:SSE  # clone of 0062ebb0
 slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  00475580  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004229f0
 slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  00478260  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004229f0
 slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  00564f90  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004229f0
@@ -171,8 +184,10 @@ slices/s004f7660/s004f7660.cpp  ?DoNuke@UIntMap@@QAEXPAUNode@@@Z  004554a0  /Od 
 slices/s00566970/s00566970.cpp  ?insert@?$vector2@IVallocator@eastl@@@eastl@@QAEPAIPAIABI@Z  00554f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 00567350
 slices/s00572580/s00572580.cpp  ?RandomRange@@YAMMM@Z  00b906a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  # clone of 00572a10
 slices/s00572580/s00572580.cpp  ?RandomSigned@@YAMM@Z  00a78f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  # clone of 00572a60
+slices/s00642530/s00642530.cpp  ?push_back@?$VecT@UEntry@@@@QAEXABUEntry@@@Z  0089a620  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00643790
+slices/s00642530/s00642530.cpp  ?push_back@?$VecT@UEntry@@@@QAEXABUEntry@@@Z  00c53a50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast  # clone of 00643790
 slices/s00427fd0/s00427fd0.cpp  ?Insert@PtrVector@@QAEXPAIPBI@Z  004fc720  /Od /Ob1 /MD /Gy /EHsc /TP  # clone of 004281d0
-slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  0062dee0  /O2 /MD /Gy /TP /GS-  # clone of 005965b0
+slices/s0107f4a0/s0107f4a0.cpp  ?printStatistics@hkPoolMemory@@UAEXPAVhkOstream@@@Z  00c72ce0  /O2 /MD /Gy /TP  # clone of 0107f700
 slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  0067f640  /O2 /MD /Gy /TP /GS-  # clone of 005965b0
 slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  00700640  /O2 /MD /Gy /TP /GS-  # clone of 005965b0
 slices/s005962e0/s005962e0.cpp  ?push_back@?$sp_vector@PAX@SP@@QAEXABQAX@Z  00766910  /O2 /MD /Gy /TP /GS-  # clone of 005965b0
@@ -200,6 +215,8 @@ slices/s005718f0/s005718f0.cpp  ?RandomUint32@@YAII@Z  00a5ec90    # clone of 00
 slices/s0041d490/s0041d490.cpp  ?Reset@ExtRef@@QAEPAU1@XZ  00472b00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  # clone of 0041d940
 slices/s0041d490/s0041d490.cpp  ?Unchecked_idl0@@YAHHHH@Z  0045daa0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  # clone of 0041daf0
 slices/s00426d90/s00426d90.cpp  ?DoRehash@Hashtable@@QAEXI@Z  005545c0  /Od /Ob1 /MD /Gy /TP  # clone of 00427320
+slices/s00613240/s00613240.cpp  ?insertHint@Elem16Vector@@QAEPAUElem16@@PAU2@ABU2@@Z  007ca9f0  /O2 /MD /Gy /TP /GS-  # clone of 00613bf0
+slices/s00613240/s00613240.cpp  ?insertHint@Elem16Vector@@QAEPAUElem16@@PAU2@ABU2@@Z  00ccc120  /O2 /MD /Gy /TP /GS-  # clone of 00613bf0
 slices/s0041dd90/s0041dd90.cpp  ?WStr_Format@@YAPAUWStr@@PAU1@PB_WZZ  00472fe0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-  # clone of 0041e050
 slices/s0041dd90/s0041dd90.cpp  ?WStr_Format@@YAPAUWStr@@PAU1@PB_WZZ  004c0530  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-  # clone of 0041e050
 slices/s004202f0/s004202f0.cpp  ??1RefVector@@QAE@XZ  0051d180  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 00420600
@@ -207,6 +224,13 @@ slices/s004202f0/s004202f0.cpp  ?push_back@RefVector@@QAEXABU?$intrusive_ptr@UAt
 slices/s004202f0/s004202f0.cpp  ?push_back@TripleVector@@QAEXABUTriple@@@Z  004e19a0  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004206f0
 slices/s004202f0/s004202f0.cpp  ??1TrivialVector@@QAE@XZ  004e1bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004209b0
 slices/s004202f0/s004202f0.cpp  ??0SmallBuffer@@QAE@IUPad24@@@Z  00552ec0  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004209f0
+slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  00837270  /O2 /MD /Gy /TP  # clone of 00616960
+slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  00886200  /O2 /MD /Gy /TP  # clone of 00616960
+slices/s00616360/s00616360.cpp  ?append@string8@@QAEAAU1@ID@Z  00b1ff30  /O2 /MD /Gy /TP  # clone of 00616960
+slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00836620  /O2 /MD /Gy /TP  # clone of 00616aa0
+slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00885fa0  /O2 /MD /Gy /TP  # clone of 00616aa0
+slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00b1ffd0  /O2 /MD /Gy /TP  # clone of 00616aa0
+slices/s00616360/s00616360.cpp  ?Destroy@cPoolTxA@@QAEPAXI@Z  00a17130  /O2 /MD /Gy /TP  # clone of 00616b00
 slices/s004d06e0/s004d06e0.cpp  ??$uninitialized_move_start@PAURec14@eastl@@PAU12@@eastl@@YAPAURec14@0@PAU10@00@Z  004ab4a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004d0f30
 slices/s00488600/s00488600.cpp  ?UpdateTargetPositions@cSPEditorLimbStructure@SP@@QAEX_N@Z  0048bf40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 00488d00
 slices/s005d87a0/s005d87a0.cpp  ??0?$pair@QAMU?$vector@PAUcSPEditorTactileComponent@SP@@Usp_vector_allocator@eastl@@@eastl@@@eastl@@QAE@ABU01@@Z  00889400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  # clone of 005d9680
@@ -6701,8 +6725,12 @@ slices/s0129de70/s0129de70.cpp  ?FUN_0129e080@@  013b32b0  /O2 /MD /Gy /EHsc /TP
 slices/s0057bfb0/s0057bfb0.cpp  ??4?$basic_string@_WUallocator@eastl@@@eastl@@QAEAAV01@ABV01@@Z  00579c60  /O2 /MD /Gy /TP /GS-  # clone of 0057cb60
 slices/s0057bfb0/s0057bfb0.cpp  ?reserve@?$sp_byte_vector@D@SP@@QAEXI@Z  006b6b70  /O2 /MD /Gy /TP /GS-  # clone of 0057cc60
 slices/s0057bfb0/s0057bfb0.cpp  ?SetResourceName@SP@@YAXPAUcResourceTable@1@HPB_W@Z  00618bd0  /O2 /MD /Gy /TP /GS-  # clone of 0057cd40
+slices/s0060b730/s0060b730.cpp  ??1HTTPMultipartRelatedPostBodyStream@Internet@EA@@UAE@XZ  00946f70  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060c660
 slices/s005646b0/s005646b0.cpp  ?clear@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAEXXZ  004b5030  /Od /Ob1 /MD /Gy /TP  # clone of 00564cd0
 slices/s005646b0/s005646b0.cpp  ?clear@?$rbtree@IIU?$less@I@eastl@@U?$use_self@I@2@@eastl@@QAEXXZ  004e8850  /Od /Ob1 /MD /Gy /TP  # clone of 00564cd0
+slices/s00614f20/s00614f20.cpp  ?Init@cSmallB@@QAEPAU1@HH@Z  008f2420  /O2 /MD /Gy /TP  # clone of 006162d0
+slices/s010dcd40/s010dcd40.cpp  hkConvexListAgent_staticLinearCastForwarder  010cda20  /O2 /MD /Gy /TP  # clone of 010ddde0
+slices/s010dcd40/s010dcd40.cpp  hkConvexListAgent_staticLinearCastForwarder  010dc150  /O2 /MD /Gy /TP  # clone of 010ddde0
 slices/s0041e730/s0041e730.cpp  ?GetBool@Property@@QAEPA_NXZ  004e42a0  /Od /Ob1 /MD /Gy /TP  # clone of 0041e920
 slices/s0041e730/s0041e730.cpp  ?GetInt@Property@@QAEPAHXZ  004e41c0  /Od /Ob1 /MD /Gy /TP  # clone of 0041e990
 slices/s0041e730/s0041e730.cpp  ?GetFloat@Property@@QAEPAMXZ  004e4230  /Od /Ob1 /MD /Gy /TP  # clone of 0041ea70
@@ -6711,3 +6739,4 @@ slices/s0041e730/s0041e730.cpp  ??1RefVector@@QAE@XZ  00432d60  /Od /Ob1 /MD /Gy
 slices/s00597230/s00597230.cpp  ?DoFreeNode@SummaryMap@SP@@QAEXPAUSummaryNode@2@@Z  00a2f660  /O2 /MD /Gy /TP /GS-  # clone of 00597650
 slices/s005f6df0/s005f6df0.cpp  ?DoAllocateNode@?$hashtable@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@eastl@@QAEPAU?$hash_node@U?$pair@UKey@ResourceMan@EA@@U123@@eastl@@@2@ABU?$pair@UKey@ResourceMan@EA@@U123@@2@@Z  00b73010  /O2 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 005f7c90
 slices/s00513930/s00513930.cpp  ?resize@?$vector@E@eastl@@QAEXIABE@Z  004c60e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 00514030
+slices/s00623f90/s00623f90.cpp  ?w_624ab0@@YGXMM@Z  00e80980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  # clone of 00624ab0

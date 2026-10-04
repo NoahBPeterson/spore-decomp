@@ -1,0 +1,8 @@
+00628d50 SP::cSPPlayMode::HandleButton  # PDB candidate; sub-mode dispatch + env reaction anims
+006291d0 SP::cSPPlayMode::GetBabyIDByIndex  # returns baby id at index (clamped)
+006292b0 SP::cSPPlayMode::SetAllOtherBabiesToIdle  # PDB candidate (caller-scored)
+006293d0 SP::cSPPlayMode::SetBabySocialCallState  # PDB candidate (caller-single)
+006294e0 SP::cSPPlayMode::SetBabyCelebrationAnim  # PDB name
+00629590 SP::cSPPlayMode::SwitchToCrouchAnim  # PDB candidate
+006298b0 SP::cSPPlayMode::SetBabyIdleAnim  # PDB candidate
+00629960 SP::cSPPlayMode::UpdateBabyButtonEventState  # PDB candidate

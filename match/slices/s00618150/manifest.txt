@@ -1,0 +1,8 @@
+slices/s00618150/s00618150.cpp  ??1cYouTubeAuthenticationTransaction@Pollen@SP@@UAE@XZ  00618150  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??1cYouTubeVideoUploadTransaction@Pollen@SP@@UAE@XZ  00618370  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??1cYouTubeVideoURLTransaction@Pollen@SP@@UAE@XZ  00618430  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??Heastl@@YA?AU?$basic_string@DUallocator@eastl@@@0@ABU10@0@Z  00618890  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??0string8N@Pollen@SP@@QAE@ABU012@@Z  00618af0  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??_GcGetAssetFeedTransaction@Pollen@SP@@UAEPAXI@Z  00618e00  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??_GcGetAssetFeedTransactionEx@Pollen@SP@@UAEPAXI@Z  00618e30  /O2 /MD /Gy /TP
+slices/s00618150/s00618150.cpp  ??1cEditFeedTransaction@Pollen@SP@@UAE@XZ  00618e70  /O2 /MD /Gy /TP

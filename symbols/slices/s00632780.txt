@@ -1,0 +1,3 @@
+00632780 SP::cSPPlayModePhotoBrowser::CheckGuidAndType  # card: PDB candidate (caller-single); opens the file stream, reads the header, validates guid/type
+00632e90 eastl::map<unsigned int,PhotoTypeInfo>::operator[]  # lower_bound + insert on the browser's photo-type map
+00633230 SP::cSPPlayModePhotoBrowser::MarkPhotoTypeForGuid  # existing PDB name from card

@@ -1,0 +1,10 @@
+slices/s00622f20/s00622f20.cpp  ?ToDouble@Pollen@SP@@YANPB_W@Z  00622f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?OnKeyUp@cXHTMLWin@Pollen@SP@@QAE_NHHH@Z  00622fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?IsSubmittableControl@Pollen@SP@@YG_NPAUDomElement@@@Z  00623000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?CreateXHTMLButton@Pollen@SP@@YA_NPAPAVIWindow@UTFWin@EA@@@Z  006230b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?ShowFormControl@Pollen@SP@@YGXPAUFormControlRef@12@H@Z  00623150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?HandleMessage@cXHTMLWin@Pollen@SP@@QAE_NABUMessage@UTFWin@EA@@@Z  00623190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?Refresh@cFloatPropWatch@Pollen@SP@@QAE_NPAUIPropertyListV@23@@Z  006231d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ??1cXHTMLWin@Pollen@SP@@UAE@XZ  00623280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?GetModificationCount@PropListNode@Pollen@SP@@QAEIXZ  006237a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00622f20/s00622f20.cpp  ?Load@cSPHoverTitle@Pollen@SP@@QAEXXZ  006239c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

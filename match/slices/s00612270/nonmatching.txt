@@ -1,0 +1,7 @@
+00612980  52  vptr/this-cast scheduling (pCheat computed after MessageServer call)
+00612ba0  94  frame 0x34 vs 0x30: count local not sharing dead param slot
+00612e00  64  Variant copy-ctor zero stores share one reg in original
+00612f00  15  store scheduling of derived vptr/field before fixed-vector init
+00612f50  116  reg allocation (ppOut in ebp) and extra lea/cmp in original
+006130e0  84  destroy loop is a counted loop in original
+00613140  200  reg allocation (first in ebp, begin cached in ebx)

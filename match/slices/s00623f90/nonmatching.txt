@@ -1,0 +1,4 @@
+00623f90  7  popup timer OnMessage; complete, only the fstp/mov al scheduling in the 0x51a1a2e path differs
+00624080  1624  cXHTMLWin::CreateFormControl; complete behaviour, structure/regalloc differ (jump-table switch, duplicated inlined tails)
+006248d0  131  cXHTMLWin::GetFormControlValue; complete; WString assign is a usercall (eax=begin) and list anchor null-test shape differs
+00624ec0  8  cCreatureCameraBase::Deactivate; complete; pServer load is hoisted above the three bool stores in mine

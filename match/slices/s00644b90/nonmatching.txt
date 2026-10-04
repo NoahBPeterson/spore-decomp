@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00644b90 134 cSPUIAssetBrowser::SetWebBrowserVisibility: complete; original passes the bool byte unwidened (mov cl,1/push ecx) and loads vtable slot after the pushes
+00644c50 131 sibling of SetWebBrowserVisibility (+Navigate call): complete; same bool-arg/vcall scheduling difference
+00644d10 80 same visibility helper with the SubA toggle: complete; same bool-arg scheduling difference
+00644eb0 169 font-size fit loop (style/rect compare): complete; SSE scheduling and stack slot layout of the two rects differ
+00645010 1 cSPUIAssetBrowser::PreloadTextures: complete; function-local static key table matches, only one loop-back jump byte differs (alignment pad)
+00645160 162 Browser validate loop over 20-byte entries then WindowManager/SetWin: complete; register allocation differs
+00645260 21 Browser::Fn_260 (error-dialog key select): complete; original pushes the key address in each arm (push imm; jmp), mine materializes in eax
+006452c0 43 accessor returning field of the single 20-byte entry: complete; original reloads end/begin differently (no push esi)
+00645300 43 same accessor for the other field
+006453e0 90 uninitialized_copy with out-param (Ent20): complete; register assignment (3 vs 4 callee-saved) differs
+00645510 9 uninitialized_fill_n (Ent20): complete; only the position of the n==0 early-out relative to push esi/edi differs

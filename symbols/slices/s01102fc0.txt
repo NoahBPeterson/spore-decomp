@@ -1,0 +1,2 @@
+01103850 hkAgent1nMachine_InvalidateTim  # walks sector entries, resets TIMs, calls dispatcher agent3 invalidateTim funcs (matches 6.x API; called from hkConvexListAgent::invalidateTim)
+01103930 hkAgent1nMachine_WarpTime  # same walker, warp-time funcs, TIM chain check oldTime==entry time

@@ -1,0 +1,14 @@
+010889e0 hkEntity::setDeactivator  # addref new, release old at +0x6c
+01088a70 hkEntity::removeCollisionListener  # +0x9c array, null-assign
+01088ae0 hkEntity::activate  # island inactive and not fixed -> markIslandActive
+01088b10 hkEntity::deactivate  # island active -> markIslandInactive
+01088c20 hkEntity::addEntityListener  # +0xb4 array, reuse empty slot else append
+01088c90 hkEntity::addCollisionListener  # +0x9c array, reuse empty slot else append
+01088d00 hkEntity_delete  # null-checked scalar deleting dtor call
+01088d20 hkEntity::hkEntity  # hkWorldObject(shape,1); friction .5 restitution .4
+01089700 hkGenericConstraint_buildLinearBasisWorld  # three build-jacobian calls on unit axes, count+=3
+010897d0 hkGenericConstraint_buildLinearDof  # one build-jacobian from DOF vector param[cmd+2], count+=1
+01089870 hkGenericConstraint_calcAngle  # two dot3 products then hkMath::atan2fApproximation
+010888c0 hkMotionState::operator=  # 0xb0-byte copy, used by getMotionStateAndVelocities
+010a0130 hkWorldOperationUtil::markIslandActive  # called by hkEntity::activate
+008dc790 hkGenericConstraintData::getScheme  # lea eax,[ecx+0xc]

@@ -1,0 +1,11 @@
+010dcd40 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::processCollision  # flips contact points and toi normal around AGENT::processCollision(B,A)
+010dce00 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::staticGetClosestPoints  # hkSymmetricAgentFlipCollector (vtable 14a43a4) + swapped bodies
+010dce40 hkSymmetricAgentLinearCast<hkHeightFieldAgent>::staticLinearCast  # negated path, FlipCastCollector (14a43ac)
+010dd120 hkConvexListAgent::removePoint  # tail-jumps hkGskfAgent::removePoint when in gsk mode
+010dd140 hkConvexListAgent::commitPotential  # tail-jumps hkGskfAgent::commitPotential
+010dd160 hkConvexListAgent::createZombie  # tail-jumps hkGskfAgent::createZombie
+010dd260 hkProcessCollisionOutputBackup::restore  # inverse of the backup ctor at 10dd1d0
+010dd640 hkConvexListAgent::hkConvexListAgent  # calls hkPredGskfAgent ctor, hkGskCache::init, sets vtable 14a4b00
+010ddc30 hkConvexListAgent::staticLinearCast  # timers LtCvsListAgent/checkHull
+010ddde0 hkConvexListAgent::staticLinearCast_forwarder  # identical stdcall forwarder
+010dde90 hkSymmetricAgent<hkConvexListAgent>::getClosestPoints  # flip collector + swapped bodies into staticGetClosestPoints@hkConvexListAgent

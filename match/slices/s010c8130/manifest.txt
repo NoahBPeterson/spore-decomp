@@ -1,0 +1,2 @@
+slices/s010c8130/s010c8130.cpp  ?getCollisionFilterInfo@hkMeshShape@@UBEII@Z  010c8840  /O2 /MD /Gy /TP
+slices/s010c8130/s010c8130.cpp  ?getCollisionFilterInfo@hkListShape@@UBEII@Z  010c8d90  /O2 /MD /Gy /TP

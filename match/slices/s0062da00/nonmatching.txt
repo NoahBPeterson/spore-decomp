@@ -1,0 +1,9 @@
+0062db30  118  FindPassableNeighbor: complete; orig keeps 'exclude' on stack (register allocation differs)
+0062dc70  79  GetBestOpenNode: complete; orig re-reads vector end/begin each loop iteration, mine hoists
+0062dce0  275  BlockCircle: complete; orig mixes SSE subtract with x87 sqrt via stack temps, schedule differs
+0062de30  18  GetNextPathPoint: complete; load/add order of x,y differs
+0062df10  253  ExpandNode: complete; orig loop pointer lives in the param slot, constant 1 held in ebx
+0062e010  545  FindPath: complete; inlined grid lookup uses reciprocal multiply with negative stride, plus ExpandNode-style regalloc
+0062e2e0  20  StartNewAnimation: complete; prologue/regalloc of arg loads
+0062e4b0  5  GetAnimCount: complete; orig re-reads panel vector begin for the loop bound
+0062e4f0  179  GetExpansionAnimInfo: complete; orig is less optimised (hoists page*3-3 to a stack slot, reloads button id)

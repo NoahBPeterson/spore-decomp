@@ -1,0 +1,7 @@
+010c85c0 hkMeshShape::getMeshMaterial  # subpart lookup by shape key bits; returns materialBase + stride * (u8|u16 index); used by getCollisionFilterInfo
+010c8860 hkMeshShape_includeVertex  # register-convention local helper: scale vertex, setTransformedPos, merge into aabb
+010c8bc0 hkMeshShape::hkMeshShape(hkFinishLoadedObjectFlag)  # fixes subpart material index striding type 0 -> 1; vptr 014a3fe4
+010c8c10 hkMeshShape_constructFinishLoaded  # null-guarded wrapper calling 010c8bc0
+010c8fe0 hkFastMeshShape_constructFinishLoaded  # null-guarded: calls 010c8bc0 then sets vptr 014a4060
+010c9030 hkCylinderShape::calcStatistics  # beginObject("Cylinder"), endObject only
+010c9050 hkFpuRoundingProbe  # steps x by 0.01f until fistp(x) != 0, returns x else 1.0f (rounding-mode probe)

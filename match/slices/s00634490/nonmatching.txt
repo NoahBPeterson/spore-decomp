@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00634520 48 NextPhoto: complete; original re-reads the vector size after the index increment and again for the clamp (no CSE), ours hoists/CSEs it
+00634640 111 FixSlashes (static helper, edi = string*): complete; original keeps the separator spilled and preloads the memmove IAT pointer and -2 into registers

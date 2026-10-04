@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00642ec0 341 vector<Entry16>::DoInsertValues: complete EASTL-shaped; original keeps nExtra/n in different regs and copies temp first
+006433a0 277 rbtree DoInsertValueHint for map<Key3,AutoRef>: complete; sret/tag-temp slot sharing and reg allocation differ
+00643500 183 HubB::OnMessage(0x4249453) erase by key: complete; key kept in reg ebp in original, stack in mine
+006435e0 282 Hub::Remove(Key3): complete; this kept in ebp + shorter spill sequence in original
+00643740 33 PoolList ctor (fixed_pool x2): complete; original shares one xor eax,eax zero for stores and pushes
+00643840 158 Hub ctor: complete; original keeps redundant node-init stores (left/parent/color) that mine dead-store eliminates
+00643940 186 Hub::Clear: complete; original erase(begin,end) copy loop is not folded away and this stays in ebx
+00643a40 15 map<uint,uint>::operator[]: complete; only the placement of kv[1]=0 store differs
+00643ac0 61 map<Key3,AutoRef>::operator[]: complete; iterator temp / tag byte share the param slot in the original

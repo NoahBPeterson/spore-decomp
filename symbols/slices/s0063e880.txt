@@ -1,0 +1,10 @@
+0063e880 SP::cSPPlayModeSubModePhoto::Update  # PDB name; stopwatch-driven UI blinking
+0063eb30 SP::cSPPlayModeSubModePhoto::ShowErrorDialog  # PDB name
+0063eb90 SP::cSPPlayModeSubModePhoto::IsPhotosWriting  # PDB name
+0063ec10 SP::cSPPlayModeSubModePhoto::CloseSendPhotoWindow  # PDB name
+0063ee30 SP::cSPPlayModeSubModePhoto::Init  # PDB name
+0063eef0 SP::cSPPlayModeSubModePhoto::Shutdown  # PDB name
+0063ef70 SP::cSPPlayModeSubModePhoto::StartCameraFlash  # PDB name
+0063f1c0 SP::cSPPlayModeSubModePhoto::cSPPlayModeSubModePhoto  # vptr stores + stopwatch ctors
+0063f2b0 SP::cSPPlayModeSubModePhoto::~cSPPlayModeSubModePhoto  # PDB name
+0063f420 SP::cSPPlayModeSubModePhoto::SavePhoto  # allocates photo message, builds file name

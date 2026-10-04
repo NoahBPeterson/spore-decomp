@@ -1,0 +1,2 @@
+0109f040 hkWorldCallbackUtil::fireContactPointAdded  # sibling of fireContactPointConfirmed/Removed/Process; contact listener array +0x15c, slot 0, event+0xc = 0
+0109f5a0 hkWorldCallbackUtil::firePostSimulationCallback  # listener array +0x120 (between island activation and post-integrate), calls slot 1 with (world, stepInfo)

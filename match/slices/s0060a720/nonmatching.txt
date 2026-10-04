@@ -1,0 +1,4 @@
+0060a720  384  ApplyURLDefaults: complete; register allocation and the shared end-begin length (cl CSEs it, original recomputes) differ; DomainMatches helper convention (edi=domain, host on stack) also differs
+0060aa40  662  CookieHandler::Filter(request): complete; fixed_vector/fixed_string frame is 4 bytes off and DomainMatches inline body scheduled differently
+0060ada0  410  AddCookie: complete; original keeps constant 1 in ebp (add [m],ebp) where cl emits inc; ref-holder slot layout differs
+0060b150  9    cDBCheckDialog ctor: complete; store order of base vptr/zero differs (xor/lea scheduling)

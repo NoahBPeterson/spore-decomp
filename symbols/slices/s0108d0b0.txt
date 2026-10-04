@@ -1,0 +1,8 @@
+0108d850 hkSimpleConstraintContactMgr::Factory::Factory  # stores vtbl 0149e494, refcount=1, world at +8; Factory::createContactMgr sits at 0108dab0
+0108d9a0 hkSimpleConstraintContactMgr::hkSimpleConstraintContactMgr  # (world, bodyA, bodyB) builds constraint data + instance, priority from dispatcher quality matrix
+0108da30 hkSimpleConstraintContactMgr::forwardContactConstraintData9  # thunk: this+0x10 data, jumps vtbl slot 9
+0108da40 hkSimpleConstraintContactMgr::forwardContactConstraintData10  # thunk: this+0x10 data, jumps vtbl slot 10
+0108da50 hkSimpleConstraintContactMgr::~hkSimpleConstraintContactMgr  # removes constraint if points remain, calls ~hkConstraintInstance and ~hkSimpleContactConstraintData
+0108dd40 hkShapePhantom::hkShapePhantom  # (shape, transform): phantom base kind 2, setTransform at +0x70
+0108df90 hkAabbPhantom::hkAabbPhantom_finishLoaded  # null-guarded finish-loaded ctor, vtbl 0149e51c
+0108dfe0 hkAabbPhantom::hkAabbPhantom  # (aabb, collisionFilterInfo): aabb copied to +0x70, filter info at +0x38

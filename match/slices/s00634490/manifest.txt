@@ -1,0 +1,30 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00634490/s00634490.cpp  ?RefreshAfterDelete@PhotoBrowser@@QAEXXZ  00634490  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?PrevPhoto@PhotoBrowser@@QAEXXZ  00634570  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ??0cPlayModeTokenTranslator@@QAE@XZ  006345b0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?TranslateToken@cPlayModeTokenTranslator@@QAE_NPB_WPAUwstring16@@@Z  006346e0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?AttachWinProc@cSPPlayModeUI@@QAEXXZ  00634b10  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490b.cpp  ?Intersect@RectF@@QAE_NABU1@0@Z  00634b60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00634490/s00634490.cpp  ??0cSPPlayModeUI@@QAE@XZ  00634c10  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?UpdateButtonEffects@cSPPlayModeUI@@QAEXH@Z  00634c80  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?FindPlayModeUIWindow@cSPPlayModeUI@@QAEPAUUIWin@@I@Z  00634dc0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?FindEditorUIWindow@cSPPlayModeUI@@QAEPAUUIWin@@I@Z  00634e40  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?FUN_00634e50@cSPPlayModeUI@@QAEHXZ  00634e50  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?IsItemVisible@cSPPlayModeUI@@QAEEI@Z  00634e60  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetHighlight@cSPPlayModeUI@@QAEXI_N@Z  00634e90  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetSelected@cSPPlayModeUI@@QAEXI_N@Z  00634ec0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetEnabled@cSPPlayModeUI@@QAEXI_N@Z  00634ef0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetEditorUIEnabled@cSPPlayModeUI@@QAEXI_N@Z  00634f20  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetHideOut@cSPPlayModeUI@@QAEXI_N@Z  00634f50  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetEditorText@cSPPlayModeUI@@QAEXIPAPB_W@Z  00635010  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490b.cpp  ?ShowToolTip@cSPPlayModeUI@@QAEXIIIPAUcSPUITooltipWinProc@@PAM@Z  00635040  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00634490/s00634490b.cpp  ?ShowEditorUIToolTip@cSPPlayModeUI@@QAEXIIIPAUcSPUITooltipWinProc@@PAM@Z  00635160  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00634490/s00634490.cpp  ?RemoveTooltip@cSPPlayModeUI@@QAEXIPAX@Z  00635290  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?DoCommand103@cSPPlayModeUI@@QAEXXZ  006352d0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?DoCommand102@cSPPlayModeUI@@QAEXXZ  006352f0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetPrompt@cSPPlayModeUI@@QAEXI@Z  00635310  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?FUN_00635350@cSPPlayModeUI@@QAEXII@Z  00635350  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?ShowEditor@cSPPlayModeUI@@QAEXXZ  00635380  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?ToggleNameAndDescribe@cSPPlayModeUI@@QAEX_N@Z  00635390  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetTagField@cSPPlayModeUI@@QAEXI@Z  006353e0  /O2 /MD /Gy /TP /GS-
+slices/s00634490/s00634490.cpp  ?SetSendEmailDialogVisibility@cSPPlayModeUI@@QAEX_N@Z  00635400  /O2 /MD /Gy /TP /GS-

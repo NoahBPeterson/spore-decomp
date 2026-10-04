@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+0107f4a0 57 havok-equivalent
+0107f530 77 havok-equivalent
+0107f5d0 11 havok-equivalent
+0107f670 50 havok-equivalent
+0107f6c0 32 havok-equivalent
+0107f720 37 havok-equivalent
+0107f750 20 havok-equivalent
+0107f780 47 havok-equivalent
+0107f7d0 32 havok-equivalent
+0107f820 115 havok-equivalent
+0107f910 679 havok-equivalent
+0107fbe0 483 havok-equivalent
+0107fdd0 366 havok-equivalent
+0107ff60 86 havok-equivalent
+0107fff0 52 havok-equivalent
+01080040 86 havok-equivalent
+010800b0 58 havok-equivalent
+01080100 8 havok-equivalent
+01080120 9 havok-equivalent
+01080170 69 havok-equivalent
+010801d0 86 havok-equivalent
+01080240 45 havok-equivalent
+01080290 8 havok-equivalent
+01080330 18 havok-equivalent
+01080350 51 havok-equivalent
+010803c0 106 havok-equivalent

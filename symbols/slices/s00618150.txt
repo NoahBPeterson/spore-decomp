@@ -1,0 +1,5 @@
+00618890 eastl::operator+(basic_string<char>,basic_string<char>)  # byte-exact
+00618e70 SP::Pollen::cEditFeedTransaction::~cEditFeedTransaction  # byte-exact (PDB name)
+00618b90 SP::Pollen::cMsgString8::scalar_deleting_destructor  # name guessed from SetMessageString8's allocation
+00618bd0 SP::Pollen::SetMessageString8  # PDB name
+00618c70 SP::Pollen::FillFeedInfo  # guessed: copies a feed source record into feed info, hashes the URI with FNV and derives the feed type

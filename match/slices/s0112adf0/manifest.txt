@@ -1,0 +1,3 @@
+slices/s0112adf0/s0112adf0.cpp  ?getClassByName@hkClassNameRegistry@@UBEPBUhkClass@@PBD@Z  0112bad0  /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?registerTypeInfo@hkFinishLoadedObjectRegistry@@UAEXPBUhkTypeInfo@@@Z  0112baf0  /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?finishLoadedObject@hkFinishLoadedObjectRegistry@@UBEXPAXPBD@Z  0112bb10  /O2 /MD /Gy /TP

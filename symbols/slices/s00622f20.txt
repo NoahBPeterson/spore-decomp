@@ -1,0 +1,10 @@
+00622f20 SP::Pollen::ToDouble  # wcstod wrapper, byte-exact
+00623000 SP::Pollen::IsSubmittableControl  # byte-exact: not disabled, not hidden input
+006230b0 SP::Pollen::CreateXHTMLButton  # PDB name; byte-exact
+00623280 SP::Pollen::cXHTMLWin::~cXHTMLWin  # byte-exact
+006239c0 SP::cSPHoverTitle::Load  # byte-exact: hover layout and property list
+00623570 SP::Pollen::FindSubmitChild  # PDB name
+00623610 SP::Pollen::FindFormChild  # PDB name
+00623660 SP::Pollen::cXHTMLWin::SubmitForm  # PDB name
+00623370 SP::Pollen::cXHTMLWin::DestroyFormControl  # PDB name
+00623c90 SP::Pollen::cXHTMLWin::SetFormControlValue  # PDB name

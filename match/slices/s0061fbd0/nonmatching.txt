@@ -1,0 +1,5 @@
+0061fbd0  378  cPollinatorPoller::Init: complete; callback-field init scheduling and the property-list out-param spill order
+0061fdb0  58   queue-event-as-work-item (3 args): complete; field-store reload pattern on the work item pointer
+0061fee0  60   same as 0061fdb0 with 4 request args
+00620270  85   cCancelConfirmationDialog::Init: complete; the second SetPosition arg goes through an x87 spill in the original (movss then fld/fstp)
+00620690  18   cXHTMLRegistrationHandler::FindFirstTaggedElement: complete; original keeps the top-tested loop (jmp back) rather than loop inversion

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00632780 18 CheckGuidAndType: complete; original leaves 4 bytes of the GetPath arg on the stack (add esp,0x24, path at esp+0x10), not reproducible with a plain thiscall virtual
+00632900 10 AddPhoto: complete; old writeJob load is hoisted above the guid/selected stores in our build
+006329b0 165 CopyPixelsToRaster: complete; original addresses the entry as (this + idx*0x24) + 0x84 disp without folding, ours folds the 0x84 into the lea
+00632c60 16 DeleteOne: complete; scheduling of a dead mov ecx,esi vs the selected-flag store
+00632ce0 16 MoveOne: complete; same as DeleteOne
+00632e40 63 ResetPhotoMap: complete; original keeps 0 in ebx across the tree reset and returns via cl/al
+00632e90 103 PhotoTypeMap::operator[] (find-or-insert): complete; original passes iterator and value_type by value to DoInsertKey
+00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
+00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster

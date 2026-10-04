@@ -1,0 +1,2 @@
+01082910 0 fragment of a larger function (unbalanced stack, EDI/ESI params); body not transcribed
+01082d20 0 constructor of a 4-listener multiple-inheritance object; class identity and vtable contents unknown

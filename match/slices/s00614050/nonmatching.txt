@@ -1,0 +1,4 @@
+00614050  341  cAssetCache::LoadAll: complete; stack frame 0x40 vs 0x48 (one more 8-byte temp slot in the original) and register choices differ
+00614280  332  cAssetCache::AddAsset: complete; id half loaded into registers vs memory, out-of-line RefPtr helper placement differs
+006146c0  207  cAssetCache::HandleMessage: complete; hi half is loaded after the bool test in the original (register reuse), and the final id/msg stores differ
+00614dc0  6    StrMap::DoInsertValueImpl: complete; only the load order of key pointers in the inlined compare differs

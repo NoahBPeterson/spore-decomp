@@ -1,0 +1,2 @@
+00638790  68  complete, not byte-exact (best symbol UpdateBabyCelebrationTimes, 120 bytes)
+006388e0  2  complete, not byte-exact (best symbol SetWalkAnimation, 193 bytes)

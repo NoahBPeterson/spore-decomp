@@ -1,0 +1,5 @@
+0063b210 SP::cSPPlayModeSubModeAction::cSPPlayModeSubModeAction  # stores vtbl, zeroes effect ptrs, Stopwatch(5,0)
+0063b5a0 SP::cSPPlayModeSubModeDance::cSPPlayModeSubModeDance  # stores vtbl, zeroes 4 fields
+0063b5c0 SP::cConnectingDialog::Init  # CardLayout init with key 834b03af/510a95b/40464100 then AddWinProc
+0063b760 SP::cSPPlayModeSubModeMovie::ToggleRecordUIGroups  # swaps visibility of groups 3f434ac / 3fc1740
+0063b890 SP::cSPPlayModeSubModeMovie::GetYTPrompt  # name from PDB

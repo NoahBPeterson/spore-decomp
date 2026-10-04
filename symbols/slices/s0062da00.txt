@@ -1,0 +1,18 @@
+0062da00 SP::cSPCasual_Path::SetPositionOffset  # clears grid flags, snaps (x,y) to nearest node; PDB layout match
+0062db30 SP::cSPCasual_Path::FindPassableNeighbor  # 3-ring neighbour search for a passable node
+0062dbf0 SP::cSPCasual_Path::StartPath  # returns mPathFound; current node = start
+0062dc10 SP::cSPCasual_Path::RemoveFromOpenList  # vector erase of one node
+0062dc70 SP::cSPCasual_Path::GetBestOpenNode  # min mTotalDistance over open list
+0062dce0 SP::cSPCasual_Path::BlockCircle  # marks grid nodes within radius
+0062de30 SP::cSPCasual_Path::GetNextPathPoint  # returns point, advances along mChild
+0062de70 SP::cSPCasual_Path::cSPCasual_Path  # PDB name
+0062dea0 SP::cSPCasual_Path::`scalar deleting destructor'  # vtable 0x13fe220
+0062df10 SP::cSPCasual_Path::ExpandNode  # A* expansion step
+0062e010 SP::cSPCasual_Path::FindPath  # A* driver
+0062e2e0 SP::cSPPlayModeAnimation::StartNewAnimation  # PDB candidate
+0062e4b0 SP::cSPPlayModeAnimation::GetAnimCount  # PDB name
+0062e4f0 SP::cSPPlayModeAnimation::GetExpansionAnimInfo  # PDB name
+0062e5f0 SP::cSPPlayModeAnimation::IsExtraAnims  # PDB candidate
+0062e600 SP::cSPPlayModeAnimation::UpdatePageCount  # PDB name
+0062e6c0 SP::cSPPlayModeAnimation::Activate  # PDB candidate
+0062e7a0 SP::cSPPlayModeAnimation::ResetCurAnimWindow  # PDB name

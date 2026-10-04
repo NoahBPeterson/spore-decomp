@@ -1,0 +1,4 @@
+00616b80  338  cTxUpload::HandleResult: complete; result flag kept in memory differently (cmp vs mov al/test) and mov/or of -1 differ
+00616d60  253  CreateDownloadJob: complete; job field store order (fn/mp4) and old-job load register differ
+00616ed0  44   cTxDownload::HandleResult: complete; register reuse (esi for metadata) differs
+00617010  236  cTxThumbnail::ConstructRequest: complete; begin pointer is cached across the bounds check instead of reloaded

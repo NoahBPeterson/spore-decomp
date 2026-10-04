@@ -1,0 +1,11 @@
+0062e7e0 SP::cSPPlayModeAnimation::UpdateButtonImages  # PDB candidate name
+0062ebb0 SP::cSPPlayModeAnimPanelInfo::`scalar deleting destructor'  # vtable 0x13fe378, vector at +0x14
+0062ebe0 SP::cSPPlayModeAnimation::NextAnimWindowSet  # PDB candidate
+0062ec30 SP::cSPPlayModeAnimation::PreviousAnimWindowSet  # PDB candidate
+0062ec90 SP::cSPPlayModeAnimation::LoadAnimInfo  # PDB name
+0062efb0 SP::cSPPlayModeAnimation::LoadPanelInfo  # PDB name
+0062f1e0 SP::cSPPlayModeAnimation::LoadAllAnimInfoFromGroup  # PDB candidate
+0062f2a0 SP::cSPPlayModeAnimation::Init  # PDB candidate
+0062f340 SP::cSPPlayModeBGMgr::SetBGHilite  # PDB name
+0062f480 SP::cSPPlayModeBGMgr::UpdateBGHilite  # PDB name
+0062f540 SP::cSPPlayModeBGMgr::UpdateBGCountText  # PDB name

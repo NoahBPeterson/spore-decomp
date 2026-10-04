@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00643b50 67 vector<Entry16>::set_capacity: complete; local frame/allocation scheduling of the shrink path differs
+00643c60 24 Hub dtor (non-deleting): complete; arg evaluation order of the last two DoNukeSubtree calls differs
+00643e70 210 Hub::AddResource: complete; original keeps obj param in esi (address-taken for Assign2) and inlines the slot assignment
+00643f70 2 Hub::Request(Entry*, flag): complete; only the shared epilogue choice (jne/je targets) differs
+00644040 576 Hub::Update(vector<Key3>*): complete; large EASTL list/vector inline code, scheduling and register choice differ
+006442e0 421 Hub::Want(Key3*): complete; same list/vector erase inlines, regalloc differs
+00644550 62 Hub::Load(vec*, flag): complete; this/vec/counter register assignment differs (ebp/edi/ebx/esi order)
+006445c0 425 Hub::Load2(vector<Key3>*): complete; temp vector building and loop regalloc differ
+006447c0 170 MakeLaunchData(flag, out): complete; constant-vs-register byte stores and store order differ
+00644990 9 Hub::Fn990 (dialog key select): complete; only store scheduling of the Key3 copy around the pushes differs
+00644b10 28 InitBlock::Init: complete; only the position of mov edx,1 differs

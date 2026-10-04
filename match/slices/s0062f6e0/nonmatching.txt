@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0062f6e0 35 ShowBGThumbnails: complete; remaining diff is load/store scheduling of the img AutoRef init and thumbnail id
+0062f7f0 159 HandleButton: complete; original shares the hilite tail between the 4 button cases, register/bl allocation differs
+0062f920 29 Shutdown: complete; effect-id local load order / register assignment (esi/edi swap)
+0062f9f0 437 LoadBackground: complete; register allocation (ebx zero reg, this in esi) and slot order differ
+0062fee0 46 GetHeaderInfo: complete; shared Get(...) call tail (push 4/2 then common call) not reproduced
+00630360 41 FindPhotoByGuid: complete; original uses 4 callee-saved regs (extra element copy in loop)
+00630470 15 IsPhotosWriting: complete; this/job register swap (edi/esi)
+006306f0 31 LocaleMsg dtor (32-slot release loop): complete; original test-then-reload of slot pointer and eax/edx vcall chain

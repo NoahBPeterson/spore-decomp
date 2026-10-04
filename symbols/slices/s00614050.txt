@@ -1,0 +1,15 @@
+00614050 SP::Pollen::cAssetCache::LoadAll  # lists every Pollinator asset record and maps server id -> loaded asset
+00614280 SP::Pollen::cAssetCache::AddAsset  # finds or loads the asset for a 64-bit id, stores data, writes and caches it
+006144c0 SP::Pollen::cAssetCache::RemoveAsset  # find id in the vector_map and drop it
+00614560 SP::Pollen::cAssetCache::ReadRecord  # PFRecordRead callback: copies the record key into the asset (type 0xfd60f0c1)
+006145d0 SP::Pollen::cAssetCache::Init  # registers the PFRecordRead factory and two message ids, then LoadAll
+006146c0 SP::Pollen::cAssetCache::HandleMessage  # messages 0x4249453 (remove by key) and 0x1dd7bda9 (asset list)
+00614840 SP::Pollen::cServerResponse::Write  # XML_Parse chunk, IStream override
+00614880 SP::Pollen::cServerResponse::Close  # final XML_Parse + XML_ParserFree
+006148c0 SP::Pollen::cServerResponse::GetAccessFlags  # open ? 2 : 0
+006148d0 SP::Pollen::cServerResponse::GetState  # parse status / XML error code
+00614900 SP::Pollen::cServerResponse::GetPosition  # bytes consumed
+00614ab0 SP::Pollen::cServerResponse::GetStatus  # compares trimmed text with "Success"/"Failure" (PDB name)
+00614da0 SP::Pollen::cServerResponse::CharacterData  # expat character-data handler, appends to mCharacterData
+00614e50 SP::Pollen::cServerResponse::GetField  # lookup in mFieldDict
+00614ed0 SP::Pollen::cServerResponse::StartElement  # expat start handler, dispatches via gStartHandlers

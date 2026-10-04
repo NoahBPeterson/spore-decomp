@@ -1,0 +1,9 @@
+00615180 SP::Pollen::cServerResponse::DefaultEndTag  # PDB name; trims text and inserts (tag, text) into mFieldDict
+00615330 SP::Pollen::cServerResponse::EndElementHandler  # PDB name; dispatches via gEndHandlers else DefaultEndTag
+00615380 SP::Pollen::cServerResponse::~cServerResponse  # PDB name
+00615430 SP::Pollen::cServerResponse::Read  # returns -1, stream is write-only
+00615450 SP::Pollen::cServerResponse::Open  # XML_ParserCreate_MM + handlers
+006154c0 SP::Pollen::cServerResponse::SetPosition  # Begin: reopen the parser when rewinding to 0
+00615520 SP::Pollen::cServerResponse::IDListElement  # PDB name; push_back(trimmed text) into mAssetList
+006155f0 SP::Pollen::cServerResponse::SetupDict  # PDB name; fills the static start/end handler vector_maps
+00615790 SP::Pollen::cServerResponse::cServerResponse  # PDB name

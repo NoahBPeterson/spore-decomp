@@ -1,0 +1,11 @@
+0060a720 SP::Pollen::CookieHandler::ApplyURLDefaults  # fills cookie domain/path defaults from the request URL parts and validates them (called from 0060ada0)
+0060ada0 SP::Pollen::CookieHandler::AddCookie  # parses a Set-Cookie header and inserts/replaces/removes it in mCookies
+0060b050 UI::cDBCheckDialog::Init  # layout init, AddWinProc(this)
+0060b180 UI::cDBCheckDialog::Close  # EndModal + RemoveWinProc + layout shutdown
+0060b110 UI::DBCheck::Init  # vtable slot 4; AddListener(msg 0x238de9c)
+0060b290 UI::DBCheck::Shutdown  # vtable slot 5; RemoveListener + release dialog
+0060b2e0 UI::DBCheck::Show  # vtable slot 6; creates cDBCheckDialog and BeginModal
+0060b390 UI::DBCheck::OnWinProcEvent  # releases dialog when control 0x431e538 closes
+0060b4f0 UI::DBCheck::HandleMessage  # msg 0x238de9c -> Shutdown
+0060b550 UI::cInsertDiscDialog::Init  # layout key 0x5b9f6852
+0060b5e0 UI::cInsertDiscDialog::Show  # sets caption string then BeginModal

@@ -1,0 +1,8 @@
+0060d860  11  id struct locals: stack slot/reg order
+0060d920  6  reg order of id lo/hi loads
+0060d9f0  8  AddRef lea/mov order
+0060df50  64  atomic dec codegen (dec edi/push ecx temp)
+0060dfb0  692  frame 0x20 vs 0x24 and serverID block layout
+0060e5b0  57  atomic dec codegen
+0060e6e0  15  iterator reg alloc esi/edi swap
+0060e800  15  iterator reg alloc esi/edi swap

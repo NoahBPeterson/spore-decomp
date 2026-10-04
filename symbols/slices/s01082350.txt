@@ -1,0 +1,17 @@
+01082350 hkQuaternion_setFromRotation  # fsqrt largest-diagonal rotation->quaternion, called by hkQuaternion::set
+01082590 hkReferencedObject::addReference  # if memSize!=0 ++refcount (word at +6)
+010825a0 hkWorldObject::addProperty  # +0x4c property array, 0x10-byte entries
+01082660 hkWorldObject::calcStatistics  # "Shape" "CollAgtPtr" "Properties"
+010826e0 hkWorldObject::hkWorldObject_finishLoaded  # hkFinishLoadedObjectFlag ctor
+01082770 hkWorldObject::~hkWorldObject  # releases shape, frees property and collision-entry arrays
+01082800 hkWorldObject::hkWorldObject  # (shape, broadPhaseType)
+01082990 hkWorld::castRay  # hkWorldRayCaster::castRay args match mangled signature
+010829e0 hkNullContactMgr::addContactPoint  # returns 0, vtable 0x149da94 slot 2
+01082a00 hkNullContactMgr::processRequest  # returns 1, ret 0x1c
+01082a40 hkWorld::removeWorldDeletionListener  # +0x108 array, null-assign
+01082a90 hkWorld::stepDeltaTime  # simulation vtbl+8(world,dt,dt) then watchdog "TtWatchDog:FreeMem"
+01082b90 hkWorld::linearCast  # hkWorldLinearCaster::linearCast args match mangled signature
+01082bf0 hkWorld::executePendingOperations  # "TtPendingOps"
+01082ca0 hkWorld::calcMaxIslandSizeEstimate  # max over +0x38 islands
+01082ce0 hkNullContactMgrFactory::createContactMgr  # returns this+8
+01082df0 hkWorld_registerContactMgrFactories  # simple(1), reactive(2), null(3) factories

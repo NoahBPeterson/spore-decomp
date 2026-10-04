@@ -1,0 +1,24 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00623f90/s00623f90.cpp  ??0RandomOwner@@QAE@XZ  006249b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_6249d0@@YGPAUQuaternion@@PAU1@PBUVector3@@1@Z  006249d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_6249f0@@YGPAXPAXPAUT9f0@@@Z  006249f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624a10@@YGPAUVector3@@PAU1@PBU1@1M@Z  00624a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624a40@@YGXMMM@Z  00624a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624a70@@YGXHHH@Z  00624a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624ab0@@YGXMM@Z  00624ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?W624b00@ISlot54@@QAEXM@Z  00624b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?W624b30@ISlot54@@QAEXMM@Z  00624b30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624b80@@YGMM@Z  00624b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624bc0@@YGMMM@Z  00624bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624c10@@YGMPBM@Z  00624c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624c60@@YGMM@Z  00624c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624cb0@@YGMMM@Z  00624cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624d10@@YGMM@Z  00624d10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624d50@@YGMMM@Z  00624d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624da0@@YGMPBM@Z  00624da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624df0@@YGPAUQuaternion@@PAU1@PBUVector3@@M@Z  00624df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?w_624e40@@YGPAUQuaternion@@PAU1@PBUVector3@@1M@Z  00624e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?Shutdown@cCreatureCameraBase@SP@@QAE_NXZ  00624eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?OnKeyDown@cCreatureCameraBase@SP@@QAE_NHH@Z  00624f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?OnKeyUp@cCreatureCameraBase@SP@@QAE_NHH@Z  00624f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00623f90/s00623f90.cpp  ?W624f90@cCreatureCameraBase@SP@@QAEX_N@Z  00624f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

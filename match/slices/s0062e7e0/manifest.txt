@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0062e7e0/s0062e7e0.cpp  ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  0062ebb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?NextAnimWindowSet@cSPPlayModeAnimation@@QAEXXZ  0062ebe0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?PreviousAnimWindowSet@cSPPlayModeAnimation@@QAEXXZ  0062ec30  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?SetBGHilite@cSPPlayModeBGMgr@@QAEXI@Z  0062f340  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?UpdateBGHilite@cSPPlayModeBGMgr@@QAEXXZ  0062f480  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?UpdateBGCountText@cSPPlayModeBGMgr@@QAEXXZ  0062f540  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?FUN_0062f5c0@cSPPlayModeBGMgr@@QAEXXZ  0062f5c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0062e7e0/s0062e7e0.cpp  ?FUN_0062f6c0@cSPPlayModeBGMgr@@QAE_NXZ  0062f6c0  /O2 /MD /Gy /TP /arch:SSE

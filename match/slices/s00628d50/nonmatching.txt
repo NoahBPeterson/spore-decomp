@@ -1,0 +1,9 @@
+00628f10  142  SetMomToFaceBaby: complete; V3 temp/stack layout differs (orig frame 0x48, mine 0x3c)
+00629220  2  SetAllBabySitUp: complete; only [edi+eax] vs [eax+edi] address operand order
+006292b0  18  SetAllOtherBabiesToIdle: complete; ebx/edi register swap for id vs vector ptr
+006294e0  149  SetBabyCelebrationAnim: complete; orig keeps float result slot on stack and recomputes end-begin
+00629590  4  SwitchToCrouchAnim: complete; locals order (mom/baby V3 slot order, z-first sum)
+006296e0  4  ForceBabiesToIdle: complete; [ecx+edi] address operand order
+00629960  86  UpdateBabyButtonEventState: complete; reg alloc/evaluation order of mgr vs id
+00629a90  4  BabiesReachedTargetAngle: complete; id lives in eax not esi
+00629b30  4  SetAllBabyRotateSpeeds: complete; id lives in eax not esi

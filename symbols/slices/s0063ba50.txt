@@ -1,0 +1,12 @@
+0063ba50 cConnectingDialog::Show  # PDB candidate + FindWindowByID/BeginModal calls
+0063bab0 cConnectingDialog::SetWindow  # stores AutoRef window + start time
+0063baf0 cConnectingDialog::HandleResults  # EndModal + RemoveWinProc + layout shutdown
+0063bf20 cConnectingDialog::End  # same body as HandleResults when arg false
+0063bf80 cConnectingDialog::Update  # timeout / rotation animation
+0063c190 cConnectingDialog::HandleUIMessage  # msg type switch
+0063c200 SP::cSPPlayModeSubModeMovie::cSPPlayModeSubModeMovie  # vptr stores + member init
+0063c590 SP::cSPPlayModeSubModeMovie::SetStatusText  # sprintf + SetCaption
+0063c7f0 SP::cSPPlayModeSubModeMovie::LoadYouTubeCredentials  # property list + Decrypt
+0063c8f0 SP::cSPPlayModeSubModeMovie::OnMovieRecorded  # builds file name/path, toggles UI groups
+0063bc70 CreateConnectingDialog  # new "UI/cConnectionDialog"
+0063c060 DestroyConnectingDialog  # End + release global

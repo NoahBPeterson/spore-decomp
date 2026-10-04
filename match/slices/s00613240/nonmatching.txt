@@ -1,0 +1,11 @@
+00613240  16  tail register allocation of spilled pNewEnd/pNewData/nNewSize
+006133b0  11  load of this->p scheduled before a/b stores (intrusive_ptr assign)
+006135d0  121  find() result merge is threaded by cl (original keeps cmp it,end after merge)
+00613660  121  same as GetFloat
+006136f0  132  push esi/edi order at entry, epilogue tail layout
+00613860  56  key param copied to a stack temp; reg alloc
+006138b0  18  Release/lo-hi load reg order
+00613a10  5  push edi placement
+00613ab0  72  set insert inlined into listener: reg/arg-home difference
+00613b10  78  weird it==it+1 check merge not threaded in original
+00613e50  390  deserializer: variant/key stack layout and slot reuse

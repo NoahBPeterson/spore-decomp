@@ -1,0 +1,16 @@
+slices/s0060c780/s0060c780.cpp  ??0UploadEntry@SP@@QAE@ABUResourceKey@1@_N1@Z  0060ccc0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?GetTypeFromName@SP@@YA_NPBDPAI@Z  0060ccf0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?ClassifyCommand@SP@@YAHFPAUcAchievementSource@1@@Z  0060ce10  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?SetEnabledState@cPollinator@SP@@QAEXH@Z  0060cec0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?OnGameEvent@SP@@YGXPAUcGameEventMessage@1@@Z  0060cf30  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ??4VariantHelper@@QAEAAU0@AB_K@Z  0060cfa0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?FindAndNotify@@YA?AU?$DequeIterator@PAUIListener@@@@U1@0UListenerQuery@@@Z  0060d000  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?FindReadyAndNotify@@YA?AU?$DequeIterator@PAUIListener@@@@U1@0PAX@Z  0060d0a0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?uninitialized_copy_entries@SP@@YAPAUUploadEntry@1@PBU21@0PAU21@@Z  0060d140  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?DeletingDtor@cPollinatorCheat@SP@@QAEPAV12@E@Z  0060d1b0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?SendNotificationMessage@SP@@YGXPAX@Z  0060d1e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?clear@DequeBase@StreamDeque@@QAEXXZ  0060d2e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?distance@SP@@YAHUHashIterator@1@0@Z  0060d5d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?copy@StreamDeque@@YA?AUIterator@1@U21@00@Z  0060d610  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?copy_backward@StreamDeque@@YA?AUIterator@1@U21@00@Z  0060d6e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0060c780/s0060c780.cpp  ?NotificationFunction@@YAXPAX0IPAI@Z  0060d800  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,2 @@
+00637f80  1009  control flow reconstructed from disasm but string/rect handling approximate
+00638430  305  FUN_00634b60 result field (extra width) approximate
