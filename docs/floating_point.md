@@ -46,3 +46,13 @@ Differential tests (tools/difftest, Unicorn): run the original function with the
 bit-for-bit against our build of the same function on random and edge-case inputs (NaN, ±0, denormals,
 huge values). Spots marked `// X87-PRECISION:` by the decompiling agents are where differences are
 expected first.
+
+## Ghidra decompiler patch (float grouping)
+
+Stock Ghidra prints float `+` and `*` with the integer operator tokens, which are marked associative. So a
+sum computed as `a + (b + c)` was printed as `a + b + c`, which C reads as `(a + b) + c`. That's a different
+float computation. Example: hkTransform::setInverse (0x01080e70) computes `(z*m8 + y*m4) + x*m0`. Stock
+Ghidra printed `x*m0 + y*m4 + z*m8`; patched Ghidra prints `x*m0 + (y*m4 + z*m8)` (same grouping; operand
+order within one `+` may be swapped, which is exact in IEEE). Patch: tools/ghidra/patches/float-nonassociative.patch;
+build+install: tools/ghidra/patch_decompiler.sh (re-run after any Ghidra upgrade). Decompiles exported before
+2026-10-04 15:00 may show regrouped float sums, so take grouping from the disassembly for those.

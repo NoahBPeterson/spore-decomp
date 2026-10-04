@@ -1,0 +1,36 @@
+--- printc.hh	2026-08-14 13:02:49
++++ printc.hh	2026-10-04 14:44:23
+@@ -82,6 +82,8 @@
+   static OpToken divide;		///< The \e division operator
+   static OpToken modulo;		///< The \e modulo operator
+   static OpToken binary_plus;		///< The \e binary \e addition operator
++  static OpToken float_plus;		///< Floating-point addition: NOT associative, so nested sums keep their parentheses
++  static OpToken float_multiply;	///< Floating-point multiplication: NOT associative
+   static OpToken binary_minus;		///< The \e binary \e subtraction operator
+   static OpToken shift_left;		///< The \e left \e shift operator
+   static OpToken shift_right;		///< The \e right \e shift operator
+@@ -318,9 +320,9 @@
+   virtual void opFloatLess(const PcodeOp *op) { opBinary(&less_than,op); }
+   virtual void opFloatLessEqual(const PcodeOp *op) { opBinary(&less_equal,op); }
+   virtual void opFloatNan(const PcodeOp *op) { opFunc(op); }
+-  virtual void opFloatAdd(const PcodeOp *op) { opBinary(&binary_plus,op); }
++  virtual void opFloatAdd(const PcodeOp *op) { opBinary(&float_plus,op); }
+   virtual void opFloatDiv(const PcodeOp *op) { opBinary(&divide,op); }
+-  virtual void opFloatMult(const PcodeOp *op) { opBinary(&multiply,op); }
++  virtual void opFloatMult(const PcodeOp *op) { opBinary(&float_multiply,op); }
+   virtual void opFloatSub(const PcodeOp *op) { opBinary(&binary_minus,op); }
+   virtual void opFloatNeg(const PcodeOp *op) { opUnary(&unary_minus,op); }
+   virtual void opFloatAbs(const PcodeOp *op) { opFunc(op); }
+--- printc.cc	2026-08-14 13:02:49
++++ printc.cc	2026-10-04 14:44:23
+@@ -37,6 +37,10 @@
+ OpToken PrintC::divide = { "/", "", 2, 54, false, OpToken::binary, 1, 0, (OpToken *)0 };
+ OpToken PrintC::modulo = { "%", "", 2, 54, false, OpToken::binary, 1, 0, (OpToken *)0 };
+ OpToken PrintC::binary_plus = { "+", "", 2, 50, true, OpToken::binary, 1, 0, (OpToken *)0 };
++// IEEE float + and * are commutative but not associative: (a+b)+c != a+(b+c) in general.
++// Marking these tokens non-associative makes the printer keep the evaluation grouping.
++OpToken PrintC::float_plus = { "+", "", 2, 50, false, OpToken::binary, 1, 0, (OpToken *)0 };
++OpToken PrintC::float_multiply = { "*", "", 2, 54, false, OpToken::binary, 1, 0, (OpToken *)0 };
+ OpToken PrintC::binary_minus = { "-", "", 2, 50, false, OpToken::binary, 1, 0, (OpToken *)0 };
+ OpToken PrintC::shift_left = { "<<", "", 2, 46, false, OpToken::binary, 1, 0, (OpToken *)0 };
+ OpToken PrintC::shift_right = { ">>", "", 2, 46, false, OpToken::binary, 1, 0, (OpToken *)0 };
