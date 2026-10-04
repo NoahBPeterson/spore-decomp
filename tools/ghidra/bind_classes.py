@@ -1,6 +1,7 @@
 # @runtime PyGhidra
 # Make Ghidra's automatic `this` typing find imported class structs:
-#  1. move every child category of /Spore to the root (so /Spore/Resource/X -> /Resource/X)
+#  1. move every child category of /Spore (or the category given as arg, e.g. /DevPDB) to the root
+#     (so /Spore/Resource/X -> /Resource/X); types already at the root win on name clashes
 #  2. convert namespaces of named functions into GhidraClass where a struct of that name exists
 from ghidra.program.model.data import CategoryPath
 from ghidra.program.model.symbol import SymbolType
@@ -9,7 +10,8 @@ from ghidra.app.util import NamespaceUtils
 prog = currentProgram
 dtm = prog.getDataTypeManager()
 root = dtm.getRootCategory()
-spore = dtm.getCategory(CategoryPath("/Spore"))
+args = getScriptArgs()
+spore = dtm.getCategory(CategoryPath(args[0] if args else "/Spore"))
 moved = 0
 if spore is not None:
     for c in list(spore.getCategories()):

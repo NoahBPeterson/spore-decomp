@@ -60,6 +60,11 @@ Tools (from repo root):
   (use `work/match/scratch_<id>_N.cpp` files; every function symbol in the file is compared)
 - `.venv/bin/python tools/matching/cmpobj.py work/SporeApp.analysis.bin <obj> <symbol> <va>`
 - `.venv/bin/python tools/matching/run_all.py --manifest match/slices/<id>/manifest.txt` (final check)
+- `.venv/bin/python tools/pdb_type.py <ClassName> [--exact]`: the class/struct/enum layout from the 2008
+  dev-build PDB as a C++ declaration with byte offsets (real member names!). Retail may differ in a few
+  fields, so confirm offsets against the disassembly. Many retail functions now carry real names from that
+  PDB (see docs/xmatch.md); the card shows them. Use these real names for classes, methods and members.
+- `.venv/bin/python tools/matching/od_names.py fit K`: local-variable slot order for /Od functions (below).
 
 Writing matchable source:
 - Default flags `/O2 /MD /Gy /EHsc /TP`; include `types.h` from match/include for fixed-width types.
