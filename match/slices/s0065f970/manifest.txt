@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+slices/s0065f970/s0065f970.cpp  ??1FeedFilterA@  0065f9e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  ?Shutdown@FeedFilterB@  0065fa20  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  cSPUIFeedFilter_ReloadCallback  0065faa0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  CloneNode14  0065fbc0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  ??0AreaRec@  0065fcd0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  ?LockFilterUI@FeedFilterC@  00660360  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  AssignChecked  006603d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  FeedDestroyRange  00660510  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  FeedUninitCopy  00660b30  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s0065f970/s0065f970.cpp  FeedRangeAssign  00660d70  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00671840/s00671840.cpp  ?FUN_00671b80@@YAXPAX@Z  00671b80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?Shutdown@cSPUISearchBox@@QAEXXZ  00671c00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?OnSearchChanged@cSPUISearchBox@@QAEXXZ  00671c50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ??1cSPUISearchBox@@QAE@XZ  00671f70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?EmptySearch@cSPUISearchBox@@QAEXXZ  006720e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ??0HFrameSet@@QAE@XZ  00672400  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?Destroy@HFrameSet@@QAEPAU1@E@Z  00672440  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?OnRelease@GuidePage@@QAE_NXZ  006725a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00671840/s00671840.cpp  ?AssignFrom@EString@@QAEPAU1@PAU1@@Z  00672880  /O2 /MD /Gy /EHsc /TP /arch:SSE

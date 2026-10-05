@@ -1,0 +1,12 @@
+0065c3c0  187  cSPUIFeedEdit::LoadPage-like: complete; wstring temp/dtor schedule differs
+0065c490  515  GetThumbnailBackdrop: complete; switch lowered as if/else compare tree
+0065c790  49  ctor: complete; dead base-vtable store and register choice differ
+0065c840  323  SetMode: complete; vcall scheduling/register allocation differs
+0065c9a0  120  OnTick: complete; float x87 compare and vcall schedule differ
+0065ca10  189  cSPUIFeedEdit::Shutdown: complete; IHandlerRC/MessageServer schedule differs
+0065cae0  123  enabled-state helper: complete; bool folding differs
+0065cc50  114  page-button enable helper: complete; register allocation differs
+0065ccd0  81  GetAssetIndex: complete; loop register allocation differs
+0065cd70  54  intrusive vector element assign: complete; refcount register schedule
+0065cec0  97  DoMessage: complete; vcall arg packing differs
+0065cf30  282  SetAsset: complete; vcall/refcount schedule differs

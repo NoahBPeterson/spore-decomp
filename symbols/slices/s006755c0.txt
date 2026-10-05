@@ -1,0 +1,20 @@
+006755c0 SaveSubject::FUN_006755C0  # reads 0x24 flag, forwards to stream vtbl+0x38 then FUN_00675440
+00675620 FUN_00675620  # global object teardown (FUN_006753A0 then vtbl[0](1))
+00675700 FUN_00675700  # PropertyManager GetPropertyListEx(0x5befd27) + GetProperty(0x5bef2cd)
+00675770 eastl::hashtable<uint32_t,uint32_t,eastl::allocator,...>::clear  # DoFreeNodes + mnElementCount=0
+00675790 FUN_00675790  # hashtable serialize: writer vtable[0x20] stream, stream[0x18]/[0x1c]
+006758a0 eastl::hashtable<uint32_t,uint32_t,...>::DoInsertValue  # PDB name
+00675990 SP::cTypedValueToStringT<short>::Write caller + property streaming
+00675b90 eastl::vector<Simulator::cCreatureAbility,...>::DoInsertValue  # 0x10-byte elements
+00675cc0 FourHashMaps::~FourHashMaps  # four 0x20-byte uint hash maps at +0,+0x20,+0x40,+0x60
+00675d70 ctor resetting four 0x20-byte uint hash maps at +0x3c,+0x5c,+0x7c,+0x9c
+00675e80 hash-map find wrapper  # calls FUN_00555A20
+00675ed0 FUN_00675ED0  # save-area streaming
+00675ff0 FUN_00675FF0  # save-area streaming
+00676140 FUN_00676140
+006761f0 FUN_006761F0
+00676370 eastl::vector<eastl::pair<wchar_t const*,eastl::mem_fun_t<void,SP::Pollen::cServerResponse>>,eastl::allocator>::insert  # PDB name
+006763e0 FUN_006763E0
+00676490 FUN_00676490
+006764f0 FUN_006764F0
+00676540 FUN_00676540

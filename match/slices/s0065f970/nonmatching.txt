@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0065f970  86  four-window visibility update; cl picks this=ebp/n=ebx and materialises the bool args with setle instead of the original branch pushes
+00660430  96  eastl lower_bound; register assignment (first=ebp vs ebx) and a spill differ
+00660650  58  KeyContains; comparison materialised with setcc per step instead of once at the join
+00660880  255  FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
+006609a0  266  eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs
+00660ad0  83  vector range construct; out/first/last register assignment differs
+00660b90  96  map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor

@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+slices/s00663be0/s00663be0.cpp  ?FUN_00664440@cSPUIFeedListCategory@@  00664440  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00663be0/s00663be0.cpp  ?FUN_00664580@cSPUIFeedListCategory@@  00664580  /O2 /MD /Gy /TP /arch:SSE /GS-

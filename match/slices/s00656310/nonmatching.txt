@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00656510  390  complete cSPUIAssetVerbs::UpdatePos: behavior and calls match; register allocation / bool-branch shape differ
+00656770  148  complete cSPUIAssetVerbs::Update: identical logic; w1/w2 callee-saved assignment (esi/edi) and arg temp register differ
+00656830  13   complete SetVerbButtonEnabled: second FindWindowByID setup keeps arg in ecx/uses eax for the vcall target vs edx both
+00656890  11   complete ReloadCallback: one float store (mVec[3]) scheduled after the mWinParent vcall-target load instead of before
+00656b80  49   complete cSPUIAssetVerbs::Init: key construction and SetParentWin argument register allocation differ
+00657460  378  complete cSPUIAssetView::m57460: all paths present; repeated multi-branch flag setup and release sequencing differ
+006577a0  65   complete IsAnimTargetDifferent: pointer kept in ecx and second xmm load delayed vs original eax / both loads up front
+00657a30  41   complete SelectAsset: null-object path laid out inline instead of as a cold block after the epilogue

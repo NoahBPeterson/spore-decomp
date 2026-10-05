@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0064dbd0/s0064dbd0.cpp  ??0cSPUIAssetComments@SP@@QAE@XZ   0064e170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?deleting_dtor@cSPUIAssetComments@SP@@QAEPAXI@Z   0064e1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?Init@cSPUIAssetComments@SP@@QAE_NPAX@Z   0064e230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?DoMessage@cSPUIAssetComments@SP@@QAE_NPAXPAH@Z   0064e300  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?SetVisibility@cSPUIAssetComments@SP@@QAEXH@Z   0064e400  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?Do@Outer168@@QAEXXZ   0064e5b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?HandleMessage@cSPUIAssetGrid@SP@@QAE_NII@Z   0064e680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?Equal@RectF@@QBE_NXZ   0064e6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ??0C_e6e0@@QAE@PBUKey3@@PAX1_N2@Z   0064e6e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?Reset@R7a0@@QAEXXZ   0064e7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064dbd0/s0064dbd0.cpp  ?SetVisible@Eaf0@@QAEX_N@Z   0064eaf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

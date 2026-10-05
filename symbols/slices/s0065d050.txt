@@ -1,0 +1,12 @@
+0065d050 SP::cSPUIFeedEditAssetView::ClearAsset  # PDB name + real member offsets
+0065d110 SP::cSPUIFeedEditAssetView::ReloadCallback  # card PDB name; free __cdecl(self,layout,bool)
+0065d260 SP::cSPUIFeedEdit::UpdateGrid  # PDB candidate name
+0065d410 SP::cSPUIFeedEdit::AssetRequestCallBack  # PDB candidate name
+0065d4e0 SP::cSPUIFeedEdit::SetPage  # PDB name
+0065d570 SP::cSPUIFeedEdit::ShowAsset  # PDB name
+0065d720 SP::cSPUIFeedEditAssetView::Init  # PDB name
+0065d810 SP::cSPUIFeedEditAssetView::Shutdown  # PDB name
+0065d9f0 SP::cSPUIFeedEdit::SetActive  # PDB candidate name
+0065daa0 SP::cSPUIFeedEdit::cSPUIFeedEdit  # PDB name
+0065dc60 SP::cSPUIFeedEdit::TranslateToken  # PDB name
+0065d860 SP::cSPUIFeedEdit::~cSPUIFeedEdit  # PDB name

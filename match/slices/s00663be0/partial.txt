@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00663be0  200  FUN_00663be0 message dispatch: call/path structure reconstructed but the SetiEffects id select is approximate
+00663ef0  400  layout sweep reconstruction: the per-item x87 area/animation math and temp stack layout are approximated

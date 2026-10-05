@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00656310  142  skeleton stub only: EA::fixed_vector/vector insert specialization (0x653cf0/0x654050/0x656240/do_copy) not reconstructed
+00657640  104  approximate: 9-arg (ret 0x24) template value-ctor helper; argument count/mapping not fully recovered (235 vs 339 bytes)

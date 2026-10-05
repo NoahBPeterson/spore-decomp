@@ -92,6 +92,9 @@ slices/s0060d860/s0060d860.cpp  ??H?$DequeIterator@UcTextureAsyncQueueEntry@@$0E
 slices/s0060d860/s0060d860.cpp  ?DoPushBackSlow@?$deque@UQueuedPtr@@$0EA@@eastl@@QAEXABUQueuedPtr@@@Z  00e30010  /O2 /MD /Gy /TP /arch:SSE /GS-  # clone of 0060dbd0
 slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  0052a3e0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 004010b0
 slices/s00401000/s00401000.cpp  ?SetSetting0@@YAXH@Z  0052a3f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE  # clone of 004010b0
+slices/s00671840/s00671840.cpp  ?FUN_00671b80@@YAXPAX@Z  00838740  /O2 /MD /Gy /EHsc /TP /arch:SSE  # clone of 00671b80
+slices/s00671840/s00671840.cpp  ?AssignFrom@EString@@QAEPAU1@PAU1@@Z  00696320  /O2 /MD /Gy /EHsc /TP /arch:SSE  # clone of 00672880
+slices/s00671840/s00671840.cpp  ?AssignFrom@EString@@QAEPAU1@PAU1@@Z  0087f550  /O2 /MD /Gy /EHsc /TP /arch:SSE  # clone of 00672880
 slices/s00c44a20/s00c44a20.cpp  Serialize_c44b40  005724e0    # clone of 00c44b40
 slices/s00c44a20/s00c44a20.cpp  Serialize_c44b40  00ac77f0    # clone of 00c44b40
 slices/s00c44a20/s00c44a20.cpp  Serialize_c44b40  00ac7830    # clone of 00c44b40
@@ -174,6 +177,8 @@ slices/s0041f940/s0041f940.cpp  ?Destroy@HashTable@@QAEXXZ  0056f480  /Od /Ob1 /
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  004aa100  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  00513e20  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
 slices/s0041f940/s0041f940.cpp  ??0Wrapper@@QAE@H@Z  00567680  /Od /Ob1 /MD /Gy /TP  # clone of 00420090
+slices/s0064dbd0/s0064dbd0.cpp  ??0cSPUIAssetComments@SP@@QAE@XZ  006715d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 0064e170
+slices/s0064dbd0/s0064dbd0.cpp  ?deleting_dtor@cSPUIAssetComments@SP@@QAEPAXI@Z  00671630  /O2 /MD /Gy /TP /arch:SSE /fp:fast  # clone of 0064e1d0
 slices/s0062e7e0/s0062e7e0.cpp  ??_GcSPPlayModeAnimPanelInfo@@UAEPAXI@Z  00fca0b0  /O2 /MD /Gy /TP /arch:SSE  # clone of 0062ebb0
 slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  00475580  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004229f0
 slices/s00422950/s00422950.cpp  ?RegisterA@CallbackRegistry@@  00478260  /Od /Ob1 /MD /Gy /TP /arch:SSE  # clone of 004229f0
@@ -234,6 +239,8 @@ slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00836620  /O2 /M
 slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00885fa0  /O2 /MD /Gy /TP  # clone of 00616aa0
 slices/s00616360/s00616360.cpp  ?AllocateSelf@string8@@QAEXI@Z  00b1ffd0  /O2 /MD /Gy /TP  # clone of 00616aa0
 slices/s00616360/s00616360.cpp  ?Destroy@cPoolTxA@@QAEPAXI@Z  00a17130  /O2 /MD /Gy /TP  # clone of 00616b00
+slices/s006755c0/s006755c0.cpp  ?clear@UIntHashTable@@QAEXXZ  0083e140  /O2 /MD /Gy /TP  # clone of 00675770
+slices/s006755c0/s006755c0.cpp  ?clear@UIntHashTable@@QAEXXZ  00cd6610  /O2 /MD /Gy /TP  # clone of 00675770
 slices/s004d06e0/s004d06e0.cpp  ??$uninitialized_move_start@PAURec14@eastl@@PAU12@@eastl@@YAPAURec14@0@PAU10@00@Z  004ab4a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast  # clone of 004d0f30
 slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01090370  /O2 /MD /Gy /TP  # clone of 01087010
 slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01097110  /O2 /MD /Gy /TP  # clone of 01087010

@@ -1,0 +1,5 @@
+slices/s0065bf20/s0065bf20.cpp  ?FUN_0065c480@cSPUIFeedEditAssetView@@QAEPAV1@H@Z  0065c480  /O2 /MD /Gy /TP
+slices/s0065bf20/s0065bf20.cpp  ?GetEventMask@cSPUIFeedEditAssetView@@QBEIXZ  0065c6f0  /O2 /MD /Gy /TP
+slices/s0065bf20/s0065bf20.cpp  ?FindChar@@YAXPB_W00@Z  0065c730  /O2 /MD /Gy /TP
+slices/s0065bf20/s0065bf20.cpp  ?FUN_0065cdc0@@YAPAUAssetInfo@@PAU1@00@Z  0065cdc0  /O2 /MD /Gy /TP
+slices/s0065bf20/s0065bf20.cpp  ?FUN_0065ce10@@YAPAUAssetInfo@@PAU1@00@Z  0065ce10  /O2 /MD /Gy /TP

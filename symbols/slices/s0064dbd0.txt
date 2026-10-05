@@ -1,0 +1,18 @@
+0064dbd0 SP::cSPEditorNaming::DoMessage  # pdb_names anchor
+0064e170 SP::cSPUIAssetComments::cSPUIAssetComments  # ctor; retail mFrameSet+0xc, mpContentWin+0x70, mpXHTMLWin+0x74
+0064e1d0 SP::cSPUIAssetComments::`scalar deleting destructor'  # vptr teardown + RefCount deallocation
+0064e230 SP::cSPUIAssetComments::Init  # pdb_names anchor
+0064e300 SP::cSPUIAssetComments::DoMessage  # pdb_candidates caller-scored
+0064e400 SP::cSPUIAssetComments::SetVisibility  # pdb_names callee-scored
+0064e460 SP::cSPUIAssetComments::LoadAssetComments  # pdb_names anchor
+0064e5b0 cSPUIAssetGrid helper  # forwards (0x80000000,-1) to sub-object at +0x168
+0064e5d0 cSPUIAssetGrid card-layout cell position  # fields +0x104,+0x108,+0x110,+0x118..+0x124
+0064e680 SP::cSPUIAssetGrid::HandleMessage  # pdb_names anchor
+0064e6b0 float pair-equality helper  # compares [ecx]/[ecx+4] against [ecx+8]/[ecx+0xc]
+0064e6e0 value constructor  # copies 12-byte key, two refcounted references, two bools
+0064e740 value constructor  # two vptrs, IUnknown-style ref at +0xc, byte/int payload
+0064e7a0 release/reset helper  # member ptr +0xfc, flag +0x100
+0064e7d0 cSPUIAssetGrid visibility/bounds predicate  # entry array +0xe8 stride 0x20, view +0x18c
+0064e880 loading-indicator window updater  # windows +0x2c..+0x38, elapsed-seconds animation
+0064e980 scroll-bar layout helper  # windows +0x3c,+0x40,+0x44
+0064eaf0 child-window visibility setter  # windows +0x1c/+0x20/+0x24, AppSystem flag +0x10c

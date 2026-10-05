@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00665d30/s00665d30.cpp  ?IsKnownID@CFeed@@QBE_NXZ  00666420  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?IsKnownState@CFeed@@QBE_NXZ  00666450  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?SetDefault@CFeed@@QAEXH@Z  00666490  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?Teardown@CFeed@@QAEXXZ  006664f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?SetIconKey@CFeed@@QAEXPBM@Z  00666590  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?GetIconKey@CFeed@@QAEPAMPAM@Z  006665e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ?CheckFlag@CFeed@@QAE_N_N@Z  00666680  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00665d30/s00665d30.cpp  ??0WidB@@QAE@H@Z  00666af0  /O2 /MD /Gy /EHsc /TP /arch:SSE

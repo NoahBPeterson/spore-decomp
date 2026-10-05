@@ -1,0 +1,15 @@
+006563c0  C563c0::C563c0  # retail helper object ctor; disasm stores f0=0,f4..f6=0,f8=1,fc=0
+00656410  SP::cSPUIAssetVerbs::~cSPUIAssetVerbs  # vtable stores + field releases match the ctor layout
+006566f0  SP::cSPUIAssetVerbs::Shutdown  # PDB-named in card; releases mLayout/AutoHandler
+00656740  SP::cSPUIAssetVerbs::IsVerb  # PDB-named in card
+00656830  SP::cSPUIAssetVerbs::SetVerbButtonEnabled  # PDB-named in card
+00656890  SP::cSPUIAssetVerbs::ReloadCallback  # PDB candidate (caller-scored) in card
+00656b00  SP::cSPUIAssetVerbs::cSPUIAssetVerbs  # ctor stores 3 vtables + fields; dtor restores base vtables
+00656b80  SP::cSPUIAssetVerbs::Init  # PDB-named "SP::cSPUIAssetVerbs::Init" in card
+006577a0  SP::cSPUIAssetView::IsAnimTargetDifferent  # reads mTargetX/Y at +0xc/+0x10, mWinShine +0x28
+00657810  SP::cSPUIAssetView::Show  # vtable stores to ctor layout (mWinShine +0x28, mBf6/f7 +0xf6/f7)
+00657870  SP::cSPUIAssetView::Hide  # mirror of Show
+006578d0  SP::cSPUIAssetView::GetHeight  # mWinShine->[0x34][3]-[1]
+006578f0  SP::cSPUIAssetView::GetWidth  # mWinShine->[0x34][2]-[0]
+00657930  SP::cSPUIAssetView::SetFirstUpdate  # writes mFirstUpdate +0x15, mThumb/mLocked rect
+00657a30  SP::cSPUIAssetView::SelectAsset  # PDB candidate (caller-scored); alloc 0x1c + message 0x94174b89

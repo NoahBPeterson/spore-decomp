@@ -1,0 +1,1 @@
+00669f50  1640  SP::cSPUIFeedListItem::Init: skeleton only (long property/key lookup chain and layout setup not reconstructed)

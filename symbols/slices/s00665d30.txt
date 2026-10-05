@@ -1,0 +1,3 @@
+00665d30 SP::cSPUIFeedListCategory::ReloadCallback  # PDB name on card; called from 006661d0 layout setup
+006666c0 SP::cSPUIFeedListItem::Refresh  # PDB candidate (caller-scored) on card
+006661d0 $E213  # compiler-assigned card name; category initialiser (cSPUILayout Init/SetReloadCallback)

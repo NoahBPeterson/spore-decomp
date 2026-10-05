@@ -1,0 +1,4 @@
+00669f50 SP::cSPUIFeedListItem::Init  # card/PDB name; 1640-byte property/key init
+0066a680 SP::cSPUIFeedListItem  # tagged-float vt[38] comparator (switch 0..4)
+0066a830 SP::cSPUIFeedListItem  # sort predicate over [0x1c]/[0x1d] + member comparators
+0066ad10 CItem default member comparator  # vt[14] int compare, CItem& args

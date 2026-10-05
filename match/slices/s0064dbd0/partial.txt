@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0064dbd0  1433  1433-byte /O2 hash-switch message handler (cSPEditorNaming::DoMessage); approximate skeleton only
+0064e460  283  cSPUIAssetComments::LoadAssetComments; authentication/browser branches reproduced, URL-build/string-format path approximated
+0064e7d0  164  visibility/bounds predicate; comparison shape reproduced but virtual-call argument ABI not reproduced
+0064e880  243  loading-indicator updater; window visibility branches reproduced, cString/time animation path approximated
+0064e980  357  scroll-bar layout helper; structure approximated, virtual-call argument ABI not reproduced

@@ -1,0 +1,3 @@
+0065daa0  338  cSPUIFeedEdit::cSPUIFeedEdit: base/vtable/member construction omitted (stub)
+0065d860  292  cSPUIFeedEdit::~cSPUIFeedEdit: member-storage teardown and vtables omitted (stub)
+0065dd30  345  resource-load helper: GetURL/resource-provider plumbing omitted (stub)

@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0064eb60  328  SP::cSPUIAssetGrid::SetEntryState complete; bool kept in a stack slot instead of bl and the view pointer spilled/reloaded (ebp reused for the sub-result) so register allocation differs, not byte-exact
+0064f280  23  IndexOfView complete; element count lands in ecx (load order begin-then-end) instead of edx, and the field pointer uses edx instead of ecx, not byte-exact
+0064f350  35  ParseHelper complete; the constant global byte is loaded as an absolute byte instead of via `mov eax,<addr>`, and the w!=0 mask uses edx instead of eax, not byte-exact
+0064f630  59  simple insertion sort complete; cl picks an aggregate-copy base pointer at +0xc (ours +0x10) and the loop pointer registers differ, not byte-exact
+0064f730  65  UninitCopyOut complete; the Entry copy ctor is emitted out-of-line and called instead of inlined, and the fourth-arg pointer loses its home-slot spill, not byte-exact
+0064f7c0  48  uninitialized copy complete; the Entry copy ctor is emitted out-of-line and called instead of inlined at this site, not byte-exact
+0064f8d0  80  uninitialized_fill_n complete; cl picks an aggregate-copy base pointer at +0xc (ours +0x10) and register allocation differs, not byte-exact

@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00669f50/s00669f50.cpp  ?FindIndex0066a5c0@@YAHH@Z  0066a5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ?Neg@Neger@@QAEHHH@Z  0066a610  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ?Get@Switcher@@QAEIXZ  0066a630  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ?GetElem0066a800@@YAHH@Z  0066a800  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ?Get@Switcher2@@QAEIXZ  0066ad70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp0c@@QAEIHH@Z  0066ab90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp10@@QAEIHH@Z  0066ac10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp28@@QAEIHH@Z  0066aa40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp38@@QAEIAAUCItem@@0@Z  0066ad10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp70@@QAEIHH@Z  0066aca0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp94@@QAEIHH@Z  0066aad0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00669f50/s00669f50.cpp  ??RCmp950@@QAEIHH@Z  0066a950  /O2 /MD /Gy /EHsc /TP /arch:SSE

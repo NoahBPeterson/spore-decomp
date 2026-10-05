@@ -1,0 +1,5 @@
+0066a5e0  43  FillBuf::Set: complete behaviour; memset lowering keeps the fill value in eax and this in ecx, original is the reverse
+0066a680  381  CmpA680: complete behaviour (Lookup + vt[38] tagged-float compare, switch 0..4); edi/ebp register allocation and tail shape differ
+0066a830  285  Sorter830: complete behaviour (sort key [0x1c]/[0x1d], member comparators, raw key words); scheduling/register gap, compiled size differs
+0066ada0  279  CmpAd: complete behaviour (Lookup + vt[38] float compare, switch 0..2); Lookup emits add vs lea and float compares compile to x87 instead of SSE
+0066af20  115  CtorAf: complete behaviour; ctor reserves an extra out-param slot (push ecx) and vec_cctor declaration flavour differs

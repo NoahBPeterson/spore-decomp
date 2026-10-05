@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0064eb60/s0064eb60.cpp  ?GetEntry@cSPUIAssetGrid@SP@@QAEPAUcSPAssetGridEntry@2@H@Z  0064f2c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ?CheckFlag@cSPUIAssetGrid@SP@@QAE_NXZ  0064f320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ??0cSPAssetGridEntry@SP@@QAE@ABU01@@Z  0064f3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ?DoDestroyValues@?$vector@UcSPAssetGridEntry@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUcSPAssetGridEntry@SP@@0@Z  0064f410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ??4cSPAssetGridEntry@SP@@QAEAAU01@ABU01@@Z  0064f450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ?InsertionSortEntries@@YAXPAUcSPAssetGridEntry@SP@@0PAUTypeGridEntrySort@2@@Z  0064f540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ?DestroyEntries@@YAPAUcSPAssetGridEntry@SP@@PAU12@00@Z  0064f840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0064eb60/s0064eb60.cpp  ?PromoteHeapEntries@@YAXPAUcSPAssetGridEntry@SP@@HHU12@PAUTypeGridEntrySort@2@@Z  0064f990  /O2 /MD /Gy /TP /arch:SSE /fp:fast

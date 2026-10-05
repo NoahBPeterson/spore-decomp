@@ -1,0 +1,24 @@
+00676660 SP::Achievements::Controller::FUN_00676660  # achievement map find/insert, returns value ptr
+006766e0 FUN_006766E0  # wrapper returning *(FUN_00676660(id)+8)
+006766f0 FUN_006766F0  # FUN_006751C0(FUN_00676660(id))
+00676710 SP::Achievements::Controller::AwardAchievement  # PDB name
+00676810 FUN_00676810
+006768b0 FUN_006768B0
+00676910 FUN_00676910
+00676a20 SP::Achievements::Controller::ParsePropFiles  # PDB name
+00676c80 SP::Achievements::Controller::Init  # card PDB name
+00676e40 FUN_00676E40  # allocate 0xa8 "Pollinator", ctor 0x6763E0, Init, release on failure
+00676e90 SP::Achievements::Controller::AutoTest  # card PDB name
+00676ed0 Controller flag set/clear
+00676f20 SP::Achievements::Controller::DecrementAccumulatorValue  # card PDB name
+00676f60 Controller message handler (id 0x366a930d)
+00676fc0 `anonymous namespace'::cAchievementsTestCheat::Execute  # card PDB name
+00677140 Controller::FUN_00677140  # message-id switch
+00677190 SP::cSPPaletteItemUIHutStyle::HandleMessage  # card PDB candidate
+00677220 FUN_00677220
+00677360 UIHost::FUN_00677360  # SetTooltip(2, arg) on mp78 vtbl+0x7c
+00677380 UIHost::FUN_00677380  # release mp7c then FUN_00828BE0
+006773b0 UIHost::FUN_006773B0  # reserve + SetupTooltip + window update
+00677470 UIHost::FUN_00677470  # image/tooltip update
+006774c0 UIHost::FUN_006774C0  # message dispatch on msg[2] 0x1b/0x1c
+00677530 FUN_00677530  # GetImageFromLayout

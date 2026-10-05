@@ -1,0 +1,26 @@
+00672bd0 eastl::copy_backward_impl<0,std::random_access_iterator_tag>::do_copy<cAction*,cAction*>  # PDB-adjacent; caller 673410
+00672c30 eastl::uninitialized_copy_impl<0,std::random_access_iterator_tag>::do_copy<fixed_string*,fixed_string*>  # caller 673120 DoRealloc
+00672c90 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<cAction*,cAction*>  # PDB name
+00672cf0 `anonymous namespace'::cBuildXHTMLDetokenizer::cVar::cAction copy ctor  # inlined fixed_string copy ctor
+00672d30 eastl::vector<cAction,fixed_vector_allocator<88,8,4,0,1>>::DoDestroyValues  # PDB name
+00672d70 eastl::vector<eastl::fixed_string<wchar_t,32,1>,fixed_vector_allocator<84,8,4,0,1>>::DoDestroyValues  # PDB name
+00672db0 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_start<cAction*,cAction*>  # caller 673410
+00672e10 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_commit<cAction*,cAction*>  # PDB name
+00672f00 eastl::uninitialized_copy_impl<0,std::random_access_iterator_tag>::do_copy<cAction*,cAction*>  # caller 673180 DoRealloc
+00672f70 `anonymous namespace'::cBuildXHTMLDetokenizer::token_action_replace  # PDB candidate
+00673120 eastl::vector<eastl::fixed_string<wchar_t,32,1>,...>::DoRealloc  # alloc + uninitialized_copy_ptr
+00673180 eastl::vector<cAction,...>::DoRealloc  # alloc + uninitialized_copy_ptr
+006731e0 eastl::vector<eastl::fixed_string<wchar_t,32,1>,...>::DoAssignFromIterator<fixed_string const*>  # PDB candidate
+006732e0 `anonymous namespace'::cBuildXHTMLDetokenizer::cVar::cVar  # ctor
+00673360 `anonymous namespace'::cBuildXHTMLDetokenizer::cVar::~cVar  # dtor
+00673410 eastl::vector<cAction,...>::DoInsertValue  # insert in place / grow
+00673570 eastl::vector<cAction,...>::DoAssignFromIterator<cAction const*>  # PDB name
+00673670 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_commit<cVar*,cVar*>  # caller 6739d0/673b00
+006736b0 eastl::fixed_vector<eastl::fixed_string<wchar_t,32,1>,8,1>::operator=  # PDB name
+00673710 `anonymous namespace'::cBuildXHTMLDetokenizer::~cBuildXHTMLDetokenizer  # destroys mVars then base dtor
+00673810 eastl::fixed_vector<cAction,8,1>::operator=  # PDB name
+00673870 `anonymous namespace'::cBuildXHTMLDetokenizer::cVar copy ctor  # PDB name
+00673940 `anonymous namespace'::cBuildXHTMLDetokenizer::cVar::operator=  # PDB candidate
+006739d0 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_start<cVar*,cVar*>  # PDB name
+00673a50 eastl::copy_backward_impl<0,std::random_access_iterator_tag>::do_copy<cVar*,cVar*>  # PDB name
+00673b00 eastl::vector<cVar,fixed_vector_allocator<1596,16,4,0,1>>::DoInsertValue  # insert in place / grow

@@ -1,0 +1,8 @@
+0065d260  384  cSPUIFeedEdit::UpdateGrid: complete; loop/register schedule differs
+0065d410  99   cSPUIFeedEdit::AssetRequestCallBack: complete; vcall/refcount register schedule differs
+0065d570  203  cSPUIFeedEdit::ShowAsset: complete; vcall/register schedule differs
+0065d6a0  109  hashtable<uint64>::erase: complete; node-unlink register schedule differs
+0065d720  169  cSPUIFeedEditAssetView::Init: complete; ctor/operator-new schedule differs
+0065d9f0  196  cSPUIFeedEdit::SetActive: complete; wstring temp + vcall schedule differs
+0065dc60  180  cSPUIFeedEdit::TranslateToken: complete; wide-string assign/dtor schedule differs
+0065ded0  27   vector<UFOCollisionEffectInfo>::erase: complete; prologue/refcount register allocation differs

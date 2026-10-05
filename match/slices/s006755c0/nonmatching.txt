@@ -1,0 +1,2 @@
+006755c0  21  SaveSubject::FUN_006755C0: complete; the vtable slot 0x38 load is scheduled after the call-result save where the original hoists it before
+00675700  114  FUN_00675700 property query: complete behaviour (PropertyManager GetPropertyListEx / GetProperty / GetBool / Release); local-slot reuse and call scheduling differ

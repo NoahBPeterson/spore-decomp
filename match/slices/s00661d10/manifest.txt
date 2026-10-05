@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+slices/s00661d10/s00661d10.cpp  ?FUN_006624d0@FeedList@@  006624d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_006627d0@FeedList@@  006627d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_006628d0@FeedList@@  006628d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_00662920@FeedList@@  00662920  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_00662960@FeedList@@  00662960  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_006629a0@FeedList@@  006629a0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_006629e0@FeedList@@  006629e0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_00662a90@FeedList@@  00662a90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_00662ad0@FeedList@@  00662ad0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00661d10/s00661d10.cpp  ?FUN_00662c10@FeedList@@  00662c10  /O2 /MD /Gy /TP /arch:SSE /GS-

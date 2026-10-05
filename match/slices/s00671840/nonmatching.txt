@@ -1,0 +1,10 @@
+00671ca0  219  cSPUISearchBox::ReloadCallback: complete behaviour (window find/assign/release + layout vt callbacks); call/register scheduling differs
+00671da0  183  cSPUISearchBox::SetParentWindow: complete behaviour (layout new/Init/SetParentWin/SetReloadCallback + timer reset); rdtsc/QPC and vtable-assign scheduling differ
+00671ec0  43  cSPUISearchBox ctor: base vptr stores dead-store-eliminated; statement scheduling differs
+00672040  105  cSPUISearchBox::Update: complete behaviour; AssetBrowser/Stopwatch scheduling and size differ
+00672120  195  cSPUISearchBox::DoMessage: complete behaviour; stopwatch restart + string-length scan scheduling differs
+00672200  395  cSPUISearchBox::Execute: complete behaviour (vt method lookups + eastl string find); heavy scheduling / EASTL string shape gap
+00672480  220  cSPUISporeGuidePage::Init: complete behaviour; ctor local + interface_cast / frame-set scheduling differs
+00672910  62  eastl::copy_impl do_copy: complete behaviour; early-return/branch layout differs
+00672960  49  cBuildXHTMLDetokenizer dtor: complete behaviour; induction-variable/address folding differs
+00672b50  112  cBuildXHTMLDetokenizer::token_action_copy: complete behaviour; eastl string assign shape differs

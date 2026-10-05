@@ -1,0 +1,6 @@
+0065af90  293  Sibling UI window message helper: layout-construction half approximated
+0065b6b0  398  OnModalWindowEnd: large state machine, feed iteration paths approximated
+0065b930  85  ctor: base/member construction (vtables, cXHTMLFrameSet ctor) omitted
+0065ba20  109  dtor: base vtables and cXHTMLFrameSet destructor omitted
+0065bc20  111  LoadPage: wide-string temp/URL argument plumbing approximated
+0065bd80  94  HandleMessage: belongs to a sibling layout class (+0x94 is a pointer), mapped to cSPUIAssetWebBrowser

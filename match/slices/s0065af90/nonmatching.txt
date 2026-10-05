@@ -1,0 +1,8 @@
+0065b1b0  180  cSPUIAssetWebBrowser::Shutdown: complete; register allocation/vcall temp differs
+0065b380  78  CreateContent: complete; this/window register swap (edi vs esi)
+0065b440  110  Feed build helper: complete; cFeedList inline layout differs
+0065b530  101  CharTypeStringRSearch: complete; cdecl param register assignment differs
+0065b5f0  110  CreateLayout helper: complete; operator-new / vcall schedule differs
+0065bac0  306  cSPUIAssetWebBrowser::Init: complete; object construction schedule differs
+0065bce0  85  wstring range ctor: complete; inlined RangeInitialize register allocation
+0065be20  205  ExtractFeedPath: complete; wstring temp/dtor scheduling differs

@@ -1,0 +1,15 @@
+00675790  149  hashtable serialization (writer vtable + WriteUint32 node walk): skeleton only
+006758a0  226  eastl::hashtable<uint32_t,uint32_t>::DoInsertValue: skeleton only
+00675990  460  typed-value-to-string + property streaming helper: skeleton only
+00675b90  301  vector<Simulator::cCreatureAbility>-style DoInsertValue (0x10-byte elements): skeleton only
+00675d70  198  ctor resetting four 0x20-byte uint hash maps: skeleton only (layout undetermined)
+00675e80  66   hash-map find wrapper over FUN_00555A20: skeleton only
+00675ed0  280  save-area streaming helper: skeleton only
+00675ff0  331  save-area streaming helper: skeleton only
+00676140  175  FUN_00676140: skeleton only
+006761f0  384  FUN_006761F0: skeleton only
+00676370  111  eastl::vector<pair<wchar_t const*,mem_fun_t<void,cServerResponse>>>::insert: skeleton only
+006763e0  166  FUN_006763E0: skeleton only
+00676490  89   FUN_00676490: skeleton only
+006764f0  78   FUN_006764F0: skeleton only
+00676540  277  FUN_00676540: skeleton only

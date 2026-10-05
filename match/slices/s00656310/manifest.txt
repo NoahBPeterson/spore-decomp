@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00656310/s00656310.cpp  ??0C563c0@@QAE@XZ   006563c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?cSPUIAssetVerbs_dtor@@YIXPAUcSPUIAssetVerbs@@@Z   00656410  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?Shutdown@cSPUIAssetVerbs@@QAEXXZ   006566f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?IsVerb@cSPUIAssetVerbs@@QAE_NH@Z   00656740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?cSPUIAssetVerbs_ctor@@YIPAUcSPUIAssetVerbs@@PAU1@@Z   00656b00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?Show@cSPUIAssetView@@QAEXXZ   00657810  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?Hide@cSPUIAssetView@@QAEXXZ   00657870  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?GetHeight@cSPUIAssetView@@QAEMXZ   006578d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?GetWidth@cSPUIAssetView@@QAEMXZ   006578f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00656310/s00656310.cpp  ?SetFirstUpdate@cSPUIAssetView@@QAEXH@Z   00657930  /O2 /MD /Gy /TP /arch:SSE /fp:fast

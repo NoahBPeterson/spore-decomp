@@ -1,0 +1,5 @@
+00663e50 SP::cSPUIFeedListCategory::Shutdown  # PDB + method shape
+00664480 SP::cSPUIFeedListCategory::Expand    # PDB + method shape
+00664a60 SP::cSPUIFeedListCategory::HandleMessage  # PDB + IHandler signature
+00664960 eastl::promote_heap<EA::AutoRefCount<SP::cSPUIFeedListItem>*,int,EA::AutoRefCount<SP::cSPUIFeedListItem>,SP::AlphabeticalFeedSort>  # symbolised in binary
+00664ad0 eastl::adjust_heap<EA::AutoRefCount<SP::cSPUIFeedListItem>*,int,EA::AutoRefCount<SP::cSPUIFeedListItem>,SP::AlphabeticalFeedSort>   # symbolised in binary

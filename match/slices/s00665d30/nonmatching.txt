@@ -1,0 +1,8 @@
+00665d30  1039  ReloadCallback: complete behaviour (window lookup/assign, layout Init/SetParentWin/SetReloadCallback, teardown+erase); large scheduling/helper-shape gap
+006661d0  436  category initialiser: complete behaviour; AutoRefCount reset/PropertyManager call shape differs
+00666630  7  vector reserve: functionally complete; cl keeps vector ptr in eax+pushes before load, original loads ecx first (scheduling)
+006666c0  460  cSPUIFeedListItem::Refresh: complete behaviour incl. area math; wcscmp/rect scheduling differs
+006668e0  159  SetImg: complete behaviour; frame size (0x24 vs 8) and repeated AssetBrowser() locals differ
+00666a60  8  WidA ctor: only diff is xor ebx,ebx scheduled after arg load instead of at entry
+00666b20  131  GetVec4: complete behaviour; property/vtable call shape differs
+00666bc0  190  CB::Action: complete behaviour; AutoRefCount temp/call shape differs

@@ -1,0 +1,1 @@
+00677470  46  UIHost::FUN_00677470 (SetTooltip/image update): complete behaviour (FUN_00599BE0, layout vtbl+0x20, FUN_00599530, GetRootWindow, FUN_00808B20); register/scheduling of the window reloads and stack cleanup differs

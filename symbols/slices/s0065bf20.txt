@@ -1,0 +1,19 @@
+0065bf20 SP::cSPUIFeedEdit::HandleMessage  # PDB candidate (large wcsncmp/wcsstr handler)
+0065c3c0 SP::cSPUIFeedEdit::LoadPage  # card PDB name
+0065c480 SP::cSPUIFeedEditAssetView::FUN_0065c480  # unknown; sets field +8
+0065c490 SP::cSPUIFeedEditAssetView::GetThumbnailBackdrop  # card PDB name
+0065c6f0 SP::cSPUIFeedEditAssetView::GetEventMask  # card PDB name
+0065c730 FindChar  # card name; wstring find helper
+0065c790 SP::cSPUIFeedEditAssetView::cSPUIFeedEditAssetView  # vtable ctor pattern
+0065c840 SP::cSPUIFeedEditAssetView::SetMode  # PDB name
+0065c9a0 SP::cSPUIFeedEditAssetView::OnTick  # tick/blink helper
+0065ca10 SP::cSPUIFeedEdit::Shutdown  # PDB candidate
+0065cae0 SP::cSPUIFeedEdit::UpdateEnabledState  # enabled-state helper
+0065cb90 SP::cSPUIFeedEdit::UpdateStrings  # PDB name
+0065cc50 SP::cSPUIFeedEdit::UpdateButtons  # page-button enable helper
+0065ccd0 SP::cSPUIFeedEdit::GetAssetIndex  # PDB name
+0065cd70 intrusive vector element assign  # AutoRefCount assignment
+0065cdc0 uninitialized_copy of intrusive elements  # eastl
+0065ce10 uninitialized_move of intrusive elements  # eastl
+0065cec0 SP::cSPUIFeedEditAssetView::DoMessage  # PDB candidate
+0065cf30 SP::cSPUIFeedEditAssetView::SetAsset  # PDB name

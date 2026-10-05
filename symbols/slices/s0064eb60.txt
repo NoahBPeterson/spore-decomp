@@ -1,0 +1,16 @@
+0064f2c0  SP::cSPUIAssetGrid::GetEntry  # thiscall ret4; [ecx+0xe8] + idx*0x20
+0064f280  SP::cSPUIAssetGrid::IndexOfView  # thiscall ret4; linear scan of mAssetView (+0x10) field
+0064f320  SP::cSPUIAssetGrid::CheckFlag  # thiscall; reads +0x1b8 and +0x19c->+0x16
+0064f3b0  SP::cSPAssetGridEntry::cSPAssetGridEntry(cSPAssetGridEntry const&)  # thiscall ret4 copy ctor (2 AutoRefCount AddRefs)
+0064f410  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::DoDestroyValues  # exact PDB name (dev 0x00d7bd90)
+0064f450  SP::cSPAssetGridEntry::operator=(cSPAssetGridEntry const&)  # thiscall ret4 assign (AutoRefCount add/release)
+0064f540  eastl::insertion_sort<SP::cSPAssetGridEntry*,SP::TypeGridEntrySort>  # insertion-sort shape (compare(temp,prev), shift)
+0064f630  eastl::insertion_sort (unbounded variant)  # same ops but no iNext!=first guard
+0064f730  eastl::uninitialized_copy (output-iterator overload)  # writes value then copies range through a pointer-to-pointer
+0064f7c0  eastl::uninitialized_copy<SP::cSPAssetGridEntry*,SP::cSPAssetGridEntry*>  # construct-copy loop returning the dest pointer
+0064f840  eastl::destroy<SP::cSPAssetGridEntry*,SP::cSPAssetGridEntry*>  # destructor loop returning the advanced pointer
+0064f8d0  eastl::uninitialized_fill_n<SP::cSPAssetGridEntry*,unsigned int,SP::cSPAssetGridEntry>  # count-down construct loop
+0064f990  eastl::promote_heap<SP::cSPAssetGridEntry*,int,SP::cSPAssetGridEntry,SP::TypeGridEntrySort>  # heap sift-up shape
+0064f350  parser/state byte helper  # (obj, int, byte) -> byte; virtual call slot 0x24; global byte at 0x015d9c70
+0064eb60  SP::cSPUIAssetGrid::SetEntryState  # (int idx, bool force); toggles +0x20 on the AssetView at idx
+0064ecc0  SP::cSPUIAssetGrid::UpdateAll  # large per-frame grid/animation update

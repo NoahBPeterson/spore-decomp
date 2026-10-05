@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00662540  6    two-branch reload of m18; cl picks edx/eax vs the original's eax/edx, calls normalized
+006625f0  220  layout setup / area capture; register and stack-slot schedule differs (calls match)
+00662750  89   update path; sete placement and branch body scheduling differ (calls match)
+00662a20  23   vector element access; original loads the index into edx first, cl hoists the header loads
+00662a40  64   indexed element search; cl CSEs the recomputed vector size, original reloads mEnd each step
+00662b40  148  mouse-focus clamp; x87/SSE float schedule differs (behavior and calls match)
+00662c70  196  object-based clamp; float schedule and temp slots differ (behavior and calls match)

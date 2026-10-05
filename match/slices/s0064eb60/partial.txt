@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0064ecc0  1464  SP::cSPUIAssetGrid::UpdateAll — 1464-byte /O2 function with many virtual calls, EASTL vector scans and animation setup; only a skeleton stub is provided (no faithful reconstruction yet).

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0064e5d0  97  complete cell-position helper; float->int conversion (original cvtss2si-from-memory vs our cvttss2si) and register allocation differ, not byte-exact
+0064e740  10  5-arg value constructor complete; argument/payload register allocation differs from the original, not byte-exact

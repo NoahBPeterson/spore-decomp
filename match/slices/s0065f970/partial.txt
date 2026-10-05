@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0065fd30  910  cSPUIEventLog::DoMessage reconstruction; animation-target temporaries and some branches are approximated
+006600c0  588  GetSupportedFilterTypes reconstruction; property/vector paths approximated
+00660c10  122  hashtable find-or-insert reconstruction; insert/find ABI approximated

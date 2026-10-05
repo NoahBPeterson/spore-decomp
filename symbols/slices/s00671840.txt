@@ -1,0 +1,16 @@
+00671840 SP::cSPUIMissingExpansionPackPage::ShowMissingExpansionPacks  # card PDB name
+00671c00 SP::cSPUISearchBox::Shutdown  # card PDB name
+00671c50 SP::cSPUISearchBox  # __thiscall, WindowManager cascade
+00671ca0 SP::cSPUISearchBox::ReloadCallback  # card PDB candidate (caller-scored)
+00671ec0 SP::cSPUISearchBox::cSPUISearchBox  # card PDB name
+00671f70 SP::cSPUISearchBox::~cSPUISearchBox  # card PDB name
+00672040 SP::cSPUISearchBox::Update  # card PDB name
+006720e0 SP::cSPUISearchBox  # clears mSearchString and pushes to mWinSearchBox
+00672120 SP::cSPUISearchBox::DoMessage  # card PDB candidate (caller-scored)
+00672200 `anonymous namespace'::cTextureCheat::Execute  # card PDB candidate (caller-scored)
+00672480 SP::cSPUISporeGuidePage::Init  # card PDB name
+00672880 eastl::basic_string<wchar_t,eastl::allocator>::operator=  # string copy/assign
+00672910 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy  # card PDB name
+00672960 App::cStringDetokenizer::~cStringDetokenizer  # vtable 0x1400f40, 4 fixed strings
+006729d0 `anonymous namespace'::cBuildXHTMLDetokenizer::detokenize  # card PDB name
+00672b50 `anonymous namespace'::cBuildXHTMLDetokenizer::token_action_copy  # card PDB name

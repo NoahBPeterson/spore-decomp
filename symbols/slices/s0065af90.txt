@@ -1,0 +1,19 @@
+0065b180 CharTypeStringFindEnd  # eastl basic_string private helper, matches string.h source
+0065b1b0 SP::cSPUIAssetWebBrowser::Shutdown  # card real name
+0065b2a0 SP::cSPUIAssetWebBrowser::SetActive  # card real name
+0065b380 SP::cSPUIAssetWebBrowser::CreateContent  # inlined FUN_009979f0/GetFrame content creation
+0065b410 SP::cSPUIAssetWebBrowser reload callback  # SetReloadCallback target in FUN_0065b5f0
+0065b440 SP::cSPUIAssetWebBrowser feed build helper  # mpFeedList at +0xa0
+0065b510 SP::cSPUIAssetWebBrowser::ClearPage  # HandleLocationChange with blank html
+0065b530 CharTypeStringRSearch  # eastl basic_string rfind helper, matches string.h source
+0065b5f0 SP::cSPUIAssetWebBrowser::CreateLayout  # allocs cSPUILayout into +0x14
+0065b6b0 SP::cSPUIAssetWebBrowser::OnModalWindowEnd  # PDB candidate
+0065b8c0 eastl::basic_string<char>::rfind(3)  # matches EASTL rfind(p,pos,n)
+0065b930 SP::cSPUIAssetWebBrowser::cSPUIAssetWebBrowser  # constructor, stores class vtables
+0065ba20 SP::cSPUIAssetWebBrowser::~cSPUIAssetWebBrowser  # card real name
+0065bac0 SP::cSPUIAssetWebBrowser::Init  # card real name
+0065bc20 SP::cSPUIAssetWebBrowser::LoadPage  # PDB candidate
+0065bcb0 eastl::basic_string<char>::rfind(2)  # calls rfind(p,pos,strlen)
+0065bce0 eastl::basic_string<wchar_t>::basic_string(str,pos,n)  # range ctor
+0065bd80 SP::cSPUIAssetWebBrowser::HandleMessage  # PDB candidate (layout differs at +0x94)
+0065be20 ExtractFeedPath  # builds a wstring substring after "/user/"

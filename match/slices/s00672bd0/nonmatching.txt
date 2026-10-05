@@ -1,0 +1,10 @@
+00672c30  77  eastl::uninitialized_copy_impl<0,random_access>::do_copy<fixed_string*>: complete; uninitialized_copy driver keeps currentDest in the sret slot, mine enregisters it (register/branch layout differs)
+00672cf0  11  cAction copy ctor: complete; fixed_string subobject store order and push edi scheduling differ by one instruction
+00672db0  42  eastl::uninitialized_move_impl<0,random_access>::do_move_start<cAction*>: complete; original keeps last in ebp, mine spills it to the arg slot (register allocation)
+00672f00  76  eastl::uninitialized_copy_impl<0,random_access>::do_copy<cAction*>: complete; same sret/currentDest register difference as 00672c30
+006731e0  212 eastl::vector<fixed_string>::DoAssignFromIterator<fixed_string const*>: complete; register allocation of first/last/capacity differs (ebx vs ebp)
+00673410  285 eastl::vector<cAction>::DoInsertValue: complete; full-capacity move path register/branch scheduling differs
+00673570  212 eastl::vector<cAction>::DoAssignFromIterator<cAction const*>: complete; same register allocation gap as 006731e0
+00673710  24  cBuildXHTMLDetokenizer::~cBuildXHTMLDetokenizer: complete; inlined basic_string dtor picks ecx for begin where original picks eax (four sites)
+00673870  5   cVar copy ctor: complete; only the mId store vs the mName `lea ecx,[edi+4]` scheduling is swapped
+00673b00  270 eastl::vector<cVar>::DoInsertValue: complete; same full-capacity move path gap as 00673410
