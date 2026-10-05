@@ -1,0 +1,14 @@
+00680c30  87   S8/M5a0 copy ctor via init-lists; cl homes the source param to a register and schedules the frame differently (orig spills xEnd early, sub-esp-8 frame)
+00680cc0  250  vector<N48>::insert: same size, all call shapes right; EH state slots and arg-eval scheduling differ
+00680e70  302  vector<N48>::operator=: source ref not homed to ebp like the original; realloc/assign branch scheduling differs
+00680fc0  220  serializer loop: this-homing to ebp happens later than original; WriteUint32 slot reuse pattern not reproduced
+006812c0  224  loader loop: count/value locals homed into dead arg slots by the original; my locals land in different slots
+00681500  63   free-chain variant: original has an EH frame with states around the member dtor call that plain member dtor calls cannot induce
+00681590  9    map insert: only arg-eval scheduling (pOut loaded into eax before size increment vs after)
+006815f0  223  insert_unique: complete, three duplicated insert paths present; register/scheduling differences throughout
+00681700  189  Obj1700 copy ctor: vec-copy bodies match shape; per-copy scheduling and state-store placement differ
+00681800  310  Obj1800 copy ctor: 0x60 plain copy emitted with different register rotation; same size, all copies present
+00681a10  80   ObjA copy ctor: vec copies match except lea/push scheduling and first arg register choice
+00681b50  87   ObjB50 operator=: struct-copy register rotation differs; all six member assignments in order
+00681c40  9    ObjA operator=: only arg-eval scheduling (lea of first call arg before vs after the 4th dword store)
+00681e80  9    copy_backward loop: only the same arg-eval scheduling difference
