@@ -1,0 +1,14 @@
+006ab3d0  600  fixed-allocator size-class helper stubbed
+006ab6c0  152  wstring hash/allocator helper stubbed
+006ab760  121  fixed-hashtable<wstring> DoFindNode stubbed
+006ab840  258  wstring hashtable node helper stubbed
+006ab950  289  wstring hashtable rehash helper stubbed
+006aba80  518  D3D9ShaderGeneric3DMorphingInitialize stubbed
+006abc90  351  shader constant setup stubbed
+006abf20  114  spin-wait retire queue stubbed
+006abfa0  148  atomic refcount retire helper stubbed
+006ac140  112  FixedAllocatorBase::Init + vtable setup stubbed
+006ac260  140  fixed-allocator node alloc + value copy stubbed
+006ac2f0  193  fixed-allocator node init loop stubbed
+006ac3c0  117  fixed-allocator core teardown stubbed
+006ac5d0  88   free bucket-array nodes stubbed

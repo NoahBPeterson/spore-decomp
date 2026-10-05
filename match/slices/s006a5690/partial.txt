@@ -1,0 +1,11 @@
+# incomplete / approximate source (not counted as decompiled)
+006a58a0  182  message handler: server/vtable calls stubbed
+006a59f0  135  message handler: stubbed body
+006a5a90  204  batch message handler: approximate
+006a5b80  178  batch message handler: approximate
+006a5c50  206  hashtable DoInsertValue: stubbed body
+006a5f70  80  name lookup: approximate (raw offsets, call shapes wrong)
+006a5fd0  180  name lookup with temp string: approximate
+006a60b0  227  property lookup/apply: approximate
+006a61c0  87  map insert: approximate
+006a6240  168  name/id lookup: approximate

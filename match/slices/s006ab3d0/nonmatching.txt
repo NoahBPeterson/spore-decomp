@@ -1,0 +1,7 @@
+006ab800  59  WString assign-range wrapper: logic complete; cl chose call (not tail-jump) + extra arg register, size differs
+006abe00  8   double interlocked refcount tweak: complete; scheduling of `add eax,8`/`mov ecx,1` swapped
+006abe50  60  FixedAllocatorBase::AllocateChunk: complete; register/frame differences
+006ac040  5   SetCachingType: complete; final `return type==0` emitted as sete instead of branch to shared false epilogue
+006ac0a0  38  cache-type setter via vtable+0xc: complete; vtable call shape differs
+006ac0d0  35  cache-type getter: complete; division/compare schedule differs
+006ac440  17  8-byte element copy loop: complete; cl used sub/jne signed form instead of dec/test/ja (loop var/reg order)

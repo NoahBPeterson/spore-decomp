@@ -1,0 +1,5 @@
+slices/s006ab3d0/s006ab3d0.cpp  ?assign@WString@@QAEXPB_WI@Z  006ab7e0
+slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006abdf0@@YIHPAPAX@Z  006abdf0
+slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006abee0@@YI_NPAD@Z  006abee0
+slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006ac470@@YIXH@Z  006ac470
+slices/s006ab3d0/s006ab3d0.cpp  ?FUN_006abeb0@@YAXPAX@Z  006abeb0

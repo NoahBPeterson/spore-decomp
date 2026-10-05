@@ -1,0 +1,3 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006a5e10  100  vector<basic_string> ctor: helper call/frame schedule differs
+006a5ea0  127  vector<0x38> ctor: matrix/value construction frame differs

@@ -1,0 +1,16 @@
+006ac630  177  `anonymous namespace'::OnRegister stubbed
+006ac6f0  91   registry dtor (vtable reset + Mutex dtor + vector free) stubbed
+006ac770  96   registry ctor (vtable + inline vector + Mutex) stubbed
+006ac7d0  105  registry ctor variant stubbed
+006ac840  138  registry callback list setup stubbed
+006ac8d0  325  registry insert path stubbed
+006aca20  120  registry erase/lookup helper stubbed
+006acaa0  437  registration callback vector manipulation stubbed
+006acc60  518  registry Register(key,obj) stubbed
+006ace70  368  registry Unregister(key,obj) stubbed
+006ad070  127  RemoveRegistrationCallback stubbed
+006ad0f0  133  registry callback registration helper stubbed
+006ad180  123  registry teardown helper stubbed
+006ad270  216  resource registration path stubbed
+006ad350  184  registration list walk stubbed
+006ad410  373  registration notify loop stubbed

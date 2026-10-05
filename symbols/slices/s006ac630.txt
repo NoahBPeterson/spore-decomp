@@ -1,0 +1,4 @@
+006ac630 `anonymous namespace'::OnRegister  # PDB anchor
+006ad070 SP::RemoveRegistrationCallback  # PDB name
+006acc60 SP::cPropertyManager registry Register  # callee of 006ad010/006ad590 wrappers
+006ace70 SP::cPropertyManager registry Unregister  # callee of 006ad030/006ad050 wrappers

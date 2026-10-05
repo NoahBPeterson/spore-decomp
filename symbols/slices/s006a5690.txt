@@ -1,0 +1,2 @@
+006a5690 `anonymous namespace'::GetVariantTypeDescription  # pdb anchor
+006a6310 FUN_006a6310  # vector<uint32_t> constructor helper (shape)

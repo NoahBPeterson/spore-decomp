@@ -239,9 +239,11 @@ struct String {
 String& String::assign(const char* p)
 {
     const char* q = p;
-    while (*q)
-        ++q;
-    return assign(p, q);
+    char c;
+    do {
+        c = *q++;
+    } while (c);
+    return assign(p, p + (q - p - 1));
 }
 
 // ---------------------------------------------------------------------------

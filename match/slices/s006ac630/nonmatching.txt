@@ -1,0 +1,1 @@
+006acfe0  10  registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax)
