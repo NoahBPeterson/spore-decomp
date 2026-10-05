@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+0047e4b0  305  SetModelFlags: bitset div-based set and /Od local slots differ
+0047e600  94   GetPosition: branch shape / x87-vs-SSE vector copy and slots differ
+0047e6e0  269  GetHandleAlphaForState: switch body layout and inlined-helper local slots differ
+0047e830  269  GetOverdrawHandleAlphaForState: switch body layout and inlined-helper local slots differ
+0047e980  284  GetHandleColorForState: switch body layout and /Od local slots differ
+0047eaa0  284  GetOverdrawHandleColorForState: switch body layout and /Od local slots differ
+0047ebe0  57   GetZeroVector: zero-init aggregate uses integer stores in original
+0047f290  286  IsFlagSet: bitset test and local slots differ
+0047f3e0  179  SetScale: reference-local product ordering and /Od slots differ

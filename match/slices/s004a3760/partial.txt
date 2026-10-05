@@ -1,0 +1,4 @@
+004a3760  -  skeleton: screen-space position helper
+004a37f0  -  skeleton: block search helper
+004a3920  -  skeleton: block search helper
+004a3c70  -  skeleton: nearest-block search

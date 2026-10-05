@@ -1,0 +1,5 @@
+# source  symbol  va  [flags]
+slices/s0044e460/s0044e460.cpp  PlaneFromPointNormal  0044e510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0044e460/s0044e460.cpp  PlaneEval  0044e5d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0044e460/s0044e460.cpp  IntersectRayPlane  0044e640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0044e460/s0044e460.cpp  SetScaleType  0044f130  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

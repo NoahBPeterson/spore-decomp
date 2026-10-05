@@ -1,0 +1,3 @@
+0045f140  -  reallocate; shrink path approximated and buffer free (release) stubbed
+0045f2a0  -  buffer swap; SSO/steal special case approximated
+0045f430  -  string appendGrow(range); buffer free (release) stubbed

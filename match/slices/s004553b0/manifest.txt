@@ -1,0 +1,2 @@
+# source  symbol  va  [flags]
+slices/s004553b0/s004553b0.cpp  Dot3  00455cc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

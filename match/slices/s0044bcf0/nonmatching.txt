@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0044c050  10   instruction sequence identical; only the hidden this-home slot and the result slot are swapped

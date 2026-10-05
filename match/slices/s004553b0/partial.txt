@@ -1,0 +1,2 @@
+00455660  567  VectorPushBack3 - eastl::vector<Vector3>::push_back grown/realloc path only outlined
+004558a0  567  VectorInsertU32 - eastl::vector<unsigned int>::DoInsertValue only outlined

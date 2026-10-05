@@ -1,0 +1,2 @@
+slices/s004a1a70/s004a1a70.cpp  ?FUN_4a1d60@cSPEditorBlock@@QAEXPBUcSPVector3@@@Z  004a1d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a1a70/s004a1a70.cpp  ?FUN_4a2560@@YA_NPAUcSPEditorModel@@@Z  004a2560  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+0049ef80 AddThreeVectors  # calls a thiscall per-element over a 3-vector array

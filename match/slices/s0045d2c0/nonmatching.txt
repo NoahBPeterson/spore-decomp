@@ -1,0 +1,7 @@
+0045d3e0  717  recursive Collada <node> writer; local slot layout / expression scheduling differs
+0045d6f0  14  SSO string ctor; frame size and one dead local slot differ
+0045d790  698  vector<Elem(0x40)>::assign; EASTL grow/shrink scheduling differs
+0045daf0  3  vector deallocate (8-byte elems); slot order of the deallocate argument temp
+0045db40  3  vector deallocate (0x40-byte elems); slot order of the deallocate argument temp
+0045dc00  155  uninitialized_copy of Matrix44; generic-iterator temporaries differ
+0045dca0  362  Matrix44 copy ctor; compiler-unrolled 4-row staging not reproduced

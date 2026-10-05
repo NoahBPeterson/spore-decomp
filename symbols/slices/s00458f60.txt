@@ -1,0 +1,1 @@
+458f60 SP::CapabilityManager::InitNonDeformAnimations  # Ghidra PDB candidate name (caller-scored), decomp_all/index_5.csv

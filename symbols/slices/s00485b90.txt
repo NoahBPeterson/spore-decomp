@@ -1,0 +1,3 @@
+00485b90  SP::cSPEditorHandleRotationRing::ComputeDistance  # bitset tests (bits 0xb/0x14), bbox + direction math
+00485eb0  SP::cSPEditorHandleRotationRing::GetBoundingRadius  # bbox transform, branch on flag bit 0x2000 at +0xdcc
+004860b0  SP::cSPEditorHandleRotationRing::Update  # large ring physics update

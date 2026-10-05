@@ -1,0 +1,2 @@
+# source  symbol  va  [flags]
+# (no byte-exact functions in this slice)

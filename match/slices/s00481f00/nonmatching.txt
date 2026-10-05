@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00481f00  28   IsNAN: comparison/short-circuit shape matches, but /Od local slot order (float params vs result) differs
+00481fa0  74   GetHandlePos: transform/vector helper shapes and /Od slots differ
+00482040  228  GetDir: subtraction operand order / transform multiply and slots differ
+00482130  193  GetP0: branch copy flavour (fld/fstp vs movss) and slots differ
+00482200  193  GetP1: branch copy flavour (fld/fstp vs movss) and slots differ
+004822d0  214  GetOrientation: matrix build helper and slots differ

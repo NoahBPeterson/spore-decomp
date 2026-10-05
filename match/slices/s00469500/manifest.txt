@@ -1,0 +1,4 @@
+# source  symbol  va
+slices/s00469500/s00469500.cpp  ??0S45a@@  00469500  /Od /Ob1 /MD /Gy /TP
+slices/s00469500/s00469500.cpp  ?init@S45b@@  00469550  /Od /Ob1 /MD /Gy /TP
+slices/s00469500/s00469500.cpp  ??4S45c@@  004696d0  /Od /Ob1 /MD /Gy /TP

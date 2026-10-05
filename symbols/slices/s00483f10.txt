@@ -1,0 +1,6 @@
+00483f10  SP::cSPEditorHandleRotationRing::Update  # large ring transform
+004845d0  SP::cSPEditorHandleRotationRing::GetHandlePosition  # PDB candidate; dir * mCustomScale (+0x84)
+00484640  SP::cSPEditorHandleRotationRing::GetHandleRadiusBasedOnBoundingBox  # PDB name
+00484820  SP::cSPEditorHandleRotationRing::CalculateBallOffset  # PDB name
+004849e0  SP::cSPEditorHandleRotationRing::Resume  # large ring update
+00484e00  SP::cSPEditorHandleRotationRing::GetPropListKey  # PDB name; EditorTuning()+0xa8

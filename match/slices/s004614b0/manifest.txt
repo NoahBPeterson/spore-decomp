@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004614b0/s004614b0.cpp  ?GetGlobalFlag@@YAEXZ  00461510  /Od /Ob1 /MD /Gy /TP
+slices/s004614b0/s004614b0.cpp  ?UseName@@YAXH@Z  004615b0  /Od /Ob1 /MD /Gy /TP

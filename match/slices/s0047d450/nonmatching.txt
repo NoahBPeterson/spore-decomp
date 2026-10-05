@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0047d6a0  309  cSPEditorHandle constructor: base-ctor vptr-store chain and /Od frame slots (0x24) not reproduced
+0047d870  110  cSPEditorHandle destructor: inlined AutoRefCount dtors / vtable ordering differ
+0047d910  32   AsInterface: implicit `this` home-slot ordering at /Od cannot be reproduced by naming
+0047d950  415  LoadProps: inlined GetPropertyT/GetPropertyAsKey templates and /Od slots differ
+0047e2c0  419  Shutdown: inlined AutoRefCount release sequences and /Od slots differ

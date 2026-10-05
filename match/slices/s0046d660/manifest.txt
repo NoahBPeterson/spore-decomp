@@ -1,0 +1,2 @@
+# source  symbol  va
+slices/s0046d660/s0046d660.cpp  ?FUN_0046d660@@  0046d660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

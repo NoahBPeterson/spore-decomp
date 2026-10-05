@@ -1,0 +1,1 @@
+0045bc80  -  complete behaviorally-equivalent influence-compaction loop; frame/register allocation (esi, slot order) differs

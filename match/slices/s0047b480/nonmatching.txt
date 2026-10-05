@@ -1,0 +1,9 @@
+0047b7b0 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
+0047b890 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
+0047bb70 - complete source; 0x2c-byte element copy ctor, NOT byte-exact
+0047bf30 - complete source; basic_string<char>::resize, NOT byte-exact
+0047c010 - complete source; refcounted-pointer range copy (AddRef), NOT byte-exact
+0047c0d0 - complete source; refcounted-pointer range assign, NOT byte-exact
+0047c140 - complete source; vector<0x29c> uninitialized_copy, NOT byte-exact
+0047c1c0 - complete source; uninitialized_copy<16-byte 4-float>, loop rotation/frame differs
+0047c240 - complete source; vector<16-byte> uninitialized_copy, NOT byte-exact

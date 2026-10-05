@@ -1,0 +1,10 @@
+0048b370 SP::cSPEditorLimbStructure::UpdateLimbScaleRange  # per-limb min/max scale update over block subtree (partial)
+0048bae0 SP::cSPEditorLimbStructure::SetFeetTargets  # for mFeet, F_485b90 target then optional 0x448e90
+0048bbb0 SP::cSPEditorLimbStructure::SetHandsTargets  # for mHands, if F_485eb0<0 set target via F_485b90
+0048bca0 SP::cSPEditorLimbStructure::GetMaxDistanceFromBase  # max (mBaseJoint->0x3c - joint->0x3c) over hands/feet
+0048bdd0 SP::cSPEditorLimbStructure::UpdateFeetTargets  # SetJointTarget for each foot then SetFeet/HandsTargets(false)
+0048be80 SP::cSPEditorLimbStructure::UpdateLengths  # joint->UpdateLength + recurse lower joints (OR of results)
+0048bf40 SP::cSPEditorLimbStructure::UpdateAllLengths  # wrapper: UpdateLengths(mBaseJoint,b)
+0048bf70 SP::cSPEditorLimbStructure::UpdateLengthsFrom  # wrapper: UpdateLengths(joint,b)
+0048bfc0 SP::cSPEditorLimbStructure::F_48bfc0  # joint->block->F_451360 then recurse lower joints
+0048c050 SP::cSPEditorLimbStructure::F_48c050  # joint->block->F_451330(block->mPosition) then recurse

@@ -1,0 +1,4 @@
+0045cd40  57  strlen loop / local slot order differ (near miss)
+0045cd90  103  varargs sink writer; BigStr local layout differs
+0045ce80  103  Vector3 float-array writer; x87 arg promotion/scheduling differs
+0045cf40  73   Vector2 float-array writer; x87 arg promotion/scheduling differs

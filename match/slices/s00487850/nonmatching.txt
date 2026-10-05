@@ -1,0 +1,3 @@
+004878e0  1238  /Od; complete. mode switch over lower-joint direction; /Od frame slot layout not reproduced
+00487e90  501  /Od; complete. mode switch over upper-joint direction; frame slot layout not reproduced
+00488100  297  /Od; complete. up-vector logic; frame ~297 bytes smaller (inline temp slots not reproduced)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00483cc0  79   SetScale2: needs a model pointer local for the if condition (raw pointer folds it away)
+00483ec0  67   AsInterface: switch shape correct but return-block ordering differs

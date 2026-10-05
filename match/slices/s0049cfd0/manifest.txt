@@ -1,0 +1,2 @@
+slices/s0049cfd0/s0049cfd0.cpp  ?TransformVector@cSPTransform@@QAEXPAUcSPVector3@@@Z  0049d640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0049cfd0/s0049cfd0.cpp  ?ClampAndSetScale@@YAMPAUcSPEditorBlock@@M_N@Z  0049dca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

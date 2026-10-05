@@ -1,0 +1,7 @@
+0043a460  15   GetVec1 result length (VectorLength) - /Od slot layout differs
+0043a490  9    12-byte key-vector lookup - only /Od local slot offsets differ
+0043a500  15   GetVec2 result length (VectorLength) - /Od slot layout differs
+0043a530  9    12-byte key-vector lookup (+0x400) - only /Od local slot offsets differ
+0043a870  265  GetSkinIdentifierForPicking - /Od frame/build differs
+0043a9e0  249  F9e0 selection-state update - /Od slot layout differs
+0043ab90  109  Fb90 state setter - Vector4 temp + /Od frame differ

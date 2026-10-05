@@ -1,0 +1,2 @@
+00496b60  20  complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68)
+00496bb0  150  complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ

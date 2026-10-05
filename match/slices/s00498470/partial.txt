@@ -1,0 +1,4 @@
+00498470  597  partial: skeleton of the move/snap-align routine
+004986d0  379  partial: skeleton only
+00498850  1728  partial: large routine skeleton only
+00498f10  1269  partial: large routine skeleton only

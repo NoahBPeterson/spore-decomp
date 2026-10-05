@@ -1,0 +1,4 @@
+# source  symbol  va
+slices/s0046e450/s0046e450.cpp  ?init@Desc@@  0046f140  /Od /Ob1 /MD /Gy /TP
+slices/s0046e450/s0046e450.cpp  ?init0@Desc@@  0046f1f0  /Od /Ob1 /MD /Gy /TP
+slices/s0046e450/s0046e450.cpp  ?FUN_0046f260@@  0046f260  /Od /Ob1 /MD /Gy /TP

@@ -1,0 +1,7 @@
+# source  symbol  va
+slices/s00471b50/s00471b50.cpp  ??1RefHolderA@@  00472520  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ??1RefHolderB@@  00472540  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ?get@StridedArr@@  00472640  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ?Init72660@@  00472660  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ?Init726d0@@  004726d0  /Od /Ob1 /MD /Gy /TP
+slices/s00471b50/s00471b50.cpp  ?Init72a00@@  00472a00  /Od /Ob1 /MD /Gy /TP

@@ -1,0 +1,8 @@
+00472b80 737 complete source; sqrt in x87 but result temps / branch store order differ (x87-optimized RW math)
+00472f50 84 complete source; inlined strlen intrinsic loop shape / local order differ
+00473140 96 complete source; char copy-ctor inline uninitialized_copy scratch-slot frame differs
+00473300 11 complete source; vector<Elem29c> dtor, only /Od frame holes differ
+00473370 177 complete source; vector<Elem29c>::resize, extra /Od frame holes from inlined temp dtor
+00473500 27 complete source; vector<Pod12>::operator=, branch-2 CopyRef local slot layout differs
+00473890 213 complete source; vector<Pod12>::reserve, uninitialized_relocate inline wrapper not reproduced
+00473b00 27 complete source; vector<Pair8>::operator=, branch-2 CopyRef local slot layout differs

@@ -1,0 +1,4 @@
+00457950  SP::cSPEditorBudget::AsInterface     # QueryInterface
+00457af0  SP::cSPEditorBudget::Init
+004581d0  SP::cSPEditorBudget::Shutdown
+004580c0  SP::ColorRGBAToU32

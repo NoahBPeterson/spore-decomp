@@ -1,0 +1,4 @@
+004575d0  529   FUN_004575d0 - body only outlined (budget setup)
+00457840  264   FUN_00457840 - destructor: vtable resets done, refcount releases omitted
+004579a0  329   FUN_004579a0 - body only outlined
+00457af0  1475  cSPEditorBudget::Init - 1.5KB body only outlined

@@ -1,0 +1,2 @@
+004a1d60 cSPEditorBlock::FUN_4a1d60  # mirrors a vector into +0x144 and (negated) into mPinTarget
+004a2560 FUN_4a2560  # OR over block predicates

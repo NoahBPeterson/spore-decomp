@@ -1,0 +1,5 @@
+0048bae0  105  /Od; complete. SetFeetTargets: F_485b90 out-vector + 0x448e90 chain; frame slot layout differs
+0048bbb0  240  /Od; complete. SetHandsTargets: F_485eb0 / F_485b90 chain; frame slot layout differs
+0048bca0  43  /Od; complete. max (baseJoint->0x3c - joint->0x3c) over hands/feet; frame ~43 bytes off
+0048bdd0  135  /Od; complete. feet-target update loop + wrappers; frame/temp layout differs
+0048c050  8  /Od; complete. 0x451330 by-value arg copy uses one extra frame slot (near miss)

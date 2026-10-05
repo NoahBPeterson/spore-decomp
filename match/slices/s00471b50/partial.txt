@@ -1,0 +1,8 @@
+# va  reason
+00471b50 SP::EditorUtils::AddInitialBoundInfo: 2KB+ stack frame with local Transform/array scratch; only skeleton written
+00471ec0 large caller in the same family; not attempted
+004721e0 large caller in the same family; not attempted
+00472860 ctor with two inlined base vtables (Editor::cEditorResource at +0, Simulator::cCreatureAbility at +4); hierarchy not recovered
+004728e0 size/span descriptor + first-slot vcall; only skeleton written
+00472990 small container ctor with 0x4c-byte frame (mostly scratch) and a trailing helper call; frame layout not reproduced
+00472aa0 destructor: inline vector-destroy loop + vtable stores; container type unknown

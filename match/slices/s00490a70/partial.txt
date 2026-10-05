@@ -1,0 +1,2 @@
+00490a70  2268  partial: SP::EditorUtils::GetAlignmentPosition skeleton; call sequence present, inlined matrix/basis-copy and EASTL temporaries approximated
+00491350  1454  partial: skeleton of the mode-dependent block accumulation loop; refcount/insert tail approximated

@@ -1,0 +1,3 @@
+461520  -  table lower_bound lookup; /Od frame/index math differs
+4615e0  -  SP::EditorUtils::RegisterCreatureModels bitfield packing; constant folding differs
+4614b0  -  holder destructor; member layout inferred, inline release codegen differs

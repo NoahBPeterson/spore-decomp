@@ -1,0 +1,3 @@
+00480320  Ring_Build  # vector transform/basis builder; calls 0x401060, 0x41db10, 0x41dca0, 0x4822d0
+004809c0  Ring_Rotate  # __thiscall (ret 4); bounding-box transform + normalized basis
+00480cf0  Ring_Reset  # __thiscall; GetLocalTransform (0x436380), Normalize (0x436ce0), Ring_Rotate (0x4809c0)

@@ -1,0 +1,1 @@
+004410d0  700  F410d0 - property fetch + model-creation sequence approximated (float/refcount details omitted)

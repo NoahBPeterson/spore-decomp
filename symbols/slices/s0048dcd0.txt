@@ -1,0 +1,2 @@
+0048dcd0 SP::EditorUtils::GetMissStackingPosition  # blends block offset with miss vector via MoveBlockLowAngleStacking (partial)
+0048e510 F_48e510  # out[0..2]=src[0..2], out[3]=0

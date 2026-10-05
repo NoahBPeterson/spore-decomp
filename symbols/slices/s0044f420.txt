@@ -1,0 +1,1 @@
+0044f420  SP::cSPEditorBlock::Split   # 925-byte clone/rebuild driver calling BuildBlock

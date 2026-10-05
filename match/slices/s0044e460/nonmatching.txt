@@ -1,0 +1,9 @@
+0044e460  58  Cross: this cl build evaluates the left product first; original computes the subtrahend first (same result, mirrored instruction order)
+0044e720  160  GetBounds: inlined Bounds construct/destroy and snap-axis (0x234 base, stride 0x20) handling not reproduced
+0044e830  237  GetBlockType: /Od property-list virtual calls, per-branch ResourceKey frames and hash-ordered locals not reproduced
+0044e980  231  SetBaseJointScale: NaN sentinel bit-compare and linked-block scale offsets not exact
+0044ea80  555  RefreshLinkedFlag: inlined AutoRefCount release/assign chains and /Od frames not reproduced (size mismatch)
+0044ede0  117  RecursiveFlagA: inlined FUN_0044c050 condition and /Od frame layout not reproduced
+0044eea0  98   RecursiveFlagB: inlined recursive branch shape and /Od frame layout not reproduced
+0044efb0  153  RecursiveFlagC: inlined release chain and /Od frame layout not reproduced
+0044f240  311  CalculateSymmetrySign: inlined property/bool lookups and /Od frames not reproduced (size mismatch)

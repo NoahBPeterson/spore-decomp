@@ -1,0 +1,14 @@
+004553b0  eastl::hashtable<SP::cString_*,...>::find
+004554a0  eastl::rbtree<...>::DoNukeSubtree / FreeTree
+004554f0  eastl::hashtable<SP::cString_*,...>::DoFreeNodes
+00455590  eastl::hashtable<SP::cString_*,...>::insert
+00455660  eastl::vector<rw::math::fpu::Vector3Template<float,0>,eastl::sp_vector_allocator>::push_back
+004558a0  eastl::vector<unsigned int,eastl::sp_vector_allocator>::DoInsertValue
+00455ae0  eastl::vector<...0x14-stride...>::erase/move
+00455c00  string-to-Vector3 parser
+00455cc0  Dot3                                   # free helper: a . b
+00455c50  ClampDot                               # clamped dot product
+00455cf0  fixed-size container init
+00455d60  eastl::basic_string<char,eastl::allocator>::append
+00455f50  FindFirst                              # first matching element scan
+00455fa0  eastl::vector<...0x20-stride...>::insert

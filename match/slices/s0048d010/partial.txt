@@ -1,0 +1,1 @@
+0048d010  2783  skeleton: cSPEditorManipulationStacking::MoveBlockLowAngleStacking evaluation; only the outer guard/return reconstructed, the 2783-byte stacking math omitted

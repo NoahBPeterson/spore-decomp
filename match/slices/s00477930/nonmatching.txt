@@ -1,0 +1,4 @@
+00478300 - complete source; EA::Variant ctor/dtor, NOT byte-exact
+00478390 - complete source; vector<8-byte,4>::DoInsertValue, NOT byte-exact
+00478620 - complete source; introsort range helper, NOT byte-exact
+004786e0 - complete source; vector<8-byte,fixed>::DoInsertValue, NOT byte-exact

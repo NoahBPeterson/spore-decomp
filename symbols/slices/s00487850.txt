@@ -1,0 +1,5 @@
+00487850 SP::cSPEditorLimbJoint::FindFirstLimbLowerJoint  # if !mLowerJoints.empty, returns first lower joint whose block passes F_44c030
+004878e0 SP::cSPEditorLimbJoint::GetLowerDirection  # returns direction based on mode (0 target,1 original,2 block pos,3 creation) from lower joint or self
+00487e90 SP::cSPEditorLimbJoint::GetUpperDirection  # direction from mUpperJoint / block parent link (0x33c)
+00488100 SP::cSPEditorLimbJoint::GetUpVector  # up vector from cross products / orientation; recurses into upper/lower joints
+004885d0 SP::Dot3  # (x*x+y*y)+z*z

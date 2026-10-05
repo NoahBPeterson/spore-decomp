@@ -1,0 +1,8 @@
+0048c610  196  /Od; complete. GetLimbOriginalPosition: mEndBlock/mLastBone cases; /Od frame slot layout differs
+0048c720  74  /Od; complete. vector<cSPEditorLimbJoint*>::eraseOne; frame/temp layout differs
+0048c790  61  /Od; complete. BuildPileList recursion; frame ~61 bytes off and iterator temps differ
+0048c8d0  84  /Od; complete. GetSymmetricBlocks AddRef/push/Release; frame ~84 bytes off
+0048ca10  465  /Od; complete. CalculateModelSize; hash-flag checks and bbox AXBXC sum; frame slot layout differs
+0048cc20  121  /Od; complete. CountModelParts; extra /Od resource-id temp slot differs
+0048ccf0  505  /Od; complete. CollectPartsRec flag walk; frame slot layout and bitset temps differ
+0048cf00  217  /Od; complete. GetModelMinZ; frame slot layout differs

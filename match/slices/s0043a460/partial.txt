@@ -1,0 +1,1 @@
+0043a5e0  418  F5e0 - vector-insert helper sequence approximated (EASTL temporaries not reproduced)

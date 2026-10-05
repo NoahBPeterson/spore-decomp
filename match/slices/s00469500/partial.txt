@@ -1,0 +1,4 @@
+# va  reason
+00469590 large ctor with several inlined base vtables at +0/+4 and member ctors; class hierarchy not recovered
+00469790 destructor calls a long sequence of member dtors / inline vector-destroy loops; container types unknown
+00469920 reflection property-registration body (PropertyManager vtable calls + EA new cPropertyList); only skeleton written

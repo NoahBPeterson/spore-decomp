@@ -1,0 +1,11 @@
+# source  symbol  va  [flags]
+slices/s00450f70/s00450f70.cpp  GetA       004511f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  GetB       00451210  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  SetF       00451240  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  SetRef     00451280  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  GetVec14   004512e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  ResetVec194 00451360 /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  GetVec194  004513a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  SetPtr188  00451e20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  SetSub38   00451e50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00450f70/s00450f70.cpp  Reset188   00451ed0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

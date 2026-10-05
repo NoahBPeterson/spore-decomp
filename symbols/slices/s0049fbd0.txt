@@ -1,0 +1,3 @@
+0049fbd0 SP::EditorUtils::RepinBlockToTorso  # PDB/card name
+004a0020 SP::EditorUtils::GetAllLimbs  # PDB/card name
+004a0ac0 FUN_4a0ac0  # scans model blocks, tests mFlags bit 0x2d

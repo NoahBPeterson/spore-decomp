@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0045d2c0/s0045d2c0.cpp  ?WriteFloatArray@@YAXHPBDPBMI@Z  0045d2c0  /Od /Ob1 /MD /Gy /TP
+slices/s0045d2c0/s0045d2c0.cpp  ___aligned_offset_recalloc  0045d3b0  /Od /Ob1 /MD /Gy /TP
+slices/s0045d2c0/s0045d2c0.cpp  ?VecWriterLines@@YAXHH@Z  0045d6b0  /Od /Ob1 /MD /Gy /TP
+slices/s0045d2c0/s0045d2c0.cpp  ?ResetAndFormat@Str@@QAEXPBDPAX@Z  0045da50  /Od /Ob1 /MD /Gy /TP
+slices/s0045d2c0/s0045d2c0.cpp  ?FUN_0045da80@@YAHHH@Z  0045da80  /Od /Ob1 /MD /Gy /TP
+slices/s0045d2c0/s0045d2c0.cpp  ?Init@TwoPtr@@QAEXXZ  0045dac0  /Od /Ob1 /MD /Gy /TP

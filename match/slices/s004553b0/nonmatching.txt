@@ -1,0 +1,11 @@
+004553b0  98   HT_Find: inlined hashtable bucket_index/find and /Od frame not reproduced
+004554a0  28   FreeTree: recursive node teardown; inlined allocator deallocate signature/frame not exact
+004554f0  102  DoFreeNodes: uninitialized_copy + destroy loop shape not reproduced
+00455590  133  HT_Insert: inlined hashtable insert (FUN_005701b0/FUN_00533740) not reproduced
+00455ae0  169  Move14: eastl 0x14-stride move-down loop and trailing erase not reproduced
+00455c00  75   ParseVec3: string parse helpers (FUN_004565f0/FUN_00456650) not reproduced
+00455c50  36   ClampDot: extra jmp per arm from the nested if/else layout not reproduced
+00455cf0  87   InitFixed: fixed-vector init; /Od locals and this-relative stores not exact
+00455d60  310  StringAppend: literal EASTL basic_string::append not fully reproduced
+00455f50  67   FindFirst: outer for(;;) loop layout (leading jmp to condition) not reproduced
+00455fa0  482  VecInsert32: eastl vector insert/relocate with 0x20-stride temporaries not reproduced

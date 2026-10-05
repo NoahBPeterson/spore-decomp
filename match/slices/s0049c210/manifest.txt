@@ -1,0 +1,1 @@
+slices/s0049c210/s0049c210.cpp  ?FindClosestSymmetry@EditorUtils@SP@@YAPAUcSPEditorBlock@@UcSPVector3@@PAU3@@Z  0049c570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

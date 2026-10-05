@@ -1,0 +1,12 @@
+00475d00 - complete source; vector<AutoRefCount,4>::erase, NOT byte-exact (loop/frame differs)
+00475da0 - complete source; vector<Elem29c,4>::erase, NOT byte-exact (move helper inline shape differs)
+00475ef0 - complete source; uninitialized_copy<12-byte>, element float fld/fstp shape not reproduced
+00476000 - complete source; vector<8-byte,4>::DoInsertValue, NOT byte-exact
+00476290 - complete source; uninitialized_copy<8-byte 2-float>, eastl::copy inline shape not reproduced
+004763a0 - complete source; uninitialized_copy+destruct<8-byte>, NOT byte-exact
+00476440 - complete source; vector<8-byte,2>::DoInsertValue, NOT byte-exact
+00476680 - complete source; vector<16-byte,4>::DoInsertValue, NOT byte-exact
+00476950 - complete source; relocate+destruct<16-byte>, NOT byte-exact
+004769b0 - complete source; fixed vector erase, NOT byte-exact
+00476a40 - complete source; vector<64-byte>::erase, NOT byte-exact
+00476ae0 - complete source; vector<Matrix44,4>::DoInsertValue, NOT byte-exact

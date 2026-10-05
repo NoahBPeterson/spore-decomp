@@ -1,0 +1,4 @@
+00478990 - complete source; vector<int>::insert(n,value), NOT byte-exact
+00478e00 - complete source; vector<0x29c>::insert(n,value), NOT byte-exact
+00479330 - complete source; vector<12-byte>::insert(n,value), NOT byte-exact
+004797a0 - complete source; uninitialized_copy<12-byte 3-float> wrapper, loop rotation/frame differs

@@ -1,0 +1,7 @@
+00450f70  SP::cSPEditorBlock::Rebuild                 # PDB BuildBlock wrapper
+004511f0  SP::cSPEditorBlock::GetA
+00451210  SP::cSPEditorBlock::GetB
+00451280  SP::cSPEditorBlock::SetRef
+004512e0  SP::cSPEditorBlock::GetVec14
+00451330  SP::cSPEditorBlock::SetVec194
+00451400  SP::cSPEditorBlock::Shutdown2

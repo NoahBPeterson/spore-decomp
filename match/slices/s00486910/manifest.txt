@@ -1,0 +1,4 @@
+slices/s00486910/s00486910.cpp  ?Fix@cSPEditorLimbJoint@SP@@QAE_NPAU12@@Z  00486e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00486910/s00486910.cpp  ?F_486f50@cSPEditorLimbJoint@SP@@QAEXUcSPVector3@@@Z  00486f50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00486910/s00486910.cpp  ?AddLowerJoint@cSPEditorLimbJoint@SP@@QAEXPAU12@@Z  00487040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00486910/s00486910.cpp  ?F_487290@cSPEditorLimbJoint@SP@@QAEXPAU12@@Z  00487290  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

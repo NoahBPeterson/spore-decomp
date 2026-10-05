@@ -1,0 +1,9 @@
+00489530  235  /Od; complete. mirror recursion; /Od frame slot layout and iterator temps differ
+00489640  137  /Od; complete. mirror+offset recursion; frame slot layout differs
+00489710  114  /Od; complete. refresh wrapper; frame slot layout differs
+004897b0  203  /Od; complete. block-target refresh; frame/temp layout differs
+004898a0  11  /Od; complete. rebuild wrapper (CollectBlocks/UpdateLimbScale/clear/BuildPileList/Refresh)
+00489900  443  /Od; complete. CollectBlocks flag checks; frame slot layout and bitset temp order differ
+00489ae0  113  /Od; complete. fix-joints loops; frame slot layout differs
+00489bc0  127  /Od; complete. limb-scale update; frame/temp layout differs
+00489c60  58  /Od; complete. finalize wrapper; frame slot layout differs

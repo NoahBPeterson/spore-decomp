@@ -1,0 +1,4 @@
+0043cad0  429  F3cad0 - state refresh approximated (inline accessor + model-flag details omitted)
+0043cfc0  332  F3cfc0 - clear-others pass approximated
+0043d240  233  F3d240 - model-transform branch approximated (transform compose omitted)
+0043d420  8    F3d420 - bone transform pipeline stubbed out

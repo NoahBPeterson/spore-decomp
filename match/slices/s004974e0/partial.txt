@@ -1,0 +1,3 @@
+004974e0  2617  partial: large routine skeleton only
+00497f20  771  partial: medium routine skeleton only
+004982b0  279  partial: transform/repin routine; control flow captured but the by-value Matrix3/Vector3 argument construction is approximated

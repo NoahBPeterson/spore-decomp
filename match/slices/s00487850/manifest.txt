@@ -1,0 +1,2 @@
+slices/s00487850/s00487850.cpp  ?FindFirstLimbLowerJoint@cSPEditorLimbJoint@SP@@  00487850  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00487850/s00487850.cpp  ?Dot3@SP@@YAMABUVector3T@@@Z  004885d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

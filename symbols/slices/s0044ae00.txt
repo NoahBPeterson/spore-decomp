@@ -1,0 +1,2 @@
+0044ae00 SP::cSPEditorBlock::GetBBox  # PDB name
+0044b5c0 SP::cSPEditorBlock::GetDefaultScale  # PDB name

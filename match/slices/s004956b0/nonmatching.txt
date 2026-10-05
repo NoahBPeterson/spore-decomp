@@ -1,0 +1,5 @@
+00495f90  8  complete scalar-deleting-dtor; only the /Od slot of the cached hkMemory instance vs the `this` spill is swapped (frame otherwise identical)
+00496090  8  complete deleting-dtor (calls the array dtor then deallocates); only the `this` spill slot differs
+004960d0  60  complete hkArray-like destructor; vtable stores and the hkThreadMemory deallocateChunk call match in shape but the class layout/slots differ
+00496140  120  complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
+004961d0  150  complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact

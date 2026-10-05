@@ -1,0 +1,1 @@
+00447150 SP::cSPEditorBlock::InitializeHandleData  # PDB name; 4653-byte /Od method

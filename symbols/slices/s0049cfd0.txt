@@ -1,0 +1,2 @@
+0049d640 cSPTransform::TransformVector  # applies mRotation (flag 2) then mScale
+0049dca0 ClampAndSetScale  # clamps to mMin/mMaxUniformScale then SetUniformScale

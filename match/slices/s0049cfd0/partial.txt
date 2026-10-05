@@ -1,0 +1,6 @@
+0049cfd0  -  skeleton: flag propagation over symmetry chain
+0049d1f0  -  skeleton: recursive symmetry update (bitset 0x1f, block transform build)
+0049d390  -  skeleton: limb/again recursion
+0049d550  -  skeleton: by-value matrix transform combine
+0049d6b0  -  skeleton: large recursive limb rebuild
+0049dd20  -  skeleton: recursive child traversal (eastl::vector temp)

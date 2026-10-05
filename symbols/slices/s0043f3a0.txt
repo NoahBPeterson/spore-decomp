@@ -1,0 +1,1 @@
+0043f6b0 SP::cSPEditorBlock::SetValid  # PDB anchor

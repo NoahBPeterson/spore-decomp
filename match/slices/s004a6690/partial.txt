@@ -1,0 +1,2 @@
+004a6690  -  skeleton: large block-validity function
+004a6d20  -  skeleton: block-validity helper

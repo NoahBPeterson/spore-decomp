@@ -1,0 +1,1 @@
+00491900  180  complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ

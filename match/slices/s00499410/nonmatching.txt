@@ -1,0 +1,1 @@
+0049a030  78  complete ray/plane intersection helper (plane through two globals, origin + t*dir); only the /Od frame/temp slots and branch layout differ

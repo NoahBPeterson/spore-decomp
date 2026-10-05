@@ -1,0 +1,7 @@
+0043f3a0  8    F3a0 - only an /Od dead-tail jump differs
+0043f3f0  139  F3f0 child-block scan - /Od frame accessor slots differ
+0043f4d0  139  F4d0 child-block scan - /Od frame accessor slots differ
+0043f5b0  166  F5b0 scale clamp - /Od frame/local slots differ
+0043ffa0  81   FFa0 - Matrix3 by-value copy + /Od slots differ
+00440020  81   F4020 - mirror-to-link - /Od accessor slots differ
+00440090  83   F4090 - mirror-to-link - /Od accessor slots differ

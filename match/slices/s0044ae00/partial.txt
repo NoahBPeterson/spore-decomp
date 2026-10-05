@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0044ae00  -  incomplete skeleton (1861-byte /Od GetBBox)
+0044b5c0  -  incomplete skeleton (121-byte /Od GetDefaultScale)
+0044b640  -  incomplete skeleton (109-byte /Od method)
+0044b6b0  -  incomplete skeleton (197-byte /Od method)
+0044b7b0  -  incomplete skeleton (613-byte /Od method)
+0044ba20  -  incomplete skeleton (709-byte /Od method)

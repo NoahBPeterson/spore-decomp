@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0045f5e0/s0045f5e0.cpp  ?UnpackColor@@YAXIPAM@Z  00460470  /Od /Ob1 /MD /Gy /TP /arch:SSE

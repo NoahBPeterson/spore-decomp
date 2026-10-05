@@ -1,0 +1,8 @@
+004582b0  SP::cSPEditorBudget::Update
+00458a40  SP::ColorRGBToU32
+00458b50  cSPEditorBudget::SetTooltip
+00458c60  SPUIHelpers::PreloadLayout
+00458d80  SPUIHelpers::ShutdownLayout
+00458de0  SPUIHelpers::GetImageFromLayout wrapper
+00458e00  editor message-id -> budget-id map A
+00458eb0  editor message-id -> budget-id map B

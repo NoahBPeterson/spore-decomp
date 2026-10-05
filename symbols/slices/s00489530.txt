@@ -1,0 +1,10 @@
+00489530 SP::cSPEditorLimbStructure::MirrorTargets  # mirrors joint target positions not in the given list, recurses lower joints
+00489640 SP::cSPEditorLimbStructure::MirrorTargetsOffset  # mirror + offset*2 on x, recurses non-limb-part joints
+00489710 SP::cSPEditorLimbStructure::RefreshTargets  # d1f0 reset then MirrorTargets/Original/Creation + UpdateSymmetry
+004897b0 SP::cSPEditorLimbStructure::RefreshBlockTargets  # block-position based mirror + 0x4961d0
+004898a0 SP::cSPEditorLimbStructure::Rebuild  # CollectBlocks/UpdateLimbScale/clear/BuildPileList/Refresh(true)
+00489900 SP::cSPEditorLimbStructure::CollectBlocks  # sets mEndBlock/mLastBone from block flags 0x2d/0x2c or foot block
+00489ae0 SP::cSPEditorLimbStructure::FixAllJoints  # runs FixJoint over lower joints, then FinalizeJoints
+00489bc0 SP::cSPEditorLimbStructure::UpdateLimbScale  # mLimbOriginalScale = |mBaseBlock->mPosition - GetLimbOriginalPosition()|
+00489c60 SP::cSPEditorLimbStructure::FinalizeJoints  # RepinJoint + SetUIState + UpdateSymmetry
+00489cf0 SP::cSPEditorLimbStructure::RepinJoint  # repin joint to torso (partial reconstruction)

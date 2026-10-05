@@ -1,0 +1,9 @@
+0048c0f0 SP::cSPEditorLimbStructure::BuildJoints  # allocates cSPEditorLimbJoint, sets block/upper/positions, recurses symmetric blocks (partial)
+0048c610 SP::cSPEditorLimbStructure::GetLimbOriginalPosition  # mEndBlock->mPosition else mLastBone->mPosition+F_43e080 else zero
+0048c720 vector<cSPEditorLimbJoint*>::eraseOne  # single-element vector erase
+0048c790 SP::BuildPileList  # recursive symmetric-block pile collection, optional 0x4956b0
+0048c8d0 SP::GetSymmetricBlocks  # symmetric blocks AddRef/push/Release, recurse when bit 0xb clear
+0048ca10 SP::EditorUtils::CalculateModelSize  # sum bbox volume / sphere area over model parts
+0048cc20 SP::EditorUtils::CountModelParts  # count model parts matching resource-id/flag predicate
+0048ccf0 SP::CollectPartsRec  # recursive part collection by flags 0xb/0xa/9
+0048cf00 SP::EditorUtils::GetModelMinZ  # min bbox.z over parts with flag 7

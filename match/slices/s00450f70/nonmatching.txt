@@ -1,0 +1,3 @@
+00450f70  493  Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
+00451330  49   SetVec194: original materialises &mVec194 once (add eax,0x194); this cl folds the displacement
+00451e90  10   GetSub38: only the /Od inline branch layout (extra jmp) differs

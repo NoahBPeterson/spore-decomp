@@ -1,0 +1,1 @@
+0048b370  1342  skeleton: per-limb scale-range update reconstructed only at a high level; the 1896-byte original's per-block clamp branches (0x218/0x21c, flags 0x2d/0x2c) omitted

@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0045edf0/s0045edf0.cpp  ?erase@StrBuf@@QAEPADPAD0@Z  0045f080  /Od /Ob1 /MD /Gy /TP

@@ -1,0 +1,5 @@
+# va  reason
+00469bb0 2395-byte /Od function; only skeleton written
+0046a510 copy-ctor-shaped with two inline base vtables at +0/+4 and MI base adjust; layout not recovered
+0046a750 base copy ctor with inlined polymorphic base vtable chain and atomic xchg refcount init; hierarchy not recovered
+0046a8a0 541-byte /Od function; only skeleton written

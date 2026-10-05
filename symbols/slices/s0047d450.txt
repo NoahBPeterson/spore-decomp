@@ -1,0 +1,8 @@
+0047d450  promote_heap  # EASTL heap algorithm; stack arg is FloatKeyPair by value
+0047d4f0  pop_heap  # EASTL heap algorithm; calls adjust_heap (0x0047ce00)
+0047d6a0  SP::cSPEditorHandle::cSPEditorHandle  # PDB candidate; vtable stores Editor/Simulator vtables
+0047d870  SP::cSPEditorHandle::~cSPEditorHandle  # calls Shutdown at 0x0047e2c0
+0047d910  SP::cSPEditorHandle::AsInterface  # __thiscall ret 4; interface ids 0xee3f516e / 0x050a1fe5
+0047d950  SP::cSPEditorHandle::LoadProps  # PDB name; property keys 0x050fc37a..37d
+0047db30  SP::cSPEditorHandle::Init  # PDB candidate (caller-single)
+0047e2c0  SP::cSPEditorHandle::Shutdown  # PDB name

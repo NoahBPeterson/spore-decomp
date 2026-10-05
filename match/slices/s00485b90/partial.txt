@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00485b90  793   Compute1: bbox/direction distance blend; body omitted
+00485eb0  512   Compute2: bounding-box transform (two branches); body omitted
+004860b0  2142  UpdateBig: large ring physics update; body omitted

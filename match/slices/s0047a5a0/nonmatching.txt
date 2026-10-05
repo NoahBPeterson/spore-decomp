@@ -1,0 +1,5 @@
+0047a5a0 - complete source; vector<Matrix44>::insert(n,value), NOT byte-exact
+0047a9a0 - complete source; uninitialized_copy<Matrix44> (copy-ctor loop), NOT byte-exact
+0047aa40 - complete source; vector<16-byte>::insert(n,value), NOT byte-exact
+0047ae60 - complete source; vector<16-byte>::insert(n,value) variant, NOT byte-exact
+0047b3d0 - complete source; vector<Matrix44> insert variant, NOT byte-exact

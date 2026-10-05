@@ -1,0 +1,7 @@
+00486910  161  /Od; complete. frame ~160 bytes short: reserved slots of inline-declined helpers (model/tip math) not reproduced
+00486d40  261  /Od; complete. Check() argument layout and local temp order differ
+00487090  24  /Od; complete. find-iterator loop: frame one slot short of the original and temp order differs
+00487140  244  /Od; complete. find-iterator loop and operator- result temps / slot order differ
+004873d0  125  /Od; complete. Abs() x87 temp placement and extra frame slots differ
+004874c0  356  /Od; complete. SignOf helper inlining and frame slot order differ
+004876b0  370  /Od; complete. SignOf helper inlining and frame slot order differ

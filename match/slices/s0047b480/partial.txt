@@ -1,0 +1,5 @@
+0047b480 - range sort entry point; skeleton only (algorithm body omitted)
+0047b6d0 - depth-limited introsort helper; skeleton only
+0047b950 - heap/insertion sort helper (534B); skeleton only
+0047bbf0 - 0x29c-byte element in-place move/copy (829B); skeleton only
+0047c2c0 - median-of-3 / partition pivot helper (306B); skeleton only

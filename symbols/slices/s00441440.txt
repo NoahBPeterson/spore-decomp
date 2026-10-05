@@ -1,0 +1,1 @@
+00441440 SP::cSPEditorBlock::BuildBlock  # PDB name; 23469-byte /Od monolith

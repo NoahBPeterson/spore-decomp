@@ -1,0 +1,13 @@
+0044f240  SP::cSPEditorBlock::CalculateSymmetrySign  # 2008 dev-build PDB name
+0044e980  SP::cSPEditorBlock::SetBaseJointScale       # writes mBaseJointScale (+0x1c0), PDB member
+0044f130  SP::cSPEditorBlock::SetScaleType           # writes +0x1cc, calls SetFlag(9)
+0044ea80  SP::cSPEditorBlock::RefreshLinkedFlag       # recurses over mChildBlockList (+0x340)
+0044ede0  SP::cSPEditorBlock::RecursiveFlagA
+0044eea0  SP::cSPEditorBlock::RecursiveFlagB
+0044efb0  SP::cSPEditorBlock::RecursiveFlagC
+0044e720  SP::cSPEditorBlock::GetBounds
+0044e830  SP::cSPEditorBlock::GetBlockType
+0044e460  Cross                                   # free math helper: out = a x b
+0044e510  PlaneFromPointNormal                    # free math helper: (n, -n.p)
+0044e5d0  PlaneEval                               # free math helper: n.p + d
+0044e640  IntersectRayPlane                       # free math helper: ray/plane t

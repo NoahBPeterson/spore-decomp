@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00480e90  4202  RecordHandlePosition: 4 KB deform-handle record; only the entry transform copy reproduced

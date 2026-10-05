@@ -1,0 +1,2 @@
+0048fee0  982  approximate: control flow and most calls reproduced but the inner snap-offset loop (FUN_0041db10/VectorLength/FUN_004a9e40 + container method/dtor) is not a faithful translation
+004906e0  613  approximate: axis/basis construction reproduced but the acos/Transform branch (Transform header tweaks, FUN_006baba0 arg order) is reconstructed only approximately

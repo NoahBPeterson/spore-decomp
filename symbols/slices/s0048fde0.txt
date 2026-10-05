@@ -1,0 +1,1 @@
+00490330  BoundingBox::Intersects  # behavior: 6-axis separating-axis AABB overlap test (mn at +0, mx at +0xc)

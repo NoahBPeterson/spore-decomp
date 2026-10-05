@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0047db30  1925  Init: main model/overdraw setup reproduced, but inlined bitset/transform/color/alpha paths omitted

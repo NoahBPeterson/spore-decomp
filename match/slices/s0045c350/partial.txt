@@ -1,0 +1,2 @@
+0045c350  -  top-level Collada scene writer (2.5 KB); only skeleton reproduced
+0045d060  -  inverse-bind-pose matrix array writer; only skeleton reproduced

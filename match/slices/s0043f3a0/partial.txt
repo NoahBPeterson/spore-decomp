@@ -1,0 +1,2 @@
+0043f6b0  1300  SetValid - large path set approximated (BBox/transform flow not reproduced)
+0043fc20  371   F3fc20 - transform/euler chain (FUN_004adb40/00/00) approximated

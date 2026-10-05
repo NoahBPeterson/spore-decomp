@@ -1,0 +1,9 @@
+00476dd0 - complete source; refcount-vector realloc (allocate+copy), NOT byte-exact
+00476fe0 - complete source; vector<int,2>::DoInsertValue, NOT byte-exact
+00477200 - complete source; uninitialized_copy+destruct<4-byte>, eastl::copy tag/frame differs
+004772a0 - complete source; vector<16-byte>::erase, NOT byte-exact
+00477380 - complete source; vector<32-byte>::erase, NOT byte-exact
+00477460 - complete source; vector<0x8c-byte>::DoInsertValue, NOT byte-exact
+00477700 - complete source; 0x8c-byte element assignment, NOT byte-exact
+004777e0 - complete source; destructor loop over 0x7c-byte elements, NOT byte-exact
+00477820 - complete source; Matrix33 element extraction, NOT byte-exact

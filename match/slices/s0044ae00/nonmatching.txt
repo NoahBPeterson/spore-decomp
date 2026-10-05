@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0044b590  28   tight loop body identical; original reserves a 0x30 frame (extra 0x24 local), ours only reserves the this slot

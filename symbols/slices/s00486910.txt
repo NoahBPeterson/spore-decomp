@@ -1,0 +1,11 @@
+00486910 SP::cSPEditorLimbJoint::UpdateLength  # bool, uses mEditorModel radius/scale slots, mFlags.test(0x2d)
+00486d40 SP::cSPEditorLimbJoint::IsValid  # reads mUpperJoint->GetLength, sets block flag 0xf
+00486e70 SP::cSPEditorLimbJoint::Fix  # args (invalid), uses IsLimbPart and a 0x43f5b0 block helper
+00486f50 SP::cSPEditorLimbJoint::SetTargetAndMoveLower  # writes mTargetPosition from pos, moves lower joints with delta
+00487040 SP::cSPEditorLimbJoint::AddLowerJoint  # push_back into mLowerJoints, sets child->mUpperJoint=this
+00487090 SP::cSPEditorLimbJoint::RemoveLowerJoint  # erases from mLowerJoints, clears child->mUpperJoint
+00487140 SP::cSPEditorLimbJoint::DetachJoint  # stores target/original/creation offsets relative to this, erases
+00487290 SP::cSPEditorLimbJoint::AttachJoint  # AddLowerJoint then Move/Translate using stored offsets
+004873d0 SP::cSPEditorLimbJoint::GetLength  # sign-based length from mTargetPosition.x / mUpperJoint sign
+004874c0 SP::cSPEditorLimbJoint::Sign  # sign of mTargetPosition.x, recurses into lower joints
+004876b0 SP::cSPEditorLimbJoint::SignFromBlock  # sign of mJointBlock->mPosition.x, checks first lower joint

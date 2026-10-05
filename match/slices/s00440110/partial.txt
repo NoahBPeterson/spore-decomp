@@ -1,0 +1,5 @@
+00440c40  10   F40c40 - list insert pipeline stubbed
+00440d80  12   F40d80 - map lookup stubbed
+00440e60  7    F40e60 - keyed list update stubbed
+00440110  10   F40110 - scale-apply path stubbed
+00440520  10   F40520 - large limb-scale pipeline stubbed

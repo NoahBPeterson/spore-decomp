@@ -1,0 +1,12 @@
+0047e4b0  SP::cSPEditorHandle::SetModelFlags  # sets bitset bit 3 and byte +0x5c on both models
+0047e600  SP::cSPEditorHandle::GetPosition  # returns mBlock->+0x48 or a default vector
+0047e6e0  SP::cSPEditorHandle::GetHandleAlphaForState  # PDB name; property keys 0x050fc1d0..1d4
+0047e830  SP::cSPEditorHandle::GetOverdrawHandleAlphaForState  # PDB name; keys 0x050fc1d1..1d5
+0047e980  SP::cSPEditorHandle::GetHandleColorForState  # PDB name; keys 0x050fc187..18b
+0047eaa0  SP::cSPEditorHandle::GetOverdrawHandleColorForState  # PDB name; keys 0x050fc188..18c
+0047ebe0  Vector3 zero helper  # returns {0,0,0} via sret
+0047ec40  SP::cSPEditorHandle::SetState  # state transition; calls Model::SetFlag (0x00437f70)
+0047f290  SP::cSPEditorHandle::IsFlagSet  # tests flag bit 0 of mModel/mOverdrawModel
+0047f3b0  SP::cSPEditorHandle::SetStateFlags  # vcall slot 12 with (1,0) and (3,1)
+0047f3e0  SP::cSPEditorHandle::SetScale  # scale = s*mDefaultScale on both models
+0047f4b0  SP::cSPEditorHandle::ConstructDerived  # derived ctor: calls base ctor 0x0047d6a0 then sets vptrs

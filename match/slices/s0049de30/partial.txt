@@ -1,0 +1,3 @@
+0049de30  -  skeleton: large block-transform/limb function
+0049e6a0  -  skeleton: SetBlockScale
+0049e880  -  skeleton: transform composition helper

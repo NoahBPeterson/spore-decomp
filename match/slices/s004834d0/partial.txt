@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+004834d0  794   Resume: ring resume/update; only model transform entry reproduced
+004837f0  1228  Big: large ring update; body omitted

@@ -1,0 +1,1 @@
+00491b40  3458  partial: only the file-level guard bit (0x16 of +0xdc8) and signature are reconstructed; the large bbox/basis computation is stubbed

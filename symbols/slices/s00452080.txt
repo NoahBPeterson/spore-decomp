@@ -1,0 +1,1 @@
+00452080  SP::cSPEditorBlock::BuildNewPhysicsShape   # builds hkRigidBody shape for the block

@@ -1,0 +1,1 @@
+459370  -  4.8 KB nested abilityID->propID decision tree not reproduced (skeleton returns 0)

@@ -1,0 +1,1 @@
+00480e90  SP::cSPEditorHandleDeform::RecordHandlePosition  # PDB candidate (caller-scored)

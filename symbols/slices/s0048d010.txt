@@ -1,0 +1,6 @@
+0048d010 SP::cSPEditorManipulationStacking::MoveBlockLowAngleStacking  # computes a low-angle stacking move for a block (partial)
+0048db10 SP::HkObj::deleting_ctor1  # sets vtable 0x13ef534, conditionally frees via hkMemory
+0048db60 SP::HkObj::init  # +0x30=0, +0x2c/+4 = 0x7f7fffee
+0048dbb0 SP::HkObj::deleting_ctor2  # sets vtable 0x13ef52c then 0x13ef534, conditionally frees
+0048dc00 SP::HkObj::copyAssign  # F_48dc50 + copies +0x20..+0x2c
+0048dc50 SP::HkObj::copyCtor  # copies 8 floats (two 16-byte vectors)

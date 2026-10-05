@@ -1,0 +1,1 @@
+00490a70  SP::EditorUtils::GetAlignmentPosition  # dev-PDB name from card.py

@@ -1,0 +1,7 @@
+00440bc0  42   F40bc0 - model sub-offset copy; /Od accessor slots differ
+00440c00  34   F40c00 - model scale store; /Od double-read slots differ
+00440390  101  F40390 - clamp+SetFlag; clamp shape and /Od slots differ
+00440420  62   F40420 - min/max clamp + F40110; /Od slots differ
+004404f0  80   F404f0 - bone matrix set; matrix copy flavour differs
+00440f60  47   Trans::Trans() - constant pool copy flavour differs
+00440ff0  79   Trans::Trans(copy) - x87 field copy shape differs

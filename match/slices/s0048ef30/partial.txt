@@ -1,0 +1,2 @@
+0048ef30  2133  skeleton: GetLateralAlignmentPosition; outer guards/return only, the lateral-alignment scoring and orientation writes omitted
+0048f790  1602  skeleton: recursive symmetry update; only the null guard reconstructed, the per-block symmetry update and symmetric-list recursion omitted

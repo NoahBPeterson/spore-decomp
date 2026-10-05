@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00483070  11   AsInterface: switch shape correct (slots/compares match) but return-block ordering differs
+004830c0  126  UpdateOffset: vcall slot9 + transform write shape and slots differ

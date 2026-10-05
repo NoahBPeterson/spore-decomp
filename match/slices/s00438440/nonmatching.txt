@@ -1,0 +1,9 @@
+00438440  176  FindEntry - key-vector search; /Od local slot layout differs
+004385e0  140  HasZeroKey - exact-key search; /Od slots differ
+00438700  257  RefreshLinks - link refresh; /Od accessor slots differ
+004388b0  277  Attach - entity attach; /Od accessor/refcount slots differ
+00438a40  127  RefreshLinked - linked refresh; /Od slots differ
+00438b10  306  Detach - entity detach; /Od accessor/refcount slots differ
+00438cc0  238  SetLink3e0 - bidirectional ref link; /Od reference-local pattern differs
+00438df0  238  SetLink3e4 - bidirectional ref link; /Od reference-local pattern differs
+00438f20  366  GetKey - recursive property lookup; /Od frame differs

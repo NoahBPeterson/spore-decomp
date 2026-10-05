@@ -1,0 +1,5 @@
+0048fde0  222  recursive child-walk; complete but frame slots / inlined callee shapes differ
+004902c0  108  AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
+00490330  212  AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
+004904a0  261  complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
+004905d0  227  complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail

@@ -1,0 +1,2 @@
+460a80  -  recursive batch reorder; reference-temp frame differs
+461400  -  string sub-object ctor; one extra reserved local slot differs
