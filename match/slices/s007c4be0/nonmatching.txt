@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+007c4be0  15  virtual v18/v20 calls + camera raster store; register allocation near-miss (3 rounds)
+007c4c40  173  SIMD 3x3 transpose with sign flip; scalar C++ does not reproduce unpcklps schedule
+007c4d20  135  builds affine 4x4 into locals then calls 4c40; SIMD local layout differs
+007c4dd0  390  cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced
+007c4fd0  201  cViewer::Update; x87 aspect compare + shader-state compare schedule differs
+007c50b0  0  cViewer::Copy; emitted size differs from original range (no similar-size symbol)
+007c5240  185  cViewer::CopyFrom; SIMD 4x4 copy + reciprocal schedule differs
+007c5350  91  SetViewAngle; fptan-based fov path differs
+007c53d0  77  SetViewAngleY; fptan-based fov path differs
+007c5440  77  SetViewWindow; SSE reciprocal ordering differs
+007c5490  18  operator new[] wrapper; calling convention/arg shape near-miss
+007c54b0  42  rw resolve ObjectToId; arena pointer chain codegen differs
+007c54f0  33  rw resolve IdToObject; arena pointer chain codegen differs
+007c5520  38  rw resolve IdToObject (returns 1); differs
+007c5560  86  rw resolve array via ObjectToId; loop shape differs
+007c55d0  52  rw resolve array via IdToObject; loop shape differs
+007c5630  52  rw resolve array via IdToObject2; loop shape differs
+007c56a0  40  rw serialize floats; array accessor call shape differs
+007c5740  93  arena type 0xff0001 registration; index range includes orphan 0x7c5760 block
+007c5820  241  static row byte-compare helper (arg in edi); register convention not reproduced
+007c5920  245  FindMatchingRow; scan/mode branches differ
+007c5a40  71  POD field initializer; /O2 store ordering differs

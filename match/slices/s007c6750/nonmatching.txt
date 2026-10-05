@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+007c6750  -  cCameraCheat::Execute; large arg-script command path not reproduced
+007c6b80  -  LoadControllers; property-group + EASTL map walk not reproduced
+007c6db0  -  Shutdown; message/cheat unregister path differences
+007c6eb0  -  ClearControllers; hashtable rehash/callback path differences
+007c7050  37  hashtable DoFreeNodes; loop/codegen differs
+007c70b0  -  cCameraManager::Init; command registration + EASTL assigns not reproduced
+007c7270  -  RegisterController; hashtable update path not reproduced
+007c74a0  -  ~cCameraManager; full EASTL member teardown not reproduced
+007c75e0  -  cCameraManager ctor; EASTL hashtable/string init not reproduced
+007c7770  86  bit-length/lookup-table initializer; codegen differs

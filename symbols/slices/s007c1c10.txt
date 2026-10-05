@@ -1,0 +1,4 @@
+007c24a0 SP::cBumpMapTable::cBumpMapTable  # card annotation (PDB name)
+007c2730 `anonymous namespace'::expand_2_32  # card annotation (PDB name)
+007c2790 SP::ColorReduce  # card annotation (PDB name)
+007c2880 SP::ConvertDXT1ToARGB8888  # card annotation (PDB name)

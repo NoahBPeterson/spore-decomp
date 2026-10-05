@@ -1,0 +1,11 @@
+# VA Name  # evidence
+007c6750 EA::ArgScript::cCameraCheat::Execute  # PDB caller-scored, console camera command
+007c6b80 SP::cCameraManager::LoadControllers  # PDB vtable-slot
+007c6db0 SP::cCameraManager::Shutdown  # PDB vtable-slot
+007c6eb0 SP::cCameraManager::ClearControllers  # PDB gap-align
+007c7050 eastl::hashtable<basic_string<wchar_t>,pair<...>,...>::DoFreeNodes  # PDB gap-align
+007c70b0 SP::cCameraManager::Init  # PDB gap-align
+007c7270 SP::cCameraManager::RegisterController  # PDB caller-scored
+007c74a0 SP::cCameraManager::~cCameraManager  # PDB gap-align
+007c75e0 SP::cCameraManager::cCameraManager  # PDB callee-single
+007c7770 BitLengthInit  # fills a bit-length lookup struct (not a manager method)

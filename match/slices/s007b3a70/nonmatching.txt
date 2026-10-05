@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007b3a70  3966  complete behavioural reconstruction (every call/path/output slot) of the 3966-byte FP layer draw; exact register allocation and FP evaluation order of the four make-quad blocks not reproduced

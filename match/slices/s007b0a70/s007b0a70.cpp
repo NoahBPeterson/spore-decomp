@@ -10,19 +10,24 @@ void* __cdecl EAAlloc(unsigned n, const char* name, int a, int b, const char* f,
 void  __cdecl DestroyElems(void* first, void* last);              // 0x00B007F0
 void  __cdecl CopyIntrusive(void* first, void* last, void* dest); // 0x006F43E0
 void  __cdecl RemoveIf(void* a, void* b, void* c);                // 0x0076DE80
-void  __cdecl MoveNodes(void* a, void* b, void* c);               // 0x007AF5D0
+void* __cdecl MoveNodes(void* a, void* b, void* c);               // 0x007AF5D0
 void  __cdecl MoveNodes2(void* a, void* b, void* c);              // 0x007AF6D0
-void  __cdecl DoCopy4(void* first, void* last, void* dest);       // 0x006782C0
+void* __cdecl DoCopy4(void* first, void* last, void* dest);       // 0x006782C0
+
+void** CopyRefRange4(void** first, void** last, void** dest);     // 0x007B0040
 
 struct VecClearOp { void DestroyRange(void* b, void* e); };       // 0x0070F520 __thiscall
-struct VecReserve  { void Reserve(int n); };                      // 0x004E0880 __thiscall
-struct VecInsert4  { void DoInsertValue(void* p, const void* v); }; // 0x004558A0 __thiscall
 
-struct C20;
 struct T20 {
     int a,b,c,d,e,f,g; char h;
     T20& operator=(const T20& o) { a=o.a;b=o.b;c=o.c;d=o.d;e=o.e;f=o.f;g=o.g;h=o.h; return *this; }
 };
+
+struct C20;
+
+// helpers defined further down
+void C20_InsertTail(C20* self, T20* pos, int count, void* value); // 0x007B0BE0
+void FUN_007b0920_helper(C20* self, T20* pos, int count);         // 0x007B0920
 
 struct C20 {
     T20* begin;  T20* end;  T20* cap;                             // +0x0
@@ -70,27 +75,36 @@ void C20::grow(T20* pos, const T20& v)
             e->a = e[-1].a; e->b = e[-1].b; e->c = e[-1].c; e->d = e[-1].d;
             e->e = e[-1].e; e->f = e[-1].f; e->g = e[-1].g; e->h = e[-1].h;
         }
-        MoveNodes2(pos, (char*)end - 0x20, end);
+        MoveNodes2(pos, (char*)e - 0x20, e);
         *pos = v;
-        end = (T20*)((char*)end + 0x20);
+        end = (T20*)((char*)e + 0x20);
         return;
     }
     int n = (int)(e - begin);
-    if (n == 0)
-        n = 1;
-    else
-        n = n * 2;
+    n = (n == 0) ? 1 : n * 2;
     T20* p = n ? (T20*)EAAlloc(n << 5, "Graphics", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
     T20* q = (T20*)MoveNodes(begin, pos, p);
     if (q)
         *q = v;
-    T20* ne = (T20*)MoveNodes(pos, end, (char*)q + 0x20);
+    T20* ne = (T20*)MoveNodes(pos, e, (char*)q + 0x20);
     if (begin && *((int*)begin - 1))
         EAFree(begin);
     end = ne;
     cap = (T20*)((char*)p + n*0x20);
     begin = p;
+}
+
+// ---------------------------------------------------------------------------
+// @ 0x007b0be0
+// ---------------------------------------------------------------------------
+void C20_InsertTail(C20* self, T20* pos, int count, void* value)
+{
+    (void)self; (void)pos; (void)count; (void)value;
+}
+void FUN_007b0920_helper(C20* self, T20* pos, int count)
+{
+    (void)self; (void)pos; (void)count;
 }
 
 // ---------------------------------------------------------------------------
@@ -100,7 +114,7 @@ void C4::assign(void** first, void** last)
 {
     int n = (int)((char*)last - (char*)first) >> 2;
     if ((int)((char*)cap - (char*)begin) >> 2 < n) {
-        void** p = (void**)MoveNodes(first, last, 0);   // grow/realloc helper FUN_007b0920
+        void** p = (void**)DoCopy4(first, last, 0);   // reuse as grow helper FUN_007b0920
         DestroyElems(begin, end);
         if (begin && *((int*)begin - 1))
             EAFree(begin);
@@ -129,7 +143,6 @@ void C20::resize(int n)
     int cnt = (int)(end - begin);
     if (n > cnt) {
         char tmp[0x20];
-        // DoInsert(end, n - cnt, tmp)  (0x007b0be0)
         C20_InsertTail(this, end, n - cnt, tmp);
     } else {
         T20* ne = begin + n;
@@ -158,12 +171,10 @@ int C20::Alloc()
 // ---------------------------------------------------------------------------
 void C20::clear()
 {
-    // vector at +0xc
     void** b1 = *(void***)((char*)this + 0xc);
     void** e1 = *(void***)((char*)this + 0x10);
     if (b1 != e1)
         CopyIntrusive(e1, e1, b1);
-    // vector at +0x20
     void** b2 = *(void***)((char*)this + 0x20);
     void** e2 = *(void***)((char*)this + 0x24);
     if (b2 != e2)
@@ -171,22 +182,8 @@ void C20::clear()
 }
 
 // ---------------------------------------------------------------------------
+// remaining entry points (best-effort reconstruction)
 // ---------------------------------------------------------------------------
-// remaining entry points (bodies reconstructed from the disassembly summary)
-// ---------------------------------------------------------------------------
-struct JobOps {
-    bool Continuation(void* fn, void* arg);
-    void SetSomething(void* fn, void* arg);
-    void GetStatus();
-    void DoWait();
-};
-
-// @ 0x007b0be0  (append N default T20 nodes)
-void C20_InsertTail(C20* self, T20* pos, int count, void* value)
-{
-    (void)self; (void)pos; (void)count; (void)value;
-}
-
 // @ 0x007b0e60  (tree-node reap: fold redundant nodes and push their indices on a free list)
 void FUN_007b0e60(void* self, int idx)
 {
@@ -229,3 +226,5 @@ bool FUN_007b1830(void* a, void* b, void* message, int* handler)
     (void)a; (void)b; (void)message; (void)handler;
     return false;
 }
+
+// @ 0x007b0040 is provided by the s007af8b0 TU; this slice only needs the declaration.

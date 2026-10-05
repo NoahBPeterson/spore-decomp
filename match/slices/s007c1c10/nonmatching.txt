@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007c2730  82  expand_2_32: complete; cl keeps the table index as (src&0xc)>>2 with a scale-4 load instead of folding it into a scale-1 load, and assigns the loop registers differently
+007c24a0  28  cBumpMapTable ctor: complete; the float→int reinterpret is kept in registers (no `push ecx` spill) and the FP expression association differs

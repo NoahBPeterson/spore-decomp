@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+# 0x7c65a0 is a compiler-generated lazy static (GetTPTR): behaviorally complete but not byte-exact.
+# (nothing partial: every function has a complete source version in s007c5a90.cpp)

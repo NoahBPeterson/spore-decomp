@@ -1,0 +1,3 @@
+007b10d0 SP::RegisterImagesAsTexture  # PDB name
+007b1710 SP::DXTCompress  # PDB name
+007b1950 SP::cTexturePreload::PreloadTextureList  # PDB-adjacent (two-vector clear)

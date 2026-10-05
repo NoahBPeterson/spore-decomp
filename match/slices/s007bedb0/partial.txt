@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007bedb0  0  skeleton: 1360-byte SP::cThumbnailManager::CaptureCSAPhotos; photo capture pipeline omitted
+007bf300  0  skeleton: 772-byte helper; job/rect setup omitted
+007bf720  0  skeleton: 663-byte helper; job/rect setup omitted

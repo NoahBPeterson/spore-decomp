@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007b7530  622  cThumbnailManager post-process job setup; skeleton only
+007b77a0  136  viewer/MessageServer teardown; skeleton only
+007b7830  225  cThumbnailManager job driver (vtable 0x13c + FUN_007b49f0); skeleton only
+007b7920  241  cThumbnailManager job driver; skeleton only
+007b7a20  152  cThumbnailManager job driver (viewer Copy + FUN_007b49f0); skeleton only

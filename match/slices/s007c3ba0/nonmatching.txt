@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007c3da0  22  copy 3x3 rotation: complete; cl uses absolute offsets for the last row instead of `add ecx,0x20 / add eax,0x18` + relative stores
+007c3f70  12  viewer init: complete; cl emits `xor ecx,ecx` before materialising the 10000.0f constant (load/schedule order differs)
+007c4010  49  viewport rect: complete; register allocation of the four ushort loads and the output store order differ
+007c4a60  80  set-viewport: complete; cl reorders the four ushort loads vs the original scheduling
+007c4b50  18  set aspect: complete; the 1.0f and height values land in different xmm registers

@@ -1,0 +1,2 @@
+007bde20 SP::cThumbnailManager::Shutdown  # PDB caller-scored candidate in card
+007be430 SP::cThumbnailManager::CapturePaletteThumbnail  # card annotation (PDB name)

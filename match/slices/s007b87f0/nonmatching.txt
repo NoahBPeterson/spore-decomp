@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+007b9620  6  complete viewer/vector teardown; cl hoists the `this+0x24` lea above the empty check (scheduling only)
+007b9690  44  complete vector<pair>::push_back (capacity check + copy, out-of-line grow); cl folds the `this+0x24` subobject pointer so addressing differs

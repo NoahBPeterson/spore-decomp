@@ -1,0 +1,2 @@
+007c2ab0 SP::ConvertDXT3ToARGB8888  # card annotation (PDB name)
+007c3410 SP::WriteAnimatedCSAGIF  # card annotation (PDB name)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007bb670  0  skeleton: 1895-byte cContentValidationSummarizer setup; the 30+ cFilterChainJob allocations and their rect/float configuration, plus the UI::BehaviorMessage post, are not reconstructed

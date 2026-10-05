@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007b19c0  0  skeleton: not reconstructed
+007b1af0  0  skeleton: not reconstructed
+007b1bb0  0  skeleton: not reconstructed
+007b1de0  0  skeleton: cTexturePreload::PreloadTextureList loop not reconstructed
+007b1e90  0  skeleton: cTexturePreload::PreloadTextureList variant not reconstructed
+007b1f40  0  skeleton: not reconstructed
+007b2270  0  skeleton: not reconstructed
+007b2320  0  skeleton: block byte-blit loop not reconstructed
+007b2380  0  skeleton: DXT/uncompressed image conversion not reconstructed
+007b2600  0  skeleton: not reconstructed
+007b26a0  0  skeleton: cThumbnailManager::SetupThumbnailRTTs not reconstructed

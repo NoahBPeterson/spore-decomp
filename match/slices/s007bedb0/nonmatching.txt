@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007bf610  170  complete reconstruction of ThumbnailDone: switch over the job type + 7 rect releases; cl chooses immediate `-1` compares (not a hoisted ebx) and a different load schedule, so every rect block differs
+007bf9c0  27  complete reconstruction of the setter block; two instruction reorderings (m_c0 store vs m_a8 load, and the RefVector operator= argument setup) differ

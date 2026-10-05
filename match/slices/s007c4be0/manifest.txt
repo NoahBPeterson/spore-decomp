@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007c4be0/s007c4be0.cpp  ?SetBasis@cViewer@@QAEXPAX@Z            007c4d00
+slices/s007c4be0/s007c4be0.cpp  ?SetViewportRectArgs@cViewer@@QAEXGGGG@Z  007c5310
+slices/s007c4be0/s007c4be0.cpp  ?RegFF0000C@@YAXXZ                      007c56e0
+slices/s007c4be0/s007c4be0.cpp  ?RegFF0000@@YAXXZ                       007c5700
+slices/s007c4be0/s007c4be0.cpp  ?RegFF0001C@@YAXXZ                      007c5720
+slices/s007c4be0/s007c4be0.cpp  ?RegFF0002C@@YAXXZ                      007c57c0
+slices/s007c4be0/s007c4be0.cpp  ?IsType1Or9@@YAHH@Z                     007c57e0
+slices/s007c4be0/s007c4be0.cpp  ?IsType9to11@@YAHH@Z                    007c5800

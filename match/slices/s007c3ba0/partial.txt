@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007c3de0  0  skeleton: 396-byte SSE 4x4 matrix inverse; SIMD shufps/mulps sequence omitted
+007c40f0  0  skeleton: 140-byte vertex-buffer fill (rep movsd + flag words); not reconstructed
+007c4180  0  skeleton: 277-byte perspective divide of a point; FP sequence omitted
+007c42a0  0  skeleton: 305-byte projection-matrix build; omitted
+007c43e0  0  skeleton: 248-byte matrix multiply/transpose helper; omitted
+007c4510  0  skeleton: 480-byte screen->world projection; omitted
+007c46f0  0  skeleton: 62-byte wrapper (camera vcall + FUN_007c4510); omitted
+007c4730  0  skeleton: 460-byte SP::cViewer::GetWorldRayFromScreenCoords; omitted
+007c4900  0  skeleton: 62-byte wrapper (camera vcall + FUN_007c4730); omitted
+007c4940  0  skeleton: 277-byte recompute-derived-transforms; omitted

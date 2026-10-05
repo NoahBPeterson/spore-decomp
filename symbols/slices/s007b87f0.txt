@@ -1,0 +1,2 @@
+007b8cb0 SP::cThumbnailManager::cCSAThumbnailJob::RenderLargeTiledImage  # PDB candidate (caller-scored)
+007b96d0 SP::cThumbnailManager::cFilterChainJob::Shutdown  # PDB name

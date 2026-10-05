@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+007b4a50  185  refcounted render-target helper (uses MaterialManager singleton + AutoRefCount release); skeleton only
+007b4b10  249  cThumbnailManager terrain-filter setup (writes filter rects, calls filter vtbl slot 3); skeleton only
+007b4cd0  128  EH destructor with atomic refcount release; skeleton only
+007b4d70  128  EH destructor with atomic refcount release; skeleton only
+007b4e10  186  EH constructor (Editor::cPropertyList-style) with vector<bool> allocate; skeleton only
+007b4ee0  398  cThumbnailManager constructor (two _eh_vector_constructor_iterator calls + Stopwatch); skeleton only
+007b5090  650  ~cThumbnailManager (long refcount teardown); skeleton only
+007b5320  719  cThumbnailManager::FrameBoundingBoxPalette (x87 FP framing math); skeleton only

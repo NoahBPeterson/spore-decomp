@@ -1,0 +1,18 @@
+# VA Name  # evidence
+007c5a90 WriteScan  # image scanline writer, uses FUN_007c5820/5920
+007c5b90 WriteImage  # image descriptor serializer to FILE
+007c5f00 WriteImageFile  # fopen("wb") + WriteImage + fclose
+007c5f50 IsVistaKB940105Required  # PDB anchor name
+007c6110 SP::cCameraManager::SetActiveController  # PDB vtable-slot
+007c6150 SP::cCameraManager::ActiveControllerID  # PDB vtable-slot
+007c61a0 SP::cCameraManager::ActiveController  # PDB vtable-slot
+007c6200 SP::cCameraManager::UpdateFromControllerProperties  # PDB anchor
+007c6370 cCameraCheat_scalar_dtor  # three vtable stores + operator_delete
+007c63a0 SP::cCameraManager::Update  # PDB vtable-slot
+007c6420 SP::cCameraManager::SetActiveControllerByIndex  # PDB vtable-slot
+007c6480 SP::cCameraManager::ControllerIDByIndex  # PDB vtable-slot
+007c64e0 SP::cCameraManager::ControllerIDByName  # PDB vtable-slot
+007c65a0 EA::VariantTypeTraits<eastl::basic_string<wchar_t,eastl::allocator> const>::GetTPTR  # PDB gap-align
+007c6610 SP::cCameraManager::HandleMessage  # PDB vtable-slot
+007c66b0 SP::cCameraManager::SetActiveController  # PDB vtable-slot
+007c6700 SP::cCameraManager::Controller  # PDB vtable-slot

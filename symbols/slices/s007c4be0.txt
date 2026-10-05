@@ -1,0 +1,30 @@
+# VA Name  # evidence
+007c4be0 cViewer_SetRaster  # cViewer uses [ecx+0x170]=mCamera, vtable singleton +0x18/+0x20
+007c4c40 cViewer_SetCameraToWorld  # copies 4x4 into +0, camera transform, calls 0x7c4940
+007c4dd0 cViewer_Init  # mCamera/mShaderDataRT/mTileRender + default raster setup
+007c4fd0 cViewer_Update  # aspect check + BuildTransforms + shader select
+007c50b0 SP::cViewer::Copy  # PDB callee-scored
+007c5240 cViewer_CopyFrom  # per-member copy, same callers as Copy
+007c5310 cViewer_SetViewportRect  # builds rect and calls 0x7c4a60
+007c5350 cViewer_SetViewAngle  # projectionType=1, fptan fov
+007c53d0 cViewer_SetViewAngleY  # projectionType=1, fptan fov (vert)
+007c5440 cViewer_SetViewWindow  # projectionType=2, vw + reciprocals
+007c5490 rw_AllocSerialized  # operator new[] with allocator context
+007c54b0 rw_ResolveObjectToId  # Arena::ObjectToId, -1 sentinel
+007c54f0 rw_ResolveIdToObject  # Arena::IdToObject, -1 sentinel
+007c5520 rw_ResolveAllIdToObject  # Arena::IdToObject, returns 1
+007c5560 rw_ResolveArrayToId  # loops entries via ObjectToId
+007c55d0 rw_ResolveArrayIdToObject  # loops entries via IdToObject
+007c5630 rw_ResolveArrayIdToObject2  # returns 1
+007c56a0 rw_SerializeData  # copies floats from rwArray
+007c56e0 rw_ArenaType0FF0000_Resolve  # ArenaTypeRegGetType(0xff0000)+0xc
+007c5700 rw_ArenaType0FF0000  # +4/+8 callbacks
+007c5720 rw_ArenaType0FF0001_Resolve  # 0xff0001 +0xc
+007c5740 rw_ArenaType0FF0001  # +4/+8 callbacks
+007c5760 rw_ArenaType0FF0002_Resolve  # 0xff0002 +0xc callback (start missed by index)
+007c57c0 rw_ArenaType0FF0002  # 0xff0002 +0xc
+007c57e0 IsType1Or9  # returns type==1||9
+007c5800 IsType9to11  # returns 9..11
+007c5820 CompareAdjacentRows  # stride byte-compare helper (edi input)
+007c5920 FindMatchingRow  # scans rows calling 0x7c5820
+007c5a40 InitViewportDesc  # field-wise POD initializer

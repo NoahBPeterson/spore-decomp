@@ -1,0 +1,1 @@
+007c1170 SP::cThumbnailManager::HandleMessage  # PDB caller-single candidate in card

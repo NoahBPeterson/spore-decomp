@@ -1,0 +1,3 @@
+# source  symbol  original VA  [flags override]
+slices/s007b29a0/s007b29a0.cpp  ?f@W39d0@@QAEXXZ  007b39d0
+slices/s007b29a0/s007b29a0.cpp  ?set@W3a30@@QAEXHPAM@Z  007b3a30

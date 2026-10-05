@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007b7ac0  2695  large summarizer/tiled-image routine; skeleton only
+007b8550  294  summarizer helper; skeleton only
+007b8680  73  scalar deleting destructor (MI, vector member); skeleton only
+007b8700  106  EH destructor (refcounted member + FUN_00a23920); skeleton only
+007b8780  100  EH destructor (FUN_00a23920 + FUN_007b6b60); skeleton only

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007b6a90  33  complete dispatch loop + trailing call; register scheduling/push order differs (cmp uses memory vs loaded end)

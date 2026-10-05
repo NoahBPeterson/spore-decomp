@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007ba350  0  skeleton: 4887-byte SP::cThumbnailManager::InitPostProcessEffect; branch dispatch (stages 1,2,5,6-9) and principal job/allocation calls captured, per-branch EASTL rect + filter-chain field stores omitted

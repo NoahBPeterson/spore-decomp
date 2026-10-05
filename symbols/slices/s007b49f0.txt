@@ -1,0 +1,3 @@
+007b4c10 Bounds6::Expand  # bounds-expansion helper (Vector3 min/max); byte-exact
+007b5090 SP::cThumbnailManager::~cThumbnailManager  # PDB name
+007b5320 SP::cThumbnailManager::FrameBoundingBoxPalette  # PDB name

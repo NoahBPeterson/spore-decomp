@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007b97d0/s007b97d0.cpp  ?Teardown@TerrainMgr@@QAEXXZ  007b9e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

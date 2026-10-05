@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007bbde0  411  complete control-flow reconstruction of the cThumbnailManager message handler; the inlined refcounted-message constructor and the +0x16c/+0x170 refcount release vtable calls are modelled with stubs, so register/size differ

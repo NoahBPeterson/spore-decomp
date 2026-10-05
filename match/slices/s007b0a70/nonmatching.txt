@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007b0a70  326  eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
+007b0da0  103  eastl::vector<Ref4>::assign: copy/destroy call ordering differs
+007b1040   86  eastl::vector<T20>::resize: grow path uses DoInsert helper, not byte-exact
+007b10a0   45  slot allocator (free-list pop else resize+index): register scheduling differs

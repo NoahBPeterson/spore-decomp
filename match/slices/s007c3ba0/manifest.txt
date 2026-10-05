@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c3ba0@cViewer@@QAE_NXZ  007c3ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c3c50@cViewer@@QAEXE@Z  007c3c50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c3c90@cViewer@@QAEMXZ  007c3c90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c3ca0@cViewer@@QAEMXZ  007c3ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?GetCameraLocationInfo@cViewer@@QAEXPAM000@Z  007c3d30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4000@cViewer@@QAEXXZ  007c4000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4050@cViewer@@QAEMXZ  007c4050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c40a0@cViewer@@QAEMXZ  007c40a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c40c0@cViewer@@QAEXPAM0@Z  007c40c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c40e0@cViewer@@QAEMXZ  007c40e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4ad0@cViewer@@QAEXMM@Z  007c4ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4b00@cViewer@@QAEXMM@Z  007c4b00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4ba0@cViewer@@QAEXM@Z  007c4ba0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007c3ba0/s007c3ba0.cpp  ?FUN_007c4bc0@cViewer@@QAEXM@Z  007c4bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

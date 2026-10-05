@@ -1,0 +1,4 @@
+007b1de0 SP::cTexturePreload::PreloadTextureList  # PDB name
+007b1e90 SP::cTexturePreload::PreloadTextureList  # PDB name (retail copy)
+007b2680 SP::cThumbnailManager::GetThumbRectID  # PDB name
+007b26a0 SP::cThumbnailManager::SetupThumbnailRTTs  # PDB name

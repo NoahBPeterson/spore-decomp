@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007b2890   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
+007b2900   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it

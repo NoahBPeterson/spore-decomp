@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007c2ab0  0  skeleton: 1071-byte SP::ConvertDXT3ToARGB8888; block decode omitted
+007c2ee0  0  skeleton: 1322-byte conversion routine; pipeline omitted
+007c3410  0  skeleton: 1274-byte SP::WriteAnimatedCSAGIF; GIF encode omitted
+007c3910  0  skeleton: 118-byte hashtable rehash helper (DoAllocateBuckets + bucket walk) not reconstructed
+007c3af0  0  skeleton: 115-byte FNV-hash map lookup helper not reconstructed

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+007b55f0  1240  cThumbnailManager job setup (EH + refcount churn); skeleton only
+007b5ad0  421  render-job setup with refcounted temp; skeleton only
+007b5c80  372  bounds accumulation over vector + bounding-sphere compute; skeleton only
+007b5e20  483  render-job setup with refcounted temp; skeleton only
+007b6010  299  EH render-target create/copy (RefCount::Release inlined); skeleton only
+007b6160  519  render-job setup with refcounted temp; skeleton only
+007b63b0  285  EH render-target create/copy; skeleton only
+007b64f0  62  AutoRefCount member release (lock xadd); skeleton only

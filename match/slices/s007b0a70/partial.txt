@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007b0be0  0  skeleton: bulk append of default T20 nodes not reconstructed
+007b0e60  0  skeleton: tree-node reap/free-list update not reconstructed
+007b0fa0  0  skeleton: T20 construction wrapper (approximate field layout)
+007b10d0  0  skeleton: SP::RegisterImagesAsTexture not reconstructed
+007b13b0  0  skeleton: DXT compress job construction not reconstructed
+007b1710  0  skeleton: SP::DXTCompress job wrapper not reconstructed
+007b1830  0  skeleton: DXTCompress job wrapper (flag=1) not reconstructed
+007b1950  0  skeleton: two-vector clear approximated without helper calls

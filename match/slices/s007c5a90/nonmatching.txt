@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+007c5a90  -  WriteScan; takes data base in a register (EBX), not reproduced
+007c5b90  757  WriteImage; large write path, helper/register layout differs
+007c5f00  34  WriteImageFile; fopen/fclose wrapper differs
+007c5f50  305  IsVistaKB940105Required; Windows version-check path differs
+007c6110  44  cCameraManager::SetActiveController(name); vtable + SPKeyFromName shape differs
+007c6200  -  UpdateFromControllerProperties; vtable property fetch differs
+007c6370  17  scalar deleting destructor; operator_delete call shape differs
+007c63a0  115  cCameraManager::Update; vtable walks differ
+007c6420  66  SetActiveControllerByIndex; vtable order differs
+007c6480  82  ControllerIDByIndex; EASTL hashtable scan not reproduced
+007c64e0  172  ControllerIDByName; localized-name search not reproduced
+007c65a0  24  VariantTypeTraits::GetTPTR; lazy static init differs
+007c6610  -  cCameraManager::HandleMessage; hashtable find not reproduced
+007c66b0  70  SetActiveController(id); hashtable find not reproduced
+007c6700  66  cCameraManager::Controller; hashtable find not reproduced

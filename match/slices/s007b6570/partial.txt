@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+007b6570  439  refcounted render-job setup; skeleton only
+007b6730  440  refcounted render-job setup; skeleton only
+007b68f0  118  cThumbnailManager AWG/viewer setup calling FUN_007b49f0; skeleton only
+007b6980  259  render-job helper; skeleton only
+007b6b60  107  EH destructor of a vector of refcounted pointers; skeleton only
+007b6bd0  127  EH destructor (vector + refcount teardown); skeleton only
+007b6c70  154  EH destructor (vector + refcount teardown); skeleton only
+007b6d50  1307  large render-job driver; skeleton only
+007b7270  702  large render-job driver; skeleton only

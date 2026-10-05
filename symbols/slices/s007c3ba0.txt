@@ -1,0 +1,2 @@
+007c3d30 SP::cViewer::GetCameraLocationInfo  # card annotation (PDB name)
+007c4730 SP::cViewer::GetWorldRayFromScreenCoords  # card annotation (PDB name)

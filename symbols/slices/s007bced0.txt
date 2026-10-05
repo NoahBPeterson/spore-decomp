@@ -1,0 +1,7 @@
+007bd4c0 SP::cThumbnailManager::DilateWithoutAODone  # card annotation (PDB name)
+007bd500 SP::cThumbnailManager::cPaletteJobInfo::Shutdown  # card annotation (PDB name)
+007bd540 SP::cThumbnailManager::cPaletteThumbnailJob::Shutdown  # card annotation (PDB name)
+007bd5d0 SP::cThumbnailManager::cEditorJobInfo::Shutdown  # card annotation (PDB name)
+007bd640 SP::cThumbnailManager::cEditorThumbnailJob::Shutdown  # card annotation (PDB name)
+007bd6b0 SP::cThumbnailManager::cCSAThumbnailJob::Shutdown  # card annotation (PDB name)
+007bdd70 SP::cThumbnailManager::cGameThumbnailJob::Shutdown  # card annotation (PDB name)

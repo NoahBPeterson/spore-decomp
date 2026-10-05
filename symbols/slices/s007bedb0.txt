@@ -1,0 +1,2 @@
+007bedb0 SP::cThumbnailManager::CaptureCSAPhotos  # card annotation (PDB name)
+007bf610 SP::cThumbnailManager::ThumbnailDone  # PDB caller-single candidate in card

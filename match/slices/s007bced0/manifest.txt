@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007bced0/s007bced0.cpp  ?DilateWithoutAODone@cThumbnailManager@@QAEXPAUDilateMsg@@@Z  007bd4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?PaletteJobInfo_Shutdown@@YGXPAUcPaletteJobInfo@@@Z  007bd500  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?Shutdown@cPaletteThumbnailJob@@QAEXXZ  007bd540  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?Shutdown@cEditorJobInfo@@QAEXXZ  007bd5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?Shutdown@cEditorThumbnailJob@@QAEXXZ  007bd640  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?Shutdown@cCSAThumbnailJob@@QAEXXZ  007bd6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?Shutdown@cGameThumbnailJob@@QAEXXZ  007bdd70  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007bced0/s007bced0.cpp  ?FUN_007bdde0@@YIXPAX@Z  007bdde0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
