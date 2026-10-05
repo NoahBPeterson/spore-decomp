@@ -1,0 +1,4 @@
+004c2460 eastl::make_heap<Elem18*,Compare18>  # MATCH; exact EASTL heap.h source
+004c2520 eastl::adjust_heap<Elem18*,int,Elem18,Compare18>  # MATCH; value passed by value
+004c26d0 eastl::basic_string<wchar_t,256>::ensure-capacity  # near-match
+004c3030 SP::cSPEditorSkinManager::AsInterface  # near-match

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004fa6c0 2820 complete behavioural reconstruction of the picking-OBB builder; the ~0x2b0-byte /Od frame and its name-hashed slots are not reproduced (built /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast)

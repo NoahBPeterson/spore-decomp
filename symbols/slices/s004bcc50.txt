@@ -1,0 +1,1 @@
+004bcc50 SP::cSPEditorResourceFactory::WriteResourceToStream  # card name; XML serializer over cSPEditorModel

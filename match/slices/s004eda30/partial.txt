@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+004eda30  -  incomplete: 1151-byte /Od validity builder, skeleton only
+004edf40  -  incomplete: 1134-byte /Od entry loader, skeleton only
+004ee3b0  -  incomplete: 421-byte /Od key helper, skeleton only
+004ee560  -  incomplete: 970-byte /Od entry writer, skeleton only

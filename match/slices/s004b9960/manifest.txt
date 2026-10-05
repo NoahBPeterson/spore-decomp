@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004b9960/s004b9960.cpp  ?AsInterface@cEditorResource2@@  004ba120  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

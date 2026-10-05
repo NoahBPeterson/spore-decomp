@@ -1,0 +1,2 @@
+00505170  RayTri             # Moeller-Trumbore: edges, cross(dir,e2), det, u/v/t outputs, cull byte
+005056d0  DistPointBoxSq     # per-axis clamp: sum of squared distances from p to [lo,hi]

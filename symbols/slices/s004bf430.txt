@@ -1,0 +1,12 @@
+004bf430 `anonymous namespace'::ReadRuntimeCreatureData  # card name
+004bf770 `anonymous namespace'::WriteRuntimeCreatureData  # card name
+004bf9f0 `anonymous namespace'::ReadBinaryEditorModel  # card name
+004bfb20 `anonymous namespace'::WriteBinaryEditorModel  # card name
+004bfc10 LocalExpatMalloc  # TLS current FBA -> Malloc(p,4)
+004bfc40 EA::Allocator::FixedBufferAllocator::Malloc  # card name
+004c0020 `anonymous namespace'::LocalExpatRealloc  # PDB candidate (caller-scored)
+004c0130 SP::cSPEditorResourceFactory factory creator  # operator_new(8) + ctor + vcall +0x10
+004c0190 Resource::ResourceObject::GetReferenceCount  # lock xadd
+004c01b0 EA::XML::XmlTextWriter::Init  # inline 0x100 buffer at +0x14
+004c0250 grow vector<cEditorModelBlock>  # 0x1d8-stride resize
+004c0350 grow vector  # 0x8c-stride resize

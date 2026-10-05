@@ -1,0 +1,1 @@
+slices/s004a89e0/s004a89e0.cpp  ?NegateX@@YAPAUV3@@PAU1@0@Z  004a8f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

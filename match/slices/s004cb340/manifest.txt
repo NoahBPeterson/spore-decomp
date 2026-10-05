@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004cb340/s004cb340.cpp  ?0SkinBuildData@@QAE@XZ  004cbdf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

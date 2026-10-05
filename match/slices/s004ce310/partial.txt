@@ -1,0 +1,4 @@
+004ce310  n/a  partial: EASTL vector<uint32_t>::insert instance; needs literal EASTL source
+004ce550  n/a  partial: EASTL vector<uint8_t>::insert instance; needs literal EASTL source
+004cef00  n/a  partial: EASTL vector insert(n,value) instance; needs literal EASTL source
+004cf2c0  n/a  partial: EASTL vector insert(first,last) instance; needs literal EASTL source

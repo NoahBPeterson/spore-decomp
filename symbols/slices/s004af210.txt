@@ -1,0 +1,2 @@
+004af210 SP::GetPropertyAsUint32  # PDB (symbols/pdb_names.json)
+004af260 SP::cSPEditorModel::SaveResource  # PDB (symbols/pdb_names.json)

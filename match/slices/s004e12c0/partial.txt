@@ -1,0 +1,8 @@
+# va  reason
+004e12c0 443-byte /Od hashtable<ResourceKey,...>::DoInsertValue skeleton
+004e14e0 245-byte /Od hashtable find skeleton
+004e1780 89-byte /Od Constraint-vector destroy-loop skeleton
+004e17e0 243-byte /Od Constraint-vector reserve skeleton
+004e18e0 181-byte /Od Constraint-vector push_back skeleton
+004e1a20 97-byte /Od hashtable iterator helper skeleton
+004e1a90 350-byte /Od rbtree insert-or-assign helper skeleton

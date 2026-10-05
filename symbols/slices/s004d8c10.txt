@@ -1,0 +1,5 @@
+004d8ee0  SpeciesProfile::GetVariantA
+004d8f10  SpeciesProfile::GetVariantB
+004d8f90  SpeciesProfile::GetVariantC
+004d8c10  SpeciesProfile::Update
+004d90a0  SP::cSpeciesProfile::FillInProfileValues

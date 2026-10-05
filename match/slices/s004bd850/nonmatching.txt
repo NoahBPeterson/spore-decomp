@@ -1,0 +1,2 @@
+004bd850  155  SP::cSPEditorUI::ShowDialogWithValidityReason: complete; only the 0x6fd7d545 arm differs (original builds a packed 0x40606000 via bitfield read-modify-writes, cl folded our constant)
+004bdae0  79  cEditorModelParser teardown: complete (XML_ParserFree + FixedBufferAllocator destroy/re-create); stub FBA method bodies change the frame

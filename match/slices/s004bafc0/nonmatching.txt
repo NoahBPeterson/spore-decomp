@@ -1,0 +1,1 @@
+004bafc0  895  SP::EditorUtils::ComputeVerbIcons: complete; /Od frame with a 12-word ResourceKey, recursive call, EA operator new("Editor")+ctor, manager vcall + interface_cast + AutoRefCount release paths; stub object model differs so frame/slot layout diverges

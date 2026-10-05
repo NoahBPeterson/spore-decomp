@@ -1,0 +1,5 @@
+00509f50  245  edge insert into slot map: complete behaviour; /Od schedule differs
+0050a730   40  per-face helper: complete behaviour; /Od frame/argument handling differs
+0050a880   58  component-wise vector abs (x87 fabs): complete behaviour; /Od temporary order differs
+0050a920  127  triangle adjacency test: complete behaviour; /Od bool materialisation differs
+0050a9e0  167  record copy-insert: complete behaviour; /Od schedule differs

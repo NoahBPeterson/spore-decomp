@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004bbfb0/s004bbfb0.cpp  ?Init@FactoryObject@@QAEPAU1@XZ  004bbfb0  /Od /Ob1 /MD /Gy /TP
+slices/s004bbfb0/s004bbfb0.cpp  ?Destroy@FactoryObject@@QAEPAU1@I@Z  004bc030  /Od /Ob1 /MD /Gy /TP
+slices/s004bbfb0/s004bbfb0.cpp  ?GetSupportedTypes@cSPEditorResourceFactory@@QAEHPAII@Z  004bc210  /Od /Ob1 /MD /Gy /TP
+slices/s004bbfb0/s004bbfb0.cpp  ?CanConvert@cSPEditorResourceFactory@@QAE_NHH@Z  004bc290  /Od /Ob1 /MD /Gy /TP
+slices/s004bbfb0/s004bbfb0.cpp  ?Create@FixedBufferAllocator@Allocator@EA@@QAEPAU123@PAXIE@Z  004bc8a0  /Od /Ob1 /MD /Gy /TP
+slices/s004bbfb0/s004bbfb0.cpp  ?IsValid@FixedBufferAllocator@Allocator@EA@@QAE_NXZ  004bc990  /Od /Ob1 /MD /Gy /TP

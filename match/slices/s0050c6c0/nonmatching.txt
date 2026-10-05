@@ -1,0 +1,4 @@
+0050cec0   99  fixed_vector<float,400> constructor: complete behaviour; /Od schedule/frame differs
+0050cfb0   37  2-component subtract: complete behaviour; /Od value-copy flavour differs
+0050d020   36  2-component scale: complete behaviour; /Od value-copy flavour differs
+0050d4e0  294  eastl::vector<float,sp_vector_allocator>::operator=: complete reimplementation; EASTL internals/schedule differ

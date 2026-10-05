@@ -1,0 +1,3 @@
+004db1b0  n/a  partial: cSpeciesCheat operation skeleton
+004db2c0  n/a  partial: cSpeciesCheat operation skeleton
+004db470  n/a  partial: cSpeciesCheat operation skeleton

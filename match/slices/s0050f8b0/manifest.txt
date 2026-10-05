@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0050f8b0/s0050f8b0.cpp  ?RelocateCommit@@YAPAXPAX00@Z        00510080  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0050f8b0/s0050f8b0.cpp  ?InsertionSortU32@@YAXPAI0@Z         00510240  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0050f8b0/s0050f8b0.cpp  ?InsertionSortSimpleU32@@YAXPAI0@Z   005102d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

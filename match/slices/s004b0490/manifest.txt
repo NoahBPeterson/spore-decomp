@@ -1,0 +1,2 @@
+slices/s004b0490/s004b0490.cpp  ?Wrapper@Vec24@@QAEXPAX0@Z  004b0560  /Od /Ob1 /MD /Gy /TP
+slices/s004b0490/s004b0490.cpp  ?Set@AutoRef@@QAEPAU1@PAX@Z  004b09b0  /Od /Ob1 /MD /Gy /TP

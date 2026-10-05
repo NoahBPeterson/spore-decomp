@@ -1,0 +1,6 @@
+00502f60  204  Ed8 copy-ctor: complete; /Od frame + inlined element-copy slot layout differ
+005031d0   80  relocate (uninitialised_move) for E48: complete; loop-temporary slot order differs
+005033f0   19  destroy range for Ed8: complete; inlined conditional-delete slot order differs
+00503930   46  E48 operator=: complete; inlined fixed-vector assign argument spill + frame differ
+00503a50  189  Ed8 operator=: complete; matrix trivial-copy and frame layout differ
+00503be0    8  destroy range for E48: complete; only the two local slots are swapped

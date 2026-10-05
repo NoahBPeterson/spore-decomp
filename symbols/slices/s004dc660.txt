@@ -1,0 +1,9 @@
+004dc660 SP::cSpeciesCheat::GetFullPath  # PDB
+004dc730 SP::cPlantSummarizer::GetStaticType  # getter for global type id
+004dc740 SP::cPlantSummarizer::GetResType  # PDB
+004dc760 SP::cPlantSummarizer::ExtractParameters  # PDB
+004dc920 SP::cSpeciesSummarizer::GetStaticType  # getter for global type id
+004dc930 SP::cSpeciesSummarizer::GetResType  # analog of cPlantSummarizer
+004dc950 SP::cSpeciesSummarizer::ExtractParameters  # PDB candidate (caller-single)
+004dcaa0 SP::cSPEditorSpeciesManager::Teardown  # map teardown
+004dcee0 SP::cSPEditorSpeciesManager::HandleMessage  # PDB candidate (caller-scored)

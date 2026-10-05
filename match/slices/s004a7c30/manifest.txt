@@ -1,0 +1,6 @@
+slices/s004a7c30/s004a7c30.cpp  ?SameKey@@YA_NPAUResKeySource@@0@Z  004a7c30  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004a7c30/s004a7c30.cpp  ?EntHasFlag@@YA_NPAUcSPEditorBlock@@@Z  004a7dd0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004a7c30/s004a7c30.cpp  ?BlockBlocked@@YA_NPAUcSPEditorBlock@@@Z  004a7e60  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004a7c30/s004a7c30.cpp  ?AdjacentDir@@YA_NHHE@Z  004a7ea0  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004a7c30/s004a7c30.cpp  ?ReleaseRefs@@YAXPAURefObj@@PAUUIntVector@@@Z  004a8860  /Od /Ob1 /MD /Gy /EHsc /TP
+slices/s004a7c30/s004a7c30.cpp  ?KillSeti@@YAXH@Z  004a88d0  /Od /Ob1 /MD /Gy /EHsc /TP

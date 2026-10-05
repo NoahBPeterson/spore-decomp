@@ -1,0 +1,3 @@
+00514910  1279  deque DoInsertValues: skeleton only (1.3 KB body not reproduced)
+00515000   246  deque construct(n): skeleton only (ptr-array allocation body not reproduced)
+005151b0  1088  deque Insert(position, n, value): skeleton only (1.1 KB body not reproduced)

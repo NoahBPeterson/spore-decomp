@@ -1,0 +1,1 @@
+004e8850 rbtree anchor reset  # frees root chain then self-initialises anchor

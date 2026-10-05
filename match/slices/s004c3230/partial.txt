@@ -1,0 +1,1 @@
+004c3230  0  partial: UpdateTorso skeleton; block-list snapshot, transform rebuild and paint-state paths omitted

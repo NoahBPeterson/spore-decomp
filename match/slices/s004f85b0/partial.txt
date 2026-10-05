@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+004f85b0  -  incomplete: 411-byte /Od helper, skeleton only
+004f8a40  -  incomplete: 829-byte /Od helper, skeleton only
+004f8e20  -  incomplete: 325-byte /Od SSE distance helper, skeleton only
+004f8f70  -  incomplete: 294-byte /Od table lookup, skeleton only
+004f90a0  -  incomplete: 218-byte /Od SSE helper, skeleton only
+004f9180  -  incomplete: 203-byte /Od SSE accumulator, skeleton only
+004f9250  -  incomplete: 271-byte /Od helper, skeleton only
+004f9360  -  incomplete: 527-byte /Od helper, skeleton only

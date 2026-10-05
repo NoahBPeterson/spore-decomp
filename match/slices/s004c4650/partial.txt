@@ -1,0 +1,7 @@
+004c4650  0  partial: refcounted thread-guarded cleanup skeleton
+004c4a30  0  partial: torso skin rebuild skeleton
+004c4d30  0  partial: per-part update skeleton
+004c4eb0  0  partial: detach/reset skin parts skeleton
+004c4f60  0  partial: skin material helper skeleton
+004c5030  0  partial: skin texture helper skeleton
+004c5100  0  partial: skin transform helper skeleton

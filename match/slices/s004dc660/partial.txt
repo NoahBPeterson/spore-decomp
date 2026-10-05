@@ -1,0 +1,6 @@
+# va  reason
+004dc660 177-byte /Od cSpeciesCheat::GetFullPath skeleton (manager vtable slots + WString locals not fitted)
+004dc760 429-byte /Od cPlantSummarizer::ExtractParameters skeleton (EASTL FunctionalMatch containers)
+004dc950 323-byte /Od cSpeciesSummarizer::ExtractParameters skeleton (EASTL FunctionalMatch containers)
+004dcaa0 1082-byte /Od species-manager map teardown skeleton (two EASTL hashtables + intrusive list)
+004dcee0 374-byte /Od cSPEditorSpeciesManager::HandleMessage skeleton (EASTL hash_map find/operator[])

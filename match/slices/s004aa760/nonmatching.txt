@@ -1,0 +1,6 @@
+004ab280  146  complete copy-construct range (stride 0x24); /Od slot/loop shape differ
+004ab450  51   complete fill loop (while(n--) *dst++=v); local slot order differs
+004ab4a0  27   complete wrapper calling 0x4ab5b0; bool temp/local shape differs
+004ab4d0  80   complete copy range (stride 0x34) via placement copy-ctor
+004ab530  109  complete copy range (stride 0x3c) with nested assign
+004ab5b0  107  complete Item range copy (x87 float member copies); V3 copy flavour + pointer temps differ

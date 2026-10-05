@@ -1,0 +1,5 @@
+# Complete behavioral ports; differences are /Od stack-slot ordering and helper inlining.
+005182f0   137  cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
+00518b00    92  cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
+00518bf0   165  cPaintCopyIdentityJob::Render: complete (buffer setup, material, vertex, BeginDraw); slots differ
+00518cf0   405  cPaintDifferentiateJob::Render: complete (property read, reciprocal scale, vertex, BeginDraw); slots differ

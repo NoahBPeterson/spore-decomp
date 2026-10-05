@@ -1,0 +1,6 @@
+004c1b80 eastl::insertion_sort<Elem18*>  # MATCH; exact EASTL 3.02.01 source
+004c1e20 eastl::partial_sort<Elem18*,Compare>  # MATCH; EASTL source with inlined sort_heap
+004c1920 eastl::Internal::quick_sort_impl<Elem18*,int,Compare>  # near-match, get_partition+median inlined
+004c1ff0 eastl::basic_string<wchar_t,fixed_vector_allocator<2,256,2,0,1>>::append  # capacity grow + fill + NUL
+004c10e0 eastl::vector<bool,fixed_vector_allocator<1,16,1,0,1>>::DoInsertValues  # byte vector insert
+004c1520 eastl::vector<Rec38,sp_vector_allocator>::DoInsertValues  # 0x38-byte element insert

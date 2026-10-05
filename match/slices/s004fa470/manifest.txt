@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004fa470/s004fa470.cpp  ?FractV@@YAPAUVector3@@PAU1@PBU1@0@Z  004fa470  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004fa470/s004fa470.cpp  ?Fract@@YAMMPAM@Z  004fa520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+004b0490  184  complete vector erase-range (0x18); missing the three EASTL copy tag bools/temp slots

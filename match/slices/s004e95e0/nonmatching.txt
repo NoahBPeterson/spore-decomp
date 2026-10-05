@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+004ea190  -  complete; frame size differs (bitfield-flag construction not reproduced)
+004e9950  372  complete; recursive child-property walk not byte-exact
+004e9fc0  349  complete; palette build/dispatch loop not byte-exact

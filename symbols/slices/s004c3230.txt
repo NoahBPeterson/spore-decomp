@@ -1,0 +1,1 @@
+004c3230 SP::cSPEditorSkinManager::UpdateTorso  # PDB name

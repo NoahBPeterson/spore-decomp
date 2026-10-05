@@ -1,0 +1,7 @@
+004afbf0  96   complete vector grow (4-byte elems); condition operand order / slot shape differ
+004afc80  82   complete vector grow (float default); x87/SSE slot shape differs
+004afd00  120  complete vector grow (0x1d8 elems)
+004afdd0  250  complete vector reserve (0x1d8 elems); allocator/dealloc paths approximate
+004aff80  105  complete vector grow (0x18 bbox elems)
+004b0040  101  complete two dead-stride loops; loop shape differs
+004b0340  156  complete vector erase-range (0x1d8 elems)

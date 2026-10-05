@@ -1,0 +1,13 @@
+004bbfb0 SP::cSPEditorResourceFactory::cSPEditorResourceFactory  # base-vtable chain + atomic refcount init (card: FUN_004bbfb0)
+004bc030 SP::cSPEditorResourceFactory::`scalar deleting destructor'  # 3 vtable stores + conditional operator delete
+004bc080 SP::cSPEditorResourceFactory::Init  # PDB candidate (caller-scored)
+004bc210 SP::cSPEditorResourceFactory::GetSupportedTypes  # card name
+004bc290 SP::cSPEditorResourceFactory::CanConvert  # card name
+004bc300 SP::cSPEditorResourceFactory::CreateResource  # 0x128/0xac EA-Editor alloc + ctor + vcall +0x24
+004bc540 SP::cSPEditorResourceFactory::ReadResource  # PDB candidate (caller-scored)
+004bc620 SP::cSPEditorResourceFactory::WriteResource  # PDB candidate (caller-single)
+004bc6d0 SP::cSPEditorResourceFactory::ReadResourceFromStream  # PDB candidate (caller-scored)
+004bc8a0 EA::Allocator::FixedBufferAllocator::Create  # sets mSignature 0x86421357 + first free block
+004bc990 EA::Allocator::FixedBufferAllocator::IsValid  # validates buffer_info header
+004bca10 EA::Allocator::FixedBufferAllocator::destroy_shared  # card name
+004bcab0 EA::Allocator::FixedBufferAllocator::Free  # card name

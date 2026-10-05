@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+004e7e50  32  RefVec build+dispatch (owner+0x18): complete; /Od frame 0x30 vs 0x2c and vec slot mismatch
+004e87f0  6  RefVec build+dispatch (3 args): complete; only /Od vec slot (-0xc vs -0x14) and reserved frame holes differ

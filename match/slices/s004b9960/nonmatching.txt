@@ -1,0 +1,4 @@
+004b9c70  120  cPropertyList ctor; vtable stores + Memset32 present, inline-buffer frame layout differs
+004b9d40  55  cPropertyList dtor; vtable/loop/Release present, loop/scalar schedule differs
+004b9da0  366  cEditorResource ctor; all field/vector stores present, inlined frames differ
+004b9f70  351  cEditorResource dtor; all loops/frees present, inlined frames differ

@@ -1,0 +1,1 @@
+004ca430  SP::EditorObject::Update  # editor object lazy-init of two refcounted sub-objects; stub name (receiver class not in 2008 PDB)

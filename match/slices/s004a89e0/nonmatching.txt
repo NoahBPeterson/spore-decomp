@@ -1,0 +1,3 @@
+004a8d70  143  complete 9-float matrix constructor; original spills `this` at ebp-0xc and uses operator[] pointer temps
+004a96d0  335  complete flag/children walk; /Od inlined-flag + element temp slots differ
+004a9840  115  complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs

@@ -1,0 +1,11 @@
+00502ee0  A::A(A const&)            # copy-ctor, base 0x40ce80 + VecA + bool + int[2] + int
+00503250  E48::E48(E48 const&)      # copy-ctor, cSPVector3 + fixed_vector<uint,8> (0x5030e0) + uint
+005039c0  A::operator=             # cSPTransform::operator= 0x537dc0 + extra fields
+00503930  E48::operator=           # inline fixed_vector clear/assign (0x4769b0, 0x42c750)
+00503180  copy_backward<E48>       # three compile-time tag bools + copy_backward_impl
+005031d0  uninitialized_move<E48>  # placement copy-ctor + destruct_range of the source
+00503be0  destruct_range<E48>      # per element: fixed_vector dtor (0x4c0b80) + dead delete
+005033f0  destruct_range<Ed8>      # same, 0xd8 stride, nested vector at +0x10
+00503630  four-dword zero init     # post-increment vector-init helper returning this
+00502f60  Ed8::Ed8(Ed8 const&)     # 4 dwords + fixed_vector + 3 x (VecA+Mat3)
+00503a50  Ed8::operator=           # trivial matrix copy variant

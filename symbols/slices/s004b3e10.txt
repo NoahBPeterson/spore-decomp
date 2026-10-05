@@ -1,0 +1,2 @@
+004b3e10  SP::cSPEditorPaintTheme::GenerateSkinPaintFromRegionPaint  # PDB caller-scored
+004b4470  SP::cSPEditorPaintTheme::ReadSkinThemeFromProp  # PDB callee-scored

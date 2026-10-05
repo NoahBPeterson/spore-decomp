@@ -1,0 +1,2 @@
+004b33e0  n/a  per-block paint accumulation: skeleton only (return 0); heavy inlined EASTL paths omitted
+004b3660  n/a  prop lookup helper: skeleton only (return 0); inlined EASTL map paths omitted

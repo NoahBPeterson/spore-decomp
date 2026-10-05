@@ -1,0 +1,8 @@
+004ba150  SP::EditorValidity::AddCellUpgradeForBlockPropList  # PDB caller-scored
+004bab30  Editor::cEditorResource::cEditorResource  # PDB anchor
+004babe0  FUN_004babe0  # 7-arg Apply wrapper
+004bac30  FUN_004bac30  # Apply wrapper with explicit args
+004bac80  SP::cRuntimeCreatureResource::AsInterface  # PDB caller-scored
+004bacc0  FUN_004bacc0  # runtime-creature ctor / zero-init
+004bad50  FUN_004bad50  # resource destructor
+004badd0  SP::cSPEditorPaintTheme::Apply  # second overload

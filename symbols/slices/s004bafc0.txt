@@ -1,0 +1,5 @@
+004bafc0 SP::EditorUtils::ComputeVerbIcons  # PDB candidate (caller-scored)
+004bb860 SP::cSPUIAssetView::InitVerbCollection  # PDB (callee-scored); model-type hash -> verb-type hash
+004bbd20 SP::EditorEntityToResourceType  # PDB (callee-scored); editor code -> model-type hash
+004bbe20 SP::cSPAssetDataList::SetAssetData  # PDB (callee-scored); model-type predicate
+004bbe90 SP::cSPEditorPaintTheme::ExtractSkinPaintData  # PDB (callee-scored); model-type predicate

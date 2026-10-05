@@ -1,0 +1,1 @@
+004e7460 ScaleColorForKind  # colour-variation multiplier

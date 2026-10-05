@@ -1,0 +1,3 @@
+# Complete behavioral ports; differences are /Od stack-slot / inlined-helper layout.
+005155f0    26  Fill7: complete uninitialized_fill_n over 7-dword values; frame slots differ
+00515650    29  RangeInsertOut: complete out-param range-insert helper; frame/caller shape differs

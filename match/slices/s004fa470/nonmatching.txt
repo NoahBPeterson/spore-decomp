@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004fa5a0 457 complete behavioural reconstruction of the SSE overlap query; it is a separate /O2 TU and the original's auto-vectorized compress-store schedule is not reproduced (s004fa470_o2.cpp)

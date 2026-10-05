@@ -1,0 +1,1 @@
+004c49e0  27  complete GetSkin switch; original has an extra unreachable jump in the switch body (67 vs 65B)

@@ -1,0 +1,14 @@
+# Complete behavioral ports; only the /Od stack-frame slot layout / inlined-helper
+# scratch holes differ from the original.
+0050e850   262  HashTable::FindSlot: complete open-addressing probe; frame slots/order differ
+0050ea00    59  HashWord: complete 3-byte FNV-style hash; first multiply not left as a runtime imul
+0050eab0   117  Vec20::AllocCopy: complete allocate+uninitialized_copy; frame slots differ
+0050eb40   136  UninitCopy12: complete placement-copy loop; frame slots differ
+0050ebe0   131  SortCmp: complete sort driver (quick_sort + insertion sorts); callee slots differ
+0050eca0   201  Vec100::EraseRange: complete copy+destroy tail; frame slot layout differs
+0050ed90   659  Vec100::DoInsertValue: complete insert-at-position (grow and in-place paths); frame slots differ
+0050f070     6  VectorBase::~VectorBase: complete; three locals in different /Od hash slots
+0050f0d0   145  SortDefault: complete sort driver; callee slots differ
+0050f210    67  Elem100::operator=: complete; inlined FixedVec::operator= frame layout differs
+0050f290  1186  Vec24Full::DoInsertValues: complete insert-n path (grow and in-place); frame slots differ
+0050f7f0   156  UninitCopy20: complete uninitialized_copy with out-param; frame slots differ

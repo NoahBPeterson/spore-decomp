@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004f96a0 2341 complete behavioural reconstruction; /Od frame with ~100 name-hashed local slots not reproduced (built /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy)

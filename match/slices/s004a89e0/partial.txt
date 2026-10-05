@@ -1,0 +1,5 @@
+004a89e0  900  incomplete: large matrix routine (x87/SSE); only entry paths sketched
+004a8e10  250  incomplete: Matrix3FromFacingAndUp wrapper; sign-flip/xorps scheduling not fully reconstructed
+004a8fc0  760  incomplete: 764-byte 16-byte-aligned SSE matrix routine (and esp,-16); not reconstructed
+004a92c0  838  incomplete: 838-byte 16-byte-aligned (and esp,-16) routine; not reconstructed
+004a9610  166  incomplete: matrix conversion; call/loop shape approximated

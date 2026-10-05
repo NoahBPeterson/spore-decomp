@@ -1,0 +1,5 @@
+004b4930  n/a  ExtractRegionPaintData: skeleton only; very large inlined EASTL/RNG/property body omitted
+004b5080  n/a  hashtable find/insert (4-byte): skeleton only; inlined bucket/node code omitted
+004b5160  n/a  hashtable find/insert (0x1c-byte): skeleton only; inlined bucket/node code omitted
+004b5210  n/a  rbtree lower_bound: skeleton only; inlined traversal omitted
+004b5370  n/a  rbtree insert (float key): skeleton only; inlined insert/rotation omitted

@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004d34f0/s004d34f0.cpp  ?InitStatics@@YAXXZ          004d34f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?Blend@@YAMMMMMMMM@Z         004d3500  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?GetAt@TuningObj@@QAEII@Z    004d3cd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?GetActive@TuningObj@@QAEHXZ 004d3d40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?GetBound@TuningObj@@QAEM_N@Z 004d3d70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?SetBounds@TuningObj@@QAEXMM@Z 004d3da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

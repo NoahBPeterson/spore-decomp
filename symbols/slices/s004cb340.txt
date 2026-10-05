@@ -1,0 +1,1 @@
+004cbdf0  SkinBuildData::SkinBuildData  # 6-vector skin-data default ctor (first vector node-weight w/ tag allocator)

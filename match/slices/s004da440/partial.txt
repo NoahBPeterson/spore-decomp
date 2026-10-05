@@ -1,0 +1,1 @@
+004da440  n/a  partial: 3425-byte cSpeciesProfile operation skeleton; decompile lost locals

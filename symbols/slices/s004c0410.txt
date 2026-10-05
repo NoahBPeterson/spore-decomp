@@ -1,0 +1,9 @@
+004c0410 resize pointer-range container  # thiscall, stride from args
+004c0570 EA::XML::XmlTextWriter::Init2  # 0x400-byte inline buffer at +0x18
+004c0600 eastl::lower_bound (0x18 stride)  # binary search over 0x18-byte records
+004c0680 eastl::copy/move_backward (0x8c stride)  # rep movsd 0x23 dwords
+004c0730 eastl::copy/move_backward (0x38 stride)  # rep movsd 0xe dwords
+004c07e0 eastl::sort/introsort driver (0x18 stride)  # recursion-depth calc + insertion sort
+004c09e0 eastl::insertion_sort (0x18 stride)  # card region
+004c0b80 vector free unless inline  # operator delete of mpBegin
+004c0bd0 EA::XML::XmlTextWriter write / reserve  # 1293-byte writer helper

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+004f1ff0  -  incomplete: 488-byte /Od float metric, skeleton only
+004f2210  -  incomplete: 1017-byte /Od validity helper, skeleton only
+004f2610  -  incomplete: 1827-byte /Od validity helper, skeleton only

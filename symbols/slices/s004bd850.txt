@@ -1,0 +1,13 @@
+004bd850 SP::cSPEditorUI::ShowDialogWithValidityReason  # card name; hash -> dialog string id
+004bd9c0 FUN_004bd9c0  # 0x5e49ce2c -> 0xd05c53a3 remap
+004bd9f0 SP::cEditorModelParser::Initialize  # expat parser create + callback registration
+004bdae0 SP::cEditorModelParser::Reset  # XML_ParserFree + FixedBufferAllocator re-create
+004bdbd0 SP::cEditorModelParser::GetLineNumber  # returns expat current line or -1
+004bdc00 SP::cEditorModelParser::GetCurrentLine  # TLS current-parser + expat call
+004bdc60 SP::cEditorModelParser::Parse  # TLS current-parser + XML_Parse
+004bdcd0 SP::cEditorModelParser::StartElement  # PDB name; expat StartElement callback
+004be070 SP::cEditorModelParser::AppendCharData  # UTF-16 append into 0x400-unit buffer
+004be100 expat_end_element_callback  # FNV hash lookup + per-type converter dispatch
+004be2e0 SP::cEditorModelParser::ReadFloat  # wcstod-like parse + cursor advance
+004be380 SP::cEditorModelParser::ReadULong  # wcstoul + cursor advance
+004be420 SP::cEditorModelParser::GrowModelArray  # append model blocks with defaults

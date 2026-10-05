@@ -1,0 +1,4 @@
+004c10e0  589  complete eastl::vector<bool,fixed_vector_allocator<1,16,1,0,1>>::DoInsertValues; emitted 499B vs 1088B (schedule + trivial mem helpers differ)
+004c1520  442  complete eastl::vector<Rec38,sp_vector_allocator>::DoInsertValues; emitted 571B vs 1013B (schedule + out-of-line helper choices differ)
+004c1920  544  complete eastl::Internal::quick_sort_impl<Elem18*,int,Compare>; code shape identical, original reserves 0x3c extra /Od dead slots
+004c1ff0  169  complete eastl::basic_string<wchar_t,fixed_vector_allocator<2,256,2,0,1>>::append(n,c)

@@ -1,0 +1,6 @@
+0050bc80   61  toggle-flag + coordinate pair swap: complete behaviour; /Od schedule/register order differs
+0050bd10   78  advance value + clamp against peer extent: complete behaviour; /Od float temp/order differs
+0050c230   80  bbox query: complete behaviour; /Od schedule differs
+0050c3b0  163  normals-init: complete behaviour (copy first vertex, rebuild rest); /Od schedule differs
+0050c490  207  barycentric interpolation (one table): complete behaviour; /Od schedule differs
+0050c5a0  241  barycentric interpolation (second table): complete behaviour; /Od schedule differs

@@ -1,0 +1,2 @@
+004a7c90  169  complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
+004a88f0  259  complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ

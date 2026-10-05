@@ -1,0 +1,9 @@
+# Complete behavioral ports; differences are /Od stack-slot layout and frame holes of
+# inlined EASTL helpers, not logic.
+0050f8b0   150  UninitRelocate12: complete copy + discard-sources; frame/slot layout differs
+0050f950   ~    QuickSortCmp (Keyed pointer array, custom compare): complete recursive quick sort; frame slots differ
+0050fa10    84  InsertionSortCmp: complete bounded insertion sort; slot layout differs
+0050fb30    82  InsertionSortSimpleCmp: complete simple insertion sort; slot layout differs
+0050fc30   ~    Vec100::DoInsertValues: complete (grow + in-place paths); frame slots differ
+005100c0   272  QuickSortU32: complete default quick sort; frame slots differ
+00510350   ~    Vec12I::insert(position, first, last): complete range insert (grow + in-place); frame slots differ

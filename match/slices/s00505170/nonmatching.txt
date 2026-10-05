@@ -1,0 +1,2 @@
+00505170  1034  Moeller-Trumbore ray/triangle: complete behavioral port; /Od SSE branch+register schedule not reproduced (flags /arch:SSE /fp:fast)
+005056d0   345  point-to-AABB squared distance: complete; /Od comiss operand order, branch layout and slot order differ (flags /arch:SSE /fp:fast)

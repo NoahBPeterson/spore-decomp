@@ -1,0 +1,4 @@
+# va  reason
+004ff750 1260-byte /Od function; skeleton only, full reconstruction out of budget
+004ffc40 1402-byte /Od function; skeleton only, full reconstruction out of budget
+005001c0 nSPSkinner::cExportHelper::ExportDummyStaticSkeleton (262 bytes); skeleton only, full reconstruction out of budget

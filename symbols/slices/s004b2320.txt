@@ -1,0 +1,13 @@
+004b2320  ConstructArray  # template construct/AddRef-over-array helper
+004b24c0  SP::cSPEditorPaintTheme::cSPEditorPaintTheme  # constructor; writes both vtables
+004b25e0  SP::cSPEditorPaintTheme::~cSPEditorPaintTheme  # destructor
+004b26a0  SP::cSPEditorPaintTheme::AsInterface  # PDB anchor
+004b26e0  SP::cSPEditorPaintTheme::SetSource  # stores +0x148 then calls Reset
+004b2710  SP::cSPEditorPaintTheme::Reset
+004b27c0  SP::cSPEditorPaintTheme::Reset2  # clear model tree + prop vector
+004b2800  SP::cSPEditorPaintTheme::ReadFromAsset
+004b29b0  SP::cSPEditorPaintTheme::ReadFromProp2  # prop reader with useColors flag
+004b2bb0  SP::cSPEditorPaintTheme::ReadFromProp  # PDB candidate (caller-scored)
+004b2f80  SP::cSPEditorPaintTheme::WriteToProp
+004b3190  SP::cSPEditorPaintTheme::ApplyToAsset
+004b31d0  SP::cSPEditorPaintTheme::Apply  # PDB anchor

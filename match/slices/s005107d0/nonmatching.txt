@@ -1,0 +1,5 @@
+# Complete behavioral ports; differences are /Od stack-slot and inlined-helper frame layout.
+005107d0   946  Vec8I::insert(position, first, last): complete range insert; frame slots differ
+00510bc0   ~    Vec24I::insert(position, first, last): complete range insert (T24); frame slots differ
+005111b0   686  MedianCmp: complete median with keyed <= compare; frame/local layout differs
+005114f0   353  GetPartitionCmp: complete Hoare partition with keyed <= compare; frame slots differ

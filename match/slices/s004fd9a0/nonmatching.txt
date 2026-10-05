@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+004fdd60 59 vector-destroy helper; /Od frame/loop slot order not reproduced
+004fddb0 75 MaxIndex; branch lowering uses p[0]/p[1]/p[2] indexing schedule not reproduced
+004fde40 63 allocator chunk pop; loop/AddCore schedule not reproduced
+004fe7f0 31 2-vector add; temp-copy schedule not fully reproduced
+004fe860 73 wide-string assign; extra inline argument slot not reproduced

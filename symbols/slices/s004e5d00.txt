@@ -1,0 +1,1 @@
+004e6920 GetPropIDForAbility  # capability hash -> property hash map

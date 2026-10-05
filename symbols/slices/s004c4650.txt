@@ -1,0 +1,1 @@
+004c49e0 SP::cSPEditorSkinManager::GetSkin  # switch on skin id, returns +0x18/+0x1c

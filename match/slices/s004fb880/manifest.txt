@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004fb880/s004fb880.cpp  ?MulComponents@@YAPAUVector3@@PAU1@PBU1@1@Z  004fc510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004fb880/s004fb880.cpp  ?SubInPlace@@YAPAUVector3@@PAU1@PBU1@@Z  004fc5a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004fb880/s004fb880.cpp  ?Determinant@@YAMPBM@Z  004fc680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004fb880/s004fb880.cpp  ?InvertMatrix@@YAPAUMatrix33@@PAU1@PBM@Z  004fc700  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004fb880/s004fb880.cpp  ?FUN_004fc960@@YAXPAX00@Z  004fc960  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

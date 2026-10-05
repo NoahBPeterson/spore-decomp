@@ -1,0 +1,2 @@
+004e58c0 SP::EditorUtils::GetVerbCategory  # PDB
+004e5910 SP::EditorUtils::IsDietCategory  # PDB

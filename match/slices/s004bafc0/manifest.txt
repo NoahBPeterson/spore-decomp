@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bb490@@YAPB_WI@Z  004bb490  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bb510@@YAPB_WH@Z  004bb510  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bb860@@YAII@Z  004bb860  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bba50@@YAIH@Z  004bba50  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bbc70@@YAIIE@Z  004bbc70  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?GetTypeForCategory@@YAIIE@Z  004bbd20  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?IsBakeableType@@YA_NIE@Z  004bbe20  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bbe90@@YA_NI@Z  004bbe90  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bbed0@@YA_NI@Z  004bbed0  /Od /Ob1 /MD /Gy /TP
+slices/s004bafc0/s004bafc0.cpp  ?FUN_004bbf10@@YA_NH@Z  004bbf10  /Od /Ob1 /MD /Gy /TP

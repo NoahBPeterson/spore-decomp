@@ -1,0 +1,6 @@
+004b4fa0  60  vector emplace/append of 0x11c-byte elements; full branches present, frame layout differs
+004b52b0  40  float triple less-than comparator; full logic present, /Od value-temp layout differs
+004b5440  62  vector-of-refcounted dtor loop; full calls present, FUN_00425990 this-adjust differs
+004b54b0  45  vector push_back of 8-word element; full path present, inline insert frame differs
+004b5570  60  vector erase of 0x20-byte elements; full logic present, byte-count/store schedule differs
+004b5610  50  nested vector destructor; full loops present, inlined frames differ

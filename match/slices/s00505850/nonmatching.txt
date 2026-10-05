@@ -1,0 +1,2 @@
+005066d0   43  cCreatureAbility cleanup loop: complete behaviour (destroy+free+null each of 3 slots); /Od delete-inline schedule differs
+00506590   118  cCreatureAbility Setup: complete behaviour (allocs 3 x cRTTBuffer + sets fields); allocation/vtable schedule differs

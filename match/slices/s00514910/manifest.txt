@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00514910/s00514910.cpp  ?DoAllocateSubarray@?$DequeBase@UElem48@@@@QAEPAUElem48@@XZ   00514e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00514910/s00514910.cpp  ??F?$DequeIterator@UElem48@@@@QAEAAU0@XZ                    00515100  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00514910/s00514910.cpp  ?SetSubarray@?$DequeIterator@UElem48@@@@QAEXPAPAUElem48@@@Z  00515170  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

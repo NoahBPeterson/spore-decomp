@@ -1,0 +1,8 @@
+004b33e0  FUN_004b33e0  # per-block paint accumulation (EASTL map)
+004b3660  FUN_004b3660  # model prop lookup
+004b3730  SP::cSPEditorPaintTheme::InitClosestRegions  # PDB anchor
+004b3910  FUN_004b3910  # region lookup by key
+004b3a50  FUN_004b3a50  # region scan / apply dispatch
+004b3b20  FUN_004b3b20  # closest-region index scan
+004b3c20  FUN_004b3c20  # model bake helper
+004b3c70  SP::cSPEditorPaintTheme::SetRegionColor  # PDB callee-scored

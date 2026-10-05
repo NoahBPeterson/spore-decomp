@@ -1,0 +1,2 @@
+# Complete behavioral port; differences are /Od stack-slot and x87 rounding codegen.
+00512400   ~  InitRenderJob: complete job-record fill (transform, bone ids, packed colors); frame/codegen differs

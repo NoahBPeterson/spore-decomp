@@ -1,0 +1,4 @@
+004bab30  92  cEditorResource ctor; vtable/field stores present, /Od frame and LOCK schedule differ
+004babe0  41  Apply wrapper (7-arg cdecl helper); argument-build frame differs
+004bac30  45  Apply wrapper (extra args); argument-build frame differs
+004bad50  103  resource dtor; releases/loops present, inlined release frames differ

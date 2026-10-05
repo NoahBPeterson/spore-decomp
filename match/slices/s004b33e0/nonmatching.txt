@@ -1,0 +1,6 @@
+004b3730  180  InitClosestRegions; control flow complete, inlined GetPropertyAsIntArray / vector frames differ
+004b3910  273  region lookup; full calls present, /Od frame holes and register choices differ
+004b3a50  214  region scan; full paths present, thiscall/loop schedule differs
+004b3b20  220  closest-region scan; full logic present, local layout and loop shape differ
+004b3c20  55  model bake helper; full logic present, huge inlined-helper frame (0x80) not reproduced
+004b3c70  386  SetRegionColor; full paths present, inlined map/insert frames differ

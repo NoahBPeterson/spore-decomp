@@ -1,0 +1,6 @@
+00509850   42  two-key equality: complete behaviour (int result + short-circuit &&); /Od bool materialisation differs
+005098a0   93  lookup-vector rebuild: complete behaviour (loop + erase + helper call); /Od schedule differs
+00509b20  209  table teardown: complete behaviour (three-vector erase + element delete loop); /Od schedule differs
+00509c80  218  slot-table insert: complete behaviour; /Od schedule and frame differ
+00509da0  273  range expand: complete behaviour; /Od pointer-local min/max flavour differs
+00509ec0   86  two-dword pair builder: complete behaviour; /Od index arithmetic schedule differs

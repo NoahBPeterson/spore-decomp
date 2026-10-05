@@ -1,0 +1,4 @@
+004b8750  87  paint-region id collector; full calls present, inlined vector push frame differs
+004b87c0  84  small ability ctor; inline-buffer vector init local layout differs
+004b8860  84  small ability ctor; inline-buffer vector init local layout differs
+004b8900  79  RNG range helper (x87); full logic present, x87/SSE float scheduling differs

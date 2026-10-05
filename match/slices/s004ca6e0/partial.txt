@@ -1,0 +1,1 @@
+004ca6e0  n/a  partial: Ghidra decompile loses frame locals (index-map base, scratch vector); skeleton only

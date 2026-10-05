@@ -1,0 +1,2 @@
+004d8f10  24  complete; residual is /Od slot layout (deref temps + return-copy local)
+004d8f90  24  complete; identical to GetVariantB with different sub-object offsets

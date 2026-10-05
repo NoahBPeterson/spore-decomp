@@ -1,0 +1,2 @@
+00507b30  217  six-vector member destruction: complete behaviour; /Od loop/register schedule differs
+00508320  149  container sub-object copy-ctor: complete behaviour (header words + sub-object copies); schedule differs

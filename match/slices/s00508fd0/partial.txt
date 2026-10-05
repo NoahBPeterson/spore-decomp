@@ -1,0 +1,2 @@
+00508fd0  1142  table builder A: skeleton only, 1.1 KB exceeds the per-function budget
+00509450  1017  table builder B: skeleton only, 1.0 KB exceeds the per-function budget

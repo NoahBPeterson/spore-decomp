@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+004f87f0  -  complete; vtable stores / empty cleanup loop not byte-exact
+004f8880  -  complete; pool-allocation sequence not byte-exact
+004f89a0  -  complete; light-vector destructor not byte-exact
+004f8d80  -  complete; weighted-distance loop not byte-exact

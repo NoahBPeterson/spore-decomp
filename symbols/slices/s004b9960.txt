@@ -1,0 +1,6 @@
+004b9960  FUN_004b9960  # eastl::vector DoInsertValue (0x4c-byte element)
+004b9c70  FUN_004b9c70  # cPropertyList ctor
+004b9d40  FUN_004b9d40  # cPropertyList dtor
+004b9da0  FUN_004b9da0  # cEditorResource ctor
+004b9f70  FUN_004b9f70  # cEditorResource dtor
+004ba120  SP::cEditorResource::AsInterface  # PDB caller-scored

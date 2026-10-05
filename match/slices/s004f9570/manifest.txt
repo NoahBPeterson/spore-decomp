@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004f9570/s004f9570.cpp  ?Apply@ForceGrid@@QAEXABUVector3@@PAUFieldAccumulator@@@Z  004f9570  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f9570/s004f9570.cpp  ?GetBounds@ForceGrid@@QAE_NPAUVector3@@0@Z  004f95e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f9570/s004f9570.cpp  ?GetVec38@ForceGrid@@QAEPAUVector3@@PAU2@@Z  004f9660  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

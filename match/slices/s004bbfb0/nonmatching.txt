@@ -1,0 +1,7 @@
+004bc080  263  SP::cSPEditorResourceFactory::Init: complete (static hash-table init + 6 manager vcalls + 2 FUN_006adc60); our manager/table stubs change the frame
+004bc300  305  SP::cSPEditorResourceFactory::CreateResource: complete (bakeable -> 0xac ctor, resource -> 0x128 ctor, vcall +0x24, field copy); stub object model diverges
+004bc540  203  SP::cSPEditorResourceFactory::ReadResource: complete; stream vtable slot types guessed
+004bc620  147  SP::cSPEditorResourceFactory::WriteResource: complete; stream vtable slot types guessed
+004bc6d0  308  SP::cSPEditorResourceFactory::ReadResourceFromStream: complete (chkstk frame + FixedBufferAllocator + read loop); our allocator/frame differs
+004bca10  118  EA::Allocator::FixedBufferAllocator::destroy_shared: complete transcription; original frame keeps 3 extra reserved slots and orders locals differently
+004bcab0  364  EA::Allocator::FixedBufferAllocator::Free: complete transcription; original frame/locals differ

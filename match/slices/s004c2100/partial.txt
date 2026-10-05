@@ -1,0 +1,7 @@
+004c2100  0  partial: vector swap fallback (element-wise) path omitted
+004c2740  0  partial: vector::operator= skeleton
+004c29c0  0  partial: basic_string<wchar_t,256>::set_capacity skeleton
+004c2ad0  0  partial: wide-buffer heap swap skeleton
+004c2bc0  0  partial: cSPEditorSkinManager constructor skeleton
+004c2eb0  0  partial: cSPEditorSkinManager destructor skeleton
+004c3070  0  partial: create_ui_raster skeleton

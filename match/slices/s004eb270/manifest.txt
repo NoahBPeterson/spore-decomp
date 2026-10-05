@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004eb270/s004eb270.cpp  ?FUN_004eb930@@YA_NABUDeclareParam@@0@Z  004eb930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004eb270/s004eb270.cpp  ?FUN_004eb980@@YAXXZ                   004eb980  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

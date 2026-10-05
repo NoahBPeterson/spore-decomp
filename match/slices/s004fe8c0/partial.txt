@@ -1,0 +1,6 @@
+# va  reason
+004fe8c0 651-byte /Od function; skeleton only, full reconstruction out of budget
+004feb50 293-byte /Od function; skeleton only, full reconstruction out of budget
+004fec80 2518-byte /Od function; skeleton only, full reconstruction out of budget
+004ff660 101-byte function; skeleton only, full reconstruction out of budget
+004ff6d0 cSPTransform::BackTransformPoint (127 bytes); skeleton only, full reconstruction out of budget

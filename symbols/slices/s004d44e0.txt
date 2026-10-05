@@ -1,0 +1,3 @@
+004d46b0  SpeciesDB::GetScale
+004d46d0  SpeciesDB::FindField8
+004d4750  SpeciesDB::FindField10

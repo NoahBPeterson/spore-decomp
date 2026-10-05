@@ -1,0 +1,5 @@
+004aa760  849  incomplete: large container routine; only entry sketch
+004aaac0  869  incomplete: large container routine; only entry sketch
+004aae30  658  incomplete: large container routine; only entry sketch
+004ab130  86   incomplete: deque insert/relink helper; store order approximated
+004ab350  201  incomplete: DequeBase node-array allocate; field layout approximated

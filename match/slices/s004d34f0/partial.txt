@@ -1,0 +1,7 @@
+004d3570  n/a  partial: hash-map field accessor skeleton; end-iterator locals not reproduced
+004d35d0  n/a  partial: hash-map clamped accessor skeleton
+004d3640  n/a  partial: hash-map field accessor skeleton
+004d36a0  n/a  partial: hash-map accessor skeleton (lazy global path omitted)
+004d3760  n/a  partial: 1005-byte tuning operation skeleton; decompile lost locals
+004d3b80  n/a  partial: 335-byte tuning operation skeleton
+004d3dd0  n/a  partial: 1799-byte tuning operation skeleton; decompile lost locals

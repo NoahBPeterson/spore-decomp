@@ -1,0 +1,6 @@
+004c0410   74  resize pointer-range container: complete; /Od frame/slot layout differs
+004c0570   24  XmlTextWriter::Init (0x400 inline buffer): complete; extra inlined-subobject slot at +0x10 not reproduced
+004c0600   78  lower_bound over 0x18-byte records: complete; /Od slot layout / bool materialisation differs
+004c0680  124  move-close gap, 0x8c-stride POD: complete (rep movsd loop matches); eastl tag locals / frame differ
+004c0730  115  move-close gap, 0x38-stride POD: complete (rep movsd loop matches); eastl tag locals / frame differ
+004c0b80    3  free vector unless inline: complete; sole diff is the n/tmp /Od slot swap

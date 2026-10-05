@@ -1,0 +1,1 @@
+004bcc50  1206  SP::cSPEditorResourceFactory::WriteResourceToStream: partial; reproduces the top-level flow and per-block/paint/handle XML emission, but the exact 0xa90 frame, inlined XmlTextWriter helpers, block-index fix-up arrays and childlist pass are not reproduced

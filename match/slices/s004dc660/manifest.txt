@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004dc660/s004dc660.cpp  ?GetStaticType@cPlantSummarizer@SP@@QAEHXZ  004dc730  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004dc660/s004dc660.cpp  ?GetResType@cPlantSummarizer@SP@@QAEHH@Z    004dc740  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004dc660/s004dc660.cpp  ?GetStaticType@cSpeciesSummarizer@SP@@QAEHXZ  004dc920  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s004dc660/s004dc660.cpp  ?GetResType@cSpeciesSummarizer@SP@@QAEHH@Z    004dc930  /Od /Ob1 /MD /Gy /TP /arch:SSE

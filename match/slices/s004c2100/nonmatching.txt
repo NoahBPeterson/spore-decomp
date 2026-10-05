@@ -1,0 +1,2 @@
+004c26d0  17  complete wide-string ensure-capacity helper; original reserves 0x44 extra /Od dead slots
+004c3030  18  complete cSPEditorSkinManager::AsInterface; switch case-body layout differs by 18B

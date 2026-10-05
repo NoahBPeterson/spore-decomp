@@ -1,0 +1,3 @@
+004c38e0 SP::cSPEditorSkinManager::Update  # PDB name
+004c4290 SP::cSPEditorSkinManager::UpdatePaintedSkin  # PDB name
+004c45d0 SP::cSPEditorSkinManager::GetSceneObject  # switch on skin id, field +0xe0

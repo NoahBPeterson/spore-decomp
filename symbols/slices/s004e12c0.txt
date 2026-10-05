@@ -1,0 +1,9 @@
+004e12c0 eastl::hashtable<ResourceKey,cSpeciesProfile*>::DoInsertValue  # Ghidra + PDB context
+004e14e0 eastl::hashtable<ResourceKey,cSpeciesProfile*>::find  # Ghidra
+004e1780 eastl::vector<SP::FunctionalMatch::Constraint>::destroy-range  # Ghidra
+004e17e0 eastl::vector<SP::FunctionalMatch::Constraint>::reserve  # Ghidra
+004e18e0 eastl::vector<SP::FunctionalMatch::Constraint>::push_back  # Ghidra
+004e1a20 hashtable iterator helper  # inferred
+004e1a90 rbtree insert/assign helper  # inferred
+004e1c30 SP::cTribeTool::GetTutorialToolPrice  # PDB
+004e1c70 SP::GetPropertyT<float>  # PDB

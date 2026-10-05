@@ -1,0 +1,10 @@
+004b7b80  FUN_004b7b80  # skin-paint generation (EASTL/RNG heavy)
+004b8180  FUN_004b8180  # region-skin paint application
+004b8750  FUN_004b8750  # paint-region id collector
+004b87c0  FUN_004b87c0  # ability / inline-buffer vector ctor (0x212)
+004b8860  FUN_004b8860  # ability / inline-buffer vector ctor (0x213)
+004b8900  FUN_004b8900  # RandomDouble range helper
+004b8950  BaseCmp::SetEq  # equality -> bool byte
+004b8980  DerivedCmp::SetEqFromNodes
+004b89c0  DerivedCmp::SetEqFromRoots
+004b8a70  FUN_004b8a70  # model-type comparator helper

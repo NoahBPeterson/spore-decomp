@@ -1,0 +1,14 @@
+004b4930  SP::cSPEditorPaintTheme::ExtractRegionPaintData  # PDB anchor
+004b4f70  C70::Release  # intrusive ref release (vtable +8)
+004b4fa0  FUN_004b4fa0  # vector emplace 0x11c-byte
+004b5030  Tree::Reset  # rbtree reset/nuke
+004b5080  FUN_004b5080  # hashtable find/insert (4)
+004b5160  FUN_004b5160  # hashtable find/insert (0x1c)
+004b5210  FUN_004b5210  # rbtree lower_bound
+004b52b0  FUN_004b52b0  # float triple comparator
+004b5370  FUN_004b5370  # rbtree insert (float key)
+004b5440  FUN_004b5440  # vector of refcounted dtor
+004b54b0  FUN_004b54b0  # vector push_back 8-word
+004b5540  C540::Init  # static-buffer vector ctor
+004b5570  Vec20::Erase  # vector erase 0x20-byte
+004b5610  FUN_004b5610  # nested vector destructor

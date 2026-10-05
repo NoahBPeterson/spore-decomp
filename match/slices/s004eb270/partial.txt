@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+004eb270  -  incomplete: 1717-byte /Od validity builder, skeleton only
+004eba00  -  incomplete: 1051-byte /Od validity loader, skeleton only

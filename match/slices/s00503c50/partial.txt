@@ -1,0 +1,1 @@
+00503c50  5402  single 5.4 KB /Od SSE segment-vs-AABB slab classifier; skeleton only (signature + directional slab test), original early-out tree/schedule not reproduced

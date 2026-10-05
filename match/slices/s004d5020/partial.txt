@@ -1,0 +1,1 @@
+004d5020  n/a  partial: SP::cSpeciesProfile::Update skeleton; 15180 bytes, decompile lost locals

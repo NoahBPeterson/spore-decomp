@@ -1,0 +1,6 @@
+004bf9f0  222  ReadBinaryEditorModel: complete (header validation + 2 read segments); stream object model / frame differ
+004bfb20  185  WriteBinaryEditorModel path: complete (header + 2 write segments); stream object model / frame differ
+004bfc10   27  LocalExpatMalloc wrapper: complete; original reserves a 0x34-byte frame (inlined helper slots) vs our push ecx
+004c0020  108  LocalExpatRealloc: complete (in-range Malloc/memcpy/Free or global realloc); frame and slot order differ
+004c0250  162  grow array<0x1d8-stride>: complete; original /Od slot layout differs
+004c0350  104  grow array<0x8c-stride>: complete; original /Od slot layout differs

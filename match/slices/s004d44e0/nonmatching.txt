@@ -1,0 +1,2 @@
+004d46d0  11  complete; residual is /Od slot permutation (i/vec/elem roles vs fixed slots)
+004d4750  11  complete; residual is /Od slot permutation (identical to FindField8 with +0x10)

@@ -1,0 +1,6 @@
+004cf770  n/a  partial: hashtable operation skeleton; decompile lost locals
+004cfc00  n/a  partial: hashtable operation skeleton; decompile lost locals
+004d0080  n/a  partial: hashtable operation skeleton; decompile lost locals
+004d0430  n/a  partial: hashtable bucket free skeleton
+004d04a0  n/a  partial: fixed-pool allocate helper skeleton
+004d04f0  n/a  partial: hashtable operation skeleton; decompile lost locals

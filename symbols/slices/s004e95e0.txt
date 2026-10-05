@@ -1,0 +1,4 @@
+004e9b40 SP::EditorValidity::AddPaintKeys  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
+004e9c40 SP::cEditorResource::UpgradeParts  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
+004e9ca0 SP::EditorValidity::GetPalettesForType  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
+004e9fc0 SP::EditorValidity::AddSpecialPaints  # plausible: same palette walk + AddPaintKeys/Climb dispatch

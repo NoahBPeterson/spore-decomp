@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+004fb880 571 complete behavioural reconstruction of SphereFields::Accumulate (field accumulation); /Od frame (0x70) not reproduced
+004fbcc0 536 complete behavioural reconstruction of the Newton surface-march; /Od frame not reproduced
+004fbf20 484 complete behavioural reconstruction of the 3x3 matrix-vector multiply; original pre-loads 12 components into named slots that are not reproduced
+004fc100 446 complete behavioural reconstruction of the ray bisection; /Od frame and indirect call schedule not reproduced
+004fc320 164 complete behavioural reconstruction of the grid reset; /Od frame/vector-copy schedule not reproduced
+004fc990 256 complete behavioural reconstruction of the adjugate/scale inverse; /Od frame (0x70) and name-hashed slots not reproduced
