@@ -1,0 +1,14 @@
+005a4250 SP::cSPColorSwatch::GetExpansionColor  # PDB anchor
+005a4500 SP::cSPColorSwatch::SetArea  # cSPColorSwatch layout (0x3c original area, window SetArea calls)
+005a45d0 SP::cSPColorSwatch::SetColor  # sets mDisplayColor(0x30)/mBaseColor(0x24), mWinColor(0x58) vcall
+005a4630 SP::cSPColorSwatch::CollapseExpansion  # clears sub-swatch input flags, mWinExpansion(0x60), mExpanded(0xf)
+005a4680 SP::cSPColorSwatch::AddTooltip  # PDB anchor
+005a4750 SP::cSPEditorColorPicker::GetSwatchArea  # PDB callee-scored
+005a4800 SP::cSPEditorColorPicker::SetArea  # PDB candidate; mRootWidth/Height(0x14/0x18), mSwatches(0x30)
+005a4920 SP::cSPEditorColorPicker::SetPaletteColor  # selects mDefaultIndex(0x2c) swatch then SetColor
+005a4990 SP::cSPColorSwatch::SetExpansionArea  # PDB anchor
+005a4b80 SP::cSPColorSwatch::SetSelectedColor  # mBecomingOwner(0x10), mOwner(0x64), calls SetArea
+005a4e20 SP::cSPEditorColorPicker::SetColor  # stores mSelectedColor(0x1c), scans mSwatches by distance
+005a4fb0 SP::cSPEditorColorPicker::SetDefault  # selects mDefaultIndex(0x2c) into mSelectedSwatch(0xc)
+005a5000 SP::cSPColorSwatch::cSPColorSwatch  # full cSPColorSwatch field init
+005a5100 SP::cSPColorSwatch::~cSPColorSwatch  # releases swatch members, restores base vtables

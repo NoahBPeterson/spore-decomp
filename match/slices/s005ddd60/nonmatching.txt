@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+005de9e0  101  cSPEditorUI helper: complete; cl keeps `this` in edi / window in esi whereas the original reuses esi for both and edi only for the child widget

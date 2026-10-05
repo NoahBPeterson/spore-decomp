@@ -1,0 +1,7 @@
+005cd870  ?Interp@cInterp@@QAEXMMPAM0@Z  # float interpolation/clamp between mFloat90..mFloat94
+005cd910  ?TimeObjValue@@YAMPAVcTimeObj@@@Z  # if GetType()==0xe and child GetType()==8 -> child float @+0xc
+005cdbb0  ?IncRef@cRefCounted@@QAEXH@Z  # ++mRef @+4
+005cdbc0  ?DecRef@cRefCounted@@QAEXH@Z  # --mRef @+4
+005cdb30  ?MakeVertKey@cSpine@@QAEIMH@Z  # packed vertebra key from radius/scale
+005cd9a0  ?CreateVertebraShape@cSPEditorSpine@@  # hkCapsuleShape + hkConvexTranslateShape
+005cdbf0  ?CreateWallBoxAndAddToWorld@cSPEditorSpine@@  # Havok box + world insert

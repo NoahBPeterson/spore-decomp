@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a2600/s005a2600.cpp  ?OnMouseDown@cTerrainUI@@QAE_NHMMH@Z  005a2f20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a2600/s005a2600.cpp  ?OnMouseWheel@cTerrainUI@@QAE_NMMH@Z  005a2f80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

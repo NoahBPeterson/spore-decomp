@@ -1,0 +1,1 @@
+005b5a30 - PARTIAL: 6653-byte /O2 function; only the entry guard reconstructed (mBlock==0 early-out). Full body omitted.

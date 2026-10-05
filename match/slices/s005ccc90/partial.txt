@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+005ccc90  1180  cSPEditorShoppingTokenTranslator::TranslateToken: body not reconstructed (stub)
+005cd190  420   SP::GetDayOfWeekString: body not reconstructed (stub)
+005cd340  765   cSPEditorShoppingTokenTranslator::GetTimeString: body not reconstructed (stub)
+005cd670  500   editor-spine helper: body not reconstructed (stub)
+005cd9a0  317   cSPEditorSpine::CreateVertebraShape: Havok shape construction not reconstructed (stub)
+005cdae0  74    spine constraint release: body not reconstructed (stub)
+005cdbf0  258   cSPEditorSpine::CreateWallBoxAndAddToWorld: Havok construction not reconstructed (stub)

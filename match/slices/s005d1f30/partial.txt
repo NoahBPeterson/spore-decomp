@@ -1,0 +1,3 @@
+005d1f30  1350  tree rebuild not reconstructed (skeleton)
+005d2480  309   per-vertebra update not reconstructed (skeleton)
+005d25c0  372   per-vertebra update not reconstructed (skeleton)

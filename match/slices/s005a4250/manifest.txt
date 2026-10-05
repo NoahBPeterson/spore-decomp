@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a4250/s005a4250.cpp  ?SetColor@cSPColorSwatch@@QAEXABUcSPColorRGB@SP@@@Z  005a45d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a4250/s005a4250.cpp  ?CollapseExpansion@cSPColorSwatch@@QAEXXZ  005a4630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a4250/s005a4250.cpp  ?SetPaletteColor@cSPEditorColorPicker@@QAEXABUcSPColorRGB@SP@@@Z  005a4920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a4250/s005a4250.cpp  ?SetDefault@cSPEditorColorPicker@@QAEXXZ  005a4fb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a4250/s005a4250.cpp  ??1cSPColorSwatch@@UAE@XZ  005a5100  /O2 /MD /Gy /TP /arch:SSE /fp:fast

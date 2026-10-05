@@ -1,0 +1,1 @@
+005b5110 SP editor manipulation pinning ctor/setters  # vtable 013f7634

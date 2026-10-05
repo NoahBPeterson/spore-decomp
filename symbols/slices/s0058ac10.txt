@@ -1,0 +1,2 @@
+0058ac10 SP::cAppModeEditorBase::OnKeyDown  # PDB candidate caller-scored; 2 args
+0058b650 SP::cAppModeEditorBase::OnMouseUp  # PDB candidate caller-scored; ret 0x10

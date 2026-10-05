@@ -1,0 +1,5 @@
+005aad00 SP::cSPEditorManipulationCellPinning::~cSPEditorManipulationCellPinning  # PDB 00d64040; byte-exact
+005aada0 SP::cSPEditorManipulationCellPinning::OnMouseUp  # PDB 00d632b0; vtable slot 4
+005ab1b0 SP::cSPEditorManipulationCellPinning::GetPileList  # vtable slot 11; returns mPileList by value
+005ab220 SP::cSPEditorManipulationCellPinning::RecalculateMouseOffset  # PDB 00d64780; vtable call site 005ab747
+005ab5c0 SP::cSPEditorManipulationCellPinning::DoOnMouseDown  # PDB 00d64ae0; vtable slot 6

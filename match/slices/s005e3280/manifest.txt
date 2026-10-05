@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s005e3280/s005e3280.cpp  ?FUN_005e3d40@VerbIcon@@QAEXXZ  005e3d40  /O2 /MD /Gy /TP /arch:SSE /GS-

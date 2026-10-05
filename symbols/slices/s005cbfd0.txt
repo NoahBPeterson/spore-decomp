@@ -1,0 +1,6 @@
+005cbfd0  ?Init@cDetachedRollover@@QAE_NG@Z  # sell-back detached rollover Init (windows 0x78..)
+005cc0e0  ?HideWin@cDetachedRollover@@QAEXXZ  # if !mFlag96 && mWin -> SetFlag(1,false)
+005cc100  ?IsWinVisible@cDetachedRollover@@QAE_NXZ  # if !mFlag96 && mWin -> GetFlag()&1
+005cc5a0  ?Init@cSellBackRollover@@QAE_NG@Z  # sell-back rollover Init (window at +0x80)
+005cc690  ?HideWin@cSellBackRollover@@QAEXXZ  # if !mFlag9e && mWin -> SetFlag(1,false)
+005cc6c0  ?IsWinVisible@cSellBackRollover@@QAE_NXZ  # if !mFlag9e && mWin -> GetFlag()&1

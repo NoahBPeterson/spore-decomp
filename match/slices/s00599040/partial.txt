@@ -1,0 +1,5 @@
+00599040 - PARTIAL: cCollectableItems::LoadConfiguration 1015B; skeleton only
+005994d0 - PARTIAL: SpaceInventory ctor 78B; MI vtable init not modelled
+005995d0 - PARTIAL: UI initialise 337B; skeleton only
+00599730 - PARTIAL: image-from-layout helper 188B; skeleton only
+005997f0 - PARTIAL: layout refresh 952B; skeleton only

@@ -1,0 +1,13 @@
+005a6e60 SP::cSPEditorComplexityMeter::cSPEditorComplexityMeter  # 3-vtable ctor, fields to 0x54
+005a6ee0 SP::cSPEditorComplexityMeter::~cSPEditorComplexityMeter  # releases members and restores base vtables
+005a6fc0 SP::cSPEditorComplexityMeter::Init  # PDB anchor
+005a7220 editor helper  # unnamed
+005a7380 editor helper  # unnamed
+005a7410 editor helper  # unnamed
+005a74a0 UI element ctor  # shorts at 0x10/0x12, calls 0x0093dd80
+005a74d0 SetValueTextForRollover  # PDB candidate caller-scored
+005a7810 dual-cString data ctor  # two cString members at 0/0x14
+005a7840 SP::cSPEditorEconomy::SendChangedMessage  # PDB callee-scored; posts id 0x3150c27
+005a7900 SP::cSPEditorGeneralBadnessCalculator::cSPEditorGeneralBadnessCalculator  # ctor
+005a7920 SP::cSPEditorGeneralBadnessCalculator::~cSPEditorGeneralBadnessCalculator  # PDB anchor
+005a7930 SP::cSPEditorGeneralBadnessCalculator::SetTuningValues  # PDB candidate

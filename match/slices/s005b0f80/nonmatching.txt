@@ -1,0 +1,4 @@
+005b0fd0  64  cSPEditorManipulationObject::OnMouseDown: virtual dispatch at vtable slot 6 not reproduced (needs the exact base vtable order)
+005b1010  102  cSPEditorManipulationObject::OnMouseMove: dead-zone x87 distance + virtual dispatch at slot 8
+005b10d0  95  Consider: x87 fsqrt distance with SSE compare; not reproduced
+005b1c80  75  vector compare helper; not reproduced

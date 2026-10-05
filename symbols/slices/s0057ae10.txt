@@ -1,0 +1,1 @@
+0057ae10 SP::cAppModeEditorBase::UpdateAnimatedCreature  # PDB candidate (caller-single)

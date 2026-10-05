@@ -1,0 +1,1 @@
+005c5df0 32  FindCategory: complete loop/paths present; register choice for the child pointer (ecx vs eax) differs

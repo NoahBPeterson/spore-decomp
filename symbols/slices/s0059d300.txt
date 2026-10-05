@@ -1,0 +1,12 @@
+0059d300 SP::cSPEditorAnimatedCreatureManager::HandleAnimatedEvent  # PDB caller-single
+0059d610 SP::cSPEditorAnimatedCreatureManager::Update  # PDB caller-single
+0059d840 SP::cSPEditorAnimatedEventInfo::MessagePost  # PDB name, disasm matches slots
+0059d8b0 SP::cSPEditorAnimatedEventInfo::MessageSend  # PDB name
+0059d930 EA::RefCountVTemplate<EA::Thread::AtomicInt<int> >::GetRefCount  # PDB name
+0059d960 SP::cSPEditorAnimatedEventInfo::cSPEditorAnimatedEventInfo  # ctor; PDB name "ColorRGBToU32" is misassigned
+0059da20 pair/field equality helper  # two int field compares
+0059da80 double RandomRange(float)  # RandomDoubleUniform * range clamp
+0059dac0 SP::cSPEditorAnimationManager::cSPEditorAnimationManager  # ctor (alloc 0x20 in 0059c060)
+0059db00 scalar deleting destructor  # vtable resets + conditional dealloc
+0059db40 SP::cSPEditorAnimationManager::Init  # PDB name
+0059dc70 SP::cSPEditorAnimationManager::GetAnimation  # PDB name

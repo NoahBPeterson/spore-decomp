@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005c7c10  178  Advance: nested-loop register/loop shape (first count hoisted, edi pushed late) differs
+005c7e20  38   Next: early path returns constant 0 (eax) instead of preserving result in edi; prologue push order
+005c7f50  52   cSPPalettePage ctor: derived-vptr stores scheduled before float member inits instead of after

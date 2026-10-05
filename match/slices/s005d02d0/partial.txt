@@ -1,0 +1,3 @@
+005d02d0  1310  spine builder/updater not reconstructed (skeleton)
+005d07f0  1264  cSPEditorSpine::Update not reconstructed (skeleton)
+005d0ea0  909   cSPEditorSpine constructor not reconstructed (skeleton)

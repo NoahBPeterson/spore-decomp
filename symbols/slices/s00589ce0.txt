@@ -1,0 +1,5 @@
+0058a1e0 SP::cAppModeEditorBase::LoadModelInternal  # PDB candidate caller-scored; 1 arg
+0058a350 SP::cAppModeEditorBase::LoadModel  # PDB candidate caller-scored; 3 args, ret 0xc
+0058a5a0 SP::cAppModeEditorBase::Undo  # PDB name; (char,char), ret 8
+0058a950 SP::cAppModeEditorBase::DeactivateHelper  # PDB candidate; thiscall no args
+00589ce0 SP::cAppModeEditorBase model loader  # PDB candidate caller-scored cSPEditorUI::LoadModel

@@ -1,0 +1,8 @@
+0059f510 eastl::vector<cSPUILayout,eastl::sp_vector_allocator>::insert-fill  # vector fill-insert 0x18 records
+0059f7c0 SP::cSPEditorBlockAbilities::SortAbilities  # PDB name
+0059f900 SP::cSPEditorBlockAbilities layout-vector shutdown  # calls cSPUILayout::Shutdown(,1) then vector::erase
+0059f950 eastl::vector<cSPUILayout,eastl::sp_vector_allocator>::resize  # PDB candidate
+0059f9e0 SP::cSPEditorVehicleAbilities ctor  # sets vptrs + vehicle key fields
+0059fa50 SP::cSPEditorBlockAbilities scalar deleting destructor  # PDB candidate
+0059faa0 ability-vector erase-range  # virtual slot 8 calls
+0059fc60 SP::BlockGetAbilities  # PDB name

@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s005e16c0/s005e16c0.cpp  ?Init@cVerbIconInterpolationValue@SP@@QAEXMMMMM@Z  005e1c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ?IsAtTarget@cVerbIconInterpolationValue@SP@@QAEHXZ  005e1cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005e16c0/s005e16c0.cpp  ?SetFlag@cSPEditorVerbIcon@SP@@QAEXD@Z  005e1fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

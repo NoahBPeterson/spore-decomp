@@ -1,0 +1,6 @@
+005b1130  170  not translated
+005b11e0  300  not translated
+005b1310  719  not translated
+005b15e0  655  not translated
+005b1870  977  not translated
+005b1cd0  344  not translated

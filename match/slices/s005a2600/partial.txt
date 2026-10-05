@@ -1,0 +1,5 @@
+005a2600  1313  cTerrainUI init/update: skeleton
+005a2b30  200   cTerrainUI screen-angle helper: skeleton
+005a2ed0  79    scalar deleting destructor: skeleton
+005a3080  408   transform compose + rotate: skeleton
+005a3220  404   cTerrainUI constructor: skeleton

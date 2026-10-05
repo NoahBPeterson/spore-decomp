@@ -1,0 +1,2 @@
+005b4ad0  24  SetBlock (planar interpenetration): cl schedules the integer parameter loads / member stores in a different order than the original
+005b4b40  79  PlanarInter constructor: emitted ctor size differs from the original (base-ctor call and vtable-store scheduling)

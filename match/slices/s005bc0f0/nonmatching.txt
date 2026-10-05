@@ -1,0 +1,2 @@
+005bc860 21   ctor: all zero-stores present; base-ctor call/register schedule differ (compiled shorter)
+005bc930 100  dtor: member destruction present; eastl::sp_vector destructor shape differs

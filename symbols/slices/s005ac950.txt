@@ -1,0 +1,2 @@
+005ac950 SP::cSPEditorManipulationCellPinning::AsInterface  # PDB 00d63230; shared/folded in several vtables
+005ad930 ?SetBlock  # unknown editor manipulation class (mBlock +0x1c, mMouseOffset +0x38, bool +0x44)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005cd870  105  cInterp::Interp: original clamps with inline-asm Min/Max (maxss/minss with stack spills); C++ ternaries give comiss branches
+005cdb30  96   cSpine::MakeVertKey: x87 skin-radius result/SSE schedule and the member calling shape differ

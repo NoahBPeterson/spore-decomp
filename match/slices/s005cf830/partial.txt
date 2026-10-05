@@ -1,0 +1,2 @@
+005cf830  1445  cSPEditorSpine::LoadStaticTuning: property-driven static tuning load not reconstructed (skeleton)
+005cfde0  1254  spine segment/frame geometry builder not reconstructed (skeleton)

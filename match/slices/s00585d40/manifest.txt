@@ -1,0 +1,2 @@
+# source  symbol  va  [flags override]
+slices/s00585d40/s00585d40.cpp  ?InitializeUndoList@cAppModeEditorBase@SP@@QAEXXZ  00586690  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,7 @@
+005a51c0 SP::cSPColorSwatch::Init  # PDB anchor
+005a5960 SP::cSPColorSwatch::MainColorSelected  # reads mOwner(0x64), mIsDefaultColor(0x12), mBaseColor(0x30), mSwatchIndex(0xa0)
+005a5a50 cX::cX  # cEditorResource/ContentValidationSummarizer-derived ctor
+005a5ae0 SP::cSPColorSwatch::SetFromSwatch  # calls SetColor(other->mBaseColor), CollapseExpansion, MainColorSelected
+005a5b10 cX scalar deleting destructor  # restores cEditorResource/ContentValidationSummarizer vtables
+005a5b70 SP::cSPColorSwatch::DoMessage  # PDB candidate caller-single
+005a5db0 SP::cSPColorSwatch::Cleanup  # recursive sub-swatch teardown + window removal

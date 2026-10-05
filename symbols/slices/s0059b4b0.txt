@@ -1,0 +1,8 @@
+0059b4b0 SP::cSPEditorAnimatedCreatureData::Update  # PDB caller-scored
+0059c010 float* min-pointer helper  # comiss + select
+0059c030 float angle wrap to [-pi,pi)  # _CIfmod + pi compare
+0059c060 SP::cSPEditorAnimatedCreatureManager::Init  # PDB name
+0059c190 SP::Matrix3FromQuaternion  # PDB name (callee-single)
+0059c2f0 eastl::rbtree<unsigned int,EA::AutoRefCount<SP::cSPEditorAnimatedCreatureData> >::DoInsertValueImpl  # node alloc + RBTreeInsert
+0059c410 SP::cSPEditorAnimatedEventInfo ref-range release (__stdcall)  # lock xadd atomic release
+0059c460 eastl::rbtree<unsigned int,EA::AutoRefCount<SP::cSPEditorAnimatedCreatureData> >::erase  # RBTreeIncrement/RBTreeErase/DoFreeNode

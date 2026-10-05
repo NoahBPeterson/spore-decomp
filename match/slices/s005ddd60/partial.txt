@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+005ddd60  -  cSPEditorUI::Init (1764-byte /O2 UI construction); not decompiled
+005de450  -  cSPEditorUI::Update (568-byte); not decompiled
+005de690  -  cSPEditorUI::EnableBasicEditorButtons (469-byte loop over window-id table); not decompiled
+005de870  -  cSPEditorUI::Shutdown (362-byte); not decompiled
+005dea60  -  cSPEditorUI helper (420-byte); not decompiled

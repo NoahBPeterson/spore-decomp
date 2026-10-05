@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005e3280  -  SP::cSPEditorVerbIcon transition /O2 routine (1696-byte); not decompiled
+005e3920  -  SP::cSPEditorVerbIcon transition /O2 routine (1046-byte); not decompiled
+005e3d50  -  SP::cSPEditorVerbIcon::Disappear (1080-byte); not decompiled

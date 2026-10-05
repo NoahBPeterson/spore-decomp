@@ -1,0 +1,7 @@
+005b5110  158  not translated
+005b51b0  516  not translated
+005b53c0  146  not translated
+005b5470  1154  not translated
+005b5900  116  not translated
+005b5980  72  GetPileList-style vector-by-value helper (mPileList at +0x24); not translated
+005b59d0  87  scalar deleting destructor (vtable 013f7634); not translated

@@ -1,0 +1,4 @@
+00583c50 1046 skeleton only (not reconstructed)
+00584070 234 skeleton only (not reconstructed)
+005841b0 122 skeleton only (not reconstructed)
+00584230 193 skeleton only (not reconstructed)

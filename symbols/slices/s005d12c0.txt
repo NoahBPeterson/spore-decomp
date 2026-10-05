@@ -1,0 +1,3 @@
+005d12c0 SP::cSPEditorSpine::RecordBlockCoordinates
+005d19e0 SP::cSPEditorSpine::RepinArea
+005d1d40 SP::cSPEditorSpine::UpdateVertebraeOrderAndCollisionFilters

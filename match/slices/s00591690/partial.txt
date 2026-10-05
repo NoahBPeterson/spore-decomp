@@ -1,0 +1,1 @@
+00591690 - PARTIAL: HandlePaletteItemTriggerMessage 2307B; skeleton only

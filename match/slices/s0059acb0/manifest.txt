@@ -1,0 +1,6 @@
+# source  symbol  va  [flags override]
+slices/s0059acb0/s0059acb0.cpp  ??4AnimatingCreatureRef@Simulator@@QAEAAU01@PAVcAnimatingCreature@1@@Z  0059acb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0059acb0/s0059acb0.cpp  ?FUN_0059ae60@cAnimatedData@Simulator@@QAEXXZ  0059ae60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0059acb0/s0059acb0.cpp  ?FUN_0059ae80@cAnimatedData@Simulator@@QAE_NXZ  0059ae80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0059acb0/s0059acb0.cpp  ?FUN_0059aea0@cAnimatedData@Simulator@@QAEXD@Z  0059aea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0059acb0/s0059acb0.cpp  ?FUN_0059b0b0@cAnimatedData@Simulator@@QAEPAXD@Z  0059b0b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

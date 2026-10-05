@@ -1,0 +1,2 @@
+005a2c00  282  cTerrainUI::Command: complete; switch-case emission order / jump table differs
+005a2d90  -    EA::Swarm::cTransform::PreRotateX: complete; original keeps more sin/cos temporaries in the frame

@@ -1,0 +1,11 @@
+005a7d00 SP::cSPEditorGeneralBadnessCalculator::CalculateValues  # PDB candidate
+005a83d0 editor helper  # unnamed
+005a85f0 SP::cSPEditorHandBadnessCalculator::CalculateBadness  # PDB candidate
+005a88a0 36-byte struct assignment  # rep movsd 9 dwords
+005a8900 EditorTuning Vector3 accessor (__stdcall)  # returns EditorTuning()+0x60
+005a8930 SP::cSPEditorHandleSpine scalar deleting destructor  # Shutdown + base dtor
+005a8970 SP::cSPEditorHandleSpine::Init  # PDB anchor
+005a8a60 cHandleish::SetState  # fields 0x10/0x14/0x18
+005a8a80 cHandleish::SetEnabled  # fields 0x10/0x14/0x18, vcalls 0x14/0x30
+005a8ad0 SP::cSPEditorHandleSpine::cSPEditorHandleSpine  # base ctor + mOffset(0x50)/mOrient(0x5c)
+005a8b20 editor helper  # unnamed

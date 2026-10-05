@@ -1,0 +1,6 @@
+005bccc0 2400 DoOnMouseMove: stubbed; full logic not reconstructed
+005bd650 255  TranslateCreature::OnMouseUp: stubbed; full logic not reconstructed
+005bd750 105  setter: stubbed; refcount assignment logic not reconstructed
+005bd7c0 779  PickPlaneOfSymmetry: stubbed; full logic not reconstructed
+005bdad0 115  dtor: stubbed; tree/vector teardown not reconstructed
+005bdb60 141  rbtree insert helper: stubbed; not reconstructed

@@ -1,0 +1,5 @@
+005bdca0 202  ctor: stubbed; constant-init sequence not reconstructed
+005bde60 103  limb-list clear: stubbed; not reconstructed
+005bded0 153  rbtree find/insert: stubbed; not reconstructed
+005bdf70 1422 large function: stubbed; not reconstructed
+005be500 1519 large function: stubbed; not reconstructed

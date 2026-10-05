@@ -1,0 +1,5 @@
+0059ace0 28 complete ctor; float-global load/store scheduling differs from original
+0059ae20 6 complete refcount swap; load of old pointer hoisted above the field store
+0059b060 34 complete axis/angle->quaternion free function; x87/SSE multiply shape differs
+0059b2f0 54 complete orientation setter; original builds the quaternion through stack temps
+0059b420 87 complete target-position setter; original builds a Vector3 temp on the stack

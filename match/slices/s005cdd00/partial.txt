@@ -1,0 +1,3 @@
+005cdd00  861  CreateVertebraBody: large Havok rigid-body construction not reconstructed (skeleton)
+005ce300  894  LoadDynamicTuning: property-system tuning load not reconstructed (skeleton)
+005ce7b0  498  FUN_005ce7b0: list-vs-direction search with x87 distances not reconstructed (skeleton)

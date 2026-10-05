@@ -1,0 +1,2 @@
+0058cee0 SP::cAppModeEditorBase::LoadModel  # PDB candidate caller-scored; 6 args, ret 0x18
+0058d1c0 SP::cAppModeEditorBase::NewModel  # PDB candidate caller-scored; (char)

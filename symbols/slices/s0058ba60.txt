@@ -1,0 +1,1 @@
+0058ba60 SP::cAppModeEditorBase::OnMouseMoveUpdate  # PDB name; (float,float,int,int), ret 0x10

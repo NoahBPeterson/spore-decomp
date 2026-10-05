@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+005dfbb0  -  SP editor UI /O2 routine (333-byte); not decompiled
+005dfd00  -  SP::cSPEditorUI::DoCommand (760-byte); not decompiled
+005e0000  -  SP editor UI /O2 routine (867-byte); not decompiled
+005e0370  -  Simulator::cCreatureAbility ctor (178-byte; MI vptrs); not decompiled
+005e0440  -  creature-ability dtor with vector teardown (144-byte); not decompiled
+005e04d0  -  SP editor UI /O2 routine (1086-byte); not decompiled

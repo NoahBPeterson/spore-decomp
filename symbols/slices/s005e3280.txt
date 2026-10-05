@@ -1,0 +1,5 @@
+# va  Name  # evidence
+005e3280  SP::cSPEditorVerbIcon_Transition_005e3280  # card
+005e3920  SP::cSPEditorVerbIcon_Transition_005e3920  # card
+005e3d40  SP::cSPEditorVerbIcon::SetState2  # sets +0x64=2, tail-calls 0x5e3920
+005e3d50  SP::cSPEditorVerbIcon::Disappear  # card

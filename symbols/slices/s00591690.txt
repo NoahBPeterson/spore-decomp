@@ -1,0 +1,1 @@
+00591690 SP::cAppModeEditorBase::HandlePaletteItemTriggerMessage  # PDB name; (int,int) returns char

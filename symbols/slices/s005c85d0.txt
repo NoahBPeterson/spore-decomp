@@ -1,0 +1,8 @@
+005c8bf0  ?SetSwatchFlag@cSPPalettePageUI@@QAEXH@Z  # if (mSwatch @+0x10) mSwatch->SetFlag(1, value)
+005c8c10  ??4?$AutoRefCount@VcRefObj@@@EA@@QAEAAV01@PAVcRefObj@@@Z  # refcount replace; AddRef/Release via +0xc subobject
+005c8c50  ?GetAndAssign@cSPPalettePageUI@@QAEPAVcRefObj@@HPAV?$AutoRefCount@VcRefObj@@@EA@@HH@Z  # virtual getter @+0x20 + refcount assign
+005c8cc0  ?Shutdown@cSPPalettePageUI@@QAEXXZ  # shutdown nodes @+0x20, release @+0x34, layout Shutdown/Release
+005c8d30  ?Accept@cSPPalettePageUI@@QAEXH@Z  # call vtable+0x18 on each element of vector @+0x34
+005c8fd0  ??1cRefVector@@QAE@XZ  # release each element (via +0xc), then EASTL_free
+005c9010  ??0cSPPalettePageUI@@QAE@XZ  # page-UI ctor (two vptrs, vectors @+0x20/+0x34)
+005c9070  ??_GcSPPalettePageUI@@UAEPAXI@Z  # page-UI scalar deleting dtor

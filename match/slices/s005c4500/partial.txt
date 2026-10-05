@@ -1,0 +1,4 @@
+005c4500 2274 PopulateExpansionPackPane: stubbed; not reconstructed
+005c4e40 614  Shutdown: stubbed; not reconstructed
+005c50b0 291  SelectByIndex: stubbed; not reconstructed
+005c51e0 473  function: stubbed; not reconstructed

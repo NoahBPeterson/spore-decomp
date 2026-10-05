@@ -1,0 +1,2 @@
+00586b00 SP::cAppModeEditorBase::PrepareAppForNewModel  # PDB name; arg cSPEditorModel*, ret 4
+00587270 SP::cAppModeEditorBase::SetMode  # PDB name; (int mode, char), ret 8, bool

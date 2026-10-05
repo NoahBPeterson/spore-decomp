@@ -1,0 +1,4 @@
+005bc0f0 1291 other: stubbed; full logic not reconstructed
+005bc630 436  other: stubbed; full logic not reconstructed
+005bc9b0 206  eastl::vector<cIVisualEffect*>::operator=: stubbed; real EASTL assign not reconstructed
+005bcaa0 529  DoOnMouseDown: stubbed; full logic not reconstructed

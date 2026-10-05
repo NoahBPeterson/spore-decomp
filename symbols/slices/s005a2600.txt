@@ -1,0 +1,9 @@
+005a2600 SP::cTerrainUI init/update core  # large
+005a2b30 cTerrainUI screen-angle helper  # fpatan of screen-space delta
+005a2c00 cTerrainUI::Command  # switch 0..4, calls ZoomBy (0x5a2200)
+005a2d90 EA::Swarm::cTransform::PreRotateX  # PDB name
+005a2ed0 cTerrainUI-related scalar deleting destructor
+005a2f20 cTerrainUI mouse-down
+005a2f80 cTerrainUI mouse-wheel
+005a3080 transform compose + rotate (calls Transform_RotateY, PreRotateX)
+005a3220 cTerrainUI ctor

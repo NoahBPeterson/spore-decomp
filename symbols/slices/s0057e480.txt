@@ -1,0 +1,13 @@
+0057e480 SP::cAppModeEditorBase::UpdateIdleAnimations  # PDB candidate
+0057e790 SP::cAppModeEditorBase::SetSelectedBlock  # PDB candidate (caller-single)
+0057e8a0 FUN_0057e8a0  # no PDB name; copies launch data into a launch state object
+0057ea30 SP::cAppModeEditorBase::SaveMetadata  # PDB candidate (caller-scored)
+0057ebf0 SP::cEditorBaker::Init  # PDB candidate (caller-scored)
+0057ed80 (object init helper)  # no PDB name
+0057eda0 eastl::basic_string<wchar_t>::trim  # real template instance
+0057edf0 (vector erase helper)  # no PDB name
+0057ee20 (vector assign helper)  # no PDB name
+0057efa0 SP::cTerrainUI::PopulateScriptList  # PDB candidate (caller-scored)
+0057f0f0 (vector insert helper)  # no PDB name
+0057f220 (vector resize helper)  # no PDB name
+0057ed00 cAppModeEditorBase::SetModelName  # no PDB name

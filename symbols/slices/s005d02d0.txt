@@ -1,0 +1,4 @@
+005d07f0 SP::cSPEditorSpine::Update  # pdb dev (anchor)
+005d0ce0 SP::cSPEditorSpine::GetFirstLeg
+005d0d90 SP::cSPEditorSpine::GetLastLeg
+005d0ea0 SP::cSPEditorSpine::cSPEditorSpine

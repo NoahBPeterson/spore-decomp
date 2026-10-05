@@ -1,0 +1,7 @@
+00598340 SP::cCollectableItems rbtree lower_bound/insert helper  # EASTL RBTreeInsert/RBTreeDecrement
+00598470 SP::cCollectableItems pool ctor  # eastl::fixed_pool_base::init
+00598540 SP::cCollectableItems::EnsureBaseUnlocksForEditor  # PDB name
+00598b50 SP::cCollectableItems rbtree node plumbing  # calls FUN_00598b50 recursion
+00598cb0 SP::cCollectableItems rbtree emplace  # aligned frame, /Oy
+00598db0 SP::cCollectableItems metadata append  # 9 args, ret 0x24
+00598e90 SP::cCollectableItems::AddCollectableItemInfo  # PDB name; 7 args, ret 0x1c

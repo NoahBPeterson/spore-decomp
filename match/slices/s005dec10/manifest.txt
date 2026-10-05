@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s005dec10/s005dec10.cpp  ?FUN_005df8d0@EditorFrame@@QAEXXZ  005df8d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s005dec10/s005dec10.cpp  ?FUN_005dfb30@EditorFrame2@@QAEXHH@Z  005dfb30  /O2 /MD /Gy /TP /arch:SSE /GS-

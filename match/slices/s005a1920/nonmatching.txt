@@ -1,0 +1,3 @@
+005a2200  3   Cam::ZoomBy: complete; (factor + 1.0f) operand order emitted reversed
+005a2260  21  Cam::ComputeView: complete; constant-load scheduling differs
+005a2580  30  Cam::OnMouseWheel: complete; float scheduling and wheel-helper arg order differ

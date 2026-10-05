@@ -1,0 +1,13 @@
+005a9d40 manipulation helper  # unnamed
+005aa3d0 cSetter::Set  # AutoRefCount-style pointer at 0x1c, ints 0x20/0x24/0x28
+005aa420 cSPEditorManipulationObject-derived ctor  # base ctor 0x5b0f80, vtables 0x13f7038/0x13f7028
+005aa490 vector copy helper  # vector ctor 0x66aec0 + FUN_004b2220
+005aa530 transform/init helper  # 9-dword copy from 0x15e8950, float 1.0 at 0x10
+005aa580 cBigThing::SetVec  # three dwords to 0x138/0x13c/0x140
+005aa5b0 SP::cSPEditorManipulationCellPinning::Update  # tail-calls GetSkin on [this+0xe0]
+005aa5d0 manipulation helper  # unnamed
+005aa740 AutoRefCount range copy  # transcribes refcounted pointers
+005aa7a0 SP::cSPEditorManipulationCellPinning::CalculateInflatedMesh  # PDB candidate
+005aa9c0 manipulation helper  # unnamed
+005aab00 manipulation helper  # unnamed
+005aac30 manipulation helper  # unnamed

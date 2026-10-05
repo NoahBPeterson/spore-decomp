@@ -1,0 +1,1 @@
+005a6e00  22  Clamp01 free function: complete; original clamps with maxss/minss, cl 15.00 emits comiss branches

@@ -1,0 +1,5 @@
+005b85d0 80  ctor: all stores/order present, but the compiler-generated member-init/vtable schedule (temporary RefCount vtable store then final) differs
+005b8690 274 OnMouseDown: full control flow/calls present; limb-construction inlining and stack slot layout differ
+005b87f0 117 Shutdown: full control flow/calls present; eastl::sp_vector erase / rbtree clear inline sequence differs
+005b88d0 113 BlockLimbMap::FindOrCreate (rbtree lower_bound+insert): full algorithm present, register allocation differs
+005b8da0 325 GenerateLimbs: full control flow/calls present; local eastl vector build and inline schedule differ

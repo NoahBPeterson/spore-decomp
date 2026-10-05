@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a1920/s005a1920.cpp  ?SetSomething@Cam@@QAEXUVec3@@_N@Z  005a2010  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?OnKeyDown@Cam@@QAE_NHH@Z  005a2080  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?OnKeyUp@Cam@@QAE_NHH@Z  005a2120  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?OnMouseUp@Cam@@QAE_NHMMH@Z  005a21c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?AddAngle@Cam@@QAEXM@Z  005a2240  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?UpdatePitch@Cam@@QAEXXZ  005a22d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005a1920/s005a1920.cpp  ?ClearVtables@Cam@@QAEXXZ  005a2300  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+0059c060  158  manager::Init: complete; callee-saved register assignment swapped (param in ebp vs original ebx) and AutoRefCount operator= scheduling
+0059c190  284  Matrix3FromQuaternion: complete; original fills the stack temp with a different float-op schedule / register allocation

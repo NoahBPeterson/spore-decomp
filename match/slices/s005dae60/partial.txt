@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+005dae60  -  eastl::map<AutoRefCount<cMWModel>,vector<cSPEditorTactileComponent*>>::operator[]; rbtree inlined internals not reconstructed (compilable placeholder)
+005daf10  -  second rbtree map operator[] instantiation; not reconstructed
+005daff0  -  third rbtree map operator[] instantiation; not reconstructed
+005db0a0  -  fourth rbtree map operator[] instantiation (vector value); not reconstructed
+005db150  -  feedback-event registration (rbtree find + vector push, inlined); not reconstructed
+005db270  -  editor settings-tab registration (variant); not reconstructed
+005db390  -  editor subsystem registration (485-byte inlined rbtree/vector); not reconstructed
+005db580  -  editor subsystem registration (193-byte); not reconstructed
+005db650  -  editor subsystem registration (1276-byte inlined rbtree/vector/Eastl); not reconstructed

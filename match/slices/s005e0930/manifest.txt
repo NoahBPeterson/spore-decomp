@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s005e0930/s005e0930.cpp  ?Shutdown@CShut@@QAEXXZ  005e0e50  /O2 /MD /Gy /TP /arch:SSE /GS-

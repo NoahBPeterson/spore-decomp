@@ -1,0 +1,1 @@
+005d2790  44  Refresh: same loop but cl keeps `this`/sentinel/iterator in different regs and does not tail-jump into FUN_005d1f30 (helpers here are partial stubs)

@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a51c0/s005a51c0.cpp  ??0cX@@QAE@XZ  005a5a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a51c0/s005a51c0.cpp  ?SetFromSwatch@cSPColorSwatch@@QAEXPAV1@@Z  005a5ae0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

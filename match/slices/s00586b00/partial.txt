@@ -1,0 +1,2 @@
+00586b00 - PARTIAL: PrepareAppForNewModel 1889B; large model-reload state reset, only headline modelled
+00587270 - PARTIAL: SetMode 1959B; mode transition with sound/UI side effects, only early-out modelled

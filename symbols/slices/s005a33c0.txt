@@ -1,0 +1,4 @@
+005a33c0 large UI/editor function  # 2638 bytes
+005a3e10 large UI/editor function  # 819 bytes
+005a41e0 wrapper flag check (vtable slot 0x28 & 1)
+005a4200 wrapper set-active (slot 0x7c, then slot 0x10 result -> slot 0xe8)

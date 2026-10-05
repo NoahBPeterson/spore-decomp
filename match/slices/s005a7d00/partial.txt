@@ -1,0 +1,5 @@
+005a7d00  0  cSPEditorGeneralBadnessCalculator::CalculateValues: 1735-byte body abridged
+005a83d0  0  editor helper: 426-byte body abridged
+005a85f0  0  cSPEditorHandBadnessCalculator::CalculateBadness: 673-byte body abridged
+005a8970  0  cSPEditorHandleSpine::Init: 240-byte body abridged
+005a8b20  0  editor helper: 502-byte body abridged

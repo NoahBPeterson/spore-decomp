@@ -1,0 +1,1 @@
+0057af00 SP::cAppModeEditorBase::Pick  # PDB symbol name

@@ -1,0 +1,3 @@
+0059aed0 - PARTIAL: 392 B quaternion/matrix transform; skeleton only
+0059b0f0 - PARTIAL: cSPEditorAnimatedCreatureData::SetTargetPosition 503 B; skeleton only
+0059b390 - PARTIAL: 141 B target-position refresh; calls the FUN_0059aed0 stub

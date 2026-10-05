@@ -1,0 +1,8 @@
+005c3cb0 224  SetSelectedPack: stubbed; not reconstructed
+005c3e00 312  ctor: stubbed; not reconstructed
+005c3f60 331  dtor: stubbed; not reconstructed
+005c40b0 211  DoMessage: stubbed; not reconstructed
+005c41b0 86   vector erase helper: stubbed; not reconstructed
+005c4210 224  GetWindowsWithMatchingID: stubbed; recursive tree walk not reconstructed
+005c4330 84   vector erase helper (stride 8): stubbed; not reconstructed
+005c4390 355  vector insert (stride 8): stubbed; not reconstructed

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005cdd00/s005cdd00.cpp  ?CreateAxialConstraintData@@  005ce0c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005cdd00/s005cdd00.cpp  ?SetEnabled@cSpineHelper@  005ce210  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s005cdd00/s005cdd00.cpp  ?GetHandle@cSpineHelper@  005ce270  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

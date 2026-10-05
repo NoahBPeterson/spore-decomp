@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+005dfb40  3  SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after

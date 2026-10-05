@@ -1,0 +1,4 @@
+0059f900  60  cSPEditorBlockAbilities::ShutdownLayouts: complete; callee-saved register assignment (esi vs edi) differs
+0059f950  -   UILayoutVector::resize: complete; temp cSPUILayout construction/erase schedule differs
+0059f9e0  79  cSPEditorVehicleAbilities ctor: complete-ish; base ctor (0x59f030) and vtable stores not reproduced
+0059faa0  76  AbilityVector::EraseRange: complete; FindAbilitySlot arg schedule + loop register allocation differ

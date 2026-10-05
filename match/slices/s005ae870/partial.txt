@@ -1,0 +1,3 @@
+005ae870  1258  not translated
+005aed80  1079  SP::cSPEditorManipulationLimb::PickOptimalPointOnLine: not translated
+005af1c0  60  vector erase helper (stride 0x3c): not translated

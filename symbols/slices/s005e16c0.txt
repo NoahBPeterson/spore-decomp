@@ -1,0 +1,11 @@
+# va  Name  # evidence
+005e16c0  SP::cSPEditorVerbIcon_Update  # card
+005e1b70  SP::cSPEditorVerbIcon_Helper_005e1b70  # card
+005e1c80  SP::cSPEditorVerbIcon::cVerbIconInterpolationValue::Init  # card
+005e1cd0  SP::cSPEditorVerbIcon::cVerbIconInterpolationValue::IsAtTarget  # card
+005e1d00  SP::cSPEditorVerbIcon_Helper_005e1d00  # card
+005e1e90  SP::cSPEditorVerbIcon_Helper_005e1e90  # card
+005e1fa0  SP::cSPEditorVerbIcon::SetFlag  # card
+005e2000  UI::TimelineEventEditorVerbIcon::TimelineEventEditorVerbIcon  # card
+005e2280  SP::cSPEditorVerbIcon_Helper_005e2280  # card
+005e23b0  SP::cSPEditorVerbIcon_Helper_005e23b0  # card

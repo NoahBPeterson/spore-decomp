@@ -1,0 +1,6 @@
+00585330 631 skeleton only (not reconstructed)
+005855b0 517 skeleton only (not reconstructed)
+005857c0 104 skeleton only (not reconstructed)
+005858f0 797 skeleton only (not reconstructed)
+00585c10 155 skeleton only (not reconstructed)
+00585d10 38 skeleton only (not reconstructed)

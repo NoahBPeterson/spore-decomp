@@ -1,0 +1,7 @@
+# va  Name  # evidence
+005dfbb0  SPEditorUI_Helper_005dfbb0  # card
+005dfd00  SP::cSPEditorUI::DoCommand  # card
+005e0000  SPEditorUI_Helper_005e0000  # card
+005e0370  Simulator::cCreatureAbility ctor  # card vtable
+005e0440  Simulator::cCreatureAbility dtor  # card vtable
+005e04d0  SPEditorUI_Helper_005e04d0  # card

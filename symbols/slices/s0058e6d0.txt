@@ -1,0 +1,1 @@
+0058e6d0 SP::cAppModeEditorBase::Activate  # PDB name; no args, returns bool

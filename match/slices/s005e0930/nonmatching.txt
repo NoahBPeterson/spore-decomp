@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+005e0cf0  74  cSPVerbTray ctor: complete; the two vptr stores are scheduled after the zero-fill (original emits them first) and the second base vptr is stored twice

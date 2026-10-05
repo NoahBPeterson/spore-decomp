@@ -1,0 +1,1 @@
+slices/s005c53c0/s005c53c0.cpp  ?ShutdownChildren@cSPPaletteCategoryUI@  005c5c20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

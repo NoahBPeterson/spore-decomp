@@ -1,0 +1,4 @@
+00586690 SP::cAppModeEditorBase::InitializeUndoList  # PDB name; retail mUndoList+0x174, mUndoLocalStateList+0x160, mUndosLeft+0x188, mDevUI+0x78
+00585d40 SP::cAppModeEditorBase::ContinueSaveInProgress  # PDB name (state at +0x38c)
+00586410 SP::cAppModeEditorBase::AddUndoState  # PDB candidate caller-single (OnMouseWheel); pushes cEditorResource onto undo list
+00586960 SP::cAppModeEditorBase::ScaleBlock  # PDB candidate caller-scored

@@ -1,0 +1,3 @@
+00582250 2729 oversized function; skeleton only
+00582d00 106 skeleton only (not reconstructed)
+00582d70 622 skeleton only (not reconstructed)

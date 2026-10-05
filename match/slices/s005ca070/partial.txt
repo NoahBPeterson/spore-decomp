@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+005ca070  1842  cSPPaletteSubCategoryUI::Init: body not reconstructed (signature-only stub)
+005ca7b0  202   category teardown/reset: body not reconstructed (stub)
+005ca9f0  953   cSPPaletteUI::UpdateNavigationVisiblity: body not reconstructed (declared, no body)
+005cae60  503   palette helper: body not reconstructed (stub)

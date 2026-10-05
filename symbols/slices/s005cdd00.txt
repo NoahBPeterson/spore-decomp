@@ -1,0 +1,4 @@
+005cdd00 SP::cSPEditorSpine::CreateVertebraBody  # pdb dev 00d37240, gap-align
+005ce0c0 SP::CreateAxialConstraintData  # pdb dev 00d375a0, gap-align
+005ce300 SP::cSPEditorSpine::LoadDynamicTuning  # pdb dev 00d37c20, anchor
+005ce680 SP::cSPEditorSpine::CalcVertebraPhysicsBoundingBox  # pdb dev 00d37f80, gap-align

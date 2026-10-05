@@ -1,0 +1,14 @@
+005a1920 SP::cTerrainUI::Init  # PDB caller-scored
+005a2010 cTerrainUI vector setter (Vec3 + bool)
+005a2080 cTerrainUI key handler -> cLocalInputState::OnKeyDown  # key switch 0x6b/0x6d/0xbb..0xbe
+005a2120 cTerrainUI key handler -> cLocalInputState::OnKeyUp
+005a21c0 cTerrainUI mouse-up -> cLocalInputState::OnMouseUp
+005a2200 cTerrainUI zoom-by-factor
+005a2240 cTerrainUI add-angle
+005a2260 cTerrainUI compute-view vector
+005a22d0 cTerrainUI update-pitch
+005a2300 cTerrainUI vtable reset
+005a2370 SP::cEditorCameraController::SetCenterCameraOffset  # PDB name
+005a2400 SP::cEditorCameraController::SetPartModeCameraOffset  # PDB name
+005a24c0 SP::cEditorCameraController::SetPaintModeCameraOffset  # PDB name
+005a2580 cTerrainUI mouse-wheel -> cLocalInputState + zoom clamp

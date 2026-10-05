@@ -1,0 +1,7 @@
+005a6ee0  0  cSPEditorComplexityMeter dtor: base/member release chain not modelled
+005a6fc0  0  cSPEditorComplexityMeter::Init: layout/window construction abridged
+005a7220  0  editor helper: body abridged
+005a7380  0  editor helper: body abridged
+005a7410  0  editor helper: body abridged
+005a74d0  0  SetValueTextForRollover: body abridged
+005a7930  0  cSPEditorGeneralBadnessCalculator::SetTuningValues: body abridged

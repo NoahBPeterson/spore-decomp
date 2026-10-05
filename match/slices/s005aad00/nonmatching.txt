@@ -1,0 +1,1 @@
+005ab1b0  38  GetPileList (vector<AutoRefCount<cSPEditorBlock>> by value): passed as a 5-argument out-of-line uninitialized_copy helper (hidden copy_result sret + first/last/dest/out) and cl reloads the out pointer; mine emits a 4-argument helper and keeps the destination in edi

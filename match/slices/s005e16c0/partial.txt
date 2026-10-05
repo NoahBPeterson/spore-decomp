@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+005e16c0  -  SP::cSPEditorVerbIcon transition /O2 routine (1190-byte); not decompiled
+005e1b70  -  SP::cSPEditorVerbIcon /O2 routine (261-byte); not decompiled
+005e1d00  -  SP::cSPEditorVerbIcon /O2 routine (386-byte); not decompiled
+005e1e90  -  SP::cSPEditorVerbIcon /O2 routine (184-byte); not decompiled
+005e2000  -  UI::TimelineEventEditorVerbIcon ctor (608-byte); not decompiled
+005e2280  -  SP::cSPEditorVerbIcon /O2 routine (261-byte); not decompiled
+005e23b0  -  SP::cSPEditorVerbIcon /O2 routine (191-byte); not decompiled

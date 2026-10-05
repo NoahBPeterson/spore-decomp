@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005a6e60/s005a6e60.cpp  ??0cSPEditorComplexityMeter@SP@@QAE@XZ  005a6e60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a6e60/s005a6e60.cpp  ??0cUIThing@@QAE@PAX@Z  005a74a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a6e60/s005a6e60.cpp  ??0cDualString@@QAE@XZ  005a7810  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a6e60/s005a6e60.cpp  ?SendChangedMessage@cSPEditorEconomy@SP@@QAEXXZ  005a7840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a6e60/s005a6e60.cpp  ??0cSPEditorGeneralBadnessCalculator@SP@@QAE@XZ  005a7900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a6e60/s005a6e60.cpp  ??1cSPEditorGeneralBadnessCalculator@SP@@UAE@XZ  005a7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast

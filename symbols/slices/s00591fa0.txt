@@ -1,0 +1,1 @@
+00591fa0 SP::cAppModeEditorBase::HandleMessage  # PDB name; IHandlerRC override (uint,int*)

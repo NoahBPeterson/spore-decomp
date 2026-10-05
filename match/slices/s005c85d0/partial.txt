@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+005c85d0  1272  cSPPalettePage::CommonInit: long property-loader body not reconstructed (signature-only stub)
+005c8ad0  234   cSPPalettePage::Init: depends on CommonInit and resource queries; stub
+005c8d70  592   page-part builder: body not reconstructed (signature-only stub)
+005c90d0  343   refcounted-vector insert: body not reconstructed (signature-only stub)

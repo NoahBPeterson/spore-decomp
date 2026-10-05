@@ -1,0 +1,2 @@
+00582fe0 2323 oversized function; skeleton only
+00583900 837 skeleton only (not reconstructed)

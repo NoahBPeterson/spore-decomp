@@ -1,0 +1,9 @@
+00585830 FUN_00585830  # no PDB name; forwards key event then updates modifiers
+00585860 FUN_00585860  # no PDB name; forwards key event then updates modifiers
+00585890 SP::cAppModeEditorBase::OnKeyUp  # PDB symbol name
+00585330 FUN_00585330  # no PDB name
+005855b0 SP::cAppModeEditorBase::SetModeModifiers  # PDB candidate
+005857c0 FUN_005857c0  # no PDB name
+005858f0 FUN_005858f0  # no PDB name
+00585c10 FUN_00585c10  # no PDB name
+00585d10 SP::cAppModeEditorBase::OnMouseWheel  # PDB candidate (caller-single)

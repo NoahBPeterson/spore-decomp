@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+005e0930  -  editor widget /O2 routine (900-byte); not decompiled
+005e0d80  -  editor widget /O2 routine (195-byte); not decompiled
+005e0e80  -  editor widget /O2 routine (407-byte); not decompiled
+005e1020  -  editor widget /O2 routine (657-byte); not decompiled
+005e12c0  -  editor widget /O2 routine (990-byte); not decompiled

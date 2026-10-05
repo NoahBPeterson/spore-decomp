@@ -1,0 +1,4 @@
+005a4250  0  cSPColorSwatch::GetExpansionColor: non-greyscale HSV/HSL branch stubbed
+005a4680  0  cSPColorSwatch::AddTooltip: tooltip window creation path elided
+005a4990  0  cSPColorSwatch::SetExpansionArea: expansion-layout math stubbed
+005a4b80  0  cSPColorSwatch::SetSelectedColor: body stubbed

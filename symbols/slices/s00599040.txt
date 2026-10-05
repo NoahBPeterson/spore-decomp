@@ -1,0 +1,11 @@
+00599040 SP::cCollectableItems::LoadConfiguration  # PDB name; thiscall (int,int)
+00599440 SP::cSpaceInventory::Configure  # stores field+0x6d74 then LoadConfiguration
+00599460 SP::cSpaceInventory::Refresh  # FindWindowByID(0,1) on layout at +0xc
+005994d0 Simulator::cSpaceInventory::cSpaceInventory  # ctor; cSPUIPropertyLayout base, vtables at +0/+4, field +0xa8
+00599530 SP::cSpaceInventory::SetActive  # FUN_00828020(1) + vcall +0x7c
+00599560 SP::cSpaceInventory::SetInactive  # FUN_00828020(0) + vcall +0x7c
+005995d0 SP::cSpaceInventory::Initialize  # UI::CursorAttachment::Initialize at +0
+00599730 SPUIHelpers image-from-layout helper  # GetImageFromLayout/CreateImageFromResource
+005997f0 TraitSuperPowerRollover layout refresh  # cSPUILayout::FindWindowByID at +0xc
+00599be0 TraitSuperPowerRollover wrapper  # forwards to FUN_005997f0 with constants
+00599c10 TraitSuperPowerRollover wrapper  # forwards to FUN_005997f0 with constants

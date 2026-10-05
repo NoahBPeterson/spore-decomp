@@ -1,0 +1,5 @@
+005a4500  178  cSPColorSwatch::SetArea: complete; auto-generated RectT-by-value + SetArea ordering differs by register choice
+005a4750  96  cSPEditorColorPicker::GetSwatchArea: complete; 4th output float and property inline scheduling differ
+005a4800  297  cSPEditorColorPicker::SetArea: complete; Property::GetFloat is inlined in the original loop
+005a4e20  366  cSPEditorColorPicker::SetColor: complete; sret/register allocation across the swatch scan differs
+005a5000  44  cSPColorSwatch::cSPColorSwatch: complete; final base-color float store scheduled after the Stopwatch ctor call

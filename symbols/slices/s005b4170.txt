@@ -1,0 +1,2 @@
+005b4b40 SP::cSPEditorManipulationPlanarInterpenetration  # Ghidra names the ctor (vtable 013f757c)
+005b4ad0 PlanarInter::SetBlock  # mBlock +0x1c, mMouseOffset +0x38, bools +0x44/+0x45

@@ -1,0 +1,1 @@
+005ab7a0 SP::cSPEditorManipulationCellPinning::DoOnMouseMove  # PDB candidate 00d64c60; vtable slot 8

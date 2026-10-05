@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+005dbc70  24  UTFInternet::HTTPRequest ctor: complete; cl loads the 0.2f constant late in the zero-fill where the original hoisted it after the +0x1c store

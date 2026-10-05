@@ -1,0 +1,2 @@
+005a88a0  10  cCopy9::Assign: complete 36-byte struct copy; cl schedules the count/this register move differently
+005a8900  6  GetEditorTuningValue: complete; load/store interleave of the 3 dwords differs

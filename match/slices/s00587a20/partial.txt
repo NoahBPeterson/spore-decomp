@@ -1,0 +1,1 @@
+00587a20 - PARTIAL: cAppModeEditorBase::Deactivate 2891B; large teardown, skeleton only

@@ -1,0 +1,8 @@
+005c7b80  ??0cSPPaletteCursor@SP@@QAE@XZ  # palette cursor ctor (base vptrs + zeroed indices), byte-exact
+005c7bc0  ?SetPalette@cSPPaletteCursor@SP@@QAEXPAVcSPPalette@2@@Z  # sets refcounted mPalette @+0xc, resets indices
+005c7c10  ?Advance@cSPPaletteCursor@SP@@QAE_NXZ  # walks category -> subcategory -> page -> item indices
+005c7d30  ?Current@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # resolves current page/item; out-params (row%col)
+005c7e20  ?Next@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # Advance + Current until non-null
+005c7ed0  ?Shutdown@cSPPalettePage@SP@@QAEXXZ  # calls cSPPaletteItem::Shutdown on mItems @+0x70
+005c7f50  ??0cSPPalettePage@SP@@QAE@XZ  # cSPPalettePage ctor (mLayoutInstanceID 0xd8006607)
+005c8440  ??_GcSPPalettePage@SP@@UAEPAXI@Z  # cSPPalettePage scalar deleting dtor (vector @+0x70)

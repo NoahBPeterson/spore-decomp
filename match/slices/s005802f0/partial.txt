@@ -1,0 +1,8 @@
+005802f0 745 skeleton only (not reconstructed)
+005805e0 106 GetEditorName reconstructed but format string/global content guessed
+00580670 109 GetDefaultModelName reconstructed but format string/global content guessed
+00580700 672 skeleton only (not reconstructed)
+005809a0 610 skeleton only (not reconstructed)
+00580c10 90 reconstructed but format string/global content guessed
+00580cb0 307 skeleton only (not reconstructed)
+00580df0 674 skeleton only (not reconstructed)

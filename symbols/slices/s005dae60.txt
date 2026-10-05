@@ -1,0 +1,6 @@
+# va  Name  # evidence
+005dbb50  UI_Helper_005dbb50  # free fn: GetGlobals()->Reset(-1)
+005dbb60  cEditorUI::CreateWidget2  # thiscall, ret 4, creates widget via FUN_007ec160
+005dbbb0  cEditorUI::CreateWidget3  # variant with mode 4
+005dbc10  cEditorUI::CreateWidget3_0  # variant with mode 0
+005dbc70  UTFInternet::HTTPRequest::HTTPRequest  # vtable UTFInternet::HTTPRequest set in body

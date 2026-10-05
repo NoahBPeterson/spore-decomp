@@ -1,0 +1,7 @@
+# va  Name  # evidence
+005ddd60  SP::cSPEditorUI::Init  # card (PDB candidate)
+005de450  SP::cSPEditorUI::Update  # card (PDB candidate)
+005de690  SP::cSPEditorUI::EnableBasicEditorButtons  # card (PDB candidate)
+005de870  SP::cSPEditorUI::Shutdown  # card
+005de9e0  cSPEditorUI_ModeHelper  # card
+005dea60  cSPEditorUI_Helper_005dea60  # card

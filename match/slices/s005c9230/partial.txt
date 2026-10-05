@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+005c9230  1444  cSPPalettePageUI::Init: body not reconstructed (signature-only stub)
+005c98a0  905   subcategory tree updater: body not reconstructed (signature-only stub)
+005c9dd0  325   cUIMissionCard::DoMessage: message build/send body not reconstructed (stub)

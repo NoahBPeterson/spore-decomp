@@ -1,0 +1,3 @@
+005d5120  23  CopyE20Range: cl assigns first->eax/dest->ecx (original first->ecx/dest->eax); otherwise identical
+005d5200  50  Curve2D::Lerp: /fp:fast contracts and reassociates, so cl keeps x0 live instead of reloading it after the delta multiplies
+005d5160  85  Curve2D::Arc: same contraction/reassociation keeps x0/y0 live; original reloads them and evaluates both delta terms first

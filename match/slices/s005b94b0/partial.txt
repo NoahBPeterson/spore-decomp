@@ -1,0 +1,6 @@
+005b94b0 431  DoOnMouseDown: stubbed (returns true); full message-posting + DeleteInvalidBlocks logic not reconstructed
+005b9660 473  Update: stubbed; full ray/target-interpolation logic not reconstructed
+005b9840 761  SetBlock: stubbed; full camera-location/orientation init logic not reconstructed
+005b9b40 1300 other: stubbed; full logic not reconstructed
+005ba0f0 72   CopyOut: stubbed; vector copy-construction helper not reconstructed
+005ba190 400  other2: stubbed; full logic not reconstructed

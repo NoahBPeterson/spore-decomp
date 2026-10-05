@@ -1,0 +1,1 @@
+slices/s005bc0f0/s005bc0f0.cpp  ?Init@cSPEditorManipulationStackingSimple@  005bc7f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

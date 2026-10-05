@@ -1,0 +1,6 @@
+005d27e0  2088  vertebra tree/geometry rebuild not reconstructed (skeleton)
+005d3010  238   map-lookup + hkWorld::removeAction helper not reconstructed (skeleton)
+005d3100  162   summed-mass walk over the vertebra map not reconstructed (skeleton)
+005d31b0  325   vertebra-tree helper not reconstructed (skeleton)
+005d3300  691   vertebra-tree helper not reconstructed (skeleton)
+005d35c0  273   vertebra-tree helper not reconstructed (skeleton)

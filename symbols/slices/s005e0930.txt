@@ -1,0 +1,8 @@
+# va  Name  # evidence
+005e0930  EditorWidget_005e0930  # card
+005e0cf0  SP::cSPVerbTray ctor  # base call SP::cSPVerbTrayCollection::cSPVerbTrayCollection
+005e0d80  EditorWidget_005e0d80  # card
+005e0e50  SP::cSPVerbTray::Shutdown  # releases m54
+005e0e80  EditorWidget_005e0e80  # card
+005e1020  EditorWidget_005e1020  # card
+005e12c0  EditorWidget_005e12c0  # card

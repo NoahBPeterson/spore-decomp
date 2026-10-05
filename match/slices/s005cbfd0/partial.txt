@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+005cc120  1018  cSPEditorSellBackDetachedRollover::Show: body not reconstructed (stub)
+005cc520  115   cSPEditorSellBackDetachedRollover ctor: MI vtable/base-init sequence not reconstructed (stub)
+005cc750  1120  cSPEditorSellBackRollover::Show: body not reconstructed (stub)
+005ccbb0  69    cShoppingTokenTranslator ctor: string/base-init body not reconstructed (stub)
+005ccc00  104   cShoppingTokenTranslator dtor: three-string teardown not reconstructed (stub)

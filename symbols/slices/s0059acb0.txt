@@ -1,0 +1,10 @@
+0059acb0 EA::AutoRefCount<Simulator::cAnimatingCreature>::operator=  # AddRef 0xa02c30 / Release 0xa05270
+0059ace0 SP::cSPEditorAnimatedEventInfo ctor  # vtable 0x13f64b4; fields at +0x20..+0x84
+0059ae20 SP::cSPEditorAnimatedEventInfo::SetCreature  # (creature*, int)
+0059ae60 SP::cSPEditorAnimatedEventInfo::Clear  # pointer at +8, count at +0xc
+0059ae80 SP::cSPEditorAnimatedEventInfo getter  # FUN_00a02b20(0) ? true : field+0x70
+0059aea0 SP::cSPEditorAnimatedEventInfo::SetFlag  # byte+0x150 and bit 0x80 at +0x70
+0059b0b0 SP::cSPEditorAnimatedEventInfo scalar deleting dtor  # vtables 0x13f64b4/0x13ef094
+0059b0f0 SP::cSPEditorAnimatedCreatureData::SetTargetPosition  # PDB name
+0059b390 target-position refresh helper  # uses FUN_0059aed0
+0059b420 target-position state setter  # fields +0x154, +0x164

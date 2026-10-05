@@ -1,0 +1,7 @@
+# source  symbol  va  [flags override]
+slices/s00599040/s00599040.cpp  ?FUN_00599440@cSpaceInventory@SP@@QAE_NHHH@Z  00599440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ?FUN_00599460@cSpaceInventory@SP@@QAEXXZ  00599460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ?FUN_00599530@cSpaceInventory@SP@@QAEXXZ  00599530  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ?FUN_00599560@cSpaceInventory@SP@@QAEXXZ  00599560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ?FUN_00599be0@cSpaceInventory@SP@@QAEXH@Z  00599be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00599040/s00599040.cpp  ?FUN_00599c10@cSpaceInventory@SP@@QAEXH@Z  00599c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast

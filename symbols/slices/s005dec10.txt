@@ -1,0 +1,9 @@
+# va  Name  # evidence
+005dec10  cSPEditorUI_Helper_005dec10  # card
+005dee70  cSPEditorUI_MessageHandler_005dee70  # card
+005def30  SP::cSPEditorUI::DoDialogEnd  # card
+005df470  cSPEditorUI_Helper_005df470  # card
+005df8d0  EditorFrame_SetMode103  # card
+005df8f0  SP::cAppModeEditorBase::HandleFileDrop  # card
+005dfb30  SP::cSPEditorUIDialogResultCallback::OnModalWindowEnd  # card (PDB candidate)
+005dfb40  SP::cSPEditorUI::DoSaveAndExit  # card

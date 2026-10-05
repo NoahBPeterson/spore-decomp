@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005ca9c0  36  FindCategoryIndex: register roles of begin/selected swapped (orig keeps selected in esi, reloads begin into ecx)
+005cadb0  34  SetVisibleChunk: mVisibleChunk store scheduled late instead of at function entry; otherwise identical
