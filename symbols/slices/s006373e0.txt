@@ -1,0 +1,9 @@
+006373e0 SP::cSPPlayModeUI::Shutdown  # PDB name (caller-scored)
+006374b0 SP::cSPPlayModeUI::SetYTUsername  # PDB name (caller-scored)
+00637510 SP::cSPPlayModeUI::SetYTPassword  # PDB name (caller-scored)
+006375e0 `anonymous namespace'::FindParentDir2  # PDB name (caller-single)
+006377d0 SP::cSPPlayModeUI::GetEditorText  # PDB name
+00637800 SP::cSPPlayModeUI::GetYTUsername  # PDB name (caller-scored)
+00637830 SP::cSPPlayModeUI::GetYTPassword  # PDB name (caller-scored)
+00637860 SP::cSPPlayModeUI::ShowSendEmailDialog  # PDB-adjacent name
+00637c90 SP::cSPPlayModeUI::SendVideoURLInfoToServer  # PDB name (anchor)

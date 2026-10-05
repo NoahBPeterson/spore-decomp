@@ -1,0 +1,9 @@
+0062bb40 SP::cSPPlayMode creature-list add/remove helper  # thiscall, ret 8
+0062bec0 SP::cSPPlayMode::StopClearSharedLibs  # clears vector at +0x7c then erase
+0062bdb0 SP::cSPPlayMode helper (creature id list)  # uses local int[8], vectors at +0x64
+0062bf10 SP::cSPPlayMode::HandleMessages  # 1064 bytes, calls MessageServer
+0062c340 SP::cSPPlayMode::Stop  # PDB name
+0062c550 SP::cSPPlayMode::Update  # PDB name, ret 4
+0062c7e0 SP::cSPPlayMode::RunSkinPaintOnEditorModel  # PDB candidate (caller-single)
+0062c910 SP::cSPPlayMode::Shutdown  # PDB candidate; releases members at +0x94/+0xcc/+0xc
+0062c990 SP::cSPPlayMode::ToggleBaby  # PDB candidate; reads +0x36d8/+0x36d0

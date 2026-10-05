@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062bb40  -  FUN_0062bb40: skeleton (623-byte creature add/remove helper not transcribed)
+0062bf10  -  FUN_0062bf10: skeleton (1064-byte message-driven update not transcribed)
+0062c340  -  SP::cSPPlayMode::Stop: skeleton (524-byte teardown not transcribed)
+0062c550  -  SP::cSPPlayMode::Update: skeleton (647-byte per-frame update not transcribed)

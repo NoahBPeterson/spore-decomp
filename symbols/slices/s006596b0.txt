@@ -1,0 +1,4 @@
+006596b0  cSPUIAssetView update  # 870 bytes
+00659a20  SP::cSPUIAssetView::OnRollover  # PDB name; 1000 bytes
+00659e30  SP::cSPUIAssetView::Cleanup  # releases +0x94/+0x54, FUN_00659340
+00659ec0  cSPUIAssetView update  # 420 bytes

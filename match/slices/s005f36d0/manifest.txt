@@ -1,0 +1,2 @@
+slices/s005f36d0/s005f36d0.cpp  ?SetModelKey@cSPSwatch@SP@@QAEXPAUKey@ResourceMan@EA@@@Z  005f4080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f36d0/s005f36d0.cpp  ?OnBakingIsDone@cSPSwatch@SP@@QAEXXZ  005f42d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

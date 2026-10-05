@@ -1,0 +1,2 @@
+00636320 SP::cSPPlayModeUI::EnablePhotoViewerButton  # PDB name (caller-scored)
+006364a0 SP::cSPPlayModeUI::HideMovieSavedDialogCustom  # PDB name (caller-scored)

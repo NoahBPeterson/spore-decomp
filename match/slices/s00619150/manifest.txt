@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00619150/s00619150.cpp  ??0cDeleteMyFeedTransaction@Pollen@SP@@QAE@PBD@Z  00619150  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??_GcDeleteMyFeedTransaction@Pollen@SP@@UAEPAXI@Z  00619180  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??0cFeedUnsubscribeTransaction@Pollen@SP@@QAE@PBD@Z  006191d0  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??_GcFeedUnsubscribeTransaction@Pollen@SP@@UAEPAXI@Z  00619200  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??0cSnapshotUploadTransaction@Pollen@SP@@QAE@ABUKey@12@PBD111@Z  00619250  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??0cYouTubeAuthenticationTransaction@Pollen@SP@@QAE@PBD00_N@Z  00619300  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??0cYouTubeVideoUploadTransaction@Pollen@SP@@QAE@PBD0000UKey@12@0@Z  00619390  /O2 /MD /Gy /TP
+slices/s00619150/s00619150.cpp  ??0cYouTubeVideoURLTransaction@Pollen@SP@@QAE@PBD000@Z  00619470  /O2 /MD /Gy /TP

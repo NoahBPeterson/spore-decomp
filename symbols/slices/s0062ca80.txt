@@ -1,0 +1,11 @@
+0062ca80 SP::cSPPlayMode_Creature path-block helper  # walks creature mgr list at +0x14, BlockCircle
+0062cb20 cSPPlayMode theme-music entry factory  # allocs 0x2c bytes "Casual", vtbl 0x14774b0
+0062cb90 SP::cSPPlayMode_Creature::ClearPathList  # releases vector at +0x3c back-to-front
+0062cbc0 SP::cPlayModePath world-position match  # fabs compare against 1.5258789e-05
+0062cc20 SP::cSPPlayMode_Creature::SetPathTarget  # SetTargetPosition + angle
+0062cd30 SP::cSPPlayMode_Creature::cSPPlayMode_Creature  # vtbl 0x13fe1bc
+0062cdb0 SP::cSPPlayMode_Creature::~cSPPlayMode_Creature  # deleting dtor, vtbl 0x13fe1bc/0x13ec458
+0062ce00 SP::cSPPlayMode_Creature::AddPathTarget  # PDB name
+0062cef0 SP::cSPPlayMode_Creature::UpdateMovement  # PDB name
+0062d0f0 SP::cSPPlayMode_Creature movement helper  # 1956 bytes
+0062d8a0 SP::cSPPlayMode_Creature grid-table builder  # 64x64, neighbour switch

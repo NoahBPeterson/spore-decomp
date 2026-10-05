@@ -1,0 +1,9 @@
+005f5080 SP::cSPSwatch::Update  # unnamed 1375-byte update routine (no PDB candidate)
+005f55e0 SP::cSPSwatch::RotateModel  # PDB name on card
+005f58f0 SP::cSPSwatch::AddModelKey  # byte-exact; appends Key to vector at +0x148
+005f5930 vector<cSPTransform_> shrink  # copy_impl + end adjustment
+005f5970 vector<AutoRefCount<cMWModel>>::clear  # erase(begin,end) pattern
+005f59b0 SP::cSwatch3DView::AddModel  # PDB caller-single candidate
+005f5aa0 SP::cSwatch3DView::RemoveAllModels  # PDB name on card
+005f5b40 SP::cSPSwatch::LoadModel  # PDB name on card
+005f5df0 SP::cSPSwatch::ShutDownModel  # PDB name on card

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00621db0  234  cXHTMLControlAppearance::CreateHitMaskFromResource: skeleton; the resource-manager request struct, FNV/asset lookup and hit-mask object construction are approximated

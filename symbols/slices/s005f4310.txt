@@ -1,0 +1,13 @@
+005f4310 SP::cSPOLDPaletteItemUIDragAndBuy::Init  # PDB name on card
+005f46c0 SP::cSPPaletteSwatch::EndDrag  # cSPPaletteSwatch method; byte-exact
+005f46f0 SP::cSPOLDPaletteItemUIDragAndBuy::HandleMessage  # IHandler-slot override, this at cSPPaletteSwatch+0xc
+005f4750 SP::cSPOLDPaletteItemUIDragAndBuy::OnLeftMouseDown  # PDB caller-scored candidate
+005f49a0 SP::cSPPaletteSwatch::SetShowCost  # byte-exact
+005f49f0 SP::cSPOLDPaletteItemUIDragAndBuy::OnMouseDown  # PDB caller-scored candidate
+005f4b80 SP::cSPOLDPaletteItemUIDragAndBuy::OnMouseUp  # message-server + viewport reset
+005f4d00 copy 0x38 records  # untyped copy loop
+005f4e10 eastl::copy_impl<...>::do_copy<AutoRefCount<cMWModel>*>  # PDB name on card; byte-exact
+005f4e80 SP::Matrix3FromEulerXYZ  # PDB name on card; byte-exact
+005f4eb0 SP::cSwatch3DView::RemoveModel  # PDB name on card; byte-exact
+005f4f80 SP::cSPSwatch::Init  # PDB name on card (7-arg)
+005f5000 SP::cSPSwatch::Init  # PDB name on card (8-arg)

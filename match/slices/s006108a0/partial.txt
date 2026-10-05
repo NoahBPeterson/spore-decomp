@@ -1,0 +1,8 @@
+006108a0  -  (881 B): skeleton.
+00610f30  -  (565 B): skeleton.
+00611170  -  SP::cPollinator::CancelTransactions (77 B): outline port of the active-transaction rbtree walk.
+006111c0  -  SP::cPollinator::HandleTransactionResult (696 B): skeleton.
+00611480  -  (189 B): skeleton.
+00611550  -  feed-description vector erase (48 B): outline port.
+00611580  -  (314 B): skeleton.
+006116c0  -  SP::cPollinator::~cPollinator (322 B): skeleton.

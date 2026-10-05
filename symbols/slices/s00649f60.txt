@@ -1,0 +1,5 @@
+0064a220 SP::cSPUIAssetBrowser::Shutdown        # PDB candidate (caller-single) card.py
+0064a400 SP::cSPUIAssetBrowser::SetVisibility   # PDB candidate (callee-scored) card.py
+0064a990 SP::cSPUIAssetBrowser::AdvancedLaunch  # PDB candidate (callee-scored) card.py
+0064ab20 SP::cSPUIAssetBrowser::Update          # PDB candidate; disasm = visibility/rollover update
+0064aba0 SP::cSPUIAssetBrowser::LaunchSporeGuide # PDB candidate (callee-scored) card.py

@@ -1,0 +1,10 @@
+00621830 SP::Pollen::InitURLs  # PDB-resolved; registers base URLs + 43 id->path entries
+00621bf0 SP::cXHTMLControlAppearance::Apply  # PDB caller-single; applies drawables to a WinXHTML
+00621c80 SetGlobalAppearance  # AutoRefCount assignment into global 0x15f5f9c
+00621cc0 eastl::uninitialized_copy<ControlDrawable>  # AddRef each copied drawable
+00621d50 eastl::uninitialized_copy_backward<ControlDrawable>  # AddRef/Release on copy-backward
+00621db0 SP::cXHTMLControlAppearance::CreateHitMaskFromResource  # PDB-named
+00621ee0 SP::cXHTMLControlAppearance::cXHTMLControlAppearance
+00621f00 SP::cXHTMLControlAppearance::~cXHTMLControlAppearance  # PDB candidate
+00621f50 eastl::vector<ControlDrawable>::erase
+00621fc0 eastl::vector<ControlDrawable>::DoInsertValue

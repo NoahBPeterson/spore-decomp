@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00621bf0   47  cXHTMLControlAppearance::Apply: complete; this/param callee-saved register assignment (ebx/ebp vs ebp/edi)
+00621d50   10  uninitialized_copy_backward: complete; load order of the new/old drawable pointers around the --dest
+00621ee0    2  cXHTMLControlAppearance ctor: complete; vptr store scheduled after mPad4 in the original
+00621f00   42  cXHTMLControlAppearance dtor: complete; vptr/base-dtor store schedule and vector release order
+00621f50   92  vector<ControlDrawable>::erase: complete; helper thiscall form and element-destroy loop shape
+00621fc0  314  vector<ControlDrawable>::DoInsertValue: complete; reallocation path (eastl uninitialized_copy/relocate) shape differs

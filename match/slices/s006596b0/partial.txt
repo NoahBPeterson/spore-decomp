@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (incomplete/approximate)
+006596b0  -  cSPUIAssetView update (870 bytes): skeleton
+00659a20  -  SP::cSPUIAssetView::OnRollover (1000 bytes): skeleton
+00659e30  -  SP::cSPUIAssetView::Cleanup (133 bytes): release paths partly reconstructed; FUN_00834e30/0x54-handler branches approximate
+00659ec0  -  cSPUIAssetView update (420 bytes): skeleton

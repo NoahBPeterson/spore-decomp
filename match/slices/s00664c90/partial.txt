@@ -1,0 +1,4 @@
+00664f30 160 partition-by-feed comparator - partial: wcsicmp/loop structure approximated
+00665210 227 eastl::partial_sort - partial: heap helper calls approximated
+00665410 908 cSPUIFeedListCategory::Refresh - partial: property/template-DB query approximated
+00665870 979 RefreshAll - partial: child dedup/rebuild loop approximated

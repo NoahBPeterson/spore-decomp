@@ -1,0 +1,5 @@
+00638e90 SP::cSPPlayModeSubModeAction::HasRequiredPart  # PDB name
+00638fd0 SP::cSPPlayModeSubModeAction::SetIdleAnimation  # PDB name
+006392e0 SP::cSPPlayModeSubModeAction::StartBoredAnimation  # PDB candidate (caller-single)
+006398f0 SP::cSPPlayModeSubModeAction::MarkKeyInputKeyDown  # PDB candidate (caller-single)
+00639a10 SP::cSPPlayModeSubModeAction::CaptureGIF  # PDB name (anchor)

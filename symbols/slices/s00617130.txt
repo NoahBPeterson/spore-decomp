@@ -1,0 +1,13 @@
+00617130  SP::Pollen feed helper  # 750 B
+00617450  SP::Pollen::cTelemetryUploadTransaction scalar deleting dtor  # PDB
+00617490  SP::Pollen scalar deleting dtor  # 69 B
+006174e0  eastl::basic_string resize  # 76 B
+00617530  eastl::promote_heap helper  # 143 B
+006175c0  SP::Pollen feed helper  # 483 B
+006177b0  SP::Pollen feed helper  # 655 B
+00617a40  SP::Pollen::cGetAssetFeedTransaction dtor  # PDB
+00617b10  SP::Pollen feed helper  # 367 B
+00617c90  SP::Pollen feed helper  # 367 B
+00617e00  SP::Pollen feed helper  # 121 B
+00617e80  SP::Pollen::cSnapshotUploadTransaction dtor  # PDB
+00617f10  SP::Pollen::cSnapshotUploadTransaction::ConstructRequest  # PDB

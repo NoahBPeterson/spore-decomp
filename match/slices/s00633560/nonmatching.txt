@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00633f90   39  SP::cSPPlayModePhotoBrowser::HandleMode: complete; switch jump-table encoding/padding and MessageServer vcall
+00634030   51  SP::cSPPlayModePhotoBrowser::ClearPhotoList: complete; rbtree reset + per-photo DeletePhoto loop shape
+00634380   80  SP::cSPPlayModePhotoBrowser::SendPhoto: complete; rbtree reset store order and ShowSendEmailWindow branch
+006343f0   46  SP::cSPPlayModePhotoBrowser::NextPage: complete; ContinueJob do/while and page-index bounds branch

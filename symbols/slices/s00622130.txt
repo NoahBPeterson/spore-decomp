@@ -1,0 +1,1 @@
+00622130 SP::cXHTMLControlAppearance::Init  # PDB-resolved; builds the control-appearance drawable set

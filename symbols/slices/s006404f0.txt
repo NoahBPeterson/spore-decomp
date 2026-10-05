@@ -1,0 +1,3 @@
+006404f0 SP::cSPPlayModeSubModePhoto::HandleButton  # PDB name (anchor)
+006411b0 SP::cSPPlayModeSubModePhoto::CaptureImageDone  # PDB candidate (caller-scored)
+00641490 FUN_00641490  # content-validation helper (template tail)

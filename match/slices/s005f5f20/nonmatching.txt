@@ -1,0 +1,4 @@
+005f67d0  161  cSwatch3DView::Shutdown: complete (camera/window/layered-object/texture/renderer teardown + RemoveAllModels); register/schedule differences
+005f68a0  204  cSPSwatch::Shutdown: complete (capture release, +0x144 release, ShutDownModel, m3DView.Shutdown, camera-controller stop, window unbind, RemoveHandler); schedule differences
+005f6ae0  65  cSPPaletteSwatch::OnRolloverEnd2: complete (RemoveHandler + rollover Hide + cSPSwatch::Shutdown); register differences
+005f6b40  -  cSwatch3DView::~cSwatch3DView: complete member teardown in original order; no same-size symbol found (vector dtor inlining differs)

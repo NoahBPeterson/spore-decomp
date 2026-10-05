@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062abd0  -  SP::cSPPlayMode::MakeCreaturesFaceCamera: skeleton (large SSE camera/creature math not transcribed)
+0062ad70  -  cSPPlayMode helper (ret 0x1c): skeleton
+0062b1c0  -  SP::cSPPlayMode::cSPPlayMode: skeleton (retail layout differs greatly from 2008 PDB)
+0062b3a0  -  SP::cSPPlayMode::~cSPPlayMode: skeleton
+0062b5c0  -  SP::cSPPlayMode::HandleMessage: skeleton (large string/EH dispatch switch)
+0062ba10  -  SP::cAppModeEditorBase::IsEventForBaby: skeleton

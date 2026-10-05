@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00620bd0  491  SubmitRegistrationForm: outer flow only; the hidden registration-code control, eastl string triad and rw::graphics::*Initialize call are not reproduced
+00620ef0 1383  cTOSDialog::DoMessage: skeleton; most message branches (window enabling, layout moves, cancel-confirmation dialog path) are approximated
+00621540  354  URL sanitizer: skeleton; the scheme split, invalid-char strip and vector_map assignment are not reproduced

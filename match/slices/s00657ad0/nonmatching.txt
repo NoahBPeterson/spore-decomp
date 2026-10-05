@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00657ad0  180  SP::cSPUIAssetView::SetWindowArea: both window vcalls, SetFirstUpdate, and the target/dest rect math complete; vcall-target register schedule differs
+00657e60  112  SP::cSPUIAssetView::UpdateVerbIcon: switch over the vcall result maps to the same 7 FUN_00657e20 calls; jump-table/compare shape differs

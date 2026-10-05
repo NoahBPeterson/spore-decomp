@@ -1,0 +1,2 @@
+005fa1d0  33  hashtable bucket teardown A (string node free loop): complete; current/next register allocation is swapped (esi/edi)
+005fa230  55  hashtable bucket teardown B (node free loop, +0xc/+0x14 fields): complete; register allocation differs

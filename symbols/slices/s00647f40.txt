@@ -1,0 +1,5 @@
+00648aa0 SP::cSPUIAssetGrid::ClearAssetViews                       # anchor PDB name (card.py)
+00648af0 eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::erase  # 0x14-stride vector erase
+00648b40 eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::insert_at  # vector insert
+00648bb0 eastl::make_heap<SP::cSPAssetGridEntry *,SP::TypeGridEntrySort>  # anchor PDB name (card.py)
+00648ce0 sorted-vector map operator[]                             # find-or-insert returning value slot

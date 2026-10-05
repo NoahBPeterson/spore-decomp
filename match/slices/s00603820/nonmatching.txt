@@ -1,0 +1,2 @@
+00603f10  40  cGraphicsTab checkbox->canvas sync (setne variant): complete; the key-temp scheduling above the Canvas call does not converge.
+00603fe0  40  cGraphicsTab checkbox->canvas sync (sete variant): complete; same key-temp scheduling difference.

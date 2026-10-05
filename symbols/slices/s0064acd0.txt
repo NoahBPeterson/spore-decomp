@@ -1,0 +1,4 @@
+0064acd0 SP::cSPUIAssetBrowser::LaunchEditorEnd  # anchor PDB name (card.py)
+0064b4b0 SP::cSPUIAssetBrowser::BanItem         # PDB candidate (caller-scored) card.py
+0064b6a0 SP::cSPUIAssetBrowser::ShowSporeGuide  # PDB name (card.py)
+0064b6b0 SP::cSPUIAssetBrowser::HandleMessage   # anchor PDB name (card.py)

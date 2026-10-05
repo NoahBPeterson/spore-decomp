@@ -1,0 +1,1 @@
+0063fd20 SP::cSPPlayModeSubModePhoto::SendPhoto  # PDB candidate (caller-single)

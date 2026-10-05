@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (incomplete/approximate)
+00654730  -  cSPUIAssetGrid SetFeedFilter/update (1477 bytes): filter/field reset + two window shows implemented; the long widget-driven body is a skeleton
+00654f50  -  cSPUIAssetGrid OnSelect/commit (1117 bytes): tutorial-timer/selection propagation only partly reconstructed

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (incomplete/approximate)
+006589d0  -  SP::cSPUIAssetView::OnLeftMouseDown (670 bytes): skeleton
+00658c70  -  cSPUIAssetView helper (386 bytes): skeleton
+00658e80  -  SP::cSPUIAssetView::SelectAsset update (994 bytes): skeleton
+00659270  -  cSPUIAssetView helper (203 bytes): skeleton
+00659340  -  cSPUIAssetView release/destroy helper (122 bytes): skeleton
+006593c0  -  cSPUIAssetView helper (752 bytes): skeleton

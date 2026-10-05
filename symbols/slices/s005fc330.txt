@@ -1,0 +1,4 @@
+005fc330 SP::Thumbnail::cImportExport::ImportNewAsset  # PDB anchor
+005fc9f0 SP::Thumbnail::cImportExport::ScanFolder  # PDB anchor
+005fcf40 SP::Thumbnail::cImportExport::cImportExport (retail layout)  # 4 hash_maps (+4..+88), image embed +88, 8 string16 +104..+174
+005fd0a0 SP::Thumbnail::cImportExport::ScanForImports  # PDB candidate (caller-single)

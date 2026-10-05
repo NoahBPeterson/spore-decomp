@@ -1,0 +1,4 @@
+0064bc50 SP::cSPUIAssetBrowser::Launch        # PDB candidate (callee-single) card.py
+0064bcd0 SP::cSPUIAssetBrowser::OnModalWindowEnd  # PDB candidate (caller-single) card.py
+0064c400 SP::cSPUIAssetBrowser::Update      # PDB candidate (caller-single) card.py
+0064c6b0 SP::cSPUIAssetBrowser::DoMessage   # PDB candidate (caller-scored) card.py

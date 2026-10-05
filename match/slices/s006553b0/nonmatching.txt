@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00656240  164  filter-then-copy_if over 0x10-byte records: FUN_00654050/FUN_006536e0/FUN_00653780 sequence complete; temp-vector frame/scheduling differs

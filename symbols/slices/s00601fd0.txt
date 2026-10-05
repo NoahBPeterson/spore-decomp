@@ -1,0 +1,2 @@
+00601fd0 SP::cGameTab::Init  # PDB anchor
+006026f0 SP::cTerrainUI::LoadScriptFromGrid / DoMessage  # PDB candidate (caller-scored)

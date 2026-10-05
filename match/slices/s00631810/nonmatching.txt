@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00631dc0   21  FUN_00631dc0: complete; register swap (edi/ebx), materialised zero size vs memcpy thunk call order
+00631df0   84  FUN_00631df0: complete; AutoRefCount push/AddRef/Release and grow-path call shape
+00632660   -   SP::cSPPlayModePhotoBrowser::DeleteSelected: complete; re-evaluated count loops + tail ExitDeleteMode
+006326f0   -   SP::cSPPlayModePhotoBrowser::MoveSelected: complete; re-evaluated count loops + tail ExitMoveMode

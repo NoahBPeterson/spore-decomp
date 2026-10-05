@@ -1,0 +1,7 @@
+0061c570 SP::Pollen::cFeedTransactionBase::cFeedTransactionBase  # (type, const FixedPtrVector&); mAssets = assets
+0061c5e0 SP::Pollen::cGetAssetFeedTransaction::cGetAssetFeedTransaction  # base(4,assets); vtable 0x13fc604; mFlag=1
+0061c610 eastl::vector<SP::Feed::FeedDescription>::insert/DoInsertValues  # 0x70 stride, DoAllocate via 0x61c1c0
+0061c880 SP::Pollen::RequestAssetsFromFeed  # PDB anchor
+0061cf60 SP::Pollen::cGetAssetFeedTransaction::HandleResult  # PDB anchor
+0061d0d0 SP::Pollen::cEditFeedTransaction::HandleResult  # PDB candidate (caller-scored)
+0061d1c0 0x13fc88c transaction ctor (many default strings)  # vtable not in PDB

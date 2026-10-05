@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0065ea00/s0065ea00.cpp  ?Handler@CallbackObj@@QAEXHH@Z  0065ef10  /O2 /MD /Gy /TP /arch:SSE2
+slices/s0065ea00/s0065ea00.cpp  ?Init@cSPUIFeedEdit@@QAEXPAX@Z  0065f700  /O2 /MD /Gy /TP /arch:SSE2
+slices/s0065ea00/s0065ea00.cpp  ?Get@ModeViewGetter@@QAEPAD_N@Z  0065f810  /O2 /MD /Gy /TP /arch:SSE2

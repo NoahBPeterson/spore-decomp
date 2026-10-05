@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00622130  3521  SP::cXHTMLControlAppearance::Init: skeleton; only the StdDrawable alloc + one image append is reproduced. The ~40 remaining CreateImageFromResource/CreateHitMaskFromResource calls, the checkbox/radio/text sets and the two ScrollbarDrawable objects are omitted.

@@ -1,0 +1,6 @@
+006002d0  -  SP::Pollen::cRegistrationDialog::DoMessage: stub.
+006008c0  -  SP::cSPUISettings::OnModalWindowEnd: stub.
+00600ab0  -  SP::cSPUISettings::ShowWindow: stub.
+00600c00  -  helper: stub.
+00600da0  -  cGraphicsTab ctor: stub (retail MI layout not reconstructed).
+00600df0  -  cGraphicsTab destructor / scalar deleting destructor: stub (retail MI layout not reconstructed).

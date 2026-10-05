@@ -1,0 +1,2 @@
+slices/s00603820/s00603820.cpp  ?SaveAllSettings@cSPUISettings14@@QAEXXZ  00604860  /O2 /MD /Gy /TP /arch:SSE
+slices/s00603820/s00603820.cpp  ?HandleMessage@Handler14@@QAE_NIPAX@Z  006041f0  /O2 /MD /Gy /TP /arch:SSE

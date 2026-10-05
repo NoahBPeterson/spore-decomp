@@ -1,0 +1,1 @@
+0061c570  63  cFeedTransactionBase ctor: complete; FixedPtrVector default-init encoding/order + zero-register choice (ebx vs edx)

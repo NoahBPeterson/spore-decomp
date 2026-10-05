@@ -1,0 +1,9 @@
+00660e30 257 cSPUIFeedFilter destructor - complete, EA cleanup scheduling differs
+00661020 233 cSPUIFeedFilter constructor - complete, many field stores not byte-exact
+00661180 270 GetArcheTypeAssetKeys - complete, constraint/template path differs
+006612b0 150 map find-or-insert - complete, rbtree shape not byte-exact
+00661390 278 vector<E34>::operator= - complete, three-branch assign not byte-exact
+006614d0 243 vector<E34>::insert - complete, reallocation path not byte-exact
+00661670 112 vector<E34>::push_back default - complete, temp cleanup inlining differs
+00661700 57 vector<E34>::pop_back - complete, helper call order differs
+00661740 369 GetArcheTypeAssetKeys variant - complete, property path differs

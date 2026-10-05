@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00629c50  308  FUN_00629c50: skeleton; the creature-structure / FUN_00629bd0 / FUN_009b3c10 tail-distance pass is omitted
+00629de0  948  FUN_00629de0: skeleton; the per-baby animated-creature setup loop is omitted
+0062a1a0  139  StopWalk: skeleton; SetIdleAnimation + per-mode animation switch omitted
+0062a230  291  SetBabyPath: partial; the path-target construction (FUN_0062cb20/AddPathTarget) is only sketched
+0062a3d0  376  cSPPlayMode::Init: skeleton; token translators, sub-mode array and editor-base setup omitted
+0062a550  527  FUN_0062a550: skeleton; the skin-paint/camera-switch body is omitted
+0062a760  139  WakeupCreature: partial; the sleep-effect trigger (mode 3) is omitted
+0062a860  303  SetupFromConfigFile: skeleton; property/key-instance preload setup omitted
+0062a990  253  BabyStartSocialCallEffect: partial; only the GetMouthPartIdx guard is reproduced
+0062aa90  227  SetBabySitState: partial; the handler release (FUN_009cab60/FUN_009cb460) is not reproduced

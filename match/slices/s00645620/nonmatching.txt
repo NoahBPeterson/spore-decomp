@@ -1,0 +1,3 @@
+006460b0  16  FUN_006460b0 (0x14-byte element assignment loop): complete; original loads the old refcount pointer at the point of use, mine hoists it to the top of the loop body
+00646140  16  FUN_00646140 (uninitialized_copy forward): complete; same old-pointref load hoist
+006461d0  20  FUN_006461d0 (uninitialized_copy backward): complete; same hoist plus loop-entry scheduling

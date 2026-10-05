@@ -1,0 +1,2 @@
+00601fd0  -  SP::cGameTab::Init: skeleton (large init routine not reconstructed).
+006026f0  -  SP::cTerrainUI::LoadScriptFromGrid / DoMessage: skeleton (large message switch not reconstructed).

@@ -1,0 +1,2 @@
+0061dfa0  37  eastl::find_last_not_of: complete; decremented pointer held in esi vs eax (register allocation)
+0061e200  53  eastl::basic_string<char>::erase(position,n): complete; min() emitted as cmov instead of a branch

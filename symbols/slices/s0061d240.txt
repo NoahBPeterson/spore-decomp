@@ -1,0 +1,10 @@
+0061d380 SP::Pollen::cGetAssetFeedTransaction::ConstructRequest  # PDB anchor
+0061d960 SP::Pollen::cEditFeedTransaction::ConstructRequest  # PDB anchor
+0061de00 SP::Pollen::cHandshakeTransaction::HandleResult  # PDB candidate (caller-scored)
+0061dea0 wrapper over 0x0093abd0  # calls (a,b,-1,0), returns a
+0061df40 eastl intrusive ref wrapper ctor  # stores ptr, AddRef via vtable slot 1
+0061df60 eastl::find_first_not_of  # forward scan
+0061dfa0 eastl::find_last_not_of  # backward scan
+0061dfe0 PollenNotifyHelper  # MessageServer + release two members
+0061e180 guarded bool getter  # EnterCriticalSection/LeaveCriticalSection around flag at +0x68
+0061e200 eastl::basic_string<char>::erase(position,n)  # memmove tail +1

@@ -1,0 +1,10 @@
+00630750 eastl::basic_string<wchar_t>::basic_string(first,last)  # AllocateSelf + memcpy + NUL
+006307a0 eastl::rbtree insert-value node helper  # operator_new 0x24 + RBTreeInsert
+006308d0 cJob-holder deleting dtor  # vtbl 0x13fe518, releases +0x34/+0x30
+00630930 SP::cSPPlayModePhotoBrowser::~cSPPlayModePhotoBrowser  # PDB name, vtbl 0x13fe528
+006309e0 eastl::operator+<wchar_t;eastl::allocator>  # PDB name
+00630a50 SP::cSPPlayModePhotoBrowser::cSPPlayModePhotoBrowser  # vtbl 0x13fe528
+00630b30 eastl::vector<SP::cSettingsTab*>::DoInsertValue  # PDB name
+00630d10 SP::cSPPlayModePhotoBrowser::UpdatePhotoCountText  # PDB name
+00630f20 SP::cSPPlayModePhotoBrowser::ShowSendEmailWindow  # PDB name
+006312f0 SP::cSPPlayModePhotoBrowser helper  # 1307 bytes

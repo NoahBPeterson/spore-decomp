@@ -1,0 +1,10 @@
+0062abd0 SP::cSPPlayMode::MakeCreaturesFaceCamera  # PDB name; this ptr from cSPPlayMode methods
+0062ace0 cSPPlayMode helper (box half-extent)  # reads p+0x180, +0x3c
+0062b000 cSPPlayMode::ClearCreaturesAndBodies  # clears vectors at +0x366c and +0x3694
+0062b0f0 SP::cSPPlayModeAnimation::cSPPlayModeAnimation  # vtable 0x13fe0ec (Ghidra)
+0062b160 SP::cSPPlayModeAnimation::~cSPPlayModeAnimation  # vtable 0x13fe0ec
+0062b1c0 SP::cSPPlayMode::cSPPlayMode  # vtable 0x13fe104/0x13fe0fc
+0062b3a0 SP::cSPPlayMode::~cSPPlayMode  # vtable 0x13fe104/0x13fe0fc
+0062b5c0 SP::cSPPlayMode::HandleMessage  # PDB name; returns bool, ret 8
+0062b980 cSPPlayMode shared-library list remove-by-id  # erases from vector at +0x7c matching +0x1c
+0062ba10 SP::cAppModeEditorBase::IsEventForBaby  # PDB name; reads +0x36d0

@@ -1,0 +1,12 @@
+005f8fe0  -  unnamed 151-byte helper: skeleton only
+005f9080  -  eastl string helper (calls 0x5f8690 + temp dtor): skeleton only
+005f90c0  -  eastl string helper (calls 0x5f8700 + temp dtor): skeleton only
+005f9100  -  hash-table insert (FNV wchar hash + bucket): skeleton only
+005f9230  -  unnamed 224-byte helper: skeleton only
+005f9310  -  SP::Thumbnail::cImportExport::SetupExportFolderPath: skeleton only
+005f9470  -  hash-table insert variant (FNV wchar hash + bucket): skeleton only
+005f95a0  -  unnamed 212-byte helper: skeleton only
+005f9680  -  unnamed 63-byte helper: skeleton only
+005f96c0  -  unnamed 155-byte helper: skeleton only
+005f9760  -  unnamed 92-byte helper: skeleton only
+005f97c0  -  unnamed 350-byte helper: skeleton only

@@ -1,0 +1,7 @@
+00603170 SP::cOnlineTab::HandleMessage  # byte-exact; posts 0x44db12e/0x5b96086/0x5c5594a, this-0x24 -> InitUIState
+00602940 SP::cOnlineTab::InitUIState  # PDB anchor
+006031c0 SP::cSPUISettings::AddTab  # PDB candidate (callee-scored)
+00603260 SP::cSPUISettings::Init  # PDB anchor
+006035d0 SP::ShowSettingsWindow  # PDB candidate (caller-single)
+00603650 SP::cGraphicsTab::init_profile_data  # PDB candidate (callee-scored)
+00603780 SP::cOnlineTab::Init  # PDB candidate (caller-scored)

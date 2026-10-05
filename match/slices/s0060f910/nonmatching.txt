@@ -1,0 +1,7 @@
+006103d0  103  SP::cPollinator::GetAssetFeed candidate (137 B): behaviorally complete; register allocation and the inlined deque fast path differ.
+00610460  -    SP::cPollinator::EatFeed candidate (132 B): behaviorally complete; see above.
+006104f0  -    SP::cPollinator::CreateMyFeed (222 B): behaviorally complete (sprintf args and deque push omitted in the outline).
+006105d0  -    SP::cPollinator::UpdateMyFeed (273 B): behaviorally complete outline.
+006106f0  103  SP::cPollinator::DeleteMyFeed (129 B): behaviorally complete; near miss.
+00610780  -    SP::cPollinator::SubscribeToFeed (136 B): behaviorally complete outline.
+00610810  -    SP::cPollinator::UnsubscribeToFeed (129 B): behaviorally complete outline.

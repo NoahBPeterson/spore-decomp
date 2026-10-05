@@ -1,0 +1,3 @@
+0061a810  32  cGetAssetFeedTransaction ctor: complete; base + CtorSprintf schedule (extra callee-saved frame, manual strlen)
+0061a8b0  32  cGetAssetFeedTransactionEx ctor: complete; ctor scheduling / 64-bit id assembly differs
+0061a970  12  cEditFeedTransaction ctor: complete; vptr/mOpType store order and the second hash-set bucket-array store order

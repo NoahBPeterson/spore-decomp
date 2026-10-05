@@ -1,0 +1,5 @@
+00602940  -  SP::cOnlineTab::InitUIState: stub (large).
+006031c0  -  SP::cSPUISettings::AddTab: stub.
+00603260  -  SP::cSPUISettings::Init: stub (large).
+00603650  -  SP::cGraphicsTab::init_profile_data: stub.
+00603780  -  SP::cOnlineTab::Init: stub (needs a 65-slot vtable stub).

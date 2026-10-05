@@ -1,0 +1,4 @@
+006634d0 363 RebuildCategories - partial: category list rebuild loop simplified, template-DB query approximated
+00663680 450 ReloadCallback - partial: reload path plus scroll-frame creation approximated
+00663860 500 $E161 SetParent/Init - partial: parent assignment and layout init approximated
+00663a90 166 FUN_00663a90 message handler - partial: SporeGuide/category branches approximated

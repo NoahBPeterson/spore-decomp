@@ -1,0 +1,6 @@
+005f5f20  -  unnamed 355-byte cSPSwatch routine: skeleton only
+005f6090  -  cSPSwatch::InitAdditionalModels: skeleton only (451 bytes)
+005f6260  -  unnamed 671-byte routine: skeleton only
+005f6500  -  cSPSwatch::SetEditorCameraController: skeleton only (708 bytes)
+005f69a0  -  cSPSwatch::OnModelLoad: skeleton only (311 bytes)
+005f6bd0  -  cSPSwatch::cSPSwatch: skeleton only (502 bytes)

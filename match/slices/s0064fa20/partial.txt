@@ -1,0 +1,8 @@
+0064fa20  544   outline only: cSPUIAssetGrid::UpdateScrolling (stubbed)
+0064fc40  188   outline only: grid helper (stubbed)
+0064fd00  224   outline only: grid helper (stubbed)
+0064fde0  419   outline only: grid helper (stubbed)
+0064ff90  144   outline only: entry comparator (stubbed)
+00650020  366   outline only: cSPUIAssetGrid::ComputeCardLayoutParameters (stubbed)
+00650190  736   outline only: cSPUIAssetGrid::DoMessage (stubbed)
+00650470  343   outline only: grid helper (stubbed)

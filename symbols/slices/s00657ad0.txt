@@ -1,0 +1,10 @@
+00657ad0  SP::cSPUIAssetView::SetWindowArea  # ret 4; two window vcalls + FUN_00657930 + target rect vcall 0x74
+00657bc0  SP::cSPUIAssetView key handler  # +0xf5 guard, switch on event+8 (6/7/8/0x1b)
+00657dd0  SP::cSPUIAssetView::IsAnimTargetReady  # MATCH; +0x98/+0x9c AutoRefCounts byte[+4]&1
+00657e00  SP::cSPUIAssetView::OnDetach  # MATCH; layout SetReloadCallback(0,0) + vcall 0x44
+00657e20  select-slot helper  # MATCH; find child 0x0105a93d, vcall 0x14(arg), enable(1,1)
+00657e60  SP::cSPUIAssetView::UpdateVerbIcon  # switch(vcall 0x38) -> FUN_00657e20 with args 6/0/1/5/2/3/4
+00657f70  UI::AssetDiscovery_View::AssetDiscovery_View  # ctor
+006580b0  UI update  # 576 bytes
+006582f0  UI update  # 330 bytes
+00658440  UI update  # 1417 bytes

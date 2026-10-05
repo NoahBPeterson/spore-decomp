@@ -1,0 +1,12 @@
+0060ea40  QueueEntry node constructor (rbtree/list node)  # allocs 0x20, value at +0x10, AddRefs pointer members
+0060eab0  EmptyQueue/empty-string singleton accessor  # guard + atexit
+0060eaf0  deque<TransactionPtr,64>::PushSlow  # ret 8, bool selects front/back
+0060ec20  UploadQueue::DoInsertValue  # vector growth + in-place insert
+0060ee90  SP::cPollinator::HandlePollinateRequest  # PDB candidate
+0060f010  SP::cPollinator::NextIDReady  # PDB candidate
+0060f080  UploadQueue::push_back  # 16-byte POD element
+0060f370  asset-metadata to Variant property setter
+0060f4a0  eastl::deque<AutoRefCount<cITransaction>,64>::erase
+0060f700  eastl::deque<...>::insert
+0060f820  eastl::rbtree<unsigned,pair<const unsigned,cActiveTransaction>>::erase
+0060f8a0  eastl::rbtree<...>::DoNukeSubtree

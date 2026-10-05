@@ -1,0 +1,8 @@
+005fde30  -  texture/refcount helper: skeleton only; the EA lock-xadd refcount release was not reproduced.
+005fdeb0  -  UI::AchievementNotifier ctor: skeleton only; the 3-vptr MI layout and member zeroing were not reproduced.
+005fdbb0  -  UI::AchievementNotifier dtor: skeleton only; the member teardown sequence was not reconstructed.
+005fdaa0  -  cSPUILayout window toggle: skeleton only.
+005fdca0  -  helper: stub.
+005fd880  -  cImportExport::Init (candidate): stub.
+005fe050  -  helper: stub.
+005fd260  -  import deserializer: stub.

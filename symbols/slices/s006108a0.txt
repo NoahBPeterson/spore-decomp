@@ -1,0 +1,14 @@
+006108a0  cPollinator feed helper  # 881 B
+00610c20  SP::cPollinator::GetAssetFeedEx candidate  # poster pattern
+00610cb0  SP::cPollinator poster candidate  # 139 B
+00610d40  SP::cPollinator poster candidate  # 133 B
+00610df0  SP::cPollinator::CancelTransactionsForID candidate  # 157 B
+00610e90  SP::cPollinator poster candidate  # 150 B
+00610f30  SP::cPollinator helper  # 565 B
+00611170  SP::cPollinator::CancelTransactions  # rbtree walk, PDB name
+006111c0  SP::cPollinator::HandleTransactionResult  # PDB name
+00611480  SP::cPollinator helper  # 189 B
+00611540  SP::cPollinator::CancelAllTransactions thunk  # push 0x3c88992
+00611550  Feed::FeedDescription vector erase  # 48 B
+00611580  SP::cPollinator helper  # 314 B
+006116c0  SP::cPollinator::~cPollinator  # PDB name

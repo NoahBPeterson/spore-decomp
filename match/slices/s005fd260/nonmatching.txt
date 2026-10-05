@@ -1,0 +1,2 @@
+005fda40  2  message handler for 0x24ce123: complete; only the scratch register holding &local differs (ecx vs edx), so the byte image does not converge.
+005fdf40  205  AchievementNotifier::Update state machine: complete; the elapsed-time float/switch codegen does not converge.

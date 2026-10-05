@@ -1,0 +1,2 @@
+006470b0  2058  outline only: large cSPUIAssetBrowser method (stubbed)
+006478c0  1660  outline only: cSPUIAssetBrowser::SetLargeCardVisibililty (SSE UI, stubbed)

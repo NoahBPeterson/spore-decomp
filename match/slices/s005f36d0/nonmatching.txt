@@ -1,0 +1,3 @@
+005f36d0  236  GetThumbnailCameraID: complete (model-type switch + Editor::GetConfigFromModelType + manager property lookup); tail AutoRefCount/out-param schedule and property-id select differ
+005f3930  300  cSwatch3DView::AddCreature: complete (both anim-world assignments, layered obj bind, LOD switch, resource fallback); register/schedule differences
+005f3b20  368  cSPSwatch::InitInternal: complete (field stores, window binds, MessageServer AddHandler, cSwatch3DView::Init, viewport init); register/schedule differences

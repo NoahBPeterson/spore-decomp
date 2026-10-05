@@ -1,0 +1,1 @@
+006478c0 SP::cSPUIAssetBrowser::SetLargeCardVisibililty  # anchor PDB name (card.py)

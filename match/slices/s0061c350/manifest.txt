@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0061c350/s0061c350.cpp  ??0cGetAssetFeedTransaction@Pollen@SP@@QAE@ABUFixedPtrVector@12@@Z  0061c5e0  /O2 /MD /Gy /TP /arch:SSE

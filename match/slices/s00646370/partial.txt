@@ -1,0 +1,2 @@
+00646370  1890  outline only: 6-arg swatch-type dispatch into save-area/asset APIs (stubbed)
+00646ae0  283   outline only: ObjectTemplateDB constraint/vector manipulation (stubbed)

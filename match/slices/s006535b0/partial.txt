@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (incomplete/approximate)
+00653cf0  -  cSPUIAssetView verb collection ctor: fixed_vector ctor + collect loop present; lower_bound/DoInsertValue insert path is a skeleton
+00654100  -  cSPUIAssetGrid::HandleMessage: 660-byte key/scroll switch stubbed (needs jump-table reconstruction)

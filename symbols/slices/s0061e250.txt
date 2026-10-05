@@ -1,0 +1,12 @@
+0061e250 MI transaction/event ctor  # vtable pair 0x13fcaa8/0x13fcaa4; DateTime + Variant
+0061e2c0 MI transaction/event ctor (5 args)  # vtable pair 0x13fcaa8/0x13fcaa4
+0061e330 MI scalar deleting destructor  # vtable 0x13eb938; releases Variant at +0x20
+0061e3c0 find_last_not_of + erase wrapper  # used by TrimRight; calls 0x0061dfa0
+0061e430 wide->char conversion + vector insert  # EA::ConvertToString8
+0061e4a0 SP::Skinner::PaintSystem ctor  # vtable 0x13fcac4/0x13fcabc; critical section at +0x48
+0061e540 SP::Skinner::PaintSystem dtor  # deletes buffer, DeleteCriticalSection, releases
+0061e5b0 SP::Pollen::HeaderHandler::operator()  # PDB candidate (caller-scored)
+0061e740 Pollen helper (886 bytes)  # not identified
+0061eac0 PollenProcessFile  # file compare + flag
+0061eba0 eastl::basic_string<char>::TrimLeft  # trims leading " \t"
+0061ec30 eastl::basic_string<char>::TrimRight  # trims trailing " \t"

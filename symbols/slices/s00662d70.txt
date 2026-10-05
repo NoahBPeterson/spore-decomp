@@ -1,0 +1,4 @@
+00662d70 SP::cSPUIFeedList::Update  # named by class/method layout
+00663040 UI::cSPUIFeedList::cSPUIFeedList  # PDB ctor name
+006630e0 SP::cSPUIFeedList::~cSPUIFeedList  # PDB dtor name (dev 006630e0)
+006631c0 SP::cSPUIFeedList::UpdateScrolling  # PDB candidate (caller-scored)

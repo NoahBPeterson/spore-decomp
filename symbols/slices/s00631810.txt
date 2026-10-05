@@ -1,0 +1,10 @@
+00631810 SP::cSPPlayModePhotoBrowser helper  # 504 bytes
+00631a10 SP::cSPPlayModePhotoBrowser helper  # 273 bytes
+00631b30 SP::cSPPlayModePhotoBrowser::PhotoCountChanged  # PDB name
+00631dc0 vector<cPlayModePhoto*> clear  # memmove + mpEnd reset
+00631df0 vector<cPlayModePhoto*> push_back  # AutoRefCount add/release
+00631e50 SP::cSPPlayModePhotoBrowser helper  # 635 bytes
+006320d0 SP::cSPPlayModePhotoBrowser::DeletePhoto  # called by DeleteSelected
+00632320 SP::cSPPlayModePhotoBrowser::MovePhoto  # PDB name
+00632660 SP::cSPPlayModePhotoBrowser::DeleteSelected  # PDB candidate (caller-single)
+006326f0 SP::cSPPlayModePhotoBrowser::MoveSelected  # PDB candidate (caller-single)

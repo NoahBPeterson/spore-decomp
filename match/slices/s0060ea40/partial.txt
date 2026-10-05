@@ -1,0 +1,10 @@
+0060ea40  -  MakeNode (104 B): allocates 0x20 and placement-copies a 16-byte value into +0x10; only an outline port (the exact value type with its AddRef members is not reconstructed).
+0060eab0  -  empty-container static initializer (63 B): outline port, no guard/atexit skeleton reproduced.
+0060eaf0  -  deque<T,64>::PushSlow (194 B): outline port.
+0060ee90  -  SP::cPollinator::HandlePollinateRequest (378 B): skeleton; resource-manager lookup and property update omitted.
+0060f010  -  SP::cPollinator::NextIDReady (111 B): outline port.
+0060f370  -  asset-metadata -> Variant update (303 B): skeleton.
+0060f4a0  -  eastl::deque<...>::erase (596 B): outline port (generic iterator-shift), not the original range algorithm.
+0060f700  -  eastl::deque<...>::insert (284 B): outline port.
+0060f820  -  eastl::rbtree<...>::erase (115 B): outline port; RBTreeIncrement/Erase and the exact AutoRefCount node layout not reconstructed.
+0060f8a0  -  eastl::rbtree<...>::DoNukeSubtree (106 B): outline port.

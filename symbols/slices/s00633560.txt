@@ -1,0 +1,13 @@
+00633560 SP::cSPPlayModePhotoBrowser helper  # 507 bytes
+00633760 SP::cSPPlayModePhotoBrowser helper  # 303 bytes
+006338a0 SP::cSPPlayModePhotoBrowser::ClearPhotoTypes  # rbtree at +0x68
+006339e0 SP::cSPPlayModePhotoBrowser::Init  # PDB name
+00633ac0 SP::cSPPlayModePhotoBrowser::ShowThumbnailAsync  # PDB name
+00633cc0 SP::cSPPlayModePhotoBrowser::ShowImageThumbnail  # PDB name
+00633ea0 SP::cSPPlayModePhotoBrowser helper  # 230 bytes
+00633f90 SP::cSPPlayModePhotoBrowser::HandleMode  # PDB candidate; switch on +0xe74
+00634030 SP::cSPPlayModePhotoBrowser::ClearPhotoList  # PDB candidate
+006340c0 SP::cSPPlayModePhotoBrowser::HandleMessage  # PDB candidate; unregisters 4 handlers
+00634140 SP::cSPPlayModePhotoBrowser helper  # 570 bytes
+00634380 SP::cSPPlayModePhotoBrowser::SendPhoto  # PDB candidate (caller-single)
+006343f0 SP::cSPPlayModePhotoBrowser::NextPage  # ContinueJob + page index +5

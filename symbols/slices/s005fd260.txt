@@ -1,0 +1,6 @@
+005fda40 cImportExport import message handler (0x24ce123)  # inferred; refcounted vec local
+005fd880 SP::Thumbnail::cImportExport::Init  # PDB anchor
+005fdeb0 UI::AchievementNotifier::AchievementNotifier  # PDB names; 3 vptrs (+0,+8,+0xc)
+005fdbb0 UI::AchievementNotifier::~AchievementNotifier  # inferred (dtor)
+005fdca0 SP::cSPPaletteItemUIHutStyle::Init  # PDB candidate (caller-scored)
+005fdf40 UI::AchievementNotifier::Update  # inferred state machine

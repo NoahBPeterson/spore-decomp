@@ -1,0 +1,6 @@
+slices/s00646370/s00646370.cpp  sub_646d70       00646d70  /O2 /MD /Gy /TP
+slices/s00646370/s00646370.cpp  ?Insert118@Owner 00646dc0  /O2 /MD /Gy /TP
+slices/s00646370/s00646370.cpp  ?Insert0F8@Owner 00646e00  /O2 /MD /Gy /TP
+slices/s00646370/s00646370.cpp  ?Insert138@Owner 00646e40  /O2 /MD /Gy /TP
+slices/s00646370/s00646370.cpp  ?Insert15C@Owner 00646ec0  /O2 /MD /Gy /TP
+slices/s00646370/s00646370.cpp  ?reserve@Vec14   00646fc0  /O2 /MD /Gy /TP

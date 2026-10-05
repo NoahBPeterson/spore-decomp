@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0062abd0/s0062abd0.cpp  ??0cSPPlayModeAnimation@@QAE@XZ  0062b0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0062abd0/s0062abd0.cpp  ??1cSPPlayModeAnimation@@QAE@XZ  0062b160  /O2 /MD /Gy /TP /arch:SSE /fp:fast

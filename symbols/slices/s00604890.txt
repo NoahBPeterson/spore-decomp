@@ -1,0 +1,9 @@
+00604890  cSPEditorVerbIcon::Shutdown candidate (caller-scored)  # 1196 B, initializes layout + icon/tooltip loop
+00604d40  SP::cSPUISettings::DoMessage  # 1166 B, message handler
+006053a0  cSPVerbIconRollover::Layout  # 1131 B, lays out the rollover icons
+006051d0  cSPVerbIconRollover::cSPVerbIconRollover  # 71 B ctor, SetLayoutName(L"RolloverVerbIcon",0x40464100)
+00605220  cSPVerbIconRollover::cSPVerbIconRollover(uint32_t)  # 73 B ctor
+00605270  cSPVerbIconRollover::Shutdown  # 69 B
+006052c0  cSPVerbIconRollover::SetVisibility(uint32_t,uint32_t)  # 39 B
+00605340  cSPVerbIconRollover::Init  # 87 B
+00605830  SetStateOnAll(int)  # 58 B, iterates icon vector (member of the tray/collection)

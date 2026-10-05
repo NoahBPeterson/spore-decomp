@@ -1,0 +1,9 @@
+00600e80  -  cSPUISettings ctor/layout helper: stub.
+006012e0  -  SP::cSPUISearchBox::DoMessage: stub.
+006016c0  -  cGraphicsTab scalar deleting destructor: stub (retail MI layout not reconstructed).
+00601730  -  SP::cOnlineTab::~cOnlineTab: stub (retail MI layout not reconstructed).
+00601790  -  SP::cSPUISettings::cSPUISettings: stub.
+00601930  -  SP::cSPUISettings::~cSPUISettings: stub.
+00601a70  -  helper: stub.
+00601da0  -  SP::cSPUISettings::RemoveTab: stub.
+00601f00  -  SP::cSPUISettings::CloseWindow: stub.

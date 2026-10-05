@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00620dc0  105  OnModalEnd: complete; ConfirmLogin/Submit call layout and cRegDialog subobject adjust differ
+00620e50  115  DialogUiNotify: complete; FindWindowByID/flag sequence and the +8 subobject adjust differ
+00621460    2  map lookup: complete; compare operand order (key vs *result) and lea register differ in 2 bytes
+006214c0    2  GetURL: complete; same compare operand order (2 bytes)
+006216b0  116  RegisterURL: complete; the CtorSprintf tag/local-string call sequence is emitted differently
+00621770  116  RegisterInsecureURL: complete; same CtorSprintf call-sequence issue

@@ -1,0 +1,14 @@
+006535b0  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::DoInsertValue  # ret 8; aliasing + realloc paths
+006536e0  filter/remove over 0x10-byte records (SetAssetData + lower_bound)  # 10-byte stride 0x10
+00653780  copy_if over 0x10-byte records  # same helpers as 006536e0
+00653820  eastl::quick_sort_impl<SP::cSPAssetGridEntry*,int,SP::TypeGridEntrySort>  # recursive median/get_partition/partial_sort, limit 0x380
+00653960  eastl::partial_sort<SP::cSPAssetGridEntry*,CompareA>  # make_heap 6533d0 + adjust_heap 6525d0 + compare 64ff90
+00653b80  SP::cSPUIAssetGrid::FindFirstVisibleEntry (forward scan)  # forward scan, returns index or -1
+00653c40  SP::cSPUIAssetGrid::FindLastVisibleEntry (reverse scan)  # reverse scan
+00653cf0  SP::cSPUIAssetView verb-collection ctor  # fixed_vector + InitVerbCollection
+00653e40  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::resize  # ret 4
+00653f50  eastl::quick_sort_impl<SP::cSPAssetGridEntry*,int,CompareA>  # median A 0x6515a0 + get_partition A 0x652e70
+00654100  SP::cSPUIAssetGrid::HandleMessage  # switch on key (0x21..0x28, 0x46), jump table at 0x654384
+006543a0  SP::cSPUIAssetGrid::Clear  # release 0xfc, destroy entries, reset fields
+00654490  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::reserve  # ret 4; realloc + swap fallback
+00654650  SP::cSPUIAssetGrid::Shutdown  # PDB candidate; releases layout/feed/search/handler

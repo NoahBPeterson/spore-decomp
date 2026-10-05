@@ -1,0 +1,2 @@
+00646d10  83  map find instantiation: complete, comparator short-circuit codegen differs
+00646f40  111 hashtable find-or-insert: complete, frame/scheduling near-miss

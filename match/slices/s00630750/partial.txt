@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00630930  -  SP::cSPPlayModePhotoBrowser::~cSPPlayModePhotoBrowser: skeleton (162-byte teardown)
+00630d10  -  SP::cSPPlayModePhotoBrowser::UpdatePhotoCountText: skeleton (514 bytes)
+00630f20  -  SP::cSPPlayModePhotoBrowser::ShowSendEmailWindow: skeleton (962 bytes)
+006312f0  -  FUN_006312f0: skeleton (1307 bytes)

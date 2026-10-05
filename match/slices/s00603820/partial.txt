@@ -1,0 +1,8 @@
+00603820  -  cGraphicsTab helper: stub.
+00603920  -  SP::cGraphicsTab::init_lmh_control: stub.
+00603a10  -  SP::cGraphicsTab::on_data_changed: stub (large).
+00603de0  -  SP::cGraphicsTab::SaveSettings: stub.
+00604260  -  SP::cGraphicsTab::Init: stub (large).
+006044b0  -  SP::cGraphicsTab::load_list_options: stub (global option-table loop).
+00604520  -  SP::cGraphicsTab::set_profile: stub (PropertyManager path).
+006045c0  -  SP::cGraphicsTab::DoMessageTab: stub (large).

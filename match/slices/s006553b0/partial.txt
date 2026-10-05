@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (incomplete/approximate)
+006553b0  -  cSPUIAssetGrid animation/update (1158 bytes): skeleton
+00655840  -  cSPUIAssetGrid layout step (691 bytes): skeleton
+00655b00  -  cSPUIAssetGrid load step (968 bytes): skeleton
+00655ed0  -  SP::cSPUIAssetGrid::Update (880 bytes): skeleton

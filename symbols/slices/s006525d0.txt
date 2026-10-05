@@ -1,0 +1,12 @@
+006525d0  eastl::adjust_heap<SP::cSPAssetGridEntry*,int,SP::cSPAssetGridEntry,CompareA>  # MATCH; comparator 0x64ff90 (two entries by value)
+006527b0  eastl::make_heap<SP::cSPAssetGridEntry*,SP::TypeGridEntrySort>  # PDB name; 15-byte copy-ctor base-anchor diff
+00652850  eastl::pop_heap<SP::cSPAssetGridEntry*,CompareA>  # MATCH; calls adjust_heap 0x6525d0
+006528f0  SP::cSPUIAssetGrid::UpdateStatsText  # PDB name (card)
+00652ba0  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::operator=(const vector&)  # shape; realloc/grow/shrink
+00652c90  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::DoInsertValues  # shape; ret 0xc
+00652e70  eastl::get_partition<SP::cSPAssetGridEntry*,SP::cSPAssetGridEntry,CompareA>  # MATCH; comparator 0x64ff90 by value
+00653110  eastl::get_partition<SP::cSPAssetGridEntry*,SP::cSPAssetGridEntry,SP::TypeGridEntrySort>  # MATCH; comparator 0x66a830 by reference
+00653230  eastl::partial_sort<SP::cSPAssetGridEntry*,SP::TypeGridEntrySort>  # shape; make_heap+adjust_heap+pop_heap+compare
+006533d0  eastl::make_heap<SP::cSPAssetGridEntry*,CompareA>  # 15-byte copy-ctor base-anchor diff
+006534c0  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::erase(iterator)  # MATCH
+00653510  eastl::vector<SP::cSPAssetGridEntry,eastl::sp_vector_allocator>::swap(vector&)  # shape; allocator-word check + 3-pointer swap

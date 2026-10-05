@@ -1,0 +1,5 @@
+0063ced0 SP::cSPPlayModeSubModeMovie::CheckYouTubeRegistration  # PDB name
+0063cf90 SP::cSPPlayModeSubModeMovie::CheckYouTubeRegistration (variant)  # near-identical to 0063ced0
+0063d050 SP::cSPPlayModeSubModeMovie::ConstructYouTubeVideoUploadXMLRequest  # PDB name
+0063d170 SP::cSPPlayModeSubModeMovie::ConstructVideoURL  # PDB name
+0063d910 SP::cSPPlayModeSubModeMovie::ToggleRecordingIndicator  # PDB name

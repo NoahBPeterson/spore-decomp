@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00630750   60  basic_string<wchar_t> range ctor: complete; memcpy/AllocateSelf scheduling and end-pointer write
+006307a0  113  rbtree insert helper: complete; operator-new line-info args and node field copy schedule
+006308d0   58  cJob-holder deleting dtor: complete; GetStatus calls via +0x34/+0x30 and buffer free
+006309e0   49  eastl::operator+<wchar_t>: complete; strlen/append call setup order
+00630a50  142  cSPPlayModePhotoBrowser ctor: complete; 0x63-entry loop body store order
+00630b30  207  vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape

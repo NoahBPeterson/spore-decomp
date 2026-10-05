@@ -1,0 +1,4 @@
+00664c90 138 cSPUIFeedListCategory ctor - complete, vtable/field store scheduling differs
+00664dc0 180 cSPUIFeedListCategory dtor - complete, refcount cleanup ordering differs
+006650c0 294 vector<AutoRefCount4>::insert - complete, reallocation path not byte-exact
+00665c50 190 cSPUIFeedListCategory::Populate - complete, cString/property path scheduling differs

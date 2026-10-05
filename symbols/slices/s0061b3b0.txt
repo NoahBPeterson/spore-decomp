@@ -1,0 +1,7 @@
+0061b3b0 SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult  # PDB anchor
+0061b620 SP::Pollen::cYouTubeVideoUploadTransaction::ConstructRequest  # PDB anchor
+0061bbc0 eastl::quick_sort_impl<unsigned*, TimeGreater>  # kQuickSortLimit 28; median/get_partition/partial_sort over 0x118-byte timestamped records
+0061bcf0 SP::Pollen::WritePropertyListAndPNG  # PDB candidate (caller-scored)
+0061c880 SP::Pollen::RequestAssetsFromFeed  # PDB anchor
+0061cf60 SP::Pollen::cGetAssetFeedTransaction::HandleResult  # PDB anchor
+0061d1c0 SP::Pollen::cEditFeedTransaction::HandleResult  # PDB candidate (caller-scored)

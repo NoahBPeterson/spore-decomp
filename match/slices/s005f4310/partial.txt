@@ -1,0 +1,5 @@
+005f4310  -  cSPOLDPaletteItemUIDragAndBuy::Init: skeleton (InitInternal + key copy + Vt24 + default UI setup); window/refcount/label branches omitted
+005f4750  -  cSPOLDPaletteItemUIDragAndBuy::OnLeftMouseDown: skeleton only (availability/cost display + vehicle-abilities + message send omitted)
+005f49f0  -  cSPOLDPaletteItemUIDragAndBuy::OnMouseDown: skeleton only (resource-type switch + audio + renderer calls omitted)
+005f4b80  -  cSPOLDPaletteItemUIDragAndBuy::OnMouseUp: skeleton only (capture release + message send omitted)
+005f4d00  -  0x38-byte record copy loop: approximate struct chosen; word/float field mix not reproduced

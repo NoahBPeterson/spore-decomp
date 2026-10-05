@@ -1,0 +1,9 @@
+00626db0 SP::cCreatureCameraBase::GetCurrentCameraPosition  # PDB-resolved
+00626ee0 SP::cCreatureCameraBase::UpdateCamera_StandardControl  # PDB-resolved
+00627000 SP::cCreatureCameraBase::GetAudioAnchorPosition  # PDB-resolved
+00627060 SP::cCreatureCameraBase::InitCreatureData  # PDB candidate (caller-single)
+006271a0 `anonymous namespace'::translateTransform
+006271f0 SP::cCreatureCameraBase::cCreatureCameraBase  # PDB-resolved
+006275d0 SP::cCreatureCameraBase::~cCreatureCameraBase  # PDB-resolved
+00627660 SP::cCreatureCameraBase::FUN_00627660
+00627ca0 SP::cCreatureCameraBase::Activate  # PDB candidate (caller-single)

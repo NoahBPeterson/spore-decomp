@@ -1,0 +1,3 @@
+0065a070 2023 cSPUIAssetView::LoadLayout - complete source, huge UI layout builder, not byte-exact
+0065a990 1027 cSPUIAssetView::Update - complete source, drag/animation + timer logic, not byte-exact
+0065aed0 19 SporepediaVecSetSize - complete, differs only in esi/edi register assignment

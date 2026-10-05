@@ -1,0 +1,4 @@
+00661900 258 ComputeCreatureVerbIcons - skeleton: only the property-manager preamble and key loop shape
+00661a10 249 HasAnyAsset - partial: first check only, lower_bound loop omitted
+00661b10 238 property filter check - skeleton: cache lookup not implemented
+00661c00 270 recursive asset match - skeleton: outer checks only

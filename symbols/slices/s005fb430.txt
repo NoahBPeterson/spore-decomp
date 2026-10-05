@@ -1,0 +1,3 @@
+005fb900 SP::Thumbnail::cImportExport::~cImportExport (retail layout)  # byte-exact; maps at +4/+24/+48/+68, image embed +88, 8 string16 +104..+174
+005fb430 SP::Thumbnail::cImportExport::UpdateExportThumb  # PDB names (callee-scored)
+005fbb00 SP::cIDGenerator::CreateKey  # PDB candidate (caller-single)

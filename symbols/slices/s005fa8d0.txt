@@ -1,0 +1,7 @@
+005fa8d0 SP::Thumbnail::cImportExport::CreateExportThumb  # PDB candidate (caller-scored)
+005fae40 SP::Thumbnail::cImportExport::Shutdown  # PDB names (callee-scored), byte-exact
+005fadb0 eastl::hashtable<KeyNamePair,Key,KeyHash>::erase(const_iterator)  # byte-exact
+005fb350 cImportInfo::operator=  # byte-exact (0x005fb350)
+005face0 eastl::hashtable<NameKeyPair,string16,hash>::erase(const string16&)  # inferred from layout
+005faec0 SP::Thumbnail::cImportExport::RemoveExportThumb  # inferred (erases from key/name maps)
+005fafb0 SP::Thumbnail::cImportExport::ImportFromFolder  # inferred (scans mKeyToNameMap)

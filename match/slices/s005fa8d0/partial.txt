@@ -1,0 +1,3 @@
+005fa8d0  -  cImportExport::CreateExportThumb: only the guard/skeleton is reconstructed; the sprite/texture and file pipeline inside is not reproduced.
+005faec0  201  cImportExport::RemoveExportThumb: main key-map erase path written, but the Guid->Key / Key->Guid map erase calls are omitted.
+005fafb0  -  cImportExport::ImportFromFolder: only the signature and a false return are present; the folder-scan loop is not reconstructed.

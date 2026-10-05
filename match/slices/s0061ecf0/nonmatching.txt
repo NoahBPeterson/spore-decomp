@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0061f3a0  400  OnPoll: complete; temporary/register layout around the 0x214 request and job out-param differs
+0061f530  264  Pump: complete; prologue register allocation and the mpStream==0 block layout differ
+0061f9f0   73  StartJob: complete; original reloads the job pointer around the virtual get-job call
+0061fb50    7  HandleMessage: complete; epilogue orders pop esi before mov al,1

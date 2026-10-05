@@ -1,0 +1,4 @@
+005f5970  44  vector<AutoRefCount<cMWModel>>::clear (erase path): complete (do_copy + DoDestroyValues + end adjustment); compiler emits sub instead of neg/add schedule
+005f59b0  213  cSwatch3DView::AddModel: complete (both layered-object/model-texture paths, flag OR, refcounted vector push); register/schedule differences
+005f5aa0  110  cSwatch3DView::RemoveAllModels: complete (layered clear vs vector clear + anim-world release); schedule differences
+005f5df0  239  cSPSwatch::ShutDownModel: complete (mModel release, four vector clears, effect release, RemoveAllModels, flag clear); vector clear scheduling differs

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062ace0  126  FUN_0062ace0: complete; original copies the two Vec3 corners into stack slots before the SSE subtractions
+0062b000  189  FUN_0062b000: complete; virtual-call register scheduling / loop shape differs (no similar-size symbol)
+0062b980   86  FUN_0062b980: complete; vector erase/copy helper form differs

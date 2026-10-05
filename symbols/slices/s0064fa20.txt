@@ -1,0 +1,4 @@
+0064fa20 SP::cSPUIAssetGrid::UpdateScrolling            # anchor PDB name (card.py)
+00650020 SP::cSPUIAssetGrid::ComputeCardLayoutParameters # anchor PDB name (card.py)
+00650190 SP::cSPUIAssetGrid::DoMessage                # PDB candidate (caller-scored) card.py
+006505d0 SP::cSPUIAssetGrid::GetEntryByID             # linear lookup of id at element+0x10

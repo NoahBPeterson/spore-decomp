@@ -1,0 +1,10 @@
+005f5f20 SP::cSPSwatch::unknown_5f5f20  # unnamed 355-byte routine
+005f6090 SP::cSPSwatch::InitAdditionalModels  # PDB name on card
+005f6260 SP::cSPSwatch::unknown_5f6260  # unnamed 671-byte routine
+005f6500 SP::cSPSwatch::SetEditorCameraController  # PDB name on card
+005f67d0 SP::cSwatch3DView::Shutdown  # PDB caller-single candidate
+005f68a0 SP::cSPSwatch::Shutdown  # PDB caller-single candidate
+005f69a0 SP::cSPSwatch::OnModelLoad  # PDB name on card
+005f6ae0 SP::cSPPaletteSwatch::OnRolloverEnd  # RemoveHandler + rollover Hide + Shutdown
+005f6b40 SP::cSwatch3DView::~cSwatch3DView  # PDB name on card
+005f6bd0 SP::cSPSwatch::cSPSwatch  # PDB name on card

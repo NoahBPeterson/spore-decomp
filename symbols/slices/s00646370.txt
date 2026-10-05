@@ -1,0 +1,9 @@
+00646370 SP::cCommunityEditor::UpdateSwatchForModelType  # PDB candidate (caller-scored) card.py
+00646ae0 SP::cSPSwatchManager::CreateAnimatingCreature     # PDB candidate (caller-scored) card.py
+00646d70 eastl::vector<SP::FunctionalMatch::Constraint,eastl::sp_vector_allocator>::DoDestroyValues  # stride 0x34 two owned buffers
+00646dc0 SP::cSPSwatchManager::AddKey118                    # map insert at this+0x118, returns inserted
+00646e00 SP::cSPSwatchManager::AddKey0F8                    # map insert at this+0xf8, returns inserted
+00646e40 SP::cSPSwatchManager::AddRefKey138                 # refcounted insert at this+0x138
+00646ec0 SP::cSPSwatchManager::AddRefKey15C                 # refcounted insert at this+0x15c
+00646f40 eastl::hash_map<unsigned int,...>::operator[]      # find-or-insert returning value slot
+00646fc0 eastl::vector<...>::reserve                       # element stride 0x14, allocator "Editor"

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062ca80   -   FUN_0062ca80: complete; void-returning thiscall codegen/size differs (loop + BlockCircle arg setup)
+0062cb20   88  FUN_0062cb20: complete; operator-new null path and field-store order differ
+0062cb90   45  FUN_0062cb90: complete; loop counter kept in edi from the prologue vs ebx pushed inside the if
+0062cbc0   62  FUN_0062cbc0: complete; x87 fabs/compare schedule vs SSE; return-bool shape
+0062cd30   -   FUN_0062cd30: complete; ctor ref/release dead branches (fields zeroed then tested) not reproduced
+0062cdb0   52  FUN_0062cdb0: complete; vector dtor call + release order and delete-flag epilogue

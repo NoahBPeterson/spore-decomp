@@ -1,0 +1,10 @@
+0061b3b0  na  cYouTubeAuthenticationTransaction::HandleResult: skeleton (returns false); XML/response parsing omitted
+0061b620  na  cYouTubeVideoUploadTransaction::ConstructRequest: skeleton; multipart upload body omitted
+0061b9a0  na  Pollen request helper (534 bytes): skeleton; not identified
+0061bc50  na  string swap: skeleton; SSO/assign branches omitted
+0061bcf0  na  WritePropertyListAndPNG: skeleton; property-list serialization omitted
+0061be80  na  0x13fc854 transaction ctor: skeleton; member init omitted
+0061bf50  na  Pollen helper (286 bytes): skeleton; not identified
+0061c070  na  eastl vector assign helper: skeleton; DoInsertValue paths omitted
+0061c1c0  na  DoAllocate + uninitialized_copy of 0x70-byte records: skeleton; copy call omitted
+0061c280  na  string set_capacity: skeleton; grow/reallocate paths omitted

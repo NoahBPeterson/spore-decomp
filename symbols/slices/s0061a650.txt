@@ -1,0 +1,8 @@
+0061a650 SP::Pollen::cGetAssetFeedTransaction-like asset GET (cServerResponse path)  # builds URL from service hash 0x68cb17d + asset id, CreateHTTPGetRequest
+0061a810 SP::Pollen::cGetAssetFeedTransaction::cGetAssetFeedTransaction  # base(3,0x13ec47c,0) + sprintf "%I64u"
+0061a8b0 SP::Pollen::cGetAssetFeedTransactionEx::cGetAssetFeedTransactionEx  # +0xf0 id, +0xf8 string
+0061a970 SP::Pollen::cEditFeedTransaction::cEditFeedTransaction  # vtable 0x13fc754, two hash_sets (bucket array 0x154df28, load 1.0/grow 2.0)
+0061aa00 SP::Pollen::cUserMatchTransaction::ConstructRequest  # PDB candidate; GET with assetId/rating
+0061abf0 SP::Pollen::cUserMatchTransaction-ish GET request  # service hash 0x5efa12b + "%llu"
+0061ad70 SP::Pollen::cHandshakeTransaction::ConstructRequest  # PDB candidate; HandshakeParser, Spore-User/Password/ProductCode headers
+0061b0e0 SP::Pollen::cTelemetryUploadTransaction::ConstructRequest  # PDB anchor; 0xd98-byte HTTPRequest POST

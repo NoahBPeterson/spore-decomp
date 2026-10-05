@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00654d00  251  cSPUIAssetGrid Reset/Refresh: release + feed-item collection + FUN_00653ee0 + timer reset all present; helper conventions differ
+00654e20  271  cSPUIAssetGrid ScrollTo: scroll math + clamp + UpdateMouseFocus complete; vcall/helper shapes differ

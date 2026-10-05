@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0060ea40/s0060ea40.cpp  ?push_back@UploadQueue@@QAEXABUQValue@@@Z  0060f080  /O2 /MD /Gy /TP /GS- /arch:SSE

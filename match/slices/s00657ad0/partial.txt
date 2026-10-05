@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (incomplete/approximate)
+00657bc0  -  SP::cSPUIAssetView key handler (526 bytes): switch head + window-manager branches implemented; remaining key branches are approximate
+00657f70  -  UI::AssetDiscovery_View::AssetDiscovery_View (294 bytes): ctor skeleton
+006580b0  -  UI update (576 bytes): skeleton
+006582f0  -  UI update (330 bytes): skeleton
+00658440  -  UI update (1417 bytes): skeleton

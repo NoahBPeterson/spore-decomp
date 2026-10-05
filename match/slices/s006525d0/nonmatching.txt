@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006527b0  15  eastl::make_heap<GridEntry*,TypeGridEntrySort>: identical logic/size; cl anchors the inlined copy-ctor base at +8 instead of +0xc
+006533d0  15  eastl::make_heap<GridEntry*,CompareA>: identical logic/size; same copy-ctor base-anchor difference
+00653230  71  eastl::partial_sort<GridEntry*,TypeGridEntrySort>: make_heap/pop_heap/sort_heap shape and calls match; same base-anchor cascade
+00652ba0  135  eastl::vector<GridEntry>::operator=(const vector&): realloc/grow/shrink paths all present; helper scheduling and copy-ctor anchor differ
+00652c90  435  eastl::vector<GridEntry>::DoInsertValues: all paths present; helper scheduling / temp slots differ from the original
+00653510  86  eastl::vector<GridEntry>::swap: both allocator-equal and fallback paths present; temp/register schedule differs
+006528f0  454  SP::cSPUIAssetGrid::UpdateStatsText: every path/call translated (cString Load/c_str, WString_Assign, scrollbar); helper signatures approximated

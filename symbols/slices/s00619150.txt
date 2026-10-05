@@ -1,0 +1,11 @@
+00619150 SP::Pollen::cDeleteMyFeedTransaction::cDeleteMyFeedTransaction  # ctor with one const char* (0x57cc10 RangeInit)
+00619180 SP::Pollen::cDeleteMyFeedTransaction::`scalar deleting destructor'  # frees mURI, free-list delete
+006191d0 SP::Pollen::cFeedUnsubscribeTransaction::cFeedUnsubscribeTransaction  # ctor with one const char*
+00619200 SP::Pollen::cFeedUnsubscribeTransaction::`scalar deleting destructor'
+00619250 SP::Pollen::cSnapshotUploadTransaction::cSnapshotUploadTransaction  # Key + 4 strings
+00619300 SP::Pollen::cYouTubeAuthenticationTransaction::cYouTubeAuthenticationTransaction  # 3 strings + bool
+00619390 SP::Pollen::cYouTubeVideoUploadTransaction::cYouTubeVideoUploadTransaction  # 5 strings + Key + string
+00619470 SP::Pollen::cYouTubeVideoURLTransaction::cYouTubeVideoURLTransaction  # 4 strings
+00619530 eastl::partial_sort<unsigned*, TimeGreater>  # make_heap/adjust_heap/sort_heap over asset indices (0x118-byte records, time at +0x30)
+006195d0 eastl::uninitialized_copy_backward  # constructs 0x70-byte FeedDescription records into a destination cursor
+00619650 eastl::copy_backward  # assigns 0x70-byte FeedDescription records

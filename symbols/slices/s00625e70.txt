@@ -1,0 +1,5 @@
+00625e70 SP::cCreatureCameraBase::AimTowardsTarget  # PDB-resolved
+00625f70 SP::cCreatureCameraBase::FUN_00625f70  # orbit/walk damping toward target
+00626290 SP::cCreatureCameraBase::ReloadTuning  # PDB-resolved
+006268a0 SP::cCreatureCameraBase::CalculateCameraToWorldMatrix  # PDB-resolved
+00626b50 SP::cCreatureCameraBase::SetInitialCameraValues  # PDB-resolved

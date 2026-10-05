@@ -1,0 +1,7 @@
+00645620  -  cSPUIAssetBrowser::LoadConfigFile: PARTIAL skeleton (1480 B)
+00645bf0  -  FUN_00645bf0: PARTIAL skeleton (208 B)
+00645cc0  -  FUN_00645cc0: PARTIAL skeleton (207 B)
+00645db0  -  FUN_00645db0 (two intrusive_ptr assignments): PARTIAL skeleton (97 B)
+00645e20  -  ShowPublishDialog: PARTIAL skeleton (174 B)
+00646030  -  FUN_00646030 (lower_bound): PARTIAL skeleton (121 B)
+006462b0  -  FUN_006462b0 (hashtable find + AssetDiscovery_View new): PARTIAL skeleton (178 B)

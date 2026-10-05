@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062a360   96  HasActivePath: complete; ss/vector loop and the float/byte flag tests are scheduled differently
+0062a7f0   92  OnMouseDown: complete; virtual slot-6 dispatch loop over the 4 sub-modes differs
+0062ab80   63  SetAllBabySitState: complete; loop shape and the SetBabySitState thunk call differ

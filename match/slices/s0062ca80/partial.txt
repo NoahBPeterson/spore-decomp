@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0062cc20  -  FUN_0062cc20: skeleton (target-position set + angle computation)
+0062ce00  -  SP::cSPPlayMode_Creature::AddPathTarget: skeleton (AutoRefCount path push/replace)
+0062cef0  -  SP::cSPPlayMode_Creature::UpdateMovement: skeleton (507 bytes)
+0062d0f0  -  FUN_0062d0f0: skeleton (1956 bytes)
+0062d8a0  -  FUN_0062d8a0: skeleton (64x64 grid neighbour-table build)

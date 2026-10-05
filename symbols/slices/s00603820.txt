@@ -1,0 +1,9 @@
+00604860 SP::cSPUISettings::SaveAllSettings  # byte-exact
+006041f0 SP::cSPUISettings::HandleMessage  # byte-exact; 0x238de9c -> EndModal+Shutdown, 0x62752d3 -> subobjects
+00603920 SP::cGraphicsTab::init_lmh_control  # PDB candidate
+00603a10 SP::cGraphicsTab::on_data_changed  # PDB anchor
+00603de0 SP::cGraphicsTab::SaveSettings  # PDB candidate (caller-scored)
+00604260 SP::cGraphicsTab::Init  # PDB anchor
+006044b0 SP::cGraphicsTab::load_list_options  # PDB candidate (callee-single)
+00604520 SP::cGraphicsTab::set_profile  # PDB candidate (callee-scored)
+006045c0 SP::cGraphicsTab::DoMessageTab  # PDB anchor

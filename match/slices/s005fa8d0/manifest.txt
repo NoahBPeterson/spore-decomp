@@ -1,0 +1,3 @@
+slices/s005fa8d0/s005fa8d0.cpp  ?erase@?$hashtable@U?$pair@UKey@ResourceMan@EA@@V?$basic_string@_W@eastl@@@eastl@@UKey@ResourceMan@EA@@UKeyHash@45@Uequal_to@2@@eastl@@QAE?AU?$hashtable_iterator@U?$pair@UKey@ResourceMan@EA@@V?$basic_string@_W@eastl@@@eastl@@U?$hash_node@U?$pair@UKey@ResourceMan@EA@@V?$basic_string@_W@eastl@@@eastl@@@2@@2@U?$hashtable_iterator@$$CBU?$pair@UKey@ResourceMan@EA@@V?$basic_string@_W@eastl@@@eastl@@U?$hash_node@U?$pair@UKey@ResourceMan@EA@@V?$basic_string@_W@eastl@@@eastl@@@2@@2@@Z  005fadb0  /O2 /MD /Gy /TP
+slices/s005fa8d0/s005fa8d0.cpp  ?Shutdown@cImportExport@Thumbnail@SP@@QAE_NXZ  005fae40  /O2 /MD /Gy /TP
+slices/s005fa8d0/s005fa8d0.cpp  ??4cImportInfo@@QAEAAU0@ABU0@@Z  005fb350  /O2 /MD /Gy /TP

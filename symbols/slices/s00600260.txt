@@ -1,0 +1,6 @@
+00600260 SP::cOnlineTab::DoMessageTab  # byte-exact; ConfigManager slots +0x2c/+0x30, window 0x5b1cc48
+006002d0 SP::Pollen::cRegistrationDialog::DoMessage  # PDB candidate (caller-scored)
+006008c0 SP::cSPUISettings::OnModalWindowEnd  # PDB candidate
+00600ab0 SP::cSPUISettings::ShowWindow  # PDB candidate
+00600da0 cGraphicsTab constructor (retail MI layout)  # PDB layout is 0x44, retail larger
+00600df0 SP::cGraphicsTab destructor / scalar deleting destructor

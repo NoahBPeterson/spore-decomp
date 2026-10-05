@@ -1,0 +1,2 @@
+0065ea00 SP::cSPUIFeedEdit::DoMessage  # PDB anchor (dev 00d85c40)
+0065f700 SP::cSPUIFeedEdit::Init  # PDB name (dev 00d86420)

@@ -1,0 +1,7 @@
+00638e90  -  HasRequiredPart: PARTIAL skeleton (315 B animation/part lookup)
+00638fd0  -  SetIdleAnimation: PARTIAL skeleton (784 B)
+006392e0  -  StartBoredAnimation: PARTIAL skeleton (102 B; float-arg register/bits scheduling not reproduced)
+00639350  -  FUN_00639350 (Init-ish): PARTIAL skeleton (1429 B)
+006398f0  -  MarkKeyInputKeyDown: PARTIAL skeleton (281 B)
+00639a10  -  CaptureGIF: PARTIAL skeleton (346 B)
+00639b70  -  ~cSPPlayModeSubModeAction: PARTIAL skeleton (84 B)

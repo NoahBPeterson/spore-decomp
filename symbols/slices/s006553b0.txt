@@ -1,0 +1,5 @@
+006553b0  SP::cSPUIAssetGrid animation step  # 1158 bytes
+00655840  SP::cSPUIAssetGrid layout step  # 691 bytes
+00655b00  SP::cSPUIAssetGrid load step  # 968 bytes
+00655ed0  SP::cSPUIAssetGrid::Update  # PDB name; 880-byte per-frame update
+00656240  filter-then-copy_if over 0x10-byte records  # FUN_00654050/FUN_006536e0/FUN_00653780

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00626db0/s00626db0.cpp  ?Activate@cCreatureCameraBase@@QAEXXZ  00627ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

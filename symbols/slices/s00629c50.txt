@@ -1,0 +1,14 @@
+00629c50 SP::cSPPlayMode::FUN_00629c50
+00629d90 FUN_00629d90  # creature-manager handler lookup/release (stdcall)
+00629de0 SP::cSPPlayMode::FUN_00629de0
+0062a1a0 SP::cSPPlayMode::StopWalk  # PDB candidate (caller-scored)
+0062a230 SP::cSPPlayMode::SetBabyPath  # PDB-resolved
+0062a360 SP::cSPPlayMode::HasActivePath
+0062a3d0 SP::cSPPlayMode::Init  # PDB-resolved
+0062a550 SP::cSPPlayMode::FUN_0062a550
+0062a760 SP::cSPPlayMode::WakeupCreature  # PDB-resolved
+0062a7f0 SP::cSPPlayMode::OnMouseDown  # PDB candidate (caller-single)
+0062a860 SP::cSPPlayMode::SetupFromConfigFile  # PDB-resolved
+0062a990 SP::cSPPlayMode::BabyStartSocialCallEffect  # PDB-resolved
+0062aa90 SP::cSPPlayMode::SetBabySitState  # PDB-resolved
+0062ab80 SP::cSPPlayMode::SetAllBabySitState

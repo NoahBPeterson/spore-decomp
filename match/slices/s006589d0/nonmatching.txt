@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00658e00  45   SP::cSPUIAssetView::SetPos(x,y,snap): field stores + window vcall 0x64 + Show-on-change complete; x87 arg order / xmm register assignment differ

@@ -1,0 +1,7 @@
+00601c50 SettingsRecord::operator= (cSPUISettings tab record)  # byte-exact; intrusive_ptr +0, string16 +0xc, sub +0x3c
+00601e60 SP::cSPUISettings::Shutdown  # PDB candidate (callee-single)
+00601da0 SP::cSPUISettings::RemoveTab  # PDB candidate
+00601f00 SP::cSPUISettings::CloseWindow  # PDB candidate
+00601730 SP::cOnlineTab::~cOnlineTab  # PDB names (gap-align)
+00601790 SP::cSPUISettings::cSPUISettings  # PDB names (callee-single)
+00601930 SP::cSPUISettings::~cSPUISettings  # PDB names (gap-align)

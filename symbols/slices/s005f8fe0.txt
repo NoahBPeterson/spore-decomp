@@ -1,0 +1,13 @@
+005f8fe0 unknown_5f8fe0  # unnamed 151-byte helper
+005f9080 eastl string helper (0x5f8690 wrapper)  # temp-string ctor + dtor
+005f90c0 eastl string helper (0x5f8700 wrapper)  # temp-string ctor + dtor
+005f9100 hashtable_insert_wchar  # FNV-1a wchar hash + bucket insert
+005f9230 unknown_5f9230  # unnamed 224-byte helper
+005f9310 SP::Thumbnail::cImportExport::SetupExportFolderPath  # PDB name on card
+005f9450 eastl::basic_string<char>::append_sprintf  # PDB name on card; byte-exact
+005f9470 hashtable_insert_wchar_variant  # FNV-1a wchar hash + bucket insert
+005f95a0 unknown_5f95a0  # unnamed 212-byte helper
+005f9680 unknown_5f9680  # unnamed 63-byte helper
+005f96c0 unknown_5f96c0  # unnamed 155-byte helper
+005f9760 unknown_5f9760  # unnamed 92-byte helper
+005f97c0 unknown_5f97c0  # unnamed 350-byte helper

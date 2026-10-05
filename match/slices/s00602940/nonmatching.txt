@@ -1,0 +1,1 @@
+006035d0  50  SP::ShowSettingsWindow: complete; the nothrow-new null path (xor esi,esi) was folded differently so the byte image does not converge.

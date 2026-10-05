@@ -1,0 +1,7 @@
+00647f40  1036  outline only: cSPUIAssetGrid sort/filter entry point (stubbed)
+006483d0  516   outline only: heap sift helper (stubbed)
+006485e0  332   outline only: vector insert-at (stubbed)
+00648730  843   outline only: grid entry population (stubbed)
+00648aa0  66    outline only: ClearAssetViews (stubbed)
+00648bb0  164   outline only: eastl::make_heap (stubbed)
+00648c60  128   sorted-vector insert(position,value) (stubbed)

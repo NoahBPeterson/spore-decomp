@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006525d0/s006525d0.cpp  ??$adjust_heap@PAUGridEntry@@HU1@UCompareA@@@eastl@@YAXPAUGridEntry@@HHHU1@UCompareA@@@Z  006525d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s006525d0/s006525d0.cpp  ??$pop_heap@PAUGridEntry@@UCompareA@@@eastl@@YAXPAUGridEntry@@0UCompareA@@@Z  00652850  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s006525d0/s006525d0.cpp  ??$get_partition@PAUGridEntry@@U1@UCompareA@@@eastl@@YAPAUGridEntry@@PAU1@0U1@UCompareA@@@Z  00652e70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s006525d0/s006525d0.cpp  ??$get_partition_ref@PAUGridEntry@@U1@UTypeGridEntrySort@@@eastl@@YAPAUGridEntry@@PAU1@0U1@AAUTypeGridEntrySort@@@Z  00653110  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s006525d0/s006525d0.cpp  ?erase@GridVec@@QAEPAUGridEntry@@PAU2@@Z  006534c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

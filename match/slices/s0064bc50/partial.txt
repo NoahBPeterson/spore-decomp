@@ -1,0 +1,5 @@
+0064bcd0  1012  outline only: cSPUIAssetBrowser::OnModalWindowEnd (stubbed)
+0064c0d0  431   outline only: cSPUIAssetBrowser helper (stubbed)
+0064c280  384   outline only: cSPUIAssetBrowser helper (stubbed)
+0064c400  680   outline only: cSPUIAssetBrowser::Update (stubbed)
+0064c6b0  551   outline only: cSPUIAssetBrowser::DoMessage (stubbed)

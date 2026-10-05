@@ -1,0 +1,5 @@
+slices/s005f4310/s005f4310.cpp  ?EndDrag@cSPPaletteSwatch@SP@@QAEXXZ  005f46c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f4310/s005f4310.cpp  ?SetShowCost@cSPPaletteSwatch@SP@@QAEX_N@Z  005f49a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f4310/s005f4310.cpp  ?copy_refs@SP@@YAPAV?$AutoRefCount@VcMWModel@SP@@@EA@@PAV23@00@Z  005f4e10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f4310/s005f4310.cpp  ?Matrix3FromEulerXYZ@SP@@YAPAUMatrix33@1@PAU21@PBX@Z  005f4e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f4310/s005f4310.cpp  ?RemoveModel@cSwatch3DView@SP@@QAEXPAVcMWModel@2@@Z  005f4eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

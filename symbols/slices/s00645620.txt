@@ -1,0 +1,4 @@
+00645620 SP::cSPUIAssetBrowser::LoadConfigFile  # PDB name (anchor)
+00645d90 SP::cSPUIAssetBrowser (field getter)  # dc
+00645e20 SP::cSPUIAssetBrowser::ShowPublishDialog  # PDB candidate (caller-single)
+00646260 SP::cSPUIAssetBrowser (auth check)  # dc

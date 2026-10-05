@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00660dd0/s00660dd0.cpp  ?CopyBackward34@@YAPAUE34@@PAU1@00@Z  00660dd0  /O2 /MD /Gy /TP /arch:SSE2

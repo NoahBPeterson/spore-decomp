@@ -1,0 +1,5 @@
+0061a650  na  asset-feed GET request builder: skeleton (returns false); full cServerResponse path omitted
+0061aa00  na  cUserMatchTransaction::ConstructRequest: skeleton; full GET + assetId/rating fields omitted
+0061abf0  na  user-match GET request builder: skeleton; full GetServiceURL + request setup omitted
+0061ad70  na  cHandshakeTransaction::ConstructRequest: skeleton; HandshakeParser + Spore-* headers omitted
+0061b0e0  na  cTelemetryUploadTransaction::ConstructRequest: skeleton; HTTPRequest + 0xd98-byte request body omitted

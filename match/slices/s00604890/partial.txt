@@ -1,0 +1,3 @@
+00604890  -  cSPEditorVerbIcon::Shutdown candidate (1196 B): outline port only (layout/init, winproc add, per-slot icon loop, layout teardown)
+00604d40  -  SP::cSPUISettings::DoMessage candidate (1166 B): message-dispatch skeleton only
+006053a0  -  cSPVerbIconRollover::Layout candidate (1131 B): float-rectangle layout outline only

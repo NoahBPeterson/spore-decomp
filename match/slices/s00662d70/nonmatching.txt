@@ -1,0 +1,9 @@
+00662d70 267 cSPUIFeedList::Update - complete, scroll frame/asset-browser path not byte-exact
+00662ea0 339 cSPUIFeedList::DoMessage - complete, message branches not byte-exact
+00663040 4 cSPUIFeedList ctor - complete, only xor ecx hoisted before two volatile vtable stores
+006630e0 93 cSPUIFeedList dtor - complete, cleanup ordering differs
+006631c0 358 cSPUIFeedList::UpdateScrolling - complete, float scroll clamp schedule differs
+00663350 180 FUN_00663350 - complete, layout/scroll layout passes not byte-exact
+00663430 42 vector<AutoRefCount>::erase - complete, first/last register assignment differs
+00663490 58 cSPUIFeedList::ShutdownCategories - complete, loop/erase scheduling differs
+00663b80 87 category comparator - complete, only branch encoding differs

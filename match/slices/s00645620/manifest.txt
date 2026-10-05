@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00645620/s00645620.cpp  ?FUN_00645d90@cSPUIAssetBrowser@@QAEHXZ  00645d90  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00645620/s00645620.cpp  FUN_00645ff0@@  00645ff0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00645620/s00645620.cpp  ?FUN_00646260@cSPUIAssetBrowser@@QAEXXZ  00646260  /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00631810  -  FUN_00631810: skeleton (504 bytes)
+00631a10  -  FUN_00631a10: skeleton (273 bytes)
+00631b30  -  SP::cSPPlayModePhotoBrowser::PhotoCountChanged: skeleton (647 bytes)
+00631e50  -  FUN_00631e50: skeleton (635 bytes)
+006320d0  -  FUN_006320d0: skeleton (580 bytes)
+00632320  -  SP::cSPPlayModePhotoBrowser::MovePhoto: skeleton (824 bytes)

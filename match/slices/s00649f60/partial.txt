@@ -1,0 +1,5 @@
+00649f60  699   outline only: cSPUIAssetBrowser helper (stubbed)
+0064a220  472   outline only: cSPUIAssetBrowser::Shutdown (stubbed)
+0064a400  1422  outline only: cSPUIAssetBrowser::SetVisibility (stubbed)
+0064a990  393   outline only: cSPUIAssetBrowser::AdvancedLaunch (stubbed)
+0064aba0  297   outline only: cSPUIAssetBrowser::LaunchSporeGuide (stubbed)

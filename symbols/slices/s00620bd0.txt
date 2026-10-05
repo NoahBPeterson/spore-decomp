@@ -1,0 +1,9 @@
+00620bd0 SP::Pollen::cRegistrationDialog::SubmitRegistrationForm  # PDB caller-single
+00620dc0 SP::Pollen::cRegistrationDialog::OnModalEnd  # this = dialog+8 (IModalWindowCallback subobject); PDB candidate
+00620e50 SP::Pollen::cRegistrationDialog  # dialog UI-notify helper (this = dialog)
+00620ef0 SP::Pollen::cTOSDialog::DoMessage  # PDB caller-scored
+00621460 SP::Pollen::MapLookup  # id -> URL map lookup, optional string out
+006214c0 SP::Pollen::GetURL  # formats URL into a string16 out
+00621540 SP::Pollen::SanitizeURL  # URL normalizer
+006216b0 SP::Pollen::RegisterURL  # mapA lookup + "https://%hs%hs" into mapB
+00621770 SP::Pollen::RegisterInsecureURL  # same with "http://%hs%hs"

@@ -3,7 +3,7 @@
 
 usage: opencode_sup.py <group> <command> [args]
   pending [WAIT]          wait up to WAIT s (default 90) for permission requests from this group's sessions; print each
-                          as "<sid>:<rid> <title> <action> :: <resources>" (bash text up to 3000 chars)
+                          as "<sid>:<rid> <title> <action> :: <resources>" (shell commands shown in full as "FULL: <command>", up to 3000 chars)
   reply once|reject [-m MSG] <sid:rid>...   answer requests (logged to work/opencode/decisions.jsonl)
   status                  one line per session: range, state, cost, cache share, slice progress; plus group totals
   launch [N]              start sessions for the next N unlaunched ranges (default 1)
@@ -103,6 +103,16 @@ if cmd == "pending":
                 res = r.get("resources") or r.get("patterns") or []
                 txt = " ; ".join(res) if isinstance(res, list) else str(res)
                 lim = 3000 if r.get("action") in ("bash", "shell") else 300
+                if r.get("action") in ("bash", "shell"):
+                    # `resources` is the command split into pieces (pipes and redirects lost); show the full text
+                    src = r.get("source") or {}
+                    m = api("GET", "/api/session/%s/message/%s" % (sid, src.get("messageID")))
+                    for part in (m.get("data") or {}).get("content", []):
+                        inp = (part.get("state") or {}).get("input") or {}
+                        if part.get("id") == src.get("id") and "command" in inp:
+                            txt = "FULL: " + inp["command"]
+                            if inp.get("workdir") not in (None, ROOT):
+                                txt += "  [workdir %s]" % inp["workdir"]
                 out.append("%s:%s %s %s :: %s" % (sid, r["id"], titles[sid], r.get("action"), txt[:lim]))
         if out or time.time() > end:
             print("\n".join(out) if out else "(none)")
