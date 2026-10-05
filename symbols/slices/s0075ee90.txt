@@ -1,0 +1,6 @@
+0075f4a0 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<SP::cLayerInfoExtra_*,SP::cLayerInfoExtra_*>  # PDB (card)
+0075f8a0 SP::cRenderer::RemovePostRenderJob  # PDB (card)
+0075f900 SP::cRenderer::RemovePreRenderJob  # PDB (card)
+0075ee90 cLayerInfoExtra copy  # inferred from asm (AddRef + 4 fields)
+0075f770 Graphics array allocate + construct  # inferred from asm
+0075f7d0 eastl::list<SP::cRenderer::cRenderJob,eastl::allocator>::erase  # PDB (card, tail jmp past 0075f770)

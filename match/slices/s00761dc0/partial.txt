@@ -1,0 +1,7 @@
+00761f90  421  FUN_00761f90: skeleton, overlay matrix + draw-call path approximated
+007624c0  300  FUN_007624c0: descriptor builder approximated (min/max clamp path guessed)
+007625d0  468  FUN_007625d0: vertex-declaration parser; jump-table cases collapsed
+00762900  300  Map insert: node allocation + rehash helper calls collapsed
+00762a60  102  nested map cleanup: iteration approximated
+00762b70  250  index-buffer wrapper: resource descriptor + hashtable store approximated
+00762c60  250  index-buffer wrapper: resource descriptor + hashtable store approximated

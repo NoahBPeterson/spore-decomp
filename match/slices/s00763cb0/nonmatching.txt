@@ -1,0 +1,2 @@
+00763df0  12   complete: registered-object predicate; original keeps key in edi / list in esi (ours swapped)
+007646a0  22   complete: state->Load(&state[0x2c], p28, p14); original keeps p28 in esi, ours edx

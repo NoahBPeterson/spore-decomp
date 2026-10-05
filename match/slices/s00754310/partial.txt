@@ -1,0 +1,10 @@
+00754310  456  SP::RegisterModel; skeleton only
+007544e0  193  EH operator new + ctor + refcount assign; skeleton only
+00754620  296  property lookup loop (EH); skeleton only
+00754770  495  skeleton only
+00754960  561  skeleton only
+00754c20  114  job continuation (vcalls + fn ptr stores); skeleton only
+00754ca0  725  SP::CompileToPropertyModel (EH); skeleton only
+00755070  445  skeleton only
+00755240  160  cCreateModelInstanceJob::LoadAsArenaJob; skeleton only
+007552e0  223  skeleton only

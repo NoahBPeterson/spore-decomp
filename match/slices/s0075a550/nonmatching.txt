@@ -1,0 +1,6 @@
+0075a550  140 ClassX destructor: vtable stores, sub-dtor, vector dtors and deallocations complete; EH frame/order differ
+0075a620  62  ClassX new 0x70 + ctor: allocation/null path complete; EH frame differs
+0075a690  52  cMultiBlender per-interpolator call loop: FUN_011fe600 loop and +0x18 store complete; float arg passing differs
+0075a820  71  SumWeight: blending/weight accumulation complete; float-returning virtual call spills the fn pointer vs original call eax
+0075a900  97  F900: slot assignment / virtual 0x24/0x28 calls complete; register schedule differs
+0075b440  119 Fb440: clip/loop weight logic + virtual call complete; x87/SSE schedule differs

@@ -1,0 +1,13 @@
+0076cc00  (vector<0x28>::insert)  # 300-byte grow/shift insert over 0x28 elements
+0076cd30  SP::cRTTCapture-like update  # cJob continue + message release + scene-job append
+0076ce50  effects job processor  # 1904-byte job/vector loop
+0076d5c0  vector<0x28>::push_back  # builds a 0x28 element from 12 args
+0076d6e0  three-call push wrapper  # calls 0076d5c0 with formats 5/7/6
+0076d7d0  RectThing::SetSize  # stores 4 uint16 sizes + 0.0/1.0 floats
+0076d820  RasterFormatSize  # format -> bytes per pixel (switch)
+0076d8e0  viewer creation  # new 0x174 viewer + rect stores
+0076d970  SnapshotWrap::Teardown  # destroys a system object
+0076d9a0  PageRecord copy ctor  # 7 ints + 1 byte copy ctor
+0076d9e0  cRTTManager::ReleasePage  # page refcount release
+0076da50  effects per-job render prep  # virtual dispatch + destination rect
+0076db00  OnCaptureMessage  # frees a sub-object on msg 0x3d037f1

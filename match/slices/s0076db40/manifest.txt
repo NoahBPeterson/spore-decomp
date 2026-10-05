@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0076db40/s0076db40.cpp  ?DeallocateSelf@SpVec@@QAEXXZ                  0076e1e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0076db40/s0076db40.cpp  ?FreeElemArray@@YGXPAUVecElem@@0@Z             0076e430  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0076db40/s0076db40.cpp  ?DestroyBigRecArray@@YGXPAUBigRec2@@0@Z        0076e7a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2

@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00762d70/s00762d70.cpp  ?SetFlag1630180@@YAXE@Z                              00762f00
+slices/s00762d70/s00762d70.cpp  ?ReleaseViaSlot8@@YAXPAUIObj@@@Z                    00762f10
+slices/s00762d70/s00762d70.cpp  ??0CEditorRes@@QAE@XZ                              00763100
+slices/s00762d70/s00762d70.cpp  ?ReadRasterTriplet@@YA_NPAXPAHH@Z                   00763340
+slices/s00762d70/s00762d70.cpp  ?Shutdown@cGraphicsResourceFactory@SP@@QAE_NXZ     00763520
+slices/s00762d70/s00762d70.cpp  ?GetSupportedTypes@cGraphicsResourceFactory@SP@@QAEIPAII@Z  00763550
+slices/s00762d70/s00762d70.cpp  ?IsRegType@@YG_NIH@Z                               00763580
+slices/s00762d70/s00762d70.cpp  ?ReadTriplets@@YG_NPAXHHH@Z                        007638a0

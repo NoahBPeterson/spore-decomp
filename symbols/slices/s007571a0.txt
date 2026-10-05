@@ -1,0 +1,3 @@
+007573a0 SP::GetModelAsGameMeshes  # dev-PDB caller-scored; large async job setup
+00757d10 FUN_00757d10  # stores vtable 0x13ef094 at this+4
+00757d20 SP::GetRwModelAsGameMeshesNoCache  # dev-PDB caller-scored; Arena exported-object scan

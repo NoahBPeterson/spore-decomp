@@ -1,0 +1,5 @@
+# VA  Name  # evidence
+0074f3a0  `anonymous namespace'::AppendGeometryToCreature  # PDB name
+0074f420  -  # unknown
+0074fea0  -  # unknown
+00750030  spstl::slot_vector_base<SP::cModelWorld::cOccluderInfo,eastl::vector<spstl::slot_vector_entry<SP::cModelWorld::cOccluderInfo>,eastl::allocator>_>::create  # PDB name

@@ -1,0 +1,1 @@
+007565a0  170  complete behaviourally (EA placement new of a 0x6c-byte refcounted object with FUN_007564b0 start + vtable slot 2 on failure); no MSVC EH frame emitted, so bytes differ

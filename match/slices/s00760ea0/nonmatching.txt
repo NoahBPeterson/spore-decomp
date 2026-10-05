@@ -1,0 +1,12 @@
+00760ea0  138  Vec3::insert fast path: EH state + construct shape differ from the original vector::insert
+00760f50   74  destructor: base vtable stores / vector teardown sequence differ
+00760fd0  204  setByKey: search + temp AutoRefCount assign shape
+00761240   43  V1240::set: local temp register allocation (esi vs edx lifetime)
+00761380  109  descriptor wrapper: EH frame not emitted in one TU (builder is same-TU)
+00761420  126  SP::CreateRaster: EH frame not emitted in one TU
+00761650  126  CreateVertexDescriptor wrapper: EH frame not emitted in one TU
+007616f0  123  CreateVertexBuffer wrapper: EH frame not emitted in one TU
+007617a0  119  CreateCompiledState wrapper: EH frame not emitted in one TU
+00761840  125  CreateMesh wrapper: EH frame not emitted in one TU
+00761b40  137  raster texture builder: abs-loop register allocation (ebx/ebp vs edi/ebx)
+00761c50   61  descriptor-array allocate loop: redundant first store elided and loop indexing

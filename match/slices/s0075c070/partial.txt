@@ -1,0 +1,2 @@
+0075c070  0  huge (0x11d4 frame) per-node blend rebuild + Store/Load/Restore switch; signature skeleton only
+0075ca60  0  huge (0xa4 frame) blend-weight normalize + quaternion conjugate/multiply over nodes; signature skeleton only

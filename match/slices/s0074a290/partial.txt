@@ -1,0 +1,5 @@
+0074a290  -  partial: SetExternalEffectsTransform slot/transform walk stubbed (signature + call shape only).
+0074a490  -  partial: SubA490 EASTL vector build path stubbed (signature + call shape only).
+0074a780  -  partial: GetBakedMeshes2 identity-transform construction approximate (extra temp, frame 0x70 vs 0x38).
+0074a920  -  partial: SubA920 refcount/list walk stubbed (signature + call shape only).
+0074ac80  -  partial: AddAttachments (1218B, EH + EASTL vector build) stubbed (signature only).

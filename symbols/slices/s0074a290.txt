@@ -1,0 +1,9 @@
+# VA  Name  # evidence
+0074a290  SP::cModelWorld::SetExternalEffectsTransform  # caller-scored PDB candidate
+0074a650  SP::cModelWorld::ReleaseTransformedHull  # vtable-slot PDB name
+0074a690  SP::cModelWorld::GetBakedMeshes  # vtable-slot PDB name
+0074a700  SP::cModelWorld::GetBakedMeshesUnscaled  # vtable-slot PDB name
+0074a780  SP::cModelWorld::GetBakedMeshes  # gap-align PDB name (3-arg overload)
+0074a850  SP::cModelWorld::GetMeshes  # gap-align PDB name
+0074a8c0  SP::cModelWorld::RemoveOccluder  # gap-align PDB name
+0074ac80  SP::cModelWorld::AddAttachments  # anchor PDB name

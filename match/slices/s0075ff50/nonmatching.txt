@@ -1,0 +1,6 @@
+0075ff50  131  ClearLayer: layer lower_bound/erase layout differs (load hoist + found-block placement)
+00760030   88  LayerVector::insert: missing EH frame and fast-path store shape (100 vs 145 B)
+007600d0  179  Shutdown: list clears abstracted to a helper (inlined 2-loop release/erase in original)
+007602a0  180  SetLayer: temp cLayerInfo/EH state layout and search shape
+00760c00    8  Poly2 ctor: derived vptr stores scheduled after base field zeroes instead of interleaved
+00760c40   31  PtrVec::erase: interlocked release register allocation (mov ecx,eax / or edx,-1 order)

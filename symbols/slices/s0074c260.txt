@@ -1,0 +1,7 @@
+# VA  Name  # evidence
+0074c370  eastl::quick_sort_impl<SP::cModelWorld::cDrawModelInfo*,int,`anonymous namespace'::cAlphaSortLessComparator>  # PDB name
+0074c580  eastl::get_partition<cOccluder*,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
+0074c670  SP::cModelWorld::ModelIsResidentInMemory  # PDB name
+0074c910  SP::cModelWorld::ScheduleForLoad  # PDB name
+0074d190  eastl::quick_sort_impl<cOccluder*,int,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
+0074d2c0  SP::cModelWorld::HandleMessage  # PDB name

@@ -1,0 +1,3 @@
+00753fc0  8  complete behaviourally (refcount decrement + callback on zero); original keeps the arg in ecx, ours in eax
+007541b0  0  complete behaviourally (find-or-insert into a 0x20-stride table via FUN_0071ded0); stack-slot order differs
+00754250  0  complete behaviourally (two-short init + ctor thunk); EH frame/layout differs

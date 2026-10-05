@@ -1,0 +1,10 @@
+007582b0  289  FUN_00732220 lookup + new/ctor skeleton; property result handling approximated
+007583e0  144  Holder841 ctor: vtable stores + RefVector build skeleton; FUN_00733070/FUN_0047c800 call shapes incomplete
+00758480  182  bounds/weights: body stubbed (per-entry FUN_00729c60 loop omitted)
+00758680  478  eastl::vector<int>::insert: growth path approximated; in-place shift path incomplete
+00758a10  169  eastl::vector<0x14>::operator=: branch skeleton, allocation/copy call shapes incomplete
+00758b60  291  Elem50 copy ctor: vector build skeleton; bounds/allocator details omitted
+00758fc0  307  weight update: float-compare and growth logic approximated
+00759100  216  mesh iterate: loop skeleton (FUN_007580a0/embedded-state/shader-data path omitted)
+00759280  360  cModel build: allocation + FUN_0072fff0 + FUN_007585c0 skeleton; body largely omitted
+00759420  161  dtor freeing four vectors: dealloc sequence present, but vector layout/order approximated

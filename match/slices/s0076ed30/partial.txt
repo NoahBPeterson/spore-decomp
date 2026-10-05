@@ -1,0 +1,10 @@
+0076ed30  96   cRTTCheat scalar deleting destructor: member/base dtors + flag-guarded free not reproduced
+0076edf0  475  0x3c-element vector insert: skeleton (growth/relocate/destroy call shapes omitted)
+0076f050  447  RTT init: skeleton (page allocation, property reads and cheat registration omitted)
+0076f280  703  RTT job setup: skeleton
+0076f640  191  insertion sort over 0x14 keys: skeleton (shift loop + comparator call omitted)
+0076f700  190  insertion sort variant: skeleton
+0076f880  148  sift/heap push helper: skeleton
+0076fb10  262  SP::cAnimationBaker::BakeToArena: skeleton
+0076fc20  108  helper FC20: skeleton
+0076fc90  297  helper FC90: skeleton

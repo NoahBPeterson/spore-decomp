@@ -1,0 +1,12 @@
+00753270  708  large cModelWorld load-queue helper; skeleton only
+00753580  79  cMWGroupInternal teardown/scalar-deleting dtor; skeleton only
+00753630  316  job queue lookup; skeleton only
+00753770  126  element constructor with inlined cSPTransform ctor; skeleton only
+00753810  108  vector-of-model-info constructor; skeleton only
+00753880  127  cLoadQueue constructor (EH); skeleton only
+00753900  678  cModelWorld constructor (EH); skeleton only
+00753bb0  155  fixed-allocator + intrusive node insert; skeleton only
+00753c50  187  cModelWorld::FinalRelease; skeleton only
+00753d10  174  operator new + ctor + assign (EH); skeleton only
+00753e00  383  skeleton only
+00753fe0  301  KDTree asset build (EH); skeleton only

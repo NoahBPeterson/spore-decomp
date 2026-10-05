@@ -1,0 +1,18 @@
+0076ed30  cRTTCheat::~cRTTCheat  # PDB name (scalar deleting dtor)
+0076ed90  eastl::vector<cPageInfo,sp_vector_allocator>::erase  # PDB name
+0076edf0  0x3c-element vector insert  # grow/shift insert
+0076f050  RTT init  # property reads + page alloc + cRTTCheat registration
+0076f210  SP::cRTTManager::Shutdown  # PDB name
+0076f280  RTT job setup  # 703-byte job build
+0076f540  LessPage  # 3-int lexicographic comparator
+0076f580  JobRecordI copy ctor  # 0xa8 int-flavour record
+0076f640  InsertionSort20  # 0x14-key insertion sort
+0076f700  InsertionSort20b  # insertion sort variant
+0076f7c0  JobRecordF copy ctor  # 0xa8 float-flavour record
+0076f880  SiftUp20  # heap sift helper
+0076f920  CopyElem30  # 0x30 element uninitialized copy
+0076f990  CopyElem30InPlace  # 0x30 element copy
+0076fa70  CopyElem30Back  # backward 0x30 element copy
+0076fb10  SP::cAnimationBaker::BakeToArena  # PDB candidate
+0076fc20  helper FC20  # arena/animation helper
+0076fc90  helper FC90  # arena/animation helper

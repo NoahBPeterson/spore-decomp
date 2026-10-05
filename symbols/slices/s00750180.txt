@@ -1,0 +1,4 @@
+# VA  Name  # evidence
+007503a0  SP::cModelWorld::~cModelWorld  # PDB name
+007505a0  SP::cModelWorld::PreloadModels  # PDB name
+00750780  SP::cModelWorld::AddOccluder  # PDB name

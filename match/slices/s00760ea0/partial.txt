@@ -1,0 +1,2 @@
+00761500  121  CreateTriangleKDTreeProcedural: skeleton, out-struct copy approximated
+007618e0  300  ResetGlobalState: skeleton (global flags only; 4x4 matrix broadcast omitted)

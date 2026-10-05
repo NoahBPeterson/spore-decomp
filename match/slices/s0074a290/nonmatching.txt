@@ -1,0 +1,1 @@
+0074a8c0  68  complete source; only register allocation differs (index kept in eax vs original ecx). Every path/call present.

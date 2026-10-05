@@ -1,0 +1,5 @@
+0075e4f0  0  large render subsystem constructor (many inlined subsystem calls); not reconstructed
+0075e830  0  large render global init with EH/subsystem calls; not reconstructed
+0075e900  0  very large (900+ B) render-tree builder; not reconstructed
+0075eca0  0  large shader-global init; not reconstructed
+0075ed50  0  render node copy; not reconstructed

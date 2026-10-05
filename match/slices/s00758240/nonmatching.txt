@@ -1,0 +1,8 @@
+00758240  57  At6 intrusive assignment: swap/AddRef/Release + 5 word copy complete; xadd register roles and dec/cmp differ
+00758540  67  Holder841 dtor: vtable stores + RefVector dtor complete; missing /EHsc frame (base/object not modeled as EH)
+007585c0  84  new 0x28 + ctor: allocation and null path complete; EH frame from new-expression differs
+00758860  207 eastl vector<0x14> range ctor: allocation + copy complete; DoInsertValue call shape differs
+00758950  146 eastl vector<0x14> fill: allocation + copy complete; call shape differs
+00758e20  45  Elem50 range copy: 4 member assignments per element complete; element OpAssign/inlined schedule differs
+00758e80  39  Elem50 range copy backward: complete; element schedule differs
+00758f70  63  Elem50 range copy: complete but source/destination argument mapping and float-vector operator= differ

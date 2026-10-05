@@ -1,0 +1,5 @@
+0076bc50  SP::cRTTCapture::TakeSnapshot  # PDB candidate cRTTCapture + "TempSnapshot" string, message ids
+0076c210  SP::cRTTCapture::HandleCaptureMessage  # same job family as 0076bc50
+0076c660  SP::cRTTCapture::cRTTCapture  # ctor: vtables 0x140e2ac/0x140e29c, fields from cRTTCapture layout
+0076c710  SP::cRTTCapture::~cRTTCapture  # dtor: restores base vtables 0x13ef094/0x13eb394
+0076c7c0  SP::cRTTCapture::HandleMessage  # PDB candidate (caller-single) cRTTCapture::HandleMessage

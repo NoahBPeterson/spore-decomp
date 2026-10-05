@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0075a550/s0075a550.cpp  ?AnyAnimating@cMultiBlender@@QAE_NXZ  0075a6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?AddWeight@cMultiBlender@@QAEHXZ  0075a710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?F780@cMultiBlender@@QAEHM@Z  0075a780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?F7d0@cMultiBlender@@QAEHM@Z  0075a7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?F880@cMultiBlender@@QAEXM@Z  0075a880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?F8c0@cMultiBlender@@QAEXUB4@@@Z  0075a8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0075a550/s0075a550.cpp  ?Fb410@cMultiBlender@@QAEXXZ  0075b410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,8 @@
+00759540  586  eastl::vector<0x14>::insert(n,value): growth path approximated; element construct/fill via helpers not reproduced
+007598f0  92   range assign/erase: stub (FUN_00758e20/FUN_00759420 loop omitted)
+00759950  590  vector range operation: stub
+00759ba0  222  vector range operation: stub
+00759c80  482  vector operation: stub
+00759ff0  324  cMorphDrawImpl helper: stub
+0075a140  278  helper: stub
+0075a260  433  cMorphDrawImpl::Dispatch: stub

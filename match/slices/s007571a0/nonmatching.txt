@@ -1,0 +1,5 @@
+00757e20  120  value ctor: matrices/refcount copies complete; SSE constant loads and M3Assign schedule differ
+00757ff0  115  0x24 value ctor: field copy + refcount AddRef complete; vtable store/base setup differs
+00757d20  189  GetRwModelAsGameMeshesNoCache: Arena loop + 0x38 temp + EH vector ctor/dtor complete; EH state stores differ
+007580a0  201  material lookup: MaterialManager index, vcall, refcount release complete; slot offsets in the entry differ
+007581a0  ~90  destructor: two releases + vptr2 store complete; AutoRefCount inline release schedule differs

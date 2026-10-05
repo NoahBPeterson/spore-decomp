@@ -1,0 +1,8 @@
+00761dc0  195  global texture-coord scale update: update schedule/divisor sign differ
+00762250  117  Obj62250 ctor: MI vptr stores + 14-dword copy layout
+007622e0  109  Obj62250 dtor: EH state / vector teardown differs
+00762380   69  Map2380::find: min-reduction local temp and loop shape
+007623f0  155  quad descriptor builder: descriptor ctor + field stores
+00762a00   12  map-erase thunk: redundant param-home store
+00762a30   12  map-erase thunk: redundant param-home store
+00762b00   64  hashtable find+insert: inlined eastl::find shape

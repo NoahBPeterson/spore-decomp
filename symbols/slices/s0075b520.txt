@@ -1,0 +1,6 @@
+0075b630 SP::cMultiBlender::SetWeight  # PDB (symbols/pdb_names.json, dev 00f55840, callee-single)
+0075b5d0 SP::cMultiBlender::SetAnimTime  # inferred: finds interpolator by m_currentAnimPtr, calls Interpolator::SetTime(0x011fe600)
+0075b6e0 SP::cMultiBlender::SetAnimating  # inferred: same find, writes mAnimating[]
+0075b790 SP::cMultiBlender::SetBlending  # inferred: same find, writes mBlending[]
+0075b540 SP::cMultiBlender::StartAnim  # inferred: 0x011fdff0/0x011fe100 take (mInterpolator*, m_currentAnimPtr)
+0075b520 SP::cMultiBlender::GetBlendState  # inferred: reads mInterpolators[0].m_remapDataPtr

@@ -1,0 +1,3 @@
+0075cf20  0  huge (0x11d4 frame, 2400 B) per-node SSE blend rebuild; only observable contract reproduced
+0075d4b0  0  large EH/stack-cookie scene-cache builder; not reconstructed
+0075d6a0  0  large EH/stack-cookie manager update; not reconstructed

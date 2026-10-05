@@ -1,0 +1,10 @@
+00764df0  362  partial: cGraphicsResourceFactory::CreateRasterFromArena (arena exported-object scan + EH vector ctor); not translated
+00764f60  362  partial: WriteResourceGameMeshes (WriteMesh + mip/face upload + material manager); not translated
+007650f0  81   partial: async arena finish (0x764580/0x763fd0 + slot calls); not translated
+00765230  133  partial: destroy array of 0x7c-stride records via 0x422fd0; EH frame not reproduced
+007652c0  554  partial: async request start (cJob x3, callback structs); not translated
+007654f0  142  partial: resource-factory ctor (vtable, atomic lock at +4, new 0x40 Graphics object + AddRef); not translated
+007655f0  194  partial: resource-manager async load wrapper (GetManager->slot0xc + CreateRasterFromArena); not translated
+007656c0  547  partial: read game-mesh record stream (serialize/deserialize + refcounted handles); not translated
+00765b30  510  partial: async arena request start variant (cJob x3, callbacks 0x7651a0/0x7651b0); not translated
+00765d30  438  partial: ResourceManagerHasTexture (DOM node type + async job); not translated

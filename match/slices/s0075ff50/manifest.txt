@@ -1,0 +1,5 @@
+slices/s0075ff50/s0075ff50.cpp  ?ClearAllLayers@cRenderer@SP@@QAEXXZ  007603e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0075ff50/s0075ff50.cpp  ?sub_760ac0@SP@@YGXPAX0PAPAUAcInner@1@0@Z  00760ac0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0075ff50/s0075ff50.cpp  ?Dispatch@JobList@SP@@QAEXPAX000@Z  00760ad0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0075ff50/s0075ff50.cpp  ??4RefTriple@SP@@QAEPAU01@ABU01@@Z  00760b50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0075ff50/s0075ff50.cpp  ?copy_triples@SP@@YAPAURefTriple@1@PAU21@00@Z  00760ba0  /O2 /MD /Gy /EHsc /TP /GS-

@@ -1,0 +1,9 @@
+0075eed0  0  large elem-array copy/construct wrapper with EH; not reconstructed
+0075ef80  0  large range construct (allocator aware) with EH; not reconstructed
+0075f030  0  very large (946 B) render-property registration; not reconstructed
+0075f510  0  large AddPostRenderJob (EH, list insert); not reconstructed
+0075f640  0  large AddPreRenderJob (EH, list insert); not reconstructed
+0075f7e0  0  render-job-list destructor (EH); not reconstructed
+0075f960  0  large render-job-list constructor (EH); not reconstructed
+0075fc70  0  large EASTL insert-n/erase with EH; not reconstructed
+0075fe50  0  large EASTL resize/erase with EH; not reconstructed

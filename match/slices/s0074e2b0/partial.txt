@@ -1,0 +1,7 @@
+0074e2b0  -  partial: UI helper (2227B) stubbed.
+0074eb70  -  partial: helper (400B) stubbed.
+0074ed00  -  partial: SP::cModelWorld::FindModelsInSphere (373B) stubbed.
+0074ee80  -  partial: SP::cModelWorld::FindModelsInBox (374B) stubbed.
+0074f010  -  partial: Editor resource destructor (149B EH) stubbed.
+0074f0c0  -  partial: rbtree clear + release (101B) stubbed.
+0074f130  -  partial: rbtree find + erase (100B) stubbed.

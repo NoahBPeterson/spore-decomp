@@ -1,0 +1,9 @@
+00762d70  400  partial: nested local-light array teardown; container/slot-vector logic not translated
+00762fa0  338  partial: 64-bit CAS map insert/AddRef; stubbed signature only
+00763130  180  partial: 64-bit CAS map append; stubbed signature only
+00763250  147  partial: interlocked refcount release with deferred delete via 0x67de80/0x763130; only approximated
+00763620  325  partial: Gimex raster header load (0x87xxxx stream); not translated
+007637d0  196  partial: Gimex load + create-raster wrapper; not translated
+00763950  294  partial: cRaster PCA-weight header reader; not translated
+00763a80  242  partial: arena refix (UnfixStart/RefixStart/RefixNext); not translated
+00763b80  221  partial: raster draw/upload (d3d9 vtables + vector insert); not translated

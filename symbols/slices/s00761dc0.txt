@@ -1,0 +1,1 @@
+00762890 SP::hashtable::erase  # eastl hashtable bucket unlink + node free (Ghidra shape)

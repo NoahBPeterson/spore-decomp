@@ -1,0 +1,4 @@
+0074b310  93  complete vector DoInsertValue(0x1c) with throwing copy ctor; EH state layout differs
+0074b490  100  complete heap-swap loop; register/scheduling differs (original keeps loop bound in memory)
+0074b510  101  complete heap-swap loop (reversed comparator); same scheduling mismatch
+0074b690  125  complete SetInWorld intrusive-list move; list anchor/register layout differs

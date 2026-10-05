@@ -1,0 +1,6 @@
+0075ee90  50  complete; cLayerInfoExtra copy (AddRef slot 0 + 4 fields), register/schedule differs
+0075f430  95  complete; EASTL copy_backward with release/AddRef on element 0, layout differs
+0075f4a0  86  complete; EASTL copy_impl<0,random_access_iterator_tag>::do_copy<...>, scheduling differs
+0075f770  96  complete; allocate count*0x14 Graphics array + range construct, arg layout differs
+0075f8a0  64  complete; SP::cRenderer::RemovePostRenderJob intrusive-list erase, layout differs
+0075f900  65  complete; SP::cRenderer::RemovePreRenderJob intrusive-list erase, layout differs

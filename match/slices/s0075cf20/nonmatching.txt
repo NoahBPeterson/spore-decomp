@@ -1,0 +1,13 @@
+0075d870  37  complete; cl did not hoist the six argument loads before the guard test (register pressure differs)
+0075d920  13  complete; original reuses the single outgoing arg slot for `call eax` (push;call;call;pop), cl pushes twice
+0075d990  49  complete; two d3d9 device calls through [vtbl+0x1d8] + MessageServer vcall, argument/reg layout differs
+0075d9e0  139  complete; monitor/aspect helper (GetMonitorInfoA/CreateDCA/GetDeviceCaps/DeleteDC via dllimport), size/frame differs
+0075da90  5  complete; cdecl callee cleanup emitted as `pop ecx` where the original used `add esp,4`
+0075db00  103  complete; cRenderer::Flush poll loop with ThreadSleep, EH/temp layout differs
+0075db70  36  complete; cRenderer::NumLayers rep-movsd copy under mutex, register/allocation differs
+0075dbb0  16  complete; cRenderer::LayerAtIndex mutex store, allocation differs
+0075dbe0  31  complete; device-ready latch, branch layout differs
+0075dc10  12  complete; tail-jmp guard (`if (!flag) ReleaseDevice()`), cl outlined/tail-called differently
+0075dc20  82  complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs
+0075dca0  87  complete; cRenderer::InitShaders caps check + state flags, frame/allocation differs
+0075dd30  326  complete; EH light-info merge scan (cLocalLightInfo dtor), large EH frame not reproduced

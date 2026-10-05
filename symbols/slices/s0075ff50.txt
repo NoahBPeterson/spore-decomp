@@ -1,0 +1,6 @@
+0075ff50 SP::cRenderer::ClearLayer  # PDB name (card)
+00760030 eastl::vector<SP::cLayerInfoExtra,eastl::fixed_vector_allocator<20,32,4,0,1>>::insert  # PDB name (card)
+007600d0 SP::cRenderer::Shutdown  # PDB name (card)
+007602a0 SP::cRenderer::SetLayer  # PDB name (card)
+007603e0 SP::cRenderer::ClearAllLayers  # PDB name (card)
+00760450 SP::cRenderer::Render  # PDB candidate (card)

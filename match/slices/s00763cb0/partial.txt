@@ -1,0 +1,13 @@
+00763cb0  306  partial: D3D9 texture-stage raster registration/setup; global image objects + stage loop not translated
+00763e50  191  partial: large value copy (0x9c bytes, x87+SSE); member layout not reconstructed
+00763fd0  234  partial: arena exported-object scan (ClearDisposableReferences); EH vector-ctor iterator not translated
+007640c0  84   partial: MI ctor (two vtables + atomic refcount at +8); member layout/EH not reconstructed
+00764220  147  partial: ctor with two EH-constructed arrays at +0x44/+0x64; not translated
+00764320  171  partial: create-raster-from-state (loops over faces/mips); not translated
+00764430  321  partial: serialize record array (0x38/0x7c stride) via 0x38-vtable; not translated
+00764580  227  partial: arena unfix/fixup/destruct walk; not translated
+00764760  177  partial: ctor with two Blk (u16,u16,4 floats,Matrix3) blocks; not translated
+00764820  462  partial: async request creation/refcount path; not translated
+007649f0  87   partial: async request complete; return-value low-byte semantics not reproduced
+00764a50  649  partial: cGraphicsResourceFactory::ReadResourceArena (0x98-byte header + 4 spans); not translated
+00764ce0  264  partial: resource-arena wrapper build/teardown; not translated

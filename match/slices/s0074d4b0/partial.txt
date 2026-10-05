@@ -1,0 +1,3 @@
+0074d4b0  -  partial: SP::cModelWorld::CreateModel (947B EH) stubbed.
+0074d870  -  partial: cModelWorld filter/collect list nodes (280B) stubbed.
+0074d990  -  partial: cModelWorld helper (2333B) stubbed.

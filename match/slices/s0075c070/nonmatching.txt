@@ -1,0 +1,1 @@
+0075c9d0  129  complete cdecl wrapper (SetupBlend + RebuildBlend, returns handle); original carries an MSVC EH frame around the first call that the reconstruction omits

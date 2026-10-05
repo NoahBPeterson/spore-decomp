@@ -1,0 +1,15 @@
+0075de80  209  complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs
+0075df60  108  complete; canvas-rect based window sizing, register/frame layout differs
+0075dff0  127  complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs
+0075e090  146  complete; cRenderer::Layer lower_bound under mutex, EH frame not reproduced
+0075e130  155  complete; cRenderer::SetInfoFlags lower_bound under mutex, EH frame not reproduced
+0075e1e0  171  complete; cRenderer::ClearInfoFlags lower_bound under mutex, EH frame not reproduced
+0075e290  146  complete; cRenderer::GetInfoFlags lower_bound under mutex, EH frame not reproduced
+0075e330  48  complete; cRenderer::NumLayers (end-begin)/0x14 under mutex, scheduling differs
+0075e3b0  1  complete; cRenderer::LayerInfoAtIndex, cl keeps base+index across Unlock instead of the final pointer
+0075e3f0  216  complete; render-layer info builder, layout differs
+0075e620  123  complete; render stage ready query, layout differs
+0075e6d0  122  complete; render stage step, layout differs
+0075e750  120  complete; render sub-object construction, layout differs
+0075eda0  87  complete; render node array free, layout differs
+0075ee10  96  complete; render node init, layout differs

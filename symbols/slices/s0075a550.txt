@@ -1,0 +1,9 @@
+0075b190 SP::cMultiBlender::GetResourceDescriptor  # dev-PDB callee-scored anchor
+0075a6e0 SP::cMultiBlender::AnyAnimating  # reads mAnimating(+0x28) x mNumAnims(+0x40)
+0075a710 SP::cMultiBlender::AddWeight  # mWeights(+0x24)/mMaxAnims(+0x38)/mNumAnims(+0x40)
+0075a780 SP::cMultiBlender::BlendStepA  # mInterpolators(+0x30)/stride(+0x3c), vcall +4
+0075a7d0 SP::cMultiBlender::BlendStepB  # same loop, vcall +8
+0075a820 SP::cMultiBlender::TotalWeight  # sum mWeights(+0x24), vcall +0x10
+0075a880 SP::cMultiBlender::BlendStepC  # per-interpolator vcall +0x14
+0075a8c0 SP::cMultiBlender::SetBlendCallback  # writes m_BlendCallBack(+0x20)
+0075b410 SP::cMultiBlender::ResetInterpolators  # loop over mMaxAnims(+0x38)

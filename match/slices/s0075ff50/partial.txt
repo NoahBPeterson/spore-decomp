@@ -1,0 +1,2 @@
+00760450  592  cRenderer::Render: main flow present but pre-render job loop and render-stats copy are stubbed
+00760ca0  279  Vec3::insert (0xc stride): grow path calls a guessed allocator/relocation sequence

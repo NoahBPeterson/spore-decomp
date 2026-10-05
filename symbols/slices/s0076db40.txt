@@ -1,0 +1,27 @@
+0076db40  cRTTManager::GetTextureHandle  # page texture lazy resolve
+0076dbb0  cRTTManager::GetTexture  # page texture pointer
+0076dc00  cRTTManager::GetRect  # sub-rect copy
+0076dc70  cRTTManager::GetRectSizes  # rect + w/h
+0076dcf0  cRTTManager::GetAB  # mA/mB
+0076dd60  cRTTManager::FillSprite  # raster fill + sprite blit
+0076ddb0  cRTTManager::FindPage  # page search
+0076de20  UninitCopyPageRecords  # 0x1d-record uninitialized copy
+0076de80  CopyPageRecords  # 0x1d-record copy loop
+0076dee0  capture-job registration  # viewer + behaviour message
+0076e040  cRTTManager::GetScaledRect  # 1/size scaling
+0076e110  SP::cRTTManager::AllocateNewPage  # PDB name
+0076e1e0  SpVec::DeallocateSelf  # three-pointer vector release
+0076e2c0  Rec3c::DestroyOne  # 0x3c record dtor
+0076e320  DestroyRecRange  # 0x3c record range dtor
+0076e3b0  DestroyRecArray  # 0x3c record array dtor
+0076e430  FreeElemArray  # 0x20-stride element vector free
+0076e5c0  SomeObj3 destructor  # vector + base vtables
+0076e610  0x2c object factory  # three-vtable MI object
+0076e670  BigRec_Construct  # 0x3c record construct
+0076e750  BigRecOps::CopyFrom  # record copy + AddRef
+0076e7a0  EA::ArgScript::cOptionsSpec::~cOptionsSpec  # PDB name (0x38 record array dtor)
+0076e840  CopyBigRecRange  # 0x3c record range copy
+0076e900  CopyBigRecRange2  # 0x3c record range assign
+0076e9b0  CopyBigRecRangeBack  # backward range assign
+0076ea60  cRTTCheat::cRTTCheat  # PDB name
+0076eb00  cRTTCheat::Execute  # PDB name

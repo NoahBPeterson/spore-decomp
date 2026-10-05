@@ -1,0 +1,10 @@
+# VA  Name  # evidence
+0074b2b0  SP::cLoadQueue<...>::~cLoadQueue  # PDB gap-align name
+0074b390  eastl::partial_sort<cOccluder*,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
+0074b510  eastl::partial_sort<SP::cModelWorld::cDrawModelInfo*,`anonymous namespace'::cAlphaSortLessComparator>  # PDB name
+0074b690  SP::cModelWorld::SetInWorld  # PDB caller-single
+0074b760  SP::cModelWorld::UpdateFromPropList  # PDB name
+0074c670  SP::cModelWorld::ModelIsResidentInMemory  # PDB name
+0074c910  SP::cModelWorld::ScheduleForLoad  # PDB name
+0074d190  eastl::quick_sort_impl<cOccluder*,int,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
+0074d2c0  SP::cModelWorld::HandleMessage  # PDB name

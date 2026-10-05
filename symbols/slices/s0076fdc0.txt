@@ -1,0 +1,10 @@
+0076f880 eastl::promote_heap  # heap sift-up: args (first, top, position, value(0x14), compare-fnptr); called by 0076fef0
+0076fdc0 buildIndex  # builds an 8-byte index table from 0x8c-byte records; caller at 007591d0-ish
+0076fef0 eastl::adjust_heap  # heap sift-down over 0x14-byte elements, function-pointer compare
+0076ffd0 eastl::copy              # 8-byte elements, dest null-checked
+00770010 eastl::uninitialized_copy  # 0x30-byte element (0x28 copied)
+00770080 eastl::fill              # 0x30-byte elements
+007700e0 eastl::uninitialized_fill_n  # 0x30-byte elements, dest null-checked
+00770180 eastl::pop_heap
+00770240 eastl::make_heap
+007702c0 eastl::sort_heap

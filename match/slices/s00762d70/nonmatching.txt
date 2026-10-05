@@ -1,0 +1,8 @@
+00762f30  79   complete: operator new + copy {a,b} + locked 0-store; cl reloads src after the call instead of keeping it in edi
+007631f0  68   complete: scalar deleting destructor for CEditorRes; original gets an EH frame and inlines ~X, ours calls ??1
+007632f0  5    complete: 4 vcall branches; cl keeps the vtable in eax instead of edx (2-byte register swap)
+007633a0  61   complete: colour-key switch; jbe vs je and switch-case register allocation differ
+00763490  86   complete: arena fixup callback; original shares the false epilogue and reloads the arena ptr in the loop
+007635b0  72   complete: EH destructor iterating two EhItem[4] arrays at +0x44/+0x64; frame layout differs
+00763770  67   complete: raster-from-gimmmex create; original uses early-return branch layout, ours merges the two checks
+00763c60  24   complete: int-vector add-unique; original keeps the count in esi (ours edx)

@@ -1,0 +1,3 @@
+0076bc50  1467 Snapshot/cubemap capture: skeleton (RTT manager tiling, scene-view job dispatch and 8 EH scopes omitted)
+0076c210  1034 Message-driven capture entry: skeleton (job dispatch and inlined EASTL setup omitted)
+0076c7c0  968  IHandlerRC::HandleMessage: skeleton (switch over capture message ids and job dispatch omitted)

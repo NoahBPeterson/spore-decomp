@@ -1,0 +1,8 @@
+# s00762d70 recovered names
+00763520 SP::cGraphicsResourceFactory::Shutdown  # PDB vtable-slot
+00763550 SP::cGraphicsResourceFactory::GetSupportedTypes  # PDB vtable-slot; kSupportedTypes @0x140dfe0 (8 dwords)
+00763580 IsRegType  # invented; registration-type predicate (0x2f4e681b..0x2f4e681c, 0x2f7d0004)
+00763950 SP::cGraphicsResourceFactory::ReadResourcePCAWeights  # PDB anchor
+00763100 CEditorRes::CEditorRes  # vtables 0x13ebcdc/0x140df3c; AtomicInt refcount at +4
+007631f0 CEditorRes scalar deleting destructor  # vtables 0x140df3c/0x13eb938; RefVector @+0x18 dtor 0x41eb80
+007633a0 ResolveColor  # invented; cDirectPropertyList key -> cSPColorRGB via tables @0x16304bc

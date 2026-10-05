@@ -1,0 +1,3 @@
+007597d0  90  Elem14Vec resize/insert: erase path and insert path complete; EH frame and call shapes differ
+00759ec0  260 MeshCacheEntry::Dispatch: per-entry lookup, shader state, vertex-descriptor compare and release chain complete; EH/frame and register schedule differ
+0075a420  140 bounds/weights: SSE clear + FUN_00759100 + per-entry FUN_00729c60 loop complete; SSE constant schedule differs

@@ -1,0 +1,10 @@
+0075e370 SP::cRenderer::LayerInfoAt  # PDB (card)
+0075e3b0 SP::cRenderer::LayerInfoAtIndex  # PDB (card)
+0075e330 SP::cRenderer::NumLayers  # PDB candidate (card)
+0075e090 SP::cRenderer::Layer  # PDB (card)
+0075e130 SP::cRenderer::SetInfoFlags  # PDB (card)
+0075e1e0 SP::cRenderer::ClearInfoFlags  # PDB (card)
+0075e290 SP::cRenderer::GetInfoFlags  # PDB (card)
+0075dff0 SP::cRenderer::SubRender  # PDB (card)
+0075de80 render settings update (sAppProperties)  # inferred from asm
+0075df60 window size from canvas rect  # inferred from asm

@@ -1,0 +1,15 @@
+0075d440 SP::cMultiBlender::Update  # inferred: same class layout as slice s0075b520
+0075d8d0 intrusive list unlink helper  # structure (two back-pointers) from asm
+0075d930 `anonymous namespace'::DeviceLost  # PDB (card)
+0075d950 `anonymous namespace'::DeviceRelease  # PDB (card)
+0075d990 nSPSkinner::cPaintSystem::Init  # PDB candidate (card)
+0075da90 SP::cRenderer::GetDisplayName  # PDB (card)
+0075daa0 SP::cRenderer::SetViewer  # PDB (card)
+0075dad0 SP::cRenderer::GetRenderStats  # PDB (card)
+0075db70 SP::cRenderer::NumLayers  # PDB (card)
+0075dbb0 SP::cRenderer::LayerAtIndex  # PDB (card)
+0075dca0 SP::cRenderer::InitShaders  # PDB (card)
+0075db00 SP::cRenderer::Flush  # PDB (card)
+0075dbe0 device-ready latch  # inferred from asm
+0075dc10 device release guard  # inferred from asm
+0075d870 render-manager update gate  # inferred from asm

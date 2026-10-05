@@ -1,0 +1,6 @@
+00751560  1475  heavily inlined /O2 job/refcount/EH code; skeleton only
+00751b30   461  inlined vector<bool>/AutoRefCount highlight-property code; skeleton only
+00751de0   240  intrusive job-queue update loop; skeleton only
+00751ed0   252  fixed_vector grow/relocate with inlined cSPTransform ctor; skeleton only
+00751ff0   240  EH init (MessageServer handler registration + draw-set reset); skeleton only
+007520e0   703  EH shutdown (large object teardown); skeleton only

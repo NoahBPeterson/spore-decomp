@@ -1,0 +1,7 @@
+0075a980  176 F980: zero-pose switch function stubbed
+0075aa30  518 Faa30: stub
+0075ac40  316 Fac40: stub
+0075ad80  1031 Fad80: stub
+0075b190  301 cMultiBlender::GetResourceDescriptor: stub
+0075b2c0  324 Fb2c0: stub
+0075b4d0  74  Fb4d0: GetResourceDescriptor wrapper stubbed

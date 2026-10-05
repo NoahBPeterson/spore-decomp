@@ -1,0 +1,6 @@
+0076f540  31   LessPage: 3-int lexicographic less-than complete; final-compare setl vs branch differs
+0076f580  42   JobRecordI copy ctor: 0xa8 record memberwise copy complete; last-trio pointer bump differs
+0076f210  75   SP::cRTTManager::Shutdown: erase + cheat/message calls complete; base-arg addressing (lea vs add) differs
+0076f920  70   CopyElem30: 0x30 element uninitialized copy complete; pointer setup/offset schedule differs
+0076f990  68   CopyElem30InPlace: 0x30 element copy complete; pointer setup/offset schedule differs
+0076fa70  70   CopyElem30Back: backward 0x30 element copy complete; pointer setup/offset schedule differs

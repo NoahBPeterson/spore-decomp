@@ -1,0 +1,3 @@
+007650d0  21   complete: state->ReadArena(&state[0x2c], p28, p14); original copies this to eax and mutates it (add eax,0x2c)
+00765580  42   complete: ~cGraphicsResourceFactory releases the refcounted cJobLock at +8 then sets base vtable; xadd temp register and dec/sub differ
+00765f10  80   complete: cPropertyList-style ctor (base vptr, zeroed fields, derived vptr, AddRef arg at +0x1c); no EH frame/register order differs

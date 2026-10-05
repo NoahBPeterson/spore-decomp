@@ -1,0 +1,5 @@
+0076fdc0 177 register-allocation/scheduling differences in the index-build loop (compiler choices)
+0076ffd0 51 copy loop: original spills `first` to its parameter home and uses only esi (no edi)
+00770010 78 uninitialized_copy: original keeps a second induction pointer at +0x1c; frame/regs differ
+00770080 76 fill: same movaps+8-mov body but different induction register assignment
+007700e0 70 uninitialized_fill_n: same body but different induction register assignment

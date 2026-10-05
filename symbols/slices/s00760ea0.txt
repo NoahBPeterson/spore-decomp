@@ -1,0 +1,7 @@
+00761420 SP::CreateRaster  # Ghidra PDB name (card)
+00761500 SP::CreateTriangleKDTreeProcedural  # Ghidra PDB name (card)
+00761650 SP::CreateVertexDescriptor  # Ghidra PDB name (card)
+007616f0 SP::CreateVertexBuffer  # Ghidra PDB name (card)
+007617a0 SP::CreateCompiledState  # Ghidra PDB name (card)
+00761840 SP::CreateMesh  # Ghidra PDB name (card)
+007618e0 SP::ResetGlobalState  # Ghidra PDB name (card)
