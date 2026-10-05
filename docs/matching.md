@@ -88,6 +88,11 @@ Writing matchable source:
 - Budget your effort: up to ~6 variant rounds per function. If it won't match, keep the best
   behaviorally-correct version (it must compile) and list it in nonmatching.txt.
 
+**No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
+generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in
+partial.txt. Only a few `__asm` statements inside C++ where the original used an asm helper (fnstcw/fldcw,
+cvtss2si) are allowed. `tools/matching/asm_audit.py` lists offending manifest entries; run it before integrating.
+
 ### Lessons from the pilot (12 agents)
 - **Module flags vary**; check the disassembly first:
   - `/Od /Ob1`: `push ebp; mov ebp,esp`, ecx spilled to `[ebp-N]`, every local in memory, but small
