@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00696c80/s00696c80.cpp  ?ZeroLocalInputState@@YIPAXPAX@Z  00697960  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?Reset@cLocalInputState@SP@@QAEXXZ  00697980  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?UpdateModifiers@cLocalInputState@SP@@QAEXXZ  006979c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?ResetIf@cLocalInputState@SP@@QAEX_N@Z  00697a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?OnKeyDown@cLocalInputState@SP@@QAEXII@Z  00697a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?OnKeyUp@cLocalInputState@SP@@QAEXII@Z  00697a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?OnMouseDown@cLocalInputState@SP@@QAEXIMMI@Z  00697ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?OnMouseUp@cLocalInputState@SP@@QAEXIMMI@Z  00697af0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?AddScrollDelta@cLocalInputState@SP@@QAEXHHHH@Z  00697b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ??0MutexLock@SP@@QAE@PAVMutex@Thread@EA@@@Z  00697b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ??1MutexLock@SP@@QAE@XZ  00697b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00696c80/s00696c80.cpp  ?ShouldLog@Server@Trace@EA@@QAEHI@Z  00697b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

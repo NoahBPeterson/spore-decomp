@@ -1,0 +1,11 @@
+006783c0 SPUISpace HUD::AnchorAndAnimate  # window anchor + fpatan; unnamed
+00678670 SPUISpace HUD::Show  # enables animator chain; unnamed
+00678910 SPUISpace HUD::UpdateAnimation  # 4-animator easing; unnamed
+00678ed0 HUD predicate: mCur == mTarget  # unnamed
+00678f70 HUD element destructor (releases 4 refs + string + base)  # unnamed
+00679080 HUD element init (4 args)  # unnamed
+00679120 HUD destroy-all  # unnamed
+006792f0 HUD element advance/recycle  # unnamed
+00679340 intrusive refcount vector assign  # eastl::vector<AutoRefCount<ILogReporter>>::operator=
+00679400 HUD destructor  # unnamed
+00679520 HUD constructor  # unnamed

@@ -1,0 +1,1 @@
+006a8610 `anonymous namespace'::GetVariantValueDescription  # PDB anchor 0157c3a0

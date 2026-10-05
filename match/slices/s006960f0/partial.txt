@@ -1,0 +1,5 @@
+006960f0  604  skeleton only; resource-manager broadcast over an intrusive refcounted node list not reconstructed (307 bytes target)
+006964c0  1069  skeleton only; the full CommandLine/locale-info/registry bootstrap (dozens of GetLocaleInfoInt calls) not reconstructed
+006968f0  141  skeleton only; longest-common-prefix locale match + vtable SetLocale not reconstructed
+006969b0  155  skeleton only; locale-list probe via FUN_0087fd10 not reconstructed
+00696a60  530  skeleton only; en-us fallback language resolution (registry + GetLocaleInfoString + WString append) not reconstructed

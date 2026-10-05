@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00668d90  1400  GetAssetList: only the output-vector zero-init is reconstructed; the managed-asset DB walk/filter and 16-byte entry construction are omitted

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006870a0  590  Vec28::ResizeLoop: insert/fill loop not reconstructed (only signature/calls)
+006872f0  670  anonymous_namespace::RegisterPackages: package scan/dispatch not reconstructed
+00687610  1006 SP::SetupResources: resource setup not reconstructed
+00687ab0  271  Vec28::Reserve: reserve path present but Elem temp default-construction/EH cleanup omitted (frame/EH missing)

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066afd0  101  comparator: complete map-lookup/vtable 0x24 path; map operator[] inlining and register allocation differ
+0066b050  58   global-vector refcounted push: complete AddRef/inline-or-outline path; vector end/cap scheduling differs
+0066b0c0  47   layout-map reset/reindex: complete DoNukeSubtree + map[] loop; cl hoists the size/pointer reloads
+0066bd40  32   zero-init constructor: all fields/vtable/floats present; self stays in ecx instead of the original eax (zero in ecx)

@@ -1,0 +1,20 @@
+# source  symbol  va  [flags override]
+slices/s0069d090/s0069d090.cpp  ?init@C1@@QAEXXZ  0069d1c0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?f@C2a@@QAE_NHH@Z  0069d1d0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?g@C2b@@QAE_NHH@Z  0069d280 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  _FUN_0069d2c0@4  0069d2c0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?setProgress@C5@@QAEXM@Z  0069d2f0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?asInterface@C6@@QAEPAXH@Z  0069d360 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?GetRefCount@C8@@QAEHXZ  0069d3f0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?reset@Holder@@QAE_NXZ  0069d480 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?valid@Holder@@QAE_NXZ  0069d4d0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?f@C830@@QAEXHH@Z  0069d830 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?reset@Holder8@@QAE_NXZ  0069d8e0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?valid@Holder8@@QAE_NXZ  0069d930 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?emit@C950@@QAEXPAX@Z  0069d950 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?get@Cddc0@@QAEHXZ  0069ddc0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?get@Cdea0@@QAEDXZ  0069dea0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?flush@Cded0@@QAEDXZ  0069ded0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?bind@Cdfc0@@QAE_NPAXH@Z  0069dfc0 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?ctor@C_e040@@QAEPAU1@XZ  0069e040 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069d090/s0069d090.cpp  ?ctor@C_e210@@QAEPAU1@XZ  0069e210 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

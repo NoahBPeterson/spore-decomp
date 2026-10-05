@@ -1,0 +1,3 @@
+slices/s006aa3f0/s006aa3f0.cpp  ?RegisterPropertyName@cPropertyManager@@QAEXPBDI@Z  006aa3f0
+slices/s006aa3f0/s006aa3f0.cpp  ?RegisterPropertyNameLocal@cPropertyManager@@QAEXPBDI@Z  006aa5e0
+slices/s006aa3f0/s006aa3f0.cpp  ?Parse@cPropertyCommand@@QAE_NPAPAX@Z  006aadb0

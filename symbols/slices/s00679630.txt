@@ -1,0 +1,8 @@
+00679630 SP::cPropertyUI::ModifyBool  # PDB candidate (caller-scored)
+00679b40 SP::cPropertyUI::cElem copy-ctor  # unnamed
+00679c90 SP::cPropertyUI::cElem operator=  # unnamed
+00679e50 SP::cPropertyUI container reset  # unnamed
+00679ff0 SP::cPropertyUI::PushElem  # unnamed
+0067a090 SP::Achievements::Controller::Shutdown  # PDB callee-scored
+0067a120 SP::cPropertyUI::DestroyAllElems  # unnamed
+0067a1b0 SP::cPropertyUI::Update  # unnamed

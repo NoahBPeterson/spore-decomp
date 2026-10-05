@@ -1,0 +1,26 @@
+# s0068e670 recovered names (PDB names where shown by card.py; else invented stubs)
+0068e670 FUN_0068e670  # Simulator job/event processor
+0068e8a0 vec_fill       # vector<bool>-style range fill (DoInsertValues 0x4c10e0 / memcpy 0x11e0744)
+0068e8f0 bitmap_init    # bitmap size/alloc/init
+0068e9a0 JobLock::Read  # job-lock deserialize (EA::IO reader vtable slots 0x28/0x30)
+0068eb50 JobLockWrite   # job-lock serialize/setup
+0068eca0 JobLockHelper  # job-lock helper
+0068ed70 JobLockHelper2 # job-lock helper
+0068eef0 JobLockHelper3 # job-lock helper
+0068eff0 Simulator::cCreatureAbility::cCreatureAbility  # ctor: vtbl 0x13ef094/0x14036f4 + Mutex @+8
+0068f050 Simulator::cCreatureAbility::~cCreatureAbility  # dtor
+0068f0b0 CJobHolder::SetJob  # swap job pointer under Mutex @+8; mJob @+0x38
+0068f180 CJobHolder2::Attach # job-lock continuation wrapper
+0068f1d0 JobLock::JobLock    # job-lock ctor
+0068f2b0 JobLock::~JobLock   # job-lock dtor (refcount release + job release)
+0068f350 TryLockJobs         # try-lock two jobs, create a JobLock
+0068f450 EA::GetHighestBitPowerOf2  # bit-scan (binary search on masks)
+0068f4a0 ClsF4A0::Reset      # zero words + close handle at +8
+0068f4e0 mutex_ctor_helper   # mutex/semaphore member ctor helper
+0068f540 ClsF540::Acquire    # lock Mutex @+8, ++count @+0x38
+0068f560 ClsF540::Release    # --count, unlock Mutex @+8
+0068f570 FUN_0068f570        # notify callback + virtual teardown call at inner+0x1c
+0068f5a0 FUN_0068f5a0        # indirect call through vtable slot 0 of *b
+0068f5b0 ClsF5B0::Set        # replace pointer, release old via slot 1
+0068f5d0 list_drain          # drain list, post semaphore per node
+0068f600 sem_list_ctor       # semaphore-list container ctor

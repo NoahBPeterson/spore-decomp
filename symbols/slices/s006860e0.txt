@@ -1,0 +1,14 @@
+# s006860e0 recovered names (PDB names where shown by card.py; else invented stubs)
+006860e0 CopyElems     # eastl copy(first,last,dst) of 0x28-byte Elem {u8,u32,WStr,WStr}; WStr=basic_string<wchar_t>
+00686150 CopyBackElems # eastl copy_backward(first,last,dstLast) of Elem
+006861d0 EraseEntry    # hashtable find + refcount decrement + erase (globals 0x152b5f8/0x152b600/0x152b5fc)
+00686250 GetElemWStr   # bool: fetch global array element's wstring into out (array 0x15fea00, count 0x152b348)
+00686290 FillElems     # eastl fill(first,last,const Elem&)
+00686320 SP::cPropertyList::~cPropertyList  # release mModCount (+0x30) then free hashtable (+0x18); vtbl cEditorResource
+00686380 HashMap::operator[]  # eastl::hash_map<unsigned,pair<Record*,int>>::operator[](key) -> &value
+006863e0 WFixed::Append  # append wide c-string into fixed wide buffer
+00686430 VecBuf::Init  # allocate+zero flat buffer {begin,end,cap}
+00686490 SP::OpenRecordAsStream  # manager->open, hash_map insert, return id
+00686520 DecodeRecord  # record decode: read header then RSA/SHA1 verify
+006866f0 ReadPropRecords  # Editor::cPropertyList record reader
+00686d90 ReadPropRecords2 # Editor::cPropertyList record reader variant

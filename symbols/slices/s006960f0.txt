@@ -1,0 +1,10 @@
+00696230 eastl::fixed_string<wchar_t,16,1>::fixed_string(const fixed_string&)  # matches fixed_string copy ctor: pool+inline buffer init then append(x.begin,x.end)
+006962a0 eastl::fixed_string<wchar_t,16,1>::fixed_string(const wchar_t*)  # pool+inline buffer init then append(p,p+strlen(p))
+00696320 eastl::fixed_string<wchar_t,16,1>::operator=(const fixed_string&)  # clear() then external append(x.begin,x.end)
+00696350 App::cLocaleChangeMessage::cLocaleChangeMessage  # vtables 0x13eb918/0x13f65b4 base, 0x1403d6c/0x1403d5c derived; mLocaleId at +0xc
+006963d0 App::cLocaleChangeMessage::~cLocaleChangeMessage  # scalar deleting dtor (??_G), destroys mLocaleId at +0xc then restores base vtables +0/+4
+00696420 SP::cLocaleManager::cLocaleManager  # vtbl 0x1403d34; mLocaleId at +0x18, lists at +0x50/+0x60
+006964c0 SP::cLocaleManager::Init  # card name from dev PDB
+006968f0 SP::cLocaleManager::SetLocaleFromString  # longest-common-prefix over 0x152d6c8 table, then vtable +0x10
+006969b0 SP::cLocaleManager::FindCurrentLocale  # probes FUN_0087fd10(0x18,str,1) over the locale table
+00696a60 SP::cLocaleManager::GetDefaultLanguage  # resolves "en-us" then language code via GetLocaleInfoString

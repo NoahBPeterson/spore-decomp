@@ -1,0 +1,2 @@
+006a05f0  147  cCOMSerializer::WriteSerializableObject: complete behaviour (vtable write both IDs + onSetSPSerializable + commit), but register scheduling and the this-8 adjustment differ
+006a06a0  155  cCOMSerializer::ReadSerializableObject: complete behaviour (read IDs, onSetSPSerializable, optional loadSingleObject + commit), register/EH scheduling differs

@@ -1,0 +1,12 @@
+00674d30 `anonymous namespace'::cBuildXHTMLDetokenizer::Detokenize  # PDB gap-align
+00674dc0 `anonymous namespace'::sBuildXHTMLDocument  # PDB anchor; takes (doc, wchar_t** out)
+00675080 SP::cSPUISporeGuidePage::LoadSporeGuidePage  # PDB anchor
+006751a0 PropertyManager setter wrapper (0x5befd27)  # unnamed; SP::PropertyManager vcall
+006751c0 cVar comparison predicate  # switch on (header>>8)&7; returns relational result
+00675260 eastl::vector<16-byte>::Serialize  # writes count + pairs via EA::IO::WriteUint32
+00675370 accessor: returns +0x28 or *(int*)(p+8)+0x3c  # unnamed
+006753a0 achievement_test cheat teardown  # PDB string "achievement_test ..."
+00675440 vector<cVar>::Deserialize  # read-vcall loop
+006754d0 object-database loader for achievement_test  # GetSaveArea + cObjectDatabase
+00675590 reset-flag pass over 0x10-stride vector  # unnamed
+00674640 `anonymous namespace'::cBuildXHTMLDetokenizer::TranslateToken  # PDB anchor

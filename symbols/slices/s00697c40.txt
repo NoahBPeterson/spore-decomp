@@ -1,0 +1,10 @@
+00697c40 EA::Trace::Server default bootstrap  # allocates LogFilterGroupLevels (0x3c) and LogFormatterFancy (0xa58), sets them via +0x2c/+0x30, then Init + AddCategory calls
+00697e00 EA::Trace::LogManager::LogManager  # base ctor 0x923d40; strings empty at +0x68/+0x78/+0x88; byte +0x98=1; 0x9259d0 at +0xa0
+00697ee0 EA::Trace::LogManager::~LogManager  # restores vtables, frees three vectors, calls Server dtor 0x924bd0
+00697fa0 EA::Trace::GetLogManager  # new (0xf8, "Debug/EATrace/LogManager") then FUN_00697e00, vtable +0x14/+0x10
+00698030 EA::Trace::Server::SetNames  # assign 3 wide strings at +0x68/+0x78/+0x88 then FUN_00697bb0
+00698180 SP::QuaternionFromDirections  # PDB name; x87 normalize + 1/sqrt(3) fallback
+006983a0 SP::MatrixFromDirection  # normalize dir, build orthonormal 3x3
+006985b0 SP::OrthogonalVector  # pick a perpendicular axis from the smallest |component|
+00698650 SP::MatrixFromQuaternion  # 4x4 from quaternion
+00698880 SP::?  006989d0 SP::?  00698b30 SP::?

@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+0068e670  549  job/event processor: skeleton only (body not reconstructed)
+0068e8a0  74   vector<bool>-style range fill: signature only
+0068e8f0  173  bitmap alloc/init: signature only
+0068e9a0  431  job-lock deserialize: only the leading vector reset reconstructed
+0068eb50  334  job-lock serialize/setup: skeleton only
+0068eca0  198  job-lock helper: skeleton only
+0068ed70  369  job-lock helper: skeleton only
+0068eef0  232  job-lock helper: skeleton only
+0068eff0  93   Simulator::cCreatureAbility ctor: vtable stores + Mutex ctor omitted
+0068f050  90   Simulator::cCreatureAbility dtor: member destruction / vtable restore omitted
+0068f0b0  170  cJob holder SetJob: mutex/job swap present but EH frame + refcount scheduling omitted
+0068f180  50   attach-job wrapper: continuation path guessed, not faithful
+0068f1d0  158  job-lock ctor: vtables/refcount/member init omitted
+0068f2b0  128  job-lock dtor: refcount release + job release below/to be verified (EH omitted)
+0068f350  204  try-lock two jobs + create JobLock: body omitted
+0068f4e0  91   mutex/semaphore member ctor helper: only field zeroing present
+0068f5d0  46   list drain / semaphore post: body approximated
+0068f600  109  semaphore-list container ctor: mutex/semaphore init omitted

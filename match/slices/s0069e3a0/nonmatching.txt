@@ -1,0 +1,8 @@
+0069e550  62  rbtree node copy-allocation (pair<key,AutoRefCount>): complete behaviour, but the original compiler EH frame/state around the allocator call is not reproduced
+0069e6c0  64  rbtree<...cFeedbackEvent...>::DoCopySubtree: complete behaviour (recursive copy of left spine + right iteration), but cl emits call/jump structure and EH differing from the original
+0069ecc0  65  rbtree cClassInfo node allocation: complete behaviour, compiler EH frame around the allocator call differs
+0069edb0  83  rbtree<...cClassInfo...>::DoCopySubtree: complete behaviour, but cl's call/loop scheduling and EH differ
+0069ee60  4  rbtree<...cClassInfo...>::DoNukeSubtree: complete behaviour, but node value offset (0x1c) / node-dtor shape and the ebx=this member register differ
+0069ec20  21  decode one huge-blob entry through a virtual IO object; complete behaviour, but the this+0x54 member and register scheduling differ
+0069f0b0  61  cCOMSerializer destructor body: complete behaviour (2 vptr stores, buffer free, smart-ref release, 2 tree nukes), but the compiler EH frame/state layout differs
+0069f160  12  cCOMSerializer::reset: complete behaviour (nuke+reanchor both trees, clear flags, release p50), but store ordering / the anchor-at-+4 layout differs

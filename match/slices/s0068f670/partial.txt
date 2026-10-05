@@ -1,0 +1,8 @@
+0068f7c0  386  partial; FreeJobUnderLock rewritten behaviourally but not verified
+0068fad0  159  partial; EASTL cJobProfZone hashtable DoRehash left as stub
+0068fbe0  121  partial; cJobData constructor approximated (mpExtraObject release)
+0068fc60  221  partial; cJobManager destructor left as stub
+0068fda0  292  partial; GetFreeJob approximated
+00690210  243  partial; cJobManager constructor left as stub
+006903c0  373  partial; Shutdown approximated
+00690630  420  partial; FailJobDependents approximated

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+006700d0  202  constructor: every vtable/field store present; cl keeps this in ecx with the zero in eax, the original swaps them (base eax, zero ecx)

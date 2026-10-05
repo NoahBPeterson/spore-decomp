@@ -1,0 +1,9 @@
+0069b600 SP::QuaternionFromFacingAndUp  # PDB name; Matrix3FromFacingAndUp + QuaternionFromMatrix33<float,0>, copies 4 floats
+0069b440 SP::Matrix3FromFacingAndUp  # PDB name
+0069a9a0 SP animated-event interpolate
+0069ac00 SP animated-event insert
+0069aee0 SP animated-event erase
+0069b1c0 SP segment closest-point helper
+0069b650 SP segment point distance
+0069b760 SP orthonormal basis helper
+0069b840 SP angle clamp/wrap

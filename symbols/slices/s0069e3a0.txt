@@ -1,0 +1,10 @@
+0069e3a0 SP::cObjectDatabase::OpenIStream  # PDB name
+0069e470 SP::cObjectDatabase::OpenOStream  # PDB name
+0069e5d0 SP::cObjectDatabase::HasKey  # PDB name
+0069e9e0 SP::cCOMSerializer::onGetSPSerializable  # PDB name
+0069eb60 eastl::map<unsigned int,SP::cCOMSerializer::cIDInfo,...>::operator[]  # PDB name
+0069edb0 eastl::rbtree<...cClassInfo...>::DoCopySubtree  # PDB name
+0069ee60 eastl::rbtree<...cClassInfo...>::DoNukeSubtree  # PDB name
+0069f160 SP::cCOMSerializer::reset  # PDB name
+0069f1d0 SP::cCOMSerializer::LoadClassObjects  # PDB name
+0069f840 SP::cCOMSerializer::cCOMSerializer  # PDB name

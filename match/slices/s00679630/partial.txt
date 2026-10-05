@@ -1,0 +1,5 @@
+00679630  1294  SP::cPropertyUI::ModifyBool: skeleton only (large property/visitor graph not reconstructed)
+00679b40  336  cPropertyUI element copy-construct: skeleton only (refcount copies + intrusive vector copy not reconstructed)
+00679c90  448  cPropertyUI element assign: skeleton only (vector assign + refcount swap not reconstructed)
+00679e50  416  cPropertyUI container reset: skeleton only (modal teardown + tree walk not reconstructed)
+0067a1b0  991  property UI update: skeleton only (x87 easing + property reads not reconstructed)

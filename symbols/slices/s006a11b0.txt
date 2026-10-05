@@ -1,0 +1,24 @@
+006a11b0 SP::GetPropertyAsColorRGB  # PDB ?GetPropertyAsColorRGB@SP@@YA_NPBVcPropertyList@1@IPAUcSPColorRGB@@@Z
+006a1200 SP::GetPropertyAsColorRGBA  # PDB ?GetPropertyAsColorRGBA@SP@@YA_NPBVcPropertyList@1@IPAUcSPColorRGBA@@@Z
+006a1250 SP::GetPropertyAsKey  # PDB ?GetPropertyAsKey@SP@@YA_NPBVcPropertyList@1@IPAVKey@ResourceMan@EA@@@Z
+006a12a0 SP::GetPropertyAsKeyInstance  # PDB ?GetPropertyAsKeyInstance@SP@@YA_NPBVcPropertyList@1@IPAI@Z
+006a12e0 SP::GetPropertyAsKeyGroup  # PDB ?GetPropertyAsKeyGroup@SP@@YA_NPBVcPropertyList@1@IPAI@Z
+006a1320 SP::GetPropertyAsKeyType  # PDB ?GetPropertyAsKeyType@SP@@YA_NPBVcPropertyList@1@IPAI@Z
+006a1360 SP::GetPropertyAsText  # PDB ?GetPropertyAsText@SP@@YA_NPBVcPropertyList@1@IPAVcString@1@@Z
+006a13b0 SP::GetPropertyAsString8  # PDB ?GetPropertyAsString8@SP@@YA_NPBVcPropertyList@1@IPAV?$basic_string@DVallocator@eastl@@@eastl@@@Z
+006a1400 SP::GetPropertyAsString16  # PDB ?GetPropertyAsString16@SP@@YA_NPBVcPropertyList@1@IPAV?$basic_string@_WVallocator@eastl@@@eastl@@@Z
+006a1450 SP::GetPropertyAsChar8Ptr  # PDB ?GetPropertyAsChar8Ptr@SP@@YA_NPBVcPropertyList@1@IPAPBD@Z
+006a1490 SP::GetPropertyAsChar16Ptr  # PDB ?GetPropertyAsChar16Ptr@SP@@YA_NPBVcPropertyList@1@IPAPB_W@Z
+006a14d0 SP::cPropertyList::DeepCopy  # PDB ?DeepCopy@cPropertyList@SP@@UAEXPAV12@@Z
+006a1510 SP::cPropertyList::DeepAdd  # PDB ?DeepAdd@cPropertyList@SP@@UAEXPAV12@@Z
+006a1540 SP::cPropertyList::Write  # PDB ?Write@cPropertyList@SP@@UBE_NPAVIStream@IO@EA@@@Z
+006a1600 SP::cDirectPropertyList::Add  # PDB ?Add@cDirectPropertyList@SP@@UAEXPAVcPropertyList@2@@Z
+006a1710 SP::cPropertyList::SetParent  # stores refcounted parent at +0x30 and mirrors its key as property 0xb2cccb
+006a17e0 SP::cDirectPropertyList::SetBoolProperty  # writes mDirectProps[index] else builds VariantT<bool>
+006a1880 SP::cDirectPropertyList::SetIntProperty  # PDB ?SetIntProperty@cDirectPropertyList@SP@@QAEXIH@Z
+006a1910 SP::cDirectPropertyList::SetFloatProperty  # PDB ?SetFloatProperty@cDirectPropertyList@SP@@QAEXIM@Z
+006a1b90 SP::cPropertyList::cPropertyList  # PDB ??0cPropertyList@SP@@QAE@PBD@Z
+006a1bd0 SP::cDirectPropertyList::~cDirectPropertyList  # PDB ??1cDirectPropertyList@SP@@UAE@XZ
+006a1ca0 SP::cDirectPropertyList::cDirectPropertyList  # ctor(count); allocates mDirectProps
+006a1de0 SP::cPropertyList::GetProperty  # PDB ?GetProperty@cPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z (non-const)
+006a1e50 SP::cDirectPropertyList::GetProperty  # PDB ?GetProperty@cDirectPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z (non-const)

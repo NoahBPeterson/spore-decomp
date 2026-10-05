@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006708d0/s006708d0.cpp  ?Destroy@MissingPage@@QAEPAU1@I@Z  00671630  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s006708d0/s006708d0.cpp  ?DoMessage@MissingPage@@QAE_NHPAH@Z  00671760  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s006708d0/s006708d0.cpp  ?SetVisibility@MissingPage@@QAEXH@Z  006717e0  /O2 /MD /Gy /EHsc /TP /arch:SSE

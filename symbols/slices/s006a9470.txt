@@ -1,0 +1,5 @@
+006a9470 `anonymous namespace'::cListPropsCheat::Execute  # PDB anchor 0157d180
+006a9790 `anonymous namespace'::cPropCheat::Execute  # PDB anchor 0157d530
+006a9b60 SP::cPropertyManager::Init  # PDB anchor 0157d9a0
+006aa130 SP::cPropertyManager::WriteResource  # PDB anchor 0157df40
+006aa0d0 eastl::vector<bool,eastl::fixed_vector_allocator<1,16,1,0,1>>::insert helper  # calls DoInsertValue 0x11e0744

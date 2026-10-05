@@ -1,0 +1,1 @@
+006a6340  6897  giant switch: dispatch + scalar cases only; array builders and EH state layout not reconstructed (no similar-size symbol emitted)

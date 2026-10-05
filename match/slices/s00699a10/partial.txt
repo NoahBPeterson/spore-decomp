@@ -1,0 +1,5 @@
+00699a10  1585  skeleton only; keyframe evaluation over float tracks (SSE) not reconstructed
+0069a050  493  skeleton only; keyframe sort/merge with x87 not reconstructed
+0069a240  632  skeleton only; vector/point distance (SSE) not reconstructed
+0069a5f0  343  skeleton only; keyframe insertion (SSE) not reconstructed
+0069a750  592  skeleton only; keyframe removal shift (SSE) not reconstructed

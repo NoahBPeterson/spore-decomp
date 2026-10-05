@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+slices/s00668be0/s00668be0.cpp  FUN_00668be0  00668be0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00668be0/s00668be0.cpp  FUN_00669410  00669410  /O2 /MD /Gy /TP /arch:SSE /GS-

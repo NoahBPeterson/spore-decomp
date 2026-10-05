@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0068e670/s0068e670.cpp  ?GetHighestBitPowerOf2@EA@@YAHI@Z        0068f450  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068e670/s0068e670.cpp  ?Reset@ClsF4A0@@QAEXXZ                   0068f4a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068e670/s0068e670.cpp  ?Acquire@ClsF540@@QAEXXZ                 0068f540  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068e670/s0068e670.cpp  ?Release@ClsF540@@QAEXXZ                 0068f560  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0068e670/s0068e670.cpp  ?Set@ClsF5B0@@QAEXPAUVObj@@@Z            0068f5b0  /O2 /MD /Gy /EHsc /TP /GS-

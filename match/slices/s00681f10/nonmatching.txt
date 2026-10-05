@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00681f10  217  complete: write map<int,Obj1700>; register allocation / call scheduling differs
+006825d0  201  complete: Map1 insert-with-hint (int,ObjC30); register allocation/scheduling differs
+00682740  142  complete: vector<Obj1800> copy ctor; EH frame size + arg scheduling differ
+006828a0  53   complete: Map2 insert-with-hint; signed-compare operand order and register roles differ
+00682900  237  complete: Map2 insert_unique returning pair<iter,bool>; scheduling differs
+00682a10  169  complete: Obj2A10 copy ctor; frame size (sub esp,8 vs push ecx) and register relief differ
+00682af0  186  complete: Map1 operator[]; duplicated insert tail + scheduling differs
+00682be0  103  complete: Map2 rbtree clone; this(cx)/src register roles swapped vs original
+00682ca0  370  complete: write map<int,Obj2A10>; per-field write scheduling differs
+00682e90  139  complete: load map<int,ObjC30>; loop/register scheduling differs

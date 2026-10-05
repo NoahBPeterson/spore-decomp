@@ -1,0 +1,11 @@
+006a1540  140  SP::cPropertyList::Write - complete; recomputed count + per-element WriteUint32/WriteVariant loop present, schedule differs
+006a1710  163  SP::cPropertyList::SetParent - complete; AutoRefCount/Variant assignment schedule differs
+006a17e0  67   SP::cDirectPropertyList::SetBoolProperty - complete; Variant ctor call returns this in original
+006a1880  66   SP::cDirectPropertyList::SetIntProperty - complete; Variant ctor call returns this in original
+006a1910  48   SP::cDirectPropertyList::SetFloatProperty - complete; Variant ctor call returns this in original
+006a1a70  124  eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ
+006a1b00  59   eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
+006a1bd0  41   SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs
+006a1de0  57   SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps
+006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes)
+006a2010  411  eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes)

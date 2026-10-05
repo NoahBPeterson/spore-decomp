@@ -1,0 +1,10 @@
+# s006870a0 recovered names (PDB names where shown by card.py; else invented stubs)
+006870a0 Vec28::ResizeLoop  # 0x28-stride element vector grow/insert loop; helpers 0x685a60/0x685b40/0x685bc0/0x685c40
+006872f0 anonymous_namespace::RegisterPackages  # scan/register package archives; wildcard L"*.package"
+00687590 Thunk_687590  # thunk calling RegisterPackages(a,b,0,0,c)
+006875b0 IteratePackages  # loop over global array 0x15fea00 (count 0x152b348), register populated entries
+00687610 SP::SetupResources  # resource-system setup
+00687a00 Thunk_687a00  # append [base,base+n) to global u32 vector at 0x152b5a0 (0x6ad970)
+00687a20 Iterate2  # iterate array, push wstring (0x553f10) and id (0x4558a0) into two vectors
+00687ab0 Vec28::Reserve  # ensure capacity n in the global 0x28-stride vector
+00687bc0 SetCount  # clamp/trim global element count; returns index or -1

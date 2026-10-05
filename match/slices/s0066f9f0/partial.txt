@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066f9f0  1263  card view builder: only a placeholder body
+0066fee0  427   helper: only a placeholder body
+00670200  363   helper: only a placeholder body
+00670370  380   helper: only a placeholder body
+006704f0  273   feed-subscribe loop: only a placeholder body (identity match + SubscribeToFeed)
+00670610  388   helper: only a placeholder body
+006707a0  295   vector-push helper (8-byte pairs): only a placeholder body

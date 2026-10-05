@@ -1,0 +1,2 @@
+006708d0  1504  SP::cGalaxyGameEntryImpl::DeleteGame: skeleton only (large asset-metadata/EASTL-string reconstruction not written)
+00670eb0  1410  cSPUIMissingExpansionPackPage::SetupPage: skeleton only (long FindWindowByID/refcount assignment chain not written)

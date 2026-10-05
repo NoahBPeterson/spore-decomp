@@ -1,0 +1,9 @@
+00695450  22  short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
+00695490  111  vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ
+00695cf0  13  indirection thunk: correct target/computation; branch layout and load order differ
+00695d10  13  resource-manager add loop: both manager calls and list walk present; vtable load scheduled after the pushes
+00695dc0  17  intrusive-list destroy: per-node vtbl+4 release and manager free present; this/cur register assignment swapped
+00695e00  112  list-node allocate/construct: allocator vcall and refcount hook present; EH prolog missing so frame differs
+00695e80  92  summarizer destructor: vtable stores, two list clears, buffer free condition present; EH frame differs
+00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ
+00695fa0  271  pooled sub-vector teardown: all walks/frees present; EH frame and register allocation differ

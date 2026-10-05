@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066f980  99   two-window fade pass: complete loop + elapsed-time vector; cl keeps the pointer/count in different registers and reorders the float array stores

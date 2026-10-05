@@ -1,0 +1,3 @@
+006985b0  171  OrthogonalVector: complete real C++ (fabs branch); x87 fabs/fcomi branch shape not reproduced (209 vs 154 bytes)
+00698880  532  RayBoxIntersect: complete slab test in real C++; branch/register schedule differs (551 vs 329 bytes)
+006989d0  534  SegmentBoxIntersect: complete slab test with t<1 end clip in real C++; schedule differs (554 vs 349 bytes)

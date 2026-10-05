@@ -1,0 +1,10 @@
+00674170 eastl::fill_n<wchar_t*>  # not PDB-named; fill of 16-bit values with rep stosd/stosw
+006741b0 eastl::hashtable/find helper  # 0x63c-stride walk + wcscmp; unnamed
+00674230 eastl::vector<cVar>::DoFillInsert  # fill-insert with memmove tail
+006742f0 eastl::move_backward / destroy range  # copies cVar strings backward
+00674340 eastl::uninitialized_copy<cVar*>  # construct-forward with assign
+006743a0 eastl::vector<cVar>::DoDestroyValues  # delete heap strings, advance dst
+006743f0 cBuildXHTMLDetokenizer::cVar::cVar(wchar_t const*)  # string ctor from C string
+00674440 eastl::vector<cVar>::DoInsertValue  # reallocation insert
+006745d0 eastl::vector<cVar>::push_back  # fast path + DoInsertValue tail
+00673c50 `anonymous namespace'::cBuildXHTMLDetokenizer::cBuildXHTMLDetokenizer  # PDB callee-scored

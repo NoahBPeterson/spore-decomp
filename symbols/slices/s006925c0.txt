@@ -1,0 +1,6 @@
+006925c0  SP::cJobManager::Run  # PDB (dev 00e92950)
+00692640  SP::cJobManager::WaitForJob  # PDB (dev 00e929f0)
+006926b0  SP::cJob::Wait  # PDB (dev 00e92a60)
+00692880  SP::cVarListSerializer::Init  # PDB (dev 00e92ca0)
+00692900  SP::cVarListSerializer::Serialize  # PDB (dev 00e92d20)
+00692f90  SP::cVarListSerializer::cVarListSerializer  # PDB (dev 00e932d0)

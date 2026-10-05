@@ -1,0 +1,2 @@
+006963d0  19  compiler-generated scalar deleting dtor (??_G) is 30 bytes and calls an out-of-line ??1; original is 72 bytes with the destructor body inlined
+00696420  49  cLocaleManager ctor: EH-state stores and list-init store scheduling (lea ecx vs lea eax/esi disp) differ

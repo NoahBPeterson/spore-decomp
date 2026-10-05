@@ -1,0 +1,3 @@
+00692900  833  partial; cVarListSerializer::Serialize left as skeleton
+00692d20  106  partial; record insertion sort B left as stub
+00692d90  100  partial; record heap-sift C left as stub

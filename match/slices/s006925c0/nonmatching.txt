@@ -1,0 +1,16 @@
+006925c0  64   complete; Run scoped-lock/helper near-miss
+00692640  61   complete; WaitForJob scoped-lock/helper near-miss
+006926b0  18   complete; cJob::Wait two-step manager load near-miss
+00692800  15   complete; ready predicate register near-miss
+00692820  36   complete; dispatch callback near-miss
+00692850  33   complete; lazy resolve near-miss
+00692880  90   complete; Init serializer-record layout near-miss
+00692c50  56   complete; Unload near-miss
+00692cb0  86   complete; record insertion sort near-miss
+00692e00  2    complete; WriteBlob32 one-register near-miss
+00692e50  2    complete; WriteBlob16 one-register near-miss
+00692ee0  14   complete; registry resolve walk near-miss
+00692f20  28   complete; registry release walk near-miss
+00692f60  25   complete; registry node constructor near-miss
+00692f90  15   complete; cVarListSerializer constructor near-miss
+006930b0  14   complete; ParseFloat stack-slot reuse near-miss

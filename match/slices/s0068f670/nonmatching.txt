@@ -1,0 +1,12 @@
+0068f670  124  complete; ready-list bit-scan register/scheduling near-miss
+0068f970  27   complete; extra mov eax,edi after the base-to-derived cast
+0068f9f0  59   complete; register allocation near-miss on the mutex-guarded store
+0068fff0  49   complete; priority-insert loop register allocation near-miss
+00690050  77   complete; head-pop list idiom near-miss
+006900b0  86   complete; wrapper call shape near-miss (FreeJobUnderLock args)
+00690120  -    complete; Release refcount decrement shape differs
+0068fed0  186  complete; IsAffinityInUse scan ordering near-miss
+0068ffb0  33   complete; cmov max-priority near-miss
+0068fd40  50   complete; PreShutdown loop shape near-miss
+0068f700  134  complete; GetFreeWaitNode list pop + alloc near-miss
+00690540  195  complete; ScheduleJob signalling shape near-miss

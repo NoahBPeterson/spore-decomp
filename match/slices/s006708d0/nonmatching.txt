@@ -1,0 +1,3 @@
+006715d0  37  ctor: multiple-inheritance base/member vptr-store scheduling differs (cl sinks the derived vptr stores past the member ctor)
+00671690  137  Init: register allocation (original this->esi, param->edi) and early-return layout differ; behaviour complete
+00671440  340  message handler: complete behaviour (vcall id checks + sscanf + pollinator debug); vcall/sscanf scheduling differs

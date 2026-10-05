@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00666cb0  600  refresh: complete 5-way flag/type selection and both icon-key lookups, but cl folds the leaf selection/float4 setup differently
+006673a0  625  SetIsSelected: complete selection/window-flag logic, register/schedule differences on the vtable calls and float add
+006676f0  356  constructor: all field/vtable/string stores present; ordering and xorps/edi zeroing differ from cl's schedule
+00667c40  4   WString assign wrapper: p[1]/p[0] land in ecx/edx instead of the original edx/eax

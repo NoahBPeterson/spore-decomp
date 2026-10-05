@@ -1,0 +1,6 @@
+00678ed0  11  equality predicate: complete behaviour; cl emits sete al directly instead of xor edx,edx/sete dl/mov al,dl
+00679080  125  sub-object init: complete behaviour; this/arg register allocation and the '+0x2c+0x80' base computation differ
+00679120  115  destroy-all loop: complete behaviour; block-advance loop and pointer-delete loop scheduling differ
+006792f0  56  advance-one-element: complete behaviour; lea vs add for +0x134 and the final reload of [this+0xc] differ
+00679340  144  intrusive refcount-vector assign: complete behaviour (grow/copy/insert tail); EASTL template shape differs
+00679520  32  constructor: complete behaviour; zero-argument block materialization and callee-saved register schedule differ

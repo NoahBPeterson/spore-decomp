@@ -1,0 +1,14 @@
+# s00682f40 recovered names (invented stub names; no PDB names for these VAs)
+00682f40 Vec1800Insert  # eastl vector<Obj1800> insert(pos,value); Obj1800 ctor 0x681800, copy_backward 0x681e40, assign 0x681b50
+00683160 ClsF::FreeChain  # thiscall recursive node free; node={right,next, Buf@0x14, MapC2@0x24}; MapC2 free 0x681480
+006831f0 VecAInsert   # eastl vector<ObjA> insert(pos,value); ctor 0x681a10, copy_backward 0x681e80, assign 0x681c40
+00683390 Map2::InsertHint  # eastl rbtree insert-with-hint; value Obj1700; create 0x6826c0
+00683500 MapY::InsertPair  # rbtree insert (create 0x683480); canInsert = !flag && pos!=anchor && *key>=pos->key
+00683560 MapY::InsertUnique # rbtree insert_unique with hint -> pair<iter,bool>
+00683670 ObjY::ObjY     # value copy ctor: S8 + member at +0x10 (copy 0x6830f0)
+00683700 LoadObj1800   # reader -> vector<Obj1800>; per element: 4x 0x680560 strings + ints + 0x6812c0 + 4 u32 vectors
+00683ab0 LoadObjA      # reader -> vector<ObjA>; per element: 0x680890 + 0x681a10 + 4x 0x6812c0 + 2 u32 vectors
+00683d10 Map2::operator[]  # find-or-insert, returns &value; uses 0x681700 temp + 0x683390
+00683e90 SP::cPropertyList::cPropertyList  # ctor: vtables 0x13ebcdc/0x1402ce8 + inline-container inits
+00683f10 RefCounted::AddRef  # (interlocked xadd(this+4,2)+2)>>1
+00683f30 RefCounted::Release # refcount release; n==0 -> vtbl[2](this,1), n==3 -> member->vtbl[0](this)

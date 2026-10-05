@@ -1,0 +1,22 @@
+006a22a0  457  eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValue - complete reimplementation, size differs
+006a2470  40   SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps
+006a24d0  40   SP::cPropertyList::GetPropertyValue - complete; same fold difference
+006a2530  57   SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference
+006a2660  137  SP::cDirectPropertyList::GetIntProperty - complete; reads Variant value directly
+006a2710  159  SP::cDirectPropertyList::GetFloatProperty - complete
+006a27d0  27   SP::cDirectPropertyList::HasProperty - complete
+006a2800  158  SP::cDirectPropertyList::GetPropertyValue - complete
+006a28f0  70   SP::cPropertyList::ClearMapOnly - complete; _Destroy helper schedule differs
+006a2940  124  eastl::vector<pair>::insert(iterator,value) - complete; DoInsertValue call schedule differs
+006a2a80  63   SP::cPropertyList::Clear - complete; _Destroy helper schedule differs
+006a2ad0  28   SP::cDirectPropertyList::Copy - complete
+006a2b20  75   SP::cDirectPropertyList::Clear - complete
+006a2b80  136  eastl::vector<pair>::resize - complete
+006a2c50  72   eastl::vector_map::insert(value) - complete
+006a2cb0  91   eastl::vector_map::erase(key) - complete
+006a2d30  237  eastl::vector_map::InsertOrGet - complete; pair-return EH frame differs
+006a2e20  145  SP::cPropertyList::SetProperty - complete
+006a2f10  66   SP::cPropertyList::v12 (merge/add) - complete
+006a3070  62   SP::cPropertyList::GetPropertyIDs - complete
+006a30c0  123  SP::cDirectPropertyList::SetProperty - complete
+006a3180  246  SP::cDirectPropertyList::GetPropertyIDs - complete

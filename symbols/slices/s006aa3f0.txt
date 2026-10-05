@@ -1,0 +1,10 @@
+006aa3f0 SP::cPropertyManager::RegisterPropertyName  # PDB anchor 0157e230
+006aa450 `anonymous namespace'::cPropertyManager::RegisterPropertyGroupName  # callers 006aa780; group id->name map +0xf4, vector +0x114
+006aa4c0 eastl::rbtree<unsigned int,eastl::pair<unsigned int const,EA::Variant>>::insert  # PDB candidate
+006aa5e0 SP::cPropertyManager::RegisterPropertyNameLocal  # PDB anchor 0157e290
+006aa640 `anonymous namespace'::cPropertyCommand::Execute  # PDB anchor 0157e2f0
+006aa7c0 SP::cPropertyManager::Shutdown  # PDB name
+006aaa10 SP::cPropertyManager::ParseAndAddProperty  # PDB name
+006aadb0 `anonymous namespace'::cPropertyListCommand::Parse  # PDB candidate caller-single
+006aae30 eastl::rbtree<unsigned int,eastl::pair<unsigned int const,EA::Variant>>::~rbtree  # PDB candidate
+006ab120 SP::cPropertyManager::ReadResource  # PDB candidate caller-scored

@@ -1,0 +1,3 @@
+006742f0  62  MoveAssignBackward: complete behaviour; cl folds the two descending pointers into one indexed address, original uses sub 0x54 on each
+006741b0  128  FindRange: complete behaviour (0x63c-stride bucket walk + wide-string compare); loop/inline shape and size differ
+00674230  171  FillInsert: complete behaviour (vector fill-insert fast path + memmove tail); size 346 vs 178, fill helper inlined differently

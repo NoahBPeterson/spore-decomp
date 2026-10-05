@@ -1,0 +1,4 @@
+00674640  1771  cBuildXHTMLDetokenizer::TranslateToken: skeleton only (token/action state machine not reconstructed)
+00674dc0  696  `anonymous namespace'::sBuildXHTMLDocument: skeleton only (property-manager setup + detokenizer loop not reconstructed)
+00675080  277  SP::cSPUISporeGuidePage::LoadSporeGuidePage: skeleton only (stack EString + PackDataIntoURIString not reconstructed)
+006754d0  186  achievement object-database loader: approximate (stack object layout / cObjectDatabase ctor args not exact)

@@ -1,0 +1,7 @@
+00698ca0 SP segment/triangle intersection
+00698e00 SP point-segment distance
+00698fa0 SP closest-points-between-segments
+006994a0 SP ray-sphere intersection
+00699600 SP move-toward (max step)
+00699730 SP angle wrap/normalize
+00699800 SP segment physics sweep

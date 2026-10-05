@@ -1,0 +1,3 @@
+006a7e40  1274  PreloadPropertyLists: resource-walk/preload pipeline stubbed
+006a8340  165  hashtable operator[] get-or-create (string key): found path complete; insert-default path approximated, temp cleanup omitted
+006a8410  212  hashtable operator[] get-or-create (uint key): found path complete; insert-default path approximated, temp cleanup omitted

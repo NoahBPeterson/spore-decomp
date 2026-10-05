@@ -1,0 +1,5 @@
+006908a0  SP::cJobManager::PromoteJobPriorityUnderLock  # PDB (dev 00e90a40)
+00690da0  SP::cJobManager::CreateJobThread  # PDB (dev 00e91d80)
+00690f60  SP::cJobManager::FailJob  # PDB (dev 00e91e30)
+006910a0  SP::cJobManager::FailNonRunnableJobs  # PDB (dev 00e91f60)
+00691260  SP::cJobManager::AddJobDependency  # PDB (dev 00e92040)

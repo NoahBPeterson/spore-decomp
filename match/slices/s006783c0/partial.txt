@@ -1,0 +1,3 @@
+006783c0  684  SPUI HUD anchor/animation: skeleton only (x87 fpatan/SQRT window-anchor loop not reconstructed)
+00678670  661  show/enable animation: skeleton only (many vcalls + float rect math not reconstructed)
+00678910  1466  update animation: skeleton only (x87 easing state machine over 4 animators not reconstructed)

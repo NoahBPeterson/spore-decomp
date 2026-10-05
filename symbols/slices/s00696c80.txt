@@ -1,0 +1,15 @@
+00697650 SP::cLocaleManager::BroadcastLocaleChange  # vtable slot +0x20/+0x14 then MessageServer dispatch of App/cLocaleChangeMessage
+00697710 SP::cLocaleManager::SetLocale  # PDB caller-single name; IsLocaleAvailable gate, list walk, SetLocale, then FUN_00697650
+00697960 SP::cLocalInputState zero-init helper  # memset(this,0,0x48); return this (__fastcall)
+00697980 SP::cLocalInputState::Reset  # PDB name
+006979c0 SP::cLocalInputState::UpdateModifiers  # PDB name; inline KeyBit(k,i,b)=((k[i]>>b)&1)
+00697a10 SP::cLocalInputState conditional clear  # same body as Reset gated on !arg
+00697a50 SP::cLocalInputState::OnKeyDown  # PDB candidate; mKeys[key>>5] |= 1<<(key&31), key<=0xff
+00697a80 SP::cLocalInputState::OnKeyUp  # PDB name
+00697ab0 SP::cLocalInputState::OnMouseDown  # PDB name; mMouseButtons[b-1000], mouse pos, drag start
+00697af0 SP::cLocalInputState::OnMouseUp  # PDB name
+00697b40 SP::cLocalInputState::OnMouseWheel  # mScrollDelta += delta (mMouseWheelDelta at +0x44 per PDB)
+00697b50 SP::MutexLock::MutexLock  # stores mutex then EA::Thread::Mutex::Lock
+00697b70 SP::MutexLock::~MutexLock  # tail-calls EA::Thread::Mutex::Unlock
+00697b80 EA::Trace::Server::ShouldLog  # if(mEnabled && !IsFiltered) return 0; return 1
+00697bb0 EA::Trace::Server assert-control  # lock +0x38 mutex, noAsserts switch, vtable +0x18

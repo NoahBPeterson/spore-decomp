@@ -1,0 +1,3 @@
+00691d30  SP::cJobManager::RunJob  # PDB (dev 00e92370)
+00692330  SP::cJobManager::CancelJob  # PDB (dev 00e927a0)
+00692400  SP::cJob::Cancel  # PDB candidate (caller-single)

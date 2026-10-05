@@ -1,0 +1,8 @@
+0069a9a0  602  skeleton only; animated-event keyframe interpolation (SSE) not reconstructed
+0069ac00  731  skeleton only; animated-event keyframe insertion (SSE) not reconstructed
+0069aee0  725  skeleton only; animated-event keyframe erase (SSE) not reconstructed
+0069b1c0  631  skeleton only; closest-point/segment helper (SSE) not reconstructed
+0069b440  445  skeleton only; SP::Matrix3FromFacingAndUp (normalize two directions + basis) not reconstructed
+0069b650  259  skeleton only; segment closest-point clamp (SSE) not reconstructed
+0069b760  210  skeleton only; orthonormal basis from two directions (SSE/x87) not reconstructed
+0069b840  196  skeleton only; angle clamp/wrap using FUN_00699730 (x87) not reconstructed

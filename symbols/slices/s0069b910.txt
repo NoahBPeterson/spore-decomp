@@ -1,0 +1,2 @@
+# 0069b910 is an unnamed OBB/SAT overlap test (8 corner transforms per box, 6 axes).
+# No confident dev-PDB symbol; neighbours are SP::Matrix3FromFacingAndUp / QuaternionFromFacingAndUp.

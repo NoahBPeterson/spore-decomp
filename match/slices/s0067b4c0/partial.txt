@@ -1,0 +1,3 @@
+0067b4c0  1354  cUIHints::ParseHints: skeleton only (huge hint-definition parser/visitor not reconstructed)
+0067ba10  366  cUIHints::InitHints: skeleton only (condition-vector reset + layout/window setup not reconstructed)
+0067bc30  1816  cUIHints::SetVisibility: skeleton only (animator/visibility state machine not reconstructed)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs
+0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ

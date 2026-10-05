@@ -1,0 +1,2 @@
+slices/s006a7e40/s006a7e40.cpp  ?reserve@PVec@@QAEXI@Z  006a84f0
+slices/s006a7e40/s006a7e40.cpp  ?DoFreeNodes@HTable@@QAEXPAPAUNode@@I@Z  006a85b0

@@ -1,0 +1,6 @@
+00698ca0  339  skeleton only; segment/triangle intersection with 3-way point-on-segment kind codes not reconstructed
+00698e00  408  skeleton only; point/segment distance (SSE) not reconstructed
+00698fa0  1274  skeleton only; closest-points-between-segments (SSE) not reconstructed
+006994a0  350  skeleton only; ray/sphere intersection (SSE) not reconstructed
+00699730  204  skeleton only; two-angle wrap/normalize using the x87 CRT helper at 0x11e08c2 not reconstructed
+00699800  515  skeleton only; segment/physics sweep with contact placement (SSE) not reconstructed

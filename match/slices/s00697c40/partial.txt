@@ -1,0 +1,8 @@
+00697c40  439  skeleton only; EA::Trace::Server default filter/formatter bootstrap (AutoRefCount assignments + vtable calls) not reconstructed
+00697e00  145  skeleton only; EA::Trace::LogManager ctor (base ctor + 3 empty WStrings at +0x68/+0x78/+0x88 + vtable stores) not reconstructed
+00697ee0  188  skeleton only; EA::Trace::LogManager dtor (inline vector deallocates + Server base dtor) not reconstructed
+00697fa0  110  skeleton only; EA::Trace::GetLogManager singleton (operator new 0xf8 + ctor + vtable slots +0x14/+0x10) not reconstructed
+00698180  540  skeleton only; SP::QuaternionFromDirections x87/SSE normalize+fallback not reconstructed
+006983a0  520  skeleton only; orientation matrix from direction (x87/SSE) not reconstructed
+00698650  555  skeleton only; matrix-from-quaternion (x87/SSE) not reconstructed
+00698b30  353  skeleton only; segment/segment closest distance not reconstructed

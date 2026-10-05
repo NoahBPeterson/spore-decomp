@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066bf70  333  layout/animation helper: only a placeholder body
+0066c0c0  619  layout/animation helper: only a placeholder body
+0066c490  644  layout/animation helper: only a placeholder body
+0066c720  697  layout/animation helper: only a placeholder body
+0066c9e0  400  layout/animation helper: only a placeholder body
+0066cbd0  300  layout/animation helper: only a placeholder body
+0066cd20  224  GetVerbIconKeysForLargeCard: RemapTypeId + property-key lookups not reconstructed

@@ -1,0 +1,8 @@
+006aa4c0  286  rbtree<unsigned,pair<const unsigned,Variant>>::insert stubbed
+006aa640  315  cPropertyCommand::Execute stubbed
+006aa780  59   group-name command handler stubbed
+006aa7c0  329  cPropertyManager::Shutdown stubbed
+006aa910  247  bool-vector range append stubbed
+006aaa10  921  cPropertyManager::ParseAndAddProperty stubbed
+006aae30  644  ~rbtree<unsigned,pair<const unsigned,Variant>> stubbed
+006ab120  677  cPropertyManager::ReadResource stubbed

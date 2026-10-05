@@ -1,0 +1,9 @@
+0069f950 eastl::map<unsigned int,SP::cCOMSerializer::cClassInfo,...>::operator[]  # PDB name
+0069fa60 SP::cObjectDatabase::cObjectDatabase  # PDB name
+0069fb90 SP::cCOMSerializer::SaveClassObjects  # PDB candidate (caller-scored)
+006a0110 SP::cCOMSerializer::onSetSPSerializable  # PDB candidate (caller-single)
+006a0360 SP::cCOMSerializer::loadSingleObject  # PDB candidate (caller-scored)
+006a05f0 SP::cCOMSerializer::WriteSerializableObject  # PDB candidate (caller-single)
+006a06a0 SP::cCOMSerializer::ReadSerializableObject  # PDB candidate (caller-single)
+006a10c0 SP::GetPropertyAsVector2  # PDB name
+006a1110 SP::GetPropertyAsVector3  # PDB name

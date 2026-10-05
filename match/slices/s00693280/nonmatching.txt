@@ -1,0 +1,6 @@
+00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
+006939b0  219  binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
+00693aa0  221  binder bind B: virtual +0x24/+0x28 probe/release paths present; EH frame and this-arg reordering differ
+00693cd0  83  binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
+00693d60  83  binder ctor B: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
+006940d0  202  Obj copy ctor: header copy + two eastl-string range-init/copy sequence reproduced; no EH region and register scheduling differ

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00668c80  238  feed iteration: complete list walk + vector push/DoInsertValue path; register allocation and the EA::ResourceMan::GetManager vtable probe differ (and the original returns with a caller-clean frame)
+00669360  68   vector-copy constructor: vtable store, reserve(), DoInsertValue and field stores all present; this lands in esi instead of the original ebx/edi pair
+006693c0  65   asset-count wrapper: complete GetAssetList + deallocate + >>4; frame is 0x14 in the original (16-byte vector plus scratch) vs 0xc here

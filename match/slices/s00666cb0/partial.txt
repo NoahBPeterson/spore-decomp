@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00667b00  900  OnLeftMouseDown: main path (audio events, first message dispatch, refcount release) reconstructed; the [0x14c] second SlotMessage dispatch is approximated

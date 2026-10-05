@@ -1,0 +1,8 @@
+006a32a0 EA::ArgScript::cExprFunction::EvalBool  # pdb vtable-slot
+006a3330 SP::cPropertyManager::CreateResource  # pdb anchor
+006a3400 SP::cPropertyManager::GetSupportedTypes  # pdb vtable-slot
+006a38c0 EA::ArgScript::cCommandStateT<SP::cPropertyManager,EA::ArgScript::cMetaCommandBase>::OnRegister  # pdb vtable-slot
+006a3ac0 `anonymous namespace'::cPropertyListCommand::Execute  # pdb anchor
+006a3c30 `anonymous namespace'::cPropertyListCommand::OnEndParse  # pdb vtable-slot
+006a3ce0 `anonymous namespace'::cAppPropsCommand::Execute  # pdb gap-align
+006a4380 eastl::basic_string<char,eastl::allocator>::assign  # pdb callee-single

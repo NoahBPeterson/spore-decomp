@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066c370  214  shutdown: all owned-object releases, RemoveHandler and the final vtable 0x78(0x1002) call are present; cl's register/schedule differs

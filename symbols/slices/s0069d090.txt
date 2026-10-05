@@ -1,0 +1,4 @@
+0069d2c0 SP::cObjectDatabase::CloseIStream  # PDB name; forwards to arg->vtbl[0x14]
+0069d3f0 EA::ResourceMan::Database::GetRefCount  # PDB name; atomic read at +8
+0069d9d0 SP::cObjectDatabaseOStream::WriteVariant  # PDB candidate (caller-scored)
+0069dca0 SP::cObjectDatabase::~cObjectDatabase  # PDB name; 4 vptr stores + 3 member releases

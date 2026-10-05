@@ -1,0 +1,5 @@
+00695140  616  cVarListSerializer field-walk body summarised (serializer/EH heavy)
+00695550  416  vector emplace-with-reallocation body summarised (EH heavy)
+00695770  483  cAnimNameCommand::Execute body summarised (string/EH heavy)
+00695960  467  cVarListSerializer::GetFields body summarised
+00695b40  228  serializer helper body summarised

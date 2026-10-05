@@ -1,0 +1,7 @@
+0069e3a0  82  cObjectDatabase::OpenIStream: allocate cObjectDatabaseOStream, virtual open, AutoRef-style guard; summarised, compiler EH frame not reproduced
+0069e470  66  cObjectDatabase::OpenOStream: allocate cObjectDatabaseOStream, virtual open, guard; summarised, compiler EH frame not reproduced
+0069e5d0  61  cObjectDatabase::HasKey: build a Key, call database vtable, eastl::find, free temp; summarised, EH frame omitted
+0069e9e0  319  cCOMSerializer::onGetSPSerializable: rbtree find + insert of cIDInfo + AutoRefCount assign; main branches summarised, EH frame omitted
+0069eb60  176  eastl::map<unsigned int,cIDInfo>::operator[]: lower_bound + DoInsertValue; summarised
+0069f1d0  1500  cCOMSerializer::LoadClassObjects: 1.5 KB IO/parse loop; only a skeleton is present
+0069f840  177  cCOMSerializer::cCOMSerializer: vptr/field init + reset + assigned database; summarised, tree/anchor init and EH frame omitted

@@ -1,0 +1,4 @@
+006673a0 SP::cSPUIFeedListItem::SetIsSelected  # PDB candidate on card (caller-scored)
+006676b0 SP::cSPUIFeedListItem::ScalarDeletingDtor  # shape: [this+4] refcounted free; vtable reset; flags&1 self-free
+006676f0 SP::cSPUIFeedListItem::cSPUIFeedListItem  # ctor: 4 vtable stores + field/string init, returns this
+006678f0 SP::cSPUIFeedListItem::~cSPUIFeedListItem  # PDB name on card

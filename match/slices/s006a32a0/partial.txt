@@ -1,0 +1,13 @@
+# incomplete / approximate source (not counted as decompiled)
+006a3330  163  CreateResource: stub of the EH operator-new path and vtable calls; wrong receiver/indices
+006a3ac0  270  cPropertyListCommand::Execute: stubbed body
+006a3c30  147  cPropertyListCommand::OnEndParse: stubbed body
+006a3d50  83  feedback-event find: stub (rbtree/atexit path omitted)
+006a3dd0  -  property apply helper: stubbed body
+006a3f00  48  feedback-event test: stub (rbtree path omitted)
+006a3f40  73  string-range ctor: approximate (RangeInitialize/DoInsertValue call shapes wrong)
+006a4190  142  EvalString+FNV hash helper: stub
+006a4240  111  hashtable lookup: stub returning false
+006a42d0  113  hashtable lookup: stub returning false
+006a43b0  119  hashtable erase-by-key: approximate node walk
+006a4450  107  rbtree erase-node: stub

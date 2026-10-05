@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006875b0  52   complete: iterate package array + RegisterPackages; loop/flag switch scheduling differs
+00687a00  15   complete: append range to global u32 vector; cl keeps the base pointer across the first push instead of reloading it
+00687a20  97   complete: iterate array pushing wstrings/ids; register allocation/scheduling differs
+00687bc0  37   complete: set element count; Reserve call shape + index computation scheduling differ

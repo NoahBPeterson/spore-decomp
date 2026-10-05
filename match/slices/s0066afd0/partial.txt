@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066b130  800  layout/animation builder: only the entry is present; the window/animation graph construction is omitted
+0066b480  2100  layout/animation builder: only the entry is present; the window/animation graph construction is omitted

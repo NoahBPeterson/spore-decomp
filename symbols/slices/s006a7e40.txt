@@ -1,0 +1,5 @@
+006a7e40 SP::cPropertyManager::PreloadPropertyLists  # PDB anchor 0157bde0
+006a8340 eastl::hash_map<eastl::basic_string<char>,EA::AutoRefCount<EA::ArgScript::cExprFunction>>::operator[]  # find callee 0x7e2ea0
+006a8410 eastl::hash_map<unsigned int,eastl::basic_string<wchar_t>>::operator[]  # find callee 0xa3b2c0
+006a84f0 eastl::vector<element(0x18)>::reserve  # alloc n*0x18 + relocate + free old
+006a85b0 eastl::hashtable<basic_string<char>,pair<const string,unsigned int>>::DoFreeNodes  # PDB 00e2e560

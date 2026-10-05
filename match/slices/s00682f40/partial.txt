@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00682f40  430  vector<Obj1800>::insert: grow path not fully reconstructed (missing exact copy/backward schedule)
+006831f0  416  vector<ObjA>::insert: grow path not fully reconstructed
+00683700  930  load vector<Obj1800> from reader: only the count header reconstructed; per-element body omitted
+00683ab0  593  load vector<ObjA> from reader: only the count header reconstructed; per-element body omitted
+00683d10  372  Map2::operator[]: find path present, insert-temp construction/cleanup omitted
+00683e90  123  SP::cPropertyList ctor: field zeroing approximate, exact inline-container init omitted

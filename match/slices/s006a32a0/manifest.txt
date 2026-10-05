@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006a32a0/s006a32a0.cpp  ?EvalBool@cExprFunction@ArgScript@EA@@QAE_NHH@Z  006a32a0
+slices/s006a32a0/s006a32a0.cpp  ?FUN_006a32c0@@YAIPBD@Z  006a32c0
+slices/s006a32a0/s006a32a0.cpp  ?Forward@cCommandStub@@QAEXHH@Z  006a3310
+slices/s006a32a0/s006a32a0.cpp  ?GetSupportedTypes@cPropertyManager@@QAEHPAII@Z  006a3400
+slices/s006a32a0/s006a32a0.cpp  ?SetVec21@Variant@@QAEAAU1@PBX@Z  006a34a0
+slices/s006a32a0/s006a32a0.cpp  ?SetVec30@Variant@@QAEAAU1@PBX@Z  006a3510
+slices/s006a32a0/s006a32a0.cpp  ?SetVec31@Variant@@QAEAAU1@PBX@Z  006a3570
+slices/s006a32a0/s006a32a0.cpp  ?SetVec32@Variant@@QAEAAU1@PBX@Z  006a3610
+slices/s006a32a0/s006a32a0.cpp  ?FUN_006a3920@@YAPAUFloat3@@PAU1@PBM@Z  006a3920
+slices/s006a32a0/s006a32a0.cpp  ?FUN_006a3980@@YGPBDH@Z  006a3980
+slices/s006a32a0/s006a32a0.cpp  ?Execute@cAppPropsCommand@@QAEXPAX@Z  006a3ce0
+slices/s006a32a0/s006a32a0.cpp  ?OnEndParse@cAppPropsCommand@@QAEXH@Z  006a3d10
+slices/s006a32a0/s006a32a0.cpp  ?Init@Vec38@@QAEPAU1@HPBX@Z  006a4130
+slices/s006a32a0/s006a32a0.cpp  ?Release@cDealloc@@QAEXXZ  006a4360

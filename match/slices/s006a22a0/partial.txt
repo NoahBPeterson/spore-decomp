@@ -1,0 +1,3 @@
+006a25a0  154  SP::cPropertyList::GetDescription - skeleton; string/description lookup path not reconstructed
+006a2a40  40   SP::cPropertyList::Copy - approximate; map deep copy not reproduced (shallow pointer copy)
+006a2f60  251  SP::cPropertyList::Read - partial; IO/PropertyManager path and map resize are approximated

@@ -1,0 +1,6 @@
+0069a4c0 CurveSlopes::ComputeSlopes  # slope[i]=(in[i+1]-in[i-1])/(x[i+1]-x[i-1]) over the float track
+00699a10 SP animated-event evaluate  # 1.5 KB track evaluation
+0069a050 SP animated-event sort  # keyframe merge/sort
+0069a240 SP vector distance  # SSE 3/4-component distance
+0069a5f0 SP animated-event insert  # keyframe insertion
+0069a750 SP animated-event remove  # keyframe removal/shift

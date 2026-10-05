@@ -1,0 +1,4 @@
+00696c80  2507  skeleton only; the 2.5 KB locale apply/merge loop (vtable +0xc/+0x18 messages, EASTL vector) not reconstructed
+00697650  186  skeleton only; ChangeManager broadcast (vtable +0x20/+0x14, MessageServer dispatch) not reconstructed
+00697710  582  skeleton only; cLocaleManager::SetLocale (IsLocaleAvailable + list walk + SetLocale + message) not reconstructed
+00697bb0  135  skeleton only; mutex-guarded noAsserts check + vtable +0x18 call not reconstructed

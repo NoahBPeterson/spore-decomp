@@ -1,0 +1,14 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006a3430  95  Euler-from-matrix: original uses x87 fpatan/fsqrt chains; C atan2f/sqrtf cannot reproduce the exact fpu sequence
+006a38c0  19  OnRegister: cl threads both branches to one shared tail call; original duplicates the tail jmp
+006a38f0  19  OnRegister: same shared-tail shape as 006a38c0
+006a39a0  21  Count: cl CSEs the begin pointer; original reloads it with a memory operand in the subtraction
+006a39d0  46  GetAt: same CSE/register-assignment difference as Count
+006a4100  32  CopyVec12: loop idiom (dec/ja vs sub/jne) and zero-register assignment differ
+006a4380  23  basic_string::assign(const char*): inlined strlen loop shape differs
+006a44d0  84  vector<0x208> ctor: cl peels/vectorises the rep-movsd fill loop
+006a4580  8   vector<0xc> ctor: only dec/ja vs sub/jne encoding of the fill loop differs
+006a4600  75  vector<8> ctor: cl vectorises the 2-float fill loop
+006a4660  50  vector<0x10> ctor: helper call/return shape differs
+006a46a0  114  vector<0xc> ctor: original reads the value from stack locals; register schedule not reproduced
+006a4730  50  vector<0x10> ctor (2nd helper): helper call/return shape differs

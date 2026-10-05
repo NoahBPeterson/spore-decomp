@@ -1,0 +1,8 @@
+0067b4c0 cUIHints::ParseHints  # PDB anchor
+0067ba10 cUIHints::InitHints  # unnamed; builds killallhints command
+0067bb80 cUIHints::ShutdownHints  # unnamed
+0067bbf0 cUIHints::InsertHint  # unnamed; string push_back or forward
+0067bc30 cUIHints::SetVisibility  # PDB anchor
+0067c350 cUIHints::UpdateHints  # PDB candidate (caller-scored)
+0067c3b0 cUIHints::SetHintState  # unnamed
+0067c420 cUIHints::SetEnabled  # unnamed

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00683160  106  complete: node-chain free (MapC2 free + guarded buffer); EH frame present, node/this register roles and frame slots differ
+00683390  202  complete: Map2 insert-with-hint (value Obj1700); register allocation / scheduling differs
+00683500  8    complete: MapY InsertPair; the out-pointer load is scheduled after the size increment (mov eax/inc order)
+00683560  237  complete: MapY insert_unique returning pair<iter,bool>; register allocations differ
+00683670  91   complete: ObjY copy ctor (S8 + MY at +0x10); frame/register relief differs
+00683f30  24   complete: Release; n==0 arm returns via xor eax instead of mov eax,esi and tests the member in a register

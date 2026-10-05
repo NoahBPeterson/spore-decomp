@@ -1,0 +1,3 @@
+0067bb80  60  hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin)
+0067c3b0  91  next-hint lookup: complete behaviour; list walk + UpdateHints call scheduling/register use differs
+0067c420  37  SetFlag: complete behaviour; cl materialises the constant 2 into eax and compares memory-to-reg instead of loading [this+0x48] first

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+006820c0  803  vector<Obj1800> serializer: incomplete - the four inner vector<u32> count+element write loops and the four bitset sub-writes are stubbed
+006823f0  472  vector<ObjA> serializer: incomplete - per-element four-float-vector write loops omitted

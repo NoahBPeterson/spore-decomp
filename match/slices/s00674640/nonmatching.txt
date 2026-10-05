@@ -1,0 +1,3 @@
+00675260  189  cVar-list serialize: complete behaviour; writer vcall/WriteUint32 scheduling and cVarListSerializer construction differ
+006753a0  46  achievement-test teardown: complete behaviour; cl puts this in edi (original esi) and the null-check block order differs
+00675440  101  cVar-list deserialize: complete behaviour; read-vcall loop and shared epilogue layout differ

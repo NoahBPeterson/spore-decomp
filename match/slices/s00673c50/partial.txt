@@ -1,0 +1,2 @@
+00673c50  1309  `anonymous_namespace'::cBuildXHTMLDetokenizer::cBuildXHTMLDetokenizer: skeleton only (large string/vector init not reconstructed)
+00674440  395  eastl::vector<cVar>::DoInsertValue: skeleton only (reallocation + uninitialized_move + assign not reconstructed)

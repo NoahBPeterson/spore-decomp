@@ -1,0 +1,7 @@
+006715d0 SP::cSPUIMissingExpansionPackPage::cSPUIMissingExpansionPackPage  # PDB gap-align; vtable stores + cXHTMLFrameSet ctor
+00671630 SP::cSPUIMissingExpansionPackPage::~cSPUIMissingExpansionPackPage  # PDB gap-align; deleting dtor (ret 4)
+00671690 SP::cSPUIMissingExpansionPackPage::Init  # PDB anchor; Setup+CheckWin+GetFrame
+00671760 SP::cSPUIMissingExpansionPackPage::DoMessage  # PDB gap-align; HandleLocationChange/HandleFormSubmit
+006717e0 SP::cSPUIMissingExpansionPackPage::SetVisibility  # PDB callee-scored; window SetVisible vcalls
+006708d0 SP::cGalaxyGameEntryImpl::DeleteGame  # PDB candidate (caller-scored)
+00671440 SP::cSPUIMissingExpansionPackPage::DoMessageHandler  # message 0x1dd7bda9 / 0x9421c619

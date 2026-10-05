@@ -1,0 +1,2 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006a4770  -  vector<0x18> ctor: value-local construction order/frame differs (cl uses x87 vs SSE constant-pool moves); /arch:SSE still not identical

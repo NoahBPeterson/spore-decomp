@@ -1,0 +1,7 @@
+00691680  1706  partial; worker loop left as skeleton
+00691d30  559   partial; RunJob left as skeleton
+00691f60  273   partial; helper left as skeleton
+00692150  466   partial; helper left as skeleton
+00692330  208   partial; CancelJob left as skeleton
+00692400  -     partial; cJob::Cancel wraps the stubbed CancelJob (inlined away)
+00692430  385   partial; helper left as skeleton

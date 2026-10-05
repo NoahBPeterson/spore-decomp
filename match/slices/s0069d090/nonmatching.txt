@@ -1,0 +1,8 @@
+0069d210  82  chunked 1KB read loop through a virtual stream; complete behaviour, but argument/register scheduling and the signed/unsigned shift differ
+0069d3c0  32  RefCountVTemplate<int>::Release (lock xadd -1, reset to 1, deleteSelf callback at -4); complete behaviour, but cl emits sub for dec and reloads the callback pointer
+0069d4f0  49  two-refcount holder conditional vcall; complete behaviour, secondary-base this adjustment and register scheduling differ
+0069d980  44  conditional write helper; complete behaviour, but the this/secondary-base register allocation (edi vs esi) and evaluation order differ
+0069dca0  54  SP::cObjectDatabase::~cObjectDatabase; complete behaviour (4 vptr stores + 3 releases), but the compiler EH frame/state layout is not reproduced
+0069dc60  11  conditional two-arg write helper; complete behaviour, only the store order of the false return path differs (store-0 then xor vs xor then store-al)
+0069df20  95  serializer guard/begin helper; complete behaviour, but the this+4/this+0x18/this+0x1c register allocation differs
+0069df90  32  two virtual predicates; complete behaviour, but cl makes the final bool branchless where the original uses branches

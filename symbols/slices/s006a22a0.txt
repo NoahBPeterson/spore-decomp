@@ -1,0 +1,25 @@
+006a22a0 eastl::vector<eastl::pair<unsigned int,EA::Variant>,eastl::allocator>::DoInsertValue  # insert single element with reallocation
+006a2470 SP::cPropertyList::HasProperty  # PDB ?HasProperty@cPropertyList@SP@@UBE_NI@Z
+006a24d0 SP::cPropertyList::GetProperty  # PDB ?GetProperty@cPropertyList@SP@@UBEABUVariant@EA@@I@Z (returns Variant*)
+006a2530 SP::cPropertyList::GetProperty  # PDB ?GetProperty@cPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z (const, bool) - used by GetPropertyAsXxx
+006a25a0 SP::cPropertyList::GetDescription  # PDB ?GetDescription@cPropertyList@SP@@QBEPBDI@Z
+006a2660 SP::cDirectPropertyList::GetIntProperty  # PDB ?GetIntProperty@cDirectPropertyList@SP@@QBEHI@Z
+006a2710 SP::cDirectPropertyList::GetFloatProperty  # PDB ?GetFloatProperty@cDirectPropertyList@SP@@QBEMI@Z
+006a27d0 SP::cDirectPropertyList::HasProperty  # PDB ?HasProperty@cDirectPropertyList@SP@@UBE_NI@Z
+006a2800 SP::cDirectPropertyList::GetProperty  # PDB ?GetProperty@cDirectPropertyList@SP@@UBEABUVariant@EA@@I@Z
+006a28c0 SP::cDirectPropertyList::GetProperty  # PDB ?GetProperty@cDirectPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z
+006a2a40 SP::cPropertyList::Copy  # copies map + compare byte then SetParent
+006a2a80 SP::cPropertyList::Clear  # vtable slot 18; destroys+truncates map and bumps modcount
+006a2ad0 SP::cDirectPropertyList::Copy  # PDB ?Copy@cDirectPropertyList@SP@@UAEXPAVcPropertyList@2@@Z
+006a2b20 SP::cDirectPropertyList::ClearProperties  # vtable slot 18; Memset32(mDirectProps)+erase map
+006a2b80 eastl::vector<eastl::pair<unsigned int,EA::Variant>,eastl::allocator>::resize
+006a2c50 eastl::vector_map<unsigned int,EA::Variant,...>::insert  # returns pair<iterator,bool>
+006a2cb0 eastl::vector_map<unsigned int,EA::Variant,...>::erase  # erase(const key&)
+006a2d30 eastl::vector_map<unsigned int,EA::Variant,...>::operator[]-style InsertOrGet
+006a2e20 SP::cPropertyList::SetProperty  # PDB ?SetProperty@cPropertyList@SP@@UAEXIABUVariant@EA@@@Z
+006a2ef0 SP::cPropertyList::RemoveProperty  # PDB candidate SP::cPropertyList::RemoveProperty
+006a2f10 SP::cPropertyList::v12  # merge/add used by DeepAdd; slot 12
+006a2f60 SP::cPropertyList::Read  # PDB candidate SP::cPropertyList::Read
+006a3070 SP::cPropertyList::GetPropertyIDs  # slot 17
+006a30c0 SP::cDirectPropertyList::SetProperty  # slot 5 override
+006a3180 SP::cDirectPropertyList::GetPropertyIDs  # slot 17 override

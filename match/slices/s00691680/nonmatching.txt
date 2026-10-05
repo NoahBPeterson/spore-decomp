@@ -1,0 +1,2 @@
+00692080  8    complete; AddWaitingJob scoped-lock register swap (esi/edi)
+006920f0  8    complete; FlushWaiting scoped-lock register swap (esi/edi)

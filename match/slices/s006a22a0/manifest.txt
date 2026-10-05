@@ -1,0 +1,2 @@
+slices/s006a22a0/s006a22a0.cpp  ?GetProperty@cDirectPropertyList@SP@@UBE_NIPAPAUVariant@EA@@@Z  006a28c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006a22a0/s006a22a0.cpp  ?RemoveProperty@cPropertyList@SP@@UAEXI@Z  006a2ef0  /O2 /MD /Gy /EHsc /TP /GS-

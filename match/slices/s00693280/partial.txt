@@ -1,0 +1,2 @@
+00693e10  698  cVarListSerializer::Serialize: read/validate/lower_bound loop and per-field dispatch summarised, not full control flow
+00693390  1199  typed-value writer: two per-type switch tables and fixed-stride array path summarised, not reproduced instruction-for-instruction
