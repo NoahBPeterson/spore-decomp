@@ -1,0 +1,8 @@
+00746b90 233 cModelWorld::ShutdownModel shape/order differs
+00746fc0 140 load-entry destructor shape differs
+007470c0 173 member release sequence shape differs
+00747190  77 entry copy-assign register shape differs
+00747270  88 cLoadingModel dtor shape differs
+00747720 121 deque< cLoadQueueEntry >::~deque shape differs
+007477d0 215 deque< cLoadQueueEntry >::clear shape differs
+007478b0  57 vector< cLoadQueueEntry >::~vector shape differs

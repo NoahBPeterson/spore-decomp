@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00745340  -   cModelWorld release-refs destructor: EH frame omitted, approximated
+007453d0  249 model-instance factory: allocation/ctor/property lookup paths approximated via stubs
+007457a0  -   deque insert/grow: DoInsertValue dispatch + reallocation path approximated

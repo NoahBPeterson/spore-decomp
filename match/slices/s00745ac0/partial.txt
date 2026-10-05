@@ -1,0 +1,5 @@
+007462b0 118 material-info commit helper approximated (paths not fully reconstructed)
+00746360 220 cModelWorld::GetHull approximated (Variant/asset-key path stubbed)
+00746610  77 cModelWorld::GetRuntimeModel approximated (matrix/arg passing)
+007466e0  52 hull-bounds refresh helper approximated (bounding-sphere math)
+007467f0 290 query helper approximated (virtual-slot protocol guessed)

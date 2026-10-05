@@ -1,0 +1,7 @@
+# <va> <Name>  # evidence
+00745cf0 eastl::adjust_heap<cOccluder*,int,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # dev-PDB gap-align
+007460b0 `anonymous namespace'::FilterModelFrustum  # dev-PDB gap-align; string/symbol
+00746250 SP::cModelWorld::SetMaterialInfo  # dev-PDB vtable-slot
+00746360 SP::cModelWorld::GetHull  # dev-PDB vtable-slot
+00746560 SP::cModelWorld::GetHullBoundingBox  # dev-PDB vtable-slot
+00746610 SP::cModelWorld::GetRuntimeModel  # dev-PDB vtable-slot

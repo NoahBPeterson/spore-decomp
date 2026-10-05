@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+00744be0  4   SetDynamicDraw: arg register-role assignment (ebx/ebp) swapped
+00744cf0  113 SetSomeFloat: property-find/vtable path and float staging differ
+00744d80  122 SetEffectEnabled: effect-list traversal and vtable slot selection differ
+00744e10  94  ForEachEffectA: effect-list look-ahead iteration/register schedule differs
+00744e90  94  ForEachEffectB: effect-list look-ahead iteration/register schedule differs
+00744f10  99  ForEachEffectC: effect-list look-ahead iteration/register schedule differs
+00745010  19  CheckFlag: field loaded via cmp instead of mov+test
+00745050  29  SelectMesh: branch block ordering of the 0x9c/0xac selection differs
+00745140  -   FillColor: switch jump-table/block layout differs
+007454f0  13  AutoRef::Release: store of ref=1 scheduled after vtable load
+00745520  55  slot_vector::next: bit-extraction lowering (test mem vs shr/test) differs
+00745560  -   load-queue chunk find: cursor/segment register schedule differs
+007455e0  55  DestroyChunk: vtable release + chunk-pointer reload schedule differs
+00745660  44  slot_vector count: bit-extraction lowering differs
+007456a0  122 slot assign: value-copy/flag branch layout differs
+00745710  125 deque advance: segment index math/register schedule differs
+007458d0  190 deque init: chunk allocation loop register schedule differs
+007459c0  243 sort of 24-byte records: temp/compare schedule differs

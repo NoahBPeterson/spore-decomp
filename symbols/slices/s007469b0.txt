@@ -1,0 +1,9 @@
+# <va> <Name>  # evidence
+007469b0 SP::cModelWorld::SetWorldBounds  # dev-PDB vtable-slot
+00746b40 SP::cModelWorld::UpdateOccluder  # dev-PDB vtable-slot
+00746b90 SP::cModelWorld::ShutdownModel  # dev-PDB callee-single
+007471f0 SP::cModelWorld::cLoadingModel::cLoadingModel  # dev-PDB gap-align
+00747270 SP::cModelWorld::cLoadingModel::~cLoadingModel  # dev-PDB gap-align
+00747720 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::~deque  # dev-PDB callee-single
+007477d0 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::clear  # dev-PDB gap-align
+007478b0 eastl::vector<SP::cModelWorld::cLoadQueueEntry,eastl::fixed_vector_allocator<32,32,4,0,1> >::~vector  # dev-PDB gap-align

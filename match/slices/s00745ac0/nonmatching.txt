@@ -1,0 +1,10 @@
+00745ac0 199 insertion-merge sort shape differs (register/scheduling)
+00745bb0  63 copy-20 shape differs (dead address guard)
+00745c20  38 rbtree-node allocation/EH frame shape differs
+00745cf0  62 adjust_heap<cOccluder*,...> value-pass copy flavour differs
+00745e00  59 adjust_heap pair (greater) value-copy/schedule differs
+00745e80  59 adjust_heap pair (less) value-copy/schedule differs
+00745f90 181 0x94-byte render/cull record ctor shape differs
+007460b0 352 FilterModelFrustum register allocation differs
+00746250  69 cModelWorld::SetMaterialInfo register/arg shape differs
+00746910 120 model-group assignment shape differs

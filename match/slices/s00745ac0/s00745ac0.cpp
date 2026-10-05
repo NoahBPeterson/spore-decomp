@@ -545,8 +545,9 @@ void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox* out)
     if (h) {
         out->mMax = h->mMax;
         out->mMin = h->mMin;
-        if (p->mTransform.mScale != g_f1485720 || (*(unsigned char*)&p->mTransform & 6))
-            out->Transform(p->mTransform);
+        const cSPTransform& xf = p->mTransform;
+        if (xf.mScale != g_f1485720 || (*(unsigned char*)&xf & 6))
+            out->Transform(xf);
     } else {
         out->mMax = p->mMax;
         out->mMin = p->mMin;

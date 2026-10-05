@@ -1,0 +1,14 @@
+00747920  85 deque pop_back shape differs
+00747ac0 111 0x38-record copy ctor register shape differs
+00747b70 179 uninitialized_copy of refcounted 0x3c elements shape differs
+00747c90 128 uninitialized_fill_n shape differs
+00747eb0  61 make_heap<cOccluder*> schedule/copy flavour differs
+00747f30  86 sort_heap<cOccluder*> shape differs
+00748010  46 make_heap pair (greater) schedule differs
+00748060  89 sort_heap pair (greater) shape differs
+007480c0  46 make_heap pair (less) schedule differs
+00748110  89 sort_heap pair (less) shape differs
+00748170 127 uninitialized_copy of plain 0x3c elements shape differs
+00748280 121 deque uninitialized_copy shape differs
+00748380 119 deque copy_backward shape differs
+00748470 137 copy_backward of refcounted 0x1c elements shape differs

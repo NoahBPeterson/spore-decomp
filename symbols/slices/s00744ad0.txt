@@ -1,0 +1,12 @@
+00744ad0 SP::cModelWorld::SetBoneTable  # dev PDB vtable slot 0x98
+00744b10 SP::cModelWorld::SetBoneCallback  # dev PDB vtable slot 0x9c
+00744b60 SP::cModelWorld::SetAnimationGroupTransform  # dev PDB vtable slot 0xa0
+00744ba0 SP::cModelWorld::GetMaterialInfo  # dev PDB vtable slot 0xa8
+00744be0 SP::cModelWorld::SetDynamicDraw  # dev PDB vtable slot 0xac
+00744c30 SP::cModelWorld::GetNumLODs  # dev PDB vtable slot 0xb0
+00744c70 SP::cModelWorld::SetLOD  # PDB candidate (caller-scored)
+00744f80 SP::cModelWorld::GetDeformationHandles  # PDB candidate (caller-single)
+00744fc0 SP::cModelWorld::GetRuntimeMeshes  # dev PDB
+00745110 SP::cModelWorld::HACK_GetArenaResource  # dev PDB vtable slot 0xbc
+00745520 spstl::slot_vector_base<SP::cModelWorld::cOccluderInfo,eastl::vector<spstl::slot_vector_entry<SP::cModelWorld::cOccluderInfo>,eastl::allocator> >::next  # dev PDB
+00745630 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::DoPopFront  # dev PDB

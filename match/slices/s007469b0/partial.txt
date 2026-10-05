@@ -1,0 +1,7 @@
+007469b0 232 cModelWorld::SetWorldBounds approximated (hiergrid math/rounding)
+00746cc0  18 rbtree::find passthrough stubbed
+00746cf0 154 cModelManager::DebugPick approximated (pick protocol guessed)
+00746e50 222 load-entry constructor incomplete
+007471f0  70 cLoadingModel::cLoadingModel incomplete (member offsets)
+00747340 373 load-queue slot refresh approximated
+00747640  88 deque entry lookup approximated (helper arg list guessed)
