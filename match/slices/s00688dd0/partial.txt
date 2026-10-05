@@ -1,0 +1,7 @@
+00688fa0  -    FTPClient::Job::~Job (582B): large body only sketched (cache path + DatabasePackedFile/cObjectDatabase)
+006891f0  -    FTPClient::Job::CommitFile (731B): large body only sketched (save-area paths, file rename)
+00689750  -    cStringCommandGenerator::ExecuteCommand: validation/execute flow approximated, EH stores missing
+00689880  -    cMessageCommandDispatcher dtor (MI): releases approximated, base subobject dtor not modeled
+006899d0  -    cMessageCommandDispatcher::ExecuteCommand (290B): dispatch approximated, returns 2 stub
+00689c80  -    cCommandParameterSet::SetStatusParameterValue: Variant ctor/dtor flow approximated
+00689d40  -    cMessageCommandDispatcher ctor: vtable stores / embedded subobject vtables omitted

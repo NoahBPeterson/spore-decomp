@@ -1,0 +1,10 @@
+0068c6d0  28  SetKeyKind: member-load scheduling (key loaded before the two byte loads)
+0068c700  27  InvalidEditorModelKey: read-modify-write xor form not reproduced
+0068c770  6   GetExplicitIdStartW: p=last hoisted before the first==last test
+0068c820  110  GetExplicitIdStartA (narrow): loop rotation / branch placement
+0068c460  47  FreeQueue::Drain: next-pointer register role + loop rotation
+0068c590  195  FreeQueue::Flush: inline vector DoInsertValue schedule
+0068cd40  47  PackStr::InsertCStr: inlined strlen codegen shape
+0068d0d0  100  SPNameFromKeyW: string-length do-while + res-branch order
+0068d290  95  SPNameFromKeyA: packed-insert + append_sprintf scheduling
+0068d420  74  HashClearBuckets: node/next register roles + loop rotation

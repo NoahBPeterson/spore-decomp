@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00689ee0/s00689ee0.cpp  ?GetNextParameterID@cCommandParameterSet@@QAEII@Z  00689fc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00689ee0/s00689ee0.cpp  ??1cCommandInfo@@QAE@XZ  0068a000  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00689ee0/s00689ee0.cpp  ?DoNukeSubtree@VMap@@QAEXPAUVMapNode@@@Z  0068a0f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00689ee0/s00689ee0.cpp  _FUN_0068a2e0  0068a2e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00689ee0/s00689ee0.cpp  ?GetCommandInfo@cCommandServer@@QAE_NIPAUWStr@@0@Z  0068a3f0  /O2 /MD /Gy /EHsc /TP /GS-

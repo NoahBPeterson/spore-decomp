@@ -1,0 +1,9 @@
+00688dd0  51  post-message helper: new-expression/EH scheduling differs
+00688e50  51  post-message helper: new-expression/EH scheduling differs
+00688ed0  28  indexed accessor: count expression register allocation / operand order
+00688f00  66  wide-string concat ctor: EASTL append/EH schedule
+00689510  41  x87 control-word write: block layout (mode==3 branch placement)
+00689590  5  x87 control-word read: missing movzx zero-extension
+00689810  80  derived destructor: base dtor inlining + vptr store order
+00689b00  8  setter: compiler reuses one epilogue instead of duplicating it
+00689dc0  160  recursive rbtree walk: loop/register layout

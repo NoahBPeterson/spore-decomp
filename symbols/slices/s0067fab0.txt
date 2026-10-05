@@ -1,0 +1,7 @@
+0067fab0 App::CheatManager::CheatManager  # card name (vtbl_App::CheatManager @ +0x00)
+0067fc50 App::CheatManager::AddCheat  # this+0x44 parser vcall + 0x0067fb80 map insert
+0067fb80 App::CheatManager::AddCheat (map insert helper)  # 0x0067e5c0 lower_bound + value at node+0x20
+0067fe30 HSLToRGB  # calls EA::Text::Typesetter::Validate (0x011e0906) and writes a float3
+0067ff30 RGBToHSL  # 0x0067fe30 is the inverse; writes h,s,l
+0067e5c0 eastl::map<basic_string,...>::LowerBound  # already matched in slice s0067d550
+0067e830 PairB::~PairB  # releases command, frees string (slice s0067d550)

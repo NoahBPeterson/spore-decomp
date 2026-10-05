@@ -1,0 +1,4 @@
+0068a460  98   vector<16-byte>::insert: helper call shape present but element count/insert semantics reconstructed approximately
+0068a7a0  162  AdjustParameterCount: add/remove loops present; uses a raw Variant temp rather than the inlined map helpers
+0068a9e0  217  GetCommandIDFromCommandString: parse + virtual lookup + vector cleanup sketched; token/vector handling approximate
+0068b000  327  SetParameterCount: parser/alloc loop sketched; treats this+0xc as a raw vector rather than a map

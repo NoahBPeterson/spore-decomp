@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006842c0  75  complete: serializer entry; vtable/get-object calls reconstructed but convention/register scheduling differs
+006844a0  8  complete: rbtree insert wrapper; only the load/store order after RBTreeInsert differs (frame slot and register choice)
+00684bf0  63  complete: SP::CoordToIndex; cl keeps the float->int conversion in a register while the original spills to a stack temp
+00684c50  46  complete: index->coordinate helper; SSE operand/register selection differs

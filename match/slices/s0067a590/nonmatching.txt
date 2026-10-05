@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0067a590  122  complete: register/frame scheduling and temp-slot placement differ (cl used a different loop/temp layout)
+0067ac80  35  complete: cl emits movzx byte loads for the masked args where the original uses and eax,0xff on dword loads
+0067af10  66  complete: predicate loop uses different loop shape/register allocation (this in ebp, counter in edi) than original
+0067af70  66  complete: same predicate loop; register allocation differs
+0067afd0  61  complete: three-way predicate composition; register/call scheduling differs
+0067b150  76  complete: store scheduling and 0.0f register reuse differ; cl hoists the cString construct differently
+0067b270  55  complete: cl CSEs the first secondary-vtable store (base ctor vptr) that the original keeps
+0067b2f0  54  complete: vtable-store scheduling vs member loads differs; duplicate vtable stores

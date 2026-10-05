@@ -1,0 +1,18 @@
+0067c960 cUIHints::Update  # PDB name (symbols/pdb_names.json)
+0067bc30 cUIHints::SetVisibility  # PDB name, called from this slice
+0067ad00 cUIHints::UpdateVisibleHint  # PDB name, called from UpdateHintTimers
+0067d230 zlib zalloc shim  # stored into z_stream_s::zalloc at 0x0067d390
+0067d260 zlib zfree shim  # stored into z_stream_s::zfree at 0x0067d39a
+0067d280 EA::IO::StreamCompressionZLib::SetCompressedFormat  # PDB
+0067d2a0 EA::IO::StreamCompressionZLib::SetBufferSize  # PDB
+0067d2e0 EA::IO::StreamCompressionZLib::SetCompressionHint  # PDB
+0067d300 EA::IO::StreamCompressionZLib::GetAccessFlags  # PDB
+0067d310 EA::IO::StreamCompressionZLib::GetState  # PDB
+0067d330 EA::IO::StreamCompressionZLib::InitPointers  # PDB
+0067d3f0 EA::IO::StreamCompressionZLib::GetPosition  # PDB
+0067d410 EA::IO::StreamDecompressionZLib::SetCompressedFormat  # PDB
+0067d420 EA::IO::StreamDecompressionZLib::SetBufferSize  # PDB
+0067d460 EA::IO::StreamDecompressionZLib::GetAccessFlags  # PDB
+0067d470 EA::IO::StreamDecompressionZLib::GetState  # PDB
+0067d490 EA::IO::StreamDecompressionZLib::InitPointers  # PDB
+0067d530 EA::IO::StreamDecompressionZLib::GetPosition  # PDB

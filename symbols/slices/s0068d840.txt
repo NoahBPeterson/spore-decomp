@@ -1,0 +1,17 @@
+0068d840  SPKeyFromName  # PDB name; parses "A.B.C" resource names, hash fallback 0x8dd7d0
+0068da70  (anonymous)::KeyFromNameThunk  # forwards 4 args to SPKeyFromName
+0068da90  (anonymous)::InstallNameCallbacks  # SetNameCallbacks(thunk, SPNameFromKey thunk)
+0068dab0  (anonymous)::EmitTaggedValue  # packs 0x40|id into 32 bits, calls vtable+8(a,b,packed)
+0068daf0  eastl::rbtree<unsigned,pair<unsigned,unsigned>>::DoInsertValueImpl  # alloc 0x18 node, RBTreeInsert, size++
+0068db70  (anonymous)::NameMap::NameMap  # vtable 0x1403594, two embedded rbtrees
+0068dc90  (anonymous)::NameMap::~NameMap  # nukes rbtrees at +0x24 and +8
+0068dd10  SP::cSPCreatureCitizen::Init  # PDB candidate; builds resource reference, manager loop
+0068ddc0  (anonymous)::RangeCoder::InitMask  # log2 scan of +0x40, table 0x1403618, FNV seed
+0068de20  (anonymous)::RangeCoder::EncodeBit  # arithmetic-coder bit encode (FNV mixing)
+0068df00  (anonymous)::RangeCoder::Flush  # flush remaining bits
+0068dfd0  (anonymous)::RangeCoder::DecodeBit  # arithmetic-coder bit decode
+0068e0c0  (anonymous)::RangeCoder::DecodeFinish  # drain/validate decoder
+0068e1a0  (anonymous)::RangeCoder::Serialize  # stream save (large EH body, chunked)
+0068e3b0  (anonymous)::RangeCoder::Read  # read/emit bytes into coder state
+0068e490  (anonymous)::RangeCoder::Verify  # stream validation
+0068e610  (anonymous)::RangeCoder::RangeCoder  # zero-init coder context

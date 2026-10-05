@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0067a6e0  316  approximate: message-handler paths reconstructed from Ghidra but container/arg register layout not reproduced
+0067a880  407  approximate: timer construction / callback registration reconstructed; pool-new and vtable scheduling differ
+0067aaf0  3  skeleton: 0x28-arg element insert not reconstructed (stub body)
+0067ad00  338  approximate: UpdateVisibleHint trig/alpha path approximated (external sin instead of inline fsin)
+0067b030  200  approximate: eastl vector<unsigned short> insert/DoInsertValue replacement is hand-written
+0067b370  289  approximate: eastl vector<AutoRefCount<cHint>> insert/DoInsertValue replacement is hand-written

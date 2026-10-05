@@ -1,0 +1,21 @@
+0067eae0 `anonymous namespace'::cCheatHelpCommand::Execute  # PDB candidate; EH function
+0067ec70 `anonymous namespace'::cCheatHistoryCommand::Execute  # PDB candidate
+0067ecb0 `anonymous namespace'::cCheatListCommand::Execute  # iterates mConsoles set, calls vtable[0x18]
+0067ed00 SP::cCheatManager::Init  # PDB candidate
+0067ee60 SP::cCheatManager::cStrMap node ctor  # string + AutoRefCount pair constructor
+0067eef0 `anonymous namespace' cCommand node allocator  # operator_new(0x24)+construct at +0x10
+0067ef60 command string setter  # thiscall ret 8; assigns or falls back to parser
+0067efc0 SP::cCheatManager::RunCheat  # PDB candidate
+0067f0c0 eastl rbtree find-or-insert (FUN_0067e890 node alloc)
+0067f1f0 eastl rbtree insert wrapper
+0067f260 eastl rbtree find-or-insert (FUN_0067eef0 node alloc)
+0067f390 SP::cCheatManager console/trace teardown
+0067f470 string intern/find in Trace log filter map
+0067f540 set<AutoRefCount> insert
+0067f5c0 find-and-erase feedback event
+0067f640 vector push_back (this+4/+8)
+0067f670 rbtree recursive subtree delete
+0067f710 WildcardMatch search into result vector
+0067f790 rbtree insert-or-assign
+0067f910 App::CheatManager::~CheatManager  # vtable App::CheatManager
+0067f9b0 string erase/find in cheat command map

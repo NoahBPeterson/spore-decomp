@@ -1,0 +1,14 @@
+00689ee0  178  cCommandInfo copy ctor: member init order right, but cl homes source/dest in different regs and uses push ecx instead of sub esp,8
+0068a040  140  find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ
+0068a250  95   map node allocator: new-expression body correct, original keeps an EH frame + cleanup around operator new/Variant assign
+0068a320  148  command-string fixup: control flow reproduced with gotos, but cl folds the length>>1 to test and lays blocks out differently
+0068a720  78   ~cCommandParameterSet: vtable stores + DoNukeSubtree correct, EH state table from real base-class dtors not reproduced
+0068a870  64   RemoveParameter: find/erase sequence correct, but cl uses an extra callee-saved reg and reads the iterator from a different slot
+0068a8d0  91   ~cStringCommandGenerator: members destroyed correctly, EH frame/state from base-class dtors not reproduced
+0068a970  65   RegisterCommandParameterInfo: find/assign/format paths present, block layout and assign argument setup differ
+0068aae0  164  RegisterCommandGenerator: refcount, set-find/insert and info loop present, EH states/temporaries differ
+0068abb0  174  UnregisterCommandGenerator: set-find/erase + release present, EH states/temporaries differ
+0068ac60  160  ExecuteCommandFormatted: Format + virtual dispatch + string cleanup present, EH frame and va_list forwarding differ
+0068ad30  20   cCommandParameterSet ctor: vtable stores and map anchor init correct, cl reorders/CSEs the zero stores
+0068ad90  380  ExecuteCommand: variant type selection, locale path and cleanup present, scheduling/regalloc differ throughout
+0068af10  133  cStringCommandGenerator ctor: vtable stores + parameter-set new correct, EH frame around new-expression differs

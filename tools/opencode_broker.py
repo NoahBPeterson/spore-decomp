@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
 """Permission broker for opencode decomp sessions (no --auto): answers each request once, by policy.
 
-usage: opencode_broker.py <batch name> [--once]
+usage: opencode_broker.py <batch name> [--once] [--manual] [--sessions <file>]
+--sessions: only handle requests from session IDs listed (one per line) in <file>, re-read every poll, so
+two brokers with different policies can serve different sessions at once.
+--manual: never auto-approve anything. Clearly forbidden requests are still auto-rejected; every other request
+          (including reads/globs/greps) is printed as HOLD for a supervising agent to decide one by one.
 Polls the opencode background service for pending permission requests in this project and replies:
   allow  - read-only/project tools (card.py, chk.py, cmpdis.py, run_all.py, pdb_type.py, rg, ls, ...) and
            edits/writes inside match/slices/<id>/, symbols/slices/<id>.txt, work/match/scratch_<id>_* for
@@ -111,6 +115,40 @@ def inline_python(seg):
     return None
 
 
+OUTSIDE = re.compile(r"(?:^|[\s=:'\"(<>|;&])(?:~|\$HOME|\$\{HOME\}|/(?!%s(?:/|\b))(?:Users|Volumes|etc|usr|bin|sbin|tmp|var|private|"
+                     r"System|Library|opt|Applications|proc|home|root|cores|Network|dev/(?!null\b)))" % re.escape(ROOT.lstrip("/")))
+SECRETY = re.compile(r"(?:^|[\s;|&(])(?:env|printenv|set\s*$|export\s+-p|declare\s+-x)(?:\s|$)|\$[A-Z_]*(?:KEY|TOKEN|SECRET|PASSWORD)|"
+                     r"\.(?:ssh|aws|config|local)/|Secrets|auth\.json|service\.json|\.opencode/|\.\./\.\.", re.I)
+
+
+def outside_repo(text):
+    """True if the text references a path outside the repo, the home dir, env vars or credential files."""
+    return bool(OUTSIDE.search(text) or SECRETY.search(text))
+
+
+def decide_manual(r):
+    act, res = r.get("action"), r.get("resources") or []
+    blob = "\n".join(res)
+    if act in ("webfetch", "websearch"):
+        return "reject", "no network"
+    if act in ("read", "glob", "grep", "list", "edit", "write", "patch", "apply_patch", "external_directory"):
+        for p in res:
+            ap = p if os.path.isabs(p) else os.path.normpath(os.path.join(ROOT, p))
+            if not ap.startswith(ROOT + "/") and ap != ROOT or SECRETY.search(p):
+                return "reject", "path outside the repo or a credential file: %s" % p[:100]
+    if act in ("edit", "write", "patch", "apply_patch"):
+        bad = [p for p in res if not ok_path(os.path.relpath(p, ROOT) if os.path.isabs(p) else p)]
+        if bad:
+            return "reject", "edit outside allowed paths: %s" % bad[:3]
+    if act in ("shell", "bash"):
+        if outside_repo(blob):
+            return "reject", "references a path outside the repo, env vars or credentials"
+        v, why = decide(r)
+        if v == "reject":
+            return v, why
+    return "hold", "manual mode: every request needs supervisor approval (policy verdict: %s)" % (decide(r)[1] if act in ("shell","bash") else act)
+
+
 def decide(r):
     act, res = r.get("action"), r.get("resources") or []
     if act in ("read", "glob", "grep", "list", "lsp", "todowrite", "todoread", "task", "skill"):
@@ -163,10 +201,16 @@ while True:
         reqs = call("GET", "/api/permission/request").get("data", [])
     except Exception as e:  # service restart etc.
         print("ERROR polling: %s" % e, flush=True); time.sleep(5); continue
+    if "--sessions" in sys.argv:
+        try:
+            mine = set(open(sys.argv[sys.argv.index("--sessions") + 1]).read().split())
+        except OSError:
+            mine = set()
+        reqs = [r for r in reqs if r["sessionID"] in mine]
     for r in reqs:
         if r["id"] in held:
             continue
-        verdict, why = decide(r)
+        verdict, why = decide_manual(r) if "--manual" in sys.argv else decide(r)
         rec = {"t": time.strftime("%H:%M:%S"), "session": r["sessionID"], "action": r.get("action"),
                "resources": r.get("resources"), "verdict": verdict, "why": why}
         open(LOG, "a").write(json.dumps(rec) + "\n")

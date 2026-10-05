@@ -1,0 +1,7 @@
+00685500 world layout entry accessor (int field)  # table at g_015fea00, stride 0x28, count g_0152b348
+00685520 world layout entry accessor (byte flag)  # same table
+00685540 world layout entry table clear  # zeroes first byte of each 0x28 entry
+00685570 layout-callback field setter (this+0x20c/this+0x210)  # tag 0x7104c38
+00685a30 eastl::vector<EA::Variant>::_Destroy  # calls EA::Variant::Destruct (0x0093db80)
+00685cd0 destroy+free range over 0x28-byte wstring pairs
+00686080 destroy+free range over 0x28-byte wstring pairs (void)

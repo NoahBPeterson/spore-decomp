@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00683f80  57  partial: factory destructor; member teardown calls use reconstructed offsets/allocator
+00684040  110  partial: factory create; object construction via FUN_00683e90 not reproduced
+006840d0  149  partial: read collection; stream vtable calls and node setup approximate
+006841a0  107  partial: write collection; EASTL serialization helpers approximate
+00684330  1  partial: rbtree insert-or-assign; stub body (size-limited comparison)
+00684500  1  partial: rbtree find-or-insert; stub body (size-limited comparison)
+00684610  3  partial: map operator[]; stub body (size-limited comparison)
+00684740  57  partial: read records; per-field stream reads reconstructed approximately
+00684890  1  partial: rbtree insert-or-assign; stub body (size-limited comparison)
+00684980  3  partial: map operator[]; stub body (size-limited comparison)
+00684a90  1  partial: read records; delegates to simplified collection reader
+00684b40  77  partial: factory serializer; trace/manager lookups approximate
+00684ca0  512  partial: SP::WrapCubeFace; face-wrap table indexing/logic approximate

@@ -1,0 +1,5 @@
+slices/s0068c330/s0068c330.cpp  ?FindLastCharW@@YAPA_WPA_W0PB_W@Z              0068c720  /O2 /MD /Gy /EHsc /TP
+slices/s0068c330/s0068c330.cpp  ?FindLastCharA@@YAPADPAD0PBD@Z                 0068c750  /O2 /MD /Gy /EHsc /TP
+slices/s0068c330/s0068c330.cpp  ?SPNameFromKeyThunk@@YAXPBUResKey@@PAXHHPBD@Z  0068d1a0  /O2 /MD /Gy /EHsc /TP
+slices/s0068c330/s0068c330.cpp  ?FreeQueueCreate@@YAPAUFreeQueue@@XZ           0068c520  /O2 /MD /Gy /EHsc /TP
+slices/s0068c330/s0068c330.cpp  ?Shutdown@FreeQueue@@QAEXXZ                    0068c4e0  /O2 /MD /Gy /EHsc /TP

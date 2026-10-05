@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0067fb80  0  partial: set/map find-or-insert; lower_bound and node-alloc/insert calls reproduced but rbtree fixup path simplified.
+0067fc50  375  partial: cCheatManager::AddCheat; key string construction, parser call and second (flag) path approximate.
+00680a50  0  partial: vector copy ctor; allocation and uninitialized_copy reproduced but FUN_00680420 argument layout approximate.

@@ -24,6 +24,6 @@ def post(path, body):
 
 s = post("/api/session", {"title": title, "location": {"directory": ROOT}, "model": {"providerID": prov, "id": mid}})
 sid = s.get("id") or s.get("data", {}).get("id")
-post("/api/session/%s/prompt" % sid, {"parts": [{"type": "text", "text": open(pfile).read()}],
+post("/api/session/%s/prompt" % sid, {"text": open(pfile).read(),
                                        "model": {"providerID": prov, "id": mid}})
 print(sid)

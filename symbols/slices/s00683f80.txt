@@ -1,0 +1,18 @@
+00683f80 App::cConversationFactory::~cConversationFactory-like  # EH teardown of members at +0x6c/+0x5c/+0x40/+0x24
+00684040 App::cConversationFactory::Create  # operator_new(0x80,"App/cConversationFactory") + virtual init
+006840d0 App::cConversationFactory::ReadCollection
+006841a0 App::cConversationFactory::WriteCollection
+006842c0 App::cConversationFactory serializer entry  # vt[0xc](0x355d6f5), then 4 sub-serializers
+00684330 rbtree insert-or-assign (0x226a1de-style key compare)
+006844a0 rbtree insert wrapper (int-key map at +0xc)
+00684500 rbtree find-or-insert (int-key map)
+00684610 map operator[] (int key)
+00684740 read records
+00684890 rbtree insert-or-assign
+00684980 map operator[] (int key)
+00684a90 read records
+00684b40 App::cConversationFactory serializer entry (alt path, lookups 0x226a1de/0x355d6f5)
+00684be0 float->int truncation helper
+00684bf0 SP::CoordToIndex  # PDB name
+00684c50 index->coordinate (inverse of CoordToIndex)
+00684ca0 SP::WrapCubeFace  # PDB name; recursive cube-face wrap

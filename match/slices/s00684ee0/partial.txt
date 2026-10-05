@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00685770  0  partial: DatabasePackedFile stream loader; FileStream/IRecord calls and object construction simplified to a stub (EH/resource paths omitted).
+00685d40  0  partial: resource variant lookup; manager vtable calls and cleanup paths simplified to a stub.
+00685f90  0  partial: open-addressed hash find-or-insert; node insert reproduced but table-rehash (FUN_00921440/FUN_00685660) cooperation approximated.

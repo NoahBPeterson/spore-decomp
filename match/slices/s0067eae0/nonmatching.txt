@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0067ec70  21  complete: command-history Execute; vtable/temp register scheduling differs from original

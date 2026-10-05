@@ -1,0 +1,23 @@
+00689ee0  SP::cCommandServer::cCommandInfo::cCommandInfo(const cCommandInfo&)  # compiler-generated copy ctor, two eastl::basic_string<wchar_t> members
+00689fc0  SP::cCommandParameterSet::GetNextParameterID  # PDB vtable-slot + map find/RBTreeIncrement shape
+0068a000  SP::cCommandServer::cCommandInfo::~cCommandInfo  # reverse-order WStr destructors; PDB layout mnID/msName/msParameterTypeInfo
+0068a040  (anonymous)::FindCommandInfoByName  # iterates cCommandServer::mCommandInfoMap begin..end, compares msName via 0x572930
+0068a0f0  eastl::rbtree<unsigned int,EA::Variant,...>::DoNukeSubtree  # PDB callee-single name; node+0x24 flags, node+0x14 Variant
+0068a250  eastl::rbtree<unsigned int,EA::Variant,...>::create_node  # allocates 0x28-byte node, stores key + Variant
+0068a2e0  (anonymous)::GetEmptyCommandString  # static-local WStr with atexit dtor, guard bit
+0068a320  (anonymous)::FixupCommandString  # assign + char1/char9 scan + insert/append literal at 0x1403308
+0068a3f0  SP::cCommandServer::GetCommandInfo  # PDB vtable-slot; find + assign msName/msParameterTypeInfo
+0068a460  eastl::vector<16-byte>::insert  # 0x555c40/0x7c7a40 calls with 16-byte stride
+0068a720  SP::cCommandParameterSet::~cCommandParameterSet  # PDB callee-single; nukes mParameterMap + mDefaultVariant
+0068a7a0  SP::cCommandParameterSet::AdjustParameterCount  # uses vtable +0x24 to append and RBTreeDecrement/Erase to drop
+0068a870  SP::cCommandParameterSet::RemoveParameter  # PDB vtable-slot; find + RBTreeIncrement/Erase + Variant dtor
+0068a8d0  SP::cStringCommandGenerator::~cStringCommandGenerator  # PDB; releases mpEmptyParameterSetOutput + mStringArray
+0068a970  SP::cCommandServer::RegisterCommandParameterInfo  # PDB vtable-slot; find + assign/format msParameterTypeInfo
+0068a9e0  SP::cCommandServer::GetCommandIDFromCommandString  # PDB; parse command string then vtable +0x34
+0068aae0  SP::cCommandServer::RegisterCommandGenerator  # PDB; refcount + mCommandGeneratorSet insert + info refresh
+0068abb0  SP::cCommandServer::UnregisterCommandGenerator  # PDB; refcount + set erase/release
+0068ac60  SP::cCommandServer::ExecuteCommandFormatted  # PDB vtable-slot; Format then vtable +0x50
+0068ad30  SP::cCommandParameterSet::cCommandParameterSet  # PDB; vtable stores + map anchor init
+0068ad90  SP::cCommandParameterSet::ExecuteCommand  # PDB; -2 scans parameters, else variant locale select
+0068af10  SP::cStringCommandGenerator::cStringCommandGenerator  # PDB; allocates empty cCommandParameterSet
+0068b000  SP::cCommandParameterSet::SetParameterCount  # PDB; parse then build parameter set

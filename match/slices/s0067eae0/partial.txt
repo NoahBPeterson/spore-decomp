@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+0067eae0  253  partial: cCheatHelpCommand::Execute reconstructed but EH/format paths and argument handling approximate
+0067ed00  120  partial: cCheatManager::Init reconstructed approximately (parser/trace/console creation simplified)
+0067ee60  102  partial: string+AutoRefCount constructor; uses allocator copy instead of EASTL RangeInitialize/DoInsertValue
+0067eef0  26  partial: placement-new helper; EH unwind/free cleanup path omitted
+0067efc0  33  partial: RunCheat; argument tokenizing (FUN_00840890/FUN_005e96a0) omitted
+0067f0c0  95  partial: rbtree find-or-insert; tree traversal/insert uses simplified relational logic
+0067f1f0  103  partial: rbtree insert wrapper; node layout/allocation differs
+0067f260  1  partial: rbtree find-or-insert variant; delegates to simplified logic (size-limited comparison)
+0067f390  62  partial: console/file-stream release; Trace/RAII path simplified
+0067f470  71  partial: string intern/find; operator_new/DoInsertValue replaced by manual copy
+0067f540  52  partial: set insert with AutoRefCount; FUN_0068a140 call layout approximate
+0067f5c0  27  partial: find-and-erase; tree erase path simplified
+0067f670  69  partial: recursive subtree delete; node member offsets approximate
+0067f710  96  partial: WildcardMatch search; result-vector growth/order approximate
+0067f790  3  partial: rbtree insert; body stub (size-limited comparison)
+0067f910  44  partial: App::CheatManager destructor; member/tree teardown approximate
+0067f9b0  35  partial: string erase/find; hash_node destruction path approximate

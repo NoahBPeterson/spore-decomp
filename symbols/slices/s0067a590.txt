@@ -1,0 +1,20 @@
+0067a590 UI::HintManager::PossiblyStartSpiceTutorial  # PDB candidate (caller-scored); thiscall member, 2 byte args
+0067a680 UI::HintManager::StartTutorialCallback  # __stdcall callback; calls FUN_0067caf0 then PossiblyStart(_,1)
+0067a6a0 UI::HintManager::HandleMessage  # compares msg id 0x670eccd; secondary subobject (this-0xc)
+0067a6e0 UI::HintManager::HandleHintMessage  # PDB cUIHints::UpdateVisibleHint-adjacent; handles types 6/8/0x287259f6
+0067a850 UI::HintManager::ResetCallback  # registered via FUN_00929da0; releases + PossiblyStart(0,0)
+0067a880 UI::HintManager::Init  # sets up CalloutTimer smooth-ramp timers + MessageServer handler
+0067aae0 UI::HintManager::AddHint  # inserts a 0x134-byte hint element
+0067ac80 EA::Color::PackARGB  # cdecl pack (a<<24)|(r<<16)|(g<<8)|b
+0067acc0 cUIHints::SetFlashWindowEnabled  # toggles window at +0x4c via layout vtable[0xf0]
+0067ad00 cUIHints::UpdateVisibleHint  # PDB candidate; flashes window, sets three window colors
+0067aee0 cUIHints/ConditionFinder::FindByID  # linear find in pointer array at +0x20/+0x24 by field +8
+0067af10 C_af::All  # all condition processors evaluate true
+0067af70 C_af::Any  # any condition processor evaluate true
+0067afd0 C_af::Check  # composition over three condition vectors
+0067b150 cUIHints::cHint::cHint  # constructor (vtable 0x14014ec, cString at +0x78)
+0067b1f0 cUIHints::cHint::~cHint  # destructor freeing three vectors + cString
+0067b270 UI::cHintManager::cHintManager  # constructor (vtable 0x1401510 / 0x14014f4)
+0067b2f0 UI::cHintManager::~cHintManager  # destructor freeing vectors
+0067b030 eastl::vector<unsigned short>::insert  # DoInsertValue template instantiation
+0067b370 eastl::vector<EA::AutoRefCount<cUIHints::cHint>>::insert  # DoInsertValue template instantiation

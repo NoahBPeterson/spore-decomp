@@ -1,0 +1,5 @@
+0068d840  574  SPKeyFromName: '!' branch block hand-duplicated and several compare/loop shapes approximated
+0068db70  106  NameMap constructor: stub; map anchor init + FUN_0091ff50 call not reproduced
+0068df00  194  Flush: bit-injection expression approximated
+0068e1a0  525  Coder::Serialize: stub (file/EH heavy body omitted)
+0068e490  382  Coder::Verify: stub (validation body omitted)

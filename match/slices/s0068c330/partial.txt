@@ -1,0 +1,6 @@
+0068c330  -    FreeQueue::TryPop (299B): 64-bit tagged-pointer CAS loop only stubbed
+0068c9e0  -    PackStr::Insert (463B): EASTL string-insert body only stubbed
+0068d1c0  -    PackStr::Swap (206B): non-SSO swap path only approximated
+0068d340  -    eastl::hash_map<unsigned,WStr>::operator[] (215B): stubbed
+0068d480  -    PackStr::Reserve (287B): capacity/grow path only stubbed
+0068d5a0  -    SPKeyFromName (664B): name-cache hash_map path approximated

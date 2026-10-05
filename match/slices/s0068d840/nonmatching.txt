@@ -1,0 +1,8 @@
+0068da70  29   name-callback thunk: forwards 4 args correctly, but cl emits a sibling tail-call where the original reorders args and returns
+0068daf0  7    rbtree insert: complete; only the mnSize increment and *pOut store are scheduled in the opposite order
+0068dc90  82   NameMap destructor: vtable store + two map DoNukeSubtree calls correct, EH states and thiscall nuke call differ
+0068dd10  171  Citizen init: assignment, flag normalization, Sub68dc00 call and resource-manager loop present; scheduling differs
+0068de20  178  EncodeBit: full range-coder path reproduced from the disassembly; register/scheduling differences throughout
+0068dfd0  206  DecodeBit: full path reproduced; register/scheduling differences throughout
+0068e0c0  203  DecodeFinish: full path reproduced; register/scheduling differences throughout
+0068e3b0  210  Coder::Read: buffer/external paths and GetManager loop present; scheduling/regalloc differ

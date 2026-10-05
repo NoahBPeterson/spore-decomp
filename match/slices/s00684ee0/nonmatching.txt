@@ -1,0 +1,12 @@
+00684ee0  n/a  Hilbert-curve coordinate remap; complete, /O2 register/scheduling differs.
+006850b0  n/a  rectangle splitter; complete, register/branch layout differs.
+00685200  n/a  recursive space-fill walk; complete, SSE scheduling/register choice differs.
+00685450  n/a  rectangle-expand helper; complete, local slot initialisation order differs (11 bytes).
+00685540  n/a  zero the entry table; complete, single-byte SIB base/index swap remains (1 byte).
+006855f0  n/a  refcounted object release; complete, interlocked intrinsic register usage differs.
+00685620  n/a  wide-string vector scan; complete, register allocation (IAT pointer / counters) differs.
+00685710  n/a  path membership test; complete, register/scheduling differs.
+00685980  n/a  intrusive list release; complete, node/next register swap and call schedule differ.
+006859b0  n/a  hash bucket erase; complete, register/branch layout differs.
+00685a60  n/a  two-wstring copy ctor; complete, EH/temp/AllocateSelf scheduling differs.
+00685ed0  n/a  vector<Variant> destroy; complete, missing compiler EH prolog.

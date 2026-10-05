@@ -1,0 +1,8 @@
+0068c6d0  SP::SetKeyKind  # Ghidra PDB symbol
+0068c700  `anonymous namespace'::InvalidEditorModelKey  # Ghidra PDB symbol
+0068c770  `anonymous namespace'::GetExplicitIdStart  # Ghidra PDB symbol
+0068c820  `anonymous namespace'::GetExplicitIdStart  # Ghidra PDB symbol (narrow)
+0068d0d0  SPNameFromKey  # Ghidra PDB symbol (wide)
+0068d290  SPNameFromKey  # Ghidra PDB symbol (narrow)
+0068d340  eastl::hash_map<unsigned int, eastl::basic_string<wchar_t> >::operator[]  # Ghidra PDB symbol
+0068d5a0  SPKeyFromName  # Ghidra PDB symbol

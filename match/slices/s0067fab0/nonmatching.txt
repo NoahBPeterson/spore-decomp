@@ -1,0 +1,15 @@
+0067fab0  n/a  App::CheatManager::CheatManager; complete multi-base/list-head initialiser, vtable-store scheduling and register choice differ.
+0067fe30  n/a  HSL->RGB conversion; complete, /O2 x87 vs SSE scheduling and round-helper shape differ.
+0067ff30  n/a  RGB->HSL conversion; complete, min/max pointer selection and colour branch codegen differ.
+006800c0  n/a  Rec48 copy constructor; complete, only a one-instruction lea/mov reorder differs (string-call argument scheduling).
+00680130  n/a  Rec48 copy-assign; complete, same lea/mov reorder as 0x006800c0.
+00680270  n/a  copy-range over 0x48 records; complete, same one-instruction lea/mov reorder.
+00680300  n/a  backward copy-range over 0x48 records; complete, cl schedules the output decrement before the first field store.
+00680390  n/a  vector<unsigned> serializer; complete, loop/register allocation differs.
+00680500  n/a  bitset serializer; complete, bool round-trip (setne al then test) and stream register choice differ.
+00680560  n/a  bitset deserializer; complete, register/branch layout differs.
+006805c0  n/a  vector<0x48-record> serializer; complete, EH/temp-copy scheduling differs.
+00680730  n/a  vector<0x48-record> destroy-and-free; complete, missing compiler EH frame and register layout differs.
+00680890  n/a  large aggregate zero-init; complete, store scheduling differs.
+00680930  n/a  cCheatManager record destructor chain; complete (tail call to 0x00680730), register layout differs.
+006809f0  n/a  destructor with EH frame; complete, missing compiler EH prolog/state stores.

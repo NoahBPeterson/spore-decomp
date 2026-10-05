@@ -1,0 +1,10 @@
+0067c450  n/a  cUIHints::UpdateHintTimers (7-way hint state machine); complete transcription of every switch arm, but /O2 register/schedule differs.
+0067c790  n/a  HideAllHints; complete, register allocation (this in esi vs edi) differs.
+0067c830  n/a  cUIHints::ActivateHint; complete, this/hint register roles and branch layout differ.
+0067c8c0  n/a  cUIHints::SetHintState; complete, register/branch layout differs.
+0067c960  n/a  cUIHints::Update; complete; cl spills elapsed instead of keeping it in x87 across the branch (79 vs 72 bytes).
+0067c9b0  n/a  cUIHints::Refresh; complete, register/branch layout differs.
+0067cc70  n/a  D3D9 register helper (unguarded variant); complete, 11-byte register-allocation diff (device/vtable in eax/ecx vs ecx/edx).
+0067ce00  n/a  D3D9 constant-upload helper; complete for this VA (first of two merged blocks), 12-float copy loop shape differs.
+0067d020  n/a  D3D9 float4 upload helper; complete, aggregate/temporary copy shape differs.
+0067d0c0  n/a  D3D9 register-table registration; complete, global-store/register-reuse scheduling differs.
