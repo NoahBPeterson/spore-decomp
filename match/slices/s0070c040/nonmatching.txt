@@ -1,0 +1,2 @@
+0070c410 126 cLightingWorld::CreateLocalLightSample: complete; zeroed local cell init and slot create call schedule differ
+0070c7c0 92 cLocalLightInfo copy ctor: complete; origin copies every float via x87 fld/fstp, cl uses integer/SSE moves

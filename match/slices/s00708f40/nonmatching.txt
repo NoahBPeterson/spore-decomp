@@ -1,0 +1,1 @@
+00709c40 111 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl

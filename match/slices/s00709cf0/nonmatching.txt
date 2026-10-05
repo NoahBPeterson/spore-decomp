@@ -1,0 +1,2 @@
+0070a1f0 1 spstl::simple_deque<...>::ClearImpl: complete; element tag test compiles to `sar` where original emits `shr`
+0070a560 37 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ

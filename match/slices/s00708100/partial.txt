@@ -1,0 +1,6 @@
+00708100 563 EH construct-range helper: only a skeleton, EH funclets and sub-object construction not reproduced
+00708500 128 EH uninitialized-copy helper: skeleton, EH cleanup path and element construct not reproduced
+007085a0 365 cLightingWorld::RemoveLight: approximate; linked-list of cell samples and manager virtual dispatch not fully reconstructed
+00708900 81 cLightingManager::~cLightingManager: skeleton; three vtable stores and sub-object dtors not reproduced
+007089a0 558 cLightingConfig::operator=: approximate field copy; nested container assignments and float fld/fstp schedule not reconstructed
+00708df0 87 vector ctor: skeleton; inline 0x400-byte buffer wiring and range-construct call not reproduced

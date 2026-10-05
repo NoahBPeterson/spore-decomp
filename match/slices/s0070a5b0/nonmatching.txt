@@ -1,0 +1,1 @@
+0070ae70 82 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs

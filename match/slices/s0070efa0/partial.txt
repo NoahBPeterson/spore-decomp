@@ -1,0 +1,5 @@
+0070f0d0  500   SP::cMaterialManager::WriteShaders; in-place path omitted
+0070f6f0  349   vector<16-byte>::insert; in-place move path omitted
+0070fb00  999   vector<AutoRefCount>::insert (b); in-place path omitted
+0070fd50  999   vector<AutoRefCount>::insert (c); in-place path omitted
+0070ffa0  999   vector<AutoRefCount>::insert (atomic); in-place path omitted

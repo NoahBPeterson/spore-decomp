@@ -1,0 +1,9 @@
+0070c040 78 simple_deque dtor: skeleton, EH funclets not reproduced
+0070c090 360 slot_vector_base<cEnvLightingCacheEntry>::create: not reconstructed (skeleton only)
+0070c200 411 slot_vector_base<cLocalLightCell>::create: not reconstructed (skeleton only)
+0070c3a0 97 fixed_vector<cCellInfo>::copy ctor: skeleton, EH cleanup not reproduced
+0070c4b0 304 slot-vector helper: not reconstructed (skeleton only)
+0070c5e0 476 slot-vector helper: not reconstructed (skeleton only)
+0070c830 633 slot-vector helper: not reconstructed (skeleton only)
+0070cab0 554 cLightingWorld::UpdateLightingInfo: not reconstructed (skeleton only)
+0070cce0 401 slot_vector_base<cLocalLightInfo>::create: not reconstructed (skeleton only)

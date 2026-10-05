@@ -1,0 +1,6 @@
+00708340 108 VecCell::assign: complete eastl DoAssignFromIterator; register schedule of begin/size and the extra tag arg differ
+00708710 101 cLightingWorld::DestroyLightingInfo: complete; intrusive-list unlink and free-vector append scheduling diverge
+007087a0 62 ClearVec::clear: complete; element-destroy loop and the zero-size memcpy schedule differ
+00708d90 70 Vec8b::resize: complete; short-circuit branch and local-zero slot linger differently
+00708e60 83 Vec16::resize: complete; frame and copy_impl argument / mpEnd arithmetic schedule diverge
+00708810 217 cLightingWorld::AddLocalSample: complete; 8-float entry copy and id-vector push diverge

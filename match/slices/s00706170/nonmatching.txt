@@ -1,0 +1,8 @@
+00706920   74  complete slot-vector next scan (stride 0xc4); register/evaluation order differs
+00706980   74  complete slot-vector next scan (stride 0x1f0); register/evaluation order differs
+007069e0   74  complete slot-vector next scan (stride 0x1e0); register/evaluation order differs
+00706ab0   35  complete forward copy of 16-byte elements; offset folded away by cl
+00706af0   64  complete vector-of-0x20 allocator; parameter register allocation differs
+00706c80   90  complete forward copy of 9-dword elements; register allocation differs
+00706d00   64  complete vector-of-0x10 allocator; parameter register allocation differs
+00706d60   96  complete array-of-0x144 destructor loop; register allocation differs

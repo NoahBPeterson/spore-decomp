@@ -1,0 +1,10 @@
+0070efa0  250   SP::cMaterialManager::ReadShaders; io/vtable shape differs
+0070f320  90    vector<AutoRefCount> teardown; EH frame missing
+0070f390  90    vector<AutoRefCount> teardown; EH frame missing
+0070f520  64    atomic weak-release range; deferred-release sequence differs
+0070f570  8     fill_n weak-refcount; one instruction scheduled earlier
+0070f8c0  218   SP::cMaterialManager::HasMaterial; map/mutex register shape differs
+0070fa60  69    vector::erase (RC3c); register assignment differs
+0070fab0  69    vector::erase (RC3b); register assignment differs
+0070fd00  4     hash bucket-chain destructor; swap of two movs only
+0070ff50  4     hash bucket-chain destructor; swap of two movs only

@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   cl flags override
+slices/s00706170/s00706170.cpp  ??1W67f0@@QAE@XZ              007067f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00706170/s00706170.cpp  GetLightingWorld@W6840@@QAEHH@Z  00706840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00706170/s00706170.cpp  get@W6870@@QAEHI@Z            00706870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00706170/s00706170.cpp  get@W6890@@QAEHI@Z            00706890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00706170/s00706170.cpp  copyFrom@W68c0@@QAEPAU1@PBU1@@Z  007068c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

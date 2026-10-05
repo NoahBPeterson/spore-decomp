@@ -1,0 +1,6 @@
+00709cf0 838 cLightingWorld property loader: not reconstructed (skeleton only)
+0070a070 93 EH destructor loop: skeleton, EH funclets not reproduced
+0070a0d0 84 inline-buffer vector ctor: skeleton, EH cleanup path not reproduced
+0070a130 183 config copy ctor: skeleton, nested container copies and EH state not reproduced
+0070a2a0 325 property-driven config: skeleton, app-property virtual calls and vector fills not reconstructed
+0070a3f0 353 cLightingWorld::Shutdown: skeleton, many container clears and EH not reproduced

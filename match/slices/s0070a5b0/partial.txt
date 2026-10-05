@@ -1,0 +1,1 @@
+0070a5b0 2189 cLightingWorld::Update: not reconstructed (2189-byte evaluator; skeleton emitted as UpdateWorldImpl)
