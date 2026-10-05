@@ -1,0 +1,9 @@
+00712e10 SP::cMaterialManager::GetIDFromCompiledState  # PDB name
+00712f50 SP::cMaterialManager::RegisterMaterial  # hash_map operator[] + UnregisterMaterial + vector append
+00713070 SP::cMaterialManager::LoadMaterials  # 1.2 KB loader
+00713560 SP::cMaterialScriptState::~cMaterialScriptState  # PDB name
+00713780 SP::cMaterialManager::~cMaterialManager  # PDB name
+007138f0 SP::cMaterialScriptState::cMaterialScriptState  # PDB name
+00713a80 SP::cMaterialManager::cMaterialManager  # PDB name
+00713cb0 `anonymous namespace'::CompileVertexAndPixelShaders  # PDB name; D3DX shader compile
+00713e20 SP::MaterialManager thunk  # forwards 3 args to manager vtable slot 15

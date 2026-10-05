@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00743c50  47  eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs
+00743d20  78  eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs
+00743d90  173 eastl uninitialized_copy<Elem28>: missing compiler EH frame around constructed elements
+00744050  546 cSPTransform two-point transform: instruction schedule/register allocation differs
+007446e0  101 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp)
+00744870  49  AnimAction: stack-slot layout and bool handling differ

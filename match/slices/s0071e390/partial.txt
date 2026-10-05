@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+0071e390  n/a  SP::WriteMesh: skeleton only
+0071e600  n/a  large helper: skeleton only
+0071e7d0  n/a  helper: skeleton only
+0071e870  n/a  vector DoInsertValues: skeleton only
+0071ea40  n/a  large helper: skeleton only
+0071ec20  n/a  helper: skeleton only
+0071ecc0  n/a  index collector into a vector (DoInsertValue 0x4558a0): approximate
+0071ed30  n/a  helper: skeleton only
+0071ee10  n/a  SP::FindPrimitives: skeleton only
+0071efa0  n/a  eastl::vector<cFaceCluster>::resize: skeleton only
+0071f040  n/a  helper: skeleton only
+0071f0f0  n/a  helper: skeleton only
+0071f300  n/a  helper: skeleton only

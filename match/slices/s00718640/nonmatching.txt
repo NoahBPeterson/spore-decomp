@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP; diff approximate)
+00718680  40   addIndices0: count*4 built with add/add + reload, cl uses lea
+007186e0  40   addIndices1: same
+00718740  45   addIndicesSlot: same plus element index addressing
+007187b0  45   addIndicesSlot6: same
+00719240  54   finish: callee/return layout and the pE8 store address selection differ

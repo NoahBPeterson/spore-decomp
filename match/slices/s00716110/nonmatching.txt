@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast; diff is approximate)
+007168c0  56  resizeV8: cl keeps the value ptr in the loop register instead of the count
+00716930  56  resizeV1c: same loop-register difference
+007167c0  180  pushColor: PackColor inlined but the aligned xmm frame of the original is not reproduced
+007169a0  200  addColors: color loop frame/register differences propagate
+00716ad0  123  uniqueAdd: cl picks edx/ecx/esi opposite to the original (member access through a reference)
+00716e40  119  addPair120: element pointer register assignment differs
+00716ed0  180  addBulk120: dual-array strength reduction differs
+00716fc0  200  addDiff134_lo: SSE vertex diff and element access register assignment differ
+007170e0  200  addDiff134_hi: same
+00717200  180  addDiff134_lo1: same
+007172f0  200  addDiff134_hi1: same

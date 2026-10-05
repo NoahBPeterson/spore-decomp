@@ -1,0 +1,9 @@
+00733400    99  COMPLETE vector reserve/zero-fill (0x1c elems); rep-movsd/register scheduling differs.
+00733510   149  COMPLETE merge of two keyed ranges; mask load hoisting and memcpy tail differ.
+007335c0    42  COMPLETE resource ctor (vtable stores + base ctor); no EH unwind frame.
+00733640    84  COMPLETE resource ctor (count + base ctor); no EH unwind frame.
+007336e0    42  COMPLETE resource ctor; no EH unwind frame.
+00733760    75  COMPLETE resource ctor (zero-fill array); no EH unwind frame.
+00733920   230  COMPLETE vector insert with reallocation; EASTL allocator/move helpers and regs differ.
+00733e90    43  COMPLETE loop calling the element destructor; count/index register assignment differs.
+00733ed0    68  COMPLETE element destructor dispatch by type tag; count/index register assignment differs.

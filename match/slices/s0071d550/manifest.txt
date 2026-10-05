@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0071d550/s0071d550.cpp  ?func_dc90@Obj13@@QAE_NH@Z  0071dc90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

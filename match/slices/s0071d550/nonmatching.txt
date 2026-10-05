@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0071dd80  29   container find(key) over stride-0x20 entries: complete; register allocation of the end/begin loads and a 2-byte vs 1-byte nop padding differ
+0071e040  28   find(key) in a short[] stride-4 table at +0x14: complete; register/ordering of the begin/end loads differ

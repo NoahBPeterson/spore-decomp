@@ -1,0 +1,6 @@
+0071c900  Simulator mesh command  # vtable calls at slots 3,4,6,7,8,0x13,0x14,0x19,0x1f; emits 3 vectors + index triples
+0071c9e0  torus/disc generator  # cos/sin ring loop, calls vtable slots 3,0x13,6,0x14,0x19,0x1f,4
+0071cc20  mesh command  # emits position vectors
+0071cde0  mesh command  # 10 position vectors + negated globals 0x1536700..0x1536720 + index fan over 0x140ce70..0x140ced0
+0071d0d0  SP::CreateArrowheadMesh  # caller-scored PDB candidate
+0071d2f0  mesh command  # builds 12-float transform from globals 0x1488874/0x1485720/0x13eb964

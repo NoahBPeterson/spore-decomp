@@ -1,0 +1,5 @@
+00735470  1252  PARTIAL: ~1.2 KB container routine; skeleton.
+007353c0   151  PARTIAL: swap-or-assign of a 0x24-byte-element vector with EH; skeleton.
+00735960   297  PARTIAL: refcounted element-list builder with EH; skeleton.
+00735a90   825  PARTIAL: ~0.8 KB container routine; skeleton.
+00736090   332  PARTIAL: vector fill/insert with EH; skeleton.

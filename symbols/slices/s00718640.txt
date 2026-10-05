@@ -1,0 +1,12 @@
+0x00718640 copy backward over 0x28-byte two-vector elements
+0x00718680 cMeshBuilder::addIndices0  # insert ints at v188[0].end then add delta
+0x007186e0 cMeshBuilder::addIndices1  # v188[1]
+0x00718740 cMeshBuilder::addIndicesSlot  # v188[2+index]
+0x007187b0 cMeshBuilder::addIndicesSlot6  # v188[6+index]
+0x00719170 FixedIdVector6::operator=  # 4-byte element vector assign
+0x00719200 fill 0x28-byte two-vector elements from one source
+0x00719240 cMeshBuilder::finish  # calls 0x718820,0x717ce0,0x7173e0,0x718050 and clears +0x150
+0x00719330 insert range + destructor loop over 0xd0-byte elements
+0x00719390 copy + erase range over 0x50-byte elements
+0x007193e0 vector<0xd0-byte>::insert n copies
+0x00718820 large cMeshBuilder editor routine

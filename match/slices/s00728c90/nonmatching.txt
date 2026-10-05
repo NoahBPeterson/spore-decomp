@@ -1,0 +1,5 @@
+00729430  26   Complete; cl narrowed the switch to a byte-index jump table (mine 138B vs 160B original). Behaviourally identical.
+007296e0  92   Complete dword-copy loop; register/schedule scheduling differs.
+00729760  194  Complete masked-row copy loop; not byte-exact.
+00729820  6    Complete ctor; only the store order of f8 vs the final fstp differs.
+00729ad0  65   Complete Find (thiscall); register allocation of begin/loop counter differs (mine 65B vs 70B).

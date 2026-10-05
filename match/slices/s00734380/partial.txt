@@ -1,0 +1,4 @@
+00734380  545  PARTIAL: refcounted element builder (alloc + float3 pack + descriptor install); skeleton.
+007346d0  449  PARTIAL: reserve/insert over 0x24-byte Matrix33 elements; skeleton.
+00734970  900  PARTIAL: ~0.9 KB table/container routine; skeleton.
+00734d00 1368  PARTIAL: ~1.3 KB container routine; skeleton.

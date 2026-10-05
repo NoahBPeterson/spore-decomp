@@ -1,0 +1,5 @@
+00719d30  eastl::vector<T50,sp_vector_allocator>::resize  # caller-shaped; calls insert(pos,n,value) 0x719620 + erase; module SWARM/GameModelDescription vector region (dev PDB names vector<cAnimationCurve>/cSplitController). Element T50 = 4 contiguous sp_vector<> members (0x50).
+00719c60  eastl::vector<T140,sp_vector_allocator>::resize  # calls DoInsertValues 0x7193e0 + erase 0x719330; default ctor outlined at 0x714e10 (zeroes members, builds subobjects)
+00719620  eastl::vector<T50,sp_vector_allocator>::insert  # (this,pos,n,value) ret 0xc; helpers UninitMove 0x716650 / Destroy 0x714a20 / FillN 0x716540 / MoveUninit 0x7164c0
+00719a00  eastl::vector<T28,sp_vector_allocator>::insert  # (this,pos,n,value) ret 0xc; helpers 0x718570/0x714c70/0x7184a0/0x718420/0x719200/0x718640
+00719890  backward copy of a 0x8c-byte element  # AutoRefCount at +0xc (calls vtable[0]/[1]), FixedIdVector6::DoAssign 0x42cd50, FixedEntryVector3::DoAssign 0x42d020

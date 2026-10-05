@@ -1,0 +1,1 @@
+0071ac50  SP::Simulator ability/loader registration (~7 KB)  # allocates a 0x58 object with vtables 0x13ef094 / 0x13eb8d0 (Simulator::cCreatureAbility), then walks large tables

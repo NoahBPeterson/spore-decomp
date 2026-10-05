@@ -1,0 +1,3 @@
+# va  Name  # evidence
+00722410  eastl::vector<SP::cTextureChart,eastl::sp_vector_allocator>::insert  # retail PDB (range append helper)
+00722520  vector<int,sp_vector_allocator>::assign  # inferred from decompile

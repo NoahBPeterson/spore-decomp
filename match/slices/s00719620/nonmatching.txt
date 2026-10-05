@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00719620  438  eastl::vector<T50,sp_vector_allocator>::insert(pos,n,value): complete (realloc + in-place DoInsertValues); original keeps n in ebx / mpEnd in ebp and its move/fill helpers take a trailing 'pos' arg (sret form), mine differs in register roles and helper argument order
+00719a00  434  eastl::vector<T28,sp_vector_allocator>::insert(pos,n,value): complete; same register-role and helper-argument-order divergence as 00719620
+00719c60  90   eastl::vector<T140,sp_vector_allocator>::resize(n): complete; original keeps the temporary's address in ebp (restored from the outlined ctor's eax) and pushes it after computing the count, mine pushes eax early (temporary) or recomputes lea (named local)
+00719890  n/a  backward copy/assign loop over a 0x8c element (AutoRefCount + FixedIdVector6::DoAssign + FixedEntryVector3::DoAssign): complete equivalent loop delegating to the element assignment helper; original inlines the whole per-element body

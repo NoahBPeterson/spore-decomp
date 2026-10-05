@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0071a650  n/a  SP::cMeshBuilder::ClearMeshInfo(): approximate — the per-container clear/copy/erase sequence and the section/attribute shrink loop were summarised, not reproduced
+0071ab60  n/a  SP::cMeshBuilder transform helper (identity-like 3x4 float matrix then cAppModeEditorBase call): approximate — exact matrix layout/constants not reproduced
+00719e10  n/a  large vertex-assembly routine (dirty-mask + section grow + primitive index emission): behavioural skeleton only

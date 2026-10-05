@@ -1,0 +1,3 @@
+# va  reason (approximate/incomplete: EH-generated copy loops replaced by skeletons)
+00716110  cMeshBuilder copy ctor: EH vector-copy-constructor iterators and allocator helpers not reproduced
+007162b0  cMeshBuilder copy ctor (2): EH vector-copy-constructor iterators not reproduced

@@ -1,0 +1,27 @@
+# source  symbol  original VA  [flags override]
+slices/s00743b20/s00743b20.cpp  ?Getb20@@YAIPAUModel@@@Z  00743b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?VecClear@cModelWorld@@QAEPAXXZ  00743b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ??0Elem28@@QAE@ABU0@@Z  00743b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?DestroyPtrRange@@YGXPAPAX0@Z  00743bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?SortDescGuarded@@YAXPAUPair8@@0@Z  00743be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?SortAscGuarded@@YAXPAUPair8@@0@Z  00743cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?PromoteCocc@@YAXPAUcOccluder6@@HHU1@P6A_NABU1@2@Z@Z  00743e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?PromoteF00@@YAXPAUPair8@@HHU1@@Z  00743f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?PromoteF60@@YAXPAUPair8@@HHU1@@Z  00743f60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?BoxDistSq@@YAIPBMM0@Z  00743fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?IsVecEmpty@cModelWorld@@QAE_NH@Z  00744680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?StallGetBoundingBox@cModelWorld@@QAEMPAUModel@@@Z  007446a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetNumAnimationGroups@cModelWorld@@QAEPAXPAUModel@@@Z  007446c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?StallUntilLoaded2@cModelWorld@@QAEXPAUModel@@I@Z  00744760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetNumAnimations@cModelWorld@@QAEHPAUModel@@@Z  00744790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetAnimationIDs@cModelWorld@@QAEHPAUModel@@PAI@Z  007447c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetAnimationMoveToTimes@cModelWorld@@QAEHPAUModel@@HH@Z  007447f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetDeformationAnimationIDs@cModelWorld@@QAEHPAUModel@@HH@Z  00744830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?MoveToTime@cModelWorld@@QAEXPAUModel@@HMH@Z  00744900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?SetWeight@cModelWorld@@QAEXPAUModel@@HMH@Z  00744950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetAnimationRange@cModelWorld@@QAE_NPAUModel@@HHAAM1@Z  007449a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetNumBones@cModelWorld@@QAEHPAUModel@@@Z  007449e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetPoseTransforms@cModelWorld@@QAEHPAUModel@@PAXH@Z  00744a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetBoneTransforms@cModelWorld@@QAEHPAUModel@@PAX@Z  00744a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetBoneIDs@cModelWorld@@QAEHPAUModel@@PAX@Z  00744a70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00743b20/s00743b20.cpp  ?GetBoneParents@cModelWorld@@QAEHPAUModel@@PAX@Z  00744aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

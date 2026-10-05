@@ -1,0 +1,2 @@
+0073cdf0  868  partial: prologue/cleanup state machine reproduced, but the multi-stage dynamic-draw query + vertex walk is omitted
+0073d1e0  1219  partial: arena export iteration reproduced, but the per-handle transform/normal math and dedupe are omitted

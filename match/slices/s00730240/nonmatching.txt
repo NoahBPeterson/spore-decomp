@@ -1,0 +1,1 @@
+00730240  1997  COMPLETE translation (EltArrayRef skin/normal routine); not byte-exact: the original uses an x87 int->float path for the weight bytes mixed with SSE for the palette math, and keeps 12 transform values in fixed stack slots.

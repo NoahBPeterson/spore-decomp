@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+00720290  457  MeshAdj::AddTri: logic complete; huge /O2 scheduling/register diff vs a differently-sized symbol (likely inlined-helper driven)
+00720470  64  MeshAdj::LinkRec: complete; register allocation / loop shape differs
+007204c0  159  MeshAdj::Build: complete; register allocation / reload pattern differs
+00720590  133  HashVec: complete; FNV hash loop and constant handling differ (addss register reuse)
+00720620  97  cHeap::HeapifyDown: complete; pointer-count subtraction and comiss branch direction differ
+007206b0  40  cHeap::HeapifyUp: complete; float branch ordering differs
+00720700  479  cMeshClusterer::CalcError: complete; original uses inline x87 Sqrt/Dot helpers, ours uses scalar SSE sqrtf
+00720920  443  MinMaxIndices: complete; original is 4x unrolled with min+max fused, ours is a simple loop
+00720b60  109  HashTable::Grow: complete; allocation/placement-new sequence and loop shape differ
+00720c20  95  DestroyRange68: complete; loop register allocation differs
+00720c90  104  UninitCopyFace28: complete; original skips mArea in the copy, register allocation differs
+00720d10  63  FillFace28: complete; register allocation differs
+00720d70  70  UninitCopyDual18: complete; aggregate copy uses edi temp vs original edx
+00720dd0  114  MoveCopy34: complete; mixed fld/int copy register allocation differs
+00720ea0  154  CopyFace28: complete; loop register allocation differs
+00720f40  712  cMeshClusterer::MergeEdgeLists: complete; offset/loop-shape and inlined-callee differences

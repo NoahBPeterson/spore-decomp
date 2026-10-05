@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP; diff approximate)
+00717820  79   Vec30::resize: original recomputes size() across the branch, cl CSEs it here
+00717890  60   Vec18::resize: shrink path copy/end update shape not reproduced
+00717cb0  35   AppEditor::insertRange: object address computed before vs after pushing args
+00718520  59   assignFwd50: source-pointer addressing hoisted differently (ebx/ebp)

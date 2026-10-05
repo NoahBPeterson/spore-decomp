@@ -1,0 +1,4 @@
+007345c0    30  COMPLETE two-call wrapper (0.5f args); x87 constant reload and param register differ.
+00734660    98  COMPLETE vector emplace (fast-path + insert fallback); /0xc magic and copy shape differ.
+007348a0   172  COMPLETE vector assign-from-vector; EASTL branch order and copy/memcpy tails differ.
+00735260   183  COMPLETE vector operator= for refcounted pointers; helper call shapes differ.

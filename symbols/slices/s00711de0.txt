@@ -1,0 +1,15 @@
+00711de0 SP::cMaterialManager::ReadRegisteredMaterials  # 1.1 KB serialization entry (mMutex guarded)
+00712280 eastl::vector<EA::AutoRefCount<SP::cMaterialInternal> >::resize  # resize(n) -> resize(n,T())
+00712320 eastl::hashtable<...>::DoFreeNodes  # node +0x24 begin / +0x28 end / +0x34 buffer / +0x4c next
+007123a0 SP::cMaterialManager::Shutdown  # PDB name
+00712450 SP::cMaterialManager::helper  # 538-byte member
+00712670 SP::cMaterialManager::Update  # reads two int properties, checks packages
+00712760 eastl::fixed_vector<...>::fixed_vector(const fixed_vector&)  # inline buffer copy ctor
+007127d0 SP::cMaterialScriptState copy  # 9 dwords + fixed-vector ctor
+00712850 SP::cMaterialScriptState copy (two sources)  # a[0] + b[1..8] + fixed-vector ctor
+007129e0 eastl::hash_map<unsigned int,SP::cMaterialInternal,...>::operator[]  # PDB name
+00712b20 eastl::hashtable<eastl::basic_string<char>,...>::DoFreeNodes  # embedded string hashtable at node+4
+00712ba0 SP::cMaterialManager::HasMaterial  # PDB name
+00712c20 SP::cMaterialManager::GetMaterial  # PDB name
+00712cb0 SP::cMaterialManager::GetMaterials  # PDB name
+00712d60 SP::cMaterialManager::GetMaterialInstance  # PDB name

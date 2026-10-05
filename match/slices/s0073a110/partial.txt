@@ -1,0 +1,8 @@
+0073a110  927  ModelUpdatePass: large model update pass, not reconstructed
+0073a4b0  556  QuadricVectorResize: eastl::vector<cQuadric>::resize, skeleton only
+0073a900  203  ReleaseBoundResource: resource release, skeleton only
+0073a9e0  108  AbilityDtorBase: MI vtable destructor, skeleton only
+0073aa70  81   AbilityCtorB: MI vtable constructor, skeleton only
+0073aae0  95   AbilityDtorB: MI vtable destructor, skeleton only
+0073ac20  761  cModelInstance::SetActive: large activate pass, body summarised
+0073af20  134  ModelHelper: advance/animate dispatch, skeleton only

@@ -1,0 +1,2 @@
+00741210 SP::cModelInstance::AddGeometryFromArena  # PDB name (symbols/pdb_names.json)
+00741710 SP::cLoadQueue<SP::cModelWorld,SP::cModelWorld::cLoadQueueEntry,SP::cModelWorld::cLoadingModel,SP::cMWModel *,8>::StallUntilLoaded  # PDB name

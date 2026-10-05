@@ -1,0 +1,11 @@
+00733400  FUN_00733400  # vector reserve + zero fill (0x1c-byte elements)
+00733510  FUN_00733510  # merge two keyed ranges
+007335c0  CtorObj::ctor_c0  # resource object ctor (vtable + refcount)
+00733640  CtorObj::ctor_640 # resource object ctor (count + base ctor)
+007336e0  CtorObj::ctor_6e0 # resource object ctor
+00733760  CtorObj::ctor_760 # resource object ctor (array zero fill)
+00733920  FUN_00733920  # vector insert with reallocation
+00733a50  FUN_00733a50  # element/sub-tree destructor (large)
+00733e90  FUN_00733e90  # run element destructor over an index list
+00733ed0  FUN_00733ed0  # element destructor dispatch by type tag
+00733f20  FUN_00733f20  # container destructor walk (large)

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
+00712280 119 vector::resize(uint32_t); inlined resize(n,value_type()) shape not reproduced
+00712320  79 hashtable::DoFreeNodes variant (node +0x24/+0x28/+0x34/+0x4c); register allocation differs
+00712760 101 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off
+007127d0  69 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced
+00712850  65 state object copy (a[0] + b[1..8] + fixed-vector ctor); field-copy schedule not reproduced
+00712b20  41 hashtable<string>::DoFreeNodes wrapper (embedded hashtable at +4); register allocation differs
+00712ba0   8 cMaterialManager::HasMaterial; only the esi/edi register rotation differs
+00712cb0 124 cMaterialManager::GetMaterials; extra frame locals and loop register assignment differ

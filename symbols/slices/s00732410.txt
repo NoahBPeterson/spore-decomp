@@ -1,0 +1,10 @@
+00732410  FUN_00732410  # no PDB name; influence/affine skinning applier
+00732a30  FUN_00732a30  # accumulate bounding box from a stream of float3 rows
+00732cb0  FUN_00732cb0  # build a 2D basis and determinant-corrected matrix
+00732eb0  FUN_00732eb0  # 3x4 -> 4x4 matrix expansion
+00732fb0  ContV::Make16  # cEltArrayRefT<16-byte element> accessor
+00732ff0  ContV::Make4   # cEltArrayRefT<4-byte element> accessor
+007330d0  FUN_007330d0  # lower_bound over 0xc-byte keyed entries
+00733140  FUN_00733140  # uninitialized_copy of 9-dword elements
+00733230  FUN_00733230  # fill_n of 9-dword elements
+00733310  FUN_00733310  # copy of 9-dword elements

@@ -1,0 +1,4 @@
+00742db0 SP::cModelInstance::ConstructFromGameModelResource  # PDB name (symbols/pdb_names.json)
+00743030 SP::cModelInstance::GetBoneParents  # PDB name (symbols/pdb_names.json)
+00743950 SP::cModelWorld::SetTimeScale  # PDB name (symbols/pdb_names.json)
+00743b00 SP::cModelWorld::ResetHighlightCurve  # PDB name (symbols/pdb_names.json)

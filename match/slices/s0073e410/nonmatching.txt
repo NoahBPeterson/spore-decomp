@@ -1,0 +1,1 @@
+0073f110  167  complete AABB overlap test; original materializes the 16-byte Vector3 locals with movaps (SSE) while cl here forward-substitutes scalar component loads

@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+007143e0 195 resource-adapter virtual dispatch on a bitmask; call/push schedule differs
+007144f0  98 record comparator (4 key dwords then 2 more); early-exit form not reproduced
+00714560  36 pair-table key lookup + value store; loop register assignment differs
+007145b0 114 matrix table store; only 12 floats are written and the copy schedule differs
+00714910  24 6-dword fill loop; dec/test/ja loop shape vs sub/jne
+00714bc0  45 pair copy with out-pointer; loop register assignment differs
+00714ec0  38 allocate-and-copy; loop register assignment differs

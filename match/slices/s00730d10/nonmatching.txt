@@ -1,0 +1,1 @@
+00730d10  1567  COMPLETE translation (float-normal sibling of 0x00730240); not byte-exact: x87/SSE mix, 12 live transform values and 6-slot weight array.

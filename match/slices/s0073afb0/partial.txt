@@ -1,0 +1,10 @@
+0073afb0  480  cModelInstance::Animate: large animation driver, skeleton only
+0073b190  927  cModelInstance::MoveToTime: large animation driver, skeleton only
+0073b530  404  cModelInstance::SetWeight: not reconstructed
+0073b6d0  265  cModelInstance::GetAnimationRange: not reconstructed
+0073b980  195  QueryAllocator: packed-file allocator query, skeleton only
+0073ba50  85   Reseat: resource reseat, skeleton only
+0073bab0  142  Notify: binding-list notify, skeleton only
+0073bb40  529  AnimDriver: large animation driver, skeleton only
+0073bd60  95   Collect: texture/material collect loop, skeleton only
+0073bdf0  277  BoneLookup: bone vertex lookup, skeleton only

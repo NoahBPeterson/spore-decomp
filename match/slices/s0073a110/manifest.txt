@@ -1,0 +1,4 @@
+# source (relative to match/)  symbol  original VA  [cl flags override]
+slices/s0073a110/s0073a110.cpp  ?SetFlags@FlagObj@@QAEX_N0@Z                          0073a800  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0073a110/s0073a110.cpp  ?Release@RefPtr@@QAEXXZ                              0073a820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0073a110/s0073a110.cpp  ?SetController@CtrlHolder@@QAEXPAUCtrlObj@@@Z        0073ab40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

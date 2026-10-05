@@ -1,0 +1,9 @@
+0073afb0 Animate              # SP::cModelInstance; PDB name
+0073b190 MoveToTime           # SP::cModelInstance; PDB name
+0073b530 SetWeight            # SP::cModelInstance; PDB name
+0073b6d0 GetAnimationRange   # SP::cModelInstance; PDB name
+0073b7e0 GetNumBones          # SP::cModelInstance; last cAnimGroupInfo's bone count + offset
+0073b800 SetBoneTable         # SP::cModelInstance; PDB name
+0073b840 SetBoneCallback      # SP::cModelInstance; writes material +0xb8/+0xbc/+0xc0
+0073b8e0 SetDynamicDraw       # SP::cModelInstance; flag bit 4 at +0xc8, object at +0xec
+0073bdc0 Release              # release refcounted object at this+0xc

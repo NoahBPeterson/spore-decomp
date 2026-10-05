@@ -1,0 +1,9 @@
+0x00717820 SP::cAppModeEditorBase vector<cAnimatedBaby>::resize(n,value)
+0x00717890 vector<EA::Text::Vertex3D>::resize(n)   # 0x18-byte elements
+0x007179e0 cAppModeEditorBase::operator=(const&)   # vectors at +8,+0x1c,+0x30[4],+0x80[2],+0xa8,+0xbc
+0x00717ad0 copy forward over 0x50-byte 4-vector elements
+0x00717b70 copy backward over 0x50-byte 4-vector elements
+0x00717cb0 insertRange into element at +0x30+index*0x14
+0x00718520 assign forward over 0x50-byte 4-vector elements
+0x00718600 copy forward over 0x28-byte 2-vector elements
+0x00718370 EH copy ctor (vectors at +0/+0x14)

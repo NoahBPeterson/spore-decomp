@@ -1,0 +1,4 @@
+00740550 SP::cModelInstance::GetBoneTransforms  # PDB name (symbols/pdb_names.json)
+00740740 SP::cModelInstance::GetBoneIDs  # PDB name (symbols/pdb_names.json)
+00740b00 SP::cModelInstance::~cModelInstance  # PDB name (symbols/pdb_names.json)
+00741150 SP::cModelInstance::GetRegionMaterialInfo  # PDB name (symbols/pdb_names.json)

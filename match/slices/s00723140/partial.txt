@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00723140  0  cSPTransform build helper: stub (1329-byte body omitted)
+00723680  0  ctor: stub
+00723720  0  ctor: stub
+007237a0  0  resize 0x18: stub
+007238b0  0  resize 0x18 with value: stub
+00723930  0  copy ctor (0x68): stub
+00723a70  0  operator= (0x68): stub
+00723af0  0  assign 0x38: stub
+00723cf0  0  helper: stub
+00723d60  0  helper: stub

@@ -1,0 +1,2 @@
+0073c410  25   CopyPairs: complete; loop register assignment (first/dst) swapped
+0073c450  38   ReleasePairs: complete; atomic decrement/test sequence differs slightly

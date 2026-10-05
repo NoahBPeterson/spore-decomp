@@ -1,0 +1,7 @@
+# va  reason
+00711380 container clear helper: array-free loop and tail-vector erase reconstructed approximately
+00711490 cMaterialManager::WriteExternalReferences: mutex + 0x100-byte scratch buffer and IO writes reconstructed; exact vector growth and EH cleanup omitted
+00711630 cMaterialManager::GetExternalReferenceKeys: outer mutex/scratch/IO reconstructed; Key insertion loop abbreviated
+00711780 cMaterialManager::ReadMaterials: only the read-count loop and per-record field reads reconstructed; arena/SetCachingType path omitted
+00711b80 cMaterialManager::UnregisterArenaContents: mutex lock and export walk skeleton only
+00711d10 cMaterialManager::RemoveAllRegisteredMaterials: bucket walk skeleton; UnregisterArenaContents dispatch omitted

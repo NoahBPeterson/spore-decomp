@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0071c900  141  Simulator mesh command (vtable calls + 3 vectors + indices): complete; only instruction scheduling of the vector stores vs the vtable-slot loads differs (same calls/args), tail jmp matches

@@ -1,0 +1,31 @@
+00713e40 `anonymous namespace'::InvalidMaterialDispatchCallback  # PDB name; invalid-material shader constant update
+00713f20 SP::RegisterInvalidShader  # PDB name
+00713f90 SP::cMaterialManager resource-adapter init  # vtable/field init
+00713fd0 SP::cMaterialManager resource-adapter dtor  # vtable reset + member dtor
+00714050 SP::cAutoListRC::Remove  # list remove-by-value
+007140e0 SP::cTextureManager::Collect  # texture gather with filter callback
+007141e0 SP::cTextureManager::DispatchAll  # dispatch over two resource pointer arrays
+00714260 SP::cMaterialManager::CollectMaterials  # allocate adapter + collect
+00714310 SP::cAutoListRC::SetName  # SPKeyFromName + store key
+00714350 SP::cAutoListRC::SetNameAndCall  # SPKeyFromName + vtable slot 0x48
+007143a0 SP::cAutoListRC::SetFlag  # conditional vtable slot 0x4c then store
+007143e0 SP::cAutoListRC::DispatchFlags  # bitmask virtual dispatch
+007144b0 eastl::copy  # 6-dword element copy loop
+007144f0 record comparator  # 0x18-byte records, keys at +0,+4,+8,+c then +0x10,+0x14
+00714560 pair-table set  # find 8-byte record by key, store value
+007145b0 matrix table store  # 0x30 stride
+007146c0 resource-adapter teardown  # frees + two vector destructors
+00714780 insertion sort over 0x18-byte records
+007147e0 insertion sort variant
+00714880 min-of-three records
+00714910 eastl::uninitialized_fill  # 6-dword elements
+007149a0 x87 copy of 0x30-byte float records
+00714a20 destroy array of 0x50-byte resources
+00714ab0 heap sift-up
+00714b40 destroy range of 0x50-byte resources
+00714bc0 pair copy with out-pointer
+00714c00 heap sift-down
+00714c70 destroy array of 0x28-byte resources
+00714cd0 vector reserve (4-byte elements)
+00714e10 resource-adapter constructor
+00714ec0 allocate-and-copy vector elements

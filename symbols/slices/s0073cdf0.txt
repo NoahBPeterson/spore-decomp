@@ -1,0 +1,2 @@
+0073d160 SP::cModelInstance::GetArenaResource  # PDB name (symbols/pdb_names.json)
+0073d1e0 SP::cModelInstance::GetDeformationHandles  # PDB name (symbols/pdb_names.json)

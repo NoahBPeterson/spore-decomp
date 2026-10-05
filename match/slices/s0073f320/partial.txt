@@ -1,0 +1,10 @@
+0073f440  112  partial: reverse copy with intrusive refcount; element/loop shape approximate
+0073f4b0  136  partial: SetAnimationGroupTransform body omitted
+0073f540  974  partial: PickLine ray/KD-tree traversal omitted
+0073f910  1028 partial: IntersectsSphere traversal omitted
+0073fd20  150  partial: Dispatch body omitted
+0073fe80  292  partial: eastl::vector DoInsertValue not reconstructed
+0073ffb0  318  partial: body omitted
+007400f0  98   partial: vtable-object constructor body omitted
+00740160  375  partial: eastl::vector DoInsertFromIterator not reconstructed
+007402e0  139  partial: binding-container dtor approximate (subobject dtor calls only)

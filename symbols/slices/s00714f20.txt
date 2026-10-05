@@ -1,0 +1,9 @@
+0x00714f20 f714f20  # eastl destroy-range over 0x28-byte elements owning two buffers
+0x00714fa0 f714fa0  # eastl::get_partition(first,last,pivot,compare) 4-arg functor form
+0x00715010 f715010  # index-based merge(first0,last0,first1,last1,out,keys)
+0x00715090 f715090  # eastl make_heap(first,last,compare)
+0x007150d0 f7150d0  # eastl sort_heap(first,last,compare)
+0x00715900 f715900  # eastl partial_sort(first,middle,last,compare)
+0x00716080 f716080  # eastl::Internal::quick_sort_impl(first,last,depth,compare)
+0x00715980 cMeshBuilder::cMeshBuilder  # PDB candidate SP::cMeshBuilder::cMeshBuilder (caller-scored)
+0x00715bb0 cMeshBuilder::~cMeshBuilder  # EH destructor of the same class (vtable 0x13eb938 = cEditorResource)

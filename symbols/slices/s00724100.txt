@@ -1,0 +1,3 @@
+# va  Name  # evidence
+00724100  SP::ConvertMeshToTriangleLists  # retail PDB name (card header)
+00724700  eastl::vector<SP::cTextureChart,eastl::sp_vector_allocator>::reserve  # retail PDB name (card header)

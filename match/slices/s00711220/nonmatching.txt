@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
+00711220 167 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
+007112c0 28 hashtable::DoFreeNodes; only inner-loop register assignment differs (node copy in edi vs esi)
+00711400 120 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced

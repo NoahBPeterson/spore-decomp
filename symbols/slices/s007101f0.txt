@@ -1,0 +1,10 @@
+007101f0 eastl::hash_map<uint32_t,SP::cTextureInstance>::operator[]  # hashtable find + insert, refcount dtor at end
+007102b0 eastl::hash_map<uint32_t,SP::cMaterialInternal>::operator[]  # identical shape, different dtor callee
+007103e0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::fixed_vector_allocator<4,4,4,0,1> >::DoInsertValue  # PDB name confirmed by byte-exact match
+00710510 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::DoInsertValues  # position,n,value shuffle with realloc
+007106d0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::assign  # range assign/DoRealloc
+00710790 SP::cMaterialManager::GetExternalReferences  # PDB name
+00710a50 SP::cTextureManager::GetAllTextures  # PDB candidate (caller-scored)
+00711070 eastl::vector<SP::cTextureInstance*>::resize  # resize(n) -> resize(n,T())
+007110f0 eastl::vector<SP::cMaterialInternal*>::resize  # second resize instantiation
+00711170 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::sp_vector_allocator>::DoInsertValue  # PDB name; no-arg append with atomic release

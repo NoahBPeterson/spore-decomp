@@ -1,0 +1,5 @@
+00735350    74  COMPLETE sorted-set insert (lower_bound + emplace); operand order/branch layout differ.
+00735dd0   184  COMPLETE vector operator= for 0x20-byte elements; copy/relocate helper shapes differ.
+00735ec0    94  COMPLETE lower_bound + insert-if-absent; branch layout and thiscall arg differ.
+00735f30    96  COMPLETE resize over 0x24-byte elements; register/loop shape differs.
+00735fa0   188  COMPLETE construct N elements from a template (0x24-byte) with nested vector; EH/copy shape differs.

@@ -1,0 +1,6 @@
+# va  reason (approximate/incomplete)
+007173e0  large editor routine (1061 bytes): body not reconstructed, skeleton only
+00717bd0  index-remap array build with EH allocation: body not reconstructed
+00717ce0  large editor routine (866 bytes): body not reconstructed, skeleton only
+00718050  large editor routine (791 bytes): body not reconstructed, skeleton only
+00718370  EH copy ctor (two vectors at +0/+0x14): body not reconstructed

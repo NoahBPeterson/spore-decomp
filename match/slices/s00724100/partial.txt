@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00724100  0  SP::ConvertMeshToTriangleLists: stub (1536-byte body omitted)
+00724700  0  eastl::vector<cTextureChart>::reserve: stub
+007247c0  0  chart helper: stub (548-byte body omitted)

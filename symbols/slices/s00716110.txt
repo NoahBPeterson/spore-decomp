@@ -1,0 +1,17 @@
+0x00716700 cMeshBuilder::pushV8   # push_back onto the Vec3 vector at +8
+0x00716740 cMeshBuilder::pushV1c  # push_back onto the Vec3 vector at +0x1c
+0x00716780 cMeshBuilder::pushV30  # push_back onto element index of the 4x0x14 array at +0x30
+0x007168c0 cMeshBuilder::resizeV8  # reserve + n push_back
+0x00716930 cMeshBuilder::resizeV1c
+0x00716ad0 cMeshBuilder::uniqueAdd  # find key in 8-byte-element vector else append (key,n14c), sets +0x158
+0x00716bf0 cMeshBuilder::pushV188_2  # push_back onto v188[2+index]
+0x00716c30 cMeshBuilder::pushV188_6
+0x00716c70 cMeshBuilder::addMasked  # bitmask-selected push_back into 8 vectors at +0x188..+0x214
+0x00716e40 cMeshBuilder::addPair120
+0x00716ed0 cMeshBuilder::addBulk120
+0x00716fc0 cMeshBuilder::addDiff134_lo
+0x007170e0 cMeshBuilder::addDiff134_hi
+0x00717200 cMeshBuilder::addDiff134_lo1
+0x007172f0 cMeshBuilder::addDiff134_hi1
+0x00716110 cMeshBuilder::cMeshBuilder(const cMeshBuilder&)
+0x007162b0 cMeshBuilder::cMeshBuilder(const cMeshBuilder&)  # 2nd copy-ctor path

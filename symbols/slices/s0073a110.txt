@@ -1,0 +1,4 @@
+0073abb0 GetAnimationMoveToTimes  # SP::cModelInstance; PDB name; indexes 8-byte anim groups at +0x14/+0x18
+0073ac20 SetActive                # SP::cModelInstance; PDB name
+0073a800 SetFlags                 # two flag bits at +8 (bit0 arg1, bit1 arg2)
+0073a820 Release                  # RefPtr::Release at +0

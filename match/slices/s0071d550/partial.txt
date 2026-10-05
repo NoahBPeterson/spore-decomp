@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+0071d550  n/a  large mesh emitter: skeleton only
+0071d960  n/a  large mesh emitter: skeleton only
+0071dbf0  n/a  writer (WriteUint32/WriteUint16 then vtable +0x38 emission): approximate
+0071dcc0  n/a  per-section sum over stride-0x14 entries with character tables: approximate
+0071ddc0  n/a  container helper: skeleton only
+0071de40  n/a  helper: skeleton only
+0071ded0  n/a  helper: skeleton only
+0071e090  n/a  helper: skeleton only
+0071e110  n/a  helper: skeleton only
+0071e230  n/a  set-membership helper over a short[] table: approximate
+0071e290  n/a  helper: skeleton only
+0071e320  n/a  helper: skeleton only

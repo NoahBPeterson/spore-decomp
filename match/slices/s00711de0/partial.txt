@@ -1,0 +1,6 @@
+# va  reason
+00711de0 cMaterialManager 1.1 KB serialization entry: mutex/scratch reconstruction only; per-object read path omitted
+007123a0 cMaterialManager::Shutdown: call sequence reproduced as comments; file-parser/refcount/package-table cleanup bodies omitted
+00712450 cMaterialManager 538-byte helper: skeleton only
+00712670 cMaterialManager::Update: property reads and package checks sketched; vtable calls omitted
+007129e0 eastl::hash_map<uint32_t,SP::cMaterialInternal>::operator[]: reconstruction lives in s00711de0_map.cpp (separate TU); find/insert helper roles guessed

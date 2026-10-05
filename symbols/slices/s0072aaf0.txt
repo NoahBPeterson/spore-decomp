@@ -1,0 +1,2 @@
+0072ace0  SP::StreamMeshToRw  # PDB name from card.py
+0072b560  SP::cTriToRegionMap::AddRegion  # PDB name from card.py

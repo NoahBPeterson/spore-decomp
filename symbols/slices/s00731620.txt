@@ -1,0 +1,9 @@
+00731620  FUN_00731620  # no PDB name; float-weight vertex blend (SP::cDynamicDraw family)
+00731e70  FUN_00731e70  # property-gated dispatcher into the three vertex blend variants
+00731fa0  FUN_00731fa0  # linear search for a matching element-array by content
+00732040  FUN_00732040  # add a scalar to typed vertex attributes over a range
+007320f0  FUN_007320f0  # container destructor walk
+007321a0  FUN_007321a0  # masked per-element index compare
+00732220  FUN_00732220  # search a descriptor vector
+00732270  FUN_00732270  # append a normalised 3x3 matrix vertex
+00732360  FUN_00732360  # descriptor type predicate

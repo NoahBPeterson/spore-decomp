@@ -1,0 +1,9 @@
+00742b30  362  partial: body omitted
+00742ca0  78   partial: eastl rbtree insert not reconstructed
+00742cf0  178  partial: animation-resource setter body omitted
+00742db0  420  partial: ConstructFromGameModelResource body omitted
+00742f60  196  partial: body omitted
+00743030  286  partial: GetBoneParents body omitted
+00743150  284  partial: body omitted
+00743270  576  partial: body omitted
+007434b0  1118 partial: body omitted

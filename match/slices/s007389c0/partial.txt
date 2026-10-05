@@ -1,0 +1,3 @@
+007389c0  745  ScatterGroup: large float-accumulation loop, skeleton only
+00738d10  275  VecB::operator=: grow/shrink schedule differs; middle (size<n) branch approximated
+00738e90  852  NormalizeGroup: large x87/SSE normalisation loop, skeleton only

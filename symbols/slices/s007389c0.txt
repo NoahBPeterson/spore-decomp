@@ -1,0 +1,1 @@
+00738e50 FourVecs::operator=  # copy-assign four 0x14-byte vector members at +8,+0x1c,+0x30,+0x44

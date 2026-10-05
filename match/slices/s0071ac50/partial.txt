@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0071ac50  n/a  very large (>7 KB) SP::Simulator creature-ability registration/loader: skeleton only (allocates the 0x58 cCreatureAbility and zeroes it); the table walk is not reproduced

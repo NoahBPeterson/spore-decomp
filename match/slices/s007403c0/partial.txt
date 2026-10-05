@@ -1,0 +1,10 @@
+007403c0  394  partial: bone-transform helper body omitted
+00740550  496  partial: GetBoneTransforms not reconstructed
+00740740  140  partial: GetBoneIDs body omitted
+007407d0  511  partial: body omitted
+007409d0  300  partial: eastl::vector DoInsertValue/grow not reconstructed
+00740b00  438  partial: cModelInstance destructor body omitted
+00740cc0  428  partial: body omitted
+00740e90  424  partial: body omitted
+00741040  264  partial: second-stage destructor body omitted
+00741150  85   partial: GetRegionMaterialInfo rbtree lower_bound not reconstructed

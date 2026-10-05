@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00721340  0  ChartSolve (UV/normal solve): skeleton only, 1152-byte jump-table body omitted
+00721980  50  TwoVtbl deleting dtor: vtable store values omitted
+00721d80  169  CopyChart68: only flat 0x50 prefix copied, inner vectors omitted
+00722010  143  InitChartHash: only first 3 fields initialised
+007220c0  224  FreeChartThing: only one member freed, EH unwinding omitted
+007222f0  258  Insert34Vec: stub (no insert path)

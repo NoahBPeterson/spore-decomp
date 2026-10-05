@@ -1,0 +1,10 @@
+00735350  Vec::insertL      # sorted-set insert over 0xc-byte keys
+007353c0  FUN_007353c0      # swap/assign of a 0x24-byte-element vector
+00735470  FUN_00735470      # container routine (large)
+00735960  FUN_00735960      # refcounted element-list builder
+00735a90  FUN_00735a90      # container routine (large)
+00735dd0  Vec::operator=    # vector operator= (0x20-byte elements)
+00735ec0  Vec::findLower    # lower_bound + insert-if-absent
+00735f30  Vec::resize24     # resize over 0x24-byte elements
+00735fa0  FUN_00735fa0      # construct N 0x24-byte elements from a template
+00736090  FUN_00736090      # vector fill/insert

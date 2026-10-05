@@ -1,0 +1,19 @@
+00743bb0 SP::cModelWorld::cLoadQueueEntry::~cLoadQueueEntry  # dev PDB 0158c860 (range destroy helper)
+00743e50 eastl::promote_heap<cOccluder*,int,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # dev PDB 0158b060
+007445b0 SP::cModelWorld::CallOnLoad  # dev PDB 0158bb10 vtable slot 0x14
+007446a0 SP::cModelWorld::StallGetBoundingBox  # dev PDB 0158bc10 vtable slot 0x5c
+007446c0 SP::cModelWorld::GetNumAnimationGroups  # dev PDB 0158bd00 vtable slot 0x60
+00744760 SP::cModelWorld::StallUntilLoaded  # dev PDB 0159d9c0 vtable slot 0x58
+00744790 SP::cModelWorld::GetNumAnimations  # dev PDB 0158bd30 vtable slot 0x64
+007447c0 SP::cModelWorld::GetAnimationIDs  # dev PDB 0158bd70 vtable slot 0x68
+007447f0 SP::cModelWorld::GetAnimationMoveToTimes  # dev PDB 0158bcc0 vtable slot 0x6c
+00744830 SP::cModelWorld::GetDeformationAnimationIDs  # dev PDB 0158bdb0
+00744870 SP::cModelWorld::AnimAction  # dev PDB 0158be50 vtable slot 0x70
+00744900 SP::cModelWorld::MoveToTime  # dev PDB 0158bf30 vtable slot 0x74
+00744950 SP::cModelWorld::SetWeight  # dev PDB 0158bfe0 vtable slot 0x78
+007449a0 SP::cModelWorld::GetAnimationRange  # dev PDB 0158c070 vtable slot 0x80
+007449e0 SP::cModelWorld::GetNumBones  # dev PDB 0158c110 vtable slot 0x84
+00744a10 SP::cModelWorld::GetPoseTransforms  # dev PDB 0158c140 vtable slot 0x88
+00744a40 SP::cModelWorld::GetBoneTransforms  # dev PDB 0158c170 vtable slot 0x8c
+00744a70 SP::cModelWorld::GetBoneIDs  # dev PDB 0158c1a0 vtable slot 0x90
+00744aa0 SP::cModelWorld::GetBoneParents  # dev PDB 0158c1d0 vtable slot 0x94

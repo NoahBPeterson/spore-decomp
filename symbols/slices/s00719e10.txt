@@ -1,0 +1,5 @@
+0071a930  eastl::vector<T28,sp_vector_allocator>::resize  # calls insert 0x719a00 (slice 9) + erase 0x7199b0; T28 = 2 x sp_vector(16B) + 2 scalars = 0x28
+0071aa20  SP::cMeshBuilder::BeginMesh  # caller-scored PDB candidate; writes ResourceKey hash 0x9f84a565 to +0x14c, mInMesh +0x150, counts +0x164..+0x184
+0071a650  SP::cMeshBuilder::ClearMeshInfo  # caller-scored PDB candidate; clears cMeshBuilder vertex-attribute vectors
+0071ab60  SP::cMeshBuilder transform helper  # builds 3x4 float matrix (1.0f diagonal) then calls 0x717820
+00719e10  SP::cMeshBuilder vertex-assembly  # calls vector<T140>::resize 0x719c60; dirty-mask + primitive emission

@@ -1,0 +1,6 @@
+0073e410  1905  partial: mesh dispatch / vertex submission walk not recovered
+0073eb90  257   partial: dynamic-draw dyn-array release loop + mesh-resource lookup not recovered
+0073eca0  311   partial: local matrix build reproduced, global render-state stores omitted
+0073ede0  543   partial: per-material dispatch loop omitted
+0073f000  260   partial: PartTransform constructor body omitted
+0073f1c0  278   partial: PartTransform copy-constructor body omitted

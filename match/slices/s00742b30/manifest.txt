@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00742b30/s00742b30.cpp  ?FlagsNotBit0@@YAEH@Z  00743910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?CompareFloatAt10@@YAHHH@Z  00743920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?Adjustor@cModelWorld56@@QAEHH@Z  00743940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?SetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  007439d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?GetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  00743a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  00743a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  00743a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00742b30/s00742b30.cpp  ?ResetHighlightCurve@cModelWorld56@@QAEXXZ  00743b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

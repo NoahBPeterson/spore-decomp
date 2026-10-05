@@ -1,0 +1,4 @@
+0073a6e0  n/a  BigObj::Ctor: complete reconstruction; 16-byte-aligned frame not reproduced
+0073a7a0  24   MatOwner::GetMat: complete; copy addressing/schedule differs
+0073a850  113  ScaleMat: complete; register scheduling of the 3x3 scale differs
+0073abb0  101  cModelInstance::GetAnimationMoveToTimes: complete; regalloc/schedule differs

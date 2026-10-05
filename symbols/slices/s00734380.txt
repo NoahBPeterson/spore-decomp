@@ -1,0 +1,8 @@
+00734380  FUN_00734380  # refcounted element builder (float3 pack)
+007345c0  FUN_007345c0  # wrapper calling the builder for slots 3 and 2
+00734660  FUN_00734660  # vector emplace (0xc-byte elements)
+007346d0  FUN_007346d0  # vector reserve/insert of Matrix33 elements
+007348a0  FUN_007348a0  # vector assign-from-vector
+00734970  FUN_00734970  # table/container routine (large)
+00734d00  FUN_00734d00  # container routine (large)
+00735260  FUN_00735260  # vector operator= for refcounted pointers

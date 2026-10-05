@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00722c60  2  VecAny::Push8: complete; only the temp register for the out-of-line append call differs (edx vs ecx)

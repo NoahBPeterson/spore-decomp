@@ -1,0 +1,9 @@
+# va  reason (approximate/incomplete: callee roles or allocator helper signatures inferred from Ghidra)
+00715120  eastl::fixed_vector<ResponseCurveData,42,1>::operator=; helper roles (0x774980 alloc, 0x8f05f0 uninit) inferred
+00715250  vector<4-byte>::operator=; uninit helper (0x7eb060) argument order inferred
+00715350  vector<4-byte>::insert(pos,value); grow path reimplemented approximately
+00715470  vector<Matrix34>::insert(pos,n,value); Matrix34 copy/fill/move helper roles inferred
+00715630  vector<8-byte>::insert(pos,first,last,?); 4th stack arg unused in original, helper roles inferred
+00715ec0  vector<4-byte>::insert(pos,first,last); DoInsertValue/memmove split approximated
+00715980  SP::cMeshBuilder::cMeshBuilder; huge EH vector-constructor-iterator body reduced to a skeleton
+00715bb0  SP::cMeshBuilder::~cMeshBuilder; huge EH destructor-iterator body reduced to a skeleton

@@ -1,0 +1,1 @@
+0072b560  157  Complete SP::cTriToRegionMap::AddRegion; register allocation of begin/end/loop counter differs.

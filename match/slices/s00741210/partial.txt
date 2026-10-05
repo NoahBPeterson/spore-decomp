@@ -1,0 +1,3 @@
+00741210  1280 partial: AddGeometryFromArena body omitted
+00741710  142  partial: cLoadQueue::StallUntilLoaded vector<bool> insert not reconstructed
+007418f0  334  partial: eastl::vector DoInsertValue/grow not reconstructed

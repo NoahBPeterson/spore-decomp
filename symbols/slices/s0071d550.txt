@@ -1,0 +1,6 @@
+0071dc90  Obj13::func_dc90  # byte-exact; returns element[idx @0x8c].field44 != field48
+0071dd80  container find(key) stride-0x20  # returns entry @0xc == key ? entry @0x10 : 0
+0071e040  find(key) in a short[] stride-4 table at object+idx*0x8c+0x14
+0071e230  set-membership helper over a short[] table
+0071dbf0  writer helper  # EA::IO::WriteUint32 0x93aa70 / WriteUint16 0x93a9d0 then vtable +0x38 emission
+0071dcc0  per-section sum over stride-0x14 entries  # char tables 0x140cf84 / 0x140cf90

@@ -1,0 +1,2 @@
+0073b800  2    cModelInstance::SetBoneTable: complete; only the scratch register for arg2 differs
+0073b840  92   cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs

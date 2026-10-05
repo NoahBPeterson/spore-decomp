@@ -1,0 +1,6 @@
+00729bd0  138   PARTIAL: VertexBuffer lock/copy skeleton.
+00729c60  376   PARTIAL: mesh bounds/area scan skeleton.
+00729de0  667   PARTIAL: skeleton.
+0072a200  1717  PARTIAL: KD-tree build skeleton.
+0072a8c0  446   PARTIAL: skeleton.
+0072aa80  109   PARTIAL: EA vector ctor skeleton.

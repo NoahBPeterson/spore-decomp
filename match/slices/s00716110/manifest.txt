@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00716110/s00716110.cpp  ?pushV8@MeshBuilder@@QAEXABUVec3@@@Z       00716700  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00716110/s00716110.cpp  ?pushV1c@MeshBuilder@@QAEXABUVec3@@@Z      00716740  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00716110/s00716110.cpp  ?pushV30@MeshBuilder@@QAEXABUVec2@@H@Z     00716780  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00716110/s00716110.cpp  ?pushV188_2@MeshBuilder@@QAEXIH@Z          00716bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00716110/s00716110.cpp  ?pushV188_6@MeshBuilder@@QAEXIH@Z          00716c30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00716110/s00716110.cpp  ?addMasked@MeshBuilder@@QAEXEI@Z           00716c70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

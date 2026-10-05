@@ -1,0 +1,5 @@
+00737dc0  136  ElemPool24::ctor reconstruction; allocator + construction sequence differs from original
+00737e80  99   InlineBuf::ctor reconstruction; inline-buffer/frame schedule differs
+00738610  472  PartInit reconstruction; EASTL vector schedule differs
+007387f0  18   AddAnimGroupsA: complete; near miss, EH-state store placement only
+00738900  30   AddAnimGroupsB: complete; near miss, EH-state store placement only

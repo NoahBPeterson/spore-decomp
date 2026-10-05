@@ -1,0 +1,21 @@
+# va  reason
+00713e40 `anonymous namespace'::InvalidMaterialDispatchCallback: x87/sin shader-constant callback; skeleton only
+00713f20 SP::RegisterInvalidShader: calls CompileVertexAndPixelShaders + shader factory; factory calls omitted
+00713f90 resource-adapter init: vtable/field stores present but vtable relocations not modelled
+00713fd0 resource-adapter destructor: member destructor call omitted
+00714050 list remove-by-value: skeleton
+007140e0 collect textures with filter: skeleton
+007141e0 dispatch-all over two pointer ranges: skeleton
+00714260 collect materials: skeleton
+007146c0 resource-adapter teardown: frees/vector dtors omitted
+00714780 insertion sort over 0x18-byte records: skeleton
+007147e0 insertion sort variant: skeleton
+00714880 min-of-three records: skeleton
+007149a0 x87 copy of 0x30-byte float records: skeleton
+00714a20 destroy array of 0x50-byte resources: skeleton
+00714ab0 heap sift-up: skeleton
+00714b40 destroy range of 0x50-byte resources: skeleton
+00714c00 heap sift-down: skeleton
+00714c70 destroy array of 0x28-byte resources: skeleton
+00714cd0 vector reserve (4-byte elements): skeleton
+00714e10 resource-adapter constructor with two vector ctors: skeleton

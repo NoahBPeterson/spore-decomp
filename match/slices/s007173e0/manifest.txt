@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007173e0/s007173e0.cpp  ??4AppEditor@@QAEAAU0@ABU0@@Z          007179e0  /O2 /MD /Gy /EHsc /TP
+slices/s007173e0/s007173e0.cpp  ?copyFwd50@@YAPAUElem50@@PAU1@00@Z     00717ad0  /O2 /MD /Gy /EHsc /TP
+slices/s007173e0/s007173e0.cpp  ?copyBack50@@YAPAUElem50@@PAU1@00@Z    00717b70  /O2 /MD /Gy /EHsc /TP
+slices/s007173e0/s007173e0.cpp  ?copyFwd28@@YAPAUElem28@@PAU1@00@Z     00718600  /O2 /MD /Gy /EHsc /TP

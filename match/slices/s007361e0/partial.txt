@@ -1,0 +1,3 @@
+007361e0  1140  PARTIAL: ~1.1 KB EltArray/descriptor construction with EH; skeleton.
+007366e0   440  PARTIAL: rebuild per-cluster index arrays (0x8c records, refcounted); skeleton.
+007368a0   605  PARTIAL: rebuild reverse index streams with refcounted EltArrays; skeleton.

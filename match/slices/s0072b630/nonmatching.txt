@@ -1,0 +1,2 @@
+0072c040  88   Complete dispatch loop; register allocation (n in edi vs ecx) differs.
+0072c0a0  68   Complete two-call dispatcher; caller-saved/callee-saved register choice differs.

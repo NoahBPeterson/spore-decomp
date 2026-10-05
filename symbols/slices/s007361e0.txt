@@ -1,0 +1,4 @@
+007361e0  FUN_007361e0  # EltArray/descriptor construction (large)
+00736660  Vec41::emit   # in-place emplace into 0x20-byte slot vector
+007366e0  FUN_007366e0  # rebuild per-cluster index arrays
+007368a0  FUN_007368a0  # rebuild reverse index streams

@@ -1,0 +1,3 @@
+00737b40  631   GroupRemapA: index-map build/compact algorithm reconstructed only partially (stub)
+00737ef0  1191  GroupRemapB: large hash/geometry pass, not reconstructed (stub)
+007383a0  617   PartRebuild: skeleton only, compaction not reproduced

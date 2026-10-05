@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0071e7a0  17   FillN(first,n,value) with a null guard: complete; cl hoists the n test before the first-pointer load and uses sub/jne instead of dec/ja
+0071ef50  53   vector<int>::resize (grow via DoInsertValues 0x71e870, shrink via erase 0x4ce270): complete; branch operand order inverted and the zero temporary is emitted as a dword store instead of two 16-bit stores

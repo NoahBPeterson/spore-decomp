@@ -1,0 +1,2 @@
+00743950  13  complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
+007439b0  9   complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops

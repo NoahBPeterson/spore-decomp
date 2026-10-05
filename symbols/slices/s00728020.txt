@@ -1,0 +1,4 @@
+00728020  SP::cMeshSimplifier::Simplify  # PDB candidate (caller-single) from card.py
+007285a0  SP::cMeshClusterer::CreateClusterInfo  # PDB name from card.py
+00728af0  SP::cMeshClusterer::Cluster  # PDB name from card.py
+007281d0  `anonymous namespace'::cUVGenJobInfo::~cUVGenJobInfo  # PDB name from card.py

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
+007101f0 130 hash_map<uint32_t,T>::operator[]; EH frame/locals and insert-return shape not reproduced
+007102b0 130 hash_map<uint32_t,T>::operator[] second instantiation; same shape mismatch
+007106d0 126 vector::assign(first,last); helper roles (ReallocRef/copy/move) guessed, slot order off
+00711070 100 vector::resize(uint32_t); inlined resize(n,value) / DoInsertValues call shape not reproduced
+007110f0 100 vector::resize(uint32_t) second instantiation; same shape mismatch
+00711170 151 vector::push_back() no-argument; grow path's temp + atomic release not reproduced

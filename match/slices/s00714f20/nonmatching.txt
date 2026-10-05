@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP)
+00715090  41  eastl make_heap; cl assigns first/n to swapped callee-saved regs and sign-fixes /2
+007150d0  63  eastl sort_heap; cl strength-reduces the end pointer, original keeps a running count
+00715900  90  eastl partial_sort; heap-helper codegen differences propagate
+00716080  86  quick_sort_impl; loop bound compares an aligned byte diff (and ~3) not element count

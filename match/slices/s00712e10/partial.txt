@@ -1,0 +1,9 @@
+# va  reason
+00712e10 cMaterialManager::GetIDFromCompiledState: mutex/find reconstructed; the not-found walk over mMaterialsMap and the id insert are stubbed
+00712f50 cMaterialManager registration helper: mutex/operator[] shape only; flag copy, vector resize and vector append paths stubbed
+00713070 cMaterialManager 1.2 KB materials loader: skeleton only
+00713560 cMaterialScriptState::~cMaterialScriptState: member destructor call list reconstructed, hashtable/vector bodies stubbed
+00713780 cMaterialManager::~cMaterialManager: member destructor order reconstructed, bodies stubbed
+007138f0 cMaterialScriptState::cMaterialScriptState: skeleton only
+00713a80 cMaterialManager::cMaterialManager: skeleton only
+00713cb0 `anonymous namespace'::CompileVertexAndPixelShaders: skeleton only (needs D3DXCompileShader)

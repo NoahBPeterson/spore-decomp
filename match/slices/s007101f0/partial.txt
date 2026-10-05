@@ -1,0 +1,4 @@
+# va  reason
+00710510 vector::DoInsertValues(position,n,value) realloc path reconstructed but the element type (refcount at +8) and the three helper callees are guessed, not verified
+00710790 cMaterialManager::GetExternalReferences: hashtable scan + arena export walk abbreviated (inner 16-byte record block omitted)
+00710a50 cTextureManager::GetAllTextures: only the entry guard reconstructed; the 1.4 KB serialization body is omitted

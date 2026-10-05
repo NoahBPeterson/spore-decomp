@@ -1,0 +1,1 @@
+0073d160  94  complete; result register (edi) lifetime differs from original (compiler folds the always-zero fall-through), otherwise identical control flow/calls

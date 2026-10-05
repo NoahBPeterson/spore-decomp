@@ -1,0 +1,7 @@
+00731620  1388  COMPLETE translation (float-weight vertex blend, sibling of 0x00730d10); register/SSE scheduling not byte-exact.
+00731e70    66  COMPLETE dispatcher; last-arg scratch register differs (ecx vs edx) plus scheduling.
+00731fa0   116  COMPLETE element-array content search; compiled 149 vs 159 bytes, register scheduling differs.
+007320f0   158  COMPLETE dtor walker (176 vs 174 bytes); index/count register order and pushed local differ.
+007321a0   104  COMPLETE masked-index compare; evaluation order of ptr/mask loads differs.
+00732270   230  COMPLETE packed-vertex writer (x87 sqrt + normalise helper); x87/SSE mix differs.
+00732360   127  COMPLETE descriptor type predicate; cl chose a range check where the original kept two compares.

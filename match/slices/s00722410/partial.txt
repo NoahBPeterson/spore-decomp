@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00722410  0  vector<cTextureChart>::append range: stub
+00722580  0  insert n elements of 0x18: stub
+00722770  0  insert n elements of 0x28: stub
+00722990  0  AllocConstruct38: allocation only, element construct call omitted
+007229f0  0  CopyChartRecord: flat prefix copy only, inner vector omit
+00722b20  0  FindOrInsertF: stub
+00722ba0  0  SwapVecIfOwned: simplified (no copy-on-alloc path)
+00722ca0  0  ConstructIntVec: EH frame + deferred assign omitted
+00722d00  0  BuildTextureChart: stub (1078-byte body omitted)

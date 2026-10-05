@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+0071f410  n/a  helper: skeleton only
+0071f590  n/a  large helper: skeleton only
+0071f7e0  n/a  helper: skeleton only
+0071f8f0  n/a  large helper: skeleton only
+0071fce0  n/a  helper (append/assign face clusters): skeleton only
+0071fd60  n/a  helper: skeleton only
+0071fe10  n/a  helper: skeleton only
+0071ff50  n/a  helper: skeleton only
+00720010  n/a  helper: skeleton only
+00720070  n/a  helper called by the Obj15 copy/ctor helpers: skeleton only
+007200f0  n/a  helper: skeleton only
+00720200  n/a  helper: skeleton only

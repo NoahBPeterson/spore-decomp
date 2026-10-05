@@ -1,0 +1,1 @@
+007249f0  SP::cMeshSimplifier::BuildConnectivity  # caller/sibling context: cMeshSimplifier module (CreateEdges @725130, Simplify @728020); not PDB-confirmed

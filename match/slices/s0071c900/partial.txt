@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0071c9e0  n/a  torus/disc generator (cos/sin ring loop): approximate skeleton
+0071cc20  n/a  mesh command emitting position vectors: approximate skeleton
+0071cde0  n/a  mesh command emitting 10 position vectors + 3 negated globals + index fan: approximate skeleton
+0071d0d0  n/a  SP::CreateArrowheadMesh: approximate skeleton
+0071d2f0  n/a  mesh command building a 12-float transform and emitting it: approximate skeleton
