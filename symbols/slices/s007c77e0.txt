@@ -1,0 +1,22 @@
+# va Name  # evidence
+007c77e0 SP::cRandom::Seed  # string-seeded LFSR setup; FNVHash(name,0x811c9dc5,0)
+007c7870 SP::cRandom::GetInstance  # returns &global 0x153cf9c after Init(0x1410708,0x6d5)
+007c78c0 SP::cRandom::GetState  # returns 0/-2 from buffer presence
+007c78e0 SP::cRandom::GetLen  # returns pos/0/size-pos/-1 switch
+007c7910 SP::cRandom::ReadBytes  # LFSR byte stream from table
+007c7980 SP::cRandom::Reset  # same bit-length init without seed
+007c7a10 SP::cConfigManager::SavePreferences  # PDB name; reads _sAppPreferences
+007c7aa0 cOptionCheat::Description  # PDB name; option help strings
+007c7ac0 SP::cConfigScriptState::SetOptionDefault  # option vector (stride 0xac) default setter
+007c7c40 SP::cConfigManager::GetOption  # PDB name
+007c7c70 SP::cConfigManager::GetOptionDefault  # PDB name
+007c7ca0 SP::cConfigManager::GetNumScreenResolutions  # PDB name; id 0x46170a1
+007c7cd0 SP::cConfigManager::GetScreenResolutionInfo  # PDB name
+007c7e70 cOptionBlockCommand::OnEndBlock  # PDB name
+007c7ec0 cSetResolutionCommand::Execute  # PDB name
+007c80c0 eastl::vector<EA::AutoRefCount<SP::cPropertyList>,...>::~vector  # PDB name
+007c8160 eastl::lower_bound  # binary search over 16-byte (u64, refptr) pairs
+007c8270 cOptionBlockCommand::OnRegister  # PDB name
+007c84a0 cVendorCommand::OnRegister  # PDB name
+007c8530 RegisterConfigScriptCommands  # PDB candidate; 10 ArgScript command registrations
+007c8880 SP::cConfigManager::SetScriptPath  # PDB name

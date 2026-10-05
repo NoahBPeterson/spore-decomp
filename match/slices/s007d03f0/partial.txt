@@ -1,0 +1,5 @@
+007d0c10  -   ReadC10: skeleton, EA::IO::ReadInt32 list read not recovered
+007d0c80  -   ReadC80: skeleton, field reads (ReadInt32/ReadUInt16/virtual Read) not recovered
+007d10d0  -   ReadVec: skeleton, read + resize + element reads not recovered
+007d1570  -   FUN_007d1570 (841 bytes): skeleton only
+007d1910  -   cGameModelSizeCommand::Execute: skeleton only

@@ -1,0 +1,21 @@
+# va Name  # evidence
+007c8940 SP::cConfigManager::ApplyOption  # PDB name
+007c8af0 AutoRefCount vector insert helper  # calls 0x7c7a40 + 0x7c7d70
+007c8b70 eastl string range assign  # stride 0x10, calls basic_string::assign
+007c8bb0 GetPropID  # PDB name; isdigit/strtoul + PropertyManager lookup
+007c8c30 cBoolPropertyCommand::Execute  # PDB name
+007c8c80 cIntPropertyCommand::Execute  # PDB name
+007c8cd0 cFloatPropertyCommand::Execute  # PDB name
+007c8d20 cResourceKeyPropertyCommand::Execute  # SPKeyFromName + Variant assign
+007c8de0 cSetOptionCommand::Execute  # PDB name
+007c8e50 cAlertCommand::Execute  # PDB name
+007c8f70 CardName command Execute  # sets isCardFound/cardName cheats
+007c9040 CardVendor command Execute  # sets cardVendor cheat
+007c9120 cOptionCheat::Execute  # PDB name
+007c9320 SP::cConfigManager::Initialize  # CreateFileParser/CreateParser wiring
+007c94f0 SP::cConfigManager::SetOption  # PDB name
+007c95d0 SP::cConfigManager::ResetToDefaults  # PDB name
+007c9680 SP::cConfigManager::ApplyAllOptions  # PDB name
+007c9760 SP::cConfigManager::GetConfigString  # PDB name
+007c97a0 AutoRefCount vector uninitialized_copy  # stride 0x18
+007c9830 AutoRefCount vector fill  # stride 0x18

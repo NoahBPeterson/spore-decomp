@@ -1,0 +1,9 @@
+slices/s007ca950/s007ca950.cpp  ?insert@?$vector_map@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@U?$less@_K@eastl@@Uallocator@4@U?$vector@U?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@Uallocator@2@@4@@eastl@@QAEPAU?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@2@PAU32@ABU32@@Z  007ca9f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  copy_backward_impl@$0A@Urandom_access_iterator_tag@std@@@eastl@@SAPAU?$vector_map@_KU  007caac0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  copy_impl@$0A@Urandom_access_iterator_tag@std@@@eastl@@SAPAU?$vector_map@_KU  007cab00  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ?insert@?$vector_map@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@U?$less@_K@eastl@@Uallocator@4@U?$vector@U?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@Uallocator@2@@4@@eastl@@QAE?AU?$pair@PAU?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@_N@2@ABU?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@2@@Z  007cabc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ??A?$vector_map@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@U?$less@_K@eastl@@Uallocator@4@U?$vector@U?$pair@_KU?$AutoRefCount@VcPropertyList@SP@@@EA@@@eastl@@Uallocator@2@@4@@eastl@@QAEAAU?$AutoRefCount@VcPropertyList@SP@@@EA@@AB_K@Z  007cac20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ??1cOption@SP@@QAE@XZ  007cb390  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ??$fill@PAU?$vector_map@_KU  007cb450  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ??$do_move_commit@PAUcOption@SP@@PAU12@@  007cb480  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007ca950/s007ca950.cpp  ?DoDestroyValues@?$vector@UcOption@SP@@  007cb510  /O2 /MD /Gy /EHsc /TP /GS-

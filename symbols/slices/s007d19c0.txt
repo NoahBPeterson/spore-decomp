@@ -1,0 +1,15 @@
+007d19c0  cGameModelAlphaCommand::Execute  # stores parser ParseFloat result into cGameModelState::mDesc.mAlpha (state+0x24)
+007d19f0  cGameModelVisibleCommand::Execute  # sets/clears mDesc.mFlags bit 3 from a parser bool
+007d1a30  cGameModelFlagsCommand::Execute  # ParseEnum("visible" table 0x153d728) ORed into mDesc.mFlagsToSet (state+0x84)
+007d1ac0  SP::cTransform::RotateZ  # rotates matrix rows 0/1 with sin/cos, bumps mFlags bit1 and mModificationCount
+007d1cc0  cGameModelNameCommand::Execute  # name/key + "message"/"overrideSet"/"noAttachments" -> mInstanceID/mGroupID/field88
+007d1e40  cGameModelWorldCommand::Execute  # SPKeyFromName of the first arg -> mDesc.mWorldID
+007d1f20  cGameModelEffectCommand::OnRegister  # registers the 12 GameModel sub-commands via AddCommand (slot 0x18)
+007d2330  cGameModelDeformCommand::Execute  # ParseEnum/ParseInt per arg, appended to mDesc.mGroups
+007d23d0  cGameModelSplitterCommand::Execute  # FindModelKernel + two ParseEnum -> cSplitController appended
+007d2490  cGameModelEffectCommand::~cGameModelEffectCommand  # destroys mDescName (0xc8) + mGameModelDescription (0x38) + base
+007d2580  cSplitController vector copy helper  # element stride 0x68
+007d2670  SWARM_GameModelAddCommands  # creates cGameModelEffectCommand + cGroupGameModelCommand and registers them
+007d2740  cAnimationCurve vector copy helper  # element stride 0x2c
+007d27d0  ReadIntVector  # reads int count then that many int32s into the vector, returns the stream
+007d2830  cGameModelState copy ctor  # memberwise copy incl. four eastl vectors

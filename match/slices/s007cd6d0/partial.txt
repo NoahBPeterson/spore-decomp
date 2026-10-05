@@ -1,0 +1,18 @@
+007cd6d0  204  cConfigManager startup (unnamed): stub body; original resets state, loads/uses the file parser, stores safe-mode/show-alert flags and applies all options via vtable slots 0x3c/0x40.
+007cd7a0  271  cConfigManager parser setup (unnamed): stub body; original replaces mAppProperties AutoRefCount (global 0x15fd918), handles "safe"/"showConfigAlerts" switch, registers the "option" cheat command.
+007cd8b0  31  cConfigManager try-configure (unnamed): stub body; original checks mFileParser and calls the startup routine if its slot 0x28 returns true.
+007cd8d0  127  SP::cConfigManager::Configure: stub body; sets safeMode/showConfigAlerts properties, GatherInformation, startup, returns !mAbortApp.
+007cd960  34  unnamed config helper: stub.
+007cd990  46  unnamed config helper: stub.
+007cd9c0  12  unnamed config helper: stub.
+007cd9d0  154  eastl pair copy-construct range (used by vector DoInsertValue): stub; should be uninitialized_copy_ptr<PropPair>.
+007cda70  275  unnamed config helper: stub.
+007cdb90  72  unnamed config helper: stub.
+007cdbe0  231  unnamed config helper: stub.
+007cdcd0  172  `anonymous namespace'::UpdateFromGroundCoverConfig: stub.
+007cdd80  49  unnamed config helper: stub.
+007cddc0  48  unnamed config helper: stub.
+007cde30  67  unnamed config helper: stub.
+007cde80  93  eastl pair copy-backward range (used by vector DoInsertValue): stub; should be copy_backward_impl<0,...>::do_copy<PropPair*,PropPair*>.
+007cdee0  262  vector/matrix transform helper: stub; original scales a 3-vector by a matrix row block and adds a translation when bit 2 of the object flags is set.
+007cdff0  1288 float animation update helper: stub; original integrates a float over time against a limit and steps an animation state machine.

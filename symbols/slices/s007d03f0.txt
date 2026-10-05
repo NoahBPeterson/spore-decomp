@@ -1,0 +1,6 @@
+007d0450 SP::cSPConversationFactory::Write_ResponseList  # PDB candidate (caller-scored)
+007d06f0 SP::cSPConversationFactory::Write_DialogList  # PDB candidate (caller-single)
+007d0f60 SP::cGameModelDescription::~cGameModelDescription  # PDB (callee-single)
+007d1010 SP::cGameModelDescription::cGameModelDescription  # PDB-derived
+007d18c0 ArgScript::GameModelEffect::GameModelEffect  # PDB previous name
+007d1910 cGameModelSizeCommand::Execute  # PDB candidate (caller-scored)

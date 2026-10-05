@@ -1,0 +1,10 @@
+# va Name  # evidence
+007c9910 AutoRefCount range copy-construct  # 0x18 stride, calls 0x7c8af0
+007c99e0 eastl vector<AutoRefCount<cPropertyList>> insert-one  # 4-byte element, allocator grow
+007c9bc0 eastl vector<AutoRefCount<cPropertyList>> insert-N  # reserve + fill
+007c9dc0 eastl vector<AutoRefCount<PropertyList>> insert-one  # 16-byte element
+007c9fa0 eastl::vector<EA::AutoRefCount<SP::cPropertyList>,fixed_vector_allocator<4,4,4,0,1>>::DoAssignFromIterator  # PDB name
+007ca060 eastl::vector<eastl::pair<unsigned __int64,AutoRefCount<PropertyList>>>::operator=  # PDB name
+007ca150 SP::cConfigManager::GetOptionIDs  # PDB name
+007ca1c0 SP::cConfigManager::Initialize  # CreateFileParser/CreateParser wiring (same as 9320)
+007ca8e0 eastl::vector<vector_map<u64,AutoRefCount<PropertyList>>,fixed_vector_allocator<20,4,4,0,1>>::~vector  # PDB name

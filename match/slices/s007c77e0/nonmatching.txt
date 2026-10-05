@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+007c77e0  7   inc ecx scheduled after the two field stores instead of right after the table load
+007c7910  10  two loop-invariant load reorderings (mSize/mState, mData/mState store)
+007c7980  7   inc ecx scheduled after the two field stores instead of right after the table load
+007c7ac0  109 loop/count register allocation and compare shape (indexed-for vs pointer loop)
+007c7b30  127 64-byte-aligned stack buffer / float-format call scheduling differs
+007c7cd0  77  CSE of mResBegin across the bounds check changes register allocation
+007c7d70  123 missing compiler EH frame around the AddRef'd uninitialized copy
+007c7e10  11  dest->mRC load hoisted above the two field stores
+007c80c0  97  missing compiler EH frame around the element Release loop
+007c8160  64  binary-search register allocation differs
+007c8270  368 command registration new-expression/EH scheduling differs
+007c84a0  114 command registration new-expression/EH scheduling differs
+007c8530  547 command registration new-expression/EH scheduling differs
+007c8880  147 parser init vcall/register allocation differs

@@ -1,0 +1,7 @@
+# source  symbol  original VA
+slices/s007c8940/s007c8940.cpp  ?CopyStrings@@YAPAXPAX00@Z  007c8b70
+slices/s007c8940/s007c8940.cpp  ?GetPropID@@YAHPBD@Z  007c8bb0
+slices/s007c8940/s007c8940.cpp  ?Execute@cBoolPropertyCommand@@QAEXPAUcArguments@@@Z  007c8c30
+slices/s007c8940/s007c8940.cpp  ?Execute@cIntPropertyCommand@@QAEXPAUcArguments@@@Z  007c8c80
+slices/s007c8940/s007c8940.cpp  ?Execute@cFloatPropertyCommand@@QAEXPAUcArguments@@@Z  007c8cd0
+slices/s007c8940/s007c8940.cpp  ?Execute@cSetOptionCommand@@QAEXPAUcArguments@@@Z  007c8de0

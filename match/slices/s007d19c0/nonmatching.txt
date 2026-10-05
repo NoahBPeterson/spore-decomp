@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+007d1ac0  84   Transform::RotateZ: all six products/rotations and the flags update are present; the /O2 register/stack schedule of the six products differs (no source regrouping tried reproduces the original's spill pattern)
+007d1cc0  288  cGameModelNameCommand::Execute: ConvertToString16/SPKeyFromName/OptionArguments/HasFlag paths all present; EH frame, string-dtor inlining and register allocation differ
+007d1e40  233  cGameModelWorldCommand::Execute: same string/key path (ConvertToString16 + SPKeyFromName -> mWorldID); the original also zero-inits a key local and uses edi for `this`
+007d1f20  143  cGameModelEffectCommand::OnRegister: the 12 sub-command new+AddCommand registrations and the child-state/parser stores are present; allocation/codegen differs
+007d2330  104  cGameModelDeformCommand::Execute: parse + isdigit branch + vector append present; the inlined push_back uses ebp in the original and its schedule differs
+007d2670  213  SWARM_GameModelAddCommands: both command registrations present; server vtable-slot dispatch and allocation shape differ

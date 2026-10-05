@@ -1,0 +1,3 @@
+007ce500 `anonymous_namespace'::GroundCoverCirclePhysics  # PDB (gap-align)
+007cec80 SP::InitAppEffects  # PDB (callee-scored)
+007cef60 eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator>::~vector<...>  # PDB (callee-single)

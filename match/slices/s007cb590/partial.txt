@@ -1,0 +1,5 @@
+007cb590  1890  SP::cConfigScriptState::GatherInformation: body stubbed (the 1890-byte function fills the config strings/numbers from a CBig system-info object via many basic_string assigns); not reconstructed.
+007cc110  85  SP::cConfigScriptState::cConfigScriptState: real ctor using a layout inferred from the disasm (offsets +0x00..+0x7c); string8/cOption member sizes are approximate, so the exact stores and value are not verified.
+007cc190  140  SP::cConfigScriptState::~cConfigScriptState: implicit member destruction using the inferred layout (sp_vector_allocator header checks, string frees, vector<cOption> dtor); not verified byte-exact.
+007cc260  147  SP::cConfigManager::~cConfigManager: implicit member destruction using the inferred layout (IConfigUnknown AutoRefCount releases at +0xc/+0x10/+0xb0, embedded state dtor); not verified.
+007cc310  93  SP::cConfigManager::cConfigManager: real ctor using the inferred layout (magic ResourceKey words at +0x14/+0x18, embedded cConfigScriptState at +0x20); not verified.

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+007c8e50  201  cAlertCommand::Execute: EH/cError throw layout and HasFlag scheduling differ
+007c8f70  157  card command Execute: mState vector/string access schedule differs
+007c9040  181  card-vendor command Execute: strlen/string assign scheduling differs
+007c9760  46   GetConfigString: CSE of mStrings across the bounds check changes registers
+007c97a0  100  AutoRef element copy-construct loop: missing EH frame, slot order differs
+007c9830  84   AutoRef fill loop: missing EH frame, register allocation differs

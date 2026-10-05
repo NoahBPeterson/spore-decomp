@@ -1,0 +1,12 @@
+# source  symbol  original VA
+slices/s007c77e0/s007c77e0.cpp  ?GetRandom@@YGPAUcRandom@@PBDHH@Z  007c7870
+slices/s007c77e0/s007c77e0.cpp  ?Mode@cRandom@@QAEHXZ  007c78c0
+slices/s007c77e0/s007c77e0.cpp  ?Query@cRandom@@QAEHH@Z  007c78e0
+slices/s007c77e0/s007c77e0.cpp  ?SavePreferences@cConfigManager@@QAE_NXZ  007c7a10
+slices/s007c77e0/s007c77e0.cpp  ?Description@cOptionCheat@@QAEPBDH@Z  007c7aa0
+slices/s007c77e0/s007c77e0.cpp  ?Shutdown@cConfigManager@@QAE_NXZ  007c7be0
+slices/s007c77e0/s007c77e0.cpp  ?GetOption@cConfigManager@@QAEHI@Z  007c7c40
+slices/s007c77e0/s007c77e0.cpp  ?GetOptionDefault@cConfigManager@@QAEHI@Z  007c7c70
+slices/s007c77e0/s007c77e0.cpp  ?GetNumScreenResolutions@cConfigManager@@QAEHXZ  007c7ca0
+slices/s007c77e0/s007c77e0.cpp  ?OnEndBlock@cOptionBlockCommand@@QAEXH@Z  007c7e70
+slices/s007c77e0/s007c77e0.cpp  ?Do@cCmdArgs@@QAEXH@Z  007c7eb0

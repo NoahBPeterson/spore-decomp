@@ -1,0 +1,18 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+007d76d0  n/a  SP::cGameModelEffect::HandleSplitCommand; complete (3 command kinds, split-instance/effect-param construction, RBTree walk), inlining/register schedule differs
+007d7a10  569  SP::cGameModelEffect::Init; complete (build param holder, per-command HandleSplitCommand loop, transform copy, ModelManager query), register/loop schedule differs
+007d7d00  66   ability command base destructor body (restore 2 base vtables, release member +0x10); complete, original EH prologue + exact vtable stores not reproduced
+007d7dc0  174  ability command Activate (query interface, compute altitude scale, create via virtual); complete, scheduling differs
+007d7ed0  58   ability command factory (size 0x28, 2 base vtables, member init); complete, null-path block layout and one masked push differ
+007d7f60  188  ability command SetTransform; complete (matrix copy, translation compare, virtual update), codegen differs
+007d8060  n/a  SP::cApp::Init; complete (camera manager, cheat command alloc, 3 message registrations), new-expression/EH schedule differs
+007d8180  97   SP::cApp::HandleMessage (IHandlerRC subobject); complete 3 message cases, register/call shape differs
+007d81f0  42   SP::cApp::PreInitAppModes; complete loop over modes calling vtable+0xc, count/register shape differs
+007d8230  45   SP::cApp::InitAppModes; complete loop over modes calling vtable+0x10, count/register shape differs
+007d8270  n/a  SP::cApp::AppMode(unsigned); complete linear search by mID, byte-diff count/register shape differs
+007d82c0  44   SP::cApp::AppMode(); complete bounds-checked mModeIndex lookup, count computation picks edi vs original edx
+007d8300  44   SP::cApp::AppModeID(); complete bounds-checked mModeIndex lookup, count computation picks edi vs original edx
+007d8360  101  SP::cApp::SetAppModeByName; complete _stricmp search + SetAppModeByIndex vcall, schedule differs
+007d83d0  46   SP::cApp::AppModeID(int); complete bounds-checked lookup, count computation picks edi vs original edx
+007d8410  49   SP::cApp::AppModeName(int); complete bounds-checked lookup, count computation picks edi vs original edx
+007d8470  n/a  SP::cApp::SwitchMode; complete (leave mode, build/send 2 messages, clear index), message ctor/EH schedule differs

@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+007d2a30  -  eastl::vector<cAnimationCurve> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
+007d2c70  -  eastl::vector<cSplitController> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
+007d3210  -  eastl::vector<cAnimationCurve> insert(position,value): fast/slow paths present but the grow branch uses simplified element copies
+007d33e0  -  eastl::vector<cSplitController> insert(position,value): fast/slow paths present but the grow branch uses simplified element copies
+007d3770  -  eastl::vector<cAnimationCurve> resize(n): grow path approximated, shrink path (destroy range) omitted
+007d3860  -  eastl::vector<cSplitController> resize(n): grow path approximated, shrink path (destroy range) omitted

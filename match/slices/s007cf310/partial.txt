@@ -1,0 +1,11 @@
+007cf310  -   Vec16::insert(pos,n,value): skeleton, growth/relocate path not recovered
+007cf4e0  -   Big2::dtor: approximate body, EH frame/unwind funclet not reproduced
+007cf690  -   MapX find-or-insert result: approximate, relies on unrecovered helpers
+007cf760  -   MapY insertPair: approximate, relies on unrecovered helpers
+007cf8d0  -   MapZ slot setter: approximate skeleton
+007cf9b0  -   ObjX2::clear body: approximate skeleton (real body not reproduced)
+007cfb40  -   MapW try-insert: approximate skeleton
+007cfbb0  -   InnerC::clear: approximate skeleton, many omitted paths
+007cfc70  -   MapV find-or-insert result: approximate, relies on unrecovered helpers
+007cfcd0  -   SP::CompileToPropertyModel: skeleton only
+007d00e0  -   SP::cCityVisualizer::AllegianceUpdate: skeleton only

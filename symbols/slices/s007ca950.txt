@@ -1,0 +1,18 @@
+007ca950 eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator>::insert  # vector::insert shape: fast path constructs value at mpEnd, else calls DoInsertValue 007c9dc0, returns mpBegin+n
+007ca9f0 eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >::insert(t,const value_type&)  # dev-PDB name (pdb_names.json)
+007caac0 eastl::copy_backward_impl<0,std::random_access_iterator_tag>::do_copy<vector_map*,vector_map*>  # dev-PDB name; call 007ca060 vector<pair>::operator=
+007cab00 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<vector_map const*,vector_map*>  # dev-PDB name
+007cab40 eastl::vector<EA::AutoRefCount<SP::cPropertyList>,eastl::fixed_vector_allocator<4,4,4,0,1> >::resize  # calls 007c9bc0 fill-insert / 006ec840 erase, element stride 4 (AutoRefCount)
+007cabc0 eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >::insert(const value_type&)  # returns pair<iterator,bool> via sret; lower_bound + base insert
+007cac20 eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >::operator[]  # lower_bound, inserts value_type(key,T()) then returns it->second (+8)
+007cace0 `anonymous namespace'::GetPropListSettings  # dev-PDB name; SPKeyFromName + vector_map insert + new Editor::cPropertyList
+007cae30 `anonymous namespace'::cOptionBoolPropertyCommand::Execute  # dev-PDB name
+007caf40 `anonymous namespace'::cOptionIntPropertyCommand::Execute  # dev-PDB name
+007cb050 `anonymous namespace'::cOptionFloatPropertyCommand::Execute  # dev-PDB name
+007cb160 `anonymous namespace'::cOptionPropertiesCommand::Execute  # PDB candidate (caller-scored); ResourceKey variant path
+007cb270 `anonymous namespace' property-list command Execute  # unnamed; PropertyManager GetPropertyList + target slot 0x30
+007cb390 SP::cOption::~cOption  # dev-PDB name; destroys mExternalSettings (+0x34) then mPropertySettings (+0xc)
+007cb3e0 eastl::fixed_vector<EA::AutoRefCount<SP::cPropertyList>,4,1>::fixed_vector  # dev-PDB name (copy ctor): inits inline buffer then DoAssignFromIterator
+007cb450 eastl::fill<vector_map*,vector_map>  # dev-PDB name
+007cb480 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_commit<SP::cOption*,SP::cOption*>  # destroys each cOption (stride 0xac), advances and returns dest
+007cb510 eastl::vector<SP::cOption,eastl::fixed_vector_allocator<172,4,4,0,1> >::DoDestroyValues  # destroys cOption elements (stride 0xac)

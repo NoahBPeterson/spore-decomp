@@ -1,0 +1,7 @@
+007da2d0  650  cMouseCameraController::ApplyMotion; float expression scheduling and inlined exp differ
+007da5f0  242  cMouseCameraController::BuildTransform; translation-vector schedule / negation order differ
+007da790  -    SP::CreateMouseCameraController; SEH factory frame and allocator inline not reproduced
+007da800  229  cMouseCameraController::ProcessInput; modifier dispatch + prev-modifier scan call shape differ
+007da910  168  cMouseCameraController::StartDrag; x87 exp inline and field-copy flavour differ
+007da9f0  629  cMouseCameraController::Update; large float lerp/wrap schedule differs
+007db0c0  191  PluginManager::Load; constant-arg block and register allocation differ

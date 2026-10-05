@@ -1,0 +1,6 @@
+# <va>  <diff-bytes>  <reason>
+007d23d0  134  cGameModelSplitterCommand::Execute: parsing + mModelSplitters append present; the "unknown split model kernel" failure path calls an error helper instead of the original throw cError(...)
+007d2490  -    cGameModelEffectCommand::~: base and mDescName string are destroyed by compiler-generated members, but the inlined ~cGameModelDescription for mGameModelState is not reproduced
+007d2580  -    split-controller vector copy helper: calls VecInit/VecAssignRange; those vector helper bodies are not reproduced
+007d2740  -    animation-curve vector copy helper: calls VecInit/VecAssignRange; those vector helper bodies are not reproduced
+007d2830  -    cGameModelState copy ctor: skeleton, copies nothing

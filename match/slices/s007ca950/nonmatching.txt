@@ -1,0 +1,8 @@
+007ca950  93  eastl::vector<pair<u64,AutoRefCount<cPropertyList>>>::insert(iterator,const value_type&): complete; retail wraps the placement-new fast path in a /EHsc frame (cl only emits EH for object construction here with extra state stores), so all offsets and the merged epilogue differ.
+007cab40  111  eastl::vector<AutoRefCount<cPropertyList>,fixed_vector_allocator<4,4,4,0,1>>::resize(size_type): complete; the T() temporary is placed in a different stack slot and cl uses ebx for size(), differing register/stack shape.
+007cb3e0  74  eastl::fixed_vector<AutoRefCount<cPropertyList>,4,1>::fixed_vector(const fixed_vector&): complete; retail passes the source object as the third DoAssignFromIterator argument (x, begin, end) instead of an empty iterator tag, and schedules the stores differently.
+007cae30  151  `anonymous namespace'::cOptionBoolPropertyCommand::Execute: complete; same calls/paths but Variant temp slot and command-table pointer arithmetic schedule differ from retail.
+007caf40  151  `anonymous namespace'::cOptionIntPropertyCommand::Execute: complete; same as the bool command (variant temp / table indexing schedule).
+007cb050  151  `anonymous namespace'::cOptionFloatPropertyCommand::Execute: complete; same as the bool command (variant temp / table indexing schedule).
+007cb160  166  `anonymous namespace'::cOptionPropertiesCommand::Execute: complete; ResourceKey variant path, same as the scalar commands (temp layout differs).
+007cb270  167  `anonymous namespace' property-list command Execute (unnamed, PDB candidate cOptionPropertiesCommand::Execute): complete; PropertyManager GetPropertyList + pList slot 0x30 call with different register scheduling.

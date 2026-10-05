@@ -1,0 +1,7 @@
+007ce500  -     complete behavioural translation of GroundCoverCirclePhysics (SSE vector math); not byte-exact
+007ced20  37    DerivedPaint dtor 140 bytes vs 177; base/derived vptr store + EH frame differ
+007cede0  49    eastl release-range helper; release intrinsic register allocation differs (edi/ebx swap)
+007cee40  98    eastl copy-range helper; same release intrinsic + schedule differences
+007ceec0  93    eastl copy-backward helper; same release intrinsic + schedule differences
+007cef60  44    VVec dtor 58 bytes vs 102; original carries an EH frame the source does not reproduce
+007cefd0  74    eastl __stdcall destruct-range helper; release intrinsic register allocation differs

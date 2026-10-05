@@ -1,0 +1,2 @@
+007cfcd0 SP::CompileToPropertyModel  # PDB candidate (caller-scored)
+007d00e0 SP::cCityVisualizer::AllegianceUpdate  # PDB candidate (caller-scored)

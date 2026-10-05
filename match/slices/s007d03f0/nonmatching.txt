@@ -1,0 +1,11 @@
+007d0450  72    SerResp response-list serializer; prologue/register schedule differs (ebp/edi choice)
+007d04b0  229   SerDlg dialog-list serializer; byte/uint16 writes and virtual-stream calls differ
+007d05b0  7     RBTreeW::Insert; only the load of `out` vs `inc [this+0x14]` is scheduled in the other order
+007d0670  -     LayoutWorld ctor; uint16 store order, dead-store folding and Matrix3 call schedule differ
+007d06f0  -     Ser6F0 top-level dialog serializer; register schedule differs
+007d0920  117   CloneTree; recursive clone body schedule differs
+007d0f60  -     cGameModelDescription dtor; EH frame/unwind funclet not reproduced
+007d1010  4     cGameModelDescription ctor; only the 1.0f load is hoisted above `mov eax,ecx`
+007d1140  -     S1140 copy ctor; vector copy uses operator= rather than reserve+DoInsertValue
+007d18c0  26    GameModelEffect ctor; placement-new null check and vtable/f34 store order differ
+007d1970  -     command Execute; vtable slot 44 sret call shape differs

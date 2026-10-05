@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007d03f0/s007d03f0.cpp  ?SerTree@@YAXPAXPAD@Z              007d03f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?NukeRange@@YAPAXPAUItem68@@0PAD@Z 007d0a00  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?NukeRange2@@YGXPAUItem68@@0@Z     007d0b30  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ??4S0D60@@QAEAAU0@ABU0@@Z         007d0d60  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?CopyRange12C0@@YAPAUS2C@@PAU1@00@Z 007d12c0 /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?CopyRange1320@@YAPADPAD00@Z      007d1320  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?AssignRange1380@@YAXPAUS2C@@00@Z 007d1380  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?CopyBack1450@@YAPAUS2C@@PAU1@00@Z 007d1450  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?AssignRange14B0@@YAXPAD00@Z      007d14b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s007d03f0/s007d03f0.cpp  ?CopyBack1510@@YAPADPAD00@Z       007d1510  /O2 /MD /Gy /EHsc /TP /arch:SSE2

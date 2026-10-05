@@ -1,0 +1,4 @@
+007ccb10  280  `anonymous namespace'::cOptionBlockCommand::Execute: stub body (280-byte command: reads cArguments, iterates cOption block, sets option values); not reconstructed.
+007cccc0  387  SP::cConfigManager resolution-info option builder: stub body (finds/creates cOption id 0x46170a2, clears its settings, creates 2 `App/ConfigManager/ResolutionInfo` property lists and stores Variant 0/1, resizes external settings); not reconstructed.
+007cce50  1261  SP::cConfigManager resolution option loader: stub body (GetIntProperty 0x46c0c15/0x46c0c16, clamps to 800x600, creates/clears cOption id 0x46170a1, fills from the display mode list); not reconstructed.
+007cd340  906  SP::cConfigManager::LoadOptionSetup: stub body (dev-PDB name; builds the option setup table); not reconstructed.

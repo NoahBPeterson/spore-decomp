@@ -1,0 +1,11 @@
+007cb590 SP::cConfigScriptState::GatherInformation  # dev-PDB name
+007cbd60 eastl::vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,eastl::fixed_vector_allocator<24,4,4,0,1> >::erase  # calls copy_impl do_copy<const vector_map*,vector_map*> then destroys, mpEnd -= n
+007cbdc0 eastl::vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,eastl::fixed_vector_allocator<24,4,4,0,1> >::insert  # grow/fill-insert, called by resize 007cc3c0
+007cc000 eastl::vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,eastl::fixed_vector_allocator<24,4,4,0,1> >::DoAssignFromIterator<const vector_map*>  # dev-PDB name
+007cc110 SP::cConfigScriptState::cConfigScriptState  # ctor: vtable + ids + 3 strings + bools + 3 vectors (offsets 0x00..0x7c)
+007cc190 SP::cConfigScriptState::~cConfigScriptState  # dev-PDB name
+007cc260 SP::cConfigManager::~cConfigManager  # PDB candidate
+007cc310 SP::cConfigManager::cConfigManager  # ctor: calls cConfigScriptState ctor at +0x20
+007cc3c0 eastl::vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,eastl::fixed_vector_allocator<24,4,4,0,1> >::resize  # dev-PDB name
+007cc480 `anonymous namespace'::cOptionSettingCommand::Execute  # dev-PDB name; source vtable slot 0xa0, resizes cOption vectors, new Editor::cPropertyList
+007cc580 eastl::fixed_vector<eastl::vector_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::less<unsigned __int64>,eastl::allocator,eastl::vector<eastl::pair<unsigned __int64,EA::AutoRefCount<SP::cPropertyList> >,eastl::allocator> >,4,1>::fixed_vector  # dev-PDB name (copy ctor)

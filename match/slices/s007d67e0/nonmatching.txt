@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS-)
+007d67e0  231  eastl uninitialized_copy of cSplitInstanceList (out-pointer form); complete, EH prologue and inlined deep-copy allocation differ
+007d68f0  223  eastl uninitialized_fill_n of cSplitInstanceList; complete, EH prologue/codegen differ
+007d69f0  237  eastl uninitialized_copy of cSplitInstanceList; complete, EH prologue/codegen differ
+007d6b00  216  EA::Swarm::cEffectParams::operator=; complete memberwise assignment, 25/9-element array copy loop register shape differs
+007d6c10  910  Swarm effect random-sample setup (10+ virtual calls + x87 clamp math); complete, offsets/register allocation/codegen differ
+007d7080  258  eastl::vector<cElement,sp_vector_allocator>::operator=; complete grow/copy/assign paths, inlining and EH differ
+007d72e0  593  eastl::vector<cSplitInstanceList>::DoInsertValues; complete grow + in-place insert paths, call/inlining schedule differs
+007d7560  n/a  eastl::vector<cSplitInstanceList>::resize; complete (erase on shrink, DoInsertValues default value on grow), EH prologue/register allocation differ
+007d7640  20   SP::cSplitManager::AddSplitInstance; complete, only the final out-pointer register assignment differs (eax vs ecx)

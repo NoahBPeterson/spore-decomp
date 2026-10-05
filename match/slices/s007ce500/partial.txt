@@ -1,0 +1,2 @@
+007cf030  360   Vec8::insert(pos,n,value): approximate reimplementation; growth path helper semantics not fully recovered
+007cf1f0  204   Vec8::insert(pos,value): approximate reimplementation; growth path helper semantics not fully recovered

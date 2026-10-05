@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+007c8940  -   cConfigManager::ApplyOption skeleton: property-apply loop / BehaviorMessage emission omitted
+007c8af0  86  AutoRef insert helper skeleton: 0x7c7a40 resize and 0x7c7d70 copy-construct calls omitted
+007c8d20  154 ResourceKey Variant property command: Variant construction/assign paths approximated
+007c9120  -   cOptionCheat::Execute: list-all-options loop and exact Output formatting omitted
+007c9320  -   cConfigManager::Initialize: parser/file-parser wiring and tail string build omitted
+007c94f0  184 cConfigManager::SetOption: g_sAppPreferences Variant set path stubbed
+007c95d0  144 cConfigManager::ResetToDefaults: g_sAppPreferences Variant set path stubbed
+007c9680  188 cConfigManager::ApplyAllOptions: g_sAppPreferences Variant/type-query path stubbed

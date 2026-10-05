@@ -1,0 +1,14 @@
+007d76d0 SP::cGameModelEffect::HandleSplitCommand  # pdb_candidates caller-single
+007d7a10 SP::cGameModelEffect::Init  # pdb_candidates caller-scored
+007d8060 SP::cApp::Init  # pdb_candidates caller-scored
+007d8180 SP::cApp::HandleMessage  # pdb_names anchor
+007d81f0 SP::cApp::PreInitAppModes  # pdb_names gap-align
+007d8230 SP::cApp::InitAppModes  # pdb_names gap-align
+007d8270 SP::cApp::AppMode  # pdb_names gap-align
+007d82c0 SP::cApp::AppMode  # pdb_names gap-align
+007d8300 SP::cApp::AppModeID  # pdb_names gap-align
+007d8360 SP::cApp::SetAppModeByName  # pdb_names gap-align
+007d83d0 SP::cApp::AppModeID  # pdb_names gap-align
+007d8410 SP::cApp::AppModeName  # pdb_names gap-align
+007d8450 SP::cApp::SetMainViewer  # pdb_names vtable-slot
+007d8470 SP::cApp::SwitchMode  # pdb_candidates caller-scored

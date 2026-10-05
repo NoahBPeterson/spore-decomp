@@ -1,0 +1,18 @@
+007cd6d0 cConfigManager startup (unnamed)  # calls state reset 007ccc30, LoadOptionSetup 007cd340, 007cccc0/007cce50, ApplyAllOptions 007c9680, tail-jumps vtable slots 0x3c/0x40
+007cd7a0 cConfigManager parser setup (unnamed)  # CommandLine::FindSwitch "safe"/"showConfigAlerts", registers "option" cheat
+007cd8b0 cConfigManager try-configure (unnamed)  # checks file parser slot 0x28 then calls 007cd6d0
+007cd8d0 SP::cConfigManager::Configure  # dev-PDB name
+007cd960 unnamed config helper  # not identified
+007cd990 unnamed config helper  # not identified
+007cd9c0 unnamed config helper  # not identified
+007cd9d0 eastl uninitialized copy range for pair<u64,AutoRefCount<cPropertyList>>  # copy-constructs 0x10-byte elements and AddRefs slot 0
+007cda70 unnamed config helper  # not identified
+007cdb90 unnamed config helper  # not identified
+007cdbe0 unnamed config helper  # not identified
+007cdcd0 `anonymous namespace'::UpdateFromGroundCoverConfig  # dev-PDB name
+007cdd80 unnamed config helper  # not identified
+007cddc0 unnamed config helper  # not identified
+007cde30 unnamed config helper  # not identified
+007cde80 eastl copy-backward range for pair<u64,AutoRefCount<cPropertyList>>  # copies 0x10-byte elements via operator= (AddRef/Release)
+007cdee0 vector-by-matrix transform helper  # SSE movss mul/add, bit 2 of flags controls the matrix/translation branch
+007cdff0 float animation update helper  # SSE integration + state machine

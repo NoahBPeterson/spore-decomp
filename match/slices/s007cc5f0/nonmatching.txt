@@ -1,0 +1,4 @@
+007cc5f0  80  SP::cOption::operator=: complete; inlines fixed_vector::operator= (erase + DoAssignFromIterator) for both members but cl assigns the this/x registers in the opposite roles from retail.
+007cc7f0  244  eastl::vector<SP::cOption,eastl::sp_vector_allocator>::DoInsertValue: complete; retail uses uninitialized_move start/commit + in-place cOption copy ctor, mine differs in the growth path size and scheduling.
+007cc9a0  110  eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back(): complete; in-place default ctor vs retail's temp/value handling differs.
+007ccc30  81  cConfigScriptState option reset (PDB candidate vector<cOption,sp_vector_allocator>::erase): complete; reset ids, vector erase + 3 string clears; cl schedules the erase result differently.

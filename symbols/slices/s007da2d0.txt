@@ -1,0 +1,11 @@
+007da2d0  SP::cMouseCameraController::ApplyMotion  # switch on modifier class, updates lerp targets
+007da5f0  SP::cMouseCameraController::BuildTransform  # writes a cTransform from camera state
+007da790  SP::CreateMouseCameraController  # PDB caller-single
+007da800  SP::cMouseCameraController::ProcessInput  # modifier -> motion scaling, tracks last 3 modifiers
+007da910  SP::cMouseCameraController::StartDrag  # snapshots camera state, starts fov lerp
+007da9f0  SP::cMouseCameraController::Update  # per-frame lerp/wrap + clip planes
+007dad80  SP::CreateOfflineEffect  # virtual lookup of "OfflineEffects" effect object
+007dade0  SP::SetEffectSeed  # PDB name
+007dae20  SP::RunOfflineWorld  # PDB caller-scored
+007db060  ManifestSource::Load  # sscanf "%x" manifest callback loader
+007db0c0  PluginManager::Load  # LoadLibrary/oaPluginInit plugin loader

@@ -1,0 +1,5 @@
+# <va>  <diff-bytes>  <reason>
+007d2ee0  150  cGameModelEffectCommand::OnEndBlock: new+CopyState+AddDescription and the string clear are present; /O2 register allocation and the string-clear form differ
+007d2f90  277  eastl::vector<cAnimationCurve>::operator=: full three-branch EASTL operator= present; range-helper register allocation and the allocate path differ
+007d30d0  277  eastl::vector<cSplitController>::operator=: full three-branch EASTL operator= present; range-helper register allocation and the allocate path differ
+007d35b0  124  SP::cGameModelDescription::operator=: all fields + four vector assignments present; nested-vector assignment inlining differs

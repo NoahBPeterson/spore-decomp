@@ -1,0 +1,9 @@
+007cc5f0 SP::cOption::operator=  # dev-PDB name
+007cc6f0 SP::cOption::cOption  # dev-PDB name (copy ctor; calls fixed_vector copy ctors 007cb3e0/007cc580)
+007cc7f0 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::DoInsertValue  # grow path uses uninitialized_move start/commit (007cc760/007cb480) + cOption copy ctor
+007cc9a0 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back  # dev-PDB name
+007ccb10 `anonymous namespace'::cOptionBlockCommand::Execute  # dev-PDB name
+007ccc30 cConfigScriptState option reset (PDB candidate vector<cOption,sp_vector_allocator>::erase)  # sets +0x58/+0x5c = -1, erases mOptions, clears 3 strings, +0xd = 0
+007cccc0 SP::cConfigManager resolution-info option builder  # unnamed; cOption id 0x46170a2 + 2 ResolutionInfo property lists
+007cce50 SP::cConfigManager resolution option loader  # unnamed; GetIntProperty 0x46c0c15/0x46c0c16, defaults 0x320/0x258
+007cd340 SP::cConfigManager::LoadOptionSetup  # dev-PDB name

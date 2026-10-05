@@ -1,0 +1,2 @@
+007d7640 SP::cSplitManager::AddSplitInstance  # pdb_candidates caller-single
+007d6b00 EA::Swarm::cEffectParams::operator=  # layout match: 25 cParamRec + float vector + int params + 9 AutoRefCount (PDB type cEffectParams)

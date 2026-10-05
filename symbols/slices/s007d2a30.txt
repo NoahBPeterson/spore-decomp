@@ -1,0 +1,10 @@
+007d2a30  eastl::vector<cAnimationCurve>::DoInsertValue  # reserve/emplace n copies at a position
+007d2c70  eastl::vector<cSplitController>::DoInsertValue
+007d2ee0  cGameModelEffectCommand::OnEndBlock  # clones the game-model state and pushes it through AddDescription
+007d2f90  eastl::vector<cAnimationCurve>::operator=
+007d30d0  eastl::vector<cSplitController>::operator=
+007d3210  eastl::vector<cAnimationCurve>::insert  # single value at a position
+007d33e0  eastl::vector<cSplitController>::insert
+007d35b0  SP::cGameModelDescription::operator=  # copies scalar fields + the four eastl vectors
+007d3770  eastl::vector<cAnimationCurve>::resize
+007d3860  eastl::vector<cSplitController>::resize
