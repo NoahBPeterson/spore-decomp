@@ -1,0 +1,18 @@
+00798d30 0 complete Ghidra transcription of FUN_00798d30; SSE identity rebuild / call dispatch schedule differs
+00798ed0 158 complete behavioral transcription; x87 unsigned rounding (fild/fistp + FPU control word) not reproduced
+00799110 326 complete switch transcription; case-body layout and inlined Vector3_Normalize call differ
+00799290 64 complete refcounted copy; register allocation differs (keeps range in esi/ecx vs edx/esi)
+007992e0 25 complete refcounted copy; register allocation differs
+00799320 125 complete Vector4 normalize; x87 accumulation order differs
+007993a0 10 complete cSplitInstance constructor; first three zero-stores scheduled differently
+007994d0 266 complete switch transcription; case-body layout / jump table ordering differs
+00799640 0 complete switch transcription; compiler layout differs (no same-size symbol)
+007997f0 44 complete vtable+field constructor; this/param register allocation differs (eax vs ecx)
+00799840 58 complete EASTL vector allocator; call-arg order/register use differs
+007998a0 108 complete plane-intersection (float10/x87); evaluation order differs
+00799940 59 complete vtable+field constructor; this/param register allocation differs
+007999a0 212 complete ray-sphere (float10/x87); evaluation order differs
+00799b00 44 complete vtable+field constructor; this/param register allocation differs
+00799b50 177 complete ray-plane (float10/x87); evaluation order differs
+00799c30 38 complete vtable+field constructor; this/param register allocation differs
+00799c70 52 complete vtable+field constructor; this/param register allocation differs

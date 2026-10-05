@@ -1,0 +1,5 @@
+007ace40   83  COMPLETE 2x2 byte box filter; the two row pointers are kept in different registers (ecx/esi vs the original) and the inner-loop load order differs, so the schedule diverges.
+007aceb0    2  COMPLETE vertical 2-tap byte average; only the register operand of the two inner `movzx` loads is swapped.
+007acef0  132  COMPLETE 2x2 RGBA SWAR box filter; same register-assignment divergence as FUN_007ace40.
+007acfa0    2  COMPLETE vertical 2-tap RGBA SWAR average; only the register operand of the two inner loads is swapped.
+007acfe0  240  COMPLETE DXT surface downsampling dispatcher; parameter/register assignment and the cold `return false` block order differ.

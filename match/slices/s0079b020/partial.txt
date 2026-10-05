@@ -1,0 +1,14 @@
+# va  diff-bytes  reason (none)
+0079b020  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b0d0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b150  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b1c0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b2a0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b360  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b4b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b520  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b590  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b5d0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b630  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b6b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+0079b7b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator

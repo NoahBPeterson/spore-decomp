@@ -1,0 +1,1 @@
+00780b70 SP::cAppModeTerrainEditor::HandleSimulationUpdate  # PDB caller-scored candidate (Ghidra also suggests cSPSimulatorSpaceGame::PlanetContextActivate)

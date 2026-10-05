@@ -1,0 +1,2 @@
+slices/s00783590/s00783590.cpp  ?MirrorSHInZ@@YAXHPAM@Z  00783c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s00783590/s00783590.cpp  ?FUN_00783f40@@YAXHHHPAX@Z  00783f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

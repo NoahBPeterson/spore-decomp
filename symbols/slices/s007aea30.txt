@@ -1,0 +1,6 @@
+007aeab0 findendpoints  # card name
+007af490 eadxt  # card name
+007af5d0 eastl::copy<Endpoint>  # inferred: conditional copy of 0x20-byte endpoint records
+007af620 eastl::fill<Endpoint>  # inferred: repeated copy of one 0x20-byte record
+007af670 eastl::fill_n<Endpoint>  # inferred: n copies of one 0x20-byte record
+007af6d0 eastl::copy_backward<Endpoint>  # inferred: backward copy of 0x20-byte records

@@ -1,0 +1,6 @@
+00795ec0 174 complete Ghidra transcription of SP::FindSHCoeffsFromHDRCubeMap; float10/x87 normalization prevents byte match
+007961d0 502 complete behavioral transcription of SP::AddSphereLighting; compiler shrinks SSE body
+00796420 388 complete behavioral transcription of SP::CalcAtmosphereZH; constant/switch schedule differs
+007965c0 23 complete store sequence; compiler vectorizes the identity-matrix constructor differently
+007966f0 276 complete scaled-matrix store; SIMD transpose schedule differs
+00796800 268 complete scaled-matrix store; SIMD transpose schedule differs

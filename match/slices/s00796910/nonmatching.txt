@@ -1,0 +1,1 @@
+00796910 1724 complete Ghidra transcription of FUN_00796910; hand-scheduled SSE matrix kernel, compiler keeps spilled scratch array (emits 3184 bytes vs 1460)

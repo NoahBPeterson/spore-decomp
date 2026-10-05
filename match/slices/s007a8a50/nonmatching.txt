@@ -1,0 +1,15 @@
+007a9130  108  find-and-erase by key: register/layout schedule differs
+007a93b0  9    wrapper: register choice + tail-call vs call
+007a9420  14  GetKeyFromTexture: base pointer register/lea shape differs
+007a9450  5    GetResourceForTexture: null path folds to absolute [0x24]
+007a9470  109  CreateTexture: IDGenerator + vtable forwarding schedule
+007a9540  52  RegisterGameTexture: IDGenerator schedule
+007a95b0  11  set/clear flag bit: epilogue merge differs
+007a9620  77  CleanupJob: EH frame + virtual-release shape
+007a9680  146  deque range copy loop
+007a9730  158  WriteTexture: async/sync path + key packing
+007a97e0  79  refptr assignment (lock xadd + release)
+007a9840  77  remove-first-matching in deque
+007a9880  46  refptr clear (lock xadd release)
+007a98b0  90  cLoadQueue<...>::StallUntilLoaded deque scan
+007a9a80  90  DequeIterator::operator+=

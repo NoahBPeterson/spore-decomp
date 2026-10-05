@@ -1,0 +1,2 @@
+007af5d0  34  COMPLETE conditional copy/fill loop over 0x20-byte endpoints; loop-carried `first`/`dest` land in the opposite registers (ecx/eax swapped), so every operand byte differs.
+007af6d0  33  COMPLETE backward copy over 0x20-byte endpoints; loop-carried `last`/`dest` land in the opposite registers.

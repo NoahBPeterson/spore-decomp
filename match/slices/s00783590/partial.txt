@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00783fb0  n/a  PARTIAL: hemisphere environment-map projection loop skeleton; texture sampling, Legendre evaluation and the 4-channel accumulation are omitted

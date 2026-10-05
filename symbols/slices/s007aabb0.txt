@@ -1,0 +1,12 @@
+007aaf90 SP::cTextureManager::UnregisterArena  # stub: locks mTextureArenaMutex (+0x98), erases the arena from the mTextureArenas set (+0x78)
+007aafc0 SP::cTextureManager::StallFinishBackgroundLoad  # PDB gap-align
+007ab090 SP::cLoadQueue<...>::ClearEntries  # iterates the 4 cTextureAsyncInfo entries and clears the deque
+007ab0d0 eastl::hashtable<EA::ResourceMan::Key,eastl::pair<EA::ResourceMan::Key const,SP::cTextureInstanceInternal *>,...>::DoInsertValue  # PDB callee-single
+007ab2f0 SP::cTextureManager::~cTextureManager  # PDB gap-align
+007ab460 SP::cTextureManager::Shutdown  # PDB vtable-slot
+007ab5f0 SP::cTextureManager::HasTexture  # PDB gap-align
+007ab6c0 SP::cTextureManager::ReloadTexture  # PDB gap-align
+007ab730 SP::cTextureManager::RegisterArenaContents  # PDB vtable-slot
+007ab860 SP::cTextureAsyncInfo::Setup  # PDB gap-align
+007aba40 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::Update  # PDB gap-align
+007abae0 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::Schedule  # PDB callee-single

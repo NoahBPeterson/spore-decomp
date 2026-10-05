@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00784420  244  complete: full ground-bounce flow (7 SH constants, diagonal basis, basis multiply switch, copy, Z mirror, diffuse reflection, SIMD accumulate); only register allocation (order/n held in ebx/esi swapped) and the SSE broadcast idiom differ

@@ -1,0 +1,9 @@
+007ada40  674  PARTIAL mapblock skeleton only.
+007adcf0  372  PARTIAL MMX nearest-endpoint block mapper skeleton only.
+007ade70  571  PARTIAL rtrymapblock skeleton only.
+007ae0b0  495  PARTIAL rbtrymapblock skeleton only.
+007ae2a0  779  PARTIAL RefineMinMaxColors skeleton only.
+007ae5b0  164  PARTIAL register-convention alpha-block interleave skeleton only.
+007ae660  472  PARTIAL InterpolatedAlphaBlock skeleton only.
+007ae840  151  PARTIAL MMX 4x4 min/max reduction skeleton only.
+007ae980   99  PARTIAL DXT surface dtor (two refcounted member releases) skeleton only.

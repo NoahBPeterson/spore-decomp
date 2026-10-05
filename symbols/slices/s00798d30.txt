@@ -1,0 +1,2 @@
+007993a0 SP::cSplitManager::cSplitInstance::cSplitInstance  # dev PDB name in card header
+00799450 SP::cSplitManager::cSplitInstance::cSplitInstance  # copy ctor, card header

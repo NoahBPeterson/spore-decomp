@@ -1,0 +1,13 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+007afb70  618  SP::cDXTCompressJobData::DXTCompressRow: full row/block copy + eadxt calls, loop/register shape differs
+007afe10  139  SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
+007aff00  250  SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs
+007b0040   89  ref-counted range copy: complete, AddRef call ordering differs
+007b00f0   23  Graphics::BakeSprites ctor: member-vector init scheduled before base vptrs in original
+007b0130    3  destructor: original restores base vptrs in order +4,+0 (cl emits +0,+4)
+007b0160   56  destructor: EH frame + release/vector order differs
+007b01d0  216  row-loop handler (premultiply path): register allocation (this/job) differs
+007b02f0   81  SP::cTexturePreload dtor: EH frame and member order differ
+007b03e0    3  scalar deleting dtor: base vptr store order +4,+0 not reproduced
+007b07e0   99  SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
+007b0980  193  eastl vector assignment: helper call arg order/scheduling differs

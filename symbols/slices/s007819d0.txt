@@ -1,0 +1,19 @@
+007819d0 ShadowSub::TryApply  # conditional apply/notify; owns enable flags at +4/+5/+6 and a ref at +0x10
+00781a60 Vec12::ConstructRange  # allocates n*0xc and uninitialized-copies; byte-exact pattern target
+00781b10 Vec12::Destroy  # releases 0xc-stride refcounted elements then deallocates
+00781b80 E36 range copy-construct  # 0x24-stride elements (ref + Vec12 + a/b/c)
+00781c30 E36 constructor  # from by-value args
+00781cb0 E36 range destroy  # 0x24-stride destroy loop; byte-exact
+00781cf0 E36 vector destroy  # destroy + tagged deallocate
+00781d60 big object constructor  # vtables, many -1 defaults, shadow raster/basis-map release loops
+007821b0 object destructor  # releases refs, destroys two sub-vectors and two fixed arrays
+00782270 Vec12::Assign  # vector assignment with reallocation
+00782420 E36 copy-assign range  # byte-exact
+00782470 E36 backwards copy-assign range  # byte-exact
+007824e0 pop_back-like helper
+00782540 push_back(E36)
+007825d0 emplace-with-flag
+00782660 emplace freshly allocated 16-byte object
+00782740 emplace from refcounted object
+007827c0 clear + notify  # byte-exact
+00782800 range insert

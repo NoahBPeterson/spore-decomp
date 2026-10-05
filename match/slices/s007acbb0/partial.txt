@@ -1,0 +1,9 @@
+007acbb0  467  PARTIAL cTextureManager::GetTexture (EH map lookup + sync/async load) skeleton only.
+007acd90  174  PARTIAL cTextureManager::StallUntilLoaded (EH) skeleton only.
+007ad0c0  535  PARTIAL DXT3 alpha-block expansion to RGBA4444 skeleton only.
+007ad2e0  276  PARTIAL mappixel (EAX/ECX register convention) skeleton only.
+007ad400  517  PARTIAL mappixeltransparent skeleton only.
+007ad610  321  PARTIAL trymappixel skeleton only.
+007ad760  169  PARTIAL rbmappixel skeleton only.
+007ad810  312  PARTIAL trymapblock skeleton only.
+007ad950  231  PARTIAL trymapblockfast (MMX) skeleton only.

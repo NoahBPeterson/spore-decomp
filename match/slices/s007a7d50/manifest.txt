@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007a7d50/s007a7d50.cpp  ?SetStyle@cTextRenderer@@QAEXH@Z  007a82a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?EnsureBuffers@cTextRenderer@@QAEXXZ  007a8310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  _FUN_007a8360  007a8360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?Init@cTextRenderer@@QAEXXZ  007a84d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?Release@cTextRenderer@@QAEXXZ  007a8530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?SetFontName@cTextRenderer@@QAEXPB_W@Z  007a8550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007a7d50/s007a7d50.cpp  ?SetFontSize@cTextRenderer@@QAEXM@Z  007a85a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

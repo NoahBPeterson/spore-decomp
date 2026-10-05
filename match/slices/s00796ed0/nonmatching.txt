@@ -1,0 +1,1 @@
+00796ed0 1408 complete Ghidra transcription of FUN_00796ed0; hand-scheduled SSE matrix kernel (emits 4290 bytes vs 2882)

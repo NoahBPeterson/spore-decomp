@@ -1,0 +1,11 @@
+007a4220 SP::cStaticBuffer::~cStaticBuffer  # PDB name
+007a4710 SP::cStaticBuffer::Flush  # PDB name
+007a47c0 SP::cStaticBuffer::GetVertexBuffer  # PDB name
+007a4b10 SP::cGraphicsSystem::GetRectID  # PDB name
+007a4bb0 SP::cGraphicsSystem::GetCurrentCubemapFaceRectID  # PDB name
+007a4d20 SP::cGraphicsSystem::PreShutdown  # PDB name
+007a4d40 SP::cGraphicsSystem::RecycleEffectsBuffers  # PDB name
+007a4d90 SP::cGraphicsSystem::UpdateManagers  # PDB name
+007a4e40 SP::cDebugDraw::Update  # PDB name
+007a4f10 SP::cGraphicsSystem::GetBakeBuffer  # PDB name
+007a5020 SP::cGraphicsSystem::RecycleBakingRTTs  # PDB name

@@ -1,0 +1,4 @@
+0079f8d0 eastl::vector<SP::cSplitModelElement,eastl::sp_vector_allocator>::operator=  # PDB dev name (symbols/pdb_names.json)
+0079fef0 eastl::vector<SP::cSplitManager::cSplitInstanceList::cElement,eastl::sp_vector_allocator>::push_back  # PDB dev name
+0079ff40 SP::cSplitManager::cSplitInstanceList::insert  # PDB caller-scored candidate
+007a0360 SP::anonymous_namespace::CompileSplitModels  # PDB caller-single candidate

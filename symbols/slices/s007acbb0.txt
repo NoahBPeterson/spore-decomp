@@ -1,0 +1,13 @@
+007acbb0 SP::cTextureManager::GetTexture  # PDB candidate (caller-single)
+007acd90 SP::cTextureManager::StallUntilLoaded  # PDB card name
+007ace40 rw::graphics::dxt::AverageBlock2x2Bytes  # inferred (2x2 byte box filter)
+007aceb0 rw::graphics::dxt::AverageBlock2x1Bytes  # inferred
+007acef0 rw::graphics::dxt::AverageBlock2x2Dwords  # inferred
+007acfa0 rw::graphics::dxt::AverageBlock2x1Dwords  # inferred
+007acfe0 rw::graphics::dxt::DownsampleSurface  # inferred dispatcher
+007ad2e0 mappixel  # card name
+007ad400 mappixeltransparent  # card name
+007ad610 trymappixel  # card name
+007ad760 rbmappixel  # card name
+007ad810 trymapblock  # card name
+007ad950 trymapblockfast  # card name

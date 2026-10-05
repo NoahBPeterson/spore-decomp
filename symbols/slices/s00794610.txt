@@ -1,0 +1,2 @@
+00794610 SP::MultiplyZH<float,rw::math::vpu::Vector4>  # Ghidra template instance name
+007948d0 SP::AddColourSample  # Ghidra name

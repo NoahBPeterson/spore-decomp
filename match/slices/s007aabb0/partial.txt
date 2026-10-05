@@ -1,0 +1,8 @@
+007aabb0  978  PARTIAL texture-raster factory: format switch + async job dispatch skeleton only.
+007aafc0  206  PARTIAL StallFinishBackgroundLoad: EH job-wait path skeleton only.
+007ab2f0  341  PARTIAL ~cTextureManager: EH + refcount teardown skeleton only.
+007ab460  390  PARTIAL Shutdown: full teardown path skeleton only.
+007ab730  298  PARTIAL RegisterArenaContents: arena export iteration skeleton only.
+007ab860  480  PARTIAL cTextureAsyncInfo::Setup: async job setup skeleton only.
+007aba40  153  PARTIAL cLoadQueue::Update: drain-queue skeleton only.
+007abae0  151  PARTIAL cLoadQueue::Schedule: enqueue skeleton only.

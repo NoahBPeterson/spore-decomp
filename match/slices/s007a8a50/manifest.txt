@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007a8a50/s007a8a50.cpp  ?GetTexture@cTextureManager@@QAEXHHH@Z  007a93c0
+slices/s007a8a50/s007a8a50.cpp  ?HasTexture@cTextureManager@@QAEXHH@Z  007a93f0
+slices/s007a8a50/s007a8a50.cpp  ?CreateTextureEx@cTextureManager@@QAEXHHHHHIHH@Z  007a94f0
+slices/s007a8a50/s007a8a50.cpp  ?ReloadTexture@cTextureManager@@QAEXHH@Z  007a95e0

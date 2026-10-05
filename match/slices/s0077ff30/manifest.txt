@@ -1,0 +1,4 @@
+slices/s0077ff30/s0077ff30.cpp  ?SetLightingWorld@LightingRefHolder@@QAEXPAUIRefCounted@@@Z  00780210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0077ff30/s0077ff30.cpp  ?SetFlag@BoolFlagHolder@@QAEX_N@Z  00780250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0077ff30/s0077ff30.cpp  ?MoveBackward12@@YAPAUElem12@@PAU1@00@Z  00780a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0077ff30/s0077ff30.cpp  ?Update@cShadowWorld@@QAEXXZ  00780ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

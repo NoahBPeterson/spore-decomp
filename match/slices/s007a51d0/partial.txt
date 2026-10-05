@@ -1,0 +1,20 @@
+# va  diff-bytes  reason (none)
+007a51d0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5290  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a52f0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5370  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5410  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a54b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5530  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a55b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5630  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a56b0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5730  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a57d0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5860  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5900  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5990  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5a20  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5ef0  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a5f70  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator
+007a6010  0  asm transcription (naked __asm/_emit), not decompiled C++; demoted by orchestrator

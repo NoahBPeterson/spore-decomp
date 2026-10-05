@@ -1,0 +1,1 @@
+007ae920  50  COMPLETE span/scanline descriptor init; store sequence is identical but `this` lives in eax in the original and in ecx here, so every operand register differs.

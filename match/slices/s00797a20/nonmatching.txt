@@ -1,0 +1,1 @@
+00797a20 1714 complete Ghidra transcription of FUN_00797a20; hand-scheduled SSE spherical-harmonic kernel (emits 6587 bytes vs 4873)

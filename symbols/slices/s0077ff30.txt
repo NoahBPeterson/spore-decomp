@@ -1,0 +1,8 @@
+0077ff30 SP::cRenderConvolutionShadow::DrawLayer  # PDB caller-single candidate; thunk of view matrices + BuildBasisMap
+00780210 LightingRefHolder::SetLightingWorld  # assigns refcounted ptr at +0x10 then calls cShadowWorld::SetLightingWorld on this-8; byte-exact
+00780250 BoolFlagHolder::SetFlag  # sets byte at +4 then calls owner notify on this-8; byte-exact
+00780270 SP::cShadowWorld::Init  # PDB name; creates shadow rasters and render-target rect IDs
+007806a0 SP::cShadowWorld::Cleanup  # releases render shadow, shadow DB, shadow-map and basis-map rasters
+00780810 SP::cShadowWorld::Apply  # binds basis rasters as render-state textures, acq/release shader resource
+00780a50 MoveBackward12  # eastl move_backward of 12-byte refcounted element; byte-exact
+00780ab0 SP::cShadowWorld::Update  # PDB caller-scored name; property-driven Init; byte-exact

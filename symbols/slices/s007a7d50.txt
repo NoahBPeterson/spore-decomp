@@ -1,0 +1,16 @@
+007a7d50 SP::cTextRenderer::InitRenderer  # nearby caller-single; large renderer init
+007a82a0 SP::cTextRenderer::SetStyle  # calls EA::Text::GetStyleManager(1)/GetStyle
+007a82d0 SP::cTextRenderer::SetStyleScale  # writes style +0x227/+0x224
+007a8310 SP::cTextRenderer::EnsureBuffers  # allocates 0x14000/0x2000 Graphics buffers
+007a8390 SP::cTextRenderer::cTextRenderer  # pdb_candidates caller-scored
+007a84d0 SP::cTextRenderer::Init  # lazy render init (material/texture/layout)
+007a8530 SP::cTextRenderer::Release  # clears cached texture pointers
+007a8550 SP::cTextRenderer::SetFontName  # wcsncmp/wcsncpy into style
+007a85a0 SP::cTextRenderer::SetFontSize  # style +0x200
+007a85e0 SP::cTextRenderer::SetColor  # packs rgb into style +0x224
+007a8660 SP::cTextRenderer::CreateDevice  # EnterCriticalSection +0x168
+007a8700 SP::cTextRenderer::DestroyDevice  # LeaveCriticalSection +0x168
+007a8790 SP::cTextRenderer::~cTextRenderer  # frees buffers/layout/style
+007a8810 SP::CreateTextRenderWareObject  # allocates 0x1a8 object, sets vtable
+007a88b0 SP::cTextRendererRenderWare::ScalarDeletingDtor
+007a8910 eastl::vector<Glyph,stride 0x14>::insert

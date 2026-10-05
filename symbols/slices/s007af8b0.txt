@@ -1,0 +1,5 @@
+007aff00 SP::WriteImageDataAsTexture  # PDB name
+007b07e0 SP::cTexturePreload::cTexturePreload  # PDB name
+007afb70 SP::cDXTCompressJobData::DXTCompressRow  # PDB candidate (caller-scored), layout matches cDXTCompressJobData
+007afe10 SP::cDXTCompressJobData::RunJob  # PDB candidate (caller-single)
+007b00f0 Graphics::BakeSprites::BakeSprites  # vtable_names.txt vt

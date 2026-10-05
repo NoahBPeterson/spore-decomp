@@ -1,0 +1,1 @@
+00794e80 3201 compiler-generated SSE/x87 template expansion (SP::RotateZHToSHAdd); transcribed complete from Ghidra but vectorization/instruction scheduling not reproducible

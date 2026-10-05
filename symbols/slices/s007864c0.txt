@@ -1,0 +1,1 @@
+007864c0 SP::RotateSH<rw::math::vpu::Vector4>  # PDB caller-scored candidate

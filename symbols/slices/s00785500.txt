@@ -1,0 +1,1 @@
+00785500 SP::RotateZHToSHAdd<rw::math::vpu::Vector4,rw::math::vpu::Vector4>  # Ghidra template instance name

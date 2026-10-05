@@ -1,0 +1,15 @@
+007a5290 SP::cGraphicsSystem::UpdateRendering  # PDB name
+007a52f0 SP::cGraphicsSystem::InitSplatterTexture  # PDB name
+007a54b0 SP::cGraphicsSystem::InitAOTexture  # PDB name
+007a5530 SP::cGraphicsSystem::InitBakeInfoTexture  # PDB name
+007a55b0 SP::cGraphicsSystem::InitNMapSpecTexture  # PDB name
+007a5630 SP::cGraphicsSystem::InitFinalBakedTexture  # PDB name
+007a56b0 SP::cGraphicsSystem::InitSmallFinalBakedTexture  # PDB name
+007a5730 SP::cGraphicsSystem::InitDepthTexture  # PDB name
+007a57d0 SP::cGraphicsSystem::InitShadowTexture  # PDB name
+007a5860 SP::cGraphicsSystem::InitShadowBlurTexture  # PDB name
+007a5900 SP::cGraphicsSystem::InitSnapshotTexture  # PDB name
+007a5990 SP::cGraphicsSystem::InitLargeThumbnailTexture  # PDB name
+007a5a20 SP::cGraphicsSystem::InitThumbnailBoundsTexture  # PDB name
+007a5ef0 SP::cGraphicsSystem::RecycleBakeBuffers  # PDB name
+007a5f70 SP::cGraphicsSystem::InitBakeBuffer  # PDB name

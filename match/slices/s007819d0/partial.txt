@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00781a60  n/a  PARTIAL: Vec12 range construction translated only structurally (allocation sizes and uninitialized-copy helper call shape uncertain)
+00781c30  n/a  PARTIAL: E36 constructor omits the by-value argument block (9 stack slots)
+00781d60  n/a  PARTIAL: big object constructor reproduces only the vtable/pointer/flag prologue; the raster-release loops and float/curve defaults are omitted
+007821b0  n/a  PARTIAL: destructor simplified; _eh_vector_destructor_iterator_ sub-vector teardown not reproduced exactly
+00782270  n/a  PARTIAL: Vec12 assignment translated structurally; reallocation/relocate helper call shapes uncertain
+007824e0  n/a  PARTIAL: pop_back approximates the tail-call to Vec12::Destroy on the new end element
+00782540  n/a  PARTIAL: push_back value shape approximated (stored dwords do not match the original)
+007825d0  n/a  PARTIAL: emplace-with-flag approximated
+00782660  n/a  PARTIAL: freshly allocated 16-byte object emplace approximated
+00782740  n/a  PARTIAL: emplace-from-object approximated
+00782800  n/a  PARTIAL: range insert translated structurally but the destroy/relocate split is not exact

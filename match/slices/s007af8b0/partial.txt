@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (incomplete / approximated source)
+007af8b0  0  skeleton: two-image blit/alpha-copy loop shape not fully recovered
+007b0430  0  skeleton: DXT compress job construction not reconstructed (path guard only)
+007b06c0  0  skeleton: jober wrapper not reconstructed

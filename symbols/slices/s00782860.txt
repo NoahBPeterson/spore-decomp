@@ -1,0 +1,13 @@
+00782860 E36 vector insert  # insert with reallocation
+00782a60 E36 vector push_back  # fast path + reallocation
+00782b00 cleanup/erase/dispatch  # calls cShadowWorld::Cleanup (0x7806a0) then range helper then virtual +0x24
+00782b30 temp-E36 push_back wrapper
+00782bb0 factorial helper  # rising/falling factorial over the int table at 0x153a2fc
+00782c90 Matrix44*Vector3  # column-accumulating SSE transform
+00782ce0 weighted 4-vector sum
+00782d40 associated-Legendre normalisation factor (SQRT part)
+00782db0 associated Legendre P_l^m(x)
+00783130 associated Legendre P(l,m) with cos/sin (complex-argument form)
+007831d0 degree-7 spherical-harmonic polynomial
+00783380 SH normalisation constants (7 floats) + copy-out
+00783410 Vector4 list rotation  # PDB names it eastl::vector<rw::math::vpu::Vector4,...>::erase

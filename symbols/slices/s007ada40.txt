@@ -1,0 +1,12 @@
+007ae920 SP::cDXTBlock::Init  # inferred: span descriptor initialiser (this+0x1c flag byte)
+007ae960 SP::cDXTBlock::IsSet  # inferred: returns byte field +0x1c
+007ae9f0 SP::cDXTBlock::cDXTBlock  # inferred: 2-vptr base + interlocked refcount ctor
+007ada40 mapblock  # card name
+007adcf0 adxtMapBlock  # inferred
+007ade70 rtrymapblock  # card name
+007ae0b0 rbtrymapblock  # card name
+007ae2a0 RefineMinMaxColors  # card name
+007ae5b0 adxtAlphaBlock  # inferred
+007ae660 InterpolatedAlphaBlock  # card name
+007ae840 adxtMinMaxBlock  # inferred
+007ae980 SP::cDXTBlock::~cDXTBlock  # inferred

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00781b10  86   complete: Vec12 destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame
+00781cf0  81   complete: E36 vector destroy loop + tagged deallocate; differs only by the compiler-generated EH unwind frame
+00781b80  131  complete: E36 range copy-construct (p0 + Vec12 copy + a/b/c); differs only by the compiler-generated EH unwind frame and register schedule
+007819d0  120  complete: conditional Apply/notify with the four enable flags and the 0x20a/0x20b/0x223 notifications; only register schedule differs

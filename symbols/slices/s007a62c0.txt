@@ -1,0 +1,6 @@
+007a62c0 SP::cGraphicsSystem::~cGraphicsSystem  # vtable stores to cGraphicsSystem vtables 0x140f7c0/0x140f7b0
+007a66c0 SP::cGraphicsSystem::InitBufferTexture  # pdb_names.json
+007a6870 SP::cGraphicsSystem::GetBufferTexture  # inferred: buffer-texture accessor (vtable+0x90 then InitBufferTexture)
+007a68c0 SP::cGraphicsSystem::GetBufferRectID  # pdb_names.json
+007a6910 eastl::vector<EA::AutoRefCount<SP::cGameModelResource>,eastl::sp_vector_allocator>::insert  # member vector insert of mBuiltinModels
+007a6b40 SP::cGraphicsSystem::Shutdown  # pdb_names.json

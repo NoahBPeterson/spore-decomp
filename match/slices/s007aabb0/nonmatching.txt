@@ -1,0 +1,3 @@
+007ab0d0  206  COMPLETE hash_map DoInsertValue; frame 0xc vs 0x8 (original reuses the value param home slot for the bucket index) and the rehash/allocate scheduling differs.
+007ab5f0  108  COMPLETE HasTexture; no /EHsc prologue (the original keeps unwind state around the mutex) and the find argument/stack layout differs.
+007ab6c0   59  COMPLETE ReloadTexture; the return-0 block is laid out inline instead of cold and the vtable loads are hoisted out of the pInstance test.

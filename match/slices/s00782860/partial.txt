@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00782a60  n/a  PARTIAL: push_back reproduces the fast path only; the reallocation call into FUN_00782860 is omitted
+00782b30  n/a  PARTIAL: temp-E36 construction approximated; the exact by-value argument block and push_back target are not reproduced
+00782db0  n/a  PARTIAL: Legendre recurrence translates the fast paths but the 8-way unrolled inner loop is collapsed to a scalar loop
+00783410  n/a  PARTIAL: only the first 2x2 column rotation is translated; the remaining block loops are omitted

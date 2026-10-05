@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00780810  143  complete: full render-state/texture-binding flow + RAII release; only register allocation and resource-release scheduling differ
+007806a0  235  complete: array-of-raster teardown with inlined lock-xadd Release; only register allocation and loop shape differ (source has redundant nested null checks cl CSEs)
+00780270  942  complete: raster + render-target-rect creation and basis-map loops translated; inlined AutoRefCount/EASTL scheduling not reproduced
+0077ff30  204  complete: full DrawLayer control flow (viewer matrices, render-state save/restore, BuildBasisMap sequence) translated; size 524 vs 728 because inlined copy/inline scheduling differs

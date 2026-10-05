@@ -1,0 +1,17 @@
+00799cc0 38 complete vtable+field constructor; this/param register allocation differs (eax vs ecx)
+00799e00 96 complete reverse refcounted copy; lock/branch schedule differs
+00799e70 0 complete switch dispatcher over DAT_0153b208; case-body layout differs (no same-size symbol)
+0079a0d0 0 complete Ghidra transcription of transform-combine; rep movsd/layout differs
+0079a4f0 112 complete EASTL vector reserve; allocation/DoInsertValue arg sequence differs
+0079a5a0 90 complete factory switch; operator_new call/ctor dispatch register use differs
+0079a630 90 complete factory switch; operator_new call/ctor dispatch register use differs
+0079a710 0 complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced
+0079a800 0 complete vector-of-vectors copy with EH frame; SEH prolog/epilog not reproduced
+0079a8f0 0 complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced
+0079a9d0 0 complete vector-of-vectors fill with EH frame; SEH prolog/epilog not reproduced
+0079aaa0 79 complete 0x78-stride transform reverse copy; cSPTransform::operator= call schedule differs
+0079ab90 102 complete factory dispatch; subtract-chain layout differs
+0079ac10 53 complete vtable/refcount constructor; lea/mov and branch layout differ
+0079ac70 101 complete destructor chain; EH cleanup schedule differs
+0079aeb0 0 complete destructor with EH frame; SEH prolog/epilog not reproduced
+0079af80 96 complete EASTL vector reserve (8-byte); allocation/copy sequence differs

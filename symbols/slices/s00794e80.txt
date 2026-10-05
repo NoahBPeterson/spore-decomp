@@ -1,0 +1,1 @@
+00794e80 SP::RotateZHToSHAdd  # dev PDB 00f79d50; card header; callee of AddSphereLighting

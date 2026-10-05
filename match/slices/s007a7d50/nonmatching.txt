@@ -1,0 +1,9 @@
+007a82d0  63  SetStyleScale: float->int conversion emitted as x87 instead of cvtss2si
+007a8390  159  cTextRenderer ctor: allocation/EH schedule and string-copy loop differ
+007a85e0  149  SetColor: repeated mTextStyle reloads / float->int conversion differ
+007a8660  69  AllocDevice: critical-section RAII EH frame not reproduced
+007a8700  51  FreeDevice: critical-section RAII EH frame not reproduced
+007a8790  74  ~cTextRenderer: member teardown order/register allocation differ
+007a8810  84  render-object factory: EH/new schedule differs
+007a88b0  49  render-object scalar deleting dtor
+007a8910  286  vector<Glyph,stride 0x14>::insert schedule

@@ -1,0 +1,11 @@
+007a9ae0  248  deque map InsertAt: EASTL deque growth schedule differs
+007a9d70  145  deque reverse range copy: iterator register schedule differs
+007a9e10  155  property-list ctor: vtable/EH schedule
+007a9eb0  96   hashtable DoFreeNodes: EH frame + refcount schedule
+007aa320  104  clear value: refcount release + virtual-release scheduling
+007aa3a0  122  job-info transfer: virtual call/register schedule
+007aa620  52   empty 16-byte ctor: EH frame shape
+007aa660  165  small dtor: release schedule
+007aa710  226  small dtor: release schedule
+007aa800  76   cNodeAllocator::Create: loop rotation differs
+007aa850  76   deque push_back with block alloc: map-growth schedule

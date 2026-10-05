@@ -1,0 +1,4 @@
+007a8a50  1569  skeleton: glyph-run encoder body omitted
+007a9080  162  empty stub: draw-glyph-run emitter not reconstructed
+007a91b0  198  empty stub: wide-string run dispatch not reconstructed
+007a9280  303  partial: GlyphCache texture creation implemented, vector push_back path incomplete

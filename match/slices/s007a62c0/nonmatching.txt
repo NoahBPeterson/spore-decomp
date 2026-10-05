@@ -1,0 +1,4 @@
+007a62c0  829  destructor: retail member layout + lock-xadd refcount release shape not reproduced
+007a66c0  171  InitBufferTexture: sret render-target creation + SEH frame not reproduced
+007a6910  268  eastl::vector<AutoRefCount<...>>::insert schedule not reproduced
+007a6b40  805  Shutdown: release-helper ordering / merged release blocks differ

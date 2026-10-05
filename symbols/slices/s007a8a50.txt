@@ -1,0 +1,19 @@
+007a9080 SP::cTextRenderer::AddGlyphRun  # emits a glyph run into the text buffers
+007a9130 SP::SomeManager::FindAndEraseByKey  # searches +0x190 vector, erases match
+007a91b0 SP::cTextRenderer::DrawString  # global/shaped text dispatch
+007a9280 SP::cTextRenderer::CreateGlyphCacheTexture  # GlyphCache key + push_back
+007a93b0 SP::ResetDevice  # calls global d3d9 device vtbl+0x14
+007a93c0 SP::cTextureManager::GetTexture  # pdb_names.json
+007a93f0 SP::cTextureManager::HasTexture  # pdb_names.json
+007a9420 SP::cTextureManager::GetKeyFromTexture  # pdb_names.json
+007a9450 SP::cTextureManager::GetResourceForTexture  # pdb_names.json
+007a9470 SP::cTextureManager::CreateTexture  # pdb_names.json
+007a94f0 SP::cTextureManager::CreateTexture  # pdb_names.json
+007a9540 SP::cTextureManager::RegisterGameTexture  # pdb_names.json
+007a95e0 SP::cTextureManager::ReloadTexture  # pdb_names.json
+007a9730 SP::cTextureManager::WriteTexture  # pdb_names.json
+007a98b0 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::StallUntilLoaded  # pdb_names.json
+007a9a80 eastl::DequeIterator<SP::cTextureAsyncQueueEntry,SP::cTextureAsyncQueueEntry *,SP::cTextureAsyncQueueEntry &,64>::operator+=  # pdb_names.json
+007aa0d0 SP::cTextureManager::AddTextureLoadDependency  # pdb_names.json
+007aa200 SP::cTextureManager::ReloadTexture  # pdb_names.json
+007aa800 SP::cNodeAllocator<SP::cTextureInstanceInternal>::Create  # pdb_names.json

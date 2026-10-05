@@ -1,0 +1,3 @@
+007961d0 SP::AddSphereLighting  # dev PDB 00f98680; card header
+00796420 SP::CalcAtmosphereZH  # dev PDB 00f984d0; card header
+00795ec0 SP::FindSHCoeffsFromHDRCubeMap  # Ghidra PDB candidate (caller-single) for FUN_00795ec0

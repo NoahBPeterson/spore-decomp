@@ -1,0 +1,9 @@
+007ac080 eastl::hash_map<EA::ResourceMan::Key,SP::cTextureInstanceInternal *,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,eastl::allocator,0>::operator[]  # PDB card name
+007ac0f0 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::cLoadQueue  # PDB card name
+007ac1e0 SP::cTextureManager::cTextureManager  # PDB card name
+007ac2f0 SP::cTextureManager::CreateInstance  # PDB candidate (caller-single)
+007ac480 eastl::deque<SP::cTextureAsyncQueueEntry,eastl::allocator,64>::erase  # PDB card name
+007ac600 SP::cTextureManager::RegisterBuiltInGameTexture  # PDB candidate (caller-single)
+007ac750 SP::cTextureManager::GetTextureSync  # PDB card name
+007ac850 SP::cTextureManager::GetTextureAsync  # PDB card name
+007ac8d0 SP::cTextureManager::StallUntilLoadedUnderLock  # PDB card name

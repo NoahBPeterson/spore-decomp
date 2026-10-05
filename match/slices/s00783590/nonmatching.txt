@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00784330  84   complete: Henyey-Greenstein phase term loop (SSE broadcast + x87 scale); cl keeps the __m128 values on the stack and emits a sqrt call instead of fsqrt
+007843a0  89   complete: additive variant of the same loop
+00783590  568  complete: full SH normalisation apply for degrees 0..4; original vectorises each 4-float group into SIMD
+00783830  745  complete: full SH normalisation remove for degrees 0..4; same vectorisation difference
+00783b20  363  complete: diffuse-reflection application for degrees 0..4 including the 7x and 9x block loops
+00783cf0  577  complete: SH basis multiply; the three basis-triple cases were folded into one loop, which changes the emitted shape

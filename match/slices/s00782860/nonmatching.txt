@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00782860  110  complete: E36 vector insert with reallocation, relocate and separate reallocation path all translated
+00782b00  32   complete: Cleanup + range-erase + virtual tail dispatch
+00782bb0  90   complete: rising/falling factorial helper with unrolled 8-way tail
+00782c90  60   complete: Matrix44 * Vector3 column accumulation
+00782ce0  82   complete: weighted sum of n 4-vectors
+00782d40  77   complete: associated-Legendre normalisation factor
+00783130  96   complete: associated Legendre P(l,m) with sin/cos handling
+007831d0  60   complete: degree-7 SH polynomial evaluation
+00783380  73   complete: 7 SH normalisation constants + copy-out
