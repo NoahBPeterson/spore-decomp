@@ -1,0 +1,25 @@
+007776f0 SP::PSProfileFromVersion
+00777720 virtual-call wrapper
+00777740 virtual-call wrapper
+00777760 SP::cShaderBase::Write
+00777840 SP::cShaderBase::Read
+007779e0 Mat44::assignTo
+00777a10 shader vertex-format max count query
+00777a60 ShaderState::setSlotU0
+00777a80 ShaderState::setSlotU1
+00777aa0 ShaderState::setSlotV0
+00777ac0 ShaderState::setSlotV1
+00777ae0 shader data setter (dirty mask + undo stack)
+00777b50 SP::SetShaderData
+00777bf0 pushShaderDataNull
+00777c10 shader data stack pop/restore
+00777c90 shaderDataStackNotEmpty
+00777cb0 DrawIndexedPrimitive loop
+00777d60 DrawIndexedPrimitive with sin count
+00777e10 light/arena wrapper
+00777e30 light/arena wrapper
+00777e50 D3D draw-call wrapper
+00777e90 D3D draw-call wrapper
+00777ed0 D3D draw-call wrapper
+00777f80 D3D draw-call wrapper (sin constants)
+00778050 table lookup

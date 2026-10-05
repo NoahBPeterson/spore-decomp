@@ -1,0 +1,4 @@
+00769f20  n/a  async job chain setup: multi-job registration approximated
+0076a4d0  n/a  try-lock chain: job locking/continuation approximated
+0076a720  n/a  CanConvert: type dispatch approximated
+0076a940  n/a  CreateConvertedResourceAsync: conversion pipeline approximated

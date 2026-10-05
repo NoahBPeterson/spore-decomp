@@ -1,0 +1,1 @@
+007749e0 7 sort(): the depth-count loop uses i!=0 in the original (test/je) which flips cl's register allocation; the i>0 spelling matches the allocation but emits jle/jg

@@ -1,0 +1,13 @@
+0076af50   45  Daf ctor: base/derived vtable store count and order differ
+0076afb0   40  Daf deleting dtor: vtable reset/EH schedule differs
+0076b240  283  cube-map refresh: helper register schedule differs
+0076b350   62  D350 ctor: vtable store/EH frame schedule differs
+0076b3c0  113  D350 dtor: vtable store/release schedule differs
+0076b5d0  118  reset refs: null-check/release schedule differs
+0076b660   53  D660 ctor: vtable store schedule differs
+0076b6c0   83  D660 dtor: vtable store schedule differs
+0076b720  284  viewer copy ctor: refcounted member attach schedule differs
+0076b840   49  release viewer: teardown schedule differs
+0076b890   91  render viewer: vcall/argument schedule differs
+0076b930   99  quaternion-from-basis: matrix temp layout and call schedule differ
+0076b9a0  110  copy-range 0x28: field copy schedule differs

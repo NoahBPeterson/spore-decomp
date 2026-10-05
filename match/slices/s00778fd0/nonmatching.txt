@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00779290  263  light-row upload complete; the SSE broadcast/negate pattern and buffer build differ entirely from scalar source
+007793e0  308  transformed light-row upload complete; FUN_011fca60 call and SSE negate pattern not reproduced
+007795a0  -  transform/focus distance complete; original computes fsqrt inline in x87, ours calls sqrt and is a different size

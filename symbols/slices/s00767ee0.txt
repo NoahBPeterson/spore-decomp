@@ -1,0 +1,8 @@
+# s00767ee0 recovered names
+00767ee0 SP::cGraphicsResourceFactory::WriteResourceRaster  # PDB name; serializes mip/face/level raster data
+00768200 C68200::Release  # releases union state at +0xd0 (5 -> FUN_7642c0, else UnionDestroy)
+00768240 C68240::C68240  # inline 0x7c vector ctor; registers job via FUN_00767760
+007682a0 V7cB::Resize  # vector<0x7c> resize
+00768370 C68370::C68370  # BakeSprites job ctor (vtables 0x13f1ab0/0x13ef094 -> 0x140e144/0x140e140)
+00768540 C68370Dtor  # BakeSprites job destructor
+00768650 LoadRecords  # PDB candidate SP::cEffectsRenderer::UpdateViewerParams; loads 0x7c records

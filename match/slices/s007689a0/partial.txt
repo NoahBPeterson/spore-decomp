@@ -1,0 +1,1 @@
+007689a0  n/a  WriteResourceGameModel: ~2.5 KB buffer/material serializer only structurally modelled

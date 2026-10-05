@@ -1,0 +1,7 @@
+00765f80   62  deleting dtor: EH prolog + vptr-store schedule not reproduced
+00765fe0    7  ResB ctor: only zeroing-store order differs (0x18/0x20/0x24/0x28/0x2c)
+00766100   37  MoveOut: one reused zero register instead of four independent xors
+00766250   53  ResE dtor: EH frame and member-dtor call schedule not reproduced
+007662d0  428  vector<0xa0>::insert: helper call schedule/register allocation differs
+00766950  399  vector<uint32_t>::insert: fill-then-move schedule differs
+00766ed0  176  Factory::CreateResource: refcount bookkeeping/register schedule differs

@@ -1,0 +1,12 @@
+007776c0 SP::VSProfileFromVersion
+00776730 SP::... # shader/model-builder routine (skeleton)
+00776920 SP::... # skeleton
+00776a60 SP::... # skeleton
+00776e60 SP::... # skeleton
+00776f40 SP::... # skeleton
+00777060 SP::... # skeleton
+00777130 SP::... # skeleton
+007771f0 SP::... # skeleton
+00777290 SP::... # skeleton
+007773c0 SP::... # skeleton
+007775a0 SP::... # skeleton

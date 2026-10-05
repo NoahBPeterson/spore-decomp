@@ -1,0 +1,3 @@
+007677c0  442  arm-decode: job registration and continuation setup approximated
+007679f0   0  ability-list reader: ability object layout and image-resource path approximated
+00767c80   0  material-list reader: material slot layout approximated

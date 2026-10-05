@@ -1,0 +1,9 @@
+# s00769f20 recovered names
+00769f20 SetupJobChain  # PDB candidate cGraphicsResourceAsyncRequest chain; 3 sub-jobs + callback
+0076a300 Func76a300  # PDB candidate cGraphicsResourceAsyncRequest::LoadSimple
+0076a340 SP::cGraphicsResourceFactory::ReadResource  # PDB candidate
+0076a400 CreateRequestJob  # single async request job registration
+0076a4d0 TryLockChain  # try-locks two jobs and chains a 4-step job
+0076a720 SP::cGraphicsResourceFactory::CanConvert  # job creation per source type
+0076a940 CreateConvertedResourceAsync  # allocates 0x338 job via FUN_00768370, AllocateRequest
+0076ac30 SP::cGraphicsResourceFactory::CreateResourceAsync

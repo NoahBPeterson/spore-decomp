@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00778060  -  Matrix4 invert: complete scalar port of the copy/affine/general branches; original is a 2413-byte SSE cofactor inverse that cannot be reproduced with ordinary C++ statements
+007789d0  106  ShaderDataVec::Push complete; loop nesting/register assignment differs (this in ebx vs edi, chunk count in ebp vs ebx)
+00778ab0  -  skinning-bone shader-constant upload complete; original fld/fstp grouped copy and chunking not reproduced
+00778f50  84  set-constant complete; compiler keeps v[1] live in xmm1 (mine stores it early and reuses xmm1 for v[0])

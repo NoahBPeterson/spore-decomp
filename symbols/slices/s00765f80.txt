@@ -1,0 +1,13 @@
+# s00765f80 recovered names
+00766030 ?AsInterfaceFC  # vtable 0x140e118 slot 3; type -> this / this+0x1c / base::AsInterface
+00766070 ResB::Method66070  # secondary vtable 0x140e0f8 slot 4; releases Arena at this-4
+007660b0 ResB::Method660b0  # secondary vtable 0x140e0f8 slot 5; forwards to container helper at this+4
+00765fe0 ResB::ResB  # ctor: vtables 0x13ebcdc -> 0x140e118 and 0x140e054 -> 0x140e0f8, AtomicInt refcount +4
+00766220 ResE::ResE  # ctor: vtables 0x13ebcdc -> 0x140e12c, AtomicInt refcount +4
+00766250 ResE::~ResE  # dtor: releases +0x18 (cLocalLightInfo) via 0x11eff60/0x9276c0
+007662d0 VBig::_insert  # vector (stride 0xa0) insert(pos,n,value)
+007668c0 UnionDestroy  # cUnionType Destroy: switch(4,3,2,1) with tailcalls 0x765ac0/0x7643d0
+00766910 VPtr::push_back  # vector<uint32_t> push_back
+00766950 V4::insert  # vector<uint32_t> insert(pos,n,value)
+00766e10 ReadDecalBlock  # painter decal reader; stream vcall at +0x28 slot 0xc
+00766ed0 Factory::CreateResource  # SP::cGraphicsResourceFactory::CreateResource

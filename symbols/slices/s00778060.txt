@@ -1,0 +1,10 @@
+# va  name  evidence
+00778060  rw::math::Matrix4_invert  # (float* out, const float* in, unsigned flags): flags&4 copy, (flags&3)==3 affine, else general SSE cofactor inverse
+007789d0  rw::graphics::ShaderDataState_Push  # pushes old shader-data values onto sShaderDataStack (0x16312f0) then sets m_softStateUpdated|=8
+00778ab0  rw::graphics::RWShader_SetShConst_skinBones  # matches ModAPI SDKtoGhidra name at 2017 0x7788B0; uploads bone rows as shader constants
+00778c50  rw::graphics::RWShader_SetShConst_skinWeights  # 4-float constant from global 0x16f6db0
+00778cc0  rw::graphics::RWShader_SetShConst_uvTweak  # fractional-part constant from {float,int} global 0x16f6db4
+00778d70  rw::graphics::RWShader_SetShConst_expandAmount  # 4-float constant from global 0x16f6db8
+00778de0  rw::graphics::RWShader_SetShConst_sunDir  # 4-float constant, default 0x1539ff8 when 0x16f6dd8 is null
+00778ea0  rw::graphics::RWShader_SetShConst_boneMatrix3  # three float4 constants from global 0x16f6df4
+00778f50  rw::graphics::RWShader_SetShConst_flag  # {int, bool} global 0x16f6de4 -> (value, flag?1:0, 0, 0)

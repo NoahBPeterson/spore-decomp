@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00775760/s00775760.cpp  ?GetRuntimeMeshes@@  007763b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00775760/s00775760.cpp  ?setFlagA@cRuntimeModelBuilder@@  007763f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00775760/s00775760.cpp  ?setFlagB@cRuntimeModelBuilder@@  00776470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

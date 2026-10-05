@@ -1,0 +1,5 @@
+# s00769310 recovered names
+00769310 SP::cGraphicsResourceFactory::ReadResourceGameModel  # game-model reader
+00769cb0 Func69cb0  # forwards member 0xc/0x10/0x14/0x28/0x2c to ReadResourceGameModel, sets flag +0x334
+00769cf0 Func69cf0  # stream header vcall then FUN_007638a0 + ReadResourceGameModel
+00769d80 SP::cGraphicsResourceFactory::ReadResourceFromStream  # PDB candidate; type dispatch to readers

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077f040  -  skeleton only; editor shadow-world constructor (cSPEditorPhysicsWorld vector, property reads) not reproduced
+0077f210  -  skeleton only; editor shadow-world EH destructor not reproduced
+0077f2c0  -  stub only; per-element virtual dispatch loop not reproduced
+0077f380  -  skeleton only; SP::cRenderConvolutionShadow::BuildBasisMap not reproduced
+0077f6a0  -  skeleton only; SP::cShadowWorld::SetLightingWorld property load not reproduced
+0077f980  -  stub only; global raster-stage dirty flags setup not reproduced
+0077fa70  -  skeleton only; body not reproduced
+0077fb10  -  skeleton only; body not reproduced
+0077fbb0  -  skeleton only; body not reproduced
+0077fde0  -  skeleton only; body not reproduced

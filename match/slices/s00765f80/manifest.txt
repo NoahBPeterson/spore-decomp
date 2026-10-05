@@ -1,0 +1,6 @@
+slices/s00765f80/s00765f80.cpp  ?AsInterfaceFC@@YIPAXPAXHH@Z  00766030
+slices/s00765f80/s00765f80.cpp  ?Method66070@ResB@@QAEXHH@Z  00766070
+slices/s00765f80/s00765f80.cpp  ?Method660b0@ResB@@QAEXXZ  007660b0
+slices/s00765f80/s00765f80.cpp  ??0ResE@@QAE@XZ  00766220
+slices/s00765f80/s00765f80.cpp  ?UnionDestroy@@YAXPAXH@Z  007668c0
+slices/s00765f80/s00765f80.cpp  ?push_back@VPtr@@QAEXABI@Z  00766910

@@ -1,0 +1,11 @@
+# va  name  evidence
+0077d800  eastl_vector_Assign  # FUN_0077d6c0 + FUN_00706ab0 (0x706ab0)
+0077d8c0  EH_dtor_release_vector  # FS:0 EH prolog, element vcall slot0, DoInsertValue, 0x13ef094 vftable
+0077d970  eastl_vector_PushBack  # begin/end/cap at +8/+0xc/+0x10, DoInsertValue 0x4558a0
+0077d9c0  eastl_vector_Resize  # Grow 0x77d510 + copy_impl 0x705250
+0077e260  EH_ctor_inline100  # inline storage at +0x18, FUN_0077d9c0 call
+0077e2c0  EH_ctor_inline40  # inline storage at +0x20, FUN_0077d800 call
+0077e4a0  rw::graphics::RWShader_SetShConst_normalization  # FUN_00778060 + SP::Remove/ApplyNormalizationConstants (0x783830/0x783590)
+0077e6d0  rw::graphics::RWShader_InitConstantTable  # registers all RWShader_SetShConst_* callbacks (0x778ab0, 0x778c50, ...)
+0077eef0  lerp3  # (int n, float* arr, float t): x87 interpolate
+0077ef60  rw::graphics::Camera_UpdateFade  # this+0x164..0x178 dir vectors, threshold at +0x20c

@@ -1,0 +1,16 @@
+# va  name  evidence
+0077c8b0  rw::graphics::RWShader_SetShConst_cameraDir  # FUN_011f1120()+0x30..0x38 normalized, distance in w; gated by 0x16f6f00
+0077c970  rw::graphics::RWShader_SetShConst_dirty4  # compare float4, notify FUN_00777ae0(0x20c)
+0077ca20  rw::graphics::RWShader_SetShConst_dirty4Indexed  # notify FUN_00777ae0(0x206)
+0077cad0  rw::graphics::ShaderConstArray_Find  # linear search of {short id; ...} entries at +8/+0xc
+0077cb10  rw::graphics::ShaderConstArray_InsertResource  # stores u32, GetImageResource(0x576650), increments count at +0xc
+0077cb40  rw::graphics::RWShader_SetShConst_fadeDistance  # globals 0x16f6e60/0x16f6ebc
+0077cd50  rw::graphics::RWShader_SetShConst_interpProbe  # global 0x16f6e64, stride 0x110 entries
+0077d130  rw::graphics::RWShader_SetShConst_globalVec4  # copies 0x1632e28..0x1632e34
+0077d170  rw::graphics::RWShader_SetShConst_zeroMatrix  # zeros 16 floats
+0077d1d0  vtbl_Simulator::cCreatureAbility ctor  # card shows vtbl_Simulator::cCreatureAbility at 0x13ef094
+0077d200  rw::graphics::RWShader_SetShConst_transformBasis  # global 0x16f6dd0, uses transform 0x16f85ac
+0077d450  eastl_shared_ptr_vector_CopyWire  # refcount lock xadd at +8
+0077d510  eastl_vector_GrowReserve  # begin/end/cap at +0/+4/+8, EASTL allocator at 0xf473a0
+0077d6c0  eastl_allocate_construct  # operator_new 0xf473d0 + FUN_00706ab0
+0077d710  EH_factory_twoKinds  # FS:0 EH prolog, cCreatureAbility vtable, 0x77d450 call

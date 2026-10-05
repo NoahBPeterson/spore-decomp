@@ -1,0 +1,5 @@
+00766140  144  ResD ctor: _eh_vector_constructor_iterator temporary not reproduced
+007664e0  355  PNGWriteCallback: debug formatted-string path stubbed
+007666a0  455  CreateByType: large cPropertyList construction body stubbed
+00766b30    0  RequestPaintDecalsFromModels: job-continuation path stubbed
+00766e10  150  ReadDecalBlock: stream vcall modelled at wrong offsets

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077f020  11  constant-forwarding virtual thunk complete; original is a tail jump (`mov [esp+8],0x12; jmp [vtbl+0xc]`), ours emits push/call/ret
+0077f5a0  59  shadow-proximity update complete; SSE register scheduling and the dx/dy/dz vs r*r evaluation order differ

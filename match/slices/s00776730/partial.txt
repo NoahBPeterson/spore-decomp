@@ -1,0 +1,11 @@
+00776730 - shader/model-builder routine; skeleton
+00776920 - shader/model-builder routine; skeleton
+00776a60 - large shader/model-builder routine; skeleton
+00776e60 - shader/model-builder routine; skeleton
+00776f40 - shader/model-builder routine; skeleton
+00777060 - shader/model-builder routine; skeleton
+00777130 - shader/model-builder routine; skeleton
+007771f0 - shader/model-builder routine; skeleton
+00777290 - shader/model-builder routine; skeleton
+007773c0 - large shader/model-builder routine; skeleton
+007775a0 - shader/model-builder routine; skeleton

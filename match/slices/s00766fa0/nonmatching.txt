@@ -1,0 +1,6 @@
+00766fa0  340  paint-model loader: register/schedule differs across a 451-byte parser
+00767170  n/a  stack-container setup: local layout and helper call shapes differ
+00767270   22  member chunk forwarder: prologue/param schedule differs
+00767290  121  vector<0xa0>::resize: grow path helper shapes differ
+00767350  452  vector<0x7c>::insert: relocation helper call schedule differs
+00767590  n/a  job builder: refcount/job-continuation sequence differs

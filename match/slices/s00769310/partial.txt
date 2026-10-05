@@ -1,0 +1,1 @@
+00769310  n/a  ReadResourceGameModel: ~2.4 KB vertex/index/material reader only structurally modelled

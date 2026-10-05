@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077cb40  -  skeleton only; 520-byte SSE/x87 dirt-distance constant setup not reproduced
+0077cd50  -  skeleton only; 983-byte interpolated light-probe constant setup not reproduced
+0077d200  -  skeleton only; 589-byte SSE transform constant setup not reproduced
+0077d450  -  skeleton only; eastl vector copy with shared-refcount element wire-up not reproduced
+0077d510  -  skeleton only; eastl vector grow/reserve (DoInsertValue/allocate path) not reproduced
+0077d6c0  -  skeleton only; EASTL allocator + placement-construct helper not reproduced
+0077d710  -  skeleton only; EH-guarded two-kind factory not reproduced

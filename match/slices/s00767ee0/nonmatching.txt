@@ -1,0 +1,2 @@
+00768240  n/a  resource ctor: base vector-pointer init and EH frame scheduling differ
+007682a0  172  vector<0x7c>::resize: temp ctor/helper call schedule differs

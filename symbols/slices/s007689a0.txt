@@ -1,0 +1,3 @@
+# s007689a0 recovered names
+007689a0 SP::cGraphicsResourceFactory::WriteResourceGameModel  # PDB candidate; material/BVH/model writer
+00769200 WriteResourceDispatch  # PDB candidate SP::cGraphicsResourceFactory::WriteResource; type switch

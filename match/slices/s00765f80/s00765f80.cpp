@@ -7,11 +7,24 @@
 #include "types.h"
 #include <intrin.h>
 #include <string.h>
+#include <malloc.h>
+#include <new>
 
 // ---------------------------------------------------------------------------
 // out-of-slice callees (relocation targets)
 // ---------------------------------------------------------------------------
 extern "C" {
+extern char g_allocFile[];
+void __cdecl sub_87cf40(void* p);
+void __cdecl sub_87cf60(void* p, int v);
+bool __cdecl sub_87d2a0(void* p, int a, int b);
+bool __cdecl sub_87d030(void* p, void* a, int n);
+void __cdecl sub_87cff0(void* p);
+void __cdecl sub_87d260(void* p);
+void* __cdecl Ctor765f10(void* p);
+void* __cdecl Ctor763100(void* p);
+void* __cdecl Ctor7004d0(void* p);
+void __cdecl sub_4e0880(void* vec, uint32_t n);
 // 0x0f473a0 : EASTL allocator (size, name, a, b, file, line)
 void* __cdecl EA_Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line);
 // 0x0f473d0 : aligned allocator (8 args)
@@ -97,7 +110,7 @@ struct BaseP {
     int mRef;                 // +0x4
     int k8, kc, k10, k14;     // +0x8..+0x14
     int x18;                  // +0x18
-    BaseP() : mRef(0), k8(0), kc(0), k10(0), k14(0), x18(0) {}
+    BaseP() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; x18 = 0; }
 };
 struct SecP {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
@@ -106,25 +119,30 @@ struct SecP {
 };
 struct ResB : BaseP, SecP {
     int a20, a24, a28, a2c;   // +0x20..+0x2c
-    ResB() : a20(0), a24(0), a28(0), a2c(0) {}
+    ResB();
     void* AsInterface(int type);      // 0x766030
     void MoveOut(void* out);          // 0x766100
     void Method66070(int a, int b);   // (secondary slot, 0x766070)
     void Method660b0();               // (secondary slot, 0x7660b0)
 };
+ResB::ResB() : a20(0), a24(0), a28(0), a2c(0) {}
+void* InitResB(void* p) { return new (p) ResB(); }
 
 // ===========================================================================
 // @ 0x00766030
 // ===========================================================================
-void* ResB::AsInterface(int type) {
+struct RawRes {
+    void* AsInterface(int type);
+};
+void* __fastcall AsInterfaceFC(void* self, int, int type) {
     if (type == 0x34c84e9) {
-        if (this)
-            return (char*)this + 0x1c;
+        if (self)
+            return (char*)self + 0x1c;
         return 0;
     }
     if (type == 0x2f4e681b)
-        return this;
-    return cResourceBase_AsInterface(this, type);
+        return self;
+    return ((RawRes*)self)->AsInterface(type);
 }
 
 // ===========================================================================
@@ -192,11 +210,21 @@ ResD::ResD() : mRef(0), m08(0), m0c(0), m10(0), m14(0), mArena(0),
 // ===========================================================================
 // @ 0x00766220  ctor of the small (0x1c) cPropertyList-derived resource
 // ===========================================================================
-struct ResE : BaseP {
+struct BaseE {
+    virtual void e0(); virtual void e1(); virtual void e2(); virtual void e3();
+    virtual void e4(); virtual void e5(); virtual void e6(); virtual void e7();
+    virtual void e8(); virtual void e9(); virtual void eA(); virtual void eB();
+    int mRef;                 // +0x4
+    int k8, kc, k10, k14;     // +0x8..+0x14
+    BaseE() { (void)_InterlockedExchange((volatile long*)&mRef, 0); k8 = 0; kc = 0; k10 = 0; k14 = 0; }
+};
+struct ResE : BaseE {
     int a18;                  // +0x18
-    ResE() : a18(0) {}
+    ResE();
     ~ResE();
 };
+ResE::ResE() : a18(0) {}
+void* InitResE(void* p) { return new (p) ResE(); }
 ResE::~ResE() {
     if (a18) {
         sub_11eff60((void*)a18);
@@ -211,6 +239,7 @@ struct VBig {
     char* mpBegin;            // +0
     char* mpEnd;              // +4
     char* mpCap;              // +8
+    void _insert(char* position, uint32_t n, char* value);
 };
 extern "C" {
 // container helpers used by VBig::insert (relocation-masked)
@@ -391,21 +420,21 @@ void __cdecl UnionDestroy(void* p, int type) {
 }
 
 // ===========================================================================
-// @ 0x00766910  vector<T*>::push_back
+// @ 0x00766910  vector<uint32_t>::push_back
 // ===========================================================================
 struct VPtr {
-    void** mpBegin;   // +0
-    void** mpEnd;     // +4
-    void** mpCap;     // +8
-    void push_back(const void* v);
-    void DoInsertValue(void** pos, const void* v);  // 0x6c1570
+    uint32_t* mpBegin;   // +0
+    uint32_t* mpEnd;     // +4
+    uint32_t* mpCap;     // +8
+    void push_back(const uint32_t& v);
+    void DoInsertValue(uint32_t* pos, const uint32_t& v);  // 0x6c1570
 };
-void VPtr::push_back(const void* v) {
-    void** e = mpEnd;
+void VPtr::push_back(const uint32_t& v) {
+    uint32_t* e = mpEnd;
     if (e < mpCap) {
         mpEnd = e + 1;
         if (e)
-            *e = (void*)v;
+            *e = v;
         return;
     }
     DoInsertValue(e, v);
@@ -572,8 +601,9 @@ struct Factory {
     virtual void g4(); virtual void g5();
     virtual void g6(); virtual void g7(); virtual void g8(); virtual void g9();
     virtual bool g9call(int* src, void* res, int a, int b);   // +0x24
+    bool CreateResource(int* src, void** out, int a, int b);
 };
-bool __thiscall Factory::CreateResource(int* src, void** out, int a, int b) {
+bool Factory::CreateResource(int* src, void** out, int a, int b) {
     void* local = 0;
     int* tmp = (int*)((IFactorySrc*)src)->f4();
     CreateByType(&local, (uint32_t)b, *(int*)((char*)tmp + 4));

@@ -1,0 +1,10 @@
+# s00766fa0 recovered names
+00766fa0 ReadPaintStuff  # paint-model chunk parser; EA::IO ReadInt32/ReadValue/WriteValue chain
+00767170 FUN_00767170  # reads two chunks into a stack temp, copies a triplet out
+00767270 F67270::Method  # forwards this+0x2c to ReadPaintStuff with members +0x28/+0x14
+00767290 VBig2::Resize  # eastl vector (stride 0xa0) resize
+00767350 V7c::Insert  # eastl vector (stride 0x7c) insert(pos,n,value)
+00767590 BuildJob  # allocates 0x1c job holder and registers it
+007677c0 ArmDecode  # cResourceBase-derived decode arming for type 0x2f4e681c
+007679f0 ReadAbilityList  # serialized ability list; kind 0x20d = color image, else table entry
+00767c80 ReadMaterialList  # serialized material ref list; int-keyed material slots

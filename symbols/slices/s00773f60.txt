@@ -1,0 +1,15 @@
+00773f60 eastl::get_partition  # 0x14-byte element, function-pointer compare
+00774010 eastl::partial_sort
+007740f0 FUN_007740f0  # thunk into Unk770320::Method on the global at 0x01630b68
+00774290 eastl::introsort_loop
+007749e0 eastl::sort
+007743b0 vector<0x30>::insert_n
+007745d0 vector<0xb0>::insert_n
+007747c0 vector<Matrix34>::insert_n
+00774a60 vector<0x14>::insert(first,last)
+00774b50 vector<8-byte>::resize
+00774bb0 vector<0x30>::resize
+00774c30 vector<0xb0>::resize
+00774cc0 vector<Matrix34>::resize
+00774f10 fixed-vector range constructor
+00774110 UI/resource glue

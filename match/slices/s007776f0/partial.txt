@@ -1,0 +1,16 @@
+00777720 - virtual-call wrapper over a shader object; skeleton
+00777740 - virtual-call wrapper over a shader object; skeleton
+00777760 - SP::cShaderBase::Write (serialization, 6x WriteUint32); skeleton
+00777840 - SP::cShaderBase::Read with EH + string load; skeleton
+00777a10 - shader vertex-format max count query; skeleton
+00777ae0 - shader data setter (dirty-mask + undo stack push); skeleton
+00777b50 - SP::SetShaderData (loop over shader-data entries); skeleton
+00777c10 - shader data stack pop/restore loop; skeleton
+00777cb0 - DrawIndexedPrimitive loop over batches; skeleton
+00777d60 - DrawIndexedPrimitive with sin-derived count; skeleton
+00777e10 - light/arena wrapper; skeleton
+00777e30 - light/arena wrapper; skeleton
+00777e50 - D3D draw-call wrapper (soft vs hard path); skeleton
+00777e90 - D3D draw-call wrapper (soft vs hard path); skeleton
+00777ed0 - D3D draw-call wrapper (soft vs hard path); skeleton
+00777f80 - D3D draw-call wrapper with sin-based constants; skeleton

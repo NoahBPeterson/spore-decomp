@@ -1,0 +1,2 @@
+00769cf0  101  stream header check + two-phase read: vcall/helper scheduling differs
+00769d80  n/a  ReadResourceFromStream dispatch: wrapper/type-switch schedule differs

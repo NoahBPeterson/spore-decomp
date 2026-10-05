@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007776f0/s007776f0.cpp  ?PSProfileFromVersion@@    007776f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?setSlotU0@ShaderState@@   00777a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?setSlotU1@ShaderState@@   00777a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?setSlotV0@ShaderState@@   00777aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?setSlotV1@ShaderState@@   00777ac0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?pushShaderDataNull@@      00777bf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?shaderDataStackNotEmpty@@ 00777c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007776f0/s007776f0.cpp  ?tableLookup@@             00778050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

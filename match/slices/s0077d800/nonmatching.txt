@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077eef0  46  lerp into a float array complete; original keeps the result live in st(0) and computes the interpolation in x87 (fld/fsub/fmul/faddp), ours computes in SSE then spills to the stack before fld

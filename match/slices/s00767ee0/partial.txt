@@ -1,0 +1,4 @@
+00767ee0  n/a  WriteResourceRaster: register-heavy mip/face event loop only structurally modelled
+00768370  n/a  BakeSprites ctor: refcounted member and inline-container setup approximated
+00768540  n/a  BakeSprites dtor: teardown order approximated
+00768650  n/a  record loader / visual-effect attach approximated

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0077c8b0  164  normalized camera direction + distance complete; x87 fsqrt/reciprocal scheduling differs
+0077c970  154  dirty float4 setter complete; original keeps a byte local + 0x14 frame and round-trips through the stack, ours enregisters the flag
+0077ca20  182  indexed dirty float4 setter complete; same flag/frame difference as 0077c970
+0077cad0  40  slot search complete; loop register allocation differs (cursor/bound/i order)
+0077d170  -  zero float4x4 complete; original emits 16 movss (xorps), ours folds to integer dword stores
+0077d1d0  -  constructor complete; original uses an atomic xchg store for the refcount field, not reproduced

@@ -1,0 +1,4 @@
+0076acd0  n/a  message registration + physics array setup approximated
+0076b000  n/a  viewer teardown: member/message registration order approximated
+0076b460  n/a  ctor with 0x2c-byte argument block approximated
+0076ba30  n/a  cube-map capture setup approximated (SSE math)

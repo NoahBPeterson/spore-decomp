@@ -1,0 +1,10 @@
+00774110 - UI/resource glue with a full EH frame; not reconstructed (skeleton)
+007743b0 - vector<0x30>::insert_n; EASTL realloc/insert paths not reproduced (skeleton)
+007745d0 - vector<0xb0>::insert_n; skeleton
+007747c0 - vector<Matrix34>::insert_n; skeleton
+00774a60 - vector<0x14>::insert(first,last); skeleton
+00774b50 - vector<8-byte>::resize; skeleton
+00774bb0 - vector<0x30>::resize; skeleton
+00774c30 - vector<0xb0>::resize; skeleton
+00774cc0 - vector<Matrix34>::resize; skeleton
+00774f10 - fixed-vector ctor from range with EH; skeleton

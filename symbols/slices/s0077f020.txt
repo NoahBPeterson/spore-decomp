@@ -1,0 +1,15 @@
+# va  name  evidence
+0077f020  virtual_const_thunk  # mov eax,[ecx]; jmp [eax+0xc] after writing 0x12 to [esp+8]
+0077f040  SP::cShadowWorld_ctor  # EH vector ctor of cSPEditorPhysicsWorld, reads _sAppProperties
+0077f210  SP::cShadowWorld_dtor  # EH vector dtor, vftables 0x140e954/0x13eb938
+0077f2c0  SP::cShadowWorld_DispatchElements  # per-element vcall slot 0xc; FUN_00777ae0(0x223)
+0077f380  SP::cRenderConvolutionShadow::BuildBasisMap  # PDB name; MaterialManager 0x67dd70, hashes 0x52d76551/0x356a4c94
+0077f510  SP::cShadowWorld_SetShadowMaterial  # f218 cache, vtable slots 0x4c/0x50
+0077f5a0  SP::cShadowWorld_UpdateShadowPoint  # fields +0x17c/+0x188, radius +0x208
+0077f640  SP::cShadowWorld_RefreshShadowMaterial  # bytes +0xc/+0xd/+0xe, fields +0x1bc/+0x220
+0077f6a0  SP::cShadowWorld::SetLightingWorld  # PDB candidate; SP::GetPropertyAsFloatArray/Vector2/GetFloatProperty
+0077f980  rw::graphics::SetRasterStageGlobals  # globals 0x16fa3a8/0x16f954c/0x16fa154 ...
+0077fa70  SP::cShadowWorld_fn_fa70
+0077fb10  SP::cShadowWorld_fn_fb10
+0077fbb0  SP::cShadowWorld_fn_fbb0
+0077fde0  SP::cShadowWorld_fn_fde0

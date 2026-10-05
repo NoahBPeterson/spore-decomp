@@ -1,0 +1,1 @@
+00769200  245  WriteResource dispatch: dynamic type switch modelled but vcall/return schedule differs
