@@ -1,0 +1,5 @@
+slices/s006de020/s006de020.cpp  ?FUN_006de2a0@@YAXXZ        006de2a0
+slices/s006de020/s006de020.cpp  ?FUN_006de350@@YAXXZ        006de350
+slices/s006de020/s006de020.cpp  ?FUN_006de3a0@@YAXPAH0@Z   006de3a0
+slices/s006de020/s006de020.cpp  ?FUN_006de440@@YAXPAH0@Z   006de440
+slices/s006de020/s006de020.cpp  ??4Rec13@@QAEAAU0@ABU0@@Z  006de7f0

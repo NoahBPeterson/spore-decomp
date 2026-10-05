@@ -1,0 +1,25 @@
+006deee0 eastl::insertion_sort_simple<SP::cClusterRect*, cRectAreaSort>  # PDB-derived comparator/type; stride 0x34, key at +8
+006defe0 eastl::fill<Elem16*, Elem16>  # 16-byte element, intrusive ptr at +0xc
+006df170 eastl::make_heap<SP::cClusterRect*, cRectAreaSort>  # make_heap shape, calls adjust_heap 0x6dea60
+006df280 IntrusivePtr::operator=  # object refcount at +4, lock xadd AddRef/Release
+006df2d0 eastl::copy<Elem16*, Elem16*>  # forward element assign
+006df340 eastl::copy_backward<Elem16*, Elem16*>  # backward element assign
+006df3b0 eastl::vector<Elem16>::~vector  # release each + operator delete
+006df420 eastl::get_partition_ref<SortKeyObj**, SortKeyObj*, SortKeyGreater>  # key at +4, pivot passed as pointer
+006df470 eastl::partial_sort<SortKeyObj**, SortKeyGreater>  # calls make/adjust/sort_heap
+006df4e0 eastl::get_partition_ref<SortKeyObj**, SortKeyObj*, SortKeyLess>  # mirrored comparator
+006df530 eastl::partial_sort<SortKeyObj**, SortKeyLess>  # mirrored variant
+006df5a0 eastl::partial_sort<SP::cClusterRect*, cRectAreaSort>  # PDB name at 0x6df5a0
+006df700 eastl::copy<RefPtr*, RefPtr*>  # 4-byte intrusive pointer elements
+006df770 eastl::quick_sort_impl<SortKeyObj**, int, SortKeyGreater>  # median-of-3 + get_partition_ref
+006df830 eastl::quick_sort_impl<SortKeyObj**, int, SortKeyLess>  # mirrored comparator
+006df8f0 eastl::get_partition<SP::cClusterRect*, SP::cClusterRect, cRectAreaSort>  # pivot by value (13 dwords)
+006df9d0 destroy range of 0x58-byte records  # pointer at +0, allocator pointer at +0x10
+006dfa00 eastl::quick_sort<SortKeyObj**, SortKeyGreater>  # Log2 + quick_sort_impl + insertion sorts
+006dfa80 eastl::quick_sort<SortKeyObj**, SortKeyLess>  # mirrored comparator
+006dfb00 eastl::quick_sort_impl<SP::cClusterRect*, int, cRectAreaSort>  # PDB name at 0x6dfb00
+006dfc30 ClusterMap::AddCluster  # area at +0x230, list at +0x238
+006dfca0 Elem16Vector::erase-range  # shift copy + release tail
+006dfd00 eastl::quick_sort<SP::cClusterRect*, cRectAreaSort>  # PDB name at 0x6dfd00
+006dfd90 Elem16Vector::DoInsertValues  # single-value insert with growth
+006dffc0 ClusterMap::ClusterMap  # inline-storage vectors and area init

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e2b50  n/a  SP::PrefilterCube; all six cube faces, the size*size weight, the specular boost and AddColourSample call translated, x87/SSE sqrt schedule and helper ABI differ
+006e3000  n/a  SP::cViewer::UpdateTransforms; all 12 float stores + zero w components present, the original reads an undefined 4th stack slot per axis

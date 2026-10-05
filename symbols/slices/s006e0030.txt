@@ -1,0 +1,6 @@
+006e0030 chart vertical-span builder  # fills +0x34/+0x48 min/max scanline arrays, max at +0x5c
+006e04d0 rect-pack charts  # weighted area at +0x230, list at +0x234, UV at +0x25c
+006e09d0 SP::RectPackCharts  # PDB name at 0x6e09d0
+006e0e00 Elem16 vector resize  # calls 0x6dfd90 grow / 0x6dfca0 shrink
+006e0ea0 chart vertex fill from model  # element 0x10 with intrusive ptr at +0xc
+006e0f90 visit all charts, virtual call at +0x34  # global list 0x170a6b4

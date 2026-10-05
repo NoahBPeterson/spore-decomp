@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+006de020 377  image-quad draw (D3D9 state + vertex fill); register allocation and vtable call shape differ
+006de3f0 15  insertion sort variant (prev-shift form); register naming only, not reproduced
+006de490 15  insertion sort variant (prev-shift form, opposite compare); register naming only
+006de4e0 66  heap sift-up (unsigned); hoisted parent index / branch layout differ
+006de530 66  heap sift-up (signed); hoisted parent index / branch layout differ
+006de580 169  heap sift-up for 0x34-byte elements; 13-dword block copies scheduled differently
+006de5e0 278  image best-fit packer (thiscall); control flow + register allocation differ
+006de710 226  image best-fit packer variant (thiscall); control flow + register allocation differ
+006de850 91  construct run of 0x10-byte refcounted elements; EH/frame differs
+006de8f0 71  fill run of 0x10-byte refcounted elements; EH/frame differs
+006de980 88  heap sift-down wrapper (unsigned); call/argument shape differs
+006de9f0 86  heap sift-down wrapper (signed); call/argument shape differs
+006dea60 159  heap sift-down wrapper for 0x34-byte elements; block copy schedule differs
+006deb70 69  make-heap push for 0x34-byte element; block copy schedule differs
+006dec60 366  mesh position/uv scale by sqrt; x87/SSE schedule + unroll differ
+006dede0 280  insertion sort of 0x34-byte records; block copy schedule differs

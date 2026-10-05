@@ -1,0 +1,17 @@
+006e0fd0 VisitIndexBuffers  # global list 0x170a798, virtual +0x34(obj,out)
+006e1010 RegisterBufferCheats  # registers 0x1532db0 and 0x1532dac cheats
+006e1040 CommandDumpVertex  # cArguments::HasFlag(0x140a944) -> 0x6e0f90
+006e1070 CommandDumpIndex  # cArguments::HasFlag(0x140a944) -> 0x6e0fd0
+006e10a0 CreateBufferCheats  # operator_new VertexBufferCheat/IndexBufferCheat
+006e1150 WUINTERNAL::Hist3d  # PDB name at 0x6e1150
+006e1260 3D cumulative-moment pass  # five 0x41-entry scratch arrays
+006e1480 3D box moment sum  # 8-corner inclusion-exclusion
+006e1520 plane moment sum (axis)  # char axis selector
+006e1650 plane moment sum (axis, coord)  # char axis selector
+006e1780 box variance  # int moments; float weight moment not recovered
+006e1880 maximise variance along an axis  # 10-arg, returns float10
+006e1a30 cut box along best axis  # three axis trials
+006e1be0 fill 3D byte region  # (y+row)*0x40 stride
+006e1c50 WUINTERNAL::AllocWuData  # PDB name at 0x6e1c50
+006e1d10 WU_open  # 0x10 context, tag 0x57554352 'WUCR'
+006e1d50 WU_read  # PDB name; descriptor must be 0x20

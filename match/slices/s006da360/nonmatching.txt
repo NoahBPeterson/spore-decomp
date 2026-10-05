@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006da360 687  attribute bake dispatch (acos projection, weight component 0); /O2 register/switch layout differs
+006da690 687  attribute bake dispatch (acos projection, weight component 1); /O2 register/switch layout differs
+006da9c0 685  attribute bake dispatch (acos projection, weight component 2); /O2 register/switch layout differs
+006dacf0 565  attribute bake dispatch (dot projection, 4x unrolled fallback); /O2 scheduling + unroll differ

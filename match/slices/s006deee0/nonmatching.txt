@@ -1,0 +1,20 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006deee0  208  eastl::insertion_sort_simple<cClusterRect*>; same algorithm/shape, but cl copies the 52-byte value with rep movsd instead of the original per-field movss block and schedules the loop test differently
+006df170  77  eastl::make_heap<cClusterRect*>; identical make_heap/adjust_heap call shape, register assignment inside the parent loop differs
+006df280  13  intrusive refptr operator=; lock xadd release plus _InterlockedExchange reset, cl folds the decrement flag-test and schedules the tail differently
+006df2d0  43  eastl::copy<Elem16*>; element-wise smart-pointer assign reproduced, helper scheduling/copy-ctor anchor differs
+006df340  90  eastl::copy_backward<Elem16*>; same backwards assign loop, register/temp schedule differs
+006df3b0  87  eastl::vector<Elem16>::~vector; release loop + allocator free, EH frame and helper scheduling differ
+006df470  79  eastl::partial_sort<SortKeyObj**,SortKeyGreater>; make_heap/select/sort_heap shape matches, pointer register schedule differs
+006df530  79  eastl::partial_sort<SortKeyObj**,SortKeyLess>; mirrored variant, same schedule difference
+006df5a0  282  eastl::partial_sort<cClusterRect*>; make_heap/adjust_heap/sort_heap calls all present, value-copy and call-argument schedule differ
+006df700  76  eastl::copy<RefPtr*>; intrusive-pointer element assign reproduced, schedule differs
+006df770  92  eastl::quick_sort_impl<SortKeyObj**,int,SortKeyGreater>; median-of-three/get_partition/recursion reproduced, pivot register assignment (eax/esi/ebp) differs
+006df830  92  eastl::quick_sort_impl<SortKeyObj**,int,SortKeyLess>; mirrored variant, same register assignment difference
+006df8f0  226  eastl::get_partition<cClusterRect*>; pivot-by-value partition reproduced, cl keeps the pivot copy as a frame temp instead of reusing the argument slots
+006dfb00  183  eastl::quick_sort_impl<cClusterRect*,int,cRectAreaSort>; median/partition/recursion reproduced, value partition schedule differs
+006dfc30  65  cluster-map add callback; every path/field and the area accumulation reproduced, vector push schedule differs
+006dfca0  78  Elem16 vector erase-range; copy + release + size adjust reproduced, helper scheduling differs
+006dfd00  87  eastl::quick_sort<cClusterRect*>; Log2/quick_sort_impl/insertion_sort dispatch present, helper call schedule differs
+006dfd90  n/a  Elem16 vector DoInsertValues; all grow in-place branches reproduced (source complete, 462 vs 547 bytes), helper/temp schedule differs
+006dffc0  86  cluster-map constructor; all 20 stores reproduced, register/ordering differs

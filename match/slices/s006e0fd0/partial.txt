@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (incomplete)
+006e1780  242  box variance; the 4 int moment sums and the X - Y/Z tail are present, but the float colour-distance moment over the weight array is omitted (x87 st-stack sequence not recovered) -> source incomplete

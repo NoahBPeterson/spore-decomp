@@ -1,0 +1,5 @@
+006e1db0 WU_close  # PDB name; palette 0x40010 hdr 0x494e5657 'WVNI'
+006e20f0 CRAPI_diffuseerror  # PDB name
+006e22d0 CRAPI_getcolour  # PDB name
+006e25f0 CRAPI_remap  # PDB name
+006e2ae0 4x4 (16-dword) block copy  # thiscall, ret 0x10, returns this

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+006db1d0 565  attribute bake dispatch (dot projection, out0.x / weight.z, 4x unrolled fallback); /O2 scheduling differ
+006db6b0 568  attribute bake dispatch (dot projection, out0.y / weight.z, 4x unrolled fallback); /O2 scheduling differ
+006dbba0 562  attribute bake dispatch (acos-len projection, components (0,1)); /O2 scheduling + switch layout differ

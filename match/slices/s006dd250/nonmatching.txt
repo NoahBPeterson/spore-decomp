@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+006dd250 61  channel buffer lock (thiscall, 5 args); explicit-self free-function form loses ecx packing
+006dd310 96  cBufferDrawImpl ctor body (placement-new 0x30 buffers); /O2 store order differs
+006dd390 126  vertex-declaration/buffer creation; register allocation over the 12-iteration loop differs
+006dd8b0 183  channel flush/unlock with eastl vector<bool> helpers; template schedule differs
+006dd9b0 338  channel lock/roll helper; large control flow + register allocation differ
+006ddb40 284  rectangle lock helper; large control flow + register allocation differ
+006dd540 607  SP::cBufferDrawImpl::IssueDraw (D3D9 draw switch); vtable dispatch and switch shape differ
+006ddf80 51  singleton install; frame (2 locals) and operator-new null path differ

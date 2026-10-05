@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e0030  1042  chart vertical-span builder; all scanline/ABS branches, the two clamped raster loops and the max pass translated, vector<bool> helper and float ROUND schedule differ
+006e04d0  n/a  rect-pack charts; weighted-area accumulation, 0x20-iteration retry loop, UV scale/bias and zeroing paths all present (transliterated), register/helper schedule differs
+006e09d0  958  SP::RectPackCharts; area scaling, quick_sort, fit-retry loop and UV snap/transform translated, EH frame and scheduling differ
+006e0e00  n/a  Elem16 vector resize; grow (FUN_006dfd90) and shrink (FUN_006dfca0) paths both present, helper ABI approximated
+006e0ea0  219  chart vertex fill; per-element model copy incl. intrusive-ptr assign translated, schedule/vtable anchor differs
+006e0f90  26  visit-all-charts + virtual dispatch; identical nesting/offsets, register assignment differs

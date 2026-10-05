@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e1db0  780  WU_close; moment pass, box-cut loop, best-score scan and palette/image output all translated, helper/register schedule differs
+006e20f0  428  CRAPI_diffuseerror; all three channel error branches (clamp/negative) and the scan loop translated, schedule differs
+006e22d0  685  CRAPI_getcolour; both distance tables, the channel-expansion hint paths, 0x1fff cache probe and nearest loop translated, schedule differs
+006e25f0  1173 CRAPI_remap; palette build (both 0x40/0x100 cases), cache clear, wide/narrow paths, dither call translated, schedule differs

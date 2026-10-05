@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e3f70  n/a  4x4 matrix multiply; all 16 output products and the Set(row0,row1,row2,row3) call translated, cl vectorises the float arithmetic differently from the original scalar x87/SSE sequence

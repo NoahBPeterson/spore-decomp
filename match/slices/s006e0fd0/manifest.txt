@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006e0fd0/s006e0fd0.cpp  ?VisitIndexBuffers@@YAXXZ  006e0fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006e0fd0/s006e0fd0.cpp  ?RegisterBufferCheats@@YAXXZ  006e1010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006e0fd0/s006e0fd0.cpp  ?CommandDumpVertex@@YGXPAUcArguments@@@Z  006e1040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006e0fd0/s006e0fd0.cpp  ?CommandDumpIndex@@YGXPAUcArguments@@@Z  006e1070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006e0fd0/s006e0fd0.cpp  ?Hist3d@@YAXPAUWuData@@PAH111PAM@Z  006e1150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+006e10a0  133  create Vertex/IndexBufferCheat command objects; both ctor+vtableset blocks translated, operator_new / ctor call schedule differs
+006e1260  624  3D cumulative-moment pass; all five scratch arrays, the 0x40x0x40 inner accumulation and writeback translated, local layout/schedule differs
+006e1480  124  3D box moment sum; index algebra and the 8-term combination reproduced, integer schedule differs
+006e1520  280  axis-selector plane moment sum; all three axis branches reproduced, codegen differs
+006e1650  289  plane moment sum with fixed coordinate; all three axis branches reproduced, codegen differs
+006e1880  363  maximise variance along an axis; plane-moment calls + variance formula + argmax loop translated, float/x87 schedule differs
+006e1a30  185  cut box along best axis; three MaximizeVariance calls and the split assignments translated, register/schedule differs
+006e1be0  67   fill a 3D byte region; triple loop translated, loop rotation differs
+006e1c50  130  WUINTERNAL::AllocWuData; both galloc buffers, zeroing and the four contiguous moment pointers reproduced, schedule differs
+006e1d10  36   WU_open; 0x10 context alloc + AllocWuData + tag/version stores translated, store order/schedule differs
+006e1d50  61   WU_read; descriptor validation, dimension stores and Hist3d call translated, register schedule differs

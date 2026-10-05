@@ -1,0 +1,2 @@
+006dd2a0 rw::graphics::ActiveState::VertexDescriptorChange  # card decompile name
+006dd540 SP::cBufferDrawImpl::IssueDraw  # card PDB candidate (caller-single)
