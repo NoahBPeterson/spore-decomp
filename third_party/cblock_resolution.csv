@@ -1,0 +1,749 @@
+va,lib,function,status,evidence
+01176a90,openssl,EVP_CIPHER_CTX_ctrl,exact-unique,byte-identical to crypto_evp_evp_enc.obj:_EVP_CIPHER_CTX_ctrl
+01176b00,openssl,EVP_CipherInit_ex,exact-unique,byte-identical to crypto_evp_evp_enc.obj:_EVP_CipherInit_ex
+01176db0,openssl,EVP_CIPHER_CTX_set_key_length,exact-unique,byte-identical to crypto_evp_evp_enc.obj:_EVP_CIPHER_CTX_set_key_length
+01176e10,openssl,EVP_rc4,exact-by-data,returns 014dd650 whose first field is NID 5 (rc4); EVP_rc4 exists in 0.9.8g
+01176e20,openssl,EVP_rc4_40,exact-by-data,returns 014dd684 whose first field is NID 97 (rc4_40); EVP_rc4_40 exists in 0.9.8g
+01176fc0,openssl,BIO_read,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_read
+01177070,openssl,BIO_write,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_write
+01177120,openssl,BIO_puts,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_puts
+011771c0,openssl,BIO_gets,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_gets
+01177260,openssl,BIO_ctrl,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_ctrl
+011772f0,openssl,BIO_callback_ctrl,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_callback_ctrl
+01177470,openssl,BIO_new,exact-unique,byte-identical to crypto_bio_bio_lib.obj:_BIO_new
+011774f0,openssl?,,unresolved,"getter returning static 015c5420 (first dword 0x401); several candidates, not identifiable"
+01177500,openssl,BIO_new_mem_buf,exact-unique,byte-identical to crypto_bio_bss_mem.obj:_BIO_new_mem_buf
+01177680,openssl,mem_write,exact-unique,byte-identical to crypto_bio_bss_mem.obj:_mem_write
+011778c0,openssl,mem_gets,exact-unique,byte-identical to crypto_bio_bss_mem.obj:_mem_gets
+01177940,openssl,mem_puts,exact-unique,byte-identical to crypto_bio_bss_mem.obj:_mem_puts
+01177970,openssl?,,unresolved,"getter returning static 015c5448 (first dword 0x20b); several candidates, not identifiable"
+01177a10,openssl,b64_read,exact-unique,byte-identical to crypto_evp_bio_b64.obj:_b64_read
+01177dd0,openssl,b64_write,exact-unique,byte-identical to crypto_evp_bio_b64.obj:_b64_write
+01178240,openssl,EVP_aes_128_cbc,exact-by-data,returns 014dd730 whose first field is NID 419 (aes_128_cbc); EVP_aes_128_cbc exists in 0.9.8g
+01178250,openssl,EVP_aes_128_cfb128,exact-by-data,returns 014dd764 whose first field is NID 421 (aes_128_cfb128); EVP_aes_128_cfb128 exists in 0.9.8g
+01178260,openssl?,,unresolved,"getter returning static 014dd798 (first dword 0x1a4); several candidates, not identifiable"
+01178270,openssl,EVP_aes_128_ecb,exact-by-data,returns 014dd7cc whose first field is NID 418 (aes_128_ecb); EVP_aes_128_ecb exists in 0.9.8g
+011782c0,openssl,EVP_aes_192_cbc,exact-by-data,returns 014dd800 whose first field is NID 423 (aes_192_cbc); EVP_aes_192_cbc exists in 0.9.8g
+011782d0,openssl,EVP_aes_192_cfb128,exact-by-data,returns 014dd834 whose first field is NID 425 (aes_192_cfb128); EVP_aes_192_cfb128 exists in 0.9.8g
+011782e0,openssl?,,unresolved,"getter returning static 014dd868 (first dword 0x1a8); several candidates, not identifiable"
+011782f0,openssl,EVP_aes_192_ecb,exact-by-data,returns 014dd89c whose first field is NID 422 (aes_192_ecb); EVP_aes_192_ecb exists in 0.9.8g
+01178390,openssl,EVP_aes_256_cbc,exact-by-data,returns 014dd8d0 whose first field is NID 427 (aes_256_cbc); EVP_aes_256_cbc exists in 0.9.8g
+011783a0,openssl,EVP_aes_256_cfb128,exact-by-data,returns 014dd904 whose first field is NID 429 (aes_256_cfb128); EVP_aes_256_cfb128 exists in 0.9.8g
+011783b0,openssl?,,unresolved,"getter returning static 014dd938 (first dword 0x1ac); several candidates, not identifiable"
+011783c0,openssl,EVP_aes_256_ecb,exact-by-data,returns 014dd96c whose first field is NID 426 (aes_256_ecb); EVP_aes_256_ecb exists in 0.9.8g
+011783d0,openssl,EVP_aes_128_cfb1,exact-by-data,returns 014dd9a0 whose first field is NID 650 (aes_128_cfb1); EVP_aes_128_cfb1 exists in 0.9.8g
+011783e0,openssl,EVP_aes_192_cfb1,exact-by-data,returns 014dd9d4 whose first field is NID 651 (aes_192_cfb1); EVP_aes_192_cfb1 exists in 0.9.8g
+01178430,openssl,EVP_aes_256_cfb1,exact-by-data,returns 014dda08 whose first field is NID 652 (aes_256_cfb1); EVP_aes_256_cfb1 exists in 0.9.8g
+01178480,openssl,EVP_aes_128_cfb8,exact-by-data,returns 014dda3c whose first field is NID 653 (aes_128_cfb8); EVP_aes_128_cfb8 exists in 0.9.8g
+01178490,openssl,EVP_aes_192_cfb8,exact-by-data,returns 014dda70 whose first field is NID 654 (aes_192_cfb8); EVP_aes_192_cfb8 exists in 0.9.8g
+011784a0,openssl,EVP_aes_256_cfb8,exact-by-data,returns 014ddaa4 whose first field is NID 655 (aes_256_cfb8); EVP_aes_256_cfb8 exists in 0.9.8g
+011784b0,openssl,aes_init_key,exact-unique,byte-identical to crypto_evp_e_aes.obj:_aes_init_key
+01178710,openssl,AES_set_encrypt_key,exact-unique,"byte-identical to 1 library function(s), first crypto_aes_aes_core.obj:AES_set_encrypt_key"
+011799f0,openssl,RSA_new_method,exact-unique,byte-identical to crypto_rsa_rsa_lib.obj:_RSA_new_method
+01179dd0,openssl,RSA_setup_blinding,exact-unique,byte-identical to crypto_rsa_rsa_lib.obj:_RSA_setup_blinding
+01179f50,openssl,DH_new|DSA_new|DSO_new|RSA_new|sk_new_null,exact-ambiguous,"byte-identical to 5 library function(s), first crypto_dh_dh_lib.obj:DH_new"
+01179f60,openssl,RSA_sign,exact-unique,byte-identical to crypto_rsa_rsa_sign.obj:_RSA_sign
+0117a150,openssl,RSA_verify,exact-unique,byte-identical to crypto_rsa_rsa_sign.obj:_RSA_verify
+0117a3c0,openssl,BN_bn2dec,exact-unique,byte-identical to crypto_bn_bn_print.obj:_BN_bn2dec
+0117a880,openssl?,,unresolved,"getter returning static 015c5484 (first dword 0x15c5480); several candidates, not identifiable"
+0117a9d0,openssl,BN_new,exact-unique,byte-identical to crypto_bn_bn_lib.obj:_BN_new
+0117aa10,openssl,bn_expand_internal,exact-unique,byte-identical to crypto_bn_bn_lib.obj:_bn_expand_internal
+0117ac80,openssl,BN_bin2bn,exact-unique,byte-identical to crypto_bn_bn_lib.obj:_BN_bin2bn
+0117b100,openssl,BN_dup,exact-unique,byte-identical to crypto_bn_bn_lib.obj:_BN_dup
+0117b1e0,openssl,PEM_read_X509_CRL,exact-unique,byte-identical to crypto_pem_pem_all.obj:_PEM_read_X509_CRL
+0117b210,openssl,PEM_read_DHparams,exact-unique,byte-identical to crypto_pem_pem_all.obj:_PEM_read_DHparams
+0117b240,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+0117b250,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+0117b410,openssl,SSL_read,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_read
+0117b460,openssl,SSL_peek,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_peek
+0117b4a0,openssl,SSL_write,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_write
+0117b780,openssl,SSL_CTX_set_cipher_list,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_CTX_set_cipher_list
+0117b840,openssl,ssl_bytes_to_cipher_list,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_bytes_to_cipher_list
+0117bf80,openssl,ssl_get_server_send_cert,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_get_server_send_cert
+0117c040,openssl,ssl_get_sign_pkey,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_get_sign_pkey
+0117c200,openssl,ssl_undefined_function,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_undefined_function
+0117c220,openssl,ssl_undefined_void_function,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_undefined_void_function
+0117c240,openssl,ssl_undefined_const_function,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_undefined_const_function
+0117c260,openssl,ssl_bad_method,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_bad_method
+0117c300,openssl,ssl_init_wbio_buffer,exact-unique,byte-identical to ssl_ssl_lib.obj:_ssl_init_wbio_buffer
+0117c400,openssl,EC_GROUP_get_asn1_flag|ENGINE_get_finish_function|SSL_state|STORE_method_get_update_store_function,exact-ambiguous,"byte-identical to 4 library function(s), first crypto_ec_ec_lib.obj:EC_GROUP_get_asn1_flag"
+0117c440,openssl,SSL_clear,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_clear
+0117c560,openssl,SSL_new,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_new
+0117c8f0,openssl,SSL_shutdown,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_shutdown
+0117c940,openssl,SSL_ctrl,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_ctrl
+0117ccd0,openssl,SSL_get_error,exact-unique,byte-identical to ssl_ssl_lib.obj:_SSL_get_error
+0117cf80,openssl,X509_new,exact-by-data,push &X509_it; call ASN1_item_new: X509_new exists in 0.9.8g
+0117d180,openssl,X509_NAME_add_entry,exact-unique,byte-identical to crypto_x509_x509name.obj:_X509_NAME_add_entry
+0117d410,openssl,X509_NAME_ENTRY_create_by_OBJ,exact-unique,byte-identical to crypto_x509_x509name.obj:_X509_NAME_ENTRY_create_by_OBJ
+0117d4d0,openssl,X509_NAME_ENTRY_create_by_txt,exact-unique,byte-identical to crypto_x509_x509name.obj:_X509_NAME_ENTRY_create_by_txt
+0117da80,openssl,X509_check_private_key,exact-unique,byte-identical to crypto_x509_x509_cmp.obj:_X509_check_private_key
+0117df20,openssl,DH_new|DSA_new|DSO_new|RSA_new|sk_new_null,exact-ambiguous,"byte-identical to 5 library function(s), first crypto_dh_dh_lib.obj:DH_new"
+0117e0a0,openssl,asn1_ex_c2i,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_ex_c2i
+0117e340,openssl,asn1_check_tlen,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_check_tlen
+0117e4e0,openssl,asn1_template_ex_d2i,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_template_ex_d2i
+0117e620,openssl,asn1_find_end,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_find_end
+0117e730,openssl,asn1_collect,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_collect
+0117e920,openssl,asn1_d2i_ex_primitive,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_asn1_d2i_ex_primitive
+0117ec00,openssl,ASN1_item_ex_d2i,exact-unique,byte-identical to crypto_asn1_tasn_dec.obj:_ASN1_item_ex_d2i
+0117f2a0,openssl,asn1_template_noexp_d2i,near,NOT byte-identical: mnemonic similarity 0.97 to crypto_asn1_tasn_dec.obj:asn1_template_noexp_d2i (config/flags still differ)
+0117f580,openssl,X509V3_EXT_get_nid,exact-unique,byte-identical to crypto_x509v3_v3_lib.obj:_X509V3_EXT_get_nid
+0117f610,openssl,X509V3_EXT_d2i,near,NOT byte-identical: mnemonic similarity 0.94 to crypto_x509v3_v3_lib.obj:X509V3_EXT_d2i (config/flags still differ)
+0117f770,openssl,OBJ_nid2obj,exact-unique,"byte-identical to 1 library function(s), first crypto_objects_obj_dat.obj:OBJ_nid2obj"
+0117f7f0,openssl,OBJ_nid2sn,exact-unique,"byte-identical to 1 library function(s), first crypto_objects_obj_dat.obj:OBJ_nid2sn"
+0117f870,openssl,OBJ_nid2ln,exact-unique,"byte-identical to 1 library function(s), first crypto_objects_obj_dat.obj:OBJ_nid2ln"
+011801b0,openssl,X509_get_ext_count|X509_get_ext_d2i,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_x509_x509_ext.obj:X509_get_ext_count"
+011801d0,openssl,X509_get_ext_by_NID|X509_get_ext_by_OBJ|X509_get_ext_by_critical,exact-ambiguous,"byte-identical to 3 library function(s), first crypto_x509_x509_ext.obj:X509_get_ext_by_NID"
+01180210,openssl,X509_get_ext_count|X509_get_ext_d2i,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_x509_x509_ext.obj:X509_get_ext_count"
+01181150,openssl?,,unresolved,"getter returning static 00000027 (first dword ?); several candidates, not identifiable"
+011812b0,,,unresolved,size 10 bytes; 18 same-size exact candidates
+01181660,openssl,SSL_SESSION_new,exact-unique,byte-identical to ssl_ssl_sess.obj:_SSL_SESSION_new
+01181810,openssl,SSL_set_session,exact-unique,byte-identical to ssl_ssl_sess.obj:_SSL_set_session
+01181a10,openssl,ssl_get_new_session,exact-unique,byte-identical to ssl_ssl_sess.obj:_ssl_get_new_session
+01181f50,openssl,ssl_get_prev_session,exact-unique,byte-identical to ssl_ssl_sess.obj:_ssl_get_prev_session
+01182240,openssl,ssl23_get_client_method,exact-unique,byte-identical to ssl_s23_clnt.obj:_ssl23_get_client_method
+01182260,openssl,ssl23_client_hello,exact-unique,byte-identical to ssl_s23_clnt.obj:_ssl23_client_hello
+01182670,openssl,ssl23_get_server_hello,exact-unique,byte-identical to ssl_s23_clnt.obj:_ssl23_get_server_hello
+01182870,openssl,ssl23_connect,exact-unique,byte-identical to ssl_s23_clnt.obj:_ssl23_connect
+01182ab0,openssl?,,unresolved,"getter returning static 015cd638 (first dword 0x301); several candidates, not identifiable"
+01182ac0,openssl,ssl23_get_server_method,exact-unique,byte-identical to ssl_s23_srvr.obj:_ssl23_get_server_method
+01182ae0,openssl,ssl23_get_client_hello,exact-unique,byte-identical to ssl_s23_srvr.obj:_ssl23_get_client_hello
+011831a0,openssl?,,unresolved,"getter returning static 015cd6b0 (first dword 0x301); several candidates, not identifiable"
+011831b0,openssl,ssl23_get_client_method,near,NOT byte-identical: mnemonic similarity 0.69 to ssl_s23_clnt.obj:ssl23_get_client_method (config/flags still differ)
+011831d0,openssl?,,unresolved,"getter returning static 015cd728 (first dword 0x301); several candidates, not identifiable"
+011831e0,openssl,OPENSSL_add_all_algorithms_noconf,exact-unique,"byte-identical to 1 library function(s), first crypto_evp_c_all.obj:OPENSSL_add_all_algorithms_noconf"
+011831f0,openssl,SSL_library_init,exact-unique,byte-identical to ssl_ssl_algs.obj:_SSL_library_init
+01183630,openssl,engine_unlocked_finish,exact-unique,byte-identical to crypto_engine_eng_init.obj:_engine_unlocked_finish
+011836c0,openssl,ENGINE_init,exact-unique,byte-identical to crypto_engine_eng_init.obj:_ENGINE_init
+01183740,openssl,ENGINE_finish,exact-unique,byte-identical to crypto_engine_eng_init.obj:_ENGINE_finish
+011838a0,,,unresolved,size 7 bytes; 21 same-size exact candidates
+011838c0,openssl,EVP_CIPHER_CTX_key_length|X509_STORE_CTX_get_error_depth,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_evp_evp_lib.obj:EVP_CIPHER_CTX_key_length"
+011838d0,openssl,EC_GROUP_get_seed_len|ENGINE_get_load_pubkey_function|EVP_MD_block_size|STORE_method_get_ctrl_function,exact-ambiguous,"byte-identical to 4 library function(s), first crypto_ec_ec_lib.obj:EC_GROUP_get_seed_len"
+011839d0,openssl,ENGINE_get_cipher_engine|ENGINE_get_digest_engine|ENGINE_unregister_DH|ENGINE_unregister_DSA|ENGINE_unregister_ECDH|ENGINE_unregister_ECDSA|ENGINE_unregister_RAND|ENGINE_unregister_RSA|...,exact-ambiguous,"byte-identical to 24 library function(s), first crypto_asn1_x_algor.obj:X509_ALGOR_dup"
+011839f0,openssl,ENGINE_get_cipher,exact-unique,byte-identical to crypto_engine_tb_cipher.obj:_ENGINE_get_cipher
+01183b20,openssl,RC4,near,NOT byte-identical: mnemonic similarity 0.75 to crypto_rc4_rc4_enc.obj:RC4 (config/flags still differ)
+01183f70,openssl,def_get_class,exact-unique,byte-identical to crypto_ex_data.obj:_def_get_class
+01184040,openssl,def_add_index,exact-unique,byte-identical to crypto_ex_data.obj:_def_add_index
+01184320,openssl,CRYPTO_set_ex_data,exact-unique,byte-identical to crypto_ex_data.obj:_CRYPTO_set_ex_data
+011843b0,openssl,int_new_ex_data,exact-unique,byte-identical to crypto_ex_data.obj:_int_new_ex_data
+011844e0,openssl,int_dup_ex_data,exact-unique,byte-identical to crypto_ex_data.obj:_int_dup_ex_data
+01184640,openssl,int_free_ex_data,exact-unique,byte-identical to crypto_ex_data.obj:_int_free_ex_data
+01184770,openssl,BUF_MEM_new,exact-unique,byte-identical to crypto_buffer_buffer.obj:_BUF_MEM_new
+011847f0,openssl,BUF_MEM_grow,exact-unique,byte-identical to crypto_buffer_buffer.obj:_BUF_MEM_grow
+011848a0,openssl,BUF_MEM_grow_clean,exact-unique,byte-identical to crypto_buffer_buffer.obj:_BUF_MEM_grow_clean
+01184a20,openssl,BUF_strndup,exact-unique,byte-identical to crypto_buffer_buffer.obj:_BUF_strndup
+01185840,openssl?,,unresolved,"getter returning static 015cd8a8 (first dword 0x1185bf0); several candidates, not identifiable"
+01185850,openssl,ssleay_rand_cleanup,exact-unique,"byte-identical to 1 library function(s), first crypto_rand_md_rand.obj:ssleay_rand_cleanup"
+011858a0,openssl,ssleay_rand_add,exact-unique,"byte-identical to 1 library function(s), first crypto_rand_md_rand.obj:ssleay_rand_add"
+01185c10,openssl,ssleay_rand_bytes,near,NOT byte-identical: mnemonic similarity 1.00 to crypto_rand_md_rand.obj:ssleay_rand_bytes (config/flags still differ)
+01186080,openssl,ssleay_rand_status,exact-unique,byte-identical to crypto_rand_md_rand.obj:_ssleay_rand_status
+01186180,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011861a0,openssl?,,unresolved,"getter returning static 015cd8c0 (first dword 0x14e4c30); several candidates, not identifiable"
+011861b0,openssl,RSA_eay_public_encrypt,exact-unique,byte-identical to crypto_rsa_rsa_eay.obj:_RSA_eay_public_encrypt
+01186640,openssl,RSA_eay_private_encrypt,exact-unique,byte-identical to crypto_rsa_rsa_eay.obj:_RSA_eay_private_encrypt
+011869d0,openssl,RSA_eay_private_decrypt,exact-unique,byte-identical to crypto_rsa_rsa_eay.obj:_RSA_eay_private_decrypt
+01186d30,openssl,RSA_eay_public_decrypt,exact-unique,byte-identical to crypto_rsa_rsa_eay.obj:_RSA_eay_public_decrypt
+011874c0,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011874d0,,,unresolved,size 8 bytes; 11 same-size exact candidates
+01187540,openssl,BN_BLINDING_convert_ex,exact-unique,byte-identical to crypto_bn_bn_blind.obj:_BN_BLINDING_convert_ex
+011875c0,openssl,BN_BLINDING_create_param,exact-unique,byte-identical to crypto_bn_bn_blind.obj:_BN_BLINDING_create_param
+011877a0,openssl,BN_BLINDING_update,exact-unique,byte-identical to crypto_bn_bn_blind.obj:_BN_BLINDING_update
+01187840,openssl,BN_BLINDING_invert_ex,exact-unique,byte-identical to crypto_bn_bn_blind.obj:_BN_BLINDING_invert_ex
+01187a80,openssl,BN_CTX_new,exact-unique,byte-identical to crypto_bn_bn_ctx.obj:_BN_CTX_new
+01187b00,openssl,BN_CTX_start,exact-unique,byte-identical to crypto_bn_bn_ctx.obj:_BN_CTX_start
+01187b90,openssl,BN_CTX_get,exact-unique,byte-identical to crypto_bn_bn_ctx.obj:_BN_CTX_get
+01187be0,openssl,BN_mod_inverse_no_branch,exact-unique,byte-identical to crypto_bn_bn_gcd.obj:_BN_mod_inverse_no_branch
+01187e90,openssl,BN_mod_inverse,exact-unique,byte-identical to crypto_bn_bn_gcd.obj:_BN_mod_inverse
+011892f0,openssl,BN_usub,exact-unique,byte-identical to crypto_bn_bn_add.obj:_BN_usub
+01189590,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011895b0,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+011895d0,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011897e0,openssl,fmtint,exact-unique,byte-identical to crypto_bio_b_print.obj:_fmtint
+01189a30,openssl,fmtfp,exact-unique,byte-identical to crypto_bio_b_print.obj:_fmtfp
+01189d60,openssl,dopr,exact-unique,byte-identical to crypto_bio_b_print.obj:__dopr
+0118fec0,openssl,SHA1_Final,near,NOT byte-identical: mnemonic similarity 0.97 to crypto_sha_sha1dgst.obj:SHA1_Final (config/flags still differ)
+01190020,openssl,PEM_ASN1_read_bio,exact-unique,byte-identical to crypto_pem_pem_oth.obj:_PEM_ASN1_read_bio
+011900e0,openssl,PEM_def_callback,exact-unique,byte-identical to crypto_pem_pem_lib.obj:_PEM_def_callback
+011905e0,openssl,PEM_do_header,exact-unique,byte-identical to crypto_pem_pem_lib.obj:_PEM_do_header
+01190790,openssl,load_iv,exact-unique,byte-identical to crypto_pem_pem_lib.obj:_load_iv
+01190840,openssl,PEM_read_bio,exact-unique,"byte-identical to 1 library function(s), first crypto_pem_pem_lib.obj:PEM_read_bio"
+01190db0,openssl,PEM_get_EVP_CIPHER_INFO,exact-unique,byte-identical to crypto_pem_pem_lib.obj:_PEM_get_EVP_CIPHER_INFO
+011910c0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011910e0,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01191470,openssl,EVP_PKEY_new,exact-unique,byte-identical to crypto_evp_p_lib.obj:_EVP_PKEY_new
+01191620,openssl,EVP_PKEY_copy_parameters,exact-unique,byte-identical to crypto_evp_p_lib.obj:_EVP_PKEY_copy_parameters
+01191820,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191840,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01191860,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191880,openssl,ENGINE_get_cipher_engine|ENGINE_get_digest_engine|ENGINE_unregister_DH|ENGINE_unregister_DSA|ENGINE_unregister_ECDH|ENGINE_unregister_ECDSA|ENGINE_unregister_RAND|ENGINE_unregister_RSA|...,exact-ambiguous,"byte-identical to 24 library function(s), first crypto_asn1_x_algor.obj:X509_ALGOR_dup"
+011918c0,openssl,X509_PUBKEY_get,exact-unique,byte-identical to crypto_asn1_x_pubkey.obj:_X509_PUBKEY_get
+01191b20,openssl,DSA_new_method,exact-unique,byte-identical to crypto_dsa_dsa_lib.obj:_DSA_new_method
+01191da0,openssl,DH_new|DSA_new|DSO_new|RSA_new|sk_new_null,exact-ambiguous,"byte-identical to 5 library function(s), first crypto_dh_dh_lib.obj:DH_new"
+01191df0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191e10,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01191e30,openssl,DSA_SIG_new,exact-by-data,push &DSA_SIG_it; call ASN1_item_new: DSA_SIG_new exists in 0.9.8g
+01191e40,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01191eb0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191ed0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191ef0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01191f10,openssl,EC_KEY_new,exact-unique,byte-identical to crypto_ec_ec_key.obj:_EC_KEY_new
+01191fe0,openssl,EC_KEY_copy,exact-unique,byte-identical to crypto_ec_ec_key.obj:_EC_KEY_copy
+01192190,openssl,EC_KEY_generate_key,exact-unique,byte-identical to crypto_ec_ec_key.obj:_EC_KEY_generate_key
+01192400,openssl,ec_asn1_parameters2group,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_ec_asn1_parameters2group
+01192990,openssl,ec_asn1_pkparameters2group,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_ec_asn1_pkparameters2group
+01192a40,openssl,d2i_ECPKParameters,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_d2i_ECPKParameters
+01192ae0,openssl,d2i_ECPrivateKey,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_d2i_ECPrivateKey
+01192cb0,openssl,d2i_ECParameters,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_d2i_ECParameters
+01192d40,openssl,o2i_ECPublicKey,exact-unique,byte-identical to crypto_ec_ec_asn1.obj:_o2i_ECPublicKey
+01192e50,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01192e70,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01192e90,openssl,ssl_load_ciphers,exact-unique,"byte-identical to 1 library function(s), first ssl_ssl_ciph.obj:ssl_load_ciphers"
+01193670,openssl,ssl_cipher_strength_sort,exact-unique,byte-identical to ssl_ssl_ciph.obj:_ssl_cipher_strength_sort
+01193740,openssl,ssl_cipher_process_rulestr,exact-unique,byte-identical to ssl_ssl_ciph.obj:_ssl_cipher_process_rulestr
+01193a90,openssl,ssl_create_cipher_list,exact-unique,byte-identical to ssl_ssl_ciph.obj:_ssl_create_cipher_list
+01193d20,openssl,SSL_COMP_get_compression_methods,exact-unique,"byte-identical to 1 library function(s), first ssl_ssl_ciph.obj:SSL_COMP_get_compression_methods"
+011948f0,openssl,ssl_cert_new,exact-unique,byte-identical to ssl_ssl_cert.obj:_ssl_cert_new
+01194940,openssl,ssl_cert_dup,exact-unique,byte-identical to ssl_ssl_cert.obj:_ssl_cert_dup
+01194c10,openssl,ssl_cert_inst,exact-unique,byte-identical to ssl_ssl_cert.obj:_ssl_cert_inst
+01194c60,openssl,ssl_sess_cert_new,exact-unique,byte-identical to ssl_ssl_cert.obj:_ssl_sess_cert_new
+01194d60,openssl,ssl_verify_cert_chain,exact-unique,byte-identical to ssl_ssl_cert.obj:_ssl_verify_cert_chain
+01194e90,openssl,SSL_get_client_CA_list,exact-unique,byte-identical to ssl_ssl_cert.obj:_SSL_get_client_CA_list
+01194ee0,openssl,X509_NAME_ENTRY_new,exact-by-data,push &X509_NAME_ENTRY_it; call ASN1_item_new: X509_NAME_ENTRY_new exists in 0.9.8g
+01194ef0,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01194f10,openssl,ENGINE_get_cipher_engine|ENGINE_get_digest_engine|ENGINE_unregister_DH|ENGINE_unregister_DSA|ENGINE_unregister_ECDH|ENGINE_unregister_ECDSA|ENGINE_unregister_RAND|ENGINE_unregister_RSA|...,exact-ambiguous,"byte-identical to 24 library function(s), first crypto_asn1_x_algor.obj:X509_ALGOR_dup"
+01194f30,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01194f50,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01194f70,openssl,X509_NAME_new,exact-by-data,push &X509_NAME_it; call ASN1_item_new: X509_NAME_new exists in 0.9.8g
+01194f80,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01194fa0,openssl,ENGINE_get_cipher_engine|ENGINE_get_digest_engine|ENGINE_unregister_DH|ENGINE_unregister_DSA|ENGINE_unregister_ECDH|ENGINE_unregister_ECDSA|ENGINE_unregister_RAND|ENGINE_unregister_RSA|...,exact-ambiguous,"byte-identical to 24 library function(s), first crypto_asn1_x_algor.obj:X509_ALGOR_dup"
+01194fc0,openssl,x509_name_ex_new,exact-unique,byte-identical to crypto_asn1_x_name.obj:_x509_name_ex_new
+01195090,openssl,x509_name_ex_d2i,exact-unique,byte-identical to crypto_asn1_x_name.obj:_x509_name_ex_d2i
+01195230,openssl,x509_name_encode,exact-unique,byte-identical to crypto_asn1_x_name.obj:_x509_name_encode
+01195a40,openssl,X509_STORE_add_crl,exact-unique,byte-identical to crypto_x509_x509_lu.obj:_X509_STORE_add_crl
+01195b10,openssl,X509_STORE_CTX_get1_issuer,exact-unique,byte-identical to crypto_x509_x509_lu.obj:_X509_STORE_CTX_get1_issuer
+011964f0,openssl,X509_check_purpose,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_purp.obj:X509_check_purpose"
+011965f0,openssl,DH_new_method,exact-unique,byte-identical to crypto_dh_dh_lib.obj:_DH_new_method
+01196850,openssl,DH_new|DSA_new|DSO_new|RSA_new|sk_new_null,exact-ambiguous,"byte-identical to 5 library function(s), first crypto_dh_dh_lib.obj:DH_new"
+01196970,openssl?,,unresolved,"getter returning static 015cda34 (first dword 0x209); several candidates, not identifiable"
+01196a90,openssl,buffer_read,exact-unique,byte-identical to crypto_bio_bf_buff.obj:_buffer_read
+01196d20,openssl,buffer_ctrl,exact-unique,byte-identical to crypto_bio_bf_buff.obj:_buffer_ctrl
+011973c0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011973e0,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01197400,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01197420,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+01197440,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01197460,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01197480,openssl,ASN1_OCTET_STRING_new,exact-by-data,push &ASN1_OCTET_STRING_it; call ASN1_item_new: ASN1_OCTET_STRING_new exists in 0.9.8g
+01197490,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011974b0,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011974d0,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+011974f0,,,unresolved,"ASN1_item wrapper (ASN1_item_new, item ASN1_ANY); wrapper name not determined"
+01197500,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01197520,openssl,X509_ALGOR_new,exact-by-data,push &X509_ALGOR_it; call ASN1_item_new: X509_ALGOR_new exists in 0.9.8g
+01197530,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01197550,openssl,asn1_template_ex_i2d,near,NOT byte-identical: mnemonic similarity 0.97 to crypto_asn1_tasn_enc.obj:asn1_template_ex_i2d (config/flags still differ)
+01198210,openssl,asn1_item_ex_combine_new,exact-unique,byte-identical to crypto_asn1_tasn_new.obj:_asn1_item_ex_combine_new
+01198420,openssl,asn1_item_clear,near,NOT byte-identical: mnemonic similarity 0.81 to crypto_asn1_tasn_new.obj:asn1_item_clear (config/flags still differ)
+011984b0,openssl,ASN1_template_new,near,NOT byte-identical: mnemonic similarity 0.90 to crypto_asn1_tasn_new.obj:ASN1_template_new (config/flags still differ)
+01198850,openssl,ASN1_template_free,near,NOT byte-identical: mnemonic similarity 0.90 to crypto_asn1_tasn_fre.obj:ASN1_template_free (config/flags still differ)
+01198cf0,openssl,AUTHORITY_KEYID_new,exact-by-data,push &AUTHORITY_KEYID_it; call ASN1_item_new: AUTHORITY_KEYID_new exists in 0.9.8g
+01198d00,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01198d20,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+01198d40,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+01198d60,openssl,X509_NAME_oneline,exact-unique,byte-identical to crypto_x509_x509_obj.obj:_X509_NAME_oneline
+011990c0,openssl,ASN1_dup,exact-unique,byte-identical to crypto_asn1_a_dup.obj:_ASN1_dup
+01199140,openssl,ASN1_item_dup,exact-unique,byte-identical to crypto_asn1_a_dup.obj:_ASN1_item_dup
+011991b0,openssl,OBJ_dup,exact-unique,byte-identical to crypto_objects_obj_lib.obj:_OBJ_dup
+01199390,openssl,a2d_ASN1_OBJECT,exact-unique,byte-identical to crypto_asn1_a_object.obj:_a2d_ASN1_OBJECT
+01199870,openssl,ASN1_OBJECT_new,exact-unique,byte-identical to crypto_asn1_a_object.obj:_ASN1_OBJECT_new
+01199930,openssl,c2i_ASN1_OBJECT,exact-unique,byte-identical to crypto_asn1_a_object.obj:_c2i_ASN1_OBJECT
+01199a40,openssl,d2i_ASN1_OBJECT,exact-unique,byte-identical to crypto_asn1_a_object.obj:_d2i_ASN1_OBJECT
+01199cb0,openssl,ASN1_STRING_set,exact-unique,byte-identical to crypto_asn1_asn1_lib.obj:_ASN1_STRING_set
+01199d70,openssl,ASN1_STRING_type_new,exact-unique,byte-identical to crypto_asn1_asn1_lib.obj:_ASN1_STRING_type_new
+01199e70,openssl,ASN1_get_object,exact-unique,byte-identical to crypto_asn1_asn1_lib.obj:_ASN1_get_object
+0119a0e0,openssl,ASN1_STRING_dup,exact-unique,byte-identical to crypto_asn1_asn1_lib.obj:_ASN1_STRING_dup
+0119a180,openssl,ASN1_STRING_new,exact-unique,byte-identical to crypto_asn1_asn1_lib.obj:_ASN1_STRING_new
+0119a2e0,openssl,EVP_DigestInit_ex,exact-unique,byte-identical to crypto_evp_digest.obj:_EVP_DigestInit_ex
+0119a510,openssl,EVP_MD_CTX_copy_ex,exact-unique,byte-identical to crypto_evp_digest.obj:_EVP_MD_CTX_copy_ex
+0119a6f0,openssl,EVP_md5,exact-by-data,returns 014e78b8 whose first field is NID 4 (md5); EVP_md5 exists in 0.9.8g
+0119a850,openssl,c2i_ASN1_INTEGER,exact-unique,byte-identical to crypto_asn1_a_int.obj:_c2i_ASN1_INTEGER
+0119a9c0,openssl,ASN1_INTEGER_set,exact-unique,byte-identical to crypto_asn1_a_int.obj:_ASN1_INTEGER_set
+0119ab00,openssl,BN_to_ASN1_INTEGER,exact-unique,byte-identical to crypto_asn1_a_int.obj:_BN_to_ASN1_INTEGER
+0119abd0,openssl,ASN1_INTEGER_to_BN,exact-unique,byte-identical to crypto_asn1_a_int.obj:_ASN1_INTEGER_to_BN
+0119acf0,openssl,c2i_ASN1_BIT_STRING,exact-unique,byte-identical to crypto_asn1_a_bitstr.obj:_c2i_ASN1_BIT_STRING
+0119adf0,openssl,ASN1_BIT_STRING_set_bit,exact-unique,byte-identical to crypto_asn1_a_bitstr.obj:_ASN1_BIT_STRING_set_bit
+0119b180,openssl,asn1_do_adb,near,NOT byte-identical: mnemonic similarity 0.92 to crypto_asn1_tasn_utl.obj:asn1_do_adb (config/flags still differ)
+0119b230,openssl,POLICY_MAPPING_free,exact-unique,byte-identical to crypto_x509v3_v3_pmaps.obj:_POLICY_MAPPING_free
+0119b300,openssl,v2i_POLICY_MAPPINGS,exact-unique,byte-identical to crypto_x509v3_v3_pmaps.obj:_v2i_POLICY_MAPPINGS
+0119b480,openssl,v2i_NAME_CONSTRAINTS,exact-unique,byte-identical to crypto_x509v3_v3_ncons.obj:_v2i_NAME_CONSTRAINTS
+0119b610,openssl,print_nc_ipadd,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_ncons.obj:print_nc_ipadd"
+0119b6e0,openssl,do_i2r_name_constraints,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_ncons.obj:do_i2r_name_constraints"
+0119b7e0,openssl,i2r_pci,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_pci.obj:i2r_pci"
+0119b890,openssl,process_pci_value,exact-unique,byte-identical to crypto_x509v3_v3_pci.obj:_process_pci_value
+0119bcd0,openssl,r2i_pci,exact-unique,byte-identical to crypto_x509v3_v3_pci.obj:_r2i_pci
+0119bf70,openssl,POLICY_CONSTRAINTS_free,exact-unique,byte-identical to crypto_x509v3_v3_pcons.obj:_POLICY_CONSTRAINTS_free
+0119bfd0,openssl,v2i_POLICY_CONSTRAINTS,exact-unique,byte-identical to crypto_x509v3_v3_pcons.obj:_v2i_POLICY_CONSTRAINTS
+0119c150,openssl,ACCESS_DESCRIPTION_free,exact-unique,byte-identical to crypto_x509v3_v3_info.obj:_ACCESS_DESCRIPTION_free
+0119c170,openssl,i2v_AUTHORITY_INFO_ACCESS,exact-unique,byte-identical to crypto_x509v3_v3_info.obj:_i2v_AUTHORITY_INFO_ACCESS
+0119c2e0,openssl,v2i_AUTHORITY_INFO_ACCESS,exact-unique,byte-identical to crypto_x509v3_v3_info.obj:_v2i_AUTHORITY_INFO_ACCESS
+0119c5b0,openssl,SXNET_add_id_INTEGER,exact-unique,byte-identical to crypto_x509v3_v3_sxnet.obj:_SXNET_add_id_INTEGER
+0119c730,openssl,sxnet_v2i,exact-unique,byte-identical to crypto_x509v3_v3_sxnet.obj:_sxnet_v2i
+0119c890,openssl,v2i_EXTENDED_KEY_USAGE,exact-unique,byte-identical to crypto_x509v3_v3_extku.obj:_v2i_EXTENDED_KEY_USAGE
+0119ca10,openssl,DIST_POINT_free,exact-unique,byte-identical to crypto_x509v3_v3_crld.obj:_DIST_POINT_free
+0119ca30,openssl,v2i_crld,exact-unique,byte-identical to crypto_x509v3_v3_crld.obj:_v2i_crld
+0119cbf0,openssl,v2i_AUTHORITY_KEYID,exact-unique,byte-identical to crypto_x509v3_v3_akey.obj:_v2i_AUTHORITY_KEYID
+0119ced0,openssl,POLICYINFO_free,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_POLICYINFO_free
+0119cef0,openssl,POLICYQUALINFO_free,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_POLICYQUALINFO_free
+0119cf10,openssl,nref_nos,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_nref_nos
+0119cf90,openssl,print_notice,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_cpols.obj:print_notice"
+0119d090,openssl,notice_section,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_notice_section
+0119d350,openssl,print_qualifiers,exact-unique,"byte-identical to 1 library function(s), first crypto_x509v3_v3_cpols.obj:print_qualifiers"
+0119d420,openssl,policy_section,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_policy_section
+0119d670,openssl,i2r_certpol,near,NOT byte-identical: mnemonic similarity 0.97 to crypto_x509v3_v3_cpols.obj:i2r_certpol (config/flags still differ)
+0119d700,openssl,r2i_certpol,exact-unique,byte-identical to crypto_x509v3_v3_cpols.obj:_r2i_certpol
+0119d910,openssl,BASIC_CONSTRAINTS_free,exact-unique,byte-identical to crypto_x509v3_v3_bcons.obj:_BASIC_CONSTRAINTS_free
+0119d970,openssl,v2i_BASIC_CONSTRAINTS,exact-unique,byte-identical to crypto_x509v3_v3_bcons.obj:_v2i_BASIC_CONSTRAINTS
+0119dd40,openssl,X509V3_add_value_bool,near,NOT byte-identical: mnemonic similarity 0.46 to crypto_x509v3_v3_utl.obj:X509V3_add_value_bool (config/flags still differ)
+0119df30,openssl,copy_issuer,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_copy_issuer
+0119e010,openssl,copy_email,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_copy_email
+0119e1c0,openssl,do_dirname,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_do_dirname
+0119e2a0,openssl,v2i_GENERAL_NAME_ex,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_v2i_GENERAL_NAME_ex
+0119e520,openssl,v2i_issuer_alt,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_v2i_issuer_alt
+0119e630,openssl,v2i_subject_alt,exact-unique,byte-identical to crypto_x509v3_v3_alt.obj:_v2i_subject_alt
+0119e850,openssl,v2i_ASN1_BIT_STRING,exact-unique,byte-identical to crypto_x509v3_v3_bitst.obj:_v2i_ASN1_BIT_STRING
+0119ea00,openssl,s2i_ASN1_OCTET_STRING,exact-unique,byte-identical to crypto_x509v3_v3_skey.obj:_s2i_ASN1_OCTET_STRING
+0119ea60,openssl,s2i_skey_id,exact-unique,byte-identical to crypto_x509v3_v3_skey.obj:_s2i_skey_id
+0119ebb0,openssl,i2s_ASN1_IA5STRING,exact-unique,byte-identical to crypto_x509v3_v3_ia5.obj:_i2s_ASN1_IA5STRING
+0119ec10,openssl,s2i_ASN1_IA5STRING,exact-unique,byte-identical to crypto_x509v3_v3_ia5.obj:_s2i_ASN1_IA5STRING
+0119ec80,openssl,X509V3_get_section,exact-unique,byte-identical to crypto_x509v3_v3_conf.obj:_X509V3_get_section
+0119f640,openssl?,,unresolved,"getter returning static 00001c20 (first dword ?); several candidates, not identifiable"
+0119f650,openssl,ssl3_get_cipher,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_get_cipher
+0119f6a0,openssl,ssl3_new,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_new
+0119f720,openssl,ssl3_free,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_free
+0119f820,openssl,ssl3_clear,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_clear
+0119f950,openssl,ssl3_ctrl,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_ctrl
+0119fbf0,openssl,ssl3_callback_ctrl,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_callback_ctrl
+0119fc80,openssl,ssl3_ctx_ctrl,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_ctx_ctrl
+0119fee0,openssl,ssl3_get_cipher_by_char,exact-unique,"byte-identical to 1 library function(s), first ssl_s3_lib.obj:ssl3_get_cipher_by_char"
+011a0030,openssl,ssl3_get_req_cert_type,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_get_req_cert_type
+011a00a0,openssl,ssl3_shutdown,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_shutdown
+011a0130,openssl,ssl3_renegotiate,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_renegotiate
+011a0160,openssl,ssl3_renegotiate_check,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_renegotiate_check
+011a01d0,openssl,ssl3_write,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_write
+011a0290,openssl,ssl3_read_internal,exact-unique,byte-identical to ssl_s3_lib.obj:_ssl3_read_internal
+011a0360,openssl?,,unresolved,"getter returning static 0000012c (first dword ?); several candidates, not identifiable"
+011a0370,,,thunk,jmp 00ea2d40 (target not identified)
+011a0380,openssl,ssl23_get_cipher,exact-unique,byte-identical to ssl_s23_lib.obj:_ssl23_get_cipher
+011a03a0,crt|openssl,OPENSSL_load_builtin_modules|RAND_screen|WinMainCRTStartup|mainCRTStartup|ssl23_get_cipher_by_char|wWinMainCRTStartup|wmainCRTStartup,exact-ambiguous,"byte-identical to 7 library function(s), first crypto_conf_conf_mall.obj:OPENSSL_load_builtin_modules"
+011a03e0,openssl,ssl23_read,exact-unique,byte-identical to ssl_s23_lib.obj:_ssl23_read
+011a0450,openssl,ssl23_peek,exact-unique,byte-identical to ssl_s23_lib.obj:_ssl23_peek
+011a04d0,openssl,ssl23_write,exact-unique,byte-identical to ssl_s23_lib.obj:_ssl23_write
+011a0540,openssl,ssl3_read_n,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_read_n
+011a0720,openssl,ssl3_do_compress,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_do_compress
+011a0770,openssl,ssl3_write_pending,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_write_pending
+011a0860,openssl,ssl3_do_change_cipher_spec,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_do_change_cipher_spec
+011a0930,openssl,ssl3_send_alert,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_send_alert
+011a09c0,openssl,ssl3_get_record,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_get_record
+011a0d80,openssl,do_ssl3_write,exact-unique,byte-identical to ssl_s3_pkt.obj:_do_ssl3_write
+011a0ff0,openssl,ssl3_read_bytes,near,NOT byte-identical: mnemonic similarity 0.97 to ssl_s3_pkt.obj:ssl3_read_bytes (config/flags still differ)
+011a1700,openssl,ssl3_dispatch_alert,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_dispatch_alert
+011a1990,openssl,ssl3_write_bytes,exact-unique,byte-identical to ssl_s3_pkt.obj:_ssl3_write_bytes
+011a1d80,openssl,ssl3_send_finished,exact-unique,byte-identical to ssl_s3_both.obj:_ssl3_send_finished
+011a1e30,openssl,ssl3_get_finished,exact-unique,byte-identical to ssl_s3_both.obj:_ssl3_get_finished
+011a1f60,openssl,ssl3_output_cert_chain,exact-unique,byte-identical to ssl_s3_both.obj:_ssl3_output_cert_chain
+011a2250,openssl,ssl3_get_message,exact-unique,byte-identical to ssl_s3_both.obj:_ssl3_get_message
+011a2610,openssl,ssl3_setup_buffers,exact-unique,byte-identical to ssl_s3_both.obj:_ssl3_setup_buffers
+011a2700,,jmp->ssl3_free,thunk,jmp 0119f720 = ssl3_free
+011a2730,openssl,tls1_get_client_method|tls1_get_method|tls1_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_t1_clnt.obj:tls1_get_client_method"
+011a2750,openssl?,,unresolved,"getter returning static 015ce970 (first dword 0x301); several candidates, not identifiable"
+011a2760,openssl,ssl3_get_client_method|ssl3_get_method|ssl3_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_s3_clnt.obj:ssl3_get_client_method"
+011a2780,openssl,ssl3_client_hello,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_client_hello
+011a2980,openssl,ssl3_get_server_hello,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_get_server_hello
+011a2d60,openssl,ssl3_get_server_certificate,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_get_server_certificate
+011a3170,openssl,ssl3_get_server_done,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_get_server_done
+011a31d0,openssl,ssl3_send_client_key_exchange,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_send_client_key_exchange
+011a3700,openssl,ssl3_send_client_verify,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_send_client_verify
+011a38d0,openssl,ssl3_send_client_certificate,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_send_client_certificate
+011a3a60,openssl,ssl3_check_cert_and_algorithm,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_check_cert_and_algorithm
+011a3cf0,openssl,ssl3_get_key_exchange,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_get_key_exchange
+011a4600,openssl,ssl3_get_certificate_request,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_get_certificate_request
+011a48f0,openssl,ssl3_connect,exact-unique,byte-identical to ssl_s3_clnt.obj:_ssl3_connect
+011a5020,openssl?,,unresolved,"getter returning static 015ce9e8 (first dword 0x300); several candidates, not identifiable"
+011a5120,openssl,ssl3_generate_key_block,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_generate_key_block
+011a5310,openssl,ssl3_change_cipher_state,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_change_cipher_state
+011a5760,openssl,ssl3_cleanup_key_block,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_cleanup_key_block
+011a57c0,openssl,ssl3_enc,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_enc
+011a5900,openssl,ssl3_init_finished_mac,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_init_finished_mac
+011a5950,openssl,ssl3_finish_mac,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_finish_mac
+011a5ad0,openssl,ssl3_generate_master_secret,near,NOT byte-identical: mnemonic similarity 0.99 to ssl_s3_enc.obj:ssl3_generate_master_secret (config/flags still differ)
+011a5d40,openssl,ssl3_setup_key_block,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_setup_key_block
+011a5f20,openssl,ssl3_mac,exact-unique,byte-identical to ssl_s3_enc.obj:_ssl3_mac
+011a60b0,openssl,tls1_get_client_method|tls1_get_method|tls1_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_t1_clnt.obj:tls1_get_client_method"
+011a60d0,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011a60e0,openssl,ssl3_get_client_method|ssl3_get_method|ssl3_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_s3_clnt.obj:ssl3_get_client_method"
+011a6140,openssl,ssl3_check_client_hello,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_check_client_hello
+011a61c0,openssl,ssl3_get_client_hello,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_get_client_hello
+011a67a0,openssl,ssl3_send_server_hello,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_send_server_hello
+011a6940,openssl,ssl3_send_certificate_request,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_send_certificate_request
+011a6b60,openssl,ssl3_get_client_key_exchange,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_get_client_key_exchange
+011a7070,openssl,ssl3_get_cert_verify,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_get_cert_verify
+011a7340,openssl,ssl3_get_client_certificate,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_get_client_certificate
+011a7770,openssl,ssl3_send_server_certificate,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_send_server_certificate
+011a7920,openssl,ssl3_send_server_key_exchange,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_send_server_key_exchange
+011a81e0,openssl,ssl3_accept,exact-unique,byte-identical to ssl_s3_srvr.obj:_ssl3_accept
+011a8a80,openssl,tls1_get_client_method|tls1_get_method|tls1_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_t1_clnt.obj:tls1_get_client_method"
+011a8aa0,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011a8ab0,openssl,ssl3_get_client_method|ssl3_get_method|ssl3_get_server_method,exact-ambiguous,"byte-identical to 3 library function(s), first ssl_s3_clnt.obj:ssl3_get_client_method"
+011a8ad0,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011a8ae0,openssl,OpenSSL_add_all_digests,near,NOT byte-identical: mnemonic similarity 0.98 to crypto_evp_c_alld.obj:OpenSSL_add_all_digests (config/flags still differ)
+011a8c30,openssl,OpenSSL_add_all_ciphers,exact-unique,byte-identical to crypto_evp_c_allc.obj:_OpenSSL_add_all_ciphers
+011a8fe0,openssl?,,unresolved,"getter returning static 014e95c8 (first dword 0x1a0); several candidates, not identifiable"
+011a8ff0,openssl?,,unresolved,"getter returning static 014e9610 (first dword 0x74); several candidates, not identifiable"
+011a9000,openssl,EVP_sha1,exact-by-data,returns 014e9658 whose first field is NID 64 (sha1); EVP_sha1 exists in 0.9.8g
+011a9060,openssl,EVP_sha224,exact-by-data,returns 014e96a0 whose first field is NID 675 (sha224); EVP_sha224 exists in 0.9.8g
+011a9070,openssl,EVP_sha256,exact-by-data,returns 014e96e8 whose first field is NID 672 (sha256); EVP_sha256 exists in 0.9.8g
+011a90d0,openssl,EVP_sha384,exact-by-data,returns 014e9730 whose first field is NID 673 (sha384); EVP_sha384 exists in 0.9.8g
+011a90e0,openssl,EVP_sha512,exact-by-data,returns 014e9778 whose first field is NID 674 (sha512); EVP_sha512 exists in 0.9.8g
+011a93f0,openssl,EVP_md2,exact-by-data,returns 014e97e0 whose first field is NID 3 (md2); EVP_md2 exists in 0.9.8g
+011a9500,openssl,EVP_rc2_cbc,exact-by-data,returns 014e9828 whose first field is NID 37 (rc2_cbc); EVP_rc2_cbc exists in 0.9.8g
+011a9510,openssl,EVP_rc2_cfb64,exact-by-data,returns 014e985c whose first field is NID 39 (rc2_cfb64); EVP_rc2_cfb64 exists in 0.9.8g
+011a9520,openssl?,,unresolved,"getter returning static 014e9890 (first dword 0x28); several candidates, not identifiable"
+011a9530,openssl,EVP_rc2_ecb,exact-by-data,returns 014e98c4 whose first field is NID 38 (rc2_ecb); EVP_rc2_ecb exists in 0.9.8g
+011a9540,openssl,EVP_rc2_64_cbc,exact-by-data,returns 014e98f8 whose first field is NID 166 (rc2_64_cbc); EVP_rc2_64_cbc exists in 0.9.8g
+011a9550,openssl,EVP_rc2_40_cbc,exact-by-data,returns 014e992c whose first field is NID 98 (rc2_40_cbc); EVP_rc2_40_cbc exists in 0.9.8g
+011a9590,openssl,rc2_magic_to_meth,exact-unique,byte-identical to crypto_evp_e_rc2.obj:_rc2_magic_to_meth
+011a99b0,openssl,EVP_des_ede_cbc,exact-by-data,returns 014e9988 whose first field is NID 43 (des_ede_cbc); EVP_des_ede_cbc exists in 0.9.8g
+011a99c0,openssl,EVP_des_ede_cfb64,exact-by-data,returns 014e99bc whose first field is NID 60 (des_ede_cfb64); EVP_des_ede_cfb64 exists in 0.9.8g
+011a99d0,openssl?,,unresolved,"getter returning static 014e99f0 (first dword 0x3e); several candidates, not identifiable"
+011a99e0,openssl,EVP_des_ede3_cbc,exact-by-data,returns 014e9a58 whose first field is NID 44 (des_ede3_cbc); EVP_des_ede3_cbc exists in 0.9.8g
+011a99f0,openssl,EVP_des_ede3_cfb64,exact-by-data,returns 014e9a8c whose first field is NID 61 (des_ede3_cfb64); EVP_des_ede3_cfb64 exists in 0.9.8g
+011a9a00,openssl?,,unresolved,"getter returning static 014e9ac0 (first dword 0x3f); several candidates, not identifiable"
+011a9b00,openssl,EVP_des_ede_ecb,exact-by-data,returns 014e9a24 whose first field is NID 32 (des_ede_ecb); EVP_des_ede_ecb exists in 0.9.8g
+011a9b10,openssl,EVP_des_ede3_ecb,exact-by-data,returns 014e9af4 whose first field is NID 33 (des_ede3_ecb); EVP_des_ede3_ecb exists in 0.9.8g
+011a9cf0,openssl,EVP_des_cbc,exact-by-data,returns 014e9b90 whose first field is NID 31 (des_cbc); EVP_des_cbc exists in 0.9.8g
+011a9d00,openssl,EVP_des_cfb64,exact-by-data,returns 014e9bc4 whose first field is NID 30 (des_cfb64); EVP_des_cfb64 exists in 0.9.8g
+011a9d10,openssl?,,unresolved,"getter returning static 014e9bf8 (first dword 0x2d); several candidates, not identifiable"
+011a9d20,openssl,EVP_des_ecb,exact-by-data,returns 014e9c2c whose first field is NID 29 (des_ecb); EVP_des_ecb exists in 0.9.8g
+011a9d30,openssl,EVP_des_cfb1,exact-by-data,returns 014e9c60 whose first field is NID 656 (des_cfb1); EVP_des_cfb1 exists in 0.9.8g
+011a9d40,openssl,EVP_des_cfb8,exact-by-data,returns 014e9c94 whose first field is NID 657 (des_cfb8); EVP_des_cfb8 exists in 0.9.8g
+011a9db0,openssl,engine_free_util,exact-unique,byte-identical to crypto_engine_eng_lib.obj:_engine_free_util
+011a9e70,openssl,ASN1_TYPE_get_octetstring,exact-unique,byte-identical to crypto_asn1_evp_asn1.obj:_ASN1_TYPE_get_octetstring
+011a9fe0,openssl,ASN1_TYPE_get_int_octetstring,exact-unique,byte-identical to crypto_asn1_evp_asn1.obj:_ASN1_TYPE_get_int_octetstring
+011aa2e0,openssl,RAND_poll,near,NOT byte-identical: mnemonic similarity 1.00 to crypto_rand_rand_win.obj:RAND_poll (config/flags still differ)
+011aa9d0,openssl,BN_mod_exp_recp,exact-unique,byte-identical to crypto_bn_bn_exp.obj:_BN_mod_exp_recp
+011aae40,openssl,BN_mod_exp_mont_consttime,exact-unique,byte-identical to crypto_bn_bn_exp.obj:_BN_mod_exp_mont_consttime
+011ab260,openssl,BN_mod_exp_mont_word,exact-unique,byte-identical to crypto_bn_bn_exp.obj:_BN_mod_exp_mont_word
+011ab5e0,openssl,BN_mod_exp_mont,exact-unique,byte-identical to crypto_bn_bn_exp.obj:_BN_mod_exp_mont
+011ac160,openssl,RSA_padding_add_none,exact-unique,byte-identical to crypto_rsa_rsa_none.obj:_RSA_padding_add_none
+011ac1c0,openssl,RSA_padding_check_none,exact-unique,byte-identical to crypto_rsa_rsa_none.obj:_RSA_padding_check_none
+011ac220,openssl,RSA_padding_add_SSLv23,exact-unique,byte-identical to crypto_rsa_rsa_ssl.obj:_RSA_padding_add_SSLv23
+011ac2d0,openssl,RSA_padding_check_SSLv23,exact-unique,byte-identical to crypto_rsa_rsa_ssl.obj:_RSA_padding_check_SSLv23
+011ac500,openssl,RSA_padding_add_PKCS1_OAEP,exact-unique,byte-identical to crypto_rsa_rsa_oaep.obj:_RSA_padding_add_PKCS1_OAEP
+011ac710,openssl,RSA_padding_check_PKCS1_OAEP,exact-unique,byte-identical to crypto_rsa_rsa_oaep.obj:_RSA_padding_check_PKCS1_OAEP
+011ac910,openssl,RSA_padding_add_PKCS1_type_1,exact-unique,byte-identical to crypto_rsa_rsa_pk1.obj:_RSA_padding_add_PKCS1_type_1
+011ac980,openssl,RSA_padding_check_PKCS1_type_1,exact-unique,byte-identical to crypto_rsa_rsa_pk1.obj:_RSA_padding_check_PKCS1_type_1
+011aca60,openssl,RSA_padding_add_PKCS1_type_2,exact-unique,byte-identical to crypto_rsa_rsa_pk1.obj:_RSA_padding_add_PKCS1_type_2
+011acb00,openssl,RSA_padding_check_PKCS1_type_2,exact-unique,byte-identical to crypto_rsa_rsa_pk1.obj:_RSA_padding_check_PKCS1_type_2
+011acbc0,openssl,RSA_padding_add_X931,exact-unique,byte-identical to crypto_rsa_rsa_x931.obj:_RSA_padding_add_X931
+011acc40,openssl,RSA_padding_check_X931,exact-unique,byte-identical to crypto_rsa_rsa_x931.obj:_RSA_padding_check_X931
+011acd00,openssl,BN_div_no_branch,exact-unique,byte-identical to crypto_bn_bn_div.obj:_BN_div_no_branch
+011ad110,openssl,BN_div,exact-unique,byte-identical to crypto_bn_bn_div.obj:_BN_div
+011ad750,openssl,BN_mod_lshift_quick,exact-unique,byte-identical to crypto_bn_bn_mod.obj:_BN_mod_lshift_quick
+011ad810,openssl,bnrand,exact-unique,byte-identical to crypto_bn_bn_rand.obj:_bnrand
+011ada00,openssl,bn_rand_range,exact-unique,byte-identical to crypto_bn_bn_rand.obj:_bn_rand_range
+011adb60,openssl,bn_mul_add_words,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_mul_add_words
+011add30,openssl,bn_mul_words,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_mul_words
+011adee0,openssl,bn_sqr_words,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_sqr_words
+011adfd0,openssl,bn_div_words,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_div_words
+011ae100,openssl,bn_add_words,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_add_words
+011ae2b0,openssl,bn_mul_comba8,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_mul_comba8
+011afe20,openssl,bn_mul_comba4,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_mul_comba4
+011b0500,openssl,bn_sqr_comba8,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_sqr_comba8
+011b1520,openssl,bn_sqr_comba4,exact-unique,byte-identical to crypto_bn_bn_asm.obj:_bn_sqr_comba4
+011b1920,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011b1c70,openssl,ASN1_TIME_set,exact-unique,byte-identical to crypto_asn1_a_time.obj:_ASN1_TIME_set
+011b1d20,openssl,EC_GROUP_new,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_new
+011b1ef0,openssl,EC_GROUP_set_curve_GFp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_set_curve_GFp
+011b1f20,openssl,EC_GROUP_set_curve_GF2m,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_set_curve_GF2m
+011b1f50,openssl,EC_GROUP_get_degree,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_get_degree
+011b1f80,openssl,EC_EX_DATA_set_data,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_EX_DATA_set_data
+011b2140,openssl,EC_POINT_new,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_new
+011b2240,openssl,EC_POINT_copy,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_copy
+011b2300,openssl,EC_POINT_set_to_infinity,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_to_infinity
+011b2350,openssl,EC_POINT_set_Jprojective_coordinates_GFp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_Jprojective_coordinates_GFp
+011b23b0,openssl,EC_POINT_set_affine_coordinates_GFp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_affine_coordinates_GFp
+011b2410,openssl,EC_POINT_set_affine_coordinates_GF2m,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_affine_coordinates_GF2m
+011b2470,openssl,EC_POINT_get_affine_coordinates_GFp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_get_affine_coordinates_GFp
+011b24d0,openssl,EC_POINT_get_affine_coordinates_GF2m,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_get_affine_coordinates_GF2m
+011b2530,openssl,EC_POINT_set_compressed_coordinates_GFp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_compressed_coordinates_GFp
+011b2590,openssl,EC_POINT_set_compressed_coordinates_GF2m,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_set_compressed_coordinates_GF2m
+011b25f0,openssl,EC_POINT_point2oct,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_point2oct
+011b2650,openssl,EC_POINT_oct2point,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_oct2point
+011b26b0,openssl,EC_POINT_add,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_add
+011b2720,openssl,EC_POINT_dbl,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_dbl
+011b2780,openssl,EC_POINT_invert,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_invert
+011b27e0,openssl,EC_POINT_is_at_infinity,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_is_at_infinity
+011b2830,openssl,EC_POINT_is_on_curve,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_is_on_curve
+011b2880,openssl,EC_POINT_cmp,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_cmp
+011b28e0,openssl,EC_POINT_make_affine,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINT_make_affine
+011b2930,openssl,EC_POINTs_make_affine,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_POINTs_make_affine
+011b2b70,openssl,EC_GROUP_copy,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_copy
+011b2d60,openssl,EC_GROUP_set_generator,exact-unique,byte-identical to crypto_ec_ec_lib.obj:_EC_GROUP_set_generator
+011b3030,openssl,ECDSA_DATA_new_method,exact-unique,byte-identical to crypto_ecdsa_ecs_lib.obj:_ECDSA_DATA_new_method
+011b3460,openssl,long_c2i,exact-unique,byte-identical to crypto_asn1_x_long.obj:_long_c2i
+011b34f0,openssl,d2i_PublicKey,exact-unique,byte-identical to crypto_asn1_d2i_pu.obj:_d2i_PublicKey
+011b35d0,openssl,ec_group_new_from_data,exact-unique,byte-identical to crypto_ec_ec_curve.obj:_ec_group_new_from_data
+011b3870,openssl,EC_GROUP_new_by_curve_name,exact-unique,"byte-identical to 1 library function(s), first crypto_ec_ec_curve.obj:EC_GROUP_new_by_curve_name"
+011b38e0,openssl?,,unresolved,"getter returning static 015ced58 (first dword 0x14f00b0); several candidates, not identifiable"
+011b38f0,openssl,dsa_do_sign,exact-unique,byte-identical to crypto_dsa_dsa_ossl.obj:_dsa_do_sign
+011b3af0,openssl,dsa_sign_setup,exact-unique,byte-identical to crypto_dsa_dsa_ossl.obj:_dsa_sign_setup
+011b3d60,openssl,dsa_do_verify,exact-unique,byte-identical to crypto_dsa_dsa_ossl.obj:_dsa_do_verify
+011b4020,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011b41d0,openssl,ec_GF2m_simple_group_set_curve,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_group_set_curve
+011b4370,openssl,ec_GF2m_simple_group_check_discriminant,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_group_check_discriminant
+011b44e0,openssl,ec_GF2m_simple_point_set_affine_coordinates,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_point_set_affine_coordinates
+011b4580,openssl,ec_GF2m_simple_point_get_affine_coordinates,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_point_get_affine_coordinates
+011b4640,openssl,ec_GF2m_simple_set_compressed_coordinates,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_set_compressed_coordinates
+011b4660,openssl,ec_GF2m_simple_point2oct,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_point2oct
+011b48d0,openssl,ec_GF2m_simple_oct2point,exact-unique,byte-identical to crypto_ec_ec2_smpl.obj:_ec_GF2m_simple_oct2point
+011b5410,openssl?,,unresolved,"getter returning static 014f00c8 (first dword 0x197); several candidates, not identifiable"
+011b5420,,jmp->ASN1_STRING_cmp,thunk,jmp 01199de0 = ASN1_STRING_cmp
+011b5430,,jmp->ASN1_STRING_set,thunk,jmp 01199cb0 = ASN1_STRING_set
+011b5540,openssl?,,unresolved,"getter returning static 015ced88 (first dword 0x0); several candidates, not identifiable"
+011b5550,openssl?,,unresolved,"getter returning static 014f0168 (first dword 0x0); several candidates, not identifiable"
+011b5c50,openssl,check_policy,exact-unique,byte-identical to crypto_x509_x509_vfy.obj:_check_policy
+011b5dc0,openssl,X509_get_pubkey_parameters,exact-unique,byte-identical to crypto_x509_x509_vfy.obj:_X509_get_pubkey_parameters
+011b5fb0,openssl,CONF_module_get_usr_data|EC_KEY_get_conv_form|ENGINE_get_ECDH|STORE_method_get_store_function|X509_PURPOSE_get0_sname|X509_STORE_CTX_get0_param|X509_VERIFY_PARAM_get_flags,exact-ambiguous,"byte-identical to 7 library function(s), first crypto_conf_conf_mod.obj:CONF_module_get_usr_data"
+011b67e0,openssl,X509_STORE_CTX_init,exact-unique,byte-identical to crypto_x509_x509_vfy.obj:_X509_STORE_CTX_init
+011b6990,openssl,X509_verify_cert,exact-unique,byte-identical to crypto_x509_x509_vfy.obj:_X509_verify_cert
+011b6dc0,openssl,PROXY_CERT_INFO_EXTENSION_new,exact-by-data,push &PROXY_CERT_INFO_EXTENSION_it; call ASN1_item_new: PROXY_CERT_INFO_EXTENSION_new exists in 0.9.8g
+011b6dd0,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011b6df0,openssl,X509_verify,near,NOT byte-identical: mnemonic similarity 0.96 to crypto_x509_x_all.obj:X509_verify (config/flags still differ)
+011b6e20,openssl,X509_verify,near,NOT byte-identical: mnemonic similarity 0.96 to crypto_x509_x_all.obj:X509_verify (config/flags still differ)
+011b6e50,openssl,i2d_DSAPrivateKey_bio|i2d_DSAPrivateKey_fp|i2d_DSA_PUBKEY_bio|i2d_DSA_PUBKEY_fp|i2d_ECPrivateKey_bio|i2d_ECPrivateKey_fp|i2d_EC_PUBKEY_bio|i2d_EC_PUBKEY_fp|...,exact-ambiguous,"byte-identical to 18 library function(s), first crypto_x509_x_all.obj:i2d_RSA_PUBKEY_fp"
+011b6e70,openssl,i2d_DSAPrivateKey_bio|i2d_DSAPrivateKey_fp|i2d_DSA_PUBKEY_bio|i2d_DSA_PUBKEY_fp|i2d_ECPrivateKey_bio|i2d_ECPrivateKey_fp|i2d_EC_PUBKEY_bio|i2d_EC_PUBKEY_fp|...,exact-ambiguous,"byte-identical to 18 library function(s), first crypto_x509_x_all.obj:i2d_RSA_PUBKEY_fp"
+011b6e90,openssl,BIO_dump_indent_fp,near,NOT byte-identical: mnemonic similarity 1.00 to crypto_bio_b_dump.obj:BIO_dump_indent_fp (config/flags still differ)
+011b6ee0,openssl?,,unresolved,"getter returning static 015cee58 (first dword 0x14f0334); several candidates, not identifiable"
+011b6ef0,openssl,generate_key,exact-unique,byte-identical to crypto_dh_dh_key.obj:_generate_key
+011b7070,openssl,compute_key,exact-unique,byte-identical to crypto_dh_dh_key.obj:_compute_key
+011b7230,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011b7240,,,unresolved,size 8 bytes; 9 same-size exact candidates
+011b7250,openssl?,,unresolved,"getter returning static 015cee7c (first dword 0x14f034c); several candidates, not identifiable"
+011b7330,openssl,add_cert_dir,exact-unique,byte-identical to crypto_x509_by_dir.obj:_add_cert_dir
+011b7520,openssl,get_cert_by_subject,exact-unique,byte-identical to crypto_x509_by_dir.obj:_get_cert_by_subject
+011b77a0,openssl,dir_ctrl,exact-unique,byte-identical to crypto_x509_by_dir.obj:_dir_ctrl
+011b7810,openssl?,,unresolved,"getter returning static 015ceea4 (first dword 0x14f039c); several candidates, not identifiable"
+011b7820,openssl,X509_load_cert_file,exact-unique,byte-identical to crypto_x509_by_file.obj:_X509_load_cert_file
+011b7980,openssl,X509_load_crl_file,exact-unique,byte-identical to crypto_x509_by_file.obj:_X509_load_crl_file
+011b7ae0,openssl,X509_load_cert_crl_file,exact-unique,byte-identical to crypto_x509_by_file.obj:_X509_load_cert_crl_file
+011b7c90,openssl,EVP_PBE_alg_add,exact-unique,byte-identical to crypto_evp_evp_pbe.obj:_EVP_PBE_alg_add
+011b8030,openssl,OTHERNAME_new,exact-by-data,push &OTHERNAME_it; call ASN1_item_new: OTHERNAME_new exists in 0.9.8g
+011b8040,openssl,GENERAL_NAME_new,exact-by-data,push &GENERAL_NAME_it; call ASN1_item_new: GENERAL_NAME_new exists in 0.9.8g
+011b8050,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011b8070,openssl,GENERAL_NAMES_new,exact-by-data,push &GENERAL_NAMES_it; call ASN1_item_new: GENERAL_NAMES_new exists in 0.9.8g
+011b8080,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011b8300,openssl,ASN1_mbstring_ncopy,exact-unique,byte-identical to crypto_asn1_a_mbstr.obj:_ASN1_mbstring_ncopy
+011b8700,openssl,ENGINE_get_cipher_engine|ENGINE_get_digest_engine|ENGINE_unregister_DH|ENGINE_unregister_DSA|ENGINE_unregister_ECDH|ENGINE_unregister_ECDSA|ENGINE_unregister_RAND|ENGINE_unregister_RSA|...,exact-ambiguous,"byte-identical to 24 library function(s), first crypto_asn1_x_algor.obj:X509_ALGOR_dup"
+011b8720,openssl,ENGINE_get_digest,exact-unique,byte-identical to crypto_engine_tb_digest.obj:_ENGINE_get_digest
+011b8e10,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011b90b0,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011b91f0,openssl,X509V3_add_value,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_X509V3_add_value
+011b92c0,,jmp->X509V3_add_value,thunk,jmp 011b91f0 = X509V3_add_value
+011b9350,openssl,i2s_ASN1_ENUMERATED,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_i2s_ASN1_ENUMERATED
+011b93a0,openssl,i2s_ASN1_INTEGER,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_i2s_ASN1_INTEGER
+011b93f0,openssl,s2i_ASN1_INTEGER,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_s2i_ASN1_INTEGER
+011b9530,openssl,X509V3_get_value_bool,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_X509V3_get_value_bool
+011b9900,openssl,hex_to_string,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_hex_to_string
+011b9990,openssl,string_to_hex,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_string_to_hex
+011b9d20,openssl,X509V3_parse_list,exact-unique,byte-identical to crypto_x509v3_v3_utl.obj:_X509V3_parse_list
+011ba540,openssl,X509_NAME_print,exact-unique,byte-identical to crypto_asn1_t_x509.obj:_X509_NAME_print
+011ba680,openssl,ASN1_ENUMERATED_to_BN,exact-unique,byte-identical to crypto_asn1_a_enum.obj:_ASN1_ENUMERATED_to_BN
+011bb170,openssl,parse_tagging,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_parse_tagging
+011bb2b0,openssl,append_exp,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_append_exp
+011bb3d0,openssl,bitstr_cb,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_bitstr_cb
+011bb460,openssl,asn1_cb,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_asn1_cb
+011bb700,openssl,asn1_str2type,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_asn1_str2type
+011bbad0,openssl,ASN1_generate_v3,exact-unique,byte-identical to crypto_asn1_asn1_gen.obj:_ASN1_generate_v3
+011bbec0,openssl,NCONF_get_section,exact-unique,byte-identical to crypto_conf_conf_lib.obj:_NCONF_get_section
+011bbf10,openssl,NCONF_get_string,exact-unique,byte-identical to crypto_conf_conf_lib.obj:_NCONF_get_string
+011bbf70,openssl,CONF_get_section,exact-unique,byte-identical to crypto_conf_conf_lib.obj:_CONF_get_section
+011bbfe0,openssl,CONF_get_string,exact-unique,byte-identical to crypto_conf_conf_lib.obj:_CONF_get_string
+011bc920,openssl,tls1_setup_key_block,exact-unique,byte-identical to ssl_t1_enc.obj:_tls1_setup_key_block
+011bcac0,openssl,tls1_enc,exact-unique,byte-identical to ssl_t1_enc.obj:_tls1_enc
+011bcef0,openssl,tls1_mac,exact-unique,byte-identical to ssl_t1_enc.obj:_tls1_mac
+011bd580,openssl,ssl_set_pkey,exact-unique,byte-identical to ssl_ssl_rsa.obj:_ssl_set_pkey
+011bd660,openssl,SSL_use_PrivateKey,exact-unique,byte-identical to ssl_ssl_rsa.obj:_SSL_use_PrivateKey
+011bd6c0,openssl,ssl_set_cert,exact-unique,byte-identical to ssl_ssl_rsa.obj:_ssl_set_cert
+011bd7d0,openssl,SSL_use_certificate,exact-unique,byte-identical to ssl_ssl_rsa.obj:_SSL_use_certificate
+011bd900,openssl,EVP_VerifyFinal,exact-unique,byte-identical to crypto_evp_p_verify.obj:_EVP_VerifyFinal
+011bdaf0,openssl,EVP_SignFinal,exact-unique,byte-identical to crypto_evp_p_sign.obj:_EVP_SignFinal
+011bdbf0,,,unresolved,no similar library function (size 242)
+011bdc20,openssl,EVP_ripemd160,exact-by-data,returns 014f0aa8 whose first field is NID 117 (ripemd160); EVP_ripemd160 exists in 0.9.8g
+011bdc30,openssl?,,unresolved,"getter returning static 014f0af0 (first dword 0x42); several candidates, not identifiable"
+011bdc80,openssl,EVP_sha,exact-by-data,returns 014f0b38 whose first field is NID 41 (sha); EVP_sha exists in 0.9.8g
+011bdc90,openssl,PKCS5_PBE_keyivgen,exact-unique,byte-identical to crypto_evp_p5_crpt.obj:_PKCS5_PBE_keyivgen
+011be020,openssl,PKCS12_PBE_keyivgen,exact-unique,byte-identical to crypto_pkcs12_p12_crpt.obj:_PKCS12_PBE_keyivgen
+011be3b0,openssl,EVP_cast5_cbc,exact-by-data,returns 014f0bf4 whose first field is NID 108 (cast5_cbc); EVP_cast5_cbc exists in 0.9.8g
+011be3c0,openssl,EVP_cast5_cfb64,exact-by-data,returns 014f0c28 whose first field is NID 110 (cast5_cfb64); EVP_cast5_cfb64 exists in 0.9.8g
+011be3d0,openssl?,,unresolved,"getter returning static 014f0c5c (first dword 0x6f); several candidates, not identifiable"
+011be3e0,openssl,EVP_cast5_ecb,exact-by-data,returns 014f0c90 whose first field is NID 109 (cast5_ecb); EVP_cast5_ecb exists in 0.9.8g
+011be420,openssl,EVP_desx_cbc,exact-by-data,returns 014f0cc4 whose first field is NID 80 (desx_cbc); EVP_desx_cbc exists in 0.9.8g
+011c0060,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011c4d10,openssl,DES_encrypt1,exact-unique,"byte-identical to 1 library function(s), first crypto_des_des_enc.obj:DES_encrypt1"
+011c5230,openssl,DES_encrypt2,exact-unique,"byte-identical to 1 library function(s), first crypto_des_des_enc.obj:DES_encrypt2"
+011c6c40,openssl,DES_set_key_unchecked,exact-unique,"byte-identical to 1 library function(s), first crypto_des_set_key.obj:DES_set_key_unchecked"
+011c85a0,openssl,BN_div_recp,exact-unique,byte-identical to crypto_bn_bn_recp.obj:_BN_div_recp
+011c88e0,openssl,general_allocate_prompt,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_general_allocate_prompt
+011c8960,openssl,general_allocate_string,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_general_allocate_string
+011c89e0,openssl,UI_add_input_string,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_UI_add_input_string
+011c8a10,openssl,UI_add_verify_string,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_UI_add_verify_string
+011c8c30,openssl,UI_set_result,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_UI_set_result
+011c8e10,openssl,UI_new,exact-unique,byte-identical to crypto_ui_ui_lib.obj:_UI_new
+011c8e80,openssl,ASN1_GENERALIZEDTIME_check,near,NOT byte-identical: mnemonic similarity 0.99 to crypto_asn1_a_gentm.obj:ASN1_GENERALIZEDTIME_check (config/flags still differ)
+011c8ff0,openssl,ASN1_GENERALIZEDTIME_set,exact-unique,byte-identical to crypto_asn1_a_gentm.obj:_ASN1_GENERALIZEDTIME_set
+011c90e0,openssl,ASN1_UTCTIME_check,exact-unique,"byte-identical to 1 library function(s), first crypto_asn1_a_utctm.obj:ASN1_UTCTIME_check"
+011c9210,openssl,ASN1_UTCTIME_set,exact-unique,byte-identical to crypto_asn1_a_utctm.obj:_ASN1_UTCTIME_set
+011c9330,openssl,ec_pre_comp_new,exact-unique,byte-identical to crypto_ec_ec_mult.obj:_ec_pre_comp_new
+011c9490,openssl,compute_wNAF,exact-unique,byte-identical to crypto_ec_ec_mult.obj:_compute_wNAF
+011c9630,openssl,ec_wNAF_mul,exact-unique,byte-identical to crypto_ec_ec_mult.obj:_ec_wNAF_mul
+011c9fc0,openssl,ec_wNAF_precompute_mult,exact-unique,byte-identical to crypto_ec_ec_mult.obj:_ec_wNAF_precompute_mult
+011ca400,openssl?,,unresolved,"getter returning static 015cf798 (first dword 0x14f23bc); several candidates, not identifiable"
+011ca410,openssl,ecdsa_sign_setup,exact-unique,byte-identical to crypto_ecdsa_ecs_ossl.obj:_ecdsa_sign_setup
+011ca680,openssl,ecdsa_do_sign,exact-unique,byte-identical to crypto_ecdsa_ecs_ossl.obj:_ecdsa_do_sign
+011ca8f0,openssl,ecdsa_do_verify,exact-unique,byte-identical to crypto_ecdsa_ecs_ossl.obj:_ecdsa_do_verify
+011cac10,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011cac30,openssl,i2d_ASN1_SET,exact-unique,byte-identical to crypto_asn1_a_set.obj:_i2d_ASN1_SET
+011cae60,openssl,BN_mod_exp2_mont,exact-unique,byte-identical to crypto_bn_bn_exp2.obj:_BN_mod_exp2_mont
+011cb950,openssl,ec_GF2m_montgomery_point_multiply,exact-unique,byte-identical to crypto_ec_ec2_mult.obj:_ec_GF2m_montgomery_point_multiply
+011cbe10,,jmp->ec_wNAF_precompute_mult,thunk,jmp 011c9fc0 = ec_wNAF_precompute_mult
+011cbe20,,jmp->ec_wNAF_have_precompute_mult,thunk,jmp 011ca3d0 = ec_wNAF_have_precompute_mult
+011cc4d0,openssl,BN_GF2m_mod,exact-unique,byte-identical to crypto_bn_bn_gf2m.obj:_BN_GF2m_mod
+011cc7b0,openssl,BN_GF2m_mod_mul,exact-unique,byte-identical to crypto_bn_bn_gf2m.obj:_BN_GF2m_mod_mul
+011ccc00,openssl,ec_GFp_mont_group_set_curve,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_group_set_curve
+011ccd50,openssl,ec_GFp_mont_field_mul,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_field_mul
+011ccda0,openssl,ec_GFp_mont_field_sqr,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_field_sqr
+011ccde0,openssl,ec_GFp_mont_field_encode,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_field_encode
+011cce30,openssl,ec_GFp_mont_field_decode,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_field_decode
+011cce70,openssl,ec_GFp_mont_field_set_to_one,exact-unique,byte-identical to crypto_ec_ecp_mont.obj:_ec_GFp_mont_field_set_to_one
+011cceb0,openssl?,,unresolved,"getter returning static 014f2448 (first dword 0x196); several candidates, not identifiable"
+011ccef0,openssl,ec_GFp_nist_group_set_curve,exact-unique,byte-identical to crypto_ec_ecp_nist.obj:_ec_GFp_nist_group_set_curve
+011cd030,openssl,ec_GFp_nist_field_mul,exact-unique,byte-identical to crypto_ec_ecp_nist.obj:_ec_GFp_nist_field_mul
+011cd0f0,openssl,ec_GFp_nist_field_sqr,exact-unique,byte-identical to crypto_ec_ecp_nist.obj:_ec_GFp_nist_field_sqr
+011cd1a0,openssl?,,unresolved,"getter returning static 014f24e0 (first dword 0x196); several candidates, not identifiable"
+011cdba0,openssl,ASN1_item_verify,exact-unique,byte-identical to crypto_asn1_a_verify.obj:_ASN1_item_verify
+011cdd10,openssl,asn1_d2i_read_bio,exact-unique,byte-identical to crypto_asn1_a_d2i_fp.obj:_asn1_d2i_read_bio
+011ce000,openssl?,,unresolved,"getter returning static 014f2670 (first dword 0x7273752f); several candidates, not identifiable"
+011ce010,openssl?,,unresolved,"getter returning static 014f2688 (first dword 0x7273752f); several candidates, not identifiable"
+011ce020,openssl?,,unresolved,"getter returning static 014f26a0 (first dword 0x5f4c5353); several candidates, not identifiable"
+011ce030,openssl?,,unresolved,"getter returning static 014f26b0 (first dword 0x5f4c5353); several candidates, not identifiable"
+011ce070,openssl,X509_INFO_new,exact-unique,byte-identical to crypto_asn1_x_info.obj:_X509_INFO_new
+011ce130,openssl,PEM_X509_INFO_read_bio,exact-unique,byte-identical to crypto_pem_pem_info.obj:_PEM_X509_INFO_read_bio
+011ced20,openssl?,,unresolved,"getter returning static 015cfc40 (first dword 0x14f2820); several candidates, not identifiable"
+011ced70,openssl,def_init_WIN32|def_init_default,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_conf_conf_def.obj:def_init_default"
+011ceda0,openssl,def_init_WIN32|def_init_default,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_conf_conf_def.obj:def_init_default"
+011cedf0,openssl,str_copy,exact-unique,byte-identical to crypto_conf_conf_def.obj:_str_copy
+011cf390,openssl,def_load_bio,near,NOT byte-identical: mnemonic similarity 1.00 to crypto_conf_conf_def.obj:def_load_bio (config/flags still differ)
+011cf910,openssl,def_load,exact-unique,byte-identical to crypto_conf_conf_def.obj:_def_load
+011d01c0,openssl,ECDH_DATA_new_method,exact-unique,byte-identical to crypto_ecdh_ech_lib.obj:_ECDH_DATA_new_method
+011d0330,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011d0350,openssl,DES_crypt|X509_REQ_add_extensions|i2d_ACCESS_DESCRIPTION|i2d_ASN1_BIT_STRING|i2d_ASN1_BMPSTRING|i2d_ASN1_ENUMERATED|i2d_ASN1_GENERALIZEDTIME|i2d_ASN1_GENERALSTRING|...,exact-ambiguous,"byte-identical to 121 library function(s), first crypto_asn1_a_time.obj:i2d_ASN1_TIME"
+011d0370,openssl,ECDSA_SIG_new,exact-by-data,push &ECDSA_SIG_it; call ASN1_item_new: ECDSA_SIG_new exists in 0.9.8g
+011d0380,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011d1f30,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011d21d0,,,unresolved,size 0 bytes; 0 same-size exact candidates
+011d77e0,openssl,EC_POINTs_mul,near,NOT byte-identical: mnemonic similarity 0.54 to crypto_ec_ec_lib.obj:EC_POINTs_mul (config/flags still differ)
+011d7940,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011d7960,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011d7b50,openssl,PKCS5_v2_PBE_keyivgen,exact-unique,byte-identical to crypto_evp_p5_crpt2.obj:_PKCS5_v2_PBE_keyivgen
+011d7de0,openssl,PKCS12_key_gen_uni,exact-unique,byte-identical to crypto_pkcs12_p12_key.obj:_PKCS12_key_gen_uni
+011d8190,openssl,PKCS12_key_gen_asc,exact-unique,byte-identical to crypto_pkcs12_p12_key.obj:_PKCS12_key_gen_asc
+011daee0,openssl?,,unresolved,"getter returning static 015cfd90 (first dword 0x14f4ad8); several candidates, not identifiable"
+011db070,openssl,popsig,exact-unique,"byte-identical to 1 library function(s), first crypto_ui_ui_openssl.obj:popsig"
+011db130,openssl,pushsig,exact-unique,"byte-identical to 1 library function(s), first crypto_ui_ui_openssl.obj:pushsig"
+011db540,openssl,ec_GFp_simple_group_set_curve,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_group_set_curve
+011db7e0,openssl,ec_GFp_simple_group_check_discriminant,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_group_check_discriminant
+011dbc80,openssl,ec_GFp_simple_point_set_affine_coordinates,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_point_set_affine_coordinates
+011dbcd0,openssl,ec_GFp_simple_point_get_affine_coordinates,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_point_get_affine_coordinates
+011dbf60,openssl,ec_GFp_simple_set_compressed_coordinates,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_set_compressed_coordinates
+011dc2c0,openssl,ec_GFp_simple_point2oct,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_point2oct
+011dc560,openssl,ec_GFp_simple_oct2point,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_oct2point
+011dd650,openssl,ec_GFp_simple_make_affine,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_make_affine
+011dd740,openssl,ec_GFp_simple_points_make_affine,exact-unique,byte-identical to crypto_ec_ecp_smpl.obj:_ec_GFp_simple_points_make_affine
+011ddbb0,openssl?,,unresolved,"getter returning static 015cfdac (first dword 0x14f4be8); several candidates, not identifiable"
+011ddbc0,openssl?,,unresolved,"getter returning static 015cfdc0 (first dword 0x14f4c00); several candidates, not identifiable"
+011ddbd0,openssl?,,unresolved,"getter returning static 015cfdd4 (first dword 0x14f4c1c); several candidates, not identifiable"
+011ddbe0,openssl?,,unresolved,"getter returning static 015cfde8 (first dword 0x14f4c3c); several candidates, not identifiable"
+011ddbf0,openssl?,,unresolved,"getter returning static 015cfdfc (first dword 0x14f4c70); several candidates, not identifiable"
+011de110,openssl,init_256_data,exact-unique,"byte-identical to 1 library function(s), first crypto_bn_bn_nist.obj:init_256_data"
+011de160,openssl,BN_nist_mod_256,exact-unique,"byte-identical to 1 library function(s), first crypto_bn_bn_nist.obj:BN_nist_mod_256"
+011de5f0,openssl,init_384_data,exact-unique,"byte-identical to 1 library function(s), first crypto_bn_bn_nist.obj:init_384_data"
+011de640,openssl,BN_nist_mod_384,exact-unique,"byte-identical to 1 library function(s), first crypto_bn_bn_nist.obj:BN_nist_mod_384"
+011ded00,,,unresolved,"ASN1_item wrapper (sk_new, item None); wrapper name not determined"
+011dedb0,,jmp->CRYPTO_free,thunk,jmp 011835c0 = CRYPTO_free
+011deeb0,openssl,X509_PKEY_new,exact-unique,byte-identical to crypto_asn1_x_pkey.obj:_X509_PKEY_new
+011defb0,openssl,DSO_convert_filename,exact-unique,byte-identical to crypto_dso_dso_lib.obj:_DSO_convert_filename
+011df070,openssl?,,unresolved,"getter returning static 015cfe14 (first dword 0x14f5d18); several candidates, not identifiable"
+011df080,openssl,ecdh_compute_key,exact-unique,byte-identical to crypto_ecdh_ech_ossl.obj:_ecdh_compute_key
+011df2f0,openssl,ENGINE_get_default_DH|ENGINE_get_default_DSA|ENGINE_get_default_ECDH|ENGINE_get_default_ECDSA|ENGINE_get_default_RAND|ENGINE_get_default_RSA,exact-ambiguous,"byte-identical to 6 library function(s), first crypto_engine_tb_dh.obj:ENGINE_get_default_DH"
+011df300,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011df320,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011df340,openssl,d2i_ACCESS_DESCRIPTION|d2i_ASN1_BIT_STRING|d2i_ASN1_BMPSTRING|d2i_ASN1_ENUMERATED|d2i_ASN1_GENERALIZEDTIME|d2i_ASN1_GENERALSTRING|d2i_ASN1_IA5STRING|d2i_ASN1_INTEGER|...,exact-ambiguous,"byte-identical to 118 library function(s), first crypto_asn1_a_time.obj:d2i_ASN1_TIME"
+011df360,openssl,ACCESS_DESCRIPTION_free|ASN1_BIT_STRING_free|ASN1_BMPSTRING_free|ASN1_ENUMERATED_free|ASN1_GENERALIZEDTIME_free|ASN1_GENERALSTRING_free|ASN1_IA5STRING_free|ASN1_INTEGER_free|...,exact-ambiguous,"byte-identical to 120 library function(s), first crypto_asn1_a_time.obj:ASN1_TIME_free"
+011df670,openssl,BN_mod_sqrt,exact-unique,byte-identical to crypto_bn_bn_sqrt.obj:_BN_mod_sqrt
+011dfd60,openssl,win32_load,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_load
+011dfe40,openssl,win32_unload,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_unload
+011dfee0,openssl,win32_bind_var,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_bind_var
+011dffa0,openssl,win32_bind_func,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_bind_func
+011e0060,openssl,win32_splitter,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_splitter
+011e0320,openssl,win32_joiner,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_joiner
+011e0560,openssl,win32_merger,exact-unique,byte-identical to crypto_dso_dso_win32.obj:_win32_merger
+011e06d0,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e072c,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0732,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0738,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e07e6,,,unresolved,size 9 bytes; 0 same-size exact candidates
+011e0810,crt,ftol2_pentium4,near,NOT byte-identical: mnemonic similarity 0.89 to 0032_ftol2.obj:ftol2_pentium4 (config/flags still differ)
+011e08bc,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e08c8,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e08f0,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0900,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0912,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0b6d,openssl,BN_options,near,NOT byte-identical: mnemonic similarity 0.80 to crypto_bn_bn_lib.obj:BN_options (config/flags still differ)
+011e0bd2,openssl,BN_options,near,NOT byte-identical: mnemonic similarity 0.80 to crypto_bn_bn_lib.obj:BN_options (config/flags still differ)
+011e0bea,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0bf0,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0c47,openssl,BN_options,near,NOT byte-identical: mnemonic similarity 0.80 to crypto_bn_bn_lib.obj:BN_options (config/flags still differ)
+011e0c66,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0c6c,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0c72,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0cac,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e0e12,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e11a0,openssl,EVP_PKEY_copy_parameters,near,NOT byte-identical: mnemonic similarity 0.39 to crypto_evp_p_lib.obj:EVP_PKEY_copy_parameters (config/flags still differ)
+011e11c0,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e11c6,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e11cc,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1368,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1545,,,unresolved,size 3 bytes; 14 same-size exact candidates
+011e15de,crt,report_gsfailure,exact-unique,"byte-identical to 1 library function(s), first 0065_gs_report.obj:report_gsfailure"
+011e16e4,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e16ea,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e16fc,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1702,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1708,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e170e,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1714,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e171a,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1720,,,unresolved,size 6 bytes; 14 same-size exact candidates
+011e1726,openssl,asn1_enc_init,near,NOT byte-identical: mnemonic similarity 0.59 to crypto_asn1_tasn_utl.obj:asn1_enc_init (config/flags still differ)
+011e17c4,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e17ca,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1b30,libpng,png_destroy_struct_2,near,NOT byte-identical: mnemonic similarity 0.70 to pngmem.obj:png_destroy_struct_2 (config/flags still differ)
+011e1ba0,openssl,HMAC_Final,near,NOT byte-identical: mnemonic similarity 0.61 to crypto_hmac_hmac.obj:HMAC_Final (config/flags still differ)
+011e1ca0,libjpeg,process_data_simple_main,near,NOT byte-identical: mnemonic similarity 0.60 to jdmainct.obj:process_data_simple_main (config/flags still differ)
+011e1d50,openssl,dtls1_buffer_message,near,NOT byte-identical: mnemonic similarity 0.49 to ssl_d1_both.obj:dtls1_buffer_message (config/flags still differ)
+011e1fa0,openssl,BN_MONT_CTX_init,near,NOT byte-identical: mnemonic similarity 0.67 to crypto_bn_bn_mont.obj:BN_MONT_CTX_init (config/flags still differ)
+011e1fd4,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1fda,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1fe0,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1fe6,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1fec,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"
+011e1ff2,openssl,OPENSSL_strcasecmp|OPENSSL_strncasecmp,exact-ambiguous,"byte-identical to 2 library function(s), first crypto_o_str.obj:OPENSSL_strncasecmp"

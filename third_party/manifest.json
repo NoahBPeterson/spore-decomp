@@ -1,0 +1,193 @@
+{
+  "schema": 1,
+  "toolchain": {
+    "compiler": "cl 15.00.30729.01 (Visual C++ 2008 SP1, x86)",
+    "driver": "tools/matching/cl.sh (wine), lib.exe from the same work/toolchain/vc9sp1 install",
+    "note": "RTM (15.00.21022.08) vs SP1 is not distinguishable from the binary; everything byte-matched so far matches with SP1"
+  },
+  "libraries": {
+    "zlib": {
+      "version": "1.2.3",
+      "evidence": "string \"deflate 1.2.3 Copyright 1995-2005\"",
+      "tarball": "zlib-1.2.3.tar.gz",
+      "urls": [
+        "https://zlib.net/fossils/zlib-1.2.3.tar.gz"
+      ],
+      "sha256": "1795c7d067a43174113fdf03447532f373e1c6c57c08d61d9e4e9be5e244b05e",
+      "extract_dir": "zlib-1.2.3",
+      "license": "zlib",
+      "build": {
+        "lib": "zlib.lib",
+        "cflags": "/O2 /arch:SSE /MD /Gy /TC",
+        "include_dirs": [],
+        "globs": [
+          "adler32.c",
+          "compress.c",
+          "crc32.c",
+          "deflate.c",
+          "gzio.c",
+          "infback.c",
+          "inffast.c",
+          "inflate.c",
+          "inftrees.c",
+          "trees.c",
+          "uncompr.c",
+          "zutil.c"
+        ],
+        "per_file": {}
+      }
+    },
+    "libpng": {
+      "version": "1.2.25",
+      "evidence": "string \"1.2.25\"",
+      "tarball": "libpng-1.2.25.tar.gz",
+      "urls": [
+        "https://downloads.sourceforge.net/project/libpng/libpng12/older-releases/1.2.25/libpng-1.2.25.tar.gz"
+      ],
+      "sha256": "295ba7b7744efe93fb4c34d4973cc1099055d9c379a1e9397209857e80611e18",
+      "extract_dir": "libpng-1.2.25",
+      "license": "libpng",
+      "build": {
+        "lib": "libpng.lib",
+        "cflags": "/O2 /arch:SSE /MD /Gy /TC",
+        "include_dirs": [
+          "@zlib"
+        ],
+        "globs": [
+          "png*.c"
+        ],
+        "exclude_stems": [
+          "pngtest",
+          "pngpread_x"
+        ],
+        "per_file": {}
+      }
+    },
+    "libjpeg": {
+      "version": "6a",
+      "evidence": "string \"6a  7-Feb-96\" (JVERSION) and \"Copyright (C) 1996, Thomas G. Lane\"; NOT 6b (the earlier README said 6b)",
+      "tarball": "jpegsrc.v6a.tar.gz",
+      "urls": [
+        "https://www.ijg.org/files/jpegsrc.v6a.tar.gz",
+        "https://web.archive.org/web/2020/https://www.ijg.org/files/jpegsrc.v6a.tar.gz"
+      ],
+      "sha256": "0e963fdd29d5049f61f3dc137bdc9437473a0ad505dbcfc8925f0fcad46c5929",
+      "extract_dir": "jpeg-6a",
+      "license": "IJG (BSD-like, README in tarball)",
+      "build": {
+        "prepare": "jpeg",
+        "jconfig": "third_party/jpeg-6a/jconfig.h",
+        "lib": "libjpeg.lib",
+        "cflags": "/O2 /arch:SSE /MD /Gy /TC",
+        "include_dirs": [
+          "build:{extract_dir}-inc"
+        ],
+        "globs": [
+          "j*.c"
+        ],
+        "exclude_stems": [
+          "jpegtran",
+          "jmemdos",
+          "jmemmac",
+          "jmemname",
+          "jmemansi"
+        ],
+        "per_file": {},
+        "note": "jconfig.h = jconfig.vc. Only /O2 (C or /TP) produces matches; /O1, /Ox, /Oy- produce no function that /O2 does not (verified), contrary to the earlier README note."
+      }
+    },
+    "openssl": {
+      "version": "0.9.8g",
+      "evidence": "string \"... part of OpenSSL 0.9.8g 19 Oct 2007\"",
+      "tarball": "openssl-0.9.8g.tar.gz",
+      "urls": [
+        "https://www.openssl.org/source/old/0.9.x/openssl-0.9.8g.tar.gz"
+      ],
+      "sha256": "0e26886845de95716c9f1b9b75c0e06e9d4075d2bdc9e11504eaa5f7ee901cf0",
+      "extract_dir": "openssl-0.9.8g",
+      "license": "OpenSSL/SSLeay dual license",
+      "build": {
+        "prepare": "openssl",
+        "lib": "openssl.lib",
+        "configure": "perl Configure VC-WIN32 <configure_options>; make links (generates crypto/opensslconf.h and include/openssl/*)",
+        "cflags": "/O2 /arch:SSE /MD /Gy /TC -DOPENSSL_THREADS -DDSO_WIN32 -DOPENSSL_SYSNAME_WIN32 -DWIN32_LEAN_AND_MEAN -DL_ENDIAN -D_CRT_SECURE_NO_DEPRECATE",
+        "include_dirs": [
+          ".",
+          "include",
+          "crypto"
+        ],
+        "walk": [
+          "crypto",
+          "ssl"
+        ],
+        "exclude_re": "test|/asm/|_vms|_os2|_beos|_dl|_dlfcn|_vxworks|_netware|LP",
+        "per_file": {},
+        "expected_failures": [
+          "crypto/asn1/p8_key.c",
+          "crypto/asn1/tasn_prn.c",
+          "crypto/bf/bf_cbc.c",
+          "crypto/bf/bf_cfb64.c",
+          "crypto/bf/bf_ecb.c",
+          "crypto/bf/bf_enc.c",
+          "crypto/bf/bf_ofb64.c",
+          "crypto/bf/bf_opts.c",
+          "crypto/bf/bf_skey.c",
+          "crypto/bf/bfspeed.c",
+          "crypto/bio/bss_rtcp.c",
+          "crypto/bn/exp.c",
+          "crypto/camellia/camellia.c",
+          "crypto/camellia/cmll_cbc.c",
+          "crypto/camellia/cmll_cfb.c",
+          "crypto/camellia/cmll_ctr.c",
+          "crypto/camellia/cmll_ecb.c",
+          "crypto/camellia/cmll_misc.c",
+          "crypto/camellia/cmll_ofb.c",
+          "crypto/cast/cast_spd.c",
+          "crypto/cast/castopts.c",
+          "crypto/cversion.c",
+          "crypto/des/des.c",
+          "crypto/des/des_opts.c",
+          "crypto/des/read_pwd.c",
+          "crypto/des/speed.c",
+          "crypto/ec/ec2_smpt.c",
+          "crypto/evp/e_dsa.c",
+          "crypto/idea/i_cbc.c",
+          "crypto/idea/i_cfb64.c",
+          "crypto/idea/i_ecb.c",
+          "crypto/idea/i_ofb64.c",
+          "crypto/idea/i_skey.c",
+          "crypto/idea/idea_spd.c",
+          "crypto/mdc2/mdc2_one.c",
+          "crypto/mdc2/mdc2dgst.c",
+          "crypto/pkcs7/bio_ber.c",
+          "crypto/rc2/rc2speed.c",
+          "crypto/rc4/rc4.c",
+          "crypto/rc4/rc4speed.c",
+          "crypto/rc5/rc5_ecb.c",
+          "crypto/rc5/rc5_enc.c",
+          "crypto/rc5/rc5_skey.c",
+          "crypto/rc5/rc5cfb64.c",
+          "crypto/rc5/rc5ofb64.c",
+          "crypto/rc5/rc5speed.c",
+          "crypto/seed/seed.c",
+          "crypto/seed/seed_cbc.c",
+          "crypto/seed/seed_cfb.c",
+          "crypto/seed/seed_ecb.c",
+          "crypto/seed/seed_ofb.c",
+          "ssl/ssl_task.c"
+        ],
+        "configure_options": [
+          "no-asm",
+          "no-err",
+          "no-ocsp",
+          "no-idea",
+          "no-bf",
+          "no-ssl2"
+        ],
+        "opensslconf_undef": [
+          "BN_LLONG"
+        ]
+      }
+    }
+  }
+}
