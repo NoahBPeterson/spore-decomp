@@ -1,0 +1,6 @@
+00527a70 eastl::uninitialized_copy<0x1c-byte>  # card: memcpy thunk 0x11e0744 + gi dispatch
+00527b70 eastl::uninitialized_copy<0x18-byte>  # card: memcpy thunk + gi dispatch
+00527c70 VectorElem40::operator=  # card decompile: assign from another vector
+00527f30 VectorElem40::DoInsertValues (fill)  # card decompile
+005283d0 eastl::fixed_vector<8-byte>::assign  # card decompile; inline buffer at +0x10
+00528610 Elem40 copy ctor  # card decompile; B4 + Vec3f + Matrix33 + 3 floats

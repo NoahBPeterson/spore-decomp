@@ -1,0 +1,4 @@
+005709b0  644  dispatcher stub: switch on this+0x54 over the 4 similarity ops with this+0x50 mode (not translated)
+00570c40  519  similarity op stub (element-merge + global-map membership; not translated)
+00570e50  673  similarity op stub (merge-join + counts; not translated)
+00571100  1070 similarity op stub (merge-join + squared magnitudes; not translated)

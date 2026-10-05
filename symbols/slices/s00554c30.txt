@@ -1,0 +1,10 @@
+00554c30 eastl::vector<eastl::string16,eastl::sp_vector_allocator>::DoInsertValue  # byte-exact
+00554f20 eastl::vector_set<uint32_t>::insert(iterator, const value_type&)  # byte-exact
+00554fb0 eastl::operator==<char>(const basic_string<char>&, const basic_string<char>&)  # byte-exact (PDB label DoFindNode is the inlined equal_to)
+00555020 eastl::operator==<char>(const basic_string<char>&, const char*)  # byte-exact
+005554e0 eastl::uninitialized_relocate_ptr<basic_string>  # move + destruct
+00555540 eastl::vector<eastl::string16>::DoInsertValues  # complete, nonmatching
+00555980 eastl::vector_set<uint32_t>::equal_range  # byte-exact
+00555a20 eastl::lower_bound<uint32_t*, uint32_t, eastl::less<uint32_t> >  # byte-exact
+00555aa0 eastl::uninitialized_copy<basic_string> (generic_iterator/sret form)  # complete, nonmatching
+00555b40 eastl::uninitialized_fill_n_ptr<eastl::string>  # complete, nonmatching

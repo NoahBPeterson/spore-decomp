@@ -1,0 +1,5 @@
+005266f0 15 /Od frame-slot order differs (frame size matches; named-local hash offsets off by a few bytes)
+005267c0 161 Elem38 vector DoInsertValue; complete but /Od frame (0xcc) and helper spill slots differ
+00526b30 212 0x1c-byte vector operator=; complete but /Od frame/spill slots differ
+00526e70 212 0x18-byte vector operator=; complete but /Od frame/spill slots differ
+00527570 984 Elem38 vector DoInsertValues (fill); complete but byte layout differs

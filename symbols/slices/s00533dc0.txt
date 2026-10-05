@@ -1,0 +1,4 @@
+005348e0 PackColor  # clamps float[4] to bytes: b=v[2],g=v[1],r=v[0],a=v[3]
+00534860 PackColorWrapper  # copies v[0..2]+w into a float[4] and calls 005348e0
+005349f0 eastl::vector<EA::Swarm::cDistributeSample,eastl::sp_vector_allocator>::push_back  # stride 0x1c
+00534a70 eastl::vector<EA::Swarm::cDistributeSample,eastl::sp_vector_allocator>::DoInsertValue  # grow+insert, memmove

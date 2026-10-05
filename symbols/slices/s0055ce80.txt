@@ -1,0 +1,2 @@
+0055ce80 SP::FUN_0055ce80  # unnamed; reads eastl::vector<WeightedID> + float at +0x18 from a stream
+0055cff0 SP::cKeyFilterEditorResourceTypes::IsKeyIncluded  # PDB caller-scored candidate

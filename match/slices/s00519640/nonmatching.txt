@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00519640  2955  /Od frame + inline Vector3 copies/property vcalls; complete Render() reconstruction

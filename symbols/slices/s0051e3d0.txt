@@ -1,0 +1,3 @@
+0051e3d0 ??1PaintSystem@Skinner@@...  # full member teardown dtor (vtbl 0x13f1c74)
+0051e5b0 ?DeviceRestore@?A0x...@@  # anonymous namespace DeviceRestore
+0051ec70 ?Shutdown@cPaintSystem@nSPSkinner@@  # PDB name

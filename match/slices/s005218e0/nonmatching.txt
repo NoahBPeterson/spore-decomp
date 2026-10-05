@@ -1,0 +1,3 @@
+# <va>  <diff-bytes>  <reason>
+00522720  110  /Od boolean-result local slot/width (int vs bool) differs; complete ShouldTick
+005227a0  81   /Od steal/release with AutoRefCount temporary; complete

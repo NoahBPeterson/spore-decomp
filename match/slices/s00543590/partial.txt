@@ -1,0 +1,3 @@
+00543590  1074  approximate; link-attribute walker structure reconstructed, exact compare/value tracking omitted
+005439d0  433   approximate; scheme/term FNV hash handling reconstructed structurally
+00543c10  742   approximate; vector_map::find + string assign on this->0x28 omitted

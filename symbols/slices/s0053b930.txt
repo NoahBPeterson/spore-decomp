@@ -1,0 +1,8 @@
+0x0053b930 `anonymous namespace'::RegisterPaintEvalCommands<...cSPSkinPaintParticleEffectBlockCommand>  # PDB name
+0x0053bc90 nSPSkinner::cPaintVarEvalList::ReadIntVector  # vector<int> IStream read
+0x0053bd00 nSPSkinner::cPaintVarEvalList::WriteIntVector
+0x0053bd80 `anonymous namespace'::cPaintVariableCommand::Execute  # vary/offset/scaleNorm/scalePos
+0x0053c190 `anonymous namespace'::cPaintAddVariableCommand::Execute  # paint variable type switch
+0x0053c480 Dot3  # float3 dot product
+0x0053c4e0 PaintResetModifier  # sets mCurrentModifier 0xff
+0x0053c500 `anonymous namespace'::cPaintAddVariableCommand2::Execute

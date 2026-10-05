@@ -1,0 +1,4 @@
+00538000 cSPTransform::cSPTransform(cSPTransform const&)  # copy-ctor: fields + Matrix3 assign (0x41cb40)
+00538380 RefCount secondary-base AddRef adjustor  # this = object+8; returns old refcount+1
+005383c0 RefCount secondary-base Release adjustor  # this = object+8; calls 0x453540 on object
+00538420 Wrapper538420  # tail call to 0x53aea0 with swapped args

@@ -1,0 +1,3 @@
+0053bd80  -1  PaintVarCommand::Execute partial; main option handling summarised, full modifier/range/wrap branch tree omitted
+0053c190  -1  PaintAddVar::Execute partial; variable lookup + switch skeleton present, scale/dot fix-ups rely on external helpers
+0053c500  -1  PaintAddVar2::Execute partial; vector/float parse + entry-slot check present, push omitted

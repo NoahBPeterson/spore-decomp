@@ -1,0 +1,3 @@
+00562b80 SP::cSPObjectTemplateDB::AssignCandidates  # copies a range into mCandidates and queries keys
+00562ca0 SP::cSPObjectTemplateDB::TryFilterCandidates  # filter then summary validation
+005631e0 SP::cSPObjectTemplateDB::FindAssetIndex  # linear scan of mAssetList by key

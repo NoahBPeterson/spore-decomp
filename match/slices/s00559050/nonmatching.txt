@@ -1,0 +1,1 @@
+00559500 4 element increment: complete; only the compiler spill slot of `this` (-8) vs the named local (-0xc) is swapped

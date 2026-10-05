@@ -1,0 +1,6 @@
+005609a0  0  large OTDB processing driver left as a call-shape skeleton
+00560d60  0  asset registration driver left as a call-shape skeleton
+00560f20  0  OTDB job construction left as a call-shape skeleton
+00561220  0  asset wrapper method left as a skeleton
+00561340  0  large resource-wrapper driver left as a call-shape skeleton
+00561850  0  asset state update left as a skeleton

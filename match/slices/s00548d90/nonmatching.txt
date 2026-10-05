@@ -1,0 +1,11 @@
+00548d90  200  complete; /Od two-wstring+variant copy ctor schedule differs
+00548e70  102  complete; /Od wstring assign schedule differs
+00548ee0  736  complete; /Od 0x118 copy ctor slot schedule differs
+00549250  625  complete; /Od 0x118 assign schedule differs
+00549500  350  complete; /Od 0x70 copy ctor slot schedule differs
+005496a0  292  complete; /Od 0x70 assign schedule differs
+005497e0  79   complete; /Od find_first_of loop schedule differs
+00549840  80   complete; /Od find_last_of loop schedule differs
+00549940  820  complete; /Od vector<0x34> assign/copy schedule differs
+00549d20  132  complete; /Od vector<0x14> insert-one schedule differs
+00549dc0  103  complete; /Od lower_bound schedule differs

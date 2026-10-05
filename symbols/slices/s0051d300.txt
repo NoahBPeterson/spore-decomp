@@ -1,0 +1,5 @@
+0051d5f0 ??_G...  # scalar deleting dtor (vtbl 0x13ef094 at +4)
+0051d690 FUN_0051d690  # Bitmap ctor (alloc "Graphics", Memset32)
+0051e100 FUN_0051e100  # ThreadedRes dtor (releases +0x80,+0x7c,+8)
+0051e340 ?AddRef@...  # non-atomic refcount at +8
+0051e180 ??0PaintSystem@Skinner@@...  # PDB candidate Skinner::PaintSystem ctor

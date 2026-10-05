@@ -1,0 +1,6 @@
+0052f170 cSPSkinPaintDistributeParticlesCommand::OnEndParse  # PDB previous-name
+0052f330 cSPSkinPaintDistributeSpacingCommand::Execute  # PDB previous-name
+0052f3f0 cSPSkinPaintDistributeRegionCommand::Execute  # PDB previous-name
+0052f6b0 SWARM_SPSkinPaintDistributeAddCommands  # PDB caller-scored
+0052f7c0 cSPSkinPaintDistributeEffectCommand ctor  # PDB previous-name
+0052fe20 cSPSkinPaintDistributeInlineCommand::Execute  # PDB previous-name

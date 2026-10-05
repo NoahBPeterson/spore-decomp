@@ -1,0 +1,8 @@
+005794b0  0     UpdateRenderSettings stub (not yet analysed)
+00579720  0     SetCurrentConfig stub (not yet analysed)
+005798f0  172   SwitchToEditorCamera stub: property/key lookup + App()->GetModeManager path
+005799a0  116   SavePreferenceSomething stub: Variant<bool> + SaveResource
+00579af0  92    SomeFinder stub: wstring find/insert
+00579c80  80    CheatObject ctor stub: MI vtables + zeroed fields (0x13f56ac/0x13f56a8/0x13ef094)
+00579ce0  81    CheatObject dtor stub: vtable restore + operator delete of +8/+1c blocks
+00579d40  211   CheatCommand stub: ArgScript output of "freedom cheat" messages

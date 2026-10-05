@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00554c30/s00554c30.cpp  ?DoInsertValue@?$vector@U?$basic_string@D@eastl@@Usp_vector_allocator@2@@eastl@@QAEXPAU?$basic_string@D@2@ABU32@@Z  00554c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00554c30/s00554c30.cpp  ?insert@?$vector_set@IU?$less@I@eastl@@@eastl@@QAEPAIPAIABI@Z  00554f20  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00554c30/s00554c30.cpp  ??$?8D@eastl@@YA_NABU?$basic_string@D@0@0@Z  00554fb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00554c30/s00554c30.cpp  ??$?8D@eastl@@YA_NABU?$basic_string@D@0@PBD@Z  00555020  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00554c30/s00554c30.cpp  ?equal_range@?$vector_set@IU?$less@I@eastl@@@eastl@@QAE?AU?$pair@PAIPAI@2@ABI@Z  00555980  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00554c30/s00554c30.cpp  ??$lower_bound@PAIIU?$less@I@eastl@@@eastl@@YAPAIPAI0ABIU?$less@I@0@@Z  00555a20  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

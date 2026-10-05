@@ -1,0 +1,3 @@
+0055a550 SP::Audio::cCityMusicSummarizer param-id table accessor  # byte-exact
+0055a9d0 SP::Audio::cCityMusicSummarizer param-type table accessor  # byte-exact
+0055aa00 SP::Audio::cCityMusicSummarizer::ExtractParameters  # PDB candidate (caller-scored)

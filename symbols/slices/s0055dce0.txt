@@ -1,0 +1,4 @@
+0055dce0 Skinner::PaintSystem::LoadPaintIds  # loads a resource-id vector from the save area
+0055de60 Skinner::PaintSystem::SavePaintIds  # writes a resource-id vector to the save area
+0055eae0 Skinner::PaintSystem::PaintSystem  # constructor
+0055ec10 Skinner::PaintSystem::~PaintSystem  # scalar deleting destructor

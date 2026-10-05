@@ -1,0 +1,6 @@
+0055f7a0 SP::cSPObjectTemplateDB::RestoreGroupRecords  # checks mClassifierTable/groups
+0055f8e0 SP::cSPObjectTemplateDB::RemoveGroupRecord  # erases one classifier record
+0055f9e0 SP::cSPObjectTemplateDB::FlushPendingObject  # conditional release at +0x44
+0055fa20 SP::cSPObjectTemplateDB::SetAssetActive  # activates/deactivates an asset
+0055fb30 SP::cSPObjectTemplateDB::IsAssetActive  # whether asset index is in the active set
+0055fbb0 SP::cSPObjectTemplateDB::TouchAsset  # writes current time into asset record

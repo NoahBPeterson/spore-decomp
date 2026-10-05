@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+0051a350  717   /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
+0051a8a0  63    /Od member-address temp locals differ; complete ctor reconstruction
+0051a930  99    /Od member-address temps + thiscall helpers; complete dtor reconstruction
+0051a9a0  222   /Od arg stores; complete 10-arg ctor reconstruction
+0051aaa0  140   /Od refcount release pattern differs; complete Release reconstruction
+0051ab50  900   /Od int-iterator loop shape differs; complete PreloadTextures reconstruction

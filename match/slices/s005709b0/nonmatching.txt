@@ -1,0 +1,5 @@
+00571640  45  ctor: complete; /Od frame is 2 slots (this at -8, one hole at -4), ours spills this at -4
+00571680  37  clear(): complete erase(begin,end)+mfLen=0; /Od frame is 0x1c of inline-helper holes
+00571720  73  assign(): complete erase+range-insert+mfLen copy; /Od slot order/frame (0x58) differs
+00571790  134 add(): complete; fabs/SSE compare and Key12 temp slot placement differ at /Od
+00571840  117 insertValue(): complete lower_bound+insert pair; /Od frame (0x2c) and name-hash slots differ

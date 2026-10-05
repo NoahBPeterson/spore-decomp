@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+005247d0  140  /Od packed-value unpack inlining / slot layout differs; complete GetChecked

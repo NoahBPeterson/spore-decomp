@@ -1,0 +1,5 @@
+# <va>  <diff-bytes>  <reason>
+005218e0  239   /Od copy/assign body not reconstructed (entry skeleton only)
+005219d0  455   /Od body not reconstructed (entry skeleton only)
+00521ba0  457   /Od body not reconstructed (entry skeleton only)
+00521d70  2474  nSPSkinner::cPaintSystem::HandleUpdateMessage; entry skeleton only

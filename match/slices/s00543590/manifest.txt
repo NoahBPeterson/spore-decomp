@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol                        original VA   [cl flags override]
+slices/s00543590/s00543590.cpp  ?FUN_00543b90@Ctx40@@QAEXPAH@Z  00543b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00543590/s00543590.cpp  ?FUN_00543bb0@Ctx40@@QAEXPAH@Z  00543bb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00543590/s00543590.cpp  ?FUN_00543bd0@Ctx40@@QAEXPAH@Z  00543bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00543590/s00543590.cpp  ?FUN_00543bf0@Ctx40@@QAEXPAH@Z  00543bf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

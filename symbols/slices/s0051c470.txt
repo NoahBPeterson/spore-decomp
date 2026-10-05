@@ -1,0 +1,7 @@
+0051c470 ??0PaintSystem@Skinner@@...  # PDB candidate Skinner::PaintSystem ctor (vtbl 0x13eb394)
+0051c620 ?AddRef@...  # atomic refcount add, +0xc
+0051c640 ?HandleMessage@cSkinpaintTextureExtractor@@...  # PDB name
+0051d010 ??1PaintSystem@Skinner@@...  # ctor/dtor vtable restore pair
+0051d090 ??_G...  # scalar deleting dtor (vtbl 0x13eb938)
+0051d140 FUN_0051d140  # intrusive-list advance
+0051d270 ?erase@...  # vector<AutoRefCount>::erase

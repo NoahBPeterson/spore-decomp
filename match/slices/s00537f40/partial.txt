@@ -1,0 +1,10 @@
+00537f40  -  cSPTransform::Compound (184 bytes): transform compose, stub only
+00538080  -  particle effect update (180 bytes): stub only
+00538180  -  particle effect destructor (125 bytes): stub only
+00538200  -  particle effect factory (94 bytes): stub only
+00538260  -  particle effect ctor (143 bytes): stub only
+00538320  -  cPaintVarEvalList owner dtor (82 bytes): stub only
+00538440  -  cSPSkinPaintParticleEffectBlockCommand::OnRegister (1461 bytes): stub only
+00538a00  -  cSPSkinPaintParticlebrushCommand::Execute (232 bytes): stub only
+00538af0  -  particle brush command (136 bytes): stub only
+00538b80  -  particle command (779 bytes): stub only

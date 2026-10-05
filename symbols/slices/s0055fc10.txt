@@ -1,0 +1,4 @@
+0055fe60 SP::cSPObjectTemplateDB::SetPopulationCount  # mPopulationCount[key]=value
+0055fed0 SP::cSPObjectTemplateDB::ResetCandidateState  # clears mCandidates then RebuildFreeList
+00560880 SP::cSPObjectTemplateDB::GetAssetSubtype  # reads AssetInfo+0xc
+005608d0 SP::cSPObjectTemplateDB::FindAssetByKey  # scans mResultSet for a matching ResourceKey

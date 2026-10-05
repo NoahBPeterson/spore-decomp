@@ -1,0 +1,7 @@
+0051a350 ?Render@cPaintSplatAlphaJob@nSPSkinner@@UAE_NXZ  # PDB candidate
+0051a6a0 FUN_0051a6a0  # no PDB name
+0051a8a0 FUN_0051a8a0  # ctor cluster (vtable 0x13f1ac0)
+0051a930 FUN_0051a930  # dtor cluster
+0051a9a0 FUN_0051a9a0  # 10-arg ctor
+0051aaa0 FUN_0051aaa0  # release helper
+0051ab50 ?PreloadTextures@cPaintRenderer@nSPSkinner@@QAEX_N@Z  # PDB candidate

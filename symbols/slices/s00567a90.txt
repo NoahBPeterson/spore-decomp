@@ -1,0 +1,3 @@
+005687d0 eastl::hashtable<unsigned __int64,unsigned __int64,...>::DoFreeNodes  # frees every bucket chain
+00568740 eastl::vector<int,eastl::allocator>::vector(first,last)  # allocate+copy range
+005680a0 eastl::vector<...>::DoDestroyValues  # destroys a 0x50-stride range

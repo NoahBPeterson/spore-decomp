@@ -1,0 +1,13 @@
+005300d0 cSPSkinPaintDistributeDescription Read  # called by ?ReadDistributeDescriptionCommand (0052e9d0); reads mEffect then fields
+005302b0 eastl::basic_string<char,eastl::allocator> ReadString  # reads bytes until NUL into *str (PDB: basic_string push_back callee)
+00530310 cSPSkinPaintDistributeDescription Write  # called by ?WriteDistributeDescriptionCommand (0052ec20)
+005305c0 eastl::basic_string<char,eastl::allocator> WriteString  # writes content then NUL
+00530670 eastl::basic_string<char,eastl::allocator>::~basic_string  # PDB name
+005306c0 eastl::basic_string<char,eastl::allocator>::push_back  # PDB name
+00530770 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::vector  # copy ctor; alloc at +0xc
+00530870 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::operator=  # three-branch assign
+00530b70 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::resize  # calls 00530db0 / erase
+00530c00 EA::ArgScript::cCommandStateT<...,EA::ArgScript::cBlockCommandBase>::OnRegister  # mState(+0x30)=state-0xc, base OnRegister 0x83c780
+00530c40 EA::ArgScript::cCommandStateT<cSPSkinPaintDistributeEffectCommand,EA::ArgScript::cMetaCommandBase>::OnRegister  # PDB name; mState(+0xc)=state-0x34
+00530c80 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::erase  # PDB name
+00530d20 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::allocate+uninitialized_copy  # called by operator= (00530870)

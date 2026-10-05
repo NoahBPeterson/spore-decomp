@@ -1,0 +1,4 @@
+00526a40 eastl::fixed_vector<8-byte>::Free  # card disasm: free unless inline buffer (param_1[4]=+0x10)
+00527110 eastl::deque<0x48>::DoPopFront  # card decompile; frees node + map, resets mItBegin.mpCurrent
+00527150 eastl::vector<0x40-byte>::vector(const&)  # card decompile; allocate + uninitialized_copy
+00527440 Elem38::Elem38(const&)  # card decompile; typed float subobjects (fld/fstp) + ObjPtr/PoolPtr AddRef

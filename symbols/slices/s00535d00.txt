@@ -1,0 +1,2 @@
+005368f0 paint-variable command: reset mVarNum(+0x50) via this->[0x30]  # ret 4 shape byte-exact
+00535d00 eastl::vector<16-byte>::vector  # copy ctor; allocate n*16 + uninitialized_copy (005371a0)

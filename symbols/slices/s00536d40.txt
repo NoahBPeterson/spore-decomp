@@ -1,0 +1,5 @@
+005372f0 EA::ArgScript::cCommandStateT<...,EA::ArgScript::cBlockCommandBase>::OnRegister  # mState(+0x30)=state-0x34; base OnRegister 0x83c780
+00537330 T16::operator=  # copy 3 floats + 2 bytes + word (16-byte struct)
+00537d60 cSPSkinPaintParticleEffect vptr reset  # three vtable stores
+00537dc0 cSPTransform::operator=  # change-detecting assign (flags/modcount)
+00537ea0 cSPSkinPaintParticleEffect::IsActive  # true while flag or paint system paused

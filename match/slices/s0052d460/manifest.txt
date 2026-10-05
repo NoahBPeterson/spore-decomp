@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0052d460/s0052d460.cpp  ??0SVec3@@QAE@PAPAX@Z  0052dfe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0052d460/s0052d460.cpp  ?ReadSkinPaintData@@YAXPAUIStream@@HH@Z  0052e030  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

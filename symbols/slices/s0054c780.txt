@@ -1,0 +1,1 @@
+0054c780  SP::Pollen::cAssetMetadataResourceFactory::ReadResource  # pdb anchor; param_4==0x30bdee3

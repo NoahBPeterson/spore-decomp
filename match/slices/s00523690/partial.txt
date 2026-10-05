@@ -1,0 +1,5 @@
+# <va>  <diff-bytes>  <reason>
+00523690  612   /Od body not reconstructed (entry skeleton only)
+00523900  2012  /Od render body not reconstructed (entry skeleton only)
+005240e0  109   inline Vector2 stack temporary + call; not reconstructed
+00524150  130   inline Vector2 stack temporary + call; not reconstructed

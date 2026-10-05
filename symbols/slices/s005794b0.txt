@@ -1,0 +1,11 @@
+005794b0 SP::cAppModeEditorBase::UpdateRenderSettings  # PDB name
+00579720 SP::cAppModeEditorBase::SetCurrentConfig  # PDB name
+005798f0 SP::cAppModeEditorBase::SwitchToEditorCamera  # PDB name
+005799a0 cAppModeEditorBase::SavePreferenceSomething  # Variant<bool> + SaveResource (name inferred)
+00579a20 cAppModeEditorBase::HasSameMask  # +0x1cc; compares 4 masked dwords against 0x15da7c4 (name inferred)
+00579a90 eastl::basic_string<wchar_t,eastl::allocator>::RangeInitialize  # callee-single PDB name
+00579af0 eastl::basic_string<wchar_t> find/insert helper  # 0x5497e0 lower_bound-ish (name inferred)
+00579c60 eastl::basic_string<char,eastl::allocator>::operator=  # assign wrapper (name inferred)
+00579c80 Editor::cCheat ctor  # MI vtables 0x13f56ac/0x13f56a8, base vtbl 0x13ef094 (name inferred)
+00579ce0 Editor::cCheat scalar deleting dtor  # frees +0x1c and +8 blocks (name inferred)
+00579d40 Editor::cCheat::Execute  # ArgScript "freedom cheat" command (name inferred)

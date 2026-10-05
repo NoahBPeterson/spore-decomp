@@ -1,0 +1,9 @@
+00549e40  95   complete; /Od uninitialized_copy+destruct tag/slot schedule differs
+00549f80  254  complete; /Od lower_bound inlined string compare differs
+0054a070  563  complete; /Od vector<string>::DoInsertValue schedule differs
+0054a2d0  252  complete; /Od lower_bound (8-byte element) compare differs
+0054a470  75   complete; /Od pair<key,string> copy ctor slot layout differs
+0054a670  629  complete; /Od vector<pair>::assign schedule differs
+0054a920  588  complete; /Od vector<pair>::DoInsertValue schedule differs
+0054aba0  173  complete; /Od vector<string>::copy-ctor schedule differs
+0054ac70  813  complete; /Od vector<string>::assign schedule differs

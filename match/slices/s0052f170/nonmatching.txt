@@ -1,0 +1,11 @@
+0052f170 373 OnEndParse; complete but /Od layout/EH frame differs
+0052f330 87 spacing command Execute; complete but byte layout differs
+0052f3a0 68 limit command Execute; complete but byte layout differs
+0052f6b0 210 AddCommands; complete but EH frame/layout differs
+0052f7c0 211 distribute effect ctor; complete but byte layout differs
+0052f890 289 block parse; complete but byte layout differs
+0052f9f0 213 add-effect helper; complete but EH frame/layout differs
+0052fb00 24 derived dtor thunk; complete but byte layout differs
+0052fb20 215 copy params; complete but byte layout differs
+0052fc10 200 swarm effect ctor; complete but byte layout differs
+0052fd80 120 command dtor; complete but byte layout differs

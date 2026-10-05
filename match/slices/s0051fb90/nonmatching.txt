@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+00520110  9    one dead jump in the bit-unpack helper differs; complete
+00520140  197  /Od x87-sqrt normalize schedule differs; complete
+00520220  170  /Od temp-frame / helper return schedule differs; complete

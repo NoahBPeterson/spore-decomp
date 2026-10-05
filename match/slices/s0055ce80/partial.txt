@@ -1,0 +1,2 @@
+0055d230  0  parameter-table merge approximated; EASTL map/vector_set internals behind stub calls
+0055d790  0  int/float parameter lookup approximated; EASTL rbtree iterator internals behind stub calls

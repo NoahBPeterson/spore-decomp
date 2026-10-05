@@ -1,0 +1,9 @@
+00549e40  vector<basic_string>::uninitialized_copy_and_destruct  # dc: copy then WString_FreeBuffer range
+00549f80  eastl::lower_bound<basic_string*>, inlined wchar compare  # dc: stride 0x10 pointer binary search
+0054a070  vector<basic_string<wchar_t>>::DoInsertValue  # dc: ret 8, insert position/value
+0054a2d0  eastl::lower_bound (8-byte element), inlined wchar compare  # dc: stride 8 pointer binary search
+0054a470  pair<unsigned int, basic_string<char>>::copy-ctor  # dc: ret 4, key + string range ctor 0x47d390
+0054a670  vector<pair<unsigned int,basic_string<char>>>::operator=  # dc: stride 0x14
+0054a920  vector<pair<unsigned int,basic_string<char>>>::DoInsertValue  # dc: ret 8 stride 0x14
+0054aba0  vector<basic_string<wchar_t>>::copy-ctor  # dc: ret 4 range init
+0054ac70  vector<basic_string<wchar_t>>::operator=  # dc: ret 4 stride 0x10

@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00535d00/s00535d00.cpp  ?Set@Host5368f0@@  005368f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

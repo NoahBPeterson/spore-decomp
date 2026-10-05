@@ -1,0 +1,2 @@
+00579a20  57  complete mask compare; cl schedules the 4 loads/stores differently (no esi temp)
+00579a90  73  complete eastl wstring RangeInitialize; s/this live in different saved registers (ebp vs esi)

@@ -1,0 +1,14 @@
+005715d0 Key12::operator<  # 12-byte {u32,u32,float} key compare; matches s005718f0's Key12
+00571610 Key12::operator==  # same key type
+005716c0 cFeatureVector::begin  # returns this+0
+005716e0 cFeatureVector::end  # returns this+4
+00571640 cFeatureVector::cFeatureVector  # zeroes begin/end/cap and mfLen(=0) at +0x18
+00571680 cFeatureVector::clear  # erase(begin,end) then mfLen=0
+00571700 cFeatureVector::ResetResourceType  # forwards to SP::GetResourceTypeFromModelType (0x526430)
+00571720 cFeatureVector::assign  # erase + range insert + mfLen copy
+00571790 SP::Traits::cFeatureVector::add  # PDB name; fabs guard, insert, +=, mfLen +=
+00571840 eastl::vector_map<SP::Traits::cID,float,...>::insert  # PDB name; lower_bound + bool pair
+005709b0 cTraitQuery::Compute  # switch on +0x54, bool +0x50, vector +0x38 (name inferred)
+00570c40 cTraitQuery::Op1  # this+0x1c feature vector; global map 0x15e4a1c
+00570e50 cTraitQuery::Op2  # merge-join similarity
+00571100 cTraitQuery::Op3  # merge-join squared-magnitude similarity

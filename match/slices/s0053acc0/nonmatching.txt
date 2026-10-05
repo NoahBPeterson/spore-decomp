@@ -1,0 +1,9 @@
+0053acc0  391  ReadParticleDescription complete; field-by-field IStream read (vtable ReadBytes +0x30)
+0053aea0  -1  WriteParticleDescription complete; symmetric write (vtable WriteBytes +0x38)
+0053b160  84  AutoRefCount<T>::operator=(T*) complete
+0053b1c0  -1  PaintCompat ctor variant complete (base ctor + vtable stores); explicit vtable stores differ
+0053b1f0  23  PaintCompat::PaintCompat ctor complete
+0053b210  -1  eastl::vector<Entry16>::operator= complete; implemented as byte-stride assign (POD elements)
+0053b520  -1  eastl::vector<Entry16>::resize complete
+0053b5a0  -1  eastl::vector<Entry20>::operator= complete
+0053b8a0  -1  eastl::vector<Entry20>::resize complete

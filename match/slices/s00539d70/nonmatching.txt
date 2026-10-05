@@ -1,0 +1,13 @@
+00539d70  237  cSPSkinPaintParticleinheritCommand::Execute complete; per-arg _stricmp loop + inherit-bit table; /Od slot order differs
+00539ed0  131  SWARM_SPSkinPaintParticleAddCommands complete; registration (alloc block/command, vtable stores); codegen of explicit vtable stores not reproduced
+00539f90  -1  cSPSkinPaintParticleEffectBlockCommand::ctor complete; object/AppProps base init + 3 vtable stores differ
+0053a030  -1  cSPSkinPaintParticleEffectBlockCommand::Parse complete; name assign + Skinner description alloc + inherited copy
+0053a1a0  -1  cSPSkinPaintParticleEffectBlockCommand::SetChild complete
+0053a220  116  cSPSkinPaintParticleEffectBlockCommand::dtor complete
+0053a2b0  -1  BrushDesc::operator= complete (fieldwise copy)
+0053a420  57  EvalList::operator= complete
+0053a460  38  cSPSkinPaintParticleEffectBlockCommand::AddDesc complete
+0053a4a0  110  FUN_0053a4a0 runtime-description lookup complete
+0053a530  282  BrushDesc::Init complete (default values)
+0053a6d0  528  ReadEvalList complete; three array reads via ReadInt32/ReadUInt8/ReadUInt16
+0053a930  -1  WriteEvalList complete; three array writes

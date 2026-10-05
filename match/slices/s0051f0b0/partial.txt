@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0051f0b0  2724  nSPSkinner::cPaintSystem::ProcessHit; entry skeleton only

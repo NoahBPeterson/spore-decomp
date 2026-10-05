@@ -1,0 +1,4 @@
+005296b0 vertex emitter (6x EmitVertex4)  # card decompile: local V2 pairs + 0x5295b0
+00529bf0 nSPSkinner::cRTTBuffer::BeginDraw  # card decompile; RenderWare state globals
+00529d30 RGB->HSV  # card decompile: min/mid/max + hue sector
+0052a030 HSV->RGB  # card decompile: switch on hue sector, Vector3Scale 0x41de40

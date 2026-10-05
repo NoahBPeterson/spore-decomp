@@ -1,0 +1,10 @@
+00555cc0 40 ResourceManager helper (0x0067CB30 + field +0x58 call 0x0054F1A0); stub only
+00555cf0 220 SP resource fetch: GetManager + virtual GetResource(ResourceKey) + AddRef/Release; stub only
+00555dd0 164 SP::PropertyManager lookup + GetPropertyAsKeyInstance; stub only
+00555e80 234 stub only
+00555f70 450 stub only
+00556140 203 stub only
+00556210 133 stub only
+005562a0 413 stub only
+00556440 409 stub only
+005565e0 478 stub only

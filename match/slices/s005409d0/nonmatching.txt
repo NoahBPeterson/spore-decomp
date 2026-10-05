@@ -1,0 +1,7 @@
+005409d0  932  complete; /Od vector<0x18>::insert grow/shift schedule differs
+00540f20  6    complete; first member store operand order differs
+00541030  932  complete; /Od vector<0xc>::insert grow/shift schedule differs
+00541450  60   complete; /Od uninitialized_copy loop shape differs (extra pair temps)
+00541630  21   complete; bool local init store differs (mov al vs byte 0)
+00541680  496  complete; /Od wide-string date/time parse schedule differs
+005418c0  197  complete; /Od prefix-table parse schedule differs

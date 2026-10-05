@@ -1,0 +1,7 @@
+00522800 FUN_00522800  # helper
+005229c0 FUN_005229c0  # writes user-colour globals
+00522a40 FUN_00522a40  # request-complete callback
+00522ad0 ?Set@...  # paint-request setter (+0x68..0x7a)
+00522b40 ?SetCreatureSkin@cPaintSystem@nSPSkinner@@  # PDB name
+00523570 FUN_00523570  # alloc factory (0x1d0 "Skinner")
+005235c0 FUN_005235c0  # helper

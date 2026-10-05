@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00518f10  1824  /Od aligned frame (and esp,-16) + inline SSE clamp/round helpers differ; complete Render() reconstruction

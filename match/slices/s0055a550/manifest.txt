@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0055a550/s0055a550.cpp  ?GetParamId@cCityMusicSummarizer@Audio@SP@@QAEII@Z  0055a550  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055a550/s0055a550.cpp  ?GetParamType@cCityMusicSummarizer@Audio@SP@@QAEII@Z  0055a9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

@@ -1,0 +1,7 @@
+0054afe0  eastl::vector<unsigned int>::operator=  # dc: stride 4, FUN_42e5b0 alloc+copy
+0054b400  eastl::uninitialized_copy<basic_string<wchar_t>>  # dc: WString_AllocateSelf per element
+0054b480  vector<basic_string<wchar_t>>::allocate+uninitialized_copy  # dc: thiscall ret 0xc, EAAlloc n*0x10
+0054b510  eastl::uninitialized_copy (result out-param)  # dc: ret, *out=end
+0054b5b0  eastl::copy<pair<unsigned int,basic_string<char>>>  # dc: stride 0x14 forward
+0054b630  eastl::copy_backward<pair<unsigned int,basic_string<char>>>  # dc: stride 0x14 backward
+0054b6f0  SP::Pollen::cAssetMetadataResourceFactory::CreateMetadata  # dc: operator new(0xd8,"Pollinator/cAssetMetadata"), vtable[9] Make

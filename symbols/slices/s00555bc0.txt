@@ -1,0 +1,4 @@
+00555bc0 eastl::uninitialized_copy_ptr<eastl::basic_string<char> >  # byte-exact
+00555c40 eastl::uninitialized_fill_n_ptr<eastl::basic_string<wchar_t> >  # complete, 9-byte near-miss
+005567c0 SP::cVehicleModelSummarizer::GetResType  # byte-exact
+00555f70 SP::cVehicleModelSummarizer parameter setup  # large /Od

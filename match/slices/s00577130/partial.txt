@@ -1,0 +1,5 @@
+00577310  473   PreloadResources stub: cTexturePreload ctor + 3 PreloadTextureList calls + property lookup, not translated
+00577650  1224  SaveSomething stub: save-area/model save + property copying, not translated
+00577b20  283   HasAnyResource stub: ResourceMan lookup + 0x1d8-stride record scan, not translated
+00577c40  387   LoadSomething stub: property key lookup + load path, not translated
+00577dd0  0     SomeLoader stub (not yet analysed)

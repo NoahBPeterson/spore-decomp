@@ -1,0 +1,7 @@
+0054afe0  230  complete; /Od vector<unsigned int>::operator= schedule differs
+0054b400  109  complete; /Od uninitialized_copy<string> tag/slot schedule differs
+0054b480  103  complete; /Od vector<string> allocate+uninit_copy schedule differs
+0054b510  146  complete; /Od uninitialized_copy (out-param) schedule differs
+0054b5b0  105  complete; /Od copy<pair> forward schedule differs
+0054b630  100  complete; /Od copy_backward<pair> schedule differs
+0054b6f0  172  complete; /Od factory vtable/new schedule differs

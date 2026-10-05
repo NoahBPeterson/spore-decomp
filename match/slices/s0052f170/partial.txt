@@ -1,0 +1,2 @@
+0052f3f0 500 PARTIAL: region Execute; _CIcos angle computation approximated
+0052fe20 400 PARTIAL: inline Execute; some effect-state copies approximated

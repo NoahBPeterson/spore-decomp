@@ -1,0 +1,4 @@
+00560c30    0  complete asset insertion; /Od frame/holes differ
+00560d20    0  complete asset key equality; /Od frame differs
+00561090  154  complete cEditorResource constructor; vtable/frame schedule differs
+005611b0   80  complete cEditorResource destructor; frame schedule differs

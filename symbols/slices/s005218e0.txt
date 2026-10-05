@@ -1,0 +1,6 @@
+005218e0 FUN_005218e0  # params copy/assign
+005219d0 FUN_005219d0  # helper
+00521ba0 FUN_00521ba0  # helper
+00521d70 ?HandleUpdateMessage@cPaintSystem@nSPSkinner@@  # PDB name
+00522720 ?ShouldTick@...  # tick predicate, flags at +0x60..0x62
+005227a0 FUN_005227a0  # steal+release at +0x100

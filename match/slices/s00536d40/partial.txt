@@ -1,0 +1,4 @@
+00536d40  -  cSPSkinPaintParticleEffect algorithm (874 bytes): stub only
+00537390  -  particle command (576 bytes): stub only
+005375d0  -  vector<16-byte>::DoInsert (1136 bytes): stub only
+00537c90  -  Big50 ctor (205 bytes): stub only

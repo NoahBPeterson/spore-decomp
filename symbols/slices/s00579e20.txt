@@ -1,0 +1,8 @@
+00579e20 SP::cAppModeEditorBase::~cAppModeEditorBase  # member release/delete cascade (name inferred)
+0057a610 SP::cAppModeEditorBase::AddTorsoToEffectsMask  # PDB candidate (caller-scored)
+0057a6d0 Editor::cCheat2 ctor  # MI vtables 0x13f585c/0x13f5858 (name inferred)
+0057a710 cAppModeEditorBase::SendBehaviorMessage  # UI::BehaviorMessage + MessageServer (name inferred)
+0057a960 cAppModeEditorBase::GetMask  # +0x1cc mask & ~globals 0x15da7ec..7f8 (name inferred)
+0057a9e0 cAppModeEditorBase::GetDefaultMask  # default 0x15daa40.. & masks, minus GetMask (name inferred)
+0057aaa0 SP::cAppModeEditorBase::GetEditorSaveability  # PDB name
+0057ac00 cAppModeEditorBase::SomeSetup  # (name inferred)

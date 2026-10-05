@@ -1,0 +1,4 @@
+00523690 FUN_00523690  # renderer helper
+00523900 FUN_00523900  # large render body
+005240e0 FUN_005240e0  # draw helper with Vector2 temp
+00524150 FUN_00524150  # draw helper with Vector2 temp

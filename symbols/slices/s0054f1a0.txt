@@ -1,0 +1,1 @@
+0054f1a0  SP::Pollen::cAssetDirectory mapping persistence (save to GetSaveArea(0x11ac19d))  # dc: mutex-guarded stream writes

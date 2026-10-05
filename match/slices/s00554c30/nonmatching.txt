@@ -1,0 +1,5 @@
+005550a0 395 vector<string>::DoInsertValues written from EASTL source; emitted 688 bytes vs 1083 (helper call/inlining schedule differs)
+00555540 395 vector<string16>::DoInsertValues written from EASTL source; emitted 688 bytes vs 1083 (helper call/inlining schedule differs)
+005554e0 81 uninitialized_relocate_ptr<string>: copy+destruct shape right, but destructor call (scalar deleting dtor) and /Od slot order differ
+00555aa0 134 uninitialized_copy<string>: sret out-param form implemented, /Od slot order and generic_iterator wrapping differ
+00555b40 96 uninitialized_fill_n_ptr<string>: loop body right, /Od slot order differs

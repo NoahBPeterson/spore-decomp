@@ -1,0 +1,1 @@
+00577e10 SP::cAppModeEditorBase::UpdateBabyCreatures  # PDB name; cSPEditorAnimatedCreatureManager + record grid

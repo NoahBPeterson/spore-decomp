@@ -1,0 +1,2 @@
+0051f0b0 ?ProcessHit@cPaintSystem@nSPSkinner@@  # PDB name
+0051fb60 ??4Vector2@@QAEAAU0@ABU0@@Z  # two-float assignment

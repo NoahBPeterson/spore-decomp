@@ -1,0 +1,13 @@
+0x00539d70 `anonymous namespace'::cSPSkinPaintParticleinheritCommand::Execute  # MainArguments(1,0x32); "diffuseColor" + 19-entry inherit-bit table -> mInheritMask +0x68
+0x00539ed0 SWARM_SPSkinPaintParticleAddCommands  # registers "spSkinPaintParticle" block+command
+0x00539f90 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::ctor  # 0x54 block ctor
+0x0053a030 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::Parse  # mName assign, new 0xb8 Skinner description, mCurrentModifier=0xff
+0x0053a1a0 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::SetChild  # clears mpDesc
+0x0053a220 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::dtor
+0x0053a2b0 nSPSkinner::cPaintBrushDescription::operator=  # fieldwise brush copy
+0x0053a420 nSPSkinner::cPaintVarEvalList::operator=
+0x0053a460 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::AddDesc  # AddDescription(0x26)
+0x0053a4a0 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::GetRuntimeDesc
+0x0053a530 nSPSkinner::cPaintBrushDescription::Init  # defaults
+0x0053a6d0 nSPSkinner::cPaintVarEvalList::Read  # IStream read, 3 arrays (0x10/0x14/4 strides)
+0x0053a930 nSPSkinner::cPaintVarEvalList::Write

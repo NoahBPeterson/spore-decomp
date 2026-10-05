@@ -1,0 +1,1 @@
+00543f00  4890  stub only; 4890-byte registration table builder not transcribed

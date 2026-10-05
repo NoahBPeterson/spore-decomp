@@ -1,0 +1,4 @@
+0053c6f0  -1  PaintCopyVar::Execute partial; vector/float parse + entry-slot guard, push/clamp tail summarised
+0053c930  -1  PaintAddVary::Execute partial; option handling summarised
+0053cca0  -1  PaintVarModifier ctor partial (base vector ctor not modelled)
+0053cd80  -1  vector<Entry20>::insert partial; reallocation/relocate via helpers simplified

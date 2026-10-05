@@ -1,0 +1,5 @@
+00559050 105 scalar deleting destructor (cPropertyList/cEditorResource); stub only
+005590c0 77 virtual-call helper; stub only
+00559110 967 Editor::ObjectTemplateDB constructor; stub only
+005594e0 32 constructor storing two vtable pointers; stub only
+00559590 792 stub only

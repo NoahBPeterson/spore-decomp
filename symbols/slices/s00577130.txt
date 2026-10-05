@@ -1,0 +1,12 @@
+00577130 SP::cAppModeEditorBase::SetSoundBlockAdded  # PDB name; 3 PlayEditorSound calls gated by +0x20e
+005771f0 SP::cAppModeEditorBase::SetSoundBlockRemoved  # PDB name; as above with hash 0xbb98bc04
+005772b0 SP::cAppModeEditorBase::RemoveTorsoFromEffectsMask  # PDB name; manual vtable slot 0x16c/0x170
+00577310 SP::cAppModeEditorBase::PreloadResources  # PDB name
+005774f0 cAppModeEditorBase::SetSomeBlock  # member at +0xf8 + call 0x573c00 (name inferred)
+00577520 cAppModeEditorBase::UpdateBlockState  # +0xcc/+0xe4 gates, SetRolloverHandle (name inferred)
+00577580 cAppModeEditorBase::SetTorsoBlock  # AutoRefCount-style +0xdc/+0xd4/+0xd8 updates (name inferred)
+00577620 cAppModeEditorBase::HasSkin  # +0x360 && +0x150->GetSkin(1) (name inferred)
+00577650 cAppModeEditorBase::SaveSomething  # GetManager/GetSaveArea/model save (name inferred)
+00577b20 cAppModeEditorBase::HasAnyResource  # ResourceMan lookup + record scan (name inferred)
+00577c40 cAppModeEditorBase::LoadSomething  # property key lookup + load (name inferred)
+00577dd0 cAppModeEditorBase::SomeLoader  # (name inferred)

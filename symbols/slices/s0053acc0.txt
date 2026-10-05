@@ -1,0 +1,9 @@
+0x0053acc0 nSPSkinner::cSPSkinPaintParticleDescription::Read  # IStream read: +0x20/+0x24, 12-byte blocks, eval list +0x74
+0x0053aea0 nSPSkinner::cSPSkinPaintParticleDescription::Write  # symmetric writer
+0x0053b160 EA::AutoRefCountBase::operator=(T*)  # AddRef new / Release old via +8 vtable
+0x0053b1c0 ArgScript::PaintCompat ctor  # base ctor + two vtable stores
+0x0053b1f0 ArgScript::PaintCompat::PaintCompat
+0x0053b210 eastl::vector<Entry16>::operator=(const&)  # 0x10 stride
+0x0053b520 eastl::vector<Entry16>::resize
+0x0053b5a0 eastl::vector<Entry20>::operator=(const&)  # 0x14 stride
+0x0053b8a0 eastl::vector<Entry20>::resize

@@ -1,0 +1,9 @@
+0055bf10 59 constructor storing embedded vtable pointers + atomic field; stub only
+0055bf50 42 constructor storing two vtable pointers; stub only
+0055bfb0 805 SP::cSPObjectTemplateDB::Shutdown; stub only
+0055c2e0 218 stub only
+0055c3c0 640 SP::cSPObjectTemplateDB::HandleMessage; stub only
+0055c6f0 747 stub only
+0055c9e0 366 stub only
+0055cb50 564 stub only
+0055cd90 234 stub only

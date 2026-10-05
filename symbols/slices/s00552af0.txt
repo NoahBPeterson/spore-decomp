@@ -1,0 +1,13 @@
+00552af0  eastl::hashtable<uint64,uint64>::erase(key)  # dc: node stride 0x18, erase all matches
+00552c20  eastl::hashtable::erase(iterator)  # dc: unlink node then deallocate
+00552d00  eastl::hashtable<uint64,uint64>::DoInsertValue  # dc: FUN_00921440 rehash
+00552f80  eastl::hashtable<key3>::find  # dc: hash key0 xor key2
+00553090  eastl::hashtable<key3>::find (b)  # dc
+005531b0  eastl::hashtable<key3>::erase(key)  # dc
+005532f0  eastl::hashtable<key3>::DoInsertValue  # dc
+00553510  eastl::hashtable<uint64,uint64>::find  # dc: node stride 0x10
+00553620  eastl::hashtable<pair>::erase(key)  # dc: node stride 8
+00553750  eastl::hashtable<pair>::DoInsertValue  # dc
+005538f0  eastl::hashtable<uint32>::find  # dc: single-key nodes, stride 0x10
+00553b90  vector<eastl::string16> destructor helper  # dc: FUN_00429410 per element
+00553be0  vector<eastl::string16>::resize  # dc: FUN_005550a0 grow

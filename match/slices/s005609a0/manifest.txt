@@ -1,0 +1,1 @@
+slices/s005609a0/s005609a0.cpp  ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  00561150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

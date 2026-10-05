@@ -1,0 +1,12 @@
+0053e120  -1  partial skeleton
+0053e190  -1  partial skeleton
+0053e1d0  -1  partial skeleton; 451-byte query routine
+0053e3a0  -1  partial skeleton
+0053e470  -1  partial skeleton
+0053e580  -1  partial skeleton
+0053e690  -1  partial skeleton; 1038-byte dispatcher
+0053eaa0  -1  partial skeleton
+0053eb10  -1  partial skeleton
+0053eba0  -1  partial skeleton
+0053eca0  -1  partial skeleton
+0053ece0  -1  partial skeleton

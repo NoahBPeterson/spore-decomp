@@ -1,0 +1,4 @@
+005296b0 797 WriteQuadVerts; complete 6-vertex emit but /Od frame/spill slots differ
+00529bf0 104 cRTTBuffer::BeginDraw; complete but /Od layout differs
+00529d30 260 RGB->HSV; complete but /Od layout differs
+0052a030 160 HSV->RGB; complete but /Od layout differs

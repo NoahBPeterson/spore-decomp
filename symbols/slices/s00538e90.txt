@@ -1,0 +1,11 @@
+0x00538e90 `anonymous namespace'::cSPSkinPaintParticledelayCommand::Execute  # writes mDelayMin/Max +0x58/+0x5c, "vary" option
+0x00538fe0 `anonymous namespace'::cSPSkinPaintParticlelifeCommand::Execute  # writes mLifeMin/Max +0x60/+0x64
+0x00539130 `anonymous namespace'::cSPSkinPaintParticlecurveCommand::Execute  # MainArguments(0,500); "random" -> mFlags |= 4
+0x005391c0 `anonymous namespace'::cSPSkinPaintParticlealignCommand::Execute  # mAlignment +0x2d, mAlignTarget +0x30; "reverse" -> |=0x40
+0x00539440 EA::Swarm::normalized  # dot, sqrt, in/len; PDB name
+0x005394e0 `anonymous namespace'::cSPSkinPaintParticleinitDirCommand::Execute  # mInitialDirection +0x2e, mInitialDirTarget +0x3c; |=0x20
+0x00539720 `anonymous namespace'::cSPSkinPaintParticleattractCommand::Execute  # mAttraction +0x2f, mAttractTarget +0x48, mAttractStrength +0x54; |=0x10
+0x00539980 `anonymous namespace'::cSPSkinPaintParticlerestrictCommand::Execute  # like attract but mFlags |= 8 first
+0x00539bf0 `anonymous namespace'::cSPSkinPaintParticlediffuseColorCommand::Execute  # ParseEnum -> +0xa8
+0x00539c70 `anonymous namespace'::cSPSkinPaintParticlespecularColorCommand::Execute  # ParseEnum -> +0xa9
+0x00539cf0 `anonymous namespace'::cSPSkinPaintParticlebumpColorCommand::Execute  # ParseEnum -> +0xaa

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00536d40/s00536d40.cpp  ?OnRegister@CmdStateBlock28@@  005372f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00536d40/s00536d40.cpp  ??4T16@@  00537330  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00536d40/s00536d40.cpp  ?ResetVtables@H537d60@@  00537d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

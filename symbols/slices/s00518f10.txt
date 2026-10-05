@@ -1,0 +1,1 @@
+00518f10 ?Render@cPaintAmbOccJob@nSPSkinner@@UAE_NXZ  # PDB candidate name from card

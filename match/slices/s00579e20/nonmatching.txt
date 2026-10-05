@@ -1,0 +1,1 @@
+0057a960  96  complete inverse-mask compute; cl keeps the 4 globals in registers/stack, ours re-loads them

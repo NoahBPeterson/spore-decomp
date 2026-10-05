@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+0051d690  76   /Od member-init schedule / base-ctor differs; complete Bitmap ctor
+0051e100  86   /Od member address-temp release pattern differs; complete ThreadedRes dtor
+0051e340  8    /Od this/n slot assignment swap only; complete RefHolder::AddRef

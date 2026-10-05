@@ -1,0 +1,6 @@
+00527a70 78 eastl::uninitialized_copy<Elem1c*>; complete, but gi-wrapper frame (0x44) not reproduced
+00527b70 78 eastl::uninitialized_copy<Elem18*>; complete, but gi-wrapper frame (0x44) not reproduced
+00527c70 225 VectorElem40::operator=; complete but /Od frame/spill slots differ
+00527f30 918 VectorElem40::DoInsertValues; complete but byte layout differs
+005283d0 118 fixed_vector<8-byte>::assign; complete but /Od layout differs
+00528610 2 Elem40 copy ctor; only the inlined Matrix33 ctor 'this' spill slot differs (-0xc vs -0x38)

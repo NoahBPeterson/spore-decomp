@@ -1,0 +1,7 @@
+00552d00  400  PARTIAL: hashtable<uint64>::DoInsertValue rehash output bucket count not recovered
+00552f80  243  PARTIAL: hashtable<key3>::find output iterator second component not recovered
+00553090  262  PARTIAL: hashtable<key3>::find (b) output iterator second component not recovered
+005532f0  400  PARTIAL: hashtable<key3>::DoInsertValue rehash output bucket count not recovered
+00553510  242  PARTIAL: hashtable<uint64>::find output iterator second component not recovered
+00553750  400  PARTIAL: hashtable<pair>::DoInsertValue rehash output bucket count not recovered
+005538f0  221  PARTIAL: hashtable<uint32>::find output iterator second component not recovered

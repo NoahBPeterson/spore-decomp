@@ -1,0 +1,1 @@
+0054b7b0  SP::Pollen::cAssetMetadataResourceFactory::WriteResource  # pdb candidate; param_4==0x30bdee3, EA::IO::WriteUint32 fields

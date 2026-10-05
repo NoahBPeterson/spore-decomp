@@ -1,0 +1,4 @@
+0054eb10  SP::Pollen::cAssetDirectory (mutex map+set lookup, object template DB dispatch)  # dc: self+0x38 enabled, self+0x3c/0x5c/0x9c containers
+0054ed50  SP::Pollen::cAssetDirectory (lookup+erase, ObjectTemplateDB vt[0x78])  # dc: ret 0xc
+0054efb0  SP::Pollen::cAssetDirectory container clear  # dc: FUN_005543a0 x2, hashtable DoFreeNodes
+0054f0f0  job scheduler setup (SP::cJob, callback 0x68f5a0)  # dc: FUN_0068f4d0

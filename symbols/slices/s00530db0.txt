@@ -1,0 +1,10 @@
+00530db0 eastl::vector<eastl::pair<int,float>,eastl::sp_vector_allocator>::DoInsertValues  # fill-insert; calls 005311a0 and 0052c8f0/004554f0
+005311a0 uninitialized_copy<eastl::pair<int,float>>  # sret iterator; copy-construct [first,last) into dest
+00531220 CreateDistributeEffect  # operator new(0x30,"Swarm") + ctor 00531270
+00531270 cSPSkinPaintDistributeEffect::cSPSkinPaintDistributeEffect  # 2 vptrs (cComponentBase) + mpDesc/mpWorld/mComponentId/mEffectsList
+00531310 cSPSkinPaintDistributeEffect::~cSPSkinPaintDistributeEffect  # destroys mEffectsList (0x4b5440) then base vptrs
+00531360 cSPSkinPaintDistributeEffect::SetParams  # mpWorld(+0x10)=arg, mNeedsFirstTick(+0x2c)=0; ret 0xc
+00531380 cSPSkinPaintDistributeEffect::Clear  # erase mEffectsList then mpWorld=0
+005313c0 cSPSkinPaintDistributeEffect::Start  # mNeedsFirstTick(+0x2c)=1
+005313e0 cSPSkinPaintDistributeEffect::Stop  # call GetPaintSystem, Stop() each effect, erase list
+00531470 cSPSkinPaintDistributeEffect::IsRunning  # true while mNeedsFirstTick or any effect IsActive()

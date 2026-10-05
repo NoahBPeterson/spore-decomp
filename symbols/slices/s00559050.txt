@@ -1,0 +1,3 @@
+00559050 Editor::cPropertyList/cEditorResource scalar deleting destructor  # vtbl refs in body
+00559110 Editor::ObjectTemplateDB::ObjectTemplateDB  # PDB name
+00559500 Editor counter increment (field at this+0x10)  # complete, 4-byte near-miss

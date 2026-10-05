@@ -1,0 +1,3 @@
+00557c90 SP content-validation summarizer GetResType-style switch  # byte-exact
+00558080 SP::cContentValidationSummarizer::GetResType  # byte-exact
+00557fc0 Simulator::cContentValidationSummarizer::cContentValidationSummarizer  # PDB name

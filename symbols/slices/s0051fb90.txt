@@ -1,0 +1,4 @@
+00520110 FUN_00520110  # packed-value/byte unpacker
+00520140 FUN_00520140  # vector length/normalize
+00520220 FUN_00520220  # axis-orthogonal normalize
+0051fb90 FUN_0051fb90  # large helper

@@ -1,0 +1,7 @@
+005370b0  70   vector<16-byte>::resize: DoInsert/erase reserved frame differs
+00537240  77   uninitialized_copy<20-byte>: generic_iterator temp slots missing
+00537c10  45   Big50 factory: EH frame / new-expression shape (size 73 vs 124)
+00537d90  26   Host::Init: local cSPTransform construction schedule differs
+00537dc0  255  cSPTransform::operator=: condition tree / float compare schedule differs
+00537ea0  13   Host::IsUsable: minor /Od slot difference
+00537ef0  46   Host::Set: local cSPTransform construction/copy schedule differs

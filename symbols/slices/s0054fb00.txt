@@ -1,0 +1,14 @@
+0054fb00  SP::Pollen::cAssetDirectory::RestoreMappings  # pdb anchor
+00550210  SP::Pollen::cAssetDirectory (map find + GetSaveArea(vt[0x40]))  # dc
+005502b0  SP::Pollen::cAssetDirectory::PurgePendingAssets  # pdb candidate (caller-scored)
+00550450  Pollinator::cAssetMetadata::cAssetMetadata  # pdb anchor; vtbl cAssetMetadata
+005506c0  Pollinator::cAssetMetadata::~cAssetMetadata  # dc: vtbl resets cPropertyList/cEditorResource
+00550740  Object::Cast  # pdb anchor; type tags 0x30bdee3/0x2269ed1/0xee3f516e
+005508a0  cAssetMetadata::GetAssetKey (int64 at +0x68)  # dc
+00550910  cAssetMetadata::GetX (vector<ptr> at +0x98)  # dc
+005509e0  cAssetMetadata::GetY (vector at +0xac)  # dc
+00550a60  cAssetMetadata::GetZ (vector<uint> at +0xc0)  # dc
+00550aa0  cAssetMetadata::HasTag (map at +0xc0)  # dc
+00550b00  cAssetMetadata::tag find  # dc: FUN_00554020(this+0xc0)
+00550b30  cAssetMetadata::author find  # dc: FUN_005540d0(this+0xc0)
+00550b60  cAssetMetadata::SetKey (int64 at +0x18 from FUN_005418c0)  # dc

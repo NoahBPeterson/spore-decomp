@@ -1,0 +1,7 @@
+00530db0  507  vector DoInsertValues: reimplemented with plain copy loops (orig uses inlined memmove/fill helpers)
+005311a0  45   uninitialized_copy: generic_iterator temp slots missing (orig 122 vs mine 77)
+00531270  20   cSPSkinPaintDistributeEffect ctor: /Od vtable-store temp slot schedule differs
+00531310  38   dtor: EH-free body but /Od temp slot schedule differs
+00531380  37   Clear: /Od temp slot schedule differs
+005313e0  82   Stop: loop/deref temp slots and GetPaintSystem path differ
+00531470  96   IsRunning: iterator/temp slots differ

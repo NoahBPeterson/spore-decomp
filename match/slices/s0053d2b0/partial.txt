@@ -1,0 +1,1 @@
+0053d2b0  -1  skin-paint apply routine partial; 3688-byte body only skeletonised (hash-table walk + paint emission omitted)

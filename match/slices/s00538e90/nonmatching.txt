@@ -1,0 +1,10 @@
+00538e90  41  cSPSkinPaintParticledelayCommand::Execute complete; /Od local slot order differs (this/pDesc/count placement)
+00538fe0  41  cSPSkinPaintParticlelifeCommand::Execute complete; /Od local slot order differs
+00539130  26  cSPSkinPaintParticlecurveCommand::Execute complete; slot order + original has a dead `xor edx,edx;jne` block after the random-flag if
+005391c0  361  cSPSkinPaintParticlealignCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+005394e0  278  cSPSkinPaintParticleinitDirCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539720  324  cSPSkinPaintParticleattractCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539980  326  cSPSkinPaintParticlerestrictCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539bf0  13  cSPSkinPaintParticlediffuseColorCommand::Execute complete; only `this` vs pDesc slot swap (this forced below all named locals)
+00539c70  13  cSPSkinPaintParticlespecularColorCommand::Execute complete; only `this` vs pDesc slot swap
+00539cf0  13  cSPSkinPaintParticlebumpColorCommand::Execute complete; only `this` vs pDesc slot swap

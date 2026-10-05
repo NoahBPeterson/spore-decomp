@@ -1,0 +1,2 @@
+00529280 StateBits::Set  # card decompile: builds a 4-bit flag word from four unsigned char args
+00529350 rw::graphics::SetRenderState  # card disasm: sets dirty bit 0x16fa38c and value 0x16f91e0

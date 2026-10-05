@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+0051c470  344  /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor
+0051d010  83   /Od base-vtable restore + inline release schedule differ; complete PaintSystem dtor
+0051d270  144  /Od erase tag-arg slots / symbol size mismatch; complete AutoRefVector::erase

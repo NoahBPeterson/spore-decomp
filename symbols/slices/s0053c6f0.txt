@@ -1,0 +1,6 @@
+0x0053c6f0 `anonymous namespace'::cPaintCopyVariableCommand::Execute
+0x0053c930 `anonymous namespace'::cPaintAddVaryCommand::Execute  # vary/offset options over eval list
+0x0053cca0 ArgScript::PaintVarModifier::PaintVarModifier  # PDB name
+0x0053cd80 eastl::vector<Entry20>::insert  # 0x14 stride
+0x0053d1a0 eastl::uninitialized_copy<Entry20>  # out-param, 0x14 stride
+0x0053d230 eastl::uninitialized_fill_n<Entry20>  # 0x14 stride

@@ -1,0 +1,7 @@
+0052a400 nSPSkinner::CreatePlaceholderTextures  # PDB caller-scored; 2x2 RGBA rasters
+0052a700 LoadSkinnerMesh  # card; cMeshClusterer + normalized_safe; caller of 0x524a50
+0052ae30 vector<pair<int,float>>::resize  # card decompile
+0052aeb0 SkinBoneWeights  # card decompile
+0052b060 AccumBoneWeight  # card decompile
+0052b170 NormalizeBoneWeights  # card decompile
+0052b220 CopyTopBoneWeights  # card decompile

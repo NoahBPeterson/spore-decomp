@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00577130/s00577130.cpp  ?SetTorsoBlock@cAppModeEditorBase@SP@@QAEXPAXD@Z  00577580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00577130/s00577130.cpp  ?HasSkin@cAppModeEditorBase@SP@@QAE_NXZ           00577620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

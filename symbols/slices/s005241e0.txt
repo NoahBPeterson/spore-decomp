@@ -1,0 +1,5 @@
+005241e0 ?ParticleTickJobCallback@cPaintSystem@nSPSkinner@@  # PDB name
+005247b0 FUN_005247b0  # model table indexer (stride 0x40)
+005247d0 FUN_005247d0  # packed model-type lookup
+00524870 FUN_00524870  # pair push_back into +0x94 vector
+005248a0 FUN_005248a0  # helper

@@ -1,0 +1,9 @@
+005300d0  148  Read description: /Od temp schedule of the eight ReadInt32 calls differs
+005302b0  82   ReadString: helper frame (orig 0x14 vs 0x4) and loop shape differ
+00530310  221  Write description: /Od write-helper temp schedule differs
+005306c0  67   push_back: /Od local slot order (this/nRequired/nCapacity) differs
+00530770  127  vector copy ctor: EH frame + uninitialized_copy shape (mine 146 vs orig 241)
+00530870  407  vector operator=: eastl::copy tag locals / branch shapes (mine 456 vs orig 757)
+00530b70  70   vector resize: DoInsertValues reserved frame differs
+00530c80  127  vector erase: missing eastl::copy three tag locals
+00530d20  62   vector DoAllocateCopy: uninitialized_copy frame differs

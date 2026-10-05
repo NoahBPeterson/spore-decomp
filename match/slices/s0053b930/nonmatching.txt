@@ -1,0 +1,5 @@
+0053b930  -1  RegisterPaintEvalCommands<...> complete; 0x13 PaintVariable objects + modifier + compareNormal/comparePosition
+0053bc90  98  vector<int>::Read complete
+0053bd00  82  vector<int>::Write complete
+0053c480  -1  Dot3 complete (x87 dot product)
+0053c4e0  23  PaintResetModifier complete (mCurrentModifier = 0xff)

@@ -1,0 +1,6 @@
+00560c30 SP::cSPObjectTemplateDB::AddAsset  # grows mAssetList and initialises an AssetInfo
+00560d20 SP::AssetInfoKeyEqual  # compares instance id and group id only
+00560d60 SP::cSPObjectTemplateDB::RegisterAsset  # PDB caller-scored candidate
+00561090 SP::cEditorResource::cEditorResource  # sets the multiple vtables of the resource wrapper
+00561150 SP::cEditorResourceThunk::f  # virtual returning 0
+005611b0 SP::cEditorResource::~cEditorResource  # destroys the wrapper's vectors and vtables

@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005266f0/s005266f0.cpp  ?Free@FixedVec8@@QAEXXZ  00526a40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005266f0/s005266f0.cpp  ?DoPopFront@DequeElem48@@QAEXXZ  00527110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005266f0/s005266f0.cpp  ??0VectorElem40@@QAE@ABU0@@Z  00527150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005266f0/s005266f0.cpp  ??0Elem38@@QAE@ABU0@@Z  00527440  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

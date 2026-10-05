@@ -1,0 +1,3 @@
+# <va>  <diff-bytes>  <reason>
+0051e5b0  1723  `anonymous namespace'::DeviceRestore; entry skeleton only
+0051ec70  1083  nSPSkinner::cPaintSystem::Shutdown; entry skeleton only
