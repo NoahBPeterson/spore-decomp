@@ -1,0 +1,3 @@
+00570140 eastl stream element copy  # copies 8-byte key + float + wstring assign
+005702c0 vector<...>::DoDestroyValues range  # destroys+deallocates stride 0x1c
+00570870 Big::Init  # two sub-inits + zero 3-float vector + flag/value

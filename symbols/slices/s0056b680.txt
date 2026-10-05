@@ -1,0 +1,6 @@
+0056b680 SP::Traits::cEditorPartCount::ExtractTraits  # pdb caller-scored name
+0056b7d0 SP::Traits::cEditorPartCount::DescribeTraits  # pdb caller-scored name
+0056b9e0 SP::Traits::cRigBlockTag::ExtractTraits  # pdb caller-scored name
+0056bd30 SP::Traits::cRigBlockTag::DescribeTraits  # pdb caller-scored name
+0056bfa0 SP::Traits::cTextureTag::ExtractTraits  # pdb caller-scored name
+0056c2d0 SP::Traits::cTextureTag::DescribeTraits  # pdb caller-scored name

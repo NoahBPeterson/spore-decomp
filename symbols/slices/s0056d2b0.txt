@@ -1,0 +1,5 @@
+0056d2b0 SP::Traits::cRegionColorClassifier::DescribeTraits  # pdb anchor name
+0056d810 SP::Traits::cBaseColorClassifier::DescribeTraits  # pdb anchor name
+0056dbe0 SP::Traits::cTextureClassifier::DescribeTraits  # pdb anchor name
+0056dec0 Vector3::SetZero  # zeroes 3 dwords
+0056def0 hashtable Find  # returns bool, out param

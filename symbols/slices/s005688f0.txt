@@ -1,0 +1,11 @@
+00569260 DequeBase::Deallocate  # call EASTL_allocator_deallocate; thiscall ret 4
+00569290 DequeBase::FreeSubarrays  # loops calling Deallocate over pair** range
+005692d0 DequeIter::operator--  # pre-decrement across subarray (stride 8, subarray 32)
+00569340 DequeIter::SetSubarray  # sets mpNode/mpFirst/mpLast from T** node
+00568f00 deque<pair<int,int>>::push_front  # fast path then DoPushFront
+00568f70 deque<pair<int,int>>::push_back  # fast path then DoPushBack
+00568ff0 deque<pair<int,int>>::insert  # iterator + const value&, ret 0x18
+005688f0 eastl::vector<V12>::insert  # position,first,last; stride 0xc
+00568d10 eastl::vector<int>::DoAssign  # first,last,false_type; stride 4
+00569460 eastl::vector<pair<int,int>>::DoAssign  # first,last,false_type; stride 8
+00569380 eastl::lower_bound  # deque iterator binary search, compares float key

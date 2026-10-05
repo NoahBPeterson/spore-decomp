@@ -1,0 +1,6 @@
+0056d2b0  917  cRegionColorClassifier::DescribeTraits; partial stub
+0056d650  437  unnamed helper; partial stub
+0056d810  628  cBaseColorClassifier::DescribeTraits; partial stub
+0056da90  332  unnamed helper; partial stub
+0056dbe0  734  cTextureClassifier::DescribeTraits; partial stub
+0056def0  133  hashtable lookup helper; partial stub

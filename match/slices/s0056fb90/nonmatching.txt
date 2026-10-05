@@ -1,0 +1,2 @@
+0056fe60  2  lower_bound over stride-0x1c elements (thiscall operator<); complete, one /Od temp slot differs
+00570140  53  stream element copy constructor (Key+float+wstring assign); complete, /Od address-local shape differs

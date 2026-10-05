@@ -1,0 +1,9 @@
+0056c570  242  cAuthorClassifier::ExtractTraits; partial stub
+0056c670  344  cAuthorClassifier::DescribeTraits; partial stub
+0056c7d0  316  cMetadataSummarizer::ExtractParameters; partial stub
+0056c910  541  cAssetMetadata::SetMetadata; partial stub
+0056cb30  276  unnamed helper; partial stub
+0056cc50  389  cFeedClassifier::DescribeTraits; partial stub
+0056cde0  392  cSwatchColorLookup::Init; partial stub
+0056cf70  258  eastl::vector<float> nearest-scan helper; partial stub
+0056d080  555  cTextureClassifier::ExtractTraits; partial stub

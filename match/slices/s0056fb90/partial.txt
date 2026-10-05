@@ -1,0 +1,9 @@
+0056fb90  712  eastl hashtable helper; partial stub
+0056fee0  602  eastl hashtable helper; partial stub
+00570230  139  unnamed helper; partial stub
+005702c0  112  vector range destroy; partial stub
+00570330  202  unnamed helper; partial stub
+00570400  120  unnamed helper; partial stub
+00570480  52   global-singleton insert dispatch; partial stub
+005704c0  930  eastl hashtable/vector helper; partial stub
+005708d0  220  unnamed helper; partial stub

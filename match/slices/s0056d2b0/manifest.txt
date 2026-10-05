@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0056d2b0/s0056d2b0.cpp  ?SetZero@Vector3@@  0056dec0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,8 @@
+0056c570 SP::Traits::cAuthorClassifier::ExtractTraits  # pdb caller-scored name
+0056c670 SP::Traits::cAuthorClassifier::DescribeTraits  # pdb caller-scored name
+0056c7d0 SP::cMetadataSummarizer::ExtractParameters  # pdb caller-scored name
+0056c910 SP::Pollen::cAssetMetadata::SetMetadata  # pdb caller-scored name
+0056cc50 SP::Traits::cFeedClassifier::DescribeTraits  # pdb anchor name
+0056cde0 SP::Traits::cSwatchColorLookup::Init  # pdb callee-scored name
+0056cf70 eastl::vector<float,eastl::sp_vector_allocator>::operator[]  # pdb callee-single name
+0056d080 SP::Traits::cTextureClassifier::ExtractTraits  # pdb caller-scored name

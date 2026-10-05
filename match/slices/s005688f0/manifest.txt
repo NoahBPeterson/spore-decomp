@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s005688f0/s005688f0.cpp  ?Deallocate@DequeBase@@  00569260  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005688f0/s005688f0.cpp  ??FDequeIter@@  005692d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005688f0/s005688f0.cpp  ?SetSubarray@DequeIter@@  00569340  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

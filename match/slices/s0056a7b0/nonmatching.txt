@@ -1,0 +1,2 @@
+0056aba0  372  Box3::AddPoint (AABB expand); complete, /Od operator[] slot shape differs
+0056b080  138  cBlockTypePercentClassifier::ExtractTraits; complete, /Od loop rotation/local shape differs

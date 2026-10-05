@@ -1,0 +1,6 @@
+0056a7b0  1002  cTallnessClassifier::ExtractTraits; partial stub (hashtable/string classifier body omitted)
+0056ad20  401  cTallnessClassifier::DescribeTraits; partial stub (serialization omitted)
+0056aec0  246  string-metric accumulate helper; partial (metric accumulation approximated, string path omitted)
+0056b120  444  cBlockTypePercentClassifier::DescribeTraits; partial stub
+0056b2e0  348  cEditorRigBlockType::ExtractTraits; partial stub (PropertyManager/GetPropertyAsKey omitted)
+0056b440  576  cEditorRigBlockType::DescribeTraits; partial stub

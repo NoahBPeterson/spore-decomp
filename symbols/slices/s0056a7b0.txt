@@ -1,0 +1,10 @@
+0056a7b0 SP::Traits::cTallnessClassifier::ExtractTraits  # pdb_names.json anchor
+0056aba0 Box3::AddPoint  # AABB expand over float[3] min/max (offsets 0/0xc)
+0056ad20 SP::Traits::cTallnessClassifier::DescribeTraits  # pdb_names.json anchor
+0056aec0 eastl::basic_string metric accumulate  # fabs<>eps then string ops
+0056afc0 basic_string<wchar_t> empty init  # sets ptr/end/cap from empty static
+0056b020 wstring copy-init helper  # calls WString_AllocateSelf
+0056b080 SP::Traits::cBlockTypePercentClassifier::ExtractTraits  # pdb vtable-slot name
+0056b120 SP::Traits::cBlockTypePercentClassifier::DescribeTraits  # pdb candidate
+0056b2e0 SP::Traits::cEditorRigBlockType::ExtractTraits  # pdb caller-scored name
+0056b440 SP::Traits::cEditorRigBlockType::DescribeTraits  # pdb caller-scored name

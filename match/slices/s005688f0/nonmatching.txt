@@ -1,0 +1,8 @@
+005688f0  1053  eastl::vector<V12>::insert(position,first,last); complete, /Od slot layout differs
+00568d10  476  eastl::vector<int>::DoAssign(first,last,false_type); complete, /Od slot layout differs
+00568f00  90  deque<pair>::push_front; complete, /Od frame/slot layout differs
+00568f70  74  deque<pair>::push_back; complete, /Od frame/slot layout differs
+00568ff0  483  deque<pair>::insert(position,value); complete (shift implementation), layout differs
+00569290  46  deque<pair>::FreeSubarrays(first,last); complete, this/temp slot order differs
+00569380  204  lower_bound over deque iterator; complete, iterator-arithmetic shape differs
+00569460  492  eastl::vector<pair>::DoAssign(first,last,false_type); complete, /Od slot layout differs

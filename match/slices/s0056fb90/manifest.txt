@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0056fb90/s0056fb90.cpp  ?Init@Big@@  00570870  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056fb90/s0056fb90.cpp  ?LowerBoundPair@@  005701b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

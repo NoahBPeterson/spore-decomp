@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0056a7b0/s0056a7b0.cpp  ?InitEmpty@WStrHolder@@  0056afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056a7b0/s0056a7b0.cpp  ?CopyInit@WStrSrc@@  0056b020  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
