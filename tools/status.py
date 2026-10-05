@@ -26,7 +26,10 @@ for f in glob.glob(W("match/slices/*/nonmatching.txt")) + glob.glob(W("match/sli
     for line in open(f):
         p = line.split("#", 1)[0].split()
         if p:
-            va = int(p[0], 16)
+            try:
+                va = int(p[0], 16)
+            except ValueError:
+                continue  # continuation/comment line without a leading VA
             (partial if (f.endswith("partial.txt") or _PARTIAL.search(line)) else nonmatching).add(va)
 clones = set()
 if os.path.exists(W("match/clones.txt")):
