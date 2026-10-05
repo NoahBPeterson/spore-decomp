@@ -1,0 +1,18 @@
+007f5300 vtable region; PDB candidate Sims3::UI::IMEComposition::SetCompositionString
+007f53d0 UTFWin icon-window init flag; calls Window::Initialize
+007f5410 AsInterface-style cast by 3 message/type ids
+007f54b0 slider position setter (ms -> fraction)
+007f54e0 cSPUIAnimatedIconWin timer tick
+007f55f0 SIMS3 event handler (0x16 / 0xe cases)
+007f58e0 cSPUIAnimatedIconWin destructor
+007f5a60 drawable render (RenderContext Begin2D/End2D)
+007f5c20 UTFWin::cSPUIAnimatedIconWin::cSPUIAnimatedIconWin constructor
+007f5eb0 EA::UTFWin::Color::Lerp
+007f5f70 array destroy loop, stride 0x8c
+007f6040 SPUICreateAnimationTimerRamp
+007f60d0 cSPUIBehaviorTimeFunctionSmoothRamp factory
+007f6170 cSPUIBehaviorTimeFunctionDampedPeriodic factory
+007f6210 cSPUIAnimator::RemoveAnimation
+007f62c0 cSPUIAnimator::HasAnimation
+007f6340 cSPUIAnimator::Empty
+007f63b0 cSPUIAnimator::Update

@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007ffc70/s007ffc70.cpp  ?ScalarDtor@C_800060@@QAEPAXE@Z  00800060  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_8005f0@@YAXXZ                008005f0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_8008b0@@YGPAXHPAX@Z          008008b0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_800ea0@@YGPAXHPAX@Z          00800ea0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_800ef0@@YGPAXHPAX@Z          00800ef0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_8010a0@@YGPAXHPAX@Z          008010a0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_801100@@YGPAXHPAX@Z          00801100  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Dtor@C_8011f0@@QAEXXZ          008011f0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Thunk@C_801210@@QAEPAXXZ       00801210  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Ctor@C_801280@@QAEPAXXZ        00801280  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_801330@@YGHPAXI@Z            00801330  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Show@C_801360@@QAEXXZ          00801360  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Hide@C_801360@@QAEXXZ          00801380  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Set40@C_8013d0@@QAE_NE@Z       008013d0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?f_801420@@YGXHH@Z              00801420  /O2 /MD /Gy /TP /arch:SSE2
+slices/s007ffc70/s007ffc70.cpp  ?Run@C_801950@@QAE_NH@Z         00801950  /O2 /MD /Gy /TP /arch:SSE2

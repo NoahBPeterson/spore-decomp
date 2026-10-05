@@ -1,0 +1,9 @@
+# va Name  # evidence
+007fa780 EA::UTFWin::SerMarshaller<cISPUIBehaviorPredicate>::Read  # dev-PDB name (00feb420)
+007faad0 cSPUIBehaviorTimeFunction::Evaluate  # method on the class at +0x3a dirty/+0x39 negated/+0xc duration/+0x3c mTime, vcall 0x58
+007faeb0 cSPUIBehaviorTimeFunction::GetEaseValue  # +0x18 easeIn/+0x1c easeOut; writes param back; called by ctor
+007fae90 cSPUIBehaviorTimeFunction::Ease  # same members, returns eased f
+007fb000 cSPUIBehaviorValueInterpolator::~cSPUIBehaviorValueInterpolator  # dev-PDB name (00fec060), 3-vptr dtor
+007fb110 cSPUIWinProc::~cSPUIWinProc  # 4 subobject vtables + AutoRefCount<IWindow> at +0x14, matches cSPUIWinProc layout
+007fb3b0 cSPUIBehaviorActionBase::SetEnabled  # uses mPredicates[4] at +0x14, mLastEvaluatedPredicateCount +0x34, vcall 0x3c
+007fb480 cSPUIBehaviorEventBase::SetActive  # MI sub-object (this=eventBase+0x18): predicates at +0x1c, actions at +0x3c

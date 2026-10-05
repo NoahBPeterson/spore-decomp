@@ -1,0 +1,8 @@
+007f9d90 cSPUIBehaviorEventBase::AddPredicate  # PDB symbol name
+007f9e20 cSPUIBehaviorEventBase::AddAction  # PDB symbol name
+007f9ee0 cSPUIBehaviorEventBase::RemovePredicate  # PDB symbol name
+007f9f60 cSPUIBehaviorEventBase::RemoveAction  # PDB symbol name
+007f9fe0 cSPUIBehaviorEventBase::RemoveAllPredicates  # PDB symbol name
+007fa060 cSPUIBehaviorEventBase::RemoveAllActions  # PDB symbol name
+007fa180 cSPUIBehaviorEventBase::AsInterface  # PDB symbol name
+007fa1d0 cSPUIBehaviorEventBase::SerUpdate  # PDB symbol name

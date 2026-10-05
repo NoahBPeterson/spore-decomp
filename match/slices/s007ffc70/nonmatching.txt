@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00801450 39  local-slot-order-mismatch (complete)
+00801980 2   arg-home-slot-reuse (complete)
+008016e0 268 member-float/SSE-shape (complete)
+008017f0 276 member-vtable-sequence (complete)

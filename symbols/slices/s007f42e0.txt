@@ -1,0 +1,8 @@
+007f4500 Sims3::UI::IMEProxy::StartCandidateList  # PDB name in card
+007f4710 Sims3::UI::IMEService::Init  # PDB name in card
+007f4860 Sims3::UI::IMEServiceShutdown  # PDB name in card
+007f4920 Sims3::UI::IMEComposition::IMEComposition  # vtable/field offsets match IMEComposition layout
+007f50f0 Sims3::UI::IMEProxy::StartComposition  # PDB name in card
+007f5220 Sims3::UI::IMEProxy::HandleMessage  # PDB candidate in card
+007f48d0 WideFixedBuf::WideFixedBuf  # layout matches 0x0042F9D0 append
+007f4630 Sims3::UI::IMEComposition::SetFlag  # calls embedded +0x208 object vtable slot 0x60

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f42e0/s007f42e0.cpp  ?SetFlag@IMECompositionS@@QAEXH@Z  007f4630
+slices/s007f42e0/s007f42e0.cpp  ?IMEServiceShutdown@@YAXXZ  007f4860
+slices/s007f42e0/s007f42e0.cpp  ?HandleMessage@IMEProxyS@@QAE_NIPAX@Z  007f5220

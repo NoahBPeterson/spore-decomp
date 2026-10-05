@@ -1,0 +1,2 @@
+007f42e0  533  best-effort Update; the EASTL hashtable lookup and message-box paths are not reproduced faithfully
+007f49b0  1855  stub only; the float/typesetter candidate-list layout routine is not reproduced

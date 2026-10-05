@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007fb7b0/s007fb7b0.cpp  ?Ctor@C_7fb880@@QAEPAXXZ   007fb880  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?Ctor@C_7fba00@@QAEPAXXZ   007fba00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?Ctor@C_7fba80@@QAEPAXXZ   007fba80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?Ctor@C_7fbb20@@QAEPAXXZ   007fbb20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?Dtor@C_7fbce0@@QAEXXZ     007fbce0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?GetClassId@C_7fbe70@@QAEHXZ  007fbe70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fb7b0/s007fb7b0.cpp  ?f@C_7fc860@@QAEXHH@Z      007fc860  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

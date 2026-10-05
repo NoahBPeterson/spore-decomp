@@ -1,0 +1,4 @@
+# va diff reason
+007fb440 6 C_7fb440::f — complete; `(char*)this - 4` base store makes cl reload `this` via a scratch reg for the vcall instead of reusing ecx/edx like the sibling binds at 007faa30/007fb250/007fb2e0
+007fab80 282 C_TF::SetNegated — complete; the finite-difference ease search (vcall 0x18/0x60, fabsf loop, 0.001f epsilon, -0.47f step) has a different branch/float schedule than the original /Od code
+007fb480 67 C_TF-subobject "set active" — complete behaviour (MI subobject method at real+0x18; predicate combine, per-action vcalls 0x18/0x1c, event release, callback) but 406 bytes vs original 473

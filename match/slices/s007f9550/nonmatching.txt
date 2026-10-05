@@ -1,0 +1,15 @@
+007f97a0 95  complete interface query; cl switch-tree lowering differs (shared vs per-case case bodies)
+007f9800 95  complete interface query; cl switch-tree lowering differs
+007f9890 153  complete interface query (this/this+4 cases); cl switch-tree lowering differs
+007f99e0 95  complete interface query; cl switch-tree lowering differs
+007f9bb0 95  complete interface query; cl switch-tree lowering differs
+007f9a40 68  complete slot refresh loop; /Od local slot order and call schedule differ
+007f9ae0 36  complete slot setter loop; /Od local slot order differs
+007f9c10 50  complete slot add loop; /Od local slot order differs
+007f9d00 11  complete slot remove-all loop; /Od local slot order (this at ebp-8 vs ebp-0x10) differs
+007f9fe0 66  complete remove-all-predicates loop; /Od local slot order / repeated getter calls differ
+007fa060 66  complete remove-all-actions loop; /Od local slot order / repeated getter calls differ
+007fa150 35  complete flags query; extra local for the external-call result differs
+007fa180 60  complete AsInterface; cl hoists the id compare before the branch vs original local-temp form
+007f9550 342  complete Eval clamp/scale routine; float branch scheduling differs
+007fa390 275  complete message broadcast; the id filter/conditional relay reconstruction differs

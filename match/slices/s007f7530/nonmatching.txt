@@ -1,0 +1,11 @@
+007f7830 5  complete; vtable-store / placement-address scheduling differs from original
+007f78c0 47  complete; loop register allocation (ebx/edi vs ebp/esi) differs
+007f7a60 157  complete do_copy of cAnimInfo; inline element-copy codegen differs (register schedule)
+007f7b30 141  complete forward copy of cAnimationInfo; register schedule differs
+007f7c00 162  complete copy_backward of cAnimationInfo; register schedule differs
+007f7ce0 143  complete fill/copy of cAnimInfo from one source; register schedule differs
+007f7db0 158  complete backward fill/copy of cAnimInfo; register schedule differs
+007f80d0 79  complete Position wrapper; cl materializes Point2DT temp in frame (original builds it in the outgoing arg area)
+007f8140 78  complete Rotation wrapper; cl materializes vector temp in frame (original builds it in the outgoing arg area)
+007f8350 95  complete vector copy-ctor; allocator tag/calling-convention codegen differs
+007f8400 245  complete vector operator=; allocation/copy call scheduling differs

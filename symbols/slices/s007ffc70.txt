@@ -1,0 +1,23 @@
+# va <Name>  # evidence
+007ffc70 cSPUIBehaviorPredicateWinState::Evaluate  # vtable 0x14165B0 slot 6; switch on cSPUIBehaviorPredicateWinState::mWinStateQuery (+0x18)
+00800060 cSPUIBehaviorPredicateWinState::~cSPUIBehaviorPredicateWinState  # vtable 0x14165B0 slot 2; resets IWinProc/RefCount vptrs, releases mpQueryWindow, base dtor
+008005f0 UTFWin::RegisterUIBehaviors  # one-time init guarded by g_164BBD9; registers 29 handler globals with the messaging server
+008008b0 UTFWin::CreateFrameSequencer  # factory: alloc 0x60 "UTFWin/cSPUIFrameSequencer", construct, set resource id 0x105A94B
+00800ea0 UTFWin::CreateBehaviorWinEventBase  # factory: alloc 0x8C "UTFWin/cSPUIBehaviorWinEventBase", ctor(10,max,0)
+00800ef0 UTFWin::CreateBehaviorWinBoolStateEvent  # factory: alloc 0x90 "UTFWin/cSPUIBehaviorWinBoolStateEvent", ctor(1,10,max,0)
+008010a0 UTFWin::CreateBehaviorTimeFunctionSmoothRamp  # factory: alloc 0x48 "UTFWin/cSPUIBehaviorTimeFunctionSmoothRamp"
+00801100 UTFWin::CreateBehaviorTimeFunctionDampedPeriodic  # factory: alloc 0x50 "UTFWin/cSPUIBehaviorTimeFunctionDampedPeriodic"
+008011f0 cSPUICursorAttachmentLayout::~cSPUICursorAttachmentLayout  # PDB name; vtable 0x1416EC4
+00801210 cSPUICursorAttachmentLayout::FindWindowByIDAdjustor  # vtable 0x1416EC4 slot 6; adjusts this by -0x6C then calls cSPUILayout::FindWindowByID
+00801280 cSPUICursorAttachmentLayout::cSPUICursorAttachmentLayout  # PDB type cSPUICursorAttachmentLayout; vtable 0x1416EC4 at +0x78
+00801330 ResKey_Init  # writes 0x2393756 into a key object
+00801360 cSPUILayoutCollection::Show  # refcount at +0x58, calls AppSystem vtable +0x40
+00801380 cSPUILayoutCollection::Hide  # refcount at +0x58
+008013d0 CanvasVisibilitySetter  # bool at +0x40; calls SP::Canvas vtable +0x78
+00801420 ScreenToWindowInt  # converts two ints to float and calls SPUIHelpers (0x804F10)
+00801450 ScreenToWindowInt2  # calls 0x804ED0 then truncates two floats to int*
+008014c0 cSPUICursorAttachmentLayout::Initialize  # creates "UI/UI/Cursor info parent window", sets flags, adds to world main window
+008016e0 CursorAttachmentLayout::SetPosition  # offsets +0x48/+0x4C, clamps into world main window rect
+008017f0 CursorAttachmentLayout::SetWindow  # offsets +0x48/+0x4C, refcount swap
+00801950 CursorAttachmentLayout::IsSomething  # offsets +0x50/+0x54, calls 0x806A60(x,y,arg,-1)
+00801980 CursorAttachmentLayout::SetEnabled  # bool at +0x44, window at +0x50

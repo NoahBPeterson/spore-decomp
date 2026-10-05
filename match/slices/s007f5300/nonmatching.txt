@@ -1,0 +1,19 @@
+007f5300  192  complete; byte-copy loop and vtable call schedule differ
+007f53d0  41  complete; this/vtable call register allocation differs
+007f5410  40  complete; tail AsInterface cast shape differs
+007f5490  15  complete; original spills the float to the stack before cvttss2si
+007f54e0  175  complete; stopwatch/timer register allocation differs
+007f55b0  54  complete; bool-to-int flag store/load differs
+007f5710  50  complete; percent->index math and tail call schedule differ
+007f5990  2  complete; vtable slot loaded into eax instead of edx
+007f59e0  2  complete; vtable slot loaded into eax instead of edx
+007f5a60  289  complete; render sprite/UV setup float ordering differs
+007f5c20  85  complete; constructor vtable-store scheduling differs
+007f5d00  339  complete; drawable factory branch layout differs
+007f5eb0  164  complete; channel-lerp expression evaluation order differs
+007f5ff0  7  complete; member load hoisted above the vtable stores
+007f6170  92  complete; ctor/call argument forms differ (mixed int/float params)
+007f6210  130  complete; loop strength-reduction/register allocation differs
+007f62c0  111  complete; loop strength-reduction/register allocation differs
+007f6340  101  complete; loop register allocation differs
+007f63b0  -  complete; float timer/vector loop schedule differs

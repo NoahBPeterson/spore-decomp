@@ -1,0 +1,10 @@
+007f85b0 305  PARTIAL: vector insert_n reconstructed from the decompile; allocation/copy paths approximated
+007f89f0 349  PARTIAL: vector insert(pos,value) reconstructed; self-referencing value and copy paths approximated
+007f8b50 166  PARTIAL: vector resize built on the approximate insert_n; default-element path approximated
+007f8c20 197  PARTIAL: cSPUIAnimator destructor reconstructed; element teardown/vector-erase path simplified
+007f8d10 203  PARTIAL: cSPUIAnimator::AddAnimation reconstructed; find/insert/assign paths approximated
+007f8f00 176  PARTIAL: cSPUIAnimator clear-all reconstructed; element teardown/erase path simplified
+007f8fd0 300  PARTIAL: cSPUIAnimator append reconstructed from decompile; element copy/dtor path approximated
+007f90f0 300  PARTIAL: vector reserve reconstructed; relocation of existing elements approximated
+007f9230 203  PARTIAL: animator advance/state machine reconstructed; Empty()/erase paths approximated
+007f9340 300  PARTIAL: factory reconstructed from decompile; embedded cSPUIAnimationSequence construction approximated

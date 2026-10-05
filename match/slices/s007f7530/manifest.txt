@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetShadeAlpha@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  007f7530  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetShade@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  007f75d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateObjectAnimation@@YAPAUAnimRaw@@PAU1@PAXPAUEA_Variant@@IHPAUcAnimationTimer@@22H@Z  007f7740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetScale@@YAPAUAnimRaw@@PAU1@PAXMMMH@Z  007f81d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetSize@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f8230  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetShadeAlphaW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f8290  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ?SPUICreateWindowAnimationTargetShadeW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f82f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ??0MissionCardAnimator@@QAE@XZ  007f83e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ??4AnimInfo88B@@QAEPAU0@PAU0@@Z  007f7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f7530/s007f7530.cpp  ??4AInfo8c@@QAEPAU0@PAU0@@Z  007f7970  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f9550/s007f9550_od.cpp  ?Sub10@Ev@@QAEPAXXZ  007f9860  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?Set14@Ev@@QAE_NH@Z  007f99c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?Sub0C@Ev@@QAEPAXXZ  007f9b50  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?Test1@Ev@@QAE_NXZ  007f9b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?RemoveB@Cont@@QAE_NPAX@Z  007f9c90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?RemovePredicate@Iface@@QAE_NPAX@Z  007f9ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?RemoveAction@Iface@@QAE_NPAX@Z  007f9f60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?False@Ev@@QAE_NXZ  007fa120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?Call93a0@Ev@@QAEXXZ  007fa130  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?SetGlobal@Ev@@QAEPAU1@XZ  007fa350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  ?ClearGlobal@Ev@@QAEXXZ  007fa370  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  _FUN_007fa4c0  007fa4c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007f9550/s007f9550_od.cpp  _FUN_007fa4f0  007fa4f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

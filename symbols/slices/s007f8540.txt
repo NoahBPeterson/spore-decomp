@@ -1,0 +1,11 @@
+007f8540 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::erase  # PDB symbol name
+007f87e0 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::erase  # PDB symbol name
+007f8b50 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::resize  # PDB symbol name
+007f8c20 cSPUIAnimator::~cSPUIAnimator  # PDB symbol name
+007f8d10 cSPUIAnimator::AddAnimation  # PDB symbol name
+007f93f0 AnimatorTimer::Reset  # thiscall stores +0x3c = 0.0f
+007f9430 AnimatorTimer::AddTime  # thiscall +0x3c += float arg
+007f9460 AnimatorTimer::Set  # vfn at vtable+0x5c, sets +0x3a
+007f94b0 AnimatorTimer::Get  # vfn at vtable+0x5c, reads float out
+007f9500 AnimatorTimer::Has  # vfn at vtable+0x5c, bool result
+007f9530 AnimatorTimer::Clear  # vfn at vtable+0x60

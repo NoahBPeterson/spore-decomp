@@ -1,0 +1,6 @@
+# va diff reason
+007fb7b0 120 cleanup/initialiser — release+delete path and plugin broadcast block approximated; delete-flag branch simplified
+007fbd50 63 vector/vector_map initialiser — eastl allocator/tag construction approximated
+007fbdb0 117 uninitialized_copy-like — allocator/source argument roles approximated
+007fc330 187 plugin server registration/plugin-proc creation — vtable slots and call order approximated
+007fc4b0 242 plugin message handler (0x11/0x12) — refcount slot updates and vtable dispatch indices approximated

@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f5300/s007f5300.cpp  ?M53C0@Obj@@QAEHPAX@Z  007f53c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M5460@Obj@@QAE_NH@Z  007f5460  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M54B0@Obj@@QAEXH@Z  007f54b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M55F0@Obj@@QAE_NPAX@Z  007f55f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M5660@Obj@@QAE_NPAX@Z  007f5660  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M5690@Obj@@QAEXXZ  007f5690  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M56C0@Obj@@QAEXXZ  007f56c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M56E0@Obj@@QAEMXZ  007f56e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M58E0@Obj@@QAEXXZ  007f58e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?M5BD0@Obj@@QAE_NPAXHH@Z  007f5bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?DestroyRange@@YGXPAX0@Z  007f5f70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?CreateTimeRamp@@YAPAXPAXMMM@Z  007f6040  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s007f5300/s007f5300.cpp  ?CreateTimeSmooth@@YAPAXPAXMMMMM@Z  007f60d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

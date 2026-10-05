@@ -1,0 +1,17 @@
+007f7530 SPUICreateWindowAnimationTargetShadeAlpha  # PDB symbol name
+007f75d0 SPUICreateWindowAnimationTargetShade  # PDB symbol name
+007f7670 SPUICreateWindowAnimationTargetOscillatingFill  # PDB symbol name
+007f7740 SPUICreateObjectAnimation  # PDB symbol name
+007f7920 cSPUIAnimator::cAnimationInfo::operator=  # refcount + animation copy of 0x88 element
+007f7970 cSPUIAnimationSequence::cAnimInfo::operator=  # animation copy + refcount/mType of 0x8c element
+007f7a60 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<cSPUIAnimationSequence::cAnimInfo *,cSPUIAnimationSequence::cAnimInfo *>  # PDB symbol name
+007f7eb0 SPUICreateAnimationTimerInterpolation  # PDB symbol name
+007f80d0 SPUICreateWindowAnimationTargetPosition  # PDB symbol name
+007f8140 SPUICreateWindowAnimationRotation  # PDB symbol name
+007f81d0 SPUICreateWindowAnimationTargetScale  # PDB symbol name
+007f8230 SPUICreateWindowAnimationTargetSize  # PDB symbol name
+007f8290 SPUICreateWindowAnimationTargetShadeAlpha  # PDB symbol name
+007f82f0 SPUICreateWindowAnimationTargetShade  # PDB symbol name
+007f8350 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::vector  # PDB symbol name
+007f83e0 UI::MissionCardAnimator::MissionCardAnimator  # PDB symbol name
+007f8400 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::operator=  # PDB symbol name

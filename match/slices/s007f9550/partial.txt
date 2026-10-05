@@ -1,0 +1,3 @@
+007f9d90 69  PARTIAL: AddPredicate reconstructed; the container/interface null-check for the slot-0x30 argument is approximated
+007f9e20 101  PARTIAL: AddAction reconstructed; the container/interface null-check and the mActions+2 activation path are approximated
+007fa1d0 342  PARTIAL: SerUpdate re-link loops reconstructed from the decompile; null-check and getter-call schedule approximated

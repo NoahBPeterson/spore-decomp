@@ -1,0 +1,6 @@
+007f4500  110  complete; this lands in ebx instead of ebp (register allocation)
+007f45b0  9    complete; one member load scheduled before the vtable stores
+007f4710  211  complete; this/server register allocation and spill differ
+007f48d0  15  complete; mFixed store vs mCapacity lea scheduling
+007f4920  86  complete; vtable stores reordered (needs the real ctor hierarchy)
+007f50f0  203  complete; this/window register allocation differs

@@ -1,0 +1,2 @@
+007f7670 135  PARTIAL: interpolation branch and FUN_007f6170 argument types approximated; not all paths faithfully reconstructed
+007f7eb0 305  PARTIAL: timer-interpolation switch reconstructed with guessed FUN_007f60d0/007f6040 signatures; temporary-timer release path approximated

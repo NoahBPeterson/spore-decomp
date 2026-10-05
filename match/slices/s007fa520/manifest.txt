@@ -1,0 +1,33 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007fa520/s007fa520.cpp  ?f_7fa520@@YA_NPAPAPAUPred@@HPAH@Z          007fa520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?GetAt@C_7fa690@@QAEPAURCObj@@H@Z           007fa690  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?SetAt@C_7fa690@@QAE_NHPAURCObj@@@Z         007fa6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fa780@@YA_NPAUC53@@PAUP2@@PAUP3@@@Z     007fa780  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fa840@@YA_NPAPAXPAUC53@@PAUY@@PAUIAlloc@@@Z  007fa840  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fa8e0@@YA_NPAPAXPAUC53@@PAUY@@@Z        007fa8e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fa950@@YAXPAUVC22@@@Z                  007fa950  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fa9b0@@YAXPAUVC22@@@Z                  007fa9b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7faa10@@YAXPAUVC22@@@Z                  007faa10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f@C_7faa30@@QAEXPAUSerItem@@@Z             007faa30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Dtor@C_7faa70@@QAEXXZ                     007faa70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Evaluate@C_TF@@QAEMM@Z                    007faad0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f20@C_TF@@QAEMXZ                          007fab20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f40@C_TF@@QAEMXZ                          007fab40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f60@C_TF@@QAEMXZ                          007fab60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?IsValid@C_TF@@QAE_NXZ                     007facf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?IsValid2@C_TF@@QAE_NXZ                    007fad40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?GetMember@C_TF@@QAEPAXH@Z                 007fad90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Ease@C_TF@@QAEMM@Z                        007fae90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Dtor@C_7fb000@@QAEXXZ                     007fb000  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fb040@@YAXPAPAXPAX@Z                   007fb040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fb0b0@@YAXPAUVC22@@@Z                  007fb0b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Dtor@C_7fb110@@QAEXXZ                     007fb110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f_7fb1a0@@YAXPAPAXPAX@Z                   007fb1a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f@C_7fb250@@QAEXPAUSerItem@@@Z             007fb250  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Dtor@C_7fb290@@QAEXXZ                     007fb290  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f@C_7fb2e0@@QAEXPAUSerItem@@@Z             007fb2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Dtor@C_7fb320@@QAEXXZ                     007fb320  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?f@C_7fb3b0@@QAE_NE@Z                      007fb3b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520.cpp  ?Clear@C_7fb6a0@@QAEXXZ                    007fb6a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fa520/s007fa520_o2.cpp  ?f@C_7fb0e0@@QAEXPAUSerItem@@@Z         007fb0e0  /O2 /MD /Gy /EHsc /TP
+slices/s007fa520/s007fa520_o2.cpp  ?f@C_7fb220@@QAEXPAUSerItem@@@Z         007fb220  /O2 /MD /Gy /EHsc /TP

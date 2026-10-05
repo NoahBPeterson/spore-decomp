@@ -1,0 +1,18 @@
+007f64d0  28  complete; phase0 frame size / store schedule differs
+007f67f0  203  complete; vtable[0x38] pointer/lerp shape differs
+007f6910  6  complete; return-value cmp scheduled before the last fstp
+007f6a60  37  complete; Color::Lerp/vcall register schedule differs
+007f6b50  138  complete; vtable slot call shape differs
+007f6d20  24  complete; cdecl argument register assignment differs
+007f6d90  70  complete; element copy / refcount addref order differs
+007f6df0  86  complete; element copy / refcount addref order differs
+007f6ee0  127  complete; range copy loop layout differs
+007f6f80  87  complete; range destroy loop layout differs
+007f6ff0  72  complete; byte copy loop shape differs
+007f7050  133  complete; reference-slot setup register/frame differs
+007f7100  133  complete; reference-slot setup register/frame differs
+007f71b0  44  complete; phase2 vector build/order differs
+007f7290  142  complete; reference-slot setup register/frame differs
+007f7340  124  complete; reference-slot setup register/frame differs
+007f73e0  126  complete; reference-slot setup register/frame differs
+007f7480  141  complete; reference-slot setup register/frame differs
