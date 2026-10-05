@@ -1,0 +1,3 @@
+006bb670 26 complete; refcount release via lock xadd idiom not reproduced
+006bbb10 8 complete; teardown correct, tail-jmp to OleUninitialize becomes call+ret
+006bbe20 13 complete; AsInterface null-mask expression emits extra neg

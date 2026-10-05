@@ -1,0 +1,9 @@
+# incomplete / approximate (stubbed blocks or omitted paths)
+006ae940   -  async request poll/GC loop: skeleton only
+006aea90   -  job completion: skeleton only
+006aec60   -  rbtree insert/emplace with node pool: skeleton only
+006aee60   -  async job setup: skeleton only
+006af080   -  fixed_map find/insert: skeleton only
+006af150   -  AllocateRequest: skeleton only
+006af260   -  large async submit routine: skeleton only
+006af720   -  read/writeUint32 serialize routine: skeleton only

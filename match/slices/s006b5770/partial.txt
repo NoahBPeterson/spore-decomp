@@ -1,0 +1,15 @@
+006b5770  122  SP::cString::cString (variant): stubbed
+006b59d0  426  TranslatorVector DoInsertValue: stubbed (eastl vector grow/relocate)
+006b5bd0  122  App::cStringDetokenizer::ProcessString: stubbed
+006b5c50  203  App::cStringDetokenizer::func30h: stubbed
+006b5d20  608  App::cStringDetokenizer::ProcessStringEx: stubbed
+006b5f80  121  TranslatorVector push_back(intrusive_ptr): stubbed
+006b6000  121  App::cStringDetokenizer::func18h: stubbed
+006b6080  223  App::cStringDetokenizer::AddTranslator: stubbed
+006b6160  812  App::cStringDetokenizer::TranslateToken: stubbed
+006b6490  124  App::cStringDetokenizer::cStringDetokenizer: stubbed (eastl vector + _eh_vector_constructor_iterator_ of 4 string16)
+006b65d0  80   hash/stream iterator helper: stubbed
+006b6620  108  stream reader helper: stubbed
+006b6740  109  eastl hashtable erase(key): stubbed
+006b67b0  226  eastl hashtable operator[]/insert: stubbed
+006b68a0  69   eastl hashtable<SP::cString*>::~hashtable scalar deleting: stubbed

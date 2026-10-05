@@ -1,0 +1,4 @@
+# Incomplete / skeleton.
+006b09b0  394  lock-free refcount/map update (lock cmpxchg8b over a keyed hash); only a skeleton emitted
+006b1200  321  entry deserialization into the inline key vector; only the stream-read preamble reconstructed
+006b15b0  490  per-world refresh over the map/list; not reconstructed

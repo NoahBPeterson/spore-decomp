@@ -1,0 +1,18 @@
+006bfda0  32  PFHoleTable hole coalescing rbtree; register/schedule differs
+006bff10  32  hole-table clear + merge (eastl set + free list); schedule differs
+006c0120  32  PFIndexModifiable::func24h hash-map hole scan; control flow differs
+006c0220  32  IStream GetSize; flag load materialized as `mov al` in original
+006c0260  26  IStream GetRemaining; test/schedule differs
+006c0290  32  PFRecordRead::ReadAt; allocator/branch schedule differs
+006c03c0  32  PFRecordRead::LoadOnDemand; alloc/decompress schedule differs
+006c0550  32  dual-stream dispatch; callee-saved register choice differs
+006c05a0  32  chunked record read bridge; control flow/schedule differs
+006c0710  32  BackgroundLoading cleanup; EH frame not reproduced
+006c07e0  8   PFRecordRead::AddRef; address/value registers swapped (eax/ecx)
+006c0800  32  PFRecordRead::Release; register/schedule differs
+006c0840  32  IStream Seek; switch layout differs
+006c0900  32  IStream Read; schedule differs
+006c0980  32  PFRecordWrite::Release; field offset + schedule differ
+006c09c0  32  PFRecordRead ctor; EH frame + scheduling differ
+006c0b20  32  PFRecordRead::InitFromInfo ctor; EH frame + scheduling differ
+006c0c40  32  PFRecordWrite ctor; EH frame + FileStream handling differ

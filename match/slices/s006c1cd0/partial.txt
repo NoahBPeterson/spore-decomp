@@ -1,0 +1,3 @@
+006c1cd0  851  animation-bake driver: reconstructed skeleton only (large EH routine not fully recovered)
+006c22b0  498  anonymous-namespace cBakedArenaResource constructor: skeleton only
+006c24b0  466  baked-animation resource assembly/registration: skeleton only

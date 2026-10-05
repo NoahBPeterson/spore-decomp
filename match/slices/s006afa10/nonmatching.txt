@@ -1,0 +1,5 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006afa90  52  QueryInterface: cl hoists `mov eax,ecx` and uses `add eax,-4` instead of `lea`
+006afe40  18  intrusive list splice: callee-saved prologue not shrink-wrapped identically
+006b0530 106  node clone: null/alloc branch layout and register allocation differ
+006b08a0  58  LRU cache node alloc: independent store ordering differs

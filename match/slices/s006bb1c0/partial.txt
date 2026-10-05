@@ -1,0 +1,22 @@
+006bb1c0 748 drag/drop window proc - skeleton
+006bb4b0 280 unknown - skeleton
+006bb690 46 DebugMessage::~DebugMessage - skeleton
+006bb6c0 148 DebugMessage ctor - skeleton
+006bb760 66 DebugMessage scalar deleting dtor - skeleton
+006bb7b0 110 GUID equality inline - skeleton
+006bb830 84 cFileDropWin32::QueryInterface - skeleton
+006bb8e0 204 drop-target drag handler - skeleton
+006bb9b0 129 drop-target helper - skeleton
+006bba70 150 ScreenToClient drag helper - skeleton
+006bbb60 140 OleInitialize + App alloc - skeleton
+006bbbf0 157 unknown - skeleton
+006bbc90 240 unknown - skeleton
+006bbd80 72 vector<wstring> deleting dtor - skeleton
+006bbde0 59 DatabasePackedFile shutdown - skeleton
+006bbe80 140 PFRecordWrite alloc+ctor - skeleton
+006bbf10 137 unknown - skeleton
+006bbfa0 122 unknown - skeleton
+006bc020 122 unknown - skeleton
+006bc0a0 68 drive-mount state machine - skeleton
+006bc0f0 60 drive-mount helper - skeleton
+006bc130 115 CreateIndex alloc+ctor - skeleton

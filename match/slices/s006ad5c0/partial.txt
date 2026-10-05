@@ -1,0 +1,12 @@
+# incomplete / approximate (stubbed blocks or omitted paths)
+006ad5c0   -  large /Od EH routine: only a skeleton (EASTL vector build + callback filter + GC)
+006ada20   -  /Od EH cache resize/GC: skeleton only
+006adb40   -  KRMap singleton ctor: skeleton only
+006adc90   -  KRMap init: skeleton only
+006adee0   -  hash_map::operator[] find+insert: skeleton only
+006ae3f0   -  cAsyncResourceManager::GetRequest: skeleton only
+006ae590   -  rbtree::erase with node pool: skeleton only
+006ae880   -  cAsyncResourceManager::RequestComplete: skeleton only
+006add30   -  sub-list ctor: approximate (FUN_006ad970 call only)
+006adda0   -  pool node alloc: approximate (alloc + shallow copy)
+006ae660   -  pool node alloc from freelist: approximate

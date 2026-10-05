@@ -1,0 +1,4 @@
+006d61e0 Bake_Dot_uv4x16_col4f_6c4200   # core FUN_006c4200; dot tail
+006d64f0 Bake_Acos_uv4x8_const_6c3550   # core FUN_006c3550; acos2 tail (weight = axis.y*|dxy|)
+006d6820 Bake_Acos_uv2x16_const_6c3550  # core FUN_006c3550; acos2 tail
+006d6b10 Bake_Acos_uv4x16_const_6c3550  # core FUN_006c3550; acos2 tail

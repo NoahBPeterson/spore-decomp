@@ -1,0 +1,6 @@
+006b8ca0 95 complete; drive hash wrapper, arg-shuffle/setne differ
+006b9050 150 complete; trig rotation, x87/SSE scheduling differs
+006b9190 124 complete; serializer, io helper signature
+006b9230 116 complete; deserializer
+006b92d0 337 complete; basis normalization, x87 sum order
+006b9440 167 complete; basis-to-matrix build

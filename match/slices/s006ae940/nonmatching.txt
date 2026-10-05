@@ -1,0 +1,7 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006aebd0   -  dtor: EH prologue + vtable stores not reproduced
+006aedc0   -  ctor: EH prologue + lock xchg + Mutex ctor not reproduced
+006af5d0 148  comparison/assignment operator: vtable-slot shape and scheduling differ
+006af670 137  record serializer: register/loop scheduling differs
+006af8a0   -  dtor: EH prologue not reproduced
+006af960   -  ctor: EH prologue + vtable chain not reproduced

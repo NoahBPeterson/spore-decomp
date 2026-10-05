@@ -1,0 +1,10 @@
+006bb690 DebugMessage::~DebugMessage  # PDB callee-scored
+006bb830 SP::cFileDropWin32::QueryInterface  # PDB anchor
+006bbdd0 EA::ResourceMan::DatabasePackedFile::Init  # PDB vtable-slot
+006bbe20 EA::ResourceMan::DatabasePackedFile::AsInterface  # PDB gap-align
+006bc130 EA::ResourceMan::DatabasePackedFile::CreateIndex  # PDB candidate
+006bb820 FUN_006bb820  # ReleaseStgMedium member (+0x1c)
+006bb890 FUN_006bb890  # InterlockedIncrement thunk (+4)
+006bb8b0 FUN_006bb8b0  # InterlockedDecrement + virtual release
+006bba40 FUN_006bba40  # ReleaseStgMedium + helper
+006bbe50 FUN_006bbe50  # Mutex lock/unlock (+0x478)

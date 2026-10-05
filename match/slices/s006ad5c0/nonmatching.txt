@@ -1,0 +1,13 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006ad800  10  loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue
+006ad890   -  ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced
+006adbf0   -  scalar deleting dtor: old-style EH prolog not reproduced
+006ae060  39  4-IID test: cl 15 emits a linear compare chain instead of the original median tree
+006ae120   -  dtor: EH prologue not reproduced
+006ae190   -  dtor: EH prologue not reproduced
+006ae210   -  rbtree_node dtor: EH prologue not reproduced
+006ae280  21  return (unsigned)(r-7)<=1; cl uses sbb/inc instead of setbe al
+006ae2a0   -  AutoRefCount::operator= : lock xadd / xchg refcount shape not reproduced
+006ae2f0  13  callback setter: extra pop esi moved to the end of the function
+006ae4c0  31  getter: duplicated tail / xor eax scheduling differs
+006ae510   -  Resource::Async ctor: EH prologue + InterlockedExchange zero store not reproduced

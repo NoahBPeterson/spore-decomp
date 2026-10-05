@@ -1,0 +1,4 @@
+006bd150  400  complete; compressed-record allocation path; RefPack local + register/frame differs
+006bd430  112  complete; Close(); duplicated cleanup blocks merged differently by cl
+006bd4d0  137  complete; GetOpenCount rbtree walk; iterator/frame differences
+006bd580  160  complete; ratio check with x87; unsigned->float conversion schedule differs

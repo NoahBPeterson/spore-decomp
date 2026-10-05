@@ -1,0 +1,4 @@
+006d6e40 Bake_Acos_uv4x8_col2f_6c3780   # core FUN_006c3780; acos2 tail
+006d7190 Bake_Acos_uv2x16_col2f_6c3780  # core FUN_006c3780; acos2 tail
+006d74b0 Bake_Acos_uv4x16_col2f_6c3780  # core FUN_006c3780; acos2 tail
+006d7800 Bake_Acos_uv4x8_col2f_6c3b90   # core FUN_006c3b90; acos2 tail

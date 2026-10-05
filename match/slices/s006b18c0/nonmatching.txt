@@ -1,0 +1,7 @@
+# Complete (all paths present) but not byte-exact.
+006b1dc0  67   AutoRefCount pair ctor; needs the EH-managed construction path (no EH frame in ours)
+006b1e20  68   AutoRefCount pair dtor; EH unwind funclet path differs
+006b1e90  74   AutoRefCount pair copy ctor; EH-managed path differs
+006b1ef0  74   AutoRefCount pair operator=; register allocation (o in ebp/ebx vs edi) differs
+006b2000  108  keyed save-area lookup; prologue schedule of the find args differs (esi saved later)
+006b2090  98   keyed save-area lookup; same find-arg scheduling difference as 006b2000

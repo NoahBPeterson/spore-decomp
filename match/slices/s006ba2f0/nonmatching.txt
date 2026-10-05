@@ -1,0 +1,7 @@
+006ba620 480 complete; Matrix3 apply, column/row order differs
+006ba870 163 complete; XForm2::Apply transform order
+006ba940 255 complete; pre-rotate wrapper, cTransform layout/schedule
+006baa70 255 complete; pre-rotate wrapper variant
+006baec0 246 complete; FindDirectoryUp, eastl::wstring insert sequence
+006baff0 43 complete; SporeAlert, extra EH state store vs original
+006bb0b0 280 complete; wide alert, cString path not reproduced

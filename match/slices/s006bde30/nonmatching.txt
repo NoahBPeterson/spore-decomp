@@ -1,0 +1,7 @@
+006be690  69   complete; insertion sort over index nodes; register allocation differs
+006be6e0  73   complete; insertion sort over index nodes; register allocation differs
+006be730  10   complete; median-of-three key selection; branch orientation differs
+006be7c0  95   complete; heap sift-up; branch/register layout differs
+006bea90  96   complete; hashtable walk computing max data end (64-bit)
+006beb00  75   complete; hashtable walk summing on-disk size (64-bit)
+006bed90  69   complete; hashtable walk setting isSaved flag

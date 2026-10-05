@@ -1,0 +1,5 @@
+006d35a0 Bake_Dot_uv4x16_col4f_6c4200   # core FUN_006c4200; dot tail
+006d38b0 Bake_Dot_uv4x8_const_6c3550    # core FUN_006c3550; dot tail
+006d3b90 Bake_Dot_uv2x16_const_6c3550   # core FUN_006c3550; dot tail
+006d3e30 Bake_Dot_uv4x16_const_6c3550   # core FUN_006c3550; dot tail
+006d4110 Bake_Dot_uv4x8_col2f_6c3780    # core FUN_006c3780; dot tail

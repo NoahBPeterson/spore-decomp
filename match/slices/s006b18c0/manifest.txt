@@ -1,0 +1,8 @@
+slices/s006b18c0/s006b18c0.cpp  ?SetSaveAreaFlag@@YAXE@Z  006b1d40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_SaveResource@@YAXPAXID@Z  006b1d50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_IsSaveArea@@YA_NPAX@Z  006b1f60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_GetSaveArea@@YAPAXI@Z  006b1f90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_FlushAllSaveAreas@@YAXXZ  006b1fc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_UpdateSaveAreas@@YAPAXPAX@Z  006b22a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?FUN_006b22f0@@YAPAXPAX@Z  006b22f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b18c0/s006b18c0.cpp  ?SP_SomethingAllSaveAreas@@YAXXZ  006b2350  /O2 /MD /Gy /EHsc /TP /GS-

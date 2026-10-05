@@ -1,0 +1,4 @@
+006c13f0  363  eastl vector<0x38>::insert: reallocation path approximate (capacity bookkeeping)
+006c1570  234  eastl vector<4>::insert: reallocation path approximate (capacity bookkeeping)
+006c1680  1110 arena skin-sink collection: simplified (object vectors + FUN_006c24b0 merge incomplete)
+006c1ae0  333  SP::cAnimationBaker::GetBakedAnimations: best-effort reconstruction, EH/manager paths approximate

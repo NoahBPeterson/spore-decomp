@@ -1,0 +1,2 @@
+# Complete (all paths present) but not byte-exact.
+006b4730  34   local-static init of the job holder: placement-new form still emits an operator-new call instead of a bare ctor call

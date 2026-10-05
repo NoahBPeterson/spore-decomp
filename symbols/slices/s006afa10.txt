@@ -1,0 +1,9 @@
+006afae0 (async request teardown: flush + release)  # dc
+006afb20 (async request completion dispatch)  # dc
+006afb60 (async request flush: two vtable calls)  # dc
+006afbe0 (record-adapter accept filter)  # dc
+006afa90 (resource Async QueryInterface-style cast)  # dc
+006afe40 (intrusive doubly-linked-list splice)  # dc
+006b0530 (node clone/create)  # dc
+006b08a0 (LRU cache node alloc)  # dc
+006afe80 (async job submit)  # dc

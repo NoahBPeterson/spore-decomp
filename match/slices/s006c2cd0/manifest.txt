@@ -1,0 +1,3 @@
+slices/s006c2cd0/s006c2cd0.cpp  ?PopHeap@@YAXPAURec24@@0@Z  006c2e00
+slices/s006c2cd0/s006c2cd0.cpp  ?MakeHeap@@YAXPAURec24@@0@Z  006c33b0
+slices/s006c2cd0/s006c2cd0.cpp  ?SortHeap@@YAXPAURec24@@0@Z  006c3430

@@ -1,0 +1,9 @@
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bc2d0@DatabasePackedFile@@  006bc2d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bc370@DatabasePackedFile@@  006bc370  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bc3a0@DatabasePackedFile@@  006bc3a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bc3e0@DatabasePackedFile@@  006bc3e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bc420@DatabasePackedFile@@  006bc420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?DeleteRecord@DatabasePackedFile@@  006bc5f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bca70@DatabasePackedFile@@  006bca70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bcb50@DatabasePackedFile@@  006bcb50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s006bc1b0/s006bc1b0.cpp  ?FUN_006bcd30@DatabasePackedFile@@  006bcd30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

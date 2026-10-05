@@ -1,0 +1,21 @@
+006bede0  0  partial: CheckFilesInRange skeleton
+006beeb0  0  partial: CheckFilesInSizeRange skeleton
+006bef70  0  partial: PFHoleTable rbtree insert/erase skeleton
+006bf030  0  partial: rbtree/hash helper skeleton
+006bf140  0  partial: rbtree/hash helper skeleton
+006bf1e0  0  partial: rbtree/hash helper skeleton
+006bf240  0  partial: rbtree/hash helper skeleton
+006bf2c0  0  partial: rbtree DoInsertValue skeleton
+006bf370  0  partial: PFIndexModifiable constructor skeleton
+006bf430  0  partial: hash_map destructor skeleton
+006bf4e0  0  partial: GetFileInfo skeleton
+006bf520  0  partial: RemoveFile skeleton
+006bf5d0  0  partial: quick_sort_impl skeleton
+006bf660  0  partial: PFIndexModifiable::Read skeleton
+006bf7d0  0  partial: hashtable find-or-insert skeleton
+006bf8f0  0  partial: rbtree DoInsertValue skeleton
+006bfa00  0  partial: GetFiles skeleton
+006bfac0  0  partial: GetAllFiles skeleton
+006bfbc0  0  partial: PutFileInfo skeleton
+006bfc20  0  partial: rbtree insert wrapper skeleton
+006bfc50  0  partial: PFHoleTable hole lookup skeleton

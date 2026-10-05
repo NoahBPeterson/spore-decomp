@@ -1,0 +1,1 @@
+slices/s006b27f0/s006b27f0.cpp  ?FUN_006b3610@@YAXXZ  006b3610  /O2 /MD /Gy /EHsc /TP /GS-

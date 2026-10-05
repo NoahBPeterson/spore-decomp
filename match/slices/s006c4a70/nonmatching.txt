@@ -1,0 +1,5 @@
+006c4c20    7  complete source; only Log2's counter/flag scheduling differs (near-miss)
+006c4ca0  472  complete source (byte colours); original is SSE-scalar prebuilt codegen, cl15 emits x87
+006c4fd0  434  complete source (16-bit colours, 2 lanes); SSE-scalar prebuilt codegen
+006c52c0  472  complete source (16-bit colours, 4 lanes); SSE-scalar prebuilt codegen
+006c55f0  505  complete source (byte colours, offset transform); SSE-scalar prebuilt codegen

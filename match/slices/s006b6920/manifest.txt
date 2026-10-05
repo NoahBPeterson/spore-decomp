@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006b6920/s006b6920.cpp  ?RemoveString@cStringManager@SP@@UAE_NPAUcString@2@@Z  006b69e0  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b6920/s006b6920.cpp  ?AddString@cStringManager@SP@@UAE_NPAUcString@2@@Z  006b6e50  /O2 /MD /Gy /EHsc /GS- /TP

@@ -1,0 +1,8 @@
+# Incomplete / skeleton.
+006b18c0  288  App::LRUCache manager event dispatch over the cache map/intrusive list; skeleton only
+006b19e0  194  App::LRUCache manager release-area (map erase + intrusive-list unlink); skeleton only
+006b1ab0  204  App::LRUCache manager destructor (map nuke + list free + stream release); skeleton only
+006b1b80  412  App::LRUCache manager update/refill loop + job bookkeeping; skeleton only
+006b2110  387  ReadExtensionMappingsFromPropFile; skeleton only
+006b2400  176  save-area helper; skeleton only
+006b2620  454  SP::CreateDirectorySave; skeleton only

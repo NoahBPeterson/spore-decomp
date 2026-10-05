@@ -1,0 +1,7 @@
+006b1d50 SP::SaveResource  # work/xmatch/matches.json dev-name match
+006b1f60 SP::IsSaveArea  # work/xmatch/matches.json dev-name match
+006b1f90 SP::GetSaveArea  # work/xmatch/matches.json dev-name match
+006b1fc0 SP::FlushAllSaveAreas  # work/xmatch/matches.json dev-name match
+006b2110 ReadExtensionMappingsFromPropFile  # work/xmatch/matches.json dev-name match
+006b22a0 SP::UpdateSaveAreas  # work/xmatch/matches.json dev-name match
+006b2620 SP::CreateDirectorySave  # work/xmatch/matches.json dev-name match

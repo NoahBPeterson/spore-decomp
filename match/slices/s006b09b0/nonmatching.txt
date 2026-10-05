@@ -1,0 +1,11 @@
+# Complete (all paths present) but not byte-exact. diff is chk.py's best-symbol delta.
+006b0b80  76   vector find+erase; register allocation for the end iterator differs (edx vs ebx)
+006b0c00  110  ctor: MI vtable stores (base then derived, four stores) not reproduced by a non-polymorphic stub
+006b0da0  113  map+intrusive-list insert; temp key/value struct shape differs
+006b0e40  104  clear/destroy: inlined payload dtor + intrusive list unlink shape differs
+006b0f40  159  vector add/update; loop register allocation and 64-bit score arithmetic differ
+006b1000  132  flush: eastl erase(begin,end) dead-copy-loop + total arithmetic shape differs
+006b10a0  309  callback filter; local eastl vector of 12-byte keys (inline allocator) not reproduced
+006b13b0  332  deserialize; key/entry struct and Insert/Read call shapes approximate
+006b14f0  163  load: AutoRefCount temporary and stream Call34 argument shape approximate
+006b17a0  168  init: needs the EH-managed AutoRefCount<MemStream> local (EH frame missing)

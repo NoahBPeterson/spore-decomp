@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+006d17c0 643  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ
+006d1a80 689  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3780, dot tail); /O2 frame + scheduling differ
+006d1d80 660  bake evaluator (uv4x8/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ
+006d2080 649  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ
+006d2350 660  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, dot tail); /O2 frame + scheduling differ

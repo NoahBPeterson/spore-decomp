@@ -1,0 +1,4 @@
+006ccf50 Bake_Acos_uv2x16_col4u8   # copies Elem32::Handle (AddRef/Release) + calls core FUN_006c4200; acos angle tail
+006cd2a0 Bake_Acos_uv4x16_col4u8   # same scaffolding, core FUN_006c4200; acos angle tail
+006cd620 Bake_Acos_uv4x8_col4f     # same scaffolding, core FUN_006c4200; acos angle tail
+006cd980 Bake_Acos_uv2x16_col4f    # same scaffolding, core FUN_006c4200; acos angle tail

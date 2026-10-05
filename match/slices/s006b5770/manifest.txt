@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006b5770/s006b5770.cpp  ?func28h@cStringDetokenizer@App@@UAE_NPAXAAUstring16@eastl@@@Z  006b57f0  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?HasTokens@cStringDetokenizer@App@@UAE_NPBG@Z  006b5810  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?func14h@ITokenTranslator@App@@UAEXH@Z  006b5840  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?FindTokenTranslation@cStringDetokenizer@App@@UAE_NPBGAAUstring16@eastl@@@Z  006b5880  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  006b5950  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  006b5990  /O2 /MD /Gy /EHsc /TP
+slices/s006b5770/s006b5770.cpp  ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  006b6540  /O2 /MD /Gy /EHsc /TP

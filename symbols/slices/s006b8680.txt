@@ -1,0 +1,13 @@
+006b8680 SP::GetSystemInfo  # PDB anchor
+006b8d60 FUN_006b8d60  # UTF-8 -> UTF-16 with capacity
+006b8db0 FUN_006b8db0  # UTF-16 -> UTF-8 with capacity
+006b8e10 FUN_006b8e10  # CompareStringW wrapper (locale via FUN_0087da90)
+006b8ea0 FUN_006b8ea0  # wide case-insensitive compare
+006b8f00 FUN_006b8f00  # UTF-8 -> UTF-16 via ConvertEncoding 0x93cfb0
+006b8f40 FUN_006b8f40  # LCMapStringW case map, EH
+006b9050 MatX::Rotate  # sin/cos rotation of 3x3 rows
+006b9190 RotSerial::Save  # serialize flags + fields
+006b9230 RotSerial::Load  # deserialize
+006b92d0 Basis3::Normalize  # normalize 3x3 basis
+006b9440 Basis3::Build  # basis-to-matrix
+006b8ca0 FUN_006b8ca0  # drive hash (PDB candidate GetShaderInfo)

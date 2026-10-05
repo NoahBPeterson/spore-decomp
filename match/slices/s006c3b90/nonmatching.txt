@@ -1,0 +1,2 @@
+006c3b90 1293  complete source (BakeWeighted N=2); original is SSE-scalar prebuilt codegen, cl15 emits x87
+006c4200 1293  complete source (BakeWeighted N=3); original is SSE-scalar prebuilt codegen, cl15 emits x87

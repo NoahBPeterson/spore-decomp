@@ -1,0 +1,2 @@
+slices/s006c3b90/s006c3b90.cpp  ?GetPartition@@YAPAURec24@@PAU1@0U1@@Z  006c4870
+slices/s006c3b90/s006c3b90.cpp  ?PartialSort@@YAXPAURec24@@00@Z  006c4960

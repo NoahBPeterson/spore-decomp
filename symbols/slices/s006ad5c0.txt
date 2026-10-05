@@ -1,0 +1,11 @@
+006ad7c0 SP::FlushCache  # PDB
+006ad910 cLRUCache::~cLRUCache  # PDB (implemented as Destroy)
+006adfe0 SP::AddRegistrationCallback  # PDB
+006ae060 SP::cAsyncResourceRequest::AsInterface  # PDB
+006ae3f0 SP::cAsyncResourceManager::GetRequest  # PDB
+006ae880 SP::cAsyncResourceManager::RequestComplete  # PDB
+006ae600 eastl::rbtree<...>::DoNukeSubtree  # PDB
+006ae590 eastl::rbtree<...>::erase  # PDB
+006ae210 eastl::rbtree_node<...>::~rbtree_node  # PDB
+006adee0 eastl::hash_map<...>::operator[]  # PDB
+006ae510 Resource::Async::Async  # PDB

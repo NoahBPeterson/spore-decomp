@@ -1,0 +1,8 @@
+006c2cd0  346  complete source; original is SSE-scalar (prebuilt/different toolset), cl15 emits x87
+006c2ea0  446  complete source; original is SSE-scalar basis projection, cl15 emits x87
+006c3080  547  complete source; SSE-scalar / EASTL allocator prebuilt codegen
+006c32f0   59  complete source; differs only in stack-slot scheduling of the outgoing vcall args
+006c3330  103  complete source; EASTL allocator/rbtree wrapper, prebuilt codegen
+006c3510   39  complete source; MI vptr-store ordering differs from cl15's output
+006c3550  504  complete source; SSE-scalar matrix transform, cl15 emits x87
+006c3780 1025  complete source; SSE-scalar matrix transform + offset, cl15 emits x87

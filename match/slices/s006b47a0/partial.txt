@@ -1,0 +1,12 @@
+006b47a0  155  async-save job setter: stubbed (EA::Thread scoped mutex + refcounted SP::cJob swap not reconstructed)
+006b4840  132  async-save job clear: stubbed
+006b48d0  279  async-save request ctor (two vptrs + nested GraphicsFactoryAsyncRequest at +0x20): stubbed
+006b4a10  308  async-save prepare/commit: stubbed
+006b4b60  375  async-save submit (ResourceMan::GetManager + job allocation): stubbed
+006b4ce0  574  async-save completion (job status switch + stream setup): stubbed
+006b50d0  62   find_placeholder: eastl hash_map<uint32_t,string16>::find; PARTIAL (definition in s006b47a0_b.cpp)
+006b5110  141  hashtable erase(key): eastl hash_map erase; PARTIAL (definition in s006b47a0_b.cpp)
+006b51a0  153  alloc_placeholder: eastl string + hash_map operator[]; PARTIAL (definition in s006b47a0_b.cpp)
+006b53a0  134  basic_string<wchar_t> concatenation helper: PARTIAL (definition in s006b47a0_b.cpp)
+006b54b0  202  SP::cString::Load: structure present but resource-manager slot call / Resource stream plumbing approximated
+006b55c0  208  SP::cString::GetText: incomplete (empty-string allocation via 0x1667bac and QualifyNameWithGroup not reconstructed)

@@ -1,0 +1,5 @@
+006cdca0 Bake_Acos_uv4x16_col4f    # core FUN_006c4200; acos angle tail
+006ce000 Bake_Dot_uv4x8_const_6c3550   # core FUN_006c3550; dot tail (axis.x*res.x+axis.z)
+006ce2e0 Bake_Dot_uv2x16_const_6c3550  # core FUN_006c3550; dot tail
+006ce580 Bake_Dot_uv4x16_const_6c3550  # core FUN_006c3550; dot tail
+006ce860 Bake_Dot_uv4x8_col2f_6c3780   # core FUN_006c3780; dot tail

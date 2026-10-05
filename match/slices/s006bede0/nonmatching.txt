@@ -1,0 +1,1 @@
+006bf5a0  41   complete; PFHoleTable field init; register copy (eax=this) differs

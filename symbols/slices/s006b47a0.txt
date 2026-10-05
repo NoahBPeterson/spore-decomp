@@ -1,0 +1,26 @@
+006b4f40 ISteamApps wrapper  # dllimport SteamApps, tail-calls vtable slot 0x18
+006b4f60 SP::cString sink ctor (source, placeholder)  # layout identical to cString payload
+006b4f90 SP::cString sink flag-and  # and byte[+0x10], arg
+006b4fa0 SP::cString sink write A  # calls FUN_00693390
+006b4fd0 SP::cString sink write B  # calls SP::cUnknownTypedValueToString::Write
+006b5000 SP::cString sink release  # releases +0x4 (slots 0x24,0x8)
+006b5030 SP::cString::SetColorLocalized  # PDB
+006b5040 make-pair helper  # writes two dwords to out
+006b5060 SP::cString::cString  # PDB; member AutoRefCount<Resource> gives the /EHsc frame
+006b50d0 `anonymous namespace'::find_placeholder  # PDB; hash_map<uint32_t,string16>::find
+006b5110 eastl::hashtable<unsigned int,...>::erase  # PDB (labelled operator+); frees key string + node
+006b51a0 `anonymous namespace'::alloc_placeholder  # PDB candidate; counter++ then hash_map[key]=str
+006b5240 SP::cString::~cString  # frees mpLocalString, erases placeholder, releases AutoRefCount
+006b5310 SP::cString::set_source_string  # PDB candidate
+006b53a0 eastl::basic_string<wchar_t> concatenation  # PDB (labelled operator+); AllocateSelf/push_back/Append
+006b5430 SP::cString::operator=  # PDB candidate
+006b54b0 SP::cString::Load  # PDB
+006b55c0 SP::cString::GetText  # lazy detokenization; PDB mislabelled IsMaxValue
+006b56d0 SP::cString::LoadFromKey  # Load(key[0], key[1], 0)
+006b56f0 SP::cString::cString(const cString&)  # PDB; copy ctor
+006b47a0 async-save cJob setter  # EA::Thread mutex + refcounted swap
+006b4840 async-save cJob clear
+006b48d0 async-save request ctor  # two vptrs + nested GraphicsFactoryAsyncRequest at +0x20
+006b4a10 async-save prepare
+006b4b60 async-save submit  # ResourceMan::GetManager
+006b4ce0 async-save completion

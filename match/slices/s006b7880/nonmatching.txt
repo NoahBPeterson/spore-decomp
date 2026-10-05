@@ -1,0 +1,5 @@
+006b8080 36 complete; family/model probe, original schedules model extraction before the family compare
+006b8410 45 complete; min(logical,physical) - original selects by reference through stack temps
+006b8460 67 complete; CBig ctor - SSE matches, original interleaves per-string cap stores
+006b7b90 398 complete; GetWindowsCPUSpeed full rewrite, register/frame differences
+006b80e0 153 complete; logical core count, cpuid block differs

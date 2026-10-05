@@ -1,0 +1,4 @@
+006ba2f0 811 unknown Swarm/transform kernel - skeleton
+006baba0 229 LogManager-ish ctor - skeleton
+006bac90 223 unknown - skeleton
+006badd0 124 LogManager ctor - simplified (vcall omitted)

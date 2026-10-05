@@ -1,0 +1,12 @@
+006c2060  47   create four render objects from 2-word descriptors; schedule differs
+006c2120  59   Editor::cEditorResource cleanup; EH frame not reproduced
+006c2170  139  Editor::cEditorResource dtor body; member dtor order/EH differ
+006c2240  96   Editor::cPropertyList ctor; EH frame (AddRef) not reproduced
+006c2690  1    packed 0xRRGGBB -> float3; constant loaded as qword instead of dword
+006c26f0  57   16-byte key less-than; compare/branch tree differs
+006c27b0  206  insertion sort over 0x18-stride records; loop/reg allocation differs
+006c28a0  188  single-record insertion sort; loop/reg allocation differs
+006c2970  141  median-of-three pointer; control flow differs
+006c2a00  206  sift-up insert; loop/reg allocation differs
+006c2b10  170  copy range with AddRef; EH frame not reproduced
+006c2bc0  269  sift-down + insert; loop/reg allocation differs

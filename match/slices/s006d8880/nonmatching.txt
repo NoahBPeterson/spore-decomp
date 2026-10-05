@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+006d8880 781  bake evaluator (uv4x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
+006d8c00 738  bake evaluator (uv4x8/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
+006d8f60 683  bake evaluator (uv2x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
+006d9280 738  bake evaluator (uv4x16/colour4f/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
+006d95e0 95  rbtree lower_bound + insert (node stride 0x14, key at +0x10); branch/register layout differs, insert call shape not reproduced
+006d9660 240  eastl vector<Handle> insert (stride 0x10); reallocation/copy helper schedule differs

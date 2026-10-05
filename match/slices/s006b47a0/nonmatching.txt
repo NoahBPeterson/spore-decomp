@@ -1,0 +1,1 @@
+006b5240  15  ~cString: complete; only register allocation in the string-free block (p/cap eax-ecx) and the erase temp (edx vs ecx) differ

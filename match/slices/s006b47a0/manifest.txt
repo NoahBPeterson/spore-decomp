@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b4f40@@YA_NPBD@Z  006b4f40  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ??0CSink@@QAE@II@Z  006b4f60  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b4f90@CSink@@QAEX_N@Z  006b4f90  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b4fa0@CSink@@QAEXPBX@Z  006b4fa0  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b4fd0@CSink@@QAEXPBX@Z  006b4fd0  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b5000@CSink@@QAEXXZ  006b5000  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?SP_cString_SetColorLocalized@@YAX_N@Z  006b5030  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b5040@@YAXIIIPAI@Z  006b5040  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ??0cString@SP@@QAE@XZ  006b5060  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?set_source_string@cString@SP@@QAEXPBG_N@Z  006b5310  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ??4cString@SP@@QAEAAU01@ABU01@@Z  006b5430  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ?FUN_006b56d0@@YAXPAUResourceKey@SP@@PAUcString@2@@Z  006b56d0  /O2 /MD /Gy /EHsc /GS- /TP
+slices/s006b47a0/s006b47a0.cpp  ??0cString@SP@@QAE@ABU01@@Z  006b56f0  /O2 /MD /Gy /EHsc /GS- /TP

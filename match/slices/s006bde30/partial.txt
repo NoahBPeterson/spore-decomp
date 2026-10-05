@@ -1,0 +1,8 @@
+006bde30  0  partial: OpenRecord skeleton (open-record multimap + decompress + record factory omitted)
+006be1d0  0  partial: read/rebuild index record omitted
+006be350  0  partial: erase open-record entries omitted
+006be820  0  partial: hashtable node erase skeleton
+006be890  0  partial: rbtree lower_bound skeleton
+006be8d0  0  partial: hashtable rehash skeleton
+006be980  0  partial: heap sift-down skeleton
+006beb60  0  partial: PFIndexModifiable::Write serialization omitted

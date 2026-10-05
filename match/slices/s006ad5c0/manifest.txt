@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006ad5c0/s006ad5c0.cpp  ?FlushCache@SP@@YAXH@Z   006ad7c0
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006ad850@@YAXPAX@Z   006ad850
+slices/s006ad5c0/s006ad5c0.cpp  ?Destroy@cLRUCache@@QAEXPAPAXI@Z   006ad910
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006adc60@@YAXHH@Z   006adc60
+slices/s006ad5c0/s006ad5c0.cpp  ?AddRegistrationCallback@SP@@YAXIPAX@Z   006adfe0
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006ae020@@YIXPAPAX@Z   006ae020
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006ae0d0@@YIEPAPAX@Z   006ae0d0
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006ae0f0@@YIEPAPAX@Z   006ae0f0
+slices/s006ad5c0/s006ad5c0.cpp  ?FUN_006ae110@@YIXPAPAX@Z   006ae110
+slices/s006ad5c0/s006ad5c0.cpp  ?DoNukeSubtree@RBTree@@QAEXPAURBNode@@@Z   006ae600

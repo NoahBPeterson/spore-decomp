@@ -1,0 +1,17 @@
+# incomplete / approximate (stubbed blocks or omitted paths)
+006afa10   -  dtor (vtable resets + two releases): skeleton only
+006afc40   -  lock cmpxchg8b refcount bump: skeleton only
+006afcb0   -  intrusive list teardown loop: skeleton only
+006afd10   -  lock cmpxchg8b list splice: skeleton only
+006afdd0   -  stream flush over intrusive list: skeleton only
+006afe80   -  async submit routine: skeleton only
+006aff70   -  read-record adapter ctor: skeleton only
+006b0020   -  refcount release / completion: skeleton only
+006b00a0   -  LRU cache alloc wrapper: skeleton only
+006b0130   -  large LRU cache record fetch: skeleton only
+006b02b0   -  list walk + drain: skeleton only
+006b0300   -  cmpxchg8b list splice (large): skeleton only
+006b04a0   -  rbtree insert with key compare: skeleton only
+006b0670   -  rbtree search: skeleton only
+006b0720   -  cmpxchg8b rbtree node access: skeleton only
+006b0900   -  rbtree/list init ctor: skeleton only

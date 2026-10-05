@@ -1,0 +1,4 @@
+006c6630  853  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c6990  884  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c6d10  833  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)
+006c7060  884  complete source via shared BakeCore; original is SSE-scalar prebuilt codegen (cl15 emits x87)

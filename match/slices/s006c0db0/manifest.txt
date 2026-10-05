@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006c0db0/s006c0db0.cpp  ?mfc0@BlendShape@@QAEIXZ  006c0fc0
+slices/s006c0db0/s006c0db0.cpp  ?mfd0@BlendShape@@QAEIH@Z  006c0fd0
+slices/s006c0db0/s006c0db0.cpp  ?mff0@BlendShape@@QAEIH@Z  006c0ff0
+slices/s006c0db0/s006c0db0.cpp  ?m1020@BlendShape@@QAEIH@Z  006c1020
+slices/s006c0db0/s006c0db0.cpp  ?m1040@BlendShape@@QAEIH@Z  006c1040
+slices/s006c0db0/s006c0db0.cpp  ?m1060@BlendShape@@QAEIH@Z  006c1060
+slices/s006c0db0/s006c0db0.cpp  ?m1080@BlendShape@@QAEIH@Z  006c1080
+slices/s006c0db0/s006c0db0.cpp  ?m10a0@BlendShape@@QAEIH@Z  006c10a0
+slices/s006c0db0/s006c0db0.cpp  ?m10c0@BlendShape@@QAEIH@Z  006c10c0
+slices/s006c0db0/s006c0db0.cpp  ?m1120@BlendShape@@QAEIXZ  006c1120
+slices/s006c0db0/s006c0db0.cpp  ?m1140@BlendShape@@QAEIXZ  006c1140
+slices/s006c0db0/s006c0db0.cpp  ?m1160@BlendShape@@QAEIH@Z  006c1160

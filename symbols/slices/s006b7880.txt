@@ -1,0 +1,8 @@
+006b7880 SP::cStringTableResourceFactory::WriteResource  # PDB vtable-slot name
+006b7b90 GetWindowsCPUSpeed  # PDB callee-scored
+006b8250  # returns 1 when DAT_01530ffc && processor-count global set
+006b8410  # min(DAT_01530ff8, processor count)
+006b8180  # ntdll TGGetOS -> "MacOSX" comparison
+006b81e0 SysInfo::Init  # NVAPI video-memory probe, sets flag byte + m_dw4
+006b8460 CBig::CBig  # 9 empty-string members + 1000.0f fields
+006b8520 CBig::operator=  # 9 string assign + scalar copy

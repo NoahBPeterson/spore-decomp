@@ -1,0 +1,9 @@
+# Incomplete / skeleton.
+006b27f0  681  SP::cAppSystem::CreateHTTPServer; skeleton only
+006b2b30  656  OpenPreCommitFile; skeleton only
+006b2dc0  656  SP::CreateCachedDirectorySave; skeleton only
+006b3050  487  `anonymous namespace'::cDirectoriesCheat::Execute; skeleton only
+006b3240  487  SP::CreatePackageSave; skeleton only
+006b3430  237  SP::CreateLocationSave (wstring append + dispatch); skeleton only
+006b3680  216  eastl::map<unsigned,cSPSaveArea>::operator[]; skeleton only
+006b3760  57   SP::RegisterSaveArea; skeleton only

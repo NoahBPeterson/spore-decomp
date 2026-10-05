@@ -1,0 +1,6 @@
+# Incomplete / skeleton.
+006b37d0  2112  SP::CreateDefaultSaveAreas; skeleton only
+006b4010  685   SP::SaveNamedResource; skeleton only
+006b4400  128   save-area helper; skeleton only
+006b4490  369   save-area helper; skeleton only
+006b4610  249   save-area helper; skeleton only

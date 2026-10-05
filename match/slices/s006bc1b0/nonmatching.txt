@@ -1,0 +1,14 @@
+006bc1b0  233  complete; /GS- EH frame + vtable call schedule differ (MakeIndexModifiable)
+006bc310  4    complete; conditional hole-table selection branch layout differs
+006bc4d0  240  complete; Open() stream/access-flag logic; register + frame differences
+006bc6f0  126  complete; scoped-lock EH epilogue layout differs
+006bc7a0  175  complete; header-record read + field conversion; buffer/store schedule differs
+006bc870  97   complete; 64-bit header integrity checks; register allocation on the 64-bit compares differs
+006bc8e0  111  complete; WriteEmptyHeaderRecord buffer zeroing schedule differs
+006bc970  248  complete; WriteHeaderRecord field packing schedule differs
+006bca90  98   complete; ReadFileSpan lock frame + register choice differs
+006bcc10  143  complete; CompressionRefpack local + DecompressData call shapes differ
+006bccb0  111  complete; DecompressRecord allocation/read path; argument marshalling differs
+006bcd70  249  complete; rbtree find + RecordInfo build; inlining/EH schedule differs
+006bcea0  404  complete; index compaction state machine; heavy scheduling/inlining differences
+006bd070  167  complete; hole-table flush/compact; hole-table inline call schedule differs

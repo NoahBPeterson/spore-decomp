@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006ba2f0/s006ba2f0.cpp  SetA@MatOwner  006ba800  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006ba2f0/s006ba2f0.cpp  SetB@MatOwner  006ba840  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE
+slices/s006ba2f0/s006ba2f0.cpp  FUN_006bae50   006bae50  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE

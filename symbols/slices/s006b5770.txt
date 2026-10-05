@@ -1,0 +1,23 @@
+006b5770 SP::cString::cString (variant)  # in the cStringDetokenizer region
+006b57f0 App::cStringDetokenizer::func28h  # tail-calls this->ProcessString(*(a+8), dst)
+006b5810 App::cStringDetokenizer::HasTokens  # wcschr(p,'~') != 0
+006b5840 App::ITokenTranslator::func14h  # iterate mTranslators[1..], call translator->func14h
+006b5880 App::cStringDetokenizer::FindTokenTranslation  # reverse-iterate, TranslateToken
+006b5950 App::cStringDetokenizer::func34h  # assign mGenericTokens[index] from pStr
+006b5990 App::TranslatorVector::erase  # intrusive_ptr vector erase (copy tail, Release last)
+006b59d0 App::TranslatorVector::DoInsertValue  # eastl vector grow/relocate
+006b5b80 App::cStringDetokenizer::RemoveTranslator  # find ptr in mTranslators, erase
+006b5bd0 App::cStringDetokenizer::ProcessString  # vtable slot 0x2c
+006b5c50 App::cStringDetokenizer::func30h  # vtable slot 0x30
+006b5d20 App::cStringDetokenizer::ProcessStringEx  # vtable slot 0x38
+006b5f80 App::TranslatorVector::push_back(intrusive_ptr)  # eastl vector emplace
+006b6000 App::cStringDetokenizer::func18h  # erase all + push self
+006b6080 App::cStringDetokenizer::AddTranslator  # vtable slot 0x1c
+006b6160 App::ITokenTranslator::TranslateToken  # vtable slot 0x10
+006b6490 App::cStringDetokenizer::cStringDetokenizer  # vtbl 0x1400f40; vector + 4 generic tokens at +0x1c
+006b6540 SP::cStringTableResourceFactory::GetSupportedTypes  # writes 0x2fac0b6
+006b65d0 hash/stream iterator helper
+006b6620 stream byte reader helper
+006b6740 eastl::hashtable erase(key)  # frees nodes, returns count
+006b67b0 eastl::hashtable insert/operator[] helper
+006b68a0 eastl::hashtable<SP::cString*>::~hashtable scalar deleting dtor

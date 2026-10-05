@@ -1,0 +1,8 @@
+006b27f0 SP::cAppSystem::CreateHTTPServer  # work/xmatch/matches.json dev-name match
+006b2b30 OpenPreCommitFile  # work/xmatch/matches.json dev-name match
+006b2dc0 SP::CreateCachedDirectorySave  # work/xmatch/matches.json dev-name match
+006b3050 `anonymous namespace'::cDirectoriesCheat::Execute  # work/xmatch/matches.json dev-name match
+006b3240 SP::CreatePackageSave  # work/xmatch/matches.json dev-name match
+006b3430 SP::CreateLocationSave  # work/xmatch/matches.json dev-name match
+006b3680 eastl::map<unsigned int,`anonymous namespace'::cSPSaveArea,eastl::less<unsigned int>,allocator::allocator>::operator[]  # work/xmatch/matches.json dev-name match
+006b3760 SP::RegisterSaveArea  # work/xmatch/matches.json dev-name match

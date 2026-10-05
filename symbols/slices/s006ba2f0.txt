@@ -1,0 +1,9 @@
+006ba800 MatOwner::SetA  # build Matrix3 and set (thiscall ret 8)
+006ba840 MatOwner::SetB  # Matrix3 from two ints
+006ba870 XForm2::Apply  # transform a Matrix3 into this
+006ba940 XForm2::PreRotateX  # build cTransform + rotate
+006baa70 XForm2::PreRotateY  # build cTransform + rotate
+006bae50 FUN_006bae50  # app property setup
+006baec0 SP::FindDirectoryUp  # PDB callee-scored
+006baff0 SP::SporeAlert  # PDB anchor, MessageBoxA + eastl sprintf
+006bb0b0 FUN_006bb0b0  # wide SporeAlert variant

@@ -1,0 +1,16 @@
+006b6920 SP::cStringManager destructor body  # vtbl 0x1409c40; releases factory/detokenizer, DoFreeNodes
+006b69e0 SP::cStringManager::RemoveString  # hash-set erase(&p), return true (vtable slot 2)
+006b6a00 cStringManager string-list iteration helper  # calls cString::Load over buckets
+006b6a70 SP::cStringManager::~cStringManager  # PDB
+006b6af0 cStringManager helper
+006b6b70 cStringManager helper
+006b6bf0 cStringManager helper
+006b6d10 App::cStringManager::cStringManager  # vtable_names.txt
+006b6e50 SP::cStringManager::AddString  # hash-set insert(&p), return true (vtable slot 1)
+006b6e80 cStringManager helper
+006b6f80 byte-vector grow helper
+006b7180 byte-vector grow helper
+006b7320 lower_bound over vector<pair<uint,WinXHTML_*>>
+006b7380 byte-vector resize/append
+006b73e0 byte-vector resize/append
+006b7430 SP::cStringTableResourceFactory::ReadResource  # vtable_names/PDB

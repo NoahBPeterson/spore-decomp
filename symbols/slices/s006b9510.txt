@@ -1,0 +1,2 @@
+006b9510 FUN_006b9510  # 3x3 transform applied across a Vector3 array (SSE)
+006b9dc0 FUN_006b9dc0  # variant of the same transform kernel

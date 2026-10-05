@@ -1,0 +1,5 @@
+slices/s006b09b0/s006b09b0.cpp  ?A@Cache@@QAEXPAUKey12@@H@Z  006b0ce0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b09b0/s006b09b0.cpp  ?B@Cache@@QAEXPAUKey12@@@Z  006b0d20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b09b0/s006b09b0.cpp  ?C@Cache@@QAEXPAUKey12@@@Z  006b0d60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b09b0/s006b09b0.cpp  ?Cache_Create@@YAPAUCache@@II@Z  006b0ed0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b09b0/s006b09b0.cpp  ?Shutdown@Cache@@QAEXXZ  006b1860  /O2 /MD /Gy /EHsc /TP /GS-

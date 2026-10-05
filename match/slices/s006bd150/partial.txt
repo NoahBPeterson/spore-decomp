@@ -1,0 +1,3 @@
+006bd300  0  partial: destructor skeleton (eastl multimap / hole-table / allocator teardown not written)
+006bd690  0  partial: OpenRecord skeleton (open-record multimap lookup + decompress + index update omitted)
+006bdc50  0  partial: constructor skeleton (all fields + embedded objects not written)

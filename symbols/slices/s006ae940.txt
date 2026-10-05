@@ -1,0 +1,7 @@
+006aebd0 SP::cAsyncResourceManager::~cAsyncResourceManager  # PDB
+006aedc0 SP::cAsyncResourceManager::cAsyncResourceManager  # PDB
+006af150 SP::cAsyncResourceManager::AllocateRequest  # PDB candidate (caller-scored)
+006ae940 (return-and-destroy async job drain loop)  # dc
+006aea90 (async job completion / RequestComplete)  # dc
+006aec60 eastl::fixed_map<...>::operator[]  # dc
+006af080 eastl::fixed_map<...>::find  # dc
