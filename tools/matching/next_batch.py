@@ -17,6 +17,8 @@ todo = [s for s in slices if not os.path.isdir(os.path.join(ROOT, "match/slices"
         and a.min_bytes <= s["bytes"] <= a.max_bytes and len(s["functions"]) >= a.min_funcs]
 if a.order == "size":
     todo.sort(key=lambda s: s["bytes"])
+elif a.order == "size-desc":
+    todo.sort(key=lambda s: s["bytes"], reverse=True)
 batch = todo[:a.n]
 data = [{"id": s["id"], "vas": [f["va"] for f in s["functions"]]} for s in batch]
 if a.write:
