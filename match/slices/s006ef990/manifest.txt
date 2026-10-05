@@ -1,0 +1,2 @@
+slices/s006ef990/s006ef990.cpp  ?Release@@YAXPAUcEffectsModelR@@@Z  006ef990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006ef990/s006ef990.cpp  ?Init@cEffectsRendererSystem@@QAE_NXZ  006ef9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

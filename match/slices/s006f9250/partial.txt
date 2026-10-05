@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+006f9250  470  skeleton: AddFilterChain body omitted (returns a stub expression).
+006f9520  177  skeleton: vector<FilterElem28> range-construct/alloc omitted.
+006f95e0  335  skeleton: five-vector descriptor copy omitted.
+006f9730  322  skeleton: vector<FilterElem28>::operator= assign paths omitted.
+006f9ac0  427  skeleton: hashtable/param update body omitted.
+006f9cf0  294  skeleton: shutdown body omitted.
+006f9e20  218  skeleton: three-arg notify body omitted.
+006fa1b0  148  skeleton: global shader-dirty flag propagation over the shader table omitted.
+006fa250  100  skeleton: shader-name list match (inline strcmp) omitted.

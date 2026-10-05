@@ -1,0 +1,6 @@
+006f2f30 RetMinus1  # stdcall stub returning -1
+006f2f40 RetThird  # stdcall stub returning its 3rd arg
+006f2f70 Adjustor2f70  # sets +0x44 vtable then tail-calls 6f2e80
+006f3290 ResetEffectStates  # SP::EffectsManager()->SetState(vt+0x98) for states 0..3
+006f32e0 ApplyStateFromProperty  # SP::GetPropertyAsFloatArray + EffectsManager SetState
+006f33d0 ReleaseIf  # vt[0x30] on +0x34 member, release it, mAt58=-1

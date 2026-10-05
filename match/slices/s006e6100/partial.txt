@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006e6100  -  incomplete: SP::cDirectShader::Write (996-byte serialization/EH routine); signature/skeleton only
+006e6600  -  incomplete: rw::graphics::EmbeddedState::SetDeviceState (262-byte gradient-fill + streamed mip setup); skeleton only
+006e6ee0  -  incomplete: 4x4 matrix builder (306 bytes, calls FUN_006ddcc0/FUN_006ddd40); skeleton only
+006e7020  -  incomplete: scaled-matrix writer (238 bytes, 14 float params); skeleton only

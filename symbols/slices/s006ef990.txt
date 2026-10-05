@@ -1,0 +1,9 @@
+006ef990 Release  # free cdecl fn taking cEffectsModel*; frees dispatch data (vector stride 0xc at +8), calls Reset, RefCountTemplate release tail
+006ef9e0 Init  # SP::cEffectsRendererSystem::Init (PDB candidate); builds test model/mesh/vertex buffer, returns true
+006efa90 Shutdown  # cEffectsRendererSystem::Shutdown; releases mesh/vb + two fixed vectors, atomic refcount, releases model
+006efb90 Create  # static singleton factory: operator_new(0x30d90,0x10,...), zero fields, store g_pEffectsRendererSystem, tail-call Init
+006efc10 DestroyEffectsRendererSystem  # free fn: Shutdown, dtor, EA allocator deallocate, clear global
+006efc70 FUN_006efc70  # cEffectsRendererSystem helper
+006efe90 RenderTextureParticles  # SP::cEffectsRenderer::RenderTextureParticles
+006f0320 FUN_006f0320  # effects renderer helper
+006f05a0 FUN_006f05a0  # effects renderer helper

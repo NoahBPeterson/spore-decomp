@@ -1,0 +1,10 @@
+006ed2c0 SetTextureParticleActive  # SP::cEffectsRenderer; vector<cTextureParticleSet> at +0x174, active list +0x188; cTextureParticleSet.mActive +0x48/mInActiveList +0x49
+006ed340 RemoveParticleSet  # frees a model-particle id (vector stride 0x68 at +0x1b8, free ids +0x1cc)
+006ed440 ActivateByKey  # guard `(a & b) != -1`; virtual call +0x58 on object at +0xc; returns vector index
+006ed5b0 DoInsertValue  # eastl::vector<cTextureParticleSet,sp_vector_allocator>::DoInsertValue
+006ed6f0 DoInsertValue  # eastl::vector<cModelParticleSet,sp_vector_allocator>::DoInsertValue
+006ed8d0 cEffectsModel  # ctor; sets vptr, fixed vectors at +8/+0x70, bounding box +0x50 (FLT_MAX), radius +0x68
+006edaa0 AddResourceRef  # SP::cEffectsModel; AutoRefCount temp + push_back into refs vector at +0x70
+006edb10 Reset  # SP::cEffectsModel; box min=+FLT_MAX max=-FLT_MAX, radius 0, release async (+0x6c), clear +8/+0x70
+006edbc0 UpdateFromResource  # SP::cEffectsModel (PDB candidate); arena exported objects -> bbox
+006ee140 Update  # SP::cEffectsModel; polls async request (+0x6c) then UpdateFromResource

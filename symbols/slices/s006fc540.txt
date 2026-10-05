@@ -1,0 +1,11 @@
+006fc540  eastl::vector<...>::set_capacity    # PDB candidate
+006fc6a0  SP::ClearPSFragment                  # PDB
+006fc780  SP fragment-block append/move
+006fcb90  SP fragment region clear
+006fcdc0  EA::IO read of a fragment-decl record
+006fceb0  EA::IO write of a fragment-decl record
+006fcf90  SP::cFragmentShader::Write           # PDB candidate
+006fd1b0  shader-array destructor iterator
+006fd280  shader-array constructor iterator
+006fd300  refcount Release
+006fd330  shader-block serialization

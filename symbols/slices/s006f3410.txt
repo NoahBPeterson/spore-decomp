@@ -1,0 +1,18 @@
+006f3410 SP::cModelInstanceSet::v0  # vtable slot 0 of 0x140b6f4 (the two-slot cModelInstanceSet vtable)
+006f3b70 SP::cModelInstanceSet::Update  # PDB name (symbols/pdb_names.json)
+006f3d00 SP::cModelInstanceSet::cModelInstanceSet  # ctor: stores vptr 0x140b6f4, size 0x5c
+006f3d50 SP::cModelInstanceSet::~cModelInstanceSet  # dtor: releases mRenderer, frees both vectors
+006f3df0 SP::cModelInstanceSet::AddToRenderer  # PDB candidate (symbols/pdb_candidates.json)
+006f3ec0 cRenderInstanceSet::OnMessage  # vtable slot 0 of 0x140b7ac
+006f3ee0 cRenderInstanceSet::CopyTo174  # cViewer::Copy to +0x17c
+006f3f20 cRenderInstanceSet::Setup178  # cViewer::Copy to +0x178 + renderer vfn
+006f3fb0 cRenderInstanceSet::Setup180  # cViewer::Copy to +0x180
+006f4020 cRenderInstanceSet::Tick154  # interpolates +0x154 with +0x1ac rate, bounded by +0x1a8
+006f40b0 cRenderInstanceSet::SetElement  # flags[12] at +0x1bc, values[12] at +0x1c8
+006f40d0 cRenderInstanceSet::ClearElements  # clears the 12 element slots
+006f4100 cRenderInstanceSet::SetColor  # vtable slot 10 of 0x140b7ac, writes 4 floats at +0x110
+006f4170 cRenderInstanceSet::IsRangeEmpty  # compares +0x120 and +0x124
+006f4190 cRenderInstanceSet::GetRange  # scans +0x1b4[2], reads model entry at +0x138
+006f41e0 cRenderInstanceSet::RenderRange  # same scan as GetRange, renders via viewer +0x174
+006f4280 cRenderInstanceSet::UpdateEffects  # decays per-instance lifetimes, calls vtable slot 8
+006f4330 cGraphicsHash::Resize  # Graphics-tagged bucket rebuild (+4 buckets, +8 count)

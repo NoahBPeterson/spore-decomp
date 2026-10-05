@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+006fb5c0  661  skeleton: GetGeneratedPixelShader body omitted.
+006fb860  140  skeleton: LoadAndSelectPS (inline strcmp + global PS table + D3D set-PS call) omitted.
+006fb920   59  skeleton: global shader vector teardown omitted.
+006fb960  122  skeleton: per-element shader release + vector clear omitted.
+006fb9e0  327  skeleton: vector<cFragmentDecl>::operator= assign paths stub (memcpy-style copy only).
+006fbb30  202  skeleton: vector swap (allocator-guard branch + copy/assign fallback) stub.
+006fbc60  614  skeleton: vector<cFragmentDecl>::DoInsertValues omitted.
+006fbf70  640  skeleton: vector<cFragmentDecl>::DoInsertValue omitted.
+006fc1f0  650  skeleton: vector<cFragmentDecl>::DoInsertValues (fill) omitted.
+006fc480  191  skeleton: vector<cFragmentDecl>::resize omitted.

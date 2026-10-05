@@ -1,0 +1,2 @@
+006e6100  SP::cDirectShader::Write  # dev-PDB caller-scored (dev 0x00fae4f0)
+006e6600  rw::graphics::EmbeddedState::SetDeviceState  # dev-PDB callee-scored (dev 0x016044d0)

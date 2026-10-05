@@ -1,0 +1,3 @@
+# va  reason
+00702af0  SP::cHierGrid::Clear: skeleton only (slot free-list unlink / mask propagation / level trim not reconstructed)
+00703360  eastl::hash_map<unsigned,SP::cCellInfo>::operator[]: skeleton only (find-or-insert via the hashtable not reconstructed)

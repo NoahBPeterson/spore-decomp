@@ -1,0 +1,6 @@
+006f0890  -  skeleton: effects renderer helper (760 B) not reconstructed.
+006f0b90  -  skeleton: effects renderer helper (1044 B) not reconstructed.
+006f0fb0  -  skeleton: cEffectsRenderer::CreateTextureParticleSet (1002 B) not reconstructed.
+006f13a0  -  approximate: RenderMainEffectsLayer; jump-table dispatch and per-case calls not reproduced.
+006f1510  -  skeleton: eastl vector insert stride 0xc0 (EH realloc path) not reconstructed.
+006f16c0  -  skeleton: eastl vector push_back stride 0xc0 (EH, default-construct temp) not reconstructed.

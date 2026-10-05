@@ -1,0 +1,14 @@
+006ffe00  FUN_006ffe00  # spatial query (EH), region 0x6ffe00
+00700120  SP::cFrustumCull::FrustumTestSphere  # PDB name
+00700290  FUN_00700290  # 0xa0-byte cell record copy
+00700360  Cell_GetChildID  # returns +0x08, writes +0x0c through out-param
+007003a0  FUN_007003a0  # cell array constructor (operator_new count*0xa0)
+00700450  FUN_00700450  # scalar deleting destructor, vtables 0x140c460 / 0x13ef094
+007004d0  FUN_007004d0  # vtbl_Editor::cPropertyList destructor
+00700640  Vec4_PushBack  # 4-byte push_back with grow at FUN_006ec4a0
+007006d0  FUN_007006d0  # cell vector release/reset
+00700a30  FUN_00700a30  # spatial cell pack
+00700b70  `anonymous namespace'::GetParentChildInfo  # PDB name
+00700bb0  `anonymous namespace'::ChildCellIDs  # PDB name
+00700c00  FUN_00700c00  # 6x5-bit interleaved cell-id pack via 0x15352a8
+00700c80  FUN_00700c80  # float cell query (SSE)

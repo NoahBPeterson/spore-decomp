@@ -1,0 +1,17 @@
+006f1770  -  skeleton: allocates a cTextureParticleSet id (free list +0x238 / +0x224) and constructs a string.
+006f1860  -  skeleton: SP::cEffectsResourceInfo::Init (manager/material lookups + EA alloc).
+006f1a30  -  skeleton: allocates a 0x18 refcounted node.
+006f1b60  -  skeleton: resource lookup (uses DAT_0140b568 table) + reference release.
+006f1c40  -  skeleton: resource creation (0x98 alloc, model UpdateFromResource).
+006f1df0  -  skeleton: atomic refcount release at +4 (lock xadd pattern not reproducible).
+006f1e20  -  skeleton: atomic refcount release at +8 (lock xadd pattern not reproducible).
+006f1f20  -  skeleton: vertex-descriptor classification via hashtable find.
+006f2000  -  skeleton: hashtable ContainsKey helper.
+006f2050  -  skeleton: hashtable FindEntry helper.
+006f20a0  -  skeleton: allocate 0x10 refcounted node (EASTL allocator + interlocked inc).
+006f20f0  -  skeleton: hashtable find-or-insert.
+006f2310  -  skeleton: insert an entry into the +0x60 vector / free list.
+006f2430  -  skeleton: free bucket list with atomic refcount release at +8.
+006f24a0  -  skeleton: assign by key into a hashtable.
+006f2510  -  skeleton: hashtable find-or-insert (variant).
+006f2620  -  skeleton: clear all particle sets / free lists.

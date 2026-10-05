@@ -1,0 +1,3 @@
+006e9230  207  copy-ctor with EH; refcount/EH try-level structure approximated
+006e9990  52  EH destructor; unwind funclet / EH-frame detail omitted
+006e9a30  94  EH destructor; refcount and EH-frame detail approximated

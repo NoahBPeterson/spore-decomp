@@ -1,0 +1,4 @@
+0070de90  364   cLightingManager message handler; RBTree notify loop omitted
+0070e160  224   lighting-state reload; property loop approximated
+0070e480  46    fixed-array wrapper; element ctor/dtor passed as null
+0070ec80  999   SP::cMaterialManager::Init; timer branch simplified

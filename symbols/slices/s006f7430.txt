@@ -1,0 +1,7 @@
+006f7430 color_wrapper_8c  # mode 0x8c, two quad colour loo
+006f7680 color_wrapper_c8  # modes 200/0xc9, three colour quads + pointer/count pair
+006f79a0 cFilterChain_DispatchParams  # reads many +0x28 colour slots, calls FUN_006f4580/FUN_006f46f0
+006f7f70 SP::cFilterChain::ApplyStrengthFilter  # PDB anchor (symbols/pdb_names.json)
+006f8140 uninitialized_copy_0x28  # copies 0x28-byte elements, bool-vector at +0x10
+006f8190 cFilterChain_Clear  # intrusive release loop + FUN_006f43e0 + hashtable frees
+006f8260 cFilterChain_ResolveTexture  # FUN_00892970 lookup, FUN_006f4500/FUN_006f44c0 fallback

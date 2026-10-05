@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+006e7110  -  incomplete: SP::cEffectsModel::DispatchWithAdditionalMaterial (346-byte loop over CompiledState records); skeleton only
+006e7270  -  incomplete: SP::cEffectsRenderer::RenderBoundingBoxes (343-byte variant of the same loop); skeleton only
+006e7450  -  incomplete: 1071-byte property-driven subsystem initialiser with EH; skeleton only
+006e78b0  -  incomplete: 252-byte per-element state refresh; skeleton only
+006e79b0  -  incomplete: 237-byte screen-space quad setup with cvtsi2ss math; skeleton only
+006e7b50  -  incomplete: 267-byte render-state bind; skeleton only
+006e7dd0  -  incomplete: 250-byte element setter with midpoint/interface update; skeleton only
+006e7f30  -  incomplete: 107-byte EH destructor (releases +0x60 and refcounted +0x0); skeleton only

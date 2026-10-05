@@ -1,0 +1,3 @@
+006ea030  907  complete; render pass A, all four culling loops present but SSE schedule/loop shape differ
+006ea9e0  393  complete; entity box setter (vtable pool alloc + transform), schedule and compare layout differ
+006ead40  200  complete; transform setter, cSPTransform call and update-index schedule differ

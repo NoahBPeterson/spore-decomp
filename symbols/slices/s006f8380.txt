@@ -1,0 +1,6 @@
+006f8380  SP::cFilterChain::ApplyFilters          # vtable slot, applies a filter-desc vector
+006f8710  eastl::vector<FilterElem28>::uninitialized_copy  # range copy of 0x28-byte filter elements
+006f87f0  SP::cFilterChain::CreateScreenFilterInternal  # PDB candidate (pdb_candidates.json)
+006f8d40  SP::cFilterChain::cFilterChain            # constructor, three MI vtables
+006f8f60  SP::cFilterChain::~cFilterChain           # destructor
+006f9020  SP::cFilterChain::RemoveFilterChain       # removes a screen-filter slot by index

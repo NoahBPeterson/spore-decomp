@@ -1,0 +1,6 @@
+006ee1f0  -  skeleton: full cEffectsRenderer constructor (multi-vtable init, fixed_vector EH ctor, ~100 field inits).
+006ee4f0  -  skeleton: compiler-generated cEffectsRenderer destructor (18-step EH unwind).
+006ee6f0  -  skeleton: cEffectsModel dispatch loop (frustum test + render state) not reconstructed.
+006ee940  -  approximate: active-id insertion; temp fixed_vector helper not reproduced.
+006eea80  -  approximate: vector-bool resize; out-of-line DoInsertValue/insert helpers not reproduced.
+006eeb60  -  skeleton: eastl vector<cTextureParticleSet> insert (stride 0x70 realloc path) not reconstructed.

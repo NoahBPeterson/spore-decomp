@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00700da0  290  complete cell-id-from-position helper; SSE schedule and floor-idiom spill slots differ, return blocks use short jumps where the original uses long
+00700ff0  75  slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
+00701050  4  list node insert-before, complete; only the final two operand loads are swapped (out vs position)
+007010b0  61  list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
+00701110  71  eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
+00701170  68  object-list copy constructor, complete; EH frame and call-argument register setup differ
+007011d0  685  SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
+007014c0  1239  SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; inlined hashtable lookup and morton build differ

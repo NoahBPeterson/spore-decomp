@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+006ffa80  8    clip-distance subtraction: complete; cl hoists the `d` argument load above the first member load (original loads member first), shifting the whole prefix.
+006ffaf0  200  plane/point clip test: complete; cl assigns the local[6] lanes and the global plane index base differently.
+006ffbd0  94   plane distance clip test: complete; same lane/index register assignment differences plus the found->(-0x140) schedule.
+006ffc60  263  cube-corner index table for a sign triple: complete; the switch case bodies and the 3-bit mask computation are laid out differently.
+006ffdc0  52   float 4x4 transpose: complete; cl rotates/unrolls the 4-row loop differently from the original 4-iteration do/while.

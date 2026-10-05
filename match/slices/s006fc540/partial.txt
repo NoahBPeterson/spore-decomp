@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+006fc540  342  skeleton: vector set_capacity (alloc/copy/free with element relocation) omitted.
+006fc6a0  223  skeleton: ClearPSFragment (temp cPixelFragmentInfo + global resets) omitted.
+006fc780  1031  skeleton: large fragment-block serialization/appended-move body omitted.
+006fcb90  548  skeleton: region-clear body omitted.
+006fcf90  421  skeleton: cFragmentShader::Write (16 state-dep entries x 2 vectors) omitted.
+006fd1b0  100  skeleton: _eh_vector_destructor_iterator twin arrays omitted.
+006fd280  116  skeleton: _eh_vector_constructor_iterator twin arrays omitted.
+006fd300   38  skeleton: refcount Release / delete-this omitted.
+006fd330  486  skeleton: shader-block serialization omitted.

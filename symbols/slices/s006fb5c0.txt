@@ -1,0 +1,12 @@
+006fb5c0  `anonymous namespace'::GetGeneratedPixelShader   # PDB
+006fb860  SP::LoadAndSelectPS                              # PDB
+006fb8f0  SP::FragmentSystem::DispatchCB                   # PDB candidate
+006fb920  UnregisterShaders
+006fb960  ClearFragmentShaders
+006fb9e0  eastl::vector<SP::cFragmentDecl>::operator=      # PDB candidate
+006fbb30  eastl::vector<SP::cFragmentDecl>::swap           # PDB
+006fbc60  eastl::vector<SP::cFragmentDecl>::DoInsertValues # (large append path)
+006fbed0  `anonymous namespace'::cPixelFragmentInfo::operator=  # PDB
+006fbf70  eastl::vector<SP::cFragmentDecl>::DoInsertValue  # PDB
+006fc1f0  eastl::vector<SP::cFragmentDecl>::DoInsertValues # PDB
+006fc480  eastl::vector<SP::cFragmentDecl>::resize         # PDB

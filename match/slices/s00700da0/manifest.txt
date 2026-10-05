@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00700da0/s00700da0.cpp  ?free_holder@@YIXPAPAX@Z  00700ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00700da0/s00700da0.cpp  ?list_free_anchor0@@YIXPAUObjListNode@@@Z  00700f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00700da0/s00700da0.cpp  ?list_free_anchor4@@YIXPAX@Z  00700fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

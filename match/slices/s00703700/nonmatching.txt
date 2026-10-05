@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
+00703b60  192  SP::cHierGrid::Update; complete behaviour, inlined-threshold scheduling differs
+00703c80  82  assign-copy a cGrid range from one source; complete, mCells assignment inlining differs
+00703ce0  83  SP::cHierGrid constructor; complete, register selection (edx vs ecx for the zero/-1 fills) differs
+00703d50  59  create-entry + Add; complete, call argument scheduling differs
+00704060  202  SP::cHierGrid::Shutdown; complete, vector erase/clear inlining differs
+00704140  217  vector<cGrid>::resize; complete, EH frame and grow path differ
+00704260  n/a  SP::cHierGrid::Init; complete, loop schedule and register allocation differ
+00704400  236  image Read; complete, nested-read control flow/register allocation differs
+00704500  7  image Write; complete, only the virtual-call register selection differs (data/fn in eax/edx)

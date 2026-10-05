@@ -1,0 +1,5 @@
+006eb6e0  308  complete; cEffectsCameraManager::UpdateCameraView, vcall argument/schedule layout differs
+006eb9d0  47  complete; pivot/rotate helper, loop rotation and register assignment differ
+006ebe50  62  complete; Hoare partition, loop rotation and operand order differ
+006ebea0  87  complete; sort helper, register assignment/loop shape differ
+006ebf50  146  complete; ctor pointer-init + Vector3 splat (stack-temp layout differs)

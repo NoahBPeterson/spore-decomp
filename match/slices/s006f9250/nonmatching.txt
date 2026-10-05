@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006f9a50  35  complete vector<Elem78>::erase (shift tail via copy79, destroy tail, shrink end); differs only in register allocation/end-update magic.

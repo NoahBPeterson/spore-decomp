@@ -1,0 +1,6 @@
+0070ced0  118   eastl::vector<SP::cLightingConfig>::DoInsertValue; compare/order correct, cl EH state machine differs
+0070d080  458   eastl::vector<SP::cLightingConfig>::DoInsertValues; helper call shapes differ
+0070d2c0  300   SP::cLightingWorld::cLightingWorld; all field stores/calls reproduced, scheduling/SSE differ
+0070d6d0  279   SP::cLightingWorld::~cLightingWorld; member chain reproduced, register order differs
+0070dc90  156   SP::cLightingManager world factory; thiscast/register allocation differs
+0070ddd0  117   SP::cLightingManager::Shutdown; range-clear + map teardown reproduced, registers differ

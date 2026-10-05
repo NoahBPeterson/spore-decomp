@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+006fe600  409  eastl vector<0x130-block>::insert: stub only (reallocation/relocation paths not reproduced).
+006fea30  407  `anonymous namespace'::GenerateVertexShader: stub only (the fragment scan, struct-string assembly and D3DXCompileShader orchestration are omitted).
+006fec40  661  `anonymous namespace'::GetGeneratedVertexShader: stub only (the shader cache lookup/eviction and record population are omitted).

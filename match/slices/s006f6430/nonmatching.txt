@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+# (none: all written functions are byte-exact or listed in partial.txt)

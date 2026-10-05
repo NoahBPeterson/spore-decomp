@@ -1,0 +1,2 @@
+slices/s006f1770/s006f1770.cpp  ?Forward1840@@YGXHH@Z  006f1840  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006f1770/s006f1770.cpp  ?Call@Owner1950@@QAEHHHHH@Z  006f1950  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

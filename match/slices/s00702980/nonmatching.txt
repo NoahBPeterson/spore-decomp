@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
+00702980  n/a  CellMap::CloneEntry (allocate + copy one hash node); full reconstruction, schedule differs
+00702a10  244  CellMap copy constructor; complete, allocation/copy schedule differs
+00702da0  60  SP::cHierGrid::Remove; complete behaviour, register allocation differs
+00702f60  n/a  CellMap::operator= (copy-and-swap); complete, temp/inline schedule differs
+007030a0  163  uninitialized_copy of cGrid range; complete, destination-pointer iteration differs
+00703160  175  fill_n of cGrid; complete, loop/register shape differs
+00703210  171  copy-construct cGrid range; complete, call/loop schedule differs
+007032e0  98  destroy range of cGrid; complete, register allocation differs
+00703470  245  slot_vector_base::create; complete, register allocation differs
+007035a0  33  destroy range of cGrid by pointer delta; complete, prefix scheduling and pop order differ
+00703690  82  assign-copy cGrid range backwards; complete, register allocation differs

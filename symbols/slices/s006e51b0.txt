@@ -1,0 +1,4 @@
+006e51b0  SP::SHFromCubeMap  # dev-PDB anchor (dev 0x00f5c910), module SPGraphicsCubeMapCapture.obj
+006e54d0  ShaderDispatchList  # local helper called by DirectShaderDispatchCallback; no PDB name
+006e5520  SP::DirectShaderDispatchCallback  # dev-PDB caller-scored (dev 0x00fac560)
+006e57a0  eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::fixed_vector_allocator<4,4,4,0,1> >::DoDestroyValues  # dev-PDB callee-single (dev 0x015b0a70)

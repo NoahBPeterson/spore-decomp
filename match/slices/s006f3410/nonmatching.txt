@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+006f3b70  389  SP::cModelInstanceSet::Update: algorithm complete, but the original uses a 16-byte-aligned frame (and esp,-16) for its bounds/radius locals that I could not reproduce; register allocation differs.
+006f3d00  14  ctor: identical instruction set but cl hoists xor ecx,0 / or edx,-1 above the vptr store, so the vptr store position differs.
+006f3d50  97  dtor: behavior complete (release mRenderer, free the two vectors) but the original carries an /EHsc EH frame + state store that a pointer-only class does not generate.
+006f3df0  128  AddToRenderer: behavior complete; the mRenderer assignment/release and the 64-bit mModelInstance/mModelGroup store are scheduled differently.
+006f3f20  3  Setup178: only the vptr/vfn register choice for the mRenderer168 vcall differs (edx/eax swapped).
+006f4020  32  Tick154: x87 compare emits fld1/fcompi/ja instead of the original fld1/fxch/fcompi/jb (same relation).
+006f4100  64  SetColor: original spills the three rgb products to a 0xc stack frame then copies them as ints; my form stores directly into the members.
+006f4190  63  GetRange: loop/found-path structure close; the not-found (-1,-1) store and the unsigned loop compare still differ.
+006f41e0  105  RenderRange: same loop shape as GetRange plus viewer calls; register allocation differs.
+006f4280  100  UpdateEffects: algorithm complete; x87 fild/fsubr and loop addressing differ.
+006f4330  105  cGraphicsHash::Resize: behavior complete; this/bytes/hash pointers are allocated to different registers (esi/ebx/edi).

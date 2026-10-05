@@ -1,0 +1,10 @@
+006f54a0 cState::F54a0  # dispatcher; FUN_006f54a0, calls FUN_006f4b90/FUN_0077ca20
+006f5bc0 vector_ushort_insert  # inserts a ushort into a growing vector (memmove front)
+006f5cd0 vector_operator_assign_c  # vector::operator= with 0xc-byte elements
+006f5e00 vector_operator_assign_8  # vector::operator= with 8-byte elements
+006f5ed0 state_struct_ctor  # initializes refcount-like block, writes +0..+0x80
+006f5f80 cState::W5f80  # color wrapper, mode 0x32/0x33 -> FUN_006f54a0
+006f6060 cState::W6060  # color wrapper, mode 0x50
+006f60f0 cState::W60f0  # color wrapper, mode 0x5a
+006f6180 cState::W6180  # color wrapper, mode 100, 3 channels
+006f6270 cState::W6270  # color wrapper, modes 0x6e/0x6f, two quads

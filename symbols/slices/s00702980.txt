@@ -1,0 +1,5 @@
+00702af0 SP::cHierGrid::Clear  # PDB callee-single (dev 00e6ca40)
+00702da0 SP::cHierGrid::Remove  # PDB callee-single (dev 00e6ccd0)
+00703360 eastl::hash_map<unsigned int,SP::cCellInfo,...>::operator[]  # PDB callee-single (dev 00e6d7d0)
+00703470 spstl::slot_vector_base<SP::cObjInfo,...>::create  # PDB gap-align (dev 00e6d8d0)
+00702a10 eastl::hashtable<...SP::cCellInfo...>::hashtable copy ctor  # inferred from layout (buckets/count/elementCount copy)

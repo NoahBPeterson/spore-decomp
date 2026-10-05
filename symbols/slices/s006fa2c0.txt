@@ -1,0 +1,17 @@
+006fa2c0  SP::cFragmentDecl::operator=          # assignment / merge
+006fa480  SP::cFragmentDecl bulk assign
+006fa730  eastl::sp_vector_allocator::allocate<cFragmentDecl>   # n*0x1c
+006fa770  eastl::vector<SP::cFragmentDecl>::DoAllocate
+006fa850  SP::cFragmentDecl::cFragmentDecl(const char*)        # RangeInitialize + scalar copy
+006fabd0  eastl::fill_imp<0>::do_fill<SP::cFragmentDecl*>       # PDB
+006fac30  eastl::copy_impl<0>::do_copy<SP::cFragmentDecl*>      # PDB
+006faca0  eastl::copy_backward_impl<0>::do_copy<SP::cFragmentDecl*>  # PDB
+006fad40  eastl::vector<SP::cFragmentDecl>::vector(const vector&)    # PDB
+006fae30  eastl::vector<PS::0x130elem>::copy
+006faea0  eastl::vector<0x130elem>::DoInsertValue
+006fafe0  `anonymous namespace'::cPixelFragmentInfo::cPixelFragmentInfo
+006fb040  `anonymous namespace'::cPixelFragmentInfo::~cPixelFragmentInfo  # PDB
+006fb0e0  `anonymous namespace'::cPixelFragmentInfo::push_back
+006fb150  RegisterShaderTable
+006fb1b0  `anonymous namespace'::AddPixelFragmentDeclarations  # PDB
+006fb310  `anonymous namespace'::GeneratePixelShader           # PDB candidate

@@ -1,0 +1,6 @@
+00704730  107  complete dispatcher; local dead-store and switch layout differ
+00704950  101  complete eh-raii dispatch; EH frame/register allocation differs
+00704dc0  344  complete factory; EH/RAII frame and ctor inlining differ
+00704f60  157  complete factory thunk; EH/RAII frame differs
+007052e0  265  complete cubemap packer; x87 fabs/max inline helpers differ
+00705470  323  complete cubemap packer; x87 fabs/max inline helpers differ

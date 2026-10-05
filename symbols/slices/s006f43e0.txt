@@ -1,0 +1,12 @@
+006f43e0 eastl_copydispatch_copy_intrusive  # intrusive_ptr copy loop with lock xadd refcounts
+006f4450 eastl_copydispatch_copy_backward_intrusive  # intrusive_ptr copy_backward
+006f44c0 ImageResource_Dispatch0  # calls FUN_0067dd60 vfn8 then GetImageResource
+006f4500 ImageResource_DispatchByHash  # hashes 0xf19d8d5/0xfd9802c7/0x9b304161 -> mgr vfn30/31/29
+006f4580 Camera_GetDistanceToPlane  # rw::math Matrix33 + SP::App/LightingManager
+006f46f0 Camera_DistanceQuery  # __fastcall, uses +0x194..+0x1a0
+006f4930 Camera_GetPositionLength  # sqrt of camera world position
+006f4a10 Camera_InitDistance  # writes +0x1a4/+0x1a8/+0x1ac/+0x1b0
+006f4b90 rw_graphics_CompiledState_Setup  # GlobalState render-state writes
+006f4ff0 Graphics_Hashtable_Insert  # uses 0x6f4330 rebuild, Graphics tag
+006f51b0 HashtableOwner_Destroy  # frees vectors +0x78/+0x60/+0x4c and hashtables +0x30/+0x10
+006f5260 EditorPhysicsWorld_SpawnViewer  # operator_new(0x174, Graphics), cViewer::Copy

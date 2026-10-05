@@ -1,0 +1,10 @@
+006f1840 Forward1840  # thunk: forwards two int args to FUN_00a7bca0
+006f1950 Call  # thiscall: mArray[idx]->vt[1](a,b,c); returns 1
+006f2270 FreeBucketList  # frees a hashtable bucket array; node vt[0]() + deallocate
+006f23d0 Remove  # erase from vector at +0x74 + vt[3]() on +0x60[index], zero it
+006f1860 ResourceInfoInit  # SP::cEffectsResourceInfo::Init (PDB candidate)
+006f1df0 ReleaseAt4  # atomic refcount release of member at +4
+006f1e20 ReleaseAt8  # atomic refcount release of member at +8
+006f2310 InsertEntry  # calls FUN_006f1b60 then appends to +0x60 vector/free list
+006f2430 FreeBucketList2  # bucket free with atomic refcount at +8
+006f2620 ClearAll  # clears +0x60/+0x74/+0x8c arrays and frees +0x5c

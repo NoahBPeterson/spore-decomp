@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006f43e0  85  eastl intrusive_ptr copy (AddRef/Release via _InterlockedExchangeAdd): behavior complete; cl assigns the loop/refcount registers differently (eax/ecx/edx and dest pointer stay/reload).
+006f4450  80  eastl intrusive_ptr copy_backward: same as 006f43e0, register allocation differs.
+006f4500  5  image-resource dispatch by 3 hashes: behavior complete; the middle branch's vfn pointer lands in edx instead of eax (2-byte encoding difference).
+006f51b0  135  owner destructor: behavior complete (vector free + two hashtable bucket arrays); the two callees are __thiscall members (ecx = &vec / &hashtable) and my free-function declarations lose the lea/ecx setup.

@@ -1,0 +1,6 @@
+006efa90  -  skeleton: cEffectsRendererSystem shutdown (vector<bool> contractions + atomic refcount release) not reconstructed.
+006efb90  -  skeleton: static singleton factory (8-arg operator new + zero-init + tail-call Init) not reconstructed.
+006efc70  -  skeleton: renderer helper not reconstructed.
+006efe90  -  skeleton: cEffectsRenderer::RenderTextureParticles (1166 B) not reconstructed.
+006f0320  -  skeleton: effects helper (627 B) not reconstructed.
+006f05a0  -  skeleton: effects helper (610 B) not reconstructed.

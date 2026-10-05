@@ -1,0 +1,14 @@
+006fe430  FUN_006fe430  # serializes the 0x162477c..0x1628b38 cVertexFragmentInfo table to an EA::IO stream
+006fe7f0  cVertexFragmentInfo_Init  # __fastcall empty-state initializer (0x1667bac/0x1667bad sentinels)
+006fe830  cVertexFragmentInfo_Destroy  # releases +0x24 vector and the +0x04/+0x14 fixed_vector buffers
+006fe890  FUN_006fe890  # two-vector DoInsertValue + end rollback
+006fe8f0  FUN_006fe8f0  # push_back on 0x1628b14 and 0x16246fc vectors
+006fe960  `anonymous namespace'::AddFragmentDeclarations  # PDB name, sprintf/extern uniform
+006fea30  `anonymous namespace'::GenerateVertexShader  # PDB candidate, calls all Generate*Struct helpers
+006fec40  `anonymous namespace'::GetGeneratedVertexShader  # PDB candidate, BinaryFindPixelShader cache
+006feee0  SP::LoadAndSelectVS  # PDB candidate, strcmp + m_vertexShader vfn+0x170
+006fef70  FUN_006fef70  # FUN_006fe3c0 + FUN_006feee0 with a 32-byte register string
+006fefa0  FUN_006fefa0  # destroys the 0x1628c20 vector, reserves 0x15345b0/0x200, clears 0x1624568
+006fefe0  FUN_006fefe0  # releases every +0x20 shader object in 0x1628c20 vector
+006ff060  `anonymous namespace'::cVertexFragmentInfo  # actually vector<0x130>::resize
+006ff100  `anonymous namespace'::cVertexFragmentInfo::operator=  # string/vector member-wise assignment

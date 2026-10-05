@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+006f4580  356  camera/lighting dot-product helper: skeleton only (rw::math Matrix33 setup + x87 camera-position math not reproduced).
+006f46f0  574  __fastcall camera distance query: skeleton only.
+006f4930  215  camera vector length query: skeleton only.
+006f4a10  370  camera-distance-to-point init: skeleton only.
+006f4b90  921  rw::graphics CompiledState setup: skeleton only.
+006f4ff0  245  Graphics hashtable insert: skeleton only.
+006f5260  562  editor physics world / viewer spawn: skeleton only.

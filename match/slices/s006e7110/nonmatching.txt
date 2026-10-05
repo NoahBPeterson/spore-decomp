@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+006e73d0  39  DispatchList - loop structure/register assignment differs (original keeps list in ebx, this in ebp)
+006e7ac0  74  Method7ac0 - vertex-descriptor lookup; register assignment around the AreEqual loop differs
+006e7d40  52  Method7d40 - element store; register scheduling of the range check/base pointer differs
+006e7da0  8   Method7da0 - refcount release; code identical except the vtable load is scheduled before the store-to-1
+006e7ed0  72  Method7ed0 - element store; range-check register scheduling differs
+006e7fa0  92  Method7fa0 - element getter; interface-call/return sequence differs
+006e8000  134  Method8000 - element setter; interface-call/branch layout differs

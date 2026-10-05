@@ -1,0 +1,18 @@
+006f9250  SP::cFilterChain::AddFilterChain            # thiscall, two args, Updates chain vector
+006f94b0  SP::cFilterChain::OnEvent                  # vtable slot 3; message 0x16 handler
+006f9520  eastl::vector<FilterElem28>::vector        # range constructor (alloc + uninitialized_copy)
+006f95e0  eastl::vector<FilterElem28>::operator=     # five-vector descriptor copy
+006f9730  eastl::vector<FilterElem28>::operator=     # assign (do_assign paths)
+006f9910  Elem78::operator=                         # six 0x14-byte member assignments
+006f9970  eastl::copy<FilterElem28*>                # forward range copy
+006f99e0  eastl::copy_backward<FilterElem28*>       # backward range copy
+006f9a50  eastl::vector<Elem78>::erase              # erase(first,last)
+006f9ac0  SP::cFilterChain::UpdateParams            # hashtable/param update
+006f9cf0  SP::cFilterChain::Shutdown                # teardown (MessageServer)
+006f9e20  SP::cFilterChain::Notify                  # three-arg virtual notify
+006f9f00  `anonymous namespace'::GenerateInputStruct       # PDB candidate
+006fa010  `anonymous namespace'::GenerateCurrentStruct     # PDB candidate
+006fa0a0  `anonymous namespace'::GenerateOutputStruct      # PDB candidate
+006fa130  `anonymous namespace'::GenerateFillOutputStruct  # PDB candidate
+006fa1b0  SetShaderDirty                            # global dirty-mask propagation
+006fa250  ShaderNameMatches                         # inline strcmp over shader-name list

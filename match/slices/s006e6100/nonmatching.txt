@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+006e6500  70  SetActiveColor - stores use integer moves and the white test uses SSE ucomiss; ours compares via a different register form
+006e6840  43  GetLayout - case-body emission order in the switch jump table differs
+006e69e0  35  SetMode - original keeps the mode in edx and tests `mode-1`; ours keeps it in a callee-saved register
+006e6a20  119  ComputeSize - switch grouping matches but register allocation around the FUN_006dde90 calls differs
+006e6b70  11  SetParams - register scheduling of the two int args differs (eax/edx swap)
+006e6c60  19  IsDone - original loads the field into ecx then tests; ours tests memory directly
+006e6ca0  47  SortPairsA - insertion-sort register assignment (v1/v2 in edx/esi) differs
+006e6cf0  51  SortPairsB - insertion-sort register assignment differs
+006e6d40  53  SiftUp - original keeps the index in ecx and parent in eax; ours swaps them
+006e6d90  33  FillSix - original routes the float through the stack (int moves); ours uses direct stores
+006e6df0  94  Normalize3 - cl does not inline sqrtf to fsqrt here, ours calls _sqrtf
+006e6e30  148  MaxVector3 - component max via comiss/cmov; ours lowers differently
+006e6e90  124  AbsArray9 - original unrolls to 9 x87 fabs; ours calls fabsf

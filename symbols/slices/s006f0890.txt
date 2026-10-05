@@ -1,0 +1,6 @@
+006f0890 RenderHelper890  # SP::cEffectsRenderer helper
+006f0b90 RenderHelperB90  # SP::cEffectsRenderer helper; called with this = cEffectsRenderer-0x18
+006f0fb0 CreateTextureParticleSet  # SP::cEffectsRenderer::CreateTextureParticleSet
+006f13a0 RenderMainEffectsLayer  # SP::cEffectsRenderer::RenderMainEffectsLayer (PDB candidate); switch on layer type
+006f1510 Insert  # eastl::vector<T,sp_vector_allocator>::insert, element stride 0xc0
+006f16c0 PushBack  # eastl::vector<T,sp_vector_allocator>::push_back, element stride 0xc0

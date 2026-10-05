@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006ff170  0  vertex-fragment record serializer: stub only (the 6-plane write loop and the byte-buffer DoInsertValues paths are omitted; original has __ehhandler frames).
+006ff3f0  0  vertex-fragment record deserializer: stub only (mirror of 006ff170, EH frames, omitted).
+006ff680  0  SP::ClearVSFragment: stub only (constructs a local cVertexFragmentInfo, assigns it into the global table slot and destroys it; EH frames, omitted).
+006ff750  0  vertex-fragment setup: stub only (EH, large; not reproduced).

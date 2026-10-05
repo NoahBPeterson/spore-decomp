@@ -1,0 +1,10 @@
+006ec5b0  143  complete; quicksort median-of-three driver, scheduling/register layout differs
+006ec660  90  complete; string setup + FUN_006ebd20 ctor, stack layout differs
+006ec730  108  complete; state ctor, register/temp ordering differs (extra esi zero reg)
+006ecdd0  70  complete; vector<Pair3> push_back, local temp placement/`add ecx,8` differs
+006ece30  57  complete; vector<Pair3> push_back(3 args), temp placement differs
+006ece90  110  complete; vector<Pair3> fill_n loop, schedule differs
+006ecf10  98  complete; builds two resource-vector lists, loop shape/register differs
+006ecfc0  138  complete; struct copy-assign, field schedule differs
+006ed1a0  91  complete; per-entity enable flag, register/schedule differs
+006ed210  149  complete; per-entity teardown + free-id push, schedule differs

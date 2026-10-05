@@ -1,0 +1,6 @@
+006ee1f0 cEffectsRenderer  # ctor; sets base vptrs at +0,+4,+8,+0xc,+0x14,+0x18,+0x1c; size >= 0x388
+006ee4f0 ~cEffectsRenderer  # compiler-generated dtor, destroys +0x364/0x360, vectors, subobjects
+006ee6f0 DispatchWithAdditionalMaterial  # SP::cEffectsModel (PDB candidate); iterates cModelParticleSet vector at +0x1b8 stride 0x68
+006ee940 AddActive  # pushes id into vector at +0x238; temp built by FUN_006ec730/FUN_006ecfc0
+006eea80 resize  # eastl::vector<bool,fixed_vector_allocator<1,16,1,0,1>>::resize
+006eeb60 insert  # eastl::vector<cTextureParticleSet,sp_vector_allocator> insert/DoInsertValue (stride 0x70)

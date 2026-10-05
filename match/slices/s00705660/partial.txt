@@ -1,0 +1,4 @@
+00705740  -  skeleton only (477-byte light-sample projection not reconstructed)
+00705c80  -  skeleton only (EASTL vector DoInsertValue for bit-packed vector)
+00705db0  -  skeleton only (EASTL vector reserve/init for bit-packed vector)
+00705f40  -  skeleton only (556-byte lighting update not reconstructed)

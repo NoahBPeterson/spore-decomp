@@ -1,0 +1,3 @@
+# va  reason
+00703700  SP::cHierGrid::Add: only the level selection and out-of-grid fallback are reconstructed; the in-cell insertion path is omitted
+00703df0  vector<cGrid>::insert: the grow/in-place shift is approximate (grid_uninit_copy/grid_fill_n call ordering not verified)

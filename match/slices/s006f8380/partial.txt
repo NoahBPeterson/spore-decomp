@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+006f8380  900  approximate: filter switch/args simplified; not every call/path reproduced.
+006f87f0  1354  skeleton: CreateScreenFilterInternal head only; per-filter hashtable body omitted.
+006f9020  548  approximate: RemoveAt control flow reproduced but helper-call argument details omitted.

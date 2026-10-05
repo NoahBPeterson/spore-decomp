@@ -1,0 +1,15 @@
+# source  symbol  original VA  [cl flags override]
+slices/s006fd520/s006fd520.cpp  ?FUN_006fd730@@YAXHHH@Z  006fd730  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?FUN_006fd7b0@@YAXXZ  006fd7b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?FUN_006fd990@@YAXPAX@Z  006fd990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?SP_TextCopy@@YAPADPADPBD@Z  006fd9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?SP_TextCopySubstitute@@YAPADPADPBDHHHH@Z  006fd9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?BinaryFindPixelShader@@YAHPBDPBUShaderBlob@@I@Z  006fdab0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?GenerateInputStruct@@YAXPADI@Z  006fdb90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?GenerateCurrentStruct@@YAXPADIIPBE@Z  006fdd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?GenerateOutputStruct@@YAXPADIIPBE@Z  006fdef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?GenerateFillCurrentStruct@@YAPADPADIH@Z  006fdfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?GenerateFillOutputStruct@@YAPADPADII@Z  006fe170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?FUN_006fe310@@YAPAUBlock130@@PAU1@00@Z  006fe310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?FUN_006fe350@@YA_NPAX@Z  006fe350  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006fd520/s006fd520.cpp  ?FUN_006fe3c0@@YAXHH@Z  006fe3c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

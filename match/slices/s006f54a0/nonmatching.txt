@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+006f5f80  215  color-state wrapper (mode 0x32/0x33): behavior complete; original keeps ctx in eax and this in esi, mine assigns ax/edx and the float local slot differs.
+006f6060  125  color-state wrapper (mode 0x50): behavior complete; same register/slot differences as 006f5f80.
+006f60f0  125  color-state wrapper (mode 0x5a): behavior complete; same as 006f6060.
+006f6180  238  color-state wrapper (3 rgb + mode 100): behavior complete; register allocation differs.
+006f6270  125  color-state wrapper (modes 0x6e/0x6f, two quads): behavior complete; register allocation differs.
+006f5ed0  138  state-struct constructor: behavior complete but the original carries an /EHsc EH frame; a plain int-array initializer does not generate it.

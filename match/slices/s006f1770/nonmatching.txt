@@ -1,0 +1,2 @@
+006f2270  22  complete; cl keeps the node in esi and next in edi, original keeps node in edi and next in esi (register allocation).
+006f23d0  92  complete; cl allocates the index/next in different registers and folds the push_back fast path differently.

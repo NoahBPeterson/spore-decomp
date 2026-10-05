@@ -1,0 +1,12 @@
+slices/s0070de90/s0070de90.cpp  ?GetIDFromMaterial@cMaterialManager@@QAEHPAUMat@@@Z  0070e2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?GetIDsFromMaterials@cMaterialManager@@QAEXHPAPAUMat@@PAI@Z  0070e2d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?WeakRelease@AutoRef14@@QAEXXZ  0070e300  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?Release@AutoRefA@@QAEXXZ  0070e320  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?Release@AutoRefB@@QAEXXZ  0070e330  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?AssignCopyA@@YAPAPAXPAPAX00@Z  0070e340  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?AssignCopyB@@YAPAPAXPAPAX00@Z  0070e390  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?Get@Holder@@QAEHXZ  0070e4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?RangeWeakRelease@@YGXPAPAURC14@@0@Z  0070e890  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?FillA@@YAXPAPAX00@Z  0070e950  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?FillB@@YAXPAPAX00@Z  0070ea20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s0070de90/s0070de90.cpp  ?FillWeak14@@YAXPAPAX00@Z  0070ebb0  /O2 /MD /Gy /EHsc /TP /arch:SSE

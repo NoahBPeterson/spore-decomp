@@ -1,0 +1,16 @@
+0070e060  206   eastl::vector<SP::cLightingConfig> resize; helper inlining/temp differs
+0070e280  54    cLightingManager message registration; register/stack allocation differs
+0070e3e0  19    eastl::copy_backward<AutoRefCount>; register assignment differs
+0070e430  19    eastl::copy_backward<AutoRefCount>; register assignment differs
+0070e4e0  198   graphics resource rebuild; vector/call shape differs
+0070e5e0  91    graphics resource release; fine register/order differences
+0070e6b0  120   hash-node constructor; EH frame missing
+0070e8c0  129   uninitialized_copy<AutoRefCount>; EH frame/order differs
+0070e9a0  115   uninitialized_fill_n<AutoRefCount>; EH frame/order differs
+0070ea70  57    uninitialized_copy with atomic refcount; spill/order differs
+0070eac0  89    fill with atomic refcount; deferred-release shape differs
+0070eb30  45    fill_n with atomic refcount; register allocation differs
+0070eb70  41    uninitialized_copy weak-refcount; parameter spills differ
+0070ebf0  30    assign weak-refcount; dst kept in memory not register
+0070ec30  33    copy_backward weak-refcount; register assignment differs
+0070eea0  200   SP::cMaterialManager::WriteMaterials; stream/vtable shape differs

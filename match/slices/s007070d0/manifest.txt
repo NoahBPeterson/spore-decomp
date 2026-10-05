@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007070d0/s007070d0.cpp  ?CreateEnvLightSample@cLightingWorld@@ 007074e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?DestroyAll@SlotDeque@@ 007075e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?CopyVec4@@ 00707660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?DoNukeSubtree@Rbtree@@ 00707690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?CopyBackVec4@@ 007076f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?Free@Buf28@@ 00707720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?GetLocalShaderData@cLightingWorld@@ 00707740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007070d0/s007070d0.cpp  ?ReleaseLocalCache@cLightingWorld@@ 00707790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006fd5d0  338  stream deserializer for the vertex-declaration vectors at +0x48/+0x188: stub only (StreamCtx::ReadDecls returns false); the real read loop and out-of-line thiscall calls are not reproduced.

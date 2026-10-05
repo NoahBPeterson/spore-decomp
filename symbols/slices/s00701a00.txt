@@ -1,0 +1,2 @@
+007026d0 SP::cHierGrid::FrustumQuery  # PDB candidate caller-single (dev 00e6c3d0)
+007028e0 eastl::hashtable<unsigned int,eastl::pair<unsigned int const,SP::cCellInfo>,...>::erase  # PDB gap-align (dev 00e6c7a0)

@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+006e51b0  -  incomplete: SP::SHFromCubeMap (778-byte /O2 routine with quaternion normalize, 6 PrefilterCube passes and a coefficient file dump); signature/skeleton only
+006e5520  -  incomplete: SP::DirectShaderDispatchCallback (392-byte shader-state commit over ~10 globals); signature/skeleton only
+006e56b0  -  incomplete: shader-state destructor (162-byte EH vector-destructor iterator over two 20-element arrays); skeleton only
+006e57d0  -  incomplete: shader-state constructor (149-byte EH vector-constructor iterator + array zeroing); skeleton only
+006e5870  -  incomplete: EASTL vector fill-insert (448-byte DoFillInsert growth path); skeleton only
+006e5a30  -  incomplete: EASTL vector<bool>-style insert (408 bytes); skeleton only
+006e5bd0  -  incomplete: shader-state clear (246-byte release + shrink of 16 slots); skeleton only
+006e5d50  -  incomplete: shader coefficient reader (944-byte serialization over 16 slots); skeleton only

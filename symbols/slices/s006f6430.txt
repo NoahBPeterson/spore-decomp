@@ -1,0 +1,12 @@
+006f6430 color_wrapper_be  # mode 0xbe, colour from +0x3c table
+006f6500 color_wrapper_dc  # mode 0xdc, two colour channels
+006f65d0 Hashtable_FindOrInsert  # FUN_00892970 lookup + FUN_006f4ff0 insert
+006f66a0 cVecU16::push_back  # vector<unsigned short> push_back
+006f66d0 FilterChain_StateVector_Destroy  # frees vectors at +0x64/+0x50/+0x3c/+0x28/+0x14/+0x0
+006f6770 vector_bool_assign  # eastl::vector<bool,fixed_vector_allocator>
+006f6830 SP::cFilterChain::AddCameraTexture  # PDB anchor (symbols/pdb_names.json)
+006f6910 cFilterChain_RemoveCameraTextures  # frame::release loop + erase
+006f69c0 cFilterChain_InitInternal  # allocates 2 state slots + 4 viewers, MessageServer::AddHandler(0x44edd9c)
+006f6c30 cFilterChain_SetupFromDesc  # colour-mode dispatch wrapper
+006f6f40 cFilterChain_Large1  # large routine
+006f71f0 cFilterChain_Large2  # large routine

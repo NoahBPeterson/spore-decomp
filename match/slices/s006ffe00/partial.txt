@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+006ffe00  0  spatial query: stub only (EH, large; not reproduced).
+00700120  0  SP::cFrustumCull::FrustumTestSphere: stub only (SSE dot products and the plane loop not reproduced).
+00700290  0  cell-record copy constructor: stub only (0xa0-byte record with float4 movaps blocks; not modelled).
+007003a0  0  cell-array constructor: stub only (operator new + 0xa0-byte element construction, EH frames).
+00700450  0  cell class scalar deleting destructor: stub only (two vtable resets + operator delete).
+007004d0  0  cPropertyList destructor: stub only.
+007006d0  0  cell vector release/reset: stub only (three vector clear loops + DoInsertValue, EH frames).
+00700a30  0  spatial cell pack: stub only.
+00700c80  0  float cell query: stub only (SSE distance computation).

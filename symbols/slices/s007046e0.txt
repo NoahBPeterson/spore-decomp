@@ -1,0 +1,14 @@
+# Slice s007046e0 recovered names of interest
+00705120 SP::cShaderDataLightingInfo::operator=  # PDB name
+007051b0 SP::cLightingManager::SetExtendedFogging  # PDB vtable-slot
+00705250 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::Text::Typesetter::RunInfo_ *,EA::Text::Typesetter::RunInfo_ *>  # PDB
+00704b30 Editor::cPropertyList-derived ctor (vtable 0x13ebca4 / secondary 0x13ebcb8, format id -1)  # invented; base vtable 0x13ebcdc
+00704b80 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id 0, size 0x30)  # invented
+00704bd0 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id 1)  # invented
+00704c20 Editor::cPropertyList-derived ctor (vtable 0x13ebca4, format id 2)  # invented
+00704c70 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id 3)  # invented
+00704cc0 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id -1, size 0x30)  # invented
+00704d30 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id -1)  # invented
+00704d80 Resource-derived ctor (vtable 0x140c60c, base vtbl_Resource::PFRecordRead 0x13effa8)  # invented
+007052e0 CubemapFaceIndex32  # invented; direction -> packed 5-bit cube-face texel
+00705470 CubemapFaceIndex16  # invented; direction -> packed 4-bit cube-face texel, |v|>=sqrt(10)

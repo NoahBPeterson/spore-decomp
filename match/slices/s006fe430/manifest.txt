@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s006fe430/s006fe430.cpp  ?FUN_006fe8f0@@YAXHH@Z  006fe8f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s006fe430/s006fe430.cpp  ?FUN_006fef70@@YAXH@Z  006fef70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s006fe430/s006fe430.cpp  ?FUN_006fefa0@@YAXXZ  006fefa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

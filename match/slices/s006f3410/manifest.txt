@@ -1,0 +1,7 @@
+# source  symbol  original VA  [cl flags override]
+slices/s006f3410/s006f3410.cpp  ?OnMessage@cRenderInstanceSet@@UAE_NHH@Z  006f3ec0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?CopyTo174@cRenderInstanceSet@@QAE_NPAX@Z  006f3ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?Setup180@cRenderInstanceSet@@QAEPAUcViewer@@PAX@Z  006f3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?SetElement@cRenderInstanceSet@@QAEXHM@Z  006f40b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?ClearElements@cRenderInstanceSet@@QAEXXZ  006f40d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?IsRangeEmpty@cRenderInstanceSet@@QBE_NXZ  006f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+006ed2c0  66  complete; cl folds the element pointer as `imul esi; add esi,[ecx+0x174]` (11B) instead of the original `mov eax,[ecx+0x174]; mov edx,edi; imul edx,edx,0x70; lea esi,[edx+eax]` (14B), shifting every following byte.
+006edb10  115  complete; FLT_MAX negation compiles to a second constant load instead of the original single movss + xorps sign-flip of -FLT_MAX.

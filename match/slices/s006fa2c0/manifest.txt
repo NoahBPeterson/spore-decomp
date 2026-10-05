@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006fa2c0/s006fa2c0.cpp  allocN               006fa730  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006fa2c0/s006fa2c0.cpp  init@Vec28           006fa770  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006fa2c0/s006fa2c0.cpp  do_fill28            006fabd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006fa2c0/s006fa2c0.cpp  do_copy28            006fac30  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006fa2c0/s006fa2c0.cpp  do_copy_backward28   006faca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2

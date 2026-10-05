@@ -1,0 +1,22 @@
+# <va> <Name>  # evidence
+007070d0 SP::cLightingWorld::UpdateLightPosition  # card name from dev PDB
+00707270 SP::cLightingWorld::RemoveLightFromList  # card name
+00707370 SP::cLightingWorld::UpdateLocalLightSample  # card name
+007074e0 SP::cLightingWorld::CreateEnvLightSample  # card name, matched
+00707540 spstl::slot_vector_base<SP::cLocalLightingCacheEntry,...>::release  # stride 0x1f0; sets state word and free-head
+00707590 spstl::slot_vector_base<SP::cLocalLightCell,...>::destroy  # stride 0x1e0
+007075e0 spstl::slot_deque<SP::cLocalLightInfo,...>::~...  # destroys elements via g_pAlloc->Destroy
+00707660 eastl::copy<rw::math::vpu::Vector4*>  # returns result
+00707690 eastl::rbtree<...>::DoNukeSubtree  # card name, matched
+007076f0 eastl::copy_backward<rw::math::vpu::Vector4*>  # matched
+00707720 eastl::sp_vector_allocator::deallocate  # frees block unless inline buffer
+00707740 SP::cLightingWorld::GetLocalShaderData  # resolves cache id, releases cell slot
+00707790 SP::cLightingWorld::ReleaseLocalCache  # decrements cache refcount, releases slot
+007077f0 eastl::vector<rw::math::vpu::Vector4,...>::operator=  # DoAssignFromIterator random-access
+00707a00 eastl::vector<rw::math::vpu::Vector4,...>::DoInsertValues  # card name
+00707a50 eastl::vector<32-byte T,...>::DoInsertValue  # card name, 0x20 stride
+00707b70 SP::RotateSHAboutZ  # card name; actually vector<Vector4>::DoInsertValues(position,n,value)
+00707d10 eastl::vector<8-byte T,...>::DoInsertValues  # card shape, 0x8 stride
+00707ed0 spstl::slot_vector_base<SP::cLocalLightingCacheEntry,...>::destroy  # 0xc4 stride, frees +0x2c unless +0x3c
+00707f40 spstl::slot_vector_base<SP::cLocalLightInfo,...>::pop/destroy  # 0x38 stride
+00707fd0 eastl::vector<SP::cSHObject,...>::operator=  # card name, 0x24 stride

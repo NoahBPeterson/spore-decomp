@@ -1,0 +1,8 @@
+006ec0c0  253  skill/effect resource installer; body omitted (entry shape only)
+006ec260  286  VecC::DoInsert growth path approximated (malloc instead of EA operator new)
+006ec4a0  269  eastl::vector<bool> DoInsertValue; body omitted
+006ec840  82  vector<AutoRefCount>::erase + release tail; body stubbed
+006ec8a0  422  vector<AutoRefCount<visual effect>>::DoInsertValue; body omitted
+006ecaa0  151  vector<AutoRefCount>::~vector; body omitted
+006ecb40  505  vector<AutoRefCount>::DoInsertValues; body omitted
+006ed070  300  eastl::vector<AutoRefCount<Resource>>::DoInsertValue; body omitted

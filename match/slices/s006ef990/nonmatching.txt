@@ -1,0 +1,1 @@
+006efc10  7  complete; cl keeps the object in esi and moves to ecx for the destructor call, original reloads the global into ecx and spills a copy to esi.

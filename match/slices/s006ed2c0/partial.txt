@@ -1,0 +1,7 @@
+006ed340  -  approximate: two-path particle-set removal reconstructed without exact intrusive-refcount/EH shapes.
+006ed440  -  approximate: key/flag activation; virtual call sequence and inlined push_back not reproduced.
+006ed5b0  -  skeleton: eastl::vector<cTextureParticleSet>::DoInsertValue (O2 relocate/realloc) not reconstructed.
+006ed6f0  -  skeleton: eastl::vector<cModelParticleSet>::DoInsertValue with EH frame not reconstructed.
+006ed8d0  -  approximate: cEffectsModel ctor; bounding-box corner/radius SSE selection not reproduced exactly.
+006edbc0  -  skeleton: cEffectsModel::UpdateFromResource (arena scan + SSE box merge) not reconstructed.
+006ee140  -  skeleton: cEffectsModel::Update (async request poll) not reconstructed.

@@ -1,0 +1,6 @@
+00703b60 SP::cHierGrid::Update  # PDB candidate caller-single (dev 00e6c3d0)
+00703ce0 SP::cHierGrid::cHierGrid  # PDB-named constructor
+00703da0 eastl::vector<SP::cGrid,eastl::sp_vector_allocator>::erase  # PDB-named
+00704060 SP::cHierGrid::Shutdown  # PDB-named
+00704140 eastl::vector<SP::cGrid,eastl::sp_vector_allocator>::resize  # PDB-named
+00704260 SP::cHierGrid::Init  # PDB-named

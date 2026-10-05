@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+006fd520  140  eastl vector<28-byte-element>::resize: behavior complete (fill-with-temp / erase paths) but cl assigns begin/end to different registers and the temp-fill scheduling differs.
+006fd7d0  269  rw::graphics::ActiveState texture/sampler flush: behavior complete but cl's texture-table induction pointer (pcVar8) and the soft-state reload schedule differ throughout.
+006fe230  117  shader-state dispatcher: behavior complete but cl keeps `mask` in a callee-saved register (original leaves it in the argument home slot) and rematerializes the manager pointer after the indirect call.

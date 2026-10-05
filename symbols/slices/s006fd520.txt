@@ -1,0 +1,15 @@
+006fd730  ActiveState_SetSamplerState  # m_d3d9Device vfn+0x114, m_samplerStateShadow/m_samplerStateDelta
+006fd7b0  ActiveState_FlushSomeStates  # 3 calls + tail jump to FUN_006fb920
+006fd990  ActiveState_InstallFlushCB  # stores &FUN_006fd7d0 at +0x14
+006fd9a0  SP::TextCopy  # PDB name
+006fd9c0  SP::TextCopySubstitute  # PDB name, isalpha/isdigit
+006fdab0  `anonymous namespace'::BinaryFindPixelShader  # PDB name, strcmp binary search over 0x130 stride
+006fdb90  `anonymous namespace'::GenerateInputStruct  # PDB name
+006fdd50  `anonymous namespace'::GenerateCurrentStruct  # PDB name
+006fdef0  `anonymous namespace'::GenerateOutputStruct  # PDB name
+006fdfc0  `anonymous namespace'::GenerateFillCurrentStruct  # PDB name
+006fe170  `anonymous namespace'::GenerateFillOutputStruct  # PDB name
+006fe230  FUN_006fe230  # shader-state dispatcher via 0x1624568 manager and 0x16fa604 function table
+006fe310  FUN_006fe310  # eastl::copy_backward of 0x130-byte blocks (returns dest)
+006fe350  FUN_006fe350  # linear strcmp over names at 0x1628b14..0x1628b18
+006fe3c0  FUN_006fe3c0  # stream write of vertex-decl vector at +0x48, indexed by g_16f6dac+4

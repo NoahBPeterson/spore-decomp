@@ -1,0 +1,7 @@
+# Slice s00705660 recovered names of interest
+00705920 SP::cLightingWorld::GetLightingStateConfig  # PDB vtable-slot
+00705a20 SP::cLightingManager::SetAtmosphereModel  # PDB vtable-slot
+00705b50 cShaderDataLightingInfo copy-ctor (fields + coefficient vector via FUN_00406540)  # invented; cf. window 0x00705120 operator=
+00705e90 eastl fill/uninitialized fill of 16-byte elements  # invented
+00705ec0 eastl fill_n of 16-byte elements (nullable dest)  # invented
+00705ef0 destructor: intrusive_list + two owned buffers  # invented

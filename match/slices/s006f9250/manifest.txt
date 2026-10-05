@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006f9250/s006f9250.cpp  ?Notify@EvChain@@QAEXHHHH@Z          006f94b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  ??4Elem78@@QAEAAU0@ABU0@@Z           006f9910  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  _copy79                              006f9970  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  _copy_backward79                     006f99e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  GenerateInputStruct                  006f9f00  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  GenerateCurrentStruct                006fa010  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  GenerateOutputStruct                 006fa0a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s006f9250/s006f9250.cpp  GenerateFillOutputStruct             006fa130  /O2 /MD /Gy /EHsc /TP /arch:SSE2

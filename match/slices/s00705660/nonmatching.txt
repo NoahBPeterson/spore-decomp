@@ -1,0 +1,6 @@
+00705660  213  complete lighting-grid packer; (int)(x*16) lowered via x87 not cvtss2si
+00705970  103  complete distance-range blend factor; x87/SSE mix and min/max helpers differ
+00705a20  276  complete SetAtmosphereModel; x87 sqrt normalize and phase copy differ
+00705af0   66  complete 0x144-stride linear search; register allocation differs
+00705c40   53  complete forward copy with destination end-report; first spilled to param slot
+00705ec0   16  complete fill-n with null check; only loop back-edge (dec/test/ja) differs

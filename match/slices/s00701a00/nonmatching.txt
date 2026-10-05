@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
+00701a00  n/a  complete SP::cHierGrid range-query over two world-space endpoints; reconstruction is much smaller than the original because the original inlines more of the per-cell scan
+00702500  90  dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
+00702550  n/a  eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
+00702660  87  bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
+007026d0  27  FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
+00702760  59  sphere-query wrapper; copy-out loop register allocation differs
+007027e0  59  segment-query wrapper; copy-out loop register allocation differs
+00702860  98  3-argument query wrapper; copy-out loop register allocation differs
+007028e0  88  eastl hashtable erase; structurally complete, register allocation differs

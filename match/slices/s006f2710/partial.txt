@@ -1,0 +1,7 @@
+006f2710  -  skeleton: effects renderer helper (1904 B) not reconstructed.
+006f2e80  -  skeleton: destructor (resets vtable + frees two hash containers) not reconstructed.
+006f2f70  -  skeleton: adjustor/destructor thunk (set +0x44 vtable, tail-call 6f2e80) not reconstructed.
+006f2fb0  -  skeleton: constructor with two 0x20-byte vtabled sub-objects at +8/+0x28.
+006f3030  -  skeleton: destructor (frees hash containers + members, calls 6f2e80).
+006f31b0  -  skeleton: constructor (calls 6f2fb0 then inits many fields).
+006f32e0  -  approximate: reads a float-array property and drives EffectsManager.SetState.

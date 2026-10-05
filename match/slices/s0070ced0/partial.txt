@@ -1,0 +1,1 @@
+0070d850  999   SP::cLightingWorld::AddLight; slot/cell bookkeeping omitted (assembly-free outline only)

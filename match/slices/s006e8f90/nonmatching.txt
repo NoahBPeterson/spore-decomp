@@ -1,0 +1,9 @@
+006e8f90  292  complete; SSE register/schedule differences over the 4 vtable-driving branches
+006e9150  87  complete; cl hoists the -1-store branch and picks different registers (sar 2 constant-fold)
+006e94a0  2  complete; only `add eax,-1` vs `sub eax,1` on the refcount decrement
+006e9530  80  complete; Vector3 splat via MakeV3 gives direct movss instead of the stack temp copy
+006e95a0  749  complete; big matrix/bounds transform, SSE schedule + call layout differ
+006e9b00  124  complete; field-init order/schedule differ (EH prolog source unknown)
+006e9bf0  123  complete; field-init order/schedule differ
+006e9cc0  91  complete; field-init order/schedule differ
+006e9d50  692  complete; projection math schedule differs

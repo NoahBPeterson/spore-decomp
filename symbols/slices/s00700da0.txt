@@ -1,0 +1,3 @@
+00700ff0 spstl::slot_vector_base<SP::cObjInfo,spstl::simple_deque<spstl::slot_vector_entry<SP::cObjInfo>,eastl::allocator,128> >::destroy  # PDB callee-scored (dev 00e69f10)
+007011d0 SP::cHierGrid::CullCellList  # PDB candidate caller-single (dev 00e6a0a0)
+00700da0 SP::cHierGrid::CellFromPos  # reads cHierGrid mOrigin/mInvSize (+0/+0x10), returns packed 10.10.10 cell id or -1

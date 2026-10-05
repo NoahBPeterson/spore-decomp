@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+006fe430  187  fragment-declaration serializer: complete (the p[-0x28..] interior-pointer walk, both 0x1c-stride loops, all IO calls) but cl rebases the loop pointer (p+0x14) instead of keeping 0x162477c.
+006fe7f0  6    empty cVertexFragmentInfo initializer: complete; cl hoists the 0x1667bac load above the [this]=0 store, reordering three instructions.
+006fe830  19   cVertexFragmentInfo destructor: complete; cl keeps `this` in esi and the +0x24 sub-address in edi (original the other way round).
+006fe890  36   two-vector insert/rollback helper: complete; cl schedules the global loads/pointer arithmetic differently.
+006fe960  127  AddFragmentDeclarations: complete; cl materializes the fragment-table base in esi (original indexes via [idx*0x44+base] and keeps ebp for the record).
+006feee0  80   SP::LoadAndSelectVS: complete; cl does not keep the name pointer in edi across the strcmp (original does), shifting the whole register map.
+006fefe0  46   vector<0x130> release-all: complete; cl swaps the loop offset/count registers (edi/ebp).
+006ff060  90   vector<0x130>::resize: complete logic but the call to the stubbed Insert is not equivalent and cl drops the saved `this` register.
+006ff100  32   cVertexFragmentInfo::operator=: complete; cl keeps `this` in edi and the source in esi (original the opposite).

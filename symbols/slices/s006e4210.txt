@@ -1,0 +1,1 @@
+006e4210  SP::CaptureCubeMap  # dev-PDB caller-scored match (dev 0x00f5b950), module SPGraphicsCubeMapCapture.obj

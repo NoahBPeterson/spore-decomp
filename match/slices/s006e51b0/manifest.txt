@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006e51b0/s006e51b0.cpp  ?ShaderDispatch@@YAXHPAUSpriteRef@@_NH1@Z  006e54d0  /O2 /MD /Gy /EHsc /TP
+slices/s006e51b0/s006e51b0.cpp  ?FillFloat3N@@YAXPAUFloat3@@IPBU1@@Z  006e5760  /O2 /MD /Gy /EHsc /TP
+slices/s006e51b0/s006e51b0.cpp  ?ZeroTriple@@YIXPAI@Z  006e5790  /O2 /MD /Gy /EHsc /TP
+slices/s006e51b0/s006e51b0.cpp  ?ShaderState_Release@@YIHPAUShaderState@@@Z  006e57a0  /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,4 @@
+slices/s006f2710/s006f2710.cpp  ?RetMinus1@@YGHHHHH@Z  006f2f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006f2710/s006f2710.cpp  ?RetThird@@YGHHHH@Z  006f2f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006f2710/s006f2710.cpp  ?ResetEffectStates@@YAXXZ  006f3290  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s006f2710/s006f2710.cpp  ?ReleaseIf@Owner33d0@@QAEXXZ  006f33d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

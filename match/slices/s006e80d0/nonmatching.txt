@@ -1,0 +1,5 @@
+006e80d0  19  complete; only register/addressing-order differs (esi+ecx vs ecx+esi, edx/ecx arg regs)
+006e8160  105  complete; x87 div scheduled as fld+fidiv instead of fild+fdivr (source-expression dependent)
+006e8200  53  complete; byte-arg movzx and register assignment in the two thiscall input handlers
+006e83e0  10  complete; std::min pointer-select but out2 pointer hoisted one slot early
+006e8480  639  complete; cl hoisted xor ebx/loop-pointer setup and reordered the three destroy/rebuild loops
