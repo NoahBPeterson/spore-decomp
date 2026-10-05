@@ -1,0 +1,2 @@
+005ed340  5   GetAreaPair: original hoists both loads before the stores; cl stores out[0] before loading mField20 (no alias knowledge)
+005ed6c0  34  ResetRollover: refcount-release/empty-layout sequence differs

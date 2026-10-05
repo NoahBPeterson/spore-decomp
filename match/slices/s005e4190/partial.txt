@@ -1,0 +1,3 @@
+005e4190  -  InitData: only the property-read prologue reconstructed; rollover creation and level-interpolation init omitted
+005e4560  -  UpdateRollover: skeleton only (EA::Variant property writes, rollover visibility, position update omitted)
+005e49c0  -  HandleMessage: skeleton only (message dispatch and rollover text drawing omitted)

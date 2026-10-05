@@ -1,0 +1,5 @@
+005ea3d0  -  large helper: skeleton (EASTL/editor logic omitted)
+005ea8f0  -  vector copy-constructor helper: skeleton (EASTL omitted)
+005ea970  -  large helper: skeleton (EASTL omitted)
+005eae50  -  rbtree lower_bound/insert helper: skeleton (EASTL omitted)
+005eaef0  -  large helper: skeleton

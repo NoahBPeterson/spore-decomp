@@ -1,0 +1,5 @@
+005ecf80  -  ShutdownRollover: skeleton (large teardown omitted)
+005ed360  -  cSPPaletteItemRollover ctor: skeleton (base ctor + field/layout init omitted)
+005ed420  -  cSPPaletteItemRollover::Init: skeleton (window/property init omitted)
+005ed650  -  Destroy: skeleton (rollover/window teardown omitted)
+005ed700  -  scalar deleting dtor: skeleton

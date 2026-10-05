@@ -1,0 +1,1 @@
+005e6fb0  29  CheckMessage: original duplicates the `return false` epilogue per branch (119 bytes); cl merges mine into one shared epilogue (101 bytes)

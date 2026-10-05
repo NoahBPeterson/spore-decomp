@@ -1,0 +1,4 @@
+005e4db0  -  GetLevelForType: skeleton (level lookup by type/index omitted)
+005e5470  -  cSPEditorVerbIconData::Init: skeleton (property/level table loading omitted)
+005e5950  -  cSPCreatureVerbIconData::Init: skeleton (data assignment + level derivation omitted)
+005e5a70  -  cSPEditorVerbIconData ctor: field stores only, cString/wstring members and remaining fields omitted

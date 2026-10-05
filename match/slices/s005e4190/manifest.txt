@@ -1,0 +1,2 @@
+slices/s005e4190/s005e4190.cpp  ?FloatToInt@SP@@YAHM@Z  005e4d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005e4190/s005e4190.cpp  ?SetIndex@cIconVerbHelper@SP@@QAEXH@Z  005e4d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+005e7830  -  cSPEditorVerbIconTray::Init: skeleton (large window/property setup omitted)
+005e8130  -  large tray helper: skeleton

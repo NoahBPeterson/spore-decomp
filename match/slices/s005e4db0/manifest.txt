@@ -1,0 +1,2 @@
+slices/s005e4db0/s005e4db0.cpp  ??0cSPCreatureVerbIconData@SP@@QAE@XZ  005e5b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005e4db0/s005e4db0.cpp  ?SetHotKey@cSPEditorVerbIconData@SP@@QAEXI@Z  005e5c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast

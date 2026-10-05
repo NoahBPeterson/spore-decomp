@@ -1,0 +1,5 @@
+005f16d0  -  cSPSwatchPlanner::DoMessage: skeleton (large message dispatch omitted)
+005f1960  -  cSPSwatchPlanner::Init: skeleton (window/property setup omitted)
+005f21d0  -  SetModel: skeleton (property-manager remap path omitted)
+005f2390  -  SizeViewportToWindowAndRemainOnScreen: skeleton
+005f24e0  -  cSwatch3DView::Init: skeleton

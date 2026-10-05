@@ -1,0 +1,1 @@
+slices/s005ecf80/s005ecf80.cpp  ?AddBox@cSPPaletteItemRollover@SP@@QAEXH@Z  005ed320  /O2 /MD /Gy /TP /arch:SSE /fp:fast

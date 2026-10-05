@@ -1,0 +1,1 @@
+005e4c90  64  UpdateLevelDisplay: float->int conversion is a _ftol2 helper call in mine but inlined fnstcw/fistp in the original; frame is 0x10 vs 0x18 (eastl::wstring slot at +4 vs +0xc)

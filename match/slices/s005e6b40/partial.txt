@@ -1,0 +1,8 @@
+005e6b40  -  DoMessage: skeleton (large message dispatch omitted)
+005e7030  -  SetLevelText: skeleton (window text formatting omitted)
+005e71d0  -  Update: skeleton (interpolation/animation update omitted)
+005e7390  -  vector DoAllocate helper: skeleton (EASTL allocation + fill omitted)
+005e7400  -  vector DoInsert/append helper: skeleton (EASTL insert omitted)
+005e75c0  -  SetBaseStat: skeleton (stat/level recompute omitted)
+005e76b0  -  Shutdown: skeleton
+005e77e0  -  vector resize: skeleton (EASTL resize omitted)
