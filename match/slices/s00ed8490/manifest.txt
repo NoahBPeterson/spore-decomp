@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00ed8490/s00ed8490.cpp  ?f@Obj85e0@@QAEPAXXZ  00ed85e0  /O2 /MD /Gy /EHsc /TP /arch:SSE

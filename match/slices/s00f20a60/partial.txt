@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f20de0  241  marker position: terrain-sample call site and view vcall/value schedule only
+               approximated (f factor and matrix argument are placeholders)
+00f213f0  877  feedback-event marker builder: only a skeleton; the CreateNoun/vtable
+               setup, AutoRefCount assignments and property parsing are not reconstructed

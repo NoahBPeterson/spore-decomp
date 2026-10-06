@@ -1,0 +1,11 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+011290b0  83   hkReorientAction::clone: reinit call shape / field copy schedule differs
+01129130  213  hkPoweredChainMapper dtor: refcount loop and hkArray free schedule differ
+01129290  109  hkPhysicsData dtor: refcount loop and hkArray free schedule differ
+01129360  80   hkPairwiseCollisionFilter::isCollisionEnabled: min/max + pair scan register shape differs
+011293c0  84   hkPairwiseCollisionFilter::entityRemovedCallback: compaction loop shape differs
+011294e0  12   filter-create helper: 1-constant hoist / branch schedule differs
+01129640  159  hkMotorAction ctor: base-ctor chain and x87 normalize schedule differ
+01129c70  3    hkDisableEntityCollisionFilter::isCollisionEnabled: only prologue push edi placement differs
+01129cc0  72   hkDisableEntityCollisionFilter::removeEntity: hkBool sret path differs
+01129d20  48   hkDisableEntityCollisionFilter::entityRemovedCallback: tail/ABI differs

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00eede20 -    not reconstructed: 1803-byte noun-creation dispatch (PartCreature/etc.)
+00eee530 -    not reconstructed: 560-byte inlined noun factory
+00eee760 -    not reconstructed: 513-byte inlined noun factory
+00eee970 -    not reconstructed: 222-byte stdcall (3 args) noun factory
+00eeea50 -    not reconstructed: 376-byte inlined noun factory

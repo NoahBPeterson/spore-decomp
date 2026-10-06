@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00eff0c0  -  visibility/placement update loop: only the initial guard reproduced
+00eff280  181  placement commit (variant): body approximated
+00eff3b0  163  flag/object reset: body approximated
+00eff4c0  205  scroll/zoom adjust: SSE clamp body approximated
+00eff600  -  tutorial-gate branch: only the initial guard reproduced
+00eff6c0  106  object add/remove: vtable +0x28 call and singleton slot handling approximated
+00eff760  24   gate wrapper: singleton vcall +0x38 and callee schedule approximate

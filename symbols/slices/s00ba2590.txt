@@ -1,0 +1,12 @@
+00ba2750 SP::cSpeciesRelationshipManager message handler  # EA::Messaging::GetServer queue
+00ba2a80 species-relationship AutoRef node create
+00ba2c70 species-relationship message filter
+00ba2f20 PlayerPlanetData destructor
+00ba2f90 PlayerPlanetData constructor
+00ba2af0 SP::cPosseSimulator::ReloadTuning  # PDB candidate; reads property tuning globals
+00ba2d80 iterate relationship rbtree, deallocating value strings
+00ba2e00 free array of relationship node-lists
+00ba2e50 eastl lower_bound over 16-byte relationship records
+00ba30c0 eastl hashtable insert (relationship node)
+00ba31d0 eastl hashtable erase (relationship node)
+00ba3310 clear relationship hashnode sets

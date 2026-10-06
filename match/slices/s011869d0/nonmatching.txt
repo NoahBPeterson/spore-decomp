@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+01187840  82  BN_mod_mul wrapper: conditional operand evaluated before the branch, register/order differs
+01187b00  46  BN_STACK push guard: callee-saved register choice (esi vs edi) differs

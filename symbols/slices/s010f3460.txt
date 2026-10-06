@@ -1,0 +1,3 @@
+010f3460  hkContinuousSimulation::reintegrateAndRecollideEntities  # PDB mangled
+010f3600  hkContinuousSimulation::collide  # PDB mangled
+010f3a40  hkContinuousSimulation::simulateToi  # PDB mangled

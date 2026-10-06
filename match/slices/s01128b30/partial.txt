@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+01128b30  -  hkReorientAction::applyAction: large x87 reconstruction approximated
+01129420  57 multi-vtable collision-filter ctor: 5 base subobjects approximated
+01129500  185 hkGroupCollisionFilter support routine: skeleton
+01129720  195 hkMotorAction::applyAction: skeleton
+011297f0  87  hkMotorAction::clone: skeleton
+01129850  -  hkGroupCollisionFilter::isCollisionEnabled core: skeleton
+01129af0  71  hkGroupCollisionFilter::isCollisionEnabled: skeleton
+01129b40  -  group collision helper: skeleton

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b7daf0   975  SP::cPlanetModel terrain/impostor property setup: only the entry guard/universe-context path is translated; the impostor property-list construction and AutoRefCount dances are omitted

@@ -1,0 +1,32 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f20a60  165  planet-radius clamp: complete, but the x87/SSE split of the sum and the
+               else-branch copies (fld/fstp vs movss) are scheduled differently
+00f20b20   10  clear property byte +0xe61: complete; the null-object arm misses the
+               `xor eax,eax; mov [eax+0xe61],al` immediacy
+00f20b60   10  clear property byte +0xe60: complete; same null-arm immediacy as 0xf20b20
+00f20be0  120  read Property Vector3 / defaults: complete; the +0x24 virtual lookup and
+               the found-union select schedule differ
+00f20c60   29  wrapper around 0xf20be0: complete; cl did not coalesce the three zero
+               default arguments into the reserved 12-byte block
+00f20cb0   53  event-log map payload replace: complete; RegisterTree walk/refcount
+               schedule differs
+00f20d20   43  event-log map lookup: complete; AutoRefCount guard and find() result
+               handling differ
+00f20d80   40  remove matching nouns: complete; NounManager/RemoveNoun two-call shape
+               and thiscall scheduling differ
+00f20ef0  196  proximity effect start/cancel: complete logic; vcall order and x87/SSE
+               distance computation diverge
+00f20fe0   14  Simulator ctor: complete; global store uses esi instead of the original's
+               ecx and the string relocation rendering differs
+00f21080  200  falloff callback loop: complete; SSE register allocation and the
+               repeated min/max clamp schedule differ
+00f211f0  157  refresh event marker: complete; the inlined 0xf20be0 block and vcall
+               argument setup differ
+00f212c0  999  greater-than-threshold test: complete x87 form, but the compare/return
+               path is scheduled differently
+00f21310  162  marker placement probe: complete; nested vcall order and x87 compare differ
+00f21760    1  tail-refresh gate: complete; only cmp vs sub for the ==10 compare differs
+00f217a0   17  reset event property: complete; the global key load is scheduled after the
+               argument load instead of before it
+00f217c0   91  find event marker by property: complete; loop register allocation and the
+               +0xb8 vcall differ

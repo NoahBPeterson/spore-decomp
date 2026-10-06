@@ -1,0 +1,16 @@
+# va  name  # evidence
+00efee60  UI::cScenarioTutorialsChecklistUI::SelectObject  # g_mgr+0xc selection, SetSelectedObject + FUN_00efc6e0
+00efeee0  UI::cScenarioTutorialsChecklistUI::Place  # PlanetModel/BuildSurfaceOrientation + audio slots 0x38/0x3c/0x40/0x58
+00efefe0  UI::cScenarioTutorialsChecklistUI::ResetPlacement  # FUN_00f32790/FUN_00f33bf0/FUN_00f38150/FUN_00f34560
+00eff030  UI::cScenarioTutorialsChecklistUI::CommitPlacement  # +0xc pair, FUN_00f336a0/FUN_00f36450/FUN_00f38330
+00eff0c0  UI::cScenarioTutorialsChecklistUI::UpdateVisibility  # g_mgr+0x20 gate, +0x1b0 object, three vtable+0x54 calls
+00eff1e0  UI::cScenarioTutorialsChecklistUI::IsVisible  # FUN_00f32790 result +0x64/+0x60 compare
+00eff230  UI::cScenarioTutorialsChecklistUI::SetObject  # g_mgr 0x64/0x68 flags + refcounted slot at +0xc (addref/release)
+00eff280  UI::cScenarioTutorialsChecklistUI::SetObjectEx  # +0x10 pair, vtable+0x58, g_mgr+0x68
+00eff360  UI::cScenarioTutorialsChecklistUI::CommitObject  # byte+5 flag branch + FUN_00f36450 + SetObject
+00eff3b0  UI::cScenarioTutorialsChecklistUI::ClearObject  # FUN_00b18e00 + FUN_00f38330/FUN_00f34560 + refcount release
+00eff4c0  UI::cScenarioTutorialsChecklistUI::Adjust  # SSE clamp 0x148cfe8/0x1485720 + FUN_00c65b50
+00eff590  UI::cScenarioTutorialsChecklistUI::GetPlacement  # PlanetModel + FUN_00f33640(p10) + three vtable calls
+00eff600  UI::cScenarioTutorialsChecklistUI::CheckTutorial  # g_016065f8 gate + g_015ad298 vcall + FUN_00f329e0
+00eff6c0  UI::cScenarioTutorialsChecklistUI::AddRemoveObject  # FUN_00ae66d0 + obj vtable+0x28/+0xac + g_mgr+8 slot
+00eff760  UI::cScenarioTutorialsChecklistUI::AddObjectGated  # g_015ad298 vcall+0x38 then AddRemoveObject

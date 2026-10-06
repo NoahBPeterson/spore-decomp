@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+010ed230  10  Release(1)-if-non-null helper; virtual call site scheduling
+010ed2a0  169  hkGskCache builder from two bodies
+010eddd0  85  hkSimpleClosestContactCollector::addCdPoint; x87 compare + bool test shape

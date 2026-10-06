@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e00760/s00e00760.cpp  ?on_ban_content_button@@YAXXZ  00e009f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?MenuKind@@YAHXZ  00e00aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?FUN_00e00bb0_impl@@YAXXZ  00e00bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?FUN_00e00bd0_impl@@YAXXZ  00e00bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?FindWindowByID@GlobalUI@@QAEPAXPAX@Z  00e012b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?SetVisibility@GlobalUI@@QAEXPAX@Z  00e01350  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e00760/s00e00760.cpp  ?IsVisible@GlobalUI@@QAEDXZ  00e01380  /O2 /MD /Gy /EHsc /TP /arch:SSE

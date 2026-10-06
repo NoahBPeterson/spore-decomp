@@ -1,0 +1,3 @@
+# source  symbol  original VA  [flags override]
+slices/s011e3ac0/s011e3ac0.cpp  ?Types@ArenaSectionManifest@@QAEPAXXZ  011e4600  /O2 /MD /Gy /TP
+slices/s011e3ac0/s011e3ac0.cpp  ?Arena_FUN_011e4670@@YAXHH@Z  011e4670  /O2 /MD /Gy /TP

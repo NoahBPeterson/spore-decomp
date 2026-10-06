@@ -1,0 +1,10 @@
+011869d0 lib_cblock::FUN_011869d0  # unnamed (no PDB)
+01186d30 lib_cblock::FUN_01186d30  # unnamed (no PDB)
+01187540 BN_mod_mul wrapper  # calls BN_copy/BN_mod_mul
+011875c0 lib_cblock::FUN_011875c0 (BN_MONT ctx helper)  # unnamed (no PDB)
+011877a0 BN_mod_mul wrapper 2  # calls FUN_011875c0/BN_mod_mul
+01187840 BN_mod_mul wrapper 3  # calls BN_mod_mul then 011877a0
+01187a80 BN_CTX_new  # ".\\crypto\\bn\\bn_ctx.c", size 0x2c
+01187b00 BN_CTX_start (BN_STACK push)  # calls BN_STACK_push
+01187b90 BN_CTX_get (BN_POOL get)  # calls BN_POOL_get/BN_set_word
+01187be0 lib_cblock::FUN_01187be0  # unnamed (no PDB)

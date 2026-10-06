@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00ecde00   78  approximate: interface adjustment goto-tree not fully reproduced
+00ece010  184  approximate: window image update chain only partially reproduced
+00ece140  158  approximate: enable/colour/visit path only partially reproduced
+00ece200   71  approximate: palette message preview path partially reconstructed
+00ece410  161  approximate: two-object comparison register convention not reproduced
+00ece4d0  594  approximate: large message handler only partially reconstructed

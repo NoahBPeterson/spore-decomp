@@ -1,0 +1,10 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c0be70   9   cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
+00c0bea0   9   cached-handle predicate: complete; bool return materialisation
+00c0c200   43  game-mode water render callback: complete; call/arg setup differs
+00c0c2d0   21  cCreatureBase::IsDefaultSpecies: complete; return materialisation
+00c0c3e0   65  copy 0x24 record + AddRef: complete; register/schedule
+00c0c440   8   copy range of 0x24 records: complete; float field copied via fld/fstp in original
+00c0c4b0   225 quaternion half-angle swap: complete; x87/SSE mixing and expression order
+00c0c5b0   96  water reflection helper: complete; branch/arg shape differs
+00c0ce30   56  relation index: complete; call/global load order

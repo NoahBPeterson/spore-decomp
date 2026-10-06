@@ -1,0 +1,5 @@
+00eae0f0 SP::Audio::cPlayerCityMusic::DeselectAmbience  # PDB caller-scored name
+00eae540 eastl::vector<float,SP::SP_STL_Sound>::operator=  # PDB name
+00eae610 SP::Audio::cPlayerCityMusic::RemoveNote  # PDB caller-scored name
+00eae8a0 SP::ReadSTLSequenceT<eastl::fixed_vector<float,3,0> >  # card previous name
+00eaea80 SP::ReadSTLSequenceT<eastl::vector<float,SP::SP_STL_Sound> >  # card previous name

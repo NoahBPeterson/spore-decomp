@@ -1,0 +1,15 @@
+00c68280  -  large segment/position rebuild not reconstructed (stub Update).
+00c686d0  -  not reconstructed (signature unknown; stub).
+00c687e0  -  vector clear: virtual slot 0x54 call + NounManager::RemoveNoun + erase omitted (simplified).
+00c688a0  -  eastl copy_impl do_copy reconstruction not attempted (stub).
+00c68980  -  view enter/leave update: one branch and the view-transition vtable calls omitted.
+00c68b40  -  key change: EffectsManager create path omitted.
+00c68c00  -  noun clone/create with return-address trick not reconstructed (stub).
+00c68d20  -  noun index lookup then create: tail call path omitted.
+00c68d70  -  copy_impl-based restore not reconstructed (stub).
+00c68e30  -  SP::cMovableDestructibleOrnament constructor not reconstructed (stub).
+00c68ed0  -  SP::cMovableDestructibleOrnament destructor vtable resets not reconstructed (stub).
+00c69030  -  cLocomotiveObject::Shutdown call and interface release omitted.
+00c69090  -  cGroundLocomotion allocation path omitted (stub).
+00c69150  -  Simulator::cNanoDrone constructor not reconstructed (stub).
+00c69290  -  not reconstructed (stub).

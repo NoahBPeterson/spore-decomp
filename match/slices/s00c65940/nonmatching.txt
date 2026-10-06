@@ -1,0 +1,4 @@
+00c65940  412  Behaviorally complete SetFacing (normalise + frame pick + UpdatePos/UpdateQuat); x87 sqrt/fdivrp in the original vs sqrtf here, and the two mirror-axis branches were folded.
+00c65af0  40  Complete SetT clamp; residual diff is operand order of the first comiss plus a cmov cl the original emitted as a branch.
+00c65b50  36  Complete SetTLerp interpolation/clamp; residual is the pointer-select codegen (cmov vs branch).
+00c666f0  86  Complete SetRange clamp; residual is the pointer-select codegen (cmov vs branch).

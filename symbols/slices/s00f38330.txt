@@ -1,0 +1,11 @@
+# Slice s00f38330 names.
+# PDB candidates seen in the decompile:
+#   00f38930  SP::cSPUIFeedFilter::DoMessage            # PDB caller-scored
+#   00f38330  cSPUISpace per-tile transform update
+#   00f38540  close SetiInfo sub-window (+0x0c)
+#   00f38570  close SetiInfo sub-window (+0x24)
+#   00f388b0  thunk_FUN_00f388b0 (wide-string number setter)
+#   00f39110  SP::cString ctor wrapper
+#   00f391c0  Simulator::cCivTokenTranslator (ctor)
+#   00f39220  Simulator::cCivTokenTranslator (dtor)
+00f38930  SP::cSPUIFeedFilter::DoMessage

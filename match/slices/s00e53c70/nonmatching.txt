@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e53c70  143  mission start: seed member flags + copy box centre to state; store/branch schedule differs
+00e53d50  110  medal proximity flags: complete; float compares + jump-table case order differ
+00e53f20   37  sOnButtonSaveClick: complete (telemetry flush, sound, message, flag); callback schedule differs
+00e53f70  150  allocate cell UI windows + init: complete; operator_new + vtable ownership dance differs
+00e54050   52  window-slot lookup + mark used: complete; global table indexing differs

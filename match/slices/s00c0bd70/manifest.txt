@@ -1,0 +1,13 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c0bd70/s00c0bd70.cpp  ?C0bee0@C@@QAEXHH@Z  00c0bee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?GetA@C@@QAEMXZ  00c0c010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?GetB@C@@QAEMXZ  00c0c040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?FindIndex@C@@QAEHH@Z  00c0c080  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?Get574@C@@QAEMXZ  00c0c0d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?Flag388@C@@QAE_NXZ  00c0c0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?Flag389@C@@QAE_NXZ  00c0c100  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?CallFind13@C@@QAEXXZ  00c0c140  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?CallFind27@C@@QAEXXZ  00c0c160  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?SetE84@C@@QAEXPAX@Z  00c0c180  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?Speed1@C@@QAEMD@Z  00c0c1c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c0bd70/s00c0bd70.cpp  ?FlagF@C@@QAEIXZ  00c0c310  /O2 /MD /Gy /TP /arch:SSE /fp:fast

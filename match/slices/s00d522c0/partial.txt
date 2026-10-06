@@ -1,0 +1,3 @@
+00d522c0  -  large cSpaceInventoryItem update not reconstructed (stub).
+00d52d80  -  SP::cPosseSimulator::Write: cVarListSerializer read/write path omitted (stub).
+00d52e40  -  notify-all-items loop (obj vtable 0xe8 + member 0x5a8 vtable 0x2c) not reconstructed (stub).

@@ -1,0 +1,7 @@
+00d522c0  FUN_00d522c0  # cSpaceInventoryItem large update
+00d52c90  FUN_00d52c90  # __cdecl compare floats at +8 (return b > a)
+00d52cb0  FUN_00d52cb0  # __cdecl heap sift with comparator
+00d52d80  SP::cPosseSimulator::Write  # PDB candidate; cVarListSerializer
+00d52df0  FUN_00d52df0  # inventory item count (GetItemID vector length - this[0x1c])
+00d52e10  FUN_00d52e10  # avatar lookup (GetAvatar + this[0x18] or global 0x145c4ac)
+00d52e40  FUN_00d52e40  # notify all inventory items

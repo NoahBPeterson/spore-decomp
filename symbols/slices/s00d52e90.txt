@@ -1,0 +1,9 @@
+00d533c0 SP::cPosseSimulator::ReloadTuning  # PDB name
+00d53330 SP::cPosseSimulator::RemovePosseSlot  # removes slot by occupant ptr
+00d53490 SP::cPosseSimulator::RemovePosseMember  # PDB name
+00d536d0 SP::cPosseSimulator::~cPosseSimulator  # scalar deleting destructor
+00d53730 SP::cPosseSimulator::Shutdown  # PDB name
+00d53790 SP::cPosseSimulator::OnTick  # PDB name
+00d538f0 Simulator::cPosseSimulator::cPosseSimulator  # PDB name
+00d539d0 SP::cPosseSimulator::Instance  # singleton accessor
+00d53a80 SP::cPosseSimulator::InitPosse  # creates 6 posse slots

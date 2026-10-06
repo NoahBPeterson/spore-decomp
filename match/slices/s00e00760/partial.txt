@@ -1,0 +1,12 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00e00760  -  context-sensitive sporepedia launcher body stubbed
+00e00a40  -  game-mode/universe-context predicate inlined-body stubbed
+00e00b00  -  pie-menu visibility predicate inlined-body stubbed
+00e00c40  -  menu-allowed predicate inlined-body stubbed
+00e00d20  -  menu predicate inlined-body stubbed
+00e00db0  -  stopwatch-driven UI update body stubbed
+00e00e90  -  body stubbed
+00e00fe0  -  handler detach body stubbed
+00e012d0  -  window-rect update body stubbed
+00e01390  -  large menu predicate body stubbed
+00e014a0  -  large menu predicate body stubbed

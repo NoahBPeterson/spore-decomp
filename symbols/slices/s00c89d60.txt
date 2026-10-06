@@ -1,0 +1,10 @@
+00c89d60  FUN_00c89d60  # effect-list world transform update (vector at +0x30/+0x31)
+00c8a020  FUN_00c8a020  # find effect by id in +0xc0 vector, set +0x14
+00c8a110  FUN_00c8a110  # find effect by id, set byte +0x10
+00c8a200  FUN_00c8a200  # find effect by id, set +0x18 and recompute position
+00c8a420  FUN_00c8a420  # destructor: vtable 0x1473758, release +0xa0, refcount +0x9c
+00c8a480  Simulator::cSpatialObject::cSpatialObject_funcB4h  # eastl string assign wrapper
+00c8a4a0  SP::cSpatialObject::GetWorldExtents  # PDB name
+00c8a550  SP::cSpatialObject::LoadModel  # PDB name (prev SetModelWorld)
+00c8a890  eastl::vector<SP::cSpatialObjectView::tEffectInfo,eastl::sp_vector_allocator>::erase  # PDB name
+00c8a910  FUN_00c8a910  # eastl vector grow/insert at +0xc0

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00fd71e0/s00fd71e0.cpp  ?PauseMovie2@cMovieSystem@@QAEDXZ   00fd7610
+slices/s00fd71e0/s00fd71e0.cpp  ?FUN_00fd7730@@YAXHPAUIWindowCtl@@@Z  00fd7730
+slices/s00fd71e0/s00fd71e0.cpp  ?GetSomething@cMovieSystem@@QAEPAXXZ  00fd7a90

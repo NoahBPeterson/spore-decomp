@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e53e30  232  closest-point on boxed 3D volume: x87 branch network approximated
+00e540b0  436  reposition two windows by mode: window vtable 0x38/0x6c/0x70 network not reconstructed
+00e54270 1548  initialize cell HUD state + window tree: only skeleton
+00e54880   67  window visibility / state helper: not reconstructed
+00e548d0  221  cell UI state helper: not reconstructed
+00e549b0  250  cell UI state helper: not reconstructed
+00e54ab0  199  cell UI state helper: not reconstructed

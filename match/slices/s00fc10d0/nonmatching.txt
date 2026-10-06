@@ -1,0 +1,14 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00fc1780   73  fixed-vector holder destructor: complete; the operator delete and
+               FUN_0070f520 order schedule differently
+00fc1ae0   83  cTerrainSystem destructor: complete; the refcount release and virtual
+               Releases are emitted through generic helper casts
+00fc1b60   17  zero-vector (__stdcall, 5 args): complete; cl assigns the xorps zero to
+               a different register than the original
+00fc1ba0   64  release terrain model: complete; ModelManager vcall chain schedule differs
+00fc1c00   69  cTerrainSystem constructor: complete; the property-info member setup
+               (mValue/mProps) is scheduled differently
+00fc1fd0   75  SP::GetTerraformPlanetType: complete; the comiss compare tree and the
+               kLavaThreshold tail differ
+00fc2040   22  radial falloff: complete; the x87 sqrt/scale and the maxss clamp are
+               scheduled differently

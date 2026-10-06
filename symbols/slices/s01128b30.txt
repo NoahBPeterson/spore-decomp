@@ -1,0 +1,18 @@
+01128b30 hkReorientAction::applyAction  # havok_names.txt identical-code
+011290b0 hkReorientAction::clone  # havok_names.txt identical-code
+01129130 hkPoweredChainMapper::~hkPoweredChainMapper  # havok_names.txt identical-code
+01129290 hkPhysicsData::~hkPhysicsData  # havok_names.txt identical-code
+01129360 hkPairwiseCollisionFilter::isCollisionEnabled  # havok_names.txt identical-code
+011293c0 hkPairwiseCollisionFilter::entityRemovedCallback  # havok_names.txt identical-code
+01129420 unnamed filter ctor (6 vtables)  # vtable stores 0x14a6f8c..0x14a6f58
+011294e0 unnamed filter-create helper  # calls 0x01129420
+01129500 unnamed hkGroupCollisionFilter support  # calls into filter vtables
+01129640 hkMotorAction::hkMotorAction  # havok_names.txt identical-code
+01129720 hkMotorAction::applyAction  # havok_names.txt identical-code
+011297f0 hkMotorAction::clone  # havok_names.txt identical-code
+01129850 hkGroupCollisionFilter core isCollisionEnabled  # called by 01129af0/01129b40
+01129af0 hkGroupCollisionFilter::isCollisionEnabled  # havok_names.txt identical-code
+01129b40 unnamed group-collision helper  # calls 0x01129850
+01129c70 hkDisableEntityCollisionFilter::isCollisionEnabled  # havok_names.txt identical-code
+01129cc0 hkDisableEntityCollisionFilter::removeEntity  # array compaction
+01129d20 hkDisableEntityCollisionFilter::entityRemovedCallback  # havok_names.txt identical-code

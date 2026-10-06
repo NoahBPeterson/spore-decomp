@@ -1,0 +1,12 @@
+00c65940  Simulator::cSimpleRotationRing::SetFacing  # PDB/vtable name cSimpleRotationRing; normalises dir into +0x15c
+00c65af0  Simulator::cSimpleRotationRing::SetT  # clamp +0x174..+0x178 into +0x17c
+00c65b50  Simulator::cSimpleRotationRing::SetTLerp  # lerp of the same clamp
+00c65bc0  Simulator::cSimpleRotationRing::_scalar_deleting_destructor  # vtable 0x14711a4, frees +0x30
+00c65c00  Simulator::cSimpleRotationRing::cSimpleRotationRing  # PDB name
+00c65e80  FUN_00c65e80  # model/world event; uses +0x9c/+0xa0/+0x19c
+00c65f00  Simulator::cSimpleRotationBall::cSimpleRotationBall  # PDB name
+00c660f0  Simulator::cSimpleRotationBall::OnView  # vtable slot 0x54 of vtbl 0x14713c8
+00c662b0  FUN_00c662b0  # setter of +0x1ac
+00c66310  FUN_00c66310  # setter of +0x1b0
+00c66370  FUN_00c66370  # quaternion/matrix update (calls QuaternionFromFacingAndUp)
+00c666f0  FUN_00c666f0  # setter of +0x174/+0x178 then re-clamp

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c64a70   67   cArrowMorphHandle::ContainsId: complete; loop guard (& 0xfffffffc) form
+00c64ad0   109  quaternion normalise: complete; x87 vs SSE sqrt/reciprocal mixing
+00c64b50   57   cArrowMorphHandle::EnableFlag: complete; bit test/set register allocation
+00c653e0   80   cSimpleRotationRing dtor: complete; vptr/dtor store schedule
+00c65540   80   cSimpleRotationBall dtor: complete; vptr/dtor store schedule
+00c658e0   78   set position + dirty: complete; call/reload schedule

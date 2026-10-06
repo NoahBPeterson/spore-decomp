@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00ed4730 117  list-walk + temp cleanup: this kept in frame reg, call scheduling differs
+00ed48a0 3    leaf bool: cl picks ecx for c[2] instead of reusing eax
+00ed49a0 167  destructor: vtable/refcount release schedule differs from original
+00ed4b70 130  state-switch: case-body call order / register allocation differs
+00ed4c70 308  UTFWin input-capture window create/show: heavy virtual-call schedule differs
+00ed4e30 51   uint64 vtable compare: 64-bit return handling differs
+00ed4f90 32   message handler: local/registration ordering differs
+00ed5190 112  posse item init + layout lookup: vtable call shapes differ
+00ed5220 117  constructor: field init order / vtable stores differ
+00ed5330 138  effects grab: refcount release + event registration differ
+00ed5400 163  effects grab 2: refcount release + event registration differ
+00ed54b0 174  dual effects grab: branch shape and register allocation differ
+00ed5640 337  posse item list rebuild: inlined UI item ctor/vcall schedule differs

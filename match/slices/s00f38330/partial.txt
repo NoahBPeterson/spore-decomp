@@ -1,0 +1,19 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f38330  473  per-tile transform/mesh update: matrix/quaternion construction and the
+               tile-element mesh path are only sketched (vcall args approximated)
+00f385d0   21  seti-panel constructor: the multi-vtable setup (base + derived vptrs at
+               +0/+4) is not emitted; only the zeroed fields are stored
+00f38680  397  seti-panel UI init: layout/child-window setup reconstructed but the
+               CenterWindowInRect receiver and per-child vcall arguments are approximated
+00f388b0  110  set number string: the wide-string sprintf and +0x80 set-text call are
+               stubbed; only the +0x1c store is real
+00f38930  384  seti message handler: branch logic sketched; SetiEffects/MessageServer
+               argument setup is approximated
+00f38ac0   90  show/hide panel: the +0x104/+0x108 virtual targets are selected through
+               generic helpers, not the correct receiver convention
+00f38c70   58  large-asset-view constructor: multi-vtable setup (+0/+4/+8) is not
+               emitted; only the zeroed fields are stored
+00f38d90  239  post UI behavior message: message allocation (operator new 0x40) and the
+               MessageBasicRC vtable/refcount setup are only sketched
+00f38e80  438  large-asset-view UI init: layout/child creation reconstructed but the
+               CenterWindowInRect receiver, child vcall args and vector push are approximated

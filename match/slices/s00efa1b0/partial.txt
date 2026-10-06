@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00efa1b0  -  Update: 4904-byte switch dispatcher (mCategory +0x30, cases 0..0xb); per-case bodies approximated

@@ -1,0 +1,12 @@
+00fd71e0  FUN_00fd71e0  # no PDB name; 5-arg cdecl delegate
+00fd7660  SP::cMovieSystem::RecordFrames  # PDB gap-align
+00fd7750  SP::cMovieLetterbox::Init  # PDB anchor
+00fd7b30  SP::cMovieSystem::cMovieSystem  # PDB gap-align
+00fd7cd0  SP::cMovieSystem::~cMovieSystem  # PDB gap-align
+00fd7260  SP::cMovieSystem::DrawLayer  # PDB caller-single
+00fd7800  SP::cMovieSystem::Shutdown  # PDB caller-scored
+00fd79e0  SP::cMovieSystem::StopMovie  # PDB caller-scored
+00fd7d80  SP::cMovieSystem::StopRecordingMovie  # PDB caller-scored
+00fd75a0  SP::cMovieSystem::MovieIsPlaying  # vtable slot identity
+00fd7610  SP::cMovieSystem::PauseMovie  # vtable slot identity (alias)
+00fd7570  SP::cMovieSystem::MovieIsPlaying  # PDB vtable-slot

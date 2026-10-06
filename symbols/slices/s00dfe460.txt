@@ -1,0 +1,3 @@
+00dfe460 SP::cSPUISpace::HandleMessage  # hashed-command dispatch
+00dfef70 SP::cSPUISpace::~cSPUISpace  # large destructor
+00dff130 SP::cSPUISpace::cSPUISpace  # copy-init helper

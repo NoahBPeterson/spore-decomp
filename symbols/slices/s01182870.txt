@@ -1,0 +1,11 @@
+01182870 lib_cblock::FUN_01182870  # unnamed (no PDB)
+01182ac0 lib_cblock dispatch (id 0x300/0x301 -> factory)  # unnamed (no PDB)
+01182ae0 lib_cblock::FUN_01182ae0  # unnamed (no PDB)
+011831b0 lib_cblock dispatch (id 0x300/0x301)  # unnamed (no PDB)
+011831e0 lib_cblock init thunk  # calls EA::Audio::Eapd::sys_gui then two helpers
+011831f0 lib_cblock::FUN_011831f0  # unnamed (no PDB)
+01183630 engine_finish (ENGINE_finish, eng_init.c)  # calls CRYPTO_lock/ERR_put_error
+011836c0 engine_init (ENGINE_init, eng_init.c)  # calls CRYPTO_lock/ERR_put_error
+01183740 engine_finish (release variant, eng_init.c)  # calls CRYPTO_lock/ERR_put_error
+011838a0 pointer deref helper  # `return *p;`
+011839f0 engine dispatch wrapper  # calls fn at +0x24, ERR_put_error

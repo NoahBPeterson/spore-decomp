@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e52d80  853  mission HUD update: 853-byte body with window/vcall network not reconstructed (stub)
+00e53460  185  mission slot transition: sound + slot field stores present, guard lookup branch and ==1/==2 checks omitted
+00e53660  510  mission-complete toggle: cString + tooltip + messaging network not reconstructed

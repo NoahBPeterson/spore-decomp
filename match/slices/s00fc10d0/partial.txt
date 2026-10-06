@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00fc10d0  1498  cSetCloudTypeStep::Step: 12-case terrain state machine, rdtsc timing
+                accumulation and per-case sphere updates are only sketched
+00fc16b0  208  fixed-vector holder ctor (0xc): element init via eastl fixed_vector and
+                DoInsertValue are not reconstructed (stub)
+00fc17e0  211  fixed-vector holder ctor (0x10): same fixed_vector init not reconstructed
+00fc18c0  211  fixed-vector holder ctor (0x10 variant): same fixed_vector init not
+                reconstructed
+00fc19a0  298  SWARM_TerrainAddCommands: the three 8-dword command tables and the
+                registration calls are not reconstructed (stub)
+00fc1c70  415  SP::cTerrainSystem::Init: the manager/wrapper setup chain is only sketched
+00fc1e40  350  cTerrainSystem shutdown: the teardown chain (editor/resource/wrapper) is
+                only sketched

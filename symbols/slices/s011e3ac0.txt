@@ -1,0 +1,23 @@
+011e3ac0 rw::core::arena::UnfixContextImpl::Serialize  # PDB name (card)
+011e3c30 rw::core::arena::Arena::ObjectToId  # PDB candidate caller-single
+011e3c50 rw::core::arena::Arena::RefixStart  # PDB name (card)
+011e3c70 rw::core::arena::Arena routine  # unnamed (no PDB)
+011e3e10 arena iterator lookup helper  # unnamed (no PDB)
+011e3e70 rw::core::arena::ArenaManager::Data  # PDB name (card)
+011e3ed0 arena insert helper  # unnamed (no PDB)
+011e3f20 rw::core::arena::Arena::Initialize  # PDB name (card)
+011e40a0 rw::core::arena::Arena::Release  # PDB name (card)
+011e4130 rw::core::arena::rwArenaOpen  # PDB name (card)
+011e43c0 rw::core::arena::rwArenaClose  # PDB name (card)
+011e4540 rw_HashUInt (FNV-1a style)  # constant 0x1000193
+011e4590 rw_HashString (FNV-1a style)  # constant 0x1000193
+011e45c0 rw_BaseResourceSetupTypeRegPtrs  # PDB name (card)
+011e4600 rw::core::arena::ArenaSectionManifest::Types  # PDB name (card)
+011e4640 ArenaSectionManifest setter  # unnamed (no PDB)
+011e4670 ArenaSectionManifest advance (+0x1c)  # unnamed (no PDB)
+011e4680 arena routine  # unnamed (no PDB)
+011e4720 rw::core::arena::ArenaSectionSubreferences::UnfixData  # PDB name (card)
+011e4820 rw::core::arena::ArenaSectionSubreferences::RefixData  # PDB name (card)
+011e4910 rw::core::arena::ArenaSectionManifest::Initialize  # PDB name (card)
+011e4970 arena manifest expand helper  # unnamed (no PDB)
+011e49d0 arena manifest init helper  # unnamed (no PDB)

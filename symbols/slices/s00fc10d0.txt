@@ -1,0 +1,8 @@
+# Slice s00fc10d0 names.
+# PDB candidates from the decompile:
+#   00fc10d0  SP::cSetCloudTypeStep::Step            # PDB caller-single
+#   00fc1c00  SP::cTerrainSystem::cTerrainSystem     # PDB caller-scored
+#   00fc1c70  SP::cTerrainSystem::Init
+#   00fc1fd0  SP::GetTerraformPlanetType
+#   00fc1fa0  terraform radius by level
+#   00fc2040  radial falloff factor

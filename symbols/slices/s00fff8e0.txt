@@ -1,0 +1,5 @@
+00fff8e0  SP::cSPSimulatorPlayerUFO::GetStarRecordUnderMouse  # PDB name
+01000000  SP::cSPSimulatorPlayerUFO::AutoAddSpiceToCargo  # PDB name
+01000520  SP::cSPSimulatorPlayerUFO::OnPlanetMoveDone  # PDB name
+00fffc90  FUN_00fffc90  # no PDB name (vector insert helper)
+00fffdd0  FUN_00fffdd0  # no PDB name (effects/hud string)

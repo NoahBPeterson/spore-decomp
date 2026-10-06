@@ -1,0 +1,9 @@
+00c89d60  -  effect-list world transform update not reconstructed (stub).
+00c8a020  -  find-effect-by-id then set +0x14: effect vtable calls + in-place Matrix33 ctor not reproduced.
+00c8a110  -  find-effect-by-id then set byte +0x10: same missing effect/matrix path.
+00c8a200  -  find-effect then recompute position from matrix not reconstructed (stub).
+00c8a480  -  basic_string::assign wrapper; exact arg shape not reconstructed.
+00c8a4a0  -  SP::cSpatialObject::GetWorldExtents: matrix/transform helpers approximate.
+00c8a550  -  SP::cSpatialObject::LoadModel not reconstructed (stub).
+00c8a890  -  eastl::vector<tEffectInfo>::erase: refcount release + element move not reproduced.
+00c8a910  -  eastl vector grow/insert not reconstructed (stub).

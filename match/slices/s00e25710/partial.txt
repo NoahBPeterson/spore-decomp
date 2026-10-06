@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e25c30  438  vector<T>::insert: reallocation branch written, in-place insert branch not reconstructed
+00e25df0  240  partition over 4-byte AutoRefCount elements: predicate callback + release sketched, compaction tail approximated
+00e25fa0  203  cSPUIPosseItem::update_control_value: control map lookup / value application approximated, blink vcall path partial
+00e260f0  797  cSPUIPosseItem::OnTick: id gate + distress increment present, fcos blink sequence and motive loop omitted
+00e26410  152  introselect driver: pivot + recurse sketched, insertion-sort fallback tail approximated

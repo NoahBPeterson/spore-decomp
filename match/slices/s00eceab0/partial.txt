@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00eceab0  1293  approximate: SP::cSPEditorDevUI::LoadLayout only partially reconstructed
+00ecf150   131  approximate: cSPScenarioSwatchEditItemUI ctor base call/vptr setup omitted
+00ecf400   712  approximate: scenario swatch message handler only partially reconstructed
+00ecf6d0   304  approximate: swatch window-enable logic only partially reconstructed

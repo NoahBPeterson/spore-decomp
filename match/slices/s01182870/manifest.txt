@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s01182870/s01182870.cpp  ?lib_cblock_FUN_01182ac0@@YAPAXH@Z  01182ac0  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_FUN_011831b0@@YAPAXH@Z  011831b0  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_FUN_011831e0@@YAXXZ  011831e0  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_engine_finish@@YAHHH@Z  01183630  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_engine_init@@YAHH@Z  011836c0  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_engine_finish2@@YAHH@Z  01183740  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_getPtr@@YAPAXPAX@Z  011838a0  /O2 /MD /Gy /TP
+slices/s01182870/s01182870.cpp  ?lib_cblock_dispatch@@YAHHH@Z  011839f0  /O2 /MD /Gy /TP

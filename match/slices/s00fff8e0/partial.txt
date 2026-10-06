@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00fff8e0  789  GetStarRecordUnderMouse: ray/record search simplified to skeleton
+00fffdd0  560  FUN_00fffdd0: effects/quaternion/string path simplified
+01000000  996  AutoAddSpiceToCargo: inventory/trading path simplified
+01000520  316  OnPlanetMoveDone: post-planet steps simplified

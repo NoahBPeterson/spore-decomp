@@ -1,0 +1,16 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b7e500   56  cPlanetModel::GetRadiusX2: complete; float local materialisation (xmm store + x87 fadd) and default-arm constant form
+00b7e840   200 SP::cPlanetModel::GetAverageRadius: complete; SSE div/mul scheduling and branch selection differ
+00b7e1d0   63  cPlanetModel::ClearContinentBits: complete; loop unrolling of the two masking loops (constant trip count)
+00b7e6c0   10  list reset + FUN_007a4420: complete; global `this` (ecx) load ordered after the argument pushes
+00b7e680   41  float->s16 quantiser: complete; pointer-select form differs (branch layout / 16-bit load)
+00b7e150   65  union-find path-compress (FindSet): complete; register/schedule differences in the while loop
+00b7e6f0   111 union-find Union: complete; find-loop register assignment differs from the original
+00b7e790   119 union-find Flatten: complete; two-loop form and register allocation differ
+00b7ea30   62  continent-flag setter: complete; bounds/divide scheduling differs
+00b7e560   221 SP::RandomDirection3: complete; x87 clamp + SSE normalise scheduling differs
+00b7dec0   197 game-mode cleanup: complete; terrain-editor sub-call object reloads and list reset differ
+00b7df80   99  game-mode ctor: complete; multiple-inheritance vptr store order
+00b7e010   32  game-mode dtor: complete; vptr/base-dtor store schedule
+00b7e0b0   86  mode-change message handler: complete; switch jump-table/register assignment
+00b7e220   257 cube-map tile walker: complete; control-flow/register assignment in the walk loop

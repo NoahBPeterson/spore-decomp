@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00efee60  68   object-selection toggle: vcall/refcount schedule differs
+00efeee0  164  placement/orientation + audio cue: x87 float args and flag flip schedule differ
+00eff030  89   placement commit: call schedule / vcall slot differs
+00eff1e0  43   visibility predicate: SSE int->float->compare idiom not reproduced exactly
+00eff230  44   singleton pointer assignment: `this`-slot/arg register assignment differs
+00eff360  39   flag-gated commit: branch/call schedule differs
+00eff590  83   placement read: vcall slots and float load schedule differ

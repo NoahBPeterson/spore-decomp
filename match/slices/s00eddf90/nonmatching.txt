@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00ede400 154  creature field setter (0x484): complete but loop/division codegen differs
+00ede530 154  creature field setter (0x4a0): complete but loop/division codegen differs
+00ede660 154  creature field setter (0x49c): complete but loop/division codegen differs
+00ede790 154  creature field setter (0x498): complete but loop/division codegen differs
+00ede8c0 154  creature field setter (0x490): complete but loop/division codegen differs
+00ede9f0 154  creature field setter (0x494): complete but loop/division codegen differs
+00ede2b0 295  creature field setter (0x48c + byte copies): complete but codegen differs
+00edebb0 11   behavior UI destructor: member release schedule differs narrowly

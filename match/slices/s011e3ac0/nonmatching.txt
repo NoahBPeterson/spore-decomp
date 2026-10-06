@@ -1,0 +1,13 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+011e3c30  19  Arena::ObjectToId: tail/arg-slot schedule differs
+011e3c50  4   Arena::RefixStart wrapper: epilogue uses pop ecx instead of add esp,4
+011e3e10  53  arena iterator lookup: register/stack schedule differs
+011e3e70  39  ArenaManager::Data: static guard byte-load and vcall schedule differ
+011e3ed0  48  arena insert helper: call/register schedule differs
+011e4540  71  rw_HashUInt: expression/register schedule differs
+011e4590  18  rw_HashString: loop read/increment order differs
+011e45c0  7   rw_BaseResourceSetupTypeRegPtrs: call/epilogue scheduling differs
+011e4640  20  ArenaSectionManifest::set: load schedule differs
+011e4910  55  ArenaSectionManifest::Initialize: memset frame and store order differ
+011e4970  56  arena manifest expand: vcall sequence differs
+011e49d0  59  arena manifest init: store order differs

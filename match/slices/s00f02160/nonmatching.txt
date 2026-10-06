@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f02670  126  init: temp V4 ctor/assign/dtor scheduling and vtable+0x18 call differ
+00f02b00  53   update gate: FUN_0067dd10 chain + g_mgr branch/tail-jmp schedule differs
+00f02b80  81   ctor: Stopwatch arg setup hoisted above the zero-store block by cl
+00f02c50  48   update gate (variant): FUN_00f02160/FUN_00f01c20 branch + tail-jmp schedule
+00f02cd0  64   ctor: operator_new literal string argument not relocation-masked; ctor schedule
+00f02d30  52   dtor: refcount release + scalar-delete order differs
+00f02dd0  8    singleton teardown: `this` register choice (ecx vs esi) differs

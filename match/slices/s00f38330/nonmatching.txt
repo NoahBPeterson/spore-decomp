@@ -1,0 +1,17 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f38610   77  seti-panel destructor: complete; the chain of +4/+8 virtual Releases is
+               emitted through generic helpers so the receiver convention differs
+00f38850   33  seti-panel shutdown: complete; the +0x28 vcall and the AutoRefCount
+               release schedule differ
+00f38bc0  137  clock digit decomposition: complete; the /60 and %60 magic-division
+               sequence is scheduled differently
+00f38ce0   92  large-asset-view destructor: complete; vector dtor, RemoveHandler and
+               the +4/+8 Releases schedule differ
+00f39080  114  large-asset-view shutdown: complete; vector erase and the child-widget
+               vcall/erase order differ
+00f39130  112  read a property value: complete; the local AutoRefCount slots and the
+               two-stage find schedule differ
+00f391c0   48  cCivTokenTranslator constructor: complete; the sentinel string stores
+               are CSE'd differently from the original's repeated register loads
+00f39220   86  cCivTokenTranslator destructor: complete; the four inline-string
+               free checks are scheduled differently

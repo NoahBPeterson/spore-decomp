@@ -1,0 +1,23 @@
+00d00ee0  FUN_00d00ee0  # object pair update (guarded by byte +0x89 each)
+00d00f80  FUN_00d00f80  # red-black tree find/lower_bound (node key at +0x10/+0x14)
+00d00ff0  FUN_00d00ff0  # container update
+00d01110  FUN_00d01110  # container update
+00d011e0  FUN_00d011e0  # tree destruction loop until sentinel (call 0x921580)
+00d01210  FUN_00d01210  # lower_bound, 0x20-byte elements, unsigned key
+00d01260  FUN_00d01260  # lower_bound, 8-byte elements, unsigned key
+00d012a0  FUN_00d012a0  # container update
+00d01340  FUN_00d01340  # container operation
+00d01410  FUN_00d01410  # set/comparator operation
+00d01470  FUN_00d01470  # set/comparator operation
+00d014e0  FUN_00d014e0  # container operation
+00d015d0  FUN_00d015d0  # container operation
+00d01820  FUN_00d01820  # container operation
+00d018d0  FUN_00d018d0  # erase range over 8-byte elements (shrink end)
+00d01920  FUN_00d01920  # container operation
+00d01ab0  FUN_00d01ab0  # compare helper
+00d01b50  FUN_00d01b50  # compare wrapper (2 args)
+00d01b80  FUN_00d01b80  # compare wrapper (3 args)
+00d01bb0  SP::cRelationshipManager::GetDebugString  # PDB name
+00d01db0  FUN_00d01db0  # relationship helper
+00d01e30  SP::cRelationshipManager::EndAlliance  # PDB name
+00d01f20  FUN_00d01f20  # relationship helper

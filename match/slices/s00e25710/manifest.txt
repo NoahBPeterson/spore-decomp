@@ -1,0 +1,8 @@
+# source  symbol  original VA  [flags override]
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItemTribe@@QAEPAXH@Z  00e25840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItemTribeBaby@@QAEPAXH@Z  00e258d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItemCiv@@QAEPAXH@Z  00e25950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItemSpace@@QAEPAXH@Z  00e259d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItem2@@QAEPAXHH@Z  00e25a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItem3@@QAEPAXH@Z  00e25ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e25710/s00e25710.cpp  ?ctor@cSPUIPosseItemTribeGhostShell@@QAEPAXXZ  00e25b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00d53330  33  register assignment (n/i in esi/edi) and base reload differ
+00d536d0  50  dtor vtable stores / delete scheduling differ
+00d53730  69  vector-pops-back loop scheduling differs
+00d53890  80  partition helper: register/iteration order differs
+00d538f0  50  ctor field-store ordering and base-ctor call differ
+00d539d0  49  singleton init: new-expression null-path differs
+00d53a80  148  6-slot loop: i64->float conversion and vector growth path differ

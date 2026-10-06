@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00ec8f40  115  approximate: queue drain loop with virtual calls simplified
+00ec92b0  533  approximate: behavior-dialog builder only partially reconstructed
+00ec9530  177  approximate: map find-or-insert node construction not reproduced
+00ec9820  149  approximate: map find-or-insert node construction not reproduced
+00ec98d0  428  approximate: multi-map clear only partially reconstructed
+00ec9a80   48  approximate: nested map lookup argument flow not reproduced
+00ec9b30  237  approximate: reference struct builder partially reconstructed
+00ec9c70  423  approximate: compare/update path only partially reconstructed

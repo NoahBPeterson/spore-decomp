@@ -1,0 +1,2 @@
+00edeb20 Simulator::cScenarioEditModeBehaviorUI::cScenarioEditModeBehaviorUI  # vtable_names.txt vt
+00edebb0 Simulator::cScenarioEditModeBehaviorUI::~cScenarioEditModeBehaviorUI  # vtable reset + member release

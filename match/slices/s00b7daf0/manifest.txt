@@ -1,0 +1,11 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00b7daf0/s00b7daf0.cpp  ?GetWaterHeight@cPlanetModel@@QAEMXZ  00b7e390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e3b0@cPlanetModel@@QAEIII@Z  00b7e3b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e3e0@cPlanetModel@@QAE_NPAM@Z  00b7e3e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e430@cPlanetModel@@QAEMPAMD@Z  00b7e430  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e490@@YAMXZ  00b7e490  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e4b0@GameModeFlags@@QAEXXZ  00b7e4b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e4d0@cPlanetModel@@QAEMXZ  00b7e4d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e360@cPlanetModel@@QAEXH@Z  00b7e360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e1a0@cPlanetModel@@QAEXXZ  00b7e1a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00b7daf0/s00b7daf0.cpp  ?FUN_00b7e070@GmSec@@QAEXXZ  00b7e070  /O2 /MD /Gy /TP /arch:SSE /fp:fast

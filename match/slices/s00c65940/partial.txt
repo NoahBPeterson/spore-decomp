@@ -1,0 +1,5 @@
+00c65c00  -  cSimpleRotationRing constructor: field-initialisation sequence not reconstructed (stub).
+00c65e80  -  OnEvent: model/world pointer chain present but object layout (this+0x9c/0xa0/0x19c) not confirmed (approximate).
+00c65f00  -  cSimpleRotationBall constructor: field-initialisation sequence not reconstructed (stub).
+00c660f0  -  OnView: virtual view query (slots 0x2c/0x30/0x70) update not reconstructed (stub).
+00c66370  -  UpdateMatrix: quaternion/matrix update not reconstructed (stub).

@@ -1,0 +1,11 @@
+00e5ce90 creature/box long helper  # unnamed
+00e5d2b0 random pickup size  # guard, FUN_00e823a0(handle)+0x304/0x308 range, EA::Random, level-size table 0x1483bd0
+00e5d340 extended-box distance predicate  # object 0x516c, fields +0x4c/0x50/0x54/0x58, box 0x16b3c88..c9c
+00e5d410 box/creature predicate  # id vs +0x40fc, else FUN_006ffbd0(0x16b3cb8)
+00e5d500 resource lookup with fallback  # EA::ResourceMan::GetManager 0x67dcd0, default 0x15a83a4..ac
+00e5d580 pickup predicate  # +0xfc, FUN_00e57340==3, FUN_00e4ff10
+00e5d5b0 pickup search over broadphase  # 0x51bc timer, FUN_00e87260, FUN_00e5cd00 distance, FUN_00e5d580
+00e5d7b0 mission slot tick  # 0x5190 slot state, FUN_00e53660, Callout_CLG_Mate, FUN_00e4fac0
+00e5da10 key from pick result  # FUN_00e5c9d0 id switch, FUN_00e394f0
+00e5daa0 show mission panel  # FUN_00b721d0(0x411c), +0x112/0x113, +0x5158=5, FUN_00e539c0
+00e5daf0 callout config by pick result  # FUN_00e4fca0, Callout_CLG_Ending/TransitionButton, SPIDFromName

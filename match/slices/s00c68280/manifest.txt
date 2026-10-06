@@ -1,0 +1,6 @@
+# source symbol va flags
+slices/s00c68280/s00c68280.cpp  ?F68840@@YIXPAUCOrn@@@Z  00c68840  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c68280/s00c68280.cpp  ?Eaa0@COrn@@QAEXXZ  00c68aa0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c68280/s00c68280.cpp  ?Eae0@COrn@@QAEXPAM@Z  00c68ae0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c68280/s00c68280.cpp  ?Ebd0@COrn@@QAEXM@Z  00c68bd0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c68280/s00c68280.cpp  FUN_00c69110  00c69110  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast

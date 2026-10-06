@@ -1,0 +1,14 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f40d00  404  gather matching nodes into a vector: main loop sketched but the
+               0x238-stride record scan and the refcount/vector push path are approximate
+00f40ed0  534  compare two surface nodes: the transform sampling (FUN_00f3ecb0 /
+               FUN_00ae66d0) and the F3f110 call matrix are only sketched
+00f41180  231  copy node positions into an output vector: not reconstructed (stub)
+00f41300  273  tear down tool-strategy data: hashtable bucket frees and the three
+               FUN_00b227c0(NounManager(...)) calls are not reconstructed (stub)
+00f414b0  503  refresh visibility of all node markers: loop and flag logic sketched only
+00f416b0  353  score a node against the active tool: FUN_00f40500/FUN_00f3e6d0 call
+               matrix and the node-cancel list are approximate
+00f41890  379  destroy one tool node (noun removal + messaging): call order sketched
+00f41bb0  307  noun-type dispatch (receiver in EAX): register-argument entry not
+               reconstructed (stub)

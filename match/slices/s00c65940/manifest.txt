@@ -1,0 +1,4 @@
+# source symbol va flags
+slices/s00c65940/s00c65940.cpp  ?ScalarDtor@cSimpleRotationRing@@QAEPAXE@Z  00c65bc0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c65940/s00c65940.cpp  ?SetPhase@cMorphHandle@@QAEXM@Z  00c662b0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00c65940/s00c65940.cpp  ?SetAmplitude@cMorphHandle@@QAEXM@Z  00c66310  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast

@@ -1,0 +1,10 @@
+00b7e390 SP::cPlanetModel::GetWaterHeight  # PDB-resolved; mpISphere->GetMap() height
+00b7e560 SP::RandomDirection3  # PDB-resolved; rejection-sampled unit vector
+00b7e840 SP::cPlanetModel::GetAverageRadius  # PDB-resolved; cube-face radius lookup
+00b7e1a0 SP::cPlanetModel::ClearContinentBits  # clears obstacle bitmap + continent mask bits
+00b7e1d0 SP::cPlanetModel::MaskContinentBits  # mask bytes/words by 0x3c000000 field
+00b7e150 union-find FindSet(path-compress) on uint16_t parent array
+00b7e6f0 union-find Union on uint16_t parent array
+00b7e790 union-find Flatten on uint16_t parent array
+00b7df80 SP::cAppModeTerrainEditor-like ctor (MI IHandlerRC + cGonzagoSubsystem)
+00b7e010 matching dtor

@@ -1,0 +1,7 @@
+00dddd20 SP::cGalaxyGameEntryImpl::UpdateCameraFromProperty  # property->Vector3 update
+00dddf30 EA::ArgScript::cCommandBase constructor  # "Level Cheats" command
+00dddf90 EA::ArgScript::cCommandBase::Parse  # command parse
+00dddfd0 SP::cGalaxyGameEntryAppMode::Init  # PDB name
+00dde2b0 SP::cGalaxyCameraController::Init  # camera controller field init
+00dde350 SP::cGalaxyCameraController::OnDeactivate  # PDB candidate
+00dde400 SP::cGalaxyCameraController::OnKey  # camera key input

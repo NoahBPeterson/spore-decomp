@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e4f860  143  collectable visibility refresh: guard/lookup loop present, per-entry branch tree approximated
+00e4f920  131  component snap: period arrives in XMM3 (register arg) and could not be reproduced; body approximated
+00e4f9d0  141  state->level float: switch mapping over +0xbc/+0xb4 guessed, not fully reconstructed
+00e4fd30   41  13-byte pattern fill: exact jump-table index mapping guessed
+00e50220  351  piecewise curve: control-point branch network and FUN_01041cd0 calls approximated
+00e50400   34  reset collectables mode: self arrives in ESI (register-convention); modelled as a stack param

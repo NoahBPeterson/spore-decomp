@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+00ecda80  132  complete; audio/message dispatch call schedule differs
+00ecdb30   23  complete; vtable slot-0x30 call with zeroed triple differs
+00ecdb50   29  complete; thiscall convention/tail-call scheduling differs
+00ecdb90   10  complete; fastcall this + condition scheduling differs
+00ecdbb0   15  complete; constant compare + tail differs
+00ecdc20   22  complete; copy fields then vcall scheduling differs
+00ecdc70   46  complete; stopwatch/float compare scheduling differs
+00ecdcc0  125  complete; property-layout position math scheduling differs
+00ecdd70   41  complete; release-chain store order differs
+00ecde60  213  complete; shutdown release chain / vcall order differs
+00ecdf60   66  complete; editor object allocation/ctor differs
+00ecdfc0   40  complete; clamp + vcall scheduling differs
+00ece110   26  complete; window lookup + vcall scheduling differs
+00ece270  116  complete; swatch init call ordering differs
+00ece300   18  complete; double set-field call scheduling differs
+00ece320   40  complete; teardown visit/ordering differs
+00ece370   37  complete; interface cast chain differs
+00ece3b0   45  complete; interface query chain differs
+00ece730   81  complete; limit-stopwatch branch scheduling differs
+00ece790   52  complete; colour-pack branch scheduling differs
+00ece7f0   42  complete; boolean triple check scheduling differs
+00ece870   37  complete; vptr/copy construction ordering differs
+00ece8c0   23  complete; lookup + vcall scheduling differs
+00ece8f0   28  complete; lookup + return scheduling differs
+00ece920   64  complete; property registration scheduling differs
+00ece990   94  complete; ctor vptr/store ordering differs

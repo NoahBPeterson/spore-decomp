@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00e01990  -  large global-options update body stubbed
+00e01db0  -  large global-options update body stubbed
+00e02040  -  SP::ShowContextSensitiveSporepedia body stubbed
+00e02200  -  SP::ShowContextSensitiveSporeGuide body stubbed

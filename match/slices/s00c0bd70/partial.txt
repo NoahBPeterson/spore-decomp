@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c0bd70   167 Simulator::cGameData::WriteAsText: GetFieldValues chain not translated
+00c0bf10   239 creature-stimuli update: ClearAll/PlayIdleAnimation call sequence not translated
+00c0c250   98  cCreatureBase::funcD4h: relationship lookup body stubbed
+00c0c630   961 SP::cCreatureLocomotion::Execute: state machine body stubbed
+00c0ca00   698 ballistic aim solver: body stubbed
+00c0ccc0   236 creature transition tick: body stubbed
+00c0cdb0   122 game-mode creature id lookup: body stubed

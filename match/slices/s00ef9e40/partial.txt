@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00ef9e40  -  Reset: per-step-hashtable temporary copy/merge/destroy sequence approximated; total size 338 vs 509

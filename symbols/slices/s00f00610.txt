@@ -1,0 +1,15 @@
+# va  name  # evidence
+00f00610  UI::cScenarioTutorialsChecklistUI::SyncPlacement  # thiscall 2 args (ret 8), g_16c7b34/0x16c7aa4+0xd4
+00f00790  UI::cScenarioTutorialsChecklistUI::ApplyPlacement  # thiscall 1 arg (ret 4)
+00f00850  UI::cScenarioTutorialsChecklistUI::ApplyPlacementEx  # thiscall 1 arg (ret 4), g_mgr+0x10
+00f00b00  V4::assign  # refcounted slot assign + trailing float (fld/fstp at +0xc)
+00f00b50  UI::cScenarioTutorialsChecklistUI::FetchPlacement  # F32790 + assign + vtable+0x20(0) + F38150 + F34560
+00f00ba0  UI::cScenarioTutorialsChecklistUI::FetchPlacementGated  # F32790(g_mgr+4) then V4::assign(pC)
+00f00bd0  UI::cScenarioTutorialsChecklistUI::CommitPlacement  # thiscall 1 arg
+00f00d10  UI::cScenarioTutorialsChecklistUI::Teardown  # thiscall no args
+00f00e50  UI::cScenarioTutorialsChecklistUI::UpdatePlacement  # thiscall 1 arg
+00f00f80  UI::cScenarioTutorialsChecklistUI::Dispatch  # g_mgr+0x10 gated, vtable +0x5c chain
+00f01030  UI::cScenarioTutorialsChecklistUI::AdjustPlacement  # FUN_00b18e00 + vtable+0x34 + 0.01f + f_eff4c0
+00f01090  UI::cScenarioTutorialsChecklistUI::AddObject  # FUN_00b18e00(p10) then object flags
+00f01140  eastl::uninitialized_copy  # copies 0x20-byte records {int; float[7]} into dst
+00f011b0  UI::cScenarioTutorialsChecklistUI::BuildScene  # 1024-byte scene builder, g_mgr+0xc

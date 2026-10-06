@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e5ce90 1048  creature/box long helper: not reconstructed
+00e5d2b0  135  random pickup size within [lo,hi]*level: guard/random x87 sequence approximated
+00e5d5b0  503  pickup search over broadphase hits: loop/vcall network approximated
+00e5d7b0  596  mission slot tick: only skeleton

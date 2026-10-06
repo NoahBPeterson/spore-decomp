@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00ec8d20   44  complete pair-emit loop; data/loop scheduling differs
+00ec8d80  187  complete pair-emit loops; array materialization differs
+00ec8ed0   69  complete vector resize; copy_impl truncation inlined differently
+00ec90c0   65  complete intrusive-list initializer; store order differs
+00ec9140   61  complete rbtree insert; node/arg scheduling differs
+00ec9250   52  complete rbtree teardown; subtree offset scheduling differs
+00ec94d0   50  complete shutdown; refcount release scheduling differs
+00ec95f0   50  complete map pair lookup; frame/scheduling differs
+00ec9640   50  complete map pair lookup; frame/scheduling differs
+00ec9690   65  complete pair iteration; loop scheduling differs
+00ec96f0   65  complete pair iteration; loop scheduling differs
+00ec9ae0   55  complete index-of search; loop scheduling differs

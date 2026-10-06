@@ -1,0 +1,12 @@
+00e53c70 SP::start mission / seed state  # FUN_00b721d0(0x411c), flags +0x16c..0x189, box centre -> state
+00e53d50 medal proximity flags  # creatures 0x51d4/0x411c, +0x18b, +0x18c jump table
+00e53e30 closest point on boxed volume  # x87, extents +0x0/0xc/0x10/0x14
+00e53f20 SP::sOnButtonSaveClick  # PDB candidate; telemetry flush, ui_global_save, message 0x1cd20f0
+00e53f70 allocate cell UI windows  # operator_new(0x18,"Simulator/Cell/UI"), cSPUILayout::Init, globals 0x15a7bac/bb0
+00e54050 window-slot lookup + mark used  # table 0x16b4178 / flags 0x16b4278, counts 0x15a7bac
+00e540b0 reposition two windows  # window vtable 0x38/0x6c/0x70, AutoSizeWindowForText 0x806e40
+00e54270 initialize cell HUD state  # FUN_00e53f70 then reset 0x934..0x940, 0xcc..0xd8, SP::cLocalInputState::Reset
+00e54880 cell UI state helper  # unnamed
+00e548d0 cell UI state helper  # unnamed
+00e549b0 cell UI state helper  # unnamed
+00e54ab0 cell UI state helper  # unnamed

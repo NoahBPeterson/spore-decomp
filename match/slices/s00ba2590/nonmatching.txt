@@ -1,0 +1,15 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00ba2590   83  intrusive-list insert: complete; refcount call scheduling differs
+00ba27b0   194 relationship-priority code: complete; condition ordering differs
+00ba28a0   159 relationship-state code: complete; switch/jump-table shape differs
+00ba2e00   25  free node-list array: complete; loop register assignment (p/next)
+00ba2e50   79  lower_bound over 16-byte records: complete; branch/compare schedule
+00ba2f90   81  PlayerPlanetData ctor: complete; field clear/store order
+00ba3010   19  message handler: complete; call ordering around GetServer
+00ba30c0   218 hashtable insert: complete; EASTL bucket/% shape differs
+00ba31d0   98  hashtable erase: complete; unlink pointer bookkeeping differs
+00ba3310   50  clear two hash sets: complete; call/count reset schedule
+00ba3550   179 vector assign (stride 16): complete; capacity/overlap branches
+00ba3620   180 vector assign (stride 8): complete; capacity/overlap branches
+00ba36f0   143 PlayerPlanetData array dtor: complete; stride/order of frees
+00ba37a0   93  cGonzagoSubsystem-derived dtor: complete; vptr/free order

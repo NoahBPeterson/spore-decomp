@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00ba2670   76  serialize via cVarListSerializer: only the leading WriteUint32 and ctor call are present; tree walk omitted
+00ba2af0   383 ReloadTuning: only the property lookup is translated; the GetUInt/GetInt reads into the globals are omitted
+00ba2ca0   213 serialize relationships: only the leading WriteUint32 and trailer are present; rbtree walk omitted
+00ba2d80   97  relationship iterator: stubbed (always returns 1); rbtree walk omitted
+00ba3350   112 erase-if over hash set: stubbed; predicate/erase loop omitted
+00ba33e0   364 read relationships: only the header ReadInt32 is present; per-record deserialisation omitted

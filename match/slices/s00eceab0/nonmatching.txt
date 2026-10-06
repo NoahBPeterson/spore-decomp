@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00ecefc0   38  complete; double set-field call scheduling differs
+00ecf000  188  complete; flag test + window update scheduling differs
+00ecf0f0   76  complete; message guard + vcall schedule differs
+00ecf320  160  complete; reload callback call/refcount scheduling differs
+00ecf800  224  complete; manager query + window toggles differ
+00ecf910   38  complete; window toggle (arg forwarded through tail call) differs
+00ecf940  376  complete; multi-window toggle ladder scheduling differs

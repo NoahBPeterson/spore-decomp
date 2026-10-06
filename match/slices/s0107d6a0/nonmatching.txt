@@ -1,0 +1,31 @@
+# va  diff-bytes  reason
+0107d740  42  hkThreadMemory::releaseCachedMemory
+0107d790  18  hkThreadMemory::removeReference
+0107d7a0  29  hkThreadMemory::setStackArea
+0107daa0  89  hkThreadMemory::allocateChunk
+0107db10  70  hkThreadMemory::deallocateChunk
+0107db90  47  hkThreadMemory::onStackUnderflow
+0107dbd0  21  hkThreadMemory::replaceInstance (static)
+0107dc10  96  hkThreadMemory::onStackOverflow
+0107dc90  36  FUN_0107dc90 small object vtable/field init
+0107dd30  30  hkMemory::replaceInstance (static)
+0107dd70  28  hkMemory::allocateChunkByRow
+0107dda0  28  hkMemory::deallocateChunkByRow
+0107de00  54  hkPointerMapBase<unsigned long> constructor
+0107de50  15  hkPointerMapBase<unsigned long> destructor
+0107de70  102  hkPointerMapBase<unsigned long>::insert
+0107df30  27  hkPointerMapBase<unsigned long>::get
+0107df90  179  hkPointerMapBase<unsigned long>::remove(Dummy*)
+0107e050  113  hkPointerMapBase<unsigned long>::resizeTable
+0107e0f0  54  hkPointerMapBase<unsigned __int64> constructor
+0107e140  19  hkPointerMapBase<unsigned __int64> destructor
+0107e160  222  hkPointerMapBase<unsigned __int64>::insert
+0107e240  130  hkPointerMapBase<unsigned __int64>::findKey
+0107e2d0  456  hkPointerMapBase<unsigned __int64>::remove(Dummy*)
+0107e4a0  113  hkPointerMapBase<unsigned __int64>::resizeTable
+0107e540  3  hkPointerMapBase<unsigned long>::getWithDefault
+0107e560  14  hkPointerMapBase<unsigned long>::remove(KEY) -> hkResult
+0107e5b0  19  grow-to helper (tail-calls resizeTable, K)
+0107e5d0  19  grow-to helper (tail-calls resizeTable, _K)
+0107e5f0  38  hkSingleton<hkStreambufFactory>::replaceInstance
+0107e640  19  small singleton/vtable allocator

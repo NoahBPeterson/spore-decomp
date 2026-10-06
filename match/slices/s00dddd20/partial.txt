@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00dddfd0  -  large cGalaxyGameEntryAppMode::Init body stubbed
+00dde5d0  -  large x87 camera integration body stubbed

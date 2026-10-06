@@ -1,0 +1,24 @@
+00c68280  FUN_00c68280  # ornament segment/position rebuild (uses fixed_vector at +0x130)
+00c686d0  FUN_00c686d0  # Simulator ornament helper
+00c687e0  FUN_00c687e0  # clear noun-ref vector (noun vtable+0x54, NounManager::RemoveNoun, erase)
+00c68840  FUN_00c68840  # tail call to 0xc687e0 with this+4
+00c68850  FUN_00c68850  # set view/clear; copies view position into first element
+00c688a0  FUN_00c688a0  # eastl copy_impl do_copy over vector elements
+00c68930  FUN_00c68930  # refresh + release view + set model bit0
+00c68980  FUN_00c68980  # view enter/leave position update
+00c68aa0  FUN_00c68aa0  # set flags 0x705/0x1707 and refresh
+00c68ae0  FUN_00c68ae0  # compare-and-set position on embedded spatial object
+00c68b40  FUN_00c68b40  # change key: release effect, EffectsManager create
+00c68bd0  FUN_00c68bd0  # setter +0x12c then refresh
+00c68c00  FUN_00c68c00  # create noun 0x76f6e64 and insert
+00c68d20  FUN_00c68d20  # find noun index and create
+00c68d70  FUN_00c68d70  # restore vector + position
+00c68e30  SP::cMovableDestructibleOrnament::cMovableDestructibleOrnament  # PDB name
+00c68ed0  SP::cMovableDestructibleOrnament::~cMovableDestructibleOrnament  # resets 6 vtables
+00c68f30  FUN_00c68f30  # interface query (0x283d961 + 4 fallbacks)
+00c69030  FUN_00c69030  # shutdown: cLocomotiveObject::Shutdown + release +0x2c
+00c69090  FUN_00c69090  # alloc cGroundLocomotion and register with BehaviorManager
+00c69110  FUN_00c69110  # static-local accessor with atexit guard
+00c69150  Simulator::cNanoDrone::cNanoDrone  # PDB name
+00c691e0  FUN_00c691e0  # interface query (0x6ef0ec9 + 3 fallbacks)
+00c69290  FUN_00c69290  # Simulator helper

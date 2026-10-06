@@ -1,0 +1,14 @@
+# va  name  # evidence
+00f02160  ScenarioTutorialsPlacement_Update  # 1279 B dispatch, called by f02c50
+00f02670  ScenarioTutorialsPlacement_Init  # FUN_00f31fd0 temp, V4 assign at +0xc, vtable+0x18
+00f02700  ScenarioTutorialsPlacement_Build  # 772 B, called by f02b00 when g_mgr+0xc
+00f02a10  ScenarioTutorialsPlacement_HandleMessage  # switch on arg 0..0xb (jump table 0xf02adc)
+00f02b00  ScenarioTutorialsPlacement_UpdateGateA  # vtable+0x38, 0x67dd10 chain, g_mgr+0x10/+0xc
+00f02b80  ScenarioTutorialsPlacement_ctor  # zero field block + Stopwatch(this+0xb0,4)
+00f02c50  ScenarioTutorialsPlacement_UpdateGateB  # vtable+0x38, 0x67dd10 chain, f02160/f01c20
+00f02cd0  ScenarioTutorialsPlacement_FactoryCtor  # vtable 0x148b708 + operator_new(0x10) + FUN_00f31fd0
+00f02d30  ScenarioTutorialsPlacement_dtor  # vtable 0x148b708, release +0xc, scalar delete
+00f02dd0  ScenarioTutorialsPlacement_DestroyGlobal  # g_mgr teardown + free + null
+00f02e00  ScenarioTutorialsPlacement_SceneBuild  # 523 B
+00f03010  ScenarioTutorialsPlacement_ListDtor  # vtable 0x148b788, free +0x2c vector, free +0xc
+00f030a0  ScenarioTutorialsPlacement_SceneCommit  # 242 B, FUN_00f01140 copy + g_015acb40 gate

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f00610  -  placement sync: only signature reproduced
+00f00790  -  placement apply: only signature reproduced
+00f00850  -  secondary placement apply: only signature reproduced
+00f00bd0  -  placement commit: only signature reproduced
+00f00d10  -  teardown: only signature reproduced
+00f00e50  -  placement update: only signature reproduced
+00f00f80  -  vtable dispatch: only signature reproduced
+00f01090  -  object add: only signature reproduced
+00f011b0  -  scene build (1024 B): only signature reproduced

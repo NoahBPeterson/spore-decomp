@@ -1,0 +1,2 @@
+00ed5220 Simulator::cScenarioEditModeDisplayStrategy::cScenarioEditModeDisplayStrategy  # vtable_names.txt vt
+00ed49a0 Simulator::cScenarioEditModeDisplayStrategy::~cScenarioEditModeDisplayStrategy  # vtable reset + member release

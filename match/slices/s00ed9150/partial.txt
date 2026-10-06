@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00ed9150 -    approximate: 1035-byte effect-path/vector builder not reconstructed
+00ed95d0 -    approximate: 952-byte noun-target selection switch not reconstructed
+00ed9990 -    approximate: 378-byte posse item init/teardown not reconstructed
+00ed9cd0 -    approximate: cursor-state selection switch replaced by a stub
+00ed9e60 -    approximate: 164-byte visibility/banning predicate replaced by a stub

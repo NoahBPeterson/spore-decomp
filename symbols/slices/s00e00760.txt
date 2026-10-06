@@ -1,0 +1,13 @@
+00e00760 SP::cSPUIGlobalUIRootWinProc::ShowContextSporepedia  # context sporepedia
+00e008e0 SP::cSPUIGlobalUIRootWinProc::cSPUIGlobalUIRootWinProc  # manager ctor
+00e00970 SP::cSPUIGlobalUIRootWinProc::~cSPUIGlobalUIRootWinProc  # manager dtor
+00e009f0 cSPUIGlobalUIRootWinProc::on_ban_content_button  # PDB name
+00e00ec0 UI::cSPUIGlobalOptions::cSPUIGlobalOptions  # PDB name
+00e00f40 UI::cSPUIGlobalOptions::~cSPUIGlobalOptions  # dtor
+00e01090 UI::cSPUIGlobalOptions scalar deleting dtor  # vtable 0x147f198
+00e010c0 Simulator::cSPUIGlobalUIRootWinProc::cSPUIGlobalUIRootWinProc  # PDB name
+00e011a0 Simulator::cSPUIGlobalUIRootWinProc::~cSPUIGlobalUIRootWinProc  # dtor
+00e012b0 cSPUIGlobalUI::FindWindowByID  # PDB name
+00e01350 cSPUIGlobalUI::SetVisibility  # PDB name
+00e01690 UI::NetworkActivityProc::NetworkActivityProc  # PDB name
+00e016f0 UI::NetworkActivityProc scalar deleting dtor  # vtable 0x147f0dc

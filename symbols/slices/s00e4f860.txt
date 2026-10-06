@@ -1,0 +1,34 @@
+00e4f860 SP::collectable-visibility refresh  # guard + thunk_FUN_00e823a0(obj+0x14) list walk, vtable 0xc/8/0x10 actions
+00e4f920 snap vector to grid period  # float component*inv-period rounding (cvtss2si/cmovb), XMM3 scalar
+00e4f9d0 state -> level float  # fields +0xbc/+0xb4 select offsets 0x58/0x5c/0x60/0x64
+00e4fac0 SP::configure collectable items  # two passes over table 0x1483e9c, FUN_00593980/0x596da0/0x596e10
+00e4fbb0 normalize 2->1 in collectable table  # table in EAX arg, global index table 0x1483ea0..0x1483f00
+00e4fc20 grant collectable recursively  # kind 1 -> FUN_00e663b0, kind 2 -> self-recurse, stride 0x1c
+00e4fca0 get +0xdc via guard  # FUN_00e4ce40(guard)
+00e4fcd0 init collectable flags + register  # new[](0x34) then 1 at +8,+0xc,+0x24,+0x2c; FUN_00e83430
+00e4fd30 13-byte 1/0 pattern fill  # constant jump table 0xe4fd6c/74
+00e4fd80 level selector  # +0x90==1 ? 6 : 5
+00e4fde0 kind -> resource hash  # Cell_EatPlant/Animal/Omnivore, 0x77d5cbac
+00e4fe50 init 0x98-stride collectable table  # fields +0x90=i, FUN_00c2fd20(FUN_00e4fde0(i))
+00e4fe90 mission-card toggle  # FUN_00b3d400 + cUIMissionCardPanel Has/Remove (0xe15cd0/0xe17fb0), add 0xe18200
+00e4ff10 read byte +0x318 via handle  # thunk_FUN_00e823a0(*(p+0x108))
+00e4ff50 count zero flags 0x390-0x397  # ids 0x14 (2 flags) and 0x18 (6 flags)
+00e4ffe0 get float +0xec  # guard + FUN_00e4ce40
+00e50020 get floats +0xf4/+0xf8  # guard + FUN_00e4ce40
+00e50060 get float +0xf0  # guard + FUN_00e4ce40
+00e500a0 cell-game UI notify handler  # 0x5107b17 / 0x5107b1a, CheatManager/MessageServer, g_16b3c04+0x51e0
+00e501a0 SP::sOnQuitDesktopButtonClick  # PDB name; quit via CheatManager
+00e501f0 quit helper via FUN_0067dd20 vtable[0x40]
+00e50220 piecewise normalized curve  # control points -1.0 sentinel, FUN_01041cd0
+00e503a0 level float getter  # 2->+0x104, 4->+0x108, else 10.0f
+00e50400 reset collectables mode  # FUN_00b3d4d0/0xad7e40, flags 0x936/0x51db
+00e50450 config lookup (0x4ea96cb) + FUN_00e82d50  # release param if lookup fails
+00e504b0 apply alpha/visibility  # clamp a*255, pack <<24|0xffffff
+00e50540 egg-kid id predicate  # FNV cell_EggkidSmall / cell_Eggkid
+00e50590 remove entries missing from list2  # compaction with count decrement
+00e505f0 linear membership test  # arr[i]==key
+00e50620 remove 0xc entry by key  # table +0x8c count +0x14c, shift last down
+00e50680 recursive set byte flag  # kind 1 -> object +0xb8 buffer
+00e50730 config bool (0x679b833)  # SP::ConfigManager vtable[0x30]
+00e50750 window-coordinate transform  # SP::App vtable[0x58] + SPUIHelpers::GetMainWindowArea
+00e507d0 parity of rounded ratio  # (a/b)*2 round & 1

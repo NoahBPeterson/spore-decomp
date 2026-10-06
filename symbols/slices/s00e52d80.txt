@@ -1,0 +1,23 @@
+00e52d80 SP cell-game mission HUD update  # g_16b3c04+0x51d0/0x51cc timers, cSPUILayout::FindWindowByID(0x8105b0)
+00e530e0 count collectable slots  # FUN_00e4fd30 13-byte mask, cell game +0x5190 +0x34 stride 4
+00e53130 update collectable HUD state/sound  # FUN_00e82d10 ids, FUN_00e84490, FUN_00e848c0
+00e531c0 current collectable slot predicate  # +0x90 state, (state+8)*0x10 table
+00e53210 slot count for index  # 1 -> 6-FUN_00e530e0(); else table +0x84
+00e53250 reset one collectable slot  # index in EAX, (idx+8)*0x10 slot
+00e53280 should-show-slot predicate  # +0x7c, +0x51dc, SP::sGetSourceLevel(0xe4ee60), +0x51c0, +0x51bc
+00e532e0 mark creature + show hint  # FUN_00b721d0, FUN_00e7ce10(0x32,1)
+00e53340 build cell HUD descriptor  # cCellSub54 0xb72160/0xb72210, globals 0x16b3c28.., 0x15a7c4c..
+00e53460 mission slot transition  # idx==3 -> FUN_00e52b70; else sound 0xc1fa4704 + ui_mission_complete
+00e53580 mission panel teardown  # window 0xd305ca84, gfx 0x161bc/0x161b4/0x161c8, EA::Messaging ids
+00e53660 toggle mission-complete panel  # cString 0x6b5060/0x6b54b0, tooltip 0x806de0, messaging
+00e53860 toggle window 0x6244208 + FUN_00b3d3f0  # FUN_00e190c0
+00e538b0 SP::cGalaxyGameEntryAppMode::OnKeyDown  # PDB candidate; ids 0x5120264/0x574f0a6
+00e53920 toggle bit 1 of +0x515c  # FUN_00e53660(1, ...)
+00e53950 show mission-complete panel  # FUN_00e28a00, FUN_00e3c6f0, SetVisibility, FUN_00e19010
+00e539c0 show mission-complete panel  # same minus flag
+00e53a20 open settings window  # SP::GetCurrentGameMode, FUN_006035d0, GetAllocator 0x7f54d0, window 0x43b72d0
+00e53a80 reset window 0x43b72d0  # GetAllocator 0x7f54d0
+00e53ad0 toggle mission-complete by FUN_00e00ac0  # FUN_00e53660(2, flag)
+00e53b00 set two gfx floats  # gfx 0x161c4/0x161d0 vtable[0x24]
+00e53b40 build medal HUD descriptor  # cCellSub54, globals, +0x51dc=1, tail FUN_00e569b0
+00e53c20 exit mode -> build medal  # FUN_00b3d4d0, FUN_00ad7dc0, config 0x4ea96cb

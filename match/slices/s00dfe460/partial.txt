@@ -1,0 +1,4 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00dfe460  -  large SP::cSPUISpace message handler switch stubbed
+00dff330  -  large inlined UI update body stubbed
+00dff650  -  large inlined UI update body stubbed

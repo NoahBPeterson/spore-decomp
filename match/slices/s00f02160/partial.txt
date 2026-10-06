@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f02160  -  placement update dispatcher (1279 B): stub
+00f02700  -  placement build (772 B): stub
+00f02a10  -  message dispatch switch: skeleton only
+00f02e00  -  scene/placement build (523 B): stub
+00f03010  -  object-list dtor (vector free): stub
+00f030a0  -  scene commit (242 B): stub

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason  (incomplete / approximate source)
+00fd7260  652  DrawLayer: simplified; viewer/SetMaterialColor render path omitted
+00fd7d80  407  StopRecordingMovie: audio-packet drain loop and frame math approximated
+00fd7f80  350  EndRecording: packet list teardown approximated

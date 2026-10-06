@@ -1,0 +1,18 @@
+00e25710 UI::Posse::Posse  # PDB/Ghidra previous name; large window ctor, vtables 0x14806b8/0x148069c
+00e25840 cSPUIPosseItemTribe::cSPUIPosseItemTribe  # PDB name; base ctor 0xe255c0 + L"PosseItemTribe"
+00e258d0 cSPUIPosseItemTribeBaby::cSPUIPosseItemTribeBaby  # L"PosseItemTribeBaby"
+00e25950 cSPUIPosseItemCiv::cSPUIPosseItemCiv  # L"PosseItemCiv"
+00e259d0 cSPUIPosseItemSpace::cSPUIPosseItemSpace  # L"PosseItemSpace"/"PosseItemSpaceGhostShell"
+00e25a60 UI::PosseItem::PosseItem  # PDB name; base ctor 0xe25460
+00e25ad0 UI::PosseItem helper ctor  # base ctor 0xe25460 with (0,param)
+00e25b50 cSPUIPosseItemTribeGhostShell::cSPUIPosseItemTribeGhostShell  # L"PosseItemTribeGhostShell"
+00e25bd0 eastl::vector<EA::AutoRefCount<EA::Trace::ILogReporter>,eastl::sp_vector_allocator>::erase  # Ghidra type; copy_impl 0x6782c0
+00e25c30 eastl::vector<AutoRefCount<...>>::insert  # DoInsertValue 0x11e0744 + FUN_00829110
+00e25df0 partition over AutoRefCount vector  # calls FUN_00bbf1a0/FUN_00bbea40/FUN_00e24530
+00e25f40 make_heap/sift over AutoRefCount pairs  # FUN_00e25240 sift
+00e25fa0 cSPUIPosseItem::update_control_value  # PDB name; map lookup 0xe23ee0
+00e260a0 cSPUIPosseItem::update_control_values  # PDB caller-single candidate
+00e260f0 cSPUIPosseItem::OnTick  # PDB name; id gate 0x3d98299
+00e26410 introselect driver  # recurses 0xe26410, fallback 0xe25df0
+00e264b0 partition over 8-byte pairs  # FUN_00e245c0 swap
+00e26530 insertion pass for pair sort  # FUN_00e25f40/0xe25240/0xe253c0

@@ -1,0 +1,15 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f40ea0   40  one-second timer test: complete; the fld1/fcompi compare and the
+               0x20 vcall receiver convention differ
+00f410f0   70  recycle a surface-node slot: complete; the (mask<<30 | idx<<0 | bit31)
+               merge and the inline-allocator frees schedule differently
+00f41270  112  classify scenario state: complete; the compare tree and register homes
+               differ from cl's original
+00f41420  107  validate node vs scenario: complete; flag set/clear scheduling and the
+               leaf-call argument homes differ
+00f41820   76  release surface-node record: complete; the -2 branch global copies and
+               messaging vcall argument setup differ
+00f41a10  113  destroy node records for a noun: complete; the eastl hashtable iteration
+               register allocation differs
+00f41aa0  111  ordered map find-or-insert: complete; the two eastl::lower_bound calls
+               and the iterator/insert path schedule differently

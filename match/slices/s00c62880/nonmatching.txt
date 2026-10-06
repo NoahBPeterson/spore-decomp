@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c62880   44  cMissionUseTool ctor: complete; base-ctor call and vptr store schedule
+00c63330   48  mission-war state setter: complete; first stub-call convention (SetSerializer) differs
+00c639a0   41  interface adjustor (QueryInterface): complete; branch order
+00c639d0   49  interface adjustor: complete; argument/register order
+00c63a20   49  interface adjustor: complete; argument/register order

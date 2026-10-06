@@ -1,0 +1,9 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c649b0   180 morph-handle apply: body stubbed
+00c64bf0   302 Simulator::cArrowMorphHandle ctor: body stubbed
+00c64db0   336 arrow world-position update: body stubbed
+00c64f00   456 arrow quaternion update: body stubbed
+00c650d0   777 arrow placement/stopwatch solve: body stubbed
+00c65610   152 simple-rotation-ball update: body stubbed
+00c656c0   180 LoadModel flag setup: body stubbed
+00c65780   344 morph-handle target set: body stubbed

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00eae0f0  817  approximate: audio-system virtual emit calls factored into a helper, exact call schedule not reproduced
+00eae610  653  approximate: RemoveNote parallel-vector erases simplified, exact call schedule not reproduced
+00eae8a0  259  approximate: SP::ReadSTLSequenceT<fixed_vector<float,3,0>> reader loop shape not reproduced
+00eae9b0  206  approximate: SP::ReadSTLSequenceT reader loop shape not reproduced
+00eaea80  210  approximate: SP::ReadSTLSequenceT<vector<float,SP_STL_Sound>> reader loop shape not reproduced
+00eaed40  422  approximate: vector<float>::insert_n growth path capacity semantics not reproduced

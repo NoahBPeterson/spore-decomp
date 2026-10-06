@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+01127ee0  906  hkKeyFrameUtility::applySoftKeyFrame: heavy x87 register schedule and inlined motion accessors differ
+011282f0  -    hkKeyFrameUtility::applyHardKeyFrame: signed symbol size mismatch (my emission differs in size)
+011285f0  29   hkpSpringAction ctor: base-ctor call is inlined/this-chained differently; float constants emitted via fld1/fld not immediates
+01128850  128  hkpSpringAction::clone: reinit call inlined differently, copy loop shape differs
+01128910  47   hkObjectList3006d0 dtor: loop register shape and hkArray free differ
+011289f0  70   hkpSerializedDisplayMarkerList dtor: vptr store and member-loop schedule differ
+01128ad0  62   hkpReorientAction ctor: base-ctor call inlined; float args stored via x87 not integer regs

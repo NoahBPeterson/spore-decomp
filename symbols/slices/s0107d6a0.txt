@@ -1,0 +1,31 @@
+0107d6a0  SP::cWalkAroundInputStrategy::Shutdown  # PDB name
+0107d740  hkThreadMemory::releaseCachedMemory  # PDB mangled
+0107d790  hkThreadMemory::removeReference  # PDB mangled
+0107d7a0  hkThreadMemory::setStackArea  # PDB mangled
+0107d7e0  hkThreadMemory::hkThreadMemory  # constructor (unnamed in PDB export)
+0107daa0  hkThreadMemory::allocateChunk  # PDB mangled
+0107db10  hkThreadMemory::deallocateChunk  # PDB mangled
+0107db90  hkThreadMemory::onStackUnderflow  # PDB mangled
+0107dbd0  hkThreadMemory::replaceInstance  # PDB mangled (static)
+0107dc10  hkThreadMemory::onStackOverflow  # PDB mangled
+0107dcf0  hkMemory::getAllocatedSize  # PDB mangled
+0107dd30  hkMemory::replaceInstance  # PDB mangled (static)
+0107dd70  hkMemory::allocateChunkByRow  # PDB mangled
+0107dda0  hkMemory::deallocateChunkByRow  # PDB mangled
+0107ddd0  hkPointerMapBase<unsigned long>::clear  # PDB mangled
+0107de00  hkPointerMapBase<unsigned long>::hkPointerMapBase  # PDB mangled
+0107de50  hkPointerMapBase<unsigned long>::~hkPointerMapBase  # PDB mangled
+0107de70  hkPointerMapBase<unsigned long>::insert  # PDB mangled
+0107def0  hkPointerMapBase<unsigned long>::findKey  # PDB mangled
+0107df30  hkPointerMapBase<unsigned long>::get  # PDB mangled
+0107df90  hkPointerMapBase<unsigned long>::remove  # PDB mangled
+0107e050  hkPointerMapBase<unsigned long>::resizeTable  # PDB mangled
+0107e0f0  hkPointerMapBase<unsigned __int64>::hkPointerMapBase  # PDB mangled
+0107e140  hkPointerMapBase<unsigned __int64>::~hkPointerMapBase  # PDB mangled
+0107e160  hkPointerMapBase<unsigned __int64>::insert  # PDB mangled
+0107e240  hkPointerMapBase<unsigned __int64>::findKey  # PDB mangled
+0107e2d0  hkPointerMapBase<unsigned __int64>::remove  # PDB mangled
+0107e4a0  hkPointerMapBase<unsigned __int64>::resizeTable  # PDB mangled
+0107e540  hkPointerMapBase<unsigned long>::getWithDefault  # PDB mangled
+0107e560  hkPointerMapBase<unsigned long>::remove  # PDB mangled (hkResult overload)
+0107e5f0  hkSingleton<hkStreambufFactory>::replaceInstance  # PDB mangled

@@ -1,0 +1,27 @@
+# Slice s00f20a60 names.
+#
+# The dev-build PDB has no direct names for these VAs; the names below are
+# evidence-based identifications.
+#
+# 00f20a60  PlanetRadiusClamp        # SP::PlanetModel + cPlanetModel::GetRadiusAt
+# 00f20b20  ClearFeedbackFlagB61     # clears byte +0xe61 on the event property
+# 00f20b60  ClearFeedbackFlagB60     # clears byte +0xe60 on the event property
+# 00f20ba0  OnFeedbackNounTypeD      # noun 0x3a25119 sub==0xd -> FUN_00f20a20
+# 00f20be0  ReadPropertyVector3      # Property::+0x24 lookup, Vector3 out, defaults
+# 00f20c60  ReadPropertyVector3Zero  # wrapper with 0,0,0 defaults
+# 00f20c90  PropertyLookupInt        # decomp index mislabels this openssl sk_unshift
+# 00f20cb0  EventLogReplacePayload   # g_pEventLog (0x016c8318) map walk
+# 00f20d20  EventLogFindPayload
+# 00f20d80  EventLogRemoveNouns
+# 00f20de0  MarkerWorldPosition
+# 00f20ef0  ProximityEffectUpdate
+# 00f20fe0  SimulatorCreate          # operator new(0x1c,"Simulator",...)
+# 00f21040  SimulatorDestroy
+# 00f21080  FalloffApply
+# 00f211f0  EventMarkerRefresh
+# 00f212c0  DistanceExceedsRadius
+# 00f21310  MarkerPlacementProbe
+# 00f213f0  FeedbackEventBuild
+# 00f21760  OnFeedbackNounTypeA
+# 00f217a0  EventLogResetProperty
+# 00f217c0  EventLogFindByProperty

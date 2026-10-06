@@ -1,0 +1,8 @@
+00c64bf0 Simulator::cArrowMorphHandle::cArrowMorphHandle  # PDB-resolved
+00c64b50 Simulator::cArrowMorphHandle::EnableFlag  # bitfield flag at +0xd0 bitmap
+00c64db0 Simulator::cArrowMorphHandle local-position update
+00c64f00 Simulator::cArrowMorphHandle local-quaternion update
+00c653e0 Simulator::cSimpleRotationRing dtor
+00c65540 Simulator::cSimpleRotationBall dtor
+00c654b0/c654e0/c65510 float setters (dirty -> FUN_00c640e0/0xc64170)
+00c658e0 Simulator::cMorphHandle position setter

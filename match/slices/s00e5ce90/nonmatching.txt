@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e5d340  118  extended-box distance predicate: complete; float compare/branch schedule differs
+00e5d410  162  box/creature predicate: complete; FUN_006ffbd0 fastcall path + float schedule differ
+00e5d500   48  resource lookup with fallback key: complete; smart-pointer calls/schedule differ
+00e5d580   31  pickup predicate: complete; short-circuit compare shape differs
+00e5da10  115  key from pick result -> FUN_00e394f0: complete; local out-slot layout differs
+00e5daa0  68   show mission panel: complete; best-symbol size mismatch
+00e5daf0  150  callout config by pick result: complete; FNV/hash call schedule differs

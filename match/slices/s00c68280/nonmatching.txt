@@ -1,0 +1,4 @@
+00c68850  54  Complete view-set: clear + copy view position into first element + refresh.
+00c68930  49  Complete shutdown-ish: refresh, release view, set model bit.
+00c68f30  68  Complete interface query chain (4 fallback casts); register allocation (edi vs esi) differs.
+00c691e0  31  Complete interface query chain (3 fallback casts); residual is the folded compare tree.

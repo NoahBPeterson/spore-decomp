@@ -1,0 +1,20 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e530e0   38  count collectable slots not in {1,2}: complete; table byte arg/loop schedule differs
+00e53130   84  update collectable HUD sound/state: complete; global reload schedule differs
+00e531c0   38  current-slot valid predicate: complete (this in ECX); calling convention differs
+00e53210   37  slot count (1 -> 6 - count): complete (this in ECX); calling convention differs
+00e53250   28  reset one 0x10 slot: complete (index in EAX); register-convention differs
+00e53280   42  should-show predicate: complete; SP::sGetSourceLevel arg convention differs
+00e532e0   40  mark creature + hint: complete; FUN_00b721d0 schedule differs
+00e53340   89  build HUD descriptor: complete field init sequence; global/MOVSS schedule differs
+00e53580  137  mission panel teardown: complete (window, 3 gfx vtable[0xc], messaging); vcall schedule differs
+00e53860   33  toggle window + FUN_00b3d3f0: complete; schedule differs
+00e538b0   80  OnKeyDown handler: complete (both message ids); FIND/schedule differs
+00e53920   26  toggle bit 1: complete; compare shape differs
+00e53950   70  show mission-complete panel: complete; float return/discard schedule differs
+00e539c0   67  show mission-complete panel: complete; float return/discard schedule differs
+00e53a20   67  open settings + reset window: complete; allocator/FIND schedule differs
+00e53a80   40  reset window: complete; allocator/FIND schedule differs
+00e53b00   33  set two gfx values: complete; float arg schedule differs
+00e53b40   20  build medal HUD descriptor: complete field init + tail call; register schedule differs
+00e53c20   37  exit mode -> maybe build medal: complete; config lookup schedule differs

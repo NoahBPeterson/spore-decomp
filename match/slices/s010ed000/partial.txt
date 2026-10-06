@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+010ed000  550  hkGskfAgent::processCollision: skeleton (complex dispatcher omitted)
+010ed380  174  point/plane query: transform math skeleton
+010ed430  1035  staticGetClosestPoints: skeleton (GJK/GSK path omitted)
+010ed840  608  getPenetrations: delegates to static version (body approximated)
+010edaa0  428  staticGetPenetrations: skeleton
+010edc50  359  getClosestPoints: skeleton
+010ede30  305  hkArray reserve/copy helper: skeleton

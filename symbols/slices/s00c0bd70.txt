@@ -1,0 +1,8 @@
+00c0bd70 Simulator::cGameData::WriteAsText  # PDB-resolved
+00c0c250 Simulator::cCreatureBase::funcD4h  # PDB candidate
+00c0c2d0 Simulator::cCreatureBase::IsDefaultSpecies
+00c0c630 SP::cCreatureLocomotion::Execute  # PDB-resolved
+00c0c0e0 cCreatureBase flag 0x388 accessor
+00c0c100 cCreatureBase flag 0x389 accessor
+00c0c310 cCreatureBase flag bit 15 accessor
+00c0be70/00c0bea0 cached-handle id predicates

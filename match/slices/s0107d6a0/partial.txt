@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0107d6a0  119  cWalkAroundInputStrategy::Shutdown: inline-list resets approximated
+0107d7e0  653  hkThreadMemory constructor: size->class table build approximated

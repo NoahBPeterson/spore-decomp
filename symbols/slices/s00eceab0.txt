@@ -1,0 +1,3 @@
+00eceab0 SP::cSPEditorDevUI::LoadLayout  # PDB caller-scored candidate
+00ecf150 UTFWin::cSPScenarioSwatchEditItemUI::cSPScenarioSwatchEditItemUI  # PDB caller-scored name
+00ecf320 SP::cSPEditorDevUI::ReloadCallback  # PDB caller-single candidate

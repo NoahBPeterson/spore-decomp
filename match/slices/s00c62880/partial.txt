@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c62990   235 GetTagString override: only fallthrough; property lookup body stubbed
+00c62a80   163 cSPMissionUseTool::Init: vector-fill loop stubbed
+00c62b30   383 cSPMissionUseTool::Init(+PickPlanet): body stubbed
+00c62ff0   317 war-target score: body stubbed
+00c631f0   315 cSPMissionWar::Update: body stubbed
+00c63380   287 cSPMissionWar::Init: body stubbed
+00c634a0   204 GetUIShortDescription: body stubbed
+00c635c0   377 GetNumCities: body stubbed
+00c63740   109 GetTagString: property/format body stubbed
+00c637b0   453 event handler: body stubbed

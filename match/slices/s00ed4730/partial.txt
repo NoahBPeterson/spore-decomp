@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00ed5020 -    incomplete: omits the local message object construction + AdvancedLaunch call
+00ed5580 -    stub: returns false; real body reads a 3-arg stdcall and a vtable lookup

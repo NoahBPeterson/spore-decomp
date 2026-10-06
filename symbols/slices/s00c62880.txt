@@ -1,0 +1,15 @@
+00c62880 Simulator::cMissionUseTool::cMissionUseTool  # PDB-resolved
+00c62a80 SP::cSPMissionUseTool::Init  # PDB-resolved
+00c62cc0 Simulator::cMissionWar::cMissionWar  # PDB-resolved
+00c62ed0 SP::cSPMissionWar::GetUIMediumDescription  # PDB-resolved
+00c62f60 SP::cSPMissionWar::GetUILongDescription  # PDB-resolved
+00c62ff0 mission-war target score helper
+00c63130 SP::cSPMissionWar::FailureCityDestroyed  # PDB-resolved
+00c63170 SP::cSPMissionWar::OnTimerExpire  # PDB-resolved
+00c631b0 SP::cSPMissionWar::ReturnForRewards  # PDB-resolved
+00c631f0 SP::cSPMissionWar::Update  # PDB candidate
+00c63380 SP::cSPMissionWar::Init  # PDB-resolved
+00c634a0 SP::cSPMissionWar::GetUIShortDescription  # PDB-resolved
+00c63570 SP::cSPMissionWar::GetProgressDisplayText  # PDB-resolved
+00c635c0 SP::cSPMissionWar::GetNumCities  # PDB-resolved
+00c63740 SP::cSPMissionWar::GetTagString  # PDB-resolved

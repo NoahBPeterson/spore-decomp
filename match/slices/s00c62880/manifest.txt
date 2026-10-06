@@ -1,0 +1,10 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c62880/s00c62880.cpp  ?cMissionUseTool_dtor@@YIPAXPAXHE@Z  00c62930  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?cMissionWar_ctor@@YIPAXPAXH@Z  00c62cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_GetUIMedium@@YIXPAXH0@Z  00c62ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_GetUILong@@YIXPAXH0@Z  00c62f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_GetProgressDisplayText@@YIXPAXH0@Z  00c63570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?FUN_00c63a10@@YAXXZ  00c63a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_FailureCityDestroyed@@YIXPAXH@Z  00c63130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_OnTimerExpire@@YIXPAXH@Z  00c63170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c62880/s00c62880.cpp  ?M_ReturnForRewards@@YIXPAXH@Z  00c631b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

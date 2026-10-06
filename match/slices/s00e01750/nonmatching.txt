@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00e01750  328  switch dispatch: case bodies / AutoRefCount assigns not reconstructed
+00e018c0  208  activate: modal begin/end and effects lookup differ
+00e01ce0  4  chained layout lookup: register choice (eax vs ecx) differs
+00e01d00  173  show-transition timing (rdtsc/QPC) body differs
+00e02430  322  options dialog + tooltip creation scheduling differs

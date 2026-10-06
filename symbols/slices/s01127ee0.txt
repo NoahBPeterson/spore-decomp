@@ -1,0 +1,8 @@
+01127ee0 hkKeyFrameUtility::applySoftKeyFrame  # havok_names.txt identical-code
+011282f0 hkKeyFrameUtility::applyHardKeyFrame  # havok_names.txt identical-code
+011285f0 hkSpringAction::hkSpringAction  # PDB 011285f0 (ctor calls ??0hkBinaryAction@@QAE@PAVhkEntity@@0I@Z)
+01128640 hkSpringAction::applyAction  # havok_names.txt identical-code
+01128850 hkSpringAction::clone  # havok_names.txt identical-code
+01128910 hkSerializedDisplayMarkerList3006d0::~  # vtable 0x14a6ec8, hkArray<0x50-byte> of hkWorldObject
+011289f0 hkpSerializedDisplayMarkerList::~hkpSerializedDisplayMarkerList  # havok_names.txt identical-code
+01128ad0 hkpReorientAction::hkpReorientAction  # ctor calls ??0hkUnaryAction@@QAE@PAVhkEntity@@I@Z

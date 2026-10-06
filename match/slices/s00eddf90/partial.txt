@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00eddf90 -    approximate: locale number-string / widget-property updates omitted
+00ede040 -    approximate: window lookup + SetWindowImage path simplified
+00ede110 -    approximate: 413-byte behavior-UI selection loop replaced by a stub
+00edeb20 -    approximate: behavior UI ctor omits the 0x70..0x80 message-listener field init
+00edec50 -    approximate: 693-byte behavior-UI method replaced by a stub

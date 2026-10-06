@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00eae430  238  complete EASTL vector<int>::insert(pos,val) reconstruction; scheduling differs
+00eae540  174  complete eastl::vector<float,SP_STL_Sound>::operator=; branch/list scheduling differs
+00eaeb60  440  complete vector<int>::insert_n reconstruction; scheduling differs
+00eaeef0  154  complete eastl::vector<float,SP_STL_Sound>::assign reconstruction; scheduling differs

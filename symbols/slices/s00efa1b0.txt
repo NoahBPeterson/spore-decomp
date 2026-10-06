@@ -1,0 +1,2 @@
+# va  name  # evidence
+00efa1b0  Simulator::cScenarioTutorials::Update  # switch on [this+0x30] 0..0xb with jump table 0xefb4a8; calls 0xef8820 guard, 0xef8390 placement, 0xefa0b0/0xefa110

@@ -1,0 +1,21 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e4fbb0   93  table normalise loop: all six 2->1 checks present; table pointer arrives in EAX (register-convention), differs
+00e4fc20   73  recursive collectable grant: complete; guard/lookup schedule and stride-offset addressing differ
+00e4fd80   20  level selector: complete (switch value 0x90, 1->6 else 5); jump-table vs compare shape differs
+00e4fde0   67  kind -> FNV hash: complete (Plant/Animal/Omnivore + 0x77d5cbac); jump-table order differs
+00e4fe50   40  init 0x98-stride table: complete; loop index/schedule differ
+00e4fe90   74  mission-card show/hide: complete (mode gate + Has/RemoveMissionCard); vcall arg schedule differs
+00e4ff50  100  zero-flag counter (0x390-0x397): complete; 0x14/0x18 id compare and increment schedule differ
+00e500a0  158  UI notify handler: complete (0x5107b17/0x5107b1a paths, cheat/quit/messageserver); switch shape differs
+00e501a0   28  sOnQuitDesktopButtonClick: complete; telemetry flush indirection approximated/scheduled differently
+00e501f0   26  quit helper: complete; best-symbol size mismatch
+00e503a0   49  level float getter: complete (2->+0x104, 4->+0x108, else 10.0f); dtor/epilogue ordering differs
+00e50450   47  config lookup + release: complete; stack temp layout differs
+00e504b0  125  alpha apply: complete (0.0 / 0xffffff paths); float arg register + call schedule differ
+00e50540   15  egg-kid predicate: complete; FNV call scheduling differs
+00e50590   31  remove list1 entries absent from list2: complete; register allocation differs
+00e50620   73  remove first matching 0xc entry: complete (shift last down); register-convention (EAX/ESI/EDI) differs
+00e50680  118  recursive set byte: complete; nested guard schedule differs
+00e50750   88  window-coord transform: complete; local struct/arg schedule differs
+00e507d0   41  parity of rounded ratio: complete; SSE round/cmov schedule differs
+00e4fac0  110  configure collectable items: complete (two table passes); call/arg schedule differs

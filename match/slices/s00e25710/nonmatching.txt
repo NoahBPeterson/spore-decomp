@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e25710  200  UI::Posse::Posse: full member-init sequence + MissionCardAnimator new present; vtable/base-ctor ordering and EA new arg schedule differ
+00e25bd0   66  vector<AutoRefCount<ILogReporter>>::erase: copy-shift + release + end adjust complete; copy_impl call shape / register schedule differ
+00e25f40   87  heap sift helper: all AddRef calls and sift recursion present; pointer-vs-index schedule differs
+00e260a0   60  cSPUIPosseItem::update_control_values: complete (tick gate + update_control_value loop); best-symbol size mismatch
+00e264b0  121  partition over 8-byte pairs: complete (hoare loop + release); predecessor/successor scheduling differs
+00e26530  328  insertion pass over 8-byte pair stable sort: complete (heapify + shift loop); register schedule differs

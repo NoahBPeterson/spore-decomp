@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00e75900  429  complete reconstruction; float/x87 ordering in sGenDistribute not byte-exact
+00e75b80  93   complete; UI vtable stub call shapes differ
+00e75c30  409  complete; x87 distance test + struct-init scheduling differ
+00e75ea0  232  complete; x87 float copies / store order differ
+00e760f0  353  complete; transform math local scheduling differs
+00e76360  174  complete; 12-arg placement call ABI/scheduling differs
+00e76480  114  complete; 16-arg build call ABI differs
+00e76540  247  complete; level-clamp + 16-arg call scheduling differs
+00e76660  388  complete; level-table lookup + switch scheduling differ

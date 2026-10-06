@@ -1,0 +1,17 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f62930  568  bind to current terrain sphere: AutoRefCount swap and the transform/
+               sphere vcall path are only sketched
+00f62e60   39  cTerrainDistributeDescription dtor: the four inline eastl-vector frees
+               and the base vtable store are not reconstructed
+00f62ea0  317  cTerrainDistributeInfo::SetInfoFromProps: cTypeInfo assignment and the
+               five-key property loop are not reconstructed (stub)
+00f63000  246  cTerrainDistributeDescription ctor: the full member layout/store order
+               is not reconstructed (stub)
+00f63190   46  cTerrainDistributeEffectCommand ctor: the nested description ctor and
+               string-sentinel stores are approximated
+00f633a0  263  cTerrainDistributeEffectCommand::OnRegister: the five command
+               allocations/registrations are not reconstructed (stub)
+00f636f0  283  cTDEffectCommand::Execute: option parsing and the vector push are not
+               reconstructed (stub)
+00f63850  501  cTerrainDistributeEffectCommand::OnEndBlock: the three level ranges and
+               vector normalization are not reconstructed (stub)

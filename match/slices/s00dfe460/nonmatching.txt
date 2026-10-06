@@ -1,0 +1,12 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00dfe910  136  vector::DoDestruct loop: element stride/register order differ
+00dfeaa0  66  uninitialized_copy stride 0x238: element ctor flags differ
+00dfeb00  292  vector assign stride 0x188: growth path/scheduling differ
+00dfec50  269  vector assign stride 0x4e0: growth path/scheduling differ
+00dfed90  15  wrapper: missing tail-call form
+00dfedb0  145  0x2788-element copy-assign scheduling differs
+00dfee80  234  0x27e8-element copy-ctor member-by-member differs
+00dfef70  313  large destructor field/subobject teardown order differs
+00dff130  90  0x27e8-element init: SBO/vector init differs
+00dff1a0  164  0x2788-element copy-ctor member-by-member differs
+00dff4e0  77  uninitialized_copy stride 0x27e8 scheduling differs

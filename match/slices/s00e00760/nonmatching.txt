@@ -1,0 +1,17 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00e008e0  115  manager ctor: stopwatch init order differs
+00e00970  75  manager dtor: vector resize/teardown scheduling differs
+00e00ac0  50  window lookup: virtual dispatch scheduling differs
+00e00bf0  46  message dispatch / settings-window call differs
+00e00d90  7  bool->mask idiom (neg/sbb vs setne) differs
+00e00ec0  66  options ctor: cString ctor arg order differs
+00e00f40  125  options dtor: refcount release order differs
+00e01090  21  deleting dtor: vtable slot stores differ
+00e010c0  152  winproc ctor: vtable/stopwatch/message registration differs
+00e011a0  96  winproc dtor: RemoveHandler args/order differ
+00e01250  12  two reset calls: receiver register differs
+00e01270  41  gametime property set: call/arg scheduling differs
+00e01570  174  POD copy with refcounted members: field order differs
+00e01620  50  pause-gate inc/dec path differs
+00e01690  60  NetworkActivityProc ctor: vtable stores differ
+00e016f0  51  NetworkActivityProc dtor: teardown differs

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00fd71e0  82  no symbol of similar size; 5-arg cdecl, switch mapping + two vcalls
+00fd74f0  90  message-driven movie play/stop; class/offset uncertainty
+00fd75a0  89  frame-count vs elapsed-time check; register/rounding
+00fd7660  162  RecordFrames loop
+00fd7750  116  cMovieLetterbox::Init refcount assignment + layout Init
+00fd7800  441  Shutdown: 5 message posts + layout release
+00fd79e0  124  StopMovie
+00fd7ab0  31  cContentValidationSummarizer vtable/field init
+00fd7b30  297  cMovieSystem constructor
+00fd7cd0  128  cMovieSystem destructor

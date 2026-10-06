@@ -1,0 +1,5 @@
+# va  name  # evidence
+00ef9e40  Simulator::cScenarioTutorials::Reset  # rebuilds two step hashtables, registers 11 message names from 0x148b5d8, reads app prefs 0x7abf095/0x7abf09d
+00efa040  Simulator::cScenarioTutorials::UpdateAll  # walks table A/B at 0x148b450/0x148b510 indexed by +0x30/+0x34, updates 0xad categories + entry range
+00efa0b0  Simulator::cScenarioTutorials::SetCategoryState  # called from 0xef8a10 with (id, flag); stopwatch + CategoryState + RefreshChecklist
+00efa110  Simulator::cScenarioTutorials::HandleCategoryMessage  # hashtable find at +0x5c, conditional category update, manager call

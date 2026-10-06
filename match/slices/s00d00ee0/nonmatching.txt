@@ -1,0 +1,2 @@
+00d011e0  9   Complete tree-destruction loop (calls 0x921580 until sentinel); residual is loop-codegen scheduling.
+00d018d0  60  Complete erase-range over 8-byte elements (shift then shrink end); residual is register/scheduling.

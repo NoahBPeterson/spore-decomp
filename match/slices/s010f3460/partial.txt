@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+010f3460  403  reintegrateAndRecollideEntities: skeleton; queue/restore details omitted
+010f3600  1088  collide: skeleton; TOI/agent dispatch omitted
+010f3a40  2422  simulateToi: skeleton; full TOI integration omitted
