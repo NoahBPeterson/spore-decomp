@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01374720  826  $E167 dynamic table initializer: complete transcription of all 509 global stores (the creature attribute table), but cl /O2 schedules/merges the interleaved store+call sequence differently from the original /O2 build

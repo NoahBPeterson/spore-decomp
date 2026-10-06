@@ -1,0 +1,1 @@
+009c32c0 nSPCreatureAnim::ComputeHierarchy  # PDB candidate (caller-scored), dev 013448b0; __cdecl, bool, 5993 bytes

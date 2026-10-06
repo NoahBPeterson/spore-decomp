@@ -1,0 +1,1 @@
+01164200  -  partial: 5.5KB /O2 terrain-brush weight-map fill; the 4-wide run expansion the original inlines ~40x per row is factored into a helper, so codegen is not reproduced

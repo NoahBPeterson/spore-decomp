@@ -1,0 +1,1 @@
+01164200 TerrainBrushWeightMapFill  # card: 576x0x12 weight/s/a/b map, per-type tables DAT_014d6fd0/71f0/7230

@@ -1,0 +1,1 @@
+00cbf120  n/a  large /O2 x87+SSE trajectory simulator (5597 B); all branches/callees reproduced, but the original's inlined x87 math becomes libm calls and class semantics are reconstructed from signatures, so code size/scheduling differ and chk.py cannot size-match it

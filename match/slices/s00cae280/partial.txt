@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cae280  ~4600  cLocomotiveObject steering/pathing update (~5072 B): control flow, direction blending and engine calls ported, but several vector math branches and the cLocomotiveObject vtable/type layout are reconstructed rather than guaranteed complete

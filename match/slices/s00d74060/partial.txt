@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d74060  ~4700  SP::cTribeGameBehaviorFish::Action (~5016 B): all 0x19 state cases and engine/creature calls ported, but the deep creature base-subobject chains and the mAgentList slot-vector walk are reconstructed rather than guaranteed complete

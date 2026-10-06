@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007efd10  -  large /Od /arch:SSE single-exit SEH geometry routine; skeleton only, body not reconstructed

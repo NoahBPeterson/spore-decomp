@@ -1,0 +1,1 @@
+00d35190 SP::cCreatureModeInputStrategy::HandleMessage  # PDB anchor, dev 008435a0

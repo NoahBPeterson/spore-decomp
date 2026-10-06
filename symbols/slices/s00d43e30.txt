@@ -1,0 +1,1 @@
+00d43e30 SP::cCreatureModeStrategy::ContinueLoading  # exact mangled name from index; __thiscall, void, 5880 bytes

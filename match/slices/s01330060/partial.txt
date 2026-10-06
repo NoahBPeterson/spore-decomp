@@ -1,0 +1,1 @@
+01330060  n/a  compiler-generated initializer that writes ~140 cPropertyInfo records (15 dwords each, 0x3c stride) into consecutive globals 0x0156faa8..0x015707c8; only the record-fill pattern is reproduced, not the full data set

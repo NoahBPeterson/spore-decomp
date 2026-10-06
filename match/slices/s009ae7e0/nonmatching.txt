@@ -1,0 +1,1 @@
+009ae7e0  n/a  large /O2 terrain/spatial update (5566 B) using a static-helper register convention (context in EDI); all branches/callees reproduced but code size/schedule differ, so chk.py cannot size-match it

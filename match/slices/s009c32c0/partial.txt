@@ -1,0 +1,1 @@
+009c32c0  n/a  PARTIAL: ~6KB heavily-inlined /O2 nSPCreatureAnim::ComputeHierarchy; entry validation + pointer/path passes reproduced, the deep inlined hierarchy/matrix/EASTL passes are outlined (see comments in s009c32c0.cpp). Not byte-exact and not behaviorally complete.

@@ -1,0 +1,1 @@
+010e9ce0 TerrainLightMapTileUpdate  # card: x87 grid/DDA tile walk, "TtrcHeightFild" TLS trace, virtual vtable+0x24/+0x28

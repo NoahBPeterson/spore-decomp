@@ -1,0 +1,1 @@
+00ce6af0  n/a  PARTIAL: ~5.7KB SP::cTribeTuningData::Init; prop-list wiring reproduced, ~200 property->member tuning rules omitted. Not complete.

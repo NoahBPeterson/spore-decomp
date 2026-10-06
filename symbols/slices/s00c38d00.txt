@@ -1,0 +1,1 @@
+00c38d00 SP::cUFOKinestheticsTuning::ReadProps  # PDB name; reads ~104 float/bool properties via cPropertyList::GetProperty (vtable+0x24)

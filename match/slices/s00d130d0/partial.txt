@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d130d0  ~4700  SP::cCommunityEditor::HandleMessage (~4965 B): message-id dispatch, forwarding group, guards and engine calls ported, but the deep cCommunity/cCity sub-object vtable chains and some stack-local aliasing are reconstructed rather than guaranteed complete

@@ -1,0 +1,1 @@
+00c2b170 cLocomotiveSteeringTargetSelect  # card: 5.7KB /O2, calls GetCurrentGameMode/cLocomotiveObject::GetVelocity/PlanetModel, dispatches on resource type keys

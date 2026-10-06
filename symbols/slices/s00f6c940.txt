@@ -1,0 +1,1 @@
+00f6c940 DecalBoxBuilder  # card: builds oriented box/decal around a direction, emits via FUN_00f6c600; x87 float maths

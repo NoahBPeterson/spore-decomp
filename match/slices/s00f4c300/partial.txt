@@ -1,0 +1,1 @@
+00f4c300  n/a  PARTIAL: ~5.8KB /Od __fastcall object updater; preset-table switch reproduced, long curve/quaternion stepping body omitted. Not complete.

@@ -1,0 +1,1 @@
+00e07e70 GonzagoHintConditions  # exact name from index; __cdecl, bool, 5747 bytes

@@ -1,0 +1,1 @@
+00c2b170  -  partial: 5.7KB /O2 gameplay steering/banner pass; Ghidra reports unaff_* (register) values and several per-type bodies are represented structurally, not reproduced exactly
