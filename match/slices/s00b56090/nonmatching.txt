@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b56090  3142  SP::Havok::CreateHavokEntityForObject (3915 B): all paths (gameplay phantom, shape phantom, locomotive body + SPCreatureProxy, rigid body, tutorial AABB phantom) reconstructed; 86/86 direct calls with a consistent name->VA mapping, 21 vs 20 vcalls (one extra inlined AutoRefCount release copy); same 0x214 frame, but stack-slot assignment, register choice (pObject not kept in edi) and block placement differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

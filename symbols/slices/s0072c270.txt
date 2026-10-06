@@ -1,0 +1,3 @@
+0072c270 SP::MakeKDTree  # PDB candidate (caller-scored); builds rw::collision::TriangleKDTreeProcedural via SP::CreateTriangleKDTreeProcedural
+0071e040 SP::FindFormatEntry  # scans cMDSection(0x8c)::mFormat (+0x14) for mElts == arg, returns index or -1
+00729870 SP::cKDBuildNode::~cKDBuildNode  # recursive delete of children at +0x2c/+0x30 into free list 0x162b1f0

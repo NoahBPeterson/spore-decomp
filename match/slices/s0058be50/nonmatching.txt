@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0058be50  121  HandleSimulationUpdate: complete; same size 4238 B and 1194 insns, identical ordered call sequence (139 direct, 36 vcalls); /O2 stack-slot packing (0xa84 vs 0xa9c frame) and a few register choices differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

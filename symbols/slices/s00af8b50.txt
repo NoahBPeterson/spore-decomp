@@ -1,0 +1,2 @@
+00af8b50 SP::SPDynamicsParticle::StepDeltaTime  # called with this = SPCreatureProxy+0x80 (0x00af026d/0x00af030e); integrates a particle (pos +0x10, vel +0x20) with hkSimplexSolverSolve over surface constraints, like the dev SPDynamicsParticle::StepDeltaTime (retail layout grew)
+010a9d30 hkSimplexSolverSolve  # (const hkSimplexSolverInput&, hkSimplexSolverOutput&); input layout matches dev PDB hkSimplexSolverInput (pos, vel, maxSurfaceVel, up, dt, minDt, constraints, num)

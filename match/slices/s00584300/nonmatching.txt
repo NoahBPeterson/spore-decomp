@@ -1,0 +1,1 @@
+00584300  3103  complete; residual: inline RefCountTemplate::Release gives sub eax,edi (flags fused) where original has dec eax + cmp eax,ebx (x2, -2 B shifts all later bytes), plus 3 map-insert store schedules

@@ -1,0 +1,1 @@
+00b60d80 Simulator::cSimulatorSystem::Initialize  # ModAPI SimulatorSystem.h: +0x0d init flag, +0x5c mSubSystems vector<intrusive_ptr<ISimulatorStrategy>>; creates all "Simulator/SubSystem/*" singletons

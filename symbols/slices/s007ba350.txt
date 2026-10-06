@@ -1,1 +1,7 @@
 007ba350 SP::cThumbnailManager::InitPostProcessEffect  # card annotation + PDB name; 4887-byte post-process setup
+007b8550 SP::cThumbnailManager::cJobPostFilter::cJobPostFilter  # operator new(0xe4,"Graphics") then this ctor at every filter creation
+007b27a0 SP::cThumbnailManager::cJobPostFilter::SetClearColor  # stores colour at +0x98..+0xa4 and sets +0x82 (PDB mClearBeforeDraw), ret 0x10
+007b27e0 SP::cThumbnailManager::cJobPostFilter::SetViewport  # stores 4 ints at +0x84.., quadrant at +0x94, sets +0x83 (mOverrideViewport)
+007b3a30 SP::cThumbnailManager::cJobPostFilter::SetCustomParams  # writes Vector4 to mCustomParams[idx*4] (+0x3c)
+007b9690 SP::cThumbnailManager::cJobPostFilter::AddAdditionalRect  # push_back on the RectID vector at +0x24
+007b9750 SP::cThumbnailManager::cFilterChainJob::AddFilter  # called on the chain argument with each new filter

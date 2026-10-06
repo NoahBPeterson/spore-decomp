@@ -1,0 +1,2 @@
+# Slice s00b39b70 names.
+00b39b70 Simulator::RegisterViewPrototypes  # descriptive: fills the view-prototype map (0x0167ea3c) with new "Simulator/c*View" objects

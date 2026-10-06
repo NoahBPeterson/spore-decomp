@@ -1,2 +1,3 @@
-# 0x00ee16f0 is UI::cScenarioTutorialsChecklistUI::Refresh (4,452 bytes).  Only a skeleton
-# is reproduced; no reliable member names recovered beyond the guard/tail calls.
+# 0x00ee16f0 refreshes the scenario tutorial checklist panel (tutorial manager g_16c7aa4+0x74, active act ScenarioTutorials_GetActive); class name not confirmed (local stub TutorialPanel).
+00ee16f0 TutorialPanel::Refresh  # byte-exact; only caller in range is 0x00ee27a0
+00ee27a0 TutorialPanel::HandleMessage  # thiscall (msgID, data), ret 8; 0x7c41ae9 category click -> FUN_00ee0960 + Refresh, 0x7c41aeb bring to front, 0x7ef2d80 Refresh

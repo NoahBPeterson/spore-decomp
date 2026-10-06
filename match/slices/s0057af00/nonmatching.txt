@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0057af00  3913  complete; same calls/vslots/constants in the same order, size 0.98x; stack-slot layout, register allocation and block order differ

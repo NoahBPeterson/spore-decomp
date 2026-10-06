@@ -1,0 +1,1 @@
+00f88eb0  3524  complete (sibling of GetVector4 s00f89e50, all 9 switch cases checked against asm/Ghidra); 3836 vs 3939 code bytes; this/&mFaceSize register allocation and case-tail merging differ

@@ -1,0 +1,2 @@
+# va  Name  # evidence
+009a86b0 nSPCreatureAnim::UpdateAnimationStaticDataVersion  # PDB name (callee-scored); version loop 6..25 over animation_static_data

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00b39b70/s00b39b70.cpp  ?RegisterViewPrototypes@Simulator@@YAXXZ  00b39b70

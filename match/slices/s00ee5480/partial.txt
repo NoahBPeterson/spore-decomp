@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-00ee5480  4026  large /O2 UI message handler (~5117 B): top-level message dispatch and every identifiable engine call reconstructed, but several deep sub-blocks (unaffiliated-register reconstructions, the class-id tail switch) are approximated rather than guaranteed complete

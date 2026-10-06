@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00fbf570  2760  complete cTerrainStateMgr shader/lighting update; same 33-entry ordered call/vcall sequence and constants, size 1.00x; frame is 0x20 bigger and locals/temps land in different slots

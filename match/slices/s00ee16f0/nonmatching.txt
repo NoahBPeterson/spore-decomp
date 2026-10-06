@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ee27a0  121  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) extra function: the tutorial panel's message handler, which Ghidra folds into 0x00ee16f0's 4,452-byte range (Refresh itself ends at 0x00ee279f and is byte-exact); complete, not exact: ebx is pushed in the prologue instead of only on the category-click path

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f502b0 2509 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same blocks and ordered calls (20/20), SSE register allocation/scheduling differs

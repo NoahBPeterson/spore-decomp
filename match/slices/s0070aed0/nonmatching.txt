@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0070aed0  2437  complete FillLightingStateFromConfig (all 85 calls, vtable slots and property keys in order; size 0.985x); /O2 /arch:SSE /fp:fast /GS- register allocation/scheduling differs (light-flag shift strength-reduced, normalize/hemisphere SSE scheduling)

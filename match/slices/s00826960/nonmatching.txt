@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00826960  1312  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete: every type branch incl. the dead 0x8000xxxx array branches, same 146 call sites in the same order, same vcall slots and pushed constants, size 4737 vs 4737; not byte-exact: /O2 stack packing (frame 0xac vs 0xb0, locals at shifted offsets), ids[i] addressing [base+index] operand order, float-branch arg scheduling, bool-array loop register choice

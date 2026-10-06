@@ -1,0 +1,1 @@
+00e423a0 cTimelinePanel_Update  # UI panel tick: entry show/hide by screen bounds, scroll smoothing (+0x270/+0x278), RGBA shade lerp, animator update

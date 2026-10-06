@@ -1,0 +1,1 @@
+00d98140  3404  complete (all 13 direct calls + 12 vcalls in order, constants identical); 3765 vs 3932 B: x87/SSE split of the Length/Normalize math, vector copy flavour (movss vs int) and frame layout differ

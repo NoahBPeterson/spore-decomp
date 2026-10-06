@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00c2a190 3227 complete creature move-velocity update; same 33 calls in order, same 0x130 frame, size 3756 vs 3730; stack-slot assignment and SSE regalloc differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

@@ -1,2 +1,2 @@
-# source  symbol  va  [flags]
-# (no byte-exact functions in this slice)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00452080/s00452080.cpp  ?BuildNewPhysicsShape@cSPEditorBlock@SP@@QAEPAVhkRigidBody@@XZ  00452080  /Od /Oy /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

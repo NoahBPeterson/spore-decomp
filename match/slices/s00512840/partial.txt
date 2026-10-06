@@ -1,1 +1,0 @@
-00512840  4336  skin algorithm routine: skeleton only (4.3 KB exceeds the per-function budget)

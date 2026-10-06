@@ -1,0 +1,6 @@
+010f25f0 hkLs_localizedSolveToi  # havok_names.txt mangled name
+010f0610 hkLs_sortSchemasOfFixedEntitiesFirst  # Claude-coined: swaps schemas whose entity has +0x9a set to the front, bumps firstNonActive
+010f06d0 hkLs_sortSchemasOfFrozenEntitiesFirst  # Claude-coined: same for schemas whose two entities are in state 8 (frozen)
+010f0790 hkLs_copyVelocitiesToAccumulators  # Claude-coined: copies motion velocities into the solver accumulators
+010f1690 hkLs_areConstraintsSatisfied  # Claude-coined: returns hkBool, optionally collects violated constraints (12-byte infos)
+010a3890 hkLs_invalidateTimsOfEntity  # Claude-coined: loops the entity collision entries calling 0x010fba10

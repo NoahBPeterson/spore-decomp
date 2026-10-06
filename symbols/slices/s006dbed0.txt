@@ -1,0 +1,3 @@
+006dbed0 BakeMeshTexCoords  # descriptive name (no PDB name): builds uv element 8 from material shader-data bake functions 0x006dacf0..0x006dbba0, fallback uv remap
+006c2ad0 Handle::Handle(const Handle&)  # 16-byte stream handle copy ctor with AddRef on +0xc owner
+006c32f0 UVBuffer::GetHandle  # returns {count=size, data=begin, size 8, stride 8, owner=this}

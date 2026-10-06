@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b8c330  2838  complete planet minimap route-overlay rebuild (land/sea/path layers); same 62-entry ordered call/vcall sequence, size 0.99x; register choice (ebx/edi zero reg) and stack slot layout differ

@@ -1,0 +1,1 @@
+004942b0 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior  # dev PDB: only EditorUtils fn with signature (cSPEditorBlock*, cSPVector3&, cSPMatrix3&, cSPVector3, bool, bool) -> bool; callers push 0x20 bytes

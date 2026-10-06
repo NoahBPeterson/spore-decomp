@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00af8b50  3341  SP::SPDynamicsParticle::StepDeltaTime (retail layout, 3910 B): gravity/slope slide, speed clamp, support-body carry, hkSimplexSolver loop (<=10 iters), ground probe and support-state update all reconstructed; 11/11 calls in identical order, all float compares checked for NaN side; register allocation / spill slots differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

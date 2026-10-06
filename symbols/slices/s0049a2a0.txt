@@ -1,0 +1,4 @@
+0049a2a0 SP::EditorUtils::MoveBlockOrientToSurfaces  # dev-PDB caller-scored candidate; dev mangled signature (block, vector<AutoRefCount<cSPEditorBlock>>&, cSPVector3, cSPVector3, AutoRefCount<cSPEditorSkinManager>, cSPVector3&, cSPVector3*, bool, bool) matches the retail stack args and ret
+004098a0 rw::math::fpu::Vector3Template<float,0>::Vector3Template(const Vector3Template&)  # out-of-line copy ctor reached through cSPVector3's inline copy ctor (this-slot + call pattern), like Matrix33Template at 0x41cb40
+00498f10 SP::EditorUtils::FindPinningBlock  # Claude-coined: (block, origin, dir, skinMgr, &pos, &normal, blocks, &snapIndex, &snapped) -> parent block under the ray
+00493640 SP::EditorUtils::ClassifyAgainstSymmetryPlane  # Claude-coined: (cSPVector3&, gridSize, size1, size2, int*) -> int, 3 = accepted

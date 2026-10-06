@@ -1,0 +1,2 @@
+# va  Name  # evidence
+00b119f0 SP::cTerrainCameraController::UpdateInterpolation  # name guessed; advances the six cInterpolationData blocks (PDB layout), writes mLastDeltaTime (+0x25c)

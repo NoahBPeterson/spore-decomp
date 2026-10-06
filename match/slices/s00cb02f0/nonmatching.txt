@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00cb02f0  3034  cFlyingLocomotion steering update: complete (call sequence identical); /fp:fast sum ordering, x87-vs-SSE scheduling, register and stack-slot layout differ (frame 0x94 vs 0xa0)

@@ -1,0 +1,1 @@
+slices/s004e1cb0/s004e1cb0.cpp  ??0cSpeciesArchetype@SP@@QAE@ABU01@@Z  004e1cb0  /Od /Ob1 /MD /Gy /TP

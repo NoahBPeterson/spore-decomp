@@ -1,0 +1,1 @@
+005b2d90  4210  COMPLETE SP::cSPEditorManipulationPinning::DoOnMouseMove (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 104/104 calls and vtable slots in identical order; frame 0x220 vs 0x1dc (stack-slot packing) and register allocation differ

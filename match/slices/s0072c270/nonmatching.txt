@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0072c270  4922  complete (vertex/triangle counting, per-triangle AABBs for direct and element-indexed sections, KD build, procedural vertex/triangle fill, region map); /O2 /arch:SSE /GS- aligned frame 0x11b4 vs 0x1174, prim-type range check merged (lea/cmp 8) where original tests 0 and 10 separately

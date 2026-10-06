@@ -1,0 +1,1 @@
+00d130d0 SP::cCommunityEditor::HandleMessage  # card/PDB name; IHandler dispatcher for the city/colony editor (ret 8, bool)

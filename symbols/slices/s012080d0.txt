@@ -1,0 +1,2 @@
+# Slice s012080d0 names.
+012080d0 BoxVolume::LinearCast  # slot 4 of the "BoxVolume" volume-type table at 0x015d0b04 (descriptive name)

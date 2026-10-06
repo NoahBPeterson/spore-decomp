@@ -1,0 +1,2 @@
+# Slice s01051850 names.
+01051850 Simulator::cToolManager::HandleMessage  # IUnmanagedMessageListener vftable 0x0149add0 at +0x1c of cToolManager (ctor 0x0104f960)

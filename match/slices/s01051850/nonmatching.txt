@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01051850  2667  complete: cToolManager::HandleMessage (14 messages); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; same ordered call/vtable/constant sequence; frame 0xd88 vs 0xd8c (temp-slot packing), register allocation, one shared effect-release tail

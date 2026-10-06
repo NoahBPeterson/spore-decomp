@@ -1,0 +1,1 @@
+0050aac0  4021  complete (same 26 calls in order, same instruction stream modulo stack-slot offsets); /Od frame 0x864 vs 0x914 (name-hash slot order + reserved holes) and the sort comparator temp (xor/mov vs mov byte 0) differ

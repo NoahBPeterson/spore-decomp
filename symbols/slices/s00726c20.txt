@@ -1,0 +1,1 @@
+00726c20 SP::QuantizeVertices  # dev build 0x00f487c0 (SPGraphicsMeshJoin.obj): same callees (PushIndices, FindEltArrayIndex, fixed_vector<int,256>, cDecCellID hash_map, ThreadSleep x2, AsRef, CreateArray); retail adds a class-table parameter

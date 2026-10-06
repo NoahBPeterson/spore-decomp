@@ -1,0 +1,1 @@
+00cdef00  1963  complete (all direct calls/vcall slots/constants in order; 3812 vs 3994 bytes); stack slots, some register choice and Matrix3 copy shape differ

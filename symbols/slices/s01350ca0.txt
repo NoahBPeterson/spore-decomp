@@ -1,0 +1,1 @@
+01350ca0 Simulator::cPlayer_InitAttributes  # $E587 dynamic initializer: builds the cPlayer serializer Attribute table (mGameEventRecord, mpCRGItems, mFlags, ... mAdventuresCompleted)

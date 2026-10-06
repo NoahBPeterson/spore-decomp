@@ -1,0 +1,1 @@
+010af750  4626  complete Havok hkVector8/hkMatrix6 reconstruction (/O2 /MD /Gy /TP /fp:fast; 5019 B vs 5115 B, same single call, equivalent field offsets modulo base-pointer strength reduction); original is Havok prebuilt-lib codegen (reloads 0.0 from memory, other strength reduction/x87 schedule)

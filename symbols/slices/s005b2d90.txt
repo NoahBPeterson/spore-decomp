@@ -1,1 +1,1 @@
-005b2d90 SP::cSPEditorManipulationPinning::DoOnMouseMove  # PDB candidate (pinning class)
+005b2d90 SP::cSPEditorManipulationPinning::DoOnMouseMove  # PDB candidate; call order matches dev build 0x00d66700 (SPEditorManipulationPinning.obj)

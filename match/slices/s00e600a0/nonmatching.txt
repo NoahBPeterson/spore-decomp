@@ -1,0 +1,1 @@
+00e600a0  3105  complete (36/36 direct+virtual calls, slots and constants identical in order; 4004 vs 3924 bytes); frame 0xb4 vs 0x8c, register/slot allocation differs

@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-008bb550  -  Type2BuildChar (FreeType/CFF Type-2 charstring interpreter, 9760 B; PDB anchor name): signature, decoder context and byte-stream reader recovered; the operator-dispatch switch and operand/subr machinery are stubbed pending the opcode/operand-stack layout. Oversized for a byte-exact attempt.

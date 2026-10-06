@@ -1,0 +1,1 @@
+00994c80 EA::UTFWinExtras::WinXHTML::CreateFormControl  # card/PDB name; byte-exact

@@ -1,0 +1,3 @@
+004d2450 SP::`anonymous namespace'::LoadSpeciesTuning  # retail symbol (card); byte-exact
+0041d870 EA::AutoRefCount<PropertyList>::AsPPVoidParam  # body = EA AutoRefCount::AsPPVoidParam (release, null, return &mpObject)
+004a9b10 EA::AutoRefCount<PropertyList>::~AutoRefCount  # if (mpObject) mpObject->Release(); called on the tuning list at exit

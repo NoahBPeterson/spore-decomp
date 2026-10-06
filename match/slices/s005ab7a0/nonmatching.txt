@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005ab7a0  3527  complete (DoOnMouseMove: all 77 calls in order, same args/constants); /O2 frame 0x19c vs 0x108 (original shares stack slots across scopes), register allocation and x87/SSE scheduling differ

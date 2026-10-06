@@ -1,0 +1,2 @@
+00d36940 SP::cCreatureModeInputStrategy::Init  # existing PDB name; body builds the UI state machine
+0057cc10 eastl::basic_string<char,eastl::allocator>::RangeInitialize(const char*)  # strlen + inlined RangeInitialize(b,e), called after 3 NULL stores

@@ -1,1 +1,0 @@
-00452080  4555  BuildNewPhysicsShape - 4.5KB Havok shape construction only outlined (hkRigidBodyCinfo, per-primitive boxes, child recursion omitted)

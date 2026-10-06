@@ -1,1 +1,1 @@
-0058be50 SP::cAppModeEditorBase::HandleSimulationUpdate  # PDB name; (int,float)
+0058be50 SP::cAppModeEditorBase::HandleSimulationUpdate  # PDB name; ?HandleSimulationUpdate@cAppModeEditorBase@SP@@UAEXMM@Z (float,float)

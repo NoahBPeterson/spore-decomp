@@ -1,2 +1,0 @@
-# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-0066daf0  4900  large layout/message builder (4924 bytes): only a placeholder body; the window-graph construction, animation scheduling and message dispatch are omitted

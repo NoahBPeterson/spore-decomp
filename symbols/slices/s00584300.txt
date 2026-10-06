@@ -1,1 +1,1 @@
-00584300 FUN_00584300  # no PDB name
+00584300 SP::cAppModeEditorBase::Init  # dev PDB name via symbols/pdb_names.json (dev 00ce3cc0), locals includeGroup/excludeGroup/pRecord/n64StoredTime

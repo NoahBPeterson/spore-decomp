@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-00ae0e30  -  incomplete: 8164-byte message-dispatch handler (nested binary-search switch over ~40 hashed message ids, inner jump tables); exact signature + outer dispatch skeleton only

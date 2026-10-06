@@ -1,0 +1,3 @@
+004ebe20 SP::EditorValidity::InitializeValidityData  # PDB anchor name; byte-exact
+004f65d0 eastl::bitset<128>::flip  # not() each of 4 words, called on 0x015da860 from InitializeValidityData
+004eba00 SP::EditorValidity::ExpandValidity  # Claude-coined: cdecl(bitset<128>*) post-pass after each validity set is filled

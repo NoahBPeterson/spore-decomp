@@ -1,0 +1,1 @@
+00c163f0 Simulator::cCreatureBase::func6Ch  # ModAPI vtable slot 0x6C name; creature effect/sound sync per frame

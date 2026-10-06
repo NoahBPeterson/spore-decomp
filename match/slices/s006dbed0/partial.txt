@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-006dbed0 - skeleton: entry validation + refcount protocol only; 4,988-byte bake pipeline body (element iteration, vertex stream assembly, primitive/material binding, 0x006dxxxx bake calls) not reconstructed

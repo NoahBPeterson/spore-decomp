@@ -1,1 +1,1 @@
-004e1cb0 unnamed large /Od body  # Ghidra FUN
+004e1cb0 SP::cSpeciesArchetype::cSpeciesArchetype(const cSpeciesArchetype&)  # implicit copy ctor; members match dev-PDB SP::cSpeciesArchetype (28 cSPVector3[2] ranges, AutoRefCount<cPropertyList> tail), byte-exact

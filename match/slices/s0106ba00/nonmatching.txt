@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+0106ba00  2897  SP::cSPUISpace::UpdatePlanetRollover (3880 B): 81/81 direct + 100/100 virtual calls in the same order (consistent name->VA mapping); frame 4 bytes smaller (ebp pushed late), rect width/height computed in SSE instead of x87, register choice differs. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

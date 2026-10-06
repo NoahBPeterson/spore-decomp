@@ -1,2 +1,2 @@
 # source  symbol  original VA  [flags override]
-# No byte-exact functions in slice s00b60d80 (see partial.txt).
+slices/s00b60d80/s00b60d80.cpp  ?Initialize@cSimulatorSystem@Simulator@@QAE_NXZ  00b60d80  /O2 /MD /Gy /TP

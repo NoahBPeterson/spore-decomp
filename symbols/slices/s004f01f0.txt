@@ -1,0 +1,1 @@
+004f01f0 SP::cSPEditorModelValidity::TestSize  # card/PDB name; called from CalculateValidity (s004f3de0) as the kValidityTooSmall* test

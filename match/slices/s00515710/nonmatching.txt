@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /Od /Ob1 /Oi /fp:fast /MD /Gy /TP /arch:SSE)
+00515710  3957  nSPSkinner::cPaintVarEvalList::Apply: complete; instruction stream identical modulo /Od frame-slot offsets (orig frame 0x2c0, ours 0x25c: name-hash slot order + temp placement) and x87 operand order of the 1e-8 epsilon sum in the BoneOffset case

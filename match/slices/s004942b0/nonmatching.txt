@@ -1,0 +1,1 @@
+004942b0  -  SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

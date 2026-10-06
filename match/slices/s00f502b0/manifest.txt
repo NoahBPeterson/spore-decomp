@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+# (no byte-exact functions in this slice)

@@ -1,0 +1,1 @@
+00ae0e30 SP::cCinematicManager::HandleMessage  # slot 1 of vtable 0x145b8d0 (ctor/dtor 0xade680), class-name string L"cCinematicManager" follows the vtable; dev-PDB layout matches

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+009a86b0 2991 complete UpdateAnimationStaticDataVersion (all 19 jump-table cases, v6->v25); same calls/consts/size (3908 vs 3888), regalloc + stack-slot order differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast)

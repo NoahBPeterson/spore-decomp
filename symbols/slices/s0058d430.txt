@@ -1,1 +1,1 @@
-0058d430 cEditorCheat::Execute  # PDB candidate caller-single anonymous namespace; (cArguments*)
+0058d430 `anonymous namespace'::cEditorCheat::Execute  # PDB candidate caller-single; editor cheat (load/timing/zcorp/rename/save/savebinary/dumpPalettes/validate/dumpGeomInfo strings)

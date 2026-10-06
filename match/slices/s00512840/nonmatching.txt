@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00512840  3669  complete decal projection flood fill (all 26 calls in order; size 1.01x); /Od /Ob1 frame layout differs (0x208 vs 0x320 temp area: inline temp slots), structure matches to ~48 normalized lines

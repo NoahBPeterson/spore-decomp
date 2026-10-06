@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ae0e30  6681  COMPLETE cCinematicManager::HandleMessage (all 42 message ids); frame 0x218 vs 0x244 (temp slots not shared like the original), /fp:fast vector-math scheduling, cl tail-merges of cString/GameTimeManager tails differ

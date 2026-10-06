@@ -1,1 +1,1 @@
-0064c8e0 SP::cSPUIAssetBrowser::SetSporeGuideVisibility  # PDB candidate (caller-single) card.py
+0064c8e0 SP::cSPUIAssetBrowser::HandleMessage  # IHandler override: ret 8, switch on message id, returns bool (mov al,1 / xor al,al); PDB caller-single candidate SetSporeGuideVisibility does not fit

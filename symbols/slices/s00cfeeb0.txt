@@ -1,0 +1,9 @@
+00cfeeb0 SP::DoCivCommAction  # card name
+00ae9310 SP::AsCivilization  # Claude-coined: source ? source->Cast(0x901f1362 cCivilization::TYPE) : 0
+00cfe820 SP::GetTributeAmount  # Claude-coined: result stored in the comm tuning amount[0]
+00cfe930 SP::IsAllied  # Claude-coined: bool on a civilization, halves/thirds gift relationship bonus
+00b3d4a0 CommManager  # Claude-coined: returns global 0x0167eb44, receiver of 0x00aeb760/0x00aea210
+00aeb760 cCommManager::ShowCommEvent  # Claude-coined: (source, city, context, 0xdbf385bf, replyID, 0)
+00aea210 cCommManager::CloseCommEvent  # Claude-coined: posts message 0x490d429
+00bef710 cCivilization::SpendMoney  # subtracts from money at +0x98 (ModAPI cCivilization mMoney)
+00ce6950 cStarRecordRef::GetCommContext  # Claude-coined: returns [this+0x184]

@@ -1,1 +1,1 @@
-00ee4390 SP::cSPEditorManipulatorUIBlockWinProc::DoMessage  # caller-scored dev-PDB candidate 0x00d42290
+00ee4390 SP::cScenarioEditModeBehaviorUI::HandleUIMessage  # IWinProc override at +8 (this-8 calls ee31d0/ee3540/edd810 of the same object as slices s00ee2860/s00ee3800); message ids/control ids match the behaviour panel; dev-PDB caller-scored candidate was cSPEditorManipulatorUIBlockWinProc::DoMessage

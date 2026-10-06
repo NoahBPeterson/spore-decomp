@@ -1,0 +1,1 @@
+00cdef00 SP::cTribeModeStrategy::HandleSimulationUpdate  # PDB name (card)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007ba350  3569  complete (all 7 effect types, every filter/AddRef/Release, RTT alloc+naming, viewport/param/clear-colour stores); /O2 /arch:SSE /GS- frame 0x4c vs 0x50 (temp slot sharing), tail-merge of the per-case final Release differs

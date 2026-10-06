@@ -1,1 +1,7 @@
-0057af00 SP::cAppModeEditorBase::Pick  # PDB symbol name
+0057af00 SP::cAppModeEditorBase::Pick  # PDB symbol name; complete source (nonmatching)
+007c4510 cViewer::GetCameraRay  # Claude-coined: thiscall (x, y, Vector3* start, Vector3* end) on App()->vfunc58() result
+00496bb0 SP::EditorUtils::GetBlockForBallConnector  # Claude-coined: cdecl (cMWModel*, Vector3) -> cSPEditorBlock*, used for handle type 0x50e8e23
+004a6120 SP::EditorUtils::IsBlockLocked  # Claude-coined: cdecl bool(cSPEditorBlock*), clears the pick result when true
+004c4a30 cSPEditorSkinManager::PickSkin  # Claude-coined: thiscall (lod, start, dir, pos*, normal*, dist*, bool), ret 0x2c
+004c4d30 cSPEditorSkinManager::GetBlockAtSkinPoint  # Claude-coined: thiscall (lod, Vector3) -> cSPEditorBlock*
+0047ec20 cSPEditorHandle::GetHandleState  # Claude-coined: returns field +0x1c; pick ignores handles in state 1

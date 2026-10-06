@@ -1,0 +1,4 @@
+00b56090 SP::Havok::CreateHavokEntityForObject  # dev PDB ?CreateHavokEntityForObject@Havok@SP@@YAXPAVcGameData@2@PAVcSpatialObject@2@PAVcLocomotiveObject@2@PBUcPhysicsNounTuning@2@@Z (SPGonzagoPhysicsHavok.obj): same 4 args (gameData stored as hk userData, spatial object as map key, locomotive object, tuning passed to the prop-list lookup), builds phantoms/rigid bodies
+00b55020 SP::Havok::CreateShape  # (object, props, hkMassProperties*, filter, int* layer, bool) -> refcounted hkShape fed to hkRigidBodyCinfo::m_shape / hkSimpleShapePhantom ctor
+00b4d880 SP::Havok::CreateRigidBody  # takes &hkRigidBodyCinfo, result gets addProperty/addEntity
+00aefb80 SP::SPCreatureProxy::SPCreatureProxy  # 0x150-byte "Simulator" object constructed from the hkRigidBody of a locomotive object; stored in the SPCreatureProxy hash_map (dev PDB map type pair<cSpatialObject*,SPCreatureProxy*>)

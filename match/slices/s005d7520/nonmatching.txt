@@ -1,1 +1,2 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+005d7520  2298  SP::cEditorSystem::Init: complete; same size (4727), identical ordered direct-call/vcall-slot sequence (237 calls), alloc sizes, ids and string literals; differs in register allocation (orig CSEs gEmptyString into ebx/edi and 0 into ebp) and stack-slot packing (this at esp+0x18 vs +0x1c, login16 +0x5c vs +0x68)

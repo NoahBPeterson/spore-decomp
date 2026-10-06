@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00bb8b20  2718  cStarManager star-database load: complete (call sequence identical); register allocation/stack-slot layout differ, lazy ebx/edi prologue pushes and a dead PlanetScripts flag store not reproduced

@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-010af750  ~4200  _hkPoweredChain_ScanAndEnableMotors (~5115 B): control-flow and matrix-scan arithmetic ported faithfully, but the Havok transform scratch layout written by FUN_0120b1b0 and some stack-local aliasing are reconstructed rather than guaranteed complete

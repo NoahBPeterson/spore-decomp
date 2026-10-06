@@ -1,0 +1,1 @@
+0070aed0 SP::cLightingManager::FillLightingStateFromConfig  # card/PDB name

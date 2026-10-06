@@ -1,0 +1,1 @@
+00a8e7c0  3048  complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); cl tail-merges some cDistributeSample ctor/push_back pairs (36 vs 40 calls), then-before-else block order, frame/temp layout differs

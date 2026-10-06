@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-00447150  -  incomplete: SP::cSPEditorBlock::InitializeHandleData is a 4653-byte /Od function; skeleton only

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cae280  4240  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) complete locomotive steering update (all 4 goal modes + path-circle branch, turn limiting, planet orientation, accel/speed clamp); not byte-exact: frame 0xe4 vs 0xc4, stack-slot assignment and SetOrientation tail-dup differ

@@ -1,1 +1,1 @@
-00f4c300 FUN_00f4c300  # no name available; __fastcall free function, void, 5816 bytes, /Od
+00f4c300 SP::cTerrainBrushEffect::ApplyEffect  # vtable 0x0148e714 (vtbl_Terrain::SWARM_TerrainBrushCreate) slot 5 = Swarm IComponent::ApplyEffect(float,float,cComponentStats*), ret 0xc; members match PDB SP::cTerrainBrushEffect

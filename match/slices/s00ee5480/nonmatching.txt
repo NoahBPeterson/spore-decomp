@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ee5480  3939  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) complete HandleUIMessage (all 10 message types, goal drag/drop, name edit, act buttons, setting checklist, 7 sliders); not byte-exact: register allocation (this in edi vs ebp), frame 0x56c vs 0x564, tail-merge differences

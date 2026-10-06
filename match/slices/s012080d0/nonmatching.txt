@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+012080d0  3695  complete: BoxVolume linear cast (rounded box, 6-step feature walk); flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast; cl unrolls the vertex-region slab loop and allocates registers/stack differently

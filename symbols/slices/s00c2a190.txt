@@ -1,0 +1,3 @@
+# va  Name  # evidence
+00c2a190 UpdateCreatureMoveVelocity  # name guessed; only caller 0x00c2d220 passes (state, creature); writes state->velocity
+00ac9850 Simulator::cLocomotionRequest::cLocomotionRequest  # ctor: field defaults match ModAPI cLocomotionRequest comments (0.99 at +0x64, FLT_MAX at +0x68)

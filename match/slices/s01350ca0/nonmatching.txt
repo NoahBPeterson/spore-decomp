@@ -1,0 +1,1 @@
+01350ca0  1683  complete table of 37 Simulator::Attribute records (all fields verified equal by store simulation) + INT_MAX default static; cl schedules the register-constant stores differently (original is the CRT dynamic initializer $E587)

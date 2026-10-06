@@ -1,0 +1,1 @@
+009acac0  nSPCreatureAnim::baked_animation::Evaluate  # samples/lerps frames via GetFrameRange, accumulates root/secondary transforms and deltas (name descriptive; PDB class)

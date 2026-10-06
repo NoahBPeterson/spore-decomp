@@ -1,0 +1,3 @@
+00543f00 SP::Feed::AtomParser::StaticInit  # builds start/end-element handler vector_maps (mem_fun to AtomParser::Start*/End*) + MIME->type-id map, sets expat memory suite; name of the function itself is a guess (dev PDB types only)
+00547320 eastl::vector_map<const wchar_t*,eastl::mem_fun1_t<void,SP::Feed::AtomParser,const wchar_t**>,SP::Feed::AtomParser::char16less>::insert  # byte-exact in s00543f00 obj (COMDAT-folded with the mem_fun_t instance)
+00548860 eastl::vector<eastl::pair<const wchar_t*,eastl::mem_fun1_t<void,SP::Feed::AtomParser,const wchar_t**>>>::insert  # byte-exact as emitted from the s00543f00 obj (not in its manifest)

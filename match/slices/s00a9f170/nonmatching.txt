@@ -1,0 +1,1 @@
+00a9f170  2781  complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 3248 vs 3766 bytes: frame/temp layout differs (identity-matrix row temps, Vector3 int copies), same call/vcall sequence

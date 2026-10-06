@@ -1,240 +1,297 @@
-// Slice s00cae280 -- cLocomotiveObject steering/pathing update (0x00cae280, ~5072 bytes).
+// Slice s00cae280 -- locomotive steering update (0x00cae280, 5072 bytes).
 //
-// Recomputes a locomotive object's desired heading: picks a reference direction
-// (goal / neighbor / facing), normalises it, blends with the current velocity,
-// clamps to the object's turn limits and writes the new position back into the
-// 3-float vector at *param_1.
+// Per-frame steering of a creature's locomotion: from the goal (target point, arrival facing,
+// mode) it picks a desired direction and speed (straight at the goal, along a turning circle
+// tangent when the creature has to arc around to reach the goal facing, or towards the next path
+// point), turns the creature's facing towards it at a limited turn rate, writes the new
+// orientation (snapped to the planet surface) and finally accelerates params->mVelocity towards
+// the desired velocity, limited by the max acceleration and max speed.
 //
-// PARTIAL: the overall control flow and all identifiable engine calls are ported
-// from the Ghidra decompilation, but several of the vector-blending branches and
-// the exact vtable/type layout of cLocomotiveObject are reconstructed rather than
-// guaranteed complete.  Byte-exact is not attempted.
-//
-// Card: work/match/scratch_32_card.txt
+// Module flags: /O2 /arch:SSE /fp:fast (scalar SSE math, x87 sqrt/acos, __asm Clamp helper that
+// forces the ebp frame with 16-byte alignment).
 #include "types.h"
+#include <math.h>
 
-extern "C" double sqrt(double);
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
 
-// callees / engine entry points
-extern "C" {
-int*  FUN_00c41ec0(...);
-float* FUN_00c423c0(...);
-float FUN_00c9ee90(...);
-float FUN_00c9f380(...);
-float FUN_004885d0(...);
-void  FUN_00699800(...);
-int   FUN_0041dd30(...);
-float* FUN_00b0fd00(...);
-float* FUN_00b7f320(...);
-float* FUN_00b7f1f0(...);
-float _CIacos(...);
-float* SP_normalized_safe(...);
-void  SP_QuaternionFromFacingAndUp(...);
-void  SP_PlanetModel(...);
-int   SP_IsNearGoal(...);
-int   FUN_00cae280_cLocomotiveObject_IsNearGoal(...);
+__forceinline float Clamp(float value, float minValue, float maxValue)
+{
+    __asm {
+        movss xmm0, value
+        maxss xmm0, minValue
+        minss xmm0, maxValue
+        movss value, xmm0
+    }
+    return value;
 }
-extern float DAT_0169a37c, DAT_0169a380, DAT_0169a384;
-extern float _DAT_0157d330, _DAT_0157d334, _DAT_0157d32c;
 
-#define F(p,o) (*(float*)((char*)(p)+(o)))
-#define I(p,o) (*(int*)((char*)(p)+(o)))
-#define B(p,o) (*(char*)((char*)(p)+(o)))
-#define RF(p,i) (*(float*)((char*)(p)+4*(i)))
-#define VS(p,o) (*(void**)((*(char**)(p))+(o)))
-#define VC0(RT,p,o)         ((RT(__thiscall*)(void*))VS(p,o))((void*)(p))
-#define VC1(RT,p,o,a)       ((RT(__thiscall*)(void*,int))VS(p,o))((void*)(p),(int)(a))
-static float SQRT(float x) { return (float)sqrt((double)x); }
+// eastl::min / eastl::max
+template <typename T> inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
+template <typename T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
+
+struct Vector3 {
+    float x, y, z;
+    Vector3() {}
+    Vector3(float _x, float _y, float _z) : x(_x), y(_y), z(_z) {}
+    Vector3(const Vector3& v) : x(v.x), y(v.y), z(v.z) {}
+    float Length() const { return sqrtf(x * x + y * y + z * z); }
+    float SquaredLength() const { return x * x + y * y + z * z; }
+    float Dot(const Vector3& b) const { return x * b.x + y * b.y + z * b.z; }
+    Vector3 Cross(const Vector3& b) const
+    {
+        return Vector3(y * b.z - z * b.y, z * b.x - x * b.z, x * b.y - y * b.x);
+    }
+    Vector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
+};
+inline Vector3 operator+(const Vector3& a, const Vector3& b) { return Vector3(a.x + b.x, a.y + b.y, a.z + b.z); }
+inline Vector3 operator-(const Vector3& a, const Vector3& b) { return Vector3(a.x - b.x, a.y - b.y, a.z - b.z); }
+inline Vector3 operator*(const Vector3& a, float s) { return Vector3(a.x * s, a.y * s, a.z * s); }
+inline Vector3 operator-(const Vector3& a) { return Vector3(-a.x, -a.y, -a.z); }
+
+struct Quaternion { float x, y, z, w; };
+
+// ---- callees (cdecl unless noted) ----
+Vector3 normalized_safe(const Vector3& v);                                   // 0x00449c20
+bool operator!=(const Vector3& a, const Vector3& b);                         // 0x0041dd30
+float Dot3(const Vector3& v);                                                // 0x004885d0 (squared length)
+Vector3 RotateTowards(const Vector3& from, const Vector3& to, float t);      // 0x00b0fd00
+Vector3 CircleTangentPoint(const Vector3& center, float radius,
+                           const Vector3& from, const Vector3& dir);        // 0x00699800
+Quaternion QuaternionFromFacingAndUp(const Vector3& facing, const Vector3& up); // 0x0069b600
+
+struct cPlanetModel {
+    Quaternion SnapOrientationToSurface(const Vector3& pos, const Quaternion& q, float height); // 0x00b7f320
+    Quaternion AlignOrientationToSurface(const Vector3& pos, const Quaternion& q);             // 0x00b7f1f0
+};
+cPlanetModel* PlanetModel();                                                 // 0x00b3d350
+
+extern const Vector3 kZeroVector;          // 0x0169a37c
+extern float kTurnCircleTolerance;         // 0x0157d334 (0.9)
+extern float kGoalCircleTolerance;         // 0x0157d330 (0.9)
+extern float kSlowTurnAngle;               // 0x0157d32c (0.1)
+
+struct LocoGoal {
+    Vector3* mpBegin;          // +0x00 path points
+    Vector3* mpEnd;            // +0x04
+    uint32_t pad08[3];
+    Vector3 mTarget;           // +0x14
+    uint32_t pad20[12];
+    Vector3 mFacing;           // +0x50 arrival facing
+    int mMode;                 // +0x5c
+    float mStopDistance;       // +0x60
+    const Vector3* GetNextPoint();   // 0x00c423c0
+};
+
+struct cLocomotiveObject {
+    PV8 PV2 PV
+    virtual const Vector3& GetPosition();            // +0x2c
+    PV8 PV8 PV8 PV8 PV2
+    virtual void* Cast(uint32_t type);               // +0xb8
+    uint32_t pad04[0x9b];
+    int mFlags;                                      // +0x270
+    LocoGoal* GetGoal();                             // 0x00c41ec0
+    bool IsNearGoal();                               // 0x00c42e20
+};
+
+struct ILocomotion {
+    PV8 PV4 PV2 PV
+    virtual void SetOrientation(const Quaternion& q); // +0x3c
+    PV4 PV2 PV
+    virtual Vector3 GetFacing();                     // +0x5c
+    PV8 PV8 PV8 PV2
+    virtual float GetMaxSpeed();                     // +0xc8
+    PV
+    virtual float GetMaxAcceleration();              // +0xd0
+};
+
+struct cCreatureLocomotion {
+    uint32_t pad00[0xd];
+    ILocomotion mLocomotion;                         // +0x34
+    uint32_t pad38[0x79];
+    float mTurnRate;                                 // +0x21c
+    uint32_t pad220[0x236];
+    uint8_t mFlagsAF8;                               // +0xaf8
+    uint8_t padaf9[0x23];
+    int mbB1C;                                       // +0xb1c
+    uint8_t padb20[0xad];
+    bool mbBCD;                                      // +0xbcd
+    float GetSpeedA();                               // 0x00c9ee90
+    float GetSpeedB();                               // 0x00c9f380
+};
+
+struct LocoSteerParams {
+    Vector3 mVelocity;         // +0x00 (in/out)
+    float mUnk0c;
+    float mDeltaTime;          // +0x10
+    cLocomotiveObject* mpObject; // +0x14
+};
+
+static __forceinline float ArrivalSpeed(float maxSpeed, float dist, float dt, float accel)
+{
+    return Min(maxSpeed, Min(dist / dt, sqrtf(accel * dist)));
+}
 
 // @ 0x00cae280
-void FUN_00cae280(int* param_1)
+void LocomotiveSteer(LocoSteerParams* params)
 {
-  void* v5;
-  int   local_14;
-  int   iVar2;
-  char  cStack_3d, cStack_51, cStack_52, cStack_c9 = 0;
-  float pcStack_a0, fStack_9c, fStack_98, fStack_94, fStack_3c = 1.0f;
-  float pcStack_a4, pcStack_a8 = 0.0f, pcStack_bc, pcStack_c0, pcStack_c4;
-  float pcStack_b0, pcStack_b4, pcStack_b8;
-  float fStack_80, fStack_7c, fStack_78;
-  float fStack_6c = 0.0f, fStack_68 = 0.0f;
-  float fStack_2c, fStack_ac;
-  float local_38x, fStack_34, fStack_30;
-  float pcStack_70x = 0.0f;
-  float ang = 0.0f;
-  float* pfVar8_ = 0;
-  int*  piStack_18;
-  int   stack_c8;
-  void* pfVar4;
-  int*  piVar5;
-  float fVar1, fVar10, fVar12, fVar14, fVar16, fVar17;
+    cLocomotiveObject* object = params->mpObject;
+    cCreatureLocomotion* owner = object ? (cCreatureLocomotion*)object->Cast(0x137e8e0) : 0;
+    bool slowTurn = owner->mbB1C != 0 || (owner->mFlagsAF8 & 4) != 0;
 
-  v5 = (void*)I(param_1, 0x14);
-  if (v5 == 0) local_14 = 0;
-  else         local_14 = VC1(int, v5, 0xb8, 0x137e8e0);
-  iVar2 = local_14;
-  stack_c8 = 0;
-  if (I(local_14, 0xb1c) != 0 || (B(local_14, 0xaf8) & 4) != 0)
-    stack_c8 = 1;                       // uStack_c8 bit 3
+    float speed = params->mVelocity.Length();
+    float dt = params->mDeltaTime;
+    ILocomotion* loco = &owner->mLocomotion;
+    float maxSpeed = loco->GetMaxSpeed();
+    float speedA = owner->GetSpeedA();
+    float speedB = owner->GetSpeedB() * 0.2f;
+    const float& refSpeed = Max(speedB, speedA);
+    float turnScale;
+    if (slowTurn && refSpeed > 0.0f)
+        turnScale = Clamp(speed / refSpeed, 0.1f, 1.0f);
+    else
+        turnScale = 1.0f;
+    float maxTurnRate = owner->mTurnRate * turnScale;
+    float speedRatio = speed / maxTurnRate;
+    float radius = Max(1.0f, speedRatio);
 
-  piStack_18 = (int*)(local_14 + 0x34);
-  pcStack_a0 = SQRT(RF(param_1,0)*RF(param_1,0) + RF(param_1,1)*RF(param_1,1) + RF(param_1,2)*RF(param_1,2));
-  pcStack_a4 = (float)VC1(int, (void*)I(local_14, 0x34), 0xc8, 0);
-  pcStack_c4 = (float)FUN_00c9ee90();
-  {
-    float other = (float)FUN_00c9f380();
-    pcStack_bc = other * 0.2f;
-    if (pcStack_c4 <= pcStack_bc) pcStack_bc = other * 0.2f;
-  }
-  if (stack_c8 == 0 || pcStack_bc <= 0.0f) {
-    pcStack_bc = 1.0f;
-  } else {
-    pcStack_bc = pcStack_a0 / pcStack_bc;
-    if (pcStack_bc <= 0.1f) pcStack_bc = 0.1f;      // 0x3dcccccd
-    if (1.0f <= pcStack_bc) pcStack_bc = 1.0f;
-  }
-  pcStack_bc = F(iVar2, 0x21c) * pcStack_bc;
-  pcStack_c0 = (pcStack_a0 / pcStack_bc <= 1.0f) ? 1.0f : (pcStack_a0 / pcStack_bc);
-  pfVar4 = (void*)VC0(int, v5, 0x2c);
-  VC1(void, (void*)I(local_14, 0x34), 0x5c, (int)&fStack_9c);
-  piVar5 = (int*)FUN_00c41ec0();
-  cStack_3d = piVar5[0x17] != 0;
-  cStack_51 = (char)FUN_00cae280_cLocomotiveObject_IsNearGoal(v5);
-  pcStack_b0 = (float)piVar5[7] - F(pfVar4, 8);
-  pcStack_b8 = (float)piVar5[5] - F(pfVar4, 0);
-  pcStack_b4 = (float)piVar5[6] - F(pfVar4, 4);
-  pcStack_a4 = SQRT(pcStack_b4*pcStack_b4 + (pcStack_b8*pcStack_b8 + pcStack_b0*pcStack_b0));
-  // distances / neighbour data are derived from piVar5 and pfVar4
-  {
-    float* pfVar6 = (float*)FUN_00c423c0();
-    float px = (float)piVar5[5], py = (float)piVar5[6], pz = (float)piVar5[7];
-    fStack_94 = SQRT((pfVar6[1]-F(pfVar4,4))*(pfVar6[1]-F(pfVar4,4)) +
-                ((pfVar6[2]-F(pfVar4,8))*(pfVar6[2]-F(pfVar4,8)) +
-                 (*pfVar6-F(pfVar4,0))*(*pfVar6-F(pfVar4,0))));
-    (void)px; (void)py; (void)pz;
-  }
-  pcStack_bc = (float)VC0(int, (void*)I(v5, 0), 0xd0);
-  cStack_52 = *piVar5 == piVar5[1];
-  if (B(local_14, 0xbcd) != 0) {
-    pcStack_bc = (float)FUN_00c9f380() * 4.0f;
-    goto LAB_00caf38f;
-  }
-  if (((((unsigned)0 /*pcStack_d4*/ >> 2) & 1) != 0) || cStack_3d == 0 || cStack_51 != 0) {
-    pcStack_bc = pcStack_bc * 2.0f;
-    goto LAB_00caf38f;
-  }
+    const Vector3& pos = object->GetPosition();
+    Vector3 facing = loco->GetFacing();
+    LocoGoal* goal = object->GetGoal();
+    bool hasMode = goal->mMode != 0;
+    bool nearGoal = object->IsNearGoal();
+    Vector3 toGoal = goal->mTarget - pos;
+    float distToGoal = toGoal.Length();
+    const Vector3& nextPoint = *goal->GetNextPoint();
+    float stopDistance = goal->mStopDistance;
+    bool pathEmpty = goal->mpBegin == goal->mpEnd;
+    int flags = object->mFlags;
+    Vector3 desiredVelocity = kZeroVector;
+    Vector3 newFacing = facing;
+    float distToNext = (nextPoint - pos).Length();
+    float accel = loco->GetMaxAcceleration();
 
-  if (cStack_52 == 0) {
-    // ---- goal-relative path ----------------------------------------------------------
-    float* pfVar6 = (float*)SP_normalized_safe(0, 0);      // direction to goal
-    fStack_80 = pfVar6[0]; fStack_7c = pfVar6[1]; fStack_78 = pfVar6[2];
-    {
-      float* n = (float*)SP_normalized_safe(0, (void*)(piVar5+5));
-      fStack_80 = n[0]; fStack_7c = n[1]; fStack_78 = n[2];
-    }
-    fStack_2c = 0.0f;
-    // blend toward the goal direction and clamp to turn limits
-  } else {
-    switch (piVar5[0x17]) {
-      case 1:
-      case 4: {
-        float t = fStack_94 / fStack_3c;
-        float s = SQRT(pcStack_bc * fStack_94);
-        float v = (t <= s) ? t : s;
-        if (v > pcStack_a8) v = pcStack_a8;
-        pcStack_70x = v;
-        fStack_68 = fStack_78 * v;
-        fStack_6c = fStack_7c * v;
-        break;
-      }
-      case 2:
-        // keep current distance
-        break;
-      case 3: {
-        float* n = (float*)SP_normalized_safe(0, (void*)(piVar5+5));
-        fStack_80 = n[0]; fStack_7c = n[1]; fStack_78 = n[2];
-        break;
-      }
-    }
-  }
+    if (owner->mbBCD) {
+        accel = owner->GetSpeedB() * 4.0f;
+    } else if (((flags >> 2) & 1) != 0 || !hasMode || nearGoal) {
+        accel *= 2.0f;
+    } else {
+        Vector3 dir = normalized_safe(distToGoal > 1.5258789e-05f ? toGoal : params->mVelocity);
+        if (pathEmpty) {
+            switch (goal->mMode) {
+            case 1:
+            case 4: {
+                float s = ArrivalSpeed(maxSpeed, distToNext, dt, accel);
+                desiredVelocity = dir * s;
+                if (stopDistance > distToNext)
+                    accel *= 16.0f;
+                break;
+            }
+            case 2:
+                desiredVelocity = dir * maxSpeed;
+                break;
+            case 3: {
+                // arc around a turning circle so that we arrive with the goal facing
+                Vector3 up = normalized_safe(goal->mTarget);
+                Vector3 side = goal->mFacing.Cross(up);
+                if (side.Dot(dir) > 0.0f)
+                    side = -side;
+                Vector3 center = goal->mTarget + side * radius;
+                if (kTurnCircleTolerance * radius <= (pos - center).Length()) {
+                    Vector3 aim;
+                    if (goal->mFacing.Dot(dir) < 0.0f)
+                        aim = goal->mTarget + side * (radius * 2.0f);
+                    else
+                        aim = goal->mTarget - goal->mFacing * (distToNext * 0.5f);
+                    Vector3 tangent = CircleTangentPoint(center, radius, pos, normalized_safe(aim - pos));
+                    if (tangent != kZeroVector) {
+                        Vector3 toTangent = tangent - pos;
+                        dir = normalized_safe(toTangent);
+                        distToNext = (tangent - goal->mTarget).Length() + toTangent.Length();
+                    }
+                }
+                float s = ArrivalSpeed(maxSpeed, distToNext, dt, accel);
+                desiredVelocity = dir * s;
+                if (stopDistance > distToNext)
+                    accel *= 16.0f;
+                break;
+            }
+            }
+        } else {
+            // approach the goal on a circle tangent to the first path segment
+            float goalRadius = Max(1.0f, speedRatio);
+            Vector3 up = normalized_safe(goal->mTarget);
+            Vector3 toFirst = *goal->mpBegin - goal->mTarget;
+            Vector3 along = normalized_safe(toFirst - up * up.Dot(toFirst));
+            Vector3 side = along.Cross(up);
+            if (side.Dot(dir) > 0.0f)
+                side = -side;
+            Vector3 center = goal->mTarget + side * goalRadius;
+            if (goalRadius * kGoalCircleTolerance <= (pos - center).Length()) {
+                Vector3 aim;
+                if (along.Dot(dir) < 0.0f)
+                    aim = goal->mTarget + side * (goalRadius * 2.0f);
+                else
+                    aim = goal->mTarget - along * (distToGoal * 0.5f);
+                Vector3 tangent = CircleTangentPoint(center, goalRadius, pos, normalized_safe(aim - pos));
+                if (tangent != kZeroVector) {
+                    Vector3 toTangent = tangent - pos;
+                    dir = normalized_safe(toTangent);
+                    distToGoal = (tangent - goal->mTarget).Length() + toTangent.Length();
+                }
+            }
+            float s = ArrivalSpeed(maxSpeed, distToNext, dt, accel);
+            desiredVelocity = dir * s;
+        }
 
-  if (piVar5[0x17] == 4) goto LAB_00caf38f;
-  if ((float)stack_c8 <= fStack_94) {
-LAB_00caf0b3:
-    if (1.5258789e-05f < (pcStack_70x*pcStack_70x + fStack_68*fStack_68) + fStack_6c*fStack_6c) {
-      float* n = (float*)SP_normalized_safe(0, &pcStack_70x);
-      local_38x = n[0]; fStack_34 = n[1]; fStack_30 = n[2];
-    }
-  } else {
-    float f = (float)FUN_004885d0(piVar5 + 0x14);
-    if (f <= 1.5258789e-05f) goto LAB_00caf0b3;
-    local_38x = (float)piVar5[0x14];
-    fStack_34 = (float)piVar5[0x15];
-    fStack_30 = (float)piVar5[0x16];
-  }
-  {
-    float dot = fStack_34 * fStack_9c + (fStack_30 * fStack_98 + local_38x * pcStack_a0);
-    if (dot <= -1.0f) dot = -1.0f;
-    if (dot >= 1.0f)  dot = 1.0f;
-    {
-      ang = (float)_CIacos();
-      (void)ang;
-    }
-  }
-  {
-    float* pfVar8 = (float*)SP_normalized_safe(0, 0);
-    pcStack_a0 = pfVar8[0]; fStack_9c = pfVar8[1]; fStack_98 = pfVar8[2];
-  }
-  SP_normalized_safe(0, pfVar4);
-  SP_QuaternionFromFacingAndUp(0, 0, 0);
-  if (piStack_18[0x2c7] == 0) {
-    pfVar8_ = (float*)FUN_00b7f320(0, pfVar4, 0, 0x40a00000);
-  } else {
-    pfVar8_ = (float*)FUN_00b7f1f0(0, pfVar4, 0);
-  }
-  pcStack_b8 = pfVar8_[0]; pcStack_b4 = pfVar8_[1]; pcStack_b0 = pfVar8_[2];
-  fStack_ac = pfVar8_[3];
-  VC1(void, (void*)I(local_14, 0x34), 0x3c, (int)&pcStack_b8);
+        if (goal->mMode != 4) {
+            if (stopDistance > distToNext && Dot3(goal->mFacing) > 1.5258789e-05f)
+                newFacing = goal->mFacing;
+            else if (desiredVelocity.SquaredLength() > 1.5258789e-05f)
+                newFacing = normalized_safe(desiredVelocity);
 
-LAB_00caf38f:
-  // ---- final blend of the desired heading with the current one ------------------------
-  {
-    float dot = fStack_34 * fStack_9c + (fStack_30 * fStack_98 + local_38x * pcStack_a0);
-    if (dot <= -1.0f) dot = -1.0f;
-    if (dot >= 1.0f)  dot = 1.0f;
-    {
-      ang = (float)_CIacos();
-      if (cStack_c9 != 0 && piVar5[0x17] != 4 && _DAT_0157d32c < ang) {
-        float d = SQRT(fStack_6c*fStack_6c + (fStack_68*fStack_68 + pcStack_70x*pcStack_70x));
-        fStack_68 = d;
-        fStack_6c = fStack_9c * d;
-      }
+            float angle = acosf(Clamp(newFacing.Dot(facing), -1.0f, 1.0f));
+            if (angle > 1.5258789e-05f) {
+                float turnRate = owner->mTurnRate;
+                float timeToGoal = maxSpeed > 1.5258789e-05f ? distToGoal / maxSpeed : 1.0f;
+                if (timeToGoal > 1.5258789e-05f)
+                    turnRate = angle / timeToGoal * 2.0f;
+                float t = Min(maxTurnRate, turnRate) * dt / angle;
+                facing = RotateTowards(facing, newFacing, Min(1.0f, t));
+            } else {
+                facing = newFacing;
+            }
+            facing = normalized_safe(facing);
+            Vector3 up = normalized_safe(pos);
+            Quaternion q = QuaternionFromFacingAndUp(facing, up);
+            Quaternion orientation;
+            if (owner->mbB1C == 0)
+                orientation = PlanetModel()->SnapOrientationToSurface(pos, q, 5.0f);
+            else
+                orientation = PlanetModel()->AlignOrientationToSurface(pos, q);
+            loco->SetOrientation(orientation);
+        }
     }
-    fVar14 = 1.0f / fStack_3c;
-    fVar12 = (fStack_68 - (float)param_1[2]) * fVar14;
-    fVar10 = (fStack_6c - (float)param_1[1]) * fVar14;
-    fVar14 = ((float)pcStack_70x - (float)param_1[0]) * fVar14;
-    if (0.0f < (fVar12*fStack_98 + fVar10*fStack_9c) + pcStack_a0*fVar14) {
-      float len = SQRT(fVar14*fVar14 + (fVar10*fVar10 + fVar12*fVar12));
-      if (pcStack_bc < len) {
-        len = pcStack_bc / len;
-        fVar14 *= len; fVar10 *= len; fVar12 *= len;
-      }
+
+    float turnAngle = acosf(Clamp(newFacing.Dot(facing), -1.0f, 1.0f));
+    Vector3 targetVelocity = desiredVelocity;
+    if (slowTurn && goal->mMode != 4 && turnAngle > kSlowTurnAngle)
+        targetVelocity = facing * desiredVelocity.Length();
+    Vector3 accelVec = (targetVelocity - params->mVelocity) * (1.0f / dt);
+    if (accelVec.Dot(facing) > 0.0f) {
+        float len = accelVec.Length();
+        if (len > accel)
+            accelVec *= accel / len;
     }
-    fVar1 = fVar12 * fStack_3c + (float)param_1[2];
-    fVar16 = fVar10 * fStack_3c + (float)param_1[1];
-    fVar17 = fVar14 * fStack_3c + (float)param_1[0];
-    RF(param_1,2) = fVar1; RF(param_1,1) = fVar16; RF(param_1,0) = fVar17;
-    {
-      float len = SQRT(fVar17*fVar17 + (fVar16*fVar16 + fVar1*fVar1));
-      if (pcStack_a8 < len) {
-        len = pcStack_a8 / len;
-        RF(param_1,0) = fVar17*len; RF(param_1,1) = fVar16*len; RF(param_1,2) = fVar1*len;
-      }
-    }
-    if (cStack_c9 != 0 && piVar5[0x17] != 4 && _DAT_0157d32c < ang) {
-      float len = SQRT(RF(param_1,0)*RF(param_1,0) + RF(param_1,1)*RF(param_1,1) + RF(param_1,2)*RF(param_1,2));
-      RF(param_1,0) = pcStack_a0*len; RF(param_1,1) = fStack_9c*len; RF(param_1,2) = fStack_98*len;
-    }
-  }
+    Vector3 velocity = accelVec * dt + params->mVelocity;
+    params->mVelocity = velocity;
+    float len = velocity.Length();
+    if (len > maxSpeed)
+        params->mVelocity = velocity * (maxSpeed / len);
+    if (slowTurn && goal->mMode != 4 && turnAngle > kSlowTurnAngle)
+        params->mVelocity = facing * params->mVelocity.Length();
 }

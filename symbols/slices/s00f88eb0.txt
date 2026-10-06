@@ -1,0 +1,1 @@
+00f88eb0 SP::cTerrainMap<unsigned int>::GetVector3  # PDB name; bilinear cube-map sample, Vector3 texels remapped to [-1,1]

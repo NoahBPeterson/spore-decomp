@@ -1,0 +1,1 @@
+00bb8b20 Simulator::cStarManager::LoadStarDatabase  # this layout = ModAPI cStarManager (0x220 CLG items, 0x224 planetRecords.pkt, 0x228 planetRecords.pkp); opens stars.db, returns isNew; method name descriptive

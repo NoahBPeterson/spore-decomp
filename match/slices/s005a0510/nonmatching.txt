@@ -1,0 +1,1 @@
+005a0510  4357  SP::cSPEditorBlockAbilities::LayoutAbilities: complete (same 58 direct + 82 virtual calls in order, frame 0x1a10 matches); register/stack-slot allocation differs; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

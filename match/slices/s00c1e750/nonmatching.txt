@@ -1,0 +1,1 @@
+00c1e750  3011  complete (all 56 direct calls and 45 vcalls in original order, noun/anim IDs and float constants identical); 3629 vs 3623 B: frame 0xdc vs 0xc4, register allocation (bIsBaby in bl vs stack byte, target/ability ebp/ebx swapped)

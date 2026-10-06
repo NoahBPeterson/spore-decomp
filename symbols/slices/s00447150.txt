@@ -1,1 +1,2 @@
-00447150 SP::cSPEditorBlock::InitializeHandleData  # PDB name; 4653-byte /Od method
+00447150 SP::cSPEditorBlock::InitializeHandleData  # pdb_names.json
+00533360 eastl::fixed_vector<SP::cSPEditorHandleDeform*,8>::fixed_vector  # ctor: mpBegin/mpEnd = inline buffer at +0x18, capacity = +0x38 (8 pointers); called from 0x00447150

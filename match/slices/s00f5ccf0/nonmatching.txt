@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f5ccf0 3409 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); original keeps 255.0f/minss/maxss memory operands and two dead curve samples (no side effects); register/scheduling differences

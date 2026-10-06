@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d130d0  3812  SP::cCommunityEditor::HandleMessage: complete (all 25 message paths, 235/235 calls, same vtable slots); flags /O2 /MD /Gy /TP (no /EHsc); register allocation, frame size (0x64 vs 0x44) and cl tail-merging of the PostMessage/hint blocks differ

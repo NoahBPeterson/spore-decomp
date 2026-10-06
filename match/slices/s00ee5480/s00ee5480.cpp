@@ -1,709 +1,772 @@
-// Slice s00ee5480 -- SP UI message handler, 0x00ee5480 (~5117 bytes, /O2 /MD /Gy /TP).
+// Slice s00ee5480 -- UI::cScenarioEditModeScriptUI::HandleUIMessage (0x00ee5480, 5117 bytes).
 //
-// A large boolean message/notification handler for an SP UI editor object.  `this`
-// is the editor (fields at +0x14 handle, +0x18/+0x1c/+0x20 state, +0x24 object ref,
-// +0x28 text control ref, +0x2c..+0x40 EA::RectT<float>).  The message (`mp`) is a
-// dword struct: +0x0 object id, +0x4 target, +0x8 message id, +0xc sub id,
-// +0x10/+0x14 floats, +0x18 object.
+// The scenario editor's "script" (goals / act settings) panel window procedure: drag-and-drop
+// of goal icons (mouse down/move/up), the scenario name text field, the act/goal buttons and
+// the act-setting sliders. Always returns false (never consumes the message).
 //
-// PARTIAL: this port reproduces the function's top-level message dispatch and every
-// side-effecting engine call identifiable from the Ghidra decompilation, but a few
-// deep sub-blocks (unaffiliated-register reconstructions and the tail switch on the
-// virtual object's class id) are approximated rather than guaranteed complete.
-// Byte-exact is not attempted: a 5000-byte /O2 handler cannot be reproduced from
-// decompilation alone.
+// `this` is the IWinProc sub-object at +0xc of the panel (vtable 0x0148a80c, IWinProc vtable
+// 0x0148a838); member offsets below are those of the full object.
 //
-// Card: work/match/scratch_30_card.txt
+// Module flags: /O2 /MD /Gy /TP /arch:SSE (UI module: no /EHsc, no /fp:fast).
 #include "types.h"
 
-typedef unsigned char  u8;
-typedef unsigned short u16;
-typedef unsigned int   u32;
+#define PVCAT2(a, b) a##b
+#define PVCAT(a, b) PVCAT2(a, b)
+#define PV virtual void PVCAT(pv_, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+#define PV16 PV8 PV8
 
-// ---- callees (names unknown in the 2008 dev PDB) --------------------------------------
-extern "C" {
-int   FUN_00435e90(...);
-int   FUN_005ff6a0(...);
-int   FUN_006c0200(...);
-int   FUN_00806ca0(...);
-int   FUN_008085d0(...);
-int   FUN_00881f00(...);
-int   FUN_00dfbba0(...);
-int   FUN_00dfd080(...);
-int   FUN_00e12f80(...);
-int   FUN_00ecb520(...);
-int   FUN_00ecb730(...);
-int   FUN_00ed39a0(...);
-int   FUN_00ed4b50(...);
-int   FUN_00ed8950(...);
-int   FUN_00edc9e0(...);
-int   FUN_00edcce0(...);
-int   FUN_00edce00(...);
-int   FUN_00edcf30(...);
-float FUN_00edcfc0(...);
-int   FUN_00edd2d0(...);
-int   FUN_00eddf30(...);
-int   FUN_00ede110(...);
-int   FUN_00ede2b0(...);
-int   FUN_00ede400(...);
-int   FUN_00ede530(...);
-int   FUN_00ede660(...);
-int   FUN_00ede790(...);
-int   FUN_00ede8c0(...);
-int   FUN_00ede9f0(...);
-int   FUN_00edf070(...);
-int   FUN_00edf090(...);
-int   FUN_00edf240(...);
-int   FUN_00edf2c0(...);
-int   FUN_00edf370(...);
-int   FUN_00edf410(...);
-int   FUN_00edf830(...);
-int   FUN_00edfa30(...);
-int   FUN_00edfcc0(...);
-int   FUN_00edfd30(...);
-int   FUN_00ee01e0(...);
-int   FUN_00ee0310(...);
-int   FUN_00ee0450(...);
-int   FUN_00ee0590(...);
-int   FUN_00ee06d0(...);
-int   FUN_00ee0960(...);
-int   FUN_00ee0eb0(...);
-int   FUN_00ee1140(...);
-int   FUN_00ee1200(...);
-int   FUN_00ee16f0(...);
-int   FUN_00ee30d0(...);
-int   FUN_00ee31d0(...);
-float FUN_00eeebd0(...);
-int   FUN_00eef810(...);
-int   FUN_00ef7a80(...);
-int   FUN_00efbbe0(...);
-int   FUN_00efc520(...);
-int   FUN_00efc8c0(...);
-int   FUN_00f0bdf0(...);
-int   FUN_00f0bea0(...);
-int   FUN_00f253e0(...);
-int   FUN_00f25670(...);
-int   FUN_00f27670(...);
-int   FUN_00f28b80(...);
-int   FUN_00f293b0(...);
-int   FUN_00f3be30(...);
-int   FUN_00f3e8a0(...);
-int   FUN_00f40370(...);
-int   FUN_00f41a10(...);
-int   FUN_00f427c0(...);
-int   FUN_00f45970(...);
-int   FUN_00f45a80(...);
-int   FUN_008050f0(...);
+// EA math helper (SSE asm): round-up float to int
+__forceinline int CeilToInt(float f)
+{
+    __asm {
+        movss    xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov      ecx, eax
+        add      ecx, 1
+        ucomiss  xmm1, xmm0
+        cmovb    eax, ecx
+    }
 }
 
-// named engine entry points (from the card's call annotations)
-int   SP_WindowManager(...);                       // SP::WindowManager
-int   SP_MessageServer(...);                       // SP::MessageServer
-int   SP_QualifyNameWithGroup(...);                // SP::QualifyNameWithGroup
-int   SP_KillSetiEffects(...);                     // SP::cSPUISpace::KillSetiEffects
-int   FUN_00885d0(...);                            // SPUIHelpers::CreateCallbackWinProc
-int   EA_operator_new(...);                        // EA::UTFWin::MultiHeapObject::operator_new
-int   cSPUILayoutManager_GetWorldMainWindow(...);  // cSPUILayoutManager::GetWorldMainWindow
-int   EA_AutoRefCount_assign(...);                 // EA::AutoRefCount<T>::operator=
-int   EA_RectT_assign(...);                        // EA::RectT<float>::operator=
-int   FUN_00881f00(...);                           // value formatting helper
+// ---------------------------------------------------------------------------------------------
+// UTFWin
+// ---------------------------------------------------------------------------------------------
+struct Point {
+    float x, y;
+    Point() {}
+    Point(float _x, float _y) : x(_x), y(_y) {}
+};
 
-// globals
-extern void* DAT_016c7aa4;
-extern char  DAT_01667bac;
-extern char  DAT_01667bae;
-extern int   DAT_0148a488[];
-extern int   DAT_0148a4a0[];
-extern int   DAT_0148a4b0[];
-extern int   DAT_0148a4c0[];
+struct RectT {
+    float x1, y1, x2, y2;
+    RectT& operator=(const RectT& other);                       // 0x00572600
+};
 
-#define I(p,o)  (*(int*)((char*)(p)+(o)))
-#define U(p,o)  (*(unsigned*)((char*)(p)+(o)))
-#define F(p,o)  (*(float*)((char*)(p)+(o)))
-#define B(p,o)  (*(char*)((char*)(p)+(o)))
+class IWindow {
+public:
+    PV4
+    virtual IWindow* GetParent();                               // +0x10
+    PV2
+    virtual uint32_t GetControlID();                            // +0x1c
+    PV4 PV2
+    virtual const RectT& GetRealArea();                         // +0x38
+    virtual const wchar_t* GetCaption();                        // +0x3c
+    PV4 PV2 PV
+    virtual void SetShadeColor(uint32_t color);                 // +0x5c
+    PV4
+    virtual void SetLayoutLocation(float x, float y);           // +0x70
+    PV
+    virtual void SetCursorID(uint32_t id);                      // +0x78
+    PV16 PV
+    virtual Point ToGlobalCoordinates(Point local);             // +0xc0
+    PV4 PV
+    virtual void AddWindow(IWindow* window);                    // +0xd8
+    virtual void RemoveWindow(IWindow* window);                 // +0xdc
+    PV2
+    virtual void BringToFront(IWindow* window);                 // +0xe8
+    PV
+    virtual IWindow* FindWindowByID(uint32_t id, bool recursive); // +0xf0
+};
 
-// virtual call: slot at byte offset o of the vtable at *(void**)p
-#define VS(p,o) (*(void**)((*(char**)(p))+(o)))
-#define VC0(RT,p,o)             ((RT(__thiscall*)(void*))VS(p,o))((void*)(p))
-#define VC1(RT,p,o,a)           ((RT(__thiscall*)(void*,int))VS(p,o))((void*)(p),(int)(a))
-#define VC2(RT,p,o,a,b)         ((RT(__thiscall*)(void*,int,int))VS(p,o))((void*)(p),(int)(a),(int)(b))
-#define VC3(RT,p,o,a,b,c)       ((RT(__thiscall*)(void*,int,int,int))VS(p,o))((void*)(p),(int)(a),(int)(b),(int)(c))
-#define VC5F(RT,p,o,a,b,c,d,e)  ((RT(__thiscall*)(void*,int,int,int,float,float))VS(p,o))((void*)(p),(int)(a),(int)(b),(int)(c),(float)(d),(float)(e))
-#define VC2F(RT,p,o,a,b)        ((RT(__thiscall*)(void*,float,float))VS(p,o))((void*)(p),(float)(a),(float)(b))
+struct Message {
+    IWindow* mSrc;             // +0x00
+    IWindow* mDst;             // +0x04
+    uint32_t mType;            // +0x08
+    union {
+        struct { float x, y; int state; int button; } mouse;
+        struct { int a0, a1, a2; union { IWindow* window; int a3; }; } args;
+    };
+};
 
-// message ids (bit patterns of the float immediates in the decompilation)
 enum {
-  MSG_685A2B9 = 0x0685a2b9, SUB_6849100 = 0x06849100,
-  MSG_287259F6 = 0x287259f6, MSG_4CAB02D = 0x04cab02d,
-  ID_742BD88 = 0x0742bd88, ID_742BD98 = 0x0742bd98, ID_742BDB0 = 0x0742bdb0,
-  ID_742BDC0 = 0x0742bdc0, ID_742BDD0 = 0x0742bdd0,
-  ID_742BDE0 = 0x0742bde0, ID_742BE6 = 0x0742cbe6, ID_742CBE0 = 0x0742cbe0,
-  ID_595E0A8 = 0x0595e0a8, ID_74656A0 = 0x074656a0,
-  ID_6F00A884 = 0x6f00a884, ID_76A93C50 = 0x76a93c50, ID_76A93C51 = 0x76a93c51,
-  ID_76A93C53 = 0x76a93c53,
-  R_7957BA8 = 0x07957ba8, R_7918320 = 0x07918320, R_792BF78 = 0x0792bf78,
-  R_7C8A7A8 = 0x07c8a7a8, R_7C8A7D0 = 0x07c8a7d0, R_8918320 = 0x08918320,
-  R_892BF78 = 0x0892bf78, R_9918320 = 0x09918320, R_7EC82C0 = 0x07ec82c0,
-  R_7A44749 = 0x07a44749, R_7A4489C = 0x07a4489c,
-  R_742CD10 = 0x0742cd10, R_742C8F8 = 0x0742c8f8, R_742C8D0 = 0x0742c8d0,
-  R_791A7C8 = 0x0791a7c8, R_7C8A7D1 = 0x07c8a7d1,
-  R_742BDE0 = 0x0742bde0, R_74656A0 = 0x074656a0
+    kMsgMouseDown = 0x06,
+    kMsgMouseUp = 0x07,
+    kMsgMouseMove = 0x08,
+    kMsgMouseLeave = 0x1c,
+    kMsgButtonSelect = 0x04cab02d,
+    kMsgButtonFocus = 0x0685a2b9,
+    kMsgSliderRelease = 0x07a44749,
+    kMsgSliderPress = 0x07a4489c,
+    kMsgComponentActivated = 0x287259f6,
+    kMsgValueChanged = 0xef00a884,
+};
+
+class IWinProc {
+public:
+    PV4 PV2
+    virtual bool HandleUIMessage(IWindow* window, const Message& msg) = 0;
+};
+
+class IWindowManager {
+public:
+    virtual void func0();
+    virtual IWindow* GetMainWindow();                                        // +0x04
+    PV2
+    virtual void SendMsg(IWindow* src, IWindow* dst, const Message& msg, bool inheritable); // +0x10
+    PV8 PV4 PV
+    virtual IWindow* GetMainWindowIndex(int index);                          // +0x48
+    PV2 PV
+    virtual void SetMainWindowIndex(int index, IWindow* window);             // +0x58
+};
+IWindowManager* WindowManager();                                             // 0x0067caa0
+
+class IMessageManager {
+public:
+    PV4 PV
+    virtual void PostMSG(uint32_t messageID, uint32_t data, int flags);      // +0x14
+};
+IMessageManager* MessageServer();                                            // 0x0067dcc0
+
+struct cSPUILayoutManager {
+    IWindow* FindWindowByID(uint32_t id);                                    // 0x00810620
+};
+cSPUILayoutManager* UILayoutManager();                                       // 0x0080fee0
+
+template <typename T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount& operator=(T* p);                                           // 0x00b5f950
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+
+struct string16 {                                                            // eastl::basic_string<wchar_t>
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    uint32_t mAllocator;
+    string16();
+    ~string16() { DeallocateSelf(); }
+    void DeallocateSelf();                                                   // 0x00933960
+};
+extern wchar_t gEmptyString[2];                                              // 0x01667bac
+inline string16::string16() : mpBegin(gEmptyString), mpEnd(gEmptyString), mpCapacity(gEmptyString + 1) {}
+bool operator==(const string16& a, const wchar_t* b);                        // 0x006ab760
+
+struct IValueControl {
+    PV8
+    virtual int GetValue();                                                  // +0x20
+};
+IValueControl* GetValueControl(IWindow* window);                             // 0x005ff6a0
+
+// ---------------------------------------------------------------------------------------------
+// Scenario
+// ---------------------------------------------------------------------------------------------
+struct ResourceKey { uint32_t instanceID, typeID, groupID; };
+struct Triple { int a, b, c; };
+
+struct cScenarioAct {                       // 0x4e0 bytes
+    uint8_t b00;
+    bool mbFlag1;                           // +0x01
+    bool mbFlag2;                           // +0x02
+    uint8_t b03;
+    uint32_t pad04[0x120];
+    float mValue484;                        // +0x484
+    float pad488;
+    float mValue48C;                        // +0x48c
+    float mValue490;                        // +0x490
+    float mValue494;                        // +0x494
+    float mValue498;                        // +0x498
+    float mValue49C;                        // +0x49c
+    float mValue4A0;                        // +0x4a0
+    int mState4A4;                          // +0x4a4
+    int pad4a8;
+    int mSetting4AC;                        // +0x4ac
+    int mSetting4B0;                        // +0x4b0
+    int mSetting4B4;                        // +0x4b4
+    int mSetting4B8;                        // +0x4b8
+    uint32_t pad4bc[9];
+    cScenarioAct(const cScenarioAct& other);  // 0x00dfd080
+    ~cScenarioAct();                          // 0x00dfbba0
+};
+
+struct cScenarioData {
+    ResourceKey mKey;                       // +0x00
+    uint32_t pad0c[5];
+    bool mbFlag20;                          // +0x20
+    int mMode24;                            // +0x24
+    Triple mValue28;                        // +0x28
+    uint32_t pad34[5];
+    int mMode48;                            // +0x48
+    int pad4c;
+    Triple mValue50;                        // +0x50
+    uint32_t pad5c[5];
+    cScenarioAct* mpActs;                   // +0x70
+    bool Check25670();                      // 0x00f25670
+    bool Check253e0();                      // 0x00f253e0
+    bool Check27670();                      // 0x00f27670
+    void GetName(string16& out);            // 0x00f28b80
+    void SetName(const wchar_t* name);      // 0x00f293b0
+};
+
+struct cScenarioResource {
+    cScenarioData* GetData(uint32_t id);    // 0x00f3e8a0
+    int GetActCount();                      // 0x00f3be30
+    void ClearAndPropagate();               // 0x00f40370
+    void Update41a10(uint32_t id);          // 0x00f41a10
+    void CommitEdit();                      // 0x00f427c0
+    void BeginEdit();                       // 0x00f45970
+    void EndEdit();                         // 0x00f45a80
+};
+
+struct cScenarioTerrainUI { void Refresh31d0(); };      // 0x00ee31d0 receiver
+struct cScenarioEditHistory { void Undo7a80(); };       // 0x00ef7a80 receiver
+struct cScenarioEditView {
+    uint32_t pad00[5];
+    struct Sub { void Update39a0(uint32_t id); }* mpSub;  // +0x14 (0x00ed39a0)
+    cScenarioTerrainUI* mpTerrainUI;                       // +0x18
+    cScenarioTerrainUI* GetTerrainUI();                    // 0x006c0200 (returns mpTerrainUI)
+    cScenarioEditHistory* GetHistory(int index);          // 0x00ed4b50
+};
+struct cScenarioTutorialsChecklistUI { void ToggleHint(int a, int b); };  // 0x00efbbe0
+
+struct cScenarioMode {
+    uint32_t pad00[5];
+    cScenarioEditView* mpEditView;          // +0x14
+    uint32_t pad18[0x17];
+    cScenarioResource* mpResource;          // +0x74
+    uint32_t pad78[0x17];
+    cScenarioTutorialsChecklistUI* mpChecklistUI; // +0xd4
+};
+extern cScenarioMode* gScenarioMode;        // 0x016c7aa4
+
+int GetActiveAct();                         // 0x00efc520
+void SetActiveAct(int act);                 // 0x00efc8c0
+int GetRecorderState();                     // 0x00435e90
+void PlayUISound(uint32_t soundID, int state); // 0x00435ed0
+
+struct IScriptHandler {
+    PV4 PV2 PV
+    virtual void OnChanged(uint32_t id);    // +0x1c
+};
+
+// helpers of this module (cdecl)
+bool GetDropTarget(int* target);                                                    // 0x00edd2d0
+int GetGoalIndex(IWindow* window);                                                  // 0x00edcce0
+void Checklist_PropertyDispatcher(cScenarioData* d, cScenarioAct* a, uint32_t id, int target, int goal); // 0x00ee0eb0
+bool CanDropGoal(cScenarioAct* a, uint32_t id, int target, int goal);               // 0x00eddf30
+void CenterWindow(IWindow* window, Point p);
+void ReleaseWindowRef(IWindow* window, bool b);                                      // 0x00e12f80                                        // 0x00806ca0
+bool IsSecondaryButton(IWindow* window);                                            // 0x00edce00
+void ShowModePicker(uint32_t id, IScriptHandler* h, bool secondary, IWindow* w);    // 0x00edfcc0
+IWindow* FindChildByID(IWindow* window, uint32_t id);                               // 0x00edc9e0
+uint32_t GetSliderID(IWindow* window);                                              // 0x008050f0
+void OnSlider8c0(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede8c0
+void OnSlider400(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede400
+void OnSlider2b0(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede2b0
+void OnSlider9f0(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede9f0
+void OnSlider530(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede530
+void OnSlider790(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede790
+void OnSlider660(cScenarioData* d, cScenarioAct* a, float oldValue);                // 0x00ede660
+Triple PickObject(uint32_t kind, uint32_t id, cScenarioData* d);                    // 0x00eef810
+void PreparePicker(IWindow* window, int flags);                                     // 0x00edf2c0
+void PickerCallback();                                                              // 0x00edf370
+void CreateCallbackWinProc(IWindow* window, void (*callback)(), int a, int b, IScriptHandler* h); // 0x008085d0
+bool IsGoalButton(IWindow* window);                                                 // 0x00edcf30
+bool ToggleGoalFlag(cScenarioData* d, cScenarioAct* a, bool b);                     // 0x00ee01e0
+void UpdateGoalFlag(uint32_t id, bool b);                                           // 0x00ee1140
+void ResetTerrain();                                                                // 0x00ecb730
+void ApplyActData(cScenarioData* d, int mode);                                      // 0x00f0bdf0
+void SetActState(uint32_t id, int act, int state);                                  // 0x00ee0960
+void ToggleBoolUndoable(bool* dst, const bool* src);                                // 0x00edfd30
+void PrepareModeChange();                                                           // 0x00f0bea0
+void ApplyModeChange(cScenarioData* d, int mode);                                   // 0x00ecb520
+bool SetActSetting4AC(cScenarioData* d, cScenarioAct* a, int index);                // 0x00ede110
+void ShowActSettingTip(uint32_t id, uint32_t tip);                                  // 0x00ed8950
+bool Checklist_SetProperty4a8(cScenarioData* d, cScenarioAct* a, int index);        // 0x00ee0310
+bool Checklist_SetProperty4b0(cScenarioData* d, cScenarioAct* a, int index);        // 0x00ee0450
+bool Checklist_SetProperty4b4(cScenarioData* d, cScenarioAct* a, int index);        // 0x00ee0590
+bool SetActSetting4B8(cScenarioData* d, cScenarioAct* a, int index, uint32_t id);   // 0x00ee06d0
+void ReadSliderValue(int value, float* dst, bool* changedA, bool* changedB, uint32_t sound); // 0x00edfa30
+void FormatNumber(double value, wchar_t* buf, int size, int decimals);              // 0x00881f00
+void FormatInteger(__int64 value, wchar_t* buf, int size);                          // 0x00881ae0
+void UpdateSliderLabel(IWindow* w, float value, bool a, bool b, uint32_t sound, const wchar_t* text); // 0x00edf830
+float ComputeSliderDisplay(ResourceKey key, float value);                           // 0x00eeebd0
+void SetActFlag(uint32_t id, bool b);                                               // 0x00ee1200
+float GetSliderValue(IWindow* window);                                              // 0x00edcfc0
+
+extern const uint32_t kSetting4ACTips[];    // 0x0148a488
+extern const uint32_t kSetting4B0Tips[];    // 0x0148a4a0
+extern const uint32_t kSetting4B4Tips[];    // 0x0148a4b0
+extern const uint32_t kSetting4B8Tips[];    // 0x0148a4c0
+
+// ---------------------------------------------------------------------------------------------
+// the panel
+// ---------------------------------------------------------------------------------------------
+class cScenarioEditModeUIBase {
+public:
+    virtual ~cScenarioEditModeUIBase();
+    uint32_t m04;
+    uint32_t m08;
+};
+
+namespace UI {
+class cScenarioEditModeScriptUI : public cScenarioEditModeUIBase, public IWinProc {
+public:
+    uint32_t m10;
+    IScriptHandler* mpHandler;              // +0x14
+    IWindow* mpMainWindow;                  // +0x18
+    uint32_t m1c;
+    uint32_t mScenarioID;                   // +0x20
+    int mbTextEditing;                      // +0x24
+    int mGoalPage;                          // +0x28
+    float mSliderStartValue;                // +0x2c
+    AutoRefCount<IWindow> mpDragWindow;     // +0x30
+    AutoRefCount<IWindow> mpDragParent;     // +0x34
+    RectT mDragArea;                        // +0x38
+
+    void Refresh();                         // 0x00ee16f0
+    void EndDrag();                         // 0x00edf410
+    IWindow* FindGoalWindow(uint32_t id);   // 0x00edf070
+    void SelectGoal(int id);                // 0x00edf090
+    void ClearSelection();                  // 0x00edf240
+    void ShowGoalSummary();                 // 0x00ee30d0
+
+    virtual bool HandleUIMessage(IWindow* window, const Message& msg);
 };
 
 // @ 0x00ee5480
-int FUN_00ee5480(void* selfp, int param_2, void* mp)
+bool cScenarioEditModeScriptUI::HandleUIMessage(IWindow* window, const Message& msg)
 {
-  char* self = (char*)selfp;
-  char* m = (char*)mp;
-  int iVar2, iVar5, iVar6;
-  char cVar3;
-  float fVar7, fVar16, fVar21;
-  int* piVar10;
-  void* piVar11;
-  float* pfVar13;
-  void* puVar14;
-  void* puVar23;
-  int uVar8, uVar20, uVar22;
-  unsigned uVar9;
-  int bVar15;
-  char cStack_561 = 0;
-  void* puStack_560 = 0;
-  void* puStack_55c = 0;
-  void* puStack_558 = 0;
-  u8 auStack_550[3];
-  u8 uStack_54d;
-  float afStack_54c[3];
-  void* puStack_540 = 0;
-  void* puStack_53c = 0;
-  char auStack_520[1252];
-  int iStack_3c = 0;
+    if (mScenarioID == (uint32_t)-1 || mScenarioID == (uint32_t)-2)
+        return false;
+    cScenarioData* data = gScenarioMode->mpResource->GetData(mScenarioID);
+    if (!data)
+        return false;
+    cScenarioAct* act = data->mpActs + GetActiveAct();
 
-  int id = I(self, 0x14);
-  if (id == -1 || id == -2) return 0;
-  iVar5 = FUN_00f3e8a0(id);
-  if (iVar5 == 0) return 0;
-  iVar6 = FUN_00efc520();
-  iVar6 = iVar6 * 0x4e0 + I(iVar5, 0x70);
-
-  int mid = I(m, 8);
-  unsigned umid = (unsigned)mid;
-
-  if (umid < 0x0685a2ba) {
-    if (mid == MSG_685A2B9) {
-      if (I(m, 0xc) == SUB_6849100) {
-        piVar11 = (void*)FUN_00edc9e0(I(m, 0), 0x76c61c8);
-        if (piVar11) {
-          piVar10 = (int*)VC0(void*, piVar11, 0x10);
-          VC1(void, piVar10, 0xe8, (int)piVar11);
-        }
-        piVar11 = (void*)FUN_00edc9e0(I(m, 0), 0x2791ba0);
-        if (piVar11) {
-          piVar10 = (int*)VC0(void*, piVar11, 0x10);
-          VC1(void, piVar10, 0xe8, (int)piVar11);
-        }
-      }
-      goto L5a83;
-    }
-    if (umid < 9) {
-      if (mid == 8) {
-        if ((void*)I(self, 0x24) == (void*)I(m, 4)) {
-          pfVar13 = (float*)VC0(void*, (void*)I(m, 4), 0x38);
-          FUN_00806ca0((void*)I(m, 4), *pfVar13 + F(m, 0xc), pfVar13[1] + F(m, 0x10));
-          iVar2 = -1;
-          cVar3 = (char)FUN_00edd2d0(&puStack_560);
-          if (cVar3 != 0) {
-            uVar8 = FUN_00edcce0((void*)I(self, 0x28));
-            cVar3 = (char)FUN_00eddf30(iVar6, I(self, 0x14), puStack_560, uVar8);
-            iVar2 = (-(int)(cVar3 != 0) & 0xff01ff00) - 0x10000;
-          }
-          VC1(void, (void*)I(m, 4), 0x5c, iVar2);
-          fVar7  = F(m, 0xc);
-          fVar21 = F(m, 0x10);
-          puVar23 = auStack_550;
-          VC0(void, (void*)I(m, 4), 0xc0);
-          pfVar13 = afStack_54c;
-          for (iVar2 = 7; iVar2 != 0; --iVar2) {
-            *pfVar13++ = *(float*)m;
-            m += 4;
-          }
-          puStack_540 = puStack_55c;
-          puStack_53c = puStack_558;
-          piVar11 = (void*)SP_WindowManager();
-          piVar10 = (int*)SP_WindowManager();
-          iVar2 = *piVar10;
-          uVar8 = VC5F(int, piVar11, 4, (int)afStack_54c, 0, (int)puVar23, fVar7, fVar21);
-          uVar9 = VC2(unsigned, (void*)iVar2, 0x10, 0, uVar8);
-          (void)uVar9;
-          return 0;
-        }
-      } else if (mid == 6) {
-        piVar11 = (void*)I(m, 4);
-        iVar2 = VC0(int, piVar11, 0x1c);
-        if (iVar2 == R_742C8F8 && I(self, 0x24) == 0) {
-          uVar8 = FUN_00edcce0(piVar11);
-          piVar10 = (int*)FUN_00edf070(uVar8);
-          fVar7 = 0.0f;
-          if (piVar10) {
-            piVar11 = (void*)VC2(int, piVar10, 0xf0, R_742C8D0, 1);
-            fVar7 = (float)FUN_00e12f80(piVar11, 1);
-          }
-        }
-        if (piVar11 != 0 &&
-            (iVar2 = VC0(int, piVar11, 0x1c)) == R_742C8D0 &&
-            I(self, 0x24) == 0) {
-          EA_AutoRefCount_assign(self + 0x24, (int)piVar11);
-          uVar8 = VC0(int, piVar11, 0x38);
-          EA_RectT_assign(self + 0x2c, uVar8);
-          uVar8 = VC0(int, piVar11, 0x10);
-          EA_AutoRefCount_assign(self + 0x28, uVar8);
-          VC3(void, piVar11, 0xc0, (int)&puStack_560, I(self, 0x2c), I(self, 0x30));
-          VC0(void, (void*)I(self, 0x28), 0xdc);
-          piVar10 = (int*)EA_operator_new(0x5b598fa);
-          piVar10 = (int*)cSPUILayoutManager_GetWorldMainWindow((int)piVar10);
-          VC1(void, piVar10, 0xd8, (int)piVar11);
-          VC2F(void, piVar11, 0x70, F(self, 0x2c), F(self, 0x30));
-          piVar10 = (int*)SP_WindowManager();
-          VC2(void, piVar10, 0x58, 1, (int)piVar11);
-          VC1(void, (void*)I(self, 0x28), 0x78, 0x747d67c);
-          FUN_00435e90();
-          SP_KillSetiEffects();
-          FUN_00ed4b50(0);
-          FUN_00ef7a80();
-          return 0;
-        }
-      } else { // mid == 7
-        fVar7 = (float)(mid - 7);
-        if (fVar7 == 0.0f && I(self, 0x24) == I(m, 4)) {
-          puStack_560 = (void*)(self - 0xc);
-          FUN_00edf410();
-          cVar3 = (char)FUN_00edd2d0(&puStack_560);
-          if (cVar3 != 0) {
-            uVar8 = FUN_00edcce0((void*)I(m, 4));
-            FUN_00ee0eb0(iVar5, iVar6, I(self, 0x14), puStack_560, uVar8);
-            if (I(iVar6, 0x4b8) == 5 && puStack_560 == (void*)0xfffffffe)
-              FUN_00efbbe0(0x4f, 0x50);
-          }
-          FUN_00ee16f0();
-          return 0;
-        }
-      }
-      return 0;
-    }
-    if (mid == 0x1c) {   // 3.92364e-44
-      if (F(m, 0xc) == 0.0f) {
-        piVar11 = (void*)I(m, 0x18);
-        iVar2 = VC0(int, piVar11, 0x1c);
-        if (iVar2 == R_7957BA8) {
-          puStack_560 = (void*)&DAT_01667bac;
-          puStack_55c = (void*)&DAT_01667bac;
-          puStack_558 = (void*)&DAT_01667bae;
-          FUN_00f28b80(&puStack_560);
-          uVar8 = VC0(int, piVar11, 0x3c);
-          cVar3 = (char)FUN_00f293b0(uVar8);   // hashtable DoFindNode
-          if (cVar3 == 0) {
-            FUN_00f45970();
-            uVar8 = VC0(int, piVar11, 0x3c);
-            FUN_00f293b0(uVar8);
-            piVar11 = (void*)SP_MessageServer();
-            VC2(void, piVar11, 0x14, 0x795b639, I(self, 0x14));
-            FUN_00f45a80();
-            FUN_00ee16f0();
-          }
-          fVar7 = (float)SP_QualifyNameWithGroup();
-        }
-        if (I(self, 0x18) != 0) {
-          piVar11 = (void*)SP_WindowManager();
-          uVar8 = VC1(int, piVar11, 0x48, 0);
-          fVar7 = (float)FUN_00edc9e0(uVar8, 0x742be58);
-          if (fVar7 == 0.0f) {
-            FUN_00edf240();
-            return 0;
-          }
-        }
-      }
-      return 0;
-    }
-    if (mid != MSG_4CAB02D) return 0;
-    if (I(m, 0xc) == SUB_6849100) {
-      iVar2 = (int)(float)FUN_00edce00(I(m, 0));
-      fVar21 = F(m, 0x10);
-      cVar3 = (char)iVar2;
-      if (cVar3 == 0) fVar16 = F(iVar5, 0x24);
-      else            fVar16 = F(iVar5, 0x48);
-      if (fVar21 == fVar16) return 0;
-      if (fVar21 == 2.8026e-45f) {
-        if (cVar3 == 0) iVar6 = I(iVar5, 0x28);
-        else            iVar6 = I(iVar5, 0x50);
-        if (iVar6 == 0) { FUN_00edfcc0(); goto L5a83; }
-      }
-      FUN_00f45970();
-      if (cVar3 == 0) {
-        cVar3 = (char)FUN_00f27670();
-        if (cVar3 != 0 || (cVar3 = (char)FUN_00f253e0()) != 0) {
-          if ((fVar16 == 2.0f || fVar16 == 1.0f) && fVar21 == 0.0f && I(iVar5, 0x48) == 1)
-            I(iVar5, 0x48) = 0;
-          if (fVar16 == 0.0f && fVar21 == 1.0f && I(iVar5, 0x48) == 0)
-            I(iVar5, 0x48) = 1;
-        }
-        F(iVar5, 0x24) = fVar21;
-        FUN_00ed39a0(I(self, 0x14));
-        VC1(void, (void*)I(self, 8), 0x1c, I(self, 0x14));
-      } else {
-        F(iVar5, 0x48) = fVar21;
-        FUN_00ee16f0();
-      }
-      FUN_00f41a10(I(self, 0x14));
-      FUN_00f45a80();
-    }
-L5a83:
-    FUN_00435e90();
-    goto L5a8e;
-  }
-
-  if (umid > MSG_287259F6) {
-    if (mid != ID_6F00A884 || I(m, 0xc) != SUB_6849100) return 0;
-    iVar2 = FUN_008050f0(I(m, 0));
-    if ((unsigned)iVar2 < R_7C8A7D1) {
-      if (iVar2 == R_7C8A7D0) {
-        uVar8 = 0;
-        piVar11 = (void*)FUN_005ff6a0(I(m, 0));
-        if (piVar11) uVar8 = VC0(int, piVar11, 0x20);
-        pfVar13 = (float*)(iVar6 + 0x494);
-        FUN_00edfa30(uVar8, pfVar13, &cStack_561, &uStack_54d, 0x7cc8a44);
-        uVar20 = (int)(*pfVar13 * 100.0f);
-        FUN_00881f00((double)uVar20, auStack_520, 0x20, 0);
-        fVar7 = *pfVar13;
-        uVar8 = 0x7cc8a44; uVar22 = 0x7c8a7d0;
-        goto L64f0;
-      }
-      if (iVar2 == R_7918320) {
-        piVar11 = (void*)FUN_005ff6a0(I(m, 0));
-        puVar14 = piVar11 ? (void*)VC0(int, piVar11, 0x20) : (void*)0;
-        u8* pbVar1 = (u8*)(iVar6 + 1);
-        puStack_560 = (void*)(iVar6 + 2);
-        FUN_00edfa30(puVar14, (void*)(iVar6 + 0x48c), (void*)(iVar6 + 2), pbVar1, 0xf69d44ec);
-        fVar7 = (float)FUN_00eeebd0();
-        afStack_54c[0] = fVar7;
-        SP_KillSetiEffects();          // EA::Locale::SetNumberString
-        uVar9 = *pbVar1;
-        puVar23 = auStack_520;
-        uVar22 = 0xf69d44ec;
-        uVar8 = FUN_00edf070(0x7918320);
-        FUN_00edf830(uVar8, (unsigned)uVar9, (int)puStack_560);
-        FUN_00ee1200(I(self, 0x14), *pbVar1);
-        return 0;
-      }
-      if (iVar2 != R_792BF78) {
-        if (iVar2 != R_7C8A7A8) return 0;
-        piVar11 = (void*)FUN_005ff6a0(I(m, 0));
-        puVar14 = piVar11 ? (void*)VC0(int, piVar11, 0x20) : (void*)0;
-        iVar2 = I(iVar5, 4);
-        uVar8 = 0;
-        if (iVar2 == 0x24682294) uVar8 = 0x7cc8a4b;
-        else if (iVar2 == 0x2b978c46) uVar8 = 0x7cc8a48;
-        else if (iVar2 == 0x476a98c7) uVar8 = 0x7cc8a4b;
-        pfVar13 = (float*)(iVar6 + 0x490);
-        FUN_00edfa30(puVar14, pfVar13, &uStack_54d, &cStack_561, uVar8);
-        iVar5 = I(iVar5, 4);
-        if (iVar5 == 0x24682294 || iVar5 == 0x476a98c7) {
-          uVar20 = (int)(*pfVar13 * 100.0f);
-          FUN_00881f00((double)uVar20, auStack_520, 0x20, 0);
-        } else if (iVar5 == 0x2b978c46) {
-          FUN_00edfcc0();
-        }
-        fVar7 = *pfVar13;
-        uVar22 = 0x7c8a7a8;
-        goto L64f0;
-      }
-      fVar7 = FUN_00edcfc0(I(m, 0));
-      afStack_54c[0] = fVar7;
-      bVar15 = F(iVar6, 0x484) != fVar7 * 175.0f;
-      F(iVar6, 0x484) = fVar7 * 175.0f;
-      if (fVar7 == 1.0f) FUN_00efbbe0(0x52, 0x53);
-    } else if (iVar2 == R_8918320) {
-      fVar7 = FUN_00edcfc0(I(m, 0)) * 2000.0f;
-      fVar16 = F(iVar6, 0x49c);
-      bVar15 = fVar16 != fVar7;
-      F(iVar6, 0x49c) = fVar7;
-    } else if (iVar2 == R_892BF78) {
-      fVar7 = FUN_00edcfc0(I(m, 0)) * 50.0f;
-      fVar16 = F(iVar6, 0x498);
-      bVar15 = fVar16 != fVar7;
-      F(iVar6, 0x498) = fVar7;
-    } else {
-      if (iVar2 != R_9918320) return 0;
-      fVar7 = FUN_00edcfc0(I(m, 0)) * 49.0f + 1.0f;
-      fVar16 = F(iVar6, 0x4a0);
-      bVar15 = fVar16 != fVar7;
-      F(iVar6, 0x4a0) = fVar7;
-    }
-    if (!bVar15) return 0;
-    goto L6802;
-  }
-
-  if (mid != 0x0742bde0) {                 // 1.3453206e-14
-    if (mid == R_7A44749) {
-      if (I(m, 0xc) == R_742CD10) {
-        iVar2 = FUN_008050f0(I(m, 0));
-        if ((unsigned)iVar2 < R_7C8A7D1) {
-          if (iVar2 == R_7C8A7D0)      FUN_00ede9f0(iVar5, iVar6, I(self, 0x20));
-          else if (iVar2 == R_7918320) { FUN_00ede2b0(iVar5, iVar6, I(self, 0x20)); goto L5c44; }
-          else if (iVar2 == R_792BF78) { FUN_00ede400(iVar5, iVar6, I(self, 0x20)); goto L5c16; }
-          else if (iVar2 == R_7C8A7A8) FUN_00ede8c0(iVar5, iVar6, I(self, 0x20));
-          else return 0;
-        } else {
-          if (iVar2 == R_8918320)      FUN_00ede660(iVar5, iVar6, I(self, 0x20));
-          else if (iVar2 == R_892BF78) { FUN_00ede790(iVar5, iVar6, I(self, 0x20)); goto L5c44; }
-          else if (iVar2 == R_9918320) { FUN_00ede530(iVar5, iVar6, I(self, 0x20)); goto L5c16; }
-          else return 0;
-        }
-        FUN_00f427c0();
-        return 0;
-      }
-    } else if (mid == R_7A4489C && I(m, 0xc) == R_742CD10) {
-      iVar2 = FUN_008050f0(I(m, 0));
-      if ((unsigned)iVar2 < R_7C8A7D1) {
-        if (iVar2 == R_7C8A7D0)      uVar8 = I(iVar6, 0x494);
-        else if (iVar2 == R_7918320) { uVar8 = I(iVar6, 0x48c); goto L5b3c; }
-        else if (iVar2 == R_792BF78) { uVar8 = I(iVar6, 0x484); goto L5b17; }
-        else if (iVar2 == R_7C8A7A8) uVar8 = I(iVar6, 0x490);
-        else return 0;
-      } else {
-        if (iVar2 == R_8918320)      { uVar8 = I(iVar6, 0x498); goto L5b3c; }
-        else if (iVar2 == R_892BF78) { uVar8 = I(iVar6, 0x4a0); goto L5b17; }
-        else if (iVar2 == R_9918320) uVar8 = I(iVar6, 0x49c);
-        else return 0;
-      }
-      I(self, 0x20) = uVar8;
-      FUN_00f45970();
-      return 0;
-    }
-    return 0;
-  }
-
-  // ---- mid == 0x0742bde0 -------------------------------------------------------------
-  {
-  int sub = I(m, 0xc);
-  if ((int)sub < 0x0742bde1) {
-    if (sub == R_742BDE0) {
-      cVar3 = (char)FUN_00edcf30(I(m, 0));
-      puStack_560 = (void*)(int)cVar3;
-      puVar14 = puStack_560;
-      cVar3 = (char)FUN_00ee01e0();
-      if (cVar3 != 0) {
-        FUN_00ee16f0();
-        FUN_00ee1140(I(self, 0x14), (int)puVar14);
-        FUN_00f40370();
-      }
-      FUN_00f427c0();
-      FUN_00435e90();
-      goto L5a8e;
-    }
-    if ((int)sub < 0x0742bd99) {
-      if (sub == 0x0742bd98) goto L5e72;
-      if (sub == 0x03791004) { FUN_00edce00(I(m, 0), I(self, 0xc)); FUN_00edfcc0(); return 0; }
-      if (sub == 0x03791005) {
-        uVar8 = FUN_00435e90();
-        uVar22 = 0x13bed0aa;
-        SP_KillSetiEffects();
-        fVar7 = (float)FUN_00eef810(afStack_54c, 0xb10e526f, I(self, 0x14), iVar5, uVar22, uVar8);
-        if (afStack_54c[0] != 0.0f) {
-          FUN_00f45970();
-          puStack_560 = (void*)I(self, 0xc);
-          uVar8 = I(self, 8);
-          FUN_00edf2c0((int)puStack_560, 0);
-          FUN_008085d0((int)puStack_560, (int)FUN_00edf370, 2, 0, uVar8);
-          cVar3 = (char)FUN_00edce00(I(m, 0));
-          if (cVar3 == 0) {
-            F(iVar5, 0x28) = afStack_54c[0];
-            F(iVar5, 0x2c) = afStack_54c[1];
-            F(iVar5, 0x30) = afStack_54c[2];
-            FUN_00ed39a0(I(self, 0x14));
-            VC1(void, (void*)I(self, 8), 0x1c, I(self, 0x14));
-          } else {
-            F(iVar5, 0x50) = afStack_54c[0];
-            F(iVar5, 0x54) = afStack_54c[1];
-            F(iVar5, 0x58) = afStack_54c[2];
-            FUN_00ee16f0();
-          }
-          FUN_00f41a10(I(self, 0x14));
-          FUN_00f45a80();
-          return 0;
-        }
-        return 0;
-      }
-      if (sub == 0x0595e0a8) { FUN_00ee30d0(); FUN_00435e90(); goto L5a8e; }
-    } else if (sub == 0x0742bdb0 || sub == 0x0742bdc0 ||
-               sub == 0x0742bdd0 /* || sub == 0x0742bde0 already handled */) {
-      goto L5e72;
-    }
-  } else {
-    if ((int)sub < 0x07ec82c1) {
-      if (sub == R_7EC82C0) {
-        iVar5 = FUN_00f3e8a0(I(self, 0x14));
-        iVar6 = FUN_00efc520();
-        FUN_00dfd080(iVar6 * 0x4e0 + I(iVar5, 0x70));
-        if (iStack_3c == -1) { FUN_00435e90(); SP_KillSetiEffects(); uVar22 = FUN_00efc520(10); }
-        else                 { FUN_00435e90(); SP_KillSetiEffects(); uVar22 = FUN_00efc520(0xffffffff); }
-        FUN_00ee0960(I(self, 0x14), uVar22);
-        FUN_00ee16f0();
-        FUN_00dfbba0();
-        return 0;
-      }
-      if (sub == R_74656A0) {
-        FUN_00ecb730();
-        uVar8 = FUN_00f3e8a0(I(self, 0x14));
-        FUN_00f0bdf0(uVar8, 2);
-      } else {
-        if (sub != R_791A7C8 && sub != 0x0791a7c0) goto L6102;
-        I(self, 0x1c) = I(self, 0x1c) + (int)(sub == R_791A7C8) * 2 - 1;
-        FUN_00435e90();
-        SP_KillSetiEffects();
-      }
-L6802:
-      FUN_00ee16f0();
-      return 0;
-    }
-    if (sub > ID_76A93C50 + 0xffffffff /* > 0x76a93c4f */) {
-      if (sub < ID_76A93C51 + 1 /* < 0x76a93c52 */) {
-        puStack_560 = (void*)(int)I(iVar5, 0x74);
-        if (I(iVar5, 0x14) != 0 && puStack_560 != 0) {
-          iVar2 = FUN_006c0200();
-          if (iVar2 != 0) {
-            iVar5 = FUN_00efc520();
-            iVar6 = FUN_00f3be30();
-            FUN_00efc8c0((int)((unsigned)(I(m, 0xc) == ID_76A93C51) * 2 - 1 + iVar5) % iVar6);
-            FUN_00ee31d0();
-            FUN_00ee16f0();
-            FUN_00435e90();
-            goto L5a8e;
-          }
-        }
-        return 0;
-      }
-      if (sub == ID_76A93C53) {
-        cStack_561 = B(iVar5, 0x20) == 0;
-        FUN_00edfd30(iVar5 + 0x20, &cStack_561);
-        FUN_00435e90();
-        SP_KillSetiEffects();
-        return 0;
-      }
-    }
-  }
-  }
-
-L6102:
-  if ((int)mid < 0x0742cbe0 || (int)mid > 0x0742cbe5) return 0;
-  cStack_561 = 0;
-  FUN_00edf240();
-  piVar11 = (void*)VC0(int, (void*)I(m, 0), 0x10);
-  piVar11 = (void*)VC0(int, piVar11, 0x10);
-  uVar8 = VC0(int, piVar11, 0x1c);
-  switch (uVar8) {
-    case ID_742BD88: {
-      int sel = I(m, 0xc) - 0x0742cbe0;
-      if (I(m, 0x18) == 2) {
-        if (sel != 5) {
-          cVar3 = (char)FUN_00f25670();
-          if (cVar3 != 0) {
-            FUN_00f0bea0();
-            uVar8 = FUN_00f3e8a0(I(self, 0x14));
-            FUN_00ecb520(uVar8, 1);
-            FUN_00ee16f0();
+    switch (msg.mType) {
+    case kMsgMouseUp: {
+        if (mpDragWindow != msg.mDst)
             break;
-          }
-          goto L61b2;
+        EndDrag();
+        int target;
+        if (GetDropTarget(&target)) {
+            Checklist_PropertyDispatcher(data, act, mScenarioID, target, GetGoalIndex(msg.mDst));
+            if (act->mSetting4B8 == 5 && target == -2)
+                gScenarioMode->mpChecklistUI->ToggleHint(0x4f, 0x50);
         }
-L61b9:
-        cVar3 = (char)FUN_00f25670();
-        if (cVar3 == 0) goto L61e8;
-        FUN_00f0bea0();
-        uVar8 = FUN_00f3e8a0(I(self, 0x14));
-        FUN_00ecb520(uVar8, 0);
-      } else {
-L61b2:
-        if (sel == 5) goto L61b9;
-L61e8:
-        FUN_00ecb730();
-      }
-      cVar3 = (char)FUN_00ede110(iVar5, iVar6, sel);
-      cStack_561 = cVar3;
-      FUN_00ee16f0();
-      if (cVar3 != 0)
-        FUN_00ed8950(I(self, 0x14), DAT_0148a488[I(iVar6, 0x4ac)]);
-      FUN_00f427c0();
-      if (I(iVar6, 0x4ac) == 5) { uVar8 = 0x49; uVar22 = 0x4a; goto L639a; }
-      break;
+        Refresh();
+        return false;
     }
-    case ID_742BD98:
-      cStack_561 = (char)FUN_00ee0310(iVar5, iVar6, I(m, 0xc) - 0x0742cbe0);
-      if (cStack_561 != 0) FUN_00f427c0();
-      break;
-    case ID_742BDB0:
-      cStack_561 = (char)FUN_00ee0450(iVar5, iVar6, I(m, 0xc) - 0x0742cbe0);
-      if (cStack_561 != 0) {
-        FUN_00f427c0();
-        FUN_00ed8950(I(self, 0x14), DAT_0148a4a0[I(iVar6, 0x4b0)]);
-      }
-      break;
-    case ID_742BDC0:
-      cStack_561 = (char)FUN_00ee0590(iVar5, iVar6, I(m, 0xc) - 0x0742cbe0);
-      if (cStack_561 != 0) {
-        FUN_00f427c0();
-        FUN_00ed8950(I(self, 0x14), DAT_0148a4b0[I(iVar6, 0x4b4)]);
-      }
-      break;
-    case ID_742BDD0:
-      cStack_561 = (char)FUN_00ee06d0();
-      if (cStack_561 != 0) {
-        FUN_00ed8950(I(self, 0x14), DAT_0148a4c0[I(iVar6, 0x4b8)]);
-        FUN_00f427c0();
-      }
-      if (I(iVar6, 0x4b8) == 5)      { uVar8 = 0x4c; uVar22 = 0x4d; }
-      else if (I(iVar6, 0x4b8) == 4) { uVar8 = 0x5f; uVar22 = 0x60; }
-      else break;
-L639a:
-      FUN_00efbbe0(uVar8, uVar22);
-      break;
-  }
-  FUN_00435e90();
-  SP_KillSetiEffects();
-  if (cStack_561 != 0) { FUN_00ee16f0(); return 0; }
-  return 0;
 
-L5a8e:
-  SP_KillSetiEffects();
-  (void)uVar9;
-  return 0;
+    case kMsgMouseDown: {
+        IWindow* w = msg.mDst;
+        if (w->GetControlID() == 0x742c8f8 && mpDragWindow == 0) {
+            IWindow* goal = FindGoalWindow(GetGoalIndex(w));
+            if (goal) {
+                w = goal->FindWindowByID(0x742c8d0, true);
+                ReleaseWindowRef(w, true);
+            }
+        }
+        if (!w || w->GetControlID() != 0x742c8d0 || mpDragWindow != 0)
+            break;
+        mpDragWindow = w;
+        mDragArea = w->GetRealArea();
+        mpDragParent = w->GetParent();
+        Point p = w->ToGlobalCoordinates(Point(mDragArea.x1, mDragArea.y1));
+        mpDragParent->RemoveWindow(w);
+        UILayoutManager()->FindWindowByID(0x5b598fa)->AddWindow(w);
+        w->SetLayoutLocation(p.x, p.y);
+        WindowManager()->SetMainWindowIndex(1, w);
+        mpDragWindow->SetCursorID(0x747d67c);
+        PlayUISound(0xc29e2486, GetRecorderState());
+        gScenarioMode->mpEditView->GetHistory(0)->Undo7a80();
+        return false;
+    }
 
-L5b17:
-  I(self, 0x20) = uVar8;
-  FUN_00f45970();
-  return 0;
+    case kMsgMouseMove: {
+        if (mpDragWindow != msg.mDst)
+            break;
+        const RectT& area = msg.mDst->GetRealArea();
+        CenterWindow(msg.mDst, Point(area.x1 + msg.mouse.x, area.y1 + msg.mouse.y));
+        uint32_t color = 0xffffffff;
+        int target;
+        if (GetDropTarget(&target))
+            color = CanDropGoal(act, mScenarioID, target, GetGoalIndex(mpDragParent)) ? 0xff00ff00 : 0xffff0000;
+        msg.mDst->SetShadeColor(color);
+        Point p = msg.mDst->ToGlobalCoordinates(Point(msg.mouse.x, msg.mouse.y));
+        Message m = msg;
+        m.mouse.x = p.x;
+        m.mouse.y = p.y;
+        WindowManager()->SendMsg(0, WindowManager()->GetMainWindow(), m, false);
+        return false;
+    }
 
-L5b3c:
-  I(self, 0x20) = uVar8;
-  FUN_00f45970();
-  return 0;
+    case kMsgButtonSelect: {
+        if (msg.args.a0 == 0x6849100) {
+            bool secondary = IsSecondaryButton(msg.mSrc);
+            int mode = msg.args.a1;
+            int current = secondary ? data->mMode48 : data->mMode24;
+            if (mode == current)
+                break;
+            if (mode == 2 && (secondary ? data->mValue50.a == 0 : data->mValue28.a == 0)) {
+                ShowModePicker(mScenarioID, mpHandler, secondary, mpMainWindow);
+            } else {
+                gScenarioMode->mpResource->BeginEdit();
+                if (secondary) {
+                    data->mMode48 = mode;
+                    Refresh();
+                } else {
+                    if (data->Check27670() || data->Check253e0()) {
+                        if ((current == 2 || current == 1) && mode == 0 && data->mMode48 == 1)
+                            data->mMode48 = 0;
+                        if (current == 0 && mode == 1 && data->mMode48 == 0)
+                            data->mMode48 = 1;
+                    }
+                    data->mMode24 = mode;
+                    gScenarioMode->mpEditView->mpSub->Update39a0(mScenarioID);
+                    mpHandler->OnChanged(mScenarioID);
+                }
+                gScenarioMode->mpResource->Update41a10(mScenarioID);
+                gScenarioMode->mpResource->EndEdit();
+            }
+        }
+        PlayUISound(0xe76c9b4f, GetRecorderState());
+        return false;
+    }
 
-L5c16:
-  FUN_00f427c0();
-  return 0;
+    case kMsgMouseLeave: {
+        if (msg.args.a0 != 0)
+            break;
+        IWindow* w = msg.args.window;
+        if (w->GetControlID() == 0x7957ba8) {
+            string16 name;
+            data->GetName(name);
+            if (!(name == w->GetCaption())) {
+                gScenarioMode->mpResource->BeginEdit();
+                data->SetName(w->GetCaption());
+                MessageServer()->PostMSG(0x795b639, mScenarioID, 0);
+                gScenarioMode->mpResource->EndEdit();
+                Refresh();
+            }
+        }
+        if (mbTextEditing != 0) {
+            if (!FindChildByID(WindowManager()->GetMainWindowIndex(0), 0x742be58)) {
+                ClearSelection();
+                return false;
+            }
+        }
+        break;
+    }
 
-L5c44:
-  FUN_00f427c0();
-  return 0;
+    case kMsgButtonFocus: {
+        if (msg.args.a0 == 0x6849100) {
+            IWindow* w = FindChildByID(msg.mSrc, 0x76c61c8);
+            if (w)
+                w->GetParent()->BringToFront(w);
+            w = FindChildByID(msg.mSrc, 0x2791ba0);
+            if (w)
+                w->GetParent()->BringToFront(w);
+        }
+        PlayUISound(0xe76c9b4f, GetRecorderState());
+        return false;
+    }
 
-L5e72:
-  cVar3 = (char)FUN_00edcf30(I(m, 0));
-  if (cVar3 == 0) { FUN_00edf240(); FUN_00435e90(); }
-  else            { FUN_00edf090(I(m, 0xc)); FUN_00435e90(); }
-  SP_KillSetiEffects();
-  return 0;
+    case kMsgSliderPress: {
+        if (msg.args.a0 != 0x742cd10)
+            break;
+        switch (GetSliderID(msg.mSrc)) {
+        case 0x7c8a7a8: mSliderStartValue = act->mValue490; break;
+        case 0x792bf78: mSliderStartValue = act->mValue484; break;
+        case 0x7918320: mSliderStartValue = act->mValue48C; break;
+        case 0x7c8a7d0: mSliderStartValue = act->mValue494; break;
+        case 0x8918320: mSliderStartValue = act->mValue49C; break;
+        case 0x892bf78: mSliderStartValue = act->mValue498; break;
+        case 0x9918320: mSliderStartValue = act->mValue4A0; break;
+        default: return false;
+        }
+        gScenarioMode->mpResource->BeginEdit();
+        return false;
+    }
 
-L64f0:
-  uVar20 = 0;
-  uVar22 = FUN_00edf070(uVar22);
-  FUN_00edf830(uVar22, (unsigned)(int)fVar7, uVar20, uVar8);
-  return 0;
+    case kMsgSliderRelease: {
+        if (msg.args.a0 != 0x742cd10)
+            break;
+        switch (GetSliderID(msg.mSrc)) {
+        case 0x7c8a7a8: OnSlider8c0(data, act, mSliderStartValue); break;
+        case 0x792bf78: OnSlider400(data, act, mSliderStartValue); break;
+        case 0x7918320: OnSlider2b0(data, act, mSliderStartValue); break;
+        case 0x7c8a7d0: OnSlider9f0(data, act, mSliderStartValue); break;
+        case 0x9918320: OnSlider530(data, act, mSliderStartValue); break;
+        case 0x892bf78: OnSlider790(data, act, mSliderStartValue); break;
+        case 0x8918320: OnSlider660(data, act, mSliderStartValue); break;
+        default: return false;
+        }
+        gScenarioMode->mpResource->CommitEdit();
+        return false;
+    }
+
+    case kMsgComponentActivated: {
+        int id = msg.args.a0;
+        switch (id) {
+        case 0x595e0a8:
+            ShowGoalSummary();
+            PlayUISound(0x1db24d95, GetRecorderState());
+            return false;
+
+        case 0x3791005: {
+            PlayUISound(0x13bed0aa, GetRecorderState());
+            Triple picked = PickObject(0xb10e526f, mScenarioID, data);
+            if (picked.a == 0)
+                return false;
+            gScenarioMode->mpResource->BeginEdit();
+            IWindow* mainWindow = mpMainWindow;
+            PreparePicker(mainWindow, 0);
+            CreateCallbackWinProc(mainWindow, PickerCallback, 2, 0, mpHandler);
+            if (IsSecondaryButton(msg.mSrc)) {
+                data->mValue50 = picked;
+                Refresh();
+            } else {
+                data->mValue28 = picked;
+                gScenarioMode->mpEditView->mpSub->Update39a0(mScenarioID);
+                mpHandler->OnChanged(mScenarioID);
+            }
+            gScenarioMode->mpResource->Update41a10(mScenarioID);
+            gScenarioMode->mpResource->EndEdit();
+            return false;
+        }
+
+        case 0x3791004:
+            ShowModePicker(mScenarioID, mpHandler, IsSecondaryButton(msg.mSrc), mpMainWindow);
+            return false;
+
+        case 0x742bd98:
+        case 0x742bdb0:
+        case 0x742bdc0:
+        case 0x742bdd0:
+            if (IsGoalButton(msg.mSrc)) {
+                SelectGoal(msg.args.a0);
+                PlayUISound(0x6e649e21, GetRecorderState());
+            } else {
+                ClearSelection();
+                PlayUISound(0xcc089e57, GetRecorderState());
+            }
+            return false;
+
+        case 0x742bde0: {
+            bool goal = IsGoalButton(msg.mSrc);
+            if (ToggleGoalFlag(data, act, goal)) {
+                Refresh();
+                UpdateGoalFlag(mScenarioID, goal);
+                gScenarioMode->mpResource->ClearAndPropagate();
+            }
+            gScenarioMode->mpResource->CommitEdit();
+            PlayUISound(0x7b802df5, GetRecorderState());
+            return false;
+        }
+
+        case 0x791a7c0:
+        case 0x791a7c8:
+            mGoalPage += (msg.args.a0 == 0x791a7c8) ? 1 : -1;
+            PlayUISound(0xe10deda0, GetRecorderState());
+            Refresh();
+            return false;
+
+        case 0x74656a0:
+            ResetTerrain();
+            ApplyActData(gScenarioMode->mpResource->GetData(mScenarioID), 2);
+            Refresh();
+            return false;
+
+        case 0x7ec82c0: {
+            cScenarioData* d = gScenarioMode->mpResource->GetData(mScenarioID);
+            cScenarioAct actCopy(d->mpActs[GetActiveAct()]);
+            if (actCopy.mState4A4 == -1) {
+                PlayUISound(0x6e649e21, GetRecorderState());
+                SetActState(mScenarioID, GetActiveAct(), 0xa);
+            } else {
+                PlayUISound(0xcc089e57, GetRecorderState());
+                SetActState(mScenarioID, GetActiveAct(), -1);
+            }
+            Refresh();
+            return false;
+        }
+
+        case 0x76a93c53: {
+            bool value = !data->mbFlag20;
+            ToggleBoolUndoable(&data->mbFlag20, &value);
+            PlayUISound(0xe76c9b4f, GetRecorderState());
+            return false;
+        }
+
+        case 0x76a93c50:
+        case 0x76a93c51: {
+            cScenarioEditView* view = gScenarioMode->mpEditView;
+            cScenarioResource* resource = gScenarioMode->mpResource;
+            if (!view || !resource)
+                return false;
+            cScenarioTerrainUI* terrainUI = view->GetTerrainUI();
+            if (!terrainUI)
+                return false;
+            SetActiveAct((GetActiveAct() + (msg.args.a0 == 0x76a93c51 ? 1 : -1)) % resource->GetActCount());
+            terrainUI->Refresh31d0();
+            Refresh();
+            PlayUISound(0xe10deda0, GetRecorderState());
+            return false;
+        }
+
+        default:
+            if (id >= 0x742cbe0 && id < 0x742cbe6) {
+                bool changed = false;
+                ClearSelection();
+                switch (msg.mSrc->GetParent()->GetParent()->GetControlID()) {
+                case 0x742bd88: {
+                    int index = msg.args.a0 - 0x742cbe0;
+                    if (msg.args.a3 == 2 && index != 5 && data->Check25670()) {
+                        PrepareModeChange();
+                        ApplyModeChange(gScenarioMode->mpResource->GetData(mScenarioID), 1);
+                        Refresh();
+                        break;
+                    }
+                    if (index == 5 && data->Check25670()) {
+                        PrepareModeChange();
+                        ApplyModeChange(gScenarioMode->mpResource->GetData(mScenarioID), 0);
+                    } else {
+                        ResetTerrain();
+                    }
+                    changed = SetActSetting4AC(data, act, index);
+                    Refresh();
+                    if (changed)
+                        ShowActSettingTip(mScenarioID, kSetting4ACTips[act->mSetting4AC]);
+                    gScenarioMode->mpResource->CommitEdit();
+                    if (act->mSetting4AC == 5)
+                        gScenarioMode->mpChecklistUI->ToggleHint(0x49, 0x4a);
+                    break;
+                }
+                case 0x742bd98:
+                    changed = Checklist_SetProperty4a8(data, act, msg.args.a0 - 0x742cbe0);
+                    if (changed)
+                        gScenarioMode->mpResource->CommitEdit();
+                    break;
+                case 0x742bdb0:
+                    changed = Checklist_SetProperty4b0(data, act, msg.args.a0 - 0x742cbe0);
+                    if (changed) {
+                        gScenarioMode->mpResource->CommitEdit();
+                        ShowActSettingTip(mScenarioID, kSetting4B0Tips[act->mSetting4B0]);
+                    }
+                    break;
+                case 0x742bdc0:
+                    changed = Checklist_SetProperty4b4(data, act, msg.args.a0 - 0x742cbe0);
+                    if (changed) {
+                        gScenarioMode->mpResource->CommitEdit();
+                        ShowActSettingTip(mScenarioID, kSetting4B4Tips[act->mSetting4B4]);
+                    }
+                    break;
+                case 0x742bdd0: {
+                    changed = SetActSetting4B8(data, act, msg.args.a0 - 0x742cbe0, mScenarioID);
+                    if (changed) {
+                        ShowActSettingTip(mScenarioID, kSetting4B8Tips[act->mSetting4B8]);
+                        gScenarioMode->mpResource->CommitEdit();
+                    }
+                    int setting = act->mSetting4B8;
+                    if (setting == 5)
+                        gScenarioMode->mpChecklistUI->ToggleHint(0x4c, 0x4d);
+                    else if (setting == 4)
+                        gScenarioMode->mpChecklistUI->ToggleHint(0x5f, 0x60);
+                    break;
+                }
+                }
+                PlayUISound(0xe76c9b4f, GetRecorderState());
+                if (changed)
+                    Refresh();
+            }
+            break;
+        }
+        break;
+    }
+
+    case kMsgValueChanged: {
+        if (msg.args.a0 != 0x742cd10)
+            break;
+        bool changed;
+        wchar_t text[0x20];
+        switch (GetSliderID(msg.mSrc)) {
+        case 0x7c8a7a8: {
+            IValueControl* control = GetValueControl(msg.mSrc);
+            int value = control ? control->GetValue() : 0;
+            uint32_t sound = 0;
+            switch (data->mKey.typeID) {
+            case 0x24682294:
+            case 0x476a98c7:
+                sound = 0x7cc8a4b;
+                break;
+            case 0x2b978c46:
+                sound = 0x7cc8a48;
+                break;
+            }
+            bool changedA, changedB;
+            ReadSliderValue(value, &act->mValue490, &changedA, &changedB, sound);
+            switch (data->mKey.typeID) {
+            case 0x24682294:
+            case 0x476a98c7:
+                FormatNumber((double)(int)(act->mValue490 * 100.0f), text, 0x20, 0);
+                break;
+            case 0x2b978c46:
+                FormatInteger((__int64)act->mValue490, text, 0x20);
+                break;
+            }
+            UpdateSliderLabel(FindGoalWindow(0x7c8a7a8), act->mValue490, false, false, sound, text);
+            return false;
+        }
+        case 0x792bf78: {
+            float value = GetSliderValue(msg.mSrc);
+            float scaled = value * 175.0f;
+            changed = act->mValue484 != scaled;
+            act->mValue484 = scaled;
+            if (value == 1.0f)
+                gScenarioMode->mpChecklistUI->ToggleHint(0x52, 0x53);
+            break;
+        }
+        case 0x7918320: {
+            IValueControl* control = GetValueControl(msg.mSrc);
+            int value = control ? control->GetValue() : 0;
+            ReadSliderValue(value, &act->mValue48C, &act->mbFlag2, &act->mbFlag1, 0xf69d44ec);
+            float display = ComputeSliderDisplay(data->mKey, act->mValue48C);
+            FormatInteger(CeilToInt(display), text, 0x20);
+            UpdateSliderLabel(FindGoalWindow(0x7918320), act->mValue48C, act->mbFlag2, act->mbFlag1,
+                              0xf69d44ec, text);
+            SetActFlag(mScenarioID, act->mbFlag1);
+            return false;
+        }
+        case 0x7c8a7d0: {
+            IValueControl* control = GetValueControl(msg.mSrc);
+            int value = control ? control->GetValue() : 0;
+            bool changedA, changedB;
+            ReadSliderValue(value, &act->mValue494, &changedA, &changedB, 0x7cc8a44);
+            FormatNumber((double)(int)(act->mValue494 * 100.0f), text, 0x20, 0);
+            UpdateSliderLabel(FindGoalWindow(0x7c8a7d0), act->mValue494, false, false, 0x7cc8a44, text);
+            return false;
+        }
+        case 0x9918320: {
+            float value = GetSliderValue(msg.mSrc) * 49.0f + 1.0f;
+            changed = act->mValue4A0 != value;
+            act->mValue4A0 = value;
+            break;
+        }
+        case 0x892bf78: {
+            float value = GetSliderValue(msg.mSrc) * 50.0f;
+            changed = act->mValue498 != value;
+            act->mValue498 = value;
+            break;
+        }
+        case 0x8918320: {
+            float value = GetSliderValue(msg.mSrc) * 2000.0f;
+            changed = act->mValue49C != value;
+            act->mValue49C = value;
+            break;
+        }
+        default:
+            return false;
+        }
+        if (changed)
+            Refresh();
+        return false;
+    }
+    }
+    return false;
 }
+}  // namespace UI

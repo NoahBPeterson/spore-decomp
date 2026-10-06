@@ -1,1 +1,1 @@
-459370 SP::CapabilityManager::GetPropIDForAbility  # decomp_all/index_5.csv real name
+00459370 SP::CapabilityManager::GetPropIDForAbility  # PDB anchor name (symbols/pdb_names.json), byte-exact

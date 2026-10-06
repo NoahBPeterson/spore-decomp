@@ -1,1 +1,5 @@
-00452080  SP::cSPEditorBlock::BuildNewPhysicsShape   # builds hkRigidBody shape for the block
+00452080  SP::cSPEditorBlock::BuildNewPhysicsShape   # builds hkRigidBody shape for the block (byte-exact)
+00453250  hkMassProperties::hkMassProperties   # zeroes the 0x50-byte struct; called on the massProperties local before hkInertiaTensorComputer (PDB "callee-scored" name GetHavokTransformFromMatrix is wrong)
+00453400  hkGeometry::hkGeometry   # two empty hkArrays (cap 0x80000000) at +0/+0xc
+00453460  hkGeometry::~hkGeometry   # releases m_triangles (12-byte elems) then m_vertices
+010edf70  hkGeometryUtility::createConvexGeometry   # "LtCreateConvex"/"Hull" timer; (hkStridedVertices&, hkGeometry&, hkArray<hkVector4>& planes, 1)

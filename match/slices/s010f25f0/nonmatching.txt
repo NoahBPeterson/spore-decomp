@@ -1,0 +1,1 @@
+010f25f0  2739  complete; Havok 3.1 prebuilt x87 module from an older compiler (rdtsc store/reload, call [reg+N] vcalls, merged hkArray dtors) not reproducible with cl 15; flags /O2 /MD /Gy /TP /GS-

@@ -1,0 +1,1 @@
+00515710 nSPSkinner::cPaintVarEvalList::Apply  # dev PDB ?Apply@cPaintVarEvalList@nSPSkinner@@QBEXQAMMABUcSPVector3@@1I@Z (SPSkinnerPaintEval.obj); same callees/switch (kPaintVarMod*) as dev twin 0xcbb9c0

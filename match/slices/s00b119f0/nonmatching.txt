@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00b119f0 2531 complete cTerrainCameraController interpolation update; same 19 calls in order, size 3769 vs 3732; SSE register choice / constant CSE / x87-vs-SSE normalize multiply differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)

@@ -1,2 +1,1 @@
-# va  Name  # evidence
-005d7520  SP::cEditorSystem::Init  # card
+005d7520 SP::cEditorSystem::Init  # dev PDB ?Init@cEditorSystem@SP@@ (SPEditorSystem.obj, dev twin 0xd33360, bool (EA::AppCommandLine&)); same pollenLogin/XHTML/editor-subsystem sequence

@@ -1,0 +1,1 @@
+00726c20  4543  COMPLETE SP::QuantizeVertices (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast); 62/62 calls identical, same EH state numbering and frame size; stack-slot assignment and register allocation differ

@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00480e90/s00480e90.cpp  ?RecordHandlePosition@cSPEditorHandleDeform@SP@@QAE_N_N@Z  00480e90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

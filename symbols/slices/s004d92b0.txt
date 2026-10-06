@@ -1,0 +1,1 @@
+004d92b0 SP::ReadAbilityData  # dev PDB name via symbols/pdb_names.json (dev 00beb7f0); bool (cCreatureAbility*, cPropertyList*)

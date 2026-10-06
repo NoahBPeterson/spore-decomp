@@ -1,0 +1,1 @@
+00c1e750 SP::cSPCreatureBase::UpdateAttack  # PDB name via xmatch; ModAPI cCreatureBase::func68h (vtable +0x68)

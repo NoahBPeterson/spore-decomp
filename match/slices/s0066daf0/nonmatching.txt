@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast)
+0066daf0  3860  complete LoadAssetViewLarge; same call/vslot/constant sequence, size 0.997x; differs in register allocation (orig keeps 0 in ebx from the first FindWindowByID) and two cross-jumped SetFlag/Release tails

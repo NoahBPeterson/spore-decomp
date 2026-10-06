@@ -1,0 +1,8 @@
+00f502b0 SP::cGameCameraController::UpdateInterpolation  # dev-PDB method (IAEXM) + cInterpolationData<T> member layout match; cTerrainCameraController is the alternative
+00f4f480 SP::cGameCameraController::CalculateAnchorInterpolationTime  # dev-PDB method; called lazily for each changed target
+00b10e50 SP::SplineInterpolation<cSPVector3>  # dev-PDB template (ABU1@000MM), called with current/velocity/end/targetVelocity
+00b11160 SP::SplineInterpolation<cSPQuaternion>  # dev-PDB template, same call shape
+0069a5f0 SP::cHermiteSplineInterpolation<float>::Interpolate  # dev-PDB method (QAEMM), spline members +0x16c/+0x1a8
+0069a9a0 SP::cHermiteSplineInterpolation<cSPVector3>::Interpolate  # dev-PDB method, spline member +0x1e4
+0069aee0 SP::cHermiteSplineInterpolation<cSPQuaternion>::Interpolate  # dev-PDB method, spline member +0x220
+00b0fc40 SP::SplineInterpolation<float>  # dev-PDB template (ABM000MM); float-track calls in UpdateInterpolation

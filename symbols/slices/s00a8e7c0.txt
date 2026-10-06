@@ -1,0 +1,3 @@
+00537f40 cTransform::PreTransformBy  # ModAPI name; composes offset/rotation/scale, flags |=, ++modcount
+00a89980 EA::Swarm::cDistributeSample::cDistributeSample(const cTransform&, int)  # thiscall, returns this, 0x4c-byte sample
+00a89de0 EA::Swarm::cDistributeSample::cDistributeSample(const cDistributeSample&)  # placement copy in push_back

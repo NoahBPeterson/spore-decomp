@@ -1,0 +1,1 @@
+00ee5480 UI::cScenarioEditModeScriptUI::HandleUIMessage  # IWinProc slot of vtbl_UI::cScenarioEditModeScriptUI (entry at 0x0148a850, this = sub-object +0xc); ret 8 (IWindow*, const Message&), returns bool
