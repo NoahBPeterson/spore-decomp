@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f3380/s007f3380.cpp  ?ShutdownCandidateListImpl@IMEProxy2@@QAEXXZ  007f3380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?HandleMessage@IMEComp@@QAE_NHPAX@Z  007f36e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?Helper@IMEComp3@@QAEXH@Z  007f3be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?HandleMessage@IMECand@@QAE_NHPAX@Z  007f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f3380/s007f3380.cpp  ?Shutdown@IMEProxy2@@QAE_NXZ  007f4250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

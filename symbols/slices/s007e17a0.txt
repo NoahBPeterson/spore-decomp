@@ -1,0 +1,16 @@
+007e17a0 eastl uninitialized_copy<eastl::pair<...,EA::AutoRefCount<...> > >  # pair<ref> copy
+007e1830 eastl uninitialized_copy/move<AutoRef>  # destination-last form
+007e1910 `anonymous namespace'::state-flag-off command Execute  # sets state+0x80=0
+007e1930 `anonymous namespace'::state-flag-on command Execute  # sets state+0x80=1
+007e1950 eastl::hashtable::rehash  # bucket rehash, uses 0x11e073e
+007e1a10 `anonymous namespace'::reset-state command Execute  # sets state+0x7c=-1
+007e1a80 description destructor (two strings + vector + refcount)  # frees +0x0/+0x10, releases +0x20
+007e1b00 eastl::copy<AutoRef>  # copy-assign with AddRef/Release
+007e1b60 `anonymous namespace'::cTransitionCommand::OnRegister  # PDB name
+007e29d0 eastl::hashtable::DoInsertValue/insert  # hashes key, buckets at +4
+007e2ae0 cAppStateManager/description copy constructor  # copies strings/vectors
+007e2ce0 cTransitionCommand instance dispatch / message broadcast  # SP::MessageServer/EffectsManager
+007e2fb0 cTransitionListCommand::Execute  # adds pair to vector at state+0x54
+007e3030 SP::cAppStateManager::StateIDFromName  # PDB name
+007e30a0 hash lookup then FUN_007e2ce0  # map at +0xd8
+007e3160 eastl::vector<SP::cAppStateManager::cActionMessage>::operator=  # PDB name

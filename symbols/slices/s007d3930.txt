@@ -1,0 +1,15 @@
+007d3930  cGameModelAnimateCommand::Execute  # main args -> animation curve floats; length/channel/vary/speedScale options
+007d3b60  cGameModelSplitCommand::Execute
+007d40f0  ReadAnimationCurves  # int count then count cAnimationCurve records from an IStream
+007d41f0  cGameModelEffectCommand::Execute
+007d4300  SP::ReadDescription  # stream -> cGameModelDescription
+007d44a0  Wrapper::Func  # forwards to a virtual at slot 0x16c with (this,1)
+007d44c0  make a fresh cGameModelDescription and read it from a stream
+007d4540  key-presence test writing a 0x102-tagged key
+007d45d0  RandomRange  # random double in [min,max]
+007d4620  EA::Swarm::cEffectParams::UnknownStore  # AutoRefCount assign
+007d4670  effect tick/activate
+007d4730  effect parameter kind dispatch (4/5/0x101) + component notify
+007d4820  visibility setter (0x15 byte + per-component + singleton)
+007d48e0  vector storage allocation (element size 0x78)
+007d4980  cSPTransform vector assign loop

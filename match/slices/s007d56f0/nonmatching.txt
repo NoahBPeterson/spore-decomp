@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+007d5aa0  69   uninitialized_copy of the 0x78-byte records: per-element field copy + cSplitInstance ctor present; the argument/register schedule and the placement-ctor call shape differ
+007d61f0  70   allocate(n*0x78) + uninitialized_copy: both parts present; the 5-argument helper call and register assignment differ
+007d6250  71   range copy of the 0x78-byte records (two cSPTransform::operator= per element): present but the /O2 loop schedule and dst register differ

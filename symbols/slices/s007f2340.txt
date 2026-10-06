@@ -1,0 +1,10 @@
+007f2340 VarMap::GetTokenIndex  # intern a token string, returns its index
+007f2590 VarMap::GetVar  # variable lookup by token name
+007f25c0 VarMap::SetVar  # variable set by token name
+007f2960 ArithReadThing  # read a length-prefixed byte blob
+007f29e0 ArithReadWrapper  # two virtual calls + forward to ArithReadThing
+007f2a10 Vec4::push_back  # 4-byte float vector push_back (new-element guard)
+007f2a40 VecU::push_back  # 4-byte integer vector push_back
+007f30e0 Sims3::UI::IMEProxy::Init  # PDB name; registers four message ids
+007f31e0 Sims3::UI::IMEProxy::SetupDefaultFonts  # PDB name
+007f3320 IMEProxy::Shutdown  # release secondary object

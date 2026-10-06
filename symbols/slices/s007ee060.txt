@@ -1,0 +1,3 @@
+007ee540 SP::cVolumeDescription::cVolumeDescription  # PDB layout (size 0xf0)
+007ee630 SP::VolumeRead  # PDB candidate (caller-scored)
+007eea90 `anonymous namespace'::cVolumeEffectCommand::OnRegister  # PDB candidate (caller-scored)

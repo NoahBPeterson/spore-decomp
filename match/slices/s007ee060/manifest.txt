@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007ee060/s007ee060.cpp  RegisterVolumeFactory  007ee450  /O2 /MD /Gy /EHsc /TP

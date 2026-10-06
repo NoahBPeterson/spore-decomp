@@ -1,0 +1,5 @@
+# va Name  # evidence
+007e8ba0 SP::cAppSystem::PreInit  # PDB name
+007e9300 SP::cAppSystem::InitPlugins  # PDB name
+007e93d0 SP::cAppSystem::SetUserDirNames  # PDB name
+007e9450 SP::cAppSystem::Shutdown  # PDB name

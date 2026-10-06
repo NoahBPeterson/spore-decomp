@@ -1,0 +1,12 @@
+007f3380 IMEProxy::ShutdownCandidateList  # releases the candidate list through its vtable
+007f33d0 Sims3::UI::IMEComposition::Init  # PDB name (506 bytes)
+007f35d0 Sims3::UI::IMEComposition::Shutdown  # PDB name
+007f36e0 Sims3::UI::IMEComposition::HandleMessage  # PDB name; message ids 0x2ac44c14/1a/1b
+007f3a90 Sims3::UI::IMEComposition::SetWindowColors  # PDB name
+007f3b00 Sims3::UI::IMEComposition::CalculateTextSize  # PDB name (static)
+007f3b70 Sims3::UI::IMEComposition::OnChar  # PDB name
+007f3c10 Sims3::UI::IMECandidateList::IMECandidateList  # PDB name
+007f3cc0 Sims3::UI::IMECandidateList::~IMECandidateList  # PDB name
+007f4090 Sims3::UI::IMECandidateList::Shutdown  # PDB name
+007f4170 Sims3::UI::IMECandidateList::HandleMessage  # PDB name; ids 0x2ac44ed8/ef0
+007f4250 Sims3::UI::IMEProxy::Shutdown  # PDB name

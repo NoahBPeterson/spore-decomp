@@ -1,0 +1,4 @@
+007e0420  32   cSafeDynamicKernelStorage::SetNormal; throw/EH branch shape and copy schedule differ
+007e0480  32   cSafeDynamicKernelStorage::SetOrigin; type-check branch layout differs
+007e04f0  32   cSafeDynamicKernelStorage::SetRadius; branch layout and frame offsets differ
+007e0570  32   cSafeDynamicKernelStorage::SetDirection; type-check branch layout differs

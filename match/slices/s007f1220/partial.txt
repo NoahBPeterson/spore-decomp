@@ -1,0 +1,11 @@
+# va diff reason
+007f1220 0 GPU submit / vertex emit method - 962 bytes SSE, skeleton only
+007f1630 0 cArithmeticaProgram::CompileToByteCode - 489-byte bytecode emitter, skeleton only
+007f1ac0 0 vector<tLabel> assign - eastl sp_vector copy path skeleton only
+007f1bf0 0 vector<16-byte>::insert - fill/reallocate path skeleton only
+007f1d90 0 cArithmeticaProgram destructor - six buffer deallocations + token range destruction, skeleton only
+007f1f60 0 vector resize - shrink/fill paths skeleton only
+007f1fe0 0 vector<16-byte> assign - uninitialized_copy path skeleton only
+007f20d0 0 token lookup / run emit - hashtable find + vector assign + FUN_007f2a70, skeleton only
+007f21d0 0 cArithmeticaProgram::Copy - per-member vector copy skeleton only
+007f2240 0 LoadArithmeticaFile - resource load with EH skeleton only

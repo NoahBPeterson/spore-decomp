@@ -1,0 +1,18 @@
+007e06b0  187  cSafeDynamicKernelStorage::Read; switch compare tree (sub-chain vs range test) differs
+007e07a0  4    SplitModelKernelRead; ctor vptr store scheduled after mKernelData/Variation, original before
+007e07f0  28   cSplitControllerEffectCommand::Execute; strlen loop shape and av register (ebx vs edi) differ
+007e0850  166  SplitControllerAddCommands; EH frame / inlined command ctor field-init schedule differs
+007e0950  46   cSplitControllerEffectCommand scalar deleting dtor; base-dtor call/vptr reset schedule differs
+007e0a60  82   cSplitModelKernelOffsetCommand::Execute; float-parse register allocation differs
+007e0b50  65   cSplitModelKernelRadiusCommand::Execute; second-float x87 spill/red-zone differs
+007e0bc0  136  cSplitModelKernelNormalCommand::Execute; sret temp / vector local scheduling differs
+007e0c90  136  cSplitModelKernelOriginCommand::Execute; sret temp / vector local scheduling differs
+007e0d60  136  cSplitModelKernelDirectionCommand::Execute; sret temp / vector local scheduling differs
+007e0e30  148  cSplitModelKernelEffectCommand::Execute; EH frame and storage reset/inherit-copy schedule differs
+007e0f70  87   cSplitControllerEffect::~cSplitControllerEffect; vptr/base-dtor schedule differs
+007e1010  80   cSplitControllerEffect::cSplitControllerEffect; vptr/field init schedule differs
+007e10c0  300  cSplitControllerEffect::AddInstance; transform math register schedule differs
+007e12b0  6    MyVector8::resize; tail register choice (eax/ecx) differs
+007e1450  190  cSplitControllerEffect::CopyFrom; rbtree/vector copy schedule differs
+007e15b0  34   cSplitControllerEffect::Start; callee-saved register allocation differs
+007e1710  54   cAppStateManager::StateOccurredPreviously; mpPrevBegin load CSE differs

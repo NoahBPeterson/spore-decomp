@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+007e7260  50  PropWatcher constructor: behaviour complete but the original carries an SEH frame (state 0) around the vf0/Read calls; no destructor-bearing local in the reconstruction
+007e72d0  99  cQuitCheat::Execute complete; register allocation (ebx/edi) and crafted-object field-store order differ

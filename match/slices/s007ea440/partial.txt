@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007ea440  1480  large serialization routine not reconstructed
+007eaa10  1233  cAppSystem::InitGraphics not reconstructed
+007eb140  526  large serialization routine not reconstructed

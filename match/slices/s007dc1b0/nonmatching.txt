@@ -1,0 +1,7 @@
+007dc1b0  113  cSmoothCameraController::Zoom; x87 compare/branch schedule differs
+007dc230  31   cSmoothCameraController::ZoomRange; comparison operand order and reload schedule differ
+007dc260  214  cSmoothCameraController::UpdateSubjectMotion; x87 sqrt/normalise schedule differs
+007dc510  190  cSmoothCameraController::ZoomInterpolationParamsFromDistanceAlongCurve; clamp/select schedule differs
+007dc5e0  65   cSmoothCameraController::ConstrainDistanceAlongCurve; minss/maxss asm helper not reproduced
+007dca30  155  cSmoothCameraController::OnUpdateTargetSet; constant/field-copy schedule differs
+007dcb00  242  FUN_007dcb00 quaternion multiply; SSE expression schedule differs

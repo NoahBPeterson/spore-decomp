@@ -1,0 +1,8 @@
+# va diff reason
+007f2340 0 VarMap::GetTokenIndex - 433-byte token interning/lookup (strcmp loop + string alloc), skeleton
+007f2500 0 ArithReset - EH + vector assigns + FUN_007f2a70, skeleton
+007f2600 0 ArithRun - 864-byte arithmetic stack-machine run, skeleton
+007f2960 0 ArithReadThing - read int + new buffer + read bytes + FUN_007f2600, skeleton
+007f2a70 0 ArithExecute - 1632-byte arithmetic stack-machine execute, skeleton
+007f31e0 0 Sims3::UI::IMEProxy::SetupDefaultFonts - style manager / font setup, skeleton
+007f3320 0 IMEProxy::Shutdown - secondary-object release with tail jump, skeleton

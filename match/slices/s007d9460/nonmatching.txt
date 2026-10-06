@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+007d9460  n/a  SP::cMouseCameraController::ConfigUpdated; complete (all ~20 property lookups into zoom/pan/rotate/offset/angle/pitch/clip fields), property-extraction scheduling/register allocation differs
+007d9a50  n/a  quaternion -> 3x3 matrix helper (then Sub_6a3430 copy); complete, SSE multiply/add schedule and constant folding differ
+007d9bd0  102  SP::cMouseCameraController::Begin (capture start state); complete, float load/store interleave and Vec3 integer-copy scheduling differ
+007d9c40  789  SP::cMouseCameraController::SetConfigValue (big id switch); complete (all 12 cases incl. quaternion paths and 9-float base-orientation copy), switch compare tree/schedule differs
+007d9fb0  686  SP::cMouseCameraController::cMouseCameraController; complete (3 vtables, config addref, all lerp/vector defaults, ConfigUpdated tail), aligned frame/EH/store order differs

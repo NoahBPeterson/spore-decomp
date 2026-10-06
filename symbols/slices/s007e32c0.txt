@@ -1,0 +1,11 @@
+007e32c0 eastl::vector<SP::cAppStateManager::cActionMessage>::DoInsertValue  # vector grow/insert
+007e34a0 SP::cAppStateManager::cActions::operator=  # PDB name
+007e34f0 `anonymous namespace'::cTransitionCommand::Execute  # PDB name
+007e3610 SP::cAppStateManager::HandleMessage  # PDB name
+007e3b40 FUN_007e3b40  # large dispatch helper
+007e3d90 eastl::vector<SP::cAppStateManager::cActionMessage>::push_back  # PDB name
+007e3e20 eastl::copy forward over cActions  # 0x50 stride
+007e3e90 eastl::copy_backward over cActions  # 0x50 stride
+007e3f00 `anonymous namespace'::cStateCommand::Execute  # PDB name
+007e40d0 SP::cAppStateManager::AddAction  # PDB name
+007e4190 SP::cAppStateManager::AddMessage  # PDB caller-scored

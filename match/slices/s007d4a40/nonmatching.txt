@@ -1,0 +1,8 @@
+# <va>  <diff-bytes>  <reason>
+007d4a40  124  transform init: field/matrix/float copies present; the Matrix3::Assign and ElemHelper call shapes differ
+007d4b60  216  cEffectParams::Handle: key change (kind 6) + component notify present; the vtable slots / visibility toggles differ
+007d4c60  216  cEffectParams::Handle2: kind 1/3/6 handling + component notify present; register allocation and refcount release shape differ
+007d5240  180  large transform ctor: all field stores + Matrix3 + AutoRefCount present; argument passing and EH frame differ
+007d5300  83   Elem40 copy ctor: Matrix3::Assign + AutoRefCount path correct, but the /O2 member-init schedule makes our function 112 bytes vs 88
+007d53a0  220  Elem40 range copy: field/matrix/refcount copies present; loop unrolling and register allocation differ
+007d5520  88   transform backward copy: cSPTransform::operator= + refcount assign present; the inline AutoRefCount codegen differs

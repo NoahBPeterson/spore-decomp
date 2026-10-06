@@ -1,0 +1,7 @@
+# va diff reason
+007ed2e0 253 register "TextEffect" command - object field init / command ctor approximated
+007ed490 155 "color" command - argument list iteration approximated
+007ed560 263 "engine scale" command - vector push loop approximated
+007ed670 173 "engine scale + parentScale" command - loop approximated
+007eda60 109 sync inherited description - manager registration approximated
+007ed980 166 "effect" command execute - parser/description lookup stubbed

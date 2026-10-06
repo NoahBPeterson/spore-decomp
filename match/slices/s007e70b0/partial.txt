@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007e70b0  414  cAppSystem::HandleMessage (message dispatch with ResourceMan wait loop) not reconstructed
+007e7380  673  cAppSystem::Configure not reconstructed
+007e7630  631  cAppSystem::cAppSystem constructor not reconstructed
+007e78d0  632  cAppSystem::~cAppSystem destructor not reconstructed
+007e7b50  427  FUN_007e7b50 not reconstructed

@@ -1,0 +1,9 @@
+# va diff reason
+007f33d0 0 Sims3::UI::IMEComposition::Init - 506-byte window/style setup, skeleton
+007f35d0 0 Sims3::UI::IMEComposition::Shutdown - 271-byte teardown, skeleton
+007f3750 0 IMEComposition message/font handler - 832 bytes, skeleton
+007f3c10 0 Sims3::UI::IMECandidateList::IMECandidateList - multiple-inheritance vptr schedule, skeleton
+007f3cc0 0 Sims3::UI::IMECandidateList::~IMECandidateList - member releases + base dtor tail, skeleton
+007f3d20 0 IMECandidateList paint/layout - 880 bytes, skeleton
+007f4090 0 Sims3::UI::IMECandidateList::Shutdown - 211-byte teardown, skeleton
+007f4200 0 IMECandidateList scalar deleting destructor - vptr/base schedule, skeleton

@@ -1,0 +1,4 @@
+007dc340  -  cSmoothCameraController::HandleRequest; request switch reproduced, two zoom cases stubbed
+007dc630  -  ~cSmoothCameraController; buffer frees reproduced, vtable/base-dtor stores omitted
+007dc7b0  -  ViewerOrientationFromPositionAndLookAt; basis/quaternion build stubbed
+007dcc30  -  ViewerPositionAndOrientationFromDistanceAlongCurve; spline sampling stubbed

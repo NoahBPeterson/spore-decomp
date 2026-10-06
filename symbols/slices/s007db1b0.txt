@@ -1,0 +1,21 @@
+007db1b0  AutomateRunner::ListCommands
+007db2a0  AutomateRunner::ListCommands2
+007db3a0  CommandRunner::Run  # parses -openautomate
+007db570  SP_AutomateEntry  # atexit registration + run
+007db5b0  PtrVec::Contains
+007db5e0  PtrVec::Find
+007db620  PtrVec::At
+007db650  SP::cPackManager::Init  # PDB name
+007db8b0  cPackInfoVec::Clear
+007db920  SP::cSmoothCameraController::Init  # PDB name
+007db950  SP::cSmoothCameraController::HandleMessage  # PDB name
+007dbc30  SP::cSmoothCameraController::OnKeyDown  # PDB name
+007dbcb0  SP::cSmoothCameraController::SetFocus  # PDB name
+007dbd90  SP::cSmoothCameraController::SetZoomDuration  # PDB name
+007dbdd0  SP::cSmoothCameraController::GetSavedCamera  # PDB name
+007dbdf0  SP::cSmoothCameraController::SetSavedCamera  # PDB name
+007dbe50  SP::cSmoothCameraController::StopMotion  # PDB name
+007dbea0  SP::cSmoothCameraController::SaveCameraPosition  # PDB name
+007dbf20  SP::cSmoothCameraController::RestoreCameraPosition  # PDB name
+007dbfe0  SP::cSmoothCameraController::SetCurrentZoomLevel  # PDB name
+007dc140  SP::cSmoothCameraController::SetCurrentDiscreteOrientation  # PDB name

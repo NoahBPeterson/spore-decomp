@@ -1,0 +1,4 @@
+007ec9e0 `anonymous namespace'::cGroupTerrainScriptCommand::Execute  # PDB candidate (caller-scored)
+007ecb50 `anonymous namespace'::cScreenFilterTextureCommand::Execute  # PDB candidate (caller-scored)
+007ecbb0 `anonymous namespace'::cScreenLengthCommand::Execute  # PDB candidate (caller-scored)
+007ed090 EA::Swarm::cSphereSurface::ParseExtraOptions  # PDB candidate (caller-scored)

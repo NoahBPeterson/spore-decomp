@@ -1,0 +1,14 @@
+# va diff reason
+007ee060 883 cVolumeDescription effect update - interpolation codegen differs (no similar-size symbol)
+007ee3e0 70 volume-effect allocate+construct - new/EH schedule differs
+007ee480 111 write cVolumeDescription - virtual write calls differ
+007ee540 227 SP::cVolumeDescription::cVolumeDescription - field/vtable store schedule differs
+007ee630 111 SP::VolumeRead - read helper shapes differ
+007ee6d0 40 six-float element copy - original uses x87 fld/fstp, ours integer/loop
+007ee700 31 VolumeAlpha command - float-conv vcall differs
+007ee730 69 VolumeColor command - vector-conv vcall differs
+007ee780 31 VolumeSliceSpacing command - float-conv vcall differs
+007ee7b0 38 VolumeMaterial command - hash call shape differs
+007ee7f0 512 copy cVolumeDescription - unrolled field copy vs loop
+007ee9f0 107 cVolumeDescription map copy-ctor - array copy callback shape differs
+007eec80 108 register volume description - new/construct/register schedule differs

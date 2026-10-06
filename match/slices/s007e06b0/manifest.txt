@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007e06b0/s007e06b0.cpp  ?FUN_007e09a0@@YAXXZ  007e09a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?Execute@cSplitModelKernelTypeCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e0a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?UpdateInstances@cSplitControllerEffect@@QAEXH@Z  007e0f00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?OnMessage@cSplitControllerEffect@@QAEXPAXPAUVtblObj@@0@Z  007e1540  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?HandleMessage@cSplitControllerEffect@@QAEDHPAUVtblObj@@@Z  007e1580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?Shutdown@cAppStateManager@@QAE_NXZ  007e1650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e06b0/s007e06b0.cpp  ?Forward@cForwarder@@QAEXHH@Z  007e1760  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

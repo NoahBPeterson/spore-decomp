@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007e5220  252  constructor reconstructed as member/subobject stores; original inlines EASTL string ctors under an SEH frame, so bytes differ
+007e5f60  56  GetAsyncKeyState result materialisation (cwde+sar 15) not reproduced by any of ~6 source spellings; rest identical
+007e5bc0  76  cTransitionCommand::OnEndBlock complete but EASTL basic_string::assign / vector count arithmetic schedule differs

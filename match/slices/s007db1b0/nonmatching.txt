@@ -1,0 +1,5 @@
+007db5e0  7    PtrVec::Find; loop index/pointer register assignment swapped (ecx/edx)
+007db8b0  96   cPackInfoVec::Clear; free-loop and vector-erase schedule differ
+007dbe50  68   cSmoothCameraController::StopMotion; x87/SSE field-copy schedule differs
+007dbea0  92   cSmoothCameraController::SaveCameraPosition; saved-camera field mapping/schedule differs
+007dc140  98   cSmoothCameraController::SetCurrentDiscreteOrientation; loop shape differs

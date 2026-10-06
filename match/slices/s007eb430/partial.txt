@@ -1,0 +1,5 @@
+# va diff reason
+007eb600 243 SP::cTelemetry::FileDump - SP::string path building / FileStream EH not reproduced
+007ebba0 318 SP::cTelemetry::PrepareFlush - bucket lookup + serialization details approximated
+007ebce0 340 SP::cTelemetry::Flush - stream swap + messaging details approximated
+007ec160 138 SP::cTelemetry::Add - item construction and timing logic approximated

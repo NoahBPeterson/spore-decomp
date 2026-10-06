@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007e9a00  743  cAppSystem::LoadEffectCollections not reconstructed
+007e9db0  1331  cAppSystem::Update not reconstructed
+007ea2f0  294  cheat constructor registering cArgumentSpec entries not reconstructed

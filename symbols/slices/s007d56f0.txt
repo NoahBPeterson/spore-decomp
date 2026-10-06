@@ -1,0 +1,18 @@
+007d56f0  eastl::vector<0x78-record>::DoInsertValue
+007d5a30  eastl::vector<0x40-record>::~vector
+007d5aa0  uninitialized_copy of 0x78-byte records (cSplitInstance ctor)
+007d5af0  effect-component ctor
+007d5c50  effect parameter add
+007d5d50  effect parameter set
+007d5dc0  effect notify
+007d5e60  effect apply
+007d6030  effect apply 2
+007d61f0  allocate + uninitialized_copy of 0x78-byte records
+007d6250  range copy of 0x78-byte records (two cSPTransform assigns)
+007d62d0  deleting destructor (curve vector + vtable)
+007d6320  vector copy ctor (allocate + uninitialized_copy)
+007d6380  editor-component ctor
+007d63e0  editor-component deleting destructor
+007d6440  resource ctor (transform + refcount)
+007d6500  resource destructor (refcount + rbtree)
+007d6620  resource complex function

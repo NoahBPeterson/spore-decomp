@@ -1,0 +1,10 @@
+# va Name  # evidence
+007e6210 LoadGameInfoProperties  # reads AppProperties game-info fields; PDB candidate none
+007e6470 SP::cAppSystem::PreShutdown  # PDB candidate (caller-scored)
+007e65d0 SP::cAppSystem::FUN_007e65d0  # refcount add/release wrapper (job manager)
+007e6630 SP::cAppSystem::FUN_007e6630  # atomic read > 0
+007e6650 SP::cAppSystem::RunJobs  # PDB name
+007e6690 eastl::smart_ptr_deleter  # delete *p
+007e66a0 PropWatcher::Check  # property modification watcher
+007e6720 PropWatcher::Read  # property change reader
+007e67a0 SP::cAppSystem::Init  # PDB name

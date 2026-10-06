@@ -1,0 +1,4 @@
+# va Name  # evidence
+007e7d00 SP::cAppSystem::SetupDirectories  # PDB name
+007e8760 SP::cAppSystem::LoadPlugins  # PDB name
+007e89c0 FUN_007e89c0  # unnamed

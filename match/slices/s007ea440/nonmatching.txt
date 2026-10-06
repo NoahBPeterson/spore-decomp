@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+007eb060  31  int-range copy complete; relative-index loop shape differs (cl folds off+dst)
+007eb090  95  rbtree node-count complete; bucket-walk register/schedule differs
+007eb100  41  hashtable find wrapper complete; bucket-array register/offset scheduling differs
+007eb360  38  vector assign-from-other complete; FUN_007eb000 call arg/register schedule differs
+007eb3b0  47  copyDown complete; register allocation (edi/esi/eax) differs
+007eb3f0  27  freeNodes complete; node/next register swap (edi/esi)

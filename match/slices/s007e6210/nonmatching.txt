@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007e66a0  10  PropWatcher::Check complete; only diff is the missing ecx=local argument load before FUN_004e41c0 (thiscall-vs-free mismatch)
+007e6720  60  PropWatcher::Read complete; type-tag selection compiled as setne instead of neg/sbb, plus ecx/eax register choice
+007e6470  235  cAppSystem::PreShutdown complete behavioural reconstruction (vtable teardown); virtual-call register/order schedule differs

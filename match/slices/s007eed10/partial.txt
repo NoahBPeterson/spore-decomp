@@ -1,0 +1,9 @@
+# va diff reason
+007eed10 0 cVolumeSetCommand::Execute - ArgScript switch/argument paths approximated (skeleton)
+007ef080 0 cVolumeEffectCommand::Execute - string assign + inherited-description copy approximated
+007ef120 0 RegisterVolumeCommands - new/EH registration schedule approximated (skeleton)
+007ef220 0 cVolumeEffectCommand scalar deleting dtor - compiler emitted a separate ??1 + wrapper ??_G instead
+007ef2a0 0 CTrack::Slot0 - embedded argument struct layout approximated
+007ef560 0 VolState destructor - vector allocator-header dealloc modelled as free function, vptr schedule omitted
+007ef730 0 VolState::UpdateFromFrame - SSE transform / bounding-box reduction approximated (skeleton)
+007efa20 0 vector<24-byte>::insert - reallocation path omitted (skeleton)

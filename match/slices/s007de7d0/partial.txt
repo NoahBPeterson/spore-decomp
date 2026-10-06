@@ -1,0 +1,5 @@
+007de7d0  -  SP::cSmoothCameraController::Reset; 2643-byte reset, skeleton only
+007df230  -  SP::cSmoothCameraController::SetPitchAngles; pitch-angle vector rebuild, skeleton only
+007df330  -  FUN_007df330 quadratic ramp helper; skeleton only
+007df450  -  cSmoothCameraController ctor body; skeleton only
+007df710  -  SP::CreateSmoothCameraController; SEH factory not reproduced

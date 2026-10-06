@@ -1,0 +1,6 @@
+# <va>  <diff-bytes>  <reason>
+007d3930  -  cGameModelAnimateCommand::Execute: option/key parsing present, but the per-argument ParseFloat -> animation-curve float-vector append is not reproduced
+007d3b60  -  cGameModelSplitCommand::Execute (1423 bytes): skeleton only
+007d41f0  -  cGameModelEffectCommand::Execute: skeleton (argument/description setup not reproduced)
+007d4300  -  SP::ReadDescription: skeleton (field-by-field stream decode not reproduced)
+007d4980  -  cSPTransform-vector assign loop: skeleton (per-label loop not reproduced)

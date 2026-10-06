@@ -1,0 +1,20 @@
+007df780  SplitModelKernelEffect kernel parse helper
+007dfac0  FUN_007dfac0
+007dfbd0  FUN_007dfbd0
+007dfbf0  MapDescription allocation helper
+007dfc20  FUN_007dfc20
+007dfd90  FUN_007dfd90
+007dfe80  ArgScript::SplitModelKernelEffect::SplitModelKernelEffect  # PDB name
+007dfed0  FUN_007dfed0
+007e0110  FUN_007e0110 MapDescription ctor
+007e0160  FUN_007e0160
+007e01a0  FUN_007e01a0
+007e0200  cSplitModelKernelEffectCommand::OnEndBlock  # PDB name
+007e0280  FUN_007e0280
+007e02f0  cSplitModelKernelEffectCommand scalar deleting dtor  # PDB name
+007e0340  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetKernelType  # PDB name
+007e0420  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetNormal  # PDB name
+007e0480  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetOrigin  # PDB name
+007e04f0  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetRadius  # PDB name
+007e0570  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::SetDirection  # PDB name
+007e05e0  SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::operator=  # PDB name

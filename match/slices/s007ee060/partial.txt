@@ -1,0 +1,2 @@
+# va diff reason
+007eea90 485 cVolumeEffectCommand::OnRegister - ArgScript command table construction approximated

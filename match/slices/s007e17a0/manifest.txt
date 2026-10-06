@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007e17a0/s007e17a0.cpp  ?Execute@cStateFlagCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e1910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e17a0/s007e17a0.cpp  ?Execute@cStateFlag2Command@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e1930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s007e17a0/s007e17a0.cpp  ?Execute@cSetStateCommand@@QAEXAAVcArguments@ArgScript@EA@@@Z  007e1a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

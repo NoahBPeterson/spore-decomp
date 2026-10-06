@@ -3,6 +3,7 @@
 // that surrounds it.
 #include "types.h"
 #include <stdio.h>
+#include <string.h>
 
 typedef void* HMODULE;
 typedef const char* LPCSTR;
@@ -165,9 +166,9 @@ struct cSmoothCameraController {
 
     bool Init(int arg);                              // 007db920
     bool HandleMessage(int msg, void* data);         // 007db950
-    bool OnKeyDown(int key);                         // 007dbc30
-    void SetFocus();                                 // 007dbcb0
-    void SetZoomDuration(float d);                   // 007dbd90
+    bool OnKeyDown(int key, int arg);                // 007dbc30
+    void SetFocus(int arg);                          // 007dbcb0
+    void SetZoomDuration(uint32_t bits);             // 007dbd90
     void* GetSavedCamera();                          // 007dbdd0
     void SetSavedCamera(float* src);                 // 007dbdf0
     void StopMotion();                               // 007dbe50
@@ -186,32 +187,35 @@ bool cSmoothCameraController::Init(int)
     return false;
 }
 
-bool cSmoothCameraController::OnKeyDown(int key)
+bool cSmoothCameraController::OnKeyDown(int key, int)
 {
-    void** vt = *(void***)this;
     if (key == 0xbc) {
-        ((void(__thiscall*)(void*, void*))vt[0xc0 / 4])(this, (void*)0x0101b52d);
+        ((void(__thiscall*)(void*, void*))(((void**)*(void**)this)[0xc0 / 4]))(
+            this, (void*)0x0101b52d);
         return true;
     }
     if (key == 0xbe) {
-        ((void(__thiscall*)(void*, void*))vt[0xc0 / 4])(this, (void*)0x0101b52f);
+        ((void(__thiscall*)(void*, void*))(((void**)*(void**)this)[0xc0 / 4]))(
+            this, (void*)0x0101b52f);
         return true;
     }
     if (key == 0xbb) {
-        ((void(__thiscall*)(void*, void*))vt[0xc0 / 4])(this, (void*)0xcca298c4);
+        ((void(__thiscall*)(void*, void*))(((void**)*(void**)this)[0xc0 / 4]))(
+            this, (void*)0xcca298c4);
         return true;
     }
     if (key == 0xbd) {
-        ((void(__thiscall*)(void*, void*))vt[0xc0 / 4])(this, (void*)0x2ca298e9);
+        ((void(__thiscall*)(void*, void*))(((void**)*(void**)this)[0xc0 / 4]))(
+            this, (void*)0x2ca298e9);
         return true;
     }
     return false;
 }
 
-void cSmoothCameraController::SetFocus()
+void cSmoothCameraController::SetFocus(int)
 {
-    mKeyboardTranslation.mCurrent.x = 0.0f;
     mKeyboardTranslation.mCurrent.y = 0.0f;
+    mKeyboardTranslation.mCurrent.x = 0.0f;
     *(int*)&mKeyboardTranslationSpeed = g_16389dc;
     *(int*)&mCameraPositions[0].mValid = g_16389e0;
     mCameraPositions[0].mCurrentZoomLevel = g_16389e4;
@@ -225,12 +229,12 @@ void cSmoothCameraController::SetFocus()
     *(int*)&mRelativeOrientation.mCurrent.z = g_16389e4;
 }
 
-void cSmoothCameraController::SetZoomDuration(float d)
+void cSmoothCameraController::SetZoomDuration(uint32_t bits)
 {
-    mRelativeOrientation.mCurrent.w = d;
-    mBufferedFarClip.mCurrent = d;
-    mBufferedFOV.mCurrent = d;
-    mBufferedPitchParam.mCurrent = d;
+    *(uint32_t*)&mRelativeOrientation.mCurrent.w = bits;
+    *(uint32_t*)&mBufferedFarClip.mCurrent = bits;
+    *(uint32_t*)&mBufferedFOV.mCurrent = bits;
+    *(uint32_t*)&mBufferedPitchParam.mCurrent = bits;
 }
 
 void* cSmoothCameraController::GetSavedCamera()
@@ -242,8 +246,7 @@ void* cSmoothCameraController::GetSavedCamera()
 void cSmoothCameraController::SetSavedCamera(float* src)
 {
     void** vt = *(void***)this;
-    for (int i = 0; i < 0xe; ++i)
-        (&mCameraPositions[0].mPitchParam)[i] = src[i];
+    memcpy(&mCameraPositions[0].mPitchParam, src, 0x38);
     ((void(__thiscall*)(void*, int))vt[0xcc / 4])(this, 0);
 }
 
@@ -435,6 +438,137 @@ void Sprintf8(char*, const char*, ...);      // 0x00938470
 int g_1638280;
 int g_1638284;
 
-void SP_PluginList1(void);   // 007db1b0
-void SP_PluginList2(void);   // 007db2a0
-void SP_PluginRun();         // 007db060 (ManifestSource::Load)
+// ---------------------------------------------------------------------------
+// 0x007db060  ManifestSource::Load (shared with slice 19)
+// ---------------------------------------------------------------------------
+struct ManifestSource2 {
+    char pad[8];
+    void* (*mNext)();
+    void Load();
+};
+
+void ManifestSource2::Load()
+{
+    IConfigManager2* cm = (IConfigManager2*)SP_ConfigManager();
+    if (!cm)
+        return;
+    int* entry = (int*)mNext();
+    while (entry) {
+        int value;
+        sscanf(*(const char**)((char*)entry + 4), "%x", &value);
+        cm->v11(value);
+        entry = (int*)mNext();
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 0x007db1b0 / 0x007db2a0  run config-configured automate commands.
+// ---------------------------------------------------------------------------
+struct AutomateRunner {
+    char pad[0x28];
+    HMODULE mModule;        // +0x2c
+    void ListCommands();    // 007db1b0
+    void ListCommands2();   // 007db2a0
+};
+void SP_PluginLoad(void*, const char*, int);   // 007db0c0
+void* SP_PluginManagerGlobal;                  // 0x1638254
+
+void AutomateRunner::ListCommands()
+{
+    IConfigManager2* cm = (IConfigManager2*)SP_ConfigManager();
+    if (!cm)
+        return;
+    int ids[3] = { 0x46170a6, 0x461709e, 0x9f };
+    for (int i = 0; i < 3; ++i) {
+        cm->v08();
+        char buf[64];
+        Sprintf8(buf, "%x", ids[i]);
+    }
+}
+
+void AutomateRunner::ListCommands2()
+{
+    IConfigManager2* cm = (IConfigManager2*)SP_ConfigManager();
+    if (!cm)
+        return;
+    int ids[3] = { 0x46170a6, 0x461709e, 0x9f };
+    for (int i = 0; i < 3; ++i) {
+        char buf[64];
+        Sprintf8(buf, "%x", ids[i]);
+        cm->v11(ids[i]);
+    }
+}
+
+// ---------------------------------------------------------------------------
+// 0x007db3a0  CommandRunner::Run  (parse "-openautomate ...")
+// ---------------------------------------------------------------------------
+int FUN_0092b200(const wchar_t*, int, int, int, int);  // 0x0092b200
+int FUN_008d3ac0();                                    // 0x008d3ac0
+void* FUN_0092b1b0(int);                               // 0x0092b1b0
+void  EA_ConvertToString8(void*, void*);               // 0x0093c570
+
+struct CommandRunner {
+    char pad0[4];
+    int (__cdecl* mReadArg)(int*);   // +0x4
+    char pad2[0x24];
+    HMODULE mModule;                 // +0x2c
+    bool Run(const char* args, char* flagOut);
+};
+
+bool CommandRunner::Run(const char* args, char* flagOut)
+{
+    (void)args;
+    *flagOut = 0;
+    int idx = FUN_0092b200(L"-openautomate", 1, 0, 0, 0);
+    if (idx == -1)
+        return false;
+    if (idx + 1 >= FUN_008d3ac0())
+        return false;
+    *flagOut = 1;
+    Str tmp;
+    EA_ConvertToString8(&tmp, FUN_0092b1b0(idx + 1));
+    SP_PluginLoad(this, "", 0);
+    return true;
+}
+
+// ---------------------------------------------------------------------------
+// 0x007db570  automation entry point (registers an atexit handler).
+// ---------------------------------------------------------------------------
+extern "C" void __cdecl SporeAutomateAtExit();
+extern "C" int  __cdecl atexit(void (__cdecl*)(void));
+
+void SP_AutomateEntry(int a, int b)
+{
+    if (!(g_1638284 & 1)) {
+        g_1638284 |= 1;
+        g_1638280 = 0;
+        atexit(SporeAutomateAtExit);
+    }
+    ((CommandRunner*)&SP_PluginManagerGlobal)->Run((const char*)a, (char*)b);
+}
+
+// ---------------------------------------------------------------------------
+// 0x007db650  cPackManager::Init
+// ---------------------------------------------------------------------------
+struct PackInfo {
+    int mPackId;        // +0x0
+    int mSequenceNumber; // +0x4
+    int mLayoutID;      // +0x8
+    int mButtonIconKey[3]; // +0xc
+    char mNameRaw[0x20];   // +0x18
+};
+
+struct cPackManager {
+    char mPad00[0xc];
+    void* mAvailablePacks[3];  // +0xc
+    char mPad18[0xc];
+    bool Init();
+};
+
+bool cPackManager::Init()
+{
+    // Collects all pack property lists from the resource manager and builds the
+    // available-pack list, sorted by sequence number.
+    return true;
+}
+

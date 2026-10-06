@@ -1,0 +1,2 @@
+slices/s007ea440/s007ea440.cpp  ?FUN_007eaef0@ObjAE@@QAEXXZ   007eaef0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007ea440/s007ea440.cpp  ?Cast@ObjAF@@QAEPAXH@Z        007eaf30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

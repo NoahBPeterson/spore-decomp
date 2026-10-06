@@ -1,0 +1,10 @@
+007e17a0  113  eastl uninitialized_copy<AutoRef>; helper-call/EH frame schedule differs
+007e1830  120  eastl uninitialized_move/copy<AutoRef>; helper-call/EH frame schedule differs
+007e1950  138  hashtable rehash; bucket-walk codegen differs
+007e1a80  100  description dtor; member-destroy schedule differs
+007e1b00  75   eastl copy<AutoRef>; release/AddRef inlining differs
+007e2ce0  374  cTransitionCommand instance dispatch; vtable/loop codegen differs
+007e2fb0  72   cTransitionListCommand::Execute; int parse (v39) register schedule differs
+007e3030  91   cAppStateManager::StateIDFromName; hashtable find call/inline differs
+007e30a0  68   hashtable lookup + FUN_007e2ce0; find call schedule differs
+007e3160  191  eastl::vector<cActionMessage>::operator=; branch layout differs

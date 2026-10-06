@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007db1b0/s007db1b0.cpp  ?SP_AutomateEntry@@YAXHH@Z                          007db570  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?Contains@PtrVec@@QAE_NH@Z                          007db5b0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?At@PtrVec@@QAEPAXH@Z                              007db620  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?Init@cSmoothCameraController@@QAE_NH@Z            007db920  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?OnKeyDown@cSmoothCameraController@@QAE_NHH@Z       007dbc30  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?SetFocus@cSmoothCameraController@@QAEXH@Z          007dbcb0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?SetZoomDuration@cSmoothCameraController@@QAEXI@Z   007dbd90  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?GetSavedCamera@cSmoothCameraController@@QAEPAXXZ   007dbdd0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s007db1b0/s007db1b0.cpp  ?SetSavedCamera@cSmoothCameraController@@QAEXPAM@Z  007dbdf0  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast

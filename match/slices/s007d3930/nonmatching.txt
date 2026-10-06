@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+007d44c0  97   make-a-fresh-description: operator new("Swarm",0x8c) + description ctor + ReadDescription all present; the /EHsc new-expression frame and allocation shape differ
+007d4540  54   key-presence test: same branches and stores; the original zero-extends the two 32-bit halves into 64-bit registers (cmp/or pattern), ours uses 32-bit and
+007d45d0  69   RandomRange: x87 double math and clamp present; the x87 stack schedule of the two doubles differs
+007d4620  70   cEffectParams::UnknownStore: AddRef/store/Release path identical, but the original function's byte range includes a 15-byte trailing follow-on stub (0x7d4660), so no source of the real function can reach 79 bytes
+007d4670  216  effect tick: component loop + singleton release + message dispatch present; the exact vtable slots and guard shape differ
+007d4730  216  effect parameter dispatch: 4/5/0x101 cases + per-component notify present; compare tree and float scheduling differ

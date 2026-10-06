@@ -1,0 +1,3 @@
+# va diff reason
+007f1820 67 cArithmeticaFactory::WriteResource - register allocation (size kept in edi, writer in esi) differs
+007f1890 61 eastl uninitialized_copy (16-byte) - iterator/sret calling shape not reproduced; register assignment differs

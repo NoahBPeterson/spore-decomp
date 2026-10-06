@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007f2340/s007f2340.cpp  ?SetVar@VarMap@@QAEXPBDM@Z  007f25c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f2340/s007f2340.cpp  ?ArithReadWrapper@@YGXPAX0HH@Z  007f29e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f2340/s007f2340.cpp  ?push_back@Vec4@@QAEXABM@Z  007f2a10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f2340/s007f2340.cpp  ?push_back@VecU@@QAEXABI@Z  007f2a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s007f2340/s007f2340.cpp  ?Init@IMEProxy@@QAE_NPAXH@Z  007f30e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

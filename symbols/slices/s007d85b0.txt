@@ -1,0 +1,7 @@
+007d8ab0 `anonymous namespace'::cAppModeCheat::Execute  # pdb_names anchor
+007d8c30 SP::cApp::SetAppMode  # pdb_names vtable-slot
+007d8c80 SP::cApp::SetAppModeByIndex  # pdb_names vtable-slot
+007d8d40 SP::cApp::~cApp  # pdb_names vtable-slot
+007d8dc0 SP::CreateApp  # pdb_names gap-align
+007d8ff0 SP::cApp::RemoveAppMode  # pdb_names gap-align
+007d9120 SP::cApp::Shutdown  # pdb_candidates caller-scored

@@ -1,0 +1,7 @@
+007db1b0  -  AutomateRunner::ListCommands; config/vector command listing approximated
+007db2a0  -  AutomateRunner::ListCommands2; config/vector command listing approximated
+007db3a0  -  CommandRunner::Run; "-openautomate" parsing skeleton only
+007db650  -  cPackManager::Init; resource/property pack collection stubbed
+007db950  -  cSmoothCameraController::HandleMessage; message switch reproduced, exact field mapping approximate
+007dbf20  -  cSmoothCameraController::RestoreCameraPosition; virtual restore calls reproduced, field stores omitted
+007dbfe0  -  cSmoothCameraController::SetCurrentZoomLevel; zoom-level interpolation approximated

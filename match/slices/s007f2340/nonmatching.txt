@@ -1,0 +1,2 @@
+# va diff reason
+007f2590 25 VarMap::GetVar - size() computed as end-minus-begin; compiler loads begin into the subtract register first

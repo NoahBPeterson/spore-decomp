@@ -1,0 +1,16 @@
+# <va>  <diff-bytes>  <reason>
+007d56f0  -  eastl::vector<0x78-record>::DoInsertValue (825 bytes): skeleton
+007d5a30  -  eastl::vector<0x40-record>::~vector: approximated (release loop shape and allocator handling not reproduced)
+007d5af0  -  effect-component ctor (326 bytes): skeleton (field initialisers approximated)
+007d5c50  -  effect parameter add: skeleton
+007d5d50  -  effect parameter set: skeleton
+007d5dc0  -  effect notify: skeleton
+007d5e60  -  effect apply (333 bytes): skeleton
+007d6030  -  effect apply 2 (448 bytes): skeleton
+007d62d0  -  deleting destructor: approximated (embedded curve-vector destruction not reproduced)
+007d6320  -  vector copy ctor: skeleton (element copy omitted)
+007d6380  -  editor-component ctor: skeleton
+007d63e0  -  editor-component deleting destructor: skeleton
+007d6440  -  resource ctor: skeleton
+007d6500  -  resource destructor: skeleton
+007d6620  -  resource complex function (445 bytes): skeleton

@@ -1,0 +1,17 @@
+007e4260 `anonymous namespace'::cGotoStateCommand::Execute  # PDB caller-single, msg 0xe11330
+007e42d0 FUN_007e42d0  # 486B dispatcher
+007e44c0 FUN_007e44c0  # 133B
+007e4550 `anonymous namespace'::cKillEffectCommand::Execute  # PDB name, msg 0xcef220e0 + softStop
+007e45e0 `anonymous namespace'::cModeCommand::Execute  # PDB caller-scored, msg 0xe11333/onExit
+007e46f0 `anonymous namespace'::cCheatCommand::Execute  # PDB name, msg 0xcef220e1
+007e4760 `anonymous namespace'::cLoadResourceCommand::Execute  # PDB name
+007e48f0 `anonymous namespace'::cLightingCommand::Execute  # PDB caller-scored, msg 0x6f188ef2
+007e4970 `anonymous namespace'::cCameraCommand::Execute  # PDB caller-scored, msg 0x6f188ef8
+007e49f0 FUN_007e49f0  # 139B
+007e4a80 FUN_007e4a80  # 145B
+007e4b20 `anonymous namespace'::cFloatPropCommand::Execute  # PDB name
+007e4bc0 SP::cAppStateManager::~cAppStateManager  # PDB name
+007e4e00 FUN_007e4e00  # 138B
+007e4e90 SP::cAppStateCheat::cAppStateCheat  # PDB name
+007e4f40 SP::cAppStateCheat::Execute  # PDB name
+007e51c0 option-carrying command scalar deleting dtor  # ArgScript::OptionParser dtor at +0x14

@@ -1,0 +1,7 @@
+007de7d0  SP::cSmoothCameraController::Reset  # PDB name
+007df230  SP::cSmoothCameraController::SetPitchAngles  # PDB name
+007df330  quadratic ramp helper
+007df450  cSmoothCameraController constructor body
+007df6a0  SP::cSmoothCameraController::SetZoomLevels  # PDB name
+007df6d0  SP::cSmoothCameraController::SetClipPlanes  # PDB name
+007df710  SP::CreateSmoothCameraController  # PDB caller-single

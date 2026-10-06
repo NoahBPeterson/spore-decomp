@@ -1,0 +1,3 @@
+# va diff reason
+007ef630 14 VolState ctor - field/vtable store schedule differs (m30 store sinks past the two short zero-stores, m48 call setup hoisted)
+007efc90 63 PQ::Push - comp byte is widened via movzx instead of the original mov cl / mov [esp+8],cl / mov ecx,[esp+8] sequence

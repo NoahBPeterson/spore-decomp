@@ -1,0 +1,2 @@
+007d9460 SP::cMouseCameraController::ConfigUpdated  # pdb_names anchor
+007d9fb0 SP::cMouseCameraController::cMouseCameraController  # pdb_candidates caller-single

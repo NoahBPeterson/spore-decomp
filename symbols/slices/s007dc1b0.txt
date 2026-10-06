@@ -1,0 +1,11 @@
+007dc1b0  SP::cSmoothCameraController::Zoom  # PDB name
+007dc230  SP::cSmoothCameraController::ZoomRange  # PDB name
+007dc260  SP::cSmoothCameraController::UpdateSubjectMotion  # PDB name
+007dc340  SP::cSmoothCameraController::HandleRequest  # PDB name
+007dc510  SP::cSmoothCameraController::ZoomInterpolationParamsFromDistanceAlongCurve  # PDB name
+007dc5e0  SP::cSmoothCameraController::ConstrainDistanceAlongCurve  # PDB name
+007dc630  SP::cSmoothCameraController::~cSmoothCameraController  # PDB name
+007dc7b0  SP::cSmoothCameraController::ViewerOrientationFromPositionAndLookAt  # PDB name
+007dca30  SP::cSmoothCameraController::OnUpdateTargetSet  # PDB name
+007dcb00  quaternion multiply helper
+007dcc30  SP::cSmoothCameraController::ViewerPositionAndOrientationFromDistanceAlongCurve  # PDB name

@@ -1,0 +1,5 @@
+# va Name  # evidence
+007e9a00 SP::cAppSystem::LoadEffectCollections  # PDB name
+007e9d00 SP::cAppSystem::OpenURL  # PDB candidate (caller-scored)
+007e9db0 SP::cAppSystem::Update  # PDB name
+007ea2f0 cheat ctor (cArgumentSpec registration)  # decompile

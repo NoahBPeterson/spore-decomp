@@ -1,0 +1,5 @@
+007e4260  77   cGotoStateCommand::Execute; BehaviorMessage ctor/vtable + InterlockedExchange init schedule differs
+007e46f0  77   cCheatCommand::Execute; same BehaviorMessage construction schedule differs
+007e48f0  83   cLightingCommand::Execute; same BehaviorMessage construction schedule differs
+007e4970  83   cCameraCommand::Execute; same BehaviorMessage construction schedule differs
+007e4550  92   cKillEffectCommand::Execute; same + softStop flag arg order differs

@@ -1,0 +1,6 @@
+007eb600 SP::cTelemetry::FileDump  # PDB name
+007ebb60 SP::cTelemetry::Reset  # PDB name
+007ebba0 SP::cTelemetry::PrepareFlush  # PDB candidate (caller-single)
+007ebce0 SP::cTelemetry::Flush  # inferred from stream-swap body
+007ebe70 SP::cTelemetry::~cTelemetry  # PDB-derived layout
+007ec0a0 SP::cTelemetry::cTelemetry  # writes cTelemetry vtables + mStats/mSession

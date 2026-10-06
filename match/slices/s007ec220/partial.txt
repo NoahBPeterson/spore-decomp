@@ -1,0 +1,4 @@
+# va diff reason
+007ec220 300 telemetry deserialize - accessor-chain / per-item reader sequence approximated
+007ec9e0 366 cGroupTerrainScriptCommand::Execute - ArgScript argument handling not reproduced
+007eccd0 959 EA::Text::Font text-command registration - command table construction stubbed

@@ -1,0 +1,13 @@
+# va diff reason
+007eb430 413 eastl::vector<int>::DoInsertValues - codegen differs (move/fill loops, register schedule)
+007eb720 112 eastl list-node allocate+copy - inlined ctor/AutoRefCount schedule differs
+007eb7d0 52 eastl list range transfer - register/loop schedule differs
+007eb820 63 eastl::vector<int>::resize - tail erase call shape differs
+007eb870 58 eastl list copy-ctor - inlined range copy schedule differs
+007eb8d0 96 eastl hash-node allocate - placement-new/list ctor inlining differs
+007eb950 119 eastl hashtable::DoFreeNodes - inlined list dtor differs
+007eb9e0 145 eastl hashtable::erase - inlined list dtor/loop differs
+007ebe70 95 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs
+007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order
+007ebfd0 189 eastl hashtable operator[] - find/insert inlining differs
+007ec0a0 105 SP::cTelemetry::cTelemetry - base vtable/EH schedule differs

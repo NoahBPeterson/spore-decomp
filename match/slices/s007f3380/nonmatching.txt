@@ -1,0 +1,4 @@
+# va diff reason
+007f3a90 87 IMEComposition::SetWindowColors - color-constant store scheduling (c6a8/c6b4 placed late) differs
+007f3b00 9 CalculateTextSize - x87 fstp vs movss scheduling of the width/height stores
+007f3b70 88 IMEComposition::OnChar - stack local frame (0x1c vs 0x10) and field-store order differ

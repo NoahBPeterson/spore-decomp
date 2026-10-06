@@ -1,0 +1,10 @@
+slices/s007e5220/s007e5220.cpp  ?FUN_007e5e80@cAppSystem@@QAEHXZ                      007e5e80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?DeactivateApp@cAppSystem@@QAEXXZ                      007e5ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?ToggleFullscreen@cAppSystem@@QAEXXZ                   007e5f00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?ToggleDisplay@cAppSystem@@QAEXXZ                      007e5f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?UnlockFromDevice@cAppSystem@@QAEXXZ                   007e6020  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?SetEffectCollectionIDs@cAppSystem@@QAEXPAIPAX@Z      007e6050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?LockToSingleCore@@YAXXZ                               007e5d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?FUN_007e5e10@@YAXXZ                                   007e5e10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?LockToDevice@cAppSystem@@QAEXXZ                       007e5fd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e5220/s007e5220.cpp  ?LoaderCommandHandler@cAppSystem@@QAEXXZ               007e6090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

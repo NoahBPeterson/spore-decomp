@@ -1,0 +1,7 @@
+# va Name  # evidence
+007e70b0 SP::cAppSystem::HandleMessage  # PDB candidate (caller-scored)
+007e7260 PropWatcher ctor  # construct + Read
+007e72d0 cQuitCheat::Execute  # PDB/decomp name (anonymous namespace)
+007e7380 SP::cAppSystem::Configure  # PDB name
+007e7630 SP::cAppSystem::cAppSystem  # PDB name
+007e78d0 SP::cAppSystem::~cAppSystem  # PDB name

@@ -1,0 +1,15 @@
+007df780  -  FUN_007df780 kernel-effect parse helper; skeleton only
+007dfac0  -  FUN_007dfac0; skeleton only
+007dfbd0  -  FUN_007dfbd0; skeleton only
+007dfc20  -  FUN_007dfc20; skeleton only
+007dfd90  -  FUN_007dfd90; skeleton only
+007dfe80  -  ArgScript::SplitModelKernelEffect constructor; skeleton only
+007dfed0  -  FUN_007dfed0; skeleton only
+007e0110  -  FUN_007e0110 MapDescription ctor; skeleton only
+007e0160  -  FUN_007e0160; skeleton only
+007e01a0  -  FUN_007e01a0; skeleton only
+007e0200  -  cSplitModelKernelEffectCommand::OnEndBlock; skeleton only
+007e0280  -  FUN_007e0280 command factory; skeleton only
+007e02f0  -  cSplitModelKernelEffectCommand scalar deleting dtor; skeleton only
+007e0340  -  cSafeDynamicKernelStorage::SetKernelType; skeleton only
+007e05e0  -  cSafeDynamicKernelStorage::operator=; skeleton only

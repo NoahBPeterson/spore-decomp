@@ -1,0 +1,12 @@
+007ef2a0 CTrack::Slot0  # vtable 0x01414920 slot 0; binds this+0x14 interface from two manager objects
+007ef350 CTrack::Slot1  # vtable 0x01414920 slot 1
+007ef370 CTrack::Slot2  # vtable 0x01414920 slot 2
+007ef3a0 CTrack::Slot3  # vtable 0x01414920 slot 3
+007ef3d0 SiftUp  # push_heap sift-up for 16-byte double-keyed nodes
+007ef450 CTrack::SetKey  # vtable 0x01414920 slot 7
+007ef480 CTrack::Eval  # vtable 0x01414920 slot 5 (key interpolation)
+007ef4a0 AdjustHeap  # adjust_heap for the 16-byte node heap
+007ef560 VolState::~VolState  # vtable 0x01414920 destructor (two Buf members)
+007ef5d0 MakeHeap  # make_heap for the 16-byte node heap
+007ef630 VolState::VolState  # vtable 0x01414920 constructor
+007efc90 PQ::Push  # priority-queue push: vector push_back + sift-up

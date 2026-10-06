@@ -1,0 +1,16 @@
+# va Name  # evidence
+007e5220 SP::cAppStateManager::cAppStateManager  # PDB name
+007e5430 SP::cAppStateManager::Init  # PDB candidate (caller-single)
+007e5890 eastl::vector<SP::cAppStateManager::cActions,eastl::sp_vector_allocator>::erase  # PDB candidate
+007e5ab0 cStateCommand::OnEndBlock  # PDB/decomp name (anonymous namespace)
+007e5bc0 cTransitionCommand::OnEndBlock  # PDB/decomp name (anonymous namespace)
+007e5c40 SP::cAppStateManager::Update  # PDB name
+007e5d90 LockToSingleCore  # decomp name
+007e5ed0 SP::cAppSystem::DeactivateApp  # PDB name
+007e5f00 SP::cAppSystem::ToggleFullscreen  # PDB name
+007e5f30 SP::cAppSystem::ToggleDisplay  # PDB name
+007e5f60 SuppressAppSwitchProc  # decomp name
+007e5fd0 SP::cAppSystem::LockToDevice  # PDB name
+007e6020 SP::cAppSystem::UnlockFromDevice  # PDB name
+007e6050 SP::cAppSystem::SetEffectCollectionIDs  # PDB name
+007e6090 SP::cAppSystem::LoaderCommandHandler  # PDB name

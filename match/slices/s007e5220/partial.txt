@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007e5430  899  cAppStateManager::Init not reconstructed (parser/command registration + MessageServer batch); incomplete
+007e5830  85  eastl::vector<cActions,sp_vector_allocator>::erase helper incomplete
+007e5890  1  eastl::vector<cActions,sp_vector_allocator>::erase (reallocating) not reconstructed; empty stub
+007e5ab0  64  cStateCommand::OnEndBlock: hash_map operator[]/hashtable find stubbed
+007e5c40  332  cAppStateManager::Update: EASTL hash-map state replay not reconstructed

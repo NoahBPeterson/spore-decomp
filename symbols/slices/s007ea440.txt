@@ -1,0 +1,12 @@
+# va Name  # evidence
+007ea440 FUN_007ea440  # unnamed serialization
+007eaa10 SP::cAppSystem::InitGraphics  # PDB name
+007eaef0 FUN_007eaef0  # EA::DateTime Set(2) init
+007eaf30 Cast/QueryInterface (id 0x45a9b42 -> this-8)  # disasm
+007eb060 eastl copy int range  # decompile
+007eb090 rbtree node count  # decompile
+007eb100 hashtable find wrapper  # entity from type
+007eb140 FUN_007eb140  # unnamed serialization
+007eb360 vector assign-from-other  # decompile
+007eb3b0 vector copyDown  # decompile
+007eb3f0 list free-nodes  # decompile

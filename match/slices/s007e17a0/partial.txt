@@ -1,0 +1,3 @@
+007e1b60  -  cTransitionCommand::OnRegister (1343B); registers 16 sub-commands but the FU_0083c780 base init and vtable/EH frames are not reproduced
+007e29d0  -  hashtable insert; only the lookup half is implemented (allocation/relink omitted)
+007e2ae0  -  cAppStateManager copy ctor; container copies are placeholder calls

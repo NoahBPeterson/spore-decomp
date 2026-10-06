@@ -1,0 +1,11 @@
+007f1600 EA::Resource::ReadKey  # __stdcall read callback storing ResourceKey id 0x472329b
+007f1630 cArithmeticaProgram::CompileToByteCode  # Ghidra name
+007f1820 cArithmeticaFactory::WriteResource  # Ghidra name
+007f1890 eastl::uninitialized_copy  # 16-byte element copy helper
+007f18e0 ResDerived factory  # operator_new(8,"App") + atomic refcount
+007f1ac0 eastl::vector<cArithmeticaProgram::tLabel>::assign  # 8-byte elements
+007f1d90 cArithmeticaProgram::~cArithmeticaProgram  # six buffer deallocations
+007f1e60 cArithmeticaProgram::cArithmeticaProgram  # PDB name, size 0x94
+007f1ed0 cArithmeticaFactory::Create  # operator_new(0x94,"App/cArithmeticaFactory")
+007f21d0 cArithmeticaProgram::Copy  # per-member vector copies
+007f2240 LoadArithmeticaFile  # Ghidra name

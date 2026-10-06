@@ -1,0 +1,24 @@
+007e06b0 SP::cSplitModelKernelDescription::cSafeDynamicKernelStorage::Read  # PDB name
+007e07a0 SP::SplitModelKernelRead  # PDB name
+007e07f0 `anonymous namespace'::cSplitControllerEffectCommand::Execute  # PDB name
+007e0850 `anonymous namespace'::SplitControllerAddCommands  # PDB caller-scored
+007e09a0 SplitModelKernel/Controller command registration  # stores tables at 0x1675c3c/0x16763d4
+007e0a00 `anonymous namespace'::cSplitModelKernelTypeCommand::Execute  # PDB/string "Type already specified."
+007e0a60 `anonymous namespace'::cSplitModelKernelOffsetCommand::Execute  # PDB caller + offset stores
+007e0b50 `anonymous namespace'::cSplitModelKernelRadiusCommand::Execute  # PDB caller-single
+007e0bc0 `anonymous namespace'::cSplitModelKernelNormalCommand::Execute  # PDB caller-single
+007e0c90 `anonymous namespace'::cSplitModelKernelOriginCommand::Execute  # PDB caller-single
+007e0d60 `anonymous namespace'::cSplitModelKernelDirectionCommand::Execute  # PDB caller-single
+007e0e30 `anonymous namespace'::cSplitModelKernelEffectCommand::Execute  # PDB caller-single
+007e0f00 SP::cSplitControllerEffect::finalize instances  # touches +0x14/0x18/0x1c
+007e0f70 SP::cSplitControllerEffect::~cSplitControllerEffect  # two vptrs, frees +0x1c, releases +0x18
+007e1010 SP::cSplitControllerEffect::cSplitControllerEffect  # inits +0x30 transform
+007e10c0 SP::cSplitControllerEffect::AddSplitInstance/AddInstance  # matrix update
+007e12b0 eastl::vector<...>::reserve/resize  # capacity check, EAlloc2 0x99efa0
+007e1450 SP::cSplitControllerEffect::CopyFrom  # copies +0x28.., rbtree iterate
+007e1540 SP::cSplitControllerEffect::OnMessage  # field10 = vtbl[0xa0]; CopyFrom(vtbl[0xc])
+007e1580 SP::cSplitControllerEffect::HandleMessage  # type==5 -> CopyFrom
+007e15b0 SP::cSplitControllerEffect::Start  # PDB caller-single
+007e1650 SP::cAppStateManager::Shutdown  # PDB name
+007e1710 SP::cAppStateManager::StateOccurredPreviously  # PDB name
+007e1760 message forwarder (two vtbl+0x18 calls)  # pairs at +0x15c/+0x160

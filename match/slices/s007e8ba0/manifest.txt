@@ -1,0 +1,2 @@
+slices/s007e8ba0/s007e8ba0.cpp  ?InitPlugins@cAppSystem@@QAE_NPAX@Z   007e9300  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007e8ba0/s007e8ba0.cpp  ?SetUserDirNames@cAppSystem@@QAEXPA_W0@Z  007e93d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

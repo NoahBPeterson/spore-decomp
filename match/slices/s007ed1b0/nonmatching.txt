@@ -1,0 +1,13 @@
+# va diff reason
+007ed1b0 283 EA::Swarm::ScaleCurve - vector insert shift loop schedule differs
+007ed3e0 53 vector<Vector3>::push_back - push/insert branch shape differs
+007ed740 101 effect description copy - inlined vector assignment differs
+007ed7c0 311 effect clone - wstring/vector ctor inlining differs
+007ed920 83 read vector<Vector3> - resize + loop differs
+007edaf0 165 effect read - string resize/read helpers differ
+007edc90 55 effect dtor - vtable store/release order differs
+007edd10 54 activate - 64-bit shift + string load differs
+007edd80 82 effect update - computed value/arg order differs
+007edde0 175 effect ctor - field schedule differs
+007edeb0 308 transform update - float multiply/add grouping differs
+007edff0 82 message handler - vcall/release sequence differs

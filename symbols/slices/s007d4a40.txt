@@ -1,0 +1,11 @@
+007d4a40  transform/description element init
+007d4ae0  EA::Swarm::cEffectParams::~cEffectParams
+007d4b60  cEffectParams::Handle  # key change (kind 6) + component notify
+007d4c60  cEffectParams::Handle2  # kinds 1/3/6 + component notify
+007d4dd0  cEffectParams effect update
+007d5240  large transform ctor
+007d5300  Elem40 copy ctor (0x40-byte element)
+007d53a0  Elem40 range copy
+007d5520  cSPTransform backward copy (0x40 stride)
+007d5590  cSPTransform-ish element copy (calls Matrix3::Assign + 0x537f40)
+007d55e0  EA::Swarm::cEffectParams::cEffectParams

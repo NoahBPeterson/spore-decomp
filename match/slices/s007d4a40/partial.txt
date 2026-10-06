@@ -1,0 +1,4 @@
+# <va>  <diff-bytes>  <reason>
+007d4ae0  -  cEffectParams::~cEffectParams: approximated (does not run the per-element AutoRefCount destructor or free the two storage vectors)
+007d4dd0  -  1123-byte effect update: skeleton only
+007d55e0  -  cEffectParams::cEffectParams: approximated (zero-init only; the member/vector and EH-array construction is not reproduced)
