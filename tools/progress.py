@@ -127,40 +127,52 @@ def model_table():
         if batch not in dominant or a["cost"] > bm[(batch, dominant[batch])]["cost"]:
             dominant[batch] = key
 
-    def batch_exact(batch):
-        bf = W("work/batches", batch + ".json"); n = 0
+    def batch_counts(batch):
+        """(exact, equivalent) function counts from this batch's manifests, minus
+        slices that actually belong to a different model's batch."""
+        bf = W("work/batches", batch + ".json"); ex = eq = 0
         exclude = CLAIM_EXCLUDE.get(batch, set())
         if os.path.exists(bf):
             for rec in json.load(open(bf)):
                 if _slice_batches[rec["id"]] & exclude:
                     continue  # shared slice actually produced by another model's batch
-                p = W("match/slices", rec["id"], "manifest.txt")
-                if os.path.exists(p):
-                    n += sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
-        return n + EXTRA_EXACT.get(batch, 0)
+                for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
+                    p = W("match/slices", rec["id"], fname)
+                    if os.path.exists(p):
+                        n = sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
+                        if is_exact:
+                            ex += n
+                        else:
+                            eq += n
+        return ex + EXTRA_EXACT.get(batch, 0), eq
 
-    agg = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0, "rea": 0, "exact": 0, "batches": 0})
+    agg = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0,
+                                            "rea": 0, "exact": 0, "equiv": 0, "batches": 0})
     for batch, key in dominant.items():
         a = bm[(batch, key)]; g = agg[key]
         for k in ("cost", "inp", "cr", "out", "rea"):
             g[k] += a[k]
-        g["exact"] += batch_exact(batch); g["batches"] += 1
+        ex, eq = batch_counts(batch)
+        g["exact"] += ex; g["equiv"] += eq; g["batches"] += 1
     rows = []
     for key, g in sorted(agg.items(), key=lambda x: -x[1]["cost"]):
-        ex = g["exact"]; inp = g["inp"] + g["cr"]; gen = g["out"] + g["rea"]
-        rows.append((key, g["batches"], human(ex), "$%.2f" % g["cost"],
-                     "$%.4f" % (g["cost"] / ex) if ex else "-",
+        ex, eq = g["exact"], g["equiv"]; comp = ex + eq
+        inp = g["inp"] + g["cr"]
+        per = lambda d: ("$%.4f" % (g["cost"] / d)) if d else "-"
+        rows.append((key, g["batches"], human(ex), human(eq), "$%.2f" % g["cost"],
+                     per(ex), per(eq), per(comp),
                      "%.2f" % (inp / ex / 1e6) if ex else "-",
-                     "%.1f" % (gen / ex / 1e3) if ex else "-",
                      ("%.0f%%" % (100 * g["cr"] / inp)) if inp else "-"))
     if not rows:
         return "(no spore-* sessions found)"
-    return table(["Model (provider/id)", "Batches", "Exact fns", "Cost", "$/fn",
-                  "In-tok/fn (M)", "Gen-tok/fn (k)", "cache%"],
-                 rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">"])
+    return table(["Model (provider/id)", "Batches", "Exact fns", "Equiv fns", "Cost",
+                  "$/exact", "$/equiv", "$/compilable", "In-tok/exact (M)", "cache%"],
+                 rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">", ">", ">"])
 
 print()
-print("Per-model efficiency (byte-exact functions; costs are opencode estimates, not billed)")
+print("Per-model efficiency (costs are opencode estimates, not billed; $/exact and $/equiv each "
+      "divide the model's whole cost, so they are not additive - use $/compilable for all-in)"
+      )
 print(model_table())
 
 # ---- live wave groups (optional) ----
