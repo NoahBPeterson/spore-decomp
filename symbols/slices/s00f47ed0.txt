@@ -1,0 +1,4 @@
+00f47ed0 SP::cSporeApp::Init  # 2008 dev-build PDB name
+00f48850 EAMain  # 2008 dev-build PDB / card name
+00f48a20 FUN_00f48a20  # __stdcall(4): constructs CommandLine, calls EAMain
+00f48b00 `anonymous_namespace'::cTerrainBrushState::~cTerrainBrushState  # 2008 dev-build PDB name

@@ -1,0 +1,2 @@
+00849f70  0  Canvas::FlushInput: only the drain/repost skeleton is written; the original's large inlined
+              message-coalescing pass (mouse/keyboard filtering over a vector<tagMSG>) is omitted.

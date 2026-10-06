@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+013cb260  9  complete; /O2 emits `sub edi,1` where the original has `dec edi` (2 bytes shorter), so the loop body is otherwise byte-identical
+013cb780  10  complete; same `dec`/`sub` delta in the 2-element zeroing loop
+013cb370  n/a  complete reconstruction of the compiler-generated array reset (store -1/0, memmove down 2 dwords, zero live count); not byte-exact and bounds span an unlisted int3 + ret thunk
+013cb7d0  n/a  body complete (mov ecx,imm; jmp dtor thunk); bounds extend over an unlisted int3 + ret thunk
+013cb850  n/a  body complete (mov ecx,imm; jmp dtor thunk); bounds extend over an unlisted int3 + ret thunk

@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c2e420/s00c2e420.cpp  ?SetSerializer@MissionStub@@QAEXXZ         00c2e4e0  /O2 /MD /Gy /TP
+slices/s00c2e420/s00c2e420.cpp  ?FUN_00c2eb60@MissionStub@@QAEXXZ         00c2eb60  /O2 /MD /Gy /TP
+slices/s00c2e420/s00c2e420.cpp  ?FUN_00c2ebc0@MissionStub@@QAEXXZ         00c2ebc0  /O2 /MD /Gy /TP
+slices/s00c2e420/s00c2e420.cpp  ?FUN_00c2f300@MissionStub@@QAEHXZ         00c2f300  /O2 /MD /Gy /TP
+slices/s00c2e420/s00c2e420.cpp  ?FUN_00c2f320@MissionStub@@QAEDPAH@Z      00c2f320  /O2 /MD /Gy /TP

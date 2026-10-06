@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edc9e0@@YAPAHPAHH@Z 00edc9e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edca20@@YAPAHPAH@Z  00edca20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edca60@@YAHH@Z     00edca60  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edca90@@YAHH@Z     00edca90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcac0@@YAXPAHH@Z  00edcac0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCB10@@QAEXXZ        00edcb10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edcc80@@YIXPAD@Z   00edcc80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?FUN_00edce00@@YA_NH@Z    00edce00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00edbfc0/s00edbfc0.cpp  ?f@ObjCF10@@QAEPAXD@Z     00edcf10  /O2 /MD /Gy /EHsc /TP /arch:SSE

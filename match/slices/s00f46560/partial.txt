@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+00f46560  n/a  skeleton: large cSPUIAssetComments/editor UI message handler (167 B); full reconstruction not done
+00f46630  n/a  skeleton: 607-byte UI activate handler (builds verb-icon tray over 4 image resources); full reconstruction not done
+00f468c0  n/a  skeleton: SP::cSPUIAssetComments::DoMessage (93 B); full reconstruction not done
+00f46920  n/a  skeleton: SP::cOnlineTab::Shutdown (277 B); full reconstruction not done
+00f46a40  n/a  skeleton: cOnlineTab teardown (111 B); full reconstruction not done
+00f46ab0  n/a  skeleton: cOnlineTab frame setup (147 B); full reconstruction not done
+00f46b50  n/a  skeleton: cOnlineTab constructor (133 B); full reconstruction not done
+00f46c00  n/a  skeleton: cOnlineTab destructor (170 B); full reconstruction not done
+00f46cf0  n/a  skeleton: cOnlineTab URL/name builder (109 B); full reconstruction not done
+00f46d60  n/a  skeleton: cOnlineTab::DoMessage (112 B); full reconstruction not done
+00f46dd0  n/a  skeleton: screen constructor (71 B); full reconstruction not done
+00f46e30  n/a  skeleton: screen destructor (95 B); full reconstruction not done
+00f46eb0  n/a  skeleton: screen::SetFrame (386 B); full reconstruction not done
+00f47040  n/a  skeleton: screen teardown (54 B); full reconstruction not done
+00f47080  n/a  skeleton: screen::SetVisible (157 B); full reconstruction not done
+00f47120  n/a  skeleton: screen::ResetFrames (75 B); full reconstruction not done
+00f47170  n/a  skeleton: screen::Refresh (523 B); full reconstruction not done

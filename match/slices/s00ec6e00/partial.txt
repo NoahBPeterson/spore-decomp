@@ -1,0 +1,9 @@
+# va  reason
+00ec7580 property lookup: only the first guard reconstructed; body incomplete
+00ec7640 early-out predicate: game-query chain not reconstructed
+00ec76e0 free-list pop/create: singleton/types modeled only as skeleton
+00ec7770 popup-menu item builder: virtual slots and switch not reconstructed
+00ec7950 unlocked-card update loop: skeleton only
+00ec79f0 intrusive-list search: iterator/virtual protocol guessed, incomplete
+00ec7a80 credits-tab float layout: not reconstructed
+00ec7ca0 eastl vector copy-ctor: not reconstructed

@@ -1,0 +1,18 @@
+009206d0  110  EapdSymbolTable ctor: field-store order / vtable store schedule differ
+009209c0  154  hash-table lookup: find() iterator loop / lock shape differs
+00920a70  -    hash-table find2: size/shape differs (no comparable symbol)
+00920c20  29   HasAltSeparator: register allocation differs
+00920c60  111  SkipComponent: path-component loop register/branch schedule differs
+00920d00  99   SkipComponentBack: backward component loop schedule differs
+00920da0  32   ComponentAt: index loop shape / register allocation differs
+00920e30  149  FindExtension: dot/extension scan schedule differs
+00920ee0  8    NormalizeSeparators2: tail-calls FindExtension instead of call+ret
+00920f00  10   NormalizeSeparators: register allocation (p/c) differs
+00921150  -    FUN_00921150: size/shape differs (no comparable symbol)
+009212c0  -    UpperBound: 50 bytes vs 63 (loop/register form differs)
+00921300  -    LowerBound: 50 bytes vs 63 (loop/register form differs)
+00921340  13   FUN_00921340: caller wrapper schedule differs
+00921360  70   FUN_00921360: x87/SSE rounding sequence schedule differs
+009213c0  107  FUN_009213c0: x87/SSE rounding sequence schedule differs
+00921440  301  FUN_00921440: range mapper arithmetic/compare schedule differs
+00921580  34   RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ

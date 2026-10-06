@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0138d560  n/a  init_15afd38: 15-dword property-descriptor table; first records reconstructed only
+013921c0  n/a  init_16d6fa8: large float basis-matrix constant table (74 stores) not reproduced
+01396110  n/a  init_15b4568: 15-dword property-descriptor table
+01396440  n/a  init_15b47b8: 15-dword property-descriptor table

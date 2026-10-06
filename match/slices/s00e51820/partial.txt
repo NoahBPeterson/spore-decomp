@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e51a40  1169  spawn effects along a segment: skeleton only (the 6 x FUN_00e4f750/FUN_00e4dbc0 sub-paths and the level-1 special path are omitted)

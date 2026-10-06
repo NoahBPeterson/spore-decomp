@@ -1,0 +1,3 @@
+# va  reason
+00e61b90 effect-with-facing: virtual slot indices and cSPTransform field writes reconstructed from Ghidra, not verified
+00e61d90 register-arg (eax self + stack) lookup helper reconstructed from Ghidra; argument provenance guessed

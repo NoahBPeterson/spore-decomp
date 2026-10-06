@@ -1,0 +1,35 @@
+0093b9e0 App::memorystream::WriteBuffer  # no PDB name; +4 raw buffer
+0093ba40 App::memorystream::memorystream  # dev-PDB App::memorystream::memorystream
+0093ba90 FUN_0093ba90  # no PDB name
+0093bab0 GraphicsFactoryAsyncRequest::GetProperty  # no PDB name
+0093bb40 GraphicsFactoryAsyncRequest::SetProperty  # no PDB name
+0093bbf0 EA::IO::MemoryStream::ReadBuffer  # no PDB name
+0093bc40 EA::IO::SharedPointer::SharedPointer  # mislabelled Release by xmatch
+0093bca0 Anim::BackgroundLoading::BackgroundLoading  # dev-PDB gap-align
+0093bcf0 Anim::BackgroundLoading ctor overload  # no PDB name
+0093bd50 Graphics::GraphicsFactoryAsyncRequest::GraphicsFactoryAsyncRequest  # no PDB name
+0093bd90 Anim::BackgroundLoading scalar deleting dtor  # no PDB name
+0093bde0 GraphicsFactoryAsyncRequest dtor  # no PDB name
+0093be30 EA::IO::MemoryStream::SetData  # dev-PDB EA::IO::MemoryStream::SetData
+0093bf70 GraphicsFactoryAsyncRequest::Attach  # no PDB name
+0093c000 EA::IO::MemoryStream::Grow  # no PDB name
+0093c0c0 EA::IO::MemoryStream::SetPosition  # no PDB name
+0093c130 EA::IO::MemoryStream::SetSizeEx  # no PDB name
+0093c150 EA::IO::MemoryStream::WriteBuffer  # no PDB name
+0093c210 GraphicsFactoryAsyncRequest scalar deleting dtor  # no PDB name
+0093c270 Graphics::GraphicsFactoryAsyncRequest::GraphicsFactoryAsyncRequest  # dev-PDB gap-align
+0093c2c0 EA::IO::MemoryStream::MemoryStream  # dev-PDB EA::IO::MemoryStream::MemoryStream
+0093c320 EA::IO::MemoryStream::Clear  # no PDB name
+0093c370 EA::IO::MemoryStream::SetSize  # no PDB name
+0093c3f0 EA::IO::MemoryStream::Release  # no PDB name
+0093c420 trivial return-b thunk  # no PDB name
+0093c430 small ctor  # no PDB name
+0093c440 EA::ConvertToString8  # dev-PDB EA::ConvertToString8
+0093c570 EA::ConvertToString8  # dev-PDB EA::ConvertToString8 (range wrapper)
+0093c5a0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16
+0093c6d0 EA::ConvertToString16  # dev-PDB EA::ConvertToString16 (range wrapper)
+0093c6f0 FUN_0093c6f0  # no PDB name; fputs to stderr
+0093c710 EA::Text::Strlen32  # dev-PDB EA::Text::`anonymous namespace'::Strlen32
+0093c730 EA::Text::DetectEncoding  # no PDB name
+0093c850 EA::Text::ConvertEncoding_via_UTF16  # dev-PDB EA::Text::ConvertEncoding_via_UTF16
+0093c920 EA::Text::GetCharacterSize  # dev-PDB EA::Text::GetCharacterSize

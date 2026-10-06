@@ -1,0 +1,2 @@
+00edd580 UI::cScenarioEditModeScriptUI::cScenarioEditModeScriptUI  # vtbl_UI::cScenarioEditModeScriptUI
+00edd6b0 UI::cScenarioEditModeScriptUI::~cScenarioEditModeScriptUI  # destroys the same MI vtables

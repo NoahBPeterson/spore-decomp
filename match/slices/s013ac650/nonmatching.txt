@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+013ac650  313  16-block 60-byte descriptor table; cl hoists the shared fnptr constants (ebp/ebx) differently from block 11 onward
+013b3650  15   TlsAlloc x5 loop: cl emits `sub edi,1`; original uses `dec edi`
+013b52d0  12   x87 `1.0f - hkFpuRoundingProbe()` spills to a stack slot instead of staying on st0 across the three stores
+013b5db0  12   post-increment guard: original reloads the global (`mov ecx,[g]`), cl CSEs the two loads
+013b5de0  12   post-increment guard: original reloads the global (`mov ecx,[g]`), cl CSEs the two loads
+013bca50  2    /Od virtual call: cl loads the vtable before `this` (ecx); original loads `this` first
+013bcd30  2    /Od virtual call: cl loads the vtable before `this` (ecx); original loads `this` first
+013b8e50  144  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps
+013b8ef0  144  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps
+013b8f90  129  Vector4 row copy emits integer dword moves; original copies 16 bytes with movaps

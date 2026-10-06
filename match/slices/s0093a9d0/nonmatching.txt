@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+0093a9d0  139  complete: WriteUint16 byte-swap loop, register schedule differs
+0093aa70  138  complete: WriteUint32 byte-swap loop, register schedule differs
+0093ab10  166  complete: WriteUint64 swap uses intrinsic vs original 8de020 helper
+0093ac80  47   complete: ReadBool, branch layout differs
+0093adb0  77   complete: WriteCString length prefix + payload, schedule differs
+0093ae80  1    complete: StreamBuffer::GetSize, one branch lands on a different ret
+0093af00  80   complete: FlushWriteBuffer, register allocation differs
+0093af60  126  complete: SetBufferSizes, allocator call/loop scheduling differs
+0093b0a0  145  complete: StreamBuffer::SetPosition, scheduling differs
+0093b140  416  complete: StreamBuffer::Read, buffer-management schedule differs
+0093b310  152  complete: FillWriteBuffer, loop schedule differs
+0093b3c0  108  complete: SetStream, refcount/field ordering differs
+0093b450  38   complete: Close, field-store ordering differs
+0093b490  101  complete: Write, branch layout differs
+0093b770  47   complete: StreamChild::Read, min/position scheduling differs
+0093b820  129  complete: WriteEncoded, ConvertEncoding loop schedule differs
+0093b950  54   complete: FixedMemoryStream::SetPosition, branch layout differs
+0093b9a0  41   complete: FixedMemoryStream::Read, unsigned test/cmov differs

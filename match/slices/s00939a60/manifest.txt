@@ -1,0 +1,12 @@
+# source  symbol  original VA  [flags override]
+slices/s00939a60/s00939a60.cpp  SetElapsedCycles@Stopwatch@@QAEX_J@Z  0093a380  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  GetCyclesToUnitsCoefficient@@YAMH@Z  0093a420  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  GetStopwatchFrequency@@YA_KXZ  0093a470  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  ??0Stopwatch@@QAE@H_N@Z  0093a560  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  GetElapsedTime@Stopwatch@@QAE_JXZ  0093a5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  WriteExact@@YA_NPAVIOStream@@PAXH@Z  0093a6c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  ReadUInt16@@YA_NPAVIOStream@@PAGHH@Z  0093a700  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  ReadInt32@@YA_NPAVIOStream@@PAIHH@Z  0093a780  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  ReadUInt64@@YA_NPAVIOStream@@PA_KHH@Z  0093a800  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  HasRoom@@YA_NPAVIOStream@@HH@Z  0093a890  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00939a60/s00939a60.cpp  StreamWrite@@YA_NPAVIOStream@@HH@Z  0093a9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE

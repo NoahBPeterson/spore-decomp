@@ -1,0 +1,10 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00efdee0  -  planet placement: long SSE/PlanetModel sequence reduced to entry/exit calls
+00efe110   -  camera/view state: FUN_007c40c0+FUN_007c4010 math and property reads approximated
+00efe310   -  stopwatch state machine: only the entry branch written
+00efe6a0   -  rating computation: full camera dot-product/rating path not written
+00efe8d0   -  window toggle: vtable calls written, DAT_016c7b88 refresh path approximate
+00efe930   -  set selected object: large reference/hash update omitted
+00efeae0   -  object permission check: loop body stubbed
+00efebb0   -  object permission variant: body stubbed
+00efec90   -  body not reconstructed (card truncated); left as an empty stub

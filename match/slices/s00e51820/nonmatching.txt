@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e51930  74  register self, list lookup + mesh vcall, append: complete; original receives self already in esi (register-arg static), we take it on the stack
+00e51990  132  compact destroyed effect pointers from a vector: complete; loop/register schedule differs
+00e51ee0  215  construct an effect spawn descriptor: complete (all field stores + default vectors); parameter/register schedule differs

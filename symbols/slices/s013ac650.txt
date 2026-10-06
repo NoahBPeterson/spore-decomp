@@ -1,0 +1,9 @@
+# address  name  # evidence
+013b34f0  ??__E?s_threadMemoryInstance@hkThreadMemory@@2V?$hkThreadLocalData@PAVhkThreadMemory@@@@A  # pdb_globals 016e4174 + TlsAlloc/atexit shape
+013b3650  ??__E?<hkThreadLocalData array>  # five TlsAlloc slots at 016e42a0
+013b3ca0  ??__E?hkLimitedHingeConstraintDataClass  # hkClass ctor with "hkLimitedHingeConstraintData"
+013b3fd0  ??__E?hkRigidBodyDeactivatorClass  # hkClass ctor with "hkRigidBodyDeactivator"
+013b40f0  ??__E?hkConstraintMotorClass  # hkClass ctor with "hkConstraintMotor"
+013b41e0  ??__E?hkWorldCinfoClass  # hkClass ctor with "hkWorldCinfo"
+013b4640  ??__E?hkEntityClass  # hkClass ctor with "hkEntity"
+013b5440  ??__E?hkRagdollConstraintDataClass  # hkClass ctor with "hkRagdollConstraintData"

@@ -1,0 +1,9 @@
+00e51820  sample fluid velocity magnitude at a point
+00e51870  sample fluid velocity vector at a point (returns vec3)
+00e518d0  fill a vec4 with 1.0
+00e51900  lookup effect object via list and return its 0x24 field
+00e51930  lookup effect, send mesh message, append self to gfx list
+00e51990  compact/notify effect pointer vector
+00e51a40  spawn effects along a segment
+00e51ee0  build an effect spawn descriptor
+00e51ff0  SP::sGetBoxSizeMultiplier2  # PDB name; level-difference multiplier table

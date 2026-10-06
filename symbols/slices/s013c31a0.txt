@@ -1,0 +1,41 @@
+# Static-destructor / shutdown thunks (engine teardown module), descriptive names.
+013c31a0 static_dtor_16_8bd4c_hashtable    # DoFreeNodes + debug free
+013c33a0 static_dtor_rbtree_array_16_8cb28 # array of 3 rbtree-like maps, free each node
+013c3550 static_dtor_16_8db30_arr6         # 6 x 0x44-stride destructors
+013c35b0 static_dtor_16_8dc98_arr2         # 2 x 0x44-stride destructors
+013c3900 static_free_16_8e7cc_16_8e754     # two debug frees
+013c3a20 static_dtor_cString_array_16_8f010# 10 x cString destructors, stride 0x14
+013c42d0 static_dtor_16_99a0c_arr60        # 0x60 x 0xb8-stride singletons + debug frees
+013c43b0 static_dtor_15_7abb0_hashtable    # DoFreeNodes + SSO-guarded free
+013c4c10 static_release_16_9d2a8           # virtual release singleton
+013c4f20 static_free_15_821cc_vector       # vector free with SSO guard
+013c52d0 static_dtor_16_9e2d0_pair          # two virtual releases + debug free
+013c5790 static_dtor_16_9f200_arr4         # 4 x 0x44-stride destructors
+013c6b00 static_release_16_a15f8           # virtual release singleton
+013c6e20 static_init_15_a4878              # vtable + 0 store
+013c72d0 static_dtor_cSPUILayout_15_a51b4  # cSPUILayout Shutdown + dtor
+013c7db0 static_dtor_16_b4178_arr6         # 6 x 0x98-stride destructors
+013c7e80 static_dtor_16_b4278_arr64        # 0x40 singletons, virtual release
+013c8d90 static_init_15_accb8              # two vtable stores
+013c8f60 static_free_15_ace38_vector       # vector free with SSO guard
+013c9030 static_dtor_16_c7c14              # vtable reset + nested release + debug free
+013c9140 static_dtor_16_c7f30_arr10        # 10 x 0x20-stride, two virtual releases each
+013c9400 static_free_15_ad7cc_vector       # vector free with SSO guard
+013c9910 static_dtor_16_c89c4_array        # array of 0x44-stride objects + debug free
+013c9950 static_shutdown_shared_alloc      # conditional EA::Allocator::ShutdownSharedAllocator
+013c9c30 static_release_16_c9f54           # atomic refcount release
+013c9c70 static_release_16_c9f58           # atomic refcount release
+013c9cb0 static_release_16_c9f5c           # atomic refcount release
+013c9dd0 static_dtor_16_d6d70_arr16        # 0x10 virtual releases
+013c9e00 static_dtor_16_d6db0_arr16        # 0x10 virtual releases
+013c9f40 static_release_16_d714c           # refcount + virtual release
+013c9f70 static_release_16_d7150           # refcount + virtual release
+013ca670 static_dtor_15_b7458_hashtable    # virtual release + DoFreeNodes + free
+013ca6c0 static_dtor_15_b749c              # vtable reset + virtual release
+013ca6f0 static_dtor_15_b7510              # vtable reset + releases
+013ca7f0 static_dtor_15_b7648              # vtable reset + releases + debug free
+013ca8f0 static_dtor_Variant_arr4_16_df428 # 4 x EA::Variant destructors, stride 0x14
+013ca920 static_dtor_15_b7b2c_15_b79b8     # 3 teardowns + vtable store
+013caab0 static_dtor_15_b84f0              # debug free + RemoveHandler + vtable store
+013cab50 static_release_16_e0d04           # double virtual release
+013cb250 static_tlsfree_16_e4174           # TlsFree

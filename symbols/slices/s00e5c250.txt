@@ -1,0 +1,22 @@
+00e5c250  SP::sGetRandomCreatureKey  # PDB candidate; weighted-creature-key picker
+00e5c410  creature-kind predicate (matches config kind)
+00e5c460  creature-height predicate (kind by height)
+00e5c4d0  forward config object to a vtable method
+00e5c4f0  cell quota refresh + return
+00e5c520  current config id at +0x74
+00e5c530  source-level interpolation
+00e5c560  set creature field 0x244 = 6
+00e5c5d0  read up to 13 ints from a stream
+00e5c660  write 13 ints to a stream
+00e5c6e0  read up to 6 var-list slots
+00e5c780  eastl::rbtree<unsigned,...>::find
+00e5c7d0  0x2c-byte struct copy
+00e5c860  copy range of 0x2c-byte structs
+00e5c8e0  spawn marker for a creature
+00e5c9d0  pick message id from source level vs thresholds
+00e5ca60  point-in-cell-bounds test
+00e5cac0  this-return accessor
+00e5cae0  normalize a random direction
+00e5cb60  fluid ray/AABB cast
+00e5cd00  distance-to-box vs scaled radius test
+00e5cde0  cell-visibility predicate

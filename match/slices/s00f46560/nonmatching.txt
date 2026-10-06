@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00f47430  28  complete behaviourally-equivalent shared-allocator teardown; register lifetime of the singleton pointer across the HeapFree call differs from cl
+00f47480  30  complete behaviourally-equivalent shared-allocator allocation; store/call scheduling and stack-cleanup shape differ
+00f475b0  11  complete; cl uses an out-of-line float->int helper where the original inlines cvttss2si

@@ -1,0 +1,3 @@
+00939a60 720  ParseFormatToken: printf-style format tokenizer with jump table not reconstructed
+00939d40 1108 ParseFormat: printf-style formatter not reconstructed
+0093a610 162  StreamCopy: chunked stream-copy loop not reconstructed

@@ -1,0 +1,29 @@
+00b1d870 FUN_00b1d870  # SP::cGonzagoSubsystem-derived ctor (vtables 0x145d7f0/7e8/7e0)
+00b1d970 FUN_00b1d970  # ctor/vtable init
+00b1da20 FUN_00b1da20  # ctor/vtable init
+00b1daf0 TerrainMgr::Fn1  # terrain-sphere indexed field lookup (switch over resource ids 0x1654c00..)
+00b1db60 FUN_00b1db60  # WindowManager SetVisible (slot 0x58) toggle
+00b1dbd0 FUN_00b1dbd0  # WindowManager SetEnabled (slot 0x5c) toggle
+00b1dc60 FUN_00b1dc60  # large init
+00b1de80 TerrainMgr::Fn2  # terrain-sphere indexed field lookup, id from +0x20
+00b1dee0 FUN_00b1dee0  # init routine
+00b1dfc0 FUN_00b1dfc0  # refcounted member reset (vtable slots 4/8)
+00b1e020 FUN_00b1e020  # init routine
+00b1e0c0 SP::cSPPlayModeBGMgr::InitiateChangeEnviroment  # PDB name
+00b1e410 FUN_00b1e410  # environmental-switch notification
+00b1e4d0 Simulator::cSpaceInventoryItem::IsAvailableInCurrentPlanet  # PDB name
+00b1e500 FUN_00b1e500  # interface id equality
+00b1e520 FUN_00b1e520  # interface id check (vtable slot 3)
+00b1e540 FUN_00b1e540  # sets flag byte at +0 and returns this
+00b1e820 New_cGenericPressureEvent  # operator new 0x1f8 "Simulator/cGenericPressureEvent"
+00b1eba0 New_cCelestialBody  # operator new 0xcc "Simulator/cCelestialBody"
+00b1f590 New_cPlanet  # operator new 0x1c8 "Simulator/cPlanet"
+00b1f5d0 New_cVisiblePlanet  # operator new 0x10c "Simulator/cVisiblePlanet"
+00b1f640 New_cSolarSystem  # operator new 0x54 "Simulator/cSolarSystem"
+00b1f790 New_cTribePlanner  # operator new 0x7c "Simulator/cTribePlanner"
+00b1f960 FUN_00b1f960  # layout/effect toggle
+00b1f9d0 GetPlayerEmpireOrMinus1  # switch over GetCurrentGameMode
+00b1fbb0 FUN_00b1fbb0  # subsystem init-state query
+00b1fbf0 UTFWin::Window::Initialize  # PDB name; returns true
+00b1fc30 New_cMissionHappinessEvent  # operator new 0x1f0 "Simulator/cMissionHappinessEvent"
+00b1fc80 FUN_00b1fc80  # cVarListSerializer round-trip

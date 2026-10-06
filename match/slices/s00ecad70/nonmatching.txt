@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00ecb010 89   row-find then 5-dword copy: p register (esi vs eax) and copy order differ
+00ecb150 115  row-find + reset + copy: register schedule differs
+00ecb6b0 73   window guard: byte reload and virtual slot schedule differ
+00ecb730 25   tail-call vs ret placement after virtual test
+00ecb7a0 97   slider clamp: needs __asm Min/Max helper shape (not reproduced)
+00ecb830 97   slider clamp: needs __asm Min/Max helper shape (not reproduced)
+00ecb8c0 54   palette-item dtor: vtable store order / virtual releases differ

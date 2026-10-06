@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00b5f040  -  skeleton: cSuperPowersCommand argument collection not reconstructed
+00b5f1d0  -  skeleton: large UI update function not reconstructed
+00b5f620  45 skeleton: cSuperPowersCommand ctor missing ArgScript base/spec construction
+00b5f670  -  skeleton: Parse + noun/game-mode dispatch not reconstructed
+00b5f7b0  -  skeleton: large object-type switch not reconstructed
+00b5fa90  -  skeleton: large UI update function not reconstructed
+00b5fde0  -  skeleton: large UI function not reconstructed
+00b600a0  -  skeleton: dtor body only partially reconstructed

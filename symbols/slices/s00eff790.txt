@@ -1,0 +1,7 @@
+# va  name  # evidence
+# scenario checklist construction / noun lookup; names unconfirmed
+00eff790  ScenarioTutorials_BuildChecklist      # creates the six checklist windows via cGameNounManager
+00f001b0  ScenarioTutorials_NearestSurfacePoint  # 0x238-stride scan + SSE distance compare
+00f002d0  ScenarioTutorials_NextSurfaceNode     # 0x238-stride scan for the next node
+00f00380  ScenarioTutorials_SurfaceQuery
+00f004f0  ScenarioTutorials_ObjectQuery

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00ec6e00 81   global reload / loop-end reload not reproduced
+00ec6ea0 52   begin/end register allocation swapped (ecx/eax vs edx/ecx)
+00ec6ee0 220  UI virtual-call chain: slot indexing and temp order differ
+00ec6fc0 213  UI transform/temp locals not reproduced
+00ec70d0 400  row-update loop: virtual layout + float math differ (large)
+00ec7320 110  UI virtual-call sequence differs
+00ec73c0 200  window-search loop; virtual calls approximated
+00ec7490 56   null-check / tail-merge block ordering differs
+00ec74e0 43   window lookup logic close; virtual-call slots approximated
+00ec78e0 79   window handle lookup + call args approximated
+00ec7b90 212  resource-image menu builder; virtual slots approximated

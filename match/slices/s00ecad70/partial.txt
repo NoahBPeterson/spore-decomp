@@ -1,0 +1,8 @@
+# va  reason
+00ecad70 ban-mode update: banner transform math and control flow not reconstructed
+00ecb1f0 event/message dispatcher: jump-table cases not reconstructed
+00ecb520 window show/hide: virtual protocol not reconstructed
+00ecb690 thin guard wrapper: float-arg convention to FUN_00ecad70 not settled
+00ecb950 palette-item shutdown: member layout approximated, incomplete
+00ecb9a0 palette-item state update: virtual calls approximated, incomplete
+00ecba50 palette-item ctor: member/vtable initialization not reconstructed

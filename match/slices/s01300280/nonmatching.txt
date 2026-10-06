@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+01300280  13  init_1668f1c: complete; LoadLibrary/atexit outline differs
+01300760  23  init_166b194: complete; store/atexit schedule differs
+01302200  19  init_166c350: complete; SSE constant synthesis (unpcklps) differs
+01307ea0  10  zero_1675eb8: complete; store scheduling shift
+01307ed0  11  zero_1675a00: complete; store scheduling shift
+0130fcc0  4  init_1679034: complete; constant folded to memory store instead of register
+0130fce0  4  init_1678f3c: complete; constant folded
+013107d0  4  init_1679394: complete; constant folded
+01310bc0  4  init_1679564: complete; constant folded
+01310be0  4  init_167946c: complete; constant folded
+01300e00  21  init_154fe1c: complete; /Od 0x14+0x584 folds (needs runtime add)
+01300e90  127  init_154ff0c: complete; /Od offset arithmetic folds
+01301110  21  init_15501e4: complete; /Od 0x14+0xa890 folds

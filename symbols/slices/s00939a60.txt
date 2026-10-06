@@ -1,0 +1,20 @@
+00939a60 FUN_00939a60  # printf-style tokenizer (jump table at 0x939ce4, cases ' '-'=')
+00939d40 FUN_00939d40  # formatter, calls 0x939a60
+0093a1a0 EA::Stopwatch::SetUnits  # PDB name
+0093a2e0 SP::cDirectPropertyList::SetBoolProperty  # PDB name
+0093a380 EA::Stopwatch::`unnamed setter'  # writes mnTotalElapsedTime from cycles/coeff
+0093a3a0 EA::Stopwatch::GetElapsedTimeFloat  # PDB name; returns accumulated cycles
+0093a420 GetCyclesToUnitsCoefficient  # switch over units 2..6
+0093a470 GetStopwatchFrequency  # returns mnStopwatchFrequency (0x154eae8)
+0093a480 EA::LimitStopwatch::SetTimeLimit  # PDB name
+0093a510 cSPUILayerManager::GetDelta  # QPC delta * coeff
+0093a560 EA::Stopwatch::Stopwatch  # PDB name
+0093a5e0 EA::Stopwatch::GetElapsedTime  # PDB name
+0093a610 StreamCopy  # chunked stream copy
+0093a6c0 WriteExact  # v14 guard, then v30 exact-length write
+0093a700 ReadUInt16  # big-endian swap read
+0093a780 EA::IO::ReadInt32  # PDB name (also ReadUint32)
+0093a800 ReadUInt64  # 64-bit big-endian swap read
+0093a890 HasRoom  # (a*b) <= v2c()
+0093a8b0 EA::IO::ReadLine  # PDB name
+0093a9a0 operator<<  # v14 guard, v38 write

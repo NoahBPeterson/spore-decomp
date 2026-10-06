@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00926020  30  ZoneObject::operator_new: virtual allocate call shape differs
+00926060  15  ZoneObject::operator_delete: virtual deallocate call shape differs
+00925bf0  16  allocator virtual call wrapper: argument/scheduling differs
+00925da0  23  allocator virtual call wrapper: argument/scheduling differs
+00925e40  11  intrusive-list pop: param convention (ret 8) differs
+00926100  17  critical-section init: return value handling differs
+00925f30  32  hash container init: field-init ordering differs

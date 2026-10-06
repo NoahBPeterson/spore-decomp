@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00efb4e0  -  category-setup switch written as a table-driven loop; per-entry Vector3 global
+              offsets are approximate, not a faithful transcription of the 1248-byte unrolled body
+00efb9c0   -  only the head (category select + first window pass) is implemented; the 0x14c-stride
+              table walk and per-window update loop are omitted

@@ -1,0 +1,11 @@
+00b5f040 FUN_00b5f040  # no PDB name
+00b5f1b0 FUN_00b5f1b0  # no PDB name
+00b5f1d0 FUN_00b5f1d0  # no PDB name
+00b5f620 App::cSuperPowersCommand::cSuperPowersCommand  # dev-PDB gap-align
+00b5f670 FUN_00b5f670  # no PDB name
+00b5f7b0 FUN_00b5f7b0  # no PDB name
+00b5f950 EA::AutoRefCount<EA::UTFWinControls::IWinText>::operator=  # dev-PDB
+00b5fa90 FUN_00b5fa90  # no PDB name
+00b5fde0 FUN_00b5fde0  # no PDB name
+00b60070 FUN_00b60070  # no PDB name
+00b600a0 FUN_00b600a0  # no PDB name

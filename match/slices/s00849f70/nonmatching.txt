@@ -1,0 +1,11 @@
+0084a230  211  SetEnabled: repeated mpCanvas/mD0 member reloads and vcall register schedule differ
+0084a540  13   SetCompositionWindow: arg0/arg1 register assignment and vtable-register schedule differ
+0084a700  88   IMECompositionStringDataEx ctor: locale copy loop shape + member store order differ
+0084a7e0  61   WString copy ctor: source-pointer register allocation differs
+0084a830  124  ConstructWStrings: inlined ctor/DoInsertValue register schedule differs
+0084a8f0  124  ConstructWStringsN: inlined ctor/DoInsertValue register schedule differs
+0084a9a0  141  UninitializedCopyWStrings: inlined ctor register schedule differs
+0084abd0  61   ~IMEServer: virtual v05(0) devirtualizes to a direct call instead of [vtable+0x14]
+0084ac50  56   IMECompositionStringDataEx::Reset: vector-clear / end-adjust code shape differs
+0084acf0  51   IMEServerWin32 scalar deleting dtor: MI vtable resets / dtor order differ
+0084ad40  382  WriteCompositionString: inlined Imm/resize/VecFill schedule differs

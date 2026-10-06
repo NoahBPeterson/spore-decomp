@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00e133b0  1906  SP::cUIMissionCard::InitForCreature: only the initial window/card acquisition and guard checks reconstructed; the layout/animation/text-sizing tail (drawable queries, Matrix33 descriptor, AutoSizeWindowForText) is omitted

@@ -1,0 +1,35 @@
+00c2e420 FUN_00c2e420  # no PDB name; cGameData::Read + 2 serializers
+00c2e4b0 FUN_00c2e4b0  # no PDB name; state setter
+00c2e4e0 UTFWin::ILayoutElement::SetSerializer  # dev-PDB gap-align
+00c2e4f0 SP::cSPCreatureMission::GetProgressIconLayout  # dev-PDB caller-scored
+00c2e520 SP::cSPCreatureMission::Update  # dev-PDB gap-align
+00c2e5a0 FUN_00c2e5a0  # no PDB name
+00c2e6c0 SP::cSPCreatureSpeciesMission::Read  # dev-PDB gap-align
+00c2e780 FUN_00c2e780  # no PDB name
+00c2e7b0 SP::cSPCreatureSpeciesMission::GetImage  # dev-PDB gap-align
+00c2e820 FUN_00c2e820  # no PDB name
+00c2e8c0 SP::cSPCreatureNestMission::Read  # dev-PDB gap-align
+00c2e980 FUN_00c2e980  # no PDB name
+00c2e9b0 FUN_00c2e9b0  # no PDB name
+00c2e9e0 FUN_00c2e9e0  # no PDB name
+00c2eaa0 FUN_00c2eaa0  # no PDB name
+00c2eb60 FUN_00c2eb60  # no PDB name
+00c2ebc0 FUN_00c2ebc0  # no PDB name
+00c2ec30 FUN_00c2ec30  # no PDB name
+00c2ec80 FUN_00c2ec80  # no PDB name
+00c2ecd0 SP::cSPCreatureMission::GetContentWinCommandID  # dev-PDB gap-align
+00c2ed20 FUN_00c2ed20  # no PDB name
+00c2f090 FUN_00c2f090  # no PDB name
+00c2f190 FUN_00c2f190  # no PDB name
+00c2f1f0 FUN_00c2f1f0  # no PDB name
+00c2f240 SP::cSPCreatureSpeciesMission::GetRewardValue  # dev-PDB gap-align
+00c2f300 FUN_00c2f300  # no PDB name
+00c2f320 FUN_00c2f320  # no PDB name
+00c2f340 Simulator::cCreatureTutorialMission::cCreatureTutorialMission  # dev-PDB gap-align
+00c2f3e0 FUN_00c2f3e0  # no PDB name
+00c2f470 Simulator::cTribeToTribeMission::cTribeToTribeMission  # dev-PDB gap-align
+00c2f520 FUN_00c2f520  # no PDB name
+00c2f590 FUN_00c2f590  # no PDB name
+00c2f5f0 FUN_00c2f5f0  # no PDB name
+00c2f650 FUN_00c2f650  # no PDB name
+00c2f690 FUN_00c2f690  # no PDB name

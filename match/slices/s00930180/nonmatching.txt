@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00930180  220  complete: lengths/copies correct, register allocation differs
+009302b0  476  complete: directory-component splitter reproduced, schedule differs
+009309b0  31   complete: absolute-path copy vs FullPath; callee-saved reg differs
+00930a30  103  complete: separator normalizer; redundant ':' test not reproduced
+00930ab0  212  complete: IsSubdirectory logic reproduced, register layout differs
+00930ba0  61   complete: first-not-in-set scan; loop shape differs
+00930cb0  92   complete: extension copy; indexing form differs
+00930fc0  215  complete: ReplacePathComponent; SafeReplace arg register order differs
+00931250  287  complete: filename sanitizer reproduces behavior, string class differs

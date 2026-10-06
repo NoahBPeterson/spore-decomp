@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0093a9d0/s0093a9d0.cpp  ?GetAccessFlags@StreamBuffer@IO@EA@@UBEHXZ            0093ae40  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetState@StreamBuffer@IO@EA@@UBEHXZ                 0093ae60  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetPosition@StreamBuffer@IO@EA@@UBEHH@Z             0093aeb0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetAvailable@StreamBuffer@IO@EA@@UBEHXZ             0093aef0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?SetSize@StreamBuffer@IO@EA@@UAE_NI@Z                0093b050  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?Flush@StreamBuffer@IO@EA@@UAE_NXZ                   0093b300  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ??0StreamBuffer@IO@EA@@QAE@IIPAVIStream@12@@Z         0093b530  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ??1StreamBuffer@IO@EA@@UAE@XZ                        0093b5a0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?Open@StreamChild@IO@EA@@QAE_NPAVIStream@23@II@Z      0093b630  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?Close@StreamChild@IO@EA@@UAE_NXZ                    0093b6a0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetState@StreamChild@IO@EA@@UBEHXZ                  0093b6d0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetPosition@StreamChild@IO@EA@@UBEHH@Z              0093b6f0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ??0StreamChild@IO@EA@@QAE@PAVIStream@12@II@Z         0093b7d0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?Release@FixedMemoryStream@IO@EA@@UAEHXZ             0093b8b0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?SetData@FixedMemoryStream@IO@EA@@QAE_NPBXI@Z        0093b8e0  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?SetSize@FixedMemoryStream@IO@EA@@UAE_NI@Z           0093b900  /O2 /MD /Gy /TP
+slices/s0093a9d0/s0093a9d0.cpp  ?GetPosition@FixedMemoryStream@IO@EA@@UBEHH@Z        0093b920  /O2 /MD /Gy /TP

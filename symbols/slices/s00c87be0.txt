@@ -1,0 +1,35 @@
+00c87be0 SP::WriteSTLSequenceT<eastl::vector<EA::AutoRefCount<SP::cSPSpaceInventoryItem>>>  # PDB name
+00c87c80 Object::_virtual_dtor  # PDB name
+00c87cc0 Simulator::cGameData::cGameData_func40h  # PDB name
+00c87d80 Simulator::cSpaceInventory::RemoveItem  # PDB name
+00c87df0 Simulator::cSpaceInventory::func7Ch  # PDB name
+00c88060 Simulator::cSpaceInventory::AddItem  # PDB name
+00c88310 Simulator::cSpaceInventory::AddCargoSlots  # PDB name
+00c883d0 Simulator::ISimulatorSerializable::Read  # PDB name
+00c88480 Simulator::ISimulatorSerializable::GetNounID  # PDB name; increments [ecx+0xbc]
+00c88490 Simulator::cGameData::SetDefinitionID  # PDB name; decrements [ecx+0xbc]
+00c884a0 Simulator::cCommunity::func5Ch  # PDB name
+00c88510 Simulator::cSpatialObject::cSpatialObject_func80h  # PDB name; tail vcall slot 0x84
+00c88530 FUN_00c88530  # stores float to +0x7c, clears +0x88
+00c88550 FUN_00c88550  # syncs +0x64 from +0x7c
+00c885b0 FUN_00c885b0  # helper
+00c88610 FUN_00c88610  # helper
+00c88670 Simulator::cCommunity::func54h  # PDB name; set 3-vector, dirty flag
+00c886d0 Simulator::cCommunity::func58h  # PDB name; set 4-vector, dirty flag
+00c88740 Simulator::cCommunity::func60h  # PDB name
+00c88790 Simulator::cGameData::RemoveOwner  # PDB name
+00c887c0 FUN_00c887c0  # returns float at +0x88 or +0x68
+00c887e0 Simulator::cCommunity::func64h  # PDB name
+00c88810 Simulator::cSpatialObject::SetModelKey  # PDB name
+00c88870 Simulator::cSpatialObject::cSpatialObject_func84h  # PDB name
+00c888e0 FUN_00c888e0  # effect-entry lookup by id (stride 0x3c)
+00c88910 SP::cSpatialObjectView::GetEffect  # PDB name
+00c88940 FUN_00c88940  # effect-entry flag query
+00c88980 SP::cSpatialObjectView::StartEffect  # PDB name
+00c889c0 FUN_00c889c0  # effect stop + vcall slot 3
+00c88a00 FUN_00c88a00  # effect float store at +0xc
+00c88a30 FUN_00c88a30  # effect start (5, v, 3) + vcall slot 0x44
+00c88a90 SP::cSpatialObject::Write  # PDB name
+00c88ba0 FUN_00c88ba0  # helper
+00c88c30 FUN_00c88c30  # helper
+00c88d90 FUN_00c88d90  # helper

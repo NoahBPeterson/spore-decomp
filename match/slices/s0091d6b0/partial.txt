@@ -1,0 +1,2 @@
+0091d950  0  GetExceptionString: 1,562-byte exception-code -> string switch; only ACCESS_VIOLATION /
+             IN_PAGE_ERROR / BREAKPOINT / SINGLE_STEP arms reconstructed, the rest collapse to "UNKNOWN".

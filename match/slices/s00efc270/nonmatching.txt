@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00efc530  38   type predicate: vtable slot/temperature register allocation differs
+00efc660  73   permission check: FUN_00b18e00/FUN_00f40ea0 schedule + __thiscall shape differ
+00efc6c0  16   clear index: param kept in edx in original; not reproduced
+00efc7a0  25   stopwatch stop: member load/call order differs
+00efc7d0  51   permission check variant: call schedule differs
+00efc850  7    `this` passed in eax then jmp: written as a normal cdecl wrapper (extra push/call)
+00efc8c0  23   set global pointer: FUN_00f46410 argument registers differ
+00efc8f0  13   get object from +8: zero-init + branch layout differ
+00efcae0  44   close window: further vcalls (FUN_00d20430 path) not scheduled
+00efcd90  35   visibility check: vtable chain constants/offset differ
+00efcde0  66   disable toggle: this/param register shape differ
+00efce30  -    set toggle params: signature/register shape not reproduced (size mismatch)

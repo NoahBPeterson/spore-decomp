@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+0093bc40  40   approximate: SharedPointer ctor; the two vtable stores and default-alloc call simplified
+0093bca0  50   approximate: BackgroundLoading ctor; allocator virtual call reconstructed loosely
+0093bcf0  53   approximate: BackgroundLoading ctor variant; allocator virtual call approximate
+0093bd90  37   approximate: BackgroundLoading scalar deleting dtor; vtable pair simplified
+0093bde0  41   approximate: GraphicsFactoryAsyncRequest dtor; base vtable store omitted
+0093bf70  109  approximate: GraphicsFactoryAsyncRequest attach; refcount logic approximate
+0093c270  55   approximate: GraphicsFactoryAsyncRequest ctor; uses ctor-field layout approximately
+0093c2c0  74   approximate: MemoryStream ctor; allocator arg forwarding approximate
+0093c440  289  approximate: ConvertToString8 built on a simplified string buffer
+0093c5a0  289  approximate: ConvertToString16 built on a simplified string buffer
+0093c730  258  approximate: DetectEncoding heuristics reconstructed from decompile
+0093c850  165  approximate: ConvertEncoding_via_UTF16 two-pass buffer logic approximate

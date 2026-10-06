@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00c2e4b0  20  complete: state change + two vtable calls, scheduling differs
+00c2e4f0  3   complete: vtable accessor + GetPropertyAsKey, one byte/frame differs
+00c2e780  8   complete: two-step accessor chain, call setup differs
+00c2e820  8   complete: two-step accessor chain, call setup differs
+00c2e980  13  complete: NotifyEvent float push, register scheduling differs
+00c2e9b0  22  complete: timer/state float getter, branch layout differs
+00c2e9e0  37  complete: state change + timer restart, scheduling differs
+00c2f340  34  complete: tutorial mission ctor, init order differs
+00c2f3e0  26  complete: tutorial mission dtor, vtable/refcount order differs

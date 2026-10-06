@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+00c2e420  -  skeleton: cGameData::Read + two cVarListSerializer passes not reconstructed
+00c2e520  -  skeleton: cSPCreatureMission::Update body not reconstructed
+00c2e5a0  -  skeleton: mission update body not reconstructed
+00c2e6c0  -  skeleton: cSPCreatureSpeciesMission::Read not reconstructed
+00c2e7b0  -  skeleton: cSPCreatureSpeciesMission::GetImage not reconstructed
+00c2e8c0  -  skeleton: cSPCreatureNestMission::Read not reconstructed
+00c2eaa0  -  skeleton: tribe-to-tribe Read not reconstructed
+00c2ec30  -  skeleton: mission body not reconstructed
+00c2ec80  -  skeleton: mission body not reconstructed
+00c2ecd0  -  skeleton: cSPCreatureMission::GetContentWinCommandID not reconstructed
+00c2ed20  -  skeleton: 869-byte mission function not reconstructed
+00c2f090  -  skeleton: mission function not reconstructed
+00c2f190  -  skeleton: mission function not reconstructed
+00c2f1f0  -  skeleton: mission function not reconstructed
+00c2f240  -  skeleton: cSPCreatureSpeciesMission::GetRewardValue not reconstructed
+00c2f470  -  skeleton: cTribeToTribeMission ctor not reconstructed
+00c2f520  -  skeleton: mission function not reconstructed
+00c2f590  -  skeleton: mission function not reconstructed
+00c2f5f0  -  skeleton: mission function not reconstructed
+00c2f650  -  skeleton: mission function not reconstructed
+00c2f690  -  skeleton: mission function not reconstructed

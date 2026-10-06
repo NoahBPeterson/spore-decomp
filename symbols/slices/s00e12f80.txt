@@ -1,0 +1,13 @@
+00e12f80  vtable-forward wrapper (call slot 0x7c with 1, arg)  # PDB dev 00a44...
+00e12fa0  vtable-forward wrapper (call slot 0x7c with 2, arg)
+00e12fc0  vtable-forward wrapper (call slot 0x80 with arg)
+00e12fe0  SP::cUICard::Toggle  # PDB name
+00e13000  cUICard animation tick (GetElapsedSeconds + animator Update)
+00e130b0  SP::cUICard::HandleMessage  # PDB dev 00a45...
+00e13160  card sort/compare helper (two vtable lookups + height compare)
+00e13210  SP::cUICard::~cUICard  # PDB name; releases AutoRefCounts, resets base vtables
+00e132c0  cUICard teardown (layout shutdown + member release)
+00e13360  cUICard::SetVisible
+00e13390  cUICard vcall wrapper (slot 0xf0)
+00e133b0  SP::cUIMissionCard::InitForCreature  # PDB name
+00e13b30  SP::cUICard::Expand  # PDB name; calls InitForCreature then vcall slot 0x30

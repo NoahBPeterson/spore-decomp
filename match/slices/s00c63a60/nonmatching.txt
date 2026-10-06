@@ -1,0 +1,6 @@
+00c63a60 50  MorphA::QueryInterface: complete; cl hoists `mov eax,ecx` and uses branchless cast
+00c63aa0 50  MorphB::QueryInterface: complete; same register-allocation near miss
+00c63be0 33  cMorphHandle::cMorphHandle: complete; vtable/float/bool store ordering differs
+00c63dd0 8   Target::Offset: complete; only the vcall function-pointer register (eax vs edx) differs
+00c63ef0 11  Target2::Dtor: complete; the +0x134 load is hoisted above the vtable stores
+00c643a0 48  HandleThing::SetEnabled: complete; bool lives in dl instead of cl and vtable load is scheduled late

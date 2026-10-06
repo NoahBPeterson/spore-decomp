@@ -1,0 +1,7 @@
+01300280 init_1668f1c  # LoadLibraryA("kernel32.dll") + GetProcAddress("ReadDirectoryChangesW") + atexit
+013002d0 InitOSGlobalSystem_init  # calls anonymous_namespace::InitOSGlobalSystem then atexit
+01300330 WSAStartup_init  # WSAStartup(2, &data) then atexit
+013004a0 init_154ed8c  # registry table, function-pointer entries via FUN_00957a60/957880
+01307ea0 zero_1675eb8  # zero-fill 0x40 records of 0x20 bytes
+01307ed0 zero_1675a00  # zero-fill 0x20 records of 0x24 bytes
+0130fcc0 init_1679034  # {int C; int 0} global initializer

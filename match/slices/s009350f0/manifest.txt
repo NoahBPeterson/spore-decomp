@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s009350f0/s009350f0.cpp  scalar_deleting_destructor@EA_IO_IniFile@@QAEPAV1@E@Z  00935510  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  CreateOSGlobalManager@@YAPAXXZ  00935a30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  GetOSGlobal@@YAPAUOSGlobalNode  00935c80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  GetApplicationPath@@YAXPA_W  00935d30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  WideSpawn@@YAHPB_W  00935d60  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  Spawn@Process@EA@@YA  00935db0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  WideSearchEnvironmentPath@@YA_N  00935e00  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  SearchEnvironmentPath@Process@EA@@YA  00935e30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009350f0/s009350f0.cpp  RandomBytes@@YAXPAEI  00936050  /O2 /MD /Gy /EHsc /TP /GS-

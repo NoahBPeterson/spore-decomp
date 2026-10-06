@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+013c33a0  36  complete; nested rbtree-array teardown loop; cl schedules the pointer/register lifetimes differently from the original
+013c42d0  33  complete; 0x60-element stride-0xb8 teardown loop; register/loop scheduling differs
+013c9030  15  complete; singleton release; the load-then-copy register choice (eax then esi) differs from cl's direct esi load
+013c9f40  11  complete; atomic refcount + virtual release; cl folds the decrement into `add [mem],-1` instead of the original pointer temp
+013c9f70  11  complete; atomic refcount + virtual release; same scheduling difference
+013ca7f0  37  complete; singleton + debug-alloc teardown; register scheduling differs
+013c31a0  3   body complete; bounds extend over a following unlisted int3 + ret thunk
+013c3550  16  body complete (44-byte-stride dtor loop); bounds extend over an unlisted int3 + ret thunk
+013c43b0  29  body complete (hashtable free + inline-buffer guard); bounds extend over an unlisted int3 + ret thunk
+013c4c10  16  body complete (virtual release); bounds extend over an unlisted int3 + ret thunk
+013c4f20  36  body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
+013c6b00  16  body complete (virtual release); bounds extend over an unlisted int3 + ret thunk
+013c7db0  51  body complete (0x98-stride dtor loop); bounds extend over an unlisted int3 + ret thunk
+013c8f60  8   body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
+013c9400  8   body complete (vector free + SSO guard); bounds extend over an unlisted int3 + ret thunk
+013c9c30  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
+013c9c70  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk
+013c9cb0  13  body complete (atomic refcount release); bounds extend over an unlisted int3 + ret thunk

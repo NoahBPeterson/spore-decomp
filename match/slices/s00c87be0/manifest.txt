@@ -1,0 +1,15 @@
+# source  symbol  original VA  [flags override]
+slices/s00c87be0/s00c87be0.cpp  Inc@Ser@@QAEXH@Z  00c88480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  Dec@Ser@@QAEXH@Z  00c88490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  MaybeCall@SpatialA@@QAEXXZ  00c88510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  SetValue@SpatialA@@QAEXM@Z  00c88530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  Sync@SpatialA@@QAEXH@Z  00c88550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  RemoveOwner@GameData@@QAEX_N@Z  00c88790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  GetValue@GameData@@QAEMXZ  00c887c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  FindEntry@GameData@@QAEHH@Z  00c888e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  HasEffect@GameData@@QAE_NH@Z  00c88910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  F40@Effects@@QAEHH@Z  00c88940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  StartEffect@Effects@@QAEXHH@Z  00c88980  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  StopEffect@Effects@@QAEXHH@Z  00c889c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  F00@Effects@@QAEXHM@Z  00c88a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c87be0/s00c87be0.cpp  F30@Effects@@QAEXHPAH@Z  00c88a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

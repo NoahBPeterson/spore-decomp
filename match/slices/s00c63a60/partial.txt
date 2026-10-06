@@ -1,0 +1,14 @@
+00c63b40 68   ComparePair: geometry compare via x87 not reconstructed
+00c63b90 53   CopyPair: geometry copy not reconstructed
+00c63cb0 285  FUN_00c63cb0: App/PlanetModel surface-orientation update not reconstructed
+00c63e30 110  Simulator::cTargetMorphHandle::cTargetMorphHandle: ctor store ordering not reproduced
+00c63f90 332  FUN_00c63f90: planet surface-orientation rebuild not reconstructed
+00c640e0 133  FUN_00c640e0: local-offset transform not reconstructed
+00c64170 355  FUN_00c64170: not reconstructed
+00c642e0 187  FUN_00c642e0: surface transform copy not reconstructed
+00c64400 83   FUN_00c64400: x87 distance compare not reconstructed
+00c64460 300  FUN_00c64460: not reconstructed
+00c64590 159  FUN_00c64590: not reconstructed
+00c64630 592  FUN_00c64630: ray/intersection helper not reconstructed
+00c64880 189  FUN_00c64880: not reconstructed
+00c64940 101  FUN_00c64940: surface-orientation apply not reconstructed

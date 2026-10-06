@@ -1,0 +1,14 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00efc270  -  message dispatch: bodies stubbed (needs the large window/hint switch)
+00efc4c0  -  ratio helper: only the branch skeleton written, SSE divide not reproduced
+00efc570  -  scale check: `this` in eax (static/helper convention) not reproduced; body stubbed
+00efc5f0  -  volume threshold: FUN_00eeca30 path stubbed
+00efc6e0  -  located-object test: global bit math stubbed
+00efc930  -  planet position compare: 3-float SSE compare / this=esi not reproduced
+00efc9c0  -  planet position compare (stack form): not reproduced
+00efca60  -  can-trigger check: vtable chain stubbed
+00efcb40  -  sound scale: type switch + return-in-xmm0 not reproduced
+00efcbe0  -  clamp to radius: x87 sqrt compare schedule not reproduced
+00efccd0  -  average of two points: this in eax, 0x24 frame not reproduced
+00efcec0  -  film/filter test: bitfield extraction from +0x224 not reproduced
+00efcfb0  -  list scan for state 2/10: loop/value layout differs

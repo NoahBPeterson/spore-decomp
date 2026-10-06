@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0092b840  -  string split/parse helper: skeleton (EASTL string/vector + memmove compaction outline only)
+0092bbe0  -  large string-table builder: skeleton
+0092c0c0  -  wide-string assign + split: skeleton
+0092c130  -  narrow-string assign + split: skeleton
+0092c1b0  -  string-split object ctor: skeleton
+0092c210  -  string-split object ctor: skeleton
+0092c340  -  RefPack::DecodeUnchecked: skeleton (EA refpack LZ decode outline only)

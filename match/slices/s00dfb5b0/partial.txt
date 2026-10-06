@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00dfb5b0  300  state-name label builder: names table and wstring construction present; static-string lazy init / sprintf varargs approximated
+00dfb9c0  119  Big::Init: all stores and callee calls present; two-vtable store sequence and base-ctor call approximated
+00dfbac0   98  Big::Destroy: member destruction order present; wstring cap test and base vptr store approximated
+00dfbd70  534  Big::Update: all paths and vcalls present; vector<Key> insert/copy helper arguments guessed
+00dfc240  696  Big::Update2: all paths and vcalls present; the Matrix33 descriptor assembled for the vcall is incomplete/placeholder

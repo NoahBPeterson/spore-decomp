@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00e50810/s00e50810.cpp  ?FUN_00e509d0@@YA_NHPAD@Z  00e509d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e50810/s00e50810.cpp  ?FUN_00e50c50@@YAMM@Z  00e50c50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e50810/s00e50810.cpp  ?OnKeyUp@cCellMode@@QAE_NHH@Z  00e51010  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e50810/s00e50810.cpp  ?OnMouseMove@cCellMode@@QAE_NMMH@Z  00e51030  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e50810/s00e50810.cpp  ?FUN_00e511b0@@YAXXZ  00e511b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

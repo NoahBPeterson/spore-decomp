@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f47ed0/s00f47ed0.cpp  ?WinMainThunk@@YGHPAX0PBDH@Z  00f48a20  /O2 /MD /Gy /EHsc /TP
+slices/s00f47ed0/s00f47ed0.cpp  ??1cTerrainBrushState@@QAE@XZ  00f48b00  /O2 /MD /Gy /EHsc /TP

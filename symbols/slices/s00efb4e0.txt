@@ -1,0 +1,11 @@
+# va  name  # evidence
+# UI::cScenarioTutorialsChecklistUI methods (ctor 0x00ef7900; primary vt 0x148b59c, secondary 0x148b58c)
+00efb4e0  UI::cScenarioTutorialsChecklistUI::SetCategoryWindows  # switch on this+0x30 (0..4), creates windows by id
+00efb9c0  UI::cScenarioTutorialsChecklistUI::SelectCategory  # thiscall(this+0xc = selected object, this+0x28 = category)
+00efbbe0  UI::cScenarioTutorialsChecklistUI::ToggleHint
+00efbc90  UI::cScenarioTutorialsChecklistUI::OnKeyInstruction  # hashtable membership then FUN_00efa0b0
+00efbce0  UI::cScenarioTutorialsChecklistUI::RefreshChecklist  # calls f_ef76f0 / f_efb4e0 / f_efa1b0
+00efbdf0  UI::cScenarioTutorialsChecklistUI::vfuncSecondary0  # secondary vt 0x148b588 slot 0
+00efbe40  UI::cScenarioTutorialsChecklistUI::SetPage
+00efbf00  UI::cScenarioTutorialsChecklistUI::Update
+00efc120  UI::cScenarioTutorialsChecklistUI::HandleMessage  # primary vt 0x148b5b4

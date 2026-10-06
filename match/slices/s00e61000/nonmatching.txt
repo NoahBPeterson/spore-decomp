@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00e61140 5    global reload/register choice differs (o kept in ecx vs eax)
+00e611b0 250  nanites update; random-range and Handle temp layout guessed
+00e61320 37   switch register allocation differs (gsp kept in eax vs ecx)
+00e61370 32   matrix->vector math operand order/scheduling differs
+00e61550 160  CellAbility ctor: MI vtable store and field-init order differ
+00e61630 117  ctor wrapper: temp Handle slot and case schedule differ
+00e61a50 11   factory new-expression: vtable/field store order differs
+00e61aa0 7    base-ctor + lea scheduling differs
+00e61b00 82   dtor: refcount/EH sequence approximate

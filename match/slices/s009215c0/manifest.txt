@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009215c0/s009215c0.cpp  ?RBTreeDecrement@eastl@@YAPAUrbtree_node_base@@PBU2@@Z  009215c0
+slices/s009215c0/s009215c0.cpp  ?RBTreeRotateLeft@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  00921600
+slices/s009215c0/s009215c0.cpp  ?RBTreeRotateRight@eastl@@YAPAUrbtree_node_base@@PAU2@0@Z  00921650
+slices/s009215c0/s009215c0.cpp  ?ClearThreads@ThreadGroup@Thread@EA@@QAEX_N@Z  00921b40
+slices/s009215c0/s009215c0.cpp  ?SetCurrentThreadHandle@Thread@EA@@YAXPAXD@Z  00921c50
+slices/s009215c0/s009215c0.cpp  ?GetCurrentThreadPriority@Thread@EA@@YAXXZ  00921d70
+slices/s009215c0/s009215c0.cpp  ?ThreadSleep@Thread@EA@@YAXPAI@Z  00921df0
+slices/s009215c0/s009215c0.cpp  ?Dtor21e40@ThreadBlob@Thread@EA@@QAEXXZ  00921e40
+slices/s009215c0/s009215c0.cpp  ??1Mutex@Thread@EA@@QAE@XZ  00922130
+slices/s009215c0/s009215c0.cpp  ?Unlock@Mutex@Thread@EA@@QAEHXZ  00922270

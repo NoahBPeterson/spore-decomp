@@ -1,0 +1,18 @@
+009350f0 EA::IO::IniFile::LoadSectionNames  # PDB name
+00935450 EA::IO::IniFile::IniFile  # PDB name; PDB layout differs from retail by +4 in the tail
+00935510 EA::IO::IniFile::`scalar_deleting_destructor'  # PDB name
+00935560 EA::IO::IniFile::EnumEntries  # PDB name
+00935a30 `anonymous namespace'::CreateOSGlobalManager  # PDB name; custom 0x37-byte aligned allocation
+00935a70 `anonymous namespace'::ShutdownOSGlobalSystem  # PDB name
+00935ad0 EA::ReleaseOSGlobal  # PDB candidate name
+00935b70 `anonymous namespace'::InitOSGlobalSystem  # PDB name
+00935c80 EA::GetOSGlobal  # PDB name
+00935d30 GetApplicationPath  # GetModuleFileNameW(buf,0x104) wrapper
+00935d60 WideSpawn  # tail-jumps to _wspawnv(_P_WAIT/_P_DETACH)
+00935db0 EA::Process::Spawn  # PDB name; tail-jumps to _spawnv
+00935e00 WideSearchEnvironmentPath  # _wsearchenv wrapper, default L"PATH"
+00935e30 EA::Process::SearchEnvironmentPath  # PDB name; _searchenv wrapper
+00935e60 EA::Process::OpenFile  # PDB name (wchar_t*)
+00935f80 EA::Process::OpenFile  # PDB name (char* -> GetCharacterAsUTF16 -> wide)
+00935fb0 EA::Process::OpenBrowser  # PDB name; ShellExecuteW(L"open", ...)
+00936050 RandomBytes  # __rdtsc-seeded byte generator

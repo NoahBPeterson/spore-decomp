@@ -1,0 +1,1 @@
+00ee3e40 SP::cScenarioEditModeBehaviorUI::Show  # installs/removes the behaviour message handler

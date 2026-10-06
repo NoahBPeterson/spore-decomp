@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00ef73c0  -  FUN_0067caf0/FUN_0067aaf0 vector-splat call arguments stubbed; x87 argument build not written

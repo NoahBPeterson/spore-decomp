@@ -1,0 +1,11 @@
+0091e970 EA::Debug::ReportWriter::ReportWriter  # ctor, sets vtable/path/file/depth
+0091e990 EA::Debug::ReportWriter::GetFileNameExtension  # pdb_names
+0091ea50 EA::Debug::ReportWriter::BeginSection  # pdb_names
+0091ec00 EA::Debug::ReportWriter::Write  # pdb_names
+0091eca0 EA::Debug::ReportWriter::GetTimeString  # pdb_names
+0091ecf0 EA::Debug::ReportWriter::GetDateString  # pdb_names
+0091ed80 EA::Debug::ReportWriter::GetAddressLocation  # pdb_names
+0091ee80 EA::Debug::ReportWriter::GetAddressLocationString  # pdb_names
+0091ef30 EA::Debug::ReportWriter::WriteSystemInfo  # pdb_names
+0091f300 EA::Debug::ReportWriter::WriteApplicationInfo  # pdb_names
+0091f400 EA::Debug::ReportWriter::WriteDisassembly  # pdb_names

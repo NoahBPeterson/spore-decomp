@@ -1,0 +1,14 @@
+# source  symbol  original VA  [flags override]
+slices/s00b1d870/s00b1d870.cpp  IsAvailableInCurrentPlanet@cSpaceInventoryItem@Simulator@@QAE_NXZ  00b1e4d0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  EqualsStreamId@@YA_NPAUVObj@@H@Z  00b1e500  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  CheckId@@YA_NPAUVObj@@H@Z  00b1e520  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  SetAvailable@cSpaceInventoryItem@Simulator@@QAEPAXXZ  00b1e540  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cGenericPressureEvent@@YAPAXXZ  00b1e820  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cCelestialBody@@YAPAXXZ  00b1eba0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cPlanet@@YAPAXXZ  00b1f590  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cVisiblePlanet@@YAPAXXZ  00b1f5d0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cSolarSystem@@YAPAXXZ  00b1f640  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cTribePlanner@@YAPAXXZ  00b1f790  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  GetPlayerEmpireOrMinus1@@YAHXZ  00b1f9d0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  Initialize@Window@UTFWin@@QAE_NXZ  00b1fbf0  /O2 /MD /Gy /EHsc /TP
+slices/s00b1d870/s00b1d870.cpp  New_cMissionHappinessEvent@@YAPAXXZ  00b1fc30  /O2 /MD /Gy /EHsc /TP

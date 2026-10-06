@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0091d6b0/s0091d6b0.cpp  Cleanup@SymbolEngine                0091d760  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  ??0SymbolEngine                     0091d7a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  WriteCallStack@ExceptionHandlerWin32  0091df70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  Set@Holder                         0091e020  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  SetReportDirectory@ExceptionHandler  0091e040  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  WriteMiniDump@ExceptionHandlerWin32  0091e190  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  WriteHeader@ExceptionHandlerWin32   0091e250  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  NotifyClients@ExceptionHandler      0091e3b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  WriteExtraData@ExceptionHandlerWin32  0091e3e0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091d6b0/s0091d6b0.cpp  WriteExceptionReportInternal@ExceptionHandlerWin32  0091e4b0  /O2 /MD /Gy /EHsc /TP /GS-

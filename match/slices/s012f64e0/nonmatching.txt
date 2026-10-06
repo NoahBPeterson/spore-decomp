@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+012f65a0  9  init_164b3f0: complete; float-constant CSE ordering differs
+012fdc00  91  init_164e9f8: complete; operator-new / reload schedule differs
+012fe300  257  init_15476e4: complete; /Od arithmetic for size field not reproduced
+012fff30  23  init_16519ac: complete; store/atexit schedule differs
+012fff90  8  init_1651994: complete; atexit argument push scheduling differs
+01300010  36  init_1549834: complete; mixed long/bool store schedule differs

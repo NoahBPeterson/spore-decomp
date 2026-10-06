@@ -1,0 +1,30 @@
+00e50810  cell extents setup (bounding boxes from a screen rect)
+00e50940  cell mode enter/init (reset state + flag)
+00e50990  query: return 0xb8 when 0xb4==6
+00e509d0  mode eligibility predicate
+00e50a10  slide value toward target with step/clamp
+00e50b80  keep sorted list insert (binary/linear search + memmove)
+00e50c50  wrap angle into [-180,180]
+00e50cb0  wrap angle difference + absolute + sign
+00e50d50  zoom in/out adjust (both key axes)
+00e50ed0  smoothstep/ease curve
+00e50f30  interaction-allowed predicate
+00e50f60  zoom step clamp [20,1000]
+00e51010  SP::cCellMode::OnKeyUp  # PDB candidate; forwards to cLocalInputState
+00e51030  SP::cCellMode::OnMouseMove  # forwards to cLocalInputState::OnMouseWheel
+00e51060  zoom add clamp
+00e510f0  interaction state selector (returns 0/1/2/3/5)
+00e511b0  notify all star/planet objects with a change
+00e511e0  source-level interpolation from bounds
+00e51250  save six var-list slots
+00e51300  serialize two objects with an id prefix
+00e513d0  lerp from a curve value
+00e51430  level -> cube-root table row interpolation
+00e514c0  emit grid-line marker message
+00e51580  emit source-level marker message
+00e51650  emit one-field marker message
+00e51690  set source level when unset
+00e516c0  source level delta (current - table level + 2)
+00e51720  normalized level fraction for an index
+00e517d0  increment a counter field
+00e517e0  copy cell extents to a float out-param

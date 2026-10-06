@@ -1,0 +1,6 @@
+# va  reason
+00edbfc0 handler teardown: member layout + virtual releases not reconstructed
+00edc0e0 huge event dispatcher (2294 B): jump-table cases not reconstructed
+00edcb40 asset-browser launch: 0x48-byte request struct not reconstructed
+00edcd30 message-handler register/unregister: protocol not reconstructed
+00edce70 message handler: shift/neg object-adjust logic not reconstructed

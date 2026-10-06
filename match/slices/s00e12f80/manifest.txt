@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s00e12f80/s00e12f80.cpp  ?FUN_00e12f80@@YAXPAXH@Z  00e12f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?FUN_00e12fa0@@YAXPAXH@Z  00e12fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?FUN_00e12fc0@@YAXPAXH@Z  00e12fc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?Toggle@cUICard@@QAEXXZ  00e12fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?FUN_00e13000@@YIXPAX@Z  00e13000  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?Release2@cUICard@@QAEXXZ  00e13210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?SetVisible@cUICard@@QAEXH@Z  00e13360  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?DoVcallF0@cUICard@@QAEXH@Z  00e13390  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00e12f80/s00e12f80.cpp  ?Expand@cUIMissionCard@@QAEXH@Z  00e13b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast

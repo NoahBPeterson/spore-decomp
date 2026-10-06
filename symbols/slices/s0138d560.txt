@@ -1,0 +1,6 @@
+0138e640 init_16c8b40  # shared-allocator bootstrap + atexit
+01391740 init_16ca3d4  # 12 x int(-1) initializer
+01391bc0 init_16d6d30  # 16 x int(0) + atexit
+01391c20 init_16d6d70  # 16 x int(0) + atexit
+0138d560 init_15afd38  # property-descriptor table (stride 0x3c)
+013921c0 init_16d6fa8  # float basis-matrix table (0x3f3504f3 = sqrt(1/2))

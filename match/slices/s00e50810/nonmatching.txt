@@ -1,0 +1,26 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
+00e50810  145  cell extents setup: all stores/calls present; the FUN_00e4ce40 out-struct local is under-sized and float ordering differs
+00e50940  31  cell mode init: complete (state resets + two flags); scheduling/registers differ
+00e50990  46  query helper returning the 0xb8 field when 0xb4==6: complete; local out-struct + call schedule differ
+00e50a10  191  slide/clamp step: complete branch structure; x87 vs SSE scheduling differs
+00e50b80  159  keep-list insert (linear search + memmove): complete but written as a straight loop rather than the unrolled search
+00e50cb0  107  wrap angle + sign: complete; loop shape/register schedule differs
+00e50d50  369  zoom adjust both axes: complete; min/max operand order and helper-argument slots differ
+00e50ed0   9  ease curve: complete; only xmm register naming differs
+00e50f30   16  mode check: complete; compare order/branch differs
+00e50f60   99  zoom step clamp: complete; broadcast constant and max/min order differ
+00e51060   94  zoom add clamp: complete; helper argument slot and (float)(int) handling differ
+00e510f0  124  interaction-state selector: complete (all calls/branches); return-value folding differs
+00e511e0   89  source-level interpolation: complete; fild/fmul sequence differs
+00e51250  103  save six var-lists: complete; cVarListSerializer buffer/args approximated
+00e51300   86  serialize two objects: complete; cVarListSerializer buffer/args approximated
+00e513d0   64  lerp by evaluated curve: complete; x87 schedule differs
+00e51430  103  level->cube-root table selection: complete; loop/index schedule differs
+00e514c0  111  emit grid-line marker: complete; local struct offsets for FUN_00e394f0 approximated
+00e51580  128  emit source-level marker: complete; table lookup/local struct offsets approximated
+00e51650   40  emit one-field marker: complete; schedule differs
+00e51690   22  apply source level if unset: complete; tail-call shape differs
+00e516c0   15  current source level delta: complete; table-index loop schedule differs
+00e51720  106  normalized level fraction: complete; x87 multiplication schedule differs
+00e517d0    8  count increment: complete; cl folds x+1 into inc rather than lea+store
+00e517e0   30  copy cell extents to out: complete; differs only by best-symbol mapping

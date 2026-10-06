@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+009216a0  354  2008 EASTL RBTreeInsert differs structurally from the 2017 ModAPI source (behaviourally equivalent red-black insert)
+00921880  555  2008 EASTL RBTreeErase differs structurally from the 2017 ModAPI source (behaviourally equivalent red-black erase)
+00921bc0  10   thread-handle add/remove: register-save ordering in the "table full" path (pop esi vs push ebp first)
+00921cc0  66   GetThreadId: reconstruction of the DuplicateHandle/TLS sequence does not match cl's scheduling
+00921d80  79   SetCurrentThreadPriority: loop/codegen shape differs (original falls through vs my return)
+00921e00  39   thread-name setter: strncpy branch layout differs
+00921e60  110  condition/rmutex init: helper call order and embedded init reconstruction approximate
+00921f00  99   thread object ctor: zero-init ordering and embedded ctor reconstruction approximate
+00921f80  170  Condition::Wait: atomic/waiter bookkeeping reconstruction approximate
+00922050  230  Condition::Signal: atomic/waiter bookkeeping reconstruction approximate
+00922150  61   Mutex::Init: CreateMutexA name-pointer select and field init ordering differ
+009221b0  122  Mutex::Lock: timeout/TryEnterCriticalSection loop shape differs
+009222a0  69   Mutex::Mutex: member zero-init ordering differs
+00922310  73   thread object dtor chain reconstruction approximate
+00922330  38   thread object init reconstruction approximate
+009223a0  226  RWMutex::Lock reconstruction approximate
+00922480  139  RWMutex::Unlock reconstruction approximate

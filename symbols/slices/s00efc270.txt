@@ -1,0 +1,13 @@
+# va  name  # evidence
+# free helpers in the scenario-checklist TU; names unconfirmed except the two reused from s00ef6db0
+00efc520  ScenarioTutorials_GetActive  # returns *g_016c7b88 or 0
+00efc530  ScenarioTutorials_IsChecklistType  # compares vtable-slot 0xe result to 5 known type ids
+00efc850  ScenarioTutorials_UpdateInterface  # gSimulator+0x18 -> FUN_00f35f70
+00efc860  ScenarioTutorials_ReleaseInput
+00efc890  ScenarioTutorials_CaptureInput
+00efc8c0  ScenarioTutorials_SetActive
+00efc910  ScenarioTutorials_GetObjectA
+00efcae0  ScenarioTutorials_CloseWindow
+00efcd90  ScenarioTutorials_IsVisible
+00efcfb0  ScenarioTutorials_IsInState2or10
+00efc270  UI::cScenarioTutorialsChecklistUI::HandleMessage2

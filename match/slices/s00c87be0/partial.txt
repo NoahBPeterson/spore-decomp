@@ -1,0 +1,16 @@
+00c87be0 153  SP::WriteSTLSequenceT<vector<AutoRefCount<cSPSpaceInventoryItem>>>: STL serialiser not reconstructed
+00c87c80 53   Object::_virtual_dtor: not reconstructed
+00c87cc0 186  Simulator::cGameData::cGameData_func40h: not reconstructed
+00c87d80 109  Simulator::cSpaceInventory::RemoveItem: item removal/compaction not reconstructed
+00c87df0 391  Simulator::cSpaceInventory::func7Ch: not reconstructed
+00c88060 688  Simulator::cSpaceInventory::AddItem: add/insert + capacity growth not reconstructed
+00c88310 187  Simulator::cSpaceInventory::AddCargoSlots: not reconstructed
+00c883d0 146  Simulator::ISimulatorSerializable::Read: not reconstructed
+00c884a0 65   Simulator::cCommunity::func5Ch: value-set + notification not reconstructed
+00c885b0 82   FUN_00c885b0: not reconstructed
+00c88610 82   FUN_00c88610: not reconstructed
+00c88740 67   Simulator::cCommunity::func60h: not reconstructed
+00c88a90 102  SP::cSpatialObject::Write: serialisation not reconstructed
+00c88ba0 130  FUN_00c88ba0: not reconstructed
+00c88c30 154  FUN_00c88c30: not reconstructed
+00c88d90 149  FUN_00c88d90: not reconstructed

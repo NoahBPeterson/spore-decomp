@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+01390c90  14  init_16c9b8c: complete; constant folded to memory store instead of register
+01390cb0  14  init_16c9b94: complete; constant folded to memory store instead of register
+01391bc0  2  init_16d6d30: complete; atexit argument push scheduled late
+01391c20  2  init_16d6d70: complete; atexit argument push scheduled late

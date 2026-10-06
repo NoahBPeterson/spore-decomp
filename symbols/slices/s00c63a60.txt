@@ -1,0 +1,25 @@
+00c63a60 FUN_00c63a60  # interface cast/query (ids 0x7a81824/0x1186577/0x7a309fb)
+00c63aa0 FUN_00c63aa0  # interface cast/query (ids 0x7abdd8d/0x1186577/0x7a309fb)
+00c63ae0 FUN_00c63ae0  # morph enable -> vtable slot 0x40 with scaled float
+00c63b20 FUN_00c63b20  # copies 3 globals (0x1693d74..7c) + clears byte
+00c63b40 FUN_00c63b40  # x87 distance compare
+00c63b90 FUN_00c63b90  # x87 vector copy
+00c63be0 Simulator::cMorphHandle::cMorphHandle  # PDB name
+00c63c40 FUN_00c63c40  # cGameData::RemoveOwner + 3-dword copy
+00c63c90 FUN_00c63c90  # sets/clears bit 0 of *(this+0xd0)+4
+00c63cb0 FUN_00c63cb0  # App/PlanetModel surface-orientation update
+00c63dd0 FUN_00c63dd0  # v58(p,a) then Check -> offset a Vector3
+00c63e30 Simulator::cTargetMorphHandle::cTargetMorphHandle  # PDB name
+00c63ef0 FUN_00c63ef0  # destructor: target vtables -> morph vtables -> base dtor
+00c63f40 FUN_00c63f40  # refcounted release of member at +0x134
+00c63f90 FUN_00c63f90  # planet surface-orientation rebuild
+00c640e0 FUN_00c640e0  # local-offset transform (v60/v38)
+00c64170 FUN_00c64170  # helper
+00c642e0 FUN_00c642e0  # surface transform copy
+00c643a0 FUN_00c643a0  # morph enable setter (same vtable slot 0x40)
+00c64400 FUN_00c64400  # x87 distance compare
+00c64460 FUN_00c64460  # helper
+00c64590 FUN_00c64590  # helper
+00c64630 FUN_00c64630  # ray/intersection helper
+00c64880 FUN_00c64880  # helper
+00c64940 FUN_00c64940  # surface-orientation apply

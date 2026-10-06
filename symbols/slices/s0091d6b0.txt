@@ -1,0 +1,11 @@
+0091d950 EA::Debug::ExceptionHandlerWin32::GetExceptionString  # pdb_names anchor
+0091df70 EA::Debug::ExceptionHandlerWin32::WriteCallStack  # pdb_names anchor
+0091e040 EA::Debug::ExceptionHandler::SetReportDirectory  # pdb_names gap-align
+0091e080 EA::Debug::ExceptionHandlerWin32::GetReportFilePath  # pdb_names anchor
+0091e190 EA::Debug::ExceptionHandlerWin32::WriteMiniDump  # pdb_names anchor
+0091e250 EA::Debug::ExceptionHandlerWin32::WriteHeader  # pdb_names anchor
+0091e3b0 EA::Debug::ExceptionHandler::NotifyClients  # pdb_names callee-single
+0091e3e0 EA::Debug::ExceptionHandlerWin32::WriteExtraData  # pdb_names anchor
+0091e4b0 EA::Debug::ExceptionHandlerWin32::WriteExceptionReportInternal  # pdb_names anchor
+0091e770 EA::Debug::ExceptionHandlerWin32::ExceptionHandlerWin32  # pdb_names anchor
+0091e810 EA::Debug::ExceptionHandler::ExceptionHandler  # pdb_names callee-scored

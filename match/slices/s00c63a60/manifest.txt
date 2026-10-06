@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00c63a60/s00c63a60.cpp  Fn@HandleThing@@QAEXXZ  00c63ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c63a60/s00c63a60.cpp  Init@MorphInit@@QAEXXZ  00c63b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c63a60/s00c63a60.cpp  RemoveOwnerFn@cGameDataThing@@QAEXH@Z  00c63c40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c63a60/s00c63a60.cpp  SetFlag@FlagHolder@@QAEXH@Z  00c63c90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c63a60/s00c63a60.cpp  Release@Target2@@QAEXXZ  00c63f40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00efe260  -    view reset: vtable chain / FUN_00eebf80 + x87 fabs compare schedule differs
+00efe4a0  115  toggle window: vtable chain (App+0x50+0x38) and tail-jump not reproduced
+00efe510  72   set visibility: vtable chain + cvttss2si float->int path not matched
+00efe5d0  37   list membership: bounds/pointer-increment schedule differs
+00efe610  12   FUN_00eebf80 then tail-call FUN_00efe5d0: argument-slot reuse not reproduced
+00efe630  99   can-trigger predicate: vtable slot 0xb8 signature/register shape differs
+00efe870  75   find surface point: 0x27e8-stride scan comparison order/registers differ

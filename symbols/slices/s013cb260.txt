@@ -1,0 +1,9 @@
+013cb260 static_tlsfree_16_e42b0_array   # TlsFree over 5 TLS slots, reverse order
+013cb290 static_tlsfree_16_e42b8        # TlsFree one slot
+013cb300 static_decref_16_f2974        # refcounted singleton teardown (-> FUN_011eaa80)
+013cb320 static_decref_16_f2978        # refcounted singleton teardown (-> FUN_011eaad0)
+013cb370 static_cleanup_16_f4998       # compiler-generated global array reset
+013cb620 static_shutdown_16_f4e18      # thread-pool teardown + DeleteCriticalSection
+013cb780 static_zero_15_d07b0          # zero 2 x 8-byte globals
+013cb7d0 static_dtor_17_0a6b9          # thiscall destructor thunk
+013cb850 static_dtor_17_0a79c          # thiscall destructor thunk

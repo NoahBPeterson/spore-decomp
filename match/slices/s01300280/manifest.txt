@@ -1,0 +1,18 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01300280/s01300280.cpp  ?init_1668f50@@YAXXZ  013002d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166aa7c@@YAXXZ  01300330  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166aab4@@YAXXZ  01300370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c090@@YAXXZ  01301b20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c098@@YAXXZ  01301b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c090@@YAXXZ  01302e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c090@@YAXXZ  01302ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c090@@YAXXZ  01302f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c97c@@YAXXZ  01302f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280.cpp  ?init_166c980@@YAXXZ  01302fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s01300280/s01300280_od.cpp  ?init_154ed8c@@YAXXZ  013004a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154f00c@@YAXXZ  013005a0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154f2d4@@YAXXZ  013008b0  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154f4dc@@YAXXZ  01300950  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154f714@@YAXXZ  01300a70  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154f94c@@YAXXZ  01300b20  /Od /Ob1 /MD /Gy /TP /arch:SSE
+slices/s01300280/s01300280_od.cpp  ?init_154fbe4@@YAXXZ  01300c50  /Od /Ob1 /MD /Gy /TP /arch:SSE

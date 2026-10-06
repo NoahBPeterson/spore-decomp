@@ -1,0 +1,5 @@
+00b1daf0 63  TerrainMgr::Fn1: complete; terrain-sphere index/scale arithmetic codegen differs
+00b1db60 18  Host::Fn1: complete; window-manager toggle arg materialisation differs
+00b1dbd0 18  Host::Fn2: complete; window-manager toggle arg materialisation differs
+00b1de80 57  TerrainMgr::Fn2: complete; terrain-sphere index/scale arithmetic codegen differs
+00b1dfc0 74  RefHolder::Reset: complete; refcounted member reset vcall schedule differs

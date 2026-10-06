@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0091e650/s0091e650.cpp  SetBuildDescription@ExceptionHandler  0091e650  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  ??0ReportWriter                     0091e970  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  GetFileNameExtension@ReportWriter   0091e990  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  Open@ReportWriter                   0091e9c0  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  Close@ReportWriter                  0091ea20  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  BeginSection@ReportWriter           0091ea50  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  NewLine@ReportWriter                0091ebf0  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  Write@ReportWriter                  0091ec00  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  ?Tell@ReportWriter                  0091ec60  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  Seek@ReportWriter                   0091ec80  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  GetTimeString@ReportWriter          0091eca0  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  GetDateString@ReportWriter          0091ecf0  /O2 /MD /Gy /EHsc /TP
+slices/s0091e650/s0091e650.cpp  GetComputerNameHelper               0091ed40  /O2 /MD /Gy /EHsc /TP

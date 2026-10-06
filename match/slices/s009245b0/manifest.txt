@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009245b0/s009245b0.cpp  ?RemoveAllLogReporters@Server@Trace@EA@@QAEXXZ  00924a50
+slices/s009245b0/s009245b0.cpp  ?MessageBoxThreadStart@Trace@EA@@YGHPAI@Z  00925000
+slices/s009245b0/s009245b0.cpp  ?UpdateTracerV@TraceHelperTable@Trace@EA@@QAEXXZ  009250b0
+slices/s009245b0/s009245b0.cpp  ?SetTraceDialogEnabled@Trace@EA@@YAXD@Z  009250c0
+slices/s009245b0/s009245b0.cpp  ?CreateEnabledValue@Trace@EA@@YAPAXXZ  00925730

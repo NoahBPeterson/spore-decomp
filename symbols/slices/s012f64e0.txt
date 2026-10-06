@@ -1,0 +1,13 @@
+012f64e0 init_164b42c  # global Vector4 initializer (1,0,1,1)
+012f6520 init_164b400  # global Vector4 initializer
+012f6560 init_164b384  # global Vector4 initializer
+012f6d80 init_154273c  # reflection/type registry table (header + 3 entries, stride 0x18)
+012f6e50 init_154279c  # reflection/type registry table
+012f7570 init_1542c44  # reflection/type registry table
+012fc2b0 init_1546064  # reflection/type registry table
+012fe000 init_15477a4  # reflection/type registry table (12 entries)
+012fe300 init_15476e4  # reflection/type registry table (7 entries)
+012ffaf0 init_1548764  # reflection/type registry table
+012ffef0 init_16514ec  # stores default core allocator
+01300080 init_1667a58  # stores InitXInputFunctions() result
+01300110 take_16688a0  # _InterlockedExchange(&g,0)

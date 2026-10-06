@@ -1,0 +1,21 @@
+00930180 SplitPath  # dev-PDB gap-align EA::IO::SplitPath
+009302b0 SplitDirectory  # dev-PDB gap-align EA::IO::SplitDirectory
+00930480 FullPath  # dev-PDB gap-align EA::IO::FullPath (cwd wrapper)
+00930670 FullPath  # dev-PDB gap-align EA::IO::FullPath (join)
+00930950 FUN_00930950  # no PDB name; iswctype-based absolute-path test
+009309b0 FUN_009309b0  # no PDB name
+00930a30 FUN_00930a30  # no PDB name; separator normalizer
+00930ab0 IsSubdirectory  # dev-PDB gap-align EA::IO::IsSubdirectory
+00930ba0 FUN_00930ba0  # no PDB name
+00930bf0 FUN_00930bf0  # no PDB name; path boundary accessor
+00930c10 GetExtension  # dev-PDB gap-align EA::IO::FilePath::GetExtension (retail returns ext ptr)
+00930c30 GetDirectory  # dev-PDB gap-align EA::IO::FilePath::GetDirectory
+00930cb0 GetFileName  # dev-PDB gap-align EA::IO::FilePath::GetFileName
+00930d20 GetDriveAndDirectory  # dev-PDB gap-align EA::IO::FilePath::GetDriveAndDirectory
+00930da0 FUN_00930da0  # no PDB name
+00930dd0 FUN_00930dd0  # no PDB name; SplitPathPtrs passthrough
+00930f60 FUN_00930f60  # no PDB name
+00930f90 AppendDirectory  # dev-PDB gap-align EA::IO::FilePath::AppendDirectory
+00930fc0 ReplacePathComponent  # dev-PDB gap-align EA::IO::FilePath::ReplacePathComponent
+00931100 FUN_00931100  # no PDB name; ReplacePathComponent(2,4,...) wrapper
+00931250 MakeFileNameValid  # dev-PDB callee-single EA::IO::MakeFileNameValid

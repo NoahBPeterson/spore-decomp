@@ -1,0 +1,2 @@
+0091ed80  0  GetAddressLocation: the PE export/name-table walk is not reconstructed; only a section-table
+             approximation is written (outputs module name but not the exported symbol index).

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00ed0c60 63   two-id switch/refptr assignment: register/refptr shape differs
+00ed1380 61   float bounds check: local order and comiss operands differ
+00ed13e0 87   window lookup + size math: virtual slot args differ
+00ed1460 13   new-object factory: cl merges the two ctor+tail branches

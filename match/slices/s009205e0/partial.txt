@@ -1,0 +1,4 @@
+009205e0  0  HashTable::insert: resize/allocator call signatures and chaining are approximate.
+00920780  0  EapdSymbolTable::LoadSymbols: stream-reading loop is a skeleton (no real deserialization).
+00920b30  0  EapdSymbolTable::LoadGroups: skeleton, group-insert pass omitted.
+00920f30  0  FUN_00920f30 path canonicalizer: "." / ".." and separator-collapse logic approximated.

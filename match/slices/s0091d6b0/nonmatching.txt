@@ -1,0 +1,5 @@
+0091d6b0  122  SymbolEngine::Load: 64-bit base handling and SymLoadModule64 arg packing differ
+0091d7d0  17   SymbolEngine scalar deleting dtor: base vtable store / register schedule differs
+0091d830  216  GetAddressInfo: SymGetLineFromAddr64/SymGetSymFromAddr64 local struct layout differs
+0091e080  176  GetReportFilePath: local buffers/format arg schedule differ from the original _snprintf use
+0091e5c0  6    WriteExceptionReport: Destroy-call placement relative to pop esi (stack offset esp+0xc vs +8)

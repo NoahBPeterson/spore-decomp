@@ -1,0 +1,8 @@
+# va  reason
+00ed0b70 handler/field teardown: virtual releases + member layout not reconstructed
+00ed0ce0 large event dispatcher (838 B): jump-table cases not reconstructed
+00ed1030 property read: singleton/property protocol not reconstructed
+00ed10b0 window value setter: base call + virtual protocol not reconstructed
+00ed1120 messaging ctor: base ctor args/registration not reconstructed
+00ed1180 item-selection toggle: intrusive-list walk and virtual protocol not reconstructed
+00ed1550 species/avatar edit update (809 B): not reconstructed

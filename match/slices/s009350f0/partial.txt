@@ -1,0 +1,5 @@
+009350f0 862 IniFile::LoadSectionNames: EASTL rbtree traversal + string tokenizing not reconstructed
+00935560 1231 IniFile::EnumEntries: EASTL rbtree/string reconstruction not completed
+00935e60 283 EA::Process::OpenFile(wchar_t*): eastl::basic_string + dynamic ShellExecuteW reconstruction not completed
+00935f80 45  EA::Process::OpenFile(char*): wrapper around the wide overload, stubbed
+00935fb0 155 EA::Process::OpenBrowser: eastl::basic_string + ShellExecuteW reconstruction not completed

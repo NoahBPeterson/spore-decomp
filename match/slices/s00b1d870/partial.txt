@@ -1,0 +1,11 @@
+00b1d870 161  FUN_00b1d870: constructor/vtable init not reconstructed
+00b1d970 164  FUN_00b1d970: constructor/vtable init not reconstructed
+00b1da20 207  FUN_00b1da20: constructor/vtable init not reconstructed
+00b1dc60 534  FUN_00b1dc60: large init/registration routine not reconstructed
+00b1dee0 215  FUN_00b1dee0: large init routine not reconstructed
+00b1e020 156  FUN_00b1e020: not reconstructed
+00b1e0c0 836  SP::cSPPlayModeBGMgr::InitiateChangeEnviroment: 836-byte environmental transition not reconstructed
+00b1e410 115  FUN_00b1e410: environmental-switch notification not reconstructed
+00b1f960 74   FUN_00b1f960: layout/effect toggle not reconstructed
+00b1fbb0 56   FUN_00b1fbb0: subsystem init-state query not reconstructed
+00b1fc80 202  FUN_00b1fc80: serializer round-trip not reconstructed

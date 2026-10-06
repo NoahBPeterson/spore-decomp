@@ -1,0 +1,2 @@
+00eed840 Scenario::cSPScenarioPropertyUI::IsValidIndex  # property bag lookup + FNV compare
+00eed920 Scenario::cSPScenarioPropertyUI::SetIntProperty  # property bag write

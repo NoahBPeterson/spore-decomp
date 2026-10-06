@@ -1,0 +1,2 @@
+00e616c0 RegisterAppMode_cCellMode  # pdb anchor; registers the Game_Cell app mode
+00e61830 eastl::lower_bound<eastl::pair<int,SP::cCollisionSound>*,...>  # pdb callee-single name

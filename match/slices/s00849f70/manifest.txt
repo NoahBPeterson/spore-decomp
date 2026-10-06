@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00849f70/s00849f70.cpp  IsOpen@IMEServerWin32            0084a360  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  SetOpenEnabled@IMEServerWin32    0084a3a0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  NotifyClosed@IMEServerWin32      0084a470  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  SetConversion@IMEServerWin32     0084a4d0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  EnsureInitialized@IMEServer      0084a590  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  Shutdown@IMEServer               0084a5d0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  SetFlag@IMEServerWin32           0084a600  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  SetCandidateSelection@IMEServerWin32  0084a640  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  ??1IMECompositionStringDataEx    0084a6a0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  ??0WString@@QAE@I_WPBX           0084a780  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  ??0WString@@QAE@_W               0084aa60  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  AssignComposition@IMEServerWin32 0084aab0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  DoDestroyValues@WStringVector    0084aad0  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  FillWStrings                     0084ab10  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  ?CopyWStrings                    0084ab40  /O2 /MD /Gy /TP
+slices/s00849f70/s00849f70.cpp  SetCompositionData@IMEServerWin32  0084ab80  /O2 /MD /Gy /TP

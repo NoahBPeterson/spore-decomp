@@ -1,0 +1,38 @@
+0093a9d0 WriteUint16  # dev-PDB EA::IO::WriteUint16
+0093aa70 WriteUint32  # dev-PDB EA::IO::WriteUint32
+0093ab10 WriteUint64  # no PDB name; 8-byte sibling of WriteUint32
+0093abd0 WriteString  # no PDB name
+0093ac80 ReadBool  # no PDB name
+0093acd0 ReadString  # no PDB name
+0093adb0 WriteCString  # no PDB name
+0093ae40 StreamBuffer::GetAccessFlags  # dev-PDB StreamBuffer::GetType nearby; IStream slot 0x10
+0093ae60 StreamBuffer::GetState  # IStream slot 0x14
+0093ae80 StreamBuffer::GetSize  # IStream slot 0x1c
+0093aeb0 StreamBuffer::GetPosition  # IStream slot 0x24
+0093aef0 StreamBuffer::GetAvailable  # IStream slot 0x2c
+0093af00 StreamBuffer::FlushWriteBuffer  # ModAPI Addresses(StreamBuffer)
+0093af60 StreamBuffer::SetBufferSizes  # ModAPI Addresses(StreamBuffer)
+0093b050 StreamBuffer::SetSize  # IStream slot 0x20
+0093b0a0 StreamBuffer::SetPosition  # IStream slot 0x28
+0093b140 StreamBuffer::Read  # IStream slot 0x30
+0093b300 StreamBuffer::Flush  # IStream slot 0x34
+0093b310 StreamBuffer::FillWriteBuffer  # ModAPI Addresses(StreamBuffer)
+0093b3c0 StreamBuffer::SetStream  # ModAPI Addresses(StreamBuffer)
+0093b450 StreamBuffer::Close  # IStream slot 0x18
+0093b490 StreamBuffer::Write  # IStream slot 0x38
+0093b530 StreamBuffer::StreamBuffer  # ctor
+0093b5a0 StreamBuffer::~StreamBuffer  # dtor
+0093b630 StreamChild::Open  # ModAPI Addresses(StreamChild)
+0093b6a0 StreamChild::Close  # IStream slot 0x18
+0093b6d0 StreamChild::GetState  # IStream slot 0x14
+0093b6f0 StreamChild::GetPosition  # IStream slot 0x24
+0093b700 StreamChild::SetPosition  # IStream slot 0x28 (dispatch uncertain)
+0093b770 StreamChild::Read  # IStream slot 0x30
+0093b7d0 StreamChild::StreamChild  # ctor
+0093b820 EA::IO::WriteEncoded  # dev-PDB EA::IO::WriteEncoded
+0093b8b0 FixedMemoryStream::Release  # IStream slot 0x08
+0093b8e0 FixedMemoryStream::SetData  # member
+0093b900 FixedMemoryStream::SetSize  # IStream slot 0x20
+0093b920 FixedMemoryStream::GetPosition  # IStream slot 0x24
+0093b950 FixedMemoryStream::SetPosition  # IStream slot 0x28
+0093b9a0 FixedMemoryStream::Read  # IStream slot 0x30

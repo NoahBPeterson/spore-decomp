@@ -1,0 +1,3 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f002d0  168  surface-node lookup: faithful translation of the 0x238-stride scan, but MSVC
+               schedules the run/flag logic differently (next-field test and loop break)

@@ -1,0 +1,12 @@
+# va  diff-bytes  short reason
+00edef10  300  switch/jump-table dispatch and window-loop layout differ (behavior complete)
+00edf2c0  160  static helper uses register calling convention (edi arg) cl cannot reproduce from source
+00edf370  34   bit tests folded to test-mask instead of separate shr/test (behavior complete)
+00edf3c0  35   callee-saved register allocation of second arg (behavior complete)
+00edf410  120  GetWorldMainWindow/vcall scheduling and dtor tail (behavior complete)
+00edf4c0  39   callee-saved register allocation across the two helper calls (behavior complete)
+00edfbf0  144  call scheduling / argument materialisation (behavior complete)
+00edfce0  13   manager reload vs cached-register ordering (behavior complete)
+00edfd70  24   branch layout of the early-out return (behavior complete)
+00edfde0  18   three bit tests folded to one mask test (behavior complete)
+00edfe10  66   base-vtable store order of the MI constructor (behavior complete)

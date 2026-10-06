@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+011e0560  n/a  DSO_merge: OpenSSL; only the two strdup arms reconstructed (merge arm omitted)
+011e0810  n/a  crt_ftol2: MSVCR90 compiler runtime helper
+011e0906  n/a  floor() IAT thunk
+011e0912  n/a  MSVCR90 vector-dtor / CxxThrowException helper
+011e0b6d  n/a  __ArrayUnwind cifuncguard helper
+011e0bd2  n/a  __ArrayUnwind cifuncguard helper
+011e0c47  n/a  __ArrayUnwind cifuncguard helper
+011e1368  n/a  _amsg_exit table + atexit runner
+011e15de  n/a  ___report_gsfailure MSVCR90 runtime
+011e2760  n/a  Arena::WriteDictionary: stream writer stubbed
+011e28e0  n/a  Arena::GetExportedObjectByIndex: stubbed
+011e2a00  n/a  AddResourceToArena<Adder>: template body approximated

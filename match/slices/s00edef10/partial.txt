@@ -1,0 +1,7 @@
+# va  diff-bytes  short reason
+00edf090  -    palette-selection dispatch reconstructed only through the window lookup (switch table omitted)
+00edf510  -    large palette-item/swatch construction not reconstructed (skeleton only)
+00edf730  -    property float-array search/clamp not reconstructed (skeleton only)
+00edf830  -    grid/string formatting handler not reconstructed (skeleton only)
+00edfa30  -    property float-array search not reconstructed (skeleton only)
+00edfb30  -    asset-browser launch sequence incomplete (hash/Release/AdvancedLaunch args omitted)

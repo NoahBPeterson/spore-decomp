@@ -1,0 +1,13 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs are chk.py best-symbol estimates)
+00dfb720  300  eastl::vector<0x38>::operator=: realloc/copy/uninit-copy path; cl register/order differs (known unsolvable from C++, cf. synth template eastl_vec_assign_trivial_div_stride)
+00dfb890   67  TypeB copy ctor (sub-vector construct form): complete; differs in sub-vector helper call scheduling
+00dfb8e0   60  uninitialized_copy of 0x44-byte TypeD: complete (first dword + TypeC copy + tail dword); call schedule differs
+00dfb930   94  copy-assign range of TypeD: complete (cString=, two wstring assigns, tail dword); differs in inline assign shape
+00dfbb60   41  vector<0x44> destroy + header-checked free at +0x18: complete; loop/return shape differs
+00dfbba0  191  large-class destructor (four 0x44 vectors + buffer + wstring): complete; address/order schedule differs
+00dfbc80  101  uninitialized_copy of 0x34-byte TypeB: complete; differs by delegating to the TypeB copy ctor rather than inlining it
+00dfbd00   25  TypeB copy ctor (sub-vector assignment form): complete; near-miss, sub-vector helper call differs
+00dfc000  382  vector<0x24>::DoInsertValue: complete (inline element operator=, grow path); registers swapped (pv/pos) vs original
+00dfc170   93  copy-construct range of 0x34-byte TypeB: complete; sub-vector helper schedule differs
+00dfc1e0   51  allocate n TypeD + uninitialized_copy: complete; differs in uninit-copy call/return shape
+00dfc500  143  Big::Check string filter loop: complete; differs in loop/register schedule

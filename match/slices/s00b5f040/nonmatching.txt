@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00b5f1b0  19  complete: conditional call + return true; mem-test vs register-test
+00b60070  9   complete: small ctor; vtable store scheduling differs

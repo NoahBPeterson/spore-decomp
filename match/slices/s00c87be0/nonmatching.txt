@@ -1,0 +1,5 @@
+00c887e0 25  GameData::HasFlag: complete; cl orders the null branch first and widens the byte return
+00c88810 67  SpatialModel::SetModelKey3: complete; key/field load scheduling and tail vcall differ
+00c88870 13  SpatialPos::Fn: complete; squared-length expression scheduling differs
+00c88670 78  VecThing::Set3: complete; float `==` chain compares v[] into xmm0 instead of the field
+00c886d0 100 VecThing::Set4: complete; 4-float `==` chain operand order differs

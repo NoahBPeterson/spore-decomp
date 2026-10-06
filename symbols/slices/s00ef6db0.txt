@@ -1,0 +1,21 @@
+# va  name  # evidence
+# Simulator::cSPScenarioModeSporepediaLargeAssetView (ctor 0x00ef64e0; vtables 0x148b3b4/3c4/3dc/3e8/3f8)
+00ef6db0  Simulator::cSPScenarioModeSporepediaLargeAssetView::Reset  # vt 0x148b3c4 slot 3 (0x148b3d0)
+00ef6ea0  Simulator::cSPScenarioModeSporepediaLargeAssetView::RemoveKey  # same class region
+00ef6f20  Simulator::cSPScenarioModeSporepediaLargeAssetView::HandleMessage  # vt 0x148b3e8 slot 1 (0x148b3ec)
+# UI::cScenarioTutorialsChecklistUI (ctor 0x00ef7900; primary vt 0x148b59c, secondary vt 0x148b58c)
+00ef7900  UI::cScenarioTutorialsChecklistUI::cScenarioTutorialsChecklistUI  # vt; vtable_names.txt
+00ef7950  UI::cScenarioTutorialsChecklistUI::~cScenarioTutorialsChecklistUI  # releases 0x0c..0x20 then base vtables
+00ef7d00  UI::cScenarioTutorialsChecklistUI::vfunc  # secondary vt 0x148b584 slot 0
+# unconfirmed helpers in the same TU, named from the disassembly / callees
+00ef7280  ScenarioTutorials_ConfigEnabled
+00ef72a0  ScenarioTutorials_HasIndex
+00ef72b0  ScenarioTutorials_ClearPending
+00ef72c0  ScenarioTutorials_MarkDirty
+00ef72d0  ScenarioTutorials_IsValidCategory
+00ef7330  ScenarioTutorials_CategoryState
+00ef73c0  ScenarioTutorials_InitPlacement
+00ef7810  ScenarioTutorials_SelectCategory
+00ef78c0  ScenarioTutorials_CountEntries
+00ef7c00  eastl::hashtable::DoRehash
+00ef7ca0  eastl::hashtable::Distance

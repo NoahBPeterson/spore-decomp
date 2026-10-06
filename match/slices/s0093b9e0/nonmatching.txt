@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+0093b9e0  65   complete: App::memorystream append, capacity/size schedule differs
+0093ba40  25   complete: memorystream ctor, field-store order differs
+0093bab0  120  complete: GetProperty switch/float materialisation differs
+0093bb40  117  complete: SetProperty switch/float materialisation differs
+0093bbf0  45   complete: MemoryStream reads via shared data pointer, schedule differs
+0093bd50  39   complete: GraphicsFactoryAsyncRequest ctor, field order differs
+0093be30  298  complete: MemoryStream::SetData, intrusive_ptr/alloc schedule differs
+0093c000  151  complete: MemoryStream grow/copy, refcount schedule differs
+0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
+0093c150  149  complete: MemoryStream resize-on-write, float path scheduling differs
+0093c210  62   complete: scalar deleting dtor, refcount schedule differs
+0093c320  55   complete: MemoryStream clear, refcount schedule differs
+0093c370  61   complete: MemoryStream SetSize, branch layout differs
+0093c420  3    complete: trivial 'return b' thunk, 3 bytes of frame differ
+0093c6f0  12   complete: fputs-to-stderr wrapper, call setup differs
+0093c710  4    complete: Strlen32 do/while, loop register order differs
+0093c920  40   complete: GetCharacterSize if-chain, compare order differs

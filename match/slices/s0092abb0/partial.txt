@@ -1,0 +1,7 @@
+0092abb0  0  Clipboard::SetClipboardData: data-info search present but OS writeback path approximated.
+0092adb0  0  Win32Clipboard::WindowProcedure: only the GetClipboardData(CF_UNICODETEXT) read path is written;
+             the message-pump/window-proc arms (WM_*) are omitted.
+0092b200  0  CommandLine::FindArgument: the substring/find arms are simplified.
+0092b300  0  CommandLine::FindSwitch: the quoted-value extraction and ':' parsing are omitted.
+0092b4d0  0  FUN_0092b4d0: command-line requoting is a simplified equivalent.
+0092b7b0  0  CommandLine::InsertArgument: vector insert + command-line reset are not fully wired.

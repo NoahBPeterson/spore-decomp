@@ -1,0 +1,12 @@
+0092acb0  79   SetClipboardText: alloc/ctor vtable call schedule differs
+0092ad10  37   platform-clipboard teardown: written as a free function, not the thiscall form
+0092ad50  57   GetClipboard: operator_new path / returned old pointer schedule differs
+0092afb0  181  Win32Clipboard ctor: WNDCLASS layout + RegisterClass/CreateWindow schedule differs
+0092b0b0  49   Clipboard platform-enable: alloc/ctor schedule differs
+0092b0f0  60   SetUserEnabled: mutex/teardown schedule differs
+0092b140  88   EnsurePlatform: mutex/enable schedule differs
+0092b1b0  36   CommandLine::at: register allocation (mpBegin kept live) differs
+0092b1d0  33   CommandLine ctor: vtable/field-init order differs
+0092b690  55   CommandLineB ctor: vtable-last field-init order differs
+0092b700  59   vector<wstring>::erase: copy/dealloc schedule differs
+0092b5f0  106  GetCurrentAppPath: cached GetModuleFileNameW call/loop schedule differs

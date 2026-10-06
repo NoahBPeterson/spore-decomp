@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00eff790  -  2591-byte checklist constructor: only the member release sequence + global window
+              registration are written; the many NounManager/spatial window creations are omitted
+00f001b0  -  nearest-surface scan: header/loop skeleton only; the SSE distance/compare body and
+              the 0x238-stride linked-list walk are not implemented
+00f00380  -  only an empty stub; the full body was not reconstructed
+00f004f0  -  only an empty stub; the full body was not reconstructed

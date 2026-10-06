@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+011e2050  n/a  rw_addref_if_first: complete; register/scheduling diff
+011e2080  n/a  rw_release_ref: complete; branch shape diff
+011e20a0  n/a  AlignInfo::AlignUpTo: complete; scheduling diff
+011e20d0  n/a  AlignInfo::Advance: complete; cmov form not reproduced
+011e21b0  n/a  rw_FindTypeReg: complete; ArenaManager stack temp diff
+011e21e0  n/a  UnfixContext::Serialize: complete; vtable indexing diff
+011e2240  n/a  copy4: complete; struct-copy codegen diff
+011e2270  n/a  callSubref: complete; load scheduling diff
+011e22c0  n/a  ArenaTypeRegGetType: complete
+011e2300  n/a  Arena::IdToObject: complete; address scaling diff
+011e2330  n/a  Arena::DestructNext: complete; register allocation diff
+011e23b0  n/a  AlignInfo4::Advance4: complete; loop vs unrolled cmov diff
+011e2470  n/a  grow: complete; dead-store shape diff
+011e24b0  n/a  alignTo: complete
+011e2500  n/a  UnfixContext::FindBaseObject: complete; /0x18 magic diff
+011e2560  n/a  UnfixContext::FindNewSubObject: complete; 12-byte near miss
+011e25d0  n/a  UnfixContext::FindExistingSubObject: complete
+011e2630  n/a  rw_free_block_30: complete
+011e2670  n/a  copyBlob: complete; rep-movsd block size diff
+011e2690  n/a  rw_cleanup_2690: complete
+011e26f0  n/a  UpdateSubreferencesData: complete
+011e29c0  n/a  initRange: complete; unrolled store diff

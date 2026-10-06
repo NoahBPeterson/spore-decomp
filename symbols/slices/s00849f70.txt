@@ -1,0 +1,4 @@
+00849f70 EA::App::Canvas::FlushInput  # pdb_names vtable-slot
+0084a360 EA::App::IMEServer::IsOpen  # ImmGetOpenStatus wrapper
+0084aad0 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::DoDestroyValues  # ghidra symbol
+0084ab40 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<eastl::basic_string<wchar_t,eastl::allocator> *,eastl::basic_string<wchar_t,eastl::allocator> *>  # ghidra symbol

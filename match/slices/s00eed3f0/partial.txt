@@ -1,0 +1,7 @@
+# va  diff-bytes  short reason
+00eed3f0  -    814-byte property handler not reconstructed
+00eed720  -    282-byte spin-state evaluator not reconstructed (skeleton only)
+00eed8c0  -    property-bag read not reconstructed (skeleton only)
+00eeda20  -    376-byte handler not reconstructed (skeleton only)
+00eedba0  -    colour-unpack helper not reconstructed (skeleton only)
+00eedc10  -    418-byte handler not reconstructed (skeleton only)

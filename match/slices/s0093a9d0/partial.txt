@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0093abd0  142  approximate: WriteString newline/CRLF mode semantics guessed from retail shape
+0093acd0  183  approximate: ReadString padding/seek behavior reconstructed loosely
+0093b700  84   approximate: StreamChild::SetPosition parent vs self dispatch unclear from retail

@@ -1,0 +1,21 @@
+# va  name  # evidence
+# scenario checklist / planetary-UI helpers; names unconfirmed
+00efdee0  ScenarioTutorials_PlacePlanetCamera
+00efe110  ScenarioTutorials_UpdateViewMetrics
+00efe240  ScenarioTutorials_RefreshAndUpdate
+00efe260  ScenarioTutorials_SetSelectedObject
+00efe310  ScenarioTutorials_TickStopwatch
+00efe4a0  ScenarioTutorials_SetTargetVisible
+00efe510  ScenarioTutorials_ToggleTarget
+00efe5d0  ScenarioTutorials_HasObject            # 0x20-stride scan over DAT_016c7b88+0x8c
+00efe610  ScenarioTutorials_HasObjectByKey
+00efe630  ScenarioTutorials_CanTrigger
+00efe6a0  ScenarioTutorials_Rating
+00efe870  ScenarioTutorials_FindSurfacePoint      # 0x27e8-stride scan of planet surface list
+00efe8d0  ScenarioTutorials_SetWindowVisible
+00efe930  ScenarioTutorials_SetSelectedWindow
+00efeaa0  ScenarioTutorials_HasPendingSelection
+00efeac0  ScenarioTutorials_HasSelected
+00efeae0  ScenarioTutorials_CheckObject
+00efebb0  ScenarioTutorials_CheckObject2
+00efec90  ScenarioTutorials_ResolveObject

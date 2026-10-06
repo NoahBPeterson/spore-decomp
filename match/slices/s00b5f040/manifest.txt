@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b5f040/s00b5f040.cpp  ??4?$AutoRefCount@VIWinText@UTFWinControls@EA@@@EA@@QAEAAU01@PAVIWinText@UTFWinControls@1@@Z  00b5f950  /O2 /MD /Gy /TP

@@ -1,0 +1,21 @@
+011e0560 DSO_merge  # OpenSSL .\crypto\dso\dso_win32.c string
+011e07e6 crt_unlock_8_helper  # push 8; call; pop ecx
+011e0906 iat_floor  # jmp [msvcr90!floor]
+011e1368 crt_amsg_exit  # jmp [msvcr90!_amsg_exit]
+011e1545 crt_return_zero  # xor eax,eax; ret
+011e15de __report_gsfailure  # Ghidra library match MSVCR90
+011e2050 rw::core::arena::AddRef  # global refcount g_16f2978
+011e2080 rw::core::arena::Release  # global refcount g_16f2978
+011e21b0 rw::core::arena::rw_FindTypeReg  # card name
+011e21e0 rw::core::arena::UnfixContextImpl::Serialize  # card name
+011e22a0 rw::core::arena::ArenaSectionManifest::ExternalArenas  # card name
+011e22c0 rw::core::arena::ArenaTypeRegGetType  # card name
+011e2300 rw::core::arena::Arena::IdToObject  # card name
+011e2330 rw::core::arena::Arena::DestructNext  # card name
+011e2500 rw::core::arena::UnfixContextImpl::FindBaseObject  # card name
+011e2560 rw::core::arena::UnfixContextImpl::FindNewSubObject  # card name
+011e25d0 rw::core::arena::UnfixContextImpl::FindExistingSubObject  # card name
+011e26f0 rw::core::arena::ArenaIterator::UpdateSubreferencesData  # card name
+011e2760 rw::core::arena::Arena::WriteDictionary  # card name
+011e28e0 rw::core::arena::Arena::GetExportedObjectByIndex  # card name
+011e2a00 rw::core::arena::AddResourceToArena<rw::core::arena::Adder>  # card name

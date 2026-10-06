@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01308d20  n/a  init_1676bfc: float->packed-byte conversion pipeline omitted (Ghidra folds to 4 constants)

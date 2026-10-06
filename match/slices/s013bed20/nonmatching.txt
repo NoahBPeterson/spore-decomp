@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+013c0da0  26  complete behaviourally-equivalent singleton-cleanup source; cl chooses a different register/shrink-wrap schedule (value kept in esi, test in eax) than the original
+013c0de0  26  complete behaviourally-equivalent singleton-cleanup source; register/shrink-wrap schedule differs
+013c1060  26  complete behaviourally-equivalent singleton-cleanup source; register/shrink-wrap schedule differs
+013bf600  19  body is complete and byte-identical up to the function ret (mov ecx,imm; jmp dtor); Ghidra bounds extend over a following unlisted int3+ret thunk, so the listed VA cannot be matched from one C++ function
+013c0300  18  body complete (virtual tail call); Ghidra bounds extend over a following unlisted /Od constructor prologue
+013c08e0  12  body complete; bounds extend over an unlisted int3 + jmp-thunk (tail-merged by Ghidra)
+013c0ce0  26  body complete (refcount release + delete); bounds extend over an unlisted int3 + ret thunk
+013c0e90  24  body complete (allocator teardown); bounds extend over an unlisted int3 + ret thunk
+013c0f40  6   body complete (FreeLibrary); bounds extend over an unlisted int3 + jmp-thunk
+013c0fc0  13  body complete (WSACleanup); bounds extend over a following unlisted FreeLibrary function
+013c1b90  8   body complete; bounds extend over an unlisted int3 + ret thunk
+013c1e00  8   body complete; bounds extend over an unlisted int3 + ret thunk
+013c1ea0  14  body complete; bounds extend over an unlisted int3 + ret thunk
+013c21d0  24  body complete; bounds extend over an unlisted int3 + ret thunk
+013c3020  42  body complete; bounds extend over an unlisted int3 + ret thunk

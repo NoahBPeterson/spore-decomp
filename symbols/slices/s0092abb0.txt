@@ -1,0 +1,9 @@
+0092abb0 EA::Clipboard::Clipboard::SetClipboardData  # pdb_names gap-align
+0092acb0 EA::Clipboard::SetClipboardText  # pdb_names gap-align
+0092ad50 EA::Clipboard::GetClipboard  # pdb_names callee-scored
+0092adb0 EA::Clipboard::Win32Clipboard::WindowProcedure  # pdb_names gap-align
+0092afb0 EA::Clipboard::Win32Clipboard::Win32Clipboard  # pdb_names anchor
+0092b300 EA::CommandLine::FindSwitch  # pdb_names callee-single
+0092b5f0 `anonymous namespace'::GetCurrentAppPath  # pdb_names anchor
+0092b700 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::erase  # pdb_names gap-align
+0092b7b0 EA::CommandLine::InsertArgument  # pdb_names gap-align

@@ -1,0 +1,3 @@
+# va  diff-bytes  short reason
+00ee31d0  32   tail-call to the empty palette refresh changes scheduling (behavior complete)
+00ee3760  68   callee-saved register allocation around the callback install (behavior complete)

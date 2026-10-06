@@ -1,0 +1,17 @@
+00dfb5b0  state-name label builder (wstring from 12 state names)
+00dfb720  eastl::vector<0x38-byte>::operator=
+00dfb890  TypeB copy ctor (sub-vector construct form)  # also constructed at vector reallocation
+00dfb8e0  eastl::uninitialized_copy<0x44-byte TypeD>
+00dfb930  eastl::copy / copy-assign range of 0x44-byte TypeD
+00dfb9c0  UI class constructor (cSPUILayout + Stopwatch + 3 sub-objects)
+00dfbac0  UI class destructor (vectors + AutoRefCounts + cSPUILayout)
+00dfbb60  vector<0x44> destroy helper
+00dfbba0  large UI class destructor (multiple 0x44 vectors)
+00dfbc80  eastl::uninitialized_copy<0x34-byte TypeB>
+00dfbd00  TypeB copy ctor (sub-vector assignment form)
+00dfbd70  UI class Update (galaxy game entry state)
+00dfc000  eastl::vector<0x24-byte>::DoInsertValue
+00dfc170  copy-construct range of 0x34-byte TypeB
+00dfc1e0  allocate array of 0x44-byte TypeD + uninitialized_copy
+00dfc240  UI class update tick (Stopwatch, vcalls)
+00dfc500  UI class string filter check

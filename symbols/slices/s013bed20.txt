@@ -1,0 +1,42 @@
+# Static-cleanup / atexit destructor thunks in the engine shutdown module (no PDB names).
+# Names below are descriptive, derived from the globals each routine tears down.
+013bed20 static_cleanup_16_029b0_Variant      # EA::Variant::~Variant on g_16029b0, guarded by g_16029c0 & 4
+013bed40 static_cleanup_sLRUCaches            # _eh_vector_destructor_iterator_ over 0xb * 0x150-byte LRU caches
+013bedc0 static_cleanup_16_04b80_singleton     # releases singleton g_1604b80 / g_1604b48
+013bf360 static_cleanup_16_198c0_pixelFrag     # vector dtor of cPixelFragmentInfo[0x100] at 0x16198c0
+013bf480 static_cleanup_16_24710_vertexFrag    # vector dtor of cVertexFragmentInfo[0x100] at 0x1624710
+013bf600 static_dtor_16_2a386                  # thiscall dtor of global at 0x162a386
+013c0100 static_cleanup_unload_16_38280        # FreeLibrary + memset of loader state
+013c0230 static_cleanup_15_40de8               # free of a global buffer
+013c0250 static_cleanup_IME_service            # resets sIMEService vtable, releases it
+013c0300 static_cleanup_16_4b410               # virtual release of singleton 0x164b410
+013c0510 static_dtor_16_4c078_DragDrop         # DragDropCaptureWin dtor + release of 4 singletons
+013c0570 static_dtor_15_44138_MI               # multiple-inheritance dtor of global 0x1544138
+013c08e0 static_cleanup_15_4744c               # free sLayerRCs unless it is the inline buffer
+013c0950 static_cleanup_15_47f54_hashtable     # hashtable DoFreeNodes + bucket dealloc
+013c09a0 static_cleanup_15_47f78_hashtable     # hashtable DoFreeNodes + bucket dealloc
+013c0ba0 static_cleanup_16_51994_vector        # vector free with element-size 0x14
+013c0c00 static_cleanup_16_519a8_hashtable     # hashtable DoFreeNodes + bucket dealloc
+013c0c50 static_cleanup_critsec_16_679d0       # DeleteCriticalSection
+013c0ce0 static_cleanup_16_67b24_resource      # validated release + refcount release of resource provider
+013c0d40 static_cleanup_16_67bc0_mutex          # mutex teardown + DeleteCriticalSection
+013c0da0 static_cleanup_16_68e9c_trace          # validated release of trace-helper table
+013c0de0 static_cleanup_16_68ea4_tracer         # validated release of tracer
+013c0e80 static_cleanup_f9250c0                 # call teardown helper with 0
+013c0e90 static_cleanup_core_allocator          # sCoreAlloc teardown / GeneralAllocatorDebug
+013c0f40 static_cleanup_freelib_16_68f1c        # FreeLibrary
+013c0fc0 static_cleanup_wsacleanup              # WSACleanup if started
+013c1060 static_cleanup_16_6b0f0_gfxdevice      # validated release of GraphicsDevice
+013c10c0 static_cleanup_15_4ed20_freelist       # intrusive free-list clear
+013c1110 static_cleanup_16_6b170_debugalloc      # debug-allocator free + Mutex dtor
+013c1150 static_cleanup_16_6b190_hashtable      # hashtable DoFreeNodes + bucket dealloc
+013c1760 static_cleanup_16_6d9a0_Variant        # EA::Variant::~Variant, guarded by 0x166d9b0 & 4
+013c1b90 static_cleanup_16_79e8c                # debug-allocator free
+013c1e00 static_cleanup_15_671b0_vector         # vector free with inline-buffer guard
+013c1ea0 static_cleanup_rbtree_15_67e2c         # rbtree DoNukeSubtree
+013c1f50 static_cleanup_16_7bef0_intrusive      # intrusive list clear
+013c20f0 static_dtor_16_7c30c_hashtable         # hashtable dtor (vtable fixups + bucket free)
+013c2140 static_cleanup_15_68584_vector         # vector free with inline-buffer guard
+013c21d0 static_cleanup_15_68568                # thiscall teardown helper
+013c29f0 static_cleanup_16_870fc                # free of a global buffer
+013c3020 static_cleanup_15_6c5bc_vector         # vector free with inline-buffer guard

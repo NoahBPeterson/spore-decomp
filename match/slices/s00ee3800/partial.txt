@@ -1,0 +1,6 @@
+# va  diff-bytes  short reason
+00ee3800  -    308-byte selection predicate not reconstructed (skeleton only)
+00ee3940  -    1271-byte handler not reconstructed
+00ee3f60  -    message dispatch chain not reconstructed (skeleton only)
+00ee40f0  -    EASTL random-selection helper not reconstructed (skeleton only)
+00ee41e0  -    427-byte behaviour-selection handler not reconstructed (skeleton only)

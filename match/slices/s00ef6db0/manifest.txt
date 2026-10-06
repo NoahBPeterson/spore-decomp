@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef7280@@YAHXZ   00ef7280  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef72a0@@YI_NPAD@Z   00ef72a0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef72b0@@YIXPAD@Z   00ef72b0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef72c0@@YIXPAD@Z   00ef72c0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef72d0@@YGHH@Z   00ef72d0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef75b0@CAssetView@@QAEXHHH@Z   00ef75b0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef7600@CAssetView@@QAEXHHH@Z   00ef7600  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef7640@CAssetView@@QAEXHD@Z   00ef7640  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef76a0@CAssetView@@QAEXHD@Z   00ef76a0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef76f0@@YA_NXZ   00ef76f0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef78c0@@YAHXZ   00ef78c0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef79d0@CScenarioTutorialsChecklistUI@@QAEXXZ   00ef79d0  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef7b00@CScenarioTutorialsChecklistUI@@QAEXXZ   00ef7b00  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?sub_ef7b40@CScenarioTutorialsChecklistUI@@QAEXXZ   00ef7b40  /O2 /MD /Gy /TP
+slices/s00ef6db0/s00ef6db0.cpp  ?FUN_00ef7ce0@@YIXPAD@Z   00ef7ce0  /O2 /MD /Gy /TP

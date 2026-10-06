@@ -1,0 +1,31 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4174@@YAXXZ  013b34f0
+slices/s013ac650/s013ac650.cpp  ??__Eg_015b9a3c@@YAXXZ  013b3510
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e42b8@@YAXXZ  013b3680
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4810@@YAXXZ  013b3ca0
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4a74@@YAXXZ  013b3fd0
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4b4c@@YAXXZ  013b40f0
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4c00@@YAXXZ  013b41e0
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e4f3c@@YAXXZ  013b4640
+slices/s013ac650/s013ac650.cpp  ?FUN_013b51d0@@YAXXZ  013b51d0
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5300@@YAXXZ  013b5300
+slices/s013ac650/s013ac650.cpp  ??__Eg_016e59b0@@YAXXZ  013b5440
+slices/s013ac650/s013ac650.cpp  ?FUN_013b55d0@@YAXXZ  013b55d0
+slices/s013ac650/s013ac650.cpp  ??__Eg_015ba420@@YAXXZ  013b5c00
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5c20@@YAXXZ  013b5c20
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5d80@@YAXXZ  013b5d80
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5d90@@YAXXZ  013b5d90
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5da0@@YAXXZ  013b5da0
+slices/s013ac650/s013ac650.cpp  ?FUN_013b5eb0@@YAXXZ  013b5eb0
+slices/s013ac650/s013ac650.cpp  ??__Eg_016f4e98@@YAXXZ  013b64c0
+slices/s013ac650/s013ac650.cpp  ?FUN_013b64e0@@YAXXZ  013b64e0
+slices/s013ac650/s013ac650.cpp  ?FUN_013b6500@@YAJXZ  013b6500
+slices/s013ac650/s013ac650.cpp  ??__Eg_015d0b80@@YAXXZ  013bc940
+slices/s013ac650/s013ac650.cpp  ?FUN_013bd0d0@@YAXXZ  013bd0d0
+slices/s013ac650/s013ac650.cpp  ?FUN_013bd9d0@@YAXXZ  013bd9d0
+slices/s013ac650/s013ac650.cpp  ?FUN_013bda60@@YAXXZ  013bda60
+slices/s013ac650/s013ac650.cpp  ?FUN_013bdc30@@YAXXZ  013bdc30
+slices/s013ac650/s013ac650.cpp  ?FUN_013be2f0@@YAXXZ  013be2f0
+slices/s013ac650/s013ac650.cpp  ?FUN_013bed00@@YAXXZ  013bed00
+slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc50@@YAXXZ  013bcc50  /Od /Ob1 /MD /Gy /TP
+slices/s013ac650/s013ac650b.cpp  ?FUN_013bcc70@@YAXXZ  013bcc70  /Od /Ob1 /MD /Gy /TP

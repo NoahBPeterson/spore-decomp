@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00efbbe0  43   key bridge: hashtable lookup + this/key register allocation (ebx<->edi) differs
+00efbc90  52   key bridge: same lookup; this/param_2 end up in different callee-saved registers
+00efbce0  153  checklist refresh: cSPUILayout vcall argument schedule / x87 float args differ
+00efbe40  128  category select: static table scan and window/tree updates not scheduled the same
+00efbf00  -    hint update: chk/card treat 0x00efbf00 as 537 bytes (0x00efbf60 is not a known
+               function boundary), so the size-based match window can never hit this function
+00efc120  322  window id switch: FUN_00985e40/vcall layout and register allocation differ
