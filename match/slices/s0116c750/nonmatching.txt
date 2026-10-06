@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-0116c750  5170  complete: ISO dist10 III_stereo (MPEG-2 LSF, float, in place); regalloc/strength-reduction differ, ms helper 0116c600 called as extern cdecl (original: same-TU static, xr in EAX); /arch:SSE

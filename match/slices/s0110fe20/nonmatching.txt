@@ -1,1 +1,0 @@
-0110fe20  4860  complete hkGskManifold_verifyAndGetPoints (all 6 dimA/dimB cases, keep/remove + vertex-id compaction); x87 op order, 0.0 from memory vs fldz, switch table base and register allocation differ

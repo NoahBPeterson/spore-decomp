@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0110fe20  4860  complete hkGskManifold_verifyAndGetPoints (all 6 dimA/dimB cases, keep/remove + vertex-id compaction); x87 op order, 0.0 from memory vs fldz, switch table base and register allocation differ  [demoted 2026-10-06: equivalence harness FAIL, value difference in call #204 (depth 1); see work/difftest/op1_equiv.json]

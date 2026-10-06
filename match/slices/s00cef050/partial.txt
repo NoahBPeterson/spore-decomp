@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00cef050  6548  complete (all 124 property reads, scalings, uint/int conversions checked vs asm); original has an 8-byte-aligned frame (and esp,-8) that shifts every esp slot by 4, not reproduced  [demoted 2026-10-06: equivalence harness FAIL, value difference in memory pool @40010080; see work/difftest/op1_equiv.json]

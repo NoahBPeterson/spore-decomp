@@ -1,1 +1,0 @@
-00f6c940  4850  complete; needs /O2 /arch:SSE /fp:fast (reassociated n.x*0+n.y*0); same call/compare/sqrt/div counts as the original, register allocation and x87/SSE scheduling differ (5506 vs 5623 bytes)

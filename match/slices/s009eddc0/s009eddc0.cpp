@@ -19,6 +19,7 @@
 // @ 0x009eddc0
 
 #include <math.h>
+#include <stddef.h>
 #pragma intrinsic(sqrt, atan2, pow)
 
 typedef unsigned char  u8;
@@ -57,6 +58,7 @@ struct Bone {
     u8  pad39[0x190 - 0x39];
     Vec3 pivotPos;              // +0x190  pos - quat.Rotate(owner->pivot * scale)
     Quat quat;                  // +0x19c  world orientation
+    u8  pad1ac[4];
     Vec3 pos;                   // +0x1b0  world position
     u8  pad1bc[0x244 - 0x1bc];
     i32 noEase;                 // +0x244  (read on ctx->start)
@@ -66,6 +68,9 @@ struct Bone {
     Vec3 splinePos;             // +0x264  point on the curve
     Quat localRot;              // +0x270  local rotation relative to the curve frame
 };
+
+typedef char BoneLayoutCheck[(offsetof(Bone, pos) == 0x1b0 && offsetof(Bone, noEase) == 0x244 &&
+                              offsetof(Bone, splinePos) == 0x264 && offsetof(Bone, localRot) == 0x270) ? 1 : -1];
 
 struct SplineCtx {
     Bone* end;                  // +0x00
