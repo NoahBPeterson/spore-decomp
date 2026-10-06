@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008019f0/s008019f0.cpp  ?FindCanvasAdj@CurMgr@@QAE_NI@Z   00801c70  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?NukeSubtree@MapBase@@QAEXPAX@Z  00801ef0  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?Shutdown@CurMgr@@QAE_NXZ        00802680  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?f@C_802870@@QAEII@Z             00802870  /O2 /MD /Gy /TP /arch:SSE2
+slices/s008019f0/s008019f0.cpp  ?Sub_8028e0@@YI_NPAX@Z           008028e0  /O2 /MD /Gy /TP /arch:SSE2

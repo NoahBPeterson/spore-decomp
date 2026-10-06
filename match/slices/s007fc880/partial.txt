@@ -1,0 +1,5 @@
+# va diff reason
+007fc880 832 PARTIAL: BehaviorMessage dispatch switch reconstructed; predicate/action vcall indices and AutoRefCount paths approximated
+007fcff0 130 PARTIAL: refcount release reconstructed; hashtable node lookup/free path approximated
+007fd090 151 PARTIAL: hashtable find_or_insert reconstructed; allocator/tag argument roles approximated
+007fd140 142 PARTIAL: refcount add reconstructed; hashtable find/insert and interface vcall paths approximated

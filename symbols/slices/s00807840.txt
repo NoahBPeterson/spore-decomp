@@ -1,0 +1,21 @@
+00807840 SPUIHelpers::CreateImageFromResource  # unlabeled; 7-arg resource image overload
+00807880 SPUIHelpers::CreateImageWindow  # unlabeled; ImageDrawable + UI/Window
+00807a50 SPUIHelpers::CreateButton  # unlabeled; button drawable + UI/WinButton
+00807bb0 SPUIHelpers::SetWindowImage  # PDB dev 00fb8ec0
+00807c70 SPUIHelpers::SetImageFromLayout  # wrapper over GetImageFromLayout + SetImageIcon
+00807cb0 SPUIHelpers::SetWindowImageResource  # unlabeled; SetImageIcon variant
+00807d30 SPUIHelpers::VisitWindowTreeDepthFirst  # PDB dev 00fb8fa0
+00807dc0 SPUIHelpers::SetWindowSPShader  # PDB dev 00fb9030
+00807e50 UI::cWindowTransform::cWindowTransform  # ctor
+00807ed0 SPUIHelpers::RefreshWindowNoReturn  # unlabeled; v98 + v90, returns 0
+00807f50 UI::cWindowTransform::UpdateRotation  # unlabeled; quaternion/rotation switch
+00808050 UI::cWindowTransform::Apply  # unlabeled; scale/rotation/translation
+00808190 UI::cWindowTransform::SetScale  # unlabeled; ensure transform, set scale
+00808210 SPUIHelpers::SetWindowScale  # PDB dev 00fb9260
+00808230 UI::cWindowTransform::SetRotation  # unlabeled; set rotation quaternion
+008082f0 UI::cWindowTransform::SetTranslation  # unlabeled; set translation
+00808370 SPUIHelpers::ComputeWindowBounds  # unlabeled; recursive bounds union
+00808590 UI::cCallbackWinProc::Call  # unlabeled; thiscall callback trampoline
+008085d0 SPUIHelpers::CreateCallbackWinProc  # unlabeled; UI/cCallbackWinProc
+00808660 SPUIHelpers::OpenRecordAsStream  # PDB dev 00fba2c0
+00808780 SPUIHelpers::DestroyWindowPool  # unlabeled; pool DoErase + clear flag

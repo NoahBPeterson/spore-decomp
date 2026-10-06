@@ -1,0 +1,15 @@
+008068d0  264 complete; drawable assignment switch, register/scheduling differences
+00806aa0  58  complete; callee-saved register choice (ebx vs esi) differs
+00806b20  196 complete; index/wrap expression and scheduling differ
+00806bf0  77  complete; SSE scheduling differs
+00806c60  14  complete; only parameter register assignment (esi/edi) swapped
+00806ca0  64  complete; SSE scheduling differs
+00806de0  84  complete; loop/register differences
+00806ee0  96  complete; register/scheduling differences
+00807430  84  complete; float clamp scheduling differs
+008074a0  188 complete; control-flow/register differences
+00807590  65  complete; loop/register differences
+00807600  107 complete; ctor/control-flow differences
+00807690  50  complete; register differences
+008076f0  91  complete; register differences
+00807760  78  complete; allocator ctor arg/register differences

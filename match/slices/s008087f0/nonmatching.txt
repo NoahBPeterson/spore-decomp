@@ -1,0 +1,2 @@
+008087f0  302  bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ
+00808ce0  43  RolloverFrameLayout scalar deleting destructor: complete equivalent class dtor, ??_G body not inlined

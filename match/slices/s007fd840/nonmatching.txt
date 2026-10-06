@@ -1,0 +1,15 @@
+# va diff reason
+007fd840 57 complete; DampedPeriodic periodic-time (slot25); fcos/x87 schedule differs
+007fd890 127 complete; DampedPeriodic eval (slot24); log/exp inlining and frame differ
+007fde00 48 complete; SerItem vector load; loop/register schedule differs
+007fdfa0 36 complete; SList allocator propagation; vcall schedule differs
+007fdfe0 52 complete; SetValue + SList allocator; schedule differs
+007fe330 71 complete; interpolator deleting-dtor; vtable/base-dtor schedule differs
+007fe390 64 complete; state deleting-dtor; vtable order differs
+007fe690 48 complete; SerItem vector load (variant); loop/register schedule differs
+007fe7d0 150 complete; BoolStateEvent predicate switch; vcall/local schedule differs
+007fea90 38 complete; WinEvent deleting-dtor; vtable stores differ
+007fead0 48 complete; IsWinState; vcall/local schedule differs
+007feb40 35 complete; SerRead secondary-base flavour; vcall base offset differs
+007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
+007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs

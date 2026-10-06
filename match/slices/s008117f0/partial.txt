@@ -1,0 +1,5 @@
+008117f0  4   approximate: 554-byte CloseLayout body stubbed
+00811a20  153 approximate: vector swap allocator-mismatch branch approximated
+00811b80  110 approximate: OnLoad reload callback / notification path simplified
+00811c20  3   approximate: 768-byte body stubbed
+00812370  181 approximate: multimap lower_bound/equal_range node search approximated

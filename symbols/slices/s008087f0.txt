@@ -1,0 +1,4 @@
+00808ad0 SPUIHelpers::SetWindowSPMaterial  # PDB name
+00808d20 SPUIHelpers::GetBoundingScreenRect  # PDB name
+00808d40 SPUIHelpers::UpdateRolloverFrame  # PDB name
+008093b0 SPUIHelpers::CreateRolloverFrame  # PDB name

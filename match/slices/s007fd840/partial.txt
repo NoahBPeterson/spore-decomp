@@ -1,0 +1,9 @@
+# va diff reason
+007fdab0 123 PARTIAL: interpolator ctor; Stopwatch/QPC schedule and multi-base vtable stores approximated
+007fdbc0 282 PARTIAL: interpolator HandleMessage; slot indices and message-arg paths approximated
+007fdd10 132 PARTIAL: interpolator SetEnabled; base gate and vcall schedule approximated
+007fe070 35 PARTIAL: ActionWinState ctor; multi-base vtable stores approximated
+007fe130 497 PARTIAL: ActionWinState::Refresh; window/predicate resolution paths approximated
+007fe3f0 668 PARTIAL: ActionWinState::Activate; switch arms and COM interface casts approximated
+007fe8c0 74 PARTIAL: BoolStateEvent::Activate; predicate/allocator paths approximated
+007feb70 120 PARTIAL: cSPUIBehaviorWinEventBase::SerUpdate; messaging paths approximated

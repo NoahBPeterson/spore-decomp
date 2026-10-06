@@ -1,0 +1,12 @@
+008107d0 cSPUILayoutResourceFactory::CreateResource  # builds cPropertyList then calls this->v24
+008108a0 cSPUILayoutResourceFactory::Function8a0  # resource load: binary stream / token IO context
+00810a50 eastl::vector<EA::COM::IUnknown32*,eastl::sp_vector_allocator>::~vector  # card name
+00810af0 eastl::rbtree<...>::DoInsertValue  # allocates 0x24-byte node, RBTreeInsert
+00810d30 UI message handler (0xf62ade)  # builds BehaviorMessage, broadcasts 0x65ff54a
+00810e30 eastl::vector<...>::insert  # vector<bool,...>::DoInsertValue call at 0x11e0744
+00810fd0 cSPUILayoutManager::CreateLayoutObjects  # operator_new 0x9c "UI/LayoutObjects", ctor 0x8100d0
+00811110 cSPUILayoutManager::FindWorldById  # rbtree find + CreateWindow
+00811260 eastl::vector<EA::COM::IUnknown32*,eastl::sp_vector_allocator>::operator=  # card name
+00811330 cSPUILayoutManager::Method11330  # 604-byte body (not reconstructed)
+008115a0 cSPUILayoutManager::InitMessaging  # registers 0x22568e7 / 0xf62ade handlers
+008116e0 cSPUILayoutManager::ShutdownMessaging  # unregisters the same handlers

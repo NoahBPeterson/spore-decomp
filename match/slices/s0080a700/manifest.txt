@@ -1,0 +1,7 @@
+slices/s0080a700/s0080a700.cpp  ?Assign@Big  0080a9d0
+slices/s0080a700/s0080a700.cpp  ?FUN_0080aa20  0080aa20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0080a700/s0080a700.cpp  ?FUN_0080aa90  0080aa90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s0080a700/s0080a700.cpp  ?dtorRange  0080ae70
+slices/s0080a700/s0080a700.cpp  ?Ctor@RecA  0080af20
+slices/s0080a700/s0080a700.cpp  ?Ctor@Rec@@  0080af90
+slices/s0080a700/s0080a700.cpp  ??4RecC  0080b240

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s008107d0/s008107d0.cpp  ?dtor@PtrVec@@QAEXXZ  00810a50  /O2 /MD /Gy /EHsc /TP /arch:SSE2

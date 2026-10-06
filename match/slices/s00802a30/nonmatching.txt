@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00802a30 171  show/hide cursor window (complete)
+00802b20 41   query cursor-window enabled flag (complete)
+00802b80 228  console alpha/colour application (complete)
+00802ff0 19   OnToggle; bool-to-int conversion register shape (complete)
+00803140 97   cSPUIDebugConsole destructor (complete)

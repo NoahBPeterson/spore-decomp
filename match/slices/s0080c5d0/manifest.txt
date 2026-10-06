@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s0080c5d0/s0080c5d0.cpp  ?dtor@cSPUIInfoLineTray@@QAEXXZ  0080cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080c5d0/s0080c5d0.cpp  ?ScalarDeletingDtor@cSPUIInfoLineTray@@QAEPAXE@Z  0080ceb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080c5d0/s0080c5d0.cpp  ?SetFlag8@@YGXPAD@Z  0080d590  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080c5d0/s0080c5d0.cpp  ?GetInnerA@@YIPADPAD@Z  0080d5a0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080c5d0/s0080c5d0.cpp  ?GetInnerBase@@YIPADPAD@Z  0080d610  /O2 /MD /Gy /EHsc /TP /arch:SSE2

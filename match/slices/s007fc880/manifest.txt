@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007fc880/s007fc880_o2.cpp  ??0cSPUIBehaviorTimeFunctionRamp@@QAE@XZ  007fd460  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?SetParams@cSPUIBehaviorTimeFunctionRamp@@QAEXMMM@Z  007fd4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?v22@cSPUIBehaviorTimeFunctionRamp@@UAEMM@Z  007fd4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?v24@cSPUIBehaviorTimeFunctionRamp@@UAE_NXZ  007fd540  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ??0cSPUIBehaviorTimeFunctionSmoothRamp@@QAE@MM@Z  007fd570  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?v22@cSPUIBehaviorTimeFunctionSmoothRamp@@UAEMM@Z  007fd5c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ??0cSPUIBehaviorTimeFunctionDampedPeriodic@@QAE@_N@Z  007fd610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?SetParams@cSPUIBehaviorTimeFunctionDampedPeriodic@@QAEXMMMMMH@Z  007fd650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?v12@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAEX_N@Z  007fd6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880_o2.cpp  ?v15@cSPUIBehaviorTimeFunctionDampedPeriodic@@UAE_NXZ  007fd700  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880.cpp  ?Factory@@YAXPAPAUBehaviorMessage@@H@Z  007fcc40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fc880/s007fc880.cpp  ?ReadSerItem@@YA_NPAUSerBuffer@@PAUC53@@PAUSerItem14@@@Z  007fd430  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,8 @@
+00804920  322  approximate SetSequence: sequence re-binding logic reconstructed; callback ordering not verified
+00804ab0  99   approximate Update: relies on slice-14 SetFrameRange (not linked here), some paths summarised
+00804b30  -    approximate Advance: ending-mode/direction loop handling partially reconstructed
+00804e20  47   approximate constructor: vtable/field init order reconstructed from the ctor asm
+00804e70  7    approximate deleting dtor: variant-destruct branch scheduling only
+00805410  111  approximate FixedAllocatorBase::AllocateChunk: loop and big-path reconstructed
+00805660  174  approximate ExpandRect: min/max accumulation reconstructed; some paths unverified
+00805740  500  approximate DrawArc: x87 arc/pie routine skeleton with correct call sites but omitted arithmetic

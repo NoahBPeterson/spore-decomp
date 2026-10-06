@@ -1,0 +1,6 @@
+008099a0 SPUIHelpers::BeginModal  # PDB name
+00809c50 SPUIHelpers::EndModal  # PDB name
+0080a1a0 `anonymous namespace'::sOnEnterEscKeys  # PDB name
+00809db0 UI::CalloutMessageBox create helper  # callee 0x816cb0/0x817040
+00809e40 EA::UTFWin subobject rebind (AutoRefCount<IWinText>)  # callee 0xb5f950
+00809ff0 window scale/position update  # callee 0x957f30

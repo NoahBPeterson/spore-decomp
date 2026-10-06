@@ -1,0 +1,6 @@
+0080dfe0 cSPUILayeredObject::get_camera_location_and_zoom  # PDB name in card
+0080e270 cSPUILayeredObject::RenderBegin  # PDB name in card
+0080de20 cSPUILayeredObject::RenderEnd  # PDB candidate (caller-scored) in card
+0080df80 cSPUIModelsAndEffectsRenderer::Release  # real name in card
+0080df50 cSPUIModelsAndEffectsRenderer::AddRef  # paired with Release thunk (this-0x250)
+0080d710 SPUIHelpers::Renderer  # card name; wraps VisitWindowTreeDepthFirst

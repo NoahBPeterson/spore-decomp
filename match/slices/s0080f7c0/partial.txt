@@ -1,0 +1,15 @@
+0080f7c0  269  approximate: removed-object push / winproc teardown paths simplified
+0080f920  58  approximate: DrawLayer message path + layer loop shapes not faithful
+0080f9d0  41  approximate: AddBoundingBox/RemoveObject call convention guessed
+0080fa20  120  approximate: Shutdown teardown order / member offsets approximate
+0080fac0  95  approximate: transform init + model vector push after callback omitted
+0080fc50  279  approximate: AddModel refcount/DoInsertValue schedule not reproduced
+0080fd60  89  approximate: Init second Get() branch and key fields omitted
+0080fe10  95  approximate: subscribe notification path handling simplified
+008101a0  144  approximate: Shutdown (SerCollection view) teardown/offsets approximate
+00810270  83  approximate: OnUnload callback dispatch + notification path simplified
+00810460  156  approximate: WriteResource branches reconstructed, arg roles guessed
+00810620  52  approximate: rbtree find call convention + iterator handling approximate
+00810660  50  approximate: rbtree find call convention + node dispatch approximate
+008106a0  113  approximate: rbtree iteration via RBTreeIncrement, node layout approximate
+00810760  59  approximate: rbtree find call convention + result field approximate

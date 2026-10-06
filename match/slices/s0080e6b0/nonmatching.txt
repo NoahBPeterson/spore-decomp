@@ -1,0 +1,4 @@
+0080ea50  17  complete; load of vector begin reuses eax instead of a fresh ecx
+0080e980 152  complete; refcount release/call schedule differs
+0080ed50  41  complete; null-return block placement + store ordering differ
+0080edb0  59  complete; ctor store schedule / this-in-eax shape differs

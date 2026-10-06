@@ -1,0 +1,15 @@
+0080d670  53  complete; callee 0x80d620 argument/return shape and register use differ
+0080d6d0  49  complete; extra callee-saved register vs original reload of params
+0080d710  39  complete; VisitWindowTreeDepthFirst local-record layout/arg order differ
+0080d770  16  complete; pushed-argument order/register differ
+0080db70   9  complete; null-arm address folded to absolute instead of kept in eax
+0080db90   9  complete; null-arm address folded to absolute instead of kept in eax
+0080dbb0 144  complete; virtual call/register schedule differs
+0080dc50  49  complete; vtable slot 0x144/0x30 call schedule differs
+0080dc90  47  complete; vtable slot 0x144/0x34 call schedule differs
+0080dcd0  76  complete; two VisitWindowTreeDepthFirst passes / record layout differ
+0080dd50  49  complete; VisitWindowTreeDepthFirst record layout differs
+0080dda0  96  complete; refcount/vtable call schedule differs
+0080de20  61  complete; ModelManager call/bit-clear schedule differs
+0080df50  32  complete; this-adjustment expression shape differs
+0080df80  51  complete; interlocked refcount/release schedule differs

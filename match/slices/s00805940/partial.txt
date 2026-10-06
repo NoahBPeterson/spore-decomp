@@ -1,0 +1,4 @@
+00805940  0  approximate math/drawing transcription (fsin/fcos arc helper) - not verified complete
+00805bb0  0  approximate math/drawing transcription (ellipse/rect arc helper) - not verified complete
+00805fe0  0  approximate; the two GetArea-style calls are not reconstructed faithfully
+00806230  0  approximate local context layout for CreateImageFromResource

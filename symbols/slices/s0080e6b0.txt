@@ -1,0 +1,12 @@
+0080e850 UI::cSPUILayeredObject::cSPUILayeredObject  # real name in card
+0080e980 UI::cSPUILayeredObject::RemoveModel  # real name in card
+0080ea50 UI::cSPUILayeredObject::RemoveAllModels  # PDB candidate in card
+0080ead0 UI::cSPUILayeredObject::~cSPUILayeredObject  # real name in card
+0080ea80 eastl::vector<cSPUICustomRendererImpl::cLayerInfo,eastl::fixed_vector_allocator<12,5,4,0,1>>::~vector  # mangled name in card
+0080ebc0 cSPUICustomRendererImpl::cSPUICustomRendererImpl  # produces 0x1417df8/0x1417df4 vtables
+0080ec40 cSPUICustomRendererImpl::~cSPUICustomRendererImpl  # real name in card
+0080eca0 cSPUICustomRendererImpl::`scalar deleting destructor'  # real name in card
+0080ed50 cSPUICustomRendererImpl::operator new factory  # allocates 0x264, returns +0x250 interface
+0080edb0 UI::LayerManager::LayerManager  # real name in card
+0080ee10 UI::LayerManager::~LayerManager  # real name in card
+0080f530 cSPUILayerManager::Init  # real name in card

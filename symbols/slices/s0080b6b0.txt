@@ -1,0 +1,5 @@
+0080b8a0 layout window find/refresh helper  # calls cSPUILayout::FindWindowByID
+0080b8f0 vector<0x34> teardown  # destroy range + free non-inline storage
+0080b930 vector<0x42c> teardown  # destroy range + free non-inline storage
+0080ba10 inline-buffered container init
+0080bcf0 vector erase(first,last)

@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s008117f0/s008117f0.cpp  ?dtor@cSPUILayout@@QAEXXZ  00811fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s008117f0/s008117f0.cpp  ?SetParentWin@cSPUILayoutObjectCollection@@QAEEPAXDI@Z  00812010  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s008117f0/s008117f0.cpp  ?scalarDtor@cSPUILayout@@QAEPAXE@Z  00812090  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s008117f0/s008117f0.cpp  ?InitA@cSPUILayout@@QAEEPAXIII@Z  00812160  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s008117f0/s008117f0.cpp  ?SetParentWin@cSPUILayout@@QAEEPAXDI@Z  008121b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2

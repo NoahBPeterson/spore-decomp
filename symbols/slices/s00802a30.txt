@@ -1,0 +1,14 @@
+# va <Name>  # evidence
+00802a30 cSPUIDebugConsole::Show  # finds window 0x14A4606 via mCursorLayout (+0x10), sets flag 0x7C
+00802b20 cSPUIDebugConsole::IsEnabled  # window 0x14A4606 vtable +0x28 & 1
+00802b80 cSPUIDebugConsole::ApplyColor  # g_164BEE8 transition; window vtable +0xA4/+0xAC/+0x90, vtable +0xEC/+0xE8
+00802cd0 cSPUIDebugConsole::Init  # PDB candidate; cSPUILayout::Init + window wiring
+00802fb0 cSPUIDebugConsole::OutputConsole  # forwards to Output(this, arg, "Console")
+00802fd0 cSPUIDebugConsole::OnShowMessage  # wParam==1 -> Show
+00802ff0 cSPUIDebugConsole::OnToggleMessage  # wParam==1 -> Show(!IsEnabled())
+00803020 cSPUIStringBinder::cSPUIStringBinder  # PDB name; vtables 0x1417604/0x14175E8/0x14175D8, FixedBufferAllocator
+00803140 cSPUIDebugConsole::~cSPUIDebugConsole  # PDB candidate; deletes allocator + vector + wraps
+00803220 cSPUIDebugConsole::DoMessage  # PDB candidate; message/command switch
+00803730 DebugMessageThunk  # dispatches *msg through a->vtable[1]
+00803750 DebugMessagePost  # EA::UTFWin::GetManager()->PostMessage(0,arg,&msg,0)
+00803790 cSPUIDebugConsole::OnCheatCommand  # 0x7BE2444..0x7BE2447 hit-test state machine

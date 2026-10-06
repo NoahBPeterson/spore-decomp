@@ -1,0 +1,14 @@
+# source  symbol  original VA  [flags override]
+slices/s0080f7c0/s0080f7c0.cpp  ?ResourceChanged@cSPUILayoutObjectCollection@@QAEXXZ  0080feb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?IsKeyIncluded@cSPUIResourcesKeyFilter@@QAE_NPAUResourceKey@@@Z  0080fef0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?Init@cSPUILayoutResourceFactory@@QAE_NXZ  0080ff50  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?GetSupportedTypes@cSPUILayoutResourceFactory2@@QAEIPAII@Z  0080ffa0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?CanConvert@cSPUILayoutResourceFactory2@@QAE_NII@Z  0080ffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?ctor@cConnectionDialog@@QAEPAXXZ  00810000  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?assign@cSPUILayout@@QAEPAU1@PAU1@@Z  00810050  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?IsVisible@cSPUILayout@@QAE_NXZ  00810070  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?alloc@EastlNodeBuilder@@QAEPAXPAX@Z  00810520  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?SetVisibility@cSPUILayout@@QAE_N_N@Z  00810590  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?FindWindowByID@cSPUILayout@@QAEPAXHD@Z  008105b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?VectorDtor@cSPUILayoutObjectCollection@@QAEPAXE@Z  008105d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080f7c0/s0080f7c0.cpp  ?AnyWorldHidden@cSPUILayoutManager@@QAE_NXZ  00810730  /O2 /MD /Gy /EHsc /TP /arch:SSE2

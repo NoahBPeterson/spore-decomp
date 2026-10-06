@@ -1,0 +1,4 @@
+0080d810  -   approximate: 6-entry scan + min/max rectangle computation stubbed
+0080da50  -   approximate: bounding-box / raster ratio path approximated
+0080dfe0  -   approximate: get_camera_location_and_zoom accumulation stubbed
+0080e270  -   approximate: RenderBegin body stubbed

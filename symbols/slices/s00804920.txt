@@ -1,0 +1,36 @@
+00804920 UTFWin::cSPUIFrameSequencer::SetSequence  # secondary vtable +0x10; binds cISPFrameSequence
+00804ab0 Sec::Update  # secondary vtable +0x24
+00804b30 Sec::Advance  # secondary vtable +0x3c; (float dt, char force)
+00804e00 Sec::Set  # secondary vtable +0x70; sets mpVisitor + Variant context
+00804e20 UTFWin::cSPUIFrameSequencer::cSPUIFrameSequencer  # vtbl 0x01417804 / 0x01417790
+00804e70 UTFWin::cSPUIFrameSequencer::ScalarDeletingDtor  # primary vtable slot 0
+00804ed0 FUN_00804ed0  # WindowManager wrapper -> 0x00812f70
+00804f10 FUN_00804f10  # WindowManager wrapper -> 0x00812ff0
+00804f50 SPUIHelpers::UpdateMouseFocus  # PDB name; -> cSPUIMainWin::GetMousePosition
+00804f80 FUN_00804f80  # WindowManager wrapper -> 0x00813040
+00804fc0 SPUIHelpers::SetWindowAlpha  # PDB name; fnstcw/fldcw rounding
+00805040 FUN_00805040  # window alpha (top byte / 255)
+00805080 SPUIHelpers::GetElapsedSeconds  # PDB name; tail-calls 0x00813070
+008050b0 FUN_008050b0  # linked-interface walk (next +0x10, test +0x28 bit0)
+008050f0 FUN_008050f0  # linked-interface find (test +0x1c)
+00805150 FUN_00805150  # linked-interface contains
+00805180 FUN_00805180  # WindowManager wrapper -> 0x008130b0
+008051b0 FUN_008051b0  # find by key via vtable +0x10c / +0xc (receiver in EDI)
+00805200 FUN_00805200  # float attr +0x14, default 1.0
+00805230 FUN_00805230  # float attr +0x18, default 1.0
+00805260 FUN_00805260  # pointer attr +0x1c, default global 0x01544384
+00805290 FUN_00805290  # float attr +0xc, default 0.0
+008052c0 FUN_008052c0  # float attr +0x10, default 0.0
+00805310 SP::cCreditsTab::Init  # PDB candidate (caller-scored)
+008053b0 FUN_008053b0  # checks a window's type id == 0x7a7c0bb
+008053e0 FUN_008053e0  # operator new("UI/FixedAllocationBin/CoreBlock")
+00805400 FUN_00805400  # operator delete
+00805410 EA::Allocator::FixedAllocatorBase::AllocateChunk  # PDB callee 0x00926650
+00805490 FUN_00805490  # thunk -> vtable +8
+008054b0 EA::Allocator::FixedAllocatorBase::Deallocate  # chunk head list
+008054f0 FUN_008054f0  # allocator singleton init
+00805510 FUN_00805510  # select allocator
+00805530 FUN_00805530  # Rect bounds combine (min/max)
+008055c0 FUN_008055c0  # Rect equality (NaN-aware ucomiss)
+00805660 FUN_00805660  # expand Rect to include an object
+00805740 FUN_00805740  # x87 arc/pie drawing

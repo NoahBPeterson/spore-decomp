@@ -1,0 +1,8 @@
+0080c5d0  511  approximate: caller-order/helper shapes not reproduced (only main paths)
+0080c840  322  approximate: inline array/list construction via 0x406540/0x80af20 not reproduced
+0080c9f0  143  approximate: POD prefix copy + inline vector/list copy not reproduced
+0080cb30  103  approximate: inline-list copy path not reproduced
+0080cc10   91  approximate: vector erase helper (0x80cab0) arity/shape unknown
+0080cc80  -   approximate: vector grow/insert path not reproduced (frame/cookie differs)
+0080ce20  129  approximate: temporary element construction + /GS frame differs
+0080cf80  -   approximate: DoMessage switch paths beyond id 0x11 stubbed

@@ -1,0 +1,13 @@
+# va diff reason
+007fed20 900 PARTIAL: create_behavior_message_from_win_message; message-kind switch and SerItem binding approximated
+007ff0d0 440 PARTIAL: cSPUIBehaviorWinEventBase::HandleMessage; refcount/message dispatch paths approximated
+007ff290 359 PARTIAL: BoolStateEvent::HandleMessage; predicate/allocator paths approximated
+007ff400 81 PARTIAL: WinEventBase ctor; multi-base vtable stores approximated
+007ff470 46 PARTIAL: BoolStateEvent ctor; vtable stores approximated
+007ff510 37 PARTIAL: ShadeColor ctor; multi-base vtable stores approximated
+007ff570 40 PARTIAL: ShadeColor::Apply; Color::Lerp and window vcalls approximated
+007ff620 42 PARTIAL: Scale ctor; multi-base vtable stores approximated
+007ff7c0 233 PARTIAL: Scale::Apply; window vcall and clamp paths approximated
+007ff940 51 PARTIAL: CopyThing; source accessor helper approximated
+007ff9f0 43 PARTIAL: PredicateWinState ctor; vtable stores approximated
+007ffa50 497 PARTIAL: PredicateWinState::Refresh; window/predicate resolution paths approximated

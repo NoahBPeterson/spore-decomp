@@ -1,0 +1,4 @@
+# va name  # evidence
+007fd460 UTFWin::cSPUIBehaviorTimeFunctionRamp::cSPUIBehaviorTimeFunctionRamp  # vtable ctors 0x1415c80
+007fd570 UTFWin::cSPUIBehaviorTimeFunctionSmoothRamp::cSPUIBehaviorTimeFunctionSmoothRamp  # vtable ctor 0x1415cf8
+007fd610 UTFWin::cSPUIBehaviorTimeFunctionDampedPeriodic::cSPUIBehaviorTimeFunctionDampedPeriodic  # vtable ctor 0x1415d60

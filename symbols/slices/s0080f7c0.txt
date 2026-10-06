@@ -1,0 +1,37 @@
+0080f7c0 cSPUILayerManager::RemoveObject  # moves a layered object from mObjects to mRemovedObjects (offsets +0xc/+0x20)
+0080f8e0 cSPUILayerManager::RemoveAllObjects  # calls RemoveObject over mObjects then erase(mRemoved)
+0080f920 cSPUILayerManager::DrawLayer  # real name in card (PDB candidate)
+0080f9d0 cSPUILayeredObject::MethodF9D0  # window-message predicate, flag at +0x74
+0080fa00 cSPUILayerManager::~adjustor  # vbase/this thunk: ecx-=0x250 then jmp 0x80f380
+0080fa20 cSPUILayerManager::Shutdown  # real name in card (PDB candidate)
+0080fac0 cSPUILayeredObject::MethodFAC0  # builds model via callback, pushes into mModels
+0080fc50 cSPUILayeredObject::AddModel  # real mangled name (callee-scored)
+0080fd60 cSPUILayoutObjectCollection::Init  # anchor name
+0080feb0 cSPUILayoutObjectCollection::ResourceChanged  # vtable-slot
+0080fef0 cSPUIResourcesKeyFilter::IsKeyIncluded  # gap-align
+0080ff50 cSPUILayoutResourceFactory::Init  # PDB candidate
+0080ffa0 cSPUILayoutResourceFactory::GetSupportedTypes  # vtable-slot
+0080ffd0 cSPUILayoutResourceFactory::CanConvert  # vtable-slot
+00810000 cConnectionDialog::cConnectionDialog  # stores vtbl_UI::cConnectionDialog
+00810020 cConnectionDialog::ctor2  # same vtbl, takes an interface arg (dead null path)
+00810050 cSPUILayout::operator=  # releases mpCollection at +0x14
+00810070 cSPUILayout::IsVisible  # reads collection +0x8c
+00810090 cSPUILayout::SetReloadCallback  # stores callback trio at collection +0x90/94/98
+008100d0 cSPUILayoutObjectCollection::cSPUILayoutObjectCollection  # PDB candidate
+00810140 cSPUILayoutObjectCollection::detach_parent  # gap-align
+008101a0 cSPUILayoutObjectCollection::Shutdown  # PDB candidate (SerCollection view)
+00810200 cSPUILayoutObjectCollection::FindWindowByID  # callee-scored
+00810270 cSPUILayoutObjectCollection::OnUnload  # gap-align
+00810310 cSPUILayoutObjectCollection::SetVisibility  # callee-scored
+008103a0 cSPUILayoutManager::SetNodeVisibility  # clamps node +0xc visibility, calls +8->v7c
+00810400 Editor::cEditorResource::~cEditorResource  # sets vtbl_Editor::cEditorResource
+00810460 cSPUILayoutResourceFactory::WriteResource  # gap-align
+00810520 eastl node allocator helper  # operator_new(0x1c), copies AutoRefCount at +0x10
+00810590 cSPUILayout::SetVisibility  # tail-calls collection SetVisibility
+008105b0 cSPUILayout::FindWindowByID  # tail-calls collection FindWindowByID
+008105d0 cSPUILayoutObjectCollection::`scalar deleting destructor'  # gap-align
+00810620 cSPUILayoutManager::GetWorldMainWindow  # rbtree find, returns node+0x1c
+00810660 cSPUILayoutManager::Method10660  # rbtree find then SetNodeVisibility
+008106a0 cSPUILayoutManager::SetAllWorldsVisibility  # gap-align
+00810730 cSPUILayoutManager::AnyWorldHidden  # iterates rbtree, +0x20==0
+00810760 cSPUILayoutManager::IsWorldVisible  # rbtree find, node+0x14+0xc==0

@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007fed20/s007fed20.cpp  ?Init@ShadeColor@@QAEXII@Z  007ff5d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?CopyFromWindow@ShadeColor@@QAEXXZ  007ff600  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Set@Scale@@QAEXMM@Z  007ff690  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?Set2@Scale@@QAEXM@Z  007ff6b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?SetDefault@Scale@@QAEXXZ  007ff6d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s007fed20/s007fed20.cpp  ?SerReadC@@YA_NPAUSerItem@@PAX@Z  007ff8c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

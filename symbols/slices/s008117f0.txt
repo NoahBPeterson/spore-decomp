@@ -1,0 +1,17 @@
+008117f0 cSPUILayoutManager::CloseLayout  # PDB candidate (554-byte body not reconstructed)
+00811a20 eastl::vector<EA::COM::IUnknown32*,eastl::sp_vector_allocator>::swap  # card name
+00811ad0 cSPUILayout::Shutdown  # real name in card
+00811b30 cSPUILayoutObjectCollection::attach_parent  # gap-align
+00811b80 cSPUILayoutObjectCollection::OnLoad  # gap-align
+00811c20 cSPUILayoutManager::Method11c20  # 768-byte body (not reconstructed)
+00811f20 cSPUILayoutManager::cSPUILayoutManager  # sets global spLayoutManager (0x164cf5c)
+00811f80 cSPUILayoutManager::`scalar deleting destructor'  # clears global, nukes 2 rbtrees
+00811fe0 cSPUILayout::~cSPUILayout  # real name in card
+00812010 cSPUILayoutObjectCollection::SetParentWin  # card name
+00812090 cSPUILayout::`scalar deleting destructor'  # card name
+008120d0 cSPUILayout::Init  # card name (creates collection via manager)
+00812160 cSPUILayout::Init  # card name (SPKeyFromName wrapper)
+008121b0 cSPUILayout::SetParentWin  # tail-calls collection SetParentWin
+00812210 UI collection compare  # lexicographic compare over a vector view
+00812310 eastl::rbtree<...>::DoErase / erase node  # RBTreeIncrement + RBTreeErase + dealloc
+00812370 eastl::rbtree<...>::lower_bound  # multimap node search + FUN_00812280

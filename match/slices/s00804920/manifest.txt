@@ -1,0 +1,11 @@
+# source  symbol  original VA  flags
+slices/s00804920/s00804920.cpp  ?Set@Sec@@QAE_NHPAUVariant@@@Z  00804e00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?HelpWFun@@YAXPAX0@Z  00804ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?HelpFF@@YAXMM@Z  00804f10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?UpdateMouseFocus@@YAXH@Z  00804f50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?WinB0@@YAXXZ  00805180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?IsSomething@@YAHXZ  008053b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?AllocCoreBlock@@YAPAXH@Z  008053e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?ChooseAlloc@@YAPAXD@Z  00805510  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?Bounds@F4@@QAEXPAU1@0@Z  00805530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00804920/s00804920.cpp  ?Feq@@YAHPAUF4@@0@Z  008055c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

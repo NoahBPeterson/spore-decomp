@@ -1,0 +1,10 @@
+0080f8e0  24  complete; begin-pointer reloaded through eax instead of a fresh ecx load
+0080fa00  5   complete; vbase adjustor uses add ecx,0xfffffdb0 (cl canonicalises to sub)
+00810020  20  complete; ctor register allocation (zero in eax, this in esi) differs
+00810090  39  complete; mpCollection temp/register schedule differs
+008100d0  7   complete; derived-vtable store scheduling / pop edi placement differ
+00810140  4   complete; vcall target loaded into eax instead of edx (2 sites)
+00810200  39  complete; vcall target register choice + loop reload differ
+00810310  90  complete; visibility compare/object re-load schedule differs
+008103a0  60  complete; clamped-visibility arithmetic + vcall schedule differ
+00810400  32  complete; dtor release/store ordering differs

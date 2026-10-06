@@ -1,0 +1,10 @@
+00809700  -  modal-window state machine: not reconstructed
+008099a0  -  SPUIHelpers::BeginModal: not reconstructed
+00809c50  -  SPUIHelpers::EndModal: not reconstructed
+00809db0  -  CalloutMessageBox create/init/show: not reconstructed
+00809e40  -  window-manager rebind helper: not reconstructed
+00809f40  -  message callback detach: not reconstructed
+00809ff0  -  window-scale update helper: not reconstructed
+0080a0f0  -  not reconstructed
+0080a1a0  -  anonymous-namespace sOnEnterEscKeys: not reconstructed
+0080a390  -  not reconstructed

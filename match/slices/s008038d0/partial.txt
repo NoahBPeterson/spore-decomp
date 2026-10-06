@@ -1,0 +1,1 @@
+00803e60  530  approximate Sub803e60: window-property sequence and callback reconciliation reconstructed from the decompile but some paths are not verified against the asm

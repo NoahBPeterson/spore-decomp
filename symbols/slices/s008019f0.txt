@@ -1,0 +1,27 @@
+# va <Name>  # evidence
+008019f0 cSPUICursorManager::ReadCursorOffsets  # reads property 0x1BAE779/0x1BAE783 into g_15435BC/g_15435C0
+00801ac0 cSPUICursorManagerFactory::Create  # alloc 0x18 "App/cSPUICursorManager", vtable 0x1416FA8
+00801b60 cSPUICursorManager::SetGlobalCursor  # map find, writes +0x30, calls 0x8027E0
+00801bb0 cSPUICursorManager::SetLocalCursor   # map find, writes +0x2C
+00801c10 cSPUICursorManager::SetCanvasCursor  # map find, writes +0x34
+00801c70 cSPUICursorManager::SetCanvasCursorAdjustor  # add ecx,-8; jmp 0x801C10
+00801c80 eastl::rbtree<unsigned,cCursorInfo>::DoCreateNode  # Ghidra name; string+value copy into node
+00801d80 cSPUICursorManager::SaveCursorToFile  # FileStream open/write of a cursor bitmap
+00801e90 eastl::rbtree<unsigned,cCursorInfo>::erase  # Ghidra name
+00801ef0 eastl::rbtree<unsigned,cCursorInfo>::DoNukeSubtree  # Ghidra name
+00801fd0 cSPUICursorManager::~cSPUICursorManager  # resets vtables 0x1416FE8/0x1416FD4
+00802050 cSPUICursorManager::AddCursor  # Ghidra name; map insert + fields +0x24/+0x28/+0x2C/+0x30
+00802160 cSPUICursorManager::AddStandardCursors  # Ghidra name; 36 AddCursor calls with STD_ names
+008024e0 cSPUICursorManager::RemoveCursor  # map find + erase + clears current pointers
+00802580 cSPUICursorManager::ClearCursors  # walks count at +0x20
+008025e0 cSPUICursorManager::cSPUICursorManager  # sets vtables 0x13EFFA8/0x1416FE8/0x1416FD4
+008026b0 cSPUICursorManager::LoadCursorFromFile  # LoadImageW(IMAGE_CURSOR, LR_LOADFROMFILE)
+008026e0 cSPUICursorManager::ResolveCursor  # GetIconInfo; writes hotspots +0x10/+0x14 and handle +0x18
+008027a0 cSPUICursorManager::DestroyCursorEntry  # DestroyCursor on +0x2C
+008027e0 cSPUICursorManager::ApplyCursor  # picks a cursor and calls SP::Canvas +0x80
+00802850 cSPUICursorManager::ResolveEntryCursor  # tail into 0x8026E0
+00802870 cSPUICursorManager::QueryCursorId  # id 0x2F009DD0 -> this unless 4
+00802890 cSPUICursorManager::FindConsoleWindow  # FindWindowByID(0x14A4606)
+008028e0 cSPUICursorManager::ShutdownAttachment  # cSPUILayout::Shutdown + release +0x28
+00802910 cSPUIDebugConsole::Clear  # Ghidra name
+00802950 cSPUIDebugConsole::Output  # Ghidra name

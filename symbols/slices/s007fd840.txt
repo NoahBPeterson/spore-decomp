@@ -1,0 +1,7 @@
+# va name  # evidence
+007fdab0 UTFWin::cSPUIBehaviorActionWinInterpolator::cSPUIBehaviorActionWinInterpolator  # vtable ctor 0x1415f18
+007fe070 UTFWin::cSPUIBehaviorActionWinState::cSPUIBehaviorActionWinState  # vtable ctor 0x1415fe8
+007fe8c0 cSPUIBehaviorWinBoolStateEvent::Activate  # PDB name
+007feb70 cSPUIBehaviorWinEventBase::SerUpdate  # PDB candidate
+007fec00 cSPUIBehaviorWinEventBase::SetWinMessageType  # PDB name
+007fec90 cSPUIBehaviorWinEventBase::SetMessageWinId  # PDB name

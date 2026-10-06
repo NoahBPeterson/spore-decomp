@@ -1,0 +1,10 @@
+0080e6b0  -   approximate: only the opening calls/float-box path reconstructed
+0080e850  -   approximate: Matrix3::Assign / cViewer / winproc construction simplified
+0080ead0 193  approximate: model-vector destroy + refcount teardown simplified
+0080ebc0  94  approximate: second operator_new / base ctor path omitted
+0080efe0  -   approximate: vector grow/reinsert path not reproduced
+0080f140  -   approximate: 12-byte vector grow/reinsert path not reproduced
+0080f2e0 121  approximate: AddLayer temp/iterator handling not reproduced
+0080f380  -   approximate: model set/binding paths after +0x258 omitted
+0080f530  -   approximate: cSPUILayerManager::Init body stubbed
+0080f730  -   approximate: builder body stubbed

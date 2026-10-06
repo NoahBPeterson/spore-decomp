@@ -1,0 +1,13 @@
+00805ea0 SPUIHelpers::GetMainWindowArea  # PDB dev 00fb7010
+00805ef0 SPUIHelpers::GetWindowArea?  # unlabeled; window area helper (vtable+0x34)
+00805fe0 SPUIHelpers::GetWindowBounds?  # unlabeled; returns {0,0,w,h} via vtable+0xc0
+008060d0 SPUIHelpers::GetImageFromTexture  # PDB dev 00fb73b0
+008061c0 SPUIHelpers::GetImageFromLayout  # PDB dev 00fb74a0
+00806230 SPUIHelpers::CreateImageFromResource  # PDB dev 00fb7510
+00806320 SPUIHelpers::CreateImageFromResource  # PDB dev 00fb7600 (name-key overload)
+00806370 SPUIHelpers::CreateWindow?  # unlabeled; UI/Window allocation helper
+008064c0 SPUIHelpers::CreateTextWindow?  # unlabeled; UI/WinText allocation helper
+00806610 SPUIHelpers::ConfigureButton?  # unlabeled; WinButton setup
+00806780 SPUIHelpers::CreateButton?  # unlabeled; UI/WinButton allocation helper
+008067f0 SPUIHelpers::GetButtonState?  # unlabeled; 8-slot index getter
+00806880 SPUIHelpers::SetButtonState?  # unlabeled; FUN_00830cf0 wrapper with clamp

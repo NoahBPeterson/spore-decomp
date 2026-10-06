@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00802cd0 -  cSPUIDebugConsole::Init skeleton (layout/ConsoleWindow/command-list wiring omitted)
+00803020 -  cSPUIStringBinder constructor: only the vtable/refcount fields are modelled; FixedBufferAllocator setup omitted
+00803220 -  cSPUIDebugConsole::DoMessage skeleton (message switch and text handling omitted)
+00803790 -  cheat command handler skeleton (vtable context dispatch omitted)

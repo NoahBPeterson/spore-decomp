@@ -1,0 +1,3 @@
+00807880  0  partial; ImageDrawable+Window composition approximated
+00807d30  0  partial; child-list iteration (vtable 0xcc/0xd0) not reconstructed
+00808370  0  partial; recursive union-of-bounds not reconstructed

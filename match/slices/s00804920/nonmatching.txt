@@ -1,0 +1,18 @@
+00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs
+00804fc0  111 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm)
+00805040  26  GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply
+00805080  16  GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup)
+008050b0  39  WalkAll linked-interface walk; register/loop shape differs
+008050f0  66  WalkFind; same linked-interface walk shape differs
+00805150  26  Contains; vtable access via VSlot address form vs direct slot load
+008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention)
+00805200  19  AttrF14 getter; wrong calling convention of the FindByKey helper
+00805230  19  AttrF18 getter; wrong calling convention of the FindByKey helper
+00805260  21  AttrP1c getter; wrong calling convention of the FindByKey helper
+00805290  19  AttrF0c getter; wrong calling convention of the FindByKey helper
+008052c0  19  AttrF10 getter; wrong calling convention of the FindByKey helper
+00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling
+00805400  6   FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4
+00805490  13  CallVt8 thunk; vtable-slot load shape
+008054b0  37  FixedFree; chunk-head list update scheduling
+008054f0  10  InitAlloc; global store/arg order

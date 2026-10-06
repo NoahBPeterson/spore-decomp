@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s0080e6b0/s0080e6b0.cpp  ?dtor@LayerInfoVec@@QAEXXZ  0080ea80  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080e6b0/s0080e6b0.cpp  ?VectorDtor@cSPUICustomRendererImpl@@QAEPAXE@Z  0080ec40  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080e6b0/s0080e6b0.cpp  ?ScalarDtor@cSPUICustomRendererImpl@@QAEXXZ  0080eca0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080e6b0/s0080e6b0.cpp  ?VectorDtor@UI_LayerManager@@QAEPAXE@Z  0080ee10  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s0080e6b0/s0080e6b0.cpp  ?FUN_0080f360@@YIXPADPAPAXPAX2@Z  0080f360  /O2 /MD /Gy /EHsc /TP /arch:SSE2

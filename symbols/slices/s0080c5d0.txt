@@ -1,0 +1,7 @@
+0080cf00 UTFWin::cSPUILaunchScreenWinProc::cSPUILaunchScreenWinProc  # vtables 0x1417d14/0x1417d04, class name from card + vtable_names.txt
+0080cf80 UTFWin::cSPUILaunchScreenWinProc::DoMessage  # same class; message-id switch
+0080c840 cSPUIInfoLine::cSPUIInfoLine  # element ctor; string "UI/cSPUIInfoLine" layout name, vtable 0x1417cb0
+0080c9f0 cSPUIInfoLine::operator=  # copies +4..+0x1c4 then layout/fields
+0080cb30 cSPUIInfoLine::cSPUIInfoLine  # element ctor variant
+0080cdd0 cSPUIInfoLineTray::~cSPUIInfoLineTray  # releases layout/current, clears InfoLine vector
+0080ceb0 cSPUIInfoLineTray::`scalar deleting destructor'  # vtable 0x1417cb4, calls dtor

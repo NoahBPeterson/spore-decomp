@@ -1,0 +1,12 @@
+# va name  # evidence
+007fed20 cSPUIBehaviorWinEventBase::create_behavior_message_from_win_message  # PDB candidate
+007ff0d0 cSPUIBehaviorWinEventBase::HandleMessage  # PDB candidate
+007ff290 cSPUIBehaviorWinBoolStateEvent::HandleMessage  # PDB candidate
+007ff400 UTFWin::cSPUIBehaviorWinEventBase::cSPUIBehaviorWinEventBase  # vtable ctor 0x14161c4
+007ff470 UTFWin::cSPUIBehaviorWinBoolStateEvent::cSPUIBehaviorWinBoolStateEvent  # vtable ctor 0x14162cc
+007ff510 UTFWin::cSPUIBehaviorWinInterpolatorShadeColor::cSPUIBehaviorWinInterpolatorShadeColor  # vtable ctor 0x14163f8
+007ff570 cSPUIBehaviorWinInterpolatorShadeColor::Apply  # PDB name
+007ff5d0 cSPUIBehaviorWinInterpolatorShadeColor::Init  # PDB name
+007ff600 cSPUIBehaviorWinInterpolatorShadeColor::copy_from_value_from_window  # PDB name
+007ff620 UTFWin::cSPUIBehaviorWinInterpolatorScale::cSPUIBehaviorWinInterpolatorScale  # vtable ctor 0x141642c
+007ff9f0 UTFWin::cSPUIBehaviorPredicateWinState::cSPUIBehaviorPredicateWinState  # vtable ctor 0x14165b0

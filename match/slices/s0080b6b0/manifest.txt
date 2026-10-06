@@ -1,0 +1,3 @@
+slices/s0080b6b0/s0080b6b0.cpp  ?method@Big3  0080b8a0
+slices/s0080b6b0/s0080b6b0.cpp  ?Vec34Dtor  0080b8f0
+slices/s0080b6b0/s0080b6b0.cpp  ?Vec42CDtor  0080b930

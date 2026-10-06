@@ -1,0 +1,23 @@
+008038d0 DragDropCaptureWin::Sub8038d0  # vtable 0x01417694 class; transition dispatcher
+00803b40 Cb::Setup  # callback setup state machine
+00803b70 Cb::operator=  # callback assignment with AddRef/Release
+00803bd0 DragDropCaptureWin::Dispose  # teardown
+00803e60 DragDropCaptureWin::Sub803e60  # property/callback reconciliation
+008040e0 DragDropCaptureWin::Sub8040e0  # create DragDropCaptureWin window
+008042f0 DragDropCaptureWin::OnEvent  # window-proc event handler switch
+008044a0 DragDropCaptureWin::ScalarDeletingDtor  # scalar deleting dtor
+00804500 GetDragDropCaptureWin  # dynamic initializer/guard for singleton at 0x0164c078
+008045a0 DragDropCaptureWin::Sub8045a0  # construct temp Cb then Sub8040e0
+00804620 Sec::Get0x18  # secondary vtable slot +0x18
+00804640 Sec::Get0x1c  # secondary vtable slot +0x1c
+00804660 Sec::Set0x20  # secondary vtable slot +0x20
+008046a0 Sec::Zero0x28  # secondary vtable slot +0x28
+008046c0 Sec::V0x2c  # secondary vtable slot +0x2c
+008046f0 Sec::V0x30  # secondary vtable slot +0x30
+00804710 Sec::Bit1  # secondary vtable slot +0x34 (state flag bit 1)
+00804720 Sec::Bit0  # secondary vtable slot +0x38 (state flag bit 0)
+00804730 cSPUIFrameSequencer::SetFrameRange  # non-virtual, this = full object
+00804830 Sec::Bit2  # secondary vtable slot +0x60 (state flag bit 2)
+00804840 Sec::SetBit2  # secondary vtable slot +0x64
+00804860 Sec::Bit3  # secondary vtable slot +0x68 (state flag bit 3)
+008048c0 cSPUIFrameSequencer::~cSPUIFrameSequencer  # dtor body (vtable 0x01417804 / 0x01417790)

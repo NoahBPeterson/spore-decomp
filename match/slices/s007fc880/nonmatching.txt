@@ -1,0 +1,8 @@
+# va diff reason
+007fcf00 5 complete; /Od `this` and GetServer() temp stack slots are swapped (ebp-4 vs ebp-8)
+007fcca0 150 complete; eastl vector insert (stride 8) reconstruction; call/register schedule differs
+007fcf40 135 complete; eastl vector emplace reconstruction; argument/register schedule differs
+007fd200 167 complete; flag setter reconstruction; virtual-call and local frame schedule differs
+007fd2d0 131 complete; vector element copy reconstruction; register schedule differs
+007fd390 131 complete; SerItem writer reconstruction; allocator/register schedule differs
+007fd790 130 complete; damping exp multiplier/local frame layout differs

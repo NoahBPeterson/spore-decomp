@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+008019f0 -  approximate property-database reads (subobject/variant layout unknown)
+00801d80 -  approximate file-save path (EA::IO stream calls not modelled exactly)
+00802050 -  AddCursor: map insert tail approximated, node fields not written
+00802160 -  AddStandardCursors drives the partial AddCursor
+008026e0 -  cursor hotspot/handle resolution partial (virtual call result path approximated)
+00802910 -  cSPUIDebugConsole::Clear empty stub (string/vector command buffer omitted)
+00802950 -  cSPUIDebugConsole::Output empty stub (string concat + event dispatch omitted)

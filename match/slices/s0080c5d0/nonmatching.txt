@@ -1,0 +1,4 @@
+0080cf00  34  complete; inlined base-ctor store to +4 is deduplicated by cl, original keeps both
+0080d5c0  11  complete; null-arm store address folded to absolute instead of kept in eax
+0080d5f0   7  complete; null arm missing the redundant xor eax,eax
+0080d620  23  complete; virtual call shapes (slot 0x4c/0x8c/0x90) and register use differ

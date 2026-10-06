@@ -1,0 +1,2 @@
+0080ba10  18  inline-buffered container init: complete equivalent; vptr store scheduled after the field stores
+0080bcf0  21  vector erase: complete equivalent; argument register/scheduling of the copy call differs

@@ -1,0 +1,6 @@
+# source  symbol  original VA  flags
+slices/s00805940/s00805940.cpp  ?GetImageFromLayout@@YAPAXPAXH@Z  008061c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00805940/s00805940.cpp  ?CreateImageFromResourceA@@YAXHHHHHHH@Z  00806320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00805940/s00805940.cpp  ?FUN_00806780@@YAPAXHHHHHH@Z  00806780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00805940/s00805940.cpp  ?FUN_008067f0@@YAPAXPAUW2@@H@Z  008067f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00805940/s00805940.cpp  ?FUN_00806880@@YAPAXPAUW2@@H@Z  00806880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

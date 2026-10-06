@@ -1,0 +1,8 @@
+008038d0  527  complete state-machine dispatcher (DragDropCaptureWin::Sub8038d0); register/scheduling diffs
+00803b70  6    Cb::operator=; one callee-saved push (edi) scheduled after the first store instead of before
+00803bd0  545  complete Dispose(bool); window teardown + callback reset reconstructed, scheduling diffs
+008040e0  483  complete Sub8040e0 (window creation/init); scheduling + helper inline diffs
+008042f0  378  complete OnEvent switch; jump-table byte-map layout differs
+00804640  18   returns (int)mDuration; original round-trips the float through the stack (cvtss2si asm helper)
+00804730  205  complete SetFrameRange algorithm; materialisation/register order differs
+008048c0  7    complete ~cSPUIFrameSequencer body; variant-dtor branch scheduling only

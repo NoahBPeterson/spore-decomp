@@ -1,0 +1,15 @@
+# source  symbol  original VA  flags
+slices/s008038d0/s008038d0.cpp  ?Setup@Cb@@QAE_NXZ  00803b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?ScalarDeletingDtor@DragDropCaptureWin@@QAEPAXD@Z  008044a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?GetDragDropCaptureWin@@YAPAXXZ  00804500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Sub8045a0@DragDropCaptureWin@@QAE_NPAXH@Z  008045a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Get0x18@Sec@@QAEHXZ  00804620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Set0x20@Sec@@QAE_NH@Z  00804660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Zero0x28@Sec@@QAE_NXZ  008046a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?V0x2c@Sec@@QAE_NXZ  008046c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?V0x30@Sec@@QAE_NXZ  008046f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Bit1@Sec@@QAEIXZ  00804710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Bit0@Sec@@QAEIXZ  00804720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Bit2@Sec@@QAEIXZ  00804830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?SetBit2@Sec@@QAEXH@Z  00804840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008038d0/s008038d0.cpp  ?Bit3@Sec@@QAEIXZ  00804860  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,4 @@
+00806d10  0  partial; Typesetter::Validate calls not reconstructed
+00806e40  0  partial; second-argument (extra horizontal offset) handling not exact
+008070d0  0  partial; anchor flag logic approximated
+00807340  0  partial; anchor rect construction approximated

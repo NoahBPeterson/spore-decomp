@@ -1,0 +1,11 @@
+00807a50  244 complete; button-drawable selection/register schedule differs
+00807bb0  159 complete; SSE/call scheduling differs
+00807cb0  93  complete; register/scheduling differences
+00807dc0  107 complete; shader refcount/loop scheduling differs
+00807f50  185 complete; rotation switch/register differences
+00808050  166 complete; transform update SSE schedule differs
+00808190  24  complete; only vtable-load scheduling differs
+00808230  96  complete; float compare schedule differs
+008082f0  23  complete; only vtable-load scheduling differs
+008085d0  59  complete; ctor field-store/register differences
+00808660  209 complete; property/stream loop register differences

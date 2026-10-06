@@ -1,0 +1,8 @@
+# source  symbol  original VA  flags
+slices/s00807840/s00807840.cpp  ?FUN_00807840@@YAXHHHHHHH@Z  00807840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?FUN_00807c70@@YADPAUW@@PAXHH@Z  00807c70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?WindowTransform_ctor@@YIPAXPAUXform@@@Z  00807e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?FUN_00807ed0@@YGDPAUW@@@Z  00807ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?SetWindowScale@@YAXPAUW@@M@Z  00808210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?Invoke@CbProc@@QAEDPAX0@Z  00808590  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00807840/s00807840.cpp  ?FUN_00808780@@YAXXZ  00808780  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

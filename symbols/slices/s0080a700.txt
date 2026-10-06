@@ -1,0 +1,6 @@
+0080a700 cSPUIImageAtlasMap::Init  # PDB name
+0080aa20 window scale setter  # uses subobject +0x20c
+0080aa90 window scale setter (outer object vtbl+0x88)
+0080af20 record ctor from 0x28 source + AutoRef
+0080af90 record copy ctor
+0080b240 record copy assignment

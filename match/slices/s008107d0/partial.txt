@@ -1,0 +1,8 @@
+008107d0  148  approximate: CreateResource callback arg roles + vtable slots guessed
+008108a0  269  approximate: resource reload/binary-stream path simplified
+00810e30  242  approximate: vector insert grow path uses generic copy/memmove
+00810fd0  163  approximate: CreateObjects message construction + temp layout simplified
+00811110  84  approximate: rbtree find result handling stubbed
+00811330  4  approximate: 604-byte body stubbed to a return
+008115a0  90  approximate: messaging registration arguments approximated
+008116e0  45  approximate: unregistration loop body omitted

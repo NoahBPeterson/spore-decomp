@@ -4,6 +4,7 @@
 //   UTFWin::cSPUIFrameSequencer (0x01417804 / secondary 0x01417790) : 00804620..008048c0
 
 typedef unsigned int u32;
+#include <intrin.h>
 
 // --- external helpers (identities are relocations, so names are free) -------
 extern "C" void* EA_UTFWin_GetManager();
@@ -74,7 +75,7 @@ struct DragDropCaptureWin {
     void Sub8038d0(int ev);                    // 0x008038d0
     void Dispose(bool b);                      // 0x00803bd0
     void Sub803e60();                          // 0x00803e60
-    bool Sub8040e0(void* arg1, Cb* arg2);      // 0x008040e0
+    bool Sub8040e0(Cb* arg1, void* arg2);      // 0x008040e0
     bool OnEvent(int a, void* e);              // 0x008042f0
     void* ScalarDeletingDtor(char flags);      // 0x008044a0
     bool Sub8045a0(void* o, int v);            // 0x008045a0
@@ -90,23 +91,21 @@ struct DragDropCaptureWin {
 // ===========================================================================
 // 0x00803b40
 bool Cb::Setup() {
-    if (fn == 0) {
-        if (ptr == 0) {
-            if (field0 != 0) { ctx = field0; fn = (CbFn)&Fn803730; return true; }
-            return false;
-        }
-        ctx = ptr; fn = (CbFn)&Fn803750;
-    }
-    return true;
+    if (fn != 0) return true;
+    if (ptr != 0) { ctx = ptr; fn = (CbFn)&Fn803750; return true; }
+    if (field0 != 0) { ctx = field0; fn = (CbFn)&Fn803730; return true; }
+    return false;
 }
 
 // 0x00803b70
 Cb& Cb::operator=(const Cb& o) {
     field0 = o.field0;
-    if (o.ptr != ptr) {
-        if (o.ptr != 0) AddRefObj(o.ptr);
-        void* old = ptr;
-        ptr = o.ptr;
+    _ReadWriteBarrier();
+    void* old = ptr;
+    void* np = o.ptr;
+    if (np != old) {
+        if (np != 0) AddRefObj(np);
+        ptr = np;
         if (old != 0) ReleaseObj(old);
     }
     fn = o.fn; ctx = o.ctx; b10 = o.b10; b11 = o.b11;
@@ -244,14 +243,14 @@ void DragDropCaptureWin::Sub803e60() {
 }
 
 // 0x008040e0
-bool DragDropCaptureWin::Sub8040e0(void* arg1, Cb* arg2) {
+bool DragDropCaptureWin::Sub8040e0(Cb* arg1, void* arg2) {
     if (a.fn != 0) return false;
     void* mgr = EA_UTFWin_GetManager();
     if ((*(int(__thiscall**)(void*, int))VSlot(mgr, 0x54))(mgr, 1) != 0) return false;
     if ((*(int(__thiscall**)(void*, int))VSlot(mgr, 0x54))(mgr, 0) != 0) return false;
-    a = *arg2;
+    a = *arg1;
     if (!a.Setup()) return false;
-    AutoRefCount_Assign(&p, arg1);
+    AutoRefCount_Assign(&p, arg2);
     a.b10 = true;
     {
         Event e;
@@ -367,14 +366,14 @@ bool DragDropCaptureWin::Sub8045a0(void* o, int v) {
     Cb tmp;
     tmp.field0 = 0; tmp.ptr = 0; tmp.fn = 0; tmp.ctx = 0; tmp.b10 = true; tmp.b11 = false;
     if (o != 0) { AddRefObj(o); tmp.ptr = o; }
-    bool r = Sub8040e0((void*)v, &tmp);
+    bool r = Sub8040e0(&tmp, (void*)v);
     if (tmp.ptr != 0) ReleaseObj(tmp.ptr);
     return r;
 }
 
 // 0x00804500 dynamic initializer of the singleton (guard + atexit)
 static DragDropCaptureWin g_ddcw;
-static unsigned char g_ddcwGuard;
+static int g_ddcwGuard;
 void* GetDragDropCaptureWin() {
     if ((g_ddcwGuard & 1) == 0) {
         g_ddcwGuard |= 1;
@@ -431,14 +430,13 @@ struct cSPUIFrameSequencer {
     int mRefCount;  // +0x04
     Sec sec;        // +0x08
     void SetFrameRange(int, int, char);  // 0x00804730
-    void* DtorBody();                    // 0x008048c0
+    void DtorBody();                     // 0x008048c0
 };
 
 // 0x00804620
 int Sec::Get0x18() {
-    void* fs = mpFS;
-    if (fs != 0) {
-        if ((*(int(__thiscall**)(void*))VSlot(fs, 0x24))(fs) != 0) return 1;
+    if (mpFS != 0) {
+        if (((bool(__thiscall*)(void*))((void**)*(void**)mpFS)[9])(mpFS)) return 1;
     }
     return 0;
 }
@@ -448,7 +446,7 @@ int Sec::Get0x1c() { return (int)mDuration; }
 
 // 0x00804660
 bool Sec::Set0x20(int n) {
-    if (n < 1) n = 1;
+    if (n <= 0) n = 1;
     float f = (float)n;
     float t = mOOFrameCount * f;
     mDuration = f;
@@ -467,14 +465,18 @@ bool Sec::Zero0x28() {
 
 // 0x008046c0
 bool Sec::V0x2c() {
-    if (Bit0()) { if (!Bit1()) mStateFlags |= 2; }
-    return Bit1();
+    if (((bool(__thiscall*)(void*))((void**)*(void**)this)[0xe])(this)) {
+        if (!((bool(__thiscall*)(void*))((void**)*(void**)this)[0xd])(this))
+            mStateFlags |= 2;
+    }
+    return ((bool(__thiscall*)(void*))((void**)*(void**)this)[0xd])(this);
 }
 
 // 0x008046f0
 bool Sec::V0x30() {
-    if (Bit1()) mStateFlags &= ~2;
-    return Bit0();
+    if (((bool(__thiscall*)(void*))((void**)*(void**)this)[0xd])(this))
+        mStateFlags &= ~2;
+    return ((bool(__thiscall*)(void*))((void**)*(void**)this)[0xe])(this);
 }
 
 // 0x00804710
@@ -488,8 +490,8 @@ unsigned Sec::Bit2() { return ((unsigned)(int)(signed char)mStateFlags & 4) >> 2
 
 // 0x00804840
 void Sec::SetBit2(int b) {
-    if (b == 1) mStateFlags |= 4;
-    else mStateFlags &= ~4;
+    if (b != 1) { mStateFlags &= ~4; return; }
+    mStateFlags |= 4;
 }
 
 // 0x00804860
@@ -529,12 +531,12 @@ void cSPUIFrameSequencer::SetFrameRange(int p2, int p3, char p4) {
 }
 
 // 0x008048c0
-void* cSPUIFrameSequencer::DtorBody() {
+void cSPUIFrameSequencer::DtorBody() {
     vtable = (void**)0x1417804;
     sec.vtable = (void**)0x1417790;
+    _ReadWriteBarrier();
     (*(void(__thiscall**)(void*, int))VSlot(&sec, 0x10))(&sec, 0);
     if ((sec.mFlags2 & 4) != 0) sec.mContext.Destruct(0);
     sec.vtable = (void**)0x13eb938;
     vtable = (void**)0x13ec458;
-    return this;
 }

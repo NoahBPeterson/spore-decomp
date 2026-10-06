@@ -1,0 +1,2 @@
+0080b2d0  107  range copy-back of 0x34 records: complete equivalent loop; copy-assign body not inlined
+0080b340  106  range copy-forward of 0x34 records: complete equivalent loop; copy-assign body not inlined

@@ -1,0 +1,7 @@
+00811ad0  10  complete; g_spLayoutManager null-check/CloseLayout call scheduling differs
+00811b30  2   complete; QI vcall target loaded into eax instead of edx
+00811f20  46  complete; manager ctor field-store order/schedule differs
+00811f80  14  complete; scalar deleting dtor teardown order differs
+008120d0  128 complete; InitB acquire/store schedule + tail call differs
+00812210  60  complete; comparison operand load order / register allocation differs
+00812310  64  complete; eraseSys RBTreeIncrement/Erase schedule differs

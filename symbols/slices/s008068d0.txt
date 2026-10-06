@@ -1,0 +1,25 @@
+008068d0 SPUIHelpers::SetDrawableImage  # unlabeled; drawable assign switch (vtable+0xa8/0xc/0x10/0x14)
+00806a60 SPUIHelpers::SetImageFromLayout  # wrapper over GetImageFromLayout + SetDrawableImage
+00806aa0 SPUIHelpers::SetImageIcon  # unlabeled; cSPUIStdDrawable icon index helper
+00806b20 SPUIHelpers::SetImageIconFrom  # unlabeled; copy 8 icon indices
+00806bf0 SPUIHelpers::SetWindowAreaToParent  # PDB dev 00fb7b30
+00806c60 SPUIHelpers::GetWindowPos  # unlabeled; top-left of window area
+00806ca0 SPUIHelpers::CenterWindow  # unlabeled; set position centering window
+00806d10 SP::Pollinator  # PDB dev 00de8b10
+00806db0 SPUIHelpers::ApplyStyle  # unlabeled; vtable+0x8c then refresh
+00806de0 SPUIHelpers::SetTooltipText  # PDB dev 00fb7e30
+00806e40 SPUIHelpers::AutoSizeWindowForText  # PDB dev 00fb7e80
+00806ee0 SPUIHelpers::SetImageIconColors  # unlabeled; loop over 8 icons
+00806f50 SPUIHelpers::IsDefaultSequence  # unlabeled; fastcall identity check
+00806fc0 SPUIHelpers::ResetScrollFrame  # unlabeled; sets scale 1,1
+00807040 SPUIHelpers::ResetScrollFrameColor  # unlabeled; sets color globals
+008070d0 SPUIHelpers::AnchorWindowToScreen  # PDB dev 00fb7fd0
+00807340 SPUIHelpers::AnchorWindowToWindow  # PDB dev 00fb8200
+00807430 SPUIHelpers::SetScalarPercent  # unlabeled; clamp 0..100
+008074a0 SPUIHelpers::DestroyRolloverFrame  # PDB dev 00fb8470
+00807590 SPUIHelpers::RemoveWindowCallback  # PDB dev 00fb8550
+00807600 SPUIHelpers::CreateScrollFrameVertical  # unlabeled; UI/ScrollFrameVertical
+00807690 SPUIHelpers::UpdateScrollFrameVerticalWrap  # unlabeled
+008076f0 SPUIHelpers::DestroyScrollFrameVertical  # unlabeled
+00807760 SPUIHelpers::FixedAllocatorSetup  # unlabeled; UI/FixedAllocationBin array
+008077f0 eastl::list<EA::UTFWin::IWindow*, eastl::fixed_node_pool<12,128,4,0,1>>::DoErase  # PDB
