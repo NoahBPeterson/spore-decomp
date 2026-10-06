@@ -1,0 +1,10 @@
+0082dc00 -   ProcessTokens: full recursive-descent serializer not reconstructed
+0082e1d0 -   large renderer helper not reconstructed
+0082e300 42  DrawLayer: d3d virtual dispatch + device state setup not reconstructed
+0082e550 -   LayerFrame::Init: full render-target/material setup not reconstructed
+0082e6b0 11  one-line thunk to 0x82e550; argument source unclear
+0082e6c0 37  release path only; d3d/device calls not reconstructed
+0082e750 -   bounding-box render helper not reconstructed
+0082e7a0 109 child-window setter; interface query dispatch not reconstructed
+0082e890 -   UpdateTransforms: 742-byte body not reconstructed
+0082ebd0 18  cSPUILayerIdWinProc constructor; secondary vptr/base hierarchy not reconstructed

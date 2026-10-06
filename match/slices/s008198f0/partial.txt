@@ -1,0 +1,8 @@
+008198f0  475  cSPUIPieMenuItem::Init: stub (full item init not reproduced)
+00819ad0  812  FUN_00819ad0: stub
+00819f90  594  cSPUIPieMenu::reload_icons: stub (icon rebuild not reproduced)
+0081a1f0  161  UI::cSPUIPieMenu::cSPUIPieMenu: stub (multi-base ctor not reproduced)
+0081a2b0  158  cSPUIPieMenu::~cSPUIPieMenu: stub (multi-base dtor not reproduced)
+0081a350  448  FUN_0081a350: stub
+0081a510  410  FUN_0081a510: stub
+0081a6d0  188  cSPUIPieMenu::Shutdown: stub (bulk erase/layout teardown not reproduced)

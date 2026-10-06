@@ -1,0 +1,8 @@
+00829c50 167 complete translation; register allocation of the refcounted-vector push_back differs
+00829f30 185 complete logic; the matrix-pointer argument (ecx) mapping is uncertain
+0082a450 127 complete translation; AutoRef release sequence codegen differs
+0082aa20 26  complete translation; callee schedule differs when the callee body is visible in the TU
+0082aa70 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
+0082aac0 23  complete translation; original keeps a dead store to +0x10 that cl eliminates
+0082ab00 11  complete translation; parameter register allocation differs (a in ecx vs eax)
+0082ab40 128 complete translation; wide-string compare not identical to the inlined form

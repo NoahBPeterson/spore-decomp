@@ -1,0 +1,25 @@
+0083f140 EA::ArgScript::cExpression::EvalBoolTerm  # dev 0x10c0a60 ("and")
+0083f2e0 EA::ArgScript::cExpression::EvalBoolExpression  # dev 0x10c0c20 ("or")
+0083f480 EA::ArgScript::cExpression::EvalChar  # PDB
+0083f510 EA::ArgScript::cExpression::ParseBool  # PDB anchor
+0083f580 `anonymous namespace'::FileMessageCallback  # PDB candidate
+0083f5e0 EA::ArgScript::cFileParser::Release  # PDB
+0083f600 EA::ArgScript::cFileParser::HandleMessage  # PDB
+0083f630 EA::ArgScript::cFileParser::Init  # PDB
+0083f680 EA::ArgScript::cFileParser::Shutdown  # PDB candidate
+0083f6f0 EA::ArgScript::cFileParser::SetParser  # PDB
+0083f740 EA::ArgScript::cFileParser::Parser  # PDB
+0083f790 EA::ArgScript::cFileParser::ParseFiles  # PDB
+0083f8f0 EA::AutoRefCount<EA::RefCounted<EA::IO::FileChangeNotification,int,0>>::release helper
+0083f940 EA::AutoRefCount<EA::RefCounted<EA::IO::FileChangeNotification,int,0>>::operator=
+0083f990 eastl::pair<string,AutoRefCount<RefCounted>>::pair (from RefCounted*)
+0083fa00 eastl::hash_node<pair<string,AutoRefCount<RefCounted>>,0>::~hash_node
+0083fa80 eastl::pair<string,AutoRefCount<RefCounted>>::pair (string, RefCounted*)
+0083fae0 EA::ArgScript::cFileParser::cInputFileSpec copy ctor
+0083fbc0 eastl::uninitialized_copy<cInputFileSpec*>
+0083fcd0 eastl::copy_backward_impl<0>::do_copy<cInputFileSpec*>
+0083fd20 reverse copy_backward of cInputFileSpec
+0083fde0 eastl::hashtable<...FileChangeNotification...>::DoInsertValue  # PDB
+0083fee0 eastl::hashtable<...FileChangeNotification...>::DoFreeNodes  # PDB
+0083ff30 eastl::hash_map<...FileChangeNotification...>::operator[]  # PDB
+0083fff0 eastl::vector<cInputFileSpec>::insert (position)

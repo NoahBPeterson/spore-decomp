@@ -1,0 +1,8 @@
+00819f10 FUN_00819f10  # stdcall destroy-range over 0x4c-stride items
+00819e60 FUN_00819e60  # cdecl destroy-range returning advanced destination
+00819e00 FUN_00819e00  # cdecl copy-range with conditional FUN_00818650
+008198f0 cSPUIPieMenuItem::Init  # PDB name
+00819f90 cSPUIPieMenu::reload_icons  # PDB name
+0081a1f0 UI::cSPUIPieMenu::cSPUIPieMenu  # vtbl 0x1418fa4/0x1418f94
+0081a2b0 cSPUIPieMenu::~cSPUIPieMenu  # PDB name
+0081a6d0 cSPUIPieMenu::Shutdown  # PDB name

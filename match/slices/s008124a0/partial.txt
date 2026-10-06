@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008124a0  -  partial: cSPUILayoutCheat::Execute - only the list/load/unload/textures main paths; EASTL vector<bool>/map plumbing omitted
+00812c90  -  partial: PostMouseEdgeMsg - simplified message envelope (payload copy + single dispatch)

@@ -1,0 +1,4 @@
+0081fd70 SP::cPropertyUI::ModifyVec4  # pdb_names.json gap-align
+00820210 SP::cPropertyUI::ModifyRGB  # pdb_names.json gap-align
+00820680 SP::cPropertyUI::ModifyRGBA  # pdb_names.json gap-align
+00820bb0 eastl::vector<T*>::DoInsertValue  # 4-byte element vector insert; COMDAT-folded pointer vectors

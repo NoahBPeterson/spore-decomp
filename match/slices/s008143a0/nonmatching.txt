@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00814d50  131 complete: cSPUIMainWin::KeyHandler - logic reproduced; same-TU helper clobber analysis and vcall scheduling differ
+00815310  48  complete: vector remove-by-value; cl keeps loop `end` in ecx, original reloads it into edx for the copy bound
+00815370  78  complete: vector push_back; AutoRefCount temp/dup AddRef ordering differs
+008153e0  52  complete: vector clear; cl saves `this` in ebx and vector addr in ebp, original uses ecx/ebx

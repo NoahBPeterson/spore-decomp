@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081fd70  -  SP::cPropertyUI::ModifyVec4 not reconstructed
+00820210  -  SP::cPropertyUI::ModifyRGB not reconstructed
+00820680  -  SP::cPropertyUI::ModifyRGBA not reconstructed
+00820bb0  -  eastl::vector<T*>::DoInsertValue not reconstructed (element-type/instantiation unknown)

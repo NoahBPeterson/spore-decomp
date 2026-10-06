@@ -1,0 +1,5 @@
+0082afe0 104 complete translation; inlined wide-string compare not identical
+0082b060 94  complete translation; EASTL array zero-fill schedule differs
+0082b7f0 69  complete translation; allocator fast-path register allocation differs
+0082b920 49  complete translation; nested allocator subobject register allocation differs
+0082b970 61  complete translation; nested allocator subobject register allocation differs

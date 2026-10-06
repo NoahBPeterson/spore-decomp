@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00834a00  -  TextZoomName::Activate: 608-byte body stubbed
+00834c60  -  TextZoomName::Deactivate: 463-byte body stubbed
+00834e30  -  TextZoomName::Shutdown: 252-byte body stubbed
+00834f30  -  TextZoomName message dispatch: stubbed
+00834fa0  -  TextZoomName::SetTargetWindow: 733-byte body stubbed
+00835660  -  TooltipManager::ShowWindow: FindWindowByID/bounding-box path stubbed

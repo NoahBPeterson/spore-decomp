@@ -1,0 +1,4 @@
+slices/s0082acb0/s0082acb0.cpp  ?Write8@RefSlot@@QAEXI@Z  0082b880  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082acb0/s0082acb0.cpp  ?Write16@RefSlot@@QAEXI@Z  0082b8a0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082acb0/s0082acb0.cpp  ?Write32@RefSlot@@QAEXI@Z  0082b8c0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082acb0/s0082acb0.cpp  ?Write64@RefSlot@@QAEXII@Z  0082b8e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2

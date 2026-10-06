@@ -1,0 +1,8 @@
+00817cb0  184  FUN_00817cb0: stub (layout/scroll recompute not reproduced)
+00817d70  164  FUN_00817d70: stub (window rebind not reproduced)
+00818000  467  cSPUIPieMenuItem::SetIcon: stub (icon window creation/rebind not reproduced)
+008183a0  352  FUN_008183a0: stub
+00818500  322  cSPUIPieMenu::disjoin_items: stub (item relocation not reproduced)
+00818650  159  FUN_00818650: stub
+008186f0  295  FUN_008186f0: stub
+00818820  161  FUN_00818820: stub

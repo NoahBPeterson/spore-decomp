@@ -1,0 +1,2 @@
+00835fe0  -  partial: cSPUIVariableWidthDrawable::Draw - translate of the image/tiling branches; float UV math and call arg shapes approximate
+00836740  -  partial: resource-by-extension lookup - dictionary tree walk approximated (Ghidra's iterator loop garbled)

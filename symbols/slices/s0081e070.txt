@@ -1,0 +1,7 @@
+0081e2b0 UI::PropertyEditor::PropertyEditor  # PDB name
+0081e230 SP::cPropertyUI::ReloadPropResource  # PDB name
+0081e6c0 SP::cPropertyUI::Init  # PDB name
+0081eb10 SP::cPropertyUI::PopulateGroupsGrid  # PDB name
+0081ebe0 SP::cPropertyUI::PopulatePropsGrid  # PDB name
+0081ed10 SP::cPropertyUI::ModifyBool  # PDB name
+0081f020 SP::cPropertyUI::ProcessToggleButton  # PDB name

@@ -1,0 +1,4 @@
+00825930 large cPropertyUI routine (unlabeled)
+00825fc0 routine (unlabeled)
+00826290 routine (unlabeled)
+00826560 SP::cPropertyUI destructor  # decomp index

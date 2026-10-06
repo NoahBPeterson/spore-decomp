@@ -1,0 +1,21 @@
+0083f140  325  complete: EvalBoolTerm; string build + EH frame + loop shape differ
+0083f2e0  325  complete: EvalBoolExpression; string build + EH frame + loop shape differ
+0083f480  86   complete: EvalChar; throw temp frame/register reuse differ
+0083f510  66   complete: ParseBool; throw frame differs
+0083f580  26   complete: FileMessageCallback; messaging vtable call shape differs
+0083f630  28   complete: cFileParser::Init; base-subobject adjust and call shape differ
+0083f680  47   complete: cFileParser::Shutdown; secondary-base vtable slots differ
+0083f6f0  69   complete: cFileParser::SetParser; AutoRefCount vtable call sequence differs
+0083f740  49   complete: cFileParser::Parser; AutoRefCount vtable call sequence differs
+0083f8f0  32   complete: AutoRefCount<RefCounted<FileChangeNotification>>::release; slot/register differ
+0083f940  33   complete: AutoRefCount<RefCounted<FileChangeNotification>>::operator=; refcount scheduling differs
+0083f990  83   complete: pair<string,AutoRefCount> ctor; string RangeInitialize/assign scheduling differs
+0083fa00  80   complete: hashtable hash_node dtor; refcount/EH frame differ
+0083fa80  90   complete: pair ctor (string + RefCounted*); scheduling differs
+0083fae0  88   complete: cInputFileSpec copy ctor; scheduling differs
+0083fbc0  205  complete: uninitialized_copy<cInputFileSpec*>; string copy loop scheduling differs
+0083fcd0  48   complete: copy_backward<cInputFileSpec*>; assign scheduling differs
+0083fd20  50   complete: copy_backward (reverse); assign scheduling differs
+0083fde0  207  complete: hashtable<FileChangeNotification>::DoInsertValue; hash walk/EH differ
+0083fee0  59   complete: hashtable<FileChangeNotification>::DoFreeNodes; node dtor scheduling differs
+0083ff30  144  complete: hash_map<FileChangeNotification>::operator[]; insert/find scheduling differ

@@ -1,0 +1,11 @@
+# source  symbol  original VA  [flags override]
+slices/s00832790/s00832790.cpp  ?HandleMessage@SubtitlesMsg@@QAE_NHPAX@Z  008328b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?Set@Subtitles@@QAE_NPB_WMH_NM@Z          00832d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?Init@Xform@@QAEXXZ                       00832dc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?GetEventMask@cSPUISwarmEffect@@QAEIXZ    00832e10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?ApplyVisibility@cSPUISwarmEffect@@QAEXPAXM@Z  00833080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ??0cSPUISwarmEffect@@QAE@XZ              00833110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?GetC@RefHolder@@QAEIXZ                  008332a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?GetE@RefHolder@@QAEIXZ                  008332d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ??0UI_Image@@QAE@PAX@Z                   008333b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00832790/s00832790.cpp  ?Init@ImageAux@@QAEPAU1@XZ               00833790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

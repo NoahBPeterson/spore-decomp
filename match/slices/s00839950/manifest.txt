@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s00839950/s00839950.cpp  ?DoInsertValue@V8@@QAEXPAUE8@@ABU2@@Z          008399d0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?DoInsertValue@V16@@QAEXPAUE16@@ABU2@@Z        00839ae0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?push_back@V8@@QAEXABUE8@@@Z                   00839d80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?push_back@V16@@QAEXABUE16@@@Z                 00839dc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?HelpString@cArgumentSpec@@QAEPBDPBDH@Z       0083a2f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?DestroyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  0083a310  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?CopyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z      0083a900  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00839950/s00839950.cpp  ?CopyBackwardOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  0083a970  /O2 /MD /Gy /EHsc /TP /GS-

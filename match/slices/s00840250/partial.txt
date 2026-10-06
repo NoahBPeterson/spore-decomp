@@ -1,0 +1,8 @@
+00840250  -    partial: cFileParser::~cFileParser; member teardown (hash_map/vector free) stubbed
+00840340  -    partial: cFileParser::ClearFilePaths; watcher-map iteration/reset stubbed
+00840420  -    partial: cFileParser::AddFilePath; path canonicalisation / dir-watch insert stubbed
+00840700  -    partial: cFileParser::cFileParser; hash_map ctor and vtable stores approximated
+008409f0  -    partial: string/UTF conversion helper; conversion logic stubbed
+00840cc0  -    partial: MakeCaseInsensitive(char*,string8); case-fold + resize logic stubbed
+00840ec0  -    partial: StripCommentsAndWhiteSpace; #< / #> comment scanner stubbed
+00841000  -    partial: ArgScript::Output; message-server output path stubbed

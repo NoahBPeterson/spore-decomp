@@ -1,0 +1,13 @@
+00836910  RawFixed::Assign  # range copy into fixed buffer; DoInsertValue + tail shift
+00836990  cDataURI::~cDataURI  # frees the two SSO fixed strings (PDB: cDataURI::GetStream, same body)
+008369e0  RawFixed::AssignCStr  # assign(const wchar_t*): reset + scan + AssignStr
+00836a30  RawFixed::SubstrInto  # builds a 256-wide fixed string from a substring (WideFixedBuf::append)
+00836a90  RawFixed::Swap  # swap layout of two fixed strings, copy+assign on the non-inline path
+00836bd0  cSPUIXHTMLUTFResourceHandler::ProcessRequest  # PDB candidate (caller-single)
+00836d50  cDataURI::init  # parses data: URI scheme/charset, sets mEncoding/mbBase64
+00837020  RawFixed::Reserve  # allocate n bytes, copy, free old (with SSO buffer sentinel check)
+008371e0  cDataURI::cDataURI  # sets up both SSO buffers then calls init
+00837230  RawFixed::Reserve2  # max_alt(size,n)+1 capacity check then Reserve
+00837270  RawFixed::AppendN  # append(count, byte) growth rule
+00837310  RawFixed::Resize  # shrink via memmove or grow via AppendN
+00837360  cSPUIXHTMLDataURIHandler::PackDataIntoURIString  # percent-encodes or base64-encodes payload

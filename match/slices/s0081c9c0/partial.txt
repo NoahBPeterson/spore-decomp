@@ -1,0 +1,14 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081c9c0  -  150-byte routine not reconstructed
+0081ca60  -  381-byte routine not reconstructed
+0081cbe0  -  cSPUIPopupMenuWin::OnChar (towlower + jump table) not reconstructed
+0081cc60  -  cSPUIPopupMenuWin::OnScrollButtonClicked not reconstructed
+0081cdb0  -  cSPUIPopupMenuWin::OnMouseWheel not reconstructed
+0081ce80  -  cSPUIPopupMenuScrollButton::OnTick (QueryPerformanceCounter) not reconstructed
+0081cf50  -  105-byte list routine not reconstructed
+0081d020  -  cSPUIProgressBarGradientWin ctor not reconstructed
+0081d0f0  -  824-byte routine not reconstructed
+0081d480  -  float compare + 0x90 vcall not reconstructed
+0081d510  -  cSPUIProgressBarWin ctor not reconstructed
+0081d5e0  -  272-byte render routine not reconstructed
+0081df10  -  cPropertyUI::FindPropertyUIWindow not reconstructed

@@ -1,0 +1,15 @@
+008133f0 cSPUIMainWin::KeyRouted  # key capture + focus dispatch (b28d guard, m268/m26c)
+00813550 cSPUIMainWin::FocusInput  # focus dispatch (b28d guard, m268/m26c)
+00813630 cSPUIMainWin::FocusKey2  # 2-float key to m268->v2c / m26c->v38
+008136b0 cSPUIMainWin::FocusKey4  # 2-float + 2-int key route
+00813740 UTFWin::Window::SetAreaNotify  # card PDB candidate cSPUIMainWin::SetArea
+00813760 cSPUIMainWin::InitHitMaskFactory  # card FUN, ResourceMan factory
+008137f0 cSPUIMainWin::InitStringFactories  # card FUN, ResourceMan + UI::StringMan
+008138e0 cSPUIMainWin::ShutdownStringFactories  # card FUN
+00813980 cSPUIMainWin::InitTitleScreen  # card real name
+00813b20 cSPUITooltipManager::Init  # card real name
+00813c20 eastl::lower_bound<unsigned short>  # binary search over ushort range
+00813ca0 cSPUIMainWin::~cSPUIMainWin  # card real name
+00813e70 cSPUIMainWin::DoMessage  # PDB candidate on card
+00814090 cSPUIMainWin::KeyHandler  # card FUN, key/message switch
+008141b0 cSPUIMainWin::cSPUIMainWin  # card FUN, constructor

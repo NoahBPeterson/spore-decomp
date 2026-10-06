@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+00830c00  86  Drawable::GetImageInfo: register allocation (this/def swap) and branch layout differ
+00830c60  7   DSub::GetFieldC: cl folds (+0xc) into the load instead of add-then-load
+00830c80  13  DSub::GetField14: same address-fold difference
+00830c90  20  DSub::GetPair28: x87 pair copy schedule differs
+00830cc0  20  DSub::GetPair30: x87 pair copy schedule differs
+00830cf0  10  DSub::GetField10: same address-fold difference
+00830d10  13  DSub::GetField18: same address-fold difference
+00830d20  13  DSub::GetField20: same address-fold difference
+00830d30  20  DSub::GetPair38: x87 pair copy schedule differs
+00830d60  20  DSub::GetPair40: x87 pair copy schedule differs
+008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs
+00831170  122 SetImageColor: factory/create + CopyFrom inlining schedule differs
+008311f0  122 SetField18At: same clone-of-template schedule differs
+00831270  122 SetField20At: same clone-of-template schedule differs
+008312f0  130 SetPair38At: same clone-of-template schedule differs
+00831380  130 SetPair40At: same clone-of-template schedule differs
+00831410  284 PickImageInfo: switch lowering + default-info copy schedule differs
+00831650  76  EnsureImageInfo0: refcount swap + CopyFrom schedule differs
+008316b0  145 DSub::SetImage: factory/create + refcount swap schedule differs
+00831760  143 Drawable::SetImageIcon: factory/create + refcount swap schedule differs

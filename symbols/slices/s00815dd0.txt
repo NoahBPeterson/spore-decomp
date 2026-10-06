@@ -1,0 +1,11 @@
+00816790 FUN_00816790  # cdecl window-material helper (PDB candidate sSetMaterialAPC)
+008167d0 UTFWin::cSPUIMaterialEffect::SetWeight  # thiscall, [this+0x88] weight, [this+0x80] window set
+00816860 UTFWin::cSPUIMaterialEffect::cSPUIMaterialEffect  # vtbl 0x1418d00
+00816910 UTFWin::cSPUIMaterialEffect::~cSPUIMaterialEffect  # scalar deleting dtor, tail-jumps Navigator dtor
+00816990 UI::CalloutMessageBox::OnWindowClosed  # closes the callout window, EndModal, Shutdown layout
+00816a20 UI::CalloutMessageBox::Show  # PDB candidate cSPUIMessageBox::Show (0x10 args)
+00816b20 UI::CalloutMessageBox::SetButtonTextFromProperty  # cString + GetPropertyAsText
+00816b90 UI::CalloutMessageBox::DoMessage  # PDB candidate cSPUIMessageBox::DoMessage
+00816ca0 UI::CalloutMessageBox::GetWindow  # FindWindowByID(0x6318e78,0)
+00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # ctor, vtable 0x1418dd4
+00815dd0 cSPUIMainWin::Init  # PDB name; initialises UI managers (retail frame offset differs from 2008 PDB)

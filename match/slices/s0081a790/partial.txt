@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081a790  -  cSPUIPieMenu::get_unused_item: container frame-growth + Init loop not reconstructed (skeleton)
+0081b240  -  cSPUIPopupMenuWin::MeasureItemHeight: 711-byte text-layout routine not reconstructed

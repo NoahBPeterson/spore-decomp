@@ -1,0 +1,7 @@
+0083a9f0  32  complete: cArgumentSpec ctor; EH handler residual + arg-load scheduling + EH state number differ
+0083aaa0  306 complete: ParseVectorArgument (no parser); switch dispatch/stack layout differs
+0083ac80  700 complete: ParseVectorArgument (parser); raw-vtable parser calls and schedule differ
+0083afc0  312 complete: ParseArgument; switch dispatch/register allocation differs
+0083b1d0  733 complete: ParseArgumentEx (parser); large switch + raw-vtable calls differ
+0083b580  262 complete: ParseOptionArgs; loop register allocation differs
+0083b6d0  223 complete: ParseOption; string/hash scheduling differs

@@ -1,0 +1,6 @@
+00817e20  31  cSPUIPieMenu::Init: resource-key build + 5-arg vtable dispatch shape differs
+008181e0  94  item loop colour set: register allocation / pointer increment differs
+00818250  96  item loop text-colour set: register allocation / pointer increment differs
+008182c0  96  item loop position assign: register allocation / pointer increment differs
+008188d0  129 cSPUIPieMenuItem::SetId: branch/flag schedule differs
+00817ee0  142 cSPUIPieMenuItem::SetTextColor: nested window/property vtable sequence differs

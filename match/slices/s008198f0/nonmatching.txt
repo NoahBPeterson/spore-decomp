@@ -1,0 +1,2 @@
+00819e00  82   copy-range helper (FUN_00818650 + 5-field tail copy): schedule differs
+00819e60  128  destroy-range helper: bulk destroy loop scheduling differs

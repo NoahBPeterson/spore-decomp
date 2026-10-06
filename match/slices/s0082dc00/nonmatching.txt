@@ -1,0 +1,2 @@
+0082e670 16  complete translation; cl merges the two signed range checks for the new layer index
+0082eba0 18  complete translation; register allocation of the read-modify-write differs

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00833af0  -  hashtable find/insert wrapper: translation incomplete (helpers modelled opaquely)
+00833ba0  -  UI::Image texture loader: 1105-byte body stubbed
+00834220  -  UI::TextZoomName::Recalc: layout/anchor pass stubbed
+008344d0  -  TextZoomName anchor callback: float math approximate, Recalc stubbed
+00834730  -  Anim1 (smooth-ramp animation): Variant/dtors approximate
+008347f0  -  Anim2 (object animation): Variant/SPUICreateObjectAnimation path omitted

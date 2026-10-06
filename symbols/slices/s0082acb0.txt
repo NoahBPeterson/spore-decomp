@@ -1,0 +1,6 @@
+0082acb0 `anonymous namespace'::cSPUISerializeHelper::ParseValue  # symbols/pdb_names.json anchor
+0082b060 `anonymous namespace'::cSPUISerializeHelper::NewArray<Value>  # symbols/pdb_names.json
+0082b0d0 EA::Allocator::StackAllocator::AllocateNewBlock  # symbols/pdb_names.json
+0082b160 `anonymous namespace'::cSPUIDeserializeHelper::SkipProperty  # symbols/pdb_names.json anchor
+0082b310 `anonymous namespace'::cSPUIDeserializeHelper::ReadProperty  # symbols/pdb_candidates.json
+0082b7f0 `anonymous namespace'::cSPUISerializationAllocator::Allocate  # symbols/pdb_names.json

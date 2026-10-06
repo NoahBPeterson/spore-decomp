@@ -1,0 +1,13 @@
+00817eb0 cSPUIPieMenuItem::SetPos  # stores +0x64/+0x68, returns true
+00817fa0 cSPUIPieMenuItem::SetIconColor  # recolours RHS + icon windows
+00818330 UI::cSPUIPieMenuItemWinProc::Hide  # hides window + releases +0xb0, updates mouse focus
+00818370 UI::cSPUIPieMenuItemWinProc::ContainsWindow  # [this+0x24]->vt[0xf8] test
+00818950 cSPUIPieMenuItem::MarkUnused  # clears id/icon and sets flags=3
+00817e20 cSPUIPieMenu::Init  # PDB candidate; builds keys then vtable+0x20
+008188d0 cSPUIPieMenuItem::SetId  # PDB name
+00817ee0 cSPUIPieMenuItem::SetTextColor  # PDB name
+008182c0 FUN_008182c0  # item position assign loop (stride 0x4c)
+00818250 cSPUIPieMenu::SetItemTextColor  # PDB candidate
+008181e0 FUN_008181e0  # item colour-by-id loop
+00818000 cSPUIPieMenuItem::SetIcon  # PDB name
+00818500 cSPUIPieMenu::disjoin_items  # PDB name

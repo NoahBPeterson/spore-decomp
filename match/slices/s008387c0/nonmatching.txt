@@ -1,0 +1,8 @@
+008389f0  80  RawStr::RawStr(const RawStr&,pos,n) - complete substr ctor; register allocation/lea folding differs
+00838a60  67  RawStr::Find - complete substring find; call arg setup / register choice differs
+00838ab0  -  Ent copy-ctor - complete string copy + field copies; register allocation differs
+00838b90  46  CopyVec2 - complete eastl copy for a 2-float element with user operator=; offset-loop shape differs
+00838de0  43  RawStr sub-range assign - complete; min_alt reference + call setup differs
+00838f20  3  CopyEntsFwd - complete; only the order of the four pointer increments differs
+00838f80  3  CopyEntsBwd - complete; argument register assignment (arg1/arg2) swapped
+00839040  2  CopyEnts2Bwd - complete; argument register assignment swapped

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081f0e0  -  SP::cPropertyUI::ModifyResourceKey not reconstructed (inline AutoRefCount/eastl/Variant)
+0081f490  -  SP::cPropertyUI::ModifyVec2 not reconstructed (inline AutoRefCount/eastl/Variant)
+0081f900  -  SP::cPropertyUI::ModifyVec3 not reconstructed (inline AutoRefCount/eastl/Variant)

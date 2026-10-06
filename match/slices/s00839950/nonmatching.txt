@@ -1,0 +1,8 @@
+00839950  99  complete: eastl::vector<cArgInfo> copy ctor; /GS- EH prologue and this/arg register swap not reproduced
+00839c00  203 complete: cArgumentSpec::AddArgDocs; append/SprintfAppend scheduling and loop register allocation differ
+00839e00  176 complete: cOptionsSpec copy ctor; EH prologue (would need vector dtor) and stack-slot layout differ
+00839f90  n/a complete: cArgumentSpec::CreateHelpString; large, string temp construction differs
+0083a3c0  266 complete: vector<cArgInfo>::DoInsertValue; /GS- EH frame + this/arg register swap differ
+0083a580  267 complete: vector<cEnumSpec>::DoInsertValue; /GS- EH frame + this/arg register swap differ
+0083a740  132 complete: vector<cArgInfo>::operator=; uc first-arg handling and grow-tail scheduling differ
+0083a8b0  23  complete: cOptionsSpec::operator=; this/arg register assignment swapped (esi/edi)

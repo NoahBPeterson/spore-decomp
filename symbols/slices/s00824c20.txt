@@ -1,0 +1,5 @@
+00824c20 vector clear helper over multiple cPropertyUI member vectors  # iterates +0x70,+0x84,+0x98,+0xc0...
+00824e10 EA::UTFWinControls::WinText creation helper  # calls CreateDefault
+00824ff0 UI::Window/SubWindow creation helper  # "UI/UI/SubWindow"
+00825110 EA::UTFWinControls::WinButton creation helper  # calls CreateDefault
+008252b0 large UI helper (unlabeled)

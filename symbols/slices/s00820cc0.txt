@@ -1,0 +1,4 @@
+00820cc0 SP::cPropertyUI::cPropertyUI  # pdb_names.json callee-single
+00820ec0 SP::cPropertyUI::ModifyInt32  # pdb_names.json gap-align
+00821260 SP::cPropertyUI::ModifyUInt32  # pdb_names.json gap-align
+00821600 SP::cPropertyUI::ModifyFloat  # pdb_names.json gap-align

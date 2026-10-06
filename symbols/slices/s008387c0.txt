@@ -1,0 +1,17 @@
+008387c0  EA::ArgScript::cArgumentSpec::ArgTypeFromName  # name (with optional []) -> ArgType bitmask
+008389f0  eastl::basic_string<char>::basic_string(s,pos,n)  # substr ctor (min_alt reference)
+00838a60  eastl::basic_string<char>::find(p,pos)  # forward substring search
+00838ab0  Ent copy-ctor  # copies field0 + string member + trailing fields
+00838b90  eastl copy for 2-float element  # fld/fstp pair copy via user operator=
+00838cd0  string element copy loop  # allocates + copies each element's string
+00838de0  eastl::basic_string::assign(pos,n)  # sub-range assign
+00838e80  DestroyEnts  # frees each element's string (with sentinel check)
+00838f20  CopyEntsFwd  # forward copy of 0x20 elements (string + fields)
+00838f80  CopyEntsBwd  # backward copy of 0x20 elements
+00838ff0  CopyEnts2Fwd  # forward copy of 0x18 elements (string + 2 fields)
+00839040  CopyEnts2Bwd  # backward copy of 0x18 elements
+00839090  EA::ArgScript::cFileParser::AddFilePath  # PDB candidate (caller-scored)
+008392b0  `anonymous namespace'::AddDocString  # splits doc text into lines
+008393a0  `anonymous namespace'::AddEnumDocs  # emits enum documentation
+00839540  EA::ArgScript::cArgumentSpec::FindNameAndTypeFromOption  # PDB candidate
+008397a0  EA::ArgScript::cArgumentSpec::NameFromArgType  # ArgType bitmask -> name string

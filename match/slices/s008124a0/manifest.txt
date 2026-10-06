@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008124a0/s008124a0.cpp  ??_GcSPUILayoutCheat@@UAEPAXI@Z  00812990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?SetWindow@Zoom@@QAEXPAX@Z  00812a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?Transform@Zoom@@QAEXPBMPAM@Z  00812a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?GetFlags@MainWin@@QAEIXZ  00812c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?MapFlags@@YAIE@Z  00812c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?DispatchMouseMsg@@YA_NPAX0PAUQ12@@@Z  00812d00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?Teardown@MainWin@@QAEXH@Z  00812d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?ScreenToClient@@YGXMM@Z  00812ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?ScaleXY@@YGXMMPAM0@Z  00813040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?GetScaledElapsed@MainWinTimer@@QAEMXZ  00813070  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?Get@AutoRefPair@@QAE_KXZ  008130a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?OnMouse@MainWin@@QAEX_N@Z  008130c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?UpdateMouseScale@MainWin@@QAEXXZ  008131b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008124a0/s008124a0.cpp  ?SetFocusObj@MainWin@@QAEXPAUX@@@Z  00813260  /O2 /MD /Gy /TP /arch:SSE /fp:fast

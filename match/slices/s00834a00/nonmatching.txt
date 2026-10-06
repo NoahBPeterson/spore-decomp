@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+008353a0  32  TooltipManager::ReleaseRefs: ref-slot store/call register scheduling differs
+008354a0  32  TooltipManager::SetTooltipText: virtual-call register assignment differs
+00835520  6   TooltipManager::MakeFullyVisibleInMainWindow: vtable/function register swap only
+00835610  32  TooltipManager::LoadProps: PropertyManager loop register scheduling differs

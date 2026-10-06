@@ -1,0 +1,3 @@
+00836bd0  -  partial: cSPUIXHTMLUTFResourceHandler::ProcessRequest - body summarised to a stub (property lookup + stream dispatch omitted)
+00836d50  -  partial: cDataURI::init - URI scheme/charset parsing summarised (string setup + codec resets reproduced)
+00837360  -  partial: cSPUIXHTMLDataURIHandler::PackDataIntoURIString - percent/base64 encoder body summarised

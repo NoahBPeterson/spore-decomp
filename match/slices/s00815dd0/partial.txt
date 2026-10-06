@@ -1,0 +1,1 @@
+00815dd0  2419  cSPUIMainWin::Init: only a partial transliteration of the 2.4KB init sequence (many EASTL alloc/ctor and vtable bodies approximated)

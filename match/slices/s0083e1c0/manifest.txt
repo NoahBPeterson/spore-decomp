@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0083e1c0/s0083e1c0.cpp  ?EvalRealExpression@cExpression@@QAEMPAPBD@Z      0083e470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0083e1c0/s0083e1c0.cpp  ?EvalSignedIntNumber@cExpression@@QAEHPAPBD@Z    0083e9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0083e1c0/s0083e1c0.cpp  ?EvalIntTerm@cExpression@@QAEHPAPBD@Z             0083ea70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0083e1c0/s0083e1c0.cpp  ?EvalIntExpression@cExpression@@QAEHPAPBD@Z       0083eb00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

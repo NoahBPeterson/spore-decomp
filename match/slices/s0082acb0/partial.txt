@@ -1,0 +1,4 @@
+0082acb0 -   cSPUISerializeHelper::ParseValue: 815-byte parser not reconstructed
+0082b0d0 -   EA::Allocator::StackAllocator::AllocateNewBlock: block-chain body skeleton
+0082b160 -   cSPUIDeserializeHelper::SkipProperty: 419-byte body not reconstructed
+0082b310 -   cSPUIDeserializeHelper::ReadProperty: 1246-byte body not reconstructed

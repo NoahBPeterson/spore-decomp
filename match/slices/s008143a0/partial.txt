@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+008143a0  -  partial: cSPUIMainWin::OnKeyDown - Date/time + SaveGame naming flow summarised
+008145d0  -  partial: MovieSystem toggle - property/area flow summarised
+008148b0  -  partial: README open flow - string/path handling stubbed
+008149c0  -  partial: fixed-vector string SSO construction stubbed
+00814b80  -  partial: sTextStyleCallback - font/stream flow stubbed
+00814e40  -  partial: cSPUIMainWin::HandleMessage - dispatch table summarised

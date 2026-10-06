@@ -1,0 +1,6 @@
+0082a040 111 constructor skeleton: EA::operator new + cSPUILayout construction not reconstructed
+0082a0d0 89  destructor body skeleton: base vtable reset omitted
+0082a140 -   Create: full layout/window setup call sequence not reconstructed
+0082a500 -   Update: full rectangle recomputation not reconstructed
+0082a8a0 -   OnMessage: dispatch switch not reconstructed
+0082abd0 211 allocator block-chain skeleton: byte copies not reconstructed

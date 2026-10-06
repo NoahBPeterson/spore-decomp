@@ -1,0 +1,7 @@
+00836910  86  RawFixed::Assign - complete range-assign (DoInsertValue + append/shrink-tail); register scheduling differs
+00836a30  77  RawFixed::SubstrInto - complete substr into a 256-wide fixed buffer; capacity lea folding / scheduling differs
+00836a90  90  RawFixed::Swap - complete; uses copy-then-assign tail; register allocation and temp shape differ
+00837020  -  RawFixed::Reserve - complete allocate-and-grow; register allocation / temp construction differs
+008371e0  8  cDataURI::cDataURI - complete; the second SSO capacity lea is scheduled one slot early
+00837270  134  RawFixed::AppendN - complete append(count,char); memset loop shape and register choice differ
+00837310  47  RawFixed::Resize - complete; register assignment (edi vs esi for this) differs

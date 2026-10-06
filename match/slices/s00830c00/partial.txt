@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00830d90  660 cSPUIStdDrawable::draw_with_image_info: large mode switch + x87 validate translation not completed
+00831530  131 cSPUIStdDrawable::GetNaturalSize: stack ImageInfo construction + release approximated
+008315c0  143 cSPUIStdDrawable::HitTest: stack ImageInfo + collision translation approximated

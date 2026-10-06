@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0081a790/s0081a790.cpp  ?OnFocusLost@cSPUIPopupMenuScrollButton@@QAEXHH@Z  0081aa80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?Reset@cSPUIPopupMenuWin@@QAEXXZ  0081aad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?SomeFunc@cSPUIPopupMenuItemWin@@QAEXXZ  0081ae40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?OnMouseWheel@cSPUIPopupMenuScrollButton@@QAEXMMHH@Z  0081af30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?OnFocusAcquired@cSPUIPopupMenuScrollButton@@QAEXHH@Z  0081afb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?FindChild@cSPUIPopupMenuWin@@QAEPAXH@Z  0081b750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?RemoveChild@cSPUIPopupMenuWin@@QAEXH@Z  0081b7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081a790/s0081a790.cpp  ?HideMenuItems@cSPUIPopupMenuWin@@QAEX_N0@Z  0081b8b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

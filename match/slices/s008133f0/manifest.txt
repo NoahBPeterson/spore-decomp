@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008133f0/s008133f0.cpp  ?FocusKey2@MainWin@@QAE_NMMH@Z  00813630  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008133f0/s008133f0.cpp  ?FocusKey4@MainWin@@QAE_NMMHH@Z  008136b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008133f0/s008133f0.cpp  ?SetAreaNotify@WinSub@@QAEXH@Z  00813740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008133f0/s008133f0.cpp  ?InitHitMaskFactory@MainWin@@QAE_NXZ  00813760  /O2 /MD /Gy /TP /arch:SSE /fp:fast

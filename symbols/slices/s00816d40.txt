@@ -1,0 +1,8 @@
+00817000 UI::CalloutMessageBox::`scalar deleting destructor'  # vtbl 0x1418dd4/0x1418dc4, mLayout at +0xc
+008175a0 FUN_008175a0  # cString::Load wrapper (Movie Name PLACEHOLDER)
+00817720 UI::CalloutMessageBox::OnShow  # rebinds root/child windows from layout (ids 0xffffffff,0x62ef978,0x642d110)
+008175c0 UI::CalloutMessageBox::Shutdown  # tears down windows, layout, message handler
+00817670 UI::CalloutMessageBox::SetVisible  # toggles three windows + app-property query
+00817840 UI::CalloutMessageBox::OnMovieCommand  # movie-system enable/disable dispatch
+00817c40 FUN_00817c40  # hash-based named-string getter (FNV1_String16)
+00816cb0 UI::CalloutMessageBox::CalloutMessageBox  # (slice s00815dd0)

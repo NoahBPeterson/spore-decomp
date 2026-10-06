@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s0082ec70/s0082ec70.cpp  ??0cSPUIMaterialWinProc@@QAE@XZ  0082f0b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0082ec70/s0082ec70.cpp  ?Destroy@cSPUIMaterialWinProc@@QAEPAXI@Z  0082f110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0082ec70/s0082ec70.cpp  ?Cleanup@SPUIShader2D@@QAEXXZ  0082f020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0082ec70/s0082ec70.cpp  ?emplace@Vec4vector@@QAEPAUVec4@@PAU2@ABU2@@Z  0082f3a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0082ec70/s0082ec70.cpp  ?GetShaderProxy@@YAPAXXZ  0082f6e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

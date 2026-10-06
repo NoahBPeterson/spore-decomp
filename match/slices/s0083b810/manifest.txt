@@ -1,0 +1,7 @@
+# source  symbol  original VA  [flags override]
+slices/s0083b810/s0083b810.cpp  ?Release@cCommandBase@@QAEHXZ           0083c760  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0083b810/s0083b810.cpp  ?Release@cBlockCommandBase@@QAEHXZ      0083c7a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0083b810/s0083b810.cpp  ?Release@cMetaCommandBase@@QAEHXZ       0083c7d0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0083b810/s0083b810.cpp  ??0cCommandBase@@QAE@XZ                 0083c800  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0083b810/s0083b810.cpp  ??0cMetaCommandBase@@QAE@XZ             0083c840  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0083b810/s0083b810.cpp  ?erase@VecOptions@@QAEPAUcOptionsSpec@@PAU2@0@Z  0083ba40  /O2 /MD /Gy /EHsc /TP /GS-

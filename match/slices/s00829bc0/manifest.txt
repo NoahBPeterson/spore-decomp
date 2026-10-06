@@ -1,0 +1,5 @@
+slices/s00829bc0/s00829bc0.cpp  ?Func1@Handler@@QAEXPAUObjT1@@I0I@Z  00829bc0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s00829bc0/s00829bc0.cpp  ?Reset@Handler@@QAEXXZ  00829d30  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s00829bc0/s00829bc0.cpp  ??0cSPUIRotateEffect_@@QAE@XZ  00829dd0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s00829bc0/s00829bc0.cpp  ?GetScrollOffset@SFV@@QAEMXZ  0082a4e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s00829bc0/s00829bc0.cpp  ?Set@Cursor@@QAEXI@Z  0082aa50  /O2 /MD /Gy /TP /fp:fast /arch:SSE2

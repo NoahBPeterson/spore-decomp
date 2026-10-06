@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081bce0  43  key/flag dispatch: register allocation of the pointer arg differs (ecx vs eax)
+0081bd50  76  event dispatch: vcall+0x30/+0x38 arg passing schedule differs

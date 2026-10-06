@@ -1,0 +1,7 @@
+00830430 cSPUIStdDrawableImageInfo::QueryInterface  # ret 4, interface ids 0x5400186/0xae9cb0fa/0xee3f516e/0xeec58382
+00830810 UTFWin::cSPUIStdDrawableImageInfo::cSPUIStdDrawableImageInfo  # vtbl 0x141a760, size 0x98
+00830950 UTFWin::cSPUIStdDrawable::cSPUIStdDrawable  # vtbl 0x141a7d8, size 0x160
+00830b30 cSPUIStdDrawable::~cSPUIStdDrawable  # vtbl 0x141a7d8, size 0x160
+00830150 cDropShadowDescriptor::SetMode2  # sets +4 and floats +0x1c/+0x20 by enum
+00830280 cDropShadowDescriptor::SetMode1  # sets +0 and floats +0x14/+0x18 by enum
+00830380 cDropShadowDescriptor::FillDefaults  # cdecl(dst,src) copy-if-sentinel

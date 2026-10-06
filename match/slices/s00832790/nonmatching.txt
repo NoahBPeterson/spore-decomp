@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00832790  31  Subtitles::Clear: complete; virtual-call register allocation differs
+00832900  32  Subtitles ctor: vtable/Stopwatch store scheduling + buffer-init order differ
+008331a0  34  cSPUISwarmEffect::DoMessage: virtual-call/arg evaluation schedule differs
+00833210  7   cSPUISwarmEffect scalar dtor: string begin/end register assignment differs
+00833270  32  Object::Cast: type-id parameter register allocation differs
+00833300  32  eastl hashtable rehash: register allocation differs (behaviorally complete)
+00833400  31  UI::Image dtor: refcount release register allocation + tail duplication differ

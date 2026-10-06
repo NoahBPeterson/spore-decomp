@@ -1,0 +1,14 @@
+0083e1c0 EA::ArgScript::cExpression::EvalRealTerm  # PDB
+0083e430 EA::ArgScript::cExpression::cExpression  # hash_map default init at cExpression+0 (bucket 0x154df28, 1.0f/2.0f)
+0083e470 EA::ArgScript::cExpression::EvalRealExpression  # PDB
+0083e4f0 EA::ArgScript::cExpression::ParseReal  # PDB anchor
+0083e560 EA::ArgScript::cExpression::EvalRealParentheses2  # PDB candidate
+0083e5f0 EA::ArgScript::cExpression::EvalIntNumber  # PDB anchor
+0083e9d0 EA::ArgScript::cExpression::EvalSignedIntNumber  # PDB candidate
+0083ea10 EA::ArgScript::cExpression::EvalIntFactor  # PDB
+0083ea70 EA::ArgScript::cExpression::EvalIntTerm  # PDB candidate
+0083eb00 EA::ArgScript::cExpression::EvalIntExpression  # PDB candidate
+0083eb70 EA::ArgScript::cExpression::EvalBool  # PDB
+0083edc0 EA::ArgScript::cExpression::ParseInt  # PDB anchor
+0083ee30 EA::ArgScript::cExpression::EvalRelExpression  # PDB anchor
+0083efd0 EA::ArgScript::cExpression::EvalBoolFactor  # dev 0x10c08d0 (between EvalRelExpression and EvalBoolTerm)

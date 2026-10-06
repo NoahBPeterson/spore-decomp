@@ -1,0 +1,1 @@
+008387a0  5  StrEqualI2 - complete _stricmp(*p,b)==0 wrapper; only register naming (eax/ecx/edx) differs

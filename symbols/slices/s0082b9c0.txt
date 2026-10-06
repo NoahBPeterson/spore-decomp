@@ -1,0 +1,2 @@
+0082c190 UTFWin::RLEHitMask::RLEHitMask  # vtable_names.txt + PDB class UTFWin::RLEHitMask
+0082c210 `anonymous namespace'::cSPUISerializeHelper::WriteHitmaskInline  # symbols/pdb_candidates.json

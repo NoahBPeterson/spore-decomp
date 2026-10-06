@@ -1,0 +1,10 @@
+0082b9c0 -   ProcessTokens/WriteHitmask: 1496-byte serializer body not reconstructed
+0082c000 105 rbtree insert: RBTreeInsert call sequence and node init not reconstructed
+0082c190 22  RLEHitMask constructor: base/secondary vtable stores not reconstructed
+0082c1d0 48  RLEHitMask scalar deleting destructor skeleton
+0082c210 -   WriteHitmaskInline (519 bytes) not reconstructed
+0082c420 -   292-byte serializer helper not reconstructed
+0082c550 -   destructor/nuke helper skeleton
+0082c5a0 -   destructor/nuke helper skeleton
+0082c770 -   148-byte helper not reconstructed
+0082c810 -   352-byte helper not reconstructed

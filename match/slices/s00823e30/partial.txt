@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00823e30  -  3566-byte cPropertyUI routine not reconstructed (deep inline grids/hash_map)

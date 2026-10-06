@@ -1,0 +1,7 @@
+00827bf0 SP::cSPUIPropertyLayout::DoMessage  # decomp index
+00827fc0 cSPUIPropertyLayout::SetKey (SPKeyFromName into +0x24/+0x28)
+00828020 cSPUIPropertyLayout::SetFlag (bool +0x74 + window vcalls)
+00828070 cSPUIPropertyLayout::GetEventMask  # PDB
+00828080 cSPUIPropertyLayout::DoMessage  # PDB (stopwatch timed)
+00828100 cSPUIPropertyLayout::GetRootWindow  # PDB
+008283a0 cSPUIPropertyLayout::SetPositionAndOffset  # PDB

@@ -1,0 +1,6 @@
+00816d40  677  cSPUIMessageBox::AutoSizeButtons: stub (layout-dependent button layout loop not reproduced)
+00817040  1324 cSPUIMessageBox::Init: stub (large layout/loader init not reproduced)
+008177e0  83   release helper: only member teardown written, arg-dependent tail-call to rebind omitted
+008178b0  398  reload helper: stub (icon/layout recompute not reproduced)
+00817a40  158  ctor: approximate field init, base ctors not reproduced
+00817b00  273  icon reload: stub (window rebuild not reproduced)

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00815aa0  83  complete: hashtable DoFreeNodes; thiscall vs free-function call shape and EASTL free-list details differ
+00815b50  85  complete: EA::Text::TextStyleReader::~TextStyleReader; nested inline-hashtable destruction schedule differs

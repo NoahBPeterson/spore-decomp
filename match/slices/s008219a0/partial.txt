@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+008219a0  -  string-property modifier not reconstructed (inline AutoRefCount/eastl/Variant)
+00821d70  -  SP::cPropertyUI::ModifyString16 not reconstructed (inline AutoRefCount/eastl/Variant)

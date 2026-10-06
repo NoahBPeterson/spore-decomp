@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081b990  -  cSPUIPopupMenuWin::GetVisibleIndex: 582-byte float/item-index routine not reconstructed
+0081bbe0  -  GetItemIndexFromChar: list walk not reconstructed
+0081be20  -  198-byte routine not reconstructed
+0081c900  -  OnMouseUp: multi-arg event struct + 0x114 vcall approximated only
+0081c030  -  823-byte routine not reconstructed
+0081c370  -  1412-byte routine not reconstructed

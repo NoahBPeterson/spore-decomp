@@ -1,0 +1,6 @@
+008189a0  729  cSPUIPieMenuItem::Update: stub (full relayout/animation not reproduced)
+00818d20  964  cSPUIPieMenu::DoMessage: stub (message handling not reproduced)
+008190f0  92   copy-range helper: stub (item copy with FUN_008186f0 not reproduced)
+00819150  91   copy-range-back helper: stub
+00819220  190  cSPUIPieMenuItem::SetText: stub (wide-string compare + window set-text not reproduced)
+00819360  1304 FUN_00819360: stub (large pie layout rebuild not reproduced)

@@ -1,0 +1,7 @@
+008387c0  -  partial: cArgumentSpec::ArgTypeFromName - name->type table incl. enum scan summarised
+00838cd0  -  partial: string element copy loop with allocation - body summarised
+00839090  -  partial: cFileParser::AddFilePath - path-normalisation body summarised
+008392b0  -  partial: AddDocString - line splitting + SprintfAppend summarised
+008393a0  -  partial: AddEnumDocs - doc emission summarised
+00839540  -  partial: cArgumentSpec::FindNameAndTypeFromOption - parsing summarised
+008397a0  -  partial: cArgumentSpec::NameFromArgType - switch emission summarised

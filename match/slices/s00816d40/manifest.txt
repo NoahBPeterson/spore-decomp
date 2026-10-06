@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00816d40/s00816d40.cpp  ?scalarDtor@MsgBoxA@@QAEPAXE@Z  00817000  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00816d40/s00816d40.cpp  ?FUN_008175a0@@YGXPAUEString@@@Z  008175a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00816d40/s00816d40.cpp  ?rebind@MsgBoxD@@QAEXXZ  00817720  /O2 /MD /Gy /EHsc /TP /arch:SSE

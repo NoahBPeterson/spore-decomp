@@ -1,0 +1,12 @@
+slices/s00837820/s00837820.cpp  ?Advance@cArguments@@QAEXXZ  00837ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?HasArgument@cArguments@@QAE_NPBD@Z  00837ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?FindUnprocessed@cArguments@@QAEXXZ  00837f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?MarkAllProcessed@cArguments@@QAEXXZ  00837f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?GetArguments@cArguments@@QAEXPAHPAPAPAD@Z  00837f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ??1cArguments@@QAE@XZ  00837fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ??0cArguments@@QAE@XZ  00837ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?MainArguments@cArguments@@QAEXH@Z  00838320  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?OptionArguments@cArguments@@QAEXPBDH@Z  00838330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?FUN_00838740@@YAXH@Z  00838740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?StrEqualI@@YA_NPBD0@Z  00838760  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00837820/s00837820.cpp  ?StrNEqualI@@YA_NPBD0I@Z  00838780  /O2 /MD /Gy /TP /arch:SSE /fp:fast

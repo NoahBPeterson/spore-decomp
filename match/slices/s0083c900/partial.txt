@@ -1,0 +1,4 @@
+0083ca00  206 partial: hashtable<cExprFunction>::find; only the key-copy prologue reconstructed
+0083cad0  156 partial: hashtable<cICommand>::DoFreeNodes; node free chain not reconstructed
+0083cb70  179 partial: hash_map<string,AutoRefCount>::operator[]; not reconstructed
+0083cc30  295 partial: install-command-under-name; hash_map setter not reconstructed

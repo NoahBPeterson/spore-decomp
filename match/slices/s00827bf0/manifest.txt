@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00827bf0/s00827bf0.cpp  ?SetKey@CPL@@QAEXPB_WH@Z  00827fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?SetFlag@CPL@@QAEX_N@Z  00828020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?GetEventMask@CPL@@UAEIXZ  00828070  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?DoMessage@CPL@@UAE_NHPAX@Z  00828080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?GetRootWindow@CPL@@QAEPAXXZ  00828100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00827bf0/s00827bf0.cpp  ?SetPositionAndOffset@CPL@@QAEXMMMM@Z  008283a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

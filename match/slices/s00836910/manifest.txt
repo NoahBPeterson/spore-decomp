@@ -1,0 +1,3 @@
+slices/s00836910/s00836910.cpp  ??1cDataURI@@QAE@XZ  00836990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00836910/s00836910.cpp  ?AssignCStr@RawFixed@@QAEPAU1@PB_W@Z  008369e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00836910/s00836910.cpp  ?Reserve2@RawFixed@@QAEXI@Z  00837230  /O2 /MD /Gy /TP /arch:SSE /fp:fast

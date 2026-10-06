@@ -1,0 +1,3 @@
+008290e0 conditional virtual-dispatch thunk (+0x10 or +0x28 object)
+00828df0 three-vcall guarded dispatcher
+00828ea0 deleting destructor

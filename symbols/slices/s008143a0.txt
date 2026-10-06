@@ -1,0 +1,10 @@
+008143a0 cSPUIMainWin::OnKeyDown  # card real name
+008145d0 cSPUIMainWin::ToggleMovie  # card FUN, SP::MovieSystem
+008148b0 cSPUIMainWin::OpenReadme  # card FUN, README/OpenFile
+008149c0 eastl::basic_string<wchar_t,fixed_vector_allocator<2,32,2,0,1>>::basic_string  # SSO construction
+00814b80 `anonymous_namespace'::sTextStyleCallback  # card real name
+00814d50 cSPUIMainWin::OnKey  # card FUN, key dispatch
+00814e40 cSPUIMainWin::HandleMessage  # card real name
+00815310 vector<AutoRefCount>::remove  # erase-by-value + copy_impl
+00815370 vector<AutoRefCount>::push_back  # card FUN
+008153e0 vector<AutoRefCount>::clear  # card FUN, UI::CalloutMessageBox::OnWindowClosed loop

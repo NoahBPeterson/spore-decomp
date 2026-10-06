@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0081c9c0/s0081c9c0.cpp  ?ScrollButtonSelected@SB@@QAEXH@Z  0081cd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?OnButtonClicked2@ScrollBtn2@@QAEXH@Z  0081ce60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0081c9c0/s0081c9c0.cpp  ?Shutdown@cSPUIPropertyEditor@@QAEXXZ  0081dce0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

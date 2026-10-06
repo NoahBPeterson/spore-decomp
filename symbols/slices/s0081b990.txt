@@ -1,0 +1,6 @@
+0081bef0 cSPUIPopupMenuWin::OnMenuItemSelected  # PDB name; pdb candidate
+0081bfb0 SPUIHelpers::cAutoPropertyBaseLink::Update  # PDB name (prev cSPUIPopupMenuWin::CollapseSubMenus)
+0081bce0 cSPUIPopupMenuWin::OnChar  # PDB candidate; towlower + GetItemIndexFromChar
+0081bd50 cSPUIPopupMenuWin::OnKeyDown2  # event dispatch vcall+0x30/+0x38
+0081b990 cSPUIPopupMenuWin::GetVisibleIndex  # PDB name
+0081bbe0 cSPUIPopupMenuWin::GetItemIndexFromChar  # PDB name

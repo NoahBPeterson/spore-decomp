@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00825930  -  large cPropertyUI routine not reconstructed
+00825fc0  -  routine not reconstructed
+00826290  -  routine not reconstructed
+00826560  -  SP::cPropertyUI destructor not reconstructed (840-byte destructor)

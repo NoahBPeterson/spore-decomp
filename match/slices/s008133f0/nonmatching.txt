@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+008137f0  200 complete: MainWin::InitStringFactories; thiscall StringMan/refcount call shapes differ
+008138e0  114 complete: MainWin::ShutdownStringFactories; thiscall release + refcount store schedule differ
+00813c20  104 complete: LowerBoundUShort; the batch region also contains a second unlisted function at 0x813c60
+00813ca0  318 complete: cSPUIMainWin destructor; field-release order/registers differ
+00814090  219 complete: key handler; message-envelope construction summarised

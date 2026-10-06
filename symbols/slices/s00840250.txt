@@ -1,0 +1,26 @@
+00840250 EA::ArgScript::cFileParser::~cFileParser  # PDB candidate
+00840340 EA::ArgScript::cFileParser::ClearFilePaths  # PDB
+00840420 EA::ArgScript::cFileParser::AddFilePath  # PDB candidate
+00840700 EA::ArgScript::cFileParser::cFileParser  # PDB
+008407c0 enum/name table lookup (stride 8)
+00840810 int table lookup (stride 8)
+00840840 enum/name table lookup (stride 0xc)
+00840890 tokenizer helper (strspn/strcspn)
+008409b0 EA::ArgScript::MakeCaseInsensitive  # PDB
+008409f0 UTF/string conversion helper
+00840bb0 EA::ArgScript::ParseEnum  # PDB
+00840c20 EA::ArgScript::Sprintf  # PDB
+00840c70 EA::ArgScript::SprintfAppend  # PDB
+00840cc0 EA::ArgScript::MakeCaseInsensitive  # PDB (char*,string8)
+00840d50 EA::ArgScript::ParseRangedFloat  # PDB
+00840dc0 EA::ArgScript::ParseRangedInt  # PDB
+00840e10 EA::ArgScript::ParseRangedVector3  # PDB
+00840ec0 EA::ArgScript::StripCommentsAndWhiteSpace  # PDB
+00841000 EA::ArgScript::Output  # PDB
+00841130 cParser virtual adaptor (int->float, vtable slot 1)
+00841150 cParser argument fetch (member +0x1c)
+00841190 cParser argument fetch (member +0x20)
+008411c0 EA::ArgScript::cParser::Release  # PDB
+00841220 parser event dispatch (vtable slot 0x38)
+00841290 parser event dispatch (vtable slot 0x3c)
+00841300 parser event dispatch (vtable slot 0x40)

@@ -1,0 +1,14 @@
+008356e0  cSPUITooltipManager::ShowTooltip  # this = cSPUITooltipManager (offsets match); PDB-adjacent tooltip state update
+00835a50  cSPUITooltipWinProc::DoMessage  # this = cSPUITooltipWinProc; PDB candidate cSPUITooltipWinProc::DoMessage
+00835cc0  cSPUITooltipWinProc::cSPUITooltipWinProc  # vtable stores + member init
+00835d90  cSPUITooltipWinProc::~cSPUITooltipWinProc  # vtable reset + 3 string frees
+00835e30  cSPUITooltipWinProc::cSPUITooltipWinProc  # parameterised ctor (layout/resources)
+00835ed0  cSPUITooltipWinProc::SetText  # assigns mTooltipString, refreshes tooltip
+00835fa0  TooltipHelper::Attach  # /Od; FUN_00835f80 init + slot-0x14 vcall store at +0xc
+00835fe0  cSPUIVariableWidthDrawable::Draw  # this->mpImage(+0xc)/mFillColor(+0x10), RenderContext Begin2D/End2D
+00836420  cSPUIVariableWidthDrawable::cSPUIVariableWidthDrawable  # vtable + mpImage/mFillColor ctor
+008364c0  eastl::basic_string<wchar16>::find  # position<size then forward scan (EASTL source)
+00836500  eastl::basic_string<wchar16>::rfind  # min_alt(nLength-1,position)+1 then CharTypeStringRFind
+00836620  eastl::basic_string::reserve/allocate  # n>1 alloc else empty-string sentinel
+00836740  resource-by-extension lookup  # wcsrchr('.') + ConvertToString8 + strstr over dictionary
+00836850  BoolVec::Init  # copy + ReserveBuffer + DoInsertValue + null-terminate

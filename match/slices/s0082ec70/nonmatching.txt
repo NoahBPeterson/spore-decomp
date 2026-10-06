@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+0082f170  226 eastl vector<u32>::insert: allocation + DoInsertValue memcpy schedule differs
+0082f280  236 eastl vector<16-byte>::insert: element shift/copy schedule differs
+0082f410  134 cSPUIShaderProxy ctor body: fixed_vector_map/string inline init order differs
+0082f500  129 cSPUIShaderProxy dtor: AutoRefCount lock-release sequence approximated
+0082f5c0  85  cSPUIShaderProxy::GetParam: lower_bound helper inlining differs
+0082f630  49  AcquireShaderProxy: free-list/AddCore loop layout (cold found block) differs
+0082f760  199 Init2DSystem: global vector fill + FixedAllocator init schedule differs
+0082f8a0  56  Shutdown2DSystem: --refcount dec/cmp split and tail-call layout differ
+0082f930  49  ParamMap::findInsert: node value (key/0x10/0/-1) store order differs

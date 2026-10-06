@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+008133f0  -  partial: MainWin::KeyRouted - capture/focus dispatch bodies summarised
+00813550  -  partial: MainWin::FocusInput - focus dispatch body summarised
+00813980  -  partial: cSPUIMainWin::InitTitleScreen - layout init + float sizing summarised
+00813b20  -  partial: cSPUITooltipManager::Init - property/hash + dictionary loop summarised
+00813e70  -  partial: cSPUIMainWin::DoMessage - message dispatch / MessageBasicRC envelope summarised
+008141b0  -  partial: cSPUIMainWin constructor - only vtable stores + field zeroing

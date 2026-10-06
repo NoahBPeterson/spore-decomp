@@ -1,0 +1,6 @@
+0083db70  139  complete: EvalIntParentheses; calling convention/throw frame differ
+0083dc00  241  complete: EvalString; thiscall ABI and string assign scheduling differ
+0083dd00  53   complete: hashtable<cExprFunction>::DoFreeNodes; node free scheduling differs
+0083dd70  58   complete: EvalSignedRealNumber; x87 sign/register scheduling differs
+0083e140  11   complete: expr table clear; call scheduling differs
+0083e160  87   complete: EvalRealFactor; long-double pow call sequence differs

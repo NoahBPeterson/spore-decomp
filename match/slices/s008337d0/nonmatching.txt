@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00833a20  4   TexTable::Clear: loop-carried register scheduling (edi/esi) differs
+00834000  12  FUN_00834000: __stdcall arg evaluation order differs
+00834140  21  VWrap::M: manager/vtable register assignment differs
+00834200  10  RefWrap::Release: add eax,-1 vs sub eax,1 + rc store order differ
+00834560  2   FUN_00834560: vtable/function pointer register assignment differs
+008345c0  32  UI::TextZoomName ctor: vtable/animator store scheduling differs
+00834660  32  UI::TextZoomName::SetActive: BehaviorMessage construction schedule differs
+00834930  32  UI::TextZoomName::Tick: animator/virtual-call schedule differs
+00834990  32  TextZoomMsg::HandleMessage: prologue/EH register scheduling differs

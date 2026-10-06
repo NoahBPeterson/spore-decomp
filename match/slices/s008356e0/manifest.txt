@@ -1,0 +1,5 @@
+slices/s008356e0/s008356e0.cpp  ?SetText@cSPUITooltipWinProc@@QAEXPB_WPAXD@Z  00835ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008356e0/s008356e0.cpp  ??0cSPUIVariableWidthDrawable@@QAE@XZ  00836420  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008356e0/s008356e0.cpp  ?FindFrom@UShortVec@@QAEHGI@Z  008364c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008356e0/s008356e0.cpp  ?ReverseFind@UShortVec@@QAEHGI@Z  00836500  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008356e0/s008356e0.cpp  ?ReserveBuffer@BoolVec@@QAEXI@Z  00836620  /O2 /MD /Gy /TP /arch:SSE /fp:fast

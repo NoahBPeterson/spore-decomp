@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00830c00/s00830c00.cpp  ?ScalarDtor@ImageInfo2@@QAEPAXI@Z  00831030  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

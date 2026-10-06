@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00815420/s00815420.cpp  ?Execute@Cheat@@QAEXPAUArgs@@@Z  00815990  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00815420/s00815420.cpp  ?ExecuteColor@Outer@@QAEXH@Z  00815a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00815420/s00815420.cpp  ?Wrap@Outer@@QAEXH@Z  00815b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00815420/s00815420.cpp  ?cSPUIMainWin_InitFonts@@YA_NXZ  00815ce0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

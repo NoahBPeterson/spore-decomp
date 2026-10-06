@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081a940  187  AddItem: get_unused_item container logic approximated (size differs)
+0081aa00  30  ctor cSPUIPopupMenuItemWin: base WinButton ctor + 3 subobject vptr stores not reproduced
+0081ad50  105  OnAttach: rect/ceil + multiple interface vcalls; scheduling differs
+0081ae90  76  ctor cSPUIPopupMenuScrollButton: vptr stores + Stopwatch/LimitStopwatch calls
+0081b000  145  ctor cSPUIPopupMenuWin: 12 pointer + float + flag initialisers, vptr stores
+0081b100  283  dtor cSPUIPopupMenuWin: AutoRefCount release order / base dtor not exact
+0081b510  224  OnDetach: interface query + member releases, register scheduling differs
+0081b650  2  AddMenuItem: first vtable call loads slot into eax instead of edx
+0081b6a0  159  AddMenuItem(layout): cSPUILayout local frame + Init/FindWindowByID not exact

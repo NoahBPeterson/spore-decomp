@@ -1,0 +1,2 @@
+0083f790  311  partial: cFileParser::ParseFiles; loop/timer/message payload approximated, not fully reconstructed
+0083fff0  -    partial: vector<cInputFileSpec>::insert; element relocate/destroy pass approximated

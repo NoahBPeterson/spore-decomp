@@ -1,0 +1,7 @@
+008356e0  745  cSPUITooltipManager::ShowTooltip - full tooltip/layout state machine; complete, register/scheduling mismatch on the float layout-rect branch
+00835a50  529  cSPUITooltipWinProc::DoMessage - full switch dispatch; complete, jump-table layout + timestamp stores differ
+00835cc0  3  cSPUITooltipWinProc::cSPUITooltipWinProc - complete; only the two movss default-offset copies are scheduled together instead of load/store pairs
+00835d90  3  cSPUITooltipWinProc::~cSPUITooltipWinProc - complete; inlined base dtor stores the two base vptrs in the opposite order ([esi] before [esi+4])
+00835e30  6  cSPUITooltipWinProc::cSPUITooltipWinProc(args) - complete; mTooltipBehavior store is hoisted above the layout-key zeroing
+00835fa0  5  TooltipHelper::Attach - /Od; complete; load order of this (ecx vs edx) before the slot-5 vcall differs
+00836850  55  BoolVec::Init - complete copy-with-null-terminator; register allocation (keep other vs spill) differs

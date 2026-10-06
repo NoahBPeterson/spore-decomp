@@ -1,0 +1,3 @@
+0083b810  346  complete: cArgumentSpec::Parse; loop/register allocation and vector-size math differ
+0083b9d0  48   complete: Parse throwing overload; helper call conventions (thiscall on arg1) and throw frame differ
+0083baa0  279  complete: vector<cOptionsSpec>::DoInsertValue; local-frame size and EH/scheduling differ

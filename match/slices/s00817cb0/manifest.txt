@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00817cb0/s00817cb0.cpp  ?SetPos@cSPUIPieMenuItem@@QAE_NHH@Z  00817eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00817cb0/s00817cb0.cpp  ?sub817fa0@cSPUIPieMenuItem@@QAEXH@Z  00817fa0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00817cb0/s00817cb0.cpp  ?teardown@Holder2@@QAEXXZ  00818330  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00817cb0/s00817cb0.cpp  ?has@WinProcHolder@@QAE_NPAUIWindow@@@Z  00818370  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00817cb0/s00817cb0.cpp  ?MarkUnused@cSPUIPieMenuItem@@QAEXXZ  00818950  /O2 /MD /Gy /EHsc /TP /arch:SSE

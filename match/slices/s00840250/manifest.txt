@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00840250/s00840250.cpp  ?LookupName8@@YAEPBDPAH1@Z          008407c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?LookupInt8@@YAHHPAH@Z             00840810  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?LookupName12@@YAEPBDPAH1@Z         00840840  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?ParserCall1ToFloat@@YIMPAHHHH@Z   00841130  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?ParserArg1c@@YIHPAHHPAPBDPAX@Z    00841150  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?ParserArg20@@YIHPAHHPAPBDPAX@Z    00841190  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00840250/s00840250.cpp  ?cParser_Release@@YIHPAH@Z         008411c0  /O2 /MD /Gy /EHsc /TP /GS-

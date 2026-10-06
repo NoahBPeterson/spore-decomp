@@ -1,0 +1,7 @@
+0083d3d0 EA::ArgScript::cExpression::EvalRealNumber  # PDB anchor
+0083db70 EA::ArgScript::cExpression::EvalIntParentheses  # PDB candidate
+0083dc00 EA::ArgScript::cExpression::EvalString  # PDB
+0083dd00 eastl::hashtable<string,...cExprFunction...>::DoFreeNodes  # PDB
+0083dd70 EA::ArgScript::cExpression::EvalSignedRealNumber  # PDB candidate
+0083df90 `anonymous namespace'::cIfCommand::cIfCommand  # PDB
+0083e160 EA::ArgScript::cExpression::EvalRealFactor  # PDB candidate

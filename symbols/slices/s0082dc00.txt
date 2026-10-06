@@ -1,0 +1,2 @@
+0082ebd0 UTFWin::cSPUILayerIdWinProc::cSPUILayerIdWinProc  # vtable_names.txt + PDB class cSPUILayerIdWinProc
+0082e890 rw::graphics::EmbeddedState::GetBlendMode  # pdb_candidates.json caller-single (probable)

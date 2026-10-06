@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s008189a0/s008189a0.cpp  ?RemoveItem@cSPUIPieMenu@@QAEXXZ  00818c80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008189a0/s008189a0.cpp  ?SetOrientation@cSPUIPieMenuItem@@QAEX_N0@Z  008192e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s008189a0/s008189a0.cpp  ?dtor819880@cSPUIPieMenuItem@@QAEXXZ  00819880  /O2 /MD /Gy /EHsc /TP /arch:SSE

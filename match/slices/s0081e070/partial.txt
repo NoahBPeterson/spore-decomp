@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+0081e070  -  435-byte routine not reconstructed
+0081e230  -  cPropertyUI::ReloadPropResource (operator new + BehaviorMessage) not reconstructed
+0081e6c0  -  cPropertyUI::Init 1090-byte routine not reconstructed
+0081eb10  -  cPropertyUI::PopulateGroupsGrid not reconstructed
+0081ebe0  -  cPropertyUI::PopulatePropsGrid not reconstructed
+0081ed10  -  cPropertyUI::ModifyBool 776-byte routine not reconstructed
+0081f020  -  cPropertyUI::ProcessToggleButton not reconstructed

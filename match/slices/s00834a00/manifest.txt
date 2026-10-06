@@ -1,0 +1,8 @@
+# source  symbol  original VA  [flags override]
+slices/s00834a00/s00834a00.cpp  ?GetEventMask@TooltipWinProc@@QAEIXZ                  008352a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ?FUN_008352c0@@YAPAXXZ                               008352c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ??0TooltipManager@@QAE@XZ                            008352d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ?Dtor@TooltipManager@@QAEXXZ                         00835320  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ?ShouldDisplayTooltip@TooltipManager@@QAE_NPAX@Z     008353f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ?ShouldTimeoutTooltip@TooltipManager@@QAEHXZ         00835440  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00834a00/s00834a00.cpp  ?ShouldDisplayDetailedTooltip@TooltipManager@@QAEHXZ 00835470  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

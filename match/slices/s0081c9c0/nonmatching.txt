@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081cce0  27  list clear loop: this/list-head register roles swapped (edi/esi)
+0081d7a0  74  Variant::Reset: 16-bit flag test emits movzx; constant register roles differ
+0081da30  71  Variant setter (type 0x20): same flag-test / register issues
+0081ddd0  9   short-field init: constant 2/0x33 register roles swapped (eax/ecx)
+0081de30  9   short-field init: constant 2/0x34 register roles swapped (eax/ecx)

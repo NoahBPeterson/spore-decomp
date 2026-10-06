@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s008337d0/s008337d0.cpp  ?CreateNode@TexTable@@QAEPAUTexNode@@PBX@Z  008337d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008337d0/s008337d0.cpp  ?Dtor@TexMgr@@QAEXXZ                        00833a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008337d0/s008337d0.cpp  ??0cSPUITextWin@@QAE@XZ                      00834020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s008337d0/s008337d0.cpp  ?Dtor@TextZoomName@@QAEXXZ                   00834160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,14 @@
+0083c900  233  complete: hashtable<cICommand>::insert; hash walk/EH and helper call shapes differ
+0083cd90  37   complete: cBlockCommandBase::~cBlockCommandBase; vtable store and free scheduling differ
+0083cdd0  34   complete: AppProps ctor; movss constant loads and member store order differ
+0083ce20  54   complete: AppProps deleting dtor; scheduling differs
+0083ce70  13   complete: ceil helper (x87 fld/fstp around ceil)
+0083ce90  32   complete: DiscardWhiteSpace; isspace loop register allocation differs
+0083ced0  13   complete: AutoRefCount release; branch layout differs
+0083cef0  92   complete: pair<string,AutoRefCount> ctor; string copy loop scheduling differs
+0083d020  89   complete: pair<string,AutoRefCount> copy ctor; scheduling differs
+0083d080  39   complete: pair<string,cExprFunction> dtor; branch layout differs
+0083d140  233  complete: hashtable<cExprFunction>::insert; same shape as 0083c900
+0083d240  45   complete: EvalBoolParentheses (expect char + throw)
+0083d290  95   complete: EvalContinueChar (expect char + throw)
+0083d2f0  209  complete: EvalRealParentheses; float returns and throw frames differ

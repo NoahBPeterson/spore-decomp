@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+008220e0  -  SP::cPropertyUI::SavePropFile not reconstructed (6388-byte serializer, deep inline)

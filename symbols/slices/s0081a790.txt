@@ -1,0 +1,14 @@
+0081aa80 cSPUIPopupMenuScrollButton::OnFocusLost  # PDB name; vcall+0xc/OnChar tail call
+0081aad0 cSPUIPopupMenuWin::Reset  # clears 4 flags at +0x8c0..+0x8c3, centered := selected
+0081ad50 cSPUIPopupMenuItemWin::OnAttach  # PDB name
+0081ae40 cSPUIPopupMenuItemWin::SomeFunc  # vcall+0x7c(1,0) then OnAttach
+0081ae90 cSPUIPopupMenuScrollButton::cSPUIPopupMenuScrollButton  # PDB name
+0081af30 cSPUIPopupMenuScrollButton::OnMouseWheel  # PDB name
+0081afb0 cSPUIPopupMenuScrollButton::OnFocusAcquired  # PDB name
+0081b000 cSPUIPopupMenuWin::cSPUIPopupMenuWin  # PDB name
+0081b100 cSPUIPopupMenuWin::~cSPUIPopupMenuWin  # PDB name
+0081b510 cSPUIPopupMenuWin::OnDetach  # PDB name
+0081b650 cSPUIPopupMenuWin::AddMenuItem  # PDB name
+0081b750 cSPUIPopupMenuWin::FindChild  # iterator + query 0x4c058cf
+0081b7d0 cSPUIPopupMenuWin::RemoveChild  # iterator + reindex child ids
+0081b8b0 cSPUIPopupMenuWin::HideMenuItems  # recursive, query 0x4c058d5

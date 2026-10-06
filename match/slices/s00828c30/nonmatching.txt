@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00828df0  48  three vcalls: null-test of mObj emitted as `cmp [mem],0; reload` vs `mov ecx,[mem]; test`

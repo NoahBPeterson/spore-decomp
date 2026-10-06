@@ -1,0 +1,8 @@
+00837820  -  partial: cDataURI stream builder (percent/base64 -> memory stream) - body summarised
+00837c90  -  partial: cSPUIXHTMLDataURIHandler::ProcessRequest - dictionary/stream dispatch summarised
+00838020  -  partial: cArguments::MainArguments(count,min,max) - count/bounds logic present, cError throw construction approximated
+008380b0  -  partial: cArguments::HasFlag - flag logic present, cError throw construction approximated
+00838130  -  partial: cArguments::OptionArguments(label,count,min,max) - logic present, cError throw construction approximated
+00838350  -  partial: cArguments::GatherUnprocessed - vector append loop summarised
+008383c0  -  partial: cArguments::SplitIntoArguments - tokeniser body summarised
+008386d0  -  partial: cArguments::cArguments(text) - ctor trampoline; SplitIntoArguments call present, body summarised

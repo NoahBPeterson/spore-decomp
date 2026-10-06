@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00820cc0  -  SP::cPropertyUI::cPropertyUI not reconstructed (MI base ctors + 30-member init + 3 hash_map members)
+00820ec0  -  SP::cPropertyUI::ModifyInt32 not reconstructed (inline AutoRefCount/eastl/Variant)
+00821260  -  SP::cPropertyUI::ModifyUInt32 not reconstructed (inline AutoRefCount/eastl/Variant)
+00821600  -  SP::cPropertyUI::ModifyFloat not reconstructed (inline AutoRefCount/eastl/Variant)

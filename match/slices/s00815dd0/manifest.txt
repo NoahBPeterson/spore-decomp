@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00815dd0/s00815dd0.cpp  _FUN_00816790  00816790  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00815dd0/s00815dd0.cpp  ?sub816990@CalloutMessageBox@@QAE_NXZ  00816990  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00815dd0/s00815dd0.cpp  ?sub816ca0@CalloutMessageBox@@QAEPAXXZ  00816ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE

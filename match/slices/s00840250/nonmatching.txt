@@ -1,0 +1,11 @@
+00840890  46   complete: NextToken; strspn/strcspn return expression differs
+008409b0  52   complete: MakeCaseInsensitive(string8); tolower loop register allocation differs
+00840bb0  70   complete: ParseEnum; table walk + throw frame differ
+00840c20  21   complete: Sprintf; buf scan loop shape differs
+00840c70  21   complete: SprintfAppend; buf scan loop shape differs
+00840d50  67   complete: ParseRangedFloat; x87 range compare + throw frame differ
+00840dc0  44   complete: ParseRangedInt; range compare + throw frame differ
+00840e10  169  complete: ParseRangedVector3; aligned frame + SSE range compare differ
+00841220  68   complete: parser event dispatch (vtable slot 0x38); try/catch EH frame differs
+00841290  68   complete: parser event dispatch (vtable slot 0x3c); try/catch EH frame differs
+00841300  68   complete: parser event dispatch (vtable slot 0x40); try/catch EH frame differs

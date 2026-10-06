@@ -1,0 +1,16 @@
+00839c00 EA::ArgScript::cArgumentSpec::AddArgDocs  # PDB anchor
+00839f90 EA::ArgScript::cArgumentSpec::CreateHelpString  # PDB anchor
+0083a2f0 EA::ArgScript::cArgumentSpec::HelpString  # PDB candidate (caller-single)
+0083a740 eastl::vector<EA::ArgScript::cArgInfo,eastl::sp_vector_allocator>::operator=  # PDB candidate
+0083a8b0 EA::ArgScript::cOptionsSpec::operator=  # PDB candidate (caller-single)
+0083a900 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::ArgScript::cOptionsSpec *,EA::ArgScript::cOptionsSpec *>  # PDB
+0083a970 eastl::copy_backward_impl<0,std::random_access_iterator_tag>::do_copy<EA::ArgScript::cOptionsSpec *,EA::ArgScript::cOptionsSpec *>  # PDB
+00839950 eastl::vector<EA::ArgScript::cArgInfo,eastl::sp_vector_allocator>::vector(const vector&)  # inferred
+008399d0 eastl::vector<8-byte,sp_vector_allocator>::DoInsertValue  # inferred
+00839ae0 eastl::vector<16-byte,sp_vector_allocator>::DoInsertValue  # inferred
+00839d80 eastl::vector<8-byte,sp_vector_allocator>::push_back  # inferred
+00839dc0 eastl::vector<16-byte,sp_vector_allocator>::push_back  # inferred
+00839e00 EA::ArgScript::cOptionsSpec::cOptionsSpec(const cOptionsSpec&)  # inferred (copy ctor)
+0083a310 destroy_range<EA::ArgScript::cOptionsSpec>  # inferred
+0083a3c0 eastl::vector<EA::ArgScript::cArgInfo,eastl::sp_vector_allocator>::DoInsertValue  # inferred
+0083a580 eastl::vector<EA::ArgScript::cEnumSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred

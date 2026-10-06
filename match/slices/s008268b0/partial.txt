@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+008268b0  -  view-reset method (float member stores + window vcalls) not reconstructed; owning class ambiguous

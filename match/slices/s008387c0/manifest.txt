@@ -1,0 +1,2 @@
+slices/s008387c0/s008387c0.cpp  ?DestroyEnts@@YAPAUEnt@@PAU1@00@Z  00838e80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s008387c0/s008387c0.cpp  ?CopyEnts2Fwd@@YAPAUEnt2@@PAU1@00@Z  00838ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

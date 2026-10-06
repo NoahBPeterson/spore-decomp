@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00823b50  -  SP::cPropertyUI::ProcessTextChange not reconstructed (large type-dispatch switch over 6 modify paths)

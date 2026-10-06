@@ -1,0 +1,14 @@
+slices/s0082dc00/s0082dc00.cpp  ?SetFloat@LayerWinProc@@QAEXMI@Z  0082e340  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?GetFloat@LayerWinProc@@QAEMI@Z  0082e360  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?CopyFloats@LayerWinProc@@QAEXPAMHH@Z  0082e380  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?FloatAt@LayerWinProc@@QAEPAMH@Z  0082e3f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?AppFlagSet@@YA_NXZ  0082e400  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?AsInterface@LayerWinProc@@QAEPAXH@Z  0082e420  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?RegisterE300@@YAXXZ  0082e470  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?CopyRectGlobal@@YAXPAH@Z  0082e4c0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?RectNotEqual@@YAHPAH0@Z  0082e4f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?Pop5@Pool5@@QAEPAUChunk@@HHHHH@Z  0082e520  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?IsLayerUsed@@YA_NI@Z  0082e700  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?Pop3@Pool3@@QAEPAUChunk@@HHH@Z  0082e840  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?SetImage2@LayerWinProc@@QAEXPAII@Z  0082e870  /O2 /MD /Gy /TP /fp:fast /arch:SSE2
+slices/s0082dc00/s0082dc00.cpp  ?SetImage@LayerWinProc@@QAEXIPAX@Z  0082eb80  /O2 /MD /Gy /TP /fp:fast /arch:SSE2

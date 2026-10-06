@@ -1,0 +1,20 @@
+00832790 cSPUISubtitles::Clear  # object with Stopwatch@0x10, "UI/cSPUISubtitles", vtable 0x141a894
+008328b0 cSPUISubtitles::HandleMessage  # secondary subobject at obj+8, msg 0x61dd1b7
+00832900 cSPUISubtitles::cSPUISubtitles  # vtables 0x141a894/0x141a884
+008329b0 cSPUISubtitles::SetWindow  # allocates "UI/cSPUISubtitles" window, text typesetter
+00832d50 cSPUISubtitles::Set  # sets text on WFixed@0x88
+00832dc0 rw::math::Matrix34::Init  # copies 3x3 from 0x164efc8, vec from 0x164ee48
+00832e10 cSPUISwarmEffect::GetEventMask  # base IWinProc::GetEventMask | 0x288
+00832e70 cSPUISwarmEffect::PositionSwarm  # uses mpVisualEffect@0x74, SP::App/cViewer
+00833080 cSPUISwarmEffect::ApplyVisibility  # EffectsManager create/destroy of mpVisualEffect
+00833110 cSPUISwarmEffect::cSPUISwarmEffect  # vtable 0x141a998, FadeEffect base
+008331a0 cSPUISwarmEffect::DoMessage  # PDB candidate cSPUISwarmEffect::DoMessage
+00833210 cSPUISwarmEffect::~scalar  # releases mSwarmEffectName@0x60
+00833270 Object::Cast  # type ids 0xae9cb0fa/0xee3f516e/0x147d84e
+008332a0 cTextureInstanceWrapper::GetWidth  # returns word [*p+0xc]
+008332d0 cTextureInstanceWrapper::GetHeight  # returns word [*p+0xe]
+00833300 eastl::hashtable::rehash  # bucket rehash; allocator vtbl slots 8/0xc
+008333b0 UI::Image::Image  # vtables 0x141aaa0/0x141aa9c
+00833400 UI::Image::~Image  # releases mpImage@0x10, base vtables 0x13eb938/0x13ef094
+00833460 UI::Image::GetImage  # "image/..." extension dispatch (png/gif/jpeg/targa)
+00833790 UI::Image::(aux ctor)  # vtables 0x141aabc/0x141aab8, ++g_counter 0x164efec

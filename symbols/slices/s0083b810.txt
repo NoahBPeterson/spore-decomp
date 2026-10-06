@@ -1,0 +1,10 @@
+0083b810 EA::ArgScript::cArgumentSpec::Parse  # PDB anchor
+0083b9d0 EA::ArgScript::cArgumentSpec::Parse (throwing overload)  # PDB candidate
+0083ba40 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::erase  # PDB
+0083baa0 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred
+0083bcd0 EA::ArgScript::cArgumentSpec::ConstructSpec  # PDB candidate
+0083c760 EA::ArgScript::cCommandBase::Release  # vtable-slot
+0083c7a0 EA::ArgScript::cBlockCommandBase::Release  # vtable-slot
+0083c7d0 EA::ArgScript::cMetaCommandBase::Release  # vtable-slot
+0083c800 ArgScript::SPSkinPaintClear::SPSkinPaintClear  # PDB
+0083c840 ArgScript::SPSkinPaintDistributeParticles::SPSkinPaintDistributeParticles  # PDB

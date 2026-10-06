@@ -1,0 +1,19 @@
+008337d0 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::create_node  # alloc +0x1c, 0x14-byte node
+00833a20 eastl::hashtable<ResourceMan::Key,cTextureInstance*>::DoFreeNodes  # frees nodes via allocator slot 0xc
+00833a80 cTextureManager::~cTextureManager  # vtables 0x141aabc/0x141aab8, clears 2 global maps
+00833af0 cTextureManager::GetOrCreate  # map find + insert, keys 0x1547f54/0x1547f78
+00833ba0 cTextureManager::LoadTexture  # "image/..." texture-instance loader (1105B)
+00834000 cTextureManager::LoadTextureThunk  # __stdcall, forwards (-1,-1)
+00834020 UTFWin::cSPUITextWin::cSPUITextWin  # vtables 0x141ac90/0x141ab70/+0x20c
+00834140 UI::TextZoomName::SetText  # virtual slot 0x8c, global 0x164f0e0
+00834160 UI::TextZoomName::~TextZoomName  # vtable 0x141ada8
+00834200 SP::cGonzagoSimulator::Release  # vtable slot 0, refcount @+4
+00834220 UI::TextZoomName::Recalc  # repositions against text window
+008344d0 TextZoomName anchor callback  # param_2 flags 0x30, slot 0x74
+00834560 IWinProc::Cast thunk  # type 0xeeee8218
+008345c0 UI::TextZoomName::TextZoomName  # vtables 0x141ada8/0x141ad98/0x141ad7c
+00834660 UI::TextZoomName::SetActive  # posts 0x61dd1b7 BehaviorMessage
+00834730 TextZoomName::Anim1  # smooth-ramp shade animation, id 0x61ee329
+008347f0 TextZoomName::Anim2  # object animation, id 0x61ee328
+00834930 UI::TextZoomName::Update  # animator update + re-anchor
+00834990 TextZoomName message handler  # secondary subobject at obj+8

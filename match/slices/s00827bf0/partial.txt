@@ -1,0 +1,12 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00827bf0  -  cSPUIPropertyLayout::DoMessage (934-byte window message handler) not reconstructed
+00828110  -  ForceVisibleLocation not reconstructed
+00828250  -  cSPUIPropertyLayout::Init not reconstructed
+008284f0  -  eastl::uninitialized_move_impl::do_move_start not reconstructed
+00828560  -  eastl::copy_impl::do_copy not reconstructed
+008285e0  -  eastl::copy_backward_impl::do_copy not reconstructed
+00828670  -  cSPUIPropertyLayout destructor not reconstructed
+008286d0  -  cSPUIPropertyLayout constructor not reconstructed
+00828740  -  func20h (769-byte routine) not reconstructed
+00828a50  -  routine not reconstructed
+00828be0  -  routine not reconstructed

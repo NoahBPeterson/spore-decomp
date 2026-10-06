@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00828450  58  pair element copy-ctor: inlined Variant reset stores scheduled differently
+008284a0  6   pair element operator=: first-member store scheduled after push edi
+00828410  7   vector::DoDestroyValues: &mVariant lea scheduled after the flag test
+00828350  7   destroy-range helper: &mVariant lea scheduled after the flag test

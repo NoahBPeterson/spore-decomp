@@ -1,0 +1,7 @@
+0081cd50 cSPUIPopupMenuScrollButton::ScrollButtonSelected  # PDB name
+0081ce60 cSPUIPopupMenuScrollButton::OnButtonClicked  # PDB candidate
+0081dce0 SP::cSPUIPropertyEditor::Shutdown  # PDB name
+0081d7a0 EA::Variant::SetValue  # flags/typeId + FUN_0093dd80 dispatch
+0081da30 EA::Variant::SetValue  # variant type 0x20
+0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
+0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name

@@ -1,0 +1,4 @@
+008175c0  112  member teardown order/refcount release schedule not byte-exact
+00817670  150  app-property lookups + three window visibility calls not byte-exact
+00817840  86  movie-system branch/compare tree not byte-exact
+00817c40  61  hash dispatch compare tree and register allocation (esi vs eax) not byte-exact

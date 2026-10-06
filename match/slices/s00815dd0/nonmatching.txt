@@ -1,0 +1,7 @@
+008167d0  2  branch layout: both jb target the L2 tail instead of the L1/return blocks (behaviour equivalent)
+00816860  56  multiple-inheritance FadeEffect base ctor + 3 vtable stores not reproduced byte-exactly
+00816910  74  multiple-inheritance vtable stores + EASTL vector dealloc checks differ
+00816a20  259  stopwatch start (rdtsc/QueryPerformanceCounter) and modal layout path not byte-exact
+00816b20  100  cString local + GetPropertyAsText/FindWindowByID schedule not byte-exact
+00816b90  246  DoMessage switch/compare tree and result-code immediates not byte-exact
+00816cb0  88  CalloutMessageBox ctor MI vtable/secondary stores not byte-exact

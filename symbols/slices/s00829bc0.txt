@@ -1,0 +1,7 @@
+00829dd0 UTFWin::cSPUIRotateEffect::cSPUIRotateEffect  # vtable_names.txt + PDB class cSPUIRotateEffect
+00829ef0 UTFWin::cSPUIRotateEffect::`scalar deleting destructor'  # sets cSPUIRotateEffect vtables + operator_delete
+00829f30 UTFWin::cSPUIRotateEffect::UpdateTransform  # PDB UpdateTransform enum (X_AXIS..ARBITRARY_AXIS), size 0xe8
+0082a040 UI::ScrollFrameVertical::ScrollFrameVertical  # vtable 0x141a0f4 vtbl_UI::ScrollFrameVertical
+0082a0d0 UI::ScrollFrameVertical::~ScrollFrameVertical  # releases members, resets base vtables
+0082a140 SPUIHelpers::CreateScrollFrameVertical  # symbols/pdb_names.json anchor
+0082a500 SPUIHelpers::UpdateScrollFrameVertical  # symbols/pdb_names.json anchor

@@ -1,0 +1,1 @@
+008268b0 view-reset method (resets +0x14/+0x18/+0x1c/+0x20, window vcalls, tails into 00824c20)

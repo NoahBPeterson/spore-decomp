@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00815420  -  partial: CSS/text-style parse routine (1383 bytes) not reconstructed
+00815bd0  -  partial: sLoadTextStylesFromCSS - only the GetFontServer/GetStyleManager prologue

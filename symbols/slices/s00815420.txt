@@ -1,0 +1,8 @@
+00815420 `anonymous_namespace'::sParseTextStyles  # card FUN, huge CSS/text-style parse
+00815990 `anonymous_namespace'::cCaptureUICheat::Execute  # card FUN, ConfigManager capture-UI toggle
+00815a50 `anonymous_namespace'::cColorLocalizedCheat::Execute  # card real name
+00815aa0 eastl::hashtable<...>::DoFreeNodes  # card real name
+00815b30 `anonymous_namespace'::cColorLocalizedCheat::SetColor  # FUN_0083b9d0 wrapper
+00815b50 EA::Text::TextStyleReader::~TextStyleReader  # card real name
+00815bd0 `anonymous_namespace'::sLoadTextStylesFromCSS  # card PDB candidate
+00815ce0 cSPUIMainWin::InitFonts  # card real name

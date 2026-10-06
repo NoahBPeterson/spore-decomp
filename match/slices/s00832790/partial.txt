@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008329b0  925  Subtitles::SetWindow: typesetter/line-layout + message-text path not translated
+00832e70  527  cSPUISwarmEffect::PositionSwarm: approximate translation, not verified
+00833460  805  UI::Image::GetImage: filename/extension + texture-loader path not translated

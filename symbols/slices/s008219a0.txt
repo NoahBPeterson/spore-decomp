@@ -1,0 +1,2 @@
+008219a0 SP::cPropertyUI::ModifyString (unlabeled, string path vs ModifyResourceKey)  # shape match to ModifyString16
+00821d70 SP::cPropertyUI::ModifyString16  # pdb_names.json gap-align

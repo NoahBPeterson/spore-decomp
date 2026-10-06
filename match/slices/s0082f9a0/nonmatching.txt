@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00830080  81  window-tree material visitor: virtual query + visitor callback schedule differs
+008300e0  35  SetThing: refcount swap + virtual layout call schedule differs
+00830430  21  QueryInterface: switch comparison tree shape differs from cl's lowering
+008304c0  45  FactoryRegistry::CreateInstance: register (esi) output convention differs
+008306e0  158 bbox adjust: x87 double Validate calls / register alloc differ
+00830810  174 cSPUIStdDrawableImageInfo ctor: vptr + descriptor store schedule differs
+00830910  34  SmallSet::Do: /Od frame layout (force /Od flags) differs
+00830950  152 cSPUIStdDrawable ctor: base ctor + 8 AutoRefCount stores schedule differs
+00830b30  124 cSPUIStdDrawable dtor: embedded image-info release loop differs

@@ -1,0 +1,7 @@
+0083a9f0 EA::ArgScript::cArgumentSpec::cArgumentSpec  # PDB anchor
+0083aaa0 EA::ArgScript::cArgumentSpec::ParseVectorArgument  # PDB anchor
+0083ac80 EA::ArgScript::cArgumentSpec::ParseVectorArgument(overload)  # inferred
+0083afc0 EA::ArgScript::cArgumentSpec::ParseArgument  # PDB anchor
+0083b1d0 EA::ArgScript::cArgumentSpec::ParseArgument(overload)  # inferred
+0083b580 EA::ArgScript::cArgumentSpec::ParseOptionArgs  # PDB anchor
+0083b6d0 EA::ArgScript::cArgumentSpec::ParseOption  # PDB anchor

@@ -1,0 +1,10 @@
+0083e1c0  476  complete: EvalRealTerm; x87 pow/fmod and SSE accumulation scheduling differ
+0083e430  14   complete: cExpression ctor; zero-init xor scheduling differs
+0083e4f0  51   complete: ParseReal; throw/float-return frame differs
+0083e560  89   complete: EvalRealParentheses2; throw temp frame and register reuse differ
+0083e5f0  141  complete: EvalIntNumber; identifier string build + hashtable dispatch + EH frame differ (845 vs 986 bytes)
+0083ea10  58   complete: EvalIntFactor; callee-saved register assignment (this/base/result) differs
+0083eb70  121  complete: EvalBool; identifier string build + hashtable dispatch + EH frame differ (458 vs 579 bytes)
+0083edc0  51   complete: ParseInt; throw frame and ecx preservation differ
+0083ee30  196  complete: EvalRelExpression; case-body layout and compare tree differ
+0083efd0  311  complete: EvalBoolFactor; identifier string build + EH frame differ

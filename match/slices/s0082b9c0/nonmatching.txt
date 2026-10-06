@@ -1,0 +1,3 @@
+0082bfa0 105 complete translation; EASTL fixed-allocator allocate call not reproduced exactly
+0082cc60 65  complete translation; vector(n) zero-fill schedule differs
+0082ccb0 62  complete translation; push_back(NULL) grow path not identical

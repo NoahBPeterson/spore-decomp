@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00826960  -  SP::cPropertyUI::LoadPropFile not reconstructed (4710-byte parser, deep inline)

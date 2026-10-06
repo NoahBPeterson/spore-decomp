@@ -1,0 +1,16 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00828c30  -  routine not reconstructed
+00828d40  -  routine not reconstructed
+00828e30  -  render Begin2D object creation not reconstructed
+00828ea0  -  deleting destructor (MI vtable stores) not reconstructed
+00828ef0  -  render end / renderable release not reconstructed
+00828f40  -  routine not reconstructed
+00829080  -  Point2D getter via vcall not reconstructed
+00829110  -  uninitialized_copy with AddRef not reconstructed
+00829160  -  large routine not reconstructed
+008294c0  -  routine not reconstructed
+00829690  -  routine not reconstructed
+00829770  -  UI object constructor (vtable + members) not reconstructed
+008297b0  -  large routine not reconstructed
+00829a70  -  routine not reconstructed
+00829ad0  -  routine not reconstructed

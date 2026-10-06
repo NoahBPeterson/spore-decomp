@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00824c20  -  vector-clearing helper (many member vectors) not reconstructed
+00824e10  -  WinText control creation not reconstructed
+00824ff0  -  SubWindow creation not reconstructed
+00825110  -  WinButton creation not reconstructed
+008252b0  -  large UI helper not reconstructed
