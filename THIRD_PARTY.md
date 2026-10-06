@@ -29,6 +29,10 @@ source is redistributed in this repository**. If you intend to vendor them in-tr
 retain EA's copyright and license notice — that license is BSD-style, which is
 compatible with combining it with GPL-3.0 code, but it is not itself GPL.
 
+A few game slices that call into EAText/EAIO/EA::Locale (s00880170, s00885ad0, s0088b250) compile
+against the same EAWebKit headers through local include links; `tools/third_party/eawebkit_include_links.sh`
+recreates them under `work/match/scratch_*_inc` once the support packages are unpacked in `work/ext/`.
+
 ## Binary-derived artifacts
 The binary, its PDBs, and the game data are © Electronic Arts / Maxis and are **not**
 distributed here. They live under `work/` (git-ignored) and are produced locally from

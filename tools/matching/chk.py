@@ -11,7 +11,7 @@ import argparse, glob, hashlib, json, os, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from cmpobj import parse_coff, REL_SIZES
-from run_all import Original, winpath, DEFAULT_FLAGS, INCLUDE, ROOT
+from run_all import Original, winpath, DEFAULT_FLAGS, INCLUDE, ROOT, resolve_flags
 from card import load_funcs, bounds
 
 SKIP = ("__ehhandler", "__unwindfunclet", "__catch", "__tryend", "$")
@@ -34,7 +34,7 @@ def main():
     for t in a.targets:
         for p in t.split(","):
             vas += slice_vas(p) if p.startswith("s") else [int(p, 16)]
-    flags = a.flags.split()
+    flags = resolve_flags(a.flags.split())
     src = os.path.abspath(a.src)
     tag = hashlib.md5((src + a.flags).encode()).hexdigest()[:10]
     obj = os.path.join(ROOT, "work", "match", "chk", "%s_%s.obj" % (os.path.basename(src).rsplit(".", 1)[0], tag))

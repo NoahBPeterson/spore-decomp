@@ -28,6 +28,24 @@ def winpath(p):
     return "Z:" + p.replace("/", "\\")
 
 
+def resolve_flags(flags):
+    """Make relative /I paths independent of the working directory. Manifests were written with
+    paths relative to work/match (e.g. /Iscratch_s00880170_inc, local EAWebKit include links; see
+    THIRD_PARTY.md); cl resolved them against cwd, so they only worked when run from there. Try
+    work/match first, then the repo root; absolute and Z: paths are left alone."""
+    out = []
+    for f in flags:
+        if f[:2] in ("/I", "-I") and len(f) > 2 and not f[2:].startswith(("Z:", "/", "\\")) and ":" not in f[2:4]:
+            rel = f[2:]
+            for base in (OUT, ROOT):
+                cand = os.path.join(base, rel)
+                if os.path.isdir(cand):
+                    f = "/I" + winpath(cand)
+                    break
+        out.append(f)
+    return out
+
+
 def obj_path(src, flags):
     return os.path.join(OUT, src.replace("/", "_").rsplit(".", 1)[0] + "_" +
                         "".join(f.strip("/") for f in flags).replace(":", "") + ".obj")
@@ -57,7 +75,7 @@ def read_rows(paths, filt):
 def compile_one(key):
     src, flags = key
     obj = obj_path(src, list(flags))
-    r = subprocess.run([os.path.join(ROOT, "tools", "matching", "cl.sh"), "/nologo", "/c", *flags, INCLUDE,
+    r = subprocess.run([os.path.join(ROOT, "tools", "matching", "cl.sh"), "/nologo", "/c", *resolve_flags(flags), INCLUDE,
                         "/Fo" + winpath(obj), winpath(os.path.join(ROOT, "match", src))],
                        capture_output=True, text=True)
     return key, (obj if r.returncode == 0 else None), (r.stdout + r.stderr)[-2000:]
