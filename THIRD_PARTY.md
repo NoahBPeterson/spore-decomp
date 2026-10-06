@@ -22,6 +22,8 @@ matched addresses are recorded in `symbols/lib_names.txt` and `work/oss/*_matche
 | libjpeg (IJG) | ijg.org | IJG |
 | Microsoft C runtime | MSVC 15.00 (VS2008 SP1) | Microsoft EULA |
 | EA EAText / EAIO | EAWebKit 1.21.00 | EA WebKit license (3-clause BSD-style) |
+| EA EAThread | github.com/BurnoutDecomp/EAThread (fork of electronicarts/EAThread) | EA BSD 3-clause |
+| RenderWare 4 / EATech reconstructions (rw::audio::core, rw::core, EA::Thread) | github.com/BurnoutDecomp/b5-decomp (`vendor/renderware`, `src/SDKs/EATech`) | EA-style BSD 3-clause, assumed (see below) |
 
 The EA EAText/EAIO sources used for the `lib_eatext` matches are obtained from the
 EAWebKit distribution and are built locally under `work/` (git-ignored); **no EA
@@ -32,6 +34,25 @@ compatible with combining it with GPL-3.0 code, but it is not itself GPL.
 A few game slices that call into EAText/EAIO/EA::Locale (s00880170, s00885ad0, s0088b250) compile
 against the same EAWebKit headers through local include links; `tools/third_party/eawebkit_include_links.sh`
 recreates them under `work/match/scratch_*_inc` once the support packages are unpacked in `work/ext/`.
+
+### EAThread and the BurnoutDecomp RenderWare/EATech reconstructions
+`lib_eathread` and `lib_b5rw` entries in `symbols/lib_names.txt` are functions that compile
+byte-exact with cl 15.00.30729 from:
+- **EAThread**, EA's open-source threading library (BSD 3-clause, copyright Electronic Arts), via the
+  BurnoutDecomp fork: `git clone https://github.com/BurnoutDecomp/EAThread work/ext/gh_EAThread`.
+- **BurnoutDecomp's reconstructions** of RenderWare 4 (mostly RenderWare Audio, `rw::audio::core`) and
+  of the EATech SDK, decompiled from Burnout Paradise: `git clone --filter=blob:none --sparse -b dev
+  https://github.com/BurnoutDecomp/b5-decomp work/ext/gh_b5`, then `git -C work/ext/gh_b5 sparse-checkout
+  set vendor/renderware src/SDKs/EATech src/vendor/renderware src/GameShared/GameClasses/Sound/Playback
+  vendor/PPMalloc` and `sparse-checkout add --skip-checks src/types.hpp`. The b5-decomp repository
+  carries no license notice; we treat it under the same EA-style BSD 3-clause terms as the EA libraries
+  above, on the assumption that the notice is simply missing.
+
+`tools/third_party/build_ea_libs.py {eathread,b5rw} --emit` builds both against the ~2010 EABase and
+coreallocator from the EAWebKit bundle (through `tools/third_party/compat`, our own shims for newer
+EABase macros and C++11 headers), applies a few VS2008 compatibility edits to copies under `work/oss`,
+matches the objects against the image (libmatch + libresolve), and appends the unique placements. No
+upstream source is committed; if you vendor it in-tree, keep the copyright and license notices.
 
 ## Binary-derived artifacts
 The binary, its PDBs, and the game data are © Electronic Arts / Maxis and are **not**
