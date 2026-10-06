@@ -1,0 +1,9 @@
+008fe380  83  Ratio::Set: 16-bit zero compare (xor edx,edx; cmp dx,ax) vs cl's test ax,ax
+008fe430  65  intrusive_hashtable::DoFindNode inlined wide-string equality unroll differs
+008fe490  99  intrusive_hashtable::find returns an 8-byte iterator (sret) with inlined FNV hash
+008fd790  594  HttpHandler::CalculateCacheTimeout: register allocation (hdrs/this) + string ctor schedule differ
+008fdb70  19  HttpHandler::CheckInit: vcall register choice and push edi placement
+008fdc00  123  HttpHandler::RemoveJobFor: register allocation and copy-loop addressing
+008fdca0  63  vector_map<uint,uint>::erase: callee-saved register order, eax-8 copy addressing
+008fdd10  645  HttpHandler::ProcessRequest: complete; scheduling and register allocation differ
+008fe0c0  557  HttpHandler IHandler::HandleMessage (IHandler subobject this): complete; allocation differs

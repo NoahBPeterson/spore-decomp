@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-006e4210  -  incomplete: SP::CaptureCubeMap is a 3988-byte /O2 /arch:SSE2 monolith whose vector/matrix math is fully inlined; only the exact signature/skeleton is provided

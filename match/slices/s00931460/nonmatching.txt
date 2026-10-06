@@ -1,0 +1,7 @@
+00931460 749 CheckPathName: fixed_string locals init/ordering, shared cleanup block and register allocation differ
+009318f0 317 FileStream::Open: register allocation of the access/share/attribute temporaries
+00931c10 1 GetPosition: tail layout 2 bytes
+00931e10 21 FileStream(const wchar_t*) ctor: -1/0 register assignment order
+00931fa0 14 File::Exists: original ends with mov eax,1 / xor eax,eax returns
+009322b0 14 Directory::Exists: original ends with mov eax,1 / xor eax,eax returns
+009322e0 108 Directory::Create: reserved 0x208 local buffer reproduced, register allocation (edi vs edx/esi) differs

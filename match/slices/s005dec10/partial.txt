@@ -1,6 +1,0 @@
-# va  diff-bytes  reason
-005dec10  -  cSPEditorUI dialog helper (608-byte); not decompiled
-005dee70  -  cSPEditorUI message handler (189-byte switch); not decompiled
-005def30  -  SP::cSPEditorUI::DoDialogEnd (1342-byte); not decompiled
-005df470  -  cSPEditorUI helper (1112-byte); not decompiled
-005df8f0  -  SP::cAppModeEditorBase::HandleFileDrop (565-byte); not decompiled

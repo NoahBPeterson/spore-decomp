@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0077a160  6826  complete C++ port of both SSE routines in the region (0x77a160 inverse*Binv upload, 0x77af70 inverse upload); original is two hand-scheduled inlined SSE matrix-inverse bodies, not reproducible byte-exact

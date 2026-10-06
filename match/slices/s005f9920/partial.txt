@@ -1,3 +1,0 @@
-005f9920  -  SP::Thumbnail::cImportExport::WriteAssetDataToImage: skeleton only (1918 bytes)
-005fa100  -  hashtable insert (FNV wchar hash + duplicate-key removal): skeleton only
-005fa290  -  SP::Thumbnail::cImportExport::RestoreImportTable: skeleton only (1589 bytes)

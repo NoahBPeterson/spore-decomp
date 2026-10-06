@@ -1,0 +1,2 @@
+# va  name  evidence
+0077a160  rw::graphics::RWShader_SetShConst_transformBlock  # caches inverse transform at 0x16f9120 using FUN_00778060; 6826-byte SSE

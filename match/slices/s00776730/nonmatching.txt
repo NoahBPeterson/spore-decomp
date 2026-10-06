@@ -1,0 +1,11 @@
+00776730 455 complete cShaderPreviewA ctor; base ctor/EH-frame shape differs (not inlined), needs /GS-
+00776920 277 complete cShaderPreviewB ctor; base ctor/EH-frame shape differs, needs /GS-
+00776a60 704 complete cShaderPreviewA::Draw; float/scheduling and frame layout differ
+00776e60 176 complete cShaderPreviewB::Draw; register allocation differs
+00776f40 226 complete cShaderPreviewA::Init; EH state for new/ctor differs
+00777060 150 complete cShaderPreviewA::Shutdown; vector clear idiom differs
+00777130 131 complete cShaderPreviewB::Init; call ordering/regalloc differs
+007771f0 79 complete cShaderPreviewB::Shutdown; clear idiom schedule differs
+00777290 232 complete cShaderBase::LoadTexture; refcount inline/EH shape differs
+007773c0 418 complete cShaderPreviewA::SetSlot; branch layout and EH differ
+007775a0 116 complete cShaderPreviewB::SetSlot; switch/jump table layout differs

@@ -1,1 +1,7 @@
-# none: each function is incomplete (see partial.txt)
+# va  diff-bytes  reason
+0082cd30 1663 ProcessStream: complete (header, bindings, hit masks, objects, property blocks, trailer); frame layout/register allocation and exit-path merging differ
+0082d480 291 ParseProp: complete; this/token register assignment (ebx/edi swapped) and spill order differ
+0082d7b0 250 ParseProps: complete (fixed_vector<Prop*,64> collect + link); cleanup blocks are merged where the original duplicates them
+0082d910 62 ParseObject: complete; obj pointer spill timing around vector push_back differs
+0082dae0 119 map<uint, 16-byte record>::operator[]: complete; value_type temporary zero-store scheduling and callee-saved register choice differ
+0082db80 15 map<Object*, int>::operator[]: complete; one zero-store of the temporary value_type is scheduled earlier than the original

@@ -1,0 +1,9 @@
+00a39ce0 SP::Audio::cEventModifier::LoadEventModifiersMap  # PDB candidate; reads event-modifier config keys into the uint map
+00a39f90 SP::Audio::cEventModifier::ReadTuningValues  # PDB candidate; compares key then forwards to the 6 primitives
+00a3a070 SP::Audio::cEventModifierPrimitiveMouthType::cEventModifierPrimitiveMouthType  # ctor with name "mouthtype" in Init
+00a3a5b0 SP::Audio::cEventModifierPrimitive::__scalar_deleting_dtor  # scalar deleting destructor of the primitive base
+00a3a670 SP::Audio::cEventModifierPrimitiveAlias::ModifyEvent  # vtable slot 3 of the alias primitive (0x14535fc)
+00a3a9a0 SP::Audio::cEventModifierPrimitiveAlias::AliasMap::operator[]  # lower_bound + insert of the uint->string map
+00a3aa80 SP::Audio::cEventModifierPrimitiveAlias::ReadTuningValues  # vtable slot 4 of the alias primitive (0x14535fc)
+00a3ac40 SP::Audio::cEventModifierPrimitiveFootTypeBase::ModifyEventWithFootName  # PDB candidate; vtable slot 7
+00a3aea0 SP::Audio::cEventModifierPrimitiveFootType::ModifyEvent  # PDB candidate; byte-exact

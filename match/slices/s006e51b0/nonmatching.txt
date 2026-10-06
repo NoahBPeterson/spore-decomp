@@ -1,1 +1,8 @@
 # va  diff-bytes  reason
+006e51b0  572  SP::SHFromCubeMap complete (6 face prefilter, renderer/model-manager calls, coefficient dump); stack frame/EH layout and fprintf arg proxy differ
+006e5520  98  SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ
+006e56b0  84  ShaderState dtor complete; original reloads vs[i]/ps[i] after the null test (cmp mem,0) where mine keeps it in a register
+006e5870  311  Float3 vector fill-insert complete (EASTL DoInsertValues); copy-helper arg scheduling differs
+006e5a30  170  uint8 fixed_vector fill-insert complete; register/branch layout differs
+006e5bd0  87  ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments
+006e5d50  523  ShaderState::Read complete (shader blob reader); EH frame and local slot layout differ

@@ -1,1 +1,3 @@
 # source  symbol  original VA  [cl flags override]
+slices/s0056b680/s0056b680.cpp  ?ExtractTraits@cEditorPartCount@@  0056b680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0056b680/s0056b680.cpp  ?DescribeTraits@cEditorPartCount@@  0056b7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

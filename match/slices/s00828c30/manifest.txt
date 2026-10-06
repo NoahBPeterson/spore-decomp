@@ -1,2 +1,8 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00828c30/s00828c30.cpp  ?Do@C25c@@QAEXH@Z  008290e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ??0cWrap@@QAE@PAVIProv@@PAVIRef@@@Z  00828d40  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ??_GcWrap@@UAEPAXI@Z  00828ea0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ?EndRender@@YAXPAVRenderContext@@PAVcWrap@@@Z  00828ef0  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ?GetRect@cPropLayout@@QAEPAURect@@PAU2@@Z  00829080  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ??0cPropLayout@@QAE@XZ  00829770  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast
+slices/s00828c30/s00828c30.cpp  ??_GcPropLayout@@UAEPAXI@Z  00829a70  /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast

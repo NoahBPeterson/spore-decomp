@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a77c80/s00a77c80.cpp  ?WaveNormal@@YGXPAMPBM@Z  00a77da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoBase@@QAE@XZ  00a77e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?ReadMapDescription@@YAXPAUIStream@@HPAUMapDescription@@@Z  00a77e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD0@@QAE@XZ  00a77ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??_GMapInfoMid@@UAEPAXI@Z  00a77f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD2@@QAE@XZ  00a77fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD3@@QAE@XZ  00a78000  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD4@@QAE@XZ  00a78050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD5@@QAE@XZ  00a780a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??_GMapInfoHolder@@UAEPAXI@Z  00a780f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??0MapInfoD6@@QAE@XZ  00a781a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?InitMapInfoTable@@YAXXZ  00a78560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?AddMapDescription@@YAXPAUMapDescription@@PAUIContext@@@Z  00a785e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?ReadMaterialParam@@YAXPAUIStream@@PAUMaterialParam@@@Z  00a78610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?resize@ParamVec@@QAEXI@Z  00a789e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?ReadMaterialDescription@@YAPAUMaterialDescription@@PAUIStream@@@Z  00a78b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?InitMaterialTable@@YAXXZ  00a78c10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ??_GMaterialDescription@@UAEPAXI@Z  00a78c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a77c80/s00a77c80.cpp  ?FastSine@@YAMM@Z  00a78c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

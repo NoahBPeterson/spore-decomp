@@ -1,5 +1,1 @@
 # va  diff-bytes  reason
-00483f10  1718  Big1: large ring transform; body omitted
-00484640  475   GetHandleRadiusBasedOnBoundingBox: bounding-box radius math not reproduced
-00484820  446   CalculateBallOffset: ball offset math not reproduced
-004849e0  1042  Big2: large ring update; body omitted

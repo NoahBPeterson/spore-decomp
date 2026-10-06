@@ -1,0 +1,16 @@
+009159b0 big2_getAtts  # expat xmltok_impl.c PREFIX(getAtts) (PDB name big2_getAtts)
+00915c50 big2_predefinedEntityName  # expat
+00915d70 big2_sameName  # expat
+00915e90 big2_nameMatchesAscii  # expat
+00915ed0 big2_nameLength  # expat (PDB name)
+00915f60 big2_skipS  # expat (PDB name)
+00915fb0 big2_updatePosition  # expat (PDB name)
+00916060 streqci  # expat xmltok.c
+009160a0 initUpdatePosition  # expat xmltok.c: tail-calls normal_updatePosition(&utf8_encoding)
+009160b0 toAscii  # expat xmltok.c
+00916100 isSpace  # expat xmltok.c
+00916140 parsePseudoAttribute  # expat xmltok.c
+00916460 doParseXmlDecl  # PDB name
+00916830 unknown_isName  # expat xmltok.c (namePages)
+00916890 unknown_isNmstrt  # expat xmltok.c (nmstrtPages)
+009168f0 unknown_isInvalid  # expat xmltok.c (checkCharRefNumber inlined)

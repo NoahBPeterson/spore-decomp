@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (flags /Od /Ob1 /arch:SSE /fp:fast /MD /Gy /TP /GS- ; no /EHsc, AutoRef params destroyed by callee)
+00498470 313 complete; /Od slot order (is15/b1 high bytes, outPos) and bool-to-uint8 arg shapes not fitted
+004986d0 38 complete; Bitset::test temp slot order (word/result swapped) and nesting of returns not fitted
+00498850 1655 complete; /Od slot order and picker->-after-args evaluation order not fitted
+00498f10 554 complete; /Od slot order not fitted (name hill-climb stalled at ~510)

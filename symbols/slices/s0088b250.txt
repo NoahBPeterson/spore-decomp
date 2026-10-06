@@ -1,0 +1,2 @@
+0088b850 EA::IO::IsFilePathSeparator  # EAWebKit EAFileDirectory, byte-exact
+0088b8a0 EA::Text::GetSystemFontDirectory  # EAWebKit EATextFontServer, byte-exact

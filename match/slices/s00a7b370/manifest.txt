@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a7b370/s00a7b370.cpp  ?ReadRecordA@@YAXPAUIStream@@PAE@Z  00a7b9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?ReadRecordB@@YAXPAUIStream@@PAE@Z  00a7ba10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?QueryTypeId@@YGHPAII@Z  00a7ba60  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?Release@RcObj@@QAEJXZ  00a7ba90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?ForwardOp12@@YG_NPAUISource@@PAUForwarder@@HI@Z  00a7bac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?ForwardOp13@@YG_NPAUForwarder@@PAUISource@@HI@Z  00a7bb00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ??0RecordReadObj@@QAE@XZ  00a7bb80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?GetResourceField@@YAHH@Z  00a7bca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?AllocNode1@@YGPAU?$HNode@UIRefT1@@@@PBU?$HPair@UIRefT1@@@@@Z  00a7bd20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?AllocNode2@@YGPAU?$HNode@UIRefT2@@@@PBU?$HPair@UIRefT2@@@@@Z  00a7be20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?Set1@Registry@@QAEXUHKey@@PAUIRefT1@@@Z  00a7c200  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?Set2@Registry@@QAEXUHKey@@PAUIRefT2@@@Z  00a7c240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?VanDerCorput@@YAMI@Z  00a7c280  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00a7b370/s00a7b370.cpp  ?RadicalInverse2@@YAMH@Z  00a7c300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

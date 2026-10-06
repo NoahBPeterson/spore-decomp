@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00886000 191 RBmpFont::GetGlyphIds (retail layout): complete; rbtree find inlined with different register allocation
+00886100 142 RBmpFont::IsCharSupported: complete; original keeps this in esi and lays the find block after the bit test

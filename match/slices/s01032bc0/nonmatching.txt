@@ -1,0 +1,1 @@
+01032bc0 4234 complete state machine (states 0/1/2, all QI paths, artifact switch); some out-param dataflow approximated (item/tool slots), stack layout and scheduling far off; flags /O2 /MD /Gy /EHsc /TP /arch:SSE

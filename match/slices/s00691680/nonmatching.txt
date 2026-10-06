@@ -1,2 +1,10 @@
+# va  diff-bytes  reason   (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
 00692080  8    complete; AddWaitingJob scoped-lock register swap (esi/edi)
 006920f0  8    complete; FlushWaiting scoped-lock register swap (esi/edi)
+00691680  -    complete CircularRef (bidirectional job-dependency search, fixed hash sets + stacks); frame slot offsets shifted 4, EH/dtor layout differs
+00691d30  -    complete RunJob; list-unlink/relink scheduling and edi/ebp register choice differ
+00691f60  -    complete RunUnderLock; register allocation (ebx/esi order) and ran flag spill differ
+00692150  39   complete WaitForJobUnderLock; only ebx/ebp register swap (this vs job)
+00692330  -    complete CancelJob; mutex pointer kept in ebp in original, reloaded from the lock object here
+00692400  28   complete cJob::Cancel; original copies self into ecx before loading mpManager
+00692430  -    complete DestroyJobThread; register allocation (ebx/ebp) and zeroing order differ

@@ -1,3 +1,4 @@
-007a3e60 SP::cStaticBuffer::Dispatch  # PDB candidate (caller-scored); sets shader/vertex state, jumps through rw graphics vtables
-007a3df0 cStaticBufferDraw::cStaticBufferDraw  # singleton ctor: stores this to [0x15ddc84], zeros fields, calls base ctor 0x6de2a0
-007a3de0 cStaticBufferDraw::sInstanceReset  # clears singleton pointer [0x15ddc84]
+007a3ce0 SP::cStaticBufferDraw::SetVertexFormat  # fills 12-entry format table via FUN_007c3af0 once, stores into this+0x44
+007a3de0 SP::cStaticBufferDraw::sInstanceReset  # clears singleton pointer
+007a3df0 SP::cStaticBufferDraw::cStaticBufferDraw  # singleton ctor
+007a3e60 SP::cStaticBuffer::Dispatch  # D3D9 draw loop over batches

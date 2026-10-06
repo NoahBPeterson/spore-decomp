@@ -1,14 +1,1 @@
-006b6920  188  cStringManager destructor body (base vtable, GetManager release, mStringList::DoFreeNodes): stubbed
-006b6a00  100  cStringManager string-list iteration helper: stubbed
-006b6a70  125  SP::cStringManager::~cStringManager (scalar): stubbed
-006b6af0  127  cStringManager helper: stubbed
-006b6b70  118  cStringManager helper: stubbed
-006b6bf0  273  cStringManager helper: stubbed
-006b6d10  273  App/SP::cStringManager::cStringManager: stubbed
-006b6e80  244  cStringManager helper: stubbed
-006b6f80  505  byte-vector grow helper (eastl vector<bool>-like): stubbed
-006b7180  409  byte-vector grow helper: stubbed
-006b7320  91   lower_bound lookup over vector<pair<uint,WinXHTML_*>>: stubbed
-006b7380  88   byte-vector resize/append: stubbed
-006b73e0  79   byte-vector resize/append: stubbed
-006b7430  1098 SP::cStringTableResourceFactory::ReadResource: stubbed
+# va  diff-bytes  reason

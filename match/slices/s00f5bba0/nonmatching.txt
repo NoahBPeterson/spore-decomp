@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f5bba0  3844  complete (same 4422 B size); EA::Swarm quad streamer, older layout; regalloc/x87-vs-SSE scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,1 +1,7 @@
 # source  symbol  va  [flags override]
+slices/s0069f950/s0069f950.cpp  ?GetPropertyAsVector2@SP@@  006a10c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069f950/s0069f950.cpp  ?GetPropertyAsVector3@SP@@  006a1110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069f950/s0069f950.cpp  ?GetPropertyAsVector4@SP@@  006a1160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069f950/s0069f950.cpp  ?GetPropertyArrayVector2@SP@@  006a0920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069f950/s0069f950.cpp  ?WriteSerializableObject@cICOMSerializer@@  006a05f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0069f950/s0069f950.cpp  ?ReadSerializableObject@cICOMSerializer@@  006a06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

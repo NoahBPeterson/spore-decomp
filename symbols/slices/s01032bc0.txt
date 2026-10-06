@@ -1,0 +1,1 @@
+01032bc0 SP::cSPSpaceGameBehaviorAbducted::Action  # PDB name via card

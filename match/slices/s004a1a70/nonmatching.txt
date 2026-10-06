@@ -1,0 +1,5 @@
+004a1a70  632  symmetry pin-block update: complete; /Od frame holes from inlined ARC/operator[] helpers not reproduced (frame 0x6c vs 0xb4)
+004a1e10  495  unsnap-replace block: complete; same /Od inline-hole frame layout difference
+004a2180  441  snap offset vec3 from merged bboxes: complete; /Od frame slot layout differs
+004a2350  3  DoSnapReplace: complete; only the /Od slot of 'changed' (-9 vs -0x15) and 'd' (-0x18 vs -0x14) differ
+004a25f0  746  orientation builder: complete; fabs is a CRT call (orig inline fld/fabs asm helper), dot-product sum order and frame layout differ

@@ -1,1 +1,7 @@
 # va  diff-bytes  reason
+00ef9180  15  ~cScenarioTutorials: member-dtor loop anchor register differs (esi=T+0x28 vs T+0x24)
+00ef9290  928  tutorial list builder: complete; register allocation (this in ebp vs edi) and temp slots differ
+00ef9880  112  step hash_set ctor (0x200 pool): complete; arg push scheduling and alloc init order differ
+00ef9950  127  step hash_set ctor (0x80 pool): complete; arg push scheduling and alloc init order differ
+00ef9af0  424  OnStepDone: complete; register allocation / iterator temp placement differ
+00ef9d90  2  cScenarioTutorials ctor: complete; default-arg empty temps at esp+0xe vs esp+0xf

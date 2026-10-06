@@ -1,0 +1,25 @@
+# source  symbol  original VA  [cl flags override]
+slices/s009568c0/s009568c0.cpp  ?InternalInit2DSystem@@YA_NPAUI2DSystem@@@Z  009568c0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00956a30@@YAXXZ  00956a30  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00956af0@@YIHPAX@Z  00956af0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?Dtor@UIRes@@QAEPAXE@Z  00956d60  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00956d90@@YAXXZ  00956d90  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FreeRenderableListChunks@@YAXPAURLChunk@@0@Z  00956e30  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FreeDisplayListEntry@@YAXPAH@Z  00956e90  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?AllocRenderableListChunk@@YAPAURLChunk@@XZ  00956ed0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00957080@@YAPBGPBG0PBI@Z  00957080  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?Contains@HitMask@@QAE_NPBH@Z  009570c0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?DoAllocateAndCopy@UShortVec@@QAEPAGIPBG0@Z  00957110  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?BuildFromMask@HitMask@@QAEXPBHHPBE@Z  00957230  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?BuildAssign@HitMask@@QAEXPBHPAUUShortVec@@@Z  009574c0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00957530@@YIXPAH@Z  00957530  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?Release@UIObj@@QAEHXZ  00957550  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?Cast@UIObj@@QAEPAXI@Z  00957570  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_009575f0@@YA_NPAUSerObj@@0PAUSerDesc@@@Z  009575f0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_009576f0@@YA_NPAUSerObj@@0PAUSerDesc@@@Z  009576f0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?SetPos@UIObj@@QAEXPAH@Z  00957790  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?SetRect@UIObj@@QAEXPAM@Z  009577f0  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00957850@@YIXPAH@Z  00957850  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?FUN_00957880@@YAPAPAXHH@Z  00957880  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?VirtualDtor@UIObj@@QAEPAXE@Z  00957940  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast
+slices/s009568c0/s009568c0.cpp  ?Ctor@UIObj@@QAEPAHPAH0PAMH@Z  00957980  /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast

@@ -1,1 +1,5 @@
 006035d0  50  SP::ShowSettingsWindow: complete; the nothrow-new null path (xor esi,esi) was folded differently so the byte image does not converge.
+00602940  1785  SP::cOnlineTab::InitUIState: complete (all branches/calls); /O2 scheduling and register assignment differ.
+006031c0  120  SP::cSPUISettings::AddTab: complete; tab ptr is reloaded from the stack in ours (address-taken param) vs held in esi.
+00603260  645  SP::cSPUISettings::Init: complete; scheduling/regalloc differ (float rotation compare, AddTab call sequence).
+00603650  169  SP::cGraphicsTab::init_profile_data: complete; register allocation differs (edi vs ebp zero reg, loop shape).

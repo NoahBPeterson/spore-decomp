@@ -1,0 +1,5 @@
+00937da0 VprintfCore8  # 2008 dev-build PDB (module: EAStdC EASprintf)
+00938400 Vsnprintf8  # 2008 dev-build PDB
+00938470 Sprintf8  # 2008 dev-build PDB
+009384e0 Snprintf8  # 2008 dev-build PDB
+00938500 ReadFormat16  # 2008 dev-build PDB

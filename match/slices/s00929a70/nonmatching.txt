@@ -1,0 +1,13 @@
+00929bf0  68   CallbackProcessor::Remove: complete; register allocation (mutex ptr in ebx vs edi) and loop rotation differ
+00929c60  7    Callback::Cancel: complete; mpObj load hoisted above the mbActive byte store
+00929d10  7    CallbackCancel (cdecl tail-call of Cancel): complete; same mpObj load order as Cancel
+00929d50  7    Callback::~Callback: complete; same mpObj load order as Cancel
+00929e00  53   Callback::Callback(): complete; original keeps the SetObj(0) release path (mpObj reload not folded)
+00929e70  98   Callback::Callback(7 args): complete; store schedule and register allocation differ
+0092a220  -    CallbackProcessor::Run: complete; register assignment (this in edi) and loop layout differ
+0092a4c0  103  CallbackProcessor::~CallbackProcessor: complete; register allocation and vector-erase loop shape differ
+0092a5d0  -    CallbackProcessor::Add: complete; register/spill schedule and loop shape differ
+0092a940  119  Clipboard::Clear: complete; loop/branch layout and register use differ
+0092aa20  123  Win32Clipboard::WriteText: complete; original keeps ok in a stack byte and shrink-wraps pushes
+0092aae0  49   DataText16 ctor: complete; store order (vtbl late) and esi/edi roles differ
+0092ab60  1    CreateTextData: complete; null-branch target one mov shorter

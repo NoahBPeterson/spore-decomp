@@ -1,0 +1,1 @@
+008b71c0 Type1BuildChar  # T2K Type 1 charstring interpreter (name from PDB/Ghidra)

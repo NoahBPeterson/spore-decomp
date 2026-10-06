@@ -1,1 +1,5 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason
+0079e950  2515  complete sphere/triangle clipper (all 4 mode cases + split cases); reg alloc and scheduling differ
+0079f4e0  186  complete vector<RefElem>::DoInsertValue; alloc-size branch shape and xadd operand order
+0079f640  143  complete vector<RefElem>::operator=; register allocation
+0079f7b0  229  complete release-and-clear; fixed-vector local layout/EH frame differs

@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009aa590/s009aa590.cpp  ?LowerBound@TreeP@@QAE?AUIter@@PBUS4@@@Z  009aa590
+slices/s009aa590/s009aa590.cpp  ??0Pair@@QAE@ABU0@@Z  009aa6c0
+slices/s009aa590/s009aa590.cpp  ?CopyBackward@@YAPAPAURefC@@PAPAU1@00@Z  009aa720
+slices/s009aa590/s009aa590.cpp  ??4S4Ref@@QAEAAU0@ABU0@@Z  009aa770
+slices/s009aa590/s009aa590.cpp  ??4S3Ref@@QAEAAU0@ABU0@@Z  009aa7c0
+slices/s009aa590/s009aa590.cpp  ?CountRefs@Mgr@@QAEHPAURefB@@@Z  009aa820
+slices/s009aa590/s009aa590.cpp  ??0Pair@@QAE@ABUS4@@ABUS3@@@Z  009aa9f0
+slices/s009aa590/s009aa590.cpp  ?AllocNodeQ@@YGPAUNodeQ@@PBUQVal@@@Z  009aaa50
+slices/s009aa590/s009aa590.cpp  ?Reserve@VecR@@QAEXI@Z  009aab80
+slices/s009aa590/s009aa590.cpp  ?InsertNode@TreeP@@QAE?AUIter@@PAUNode@@PBUPair@@_N@Z  009aac20
+slices/s009aa590/s009aa590.cpp  ?Erase@TreeP@@QAE?AUIter@@U2@@Z  009aadb0
+slices/s009aa590/s009aa590.cpp  ?DoNuke@TreeP@@QAEXPAUNode@@@Z  009aae10
+slices/s009aa590/s009aa590.cpp  ?Erase@TreeQ@@QAE?AUIter@@U2@@Z  009aae70
+slices/s009aa590/s009aa590.cpp  ?DoNuke@TreeQ@@QAEXPAUNode@@@Z  009aaed0
+slices/s009aa590/s009aa590.cpp  ?DoInsertValue@VecR@@QAEXPAPAXPBQAX@Z  009ab030
+slices/s009aa590/s009aa590.cpp  ?Erase2@TreeQ@@QAE?AUIter@@U2@@Z  009ab150
+slices/s009aa590/s009aa590.cpp  ?DoInsertValue@VecP@@QAEXPAPAURefC@@PBQAU2@@Z  009ab170
+slices/s009aa590/s009aa590.cpp  ?push_back@VecP@@QAEXPBQAURefC@@@Z  009ab3f0

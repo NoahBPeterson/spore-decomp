@@ -1,1 +1,9 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+00712e10 239 GetIDFromCompiledState: complete (find, id probe loop, insert); inlined hash lookup/EH shape differs
+00712f50 214 RegisterMaterial: complete; eastl::copy and AutoRef push shape not byte-exact
+00713070 1027 ReadExternalReferences: complete; EH/vec-ctor and inline AutoRef shapes differ
+00713560 419 cMaterialScriptState dtor: complete; member table frees in order, inlined helper shapes differ
+00713780 222 cMaterialManager dtor: complete; member teardown order reproduced, EH frame differs
+007138f0 260 cMaterialScriptState ctor: complete; store order/scheduling differs
+00713a80 265 cMaterialManager ctor: complete; store order differs
+00713cb0 201 CompileVertexAndPixelShaders: complete (D3DXCompileShader + Create*Shader); locals/arg order differ

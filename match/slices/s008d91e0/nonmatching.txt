@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+008d91e0 262 CompressRecordData: complete; cl hoists the Refpack vtable store/0xffff constant differently and orders flag stores differently
+008d94a0 40 CloseInternal: complete; structure matches but cl spills the result bool to the stack and keeps zero in ebx instead of bl/edi
+008d95f0 300 WriteIndexRecord: complete; original has a partial prologue (ebx pushed only inside the dirty-index branch, mov al,1 hoisted)
+008d9850 91 TryCompress: complete; register assignment size/pOutSize (ebx/ebp) swapped vs original
+008d98f0 8 RecMap::DoInsertValue: complete; original loads *out before ++mnSize
+008d9a10 900 CloseRecord: complete; large function, many scheduling and register differences
+008d9f80 229 DatabasePackedFile ctor: complete; dead stores (anchor zeros at 2f0..2f8) and string-empty constant schedule differ

@@ -1,0 +1,1 @@
+00ceb710 3544 complete Render(billboard quads); inlined fixed_vector/x87 normalize/scheduling differ from original

@@ -1,1 +1,1 @@
-0052b340 skin-paint build helper  # card disasm signature only (body not reconstructed)
+0052b340 SkinPaintBuildBoneWeights  # per-point bone-weight builder: 4 strongest influences, 20-byte rows, SkinBoneWeights smoothing passes

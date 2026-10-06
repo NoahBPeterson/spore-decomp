@@ -1,0 +1,9 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+005a9d40  1382  OnMouse: complete (plane/sphere ray paths), x87/sse scheduling and register allocation differ
+005aa420  25  ctor: derived vptr stores scheduled after member stores
+005aa490  30  vector copy: arg-slot/result handling and load order differ
+005aa5d0  243  ClampToPinned: loop reg alloc (ebx vs ebp) and flag test shr/test vs test imm
+005aa7a0  454  CalculateInflatedMesh: complete, x87/sse scheduling differs
+005aa9c0  264  GetPlacement: complete, arg copies differ
+005aab00  225  Setup: complete, dead stores/ordering differ
+005aac30  99  CellPinning ctor: vptr stores scheduled late

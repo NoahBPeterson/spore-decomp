@@ -1,0 +1,2 @@
+# va  diff  reason
+0053d2b0 2947 complete ctor + table builder; /Od frame (0x270 vs 0x1fc), temp slot layout and array-init shape not matched

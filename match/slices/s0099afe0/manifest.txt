@@ -1,3 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0099afe0/s0099afe0.cpp  ?f@S99b5a0@@QAEXHH@Z  0099b5a0
 slices/s0099afe0/s0099afe0.cpp  ?f@S99b5e0@@QAEXXZ  0099b5e0
+slices/s0099afe0/s0099afe0.cpp  ReadGraph@XmlReaderState  0099bac0  /O2 /MD /Gy /TP /GS-
+slices/s0099afe0/s0099afe0.cpp  XmlDeserializerRead  0099be60  /O2 /MD /Gy /TP /GS-

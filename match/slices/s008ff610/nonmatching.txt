@@ -1,0 +1,11 @@
+008ffdf0  122  vector_map operator[]: complete; register allocation differs
+00900070  699  ResourceProvider::Request: complete; frame size and temp reuse differ
+008ff610  434  CancelRequest(id): complete; frame/temp slot layout differs
+008ff7f0  250  CancelAll: complete; frame/temp slot layout differs
+008ff9b0  46  vector_map erase(key): complete; original does not jump-thread the end check
+008ffa20  7  string hashtable DoInsertValue: complete; epilogue pop/store scheduling differs (4 bytes)
+008ffb40  185  FinishRequest: complete; one extra frame dword and a spill differ
+008ffd50  140  SetFactory: complete; original inlines push_back/find on the mFactories subobject (this=ecx+0xc)
+008ffe80  61  ResourceProvider ctor: complete; member init store scheduling differs
+00900310  56  ResourceRequest ctor: complete; store scheduling differs
+00900370  149  sniff encoding from stream: complete; resize/insert shape differs

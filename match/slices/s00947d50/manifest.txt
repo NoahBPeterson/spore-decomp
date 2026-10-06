@@ -1,0 +1,12 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00947d50/s00947d50.cpp  ?CreateMemoryStream@INetFileCache@Internet@EA@@QAE_NPAPAUMemoryStream@@@Z  00947d50  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?RemoveCachedFile@INetFileCache@Internet@EA@@QAE_NPBUwstr16@@@Z  00947de0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?WriteDataToFile@INetFileCache@Internet@EA@@QAE_NPB_WPBXI@Z  00947e30  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?ReadDataFromFile@INetFileCache@Internet@EA@@QAE_NPB_WPAXI@Z  00947ec0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ??1Pair@Internet@EA@@QAE@XZ  00948020  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?FindOldest@INetFileCache@Internet@EA@@QAEPAUIter@23@PAU423@I@Z  009481b0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ??0Info@Internet@EA@@QAE@ABU012@@Z  00948230  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ??0Pair@Internet@EA@@QAE@ABUstr8@@ABUInfo@12@@Z  009483a0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?SetIniFileName@INetFileCache@Internet@EA@@QAE_NPB_W@Z  00948460  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ?PairConstructByValue@Internet@EA@@YA?AUPair@12@Ustr8@@UInfo@12@@Z  00948780  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s00947d50/s00947d50.cpp  ??0Pair@Internet@EA@@QAE@ABU012@@Z  00948800  /O2 /MD /Gy /TP /GS- /arch:SSE

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0044c690 3000  CalculateSnapAxes: complete (all paths and calls, 21 calls in order); /Od frame slot layout and Vector3 copy flavours (movss/fld/int) differ

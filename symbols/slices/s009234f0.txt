@@ -1,0 +1,40 @@
+009234f0 EA::Trace::Server::TraceVaList  # ITracer-side member (this = Server+4)
+00923630 EA::Trace::Server::GetLevelName  # PDB name (card)
+00923680 EA::Trace::Server::AsInterface  # PDB name; IUnknown-32 QueryInterface
+009236d0 EA::Trace::Server::Release  # PDB name; refcount at +0x34, deleting dtor at vtbl+8
+00923700 EA::Trace::LogReporter::FilterEnabled  # inferred (mFilter vtbl +0x14)
+00923740 EA::Trace::LogReporter::FilterEnabled2  # inferred (mFilter vtbl +0x10)
+009237c0 EA::Trace::Server::GetLogReporter  # PDB name (card); _stricmp on GetName
+00923840 EA::Trace::Server::EnumerateLogReporters  # PDB name (card)
+00923930 EA::Trace::Server::IsFiltered  # PDB name (card)
+00923990 EA::Trace::Server::Trace  # ITracer-side member (this = Server+4)
+00923a60 EA::Trace::LogReporter::ShowAlert  # inferred (mFormatter vtbl +0x10)
+00923aa0 EA::Trace::LogReporter::DebugPrint  # inferred (OutputDebugStringA)
+00923ac0 eastl::rbtree<...>::find  # PDB name (full template)
+00923b40 eastl::rbtree<...>::DoNukeSubtree  # PDB name (full template)
+00923b80 eastl::map<char const*,int,...>::erase  # PDB name (full template)
+00923bc0 EA::Trace::LogFilterGroupLevels::RemoveGroupLevel  # PDB name (card)
+00923c90 EA::Trace::LogFilterGroupLevels::IsFiltered  # PDB name (card)
+00923cf0 EA::Trace::LogReporter::~LogReporter  # PDB name (card)
+00923d40 EA::Trace::Server::Server  # PDB candidate (caller-scored); allocates HeapBuffer
+00923dc0 FUN_00923dc0  # iterator ctor helper (calls 0x91a530)
+00923de0 eastl::rbtree<...>::DoInsertValueImpl  # PDB name (full template)
+00923e70 EA::Trace::LogFormatterSimple::~LogFormatterSimple  # frees mLine then mName (vtbl 0x143dd5c)
+00923ed0 EA::Trace::LogFormatterFancy::~LogFormatterFancy  # frees mLine then mName (vtbl 0x143dd7c)
+00923f30 EA::Trace::LogFilterGroupLevels::LogFilterGroupLevels  # PDB name (card)
+00923f90 EA::Trace::LogFilterGroupLevels::~LogFilterGroupLevels  # PDB name (card)
+00923fe0 EA::Trace::LogFilterGroupLevels::SetName  # string at +8 (assign)
+00924010 EA::Trace::LogReporter::SetName  # string at +0x14; notifies filter/formatter
+00924060 eastl::rbtree<...>::DoInsertValue  # PDB name (full template)
+00924170 EA::Trace::LogReporter::LogReporter  # PDB name (card); string at +0x14
+009241f0 EA::Trace::Server::RemoveLogReporter  # PDB name (card)
+00924270 EA::Trace::LogReporter::SkipFilter1  # inferred (rec flags & 1, mFilter vtbl +0x14)
+009242b0 EA::Trace::LogReporter::SkipFilter2  # inferred (rec->[+0xc] flags & 1, mFilter vtbl +0x10)
+009242f0 EA::Trace::LogReporter::`scalar deleting destructor'  # vtbl AddRef slot + flags delete
+00924350 EA::Trace::LogReporter::SkipFilter3  # inferred (rec flags & 2)
+00924390 EA::Trace::LogReporter::SkipFilter4  # inferred (rec->[+0xc] flags & 2)
+009243d0 EA::Trace::LogFormatterSimple::LogFormatterSimple  # PDB name (card)
+00924450 EA::Trace::LogFormatterSimple::SetName  # PDB name (card)
+00924490 EA::Trace::LogFormatterSimple::Clone  # PDB name (card)
+009244d0 EA::Trace::LogFormatterFancy::LogFormatterFancy  # PDB name (card)
+00924570 EA::Trace::LogFormatterFancy::SetName  # PDB name (card)

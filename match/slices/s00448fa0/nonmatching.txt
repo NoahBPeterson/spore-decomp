@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00448fa0  849  complete; /Od frame layout (inline AutoRefCount operator-> temp slots, uninit copy pattern) not reproduced
+00449420  106  complete; /Od frame holes and the by-value Matrix3 dest-pointer temp slot not reproduced
+004494b0  714  complete; /Od temp slot layout (extra sret temps, ~0x88 bytes of frame) not reproduced
+00449d40  216  complete; /Od inline operator-> junk-copy temps (3 extra slots) not reproduced

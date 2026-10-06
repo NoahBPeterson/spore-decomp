@@ -1,0 +1,11 @@
+00a4c610 EA::Audio::Eapd::x_gui_setup  # PDB candidate; calls gfxstub/openpanel/savepanel setup
+00a4c710 EA::Audio::Eapd::glist_isselected  # inlined Pd glist_isselected loop over e_selection
+00a4ca40 EA::Audio::Eapd::canvas_setgraph  # PDB candidate; toggles gl_isgraph, Pd g_graph.c
+00a4cfb0 EA::Audio::Eapd::canvas_getlastxy  # Pd glist_getnextxy: canvas_last_glist coordinates
+00a4ce30 EA::Audio::Eapd::canvas_connect  # PDB candidate; Pd canvas_connect (sys_gui create line)
+00a4d070 EA::Audio::Eapd::g_editor_free  # frees copy_binbuf
+00a4d090 EA::Audio::Eapd::glist_deselect  # PDB candidate; Pd glist_deselect
+00a4d280 EA::Audio::Eapd::sys_nearestfontsize  # sys_fontspec table walk
+00a4d2b0 EA::Audio::Eapd::sys_fontwidth  # sys_fontspec table walk
+00a4d2e0 EA::Audio::Eapd::sys_fontheight  # sys_fontspec table walk
+00a4d310 EA::Audio::Eapd::sys_fontextra  # sys_fontspec table walk

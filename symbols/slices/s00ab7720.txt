@@ -1,0 +1,2 @@
+00ab7720 Trail_FillVertices  # quad-list ribbon builder (Lock/Unlock vcalls on sink); name is ours
+00ab86d0 Trail_FillStrip  # strip variant; second routine inside the 6899-byte card symbol

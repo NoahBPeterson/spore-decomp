@@ -1,0 +1,3 @@
+007c2ab0  970  complete DXT3->ARGB8888 decode (alpha nibbles + colour interp); different loop/register scheduling
+007c2ee0  1091  complete DXT5->ARGB8888 decode (interpolated alpha, 8/6-level); different loop/register scheduling
+007c3410  1058  complete WriteAnimatedCSAGIF (SEH, string, GIF writer, message post); frame/layout differences

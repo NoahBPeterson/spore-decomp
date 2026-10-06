@@ -5,3 +5,9 @@ slices/s004d34f0/s004d34f0.cpp  ?GetAt@TuningObj@@QAEII@Z    004d3cd0  /Od /Ob1 
 slices/s004d34f0/s004d34f0.cpp  ?GetActive@TuningObj@@QAEHXZ 004d3d40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s004d34f0/s004d34f0.cpp  ?GetBound@TuningObj@@QAEM_N@Z 004d3d70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s004d34f0/s004d34f0.cpp  ?SetBounds@TuningObj@@QAEXMM@Z 004d3da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?MapGetFieldC@@  004d3570  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?MapGetClamped@@  004d35d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?MapGetField4@@  004d3640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ?MapGetPtr@@  004d36a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ??0CreatureAbility@@  004d3760  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004d34f0/s004d34f0.cpp  ??1CreatureAbility@@  004d3b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

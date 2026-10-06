@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00945ed0  1310  WorkerThreadFunction: complete (all paths/calls); register allocation/spills differ (orig keeps this and mutex ptr on stack)
+00946850  2  GetPosition: complete; operand order of pos - end + begin differs by 2 bytes
+00946900  2  GetAvailable: complete; operand order of end - pos - begin differs by 2 bytes

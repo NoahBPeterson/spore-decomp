@@ -1,0 +1,21 @@
+011fab10 SetWorldViewProjT  # transposes 0x16f90d0 into a local, sets VS/PS const F=0x178/0x1b4
+011fab60 SetWorldViewProj  # sets VS/PS const from 0x16f90d0 directly
+011fab90 SetLightPos  # first light's +0x30 float4 to VS/PS const
+011fac30 SetLightColor  # first light's +0x20 float3 (+w=0) to VS/PS const
+011face0 SetLightDir2  # first light's +0x10 float4
+011fad70 SetLightRange  # float4 (0,0,0,light[1] or -1)
+011fae40 SetWorldMatrixRow3  # world matrix 0x16f8b10 row 3 (+0x30)
+011faea0 SetWorldMatrixRows23  # world matrix rows 2/3 (+0x20..0x3c)
+011faf00 SetMaterialColor  # VS/PS const from 0x16f6590
+011faf30 SetAmbientColor  # VS/PS const from 0x16f5c40
+011faf60 SetTime  # VS/PS const from 0x16f9168
+011faf90 SetPointSize  # (viewportWidth,0,0,1) * sqrt(2)
+011fb030 SetTimeSeconds  # QueryPerformanceCounter delta / frequency
+011fb0f0 SetTimeMod  # QPC delta mod frequency / frequency
+011fb1c0 ResolveTwo  # arena ObjectToId on +0xc,+0x10
+011fb1f0 UnresolveTwo  # arena IdToObject on +0xc,+0x10
+011fb220 NoOp  # 1-byte ret; registered as a default vertex-shader builder
+011fb230 CalcLightRange  # per-light-count range/LOD float4
+011fb310 Matrix44Invert  # 4x4 SSE matrix inverse (shufps)
+011fb750 Matrix33Mul  # in-place 3x3 row transform (shufps)
+011fb950 TransformPoint  # cached-inverse point transform (D3DXVec3Transform 0x120bb5c)

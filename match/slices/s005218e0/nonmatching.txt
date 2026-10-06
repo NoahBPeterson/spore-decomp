@@ -1,3 +1,7 @@
 # <va>  <diff-bytes>  <reason>
 00522720  110  /Od boolean-result local slot/width (int vs bool) differs; complete ShouldTick
 005227a0  81   /Od steal/release with AutoRefCount temporary; complete
+005218e0  221  /Od copy-assign complete; frame/temp layout differs
+005219d0  455  /Od message handler complete; temps/EASTL inline not exact
+00521ba0  457  /Od per-frame update complete; AutoRefCount temp layout differs
+00521d70  2474  nSPSkinner::cPaintSystem::HandleUpdateMessage complete; /Od layout differs

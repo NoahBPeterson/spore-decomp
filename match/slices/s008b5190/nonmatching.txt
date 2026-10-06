@@ -1,0 +1,1 @@
+008b5190 -1 complete source; callees use custom register conventions (esi/eax/edi=pfr) and inlined stream-read macros, not byte-exact

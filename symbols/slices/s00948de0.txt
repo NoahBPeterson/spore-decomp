@@ -1,0 +1,11 @@
+00948de0 eastl::hashtable<eastl::basic_string<char,eastl::allocator>,eastl::pair<eastl::basic_string<char,eastl::allocator> const,EA::Internet::INetFileCache::Info>,...>::DoFreeNodes  # card (real PDB name)
+00948e80 eastl::hashtable<...INetFileCache::Info...>::erase  # card (real PDB name)
+00948f00 EA::Internet::INetFileCache::ClearCacheMap  # card (real PDB name), byte-exact
+00948f80 EA::Internet::INetFileCache::IniFileCallbackFunction  # PDB candidate; "url,file,mime,size,timeout,created,lastUsed,timeTimeout" parser
+009492e0 EA::Internet::INetFileCache::DoPeriodicCacheMaintenance  # card
+00949530 EA::Internet::INetFileCache::RemoveCachedData  # card
+00949620 EA::Internet::INetFileCache::CommitNewCachedDataStream  # card
+009498c0 EA::Internet::INetFileCache::GetCachedDataStream  # card
+00949b00 EA::Internet::INetFileCache::ReadCacheIniFile  # card
+00949b80 EA::Internet::INetFileCache::INetFileCache  # card
+00949c10 EA::Internet::INetFileCache::~INetFileCache  # PDB candidate (dtor)

@@ -1,0 +1,5 @@
+00a1cf10 2 NodePool::Insert: complete, allocator-size load uses eax instead of ecx
+00a1d310 73 Sound::SetData: complete, switch/register/vcall schedule differs
+00a1c710 1183 Sound::TickInternal: complete; emitter vcall register pairing (eax/edx) and flag reload/CSE differ throughout
+00a1cf60 6 Sound::UpdatePropertiesFromPrimitives: complete; original frame has one extra 4-byte local
+00a1d080 42 Sound::CommitAllProperties: complete; trailing SetData arg loads are CSE'd in mine, reloaded in original

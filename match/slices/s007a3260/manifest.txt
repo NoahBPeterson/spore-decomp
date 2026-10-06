@@ -1,1 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007a3260/s007a3260.cpp  ?SetVertexFormat@cStaticBufferDraw@@QAEXH@Z  007a3ce0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a3260/s007a3260.cpp  ?sInstanceReset@cStaticBufferDraw@@SAXXZ  007a3de0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a3260/s007a3260.cpp  ??0cStaticBufferDraw@@QAE@XZ  007a3df0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s007a3260/s007a3260.cpp  ?FreeArrayBlock@@YIXPAPAX@Z  007a41a0  /O2 /MD /Gy /EHsc /TP /GS-

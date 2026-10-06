@@ -1,0 +1,10 @@
+00902460  129  TokenIOContext::ClearStrings: complete; hashtable re-init store schedule differs (InitEmpty field write order)
+00902640  317  sWriteString: complete; wide/narrow split and register schedule differ
+00902c20  203  sWriteToken: complete; switch tail / dup-call schedule differs (int vs bool return)
+00902fc0  185  sWriteTokenList: complete; header write schedule and marker compare differ
+009030b0  58   TokenIOContext ctor: complete; placement-new null check and allocator store schedule differ
+00902590  147  AddString: complete; hashtable find/insert temp (pair/iterator) stack layout and ebx/ebp roles differ
+009027b0  155  sReadString: complete; register roles (stream/out) and in-place widen loop schedule differ
+00902950  508  ReadToken: complete; register roles and local slot layout differ (alloc failure faithfully not checked)
+00902d40  186  ReadTokenList: complete; local slot order for header words differs
+009032b0  22   FreeTokenList (static helper): complete; owner arg passed on stack instead of ebx (stand-in caller added)

@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f2b3d0/s00f2b3d0.cpp  ?FUN_00f2b8d0@@YAXPAUIReader@@PAUIntVec@@@Z  00f2b8d0  /O2 /MD /Gy /TP
+slices/s00f2b3d0/s00f2b3d0.cpp  ?insert@IntSet@@QAEXPBH0@Z  00f2ba80  /O2 /MD /Gy /TP

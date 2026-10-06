@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00929a70/s00929a70.cpp  ?Write@MultiStreamWriter@IO@EA@@QAE_NPBXI@Z  00929a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Update@CallbackSystem@EA@@YA_NXZ  00929bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Shutdown@CallbackSystem@EA@@YA_NXZ  00929ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Set@Callback@CallbackSystem@EA@@QAE_NP6AXPAXHH@Z0PAUIRefCount@23@@Z  00929da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ??0CallbackProcessor@CallbackSystem@EA@@QAE@PAH0PAUStopwatch@2@_N@Z  00929f80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Init@CallbackSystem@EA@@YA_NXZ  0092a020  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Schedule@Callback@CallbackSystem@EA@@QAE_N_N@Z  0092a7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?SetProcessor@Callback@CallbackSystem@EA@@QAE_NH@Z  0092a7d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?Release@RefHolder@@QAEHXZ  0092a860  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ??0Clipboard@0EA@@QAE@XZ  0092a880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00929a70/s00929a70.cpp  ?GetClipboardData@Clipboard@1EA@@QAE_NIPAPAUIData@12@@Z  0092a8d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

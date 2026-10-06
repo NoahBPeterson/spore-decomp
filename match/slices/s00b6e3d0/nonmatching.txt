@@ -1,0 +1,12 @@
+00b6e3d0 95 FindNearestColorKey: original copies the Vec3 and distance through stack temps; x87 sqrt path not reproduced
+00b6e4b0 274 AdjustColor: gray-nudge + HSL clamp; min/max helper spills and float op order differ
+00b6e7b0 279 ColorTranslator::Translate: hash switch complete; switch tail-merging/find-call sharing differs
+00b6eb30 66 ColorMap::DoInsertValueImpl: complete; stack/arg shape of value copy differs
+00b6ec50 84 LoadColorNames: complete; string temp / cString init scheduling differs
+00b6ee40 60 ColorMap::operator[]: complete; value_type temp copies and by-value iterator arg shape differ
+00b6eee0 121 InitColorManager: complete; property array/refptr shapes differ
+00b6f0d0 95 GetColorARGB: complete; original float->int uses cvttss2si (not reproducible with /arch:SSE, flags issue)
+00b6f180 83 MarkNearestColors: complete; loop/scheduling differs
+00b6f280 18 cColorSet ctor: complete; zero-init store order of embedded map differs
+00b6f310 93 cColorSet::GetARGB: complete; cvttss2si (see GetColorARGB)
+00b6f380 108 cColorSet::LoadNames: complete; scheduling differs

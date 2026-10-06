@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009234f0/s009234f0.cpp  ?GetLevelName@Server@Trace@EA@@QAEPBDH@Z  00923630  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?ShowAlert@LogReporter@Trace@EA@@QAEXPAX@Z  00923a60  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?DebugPrint@LogReporter@Trace@EA@@QAEHPAX@Z  00923aa0  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?DoNukeSubtree@RBTreeMap@Trace@EA@@QAEXPAURBNode@23@@Z  00923b40  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ??1LogReporter@Trace@EA@@UAE@XZ  00923cf0  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ??1LogFormatterSimple@Trace@EA@@UAE@XZ  00923e70  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ??1LogFormatterFancy@Trace@EA@@UAE@XZ  00923ed0  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?SetName@LogFilterGroupLevels@Trace@EA@@QAEXPBD@Z  00923fe0  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ??_GLogReporter@Trace@EA@@UAEPAXI@Z  009242f0  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?SetName@LogFormatterSimple@Trace@EA@@QAEXPBD@Z  00924450  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?Clone@LogFormatterSimple@Trace@EA@@QAEPAXXZ  00924490  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?SetName@LogFormatterFancy@Trace@EA@@QAEXPBD@Z  00924570  /O2 /MD /Gy /TP

@@ -1,3 +1,0 @@
-005d36e0  2087  limb/geometry rebuild not reconstructed (skeleton)
-005d3f10  1216  limb/geometry rebuild not reconstructed (skeleton)
-005d43d0  607   limb/geometry helper not reconstructed (skeleton)

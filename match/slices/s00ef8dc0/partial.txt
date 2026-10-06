@@ -1,11 +1,1 @@
-# va  diff-bytes  reason
-00ef8dc0  -   partial: UI layout dispatcher skeleton
-00ef8ed0  -   partial: UI layout dispatcher skeleton
-00ef9000  -   partial: editor layout rebuild skeleton
-00ef9180  -   partial: ~cScenarioTutorials; vtable stores + step-hashtable teardown + RemoveHandler approximated
-00ef9290  -   partial: huge (1438 B) window/key dispatcher; skeleton only
-00ef9880  -   partial: step-hashtable ctor; fixed_pool_base::init/type ctor/zerofill only sketched
-00ef9950  -   partial: step-hashtable ctor (0x7c pool); fixed_pool/type ctor only sketched
-00ef9af0  -   partial: UI update skeleton
-00ef9d00  -   partial: UI helper skeleton
-00ef9d90  -   partial: cScenarioTutorials ctor; Stopwatch/LimitStopwatch and fixed-pool ctors stubbed
+# va  diff-bytes  reason (none)

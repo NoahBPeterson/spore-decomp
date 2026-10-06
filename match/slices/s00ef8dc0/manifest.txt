@@ -1,2 +1,6 @@
 # source  symbol  original VA  [flags override]
-slices/s00ef8dc0/s00ef8dc0.cpp  ?FUN_00ef9830@@YAXPAXHD@Z  00ef9830
+slices/s00ef8dc0/s00ef8dc0.cpp  ?SavePrefs@cScenarioTutorials@@QAEXXZ  00ef8dc0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00ef8dc0/s00ef8dc0.cpp  ?FUN_00ef8ed0@@YGX_N@Z  00ef8ed0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00ef8dc0/s00ef8dc0.cpp  ?Rebuild@cTutorialPage@@QAEXXZ  00ef9000  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00ef8dc0/s00ef8dc0.cpp  ?FUN_00ef9830@@YAXPAXHD@Z  00ef9830  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00ef8dc0/s00ef8dc0.cpp  ?CreateLayout@cTutorialPage@@QAEXXZ  00ef9d00  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

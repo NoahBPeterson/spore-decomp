@@ -1,0 +1,11 @@
+# source  symbol  original VA  [flags override]
+slices/s00958a70/s00958a70.cpp  ?HitTest@WM@@ 00958a70    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?MarkTree@WM@@ 00958b60    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?DestroyDisplayList@WM@@ 00958bb0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?IsFocusWindow@WM@@ 00958c60    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?EraseRange@MsgList@@ 00958ca0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?FindWindowAt@WM@@ 00959230    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?LinkTickable@WM@@ 009592a0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?DispatchTree@WM@@ 009592e0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?DispatchUp@WM@@ 009593d0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00958a70/s00958a70.cpp  ?InsertRange@MsgList@@ 009595e0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

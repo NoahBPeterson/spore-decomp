@@ -1,1 +1,4 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00825930  1419  AddSpinnerRow complete; call/vslot sequence identical to original, differs in reg alloc (edx/eax order for vcalls), frame layout (pid in arg slot) and AddChild codegen; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00825fc0  556  AddTextEditRowA complete; same call sequence, reg-alloc/CSE of &mTextEdit and id caching in ebp differ; same flags
+00826290  596  AddTextEditRowB complete; same call sequence, reg-alloc differs (edi/ebx swap, size() form); same flags

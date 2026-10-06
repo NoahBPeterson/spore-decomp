@@ -1,4 +1,1 @@
-006a9470  794  cListPropsCheat::Execute: property-list walk/output pipeline stubbed
-006a9790  964  cPropCheat::Execute: property resolve/print pipeline stubbed
-006a9b60  1377 cPropertyManager::Init: cheat/list registration stubbed
-006aa130  689  cPropertyManager::WriteResource: serialisation stubbed
+# va  diff-bytes  reason

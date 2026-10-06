@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a158e0/s00a158e0.cpp  ??0EffBase@@QAE@XZ 00a15c20    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?ConstructEffBase@@YAXPAUEffBase@@H@Z 00a15c80    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?InitMeterNode@@YA_NPAD@Z 00a15cd0    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ??_GFixedOwner@@UAEPAXI@Z 00a15f70    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?Push@CmdRing@@QAEXII@Z 00a16170    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?ClearState@Fx@@QAEXXZ 00a161c0    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?RemoveTimerIfSet@Fx@@QAEXXZ 00a16270    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?ResetMeter@@YAXPAD@Z 00a16290    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?ClearOwnerCallback@@YAHPAD@Z 00a16320    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?CopyParams@Fx@@QAEXXZ 00a16340    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ??0PlayerNode@@QAE@XZ 00a164d0    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?Queue@QNode@@QAEXHH@Z 00a16520    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?RunMeter@@YAHPADPAUMixCtx@@@Z 00a16820    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a158e0/s00a158e0.cpp  ?ConstructPlayerNode@@YAXPAUPlayerNode@@H@Z 00a16870    /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

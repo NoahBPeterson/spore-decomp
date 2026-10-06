@@ -2,3 +2,5 @@
 slices/s0057e480/s0057e480.cpp  ?Init@cUnkEd80@@QAEPAXPAX0@Z  0057ed80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-
 slices/s0057e480/s0057e480.cpp  ?trim@?$basic_string@_WUallocator@eastl@@@eastl@@QAEXXZ  0057eda0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-
 slices/s0057e480/s0057e480.cpp  ?EraseAfter@cVec16@@QAEPAXPAX@Z  0057edf0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /GS-
+slices/s0057e480/s0057e480.cpp  ?SetSelectedBlock@cEditorBase@@QAEXPAUBlock@@I@Z  0057e790  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s0057e480/s0057e480.cpp  ?BakerInit@cEditorBase@@QAEXXZ  0057ebf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

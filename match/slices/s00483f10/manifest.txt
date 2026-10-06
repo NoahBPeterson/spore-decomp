@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s00483f10/s00483f10.cpp  ?GetPropListKey@RotationRing@@QAEPAUVector3@@PAU2@@Z  00484e00  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00483f10/s00483f10.cpp  ?GetHandleRadiusBasedOnBoundingBox@cSPEditorHandleRotationRing@SP@@QAEMXZ  00484640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00483f10/s00483f10.cpp  ?CalculateBallOffset@cSPEditorHandleRotationRing@SP@@QAEXXZ  00484820  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

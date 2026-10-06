@@ -1,3 +1,0 @@
-004a4c70  -  skeleton: struct zero-init constructor
-004a3dc0  -  skeleton: large pick/update function
-004a4840  -  skeleton: SP::EditorUtils::PickBlocks

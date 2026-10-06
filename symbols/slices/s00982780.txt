@@ -1,0 +1,1 @@
+00982780 EA::UTFWinControls::ScrollbarDrawable::Paint  # PDB candidate, mComponentImage[7] at +0x10 indexed by part

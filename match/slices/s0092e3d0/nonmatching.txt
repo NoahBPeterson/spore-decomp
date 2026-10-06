@@ -1,0 +1,10 @@
+0092e440 24 tm pointer passed as 'this': original reloads ecx from the stack arg (register allocation)
+0092e470 51 DateTime::Add: same logic, callee-saved register choice (esi vs edi) differs
+0092e5a0 131 GetLocalTimeBias: calls SetDate with garbage this (ecx), block order/regalloc differs
+0092e680 52 FILETIME epoch: SYSTEMTIME zero-init stores scheduled differently
+0092e6e0 6 FileTimeToUnix: arg register loads swapped (ecx/edx)
+0092ea90 373 basic_string::insert(p,n,c): register allocation differs
+0092ec60 149 deque::DoReallocPtrArray: register allocation / spill order
+0092ed90 96 Entry copy ctor: one src spill ordering
+0092ef40 600 DirectoryIterator::Read: back() call sequence and strlen inline differ
+0092ea70 19 deque::back: original loads cur/begin/array-ptr before compare

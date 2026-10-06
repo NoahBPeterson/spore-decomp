@@ -1,3 +1,6 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s005570d0/s005570d0.cpp  ?GetResType@c557c90@W1G2_57@SP@@QAEIH@Z  00557c90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s005570d0/s005570d0.cpp  ?GetResType@cContentValidationSummarizer@SP@@QAEIH@Z  00558080  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s005570d0/s005570d0.cpp  ??0c557c90@W1G2_57@SP@@QAE@XZ  005570d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s005570d0/s005570d0.cpp  ?IsAllowed@c557c90@W1G2_57@SP@@QAE_NABUResourceKey@@H@Z  00557cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s005570d0/s005570d0.cpp  ??0cContentValidationSummarizer@SP@@QAE@XZ  00557fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

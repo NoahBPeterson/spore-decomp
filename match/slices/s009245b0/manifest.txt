@@ -1,6 +1,11 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s009245b0/s009245b0.cpp  ?RemoveAllLogReporters@Server@Trace@EA@@QAEXXZ  00924a50
-slices/s009245b0/s009245b0.cpp  ?MessageBoxThreadStart@Trace@EA@@YGHPAI@Z  00925000
-slices/s009245b0/s009245b0.cpp  ?UpdateTracerV@TraceHelperTable@Trace@EA@@QAEXXZ  009250b0
-slices/s009245b0/s009245b0.cpp  ?SetTraceDialogEnabled@Trace@EA@@YAXD@Z  009250c0
-slices/s009245b0/s009245b0.cpp  ?CreateEnabledValue@Trace@EA@@YAPAXXZ  00925730
+slices/s009245b0/s009245b0.cpp  ?RemoveAllLogReporters@Server@Trace@EA@@QAEXXZ  00924a50  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?MessageBoxThreadStart@Trace@EA@@YGHPAI@Z  00925000  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?UpdateTracerV@TraceHelperTable@Trace@EA@@QAEXXZ  009250b0  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?SetTraceDialogEnabled@Trace@EA@@YAXD@Z  009250c0  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?CreateEnabledValue@Trace@EA@@YAPAXXZ  00925730  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?Init@Server@Trace@EA@@QAEXXZ  00924790  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?SetOutputLevel@Server@Trace@EA@@QAE_NPBD0H@Z  00924a80  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?ReserveHelper@TraceHelperTable@Trace@EA@@QAEPAUTraceHelper@23@IPBDHPBH@Z  00925420  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ??_GTraceHelperTable@Trace@EA@@UAEPAXI@Z  009255a0  /O2 /MD /Gy /TP /GS-
+slices/s009245b0/s009245b0.cpp  ?UpdateTracer@TraceHelperTable@Trace@EA@@QAEXPAUITracer@23@@Z  009251d0  /O2 /MD /Gy /TP /GS-

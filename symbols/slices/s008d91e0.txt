@@ -1,0 +1,9 @@
+008d91e0 EA::ResourceMan::DatabasePackedFile::CompressRecordData  # calls CompressionRefpack::CompressData, allocs "Resource/PackedRecord"
+008d9320 EA::ResourceMan::DatabasePackedFile::ReadCompressed  # alloc "Resource/Raw", ReadAt, Decompress
+008d9560 EA::ResourceMan::DatabasePackedFile::GetOpenCount  # PDB name via card
+008d95f0 EA::ResourceMan::DatabasePackedFile::WriteIndexRecord  # PDB name via card
+008d9770 EA::ResourceMan::DatabasePackedFile::InitializeHoleTable  # PDB name via card
+008d9850 EA::ResourceMan::DatabasePackedFile::TryCompress  # compress and keep only if ratio < mfMinRatioToUseCompression
+008d99c0 EA::ResourceMan::DatabasePackedFile::SetLocation  # PDB name via card
+008d9a10 EA::ResourceMan::DatabasePackedFile::CloseRecord  # PDB candidate name
+008d9f80 EA::ResourceMan::DatabasePackedFile::DatabasePackedFile  # ctor, PDB name via card

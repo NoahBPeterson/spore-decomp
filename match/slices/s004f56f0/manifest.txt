@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s004f56f0/s004f56f0.cpp  ?FUN_004f56f0@@YA_N_W@Z    004f56f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s004f56f0/s004f56f0.cpp  ?Compare@Obj@@QAE_NPBUKey@@@Z  004f64d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004f56f0/s004f56f0.cpp  ?push_back@wstring@@QAEX_W@Z  004f6510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

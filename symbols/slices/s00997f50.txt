@@ -1,0 +1,13 @@
+00997f50 EA::UTFWinTools::HitMaskResource::HitMaskResource  # 2008 dev-PDB name
+00998050 EA::UTFWinTools::HitMaskFactory::CreateResource  # 2008 dev-PDB name
+009980d0 hash bit-smear finalizer  # (MurmurHash3 fmix32 shape)
+00998100 EA::UTFWinTools::RWTextureFactory interface query  # AsInterface-like
+00998140 FUN_00998140  # resource release helper
+00998170 EA::UTFWinTools::RWTextureFactory::GetSupportedTypes  # 2008 dev-PDB name
+009981b0 EA::UTFWinTools::RWTextureFactory::CanConvert  # 2008 dev-PDB name
+00998250 EA::UTFWinTools::RWTextureResource::InitTextureResources  # PDB candidate caller-scored
+009983d0 EA::UTFWinTools::RWTextureFactory::ReadResource  # 2008 dev-PDB name
+00998530 EA::UTFWinTools::RWTextureFactory::WriteResource  # 2008 dev-PDB name
+00998770 EA::UTFWinTools::RWTextureFactory::CreateResource  # 2008 dev-PDB name
+00999000 EA::UTFWinTools::SerCollection::RemoveAll  # 2008 dev-PDB name
+00999080 EA::UTFWinTools::SerCollection::SerCollection  # 2008 dev-PDB name

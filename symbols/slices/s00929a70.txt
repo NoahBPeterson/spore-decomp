@@ -1,0 +1,24 @@
+00929a70 EA::IO::MultiStreamWriter::Write  # splits writes across 1 GiB streams (name inferred)
+00929bd0 EA::CallbackSystem::Update  # calls vtbl slot 1 (Run) of the polled processor
+00929bf0 EA::CallbackSystem::CallbackProcessor::Remove  # nulls the matching entry's Callback* under the mutex
+00929c60 EA::CallbackSystem::Callback::Cancel  # remove from its processor, drop refcounted object
+00929ca0 EA::CallbackSystem::Shutdown  # deletes both processors and the stopwatch
+00929d10 EA::CallbackSystem::CallbackCancel  # default callback fn: cancels itself
+00929d50 EA::CallbackSystem::Callback::~Callback  # vtable 0x13fcab8
+00929da0 EA::CallbackSystem::Callback::Set  # fn/ctx/refcounted object
+00929e00 EA::CallbackSystem::Callback::Callback  # period 1000, jitter 500
+00929e70 EA::CallbackSystem::Callback::Callback(7 args)  # fn,ctx,period,jitter,proc,timeType,obj
+00929f80 EA::CallbackSystem::CallbackProcessor::CallbackProcessor  # PDB-derived name from card
+0092a020 EA::CallbackSystem::Init  # creates Stopwatch + 2 processors (threaded / polled)
+0092a220 EA::CallbackSystem::CallbackProcessor::Run  # IRunnable::Run, vtbl slot 1
+0092a4c0 EA::CallbackSystem::CallbackProcessor::~CallbackProcessor  # sets base vtbl 0x13fc474 last
+0092a5d0 EA::CallbackSystem::CallbackProcessor::Add  # schedules a callback, starts thread "CallbackProcessor"
+0092a7a0 EA::CallbackSystem::Callback::Schedule  # Add to processor if not active
+0092a7d0 EA::CallbackSystem::Callback::SetProcessor  # re-schedule on another processor
+0092a860 RefHolder::Release  # delete this when refcount would reach 0 (vtbl slot 0 with 1)
+0092a880 EA::Clipboard::Clipboard::Clipboard  # PDB: Clipboard 0x150 bytes
+0092a8d0 EA::Clipboard::Clipboard::GetClipboardData  # PDB
+0092a940 EA::Clipboard::Clipboard::Clear  # PDB
+0092aa20 EA::Clipboard::Win32Clipboard::WriteText  # CF_UNICODETEXT (0xd) via GlobalAlloc
+0092aae0 EA::Clipboard::DataText16::DataText16  # type 3, vtbl 0x143e3bc
+0092ab60 EA::Clipboard::CreateTextData  # pool alloc + AddRef

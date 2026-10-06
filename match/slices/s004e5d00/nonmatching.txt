@@ -1,3 +1,6 @@
 # va  diff-bytes  reason
 004e6bc0  7  RefVec build+dispatch: complete; only /Od vec slot (-0xc vs -0x14) and reserved frame holes differ
 004e6c10  7  RefVec guarded build+dispatch: complete; same /Od frame/slot mismatch
+004e5d00  2281  BuildVerbCapabilities: complete (both verb icons, 8-way modifier-flag capability chain); only /Od frame slot order/holes differ
+004e6720  426  Collect6720: complete (dedup vector, usable-verb filter, ability ids, property list -> AddVerbIcons, final capabilities); /Od slot order and find() temps differ
+004e6a10  247  UpdateEntry6a10: complete (0x1d8-byte entry loop, dedup vector, alt index); /Od slot order and holes differ

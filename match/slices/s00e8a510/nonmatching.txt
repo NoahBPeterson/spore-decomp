@@ -1,0 +1,1 @@
+00e8a510 4747 complete behaviorally (all paths/calls); 4076 vs 4747 bytes, tribe-link chains and effect-msg blocks collapsed into helpers, raw vtable-slot calls; not byte-exact

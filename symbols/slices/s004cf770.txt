@@ -1,0 +1,6 @@
+004cf770 eastl::vector<Rec14>::DoInsertValues  # EASTL insert(pos,n,value), 20-byte element, growth via DoAllocate
+004cfc00 eastl::vector<Vec4>::DoInsertValues  # same, 16-byte element
+004d0080 eastl::vector<Word32,fixed_vector_allocator>::DoInsertValues  # same, 4-byte element, fixed allocator free check
+004d0430 eastl::hashtable::DoFreeNodes  # frees every bucket chain, nulls the bucket
+004d04a0 eastl::allocate_memory<fixed_hashtable_allocator>  # alignment<=8 branch both call allocate()
+004d04f0 eastl::vector<Word32>::DoAssignFromIterator<const Word32*>  # three-way assign

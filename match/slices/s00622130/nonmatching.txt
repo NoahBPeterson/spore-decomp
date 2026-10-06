@@ -1,1 +1,2 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp=fast)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00622130  3216  SP::cXHTMLControlAppearance::Init: complete (4 StdDrawable sets + 2 ScrollbarDrawables, all 43 images/3 hitmasks, vector appends); register allocation (ebx/esi/edi roles) and one extra spill slot differ.

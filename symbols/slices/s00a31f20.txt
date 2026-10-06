@@ -1,0 +1,2 @@
+00a31f20 EA::Audio::System::DoCommandMainThread  # card PDB candidate; switch on Command::Type with three message-building cases
+00a32ea0 EA::Audio::System::SetOutputProperty  # card PDB candidate (caller-single)

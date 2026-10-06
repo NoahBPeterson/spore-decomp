@@ -1,0 +1,1 @@
+00af6bf0 3676 complete source (4KB SSE path tracer); /O2 x87/SSE mix and frame layout differ, not chased

@@ -1,0 +1,3 @@
+009ffa00 many LoadGoalChildren: complete; register allocation/loop shape differ
+00a00490 82 AnimGoal::Reset: complete; compiler groups the 8 child-slot stores differently
+00a006f0 many SelectPending: complete; goal pointer/register scheduling and loop shape differ

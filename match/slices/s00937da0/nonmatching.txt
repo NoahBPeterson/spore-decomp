@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00937da0  n/a  complete: full control flow of VprintfCore8 from asm; custom EAX/stack conventions and goto layout differ
+00938500  n/a  complete: ReadFormat16 transcribed from state machine; register convention (eax/edx) differs
+00938980  n/a  complete: WriteInteger16; register convention (eax=value, edi=fd) differs

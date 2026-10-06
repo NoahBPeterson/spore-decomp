@@ -1,0 +1,13 @@
+0092e440 SetDateFromTm  # forwards tm fields to DateTime::SetDate
+0092e470 EA::DateTime::DateTime::Add  # switch on unit (year/month/week/day/hour/min/sec)
+0092e5a0 GetLocalTimeBias  # localtime vs gmtime hour difference * 3600
+0092e680 GetFileTimeEpoch  # SystemTimeToFileTime(1970-01-01)/1e7
+0092e6e0 FileTimeToUnix  # FILETIME/1e7 minus lazily-initialised 1970 epoch
+0092e8e0 EA::IO::EntryFindNext  # FindNextFileW
+0092e9b0 EA::IO::EntryFindFinish  # FindClose + delete if owned
+0092e9f0 eastl::DequeIterator<Entry>::operator+=  # subarray size 4 (0xc0/0x30)
+0092ea70 eastl::deque<EA::IO::DirectoryIterator::Entry>::back  # PDB candidate
+0092ea90 eastl::basic_string<wchar_t>::insert  # (p, n, c)
+0092ec60 eastl::deque<Entry>::DoReallocPtrArray  # EASTL source shape
+0092ed90 EA::IO::DirectoryIterator::Entry::Entry  # copy ctor
+0092ef40 EA::IO::DirectoryIterator::Read  # PDB candidate

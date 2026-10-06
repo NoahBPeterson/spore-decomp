@@ -1,1 +1,9 @@
-# no byte-exact functions in this slice (see partial.txt)
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b318d0/s00b318d0.cpp  ?RegisterSetTimeCommand@@YAXXZ  00b31bc0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?GetPauseGateCount@cGameTimeManager@@QAEHI@Z  00b320d0  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?ClearPauseGates@cGameTimeManager@@QAEXXZ  00b32110  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ??_GcGameTimeManager@@UAEPAXI@Z  00b32140  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?IncPauseGate@cGameTimeManager@@QAEHI@Z  00b32220  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?DecPauseGate@cGameTimeManager@@QAEHI@Z  00b32250  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?TogglePauseGate@cGameTimeManager@@QAE_NI@Z  00b32280  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowSetting@cGameTimeManager@@QAEXH@Z  00b32450  /O2 /MD /Gy /TP /arch:SSE /GS-

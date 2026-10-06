@@ -1,0 +1,6 @@
+0089b7e0 EA::Text::Typesetter::AdjustWhitespaceEmbedding  # PDB name
+0089b900 EA::Text::Typesetter::Justify  # PDB name
+0089bf70 EA::Text::LineLayout::LineLayout  # PDB name (copy ctor)
+0089c110 EA::Text::LineLayout::GetGlyphSelection  # PDB name
+0089c2d0 EA::Text::LineLayout::GetGlyphDecoration  # PDB candidate (caller-single)
+0089c540 EA::Text::Typesetter::~Typesetter  # PDB name

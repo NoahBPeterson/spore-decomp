@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00844270/s00844270.cpp  ??1MacroPair@@QAE@XZ  00844680  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00844270/s00844270.cpp  ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  00844700  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00844270/s00844270.cpp  ??1cDefineCommand@  00844e50  /O2 /MD /Gy /EHsc /TP /GS-

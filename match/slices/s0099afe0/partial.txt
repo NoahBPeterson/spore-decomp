@@ -1,9 +1,0 @@
-0099afe0 approximate recursive LazyReference/object-map fixup walk
-0099b110 approximate CreateLazyReference pool allocation
-0099b1f0 skeleton ReadProperty (942-byte property parser)
-0099b730 skeleton ReadPropertyList
-0099b8a0 skeleton ReadObject
-0099b9e0 skeleton ReadBindings
-0099bac0 skeleton ReadGraph
-0099bc00 skeleton reader traversal
-0099be60 skeleton finaliser

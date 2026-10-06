@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006e3100  3092  complete (six-face camera setup, message/pipeline build and submit); /O2 scheduling and x87/SSE mix of the vector math not reproduced

@@ -1,0 +1,2 @@
+0089d9a0 EA::Text::Typesetter::FinalizeLine  # PDB candidate (caller-single); finishes a laid-out line
+0089dc00 EA::Text::Typesetter::LayoutParagraph  # PDB candidate (caller-scored)

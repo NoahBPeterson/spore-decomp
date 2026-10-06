@@ -1,6 +1,1 @@
 # va  diff-bytes  reason
-006f7430  582  colour-state wrapper (mode 0x8c): skeleton only.
-006f7680  789  colour-state wrapper (mode 200/0xc9): skeleton only.
-006f79a0  1473  cFilterChain parameter dispatch (FUN_006f4580/FUN_006f46f0 live values): skeleton only.
-006f7f70  399  SP::cFilterChain::ApplyStrengthFilter (PDB anchor): skeleton only.
-006f8260  277  resource lookup/registration (FUN_00892970 + FUN_006f4500/FUN_006f44c0): skeleton only.

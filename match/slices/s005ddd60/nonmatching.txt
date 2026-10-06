@@ -1,2 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
 005de9e0  101  cSPEditorUI helper: complete; cl keeps `this` in edi / window in esi whereas the original reuses esi for both and edi only for the child widget
+005ddd60  1244  complete Init (all layouts/windows/procs/grid/cursor); schedule and register allocation differ
+005de450  386  complete Update (fade timer, color, 4 terrain brush polls); float/x87 mix and scheduling differ
+005de690  402  complete EnableBasicEditorButtons; cl spills the id-table pointer where original keeps ebp pointer and spills this
+005de870  270  complete Shutdown; ref-release inline schedule differs
+005dea60  329  complete ctor-style field init; original keeps dead vtable stores in order, cl folds them

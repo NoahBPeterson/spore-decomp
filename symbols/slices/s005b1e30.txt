@@ -1,1 +1,9 @@
+005b1e30 SP::cSPEditorManipulationPinning::OnMouseUp  # vtable 013f74dc slot 4; cursor-warp + RepinBlockToTorso + animated-event send
+005b2180 SP::cSPEditorManipulationPinning::Init  # 6 stack args (block ref, Vec3, skin AutoRefCount by value, bool)
+005b2350 Nlerp  # Lerp(a,b,t) normalised; cdecl sret
+005b23d0 SP::cSPEditorManipulationPinning::cSPEditorManipulationPinning  # ctor, vtable 013f74dc/013f74cc
+005b24a0 SP::cSPEditorManipulationPinning::~cSPEditorManipulationPinning  # dtor body
+005b2500 Slerp  # quaternion slerp, nlerp fallback below cos(5deg)
+005b26f0 SlerpWrap  # sret wrapper around Slerp
+005b2750 SP::cSPEditorManipulationPinning::Update  # PDB name; eases block toward target pos/orientation
 005b2a50 SP::cSPEditorManipulationPinning::DoOnMouseDown  # PDB candidate 00d664a0

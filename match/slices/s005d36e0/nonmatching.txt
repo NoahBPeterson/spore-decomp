@@ -1,0 +1,3 @@
+005d36e0  1601  complete (walls, vertebra loop, handles); retail find/ctor inlines and x87 order differ
+005d3f10  -     complete (vertebra build from block list, handle setup); size differs from original
+005d43d0  397   complete (mouse-spring create); float/vector copy scheduling differs

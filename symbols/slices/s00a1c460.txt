@@ -1,0 +1,5 @@
+00a1c460 EA::Audio::Sound::ConfigurePrimitives  # PDB caller-scored
+00a1c710 EA::Audio::Sound::TickInternal  # PDB caller-scored
+00a1cf60 EA::Audio::Sound::UpdatePropertiesFromPrimitives  # PDB vtable-slot
+00a1d080 EA::Audio::Sound::CommitAllProperties  # PDB vtable-slot
+00a1d310 EA::Audio::Sound::SetData  # PDB anchor

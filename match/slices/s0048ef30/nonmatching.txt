@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0048ef30  1736  complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
+0048f790  522  complete (all paths and calls); /Od temp slot layout differs (original frame 0x140, second AllocTag temp at -0xd1)

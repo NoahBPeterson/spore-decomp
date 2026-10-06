@@ -1,0 +1,15 @@
+00902460 EA::XML::TokenIOContext::ClearStrings  # PDB name (card)
+00902590 EA::XML::TokenIOContext::AddString  # PDB candidate
+00902640 `anonymous namespace'::sWriteString  # PDB candidate (caller-single)
+009027b0 `anonymous namespace'::sReadString  # PDB candidate (caller-single)
+00902950 EA::XML::ReadToken  # PDB candidate
+00902c20 `anonymous namespace'::sWriteToken  # inferred writer for EA::XML::ReadToken
+00902d40 EA::XML::ReadTokenList  # PDB candidate (caller-single)
+00902fc0 `anonymous namespace'::sWriteTokenList  # inferred writer for EA::XML::ReadTokenList
+009030b0 EA::XML::TokenIOContext::TokenIOContext  # PDB name (card)
+00903120 EA::XML::TokenIOContext::~TokenIOContext  # clears both hashtables + StackAllocator::Reset x2
+009031a0 EA::XML::XmlTokenReader::XmlTokenReader  # constructs XmlReader + TokenIOContext at +0x6c
+009031d0 EA::XML::XmlTokenReader::~XmlTokenReader  # resets TokenIOContext, tail to XmlReader dtor
+009031f0 EA::XML::XmlTokenReader::Read  # BeginRead + ReadTokenList
+00903230 EA::XML::XmlTokenReader::Read2  # BeginRead2(3 args) + ReadTokenList
+009032b0 EA::XML::FreeTokenList  # static helper, eax=list head ebx=owner

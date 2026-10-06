@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-00780b70  n/a  PARTIAL: only the property-toggle/enable/refresh front end is reproduced; the curve-sampling, direction-lerp, 2048-step render loop and inlined Matrix44 transforms are omitted

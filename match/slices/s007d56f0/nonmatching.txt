@@ -1,4 +1,16 @@
 # <va>  <diff-bytes>  <reason>
-007d5aa0  69   uninitialized_copy of the 0x78-byte records: per-element field copy + cSplitInstance ctor present; the argument/register schedule and the placement-ctor call shape differ
-007d61f0  70   allocate(n*0x78) + uninitialized_copy: both parts present; the 5-argument helper call and register assignment differ
-007d6250  71   range copy of the 0x78-byte records (two cSPTransform::operator= per element): present but the /O2 loop schedule and dst register differ
+007d56f0  ~200 cGameModelEffect::SetTransforms: complete; cTransform copies use one stack temp in the original (Matrix3::Assign call only for the first copy), three temps here
+007d5a30  ~40  vector<cSplitController>::~vector: complete; original keeps an EH frame (this + state 0) around the release loop
+007d5af0  ~80  cGameModelEffect ctor: complete; scheduling of the float-constant loads and the refcount store order differ
+007d5c50  19   ~cGameModelEffect: complete; EH state numbering (anim vector has no state in the original) and base-vptr store at the end differ
+007d5d50  16   cSplitManager ctor: complete; refcount store is scheduled after the u16 stores here
+007d5dc0  2    cGameModelEffect::Unload: complete; only the [edi+eax+0x3c] vs [eax+edi+0x3c] addressing order differs
+007d5e60  ~70  cGameModelEffect::FindGameModel: complete; stack layout of the fixed vector / key copy differs
+007d6030  ~120 eastl::vector<cAnimationInfo>::DoInsertValues: complete (callee helpers declared extern); call shapes of the generic_iterator helpers differ
+007d6320  ~35  eastl::vector<cElement0x78>::vector(const vector&): complete; this/arg register swap
+007d6440  ~15  cMapResB ctor: complete; EH state numbering and vptr store order differ
+007d6500  ~25  cMapResB dtor: complete; EH state numbering and `add eax,-1` refcount idiom differ
+007d6620  ~130 eastl::vector<cSplitController>::DoInsertValue: complete; original has an EH frame around the placement copy
+007d5aa0  56   uninitialized_copy of the 0x78-byte records: per-element field copy + cSplitInstance ctor present; original keeps `first` in its stack slot, no callee-saved regs
+007d61f0  27   allocate(n*0x78) + uninitialized_copy: both parts present; the 5-argument helper call and register assignment differ
+007d6250  72   range copy of the 0x78-byte records (two cSPTransform::operator= per element): present but the /O2 loop schedule and dst register differ

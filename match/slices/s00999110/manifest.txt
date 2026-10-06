@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00999110/s00999110.cpp  ?Callback@SerializationService@@QAEXI@Z  00999480
+slices/s00999110/s00999110.cpp  ?GetReader@SerializationService@@QAEPAXPAX@Z  009994f0
+slices/s00999110/s00999110.cpp  ??0SerializationService@@QAE@XZ  00999520
+slices/s00999110/s00999110.cpp  ??0StringTable@@QAE@XZ  009997e0
+slices/s00999110/s00999110.cpp  ?FUN_00999ba0@@YGHPAII@Z  00999ba0
+slices/s00999110/s00999110.cpp  ??0FactoryStringTableXml@@QAE@XZ  00999c20
+slices/s00999110/s00999110.cpp  ?Shutdown@SerCollection@@QAEXXZ  009991e0
+slices/s00999110/s00999110.cpp  ?Read@SerializationService@@QAEIIIII@Z  009994a0
+slices/s00999110/s00999110.cpp  ?ClearAll@SerializationService@@QAEXXZ  00999720
+slices/s00999110/s00999110.cpp  ??_GStringTableFilter@@UAEPAXI@Z  009998d0
+slices/s00999110/s00999110.cpp  ??_GStringTableXml@@UAEPAXI@Z  00999ce0

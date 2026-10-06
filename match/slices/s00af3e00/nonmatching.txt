@@ -1,0 +1,2 @@
+00af3e50 2233 complete cube-map ray march + 3 probe rays; x87/SSE mix, register allocation and load order differ (not chased)
+00af4870 1193 complete simple ray march variant; same x87 abs/compare scheduling differences as 00af3e50

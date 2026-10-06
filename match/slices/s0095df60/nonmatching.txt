@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0095df60  223  Mat3 x vec3 transform: original builds Vec4 row temporaries on stack (spill/reload schedule)
+0095e040  86   Mat3 determinant: original is x87 with float temp spills; compiled with SSE
+0095e0b0  1519 Mat4 inverse: cofactor temp spill schedule differs (Ghidra expression order used)
+0095e810  87   Mat4::SetScaleTranslate: original copies Vec3 via movss, mine uses fld/fstp
+0095e890  411  Mat4::Translate: original uses Vec4 temp (w*vec4(x,y,z,0)) store pattern
+0095ea30  4    Mat4::Scale: operand order of the first mulss pairs
+0095eb00  246  Mat4::RotateX: original loads all column values to locals before fsin/fcos
+0095ec30  237  Mat4::RotateY: same local-spill pattern
+0095ed60  222  Mat4::RotateZ: same local-spill pattern

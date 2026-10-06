@@ -1,0 +1,9 @@
+# source  symbol  original VA  [flags override]
+slices/s0095b310/s0095b310.cpp  ?Shutdown@WM@@ 0095b860    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ??1WM@@ 0095b8c0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ?GetTableEntry@@ 0095ba70    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ??_GBatch2D@@ 0095baf0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ?End2D@RenderCtx@@ 0095bb20    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ??0RenderCtx@@ 0095bb80    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ?AddRenderable@RenderCtx@@ 0095bbc0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ?Begin2D@RenderCtx@@ 0095bc10    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

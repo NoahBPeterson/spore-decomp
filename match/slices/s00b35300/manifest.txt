@@ -1,0 +1,7 @@
+# source  symbol  original VA  [flags override]
+slices/s00b35300/s00b35300.cpp  ?Teardown@Owner@@QAEXXZ  00b35860  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b35300/s00b35300.cpp  ?GetNounOffset@@YG?AUVec3@@I@Z  00b35b80  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b35300/s00b35300.cpp  ?GetEditorFloat@@YAMXZ  00b35fa0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b35300/s00b35300.cpp  ?CanSelect@@YA_NPAUObj@@@Z  00b36030  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b35300/s00b35300.cpp  ?HeapPercolate@@YAXPAPAUObj@@HHHII@Z  00b36180  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b35300/s00b35300.cpp  ?FillN@@YAXPAUElem@@IPBU1@@Z  00b36250  /O2 /MD /Gy /TP /arch:SSE

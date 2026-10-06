@@ -1,0 +1,4 @@
+009643c0 8 complete; focus-manager SetFocus vcall: original loads the vptr, builds the lea arg, then fetches the slot; ours fetches the slot first (scheduling)
+00964450 8 complete; same ReleaseFocus vcall ordering as OnMouseDown
+00964c90 504 complete; painter pointer is CSE'd into edi across calls in ours (original reloads it), locals/frame differ
+00964f10 344 complete; remaining diffs are float constant load order, temp-slot layout of the max() reference temporaries, and x87 spill schedule

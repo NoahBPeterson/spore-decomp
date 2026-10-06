@@ -1,0 +1,7 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00948de0/s00948de0.cpp  ?DoFreeNodes@HT@@QAEXPAPAUNode@@I@Z  00948de0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00948de0/s00948de0.cpp  ?erase@HT@@QAE?AUIter@@UConstIter@@@Z  00948e80  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00948de0/s00948de0.cpp  ?ClearCacheMap@INetFileCache@Internet@EA@@QAEXXZ  00948f00  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00948de0/s00948de0.cpp  ?ReadCacheIniFile@INetFileCache@Internet@EA@@QAE_NXZ  00949b00  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00948de0/s00948de0.cpp  ??0INetFileCache@Internet@EA@@QAE@XZ  00949b80  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00948de0/s00948de0.cpp  ??1INetFileCache@Internet@EA@@QAE@XZ  00949c10  /O2 /MD /Gy /TP /GS- /arch:SSE2

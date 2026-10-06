@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+0088b250 431 upstream EAWebKit EAText/EAIO source; retail build config (allocator/templates) differs
+0088b450 108 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b500 74 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b560 7 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b580 28 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b5b0 38 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b600 22 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b640 468 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b870 31 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b930 82 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b9a0 30 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088b9e0 264 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088bb20 123 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088bbb0 76 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088be70 168 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088bf40 163 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088c010 1 upstream EAWebKit EAText/EAIO source; retail build config differs (1 byte)
+0088c050 89 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088c0d0 132 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088c170 328 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088c380 52 upstream EAWebKit EAText/EAIO source; retail build config differs
+0088c500 2 upstream EAWebKit EAText/EAIO source; retail build config differs (2 bytes)

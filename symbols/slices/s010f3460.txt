@@ -1,3 +1,6 @@
 010f3460  hkContinuousSimulation::reintegrateAndRecollideEntities  # PDB mangled
 010f3600  hkContinuousSimulation::collide  # PDB mangled
 010f3a40  hkContinuousSimulation::simulateToi  # PDB mangled
+010f1df0 hkContinuousSimulation::collideEntitiesBroadPhaseContinuous  # name inferred: LtBroadPhase/InitMem/StCalcAabbs timers, (entities,n,world,flag)
+010f0b00 hkContinuousSimulation::addToiEvent  # name inferred: appends a 0x40-byte hkToiEvent built from hkProcessCollisionOutput + agent entry to m_toiEvents (+0x18)
+010fc180 hkAgentNnMachine_processAgent  # name inferred: (hkAgentNnEntry*, hkProcessCollisionInput&, hkProcessCollisionOutput&) cdecl, called per collision entry

@@ -1,1 +1,6 @@
-# no byte-exact functions in this slice yet
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0074e2b0/s0074e2b0.cpp  ?FindModelsInSphere@cModelWorld@@QAE_NPBXPAUModelVec@@PAX@Z  0074ed00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0074e2b0/s0074e2b0.cpp  ?FindModelsInBox@cModelWorld@@QAE_NPBXPAUModelVec@@PAX@Z  0074ee80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0074e2b0/s0074e2b0.cpp  ?FindModelsInShape@cModelWorld@@QAE_NPBXMPAUModelVec@@PAX@Z  0074eb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0074e2b0/s0074e2b0.cpp  ??1EditorResource@@UAE@XZ  0074f010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s0074e2b0/s0074e2b0.cpp  ?Shutdown@EditorResource@@QAE_NXZ  0074f0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

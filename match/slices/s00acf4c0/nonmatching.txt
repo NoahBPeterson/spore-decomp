@@ -1,0 +1,1 @@
+00acf4c0 3800 complete; original uses aligned frame (and esp,-16) and SSE struct/compare copies, size 3526 vs 4163; not chased

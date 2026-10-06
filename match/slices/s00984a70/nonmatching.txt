@@ -1,0 +1,1 @@
+00984a70 9999 complete (all paths); not byte-exact: original keeps ~0x340 bytes of unshared per-fill Point temporaries (mine reuses slots, 0x98 frame), imageIndex-1 addressing folded; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

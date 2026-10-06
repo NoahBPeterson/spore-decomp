@@ -1,2 +1,12 @@
-00d011e0  9   Complete tree-destruction loop (calls 0x921580 until sentinel); residual is loop-codegen scheduling.
-00d018d0  60  Complete erase-range over 8-byte elements (shift then shrink end); residual is register/scheduling.
+00d00f80 64 Complete map::find (lower_bound + verify); residual is register allocation/shrink-wrap of esi/edi/ebx
+00d00ff0 190 Complete map<pair,VarList> writer; residual is call-argument scheduling and register assignment
+00d011e0 9 Complete tree-destruction loop (calls 0x921580 until sentinel); residual is loop-codegen scheduling.
+00d01110 168 Complete map<uint,float> writer; residual is call-argument scheduling and register assignment
+00d01410 76 Complete relationship lookup; original keeps the null result in edi across NormalizePair
+00d01470 120 Complete feedback-strength lookup; residual is stack-slot/size difference at the tail
+00d014e0 180 Complete cRelationshipManager::Write; residual is register assignment around the inlined PutU32 helper
+00d015d0 290 Complete scaled feedback strength (power-ratio adjusted); residual is x87/SSE mix and register assignment
+00d01820 139 Complete rbtree DoCopySubtree over a pair-key set; residual is loop register assignment
+00d018d0 60 Complete erase-range over 8-byte elements (shift then shrink end); residual is register/scheduling.
+00d01ab0 79 Complete per-key relationship tree lookup; residual is shrink-wrapped ebx and key kept in a register
+00d01bb0 400 Complete cRelationshipManager::GetDebugString; residual is String temp/EH layout and register assignment

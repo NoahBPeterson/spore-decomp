@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0098a910  21   FindWordStart (word-boundary scan backwards): complete; register allocation (this/found swapped)
+0098a9f0  108  FindLineEnd: complete; original loads the text base late (ebx) and uses a memory-operand compare
+0098aa80  117  FindLineStart: complete; original keeps the redundant "*p == 0xd" re-check and reloads the char
+0098ab40  289  SelectWordAt: complete (word/sentence helpers 98a4b0/570/660/730 are other functions); ordering/regalloc differ
+0098ad40  1836 OnKeyDown: complete (all VK cases); case-body layout/register allocation differ, and the original's (int)(float)len uses cvttss2si from memory where cl emits _ftol2_sse
+0098b700  235  eastl::DequeBase<void*,..,64>::DoReallocPtrArray: complete; original recomputes the used-pointer byte count instead of hoisting it

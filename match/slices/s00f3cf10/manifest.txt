@@ -3,3 +3,5 @@ slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3d210@cSec3@@QAEXXZ  00f3d210
 slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3d880@cSec3@@QAEPAXXZ  00f3d880
 slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3d8a0@cSec3@@QAEXXZ  00f3d8a0
 slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3d8c0@cSec3@@QAEXD@Z  00f3d8c0
+slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3d780@cSec3@@QAEPAXH@Z  00f3d780
+slices/s00f3cf10/s00f3cf10.cpp  ?FUN_00f3dc70@cSec3@@QAEPAXH@Z  00f3dc70

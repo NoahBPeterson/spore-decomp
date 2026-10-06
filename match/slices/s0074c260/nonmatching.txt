@@ -1,1 +1,6 @@
 0074ca70  69  complete vector<int>::erase-first-value; register allocation (this/begin cached in different callee-saved regs) differs
+0074c670  573  complete ModelIsResidentInMemory; scratch vector/EH frame layout and register allocation differ
+0074c910  281  complete ScheduleForLoad; EH state and LoadReq temp layout differ
+0074cad0  576  complete load-job Step state machine; scratch vector/EH layout differ
+0074ce20  289  complete vector<E14>::DoInsertValue; nNew kept in register not stack slot, sign-test shape differs
+0074d2c0  431  complete HandleMessage; list-walk register allocation and EH state differ

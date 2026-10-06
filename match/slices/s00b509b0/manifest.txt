@@ -1,0 +1,10 @@
+# source  symbol  original VA  [flags override]
+slices/s00b509b0/s00b509b0.cpp  ??1HkOwner@@UAE@XZ 00b50de0    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ??_GHkOwner@@UAEPAXI@Z 00b50e30    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?GetResourceTypes@@YGHPAII@Z 00b50e80    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?IsResourceType@@YG_NII@Z 00b50ea0    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ??_GcHavokResource@@UAEPAXI@Z 00b50ef0    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?Create@ResLoader@@QAE_NHPAPAUcResourceBase@@HH@Z 00b50f40    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?RegisterHavokResourceFactory@@YAXXZ 00b50ff0    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?LoadPlanetTuning@@YAXPAUPropSet@@@Z 00b51460    /O2 /MD /Gy /TP /arch:SSE
+slices/s00b509b0/s00b509b0.cpp  ?Update@PlanetWatcher@@QAEXXZ 00b515e0    /O2 /MD /Gy /TP /arch:SSE

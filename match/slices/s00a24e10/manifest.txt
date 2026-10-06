@@ -1,0 +1,6 @@
+slices/s00a24e10/s00a24e10.cpp  ?Remove@Tracker@@QAEXPAUTObj@@@Z  00a24e10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a24e10/s00a24e10.cpp  ?Process@Tracker@@QAEXPAUTObj@@@Z  00a24f50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a24e10/s00a24e10.cpp  ??_GResDerived@@UAEPAXI@Z  00a25050  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a24e10/s00a24e10.cpp  ?CallPrim@AudioSys@@QAE_NIHMH@Z  00a25a40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a24e10/s00a24e10.cpp  ?HasPrim@AudioSys@@QAE_NI@Z  00a25b20  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a24e10/s00a24e10.cpp  ?UpdateOutput@AudioSys@@QAEXXZ  00a25b60  /O2 /MD /Gy /EHsc /TP /GS-

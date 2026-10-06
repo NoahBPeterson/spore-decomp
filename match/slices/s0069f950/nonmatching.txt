@@ -1,2 +1,6 @@
-006a05f0  147  cCOMSerializer::WriteSerializableObject: complete behaviour (vtable write both IDs + onSetSPSerializable + commit), but register scheduling and the this-8 adjustment differ
-006a06a0  155  cCOMSerializer::ReadSerializableObject: complete behaviour (read IDs, onSetSPSerializable, optional loadSingleObject + commit), register/EH scheduling differs
+# va  diff-bytes  reason
+0069f950  76  ClassMap::operator[]: complete (lower_bound, default pair + insert-with-hint); iterator result slot/EH state numbering differ
+0069fa60  197  cObjectDatabase ctor: complete (vptr chain, interlocked refcount clear, new cCOMSerializer, two smart-pointer assigns); EH state stores and vptr store order differ
+0069fb90  1238  cICOMSerializer::SaveClassObjects: complete (class/instance write loop with crc+size backpatch, progress, class table); register allocation/EH differ
+006a0110  407  onSetSPSerializable: complete (class + instance map insert, writing-map mirror); temp ClassInfo construction/frame differ
+006a0360  534  loadSingleObject: complete (open stream, per-record size/crc/id scan, close, count check); register allocation/EH differ

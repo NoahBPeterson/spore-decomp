@@ -1,0 +1,6 @@
+008fe830 EA::XHTML::Resource::ResourceCache::ResourceCache  # ctor: memset(mMap,0,0x100), LRU list self-link, PDB class layout (+0x14 mMap, +0x120 mLRUList)
+008fe8b0 EA::XHTML::Resource::ResourceCache::Remove  # PDB name on card, byte-exact
+008feae0 EA::XHTML::Resource::ResourceCache::Clear  # frees every LRU entry then mSize=0
+008feba0 EA::XHTML::Resource::ResourceCache::Find  # PDB candidate on card, moves hit to LRU front
+008fec20 EA::XHTML::Resource::ResourceCache::Insert  # PDB name on card
+008ff170 EA::XHTML::Resource::ResourceProvider::CreateResource  # PDB name on card

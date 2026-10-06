@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d5fb60 4591 complete (compiles 4591 vs 4468 bytes); retail-offset raw access, vcall helpers; no 64-aligned frame, EA vector clear/AutoRefCount inlines not fitted

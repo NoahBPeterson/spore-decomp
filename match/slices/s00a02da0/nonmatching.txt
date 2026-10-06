@@ -1,0 +1,1 @@
+00a02da0 4093 complete, compiles to 3302 bytes; original builds 24 9-float vertices via struct-copy temporaries (movss/mov edx round trips) that plain stores don't reproduce

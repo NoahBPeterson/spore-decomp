@@ -1,6 +1,11 @@
-# va  Name  # evidence
-00ef9180  Simulator::cScenarioTutorials::~cScenarioTutorials  # vtable stores vtbl_Simulator::cScenarioTutorials / Skinne::PaintSystem; RemoveHandler
+00ef8dc0  Simulator::cScenarioTutorials::SavePrefs  # RemoveHandler + writes two completed-count prefs (0x7abf095/0x7abf09d) then SaveResource
+00ef8ed0  FUN_00ef8ed0  # toggles tutorial page windows by root state, gated by config key 0x4ea96cb
+00ef9000  cTutorialPage::Rebuild  # builds "N of M" caption via SetNumberString + cString args
+00ef9180  Simulator::cScenarioTutorials::~cScenarioTutorials  # vtable stores + step hash_set teardown + RemoveHandler
+00ef9290  cTutorialPage::BuildList  # builds lesson group/step rows from cSPUILayout resources
 00ef9830  FUN_00ef9830  # toggle: destroys attached window (vtbl+0x108 / +4) and clears this+0x24
-00ef9880  FUN_00ef9880  # step-hashtable ctor, fixed_pool_base::init(this+0x13c, 0x200)
-00ef9950  FUN_00ef9950  # step-hashtable ctor, fixed_pool_base::init(this+0x7c, 0x80)
+00ef9880  FUN_00ef9880  # step hash_set ctor, fixed_pool_base::init(this+0x13c, 0x200)
+00ef9950  FUN_00ef9950  # step hash_set ctor, fixed_pool_base::init(this+0x7c, 0x80)
+00ef9af0  Simulator::cScenarioTutorials::OnStepDone  # inserts step, checks group completion, marks group done
+00ef9d00  cTutorialPage::CreateLayout  # new cSPUILayout, Init/SetParentWin/SetReloadCallback then BuildList
 00ef9d90  Simulator::cScenarioTutorials::cScenarioTutorials  # vtable + Stopwatch(this+0x10) + step ctors

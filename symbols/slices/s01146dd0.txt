@@ -1,0 +1,1 @@
+01146dd0 Dct32  # 32-pt DCT butterfly (straight-line SSE, scratch array 0x16e8180)

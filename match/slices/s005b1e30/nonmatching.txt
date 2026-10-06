@@ -1,0 +1,5 @@
+005b1e30  662  SP::cSPEditorManipulationPinning::OnMouseUp: complete; SSE register order in world-position math and merged message-send tail differ
+005b2180  118  SP::cSPEditorManipulationPinning::Init: complete; scheduling of the offset*matrix products differs (loads/regs)
+005b2500  457  Slerp: complete; original keeps s0/s1 in SSE regs (float spills) while cl keeps x87; q0/q1 copies scheduled differently
+005b2750  531  SP::cSPEditorManipulationPinning::Update: complete; frame layout (temps for quaternion/matrix copies) differs
+005b2a50  704  SP::cSPEditorManipulationPinning::DoOnMouseDown: complete; frame layout/temp order differs

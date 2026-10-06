@@ -1,0 +1,15 @@
+008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # 2008 dev-PDB name
+008fce50 EA::XHTML::Resource::FileHandler::ProcessRequest  # 2008 dev-PDB name
+008fd080 EA::XHTML::Resource::HTTPHandler::GetProtocolName  # 2008 dev-PDB name
+008fd0a0 EA::XHTML::Resource::EncodingFromName  # 2008 dev-PDB name
+008fd350 EA::XHTML::Resource::HTTPHandler::~HTTPHandler  # PDB candidate (caller-scored)
+008fd3d0 EA::Internet::HTTPClient::`scalar deleting destructor'  # PDB candidate (caller-single)
+008fd540 EA::XHTML::Resource::HTTPHandler::HTTPHandler  # 2008 dev-PDB name
+008fd670 EA::XHTML::Resource::HTTPHandler::SetAcceptEncoding  # 2008 dev-PDB name
+008fc670 TextStyle::Update  # resolves font sizes vs parent, GetFontServer metrics, merges string tables into parent
+008fcab0 EA::XHTML::Resource::DocumentFactory::CreateResource  # strcmp mime "text/html", new Document, XmlParser::Parse
+008fcbd0 StripLeadingDotComponents  # removes leading ".", ".." and empty components of a wide path (compare against L"." / L".." / L"")
+008fce50 EA::XHTML::Resource::FileHandler::ProcessRequest  # ConvertURLToFilePath, Join, ext-map find, FileStream open
+008fd350 EA::XHTML::Resource::HTTPHandler::HandlerMsgCb  # notification target callback (id 0x700af301)
+008fd3d0 EA::XHTML::Resource::HTTPHandler::~HTTPHandler  # unregisters msg handler 0x338cd0e, frees strings, HTTPClient dtor
+008fd540 EA::XHTML::Resource::HTTPHandler::HTTPHandler  # UA string "EA UTF XHTML browser with HTTP"

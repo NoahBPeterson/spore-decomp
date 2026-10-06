@@ -1,0 +1,9 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+009873a0  127  WinSpinner::Ctor: vtable init and member-store scheduling differ
+00987470  16   WinSpinner scalar deleting dtor: member load hoisted before vtable stores
+00987530  33   BasicFactory_SpinnerDrawable::CreateInstance: vtable/member store order differs
+009880e0  446  StdDrawable::HitTest: scaling switch and modulo/div schedule differs
+00988420  129  UI::StdDrawable::StdDrawable: member-init store scheduling differs
+00987bf0  271  StdDrawable::draw_with_image (3 stack args, ret 0xc): edge-block and scaling-type call schedule differs
+00987590  681  WinSpinner::Refresh: complete; register choice for vtable ptr (edx vs eax) and 0x20 vs 0x1c frame differ
+00987d40  827  StdDrawable::CreateRenderables: complete; ebp frame with aligned fistp slot and loop scheduling differ

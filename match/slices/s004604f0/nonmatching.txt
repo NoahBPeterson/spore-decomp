@@ -1,2 +1,5 @@
 460a80  -  recursive batch reorder; reference-temp frame differs
 461400  -  string sub-object ctor; one extra reserved local slot differs
+4604f0  1097  BuildCreatureMaterialInfo complete (all three shader-state blocks, property lookup, extra ctor pushes); /Od frame/temp slot layout differs
+460bf0  5  complete; one reserved 4-byte hole between locals not reproduced (frame 0x3c vs 0x38); needs /fp:fast
+460d40  397  complete; /Od local slot order (named locals/temp holes) differs

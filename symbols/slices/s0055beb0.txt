@@ -4,3 +4,5 @@
 0055c3c0 SP::cSPObjectTemplateDB::HandleMessage  # PDB name
 0055c640 SP::CreateObjectTemplateDB (new Editor::ObjectTemplateDB)  # byte-exact
 0055c690 SP::cSPObjectTemplateDB::AsInterface  # complete, 13-byte near-miss (case-body layout)
+0055c6f0 SP::cSPObjectTemplateDB::SaveAssetParameters  # PDB candidate (caller-scored), byte-exact
+0055cb50 SP::cSPObjectTemplateDB::LoadAssetParameters  # PDB candidate (caller-scored), byte-exact

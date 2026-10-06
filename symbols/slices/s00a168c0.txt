@@ -1,0 +1,8 @@
+00a16d00 EA::Audio::PrimitiveAggregate::PrimitiveAggregate  # PDB callee-scored
+00a16e70 EA::Audio::PrimitiveBase::Shutdown  # PDB caller-scored
+00a16f60 EA::Audio::PrimitiveBase::Init  # PDB caller-scored
+00a174d0 EA::Audio::ResourceConfiguration::GetPropertyAsKey  # PDB vtable-slot
+00a17520 EA::Audio::ResourceConfiguration::GetPropertyAsKeyInstance  # PDB vtable-slot
+00a17560 EA::Audio::ResourceConfiguration::GetPropertyAsFloatArray  # PDB vtable-slot
+00a175c0 EA::Audio::ResourceConfiguration::GetPropertyAsUint32Array  # PDB vtable-slot
+00a17620 EA::Audio::ResourceConfiguration::GetPropertyAsKeyArray  # PDB vtable-slot

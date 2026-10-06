@@ -1,0 +1,5 @@
+00958cf0 525 WindowMgr ctor complete; member-init list order/hoisting (lea before GetAlloc call) differs
+00958fa0 162 SendModifiedMsg complete; this spilled to stack in original (unknown RAII/inline helper), regs differ
+00959050 425 UpdateCursorWindow complete; V2 copy flavours (movss vs int regs) and store scheduling differ
+009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout
+00959640 269 SendMsgFull complete; original reuses param home slot for result byte, regs differ

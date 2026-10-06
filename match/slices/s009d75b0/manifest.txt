@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009d75b0/s009d75b0.cpp  ??RLessIdx@@QAE_NUS@@0@Z  009d7840  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009d75b0/s009d75b0.cpp  ??RLessWord@@QAE_NUS@@0@Z  009d7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009d75b0/s009d75b0.cpp  ?DestroyRecords@@YAPAUS@@PAU1@00@Z  009d7c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009d75b0/s009d75b0.cpp  ?AddElem@TOwner@@QAEHPAXPBUV3@@PBUV4@@@Z  009d7d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009d75b0/s009d75b0.cpp  ??4Item@@QAEAAU0@ABU0@@Z  009d7e50  /O2 /MD /Gy /TP /arch:SSE /fp:fast

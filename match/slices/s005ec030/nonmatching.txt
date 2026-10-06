@@ -1,0 +1,4 @@
+005ec030  -     complete (chain map operator[]: lower_bound + insert); EASTL inline shape differs
+005ec130  495   complete (n-gram count + chain table build); EASTL inlines differ
+005ec370  940   complete (markov name generation with retries, exclusions, duplicate suffix); EASTL inlines differ
+005ec7c0  -     complete (cSPNameGenerator::Init property loading and chain setup); inlines differ

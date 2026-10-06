@@ -1,0 +1,11 @@
+00956b30 92 GlyphRenderer::DrawText(x,y,...): complete; wcslen loop shape and fixed_vector ctor store order/regalloc differ
+00956c40 116 GlyphRenderer::DrawText(4 floats,...): complete; same wcslen/fixed_vector ctor schedule differences
+00956f30 27 free pool drain: complete; pop_front register choice (ecx copy of node) differs
+00956fa0 22 FreeDisplayListEntries splice: complete; prologue push order (orig pushes esi/edi before Lock) differs
+00956ff0 60 AllocDisplayListEntry: complete; anchor held in ecx vs eax, node copy and DisplayList ctor store order differ
+00957160 129 UShortVec::operator=: complete; load order and ebx/ebp regalloc differ
+00957300 148 HitMask::BuildFromAlpha: complete; compiler strength-reduces data[x*4+3] where orig indexes
+009573e0 23 UShortVec::swap: complete; extra 8-byte frame slots and ternary shape differ
+00957710 68 Int2 property getter copy: complete; register allocation/load order differs
+009577b0 22 UIObj::GetRect: complete; load/store scheduling differs
+009578c0 97 Float4 property getter copy: complete; register allocation/load order differs

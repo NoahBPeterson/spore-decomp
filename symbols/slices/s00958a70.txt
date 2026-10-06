@@ -1,0 +1,2 @@
+00958bb0 EA::UTFWin::WindowMgr::DestroyDisplayList  # PDB candidate (caller-single), calls FreeDisplayListEntries
+00958cf0 EA::UTFWin::WindowMgr::WindowMgr  # vtable_names.txt

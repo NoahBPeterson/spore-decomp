@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a33ee0/s00a33ee0.cpp  ?SetProperty@VoiceContainer@Audio@EA@@  00a33ee0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?GetProperty@VoiceContainer@Audio@EA@@  00a33fd0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?FindPluginIndex@VoiceContainer@Audio@EA@@QAEHI  00a341e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?FindPlugin@VoiceContainer@Audio@EA@@  00a34230  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?Create@VoiceContainer@Audio@EA@@  00a342c0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?Destroy@VoiceContainer@Audio@EA@@  00a343e0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?DtorTail@VoiceContainer@Audio@EA@@  00a34620  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?ConnectToSubmix@VoiceContainer@Audio@EA@@  00a34b50  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?Reconnect@VoiceContainer@Audio@EA@@  00a34c90  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+slices/s00a33ee0/s00a33ee0.cpp  ?AddPropertyBinding@VoiceContainer@Audio@EA@@  00a34cb0  /O2 /Ob1 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast

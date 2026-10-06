@@ -1,12 +1,2 @@
-004c5200  0  partial: property-driven skin update skeleton
-004c58b0  0  partial: predicate/accessor skeleton
-004c5910  0  partial: helper skeleton
-004c5980  0  partial: diagnostic string builder skeleton
-004c5d50  0  partial: thunk skeleton
-004c5d80  0  partial: helper skeleton
-004c5eb0  0  partial: vector transform insert skeleton
-004c5f40  0  partial: refcounted release skeleton
-004c5fc0  0  partial: helper skeleton
-004c6070  0  partial: allocator-free skeleton
-004c60e0  0  partial: vector erase skeleton
-004c6150  0  partial: accessor skeleton
+# va  diff-bytes  reason (compiled with /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast)
+004c60e0  0  partial: vector resize helper skeleton (not in this pass)

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0096e3a0  339  CopyWithQualityAdjustment: branch layout / float clamp schedule differs (399 vs 338 bytes)
+0096e540  371  GlyphVec::insert: EASTL grow path and call scheduling differ
+0096e6d0  71   GlyphVec::resize: grow/erase call scheduling differs
+0096f080  35   BiStateEffect_func84h: float temp kept in register and 0xffffff add folded to a subtract
+0096f240  43   Ctx96::q(AsInterface): this register allocation / compare order differs
+0096e740  1152  DropShadowText::draw (DrawTextGlyphs): complete; original has ebp frame with 8-aligned fistp slot, loop scheduling differs

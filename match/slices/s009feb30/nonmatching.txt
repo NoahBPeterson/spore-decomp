@@ -1,0 +1,6 @@
+009fee90 6 Init: register allocation of the constant loads (xmm0/xmm1 swapped)
+009ff040 many QueuedToActive: complete; compiler unrolls pop 4x but signed %16 and pointer/reg scheduling differ
+009ff380 many FindFreeSlot: complete; register allocation (this in ebx vs esi)
+009ff4b0 many UpdateGoals: complete; float arg spill order / Vec3 temp differ
+009ff880 many UpdateGoalWeight: complete; clamp reference shape and register allocation
+009feb30 many RegisterSPSkinPaintCommands: complete reconstruction; EH/local layout differ

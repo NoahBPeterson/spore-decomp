@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009873a0/s009873a0.cpp  ?FUN_00987900@StdDrawable@@QAEXXZ          00987900  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ?SetImageAt@StdDrawable@@QAEXIPAX@Z       00987970  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ?GetImageAt@StdDrawable@@QAEPAXI@Z        009879b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ?GetImageForState@StdDrawable@@QAEPAXI@Z  009879f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ??1StdDrawable@@QAE@XZ                   00987b10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ?QueryAttribute@StdDrawable@@QAE_NHPAI@Z  009883c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ?GetNaturalSize@StdDrawable@@QAE_NPAMHH@Z 009883f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

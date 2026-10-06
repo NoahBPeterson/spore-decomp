@@ -1,0 +1,4 @@
+009ffe10 ResolveGoalPair  # fills {goal, linked goal} from a packed handle (slot*0xf0, generation at +0xb4)
+009ffb50 AnimGoal::operator=  # refptr assign x2 + field copy, ret 4
+00a00490 AnimGoal::Reset  # resets fields, releases goal object to pool 0x166c064
+00a007d0 QueuedBlender::ResetAll  # resets 16 goals, clears queues

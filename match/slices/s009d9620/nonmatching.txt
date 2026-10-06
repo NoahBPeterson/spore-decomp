@@ -1,0 +1,13 @@
+009d9840 245 complete insertion sort (guarded) on 0x104 records via LessIdx; original inlines the dtor loop and has no stack functor slot (ecx = existing stack addr)
+009d9970 221 complete unguarded insertion sort (LessIdx); same dtor-inlining/functor-slot differences
+009d9a90 245 complete insertion sort (guarded) via LessWord; same differences
+009d9bc0 221 complete unguarded insertion sort (LessWord); same differences
+009d9d60 216 complete push_heap (LessIdx), value by value; dtor inline and functor slot differ
+009d9e70 216 complete push_heap (LessWord); same
+009d9f80 60 complete swap of two records; only schedule of the inlined dtor differs
+009da000 322 complete group-by-key fill of items (memcpy(0,0,0) for empty vector copy kept); reg alloc/layout differs
+009da170 351 complete adjust_heap (LessIdx); inlined dtor/functor slot differ
+009da2d0 350 complete adjust_heap (LessWord); same
+009da430 118 complete pop_heap (LessIdx); inlined dtor differs
+009da4f0 118 complete pop_heap (LessWord); same
+009da5b0 102 complete small/large group sort dispatch; original keeps pred tag byte in a stack slot (push ecx)

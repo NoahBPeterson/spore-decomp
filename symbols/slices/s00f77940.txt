@@ -1,0 +1,1 @@
+00f77940 anon::Stream_Quad_V4F_N4F_C4B_T2F_Old  # older copy of 00aabc20; callees 00f76000=StreamerSetup, 00f74b40=ApplyLoopBox, 00a9aff0=WigglePoint

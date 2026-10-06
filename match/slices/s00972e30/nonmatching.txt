@@ -1,0 +1,17 @@
+00972e90 525 DoArrowKey: complete (both key switches, selection clear, notify, scrollbar update); regalloc/frame differ, uninitialized msg fields left as-is
+00973100 27 SetGridFlags: complete; vptr load / dirty-flag store order differs in the tail
+00973160 150 GetCellIsSelected: complete (3 selection rules); compiler hoists the list head, original recomputes it per case
+00973200 43 ClearSelection: complete; 64-bit compare of +0x84 reproduced, store zeroing/-1 constants scheduled differently
+00973270 175 IsWindowACellWindow: complete (id lookup and window-ptr lookup); register allocation/push order differs
+00973490 251 AddScrollBar: complete (vertical+horizontal creation, drawable hookup, add to window, dirty); diverges in call/arg ordering
+00973640 92 ColIterA::operator++ (SparseMatrixColIterator<CellData*>): complete; loop layout differs
+009736c0 80 ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>): complete; loop layout differs
+00973740 70 SparseMatrix::RowBegin (outer find + inner begin iterator): complete; arg-slot reuse for the key differs
+009737a0 70 SparseMatrix::RowEnd (outer find + inner end iterator): complete; arg-slot reuse for the key differs
+00973800 172 SparseMatrix::GetMinMaxUsedRowForCol: complete; original forms inner-tree pointers via node+0x14 and keeps a result flag in al
+00973930 40 SparseMatrix::GetMinUsedColAndRow: complete; load of node key hoisted by cl, original reads first-inner key through a pointer
+00973980 46 SparseMatrix::GetMaxUsedColAndRow: complete; same pattern as 00973930
+00973a40 60 SparseMatrix::IsCellUsed: complete; original reuses the dead arg slot as the second find's out iterator
+00973a90 86 SparseMatrix::GetCellPtr: complete; same arg-slot reuse
+00973c30 106 SparseMatrix::FindByValue (iterator to first inner node with value): complete; layout differs
+00973cc0 34 SparseMatrix::FirstUsed: complete; iterator store order differs

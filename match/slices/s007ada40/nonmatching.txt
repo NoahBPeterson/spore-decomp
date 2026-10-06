@@ -1,1 +1,9 @@
 007ae920  50  COMPLETE span/scanline descriptor init; store sequence is identical but `this` lives in eax in the original and in ecx here, so every operand register differs.
+007ada40  646  COMPLETE mapblock (DXT1 index mapper); original uses custom register convention for mappixel and different loop scheduling
+007adcf0  377  COMPLETE MMX nearest-endpoint mapper via intrinsics; cl adds ebp frame/spills the original does not have
+007ade70  560  COMPLETE rtrymapblock (byte-channel error sum); palette build scheduling differs
+007ae0b0  475  COMPLETE rbtrymapblock; rbmappixel uses edx/esi register convention in original
+007ae2a0  608  COMPLETE RefineMinMaxColors; original takes pixel ptr in esi (usercall)
+007ae5b0  193  COMPLETE alpha nibble interleave; original takes src in eax, dst in esi, stride in edi (usercall)
+007ae660  406  COMPLETE InterpolatedAlphaBlock; original usercall (eax/ecx/edi regs), loop fully unrolled
+007ae840  120  COMPLETE MMX 4x4 min/max reduction via intrinsics; cl emits ebp frame and spills, original is frameless

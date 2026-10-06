@@ -1,2 +1,2 @@
-0048ef30 SP::EditorUtils::GetLateralAlignmentPosition  # lateral alignment scoring/writes (partial)
-0048f790 SP::UpdateSymmetryRec  # recursive per-block symmetry update (partial)
+0048ef30 SP::EditorUtils::GetLateralAlignmentPosition  # lateral alignment scoring/writes (complete)
+0048f790 SP::UpdateSymmetryRec  # recursive per-block symmetry update (complete)

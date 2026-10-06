@@ -1,0 +1,1 @@
+008b5190 tsi_NewPFRClass  # T2K PFR font loader (PFR header magic, tsi_ naming)

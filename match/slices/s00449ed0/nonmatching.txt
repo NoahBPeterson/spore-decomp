@@ -1,3 +1,6 @@
 # va  diff-bytes  reason
+00449ed0  334  Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ
+0044a0e0  -    Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ
 0044a9a0  53   complete behaviour; /Od frame/slot order differs
 0044aa10  56   complete behaviour; /Od frame/slot order differs
+0044aaa0  -    Blk::A4aaa0 (GetBounds by value) complete; inline bool helpers / switch layout differ

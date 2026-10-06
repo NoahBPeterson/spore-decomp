@@ -1,0 +1,13 @@
+# complete (behaviorally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b21e60  ~210  complete; codegen differs (see source)
+00b22060  93  complete; codegen differs (see source)
+00b22100  3  complete; codegen differs (see source)
+00b222a0  170  complete; codegen differs (see source)
+00b22440  176  complete; codegen differs (see source)
+00b225d0  ~84  complete; codegen differs (see source)
+00b22650  236  complete; codegen differs (see source)
+00b227c0  233  complete; codegen differs (see source)
+00b22960  546  complete; codegen differs (see source)
+00b22bc0  200  complete; codegen differs (see source)
+00b22cc0  218  complete; codegen differs (see source)
+00b22ea0  ~117  complete; codegen differs (see source)

@@ -1,0 +1,4 @@
+005d27e0  1793  complete (spine grow: phantom probe + block/body build); SSE math/regalloc differs from original
+005d3010  122   complete; lower_bound jump layout + key param spill differ
+005d3100  1     complete; only the lower_bound null-root branch target differs (jump threading)
+005d3300  461   complete; reg alloc (this/next) and zero-compare form differ

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+009a1d90  108  advance anim time: x87 ratio stays on the FP stack in the original; final scale multiply is SSE there

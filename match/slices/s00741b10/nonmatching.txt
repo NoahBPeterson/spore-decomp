@@ -1,0 +1,1 @@
+00741b10  3574  complete reconstruction (all arena types, 3 blender passes, resize/fill, group record); 3964 vs 4127 bytes, not exact

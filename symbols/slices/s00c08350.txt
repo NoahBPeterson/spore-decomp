@@ -1,0 +1,1 @@
+00c08350 SP::cCreatureAwareness_Update  # guess: updates per-creature sensing lists (self-position, nearby entity list, target scoring)

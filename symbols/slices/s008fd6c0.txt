@@ -1,0 +1,14 @@
+008fd6c0 EA::XHTML::Resource::HTTPHandler::SetAcceptLanguage  # 2008 dev-PDB name
+008fd710 EA::XHTML::Resource::SetRequestTypeInfo  # 2008 dev-PDB name
+008fd790 EA::XHTML::Resource::HTTPHandler::CalculateCacheTimeout  # 2008 dev-PDB name
+008fdb70 EA::XHTML::Resource::HTTPHandler::CheckInit  # 2008 dev-PDB name
+008fdd10 EA::XHTML::Resource::HTTPHandler::ProcessRequest  # 2008 dev-PDB name
+008fe0c0 EA::XHTML::Resource::HTTPHandler::HandleMessage  # 2008 dev-PDB name
+008fe430 eastl::intrusive_hashtable<wchar_t const *,EA::XHTML::Resource::ResourceCache::ResourceCacheEntry,eastl::hash<wchar_t const *>,eastl::str_equal_to<wchar_t const *>,64,0,1>::DoFindNode  # 2008 dev-PDB name
+008fe490 eastl::intrusive_hashtable<wchar_t const *,EA::XHTML::Resource::ResourceCache::ResourceCacheEntry,eastl::hash<wchar_t const *>,eastl::str_equal_to<wchar_t const *>,64,0,1>::find  # 2008 dev-PDB name
+008fe510 eastl::intrusive_hashtable<wchar_t const *,EA::XHTML::Resource::ResourceCache::ResourceCacheEntry,eastl::hash<wchar_t const *>,eastl::str_equal_to<wchar_t const *>,64,0,1>::erase  # 2008 dev-PDB name
+008fd790 EA::XHTML::Resource::HTTPHandler::CalculateCacheTimeout  # Cache-Control no-cache/no-store/max-age parsing
+008fdb70 EA::XHTML::Resource::HTTPHandler::CheckInit  # registers msg handler 0x338cd0e
+008fdd10 EA::XHTML::Resource::HTTPHandler::ProcessRequest  # cJob + CreateHTTPGetRequest
+008fe0c0 EA::XHTML::Resource::HTTPHandler::HandleMessage  # IMsgHandler subobject this (-0xc)
+008fe510 eastl::intrusive_hashtable<wchar_t const*,...>::erase(key)  # FNV hash, 64 buckets, count at +0x104

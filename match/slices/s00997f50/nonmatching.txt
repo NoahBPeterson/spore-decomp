@@ -1,0 +1,23 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00997f50  52   HitMaskResource::HitMaskResource: vtable/zero-init store scheduling differs
+00998000  5    HitMaskResource scalar deleting dtor: member load hoisted before the vtable store
+00998050  -    HitMaskFactory::CreateResource: vcall/arg-block schedule differs
+00998200  34   Release: lock/dec and refcount branch layout differ
+009986e0  33   FUN_009986e0 ctor: vtable/zero-init scheduling differs
+00998770  126  RWTextureFactory::CreateResource: ctor inline and vcall schedule differs
+00998820  18   FUN_00998820 ctor: register choice / vtable store order differs
+00998fc0  53   FUN_00998fc0: AddRef vcall and grow-path schedule differ
+00999000  29   SerCollection::RemoveAll: pointer-diff arithmetic schedule differs
+00999080  104  SerCollection::SerCollection: large field-init store scheduling differs
+00998250  39   RWTextureResource::InitTextureResources: complete; stack-slot layout of locals differs (frame 0x5c vs 0x68)
+009983d0  -    RWTextureFactory::ReadResource: complete; vtable-fetch schedule and info struct copy differ
+00998530  -    RWTextureFactory::WriteResource: complete; local layout differs
+00998920  -    KeyHT::equal_range: complete; register allocation not checked
+009989d0  91   KeyHT::insert (multi): complete; schedule differs
+00998ac0  -    SerAutoUpdate::RemoveEntry: complete; schedule not checked
+00998b60  42   SerAutoUpdate::AddEntry: complete; local struct layout differs
+00998bd0  -    SerAutoUpdate::ProcessChanges: complete; iterator/register schedule not checked
+00998d30  -    ReloadChangedLayouts callback: complete; tail call not checked
+00998d70  55   OnResourceChanged callback: complete; schedule differs
+00998df0  76   SerAutoUpdate ctor: complete; store order differs
+00998eb0  104  SerAutoUpdate dtor: complete; schedule differs

@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+00a26e10  225  complete; DoInsertKey node order / register allocation differs
+00a26f30  13  complete; refcount store (rc=1) scheduled after vtable load
+00a27010  79  complete; original has EH frame (node alloc unwind) not reproduced
+00a270b0  44  complete; member-init store order of the two fixed vectors differs
+00a27110  4  complete; scalar deleting dtor, one vtable store differs
+00a27170  131  complete; EH state/AutoRefCount temps not reproduced
+00a27340  87  complete; hashtable iterator by-value arg plumbing differs
+00a273d0  104  complete; iterator loop shape differs
+00a27460  63  complete; AutoRefCount temp pattern not reproduced
+00a27530  121  complete; EH frame + temp AutoRefCount layout differs
+00a27660  109  complete; erase loop shape differs
+00a27760  172  complete; AutoRefCount vector insert, EH layout differs
+00a27910  8  complete; register choice (eax vs edx) in relocate-call arg loads
+00a27a40  8  complete; register choice (eax vs edx) in relocate-call arg loads
+00a27b90  14  complete; operand load order in final relocate call
+00a27e60  53  complete; rbtree insert tag/temps differ
+00a27ed0  134  complete; EH + eastl string temp layout differs
+00a27ff0  187  complete; pair value layout guessed, EH temps differ

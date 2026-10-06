@@ -1,0 +1,24 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00964190/s00964190.cpp  ?OnButtonClicked@WB@@  0x00964190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?OnKeyDown@WB@@  0x009642d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?OnKeyUp@WB@@  0x00964330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?OnFocusChange@WB@@  0x009644d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?OnTick@WB@@  0x009645a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F9645c0@IfWB@@  0x009645c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964610@Win4@@  0x00964610  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964640@Win4@@  0x00964640  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?Set@RefHolder@@  0x00964710  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964770@TextSized@@  0x00964770  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F9647b0@TextSized@@  0x009647b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?SerUpdate@WB@@  0x00964890  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964900@IfWB@@  0x00964900  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?GetDrawable@Sub2c@@  0x00964950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964970@IfWB@@  0x00964970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964a20@IfWB@@  0x00964a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964a50@IfWB@@  0x00964a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964a90@IfWB@@  0x00964a90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964ac0@IfWB@@  0x00964ac0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964af0@IfWB2@@  0x00964af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964b40@IfWB2@@  0x00964b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964b90@IfWB2@@  0x00964b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00964190/s00964190.cpp  ?F964bd0@ZoomWin@@  0x00964bd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

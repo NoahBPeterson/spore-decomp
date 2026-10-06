@@ -1,0 +1,9 @@
+00ac12f0  361  complete cell-neighbor lookup (fast interior path + wrapped slow path with WrapCubeFace); stack-array layout and scheduling differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00ac1510  159  complete cube-face cell to unit direction (rsqrtss + one Newton step via _mm intrinsics); original has no aligned frame, ours spills an __m128
+00ac1610  771  complete same-cell test via cube-map lookups; fabs x87/SSE interleave and spill copies differ from original
+00ac1970  20  complete water-aware distance; only the stack frame size/spill slots differ (original frame 0x14)
+00ac1a70  38  complete 75-unit proximity test; mul/add schedule differs (original interleaves the squares)
+00ac1b30  500  complete cost between two directions via coarse grid cell + entity checks; cube-face block scheduling differs
+00ac1dc0  430  complete same-cell compare returning 0.0f/1.0f; cube-face block scheduling differs
+00ac2130  125  complete uninitialized_copy of 0x3c-byte records; original strength-reduces to base+0x1c induction pointer
+00ac2200  160  complete direction penalty vs [lo,hi]; register allocation/spill slots differ (x87 sqrt mixed with SSE)

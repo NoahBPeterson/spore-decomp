@@ -1,0 +1,3 @@
+005ce9b0  1709  complete belt-of-circles arc walker (kinds 0/1/2, tangent search); not byte-exact: x87/SSE mix scheduling differs
+005cf110  755  complete nearest-parameter search (coarse scan + bisection); not byte-exact: x87 sum scheduling differs
+005cf4f0  519  complete handle extrusion helper; not byte-exact: fabs/sqrt x87 interleave and vec3 copy via int regs differ

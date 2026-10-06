@@ -1,0 +1,2 @@
+006470b0 1818 complete: creates one large-asset view and registers it under 28 type keys; cl duplicates the first block / differs in spill layout
+006478c0 1325 complete: SetLargeCardVisibililty; cl emits x87 rect math where original used SSE via inline helpers

@@ -1,0 +1,9 @@
+slices/s00972e30/s00972e30.cpp  ?CreateNodeCopy@@YGPAURBNode@@PBU1@PAU1@@Z  00972e30
+slices/s00972e30/s00972e30.cpp  ?DoCellWindowMove@WinGrid@@QAEXPAH@Z  00973330
+slices/s00972e30/s00972e30.cpp  ?SetScrollBarDrawableVertical@WinGrid@@QAE_NPAX@Z  00973390
+slices/s00972e30/s00972e30.cpp  ?SetScrollBarDrawableHorizontal@WinGrid@@QAE_NPAX@Z  00973410
+slices/s00972e30/s00972e30.cpp  ?GetCountForKey@SparseMatrix@@QAEHH@Z  009739e0
+slices/s00972e30/s00972e30.cpp  ?CountCellsInRange@SparseMatrix@@QAEHHHHH@Z  00973b00
+slices/s00972e30/s00972e30.cpp  ?GetCellsInRange@SparseMatrix@@QAEHHHHHPAH@Z  00973b90
+slices/s00972e30/s00972e30.cpp  ?ListErase@@YGPAUListIter@@PAU1@U1@1@Z  00973d10
+slices/s00972e30/s00972e30.cpp  ?ListInsertRange@@YGXPAUListNode@@UListIter@@1H@Z  00973d60

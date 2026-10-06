@@ -1,4 +1,0 @@
-00499410  1825  partial: large routine skeleton only
-00499b40  966  partial: medium routine skeleton only
-00499f10  280  partial: routine skeleton only
-0049a0c0  468  partial: routine skeleton only

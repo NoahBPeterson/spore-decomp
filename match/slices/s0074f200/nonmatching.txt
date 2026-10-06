@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0074f200  129  complete (map<uint,AutoRef<cFeedbackEvent>>::operator[]); register allocation / EH-state layout differs
+0074f420  242  complete (vector<Elem1C>::DoInsertValue, fixed buffer); EH state and local slot layout differ (no catch/unwind funclets reproduced)
+0074f5d0  449  complete (vector<cModelInfo>::DoInsertValues); original reuses the n argument slot as the end-n pointer
+0074f800  1262  complete (cModelWorld::DrawLayer); original has many Float4 temp slots and a 0xa0 frame
+0074fd90  77  complete (constructor, two rb-tree headers + counters); dead zero stores of the tree anchors are not reproduced
+0074fea0  300  complete (start of the two feedback jobs); register allocation and EH unwind layout differ

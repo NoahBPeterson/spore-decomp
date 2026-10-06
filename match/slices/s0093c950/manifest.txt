@@ -1,0 +1,7 @@
+slices/s0093c950/s0093c950.cpp  ?ConvertEncoding@Text@EA@@YAIPB_WIIPAUWStr@12@@Z  0093cfb0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ?GetTextLine@Text@EA@@YAPBDPBD0PAPBD@Z  0093d0b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ?ConvertBinaryDataToASCIIArray@Text@EA@@YAXPBXHPAG@Z  0093d210  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ?ConvertASCIIArrayToBinaryData@Text@EA@@YA_NPB_WHPAX@Z  0093d280  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ?SplitTokenDelimited@Text@EA@@YA_NPB_WI_WPA_WIPAPB_W@Z  0093d320  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ??$MatchPattern@_W@Text@EA@@YA_NPB_W0@Z  0093d3a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0093c950/s0093c950.cpp  ??$MatchPattern@D@Text@EA@@YA_NPBD0@Z  0093d410  /O2 /MD /Gy /EHsc /TP /GS-

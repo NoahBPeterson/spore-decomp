@@ -1,1 +1,9 @@
-# (none — all reconstructed functions in this slice are either byte-exact or partial)
+# va  diff-bytes  reason
+006b6920  77   ~cStringManager complete; vcall method load scheduled before pushes
+006b6a00  45   LoadAll complete; mpBucketArray reloaded for end sentinel in original
+006b6bf0  193  StringTableResourceFactory::Create complete; StringTable ctor not inlined
+006b6d10  177  cStringManager ctor complete; init store order/ctor inlining differs
+006b6f80  364  vector<ushort>::insert(pos,n,val) complete; fill helper (rep stos) shape differs
+006b7180  319  vector<uchar>::insert(pos,n,val) complete; fill/memset order differs
+006b7320  76   StringTable::GetString complete; find() jump threading differs
+006b7430  841  ReadResource complete; register allocation / scheduling differs

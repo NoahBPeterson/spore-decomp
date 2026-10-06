@@ -1,0 +1,11 @@
+00996f10 eastl::deque<EA::UTFWinExtras::cXHTMLFrameSet::JobEntry,eastl::allocator,16>::erase  # 2008 dev-PDB name
+00997210 EA::UTFWinExtras::cXHTMLFrameSet::GetJobInfo  # 2008 dev-PDB name
+009972a0 EA::UTFWinExtras::cXHTMLFrameSet::LoadRequestCallback  # PDB candidate caller-single
+00997350 eastl::vector_map<unsigned int,EA::UTFWinExtras::WinXHTML_*,...>::insert  # dev-PDB name
+00997730 EA::UTFWinExtras::cXHTMLFrameSet::HandleLocationChange  # 2008 dev-PDB name
+009978b0 EA::UTFWinExtras::cXHTMLFrameSet::HandleFormSubmit  # 2008 dev-PDB name
+00997bf0 EA::UTFWinTools::HitMaskBinder::Bind  # PDB candidate caller-scored
+00997d40 EA::UTFWinTools::HitMaskFactory::GetSupportedTypes  # 2008 dev-PDB name
+00997d80 EA::UTFWinTools::HitMaskFactory::CanConvert  # 2008 dev-PDB name
+00997dc0 EA::UTFWinTools::HitMaskFactory::ReadResource  # 2008 dev-PDB name
+00997f30 EA::UTFWinTools::HitMaskFactory ctor  # vtable setup

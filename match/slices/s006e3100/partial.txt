@@ -1,2 +1,1 @@
 # va  diff-bytes  reason (incomplete)
-006e3100  n/a  SP::CaptureSceneViews (3,664 bytes): compiling skeleton only; the six-face capture / render-target bind / accumulation body is not translated

@@ -1,2 +1,20 @@
 slices/s00b181d0/s00b181d0.cpp  ?WriteSerializableObjectCheck@cGameData@SP@@QAE_NXZ  00b183e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s00b181d0/s00b181d0.cpp  ?NotifyDirty@cGameData@SP@@QAEX_N@Z  00b189a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b181d0/s00b181d0.cpp  ?VtableSlot40@cGameData@SP@@QAEXH@Z  00b183f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?Init@cGameData@SP@@QAE_NPAXHH@Z  00b18400  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?Ctor@RefHolder@@QAEPAU1@IIPAUIRef@@@Z  00b18490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?DtorBody@cGameData@SP@@QAEXXZ  00b184c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?GetDefinition@cGameData@SP@@QAEIXZ  00b18530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?SetOwner@cGameData@SP@@QAEXPAUIRef@@@Z  00b18550  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ??0cGameData@SP@@QAE@XZ  00b18660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?ScalarDeletingDtor@cGameData@SP@@QAEPAU12@E@Z  00b186b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?KindIsActive@@YAEPAUIObj@@@Z  00b188b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?NotifyRemove@@YIXPAD@Z  00b18960  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?CheckSpaceGame@@YG_NH@Z  00b18d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?SendMessage7@@YGXH@Z  00b18d90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?ClearTimers@@YIXPAD@Z  00b18db0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?CallHolder18@@YAXXZ  00b18dd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?HasBits@cNibbleHolder@@QAE_NXZ  00b18e40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?PawnFlags@@YIIPAUIObj@@@Z  00b18e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?CheckAppProperty@@YA_NXZ  00b18f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00b181d0/s00b181d0.cpp  ?RegisterInputHandler@@YIXPAD@Z  00b19180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

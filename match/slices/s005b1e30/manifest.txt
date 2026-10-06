@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005b1e30/s005b1e30.cpp  ??0cSPEditorManipulationPinning@SP@@QAE@XZ  005b23d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005b1e30/s005b1e30.cpp  ??1cSPEditorManipulationPinning@SP@@UAE@XZ  005b24a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005b1e30/s005b1e30.cpp  ?Nlerp@@YA?AUcSPQuaternion@@ABU1@0M@Z  005b2350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005b1e30/s005b1e30.cpp  ?SlerpWrap@@YA?AUcSPQuaternionW@@ABUcSPQuaternion@@0M@Z  005b26f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,6 @@
+00617130  623  cFeedAssetTx::HandleResult: complete; register allocation differs (dir/ok kept in different registers and frame 0x14 vs 0x18)
+006175c0  354  RemoveFeedFromAll (cdecl, hash-set walk): complete; iterator/begin() register choice and key zero-init scheduling differ
+006177b0  550  RemoveFeedByName (ObjectTemplateDB query by name): complete; msg/results local layout and register allocation differ
+00617b10  190  cFeedGetTx::ConstructRequestA: complete; this in edi vs ebx and delete-this null check after the atomic release not reproduced
+00617c90  189  cFeedGetTx::ConstructRequestB: same as 00617b10 with map id 0x539f705
+00617f10  312  cSnapshotUploadTransaction::ConstructRequest: complete; register allocation (this in ebx vs edi) and vtable-load scheduling differ

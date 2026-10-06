@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s0089b520/s0089b520.cpp  ?resize@?$ResizableVec@UGlyphInfo@Text@EA@@@@QAEXI@Z  0089bd50  /O2 /MD /Gy /TP /arch:SSE /GS-

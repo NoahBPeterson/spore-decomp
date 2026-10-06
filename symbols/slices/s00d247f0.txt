@@ -1,0 +1,1 @@
+00d247f0 SP::cCreatureCamera::ReloadTuning  # card name

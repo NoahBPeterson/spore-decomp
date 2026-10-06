@@ -1,0 +1,1 @@
+008a6430 2129 complete behavioral source (565 colour-block LSQ endpoint fit); original 4048B is a union/Vector3-temporary-heavy expansion, ours 1919B at /O2 /arch:SSE

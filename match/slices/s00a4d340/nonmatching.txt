@@ -1,0 +1,4 @@
+00a4d340  1  linked-list tail walk picks eax vs ecx for node reg
+00a4d4d0  2  xmax/maxp update store order
+00a4d6a0  2  xmax/maxp update store order
+00a4de50  140  x and y swap callee-saved regs (edi/ebx)

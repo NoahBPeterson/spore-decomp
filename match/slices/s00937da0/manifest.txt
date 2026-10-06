@@ -1,0 +1,3 @@
+slices/s00937da0/s00937da0.cpp  ?Vsnprintf8@@YAHPADIPBD0@Z  00938400  /O2 /MD /Gy /TP /GS-
+slices/s00937da0/s00937da0.cpp  ?Sprintf8@@YAHPADPBDZZ  00938470  /O2 /MD /Gy /TP /GS-
+slices/s00937da0/s00937da0.cpp  ?Snprintf8@@YAHPADIPBDZZ  009384e0  /O2 /MD /Gy /TP /GS-

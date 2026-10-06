@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+004cf770  909  vector<Rec14>::DoInsertValues complete; only diff is Rec14 temp copy: original spills this (lea ecx,[ebp-0x14]; mov [ebp-0x34],ecx) before the out-of-line X87Vec4 copy ctor call; ScratchSlots<1> reproduces the slot, not the 3 insns (rest shifts)

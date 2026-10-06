@@ -1,1 +1,7 @@
-0057a960  96  complete inverse-mask compute; cl keeps the 4 globals in registers/stack, ours re-loads them
+0057a960  88    complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)
+00579e20  1727  complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original
+0057a610  163   complete AddTorsoToEffectsMask; uninitialized vec3 local copied as in original, sched differs
+0057a6d0  3     complete ctor; only mov ecx,<addr> scheduling differs
+0057a710  423   complete SendBehaviorMessage; this/msg register roles swapped vs original
+0057a9e0  110   complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores
+0057ac00  366   complete BuildPartMask (masks | defaults + ability/property bits); schedule differs

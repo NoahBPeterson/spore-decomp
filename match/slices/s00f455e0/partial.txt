@@ -1,8 +1,0 @@
-# va  diff-bytes  reason
-00f455e0  n/a  skeleton: 912-byte scenario action routine; not reconstructed
-00f45970  n/a  skeleton: scenario init while the global flag is set; not reconstructed
-00f45a80  n/a  skeleton: scenario teardown/refresh; not reconstructed
-00f45b50  n/a  skeleton: 222-byte scenario state step; not reconstructed
-00f45c30  n/a  skeleton: 916-byte scenario action-table update helper; not reconstructed
-00f46020  n/a  skeleton: 997-byte scenario action-table update helper; not reconstructed
-00f46450  n/a  skeleton: 262-byte scenario create-action; not reconstructed

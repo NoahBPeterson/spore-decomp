@@ -1,0 +1,4 @@
+0056b9e0 657 cRigBlockTag::ExtractTraits; complete, /Od slot layout (BlockKey/hashtable temps) differs
+0056bd30 2 cRigBlockTag::DescribeTraits; complete, 2-byte near-miss: wfind const char& temp slot at -0x59 vs -0x5a
+0056bfa0 670 cTextureTag::ExtractTraits; complete, /Od slot layout (vector_map insert temps) differs
+0056c2d0 2 cTextureTag::DescribeTraits; complete, 2-byte near-miss: wfind const char& temp slot at -0x59 vs -0x5a

@@ -1,0 +1,1 @@
+00c2d220 3679 complete source; stack-slot layout/regalloc differ (frame 0x108 vs 0x114), FUN_00c29d80 returns float in xmm0 (non-MSVC convention, declared as x87 float)

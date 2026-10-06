@@ -1,2 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s004eda30/s004eda30.cpp  ?FUN_004ee930@@YAHIH@Z  004ee930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004eda30/s004eda30.cpp  ?FUN_004edeb0@@YA_NHPAUFlags128@@@Z  004edeb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004eda30/s004eda30.cpp  ?FUN_004ee3b0@@YA_NPADPAUFlags128@@@Z  004ee3b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004eda30/s004eda30.cpp  ?FUN_004edf40@@YA_NPB_WPAUFlags128@@@Z  004edf40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

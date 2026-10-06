@@ -1,1 +1,2 @@
-# (empty)
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast)
+007dd880  2372  SP::cSmoothCameraController::ConfigUpdated; complete (all property reads incl. zoom/FOV, clip, pitch and orientation arrays), this lives in esi instead of ebx and frame is 4 bytes smaller

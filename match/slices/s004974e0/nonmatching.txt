@@ -1,1 +1,4 @@
 00498230  4   complete recursive flag propagation; only the /Od slots of the two inner locals (slot pointer vs child) are swapped
+004974e0  2269  complete (all paths and calls); /Od slot order, inline-vs-out-of-line Vector3 copy flavours and the inlined parent accessor differ
+00497f20  560  complete (direction search loops); /Od slot order and vector/string local init order differ
+004982b0  244  complete (Matrix3/Vector3 by-value args via real copy ctors); /Od frame holes (0x10c vs 0x74) differ

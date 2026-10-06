@@ -1,8 +1,1 @@
-005ac980  39  constructor (base ctor + two vtable stores + zero): not translated
-005ac9f0  98  constructor (base ctor + vtable stores + member clears): not translated
-005aca70  448  not translated
-005accc0  147  not translated
-005acdb0  260  not translated
-005acec0  1386  not translated
-005ad430  413  not translated
-005ad5d0  859  not translated
+# va  diff-bytes  reason

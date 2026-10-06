@@ -1,1 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0081fd70  -  complete ModifyVec4 (both bArray paths); late 'push ebp' save, textEdit/iterator register assignment differ (~9 instr)
+00820210  -  complete ModifyRGB; same register/spill differences as ModifyVec4
+00820680  -  complete ModifyRGBA; same register/spill differences as ModifyVec4
+00820bb0  -  complete eastl::vector<T*>::DoInsertValue (generic ptr vec); register assignment esi/edi swapped, ebp save placement

@@ -1,0 +1,9 @@
+00b181d0  6  WaterClearance: complete; x87 order of x^2/z^2 in the radius sum differs (cl evaluates z^2 first)
+00b182f0  6  BoundsQuery: complete; same x87 sum-order diff as 00b181d0 (inlined radius update)
+00b18590  15  cGameData::Write: complete; cl stores the 0x17f243b local before the vcall's table load, original after
+00b18760  9  creature check: complete; cl places the tail-jmp block before the xor al,al return, original after
+00b189c0  585  KeyDownHandler: complete; cl merges the return-true/false exits that the original duplicates, layout shifts
+00b18ef0  85  RequestAction: complete; cl folds the 0x5ece0001..2 range test and picks different callee-saved regs
+00b18f90  90  CheckPawnFlags: complete; original is a custom-convention (ecx + caller-popped stack arg) static, not reproducible
+00b19000  229  PickPosition: complete; original takes flags in eax and out in edi (custom convention), frame differs
+00b19290  231  OnKey: complete; register allocation (ebx vs ebp) and u8 byte ops of the pause-flag toggle differ

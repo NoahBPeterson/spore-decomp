@@ -1,0 +1,2 @@
+005eb540 SP::cSPNameGenerator::CreateRandomCompoundName  # PDB candidate (caller-scored) + asm
+005ebb00 SP::cSPNameGenerator::CreateRandomName  # PDB candidate (caller-scored) + asm

@@ -1,1 +1,5 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005002d0/s005002d0.cpp  ?ExportMeshBegin@cExportHelper@@QAEXI_N@Z  00500880  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005002d0/s005002d0.cpp  ?ExportSubmesh@cExportHelper@@QAEXPAUcMeshData@@PAUcSkinWeights@@@Z  00500920  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005002d0/s005002d0.cpp  ?ExportMeshAdd@cExportHelper@@QAEXHHPAM00PAIIIHHH@Z  00500ef0  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s005002d0/s005002d0.cpp  ?ExportMeshEnd@cExportHelper@@QAEXXZ  00501200  /Od /Ob1 /MD /Gy /TP /GS- /arch:SSE /fp:fast

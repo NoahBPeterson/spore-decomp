@@ -1,2 +1,5 @@
 # source  symbol  original VA  [cl flags override]
 slices/s006f7430/s006f7430.cpp  ?FUN_006f8140@@YAPADPAD00@Z  006f8140  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f7430/s006f7430.cpp  ?Wrapper8c@cFilterChain@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHH@Z  006f7430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s006f7430/s006f7430.cpp  ?Wrapper200@cFilterChain@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHH@Z  006f7680  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s006f7430/s006f7430.cpp  ?ApplyStrengthFilter@cFilterChain@@QAEXPAUFilterTables@@PAUFilterOp@@HHHHF@Z  006f7f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

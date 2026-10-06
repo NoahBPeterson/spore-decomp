@@ -1,6 +1,1 @@
 # va  diff-bytes  reason
-00f447f0  n/a  skeleton: scenario-mode init (allocates ScenarioResource 0x2cb0 + ScenarioEconomy 0x30, registers 3 message handlers); not reconstructed
-00f44a40  n/a  skeleton: action insert-at-index with per-action vector growth; not reconstructed
-00f44bf0  n/a  skeleton: scenario tag/asset message apply; not reconstructed
-00f44dd0  n/a  skeleton: scenario manager reinitialization (large aligned frame); not reconstructed
-00f44fe0  n/a  skeleton: 1532-byte scenario save/load/rebuild; not reconstructed

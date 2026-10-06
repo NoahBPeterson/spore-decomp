@@ -1,0 +1,12 @@
+slices/s00a22220/s00a22220.cpp  ?FreeNodes@PoolList@@QAEXXZ  00a222c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ??4AR@@QAEAAU0@ABU0@@Z  00a22580  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?ARUninitCopy@@YAPAUAR@@PAU1@00@Z  00a225d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?ARCopyBackward@@YAPAUAR@@PAU1@00@Z  00a226c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?ARCopy@@YAPAUAR@@PAU1@00@Z  00a22730  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ??1ResourceDeviceDriver@@UAE@XZ  00a227d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?UpdateOutput@Subscription@@QAEXPAUBuilder@@@Z  00a22820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?MakeKeyPair@@YGHPAHH@Z  00a22b00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?SetPaused@Mgr@@QAE_NH_N@Z  00a22d50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?FindObject@@YG_NHPAPAUIZ@@H@Z  00a22fa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?FindObject2@Mgr@@QAE_NHPAPAUIZ@@H@Z  00a23090  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a22220/s00a22220.cpp  ?FindByName@Mgr@@QAE_NPAUSnd@@PAPAU2@@Z  00a23160  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

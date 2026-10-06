@@ -1,1 +1,5 @@
-# va  diff-bytes  reason
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP)
+00f455e0  772  remove-scenario-object: complete; register allocation/loop layout differ (436-line diff)
+00f45c30  777  scenario action-table update: complete; callee 0xf3fa20 is usercall (this in eax), register allocation differs
+00f46020  851  scenario action-table compare/sync: complete; usercall callee, branch layout differs
+00f46450  180  scenario create-action: complete; usercall callee 0xf42a50 (eax/esi regs), schedule differs

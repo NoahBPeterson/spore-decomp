@@ -1,7 +1,0 @@
-0082cd30 -   cSPUIDeserializeHelper::ProcessStream: 1863-byte parser not reconstructed
-0082d480 -   cSPUISerializeHelper::ParseProp: 801-byte parser not reconstructed
-0082d7b0 -   cSPUISerializeHelper::ParseProps: 345-byte parser not reconstructed
-0082d910 -   cSPUISerializeHelper::ParseObject: 209-byte parser not reconstructed
-0082d9f0 -   cSPUIDeserializer::Read: 230-byte reader not reconstructed
-0082dae0 -   152-byte helper not reconstructed
-0082db80 -   125-byte helper not reconstructed

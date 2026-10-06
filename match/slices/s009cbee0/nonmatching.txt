@@ -1,0 +1,1 @@
+009cbee0 3662 complete port using retail byte offsets (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); frame 0x4b8 vs 0x4c0 and reg allocation differ, 4KB fp-heavy function not chased

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f78a60  3869  complete (same 4417 B size); older-copy T4B quad streamer, regalloc/x87-vs-SSE scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

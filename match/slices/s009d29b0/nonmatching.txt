@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+009d29b0  375  DistanceBetween: complete; Vec3 subtract flavour (x87 x, SSE y/z spills) and frame differ
+009d2b90  210  PathSection::ComputeLength: complete; mixed x87/SSE subtract flavour differs
+009d2c80  319  AssignWeights: complete; sin/cos/sqrt scheduling differs
+009d2dd0  243  PathSection::Setup: complete; register allocation differs
+009d2f50  173  GetSlotDirection: complete; register allocation differs
+009d3020  126  IsPointUnique: complete; register pressure/hoisting differs
+009d3200  167  Integrate: complete; local slot reuse of arg slot differs
+009d32d0  159  UpdatePhases: complete; x87 stack scheduling differs
+009d3410  116  FindLimbAboveThreshold: complete; x87 temp scheduling differs
+009d34a0  60  ComputeRatios: complete; only loop-head alignment nop differs
+009d3580  107  GetStepScale: complete; original keeps this in esi
+009d3610  154  GetAmplitude: complete; x87 scheduling differs
+009d3790  136  GetStepScale2: complete; original keeps this in esi
+009d3840  205  GetTurnFactor: complete; x87 scheduling differs

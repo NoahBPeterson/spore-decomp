@@ -1,4 +1,1 @@
 # va  reason
-004e5d00 2585-byte /Od verb/capability builder skeleton
-004e6720 506-byte /Od vector collector skeleton
-004e6a10 431-byte /Od per-entry updater skeleton

@@ -1,2 +1,9 @@
 # Complete (all paths present) but not byte-exact.
 006b2aa0  57   recursive rbtree DoNukeSubtree; needs the EH-managed AutoRefCount pair dtor frame
+006b27f0  520  CreateHTTPServer complete; original keeps new-expression temp in the dead param slot and EH smart-ptr states, register alloc differs
+006b2b30  475  OpenPreCommitFile complete; same dead-param-slot temp / EH state layout difference
+006b2dc0  476  CreateCachedDirectorySave complete; same as OpenPreCommitFile
+006b3050  276  cDirectoriesCheat::Execute complete; frame is 4 bytes larger in the original (new-expression temp), prologue order differs
+006b3240  276  CreatePackageSave complete; same as Execute
+006b3430  147  CreateLocationSave complete; prologue/frame differs (extra 4-byte slot), otherwise same calls
+006b3680  180  map::operator[] complete; original reuses the key param slot for the insert's sret result

@@ -1,1 +1,6 @@
-00677470  46  UIHost::FUN_00677470 (SetTooltip/image update): complete behaviour (FUN_00599BE0, layout vtbl+0x20, FUN_00599530, GetRootWindow, FUN_00808B20); register/scheduling of the window reloads and stack cleanup differs
+00676660  99  Controller::FUN_00676660 (map find-or-insert): complete; key temp init order and id/end register swap differ
+00676710  186  Controller::AwardAchievement: complete; register allocation (id kept in ebx, return value spilled) and extra it==it+1 check differ
+00676810  150  Controller::FUN_00676810 (load records): complete; compiler rotates the read loop and drops the sete/test after the first read
+00676a20  8  Controller::ParsePropFiles: complete; only the order of the KeyList vptr store vs the vector zeroing differs
+00676f60  88  Controller message handler: complete; original copies the 12-byte message to a dead local first
+00677530  107  UIHost::FUN_00677530 (SetWindowImage-ish): complete; needs /arch:SSE /fp:fast, ecx/eax shuffle around the image release differs

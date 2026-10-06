@@ -1,7 +1,0 @@
-005c53c0 2081 cSPPaletteCategoryUI::Init: stubbed; not reconstructed
-005c5c50 97   function: stubbed; not reconstructed
-005c5cc0 273  function: stubbed; not reconstructed
-005c5e30 68   ctor: stubbed; not reconstructed
-005c5e90 78   dtor: stubbed; not reconstructed
-005c5f00 265  function: stubbed; not reconstructed
-005c6010 808  cSPPalette::LoadDefinitionPart: stubbed; not reconstructed

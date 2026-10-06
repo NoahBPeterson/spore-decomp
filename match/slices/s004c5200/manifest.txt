@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004c5200/s004c5200.cpp  ?Check58b0@Ed@@QAE_NXZ  004c58b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Get5910@Ed@@QAEXPAPAUTex@@0@Z  004c5910  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Diag5980@Ed@@QAEXPB_W0@Z  004c5980  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Dtor5d50@EPtr@@QAEXXZ  004c5d50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Assign5d80@EPtr@@QAEAAU1@PAUEObj@@@Z  004c5d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?EmplaceBack5eb0@TVec@@QAEXXZ  004c5eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Dtor5f40@PairVec@@QAEXXZ  004c5f40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?PushBack5fc0@PairVec@@QAEXABUPair@@@Z  004c5fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?PopBack6070@PairVec@@QAEXXZ  004c6070  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Copy6150@EPtr@@QAEPAU1@PAU1@@Z  004c6150  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004c5200/s004c5200.cpp  ?Update5200@Ed@@QAE_NPAUSkinDesc@@@Z  004c5200  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

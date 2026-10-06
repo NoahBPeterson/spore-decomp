@@ -1,0 +1,6 @@
+0096e3a0 EA::UTFWin::cDropShadowDescriptor::CopyWithQualityAdjustment  # 2008 dev-PDB name
+0096e500 EA::UTFWin::cDropShadowDescriptor::SetQuality              # 2008 dev-PDB name
+0096eee0 EA::UTFWinControls::ExplicitNavigator::`scalar deleting destructor'  # 2008 dev-PDB name
+0096f060 UI::FadeEffect::FadeEffect                                 # 2008 dev-PDB name
+0096f080 UTFWin::BiStateEffect::func84h                             # 2008 dev-PDB name (partial)
+0096ef80 EA::UTFWinControls registration chain                      # sequence of static registrations

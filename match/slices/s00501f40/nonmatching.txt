@@ -1,0 +1,3 @@
+00501f40  1000  complete vector<E48>::DoInsertValues (0x48-byte elem); /Od inline-wrapper arg-copy layers missing (mine 1023 vs 1291 bytes)
+00502450  749  complete vector<EA54>::DoInsertValues (0x54-byte elem); /Od wrapper layers/frame layout differ (822 vs 1066 bytes)
+00502880  1000  complete vector<Ed216>::DoInsertValues (0xd8-byte elem + temp dtor); wrapper layers missing (1111 vs 1359 bytes)

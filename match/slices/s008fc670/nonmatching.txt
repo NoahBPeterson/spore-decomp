@@ -1,0 +1,8 @@
+008fd1a0  103  LogFilter setter: register schedule of the refcount/virtual tail differs
+008fd240  35  AutoRef::operator=: cl folds the refcount decrement compare into the xadd flags (missing dec)
+008fd2e0  92  handler destructor: derived vtable stores at entry and dec-fold differ
+008fc670  856  TextStyle::Update: register naming (esi/edi swap) + 64-byte frame alignment + needs /fp:fast; semantics complete
+008fcab0  8  DocumentFactory::CreateResource: vcall eax/edx register choice differs
+008fcbd0  163  StripLeadingDotComponents: whole-function register permutation (edi/esi swapped)
+008fce50  390  FileHandler::ProcessRequest: this/req register allocation swapped (ebx/edi) shifts everything
+008fd540  86  HttpHandler ctor: float constant load hoisting (movss placement)

@@ -1,7 +1,0 @@
-00579e20  1918  cAppModeEditorBase::~cAppModeEditorBase stub: member release/delete cascade
-0057a610  186   AddTorsoToEffectsMask stub: vtable lookup + cSPTransform::operator= + model mask bit
-0057a6d0  48    small MI object ctor stub: vtables 0x13f585c/0x13f5858 + 0x1667bac/0x1667bae
-0057a710  588   SendBehaviorMessage stub: allocates UI::BehaviorMessage objects + MessageServer posts
-0057a9e0  177   GetDefaultMask stub: default mask AND inverse of +0x1cc mask
-0057aaa0  344   GetEditorSaveability stub: property + +0x4b3/+0x4b4 gates
-0057ac00  0     SomeSetup stub (not yet analysed)

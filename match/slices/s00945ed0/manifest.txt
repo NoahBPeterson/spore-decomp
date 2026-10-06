@@ -1,0 +1,22 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00945ed0/s00945ed0.cpp  ?StaticWorkerThreadFunction@HTTPClient@Internet@EA@@SAIPAUWorkerThreadInfo@23@@Z  00946520  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?CreateWorkerThreadIfNeeded@HTTPClient@Internet@EA@@QAEXXZ  00946540  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?AddNewJob@HTTPClient@Internet@EA@@QAEIPAUHTTPRequestStub@23@H_NH@Z  00946680  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Fn9467b0@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NH@Z  009467b0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Fn9467c0@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NXZ  009467c0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Fn9467d0@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NHH@Z  009467d0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?GetSize@HTTPMultipartFormDataPostBodyStream@Internet@EA@@QAEHXZ  009467e0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?SetSize@HTTPMultipartRelatedPostBodyStream@Internet@EA@@QAE_NH@Z  00946800  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Close@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NXZ  00946810  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?GetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAEHXZ  00946830  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?SetPosition@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NHH@Z  00946890  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Read@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAEHPAXI@Z  00946920  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Finalize@HTTPMultipartFormDataPostBodyStream@Internet@EA@@QAE_NXZ  00946970  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?WriteField@HTTPMultipartFormDataPostBodyStream@Internet@EA@@QAE_NPBD0@Z  009469c0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?WriteEndBoundary@HTTPMultipartFormDataPostBodyStream@Internet@EA@@QAE_NXZ  00946aa0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?SetPosition@HTTPMultipartRelatedPostBodyStream@Internet@EA@@QAE_NHH@Z  00946b30  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ??0HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE@XZ  00946c50  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Fn946cc0@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NXZ  00946cc0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ??_GHTTPFormURLEncodedPostBodyStream@Internet@EA@@UAEPAXI@Z  00946ce0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?GetContentTypeString@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NPAUStrStub@eastl@@@Z  00946d20  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s00945ed0/s00945ed0.cpp  ?Write@HTTPFormURLEncodedPostBodyStream@Internet@EA@@QAE_NPBD0@Z  00946d40  /O2 /MD /Gy /TP /GS- /arch:SSE2

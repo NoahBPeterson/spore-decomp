@@ -1,0 +1,1 @@
+0097a130 3541 complete (all paths); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; frame/reg allocation differs, double->int64 ceil cast emits _ftol2_sse instead of inline fistp+fldcw

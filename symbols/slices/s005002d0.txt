@@ -1,0 +1,5 @@
+005002d0 nSPSkinner::cExportHelper::ExportSkeleton  # PDB name; writes "<name>.xsf" with one <BONE> per export joint
+00500880 nSPSkinner::cExportHelper::ExportMeshBegin  # opens "<name>.xmf", writes <MESH VERSION="1000" NUMSUBMESH=..>; (anchor name SP::cSPEditorSkinManager::Init is wrong)
+00500920 nSPSkinner::cExportHelper::ExportSubmesh  # writes one <SUBMESH> from a mesh and per-vertex skin weights (4 bone ids + 4 weights, 0x14 bytes/vertex)
+00500ef0 nSPSkinner::cExportHelper::ExportMeshAdd  # PDB name; writes one <SUBMESH> from raw vertex/normal/uv/index arrays
+00501200 nSPSkinner::cExportHelper::ExportMeshEnd  # writes </MESH>, fcloses and clears the FILE* at +0x6c (anchor name eastl::VectorBase is wrong)

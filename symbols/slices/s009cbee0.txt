@@ -1,0 +1,1 @@
+009cbee0 InitCreatureStaticDataFromResource  # PDB name on card

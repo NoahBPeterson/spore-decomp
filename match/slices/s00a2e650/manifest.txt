@@ -1,1 +1,2 @@
-slices/s00a2e650/s00a2e650.cpp  ?SetTypePriority@cTypeMapHolder@@QAEXII@Z  00a2f180
+slices/s00a2e650/s00a2e650.cpp  ?SetTypePriority@cTypeMapHolder@@QAEXII@Z  00a2f180  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a2e650/s00a2e650.cpp  ?PostEvent@MgrBase@@QAEXIIIIPAX@Z  00a2ee40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

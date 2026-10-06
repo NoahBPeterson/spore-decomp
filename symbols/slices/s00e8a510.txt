@@ -1,0 +1,1 @@
+00e8a510 SP::cBuildingView::HandleSimulationUpdate  # card name; cBuildingView : cSpatialObjectView (size 0x70)

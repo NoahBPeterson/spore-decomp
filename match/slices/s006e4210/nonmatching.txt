@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006e4210  3483  complete SSE2 source (all paths/calls, refcounted msgs as Ref<T>); inlined vector math scheduling and EH state layout not byte-exact

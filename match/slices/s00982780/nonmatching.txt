@@ -1,0 +1,1 @@
+00982780 -1 complete; Quad helper + ternary color, not tuned for byte match

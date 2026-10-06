@@ -1,0 +1,15 @@
+009568c0 EA::UTFWin::InternalInit2DSystem  # card (real PDB name), byte-exact
+00956a30 EA::UTFWin::InternalShutdown2DSystem  # mirror of Init: refcount dec, font mgr release, pool/memory manager delete
+00956b30 EA::UTFWin::GlyphRenderer::DrawText  # LayoutTextLine into a fixed_vector<GlyphDisplayEntry,256>, then vslot 13 draws the glyphs
+00956c40 EA::UTFWin::GlyphRenderer::DrawText  # 4-float overload (FUN_00890830 layout variant)
+00956f30 EA::UTFWin::FreeAllPooledLists  # drains display-list pool and renderable list chunk pool
+00956fa0 EA::UTFWin::FreeDisplayListEntries  # card
+00956ff0 EA::UTFWin::AllocDisplayListEntry  # card
+00957080 EA::UTFWin::UpperBound16  # upper_bound over a uint16 run table
+009570c0 EA::UTFWin::HitMask::Contains  # parity of upper_bound(runs, y*w+x)
+00957110 eastl::vector<unsigned short>::DoAllocateAndCopy  # new(n*2,"EASTL") + memcpy
+00957160 eastl::vector<unsigned short>::operator=  # copy assignment
+00957230 EA::UTFWin::HitMask::BuildFromMask  # byte mask -> run table
+00957300 EA::UTFWin::HitMask::BuildFromAlpha  # alpha>0x7f -> run table
+009573e0 eastl::vector<unsigned short>::swap  # copy-swap unless both own heap storage
+009574c0 EA::UTFWin::HitMask::BuildAssign  # swap runs + width/height

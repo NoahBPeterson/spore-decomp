@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+007b55f0  841  FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ
+007b5ad0  101  PostRenderJob: complete (job + message objects, EH smart ptrs); vtable-load order and a null-check differ
+007b5c80  184  MeshBoundingSphere: complete; float scheduling and Vector3 temp copies differ
+007b5e20  393  FrameJob::Fit: complete (opaque-pixel box fit); member reload/lea shape differs
+007b6010  11   RtJobA::Run: complete; only lock-xadd register choice differs
+007b6160  221  FrameJob::FitAspect: complete; member reload/lea shape differs
+007b63b0  13   RtJobB::Run: complete; only lock-xadd register choice differs
+007b64f0  58   RefHolder_Reset: complete; lock-xadd Release register shape and double member load differ

@@ -1,9 +1,0 @@
-005b1e30  848  not translated
-005b2180  453  not translated
-005b2350  126  not translated
-005b23d0  172  not translated
-005b24a0  81  not translated
-005b2500  496  not translated
-005b26f0  63  not translated
-005b2750  768  not translated
-005b2a50  821  SP::cSPEditorManipulationPinning::DoOnMouseDown: not translated

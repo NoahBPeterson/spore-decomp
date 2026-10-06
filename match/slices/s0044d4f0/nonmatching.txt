@@ -1,0 +1,1 @@
+0044d9e0 1783 complete; original Clamp uses maxss/minss (inline-asm only) and /Od slot hash fits for 7+18 locals unmatched

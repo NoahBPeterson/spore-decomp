@@ -1,19 +1,19 @@
-# slice s00b21e60 - names not recovered; roles inferred from call shape
-00b21e60  unknown
-00b21fe0  unknown
-00b22060  unknown
-00b22100  unknown
-00b22180  unknown
-00b22210  unknown
-00b222a0  unknown
-00b22440  unknown
-00b225b0  unknown
-00b225d0  unknown
-00b22650  unknown
-00b227c0  unknown
-00b22930  unknown
-00b22960  unknown
-00b22bc0  unknown
-00b22cc0  unknown
-00b22e80  unknown
-00b22ea0  unknown
+# slice s00b21e60 - names from PDB/Ghidra where known, roles inferred otherwise
+00b21e60  ReadClassMap  # reads count + (key, object) pairs from a serializer into an rbtree map
+00b21fe0  ClsMap_InsertValue  # rbtree DoInsertValue (24-byte node: value copy at +0x10); byte-exact
+00b22060  SPVector_swap  # vector swap with allocator compare (copy via temp when allocators differ)
+00b22100  Simulator::cVehicleGroupOrder::cVehicleGroupOrder  # PDB name from card
+00b22180  cVehicleGroupOrder_DtorBody  # destroys 0x178-byte element array, refs, tree, then cGameData dtor; byte-exact
+00b22210  GetStaticObj  # function-local static singleton; byte-exact
+00b222a0  ValidateClassSets  # logs "clsid 0x%08x" for ids missing from the class registry
+00b22440  Skinner_PaintSystem_DtorBody  # ends with vtbl_Skinner::PaintSystem store
+00b225b0  cGameNounManager_FlushAndMerge  # byte-exact
+00b225d0  SP::cGameNounManager::RemoveNoun  # Ghidra/PDB name
+00b22650  cGameNounManager_RemoveNounsOfType
+00b227c0  cGameNounManager_RemoveNounsWithInterface
+00b22930  cGameNounManager_RemoveHerd  # byte-exact
+00b22960  cGameNounManager_ProcessPending
+00b22bc0  cGameNounManager_Cleanup
+00b22cc0  cGameNounManager_CreateAndInit
+00b22e80  ClearHolderVec  # byte-exact
+00b22ea0  PushBackCast  # push_back(obj->Cast(0x1186577)) with refcount

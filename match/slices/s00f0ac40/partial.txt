@@ -1,11 +1,1 @@
 # va  diff-bytes  reason
-00f0ac40  -   partial: large (1171 B) UI list update; skeleton only
-00f0b0e0  -   partial: container range helper (0x44-byte records, eastl::copy + element ctor/dtor); semantics stubbed
-00f0b150  -   partial: container grow/append; skeleton only
-00f0b390  -   partial: container reserve/erase clamp; skeleton only
-00f0b420  -   partial: key lookup helper; skeleton only
-00f0b4d0  -   partial: list insert path; skeleton only
-00f0b690  -   partial: list remove path; skeleton only
-00f0b8b0  -   partial: window-list sweep; only the FUN_00f0b420 stage modelled
-00f0b940  -   partial: UI update skeleton
-00f0ba10  -   partial: UI update skeleton

@@ -1,4 +1,0 @@
-004a0b70  -  skeleton: new Editor block + BuildBlock (EA new, class ctor)
-004a0bf0  -  skeleton: block update helper
-004a1070  -  skeleton: large block update
-004a18b0  -  skeleton: block update helper

@@ -2,3 +2,6 @@
 slices/s0067eae0/s0067eae0.cpp  ?Execute@Cmd_ecb0@@QAEXPAX@Z    0067ecb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s0067eae0/s0067eae0.cpp  ?Execute@Cmd_ef60@@QAE_NPBDH@Z  0067ef60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s0067eae0/s0067eae0.cpp  ?push_back@Cmd_f640@@QAEXPAPAX@Z 0067f640  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s0067eae0/s0067eae0.cpp  ?NewNodeFromPair  0067eef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s0067eae0/s0067eae0.cpp  ?NukeSub@StrTree  0067f670  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s0067eae0/s0067eae0.cpp  ??1CheatMgr  0067f910  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

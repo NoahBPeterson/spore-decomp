@@ -1,0 +1,1 @@
+006196c0  big  COMPLETE: all fields/files/paths and calls reproduced (3050 vs 3984 bytes: original duplicates the failure cleanup tails inline; RAII locals share them)

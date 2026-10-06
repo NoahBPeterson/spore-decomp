@@ -1,0 +1,8 @@
+008d2590 EA::Input::InputMan::UpdateController  # XInput/DirectInput poll of one Controller (PDB layout)
+008d2b50 EA::Input::Controller::GetDeviceInfo  # calls InputMan::GetControllerDeviceInfo(mnIndex)
+008d2d70 EA::Input::Keyboard::GetDeviceInfo  # PDB name
+008d2ea0 EA::Input::Mouse::GetDeviceInfo  # PDB name
+008d3080 InitXInputFunctions  # PDB name
+008d3130 EA::Input::InputMan::~InputMan  # vptr resets of Controller[4]/Keyboard/Mouse
+008d31b0 EA::Input::InputMan::PollAll  # updates 4 controllers then poll-completion callback
+008d32f0 EA::Input::InputMan::InputMan  # ctor, noise 0.02 / binary 0.5

@@ -5,8 +5,8 @@
 006fb960  ClearFragmentShaders
 006fb9e0  eastl::vector<SP::cFragmentDecl>::operator=      # PDB candidate
 006fbb30  eastl::vector<SP::cFragmentDecl>::swap           # PDB
-006fbc60  eastl::vector<SP::cFragmentDecl>::DoInsertValues # (large append path)
+006fbc60  eastl::vector<SP::cFragmentDecl>::DoInsertValues # fill-insert path
 006fbed0  `anonymous namespace'::cPixelFragmentInfo::operator=  # PDB
-006fbf70  eastl::vector<SP::cFragmentDecl>::DoInsertValue  # PDB
-006fc1f0  eastl::vector<SP::cFragmentDecl>::DoInsertValues # PDB
+006fbf70  WriteShaderCache                                 # serializes 0x130-byte shader table (PDB label vector::DoInsertValue was wrong)
+006fc1f0  ReadShaderCache                                  # loads table, CreatePixelShader via device vtbl+0x1a8
 006fc480  eastl::vector<SP::cFragmentDecl>::resize         # PDB

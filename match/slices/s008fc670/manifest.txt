@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008fc670/s008fc670.cpp  ?SetFlagBool@HTTPx@@QAEX_NM@Z       008fd050  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ?GetProtocolName@@YGPB_WH@Z        008fd080  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ?EncodingFromName@@YAIPBD@Z        008fd0a0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ??0D290@@QAE@H@Z                   008fd290  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ?SetAcceptEncoding@HTTPy@@QAEXPBD@Z 008fd670  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ?HandlerMsgCb@@YAXIIHPAUHMsg@@@Z  008fd350  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ??1HttpHandler@@UAE@XZ  008fd3d0  /O2 /MD /Gy /TP /GS- /arch:SSE2

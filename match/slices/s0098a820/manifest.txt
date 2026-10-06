@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0098a820/s0098a820.cpp  ?FindSentenceEnd@WinTextEdit@UTFWinControls@EA@@QAEXI@Z  0098a820  /O2 /MD /Gy /TP /arch:SSE
+slices/s0098a820/s0098a820.cpp  ?SetScrollbar@IWinTextEdit@UTFWinControls@EA@@QAEXHPAUIUnk@23@@Z  0098acb0  /O2 /MD /Gy /TP /arch:SSE
+slices/s0098a820/s0098a820.cpp  ?SetScrollbarEnabled@IWinTextEdit@UTFWinControls@EA@@QAEXHH@Z  0098ad10  /O2 /MD /Gy /TP /arch:SSE
+slices/s0098a820/s0098a820.cpp  ??$upper_bound@PBUParagraph@UTFWinControls@EA@@MUYPosComparator  0098b650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098a820/s0098a820.cpp  ??$upper_bound@PBUParagraph@UTFWinControls@EA@@IUTextIndexComparator  0098b6b0  /O2 /MD /Gy /TP /arch:SSE

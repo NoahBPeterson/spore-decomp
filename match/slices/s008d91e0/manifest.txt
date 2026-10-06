@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+slices/s008d91e0/s008d91e0.cpp  ?ReadCompressed@DatabasePackedFile@@QAE_NHHHHH@Z  008d9320  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ?erase@RecMap@@QAE?AURbIter@@U2@@Z  008d93a0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ??1DatabasePackedFile@@QAE@XZ  008d93e0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ?GetOpenCount@DatabasePackedFile@@QAEHPBUKey@@@Z  008d9560  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ?InitializeHoleTable@DatabasePackedFile@@QAEXXZ  008d9770  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ?SetLocation@DatabasePackedFile@@QAE_NPB_W@Z  008d99c0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d91e0/s008d91e0.cpp  ?insert@RecMap@@QAEPAPAURbNode@@PAPAU2@PBUPFPair@@H@Z  008d9f20  /O2 /MD /Gy /TP /GS- /arch:SSE

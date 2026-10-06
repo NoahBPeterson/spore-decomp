@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00983790/s00983790.cpp  ?SetOrientation@IWinSlider@UTFWinControls@EA@@QAEXH@Z  00983b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?SetDrawable@IWinSlider@UTFWinControls@EA@@QAEXPAX@Z  00983ba0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?SetValue@IWinSlider@UTFWinControls@EA@@UAEXHD@Z  00983be0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?SetMinimumValue@IWinSlider@UTFWinControls@EA@@QAEXHH@Z  00983c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?SetMaximumValue@IWinSlider@UTFWinControls@EA@@QAEXHH@Z  00983c90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?OnMouseDown@WinSlider@UTFWinControls@EA@@QAE_NMMHH@Z  00983cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?OnMouseUp@WinSlider@UTFWinControls@EA@@QAE_NMMHH@Z  00983dd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?OnMouseMove@WinSlider@UTFWinControls@EA@@QAE_NMMH@Z  00983ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?GetNaturalSize@SliderDrawable@UTFWinControls@EA@@QAE_NPAMHH@Z  00983ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?SetComponentImage@ISliderDrawable@UTFWinControls@EA@@QAEXIPAUImage@23@@Z  00984040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?GetDrawable@IWinSlider@UTFWinControls@EA@@QAEPAXXZ  009842c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?OnRebuild@WinSlider@UTFWinControls@EA@@QAE_NH@Z  009842e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?RenderComponent@WinSlider@UTFWinControls@EA@@QAEXHI@Z  00984340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00983790/s00983790.cpp  ?PickComponent@WinSlider@UTFWinControls@EA@@UAEHMM@Z  00984410  /O2 /MD /Gy /TP /arch:SSE /fp:fast

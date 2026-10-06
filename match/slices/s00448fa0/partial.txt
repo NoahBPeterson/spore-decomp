@@ -1,6 +1,1 @@
-# va  diff-bytes  reason
-00448fa0  -  incomplete skeleton (1145-byte /Od method)
-00449420  -  incomplete skeleton (142-byte /Od method)
-004494b0  -  incomplete skeleton (1897-byte /Od method)
-00449ce0  -  incomplete skeleton (86-byte /Od method)
-00449d40  -  incomplete skeleton (393-byte /Od method)
+# va  diff-bytes  reason (incomplete)

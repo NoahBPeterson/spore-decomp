@@ -1,1 +1,8 @@
 005ad930  21  SetBlock: cl schedules the three integer argument loads / member stores in a different order than the original (original loads ecx/edx/eax then stores 0x38/0x3c/0x40; mine stores 0x40 first)
+
+005ac9f0  25  PinRot ctor: complete; cl hoists the 0x48/byte4 stores above the vtable stores
+005aca70  328  PinRot::OnMouseUp: complete; PostBlockEvent inlined differently, frame/scheduling differ
+005acdb0  76  PinRot::DoOnMouseDown: complete; block reg reuse (ecx vs eax) around flag test differs
+005acec0  -  PinRot::Update: complete (sound name check simplified to first-char test); Vector3 helpers/regalloc differ
+005ad430  338  PinRot::DoOnMouseUp2: complete; message-post expansions per branch differ
+005ad5d0  651  PinMove::DoMouseMove: complete; vector copies/regalloc differ

@@ -1,0 +1,1 @@
+010adab0 ?? complete from Ghidra decompile, behaviorally equivalent; original inlined Havok vector temps not CSEd (4749B vs 1609B ours), not reproducible

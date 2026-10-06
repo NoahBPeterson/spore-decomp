@@ -1,0 +1,3 @@
+00a20060 EA::Audio::Sound::ConfigureSound  # PDB anchor
+00a20700 EA::Audio::ConstructEmitterSndPlayer  # PDB gap-align
+00a207d0 EA::Audio::System::Shutdown  # PDB caller-scored (retail body is subsystem teardown)

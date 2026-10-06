@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 004f65d0  -   complete; original keeps a dead w[3]&=0 block (size differs)
+004f5720  1103  complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ
+004f5c60  1834  complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ; 2113 vs 2156 bytes

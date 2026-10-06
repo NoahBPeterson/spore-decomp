@@ -1,1 +1,7 @@
-# no byte-exact functions in this slice (see partial.txt)
+# source (relative to match/)  symbol  original VA  [cl flags override]
+slices/s00b21e60/s00b21e60.cpp  ?InsertValue@ClsMap2@@QAE?AUClsIter@@PAURBNode@@PAUClsKV@@_N@Z  00b21fe0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b21e60/s00b21e60.cpp  ?DtorBody@cVGOImpl@@QAEXXZ  00b22180  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b21e60/s00b21e60.cpp  ?GetStaticObj@@YAPAUStaticObj@@XZ  00b22210  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b21e60/s00b21e60.cpp  ?Dummy225b0@cGameNounManager@@QAEXXZ  00b225b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b21e60/s00b21e60.cpp  ?RemoveHerd@cGameNounManager@@QAEXPAUcNoun@@@Z  00b22930  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b21e60/s00b21e60.cpp  ?ClearHolderVec@@YAXPAUVecHolder@@@Z  00b22e80  /O2 /MD /Gy /TP /arch:SSE

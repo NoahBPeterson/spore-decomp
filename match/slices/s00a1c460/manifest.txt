@@ -1,0 +1,1 @@
+slices/s00a1c460/s00a1c460.cpp  ?ConfigurePrimitives@Sound@@QAE_NXZ  00a1c460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

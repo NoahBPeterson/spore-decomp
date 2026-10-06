@@ -1,1 +1,17 @@
 006acfe0  10  registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax)
+006ac630  92  OnRegister: refcount add/release arm and callback-loop scheduling differ
+006ac6f0  63  RegList dtor: complete; EH frame/vtable-store ordering differs
+006ac770  61  RegList ctor: complete; init order/EH differs
+006ac7d0  88  Registry::ClearAll: complete; hashtable iterator loop peeling differs
+006ac840  91  Registry::Lookup: complete; EH state/guard layout differs
+006ac8d0  276  Registry::Enumerate: complete; list-node smartptr assign shape differs
+006aca20  82  RegTable::erase: complete; register allocation differs
+006acaa0  374  vector<8B>::insert n copies: complete; inlined helper shapes differ
+006acc60  452  Registry::Register: complete; EH unwind states/inlined smartptr differ
+006ace70  304  Registry::Unregister: complete; EH unwind states differ
+006ad070  59  RemoveRegistrationCallback: complete; reg alloc differs
+006ad0f0  67  hashtable dtor: complete; EH/inline differences
+006ad180  112  vector<AutoRef>::push_back(null): complete; DoInsertValue call shape differs
+006ad270  147  RegList::ReleaseAll: complete; mutex guard/EH shape differs
+006ad350  98  RegList::Reset: complete; guard/EH shape differs
+006ad410  296  RegList::Add: complete; loop/register shape differs

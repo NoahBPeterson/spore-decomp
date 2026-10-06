@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00919620/s00919620.cpp  ?assign@StrBase@@  0x009199c0  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?DeallocateSelf@StrBase@@  0x00919a40  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ??1StrPair@@  0x00919b70  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?F919bc0@Holder@@  0x00919bc0  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?AppendRet@StrBase@@  0x00919c10  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?F919c30@Holder@@  0x00919c30  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?GetModuleSizeInfo@@  0x0091a1d0  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?GetSymbolInfoTypeFromDatabase@@  0x0091a200  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?Shutdown@AddressRepLookupSet@@  0x0091a430  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?GetAddressRepFromSet@AddressRepLookupSet@@  0x0091a490  /O2 /MD /Gy /TP /GS-
+slices/s00919620/s00919620.cpp  ?DestroyAll@StrArray4@@  0x0091a4f0  /O2 /MD /Gy /TP /GS-

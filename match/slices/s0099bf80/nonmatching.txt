@@ -1,0 +1,14 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+0099bf80  28  tree dtor: cl drops the redundant null test before delete and keeps no dec after xadd
+0099c0b0  220  quaternion multiply: SSE scheduling/register allocation differs
+0099c1a0  335  rotate vector by quaternion A: SSE scheduling differs
+0099c310  326  rotate vector by quaternion B: SSE scheduling differs
+0099c4a0  8  Add: final addss operand order (mem vs arg first) differs
+0099c540  8  Add: final addss operand order (mem vs arg first) differs
+0099c600  58  highest-bit: original has 'or ecx,eax' + dead store of hi param, not reproduced
+0099c7b0  181  InitChannel: copy of rec pointer kept in ecx in the original; arg register choice differs
+0099c9f0  161  index wrap: branch layout differs
+0099cae0  107  normalize to out: x87 sum/stack slot layout differs
+0099cba0  158  quaternion dot-sign add/sub: SSE scheduling differs
+0099cc70  376  slerp: SSE/x87 scheduling and spill layout differs
+0099ce40  190  unitize packed: x87 sum and schedule differ

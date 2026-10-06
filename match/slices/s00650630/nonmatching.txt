@@ -1,0 +1,3 @@
+00650630  2171  ReloadCallback complete (teardown + window wiring); register allocation / frame reuse of dead arg slots differs
+006511b0  436  eastl::insertion_sort<GridEntry*,CompareA> complete; iterator strength-reduction/register layout differs
+00651390  355  unguarded insertion sort complete; iterator strength-reduction/register layout differs

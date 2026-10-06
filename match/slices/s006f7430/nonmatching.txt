@@ -1,2 +1,4 @@
 # va  diff-bytes  reason
 006f8190  174  filter-chain teardown (intrusive release loop + FUN_006f43e0 + hashtable bucket frees): behavior complete; the release/loop register allocation differs.
+006f79a0  1242  cFilterChain::Dispatch (key + 12 floats + shader consts + fixed_vector<u64,8> + camera-driven blend, Submit): complete; register roles (ebx=tables/edi=this) and one extra 8-byte frame slot differ (flags /GS-).
+006f8260  207  cFilterChain::Resolve(ResKey): complete (hashtable find, TryA/TryB, ref-vector push, index map); register allocation of the two key halves differs.

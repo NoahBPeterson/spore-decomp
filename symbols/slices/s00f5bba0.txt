@@ -1,0 +1,1 @@
+00f5bba0 EA::Swarm::Stream_Quad_V4F_N4F_C4B_T2F (older copy)  # same algorithm as s00aabc20 sibling; callees 00f5a200=StreamerSetup, 00f58ed0=ApplyLoopBox, 00a9aff0=WigglePoint

@@ -1,0 +1,5 @@
+00844270 EA::ArgScript::SubstituteParameters  # anonymous-namespace helper, PDB-named
+00844780 EA::ArgScript::cIfCommand::Execute  # PDB name
+00844c40 EA::ArgScript::cDefineCommand::Execute  # PDB name
+00844ec0 EA::ArgScript::cParser::ParseEnd  # PDB name
+00844fb0 EA::ArgScript::cParser::InstantiateMacro  # PDB name

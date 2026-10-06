@@ -1,0 +1,2 @@
+45f5e0 - complete: mesh merge routine (/Od, inlined vector/size helpers and struct copies not reproduced)
+4600f0 666 complete: stream append; /Od slot order and ternary bool temps not matched

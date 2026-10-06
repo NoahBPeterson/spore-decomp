@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00823e30  3500  cPropertyUI::ProcessSpinnerButtons complete (inc/dec x 8 types x array); cl dynamically aligns the frame (and esp) once many double-vararg sprintf sites exist, the original has a plain 0x38 frame

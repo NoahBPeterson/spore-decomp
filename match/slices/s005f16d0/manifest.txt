@@ -4,3 +4,4 @@ slices/s005f16d0/s005f16d0.cpp  ?CheckType@cSPSwatchPlanner@SP@@QAEHXZ  005f22d0
 slices/s005f16d0/s005f16d0.cpp  ?GetDouble94@cSPSwatchPlanner@SP@@QAEMXZ  005f2310  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f16d0/s005f16d0.cpp  ?Contains@cSPSwatchPlanner@SP@@QAEHPBM@Z  005f2350  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f16d0/s005f16d0.cpp  ?GetBuffer@cSPSwatchPlanner@SP@@QAEHXZ  005f2740  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f16d0/s005f16d0.cpp  ?SetModel@cSPSwatchPlannerReal@SW@@QAEXAAPAVcPropertyList@2@@Z  005f21d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

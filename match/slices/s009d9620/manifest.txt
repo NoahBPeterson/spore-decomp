@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009d9620/s009d9620.cpp  ??4S@@QAEAAU0@ABU0@@Z  009d9620  /O2 /MD /Gy /TP /arch:SSE /fp:fast

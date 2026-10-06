@@ -1,1 +1,2 @@
-# no byte-exact functions in this slice
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0082cd30/s0082cd30.cpp  ?Read@cSPUIDeserializer@@UAEIPAUIStream@@HPAXHHH@Z  0082d9f0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /GS-

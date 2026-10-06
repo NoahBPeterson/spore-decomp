@@ -1,0 +1,35 @@
+01212800 76 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012129a0 43 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012129d0 50 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212a70 132 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212d70 70 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212dc0 50 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212e30 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212f00 37 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01212f30 162 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213000 52 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012130b0 152 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213150 98 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012131c0 61 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213230 72 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213280 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012132b0 66 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213340 84 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012133a0 88 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213440 146 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012134e0 154 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213630 52 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012136b0 82 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice
+012137f0 94 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012138a0 11 body `g_16f33b78 &= ~1` reproduces the first 13 bytes; the trailing 11-byte compiler EH/throw funclet is not reproduced
+012138e0 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213930 68 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213a10 86 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213a70 110 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213ae0 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213b70 18 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213bb0 43 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213be0 35 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213d10 95 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01213e30 982 compiler-generated EH cleanup funclet; enclosing source is outside the slice

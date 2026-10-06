@@ -1,0 +1,11 @@
+00844270 707 SubstituteParameters: complete; allocation/string-build scheduling differs (inline string8 range ctor, throw paths)
+00844780 122 cIfCommand::Execute: complete; vcall arg setup / BoolVec push_back scheduling differs
+00844860 53 cMacroDefinition ctor: complete; store order of string8 empty-init differs
+00844a00 68 pair<string,AutoRefCount> ctor: complete; string8 copy ctor register allocation
+00844a60 63 pair copy ctor: complete; string8 copy ctor register allocation
+00844ac0 290 vector<char>::insert(range) 4-arg: complete; structure close but frame/branch layout differs
+00844c40 373 cDefineCommand::Execute: complete; name reloaded from MainArguments in original, inline ctor scheduling
+00844ec0 23 cParser::ParseEnd: complete; trailing eax load (mArgs field) scheduled earlier than original
+00844fb0 449 cParser::InstantiateMacro: complete incl. try/catch rethrow; funclet layout/sizes differ
+00845260 55 cParser::PushScope: complete; vector push_back + string append scheduling
+00845320 68 cParser::PushMeta: complete; temp cMetaEntry store order

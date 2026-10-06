@@ -1,0 +1,1 @@
+009c6fc0 -1 complete behavioral source (all paths/calls); compiles to 3305 bytes (3566 with /fp:fast) vs 4140 original; x87/SSE float mix and deform-loop duplication not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE

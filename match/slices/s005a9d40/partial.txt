@@ -1,10 +1,1 @@
-005a9d40  0  manipulation helper: 1669-byte body abridged
-005aa420  0  manipulation object ctor: base layout not modelled
-005aa490  0  vector copy helper: vector copy ctor + FUN_004b2220 path abridged
-005aa530  0  transform/init helper: root/global copies abridged
-005aa5d0  0  helper: 353-byte body abridged
-005aa740  0  AutoRefCount range copy: body abridged
-005aa7a0  0  cSPEditorManipulationCellPinning::CalculateInflatedMesh: 544-byte body abridged
-005aa9c0  0  helper: 308-byte body abridged
-005aab00  0  helper: 291-byte body abridged
-005aac30  0  helper: 165-byte body abridged
+# va  diff-bytes  reason   (incomplete / approximate)

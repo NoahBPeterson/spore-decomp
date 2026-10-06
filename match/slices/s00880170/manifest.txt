@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+slices/s00880170/s00880170.cpp  ??A?$map@V?$fixed_string@_W$0BA@$00Vallocator@eastl@@@eastl@@V?$fixed_string@_W$0CAA@$00Vallocator@eastl@@@2@U?$less@V?$fixed_string@_W$0BA@$00Vallocator@eastl@@@eastl@@@2@Vallocator@2@@eastl@@QAEAAV?$fixed_string@_W$0CAA@$00Vallocator@eastl@@@1@ABV?$fixed_string@_W$0BA@$00Vallocator@eastl@@@1@@Z  00880610  /O2 /MD /GS- /GR- /TP /Iscratch_s00880170_inc
+slices/s00880170/s00880170.cpp  ?EA_Locale_GetCountryDataString@@YAHPBUFixedStr16@@H_NPBXPA_WI@Z  00880750  /O2 /MD /GS- /GR- /TP /Iscratch_s00880170_inc
+slices/s00880170/s00880170.cpp  ?EA_Locale_GetCountryDataString@@YAHPBUFixedStr16@@H_NPBXPA_WI@Z  00880830  /O2 /MD /GS- /GR- /TP /Iscratch_s00880170_inc

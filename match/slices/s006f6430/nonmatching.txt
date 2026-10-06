@@ -1,2 +1,8 @@
 # va  diff-bytes  reason
-# (none: all written functions are byte-exact or listed in partial.txt)
+006f65d0  52  complete hash_map<ushort,int>::operator[]; value pair/iterator/tag temps do not share the original stack slots
+006f6770  117  complete byte-vector operator=; register allocation of x/begin/cap differs
+006f6910  125  complete RemoveCameraTextures; erase() inline schedule differs (loop operand order)
+006f69c0  403  complete init; new-expression temp and p share one slot in the original, two in mine
+006f6c30  372  complete SetupFromDesc wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ
+006f6f40  416  complete wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ
+006f71f0  268  complete wrapper (uint64 flags + fixed_vector<8>); needs /GS- /EHsc; element copy and arg load order differ

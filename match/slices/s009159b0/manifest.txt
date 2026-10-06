@@ -1,0 +1,19 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009159b0/s009159b0.cpp  big2_getAtts  009159b0
+slices/s009159b0/s009159b0.cpp  big2_predefinedEntityName  00915c50
+slices/s009159b0/s009159b0.cpp  big2_sameName  00915d70
+slices/s009159b0/s009159b0.cpp  big2_nameMatchesAscii  00915e90
+slices/s009159b0/s009159b0.cpp  big2_nameLength  00915ed0
+slices/s009159b0/s009159b0.cpp  big2_skipS  00915f60
+slices/s009159b0/s009159b0.cpp  big2_updatePosition  00915fb0
+slices/s009159b0/s009159b0.cpp  streqci@@YAHPBD0  00916060
+slices/s009159b0/s009159b0.cpp  initUpdatePosition  009160a0
+slices/s009159b0/s009159b0.cpp  toAscii  009160b0
+slices/s009159b0/s009159b0.cpp  isSpace  00916100
+slices/s009159b0/s009159b0.cpp  parsePseudoAttribute  00916140
+slices/s009159b0/s009159b0.cpp  doParseXmlDecl  00916460
+slices/s009159b0/s009159b0.cpp  XmlUtf8Encode  00916700
+slices/s009159b0/s009159b0.cpp  XmlUtf16Encode  009167c0
+slices/s009159b0/s009159b0.cpp  unknown_isName  00916830
+slices/s009159b0/s009159b0.cpp  unknown_isNmstrt  00916890
+slices/s009159b0/s009159b0.cpp  unknown_isInvalid  009168f0

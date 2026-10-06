@@ -1,1 +1,2 @@
-# va  diff-bytes  reason   (none)
+# va  diff-bytes  reason
+00784560  3518  complete (SH basis eval to 8 bands); schedule/frame differs, not chased

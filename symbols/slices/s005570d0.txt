@@ -1,3 +1,3 @@
-00557c90 SP content-validation summarizer GetResType-style switch  # byte-exact
-00558080 SP::cContentValidationSummarizer::GetResType  # byte-exact
-00557fc0 Simulator::cContentValidationSummarizer::cContentValidationSummarizer  # PDB name
+005570d0 W1G2_57::c557c90::c557c90  # ctor: base vtable chain 13ec458/13f0958, vtbl 13f4250, 8 resource keys from property list 0x280852f1
+00557cf0 W1G2_57::c557c90::IsAllowed  # true unless key matches one of the 9 stored keys
+00557fc0 SP::cContentValidationSummarizer::cContentValidationSummarizer  # PDB name

@@ -1,0 +1,10 @@
+slices/s009feb30/s009feb30.cpp  ?CopyFiltersFrom@AnimGoal@@QAEXPAU1@@Z  009fef20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?packHandle@@YAHHE@Z  009fef70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?packGoalHandle@@YAHPAUQueuedBlender@@PAUAnimGoal@@@Z  009fef90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?Count@QueuedBlender@@QAEHXZ  009fefd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?IsActive@AnimGoal@@QAEHXZ  009ff020  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?TransitionToNextAnimation@QueuedBlender@@QAEXXZ  009ff440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?FindGoalByHandle@@YAPAUAnimGoal@@PAUQueuedBlender@@I@Z  009ff6f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?GetCurrentGoal@@YAPAUAnimGoal@@PAUQueuedBlender@@@Z  009ff750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?FindGoalValue@@YAHPAUQueuedBlender@@I@Z  009ff7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?FindGoalByID@@YA_NPAUQueuedBlender@@HPAH@Z  009ff7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

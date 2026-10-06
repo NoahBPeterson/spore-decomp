@@ -1,0 +1,1 @@
+00eb4420 cView::UpdateTransform  # mode (+0x14) 0..4 switch building a cSPTransform from quaternion/facing/up; stores to +0x174

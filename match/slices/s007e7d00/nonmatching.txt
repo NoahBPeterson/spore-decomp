@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007e7d00 1777 complete SetupDirectories; EASTL string inline/EH-state layout differs from original
+007e8760 279 complete LoadPlugins; WString copy ctor/EH state stores differ
+007e89c0 286 complete vector<AutoRefCount>::DoInsertValue; EH unwind-state stores differ

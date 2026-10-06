@@ -1,1 +1,1 @@
-0055c690 13 cSPObjectTemplateDB::AsInterface: complete switch; only the case-body layout/je targets are rotated
+0055c3c0 14 SP::cSPObjectTemplateDB::HandleMessage: complete switch, compare tree identical; only case-local slot placement/holes differ

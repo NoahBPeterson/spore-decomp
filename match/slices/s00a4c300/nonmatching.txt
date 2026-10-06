@@ -1,0 +1,3 @@
+00a4c470 30 complete (EA gfxstub_new); same calls, strlen+0x32<=4000 guard and sym copy; only the store/sprintf-arg scheduling differs
+00a4ce30 63 complete (canvas_connect); same flow, register allocation of the two list walkers/object pointers differs
+00a4d090 11 complete (glist_deselect); shared found-tail reproduced via goto; remaining diff is store scheduling of the re-entry guard and one register copy

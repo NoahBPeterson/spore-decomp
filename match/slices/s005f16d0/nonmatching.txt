@@ -1,0 +1,4 @@
+005f16d0  259  complete DoMessage; cSPMessage ctor inlined in one arm and out-of-line in the other, item null check kept in original
+005f1960  661  complete Init; local frame sharing (sym/spill slot at esp+0x10) and tooltip block scheduling differ
+005f2390  209  complete; x87-free SSE loads of the window rect and compare/register order differ
+005f24e0  304  complete; register allocation (ebp/ebx swap, spilled factory result) differs

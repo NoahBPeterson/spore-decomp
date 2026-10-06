@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s007ada40/s007ada40.cpp  ?IsSet@FlagHolder@@  007ae960
 slices/s007ada40/s007ada40.cpp  ??0DxtSurface@@  007ae9f0
+slices/s007ada40/s007ada40.cpp  ??1DxtSurface@@UAE@XZ  007ae980  /O2 /MD /Gy /EHsc /TP /GS-

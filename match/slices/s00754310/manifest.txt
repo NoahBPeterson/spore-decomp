@@ -1,1 +1,3 @@
 slices/s00754310/s00754310.cpp  CreateModelInstance_00754ba0  00754ba0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00754310/s00754310.cpp  ?FUN_007544e0@@YAXPAXII@Z  007544e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s00754310/s00754310.cpp  ?FUN_00755240@S_00755240@@QAEXPAUcJob@@@Z  00755240  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

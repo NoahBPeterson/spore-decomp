@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00825930/s00825930.cpp  ??1cPropertyUI@@UAE@XZ  00826560  /O2 /MD /Gy /TP /arch:SSE /fp:fast

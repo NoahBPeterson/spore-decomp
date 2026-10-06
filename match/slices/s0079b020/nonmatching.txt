@@ -1,1 +1,10 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason (complete, not byte-exact)
+0079b020  130  vector<UShortVecRec> copy ctor: EH-state/register scheduling differs
+0079b150  53  vector<ushort> assign-with-allocator: register allocation (esi/ebx swap)
+0079b1c0  178  uninitialized_copy of UShortVecRec: EH/loop scheduling
+0079b2a0  136  uninitialized_fill_n of UShortVecRec: EH/loop scheduling
+0079b360  163  vector<ushort>::operator=: register allocation (original hoists x.begin/x.end and uses ebp)
+0079b4b0  87  AddVertex: original keeps temp fields in edi/esi regs; scheduling differs
+0079b520  87  AddEdge: same as AddVertex
+0079b6b0  185  CompileSplitModelElement: frame/scheduling differs (ebp zero reg, loop shape)
+0079b7b0  1763  SplitPlane::SplitTriangles: complete (all modes); register allocation / spill layout differs

@@ -1,23 +1,13 @@
-# slice s00b318d0 - names not recovered; roles inferred from call shape
-00b318d0  unknown
-00b31a90  unknown
-00b31ae0  unknown
-00b31bc0  unknown
-00b31c60  unknown
-00b31cc0  unknown
-00b31ea0  unknown
-00b31fa0  unknown
-00b320d0  unknown
-00b32110  unknown
-00b32140  unknown
-00b32190  unknown
-00b32220  unknown
-00b32250  unknown
-00b32280  unknown
-00b322c0  unknown
-00b323f0  unknown
-00b32450  unknown
-00b32490  unknown
-00b324b0  unknown
-00b324f0  unknown
-00b32890  unknown
+00b31a90 SP::cGameTimeManager::UpdateTimeAtStartOfFrame  # mTimeAtStartOfFrame = mBaseTimeElapsed + elapsed*rate
+00b31ae0 SP::cGameTimeManager::Serialize  # folds elapsed into base, cVarListSerializer
+00b31ea0 SP::cGameTimeManager::cGameTimeManager  # PDB layout, rates 1/2/4/8
+00b31fa0 SP::cGameTimeManager::UpdatePauseState  # PDB mCachedPauseState
+00b320d0 SP::cGameTimeManager::GetPauseGateCount  # map lookup then gate count
+00b32140 SP::cGameTimeManager::`scalar deleting destructor'  # vptrs 0x1460390/0x146038c
+00b32190 SP::cGameTimeManager::RegisterPauseGate  # tPauseGate registration
+00b32220 SP::cGameTimeManager::IncPauseGate  # pdb_names
+00b32250 SP::cGameTimeManager::DecPauseGate  # pdb_names
+00b32280 SP::cGameTimeManager::TogglePauseGate  # 0/1 toggle
+00b322c0 SP::cGameTimeManager::SetTimeFlowRate  # mTimeFlowRate
+00b323f0 SP::cGameTimeManager::RegisterDefaultPauseGates  # "user toggle","gameplay","ui toggle","modal dialog"
+00b32450 SP::cGameTimeManager::SetTimeFlowSetting  # mTimeFlowRates[idx]

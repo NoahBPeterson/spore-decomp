@@ -1,0 +1,1 @@
+00ab7720 ~6800 complete (both routines: 0xab7720 quad builder + 0xab86d0 strip builder, same 6899-byte original symbol); not exact, one symbol spans two functions and source is semantic reconstruction

@@ -1,9 +1,1 @@
-0069f950  271  eastl::map<unsigned int,cClassInfo>::operator[]: lower_bound + rbtree DoInsertValue; summarised, EASTL node/value construction omitted
-0069fa60  291  cObjectDatabase::cObjectDatabase: vptr/field init, allocate+construct cCOMSerializer, assign database; summarised, exact vptr order/EH frame omitted
-0069fb90  1405  cCOMSerializer::SaveClassObjects: ~1.4 KB write loop over both rbtrees; skeleton only
-006a0110  588  cCOMSerializer::onSetSPSerializable: rbtree find/insert of cClassInfo + cIDInfo + smart-ref assign; skeleton only
-006a0360  651  cCOMSerializer::loadSingleObject: ~650 B IO/CRC/object loop; skeleton only
-006a0920  112  property getter (type 0x30, flag 0x10); behaviour summarised
-006a10c0  72  SP::GetPropertyAsVector2: variant vtable[0x24] fetch + type check + in-place copy; frame/scheduling not reproduced
-006a1110  76  SP::GetPropertyAsVector3: variant fetch + type 0x31 check + in-place copy; summarised
-006a1160  72  SP::GetPropertyAsVector4: variant fetch + type 0x33 check + in-place copy; summarised
+# va  reason

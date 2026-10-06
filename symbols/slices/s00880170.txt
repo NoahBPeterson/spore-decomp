@@ -1,0 +1,3 @@
+00880610 eastl::map<eastl::fixed_string<wchar_t,16,1>,eastl::fixed_string<wchar_t,512,1>,eastl::less<...>,eastl::allocator>::operator[]  # explicit EASTL instantiation, byte-exact
+00880750 EA::Locale::GetCountryDataString  # PDB pdb_names.json (gap-align)
+00880830 EA::Locale::GetLanguageDataString  # PDB pdb_names.json (gap-align)

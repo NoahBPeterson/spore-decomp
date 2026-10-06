@@ -1,1 +1,12 @@
-00f3ec90  21  complete reconstruction; cl emits fcomp/fnstsw instead of fld1/fcompi for the 1.0f compare
+00f3ec90 21 complete reconstruction; cl emits fcomp/fnstsw instead of fld1/fcompi for the 1.0f compare
+00f3de30 43 complete SummaryVec copy ctor; uninitialized_copy out-param/arg reload differs
+00f3dec0 116 complete fill_n of SummaryEntry; memberwise operator= schedule differs
+00f3df50 669 complete cX dtor; member-dtor/base-vptr store order differs
+00f3e2b0 107 complete; stack-arg cleanup for GetProperty vcall differs
+00f3e3b0 467 complete sparse-table walk; iterator codegen differs
+00f3e590 235 complete; iterator/hash-find codegen differs
+00f3e6d0 262 complete; branch layout differs
+00f3e810 107 complete; vector erase tail-call not reproduced
+00f3e8a0 84 complete; always-false p==p+0x27e8 compare omitted
+00f3e910 705 complete stats histogram; locals/branch layout differ
+00f3ecb0 239 complete; loop/regalloc differ

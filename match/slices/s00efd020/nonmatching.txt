@@ -1,2 +1,8 @@
 # va  diff-bytes  reason
 00efde90  10  complete: selection predicate; only register choice differs (p base in eax vs original edx)
+00efd020  1102  CtlQ::Update: complete (1721 B vs 1722); vtable-call/local slot scheduling differs
+00efd6e0  190  RayHitPlane: complete; original takes plane in esi and out in edi (static usercall), mine uses stack args
+00efd830  169  ProjectHit: complete; original takes ecx/eax implicit args
+00efd8e0  103  ObjPlaneVec: complete; original takes esi/edi implicit args
+00efd970  555  PickUpdate: complete; vector locals/regalloc and inlined RayHitPlane args differ
+00efdc00  540  ToolSnapUpdate: complete; vector locals/regalloc differ

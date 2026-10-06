@@ -1,0 +1,14 @@
+00a340b0 89 MaskPluginBindings: first loop keeps the 0xfffffffd mask in a register; push order differs
+00a34260 20 FindPluginIndexById: found-path tail ordering (jge/xor return vs fallthrough)
+00a34440 2 ConnectToMasteringVoice: lea edx vs ecx for &master (register choice only)
+00a34530 2 DisconnectFromMasteringVoice: lea edx vs ecx (register choice only)
+00a34660 181 Submix::DisconnectSendFromSubmix: ebx/edi/esi allocation and lock scope differ
+00a34760 102 VoiceContainer ctor: store scheduling (zero stores / xor edx placement)
+00a347f0 72 DisconnectFromSubmix: begin pointer CSE'd in edi where original reloads [esi+8]
+00a34890 2 Disconnect: plugin load register (ecx vs edx) only
+00a34930 28 vector<tBinding>::DoInsertValue: store order of end/capacity after do_move_start
+00a34a10 154 Submix::ConnectSendToSubmix: register allocation (ebx/edi), lock scope
+00a34bf0 33 VoiceContainer::Connect: bl vs al result byte and plugin load register
+00a34d70 75 SetSendId (fixed_vector<uint> push/back overwrite): operand/branch layout
+00a34dc0 92 cEapdMessage::Init: original keeps result byte in bl (xor bl,bl) and pushes ebp
+00a34e30 61 cEapdMessage::GetNextFloat: original keeps result byte in bl

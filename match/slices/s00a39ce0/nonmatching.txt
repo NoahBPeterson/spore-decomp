@@ -1,0 +1,12 @@
+00a39ce0 493 complete (cEventModifier::LoadEventModifiersMap); same calls/loop, register allocation differs (this in ebx vs edi) and the temp key set zero-init order
+00a39f90 31 complete (cEventModifier::ReadTuningValues); original reloads mpBegin+offset each iteration and uses cmp [p],0 then reloads
+00a39ff0 59 complete (cEventModifierPrimitiveAlias dtor); EH state numbering of the map member and base differs
+00a3a070 45 complete (cEventModifierPrimitiveMouthType ctor); original has an EH frame (members with dtors at +0x24/+0x30) and stores vptr before the float fields
+00a3a0e0 78 complete (primitive with SP_STL_Sound hashtable dtor); EH state order (hashtable dtor runs in state -1 in the original)
+00a3a180 141 complete (cEventModifier::Init); identical flow incl. noinline mouth ctor and 6-arg new/delete EH; only the alias tree-anchor zeroing (xor ecx vs ebx) differs and shifts the rest
+00a3a4c0 81 complete (Append); same loops, register allocation differs
+00a3a5b0 38 complete (cEventModifierPrimitive scalar deleting dtor, inlined dtor); EH state is reset to -1 before the base vptr store in mine
+00a3a670 2 complete (Alias::ModifyEvent); key slot is the dead argument slot, one slot higher/lower than the original
+00a3a9a0 146 complete (StrMap::operator[]); insert helper (0xa3a8b0) signature/by-value pair differs
+00a3aa80 443 complete (Alias::ReadTuningValues); GetKeys/string temp frame differs
+00a3ac40 30 complete (FootTypeBase::ModifyEventWithFootName); frame and float order match; cl emits cmov for the default-name select where the original branches

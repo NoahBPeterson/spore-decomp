@@ -3,3 +3,4 @@ slices/s005a7d00/s005a7d00.cpp  ??_GcSPEditorHandleSpine@SP@@UAEPAXI@Z  005a8930
 slices/s005a7d00/s005a7d00.cpp  ?SetState@cHandleish@@QAEXH@Z  005a8a60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005a7d00/s005a7d00.cpp  ?SetEnabled@cHandleish@@QAEX_N@Z  005a8a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005a7d00/s005a7d00.cpp  ??0cSPEditorHandleSpine@SP@@QAE@XZ  005a8ad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005a7d00/s005a7d00.cpp  ?Init@cSPEditorHandleSpine@SP@@QAEXPAXPBUcSPVector3@2@PBUcSPMatrix3@2@@Z  005a8970  /O2 /MD /Gy /TP /arch:SSE /fp:fast

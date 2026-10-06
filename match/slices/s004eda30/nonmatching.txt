@@ -1,2 +1,3 @@
 # va  diff-bytes  reason
-004edeb0  66  complete; unreachable /Od set-bit branch not reproduced
+004eda30  400  complete; /Od frame: 16-byte hole between inline-return temp and switch temp not reproduced (entry local ends up 8 bytes lower)
+004ee560  47  complete; /Od slot order: GetMgr401010 result must sit at ebp-0x34 (below the nested pv slots), name search found no spelling

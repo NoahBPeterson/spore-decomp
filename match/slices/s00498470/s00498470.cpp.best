@@ -1,0 +1,128 @@
+// Slice s00498470 (batch w1g0, slice 96), 0x00498470..0x00498f??.
+// /Od editor-region code: block placement / pinning helpers (SP::EditorUtils neighbourhood).
+// Built unoptimized: /Od /Ob1 /arch:SSE /fp:fast. Callees are declared with the convention seen at the call site.
+
+#include "types.h"
+
+typedef unsigned int u32;
+
+// cSPVector3-like: user copy ctor (inline, element-wise).
+struct P3 { float x, y, z; };                   // plain POD triple (dword copies)
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+// Same layout but with the out-of-line copy constructor (0x004098a0).
+struct Vec3C : Vec3 {
+    Vec3C(const Vec3C& o);                      // 0x004098a0
+};
+struct Matrix3 {
+    float m[9];
+    Matrix3() {}
+    Matrix3(const Matrix3& o);                  // 0x0041cb40 (Matrix3::Assign)
+};
+
+template <unsigned N> struct Bitset {
+    u32 mWord[(N + 31) / 32];
+    bool test(unsigned pos) const {
+        bool r;
+        if (pos < N) {
+            u32 w = mWord[pos >> 5];
+            r = (w & (1u << (pos % 32))) != 0;
+        } else {
+            r = false;
+        }
+        return r;
+    }
+};
+
+struct RefCountV {
+    virtual void rc0();
+    int mnRefCount;
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();                              // 0x00453540
+};
+struct Model {                                  // SP::cSPEditorModel (retail layout: vptr, then refcount base at +4)
+    virtual void m0();
+    RefCountV rc;
+    bool FUN_004adc40();                        // 0x004adc40
+};
+template <class T> struct AutoRefModel {
+    T* mp;
+    AutoRefModel(T* p) : mp(p) { if (mp) mp->rc.AddRef(); }
+    ~AutoRefModel() { if (mp) mp->rc.Release(); }
+};
+
+struct IPicker {                                // ray-cast / pick service (intrusive refcounted, Release = vtable slot 1)
+    virtual void s0();
+    virtual void Release();
+    bool RayCast(int type, Vec3C origin, Vec3 dir, P3* hit, P3* normal, float* dist, bool flag);  // 0x004c4a30
+    bool RayCast(int type, Vec3 origin, Vec3 dir, P3* hit, P3* normal, float* dist, bool flag);   // 0x004c4a30
+    struct Block* PickResult(int type, Vec3 hit);                                                       // 0x004c4d30
+};
+template <class T> struct AutoRef {
+    T* mp;
+    ~AutoRef() { if (mp) mp->Release(); }
+    T* operator->() const { return mp; }
+    operator T*() const { return mp; }
+};
+// raw member smart pointer (no ref ops needed by these functions): inline accessors only
+template <class T> struct Ref {
+    T* mp;
+    T* operator->() const { return mp; }
+    operator T*() const { return mp; }
+};
+
+struct Block {
+    char pad0[0x28];
+    Ref<Model> mEditorModel;                    // +0x28
+    char pad1[0x33c - 0x2c];
+    Ref<Block> mSocketBlock;                    // +0x33c
+    Block** mSocketBegin;                       // +0x340 (vector of Block*)
+    Block** mSocketEnd;                         // +0x344
+    char pad2[0xdc8 - 0x348];
+    Bitset<60> mFlags;                          // +0xdc8
+    int GetSkinIdentifierForPicking();          // 0x0043a870
+    void SetBooleanAttribute(int id, bool v);   // 0x00435a10
+    float FUN_0043f3a0();                       // 0x0043f3a0
+};
+
+// ---- external callees ----
+bool  __cdecl FUN_004974e0(Block* b, Vec3 pos, P3* out, bool* ok, float f, uint8_t g);
+Matrix3* __cdecl MoveBlockAndTranslateSnappedBlocks(Matrix3* ret, Block* b, Matrix3 m);   // 0x00493ce0
+bool  __cdecl FUN_004973f0(Block* b, Matrix3* m, float f, uint8_t g);
+void  __cdecl FUN_0049ec40(Block* b, P3* pos, Matrix3* m1, Matrix3* m2, bool e);
+void  __cdecl FUN_004983d0(Block* b, bool v);
+void  __cdecl FUN_00498230(Block* b, int v);
+Block* __cdecl PickBlockForPinning(Block* b, int a30, Vec3 origin, Vec3 dir, P3* out1, P3* out2, int a38, int a34); // 0x004a4d60
+P3* __cdecl FUN_0041db10(P3* out, const P3* a, const P3* b);        // vector difference a - b
+P3* __cdecl Vector3_Normalize(P3* out, const P3* in);                   // 0x00436ce0
+float __cdecl VectorLength(const P3* v);                                    // 0x0040ae50
+
+struct Viewer {
+    void GetCameraLocationInfo(P3* pos, void* info, int a, int b);          // 0x007c3d30
+};
+struct App {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
+    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21();
+    virtual Viewer* GetViewer();                // slot 22 (+0x58)
+};
+App* __cdecl App_Get();                         // 0x0067dd10 (SP::App)
+
+struct HandleData {
+    char pad[8];
+    struct { int a; P3 pos; } sub;            // Vec3 at +0xc
+};
+struct Handle {                                 // gizmo / handle object with a vtable
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
+    virtual int GetTypeId();                    // slot 4 (+0x10)
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8();
+    virtual P3* GetPosition(P3* out);       // slot 9 (+0x24)
+    HandleData* FUN_0047e680();                 // 0x0047e680
+    Block* FUN_0047e6c0();                      // 0x0047e6c0 (owning block)
+};
+

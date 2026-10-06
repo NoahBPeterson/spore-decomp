@@ -1,0 +1,4 @@
+00a347f0 EA::Audio::VoiceContainer::DisconnectFromSubmix  # card PDB candidate; calls Submix::DisconnectSendFromSubmix / DisconnectFromMasteringVoice, clears mbConnected
+00a34bf0 EA::Audio::VoiceContainer::Connect  # card PDB candidate (caller-single); loops send plugins calling ConnectToSubmix, sets mbConnected
+00a34cb0 EA::Audio::VoiceContainer::AddPropertyBinding  # card PDB candidate; HasPropertyBinding then push_back of a tBinding
+00a34dc0 SP::Audio::cEapdMessage::Init  # card PDB candidate; sibling of cEapdMessage::GetNextFloat

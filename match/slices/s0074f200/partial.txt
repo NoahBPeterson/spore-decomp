@@ -1,9 +1,0 @@
-0074f200  -  partial: input handler (181B) stubbed.
-0074f3a0  -  partial: `anonymous namespace'::AppendGeometryToCreature (126B) stubbed.
-0074f420  -  partial: helper (428B) stubbed.
-0074f5d0  -  partial: helper (549B) stubbed.
-0074f800  -  partial: SP::cEffectsRenderer::Render (1410B) stubbed.
-0074fd90  -  partial: resource constructor (95B, long store sequence) stubbed.
-0074fe10  -  partial: rbtree find + id allocation (90B) stubbed.
-0074fea0  -  partial: helper (394B) stubbed.
-00750030  -  partial: slot_vector create (328B) stubbed.

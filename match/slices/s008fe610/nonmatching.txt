@@ -1,0 +1,19 @@
+008fe6a0  10  list Find: cl keeps the cursor in eax, original in edx (register-only diff)
+008fe6d0  54  list splice: original keeps the node copy in edi and reloads args; scheduling differs
+008fe930  58  global provider assign: refcount inc/dec addressed-mode fold differs (no separate load)
+008ff110  1   bucket free: original copies node to edi before loading p8 (first two insns swapped)
+008fe610  52  intrusive_hashtable DoInsertValue: original keeps &key in ebp and reloads node from the arg slot; ours keeps node in ebp
+008fe830  16  ResourceCache ctor: store order/register use differs (edi=this+0x14 inline memset arg)
+008fe9a0  72  string hashtable find: register allocation and iterator copy differ
+008feae0  137  ResourceCache::Clear: complete; list pop and release order scheduling differ
+008feba0  22  ResourceCache::Find: complete; edi (node) reloaded after inlined splice stores
+008fec20  323  ResourceCache::Insert: complete; original keeps the bool result in a reused param slot
+008fedb0  77  protocol hashtable DoInsertValue: complete; bucket-offset arithmetic and slot spill differ
+008feef0  140  Resolve (scheme lookup): complete; temp-slot reuse (alloc tag and key share a slot in original) differs
+008fefb0  201  protocol hashtable erase(key): complete; loop/register differences
+008ff0b0  69  vector copy ctor: complete; register allocation differs
+008ff170  106  CreateResource: complete; register choice for mime string temp differs
+008ff270  139  Register handlers: complete; ebx/edi allocation and flag load order differ
+008ff320  73  vector_map find: complete; original keeps this in esi
+008ff3c0  111  string hashtable erase(iterator): complete; node load hoisting differs
+008ff450  87  BuildVec (pair + vector copy): complete; register allocation differs

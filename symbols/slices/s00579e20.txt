@@ -5,4 +5,4 @@
 0057a960 cAppModeEditorBase::GetMask  # +0x1cc mask & ~globals 0x15da7ec..7f8 (name inferred)
 0057a9e0 cAppModeEditorBase::GetDefaultMask  # default 0x15daa40.. & masks, minus GetMask (name inferred)
 0057aaa0 SP::cAppModeEditorBase::GetEditorSaveability  # PDB name
-0057ac00 cAppModeEditorBase::SomeSetup  # (name inferred)
+0057ac00 cAppModeEditorBase::BuildPartMask  # Claude-coined: (masks|defaults) + ability/property bits (0x400,0x40000,0x20,0x800)

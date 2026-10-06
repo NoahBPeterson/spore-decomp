@@ -1,0 +1,4 @@
+005c4500  2274  PopulateExpansionPackPane: complete (hide/show pane, pack buttons, tooltips); button creation split into a helper and the two near-identical loops merged
+005c4e40  498  Shutdown: complete; register allocation and inline erase scheduling differ
+005c50b0  228  SelectPalette: complete; register allocation differs
+005c51e0  397  SetCategory: complete; register allocation / spill slots differ

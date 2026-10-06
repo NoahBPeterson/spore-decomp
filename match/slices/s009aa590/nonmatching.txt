@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+009aa5e0 35 PushHeap: prologue pushes all four callee-saved regs before the range check (shrink-wrapping differs)
+009aa640 40 AdjustHeap: register assignment for position/temp (edi vs edx)
+009aa8a0 46 Mgr::Add: node.second.q address folded (add eax,0x24) instead of re-read
+009aa950 133 CollectBits: zero register choice and loop/epilogue layout differ
+009aaab0 103 BuildBaked (/arch:SSE /fp:fast): frame size 0x24 vs 0x20, float temp placement
+009aacc0 194 TreeP::InsertUnique: compare-chain branch threading and extra local frame
+009ab2c0 279 TreeP::InsertHint: position spill / register allocation, inlined Less
+009ab430 80 Mgr::Mgr: member-init store order (tree/anchor zero stores) differs
+009ab4a0 65 Mgr::RemoveEntry: inlined push_back register choice and pit reloads
+009ab540 170 Mgr::RemoveAll: n kept in ebp and anchor address recomputed in original

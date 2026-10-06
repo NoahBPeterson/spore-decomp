@@ -1,1 +1,4 @@
 slices/s005bccc0/s005bccc0.cpp  ?GetPileList@cSPEditorManipulationSpineResize@  005bdc80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bccc0/s005bccc0.cpp  ?OnMouseUp@cSPEditorManipulationTranslateCreature@  005bd650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bccc0/s005bccc0.cpp  ?SetTargets@cSPEditorManipulationTranslateCreature@  005bd750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005bccc0/s005bccc0.cpp  ??1cSPEditorManipulationTranslateCreature@  005bdad0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

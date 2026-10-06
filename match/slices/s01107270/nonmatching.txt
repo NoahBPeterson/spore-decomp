@@ -1,0 +1,1 @@
+01107270 4172 complete (all paths/calls); original uses hkVector4 temporaries in specific stack order, x87 temp schedule differs; frame (ebp, and esp,-16) matches via align(16) locals

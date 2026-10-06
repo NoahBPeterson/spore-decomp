@@ -1,0 +1,13 @@
+slices/s00a510e0/s00a510e0.cpp  ?glist_drawiofor@Eapd@Audio@EA@@  00a510e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?glist_eraseiofor@Eapd@Audio@EA@@  00a51450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?text_eraseborder@Eapd@Audio@EA@@  00a514d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?g_text_setup@Eapd@Audio@EA@@  00a516e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?text_displace@Eapd@Audio@EA@@  00a51bd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?text_select@Eapd@Audio@EA@@  00a51c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?text_vis@Eapd@Audio@EA@@  00a51cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?gatom_displace@Eapd@Audio@EA@@  00a51e20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?gatom_vis@Eapd@Audio@EA@@  00a51e60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?graphics_objects_init@Eapd@Audio@EA@@  00a51f40  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?control_objects_init@Eapd@Audio@EA@@  00a51f90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?audio_objects_init@Eapd@Audio@EA@@  00a52000  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00a510e0/s00a510e0.cpp  ?mtof@Eapd@Audio@EA@@  00a52020  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

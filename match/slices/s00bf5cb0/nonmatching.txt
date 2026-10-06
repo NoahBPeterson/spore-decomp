@@ -1,0 +1,1 @@
+00bf5cb0 3119 complete behavior; 4090-byte function, loop/register layout differs (flags /O2 /arch:SSE /fp:fast best)

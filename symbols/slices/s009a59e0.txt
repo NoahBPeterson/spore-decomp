@@ -1,0 +1,5 @@
+009a59e0 nSPCreatureAnim::ComputeEventLocationState  # PDB/Ghidra name
+009a4c70 EA::RectT<float>::RotA  # thiscall(quat, 0.0, 1.0) called at end when bone limit>0 (name guessed)
+009a49d0 NormalizeVec3  # vec3 normalize, optional length out (name guessed)
+009a49b0 LengthSqVec3  # x87 return (name guessed)
+009a4a70 PerpPair  # orthonormal basis perpendicular to a direction (name guessed)

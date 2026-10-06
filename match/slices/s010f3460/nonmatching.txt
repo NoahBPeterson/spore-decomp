@@ -1,1 +1,4 @@
 # va  diff-bytes  reason
+010f3460  340  reintegrateAndRecollideEntities complete (queue path, lock, step swap, motion backstep+step, rebroadphase, reset, agent recollide, unlock, restore). Not exact: original x87 code from an older cl (float consts via fld [pool], different scheduling/ordering)
+010f3600  677  collide complete (timers, step copies, solver dt, 2 island loops with OOM bail-outs, post-collide callbacks). Not exact: original is older-cl scheduling (reloads of island size, no register cache for the world)
+010f3a40  2422  simulateToi complete (keycode, resource mgr begin/end, solver setup, localized solve, TOI event cleanup w/ contact-removed callbacks, agent recollide with OOM watchdog, stack frees). Not exact: ~2.4 KB with x87 constants from the pool, 16-byte aligned frame and older-cl scheduling

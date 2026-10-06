@@ -1,5 +1,1 @@
 # <va>  <diff-bytes>  <reason>
-0051d300  685   large /Od body not reconstructed (entry skeleton only)
-0051d720  2065  2065-byte /Od body not reconstructed (entry skeleton only)
-0051df40  394   /Od body not reconstructed (entry skeleton only)
-0051e180  435   Skinner::PaintSystem::PaintSystem 435-byte ctor not reconstructed (entry skeleton only)

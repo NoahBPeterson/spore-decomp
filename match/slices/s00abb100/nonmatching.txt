@@ -1,0 +1,6 @@
+00abb100  698  complete Analyzer message handler (switch 4/1/5/0x101/0xd); stack-slot/register allocation and loop induction differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00abb660  347  complete vector<pair<fn*,void*>>::insert(pos,n,val); the original reloads mEnd (no CSE) and orders the tmp copy differently
+00abb820  358  complete vector<pair<float,float>>::insert(pos,n,val); same schedule differences as 00abb660
+00abbaa0  145  complete constructor (all stores present); store order/scheduling differs from the original
+00abbd80  127  complete uninitialized_fill_n of FilterElem; original strength-reduces to a pointer at +0x14 inside the element and loops via jmp
+00abbf70  504  complete vector<FilterElem>::insert(pos,n,val); call sequence matches, register/schedule differ

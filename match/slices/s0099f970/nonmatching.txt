@@ -1,0 +1,1 @@
+0099f970 4789 complete Hermite/quat track eval; helper-inlined, not byte-exact

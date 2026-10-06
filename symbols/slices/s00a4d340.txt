@@ -1,0 +1,8 @@
+00a4d340 EA::Audio::Eapd::glist_add  # PDB name; Pd glist_add, tail-append
+00a4d3e0 EA::Audio::Eapd::glist_retext  # PDB candidate; find rtext then rtext_retext
+00a4d920 EA::Audio::Eapd::text_xpix  # PDB candidate; glist_xtopixels with goprect/screen scaling
+00a4d9c0 EA::Audio::Eapd::text_ypix  # PDB candidate; mirror of text_xpix
+00a4de30 EA::Audio::Eapd::graph_setup  # sets graph widgetbehavior on canvas class
+00a4de50 EA::Audio::Eapd::glist_delete  # PDB candidate; removes y from x->gl_list, sprintf graph%lx
+00a4e260 EA::Audio::Eapd::glist_dpixtodx  # PDB candidate
+00a4e2a0 EA::Audio::Eapd::glist_dpixtody  # PDB candidate

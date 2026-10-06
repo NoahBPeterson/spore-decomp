@@ -1,0 +1,9 @@
+00a514d0 EA::Audio::Eapd::text_eraseborder  # PDB candidate; deletes tag R rect and io
+00a51510 EA::Audio::Eapd::text_setto  # PDB candidate; rename special case for pd
+00a51bd0 EA::Audio::Eapd::text_displace  # PDB candidate
+00a51cf0 EA::Audio::Eapd::text_vis  # PDB candidate
+00a51ae0 EA::Audio::Eapd::gatom_getwherelabel  # PDB candidate
+00a51f40 EA::Audio::Eapd::graphics_objects_init  # PDB candidate
+00a51f90 EA::Audio::Eapd::control_objects_init  # PDB candidate
+00a52000 EA::Audio::Eapd::audio_objects_init  # PDB candidate
+00a52020 EA::Audio::Eapd::mtof  # Pd mtof: 8.1758*exp(0.0577622*f), clamped at 1499

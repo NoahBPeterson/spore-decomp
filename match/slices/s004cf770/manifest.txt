@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004cf770/s004cf770.cpp  ?DoInsertValues@?$vector@UVec4@eastl@@@eastl@@QAEXPAUVec4@2@IABU32@@Z  004cfc00  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cf770/s004cf770.cpp  ?DoInsertValues@fixed_word_vector@eastl@@QAEXPAUWord32@2@IABU32@@Z  004d0080  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cf770/s004cf770.cpp  ?DoFreeNodes@hashtable@eastl@@QAEXPAPAUHashNode@2@I@Z  004d0430  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cf770/s004cf770.cpp  ?allocate_memory@eastl@@YAPAXAAUFixedHashtableAllocator@1@III@Z  004d04a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s004cf770/s004cf770.cpp  ??$DoAssignFromIterator@PBUWord32@eastl@@@?$vector@UWord32@eastl@@@eastl@@QAEXPBUWord32@1@0Urandom_access_iterator_tag@1@@Z  004d04f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

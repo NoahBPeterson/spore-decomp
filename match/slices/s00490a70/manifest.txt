@@ -1,1 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00490a70/s00490a70.cpp  ?GetAlignmentPosition@@YAMPAUcSPEditorBlock@@PAUMgr@@UVec3@@UMatrix3@@PAURwVec3@@PAU4@PA_NE3@Z  00490a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00490a70/s00490a70.cpp  ?CountPileWeight@@YAHPAUcSPEditorBlock@@H@Z  00491350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

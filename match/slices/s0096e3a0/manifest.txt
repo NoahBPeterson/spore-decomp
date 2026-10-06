@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0096e3a0/s0096e3a0.cpp  ?cDropShadowDescriptor_SetQuality@@YAXHH@Z              0096e500  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?m@Obj96@@QAE_NPAX0@Z                                   0096ecf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?FUN_0096ed70@@YA_NPAXPAD1@Z                            0096ed70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?ScalarDtor@ExplicitNavigator@@QAEPAXI@Z               0096eee0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?BasicFactory_ExplicitNavigator_CreateInstance@@YGPAXHH@Z 0096ef10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?FUN_0096ef80@@YAXXZ                                    0096ef80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ??0FadeEffect@@QAE@XZ                                   0096f060  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?BasicFactory_FadeEffect_CreateInstance@@YGPAXHH@Z      0096f120  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?a@Ctx96@@QAEXPAMM@Z                                    0096f1b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?b@Ctx96@@QAEXPAM@Z                                     0096f1f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?s@Ctx96@@QAEHI@Z                                       0096f280  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s0096e3a0/s0096e3a0.cpp  ?FUN_0096f320@@YA_NPAXPAD1@Z                            0096f320  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

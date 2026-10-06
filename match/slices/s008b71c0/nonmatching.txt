@@ -1,0 +1,1 @@
+008b71c0 3603 complete Type1BuildChar charstring interpreter; ~16 bytes frame/inline differences, register assignment and number-decode shape differ (not iterated)

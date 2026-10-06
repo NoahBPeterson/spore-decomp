@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00a158e0  749  complete; 4x-unrolled crossfade loop, register allocation differs
+00a15d40  241  complete; loop/spill layout (node param slot reused as position) differs
+00a15fb0  27  complete; store order of mActive vs clear args
+00a16020  238  complete; switch/xorps negate and register scheduling
+00a16550  668  complete; original uses hand-written SSE helper (mask local, maxps/sqrtps) not reproduced exactly

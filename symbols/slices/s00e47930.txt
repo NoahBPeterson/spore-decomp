@@ -1,0 +1,1 @@
+00e47930 cEditorVerbIconPanel::RefreshUI  # retail editor verb-icon panel UI refresh; PDB caller-scored name StartCharge not trusted

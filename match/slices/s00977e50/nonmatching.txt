@@ -1,0 +1,9 @@
+00977f90 551 SetCellFormat: complete (default/row/column/cell formats, new CellData+CellFormat, recalc + redraw); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; regalloc and inline-ctor schedule differ
+00978250 326 SetCellTextStyle: complete (existing/new cell format, changed flag, dirty+notify); flags +/arch:SSE; regalloc/arg reloads differ
+009783f0 273 SetCellColors: complete; original keeps col/row in the stack arg slots and reloads, mine enregisters them
+00978560 265 SetCellWrapping: complete; same regalloc pattern as SetCellColors
+009786c0 203 SetCellAlignment: complete; same regalloc pattern as SetCellColors
+00978830 216 SetCellBorder: complete; same regalloc pattern as SetCellColors
+009789a0 387 SetSizeCachedActualForRow: complete (reset all via FindByValue iterator, or per-row set/insert); frame is 4 bytes larger and the iterator loop differs
+00978b50 370 SetSizeCachedActualForColumn: complete (reset-all via RowBegin/RowEnd iterators, or per-column set/insert); frame 4 bytes larger, iterator regs differ
+00978d30 63 SetCellExtraData: complete; original skips Set() when operator new returns null (merged check), mine does not

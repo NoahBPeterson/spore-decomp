@@ -1,1 +1,2 @@
-# va  diff-bytes  reason   (none)
+# va  diff-bytes  reason
+00780b70  3680  complete (every path and call); x87/SSE float scheduling, fsqrt/fptan inline and register allocation not reproduced (our build is ~500 bytes shorter)

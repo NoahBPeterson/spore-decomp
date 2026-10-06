@@ -1,1 +1,4 @@
-# no byte-exact functions in this slice yet
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0074f200/s0074f200.cpp  ?quick_sort@@YAXPAUcOccluder@@0P6A_NABU1@1@Z@Z  0074f3a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s0074f200/s0074f200.cpp  ?Allocate@SlotAllocator@@QAEHII@Z  0074fe10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s0074f200/s0074f200.cpp  ?create@SlotVectorOccluder@@QAEIABUcOccluderInfo@@@Z  00750030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

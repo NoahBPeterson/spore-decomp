@@ -1,6 +1,0 @@
-0056b680  332  cEditorPartCount::ExtractTraits; partial stub
-0056b7d0  525  cEditorPartCount::DescribeTraits; partial stub
-0056b9e0  842  cRigBlockTag::ExtractTraits; partial stub (BlockKey hashtable)
-0056bd30  613  cRigBlockTag::DescribeTraits; partial stub
-0056bfa0  809  cTextureTag::ExtractTraits; partial stub
-0056c2d0  668  cTextureTag::DescribeTraits; partial stub

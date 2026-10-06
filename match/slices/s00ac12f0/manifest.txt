@@ -1,0 +1,9 @@
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac1490@@YAXPAMMH@Z  00ac1490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ??0VtblObj@@QAE@XZ  00ac14d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac14e0@@YIXPAD@Z  00ac14e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac1500@@YAXXZ  00ac1500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac15e0@@YIHPAD@Z  00ac15e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac1fc0@@YG_NHPAUMsg@@@Z  00ac1fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ??0Rec3C@@QAE@ABU0@@Z  00ac1ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ?FUN_00ac2060@@YAXPAUHeapEnt@@HHHIII@Z  00ac2060  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00ac12f0/s00ac12f0.cpp  ??0Rec3C@@QAE@ABUVec3f@@@Z  00ac21d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

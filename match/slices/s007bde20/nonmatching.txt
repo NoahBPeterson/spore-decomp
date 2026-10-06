@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+007bde20  471  complete Shutdown; loop induction var (job array vs viewer array) and texture release double-null-check reload differ
+007be430  1187  complete CapturePaletteThumbnail; helper-object ctors (MI vptr stores), frame layout and EH slot order differ
+007bea00  694  complete image variant; Vec3 by-value arg temp built with x87 fld/fstp in original (z,x,y order), EH temp slot differs

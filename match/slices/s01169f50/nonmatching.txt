@@ -1,0 +1,1 @@
+01169f50 1108 complete (Ghidra body, 3610 vs 4718 bytes: original spills intermediates to globals g[]; eax/ecx/edx register convention modeled as 3 args)

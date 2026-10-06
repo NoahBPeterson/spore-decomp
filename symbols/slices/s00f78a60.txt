@@ -1,0 +1,3 @@
+00f78a60 anon::Stream_Quad_V4F_N4F_C4B_T4B_Old  # older copy of 00aad240 (dev PDB Stream_Quad_V4F_N4F_C4B_T4B); callees 00f76000=StreamerSetup, 00f74b40=ApplyLoopBox, 00a9aff0=WigglePoint
+00f76000 anon::StreamerSetup  # older copy of 00aa9b70, same role/args
+00f74b40 anon::ApplyLoopBox  # older copy, args (effect, desc, &pos, &color, &alpha)

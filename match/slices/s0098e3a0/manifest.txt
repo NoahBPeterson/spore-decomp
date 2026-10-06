@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0098e3a0/s0098e3a0.cpp  ?GetParagraphCount@IWinTextEdit@UTFWinControls@EA@@QAEHXZ  0098e7b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?GetParagraphTextIndex@IWinTextEdit@UTFWinControls@EA@@QAEII@Z  0098e7e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?GetParagraphYPos@IWinTextEdit@UTFWinControls@EA@@QAEMI@Z  0098e830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?GetParagraphLength@IWinTextEdit@UTFWinControls@EA@@QAEII@Z  0098e880  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?GetTextExtent@IWinTextEdit@UTFWinControls@EA@@QAEXPAUPoint2@23@@Z  0098e9a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?OnTick@WinTextEdit@UTFWinControls@EA@@QAE_NXZ  0098ebd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?RegisterWinTextEditTypes@UTFWinControls@EA@@YAXXZ  0098f330  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s0098e3a0/s0098e3a0.cpp  ?Init@WinTreeView@UTFWinControls@EA@@QAE_NXZ  0098f3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

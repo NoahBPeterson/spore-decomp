@@ -1,11 +1,1 @@
 # va  diff-bytes  reason
-006f6430  199  color wrapper (mode 0xbe, color from +0x3c table): skeleton only.
-006f6500  199  color wrapper (mode 0xdc, two channels): skeleton only.
-006f65d0  92  hashtable find-or-insert (FUN_00892970 + FUN_006f4ff0): skeleton only.
-006f6770  183  vector bool assign: skeleton only.
-006f6830  211  cFilterChain::AddCameraTexture (PDB anchor): skeleton only.
-006f6910  163  cFilterChain camera-texture teardown: skeleton only.
-006f69c0  610  state/editor init (allocates 0x8c state + 4 viewers): skeleton only.
-006f6c30  772  cFilterChain state dispatch wrapper: skeleton only.
-006f6f40  680  large cFilterChain routine: skeleton only.
-006f71f0  563  large cFilterChain routine: skeleton only.

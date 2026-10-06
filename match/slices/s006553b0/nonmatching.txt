@@ -1,2 +1,6 @@
 # va  diff-bytes  reason (complete, not byte-exact)
 00656240  164  filter-then-copy_if over 0x10-byte records: FUN_00654050/FUN_006536e0/FUN_00653780 sequence complete; temp-vector frame/scheduling differs
+006553b0  828  RefreshAssetStates: complete (all paths and calls); register allocation/frame (0x28 vs 0x10) and block layout differ
+00655840  531  SelectKey: complete; local layout, loop shape and sete/test idiom differ
+00655b00  800  AddEntries: complete; frame layout and loop shape differ
+00655ed0  690  Update: complete; frame layout / x87 fabs compare scheduling differ

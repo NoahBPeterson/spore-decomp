@@ -1,1 +1,2 @@
 slices/s004b11f0/s004b11f0.cpp  ?FillAutoRef@@YAXPAUAutoRef@@0PAPAX@Z  004b22b0  /Od /Ob1 /MD /Gy /TP
+slices/s004b11f0/s004b11f0.cpp  ?DoInsertValues@?$vector@UBig@eastl@@@eastl@@QAEXPAUBig@2@IABU32@@Z  004b11f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

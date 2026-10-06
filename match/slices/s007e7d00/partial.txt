@@ -1,4 +1,1 @@
 # va  diff-bytes  reason
-007e7d00  2650  cAppSystem::SetupDirectories not reconstructed
-007e8760  487  cAppSystem::LoadPlugins not reconstructed (EASTL string/vector directory scan)
-007e89c0  423  FUN_007e89c0 not reconstructed

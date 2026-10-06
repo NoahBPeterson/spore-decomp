@@ -1,0 +1,2 @@
+slices/s008ff610/s008ff610.cpp  ??1ResourceProvider@@UAE@XZ  008fff80  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008ff610/s008ff610.cpp  ?SetEncoding@ResourceRequest@@QAE_NHH@Z  009002f0  /O2 /MD /Gy /TP /GS- /arch:SSE2

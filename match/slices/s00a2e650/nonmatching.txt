@@ -1,1 +1,9 @@
 00a2f1a0  13   eastl::map operator[] assignment/store scheduling differs
+00a2e650  1474 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
+00a2edd0  86   complete hashtable find+erase wrapper; temp/iterator slot reuse and callee-saved regs differ
+00a2eed0  9    complete hashtable remove wrapper; iterator temp slot reuse (frame 8 vs 0x10)
+00a2ef60  420  complete stopwatch-timed table rebuild; locals/regs and EH layout differ
+00a2f210  144  complete fixed_hash_map ctor; arg evaluation order of temp allocator vs NextPrime differs
+00a2f310  144  complete fixed_hash_map ctor; same shape as 00a2f210
+00a2f410  144  complete fixed_hash_map ctor; same shape as 00a2f210
+00a2f5d0  86   complete pool node alloc+construct; EH object frame (placement-new temp) differs

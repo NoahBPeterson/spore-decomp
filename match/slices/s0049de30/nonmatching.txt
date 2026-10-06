@@ -1,1 +1,4 @@
 0049ec40  24  complete; /Od frame 0x68 vs 0x4c, extra temp slots
+0049de30  34  complete (block-offset rescale + limb refix); only /Od frame holes (0x240 vs 0x280) differ
+0049e6a0  43  complete (SetBlockScale); /Od frame 0x54 vs 0x70, temp slot order
+0049e880  308 complete (basis re-orthonormalize); /Od frame 0x11c vs 0x174 and length^2 add order (z,y,x loads)

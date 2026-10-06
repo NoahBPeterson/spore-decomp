@@ -1,4 +1,0 @@
-005ec030  -  helper: skeleton
-005ec130  -  helper: skeleton
-005ec370  -  large helper: skeleton
-005ec7c0  -  cSPNameGenerator::Init: skeleton (name-table setup omitted)

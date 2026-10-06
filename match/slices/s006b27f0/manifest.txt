@@ -1,1 +1,2 @@
 slices/s006b27f0/s006b27f0.cpp  ?FUN_006b3610@@YAXXZ  006b3610  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006b27f0/s006b27f0.cpp  ?SP_RegisterSaveArea@@YAXIPAX0@Z  006b3760  /O2 /MD /Gy /EHsc /TP /GS-

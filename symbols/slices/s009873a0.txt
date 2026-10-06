@@ -1,0 +1,12 @@
+009873a0 UTFWin::EA::UTFWinControls::WinSpinner::WinSpinner  # 2008 dev-PDB name (ctor)
+00987470 EA::UTFWinControls::WinSpinner::`scalar deleting destructor'  # 2008 dev-PDB name
+00987530 EA::UTFWinControls::BasicFactory_SpinnerDrawable::CreateInstance  # 2008 dev-PDB name
+00987590 EA::UTFWinControls::WinSpinner::Refresh  # 2008 dev-PDB name
+00987900 UI::StdDrawable method  # vtable statics (SetSerializer/SetMode)
+009879f0 EA::UTFWinControls::StdDrawable::GetImageForState  # 2008 dev-PDB name
+00987b10 EA::UTFWinControls::StdDrawable::~StdDrawable  # 2008 dev-PDB name
+00987d40 EA::UTFWinControls::StdDrawable::CreateRenderables  # 2008 dev-PDB name
+009880e0 EA::UTFWinControls::StdDrawable::HitTest  # 2008 dev-PDB name
+009883c0 EA::UTFWinControls::StdDrawable::QueryAttribute  # 2008 dev-PDB name
+009883f0 EA::UTFWinControls::StdDrawable::GetNaturalSize  # 2008 dev-PDB name
+00988420 UI::StdDrawable::StdDrawable  # 2008 dev-PDB name

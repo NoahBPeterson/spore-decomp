@@ -1,0 +1,1 @@
+004ae3b0 SP::cSPEditorModel::LoadFromBinary  # class from PDB layout (cSPEditorModel members at same offsets as retail +4 shift); method name guessed from behaviour (rebuilds blocks from WriteBinaryEditorModel data)

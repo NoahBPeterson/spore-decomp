@@ -1,2 +1,1 @@
-# va  diff-bytes  reason
-00784560  n/a  PARTIAL: 3987-byte unrolled SH accumulation routine; only the signature and argument handling are reproduced
+# va  diff-bytes  reason (incomplete / approximated source)

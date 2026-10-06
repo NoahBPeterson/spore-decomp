@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+slices/s0088b250/s0088b250.cpp  ?IsFilePathSeparator@IO@EA@@YA_NH@Z  0088b850  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ?GetSystemFontDirectory@Text@EA@@YAIPA_WI@Z  0088b8a0  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc

@@ -1,0 +1,4 @@
+008e1f10 EA::ResourceMan::Manager::~Manager  # 2008 dev-PDB gap-align match
+008e20c0 EA::ResourceMan::Manager::Manager  # 2008 dev-PDB callee-scored match
+008e2890 EA::XHTML::DOM::Document::DestroyFormControls  # 2008 dev-PDB name
+008e2c10 EA::XHTML::DOM::Document::CreateElement  # tag-name dispatch (sys_gui/object/form/input...), AppendAttr per attribute

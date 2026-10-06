@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00470bd0 706 complete; second loop's Vec4 ctor temps need own frame slots (loops are separate inlines); name-hash slot order not fitted
+00471000 1883 complete; /Od frame slot order and eastl/Variant helper shapes not fitted
+00471830 681 complete; original frame is esp-based after and esp,-8 (cause not found); slot order not fitted

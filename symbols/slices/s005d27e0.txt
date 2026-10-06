@@ -1,0 +1,6 @@
+005d27e0 SP::cSPEditorSpine::GrowVertebra  # Claude-coined: probes a new vertebra shape with a Havok phantom and, if free, builds block+body+constraint at the first/last end
+005d3010 SP::cSPEditorSpine::RemoveVertebraAction  # Claude-coined: callback-shaped (7 args); removes the vertebra's action by key
+005d3100 SP::cSPEditorSpine::GetTotalMass  # Claude-coined: sums hkRigidMotion::getMass over the vertebra chain
+005d31b0 SP::cSPEditorSpine::ClearVertebrae  # Claude-coined: removes bodies from the world, clears the vertebra map and releases refs
+005d3300 SP::cSPEditorSpine::RemoveVertebra  # Claude-coined: drops one vertebra's body/constraint, fixes first/last, erases map node
+005d35c0 SP::cSPEditorSpine::~cSPEditorSpine  # Claude-coined dtor body (vtbl reset to cContentValidationSummarizer/cEditorResource)

@@ -1,2 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-# (no byte-exact functions in this slice)
+slices/s007d56f0/s007d56f0.cpp  ??_GcSplitManager@@UAEPAXI@Z  007d62d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d56f0/s007d56f0.cpp  ??0cMapResA@@QAE@ABURbMap@@@Z  007d6380  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+slices/s007d56f0/s007d56f0.cpp  ??_GcMapResA@@UAEPAXI@Z  007d63e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

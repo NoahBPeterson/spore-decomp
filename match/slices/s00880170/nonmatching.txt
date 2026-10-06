@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00880170 651 EA::Locale element formatter: complete (all paths/calls); frame is 0xc smaller, register allocation/jump-table order differ
+008804d0 264 MakeStringFromFormatElements: complete; prev-element pointer is spilled to the stack in the original, in a register in ours

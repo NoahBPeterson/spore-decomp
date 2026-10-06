@@ -1,0 +1,1 @@
+00f89e50 SP::cTerrainMap<unsigned int>::GetVector4  # PDB name; bilinear cube-map sample

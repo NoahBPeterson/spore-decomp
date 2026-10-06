@@ -1,6 +1,1 @@
 # va  reason
-005002d0 nSPSkinner::cExportHelper::ExportSkeleton (1456 bytes); skeleton only, full reconstruction out of budget
-00500880 SP::cSPEditorSkinManager::Init (154 bytes); skeleton only, full reconstruction out of budget
-00500920 1481-byte /Od function; skeleton only, full reconstruction out of budget
-00500ef0 nSPSkinner::cExportHelper::ExportMeshAdd (778 bytes); skeleton only, full reconstruction out of budget
-00501200 eastl::VectorBase ctor (63 bytes); skeleton only, full reconstruction out of budget

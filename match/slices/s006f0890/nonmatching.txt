@@ -1,0 +1,6 @@
+006f0890  705  complete cEffectsRenderer shutdown; register allocation/store scheduling differ (loop locals, hoisted stores)
+006f0b90  631  complete Render pass; global |= sequences merged by cl (orig keeps separate or's), reg alloc differs
+006f0fb0  703  complete AddParticleSet; EH frame/refcount-release layout differs
+006f13a0  21   complete; orig pushes ebp/edi before the flags fixup (push order only)
+006f1510  197  complete vector Insert; EH unwind states (objects with dtors) not reproduced
+006f16c0  190  complete vector push_back; temp ctor-return/EH state layout differs

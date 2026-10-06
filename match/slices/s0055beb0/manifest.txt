@@ -1,4 +1,13 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0055beb0/s0055beb0.cpp  ?Description@cFunctionalTestCheat@SP@@QAEPBDH@Z  0055beb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0055beb0/s0055beb0.cpp  ?IsEnabled@cFunctionalTestCheat@SP@@QAE_NXZ  0055bee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ??0cResFinal@@QAE@XZ  0055bf10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ??0cSummarizerFinal@@QAE@XZ  0055bf50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?Shutdown@cSPObjectTemplateDB@SP@@QAE_NXZ  0055bfb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?RandomizeFirstN@cSPObjectTemplateDB@SP@@QAE_NPAU?$ParamVec@UKey3@@@@H@Z  0055c2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
 slices/s0055beb0/s0055beb0.cpp  ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB@Editor@@XZ  0055c640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?AsInterface@cSPObjectTemplateDB@SP@@QAEPAXI@Z  0055c690  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?SaveAssetParameters@@YA_NPBUResKey@@PBU?$ParamVec@UAssetParam@@@@PBU?$ParamVec@UExtraParam@@@@@Z  0055c6f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?WriteExtraParameters@@YA_NPAUIStream@IO@EA@@PBU?$ParamVec@UExtraParam@@@@@Z  0055c9e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?LoadAssetParameters@@YA_NPAUIStream@IO@EA@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  0055cb50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s0055beb0/s0055beb0.cpp  ?LoadAssetParametersFromKey@@YA_NPBUResKey@@PAU?$ParamVec@UAssetParam@@@@PAU?$ParamVec@UExtraParam@@@@@Z  0055cd90  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

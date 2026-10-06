@@ -1,1 +1,2 @@
-# va  diff-bytes  reason   (none)
+# va  diff-bytes  reason
+00785500  big  COMPLETE: scalar-float transcription of the unrolled ZH->SH rotation (orders 1-8); 6327 vs 4022 bytes, original uses Vector4 SSE (movaps/shufps) loops

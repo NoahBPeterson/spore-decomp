@@ -2,3 +2,6 @@
 slices/s005ac950/s005ac950.cpp  ?AsInterface@cSPEditorManipulationCellPinning@SP@@  005ac950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ac950/s005ac950.cpp  ?DoOnMouseMove@SPin30@@  005acc30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005ac950/s005ac950.cpp  ?Shutdown@SPin90@@  005acc90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+
+slices/s005ac950/s005ac950.cpp  ??0PinSimple@@QAE@XZ  005ac980  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005ac950/s005ac950.cpp  ?Begin@PinRot@@QAEXPAUHandle@@UV3@@H@Z  005accc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

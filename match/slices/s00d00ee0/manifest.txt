@@ -1,3 +1,12 @@
 # source symbol va flags
-slices/s00d00ee0/s00d00ee0.cpp  _Fd01210  00d01210  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
-slices/s00d00ee0/s00d00ee0.cpp  _Fd01260  00d01260  /O2 /MD /Gy /TP /arch:SSE2 /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  _Fd01210  00d01210  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  _Fd01260  00d01260  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A0ee0@RelCalc  00d00ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  InsertImpl@RelTree  00d012a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  Insert@RelTree@@QAE  00d01340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  InsertHint@RelTree  00d01920  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A1b50@RelBook  00d01b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A1b80@RelBook  00d01b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A1db0@RelBook  00d01db0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A1e30@RelBook  00d01e30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00d00ee0/s00d00ee0.cpp  A1f20@RelBook  00d01f20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

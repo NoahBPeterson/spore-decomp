@@ -1,1 +1,4 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason
+007a3260  1165  complete mesh pair-list builder (template over Gather helper); frame layout/temp slots differ
+007a37a0  1153  same body as 007a3260 with Gather helper 007a2180; frame layout/temp slots differ
+007a3e60  496  complete static-buffer dispatch; case order/register allocation differ

@@ -1,4 +1,1 @@
 # va  diff-bytes  reason (incomplete / approximated source)
-007bde20  0  skeleton: SP::cThumbnailManager::Shutdown; ~30 message unsubscribes, viewer teardown and 1024-entry job arrays omitted
-007be430  0  skeleton: SP::cThumbnailManager::CapturePaletteThumbnail; object construction, RTT setup and capture dispatch omitted
-007bea00  0  skeleton: palette capture helper; content-validation summarizer / physics-world construction and messaging omitted
