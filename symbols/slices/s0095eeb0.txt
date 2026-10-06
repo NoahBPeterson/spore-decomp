@@ -1,0 +1,26 @@
+0095eeb0 rw::math::fpu::TransformPoint3  # dc: 4x3 * vec3 + translation
+0095efb0 rw::math::fpu::TransformPoint3NoTrans  # dc: 4x3 * vec3
+0095f090 rw::math::fpu::Matrix33Template::SetAxes  # dc: copy 3 Vec4 axes
+0095f0f0 rw::math::fpu::Matrix33Template::Matrix33Template  # pdb callee-scored
+0095f1c0 rw::math::fpu::TransformPoint4  # dc: homogeneous 4x4 * vec3 with divide
+0095f320 rw::math::fpu::BuildRotationMatrix  # dc: axis-angle rotation
+0095f490 rw::math::fpu::Inverse  # pdb callee-scored
+0095f5c0 rw::math::fpu::Matrix43::MultiplyPrependRotation  # dc: build then multiply
+0095f620 EA::UTFWin::Transform::Invert  # pdb callee-scored
+0095f860 rw::math::fpu::Matrix43::Multiply  # dc: 17-dword concat
+0095f8c0 EA::UTFWin::ModulateARGB32  # pdb callee-scored
+0095f960 EA::UTFWin::Window::AsInterface  # pdb vtable-slot
+0095f9a0 EA::UTFWin::Window::Release  # pdb vtable-slot
+0095f9d0 EA::UTFWin::Window::GetSlot34  # dc: +0x34 accessor
+0095fa60 EA::UTFWin::Window::SetFlag1D8  # dc: field +0x1d8
+0095fad0 EA::UTFWin::Window::IsAncestorOf  # dc: IWindow ancestor walk
+0095fb20 EA::UTFWin::Window::TestSlot48  # dc: m30 vtable +0x48
+0095fb60 EA::UTFWin::Window::TestSlot54  # dc: m30 vtable +0x54
+0095fbb0 EA::UTFWin::Window::AllDescendants  # dc: child walk
+0095fc00 EA::UTFWin::Window::AllDescendantsAll  # dc: child walk
+0095fc50 EA::UTFWin::Window::FindChild  # dc: child list search
+0095fcc0 EA::UTFWin::Window::WalkChildren  # dc: recursive child walk
+0095fd60 EA::UTFWin::Window::SetA8  # dc: field +0xa8 event
+0095fdc0 EA::UTFWin::Window::Set1D4  # dc: field +0x1d4
+0095fe40 EA::UTFWin::Window::SetArea  # pdb callee-single
+0095fec0 EA::UTFWin::Window::ResizeBy  # dc: vtable +0x60 call

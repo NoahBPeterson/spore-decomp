@@ -1,0 +1,10 @@
+00928e20  212  partial: path-normalize skeleton (wstring copy + last-separator scan + extension split)
+00928f00  110  partial: formatted resource-name builder skeleton
+00928fc0  56   partial: stream position/size accessor skeleton
+00929000  159  partial: big-file delete skeleton
+009290a0  25   partial: stream query skeleton
+00929100  274  partial: big-file write loop skeleton
+00929310  307  partial: big-file open skeleton
+00929470  810  partial: big-file read skeleton
+009297a0  346  partial: big-file seek skeleton
+00929900  357  partial: big-file commit/serialize skeleton

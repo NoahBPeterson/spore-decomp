@@ -1,0 +1,9 @@
+009ac250  nSPCreatureAnim::baked_animation::Init  # dc: resets/deletes mpData, assigns id from g_bakedAnimIdCounter
+009ac2b0  nSPCreatureAnim::baked_animation::GetScale  # dc: returns mpData->mScale or 0
+009ac2e0  nSPCreatureAnim::baked_animation::GetFrame  # dc: base 0x38 + (count*8+0x54)*index
+009ac300  UnpackColor  # dc: 10:11:11 -> float3 scaled by g_colorScale
+009ac390  PackColor    # dc: float3 -> 10:11:11, clamped, 2046/1022 scales
+009ac460  UnpackBytes  # dc: byte RGB -> float3 [-1,1] plus derived 4th component
+009ab620  nSPCreatureAnim::baked_anim_manager::Clear  # dc: resets mLastUpdatedKey and both maps
+009abce0  nSPCreatureAnim::baked_anim_manager::~baked_anim_manager  # dc: Clear + member destructors
+009abd10  nSPCreatureAnim::baked_anim_manager::PostFeedbackEvent/CreateInstance  # dc: allocates 0x1930 "Anim/bam/new_cid"

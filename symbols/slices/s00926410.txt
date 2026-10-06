@@ -1,0 +1,4 @@
+009265f0 EA::Allocator::FixedAllocatorBase::SplitCore  # PDB fields align; builds the free chunk list
+00926650 EA::Allocator::FixedAllocatorBase::AddCore  # 2008 dev PDB name
+009266b0 EA::Allocator::FixedAllocatorBase::Init  # 2008 dev PDB name
+00926720 EA::Allocator::FixedAllocatorBase::FixedAllocatorBase  # 2008 dev PDB name

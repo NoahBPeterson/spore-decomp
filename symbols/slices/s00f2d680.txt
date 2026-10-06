@@ -1,0 +1,9 @@
+00f2d680  FUN_00f2d680  # ctor of the 0x4e0-byte Simulator element (3 fixed_vectors<0x44,5> + cString + floats)
+00f2d7e0  FUN_00f2d7e0  # serialize method of that element (cVarListSerializer + 0x34-array)
+00f2dbe0  Vec4e0::set_capacity  # (cap-begin)/0x4e0 < n; matches /O2 /MD /Gy /EHsc /TP /arch:SSE
+00f2dde0  FUN_00f2dde0  # builds vector<SP::FunctionalMatch::Constraint> (elem 0x24) via ObjectTemplateDB
+00f2df80  Vec4e0::Insert  # generic insert for 0x4e0 element (doubling growth)
+00f2e230  Vec238::set_capacity  # element 0x238; delete has no [-4] refcount check
+00f2e370  Vec4e0::Serialize  # read count via EA::IO::ReadInt32, reserve, construct+append
+00f2e440  Vec188::Serialize  # read count for 0x188-element container
+00f2e5d0  Vec238::Insert  # generic insert for 0x238 element

@@ -1,0 +1,7 @@
+00a2d940  64   EH constructor frame (fs:[0] handler + object ctor) not reproduced
+00a2d9d0  59   EH destructor frame + operator_delete path approximated
+00a2da30  -    PickRandomKey: 525-byte EASTL hashtable iteration + EH body skipped
+00a2dc40  -    SetupPropertyAggregationRules: 472-byte EH + EASTL body skipped
+00a2e060  107  eastl::map::operator[]: find reproduced, DoInsertValue insert approximated
+00a2e2f0  -    fixed_pool + fixed_hashtable constructor body approximated
+00a2e4c0  -    Stopwatch/Mutex timing body approximated

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+01178710  -  1324-byte AES_set_encrypt_key: only the argument validation and the rounds
+              store are written; the fully unrolled Te0..Te3/rcon key schedule is omitted
+01177a10  -  955-byte BIO_f_base64 enc_read: only an empty stub (decode state machine and
+              the line-buffer copy loop not reconstructed)

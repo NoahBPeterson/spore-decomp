@@ -1,0 +1,10 @@
+slices/s00900410/s00900410.cpp  ?FUN_00900610@XmlReader@@  00900610
+slices/s00900410/s00900410.cpp  ?GetTokenType@XmlReader@@  00900660
+slices/s00900410/s00900410.cpp  ?GetTokenCount@XmlReader@@  009006a0
+slices/s00900410/s00900410.cpp  ?GetEntryA@XmlReader@@  009006c0
+slices/s00900410/s00900410.cpp  ?GetEntryB@XmlReader@@  009006f0
+slices/s00900410/s00900410.cpp  ?FUN_009008f0@XmlReader@@  009008f0
+slices/s00900410/s00900410.cpp  ?FUN_00900b10@@  00900b10
+slices/s00900410/s00900410.cpp  ??0XmlTextReader@@  00900b30
+slices/s00900410/s00900410.cpp  ?MapError@XmlTextReader@@  00900ba0
+slices/s00900410/s00900410.cpp  ?IsAtEnd@XmlReader@@  00900d90

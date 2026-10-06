@@ -1,0 +1,9 @@
+# va  Name  # evidence
+00ef8440  FUN_00ef8440  # cSPSimulatorSpaceGame::GetPlayerInventory -> Resource DatabasePackedFile::GetAllocator -> FUN_00f3e8a0; returns ==0
+00ef84b0  FUN_00ef84b0  # same as 00ef8440 but inventory index from this+0x44 (default 5)
+00ef8590  FUN_00ef8590  # QueryPerformanceCounter stopwatch + cDirectPropertyList::SetBoolProperty
+00ef8600  FUN_00ef8600  # cSPUILayout::FindWindowByID + EA::Audio::GetSystemAT + LimitStopwatch::SetTimeLimit
+00ef8820  FUN_00ef8820  # hashtable find returning bool (bucket at +0x60/+0x64)
+00ef8860  FUN_00ef8860  # step-table walk over DAT_0148b450/0148b510 + FUN_00ef7ec0 x0xad
+00ef8940  FUN_00ef8940  # hashtable occupancy/gap count over two table modes (+0x4a8/+0x4ac)
+00ef8cc0  FUN_00ef8cc0  # eastl::hashtable::DoInsertKey (operator_new "Simulator", pool at +0x1c)

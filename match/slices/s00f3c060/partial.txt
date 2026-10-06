@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+00f3c120   50  incomplete: iterator skip-advance stub
+00f3c160   77  incomplete: next-nonempty-index stub
+00f3c1d0  235  incomplete: property read (GetPropertyT<float> x3) stub
+00f3c2c0   99  incomplete: element visitor loop stub
+00f3c330  234  incomplete: stub
+00f3c420  209  incomplete: stub
+00f3c500  266  incomplete: stub
+00f3c610  308  incomplete: stub
+00f3c750  156  incomplete: scenario entry loop stub
+00f3c7f0  123  incomplete: element count stub (skip-loop shape)
+00f3c870  692  incomplete: stub
+00f3cb60  219  incomplete: stub
+00f3cc40  139  incomplete: content-validation summarizer ctor stub
+00f3cd10   66  incomplete: scalar deleting dtor stub
+00f3cd60  131  incomplete: wide-string member setter stub
+00f3cdf0  131  incomplete: wide-string member setter stub
+00f3ce80  131  incomplete: wide-string member setter stub

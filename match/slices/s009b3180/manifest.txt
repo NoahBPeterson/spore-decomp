@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009b3180/s009b3180.cpp  ?GetAnimationBlend@nSPCreatureAnim@@YAMH@Z  009b33f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ?FUN_009b3430@nSPCreatureAnim@@YGDHH@Z  009b3430  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ?Set@TargetFrame@nSPCreatureAnim@@QAEXPBM0@Z  009b3920  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ??4CopyBlock@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ?FUN_009b3bc0@nSPCreatureAnim@@YAXH@Z  009b3bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s009b3180/s009b3180.cpp  ??4Transform30@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

@@ -1,0 +1,7 @@
+00f2e7d0  ???  # 0x2cb0 Editor::cPropertyList-derived ctor (cString triples at +0x7c/+0xb8/+0xf4/+0x130, Vec238 at +0x2ca0)
+00f2eb80  ???  # factory: operator new 0x2cb0 + ctor + AddRef + owner vtable[9]
+00f2ec10  set_capacity<E0x27e8>  # (cap-begin)/0x27e8 < n; matches
+00f2ecd0  clear<E0x238>          # move/destroy tail + sentinel writes +0x14/+0x18
+00f2ef10  set_capacity<E0x534>   # refcount-checked delete; matches
+00f2f2e0  erase<E0x27e0>         # eastl vector erase
+00f2f340  erase<E0x27e8>         # eastl vector erase

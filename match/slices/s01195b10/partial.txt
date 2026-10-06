@@ -1,0 +1,6 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+01195b10  -  435-byte function: only a stub
+01196d20  -  1054-byte ASN1/BIO function: only a stub
+01197550  -  685-byte function: only a stub
+01198210  -  516-byte function: only a stub
+01198420  -  asn1 primitive clear with a custom EAX input convention: only a stub

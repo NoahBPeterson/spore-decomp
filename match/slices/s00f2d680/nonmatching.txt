@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f2d680  270  complete: 0x4e0-element ctor (all fixed-vector/string/float stores + resize/cString calls) written, not byte-exact

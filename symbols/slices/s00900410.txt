@@ -1,0 +1,15 @@
+00900410 EA::XHTML::Resource::StylesheetFactory::CreateResource  # 2008 dev PDB name
+00900800 EA::XML::XmlReader::ReadString  # 2008 dev PDB name
+00900990 EA::XML::XmlReader::XmlReader  # class layout + base-ctor call from XmlTextReader ctor
+009009e0 EA::XML::XmlReader::~XmlReader  # matching dtor body / vtable
+00900b30 EA::XML::XmlTextReader::XmlTextReader  # vtable 0x0143a0b0 + fields 0x6c..0x84
+00900b70 EA::XML::XmlTextReader::~XmlTextReader  # vtable + XML_ParserFree
+00900ba0 EA::XML::XmlTextReader::MapError  # expat error -> ResultCode map
+00900db0 EA::XML::XmlTextReader callback (start element w/ mnFlags&8)  # expat XML_SetElementHandler arg pushed in 0x00901220
+00900e60 EA::XML::XmlTextReader callback (start element)  # expat XML_SetElementHandler arg
+00900f70 EA::XML::XmlTextReader callback (end element)  # expat handler arg
+00900ff0 EA::XML::XmlTextReader callback (character data)  # expat XML_SetCharacterDataHandler arg
+009010c0 EA::XML::XmlTextReader callback (comment)  # expat handler arg
+00901150 EA::XML::XmlTextReader callback (processing instruction)  # expat handler arg
+00901220 EA::XML::XmlTextReader::InitParser  # registers all expat handlers, allocates 0x2000 token buffer
+00901340 EA::XML::XmlTextReader::Read  # XML_Parse driver loop

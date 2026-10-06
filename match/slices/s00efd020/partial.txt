@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00efd020  -   partial: large (1722 B) Simulator/editor update dispatcher; skeleton only
+00efd6e0  -   partial: camera ray/plane test; App/cViewer call sequence and EAX/ESI/EDI conventions stubbed
+00efd830  -   partial: normalized direction dot; x87 sqrt/reciprocal sequence not reproduced
+00efd8e0  -   partial: view-space Vector3 helper; implicit ESI return buffer not modelled
+00efd970  -   partial: editor UI update skeleton
+00efdc00  -   partial: editor UI update skeleton

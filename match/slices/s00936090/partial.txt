@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00936950  -  SharedLibrary::SetPath: skeletal reimplementation; the eastl::string assignment / QualifyNameWithGroup path is not reconstructed

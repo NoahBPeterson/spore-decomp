@@ -1,0 +1,9 @@
+00a00980 nSPCreatureAnim::queued_blender::ClearQueued          # command-table clear; class from caller-single PDB at 00a010c0
+00a00f10 nSPCreatureAnim::queued_blender::Deactivate               # frees/clears an active command slot
+00a00d50 nSPCreatureAnim::queued_blender::Activate                 # sets a command active (calls 009a2cc0 etc.)
+00a01050 nSPCreatureAnim::queued_blender::RebuildActive            # scans mActive, recomputes mPrimary via 009ff380
+00a010c0 nSPCreatureAnim::queued_blender::UpdateCreatureBodies     # PDB candidate (caller-single)
+00a00b10 nSPCreatureAnim::queued_blender::QueueCommand             # allocates a new anim_command and links it
+00a009e0 nSPCreatureAnim::queued_blender::NextFreeCommand          # scans for a free command slot
+00a00c40 nSPCreatureAnim::queued_blender::ReplaceDefault           # moves the default command into a slot
+00a00f90 nSPCreatureAnim::queued_blender::ReleaseCommand           # releases/unlinks a command

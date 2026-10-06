@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f318e0/s00f318e0.cpp  ?lerp@Obj@@QAEMXZ  00f31b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?set104@Obj@@QAEXH@Z  00f31c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?setEC@Obj@@QAEXH@Z  00f31d20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?setF0@Obj@@QAEXH@Z  00f31d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?MsgSend@@YAXXZ  00f31ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?SelectPlanetRecord@@YAXXZ  00f31f80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?Set@Vec4@@QAEPAU1@XZ  00f31fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?set148@Obj@@QAEXABUVector3@@@Z  00f32100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?set154@Obj@@QAEXABUVector3@@@Z  00f32150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?set130@Obj@@QAEXABUVector3@@@Z  00f321a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?set13c@Obj@@QAEXABUVector3@@@Z  00f321f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?ReleaseGlobal@@YAXXZ  00f32410  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?below@C@@QAEHH@Z  00f326d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?onMsg@Obj@@QAEDHH@Z  00f326f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00f318e0/s00f318e0.cpp  ?release100@Obj@@QAEXXZ  00f323c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

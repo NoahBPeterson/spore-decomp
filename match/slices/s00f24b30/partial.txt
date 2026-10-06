@@ -1,0 +1,8 @@
+# va        diff-bytes  reason
+00f24b30  n/a      incomplete: virtual dispatch + message/key construction not reconstructed
+00f24d30  72       incomplete: inlined eastl::map default-construction not reconstructed
+00f24d90  21       incomplete: eastl::map teardown (DoNukeSubtree/destroy) not reconstructed
+00f24dc0  n/a      incomplete: noun-manager game-data vector iteration not reconstructed
+00f257f0  111      incomplete: cVarListSerializer construction/serialize not fully reconstructed
+00f25930  76       incomplete: asset-directory GetLocalKey call modeled as a cdecl stub
+00f259b0  124      incomplete: asset lookup branch/return paths approximate

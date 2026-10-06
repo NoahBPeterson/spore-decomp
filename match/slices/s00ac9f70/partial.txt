@@ -1,0 +1,6 @@
+00aca0c0  -    heap sift-down with functor compare; body stubbed
+00aca360  -    creature interaction (702 bytes, vcalls + distance math); body stubbed
+00aca620  -    wchar_t hashtable deserialize (EH); body approximated
+00acabe0  -    EASTL wchar_t string serialize (460 bytes); body approximated
+00acadb0  -    EASTL wchar_t string serialize (460 bytes); body approximated
+00acaf80  -    EASTL wchar_t string serialize (460 bytes); body approximated

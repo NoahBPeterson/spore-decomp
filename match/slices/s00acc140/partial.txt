@@ -1,0 +1,7 @@
+00acc390  -    sGetClosestRare (626 bytes, nested vectors + vcalls); body approximated
+00acc610  -    remove city-creature from 0x18 blocks; vector erase path approximated
+00acc800  -    `anonymous namespace'::LoadSelector (planet selector fan-out); body stubbed
+00accf80  -    SP::cCityVisualizer::SetupCultureStages (654 bytes); body stubbed
+00acd210  -    iterate culture stages calling SetupCultureStages; body stubbed
+00acd2d0  -    property-change handler (hash_map + vector append); body approximated
+00acd410  -    property-change handler dispatch to SetupCultureStages; body approximated

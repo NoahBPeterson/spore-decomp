@@ -1,0 +1,4 @@
+# incomplete / approximate (not counted as decompiled)
+00b0f270  1150  cTerrainCameraController::RunCameraScript: skeleton only (long straight-line VarMap::SetVar/GetVar sequence with PDB-known layout omitted)
+00b0fd00  398   RotateTowards: skeleton only (x87/SSE rotation math omitted)
+00b0fe90  873   cTerrainCameraController::HandleMouse: skeleton only (input/zoom damping logic omitted)

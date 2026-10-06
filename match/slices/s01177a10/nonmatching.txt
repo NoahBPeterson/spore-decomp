@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+011784b0   16  AES key-setup wrapper: complete; MSVC assigns the output/bits/key inputs to
+               ecx/edx the other way round and hoists the key reload
+01177dd0  347  BIO_f_base64 enc_write: complete translation; the register schedule (retry
+               loops, EVP_Encode* argument setup) drifts from the original
+01179dd0  309  RSA_blinding_on: complete translation; block schedule and the blinding
+               buffer copy differ

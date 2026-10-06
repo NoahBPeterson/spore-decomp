@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+009326b0  -  DeleteDirectoryContents: directory-iteration callback (WalkDirectory/eastl container) not reconstructed
+00932960  -  CreateDirectoryPath: component splitter FUN_00930dd0 not reconstructed (target path unrolled, no symbol)
+00932b20  -  CopyDirectoryTree: recursive copy body (CopyFileW/recursion) not reconstructed

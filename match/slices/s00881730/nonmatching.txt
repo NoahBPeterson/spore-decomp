@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00881ed0    6  Locale number formatter with a global format string: complete; cl loads the
+               b/c/d arguments into different registers than the original
+00881f00    6  Locale number formatter with a global format string: same register schedule
+               difference as 00881ed0
+008822e0  122  EA::Locale::SetMoneyString: complete translation (FtoaEnglish16 + sign/digit
+               skip + SetMoneyStringLocal); the 128-entry buffer frame and the iswctype IAT
+               hoist differ

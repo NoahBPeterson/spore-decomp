@@ -1,0 +1,9 @@
+# va        diff-bytes  reason
+00f25110  24  complete; /O2 scheduler places the mode==2 compare after the zero stores
+00f25160  29  complete; trailing key-rewrite compare/hoist scheduling differs
+00f25190  54  complete; same compare-scheduling + branch layout differences
+00f251f0  11  complete; 3-field Vector3 copy load/store interleaving differs
+00f25240  34  complete; same accessor scheduling as 00f25190
+00f25580  68  complete; decision-tree block ordering differs (control flow equivalent)
+00f256a0  10  complete; inner switch tree evaluates u<=root then branches, block order differs
+00f256e0  10  complete; same as 00f256a0 with the second constant set

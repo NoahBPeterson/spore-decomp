@@ -1,0 +1,7 @@
+00900410  326  partial: XHTML StylesheetFactory::CreateResource skeleton (operator_new + stream read + CSSParser path not reconstructed)
+009007b0  70   partial: XmlReader token-walk helper skeleton
+00900800  210  partial: XmlReader::ReadString skeleton (token->buffer append loop not reconstructed)
+00900a30  115  partial: XmlReader allocator/stream re-init skeleton
+00900ab0  71   partial: XmlReader deleting-dtor skeleton
+00901220  231  partial: XmlTextReader parser setup (expat handler registration) skeleton
+00901340  120  partial: XmlTextReader::Read (XML_Parse loop) skeleton

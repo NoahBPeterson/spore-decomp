@@ -1,0 +1,14 @@
+# va  name  # evidence
+# scenario-tutorial surface-node module; names inferred from call graph, unconfirmed
+00f3fd90  ScenarioNode_Destroy            # nounId==-2 destroys nodes; else dequeue+callback
+00f3ff70  ScenarioNode_Load               # queries noun, writes state at noun+0x22c
+00f40090  ScenarioNode_Refresh            # sets/clears flags 2 and 0x10 on noun+0x224
+00f401a0  ScenarioNode_RefreshAll         # walks world->v238 (0x238 stride), ANDs results
+00f40240  ScenarioNode_Propagate          # per-node bit2 propagate via m3f110
+00f40370  ScenarioNode_ClearAndPropagate  # clears bit2 on all nodes then propagates
+00f404d0  ScenarioNode_GetField2          # *(node->arr70 + idx*0x4e0 + 2), byte-exact
+00f40500  ScenarioNode_Process            # 11-way switch on noun state
+00f409a0  ScenarioNode_ClampValue         # maxss/minss clamp + lerp callback
+00f40ae0  ScenarioNode_AppendToWorld      # push_back into world->v38
+00f40bb0  ScenarioTutorials_SyncActive    # ScenarioTutorials_GetActive index sync
+00f40c20  ScenarioNode_CollectByNoun      # collects nodes matching a noun id

@@ -1,0 +1,4 @@
+# va  Name  # evidence
+00f0b0e0  FUN_00f0b0e0  # 0x44-byte-record container range helper: eastl::copy(0xdfb930) + FUN_00f280f0 per element
+00f0b8b0  FUN_00f0b8b0  # SP::WindowManager()->GetWindowList(0) sweep over DAT_016c7d90 (0x50 bytes, stride 0x10)
+00f0b420  FUN_00f0b420  # key lookup (called with DAT_016c7d90+0x14 entries)

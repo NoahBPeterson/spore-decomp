@@ -1,0 +1,10 @@
+# va  name  # evidence
+00881730  FUN_00881730                  # locale/format helper (unconfirmed)
+00881ae0  EA::Locale::SetNumberString
+00881c50  eastl::fixed_string<wchar_t,16,1>::operator=
+00881ea0  EA::Locale::SetNumberString    # wrapper with L"%N%?p%?2F"; byte-exact
+00881ed0  EA::Locale::SetNumberString    # wrapper with global format DAT_01650540
+00881f00  EA::Locale::SetNumberString    # wrapper with global format DAT_01650574
+00881f30  EA::Locale::SetMoneyStringLocal
+008822e0  EA::Locale::SetMoneyString
+00882380  EA::Locale::`anonymous_namespace'::GetLocaleTraits

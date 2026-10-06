@@ -1,0 +1,10 @@
+00922570 EA::Thread::EASemaphoreData::UpdateCancelCount  # 2008 dev PDB name
+009225d0 EA::Thread::SemaphoreData::SemaphoreData  # PDB name (count/intra/name descriptor)
+00922620 EA::Thread::Semaphore::Init  # 2008 dev PDB name (CreateSemaphoreA)
+00922690 EA::Thread::Semaphore::Wait  # 2008 dev PDB name (WaitForSingleObject)
+00922740 EA::Thread::Semaphore::Post  # 2008 dev PDB name (ReleaseSemaphore)
+00922b30 EA::Thread::Thread::SetName  # 2008 dev PDB name (RaiseException 0x406d1388)
+009233f0 EA::Trace::LogFilterGroupLevels::IsFiltered  # 2008 dev PDB name (vtable+0x14 thunk)
+00923440 EA::Trace::LogFilterGroupLevels::Release  # 2008 dev PDB name
+009234c0 EA::Trace::GetServer  # 2008 dev PDB name
+009234e0 EA::Trace::Server::UpdateLogFilters  # 2008 dev PDB name (vtable+0x14 thunk)

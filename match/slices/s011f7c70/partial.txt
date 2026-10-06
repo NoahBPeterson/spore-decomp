@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+011f7de0  -  296-byte rwg_D3D9ResetAndRestoreDevice: only a stub (device reset/restore
+              sequence, effect-restore callbacks and raster rebinds not reconstructed)
+011f84b0  -  457-byte Device::Initialize: only a stub (adapter/mode enumeration and the
+              MXCSR setup are not reconstructed)
+011f8680  -  576-byte Device::StartInternal: only a stub (present-parameter assembly,
+              Raster::Initialize calls and the device creation sequence omitted)
+011f88c0  -  383-byte adapter/format enumeration: only a stub

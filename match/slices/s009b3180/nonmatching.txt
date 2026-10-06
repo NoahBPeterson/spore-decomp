@@ -1,0 +1,1 @@
+009b3460  5  complete; recursive pointer-walk; outer/inner register allocation (eax vs ecx) differs

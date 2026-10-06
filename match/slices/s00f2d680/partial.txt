@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00f2d7e0  1009  incomplete: serializer stub (cVarListSerializer + 0x34-element adjustment loop not reconstructed)
+00f2dde0  405  incomplete: constraint-list builder stub (vector<Constraint> append + ObjectTemplateDB traversal missing)
+00f2df80  337  incomplete: inlined generic insert (destroy/move_backward/construct path not reproduced)
+00f2e370  152  incomplete: 0x4e0 container deserialize (0xf2dd70 pre-call + object vtable stream accessor missing)
+00f2e440  336  incomplete: 0x188 container deserialize stub
+00f2e5d0  333  incomplete: inlined 0x238 insert (destroy/shift/construct path not reproduced)

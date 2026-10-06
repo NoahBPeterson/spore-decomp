@@ -1,0 +1,2 @@
+009aa440 97 complete creature-visibility predicate; register allocation differs
+009aa500 111 complete rbtree three-field lower_bound; register allocation differs

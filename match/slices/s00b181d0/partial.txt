@@ -1,0 +1,28 @@
+# incomplete / approximate skeletons (not counted as decompiled)
+00b181d0  287  WaterClearance/hashtable distance test: skeleton
+00b182f0  220  path/serialization check: skeleton
+00b183f0  10   cGameData vtable hook (call slot 0x10): skeleton
+00b18400  31   cGameData::Init/SetDefinitionID: skeleton
+00b18490  46   0x10-byte ref-holder constructor: skeleton
+00b184c0  51   cGameData destructor (vtable stores/refcount dec): skeleton
+00b18530  27   skeleton
+00b18550  60   skeleton
+00b18590  102  cGameData::Write: skeleton
+00b18660  70   cGameData::cGameData: skeleton
+00b186b0  71   cGameData scalar deleting destructor: skeleton
+00b18760  34   creature-tag check: skeleton
+00b188b0  164  trait/kind hash switch: skeleton
+00b18960  58   MessageServer notify: skeleton
+00b189c0  869  large serialization routine: skeleton
+00b18d50  24   GameData check: skeleton
+00b18d90  22   message send helper: skeleton
+00b18db0  31   container teardown: skeleton
+00b18dd0  32   skeleton
+00b18e40  46   skeleton
+00b18e70  125  skeleton
+00b18ef0  122  skeleton
+00b18f70  28   skeleton
+00b18f90  110  skeleton
+00b19000  374  skeleton
+00b19180  258  skeleton
+00b19290  429  skeleton

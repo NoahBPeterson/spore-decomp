@@ -1,0 +1,20 @@
+009323c0 GetSystemPath  # dc: switches on CSIDL bucket, SHGetFolderPathW, appends separator
+00932580 EA::IO::CreateTempFile  # pdb-area: _time64 + Snprintf16 temp-name loop + FileStream
+009326b0 DeleteDirectoryContents  # dc: recursive DeleteFileW/RemoveDirectory walk
+00932890 RemoveDirectoryRecursive  # dc: RemoveDirectoryW wrapper, recursive path calls 009326b0
+00932960 CreateDirectoryPath  # dc: component-wise MakeOneDirectory
+00932ae0 EnsureDirectoryExists  # dc: GetFileAttributesW + CreateDirectoryPath
+00932b20 CopyDirectoryTree  # dc: recursive CopyFileW over WalkDirectory listing
+00932d00 EA::Hash::InitCRC32Table  # pdb anchor
+00932da0 EA::Hash::CRC32  # pdb callee-single
+00932df0 EA::Hash::CRC64  # dc: dual-table 64-bit CRC
+00932e50 EA::Hash::FNV1  # pdb callee-single
+00932e80 EA::Hash::FNV1_String8  # dc: null-terminated FNV1 with case mode
+00932f30 EA::Hash::FNV1_String16  # pdb callee-single
+00932ff0 EA::IO::IniFile::GetOption  # pdb vtable-slot
+00933010 EA::IO::IniFile::SetOption  # pdb vtable-slot
+00933040 EA::IO::IniFile::SetPath  # pdb callee-single
+009330c0 EA::IO::IniFile::SetStream  # pdb vtable-slot
+00933120 EA::IO::IniFile::Open  # pdb gap-align
+00933250 EA::IO::IniFile::GetEncoding  # dc: DetectEncoding over stream read
+009332d0 EA::IO::StackArray<char,256>::Init  # pdb gap-align (anonymous namespace)

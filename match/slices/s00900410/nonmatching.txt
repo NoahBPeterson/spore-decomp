@@ -1,0 +1,12 @@
+00900720  105  XmlReader::FindAttribute: complete; 8-bit compare-loop shape differs (cl emitted a 4-byte-wide strcmp-style loop)
+00900900  78   wstring->stack-allocator append: complete; bump-allocator/loop schedule differs
+00900990  76   XmlReader ctor: complete; cl interleaves member construction / adds an EH frame vs the original
+009009e0  57   XmlReader dtor: complete; cl adds an EH frame and tail-jumps the base dtor differently
+00900b70  43   XmlTextReader dtor: complete; cl adds an EH frame vs the original's plain tail-call dtor
+00900db0  134  expat start-element callback (flags&8): complete; token-buffer allocation schedule differs
+00900e60  258  expat start-element callback: complete; token/entry allocation and loop layout differ
+00900f70  112  expat end-element callback: complete; allocation schedule differs
+00900ff0  212  expat character-data callback: complete; buffer copy/allocation differs
+009010c0  112  expat comment callback: complete; allocation schedule differs
+00901150  113  expat processing-instruction callback: complete; allocation schedule differs
+009011e0  39   XmlTextReader deleting dtor: complete; EH frame/ordering differs

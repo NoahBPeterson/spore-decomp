@@ -1,0 +1,14 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009323c0/s009323c0.cpp  ?InitCRC32Table@@YAXXZ  00932d00  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?CRC32@@YAIPBEHI_N@Z  00932da0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?CRC64@@YA_KPBEH_K_N@Z  00932df0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?FNV1@@YAIPBEHI@Z  00932e50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?FNV1_String8@@YAIPBDIH@Z  00932e80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?FNV1_String16@@YAIPB_WIH@Z  00932f30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?GetOption@EA_IO_IniFile@@QAEHH@Z  00932ff0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?SetOption@EA_IO_IniFile@@QAEXHH@Z  00933010  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?SetPath@EA_IO_IniFile@@QAE_NPB_W@Z  00933040  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?SetStream@EA_IO_IniFile@@QAE_NPAX@Z  009330c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?EnsureDirectoryExists@@YA_NPB_W@Z  00932ae0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?GetEncoding@EA_IO_IniFile@@QAEHXZ  00933250  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009323c0/s009323c0.cpp  ?Init@StackArrayChar256@@QAEPADPADH@Z  009332d0  /O2 /MD /Gy /EHsc /TP /GS-

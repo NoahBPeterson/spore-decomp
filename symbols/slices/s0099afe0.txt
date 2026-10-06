@@ -1,0 +1,7 @@
+0099b110 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::CreateLazyReference  # PDB pdb_names.json
+0099b1f0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadProperty  # PDB pdb_names.json
+0099b660 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::XmlReaderState  # PDB pdb_names.json
+0099b730 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadPropertyList  # Ghidra PDB candidate (caller-single)
+0099b8a0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadObject  # PDB pdb_names.json
+0099b9e0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadBindings  # PDB pdb_names.json
+0099bac0 EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadGraph  # PDB pdb_names.json

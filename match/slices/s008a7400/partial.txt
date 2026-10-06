@@ -1,0 +1,4 @@
+008a7400  733  partial: stem/blue-zone fit pass skeleton (float reference-width search + operator new[] scratch); not reconstructed
+008a76e0  118  partial: 0x430-byte scratch dispatch wrapper skeleton; opaque callee types not reconstructed
+008a7e30  844  partial: per-hint-set interpolation table builder skeleton; not reconstructed
+008a8180  256  partial: DoVStrokes vertical-stroke fit loop; original uses a register ABI (first value in EAX, class ptr in EDI), not expressible as matching C

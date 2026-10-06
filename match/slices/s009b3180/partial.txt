@@ -1,0 +1,8 @@
+009b3180  613  partial; creature_body_static_data::Clear skeleton
+009b3490  948  partial; large creature-body helper skeleton
+009b3850  207  partial; creature_instance_data::ComposeGaitFileName skeleton
+009b3970  108  partial; angle/power curve helper skeleton
+009b39e0  178  partial
+009b3b20  156  partial; transform-shuffle helper skeleton
+009b3c10  106  partial; wrap-around helper skeleton
+009b3cd0  357  partial

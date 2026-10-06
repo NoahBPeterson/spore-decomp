@@ -1,0 +1,8 @@
+00ac9f70  83   complete; hashmap serialize loop, register schedule differs
+00aca1f0  37   complete; lower_bound, begin/end register allocation differs
+00aca2f0  81   complete; 0x20-stride range destroy, register schedule differs
+00aca730  27   complete; vector serialize, vcall/length schedule differs
+00aca7b0  22   complete; 0x20-stride range destroy, counter/shift shape differs
+00aca970  81   complete; vector copy helper, call schedule differs
+00acaab0  149  complete; 0x18-stride range copy, NEW ordering differs
+00acb150  51   complete; 4-vector destructor, call order/registers differ

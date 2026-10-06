@@ -1,0 +1,10 @@
+00acc140  132  complete; vector<0xc> insert, block-move/register schedule differs
+00acc2d0  76   complete; 0x18-range refcount assign, register schedule differs
+00acc330  81   complete; reverse 0x18-range assign, register schedule differs
+00acc700  101  complete; vector<0x14> push with squared floats, schedule differs
+00acc770  34   complete; release/compact loop, register allocation differs
+00acc9b0  58   complete; vector resize dispatch, schedule differs
+00acca00  59   complete; remove_1st, shift-loop shape differs
+00accd70  264  complete; 0x68-node freelist teardown, register schedule differs
+00accec0  72   complete; 0x20-range copy, element-ctor call schedule differs
+00accf20  76   complete; reverse 0x20-range copy, register schedule differs

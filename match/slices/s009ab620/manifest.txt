@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009ab620/s009ab620.cpp  ?Init@baked_animation@nSPCreatureAnim@@QAEX_N@Z  009ac250  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s009ab620/s009ab620.cpp  ?GetScale@baked_animation@nSPCreatureAnim@@QBEMXZ  009ac2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s009ab620/s009ab620.cpp  ?GetFrame@baked_animation@nSPCreatureAnim@@QBEPAXH@Z  009ac2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE2

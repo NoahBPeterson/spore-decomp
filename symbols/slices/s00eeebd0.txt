@@ -1,0 +1,5 @@
+# va  Name  # evidence
+00eef170  FUN_00eef170  # calls SP::PlanetModel / SP::cPlanetModel::BuildSurfaceOrientation (0x00b3d350/0x00b7f190); model-record fill
+00eef330  FUN_00eef330  # edits a vector<Key_> (eastl::find<Key_*>) then collector FUN_006a0ee0; PDB caller-scored candidate SP::EditorUtils::ApplyRandomSkinPaintThemeToModel (unconfirmed)
+00eef4b0  FUN_00eef4b0  # walks the active model set (DAT_016c7aa4->0x74->0x10, stride 0x238) clearing flags
+00eef7d0  FUN_00eef7d0  # driver over the 0x34-byte model list calling FUN_00eef170 per record

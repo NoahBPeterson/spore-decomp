@@ -1,0 +1,4 @@
+# va        diff-bytes  reason
+00f278b0  49  complete; predicate branch/block ordering differs (control-flow equivalent)
+00f278f0  119 complete; 0x44-stride loop register allocation + inline wcslen differ
+00f280b0  6   complete; only the `xor ecx,ecx` zero-register scheduling differs

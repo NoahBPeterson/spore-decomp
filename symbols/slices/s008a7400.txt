@@ -1,0 +1,8 @@
+008a7760 ff_malloc  # 2008 dev PDB callee-single name
+008a7770 ff_free  # 2008 dev PDB callee-single name
+008a7780 ff_realloc  # 2008 dev PDB callee-single name
+008a77b0 FlipContourDirection  # 2008 dev PDB name; GlyphClass offsets 0x36/0x3c/0x40/0x44/0x48/0x50/0x54 match
+008a7930 New_FFT1HintClass  # 2008 dev PDB name; allocates 0x378 FFT1HintClass
+008a7c90 SetupStemWeights  # 2008 dev PDB name; util_FixMul stem-width fit
+008a7e30 SetInterpolation  # 2008 dev PDB name; FFT1HintClass +0x2ac hint sets
+008a8180 DoVStrokes  # 2008 dev PDB name; vertical stroke fitting

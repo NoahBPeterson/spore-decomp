@@ -1,0 +1,1 @@
+slices/s00a2d790/s00a2d790.cpp  ?FUN_00a2d990@AudioSystem@@QAEHPAX@Z  00a2d990  /O2 /MD /Gy /EHsc /TP /arch:SSE

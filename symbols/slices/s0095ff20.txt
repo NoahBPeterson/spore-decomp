@@ -1,0 +1,23 @@
+0095ff20 EA::UTFWin::Window::MoveBy  # dc: add offset to +0x94 area via vtable +0x60
+0095ff70 EA::UTFWin::Window::GrowBy  # dc: resize +0x84 area via vtable +0x6c
+0095ffd0 EA::UTFWin::Window::MoveBy2  # dc: move +0x84 area via vtable +0x6c
+00960020 EA::UTFWin::Window::SetA4  # dc: field +0xa4
+00960050 EA::UTFWin::Window::Set1E4  # dc: refcounted field +0x1e4
+009600a0 EA::UTFWin::Window::OnPaintState  # dc: flags at +0x28/+0x2c
+009600d0 EA::UTFWin::Window::CallSlot0  # dc: conditional call
+00960100 EA::UTFWin::Window::TransformPoint  # dc: mMat +0x148 * point
+00960180 EA::UTFWin::Window::ScreenToLocal  # dc: vtable +0xc8
+009601e0 EA::UTFWin::Window::GetChild  # dc: child list lookup
+00960230 EA::UTFWin::Window::RemoveChild  # dc: vtable +0xdc detach
+00960280 EA::UTFWin::Window::ClearChildren  # dc: vtable +0xe0 loop
+009602c0 EA::UTFWin::Window::Dispatch14  # dc: m30 vtable +0x14
+009602f0 EA::UTFWin::Window::Dispatch  # dc: FUN_0095a0b0
+00960310 EA::UTFWin::Window::OnPaint  # pdb gap-align
+00960410 EA::UTFWin::Window::DoMessage  # pdb gap-align
+00960550 EASTL::allocator::allocate_pair  # dc: operator_new pair wrapper
+009605a0 HashTable::rehash  # dc: bucket relink
+00960650 EA::UTFWin::WindowListMarshaller::Read  # pdb gap-align
+009608c0 EA::UTFWin::Window::SetPhysicalArea  # pdb gap-align
+009609b0 EA::UTFWin::Window::InvalidateLayout  # pdb callee-single
+00960ae0 FUN_00960ae0  # dc: vtable dispatch
+00960b40 FUN_00960b40  # dc: vtable dispatch

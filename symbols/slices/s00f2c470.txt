@@ -1,0 +1,3 @@
+# Slice s00f2c470 names.
+# All functions are scenario-resource / cBuildingData copy and serialization
+# helpers (0x188, 0x238, 0x34 and 0x44 strides).  No exact names confirmed.

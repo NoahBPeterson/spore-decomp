@@ -1,0 +1,15 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00f3ff70  248  node load/unload state machine: faithful translation, but MSVC's register
+               allocation and the reused argument home slot (state at noun+0x22c) differ
+00f40090  234  per-node flag refresh: full path reconstructed; cl hoists the repeated
+               FUN_00b18e00()/vcall schedule differently
+00f401a0  115  iterate world->v238 and refresh each node: complete, but the 0x238-stride
+               header scan (bit30 break / bit31 continue) is scheduled differently
+00f40240  246  per-node propagate/clear: complete; the inlined 0x238 scan and the
+               m3f110 argument schedule diverge
+00f40370  302  clear all node bit2 then re-propagate: complete; same scan issue
+00f40ae0  176  push_back into world->v38 (0x38 stride): complete, inline/slow-path split
+               and the ctor slot differ
+00f40bb0   48  scenario-checklist active-node sync: complete; register allocation for the
+               begin/end division and the vtable call differ
+00f40c20  216  collect nodes whose nounId matches: complete; scan + out-vector growth differ

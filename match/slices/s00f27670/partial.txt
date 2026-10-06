@@ -1,0 +1,14 @@
+# va        diff-bytes  reason
+00f27670  n/a      incomplete: PropertyManager/eastl-string query path not reconstructed
+00f27730  n/a      incomplete: same as 00f27670, result compared against 0xc
+00f277f0  n/a      incomplete: PropertyManager + GetUInt(0x1ea08337) range check not reconstructed
+00f27990  n/a      incomplete: large scenario update function not reconstructed
+00f27d80  n/a      incomplete: PlanetModel/Variant property set not reconstructed
+00f27e00  n/a      incomplete: SP::GetSaveArea serialize + ObjectTemplateDB not reconstructed
+00f27ee0  n/a      incomplete: cVarListSerializer over 0x27e8 array + tail jmp not reconstructed
+00f280f0  n/a      incomplete: cString destructor (two deallocations + tail jmp) not reconstructed
+00f28140  n/a      incomplete: eastl vector reserve (DoAllocate) not reconstructed
+00f28280  n/a      incomplete: eastl vector reserve (0x38 stride) not reconstructed
+00f28380  n/a      incomplete: ConvertToString16 + cVarListSerializer path not reconstructed
+00f28480  n/a      incomplete: same as 00f28380 with a different type tag
+00f28580  n/a      incomplete: same as 00f28380 with a different type tag

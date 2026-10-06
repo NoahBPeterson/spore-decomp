@@ -1,0 +1,7 @@
+00922940  199  partial: thread wait-for-handle loop skeleton (GetThreadTime/ThreadSleep/WaitForSingleObject paths not reconstructed)
+00922a10  89   partial: thread exit-code query skeleton
+00922d30  81   partial: thread-data slot allocator skeleton (atomic slot table + 100-byte pool)
+00922e30  243  partial: thread start/parameter marshalling skeleton
+00922f30  364  partial: thread suspend/resume skeleton
+009230a0  251  partial: thread wait/join skeleton
+009231a0  364  partial: thread terminate skeleton

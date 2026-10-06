@@ -1,0 +1,14 @@
+# complete behaviorally-equivalent source, not byte-exact
+00aea5d0  318  PtrVec::DoInsertValue (AutoRefCount vector grow/inplace insert): source uses raw-offset transliteration; EASTL's exact uninitialized_copy/move_backward scheduling and allocator temp not reproduced
+00aea720  142  SpaceTool::RemoveMatching: loop/condition shape correct; register allocation and eastl copy_impl inlining differ
+00aea7f0  78   SpaceTool::RemoveByPtr: complete; register allocation differs
+00aea850  73   SpaceTool::ReleaseSelected: complete; register allocation differs
+00aea8e0  224  SpaceTool::Advance: complete; condition order + check-entry inlining differ
+00aea9e0  117  SpaceTool::RemoveByPtrAndUpdate: complete; register allocation differs
+00aeaa80  107  SpaceTool::RemoveMatching2: complete; register allocation differs
+00aeab40  320  SpaceTool::RemoveByKey: complete; register allocation differs
+00aeae10  111  Vec12::erase: complete; eastl move helper signature/order modelled
+00aeae90  346  Vec12::DoInsertValue: complete; EASTL scheduling differs
+00aeb030  31   destroy_hash_buckets: complete; near-miss (loop/regs)
+00aeb090  103  SpaceTool::Cleanup: complete; vtable slot calls via generic helpers change scheduling
+00aeb160  176  SpaceTool::AddEntry: complete; refcount temp handling differs

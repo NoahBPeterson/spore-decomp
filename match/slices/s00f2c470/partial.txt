@@ -1,0 +1,12 @@
+# va        diff-bytes  reason
+00f2c470  n/a      incomplete: scenario resource copy/serialize not reconstructed
+00f2c5d0  n/a      incomplete: scenario resource copy/serialize not reconstructed
+00f2c6a0  n/a      incomplete: scenario resource copy/serialize not reconstructed
+00f2c810  n/a      incomplete: scenario resource copy/serialize not reconstructed
+00f2c950  n/a      incomplete: scenario resource copy/serialize not reconstructed
+00f2cb50  n/a      incomplete: vector reallocate/append-with-reuse not reconstructed
+00f2ced0  n/a      incomplete: 0x188-stride copy-construct forward loop not reconstructed
+00f2d090  n/a      incomplete: scenario resource reader not reconstructed
+00f2d260  n/a      incomplete: scenario resource reader not reconstructed
+00f2d330  n/a      incomplete: large two-cString object constructor not reconstructed
+00f2d3d0  n/a      incomplete: vector resize branch not reconstructed

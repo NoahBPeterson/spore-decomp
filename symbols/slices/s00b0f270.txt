@@ -1,0 +1,14 @@
+# slice s00b0f270 - names inferred from PDB / call sites
+00b0f270  SP::cTerrainCameraController::RunCameraScript  # PDB name; sets many VarMap scratch vars via 0x7f25c0
+00b0f720  SP::cTerrainCameraController::SetFloats5  # stores 5 float args to +0x278..+0x288
+00b0f770  SP::cTerrainCameraController::ClampSpread  # clamps +0x150/+0x154/+0x158/+0x15c/+0x28c by +/- 0x167bd10
+00b0f880  SP::cTerrainCameraController::InterpByAngle  # dot(+0x54..,+0x6c..) -> acos/pi -> lerp +0x374/+0x378
+00b0f930  SetEdgeDistance  # free __stdcall; g14=p[0]; g18=p[1]
+00b0f950  SP::cTerrainCameraController::SetToggle  # toggles mb11, cursor-attachment layout calls
+00b0f9a0  SP::cTerrainCameraController::KeysHeld  # tests GameInputManager vtable slot 6 for keys 1..0x12
+00b0fa70  Spring1f::Set  # 1-float spring force/set
+00b0fae0  Spring3f::Set  # 3-float spring force/set
+00b0fbe0  Spring1f::Reset  # resets spring, stores velocity
+00b0fc40  BezierEval  # cubic bezier helper (float10)
+00b0fd00  RotateTowards  # x87/SSE rotation helper
+00b0fe90  SP::cTerrainCameraController::HandleMouse  # mouse wheel/zoom damping handler

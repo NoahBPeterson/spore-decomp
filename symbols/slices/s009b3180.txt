@@ -1,0 +1,8 @@
+009b33f0  nSPCreatureAnim::GetAnimationBlend  # dc: 0.375*f438 + 0.625*f434
+009b3430  FUN_009b3430  # dc: (b-a)>>3 + 1 >= 4
+009b3460  FUN_009b3460  # dc: cached parent pointer walk (recursive)
+009b3850  nSPCreatureAnim::creature_instance_data::ComposeGaitFileName  # pdb name
+009b3920  nSPCreatureAnim::TargetFrame::Set  # dc: copies posA[3] and posB[4]
+009b3ab0  nSPCreatureAnim::CopyBlock::operator=  # dc: int[4]+float[10]+char copy
+009b3bc0  FUN_009b3bc0  # dc: zeroes 9 floats at +0x118
+009b3c80  nSPCreatureAnim::Transform30::operator=  # dc: int,int,float[10] copy

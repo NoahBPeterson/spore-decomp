@@ -1,0 +1,2 @@
+00acb490 eastl::vector<EA::AutoRefCount<SP::cStarRecord>,eastl::sp_vector_allocator> copy/ctor  # 4 contained vectors
+00acbaf0 FUN_00acbaf0  # node copy ctor for 0x20 node with vector at +0xc

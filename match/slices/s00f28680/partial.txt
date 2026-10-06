@@ -1,0 +1,15 @@
+# va        diff-bytes  reason
+00f28680  n/a      incomplete: 256-byte cBuildingData copy/convert loop not reconstructed
+00f28780  n/a      incomplete: 256-byte cBuildingData copy/convert loop not reconstructed
+00f28880  n/a      incomplete: cBuildingData vector transformation not reconstructed
+00f289d0  n/a      incomplete: cBuildingData vector transformation not reconstructed
+00f28b80  n/a      incomplete: cString/vector value query not reconstructed
+00f28c50  n/a      incomplete: cVarListSerializer + cString field round-trip not reconstructed
+00f28ce0  n/a      incomplete: cVarListSerializer over building array not reconstructed
+00f28dd0  n/a      incomplete: eastl::vector<cBuildingData>::erase not reconstructed (0x38 rep-movsd)
+00f28e40  n/a      incomplete: large cBuildingData update function not reconstructed
+00f29030  n/a      incomplete: 320-byte cBuildingData function not reconstructed
+00f29170  n/a      incomplete: 329-byte cBuildingData function not reconstructed
+00f292c0  n/a      incomplete: 0x34-stride copy-construct loop not reconstructed
+00f29330  n/a      incomplete: 0x34-stride copy-construct loop not reconstructed
+00f29410  n/a      incomplete: scenario-resource serializer not reconstructed

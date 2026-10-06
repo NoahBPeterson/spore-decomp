@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009413d0/s009413d0.cpp  ?SetVariantOp@@YAPAXHGPAX@Z  00941440  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?InvokeVariantOp@@YAXHPAX0000@Z  009414b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?GetVariantOpChecked@@YAPAXHG@Z  00941560  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?SetVariantOpChecked@@YAPAXHGPAX@Z  00941580  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?InvokeVariantOpChecked@@YAXHPAX0000@Z  009415a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?GetTime64@@YA_JXZ  00941bb0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?HTTPMethodToString@@YAPBDH@Z  00941bc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s009413d0/s009413d0.cpp  ?HeaderFieldToFieldString@@YAPBDH@Z  00941c40  /O2 /MD /Gy /EHsc /TP /GS-

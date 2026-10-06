@@ -1,0 +1,8 @@
+00f3c060  InitThing  # g_16065f8 guard + g_16065fc vtable[3]/[4] + Release
+00f3c0b0  KillThing  # g_16065fc Release
+00f3c0e0  GetThing   # g_16c7aa4+0xcc==2 ? [g+0x78]+0xb8 : ScenarioTutorials_GetActive()
+00f3c100  W::IndexOf
+00f3c1b0  CallD      # g_15b0534.fn(0x55c0377, g_15b0530)
+00f3cb30  W::GetAt
+00f3cd10  scalar deleting dtor of the summarizer class
+00f3cd60/cdf0/ce80  wide-string member setters (+0x48/+0x58/+0x68)

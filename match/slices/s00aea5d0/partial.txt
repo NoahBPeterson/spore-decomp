@@ -1,0 +1,3 @@
+# incomplete / approximate (not counted as decompiled)
+00aeacc0  334  field serializer: string-name construction (EA::ConvertToString16 / eastl::basic_string<wchar_t> RangeInitialize + copy ctor + dealloc) modelled with a WString stub, several calls omitted
+00aeb240  358  SpaceTool::CreateEntry: complete through the vector insert, but the trailing GetActivePlanet/active-civ update path is a placeholder

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00f338c0  257  incomplete: stub
+00f33bf0  374  incomplete: stub
+00f33d70  484  incomplete: stub
+00f33f90  309  incomplete: Simulator::cContentValidationSummarizer ctor stub (vtable/zero-field stores not reconstructed)
+00f340e0  464  incomplete: stub
+00f342d0  198  incomplete: reporter-list pop_back/erase stub
+00f343a0  305  incomplete: stub
+00f344e0  126  incomplete: vector assign + property list insert stub
+00f34560  242  incomplete: stub
+00f34660  381  incomplete: stub

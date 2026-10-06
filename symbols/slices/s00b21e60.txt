@@ -1,0 +1,19 @@
+# slice s00b21e60 - names not recovered; roles inferred from call shape
+00b21e60  unknown
+00b21fe0  unknown
+00b22060  unknown
+00b22100  unknown
+00b22180  unknown
+00b22210  unknown
+00b222a0  unknown
+00b22440  unknown
+00b225b0  unknown
+00b225d0  unknown
+00b22650  unknown
+00b227c0  unknown
+00b22930  unknown
+00b22960  unknown
+00b22bc0  unknown
+00b22cc0  unknown
+00b22e80  unknown
+00b22ea0  unknown

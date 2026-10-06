@@ -1,0 +1,4 @@
+slices/s00a00980/s00a00980.cpp  ?ClearQueued@QueuedBlender@@QAEXXZ  00a00980  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a00980/s00a00980.cpp  ?Deactivate@QueuedBlender@@QAEXI@Z  00a00f10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a00980/s00a00980.cpp  ?FUN_00a00f90@QueuedBlender@@QAEXPAUAnimCommand@@I@Z  00a00f90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00a00980/s00a00980.cpp  ?FUN_00a01050@QueuedBlender@@QAEXI@Z  00a01050  /O2 /MD /Gy /EHsc /TP /arch:SSE

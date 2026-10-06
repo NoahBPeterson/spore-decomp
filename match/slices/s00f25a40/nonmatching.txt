@@ -1,0 +1,5 @@
+# va        diff-bytes  reason
+00f25ee0  30  complete; inner sparse-switch decision-tree block ordering differs
+00f25f20  35  complete; same as 00f25ee0 with the second constant set
+00f26ac0  17  complete; flag/zero-store scheduling (immediate vs ecx zero) differs
+00f26c60  17  complete; same as 00f26ac0 with the second global pair

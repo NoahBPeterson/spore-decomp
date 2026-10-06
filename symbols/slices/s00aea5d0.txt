@@ -1,0 +1,16 @@
+# slice s00aea5d0 - names inferred from call sites in the disassembly
+00aea5d0  eastl::vector<EA::AutoRefCount<Entry> >::DoInsertValue  # vector at this+0, mpBegin/mpEnd/mpCapacity, AddRef/Release on element copy
+00aea720  SpaceTool::RemoveMatching  # scans vector +0x24, compares entry +0x18/+0x34/+0x40, calls EventLog/cStarMap::RemoveVisual
+00aea7f0  SpaceTool::RemoveByPtr  # scans vector for a given pointer, erases
+00aea850  SpaceTool::ReleaseSelected  # clears +0x20 then erases pointer from vector
+00aea8e0  SpaceTool::Advance  # entry +0x48/+0x4c timer, calls FUN_00aea3d0 (hashtable check) + terrain update
+00aea9e0  SpaceTool::RemoveByPtrAndUpdate  # find pointer, remove, refresh terrain sphere
+00aeaa80  SpaceTool::RemoveMatching2  # match entry +0x18/+0x34/+0x38/+0x3c, remove
+00aeab40  SpaceTool::RemoveByKey  # match entry +0x34, remove
+00aeacc0  SerializeList  # writes field name (else L"list"), iterates 0xc-stride vector via writer vtable slots 0/1
+00aeae10  eastl::vector<Entry12>::erase  # 0xc-stride, releases element +0x8
+00aeae90  eastl::vector<Entry12>::DoInsertValue  # 0xc-stride insert
+00aeb030  destroy_hash_buckets  # frees an array of singly linked buckets (+0x4 buffer, +0x18 next)
+00aeb090  SpaceTool::Cleanup  # broadcasts messages, clears UI/vector/selected
+00aeb160  SpaceTool::AddEntry  # allocates 0xa0 entry, fills +0x18/0x34/0x38/0x3c/0x40/0x44/0x48, pushes into vector
+00aeb240  SpaceTool::CreateEntry  # allocates 0xa0 entry, optional civ/planet lookup, fills fields, pushes into vector

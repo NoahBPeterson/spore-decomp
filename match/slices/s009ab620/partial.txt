@@ -1,0 +1,8 @@
+009ab710  169  partial; RemoveSpeciesEntry skeleton (control flow and callees described, body not reconstructed)
+009ab7c0  183  partial; InsertBakedCacheEntry skeleton (lower_bound + DoInsertValueImpl not reconstructed)
+009ab890  485  partial; TrimBakedAnimCache skeleton (LRU eviction loop not reconstructed)
+009aba80  289  partial; RemoveAllEventsOfSameType skeleton
+009abbb0  304  partial; baked-cache eviction cursor skeleton
+009abd10  372  partial; CreateCreatureInstance skeleton (0x1930 creature_instance_data setup not reconstructed)
+009abe90  664  partial; creature animation-instance entry skeleton
+009ac130  276  partial; RestartTimer skeleton (EA::LimitStopwatch pass not reconstructed)

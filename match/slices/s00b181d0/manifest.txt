@@ -1,0 +1,2 @@
+slices/s00b181d0/s00b181d0.cpp  ?WriteSerializableObjectCheck@cGameData@SP@@QAE_NXZ  00b183e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b181d0/s00b181d0.cpp  ?NotifyDirty@cGameData@SP@@QAEX_N@Z  00b189a0  /O2 /MD /Gy /EHsc /TP /arch:SSE

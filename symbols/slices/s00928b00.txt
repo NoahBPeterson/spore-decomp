@@ -1,0 +1,5 @@
+00928b00 EA::Allocator::StackAllocator::Init  # 2008 dev PDB name
+00928ba0 EA::Allocator::StackAllocator::AllocateNewBlock  # 2008 dev PDB (previous name); block alloc + grow
+00928cd0 EA::Allocator::StackAllocator::StackAllocator  # 2008 dev PDB name
+00928d40 EA::Allocator::StackAllocator::MallocAligned  # 2008 dev PDB name
+00928dc0 EA::Allocator::StackAllocator::Reset  # tail-call thunk to 0x00928c40

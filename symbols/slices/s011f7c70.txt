@@ -1,0 +1,23 @@
+# va  name  # evidence
+# RenderWare D3D9 driver (PDB/library names); this module is a prebuilt object whose
+# call-vtable form (call [reg+N]) differs from cl 15's, so none are byte-exact yet.
+011f7c70  rw::graphics::D3D9VertexShaderDescriptor::DefaultLoadAndSelect
+011f7d00  rw::graphics::`anonymous_namespace'::rwg_SetPresent
+011f7de0  rwg_D3D9ResetAndRestoreDevice
+011f7f10  rw::graphics::Device::Stop
+011f7fa0  rw::graphics::Device::ShutdownD3D
+011f7fd0  rw::graphics::Device::Reset
+011f8070  rw::graphics::Device::D3D9WindowResize
+011f8120  rw::graphics::Device::ShowRaster
+011f8160  rw::graphics::Device::ResetVertexShader
+011f81d0  rw::graphics::Device::RestoreVertexShader
+011f8270  rw::graphics::Device::D3D9GetDesktopDisplayMode
+011f82a0  rw::graphics::Device::D3D9CreateDevice
+011f8310  rw::graphics::D3D9AdapterInfo::GetAdapterString
+011f8340  rw::graphics::Device::GetDefaultParameters
+011f8400  rw::graphics::Device::D3D9GetMaxSamplerStage
+011f84b0  rw::graphics::Device::Initialize
+011f8680  rw::graphics::Device::StartInternal
+011f88c0  rw::graphics::Device::GetAdapterInfo
+011f8a40  rw::graphics::Device::GetFormats
+011f8b00  rw::graphics::DevCapsManager::GetNonD3DDeviceInfo

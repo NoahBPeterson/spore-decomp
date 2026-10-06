@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00ef8dc0/s00ef8dc0.cpp  ?FUN_00ef9830@@YAXPAXHD@Z  00ef9830

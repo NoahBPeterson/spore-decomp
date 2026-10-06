@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+0095eeb0  235  CM::TransformPoint3: complete; SSE register schedule differs
+0095efb0  205  CM::TransformPoint3B: complete; SSE register schedule differs
+0095f090  84   CM_SetAxes: complete; thiscall member form still scheduled differently
+0095f0f0  181  CM::BuildMat33: complete; aligned frame and movss copy order differ
+0095f1c0  289  CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
+0095f320  318  BuildRotation: complete; sin/cos x87 interleave with SSE differs
+0095f5c0  84   CM::SetRotationAtLeast2: complete; frame/register schedule differs
+0095f860  84   CM::Multiply: complete; 17-dword copy / multiply branch layout differs
+0095f8c0  133  ModulateARGB32: complete; channel packing arithmetic schedule differs
+0095f960  14   Window::AsInterface: complete; shared tail branch layout differs
+0095f9a0  36   Window::Release: complete; lock xadd / vtable call schedule differs
+0095fa60  56   Window::Set1D8: complete; vtable slot 0x90/0x10 call layout differs
+0095fad0  69   Window::IsAncestorOf: complete; ancestor walk register schedule differs
+0095fb20  41   Window::Test30Slot48: complete; this-adjust mask differs
+0095fb60  41   Window::Test30Slot54: complete; this-adjust mask differs
+0095fc00  3    Window::AllDescendantsAll: complete; bool return uses al instead of eax
+0095fd60  26   Window::SetA8: complete; event arg block order differs
+0095fdc0  26   Window::Set1D4: complete; this-4 arguments differ
+0095fe40  33   Window::SetArea: complete; float compare/set order differs
+0095fec0  54   Window::ResizeBy: complete; area composition order differs

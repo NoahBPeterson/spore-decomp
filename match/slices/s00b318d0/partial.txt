@@ -1,0 +1,23 @@
+# incomplete skeletons (not counted as decompiled)
+00b318d0  401  skeleton
+00b31a90  80   skeleton
+00b31ae0  209  skeleton
+00b31bc0  157  skeleton
+00b31c60  96   skeleton
+00b31cc0  473  skeleton
+00b31ea0  137  skeleton
+00b31fa0  304  skeleton
+00b320d0  52   skeleton
+00b32110  34   skeleton
+00b32140  79   skeleton
+00b32190  134  skeleton
+00b32220  42   skeleton
+00b32250  42   skeleton
+00b32280  64   skeleton
+00b322c0  295  skeleton
+00b323f0  87   skeleton
+00b32450  23   skeleton
+00b32490  31   skeleton
+00b324b0  52   skeleton
+00b324f0  910  skeleton
+00b32890  45   skeleton

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0095ff20  35  Window::MoveBy: complete; +0x60 call and SSE add schedule differ
+0095ff70  54  Window::GrowBy: complete; +0x6c call and SSE add schedule differ
+0095ffd0  35  Window::MoveBy2: complete; +0x6c call and SSE add schedule differ
+00960020  35  Window::SetA4: complete; tail-call to FUN_009580b0 not formed
+00960050  59  Window::Set1E4: complete; refcount swap and vtable +0x90 call differ
+009600a0  33  Window::OnPaint2: complete; flag test order differs
+009600d0  15  Window::CallSlot: complete; trivial call wrapper tail shape differs
+00960280  3   Window::ClearChildren: complete; node==8 test uses cmp instead of add -8
+009602c0  39  Window::Dispatch14: complete; this-adjust and vtable +0x14 args differ
+009602f0  20  Window::Dispatch: complete; tail-call not formed
+00960ae0  98  FUN_00960ae0: complete; vtable dispatch shape differs

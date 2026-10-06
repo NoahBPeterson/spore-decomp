@@ -1,0 +1,8 @@
+00926410  44   hashtable critical-section teardown: complete; list-walk/DeleteCriticalSection schedule differs
+009265b0  32   retirement-list drain: complete; loop/return schedule differs
+00926650  56   FixedAllocatorBase::AddCore: complete; the `while (nSize==0)` gets cl's loop-inversion (test at bottom) vs original top-test/jmp
+00926840  84   block-list insert: complete; field store schedule differs
+009268b0  57   block init: complete; field store schedule differs
+00926a30  5    Pool::Find: complete; `end`/`cur` load order swapped after the (p>=cur) test
+00926a60  62   block free callback: complete; indirect-callback arg schedule differs
+00926ab0  2    Pool::Contains: complete; comparison encoded as `cmp edx,esi;ja` instead of `cmp esi,edx;jb`

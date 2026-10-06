@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f3fd90  -  the nounId==-2 destruction/setup path is faithful, but the else-branch
+              hashtable dequeue/callback sequence is only approximated
+00f40500  -  1184-byte 11-way state machine: only a stub (the switch arms and the many
+              noun-manager calls are not reconstructed)
+00f409a0  -  SSE clamp/lerp helper: the compare tree and the two 0x148d2d4/0x1471064
+              constants are approximated

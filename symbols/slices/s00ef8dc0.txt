@@ -1,0 +1,6 @@
+# va  Name  # evidence
+00ef9180  Simulator::cScenarioTutorials::~cScenarioTutorials  # vtable stores vtbl_Simulator::cScenarioTutorials / Skinne::PaintSystem; RemoveHandler
+00ef9830  FUN_00ef9830  # toggle: destroys attached window (vtbl+0x108 / +4) and clears this+0x24
+00ef9880  FUN_00ef9880  # step-hashtable ctor, fixed_pool_base::init(this+0x13c, 0x200)
+00ef9950  FUN_00ef9950  # step-hashtable ctor, fixed_pool_base::init(this+0x7c, 0x80)
+00ef9d90  Simulator::cScenarioTutorials::cScenarioTutorials  # vtable + Stopwatch(this+0x10) + step ctors

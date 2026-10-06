@@ -1,0 +1,9 @@
+# Slice s00f25a40 names.
+# The editor functions operate on SP::cSPEditorVerbIconTray-like objects
+# (observed at 0x00f263b0 decompile) and a Simulator game-data object.
+# No exact mangled names could be confirmed, so none are asserted.
+# Provisional observations:
+#   00f26380  wcslen of CString::GetText()
+#   00f262e0  iterates a PtrVec and tests PtrVec::Contains
+#   00f26ac0  lazily-initialised global pair (016c8474 flag / 016c8470 value)
+#   00f26c60  lazily-initialised global pair (016c847c flag / 016c8478 value)

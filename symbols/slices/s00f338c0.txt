@@ -1,0 +1,6 @@
+00f33a10  copy<E0x10>          # element = smart-ptr + int + int + float
+00f33ac0  copy_backward<E0x10>
+00f33b50  PObj::setF4           # triple-int compare then two method calls
+00f33bb0  PObj::resetParent     # matches
+00f33f90  Simulator::cContentValidationSummarizer ctor  # vtables 0x13ec458/0x148d030/0x148d020 + many zero stores
+00f342d0  reporter-list pop_back/erase

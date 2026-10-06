@@ -1,0 +1,6 @@
+008a7760  7   FontFusion ff_malloc: complete; original is a memory-indirect guard/tail-jump stub (prebuilt toolset), cl emits register-indirect
+008a7770  7   FontFusion ff_free: complete; same memory-indirect stub shape not reproduced
+008a7780  7   FontFusion ff_realloc: complete; same memory-indirect stub shape not reproduced
+008a77b0  365 FlipContourDirection: complete; FontFusion module uses a different register allocator (four pointer regs pre-zeroed) than cl 15.00 /O2
+008a7930  n/a New_FFT1HintClass: complete; allocation/initialisation replicated, cl expands the zero-loops and orders the ~20 allocations differently
+008a7c90  387 SetupStemWeights: complete; FontFusion module codegen (register/frame layout) differs from cl 15.00 /O2

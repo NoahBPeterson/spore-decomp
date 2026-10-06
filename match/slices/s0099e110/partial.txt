@@ -1,0 +1,2 @@
+0099e110 skeleton creature-animation static-data apply (2963-byte /arch:SSE function)
+0099ed90 skeleton nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper (516 bytes)

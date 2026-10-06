@@ -1,0 +1,6 @@
+00acb1b0  -    serialize map<wstring,int> (EASTL string + hashtable); approximated
+00acb340  -    serialize vector of 0x20 nodes (EASTL string); approximated
+00acb810  -    vector<0x2c> insert with element ctor; body stubbed
+00acb930  -    vector reserve/insert-n; body approximated
+00acbc10  -    serialize hashtable values (EASTL string); approximated
+00acbf30  -    vector<0x18> insert with element ctor; body approximated

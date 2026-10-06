@@ -1,0 +1,9 @@
+00961f20 approximate Window::SetName-like hash lookup; tail notification block stubbed
+00961fc0 approximate sorted-child insertion; allocator/tree-link paths not reproduced exactly
+00962100 approximate hash_map::operator[]; EASTL find/insert path simplified
+00962360 skeleton hash-table insert; only the lookup probe is reproduced
+009625f0 approximate cGetChildWindowCache::Remove; hash-bucket walk rewritten, not complete
+00962740 approximate Window destructor; several deallocate vtable stores/args approximate
+00962840 approximate Window::ChildAdd; child-list splice and window-manager paths approximate
+00962950 approximate hashtable copy/reset; local temporary lifecycle approximated
+00962a10 approximate Window constructor; base-subobject vtable init approximated

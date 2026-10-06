@@ -1,0 +1,19 @@
+00922500  83   Semaphore ctor (name/intra): complete; reg/stack schedule differs (Mutex + 2 lock ctors inlined)
+00922570  52   EASemaphoreData::UpdateCancelCount: complete; CAS loop schedule differs
+00922620  66   Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs
+00922690  117  Semaphore::Wait: complete; intra-process fast path schedule differs
+00922740  71   Semaphore::Post: complete; cancel-count exchange schedule differs
+00922820  56   Semaphore ctor: complete; local SemaphoreData layout/schedule differs
+00922880  50   Semaphore ctor: complete; local SemaphoreData layout/schedule differs
+009228c0  50   Semaphore::Create: complete; local SemaphoreData layout/schedule differs
+00922900  23   thread-data init: complete; cl keeps `this` in ecx instead of the original eax
+00922ab0  101  SetThreadPriority retry loop: complete; loop/branch inversion differs
+00922b30  119  Thread::SetName: complete EH function; /EHsc frame + RaiseException arg layout differ
+00922c20  18   SmartPtr copy+AddRef: complete; register assignment (this in eax vs ecx) differs
+00922c40  0    SetThreadIdealProcessor: complete; processor-count atomic/div schedule differs
+00922d10  12   QueueUserAPC wrapper: complete; cl materializes the handle before the null test
+00922da0  62   thread-data release/free: complete; range check + atomic clear schedule differs
+00922e10  17   release helper (_InterlockedExchangeAdd flags): complete; cl emits `cmp` instead of reusing xadd ZF
+00923310  26   release helper: complete; same xadd-flags issue
+00923330  29   release+delete helper: complete; same xadd-flags issue
+009233f0  12   ILogFilter::IsFiltered tail-call thunk: complete; register order differs

@@ -1,0 +1,5 @@
+00a2d790 EA::Audio::System::RegisterPrimitive                    # Ghidra symbol
+00a2dc40 EA::Audio::System::SetupPropertyAggregationRules       # Ghidra symbol
+00a2de20 EA::Audio::System::DestroySubmixes                     # PDB candidate (caller-single)
+00a2e060 eastl::map<unsigned long,unsigned long,eastl::less<unsigned long>,eastl::allocator>::operator[]  # Ghidra name
+00a2da30 `anonymous namespace'::PickRandomKey                   # PDB candidate (caller-scored)

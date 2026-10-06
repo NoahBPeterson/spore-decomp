@@ -1,0 +1,4 @@
+00a009e0  282  complete; /O2 register allocation of the scan loop differs (source uses explicit index/pointer locals)
+00a00b10  183  complete; list-splice shape and command-ctor call schedule differ from retail
+00a00c40  202  complete; callee-saved register assignment (param/src/dst) differs from retail
+00a00d50  241  complete; /arch:SSE float + multiple callback call sites not byte-identical

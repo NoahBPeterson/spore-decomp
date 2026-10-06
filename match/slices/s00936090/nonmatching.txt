@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+009360d0  33  RandomDoubleUniform: complete; float clamp use fcomp/fnstsw instead of the original fcomi (flag-dependent)
+00936110  218  MersenneTwister::Reload: complete MT reload; cl unrolls the three loops with different counter/rotation scheduling
+009361f0  70  MersenneTwister::InitState: complete; register allocation differs (seed kept in ebx vs eax) and store/or split
+009362d0  16  MersenneTwister::GenerateDouble: complete; double clamp uses fcomp/fnstsw instead of fcomi
+00936330  18  SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs
+00936380  21  SharedLibrary::Reload: complete; tail merge of the false path differs
+009363b0  10  SharedLibrary::GetVersionInfo: complete; local-zero store scheduled before the vtable load
+00936440  107  SharedLibrary::generic_command_function: complete; inlined strcmp differs from cl's byte-pair compare loop
+009364f0  62  SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
+00936550  21  SharedLibraryRegistry::ExecuteCommandAll: complete; loop counter and vtable arg reload schedule differ
+009365e0  167  SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ
+009366d0  43  SharedLibrary::Unregister: complete; pair erase tail moves differ
+00936760  156  SharedLibraryRegistry::RemoveLibrary: complete; eastl refcount swap and pair erase schedule differ
+00936820  163  SharedLibraryRegistry::GetLibraries: complete; AddRef/Release swap loop and mutex scoping differ
+009368f0  4  SharedLibraryRegistry ctor: complete; vtable store scheduled after the mutex setup
+00936920  28  SharedLibraryRegistry scalar deleting dtor: complete; vtable store / mutex dtor ordering differs
+00936b70  71  SharedLibrary::Unload: complete; eastl pair-vector erase schedule differs
+00936c00  102  SharedLibrary::Register: complete; eastl pair push_back shape differs
+00936c80  52  SharedLibrary::SharedLibrary ctor: complete; atomic refcount xchg and string/vector init order differ
+00936ce0  22  SharedLibrary::~SharedLibrary: complete; eastl string/vector teardown schedule differs
+00936d50  146  SharedLibraryRegistry::Init: complete; operator new/placement and vector append shape differs
+00936e50  369  SharedLibraryRegistry::LoadPath: complete; name compare, SetPath and refcount/append sequence differ
+00937010  111  SharedLibraryRegistry::AddLibraryRef: complete; vector growth via FUN_009a0c50 not reproduced

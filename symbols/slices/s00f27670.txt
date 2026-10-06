@@ -1,0 +1,7 @@
+# Slice s00f27670 names.
+# No exact mangled names confirmed. Provisional observations:
+#   00f27fc0  eastl lower_bound over 0x18-stride records, key compared (x,z,y)
+#   00f278f0  scans an array of 0x44-stride records; each has a cString at +4
+#   00f280b0  zero-initialises a 0x34-byte record (SSE scalar stores)
+#   00f28140  eastl vector reserve (0x18 stride)
+#   00f28280  eastl vector reserve (0x38 stride)

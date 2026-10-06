@@ -1,0 +1,2 @@
+0099ed90 nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper  # PDB pdb_names.json
+0099efd0 nSPCreatureAnim::LoadAnimationStaticData  # Ghidra PDB candidate (caller-single)

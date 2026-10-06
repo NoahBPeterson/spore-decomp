@@ -1,0 +1,23 @@
+009413d0 EA::UTFWin::GetVariantOp  # dc: cArray variant dispatch table lookup
+00941440 EA::UTFWin::SetVariantOp  # dc: cArray variant dispatch table store
+009414b0 EA::UTFWin::InvokeVariantOp  # dc: dispatch call
+009414f0 EA::UTFWin::InitVariantTable  # dc: fill 0x400 table + hooks
+00941560 EA::UTFWin::GetVariantOpChecked  # dc: lazy-init wrapper
+00941580 EA::UTFWin::SetVariantOpChecked  # dc: lazy-init wrapper
+009415a0 EA::UTFWin::InvokeVariantOpChecked  # dc: lazy-init wrapper
+009415f0 EA::Internet::EncodeBase64  # pdb callee-scored
+00941790 EA::Internet::DecodeBase64  # dc: base64 decode core
+00941a10 EA::Internet::EncodeBase64String  # dc: eastl string wrapper
+00941af0 EA::Internet::DecodeBase64String  # dc: eastl string wrapper
+00941bb0 GetTime64  # dc: _time64(0)
+00941bc0 EA::Internet::HTTPMethodToString  # pdb anchor
+00941c40 EA::Internet::HeaderFieldToFieldString  # pdb anchor
+00941e80 EA::Internet::EncodeFormURL  # pdb anchor
+00941f20 EA::Internet::HTTPClient::AllocBuffer  # dc: operator new char8_t buffer
+00941f90 EA::Internet::HTTPClient::AllocateSocket  # pdb candidate caller-single
+00942010 EA::Internet::HTTPClient::CheckTimeout  # dc: _time64 compare
+00942050 EA::Internet::HTTPClient::FindHeader  # dc: _stricmp over 0xa8-stride table
+009420e0 EA::Internet::HTTPClient::FindHeaderByField  # dc: HeaderFieldToFieldString + FindHeader
+00942110 EA::Internet::HTTPClient::SendToCallback  # dc: vtable+0x38 callback
+00942150 EA::Internet::HTTPClient::SetNotificationTarget  # pdb callee-scored
+009421b0 EA::Internet::HTTPClient::Pump  # dc: stream read loop

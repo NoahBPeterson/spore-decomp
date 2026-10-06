@@ -1,0 +1,8 @@
+00a2d790  211  complete; virtual-call schedule + hashtable find not byte-identical
+00a2d880  155  complete; EH ctor of feedback-event node, register schedule differs
+00a2de20  240  complete; two-pass submix teardown, iterator/register schedule differs
+00a2dfe0  93   complete; vector push_back node copy, inlined schedule differs
+00a2e0e0  210  complete; hashtable erase, bucket-walk schedule differs
+00a2e1b0  166  complete; rbtree erase, node relink schedule differs
+00a2e260  -    complete; vector push_back of 0x14 node, schedule differs
+00a2e420  -    complete; pool node alloc, EH/pool order differs

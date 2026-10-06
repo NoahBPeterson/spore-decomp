@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f24b30/s00f24b30.cpp  ?fn25050@@YGHPAXI@Z  00f25050  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25080@Obj@@QAEHPAU1@@Z  00f25080  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn252c0@Obj@@QAEHXZ  00f252c0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn252f0@Obj@@QAEHXZ  00f252f0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25330@Obj@@QAE_NXZ  00f25330  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25360@Obj@@QAE_NXZ  00f25360  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25370@Obj@@QAE_NXZ  00f25370  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn253e0@Obj@@QAEDXZ  00f253e0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn253f0@Obj@@QAEDXZ  00f253f0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25420@Obj@@QAEDXZ  00f25420  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25430@Obj@@QAE_NXZ  00f25430  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25470@Obj@@QAE_NXZ  00f25470  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25490@Obj@@QAE_NXZ  00f25490  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn254d0@Obj@@QAE_NXZ  00f254d0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25530@Obj@@QAEHXZ  00f25530  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25560@Obj@@QAE_NXZ  00f25560  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn255d0@Obj@@QAE_NXZ  00f255d0  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25600@Obj@@QAE_NXZ  00f25600  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25640@Obj@@QAE_NXZ  00f25640  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25670@Obj@@QAE_NXZ  00f25670  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25680@Obj@@QAEHXZ  00f25680  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25720@Obj@@QAE_NXZ  00f25720  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25730@Obj@@QAE_NXZ  00f25730  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn25750@Obj@@QAEHXZ  00f25750  /O2 /MD /Gy /TP
+slices/s00f24b30/s00f24b30.cpp  ?fn257b0@Obj@@QAEPAU1@XZ  00f257b0  /O2 /MD /Gy /TP

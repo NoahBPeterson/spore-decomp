@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009afda0/s009afda0.cpp  ?FUN_009b0720@@YAPAXPAXHPAUcontext_target@nSPCreatureAnim@@0@Z  009b0720  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

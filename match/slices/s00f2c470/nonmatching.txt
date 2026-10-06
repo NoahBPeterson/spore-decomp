@@ -1,0 +1,3 @@
+# va        diff-bytes  reason
+00f2d5e0  54  complete; only the `(tag>>31)&1` sign test differs (compiler folds it to a bit-test) plus 2-byte layout shift
+00f2cfa0  104 complete; copy_backward loop field/vector-copy sequence differs

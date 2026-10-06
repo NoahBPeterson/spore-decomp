@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00960100  -  Window::TransformPoint: flag traversal + mMat transform not reproduced
+00960180  -  Window::ScreenToLocal: vtable +0xc8 call not reconstructed
+009601e0  -  Window::GetChild: child index lookup partially reconstructed
+00960230  -  Window::RemoveChild: detach path partially reconstructed
+00960310  -  Window::OnPaint: paint traversal not reconstructed
+00960410  -  Window::DoMessage: message dispatch not reconstructed
+009605a0  -  HashTable::Rehash: bucket relink loop not reconstructed
+00960650  -  WindowListMarshaller::Read: marshaller body not reconstructed
+009608c0  -  Window::SetPhysicalArea: body not reconstructed
+009609b0  -  Window::InvalidateLayout: body not reconstructed
+00960b40  -  FUN_00960b40: body not reconstructed

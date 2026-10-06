@@ -1,0 +1,7 @@
+00961db0 43 complete hashtable DoFreeNodes; register allocation swaps the node/next roles (edi<->esi)
+00961e80 2 complete Window::Shutdown; cl emits `sub eax,8` where the original has `add eax,-8`
+00962180 123 complete hashtable DoEraseNode; bucket-advance loop/pointer scheduling differs
+00962580 16 complete this-adjust wrapper; only the argument-evaluation schedule of the call differs
+009625b0 16 complete this-adjust wrapper; only the argument-evaluation schedule of the call differs
+009628f0 34 complete Window::ChildRemove; callee-saved register choice (this in edi vs ebx)
+00962e80 79 complete vertex-buffer Begin; argument evaluation order / register allocation differs

@@ -1,0 +1,8 @@
+00961e80 EA::UTFWin::Window::Shutdown  # PDB pdb_names.json (dev 0104a940), vtable slot
+00962100 eastl::hash_map<unsigned int,EA::AutoRefCount<EA::Swarm::cEffectsWorld> >::operator[]  # PDB pdb_names.json (dev 0149ef80)
+009625f0 EA::UTFWin::cGetChildWindowCache::Remove  # PDB pdb_names.json (dev 0104b380)
+00962740 EA::UTFWin::Window::~Window  # Ghidra PDB candidate (caller-scored)
+00962840 EA::UTFWin::Window::ChildAdd  # PDB candidate (caller-single)
+009628f0 EA::UTFWin::Window::ChildRemove  # PDB pdb_names.json (dev 0104b760)
+00962a10 EA::UTFWin::Window::Window  # PDB pdb_names.json (dev 0104b9b0)
+00962f00 EA::UTFWin::ImmediateModeEx::EndBatch  # Ghidra PDB candidate (caller-scored)

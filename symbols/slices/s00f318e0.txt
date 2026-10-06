@@ -1,0 +1,12 @@
+00f31b70  Obj::lerp  # lerp(a,b,t) = a + (b-a)*t over (m4+0x58, m4+0x5c, +0xc); needs /arch:SSE /fp:fast
+00f31c20  Obj::set104  # byte field + m194->setOne(v) (tail thiscall)
+00f31d20  Obj::setEC  # (v-1)<=0xe guard
+00f31d50  Obj::setF0  # (v-1)<=0xe guard
+00f31ea0  MsgSend  # MessageServer()->vtable[6](0x36b154d8,0,0,0)
+00f31f80  SelectPlanetRecord  # AutoRefCount<planetrecord> global swap + g_16c85a0.fn
+00f31fd0  Vec4::Set  # zero xyz + w=1.0f, return this (__thiscall)
+00f32100/150/1a0/1f0  Obj::set130/13c/148/154  # Vector3 assign (inline copy-ctor) + sub.fn(v)
+00f323c0  Obj::release100  # m100->f10 / f0c(1) / Release
+00f32410  ReleaseGlobal  # g_16065fc Release + g_16065f8=1
+00f326d0  C::below  # (this->f325b0() < 1.0f), thiscall
+00f326f0  Obj::onMsg  # id==0x36b154d8 && m190 -> fn

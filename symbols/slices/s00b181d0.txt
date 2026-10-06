@@ -1,0 +1,21 @@
+# slice s00b181d0 - names from the 2008 dev-build PDB where known, else inferred
+00b181d0  cGameData::WaterClearance  # compares hashtable entry to water height, returns bool + optional distance
+00b182f0  cGameData::PathOrSerializationCheck  # builds temp array, calls FUN_00b3d3c0/FUN_00b7a1d0
+00b183e0  SP::cGameData::WriteSerializableObjectCheck  # PDB vtable-slot; returns mb21==0
+00b183f0  SP::cGameData::vtableSlot40  # tail call to vtable slot 0x40
+00b18400  SP::cGameData::Init  # PDB callee-single (a.k.a. SetDefinitionID); stores view +1
+00b18490  ref-holder ctor  # fields +0,+4,+8,+0xc with AddRef of +0xc
+00b184c0  SP::cGameData::~cGameData  # vtable stores + refcount decrement + Release of +0x2c
+00b18530  SP::cGameData helper
+00b18550  SP::cGameData helper
+00b18590  SP::cGameData::Write  # PDB callee-single
+00b18660  SP::cGameData::cGameData  # PDB callee-single ctor
+00b186b0  SP::cGameData scalar deleting destructor
+00b18760  creature-tag check  # vtable slot 3 lookup of 0xd0036e08 then cCreatureBase test
+00b188b0  trait/kind hash switch  # switch over vtable-slot 0x38 kind hash
+00b18960  MessageServer notify on +0x68
+00b189a0  SP::cGameData::NotifyDirty  # if !b call vtable slot 7
+00b189c0  SP::cGameData large serialization routine
+00b18d50  GameData/SpaceGame check
+00b18d90  message send helper (0x8d36f0)
+00b18db0  container teardown (+0xc0)

@@ -1,0 +1,17 @@
+# va        diff-bytes  reason
+00f25a40  n/a      incomplete: asset-directory key/return handling not reconstructed
+00f25af0  n/a      incomplete: serializer dispatch via SP::GetSaveArea virtual not reconstructed
+00f25d80  n/a      incomplete: EA::IO::WriteUint32 serialization loop not reconstructed
+00f25f80  n/a      incomplete: jumptable serialization function not reconstructed
+00f26230  n/a      incomplete: rep-movsd struct reset of a 0x27e8 array not reconstructed
+00f263b0  n/a      incomplete: cString compare loop + AutoRefCount path not reconstructed
+00f26440  n/a      incomplete: cString compare loop not reconstructed
+00f264d0  n/a      incomplete: stride-0x534/0x188 container search not reconstructed
+00f26b00  n/a      incomplete: cVarListSerializer over 0x4e0 array + tail jmp not reconstructed
+00f26ca0  n/a      incomplete: float-vector serialization loop not reconstructed
+00f26ef0  n/a      incomplete: cVarListSerializer over 0x38 array + tail jmp not reconstructed
+00f27010  n/a      incomplete: cVarListSerializer over 0x534 array + tail jmp not reconstructed
+00f270f0  n/a      incomplete: 0x238 stride marker loop not reconstructed
+00f27170  n/a      incomplete: ReadInt32 length/clamp loop not reconstructed
+00f27200  n/a      incomplete: pointer-vector serialize loop not reconstructed
+00f27430  n/a      incomplete: big cVarListSerializer property loop not reconstructed

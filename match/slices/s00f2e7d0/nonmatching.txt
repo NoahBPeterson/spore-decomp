@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00f2eb80  105  complete: Editor::cPropertyList factory (operator new 0x2cb0 + ctor + AddRef + owner vtable[9] + Release), not byte-exact (register/null-path shape)
+00f2f2e0   77  complete: eastl::vector<E27e0>::erase (move tail + destroy + mpEnd -= last-first; registers cached differently)
+00f2f340   77  complete: eastl::vector<E27e8>::erase (same, element 0x27e8)

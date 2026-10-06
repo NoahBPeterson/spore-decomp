@@ -1,0 +1,10 @@
+# complete behaviorally-equivalent source, not byte-exact
+00b0f770  260  ClampSpread: min/max clause selection + NaN compare order differs
+00b0f880  152  InterpByAngle: dot product / acos / pi interpolation; x87+SSE mix differs
+00b0f930  20   SetEdgeDistance: complete; constant-global addressing/order differs
+00b0f950  79   SetToggle: complete; call scheduling differs
+00b0f9a0  33   KeysHeld: complete; input-manager vtable call chain scheduling differs
+00b0fa70  81   Spring1f::Set: complete; NaN compare + store order differ
+00b0fae0  157  Spring3f::Set: complete; NaN compare + store order differ
+00b0fbe0  68   Spring1f::Reset: complete; scheduling differs
+00b0fc40  107  BezierEval: complete; x87 evaluation order differs

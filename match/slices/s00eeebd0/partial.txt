@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00eeebd0  -   partial: resource-key float dispatcher; x100/species/profile branches implemented, editor-resource entry-scan branch stubbed
+00eef170  -   partial: 0x34-byte model-record fill; inlined eastl key-list copy and vector appends omitted
+00eef330  -   partial: editor-model list reserve/find/erase/push_back; collector call present, vector body stubbed
+00eef4b0  -   partial: model-set record walk collapsed to flag clear + FUN_00ff3f00 selection notify + end=begin
+00eef570  -   partial: gadget apply loop; record iteration and vector<Entry32> push_backs stubbed

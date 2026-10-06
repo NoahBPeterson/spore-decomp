@@ -1,0 +1,34 @@
+00936090 EA::Random::RandomLinearCongruential::SetSeed  # pdb callee-single
+009360b0 EA::Random::RandomLinearCongruential::RandomUint32Uniform  # pdb callee-scored
+009360d0 EA::Random::RandomLinearCongruential::RandomDoubleUniform  # pdb callee-scored
+00936110 EA::Random::RandomMersenneTwister::Reload  # dc: MT19937 reload (227/396/1 split)
+009361f0 EA::Random::RandomMersenneTwister::InitState  # dc: seed expansion loop + Reload
+00936250 EA::Random::RandomMersenneTwister::Generate  # dc: tempering
+009362b0 EA::Random::RandomMersenneTwister::GenerateUInt32  # dc: (gen*max)>>32
+009362d0 EA::Random::RandomMersenneTwister::GenerateDouble  # dc: double clamp
+00936300 EA::Random::RandomMersenneTwister::SetSeed  # dc: mpNext=0; count=624; InitState
+00936330 EA::SharedLibrary::CanUnload  # pdb anchor
+00936380 EA::SharedLibrary::Reload  # pdb vtable-slot
+009363b0 EA::SharedLibrary::GetVersionInfo  # pdb vtable-slot
+00936420 EA::SharedLibrary::IsLoaded  # pdb vtable-slot
+00936440 EA::SharedLibrary::generic_command_function  # pdb gap-align
+009364f0 EA::SharedLibraryRegistry::RemoveAllLibraries  # pdb gap-align
+00936550 EA::SharedLibraryRegistry::ExecuteCommandAll  # pdb gap-align
+009365d0 EA::SharedLibraryRegistry::GetFirst  # dc: *mBegin
+009365e0 EA::SharedLibrary::Load  # pdb anchor
+009366d0 EA::SharedLibrary::Unregister  # pdb vtable-slot
+00936710 EA::SharedLibrary::ExecuteCommand  # pdb gap-align
+00936740 EA::SharedLibraryRegistry::~SharedLibraryRegistry  # pdb gap-align
+00936760 EA::SharedLibraryRegistry::RemoveLibrary  # pdb gap-align
+00936820 EA::SharedLibraryRegistry::GetLibraries  # pdb gap-align
+009368f0 EA::SharedLibraryRegistry::SharedLibraryRegistry  # dc: vtable + Mutex(0,1)
+00936920 EA::SharedLibraryRegistry::scalar_deleting_destructor  # pdb gap-align
+00936950 EA::SharedLibrary::SetPath  # pdb candidate caller-scored
+00936b70 EA::SharedLibrary::Unload  # pdb anchor
+00936c00 EA::SharedLibrary::Register  # pdb callee-single
+00936c80 EA::SharedLibrary::SharedLibrary  # pdb gap-align
+00936ce0 EA::SharedLibrary::~SharedLibrary  # pdb candidate caller-single
+00936d50 EA::SharedLibraryRegistry::Init  # pdb gap-align
+00936e10 EA::SharedLibraryRegistry::Shutdown  # pdb gap-align
+00936e50 EA::SharedLibraryRegistry::LoadPath/AddLibrary  # pdb gap-align
+00937010 EA::SharedLibraryRegistry::AddLibrary  # pdb gap-align

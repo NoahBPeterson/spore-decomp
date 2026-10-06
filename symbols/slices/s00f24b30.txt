@@ -1,0 +1,10 @@
+# Slice s00f24b30 names.
+#
+# No dev-build PDB names or ModAPI names could be confirmed for these small
+# __thiscall type/key predicates, so no symbol is asserted here.  The 32-bit
+# constants they compare against are FNV hashes of Spore type names; without the
+# name registry they are kept as literals in the source.
+#
+# Provisional observations (not asserted as names):
+#   016c8318  singleton pointer to the 0x38-byte two-eastl-map layout object (fn24d30)
+#   00f257f0  constructs SP::cVarListSerializer over the object and serializes

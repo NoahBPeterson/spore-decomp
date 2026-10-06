@@ -1,0 +1,4 @@
+009b00c0  FUN_009b00c0  # dc: scans body array at +0x384 (stride 0x468) testing +0x154 & mask
+009b01e0  FUN_009b01e0  # dc: smoothstep/blend of (a,b,t)
+009b0280  nSPCreatureAnim::MirrorSagittalContextTarget  # pdb name; mirrors sagittal context bits
+009b0720  FUN_009b0720  # dc: context target coordinate transform

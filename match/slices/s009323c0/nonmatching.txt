@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+009323c0  327  GetSystemPath: complete reconstruction; SHGetFolderPathW retry branch and the trailing wcslen pointer loop schedule differently
+00932580  156  CreateTempFileW: complete; FileStream ctor/dtor call shape and the drive-space stack buffer layout differ
+00932890  126  RemoveDirectoryRecursive: complete; the redundant strlen in the separator branch and the pointer-copy loop differ
+00933120  237  IniFile::Open: complete; the 3s time-retry loop register/stack layout and the vtable-slot calls differ

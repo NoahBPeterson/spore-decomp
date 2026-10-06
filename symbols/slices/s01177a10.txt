@@ -1,0 +1,9 @@
+# va  name  # evidence
+# statically linked OpenSSL 0.9.8g (lib_openssl); PDB/library names
+01177a10  BIO_f_base64_enc_read     # BIO base64 read: EVP_Decode*, line-buffer handling
+01177dd0  BIO_f_base64_enc_write    # BIO base64 write: EVP_EncodeUpdate/Block, 0x65a buffer
+011784b0  AES_set_key_wrapper       # picks AES_set_encrypt_key/decrypt_key from flags&7
+01178710  AES_set_encrypt_key       # Te0..Te3/rcon tables at 0x14de2d8/0x14de6d8/0x14ddad8/0x14dded8
+011799f0  RSA_new                   # CRYPTO_malloc(0x58), CRYPTO_new_ex_data(6,...), byte-exact
+01179dd0  RSA_blinding_on           # BN_BLINDING_*, rsa_get_public_exp, RAND_add
+01179f50  RSA_new_noargs            # tail wrapper: RSA_new(0); byte-exact

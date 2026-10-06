@@ -1,0 +1,12 @@
+# va  name  # evidence
+# statically linked OpenSSL 0.9.8g (lib_openssl)
+01195b10  X509_verify_cert_aux          # large X509 verification helper (unconfirmed)
+011964f0  X509_check_purpose            # v3_purp.c, purpose callback table at 0x15cd938
+011965f0  DH_new                       # CRYPTO_malloc(0x4c), dh_lib.c; byte-exact
+01196850  DH_new_noargs                # tail wrapper: DH_new(0); byte-exact
+01196a90  BIO_buffered_read             # copies biobuf to caller, FUN_01176fc0 refill
+01196d20  X509_STORE_CTX_init           # unconfirmed
+01197550  X509_verify_cert              # unconfirmed
+01198210  ASN1_item_ex_free             # unconfirmed
+01198420  asn1_primitive_clear         # jump-table dispatch on ASN1 tag byte
+011984b0  ASN1_item_ex_clear           # flag dispatch, calls FUN_01198420 via EAX

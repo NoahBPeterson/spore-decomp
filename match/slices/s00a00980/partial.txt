@@ -1,0 +1,2 @@
+00a010c0  1510  UpdateCreatureBodies: full control-flow transcribed, but the status==2 easing path
+                  (ceil/modf x87 rounding and the mA0/mSeq comparison) is approximated, not verified.

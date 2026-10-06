@@ -1,0 +1,6 @@
+00acb490  229  complete; 4-vector copy ctor, call schedule differs
+00acb680  71   complete; vector<0x14> insert, block-move schedule differs
+00acb7c0  42   complete; vector erase+release, argument order/register differs
+00acbb20  85   complete; 0x20-stride node range copy, register schedule differs
+00acbd90  246  complete; vector<0xc> assign, grow/overlap schedule differs
+00acbed0  33   complete; vector<0xc> erase, vcall/register schedule differs

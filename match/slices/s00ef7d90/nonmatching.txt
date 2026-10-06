@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00ef8440  62  complete: cSPSimulatorSpaceGame inventory->Allocator->FUN_00f3e8a0==0; global reload/register choices differ
+00ef84b0  73  complete: same with param+0x44 inventory index (fallback 5); register choices differ
+00ef8820  50  complete: hashtable find + compare against bucket head; differs in stub call arg layout
+00ef8860  160 complete: step list walk, FUN_00ef7ec0 loop, selection release and field reset
+00ef8940  184 complete: hashtable gap count over two table modes

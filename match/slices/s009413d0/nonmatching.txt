@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+009413d0  1  GetVariantOp: complete; one residual byte in the map-lookup tail after relocation masking
+009414f0  20  InitVariantTable: complete; `mov al,1` and the hook-pointer store order differ
+009415f0  321  EncodeBase64: complete; group/line-wrap loop register schedule and tail-padding branches differ
+00941a10  175  Base64EncodeString: complete; eastl resize/memmove growth sequence differs
+00941af0  161  Base64DecodeString: complete; eastl resize/memmove growth sequence differs
+00941e80  113  EncodeFormURL: complete; isspace/isalnum ordering and sprintf+append path differ
+00941f20  44  HTTPClientAllocBuffer: complete; operator-new arg/register schedule differs
+00941f90  127  HTTPClientAllocateSocket: complete; SSL / non-SSL socket creation branches differ in scheduling
+00942010  48  HTTPClientCheckTimeout: complete; branch layout differs
+00942050  48  HTTPClientFindHeader: complete; stride division and loop register schedule differ
+009420e0  -  HTTPClientFindHeaderByField: complete; inlined header-string lookup shape differs
+00942110  41  HTTPClientSendCallback: complete; length/strlen and callback reload differ
+00942150  81  HTTPClientSetNotificationTarget: complete; notification callback layout differs

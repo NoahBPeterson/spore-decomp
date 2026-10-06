@@ -1,0 +1,18 @@
+# va  diff-bytes  reason
+00f318e0  651  incomplete: 0x2cb0 ctor helper stub
+00f31b90  103  incomplete: clamp helper (eax-input static) stub
+00f31c40   98  incomplete: UI slider setter stub
+00f31cb0   98  incomplete: UI slider setter stub
+00f31d80   87  incomplete: planet-rotation setter stub
+00f31de0   87  incomplete: planet-rotation setter stub
+00f31e60   50  incomplete: range-inverse helper stub
+00f31ee0   61  incomplete: vector back/bool helper stub
+00f31f20   87  incomplete: variant serialization helper stub
+00f31ff0   57  incomplete: interpolated float helper stub
+00f32030  198  incomplete: stub
+00f32240  179  incomplete: stub
+00f32440  368  incomplete: stub
+00f325b0  275  incomplete: 0xf325b0 body not reconstructed
+00f32710  114  incomplete: descriptor-table setter stub
+00f32790   93  incomplete: element find stub (find() loop shape not reproduced)
+00f327f0  142  incomplete: stub

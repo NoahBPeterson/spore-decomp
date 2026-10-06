@@ -1,0 +1,5 @@
+009ac300  33  complete; UnpackColor; cl SP1 pools the x87 float constants as double where the original (VC8-era) used dword
+009ac390  100  complete; PackColor; SSE float divide/clamp schedule differs
+009ac460  100  complete; UnpackBytes; SSE clamp/sqrt schedule differs
+009ab620  165  complete; baked_anim_manager::Clear; EASTL map teardown register/allocation schedule differs
+009abce0  33  complete; ~baked_anim_manager; member-destructor call schedule differs

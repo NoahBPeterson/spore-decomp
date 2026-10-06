@@ -1,0 +1,8 @@
+00926460  329  partial: interned-string pool find/insert skeleton (hash-bucket walk + eastl vector<bool> node allocate)
+00926960  174  partial: hashtable node insert skeleton
+00926af0  303  partial: block split/coalesce skeleton
+00926c20  396  partial: allocator core teardown skeleton
+00926db0  350  partial: allocator rehash/move skeleton
+00926f10  181  partial: allocator node init skeleton
+00926fd0  364  partial: allocator bulk free skeleton
+00927140  381  partial: allocator statistics skeleton

@@ -1,0 +1,5 @@
+009a2d50 skeleton vector grow/copy (554 bytes)
+009a2fd0 approximate vector reserve; temporary lifecycle omitted
+009a3080 skeleton animation reset (413 bytes)
+009a3220 skeleton (631 bytes)
+009a3b10 skeleton (302 bytes)

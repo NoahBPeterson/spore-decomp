@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00936090/s00936090.cpp  ?SetSeed@RandomLinearCongruential@Random@EA@@QAEXI@Z  00936090  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?RandomUint32Uniform@RandomLinearCongruential@Random@EA@@QAE_KXZ  009360b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?Generate@RandomMersenneTwister@Random@EA@@QAEIXZ  00936250  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?GenerateUInt32@RandomMersenneTwister@Random@EA@@QAEII@Z  009362b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?SetSeed@RandomMersenneTwister@Random@EA@@QAEPAV123@I@Z  00936300  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?IsLoaded@SharedLibrary@EA@@UAEHXZ  00936420  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?GetFirst@SharedLibraryRegistry@EA@@QAEPAXXZ  009365d0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?ExecuteCmd@SharedLibrary@EA@@QAE_NPBDPAXHHH@Z  00936710  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ??1SharedLibraryRegistry@EA@@QAE@XZ  00936740  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00936090/s00936090.cpp  ?Shutdown@SharedLibraryRegistry@EA@@QAE_NXZ  00936e10  /O2 /MD /Gy /EHsc /TP /GS-

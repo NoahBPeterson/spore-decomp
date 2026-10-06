@@ -1,0 +1,4 @@
+# Slice s00f28680 names.
+#   00f28dd0  eastl::vector<SP::cBuildingData, eastl::sp_vector_allocator>::erase  # from 2008 dev-build PDB
+# Provisional:
+#   00f292c0 / 00f29330  0x34-stride copy-construct loops (cSPVector3 vector member)
