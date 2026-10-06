@@ -92,6 +92,64 @@ print()
 print(table(["Component", "With compilable source", "Code size", "With source (by size)"],
             crows, aligns=["<", ">", ">", ">"]))
 
+# ---- breadth-first coverage from the program entry point ----
+def bfs_table():
+    """Per call-depth level from the entry point: how many reachable game functions have source."""
+    bf = W("work", "bfs_rank.json")
+    if not os.path.exists(bf):
+        return None
+    try:
+        data = json.load(open(bf))
+    except Exception:
+        return None
+    rank = {int(k, 16): d for k, d in data.get("rank", {}).items()}
+    per = collections.defaultdict(lambda: [0, 0, 0, 0])  # game funcs, byte-exact, equiv, partial
+    for va, d in rank.items():
+        if va not in game:
+            continue
+        t = per[d]
+        t[0] += 1
+        if va in byte_exact:
+            t[1] += 1
+        elif va in equiv:
+            t[2] += 1
+        elif va in part:
+            t[3] += 1
+    if not per:
+        return None
+    maxd = max(per)
+    rows = []
+    done_levels = total_levels = 0
+    frontier = None       # first level with reachable game code that is not fully decompiled
+    deepest_any = None    # deepest level with any decompiled game code
+    for d in range(maxd + 1):
+        tot, ex, eq, pa = per.get(d, [0, 0, 0, 0])
+        src = ex + eq
+        if tot:
+            total_levels += 1
+            if src == tot:
+                done_levels += 1
+            elif frontier is None:
+                frontier = d
+        if src:
+            deepest_any = d
+        rows.append((str(d), human(tot), human(ex), human(eq), human(pa), human(tot - src),
+                     ("%.0f%%" % (100.0 * src / tot)) if tot else "-"))
+    head = ("BFS coverage from the entry point (%s; root %s, %d levels)"
+            % (os.path.relpath(bf, ROOT), data.get("root", "?"), maxd + 1))
+    body = table(["Level", "Funcs", "Byte-exact", "Equivalent", "Partial", "No source", "Source%"],
+                 rows, aligns=["<", ">", ">", ">", ">", ">", ">"])
+    summary = ("Levels fully decompiled: %d / %d; frontier (first level not fully decompiled): %s; "
+               "deepest level with source: %s"
+               % (done_levels, total_levels, frontier if frontier is not None else "-",
+                  deepest_any if deepest_any is not None else "-"))
+    return head + "\n" + body + "\n" + summary
+
+_bt = bfs_table()
+if _bt:
+    print()
+    print(_bt)
+
 # ---- per-model efficiency (needs the opencode service for live token/cost) ----
 def _svc_sessions():
     try:
