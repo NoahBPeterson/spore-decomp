@@ -26,3 +26,8 @@ cmake -S . -B build -G Ninja && cmake --build build
 SPORE_DATA="<Spore>/Data" ctest --test-dir build --output-on-failure
 ```
 Ghidra project setup (about 20 min): see `docs/PLAN.md`.
+
+## License
+Released under the **GNU General Public License v3.0** — see [`LICENSE`](LICENSE).
+Third-party components and the status of binary-derived artifacts are described in
+[`THIRD_PARTY.md`](THIRD_PARTY.md).
