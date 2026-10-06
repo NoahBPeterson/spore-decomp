@@ -31,7 +31,10 @@ def load_funcs():
         for line in open(f):
             p = line.split("#", 1)[0].split()
             if len(p) >= 2:
-                names[int(p[0], 16)] = p[1]
+                try:
+                    names[int(p[0], 16)] = p[1]
+                except ValueError:
+                    continue  # malformed symbol line (non-hex address): skip
     starts = sorted(set(starts))
     return starts, names
 

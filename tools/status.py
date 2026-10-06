@@ -70,7 +70,10 @@ named = set()
 for line in (l for f in glob.glob(W("symbols/*.txt")) for l in open(f)):
     p = line.split("#", 1)[0].split()
     if p:
-        named.add(int(p[0], 16))
+        try:
+            named.add(int(p[0], 16))
+        except ValueError:
+            continue  # malformed symbol line (non-hex address): skip
 named |= set(lib_in_funcs)
 if os.path.exists(W("symbols/pdb_names.json")):
     import json as _j
