@@ -13,7 +13,7 @@ Orders:
              produced by tools/matching/callgraph.py.  Unreachable slices sort last unless
              --reachable-only is given.
 """
-import argparse, json, os
+import argparse, glob, json, os
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 W = lambda *p: os.path.join(ROOT, *p)
 ap = argparse.ArgumentParser()
@@ -25,7 +25,14 @@ ap.add_argument("--reachable-only", action="store_true", help="with --order bfs,
 ap.add_argument("--write", help="freeze the batch to work/batches/<name>.json")
 a = ap.parse_args()
 slices = json.load(open(W("work/slices.json")))
-todo = [s for s in slices if not os.path.isdir(W("match/slices", s["id"]))
+# Slices already frozen into any batch are never re-planned, even if no agent has created
+# their match/slices/<id>/ directory yet (otherwise two consecutive --write runs would
+# pick the same slices).
+batched = set()
+for _bf in glob.glob(W("work/batches", "*.json")):
+    for _rec in json.load(open(_bf)):
+        batched.add(_rec["id"])
+todo = [s for s in slices if not os.path.isdir(W("match/slices", s["id"])) and s["id"] not in batched
         and a.min_bytes <= s["bytes"] <= a.max_bytes and len(s["functions"]) >= a.min_funcs]
 if a.order == "size":
     todo.sort(key=lambda s: s["bytes"])
