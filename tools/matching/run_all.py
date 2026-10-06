@@ -15,6 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pefile
 from cmpobj import parse_coff, REL_SIZES
+import imgcache
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
@@ -65,9 +66,8 @@ def compile_one(key):
 class Original:
     def __init__(self):
         pe = pefile.PE(IMAGE, fast_load=True)
-        pe.parse_data_directories([pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_BASERELOC"]])
         self.pe, self.base = pe, pe.OPTIONAL_HEADER.ImageBase
-        self.relocs = sorted(e.rva for b in getattr(pe, "DIRECTORY_ENTRY_BASERELOC", []) for e in b.entries if e.type == 3)
+        self.relocs = imgcache.relocs(IMAGE)  # sorted HIGHLOW reloc RVAs, cached (was ~1.6 s per run)
 
     def bytes_and_mask(self, va, n):
         rva = va - self.base

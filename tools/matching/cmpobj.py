@@ -9,8 +9,11 @@ usage: cmpobj.py <image> <obj> <symbol> <va-hex> [--len N] [--quiet]
 - Length defaults to the size of the symbol's COMDAT section (compile with /Gy).
 Exit 0 iff all unmasked bytes are identical.
 """
-import argparse, struct, sys
+import argparse, bisect, os, struct, sys
 import pefile
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import imgcache
 
 REL_SIZES = {0x06: 4, 0x07: 4, 0x14: 4, 0x0B: 4, 0x0A: 2}  # DIR32, DIR32NB, REL32, SECREL, SECTION
 
@@ -70,19 +73,17 @@ def main():
                 mask_mine.add(vaddr + k - off)
 
     pe = pefile.PE(a.image, fast_load=True)
-    pe.parse_data_directories([pefile.DIRECTORY_ENTRY["IMAGE_DIRECTORY_ENTRY_BASERELOC"]])
     va = int(a.va, 16)
     rva = va - pe.OPTIONAL_HEADER.ImageBase
     orig = pe.get_data(rva, length)
     mask_orig = set()
-    for blk in getattr(pe, "DIRECTORY_ENTRY_BASERELOC", []):
-        if blk.struct.VirtualAddress + 0x1000 <= rva or blk.struct.VirtualAddress >= rva + length:
-            continue
-        for e in blk.entries:
-            if e.type == 3 and rva - 3 <= e.rva < rva + length:
-                for k in range(4):
-                    if 0 <= e.rva + k - rva < length:
-                        mask_orig.add(e.rva + k - rva)
+    rel = imgcache.relocs(a.image)  # sorted HIGHLOW reloc RVAs, cached
+    i = bisect.bisect_left(rel, rva - 3)
+    while i < len(rel) and rel[i] < rva + length:
+        for k in range(4):
+            if 0 <= rel[i] + k - rva < length:
+                mask_orig.add(rel[i] + k - rva)
+        i += 1
     mask = mask_mine | mask_orig
     diffs = [i for i in range(length) if i not in mask and orig[i] != mine[i]]
     ok = not diffs and len(mine) == length

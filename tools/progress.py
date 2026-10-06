@@ -22,11 +22,27 @@ EXTRA_EXACT = {"b007": 30}
 # IDs appear in two batches; the manifests are DeepSeek's, not GLM's. Do not let b007
 # claim slices it shares with those batches.
 CLAIM_EXCLUDE = {"b007": {"b008", "b009"}}
+# Slices that Claude workflows (cl1_*, op1_*) later reworked: opencode models are credited with
+# their manifest/nonmatching counts frozen at the last pre-Claude commit, not with Claude's edits.
+# bfs4 was never committed before Claude resumed it, so its DeepSeek output is not recoverable
+# per slice; BATCH_FROZEN pins its total to the 178 byte-exact shown before the handoff.
+try:
+    CLAUDE_BASELINE = json.load(open(W("work/claude/opencode_baseline.json")))["slices"]
+except (OSError, ValueError, KeyError):
+    CLAUDE_BASELINE = {}
+BATCH_FROZEN = {"bfs4": (178, None, 625)}  # (exact, equiv unknown, accounted)
 _slice_batches = collections.defaultdict(set)
 for _bf in glob.glob(os.path.join(ROOT, "work/batches", "*.json")):
     _bn = os.path.basename(_bf)[:-5]
-    for _rec in json.load(open(_bf)):
-        _slice_batches[_rec["id"]].add(_bn)
+    try:
+        _recs = json.load(open(_bf))
+    except (OSError, ValueError):
+        continue  # a batch file being (re)written by another process; skip it
+    for _rec in _recs if isinstance(_recs, list) else []:
+        # Tolerate other batch shapes: {"id": ...}, {"slice": ...} or a bare slice-id string.
+        _sid = _rec if isinstance(_rec, str) else (_rec.get("id") or _rec.get("slice")) if isinstance(_rec, dict) else None
+        if _sid:
+            _slice_batches[_sid].add(_bn)
 
 def table(headers, rows, aligns=None):
     cols = len(headers)
@@ -194,6 +210,11 @@ def model_table():
             for rec in json.load(open(bf)):
                 if _slice_batches[rec["id"]] & exclude:
                     continue  # shared slice actually produced by another model's batch
+                if rec["id"] in CLAUDE_BASELINE:
+                    # later reworked by a Claude workflow: credit only what existed before
+                    b_ex, b_eq = CLAUDE_BASELINE[rec["id"]]
+                    ex += b_ex; eq += b_eq
+                    continue
                 for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
                     p = W("match/slices", rec["id"], fname)
                     if os.path.exists(p):
@@ -202,6 +223,8 @@ def model_table():
                             ex += n
                         else:
                             eq += n
+        if batch in BATCH_FROZEN:  # equivalents stay as computed (an undercount for bfs4)
+            ex = BATCH_FROZEN[batch][0]
         return ex + EXTRA_EXACT.get(batch, 0), eq
 
     agg = collections.defaultdict(lambda: {"cost": 0.0, "inp": 0, "cr": 0, "out": 0,
@@ -259,33 +282,85 @@ def groups_table():
             if isinstance(d, dict): active = set(d.keys())
         except Exception:
             pass
+    def nlines(p):
+        return sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#")) if os.path.exists(p) else 0
     rows = []
     tot = collections.Counter()
+    # OpenCode groups, alphabetical by group file name.
     for gf in sorted(glob.glob(W("work/opencode/groups", "*.json"))):
         g = json.load(open(gf)); name = os.path.basename(gf)[:-5]
         batch = json.load(open(W("work/batches", g["batch"] + ".json")))
-        account = exact = tot_funcs = 0; cost = 0.0; act = 0
+        account = exact = equiv = tot_funcs = 0; cost = 0.0; act = 0
         for k, sid in g.get("sessions", {}).items():
             if sid in sess_cost: cost += sess_cost[sid]
             if sid in active: act += 1
         for a, b in g["ranges"]:
             for i in range(a, b + 1):
                 sid = batch[i]["id"]; tot_funcs += len(batch[i]["vas"])
-                for f, isok in (("manifest.txt", 1), ("nonmatching.txt", 0), ("partial.txt", 0)):
-                    p = W("match/slices", sid, f)
-                    if os.path.exists(p):
-                        n = sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
-                        account += n; exact += n * isok
+                if sid in CLAUDE_BASELINE:  # reworked by Claude: show the pre-Claude state
+                    b_ex, b_eq = CLAUDE_BASELINE[sid]
+                    account += b_ex + b_eq; exact += b_ex; equiv += b_eq
+                    continue
+                n_ex = nlines(W("match/slices", sid, "manifest.txt"))
+                n_eq = nlines(W("match/slices", sid, "nonmatching.txt"))
+                n_pa = nlines(W("match/slices", sid, "partial.txt"))
+                account += n_ex + n_eq + n_pa; exact += n_ex; equiv += n_eq
         launched = len(g.get("sessions", {})); nranges = len(g["ranges"])
         if account == 0 and launched == 0:
             continue
-        rows.append((name, "%d/%d" % (account, tot_funcs), str(exact), "$%.2f" % cost, str(act), "%d/%d" % (launched, nranges)))
-        tot["account"] += account; tot["tot"] += tot_funcs; tot["exact"] += exact; tot["cost"] += cost; tot["active"] += act
+        if g["batch"] in BATCH_FROZEN:
+            exact, account = BATCH_FROZEN[g["batch"]][0], BATCH_FROZEN[g["batch"]][2]
+        model = g.get("model", "?")
+        model = model.split("/")[-1] if isinstance(model, str) else "?"
+        rows.append((name, model, "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "$%.2f" % cost, str(act), "%d/%d" % (launched, nranges)))
+        tot["account"] += account; tot["tot"] += tot_funcs; tot["exact"] += exact; tot["equiv"] += equiv
+        tot["cost"] += cost; tot["active"] += act
+    # Claude-only workflow groups (work/claude/groups.json), in launch order. Counted per assigned VA,
+    # so a slice's earlier OpenCode work is not credited here. Cost is subscription usage, not $.
+    try:
+        cgroups = json.load(open(W("work/claude/groups.json")))
+    except (OSError, ValueError):
+        cgroups = []
+    hexva = re.compile(r"^(?:0x)?([0-9a-fA-F]{8})$")
+    for g in cgroups:
+        try:
+            batch = json.load(open(W("work/batches", g["batch"] + ".json")))
+        except (OSError, ValueError):
+            continue
+        account = exact = equiv = tot_funcs = 0
+        for rec in batch:
+            mine = {v.lower() for v in rec["vas"]}; tot_funcs += len(mine)
+            seen = {}
+            for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
+                p = W("match/slices", rec["id"], f)
+                if not os.path.exists(p):
+                    continue
+                for l in open(p):
+                    for tok in l.split()[:3]:
+                        m = hexva.match(tok)
+                        if m and m.group(1).lower() in mine:
+                            seen.setdefault(m.group(1).lower(), f)
+            account += len(seen)
+            exact += sum(1 for f in seen.values() if f == "manifest.txt")
+            equiv += sum(1 for f in seen.values() if f == "nonmatching.txt")
+        started, done = set(), set()
+        try:
+            for l in open(g["journal"]):
+                e = json.loads(l)
+                if not str(e.get("label", "")).startswith(g["batch"] + "[") and e.get("agentId") not in started:
+                    continue
+                if e.get("type") == "started": started.add(e.get("agentId"))
+                elif e.get("type") == "result": done.add(e.get("agentId"))
+        except (OSError, ValueError):
+            pass
+        act = len(started - done)
+        rows.append((g["name"], g["model"].split("/")[-1], "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "-", str(act), "%d/%d" % (len(started), g.get("units", 0))))
+        tot["account"] += account; tot["tot"] += tot_funcs; tot["exact"] += exact; tot["equiv"] += equiv; tot["active"] += act
     if not rows:
         return None
-    rows.append(("TOTAL", "%d/%d" % (tot["account"], tot["tot"]), str(tot["exact"]), "$%.2f" % tot["cost"], str(tot["active"]), ""))
-    return table(["Group", "Accounted", "Exact", "Cost", "Active", "Launched"], rows,
-                 aligns=["<", ">", ">", ">", ">", ">"])
+    rows.append(("TOTAL", "", "%d/%d" % (tot["account"], tot["tot"]), str(tot["exact"]), str(tot["equiv"]), "$%.2f" % tot["cost"], str(tot["active"]), ""))
+    return table(["Group", "Model", "Accounted", "Exact", "Equiv", "Cost", "Active", "Launched"], rows,
+                 aligns=["<", "<", ">", ">", ">", ">", ">", ">"])
 
 if "--groups" in sys.argv:
     t = groups_table()

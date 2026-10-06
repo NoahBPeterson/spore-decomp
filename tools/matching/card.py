@@ -8,6 +8,9 @@ string literals shown), and the Ghidra decompile.
 import bisect, csv, glob, os, re, struct, sys
 import pefile, capstone
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import imgcache
+
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 W = lambda *p: os.path.join(ROOT, *p)
 IMAGE = W("work/SporeApp.analysis.bin")
@@ -17,7 +20,7 @@ _pe = None
 def pe():
     global _pe
     if _pe is None:
-        _pe = pefile.PE(IMAGE)
+        _pe = pefile.PE(IMAGE, fast_load=True)  # data reads only; imports come from imgcache
     return _pe
 
 def load_funcs():
@@ -39,12 +42,7 @@ def load_funcs():
     return starts, names
 
 def imports():
-    m = {}
-    for e in pe().DIRECTORY_ENTRY_IMPORT:
-        for i in e.imports:
-            m[i.address] = "%s!%s" % (e.dll.decode().lower().replace(".dll", ""),
-                                      i.name.decode() if i.name else "ord%d" % i.ordinal)
-    return m
+    return imgcache.imports(IMAGE)
 
 def string_at(va):
     p = pe(); base = p.OPTIONAL_HEADER.ImageBase
