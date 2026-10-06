@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+0092f8b0  135  complete; FindFirstChangeNotificationW watch loop (register allocation and callback-arg layout differ)
+0092f960  23  complete; constructor stores in place, cl hoists m_path[0]=0 above m_hFile=0 (same stores, 2 instr reorder)
+0092fa50  36  complete; path copy loop, cl fails to strength-reduce the two pointers to one index (edx = dst-src)
+0092faf0  149  complete; Start(): CreateFileW/CreateEventA + thread start; helper ABI approximated
+0092fbe0  80  complete; Arm(): notify-filter bit composition and dispatch to Worker/Watch
+0092fcd0  259  complete; EA::IO::FilePath::SafeReplace string splice; EASTL insert helper approximated
+0092fe00  65  complete; EnsureTrailingPathSeparator; cl puts path in ecx where the original kept edx (char in cx)
+0092fe60  91  complete; ConcatenatePathComponents; separator char must be an int (32-bit cmp) and start-save reg differs

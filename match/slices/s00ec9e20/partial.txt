@@ -1,0 +1,12 @@
+# va  reason
+00ec9e20  text analysis: multi-stage index lookup with 0x27e8/8/0x14 strides not reconstructed
+00eca010  glyph layout rebuild: not reconstructed
+00eca0f0  glyph layout validation: not reconstructed
+00eca1d0  analysis update: not reconstructed
+00eca3b0  palette page populate: not reconstructed
+00eca4b0  palette item action dispatch (jump table): not reconstructed
+00eca670  palette window setup (679 B): not reconstructed
+00eca920  palette entry select: not reconstructed
+00eca9c0  analysis helper: not reconstructed
+00ecaab0  analysis helper: not reconstructed
+00ecabc0  analysis helper (431 B): not reconstructed

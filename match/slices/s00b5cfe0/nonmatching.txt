@@ -1,0 +1,4 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b5d7c0  123  cGonzagoMode destructor; eastl vector dtor + handler removal schedule differs
+00b5db40   56  list erase-by-key; node unlink layout/order differs
+00b5df90   84  cGonzagoMode constructor; base-vtable store order differs

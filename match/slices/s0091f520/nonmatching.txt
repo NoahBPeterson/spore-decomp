@@ -1,0 +1,7 @@
+0091fe60  144  stack memory view; regalloc/scheduling of fs:[4]/fs:[8] range differs
+0091ff50  105  uptime via _mktime64/_time64; field-init order and register use differ
+0091ffd0  144  filetime delta via allmul/aulldiv; 64-bit scheduling differs
+00920160  154  handle-table name lookup; strcmp loop shape differs
+00920410  111  EASTL hashtable full destructor; inlined DoFreeNodes scheduling differs
+00920490  131  EASTL hashtable insert; template instantiation not faithfully reconstructed
+00920560  111  EASTL string-keyed hashtable find; node layout/scheduling differs

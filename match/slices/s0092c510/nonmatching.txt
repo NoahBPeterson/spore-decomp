@@ -1,0 +1,11 @@
+0092cb30  87  narrow string append (EASTL); inlined DoInsertValue scheduling differs
+0092cb90  91  wide string append (EASTL); inlined DoInsertValue scheduling differs
+0092cc00  112  case-insensitive strstr (char); register/loop shape differs
+0092cc90  126  case-insensitive wstrstr; register/loop shape differs
+0092ce80  85  _ecvt result widened to UTF-16; local buffer layout differs
+0092cef0  85  _fcvt result widened to UTF-16; local buffer layout differs
+0092cf60  137  unsigned-64 -> string; base arrives in eax (static-helper convention) not reproduced
+0092cff0  94  base-10 signed formatter wrapper; static-helper eax convention differs
+0092d040  16  base-N unsigned formatter wrapper; static-helper eax convention differs
+0092d060  96  signed formatter to UTF-16; static-helper eax convention differs
+0092d0d0  79  unsigned formatter to UTF-16; static-helper eax convention differs

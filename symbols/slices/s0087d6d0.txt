@@ -1,0 +1,14 @@
+0087d6d0 EA::Locale::FieldParse  # parses printf-style fields into LocField array
+0087d9a0 EA::Locale::MakeLocaleAvailable  # PDB name (callee-single)
+0087da10 EA::Locale::MakeLocaleAvailableStr  # same compare core, NUL-terminated input
+0087da90 EA::Locale::GetSystemLocaleName  # GetSystemDefaultLCID + en-US table
+0087db80 EA::Locale::FindChineseTraditionalName  # iterates chinese_traditional_cht table
+0087dc40 EA::Locale::FindByShortName  # prefix-matches locale table entries
+0087dd10 EA::Locale::LocaleData::Free  # frees seven fixed wide buffers
+0087de40 EA::Locale::SplitFieldInto  # extracts Nth '^' field and appends it
+0087deb0 EA::Locale::FormatGroupedNumber  # digit grouping with locale separator
+0087e060 EA::Locale::AppendLocaleView  # Appends a {begin,end} wide range
+0087e080 EA::Locale::LocaleBuffer::Assign  # assign a NUL-terminated wide string
+0087e0d0 EA::Locale::LocaleFormatter::Assign  # copy two fixed wide buffers
+0087e130 EA::Locale::FindByLcid  # matches LCID and iswctype script flag
+0087e230 EA::Locale::FindLowercasedName  # lowercased match including "taiwan" special case

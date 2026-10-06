@@ -1,0 +1,18 @@
+0091f520 EA::Debug::ReportWriter::WriteMemoryView  # PDB name
+0091f7c0 EA::Debug::ReportWriter::WriteModuleList  # PDB name
+0091fa10 EA::Debug::ReportWriter::WriteRegisterValues  # PDB name (callee-single)
+0091fbd0 EA::Debug::ReportWriter::WriteRegisterMemoryView  # PDB name
+0091fca0 EA::Debug::ReportWriter::WriteCallStack  # PDB name
+0091fe40 EA::Debug::FileReportWriter::~FileReportWriter  # vtable store + fclose
+0091fe60 EA::Debug::ReportWriter::WriteStackMemoryView  # PDB name
+0091ff10 EA::Debug::FileReportWriter::ScalarDeletingDtor  # vtable store + fclose + delete
+0091ff50 EA::Debug::GetUptime  # _mktime64(1970)/_time64 delta
+0091ffd0 EA::Debug::GetTickCount100ns  # GetSystemTime/SystemTimeToFileTime delta
+009200b0 EA::Debug::CallRefCtor  # vtable+0xc(1) forwarder
+009200d0 EA::Debug::Mgr::Create  # vtable+0x14 then +0x8
+00920110 EA::Debug::Mgr::Factory24  # vtable+0x24 factory + release on failure
+00920160 EA::Debug::MgrFindByName  # handle-table name lookup
+00920240 EA::Debug::Mgr::Factory1c  # vtable+0x1c factory + release on failure
+00920410 EA::Debug::HashTable::Destroy  # EASTL hashtable full dtor
+00920490 EA::Debug::HashTable::Insert  # EASTL hashtable insert (12-byte key)
+00920560 EA::Debug::HashTable::Find  # string-keyed FNV-1a hashtable find

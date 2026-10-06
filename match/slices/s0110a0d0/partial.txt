@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0110a0d0  n/a  partial: hkBoxBoxCollisionDetection::faceAVertexBValidationDataFromFeatureIndex (480 B x87 feature validation) not reconstructed
+0110a2b0  n/a  partial: hkBoxBoxCollisionDetection::faceBVertexAValidationDataFromFeatureIndex (508 B) not reconstructed
+0110a4b0  n/a  partial: hkBoxBoxCollisionDetection::edgeEdgeValidationDataFromFeatureIndex (326 B) not reconstructed
+0110a600  n/a  partial: box-box manifold setup (956 B) not reconstructed
+0110a9c0  n/a  partial: hkBoxBoxCollisionDetection::addAdditionalEdgeHelper (713 B) not reconstructed
+0110ac90  n/a  partial: additional-edge fan-out dispatcher; edge-flag logic approximated, exact float/stack shape not reproduced

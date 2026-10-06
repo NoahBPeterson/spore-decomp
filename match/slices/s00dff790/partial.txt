@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00dff790  -  large inlined input-strategy body stubbed
+00dff8e0  -  large inlined input-strategy body stubbed
+00dffa30  -  large inlined input-strategy body stubbed
+00dffda0  -  large inlined input-strategy body stubbed
+00e000a0  -  resource-manager lookup body stubbed
+00e001a0  -  input dispatch body stubbed
+00e002b0  -  big key-switch body stubbed

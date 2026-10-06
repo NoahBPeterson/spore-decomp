@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+010c19a0  539  complete hkConvexVerticesShape::copyVertexData (FourVectors pack + AABB); cl loop unroll/register shape differs
+010c1c60  35   complete hkConvexVerticesShape::getAabb (one calcAabb call); argument evaluation/scheduling differ
+010c1f40  95   complete hkConvexVerticesShape::calcStatistics; vtable-call argument scheduling differs
+010c21c0  87   complete hkConvexVerticesShape destructor (hkThreadMemory dealloc); TlsGetValue/global load scheduling differs
+010c2230  142  complete hkGeometry->shape assignment; field scheduling differs
+010c2310  140  complete hkAllCdPointCollector::addCdPoint; hkArray pushBack inlining / chain walk differs
+010c23c0  269  complete hkAlgorithm::quickSortRecursive<hkRootCdPoint>; swap block register allocation differs
+010c2570  24   complete hkAllCdPointCollector::sortPoints; tag temporary / loop entry differs
+010c25a0  122  complete collision-agent registration sequence; call scheduling differs
+010c26f0  19   complete hkCapsuleShape::calcStatistics; prologue/argument setup differs
+010c2730  88   complete hkCapsuleShape constructor; radius store via x87 instead of raw dword
+010c27a0  122  complete hkCapsuleShape::getSupportingVertex; x87 branch/frame differs
+010c2850  32   complete hkCapsuleShape::getCollisionSpheres; cl increments ecx instead of using [ecx+0x20]

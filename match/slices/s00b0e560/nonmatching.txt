@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b0e560  155  spstl::slot_vector resize/erase schedule in a serialization read; container templates not reproduced
+00b0e610   97  reader-chain + slot_vector clear; helper call schedule differs
+00b0e6a0  174  two slot_vector resets + EASTL list clear; container templates not reproduced
+00b0e780  106  spstl bit-range slot relocation; iterator/bit-index schedule differs
+00b0e810   94  refcount + slot_vector swap; AutoRefCount template not reproduced
+00b0e890  118  EASTL list job sweep; intrusive-list node erasure schedule differs
+00b0f0c0    1  angle-wrap branch block placement one branch displacement off

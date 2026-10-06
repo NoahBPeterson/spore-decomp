@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00e308d0  36   list destructor: current/next node live in esi/edi swapped
+00e30a60  106  vector erase-if(f0||f8): loop/removal shape differs from cl's
+00e30ae0  104  vector erase-if(f8): loop/removal shape differs from cl's
+00e30c00  62   in-place emplace_back: local zero element and branch layout differ
+00e30c60  43   MgrA ctor: vtable/zero store scheduling and ca09f0 arg setup order differ
+00e30d20  143  asset-discovery-card Add(): intrusive_ptr release/call schedule differs
+00e30dc0  47   MgrCard teardown: node-list destroy + handler removal schedule differs
+00e313c0  337  card drag/fade update: float accumulation and erase schedule differ
+00e31550  22   card hide: erase-call address computation ordered after the 0-store
+00e315f0  49   card element append: fast-path pair copy and slow-path call differ

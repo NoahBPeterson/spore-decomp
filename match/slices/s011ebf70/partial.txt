@@ -1,0 +1,19 @@
+# va  diff-bytes  reason
+011ebf70  n/a  partial: FindFirstFileA wrapper / rw filesys handle setup (200 B) not reconstructed
+011ec260  n/a  partial: scheduler helper (109 B) not reconstructed
+011ec2f0  n/a  partial: filesystem stream open (148 B) not reconstructed
+011ec390  n/a  partial: scheduler helper (123 B) not reconstructed
+011ec410  n/a  partial: scheduler/timer wait body (193 B) not reconstructed
+011ec4e0  n/a  partial: scheduler helper (230 B) not reconstructed
+011ec5d0  n/a  partial: scheduler helper (121 B) not reconstructed
+011ec650  n/a  partial: scheduler helper (253 B) not reconstructed
+011ec750  n/a  partial: thread start/thunk (137 B) not reconstructed
+011ec840  n/a  partial: filesystem handle init (118 B) not reconstructed
+011ec8c0  n/a  partial: stream wait/timed body (160 B) not reconstructed
+011ec960  n/a  partial: stream wait/timed body (202 B) not reconstructed
+011eca30  n/a  partial: refcounted object init (96 B) not reconstructed
+011eca90  n/a  partial: refcounted object destroy (102 B) not reconstructed
+011ecb20  n/a  partial: refcounted object copy (133 B) not reconstructed
+011ecba9  n/a  partial: EH cleanup continuation (106 B) not reconstructed
+011ecc20  n/a  partial: filesystem stream read (366 B) not reconstructed
+011ecdf0  n/a  partial: rw::core::filesys::Handle::Handle (325 B) not reconstructed

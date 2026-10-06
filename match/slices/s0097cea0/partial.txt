@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0097cea0  n/a  partial; WinGrid::SetCellWindow (465B) - SparseMatrix cell insert / copy path approximated
+0097d270  n/a  partial; ImageDrawable::CreateRenderables (1626B) - renderable build skeleton
+0097d8d0  n/a  partial; ImageDrawable helper (127B) skeleton
+0097dad0  n/a  partial; CursorWindow::CursorWindow ctor skeleton
+0097db30  n/a  partial; CursorWindow::OnRebuild skeleton
+0097dc30  n/a  partial; eastl hashtable<...>::DoRehash skeleton (size 159)
+0097dd80  n/a  partial; hashtable helper (101B) skeleton
+0097de20  n/a  partial; ImageCursorProvider::SetCursor (325B) skeleton
+0097e030  n/a  partial; eastl hashtable<...>::DoFreeNodes skeleton
+0097e0b0  n/a  partial; hash_map<...>::operator[] skeleton (find+insert+rehash)
+0097e140  n/a  partial; anonymous CursorListMarshaller::Read (170B) skeleton

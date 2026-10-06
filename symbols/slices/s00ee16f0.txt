@@ -1,0 +1,2 @@
+# 0x00ee16f0 is UI::cScenarioTutorialsChecklistUI::Refresh (4,452 bytes).  Only a skeleton
+# is reproduced; no reliable member names recovered beyond the guard/tail calls.

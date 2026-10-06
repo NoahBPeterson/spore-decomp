@@ -1,0 +1,4 @@
+slices/s00a01810/s00a01810.cpp  ?IsOrientStartAnim@cAnimatingCreature@@QAE_NI@Z  00a02710
+slices/s00a01810/s00a01810.cpp  ?IsOrientStopAnim@cAnimatingCreature@@QAE_NI@Z  00a02740
+slices/s00a01810/s00a01810.cpp  ??1anim_qb@@QAE@XZ  00a01c70
+slices/s00a01810/s00a01810.cpp  ?Foo@anim_qb@@QAEXHH@Z  00a01f10

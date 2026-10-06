@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00f41cf0/s00f41cf0.cpp  ?f_42780@@YAPAUElem4e0@@PAU1@IABU1@@Z  00f42780  /O2 /MD /Gy /EHsc /TP
+slices/s00f41cf0/s00f41cf0.cpp  ?f_42a00@ScenarioObj@@QAEXH@Z  00f42a00  /O2 /MD /Gy /EHsc /TP
+slices/s00f41cf0/s00f41cf0.cpp  ?f_41cf0@ScenarioObj@@QAEXXZ  00f41cf0  /O2 /MD /Gy /EHsc /TP

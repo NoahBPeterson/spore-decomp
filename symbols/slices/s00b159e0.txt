@@ -1,0 +1,5 @@
+# va  Name  # evidence
+00b159e0  SP::cTerrainCameraController::SetZoomDelta   # seeds FUN_00b148c0 with delta*m2a0, sets m13, m294=m114
+00b15a80  SP::cTerrainCameraController::OnMouseWheel   # forwards to cLocalInputState::OnMouseWheel (+0x31c)
+00b16490  FUN_00b16490  # normalize a cSPVector3 and extend by a scalar (fsqrt)
+00b16450  FUN_00b16450  # adds a list's +0x38 offset to a cSPVector3 when the list is non-empty

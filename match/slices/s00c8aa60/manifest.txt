@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c8aa60/s00c8aa60.cpp  ?CreateEffect3@cSpatialObjectView@@QAEXPAX00@Z  00c8b060  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?CreateEffect1@cSpatialObjectView@@QAEXPAX@Z   00c8b080  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b1a0@cSpatialObjectView@@QAEXPAX@Z        00c8b1a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b210@cSpatialObjectView@@QAEXPAX@Z        00c8b210  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?c8b470@@YAXHPAH0@Z                            00c8b470  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b560@Obj48@@QAEXXZ                         00c8b560  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b570@Obj48@@QAEXH@Z                        00c8b570  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b5c0@Obj48@@QAEXPAX@Z                      00c8b5c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?c8b5e0@@YAXPAUListArg@@@Z                      00c8b5e0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?sub_b7d0@Obj48@@QAEXXZ                         00c8b7d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00c8aa60/s00c8aa60.cpp  ?RemoveOwner@cGameData@@QAEXXZ                  00c8b790  /O2 /MD /Gy /EHsc /TP /arch:SSE

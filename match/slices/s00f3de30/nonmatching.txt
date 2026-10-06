@@ -1,0 +1,1 @@
+00f3ec90  21  complete reconstruction; cl emits fcomp/fnstsw instead of fld1/fcompi for the 1.0f compare

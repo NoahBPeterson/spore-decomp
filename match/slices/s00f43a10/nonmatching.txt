@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00f44190  11  complete vector<T534> erase; cl allocates the erased element (last) to esi where the original uses edi
+00f446f0  132 complete vector<T534> default push_back; needs /GS- and cl's tail-call/register shape differs from the original

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00e78de0  42   init: FUN_00e77930 receives its object in ESI (static register convention); extern call uses stack
+00e78e40  12   same ESI convention for FUN_00e77930; plus arg register edx vs ecx
+00e78e70  128  message-ID switch: cl's compare tree differs (case-body layout / duplicate cases)

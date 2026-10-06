@@ -1,0 +1,10 @@
+00edff50  207  complete; manager enumeration loop shape and callee-saved register assignment differ
+00ee0080  231  complete; virtual-dispatch blocks and tail-call scheduling differ
+00ee01e0  229  complete; loop bound re-evaluated per iteration and register assignment differ
+00ee0310  260  complete; loop bound re-evaluated per iteration and register assignment differ
+00ee0450  260  complete; loop bound re-evaluated per iteration and register assignment differ
+00ee0590  260  complete; loop bound re-evaluated per iteration and register assignment differ
+00ee06d0  470  complete; vector-notify path and loop scheduling differ
+00ee0960  281  complete; lookup/notify tail and register assignment differ
+00ee0af0  234  complete; loop bound re-evaluated per iteration and register assignment differ
+00ee0c30  242  complete; loop bound re-evaluated per iteration and register assignment differ

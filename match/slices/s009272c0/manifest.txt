@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s009272c0/s009272c0.cpp  ?Release@cLocalLightInfo@@QAEXH@Z  009276c0  /O2 /MD /Gy /EHsc /TP /GS-

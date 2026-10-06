@@ -1,0 +1,7 @@
+# Slice s0110a0d0 names. Havok 3.1.0 hkBoxBoxCollisionDetection region.
+0110a0d0 hkBoxBoxCollisionDetection::faceAVertexBValidationDataFromFeatureIndex  # dev-PDB mangled name
+0110a2b0 hkBoxBoxCollisionDetection::faceBVertexAValidationDataFromFeatureIndex  # dev-PDB mangled name
+0110a4b0 hkBoxBoxCollisionDetection::edgeEdgeValidationDataFromFeatureIndex  # dev-PDB mangled name
+0110a600 box-box manifold setup helper
+0110a9c0 hkBoxBoxCollisionDetection::addAdditionalEdgeHelper  # dev-PDB mangled name
+0110ac90 additional-edge fan-out dispatcher (calls addAdditionalEdgeHelper 4x)

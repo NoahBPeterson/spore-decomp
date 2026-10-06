@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00b0e920  263  slot_vector trim loops: bit-run skipping and erase schedule only approximated
+00b0ea30  174  per-frame teardown: the +0x58 live-index loop is stubbed, list teardown approximated
+00b0eae0  816  interaction-agent tick: many sub-paths (agent run, interaction dispatch) reduced to skeletons
+00b0ee10  592  next-live-job selection: iterator walk / slot selection only approximated

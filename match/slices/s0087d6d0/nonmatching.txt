@@ -1,0 +1,8 @@
+0087d6d0  546  format-field parser; switch/jump-table and scan scheduling differ
+0087d9a0  110  wide-vector equality; register assignment and byte-tail loop shape differ
+0087da10  103  wchar* vs vector equality; loop/register shape differs
+0087da90  60  system/default locale lookup; CRT import-load scheduling differs
+0087dc40  120  short-name prefix match; inline compare loop shape differs
+0087deb0  377  group-separator number formatter; instruction scheduling differs
+0087e0d0  76  formatter buffer init (two fixed buffers); register scheduling differs
+0087e130  2  LCID locale lookup; two CRT IAT loads emitted in swapped registers

@@ -1,0 +1,1 @@
+slices/s00f47680/s00f47680.cpp  ?Shutdown@cSporeApp@@QAE_NXZ  00f47700

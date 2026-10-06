@@ -1,0 +1,8 @@
+# va  Name  # evidence
+00b108b0  SP::cTerrainCameraController::ReloadZoomProgram  # PDB symbol name shown on card.py
+00b10200  SP::cTerrainCameraController::GetAnchorDirection0  # m54/m58/m5c * m28 -> global lazy-init vector
+00b10260  SP::cTerrainCameraController::GetAnchorDirection1  # m6c/m70/m74 * m30 -> global lazy-init vector
+00b102c0  SP::cTerrainCameraController::UpdateCurrentHeight  # DebugDrawGrid + GetHeightAt into m30
+00b10470  SP::cTerrainCameraController::SetYaw  # sets m15c from the yaw block
+00b104c0  SP::cTerrainCameraController::SetDistance  # floors at 0.1 and seeds m108..m11c
+00b10760  SP::cTerrainCameraController::ResetInterpolation  # hard reset of all three blocks

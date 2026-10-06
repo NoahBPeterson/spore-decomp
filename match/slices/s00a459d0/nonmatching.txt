@@ -1,0 +1,11 @@
+00a46050  16   bool-normalisation / vcall register choice
+00a46080  16   bool-normalisation / vcall register choice
+00a460b0  2    tail-jmp target register differs
+00a46690  22   branch orientation and bool materialisation
+00a46770  15   float-to-int uses x87 instead of cvttss2si
+00a46790  28   symbol copy register allocation
+00a468f0  23   condition orientation / array indexing
+00a46920  32   condition orientation / array indexing
+00a46950  22   duplicated default branch reordered
+00a467c0  999  sprintf/gensym helper shape differs
+00a46830  999  snprintf loop shape differs

@@ -1,0 +1,6 @@
+00e786b0 SP::sCreatePlant_Type3  # decomp index name
+00e78830 SP::sGenPlants  # decomp index name
+00e78fc0 SP::sUpdateAICaterpillar  # decomp index name
+00e791f0 SP::sDigestionOutput  # decomp index name
+00e792b0 SP::sDigestion_End  # decomp index name
+00e79320 SP::sOnEatEater  # decomp index name

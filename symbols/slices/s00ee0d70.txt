@@ -1,0 +1,3 @@
+# UI::cScenarioTutorialsChecklistUI-adjacent helpers (names inferred).
+00ee0eb0  Checklist_PropertyDispatcher  # dispatches 0x742bdb0/bdc0/bdd0 to the f_00ee0af0/0c30/0d70 setters
+00ee1060  RefCountedReleaseThunk       # if(*p) tail-call FUN_00edfbf0(p)

@@ -1,0 +1,4 @@
+0092c510  970  EA::Refpack::iCompress core; compression search approximated
+0092c8e0  300  EA::Refpack::DeflateBuf; hash-table/deflate core approximated
+0092cd20  220  bitmask substring matcher; reconstructed as a simplified scan
+0092d120  697  strtoull-like parser; overflow/errno paths simplified

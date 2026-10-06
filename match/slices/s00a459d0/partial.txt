@@ -1,0 +1,12 @@
+00a459d0  628   large constructor; skeleton
+00a45c90  11    MI adjustor thunk; not reconstructed
+00a45ca0  11    MI adjustor thunk; not reconstructed
+00a45cf0  11    MI adjustor thunk; not reconstructed
+00a45d00  11    MI adjustor thunk; not reconstructed
+00a45d10  499   large EH destructor; not reconstructed
+00a45f30  111   EH operator_new ctor wrapper; not reconstructed
+00a460d0  109   eastl hashtable erase; not reconstructed
+00a46160  1095  large EH StartVoice; not reconstructed
+00a465b0  110   EH object constructor; not reconstructed
+00a46620  96    scalar deleting destructor with hashtable; not reconstructed
+00a466d0  139   EH object allocator; not reconstructed

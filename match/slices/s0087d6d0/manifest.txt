@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0087d6d0/s0087d6d0.cpp  ?Locale_FindInCht@@YAHPB_WPA_WH@Z              0087db80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0087d6d0/s0087d6d0.cpp  ?Free@LocaleData@@QAEXXZ                        0087dd10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0087d6d0/s0087d6d0.cpp  ?Locale_SplitField@@YA_NHPA_WPAULocBuf@@_W@Z    0087de40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0087d6d0/s0087d6d0.cpp  ?Locale_AppendView@@YAXPAULocBuf@@PBUWStrView@@@Z 0087e060  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0087d6d0/s0087d6d0.cpp  ?Assign@LocBuf@@QAEPAU1@PB_W@Z                  0087e080  /O2 /MD /Gy /EHsc /TP /GS-

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+009334d0  384  partial; IniFile::ReadBinary - StackArray<char> conversion path approximated
+00933640  156  partial; IniFile::WriteBinary - ConvertBinaryDataToASCIIArray args approximated
+00933850  99  partial; IniFile::ReadEntry - vtable +0x24 / wcsncpy path approximated
+009338e0  90  partial; IniFile::ReadEntryFormatted - Vsscanf16 path approximated
+00933980  157  partial; IniFile::GetFileLine - vtable +0x54/+0x58 dispatch approximated
+00933b70  241  partial; IniFile::GetFileLine8To8 - read/seek vtable loop approximated
+00933c80  382  partial; IniFile::GetFileLine16To16 - endianness swap + read/seek loop approximated
+00933e50  107  partial; rbtree insert helper (operator_new 0x24 + RBTreeInsert) approximated
+00933ef0  n/a  partial; IniFile::ReadEntry (699B) - control flow skeleton only

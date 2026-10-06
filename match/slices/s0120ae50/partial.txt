@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+0120ae50  n/a  partial: _hkMatrix6Sub (582 B x87) not reconstructed
+0120b0a0  n/a  partial: _hkMatrix6SetMul (260 B) not reconstructed
+0120b1b0  n/a  partial: _hkMatrix6SetTranspose (347 B) not reconstructed
+0120b310  n/a  partial: hkMatrix6::setInvert (1384 B) not reconstructed
+0120bb70  n/a  partial: rw::DocMessage::Send static-init + indirect dispatch not reconstructed
+0120bbf0  n/a  partial: debug-output formatter; signature/varargs shape not reproduced
+0120bcb0  n/a  partial: EH cleanup fragment (Skinner/Clear)
+0120bd30  n/a  partial: EH cleanup fragment (SPSkinPaintDistribute*)
+0120be20  n/a  partial: EH cleanup fragment (Swarm/SkinPaint)
+0120be90  n/a  partial: EH cleanup fragment (Skinner/Swarm)
+0120bf00  n/a  partial: EH cleanup fragment (Swarm)
+0120bfc0  n/a  partial: EH cleanup fragment (App/CheatManager)
+0120c0f0  n/a  partial: EH cleanup fragment
+0120c2a0  n/a  partial: EH cleanup fragment
+0120c330  n/a  partial: EH cleanup fragment
+0120c360  n/a  partial: EH cleanup fragment

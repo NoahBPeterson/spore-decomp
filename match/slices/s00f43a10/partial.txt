@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+00f43a10  n/a  skeleton: action push_back with static-init guard; not reconstructed
+00f43af0  n/a  skeleton: 245-byte action construct/init; not reconstructed
+00f43bf0  n/a  skeleton: 816-byte action test/match; not reconstructed
+00f43f20  n/a  skeleton: 390-byte per-action progress update loop; not reconstructed
+00f440b0  n/a  skeleton: 219-byte message handler; not reconstructed
+00f44210  n/a  skeleton: 349-byte remove-action-at-index; not reconstructed
+00f44370  n/a  skeleton: 584-byte create-action; not reconstructed
+00f445c0  n/a  skeleton: 304-byte dispatch/create action; not reconstructed

@@ -1,0 +1,7 @@
+slices/s0092f220/s0092f220.cpp  ?Stop@FileWatcher@@QAE_NXZ  0092f5f0
+slices/s0092f220/s0092f220.cpp  ?Close@FileWatcher@@QAE_NXZ  0092f9e0
+slices/s0092f220/s0092f220.cpp  ?SetFlags@FileWatcher@@QAE_NI@Z  0092fa90
+slices/s0092f220/s0092f220.cpp  ?SetShareMode@FileWatcher@@QAE_NI@Z  0092fac0
+slices/s0092f220/s0092f220.cpp  ?Destroy@FileWatcher@@QAEXXZ  0092fc50
+slices/s0092f220/s0092f220.cpp  ?DestroyScalar@FileWatcher@@QAEPAU1@E@Z  0092fc80
+slices/s0092f220/s0092f220.cpp  ?Reset0@FileWatcher@@QAEPAFXZ  0092fcc0

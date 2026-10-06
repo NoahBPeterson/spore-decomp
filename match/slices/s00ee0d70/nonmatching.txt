@@ -1,0 +1,8 @@
+00ee0d70  234  complete; property setter, loop bound re-evaluated per iteration and register assignment differ
+00ee0f50  256  complete; teardown walks refcounted array / layout; register assignment and inlined vcall scheduling differ
+00ee1080  159  complete; popup-menu intrusive-iterator walk; iterator mechanics approximate
+00ee1140  127  complete; vector walk; frame size (extra 8 bytes) and loop-cache registers differ
+00ee1200  142  complete; vector walk; frame size and loop-cache registers differ
+00ee12c0  578  complete; large teardown; inlined vcalls and frame layout differ
+00ee1510  188  complete; vector walk with float accumulation; frame size and x87 scheduling differ
+00ee1630  49   complete; vector walk; extra 8-byte frame slot and second-loop cache register differ

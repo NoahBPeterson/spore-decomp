@@ -1,0 +1,1 @@
+00927860  124  pool constructor; zero-store register/scheduling differs (all fields present)

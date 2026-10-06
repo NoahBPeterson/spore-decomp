@@ -1,0 +1,13 @@
+# va  reason
+00e786b0  sCreatePlant_Type3: nested cell-attachment creation loops not reconstructed
+00e78830  sGenPlants: large RNG/plant-spawn loop with jump table not reconstructed
+00e78b20  cell query: static register-convention helper; body not reconstructed
+00e78b80  cell query: static register-convention helper; body not reconstructed
+00e78c00  cell visibility/clear: mixed register args; body not reconstructed
+00e78d10  proximity check: not reconstructed
+00e78fc0  sUpdateAICaterpillar: not reconstructed
+00e791a0  emit-if-primary: register-arg parameters; not reconstructed
+00e791f0  sDigestionOutput: not reconstructed
+00e792b0  sDigestion_End: not reconstructed
+00e79320  sOnEatEater: not reconstructed
+00e79460  cell query/clear: static register-convention helper; not reconstructed

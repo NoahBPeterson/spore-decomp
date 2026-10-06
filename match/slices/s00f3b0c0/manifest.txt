@@ -1,0 +1,16 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b2f0@@YA_NH@Z  00f3b2f0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b320@@YAHH@Z  00f3b320
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b340@@YAHH@Z  00f3b340
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b370@@YAHH@Z  00f3b370
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b390@@YAHH@Z  00f3b390
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b3b0@@YG_NPAH0@Z  00f3b3b0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b420@cSim@@QAEHXZ  00f3b420
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b7c0@cSim@@QAEXH@Z  00f3b7c0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b920@cSim@@QAEHXZ  00f3b920
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3b950@cSim@@QAE_NXZ  00f3b950
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bbd0@@YGXHD@Z  00f3bbd0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bcc0@cSim@@QAEXH@Z  00f3bcc0
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3be30@cSim@@QAEHXZ  00f3be30
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bf70@cSim@@QAEHXZ  00f3bf70
+slices/s00f3b0c0/s00f3b0c0.cpp  ?FUN_00f3bfa0@cSim@@QAEHH@Z  00f3bfa0

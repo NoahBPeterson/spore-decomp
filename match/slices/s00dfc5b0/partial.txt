@@ -1,0 +1,12 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00dfc6f0  -  inlined cSPUILayout::Init / EASTL vector append path stubbed
+00dfca50  -  vector<pair<u32,Variant>> copy-assignment stubbed
+00dfcb00  -  inlined eastl::vector assign/insert machinery stubbed
+00dfcc90  -  inlined eastl::vector copy machinery stubbed
+00dfcce0  -  large inlined string/vector copy stubbed
+00dfcee0  -  inlined eastl::vector<0x34> assign machinery stubbed
+00dfd020  -  inlined eastl::vector copy ctor stubbed
+00dfd080  -  large inlined string/vector element copy stubbed
+00dfd250  -  eastl::uninitialized_copy<0x188> stubbed
+00dfd3a0  -  inlined eastl::vector<float> element copy stubbed
+00dfd4e0  -  eastl::uninitialized_copy<0x188> stubbed

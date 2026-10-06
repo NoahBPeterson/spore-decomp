@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00b7c160  56   flag field tested as byte/updated via memory operands; cl kept the word in eax
+00b7c790  61   global pointer load scheduled after push esi (prologue ordering)
+00b7c890  52   loop iterator kept in ecx vs esi; non-tail call for the color update
+00b7c9c0  199  inlined base-class vtable-init ordering (two vptr stores) differs
+00b7cb20  258  cl promoted the float position deltas to double; x87/SSE mix differs

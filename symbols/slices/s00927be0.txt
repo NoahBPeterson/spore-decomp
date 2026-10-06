@@ -1,0 +1,7 @@
+00927be0 SP::cSPMemPool::MallocCore  # pool malloc core (bins + VirtualAlloc segments)
+009282e0 SP::cSPMemPool::AlignedAllocCore  # pool aligned allocation core
+00928730 SP::cSPMemPool::ReallocCore  # pool realloc core
+009289f0 SP::cSPMemPool::LockedAlloc  # scoped critical-section wrapper over 0x927be0
+00928a30 SP::cSPMemPool::LockedAligned  # scoped wrapper over 0x9282e0
+00928a80 SP::cSPMemPool::LockedRealloc  # scoped wrapper over 0x928730
+00928ad0 SP::Pool_AllocGlobal  # global singleton alloc returning success flag

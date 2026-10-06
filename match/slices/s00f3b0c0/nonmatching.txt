@@ -1,0 +1,13 @@
+00f3b290  16  complete reconstruction; cl allocates the body differently (jump layout)
+00f3b2c0  26  complete reconstruction; cl branch-folds the return-0 paths (setne) vs original branches
+00f3b590  72  complete reconstruction; x87 random-range scheduling differs
+00f3b710  188  complete reconstruction; list/destructor loop register allocation differs
+00f3b990  37  complete reconstruction; NounManager/RemoveNoun argument setup differs
+00f3bc20  114  complete reconstruction; nested 0x534/0x188 loops differ in register use
+00f3bce0  190  complete reconstruction; uses FUN_00f3b710/FUN_00f3b5e0 with x87 arg, scheduling differs
+00f3bd90  71  complete reconstruction; cl caches begin ptr instead of keeping Inner in esi
+00f3bde0  62  complete reconstruction; cl caches begin ptr instead of keeping Inner in esi
+00f3be60  74  complete reconstruction; register allocation of the 0x534 division differs
+00f3bec0  42  complete reconstruction; register allocation of the nested call differs
+00f3bf00  81  complete reconstruction; register allocation of the nested call differs
+00f3bfc0  127  complete reconstruction; 3-float compare/copy scheduling differs

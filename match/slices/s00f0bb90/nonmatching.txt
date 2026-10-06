@@ -1,0 +1,5 @@
+00f0bc80  151  complete reconstruction; register-allocation/loop-scheduling differences vs cl 15.00
+00f0bec0  245  complete reconstruction; slot-search loop and id selection compile to different shape
+00f0c000  453  complete reconstruction; slot find/swap and unrolled count loops differ
+00f0c290  53  complete reconstruction; register allocator hoists esi prologue (source-shape difference)
+00f0c310  628  complete reconstruction; x87/SSE float scheduling differs

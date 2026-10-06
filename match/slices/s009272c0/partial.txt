@@ -1,0 +1,4 @@
+009272c0  492  pool small-bucket allocator; dl malloc internals approximated
+009274d0  424  pool lazy-init; inlined heap setup approximated
+00927700  347  pool free-chunk consolidation; dl malloc internals approximated
+00927a50  399  pool teardown; lists/free ordering approximated

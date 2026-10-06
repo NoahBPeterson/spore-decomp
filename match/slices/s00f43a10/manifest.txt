@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00f43a10/s00f43a10.cpp  ?insert@Vec534@@QAEPAUT534@@PAU2@ABU2@@Z  00f44780  /O2 /MD /Gy /EHsc /TP

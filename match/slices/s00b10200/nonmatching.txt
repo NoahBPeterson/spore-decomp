@@ -1,0 +1,11 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b10200    9  lazy-init anchor-direction*radius; only component load register assignment (xmm1/2/3 rotation) differs
+00b10260   10  same shape as 0x00b10200 for the second anchor vector
+00b102c0  110  camera height update via cDistGrid + cTerrainMapSet; call schedule/selector differs
+00b10340  268  three-block interpolation-target setter; maxss clamp + branch layout differs
+00b10470   69  single yaw setter; cl CSEs the m15c reload the original performs (2-byte frame difference)
+00b104c0   95  distance reset + 0.1 floor; scheduling of the 4 stores differs
+00b10540  479  combined distance/pitch/yaw setter; block layout and clamp schedule differ
+00b10760  309  hard reset of all three interpolation blocks; block layout differs
+00b10de0   91  Hermite scratch reset; x87 vs movss copy schedule differs
+00b10e50  n/a  Hermite/Catmull-Rom segment; float scheduling differs (symbol size mismatch)

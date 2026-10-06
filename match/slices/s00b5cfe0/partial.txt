@@ -1,0 +1,11 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00b5cfe0   328  mode enter/exit: only skeleton
+00b5d130   117  minimap init + layer loop: incomplete
+00b5d220   159  hash bucket rehash: incomplete
+00b5d2c0   228  arg parsing + background color: incomplete
+00b5d430   210  ban-mode scene setup: incomplete
+00b5d540   356  mode-strategy availability check: incomplete
+00b5d870   472  command-line switch handling: incomplete
+00b5da50   239  mode setup: incomplete
+00b5dbb0   977  effects manager update: incomplete
+00b5e050    90  style hashtable find: incomplete

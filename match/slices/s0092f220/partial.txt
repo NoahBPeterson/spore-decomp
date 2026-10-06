@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+0092f220  841  partial; DirectoryIterator::ReadRecursive translation has approximate deque/EASTL helper calls and ABI
+0092f650  n/a  partial; overlapped ReadDirectoryChangesW worker: record-walk logic simplified, all calls present but not faithful
+0092fee0  329  partial; StripPathComponent switch translation reconstructed from decompile; case internals approximate
+00930070  228  partial; SplitPathPtrs translation reconstructed from decompile; UNC/drive splitting approximate

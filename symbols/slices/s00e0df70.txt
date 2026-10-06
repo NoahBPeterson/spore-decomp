@@ -1,0 +1,3 @@
+00e0e840 cSPUIMinimapWin::build_edge_offsets  # Ghidra real name
+00e0eab0 cSPUIMinimapWin::Init  # Ghidra real name
+00e0e9f0 eastl::lower_bound<SP::cDataSerializationInfo*,SP::cDataSerializationInfo,cDataSerializationInfoLessCompare>  # Ghidra real name

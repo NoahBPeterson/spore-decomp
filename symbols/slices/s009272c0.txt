@@ -1,0 +1,6 @@
+009272c0 SP::cSPMemPool::Allocate  # pool small-bucket alloc (VirtualAlloc + 0x926c20)
+009274d0 SP::cSPMemPool::Initialize  # lazily sets up segment/heap tables
+009276c0 SP::cLocalLightInfo::~cLocalLightInfo  # PDB name (callee-single); scoped CS lock
+00927700 SP::cSPMemPool::Shrink  # consolidates free chunks
+00927860 SP::cSPMemPool::cSPMemPool  # constructor, fills fields 0x000-0x50c
+00927a50 SP::cSPMemPool::Destroy  # teardown, frees lists and critical section

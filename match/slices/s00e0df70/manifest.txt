@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e0df70/s00e0df70.cpp  ?lower_bound_DataInfo@@YAPAUDataInfo@@PAU1@0PAI@Z  00e0e9f0  /O2 /MD /Gy /EHsc /TP /arch:SSE

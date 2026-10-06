@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+011ec0f0  14  complete rw::core::thread::Mutex::Destroy; cl uses `cmp byte [ecx+0x24],0` instead of `mov al,[..]; test al,al`
+011ec110  74  complete Mutex::Init; branch/scheduling shape differs
+011ec170  133 complete Mutex::Lock; register allocation around TryEnterCriticalSection loop differs
+011ec230  27  complete Mutex::Unlock; cl picks esi and folds the bool test
+011ecf40  24  complete stream-list teardown; cl materialises the vtable slot in eax instead of `call [edx+0x10]`

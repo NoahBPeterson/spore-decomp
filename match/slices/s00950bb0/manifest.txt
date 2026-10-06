@@ -1,0 +1,4 @@
+slices/s00950bb0/s00950bb0.cpp  ?operator_delete@MultiHeapObject@UTFWin@EA@@SAXPAX@Z  00951330
+slices/s00950bb0/s00950bb0.cpp  ?Release@CustomWinProc@UTFWin@EA@@QAEHXZ  009514a0
+slices/s00950bb0/s00950bb0.cpp  ?GetBounds@Bounds@@QAEDPAM@Z  00952100
+slices/s00950bb0/s00950bb0.cpp  ?SetBounds@Bounds@@QAEXDPBM@Z  00952130

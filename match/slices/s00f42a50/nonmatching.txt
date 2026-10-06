@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f43830  41  complete erase-at-index wrapper; cl CSEs the vector begin pointer into edi instead of the original's memory reload

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b15a20   92  vector<RunInfo,0x10>::resize; eastl::copy tail-shift schedule differs
+00b16270  491  camera-interpolation reset; store order / x87-vs-SSE zeroing differs
+00b16450   57  vector add-list offsets: cl hoists the three list loads before the destination pointer
+00b16490   54  normalize+extend: component register assignment (xmm2/3/4) differs

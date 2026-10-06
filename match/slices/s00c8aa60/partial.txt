@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00c8aa60  -  large function not decompiled (skeleton)
+00c8add0  -  eastl::vector<tEffectInfo>::push_back grow path stubbed
+00c8ae20  -  CreateEffectInternal inlined manager/matrix path stubbed
+00c8b3e0  -  Simulator::ISimulatorSerializable::Read serializer path stubbed
+00c8b820  -  nested tree traversal stubbed
+00c8b920  -  nested tree traversal stubbed
+00c8ba00  -  nested tree traversal stubbed

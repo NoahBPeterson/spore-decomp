@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00e005b0  92   operator-new/ctor scheduling and local frame layout differ
+00e00670  177  argument register assignment (esi/edi/ebx) differs

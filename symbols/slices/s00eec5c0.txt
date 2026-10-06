@@ -1,0 +1,8 @@
+# Editor / creature resource-key + property helpers (names inferred).
+00eec820  ResourceScaledFloat  # vtable 0x74 value, doubled when (*p+0xb8)(0x137e8e0) != 0
+00eec870  ResourceCategoryKey  # picks one of the g_015aca40..4c category globals
+00eec8e0  ResourceFlagPair     # two bools from FUN_00f3e8a0 hit, 1/1 default, 0/0 for key -2
+00eec940  ManagerReleaseList   # FUN_00f3e2b0/FUN_00f3da90 over a 0x20-stride range
+00eec990  ResourceProperty4a8  # returns entry+0x4a8 or 2
+00eeca30  ResourceQuery1186577 # FUN_00f3d780 then query hash 0x1186577
+00eece20  ResourceKeyToIcon    # hash -> constant id dispatch

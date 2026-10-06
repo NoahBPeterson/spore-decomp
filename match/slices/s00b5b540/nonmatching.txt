@@ -1,0 +1,20 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b5b540   82  multi-vtable serialization bridge; vcall argument order/obj layout differs
+00b5b5d0   26  interface adjustor thunk; neg/sbb pattern not reproduced by ?: form
+00b5b690   17  free-list erase-first-equal; loop/branch layout differs
+00b5b6c0   16  cGonzagoSimulator ctor; double vtable store schedule differs
+00b5b6f0   19  free-list push_back; capacity check schedule differs
+00b5b840   22  CheckGonzagoSubsystemInitState; virtual call schedule differs
+00b5b960   23  cGonzagoSubsystem ctor; base-ctor vtable store order differs
+00b5be10   49  serializer wrapper; cVarListSerializer arg schedule differs
+00b5bf30   48  message-server registration; vcall arg/order differs
+00b5bf80   71  multi-message registration loop; loop body schedule differs
+00b5c9d0   74  game-mode id remap compare tree; compare ordering differs
+00b5ca60    8  IsSomething: cdecl/fastcall mangling and compare form differ
+00b5ca70  n/a  current-game-mode predicate; switch/jump-table layout differs
+00b5cb20   29  game-mode guard; call/branch layout differs
+00b5cba0   11  subobject vcall thunk (+8 subobject); lea/arg schedule differs
+00b5cbc0   11  subobject vcall thunk (+8 subobject, slot 0x10); schedule differs
+00b5cc80   76  GameTimeManager cinematic registrations; vcall/arg schedule differs
+00b5cd90   25  iterate +0x5c vector and forward to slot 0x30; loop shape differs
+00b5cde0   85  App->mode vcall chain; call schedule differs

@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00b5b730   194  eastl::vector<bool> insert + resize: body incomplete
+00b5ba30   984  universe/species setup on game-mode change: only entry logic reproduced
+00b5be60   203  species deserialize path: species-manager branches approximated
+00b5ce70   367  cGonzagoSimulator per-frame update: incomplete

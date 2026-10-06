@@ -1,0 +1,7 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00b7c1b0  -  inlined EASTL hashtable find+node construction approximated (temporaries/cleanup omitted)
+00b7c290  -  get-or-create path approximated (hashtable iterator/erase semantics inferred)
+00b7c360  -  0x54e8 hash lookup + transform copy approximated
+00b7c480  -  large inlined create-from-model path stubbed after the first branch
+00b7bd50  -  large item-refresh loop body stubbed (only control-flow skeleton)
+00b7c8e0  -  screen-position projection path incomplete (outX/outY computation omitted)

@@ -1,0 +1,3 @@
+00eec0d0  9   complete; global-load vs arg-load scheduling differs (register assignment)
+00eec3d0  6   complete; three-dword sret copy store order differs
+00eec580  17  complete; index register (eax vs ecx) and loop scheduling differ

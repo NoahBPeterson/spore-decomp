@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00f42a50  n/a  skeleton: 879-byte action-list helper; not reconstructed
+00f42e60  n/a  skeleton: vector<T4e0> range copy-constructor; not reconstructed
+00f42ef0  n/a  skeleton: vector<T34> resize/assign helper; not reconstructed
+00f43010  n/a  skeleton: 496-byte FunctionalMatch constraint/asset lookup builder; not reconstructed
+00f43200  n/a  skeleton: 538-byte FunctionalMatch recursive constraint matcher; not reconstructed
+00f43420  n/a  skeleton: 787-byte FunctionalMatch builder; not reconstructed
+00f438f0  n/a  skeleton: vector<T4e0> assign(n,value); not reconstructed

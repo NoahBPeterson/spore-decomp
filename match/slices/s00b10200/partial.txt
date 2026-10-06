@@ -1,0 +1,4 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00b108b0  360  ReloadZoomProgram: VarMap/RunCameraScript paths approximated, several config writes collapsed
+00b10a90  362  zoom-key handling: GameInputManager virtual queries and cached-flag path approximated
+00b10c40  385  enable/disable path: CanvasVisibilitySetter / CursorAttachment paths approximated

@@ -1,0 +1,9 @@
+00ad0590  369  vector insert/relocate; skeleton
+00ad0710  375  VarList deserialize loop; skeleton
+00ad08f0  576  city data update; skeleton
+00ad0b30  145  serializer wrapper; skeleton
+00ad0bd0  177  teardown; skeleton
+00ad0ca0  232  container lookup/insert; skeleton
+00ad0d90  611  deserialize; skeleton
+00ad1000  491  vignette container resize; skeleton
+00ad11f0  173  cCityVisualizer::UpdateVignettes; skeleton

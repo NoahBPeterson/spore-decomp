@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00ed3350  14   select-by-id wrapper: `this` kept in EDI instead of ESI across the calls
+00ed33a0  7    select-by-id wrapper: `this`/result registers swapped (EDI vs ESI)
+00ed34a0  76   container range destructor: element inner-dtor call and buffer free schedule differ

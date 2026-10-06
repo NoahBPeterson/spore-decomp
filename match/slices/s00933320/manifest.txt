@@ -1,0 +1,5 @@
+slices/s00933320/s00933320.cpp  ?Resize@?$StackArray@_W$0BAA@@@QAEXI@Z  00933320
+slices/s00933320/s00933320.cpp  ?Resize@?$StackArray@D$0BAA@@@QAEXI@Z  00933390
+slices/s00933320/s00933320.cpp  ?DeallocateSelf@WString@@QAEXXZ  00933960
+slices/s00933320/s00933320.cpp  ?eastl_do_move_commit@@YAPAXPAUWString@@00@Z  00933a90
+slices/s00933320/s00933320.cpp  ?DestroyPairRange@@YGXPAUWString@@0@Z  00933df0

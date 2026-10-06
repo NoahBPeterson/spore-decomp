@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+00e0df70  -  large minimap-feedback body stubbed
+00e0e0e0  -  matrix/quaternion transform invert body stubbed
+00e0e1a0  -  very large inlined minimap update body stubbed
+00e0e840  -  cSPUIMinimapWin::build_edge_offsets body stubbed (inlined raster loop)
+00e0eab0  -  cSPUIMinimapWin::Init body stubbed

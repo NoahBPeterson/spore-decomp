@@ -1,0 +1,4 @@
+# Adviser / planet-surface helper TU (names inferred).
+00eebf80  GetRefCounted18   # tail-call to FUN_006c0200 ([p+0x18])
+00eebf90  WinCallbackSetup  # FUN_005bf860 + FUN_005bf120 pairs
+00eec540  FindFirstGE       # scans g_016c7a24[0..g_016c7a28) for >= p

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00f42580  44  complete; cl keeps the 12-byte argument live in edi across the two calls instead of hoisting its push (extra push/pop edi)
+00f425d0  132 complete hashtable-bucket scan; register allocation and node-advance loop shape differ from cl
+00f42670  221 complete eastl::vector<T,Alloc>::assign(n,value) with 0x44 stride; out-of-line ctor/swap/erase helper call shapes differ

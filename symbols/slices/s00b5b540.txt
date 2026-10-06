@@ -1,0 +1,13 @@
+# va  Name  # evidence
+00b5b6c0  SP::cGonzagoSimulator::cGonzagoSimulator  # PDB symbol name shown on card.py
+00b5b840  SP::cGonzagoSubsystem::CheckGonzagoSubsystemInitState  # PDB symbol name shown on card.py
+00b5b900  SP::cGonzagoSubsystem::PostGameModeTransition  # PDB symbol name shown on card.py
+00b5b930  SP::cGonzagoSubsystem::PreGameModeTransition  # PDB symbol name shown on card.py
+00b5b960  SP::cGonzagoSubsystem::cGonzagoSubsystem  # PDB symbol name shown on card.py
+00b5b9a0  SP::cGonzagoSubsystem::~cGonzagoSubsystem  # PDB symbol name shown on card.py
+00b5b800  SP::GetCurrentGameMode  # PDB symbol name shown on card.py
+00b5b820  SP::GetCurrentGameModeAlt  # same shape as GetCurrentGameMode, other query fn
+00b5b880  SP::cGonzagoSubsystem::SetTransitionState1  # mPhase=1, arms mCurrent if -1
+00b5b8a0  SP::cGonzagoSubsystem::SetTransitionState2  # mPhase=2
+00b5b8c0  SP::cGonzagoSubsystem::EndTransitionPre  # mPreMode=mCurrent; reset
+00b5b8e0  SP::cGonzagoSubsystem::EndTransitionPost  # mPostMode=mCurrent; reset

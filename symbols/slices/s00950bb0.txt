@@ -1,0 +1,2 @@
+00950eb0 EA::UTFWin::CustomWinProc::AsInterface  # pdb_names vtable-slot
+00951330 EA::UTFWin::MultiHeapObject::operator delete  # pdb_names callee-single

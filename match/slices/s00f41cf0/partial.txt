@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00f41dc0  n/a  skeleton: 771-byte action-state evaluator (jump-table on action type); full reconstruction not done
+00f420d0  n/a  skeleton: 1196-byte two-pass action cost evaluator; full reconstruction not done
+00f427c0  n/a  skeleton: 569-byte per-tutorial action evaluation driver; full reconstruction not done

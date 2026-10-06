@@ -1,0 +1,5 @@
+00a01c10 anim_qb::anim_qb  # PDB has no name; layout matches ModAPI anim_qb (0xfd0)
+00a01c70 anim_qb::~anim_qb  # byte-exact; layout matches ModAPI anim_qb
+00a01f10 anim_qb::Foo  # byte-exact; thin wrapper over 0x9ff6f0/0xa00f90
+00a02710 SP::cAnimatingCreature::IsOrientStartAnim  # dev-PDB callee-scored
+00a02740 SP::cAnimatingCreature::IsOrientStopAnim  # dev-PDB anchor

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00950bb0  n/a  partial; 744-byte WindowProc message dispatch switch - case bodies approximated
+00950ef0  n/a  partial; 812-byte second message dispatch switch (size 0x1000/1..0x1c + jump table) skeleton
+00951e10  n/a  partial; 646-byte skin-vertex transform loop skeleton
+009520a0  n/a  partial; 4-arg quad xform helper approximated
+00952230  n/a  partial; rounded-rect AddElement (340B, two compare/select paths) approximated

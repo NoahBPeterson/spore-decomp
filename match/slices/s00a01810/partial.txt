@@ -1,0 +1,3 @@
+00a01cd0  507  approximate transliteration (x87 branches not verified)
+00a01f40  1087 approximate transliteration of the per-query animation update
+00a02530  400  approximate ray/box slab test (ABS/denom test rewritten)

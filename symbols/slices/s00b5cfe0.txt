@@ -1,0 +1,7 @@
+# va  Name  # evidence
+00b5df90  SP::cGonzagoMode::cGonzagoMode  # initializes vtables + list at +0x20
+00b5d7c0  SP::cGonzagoMode::~cGonzagoMode  # clears list + removes message handlers
+00b5d3f0  FUN_00b5d3f0  # allocates an App-mode strategy and registers it (LoadGame)
+00b5d760  FUN_00b5d760  # lazy atexit registration of a static cleanup
+00b5d7a0  FUN_00b5d7a0  # writes three constant dwords
+00b5db90  SP::cGonzagoMode::ClearList  # eastl list DoClear + reinit head/tail

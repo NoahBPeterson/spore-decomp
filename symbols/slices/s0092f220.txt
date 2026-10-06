@@ -1,0 +1,5 @@
+0092f220 EA::IO::DirectoryIterator::ReadRecursive  # pdb_candidates caller-scored + DirectoryIterator layout (mnListSize/mnRecursionIndex/mpBaseDirectory/mBaseDirectoryLength)
+0092fcd0 EA::IO::FilePath::SafeReplace  # pdb_names callee-single
+0092fe00 EA::IO::EnsureTrailingPathSeparator  # pdb_names callee-single + ModAPI IO::Constants.h
+0092fe60 EA::IO::ConcatenatePathComponents  # pdb_names callee-single + ModAPI IO::Constants.h
+00930070 EA::IO::SplitPathPtrs  # pdb_names callee-single

@@ -1,0 +1,11 @@
+# va  reason
+00ed2600  large vtable/update entry (872 B): not reconstructed
+00ed2a50  rbtree insert-once helper: not reconstructed
+00ed2ae0  rbtree erase helper: not reconstructed
+00ed2bc0  container helper: not reconstructed
+00ed2e40  container helper: not reconstructed
+00ed2f30  container helper: not reconstructed
+00ed3120  palette category update (557 B): not reconstructed
+00ed33f0  category select/erase: not reconstructed
+00ed35d0  vector grow-and-insert (0x27e8 elements): not reconstructed
+00ed3740  vector insert-at-end: not reconstructed

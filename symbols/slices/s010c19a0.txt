@@ -1,0 +1,17 @@
+# Slice s010c19a0 names. Havok 3.1.0 hkConvexVerticesShape / hkCapsuleShape region.
+010c19a0 hkConvexVerticesShape::copyVertexData  # dev-PDB mangled name ?copyVertexData@hkConvexVerticesShape@@QAEXPBMHH@Z
+010c1c60 hkConvexVerticesShape::getAabb  # dev-PDB mangled name
+010c1c90 hkConvexVerticesShape::castRay  # dev-PDB mangled name
+010c1f40 hkConvexVerticesShape::calcStatistics  # dev-PDB mangled name
+010c1fe0 hkConvexVerticesShape constructor from hkGeometry-like source
+010c21c0 hkConvexVerticesShape::~hkConvexVerticesShape  # dev-PDB mangled name
+010c2230 hkConvexVerticesShape assignment from an hkGeometry-like source
+010c2310 hkAllCdPointCollector::addCdPoint  # dev-PDB mangled name
+010c23c0 hkAlgorithm::quickSortRecursive<hkRootCdPoint,hkAlgorithm::less<hkRootCdPoint> >  # dev-PDB mangled name
+010c2570 hkAllCdPointCollector::sortPoints
+010c25a0 hkAgentRegisterUtil::registerAllAgents / collision agent registration  # long registerAgent call fan-out
+010c26f0 hkCapsuleShape::calcStatistics
+010c2730 hkCapsuleShape::hkCapsuleShape  # dev-PDB mangled name
+010c27a0 hkCapsuleShape::getSupportingVertex  # dev-PDB mangled name
+010c2830 hkCapsuleShape::getFirstVertex  # dev-PDB mangled name; byte-exact
+010c2850 hkCapsuleShape::getCollisionSpheres  # dev-PDB mangled name

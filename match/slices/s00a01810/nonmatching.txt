@@ -1,0 +1,5 @@
+00a01810  445  anim_qb query-activation helper; switch/free-slot scan scheduling differs
+00a01a00  264  anim_qb::AddQuery; cl min() temp/reference codegen and loop register roles differ
+00a01b50  129  anim_qb::EnableAnim; argument-evaluation register scheduling differs
+00a01c10  4    anim_qb::anim_qb; one store/push scheduling swap
+00a02440  191  anim_qb::Bar; register allocation / store scheduling differs

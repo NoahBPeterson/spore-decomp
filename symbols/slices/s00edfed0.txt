@@ -1,0 +1,8 @@
+# UI::cScenarioTutorialsChecklistUI-adjacent float/state helpers (names inferred from role,
+# no dev-PDB names recovered for this range).
+00edfed0  Checklist_FloatPairMatch  # thiscall; compares [this+0x18],[this+0x1c] to FUN_00edd440 outputs
+00ee0310  Checklist_SetProperty4a8  # table5-mapped int property at entry+0x4a8
+00ee0450  Checklist_SetProperty4b0  # table3-mapped int property at entry+0x4b0
+00ee0590  Checklist_SetProperty4b4  # table3-mapped int property at entry+0x4b4
+00ee0af0  Checklist_SetProperty4bc  # int property at entry+0x4bc
+00ee0c30  Checklist_SetProperty4c0  # int property at entry+0x4c0

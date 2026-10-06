@@ -1,0 +1,1 @@
+slices/s010c19a0/s010c19a0.cpp  ?getFirstVertex@hkCapsuleShape@@QBEXAAUhkVector4@@@Z  010c2830

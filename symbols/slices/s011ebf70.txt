@@ -1,0 +1,37 @@
+# Slice s011ebf70 names. RenderWare core threading / file-system module.
+011ebf70 rw::core::filesys::Handle::findFirstFile  # FindFirstFileA + StreamImpl::operator_new(0x10)
+011ec070 unknown trivial (64-bit 0, ret 0x18)
+011ec080 unknown trivial (64-bit 0, ret 4)
+011ec0b0 rw::core::stdc::String / fixed-name set(char,const char*)  # strncpy(this+1,src,0xf)
+011ec0f0 rw::core::thread::Mutex::Destroy  # DeleteCriticalSection/CloseHandle
+011ec110 rw::core::thread::Mutex::Init  # CreateMutexA / InitializeCriticalSection
+011ec170 rw::core::thread::Mutex::Lock  # dev-PDB symbol
+011ec230 rw::core::thread::Mutex::Unlock  # dev-PDB symbol
+011ec260 scheduler helper
+011ec2d0 subobject teardown (Mutex + two stream lists)
+011ec2f0 filesystem stream open
+011ec390 scheduler helper
+011ec410 scheduler/timer wait
+011ec4e0 scheduler helper
+011ec5d0 scheduler helper
+011ec650 scheduler helper
+011ec750 thread start thunk
+011ec7e0 SleepEx(*p,1) wrapper
+011ec800 refcounted-object init
+011ec830 refcounted-object init
+011ec840 filesystem handle init
+011ec8c0 stream wait/timed
+011ec960 stream wait/timed
+011eca30 refcounted object init
+011eca90 refcounted object destroy
+011ecb00 refcounted object release (lock xadd)
+011ecb20 refcounted object copy
+011ecba5 return -1
+011ecba9 EH cleanup continuation
+011ecc20 filesystem stream read
+011ecd90 critical-section init wrapper
+011ecdb0 critical-section destroy wrapper
+011ecdd0 critical-section enter wrapper
+011ecde0 critical-section leave wrapper
+011ecdf0 rw::core::filesys::Handle::Handle  # dev-PDB symbol
+011ecf40 stream-list teardown

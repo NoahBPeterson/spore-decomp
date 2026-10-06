@@ -1,0 +1,20 @@
+0092c510 EA::Refpack::iCompress  # PDB name (callee-scored)
+0092c8e0 EA::Refpack::DeflateBuf  # PDB name (anchor)
+0092c9f0 EA::CompressionRefpack::CompressData  # PDB candidate (caller-single)
+0092ca60 EA::CompressionRefpack::DecompressData  # PDB (vtable-slot); refpack header + decode
+0092cb00 Memset32  # PDB name; rep stosd 32-bit fill
+0092cb30 EA::String::append  # narrow string append (EASTL DoInsertValue)
+0092cb90 EA::String::appendW  # wide string append (EASTL DoInsertValue)
+0092cc00 StrIStr  # case-insensitive char substring (tolower)
+0092cc90 Stristr16  # PDB name; case-insensitive wchar substring (towlower)
+0092cd20 Util::FindSubset  # character-bitmask substring matcher
+0092ce00 _ecvt wrapper  # copies _ecvt result into caller buffer
+0092ce40 _fcvt wrapper  # copies _fcvt result into caller buffer
+0092ce80 _ecvt -> UTF-16  # widens _ecvt result
+0092cef0 _fcvt -> UTF-16  # widens _fcvt result
+0092cf60 UInt64ToStr  # unsigned 64-bit to string (base in eax, static helper)
+0092cff0 UInt64ToStrAuto  # picks sign only for base 10, delegates to 0x92cf60
+0092d040 UInt64ToStrNoSign  # base-N wrapper over 0x92cf60
+0092d060 UInt64ToStrWideAuto  # signed-aware UTF-16 format
+0092d0d0 UInt64ToStrWide  # UTF-16 format
+0092d120 ParseInt64  # strtoull-like parser with base detection and clamping

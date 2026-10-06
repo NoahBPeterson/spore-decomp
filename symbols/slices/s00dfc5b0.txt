@@ -1,0 +1,3 @@
+00dfca50 eastl::pair-ish copy assignment  # vector<pair<unsigned int,EA::Variant>> operator=
+00dfcb00 eastl::vector<0x44-byte>::operator=  # inlined assign/copy
+00dfc6f0 cSPUILayout::Init scenario menu builder  # L"GGENewScenariov3" literal

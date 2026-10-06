@@ -1,0 +1,2 @@
+00e31050 UI::cUIFlashWindowManager::cUIFlashWindowManager  # vtable 0x1481948/0x1481940 (symbols/vtable_names.txt)
+00e31100 UTFWin::IWinProc::GetPriority  # symbols/vtable_names.txt

@@ -1,0 +1,1 @@
+# no confident new names in this slice (callers are cSPPaletteUI/cSPPaletteCategoryUI but offsets unverified)

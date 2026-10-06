@@ -1,0 +1,9 @@
+00c8ae20 SP::cSpatialObjectView::CreateEffectInternal  # Ghidra real name
+00c8b040 SP::cSpatialObjectView::CreateEffect  # overload, 4 args
+00c8b060 SP::cSpatialObjectView::CreateEffect  # overload, 3 args + flag 1
+00c8b080 SP::cSpatialObjectView::CreateEffect  # overload, 1 arg
+00c8b0a0 SP::cSpatialObjectView::DestroyAllEffects  # Ghidra real name
+00c8b3e0 Simulator::ISimulatorSerializable::Read  # Ghidra real name
+00c8b640 Simulator::cStar::cStar  # Ghidra real name + vtbl 0x1473990
+00c8b790 Simulator::cGameData::RemoveOwner  # Ghidra real name
+00c8add0 eastl::vector<SP::cSpatialObjectView::tEffectInfo,eastl::sp_vector_allocator>::push_back  # Ghidra real name

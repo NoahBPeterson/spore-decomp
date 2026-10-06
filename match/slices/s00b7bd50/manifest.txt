@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b7bd50/s00b7bd50.cpp  ?PieMenuAcceptCallback@@YAXHHD@Z      00b7c750  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b7bd50/s00b7bd50.cpp  ?cSPPieMenu_HideUTFMenu@@YAXD@Z        00b7c810  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b7bd50/s00b7bd50.cpp  ?cSPPieMenu_ContainsWindow@@YA_NPAX@Z  00b7c870  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b7bd50/s00b7bd50.cpp  ?GetPosition@cPieMenuScreenPosition@@QAE_NPAM0@Z  00b7cb00  /O2 /MD /Gy /EHsc /TP /arch:SSE

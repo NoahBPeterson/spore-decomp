@@ -1,0 +1,1 @@
+00ad0510  60   complete transliteration; register allocation (this->ebx vs ->edi) differs

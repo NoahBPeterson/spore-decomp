@@ -1,0 +1,5 @@
+# va  reason
+00e30790  vector insert: grow path (operator_new + relocate) approximate; no byte-exact symbol emitted
+00e30990  manager update: x87 fsin and the remove/erase iteration not reproduced exactly
+00e30b60  hashtable find-or-add: insert template only approximated (placeholder return)
+00e30e20  AddOrUpdate: compare-key find + property-manager/substring branch partly reconstructed

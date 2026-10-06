@@ -1,0 +1,8 @@
+00eeb770  -  refcounted-list removal; PARTIAL (body not transcribed)
+00eeb920  -  list-copy into two vectors; PARTIAL (body not transcribed)
+00eeba40  -  large message handler; PARTIAL skeleton (switch body not transcribed)
+00eebfc0  -  vector reserve + key find; PARTIAL (body approximated)
+00eec0f0  -  surface position/radius; PARTIAL (x87 body not transcribed)
+00eec2b0  -  scaled surface direction; PARTIAL (calls stubbed f_00eec0f0)
+00eec370  -  surface-distance delta; PARTIAL (calls partially-stubbed f_00eec2b0)
+00eec440  -  orient/scale from physics object; PARTIAL (body not transcribed)

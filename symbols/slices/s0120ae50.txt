@@ -1,0 +1,25 @@
+# Slice s0120ae50 names. Havok hkMatrix6 / hkAction, RenderWare DocMessage.
+0120ae50 _hkMatrix6Sub
+0120b0a0 _hkMatrix6SetMul
+0120b1b0 _hkMatrix6SetTranspose
+0120b310 hkMatrix6::setInvert  # dev-PDB mangled name
+0120b890 hkUnaryAction::hkUnaryAction  # dev-PDB mangled name
+0120b8d0 hkUnaryAction::removeFromWorld  # hkWorld::removeActionImmediately
+0120b8f0 hkUnaryAction::~hkUnaryAction  # dev-PDB mangled name
+0120b920 hkUnaryAction::getEntities  # dev-PDB mangled name
+0120b960 hkBinaryAction::hkBinaryAction  # dev-PDB mangled name
+0120b9c0 hkBinaryAction::~hkBinaryAction  # dev-PDB mangled name
+0120ba00 hkBinaryAction::getEntities  # dev-PDB mangled name
+0120bb70 rw::DocMessage::Send  # dev-PDB symbol
+0120bbf0 debug-output formatter (vsnprintf)
+0120bc40 vsnprintf wrapper  # _vsnprintf + NUL terminate; byte-exact
+0120bcb0 EH cleanup fragment
+0120bd30 EH cleanup fragment
+0120be20 EH cleanup fragment
+0120be90 EH cleanup fragment
+0120bf00 EH cleanup fragment
+0120bfc0 EH cleanup fragment
+0120c0f0 EH cleanup fragment
+0120c2a0 EH cleanup fragment
+0120c330 EH cleanup fragment
+0120c360 EH cleanup fragment

@@ -1,0 +1,14 @@
+0097cea0 EA::UTFWinControls::WinGrid::SetCellWindow  # pdb_candidates caller-single
+0097d080 EA::UTFWinControls::WinGrid::Refresh  # pdb_names vtable-slot
+0097d170 EA::UTFWinControls::ImageDrawable::GetNaturalSize  # pdb_names vtable-slot
+0097d270 EA::UTFWinControls::ImageDrawable::CreateRenderables  # pdb_names gap-align
+0097d950 EA::UTFWinControls::ImageDrawable::`scalar deleting destructor'  # pdb_names gap-align
+0097da40 EA::UTFWin::CustomWinProc::Release  # pdb_names vtable-slot
+0097da60 EA::UTFWinControls::ImageCursorProvider::AsInterface  # pdb_names anchor
+0097dad0 EA::UTFWinControls::ImageCursorProvider::CursorWindow::CursorWindow  # pdb_names gap-align
+0097db30 EA::UTFWinControls::ImageCursorProvider::CursorWindow::OnRebuild  # pdb_names gap-align
+0097dc00 EA::UTFWinControls::ImageCursorProvider::UpdateMousePosition  # pdb_names vtable-slot
+0097ddf0 EA::UTFWinControls::ImageCursorProvider::HasCursor  # pdb_names gap-align
+0097de20 EA::UTFWinControls::ImageCursorProvider::SetCursor  # pdb_names gap-align
+0097e0b0 eastl::hash_map<unsigned int,...>::operator[]  # pdb_names callee-single
+0097e140 EA::UTFWinControls::`anonymous namespace'::CursorListMarshaller::Read  # pdb_names gap-align

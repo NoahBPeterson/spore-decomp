@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+010c1c90  513  approximate hkConvexVerticesShape::castRay: monitor-stream timers omitted and the plane intersection branches simplified
+010c1fe0  272  incomplete hkConvexVerticesShape constructor from a geometry source: plane-equation array copy/allocation not reconstructed

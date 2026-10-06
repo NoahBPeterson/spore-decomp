@@ -1,0 +1,6 @@
+slices/s00a459d0/s00a459d0.cpp  ?Set@Holder@@QAEXPAVRefC@@@Z  00a45cb0
+slices/s00a459d0/s00a459d0.cpp  ?GetAudioTime@@YANXZ  00a45fd0
+slices/s00a459d0/s00a459d0.cpp  ?AudioFunc98@@YGXH@Z  00a45ff0
+slices/s00a459d0/s00a459d0.cpp  ?AudioFunc9c@@YGXHH@Z  00a46010
+slices/s00a459d0/s00a459d0.cpp  ?AudioCopyPtr@@YG_NHHPAPAX@Z  00a46040
+slices/s00a459d0/s00a459d0.cpp  ?atom_getfloat@@YAMPAUAtom@@@Z  00a46760

@@ -1,0 +1,2 @@
+00a2f180 EA::Audio::System::SetTypePriority  # PDB name
+00a2f1a0 eastl map operator[] initialiser

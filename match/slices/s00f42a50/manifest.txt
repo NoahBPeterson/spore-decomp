@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s00f42a50/s00f42a50.cpp  ?insert@Vec34@@QAEPAUT34@@PAU2@ABU2@@Z  00f42dc0  /O2 /MD /Gy /EHsc /TP
+slices/s00f42a50/s00f42a50.cpp  ?fillCtor@Vec4e0@@QAEPAU1@IABUT4e0@@PBX@Z  00f42f90  /O2 /MD /Gy /EHsc /TP
+slices/s00f42a50/s00f42a50.cpp  ?erase@Vec188@@QAEPAUT188@@PAU2@@Z  00f43740  /O2 /MD /Gy /EHsc /TP
+slices/s00f42a50/s00f42a50.cpp  ?insert@Vec4e0@@QAEPAUT4e0@@PAU2@ABU2@@Z  00f43880  /O2 /MD /Gy /EHsc /TP

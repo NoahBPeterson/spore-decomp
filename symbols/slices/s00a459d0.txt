@@ -1,0 +1,5 @@
+00a45fd0 EA::Audio GetAudioTime  # float time helper
+00a46760 EA::Audio::Eapd::atom_getfloat  # PDB name
+00a46790 EA::Audio::Eapd::atom_getsymbol  # PDB name
+00a467c0 EA::Audio::Eapd::atom_gensym  # PDB name
+00a46830 EA::Audio::Eapd::atom_vectorgensym  # PDB name

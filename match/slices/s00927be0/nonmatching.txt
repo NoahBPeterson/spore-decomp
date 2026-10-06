@@ -1,0 +1,1 @@
+00928ad0  13  global pool alloc; result-to-zero uses eax instead of the original edx copy

@@ -1,0 +1,15 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00c8b040  18   tail-call folded to jmp (caller/callee signatures identical)
+00c8b130  30   iterator kept in eax vs ecx; volatile global read became a load
+00c8b1b0  9    iterator kept in eax vs ecx
+00c8b220  158  full vector erase path; register allocation differs
+00c8ad30  131  full vector erase path; register allocation differs
+00c8b0a0  150  full vector erase path; register allocation differs
+00c8b2e0  101  release helper inlining / register allocation differs
+00c8b450  16   cl folded the range test to add/cmp/setle
+00c8b520  12   cl reordered the predicate returns
+00c8b640  10   cl reordered the independent pointer stores in the ctor
+00c8b6d0  35   helper call argument forms differ
+00c8b700  58   operator-new / release schedule differs
+00c8b7e0  18   unsigned <= 5 lowered to cmp/sbb/inc instead of setbe
+00c8b800  18   unsigned > 2 lowered to cmp/sbb/neg instead of seta

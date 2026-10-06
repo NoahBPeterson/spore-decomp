@@ -1,0 +1,8 @@
+# va  Name  # evidence
+00b0f140  InputHost::ResetInput      # this+0x31c forwarded to SP::cLocalInputState::Reset (PDB 0x00697980)
+00b0f170  InputHost::ResetEffects    # vtbl+0x50 then tail-call ResetEffectStates (0x006f3290)
+00b0f190  InputHost::OnKeyDown       # this+0x31c forwarded to SP::cLocalInputState::OnKeyDown (PDB 0x00697a50)
+00b0f1b0  InputHost::OnMouseDown     # this+0x31c forwarded to SP::cLocalInputState::OnMouseDown (PDB 0x00697ab0); returns true
+00b0f1e0  InputHost::OnMouseUp       # this+0x31c forwarded to SP::cLocalInputState::OnMouseUp (PDB 0x00697af0)
+00b0f210  InputHost::GetAnglesA      # reads three floats at +0x15c/+0x138/+0x114
+00b0f240  InputHost::GetAnglesB      # reads three floats at +0x154/+0x130/+0x10c

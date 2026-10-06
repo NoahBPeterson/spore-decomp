@@ -1,0 +1,11 @@
+00eec5c0  -  type->rounded-float dispatch; PARTIAL skeleton (arms not transcribed)
+00eec760  -  three hashed property reads; PARTIAL skeleton
+00eec9c0  -  0x20-byte x87 field-copy loop; PARTIAL skeleton
+00eeca60  -  resource type -> property key; PARTIAL stub
+00eecba0  -  resource lookup / entry id; PARTIAL stub
+00eeccb0  -  creature model state update; PARTIAL stub
+00eecf10  -  hash dispatch; PARTIAL (0x3a2511e GetBoolProperty case stubbed)
+00eed010  -  noun-property key fetch; PARTIAL stub
+00eed090  -  helper thunk; PARTIAL (call shape not reproduced)
+00eed0b0  -  property pair read (bool); PARTIAL stub
+00eed280  -  property float read; PARTIAL stub

@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0091f520/s0091f520.cpp  ?WriteRegisterValues@ReportWriter@@QAE_NPAH@Z   0091fa10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?WriteRegisterMemoryView@ReportWriter@@QAE_NPAH@Z 0091fbd0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ??1FileReportWriter@@UAE@XZ                    0091fe40  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ??_GFileReportWriter@@UAEPAXI@Z                0091ff10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?CallRefCtor@@YGHPAUMgr@@@Z                     009200b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?Create@Mgr@@QAEHHHPAU1@@Z                      009200d0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?Factory24@Mgr@@QAEHHHHH@Z                      00920110  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?Factory1c@Mgr@@QAEHHHHH@Z                      00920240  /O2 /MD /Gy /EHsc /TP /GS-

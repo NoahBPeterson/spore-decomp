@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f47d80  242  approximate: command-line driven ship-data-dir setup; EASTL string temporaries and the second Format path are not reproduced faithfully

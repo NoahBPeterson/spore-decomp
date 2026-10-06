@@ -1,0 +1,14 @@
+# source  symbol  original VA  [flags override]
+slices/s00e30790/s00e30790.cpp  ?scalar_dtor@MgrA@@QAEPAU1@H@Z          00e30930  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?dtor@FlashMgr@@QAEXXZ                  00e30f90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?Wrapper@MgrCard@@QAEXHHHH@Z            00e31030  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?FlashMgr_ctor@@YIPAUFlashMgr@@PAU1@@Z  00e31050  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?UTFWin_IWinProc_GetPriority@@YIHPAX@Z  00e31100  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?FUN_00e31110@@YIHPAX@Z                00e31110  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?FUN_00e31130@@YIXPAX@Z                00e31130  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?FUN_00e31170@@YIHPAX@Z                00e31170  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?FUN_00e31190@@YIXPAX@Z                00e31190  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?step@StateObj@@QAEXH@Z                00e311b0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?dtor@CardView@@QAEXXZ                 00e31220  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?CardView_ctor@@YIPAUCardView@@PAU1@@Z  00e31320  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00e30790/s00e30790.cpp  ?show@CardView@@QAEXXZ                 00e31650  /O2 /MD /Gy /EHsc /TP /arch:SSE

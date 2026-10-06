@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00f47680  28  complete cSporeApp destructor; cl schedules the entry vptr stores after the first member load and tail-jumps the last release instead of emitting the base-vptr restore
+00f47930  368  complete frame/timer update; register allocation and call scheduling differ
+00f47b10  214  complete message handler; vtable release blocks outlined differently
+00f47c20  88  complete resource-key predicate + string assign; size/reloc shape differ
+00f47ca0  167  complete string translator/detokenizer setup; stack frame and EASTL string shape differ

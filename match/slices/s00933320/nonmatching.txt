@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+009333f0  176  complete; WriteEntryFormatted (Vsnprintf16 twice, vtable +0x2c) - stack-array scheduling differs
+00933700  199  complete; ConvertAndWriteStream (GetCharacterSize/ConvertEncoding + vtable +0x38)
+009337f0  70  complete; WString copy-ctor (AllocateSelf + block copy); allocator field handling differs
+00933b00  83  complete; eastl copy_backward_impl do_copy pair<WString,WString>; cl strength-reduces the +0x10 high pointers
+009341b0  152  complete; IniFile::SectionExists (RangeInitialize/make_lower/rbtree::find)

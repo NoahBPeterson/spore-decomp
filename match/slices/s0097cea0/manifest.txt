@@ -1,0 +1,3 @@
+slices/s0097cea0/s0097cea0.cpp  ?DestroyScalar@ImageDrawable@@QAEPAU1@E@Z  0097d950
+slices/s0097cea0/s0097cea0.cpp  ?Release@CustomWinProc2@@QAEHXZ  0097da40
+slices/s0097cea0/s0097cea0.cpp  ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  0097da60

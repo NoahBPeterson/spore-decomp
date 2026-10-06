@@ -1,0 +1,17 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5b800  00b5b800  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5b820  00b5b820  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?SetTransitionState1@cGonzagoSubsystem@@QAEXH@Z  00b5b880  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?SetTransitionState2@cGonzagoSubsystem@@QAEXH@Z  00b5b8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?EndTransitionPre@cGonzagoSubsystem@@QAEXXZ  00b5b8c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?EndTransitionPost@cGonzagoSubsystem@@QAEXXZ  00b5b8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?PostGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  00b5b900  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?PreGameModeTransition@cGonzagoSubsystem@@QAEXHH@Z  00b5b930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ??1cGonzagoSubsystem@@QAE@XZ  00b5b9a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  ?ScalarDeletingDtor@cGonzagoSubsystem@@QAEPAXD@Z  00b5b9b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5c990  00b5c990  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5ca50  00b5ca50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cb60  00b5cb60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cb80  00b5cb80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cbe0  00b5cbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00b5b540/s00b5b540.cpp  _FUN_00b5cc00  00b5cc00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

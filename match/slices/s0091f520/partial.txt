@@ -1,0 +1,3 @@
+0091f520  600  hex/ASCII memory dump; SEH frame omitted in reconstruction
+0091f7c0  455  psapi module enumeration; function-pointer API signatures approximated
+0091fca0  314  callstack dump; callstack helper ABI approximated

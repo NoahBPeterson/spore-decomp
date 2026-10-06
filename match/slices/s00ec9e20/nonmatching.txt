@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00eca2f0  122  palette-window refresh: window lookups and vcall schedules differ from the original

@@ -1,0 +1,8 @@
+# Slice s00f47680 names. Region is the SP::cSporeApp object in the SporeApp module.
+00f47680 SP::cSporeApp::~cSporeApp  # releases AutoRefCount members at +0x20..+0x3c then resets the two base vptrs (IHandler@0, RefCountVTemplate@4)
+00f47700 SP::cSporeApp::Shutdown  # dev-PDB name; byte-exact
+00f47930 SP::cSporeApp::UpdateFrame  # QueryPerformanceCounter delta * mMSPerCycle, frame-budget sleep, per-subsystem tick fan-out
+00f47b10 SP::cSporeApp::HandleMessage  # caller-single PDB candidate; dispatches 0x153c326/0x1ee1003/0x1ee100a/0x44edd9c
+00f47c20 SP::cSporeApp::UpdateCheck  # FNV1_String16 == 0x81041658 then localized title assign (" Demo")
+00f47ca0 App::BuildStringTokenTranslator  # allocates cStringTokenTranslator(0xc)/cStringDetokenizer(0x5c), loads resource 0x40e05d38
+00f47d80 SP::SetupShipDirsFromCommandLine  # shipDirs / data-dir command-line handling

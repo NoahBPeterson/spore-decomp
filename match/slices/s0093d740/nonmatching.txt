@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0093dbc0  132  complete; Variant 8-byte/string-header setter; register assignment (ax vs dx) differs
+0093dcc0  137  complete; EASTL hashtable bucket rebuild (rehash); node re-linking schedule differs
+0093df20  104  complete; Variant::SetBool (type 2); cl shares ebx=2 for mask+type in the original
+0093dfa0  132  complete; Variant::SetUInt16 (type 3); flags-mask local kept in ax vs dx
+0093e020  63  complete; Variant::SetUInt8 (type 5); flags-mask local kept in ax vs dx
+0093e0a0  63  complete; Variant::SetInt8 (type 6); flags-mask local kept in ax vs dx
+0093e120  132  complete; Variant::SetUInt16b (type 7); flags-mask local kept in ax vs dx
+0093e1a0  127  complete; Variant::SetU64/pointer (type 0xb, 8-byte copy); flags-mask local differs
+0093e220  63  complete; Variant::SetDouble (type 0xe, fld/fstp copy); flags-mask local kept in ax vs dx
+0093e3f0  108  complete; EASTL hashtable find (hash + bucket walk, sret iterator)
+0093e470  n/a  complete; EASTL hashtable insert (rehash on grow + node alloc)

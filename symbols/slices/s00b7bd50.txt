@@ -1,0 +1,4 @@
+00b7c810 SP::cSPPieMenu::HideUTFMenu  # dev PDB 0x5ebc40 callee-single
+00b7c9c0 Simulator::cPieMenuScreenPosition::cPieMenuScreenPosition  # Ghidra real name / vtbl 0x14651bc
+00b7c750 PieMenu input accept callback  # forwards to SP::GameInputManager vtbl+0x68
+00b7c870 cSPPieMenu window-contains-window query  # global winproc +0x00818370

@@ -1,0 +1,2 @@
+00e00670 SP::cTribeModeStrategy::Shutdown  # Ghidra PDB candidate (caller-scored)
+00e000a0 resource-manager lookup  # calls EA::ResourceMan::GetManager

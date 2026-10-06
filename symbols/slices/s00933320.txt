@@ -1,0 +1,13 @@
+00933320 `anonymous namespace'::StackArray<wchar_t,256>::Resize  # pdb_names gap-align
+00933390 `anonymous namespace'::StackArray<char,256>::Resize  # pdb_names gap-align
+009333f0 EA::IO::IniFile::WriteEntryFormatted  # pdb_names gap-align
+009334d0 EA::IO::IniFile::ReadBinary  # pdb_names gap-align
+00933640 EA::IO::IniFile::WriteBinary  # pdb_names gap-align
+00933700 EA::IO::IniFile::ConvertAndWriteStream  # pdb_names gap-align
+00933850 EA::IO::IniFile::ReadEntry  # pdb_names vtable-slot
+009338e0 EA::IO::IniFile::ReadEntryFormatted  # pdb_names vtable-slot
+00933980 EA::IO::IniFile::GetFileLine  # pdb_candidates caller-single
+00933b70 EA::IO::IniFile::GetFileLine8To8  # pdb_names gap-align
+00933c80 EA::IO::IniFile::GetFileLine16To16  # pdb_names gap-align
+00933ef0 EA::IO::IniFile::ReadEntry  # pdb_candidates caller-scored (699B overload)
+009341b0 EA::IO::IniFile::SectionExists  # pdb_names gap-align

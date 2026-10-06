@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00e0e9a0  31   begin pointer kept in esi instead of eax before the magic division
+00e0ea40  96   member assignment register allocation (ebx/edi/ebp) differs

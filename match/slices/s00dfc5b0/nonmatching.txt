@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00dfc5b0  49  member pointer kept in edi vs esi; vector-base reload schedule differs
+00dfc600  65  cl lowered the pointer loop to a magic-multiply trip count
+00dfcc40  61  vector-base reload/register schedule differs
+00dfd300  114 nested 0x238-record destructor loop; register allocation differs
