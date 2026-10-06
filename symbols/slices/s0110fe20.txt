@@ -1,0 +1,2 @@
+0110fe20 hkGskManifold_verifyAndGetPoints  # Havok 3.1 C-style hkGskManifold_* family (cf. 0110fd70/0110fdd0); called by hkPredGskAgent3::process with (manifold, work{verts,masterNormal,radii}, firstIndex, output, contactMgr); validates each dimA*4+dimB contact and removes stale ones via contactMgr->removeContactPoint
+0110fc50 hkGskManifold_removeUnusedVertices  # called at the end of 0110fe20 with the manifold in ecx; marks referenced vertex ids and compacts the id array

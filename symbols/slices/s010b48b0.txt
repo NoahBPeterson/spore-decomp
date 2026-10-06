@@ -1,0 +1,1 @@
+010b48b0 hkSolver_solveJacobianSchemas  # inferred (Havok 3.1 prebuilt): one solver pass over the jacobian-schema stream; schema types match the hk*BuildJacobian emitters, calls hk1Lin2AngJacobian::next / hk2Lin2AngJacobian::next / chain getEnd

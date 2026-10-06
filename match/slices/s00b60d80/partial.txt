@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b60d80  -  Compiler-generated one-time class/App registration initializer (~10 KB, 10064 B; PDB candidate "cTribeTool::TakeHit" is wrong, the string pool is all "App/c*" class keys): first registration block + summariser install recovered, the remaining ~150 guarded static-object registrations summarised. Oversized for a byte-exact attempt.

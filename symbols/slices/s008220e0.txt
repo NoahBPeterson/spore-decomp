@@ -1,1 +1,5 @@
-008220e0 SP::cPropertyUI::SavePropFile  # pdb_names.json callee-scored
+008220e0 SP::cPropertyUI::SavePropFile  # PDB name; body walks mHolderWindow rows and writes the PropertyList
+0081d780 EA::COM::interface_cast<IWinTextEdit>  # QI with IID 0xcf428691 on AutoRefCount<IWindow>
+005c2570 EA::COM::interface_cast<IWinButton>  # QI with IID 0x8ed27e7a on AutoRefCount<IWindow>
+005a74a0 EA::Variant::Variant(const string16&)  # type=0,flags=0 then Set(0x13, 9, &s, 0x10, 1)
+00671b80 ParseFloatW  # cdecl wrapper: FUN_0092ddc0(s, &end), returns float

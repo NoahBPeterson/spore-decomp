@@ -1,0 +1,3 @@
+01330060 Simulator::cCivilization attribute table dynamic initializer ($E410)  # 57 Attribute records "mCultureSet".."mSuperweaponCooldown" (ModAPI cCivilization members), layout = ModAPI Simulator::Attribute
+0156faa8 Simulator::cCivilization::sAttributes  # 57 x 0x3c, written by 0x01330060
+00692ca0 Simulator::Attribute::DefaultOffset  # returns pCurrentObject + offset; ModAPI Serialization.h

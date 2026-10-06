@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00aabc20  8961  complete: span is two packed functions, Stream_Quad_V4F_N4F_C4B_T2F (00aabc20, 4492 diff) + Stream_Quad_V4F_N4F_C4B_T4B (00aad240, 4469 diff); all paths written (curves, screw, wiggle, loop box, rigid xform, bloom, stretch, spin, vertex writes); regalloc/x87-vs-SSE scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

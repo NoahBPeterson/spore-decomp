@@ -1,0 +1,1 @@
+010e8860 ?castRayWithCollector@hkSampledHeightFieldShape@@UBEXABUhkShapeRayCastInput@@ABVhkCdBody@@AAVhkRayHitCollector@@@Z  # vtable slot 6 called by castRay 0x010e8680; same inlined castRayInternal as castSphere 0x010e9ce0

@@ -1,0 +1,1 @@
+0093e5f0 EA::VariantDefaultTypeProc  # inferred: cdecl type proc stored at 0x0154eb48 and called by EA::Variant::Destruct (op 1); ops 1/2/3 = destruct/construct/convert over EA::Variant::eTypeId; literal "App/EAVariant/kfCArray"

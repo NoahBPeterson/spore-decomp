@@ -1,0 +1,1 @@
+010e9ce0  4814  complete: hkSampledHeightFieldShape::castSphere with castRayInternal inlined (clip, 3-axis DDA walk, hit/penetration, vertical-ray cell test, 14 timer exits). Flags /O2 /MD /Gy /TP. Diffs: x87 scheduling/stack slots, sqrt goes through _CIsqrt (orig inline fsqrt)

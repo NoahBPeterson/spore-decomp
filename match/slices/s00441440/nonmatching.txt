@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00441440  20619  (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc) complete source (all 23 KB of paths, calls and stores; call/vcall/property-hash sequence matches the original); not byte-exact: /Od frame layout (0x2d5c vs 0x3314) and slot order differ, a few inline-vs-call choices (fabs, AutoRefCount<cPropertyList>::operator=)

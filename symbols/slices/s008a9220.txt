@@ -1,0 +1,1 @@
+008a9220 SetupInput  # dev-PDB candidate (caller-single); body builds FFT1HintClass hint sets then calls DoVStrokes/DoHStrokes/DoExtraEdges/SetInterpolation

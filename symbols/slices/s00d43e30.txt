@@ -1,1 +1,2 @@
 00d43e30 SP::cCreatureModeStrategy::ContinueLoading  # exact mangled name from index; __thiscall, void, 5880 bytes
+00675250 AchievementsController  # returns global 0x015fc250; result used as ecx for AutoTest (0x00676e90)

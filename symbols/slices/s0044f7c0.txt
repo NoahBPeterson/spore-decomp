@@ -1,1 +1,1 @@
-0044f7c0  SP::cSPEditorBlock::BuildBlock   # 6KB block builder; called by Split/Rebuild
+0044f7c0  SP::cSPEditorBlock::CloneBlock   # Claude-coined name (no PDB name); recursive clone/mirror of a block and its children, called by Split 0x0044f420; the PDB BuildBlock is 0x00441440

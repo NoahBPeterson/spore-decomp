@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+01161900 6322 Control-point smoothing / min-max solver (/O2, SSE, 6336 bytes): structural reconstruction only.  The lazy per-axis scale init, the scale+ABS copy of the input point array, the 0.997 smoothing pass seeded from param_5, the per-0x20-window FUN_01161540 solve and the param_6 min/max branch are modelled, but the exact unrolled lane ordering and the NAN-seeded min/max select are not reproduced verbatim, so this is not claimed complete.

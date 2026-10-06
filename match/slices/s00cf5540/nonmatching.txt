@@ -1,0 +1,1 @@
+00cf5540 4362 complete; /O2 /MD /Gy /TP /arch:SSE (no /EHsc); frame 0x78 vs 0xd4 (orig keeps every case-local in its own slot), cl tail-merges the four string16 ShowMessage branches, x87 vs SSE in two Vector3 subtractions

@@ -1,0 +1,1 @@
+0110e510 hkGsk::getClosestFeature  # GSK simplex loop between hkGsk::checkTriangleBoundaries/handlePenetration (havok_names.txt); calls closestLineSegLineSeg, getSupportingVertex (vtbl+0x24), ret 0x10

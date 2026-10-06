@@ -1,0 +1,3 @@
+00ab3370 cRibbonEffect_StreamQuads  # inferred: param_1 is EA::Swarm::cRibbonEffect (cRibbonDescription curves at retail offsets), samples position/right history, packs ARGB, emits 2 quads per segment via 00ab3100 into a locked stream (vtbl 0 Lock / 2 Unlock)
+00ab3100 cRibbonEffect_AddQuad  # thiscall: writes 4 vertices (pos/uv/colour) at mOffsets[], returns buffer + 4*stride
+006e6df0 Swarm_Normalize  # v / sqrt(|v|^2 + 1e-8), sret

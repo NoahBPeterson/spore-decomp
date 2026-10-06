@@ -1,0 +1,1 @@
+00531510 cSPSkinPaintDistributeEffect::ApplyEffect  # ModAPI IComponent slot 0x14 ApplyEffect(float,float,cComponentStats*), ret 0xc; uses mpDesc fields mLimit/mSpacing/mRegionFlags/mParticleSelect

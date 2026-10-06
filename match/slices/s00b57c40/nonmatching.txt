@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b57c40  8238  SP::cGonzagoPhysics::UpdateHavok (9746 B): every call (97/97, same order per block) and store reconstructed; frame is 0x20 smaller, the two fixed vectors are laid out in swapped order and block/register placement differs. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

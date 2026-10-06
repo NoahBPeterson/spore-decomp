@@ -1,0 +1,1 @@
+00b9d820 SP::cTerrainSphere::RequestModelFootprint  # xmatch matches.json (caller-scored); Ghidra also suggests SP::TrySueForPeace. NOTE: body is civ-stage city setup (num_cities Arithmetica, capital pick, NPC city distribution); neither PDB name fits

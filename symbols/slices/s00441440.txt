@@ -1,1 +1,3 @@
 00441440 SP::cSPEditorBlock::BuildBlock  # PDB name; 23469-byte /Od monolith
+00435a10 SP::cSPEditorBlock::SetBooleanAttribute  # BuildBlock calls it ~50x as (attrIndex, value of a model* bool property); writes the 60-bit bitset at +0xdc8
+004410d0 SP::cSPEditorBlock::CreateRotationRingHandle  # BuildBlock calls it for axis 0/1/2 with xaxis/yaxis/zaxis and the modelRotationRing<X|Y|Z>Axis* property IDs

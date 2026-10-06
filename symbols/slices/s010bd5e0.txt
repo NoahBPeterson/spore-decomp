@@ -1,0 +1,1 @@
+010bd5e0 hkExportImpulsesAndRhs  # inferred: walks solver schemas, copies hkSolverElemTemp impulses into hkSolverResults + exports rhs; matches Havok hkpSolve.h hkExportImpulsesAndRhs role, same schema stream as hkSolveConstraints 0x010b8b30

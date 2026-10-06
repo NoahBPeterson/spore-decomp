@@ -1,62 +1,193 @@
-// w1g1 slice s00503c50 -- single large function at 0x503c50.
+// slice s00503c50 -- single large function at 0x00503c50.
 //
-// 0x503c50 is a 5402-byte /Od SSE segment-vs-AABB (slab) classifier:
-//   unsigned __cdecl f(float x0, float y0, float z0,
-//                      float dx, float dy, float dz, const float* box)
-// box points at 6 floats (three min / three max planes).  The original is a huge
-// hand-unrolled boolean tree of comiss/mulss/subss early-outs (Ghidra renders it
-// as ~200 lines of nested if/else); every comparison reloads one of the six
-// scalar parameters through the frame because they are also indexed as a vector.
+// 0x00503c50 (5402 bytes, /Od SSE) is the Mahovsky & Wyvill ray/AABB overlap test
+// using Pluecker coordinates ("Fast Ray-Axis Aligned Bounding Box Overlap Tests
+// with Pluecker Coordinates", JGT 2004).  Instead of the paper's switch on a
+// precomputed ray classification, the eight direction-sign classes (MMM .. PPP)
+// are selected by nested `dir[i] < 0` tests.  Each class:
+//   1. rejects rays whose origin lies beyond the box on a side the ray moves away
+//      from (origin < min for a negative component, origin > max for a positive);
+//   2. computes the six box-corner offsets from the origin (xa..zb, one block-
+//      scoped set per class -> the 0xc0-byte frame of 8 x 6 floats);
+//   3. rejects on six Pluecker side tests (d[i]*a - d[j]*b < 0 or > 0).
+// The original ends with an unreachable `return false;`.
 //
-// This 5.4 KB function is far past the per-function budget (see the batch lessons
-// on oversized functions), so only a behavior skeleton is provided here: the
-// signature and the directional slab test are reproduced, but the original's
-// exact early-out tree and instruction schedule are not.  Recorded as PARTIAL.
+// Origin and direction are passed by value (3 floats each), the box by pointer
+// {min, max}.  Every component access goes through an inline operator[]
+// (the `xor r,r; shl r,2` / `mov r,k; shl r,2` index pattern).
 //
-// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE (movss/comiss, x87 not used for these).
+// Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 
-typedef unsigned int uint32_t;
+struct Vector3 {
+    float v[3];
+    float& operator[](int i) { return v[i]; }
+    const float& operator[](int i) const { return v[i]; }
+};
 
-// @ 0x00503c50  (PARTIAL skeleton)
-uint32_t __cdecl SegmentAABBTouches(float x0, float y0, float z0,
-                                    float dx, float dy, float dz,
-                                    const float* box)
+struct BoundingBox {
+    Vector3 min;   // +0x00
+    Vector3 max;   // +0x0c
+};
+
+// @ 0x00503c50  (Claude-coined name)
+bool RayIntersectsBox(Vector3 o, Vector3 d, const BoundingBox* b)
 {
-    // box[0..2] = max corner, box[3..5] = min corner (as compared in the original).
-    const float bxLo = box[3], byLo = box[4], bzLo = box[5];
-    const float bxHi = box[0], byHi = box[1], bzHi = box[2];
-
-    // Directional inside test (the first three branches of the original):
-    // each component must point toward the box when the start is outside it.
-    float t0 = 0.0f, t1 = 1.0f;
-
-    // X slab
-    if (dx == 0.0f) {
-        if (x0 < bxLo || bxHi < x0) return 0;
+    if (d[0] < 0.0f) {
+        if (d[1] < 0.0f) {
+            if (d[2] < 0.0f) {
+                // MMM
+                if (o[0] < b->min[0] || o[1] < b->min[1] || o[2] < b->min[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * ya - d[1] * xb < 0.0f ||
+                    d[0] * yb - d[1] * xa > 0.0f ||
+                    d[0] * zb - d[2] * xa > 0.0f ||
+                    d[0] * za - d[2] * xb < 0.0f ||
+                    d[1] * za - d[2] * yb < 0.0f ||
+                    d[1] * zb - d[2] * ya > 0.0f)
+                    return false;
+                return true;
+            } else {
+                // MMP
+                if (o[0] < b->min[0] || o[1] < b->min[1] || o[2] > b->max[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * ya - d[1] * xb < 0.0f ||
+                    d[0] * yb - d[1] * xa > 0.0f ||
+                    d[0] * zb - d[2] * xb > 0.0f ||
+                    d[0] * za - d[2] * xa < 0.0f ||
+                    d[1] * za - d[2] * ya < 0.0f ||
+                    d[1] * zb - d[2] * yb > 0.0f)
+                    return false;
+                return true;
+            }
+        } else {
+            if (d[2] < 0.0f) {
+                // MPM
+                if (o[0] < b->min[0] || o[1] > b->max[1] || o[2] < b->min[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * ya - d[1] * xa < 0.0f ||
+                    d[0] * yb - d[1] * xb > 0.0f ||
+                    d[0] * zb - d[2] * xa > 0.0f ||
+                    d[0] * za - d[2] * xb < 0.0f ||
+                    d[1] * zb - d[2] * yb < 0.0f ||
+                    d[1] * za - d[2] * ya > 0.0f)
+                    return false;
+                return true;
+            } else {
+                // MPP
+                if (o[0] < b->min[0] || o[1] > b->max[1] || o[2] > b->max[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * ya - d[1] * xa < 0.0f ||
+                    d[0] * yb - d[1] * xb > 0.0f ||
+                    d[0] * zb - d[2] * xb > 0.0f ||
+                    d[0] * za - d[2] * xa < 0.0f ||
+                    d[1] * zb - d[2] * ya < 0.0f ||
+                    d[1] * za - d[2] * yb > 0.0f)
+                    return false;
+                return true;
+            }
+        }
     } else {
-        float a = (bxLo - x0) / dx, b = (bxHi - x0) / dx;
-        if (a > b) { float s = a; a = b; b = s; }
-        if (a > t0) t0 = a;
-        if (b < t1) t1 = b;
+        if (d[1] < 0.0f) {
+            if (d[2] < 0.0f) {
+                // PMM
+                if (o[0] > b->max[0] || o[1] < b->min[1] || o[2] < b->min[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * yb - d[1] * xb < 0.0f ||
+                    d[0] * ya - d[1] * xa > 0.0f ||
+                    d[0] * za - d[2] * xa > 0.0f ||
+                    d[0] * zb - d[2] * xb < 0.0f ||
+                    d[1] * za - d[2] * yb < 0.0f ||
+                    d[1] * zb - d[2] * ya > 0.0f)
+                    return false;
+                return true;
+            } else {
+                // PMP
+                if (o[0] > b->max[0] || o[1] < b->min[1] || o[2] > b->max[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * yb - d[1] * xb < 0.0f ||
+                    d[0] * ya - d[1] * xa > 0.0f ||
+                    d[0] * za - d[2] * xb > 0.0f ||
+                    d[0] * zb - d[2] * xa < 0.0f ||
+                    d[1] * za - d[2] * ya < 0.0f ||
+                    d[1] * zb - d[2] * yb > 0.0f)
+                    return false;
+                return true;
+            }
+        } else {
+            if (d[2] < 0.0f) {
+                // PPM
+                if (o[0] > b->max[0] || o[1] > b->max[1] || o[2] < b->min[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * yb - d[1] * xa < 0.0f ||
+                    d[0] * ya - d[1] * xb > 0.0f ||
+                    d[0] * za - d[2] * xa > 0.0f ||
+                    d[0] * zb - d[2] * xb < 0.0f ||
+                    d[1] * zb - d[2] * yb < 0.0f ||
+                    d[1] * za - d[2] * ya > 0.0f)
+                    return false;
+                return true;
+            } else {
+                // PPP
+                if (o[0] > b->max[0] || o[1] > b->max[1] || o[2] > b->max[2])
+                    return false;
+                float xa = b->min[0] - o[0];
+                float ya = b->min[1] - o[1];
+                float za = b->min[2] - o[2];
+                float xb = b->max[0] - o[0];
+                float yb = b->max[1] - o[1];
+                float zb = b->max[2] - o[2];
+                if (d[0] * yb - d[1] * xa < 0.0f ||
+                    d[0] * ya - d[1] * xb > 0.0f ||
+                    d[0] * za - d[2] * xb > 0.0f ||
+                    d[0] * zb - d[2] * xa < 0.0f ||
+                    d[1] * zb - d[2] * ya < 0.0f ||
+                    d[1] * za - d[2] * yb > 0.0f)
+                    return false;
+                return true;
+            }
+        }
     }
-    // Y slab
-    if (dy == 0.0f) {
-        if (y0 < byLo || byHi < y0) return 0;
-    } else {
-        float a = (byLo - y0) / dy, b = (byHi - y0) / dy;
-        if (a > b) { float s = a; a = b; b = s; }
-        if (a > t0) t0 = a;
-        if (b < t1) t1 = b;
-    }
-    // Z slab
-    if (dz == 0.0f) {
-        if (z0 < bzLo || bzHi < z0) return 0;
-    } else {
-        float a = (bzLo - z0) / dz, b = (bzHi - z0) / dz;
-        if (a > b) { float s = a; a = b; b = s; }
-        if (a > t0) t0 = a;
-        if (b < t1) t1 = b;
-    }
-
-    return (t0 <= t1) ? 1u : 0u;
+    return false;
 }

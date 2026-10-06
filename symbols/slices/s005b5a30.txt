@@ -1,0 +1,2 @@
+005b5a30 SP::cSPEditorManipulationRotationHandle::Reset  # PDB caller-scored candidate; drag update of ring/ball rotation handles (mX/mY ray, mTargetRoll/mActualRoll)
+005b51b0 Transform::PreRotate  # thiscall on a cSPTransform, multiplies rotation by Matrix3 arg when flag 2 set, ++changeCount

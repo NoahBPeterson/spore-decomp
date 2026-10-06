@@ -1,0 +1,3 @@
+009eab60 nSPCreatureAnim::IKCreatureRetargetGoals  # name guessed; retail-only ik_solver pass (creature_instance_data&, const vector_4& rootRot): re-targets goals to new root rotation/scale without rebuilding constraints
+009e9af0 nSPCreatureAnim::IKSumDelegatedGoals  # name guessed; (creature*, body*, int* count, vector_3* sumPos, vector_4* sumRot), result averaged and normalized by the caller
+009ea370 nSPCreatureAnim::IKFinishRetargetGoals  # name guessed; (creature*, root body*), called after the per-body retarget loop

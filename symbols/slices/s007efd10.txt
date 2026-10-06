@@ -1,1 +1,1 @@
-# va name  # evidence
+007efd10 VolState::BuildSlices  # view-aligned slicing of the 8-corner volume box (vertex+count vectors out); name is descriptive

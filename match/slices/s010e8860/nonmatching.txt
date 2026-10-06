@@ -1,0 +1,1 @@
+010e8860  4462  complete: hkSampledHeightFieldShape::castRayWithCollector = castRayInternal(report=false, maxExtraPenetration=0) inlined (clip, 3-axis DDA walk, vertical-ray cell test, timer exits); helper shared with s010e9ce0. Flags /O2 /MD /Gy /TP. Diffs: x87 scheduling/stack slots, sqrt via _CIsqrt

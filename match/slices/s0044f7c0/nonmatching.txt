@@ -1,0 +1,1 @@
+0044f7c0  4677  CloneBlock (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-): complete; instruction stream matches except /Od slot layout (frame 0x2d8 vs 0x320), inner fixed_vector dtor inlined in original, Matrix3 by-value arg temp order

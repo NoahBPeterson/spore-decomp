@@ -1,1 +1,0 @@
-00577e10  5788  UpdateBabyCreatures: 5788-byte SSE/stack matrix function, not translated

@@ -1,0 +1,3 @@
+00fb50d0 SP::cTerrainSphereQuad::BuildRibbonVerts  # RebuildRibbonVerts-shaped caller 0xfb6660 clears mRibbonVerts (+0x1a0) then calls it with this+0x18c; dev 0x012e68d0 has the same callee family (CalcMorphedPoint, cTerrainMap<unsigned int>::GetVector4, two atexit statics)
+00fb2400 SP::cTerrainSphereQuad::CalcMorphedPoint  # thiscall (int x, int y) returning pair<cSPVector3,cSPVector3>; dev version takes cSPVector2
+00fafb50 InterpolateRibbonPoly  # pure bilinear interpolation of the 4 cRibbonFaceVertex at poly+0xc0 (Claude-coined name)

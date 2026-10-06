@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010b48b0  4025  complete (all 26 schema types, every store/call/NaN branch); original materialises hkVector4 temps in a 0xcd4-byte aligned x87 frame (17020 B vs our 4488 B), per-component float grouping differs

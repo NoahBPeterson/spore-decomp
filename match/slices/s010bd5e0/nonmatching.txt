@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010bd5e0  6698  complete hkExportImpulsesAndRhs (all 26 schema cases incl. stiff-spring/ball-socket/powered chains with max2/min2 motor clamps); flags /O2 /MD /Gy /TP; 7320 vs 6264 bytes, prebuilt Havok x87 spill pattern of hkVector4 temps not reproduced by cl 15 (diff from cmpobj: chk.py skips it, size outside 1/8)

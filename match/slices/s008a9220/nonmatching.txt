@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008a9220  n/a  SetupInput (FontFusion T1 hinting, prebuilt module): complete incl. 3 verified realloc-size quirks; register ABI (h in EAX, callees take EAX/ECX/EDX args) modelled as C params, cl merges duplicated grow/init tails so the body is 9176 B vs 10800 B (chk finds no size-similar symbol)

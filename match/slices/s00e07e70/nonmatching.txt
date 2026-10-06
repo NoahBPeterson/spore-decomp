@@ -1,0 +1,1 @@
+00e07e70  4236  complete: all ~120 hint-condition arms (creature/civ/tribe/space blocks) reproduced; cl tail-merges some shared returns, frame 0x10 vs 0x18 and call-target masking inflate the count. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE

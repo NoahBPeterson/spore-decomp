@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete, behaviorally equivalent, not byte-exact)
+0110e510  4954  hkGsk::getClosestFeature: all 10 simplex cases (point/edge/triangle/tetra x A/B), penetration exit, alternating A/B support search and final normalize; x87 op order, __CIsqrt vs inline fsqrt, case layout differ (flags /O2 /MD /Gy /EHsc /TP)

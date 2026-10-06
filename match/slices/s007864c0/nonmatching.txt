@@ -1,1 +1,2 @@
-# va  diff-bytes  reason   (none)
+# va  diff-bytes  reason
+007864c0  54197  complete (bands 0-7, all 237 sqrt coefficients; numerically verified) but 57 KB of x87/SSE scheduling and frame layout differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+010a7720  4825  complete: Havok 3.1 contact jacobian builder (per-point contact + PATH2 pair coupling, penetration recovery, 2D friction along tangents of the averaged normal, rolling friction with area-changed radius recompute). Flags /O2 /MD /Gy /TP. Diffs: aligned-frame stack slots and x87 scheduling

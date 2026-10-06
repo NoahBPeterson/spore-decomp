@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01060df0  6588  complete; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; stack slot layout/scheduling differ (aligned frame reproduced via SSE clamp intrinsics)

@@ -1,0 +1,1 @@
+010a7720 _hkSimpleContactConstraintDataBuildJacobian  # sole callee from hkSimpleContactConstraintData::buildJacobian (0x010a4277); Havok 6 extern "C" name for this role (3.1 argument list differs)

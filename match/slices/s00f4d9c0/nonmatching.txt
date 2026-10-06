@@ -1,0 +1,1 @@
+00f4d9c0  4948  BuildRibbonBrush (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): complete (all 22 calls, every poly/vertex store, subdivision and sphere projection); 5457 B original vs 4987 B ours, mostly frame layout/scheduling (original 0x414 frame) so diff count is misaligned noise

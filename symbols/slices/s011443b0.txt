@@ -1,0 +1,1 @@
+011443b0 Layer3Decoder::Stereo  # ISO dist10 III_stereo shape: is_pos=7 fill, sfBandIndex scans, tan(is_pos*PI/12) and MPEG-2 k tables, 1/sqrt2 M/S

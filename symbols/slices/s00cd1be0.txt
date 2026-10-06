@@ -1,0 +1,2 @@
+00cd1be0 SP::cTribeInputStrategy::HandleMessage  # PDB name; IHandler override (this = +0x3C subobject), ret 8
+00cd0a70 eastl::fixed_vector<cSPCreatureCitizen*,32>::push_back  # called on a 32-slot fixed_vector local in HandleMessage 0x57526c7

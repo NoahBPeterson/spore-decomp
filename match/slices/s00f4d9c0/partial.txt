@@ -1,1 +1,0 @@
-00f4d9c0  n/a  large /O2 ribbon-mesh builder (5433 B); top-level control flow and all callees reproduced, but the per-quad vertex packing and the arc-length loops are only structurally reconstructed

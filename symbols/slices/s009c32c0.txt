@@ -1,1 +1,4 @@
 009c32c0 nSPCreatureAnim::ComputeHierarchy  # PDB candidate (caller-scored), dev 013448b0; __cdecl, bool, 5993 bytes
+009c0ed0 eastl::vector<nSPCreatureAnim::creature_body_static_data,eastl::sp_vector_allocator>::swap  # thiscall(&other), allocator-compatibility check then pointer swap
+009c0bb0 eastl::vector<nSPCreatureAnim::creature_body_static_data,eastl::sp_vector_allocator>::vector(n, allocator)  # new(n*0x468) then default-construct
+0089cb60 eastl::fixed_vector<uint32,255>::resize  # resize(n) via DoInsertValues 0x89a8e0 / memcpy erase

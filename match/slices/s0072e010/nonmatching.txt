@@ -1,0 +1,1 @@
+0072e010  6004  complete (all streams/morph/skin/index/prim/material paths); /GS- needed; cl inlines vector push_back at 5 sites the original calls out of line (0x41f7d0), so layout diverges

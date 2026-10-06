@@ -1,0 +1,1 @@
+01330060  5536  complete table (57 Simulator::Attribute records + 2 default statics); cl 15 folds the inline-ctor array init to static .data (only the 2 static stores remain in the initializer), original builds each record in a stack temp and rep-movsd copies it (likely LTCG-inlined out-of-line ctor)

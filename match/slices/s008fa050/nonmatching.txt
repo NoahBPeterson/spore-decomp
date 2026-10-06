@@ -1,0 +1,1 @@
+008fa050  3543  complete; only diff: the 5 inline PropertyCollection ctors zero via a fresh xor eax,eax in the original but reuse ebp=0 here (each shifts later jumps, inflating the byte count). Flags /O2 /MD /Gy /EHsc /TP /arch:SSE

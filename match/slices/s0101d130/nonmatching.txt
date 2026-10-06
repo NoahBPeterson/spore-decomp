@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+0101d130  5626  complete planet-camera Update (all paths/calls); frame 0x334 vs 0x1f4 (local slot sharing), x87/SSE scheduling and store order differ

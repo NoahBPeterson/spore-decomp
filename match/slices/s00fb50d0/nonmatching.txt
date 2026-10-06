@@ -1,0 +1,1 @@
+00fb50d0  5090  complete cTerrainSphereQuad::BuildRibbonVerts (static cell/point grids, per-ribbon flush, row scan-conversion, 19/19 calls); SSE scheduling, fixed_vector layout and stack layout differ

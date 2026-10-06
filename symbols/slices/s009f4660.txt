@@ -1,0 +1,18 @@
+009f4660 nSPCreatureAnim::IKCreatureToGoals  # PDB anchor; retail takes (creature_instance_data&, const checkerlib::vector_4& rootRot)
+009e6c60 `IKCreatureToGoals'::ik_utils::Clear  # dev ik_solver.obj static helper; resets the body IK fields, called per body
+009e7bb0 `IKCreatureToGoals'::ik_utils::DelegateGoals  # dev signature (creature&, body&, int&, int&, vector_3&, vector_4&, ik_goals_data&); retail has one more int&
+009e6750 nSPCreatureAnim::ik_goals_data::MergeThisBIdx  # thiscall(byte), switch on TypeAndFlags&7 (dev ik_solver.obj)
+009e67c0 nSPCreatureAnim::ik_goals_data::MergeChild  # thiscall(ik_goals_data by value, ulong) (dev ik_solver.obj)
+009e68f0 nSPCreatureAnim::ik_constraint::ik_constraint  # (body* b_i, body* b_j, float rest_length, ulong flags), p_i/p_j = &b->+0x1b0
+009e6a20 nSPCreatureAnim::ik_constraint::ik_constraint  # (body*, vector_3*, float, body*, vector_3*, float, float, ulong), ret 0x20 = dev 8-arg ctor
+009be850 nSPCreatureAnim::ik_constraint::ik_constraint  # copy ctor, used by the inlined vector<ik_constraint>::push_back
+009f3e20 eastl::vector<nSPCreatureAnim::ik_constraint,eastl::sp_vector_allocator>::DoInsertValue  # push_back slow path
+009c2ef0 eastl::vector<nSPCreatureAnim::ik_constraint,eastl::sp_vector_allocator>::resize  # called with 0 on creature+0x24c
+009f4100 nSPCreatureAnim::AddSerialSpineConstraints  # returns bool, called for spine bodies (dev ik_solver.obj order)
+009f41b0 nSPCreatureAnim::AddCrossConstraints  # (creature, body, 0x200) returns ulong (dev signature YAKAAU..AAU..K)
+009e99a0 `IKCreatureToGoals'::nest::ComputeSplineNormal  # body rest x axis orthogonalized against the tangent (eax=body, ecx=sret)
+0099c1a0 checkerlib::QuaternionVectorTransform  # rotate v by q (sret, q, v)
+009a4f10 checkerlib::matrix_to_quaternion  # trace/largest-diagonal matrix->quaternion (sret, m)
+0099cae0 checkerlib::Normalize  # vector_4 overload (sret, q, float* len)
+009edb70 checkerlib::RotationAtoB  # (sret matrix, a, b, float*, const matrix_3x3*), identity when parallel
+009e5f50 checkerlib::matrix_3x3::ConcatenateYRotation  # thiscall(float), rotates rows 0/2 by sin/cos

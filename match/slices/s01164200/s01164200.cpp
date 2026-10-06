@@ -1,24 +1,14 @@
-// @ 0x01164200   FUN_01164200  (5653 bytes)
+// @ 0x01164200   TerrainBrushWeightMapFill  (5653 bytes)
 //
-// __thiscall (this = param_1).  Fills the per-cell material-weight map for one terrain brush
-// tile (param_2 selects the tile row) and then blends it into the 0x240x0x12 accumulation
-// buffer at param_3.
+// __thiscall, ret 8.  Fills the per-cell material-weight map for one terrain brush tile
+// (tileIndex selects the 0x18-byte tile descriptor at this+0x58) and folds it into the
+// destination buffer `dst`, which holds two 32x18 float planes (dst[0..575] and the
+// "residual" plane dst[576..1151], i.e. +0x900 bytes).
 //
-// Layout of the working set:
-//   weight[576]  u32   cell material id (7 == empty)
-//   s[576]       float per-material contribution (flag this+0x3b == 0 path)
-//   a[576]/b[576] float two-material blend weights (this+0x3b != 0 path)
-//
-// Two source-data branches:
-//   * this->[+0x58 + param_2*0x18] descriptor with byte +7 != 0 && byte +8 == 2 : the
-//     "mirrored polygon" branch, expanding edge columns (DAT_014d7008.. etc.).
-//   * otherwise: a scanline branch that first finds the first non-zero of the source
-//     (DAT_014d6fd0 per-type table, 0x1e columns at this->+0x3c), then repeats each run.
-// Finally the map is folded into param_3 (the destination at +0 and a "residual" at +0x900).
-//
-// Filed PARTIAL: the enormous inlined run-expansion (each identical 4-wide block is emitted
-// inline in the original) is factored into PutRun() here; the byte-exact register allocation
-// and table indexing are not reproduced.
+// The original's 4-wide store blocks are cl's own unrolling of the simple per-cell loops
+// below (pattern `((n-4)>>2)+1`), so the source is written as plain loops over two inline
+// helpers (SetCell / CopyCell). SetCell reads this->twoMaterial per cell like the original;
+// __forceinline keeps cl from outlining it (the original inlines it at all four sites).
 
 #include "types.h"
 
@@ -26,144 +16,268 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 
-extern "C" int   FUN_01164140();      // 0x01164140 (mirror/flip helper for the !bVar8 path)
-extern "C" float DAT_014d71f0[];      // 0x014d71f0  per-material float table
-extern "C" float DAT_014d7230[];      // 0x014d7230  per-material float table
-extern "C" short DAT_014d6fd0[];      // 0x014d6fd0  per-type column table
-extern "C" short DAT_014d6ff8[];
-extern "C" short DAT_014d6ffa[];
-extern "C" u8    DAT_014d6ffe[];
-extern "C" u8    DAT_014d6fff[];
-extern "C" u8    DAT_014d7000[];
-extern "C" u8    DAT_014d7008[];
-extern "C" u8    DAT_014d7009[];
-extern "C" u8    DAT_014d700a[];
+enum { kCells = 0x240 };   // 32 rows x 18 columns
+enum { kCols  = 0x12 };
+enum { kEmpty = 7 };       // material id meaning "leave the cell unchanged"
 
-enum { kCells = 0x240 };              // 576
-enum { kCols  = 0x12 };               // 18
+// 0x3c-byte per-brush-type layout table at 0x014d6fd0.
+//   bands[0..21]  : start cell of each of the 21 scanline bands (bands[21] = end)
+//   bands[20]     : the cell replicated into the tail; bands[21] the tail start
+//   cols[0..13]   : column-band boundaries used by the 3-row "polygon" layout; band i
+//                   covers cells cols[i]*3 .. cols[i+1]*3 (3 rows of width cols[i+1]-cols[i])
+struct BrushTypeLayout {
+    short bands[23];     // +0x00
+    u8    cols[14];      // +0x2e
+};
+extern "C" BrushTypeLayout DAT_014d6fd0[];   // 0x014d6fd0
+extern "C" float DAT_014d71f0[];             // 0x014d71f0 per-material single weight
+extern "C" float DAT_014d7230[];             // 0x014d7230 [2][32] two-material blend weights
 
-// The per-cell target of the fill.  weight==7 means "leave unchanged".
-struct WeightMap {
-    u32   weight[kCells];
-    float s[kCells];
-    float a[kCells];
-    float b[kCells];
+// 0x01164140: in-place 45-degree rotation of the two planes (custom register convention:
+// the buffer comes in EAX; declared as a plain function here).
+void FUN_01164140(float* dst);
+
+struct BrushTile {               // 0x18 bytes at this+0x58
+    char  pad0[4];
+    u16   flags;                 // +0x04, bit 0 selects the DAT_014d7230 half
+    char  pad6;
+    char  hasPolygon;            // +0x07
+    char  layoutKind;            // +0x08, 2 = polygon layout
+    char  polygonAlt;            // +0x09
+    char  pad0a[0x18 - 0x0a];
 };
 
-// One cell of the run-expansion (the block the original inlines four-ish times per row).
-static inline void PutRun(WeightMap* m, int idx, unsigned type, unsigned uVar10, char flag3b)
+struct WeightMap {
+    float a[kCells];             // two-material weight on the dst plane
+    float b[kCells];             // two-material weight on the residual plane
+    u32   weight[kCells];        // material id per cell, kEmpty = untouched
+    float s[kCells];             // single-material contribution
+};
+
+class TerrainBrush {
+public:
+    char      pad0[0x3b];
+    char      twoMaterial;       // +0x3b
+    u8        brushType;         // +0x3c
+    char      pad3d[0x43 - 0x3d];
+    char      mode;              // +0x43
+    u8        modeFlags;         // +0x44
+    char      pad45[0x58 - 0x45];
+    BrushTile tiles[10];         // +0x58
+    short     materials[1];      // +0x134 (indexed by band / row*13+column-band)
+
+    void FillWeightMap(int tileIndex, float* dst);
+    void SetCell(WeightMap& m, int idx, u32 type, u32 half);
+};
+
+__forceinline void TerrainBrush::SetCell(WeightMap& m, int idx, u32 type, u32 half)
 {
-    if (idx < 0 || idx >= kCells || type == 7)
-        return;                                   // weight still set below in the original
-    m->weight[idx] = type;
-    if (flag3b == 0) {
-        m->s[idx] = DAT_014d71f0[type];
+    m.weight[idx] = type;
+    if (type != kEmpty) {
+        if (twoMaterial == 0) {
+            m.s[idx] = DAT_014d71f0[type];
+        }
+        else if (type == 0) {
+            m.a[idx] = 1.0f;
+            m.b[idx] = 1.0f;
+        }
+        else if ((type & 1) == 0) {
+            m.a[idx] = 1.0f;
+            m.b[idx] = DAT_014d7230[(type >> 1) + half * 0x20];
+        }
+        else {
+            m.b[idx] = 1.0f;
+            m.a[idx] = DAT_014d7230[((type + 1) >> 1) + half * 0x20];
+        }
     }
-    else if (type == 0) {
-        m->a[idx] = 1.0f;
-        m->b[idx] = 1.0f;
-    }
-    else if ((type & 1) == 0) {
-        m->a[idx] = 1.0f;
-        m->b[idx] = DAT_014d7230[(type >> 1) + uVar10 * 0x20];
+}
+
+static inline void CopyCell(WeightMap& m, int dstIdx, int srcIdx, char twoMaterial)
+{
+    m.weight[dstIdx] = m.weight[srcIdx];
+    if (twoMaterial == 0) {
+        m.s[dstIdx] = m.s[srcIdx];
     }
     else {
-        m->b[idx] = 1.0f;
-        m->a[idx] = DAT_014d7230[((type + 1) >> 1) + uVar10 * 0x20];
+        m.a[dstIdx] = m.a[srcIdx];
+        m.b[dstIdx] = m.b[srcIdx];
     }
 }
 
 // @ 0x01164200
-void FUN_01164200(int param_1, int param_2, int param_3)
+void TerrainBrush::FillWeightMap(int tileIndex, float* dst)
 {
-    WeightMap map;
+    bool fill   = (mode == 1 && (modeFlags & 1) != 0) ? true : false;
+    bool rotate = (mode == 1 && (modeFlags & 2) != 0) ? true : false;
 
-    char cFlag3b = *(char*)(param_1 + 0x3b);
-    u8   uType   = *(u8*)(param_1 + 0x3c);
-
-    bool bVar8 = (*(char*)(param_1 + 0x43) == 1) && ((*(u8*)(param_1 + 0x44) & 1) != 0);
-    bool bVar9 = (*(char*)(param_1 + 0x43) == 1) && ((*(u8*)(param_1 + 0x44) & 2) != 0);
-
-    if (!bVar8) {
-        if (bVar9)
-            FUN_01164140();
+    if (!fill) {
+        if (rotate)
+            FUN_01164140(dst);
         return;
     }
 
-    int desc = param_1 + 0x58 + param_2 * 0x18;
-    unsigned uVar10 = *(u16*)(desc + 4) & 1;
+    BrushTile* tile = &tiles[tileIndex];
+    u32 half = tile->flags & 1;
+    float* res = dst + kCells;
 
+    WeightMap m;
     for (int i = 0; i < kCells; ++i)
-        map.weight[i] = 7;
+        m.weight[i] = kEmpty;
 
-    if (*(char*)(desc + 7) == 0 || *(char*)(desc + 8) != 2) {
-        // ---- scanline branch -------------------------------------------------
-        // find the first non-zero source cell scanning the map at param_3 (+0x46e.. window)
-        int iVar13 = 0x1f, iVar17 = 0x11, iVar11 = 0, iVar20 = 0x46E;
-        do {
-            if (*(float*)(param_3 + (iVar20 + iVar17) * 4) != 0.0f) {
-                iVar11 = iVar17 + iVar13 * 0x12;
-                break;
+    if (tile->hasPolygon != 0 && tile->layoutKind == 2) {
+        // ---- 3-row polygon layout: 13 column bands per row ------------------------
+        const BrushTypeLayout& L = DAT_014d6fd0[brushType];
+        int row = 0;
+        if (tile->polygonAlt == 0) {
+            const BrushTypeLayout& T = DAT_014d6fd0[brushType];
+            u32 c10 = T.cols[10];
+            u32 c11 = T.cols[11];
+            int tailLen = T.cols[12] - c11;
+            for (int base = 0x17; base < 0x3e; base += 0xd, ++row) {
+                // last column band (from the right) whose residual is non-zero in this row
+                int last = -1;
+                for (int i = 12; i >= 0; --i) {
+                    int w = L.cols[i + 1] - L.cols[i];
+                    const float* p = &res[(row + 1) * w - 1 + L.cols[i] * 3];
+                    for (int j = w; j > 0; --j, --p) {
+                        if (*p != 0.0f) {
+                            last = i;
+                            i = -10;
+                            j = -10;
+                        }
+                    }
+                }
+                for (int k = last + 1; k < 12; ++k) {
+                    const u8* c = &DAT_014d6fd0[brushType].cols[k];
+                    int w = c[1] - c[0];
+                    int idx = row * w + c[0] * 3;
+                    for (int j = 0; j < w; ++j)
+                        SetCell(m, idx++, materials[base + k], half);
+                }
+                int to   = row * tailLen + c11 * 3;
+                int from = (c11 - c10) * row + c10 * 3;
+                for (int j = 0; j < tailLen; ++j)
+                    CopyCell(m, to++, from, twoMaterial);
             }
-            if (--iVar17 < 0) { --iVar13; iVar20 -= 0x12; iVar17 = 0x11; }
-        } while (0x23F < iVar20);
-
-        // locate the column band in the per-type table
-        int i17 = 0;
-        if (DAT_014d6fd0[uType * 0x1e] <= iVar11) {
-            const short* p = &DAT_014d6fd0[uType * 0x1e];
-            do { ++i17; } while (*++p <= iVar11);
         }
-        (void)i17;
-
-        // expand each band's rows (the original inlines a 4-wide store block per step)
-        for (int row = i17; row < 0x15; ++row) {
-            const short* band = &DAT_014d6fd0[row + uType * 0x1e];
-            int len = band[1] - band[0];
-            (void)len;   // runs are written with PutRun(...,DAT_014d6fd0[type],...)
-        }
-        (void)iVar11;
-
-        // tail replication of the last band
-    }
-    else {
-        // ---- mirrored-polygon branch ----------------------------------------
-        u8 u16v = DAT_014d7009[uType * 0x3c];
-        u8 b4   = DAT_014d7008[uType * 0x3c];
-        (void)u16v; (void)b4;
-        for (int band = 0; band < 0x3e; band += 0xd) {
-            // scan the 0xc edge columns, repeat each run into the map
-        }
-    }
-
-    // ---- blend the working map into param_3 --------------------------------
-    int iVar11 = 0, iVar17 = 0;
-    for (;;) {
-        for (int col = 0; col < kCols; ++col, ++iVar11) {
-            float* dst = (float*)(param_3 + (iVar17 + col) * 4);
-            float* res = (float*)(param_3 + 0x900 + (iVar17 + col) * 4);
-            if (map.weight[iVar11] == 7) {
-                if (bVar9) {
-                    float v = *dst;
-                    float r = *res;
-                    *res = (v - r) * 0.70710677f;
-                    *dst = (r + v) * 0.70710677f;
+        else {
+            const BrushTypeLayout& T = DAT_014d6fd0[brushType];
+            u32 c10 = T.cols[10];
+            u32 c11 = T.cols[11];
+            u32 c12 = T.cols[12];
+            int maxStart = 0;
+            for (int base = 0x17; base < 0x3e; base += 0xd, ++row) {
+                int last = 2;
+                for (int i = 12; i > 2; --i) {
+                    int w = L.cols[i + 1] - L.cols[i];
+                    const float* p = &res[(row + 1) * w - 1 + L.cols[i] * 3];
+                    for (int j = w; j > 0; --j, --p) {
+                        if (*p != 0.0f) {
+                            last = i;
+                            i = -10;
+                            j = -10;
+                        }
+                    }
+                }
+                int start = last + 1;
+                if (maxStart < start)
+                    maxStart = start;
+                for (int k = start; k < 12; ++k) {
+                    const u8* c = &DAT_014d6fd0[brushType].cols[k];
+                    int w = c[1] - c[0];
+                    int idx = w * row + c[0] * 3;
+                    for (int j = 0; j < w; ++j)
+                        SetCell(m, idx++, materials[base + k], half);
+                }
+                int tailLen = c12 - c11;
+                int from = (c11 - c10) * row + c10 * 3;
+                int to   = tailLen * row + c11 * 3;
+                for (int j = 0; j < tailLen; ++j)
+                    CopyCell(m, to++, from, twoMaterial);
+            }
+            if (maxStart < 4) {
+                // nothing reached the first column bands: fill scanline bands 0..7 after the
+                // last non-zero residual cell of rows 0..2
+                int lastCell = -1;
+                for (int r = 2; r >= 0; --r) {
+                    for (int c = kCols - 1; c >= 0; --c) {
+                        if (res[r * kCols + c] != 0.0f) {
+                            lastCell = c + r * kCols;
+                            goto found3;
+                        }
+                    }
+                }
+            found3:
+                const BrushTypeLayout& S = DAT_014d6fd0[brushType];
+                int band = 0;
+                while (S.bands[band] <= lastCell)
+                    ++band;
+                int idx = S.bands[band];
+                for (; band < 8; ++band) {
+                    const short* b = &DAT_014d6fd0[brushType].bands[band];
+                    int len = b[1] - b[0];
+                    for (int j = 0; j < len; ++j)
+                        SetCell(m, idx++, materials[band], half);
                 }
             }
-            else if (cFlag3b == 0) {
-                float f = map.s[iVar11];
-                float v = *dst / (f + 1.0f);
-                *res = v;
-                *dst = v * f;
-            }
-            else {
-                float v = *dst;
-                *dst = map.a[iVar11] * v;
-                *res = map.b[iVar11] * v;
+        }
+    }
+    else {
+        // ---- scanline layout: 21 bands over the whole 32x18 tile -----------------------
+        int lastCell = 0;
+        for (int r = 31; r >= 0; --r) {
+            for (int c = kCols - 1; c >= 0; --c) {
+                if (res[r * kCols + c] != 0.0f) {
+                    lastCell = c + r * kCols;
+                    goto found;
+                }
             }
         }
-        iVar17 += 0x12;
-        if (0x23F < iVar17)
-            return;
+    found:
+        const BrushTypeLayout& S = DAT_014d6fd0[brushType];
+        int band = 0;
+        while (S.bands[band] <= lastCell)
+            ++band;
+        int idx = S.bands[band];
+        for (; band < 0x15; ++band) {
+            const short* b = &DAT_014d6fd0[brushType].bands[band];
+            int len = b[1] - b[0];
+            for (int j = 0; j < len; ++j)
+                SetCell(m, idx++, materials[band], half);
+        }
+        // replicate the type's tail cell over the rest of the tile
+        int from = DAT_014d6fd0[brushType].bands[20];
+        for (int n = kCells - DAT_014d6fd0[brushType].bands[21]; n > 0; --n, ++idx) {
+            if (idx >= kCells)
+                break;
+            CopyCell(m, idx, from, twoMaterial);
+        }
+    }
+
+    // ---- fold the working map into dst -------------------------------------------------
+    int cell = 0;
+    for (int r = 0; r < kCells; r += kCols) {
+        for (int c = 0; c < kCols; ++c, ++cell) {
+            float* d = &dst[r + c];
+            if (m.weight[cell] == kEmpty) {
+                if (rotate) {
+                    float v = *d;
+                    float w = res[r + c];
+                    res[r + c] = (v - w) * 0.70710677f;
+                    *d = (w + v) * 0.70710677f;
+                }
+            }
+            else if (twoMaterial == 0) {
+                float f = m.s[cell];
+                float v = *d / (f + 1.0f);
+                res[r + c] = v;
+                *d = v * f;
+            }
+            else {
+                float v = *d;
+                *d = m.a[cell] * v;
+                res[r + c] = m.b[cell] * v;
+            }
+        }
     }
 }

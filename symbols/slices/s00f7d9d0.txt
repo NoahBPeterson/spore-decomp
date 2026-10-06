@@ -1,0 +1,1 @@
+00f7d9d0 UpdateNormalMapRegion  # inferred (no PDB name): only caller SP::UpdateNormalMap @0x00f8b53b; builds A8R8G8B8 normal/slope texels from 16-bit heights

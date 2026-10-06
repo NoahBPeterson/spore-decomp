@@ -1,0 +1,1 @@
+01112950  4690  hkGsk_calcToi (/O2 /MD /Gy /EHsc /TP /fp:fast): complete (setup, conservative-advancement loop with plane refinement, 10-step regula falsi, TOI contact + addToi, timers, stack alloc); same 14 direct calls as the original; 0x011120a0 is a register-convention static helper declared as a plain cdecl extern; scheduling/frame differ

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+01025840  11069  16 KB cheat dispatcher written out in full (all options, calls, outputs); register allocation, shared-tail merging and block layout differ

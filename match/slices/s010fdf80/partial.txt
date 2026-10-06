@@ -1,1 +1,0 @@
-010fdf80  n/a  PARTIAL: ~6KB Havok hkPredGskCylinderAgent3::process; TLS trace prologue + input flag unpack reproduced, GSK clipping/manifold body omitted. Not complete.

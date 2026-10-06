@@ -1,1 +1,3 @@
 0054c780  SP::Pollen::cAssetMetadataResourceFactory::ReadResource  # pdb anchor; param_4==0x30bdee3
+00554140  object_cast<SP::Pollen::cAssetMetadata>  # p ? p->Cast(0x30bdee3) : 0
+00554020  eastl::vector_set<uint32_t>::insert  # cAssetMetadata::mConsequenceTraits (+0xc0), lower_bound + insert, sret pair

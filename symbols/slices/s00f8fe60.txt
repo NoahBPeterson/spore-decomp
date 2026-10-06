@@ -1,0 +1,2 @@
+00f8fe60 SP::cTerrainMap<unsigned int>::BlendMapEdges  # PDB name (callee-scored); body averages cube-face border texels across faces
+00f87c10 SP::Direction4fToDirection4c  # PDB name; called with &Vector4, returns packed uint

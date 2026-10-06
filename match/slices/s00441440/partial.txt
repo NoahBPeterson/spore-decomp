@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-00441440  -  incomplete: SP::cSPEditorBlock::BuildBlock is a 23469-byte /Od monolith (~7000 decompiled lines); only the exact signature/skeleton is provided

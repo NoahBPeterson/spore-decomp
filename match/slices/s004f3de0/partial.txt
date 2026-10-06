@@ -1,2 +1,0 @@
-# va  diff-bytes  reason
-004f3de0  -  incomplete: 6416-byte validity table loader, skeleton only

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete, behaviorally equivalent, not byte-exact)
+00e11ab0  4535  cSPUIMinimapWin::HandleMessage (IHandler override, this = window+0x214): all 18 message cases incl. attack/comm icon creation and pause/resume loops; frame 0x60 vs 0x44 and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE)

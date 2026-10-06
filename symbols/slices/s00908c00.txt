@@ -1,0 +1,1 @@
+00908c00 doProlog  # expat 2.0.1 xmlparse.c; struct offsets (m_encoding 0x90, m_prologState 0x100, m_eventPtr 0x120, m_dtd 0x164) and callee set match

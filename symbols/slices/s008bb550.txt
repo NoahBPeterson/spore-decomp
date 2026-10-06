@@ -1,0 +1,1 @@
+008bb550 Type2BuildChar  # 2008 dev-PDB anchor name (symbols/pdb_names.json); prologue reads the charstring via Tell_InputStream(0x8cc5b0); neighbours tsi_ParseCFFTopDict (008bb0d0) and tsi_DeleteCFFClass (008bdb70). EA-UTF module.

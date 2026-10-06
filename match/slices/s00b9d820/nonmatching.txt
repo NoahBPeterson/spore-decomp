@@ -1,0 +1,1 @@
+00b9d820  6911  complete (all paths/calls/stores); /O2 /MD /Gy /TP /arch:SSE /fp:fast. Frame layout + scheduling differ; original float->int uses an inline cvttss2si helper (mine __ftol2_sse); original keeps dead cube-face coords that cl drops

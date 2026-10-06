@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+0100b890  4647  complete 45-case IHandler dispatch (all paths/calls/stores, response Variant tail); esi/edi roles swapped (msgID vs this), frame 0x114 vs 0xe4 (slot sharing), inline-vs-outlined AutoRefCount helpers and tail merging differ

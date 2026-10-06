@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f7d9d0  33095  flags /O2 /MD /Gy /TP /GS- /arch:SSE; complete reconstruction of the 41 KB hand-pipelined SSE normal-map builder (3 loop shapes x 3 cube axes inlined); verified behaviourally identical to the original on 1,200 random inputs (all 9 bodies, NaN/inf params) with a unicorn differential test (work/match/scratch_s00f7d9d0_diff.py); register allocation, pipelining and shuffle sequences differ (ours 39,906 B)

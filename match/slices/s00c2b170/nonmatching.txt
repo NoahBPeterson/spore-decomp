@@ -1,0 +1,1 @@
+00c2b170  4802  complete (direct-call sequence identical to original, all noun cases, creature TOCA/slow-down path, mesh/building sweeps, terrain/water/planet tail); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs: stack-slot assignment, register allocation, switch compare-tree layout

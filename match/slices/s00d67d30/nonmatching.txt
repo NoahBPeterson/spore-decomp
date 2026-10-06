@@ -1,0 +1,1 @@
+00d67d30 6338 complete source (all paths/calls; direct-call and per-vtable-slot call counts equal the original); not byte-exact: stack-slot sharing and x87/SSE scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+00cf5540 SP::cCityInputStrategy::HandleMessage  # card/PDB name; this = IHandlerRC subobject at +0x3c
+00cf74c0 SP::cCivModeStrategy::Get  # returns global 0169d2c8, result used as thiscall receiver for SetCameraTrackObject/DoNextCivTutorial

@@ -1,1 +1,2 @@
-0116c750 TerrainBrushWeightMapFill2  # card: twin of 01164200 with +0x18 member and DAT_014da570/6d8/718 tables
+0116c750 Layer3DecoderLSF::III_stereo  # MPEG audio Layer III joint stereo (dist10 + LSF): 576 lines, sfBandIndex LSF table at 014da570, tan(is_pos*PI/12) table 014da6d8, io^n table 014da718, 1/sqrt2
+0116c600 III_ms_stereo  # MS-only stereo (SSE, xr in EAX), (L+R)/sqrt2, (L-R)/sqrt2 over 576 lines

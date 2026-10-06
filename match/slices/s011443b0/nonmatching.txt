@@ -1,0 +1,1 @@
+011443b0 6187 Layer3Decoder::Stereo (dist10 III_stereo: intensity + M/S), complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. Not exact: block layout/order differs and cl unrolls the final 18-line loop x2 (7618 vs 6482 bytes); MsStereoSSE (0x01144270) takes xr in EAX in the original (static asm helper), declared as a plain cdecl extern here.

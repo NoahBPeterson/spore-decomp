@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010b8b30  18406  complete hkSolveConstraints (all 26 schema cases, substep loop, deactivation/integration); scalar inline helpers vs original hkVector4 temporaries + hand-unrolled pair-contact case (10180 vs 19112 bytes), dot-product sum order canonicalised

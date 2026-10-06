@@ -1,0 +1,4 @@
+004c73f0 SP::cSkinObject::UpdateBlocks  # dev-PDB caller-scored candidate; receiver layout matches cSkinObject (mResource +8, mBlockProps +0xc, mNodeBlockMap +0x20); builds cRuntimeCreatureResource blocks
+00461680 SortSkeletonNodes  # cdecl (nodes, count, &orderVec, 0,0,0, &numRoots) called from 004c73f0 after node typing
+0046d6c0 IsSkeletonSymmetric  # cdecl (blocks, count) -> bool; sets cRuntimeCreatureResource flag 1 in 004c73f0 (name guessed)
+004615b0 GetCapabilityCode  # cdecl (capability property ID) -> code pushed to mCapCodes in 004c73f0 (name guessed)

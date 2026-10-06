@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00588570 4811 complete (all modes, every manipulator path); register allocation (esi vs ebp for this), frame size and tail duplication differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

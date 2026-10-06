@@ -1,1 +1,3 @@
 00577e10 SP::cAppModeEditorBase::UpdateBabyCreatures  # PDB name; cSPEditorAnimatedCreatureManager + record grid
+0041dd30 Vector3_NotEqual  # cdecl(const Vector3*, const Vector3*), per-component ucomiss != (operator!=)
+00572a10 RandomFloatRange  # cdecl(float lo, float hi), wraps RandomDoubleUniform on the shared math RNG 0x01601760

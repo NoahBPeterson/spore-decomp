@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact functions in slice s00b60d80 (see partial.txt).

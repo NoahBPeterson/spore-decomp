@@ -1,0 +1,1 @@
+00908c00  5153  expat 2.0.1 doProlog transcribed from lib/xmlparse.c (complete); original was built with LTCG: static helpers use custom regs (processXmlDecl via ecx/edx/eax, both calls merged), poolClear partly inlined, so register allocation/layout differ

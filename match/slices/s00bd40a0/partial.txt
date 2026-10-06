@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bd40a0  -  incomplete: 7678-byte no-argument thiscall with a 0x1a0c-byte frame (chkstk); exact receiver convention + skeleton only

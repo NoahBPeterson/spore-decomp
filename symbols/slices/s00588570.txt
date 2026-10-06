@@ -1,1 +1,7 @@
-00588570 SP::cAppModeEditorBase::OnMouseDown  # PDB name; 4 args, ret 0x10, bool
+00588570 SP::cAppModeEditorBase::OnMouseDown  # card/PDB name
+005740e0 SP::cAppModeEditorBase::IsManipulatorEnabled  # linear search of the uint32 vector at +0x320 (ModAPI mEnabledManipulators)
+0047e6c0 SP::cSPEditorHandle::GetRigblock  # returns [this+0x10] (ModAPI EditorBaseHandle::mpRigblock)
+0047e680 SP::cSPEditorHandle::GetModel  # returns [this+0x14] (ModAPI mpModel)
+0044f220 SP::cSPEditorBlock::GetSymmetryIndex  # returns [this+0x1c0]
+0044b550 SP::cSPEditorBlock::GetModelDefaultMouseOffset  # returns Vector3 at +0x1e8 (ModAPI mModelDefaultMouseOffset)
+00401050 SP::MessageManager  # returns global 0x15d0c14

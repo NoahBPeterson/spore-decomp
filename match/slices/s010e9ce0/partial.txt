@@ -1,1 +1,0 @@
-010e9ce0  -  partial: 5.5KB /O2 x87 grid/light-map tile walk; scalar state lives in x87 registers (Ghidra unaff_*), DDA/tile-walk inner body not reproduced byte-exactly

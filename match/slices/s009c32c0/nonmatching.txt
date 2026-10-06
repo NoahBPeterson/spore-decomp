@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+009c32c0 6380 complete (root choice, re-rooting, hierarchy sort, rest xforms, symmetry, radii, leg chains); x87/SSE scheduling, frame layout and fixed_vector inlining differ. Flags /O2 /MD /Gy /TP /arch:SSE

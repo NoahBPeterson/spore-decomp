@@ -1,0 +1,1 @@
+0100b890 SP::cSPSimulatorSpaceGame::HandleMessage  # card name; IHandler override (this = object+0x10), message IDs match the 2008 eSimulatorSpaceGameMessages enum

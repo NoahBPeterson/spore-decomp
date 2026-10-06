@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0071ac50  6509  complete SP::cMeshBuilder::CreateMeshData (all elt arrays, sections w/ format entries, primitives); stack-slot layout and first push_back sites (orig calls 0x41f7d0 out of line) differ. flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,5 @@
+004d5020  SP::cSpeciesProfile::Update  # card name; body resets/derives the species profile stats from the editor rig
+004d35d0  SP::cSpeciesProfile GetCapLevel helper (cdecl this,cap -> uint)  # called with capability FourCCs, result stored to level fields
+004d3640  SP::cSpeciesProfile CountCap helper (cdecl this,cap -> int)  # results stored as num_graspers/num_mouths/num_ears
+004d36a0  SP::cSpeciesProfile GetCapInfo helper (cdecl this,cap -> PartLayout*)  # fields +0/+4/+0xc read as count/sum/scale
+004e01d0  SP::cSpeciesProfile::AddAbility  # called after FillInProfileValues succeeds for a global ability

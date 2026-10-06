@@ -1,1 +1,2 @@
 006a6340 `anonymous namespace'::ParseVariantValue  # PDB anchor 0157a300
+0093dd80 EA::Variant::Set  # (type, flags 0x18, data, elemSize, count) as ModAPI App::Property::Set; called by ParseVariantValue

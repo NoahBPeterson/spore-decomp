@@ -1,0 +1,4 @@
+00aabc20 anon::Stream_Quad_V4F_N4F_C4B_T2F  # dev PDB cParticlesEffect.obj 0x01447a00 (5738 B), same callees (StreamerSetup, WigglePoint) and body shape
+00aad240 anon::Stream_Quad_V4F_N4F_C4B_T4B  # dev PDB cParticlesEffect.obj 0x01449070 (5744 B); packed after 00aabc20, frame byte (cParticle+0x44) in T4B
+00aa9b70 anon::StreamerSetup  # called first by both streamers with (effect, desc, &info), dev 0x01445460
+00a9aff0 EA::Swarm::WigglePoint  # dev Stream_Quad callee 0x00eeb7e0 WigglePoint, args (time, &desc->wiggles, &srcTranslation, &pos)

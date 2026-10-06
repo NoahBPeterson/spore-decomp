@@ -1,0 +1,2 @@
+# va  diff  reason
+004629e0 5404 complete source (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-); same 93 calls, /Od name-hash frame slots and inline-accessor temp slots differ (frame 0x2524 vs 0x2724)

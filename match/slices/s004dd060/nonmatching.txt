@@ -1,0 +1,1 @@
+004dd060  7528  complete /Od reconstruction (all 49 typed property reads, 6 float ranges, 27 Vector3 ranges, origin/uint lists, ability load, template registration); frame 0x354 vs 0xca8 (original gives every inline expansion its own slots), GetPropertyList out-param temp slot missing

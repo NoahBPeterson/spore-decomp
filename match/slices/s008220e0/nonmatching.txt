@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+008220e0  6329  complete (all 12 scalar + 12 dead array property branches); stack slot layout and inline/out-of-line choices of Variant ctors and AutoRefCount::operator= differ

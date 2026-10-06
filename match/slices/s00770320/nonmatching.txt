@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00770320  14222  skin-matrix bake job: every path, call and store present (instruction-class histogram matches except CSE of repeated splats in the 3 inlined affine inverses); SSE register allocation, temp spills and 0x7194 frame layout differ

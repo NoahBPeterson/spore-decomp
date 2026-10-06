@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0093e5f0  8460  complete EA::Variant default type proc (destruct/construct/convert matrix); flags /O2 /MD /Gy /TP /arch:SSE /GS-; register choice (esi/edi), shared temp slots (frame 0x174 vs 0x3ac) and block merging differ

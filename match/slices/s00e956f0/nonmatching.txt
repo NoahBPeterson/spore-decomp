@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00e956f0  5528  complete cVehicleView::HandleSimulationUpdate: all 221 calls present (per-callee counts match except one CreateEffect site cl tail-merges); wobble float order, 27-case switch layout and stack frame differ

@@ -1,1 +1,1 @@
-00c2b170 cLocomotiveSteeringTargetSelect  # card: 5.7KB /O2, calls GetCurrentGameMode/cLocomotiveObject::GetVelocity/PlanetModel, dispatches on resource type keys
+00c2b170 CreatureObstacleSweep  # descriptive (no PDB name): cdecl sweep callback passed by address from 0xc2c9fa/0xc2ccd3; clips creature sweep distance against nearby objects by noun ID

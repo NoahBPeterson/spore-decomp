@@ -1,0 +1,1 @@
+00e11ab0 cSPUIMinimapWin::HandleMessage  # body calls RemoveIcon/AddIcon on this-0x214, neighbours are cSPUIMinimapWin; PDB anchor name (vector<slot_vector_entry<cGroupMovement>>::DoInsertValue) is a mislabel

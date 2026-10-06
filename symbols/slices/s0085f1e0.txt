@@ -1,0 +1,1 @@
+0085f1e0 jpeg_fdct_float  # IJG jfdctflt.c AAN float FDCT; constants 0.70710677/0.38268343/0.5411961/1.306563, byte-exact

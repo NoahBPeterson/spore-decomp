@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d35190  4333  cCreatureModeInputStrategy::HandleMessage complete, all ~45 message branches (flags /O2 /MD /Gy /TP /arch:SSE); frame is 0x18 larger and stack-slot offsets differ

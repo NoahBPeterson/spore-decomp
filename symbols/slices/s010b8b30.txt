@@ -1,0 +1,1 @@
+010b8b30 hkSolveConstraints  # inferred (Havok 3.1 prebuilt): args (hkSolverInfo&, schemas, accumulators, jacobians, hkSolverElemTemp*); m_numSteps substep loop with Gauss-Seidel schema dispatch (types 0x00..0x19) then accumulator integration + deactivation check; callees next@hk1Lin2AngJacobian/hk2Lin2AngJacobian, getEnd@hkJacobian*ChainSchema

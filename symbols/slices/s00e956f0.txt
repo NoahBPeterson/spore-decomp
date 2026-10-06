@@ -1,0 +1,1 @@
+00e956f0 SP::cVehicleView::HandleSimulationUpdate  # PDB name; retail layout differs from the 2008 PDB (timers +0x58/+0x78, sound +0x98/+0x9c, animator +0xb0)

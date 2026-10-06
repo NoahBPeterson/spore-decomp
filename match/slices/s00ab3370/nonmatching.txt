@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ab3370  16012  complete cRibbonEffect quad streaming (17 KB); /O2 /arch:SSE /fp:fast gives the same call/fsqrt/cvtss2si/fild/comiss counts but cl CSEs the repeated clamps and normals, so size 15073 vs 17323 and register/slot allocation differ (diff measured at /fp:precise)

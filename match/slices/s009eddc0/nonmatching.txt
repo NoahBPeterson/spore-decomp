@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009eddc0  9880  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) complete source: both branches (linear quat blend; quintic Hermite spline + rotation-minimising frame with Rodrigues/identity/half-turn cases) and the twist-distribution pass, all 16 calls and every bone store; not byte-exact: /fp:fast register allocation and spill layout differ (10434 vs 11221 B), the original keeps the column-fill and Mat3-copy loops rolled (fld/fstp) where cl unrolls/rep-movsd ours

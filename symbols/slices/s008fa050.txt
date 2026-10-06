@@ -1,0 +1,16 @@
+008fa050 EA::XHTML::Style::CreateDefaultStylesheet  # PDB anchor; allocation tag "XHTML/Style/CreateDefaultStylesheet"
+008f9cd0 EA::XHTML::Style::Stylesheet::AddRule  # Claude-coined name: thiscall on Stylesheet, allocs a 0x10 element-name selector and returns the Rule
+008f9fa0 EA::XHTML::Style::Selector::Append  # Claude-coined name: walks mpNext (+4) and links the argument at the end
+008f9fd0 EA::XHTML::Style::CreateNameListPropertyFunc  # Claude-coined name: builds a 0x40 PropertyFuncNameList (PDB layout) with one name
+008f29b0 EA::XHTML::Style::StyleState::SetMargin  # Claude-coined name: writes Length to mEdges[i]+0 (StyleState +0x2ec), Edge_All=4 writes all four
+008f2a20 EA::XHTML::Style::StyleState::SetPadding  # Claude-coined name: mEdges[i]+8
+008f2a90 EA::XHTML::Style::StyleState::SetBorderWidth  # Claude-coined name: mEdges[i]+0x10
+008f2b40 EA::XHTML::Style::StyleState::SetBorderStyle  # Claude-coined name: mEdges[i]+0x18 (uint)
+008f2bc0 EA::XHTML::Style::StyleState::SetBorderSpacing  # Claude-coined name: writes mBorderSpacingH and mBorderSpacingV (+0x41c/+0x424)
+008f2c90 EA::XHTML::Style::StyleState::SetDisplay  # Claude-coined name: writes mDisplay (+0x3a8)
+008f2ca0 EA::XHTML::Style::StyleState::SetWhitespace  # Claude-coined name: writes mWhitespaceMode (+0x3ac)
+008f2cb0 EA::XHTML::Style::StyleState::SetListStyleType  # Claude-coined name: writes mListStyleType (+0x3b0)
+008f2990 EA::XHTML::Style::StyleState::SetLineHeight  # Claude-coined name: writes mLineHeight (+0x290)
+008f27e0 EA::XHTML::Style::StyleState::SetColor  # Claude-coined name: writes mFgColor (+0x28c)
+008f27f0 EA::XHTML::Style::StyleState::SetBackgroundColor  # Claude-coined name: writes mBgColor and mColorInherited
+008fca70 EA::XHTML::Style::StyleState::SetCounterIncrement  # Claude-coined name: mCounterIncrement[name] = n (+0x3dc hash_map)

@@ -1,1 +1,3 @@
-005af200 SP::cSPEditorManipulationLimb::Update  # PDB candidate 00d6beb0
+005af200 SP::cSPEditorManipulationLimb::Update  # PDB candidate 00d6beb0; ret 4, switch on mManipType (+0xf8)
+005af1c0 SP::HighlightVector::clear  # erase of 0x3c-byte records at Limb+0x68/+0x7c; called from Update
+00572660 EA::AutoRefCount<SP::cSPEditorSkinManager>::AutoRefCount  # stores ptr, AddRef via vtable slot 0, ret 4

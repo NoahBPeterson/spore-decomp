@@ -1,1 +1,0 @@
-004c73f0  0  partial: large model-build skeleton; property reads, vector rebuild and math omitted
