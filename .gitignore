@@ -10,3 +10,6 @@ build/
 .DS_Store
 vc90.pdb
 .opencode/
+_off.cod
+*.cpp.new
+*-this-session-is-being-continued-*.txt
