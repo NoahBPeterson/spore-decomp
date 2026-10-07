@@ -85,7 +85,7 @@ struct cSec3 {
     void  FUN_00f3cf10(bool p);
     void  FUN_00f3d210();
     void  FUN_00f3d3e0(int a1, ResKey* key, int* out);
-    void  FUN_00f3d7e0();
+    void  FUN_00f3d7e0(int unused);   // ret 4: one ignored stack arg
     void* FUN_00f3d780(int p);
     void* FUN_00f3d880();
     void  FUN_00f3d8a0();
@@ -352,7 +352,7 @@ void* cSec3::FUN_00f3d780(int p) {
 // ---------------------------------------------------------------------------
 // @ 0x00f3d7e0  (walk the hashtable of registered objects, post-process by type id)
 // ---------------------------------------------------------------------------
-void cSec3::FUN_00f3d7e0() {
+void cSec3::FUN_00f3d7e0(int) {
     Iter8 it;
     it.bucket = (char**)F(0xb4);
     it.node = *it.bucket;

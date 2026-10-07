@@ -284,7 +284,7 @@ RefPair5& SaveMap5::Index(const uint32_t& key) {
     RefPair5 tmp;
     SavePair p(key, tmp);
     SavePairResult r;
-    DoInsertValue(&r, it, p, 0);
+    DoInsertValue(&r, it, p, TrueTag5());
     it = r.node;
   }
   return it->val;

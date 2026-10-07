@@ -596,10 +596,13 @@ void ZoneVector::DoInsertValue(Zone* pos, const Zone* value)
 // ---------------------------------------------------------------------------
 // map<uint, pair<uint, int>>: bump a per-key counter, inserting {key, 1} when absent.
 struct CountNode { char pad[0x14]; int count; };   // rbtree node: value.second at +0x14
-struct CountPair { uint32_t key; int count; };
+struct CountPair { uint32_t key; int count; CountPair(uint32_t k, int c) : key(k), count(c) {} };
+struct CountTrueType {};  // eastl::true_type: empty tag passed by value
 struct CountTree {
     void find(HIter* out, const uint32_t* key);                            // 0x00e5c780
-    void Insert(HIter* out, const CountPair* v, int tag);                  // 0x00a246c0
+    HIter findv(const uint32_t& key) { HIter r; find(&r, &key); return r; }
+    HIter Insert(const CountPair& v, CountTrueType tag);                   // 0x00a246c0
+    HIter insert(const CountPair& v) { return Insert(v, CountTrueType()); }
 };
 struct CountMap {
     char pad0[4];
@@ -610,38 +613,41 @@ struct CountMap {
 // @ 0x00a27e60
 bool CountMap::AddRef(uint32_t key)
 {
-    HIter it;
-    mTree.find(&it, &key);
-    if ((char*)this + 8 == (char*)it.node) {
-        CountPair p;
-        p.key = key;
-        p.count = 1;
-        HIter res;
-        mTree.Insert(&res, &p, 0);
+    CountNode* n = (CountNode*)mTree.findv(key).node;
+    if ((char*)this + 8 == (char*)n) {
+        mTree.insert(CountPair(key, 1));
         return true;
     }
-    ((CountNode*)it.node)->count++;
+    n->count++;
     return true;
 }
 
 // ---------------------------------------------------------------------------
 // EA::Audio::Submix::ConnectToSubmix
+extern char g_EmptyStrRep[];            // 0x01667bac
 struct EStr {
     char* mpBegin; char* mpEnd; char* mpCap;
+    struct Alloc {} mAllocator;         // eastl::allocator (empty)
+    const char* c_str() const { return mpBegin; }
+    EStr() : mpBegin(g_EmptyStrRep), mpEnd(g_EmptyStrRep), mpCap(g_EmptyStrRep + 1) {}
+    ~EStr() { if (mpCap - mpBegin > 1 && mpBegin) operator delete(mpBegin); }
     void sprintf(const char* fmt, ...);                                    // 0x00472fe0 (cdecl, this pushed)
 };
-extern char g_EmptyStrRep[];            // 0x01667bac
 struct LockObj { void Lock(); void Unlock(); };                            // 0x0112c600 / 0x0112c620
 extern LockObj* g_pAudioLock;           // 0x016e61a8
+struct AudioLockGuard {
+    AudioLockGuard() { if (g_pAudioLock) g_pAudioLock->Lock(); }
+    ~AudioLockGuard() { if (g_pAudioLock) g_pAudioLock->Unlock(); }
+};
 struct VoiceContainer {
     void* FindPlugin(uint32_t id);                                         // 0x00a34230
     bool ConnectToSubmix(void* submixVoice, int flag);                     // 0x00a34b50
 };
-struct Plugin { void SetName(int a, const char** name); };                 // 0x0112ccc0
+struct Plugin { void SetName(int a, const char* const& name); };                 // 0x0112ccc0
 struct Submix {
     char pad0[0x10];
     VoiceContainer mVoiceContainer;     // +0x10
-    char pad_988[0x978];
+    char pad_988[0x977];
     const char* mpName;                 // +0x988
     bool ConnectToSubmix(Submix* other);
 };
@@ -649,21 +655,14 @@ struct Submix {
 bool Submix::ConnectToSubmix(Submix* other)
 {
     if (!other) return false;
-    if (g_pAudioLock) g_pAudioLock->Lock();
+    AudioLockGuard lock;
     Plugin* plugin = (Plugin*)mVoiceContainer.FindPlugin(0x41695730);
     if (plugin) {
         EStr s;
-        s.mpBegin = g_EmptyStrRep;
-        s.mpEnd = g_EmptyStrRep;
-        s.mpCap = g_EmptyStrRep + 1;
         s.sprintf("%s.aiff", mpName);
-        const char* c = s.mpBegin;
-        plugin->SetName(0, &c);
-        if (s.mpCap - s.mpBegin > 1 && s.mpBegin) operator delete(s.mpBegin);
+        plugin->SetName(0, s.c_str());
     }
-    bool ok = mVoiceContainer.ConnectToSubmix(fld<void*>(other, 0x970), 0);
-    if (g_pAudioLock) g_pAudioLock->Unlock();
-    return ok;
+    return mVoiceContainer.ConnectToSubmix(fld<void*>(other, 0x970), 0);
 }
 
 // ---------------------------------------------------------------------------

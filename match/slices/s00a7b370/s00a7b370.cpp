@@ -49,8 +49,8 @@ struct VertexVec {
     Vertex* mpEnd;
     Vertex* mpCapacity;
     void PushSlow(Vertex* pEnd, const Vertex* v);   // 0x00a7a9d0
+    Vertex* erase(Vertex* first, Vertex* last);    // 0x00d73090 (thiscall, ret 8)
 };
-void DestroyRange(Vertex* first, Vertex* last);     // 0x00d73090 (cdecl)
 extern const Vec3 kDefaultDir;                      // 0x016770dc
 
 template<class T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
@@ -142,7 +142,7 @@ void PathBuilder::Build(bool skip)
         nWidth = 1;
     }
 
-    DestroyRange(mpOut->mpBegin, mpOut->mpEnd);
+    mpOut->erase(mpOut->mpBegin, mpOut->mpEnd);
     for (int i = 0; i < n; ++i) {
         Vertex v;
         v.pos = mPoints.mpBegin[i];

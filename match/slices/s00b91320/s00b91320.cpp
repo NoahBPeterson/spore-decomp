@@ -258,6 +258,7 @@ FINAL:
   r->y1 = (short)yhi;
   for (int y = ylo; y <= yhi; y++) {
     for (int x = xlo; x <= xhi; x++) {
+      CellAt(face, x, y);           // the original wraps the coordinates twice per cell
       CellAt(face, x, y).owner = r;
     }
   }
@@ -275,21 +276,20 @@ bool cCubeGrid::GetCellDir(unsigned int mask, int face, int x, int y, Vec3* out)
   float nrm = 1.0f / (float)sqrt((fa * fa + fb * fb) + 1.0f);
   float s = nrm;
   if (f & 1) s = -nrm;
-  float v[3];
-  v[t[0]] = s * fa;
-  v[t[1]] = nrm * fb;
-  v[t[2]] = s;
+  Vec3 v;
+  (&v.x)[t[0]] = s * fa;
+  (&v.x)[t[1]] = nrm * fb;
+  (&v.x)[t[2]] = s;
   unsigned int a0 = (unsigned int)(mStrideA * cx) / (unsigned int)mN;
   unsigned int b0 = (unsigned int)(mStrideB * cy) / (unsigned int)mN;
   int idx = a0 + b0 + mStrideB * f + mBase;
   int h = (int)mHeights[idx] - 0x8000;
   float height = ((float)h * mScale) * 3.051851e-05f + mBias;
-  Vec3 res;
-  res.x = v[0] * height;
-  res.y = v[1] * height;
-  res.z = v[2] * height;
+  v.x = v.x * height;
+  v.y = v.y * height;
+  v.z = v.z * height;
   Cell* c = GetCell(face, x, y);
-  *out = res;
+  *out = v;
   return (c->flags & mask) != 0;
 }
 

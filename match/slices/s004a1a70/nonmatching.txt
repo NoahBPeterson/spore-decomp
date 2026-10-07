@@ -1,5 +1,5 @@
 004a1a70  632  symmetry pin-block update: complete; /Od frame holes from inlined ARC/operator[] helpers not reproduced (frame 0x6c vs 0xb4)
 004a1e10  495  unsnap-replace block: complete; same /Od inline-hole frame layout difference
-004a2180  441  snap offset vec3 from merged bboxes: complete; /Od frame slot layout differs
+004a2180  441  snap offset vec3 from merged bboxes: complete; /Od frame slot layout differs; difftest PASS after fixing the axis index (FUN_44c0e0's 2nd out value, not the 1st)
 004a2350  3  DoSnapReplace: complete; only the /Od slot of 'changed' (-9 vs -0x15) and 'd' (-0x18 vs -0x14) differ
-004a25f0  746  orientation builder: complete; fabs is a CRT call (orig inline fld/fabs asm helper), dot-product sum order and frame layout differ
+004a25f0  746  orientation builder: complete; fabs is a CRT call (orig inline fld/fabs asm helper), dot-product sum order and frame layout differ; statics now built in place by Normalize and cross/negate results copy-constructed like the original; difftest FAIL is a checker artifact: our three function-local statics and their guard are not mapped to the image's (0x015d60c0/cc/d8, guard 0x015d60e4; alignment cannot pair them), so the original's .data writes are compared with nothing; the same source with those statics spelled as the image globals (work/match/scratch_s004a1a70_globals.cpp) gives PASS 400/400

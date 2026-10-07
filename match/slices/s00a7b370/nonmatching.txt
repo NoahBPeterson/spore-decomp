@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00a7b370 1268 complete PathBuilder::Build (arc-length params, widths, tangents -> vertices); x87/SSE scheduling and block layout differ
+00a7b370 1265 complete PathBuilder::Build (arc-length params, widths, tangents -> vertices); x87/SSE scheduling and block layout differ; difftest WEAK after fixing the output clear (0xd73090 is the thiscall vector::erase(first,last) on mpOut, ret 8, not a cdecl free function)
 00a7bba0 119 complete Loader::Load; null-check of new result kept in original, stack layout differs
 00a7bf40 87 complete hash-map find; original builds iterator in a stack temp then copies to sret
 00a7c100 13 complete hash_map<Key,RefT1>::operator[]; stack slot sharing of find/insert results differs

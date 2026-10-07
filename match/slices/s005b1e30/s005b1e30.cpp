@@ -44,6 +44,11 @@ struct cSPQuaternion {
   }
 };
 
+// Scale/add by value: the float scale arrives as a spilled float, so Slerp's weights are rounded
+// to float and the blends run in SSE.
+inline cSPQuaternion operator*(const cSPQuaternion& q, float s) { return cSPQuaternion(q.x * s, q.y * s, q.z * s, q.w * s); }
+inline cSPQuaternion operator+(const cSPQuaternion& a, const cSPQuaternion& b) { return cSPQuaternion(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+
 struct cSPMatrix3 {
   float m[9];
   cSPMatrix3() {}
@@ -388,12 +393,12 @@ cSPQuaternion Slerp(const cSPQuaternion& a, const cSPQuaternion& b, float t) {
     dot = -dot;
   }
   if (dot > cos(gSlerpEpsilonAngle))
-    return Nlerp(q0, q1, t);
+    return Nlerp(q0, b, t);
   float omega = acos(dot);
   float inv = 1.0f / sin(omega);
   float s0 = sin((1.0f - t) * omega) * inv;
   float s1 = sin(t * omega) * inv;
-  return cSPQuaternion(q1.x * s1 + q0.x * s0, q1.y * s1 + q0.y * s0, q1.z * s1 + q0.z * s0, q1.w * s1 + q0.w * s0);
+  return q0 * s0 + q1 * s1;
 }
 
 // Result type of the slerp wrapper: element-wise user assignment from the helper's result.

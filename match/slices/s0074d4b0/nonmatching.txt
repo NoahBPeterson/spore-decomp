@@ -1,3 +1,3 @@
 0074d4b0  947  SP::cModelWorld::CreateModel: complete (needs /GS-); EH state stores and node-alloc loop layout differ.
 0074d870  263  SP::cModelWorld collect-by-filter: complete; regalloc (ebp/ebx for out/filter, spilled list end) differs.
-0074d990  2553  SP::cModelWorld sphere sweep collect: complete; node-visit body inlined twice via __forceinline, scheduling/float codegen differs.
+0074d990  2553  SP::cModelWorld sphere sweep collect (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete; node-visit body inlined twice via __forceinline, scheduling/float codegen differs; difftest WEAK after fixing out->clear() (erase must subtract the element count, (end-begin)>>2 words, not the byte distance), the // @ marker sitting on the inline helper instead of CollectSweep, the missing SSE/fp:fast flags, and NaN-faithful (0 > x) sphere-test compares

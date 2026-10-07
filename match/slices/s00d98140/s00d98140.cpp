@@ -17,6 +17,7 @@ struct cSPVector3 {
     cSPVector3() {}
     cSPVector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
     cSPVector3(const cSPVector3& v) { x = v.x; y = v.y; z = v.z; }
+    cSPVector3& operator+=(const cSPVector3& v) { x += v.x; y += v.y; z += v.z; return *this; }
     float Length() const { return sqrtf(x * x + y * y + z * z); }
     cSPVector3 Normalized() const
     {
@@ -232,15 +233,18 @@ void UpdateStream(CitizenStream* s, float dt)
     for (int i = 0; i < kNumPoints; ++i) {
         cSPVector3& cur = s->mPoints[i];
         const cSPVector3& tgt = s->mTargets[i];
-        cSPVector3 d = tgt - cur;
-        float dist = d.Length();
+        double dx = (double)tgt.x - cur.x;
+        double dy = (double)tgt.y - cur.y;
+        double dz = (double)tgt.z - cur.z;
+        cSPVector3 d((float)dx, (float)dy, (float)dz);
+        float dist = (float)sqrt(dx * dx + dy * dy + dz * dz);
         if (dist > 0.0f) {
             float maxMove = ((float)i * 0.1f) * (dt * 2.0f);
             if (maxMove >= dist) {
                 cur = tgt;
             } else {
                 float f = maxMove / dist;
-                cur = d * f + cur;
+                cur += d * f;
             }
         }
     }

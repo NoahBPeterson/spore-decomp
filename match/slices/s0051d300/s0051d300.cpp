@@ -4,8 +4,6 @@
 
 void  EASTL_allocator_deallocate(void* p);                         // 0x00f47380
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
-void  AtomicRefCounted_Release(void* p);                           // 0x00402420
-void  ThreadedObject_Release(void* p);                             // 0x00404f90
 void  Memset32(void* dst, int value, int count);                   // 0x0092cb00
 void  BaseBca_ctor(void* self, int w, int h);                      // 0x00432960
 
@@ -20,6 +18,10 @@ struct SimAbility {
 struct AtomicRefCounted {
     int vtbl;
     int mCount;
+    void Release();              // 0x00402420 (thiscall)
+};
+struct ThreadedObject {
+    void Release();              // 0x00404f90 Resource::ThreadedObject::Release (thiscall)
 };
 struct RefHolder {
     int vtbl;                    // +0x00
@@ -336,17 +338,27 @@ Bitmap::Bitmap(int w, int h, int fill)
     Memset32(buf, fill, w * h);
 }
 
+// eastl::intrusive_ptr-style holder; its inlined dtor gives the /Od member-address temps.
+template <class T> struct IPtr51 {
+    T* mpObject;
+    void Reset() { if (mpObject) mpObject->Release(); }
+};
+// base part (vtable 0x13ef094 = Simulator::cCreatureAbility): holder at +8, then the base vtable.
+struct ThreadedResBase51 {
+    void* vtbl;
+    int f4;
+    IPtr51<ThreadedObject> m8;
+    // pad: three dead /Od slots (ebp-0x14..-0xc) the original frame also has, likely from other inlined member dtors.
+    void Teardown() { int pad[3]; m8.Reset(); *(void**)this = &g_vtblSimCreatureAbility; }
+};
+
 // @ 0x0051e100 ThreadedRes dtor
 void ThreadedRes::dtor()
 {
     *(void**)this = &g_vtblF1c6c;
-    if (*(void**)((char*)this + 0x80) != 0)
-        AtomicRefCounted_Release(*(void**)((char*)this + 0x80));
-    if (*(void**)((char*)this + 0x7c) != 0)
-        AtomicRefCounted_Release(*(void**)((char*)this + 0x7c));
-    if (*(void**)((char*)this + 8) != 0)
-        ThreadedObject_Release(*(void**)((char*)this + 8));
-    *(void**)this = &g_vtblSimCreatureAbility;
+    ((IPtr51<AtomicRefCounted>*)((char*)this + 0x80))->Reset();
+    ((IPtr51<AtomicRefCounted>*)((char*)this + 0x7c))->Reset();
+    ((ThreadedResBase51*)this)->Teardown();
 }
 
 // @ 0x0051e340 RefHolder::AddRef (non-atomic)

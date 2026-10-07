@@ -254,7 +254,7 @@ struct Variant {
   char data[0x10];
   unsigned short mFlags;
   unsigned short mTypeId;
-  Variant() : mFlags(0), mTypeId(0) {}
+  Variant() : mFlags(0) {}               // the original leaves mTypeId unset
   ~Variant() { if (mFlags & 4) Destruct(0); }
   Variant& operator=(const Variant& o);   // 0x00542b80
   void Destruct(int);                     // 0x0093db80
@@ -262,7 +262,11 @@ struct Variant {
 struct VarSlot {
   AutoRef<IRef> p;
   Variant v;
-  unsigned extra;
+  union {
+    unsigned extra;
+    struct { unsigned short extraLo, extraHi; };
+  };
+  VarSlot() { extraHi = 0; }             // only the high half is cleared
 };
 
 // ---- 0x00828c30: sorted-vector map insert --------------------------------------
@@ -272,10 +276,14 @@ struct MapNode {
   Variant v;
   unsigned flags;
 };
-struct MapVec {
-  MapNode** mBegin;   // +0x2c
-  MapNode** mEnd;     // +0x30
-  MapNode** Insert(MapNode** pos, unsigned* key);   // 0x00828b80
+struct MapPair {      // value_type passed to Insert (copied into the vector)
+  unsigned key;
+  VarSlot s;
+};
+struct MapVec {       // sorted vector of MapNode values
+  MapNode* mBegin;    // +0x2c
+  MapNode* mEnd;      // +0x30
+  MapNode* Insert(MapNode* pos, const MapPair* value);   // 0x00828b80
 };
 class cEntryMap {
  public:
@@ -285,22 +293,24 @@ class cEntryMap {
   bool mFlag;         // +0x40
   bool Set(unsigned key, const Variant* value, unsigned flags, IRef* ref);
 };
-MapNode** LowerBound(MapNode** first, MapNode** last, unsigned* key, bool flag);   // 0x00d01210
+MapNode* LowerBound(MapNode* first, MapNode* last, unsigned* key, bool flag);   // 0x00d01210
 
 // @ 0x00828c30
 bool cEntryMap::Set(unsigned key, const Variant* value, unsigned flags, IRef* ref) {
-  MapNode** it;
+  MapNode* it;
   {
     VarSlot a;
-    VarSlot b;
-    b.v = a.v;
-    b.extra = a.extra;
-    unsigned k = key;
-    it = LowerBound(mVec.mBegin, mVec.mEnd, &k, mFlag);
-    if (it == mVec.mEnd || k < (*it)->key)
-      it = mVec.Insert(it, &k);
+    MapPair b;
+    b.key = key;
+    b.s.v = a.v;
+    b.s.extra = a.extra;
+    MapVec& vec = mVec;
+    MapNode* end = vec.mEnd;
+    it = LowerBound(vec.mBegin, end, &b.key, mFlag);
+    if (it == end || b.key < it->key)
+      it = vec.Insert(it, &b);
   }
-  MapNode* n = (MapNode*)it;
+  MapNode* n = it;
   n->v = *value;
   n->flags = flags | 4;
   IRef* old = n->p;

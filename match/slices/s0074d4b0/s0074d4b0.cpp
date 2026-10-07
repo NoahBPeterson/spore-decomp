@@ -136,7 +136,7 @@ struct PtrVec {
     void** first = mpBegin;
     void** last = mpEnd;
     memcpy(first, last, (size_t)((char*)mpEnd - (char*)last));
-    mpEnd = (void**)((char*)mpEnd - ((char*)last - (char*)first));
+    mpEnd -= (last - first);   // element count: (last-first)>>2, then *4
   }
 };
 
@@ -331,9 +331,7 @@ bool cModelWorld::CollectModels(PtrVec* out, const cModelFilter* f)
   return out->mpBegin != out->mpEnd;
 }
 
-// ---------------------------------------------------------------------------
-// @ 0x0074D990  cModelWorld: sphere sweep (p0 -> p1, radius) over models, appends hits to out
-// ---------------------------------------------------------------------------
+// Node-visit body of the sphere sweep below (inlined at both call sites).
 static __forceinline void SweepNode(cModelNode* n, const float* p0, const float* p1, PtrVec* out,
                                     const cModelFilter* f, float radius, cSPTransform& xf, cBBox& box,
                                     const float* rot)
@@ -363,15 +361,15 @@ static __forceinline void SweepNode(cModelNode* n, const float* p0, const float*
   float b = (dx * cx + dy * cy) + dz * cz;
   float a = (dx * dx + dy * dy) + dz * dz;
   float disc = b * b - (((cx * cx + cy * cy) + cz * cz) - R * R) * a;
-  if (!(0.0f <= disc)) return;
+  if (0.0f > disc) return;
   float s = sqrtf(disc);
   float t0 = -b - s;
-  if (!(0.0f <= s - b) || !(t0 <= a)) return;
+  if (0.0f > s - b || t0 > a) return;
 
   if (lod < 3 || !n->mCookie || !n->mCookie->mFlagCC) {
     if (lod > 1 && n->mCookie2 && n->mCookie2->mFlagCC) {
       if (!FUN_00748ad0(p0, p1, &xf, &box, rot, n, 4, 0, radius)) return;
-    } else if (lod != 0 && n->mBoxMin[0] <= n->mBoxMax[0]) {
+    } else if (lod != 0 && !(n->mBoxMin[0] > n->mBoxMax[0])) {
       cCapsule6 seg;
       seg.a[0] = n->mBoxMin[0]; seg.a[1] = n->mBoxMin[1]; seg.a[2] = n->mBoxMin[2];
       seg.a[3] = n->mBoxMax[0]; seg.a[4] = n->mBoxMax[1]; seg.a[5] = n->mBoxMax[2];
@@ -383,6 +381,9 @@ static __forceinline void SweepNode(cModelNode* n, const float* p0, const float*
   out->PushObj(n->Obj());
 }
 
+// ---------------------------------------------------------------------------
+// @ 0x0074D990  cModelWorld: sphere sweep (p0 -> p1, radius) over models, appends hits to out
+// ---------------------------------------------------------------------------
 bool cModelWorld::CollectSweep(const float* p0, const float* p1, PtrVec* out, const cModelFilter* f, float radius)
 {
   out->clear();

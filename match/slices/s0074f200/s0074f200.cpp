@@ -559,14 +559,18 @@ struct IJobManager {
 IJobManager* GetJobManager();                          // 0x0068f4d0
 
 struct cJob {
-    char pad0[0x18];
+    void (*mpCallback)(void*);                         // +0x00
+    void* mpCallbackData;                              // +0x04
+    char pad08[0x10];
     uint32_t mFlags;                                   // +0x18
     void SetDependency(cJob* pOther);                  // 0x00691380 (this = dependent)
     void Start();                                      // 0x006909b0
     void Release();                                    // 0x00690120
+    void SetCallback(void (*f)(void*), void* data) { mpCallback = f; mpCallbackData = data; }
 };
 struct cJobRef {
     cJob* mp;
+    void reset() { if (mp) { cJob* pOld = mp; mp = 0; pOld->Release(); } }
 };
 struct JobLock {
     IJobManager* m;
@@ -580,13 +584,15 @@ struct cFeedbackJobs {
     char pad1d[3];
     cJobRef mJobA;                                     // +0x20
     cJobRef mJobB;                                     // +0x24
-    char pad28[4];
+    struct Tree28 {
+        uint32_t mpad;
+        void ResetTree(uint32_t first);                // 0x00478db0 (thiscall on this+0x28)
+    } mTree28;                                         // +0x28
     uint32_t mnState;                                  // +0x2c
     cJobRef mJobC;                                     // +0x30
     char pad34[0x4c - 0x34];
     uint32_t mbActive;                                 // +0x4c
     void Assign(void** pSource);                       // 0x00747190
-    void ResetTree(uint32_t first);                    // 0x00478db0 (thiscall on this+0x28)
     bool Start(void** pSource);
 };
 void JobCallback(void*);                               // 0x0074d080
@@ -596,37 +602,26 @@ bool cFeedbackJobs::Start(void** pSource)
 {
     if (*pSource == 0)
         return false;
-    ResetTree((uint32_t)*pSource);
+    mTree28.ResetTree((uint32_t)*pSource);
     Assign(pSource);
     mbActive = 1;
     mnState = 6;
-    if (mJobC.mp) {
-        cJob* pOld = mJobC.mp;
-        mJobC.mp = 0;
-        pOld->Release();
-    }
+    mJobC.reset();
     JobLock lock(GetJobManager());
     {
-        if (mJobA.mp) {
-            cJob* pOld = mJobA.mp;
-            mJobA.mp = 0;
-            pOld->Release();
-        }
-        if (!GetJobManager()->CreateJob(&mJobA))
+        IJobManager* pMgr = GetJobManager();
+        mJobA.reset();
+        if (!pMgr->CreateJob(&mJobA))
             return false;
     }
     {
-        if (mJobB.mp) {
-            cJob* pOld = mJobB.mp;
-            mJobB.mp = 0;
-            pOld->Release();
-        }
-        if (!GetJobManager()->CreateJob(&mJobB))
+        IJobManager* pMgr = GetJobManager();
+        mJobB.reset();
+        if (!pMgr->CreateJob(&mJobB))
             return false;
     }
     mJobA.mp->mFlags = 0x80000000;
-    *(void**)mJobA.mp = (void*)JobCallback;
-    ((void**)mJobA.mp)[1] = this;
+    mJobA.mp->SetCallback(JobCallback, this);
     mJobB.mp->SetDependency(mJobA.mp);
     mJobB.mp->Start();
     mbStarted = 1;

@@ -13,6 +13,6 @@
 00a27910  8  complete; register choice (eax vs edx) in relocate-call arg loads
 00a27a40  8  complete; register choice (eax vs edx) in relocate-call arg loads
 00a27b90  14  complete; operand load order in final relocate call
-00a27e60  53  complete; rbtree insert tag/temps differ
-00a27ed0  134  complete; EH + eastl string temp layout differs
+00a27e60  8  complete; true_type tag is built in a temp slot instead of the dead key parameter slot (stack slot choice); difftest PASS after fixing the insert tag (an empty eastl::true_type by value, not int 0; upper bytes are unspecified padding the callee never reads)
+00a27ed0  15  complete; register choice (eax/ecx/edx) around the sprintf and SetName calls; difftest WEAK after fixing mpName offset (empty VoiceContainer member padded to 4 made it +0x98c instead of +0x988), plus lock-guard/string RAII for the EH frame
 00a27ff0  187  complete; pair value layout guessed, EH temps differ

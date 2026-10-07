@@ -42,6 +42,9 @@ struct SaveObj5 {
   virtual void Call1c();     // 0x1c
 };
 
+// eastl::true_type: empty tag argument (1 byte; the caller leaves the slot's upper bytes as garbage).
+struct TrueTag5 {};
+
 // global save-area map (base 0x0152fdc4).
 struct SaveMap5 {
   uint32_t f0;       // +0x00
@@ -52,7 +55,7 @@ struct SaveMap5 {
   uint32_t f14;      // +0x14
   void Nuke(RBNode5* n);   // 0x6b2aa0 (thiscall, this ignored)
   RefPair5& Index(const uint32_t& key);      // 0x6b3680 operator[]
-  void DoInsertValue(SavePairResult* sret, RBNode5* hint, const SavePair& v, uint32_t extra);   // 0x6b3520
+  void DoInsertValue(SavePairResult* sret, RBNode5* hint, const SavePair& v, TrueTag5 unique);   // 0x6b3520
 };
 extern SaveMap5 g_m5;
 

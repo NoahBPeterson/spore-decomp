@@ -1,6 +1,5 @@
 # <va>  <diff-bytes>  <reason>
 0051d690  76   /Od member-init schedule / base-ctor differs; complete Bitmap ctor
-0051e100  86   /Od member address-temp release pattern differs; complete ThreadedRes dtor
 0051e340  8    /Od this/n slot assignment swap only; complete RefHolder::AddRef
 0051d300  -  complete fixed_vector<intrusive_ptr>::DoInsertValue; original inlines the move/uninitialized-copy helpers with extra flag locals (frame 0x84 vs mine)
 0051d720  -  complete sampler (all paths, calls, clamps); original inlines item-vector size/begin helpers differently, frame 0x12c vs 0x110

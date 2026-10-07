@@ -1,7 +1,5 @@
 # <va>  <diff-bytes>  <reason>
-00522720  110  /Od boolean-result local slot/width (int vs bool) differs; complete ShouldTick
-005227a0  81   /Od steal/release with AutoRefCount temporary; complete
-005218e0  221  /Od copy-assign complete; frame/temp layout differs
-005219d0  455  /Od message handler complete; temps/EASTL inline not exact
+005218e0  13   /Od copy-assign complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE), member-wise like a compiler-generated operator=; only the frame differs (original reserves two more unused slots); difftest PASS after fixing the 0x525d90 smart-pointer assign declared cdecl instead of thiscall
+005219d0  187  /Od message handler complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE); instructions match, only the /Od stack-slot layout differs; difftest WEAK after fixing the missing second parameter (ret 8), thiscall AtomicRefCounted::Release and thiscall EASTL erase/assign/ctor/DoFree helpers that were declared cdecl
 00521ba0  457  /Od per-frame update complete; AutoRefCount temp layout differs
 00521d70  2474  nSPSkinner::cPaintSystem::HandleUpdateMessage complete; /Od layout differs

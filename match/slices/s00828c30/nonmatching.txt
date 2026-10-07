@@ -1,6 +1,6 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 00828df0  48  three vcalls: null-test of mObj emitted as `cmp [mem],0; reload` vs `mov ecx,[mem]; test`
-00828c30  276  cEntryMap::Set: complete; temp VarSlot placement/dtor order differs
+00828c30  243  cEntryMap::Set: complete; flags /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast (the original has no cookie and no EH frame); register allocation differs (this vs &mVec, end kept in edi vs ebx); difftest PASS after fixing the map value layout (vector of MapNode values, not pointers; Insert takes the whole key+slot pair; slot ctor clears only the high half of the trailing dword) and the flags (/GS-, no /EHsc)
 00828e30  6  BeginRender: complete; edx vs eax for Begin2D arg
 00828f40  262  MeasureOverflow: complete; loop var/this register allocation
 00829110  55  UninitCopyRefs: complete; params kept in regs vs stack

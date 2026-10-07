@@ -103,6 +103,10 @@ void SPin930::SetBlock(RefA** src, uint32_t a, uint32_t b, uint32_t c, bool d) {
 
 // ---- rotation / move manipulator helpers (class identity unconfirmed; offsets from retail) ----
 struct V3 { float x, y, z; };
+struct V3c {  // Vector3 passed by value with a member-wise (x87) copy
+  float x, y, z;
+  V3c(const V3& o) : x(o.x), y(o.y), z(o.z) {}
+};
 struct V4 { float x, y, z, w; };
 extern V4 g_01511b00;  // constant vec4 passed by value to Block::F448690
 
@@ -141,7 +145,7 @@ struct AnimInfo {  // SP::cSPEditorAnimatedEventInfo (size 0x30)
   virtual void vs0();
   virtual int AddRef();
   virtual int Release();
-  uint32_t pad[9];
+  uint32_t pad[11];
   AnimInfo();  // 0x0059d960
   void MessagePost(uint32_t id, Block* b, Model* m, int a, int c, float d, int e, int f, float g);  // 0x0059d840
 };
@@ -165,6 +169,8 @@ struct Block {
   void F448a80();                       // 0x00448a80
   int F43c3d0(Handle* h, int a);        // 0x0043c3d0
   void F448480(int v);                  // 0x00448480
+  void F43c450(Handle* h, float a, float* b, int c);  // 0x0043c450
+  void F43cfc0(Handle* h, int a);       // 0x0043cfc0
   void F448690(V4 v);                   // 0x00448690
   void F43cad0();                       // 0x0043cad0
   void F448e90(V3* p, int a);           // 0x00448e90
@@ -182,9 +188,7 @@ struct PileList {
 };
 
 void* __cdecl operator_new_dummy();
-void __stdcall F43c450(Handle* h, float a, float* b, int c);       // 0x0043c450
-void __stdcall F43cfc0(Handle* h, int a);                           // 0x0043cfc0
-void __cdecl F4a02b0(Block* b, V3 a, V3 c);                         // 0x004a02b0
+void __cdecl F4a02b0(Block* b, V3c a, V3c c);                         // 0x004a02b0
 void __cdecl DeleteInvalidBlocks(Block* b, int a);                  // 0x004a6f10
 void __cdecl BuildPileList(Block* b, PileList* l, int a);           // 0x0048c790
 void __cdecl F4961d0(Block* b, PileList* l);                        // 0x004961d0
@@ -210,7 +214,7 @@ struct AppObj {
 };
 AppObj* AppGet();  // 0x0067dd10 (SP::App)
 
-static __forceinline void PostBlockEvent(Block* blk, uint32_t id) {
+static __forceinline void PostBlockEvent(Block* const& blk, uint32_t id) {
   AnimInfo* info = new ("Editor", 0, 0, 0, 0) AnimInfo();
   if (info)
     info->AddRef();
@@ -272,11 +276,9 @@ PinRot::PinRot() {
 // @ 0x005aca70
 bool PinRot::OnMouseUp(int, float, float, int) {
   if (mHandle && mBlock) {
-    F43c450(mHandle, mAngle, 0, 1);
-    if (mBlock->Flag11() && mBlock->m3f0) {
-      V3* p = (V3*)((char*)mBlock->m3f0 + 0xc);
-      F4a02b0(mBlock, m34, *p);
-    }
+    mBlock->F43c450(mHandle, mAngle, 0, 1);
+    if (mBlock->Flag11() && mBlock->m3f0 != 0)
+      F4a02b0(mBlock, m34, *(V3*)((char*)mBlock->m3f0 + 0xc));
     mBlock->F449ce0();
     if (mChanged)
       PostBlockEvent(mBlock, 0x8fea0db4);
@@ -336,7 +338,7 @@ bool PinRot::DoOnMouseDown(int, float x, float y, int z) {
     Block* cb = mBlock;
     if (cb->Flag11() && cb->m3f0)
       m34 = *(V3*)((char*)cb->m3f0 + 0xc);
-    F43cfc0(mHandle, 1);
+    mBlock->F43cfc0(mHandle, 1);
     mHandle->Notify(2, 1);
   }
   return false;
@@ -393,7 +395,7 @@ void PinRot::Update(int) {
     mAngle2 = lo;
   if (mBlock->Flag11() && mBlock->m3f0)
     m34 = *(V3*)((char*)mBlock->m3f0 + 0xc);
-  F43c450(mHandle, mAngle2, &mAngle, 1);
+  mBlock->F43c450(mHandle, mAngle2, &mAngle, 1);
   mBlock->F449ce0();
   if (old != mAngle2) {
     const char* name = mHandle->mSoundName;

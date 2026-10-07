@@ -2,7 +2,6 @@
 // Unoptimized editor module: /Od /Ob1 /MD /Gy /TP /arch:SSE (no /EHsc).
 #include "types.h"
 
-void AtomicRefCounted_Release(void* p);   // 0x00402420
 void FUN_00525d90(void* p, void* v);      // 0x00525d90
 
 struct RcObj { virtual void AddRef(); virtual void Release(); };
@@ -37,7 +36,7 @@ struct TickState {
     bool ShouldTick();
     void ClearPtr100();
     TickState& Assign(const TickState& o);                        // 0x005218e0
-    bool HandleMessage(int id);                                   // 0x005219d0
+    bool HandleMessage(int id, void* msg);                        // 0x005219d0
     void Tick(int dt);                                            // 0x00521ba0
     void HandleUpdateMessage(int dt);                             // 0x00521d70
     void F_00523690();
@@ -48,102 +47,131 @@ struct TickState {
     void SetCreatureSkin(int, int);                               // 0x00522b40
 };
 void F_00525d90b(void* self, unsigned v);                         // 0x00525d90 (thiscall)
-void F_00525cf0(void* dst, void* src);                            // 0x00525cf0 (thiscall on dst)
-void VecErase(void* v, unsigned b, unsigned e);                   // 0x00530c80 (thiscall)
-void VecAssign(void* v, unsigned* b, unsigned* e);                // 0x005283d0 (thiscall)
-void VecFree(void* v);                                            // 0x00526a40 (thiscall)
+struct PairF { int first; float second; };
+struct IterTag {};
+// eastl::vector<eastl::pair<int,float>, sp_vector_allocator> at TickState+0x94
+struct PairVector {
+    PairF* mpBegin; PairF* mpEnd; PairF* mpCapacity; int mAllocator;
+    PairF* erase(PairF* first, PairF* last);                     // 0x00530c80
+    void DoAssign(PairF* first, PairF* last, IterTag);            // 0x005283d0
+    void assign(PairF* first, PairF* last) { IterTag tag; DoAssign(first, last, tag); }
+};
+// eastl::fixed_vector<pair<int,float>, 8> snapshot (0x58 bytes)
+struct PairFixedVector {
+    PairF* mpBegin; PairF* mpEnd; PairF* mpCapacity; int mAllocator[2]; int mPool[17];
+    PairFixedVector(const PairVector& src);                       // 0x00525cf0
+    void DoFree();                                                // 0x00526a40
+};
 bool GetResourceTypeFromModelType(int modelType);                 // 0x00526430 (thiscall)
 
 // @ 0x00522720
+struct PairVec { struct E { int a, b; }; E* mpBegin; E* mpEnd; unsigned size() const { return (unsigned)(mpEnd - mpBegin); } };
+struct PtrHolder { void* p; void* get() const { return p; } };
 bool TickState::ShouldTick()
 {
-    bool result = true;
-    if (*(unsigned char*)((char*)this + 0x62) == 0) {
-        int* p = (int*)((char*)this + 0x94);
-        if (((p[1] - p[0]) >> 3) <= *(int*)((char*)this + 0xec)) {
-            int v = *(int*)((char*)this + 0xf0);
-            if (v == 0 && *(unsigned char*)((char*)this + 0x61) == 0 &&
-                *(unsigned char*)((char*)this + 0x60) == 0)
-                result = false;
-        }
-    }
-    return result;
+    return !(*(unsigned char*)((char*)this + 0x62) == 0 &&
+             *(unsigned*)((char*)this + 0xec) >= ((PairVec*)((char*)this + 0x94))->size() &&
+             ((PtrHolder*)((char*)this + 0xf0))->get() == 0 &&
+             *(unsigned char*)((char*)this + 0x61) == 0 &&
+             *(unsigned char*)((char*)this + 0x60) == 0);
 }
+
+extern "C" long __cdecl _InterlockedIncrement(long volatile*);
+#pragma intrinsic(_InterlockedIncrement)
+struct AtomicRefCounted {
+    void* vt; int pad; volatile long mRefCount;
+    void AddRef() { _InterlockedIncrement(&mRefCount); }
+    void Release();                                               // 0x00402420
+};
+template<class T> struct RefPtr {
+    T* mp;
+    RefPtr& operator=(T* p) { T* old = mp; if (p) p->AddRef(); mp = p; if (old) old->Release(); return *this; }
+    __forceinline void Clear() { if (mp) *this = 0; }
+};
 
 // @ 0x005227a0
 void TickState::ClearPtr100()
 {
-    int** p = (int**)((char*)this + 0x100);
-    if (*p != 0) {
-        int* old = *p;
-        *p = 0;
-        if (old != 0)
-            AtomicRefCounted_Release(old);
-    }
+    ((RefPtr<AtomicRefCounted>*)((char*)this + 0x100))->Clear();
 }
 
 
 #define F(T, off) (*(T*)((char*)this + (off)))
 
-// @ 0x005218e0 copy-assign
+// Smart-pointer member views for the copy-assign below.
+template<class T> struct VRefPtr {
+    T* mp;
+    VRefPtr& operator=(T* p) { if (p != mp) { T* old = mp; if (p) p->AddRef(); mp = p; if (old) old->Release(); } return *this; }
+    VRefPtr& operator=(const VRefPtr& o) { return operator=(o.mp); }
+};
+struct CountedObj;
+struct CountedPtr { CountedObj* mp; CountedPtr& operator=(CountedObj* p);   // 0x00525d90 (thiscall, out of line)
+                    CountedPtr& operator=(const CountedPtr& o) { return operator=(o.mp); } };
+struct Vec3Copy { float x, y, z; };
+struct TickStateParams {
+    Vec3Copy a; Vec3Copy b; float f18; int i1c, i20, i24, i28;
+    VRefPtr<RcObj> r2c; int i30; CountedPtr p34;
+};
+
+// @ 0x005218e0 copy-assign (shaped like a compiler-generated operator=; the original frame has two more unused slots)
 TickState& TickState::Assign(const TickState& o)
 {
-    const char* src = (const char*)&o;
-    for (int i = 0; i < 0x18; i += 4) *(int*)((char*)this + i) = *(const int*)(src + i);
-    F(float, 0x18) = *(const float*)(src + 0x18);
-    F(int, 0x1c) = *(const int*)(src + 0x1c);
-    F(int, 0x20) = *(const int*)(src + 0x20);
-    F(int, 0x24) = *(const int*)(src + 0x24);
-    F(int, 0x28) = *(const int*)(src + 0x28);
-    RcObj** dst = (RcObj**)((char*)this + 0x2c);
-    RcObj* nw = *(RcObj* const*)(src + 0x2c);
-    if (nw != *dst) {
-        RcObj* old = *dst;
-        if (nw) nw->AddRef();
-        *dst = nw;
-        if (old) old->Release();
-    }
-    F(int, 0x30) = *(const int*)(src + 0x30);
-    F_00525d90b((char*)this + 0x34, *(const unsigned*)(src + 0x34));
+#define D (*(TickStateParams*)this)
+#define S (*(const TickStateParams*)&o)
+    D.a = S.a;
+    D.b = S.b;
+    D.f18 = S.f18;
+    D.i1c = S.i1c;
+    D.i20 = S.i20;
+    D.i24 = S.i24;
+    D.i28 = S.i28;
+    D.r2c = S.r2c;
+    D.i30 = S.i30;
+    D.p34 = S.p34;
+#undef D
+#undef S
     return *this;
 }
 
 // @ 0x005219d0 message handler
-bool TickState::HandleMessage(int id)
+bool TickState::HandleMessage(int id, void* msg)
 {
-    if (id == 0x247ca7b) {
+    switch (id) {
+    case 0x247ca7b:
         if (F(unsigned char, 0x7e) && F(unsigned char, 0x7d)) {
             F(unsigned char, 0x7c) = 1;
             F(unsigned char, 0x7d) = 0;
             char* req = F(char*, 0x1c);
             if (req) {
-                if (*(unsigned char*)(req + 0x6a)) {
-                    int** p = (int**)((char*)this + 0x100);
+                char* req2 = F(char*, 0x1c);
+                if (*(unsigned char*)(req2 + 0x6a)) {
+                    AtomicRefCounted** p = (AtomicRefCounted**)((char*)this + 0x100);
                     if (*p) {
-                        int* old = *p;
+                        AtomicRefCounted* old = *p;
                         *p = 0;
-                        AtomicRefCounted_Release(old);
+                        old->Release();
                     }
                     F_0051a6a0(p);
                 }
             }
         }
-    } else if (id == 0x44edd9c) {
+        break;
+    case 0x44edd9c:
         if (ShouldTick()) {
-            // snapshot the pending-list at +0x94 into a local fixed vector, rebuild, copy back
-            struct Local { unsigned* mpBegin; unsigned* mpEnd; unsigned pad[18]; } local;
-            F_00525cf0(&local, (char*)this + 0x94);
+            // snapshot the pending list at +0x94, rebuild it, then restore the snapshot
+            PairFixedVector local(*(PairVector*)((char*)this + 0x94));
             F_00523690();
-            unsigned* mine = (unsigned*)((char*)this + 0x94);
-            if (mine != (unsigned*)&local) {
-                VecErase(mine, mine[0], mine[1]);
-                VecAssign(mine, local.mpBegin, local.mpEnd);
+            PairVector* mine = (PairVector*)((char*)this + 0x94);
+            if ((void*)mine != (void*)&local) {
+                mine->erase(mine->mpBegin, mine->mpEnd);
+                mine->assign(local.mpBegin, local.mpEnd);
             }
-            for (unsigned* it = local.mpBegin; it < local.mpEnd; it += 2) { }
-            VecFree(&local);
+            for (PairF* it = local.mpBegin; it < local.mpEnd; ++it) { }
+            local.DoFree();
         }
         F(unsigned char, 0x7c) = 0;
         F(unsigned char, 0x7d) = 0;
+        break;
     }
     return true;
 }

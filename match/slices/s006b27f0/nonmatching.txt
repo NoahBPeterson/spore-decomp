@@ -6,4 +6,4 @@
 006b3050  276  cDirectoriesCheat::Execute complete; frame is 4 bytes larger in the original (new-expression temp), prologue order differs
 006b3240  276  CreatePackageSave complete; same as Execute
 006b3430  147  CreateLocationSave complete; prologue/frame differs (extra 4-byte slot), otherwise same calls
-006b3680  180  map::operator[] complete; original reuses the key param slot for the insert's sret result
+006b3680  177  map::operator[] complete; original reuses the key param slot for the insert's sret result; difftest PASS after fixing the DoInsertValue tag argument (an empty true_type passed in the reused key slot, not a literal 0 dword)

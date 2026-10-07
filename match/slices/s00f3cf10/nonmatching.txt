@@ -2,7 +2,7 @@
 00f3d260  311  complete: resource-registration helper; list/vcall scheduling not exact
 00f3d3e0  405  complete: 4-slot image refresh loop; hand-scheduled key arithmetic not exact
 00f3d5d0  361  complete: per-index key regen loop; scheduling not exact
-00f3d7e0  105  complete: hashtable walk with type-id dispatch; end() reload and thiscall-vs-cdecl scheduling differ
+00f3d7e0  114  complete: hashtable walk with type-id dispatch (takes one ignored stack arg, ret 4); end() reload CSEd and register allocation differ; difftest WEAK after fixing the missing ignored stack argument (ours returned with ret instead of ret 4)
 00f3d900  324  complete: bit-flag helper (shr/test chain) folded by cl; register choice differs
 00f3da90  412  complete: object state copy + QueryInterface chains; scheduling differs
 00f3dce0  245  complete: needs /arch:SSE (module flag) ; weighted average + clamp

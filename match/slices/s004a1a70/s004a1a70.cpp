@@ -31,6 +31,7 @@ struct rwVec3 {
     float x, y, z;
     rwVec3() {}
     rwVec3(const rwVec3& v);                      // 0x004098a0
+    rwVec3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
     float& operator[](int i) { return (&x)[i]; }
 };
 struct rwMat3 {                                   // 3 rows of rwVec3
@@ -271,8 +272,8 @@ extern const float kSnapScale;                   // 0x013ef578 (1.3f)
 // @ 0x4a2180
 rwVec3* FUN_4a2180(rwVec3* ret, cSPEditorBlock* a, cSPEditorBlock* b)
 {
-    int axis, i1, i2;
-    b->FUN_44c0e0(&axis, &i1, &i2);
+    int i0, axis, i2;                             // axis is the 2nd out value
+    b->FUN_44c0e0(&i0, &axis, &i2);
     BBox bbA;
     a->GetBBox(&bbA, 1, 0, 0);
     BlockVec vec;
@@ -358,14 +359,11 @@ rwMat3 FUN_4a25f0(rwMat3 m, int mode)
     dir.y = 0.0f;
     dir.z = 0.0f;
     if (mode == 0) {
-        rwVec3 n0;
-        static rwVec3 sNegX = (n0.x = -1.0f, n0.y = 0.0f, n0.z = 0.0f, Vec3Normalized(n0));
+        static rwVec3 sNegX = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.0f));     // 0x015d60d8
         dir = sNegX;
     } else {
-        rwVec3 n1;
-        static rwVec3 sPosX = (n1.x = 1.0f, n1.y = 0.0f, n1.z = 0.2f, Vec3Normalized(n1));
-        rwVec3 n2;
-        static rwVec3 sNegX2 = (n2.x = -1.0f, n2.y = 0.0f, n2.z = 0.2f, Vec3Normalized(n2));
+        static rwVec3 sPosX = Vec3Normalized(rwVec3(1.0f, 0.0f, 0.2f));      // 0x015d60cc
+        static rwVec3 sNegX2 = Vec3Normalized(rwVec3(-1.0f, 0.0f, 0.2f));    // 0x015d60c0 (guard 0x015d60e4)
         rwVec3* p = (mode == 1) ? &sPosX : &sNegX2;
         rwVec3 base(*p);
         rwVec3 tmp;
@@ -377,16 +375,16 @@ rwMat3 FUN_4a25f0(rwMat3 m, int mode)
     rwVec3 z;
     if (Vec3Length(&x) < kDegenerateEps) {
         rwVec3 t3;
-        x = *Vec3Negate(&t3, &kUpAxis);
+        new (&x) rwVec3(*Vec3Negate(&t3, &kUpAxis));
         rwVec3 t4;
-        z = *Vec3Cross(&t4, &x, &up);
+        new (&z) rwVec3(*Vec3Cross(&t4, &x, &up));
         rwVec3 t5;
         z = *Vec3Normalize(&t5, &z);
         rwVec3 t6;
-        up = *Vec3Cross(&t6, &z, &x);
+        new (&up) rwVec3(*Vec3Cross(&t6, &z, &x));
     } else {
         rwVec3 t7;
-        z = *Vec3Cross(&t7, &x, &up);
+        new (&z) rwVec3(*Vec3Cross(&t7, &x, &up));
         rwVec3 t8;
         z = *Vec3Normalize(&t8, &z);
     }

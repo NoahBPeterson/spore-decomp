@@ -4,4 +4,4 @@
 0074f5d0  449  complete (vector<cModelInfo>::DoInsertValues); original reuses the n argument slot as the end-n pointer
 0074f800  1262  complete (cModelWorld::DrawLayer); original has many Float4 temp slots and a 0xa0 frame
 0074fd90  77  complete (constructor, two rb-tree headers + counters); dead zero stores of the tree anchors are not reproduced
-0074fea0  300  complete (start of the two feedback jobs); register allocation and EH unwind layout differ
+0074fea0  7  complete (start of the two feedback jobs); register allocation in the job-callback stores and the final Unlock vcall differs; difftest PASS after fixing ResetTree's this (0x00478db0 is thiscall on this+0x28, not this) and calling GetJobManager before releasing each old job ref

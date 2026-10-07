@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00784560  3518  complete (SH basis eval to 8 bands); schedule/frame differs, not chased
+00784560  3008  complete (SH basis eval to 8 bands), flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; schedule/frame differs, not chased; difftest PASS after fixing band 2 precision (2.0f float literal so bands 1-4 stay single-precision SSE like the original; 2.0 promoted them to double) and recording the /arch:SSE /fp:fast flags

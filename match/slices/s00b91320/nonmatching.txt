@@ -1,3 +1,3 @@
 00b91320 900 cCubeGrid::MarkSphere: complete (cube-face span walk, flag cells within radius); float spill/ordering and Vec3 local layout differ
-00b91810 -1 cCubeGrid::GrowRegion: complete (4-direction extent probe, alternating x/y box growth, claim cells); control flow restructured from gotos, not compared
-00b920b0 214 cCubeGrid::GetCellDir: complete; float local/xmm register scheduling differs
+00b91810 -1 cCubeGrid::GrowRegion: complete (4-direction extent probe, alternating x/y box growth, claim cells); control flow restructured from gotos, not compared; difftest WEAK after fixing the claim loop (the original runs the WrapCubeFace loop twice per claimed cell)
+00b920b0 206 cCubeGrid::GetCellDir: complete; float local/xmm register scheduling and the x/y/face local slots differ; difftest WEAK after fixing the frame layout (the direction is scaled in place in one Vec3 like the original, so out-of-range face-table indices write the same stack slots)

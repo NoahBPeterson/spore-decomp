@@ -1,4 +1,4 @@
-// Slice s00784560: SH (spherical harmonics) basis evaluation (0x784560), /O2 /MD /Gy /EHsc /TP /arch:SSE.
+// Slice s00784560: SH (spherical harmonics) basis evaluation (0x784560), /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 // Evaluates the real SH basis for unit direction `dir` up to `order` bands (1..8) using the
 // band recurrence, and multiplies each basis value by that band's coefficient vec4
 // (coeffs[l]); writes order*order vec4s to out. The g_xxxxxxxx floats are runtime-initialized
@@ -30,11 +30,11 @@ void SHEvalBands(const float* param_1, int param_2, const __m128* c, __m128* out
     out[2] = _mm_mul_ps(_mm_set1_ps(z), cv);
     out[3] = _mm_mul_ps(_mm_set1_ps(x), cv);
     if (2 < param_2) {
-      A[0] = ((x * y) * 2.0) * g_01634104;
-      A[1] = ((z * y) * 2.0) * g_01634104;
+      A[0] = ((x * y) * 2.0f) * g_01634104;
+      A[1] = ((z * y) * 2.0f) * g_01634104;
       A[2] = z * z - (y * y + x * x) * g_016340dc;
       oi = 4;
-      A[3] = ((x * z) * 2.0) * g_01634104;
+      A[3] = ((x * z) * 2.0f) * g_01634104;
       A[4] = (x * x - y * y) * g_01634104;
       cv = c[2];
       for (int i = 0; i < 5; i++)
