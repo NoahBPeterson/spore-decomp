@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00779f20  -  direction basis matrix complete (fallback identity + SP::MatrixFromDirection transpose/negate); original SSE register scheduling and combined multiply tree not reproduced, source size 0x60 but body differs

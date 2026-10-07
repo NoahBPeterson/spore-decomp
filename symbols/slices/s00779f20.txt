@@ -1,0 +1,2 @@
+# va  name  evidence
+00779f20  rw::graphics::RWShader_SetShConst_directionBasis  # builds 3x4 matrix; calls SP::MatrixFromDirection (0x6983a0) when 0x16f6ed8 != 0

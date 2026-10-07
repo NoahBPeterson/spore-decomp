@@ -1,0 +1,1 @@
+00af1a90  7954  complete behavioural C++ transcription of the Ghidra decompile (all 4 switch paths); /O2 register allocation + scheduling differ, no byte-exact recovery

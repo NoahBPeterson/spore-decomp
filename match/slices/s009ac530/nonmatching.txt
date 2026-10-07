@@ -1,0 +1,3 @@
+009ac530  134  complete; PackSignedNormal: constants hoisted but float->int uses cvttss2si reg instead of the original's store+cvttss2si-from-stack spill
+009ac690  230  complete; baked_animation::GetFrameRange: x87 unsigned int->float schedule and per-loop register/stack slots differ
+009ac7a0  410  complete; QuatFromVectors: x87 evaluation order and sret/local frame differ

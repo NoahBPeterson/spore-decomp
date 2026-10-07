@@ -1,0 +1,1 @@
+00a8f6a0  n/a  complete behavioural transcription of the Ghidra decompile (switch cases 0/3/4/6/default: clustered sample grids, cube->sphere mapping, EASTL sample pushes); code size differs, not byte-exact

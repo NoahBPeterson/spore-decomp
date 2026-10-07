@@ -1,0 +1,4 @@
+00774f80 - model-builder mesh comparison with EH frame and inlined EASTL vectors; skeleton
+00775230 - model-builder helper with EH frame; skeleton
+007754d0 - __alloca_probe frame building an index table; skeleton
+007756b0 - vector<0x20>::push_back with EH frame; skeleton

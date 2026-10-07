@@ -1,0 +1,1 @@
+00d77680 SP::TRIBE_STEAL_BABY_Tick  # PDB caller-scored candidate (cSPCreatureCitizen state machine)

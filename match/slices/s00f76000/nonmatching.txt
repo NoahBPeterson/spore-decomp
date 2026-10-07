@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00f76000 6456 effect/draw parameter builder, second layout (/O2, SSE, 6456 bytes): complete behaviourally-equivalent reconstruction of the mode switch (1/5 cross-product frame, 6/7 normalised tangents, default frame copy from the object at this+0x30), the tint block (+0x180..+0x183) and the tile metrics including the log2 loop; the original is a ~1460-instruction inlined SSE body (identical algorithm to 0x00f5a200 but a different source-object layout), so no re-spelling reaches byte equality.

@@ -1,0 +1,1 @@
+00d77680  -  skeleton only: SP::TRIBE_STEAL_BABY_Tick, 10-state behaviour machine over citizen/creature navigation (~5197B); not reconstructed

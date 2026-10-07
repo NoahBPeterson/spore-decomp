@@ -1,0 +1,20 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+00960be0  622  geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes)
+00960f20  184  SetUserData: vcall/IID schedule and bit clear order differ
+00960fe0  321  TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)
+00961150  213  ScreenToWindow: manager scan / transform schedule differs
+00961260  3    GetId: register order (ecx/eax) around the store differs
+00961280  103  ListRemove: splice helper argument setup and this-adjust differ
+00961300  127  ListInsert: list relink register schedule differs
+009613a0  25   Find60: loop read/increment order differs
+009613e0  94   RecomputeFlags: list offset/register schedule differs
+009614a0  239  SerUpdate: transform copy and vcall schedule differ
+00961680  77   CloneNode: allocator vcall and field-copy order differ
+009616f0  43   serialization table build: list walk and store order differ
+00961760  211  SetFlag: switch tree and event-block layout differ
+00961860  86   Show: flag test/event schedule differs
+009618e0  77   Hide: flag clear/event schedule differs
+00961990  116  DestroyProc: winproc list walk and free schedule differ
+00961a50  106  ClearProcs: list purge loop schedule differs
+00961ae0  62   PurgeProcs: list walk and free schedule differ
+00961b40  292  vector-of-lists copy: allocation and node clone schedule differ

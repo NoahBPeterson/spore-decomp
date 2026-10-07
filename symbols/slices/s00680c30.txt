@@ -1,0 +1,18 @@
+# s00680c30 recovered names (invented stub names; no PDB names exist for these VAs)
+00680c30 ObjC30::ObjC30  # copy ctor: S8 string + M (0x680a50) member at +0x10; called by 0x680fc0
+00680cc0 V48::insert  # eastl vector<72-byte>::insert(pos, value); realloc via EASTL_allocator_allocate line 0xd1
+00680e70 V48::operator=  # eastl vector<72-byte>::operator=(const V48*), uses 0x6807a0/0x6803f0/0x680270/0x680420
+00680fc0 Save_00680fc0  # serialize rbtree map: size, per-node key + ObjC30 value via vtbl+0x38 Write
+00681250 ReadVecU32  # stdcall; Read4(count) then count ints push_back'd into vector<unsigned>
+006812c0 LoadEntries  # method; per-entry: two 0x680560 strings, 3 ints, cString::Load, 0x6810e0 add
+00681400 Cls1400::~Cls1400  # dtor: m3c (0x681160), m28 (0x680730), guarded buffer free
+00681480 MapC2::FreeNodes  # recursive chain free, guards p[-1] (x2) and cap-begin>1, then node
+00681500 MapC0::FreeChain2  # recursive chain free with 0x680730 member dtor + guarded string
+00681590 MapV::InsertPair  # rbtree insert with canInsert hint: !allowEquiv && pos!=anchor && *key >= pos->key
+006815f0 MapV::InsertUnique  # rbtree insert_unique: anchor/root/begin at +4/+0xc/+8, key at node+0x10
+00681700 Obj1700::Obj1700  # copy ctor: S8 + 2 float vectors (0x4aa350 reserve + memcpy)
+00681800 Obj1800::Obj1800  # copy ctor: 0x60 pod + M + 4 float vectors
+00681a10 ObjA::ObjA  # copy ctor: 4 dwords + 4 float vectors
+00681b50 ObjB50::operator=  # 0x60 pod + V48 (0x680e70) + 4 float vectors (0x50d4e0)
+00681c40 ObjA::operator=  # 4 dwords + 4 float vector operator=
+00681e80 CopyBackwardA  # copy_backward of ObjA (0x60 stride), 4 dword moves + 4 operator=

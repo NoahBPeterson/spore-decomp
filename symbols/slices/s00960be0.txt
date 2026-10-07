@@ -1,0 +1,3 @@
+00961150 EA::UTFWin::Window::ScreenToWindow  # 2008 dev-PDB gap-align (dev 01049900)
+009614a0 EA::UTFWin::Window::SerUpdate      # 2008 dev-PDB caller-single (dev 01049cd0)
+00961760 EA::UTFWin::Window::SetFlag       # 2008 dev-PDB callee-single (dev 0104a260)

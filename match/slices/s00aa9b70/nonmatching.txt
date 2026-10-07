@@ -1,0 +1,1 @@
+00aa9b70  1110  complete behavioural transcription of the Ghidra decompile (all switch cases 1/5/6/7/default + tail); /arch:SSE but register allocation/scheduling and frame (needs ebp + 0x18 frame) differ; same 1400-byte size

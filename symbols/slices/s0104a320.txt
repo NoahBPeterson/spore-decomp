@@ -1,0 +1,1 @@
+0104a320 SP::cSpaceTokenTranslator::TranslateToken  # PDB anchor (dev 0x0090e950); the only symbol-bearing function in the slice

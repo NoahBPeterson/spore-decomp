@@ -1,0 +1,6 @@
+009ac530  nSPCreatureAnim::PackSignedNormal  # dc: float4 -> 3 bytes, (v+1)/2*254 or (1-v)/2*254 by v[3] sign
+009ac640  nSPCreatureAnim::PackBoneFrame  # dc: packs color(+0x10) + signed normal(+0x1c) + 2 flag bytes(+0x54/+0x55) into 8 bytes
+009ac690  nSPCreatureAnim::baked_animation::GetFrameRange  # dc: normalized time -> [start,end] keyframe range (flag bit 0 search)
+009ac7a0  QuaternionFromTwoVectors  # dc: quat = (a x b, a.b + |a||b|), normalize or fallback
+009ac9e0  nSPCreatureAnim::baked_animation::Alloc  # dc: operator_new "Anim/BakedAnim", BANI header, zero frames
+009aca60  nSPCreatureAnim::baked_animation::Create  # dc: reset + Alloc + copy scale and 32-byte header

@@ -1,0 +1,16 @@
+00949cc0 EA::Internet::INetFileCache::Init  # dev-PDB caller-single (card)
+00949d90 EA::Internet::INetFileCache::Release  # refcount release; card PDB candidate was `scalar deleting destructor' (caller-single, less reliable)
+00949dc0 `anonymous namespace'::FNVHash8Lower  # card
+00949e10 EA::Internet::MIMETypeStringToMIMEType  # card
+0094a1b0 EA::Internet::MIMETypesToFileExtension  # card
+0094a3f0 EA::Internet::MIMEStringToMIMETypes  # pdb_candidates.json caller-single
+0094a4a0 EA::Internet::URL::GetPort  # strtoul(msComponent[4]); pair of SetPort
+0094a4c0 EA::Internet::URL::URL  # default ctor
+0094a560 EA::Internet::URL::URL  # ctor from const char* (assigns msURL)
+0094a630 EA::Internet::URL::operator=  # copy assignment
+0094a6a0 EA::Internet::URL::SetURL  # sets/changes msURL (+mbParsed flag)
+0094a6f0 EA::Internet::URL::SetComponent  # sets msComponent[index]
+0094a750 EA::Internet::URL::SetPort  # printf "%u" into msComponent[4]
+0094a7a0 EA::Internet::URL::CanonicalizePath  # PDB name (static: plain ret)
+0094a9f0 EA::Internet::URL::ParseUsernameAndPassword  # PDB name
+0094aae0 EA::Internet::URL::ParseURLFILE  # PDB name

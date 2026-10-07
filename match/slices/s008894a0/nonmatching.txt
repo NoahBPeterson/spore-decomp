@@ -1,0 +1,20 @@
+# va  diff-bytes  reason
+008894a0 315 upstream EAWebKit EAText source; retail allocator/template config differs
+00889610 390 upstream EAWebKit EAText source; retail allocator/template config differs
+008897a0 184 upstream EAWebKit EAText source; retail allocator/template config differs
+00889880 90 upstream EAWebKit EAText source; retail allocator/template config differs
+00889900 120 upstream EAWebKit EAText source; retail allocator/template config differs
+008899b0 369 upstream EAWebKit EAText source; retail allocator/template config differs
+00889b40 166 upstream EAWebKit EAText source; retail allocator/template config differs
+00889c10 91 upstream EAWebKit EAText source; retail allocator/template config differs
+00889c80 211 upstream EAWebKit EAText source; retail allocator/template config differs
+00889d90 342 upstream EAWebKit EAText source; retail allocator/template config differs
+00889f10 125 upstream EAWebKit EAText source; retail allocator/template config differs
+00889fc0 34 upstream EAWebKit EAText source; retail allocator/template config differs
+0088a000 174 upstream EAWebKit EAText source; retail allocator/template config differs
+0088a0f0 282 upstream EAWebKit EAText source; retail allocator/template config differs
+0088a240 7 upstream EAWebKit EAText source; retail allocator/template config differs (7 bytes)
+0088a2b0 2 upstream EAWebKit EAText source; retail allocator/template config differs (2 bytes)
+0088a2c0 18 upstream EAWebKit EAText source; retail allocator/template config differs
+0088a330 175 upstream EAWebKit EAText source; retail allocator/template config differs
+0088a420 81 upstream EAWebKit EAText source; retail allocator/template config differs

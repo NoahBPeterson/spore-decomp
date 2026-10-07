@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dbab60  13792  oversized tribe behaviour-tree tick (>13 KB): opcode-switch skeleton only; per-case animation/locomotion bodies summarised

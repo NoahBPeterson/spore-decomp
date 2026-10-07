@@ -1,0 +1,13 @@
+011f3f20 rw::graphics::Camera::Check  # builds view/proj D3D transforms, compares/sets viewport; PDB rwCamera::Check from callers 0x5288f0/0x7c4be0
+011f4200 rw::graphics::Shader::Release  # dec m_refCount(+0x3c); on 0 unregisters m_id(+0x38) via 0x11fa050, zeroes m_id/m_next(+0x40)
+011f4220 ReleaseShaderC  # cdecl twin of Shader::Release (self passed on stack)
+011f4270 SetShaderDef  # fills 32-byte entry at g_shaderDefs[id] (0x16fa5e8); called from 0x11f4630 only
+011f42c0 MapShaderHandle  # maps handle [0x400,0x800) through thiscall 0x11e2270 + 0x400
+011f42f0 rw::graphics::Shader::D3D9DefaultDispatchCB  # PDB candidate; walks vertex/pixel token streams into 0x170ee48 / 0x170ec98
+011f4420 ShaderCleanup  # default-shader dispatch CB installed by GetDefaultShader; calls 0x11fd4d0/0x11fd500/0x11f7850/0x11f6920, returns 1
+011f4440 ShaderConstruct  # initializes rw::graphics::Shader (0x44 bytes); dispatchCB=0x11f42f0, refCount=1, byteswapped version words, registers via 0x11f9fb0
+011f44f0 rw::graphics::Shader::D3D9CheckShaderVersionSupport  # PDB name; clips m_max*VS/PS against D3DCAPS9 +0xc4/+0xcc
+011f45a0 ReleaseDefaultShader  # default-shader Release on globals 0x170a628/0x170a62c/0x170a630
+011f45d0 GetDefaultShader  # lazily constructs the global Shader at 0x170a5f0, else bump refcount
+011f4630 InitShaderTable  # zeroes 0x10000 bytes at 0x16fa5e8 and registers entries 3..44, then GetDefaultShader
+011f4e70 rw::graphics::IndexDescriptor::RegisterArenaReadCallbacks  # ArenaTypeRegGetType(0x20006)+0xc = 0x12057f0, +0x10 = 0

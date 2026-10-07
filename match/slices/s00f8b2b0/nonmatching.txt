@@ -1,0 +1,1 @@
+00f8b2b0  2438  complete behavioural transcription of the Ghidra decompile (clamped rect, 4 edge-cube normal loops, 6 corner texels); not byte-exact, different code size (6634 vs 9072); format tables/sign axis decoded from asm

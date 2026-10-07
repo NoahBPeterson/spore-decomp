@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00e40700 6649 SP::cSPUITimeline UI setup/constructor (/O2, SSE, 1460 insns, 6649 bytes): complete behaviourally-equivalent high-level reconstruction (real IWindow/ModAPI vtable slots, the animator/layout/palette creation, all FindWindowByID ids, the icon/event pair maps, transition layouts, ten track rows and message/HSM registration); the original is one giant inlined /O2 body with per-site register allocation and an inlined float path, so no small re-spelling reaches byte equality (chk finds no symbol of comparable size).

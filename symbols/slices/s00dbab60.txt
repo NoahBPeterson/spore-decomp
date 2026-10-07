@@ -1,0 +1,1 @@
+00dbab60 SP::TRIBE_NPC_GIFT_Tick  # PDB candidate (caller-scored; xmatch also scores TRIBE_GATHER_MEAT_Tick); tribe creature behaviour-tree tick, opcode switch + animation/locomotion calls

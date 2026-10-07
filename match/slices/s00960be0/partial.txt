@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (incomplete / approximate)
+# (none: every function in this slice has a complete behaviourally-equivalent body)

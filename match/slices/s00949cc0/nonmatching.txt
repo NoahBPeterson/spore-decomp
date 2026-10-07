@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS-)
+00949e10   761  MIMETypeStringToMIMEType: complete MIME-type hash switch; FNV end pointer computed add-vs-lea (original `add ecx,eax`, ours `lea edx,[eax+ecx]`) shifts every subsequent branch target (tree itself is identical)
+0094a7a0   281  URL::CanonicalizePath: complete (./, /../ and trailing /.. removal); compiler picked ebp/ebx opposite to original for the two live string pointers, so every reload differs
+0094a9f0   161  URL::ParseUsernameAndPassword: complete; original reuses the arg home slot for the length and keeps component pointers in esi/ebp, ours spills `this` (extra `sub esp,8` frame)

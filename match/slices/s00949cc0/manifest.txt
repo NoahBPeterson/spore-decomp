@@ -1,0 +1,14 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00949cc0/s00949cc0.cpp  ?Init@INetFileCache@Internet@EA@@QAE_NXZ  00949cc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?Release@INetFileCache@Internet@EA@@QAEHXZ  00949d90  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  FNVHash8Lower  00949dc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?MIMETypesToFileExtension@Internet@EA@@YAHHHPA_WI@Z  0094a1b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?MIMEStringToMIMETypes@Internet@EA@@YAHPBDPAH1H@Z  0094a3f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?GetPort@URL@Internet@EA@@QAEIXZ  0094a4a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ??0URL@Internet@EA@@QAE@XZ  0094a4c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ??0URL@Internet@EA@@QAE@PBD@Z  0094a560  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ??4URL@Internet@EA@@QAEAAV012@ABV012@@Z  0094a630  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?SetURL@URL@Internet@EA@@QAEXPBD_N@Z  0094a6a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?SetComponent@URL@Internet@EA@@QAEXHPBD@Z  0094a6f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?SetPort@URL@Internet@EA@@QAEXI@Z  0094a750  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00949cc0/s00949cc0.cpp  ?ParseURLFILE@URL@Internet@EA@@QAE_NPAU?$basic_string@D@eastl@@@Z  0094aae0  /O2 /MD /Gy /EHsc /TP /GS-

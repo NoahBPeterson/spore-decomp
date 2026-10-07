@@ -1,0 +1,19 @@
+008894a0 eastl::vector<GlyphTextureInfo>::assign  # EAWebKit EAText, best-symbol match
+00889610 EA::Text::GlyphCache::TryAllocateTextureArea  # EAWebKit EAText, best-symbol match
+008897a0 fixed_hash_map<string,string>::fixed_hash_map  # EAWebKit EAText, best-symbol match
+00889880 eastl::basic_string<wchar_t>::RangeInitialize  # EAWebKit EAText, best-symbol match
+00889900 EA::Text::FontServer::FontServer  # EAWebKit EAText, best-symbol match
+008899b0 EA::Text::GlyphCache::TryAllocateTextureArea  # EAWebKit EAText, best-symbol match
+00889b40 EA::Text::FontServer::AddFace  # EAWebKit EAText, best-symbol match
+00889c10 eastl::list<FontServer::FaceSource>::erase  # EAWebKit EAText, best-symbol match
+00889c80 EA::Text::GlyphCache::SetOption  # EAWebKit EAText, best-symbol match
+00889d90 EA::Text::GlyphCache::TryAllocateTextureArea  # EAWebKit EAText, best-symbol match
+00889f10 eastl::fixed_list<FontServer::FaceSource>::fixed_list  # EAWebKit EAText, best-symbol match
+00889fc0 EA::IO::MemoryStream::scalar deleting dtor  # EAWebKit EAText, best-symbol match
+0088a000 eastl::basic_string<wchar_t>::set_capacity  # EAWebKit EAText, best-symbol match
+0088a0f0 EA::Text::FontServer::AddSubstitution  # EAWebKit EAText, best-symbol match
+0088a240 EA::Text::GlyphCache::ClearTextureInternal  # EAWebKit EAText, best-symbol match
+0088a2b0 EA::Text::GlyphCache::SetAllocator  # EAWebKit EAText, best-symbol match
+0088a2c0 EA::Text::GlyphCache::Init  # EAWebKit EAText, best-symbol match
+0088a330 fixed_hash_map<string,FontServer::Face>::fixed_hash_map  # EAWebKit EAText, best-symbol match
+0088a420 EA::Text::GlyphCache::~GlyphCache  # EAWebKit EAText, best-symbol match
