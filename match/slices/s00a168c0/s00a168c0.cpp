@@ -83,7 +83,7 @@ struct PAgg {
 
     void*  QueryInterface(u32 id);              // 00a16aa0
     void   SetEnabled(bool b);                  // 00a16a40
-    bool   OnConfigurePrimitive(void* p);       // 00a16b40
+    void   OnConfigurePrimitive(void* p);       // 00a16b40
     bool   RemoveElement(IPrimitive* p);        // 00a16b80
     bool   UpdateValueFromChildren();           // 00a16bc0
     void   SetModificationSource(void* src, int mod); // 00a16be0
@@ -120,7 +120,7 @@ void PAgg::SetEnabled(bool b)
 }
 
 // ---- PrimitiveAggregate::OnConfigurePrimitive @ 0x00a16b40 ----------------
-bool PAgg::OnConfigurePrimitive(void* p)
+void PAgg::OnConfigurePrimitive(void* p)
 {
     void** it = mpBegin;
     void** end = mpEnd;
@@ -130,7 +130,6 @@ bool PAgg::OnConfigurePrimitive(void* p)
     }
     if (mModify == (int)p)
         mbDirty = false;
-    return true;
 }
 
 // ---- PrimitiveAggregate::RemoveElement @ 0x00a16b80 -----------------------

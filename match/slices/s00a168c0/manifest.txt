@@ -1,5 +1,6 @@
 slices/s00a168c0/s00a168c0.cpp  ?SetEnabled@PAgg@@QAEX_N@Z  00a16a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?QueryInterface@PAgg@@QAEPAXI@Z  00a16aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a168c0/s00a168c0.cpp  ?OnConfigurePrimitive@PAgg@@QAEXPAX@Z  00a16b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?UpdateValueFromChildren@PAgg@@QAE_NXZ  00a16bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?Destroy@PAgg@@QAEPAXE@Z  00a16ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?Shutdown@PrimBase@@QAE_NXZ  00a16e70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
