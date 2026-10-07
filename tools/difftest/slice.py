@@ -204,8 +204,24 @@ def source_path(sid):
     return os.path.join(slice_dir(sid), sid + ".cpp")
 
 
+def resolve_include_flags(flags):
+    """Relative /I paths in manifests are relative to work/match (see run_all.resolve_flags); cl would
+    resolve them against cwd. Try work/match, then the repo root; absolute and Z: paths are kept."""
+    out = []
+    for f in flags:
+        if f[:2] in ("/I", "-I") and len(f) > 2 and not f[2:].startswith(("Z:", "/", "\\")) and ":" not in f[2:4]:
+            for base in (os.path.join(ROOT, "work", "match"), ROOT):
+                cand = os.path.join(base, f[2:])
+                if os.path.isdir(cand):
+                    f = "/I" + winpath(cand)
+                    break
+        out.append(f)
+    return out
+
+
 def compile_obj(src, flags):
     """Compile src with flags into work/difftest/obj (cached by source+headers+flags). -> (obj, log)."""
+    flags = resolve_include_flags(flags)
     os.makedirs(OBJDIR, exist_ok=True)
     h = hashlib.md5()
     h.update(open(src, "rb").read())
