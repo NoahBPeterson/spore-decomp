@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 007b6570  19  complete; base-message ctor store order/AddRef register (edx/eax) differ
 007b6a90  33  complete dispatch loop + trailing call; register scheduling/push order differs (cmp uses memory vs loaded end)
-007b6c70  48  complete; only lock-xadd Release register shape (ecx/edx copies) differs
-007b6d50  -  complete (frustum fit step); float global copies use x87/rep movs instead of movss/stack temps, block layout differs
-007b7270  553  complete (camera pull-back driver); XForm/Vector3 float scheduling and frame layout differ
+007b6c70  48  complete; only lock-xadd Release register shape (ecx/edx copies) differs; difftest PASS (vtables mapped via symbols/slices/s007b6570.txt)
+007b6d50  988  complete (frustum fit step); float global copies use x87/rep movs instead of movss, block layout differs; difftest PASS (fixed: pos update was a fused x87 mul+add, now rounded per op via Vector3 ops; frame size matched so callee stack junk lines up)
+007b7270  553  complete (camera pull-back driver); XForm/Vector3 float scheduling and frame layout differ; difftest WEAK (189 valid, 27% coverage: SP::App() singleton reads fault on random inputs)

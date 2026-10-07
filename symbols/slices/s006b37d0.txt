@@ -1,2 +1,6 @@
 006b37d0 SP::CreateDefaultSaveAreas  # work/xmatch/matches.json dev-name match
 006b4010 SP::SaveNamedResource  # work/xmatch/matches.json dev-name match
+014099e4 ??_7Job6B@@6BER6@@@  # Job6B primary vtable (stored at +0 by ~Job6B 0x6b4400)
+014099bc ??_7Job6B@@6BBG6@@@  # Job6B second-base vtable (stored at +4 by ~Job6B 0x6b4400)
+013effb8 ??_7BG6@@6B@  # BG6 base vtable (Anim::BackgroundLoading), stored at +4 by ~Job6B
+013eb938 ??_7ER6@@6B@  # ER6 base vtable (GmeEditorResBase), stored at +0 by ~Job6B

@@ -1,1 +1,1 @@
-00e47930 3491 complete source, size 4724 matches; frame/ebp-zero reg/stack-slot layout differs (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00e47930 3491 complete source, size 4724 matches; frame/ebp-zero reg/stack-slot layout differs (flags /O2 /MD /Gy /TP /arch:SSE /GS-); difftest WEAK (284 valid, 8.5% coverage; one-line struct annotations split, delete[] and cSPUILayout ctor 0x810000 annotated)

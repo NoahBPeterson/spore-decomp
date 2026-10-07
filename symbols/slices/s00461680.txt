@@ -1,1 +1,3 @@
 00461680 SortSkeletonNodes  # cdecl (nodes, count, &order, &end1..&end4); called from 004c73f0, groups nodes by class 5..1 via 00460a80
+0042b9e0 ??$DoInsertFromIterator@PAH@?$vector@HUallocator@eastl@@@eastl@@IAEXPAH00Uforward_iterator_tag@1@@Z  # eastl::vector<int>::DoInsertFromIterator<int*> (template: annotations do not apply)
+004c0b80 ??1?$VectorBase@HUfixed_vector_allocator@eastl@@@eastl@@QAE@XZ  # eastl::VectorBase<int, fixed_vector_allocator>::~VectorBase (fixed_vector dtor tail)

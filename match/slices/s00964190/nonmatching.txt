@@ -1,4 +1,4 @@
-009643c0 8 complete; focus-manager SetFocus vcall: original loads the vptr, builds the lea arg, then fetches the slot; ours fetches the slot first (scheduling)
-00964450 8 complete; same ReleaseFocus vcall ordering as OnMouseDown
+009643c0 8 complete; focus-manager SetFocus vcall: original loads the vptr, builds the lea arg, then fetches the slot; ours fetches the slot first (scheduling); difftest PASS (394 valid, 89% cov; added // @ marker)
+00964450 8 complete; same ReleaseFocus vcall ordering as OnMouseDown; difftest PASS (393 valid, 84% cov; added // @ marker)
 00964c90 504 complete; painter pointer is CSE'd into edi across calls in ours (original reloads it), locals/frame differ
-00964f10 344 complete; remaining diffs are float constant load order, temp-slot layout of the max() reference temporaries, and x87 spill schedule
+00964f10 344 complete; remaining diffs are float constant load order, temp-slot layout of the max() reference temporaries, and x87 spill schedule; difftest WEAK (391 valid, no mismatch, 32% cov; inputs reaching the CRT _decode_pointer import are discarded)

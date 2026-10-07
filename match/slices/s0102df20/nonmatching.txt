@@ -1,1 +1,1 @@
-0102df20 3332 complete dispatcher; frame 0x80 vs 0x88 and register allocation (planet/arg kept in ebx/esi vs original esi/ebp), flags /O2 /MD /Gy /TP /arch:SSE /GS-
+0102df20 3330 complete dispatcher; frame 0x80 vs 0x88 and register allocation (planet/arg kept in ebx/esi vs original esi/ebp), flags /O2 /MD /Gy /TP /arch:SSE /GS-; difftest WEAK (4000 inputs: no mismatch, 11.6% coverage, hash-ID dispatch on real singletons; fix: callee/ctor/dtor annotations, k_Military_Planet declared as the .rdata string array 0x0149963c instead of a pointer variable)

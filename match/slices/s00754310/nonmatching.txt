@@ -5,4 +5,4 @@
 00754960  469  complete (resource manager load by key type, *out = res); EH/register allocation differ; difftest FAIL is a checker artifact: the original's "Graphics" literal at 0x13eb8a4 follows a float constant (3e800000) with no NUL before it, so resolve.rdata_find misses it and ours passes its own copy to operator new; with the literal mapped (scratch source using an extern at 0x13eb8a4) the checker reports WEAK, no mismatch
 00754c20  39  complete (job continuation step); branch/epilogue layout differs
 00754ca0  594  SP::CompileToPropertyModel: complete (keys, mask variant, BehaviorMessage send); Variant/EH layout differs
-007552e0  138  complete (EASTL vector<GlyphInfo>::operator=); allocator/copy helper shapes differ
+007552e0  138  complete (EASTL vector<GlyphInfo>::operator=); allocator/copy helper shapes differ; difftest WEAK (186 valid, 41% coverage); renamed operator= to GlyphVec::Assign so the checker can find the symbol (it cannot match ??4 names)

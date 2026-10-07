@@ -21,10 +21,16 @@ extern char g_killallhints[];         // 0x01401520 "killallhints"
 extern wchar_t g_wEmpty[];            // 0x01667bac shared empty wide-string rep
 
 // ---- external callees ---------------------------------------------------
-struct EStrSoA { void push_back(int ch); };        // 0x004f6510
-struct Layout0 { void Shutdown(int); };            // 0x00811ad0
+struct EStrSoA {
+    void push_back(int ch);                         // 0x004f6510
+};
+struct Layout0 {
+    void Shutdown(int);                             // 0x00811ad0
+};
 int* __cdecl FUN_00d3b3c0(int a, int b, int c);    // 0x00d3b3c0 (EASTL copy helper)
-struct Vec20 { void Insert(int* r, int* end); };   // 0x00a693f0 (member at this+0x20: destroy range)
+struct Vec20 {                                      // member at this+0x20: destroy range
+    void Insert(int* r, int* end);                  // 0x00a693f0
+};
 
 // ---- strings -----------------------------------------------------------
 // eastl::basic_string<wchar_t>: begin/end/capacity-end + allocator; an empty string shares g_wEmpty.
@@ -39,14 +45,17 @@ struct WStr {
         if (n > 2 && mpBegin) FreeArray(mpBegin);
     }
     void Assign(const wchar_t* b, const wchar_t* e);      // 0x00423650
-    void Append(const wchar_t* s);                        // 0x005c3d90
+    void AppendSz(const wchar_t* s);                      // 0x005c3d90 (eastl append(const wchar_t*))
     unsigned Find(const wchar_t* s, unsigned pos) const;  // 0x00608340
     void Erase(unsigned pos, unsigned n);                 // 0x004228e0
     int Insert(int a, int b);                             // 0x0067bbf0
     int Forward(int a, int b);                            // 0x0067b030 (vector insert, elsewhere)
 };
 
-struct cString { uint32_t pad[5]; const wchar_t* GetText(); };             // 0x006b55c0 (SP::cString)
+struct cString {                                    // SP::cString
+    uint32_t pad[5];
+    const wchar_t* GetText();                       // 0x006b55c0
+};
 
 // ---- property lists ----------------------------------------------------------
 struct Property {
@@ -447,7 +456,7 @@ void cUIHints::SetVisibility(int show, cHint* h) {
     bool bSplit = false;
     s2.Assign(L"", L"");
     if (h->mbHasText) {
-        s1.Append(h->mText.GetText());
+        s1.AppendSz(h->mText.GetText());
         unsigned pos = s1.Find(L"<hinticon>", 0);
         if (pos != (unsigned)-1) {
             s2.Assign(s1.mpBegin, s1.mpEnd);

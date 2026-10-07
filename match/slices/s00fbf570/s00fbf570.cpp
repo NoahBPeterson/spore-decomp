@@ -265,6 +265,7 @@ struct cTerrainStateMgr {
     void Update(cCamera* camera, int unused, int lightArg);
 };
 
+// @ 0x00fbf570
 void cTerrainStateMgr::Update(cCamera* camera, int unused, int lightArg)
 {
     if (!mbEnabled)

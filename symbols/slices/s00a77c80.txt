@@ -1,0 +1,2 @@
+00a78590  Swarm::MapDescription::MapDescription  # ctor: vptr + default fields
+01453948  ??_7MapDescription@@6B@  # Swarm::MapDescription vtable, stored by the ctor 0xa78590

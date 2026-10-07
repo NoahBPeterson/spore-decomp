@@ -104,26 +104,51 @@ struct MapInfoMid : IRefObj, B4 {    // 0x40 bytes
 MapInfoBase::MapInfoBase() {}
 
 // Derived map-info objects (each has its own vtable): their constructors only zero the extra fields.
-struct MapInfoD1 : MapInfoMid { uint32_t x[4]; MapInfoD1();   // 0x50 (0x00a77ef0)
-    void Init76420(void*, int, int, bool, void*, bool); virtual void Apply(); };
-struct MapInfoD2 : MapInfoMid { uint32_t x[1]; MapInfoD2();   // 0x44 (0x00a77fa0)
-    void Init76070(void*, int, int, bool, void*, bool); virtual void Apply(); };
-struct MapInfoD3 : MapInfoMid { uint32_t x[2]; MapInfoD3();   // 0x48 (0x00a78000)
-    void Init76420(void*, int, int, bool, void*, bool); virtual void Apply(); };
-struct MapInfoD4 : MapInfoMid { uint32_t x[2]; MapInfoD4();   // 0x48 (0x00a78050)
-    void Init769b0(void*, int, int, bool, void*); virtual void Apply(); };
-struct MapInfoD5 : MapInfoMid { uint32_t x[4]; MapInfoD5();   // 0x50 (0x00a780a0)
-    void Init76b80(void*, int, int, bool, void*); virtual void Apply(); };
+// MapInfoD1 is 0x50 bytes (ctor shape 0x00a77ef0); unused by Add.
+struct MapInfoD1 : MapInfoMid {
+    uint32_t x[4];
+    MapInfoD1();
+    void Init76420(void*, int, int, bool, void*, bool);
+    virtual void Apply(); };
+struct MapInfoD2 : MapInfoMid {  // 0x44 bytes
+    uint32_t x[1];
+    MapInfoD2();                                         // 0x00a77fa0
+    void Init76070(void*, int, int, bool, void*, bool);  // 0x00a76070
+    virtual void Apply(); };
+struct MapInfoD3 : MapInfoMid {  // 0x48 bytes
+    uint32_t x[2];
+    MapInfoD3();                                         // 0x00a78000
+    void Init76420(void*, int, int, bool, void*, bool);  // 0x00a76420
+    virtual void Apply(); };
+struct MapInfoD4 : MapInfoMid {  // 0x48 bytes
+    uint32_t x[2];
+    MapInfoD4();                                         // 0x00a78050
+    void Init769b0(void*, int, int, bool, void*);        // 0x00a769b0
+    virtual void Apply(); };
+struct MapInfoD5 : MapInfoMid {  // 0x50 bytes
+    uint32_t x[4];
+    MapInfoD5();                                         // 0x00a780a0
+    void Init76b80(void*, int, int, bool, void*);        // 0x00a76b80
+    virtual void Apply(); };
 struct MapInfoMid2 : MapInfoMid { uint32_t x40; MapInfoMid2() { x40 = 0; } };
-struct MapInfoD6 : MapInfoMid2 { uint32_t x44; MapInfoD6();   // 0x48 (0x00a781a0)
-    void Init76070(void*, int, int, bool, void*, bool); virtual void Apply(); };
-struct MapInfoD0 : MapInfoMid { uint32_t x[4]; MapInfoD0();   // 0x50 (0x00a77ef0 shape; used for kinds 2/3)
-    void Init75810(void*, int, int, bool, void*, bool);
-    void Init758b0(void*, int, int, bool, void*, int, bool); virtual void Apply(); };
-struct MapInfoD7 : MapInfoMid { uint32_t x[0x10]; MapInfoD7();  // 0x80 (0x00a76cf0, other slice)
-    void Init77b70(int, void*, void*);
-    void Init75340(int, uint32_t, uint32_t);
-    void Init752d0(int, void*); virtual void Apply(); };
+struct MapInfoD6 : MapInfoMid2 {  // 0x48 bytes
+    uint32_t x44;
+    MapInfoD6();                                         // 0x00a781a0
+    void Init76070(void*, int, int, bool, void*, bool);  // 0x00a76070
+    virtual void Apply(); };
+struct MapInfoD0 : MapInfoMid {  // 0x50 bytes; used for kinds 2/3
+    uint32_t x[4];
+    MapInfoD0();                                         // 0x00a77ef0
+    void Init75810(void*, int, int, bool, void*, bool);  // 0x00a75810
+    void Init758b0(void*, int, int, bool, void*, int, bool);   // 0x00a758b0
+    virtual void Apply(); };
+struct MapInfoD7 : MapInfoMid {  // 0x80 bytes
+    uint32_t x[0x10];
+    MapInfoD7();                                         // 0x00a76cf0 (other slice)
+    void Init77b70(int, void*, void*);                   // 0x00a77b70
+    void Init75340(int, uint32_t, uint32_t);             // 0x00a75340
+    void Init752d0(int, void*);                          // 0x00a752d0
+    virtual void Apply(); };
 
 // @ 0x00a77ef0
 MapInfoD0::MapInfoD0() { x[0] = 0; x[1] = 0; x[2] = 0; x[3] = 0; }

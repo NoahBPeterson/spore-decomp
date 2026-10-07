@@ -1,8 +1,8 @@
 00f3cf10  620  complete: panel build (new PanelObj/BObj, list walk, atomic image refs); register allocation/inlined ref-count shape differs
-00f3d260  311  complete: resource-registration helper; list/vcall scheduling not exact
+00f3d260  311  complete: resource-registration helper; list/vcall scheduling not exact; difftest WEAK (17% coverage: most inputs fault on the ResourceMan/GetManager globals, which are null in the static image) after mapping operator new/Obj30 ctor
 00f3d3e0  405  complete: 4-slot image refresh loop; hand-scheduled key arithmetic not exact
 00f3d5d0  361  complete: per-index key regen loop; scheduling not exact
 00f3d7e0  114  complete: hashtable walk with type-id dispatch (takes one ignored stack arg, ret 4); end() reload CSEd and register allocation differ; difftest WEAK after fixing the missing ignored stack argument (ours returned with ret instead of ret 4)
-00f3d900  324  complete: bit-flag helper (shr/test chain) folded by cl; register choice differs
+00f3d900  324  complete: bit-flag helper (shr/test chain) folded by cl; register choice differs; difftest WEAK (40% coverage) after moving the @ marker below the AnyFlag helper and mapping SP::NounManager/GetAvatar/hashtable::find
 00f3da90  412  complete: object state copy + QueryInterface chains; scheduling differs
-00f3dce0  245  complete: needs /arch:SSE (module flag) ; weighted average + clamp
+00f3dce0  245  complete: weighted average + clamp; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS after naming the 13 weight globals by address (g_016c88xx) and giving the /arch:SSE flags in checker form

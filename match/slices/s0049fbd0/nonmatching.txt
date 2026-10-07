@@ -1,6 +1,6 @@
-0049fbd0  614  COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ
-0049fee0  250  COMPLETE limb-structure FixAllJoints loop; /Od slot order differs
-004a0020  574  COMPLETE GetAllLimbs; /Od slot order (vector locals, inline operator[] temps) differs
-004a02b0  1037  COMPLETE limb scale/repin; /Od slots and by-value vec/mat temps differ
+0049fbd0  614  COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ; difftest PASS (mapped ctor annotations; touched vector now uses the AutoRefCount vector dtor 0x453eb0 that releases elements)
+0049fee0  250  COMPLETE limb-structure FixAllJoints loop; /Od slot order differs; difftest WEAK (38.6% coverage; LimbVec/LimbStructure annotations fixed)
+004a0020  574  COMPLETE GetAllLimbs; /Od slot order (vector locals, inline operator[] temps) differs; difftest WEAK (44.3% coverage; LimbVec annotations fixed)
+004a02b0  1037  COMPLETE limb scale/repin; /Od slots and by-value vec/mat temps differ; difftest WEAK (35.4% coverage; by-value matrix now built with the 0x449cc0 ctor directly)
 004a06c0  204  COMPLETE block offset getter; extra per-test bool slots missing
-004a0900  438  COMPLETE socket snap helper; /Od slots differ
+004a0900  438  COMPLETE socket snap helper; /Od slots differ; difftest PASS

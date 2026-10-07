@@ -98,7 +98,8 @@ void GetPropertyAsVector2(cPropertyList* p, uint32_t id, Vec2* out);   // 0x006a
 
 extern char g_Mode_1654c10;
 extern char g_Mode_1654c01;
-extern char g_Dead_b1b104;
+// 0x00b1b104 is a plain constant here (it points into the middle of an instruction in .text)
+static const unsigned kDead_b1b104 = 0x00b1b104;
 
 struct Local { Property* prop; uint32_t a; const void* dead; uint32_t b; };
 
@@ -157,7 +158,7 @@ void cCreatureCamera::ReloadTuning()
     uint32_t keyA = 0xd03a25cf, keyB = 0xad56080c;
     if (GetCurrentGameMode() == &g_Mode_1654c10) {
         keyA = 0x70ec1123; keyB = 0x408a0100;
-        loc.dead = &g_Dead_b1b104;
+        loc.dead = (const void*)kDead_b1b104;
     }
     if (p) { cPropertyList* t = p; p = 0; t->Release(); }
     if (pm->GetPropertyList(keyA, keyB, &p)) {

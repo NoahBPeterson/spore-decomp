@@ -1,0 +1,2 @@
+# slice s00919620
+0091a620 StrRec::StrRec  # implicit copy ctor of the 0x48-byte record (emitted out of line via CopyStrRec)

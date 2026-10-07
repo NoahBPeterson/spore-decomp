@@ -14,19 +14,23 @@ struct Matrix33T {
     Matrix33T() {}
     Matrix33T(const Matrix33T& m) : xAxis(m.xAxis), yAxis(m.yAxis), zAxis(m.zAxis) {}
 };
-struct cSPVector3 : Vector3T {               // out-of-line copy ctor @ 0x4098a0
+struct cSPVector3 : Vector3T {               // out-of-line copy ctor (Vector3Template copy)
     cSPVector3() {}
-    cSPVector3(const Vector3T& v);
-    cSPVector3(const cSPVector3& v);
+    cSPVector3(const Vector3T& v);              // 0x4098a0
+    cSPVector3(const cSPVector3& v);            // 0x4098a0
 };
-struct cSPMatrix3 : Matrix33T {              // out-of-line copy ctor @ 0x41cb40 (Matrix3::Assign)
+struct Mat3B;
+struct cSPMatrix3 : Matrix33T {              // out-of-line copy ctor (Matrix3::Assign)
     cSPMatrix3() {}
-    cSPMatrix3(const Matrix33T& m);
-    cSPMatrix3(const cSPMatrix3& m);
+    explicit cSPMatrix3(const Mat3B& m);        // 0x449cc0 (wrapper that calls Matrix3::Assign)
+    cSPMatrix3(const Matrix33T& m);             // 0x41cb40
+    cSPMatrix3(const cSPMatrix3& m);            // 0x41cb40
 };
 struct PodVec { float x, y, z; };
-struct Mat3Id : Matrix33T { Mat3Id(); };      // @ 0x402ab0 default ctor
-struct Mat3B { char d[36]; Mat3B(const Matrix33T&); };  // @ 0x449cc0 by-value matrix wrapper
+struct Mat3Id : Matrix33T {                  // default ctor
+    Mat3Id();                                   // 0x402ab0
+};
+struct Mat3B : Matrix33T {};                 // tag: selects the 0x449cc0 constructor
 template<int N> struct bitset {
     uint32_t mWord[(N + 31) / 32];
     bool test(uint32_t i) const {
@@ -37,7 +41,7 @@ template<int N> struct bitset {
         return false;
     }
 };
-template<class T> struct LimbVec {
+template<typename T> struct LimbVec {
     T* b; T* e; T* c; int allocPair[2];
     LimbVec() { b = 0; e = 0; c = 0; }
     LimbVec(char& a);                            // @ 0x540470
@@ -77,16 +81,29 @@ struct cSPEditorModel {
     bool FUN_4adc40();                           // @ 0x4adc40
     float FUN_4adaa0();                          // @ 0x4adaa0
 };
-struct cSPEditorLimbStructure { char d[0x58]; cSPEditorLimbStructure(); ~cSPEditorLimbStructure();
-    void FUN_4891a0(cSPEditorBlock*, int, int); void FixAllJoints(); void FUN_488980(); };
+struct cSPEditorLimbStructure {
+    char d[0x58];
+    cSPEditorLimbStructure();                   // 0x488850
+    ~cSPEditorLimbStructure();                  // 0x488900
+    void FUN_4891a0(cSPEditorBlock*, int, int); // 0x4891a0
+    void FixAllJoints();                        // 0x489ae0
+    void FUN_488980();                          // 0x488980
+};
+// eastl::vector<AutoRefCount<cSPEditorBlock>>: same layout as LimbVec, but its destructor
+// releases every element before freeing the buffer.
+struct RefBlockVec {
+    cSPEditorBlock** b; cSPEditorBlock** e; cSPEditorBlock** c; int allocPair[2];
+    RefBlockVec(char& a);                       // 0x540470
+    ~RefBlockVec();                             // 0x453eb0
+};
 
 cSPEditorBlock* FUN_4a5a70(cSPEditorModel* m);
 cSPEditorBlock* FUN_4a5970(cSPEditorBlock* b);
 Vector3T* FUN_41db10(Vector3T* out, const Vector3T* a, const Vector3T* b);   // a - b
 Vector3T* FUN_41dc10(Vector3T* out, const Vector3T* a, const Vector3T* b);   // a - b
 Vector3T* FUN_41dca0(Vector3T* out, const Vector3T* a, const float* s);      // a * s
-float VectorLength(const Vector3T* v);
-void Vector3_Normalize(Vector3T* out, const Vector3T* in);
+float VectorLength(const Vector3T* v);                       // 0x40ae50
+void Vector3_Normalize(Vector3T* out, const Vector3T* in);   // 0x436ce0
 void FUN_49efc0(cSPEditorBlock*, cSPVector3, cSPVector3, cSPMatrix3, cSPMatrix3, LimbVec<cSPEditorBlock*>*);
 void FUN_49efc0(cSPEditorBlock*, Vector3T, Vector3T, Mat3Id, Matrix33T, LimbVec<cSPEditorBlock*>*);
 bool FUN_49dd20(cSPEditorBlock*, LimbVec<cSPEditorBlock*>*, int);
@@ -136,12 +153,12 @@ void RepinBlockToTorso(cSPEditorBlock* block, cSPVector3 t, cSPMatrix3 r, bool f
     Vector3T zero;
     zero.x = 0; zero.y = 0; zero.z = 0;
     char alloc;
-    LimbVec<cSPEditorBlock*> touched(alloc);
+    RefBlockVec touched(alloc);
     if (block->mParent) {
         if (block->mEditorModel->FUN_4adc40()) {
-            if (FUN_49dd20(block->mParent, &touched, 0)) {
+            if (FUN_49dd20(block->mParent, (LimbVec<cSPEditorBlock*>*)&touched, 0)) {
                 FUN_49efc0(block->mParent, parentPos, block->mParent->mPosition,
-                           parentMat, block->mParent->mOrientation, &touched);
+                           parentMat, block->mParent->mOrientation, (LimbVec<cSPEditorBlock*>*)&touched);
             }
         }
     }
@@ -234,7 +251,7 @@ void FUN_4a02b0(cSPEditorBlock* block, cSPVector3 p, cSPVector3 q)
             float diff = scaled - dot;
             cSPVector3 w(*FUN_41dca0(&tmp5, &n, &diff));
             PodVec r = *(PodVec*)FUN_41dc10(&tmp6, &bp, &w);
-            RepinBlockToTorso(blk, *(cSPVector3*)&r, *(cSPMatrix3*)&Mat3B(blk->mTorsoMat), false);
+            RepinBlockToTorso(blk, *(cSPVector3*)&r, cSPMatrix3(*(const Mat3B*)&blk->mTorsoMat), false);
         }
     }
 }

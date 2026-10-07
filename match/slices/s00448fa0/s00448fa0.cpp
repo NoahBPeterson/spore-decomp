@@ -38,9 +38,9 @@ struct Matrix3 {
     Matrix3(const Matrix3& other);              // 0x0041cb40 (out of line)
     Vector3& operator[](int i) { return r[i]; }
 };
-struct cSPMatrix3 : Matrix3 {                   // default ctor 0x00402ab0, copy ctor 0x00449cc0 (out of line)
-    cSPMatrix3();
-    cSPMatrix3(const cSPMatrix3& o);
+struct cSPMatrix3 : Matrix3 {                   // ctors are out of line
+    cSPMatrix3();                               // 0x00402ab0
+    cSPMatrix3(const cSPMatrix3& o);            // 0x00449cc0
 };
 Vector3 operator-(const Vector3& v);                               // 0x00422020
 Vector3& operator*=(Vector3& a, const float& s);                   // 0x0041dba0
@@ -109,7 +109,9 @@ struct cPropertyList {
     virtual void v4(); virtual void v5(); virtual void v6();
     virtual bool HasProperty(uint32_t id);
 };
-struct cSPEditorModel { bool IsSymmetryEnabled(); };               // 0x004adc40
+struct cSPEditorModel {
+    bool IsSymmetryEnabled();                                      // 0x004adc40
+};
 struct cSPEditorHandle {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void Update();                                         // +0x14

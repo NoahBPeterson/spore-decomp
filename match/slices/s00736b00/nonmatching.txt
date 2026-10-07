@@ -1,1 +1,1 @@
-00736b00  n/a  COMPLETE mesh tangent generation (all 14 calls + 15 vcalls in order, EH states); needs /GS- /arch:SSE /fp:fast; operator+ temps/stack frame (0x124 vs 0x1c4) and scheduling differ
+00736b00  n/a  COMPLETE mesh tangent generation (all 14 calls + 15 vcalls in order, EH states); needs /GS- /arch:SSE /fp:fast; operator+ temps/stack frame (0x124 vs 0x1c4) and scheduling differ; difftest WEAK (2793 valid at 3000 inputs, 8.5% coverage: random meshes take the early exits; no difference; callee annotations moved onto the declaration lines)

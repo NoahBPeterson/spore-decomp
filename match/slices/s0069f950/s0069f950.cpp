@@ -117,8 +117,10 @@ struct StreamKey {                           // {type tag, id, flags}
     uint32_t mId;
     uint32_t mFlags;
 };
-extern char g_179d304[];                     // 0x0179d304
-extern char g_179d310[];                     // 0x0179d310
+// Stream type tags: the original only uses their addresses (immediates 0x0179d304 / 0x0179d310,
+// past the end of .data in the image), never their contents.
+#define g_179d304 ((char*)0x0179d304)
+#define g_179d310 ((char*)0x0179d310)
 struct ClassMgr {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
     virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
@@ -226,13 +228,16 @@ struct ClassMap : RBMapBase {
     ClassMap& operator=(const ClassMap& x);                        // 0x0069f7b0
     RBInsertResult DoInsertValue(const ClassPair& v, true_type);   // 0x0069eea0
     RBIter DoInsertValue(RBIter hint, const ClassPair& v, true_type); // 0x0069efb0
-    ClassInfo& operator[](const uint32_t& key);                    // 0x0069f950
+    // eastl::map::operator[] (0x0069f950). The out-of-line body is named Subscript so the
+    // equivalence checker can find it by name; operator[] just forwards to it.
+    ClassInfo& Subscript(const uint32_t& key);                     // 0x0069f950
+    ClassInfo& operator[](const uint32_t& key) { return Subscript(key); }
 };
 struct ClassNode : RBNodeBase { ClassPair mValue; };    // value at +0x10 (key), +0x14 (ClassInfo)
 struct IDNode : RBNodeBase { IDPair mValue; };
 
 // @ 0x0069f950
-ClassInfo& ClassMap::operator[](const uint32_t& key)
+ClassInfo& ClassMap::Subscript(const uint32_t& key)
 {
     // lower_bound
     RBNodeBase* pRangeEnd = &mAnchor;

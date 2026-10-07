@@ -1,3 +1,3 @@
-00a51240  355  enregistered x1..y2 and pattern slot sharing differ (register allocation)
+00a51240  355  enregistered x1..y2 and pattern slot sharing differ (register allocation) ; difftest PASS (gpTextClass annotated 0x016754f0)
 00a51510  243  register assignment (b/vec) and canvas_objtext is a register-convention static (edi=b)
 00a51ae0  7  sret temp for canvas_realizedollar overlaps x2/y2 in original (frame 0x14 vs 0x18)

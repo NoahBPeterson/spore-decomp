@@ -1,2 +1,2 @@
 # va  diff  reason
-0053d2b0 2947 complete ctor + table builder; /Od frame (0x270 vs 0x1fc), temp slot layout and array-init shape not matched
+0053d2b0 3016 complete ctor + table builder (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast); /Od frame (0x270 vs 0x1fc), temp slot layout and array-init shape not matched; difftest PASS after fixing the member layout (mVec2 Alloc1 member is 0xc bytes: ours called the +0x68/+0x7c VSet ctors at +0x6c/+0x80; pad at +0x38); made testable by leaving the anonymous namespace, annotating the callees per line and giving each vtable its one real slot (deleting dtors 0x41d780, 0x53e440)

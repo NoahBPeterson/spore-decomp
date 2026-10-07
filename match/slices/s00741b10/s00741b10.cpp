@@ -5,6 +5,8 @@
 #include "types.h"
 #include <new>
 
+void operator delete[](void* p);                           // 0x00f47380
+
 namespace SP {
 
 struct Obj;
@@ -89,7 +91,10 @@ struct FixedObjVec {
 
 struct Matrix3 { float m[9]; Matrix3(const Matrix3& src); };   // 0x0041cb40
 extern const Matrix3 g_Matrix0162e9cc;
-extern const float g_f0162e88c, g_f0162e890, g_f0162e894, g_f01485720;
+extern const float g_f0162e88c;                            // 0x0162e88c
+extern const float g_f0162e890;                            // 0x0162e890
+extern const float g_f0162e894;                            // 0x0162e894
+extern const float g_f01485720;                            // 0x01485720
 
 struct Xf {
     uint16_t a, b; float f0, f1, f2, w; Matrix3 m;
@@ -114,7 +119,7 @@ extern Pool* g_pool;                                       // 0x016c8b44
 
 struct PropList { char GetDescription(const void* key); }; // 0x006a25a0
 extern PropList* g_props;                                  // 0x015fd918
-extern const char kPropKey[];                              // 0x0138fdbe
+static const uint32_t kPropKey = 0x0138fdbe;              // property id (immediate, not an address)
 
 struct BlenderVT {
     void* s0; void* s1; void* s2; void* s3;
@@ -266,7 +271,7 @@ void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16
 
     if (v1.mpBegin != v1.mpEnd || param_3 != 0) {
         if ((flags & 0xa) != 0 || (v1.mpBegin == v1.mpEnd && param_3 != 0)) {
-            if (!g_props->GetDescription(kPropKey)) flags |= 0x20;
+            if (!g_props->GetDescription((const void*)kPropKey)) flags |= 0x20;
         }
         flags |= 4;
         int n1 = v1.size();

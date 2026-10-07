@@ -1,1 +1,1 @@
-00fa75f0 ? complete SSE-intrinsics reconstruction (all paths + calls); compiles; not byte-exact: no symbol of matching size, register allocation/scheduling of 4.2KB intrinsics body unmatched
+00fa75f0 ? complete SSE-intrinsics reconstruction (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) (all paths + calls); compiles; not byte-exact: no symbol of matching size, register allocation/scheduling of 4.2KB intrinsics body unmatched; difftest WEAK (264 valid, 1.8% coverage, many budget/fault discards; O210::Use annotation split)

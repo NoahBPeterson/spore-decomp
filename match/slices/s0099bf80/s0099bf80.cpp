@@ -6,7 +6,7 @@
 
 typedef unsigned int uint;
 
-extern "C" void  operator_delete(void*);
+extern "C" void  operator_delete(void*);  // 0x00f47380
 extern "C" __declspec(dllimport) double modf(double, double*);
 extern "C" double sqrt(double);
 #pragma intrinsic(sqrt)

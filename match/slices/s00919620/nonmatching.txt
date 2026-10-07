@@ -1,9 +1,9 @@
 00919620 122 complete; loop is inverted (condition duplicated) in ours, original tests at the top; frame is 4 bytes off
 00919750 398 complete; switch/loop register allocation and spill layout differ
-00919a60 8 complete; ctor: original computes buf+0x100 after the first store (lea order), ours schedules it earlier
-00919a80 84 complete; swap: this/other register roles swapped (original loads the arg into esi first)
-00919b20 6 complete; same lea scheduling as the FixedString ctor (two inlined fixed-string inits)
-00919ca0 788 complete; ctx pointer kept in ebp in ours (original keeps it in memory/ecx); vcall register naming differs
-0091a010 154 complete; original frame has one extra stack dword (result kept in a stack slot)
-0091a530 186 complete; arg reloads per Vsnprintf8 call differ in schedule
+00919a60 8 complete; ctor: original computes buf+0x100 after the first store (lea order), ours schedules it earlier; difftest PASS
+00919a80 84 complete; swap: this/other register roles swapped (original loads the arg into esi first); difftest PASS (900 inputs; 400 gave WEAK on valid count)
+00919b20 6 complete; same lea scheduling as the FixedString ctor (two inlined fixed-string inits); difftest PASS
+00919ca0 812 complete; ctx pointer kept in ebp in ours (original keeps it in memory/ecx); vcall register naming differs; difftest WEAK (11.7% coverage: faked Read must return the exact byte count; no mismatch); fixed: string appends now call AppendRet 0x919c10 like the original instead of append 0x924c60
+0091a010 154 complete; original frame has one extra stack dword (result kept in a stack slot); difftest WEAK (9.6% coverage: needs F919620 to succeed on random inputs; no mismatch)
+0091a530 186 complete; arg reloads per Vsnprintf8 call differ in schedule; difftest PASS
 0091a620 76 complete; copy ctor of 0x48-byte record: bitfield word-load (movzx) and prologue register choice differ

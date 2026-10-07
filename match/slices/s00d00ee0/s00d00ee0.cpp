@@ -334,9 +334,12 @@ void RelTree::find(RBNode** out, const uint32_t* key)
         *out = end;
 }
 
+__declspec(noinline) void __cdecl WriteVarMap(ISerializer* ser, RelTree* t);
+__declspec(noinline) void __cdecl WriteFloatMap(ISerializer* ser, RelTree* t);
+
 // ---------------------------------------------------------------------------
 // @ 0x00d00ff0  write a map<pair<uint,uint>, VarList>
-__declspec(noinline) void __cdecl WriteVarMap(ISerializer* ser, RelTree* t)
+void __cdecl WriteVarMap(ISerializer* ser, RelTree* t)
 {
     PutU32(ser, t->size);
     RBNode* end = &t->anchor;
@@ -353,7 +356,7 @@ __declspec(noinline) void __cdecl WriteVarMap(ISerializer* ser, RelTree* t)
 
 // ---------------------------------------------------------------------------
 // @ 0x00d01110  write a map<uint,float>
-__declspec(noinline) void __cdecl WriteFloatMap(ISerializer* ser, RelTree* t)
+void __cdecl WriteFloatMap(ISerializer* ser, RelTree* t)
 {
     PutU32(ser, t->size);
     RBNode* end = &t->anchor;

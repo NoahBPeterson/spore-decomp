@@ -1,0 +1,10 @@
+009e2490 BuildGaits  # Anim gait table builder ("Anim/gait/untagged"); stdcall(Table*)
+009e18f0 ?reserve@?$Vec@UGait@@@@QAEXH@Z  # vector<Gait>::reserve (callee of BuildGaits; name from s009e2490 source)
+009e1990 ?realloc_insert@?$Vec@UGait@@@@QAEXPAUGait@@ABU2@@Z  # vector<Gait> grow-and-insert
+009e0110 ?realloc_insert@?$Vec@UGaitA@@@@QAEXPAUGaitA@@ABU2@@Z  # vector<GaitA> grow-and-insert (0x44-byte elements)
+009e0230 ?realloc_insert@?$Vec@UGaitB@@@@QAEXPAUGaitB@@ABU2@@Z  # vector<GaitB> grow-and-insert (0x58-byte elements)
+009e0330 ?realloc_insert@?$Vec@UGaitC@@@@QAEXPAUGaitC@@ABU2@@Z  # vector<GaitC> grow-and-insert (0x1c-byte elements)
+009dfda0 ?assign@?$Vec@UGaitA@@@@QAEXABU1@@Z  # vector<GaitA>::operator=
+009dfec0 ?assign@?$Vec@UGaitB@@@@QAEXABU1@@Z  # vector<GaitB>::operator=
+009dffe0 ?assign@?$Vec@UGaitC@@@@QAEXABU1@@Z  # vector<GaitC>::operator=
+009dc2b0 ??$vcopy@UGaitC@@@@YAPAUGaitC@@PAU0@00@Z  # eastl::copy for GaitC (cdecl)

@@ -4,7 +4,7 @@
 #include "types.h"
 
 #include <string.h>
-void operator delete[](void* p) throw();
+void operator delete[](void* p) throw();   // 0x00f47380
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
                    const char* file, int line);
 
@@ -68,7 +68,9 @@ struct Vec28 {
   void DoDestroy(FragDecl* first, FragDecl* last) throw();                         // 0x006fab90
   FragDecl* erase(FragDecl* first, FragDecl* last);                          // 0x006fbc00
 
-  __declspec(noinline) Vec28& operator=(const Vec28& x);   // 0x006fb9e0
+  // operator= at 0x006fb9e0; the body is named Assign so the equivalence checker can find it.
+  __declspec(noinline) Vec28& Assign(const Vec28& x);      // 0x006fb9e0
+  __forceinline Vec28& operator=(const Vec28& x) { return Assign(x); }
   void swap(Vec28& o);                                     // 0x006fbb30
   void DoInsertValues(FragDecl* pos, unsigned n, const FragDecl& v);  // 0x006fbc60
   void resize(unsigned n);                                 // 0x006fc480
@@ -286,7 +288,7 @@ extern "C" void ClearFragments() {
 // eastl::vector<cFragmentDecl> members.
 
 // @ 0x006fb9e0
-__declspec(noinline) Vec28& Vec28::operator=(const Vec28& x) {
+Vec28& Vec28::Assign(const Vec28& x) {
   if (&x != this) {
     FragDecl* xb = x.mpBegin;
     FragDecl* xe = x.mpEnd;

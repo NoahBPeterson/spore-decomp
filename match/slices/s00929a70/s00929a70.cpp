@@ -297,7 +297,7 @@ Callback::Callback()
     Set(0, 0, 0);
 }
 
-// 0x929e70
+// @ 0x00929e70
 Callback::Callback(CallbackFn fn, void* ctx, int period, int jitter, int proc, int timeType, IRefCount* obj)
     : mProc(proc), mTimeType(timeType), mPeriod(period), mJitter(jitter), mpObj(0), mbActive(false)
 {

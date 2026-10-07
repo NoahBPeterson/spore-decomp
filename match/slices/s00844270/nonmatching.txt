@@ -1,4 +1,4 @@
-00844270 707 SubstituteParameters: complete; allocation/string-build scheduling differs (inline string8 range ctor, throw paths)
+00844270 707 SubstituteParameters: complete; allocation/string-build scheduling differs (inline string8 range ctor, throw paths); difftest WEAK (204 valid, 5.8% coverage: random text rarely contains a well-formed &name; no mismatch)
 00844780 122 cIfCommand::Execute: complete; vcall arg setup / BoolVec push_back scheduling differs
 00844860 53 cMacroDefinition ctor: complete; store order of string8 empty-init differs
 00844a00 68 pair<string,AutoRefCount> ctor: complete; string8 copy ctor register allocation

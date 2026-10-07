@@ -1,11 +1,11 @@
-00776730 455 complete cShaderPreviewA ctor; base ctor/EH-frame shape differs (not inlined), needs /GS-
-00776920 277 complete cShaderPreviewB ctor; base ctor/EH-frame shape differs, needs /GS-
-00776a60 704 complete cShaderPreviewA::Draw; float/scheduling and frame layout differ
-00776e60 176 complete cShaderPreviewB::Draw; register allocation differs
-00776f40 226 complete cShaderPreviewA::Init; EH state for new/ctor differs
-00777060 150 complete cShaderPreviewA::Shutdown; vector clear idiom differs
+00776730 455 complete cShaderPreviewA ctor; base ctor/EH-frame shape differs (not inlined), needs /GS-; difftest PASS (after mapping the cListenerBase/cShaderPreviewA/B vtables in symbols/slices/s00776730.txt)
+00776920 277 complete cShaderPreviewB ctor; base ctor/EH-frame shape differs, needs /GS-; difftest PASS (after the same vtable mapping)
+00776a60 704 complete cShaderPreviewA::Draw; float/scheduling and frame layout differ; difftest FAIL is a checker artifact: the only mismatch is a viewer float (+0xf0/+0xf4, 9-10 ulp) written by the real callee SetXform (0x7c4d00 -> 0x7c4a32) from byte-identical inputs; its result depends on the stack address (our frame is 0x10 smaller; padding our frame changes the ulp distance), coverage 29%
+00776e60 176 complete cShaderPreviewB::Draw; register allocation differs; difftest WEAK (20% coverage: random viewers rarely pass Update)
+00776f40 226 complete cShaderPreviewA::Init; EH state for new/ctor differs; difftest PASS (after annotating operator_new 0xf473a0 and cViewer ctor 0x7c3f70)
+00777060 150 complete cShaderPreviewA::Shutdown; vector clear idiom differs; difftest PASS (after annotating ~cViewer 0x7c4000 and operator_delete__ 0xf47380)
 00777130 131 complete cShaderPreviewB::Init; call ordering/regalloc differs
 007771f0 79 complete cShaderPreviewB::Shutdown; clear idiom schedule differs
 00777290 232 complete cShaderBase::LoadTexture; refcount inline/EH shape differs
-007773c0 418 complete cShaderPreviewA::SetSlot; branch layout and EH differ
+007773c0 418 complete cShaderPreviewA::SetSlot; branch layout and EH differ; difftest WEAK (54% coverage)
 007775a0 116 complete cShaderPreviewB::SetSlot; switch/jump table layout differs; difftest FAIL is a checker artifact: the input's hash bucket array (via a garbage bucket index) lands in unallocated DYN heap (0x519ad970, beyond dyn_next), the original's LoadTexture find-or-insert links a node there, and the harness does not reset that memory, so our run's hash walk follows the original's leftover node and faults (traced with work/match/scratch_s00776730_trace.py)

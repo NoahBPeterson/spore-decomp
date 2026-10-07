@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-00937da0  n/a  complete: full control flow of VprintfCore8 from asm; custom EAX/stack conventions and goto layout differ
-00938500  n/a  complete: ReadFormat16 transcribed from state machine; register convention (eax/edx) differs
-00938980  n/a  complete: WriteInteger16; register convention (eax=value, edi=fd) differs
+00937da0  n/a  complete: full control flow of VprintfCore8 from asm; custom EAX/stack conventions and goto layout differ; difftest WEAK (--ignore-abi, valid because ours also takes pFormat in EAX: the byte-exact Vsnprintf8 calls it that way; 3000 inputs, 30% coverage, random format strings rarely hold specs) after fixing the callee conventions: ReadFormat8 (eax=va_list*, edx=format) and WriteInteger8 (eax=value, ecx=FormatData) are register-convention statics, so they are now TU-static functions sharing the ReadFormat16/WriteInteger16 bodies instead of cdecl externs (the cdecl calls passed garbage registers to the originals: FAIL)
+00938500  n/a  complete: ReadFormat16 transcribed from state machine; register convention (eax/edx) differs; difftest untestable: original takes va_list* in EAX and format in EDX, ours (TU-static with a stand-in caller) gets EDX/ECX from cl for any parameter order
+00938980  n/a  complete: WriteInteger16; register convention (eax=value, edi=fd) differs; difftest untestable: original takes FormatData in EDI, which the checker never sets (and ours gets eax=value, ecx=buffer end, stack=FormatData)

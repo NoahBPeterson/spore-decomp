@@ -109,7 +109,7 @@ int cSPSwatchPlanner::GetBuffer() {
 // ---------------------------------------------------------------------------------------------
 // Real class model for the swatch planner's big functions (DoMessage, Init, SetModel, ...).
 // ---------------------------------------------------------------------------------------------
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);  // 0x00f473a0
 
 namespace SW {
 
@@ -144,7 +144,7 @@ template <typename T>
 class ARCExt {  // EA::AutoRefCount<IWinText>: operator= stays out of line (0x00b5f950)
  public:
   T* mpObject;
-  ARCExt& operator=(T* p);
+  ARCExt& operator=(T* p);  // 0x00b5f950
 };
 typedef ARCExt<IWinProc> ARCText;
 class IRC;
@@ -183,10 +183,10 @@ class cSPUILayout {
   PV(0)
   virtual int AddRef();
   virtual int Release();
-  cSPUILayout();
-  IWindow* FindWindowByID(uint32_t id, bool recursive);
-  bool Init(const Key* key, bool b, uint32_t id);
-  void SetParentWin(IWindow* parent, bool b, uint32_t id);
+  cSPUILayout();  // 0x00810000
+  IWindow* FindWindowByID(uint32_t id, bool recursive);  // 0x008105b0
+  bool Init(const Key* key, bool b, uint32_t id);  // 0x008120d0
+  void SetParentWin(IWindow* parent, bool b, uint32_t id);  // 0x008121b0
   char pad[0x18 - 4];
 };
 
@@ -194,8 +194,8 @@ class Property {
  public:
   char pad[0x12];
   uint16_t mType;  // +0x12
-  bool* GetBool();
-  int* GetInt();
+  bool* GetBool();  // 0x0041e920
+  int* GetInt();  // 0x0041e990
 };
 
 class cPropertyList {
@@ -213,7 +213,7 @@ class IPropertyManager {
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10)
   virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList*& result);  // +0x2c
 };
-IPropertyManager* PropertyManager();
+IPropertyManager* PropertyManager();  // 0x0067de30
 
 class IWindowManager {
  public:
@@ -234,12 +234,12 @@ class IMessageServer {
   PV(6) PV(7) PV(8)
   virtual void AddHandler(IHandler* handler, uint32_t messageID);      // +0x24
 };
-IMessageServer* MessageServer();
+IMessageServer* MessageServer();  // 0x0067dcc0
 
 class cString {
  public:
-  cString();
-  ~cString();
+  cString();  // 0x006b5060
+  ~cString();  // 0x006b5240
   const wchar_t* GetText(const void* v, int a, const void* b, int c);  // 0x006b55c0
   char pad[0x10];
 };
@@ -279,7 +279,7 @@ class IMsgB {
 class cSPMessage : public IMsgA, public IMsgB {
  public:
   cSPMessage();  // 0x005c1280
-  ~cSPMessage();
+  ~cSPMessage();  // 0x005c12c0
   virtual void ma();
   virtual void mb();
   uint32_t mID;     // +0xc
@@ -382,8 +382,8 @@ class cSPPaletteSwatch {  // 0x1c8 bytes, ctor 0x005f7380
   virtual void SetModelKey(const Key* k);  // +0x24
   PV(10) PV(11) PV(12) PV(13)
   virtual void SetShowCostV(bool b);       // +0x38
-  cSPPaletteSwatch();
-  void Init(const Key* key, IWindow* w, int a, uint32_t id, cSwatchItemInfo* info, cSPPaletteInfo* pi, bool flag);
+  cSPPaletteSwatch();  // 0x005f7380
+  void Init(const Key* key, IWindow* w, int a, uint32_t id, cSwatchItemInfo* info, cSPPaletteInfo* pi, bool flag);  // 0x005f4310
   void SetShowCost(bool b);  // 0x005f49a0
   void FUN_005f2290(int a);  // 0x005f2290
   char padE[0x100 - 4];

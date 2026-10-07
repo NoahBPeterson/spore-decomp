@@ -6,8 +6,13 @@
 0057ed80 (object init helper)  # no PDB name
 0057eda0 eastl::basic_string<wchar_t>::trim  # real template instance
 0057edf0 (vector erase helper)  # no PDB name
-0057ee20 (vector assign helper)  # no PDB name
+0057ee20 ?4?$vector  # = ??4?$vector@URec18@@@eastl@@QAEAAU01@ABU01@@Z, eastl::vector<Rec18>::operator= (difftest name lookup only matches the base_ident form); no PDB name
 0057efa0 SP::cTerrainUI::PopulateScriptList  # PDB candidate (caller-scored)
-0057f0f0 (vector insert helper)  # no PDB name
-0057f220 (vector resize helper)  # no PDB name
+0057f0f0 eastl::vector<Rec30>::DoInsertValue  # vector insert helper; no PDB name
+0057f220 eastl::vector<RefElem>::DoInsertValues  # vector fill-insert (resize) helper; no PDB name
 0057ed00 cAppModeEditorBase::SetModelName  # no PDB name
+005729b0 ??$copy_ool@URec18@@@eastl@@YAPAURec18@@PBU1@0PAU1@@Z  # difftest alias: this slice's mangled name for copy<Rec18> (called by 0057ee20)
+004b2400 ??$uninitialized_copy_impl@PBURec18@@PAU1@@eastl@@YA?AU?$generic_iterator@PAURec18@@@0@U?$generic_iterator@PBURec18@@@0@0U10@Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<Rec18> (called by 0057ee20)
+01022c60 ??$uninitialized_copy_impl@PAURefElem@@PAU1@@eastl@@YA?AU?$generic_iterator@PAURefElem@@@0@U10@00Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<RefElem> (called by 0057f220)
+005c1dc0 ??$copy_backward_ool@URefElem@@@eastl@@YAXPAURefElem@@00@Z  # difftest alias: copy_backward<RefElem> (called by 0057f220)
+00657f20 ??$fill_ool@URefElem@@@eastl@@YAXPAURefElem@@0ABU1@@Z  # difftest alias: fill<RefElem> (called by 0057f220)

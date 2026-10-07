@@ -5,7 +5,7 @@
 
 void* operator new(unsigned size, const char* name, int a, int b, int c, int d);
 void  operator delete(void* p, const char* name, int a, int b, int c, int d);
-void  operator_delete__(void* p);
+void  operator_delete__(void* p);                // 0x00f47380
 
 extern const char g_lockName[];   // 0x01452970
 
@@ -145,7 +145,8 @@ struct Str16 {
 };
 Str16 ConvertToString16(const char* s, int n);   // 0x0093c5a0
 struct StrOut { int a, b, c; };
-extern void (__cdecl* g_pfnString)(StrOut*, int, int, int, int, int);  // 0x0154c464
+typedef void (__cdecl* StringFn)(StrOut*, int, int, int, int, int);
+extern StringFn g_pfnString;                     // 0x0154c464
 
 struct RbIter { int* n; RbIter() {} RbIter(const RbIter& o) { n = o.n; } };
 struct RbTree {

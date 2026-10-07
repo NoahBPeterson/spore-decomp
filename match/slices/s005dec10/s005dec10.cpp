@@ -3,7 +3,10 @@
 // Slice s005dec10: SP::cSPEditorUI dialog/save helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
 
-struct Layout { void* FindWindowByID(int, int); char pad[0x18]; };
+struct Layout {
+    void* FindWindowByID(int, int);   // 0x8105b0
+    char pad[0x18];
+};
 struct Widget {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
@@ -127,8 +130,12 @@ struct WinObj {
     void FUN_005fea60(uint32_t a, uint8_t b);
     void FUN_005fe6c0();
 };
-void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
-struct RefPtr { WinObj* p; void assign(WinObj* o); };   // AutoRefCount<IWinText>::operator=
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int);   // 0xf473a0
+// AutoRefCount<IWinText>::operator=
+struct RefPtr {
+    WinObj* p;
+    void assign(WinObj* o);   // 0xb5f950
+};
 
 struct AppBase {
     char pad[0x4b1];
@@ -142,23 +149,23 @@ struct AppBase {
     bool FUN_00573070(EditorRes* r);
     bool FUN_00573050();
     void FUN_00573fb0();
-    void SetCurrentConfig(uint32_t cfg, Key12 key);
+    void SetCurrentConfig(uint32_t cfg, Key12 key);   // 0x579720
     void LoadModelKey(const Key12* k, Key16 k16, int f);   // 0x58cee0
     void LoadModel(int a, int b, int c);                   // 0x58a350
     void FUN_005721b0(Key16 a, Key16 b);
 };
 
-ResMgr* __cdecl GetManager();
-MsgServer* __cdecl GetMessageServer();
-ConfigMgr* __cdecl GetConfigManager();
-AudioSys* __cdecl GetSystemAT();
-uint32_t __cdecl RemapTypeId(uint32_t t);
-EditorRes* __cdecl interface_cast_EditorRes(Res** r);
+ResMgr* __cdecl GetManager();   // 0x67dcd0
+MsgServer* __cdecl GetMessageServer();   // 0x67dcc0
+ConfigMgr* __cdecl GetConfigManager();   // 0x67dd30
+AudioSys* __cdecl GetSystemAT();   // 0xa206f0
+uint32_t __cdecl RemapTypeId(uint32_t t);   // 0x432f10
+EditorRes* __cdecl interface_cast_EditorRes(Res** r);   // 0x421eb0
 struct Obj67 { void FUN_0067c830(); };
 Obj67* __stdcall FUN_0067cac0(uint32_t id);
 struct Obj45 { void FUN_0045ae10(); };
 Obj45* __stdcall FUN_00401050(uint32_t id, int x);
-void __cdecl CalloutMessageBox(void* where, const Key12* key);
+void __cdecl CalloutMessageBox(void* where, const Key12* key);   // 0x809db0
 bool __cdecl FUN_004f3d60(Key16 a, Key16 b);
 void __cdecl FUN_004a88d0_(uint32_t id);
 

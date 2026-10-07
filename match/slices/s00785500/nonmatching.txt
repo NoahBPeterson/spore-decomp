@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00785500  big  COMPLETE: scalar-float transcription of the unrolled ZH->SH rotation (orders 1-8); 6327 vs 4022 bytes, original uses Vector4 SSE (movaps/shufps) loops
+00785500  big  COMPLETE: scalar-float transcription of the unrolled ZH->SH rotation (orders 1-8); 6327 vs 4022 bytes, original uses Vector4 SSE (movaps/shufps) loops; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (100% coverage) once compiled with /fp:fast (at /fp:precise rows of band 7 differed by rounding: the original spills x87 float temporaries to dword slots)

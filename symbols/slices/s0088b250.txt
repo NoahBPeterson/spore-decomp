@@ -1,2 +1,18 @@
 0088b850 EA::IO::IsFilePathSeparator  # EAWebKit EAFileDirectory, byte-exact
 0088b8a0 EA::Text::GetSystemFontDirectory  # EAWebKit EATextFontServer, byte-exact
+0088b870 EA::IO::Path::GetFileName  # retail EAIO form over SplitPathPtrs, byte-exact
+0088b930 EA::Text::GetFontTypeFromFilePath  # byte-exact
+0088c010 eastl::hashtable::DoFindNode  # <const wchar_t*, equal_to_2> instantiation on the Face map (FontServer::FaceMap)
+0088c050 eastl::fixed_list::fixed_list  # fixed_list<Font*,4,true> default ctor
+0088c0d0 eastl::pair::pair  # pair<const string16, string16>(const string16&, const string16&)
+0088c170 eastl::basic_string::insert  # basic_string<wchar_t, allocator>::insert(wchar_t*, const wchar_t*, const wchar_t*)
+0088c380 eastl::hashtable::DoAllocateNode  # string16 -> string16 fixed_hash_map (FamilySubstitutionMap)
+0088c500 eastl::list::erase  # list<Font*, fixed_node_allocator>::erase(first, last)
+0088b250 EA::Text::GlyphCache::AddTextureInfo  # retail layout (thread-safe build), RT:: in source; difftest PASS
+0088b450 EA::Text::GlyphCache::~GlyphCache  # retail layout, byte-exact
+0088b500 EA::Text::FontDescription::operator==  # byte-exact with /arch:SSE2 /fp:fast
+0088b560 EA::Text::Font::~Font  # retail layout, byte-exact
+0088b580 EA::Text::Font::Release  # retail layout, byte-exact
+0088b5b0 EA::Text::Font::Font  # retail layout, byte-exact
+0088b600 EA::Text::Font::`scalar deleting destructor'  # byte-exact
+0088b640 EA::Text::Font::SetupSupportedScriptSet  # retail layout, byte-exact

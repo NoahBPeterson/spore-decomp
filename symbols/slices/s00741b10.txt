@@ -1,1 +1,5 @@
 00741b10 SP::cModelInstance::AddAnimationsFromArena  # PDB name (symbols/pdb_names.json)
+00740b00 ?Insert@?$Vec@UP8@SP@@@SP@@QAEXPAUP8@2@IABU32@@Z  # Vec<P8>::Insert(pos, n, v) (resize fill of the 8-byte pair vector; card mislabels it ~cModelInstance)
+007411b0 ?PushSlow@?$Vec@UE12@SP@@@SP@@QAEXABUE12@2@@Z  # Vec<E12>::push_back slow path
+007417a0 ?Grow@?$Vec@UcMaterial@SP@@@SP@@QAEXPAUcMaterial@2@ABU32@@Z  # Vec<cMaterial>::Grow (insert at end, realloc)
+006ec390 ?Grow@?$Vec@UE8@SP@@@SP@@QAEXPAUE8@2@ABU32@@Z  # Vec<E8>::Grow (anim group record)

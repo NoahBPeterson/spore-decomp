@@ -1,1 +1,1 @@
-009cbee0 3662 complete port using retail byte offsets (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); frame 0x4b8 vs 0x4c0 and reg allocation differ, 4KB fp-heavy function not chased
+009cbee0 3662 complete port using retail byte offsets (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); frame 0x4b8 vs 0x4c0 and reg allocation differ, 4KB fp-heavy function not chased; difftest WEAK (233 valid, 11% coverage, no mismatch; most paths need a well-formed resource) after annotating the Clear/resize stubs (0x9c1dc0, 0x9b3180, 0x9cb840, 0x9cb8f0) on their own lines

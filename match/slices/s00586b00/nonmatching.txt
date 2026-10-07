@@ -1,3 +1,3 @@
 # <va> <diff-bytes> <reason>
 00586b00 1580 complete; frame 0x2c vs 0x30 and register allocation differ
-00587270 1590 complete; branch layout / register allocation differ
+00587270 1590 complete; branch layout / register allocation differ; difftest WEAK (335 valid, no mismatch, 4.3% coverage: guard this+0x38c in {0,6} rarely holds on random objects; fix: per-method callee annotations)

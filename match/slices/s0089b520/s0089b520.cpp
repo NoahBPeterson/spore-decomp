@@ -53,7 +53,9 @@ struct cvec {
     unsigned size() const { return mpEnd - mpBegin; }
     unsigned capacity() const { return mpCapacity - mpBegin; }
     T* DoAllocateAndCopy(unsigned n, const T* first, const T* last);   // out-of-line
-    cvec& operator=(const cvec& x)
+    cvec& operator=(const cvec& x) { return DoAssign(x); }
+    // operator= body; force-inlined so the 0x0089ba90/0x0089bc80 wrappers below carry it
+    __forceinline cvec& DoAssign(const cvec& x)
     {
         if (&x != this) {
             const T* pBegin = x.mpBegin;
@@ -395,9 +397,9 @@ void Typesetter::Justify()
 // vector<uint32>::operator= (0x0089ba90) and vector<uint16>::operator= (0x0089bc80)
 // ===========================================================================
 // @ 0x0089ba90
-cvec<uint32_t>& __fastcall UIntVec_assign(cvec<uint32_t>* self, int, const cvec<uint32_t>& x) { return *self = x; }
+cvec<uint32_t>& __fastcall UIntVec_assign(cvec<uint32_t>* self, int, const cvec<uint32_t>& x) { return self->DoAssign(x); }
 // @ 0x0089bc80
-cvec<uint16_t>& __fastcall UShortVec_assign(cvec<uint16_t>* self, int, const cvec<uint16_t>& x) { return *self = x; }
+cvec<uint16_t>& __fastcall UShortVec_assign(cvec<uint16_t>* self, int, const cvec<uint16_t>& x) { return self->DoAssign(x); }
 
 // ===========================================================================
 // vector::resize helpers (0x0089bd50, 0x0089bdb0, 0x0089be20)
@@ -407,7 +409,9 @@ struct ResizableVec {
     T* mpBegin; T* mpEnd; T* mpCapacity;
     void insert(T* pos, unsigned n, const T& v);   // fill-insert (out of line)
     void erase(T* first, T* last);                 // out of line
-    void resize(unsigned n)
+    void resize(unsigned n) { DoResize(n); }
+    // resize body; force-inlined so the 0x0089bdb0 wrapper below carries it
+    __forceinline void DoResize(unsigned n)
     {
         T* b = mpBegin;
         if (n > (unsigned)(mpEnd - b)) {
@@ -423,7 +427,7 @@ struct ResizableVec {
 // @ 0x0089bd50
 void __fastcall GlyphInfoVec_resize(ResizableVec<GlyphInfo>* self, int, unsigned n) { self->resize(n); }
 // @ 0x0089bdb0
-void __fastcall GlyphLayoutInfoVec_resize(ResizableVec<GlyphLayoutInfo>* self, int, unsigned n) { self->resize(n); }
+void __fastcall GlyphLayoutInfoVec_resize(ResizableVec<GlyphLayoutInfo>* self, int, unsigned n) { self->DoResize(n); }
 
 // @ 0x0089be20: fixed_vector<RunInfo,4>::resize
 void FixedRunVec::resize(unsigned n)

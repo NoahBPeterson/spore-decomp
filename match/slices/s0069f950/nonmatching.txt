@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-0069f950  76  ClassMap::operator[]: complete (lower_bound, default pair + insert-with-hint); iterator result slot/EH state numbering differ
+0069f950  76  ClassMap::operator[]: complete (lower_bound, default pair + insert-with-hint); iterator result slot/EH state numbering differ; difftest PASS (out-of-line body renamed ClassMap::Subscript, operator[] forwards to it, so the checker can find it by name)
 0069fa60  197  cObjectDatabase ctor: complete (vptr chain, interlocked refcount clear, new cCOMSerializer, two smart-pointer assigns); EH state stores and vptr store order differ
-0069fb90  1238  cICOMSerializer::SaveClassObjects: complete (class/instance write loop with crc+size backpatch, progress, class table); register allocation/EH differ
-006a0110  407  onSetSPSerializable: complete (class + instance map insert, writing-map mirror); temp ClassInfo construction/frame differ
-006a0360  534  loadSingleObject: complete (open stream, per-record size/crc/id scan, close, count check); register allocation/EH differ
+0069fb90  1250  cICOMSerializer::SaveClassObjects: complete (class/instance write loop with crc+size backpatch, progress, class table); register allocation/EH differ; difftest WEAK (12.9% coverage; type-tag globals 0x0179d304/0x0179d310 lie outside the image's data sections, now spelled as address constants)
+006a0110  411  onSetSPSerializable: complete (class + instance map insert, writing-map mirror); temp ClassInfo construction/frame differ; difftest FAIL (not a source difference: the original callee 0x0069f950 copies its uninitialised ClassInfo counts from its stack frame, and the leftover values there depend on the caller's frame layout, 0x7c vs 0x6c; known limitation 'reads of uninitialised stack memory' in docs/equivalence.md; call traces identical)
+006a0360  538  loadSingleObject: complete (open stream, per-record size/crc/id scan, close, count check); register allocation/EH differ; difftest WEAK (25.8% coverage; type-tag global spelled as address constant 0x0179d304)

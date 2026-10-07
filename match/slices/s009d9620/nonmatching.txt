@@ -5,7 +5,7 @@
 009d9d60 216 complete push_heap (LessIdx), value by value; dtor inline and functor slot differ
 009d9e70 216 complete push_heap (LessWord); same
 009d9f80 60 complete swap of two records; only schedule of the inlined dtor differs
-009da000 322 complete group-by-key fill of items (memcpy(0,0,0) for empty vector copy kept); reg alloc/layout differs
+009da000 322 complete group-by-key fill of items (memcpy(0,0,0) for empty vector copy kept); reg alloc/layout differs; difftest WEAK (21% coverage: random inputs rarely enter the group loop) after fixing the clear call: the original calls ItemVec::erase(begin,end) 0x9d8e20 (which also resets end), ours called the range destroy 0x9c15f0 and left end stale; memcpy declaration annotated as the 0x11e0744 import thunk
 009da170 351 complete adjust_heap (LessIdx); inlined dtor/functor slot differ
 009da2d0 350 complete adjust_heap (LessWord); same
 009da430 118 complete pop_heap (LessIdx); inlined dtor differs

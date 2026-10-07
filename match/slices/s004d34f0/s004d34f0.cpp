@@ -207,22 +207,28 @@ CreatureAbility::~CreatureAbility() {}
 // ---------------------------------------------------------------------------
 struct CapsTag1 { bool c; CapsTag1() { c = false; } };
 struct CapsTag2 { CapsTag2() {} };
-struct CapsMap { char data[0x4e0]; CapsMap(const CapsTag1&, const CapsTag2&); };
+struct CapsMap {
+    char data[0x4e0];
+    CapsMap(const CapsTag1&, const CapsTag2&);   // 0x004e0370
+};
 struct ColorRGB { float r, g, b; ColorRGB() { ScratchSlots<7>(); } };
 struct ResKey { uint32_t instanceID, typeID; int groupID; ResKey() { instanceID = 0; typeID = 0; groupID = 0; } };
-extern wchar_t gEmptyWStr[2];
+extern wchar_t gEmptyWStr[2];   // 0x01667bac
 struct ProfWStr { wchar_t* b; wchar_t* e; wchar_t* c; uint32_t alloc;
     ProfWStr() { b = 0; e = 0; c = 0; b = gEmptyWStr; e = b; c = b + 1; } };
 struct ProfVec3 { uint32_t* b; uint32_t* e; uint32_t* c; ProfVec3() { b = 0; e = 0; c = 0; } };
-struct ObjA { uint32_t d[0x1a]; ObjA(); };
+struct ProfObjA {
+    uint32_t d[0x1a];
+    ProfObjA();   // 0x004e0500
+};
 struct SubTag { SubTag() {} };
 struct ObjAB {
     uint32_t d[0x1a];
-    void SubInit(const SubTag&);
-    void Init();
+    void SubInit(const SubTag&);   // 0x00540470
+    void Init();                   // 0x004e07d0
     ObjAB() { SubTag t; SubInit(t); Init(); }
 };
-void BadModelKey(ResKey* k, int n);
+void BadModelKey(ResKey* k, int n);   // 0x0068c700
 inline bool IsEditorGroup(uint32_t g) { return ((g >> 30) & 3) == 1; }
 struct cSpeciesProfile {
     CapsMap capsInfos;               // 0x0
@@ -320,9 +326,9 @@ struct cSpeciesProfile {
     uint32_t m6d0;
     ObjAB m6d4;
     ObjAB m73c;
-    ObjA m7a4;
+    ProfObjA m7a4;
     bool m80c, m80d;
-    ObjA m810, m878, m8e0, m948, m9b0;
+    ProfObjA m810, m878, m8e0, m948, m9b0;
     cSpeciesProfile(const ResKey& key, bool flag);
 };
 // @ 0x004D3DD0

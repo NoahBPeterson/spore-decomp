@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
-00948080  173  UpdateCacheIniFile: complete; frame layout matches, loop scheduling/register differences
+00948080  173  UpdateCacheIniFile: complete; frame layout matches, loop scheduling/register differences; difftest WEAK after annotating Sprintf16 (0x9399c0): 363 valid, 10% coverage, every path past File::Remove hits the unemulated DeleteFileW import
 00948300  87  hashtable::find_as<const char*>: complete; orig keeps an iterator temp on the stack and copies it to the sret; difftest PASS after fixing key type (const char* const&, not string&) and the compare callee (operator==(string, const char*) 0x555020)
 00948400  50  SetCacheDirectory: complete; register/scheduling differences around esi save
 009484e0  16  CreateNewCachedDataStream: complete; vcall register pair (edx=vtbl, eax=fn) swapped; difftest WEAK after fixing the EASTL allocator __FILE__ string (missing include\EASTL/ part; now a literal so it maps to the original)
 009485f0  26  GetNewCacheFileName: complete; rep movsb scheduling of the inline wcscat differs
-00948860  184  IsEntryValid: complete; temp string ctor and compare codegen differ (sbb/neg vs setb)
+00948860  184  IsEntryValid: complete; temp string ctor and compare codegen differ (sbb/neg vs setb); difftest PASS (--inputs 1200) after annotating operator_delete__ (0xf47380) and GetTime64 (0x941bb0)
 00948940  274  MoveEntryToLocation: complete; branch layout/register allocation differ
 00948aa0  110  ForceAllDataToLocation: complete; loop prologue/register allocation differ
 00948b30  248  RemoveUnusedCachedFiles: complete (deque iteration modelled with stub types); layout differs

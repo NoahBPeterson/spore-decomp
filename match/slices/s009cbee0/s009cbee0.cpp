@@ -12,10 +12,18 @@ struct creature_body_static_data;
 template <class T> static inline T& at(void* p, int off) { return *(T*)((char*)p + off); }
 
 // thiscall stubs
-struct StaticDataStub { void Clear(int); };
-struct BodyStub { void Clear(); };
-struct BodyVecStub { void resize(unsigned n); };     // eastl::vector<creature_body_static_data>::resize
-struct WiggleVecStub { void resize(unsigned n); };   // eastl::vector<creature_body_wiggle_static_data>::resize
+struct StaticDataStub {
+    void Clear(int);              // 0x9c1dc0 creature_static_data::Clear
+};
+struct BodyStub {
+    void Clear();                 // 0x9b3180 creature_body_static_data::Clear
+};
+struct BodyVecStub {
+    void resize(unsigned n);      // 0x9cb840 eastl::vector<creature_body_static_data>::resize
+};
+struct WiggleVecStub {
+    void resize(unsigned n);      // 0x9cb8f0 eastl::vector<creature_body_wiggle_static_data>::resize
+};
 
 }  // namespace nSPCreatureAnim
 

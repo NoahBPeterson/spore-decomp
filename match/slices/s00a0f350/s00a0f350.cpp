@@ -7,7 +7,7 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 
-void* __cdecl operator new(size_t, const char*, int, int, int, int);
+void* __cdecl operator new(size_t, const char*, int, int, int, int);   // 0xf473a0
 
 // ---------------------------------------------------------------------------
 // cSPCreatureAnimManager::Init (0xa0f350) and HandleMessage (0xa0f610)
@@ -71,7 +71,7 @@ struct PtrVec {
     u32** mBegin;
     u32** mEnd;
     u32** mCap;
-    void DoInsertValue(u32** pos, u32* const& v);
+    void DoInsertValue(u32** pos, u32* const& v);   // 0x4558a0
     void push_back(u32* const& v) {
         if (mEnd < mCap) { u32** p = mEnd++; if (p) *p = v; }
         else DoInsertValue(mEnd, v);
@@ -82,16 +82,27 @@ struct AnimRefHolder {           // object at [mgr+0x84], vector at +8
     PtrVec mVec;
 };
 
-struct RefA { RefA(); u8 pad[0x1c]; };                 // 0x77d1d0
-struct RefB { RefB(); void InsertResource(int, void*); u8 pad[0x70]; };   // 0x40d010 / 0x77cb10
-struct RefC {                                          // 0x432cf0
-    RefC();
+struct RefA {
+    RefA();                                            // 0x77d1d0
+    u8 pad[0x1c];
+};
+struct RefB {
+    RefB();                                            // 0x40d010
+    void InsertResource(int, void*);                   // 0x77cb10
+    u8 pad[0x70];
+};
+struct RefC {
+    RefC();                                            // 0x432cf0
     u8 pad[0xc];
     u8 mKind; u8 pad1[3];
     float mA, mB, mC, mD;
 };
 
-struct CmdBase { CmdBase(); virtual void Run() = 0; u8 pad[0xc]; };
+struct CmdBase {
+    CmdBase();                                         // 0x83c800
+    virtual void Run() = 0;
+    u8 pad[0xc];
+};
 struct BlocksModeCmd : CmdBase {
     AnimMgr* mMgr;
     virtual void Run() {}
@@ -104,18 +115,26 @@ struct AutoHandlerRec {
 extern u32 g_animMsgIds[2];            // 0x155182c
 extern u32 g_defaultPropVal[];         // 0x15d1164
 extern AnimMgr* g_animMgr;             // 0x166cc08
-extern struct SomeObj { bool Prep(); } g_obj_166c058;
-extern struct SomeObj2 { void Fn(void*, int); } *g_obj_166c084;
+struct SomeObj {
+    bool Prep();                                       // 0x9a9920
+};
+struct SomeObj2 {
+    void Fn(void*, int);                               // 0x9ab540
+};
+extern SomeObj g_obj_166c058;
+extern SomeObj2* g_obj_166c084;
 
-IMaterialMgr* GetMaterialManager();
-IResMgr*      GetResMgr();
-IPropMgr*     GetPropertyManager();
-IServer*      GetMessageServer();
-ICheatMgr*    GetCheatManager();
+IMaterialMgr* GetMaterialManager();       // 0x67dd70
+IResMgr*      GetResMgr();                // 0x67dd60
+IPropMgr*     GetPropertyManager();       // 0x67de30
+IServer*      GetMessageServer();         // 0x67dcc0
+ICheatMgr*    GetCheatManager();          // 0x67de20
 void          FUN_00a059d0(AnimMgr*);
 void*         FUN_009a37a0(void*);
 void          FUN_009a4020(void*, int);
-struct RefSlot { void Assign(void* p); };            // 0x41d8b0
+struct RefSlot {
+    void Assign(void* p);                              // 0x41d8b0
+};
 
 struct AnimMgr {
     u8     pad0[0x4c];
@@ -131,7 +150,7 @@ struct AnimMgr {
     virtual void v12(); virtual void v13(); virtual void v14();
     virtual void SetAppMode(u32 mode);                 // +0x3c
 
-    void ReadAnimList(int);
+    void ReadAnimList(int);                            // 0xa0f080
     bool Init(bool flag);
 };
 
@@ -209,7 +228,7 @@ bool AnimMgr::Init(bool flag)
 struct Msg { u8 pad[8]; u32 mSel; u8 pad2[0xc]; void* mData; };
 struct AnimHandler {
     u8 pad[0x78]; u32 mAppMode;
-    void Do08ba0();
+    void Do08ba0();                                    // 0xa08ba0
     bool HandleMessage(u32 id, Msg* m);
 };
 
@@ -249,9 +268,9 @@ bool AnimHandler::HandleMessage(u32 id, Msg* m)
 // name in esi (a register convention MSVC cannot express), modeled as an extra argument.
 // ---------------------------------------------------------------------------
 struct MemPool {
-    void* LockedAlloc(int a, int b, int zero, const char* name, int c, int d);
-    void* LockedAligned(int a, int b, int c, int d, int zero, const char* name, int e, int f);
-    void  Free(void* p);
+    void* LockedAlloc(int a, int b, int zero, const char* name, int c, int d);                  // 0x9289f0
+    void* LockedAligned(int a, int b, int c, int d, int zero, const char* name, int e, int f);  // 0x928a30
+    void  Free(void* p);                                                                        // 0x9276c0
 };
 extern MemPool* g_memPool;       // 0x16c8b44
 

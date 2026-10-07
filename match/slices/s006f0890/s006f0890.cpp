@@ -1,5 +1,5 @@
 // Slice s006f0890 -- SP::cEffectsRenderer helpers.
-// /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE.
+// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
 #include "types.h"
 #include <intrin.h>
 
@@ -7,8 +7,8 @@ inline void* operator new(unsigned, void* p) { return p; }
 inline void operator delete(void*, void*) {}
 
 // EA allocator entry points (operator_new 0xf473a0 / operator_delete__ 0xf47380)
-void* __cdecl EaNew(unsigned size, const char* name, int a, int b, const char* file, int line);
-void __cdecl EaDelete(void* p);
+void* __cdecl EaNew(unsigned size, const char* name, int a, int b, const char* file, int line);  // 0x00f473a0
+void __cdecl EaDelete(void* p);  // 0x00f47380
 
 // ---- refcounted image resource (refcount at +8) -----------------------------
 struct RcObj {
@@ -276,10 +276,20 @@ extern unsigned g_samplerA;           // 0x016f9530
 extern unsigned g_samplerB;           // 0x016f9534
 extern unsigned g_renderDirty;        // 0x016fa38c
 extern unsigned g_renderDirty2;       // 0x016fa39c
-extern int g_s0, g_s1, g_s2, g_s3, g_s4, g_s5, g_s6;  // 0x16f9fe0 .. 0x16f9238
+extern int g_s0;  // 0x016f9fe0
+extern int g_s1;  // 0x016f9fdc
+extern int g_s2;  // 0x016f9fe4
+extern int g_s3;  // 0x016fa018
+extern int g_s4;  // 0x016fa014
+extern int g_s5;  // 0x016fa01c
+extern int g_s6;  // 0x016f9238
 extern int g_fogType;                 // 0x016f9f7c
 extern int g_r250, g_r410;            // 0x016f9250, 0x016f9410
-extern int g_b218, g_b23c, g_b21c, g_b244, g_b240;
+extern int g_b218;  // 0x016f9218
+extern int g_b23c;  // 0x016f923c
+extern int g_b21c;  // 0x016f921c
+extern int g_b244;  // 0x016f9244
+extern int g_b240;  // 0x016f9240
 void __cdecl SetBlendMode(int mode);  // 0x011f1340
 
 struct D3DCaps { char pad[0xc4]; unsigned c4; char pad2[4]; unsigned cc; };

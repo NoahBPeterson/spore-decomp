@@ -97,7 +97,10 @@ float VecLength(void* obj);                                                     
 }
 
 class cCamObj { public: char pad[0xc]; Vec3 pos; };
-class cBlockInfo { public: bool F4adc40(); };       // 0x004adc40 (thiscall)
+class cBlockInfo {
+public:
+    bool F4adc40();            // 0x004adc40 (thiscall)
+};
 class cBlock {
 public:
     virtual void v0();
@@ -118,7 +121,7 @@ void RepinBlockToTorso(cBlock* b, Vec3 pos, Mat3 orient, int flag);   // 0x0049f
 
 class cViewerStub {
 public:
-    void GetWorldRayFromScreenCoords(float x, float y, Vec3* org, Vec3* dir);   // thiscall, ret 0x10
+    void GetWorldRayFromScreenCoords(float x, float y, Vec3* org, Vec3* dir);   // 0x007c4730 SP::cViewer, thiscall, ret 0x10
 };
 class cAppStub {
 public:
@@ -414,7 +417,11 @@ public:
     bool F50bd90(const Vec3* a, const Vec3* b, int one, float* p5, float* p4, float* p3, float* p2, float* p1);   // 0x0050bd90 thiscall ret 0x20
 };
 class cPosObj { public: char pad[0x48]; float x, y; };      // helper objects with pos
-class cPosHolder { public: cPosObj* F4ac610(); cPosObj* F4ac710(); };   // 0x004ac610, 0x004ac710
+class cPosHolder {
+public:
+    cPosObj* F4ac610();        // 0x004ac610
+    cPosObj* F4ac710();        // 0x004ac710
+};
 
 class cCellPinning : public cManipBase, public cRC {
 public:

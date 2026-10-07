@@ -18,9 +18,7 @@ struct Vector3 {
 
 struct FaceUV { float u, v; int face; };
 
-namespace {
 Vector3 __cdecl ToVector3(uint32_t packed);     // 0x00f885b0
-}
 void WrapCubeFace(int size, int* face, int* x, int* y, int* rot, int* flip);   // 0x00684ca0
 extern Vector3 kDefaultVector3;   // 0x016c9bc8
 extern Vector3 kVector3Bias;      // 0x015b0f84

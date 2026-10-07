@@ -12,11 +12,11 @@ void* __cdecl memcpy(void*, const void*, unsigned int);
 inline void* operator new(unsigned int, void* p) { return p; }
 #define kEastlFile "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl memset(void*, int, unsigned int);
-void __cdecl operator_delete__(void*) throw();
+void __cdecl operator_delete__(void*) throw();   // 0x00f47380
 void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
 void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int);   // EASTL form
-int __cdecl GetTime64();
-int __cdecl Sprintf16(wchar_t* buf, const wchar_t* fmt, ...);
+int __cdecl GetTime64();   // 0x00941bb0
+int __cdecl Sprintf16(wchar_t* buf, const wchar_t* fmt, ...);   // 0x009399c0
 
 // ---------------------------------------------------------------------------
 // Minimal EASTL-shaped strings (16 bytes incl. allocator)
@@ -722,7 +722,7 @@ struct DirEntryDeque {          // 0x30 bytes
     DequeIt    mItEnd;          // +0x18
     void*      mpAllocator;     // +0x28
     int        pad2c;
-    void DoInit(unsigned n);    // eastl::DequeBase::DoInit
+    void DoInit(unsigned n);    // 0x005f8840 eastl::DequeBase::DoInit
     ~DirEntryDeque();           // 0x5f96c0
 };
 
@@ -731,7 +731,7 @@ struct DirFinder {
     int Find(const wchar_t* dir, DirEntryDeque* out, const wchar_t* pattern, int flags, int maxSize, int zero);   // 0x92ef40
 };
 
-void* __cdecl GetDefaultAllocator();   // EA::Allocator::ICoreAllocator::GetDefaultAllocator
+void* __cdecl GetDefaultAllocator();   // 0x00925cb0 EA::Allocator::ICoreAllocator::GetDefaultAllocator
 
 // @ 0x00948b30
 bool INetFileCache::RemoveUnusedCachedFiles() {

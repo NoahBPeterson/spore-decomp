@@ -1,1 +1,1 @@
-00741b10  3574  complete reconstruction (all arena types, 3 blender passes, resize/fill, group record); 3964 vs 4127 bytes, not exact
+00741b10  3578  complete reconstruction (all arena types, 3 blender passes, resize/fill, group record); 3964 vs 4127 bytes, not exact; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest WEAK (152 valid, 18.7% coverage, no mismatch; mapped Vec template slow paths in symbols/, operator delete[] 0x00f47380, float constants; kPropKey is the immediate property id 0x0138fdbe, not an address)

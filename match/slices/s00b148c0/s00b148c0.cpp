@@ -59,10 +59,15 @@ struct IDistGrid {
     virtual void v0(); virtual void v1(); virtual void v2();
     virtual IMapSet* GetMapSet();                          // vtable +0xc
     float GetBaseHeight();                                 // FUN_00f987f0
-    void  BuildSurfaceOrientation(Quat* out, const Vec3* pos, const void* ref);  // 0x00f9c660 / 0x00f9c960
+    void  BuildSurfaceOrientation(Quat* out, const Vec3* pos, const Quat* ref);  // 0x00f9c660
+    void  BuildSurfaceOrientationDir(Quat* out, const Vec3* pos, const Vec3* dir);  // 0x00f9c960 (overload of BuildSurfaceOrientation)
 };
 struct VarMap { float GetVar(const char* name); };         // 0x007f2590
-struct SlotMessage { u32 d[4]; SlotMessage(int); ~SlotMessage(); };   // 0x00421c80 / 0x00421cf0
+struct SlotMessage {
+    u32 d[4];
+    SlotMessage(int);     // 0x00421c80
+    ~SlotMessage();       // 0x00421cf0
+};
 
 extern VarMap g_varMap;           // 0x0167bc78
 extern float  g_ballistA;         // 0x0167bda8
@@ -75,7 +80,8 @@ extern u8     g_edgeFlag;         // 0x0167bd91
 extern u8     g_wasMoving;        // 0x0167bd90
 extern float  g_lastDeltaX;       // 0x0167bd84
 extern float  g_lastDeltaY;       // 0x0167bd80
-extern u32    g_bbf0, g_bbf4;     // 0x0167bbf0 / 0x0167bbf4
+extern u32    g_bbf0;             // 0x0167bbf0
+extern u32    g_bbf4;             // 0x0167bbf4
 extern Vec3   g_axisZ;            // 0x0167bd38
 extern const float kDegToRad;     // 0x0145ccfc = 0.017453292
 extern const float kDegToRad10;   // 0x01412cb0 = 0.17453292 (mouse y)
@@ -511,7 +517,7 @@ void cTerrainCameraController::MoveCamera(float yawDelta, float pitchDelta, floa
                         dd.y = sp.y * inv2;
                         dd.z = sp.z * inv2 - -1.0f;
                         Quat q;
-                        dg->BuildSurfaceOrientation(&q, &sp, &dd);
+                        dg->BuildSurfaceOrientationDir(&q, &sp, &dd);
                         if (q.x != orient.target.x || q.y != orient.target.y ||
                             q.z != orient.target.z || q.w != orient.target.w) {
                             orient.start = orient.current;

@@ -223,7 +223,7 @@ struct cSPEditorHandleRotationRing : cSPEditorHandle {
     void Shutdown();
     float GetHandleRadiusBasedOnBoundingBox();                                              // @ 0x484640
 
-    cSPVector3 GetHandlePosition();                                                         // @ 0x4845d0 (see RotationRing below)
+    cSPVector3 GetHandlePosition();                                                         // 0x4845d0 (see RotationRing below)
     void Update();                                                                     // @ 0x483f10
     void Resume(IModelManager* modelMgr, cSPEditorBlock* block, uint32_t modelKey, uint32_t axisID,
               uint32_t placement, float angleDeg, float offset, float scale, bool hidden, bool loadProps); // @ 0x4849e0

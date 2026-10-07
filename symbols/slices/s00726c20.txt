@@ -1,1 +1,10 @@
 00726c20 SP::QuantizeVertices  # dev build 0x00f487c0 (SPGraphicsMeshJoin.obj): same callees (PushIndices, FindEltArrayIndex, fixed_vector<int,256>, cDecCellID hash_map, ThreadSleep x2, AsRef, CreateArray); retail adds a class-table parameter
+# template instances called from 0x00726c20 (matched by call order against the original)
+00726900 ??0?$fixed_vector@H$0BAA@@eastl@@QAE@H@Z  # fixed_vector<int,256>(n) indicesRemap
+006c3510 ??0?$cEltArrayT@UcSPVector3@@@SP@@QAE@XZ  # new cEltArrayT<cSPVector3>
+006c2ad0 ??0?$cEltArrayRefT@H@SP@@QAE@ABUcEltArrayRef@1@@Z  # cEltArrayRefT<int>(const cEltArrayRef&)
+004281d0 ?DoInsertValue@?$fixed_vector@H$07@eastl@@QAEXPAHABH@Z  # folded 4-byte vector insert, 3 calls
+004b5ad0 ?DoInsertValue@?$vector@UcSPVector3@@@eastl@@QAEXPAUcSPVector3@@ABU3@@Z
+004ce310 ?DoInsertValue@?$fixed_vector@M$0BAA@@eastl@@QAEXPAMABM@Z  # weights
+006c1570 ?DoInsertValue@?$fixed_vector@H$0BAA@@eastl@@QAEXPAHABH@Z  # anchorIndices
+006d9660 ?DoInsertValue@?$fixed_vector@UcIndexArrayRef@SP@@$02@eastl@@QAEXPAUcIndexArrayRef@SP@@ABU34@@Z  # 2 calls

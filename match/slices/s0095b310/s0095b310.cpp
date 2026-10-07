@@ -40,8 +40,16 @@ struct IRenderer {
     virtual void r17(); virtual void r18(); virtual void r19(); virtual void r20(); virtual void r21();
     virtual void DrawRect(const RectF* dst, const RectF* clip, const RectF* uv);   // +0x58
 };
-struct Base2D { Base2D(void* a); virtual ~Base2D(); u32 d[8]; };    // 0x9520a0 / 0x951ba0, size 0x24
-struct Builder { Builder(); ~Builder(); u32 d[40]; };               // 0x952aa0 / 0x952f80
+struct Base2D {                                                  // size 0x24
+    Base2D(void* a);                                             // 0x9520a0
+    virtual ~Base2D();                                           // 0x951ba0
+    u32 d[8];
+};
+struct Builder {
+    Builder();                                                   // 0x952aa0
+    ~Builder();                                                  // 0x952f80
+    u32 d[40];
+};
 struct Batch2D : Base2D {
     Builder b;                                                       // +0x24
     Batch2D(void* a) : Base2D(a) {}
@@ -102,7 +110,10 @@ extern u32 g_tbl_1440748[29];
 extern const float g_1471064, g_1485720, g_1470f1c, g_13eb1bc_f;
 extern float g_sign_mask_13eb8b0;
 extern void __cdecl MergePending(Node* lD, Node* L1, Node* L2);      // 0x958570
-struct MutexOps { void __thiscall Lock(const void* name); void __thiscall Unlock(); };   // 0x9221b0 / 0x922270
+struct MutexOps {
+    void __thiscall Lock(const void* name);                      // 0x9221b0
+    void __thiscall Unlock();                                    // 0x922270
+};
 
 #define WB(w, o)   (*(u8*)((u8*)(w) + (o)))
 #define WD(w, o)   (*(u32*)((u8*)(w) + (o)))

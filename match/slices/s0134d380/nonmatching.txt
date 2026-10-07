@@ -1,1 +1,1 @@
-0134d380 2085 complete table of 43 Attribute records built as stack temp + copy into raw storage (frame 0x48 and record shape match); cl register/scheduling of callback constants and store order differs (original is the CRT dynamic initializer $E223 of a static array)
+0134d380 2102 complete table of 43 Attribute records built as stack temp + copy into raw storage (frame 0x48 and record shape match); cl register/scheduling of callback constants and store order differs (original is the CRT dynamic initializer $E223 of a static array)

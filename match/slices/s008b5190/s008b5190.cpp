@@ -24,12 +24,12 @@ struct InputStream {
 
 extern "C" void*  tsi_AllocMem(tsiMemObject* mem, uint32 size);               // 0x008d1260
 extern "C" void   tsi_DeAllocMem(tsiMemObject* mem, void* p);                 // 0x008d1440
-extern "C" void   tsi_Error(tsiMemObject* mem, int code);
+extern "C" void   tsi_Error(tsiMemObject* mem, int code);                      // 0x008d10c0
 extern "C" void   Seek_InputStream(InputStream* in, int pos);                 // 0x008cc580
 extern "C" int    Tell_InputStream(InputStream* in);                          // 0x008cc5b0
 extern "C" void   PeekInt16(InputStream* in, void* dst, int n);               // 0x008cc220
 extern "C" uint16 ReadInt16(InputStream* in);                                 // 0x008cc190
-extern "C" void   PrimeT2KInputStream(InputStream* in);
+extern "C" void   PrimeT2KInputStream(InputStream* in);                       // 0x008cc0b0
 extern "C" int    util_FixMul(int a, int b);                                  // 0x008d1590
 extern "C" int    util_FixDiv(int a, int b);                                  // 0x008d16d0
 extern "C" void*  memcpy(void*, const void*, size_t);                         // thunk 0x011e0744

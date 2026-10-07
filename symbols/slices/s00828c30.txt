@@ -1,3 +1,4 @@
 008290e0 conditional virtual-dispatch thunk (+0x10 or +0x28 object)
-00828df0 three-vcall guarded dispatcher
+00828df0 C25b::Do  # three-vcall guarded dispatcher
 00828ea0 deleting destructor
+00829ad0 ?4RefVec  # RefVec::operator= (mangled ??4RefVec@@...; written as its base identifier so the checker's name matcher finds it)

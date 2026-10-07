@@ -78,7 +78,9 @@ struct ThingA {                  // object wrapper used by the pick helpers
 ThingA* GetThingA(Obj* o);                       // 0x00b18e00
 float* GetRefCounted18(Obj* o);                  // 0x00eebf80
 V3* __cdecl FUN_0059aed0(V3* sret, const V3* a, const V3* b);   // 0x0059aed0 (hidden sret first)
-struct Picker { bool F35bf0(); };                // 0x00b35bf0
+struct Picker {
+  bool F35bf0();                                 // 0x00b35bf0
+};
 Picker* __stdcall FUN_00b3d240(ThingA* t, V3* origin, V3* dir, V3* out);  // 0x00b3d240
 
 struct UICtx {
@@ -307,8 +309,10 @@ struct ObjQ2 : ObjQ {
 };
 struct Mgr2 { int F3dc70(Thing2* t); };           // 0x00f3dc70
 struct G2b { char pad_0[0x14]; void* f14; char pad_18[0x74 - 0x18]; Mgr2* f74; };
-extern G2b* g_G2b;
-void FUN_00ed4e90(void* a);                       // 0x00ed4e90 (tail call, arg ecx)
+extern G2b* g_G2b;            // 0x016c7aa4
+struct Sys14 {
+  void F4e90();                                   // 0x00ed4e90 (thiscall, tail call)
+};
 struct CtlQ {
   char pad_0[6]; bool b6; char pad_7; Owner* f8;
   void Update();
@@ -319,7 +323,7 @@ struct UICtx2 {
   char setter30[0x24];
   Widget* f54; Widget* f58;
 };
-extern UICtx2* g_UI2;
+extern UICtx2* g_UI2;        // 0x016c7b88
 
 // @ 0x00efd020 -- per-frame update of the editor tool slots (g_UI->f14..f2c, f54, f58).
 void CtlQ::Update() {
@@ -463,5 +467,5 @@ void CtlQ::Update() {
   g_UI2->f54->SetTarget(J);
   g_UI2->f58->SetTarget(K);
   if (!obj)
-    FUN_00ed4e90(g_G2b->f14);
+    ((Sys14*)g_G2b->f14)->F4e90();
 }

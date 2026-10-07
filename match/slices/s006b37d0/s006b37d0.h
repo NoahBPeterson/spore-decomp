@@ -32,6 +32,8 @@ struct JobHolder6 {
 extern JobHolder6 g_jobHolder6;   // 0x01604b48
 extern uint32_t  g_1604b80;
 inline void* operator new(uint32_t, void* p) { return p; }
+void operator delete(void* p);     // 0x00f47380
+void operator delete[](void* p);   // 0x00f47380
 
 // ---- save-area setup (0x6b37d0) ----
 struct IRef6 { virtual void v0(); virtual void Release(); };
@@ -39,24 +41,27 @@ struct SaveObj6 { uint32_t pad0; IRef6 ref; };   // refcounted through the +4 su
 struct SaveRef6 { SaveObj6* p; SaveRef6() : p(0) {} ~SaveRef6() { if (p) p->ref.Release(); } };
 struct Ref6b { IRef6* p; Ref6b() : p(0) {} ~Ref6b() { if (p) p->Release(); } };
 struct cString6 {
-  cString6();
-  ~cString6();
-  void Load(uint32_t tableId, uint32_t instId, const wchar_t* dflt);
-  const wchar_t* GetText();
+  cString6();   // 0x006b5060
+  ~cString6();   // 0x006b5240
+  void Load(uint32_t tableId, uint32_t instId, const wchar_t* dflt);   // 0x006b54b0
+  const wchar_t* GetText();   // 0x006b55c0
   char data[8];
 };
-bool CreateDirectorySave(uint32_t root, const wchar_t* name, SaveObj6** out, uint32_t key);
-bool CreateLocationSave(uint32_t root, const wchar_t* name, SaveObj6** out, uint32_t key, uint32_t flag);
-bool CreatePackageSave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out);
-bool CreateServerCacheSave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out);
-bool CreateGraphicsDir(uint32_t root, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a, uint32_t b);
-bool CreateGraphicsPackage(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a);
-bool CreateCachedDirectorySave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a);
-void RegisterSaveArea(uint32_t key, SaveObj6* o, IRef6* o2);
-uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
+bool CreateDirectorySave(uint32_t root, const wchar_t* name, SaveObj6** out, uint32_t key);   // 0x006b2620
+bool CreateLocationSave(uint32_t root, const wchar_t* name, SaveObj6** out, uint32_t key, uint32_t flag);   // 0x006b3430
+bool CreatePackageSave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out);   // 0x006b3240
+bool CreateServerCacheSave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out);   // 0x006b3050
+bool CreateGraphicsDir(uint32_t root, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a, uint32_t b);   // 0x006b27f0
+bool CreateGraphicsPackage(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a);   // 0x006b2b30
+bool CreateCachedDirectorySave(uint32_t root, const void* dir, const wchar_t* name, SaveObj6** out, IRef6** out2, uint32_t a);   // 0x006b2dc0
+void RegisterSaveArea(uint32_t key, SaveObj6* o, IRef6* o2);   // 0x006b3760
+uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);   // 0x00932e80
 struct PropDesc6 { char pad[0x118]; int flag118; };
 struct PropList6 { char pad[0x3c]; PropDesc6* desc; };
-struct PropListFn6 { bool GetDescription(uint32_t hash); char pad[0x3c]; PropDesc6* desc; };
+struct PropListFn6 {
+  bool GetDescription(uint32_t hash);   // 0x006a25a0
+  char pad[0x3c]; PropDesc6* desc;
+};
 extern PropListFn6* g_appProps6;   // 0x15fd918
 extern char g_editorMode6;         // 0x16046d8
 extern char g_serverMode6;         // 0x152fbcc
@@ -66,11 +71,11 @@ extern const char g_dir13ec468[];  // 0x13ec468
 // ---- save-named-resource (0x6b4010) ----
 struct WStr6 {
   wchar_t* b; wchar_t* e; wchar_t* cap; void* alloc;
-  void Init(const wchar_t* s);
-  int rfind(wchar_t c, int pos);
-  void push_back(wchar_t c);
-  void append(const wchar_t* s);
-  ~WStr6() { if (((cap - b) & ~1) > 2 && b) operator delete[](b); }
+  void Init(const wchar_t* s);   // 0x00579a90
+  int rfind(wchar_t c, int pos);   // 0x0041dfc0
+  void push_back(wchar_t c);   // 0x004f6510
+  void append(const wchar_t* s);   // 0x00599bb0
+  ~WStr6() { if ((((char*)cap - (char*)b) & ~1) > 2 && b) operator delete[](b); }   // byte capacity, signed compare
 };
 struct Key3 { uint32_t inst, type, group; };
 struct KeyRef6 { uint32_t pad[2]; uint32_t inst, type, group; };
@@ -107,9 +112,9 @@ struct Fmt6 {
   V6(0) V6(1) V6(2) V6(3) V6(4) V6(5) V6(6) V6(7) V6(8) V6(9)
   virtual bool Write(void* key, IStream6* strm, int z, uint32_t type);   // 0x28
 };
-ResMgr6* GetResMgr6();
-void FormatHex6(WStr6* s, const wchar_t* fmt, uint32_t v);
-void SPKeyFromName(void* k, const wchar_t* name, uint32_t type, uint32_t group);
+ResMgr6* GetResMgr6();   // 0x0067dcd0
+void FormatHex6(WStr6* s, const wchar_t* fmt, uint32_t v);   // 0x004e0850
+void SPKeyFromName(void* k, const wchar_t* name, uint32_t type, uint32_t group);   // 0x0068d840
 extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 
 // ---- editor-resource job (0x6b4400..0x6b4610) ----
@@ -120,13 +125,13 @@ struct SvcBase6 {
   virtual uint32_t Detach();   // 0x48
 };
 struct SvcA6 : SvcBase6 {
-  bool Check(void* key, uint32_t size);
-  bool Pack(void* data, uint32_t size, uint32_t* pOut, uint32_t* pLen, uint16_t* pFlag);
+  bool Check(void* key, uint32_t size);   // 0x008d8570
+  bool Pack(void* data, uint32_t size, uint32_t* pOut, uint32_t* pLen, uint16_t* pFlag);   // 0x008d9850
   bool Unpack(void* key, uint32_t a, uint32_t b, uint32_t size, uint32_t flag);
 };
 struct SvcB6 : SvcBase6 {
-  bool Check(void* key, uint32_t size);
-  bool Pack(void* data, uint32_t size, uint32_t* pOut, uint32_t* pLen, uint16_t* pFlag);
+  bool Check(void* key, uint32_t size);   // 0x006bc3e0
+  bool Pack(void* data, uint32_t size, uint32_t* pOut, uint32_t* pLen, uint16_t* pFlag);   // 0x006bd580
   bool Unpack(void* key, uint32_t a, uint32_t b, uint32_t size, uint32_t flag);
 };
 struct Alloc6 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
@@ -143,17 +148,19 @@ struct ProvPtr6 {
   ~ProvPtr6() { if (p) p->sec.Release(); }
 };
 struct Stream6 {
-  ~Stream6();
-  void* GetData();
-  void Attach(int a, int b);
-  void SetData(uint32_t p, uint32_t n, int a, int b, uint32_t c);
+  ~Stream6();   // 0x0093bde0
+  void* GetData();   // 0x0093ba70
+  void Attach(int a, int b);   // 0x0093bf70
+  void SetData(uint32_t p, uint32_t n, int a, int b, uint32_t c);   // 0x0093be30
   virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
   virtual void Flush();    // 0x18
   virtual uint32_t Size(); // 0x1c
   char d[0x24];
 };
 struct IRefPtr6 { IRefC* p; ~IRefPtr6() { if (p) p->Release(); } };
-struct JobCtx6 { void Done(int n); };
+struct JobCtx6 {
+  void Done(int n);   // 0x0068f9b0
+};
 struct BG6 { virtual void bg0(); virtual ~BG6() {} };
 struct ER6 { virtual void er0(); virtual ~ER6() {} };
 struct Job6B : ER6, BG6 {

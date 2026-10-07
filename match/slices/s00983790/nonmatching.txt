@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00983790  23  WinScrollbar ctor: complete; 0xff byte-store register (al vs cl) and call-result register differ
-009838a0  13  ScrollbarDrawable standalone ctor: complete; original keeps the dead base-vptr stores
-00983940  22  BasicFactory_ScrollbarDrawable::CreateInstance: complete; dead base-vptr stores / zero-register differ
+009838a0  13  ScrollbarDrawable standalone ctor: complete; original keeps the dead base-vptr stores; difftest PASS after turning the standalone ctor into a thiscall member ScrollbarDrawable::Construct (was a cdecl free function named after __declspec)
+00983940  22  BasicFactory_ScrollbarDrawable::CreateInstance: complete; dead base-vptr stores / zero-register differ; difftest PASS after annotating the three ScrollbarDrawable vtable externs
 009839b0  64  WinScrollbar::CreateDefault: complete; shared zero register (edi) and inlined drawable ctor stores differ
 00983f50  5   OnFocusChange: complete; 0xff immediate vs register reuse and vptr-load order
 00984150  79  GetPreferredSize: complete; original recomputes the rect deltas and reuses the param slots as locals

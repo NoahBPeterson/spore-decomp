@@ -1,3 +1,3 @@
 0064acd0  1519  LaunchEditorEnd: complete; register allocation / frame layout diffs (largest function)
 0064b4b0  399  BanItem: complete; loop offset spill / frame 0x44 vs 0x34 diff
-0064b6b0  1202  HandleMessage: complete; register allocation / local reuse of param home slot diffs
+0064b6b0  1202  HandleMessage: complete; register allocation / local reuse of param home slot diffs; difftest PASS (--inputs 1000: 468 valid, 64.8% coverage) after fixing TimelineSporepediaCardData to 0x78 bytes (ours allocated 0x14) and splitting FeedCategory::Expand onto its own line so its 0x664480 annotation resolves

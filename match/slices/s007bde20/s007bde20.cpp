@@ -521,7 +521,8 @@ extern cPropertyList* g_sAppProperties;                       // [0x15fd918]
 extern float g_fFltMax;      // [0x140fd1c]
 extern float g_fNegFltMax;   // [0x13f51ac]
 extern float g_fOne;
-extern float g_fVecX, g_fVecY;  // [0x1635640], [0x1635644]
+extern float g_fVecX;  // 0x01635640
+extern float g_fVecY;  // 0x01635644
 
 // 0x7be430
 void cThumbnailManager::CapturePaletteThumbnail(cCaptureCtx* ctx, cPaletteRequest* req)
@@ -635,6 +636,7 @@ struct cPaletteImageRequest
 };
 
 // 0x7bea00: image-resource variant
+// @ 0x007bea00
 void cThumbnailManager::CapturePaletteImageThumbnail(cCaptureCtx* ctx, cPaletteImageRequest* req)
 {
     SetupThumbnailRTTs(req->m08, 1);

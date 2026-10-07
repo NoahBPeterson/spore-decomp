@@ -1,1 +1,1 @@
-00ceb710 3544 complete Render(billboard quads); inlined fixed_vector/x87 normalize/scheduling differ from original
+00ceb710 3551 complete Render(billboard quads); inlined fixed_vector/x87 normalize/scheduling differ from original; difftest WEAK (1543 valid, 2.5% coverage: exits early because image singletons are unset; no difference; fixed: game-mode/type IDs 0x1654c02/0x18c6de8 are plain immediates, not global addresses, and operator delete[] declared so it resolves to 0x00f47380)

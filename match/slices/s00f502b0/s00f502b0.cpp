@@ -18,6 +18,8 @@ struct cSPVector3
 	cSPVector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
 	bool operator==(const cSPVector3& b) const { return x == b.x && y == b.y && z == b.z; }
 	float Dot(const cSPVector3& b) const { return x * b.x + y * b.y + z * b.z; }
+	// same sum as Dot, accumulated statement by statement so cl /fp:fast keeps the x-first order of the original
+	float DotXYZ(const cSPVector3& b) const { float d = x * b.x; d += y * b.y; d += z * b.z; return d; }
 	float Length() const { return sqrtf(x * x + y * y + z * z); }
 	static cSPVector3 ZERO;   // 0x016C9058
 };
@@ -34,6 +36,8 @@ struct cSPQuaternion
 	float SquaredLength() const { return x * x + y * y + z * z + w * w; }
 	cSPQuaternion& operator*=(float s) { x *= s; y *= s; z *= s; w *= s; return *this; }
 	float Dot(const cSPQuaternion& b) const { return x * b.x + y * b.y + z * b.z + w * b.w; }
+	// same sum as Dot, accumulated statement by statement so cl /fp:fast keeps the x-first order of the original
+	float DotXYZW(const cSPQuaternion& b) const { float d = x * b.x; d += y * b.y; d += z * b.z; d += w * b.w; return d; }
 	float Length() const { return sqrtf(x * x + y * y + z * z + w * w); }
 	static cSPQuaternion ZERO;   // 0x016C9064 (name guessed: all four components zero)
 };
@@ -44,12 +48,14 @@ static inline cSPQuaternion operator/(const cSPQuaternion& a, float s) { cSPQuat
 
 static inline cSPVector3 Normalize(const cSPVector3& v)
 {
-	float inv = 1.0f / sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+	// The original computes 1/sqrt on the x87 and rounds it to float once (it moves to SSE through memory);
+	// volatile keeps cl from multiplying with the unrounded x87 value under /fp:fast.
+	volatile float inv = (float)(1.0 / sqrt((double)v.x * v.x + (double)v.y * v.y + (double)v.z * v.z));
 	return cSPVector3(inv * v.x, v.y * inv, v.z * inv);
 }
 static inline cSPQuaternion Normalize(const cSPQuaternion& q)
 {
-	float inv = 1.0f / sqrtf(q.x * q.x + q.y * q.y + q.z * q.z + q.w * q.w);
+	volatile float inv = (float)(1.0 / sqrt((double)q.x * q.x + (double)q.y * q.y + (double)q.z * q.z + (double)q.w * q.w));
 	return cSPQuaternion(inv * q.x, inv * q.y, inv * q.z, inv * q.w);
 }
 
@@ -58,16 +64,15 @@ template <class T> inline const T& max(const T& a, const T& b) { return (a < b) 
 }
 
 namespace SP {
-template <class T> T SplineInterpolation(const T& current, const T& velocity, const T& end, const T& endVelocity, float time, float dt);
-// 0x00B0FC40 (float), 0x00B10E50 (cSPVector3), 0x00B11160 (cSPQuaternion)
-template <> float SplineInterpolation<float>(const float&, const float&, const float&, const float&, float, float);
-template <> cSPVector3 SplineInterpolation<cSPVector3>(const cSPVector3&, const cSPVector3&, const cSPVector3&, const cSPVector3&, float, float);
-template <> cSPQuaternion SplineInterpolation<cSPQuaternion>(const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, float, float);
+// SplineInterpolation<T> instances, declared as plain overloads (same calls) so each can carry its address.
+float SplineInterpolation(const float&, const float&, const float&, const float&, float, float);   // 0x00B0FC40
+cSPVector3 SplineInterpolation(const cSPVector3&, const cSPVector3&, const cSPVector3&, const cSPVector3&, float, float);   // 0x00B10E50
+cSPQuaternion SplineInterpolation(const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, const cSPQuaternion&, float, float);   // 0x00B11160
 
 template <class T> struct cHermiteSplineInterpolation
 {
 	uint32_t mData[15];   // times / points / slopes vectors (retail size 0x3c)
-	T Interpolate(float t);   // 0x0069A5F0 (float), 0x0069A9A0 (cSPVector3), 0x0069AEE0 (cSPQuaternion)
+	T Evaluate(float t);   // 0x0069A5F0 (float); cSPVector3 0x0069A9A0 and cSPQuaternion 0x0069AEE0 resolve by their symbols names
 };
 
 struct cTerrainMapSet { float GetHeightAt(const cSPVector3& pos); };   // 0x00F927C0
@@ -199,7 +204,7 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 		cSPVector3 prev = mCameraAnchorDirection.current;
 		if (mBallisticMotion)
 		{
-			mCameraAnchorDirection.current = mDirectionSpline.Interpolate(mCameraAnchorDirection.currentTime);
+			mCameraAnchorDirection.current = mDirectionSpline.Evaluate(mCameraAnchorDirection.currentTime);
 			ballisticDone = false;
 		}
 		else
@@ -209,9 +214,9 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 			mCameraAnchorDirection.current = SplineInterpolation(mCameraAnchorDirection.current, mCameraAnchorDirection.velocity,
 				mCameraAnchorDirection.end, mCameraAnchorDirection.targetVelocity, eastl::max(deltaTime, remaining), deltaTime);
 		}
-		mCameraAnchorDirection.current = mCameraAnchorDirection.current / mCameraAnchorDirection.current.Length();
+		mCameraAnchorDirection.current = Normalize(mCameraAnchorDirection.current);
 		mCameraAnchorDirection.velocity = (mCameraAnchorDirection.current - prev) / deltaTime;
-		mCameraAnchorDirection.velocity = mCameraAnchorDirection.velocity - mCameraAnchorDirection.current * mCameraAnchorDirection.current.Dot(mCameraAnchorDirection.velocity);
+		mCameraAnchorDirection.velocity = mCameraAnchorDirection.velocity - mCameraAnchorDirection.current * mCameraAnchorDirection.current.DotXYZ(mCameraAnchorDirection.velocity);
 	}
 	else
 	{
@@ -226,7 +231,7 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 		cSPQuaternion prev = mCameraAnchorOrientation.current;
 		if (mBallisticMotion)
 		{
-			mCameraAnchorOrientation.current = mOrientationSpline.Interpolate(mCameraAnchorOrientation.currentTime);
+			mCameraAnchorOrientation.current = mOrientationSpline.Evaluate(mCameraAnchorOrientation.currentTime);
 			ballisticDone = false;
 		}
 		else
@@ -239,9 +244,9 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 			mCameraAnchorOrientation.current = SplineInterpolation(mCameraAnchorOrientation.current, mCameraAnchorOrientation.velocity,
 				mCameraAnchorOrientation.end, mCameraAnchorOrientation.targetVelocity, eastl::max(deltaTime, remaining), deltaTime);
 		}
-		mCameraAnchorOrientation.current = mCameraAnchorOrientation.current / mCameraAnchorOrientation.current.Length();
+		mCameraAnchorOrientation.current = Normalize(mCameraAnchorOrientation.current);
 		mCameraAnchorOrientation.velocity = (mCameraAnchorOrientation.current - prev) / deltaTime;
-		mCameraAnchorOrientation.velocity = mCameraAnchorOrientation.velocity - mCameraAnchorOrientation.current * mCameraAnchorOrientation.current.Dot(mCameraAnchorOrientation.velocity);
+		mCameraAnchorOrientation.velocity = mCameraAnchorOrientation.velocity - mCameraAnchorOrientation.current * mCameraAnchorOrientation.current.DotXYZW(mCameraAnchorOrientation.velocity);
 	}
 	else
 	{
@@ -256,7 +261,7 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 		float prev = mCameraDistance.current;
 		if (mBallisticMotion)
 		{
-			mCameraDistance.current = mDistanceSpline.Interpolate(mCameraDistance.currentTime);
+			mCameraDistance.current = mDistanceSpline.Evaluate(mCameraDistance.currentTime);
 			ballisticDone = false;
 		}
 		else
@@ -287,7 +292,7 @@ void cGameCameraController::UpdateInterpolation(float deltaTime)
 		float prev = mCameraPitch.current;
 		if (mBallisticMotion)
 		{
-			mCameraPitch.current = mPitchSpline.Interpolate(mCameraPitch.currentTime);
+			mCameraPitch.current = mPitchSpline.Evaluate(mCameraPitch.currentTime);
 			ballisticDone = false;
 		}
 		else

@@ -10,3 +10,8 @@
 00777290 SP::... # skeleton
 007773c0 SP::... # skeleton
 007775a0 SP::... # skeleton
+013eb384 ??_7cListenerBase@@6B@
+0140e660 ??_7cShaderPreviewA@@6BcListenerBase@@@
+0140e670 ??_7cShaderPreviewA@@6BcRefObjBase@@@
+0140e688 ??_7cShaderPreviewB@@6BcListenerBase@@@
+0140e698 ??_7cShaderPreviewB@@6BcRefObjBase@@@

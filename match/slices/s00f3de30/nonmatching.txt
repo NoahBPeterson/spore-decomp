@@ -3,9 +3,9 @@
 00f3df50 669 complete cX dtor; member-dtor/base-vptr store order differs
 00f3e2b0 107 complete; stack-arg cleanup for GetProperty vcall differs
 00f3e3b0 467 complete sparse-table walk; iterator codegen differs
-00f3e590 235 complete; iterator/hash-find codegen differs
+00f3e590 235 complete; iterator/hash-find codegen differs; difftest WEAK (980 valid, 31.9% coverage: random sparse-table inputs rarely enter the loop)
 00f3e6d0 262 complete; branch layout differs
-00f3e810 107 complete; vector erase tail-call not reproduced
-00f3e8a0 84 complete; always-false p==p+0x27e8 compare omitted
+00f3e810 107 complete; erase tail call now reproduced, FUN_00f3b710 arg reuses cached mpBegin instead of reloading; difftest PASS (earlier FAIL was a tail-jmp arg-slot artifact)
+00f3e8a0 84 complete; always-false p==p+0x27e8 compare omitted; difftest PASS
 00f3e910 705 complete stats histogram; locals/branch layout differ
 00f3ecb0 239 complete; loop/regalloc differ

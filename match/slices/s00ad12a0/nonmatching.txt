@@ -1,2 +1,2 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-00ad12a0  2624  complete casting-manager tribe population update; same 86-entry ordered call/vcall sequence, size 0.89x; cTransform default-ctor copies (orig goes through per-row temps), frame 0xfc vs 0x144
+00ad12a0  2636  complete casting-manager tribe population update; same 86-entry ordered call/vcall sequence, size 0.89x; cTransform default-ctor copies (orig goes through per-row temps), frame 0xfc vs 0x144

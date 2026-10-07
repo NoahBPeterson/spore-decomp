@@ -8,7 +8,7 @@ __declspec(dllimport) void* __cdecl memmove(void*, const void*, unsigned int);
 __declspec(dllimport) int __cdecl strncmp(const char*, const char*, unsigned int);
 }
 void* __cdecl memcpy(void*, const void*, unsigned int);
-void __cdecl operator_delete__(void*) throw();
+void __cdecl operator_delete__(void*) throw();   // 0x00f47380
 void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
 
 typedef int  (__thiscall *VF0)(void*);
@@ -26,7 +26,8 @@ struct StrStub {
     char* mpCapacity;
     int   mAlloc;
     void assign(const char* first, const char* last);
-    void append(const char* first, const char* last);
+    void append(const char* first, const char* last);   // 0x00455d60
+    void appendFixed(const char* first, const char* last);   // 0x0060a150 (fixed_string<char>::append)
     ~StrStub() {
         if (mpCapacity - mpBegin > 1 && mpBegin)
             operator_delete__(mpBegin);
@@ -116,6 +117,7 @@ int HTTPFormURLEncodedPostBodyStream::GetSize() {
     return (int)(msData.mpEnd - msData.mpBegin);
 }
 
+// @ 0x00946850
 int HTTPFormURLEncodedPostBodyStream::GetPosition(int origin) {
     int r = -1;
     if (mbFinal && mnState == 0) {
@@ -149,6 +151,7 @@ bool HTTPFormURLEncodedPostBodyStream::SetPosition(int pos, int origin) {
     return true;
 }
 
+// @ 0x00946900
 int HTTPFormURLEncodedPostBodyStream::GetAvailable() {
     if (!mbFinal)
         return -1;
@@ -398,7 +401,7 @@ struct Thread {
 int GetThreadPriorityDefault();                       // FUN_00922920
 void __cdecl ThreadSleep(const void* t);              // EA::Thread::ThreadSleep
 int __cdecl GetTime64();                              // FUN_00941bb0
-char* __cdecl Sprintf8(char* buf, const char* fmt, ...);
+char* __cdecl Sprintf8(char* buf, const char* fmt, ...);   // 0x00938470
 const char* __cdecl HeaderFieldToFieldString(int field);
 extern char g_logBuf[];                               // 0x0166A9D8
 extern const int kLockTimeout;                        // 0x0143F214
@@ -684,6 +687,7 @@ static inline const char* CharStrEnd(const char* p) {
     return e - 1;
 }
 
+// @ 0x00945ed0
 unsigned HTTPClient::WorkerThreadFunction(WorkerThreadInfo* info) {
     Job job;
     bool bOk;
@@ -749,7 +753,7 @@ unsigned HTTPClient::WorkerThreadFunction(WorkerThreadInfo* info) {
                     *body.mpBegin = 0;
                     body.mpEnd = body.mpBegin;
                 }
-                body.append(url, CharStrEnd(url));
+                body.appendFixed(url, CharStrEnd(url));
             }
         }
         {
@@ -760,7 +764,7 @@ unsigned HTTPClient::WorkerThreadFunction(WorkerThreadInfo* info) {
                     *dst->mpBegin = 0;
                     dst->mpEnd = dst->mpBegin;
                 }
-                dst->append(src->mpBegin, src->mpEnd);
+                dst->appendFixed(src->mpBegin, src->mpEnd);
             }
         }
         {

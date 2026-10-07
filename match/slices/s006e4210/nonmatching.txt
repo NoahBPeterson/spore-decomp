@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-006e4210  3483  complete SSE2 source (all paths/calls, refcounted msgs as Ref<T>); inlined vector math scheduling and EH state layout not byte-exact
+006e4210  3483  complete SSE2 source (all paths/calls, refcounted msgs as Ref<T>); inlined vector math scheduling and EH state layout not byte-exact; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2; difftest UNSUPPORTED: 0/400 inputs valid (the render-queue/device singleton getters return null image globals, so the original faults at once)

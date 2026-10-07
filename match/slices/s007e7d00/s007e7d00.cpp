@@ -6,8 +6,8 @@ extern "C" {
 void* __cdecl memcpy(void*, const void*, size_t);
 __declspec(dllimport) int __cdecl _wcsnicmp(const wchar_t*, const wchar_t*, size_t);
 }
-void* __cdecl operator_new(size_t, const char*, int, int, const char*, int);
-void __cdecl operator_delete__(void* p);
+void* __cdecl operator_new(size_t, const char*, int, int, const char*, int);  // 0x00f473a0
+void __cdecl operator_delete__(void* p);  // 0x00f47380
 
 // ---- minimal EASTL wstring (12 bytes used here: begin/end/capacity) ----
 extern wchar_t gEmptyWStr[2];  // 0x1667bac: shared empty-string sentinel
@@ -70,11 +70,11 @@ extern const wchar_t* gRegDataDirValue;  // 0x153f854 L"DataDir"
 extern const wchar_t* gDllMask;          // 0x153f84c L"*.dll"
 
 // EA::IO entry iteration (0x92e730 / 0x92e8e0 / 0x92e9b0)
-const wchar_t* __cdecl EntryFindFirst(const wchar_t* dir, const wchar_t* mask, int a, int b);
-int __cdecl EntryFindNext(const wchar_t* entry, int a);
-void __cdecl EntryFindFinish(const wchar_t* entry);
+const wchar_t* __cdecl EntryFindFirst(const wchar_t* dir, const wchar_t* mask, int a, int b);  // 0x0092e730
+int __cdecl EntryFindNext(const wchar_t* entry, int a);  // 0x0092e8e0
+void __cdecl EntryFindFinish(const wchar_t* entry);  // 0x0092e9b0
 
-extern const char kEastlAllocFile[];  // "...EASTL/allocator.h"
+extern const char kEastlAllocFile[];  // 0x013ebb38 "...EASTL/allocator.h"
 inline WString::WString(const WString& o) {
     size_t n = o.mpEnd - o.mpBegin;
     size_t cap = n + 1;

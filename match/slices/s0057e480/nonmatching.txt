@@ -2,7 +2,7 @@
 0057e8a0 2 complete UpdateBaker; only one register differs (esi vs edi for the last baker pointer)
 0057ea30 13 complete SaveMetadata; else-arm of the meta ternary laid out inline instead of after the ret
 0057ed00 7 complete SetModelName; message struct stores use eax/ecx swapped
-0057ee20 243 complete vector<Rec18>::operator=; register allocation (x in ebp vs ebx) and tail layout
+0057ee20 243 complete vector<Rec18>::operator=; register allocation (x in ebp vs ebx) and tail layout; difftest WEAK (156 valid, 44.3% coverage; no difference; the copy/uninitialized_copy<Rec18> callees mapped via symbols aliases)
 0057efa0 273 complete PopulateScriptList; callee-saved register assignment differs (zero const in ebp vs edi)
-0057f0f0 10 complete vector<Rec30>::DoInsertValue; eax/edx register choice only (flags /O2 /MD /Gy /TP /GS- no arch)
-0057f220 358 complete vector<RefElem>::DoInsertValues; position spilled in original, tag arg/regs differ (flags /O2 /MD /Gy /TP /GS-)
+0057f0f0 10 complete vector<Rec30>::DoInsertValue; eax/edx register choice only (flags /O2 /MD /Gy /TP /GS- no arch); difftest WEAK (107 valid, 59.8% coverage; no difference)
+0057f220 358 complete vector<RefElem>::DoInsertValues; position spilled in original, tag arg/regs differ (flags /O2 /MD /Gy /TP /GS-); difftest WEAK (942/2000 valid, 12.4% coverage: random n rarely reaches the insert paths; no difference)

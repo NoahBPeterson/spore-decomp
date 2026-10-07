@@ -64,7 +64,7 @@ StrBase& StrBase::assign(const char* first, const char* last)
     return *this;
 }
 
-// 0x00919a60
+// @ 0x00919a60
 FixedString::FixedString()
 {
     char* p = mBuf;
@@ -75,7 +75,7 @@ FixedString::FixedString()
     *p = 0;
 }
 
-// 0x00919a80
+// @ 0x00919a80
 void FixedString::swap(FixedString& o)
 {
     if (&mAllocator == &o.mAllocator) {
@@ -90,7 +90,7 @@ void FixedString::swap(FixedString& o)
     o.StrBase::operator=(temp);
 }
 
-// 0x00919b20
+// @ 0x00919b20
 StrPair::StrPair()
 {
 }
@@ -199,7 +199,7 @@ struct Holder {
     bool F919c10dummy();
 };
 
-// 0x00919620
+// @ 0x00919620
 bool Holder::F919620(void* a1, Info* info)
 {
     if (!f2a8.F918350(a1, f2d8))
@@ -229,7 +229,7 @@ bool Holder::F919620(void* a1, Info* info)
     return ok;
 }
 
-// 0x00919750
+// @ 0x00919750
 bool Parser::F919750(void* a1, Seg* out)
 {
     if (!SetPosition(f38 + 6, 0))
@@ -347,7 +347,7 @@ bool Holder::F919c30(Info* p, FixedString* out)
     return true;
 }
 
-// 0x00919ca0
+// @ 0x00919ca0
 bool Parser::F919ca0(void* a1, Ctx* ctx)
 {
     ctx->a.clear();
@@ -384,7 +384,7 @@ bool Parser::F919ca0(void* a1, Ctx* ctx)
             do {
                 if (Read(&ch, 1) != 1) return false;
                 if ((uint8_t)ch == 0) break;
-                ctx->a.append(ch);
+                ctx->a.AppendRet(ch);
             } while ((uint8_t)ch != 0);
             if (!F918200(&t)) return false;
             if (!F918200(&ctx->f228)) return false;
@@ -400,7 +400,7 @@ bool Parser::F919ca0(void* a1, Ctx* ctx)
             do {
                 if (Read(&ch, 1) != 1) return false;
                 if ((uint8_t)ch == 0) break;
-                ctx->b.append(ch);
+                ctx->b.AppendRet(ch);
             } while ((uint8_t)ch != 0);
             i++;
         } while (i < t);
@@ -409,7 +409,7 @@ bool Parser::F919ca0(void* a1, Ctx* ctx)
     return true;
 }
 
-// 0x0091a010
+// @ 0x0091a010
 uint32_t Holder::F91a010(uint8_t flags, void* a2, StrPair* out, uint32_t* arg4)
 {
     if (f280 == 0)
@@ -568,6 +568,7 @@ struct VString {
     VString* AppendVSprintf(const char* fmt, void* args);
 };
 template <class T> inline const T& vmax(const T& a, const T& b) { return b < a ? a : b; }
+// @ 0x0091a530
 VString* VString::AppendVSprintf(const char* fmt, void* args)
 {
     int len = mpEnd - mpBegin;

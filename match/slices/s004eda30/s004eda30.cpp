@@ -82,7 +82,10 @@ struct PropMgr {
 };
 PropMgr* PropertyManager();     // 0x67de30
 bool GetBoolProperty(IRef* p, uint32_t id, bool* out);   // 0x407190
-struct PropVal { char pad[0x12]; unsigned short type; float* GetFloat(); };   // GetFloat = 0x41ea70
+struct PropVal {
+    char pad[0x12]; unsigned short type;
+    float* GetFloat();   // 0x41ea70
+};
 
 // ===========================================================================
 // @ 0x004eda30  (validity of resource entries)

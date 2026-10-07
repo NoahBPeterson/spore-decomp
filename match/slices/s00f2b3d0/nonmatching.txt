@@ -2,10 +2,10 @@
 00f2b4f0  155  complete (collect sorted unique keys); Key copy load order / frame size (0x24 vs 0x2c) differ
 00f2b690  167  complete (collect sorted unique 64-bit ids); scheduling differs
 00f2b790  255  complete (mark refs missing companion resource); scheduling/register allocation differs
-00f2b9f0  93  complete (KeyMap::operator[]); pair temp construction order differs
-00f2bbd0  115  complete (range destroy of 0x238 entries); original addresses fields via base ebx=&buf
+00f2b9f0  93  complete (KeyMap::operator[]); pair temp construction order differs  ; difftest PASS (renamed operator[] to KeyMap::Lookup so the checker finds it)
+00f2bbd0  115  complete (range destroy of 0x238 entries); original addresses fields via base ebx=&buf  ; difftest WEAK (operator_delete__ mapped to 0xf47380; random first/last never meet, 13% coverage)
 00f2bcb0  70  complete reconstruction; EASTL range-destructor register/scheduling differs
 00f2bd10  33  complete reconstruction; cl schedules inline-buffer setup before the sentinel stores
 00f2bd50  537  complete (XML export of model assets); string/writer temp layout and short-circuit shape differ
-00f2c070  570  complete (resolve keys through browser, rewrite refs); inline map/vector code differs (760 vs 700 bytes)
-00f2c330  198  complete (filter keys of kind 2 then resolve); scheduling differs
+00f2c070  570  complete (resolve keys through browser, rewrite refs); inline map/vector code differs (760 vs 700 bytes)  ; difftest WEAK (operator_delete__ mapped; 18.5% coverage, browser Resolve rarely succeeds)
+00f2c330  198  complete (filter keys of kind 2 then resolve); scheduling differs  ; difftest WEAK (added @ marker; 42% coverage, real FUN_00f2b4f0 yields few keys)

@@ -10,9 +10,9 @@
 011faf30 29 complete: ambient colour constant setter; call form difference
 011faf60 29 complete: time constant setter; call form difference
 011faf90 100 complete: point-size constant (viewport width * sqrt2); call form + float temp copies
-011fb030 111 complete: elapsed-time-seconds constant (QPC); call form + temp vector copies
-011fb0f0 136 complete: elapsed-time-modulo constant (allrem); call form + temp vector copies
-011fb230 145 complete: fog constant (x,y by fog type, z=0, w=1); vector lane-merge shuffles not reproduced
-011fb310 500 complete: affine 4x4 inverse (3x3 cofactors, epsilon-guarded 1/det, translation); original SSE shufps vector code, w lanes of result are uninitialised stack in the original
+011fb030 111 complete: elapsed-time-seconds constant (QPC); call form + temp vector copies; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS after declaring QueryPerformance* as dllimport and copying the constant as one __m128 (so the device-call pushes are hoisted above the je, as in the original; the checker otherwise guessed different fake-call arities)
+011fb0f0 136 complete: elapsed-time-modulo constant (allrem); call form + temp vector copies; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS after declaring QueryPerformance* as dllimport and using now % freq (the hand-declared cdecl allrem broke the stack: _allrem pops its own arguments)
+011fb230 145 complete: fog constant (x,y by fog type, z=0, w=1); vector lane-merge shuffles not reproduced; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (41% coverage: g_fogType is an image global, so only one fog branch is reachable with generated inputs); fog globals given one // 0x comment each
+011fb310 500 complete: affine 4x4 inverse (3x3 cofactors, epsilon-guarded 1/det, translation); original SSE shufps vector code, w lanes of result are uninitialised stack in the original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS after rewriting on __m128 splats/lane inserts like the original (x87 version differed by 1 ulp in the translation and left the w lanes unwritten; original writes uninitialised-stack w lanes, row 0 w scaled by 1/det) and annotating kEpsilon 0x14f8140
 011fb750 505 complete: rigid-matrix inverse (3x3 transpose + translation -t*R^T); original SSE shufps code, ours scalar transpose + intrinsic dot products; difftest PASS after fixing translation rounding (original sums x*a + (y*b + z*c) in SSE single precision; ours summed left to right on x87)
 011fb950 175 complete: cached-inverse point transform (rigid/identity/general inverse cache, D3DXVec3Transform, keep w); SSE lane-merge form differs

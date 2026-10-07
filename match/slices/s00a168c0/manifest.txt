@@ -24,3 +24,5 @@ slices/s00a168c0/s00a168c0.cpp  ?GetPropertyAsFloatArray@RC@@QAE_NIPAIPAPBX@Z  0
 slices/s00a168c0/s00a168c0.cpp  ?GetPropertyAsUint32Array@RC@@QAE_NIPAIPAPBX@Z  00a175c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?GetPropertyAsKeyArray@RC@@QAE_NIPAIPAPBX@Z  00a17620  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a168c0/s00a168c0.cpp  ?SetModificationSource@PAgg@@QAEXMH@Z  00a16be0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a168c0/s00a168c0.cpp  ?FUN_00a16ad0@@YAPAXI@Z  00a16ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a168c0/s00a168c0.cpp  ?FUN_00a17090@@YAPAXI@Z  00a17090  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

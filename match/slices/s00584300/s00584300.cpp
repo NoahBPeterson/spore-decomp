@@ -203,9 +203,8 @@ struct cIEffectsManager {
 };
 
 struct cZoneObject : cIVirtualRC {                   // 0xc-byte object, ctor 0x00998820
-    static void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
-                              const char* file, int line);    // 0x00926020
-    cZoneObject();
+    static void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);   // 0x00926020
+    cZoneObject();   // 0x00998820
     uint32_t mData[2];
 };
 

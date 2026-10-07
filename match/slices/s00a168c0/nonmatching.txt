@@ -1,14 +1,12 @@
-00a16ad0  47  FixedAllocator<0x6c> pool allocate; freelist walk schedule differs
 00a16b80  48  RemoveElement: complete, vector swap-remove register schedule differs
 00a16da0  116  UpdatePrimitives: complete, clear() inlined loop vs DoInsertValue differs
 00a16e20  52  PushBack: complete, growth/call schedule differs
-00a16f60  98  PrimitiveBase::Init: complete, vtable/QueryInterface register schedule differs
+00a16f60  98  PrimitiveBase::Init: complete, vtable/QueryInterface register schedule differs; difftest PASS (GetServer/GetSystemAT annotated)
 00a17030  7  PB::SetEnabled: complete, sys/vtable register assignment differs
-00a17090  47  FixedAllocator<0x1c> pool allocate; freelist walk schedule differs
 00a172e0  94  PResp::SetModificationSource: complete, vcall/float schedule differs; difftest PASS after fixing the signature (value is a float first arg, v28 takes (float value, int mod), as in PAgg::SetModificationSource)
-00a17360  89  PResp::Destroy: complete, vptr/EH frame shape differs
+00a17360  89  PResp::Destroy: complete, vptr/EH frame shape differs; difftest PASS (signature fixed: no flags arg, void; vtables annotated)
 00a17520  3  GetPropertyAsKeyInstance: complete, value/out register naming differs
-00a168c0 39 sys_gui scalar deleting dtor: complete; original omits the EH state=-1 store after member dtor
+00a168c0 39 sys_gui scalar deleting dtor: complete; original omits the EH state=-1 store after member dtor; difftest PASS (written as named member SysGui::ScalarDeletingDtor; ours adds a /GS cookie to the EH frame)
 00a16920 160 VuMeter init: complete; zero register hoisted across call to 0xa161c0 in original (interprocedural xmm use)
-00a16d00 91 PrimitiveAggregate ctor: complete; original reloads vector begin/end for the inlined clear() instead of forwarding stores
-00a173f0 4 PResp ctor: complete; load order of arg vs float const
+00a16d00 91 PrimitiveAggregate ctor: complete; original reloads vector begin/end for the inlined clear() instead of forwarding stores; difftest PASS (vtables mapped in symbols/slices)
+00a173f0 4 PResp ctor: complete; load order of arg vs float const; difftest PASS (globals annotated, vtables mapped in symbols/slices)

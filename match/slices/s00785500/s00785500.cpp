@@ -1,6 +1,6 @@
 // Slice s00785500: one 4022-byte function, the explicit template instance
 // SP::RotateZHToSHAdd<rw::math::vpu::Vector4, rw::math::vpu::Vector4> (0x785500).
-// /O2 /MD /Gy /EHsc /TP /arch:SSE module.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  (fp:fast: the original spills x87 float temporaries to dword slots; the checker FAILs at /fp:precise)
 //
 // Rotates the zonal-harmonic coefficients (in) by the direction p and accumulates into
 // the SH output (out): band l (up to order 8) is built from band l-1 with the usual
@@ -10,8 +10,32 @@
 #include "types.h"
 #include <math.h>
 
-extern float k05c, k064, k074, k078, k07c, k09c, k0a8, k0b0, k0cc, k0d4, k0dc, k0e4,
-             k0e8, k0ec, k0f8, k0fc, k104, k10c, k130, k134, k150, k168, k1b0, k1dc, k1e0;
+// kXXX lives at 0x01634XXX in the original image.
+extern float k05c;  // 0x0163405c
+extern float k064;  // 0x01634064
+extern float k074;  // 0x01634074
+extern float k078;  // 0x01634078
+extern float k07c;  // 0x0163407c
+extern float k09c;  // 0x0163409c
+extern float k0a8;  // 0x016340a8
+extern float k0b0;  // 0x016340b0
+extern float k0cc;  // 0x016340cc
+extern float k0d4;  // 0x016340d4
+extern float k0dc;  // 0x016340dc
+extern float k0e4;  // 0x016340e4
+extern float k0e8;  // 0x016340e8
+extern float k0ec;  // 0x016340ec
+extern float k0f8;  // 0x016340f8
+extern float k0fc;  // 0x016340fc
+extern float k104;  // 0x01634104
+extern float k10c;  // 0x0163410c
+extern float k130;  // 0x01634130
+extern float k134;  // 0x01634134
+extern float k150;  // 0x01634150
+extern float k168;  // 0x01634168
+extern float k1b0;  // 0x016341b0
+extern float k1dc;  // 0x016341dc
+extern float k1e0;  // 0x016341e0
 
 static inline double S(double v) { return sqrt(v); }
 

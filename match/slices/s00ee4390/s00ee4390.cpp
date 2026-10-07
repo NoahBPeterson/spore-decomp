@@ -119,6 +119,14 @@ struct AutoRefCount {
     operator T*() const { return mpObject; }
 };
 
+// AutoRefCount<cHideOnMoveScreenPosition>, spelled as a plain struct so the checker can map its
+// out-of-line constructor (one body at 0x00572660 serves every T).
+class cHideOnMoveScreenPosition;
+struct HideOnMoveRef {
+    cHideOnMoveScreenPosition* mpObject;
+    HideOnMoveRef(cHideOnMoveScreenPosition* p);                          // 0x00572660
+};
+
 class cSPUILayout {
 public:
     IWindow* FindWindowByID(uint32_t id, bool recursive);                 // 0x008105b0
@@ -459,7 +467,7 @@ bool cScenarioEditModeBehaviorUI::HandleUIMessage(IWindow* window, const Message
             }
             mpPieMenu->SetCallback(OnPieMenuChoice, this);
             void* object = GetObjectByID(data->GetItemObjectID(selected));
-            AutoRefCount<cHideOnMoveScreenPosition> anchor(
+            HideOnMoveRef anchor(
                 new ("Simulator/cHideOnMoveScreenPosition", 0, 0, 0, 0)
                     cHideOnMoveScreenPosition(object, OnPieMenuMoved, this));
             cHideOnMoveScreenPosition* pAnchor = anchor.mpObject;

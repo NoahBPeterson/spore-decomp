@@ -4,17 +4,28 @@
 #include <string.h>
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
-void  operator delete[](void* p);
+void  operator delete[](void* p);  // 0x00F47380
 inline void* operator new(size_t, void* p) { return p; }
 
 #define EASTL_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 #define EANEW(sz) operator new[]((sz), "EASTL", 0, 0, EASTL_FILE, 0xd1)
 
 // ---- intrusive-refcounted payload types (names unknown) ----
-struct RefB { void AddRef(); void Release(); };               // 0x009B3450 / 0x009C26A0
-struct RefC { void AddRef(); void Release(); void Fn(int); }; // 0x0099C970 / 0x009A3630 / 0x009A3080
+struct RefB {
+    void AddRef();   // 0x009B3450
+    void Release();  // 0x009C26A0
+};
+struct RefC {
+    void AddRef();   // 0x0099C970
+    void Release();  // 0x009A3630
+    void Fn(int);    // 0x009A3080
+};
 struct Z { int pad; int size; };
-struct RefD { Z* z; int pad; uint32_t stamp; void AddRef(); void Release(); }; // 0x009AC2A0 / 0x009AE1C0
+struct RefD {
+    Z* z; int pad; uint32_t stamp;
+    void AddRef();   // 0x009AC2A0
+    void Release();  // 0x009AE1C0
+};
 struct RefE { void AddRef(); void Release(); };               // 0x00A17060 / creature_instance_data::Release 0x009C4CC0
 
 struct S4 { RefB* p; uint32_t a, b, c; };          // map key: compares p, a, c
@@ -82,8 +93,8 @@ struct TreeP {
     uint8_t pad0; Node anchor_; // anchor at +4
     int size;
     Iter LowerBound(const S4* k);
-    Iter Find(const S4* k);
-    bool Less(const S4* a, const S4* b);
+    Iter Find(const S4* k);               // 0x009AA500
+    bool Less(const S4* a, const S4* b);  // 0x009A9BC0
     Iter InsertNode(Node* pos, const Pair* v, bool left);
     IterBool InsertUnique(const Pair* v, TagT t);
     Iter Erase(Iter n);
@@ -491,11 +502,11 @@ void __cdecl CollectBits(Obj* o, int* outCount, uint32_t* bits)
 struct BakedData { char pad[0x10]; uint32_t count; };
 struct Baked {
     BakedData* d;
-    void Create(int n, int count, const float* rate);
-    void F9ae350(int a, float b, Obj* o, void* p2);
+    void Create(int n, int count, const float* rate);  // 0x009ACA60
+    void F9ae350(int a, float b, Obj* o, void* p2);    // 0x009AE350
 };
-void __cdecl F9a9c00(Obj* o, void* p2, float f);
-void __cdecl F9aa3a0(Obj* o, void* p2, Baked* b, uint32_t n);
+void __cdecl F9a9c00(Obj* o, void* p2, float f);  // 0x009A9C00
+void __cdecl F9aa3a0(Obj* o, void* p2, Baked* b, uint32_t n);  // 0x009AA3A0
 
 // @ 0x009AAAB0
 void __cdecl BuildBaked(Obj* o, void* p2, Baked* b, float t, float rate)

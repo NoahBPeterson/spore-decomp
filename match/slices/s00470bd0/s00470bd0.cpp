@@ -340,7 +340,7 @@ struct BoxEx : Box {
 };
 struct Vec3C {                                              // Vector3 with a copy ctor at 0x4098a0
     float x, y, z;
-    Vec3C(const Vec3& o);
+    Vec3C(const Vec3& o);                                  // 0x004098a0
 };
 struct BoxC {
     Vec3C mMin; Vec3C mMax;

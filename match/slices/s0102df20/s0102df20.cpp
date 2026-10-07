@@ -93,8 +93,8 @@ struct Tuning90 : Obj { uint pad[36]; int f90; };          // +0x90
 inline uint& nounField(Obj* n, int off) { return *(uint*)((char*)n + off); }
 struct VecCopy {                              // eastl::vector<Obj*> copy (50d440 ctor / 4e1bf0 dtor)
     Obj** b; Obj** e; Obj** c;
-    VecCopy(const PtrVec& src);
-    ~VecCopy();
+    VecCopy(const PtrVec& src);   // 0x0050d440
+    ~VecCopy();                   // 0x004e1bf0
 };
 struct SpaceGameObj { uint pad[5]; Obj* f14; };
 struct Flag44 { char pad[0x44]; char flag; };
@@ -104,18 +104,18 @@ struct EvtData {
     char pad[0x1c];
     float f1c;
     float f20;
-    EvtData(const Vec3* p, const Quat* q);
-    ~EvtData();
+    EvtData(const Vec3* p, const Quat* q);   // 0x00ad79d0
+    ~EvtData();                              // 0x00ad7ad0 cActionTarget::~cActionTarget
 };
 
 struct Z3 { int a, b, c; Z3() : a(0), b(0), c(0) {} };
 
 // ---- cdecl callees ----
-Planet* GetActivePlanet();                 // SP::cSPLivingUniverse::GetActivePlanet
-Obj* GetSystemAT();                        // EA::Audio::GetSystemAT
+Planet* GetActivePlanet();                 // 0x01021260 SP::cSPLivingUniverse::GetActivePlanet
+Obj* GetSystemAT();                        // 0x00a206f0 EA::Audio::GetSystemAT
 uint GetPlayerEmpireID();                  // SP::cSPLivingUniverse::GetPlayerEmpireID
 Obj* GetPlayerEmpire();                    // SP::cSPLivingUniverse::GetPlayerEmpire
-int GetUniverseContext();
+int GetUniverseContext();                  // 0x01021080
 Obj* Fn_01021240();
 Obj* Fn_01021230();
 Obj* StarManager();
@@ -123,7 +123,7 @@ Obj* RelationshipManager();
 Obj* NounManager();
 Obj* SpaceGameGet();
 Obj* GetUFOSimulator();
-Obj* MessageServer();
+Obj* MessageServer();                      // 0x0067dcc0
 Obj* Fn_0102f810();                        // SP::GetSpaceEconomyTuning
 Tuning90* GetSpaceRelationshipTuning();
 Obj* Fn_00b3d4a0();
@@ -148,18 +148,18 @@ Obj* Fn_00aed3f0(Obj* mission);
 Obj* icast_Delivery(Obj* m);               // EA::COM::interface_cast<cSPMissionMultiDelivery*>
 Obj* icast_Fetch(Obj* m);                  // interface_cast<cSPMissionFetch*>
 Obj* icast_Flight101(Obj* m);              // interface_cast<cSPMissionFlight101*>
-void GiveGift(int arg, int kind);
-void TryBreakAlliance(int arg);
-void TryCreateAlliance(int arg);
-void TryPeaceOffer(int arg, int price);
-void TryPurchaseOffer(int arg, Obj* sort, int price);
-int GetAttackRequestResponse(int arg);
+void GiveGift(int arg, int kind);          // 0x0102cae0
+void TryBreakAlliance(int arg);            // 0x0102cd90
+void TryCreateAlliance(int arg);           // 0x0102ce30
+void TryPeaceOffer(int arg, int price);    // 0x0102cf10
+void TryPurchaseOffer(int arg, Obj* sort, int price);   // 0x0102d1b0
+int GetAttackRequestResponse(int arg);     // 0x0102d150
 void Fn_00e39ab0(int key, Obj* emp, Z3* d, Z3* c, int v, int zero, Z3* b, Z3* a);
 
 extern char g_key_016de7e4[];
 extern PtrVec g_AttackRequestPlanets;       // 0x16decac
 extern int g_TargetPlanetIndex;             // 0x15b751c
-extern const char* const k_Military_Planet; // "SPG_SystemSurrender_Military_Planet"
+extern const char k_Military_Planet[];      // 0x0149963c "SPG_SystemSurrender_Military_Planet"
 
 template <class R> inline R vc0(void* o, int off) {
     typedef R(__thiscall * F)(void*);

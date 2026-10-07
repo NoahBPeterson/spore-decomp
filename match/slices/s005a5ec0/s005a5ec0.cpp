@@ -172,7 +172,9 @@ extern cSPColorRGB gWhiteColor;               // 0x0150F470 {1,1,1}
 uint32_t __cdecl ColorRGBAToU32(const cSPColorRGBA* c);   // 0x004580C0
 cSPColorRGB* __cdecl HSLToRGB(cSPColorRGB* out, float h, float s, float l);   // 0x0067FE30
 void __cdecl FUN_004a88d0(uint32_t id);                   // 0x004A88D0
-struct BoundingBoxLite { void Renderer(); };              // 0x0080D710
+struct BoundingBoxLite {
+    void Renderer();   // 0x0080D710
+};
 BoundingBoxLite* __cdecl AddBoundingBox(IWindow* win, int a, int b);   // 0x0067CAD0
 bool __cdecl GetPropertyArray(cPropertyList* list, uint32_t id, int* pCount, cSPColorRGB** pData); // 0x006A0A70
 

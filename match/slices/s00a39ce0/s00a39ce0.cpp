@@ -12,10 +12,10 @@
 #define V16 V4 V4 V4 V4
 
 void* operator new(unsigned int, const char*, int, int, int, int);
-void* operator new(unsigned int, const char*, int, int, const char*, int);
+void* operator new(unsigned int, const char*, int, int, const char*, int);   // 0x00f473a0
 void* operator new(unsigned int);
-void operator delete(void*);
-void operator delete[](void*);
+void operator delete(void*) throw();     // 0x00f47380
+void operator delete[](void*);   // 0x00f47380
 void operator delete(void*, const char*, int, int, int, int);
 void operator delete(void*, const char*, int, int, const char*, int);
 inline void* operator new(unsigned int, void* p) { return p; }
@@ -58,21 +58,20 @@ struct RbAnchorNode {
     RbNode* mpLeft;
     RbNode* mpParent;
     uint32_t mColor;
-    RbAnchorNode() : mpLeft(), mpParent(), mColor() {}
 };
 struct RbTreeData {
     int mAlloc;
     RbAnchorNode mAnchor;
     int mnSize;
     RbNode*& mpRight_() { return mAnchor.mpRight; }
-    RbTreeData() {
+    RbTreeData() : mAnchor() {
         mAnchor.mpRight = (RbNode*)&mAnchor;
         mAnchor.mpLeft = (RbNode*)&mAnchor;
         mAnchor.mpParent = 0;
         *(uint8_t*)&mAnchor.mColor = 0;
         mnSize = 0;
     }
-    void DoNukeSubtree(RbNode* node);
+    void DoNukeSubtree(RbNode* node);   // 0x009a9600
 };
 // Destructor with the nuke loop inlined.
 struct RbTree : RbTreeData {
@@ -146,20 +145,20 @@ struct String8 {
         *mpEnd = 0;
     }
     ~String8() { if (mpCapacity - mpBegin > 1 && mpBegin) operator delete[](mpBegin); }
-    void assign(const char* b, const char* e);
+    void assign(const char* b, const char* e);   // 0x00454cb0
     String8& operator=(const String8& x) {
         if (this != &x) assign(x.mpBegin, x.mpEnd);
         return *this;
     }
 };
-void ConvertToString8(String8* dst, const uint32_t* src);
+String8 ConvertToString8(const uint32_t* src);   // 0x0093c570 (returns via the hidden result pointer)
 uint32_t FNV1_String8(const char* s, uint32_t seed, int flag);
-RbNode* RBTreeIncrement(RbNode* n);
+RbNode* RBTreeIncrement(RbNode* n);   // 0x00921580
 
 namespace Audio {
 struct Command {
     bool GetUint32(uint32_t key, uint32_t* out);
-    bool GetFloat(uint32_t key, float* out);
+    bool GetFloat(uint32_t key, float* out);   // 0x00a0fa70 (named GetBool in symbols; reads a float)
     void SetFloat(uint32_t key, float v);
 };
 struct ResponseCurve {
@@ -186,6 +185,7 @@ struct StrPair {
     uint32_t first;
     String8 second;
     StrPair() {}
+    StrPair(const uint32_t& key, const String8& value);   // 0x00b209f0
     StrPair(const StrPair& other);   // 0xb20b90 (register-convention helper in the original)
 };
 struct RbIter {
@@ -193,20 +193,23 @@ struct RbIter {
     RbIter() {}
     RbIter(const RbIter& x) : mpNode(x.mpNode) {}
 };
+struct TrueType {};
 struct StrNode : RbNode {
     String8 mValue;   // +0x14 (mKey at +0x10)
 };
 
-struct StrMap : RbTreeS {
+struct StrMap : RbTreeData {
+    ~StrMap() { DoNukeSubtree(mAnchor.mpParent); }
+    void DoNukeSubtree(RbNode* node);   // 0x00e4b990 (string-valued node nuke)
     StrNode* DoCreateNode(const StrPair& value);   // 0xa3a6d0
     String8& operator[](const uint32_t& key);      // 0xa3a9a0
     RbIter find(const uint32_t& key);
-    RbNode* insert(RbNode* hint, const StrPair& v);
+    RbIter DoInsertValue(RbIter hint, const StrPair& v, TrueType unique);   // 0x00a3a8b0
     RbNode* anchor() { return (RbNode*)&mAnchor; }
 };
 
 struct UIntMap : RbTreeData {
-    uint32_t& operator[](const uint32_t& key);
+    uint32_t& operator[](const uint32_t& key);   // 0x00a2e060
     void Clear() {
         DoNukeSubtree(mAnchor.mpParent);
         mAnchor.mpRight = (RbNode*)&mAnchor;
@@ -251,39 +254,13 @@ bool cEventModifierPrimitive::Init() {
     return true;
 }
 
-// 0xa3a4c0
+// @ 0xa3a4c0
 void cEventModifierPrimitive::Append(char* dst, int capacity, char* str, bool sep) {
-    const char* p = dst;
-    const char* e = dst + 1;
-    char c;
-    do {
-        c = *p;
-        p++;
-    } while (c != 0);
-    int dstLen = (int)(p - e);
-    p = str;
-    e = str + 1;
-    do {
-        c = *p;
-        p++;
-    } while (c != 0);
-    int need = (int)(p - e) + sep;
-    int n;
-    if (need != 0)
-        n = 1;
-    else
-        n = dstLen;
+    unsigned dstLen = strlen(dst);
+    int n = (strlen(str) + sep) ? 1 : (int)dstLen;
     if (n < capacity) {
-        if (sep) {
-            dst[dstLen] = '_';
-            dstLen++;
-        }
-        char* q = dst + dstLen - (int)str;
-        do {
-            c = *str;
-            str[(int)q] = c;
-            str++;
-        } while (c != 0);
+        if (sep) dst[dstLen++] = '_';
+        strcpy(dst + dstLen, str);
     }
 }
 
@@ -300,40 +277,71 @@ bool cEventModifierPrimitive::ReadTuningValues(const ResourceKey* key) {
     return false;
 }
 
+extern char gMouthTable[];   // 0x0154df28 (the hashtable's shared empty bucket array)
+
+// eastl::prime_rehash_policy
+struct RehashPolicy {
+    float mfMaxLoadFactor;    // 1.0
+    float mfGrowthFactor;     // 2.0
+    unsigned mnNextResize;
+    RehashPolicy() : mfMaxLoadFactor(1.0f), mfGrowthFactor(2.0f), mnNextResize(0) {}
+};
+
+// eastl::hashtable<uint, pair<const uint, string>, SP_STL_Sound, ...>
+struct SoundHashTable {
+    int mAlloc;               // +0x18
+    void** mpBucketArray;     // +0x1c
+    unsigned mnBucketCount;   // +0x20
+    unsigned mnElementCount;  // +0x24
+    RehashPolicy mRehashPolicy;   // +0x28
+    explicit SoundHashTable(unsigned nBucketCount = 0)
+        : mnBucketCount(0), mnElementCount(0), mRehashPolicy() {
+        if (nBucketCount < 2) {
+            reset();
+        } else {
+            mnBucketCount = nBucketCount;
+            mpBucketArray = DoAllocateBuckets(nBucketCount);
+        }
+    }
+    void** DoAllocateBuckets(unsigned n);
+    void reset() {
+        mnBucketCount = 1;
+        mpBucketArray = (void**)gMouthTable;
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    void DoFreeNodes(void** buckets, unsigned count) throw();   // 0xa39c20
+    ~SoundHashTable() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+        DoFreeBuckets(mpBucketArray, mnBucketCount);
+    }
+    static void DoFreeBuckets(void** buckets, unsigned n) {
+        if (n > 1) operator delete(buckets);
+    }
+};
+
 struct cEventModifierPrimitiveMouthType : cEventModifierPrimitive {
-    int mPad18;
-    const void* mpTable;   // +0x1c
-    int mnCount;           // +0x20
-    int mZero24;
-    float mMin, mMax;      // +0x28, +0x2c
-    int mZero30;
+    SoundHashTable mTable;   // +0x18
     int mPad34;
     __declspec(noinline) cEventModifierPrimitiveMouthType(const char* name);
 };
-extern char gMouthTable[];
 
 // 0xa3a070
 cEventModifierPrimitiveMouthType::cEventModifierPrimitiveMouthType(const char* name)
-    : cEventModifierPrimitive(name) {
-    mMin = 1.0f;
-    mMax = 2.0f;
-    mZero24 = 0;
-    mZero30 = 0;
-    mnCount = 1;
-    mpTable = gMouthTable;
-}
+    : cEventModifierPrimitive(name) {}
+
+// 0xa3a0e0 cEventModifierPrimitiveMouthType::~cEventModifierPrimitiveMouthType (implicit destructor, called by its scalar deleting destructor at 0xa3a160)
 
 struct cEventModifierPrimitiveAlias : cEventModifierPrimitive {
     StrMap mMap;   // +0x18 (allocator slot) .. +0x2c
     int mPad30;
     cEventModifierPrimitiveAlias() : cEventModifierPrimitive("alias") {}
-    virtual ~cEventModifierPrimitiveAlias();                            // 0xa39ff0
     virtual void ModifyEvent(Command* cmd, int a, char* name, int capacity);   // 0xa3a670
     virtual bool ReadTuningValues(const ResourceKey* key);              // 0xa3aa80
 };
 
-// 0xa39ff0
-cEventModifierPrimitiveAlias::~cEventModifierPrimitiveAlias() {}
+// 0xa39ff0 cEventModifierPrimitiveAlias::~cEventModifierPrimitiveAlias (implicit destructor, called by its scalar deleting destructor)
 
 // 0xa3a670
 void cEventModifierPrimitiveAlias::ModifyEvent(Command* cmd, int a, char* name, int capacity) {
@@ -360,25 +368,23 @@ StrNode* StrMap::DoCreateNode(const StrPair& value) {
     return p;
 }
 
-// 0xa3a9a0
+// @ 0xa3a9a0 (eastl::map::operator[]: lower_bound, then insert(hint, value_type(key, T())))
 String8& StrMap::operator[](const uint32_t& key) {
-    RbNode* anchorNode = anchor();
-    RbNode* pos = anchorNode;
-    RbNode* cur = mAnchor.mpParent;
-    while (cur) {
-        if (cur->mKey < key) {
-            cur = cur->mpRight;
+    RbNode* pRangeEnd = anchor();
+    RbNode* pCurrent = mAnchor.mpParent;
+    while (pCurrent) {
+        if (!(pCurrent->mKey < key)) {
+            pRangeEnd = pCurrent;
+            pCurrent = pCurrent->mpLeft;
         } else {
-            pos = cur;
-            cur = cur->mpLeft;
+            pCurrent = pCurrent->mpRight;
         }
     }
-    if (pos == anchorNode || key < pos->mKey) {
-        StrPair v;
-        v.first = key;
-        pos = insert(pos, v);
-    }
-    return ((StrNode*)pos)->mValue;
+    RbIter itLower;
+    itLower.mpNode = pRangeEnd;
+    if (itLower.mpNode == anchor() || key < itLower.mpNode->mKey)
+        itLower = DoInsertValue(itLower, StrPair(key, String8()), TrueType());
+    return ((StrNode*)itLower.mpNode)->mValue;
 }
 
 // 0xa3aa80
@@ -477,31 +483,6 @@ void cEventModifierPrimitiveEpicFootType::ModifyEvent(Command* cmd, int a, char*
         ModifyEventWithFootName(gEpicFootName, cmd, a, dst, capacity);
 }
 
-struct SoundHashTable {
-    int mAlloc;               // +0x18
-    void** mpBucketArray;     // +0x1c
-    unsigned mnBucketCount;   // +0x20
-    unsigned mnElementCount;  // +0x24
-    void DoFreeNodes(void** buckets, unsigned count);   // 0xa39c20
-    ~SoundHashTable() {
-        DoFreeNodes(mpBucketArray, mnBucketCount);
-        mnElementCount = 0;
-        if (mnBucketCount > 1) operator delete(mpBucketArray);
-    }
-};
-
-// A primitive that owns a uint -> string table (destructor at 0xa3a0e0).
-struct cEventModifierPrimitiveTable : cEventModifierPrimitive {
-    SoundHashTable mTable;
-    cEventModifierPrimitiveTable(const char* name);
-};
-cEventModifierPrimitiveTable::cEventModifierPrimitiveTable(const char* name) : cEventModifierPrimitive(name) {}
-
-// 0xa3a0e0 (implicit destructor; kept out of line so the scalar deleting destructor calls it)
-#pragma auto_inline(off)
-void DestroyTable(cEventModifierPrimitiveTable* p) { delete p; }
-#pragma auto_inline(on)
-
 struct cEventModifierPrimitiveSurfaceType : cEventModifierPrimitive {
     cEventModifierPrimitiveSurfaceType() : cEventModifierPrimitive("surfacetype") {}
     virtual void ModifyEvent(Command* cmd, int a, char* dst, int capacity);   // 0xa3b9a0
@@ -538,7 +519,7 @@ struct cEventModifier {
     PrimVector mEventModifiers;   // +8
     int mPad18;
     UIntMap mModifierMap;         // +0x1c
-    uint32_t ConvertStringToMaskBit(const char* s);         // 0xa390d0
+    uint32_t ConvertStringToMaskBit(const char* s) throw();   // 0xa390d0
     bool LoadEventModifiersMap();                           // 0xa39ce0
     bool Init();                                            // 0xa3a180
     void ReadTuningValues(const ResourceKey* key);          // 0xa39f90
@@ -560,25 +541,17 @@ bool cEventModifier::LoadEventModifiersMap() {
         Property* prop;
         cfg.mp->GetProperty(key, prop);
         if (prop->mnType == 0x13) {
-            int count;
-            const uint32_t* str;
-            if (prop->mnFlags & 0x30) {
-                count = prop->mnCount;
-                str = prop->mpData;
-            } else {
-                count = 1;
-                str = (const uint32_t*)prop;
-            }
             uint32_t mask = 0;
+            uint16_t multi = prop->mnFlags & 0x30;
+            int count = multi ? prop->mnCount : 1;
+            const uint32_t* str = multi ? prop->mpData : (const uint32_t*)prop;
             if (count > 0) {
                 do {
-                    String8 s;
-                    ConvertToString8(&s, str);
+                    String8 s = ConvertToString8(str);
                     str += 4;
                     for (char* p = s.mpBegin; p < s.mpEnd; p++) *p = (char)tolower((unsigned char)*p);
                     mask |= ConvertStringToMaskBit(s.mpBegin);
-                    count--;
-                } while (count != 0);
+                } while (--count != 0);
             }
             mModifierMap[key] = mask;
         }
@@ -598,7 +571,7 @@ void cEventModifier::ReadTuningValues(const ResourceKey* key) {
     }
 }
 
-// 0xa3a180
+// @ 0xa3a180
 bool cEventModifier::Init() {
     mEventModifiers.resize(6);
     LoadEventModifiersMap();

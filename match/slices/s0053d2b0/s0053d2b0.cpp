@@ -2,13 +2,13 @@
 // Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
 
-namespace {
+// (formerly in an anonymous namespace: resolve.py cannot match annotations to ?A0x... scoped names)
 
 struct Entry4 { uint16_t mask; uint8_t edge; uint8_t pad; };
 
 struct Corner {                           // 4 bytes: x, y, z, w (stored by FUN_0053e190)
     uint8_t v[4];
-    Corner* Set(uint8_t z, uint8_t y, uint8_t x, uint8_t w);
+    Corner* Set(uint8_t z, uint8_t y, uint8_t x, uint8_t w);   // 0x0053e190
 };
 
 struct Face {                             // 0x20 bytes, built by FUN_0053e1d0
@@ -17,7 +17,7 @@ struct Face {                             // 0x20 bytes, built by FUN_0053e1d0
     uint32_t normal;                      // +8
     uint8_t cornerMask, cornerCount, pad[2];
     uint8_t c[4][4];                      // +0x10 corner coordinates
-    Face* Init(uint8_t index, uint32_t* a, uint32_t* b, uint32_t* c_, uint32_t* d, uint32_t* n);
+    Face* Init(uint8_t index, uint32_t* a, uint32_t* b, uint32_t* c_, uint32_t* d, uint32_t* n);   // 0x0053e1d0
 };
 
 // Tables in .data/.rdata (declared extern: relocations are masked).
@@ -37,8 +37,14 @@ int __cdecl Wrap(int v, int m, int* q);   // 0x0053e120: floor-mod
 inline uint8_t Mask3(const uint8_t* p) { return (uint8_t)(p[0] | (p[1] << 1) | (p[2] << 2)); }
 
 struct AllocTag { AllocTag() {} };
-struct Alloc1 { Alloc1(const AllocTag& tag); uint32_t pad[4]; };   // FUN_00429360, 0x10 bytes
-struct Alloc2 { Alloc2(const AllocTag& tag); uint32_t pad[5]; };   // FUN_00540470, 0x14 bytes
+struct Alloc1 {                          // 0xc bytes (mVec2's sits at +0x5c, mB at +0x68)
+    Alloc1(const AllocTag& tag);         // 0x00429360
+    uint32_t pad[3];
+};
+struct Alloc2 {                          // 0x14 bytes
+    Alloc2(const AllocTag& tag);         // 0x00540470
+    uint32_t pad[5];
+};
 
 struct VecA {
     uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCap;
@@ -55,21 +61,20 @@ struct RefPtr {
 class cCreatureAbility {
 public:
     cCreatureAbility() : mRefCount(0) {}
-    virtual void Dummy0();
-    virtual void Dummy1();
+    virtual void* DeletingDtor(unsigned flags);   // 0x0041d780 (vtable 0x13ef094 has this one slot)
     int mRefCount;
 };
 
 class cSPSkinPaintParticle : public cCreatureAbility {
 public:
     cSPSkinPaintParticle(float rate);
-    virtual void Dummy0();
-    virtual void Dummy1();
+    virtual void* DeletingDtor(unsigned flags);   // 0x0053e440 (vtable 0x13f3464 has this one slot)
     uint32_t pad08[3];
     float mRate;                 // +0x14
     float mInvRate;              // +0x18
     uint32_t pad1c;
     VecA mVec1;                  // +0x20
+    uint32_t pad38;
     Alloc2 mA;                   // +0x3c
     VecA mVec2;                  // +0x50
     Alloc2 mB;                   // +0x68
@@ -166,6 +171,4 @@ cSPSkinPaintParticle::cSPSkinPaintParticle(float rate)
         }
         g_edgeMaskTable[k] = acc;
     }
-}
-
 }

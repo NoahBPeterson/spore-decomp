@@ -1,1 +1,1 @@
-0132d6d0 2142 complete; store scheduling/register hoisting differs from original (46 descriptor temp->global copies)
+0132d6d0 2142 complete; store scheduling/register hoisting differs from original (46 descriptor temp->global copies); difftest PASS

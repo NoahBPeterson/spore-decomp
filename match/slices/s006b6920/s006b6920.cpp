@@ -8,8 +8,8 @@
 typedef unsigned short wchar16;
 
 // EA operator new (size, name, flags, align?, file, line): 6-arg cdecl allocator hook used by EASTL.
-void* __cdecl operator new(unsigned int n, const char* name, int a, int b, const char* file, int line);
-void* __cdecl operator new(unsigned int n, const char* name, int a, int b, int c, int d);
+void* __cdecl operator new(unsigned int n, const char* name, int a, int b, const char* file, int line);   // 0x00f473a0
+void* __cdecl operator new(unsigned int n, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 extern "C" void* __cdecl EA_ZoneObject_new(unsigned int n, const char* name, int a, int b, int c, int d);   // 0x00926020
 
 #define EASTL_ALLOC(n) ::operator new((n), "App", 0, 0, \
@@ -280,20 +280,21 @@ struct IdMap : SPVector<IdOffset> {
 extern const wchar16 gEmptyString[];   // 0x01409be8
 
 // The string table resource object created by the factory (size 0x44).
-struct StringTable : RefObj {
-    uint32_t mKey[3];               // +0x08 ResourceKey
+struct ResourceKey { uint32_t instance, type, group; };
+struct ResourceObjectST : RefObj {
+    ResourceKey mKey;               // +0x08
     uint32_t mPad14;
+    ResourceObjectST() { mKey.instance = 0; mKey.type = 0; mKey.group = 0; mPad14 = 0; }
+};
+struct StringTable : ResourceObjectST {
     SPVector<uint16_t> mChars;      // +0x18
     uint32_t mPad24[2];
     IdMap mMap;                     // +0x2c (begin,end,cap) ... flag at +0x40
     uint32_t mPad44[0];
 
     StringTable() {
-        mKey[0] = mKey[1] = mKey[2] = 0;
-        mPad14 = 0;
-        mChars.mpBegin = mChars.mpEnd = mChars.mpCapacity = 0;
-        mMap.mpBegin = mMap.mpEnd = mMap.mpCapacity = 0;
-        AddRef();
+        mChars.mpBegin = 0; mChars.mpEnd = 0; mChars.mpCapacity = 0;
+        mMap.mpBegin = 0; mMap.mpEnd = 0; mMap.mpCapacity = 0;
     }
     virtual void AddRef();
     virtual void Release();
@@ -319,7 +320,7 @@ struct IStreamSize { virtual void s0(); virtual void s1(); virtual void s2(); vi
 struct IKeyStream  { virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
                      virtual void s4(); virtual void s5(); virtual IStreamSize* GetStream(); };
 struct IResKeySrc  { virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
-                     virtual uint32_t* GetKey(); };
+                     virtual ResourceKey* GetKey(); };
 struct IResMan {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
@@ -492,15 +493,16 @@ bool SP::cStringTableResourceFactory::Create(IResKeySrc* pSrc, StringTable** ppO
     AutoRefCount<StringTable> ref;
     StringTable* pTable = 0;
     if (type == 0x2fac0b6) {
-        pTable = new ("UI/SP::cString", 0, 0, 0, 0) StringTable();
-        ref.mp = pTable;
+        ref = new ("UI/SP::cString", 0, 0, 0, 0) StringTable();
+        pTable = ref.mp;
         if (ReadResource((IKeyStream*)pSrc, pTable, arg3, 0x2fac0b6)) {
             *ppOut = pTable;
             pTable->AddRef();
-            uint32_t* pKey = pSrc->GetKey();
-            (*ppOut)->mKey[0] = pKey[0];
-            (*ppOut)->mKey[1] = pKey[1];
-            (*ppOut)->mKey[2] = pKey[2];
+            const ResourceKey* pKey = pSrc->GetKey();
+            StringTable* pOut = *ppOut;
+            pOut->mKey.instance = pKey->instance;
+            pOut->mKey.type = pKey->type;
+            pOut->mKey.group = pKey->group;
             ok = true;
         }
     }

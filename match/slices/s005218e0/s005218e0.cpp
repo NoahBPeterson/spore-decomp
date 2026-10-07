@@ -5,13 +5,17 @@
 void FUN_00525d90(void* p, void* v);      // 0x00525d90
 
 struct RcObj { virtual void AddRef(); virtual void Release(); };
-struct JobMgr { int ContinueJob(); };                         // 0x0068f970
+struct JobMgr {
+    int ContinueJob();                                        // 0x0068f970
+};
 struct Job { virtual void v0(); virtual void Release(); virtual bool Start(int, void*); virtual void v3(); virtual bool IsRunning(); };
 struct Vec2f { float x, y; };
 struct AOCache { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
                  virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
                  virtual void SetBlendColor(void* tmp, float a, float b); };   // vtable +0x3c
-struct MeshAORender { void Rebuild();  };                      // 0x00516eb0
+struct MeshAORender {
+    void Rebuild();                                           // 0x00516eb0
+};
 struct Pipeline { void ExecutePipeline(); void F_0051aaa0(); void F_0051a9a0(unsigned plr, int, int, int, int, int, int, int, int, int); int pad[0x33c / 4]; int mFramesWaited; }; // 0x0051afd0 / 0051aaa0 / 0051a9a0
 struct PaintListRender { void F_005123b0(); };                 // 0x005123b0
 struct MatObj { void F_00526070(unsigned); void F_00526230(unsigned); void F_006909b0(); };
@@ -20,7 +24,11 @@ struct JobFactory { virtual void v0(); virtual void v1(); virtual void v2(); vir
                     virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
                     virtual unsigned char Create(int, void*, void*, int, int, int); }; // vtable +0x40
 
-class RandomLC { public: unsigned mSeed; void SetSeed(unsigned); };   // 0x00936090
+class RandomLC {
+public:
+    unsigned mSeed;
+    void SetSeed(unsigned);                                   // 0x00936090
+};
 extern RandomLC gRandom;                                              // 0x016778dc
 extern void* gAppProperties;                                          // 0x015fd918
 extern void* gUnknown15de57c;                                         // 0x015de57c

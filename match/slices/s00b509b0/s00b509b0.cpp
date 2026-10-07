@@ -26,8 +26,12 @@ struct RefObj {
 
 // ------------------------------------------------------------------ plane projection
 struct UV { float u, v; int face; };
-struct TerrainMapF { float GetFloat(UV* uv); };                 // 0xf8d620
-struct TerrainMapV { void GetVector4(Vec4* out, UV* uv); };     // 0xf89e50
+struct TerrainMapF {
+    float GetFloat(UV* uv);                                     // 0x00f8d620
+};
+struct TerrainMapV {
+    void GetVector4(Vec4* out, UV* uv);                         // 0x00f89e50
+};
 struct PlanetModelT {
     char pad[0xf0];
     u8   hasWater;                                              // 0xf0
@@ -55,15 +59,16 @@ extern Vec3 g_normalBias;                                       // 0x1569b1c
 // @ 0x00b509b0
 void TerrainSampler::ProjectPlanes(PlaneList* in, Plane* out)
 {
-    for (int i = 0; i < in->count; ++i) {
+    int count = in->count;   // read once (the original counts down a copy)
+    for (int i = 0; i < count; ++i) {
         float maxd = in->maxDist;
         Plane* p = &in->data[i];
         float px = p->x, py = p->y, pz = p->z;
         float inv = 1.0f / sqrtf(px * px + (py * py + pz * pz) + 1e-08f);
-        float ax = fabsf(px), ay = fabsf(py), az = fabsf(pz);
         float uy = py * inv;
         float ux = inv * px;
         float uz = pz * inv;
+        float ax = fabsf(px), ay = fabsf(py), az = fabsf(pz);
         UV uv;
         if (az < ax || az < ay) {
             if (ay < ax) {
@@ -85,18 +90,18 @@ void TerrainSampler::ProjectPlanes(PlaneList* in, Plane* out)
         float h2 = h;
         if (planet->hasWater) {
             float wh = planet->GetWaterHeight();
-            const float* pf = &wh;
-            if (wh <= h) pf = &h;
+            const float* pf = &h;
+            if (wh > h) pf = &wh;    // unordered keeps h, as the original's ja
             h2 = *pf;
         }
         Vec3 n;
-        if (!planet->hasWater || planet->GetWaterHeight() <= h2) {
+        if (!planet->hasWater || !(planet->GetWaterHeight() > h2)) {   // unordered -> normal path (jbe)
             Vec4 v;
             normals->GetVector4(&v, &uv);
             float nx = v.x * 2.0f - g_normalBias.x;
             float ny = v.y * 2.0f - g_normalBias.y;
             float nz = v.z * 2.0f - g_normalBias.z;
-            float ninv = 1.0f / sqrtf(nx * nx + (nz * nz + ny * ny) + 1e-08f);
+            float ninv = 1.0f / sqrtf((nx * nx + nz * nz) + ny * ny + 1e-08f);
             n.x = ninv * nx;
             n.y = ny * ninv;
             n.z = nz * ninv;
@@ -104,10 +109,10 @@ void TerrainSampler::ProjectPlanes(PlaneList* in, Plane* out)
             n.x = ux; n.y = uy; n.z = uz;
         }
         float d = ((n.y * py + n.z * pz) + n.x * px) + -((n.x * (ux * h2) + n.z * (uz * h2)) + n.y * (uy * h2)) - p->w;
-        if (maxd <= d) {
-            d = 3.40282e+38f;
-        } else {
+        if (d < maxd) {      // NaN d takes the FLT_MAX path, as in the original (comiss maxd,d; jbe)
             out[i].x = n.x; out[i].y = n.y; out[i].z = n.z;
+        } else {
+            d = 3.40282e+38f;
         }
         out[i].w = d;
     }

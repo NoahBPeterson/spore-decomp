@@ -1,6 +1,6 @@
-0061c570  63  cFeedTransactionBase ctor: complete; FixedPtrVector default-init encoding/order + zero-register choice (ebx vs edx)
-0061c350  413  complete: asset-feed HandleResult (local key lookup, pooled FeedEvent push, sorted key insert); inlined pool/lower_bound scheduling differs
-0061c610  326  complete: vector<FeedDescription> assign from reversed range (realloc/shrink/grow paths); eastl helpers are externs
-0061c760  230  complete: vector<FeedDescription> assign from forward range; eastl helpers are externs
-0061c880  1434  complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact
+0061c570  63  cFeedTransactionBase ctor: complete; FixedPtrVector default-init encoding/order + zero-register choice (ebx vs edx); difftest WEAK (no difference; 196/200 valid inputs, 100% coverage; ctor body was missing from the source, added)
+0061c350  416  complete: asset-feed HandleResult (local key lookup, pooled FeedEvent push, sorted key insert); inlined pool/lower_bound scheduling differs; difftest WEAK (no difference; 21% coverage, feed-key match rarely hit by random inputs; fix: pool AddCore was declared cdecl with the pool as an arg, it is thiscall 0x926650 on 0x15f5254)
+0061c610  326  complete: vector<FeedDescription> assign from reversed range (realloc/shrink/grow paths); eastl helpers are externs; fixed: third (tag) arg so it is ret 0xc like the original
+0061c760  230  complete: vector<FeedDescription> assign from forward range; eastl helpers are externs; fixed: third (tag) arg (ret 0xc) and uninitialized_copy(mid,last,end) argument order
+0061c880  1434  complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact; difftest WEAK (no difference; 13% coverage)
 0061cf60  291  complete: cGetAssetFeedTransaction::HandleResult; original keeps the bool result in ebx and a 8-byte-larger frame

@@ -1,4 +1,4 @@
-00b509b0 917 complete; original uses an aligned (and esp,-16) frame and different SSE/x87 scheduling
+00b509b0 917 complete; original uses an aligned (and esp,-16) frame and different SSE/x87 scheduling; built flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (inline fsqrt, SSE float math); difftest PASS (275 valid, 97% cov; also PASS with --alias 0.5 and --nan) after fixes: TerrainMap callee annotations, u-vector computed from the stored float inv, NaN-order of the water/maxDist compares, count read once
 00b51040 47 complete; x87 fabs compare constant loads as qword and end pointer hoisted into edi
 00b510b0 485 complete; same calls/args, locals zero-init order and frame scheduling differ
 00b512f0 32 complete; addProperty value args pushed as consts instead of via regs

@@ -1,0 +1,4 @@
+013eb90c  ??_7RefBaseA22@@6B@     # base vtable stored first by DrvBA22 ctor 00a227a0
+01452a38  ??_7DrvBA22@@6B@        # DrvBA22 vtable (ctor 00a227a0)
+013ebcdc  ??_7PropBaseA22@@6B@    # Editor::cPropertyList base vtable (ctor 00a22cf0)
+01452aac  ??_7PropListA22@@6B@    # PropListA22 vtable (ctor 00a22cf0)

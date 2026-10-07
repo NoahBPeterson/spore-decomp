@@ -1,7 +1,7 @@
 # complete (behaviorally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
-00b21e60  ~210  complete; codegen differs (see source)
-00b22060  93  complete; codegen differs (see source)
-00b22100  3  complete; codegen differs (see source)
+00b21e60  ~210  complete; codegen differs (see source) ; difftest WEAK (117/400 valid, 33% coverage; callees mapped)
+00b22060  93  complete; codegen differs (see source) ; difftest WEAK (167/400 valid, 62% coverage; callees mapped)
+00b22100  3  complete; codegen differs (see source) ; difftest PASS (vtable stores now name the image vtables through a non-polymorphic base)
 00b222a0  170  complete; codegen differs (see source)
 00b22440  176  complete; codegen differs (see source)
 00b225d0  ~84  complete; codegen differs (see source)

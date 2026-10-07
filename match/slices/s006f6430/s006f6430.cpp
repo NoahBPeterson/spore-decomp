@@ -76,10 +76,10 @@ struct cHashMap16 {
     unsigned mnBucketCount;     // +8
     cHIter find(const unsigned short& k);                                           // 0x892970
     cHInsertResult DoInsertValue(const cHPair& v, cTrue);                    // 0x6f4ff0
-    int& operator[](const unsigned short& k);
+    int& Subscript(const unsigned short& k);       // operator[] (named so the checker can find it)
 };
 // @ 0x006f65d0
-int& cHashMap16::operator[](const unsigned short& k) {
+int& cHashMap16::Subscript(const unsigned short& k) {
     cHNode* n;
     { cHIter it = find(k); n = it.mpNode; }
     if (n == mpBucketArray[mnBucketCount]) {
@@ -174,7 +174,7 @@ struct cByteVec {
     unsigned char* mpCap;     // +8
     unsigned char* DoAllocateAndCopy(unsigned n, const unsigned char* f, const unsigned char* l);   // 0x426950
     void DoInsertValue(unsigned char* pos, const unsigned char& v);                                  // 0x426730
-    cByteVec& operator=(const cByteVec& x);
+    cByteVec& Assign(const cByteVec& x);           // operator= (named so the checker can find it)
     void erase(unsigned char* first, unsigned char* last) {
         memcpy(first, last, mpEnd - last);
         mpEnd -= (last - first);
@@ -185,7 +185,7 @@ struct cByteVec {
     }
 };
 // @ 0x006f6770
-cByteVec& cByteVec::operator=(const cByteVec& x) {
+cByteVec& cByteVec::Assign(const cByteVec& x) {
     if (&x != this) {
         const unsigned n = (unsigned)(x.mpEnd - x.mpBegin);
         if (n > (unsigned)(mpCap - mpBegin)) {

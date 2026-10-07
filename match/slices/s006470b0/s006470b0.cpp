@@ -2,7 +2,7 @@
 // Module flags: /O2 /MD /Gy /TP /arch:SSE (scalar movss/comiss).
 #include "types.h"
 
-void* __cdecl operator new(unsigned size, const void* tag, int, int, int, int);
+void* __cdecl operator new(unsigned size, const void* tag, int, int, int, int);   // 0xf473a0
 extern char g_allocTag[];                       // 0x13f6b3c
 extern char g_animTargetVtbl[];                 // 0x13f6400
 extern char g_animTargetVtbl2[];                // 0x13f63fc
@@ -309,9 +309,9 @@ void __thiscall cSPUIAssetBrowser::SetLargeCardVisibililty(bool visible, const f
         cISPLargeAssetView* old = mCurrentLargeAssetView.p;
         cISPLargeAssetView* nu = slot;
         if (nu != old) {
-            if (nu) nu->IRefCounted2::AddRef();
+            if (nu) nu->AddRef();
             mCurrentLargeAssetView.p = nu;
-            if (old) old->IRefCounted2::Release();
+            if (old) old->Release();
         }
         if (mCurrentLargeAssetView.p == 0) {
             unsigned defKey = 0xffffffff;
@@ -341,7 +341,7 @@ void __thiscall cSPUIAssetBrowser::SetLargeCardVisibililty(bool visible, const f
     cISPLargeAssetView* v = mCurrentLargeAssetView.p;
     if (v) {
         mCurrentLargeAssetView.p = 0;
-        v->IRefCounted2::Release();
+        v->Release();
     }
     MessageServer()->PostMessage(0x5c81b25, 0, 0);
 }

@@ -44,16 +44,15 @@ struct ForceTag {
     ForceTag(bool v) : mValue(v) {}
 };
 
-template<class K, class V> struct RbTreeMap {
+// D is the concrete map type (CRTP): each instantiation's DoInsertValue is declared on D so its
+// original address can be annotated per instantiation.
+template<class K, class V, class D> struct RbTreeMap {
     typedef RbNode<K, V> node_type;
     typedef RbPair<K, V> value_type;
     uint32_t mAllocator;        // +0x00
     RbNodeBase mAnchor;         // +0x04 (header node; root is mAnchor.mpNodeParent)
     uint32_t mnSize;            // +0x14
     uint32_t mCompare;          // +0x18
-
-    // eastl::rbtree::DoInsertValue (thiscall, hidden return slot, iterator by value)
-    RbIterBase DoInsertValue(RbIterBase position, const value_type& value, ForceTag bForceToLeft);
 
     RbIterBase lower_bound(const K& key)
     {
@@ -74,10 +73,10 @@ template<class K, class V> struct RbTreeMap {
 
     RbIterBase insert(RbIterBase position, const value_type& value)
     {
-        return DoInsertValue(position, value, ForceTag(false));
+        return static_cast<D*>(this)->DoInsertValue(position, value, ForceTag(false));
     }
 
-    V& operator[](const K& key)
+    __forceinline V& operator[](const K& key)     // inlined into the Index wrappers below
     {
         RbIterBase itLower(lower_bound(key));
         if (itLower.mpNode == end().mpNode || key < static_cast<node_type*>(itLower.mpNode)->first) {
@@ -94,14 +93,23 @@ struct Slot16 {
     uint32_t a, b, c, d;
     Slot16() : a(0), b(0), c(0), d(0) {}
 };
-typedef RbTreeMap<uint32_t, Slot16> XmlIdMap;            // mXMLIDToObject
-typedef RbTreeMap<SerObject*, int> ObjectBindingMap;      // mObjectBindings
+// The out-of-line eastl::map::operator[] bodies are named Index (thiscall, like the original
+// operator[]) so the equivalence checker can find them by name.
+struct XmlIdMap : RbTreeMap<uint32_t, Slot16, XmlIdMap> {               // mXMLIDToObject
+    // eastl::rbtree::DoInsertValue (thiscall, hidden return slot, iterator by value)
+    RbIterBase DoInsertValue(RbIterBase position, const value_type& value, ForceTag bForceToLeft); // 0x0082CAC0
+    Slot16& Index(const uint32_t& key);                                                            // 0x0082DAE0
+};
+struct ObjectBindingMap : RbTreeMap<SerObject*, int, ObjectBindingMap> { // mObjectBindings
+    RbIterBase DoInsertValue(RbIterBase position, const value_type& value, ForceTag bForceToLeft); // 0x0082CB90
+    int& Index(SerObject* const& key);                                                             // 0x0082DB80
+};
 
 // @ 0x0082DAE0
-Slot16& XmlIdMapIndex(XmlIdMap* self, const uint32_t& key) { return (*self)[key]; }
+Slot16& XmlIdMap::Index(const uint32_t& key) { return (*this)[key]; }
 
 // @ 0x0082DB80
-int& ObjectBindingMapIndex(ObjectBindingMap* self, SerObject* const& key) { return (*self)[key]; }
+int& ObjectBindingMap::Index(SerObject* const& key) { return (*this)[key]; }
 
 // ---------------------------------------------------------------------------------------------
 // cSPUISerializeHelper (anonymous namespace): XML token tree -> property list parser
@@ -194,9 +202,9 @@ struct SerializeHelper {
     Prop* NewProp();                                                       // @ 0x82B920
     SerObject* NewObject();                                                // @ 0x82B970
 
-    SerObject* ParseObject(Token* tok);                                    // @ 0x82D910
-    Prop* ParseProp(Token* tok);                                           // @ 0x82D480
-    Prop* ParseProps(Token* tok);                                          // @ 0x82D7B0
+    SerObject* ParseObject(Token* tok);                                    // 0x0082D910
+    Prop* ParseProp(Token* tok);                                           // 0x0082D480
+    Prop* ParseProps(Token* tok);                                          // 0x0082D7B0
 };
 
 // @ 0x0082D910

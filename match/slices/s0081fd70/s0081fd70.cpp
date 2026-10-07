@@ -88,6 +88,8 @@ void PtrVec::DoInsertValue(void** position, void* const& value)
 //   (array) property instead of replacing it. Declarations are shared with s008220e0.
 // ===========================================================================
 extern wchar_t gEmptyString16[2];  // 0x01667bac
+void operator delete(void* p);    // 0x00f47380
+void operator delete[](void* p);  // 0x00f47380
 
 struct EString16 {
   wchar_t* mpBegin;
@@ -129,8 +131,10 @@ struct Variant {
   bool Set(int type, int flags, const void* p, unsigned size, unsigned n);  // 0x0093dd80
   Variant& operator=(const Variant& x);                                     // 0x00542b80
   Variant& Assign(Vector4* p);                                              // 0x0081dc60
-  Variant& AssignArray(ColorRGB* p);                                        // 0x0081db80
-  Variant& AssignArray(ColorRGBA* p);                                       // 0x0081dbf0
+  Variant& AssignArrayRGB(ColorRGB* p);                                     // 0x0081db80
+  Variant& AssignArrayRGBA(ColorRGBA* p);                                   // 0x0081dbf0
+  Variant& AssignArray(ColorRGB* p) { return AssignArrayRGB(p); }
+  Variant& AssignArray(ColorRGBA* p) { return AssignArrayRGBA(p); }
 };
 struct VariantPtr : Variant {  // 0x0081e690
   VariantPtr(Vector4* p) {

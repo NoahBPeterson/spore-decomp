@@ -1,1 +1,2 @@
 004db6e0 SP::cSpeciesCheat::Execute  # PDB
+00838330 ?OptionArguments@cArguments@@QAEPAPBDPBDH@Z  # cArguments::OptionArguments(const char*,int) wrapper, called by Execute

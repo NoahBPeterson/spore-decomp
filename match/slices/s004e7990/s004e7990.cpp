@@ -179,7 +179,6 @@ void FillRefVec18(RefVec* out, uint32_t key)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x004e7da0
 // Collects the owner's entry list (8-byte entries), builds a verb-icon vector from it and
 // hands it to the sink; the trailing empty loop is a /Od leftover of an unused iteration.
 struct Entry8 { uint32_t a, b; };
@@ -199,6 +198,7 @@ struct EntryOwner {
 void __cdecl ApplyOwnerEntries(EntryOwner* owner, EntryVec* out);                  // 0x00433210
 void __cdecl BuildVerbIcons(EntryVec* entries, RefVec* out, uint32_t key);         // 0x004e7610
 
+// @ 0x004e7da0
 void ConvertOwnerEntries(EntryOwner* owner, VerbSink* sink)
 {
     if (owner) {
@@ -226,7 +226,6 @@ void BuildAndDispatch18(void* owner, VerbSink* sink)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x004e7eb0
 // Builds the creature verb-icon list for an editor rig: profiles the creature, then fills `out`
 // with [carnivore icon][value icon][jump/herbivore icon][one icon per ability / passive ability].
 struct EditorRig;
@@ -262,6 +261,7 @@ float __cdecl FUN_4d12a0(void* arg);                                            
 int __cdecl GetVerbCategory(int verbType);                                         // 0x004e58c0
 bool __cdecl IsDietCategory(int category);                                         // 0x004e5910
 
+// @ 0x004e7eb0
 void BigBuilder2368(EditorRig* rig, RefVec* out, void* arg3, float minValue)
 {
     if (rig) {

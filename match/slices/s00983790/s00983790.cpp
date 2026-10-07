@@ -15,9 +15,9 @@ extern void* vtbl_WinScrollbar_IWindow[];
 extern void* vtbl_IWinScrollbar_base[];
 extern void* vtbl_IWinScrollbar[];
 extern void* vtbl_Resource_Async[];
-extern void* vtbl_ScrollbarDrawable[];
-extern void* vtbl_ScrollbarDrawable_1[];
-extern void* vtbl_ScrollbarDrawable_3[];
+extern void* vtbl_ScrollbarDrawable[];     // 0x01444874
+extern void* vtbl_ScrollbarDrawable_1[];   // 0x0144485c
+extern void* vtbl_ScrollbarDrawable_3[];   // 0x01441a2c
 
 void* GetDefaultAllocator();                                                       // 009512C0
 void* AllocAligned(uint32_t size, uint32_t align, const char* name, void* alloc);  // 009512D0 (cdecl)
@@ -168,6 +168,7 @@ struct ScrollbarDrawable : ObjHead, AsyncBase {
         vtc = vtbl_ScrollbarDrawable_3;
         f[0] = 0; f[1] = 0; f[2] = 0; f[3] = 0; f[4] = 0; f[5] = 0; f[6] = 0;
     }
+    __declspec(noinline) ScrollbarDrawable* Construct();   // 0x009838a0 (standalone ctor body)
 };
 
 // @ 0x983790
@@ -191,15 +192,15 @@ WinScrollbar::WinScrollbar() : Window(), IWinScrollbar() {
 }
 
 // @ 0x9838a0  (standalone constructor; the in-class ctor is inlined into the factories)
-__declspec(noinline) ScrollbarDrawable* ConstructScrollbarDrawable(ScrollbarDrawable* self) {
-    self->vt4 = vtbl_Resource_Async;
-    self->f8 = 0;
-    self->vtc = vtbl_Resource_Async;
-    self->vt = vtbl_ScrollbarDrawable;
-    self->vt4 = vtbl_ScrollbarDrawable_1;
-    self->vtc = vtbl_ScrollbarDrawable_3;
-    self->f[0] = 0; self->f[1] = 0; self->f[2] = 0; self->f[3] = 0; self->f[4] = 0; self->f[5] = 0; self->f[6] = 0;
-    return self;
+ScrollbarDrawable* ScrollbarDrawable::Construct() {
+    vt4 = vtbl_Resource_Async;
+    f8 = 0;
+    vtc = vtbl_Resource_Async;
+    vt = vtbl_ScrollbarDrawable;
+    vt4 = vtbl_ScrollbarDrawable_1;
+    vtc = vtbl_ScrollbarDrawable_3;
+    f[0] = 0; f[1] = 0; f[2] = 0; f[3] = 0; f[4] = 0; f[5] = 0; f[6] = 0;
+    return this;
 }
 
 struct BasicFactory_ScrollbarDrawable {

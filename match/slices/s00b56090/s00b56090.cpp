@@ -375,7 +375,7 @@ struct hashtable_iterator_base {
 inline bool operator==(const hashtable_iterator_base& a, const hashtable_iterator_base& b) { return a.mpNode == b.mpNode; }
 inline bool operator!=(const hashtable_iterator_base& a, const hashtable_iterator_base& b) { return a.mpNode != b.mpNode; }
 
-template <class K, class V> class hash_map {
+template <typename K, typename V> class hash_map {
 public:
     typedef hashtable_iterator_base iterator;
     uint32_t mRehashBase;

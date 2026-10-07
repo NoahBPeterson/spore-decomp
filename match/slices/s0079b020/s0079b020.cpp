@@ -31,7 +31,7 @@ struct UShortVec : UShortVecBase {
 
     uint16_t* DoRealloc(int n, const uint16_t* first, const uint16_t* last);   // 0x0079ae60
     void DoInsertValue(uint16_t* pos, const uint16_t& v);                      // 0x006f5bc0
-    UShortVec& operator=(const UShortVec& x);                                  // 0x0079b360
+    UShortVec& CopyFrom(const UShortVec& x);   // 0x0079b360 operator= (named so the checker can find our symbol)
     void push_back(const uint16_t& v)
     {
         if (mpEnd < mpCapacity) {
@@ -83,7 +83,7 @@ UShortVecDst* UShortVecDst::Assign(const UShortVecSrc& x)
 }
 
 // @ 0x0079b360  eastl::vector<uint16_t>::operator=
-UShortVec& UShortVec::operator=(const UShortVec& x)
+UShortVec& UShortVec::CopyFrom(const UShortVec& x)
 {
     if (&x != this) {
         const uint16_t* const pFirst = x.mpBegin;

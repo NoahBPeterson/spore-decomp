@@ -17,14 +17,14 @@ struct TimerManager;                   // rw::audio::core::TimerManager
 
 struct TimerManager;
 
-SystemAT* GetSystemAT();
-Server*   GetServer();
+SystemAT* GetSystemAT();               // 0x00a206f0
+Server*   GetServer();                 // 0x00883860
 void      FUN_00a16870(void*, int);
 void      FUN_00a161c0(void*);
 int       FUN_00899480(void*, void*);
-void      FUN_006abeb0();
-bool      AddCore(void* alloc, int, int);
-void      __cdecl op_delete(void*);
+void*     FUN_006abeb0(u32 size);
+struct FixedAllocatorBase { bool AddCore(int, int); };   // 0x00926650
+void      __cdecl op_delete(void*);      // 0x00f47380
 
 struct TimerManager {
     bool AddTimer(void* key, void* cb, void* obj, const char* name, int a, int b);
@@ -491,11 +491,14 @@ struct PResp {
     bool  RecomputeValue();              // 00a17250
     bool  Reconfigure();                 // 00a17280
     void  SetModificationSource(float value, int mod); // 00a172e0
-    void* Destroy(u8 flags);             // 00a17360
+    void  Destroy();                     // 00a17360 (destructor body, no flags)
 };
 
-extern "C" char prVtbl0, prVtbl1, prBaseVtbl0, prBaseVtbl1;
-extern "C" float g_prDefault;
+extern "C" char prVtbl0;      // 0x014522fc
+extern "C" char prVtbl1;      // 0x014522f8
+extern "C" char prBaseVtbl0;  // 0x013eb938
+extern "C" char prBaseVtbl1;  // 0x013ef094
+extern "C" float g_prDefault;      // 0x01552c48
 extern "C" void* g_prDefaultData;
 
 // ---- PResp::GetDirty @ 0x00a17160 ---------------------------------------
@@ -569,7 +572,8 @@ void PResp::SetModificationSource(float value, int mod)
 }
 
 // ---- PResp::Destroy @ 0x00a17360 ----------------------------------------
-void* PResp::Destroy(u8 flags)
+// @ 0x00a17360
+void PResp::Destroy()
 {
     vtbl0 = &prVtbl0;
     vtbl1 = &prVtbl1;
@@ -581,8 +585,6 @@ void* PResp::Destroy(u8 flags)
         op_delete(buf);
     vtbl1 = &prBaseVtbl1;
     vtbl0 = &prBaseVtbl0;
-    (void)flags;
-    return this;
 }
 
 // ---------------------------------------------------------------------------
@@ -683,15 +685,29 @@ bool RC::GetPropertyAsKeyArray(u32 key, u32* count, const void** arr)
 // ---------------------------------------------------------------------------
 // Misc EA::Audio / Eapd helpers
 // ---------------------------------------------------------------------------
-// @ 0x00a168c0 (deleting destructor of Eapd::sys_gui; compiler-generated ??_G)
-struct GuiMember { ~GuiMember(); };               // 0xc2e4e0
-struct GuiBase { virtual ~GuiBase() {} u8 pad[0x20]; };
+// Eapd::sys_gui scalar deleting destructor, written out as a member so it has a name:
+// the member dtor runs under EH state 0, then the inlined base dtor resets the vptr.
+extern "C" char g_guiBaseVtbl;                    // 0x014bc0fc
+struct GuiMember { ~GuiMember(); };               // 0x00c2e4e0
+struct GuiBase {
+    void* vtbl;
+    u8    pad[0x20];
+    ~GuiBase() { vtbl = &g_guiBaseVtbl; }
+};
 struct SysGui : GuiBase {
     GuiMember mMember;                            // +0x24
-    virtual void Unused() {}
-    SysGui();
+    __forceinline ~SysGui() {}
+    void* ScalarDeletingDtor(unsigned flags);
 };
-SysGui::SysGui() {}
+
+// @ 0x00a168c0
+void* SysGui::ScalarDeletingDtor(unsigned flags)
+{
+    this->~SysGui();
+    if (flags & 1)
+        op_delete(this);
+    return this;
+}
 
 struct VuOwner {
     u8  pad0[0x60];
@@ -747,43 +763,39 @@ bool VuMeter_Init(VuMeter* p)
 // @ 0x00a16ad0
 void* FUN_00a16ad0(u32 size)
 {
-    if (size != 0x6c) {
-        FUN_006abeb0();
+    if (size == 0x6c) {
+        do {
+            void* p = g_freeList_6d900;
+            if (p != 0) {
+                g_freeList_6d900 = *(void**)p;
+                return p;
+            }
+        } while (((FixedAllocatorBase*)&g_alloc_166d8f0)->AddCore(0, 0));
         return 0;
     }
-    for (;;) {
-        void* p = g_freeList_6d900;
-        if (p != 0) {
-            g_freeList_6d900 = *(void**)p;
-            return p;
-        }
-        if (!AddCore(&g_alloc_166d8f0, 0, 0))
-            return 0;
-    }
+    return FUN_006abeb0(size);
 }
 
 // @ 0x00a17090
 void* FUN_00a17090(u32 size)
 {
-    if (size != 0x1c) {
-        FUN_006abeb0();
+    if (size == 0x1c) {
+        do {
+            void* p = g_freeList_6d948;
+            if (p != 0) {
+                g_freeList_6d948 = *(void**)p;
+                return p;
+            }
+        } while (((FixedAllocatorBase*)&g_alloc_166d938)->AddCore(0, 0));
         return 0;
     }
-    for (;;) {
-        void* p = g_freeList_6d948;
-        if (p != 0) {
-            g_freeList_6d948 = *(void**)p;
-            return p;
-        }
-        if (!AddCore(&g_alloc_166d938, 0, 0))
-            return 0;
-    }
+    return FUN_006abeb0(size);
 }
 
 // ---------------------------------------------------------------------------
 // PrimitiveAggregate::PrimitiveAggregate @ 0x00a16d00 (real class layout)
 // ---------------------------------------------------------------------------
-extern "C" float g_aggDefault;
+extern "C" float g_aggDefault;     // 0x01552ba0
 
 struct PA_Prim { virtual void p0() {} virtual int p1() { return 0; } };
 struct PA_Agg  { virtual void a0() {} };
@@ -831,7 +843,7 @@ PAggC::PAggC(int arg)
 // ---------------------------------------------------------------------------
 // PResp::PResp @ 0x00a173f0 (real class layout with EH unwind states)
 // ---------------------------------------------------------------------------
-extern "C" char g_prData2[];
+extern "C" char g_prData2[];       // 0x01452330
 
 struct RespCurve {
     RespCurve();                                  // 0xa1aa50

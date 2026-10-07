@@ -18,6 +18,7 @@ struct cSPVector3 {
     float Dot(const cSPVector3& o) const { return x * o.x + y * o.y + z * o.z; }
     float LengthSq() const { return x * x + y * y + z * z; }
     cSPVector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
+    float Normalize() { float len = sqrtf(LengthSq()); float inv = 1.0f / len; x *= inv; y *= inv; z *= inv; return len; }
     bool operator==(const cSPVector3& o) const { return x == o.x && y == o.y && z == o.z; }
 };
 inline cSPVector3 operator-(const cSPVector3& a, const cSPVector3& b) { return cSPVector3(a.x - b.x, a.y - b.y, a.z - b.z); }
@@ -32,6 +33,7 @@ struct cSPQuaternion {
     float Dot(const cSPQuaternion& o) const { return x * o.x + y * o.y + z * o.z + w * o.w; }
     float LengthSq() const { return x * x + y * y + z * z + w * w; }
     cSPQuaternion& operator*=(float s) { x *= s; y *= s; z *= s; w *= s; return *this; }
+    float Normalize() { float len = sqrtf(LengthSq()); float inv = 1.0f / len; x *= inv; y *= inv; z *= inv; w *= inv; return len; }
 };
 inline cSPQuaternion operator-(const cSPQuaternion& a, const cSPQuaternion& b) { return cSPQuaternion(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
 inline cSPQuaternion operator*(const cSPQuaternion& a, float s) { return cSPQuaternion(a.x * s, a.y * s, a.z * s, a.w * s); }
@@ -193,8 +195,7 @@ void cTerrainCameraController::UpdateInterpolation(float deltaTime)
             d.current = HermiteEval(&d.current, &d.velocity, &d.end, &d.targetVelocity,
                                     Max(deltaTime, remaining), deltaTime);
         }
-        float inv = 1.0f / sqrtf(d.current.LengthSq());
-        d.current = inv * d.current;
+        d.current.Normalize();
         float rdt = 1.0f / deltaTime;
         d.velocity = (d.current - old) * rdt;
         d.velocity = d.velocity - d.current * d.current.Dot(d.velocity);
@@ -225,8 +226,7 @@ void cTerrainCameraController::UpdateInterpolation(float deltaTime)
             d.current = HermiteEval(&d.current, &d.velocity, &end, &d.targetVelocity,
                                     Max(deltaTime, remaining), deltaTime);
         }
-        float inv = 1.0f / sqrtf(d.current.LengthSq());
-        d.current = inv * d.current;
+        d.current.Normalize();
         float rdt = 1.0f / deltaTime;
         d.velocity = (d.current - old) * rdt;
         d.velocity = d.velocity - d.current * d.current.Dot(d.velocity);

@@ -38,7 +38,9 @@ struct Prop {
     u16 type;
     float* GetFloat();                                   // 0x41ea70
 };
-struct PropBase { int GetModificationCount(); };         // 0x6237a0
+struct PropBase {
+    int GetModificationCount();                          // 0x6237a0
+};
 struct PropList {
     VP4 VP4 VP
     virtual bool Get(u32 id, Prop** out);                // 0x24
@@ -194,7 +196,9 @@ struct cSPEditorPhysicsWorld {
 };
 
 struct SceneA { void Fn(); void Fn2(); };                            // FUN_00b3d470 result
-struct SceneB { PropList* Fn2(); };                      // FUN_00b3d320 result
+struct SceneB {                                          // FUN_00b3d320 result
+    PropList* Fn2();                                     // 0xb1de80
+};
 
 void* __cdecl operator_new(unsigned, const char*, int, int, int, int);
 inline void* operator new(unsigned n, const char* name, int a, int b, int c, int d) {
@@ -220,8 +224,12 @@ void         __fastcall Helper_fc3f00(RefObj* o);        // 0xfc3f00 (thiscall)
 extern PropList* g_Props;                                // 0x15fd918
 extern RefObj*   g_Lighting;                             // 0x167ea54
 extern Registered* g_Gonzago;                            // 0x167ea58
-extern u32 g_a, g_b, g_c;                                // 0x167e9f8
-extern float g_na, g_nb, g_nc;                           // 0x167ea5c
+extern u32 g_a;                                          // 0x167e9f8
+extern u32 g_b;                                          // 0x167e9fc
+extern u32 g_c;                                          // 0x167ea00
+extern float g_na;                                       // 0x167ea5c
+extern float g_nb;                                       // 0x167ea60
+extern float g_nc;                                       // 0x167ea64
 
 static inline void AssignRef(RefObj*& dst, RefObj* src) {
     RefObj* old = dst;

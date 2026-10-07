@@ -9,7 +9,7 @@
 
 // ---------------------------------------------------------------- allocation / EH helpers
 void* operator new(size_t size, const char* name, int a, int b, const char* file, int line);
-void  operator delete[](void* p);
+void  operator delete[](void* p);   // 0x00f47380
 
 // eastl::string (char, default allocator).  The empty string lives in a shared static buffer.
 extern char gEmptyStr[];   // 0x01667bac
@@ -168,7 +168,7 @@ IMessageServer* __cdecl MessageServer();                            // 0x0067dcc
 // ===========================================================================
 struct ListMgr;
 struct cCommandBase {                  // base of ArgScript commands / cheats (ctor at 0x0083c800)
-    cCommandBase();
+    cCommandBase();                    // 0x0083c800
     virtual void Execute(cArguments* args);
     void* mOut;                        // +4
     int f8, fc;
@@ -382,11 +382,13 @@ struct wstring {
 }
 eastl::string* __cdecl ConvertToString8(eastl::string* out, const eastl::wstring* in);   // 0x0093c570
 
-struct HashHolder { void Finish(); };                    // 0x0083df90
+struct HashHolder {
+    void Finish();                                       // 0x0083df90
+};
 
 // ArgScript command classes registered by Init (vtables at 0x1408d64 ... 0x1408dbc)
 struct cCommandBase2 {                                   // ctor at 0x0083c840
-    cCommandBase2();
+    cCommandBase2();                                     // 0x0083c840
     virtual void Execute(cArguments* args);
     void* mOut; int f8, fc;
 };
@@ -409,7 +411,7 @@ extern const char* gCmdName_PropertyGroup;   // 0x0152ef9c
 extern const char* gCmdName_PropertyList;    // 0x0152ef98
 extern const char* gCmdName_AppProps;        // 0x0152efa0
 
-void* operator new(size_t size, const char* name, int a, int b, int c, int d);
+void* operator new(size_t size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 
 struct cPropertyManager {
     void* vtbl;                    // +0

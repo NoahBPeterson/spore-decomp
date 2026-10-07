@@ -180,15 +180,15 @@ extern const TangentFrame kZeroTangentFrame;  // 0x0162b67c
 
 // 0x0071ded0: finds (or reports) the streams with the given usages/formats.
 bool __cdecl FindMeshStreams(Mesh* mesh, int n, int* outIdx, const int* usages, int* usageIdx,
-                             const int* formats, int* extra);
+                             const int* formats, int* extra);  // 0x0071ded0
 // 0x0071e230: does the sub-mesh reference all n streams?  Optionally returns their positions.
-bool __cdecl SubMeshHasStreams(StreamUseVec* uses, int n, const int* idx, int* outPos);
+bool __cdecl SubMeshHasStreams(StreamUseVec* uses, int n, const int* idx, int* outPos);  // 0x0071e230
 // 0x0071ed30: adds n stream indices to the sub-mesh's stream list.
-void __cdecl SubMeshAddStreams(StreamUseVec* uses, int n, const int* idx);
+void __cdecl SubMeshAddStreams(StreamUseVec* uses, int n, const int* idx);  // 0x0071ed30
 // 0x00732cb0: per-triangle tangent frame from positions and texcoords.
 void __cdecl ComputeTriangleTangent(const float* p0, const float* p1, const float* p2,
                                     const float* t0, const float* t1, const float* t2,
-                                    TangentFrame* out);
+                                    TangentFrame* out);  // 0x00732cb0
 
 void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
 

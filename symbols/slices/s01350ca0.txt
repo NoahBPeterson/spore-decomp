@@ -1,1 +1,4 @@
 01350ca0 Simulator::cPlayer_InitAttributes  # $E587 dynamic initializer: builds the cPlayer serializer Attribute table (mGameEventRecord, mpCRGItems, mFlags, ... mAdventuresCompleted)
+00c78a50 ?ToXml_00c78a50@Simulator@@YA_NPAXPBDH@Z  # Attribute ToXml callback stored by 0x1350ca0 (mov [esp+0x48], 0xc78a50); Ghidra LAB, real function start
+00c78bd0 ?ToXml_00c78bd0@Simulator@@YA_NPAXPBDH@Z  # Attribute ToXml callback stored by 0x1350ca0 (mov [esp+0x48], 0xc78bd0); Ghidra LAB, real function start
+00675ca0 ?ToXml_00675ca0@Simulator@@YA_NPAXPBDH@Z  # Attribute ToXml callback stored by 0x1350ca0 (three times); 29-byte forwarder

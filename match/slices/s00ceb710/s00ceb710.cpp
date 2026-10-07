@@ -21,7 +21,7 @@ struct Transform {
 struct cSpatialObject {
     virtual void s0();  virtual void s1();  virtual void s2();  virtual void s3();
     virtual void s4();  virtual void s5();  virtual void s6();  virtual void s7();
-    virtual const void* GetTypeId();                                   // slot 8  (+0x20)
+    virtual uint32_t GetTypeId();                                      // slot 8  (+0x20)
     virtual void s9();  virtual void s10();
     virtual const Vector3* GetPosition();                              // slot 11 (+0x2c)
     virtual void s12(); virtual void s13(); virtual void s14(); virtual void s15();
@@ -104,15 +104,17 @@ struct GameState { uint8_t pad[0x2c]; int m_mode; };
 
 GameState* FUN_00b3d4d0();                                  // 0x00b3d4d0
 cPlanetModel* PlanetModel();                                // SP::PlanetModel 0x00b3d350
-const void* GetCurrentGameMode();                           // 0x00b5b800
+uint32_t GetCurrentGameMode();                              // 0x00b5b800
 cApp* App();                                                // SP::App 0x0067dd10
 ITerrainCursor* GetGameTerrainCursor();                     // 0x00b30d70
 const Vector3* normalized_safe(Vector3* out, const Vector3* in);                       // 0x00449c20
 const Matrix3* Matrix3FromFacingAndUp(Matrix3* out, const Vector3* facing, const Vector3* up);   // 0x0069b440
 
 extern Vector3 g_vecDefault;       // 0x0169ba50
-extern char g_modeTerrain;         // 0x01654c02
-extern char g_typeIdPlanet;        // 0x018c6de8
+// IDs, not addresses: the original compares against them as plain (non-relocated) immediates.
+const uint32_t kGameModeTerrain = 0x01654c02;
+const uint32_t kTypeIdPlanet = 0x018c6de8;
+void operator delete[](void* p);   // 0x00f47380
 
 static inline uint32_t ColorByte(float v)
 {
@@ -140,7 +142,7 @@ void cBillboardRenderer::Render(IVertexSink* sink)
         return;
 
     cPlanetModel* planet = PlanetModel();
-    bool terrainMode = (GetCurrentGameMode() == &g_modeTerrain);
+    bool terrainMode = (GetCurrentGameMode() == kGameModeTerrain);
     bool hasCamera = false;
 
     TransformVec transforms;
@@ -174,7 +176,7 @@ void cBillboardRenderer::Render(IVertexSink* sink)
 
         bool alt = false;
         void* q = obj->QueryInterface(0x17f243b);
-        if (q && ((cSpatialObject*)q)->GetTypeId() == &g_typeIdPlanet) {
+        if (q && ((cSpatialObject*)q)->GetTypeId() == kTypeIdPlanet) {
             cSpatialObjectComponent* c = (cSpatialObjectComponent*)obj->QueryInterface(0x137e8e0);
             alt = (c->m_state == 2);
         }

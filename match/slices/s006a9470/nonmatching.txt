@@ -1,6 +1,6 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS-)
 006a9470  592  cListPropsCheat::Execute complete; frame is 0x18 bytes bigger in the original (an extra dead eastl::string slot whose stores survive) and the original re-reads some registers
 006a9790  708  cPropCheat::Execute complete; EH-state/message-temp layout and register choices differ
-006a9b60  999  cPropertyManager::Init complete; all calls/stores present, register allocation and EH-frame layout differ
+006a9b60  999  cPropertyManager::Init complete; all calls/stores present, register allocation and EH-frame layout differ; difftest WEAK (313 valid, 3.5% coverage, no mismatch)
 006aa130  551  cPropertyManager Factory::WriteResource complete; register allocation / string-slot layout differ
 006aa0d0  43  bool-vector append: all calls present; 3rd DoInsertValue arg emitted as mov/sub of end-end and the setne result register is edx vs ecx

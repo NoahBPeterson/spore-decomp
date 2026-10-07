@@ -48,9 +48,15 @@ struct StateMachineBuilder {
     void __thiscall SetMachineName(const char* s);          // 0xb1b410
     void __thiscall AddTransition(int, int, int, int, unsigned, int, unsigned, int, int, int, BoolVec*, int); // 0xb1c8d0
 };
-struct CommandBase { void __thiscall Destroy(); };          // 0x83c750 EA::ArgScript::cCommandBase::~cCommandBase
-struct NodeTree { void __thiscall Destroy(uint32_t root); };// 0xe4b990
-struct BuilderCleanup { void __thiscall Destroy(uint32_t x); }; // 0xb1b830
+struct CommandBase {
+    void __thiscall Destroy();                // 0x83c750 EA::ArgScript::cCommandBase::~cCommandBase
+};
+struct NodeTree {
+    void __thiscall Destroy(uint32_t root);   // 0xe4b990
+};
+struct BuilderCleanup {
+    void __thiscall Destroy(uint32_t x);      // 0xb1b830
+};
 
 // @ 0xfe1a20
 void __stdcall cAppModeSpace_LoadStateMachine(int mode)

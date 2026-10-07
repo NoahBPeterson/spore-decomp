@@ -2,12 +2,11 @@
 009a0df0  39  Reset: scheduling of float stores vs the clear() memcpy args
 009a0f10  787  AddBindRecord: original static custom convention (ecx=this, eax=c, 6 stack args); cl picks different regs
 009a1250  404  EmitVariant: original static custom convention (this in EDI); register allocation differs
-009a1470  115  GenerateVariantsRecurse: calls EmitVariant with EDI-this convention; branch layout
+009a1470  115  GenerateVariantsRecurse: calls EmitVariant with EDI-this convention; branch layout; difftest WEAK (134 valid, 88.7% coverage, no mismatch; many inputs hit the budget). Deep path untested: EmitVariant calls InitChannel 0x0099c7b0, whose original takes esi/edx registers that ours cannot pass
 009a1530  26  Construct: placement of xor eax,eax among float stores
 009a15a0  169  channel sample scan: x87 uint->float compare schedule and spills
 009a1670  234  per-channel loop: arg setup / allshl schedule differs
-009a1770  20  Vec8b::resize: register choice (esi vs ecx) for end pointer load
 009a17d0  34  slot copy-construct: register assignment (src in ebx vs ebp)
 009a1960  178  slot range destroy: strength-reduced induction var in original
 009a1b00  171  slot range destroy (__stdcall, ret 8): strength-reduced induction var in original; difftest WEAK after fixing calling convention (original is __stdcall, ours was cdecl)
-009a1c60  272  per-key variant lists: entry pointer induction var and spill layout
+009a1c60  272  per-key variant lists: entry pointer induction var and spill layout; difftest PASS with --ignore-abi (the checker's "ecx read at entry" is the lea ecx,[ecx] alignment nop at 009a1c7d; declaration is right): 375 valid / 1000 inputs, 73.7% coverage

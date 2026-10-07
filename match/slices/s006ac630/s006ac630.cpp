@@ -5,6 +5,8 @@
 #include <intrin.h>
 #include <string.h>
 
+void operator delete(void* p) throw();   // 0x00f47380
+
 // ---------------------------------------------------------------------------
 // Resource registry (global at 0x01603118): a hashtable ResourceMan::Key -> IObj*, guarded by a
 // reader/writer spin lock at +0x48 (+0x50 = write-generation counter).
@@ -132,8 +134,8 @@ bool FUN_006ad590(char* a, bool flag)
 
 // EA::Thread::Mutex (used by the registration list)
 struct Mutex {
-    Mutex(void* attr, bool b);
-    ~Mutex();
+    Mutex(void* attr, bool b);   // 0x009222a0
+    ~Mutex();                    // 0x00922130
     int Lock(const int& timeout);
     int Unlock();
 };
@@ -188,8 +190,9 @@ void OnRegister(bool added, IObj* obj)
 
 // Registration list (vtable 0x014093c4): a fixed_vector<{cResource*, int}, 32> plus a Mutex.
 struct RegEntry { cResourceBase* obj; int count; };
-struct RegList {
-    virtual ~RegList();
+// The fixed_vector is a member at +4 (after the vptr); its inlined dtor runs after the Mutex
+// member's, as in the original.
+struct RegVec {
     RegEntry* mpBegin;      // +4
     RegEntry* mpEnd;        // +8
     RegEntry* mpCapEnd;     // +0xc
@@ -198,27 +201,38 @@ struct RegList {
     int pad18;
     RegEntry mBuf[32];      // +0x1c
     int pad11c;             // +0x11c
+    RegVec()
+    {
+        RegEntry* p = mBuf;
+        mpBuf = p;
+        mpEnd = p;
+        mpBegin = p;
+        mpCapEnd = p + 32;
+    }
+    ~RegVec()
+    {
+        if (mpBegin && mpBegin != mpBuf)
+            operator delete(mpBegin);
+    }
+};
+struct RegList {
+    virtual void Add(cResourceBase* obj);   // vtable 0x014093c4 slot 0 = 0x006ad410
+    virtual ~RegList();                     // slot 1 = 0x006ac750 (scalar deleting dtor)
+    RegVec v;               // +4
     Mutex mMutex;           // +0x120
     RegList();
     bool ReleaseAll();      // 0x006ad270
     void Reset();           // 0x006ad350
-    void Add(cResourceBase* obj);   // 0x006ad410
 };
 
 // @ 0x006ac6f0
 RegList::~RegList()
 {
-    if (mpBegin && mpBegin != mpBuf)
-        operator delete(mpBegin);
 }
 
 // @ 0x006ac770
 RegList::RegList() : mMutex(0, true)
 {
-    mpBuf = mBuf;
-    mpEnd = mBuf;
-    mpBegin = mBuf;
-    mpCapEnd = mBuf + 32;
 }
 
 // @ 0x006ac7d0
@@ -469,10 +483,12 @@ void RemoveRegistrationCallback(uint32_t key, ResCallback callback)
 }
 
 // @ 0x006ad0f0
-struct InnerAlloc { ~InnerAlloc(); };
+struct InnerAlloc {
+    ~InnerAlloc();   // 0x00926640
+};
 struct RegTableOwner {
     void* pad0; void** buckets; uint32_t bucketCount; int count;
-    char pad10[0x1c]; InnerAlloc inner;   // +0x1c
+    char pad10[0xc]; InnerAlloc inner;    // +0x1c
     char pad20[0xf]; void* freelist;      // +0x2c
     ~RegTableOwner();
     void FreeNodes(void** first, uint32_t n);   // 0x006ac5d0
@@ -480,13 +496,15 @@ struct RegTableOwner {
 RegTableOwner::~RegTableOwner()
 {
     FreeNodes(buckets, bucketCount);
+    uint32_t n = bucketCount;
+    void** b = buckets;
     count = 0;
-    if (bucketCount > 1) {
-        if (bucketCount * 4 + 4 <= 0x14) {
-            *buckets = freelist;
-            freelist = buckets;
+    if (n > 1) {
+        if (n * 4 + 4 <= 0x14) {
+            *b = freelist;
+            freelist = b;
         } else {
-            operator delete(buckets);
+            operator delete(b);
         }
     }
 }
@@ -517,55 +535,54 @@ struct Vec8 {
     void InsertN(Elem8* pos, uint32_t n, const Elem8* val);
 };
 Elem8* UninitCopy(Elem8* first, Elem8* last, Elem8* dst);                // 0x0099efa0
-void* AllocBytes(uint32_t bytes, const char* name, int, int, const char* file, int line);
-void CopyFwd(Elem8** out, Elem8* first, Elem8* last, Elem8* dst, int);   // 0x0076ffd0 (eastl::copy)
+void* AllocBytes(uint32_t bytes, const char* name, int, int, const char* file, int line);   // 0x00f473a0
+struct CopyTag {};   // by-value tag argument: an unused, uninitialised dword
+void CopyFwd(Elem8** out, Elem8* first, Elem8* last, Elem8* dst, CopyTag);   // 0x0076ffd0 (eastl::copy)
 void CopyBack(Elem8* first, Elem8* last, Elem8* dstEnd);                 // 0x0073fe50
 void FillRange(Elem8* first, Elem8* last, const Elem8* v);               // 0x00a52da0
 void UninitFill(Elem8* dst, uint32_t n, const Elem8* v);                 // 0x006ac440
 void Vec8::InsertN(Elem8* pos, uint32_t n, const Elem8* val)
 {
-    if ((uint32_t)(mpCapEnd - mpEnd) < n) {
-        uint32_t oldSize = (uint32_t)(mpEnd - mpBegin);
-        uint32_t newCap = oldSize * 2;
-        if (oldSize == 0) newCap = 1;
-        uint32_t need = oldSize + n;
-        if (newCap < need) newCap = need;
-        Elem8* mem = 0;
-        if (newCap)
-            mem = (Elem8*)AllocBytes(newCap * 8, "App", 0, 0,
-                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
-        Elem8* mid = UninitCopy(mpBegin, pos, mem);
-        Elem8* d = mid;
-        for (uint32_t i = n; i != 0; i--) {
-            if (d) { d->a = val->a; d->b = val->b; }
-            d++;
+    if (n <= (uint32_t)(mpCapEnd - mpEnd)) {
+        if (n > 0) {
+            const Elem8 tmp = *val;
+            Elem8* const end = mpEnd;
+            const uint32_t after = (uint32_t)(end - pos);
+            if (n < after) {
+                Elem8* o;
+                CopyTag t;
+                CopyFwd(&o, end - n, end, end, t);
+                mpEnd += n;
+                CopyBack(pos, end - n, end);
+                FillRange(pos, pos + n, &tmp);
+            } else {
+                UninitFill(end, n - after, &tmp);
+                mpEnd += n - after;
+                Elem8* o;
+                CopyTag t;
+                CopyFwd(&o, pos, end, mpEnd, t);
+                mpEnd += after;
+                FillRange(pos, end, &tmp);
+            }
         }
-        Elem8* end2 = UninitCopy(pos, mpEnd, mid + n);
+    } else {
+        const uint32_t oldSize = (uint32_t)(mpEnd - mpBegin);
+        const uint32_t grow = oldSize > 0 ? oldSize * 2 : 1;
+        const uint32_t need = oldSize + n;
+        const uint32_t newCap = grow > need ? grow : need;
+        Elem8* const mem = newCap ? (Elem8*)AllocBytes(newCap * 8, "App", 0, 0,
+                "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+        Elem8* const mid = UninitCopy(mpBegin, pos, mem);
+        Elem8* d = mid;
+        for (uint32_t i = n; i > 0; --i, ++d) {
+            if (d) *d = *val;
+        }
+        Elem8* const end2 = UninitCopy(pos, mpEnd, mid + n);
         if (mpBegin && mpBegin != mpFixed)
             operator delete(mpBegin);
         mpBegin = mem;
         mpEnd = end2;
         mpCapEnd = mem + newCap;
-    } else if (n != 0) {
-        Elem8 tmp = *val;
-        Elem8* end = mpEnd;
-        uint32_t after = (uint32_t)(end - pos);
-        if (n < after) {
-            Elem8* srcStart = end - n;
-            Elem8* o;
-            CopyFwd(&o, srcStart, end, end, 0);
-            mpEnd += n;
-            CopyBack(pos, srcStart, end);
-            FillRange(pos, pos + n, &tmp);
-        } else {
-            uint32_t extra = n - after;
-            UninitFill(end, extra, &tmp);
-            mpEnd += extra;
-            Elem8* o;
-            CopyFwd(&o, pos, end, mpEnd, 0);
-            mpEnd += after;
-            FillRange(pos, end, &tmp);
-        }
     }
 }
 
@@ -573,18 +590,18 @@ void Vec8::InsertN(Elem8* pos, uint32_t n, const Elem8* val)
 bool RegList::ReleaseAll()
 {
     LockGuard g(&mMutex);
-    int n = (int)(mpEnd - mpBegin);
+    int n = (int)(v.mpEnd - v.mpBegin);
     for (int i = 0; i < n; i++) {
-        if (mpBegin[i].obj) {
-            int c = _InterlockedExchangeAdd((long*)&mpBegin[i].obj->mnRefCount, 0);
+        if (v.mpBegin[i].obj) {
+            int c = _InterlockedExchangeAdd((long*)&v.mpBegin[i].obj->mnRefCount, 0);
             if ((c >> 1) - 1 == 0) {
-                cResourceBase* o = mpBegin[i].obj;
+                cResourceBase* o = v.mpBegin[i].obj;
                 if (sRegistry)
                     sRegistry->Unregister(&o->key[0], o);
             }
         }
     }
-    mpEnd += -(int)(mpEnd - mpBegin);
+    v.mpEnd += -(int)(v.mpEnd - v.mpBegin);
     return true;
 }
 
@@ -592,18 +609,18 @@ bool RegList::ReleaseAll()
 void RegList::Reset()
 {
     LockGuard g(&mMutex);
-    int n = (int)(mpEnd - mpBegin);
+    int n = (int)(v.mpEnd - v.mpBegin);
     for (int i = 0; i < n; i++) {
-        if (mpBegin[i].obj) {
-            int c = _InterlockedExchangeAdd((long*)&mpBegin[i].obj->mnRefCount, 0);
+        if (v.mpBegin[i].obj) {
+            int c = _InterlockedExchangeAdd((long*)&v.mpBegin[i].obj->mnRefCount, 0);
             if ((c >> 1) - 1 == 0) {
-                cResourceBase* o = mpBegin[i].obj;
+                cResourceBase* o = v.mpBegin[i].obj;
                 if (sRegistry)
                     sRegistry->Unregister(&o->key[0], o);
             }
         }
-        mpBegin[i].obj = 0;
-        mpBegin[i].count = 1000;
+        v.mpBegin[i].obj = 0;
+        v.mpBegin[i].count = 1000;
     }
 }
 
@@ -611,35 +628,35 @@ void RegList::Reset()
 void RegList::Add(cResourceBase* obj)
 {
     LockGuard g(&mMutex);
-    if (mpBegin == mpEnd) {
+    if (v.mpBegin == v.mpEnd) {
         if (sRegistry)
             sRegistry->Unregister(&obj->key[0], obj);
     } else {
-        int n = (int)(mpEnd - mpBegin);
+        int n = (int)(v.mpEnd - v.mpBegin);
         bool found = false;
         for (int i = 0; i < n; i++) {
-            if (mpBegin[i].obj == obj) {
-                mpBegin[i].count++;
+            if (v.mpBegin[i].obj == obj) {
+                v.mpBegin[i].count++;
                 found = true;
                 break;
             }
         }
-        int n2 = (int)(mpEnd - mpBegin);
+        int n2 = (int)(v.mpEnd - v.mpBegin);
         int freeSlot = -1;
         int best = 0;
         int bestIdx = 0;
         for (int i = 0; i < n2; i++) {
-            if (mpBegin[i].obj) {
-                int c = _InterlockedExchangeAdd((long*)&mpBegin[i].obj->mnRefCount, 0);
+            if (v.mpBegin[i].obj) {
+                int c = _InterlockedExchangeAdd((long*)&v.mpBegin[i].obj->mnRefCount, 0);
                 if ((c >> 1) - 1 > 0) {
-                    mpBegin[i].obj = 0;
-                    mpBegin[i].count = 1000;
+                    v.mpBegin[i].obj = 0;
+                    v.mpBegin[i].count = 1000;
                     freeSlot = i;
                 } else {
-                    mpBegin[i].count++;
+                    v.mpBegin[i].count++;
                 }
             }
-            int cnt = mpBegin[i].count;
+            int cnt = v.mpBegin[i].count;
             if (best < cnt) {
                 best = cnt;
                 bestIdx = i;
@@ -649,7 +666,7 @@ void RegList::Add(cResourceBase* obj)
             int idx = freeSlot;
             if (idx < 0)
                 idx = bestIdx;
-            RegEntry* e = &mpBegin[idx];
+            RegEntry* e = &v.mpBegin[idx];
             cResourceBase* prev = e->obj;
             if (prev && sRegistry)
                 sRegistry->Unregister(&prev->key[0], prev);

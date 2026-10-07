@@ -10,7 +10,8 @@
 // reconstructed from the retail disassembly alone.
 //
 // Module flags: SSE scalar math without cvtss2sd and no EH frame although locals have
-// destructors -> /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
+// destructors (no /EHsc).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
 #define VP(n) virtual void vpad_##n();
@@ -534,8 +535,10 @@ struct ActionDataVector {
     void push_back(const ActionDataPtr& p);                          // 0x00ADE190
     void erase(ActionDataPtr* first, ActionDataPtr* last);           // 0x0103C4F0
 };
-bool IsActionDone(const ActionDataPtr& p);                           // 0x00AD71F0
-ActionDataPtr* RemoveActions(ActionDataPtr* first, ActionDataPtr* last, bool (*pred)(const ActionDataPtr&)); // 0x00AD9470
+bool IsActionDone(const ActionDataPtr& p);                           // at AD71F0 (not a known function start: resolved by alignment)
+typedef bool (*ActionDataPred)(const ActionDataPtr&);
+extern const float kFloatMinNormal;                                  // 0x0145B2E0 (FLT_MIN in .rdata)
+ActionDataPtr* RemoveActions(ActionDataPtr* first, ActionDataPtr* last, ActionDataPred pred); // 0x00AD9470
 
 // Effect data (RefCountTemplate + IRefCount at +8).
 struct cEffectData {
@@ -1187,7 +1190,7 @@ bool cCinematicManager::HandleMessage(uint32_t messageID, void* pMessage)
         uint32_t flags = msg->mParams[2].u;
         if (targetID == 0)
             return true;
-        if (1.17549435e-38f >= radiusSq)
+        if (kFloatMinNormal >= radiusSq)
             return true;
         if (flags == 0)
             return true;

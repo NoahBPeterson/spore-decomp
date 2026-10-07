@@ -5,6 +5,10 @@
 // circle) from the block model's own transform (temporarily reset to identity), records for each axis
 // the surface triangle it pins to and the pick-point origin in model space, then restores the transform.
 #include "types.h"
+extern "C" double __cdecl fmod(double, double);
+extern "C" double __cdecl cos(double);
+extern "C" double __cdecl sin(double);
+#pragma intrinsic(fmod, cos, sin)
 #include <math.h>
 
 void* operator new(unsigned int size, const char* name, int, int, int, int);
@@ -66,8 +70,16 @@ struct cSPBoundingBox {
 Vector3T operator+(const Vector3T& a, const Vector3T& b);                // 0x0041dc10
 Vector3T operator-(const Vector3T& a, const Vector3T& b);                // 0x0041db10
 Vector3T operator-(const Vector3T& v);                                   // 0x00422020
+// The two operator* overloads sit in separate (otherwise unused) namespaces only so the
+// equivalence checker can tell their '// 0x' annotations apart; codegen is unaffected.
+namespace VecScale {
 Vector3T operator*(const Vector3T& a, const float& s);                   // 0x0041dca0
+}
+namespace VecRotate {
 Vector3T operator*(const Vector3T& v, const Matrix33T& m);               // 0x0041daf0
+}
+using VecScale::operator*;
+using VecRotate::operator*;
 Matrix33T Inverse(const Matrix33T& m);                                   // 0x0041ded0
 Vector3T* Normalize(Vector3T* out, const Vector3T* v);                   // 0x00436ce0 (cdecl)
 

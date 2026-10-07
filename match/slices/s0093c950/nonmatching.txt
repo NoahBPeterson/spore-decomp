@@ -3,6 +3,6 @@
 0093cf10  41  complete; register allocation (pSource in esi vs ecx) differs in inlined wide strlen
 0093cf60  10  complete; only register choice (edx/ecx) differs
 0093d110  206  complete; GetToken basic-block layout differs (bool delimiter test placement)
-0093d470  16  complete; only register choice in inlined strlen differs
-0093d5d0  128  complete; register allocation / stack slot order differs
+0093d470  16  complete; only register choice in inlined strlen differs; difftest WEAK (307 valid, 9.4% cov: case-insensitive path needs unemulated _wcslwr)
+0093d5d0  128  complete; register allocation / stack slot order differs; difftest WEAK (305 valid, 10.8% cov: case-insensitive path needs unemulated _strlwr)
 0093d6f0  70  complete; cl folds (p+n)-p, original kept it unfolded

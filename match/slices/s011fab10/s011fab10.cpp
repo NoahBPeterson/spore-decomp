@@ -19,8 +19,8 @@ struct Arena {
     int IdToObject(u32 id);    // 0x11e2300 (__thiscall)
 };
 long long __cdecl allrem(long long num, long long den);          // 0x11e0d60
-extern "C" void __stdcall QueryPerformanceFrequency(void* f);     // kernel32 IAT
-extern "C" void __stdcall QueryPerformanceCounter(void* c);       // kernel32 IAT
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceFrequency(void* f);  // kernel32 IAT
+extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(void* c);    // kernel32 IAT
 
 struct Matrix44 { float m[16]; };
 struct Vector4f { float x, y, z, w; };
@@ -151,7 +151,9 @@ extern Light* g_activeLights[8]; // 0x16f656c
 extern Matrix44 g_projMatrix;          // 0x16f90d0
 extern u32 g_softState;                // 0x16f9110
 extern void* g_lights[8];              // 0x16f656c
-extern int g_fogType; extern float g_fogStart; extern float g_fogEnd; // 0x16f90c0 / 0x16f5c54 / 0x16f8d00
+extern int g_fogType;    // 0x16f90c0
+extern float g_fogStart; // 0x16f5c54
+extern float g_fogEnd;   // 0x16f8d00
 extern Vec4 g_colorActive;             // 0x16f6590
 extern Vec4 g_ambientActive;           // 0x16f5c40
 extern Vec4 g_timeActive;              // 0x16f9168
@@ -310,7 +312,8 @@ void __cdecl SetTimeSeconds(u32 a, u32 b, int c)
     now -= g_timeSinceStart;
     float f = (float)((double)now / (double)freq);
     Vec4c t(f, kZero, kZero, kOne);
-    Vec4 v = t;
+    Vec4 v;
+    v.m = t.m;
     DEV_SET(a, &v, 1);
 }
 
@@ -321,7 +324,7 @@ void __cdecl SetTimeMod(u32 a, u32 b, int c)
     QueryPerformanceFrequency(&freq);
     QueryPerformanceCounter(&now);
     now -= g_timeSinceStart;
-    now = allrem(now, freq);
+    now = now % freq;
     float f = (float)((double)now / (double)freq);
     Vec4c t(f, kZero, kZero, kOne);
     Vec4 v = t;
@@ -373,42 +376,51 @@ tail:
     *v = w;
 }
 
-extern const float kEpsilon;
-extern Mat4* g_transform;      // 0x16f85ac
-extern int   g_transformType;  // 0x16f8b50
+extern const float kEpsilon;   // 0x14f8140 (FLT_EPSILON)
 extern Mat4* g_cachedInverse;  // 0x16f9120
-extern Mat4  g_invStorage;     // 0x1718a60
-extern Mat4  g_identity;       // 0x1718aa0
- // 0x14f8140 (FLT_EPSILON)
 extern Mat4* g_transform;      // 0x16f85ac
 extern int   g_transformType;  // 0x16f8b50
 extern Mat4  g_invStorage;     // 0x1718a60
 extern Mat4  g_identity;       // 0x1718aa0
 void __stdcall D3DXVec3Transform(Vec4* out, const Vec4* v, const Mat4* m); // 0x120bb5c
 
-// @ 0x011fb310  (inverse of an affine 4x4 matrix: 3x3 cofactor inverse + translation; w lanes untouched)
+static inline __m128 SplatX(__m128 v) { return _mm_shuffle_ps(v, v, 0x00); }
+static inline __m128 SplatY(__m128 v) { return _mm_shuffle_ps(v, v, 0x55); }
+static inline __m128 SplatZ(__m128 v) { return _mm_shuffle_ps(v, v, 0xaa); }
+
+// @ 0x011fb310  (inverse of an affine 4x4 matrix: 3x3 cofactors, epsilon-guarded 1/det, translation)
+// Written on 4-lane vectors like the original: every scalar is a splatted vector, each result is
+// inserted into a row whose w lane is never set (uninitialised, as in the original); row 0 is
+// scaled by 1/det as a whole vector, the other rows' lanes are scaled before insertion.
 Mat4* __cdecl Matrix44Invert(Mat4* out, const Mat4* in)
 {
-    const float* m = &in->r[0].x;
-    float* o = &out->r[0].x;
-    float c00 = m[5] * m[10] - m[6] * m[9];
-    float c01 = 0.0f - (m[1] * m[10] - m[2] * m[9]);
-    float c02 = m[1] * m[6] - m[2] * m[5];
-    float det = (c00 * m[0] + c01 * m[4]) + c02 * m[8];
-    float inv = 1.0f;
-    if (!(((-det > det) ? -det : det) <= kEpsilon)) inv = 1.0f / det;
-    o[0] = c00 * inv;
-    o[1] = c01 * inv;
-    o[2] = c02 * inv;
-    o[4] = (0.0f - (m[4] * m[10] - m[6] * m[8])) * inv;
-    o[5] = (m[0] * m[10] - m[2] * m[8]) * inv;
-    o[6] = (0.0f - (m[0] * m[6] - m[2] * m[4])) * inv;
-    o[8] = (m[4] * m[9] - m[5] * m[8]) * inv;
-    o[9] = (0.0f - (m[0] * m[9] - m[1] * m[8])) * inv;
-    o[10] = (m[0] * m[5] - m[1] * m[4]) * inv;
-    o[12] = 0.0f - ((m[12] * o[0] + m[13] * o[1]) + m[14] * o[2]);
-    o[13] = 0.0f - ((m[12] * o[4] + m[13] * o[5]) + m[14] * o[6]);
-    o[14] = 0.0f - ((m[12] * o[8] + m[13] * o[9]) + m[14] * o[10]);
+    __m128 A = in->r[0].m, B = in->r[1].m, C = in->r[2].m, D = in->r[3].m;
+    __m128 zero = _mm_setzero_ps();
+    Mat4 r;
+    r.r[0].x = _mm_cvtss_f32(_mm_sub_ps(_mm_mul_ps(SplatY(B), SplatZ(C)), _mm_mul_ps(SplatZ(B), SplatY(C))));
+    r.r[0].y = _mm_cvtss_f32(_mm_sub_ps(zero, _mm_sub_ps(_mm_mul_ps(SplatY(A), SplatZ(C)), _mm_mul_ps(SplatZ(A), SplatY(C)))));
+    r.r[0].z = _mm_cvtss_f32(_mm_sub_ps(_mm_mul_ps(SplatY(A), SplatZ(B)), _mm_mul_ps(SplatZ(A), SplatY(B))));
+    __m128 R0 = r.r[0].m;
+    __m128 det = _mm_add_ps(_mm_add_ps(_mm_mul_ps(SplatX(R0), SplatX(A)), _mm_mul_ps(SplatY(R0), SplatX(B))),
+                            _mm_mul_ps(SplatZ(R0), SplatX(C)));
+    __m128 small = _mm_cmple_ps(_mm_max_ps(_mm_mul_ps(_mm_set_ps1(kNegOne), det), det), _mm_set_ps1(kEpsilon));
+    __m128 inv = _mm_set_ps1(kOne);
+    if (_mm_movemask_ps(small) != 15) inv = _mm_div_ps(inv, det);
+    R0 = _mm_mul_ps(R0, inv);
+    r.r[1].x = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(zero, _mm_sub_ps(_mm_mul_ps(SplatX(B), SplatZ(C)), _mm_mul_ps(SplatZ(B), SplatX(C)))), inv));
+    r.r[1].y = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(_mm_mul_ps(SplatX(A), SplatZ(C)), _mm_mul_ps(SplatZ(A), SplatX(C))), inv));
+    r.r[1].z = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(zero, _mm_sub_ps(_mm_mul_ps(SplatX(A), SplatZ(B)), _mm_mul_ps(SplatZ(A), SplatX(B)))), inv));
+    r.r[2].x = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(_mm_mul_ps(SplatX(B), SplatY(C)), _mm_mul_ps(SplatY(B), SplatX(C))), inv));
+    r.r[2].y = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(zero, _mm_sub_ps(_mm_mul_ps(SplatX(A), SplatY(C)), _mm_mul_ps(SplatY(A), SplatX(C)))), inv));
+    r.r[2].z = _mm_cvtss_f32(_mm_mul_ps(_mm_sub_ps(_mm_mul_ps(SplatX(A), SplatY(B)), _mm_mul_ps(SplatY(A), SplatX(B))), inv));
+    __m128 R1 = r.r[1].m, R2 = r.r[2].m;
+    r.r[3].x = _mm_cvtss_f32(_mm_sub_ps(zero, _mm_add_ps(_mm_add_ps(_mm_mul_ps(SplatX(D), SplatX(R0)), _mm_mul_ps(SplatY(D), SplatY(R0))), _mm_mul_ps(SplatZ(D), SplatZ(R0)))));
+    r.r[3].y = _mm_cvtss_f32(_mm_sub_ps(zero, _mm_add_ps(_mm_add_ps(_mm_mul_ps(SplatX(D), SplatX(R1)), _mm_mul_ps(SplatY(D), SplatY(R1))), _mm_mul_ps(SplatZ(D), SplatZ(R1)))));
+    r.r[3].z = _mm_cvtss_f32(_mm_sub_ps(zero, _mm_add_ps(_mm_add_ps(_mm_mul_ps(SplatX(D), SplatX(R2)), _mm_mul_ps(SplatY(D), SplatY(R2))), _mm_mul_ps(SplatZ(D), SplatZ(R2)))));
+    out->r[0].m = R0;
+    out->r[1].m = R1;
+    out->r[2].m = R2;
+    out->r[3].m = r.r[3].m;
     return out;
 }
 

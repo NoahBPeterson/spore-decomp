@@ -14,24 +14,55 @@
 #define SARR(p, o) ((short*)I32(p, o))
 
 extern "C" {
-void tsi_Error(void* mem, int code);
-void tsi_DeAllocMem(void* mem, void* p);
-void Delete_GlyphClass(void* glyph);
-unsigned short GetSfntClassGlyphIndex(void* sfnt, int ch, int flag, unsigned short* adv, unsigned short* adv2);
-char* FUN_008cefe0(void* sfnt, int idx, ...); // GetGlyphByIndex-like; the flag-8 path passes 5 args
-int IsFigure(void* sfnt, int ch);
+void tsi_Error(void* mem, int code);  // 0x008d10c0
+void tsi_DeAllocMem(void* mem, void* p);  // 0x008d1440
+void Delete_GlyphClass(void* glyph);  // 0x008b0280
+unsigned short GetSfntClassGlyphIndex(void* sfnt, int ch);  // 0x008d0b00
+// GetGlyphByIndex-like (0x008cefe0); always 5 args. The original evaluates the glyph-index call
+// after pushing the last three, which made it look like GetSfntClassGlyphIndex took 5.
+char* FUN_008cefe0(void* sfnt, int idx, unsigned flag, unsigned short* adv, unsigned short* adv2);
+int IsFigure(void* sfnt, int ch);  // 0x008d0b60
 void FUN_008afee0(char** outGlyph, char* glyph, unsigned flags, int x, int y);
-int util_FixMul(int a, int b);
-int util_FixDiv(int a, int b);
+int util_FixMul(int a, int b);  // 0x008d1590
+int util_FixDiv(int a, int b);  // 0x008d16d0
 void FUN_008cceb0(void* a, void* glyph);
-// Original takes (eax = scale struct, edi = count, stack = srcShort, dstInt); register convention not expressible here.
-void scalePoints(short* src, int* dst, void* scale, int count);
-void SetScale_FFT1HintClass(void* h, int sx, int sy);
+void SetScale_FFT1HintClass(void* h, int sx, int sy);  // 0x008a8830
 void FUN_008abc50(void* h, int a, int b, int c, int d, int e, int f, int g, int h2, int i, int j, int k);
-void ApplyHints_FFT1HintClass(void* h, int n, int four, void* glyph);
+void ApplyHints_FFT1HintClass(void* h, int n, int four, void* glyph);  // 0x008a8880
 char* FUN_008c8c30(void* mem, unsigned short a, int b, int c, int* xs, int* ys, int d, int e, int f, int g, int h, int i, int j, int k, int l);
 void FUN_008c9000(char* bmp, int a, int b, int c, int d, int e, int f, int g);
 void FUN_008c9a70(char* bmp);
+}
+
+// scalePoints (0x008bfc70) takes (eax = scale struct, edi = count, stack = src, dst): an LTCG
+// register convention that a plain declaration cannot express, so its body is written here as a
+// file-local helper (kept out of line like the original; the checker runs ours from our object).
+// Scale struct: +0 short mul, +2 short shift, +4 int denom, +8 int round, +0xc int fixed mul,
+// +0x10 short mode.
+static __declspec(noinline) void scalePoints(short* src, int* dst, void* scale, int count)
+{
+    short mode = I16(scale, 0x10);
+    short mul = I16(scale, 0);
+    int round = I32(scale, 8);
+    int i;
+    if (mode == 0) {
+        short shift = I16(scale, 2);
+        for (i = 0; i < count; i++)
+            dst[i] = (src[i] * (int)mul + round) >> (shift & 0x1f);
+    } else if (mode == 1) {
+        int denom = I32(scale, 4);
+        for (i = 0; i < count; i++) {
+            int v = src[i] * (int)mul;
+            if (v >= 0)
+                dst[i] = (v + round) / denom;
+            else
+                dst[i] = -((round - v) / denom);
+        }
+    } else if (mode == 2) {
+        int m = I32(scale, 0xc);
+        for (i = 0; i < count; i++)
+            dst[i] = util_FixMul(m, src[i]);
+    }
 }
 
 // @ 0x008c0760
@@ -106,8 +137,7 @@ void T2K_RenderGlyphInternal(char* t, int ch, unsigned depth, int param_4, int p
     I32(sfnt, 0xc0) = I32(t, 0x14c);
     I32(PTR(t, 0x184), 0xc4) = I32(t, 0x160);
     if ((flags & 8) == 0) {
-        unsigned short gi = GetSfntClassGlyphIndex(PTR(t, 0x184), ch, local_48, &advX, advY);
-        g = FUN_008cefe0(PTR(t, 0x184), gi);
+        g = FUN_008cefe0(PTR(t, 0x184), GetSfntClassGlyphIndex(PTR(t, 0x184), ch), local_48, &advX, advY);
         if (depth == 0) {
             I16(t, 0x108) = I16(g, 0x76);
             if ((unsigned char)param_6 == 0) {

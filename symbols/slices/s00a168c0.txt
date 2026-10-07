@@ -6,3 +6,11 @@
 00a17560 EA::Audio::ResourceConfiguration::GetPropertyAsFloatArray  # PDB vtable-slot
 00a175c0 EA::Audio::ResourceConfiguration::GetPropertyAsUint32Array  # PDB vtable-slot
 00a17620 EA::Audio::ResourceConfiguration::GetPropertyAsKeyArray  # PDB vtable-slot
+01452198 ??_7PAggC@@6BPA_Prim@@@  # PrimitiveAggregate vtable (+0), stored by ctor 00a16d00
+0145217c ??_7PAggC@@6BPA_Agg@@@  # PrimitiveAggregate IPrimitiveAggregate vtable (+4)
+01452178 ??_7PAggC@@6BPA_RC@@@  # PrimitiveAggregate refcount vtable (+8)
+014426a0 ??_7PA_Agg@@6B@  # base vtable stored at +4 during PrimitiveAggregate ctor
+013ef094 ??_7PA_RC@@6B@  # base refcount vtable (IEventModifier) stored at +8
+014522fc ??_7PRespC@@6BPR_Prim@@@  # PrimitiveResponse vtable (+0), stored by ctor 00a173f0
+014522f8 ??_7PRespC@@6BPR_RC@@@  # PrimitiveResponse refcount vtable (+4)
+013ef094 ??_7PR_RC@@6B@  # base refcount vtable (IEventModifier) stored at +4

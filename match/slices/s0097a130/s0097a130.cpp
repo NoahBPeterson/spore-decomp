@@ -120,17 +120,18 @@ struct IWinGridView {
 };
 
 struct RenderContext {
-    Renderer2D* Begin2D(int a);
+    Renderer2D* Begin2D(int a);   // 0x0095bc10
 };
 
 // eastl::basic_string<wchar_t> (16 bytes)
-extern wchar_t gEmptyWStr[2];
+extern wchar_t gEmptyWStr[2];   // 0x01667bac
+void __cdecl EASTLFree(void* p);   // 0x00f47380 EASTL_allocator_deallocate
 struct WString {
     wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; int mAlloc;
     WString() { mpBegin = gEmptyWStr; mpEnd = gEmptyWStr; mpCapacity = gEmptyWStr + 1; }
-    ~WString();
+    ~WString() { if ((mpCapacity - mpBegin) > 1 && mpBegin) EASTLFree(mpBegin); }   // inlined into the atexit thunk 0x013c1330
 };
-extern "C" int WStr_Format(WString* s, const wchar_t* fmt, ...);
+extern "C" int WStr_Format(WString* s, const wchar_t* fmt, ...);   // 0x0041e050
 
 struct HNode { uint32_t key; WString value; HNode* next; };
 struct HeadingMap {
@@ -222,11 +223,11 @@ struct WinGrid {
     char     pad10[0x454 - 0x444];
     CellFormat mDefaultHeadingFormatting; // +0x454
 
-    float GetColumnWidthInternal(int col);
-    float GetRowHeightInternal(int row);
-    void  DrawCellBackground(CellDrawArgs* a);
-    void  DrawCell(CellDrawArgs* a);
-    void  DrawText(WString* s, Rect* r, CellDrawArgs* a);
+    float GetColumnWidthInternal(int col);   // 0x00979db0
+    float GetRowHeightInternal(int row);     // 0x00979f10
+    void  DrawCellBackground(CellDrawArgs* a);   // 0x00971490
+    void  DrawCell(CellDrawArgs* a);         // 0x00971600
+    void  DrawText(WString* s, Rect* r, CellDrawArgs* a);   // 0x00971250
     bool  OnRebuild(RenderContext* rc);
 };
 

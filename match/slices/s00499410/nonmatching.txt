@@ -1,4 +1,4 @@
 0049a030  78  complete ray/plane intersection helper (plane through two globals, origin + t*dir); only the /Od frame/temp slots and branch layout differ
-00499410  981  editor pick-block routine (ray vs block pick / skin pick / ground-plane fallback): complete; /Od inner-scope slot layout, Vector3 copy flavours (inline movss vs fld/fstp vs 0x4098a0 call) and by-value temp order differ
+00499410  871  editor pick-block routine (ray vs block pick / skin pick / ground-plane fallback): complete; /Od inner-scope slot layout, Vector3 copy flavours (inline movss vs fld/fstp vs 0x4098a0 call) and by-value temp order differ; difftest PASS (fixed: the skin-pick retry passes the plane hit as Vec3C, copied with the out-of-line copy ctor 0x4098a0, as the original)
 00499b40  412  barycentric weights of a point in a triangle: complete; /Od slot order (needs all locals in one scope with hash-picked names) and copy flavours differ
-0049a0c0  366  block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently
+0049a0c0  366  block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently; difftest PASS

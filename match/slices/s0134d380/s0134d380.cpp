@@ -72,6 +72,7 @@ struct Attribute
 };
 
 struct Vec3Default { float x, y, z; };
+struct Vec3Static { float x, y, z; Vec3Static() {} };   // empty ctor: guard set, value assigned on every call
 
 // Stores a default vec3 {0,0,0} into a guarded function-local static, returns the callback.
 inline SetDefaultFunction_t InitDefaultVec3(SetDefaultFunction_t pSetDefault)
@@ -390,7 +391,10 @@ void InitHerdAttributes()
     }
     {
         Vec3Default tmp = { 0.0f, 0.0f, 0.0f };
-        static Vec3Default sDefault = tmp;
+        static Vec3Static sDefault;   // 0x01693e40, guard bit 0x01693e4c
+        sDefault.x = tmp.x;
+        sDefault.y = tmp.y;
+        sDefault.z = tmp.z;
         Attribute a("mInitialPosition", 0x1368374d, 0x034,
                   Read_00b6e3a0, Write_00ac88c0, ReadText_006930f0, WriteText_00695010,
                   Validate_00b1fbf0, ToXml_00acbba0,

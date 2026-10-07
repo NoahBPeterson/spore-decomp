@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
-005dfb40  3  SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after
-005dec10  424  SP::cSPEditorUI::DoFinalCommand: complete; original is LTCG-style (callee ecx kept live), cl reloads/reorders
+005dfb40  3  SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+005dec10  424  SP::cSPEditorUI::DoFinalCommand: complete; original is LTCG-style (callee ecx kept live), cl reloads/reorders; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
 005dee70  188  cSPEditorUI IHandler message handler: complete; original passes ecx=this-8 into callee without re-lea (LTCG register reuse)
-005def30  1033  SP::cSPEditorUI::DoDialogEnd: complete; original switch is a hand-ordered binary search tree
-005df470  -  cSPEditorUI::StartCommand: complete; cl output differs in switch/tail layout
+005def30  1033  SP::cSPEditorUI::DoDialogEnd: complete; original switch is a hand-ordered binary search tree; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+005df470  -  cSPEditorUI::StartCommand: complete; cl output differs in switch/tail layout; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
 005df8f0  479  SP::cAppModeEditorBase::HandleFileDrop: complete; register allocation / tail layout differs

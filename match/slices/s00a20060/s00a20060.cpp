@@ -4,7 +4,8 @@
 typedef unsigned char u8;
 typedef unsigned int  u32;
 
-void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);   // 0xf473a0
+void  operator delete(void* p, const char* name, int a, int b, int c, int d);           // matching placement delete: gives the new-expression its EH cleanup frame
 extern "C" unsigned int _controlfp(unsigned int, unsigned int);
 unsigned int __cdecl FNV1_String8(const void* s, unsigned int basis, int flag);
 
@@ -28,8 +29,8 @@ extern int g_166d9f8;
 void  FUN_00a1fbb0();
 
 struct Mutex {
-    void Lock(void* tag);
-    void Unlock();
+    void Lock(void* tag);   // 0x9221b0 (EA::Thread::Mutex::Lock)
+    void Unlock();          // 0x922270 (EA::Thread::Mutex::Unlock)
     int  GetLocation();
 };
 struct ScopedLock {
@@ -37,8 +38,12 @@ struct ScopedLock {
     ScopedLock(Mutex* mm, void* tag) : m(mm) { m->Lock(tag); }
     ~ScopedLock() { m->Unlock(); }
 };
-struct Sub264 { void F(void*); };         // 00a0fee0
-struct Sub20  { void F(void*, int); };    // 00922940
+struct Sub264 {
+    void F(void*);                        // 0xa0fee0
+};
+struct Sub20 {
+    void F(void*, int);                   // 0x922940
+};
 struct SubRel { virtual void r0(); virtual void r1(); virtual void r2(); virtual void Rel(); };
 void ThreadSleep(const int*);              // 00921df0
 
@@ -109,10 +114,11 @@ void __fastcall SetFp(const unsigned int* p)
         _controlfp(v, 0x30000);
 }
 
-// @ 0x00a20700
 struct EmitterSndPlayer {
-    EmitterSndPlayer();
+    EmitterSndPlayer();                   // 0xa12d80
+    char data[0xe00];
 };
+// @ 0x00a20700
 EmitterSndPlayer* ConstructEmitterSndPlayer()
 {
     return new ("audio", 0, 0, 0, 0) EmitterSndPlayer();
@@ -237,14 +243,15 @@ void* Sys::SlotB(int idx)
     return (void*)((char*)this + 0x15b6d8 + idx * 0xc);
 }
 
-// @ 0x00a20d60
 struct Sound;
-struct Sound2 {
-    Sound2();
+struct Sound2 {                           // Audio::Sound, 0x1e10 bytes
+    Sound2();                             // 0xa1fbb0
     virtual void s0();
     virtual void s1();
+    char data[0x1e10 - 4];
 };
-bool MakeSound(Sound2** out)
+// @ 0x00a20d60
+bool __stdcall MakeSound(Sound2** out)
 {
     if (out == 0)
         return false;

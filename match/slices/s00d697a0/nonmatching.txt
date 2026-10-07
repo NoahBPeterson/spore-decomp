@@ -1,1 +1,1 @@
-00d697a0 big complete source; frame/scheduling differs (4004 vs 4746 bytes), flags /O2 /arch:SSE /fp:fast; arg slots 2-5,7 unknown/unused
+00d697a0 big complete source; frame/scheduling differs (4004 vs 4746 bytes), flags /O2 /arch:SSE /fp:fast; arg slots 2-5,7 unknown/unused; difftest WEAK --inputs 3000 (1612 valid, no mismatch, 7.2% cov: real callees FUN_00c26c90/PlayIdleAnimation gate the body on creature state random inputs rarely satisfy). Fixed: GetPropertyT_float mapped to 0x4e1c70; FUN_00c26c90 is a thiscall member (ret 8), was declared as a free cdecl function

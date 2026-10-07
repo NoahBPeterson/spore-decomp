@@ -1,1 +1,6 @@
 00512840 cDecalBuilder::Project  # descriptive: decal UV projection flood fill over mesh triangles (Claude-coined)
+00514750 ?erase@?$SpVector@E@@QAEPAEPAE0@Z  # vector<uint8_t>::erase as called by cDecalBuilder::Project (sVisitedTriangles)
+00514030 ?resize@?$SpVector@E@@QAEXIABE@Z  # vector<uint8_t>::resize(n, v) (sVisitedTriangles)
+0050f740 ?erase@?$SpVector@UFillEntry@@@@QAEPAUFillEntry@@PAU2@0@Z  # 12-byte-element vector erase (folded; sFillStack)
+004e19a0 ?push_back@?$SpVector@UFillEntry@@@@QAEXABUFillEntry@@@Z  # 12-byte-element vector push_back(const T&) (folded; sFillStack)
+00526430 ?empty@?$SpVector@UFillEntry@@@@QBE_NXZ  # vector empty() (folded; sFillStack)

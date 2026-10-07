@@ -1,12 +1,6 @@
-00a39ce0 493 complete (cEventModifier::LoadEventModifiersMap); same calls/loop, register allocation differs (this in ebx vs edi) and the temp key set zero-init order
+00a39ce0 431 complete (cEventModifier::LoadEventModifiersMap); same calls/loop and EH states; ConvertToString8 returns the string via sret, mask register doubles as the zero constant; remaining: 4-byte larger frame in the original, the multi-value count/data selects are two branches there, Reset load order; difftest WEAK (320 valid, 21.8% coverage: the config out-param is written by the real GetConfiguration behind a fake vtable call, so random inputs never reach the key loop; no difference seen)
 00a39f90 31 complete (cEventModifier::ReadTuningValues); original reloads mpBegin+offset each iteration and uses cmp [p],0 then reloads
-00a39ff0 59 complete (cEventModifierPrimitiveAlias dtor); EH state numbering of the map member and base differs
-00a3a070 45 complete (cEventModifierPrimitiveMouthType ctor); original has an EH frame (members with dtors at +0x24/+0x30) and stores vptr before the float fields
-00a3a0e0 78 complete (primitive with SP_STL_Sound hashtable dtor); EH state order (hashtable dtor runs in state -1 in the original)
-00a3a180 141 complete (cEventModifier::Init); identical flow incl. noinline mouth ctor and 6-arg new/delete EH; only the alias tree-anchor zeroing (xor ecx vs ebx) differs and shifts the rest
-00a3a4c0 81 complete (Append); same loops, register allocation differs
-00a3a5b0 38 complete (cEventModifierPrimitive scalar deleting dtor, inlined dtor); EH state is reset to -1 before the base vptr store in mine
 00a3a670 2 complete (Alias::ModifyEvent); key slot is the dead argument slot, one slot higher/lower than the original; difftest FAIL is a checker artifact: the only difference is which dead callee-owned argument slot (a vs name) holds the key whose address is passed to rbtree::find; a variant storing it in the name slot (29 diff bytes) PASSes 354/354 at 100% coverage
-00a3a9a0 146 complete (StrMap::operator[]); insert helper (0xa3a8b0) signature/by-value pair differs
-00a3aa80 443 complete (Alias::ReadTuningValues); GetKeys/string temp frame differs
-00a3ac40 30 complete (FootTypeBase::ModifyEventWithFootName); frame and float order match; cl emits cmov for the default-name select where the original branches
+00a3a9a0 166 complete (StrMap::operator[], eastl map::operator[]); lower_bound loop matches; insert is DoInsertValue(sret, hint by value, const value_type&, true_type) at 0xa3a8b0 with the pair built by 0xb209f0; the original elides the empty T() temp's dtor on the normal path and reuses the key arg slot for the result; difftest PASS (317 valid, 93.1% coverage) run with --src on a scratch copy renaming operator[] to At, because the checker cannot match operator symbols by name (slice.find_symbol/_name_matches)
+00a3aa80 443 complete (Alias::ReadTuningValues); GetKeys/string temp frame differs; difftest WEAK (13% coverage: base ReadTuningValues needs the key to equal this+8..0x10 and a live GetSystemAT; callee annotations added)
+00a3ac40 30 complete (FootTypeBase::ModifyEventWithFootName); frame and float order match; cl emits cmov for the default-name select where the original branches; difftest PASS (484 valid at --inputs 1200, 98% coverage; GetFloat mapped to 0xa0fa70, which symbols call GetBool)

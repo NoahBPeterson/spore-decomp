@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
-00886000 191 RBmpFont::GetGlyphIds (retail layout): complete; rbtree find inlined with different register allocation
-00886100 142 RBmpFont::IsCharSupported: complete; original keeps this in esi and lays the find block after the bit test
+00886000 191 RBmpFont::GetGlyphIds (retail layout): complete; rbtree find inlined with different register allocation; difftest PASS (run with --flags "/O2 /MD /GS- /GR- /TP /arch:SSE /IZ:\...\work\match\scratch_s00880170_inc": the checker does not resolve the manifest's relative /I)
+00886100 142 RBmpFont::IsCharSupported: complete; original keeps this in esi and lays the find block after the bit test; difftest PASS (run with --flags "/O2 /MD /GS- /GR- /TP /arch:SSE /IZ:\...\work\match\scratch_s00880170_inc": the checker does not resolve the manifest's relative /I)

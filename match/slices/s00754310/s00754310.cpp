@@ -566,7 +566,7 @@ void S_00755240::FUN_00755240(cJob* job) {
   job->Continuation((void*)0x754c10, this);
 }
 
-// @ 0x007552e0  (223 bytes) EASTL vector<GlyphInfo (8 bytes)>::operator=(const vector&)
+// 0x007552e0  (223 bytes) EASTL vector<GlyphInfo (8 bytes)>::operator=(const vector&)
 struct GlyphInfo {
   uint32_t a, b;
 };
@@ -577,9 +577,10 @@ struct GlyphVec {
   GlyphInfo* mpEnd;
   GlyphInfo* mpCapacity;
   GlyphInfo* DoRealloc(unsigned n, GlyphInfo* first, GlyphInfo* last);  // 0x754f80
-  GlyphVec& operator=(const GlyphVec& x);
+  GlyphVec& Assign(const GlyphVec& x);  // the original operator=; named so the checker can find it
 };
-GlyphVec& GlyphVec::operator=(const GlyphVec& x) {
+// @ 0x007552e0
+GlyphVec& GlyphVec::Assign(const GlyphVec& x) {
   if (&x != this) {
     const unsigned nNewSize = (unsigned)(x.mpEnd - x.mpBegin);
     if (nNewSize > (unsigned)(mpCapacity - mpBegin)) {

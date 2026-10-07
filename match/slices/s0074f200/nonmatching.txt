@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-0074f200  129  complete (map<uint,AutoRef<cFeedbackEvent>>::operator[]); register allocation / EH-state layout differs
+0074f200  117  complete (map<uint,AutoRef<cFeedbackEvent>>::operator[]); register allocation / EH-state layout differs; difftest PASS after renaming to CompactMapUU::Subscript, making cFeedbackEvent::Release virtual slot 1 (as the original's unwind funclets call it) and rewriting the insert as EASTL's DoInsertValue(iterator by value, const pair&, true_type tag) with sret, so the tag dword is pushed from the key arg slot like the original
 0074f420  242  complete (vector<Elem1C>::DoInsertValue, fixed buffer); EH state and local slot layout differ (no catch/unwind funclets reproduced)
 0074f5d0  449  complete (vector<cModelInfo>::DoInsertValues); original reuses the n argument slot as the end-n pointer
 0074f800  1262  complete (cModelWorld::DrawLayer); original has many Float4 temp slots and a 0xa0 frame
-0074fd90  77  complete (constructor, two rb-tree headers + counters); dead zero stores of the tree anchors are not reproduced
+0074fd90  77  complete (constructor, two rb-tree headers + counters); dead zero stores of the tree anchors are not reproduced; difftest PASS after mapping the three vtables (0x140d720, 0x140d71c, 0x13ef094) in symbols/slices/s0074f200.txt
 0074fea0  7  complete (start of the two feedback jobs); register allocation in the job-callback stores and the final Unlock vcall differs; difftest PASS after fixing ResetTree's this (0x00478db0 is thiscall on this+0x28, not this) and calling GetJobManager before releasing each old job ref

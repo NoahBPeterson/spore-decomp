@@ -18,22 +18,22 @@ void   __fastcall FUN_00abf010(Range* out, int, P agentList, Abducted** pthis); 
 void   __fastcall FUN_00abeb20(Range* it, int);                                  // advance iterator
 P      GetActivePlanet();                   // SP::cSPLivingUniverse::GetActivePlanet
 P      __fastcall FUN_008414c0(P planet, int);
-P      PlanetModel();                       // SP::PlanetModel
+P      PlanetModel();   // 0x00b3d350 SP::PlanetModel
 void   __fastcall FUN_00b81630(P model, int, Vec3* out, const Vec3* pos);
-void   __fastcall GetEndPoints(P beam, int, Vec3* a, Vec3* b);   // SP::cDefaultBeamProjectile::GetEndPoints
-P      GetUFOSimulator();                   // SP::GetUFOSimulator
-P      __fastcall GetPlayerInventory(P sim, int); // SP::cSPSimulatorSpaceGame::GetPlayerInventory
+void   __fastcall GetEndPoints(P beam, int, Vec3* a, Vec3* b);   // 0x00cb8ba0 SP::cDefaultBeamProjectile::GetEndPoints
+P      GetUFOSimulator();   // 0x00ffbe50 SP::GetUFOSimulator
+P      __fastcall GetPlayerInventory(P sim, int);   // 0x00a1ad60 SP::cSPSimulatorSpaceGame::GetPlayerInventory
 P      SpaceGameGet();                      // SP::SpaceGameGet
-P      GetRecorderState();
-void   KillSetiEffects(uint id, P rec);     // SP::cSPUISpace::KillSetiEffects
-P      EA_Messaging_GetServer();            // EA::Messaging::GetServer
-P      MessageServer();                     // SP::MessageServer
+P      GetRecorderState();   // 0x00435e90
+void   KillSetiEffects(uint id, P rec);   // 0x00435ed0 SP::cSPUISpace::KillSetiEffects
+P      EA_Messaging_GetServer();   // 0x00883860 EA::Messaging::GetServer
+P      MessageServer();   // 0x0067dcc0 SP::MessageServer
 P      NounManager(P noun);                 // SP::NounManager
 void   __fastcall RemoveNoun(P mgr, int);        // 0xb225d0 (stack arg = noun passed to NounManager)
-P      StarManager();                      // SP::StarManager
+P      StarManager();   // 0x00b3d2a0 SP::StarManager
 int    __fastcall FUN_00885c90(P mgr, int);
-P      EventLog(uint a, uint b, int c, int d, int e, int f);  // SP::EventLog
-void   __fastcall PostFeedbackEvent(P log, int); // SP::cSPUIEventLog::PostFeedbackEvent
+P      EventLog(uint a, uint b, int c, int d, int e, int f);   // 0x00b3d3e0 SP::EventLog
+void   __fastcall PostFeedbackEvent(P log, int);   // 0x00dd8640 SP::cSPUIEventLog::PostFeedbackEvent
 P      __fastcall FUN_00c0bc00(P creature, int, int a, int b);
 P      __fastcall FUN_00c463d0(P slot, int, P arg);
 P      FUN_00b3d450(P x);
@@ -72,27 +72,27 @@ P      FUN_00ac9dd0(P a, P b);
 P      __fastcall FUN_00bd81f0(P x, int, float f);
 void   __fastcall FUN_00ff0350(P x, int);
 P      __fastcall FUN_00c31a00(P x, int);
-P      GetPlayerEmpire(uint id);            // SP::cSPLivingUniverse::GetPlayerEmpire
+P      GetPlayerEmpire(uint id);   // 0x01021300 SP::cSPLivingUniverse::GetPlayerEmpire
 void   __fastcall FUN_00fffdd0(P ufo, int, int a, uint b);
 P      FUN_00b3d3d0(int a, P b);
-void   __fastcall CollectSpicePile(P x, int);    // SP::cSPSpaceTrading::CollectSpicePile
-bool   __fastcall IsRare(P artifact, int);       // SP::cSPPlanetaryArtifact::IsRare
+void   __fastcall CollectSpicePile(P x, int);   // 0x0103fe90 SP::cSPSpaceTrading::CollectSpicePile
+bool   __fastcall IsRare(P artifact, int);   // 0x00c74ca0 SP::cSPPlanetaryArtifact::IsRare
 int    __fastcall FUN_0103ac40(P x, int);
 void   __fastcall FUN_00c389c0(P inv, int, int a, int b);
 bool   FUN_005f78f0(P a, P b);              // EA::ResourceMan::operator!=
 P      FUN_00b3d390(P a, P out);
-bool   __fastcall CreateToolFromToolID(P mgr, int);
+bool   __fastcall CreateToolFromToolID(P mgr, int);   // 0x0104e340
 P      FUN_01005180(P x, int a);
 void   __fastcall FUN_007eb820(P x, int, int a);
 void   FUN_00c878d0(Vec3 key, P out);
-void   RemoveArtifact(P low, P a, uint count);   // SP::RemoveArtifact
-P      InterfaceCastArtifact(P noun);       // EA::COM::interface_cast<cSPPlanetaryArtifact*, ...>
+void   RemoveArtifact(P low, P a, uint count);   // 0x00c71160 SP::RemoveArtifact
+P      InterfaceCastArtifact(P noun);   // 0x01030e40 EA::COM::interface_cast<cSPPlanetaryArtifact*, ...>
 extern uint  g_Msg_vtbl;                    // vtbl_UI::BehaviorMessage / message vtable
-extern P     g_spaceTokenTranslator;        // _gpSpaceTokenTranslator_SP__3PAVcSpaceTokenTranslator_1_A
+extern P     g_spaceTokenTranslator;   // 0x016e0d08 _gpSpaceTokenTranslator_SP__3PAVcSpaceTokenTranslator_1_A
 extern char  DAT_016ded38[], DAT_016ded44[];
-void   __fastcall MsgConstruct(P msg, int, int a);   // SlotMessage::Construct
+void   __fastcall MsgConstruct(P msg, int, int a);   // 0x00421c80 SlotMessage::Construct
 void   __fastcall MsgDestruct(P msg, int);           // SlotMessage::Destruct
-void*  operator_new(uint size, const char* name, int a, int b, int c, int d);
+void*  operator_new(uint size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 
 // Message block as laid out on the stack (0x40 bytes).
 struct Msg {

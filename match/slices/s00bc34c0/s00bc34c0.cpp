@@ -39,16 +39,24 @@ extern float g156d1fc;                                 // follow-rate scale
 extern float g145cfe8;                                 // block of 4 floats (0x3e860a92)
 extern V3 g168aab4;
 extern void* vt014667f0[];
-extern void* vt1145cf78[];
-extern void* vt2014667ec[];
+extern void* vt0145cf78[];
+extern void* vt014667ec[];
 
-struct B0 { void __thiscall init(void* a); };           // FUN_00b12890 (base ctor)
+struct B0 {
+    void __thiscall init(void* a);  // 0x00b12890 (base ctor)
+};
 struct F3 { float x, y, z; F3(float a, float b, float c) : x(a), y(b), z(c) {} F3(const F3& o) : x(o.x), y(o.y), z(o.z) {} };
 struct F4 { float x, y, z, w; F4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {} F4(const F4& o) : x(o.x), y(o.y), z(o.z), w(o.w) {} };
 extern F3 g156d200v;                                   // 0x0156d200
 extern F4 g156d20cv;                                   // 0x0156d20c
-struct SubA { uint32_t pad[0x15]; void __thiscall set(F3 v); };          // FUN_00f4f5a0
-struct SubB { uint32_t pad[0x1b]; void __thiscall set(F4 q); };          // FUN_00f4fe50
+struct SubA {
+    uint32_t pad[0x15];
+    void __thiscall set(F3 v);  // 0x00f4f5a0
+};
+struct SubB {
+    uint32_t pad[0x1b];
+    void __thiscall set(F4 q);  // 0x00f4fe50
+};
 
 struct FixedVec8 {                                        // fixed_vector<AutoRefCount<cSpatialObject>, 8>
     void** mpBegin; void** mpEnd; void** mpCap;
@@ -59,24 +67,24 @@ struct FixedVec8 {                                        // fixed_vector<AutoRe
 
 struct Cam {                                              // App()->vf50()->vf1c()
     virtual void v0();
-    void __thiscall f7c4d00(void* hdr);
-    void __thiscall f7c4ba0(float a);
-    void __thiscall f7c4bc0(float a);
+    void __thiscall f7c4d00(void* hdr);  // 0x007c4d00
+    void __thiscall f7c4ba0(float a);  // 0x007c4ba0
+    void __thiscall f7c4bc0(float a);  // 0x007c4bc0
 };
 struct Mgr { virtual void v0(); };
 struct App1 { virtual void v0(); };
-App1* __cdecl App();                                       // SP::App
+App1* __cdecl App();                                       // 0x0067dd10 SP::App
 
 struct PosHelper : V3 {                                   // 0xb16dc0 / 0xb17790
-    PosHelper(Cam* c);
-    void __thiscall f17790(int a);
+    PosHelper(Cam* c);  // 0x00b16dc0
+    void __thiscall f17790(int a);  // 0x00b17790
 };
 
-bool __cdecl f00b17c10(PosHelper* pos, FixedVec8* v);
-bool __cdecl f00b17810(PosHelper* pos, Q4* q);
-bool __cdecl f00b182f0(PosHelper* pos, int flags);          // cGameData::PathOrSerializationCheck
-void __cdecl f00b16450(PosHelper* pos, FixedVec8* v);
-void __cdecl f00b16e50(PosHelper* pos, Q4* q);
+bool __cdecl f00b17c10(PosHelper* pos, FixedVec8* v);  // 0x00b17c10
+bool __cdecl f00b17810(PosHelper* pos, Q4* q);  // 0x00b17810
+bool __cdecl f00b182f0(PosHelper* pos, int flags);          // 0x00b182f0 cGameData::PathOrSerializationCheck
+void __cdecl f00b16450(PosHelper* pos, FixedVec8* v);  // 0x00b16450
+void __cdecl f00b16e50(PosHelper* pos, Q4* q);  // 0x00b16e50
 
 struct Hdr { uint16_t flags; uint16_t count; float v[3]; };
 
@@ -111,8 +119,8 @@ C* __thiscall C::ctor(void* arg)
 {
     ((B0*)this)->init(arg);
     vt0 = vt014667f0;
-    vt1 = vt1145cf78;
-    vt2 = vt2014667ec;
+    vt1 = vt0145cf78;
+    vt2 = vt014667ec;
     d3b4 = 0;
     b18 = 0;
     b19 = 0;

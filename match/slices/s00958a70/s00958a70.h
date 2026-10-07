@@ -138,8 +138,16 @@ extern char vtbl_WindowMgr;                                        // 0x14406a0
 extern float g_13eb1bc, g_1440738;
 
 struct ListHead { Node n; ListHead() { n.prev = &n; n.next = &n; } ~ListHead(); };      // dtor 0x620230
-struct Mutex { Mutex(int a, int b); ~Mutex(); u32 pad[12]; };             // 0x9222a0
-struct Typesetter { Typesetter(int a); ~Typesetter(); u32 pad[0x14c]; };         // 0x89d820
+struct Mutex {
+    Mutex(int a, int b);   // 0x9222a0
+    ~Mutex();
+    u32 pad[12];
+};
+struct Typesetter {
+    Typesetter(int a);     // 0x89d820
+    ~Typesetter();
+    u32 pad[0x14c];
+};
 struct WM {
     virtual ~WM();
     virtual void s01();

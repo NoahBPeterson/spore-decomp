@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00f0ac40  1171  complete; frame (and esp,-8, 0x1b8) and reg alloc differ, no symbol of similar size
 00f0b0e0  35  complete; arg load order / reg alloc
-00f0b150  450  complete; helper arg shapes (out-iterator, tag args) not exact
+00f0b150  450  complete; helper arg shapes (out-iterator, tag args) not exact; difftest WEAK (no mismatch; 12% coverage, random begin/end/n mostly fault)
 00f0b390  74  complete; reg alloc
 00f0b420  141  complete; branch/reg layout
 00f0b4d0  237  complete; k range check (test/jl vs ja) and loop reg alloc

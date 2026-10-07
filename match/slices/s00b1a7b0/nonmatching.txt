@@ -1,9 +1,9 @@
-00b1a7b0 174 vector<Elem38>::operator=; cached xBegin/xEnd/mpBegin locals and register allocation differ
+00b1a7b0 174 vector<Elem38>::operator=; cached xBegin/xEnd/mpBegin locals and register allocation differ; difftest WEAK (345/1000 valid, no mismatch, 52% cov)
 00b1a900 14 vector<Elem38>::DoInsertValue; only ebx/ebp register swap left (nNewData kept in memory via volatile)
-00b1aa50 264 rbtree<int,string> DoCopySubtree (string copy inlined); not tuned
+00b1aa50 264 rbtree<int,string> DoCopySubtree (string copy inlined); not tuned; difftest PASS (391/1000 valid, 83% cov; operator new mapped to 0xf473a0)
 00b1aba0 239 rbtree<string,V>::insert; iterator result lives in a reused param slot in the original
 00b1aca0 11 rbtree<int,vector> DoCreateNodeCopy; only the early load of the src arg differs
 00b1add0 237 FindClosestGameData; callee 00b18f90 takes ecx=obj plus a caller-popped stack arg (unknown convention)
-00b1af20 1040 input message handler (Variant string parsing); not tuned
+00b1af20 1040 input message handler (Variant string parsing); not tuned; difftest WEAK (1996/2000 valid, no mismatch, 1.8% cov: random msgID never equals 0x2168a93, so the body is never reached)
 00b1b410 313 ArgScript state-machine loader; not tuned
-00b1b6c0 285 rbtree<int,vector<Elem38>> DoCopySubtree; not tuned
+00b1b6c0 285 rbtree<int,vector<Elem38>> DoCopySubtree; not tuned; difftest WEAK (354/1000 valid, no mismatch, 21% cov)

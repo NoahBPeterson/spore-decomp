@@ -261,22 +261,22 @@ struct PathBuf {  // 0x0092fcc0
 struct PairWK {  // pair<wstring, key>   0x005f8690
   WStr s;
   Key3 k;
-  PairWK(const WStr& a, const Key3& b);
+  PairWK(const WStr& a, const Key3& b);  // 0x005f8690
 };
 struct ValueWK {  // pair<const wstring, key>   0x005f8320
   WStr s;
   Key3 k;
-  ValueWK(const PairWK& p);
+  ValueWK(const PairWK& p);  // 0x005f8320
 };
 struct PairKW {  // 0x005f8700
   Key3 k;
   WStr s;
-  PairKW(const Key3& a, const WStr& b);
+  PairKW(const Key3& a, const WStr& b);  // 0x005f8700
 };
 struct ValueKW {  // 0x005f8390
   Key3 k;
   WStr s;
-  ValueKW(const PairKW& p);
+  ValueKW(const PairKW& p);  // 0x005f8390
 };
 struct PairKK {
   Key3 a, b;
@@ -286,19 +286,19 @@ struct PairKK {
 struct IterBool { int it[3]; };
 struct MapWK {  // 0x005f9470
   char d[0x20];
-  void Insert(IterBool* out, const ValueWK& v, bool b);
+  void Insert(IterBool* out, const ValueWK& v, bool b);  // 0x005f9470
 };
 struct MapKW {  // 0x005f95a0
   char d[0x20];
-  void Insert(IterBool* out, const ValueKW& v, bool b);
+  void Insert(IterBool* out, const ValueKW& v, bool b);  // 0x005f95a0
 };
 struct MapKK {  // 0x005f8170
   char d[0x20];
-  void Insert(IterBool* out, const PairKK& v, bool b);
+  void Insert(IterBool* out, const PairKK& v, bool b);  // 0x005f8170
 };
 struct MapKK2 {  // 0x005f8240
   char d[0x20];
-  void Insert(IterBool* out, const PairKK& v, bool b);
+  void Insert(IterBool* out, const PairKK& v, bool b);  // 0x005f8240
 };
 
 namespace SP {

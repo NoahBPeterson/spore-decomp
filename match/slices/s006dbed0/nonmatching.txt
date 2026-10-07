@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-006dbed0 4203 complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); same 49 direct calls in order, size 0.98x; /O2 frame layout (0x1b4 vs 0x18c), register allocation and the de-dup loop addressing differ; both return paths merged (one fewer Release vcall site)
+006dbed0 4203 complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); same 49 direct calls in order, size 0.98x; /O2 frame layout (0x1b4 vs 0x18c), register allocation and the de-dup loop addressing differ; both return paths merged (one fewer Release vcall site); difftest WEAK (5.1% coverage: needs three FindElement hits (usages 0x15, 0x14, 1) in a random mesh; resolved by annotating kElementMask // 0x140a644)

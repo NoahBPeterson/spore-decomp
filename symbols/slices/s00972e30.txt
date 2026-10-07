@@ -1,0 +1,2 @@
+00973640 ?EColIterA  # ColIterA::operator++ (SparseMatrixColIterator<CellData*>); ??E prefix form so the checker matches the operator symbol
+009736c0 ?EColIterB  # ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>); same

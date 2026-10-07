@@ -1,1 +1,6 @@
 0055aac0 SP::cFunctionalTestCheat::Execute  # PDB name
+004e1780 ??1?$vector@UConstraint@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAE@XZ  # eastl::vector<Constraint>::~vector (this slice's spelling of the type)
+004e39a0 ?DoDestroyValues@?$vector@UConstraint@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAEXPAUConstraint@FunctionalMatch@SP@@0@Z  # eastl::vector<Constraint>::DoDestroyValues
+004e4310 ??_GConstraint@FunctionalMatch@SP@@QAEPAXI@Z  # SP::FunctionalMatch::Constraint scalar deleting dtor (called with 0)
+004ab0d0 ??1?$VectorBase@UConstraint@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@QAE@XZ  # eastl::VectorBase<Constraint>::~VectorBase
+005156b0 ??1?$VectorBase@UResourceKey@@Usp_vector_allocator@eastl@@@eastl@@QAE@XZ  # eastl::VectorBase<ResourceKey>::~VectorBase

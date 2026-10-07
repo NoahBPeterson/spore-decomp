@@ -1,7 +1,7 @@
 # va  diff-bytes  reason   (complete source; compile flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS-)
 006fb5c0  420  complete GetGeneratedPixelShader (LRU shader cache lookup/insert); register allocation and block order differ
-006fb9e0  174  complete vector<cFragmentDecl>::operator=; x kept in ebp instead of mb, so register allocation differs
+006fb9e0  174  complete vector<cFragmentDecl>::operator=; x kept in ebp instead of mb, so register allocation differs ; difftest WEAK (154 valid, 52% coverage; body renamed Assign behind a forceinline operator= so the checker finds it)
 006fbc60  438  complete vector<cFragmentDecl>::DoInsertValues (fill); frame/EH layout differ
 006fbf70  417  complete WriteShaderCache (serialize table to stream); frame slots/register allocation differ
 006fc1f0  356  complete ReadShaderCache (load table, create D3D pixel shaders); frame slots/register allocation differ
-006fc480  121  complete vector<cFragmentDecl>::resize; temp default FragDecl dtor not elided, size recomputation differs
+006fc480  121  complete vector<cFragmentDecl>::resize; temp default FragDecl dtor not elided, size recomputation differs ; difftest PASS (operator delete[] annotated 0x00f47380)

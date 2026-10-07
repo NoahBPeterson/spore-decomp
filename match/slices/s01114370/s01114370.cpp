@@ -21,6 +21,10 @@ struct hkErrorIface {
 };
 extern hkErrorIface* g_hkError;   // 0x016E4184
 
+// Havok 3.1 was built by an older cl that loads 0.0f/1.0f from the constant pool.
+extern const float kZero;   // 0x01485378
+extern const float kOne;    // 0x01485720
+
 struct hkMoppShape {
     virtual void v0();
     virtual void v1();
@@ -47,8 +51,8 @@ struct hkMoppDispatch {
 typedef void (__cdecl *hkMoppHitFn)(void*, hkMoppChildRef*, void*, void*, void*);
 
 // Per-subtree transform, 13 dwords copied by FUN_01114310 (the 4th dword array element beyond is scratch)
-struct __declspec(align(16)) hkMoppXform {
-    float o[4];            // +0x00 offset
+struct hkMoppXform {
+    __declspec(align(16)) float o[4];   // +0x00 offset (aligns the struct to 16)
     float f[5];            // +0x10 scale factors / extents (+0x20 used as the diagonal term)
     int   m_idx;           // +0x24
     float m_scale;         // +0x28
@@ -90,7 +94,8 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
     for (;;) {
         unsigned op = *pc;
         int axis = 999;
-        float lo, hi, p0, p1;
+        float lo, hi, p1;
+        double p0;   // the original keeps p0 in an x87 register (never rounded to float)
         unsigned skipA, skipB;
         switch (op) {
         case 0:
@@ -275,7 +280,7 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
         case 0x20: case 0x21: case 0x22:
             axis = op - 0x20;
             lo = (float)pc[1] - xf->f[axis];
-            hi = ((float)pc[1] + 1.0f) + xf->f[axis];
+            hi = ((float)pc[1] + kOne) + xf->f[axis];
             p0 = seg[axis];
             p1 = seg[axis + 4];
             skipA = pc[2];
@@ -326,24 +331,20 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
             t0[0] = seg[0]; t0[1] = seg[1]; t0[2] = seg[2]; t0[3] = seg[3];
             float d = q0 - hi2;
             t0[4] = seg[4]; t0[5] = seg[5]; t0[6] = seg[6]; t0[7] = seg[7];
-            if (d * (q1 - hi2) < 0.0f) {
-                float t = d / (d - (q1 - hi2));
-                float u = 1.0f - t;
+            if (d * (q1 - hi2) < kZero) {
                 float* dst = seg + (4 - side * 4);
-                dst[0] = t0[0] * u + t0[4] * t;
-                dst[1] = t0[1] * u + t0[5] * t;
-                dst[2] = t0[2] * u + t0[6] * t;
-                dst[3] = t0[3] * u + t0[7] * t;
+                dst[0] = t0[0] * (kOne - (d / (d - (q1 - hi2)))) + t0[4] * (d / (d - (q1 - hi2)));
+                dst[1] = t0[1] * (kOne - (d / (d - (q1 - hi2)))) + t0[5] * (d / (d - (q1 - hi2)));
+                dst[2] = t0[2] * (kOne - (d / (d - (q1 - hi2)))) + t0[6] * (d / (d - (q1 - hi2)));
+                dst[3] = t0[3] * (kOne - (d / (d - (q1 - hi2)))) + t0[7] * (d / (d - (q1 - hi2)));
             }
             d = q0 - lo2;
-            if (d * (q1 - lo2) < 0.0f) {
-                float t = d / (d - (q1 - lo2));
-                float u = 1.0f - t;
+            if (d * (q1 - lo2) < kZero) {
                 float* dst = seg + side * 4;
-                dst[0] = t0[0] * u + t0[4] * t;
-                dst[1] = t0[1] * u + t0[5] * t;
-                dst[2] = t0[2] * u + t0[6] * t;
-                dst[3] = t0[3] * u + t0[7] * t;
+                dst[0] = t0[0] * (kOne - (d / (d - (q1 - lo2)))) + t0[4] * (d / (d - (q1 - lo2)));
+                dst[1] = t0[1] * (kOne - (d / (d - (q1 - lo2)))) + t0[5] * (d / (d - (q1 - lo2)));
+                dst[2] = t0[2] * (kOne - (d / (d - (q1 - lo2)))) + t0[6] * (d / (d - (q1 - lo2)));
+                dst[3] = t0[3] * (kOne - (d / (d - (q1 - lo2)))) + t0[7] * (d / (d - (q1 - lo2)));
             }
             continue;
         }
@@ -421,37 +422,31 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
                 float d2 = p1 - hi;
                 float d3 = p1 - lo;
                 if (d2 <= d0) {
-                    if (d3 * d1 < 0.0f) {
-                        float t = d1 / (d1 - d3);
-                        float u = 1.0f - t;
-                        t0[4] = u * seg[0] + t * seg[4];
-                        t0[5] = t * seg[5] + u * seg[1];
-                        t0[6] = t * seg[6] + u * seg[2];
-                        t0[7] = t * seg[7] + u * seg[3];
+                    if (d3 * d1 < kZero) {
+                        t0[4] = (kOne - (d1 / (d1 - d3))) * seg[0] + (d1 / (d1 - d3)) * seg[4];
+                        t0[5] = (d1 / (d1 - d3)) * seg[5] + (kOne - (d1 / (d1 - d3))) * seg[1];
+                        t0[6] = (d1 / (d1 - d3)) * seg[6] + (kOne - (d1 / (d1 - d3))) * seg[2];
+                        t0[7] = (d1 / (d1 - d3)) * seg[7] + (kOne - (d1 / (d1 - d3))) * seg[3];
                     }
                     cast(xf, pc, t0);
-                    if (d2 * d0 < 0.0f) {
-                        float t = d0 / (d0 - d2);
-                        float u = 1.0f - t;
-                        seg[0] = t * seg[4] + u * seg[0];
-                        seg[1] = t * seg[5] + u * seg[1];
-                        seg[2] = t * seg[6] + u * seg[2];
-                        seg[3] = t * seg[7] + u * seg[3];
+                    if (d2 * d0 < kZero) {
+                        seg[0] = (d0 / (d0 - d2)) * seg[4] + (kOne - (d0 / (d0 - d2))) * seg[0];
+                        seg[1] = (d0 / (d0 - d2)) * seg[5] + (kOne - (d0 / (d0 - d2))) * seg[1];
+                        seg[2] = (d0 / (d0 - d2)) * seg[6] + (kOne - (d0 / (d0 - d2))) * seg[2];
+                        seg[3] = (d0 / (d0 - d2)) * seg[7] + (kOne - (d0 / (d0 - d2))) * seg[3];
                     }
                     if (m_frac < m_best) {
                         float* in = m_in->p;
-                        float f = m_frac;
-                        float u = 1.0f - f;
                         m_best = m_frac;
-                        float px = f * in[4] + u * in[0];
-                        float py = f * in[5] + u * in[1];
-                        float pz = f * in[6] + u * in[2];
-                        float pw = f * in[7] + u * in[3];
+                        __declspec(align(16)) float p[4];
+                        p[0] = (kOne - m_frac) * in[0] + m_frac * in[4];
+                        p[1] = (kOne - m_frac) * in[1] + m_frac * in[5];
+                        p[2] = (kOne - m_frac) * in[2] + m_frac * in[6];
                         const float* base = m_info->v;
-                        seg[4] = px - base[0];
-                        seg[5] = py - base[1];
-                        seg[6] = pz - base[2];
-                        seg[7] = pw - base[3];
+                        seg[4] = p[0] - base[0];
+                        seg[5] = p[1] - base[1];
+                        seg[6] = p[2] - base[2];
+                        seg[7] = ((kOne - m_frac) * in[3] + m_frac * in[7]) - base[3];
                         float s = xf->m_scale;
                         seg[4] = s * seg[4];
                         seg[5] = s * seg[5];
@@ -466,37 +461,31 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
                     }
                     pc += skipB - skipA;
                 } else {
-                    if (d2 * d0 < 0.0f) {
-                        float t = d0 / (d0 - d2);
-                        float u = 1.0f - t;
-                        t0[4] = t * seg[4] + u * seg[0];
-                        t0[5] = u * seg[1] + t * seg[5];
-                        t0[6] = u * seg[2] + t * seg[6];
-                        t0[7] = u * seg[3] + t * seg[7];
+                    if (d2 * d0 < kZero) {
+                        t0[4] = (d0 / (d0 - d2)) * seg[4] + (kOne - (d0 / (d0 - d2))) * seg[0];
+                        t0[5] = (kOne - (d0 / (d0 - d2))) * seg[1] + (d0 / (d0 - d2)) * seg[5];
+                        t0[6] = (kOne - (d0 / (d0 - d2))) * seg[2] + (d0 / (d0 - d2)) * seg[6];
+                        t0[7] = (kOne - (d0 / (d0 - d2))) * seg[3] + (d0 / (d0 - d2)) * seg[7];
                     }
                     cast(xf, pc + (skipB - skipA), t0);
-                    if (d3 * d1 < 0.0f) {
-                        float t = d1 / (d1 - d3);
-                        float u = 1.0f - t;
-                        seg[0] = u * seg[0] + t * seg[4];
-                        seg[1] = u * seg[1] + t * seg[5];
-                        seg[2] = u * seg[2] + t * seg[6];
-                        seg[3] = u * seg[3] + t * seg[7];
+                    if (d3 * d1 < kZero) {
+                        seg[0] = (kOne - (d1 / (d1 - d3))) * seg[0] + (d1 / (d1 - d3)) * seg[4];
+                        seg[1] = (kOne - (d1 / (d1 - d3))) * seg[1] + (d1 / (d1 - d3)) * seg[5];
+                        seg[2] = (kOne - (d1 / (d1 - d3))) * seg[2] + (d1 / (d1 - d3)) * seg[6];
+                        seg[3] = (kOne - (d1 / (d1 - d3))) * seg[3] + (d1 / (d1 - d3)) * seg[7];
                     }
                     if (m_frac < m_best) {
                         float* in = m_in->p;
-                        float f = m_frac;
-                        float u = 1.0f - f;
                         m_best = m_frac;
-                        float px = f * in[4] + u * in[0];
-                        float py = f * in[5] + u * in[1];
-                        float pz = f * in[6] + u * in[2];
-                        float pw = f * in[7] + u * in[3];
+                        __declspec(align(16)) float p[4];
+                        p[0] = (kOne - m_frac) * in[0] + m_frac * in[4];
+                        p[1] = (kOne - m_frac) * in[1] + m_frac * in[5];
+                        p[2] = (kOne - m_frac) * in[2] + m_frac * in[6];
                         const float* base = m_info->v;
-                        seg[4] = px - base[0];
-                        seg[5] = py - base[1];
-                        seg[6] = pz - base[2];
-                        seg[7] = pw - base[3];
+                        seg[4] = p[0] - base[0];
+                        seg[5] = p[1] - base[1];
+                        seg[6] = p[2] - base[2];
+                        seg[7] = ((kOne - m_frac) * in[3] + m_frac * in[7]) - base[3];
                         float s = xf->m_scale;
                         seg[4] = s * seg[4];
                         seg[5] = s * seg[5];

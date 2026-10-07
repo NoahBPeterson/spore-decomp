@@ -1,3 +1,3 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-007a1740  436  B::CopyFrom complete; regalloc/loop-carried spills differ (this spilled, ebx=idx in orig); needs /GS- flags
-007a23c0  655  Builder::F23c0 complete; compiler emits ebp frame + and esp,-8 with two inline push_backs, orig does not; needs /GS-
+007a1740  311  B::CopyFrom complete; regalloc/loop-carried spills differ (this spilled, ebx=idx in orig); needs /GS- flags; difftest WEAK (777/1500 valid, 55% coverage, no mismatch) after fixing two receivers: vector resize at 0x71f7e0 runs on A+0x1c and Build at 0x7a1400 on the sub-object at B+8
+007a23c0  655  Builder::F23c0 complete; compiler emits ebp frame + and esp,-8 with two inline push_backs, orig does not; needs /GS-; difftest WEAK (700/1500 valid, 36% coverage, no mismatch; Fill callee output limits coverage) after annotating callees with 0x addresses

@@ -4,3 +4,10 @@
 0089c110 EA::Text::LineLayout::GetGlyphSelection  # PDB name
 0089c2d0 EA::Text::LineLayout::GetGlyphDecoration  # PDB candidate (caller-single)
 0089c540 EA::Text::Typesetter::~Typesetter  # PDB name
+00899c90 ?insert@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@IABU234@@Z  # difftest alias: this slice's mangled name for vector<GlyphLayoutInfo>::insert(pos,n,v), called by 0089bdb0
+00899420 ?erase@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@0@Z  # difftest alias: vector<GlyphLayoutInfo>::erase, called by 0089bdb0
+00898d70 ?DoAllocateAndCopy@?$cvec@UAnalysisInfo@Text@EA@@@Text@EA@@QAEPAUAnalysisInfo@23@IPBU423@0@Z  # difftest alias: vector<AnalysisInfo>::DoAllocateAndCopy (called by 00898fc0)
+0089a790 ?DoAllocateAndCopy@?$cvec@G@Text@EA@@QAEPAGIPBG0@Z  # difftest alias: vector<uint16>::DoAllocateAndCopy (called by 0089bc80)
+00898dc0 ?DoAllocateAndCopy@?$cvec@UGlyphInfo@Text@EA@@@Text@EA@@QAEPAUGlyphInfo@23@IPBU423@0@Z  # difftest alias: vector<GlyphInfo>::DoAllocateAndCopy (called by 00899110)
+00898e10 ?DoAllocateAndCopy@?$cvec@UGlyphLayoutInfo@Text@EA@@@Text@EA@@QAEPAUGlyphLayoutInfo@23@IPBU423@0@Z  # difftest alias: vector<GlyphLayoutInfo>::DoAllocateAndCopy (called by 008991f0)
+0089a660 ?DoAllocateAndCopy@?$cvec@I@Text@EA@@QAEPAIIPBI0@Z  # difftest alias: vector<uint32>::DoAllocateAndCopy (called by 0089ba90)

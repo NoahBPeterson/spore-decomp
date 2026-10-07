@@ -13,6 +13,8 @@
 #include "types.h"
 #include <math.h>
 
+void operator delete[](void* p);   // 0x00f47380 (Spore's global delete[])
+
 #define PVCAT2(a, b) a##b
 #define PVCAT(a, b) PVCAT2(a, b)
 #define PV virtual void PVCAT(pv_, __COUNTER__)();
@@ -234,7 +236,7 @@ IModelManager* ModelManager();              // 0x0067dd80
 
 class cRenderer {
 public:
-    void Flush(int n);                      // 0x007c3c50
+    void FlushTargets(int n);               // 0x007c3c50 (bit mask 1|2|4 -> 0x11f3d40)
 };
 extern cRenderer sRenderer;                 // 0x016ca0d8
 
@@ -422,7 +424,7 @@ void cTerrainSphere::RefractionMapRender(cViewer* pViewer, RenderStatistics& sta
         IModelWorld* pCurrentWorld = 0;
         eastl::bitset<64> groups1;
         eastl::bitset<64> groups2;
-        sRenderer.Flush(6);
+        sRenderer.FlushTargets(6);
         int currentPass = 0;
         for (int k = 0; k < (int)separate.size(); k++)
             separate[k].mpModel->mRenderGroups.set(group);

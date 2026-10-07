@@ -5,7 +5,7 @@
 //   00938470  Sprintf8
 //   009384e0  Snprintf8
 //   00938500  ReadFormat16   (wchar_t format-spec parser)
-//   00938980  FUN_00938980   (integer -> string conversion helper; wide variant)
+//   00938980  WriteInteger16 (integer -> string conversion helper; wide variant)
 //
 // This is the self-contained EAStdC EASprintf implementation that Spore statically links
 // (names recovered from the 2008 dev-build PDB).  Snprintf8 matches byte-exact; the two
@@ -59,9 +59,16 @@ struct FormatData8 {
     int  mnType;              // +0x18
 };
 
-// Out-of-slice helpers (masked call targets).  Real register conventions differ; only shapes matter.
-const char* ReadFormat8(const char* pFormat, va_list* pArguments, FormatData8* pData);   // 0x009370d0
-char* WriteInteger8(unsigned int nValue, FormatData8* pData, char* pBufferEnd);          // 0x00937510
+// ReadFormat8 (009370d0: EAX = va_list*, EDX = format, stack = FormatData) and WriteInteger8
+// (00937510: EAX = value, ECX = FormatData, stack = buffer end) have the register conventions
+// cl gives TU-static functions, so they were static in the original TU.  They are defined below
+// as static functions sharing the ReadFormat16 / WriteInteger16 bodies (cl assigns our copies
+// different registers, so the call sites differ in bytes; the equivalence checker runs our
+// copies).  Deliberately no address comment on these declarations: mapping the calls to the
+// originals would pass the arguments in the wrong registers.
+static const char* ReadFormat8(va_list* pArguments, const char* pFormat, FormatData8* pData);
+static char* WriteInteger8(unsigned int nValue, FormatData8* pData, char* pBufferEnd);
+// Out-of-slice helpers that are plain cdecl in the original too.
 char* WriteInteger64_8(FormatData8* pData, unsigned int nLow, unsigned int nHigh, char* pBufferEnd); // 0x00937720
 char* WriteDouble8(FormatData8* pData, double dValue, char* pBufferEnd);                 // 0x00937970
 
@@ -101,7 +108,7 @@ __declspec(noinline) static int VprintfCore8(const char* pFormat, WriteFunction8
         if (*pSpec == 0)
             continue;
 
-        pCur = ReadFormat8(pSpec, &arguments, &fd);
+        pCur = ReadFormat8(&arguments, pSpec, &fd);
 
         const char* pOut = szBuffer;
         int nOut = 0;
@@ -344,12 +351,15 @@ int Snprintf8(char* pDestination, unsigned int n, const char* pFormat, ...) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00938500  ReadFormat16
-// Wide-character format-spec parser (one spec starting at '%').  The original takes the va_list
+// ReadFormat8 (0x009370d0) / ReadFormat16 (0x00938500): format-spec parser (one spec starting at '%').  The original takes the va_list
 // pointer in EAX, the format pointer in EDX and the FormatData out-pointer on the stack, and
 // returns the pointer just past the spec.  Bails out (type 0) on width/precision above 0x400.
 // ---------------------------------------------------------------------------------------------
-const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatData8* pData) {
+static inline unsigned int FormatChar(char c) { return (unsigned char)c; }
+static inline unsigned int FormatChar(wchar_t c) { return c; }
+
+template <typename C>
+static __forceinline const C* ReadFormatT(va_list* pArguments, const C* pFormat, FormatData8* pData) {
     int nAlignment = 1;
     int nSign = 1;
     char bAlternativeForm = 0;
@@ -359,26 +369,26 @@ const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatD
     int nType = 0;
     int nPrevAlignment = 0;
 
-    const wchar_t* p = pFormat + 1;
-    unsigned int c = *p;
+    const C* p = pFormat + 1;
+    unsigned int c = FormatChar(*p);
 
-    if (c == L'%') {
+    if (c == '%') {
         nType = '%';
         goto done;
     }
 
     // flags
     while (c - 0x20 <= 0x10) {
-        if (c == L' ') {
+        if (c == ' ') {
             if (nSign != 2)
                 nSign = 3;
-        } else if (c == L'#') {
+        } else if (c == '#') {
             bAlternativeForm = 1;
-        } else if (c == L'+') {
+        } else if (c == '+') {
             nSign = 2;
-        } else if (c == L'-') {
+        } else if (c == '-') {
             nAlignment = 0;
-        } else if (c == L'0') {
+        } else if (c == '0') {
             if (nAlignment != 0) {
                 if (nAlignment != 2)
                     nPrevAlignment = nAlignment;
@@ -387,41 +397,41 @@ const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatD
         } else {
             break;
         }
-        c = *++p;
+        c = FormatChar(*++p);
     }
 
     // width
-    if (c == L'*') {
+    if (c == '*') {
         nWidth = va_arg(*pArguments, int);
         if (nWidth < 0) {
             nWidth = -nWidth;
             nAlignment = 0;
         }
-        c = *++p;
+        c = FormatChar(*++p);
         if (nWidth > 0x400)
             goto done;
-    } else if (c - L'0' < 10) {
+    } else if (c - '0' < 10) {
         do {
-            nWidth = nWidth * 10 + (c - L'0');
-            c = *++p;
-        } while (c - L'0' < 10);
+            nWidth = nWidth * 10 + (c - '0');
+            c = FormatChar(*++p);
+        } while (c - '0' < 10);
         if (nWidth > 0x400)
             goto done;
     }
 
     // precision
-    if (c == L'.') {
-        c = *++p;
-        if (c == L'*') {
+    if (c == '.') {
+        c = FormatChar(*++p);
+        if (c == '*') {
             nPrecision = va_arg(*pArguments, int);
             if (nPrecision < 0)
                 nPrecision = 0;
-            c = *++p;
+            c = FormatChar(*++p);
         } else {
             nPrecision = 0;
-            while (c - L'0' < 10) {
-                nPrecision = nPrecision * 10 + (c - L'0');
-                c = *++p;
+            while (c - '0' < 10) {
+                nPrecision = nPrecision * 10 + (c - '0');
+                c = FormatChar(*++p);
             }
         }
         if (nPrecision > 0x400 && nPrecision != 0x7fffffff)
@@ -430,62 +440,62 @@ const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatD
 
     // length modifier
     switch (c) {
-        case L'I': {
-            unsigned int c1 = p[1];
-            if (c1 == L'8') {
+        case 'I': {
+            unsigned int c1 = FormatChar(p[1]);
+            if (c1 == '8') {
                 nModifier = 10;
                 ++p;
-            } else if (c1 == L'1' && p[2] == L'6') {
+            } else if (c1 == '1' && FormatChar(p[2]) == '6') {
                 nModifier = 11;
                 p += 2;
-            } else if (c1 == L'3' && p[2] == L'2') {
+            } else if (c1 == '3' && FormatChar(p[2]) == '2') {
                 nModifier = 12;
                 p += 2;
-            } else if (c1 == L'6' && p[2] == L'4') {
+            } else if (c1 == '6' && FormatChar(p[2]) == '4') {
                 nModifier = 13;
                 p += 2;
-            } else if (c1 == L'1' && p[2] == L'2' && p[3] == L'8') {
+            } else if (c1 == '1' && FormatChar(p[2]) == '2' && FormatChar(p[3]) == '8') {
                 nModifier = 14;
                 p += 3;
             } else {
                 goto done;
             }
-            c = *++p;
+            c = FormatChar(*++p);
             break;
         }
-        case L'L':
+        case 'L':
             nModifier = 8;
-            c = *++p;
+            c = FormatChar(*++p);
             break;
-        case L'h':
-            if (p[1] == L'h') {
+        case 'h':
+            if (FormatChar(p[1]) == 'h') {
                 nModifier = 1;
                 ++p;
             } else {
                 nModifier = 2;
             }
-            c = *++p;
+            c = FormatChar(*++p);
             break;
-        case L'j':
+        case 'j':
             nModifier = 5;
-            c = *++p;
+            c = FormatChar(*++p);
             break;
-        case L'l':
-            if (p[1] == L'l') {
+        case 'l':
+            if (FormatChar(p[1]) == 'l') {
                 nModifier = 4;
                 ++p;
             } else {
                 nModifier = 3;
             }
-            c = *++p;
+            c = FormatChar(*++p);
             break;
-        case L't':
+        case 't':
             nModifier = 7;
-            c = *++p;
+            c = FormatChar(*++p);
             break;
-        case L'z':
+        case 'z':
             nModifier = 6;
-            c = *++p;
+            c = FormatChar(*++p);
             break;
         default:
             break;
@@ -495,28 +505,28 @@ const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatD
 
     // type-dependent defaults
     switch (c) {
-        case L'X': case L'b': case L'd': case L'i': case L'o': case L'u': case L'x':
+        case 'X': case 'b': case 'd': case 'i': case 'o': case 'u': case 'x':
             if (nPrecision == 0x7fffffff)
                 nPrecision = 1;
             else if (nAlignment == 2)
                 nAlignment = 1;
             break;
-        case L'G': case L'g':
+        case 'G': case 'g':
             if (nPrecision == 0)
                 nPrecision = 1;
             else if (nPrecision == 0x7fffffff)
                 nPrecision = 6;
             break;
-        case L'A': case L'E': case L'F': case L'a': case L'e': case L'f':
+        case 'A': case 'E': case 'F': case 'a': case 'e': case 'f':
             if (nPrecision == 0x7fffffff)
                 nPrecision = 6;
             break;
-        case L'p':
+        case 'p':
             nModifier = 12;
             nPrecision = 1;
             nType = 'x';
             break;
-        case L'C': case L'S': case L'c': case L's':
+        case 'C': case 'S': case 'c': case 's':
             if (nAlignment == 2)
                 nAlignment = nPrevAlignment;
             if (nModifier == 2)
@@ -524,7 +534,7 @@ const wchar_t* ReadFormat16(const wchar_t* pFormat, va_list* pArguments, FormatD
             else if (nModifier == 3)
                 nModifier = 9;
             else
-                nModifier = (c == L's') ? 9 : 1;
+                nModifier = (c == 's') ? 9 : 1;
             break;
         default:
             break;
@@ -541,21 +551,32 @@ done:
     return p + 1;
 }
 
+__declspec(noinline) static const char* ReadFormat8(va_list* pArguments, const char* pFormat,
+                                                    FormatData8* pData) {
+    return ReadFormatT(pArguments, pFormat, pData);
+}
+
+// @ 0x00938500
+__declspec(noinline) static const wchar_t* ReadFormat16(va_list* pArguments, const wchar_t* pFormat,
+                                                        FormatData8* pData) {
+    return ReadFormatT(pArguments, pFormat, pData);
+}
+
 // ---------------------------------------------------------------------------------------------
-// @ 0x00938980  WriteInteger16
-// Integer -> wide string.  Original: EAX = value, EDI = FormatData*, stack = buffer end.
+// WriteInteger8 (0x00937510) / WriteInteger16 (0x00938980): integer -> string.  Original: EAX = value, EDI = FormatData*, stack = buffer end.
 // Writes digits backwards from pBufferEnd (terminator first) and returns the start pointer.
 // ---------------------------------------------------------------------------------------------
-short* WriteInteger16(unsigned int nValue, FormatData8* pData, short* pBufferEnd) {
+template <typename C>
+static __forceinline C* WriteIntegerT(unsigned int nValue, FormatData8* pData, C* pBufferEnd) {
     int nMinDigits = pData->mnPrecision;
-    short* p = pBufferEnd - 1;
+    C* p = pBufferEnd - 1;
     int nDigits = 0;
     int nSign = 0;
     bool bNegative = false;
     int nBase;
     int nShift = 0;
     unsigned int nMask = 0;
-    short c = 0;
+    C c = 0;
 
     *p = 0;
 
@@ -587,11 +608,11 @@ short* WriteInteger16(unsigned int nValue, FormatData8* pData, short* pBufferEnd
             nValue >>= nShift;
         }
         if ((int)nDigit < 10)
-            c = (short)(nDigit + '0');
+            c = (C)(nDigit + '0');
         else if (pData->mnType == 'x')
-            c = (short)(nDigit - 10 + 'a');
+            c = (C)(nDigit - 10 + 'a');
         else
-            c = (short)(nDigit - 10 + 'A');
+            c = (C)(nDigit - 10 + 'A');
         *--p = c;
         ++nDigits;
     } while (nValue != 0);
@@ -627,8 +648,26 @@ short* WriteInteger16(unsigned int nValue, FormatData8* pData, short* pBufferEnd
             }
         }
     } else if (pData->mbAlternativeForm && (nBase == 2 || nBase == 16)) {
-        *--p = (short)pData->mnType;
+        *--p = (C)pData->mnType;
         *--p = '0';
     }
     return p;
+}
+
+__declspec(noinline) static char* WriteInteger8(unsigned int nValue, FormatData8* pData, char* pBufferEnd) {
+    return WriteIntegerT(nValue, pData, pBufferEnd);
+}
+
+// @ 0x00938980
+__declspec(noinline) static short* WriteInteger16(unsigned int nValue, FormatData8* pData, short* pBufferEnd) {
+    return WriteIntegerT(nValue, pData, pBufferEnd);
+}
+
+// Stand-in for the callers outside this slice (VprintfCore16): a TU-static function is only
+// emitted, and only gets cl's register convention, when something in the TU calls it.
+const wchar_t* ReadFormat16Caller(va_list* pArguments, const wchar_t* pFormat, FormatData8* pData) {
+    return ReadFormat16(pArguments, pFormat, pData);
+}
+short* WriteInteger16Caller(unsigned int nValue, FormatData8* pData, short* pBufferEnd) {
+    return WriteInteger16(nValue, pData, pBufferEnd);
 }

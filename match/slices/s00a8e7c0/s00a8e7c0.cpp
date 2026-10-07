@@ -233,6 +233,7 @@ __forceinline void cDistributeEffect::CreateSphereSamples(const cTransform& tf,
 }
 
 // ---------------------------------------------------------------- 0x00a8e7c0
+// @ 0x00a8e7c0
 void cDistributeEffect::CreateRandomSamples(int count, int first, int last) {
   cTransform tf(mSourceTransform);
   if (mSubdivOwner)

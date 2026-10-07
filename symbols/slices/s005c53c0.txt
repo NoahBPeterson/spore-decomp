@@ -1,0 +1,7 @@
+# compiler-generated members of slice s005c53c0's classes, mapped for the equivalence checker
+0055bf80 ??_ERefCountVTemplate@SP@@UAEPAXI@Z  # EA::RefCountVTemplate<int> deleting dtor (vtable 0x013ec458 slot 0)
+00517400 ??_EIUnknown32@SP@@UAEPAXI@Z  # interface base deleting dtor (vtable 0x013eb938 slot 2)
+005c5ee0 ??_EcSPPalette@SP@@UAEPAXI@Z  # cSPPalette deleting dtor (vtable 0x013f7fd4 slot 0)
+005c5e80 ??_EcSPPalette@SP@@W7AEPAXI@Z  # this-8 adjustor thunk to 0x005c5ee0 (vtable 0x013f7fc4 slot 2)
+00ae4340 ?AddRef@cSPPalette@SP@@W7AEHXZ  # this-8 adjustor thunk to AddRef 0x00804910 (vtable 0x013f7fc4 slot 0, folded)
+00ae4330 ?Release@cSPPalette@SP@@W7AEHXZ  # this-8 adjustor thunk to Release 0x00834200 (vtable 0x013f7fc4 slot 1, folded)

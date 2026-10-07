@@ -2,5 +2,5 @@
 00abb660  356  complete vector<pair<fn*,void*>>::insert(pos,n,val); the original reloads mEnd (no CSE) and orders the tmp copy differently; difftest WEAK after fixing pos reuse (eastl::copy writes its result into pos's slot; the original keeps using the old pos, ours reloaded the overwritten value)
 00abb820  358  complete vector<pair<float,float>>::insert(pos,n,val); same schedule differences as 00abb660
 00abbaa0  145  complete constructor (all stores present); store order/scheduling differs from the original
-00abbd80  127  complete uninitialized_fill_n of FilterElem; original strength-reduces to a pointer at +0x14 inside the element and loops via jmp
+00abbd80  127  complete uninitialized_fill_n of FilterElem; original strength-reduces to a pointer at +0x14 inside the element and loops via jmp; difftest PASS (--inputs 800: 381 valid, 84.5% coverage) after fixing the return type (original returns void; ours returned dest, compared as eax)
 00abbf70  504  complete vector<FilterElem>::insert(pos,n,val); call sequence matches, register/schedule differ

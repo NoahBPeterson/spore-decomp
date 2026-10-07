@@ -1,18 +1,25 @@
 007d56f0  eastl::vector<0x78-record>::DoInsertValue
 007d5a30  eastl::vector<0x40-record>::~vector
 007d5aa0  uninitialized_copy of 0x78-byte records (cSplitInstance ctor)
-007d5af0  effect-component ctor
-007d5c50  effect parameter add
+007d5af0  cGameModelEffect::cGameModelEffect
+007d5c50  cGameModelEffect::~cGameModelEffect
 007d5d50  effect parameter set
-007d5dc0  effect notify
-007d5e60  effect apply
-007d6030  effect apply 2
+007d5dc0  cGameModelEffect::Unload  # IComponent slot 1 (Dispose)
+007d5e60  cGameModelEffect::FindGameModel
+007d6030  AnimVec::DoInsertValues  # eastl::vector<cAnimationInfo>
 007d61f0  allocate + uninitialized_copy of 0x78-byte records
 007d6250  range copy of 0x78-byte records (two cSPTransform assigns)
 007d62d0  deleting destructor (curve vector + vtable)
 007d6320  vector copy ctor (allocate + uninitialized_copy)
 007d6380  editor-component ctor
 007d63e0  editor-component deleting destructor
-007d6440  resource ctor (transform + refcount)
-007d6500  resource destructor (refcount + rbtree)
+007d6440  cMapResB::cMapResB
+007d6500  cMapResB::~cMapResB
 007d6620  resource complex function
+014123b8  ??_7cGameModelEffect@@6BGmeIComponent@@@
+014123b4  ??_7cGameModelEffect@@6BGmeRefCount@@@
+013f21d4  ??_7GmeIComponent@@6B@
+013ef094  ??_7GmeRefCount@@6B@
+01412404  ??_7cMapResB@@6BGmeEditorResBase@@@
+01412400  ??_7cMapResB@@6BGmeRefCount@@@
+013eb938  ??_7GmeEditorResBase@@6B@

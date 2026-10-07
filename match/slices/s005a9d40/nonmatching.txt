@@ -1,9 +1,9 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-005a9d40  1382  OnMouse: complete (plane/sphere ray paths), x87/sse scheduling and register allocation differ
-005aa420  25  ctor: derived vptr stores scheduled after member stores
+005a9d40  1382  OnMouse: complete (plane/sphere ray paths), x87/sse scheduling and register allocation differ; difftest WEAK (3% coverage: the ray paths need SP::App() i.e. the image global sApp 0x15fd8b0, which is null in the image, so generated inputs only reach the early exits); callee declarations split onto their own lines with // 0x comments (F4adc40, GetWorldRayFromScreenCoords 0x7c4730)
+005aa420  25  ctor: derived vptr stores scheduled after member stores; difftest PASS after mapping the vtables (??_7cManipTactile@@6BcManipBase@@@ 0x13f7038, ...6BcRC@@@ 0x13f7028, ??_7cRC@@6B@ 0x13ec458) in symbols/slices/s005a9d40.txt
 005aa490  30  vector copy: arg-slot/result handling and load order differ
 005aa5d0  243  ClampToPinned: loop reg alloc (ebx vs ebp) and flag test shr/test vs test imm
 005aa7a0  454  CalculateInflatedMesh: complete, x87/sse scheduling differs
 005aa9c0  264  GetPlacement: complete, arg copies differ
-005aab00  225  Setup: complete, dead stores/ordering differ
-005aac30  99  CellPinning ctor: vptr stores scheduled late
+005aab00  225  Setup: complete, dead stores/ordering differ; difftest PASS (--inputs 800: 370 valid, 100% coverage; 400 inputs gave 182 valid) after splitting the cPosHolder declarations so F4ac610/F4ac710 each carry their // 0x comment
+005aac30  99  CellPinning ctor: vptr stores scheduled late; difftest PASS after mapping the vtables (??_7cCellPinning@@6BcManipBase@@@ 0x13f70e4, ...6BcRC@@@ 0x13f70d4, ??_7cRC@@6B@ 0x13ec458) in symbols/slices/s005a9d40.txt

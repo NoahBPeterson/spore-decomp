@@ -176,9 +176,15 @@ struct SparseTable {                           // at owner+0x2c10
 struct EntRef { cEntity* p; char pad[0x1c]; };
 struct EntVec { EntRef* mpBegin; EntRef* mpEnd; EntRef* mpCap; };
 struct Row38 { char b[0x38]; };
-struct Vec38 { Row38* mpBegin; Row38* mpEnd; Row38* mpCap; void erase(Row38* pos); };   // erase = 0xff1600
+struct Vec38 {
+    Row38* mpBegin; Row38* mpEnd; Row38* mpCap;
+    void erase(Row38* pos);   // 0xff1600
+};
 struct RbNode { };
-struct RbMap { uint32_t pad; RbNode endNode; RbNode** find(RbNode** out, const uint32_t* key); };   // 0xe5c780
+struct RbMap {
+    uint32_t pad; RbNode endNode;
+    RbNode** find(RbNode** out, const uint32_t* key);   // 0xe5c780
+};
 struct cTrack { char pad[8]; RbMap map; bool FUN_00edfde0(); };
 struct cInfo { char pad[0x70]; char* mpRowsBegin; char* mpRowsEnd; bool FUN_00f254d0(); };
 struct LbElem { int key; int pad; char payload[0x27e8 - 8]; };
@@ -232,11 +238,11 @@ struct cX : cB0, cB1, cB2 {
     ~cX();                                         // 0xf3df50
     void  FUN_00f3e2b0(cEntity* key, cObject* res, int flag);
     void  FUN_00f3e3b0(int unused);
-    void  FUN_00f3e590(void* p, bool flag);
+    __declspec(noinline) void  FUN_00f3e590(void* p, bool flag);
     bool  FUN_00f3e6d0(cObject* obj, uint32_t* info, int idx, cTrack* ent);
     void  FUN_00f3e810(int idx);
-    void* FUN_00f3e8a0(int key);
-    float FUN_00f3e910();
+    __declspec(noinline) void* FUN_00f3e8a0(int key);
+    __declspec(noinline) float FUN_00f3e910();
     void  FUN_00f3ecb0(cEntity* key, cObject* obj, uint32_t* out);
     void  FUN_00f3e6b0(void* p);
     void* FUN_00f3e900(int* p);
@@ -376,7 +382,7 @@ void cX::FUN_00f3e3b0(int unused) {
 // ---------------------------------------------------------------------------
 // @ 0x00f3e590
 // ---------------------------------------------------------------------------
-__declspec(noinline) void cX::FUN_00f3e590(void* p, bool flag) {
+void cX::FUN_00f3e590(void* p, bool flag) {
     cOwner* o = mpOwner.p;
     for (SparseEl* it = TableStart(o); o->table.mpEnd != it; TableNext(it)) {
         cEntity* key = &it->ent;
@@ -458,14 +464,15 @@ void cX::FUN_00f3e810(int idx) {
     if (idx >= 0 && idx < (int)(o->rows.mpEnd - o->rows.mpBegin)) {
         if (mpAvatar)
             FUN_00f3b710(&o->rows.mpBegin[idx]);
-        o->rows.erase(&mpOwner.p->rows.mpBegin[idx]);
+        Vec38& r = mpOwner.p->rows;
+        r.erase(&r.mpBegin[idx]);
     }
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x00f3e8a0  (lower_bound lookup; returns payload or null)
 // ---------------------------------------------------------------------------
-__declspec(noinline) void* cX::FUN_00f3e8a0(int key) {
+void* cX::FUN_00f3e8a0(int key) {
     cOwner* o = mpOwner.p;
     LbElem* end = o->mpLbEnd;
     LbElem* p = FUN_00ed29b0(o->mpLbBegin, end, &key, o->lbFlag);
@@ -486,7 +493,7 @@ void* cX::FUN_00f3e900(int* p) {
 // ---------------------------------------------------------------------------
 // @ 0x00f3e910
 // ---------------------------------------------------------------------------
-__declspec(noinline) float cX::FUN_00f3e910() {
+float cX::FUN_00f3e910() {
     if (g_disabledFlag) return 0.0f;
     h13c.Clear();
     h15c.Clear();

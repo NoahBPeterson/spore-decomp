@@ -1,1 +1,2 @@
 00515710 nSPSkinner::cPaintVarEvalList::Apply  # dev PDB ?Apply@cPaintVarEvalList@nSPSkinner@@QBEXQAMMABUcSPVector3@@1I@Z (SPSkinnerPaintEval.obj); same callees/switch (kPaintVarMod*) as dev twin 0xcbb9c0
+0041daf0  ??D@YA?AUcSPVector3R@@ABUcSPVector3@@ABUcSPMatrix3@@@Z  # cSPVector3R operator*(const cSPVector3&, const cSPMatrix3&) as declared in s00515710.cpp

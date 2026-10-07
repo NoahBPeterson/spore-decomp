@@ -3,7 +3,7 @@
 0079b150  53  vector<ushort> assign-with-allocator: register allocation (esi/ebx swap)
 0079b1c0  178  uninitialized_copy of UShortVecRec: EH/loop scheduling
 0079b2a0  136  uninitialized_fill_n of UShortVecRec: EH/loop scheduling
-0079b360  163  vector<ushort>::operator=: register allocation (original hoists x.begin/x.end and uses ebp)
+0079b360  163  vector<ushort>::operator=: register allocation (original hoists x.begin/x.end and uses ebp); difftest WEAK (757 valid of 2000, 42.4% coverage: random begin/end pointers give huge memcpy lengths, discarded as faults or import:memcpy); made testable by renaming operator= to CopyFrom (the checker cannot find an operator= by name)
 0079b4b0  87  AddVertex: original keeps temp fields in edi/esi regs; scheduling differs
 0079b520  87  AddEdge: same as AddVertex
 0079b6b0  185  CompileSplitModelElement: frame/scheduling differs (ebp zero reg, loop shape)

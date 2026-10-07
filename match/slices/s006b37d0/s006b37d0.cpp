@@ -167,7 +167,7 @@ done:;
 }
 
 // @ 0x6b4010
-bool SP_SaveNamedResource(Res6* res, KeyRef6* key, const wchar_t* name) {
+bool SP_SaveNamedResource(KeyRef6* key, const wchar_t* name, Res6* res) {
   if (res == 0) return false;
   ResMgr6* mgr = GetResMgr6();
   WStr6 str;

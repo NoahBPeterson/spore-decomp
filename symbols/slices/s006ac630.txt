@@ -2,3 +2,6 @@
 006ad070 SP::RemoveRegistrationCallback  # PDB name
 006acc60 SP::cPropertyManager registry Register  # callee of 006ad010/006ad590 wrappers
 006ace70 SP::cPropertyManager registry Unregister  # callee of 006ad030/006ad050 wrappers
+006ac750 ??_GRegList@@UAEPAXI@Z  # RegList scalar deleting dtor (vtable 0x014093c4 slot 1)
+006ac750 ??_ERegList@@UAEPAXI@Z  # vtable slot 1 (original only has the scalar deleting dtor)
+006ad410 ?Add@RegList@@UAEXPAUcResourceBase@@@Z  # vtable 0x014093c4 slot 0

@@ -18,8 +18,12 @@ struct S962100b { int* op(void*); };        // eastl hash_map<unsigned,AutoRefCo
 struct S693230 { void f(void*, unsigned); }; // hashtable bucket dealloc/copy helper
 struct S620230b { void f(); };               // intrusive_list_base::~intrusive_list_base
 struct S928dc0 { void f(); };                // allocator reset
-struct S928cd0 { void init(int, int, int, int, int); }; // StackAllocator::StackAllocator
-struct S928b00 { void init(int, int, int, int, int); }; // StackAllocator::Init
+struct S928cd0 {
+  void init(int, int, int, int, int);   // 0x00928cd0 StackAllocator::StackAllocator
+};
+struct S928b00 {
+  void init(int, int, int, int, int);   // 0x00928b00 StackAllocator::Init
+};
 struct S928c40 { void f(void*); };
 
 extern void FUN_f47380(void*);     // operator delete(void*)
@@ -117,9 +121,13 @@ extern "C" bool __cdecl ReadResKey(const wchar_t* s, ResKey* key);   // 0x008de0
 extern "C" int  __cdecl ParseTypeName(const wchar_t* s);             // 0x0099a380
 
 struct HNode { uint32_t key; void* value; HNode* next; };
-struct HFind { void find(HNode** out, const uint32_t* key); };       // 0x00645ed0 (hashtable<uint,pair<uint,int>>::find)
+struct HFind {
+  void find(HNode** out, const uint32_t* key);   // 0x00645ed0 (hashtable<uint,pair<uint,int>>::find)
+};
 struct HMap { char pad[4]; HNode** buckets; uint32_t nbuckets; uint32_t count; };   // +4 buckets, +8 bucket count, +0xc count
-struct ObjectMapAlloc { void f(void*, unsigned); };
+struct ObjectMapAlloc {
+  void f(void*, unsigned);   // 0x00693230 hashtable::DoFreeBuckets
+};
 
 struct SerCollection {
   char pad[0x1c];
@@ -135,8 +143,12 @@ struct FactoryMgr { virtual void v0(); virtual void v1(); virtual void v2(); vir
   virtual IUnknown32* Create(uint32_t clsid, uint32_t iid, int a, int b); };            // +0x20
 FactoryMgr* GetFactoryMgr();                                                            // 0x00920090
 
-struct HMapOps { IUnknown32** op(const uint32_t* key); };                // 0x00975d40 operator[]
-struct CollMapAssign { void f(uint32_t key, IUnknown32* obj); };                         // 0x0099b5a0
+struct HMapOps {
+  IUnknown32** op(const uint32_t* key);   // 0x00975d40 operator[]
+};
+struct CollMapAssign {
+  void f(uint32_t key, IUnknown32* obj);   // 0x0099b5a0
+};
 
 struct XmlReaderState {
   const void* vptr;                                      // +0

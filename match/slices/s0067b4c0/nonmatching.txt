@@ -1,6 +1,6 @@
-0067bb80  60  hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin)
+0067bb80  60  hint-list teardown: complete behaviour; cl swaps the this/begin/end register roles (edi=this vs original ebx=this, ebp=begin); difftest PASS
 0067c3b0  91  next-hint lookup: complete behaviour; list walk + UpdateHints call scheduling/register use differs
 0067c420  37  SetFlag: complete behaviour; cl materialises the constant 2 into eax and compares memory-to-reg instead of loading [this+0x48] first
 0067b4c0  939  ParseHints: complete (clears list, reads each hint property list, builds cHint); not exact: ref/h register roles (edi/ebx/ebp) and merged pl-null tests differ
 0067ba10  13  InitHints: complete; exact except the window vtable[0x104] call schedules edx load before lea ecx
-0067bc30  1461  SetVisibility: complete (layout show/hide, text split at <hinticon>, icon, flash window); not exact: register allocation (ebx/ebp roles) and spill slots differ
+0067bc30  1461  SetVisibility: complete (layout show/hide, text split at <hinticon>, icon, flash window); not exact: register allocation (ebx/ebp roles) and spill slots differ; difftest WEAK (170 valid, 6.4% cov: real cSPUILayout::SetVisibility faults on random layouts)

@@ -1,3 +1,3 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast)
 007de7d0  851  SP::cSmoothCameraController::Reset; complete (all keyboard/lerp defaults, 7 local float vectors, 4 vtable setters, vector clears, camera-position invalidation, refresh); frame size now equal, only constant-register choice (xmm1 vs xmm2) and store/load scheduling differ
-007df230  16  SP::cSmoothCameraController::SetPitchAngles; complete, only the mpEnd-before-value load order in the push_back loop differs
+007df230  16  SP::cSmoothCameraController::SetPitchAngles; complete, only the mpEnd-before-value load order in the push_back loop differs; difftest WEAK (54% coverage, no mismatch)

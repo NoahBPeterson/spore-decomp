@@ -1,6 +1,6 @@
-00a31f20 496 DoCommandMainThread: complete; stack slot of the two stack messages not shared, mask-or order folded
+00a31f20 496 DoCommandMainThread: complete; stack slot of the two stack messages not shared, mask-or order folded; difftest WEAK (2000 valid, 27% cov: GetServer() is null in emulation, so the message paths are unreached); ListB::Push annotated
 00a32220 250 fixed_hash_map<uint,Subscription,100,101,1,...> ctor: complete; no EH frame, local allocator-struct layout differs
 00a32320 149 swap of two hash containers via 1 KB temp: complete; callee conventions guessed, no EH
-00a323e0 285 hash_map<uint,fixed_hash_map<uint,float,20,...>>::operator[]: complete; node temp layout and EH differ
+00a323e0 285 hash_map<uint,fixed_hash_map<uint,float,20,...>>::operator[]: complete; node temp layout and EH differ; difftest PASS after fix (found/end test was inverted; mapped_type() temporary and its bucket release were missing)
 00a32550 2465 System dtor body (~40 EASTL fixed containers): complete via templated pool/free helpers; not byte-exact
-00a32ea0 111 System::SetOutputProperty: complete; register allocation and param-slot reuse differ
+00a32ea0 111 System::SetOutputProperty: complete; register allocation and param-slot reuse differ; difftest PASS

@@ -217,7 +217,7 @@ struct IGrid {
 
 extern void* GetAllocator();                                                      // 0x009512c0
 extern void* AllocAligned(unsigned size, int align, const char* name, void* a);   // 0x009512d0
-extern IBtn* CreateDefaultButton(int a, int b, int c);                            // WinButton::CreateDefault
+extern IBtn* CreateDefaultButton(int a, int b, int c);                            // 0x009671c0 WinButton::CreateDefault
 extern const char kTextEditName[];                                                // "UI/UI/WinTextEdit"
 extern const char kStyleStr[];                                                    // 0x015a4361
 extern const char kBtnTextA[];                                                    // 0x01419de8
@@ -225,9 +225,11 @@ extern const char kBtnTextB[];                                                  
 extern const char kSprintfFmt[];                                                  // 0x013fcac8
 extern const float kQuarter;                                                      // 0x013eb8a0
 extern const float kRowAdvance;                                                   // 0x01419dd4 (210)
-extern const float kRect2W, kRect2H;                                              // 0x13eecd8 / 0x1419d38
+extern const float kRect2W;                                                       // 0x013eecd8
+extern const float kRect2H;                                                       // 0x01419d38
 extern const float kRect1W;                                                       // 0x01419d40 (60)
-extern const float kEditW, kEditH;                                                // 0x01477fbc / 0x013eecd8
+extern const float kEditW;                                                        // 0x01477fbc
+extern const float kEditH;                                                        // 0x013eecd8
 extern const float kSpin80;                                                       // 0x014763c4
 extern const float kBtn2Y;                                                        // 0x0140c7a4
 extern const float kAdv30;                                                        // 0x014853bc
@@ -255,7 +257,8 @@ struct EString16 {  // eastl::string16
 };
 extern EString16* ConvertToString16(EString16* out, const EString* in);          // 0x0093c6d0
 
-template <class T> struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x14 bytes
+template <class T>
+struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x14 bytes
   T** b;
   T** e;
   T** cap;
@@ -264,7 +267,7 @@ template <class T> struct SpVec {  // eastl::vector<T*, sp_vector_allocator>, 0x
     if (b == e) return 0;
     return (unsigned)(e - b);
   }
-  void Grow(T** pos, T** val);
+  void Grow(T** pos, T** val);   // vector<T*>::DoInsertValue; per-T addresses in symbols/slices/s00825930.txt
   void push_back(T* v) {
     T* tmp = v;
     T** at = e;

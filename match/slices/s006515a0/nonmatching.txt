@@ -1,4 +1,4 @@
-00651990  8  complete; ctor matches except scheduling of one mov eax,1 vs byte store
+00651990  8  complete; ctor matches except scheduling of one mov eax,1 vs byte store; difftest PASS (400 valid, 100% coverage) after mapping the GB1-3 base and cSPUIAssetGrid vtables in symbols/slices/s006515a0.txt
 00651f30  120  complete; float height subss operand load order and branch layout differ
 00651ff0  851  complete; xmm/Vec2 temp slot layout and register scheduling differ
 006524a0  5  complete; xmm0/xmm1 register choice in (r-l)+l; difftest WEAK (186 valid, 19% coverage, no mismatch) after fixing the checker's symbol lookup: the in-class '// @ 0x006524a0' comment made it test the constructor, so symbols/slices/s006515a0.txt now names cSPUIAssetGrid::UpdateScrollRegion

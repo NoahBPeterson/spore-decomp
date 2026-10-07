@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-006e51b0  572  SP::SHFromCubeMap complete (6 face prefilter, renderer/model-manager calls, coefficient dump); stack frame/EH layout and fprintf arg proxy differ
-006e5520  98  SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ
+006e51b0  581  SP::SHFromCubeMap complete (6 face prefilter, renderer/model-manager calls, coefficient dump); stack frame/EH layout and fprintf arg proxy differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /GS- (original has no stack cookie); sqrt now summed in double as the original does on x87
+006e5520  98  SP::DirectShaderDispatchCallback complete; register allocation and if/else branch order of the texture-bind loop differ; difftest PASS (g_spriteDispatch mapped to 0x16fa604)
 006e56b0  84  ShaderState dtor complete; original reloads vs[i]/ps[i] after the null test (cmp mem,0) where mine keeps it in a register
 006e5870  311  Float3 vector fill-insert complete (EASTL DoInsertValues); copy-helper arg scheduling differs
 006e5a30  170  uint8 fixed_vector fill-insert complete; register/branch layout differs

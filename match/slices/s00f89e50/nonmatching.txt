@@ -1,1 +1,1 @@
-00f89e50 3962 complete; 4388 vs 4480 bytes, frame 0x28c vs 0x29c, face*size operand order and this/&mFaceSize register allocation differ
+00f89e50 3962 complete; 4388 vs 4480 bytes, frame 0x28c vs 0x29c, face*size operand order and this/&mFaceSize register allocation differ; difftest PASS (--inputs 3000, 73% coverage; WEAK 34% at the default 400)

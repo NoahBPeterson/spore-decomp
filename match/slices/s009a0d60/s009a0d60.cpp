@@ -367,7 +367,7 @@ struct Gen {
 
 extern "C" void* __cdecl memset(void*, int, unsigned int);
 extern "C" void FUN_009b1d80(void* buf, uint* outCount, void* ctx, void* ctxEntry, void* rec);
-extern void InitChannelStatic(BindObj* b, int index, void* p3);   // 0x0099c7b0 (separate slice)
+extern void FUN_0099c7b0(BindObj* b, int index, void* p3);   // InitChannel (separate slice s0099bf80)
 
 // ===========================================================================
 // @ 0x009a1250  emit the bind records for the current variant selection
@@ -398,7 +398,7 @@ static void __stdcall EmitVariantS(Gen* g, void* p3) {
               memset(&buf[1], 0, 0x3f8);
               FUN_009b1d80(buf, &outCount, g->mpCtx,
                            (char*)g->mpCtx->mpEntries + chosen * 0x468, (char*)rec + 0x8c);
-              InitChannelStatic(g->mpBind, (int)r, p3);
+              FUN_0099c7b0(g->mpBind, (int)r, p3);
               uint k = 0;
               if (outCount != 0) {
                 do {
@@ -626,7 +626,7 @@ void FUN_009a1670(int* obj, float f, char p3, char p4, uint p5, uint p6, uint p7
 }
 
 // ===========================================================================
-// @ 0x009a1770  Vec8::resize(n): pad with {0xffff, -1} or erase the tail
+// 0x009a1770  Vec8::resize(n): pad with {0xffff, -1} or erase the tail
 // ===========================================================================
 struct Vec8b {
   U64Pair* mpBegin;    // +0
@@ -634,17 +634,18 @@ struct Vec8b {
   U64Pair* mpCap;      // +8
   uint size() const { return (uint)(mpEnd - mpBegin); }
   void resize(uint n);
+  void insert(U64Pair* pos, uint count, const void* val);   // 0x00abb660
+  void erase(U64Pair* first, U64Pair* last);                // 0x00d018d0
 };
-extern "C" void __stdcall FUN_00abb660(void* end, uint count, const void* val);
-extern "C" void __stdcall FUN_00d018d0(void* pos, void* end);
 struct PadVal { uint16_t a; uint16_t pad; int b; PadVal(uint16_t x, int y) { a = x; b = y; } };
+// @ 0x009a1770
 void Vec8b::resize(uint n) {
   if (n > size()) {
     PadVal v(0xffff, -1);
-    FUN_00abb660(mpEnd, n - size(), &v);
+    insert(mpEnd, n - size(), &v);
     return;
   }
-  FUN_00d018d0(mpBegin + n, mpEnd);
+  erase(mpBegin + n, mpEnd);
 }
 
 // ===========================================================================
@@ -733,7 +734,7 @@ void __stdcall FUN_009a1b00(SlotObj* first, SlotObj* last) {
 }
 
 // ===========================================================================
-// @ 0x009a1c60  build the per-key variant lists
+// 0x009a1c60  build the per-key variant lists
 // ===========================================================================
 extern "C" uint FUN_009b2340(void* buf, int mask, void* ctx, void* rec, void* p, int one);
 struct IntVecI {
@@ -744,6 +745,7 @@ struct IntVecI {
     mpEnd = mpEnd - (last - first);
   }
 };
+// @ 0x009a1c60
 bool __stdcall FUN_009a1c60(Gen* g, void* p2) {
   uint buf[0x100];
   uint i = 0;

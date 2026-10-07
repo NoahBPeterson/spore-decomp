@@ -6,7 +6,7 @@
 #include <intrin.h>
 #include "types.h"
 
-void __cdecl operator_delete__(void* p);
+void __cdecl operator_delete__(void* p);   // 0x00f47380
 void* __cdecl operator_new(unsigned n, const char* name, int a, int b, const char* file, int line);
 struct IAlloc {
     virtual void v0();
@@ -14,7 +14,7 @@ struct IAlloc {
     virtual void* AllocSimple(unsigned sz, const char* name, unsigned flags);
     virtual void Free(void* p, unsigned sz);
 };
-IAlloc* GetDefaultAllocator();   // EA::Allocator::ICoreAllocator::GetDefaultAllocator
+IAlloc* GetDefaultAllocator();   // 0x00925cb0 EA::Allocator::ICoreAllocator::GetDefaultAllocator
 struct TagT {};
 
 struct IUnk {
@@ -329,8 +329,8 @@ struct UMap {
         mpCap = 0;
     }
     unsigned erase(unsigned* key);
-    ResourceRequest** operator[](unsigned* key);
-    void insert(UPair* pos, UPair* val);   // 0x009970e0
+    ResourceRequest** GetOrInsert(unsigned* key);   // vector_map operator[] (named so the checker can find it)
+    UPair* insert(UPair* pos, UPair* val);   // 0x009970e0
 };
 
 // @ 0x008ff9b0
@@ -358,7 +358,7 @@ unsigned UMap::erase(unsigned* key)
 }
 
 // @ 0x008ffdf0
-ResourceRequest** UMap::operator[](unsigned* key)
+ResourceRequest** UMap::GetOrInsert(unsigned* key)
 {
     UPair* b = mpBegin;
     UPair* e = mpEnd;
@@ -373,7 +373,7 @@ ResourceRequest** UMap::operator[](unsigned* key)
         else
             it = LowerBound(b, it, &val.first, mFlag);
         if (it == e || k < it->first)
-            insert(it, &val);
+            it = insert(it, &val);
     }
     return &it->second;
 }
@@ -824,7 +824,7 @@ bool ResourceProvider::Request(unsigned* outId, const uint16_t* url, ReqCb cb, v
     r->mpCallback = cb;
     r->mpContext = ctx;
     *outId = r->mRequestId;
-    *mRequests[outId] = r;
+    *mRequests.GetOrInsert(outId) = r;
     VOut bv;
     BuildVec(&bv, r->mpURL, VecVal());
     WKV kv;

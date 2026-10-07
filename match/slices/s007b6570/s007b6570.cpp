@@ -680,6 +680,12 @@ AbilityB::~AbilityB()
 #include <math.h>
 struct Vector3 {
     float x, y, z;
+    Vector3() {}
+    Vector3(float a, float b, float c) : x(a), y(b), z(c) {}
+    Vector3 operator+(const Vector3& b) const { return Vector3(x + b.x, y + b.y, z + b.z); }
+    Vector3 operator-(const Vector3& b) const { return Vector3(x - b.x, y - b.y, z - b.z); }
+    Vector3 operator*(float s) const { return Vector3(x * s, y * s, z * s); }
+    Vector3& operator+=(const Vector3& b) { x += b.x; y += b.y; z += b.z; return *this; }
 };
 struct Matrix3 {
     Vector3 row0, row1, row2;
@@ -708,7 +714,9 @@ struct Mat16 { float m[16]; };
 struct SphereVec { Sphere6* begin; Sphere6* end; };
 
 extern const Matrix3 g_identityBasis;                          // 0x1635788
-extern float g_defaultPosX, g_defaultPosY, g_defaultPosZ;      // 0x1635648..50
+extern float g_defaultPosX;      // 0x1635648
+extern float g_defaultPosY;      // 0x163564c
+extern float g_defaultPosZ;      // 0x1635650
 extern float g_13ec4b4, g_13ec4b8, g_140ffc8, g_13eb960, g_140f7ac, g_1471064;
 
 struct FitJob {
@@ -720,28 +728,27 @@ struct FitJob {
 char FitJob::Fit6d50(SphereVec* v, cViewer* vw, const float* c, const float* off, float* fov)
 {
     float fv = *fov;
+    Sphere6 s;
+    XForm xf;
     vw->SetViewAngleY(fv);
     cFrustumCull cull1;
-    {
-        Mat16 vp = *(Mat16*)vw->viewProj;
-        cull1.Setup(vp.m);
-    }
+    Mat16 vp1 = *(Mat16*)vw->viewProj;
+    cull1.Setup(vp1.m);
     int n = (int)(v->end - v->begin);
     for (int i = 0; i < n; i++) {
-        Sphere6 s = v->begin[i];
+        s = v->begin[i];
         if (cull1.FrustumTestSphere(&s.c.x, &s.e.x, 0) >= 0) {
-            XForm xf;
             xf.flags = 0;
             xf.rev = 0;
             xf.pos.x = g_defaultPosX;
             xf.pos.y = g_defaultPosY;
             xf.pos.z = g_defaultPosZ;
-            xf.scale = 1.0f;
-            xf.m = g_identityBasis;
+            xf.scale = g_1485720;
+            xf.m.row0 = Vector3(g_identityBasis.row0.x, g_identityBasis.row0.y, g_identityBasis.row0.z);
+    xf.m.row1 = Vector3(g_identityBasis.row1.x, g_identityBasis.row1.y, g_identityBasis.row1.z);
+    xf.m.row2 = Vector3(g_identityBasis.row2.x, g_identityBasis.row2.y, g_identityBasis.row2.z);
             vw->F40f0(&xf);
-            xf.pos.x = xf.pos.x - off[0];
-            xf.pos.y = xf.pos.y - off[1];
-            xf.pos.z = xf.pos.z - off[2];
+            xf.pos = xf.pos - *(const Vector3*)off;
             xf.flags |= 4;
             xf.rev++;
             vw->F4d00(&xf);
@@ -750,33 +757,30 @@ char FitJob::Fit6d50(SphereVec* v, cViewer* vw, const float* c, const float* off
     }
     vw->SetViewAngleY(fv * g_13ec4b4);
     cFrustumCull cull2;
-    {
-        Mat16 vp = *(Mat16*)vw->viewProj;
-        cull2.Setup(vp.m);
-    }
+    Mat16 vp2 = *(Mat16*)vw->viewProj;
+    cull2.Setup(vp2.m);
     n = (int)(v->end - v->begin);
     bool all = true;
     for (int i = 0; i < n; i++) {
-        Sphere6 s = v->begin[i];
+        s = v->begin[i];
         if (cull2.FrustumTestSphere(&s.c.x, &s.e.x, 0) >= 0)
             all = false;
     }
     if (!all)
         return 1;
-    XForm xf;
     xf.flags = 0;
     xf.rev = 0;
     xf.pos.x = g_defaultPosX;
     xf.pos.y = g_defaultPosY;
     xf.pos.z = g_defaultPosZ;
-    xf.scale = 1.0f;
-    xf.m = g_identityBasis;
+    xf.scale = g_1485720;
+    xf.m.row0 = Vector3(g_identityBasis.row0.x, g_identityBasis.row0.y, g_identityBasis.row0.z);
+    xf.m.row1 = Vector3(g_identityBasis.row1.x, g_identityBasis.row1.y, g_identityBasis.row1.z);
+    xf.m.row2 = Vector3(g_identityBasis.row2.x, g_identityBasis.row2.y, g_identityBasis.row2.z);
     vw->F40f0(&xf);
     xf.flags |= 4;
     xf.rev++;
-    xf.pos.x = xf.pos.x + off[0] * g_1471064;
-    xf.pos.y = xf.pos.y + off[1] * g_1471064;
-    xf.pos.z = xf.pos.z + off[2] * g_1471064;
+    xf.pos += *(const Vector3*)off * g_1471064;
     vw->F4d00(&xf);
     return 0;
 }

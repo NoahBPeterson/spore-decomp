@@ -76,7 +76,7 @@ struct Lighting : RefObj {
 
 struct cCommandBase {
     int cb[3];
-    cCommandBase();
+    cCommandBase();                                         // 0x0083c800
     virtual ~cCommandBase() {}
 };
 struct cViewManagerCommand : cCommandBase { virtual void Run() {} };
@@ -105,18 +105,20 @@ struct ViewerSetup2 {
 struct RasterInfo { u32 handle; u32 pad[2]; u16 w; u16 h; };
 struct cSPEditorPhysicsWorld {
     char pad[0x174];
-    cSPEditorPhysicsWorld();
-    void Init(int);
-    RasterInfo* GetRasterInfo();
+    cSPEditorPhysicsWorld();                                // 0x007c3f70
+    void Init(int);                                         // 0x007c4dd0
+    RasterInfo* GetRasterInfo();                            // 0x007c3cd0
 };
-struct InitArea { void Init(int); };
+struct InitArea {
+    void Init(int);                                         // 0x00c77b60
+};
 struct V { u32 a, b; };
 struct ValueMap {
     char pad[0x34];
-    V& operator[](const u32& key);
+    V& operator[](const u32& key);                          // 0x005526a0
 };
 
-void* __cdecl operator_new(unsigned, const char*, int, int, int, int);
+void* __cdecl operator_new(unsigned, const char*, int, int, int, int);   // 0x00f473a0
 inline void* operator new(unsigned n, const char* name, int a, int b, int c, int d) {
     return operator_new(n, name, a, b, c, d);
 }
@@ -154,7 +156,9 @@ struct B {
 
     void Setup();
 };
-struct Outer : A0, C0, B { void Prepare(); };
+struct Outer : A0, C0, B {
+    void Prepare();                                         // 0x00b39b70
+};
 
 
 static inline void AssignRef(RefObj*& dst, RefObj* src) {

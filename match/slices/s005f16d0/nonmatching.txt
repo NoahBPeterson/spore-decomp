@@ -1,4 +1,4 @@
-005f16d0  259  complete DoMessage; cSPMessage ctor inlined in one arm and out-of-line in the other, item null check kept in original
-005f1960  661  complete Init; local frame sharing (sym/spill slot at esp+0x10) and tooltip block scheduling differ
+005f16d0  259  complete DoMessage; cSPMessage ctor inlined in one arm and out-of-line in the other, item null check kept in original; difftest WEAK (16.5% coverage: message-type/ID guards rarely hit by random inputs)
+005f1960  661  complete Init; local frame sharing (sym/spill slot at esp+0x10) and tooltip block scheduling differ; difftest WEAK (1.2% coverage: inputs past the null-parent early return fault in the runtime allocator/singletons)
 005f2390  209  complete; x87-free SSE loads of the window rect and compare/register order differ
 005f24e0  304  complete; register allocation (ebp/ebx swap, spilled factory result) differs

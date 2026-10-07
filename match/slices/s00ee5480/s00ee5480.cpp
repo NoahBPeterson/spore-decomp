@@ -213,7 +213,9 @@ struct cScenarioResource {
 };
 
 struct cScenarioTerrainUI { void Refresh31d0(); };      // 0x00ee31d0 receiver
-struct cScenarioEditHistory { void Undo7a80(); };       // 0x00ef7a80 receiver
+struct cScenarioEditHistory {
+    void Undo7a80();                                     // 0x00ef7a80
+};
 struct cScenarioEditView {
     uint32_t pad00[5];
     struct Sub { void Update39a0(uint32_t id); }* mpSub;  // +0x14 (0x00ed39a0)
@@ -248,8 +250,8 @@ bool GetDropTarget(int* target);                                                
 int GetGoalIndex(IWindow* window);                                                  // 0x00edcce0
 void Checklist_PropertyDispatcher(cScenarioData* d, cScenarioAct* a, uint32_t id, int target, int goal); // 0x00ee0eb0
 bool CanDropGoal(cScenarioAct* a, uint32_t id, int target, int goal);               // 0x00eddf30
-void CenterWindow(IWindow* window, Point p);
-void ReleaseWindowRef(IWindow* window, bool b);                                      // 0x00e12f80                                        // 0x00806ca0
+void CenterWindow(IWindow* window, Point p);                                        // 0x00806ca0
+void ReleaseWindowRef(IWindow* window, bool b);                                      // 0x00e12f80
 bool IsSecondaryButton(IWindow* window);                                            // 0x00edce00
 void ShowModePicker(uint32_t id, IScriptHandler* h, bool secondary, IWindow* w);    // 0x00edfcc0
 IWindow* FindChildByID(IWindow* window, uint32_t id);                               // 0x00edc9e0

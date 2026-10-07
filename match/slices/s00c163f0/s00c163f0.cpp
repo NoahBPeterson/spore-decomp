@@ -177,7 +177,8 @@ template <class K, class V> struct hashtable_iterator {
     hashtable_iterator& operator++() { increment(); return *this; }
     bool operator!=(const hashtable_iterator& x) const { return mpNode != x.mpNode; }
 };
-template <class K, class V> struct sp_fixed_hash_map {
+template <class K, class V>
+struct sp_fixed_hash_map {
     typedef hashtable_iterator<K, V> iterator;
     uint32_t mHashFunction;
     hash_node<K, V>** mpBucketArray;

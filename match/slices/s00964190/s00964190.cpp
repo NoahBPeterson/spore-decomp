@@ -24,12 +24,16 @@ struct DropShadow {
     void SetMode2(uint32_t);               // 0x00830150
     void F96e740(uint32_t h, uint32_t a, uint32_t b, int r, uint32_t c, uint32_t ch, bool flag);  // 0x0096e740
 };
-struct LineLayout { void Clear(int all); };                                       // 0x0089cbc0
+struct LineLayout {
+    void Clear(int all);  // 0x0089cbc0
+};
 struct Typesetter {
     int  F89dc00(const uint16_t* text, int len, float l, float t, float r, float b, void* style, void* layout, int flags);  // 0x0089dc00
     void LayoutLine(const uint16_t* text, int len, float x, float y, void* style);  // 0x0089db20
 };
-struct StyleManager { void* GetStyle(uint32_t id, int arg); };                    // 0x00894670
+struct StyleManager {
+    void* GetStyle(uint32_t id, int arg);  // 0x00894670
+};
 StyleManager* __cdecl GetStyleManager(bool create);                              // 0x00885bd0
 struct RenderContext { uint32_t Begin2D(int arg); };                              // 0x0095bc10
 struct IMgr2;
@@ -364,7 +368,7 @@ bool WB::OnKeyUp(int a, int b, int c)
     return true;
 }
 
-// ---- 0x009643c0 ----
+// @ 0x009643c0
 bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8) || (f & 0x30))
@@ -385,7 +389,7 @@ bool WB::OnMouseDown(int a, int b, int c, uint32_t f)
     return true;
 }
 
-// ---- 0x00964450 ----
+// @ 0x00964450
 bool WB::OnMouseUp(int a, int b, int c, uint32_t f)
 {
     if (!(f & 8)) {
@@ -718,7 +722,7 @@ void ZoomWin::F964bd0(Point2 pt)
     F960fe0(pt);
 }
 
-// ---- 0x00964c90 ----
+// @ 0x00964c90
 bool WB::OnRebuild(RenderContext* rc)
 {
     P()->V9c();
@@ -776,7 +780,7 @@ bool WB::OnRebuild(RenderContext* rc)
     return true;
 }
 
-// ---- 0x00964f10 ----
+// @ 0x00964f10
 bool WB::CalcSize(int a, float* out)
 {
     if (a != 0)

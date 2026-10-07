@@ -2,3 +2,5 @@
 00825fc0 routine (unlabeled)
 00826290 routine (unlabeled)
 00826560 SP::cPropertyUI destructor  # decomp index
+00820bb0 ?Grow@?$SpVec@UITE@@@@QAEXPAPAUITE@@0@Z  # callee: vector<ITE*>::DoInsertValue (mTextEdit push_back)
+00630b30 ?Grow@?$SpVec@UIBtn@@@@QAEXPAPAUIBtn@@0@Z  # callee: vector<IBtn*>::DoInsertValue (mButton push_back)

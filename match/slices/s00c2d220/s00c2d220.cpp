@@ -143,16 +143,18 @@ struct Loco {
     virtual void pad53();
     virtual void pad54();
     virtual void V_dc(void* p);                      // slot 55 (+0xdc)
-    Vector3* GetVelocity();
-    bool IsNearGoal();
-    void UpdateSteeringForMovementStyle();
+    Vector3* GetVelocity();   // 0xd20610
+    bool IsNearGoal();   // 0xc42e20
+    void UpdateSteeringForMovementStyle();   // 0xc44610
     St* GetState();                                  // 0xC41EC0
     bool Within(float a, float b);                   // 0xC41ED0
-    float* F421f0();
-    void F44080(Vector3* out);
+    float* F421f0();   // 0xc421f0
+    void F44080(Vector3* out);   // 0xc44080
 };
 
-struct Sub15b8 { void F9ce740(float f); };
+struct Sub15b8 {
+    void F9ce740(float f);   // 0x9ce740
+};
 
 struct Anim {
     virtual void pad0();
@@ -179,7 +181,7 @@ struct Anim {
     virtual void pad21();
     virtual void Q58(int* out, int a, int b, void** p);   // slot 22 (+0x58)
     virtual bool Q5c(void* p, float* den, float* num);    // slot 23 (+0x5c)
-    bool IsOrientStartAnim(int id);
+    bool IsOrientStartAnim(int id);   // 0xa02710
 };
 
 struct Creature {
@@ -206,31 +208,37 @@ struct Ctx {
 
 struct Info2b110 { uint32_t pad[1]; int f4; float f8; };
 struct Info532b0 { uint32_t pad[0x33]; int fcc; };
-struct ArrObj { void* p; uint32_t rest[0x1c]; ArrObj(); ~ArrObj() { if (p && ((int*)p)[-1] != 0) operator delete[](p); } };
+void operator delete[](void* p);   // 0x00f47380
+struct ArrObj {
+    void* p;
+    uint32_t rest[0x1c];
+    ArrObj();   // 0xac9850
+    ~ArrObj() { if (p && ((int*)p)[-1] != 0) operator delete[](p); }
+};
 
 extern uint8_t g_169e381, g_169e37e, g_169e37f;
 extern float g_169e384, g_169e388, g_169e38c, g_169e390;
 extern Vector3 g_168dd78;
 
-unsigned GetCurrentGameMode();
-void F2a190(Ctx* ctx, Creature* c);
-void F28290(Creature* c, Vector3* p, float* dist);
-Info532b0* F0b532b0(Loco* l);
-char F28870(Ctx* ctx, Creature* c, Vector3* pos, St* st);
-Info2b110* F2b110(Creature* c);
-void F0cadb50(Info2b110* p);
-void F289b0(Ctx* ctx, Creature* c, St* st, bool nearFlag, float dist);
-char F2c7b0(Creature* c, St* st, Vector3* heading, float* scale, const int& style);
-void F2cac0(Creature* c, Vector3* heading, St* st, bool* nearFlag, float* dist, float* scale, const int& style);
-char F283d0(Ctx* ctx, Creature* c);
-void F28700(Ctx* ctx, Creature* c, St* st, Vector3* heading, float dist, float st20, float* speed);
-float F29b10(Creature* c, Vector3* heading, Vector3* goal, float f10, float speed, float turn, int flag);
-float F29d80(Vector3* heading, float f10, float speed, float turn);
-char F28b40(Ctx* ctx, Creature* c, Vector3* dir, char f7c);
-void F29940(Creature* c);
-void normalized_safe(Vector3* out, const Vector3* in);
-char F41dd30(const Vector3* v, const Vector3* ref);
-Vector3* Vector3_Normalize(Vector3* out, const Vector3* in);
+unsigned GetCurrentGameMode();   // 0xb5b800
+void F2a190(Ctx* ctx, Creature* c);   // 0xc2a190
+void F28290(Creature* c, Vector3* p, float* dist);   // 0xc28290
+Info532b0* F0b532b0(Loco* l);   // 0xb532b0
+char F28870(Ctx* ctx, Creature* c, Vector3* pos, St* st);   // 0xc28870
+Info2b110* F2b110(Creature* c);   // 0xc2b110
+void F0cadb50(Info2b110* p);   // 0xcadb50
+void F289b0(Ctx* ctx, Creature* c, St* st, bool nearFlag, float dist);   // 0xc289b0
+char F2c7b0(Creature* c, St* st, Vector3* heading, float* scale, const int& style);   // 0xc2c7b0
+void F2cac0(Creature* c, Vector3* heading, St* st, bool* nearFlag, float* dist, float* scale, const int& style);   // 0xc2cac0
+char F283d0(Ctx* ctx, Creature* c);   // 0xc283d0
+void F28700(Ctx* ctx, Creature* c, St* st, Vector3* heading, float dist, float st20, float* speed);   // 0xc28700
+float F29b10(Creature* c, Vector3* heading, Vector3* goal, float f10, float speed, float turn, int flag);   // 0xc29b10
+float F29d80(Vector3* heading, float f10, float speed, float turn);   // 0xc29d80
+char F28b40(Ctx* ctx, Creature* c, Vector3* dir, char f7c);   // 0xc28b40
+void F29940(Creature* c);   // 0xc29940
+void normalized_safe(Vector3* out, const Vector3* in);   // 0x449c20
+char F41dd30(const Vector3* v, const Vector3* ref);   // 0x41dd30
+Vector3* Vector3_Normalize(Vector3* out, const Vector3* in);   // 0x436ce0
 
 // @ 0xC2D220
 void __stdcall F00c2d220(Ctx* ctx)

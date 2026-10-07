@@ -246,7 +246,7 @@ struct LogFilterGroupLevels : ILogFilter {
     ILogFilter* Clone();
 };
 extern char g_empty_01667bac[];
-extern char g_vtbl_LogFilterGroupLevels[];
+extern char g_vtbl_LogFilterGroupLevels[];  // 0x0143dd9c
 
 // @ 0x00924600
 void LogFilterGroupLevels::AddGroupLevel(const char* group, int level) {

@@ -3,7 +3,7 @@
 00924600  ~140 LogFilterGroupLevels::AddGroupLevel: complete; this/group register swap, DoInsertValue's 3rd arg is a stack-slot-reuse bool in the original
 009246c0  ~110 LogFilterGroupLevels::Clone: complete; inline rbtree ctor store order/zero-register differs, extra push ecx slot
 009248f0  ~250 Server::AddLogReporter: complete; ebp mutex-pointer spill/reload pattern differs
-00924bd0  7    Server::~Server: complete; ebx/edi swap for the mutex/vector pointers
+00924bd0  7    Server::~Server: complete; ebx/edi swap for the mutex/vector pointers ; difftest PASS (after mapping the IServer/ITracerBase base vtables to 0x013eb938 in symbols/slices/s009245b0.txt)
 00924c60  48   FString::push_back: complete; eastl::max temp/register layout differs
 00924d10  ~50  LogFormatterSimple::FormatRecord: complete; register allocation (ebx/ebp) and size() load order
 00924d90  ~340 LogFormatterFancy::FormatRecord: complete; strlen+end-pointer fold (dec eax vs sub/lea) and register allocation differ

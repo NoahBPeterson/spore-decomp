@@ -53,8 +53,10 @@ struct Plant : RefObj {
     void __thiscall SetPlantFlag(bool b);       // 0xc6ace0
 };
 
-struct IRefVec { RefObj** begin; RefObj** end; RefObj** cap;
-    void __thiscall Append(RefObj** where, uint32_t n, RefObj** val); };   // 0xbabb70
+struct IRefVec {
+    RefObj** begin; RefObj** end; RefObj** cap;
+    void __thiscall Append(RefObj** where, uint32_t n, RefObj** val);      // 0xbabb70
+};
 
 // hashtable node of the tile map (value starts at +4)
 struct TileNode {
@@ -133,7 +135,9 @@ cTerrainCameraController* GetTerrainCameraController();             // 0xb3d280
 cPlanet*          GetActivePlanet();                                // 0x1021260
 void*             GetCurrentGameMode();                             // 0xb5b800
 void*             __stdcall GetSpeciesManagerFor(void* key);        // 0x401090
-struct SpeciesManager { void* __thiscall GetProfile(); };           // 0x4df550
+struct SpeciesManager {
+    void* __thiscall GetProfile();                                   // 0x4df550
+};
 void __cdecl operator_delete_array(void* p);                        // 0xf47380
 
 extern Vector3 g_InvalidPos;        // 0x167a390

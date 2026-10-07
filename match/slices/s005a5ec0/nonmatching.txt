@@ -1,3 +1,3 @@
 005a6e00  22  Clamp01 free function: complete; original clamps with maxss/minss, cl 15.00 emits comiss branches
 005a5ec0  1027  cSPEditorColorPicker::Init: complete (swatch creation, custom/default swatches, colour/HSL); frame 0x30 vs 0x1c, scheduling differs
-005a63d0  2159  cSPColorSwatch::Update: complete (timers, glow, expansion grid, owner transfer); register/frame shape differs
+005a63d0  2159  cSPColorSwatch::Update: complete (timers, glow, expansion grid, owner transfer); register/frame shape differs; difftest WEAK (1065/2000 valid, 37.4% coverage; BoundingBoxLite::Renderer annotation split)

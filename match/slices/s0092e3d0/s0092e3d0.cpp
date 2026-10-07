@@ -14,8 +14,8 @@ extern "C" int64_t __stdcall _allmul(int, int, int, int);
 // ---------------------------------------------------------------------------------------------
 struct DateTime {
     int64_t mnSeconds;
-    int  GetParameter(int which);
-    void SetDate(int year, int month, int day, int hour, int minute, int second);
+    int  GetParameter(int which);   // 0x0092df80
+    void SetDate(int year, int month, int day, int hour, int minute, int second);   // 0x0092e200
     void Set(int utc);
     void Add(int unit, int amount);
 };
@@ -111,7 +111,9 @@ __declspec(noinline) static int64_t GetFileTimeEpoch() {
 
 // @ 0x0092e6e0  FILETIME -> seconds since 1970 (epoch computed once)
 static int64_t FileTimeToUnix(const FILETIME* ft) {
-    int64_t secs = _alldiv(ft->dwLowDateTime, ft->dwHighDateTime, 10000000, 0);
+    DWORD lo = ft->dwLowDateTime;
+    DWORD hi = ft->dwHighDateTime;
+    int64_t secs = _alldiv(lo, hi, 10000000, 0);
     static int64_t sEpoch = GetFileTimeEpoch();
     return secs - sEpoch;
 }
@@ -137,7 +139,7 @@ struct EntryFindData {
 void  EnsureTrailingPathSeparator(wchar_t* path, int len);
 void  ConcatenatePathComponents(wchar_t* out, const wchar_t* dir, const wchar_t* name);
 void* operator new(unsigned, const char*, int, int, int, int);
-void  operator delete[](void*);
+void  operator delete[](void*);   // 0x00f47380
 
 static inline void CopyW(wchar_t* d, const wchar_t* s) {
     do {
@@ -276,7 +278,7 @@ static inline wchar_t* CharTypeMoveBackward(const wchar_t* first, const wchar_t*
     return (wchar_t*)memmove(destEnd - n, first, n * 2);
 }
 
-// @ 0x0092ea90  eastl::basic_string<wchar_t>::insert(iterator p, size_type n, value_type c)
+// @ 0x0092ea90  WString::insert = eastl::basic_string<wchar_t>::insert(iterator p, size_type n, value_type c)
 __declspec(noinline) void WString::insert(wchar_t* p, unsigned n, wchar_t c) {
     if (n) {
         if (n + 1 <= (unsigned)(mpCapacity - mpEnd)) {
@@ -382,7 +384,7 @@ struct Deque {
     void DoReallocPtrArray(unsigned nAdditional, int side);
 };
 
-// @ 0x0092ea70  eastl::deque::back
+// @ 0x0092ea70  Deque::back = eastl::deque::back
 __declspec(noinline) Entry& Deque::back() {
     Entry* c = mItEnd.mpCurrent;
     Entry* b = mItEnd.mpBegin;
@@ -394,7 +396,7 @@ __declspec(noinline) Entry& Deque::back() {
 
 static inline const unsigned& max_alt(const unsigned& a, const unsigned& b) { return a < b ? b : a; }
 
-// @ 0x0092ec60  eastl::deque::DoReallocPtrArray(nAdditional, side)  (side 0 = front)
+// @ 0x0092ec60  Deque::DoReallocPtrArray = eastl::deque::DoReallocPtrArray(nAdditional, side)  (side 0 = front)
 __declspec(noinline) void Deque::DoReallocPtrArray(unsigned nAdditional, int side) {
     int nUsedBytes = (int)((char*)mItEnd.mpCurrentArrayPtr - (char*)mItBegin.mpCurrentArrayPtr);
     int nUsed = (nUsedBytes >> 2) + 1;

@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011b0500/s011b0500.cpp  ?lib_cblock_Square8@@YAXPAKPBK@Z  011b0500  /O2 /MD /Gy /EHsc /TP

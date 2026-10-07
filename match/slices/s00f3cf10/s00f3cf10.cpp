@@ -12,7 +12,7 @@
 typedef unsigned int uint32_t;
 #include <intrin.h>
 
-void* operator new(unsigned sz, const char* tag, int, int, int, int);
+void* operator new(unsigned sz, const char* tag, int, int, int, int);   // 0x00f473a0
 
 // VFN(o, off, R, args): call virtual slot at byte offset `off` of o (thiscall).
 #define VFN(o, off, R, args) ((R (__thiscall*)args)(*(void***)(o))[(off) / 4])
@@ -49,22 +49,27 @@ struct ResKey { int a, b, c; };
 struct Iter8 { char* node; char** bucket; };    // eastl hashtable_iterator (8 bytes, returned via sret)
 struct Hashtable {
     int pad0; char** mpBucketArray; unsigned mnBucketCount;
-    Iter8 find(const unsigned& k) const;
+    Iter8 find(const unsigned& k) const;   // 0x00645ed0
 };
 struct EStr3 { char* b; char* e; char* c; };    // eastl::string begin/end/capacity
-struct EStrHolder { void assign(const char* b, const char* e); };
+struct EStrHolder {
+    void assign(const char* b, const char* e);   // 0x00454cb0
+};
 
 // Panel object created by FUN_00f3cf10 (0x2c bytes, vtable 0x1462d70): ref counted, with an eastl::string at +0x18.
-struct BObj { BObj(); virtual void AddRef(); virtual void Release(); };
+struct BObj {
+    BObj();   // 0x00760c00
+    virtual void AddRef(); virtual void Release();
+};
 struct PanelObj {
     PanelObj() {
         mCount = 0;
         mB = 0; mImg = 0;
         str.b = (char*)0x1667bac; str.e = (char*)0x1667bac; str.c = (char*)0x1667bad;
     }
-    virtual void v0();
-    virtual void AddRef();
-    virtual void Dtor2();
+    virtual void v0();       // 0x00b60300 (vtable 0x01462d70)
+    virtual void AddRef();   // 0x00804910
+    virtual void Dtor2();    // 0x00834200
     int mCount;
     float mFloat; int mZero;
     BObj* mB; void* mImg;
@@ -75,8 +80,13 @@ struct XObjA { void FUN_00c3aa40(void*); };
 struct XObjB { XObjB* FUN_00c04590(void*); };
 struct cHerd { void SetPosition(); };
 struct XObjC { void FUN_00b48770(); };
-struct Obj30 { Obj30(); virtual void AddRef(); virtual void Release(); int pad[10]; };
-struct cPlanet { void* GetName(); };
+struct Obj30 {
+    Obj30();   // 0x009986e0
+    virtual void AddRef(); virtual void Release(); int pad[10];
+};
+struct cPlanet {
+    void* GetName();   // 0x00c707e0
+};
 struct cPlanetModel { float FUN_00b7e4d0(); };
 
 struct cSec3 {
@@ -105,20 +115,22 @@ void* FUN_0067ddb0();
 void* FUN_00ResMan_GetManager();      // EA::ResourceMan::GetManager (0x67dcd0)
 void* SP_GetSaveArea(unsigned);       // 0x6b1f90 (cdecl, 1 arg)
 cPlanet* SP_GetActivePlanet();        // 0x1021260
-EStr3* ConvertToString8(EStr3* out, void* wname);   // cdecl
+EStr3* ConvertToString8(EStr3* out, void* wname);   // 0x0093c570 (cdecl)
 cPlanetModel* SP_PlanetModel();       // 0xb3d350
 void operator_delete_arr(void* p);    // 0xf47380
 void* FUN_00b18e00(void* h);
 XObjC* __stdcall FUN_00b3d310(void* h, void* q);
-struct NounMgr { void* GetAvatar(); };
-NounMgr* SP_NounManager();
+struct NounMgr {
+    void* GetAvatar();   // 0x00b1fdb0
+};
+NounMgr* SP_NounManager();   // 0x00b3d300
 unsigned FUN_00ef1990(char* a, char* b, float avg);
 void FUN_00eeccb0(void* b);
 void FUN_00eed720(void* p, void* o, void* o2);
 void FUN_00eabf30x(void* p);
 extern char* g_16c7aa4;
 extern void (*g_DefaultCreateNameFromKey)(ResKey*, void*, void*, void*, int);   // [0x154c468], cdecl
-extern float g_f884, g_f894, g_f8a4, g_f8b4, g_f8c4, g_f8d4, g_f8e4, g_f8f4, g_f904, g_f914, g_f924, g_f934, g_f944;
+extern float g_016c8884, g_016c8894, g_016c88a4, g_016c88b4, g_016c88c4, g_016c88d4, g_016c88e4, g_016c88f4, g_016c8904, g_016c8914, g_016c8924, g_016c8934, g_016c8944;
 
 // 0x760fd0 (thiscall on the 0x20-byte object), 0xf03ff0 / 0xf04060 (thiscall on the object at g_16c7aa4+0xd8),
 // and the helpers called by the hashtable walk.
@@ -421,12 +433,13 @@ void cSec3::FUN_00f3d8c0(char p) {
     }
 }
 
-// ---------------------------------------------------------------------------
-// @ 0x00f3d900
-// ---------------------------------------------------------------------------
 static inline bool AnyFlag(unsigned v) {
     return ((v >> 4) & 1) || ((v >> 1) & 1) || ((v >> 2) & 1);
 }
+
+// ---------------------------------------------------------------------------
+// @ 0x00f3d900
+// ---------------------------------------------------------------------------
 
 void cSec3::FUN_00f3d900() {
     if (F(0x8c) != 0) {
@@ -550,11 +563,11 @@ void* cSec3::FUN_00f3dc70(int p) {
 // @ 0x00f3dce0  (weighted average of 12 ints, clamped against an element count scaled by 1/1024)
 // ---------------------------------------------------------------------------
 float cSec3::FUN_00f3dce0(int* v) {
-    float avg = (((((float)v[11] * g_f934 + (float)v[10] * g_f924) + (float)v[9] * g_f914)
-                  + (float)v[8] * g_f904 + (float)v[7] * g_f8f4 + (float)v[6] * g_f8e4)
-                 + ((((((float)v[5] * g_f8d4 + (float)v[4] * g_f8c4) + (float)v[3] * g_f8b4)
-                      + (float)v[2] * g_f8a4) + (float)v[1] * g_f894) + (float)v[0] * g_f884))
-                / g_f944;
+    float avg = (((((float)v[11] * g_016c8934 + (float)v[10] * g_016c8924) + (float)v[9] * g_016c8914)
+                  + (float)v[8] * g_016c8904 + (float)v[7] * g_016c88f4 + (float)v[6] * g_016c88e4)
+                 + ((((((float)v[5] * g_016c88d4 + (float)v[4] * g_016c88c4) + (float)v[3] * g_016c88b4)
+                      + (float)v[2] * g_016c88a4) + (float)v[1] * g_016c8894) + (float)v[0] * g_016c8884))
+                / g_016c8944;
     char* inner = (char*)F(0x10);
     char* end = (char*)I(inner, 0x2c14);
     char* beg;

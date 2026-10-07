@@ -26,6 +26,9 @@ struct Vector2 {
 Vector2& operator+=(Vector2& a, const Vector2& b);                   // 0x0050E570
 Vector2& operator*=(Vector2& a, const float& s);                      // 0x0050D020
 
+struct UVChart;
+struct UVChartCompare;
+
 namespace eastl {
 
 struct sp_vector_allocator {
@@ -65,13 +68,15 @@ template <class T> inline void destruct(T* first, T* last)
         first->~T();
 }
 
-template <class T> void quick_sort(T* first, T* last);               // 0x0050F0D0 (uint32_t)
+// The two instantiations used here, declared as plain overloads so they can be annotated.
+void quick_sort(uint32_t* first, uint32_t* last);                    // 0x0050F0D0
 template <class T> inline void sort(T* first, T* last) { quick_sort(first, last); }
-template <class T, class C> void quick_sort(T* first, T* last, C compare);  // 0x0050EBE0 (UVChart*)
+void quick_sort(UVChart** first, UVChart** last, UVChartCompare compare);  // 0x0050EBE0
 template <class T, class C> inline void sort(T* first, T* last, C compare) { quick_sort(first, last, compare); }
-template <class T> T* unique(T* first, T* last);                     // 0x0050E4B0 (uint32_t)
+uint32_t* unique(uint32_t* first, uint32_t* last);                   // 0x0050E4B0
 
-template <class T> class vector {
+template <class T>
+class vector {
 public:
     T* mpBegin;
     T* mpEnd;
@@ -97,7 +102,8 @@ public:
     void DoFree();                                                   // 0x00425990
 };
 
-template <class T, int N> class fixed_vector {
+template <class T, int N>
+class fixed_vector {
 public:
     T* mpBegin;
     T* mpEnd;
@@ -107,7 +113,7 @@ public:
 
     fixed_vector();                                                  // 0x0041CFE0 (UVChart*, 16)
     fixed_vector(unsigned int n);                                    // 0x0050CEC0 (UVShelf, 16)
-    ~fixed_vector();                                                 // 0x004209B0 / 0x0050E290
+    ~fixed_vector();      // 4209b0 (UVChart*) / 50e290 (UVShelf): left to call alignment
     T* begin() { return mpBegin; }
     T* end() { return mpEnd; }
     unsigned int size() const { return (unsigned int)(mpEnd - mpBegin); }

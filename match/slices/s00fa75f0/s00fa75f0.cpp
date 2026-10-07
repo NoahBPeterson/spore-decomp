@@ -53,7 +53,9 @@ struct Ctx {                      // object at Cls+0x2c
 
 struct O2 { uint32_t pad[10]; uint8_t* tbl; };          // +0x28
 struct O1 { uint32_t pad[0xcb]; O2* o2; };              // +0x32c
-struct O210 { void Use(Img* h); };                      // 0xfc42a0
+struct O210 {
+    void Use(Img* h);   // 0xfc42a0
+};
 
 struct Cls {
     virtual void v0();  virtual void v1();  virtual void v2();  virtual void v3();

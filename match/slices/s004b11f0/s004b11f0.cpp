@@ -86,6 +86,7 @@ template <class T> struct has_trivial_relocate : public false_type {};
 
 template <class T> T* uninitialized_move(T* first, T* last, T* dest);              // out of line
 template <class T> T* uninitialized_copy_ool(T* first, T* last, T* dest);          // out of line
+template <class T> T* uninitialized_move_start(T* first, T* last, T* dest);        // out of line (S24: 0x00512000)
 template <class In, class Out>
 generic_iterator<Out> uninitialized_copy_impl(generic_iterator<In> first, generic_iterator<In> last,
                                               generic_iterator<Out> dest, false_type);
@@ -150,7 +151,8 @@ inline void destruct(T* first, T* last)
         ;
 }
 
-template <class T> struct vector {
+template <class T>
+struct vector {
     T* mpBegin;
     T* mpEnd;
     T* mpCapacity;
@@ -222,8 +224,9 @@ template <> void vector<Big>::DoInsertValues(Big* position, uint32_t n, const Bi
     }
 }
 
-// @ 0x004b1800
-template <> void vector<S24>::DoInsertValues(S24* position, uint32_t n, const S24& value)
+// @ 0x004b1800 US24::DoInsertValues  (mangled-class hint: picks vector<S24>, not vector<Big>, for the checker)
+template <>
+void vector<S24>::DoInsertValues(S24* position, uint32_t n, const S24& value)
 {
     if (n <= (uint32_t)(mpCapacity - mpEnd)) {
         if (n > 0) {
@@ -251,7 +254,7 @@ template <> void vector<S24>::DoInsertValues(S24* position, uint32_t n, const S2
         S24* const pNewData = DoAllocate(nNewSize);
         S24* pNewEnd = uninitialized_move(mpBegin, position, pNewData);
         uninitialized_fill_n_ptr(pNewEnd, n, value);
-        pNewEnd = uninitialized_copy_ool(position, mpEnd, pNewEnd + n);
+        pNewEnd = uninitialized_move_start(position, mpEnd, pNewEnd + n);
         destruct(position, mpEnd);
         DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
         mpBegin = pNewData;
@@ -261,7 +264,8 @@ template <> void vector<S24>::DoInsertValues(S24* position, uint32_t n, const S2
 }
 
 // @ 0x004b1cc0
-template <> void vector<S24>::DoAssignFromIterator(const S24* first, const S24* last, random_access_iterator_tag)
+template <>
+void vector<S24>::DoAssignFromIterator(const S24* first, const S24* last, random_access_iterator_tag)
 {
     const uint32_t n = (uint32_t)(last - first);
     if (n > (uint32_t)(mpCapacity - mpBegin)) {
@@ -284,7 +288,8 @@ template <> void vector<S24>::DoAssignFromIterator(const S24* first, const S24* 
 }
 
 // @ 0x004b2030
-template <> void vector<uint32_t>::DoAssignValues(uint32_t n, const uint32_t& value)
+template <>
+void vector<uint32_t>::DoAssignValues(uint32_t n, const uint32_t& value)
 {
     if (n > (uint32_t)(mpCapacity - mpBegin)) {
         vector<uint32_t> tmp(n, mAllocator);

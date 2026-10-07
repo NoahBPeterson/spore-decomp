@@ -26,7 +26,7 @@ struct Vec4 {                                   // movss copy ctor / assignment 
 
 struct X87Vec4 {                                // out-of-line copy ctor (x87), 0x00501290
     float x, y, z, w;
-    X87Vec4(const X87Vec4& v);
+    X87Vec4(const X87Vec4& v);                  // 0x00501290
 };
 
 struct Rec14 {                                  // 0x14: key + X87Vec4

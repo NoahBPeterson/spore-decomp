@@ -81,9 +81,9 @@ struct YPosComparator {};
 struct TextIndexComparator {};
 
 // eastl::upper_bound instantiations (0x98b650 / 0x98b6b0 / 0x9212c0)
-const Paragraph* UpperBoundY(const Paragraph* first, const Paragraph* last, const float& v, YPosComparator c);
-const Paragraph* UpperBoundIndex(const Paragraph* first, const Paragraph* last, const uint32_t& v, TextIndexComparator c);
-const uint32_t* UpperBoundLine(const uint32_t* first, const uint32_t* last, const uint32_t& v);
+const Paragraph* UpperBoundY(const Paragraph* first, const Paragraph* last, const float& v, YPosComparator c);  // 0x98b650
+const Paragraph* UpperBoundIndex(const Paragraph* first, const Paragraph* last, const uint32_t& v, TextIndexComparator c);  // 0x98b6b0
+const uint32_t* UpperBoundLine(const uint32_t* first, const uint32_t* last, const uint32_t& v);  // 0x9212c0
 
 template <class T> inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
 template <class T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }

@@ -1,1 +1,1 @@
-00c163f0  2854  complete (36 direct calls, 19 vcalls and all constants in original order); 3560 vs 3933 B: frame 0xe4 vs 0xf4, hash-iterator register allocation, Matrix3 copy inlining choices differ
+00c163f0  2854  complete (36 direct calls, 19 vcalls and all constants in original order); 3560 vs 3933 B: frame 0xe4 vs 0xf4, hash-iterator register allocation, Matrix3 copy inlining choices differ; difftest WEAK (1.9% coverage: random creature objects fault early)

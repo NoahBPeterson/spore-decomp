@@ -17,9 +17,7 @@ struct Vector4 {
 
 struct FaceUV { float u, v; int face; };
 
-namespace {
-Vector4 __cdecl ToVector4(uint32_t packed);     // 0x00f885f0
-}
+Vector4 __cdecl ToVector4(uint32_t packed);     // 0x00f885f0 (file-static in the original)
 void WrapCubeFace(int size, int* face, int* x, int* y, int* rot, int* flip);   // 0x00684ca0
 extern Vector4 kDefaultVector4;   // 0x016c9bd4
 

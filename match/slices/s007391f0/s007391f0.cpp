@@ -19,8 +19,8 @@ struct IRefCount {
     virtual int Release();
 };
 
-extern void* __cdecl SporeNew(unsigned size, const char* name, int a, int b, const char* file, int line);
-extern void __cdecl operator_delete__(void* p);
+extern void* __cdecl SporeNew(unsigned size, const char* name, int a, int b, const char* file, int line);  // 0xf473a0
+extern void __cdecl operator_delete__(void* p);  // 0xf47380
 
 // ---- containers -------------------------------------------------------------------
 // One id entry of a batch: low half = stream index, high half = vertex-entry slot
@@ -110,17 +110,17 @@ struct PartList { Part** begin; Part** end; };
 
 struct OutRangeVec {
     Range* begin; Range* end; Range* cap;
-    void __thiscall DoInsertValue(Range* pos, Range* v);
+    void __thiscall DoInsertValue(Range* pos, Range* v);  // 0x428900
 };
 // vector<OutStream> insert helper (0x00736660) living inside OutMesh at +8
 struct OutStreamVec {
     OutStream* begin; OutStream* end;
-    void __thiscall Insert(OutStream* pos, OutStream* value);
+    void __thiscall Insert(OutStream* pos, OutStream* value);  // 0x736660
 };
 // vector<Batch> push (0x004754e0) living inside OutMesh at +0x1c
 struct OutBatchVec {
     Batch* begin; Batch* end;
-    void __thiscall PushBack(Batch* value);
+    void __thiscall PushBack(Batch* value);  // 0x4754e0
 };
 struct OutMesh {
     char pad0[8];

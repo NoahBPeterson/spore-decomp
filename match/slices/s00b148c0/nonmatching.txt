@@ -1,2 +1,2 @@
 # va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
-00b148c0  3558  MoveCamera: complete (all paths/calls); frame 0x114 vs 0xa4, original shares stack slots and reuses xmm regs far more; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc)
+00b148c0  3558  MoveCamera: complete (all paths/calls); frame 0x114 vs 0xa4, original shares stack slots and reuses xmm regs far more; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc); difftest WEAK (377 valid, 6.7% coverage; one-line multi-address annotations split, 0xf9c960 overload declared separately)

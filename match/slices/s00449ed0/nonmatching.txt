@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00449ed0  334  Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ
+00449ed0  334  Blk::A49ed0 complete; AutoRefCount operator-> temps and frame layout differ; difftest PASS (347 valid, 74.2% coverage) after the GetScale annotation became a // 0x004adaa0 line comment
 0044a0e0  -    Blk::A4a0e0 (SetOrientation) complete; /Od frame layout and inline temps differ
 0044a9a0  53   complete behaviour; /Od frame/slot order differs
 0044aa10  56   complete behaviour; /Od frame/slot order differs

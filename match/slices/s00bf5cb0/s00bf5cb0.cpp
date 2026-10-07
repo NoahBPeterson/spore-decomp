@@ -99,7 +99,7 @@ struct PairVec { Entity** begin; Entity** end; };
 struct NounMgr {
     PairVec* GetEmpires();                    // 0xb25ca0
     int GetPlayerEmpireOrMinus1();            // 0xb1f9d0
-    VecHolder* GetGameDataVector(void* a, void* b, void* c, void* d, void* e);  // 0xb21340
+    VecHolder* GetGameDataVector(void* a, void* b, void* c, void* d, unsigned int typeTag);  // 0xb21340
     struct Sphere* GetCurrentTerrainSphere(); // 0xf67d90
 };
 struct Sphere { int GetKind(); };             // 0xc75420
@@ -117,8 +117,10 @@ Seed* GetSeed();                              // 0xb3d290
 bool IsValidFireTarget(Pos* mine, Pos* theirs);   // 0xdc4e20 (cdecl, anonymous namespace)
 extern Rand sMathRandom;                      // 0x1601760
 extern const float kRadiusScale;              // 0x156f89c
-extern int gTypeInfo;                         // 0x18c43e8
-void FnA(); void FnB(); void FnC(); void FnD();   // 0xb1e500, 0xacdff0, 0xd3d420, 0xcd7d10
+void FnA();   // 0xb1e500
+void FnB();   // 0xacdff0
+void FnC();   // 0xd3d420
+void FnD();   // 0xcd7d10
 
 struct TribeAI {
     virtual void t0(); virtual void t1(); virtual void t2(); virtual void t3(); virtual void t4();
@@ -306,7 +308,7 @@ void TribeAI::Update()
                     if (!defended && idle > 0) {
                         Entity* best = 0;
                         int bestR = 0;
-                        VecHolder* gd = NounManager()->GetGameDataVector((void*)&gTypeInfo, (void*)FnA, (void*)FnB, (void*)FnC, (void*)FnD);
+                        VecHolder* gd = NounManager()->GetGameDataVector((void*)FnD, (void*)FnC, (void*)FnB, (void*)FnA, 0x18c43e8);
                         int n = gd->end - gd->begin;
                         if (n > 0) {
                             for (int i = 0; i < n; ++i) {
@@ -464,7 +466,6 @@ void TribeAI::Update()
         }
         int size = (int)(mListEnd - mListBegin);
         int x = GetLimit(1) - size;
-        mCityB->GetFactor();
         int ft = (int)mCityB->GetFactor();
         int base = mCityB->GetBase();
         int lim = (base + ft) / 0x29 + 2;

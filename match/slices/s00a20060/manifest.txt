@@ -16,3 +16,5 @@ slices/s00a20060/s00a20060.cpp  ?Route3@Sys@@QAE_NIMMM@Z  00a20990  /O2 /MD /Gy 
 slices/s00a20060/s00a20060.cpp  ?Less1@@YA_NPAUSoundOrd@@_NPAUOrdInfo@@@Z  00a20df0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a20060/s00a20060.cpp  ?WithinRange@Sys@@QAE_NPAXH@Z  00a21080  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s00a20060/s00a20060.cpp  ?ReleaseSub@Sys@@QAEHXZ  00a207a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a20060/s00a20060.cpp  ?ConstructEmitterSndPlayer@@YAPAUEmitterSndPlayer@@XZ  00a20700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+slices/s00a20060/s00a20060.cpp  ?MakeSound@@YG_NPAPAUSound2@@@Z  00a20d60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

@@ -4,3 +4,5 @@
 0056bd30 SP::Traits::cRigBlockTag::DescribeTraits  # pdb caller-scored name
 0056bfa0 SP::Traits::cTextureTag::ExtractTraits  # pdb caller-scored name
 0056c2d0 SP::Traits::cTextureTag::DescribeTraits  # pdb caller-scored name
+00540470 ??0VSet@@QAE@ABUAlloc@@@Z  # eastl::vector_set<unsigned>(const allocator&), 1st call in 0x0056b9e0 (overloaded ctor: annotation ambiguous)
+00564690 ??0VSet@@QAE@ABU0@@Z  # eastl::vector_set<unsigned> copy ctor, 2nd call in 0x0056b9e0

@@ -1,2 +1,2 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast)
-0066daf0  3860  complete LoadAssetViewLarge; same call/vslot/constant sequence, size 0.997x; differs in register allocation (orig keeps 0 in ebx from the first FindWindowByID) and two cross-jumped SetFlag/Release tails
+0066daf0  3860  complete LoadAssetViewLarge; same call/vslot/constant sequence, size 0.997x; differs in register allocation (orig keeps 0 in ebx from the first FindWindowByID) and two cross-jumped SetFlag/Release tails; difftest WEAK (23% coverage, no mismatch; cCardRollover vftable mapped to 0x0140075c in symbols/slices/s0066daf0.txt, ResourceManager call fixed to EA::ResourceMan::GetManager 0x0067dcd0)

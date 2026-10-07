@@ -86,9 +86,11 @@ float  GetModeParam(int mode, int which);                       // 0x00C84C60 cd
 float* GetKindRange(float* out, int mode, int type, float w);   // 0x00BA68F0 cdecl
 float  PickInRange(float* range);                               // 0x004DF2D0 cdecl
 bool   IntervalLess(const Interval& a, const Interval& b);      // 0x00B72560
-void   IntroLoop(Interval* first, Interval* last, int depth, bool (*cmp)(const Interval&, const Interval&));   // 0x00BABD30
-void   InsertionSort(Interval* first, Interval* last, bool (*cmp)(const Interval&, const Interval&));          // 0x00BA77E0
-void   UnguardedInsertion(Interval* first, Interval* last, bool (*cmp)(const Interval&, const Interval&));    // 0x00BA7880
+void operator delete[](void* p);                                 // 0x00F47380
+typedef bool (*IntervalCmp)(const Interval&, const Interval&);
+void   IntroLoop(Interval* first, Interval* last, int depth, IntervalCmp cmp);   // 0x00BABD30
+void   InsertionSort(Interval* first, Interval* last, IntervalCmp cmp);          // 0x00BA77E0
+void   UnguardedInsertion(Interval* first, Interval* last, IntervalCmp cmp);    // 0x00BA7880
 
 struct LayoutPass {
     void PlaceItem(LayoutContainer* c, void* sub, float a, float b, LayoutItem* prev);                // 0x00BA8C40

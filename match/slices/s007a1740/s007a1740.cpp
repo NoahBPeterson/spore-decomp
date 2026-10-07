@@ -4,6 +4,7 @@
 #include "types.h"
 #include <intrin.h>
 #include <new>
+void operator delete(void* p);  // 0x00f47380 (EASTL_allocator_deallocate)
 
 struct RcBase {
   virtual void Destroy(int flag) = 0;  // slot 0: deleting destructor
@@ -38,12 +39,13 @@ struct Vec16 {  // 0x14 bytes: a list of 16-bit indices
   uint32_t pad[3];
 };
 
-struct IdVec6 { void operator=(const IdVec6&); uint32_t d[12]; };  // FixedIdVector6, 0x30 bytes
+struct IdVec6 { void operator=(const IdVec6&);  // 0x00719170
+  uint32_t d[12]; };  // FixedIdVector6, 0x30 bytes
 struct EntVec3 {  // FixedEntryVector3 (begin/end at +0/+4)
   uint32_t* b;
   uint32_t* e;
-  void Erase(uint32_t* f, uint32_t* l);
-  void DoAssign(uint32_t* f, uint32_t* l, void* tag);
+  void Erase(uint32_t* f, uint32_t* l);  // 0x004772a0
+  void DoAssign(uint32_t* f, uint32_t* l, void* tag);  // 0x0042d020
   uint32_t pad[1];
 };
 
@@ -57,7 +59,14 @@ struct Vert {  // 0x8c bytes
 
 struct Prim { int a, b, c, d, e; };  // 0x14 bytes
 
-struct Inline8 { void Assign(const Inline8&); uint32_t d[5]; };
+struct Inline8 { void Assign(const Inline8&);  // 0x00735dd0
+  uint32_t d[5]; };
+
+struct VertVec {  // vector<Vert> at A+0x1c
+  Vert* b;
+  Vert* e;
+  void resize(int n);  // 0x0071f7e0
+};
 
 struct A : RcBase {  // source mesh (also the payload of B)
   Inline8 inl;       // +8
@@ -66,7 +75,7 @@ struct A : RcBase {  // source mesh (also the payload of B)
   uint32_t pad24[3];
   Prim* pb;          // +0x30
   Prim* pe;          // +0x34
-  void ResizeVerts(int n);
+  void ResizeVerts(int n) { ((VertVec*)&vb)->resize(n); }  // the vertex vector at +0x1c resizes itself
 };
 
 struct B;
@@ -81,6 +90,7 @@ struct C {  // sub-object at B+8
   int f34;
   uint32_t pad38;
   int f3c;
+  RcBase* Build(A* src);  // 0x007a1400 (called on the sub-object at B+8)
 };
 
 struct B {  // builder / destination
@@ -91,10 +101,9 @@ struct B {  // builder / destination
   uint32_t pad4c[0x64 / 4 - 0x4c / 4];
   int f64;
   uint32_t pad68[2];
-  void Resize(int nPrims, int nVerts);                // 7a0de0
-  void Emit(Prim pr);                                 // 79b630 (ret 0x14)
-  RcBase* Build(A* src);                              // 7a1400
-  __declspec(noinline) void CopyFrom(A* src);         // 7a1740
+  void Resize(int nPrims, int nVerts);                // 0x007a0de0
+  void Emit(Prim pr);                                 // 0x0079b630 (ret 0x14)
+  __declspec(noinline) void CopyFrom(A* src);         // 0x007a1740
   B() {
     uint32_t* w = (uint32_t*)this;
     w[0] = 0; w[1] = 0; w[2] = 0; w[3] = 0; w[4] = 0; w[5] = 0;
@@ -104,11 +113,11 @@ struct B {  // builder / destination
     w[23] = 4;
     w[24] = 0; w[25] = 0; w[26] = 0; w[27] = 0;
   }
-  ~B();                                               // 79aeb0
+  ~B();                                               // 0x0079aeb0
 };
 
 // @ 0x007a1740
-__declspec(noinline) void B::CopyFrom(A* src) {
+void B::CopyFrom(A* src) {
   A* pp = p;
   if (pp->pe - pp->pb > 0) {
     p->inl.Assign(src->inl);
@@ -129,7 +138,7 @@ __declspec(noinline) void B::CopyFrom(A* src) {
       int cnt = iv->e - iv->b;
       if (cnt != 0) {
         Range r(cnt, iv->b);
-        extern void Obj15(Range*, Vert*);
+        extern void Obj15(Range*, Vert*);  // 0x007201d0
         Obj15(&r, d);
       }
     }
@@ -139,7 +148,7 @@ __declspec(noinline) void B::CopyFrom(A* src) {
       pp->Release();
     }
   }
-  RcBase* np = Build(src);
+  RcBase* np = c.Build(src);
   RcBase* old = q;
   if (np != old) {
     if (np) np->AddRef();
@@ -149,12 +158,12 @@ __declspec(noinline) void B::CopyFrom(A* src) {
 }
 
 struct Builder {
-  void Cb1(A* src, Prim* pr, Vec16* iv, C* ctx);   // 79b7b0
-  void Cb2(A* src, Prim* pr, Vec16* iv, C* ctx);   // 79bfa0
-  void Cb3(A* src, Prim* pr, Vec16* iv, C* ctx);   // 79c960
-  void Cb4(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 79d190
-  void Cb5(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 79dce0
-  void Cb6(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 79e950
+  void Cb1(A* src, Prim* pr, Vec16* iv, C* ctx);   // 0x0079b7b0
+  void Cb2(A* src, Prim* pr, Vec16* iv, C* ctx);   // 0x0079bfa0
+  void Cb3(A* src, Prim* pr, Vec16* iv, C* ctx);   // 0x0079c960
+  void Cb4(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 0x0079d190
+  void Cb5(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 0x0079dce0
+  void Cb6(A* src, Prim* pr, Vec16* ivA, Vec16* ivB, C* ctxA, C* ctxB);  // 0x0079e950
   __declspec(noinline) void F1940(A* src, B* dst);
   __declspec(noinline) void F1a80(A* src, B* dst);
   __declspec(noinline) void F1bc0(A* src, B* dst);
@@ -274,8 +283,8 @@ struct OutVec {  // vector of OutPair
   OutPair* e;
   OutPair* cap;
   uint32_t pad[2];
-  void Resize(uint32_t n);                          // 79af80
-  void Grow(OutPair* at, const OutPair& v);         // 79f4e0
+  void Resize(uint32_t n);                          // 0x0079af80
+  void Grow(OutPair* at, const OutPair& v);         // 0x0079f4e0
   void push_back(const OutPair& v) {
     if (e < cap) {
       OutPair* at = e++;
@@ -288,15 +297,15 @@ struct OutVec {  // vector of OutPair
 
 struct Arg23c0 {  // object whose [0] is an array of OutVec
   OutVec* vecs;
-  void Resize(uint32_t n);                          // 7a1100
+  void Resize(uint32_t n);                          // 0x007a1100
 };
 
 struct SrcVec {  // local vector of SrcRange
   SrcRange* b;
   SrcRange* e;
   SrcRange* cap;
-  void Fill(Arg23c0* a);                            // 7a0b90
-  void Destroy(SrcRange* f, SrcRange* l);           // 79b0d0
+  void Fill(Arg23c0* a);                            // 0x007a0b90
+  void Destroy(SrcRange* f, SrcRange* l);           // 0x0079b0d0
   ~SrcVec() {
     Destroy(b, e);
     if (b && ((int*)b)[-1]) operator delete(b);

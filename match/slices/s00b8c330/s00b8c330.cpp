@@ -257,6 +257,7 @@ struct cPlanetModel {
     void UpdateMinimap(int arg0, int arg1, int modeOverride);
 };
 
+// @ 0x00b8c330
 void cPlanetModel::UpdateMinimap(int arg0, int arg1, int modeOverride)
 {
     if (GetActivePlanet()) {

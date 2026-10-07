@@ -151,6 +151,7 @@ struct cSPCreatureBase {
     bool AnimationFinished2(int id);                   // 0xc123f0
     bool WaitForAnimEventOrEnd(int id, int* out, int a, int b, int c);
     void FUN_00c26c80();
+    bool FUN_00c26c90(int a, int b);                   // thiscall, ret 8
     int  InterruptAnimation(int id, int a, int b);
     int  PlayAnimation(int id, int a, int b);
     bool FUN_00c0c130();
@@ -170,7 +171,6 @@ struct cSPCreatureBase {
 Citizen* FUN_00d994c0(int creature);
 void*    FUN_00d998d0(IdleRes* idle, int hash);
 bool     FUN_00da6270(cSPCreatureBase* c, int id);
-bool     FUN_00c26c90(int a, int b);
 int      FUN_00d998f0(const void* p);
 float    FUN_004df2d0(const void* tuning);
 float    FUN_00d38a30(int which, cSPCreatureBase* c);
@@ -186,7 +186,7 @@ Vec3*    normalized_safe(Vec3* out, const Vec3* in);
 char     Vector3Equal(const Vec3* a, const Vec3* b);
 void     FUN_00d99e20(Vec3* pos, Vec3* res);
 bool     GetFightSlots(cSPCreatureBase* c, int* slot, int arg);
-float    GetPropertyT_float(int props, uint32_t hash, float def);
+float    GetPropertyT_float(int props, uint32_t hash, float def);   // 0x004e1c70 SP::GetPropertyT<float>
 LocoState* LocoGetState(Loco* l);
 
 extern float DAT_0157206c;
@@ -236,7 +236,7 @@ bool TRIBE_FIGHT_Tick(cSPCreatureBase* self, int, int, int, int, FightState* st,
         return FUN_00da6270(self, st->mId);
     }
 
-    if (!FUN_00c26c90(0x6000e, 1)) return true;
+    if (!self->FUN_00c26c90(0x6000e, 1)) return true;
 
     if (st->mEventAnim) {
         int tmp = 0;

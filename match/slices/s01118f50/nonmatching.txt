@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-01118f50 3361 complete (flags /O2 /MD /Gy /TP /fp:fast); Havok 3.1 older-cl x87 scheduling/constant-pool loads differ; call order 22/22 identical
+01118f50 3362 complete (flags /O2 /MD /Gy /TP /fp:fast); Havok 3.1 older-cl x87 scheduling/constant-pool loads differ; call order 22/22 identical; difftest PASS (800 inputs: 398 valid, 69.2% coverage) after fix: step 3 e0/e1 normalize3 re-reads the stored float-rounded cross product like the original (was 1-ulp plane w difference); mapped sharesEdgePair 0x01115730, addPlanesForOpposingFace 0x01116f90

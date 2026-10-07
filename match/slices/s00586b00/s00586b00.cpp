@@ -93,7 +93,9 @@ struct CreatureMgr {   // cSPEditorAnimatedCreatureManager
 
 struct Vec3 { float x, y, z; };
 struct FVec { FVec& operator=(const FVec& o); };   // 0x0050D4E0
-struct Flagged { void SetFlag(); };   // 0x0059AEA0
+struct Flagged {
+    void SetFlag();   // 0x0059AEA0
+};
 struct Sink { void FUN_00a04550(int i, Vec3* v); };   // 0x00A04550
 
 struct SPModel {   // cSPEditorModel
@@ -146,7 +148,10 @@ struct DecoMgr {   // this+0x14C
     void FUN_005d36e0(SPModel* m, void* x, int v);           // 0x005D36E0
 };
 struct Handle { void* FUN_0047e6c0(); };    // 0x0047E6C0
-struct PlayMode { void Stop(); void HandleMessages(int v); };   // 0x0062C340 / 0x0062BF10
+struct PlayMode {
+    void Stop();                  // 0x0062C340
+    void HandleMessages(int v);   // 0x0062BF10
+};
 struct VProbe { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
                 virtual void v5(); virtual void v6(); virtual void v7();
                 virtual void SlotX(int a);   // +0x1c

@@ -1,6 +1,6 @@
 0074ca70  69  complete vector<int>::erase-first-value; register allocation (this/begin cached in different callee-saved regs) differs
-0074c670  573  complete ModelIsResidentInMemory; scratch vector/EH frame layout and register allocation differ
-0074c910  281  complete ScheduleForLoad; EH state and LoadReq temp layout differ
-0074cad0  576  complete load-job Step state machine; scratch vector/EH layout differ
-0074ce20  289  complete vector<E14>::DoInsertValue; nNew kept in register not stack slot, sign-test shape differs
-0074d2c0  431  complete HandleMessage; list-walk register allocation and EH state differ
+0074c670  573  complete ModelIsResidentInMemory; scratch vector/EH frame layout and register allocation differ  ; difftest WEAK (OpDeleteArr annotated 0xf47380; 27% coverage, random inputs rarely pass the GetDescription/GetPropertyAsKey gates)
+0074c910  281  complete ScheduleForLoad; EH state and LoadReq temp layout differ  ; difftest WEAK (LoadQueue::Push/Remove, Load74a920 annotated; 47 valid inputs, callee read faults)
+0074cad0  576  complete load-job Step state machine; scratch vector/EH layout differ  ; difftest WEAK after fix: GetStatus now called on the old job (was null this), 0x73bd60 list fill is thiscall on the resource (was cdecl 0x7141e0), 0x6913c0 and Continuation are thiscall on cj with fn 0x74d080 (was cdecl with fn 0), returns bool
+0074ce20  289  complete vector<E14>::DoInsertValue; nNew kept in register not stack slot, sign-test shape differs  ; difftest UNSUPPORTED: only 7/400 inputs valid (pool-limit from huge random vector sizes); marker fixed
+0074d2c0  431  complete HandleMessage; list-walk register allocation and EH state differ  ; difftest WEAK (ShutdownModel/ScheduleForLoad annotated; 13.9% coverage, random msgId rarely hits the two handled ids)

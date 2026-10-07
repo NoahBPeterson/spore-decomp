@@ -5,7 +5,7 @@
 #pragma intrinsic(sqrt)
 
 inline void* operator new(unsigned, void* p) { return p; }
-void operator delete[](void*);
+void operator delete[](void*);   // 0x00f47380
 
 struct Slot {            // 16 bytes
     float a, b;
@@ -16,7 +16,7 @@ struct Slot {            // 16 bytes
 };
 
 struct GaitA {           // 0x44
-    virtual void f0();
+    virtual void f0();   // 0x009dc410 (vtable 0x01447cc0)
     int id;
     float x, y, z;
     Slot s[3];
@@ -24,7 +24,7 @@ struct GaitA {           // 0x44
 };
 
 struct GaitB {           // 0x58
-    virtual void f0();
+    virtual void f0();   // 0x009dc4f0 (vtable 0x01447cc4)
     int id;
     float a, b, c, d;
     Slot s[4];
@@ -32,7 +32,7 @@ struct GaitB {           // 0x58
 };
 
 struct GaitC {           // 0x1c
-    virtual void f0();
+    virtual void f0();   // 0x009dba20 (vtable 0x01447cc8)
     int id;
     float x, y, z;
     bool c0, c1;
@@ -41,7 +41,7 @@ struct GaitC {           // 0x1c
     GaitC(int i, float px) : id(i), x(px), y(0.0f), z(0.0f), c0(false), c1(false), c2(0) {}
 };
 
-template <class T> T* vcopy(T* first, T* last, T* dest);   // eastl::copy (cdecl)
+template <class T> T* vcopy(T* first, T* last, T* dest);   // eastl::copy (cdecl); instances: symbols/slices/s009e2490.txt
 
 template <class T>
 struct Vec {             // 0x14 bytes: begin/end/cap + 8-byte allocator
@@ -51,7 +51,7 @@ struct Vec {             // 0x14 bytes: begin/end/cap + 8-byte allocator
     int alloc[2];
     Vec() : b(0), e(0), cap(0) {}
     ~Vec() { if (b && ((int*)b)[-1]) operator delete[](b); }
-    void realloc_insert(T* pos, const T& v);
+    void realloc_insert(T* pos, const T& v);   // per-instance addresses: symbols/slices/s009e2490.txt
     void reserve(int n);
     void assign(const Vec& o);
     void push_back(const T& v) {
@@ -74,7 +74,7 @@ struct Gait {            // 0x40
     Vec<GaitA> a;
     Vec<GaitB> b;
     Vec<GaitC> c;
-    Gait();
+    Gait();   // 0x009e1030
     Gait(const Gait& o) : id(o.id) { a.assign(o.a); b.assign(o.b); c.assign(o.c); }
 };
 

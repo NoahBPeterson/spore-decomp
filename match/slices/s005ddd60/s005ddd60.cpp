@@ -134,7 +134,10 @@ struct Layout {
     char pad[0x18];
 };
 
-template <class T> struct Ref { T* p; Ref& Set(T* v); };   // 0x00b5f950 (AutoRefCount::operator=)
+template <class T> struct Ref {       // AutoRefCount::operator=
+    T* p;
+    Ref& Set(T* v);                   // 0x00b5f950
+};
 
 // Small refcounted window-proc helpers allocated by Init (16 bytes).
 struct IBase { virtual void a(); };
@@ -144,7 +147,9 @@ struct BlockerA : BlockerBase { virtual void a(); virtual void rcv(); BlockerA()
 struct BlockerB : BlockerBase { virtual void a(); virtual void rcv(); BlockerB() { app = 0; } };
 void* operator new(unsigned size, const char* tag, int a, int b, int c, int d);   // 0x00f473a0
 
-struct TooltipProc { void Ctor(); };                 // 0x00835cc0
+struct TooltipProc {
+    void Ctor();                       // 0x00835cc0
+};
 void* AllocTooltip(int size, const char* name, int a, void* pool);   // 0x009512d0 (cdecl)
 void* GetTooltipPool();                                // 0x009512c0
 Widget* CreateWindowFor(Widget* parent);               // 0x00806370 (cdecl)
@@ -161,7 +166,7 @@ unsigned ColorRGBAToU32(const float* c);               // 0x004580c0 (cdecl)
 
 struct TerrainTool { void Brush5a2200(float v); void Brush5a2240(float v); };   // 0x005a2200 / 0x005a2240
 struct AppMode {
-    void NewModel(int);
+    void NewModel(int);                // 0x0058d1c0
     TerrainTool* FUN_00574590();
     bool IsAvailable();                // 0x00b1e4d0
     char pad[0x31c];
@@ -170,7 +175,11 @@ struct AppMode {
     void** mItemsBegin;                // +0x334
     void** mItemsEnd;                  // +0x338
 };
-struct WinCtl { void Release(); void FUN_005fe650(); };
+struct WinCtl {
+    virtual void v0();
+    virtual void Release();            // vtable slot 1 (the original calls [vtbl+4])
+    void FUN_005fe650();
+};
 
 extern unsigned g_basicButtonIds[18];  // 0x01519a60
 extern char* g_ptr15fd918;             // 0x015fd918 (struct whose +0x3c holds a state block)
@@ -215,7 +224,7 @@ struct EditorUI {
     int f110; char f114, f115, f116, f117;
     int f118, f11c, f120, f124, f128;
 
-    void SetMode(int);
+    void SetMode(int);                       // 0x005dda30
     void FUN_005de9e0();
     EditorUI* Construct();
     bool Init(AppMode* app, int a2, unsigned a3, int a4);
@@ -224,12 +233,12 @@ struct EditorUI {
     bool Shutdown();
     void StopListeningToMessages();
     void StartListeningToMessages();
-    void UpdateUIBasedOnModelSaveability();
-    void UpdateSaveButtons();
+    void UpdateUIBasedOnModelSaveability();  // 0x005dd7a0
+    void UpdateSaveButtons();                // 0x005dc800
     void FUN_005dc970(int a);
     void FUN_005dd090(int a);
     void FUN_005dd390();
-    void FUN_005dc5a0(unsigned a);
+    void FUN_005dc5a0(unsigned a);           // 0x005dc5a0
     Widget* FUN_005dc310(unsigned id);
     void SetSelected(unsigned id, int a, int b);
 };

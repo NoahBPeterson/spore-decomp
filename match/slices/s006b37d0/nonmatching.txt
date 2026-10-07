@@ -1,7 +1,7 @@
 # Complete (all paths present) but not byte-exact.
 006b4730  34   local-static init of the job holder: placement-new form still emits an operator-new call instead of a bare ctor call
 006b37d0  1541  complete; EH-state/stack layout and call-arg scheduling differ (cString/out refs)
-006b4010  290  complete; stack slot order (dot/key/str/mgr) and spill placement differ
-006b4400  3  complete dtor; base vptr store order (+0 then +4) is reversed vs original (+4 then +0)
-006b4490  318  complete; svc kept in register (edi) instead of stack slot [esp+0x1c], stream this spilled
+006b4010  290  complete; stack slot order (dot/key/str/mgr) and spill placement differ; difftest WEAK (fixed: parameter order is (key, name, res), and the wstring dtor tests the byte capacity (char*)cap-(char*)b, not the element count)
+006b4400  3  complete dtor; base vptr store order (+0 then +4) is reversed vs original (+4 then +0); difftest PASS
+006b4490  318  complete; svc kept in register (edi) instead of stack slot [esp+0x1c], stream this spilled; difftest PASS
 

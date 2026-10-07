@@ -3,4 +3,4 @@
 007b8b30  132  complete ctor of two-vtable resource (raw vtable stores; original has EH frame from base ctor inlining)
 007b8be0  99  complete dtor (vtable restore + ~RefVector + 2 releases); no EH frame in mine
 007b8cb0  1108  complete RenderLargeTiledImage (tile loop, stitch, save png); not exact
-007b91f0  400  complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox
+007b91f0  366  complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox; difftest PASS after fixes: atan2 inlined as fpatan via float_control(precise, off) (was an unresolved __CIatan2 call), capture call args were swapped (viewer before hash key), bbox built from Vector3 temps so the frame depth matches (a callee reads a stale stack slot)

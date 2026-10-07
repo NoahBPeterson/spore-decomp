@@ -2,7 +2,7 @@
 // Sporepedia large asset card: finds every child window of the card layout, creates the
 // comment/expansion/verb/zoom helpers, positions the title/author widgets, loads the asset's
 // resource, builds the verb tray and the preview swatch.
-// Flags: /O2 /MD /Gy /TP /arch:SSE /GS-, no /EHsc (the string16 local has no EH frame).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast, no /EHsc (the string16 local has no EH frame).
 //
 // Layout: retail class matches ModAPI Sporepedia::cSPUILargeAssetView (size 0xCC).
 #include "types.h"
@@ -385,7 +385,7 @@ void __cdecl CenterWindow(IWindow* window, Point center);                 // 008
 }
 IAuthManager* __cdecl AuthManager();                                      // 00607A60
 cDownloadManager* __cdecl DownloadManager();                              // 0067CB30
-IResourceManager* __cdecl ResourceManager();                              // 0067DCD0
+IResourceManager* __cdecl GetManager();  // EA::ResourceMan::GetManager 0067DCD0 (not the SP::ResourceManager wrapper 004DA3A0)
 IPropertyManager* __cdecl PropertyManager();                              // 0067DE30
 IModelManager* __cdecl ModelManager();                                    // 0067DD80
 cSPSwatchManager* __cdecl SwatchManager();                                // 00401020
@@ -603,7 +603,7 @@ void cSPUILargeAssetView::LoadAssetViewLarge()
     AutoRefCount<ResourceObject> resource;
     if (mHasResource) {
         IAssetData* assetData = mAssetData;
-        IResourceManager* resourceManager = ResourceManager();
+        IResourceManager* resourceManager = GetManager();
         if (!resourceManager->GetResource(*assetData->GetKey(), resource.AsPPTypeParam(), 0, 0, 0, 0)) {
             resource.Reset();
             mHasResource = false;

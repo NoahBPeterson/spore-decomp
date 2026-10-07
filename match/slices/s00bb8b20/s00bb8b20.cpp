@@ -201,9 +201,11 @@ template<class T> struct AutoRefCount
 
 // Object-database stream reader (opens a record of the cObjectDatabase).
 struct ResourceKey { uint32_t instance, type, group; };
-extern ResourceKey kDefaultKey;                                     // 0x01897C18
+// The record key is passed BY VALUE: the original pushes 0x01897C18 three times as plain
+// (non-relocated) immediates, i.e. the key {0x01897C18, 0x01897C18, 0x01897C18}.
 struct cDatabaseStream {
-    cDatabaseStream(cObjectDatabase* pDB, const ResourceKey& a, const ResourceKey& b, const ResourceKey& c); // 0x00693CD0
+    // (ResourceKey by value, spelled as its three dwords: instance, type, group)
+    cDatabaseStream(cObjectDatabase* pDB, uint32_t instance, uint32_t type, uint32_t group); // 0x00693CD0
     ~cDatabaseStream();                                             // 0x00693900
     void Open();                                                    // 0x00692EA0
     void SetVersion(int version);                                   // 0x00692EC0
@@ -251,7 +253,9 @@ struct IMessageServer {
 };
 IMessageServer* MessageServer();                                    // 0x0067DCC0
 
-struct RandomLinearCongruential { double RandomDoubleUniform(); };  // 0x009360D0
+struct RandomLinearCongruential {
+    double RandomDoubleUniform();                                   // 0x009360D0
+};
 extern RandomLinearCongruential sMathRandom;                        // 0x01601760
 
 struct cGameTimeManager;
@@ -259,9 +263,13 @@ cGameTimeManager* GameTimeManager();                                // 0x00B3D38
 extern cGameTimeManager* gSerializedTimeManager;                    // 0x01689644
 extern void* gSerializedRelationshipManager;                        // 0x01689640
 
-struct WStringSet { void clear(); };                                // 0x005EA010
+struct WStringSet {
+    void clear();                                                   // 0x005EA010
+};
 extern WStringSet gLoadedNames;                                     // 0x0156C64C
-struct NameRegistry { void Assign(WStringSet* pSet); };             // 0x00B21DA0
+struct NameRegistry {
+    void Assign(WStringSet* pSet);                                  // 0x00B21DA0
+};
 struct AppData { uint32_t pad[0x3C0 / 4]; NameRegistry mNames; };
 AppData* GetAppData();                                              // 0x004010A0
 
@@ -445,7 +453,7 @@ bool cStarManager::LoadStarDatabase()
         pODB->SetLocation(dbPath.c_str());
         pODB->SetMode(1, 0);
         {
-        cDatabaseStream stream(pODB, kDefaultKey, kDefaultKey, kDefaultKey);
+        cDatabaseStream stream(pODB, 0x01897C18, 0x01897C18, 0x01897C18);
         stream.Open();
         void* pStream = stream.mpStream;
         StarDatabaseHeader header;

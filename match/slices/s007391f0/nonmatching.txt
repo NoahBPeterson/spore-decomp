@@ -1,1 +1,1 @@
-007391f0  3591  complete mesh merge pass; register allocation/structure differ (SEH, EASTL inlines)
+007391f0  3591  complete mesh merge pass; register allocation/structure differ (SEH, EASTL inlines); difftest WEAK (156 valid, 13% coverage: object-heavy) after annotating SporeNew/operator_delete__/Insert/PushBack/DoInsertValue

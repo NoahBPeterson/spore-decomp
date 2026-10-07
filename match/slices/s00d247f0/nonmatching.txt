@@ -1,1 +1,1 @@
-00d247f0  3791  complete; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; only esi/edi/ebx allocation of pm/keyA/keyB differs
+00d247f0  3795  complete; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; only esi/edi/ebx allocation of pm/keyA/keyB differs; difftest WEAK (319 valid, 8.6% coverage: the image property manager has no list for the keys, so the property reads are never reached; 0xb1b104 now a plain constant)

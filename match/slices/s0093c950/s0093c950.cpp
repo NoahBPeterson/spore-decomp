@@ -30,7 +30,7 @@ extern "C" void* __cdecl operator_new(unsigned int size, const char* name, int a
                                       const char* file, int line);
 void* __cdecl operator new[](unsigned int size, const char* name, int a, int b,
                              const char* file, int line);
-extern "C" void __cdecl operator_delete__(void* p);
+extern "C" void __cdecl operator_delete__(void* p);   // 0xf47380
 
 namespace EA {
 namespace Text {

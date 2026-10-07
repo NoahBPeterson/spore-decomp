@@ -137,6 +137,7 @@ struct TagMgr {
 struct VecStub {
     void DtorStarRecordVec();                     // 0x00ae6970 ~vector<AutoRefCount<cStarRecord>>
     void DtorSharedLibVec();                      // 0x005c7f10 ~vector<AutoRefCount<SharedLibrary>>
+    void Fn5942e0();                              // 0x005942e0 (thiscall, no args)
 };
 struct RbTreeStub { void DoNukeSubtree(void* root); };     // 0x009a9600
 void RemoveHandler(int h, int a, int b, int c, int d);    // 0x00571db0 EA::Messaging::RemoveHandler (cdecl)
@@ -150,7 +151,9 @@ extern PropList* g_sAppProperties;                 // 0x015fd918
 struct PropRoot { char pad[0x3c]; struct PropSub* sub; };
 struct PropSub { char pad[0x118]; int flag118; };
 
-struct BMsgBase {                                  // UI::BehaviorMessage base
+extern char vtbl_BehaviorMessage[];                // 0x013eb90c vtbl_UI::BehaviorMessage
+extern char vtbl_13eb844[];                        // 0x013eb844
+struct __declspec(novtable) BMsgBase {             // UI::BehaviorMessage base
     virtual void v0();
     virtual int AddRef();
     virtual int Release();
@@ -159,12 +162,12 @@ struct BMsgBase {                                  // UI::BehaviorMessage base
     char pad0c[0x30 - 0xc];
     unsigned id;                                   // +0x30
     unsigned pad34;
-    __forceinline BMsgBase() : id(0) { _InterlockedExchange(&rc, 0); }
+    __forceinline BMsgBase() : id(0) { *(void**)this = vtbl_BehaviorMessage; _InterlockedExchange(&rc, 0); }
 };
-struct BMsg : BMsgBase {
+struct __declspec(novtable) BMsg : BMsgBase {
     unsigned f38;                                  // +0x38
     unsigned pad3c;
-    __forceinline BMsg() : f38(0) { AddRef(); }
+    __forceinline BMsg() : f38(0) { *(void**)this = vtbl_13eb844; }
 };
 struct MsgServer {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5();
@@ -182,9 +185,15 @@ struct ModelMgr { virtual void s0(); virtual void s1(); virtual void s2(); virtu
 ModelMgr* ModelManager();                          // 0x0067dd80 (cdecl)
 bool FUN_004f3d60(Bits128 a, Bits128 b);           // 0x004f3d60 (cdecl, by-value masks)
 
-struct TorsoHolder { void* p; void Set(void* x); };           // 0x00478db0
-struct SceneObjA { void* GetSceneObject(int i); };            // 0x004c45d0
-struct XformStub { void Assign(void* src); };                 // 0x00537dc0 cSPTransform::operator=
+struct TorsoHolder { void* p;
+    void Set(void* x);                                        // 0x00478db0
+};
+struct SceneObjA {
+    void* GetSceneObject(int i);                              // 0x004c45d0
+};
+struct XformStub {
+    void Assign(void* src);                                   // 0x00537dc0 cSPTransform::operator=
+};
 
 namespace SP {
 class cAppModeEditorBase {
@@ -192,7 +201,7 @@ public:
     char pad[0x600];
     ~cAppModeEditorBase();                       // 0x579e20
     void RemoveTorsoFromEffectsMask();           // 0x5772b0
-    void AddTorsoToEffectsMask(int, int, int, int);   // 0x57a610
+    void AddTorsoToEffectsMask(float x, float y, float z, int);   // 0x57a610
     void SendBehaviorMessage(BMsg*);             // 0x57a710
     __declspec(noinline) Bits128 GetMask();   // 0x57a960
     Bits128 GetDefaultMask();                    // 0x57a9e0
@@ -203,11 +212,19 @@ public:
 
 using SP::cAppModeEditorBase;
 
-extern unsigned g_mec, g_mf0, g_mf4, g_mf8;      // 0x15da7ec..0x15da7f8
-extern unsigned g_d40, g_d44, g_d48, g_d4c;      // 0x15daa40..0x15daa4c
+extern unsigned g_mec;                           // 0x015da7ec
+extern unsigned g_mf0;                           // 0x015da7f0
+extern unsigned g_mf4;                           // 0x015da7f4
+extern unsigned g_mf8;                           // 0x015da7f8
+extern unsigned g_d40;                           // 0x015daa40
+extern unsigned g_d44;                           // 0x015daa44
+extern unsigned g_d48;                           // 0x015daa48
+extern unsigned g_d4c;                           // 0x015daa4c
 extern void* g_015e4ef0;                         // 0x015e4ef0
 extern char vtbl_cAppModeEditorBase[], vtbl_13f57e4[], vtbl_13f57e0[], vtbl_13f57c8[], vtbl_13f57b8[], vtbl_13f57a8[], vtbl_13f57a4[];
-extern char vtbl_cEditorResource[], vtbl_PaintSystem[], vtbl_cContentValidationSummarizer[];
+extern char vtbl_cEditorResource[];             // 0x013eb938
+extern char vtbl_PaintSystem[];                 // 0x013eb394
+extern char vtbl_cContentValidationSummarizer[]; // 0x013ec458
 
 #define F(T, off) (*(T**)((char*)this + (off)))
 #define REL(off, slot) { V* p_ = F(V, off); if (p_) p_->s##slot(); }
@@ -326,11 +343,10 @@ cAppModeEditorBase::~cAppModeEditorBase()
 
 // @ 0x0057A610
 // Re-create the torso scene object and flag the torso in the effects mask.
-void cAppModeEditorBase::AddTorsoToEffectsMask(int, int, int, int)
+void cAppModeEditorBase::AddTorsoToEffectsMask(float x, float y, float z, int)
 {
     if (*(int*)((char*)this + 0x150) != 0) {
         RemoveTorsoFromEffectsMask();
-        float v[3];                                 // left uninitialized in the original
         TorsoHolder* h = (TorsoHolder*)((char*)this + 0xf0);
         void* r = (*(void*(__thiscall**)(void*, unsigned, unsigned, int))(**(int**)((char*)this + 0x84) + 0xc))(
             *(void**)((char*)this + 0x84), 0xfeb8102, 0xefeb80ec, 0);
@@ -339,10 +355,10 @@ void cAppModeEditorBase::AddTorsoToEffectsMask(int, int, int, int)
             SceneObjA* so = *(SceneObjA**)((char*)this + 0x150);
             void* scene = so->GetSceneObject(0);
             ((XformStub*)((char*)h->p + 8))->Assign((char*)scene + 8);
-            float* dst = (float*)((char*)h->p + 0x4c);
-            dst[0] = v[0];
-            dst[1] = v[1];
-            dst[2] = v[2];
+            float* dst = (float*)((char*)h->p + 0x4c);   // Vector3 position passed by value
+            dst[0] = x;
+            dst[1] = y;
+            dst[2] = z;
             ModelMgr* mm = ModelManager();
             char* obj = (char*)h->p;
             unsigned idx = mm->GetIndex(0x23008d4, 0);
@@ -352,11 +368,12 @@ void cAppModeEditorBase::AddTorsoToEffectsMask(int, int, int, int)
     }
 }
 
-// @ 0x0057A6D0 -- ctor of the Editor cheat object (two-level MI vtables)
-struct CheatBase2 {                  // Simulator::cCreatureAbility-style base at +4
+// ctor of the Editor cheat object (two-level MI vtables), 0x0057A6D0
+extern char vtbl_RefObj[];           // 0x013ef094 ??_7RefObj@@6B@
+struct __declspec(novtable) CheatBase2 {   // RefObj base at +4
     virtual void f0();
     unsigned f8;
-    CheatBase2() : f8(0) {}
+    CheatBase2() { *(void**)this = vtbl_RefObj; f8 = 0; }
 };
 extern char vtbl_13f585c[], vtbl_13f5858[], g_01667bac[], g_01667bae[];
 struct CheatObject2 {
@@ -367,6 +384,7 @@ struct CheatObject2 {
     char* s14;
     CheatObject2();
 };
+// @ 0x0057A6D0
 CheatObject2::CheatObject2() : b()
 {
     vt0 = vtbl_13f585c;
@@ -385,6 +403,7 @@ void cAppModeEditorBase::SendBehaviorMessage(BMsg* msg)
         MessageServer()->Post(0x30c11c7, msg, 0, 0);
         if (((PropSub*)((PropRoot*)g_sAppProperties)->sub)->flag118 != 0) {
             BMsg* m = new ("Casual", 0, 0, 0, 0) BMsg();
+            if (m) m->AddRef();
             char* src = *(char**)(self + 0x98);
             unsigned* dst = (unsigned*)(self + 0x1ec);
             dst[0] = *(unsigned*)(src + 0xc);
@@ -399,6 +418,7 @@ void cAppModeEditorBase::SendBehaviorMessage(BMsg* msg)
                 lm->Method10660(0x614de4c, 1);
         }
         BMsg* m2 = new ("App", 0, 0, 0, 0) BMsg();
+        if (m2) m2->AddRef();
         m2->id = 0xe11332;
         m2->data = *(unsigned*)(*(char**)(self + 0x1cc) + 0x1c);
         MessageServer()->Post(m2->id, m2, 0, 0);
@@ -406,13 +426,14 @@ void cAppModeEditorBase::SendBehaviorMessage(BMsg* msg)
         if (cur && *(char**)(cur + 0x94)) {
             V* sub = *(V**)(cur + 0x94);
             if (sub) {
-                void* r = (*(void*(__thiscall**)(void*, unsigned))(**(int**)sub + 0xc))(sub, 0x3a3aa3a);
-                if (r) ((VecStub*)r)->DtorStarRecordVec();   // 0x005942e0 (thiscall, no args)
+                void* r = (*(void*(__thiscall**)(void*, unsigned))(*(char**)sub + 0xc))(sub, 0x3a3aa3a);
+                if (r) ((VecStub*)r)->Fn5942e0();
             }
         }
         m2->Release();
     } else {
         BMsg* m = new ("App", 0, 0, 0, 0) BMsg();
+        if (m) m->AddRef();
         m->id = 0xe11332;
         m->data = 0x2ccd1d2;
         MessageServer()->Post(m->id, m, 0, 0);

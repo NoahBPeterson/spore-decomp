@@ -265,26 +265,23 @@ AR* __cdecl ARCopy(AR* first, AR* last, AR* dst)
 // ---------------------------------------------------------------------------
 // Driver base classes
 // ---------------------------------------------------------------------------
-struct RefBase {
+struct RefBaseA22 {
     virtual void v0();
     volatile long rc;
-    RefBase() { _InterlockedExchange(&rc, 0); }
+    RefBaseA22() { _InterlockedExchange(&rc, 0); }
 };
 
-struct DrvB : RefBase {
+struct DrvBA22 : RefBaseA22 {
     u32   pad[0x1e];       // +8 .. +0x80
     void* mArg;            // +0x80
     u32   mPad84;
     u32   mZero;           // +0x88
-    DrvB(void* arg) : mArg(arg), mZero(0) {}
+    DrvBA22(void* arg);
     virtual void v0();
 };
 
 // @ 0x00a227a0
-void ConstructDrvB(DrvB* self, void* arg)
-{
-    new (self) DrvB(arg);
-}
+DrvBA22::DrvBA22(void* arg) : mArg(arg), mZero(0) {}
 
 // ---------------------------------------------------------------------------
 // Shared pointer helpers
@@ -343,12 +340,13 @@ struct SharedRef {
             p->sub.Release();
     }
 };
-struct DDBase2 { virtual ~DDBase2() {} };
-struct SharedHolder : DDBase2 {
+struct GmeEditorResBase { virtual ~GmeEditorResBase() {} };
+struct SharedHolder : GmeEditorResBase {
     u32       pad[9];
     SharedRef mShared;    // +0x28
     SharedHolder() {}
 };
+// 0x00a22b20 SharedHolder::~SharedHolder (implicit; emitted through MakeSH's vtable)
 SharedHolder* MakeSH() { return new SharedHolder; }   // forces ~SharedHolder 00a22b20
 
 // @ 0x00a22b00
@@ -361,23 +359,20 @@ int __stdcall MakeKeyPair(int* out, int)
     return 2;
 }
 
-// @ 0x00a22cf0
-struct PropBase {
+struct PropBaseA22 {
     virtual void v0();
     volatile long rc;
-    PropBase() { _InterlockedExchange(&rc, 0); }
+    PropBaseA22() { _InterlockedExchange(&rc, 0); }
 };
-struct PropList : PropBase {
+struct PropListA22 : PropBaseA22 {
     u32    f08, f0c, f10, f14, f18, f1c;
     double d20;
     u32    f28;
-    PropList() : f08(0), f0c(0), f10(0), d20(0.0), f14(0), f18(0), f28(0) {}
+    PropListA22();
     virtual void v0();
 };
-void ConstructPropList(PropList* self)
-{
-    new (self) PropList();
-}
+// @ 0x00a22cf0
+PropListA22::PropListA22() : f08(0), f0c(0), f10(0), d20(0.0), f14(0), f18(0), f28(0) {}
 
 // ---------------------------------------------------------------------------
 // Subscription::UpdateOutput

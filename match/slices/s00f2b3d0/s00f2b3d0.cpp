@@ -7,7 +7,7 @@
 // element/allocator types are not recovered here; the two self-contained functions
 // (FUN_00f2bd10, FUN_00f2bcb0) are reconstructed, the rest are skeletons.
 #include "types.h"
-void operator_delete__(void*);
+void operator_delete__(void*);                     // 0x00f47380
 void FUN_00dfaaf0(void*, void*);
 
 
@@ -155,7 +155,7 @@ struct AssetSet {
     void FUN_00f2b790();
     bool FUN_00f2c070(KeyVec* in, KeyVec* out);
     bool FUN_00f2c330(bool stopOnFirst, KeyVec* out);
-    bool FUN_00f2bd50(uint32_t a, uint32_t b);
+    bool FUN_00f2bd50(void* stream, uint32_t b);
     char pad[0x78];
     uint32_t mModelType;                          // +0x78
 };
@@ -306,7 +306,7 @@ void IntSet::insert(const int* first, const int* last)
     for (; first != last; ++first) insert_unique(*first);
 }
 
-// @ 0x00f2b9f0  map[key]: returns the value slot for key, inserting a zero value if absent.
+// 0x00f2b9f0 (KeyMap::operator[]) map[key]: returns the value slot for key, inserting a zero value if absent.
 struct KeyPair { Key first; Key second; };
 struct KeyMap {
     KeyPair* b; KeyPair* e; KeyPair* c;
@@ -314,7 +314,7 @@ struct KeyMap {
     bool flag;                                    // +0x14
     KeyPair* Insert(KeyPair* pos, const KeyPair* v);                  // @ 0xf2afc0 (thiscall)
     void Reserve(uint32_t n);                                         // @ 0xf28140
-    Key* operator[](const Key& k);
+    Key* Lookup(const Key& k);                                       // operator[]
 };
 KeyPair* __cdecl LowerBound(KeyPair* first, KeyPair* last, const Key* k, bool flag);   // @ 0xf27fc0
 
@@ -325,7 +325,8 @@ inline bool KeyLess(const Key& x, const Key& y)
     return x.b < y.b;
 }
 
-Key* KeyMap::operator[](const Key& k)
+// @ 0x00f2b9f0
+Key* KeyMap::Lookup(const Key& k)
 {
     KeyPair* end = e;
     KeyPair* it = LowerBound(b, end, &k, flag);
@@ -370,7 +371,7 @@ Entry238* FUN_00f2bbd0(Entry238* first, Entry238* last, Entry238* dest)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f2bd50  Write the asset list of a model as XML.
+// 0x00f2bd50: Write the asset list of a model as XML.
 // ---------------------------------------------------------------------------
 struct WAlloc { char c; WAlloc() { c = 0; } };
 struct WString {
@@ -380,13 +381,13 @@ struct WString {
 };
 struct XmlTextWriter {
     virtual void _v0(); virtual void _v1();
-    virtual bool StartElement(const wchar_t* name);                   // +0x08
-    virtual bool EndElement(const wchar_t* name);                     // +0x0c
+    virtual bool StartElement(const wchar_t* name);                   // +0x08  0x00901b30
+    virtual bool EndElement(const wchar_t* name);                     // +0x0c  0x00901b90
     virtual void _v4(); virtual void _v5(); virtual void _v6(); virtual void _v7();
-    virtual bool WriteText(const wchar_t* text);                      // +0x20
+    virtual bool WriteText(const wchar_t* text);                      // +0x20  0x009018a0
     XmlTextWriter(uint32_t stream, int zero);                         // @ 0x901a10
     ~XmlTextWriter();                                                 // @ 0x901a50
-    void Attach(uint32_t a, uint32_t b);                              // @ 0x901d30
+    void Attach(void* stream, uint32_t flag);                         // @ 0x901d30 (IStream*, bool)
     bool WriteXmlHeader();                                            // @ 0x901960
 };
 struct XmlSink {
@@ -396,11 +397,12 @@ struct XmlSink {
 extern const void* PTR_FUN_0148c67c;
 bool __cdecl WriteAssetBody(void* sink, int zero, AssetSet* self);    // @ 0xf28380
 
-bool AssetSet::FUN_00f2bd50(uint32_t a, uint32_t b)
+// @ 0x00f2bd50
+bool AssetSet::FUN_00f2bd50(void* a, uint32_t b)
 {
     struct Sink {
         const void* vtbl; XmlTextWriter w;
-        Sink(uint32_t s) : vtbl(PTR_FUN_0148c67c), w(s, 0) {}
+        Sink(uint32_t s) : vtbl(&PTR_FUN_0148c67c), w(s, 0) {}
     } sink(b);
     sink.w.Attach(a, b);
     bool hdr = sink.w.WriteXmlHeader();
@@ -430,13 +432,13 @@ bool AssetSet::FUN_00f2bd50(uint32_t a, uint32_t b)
     bool result = false;
     if (ok && sink.w.EndElement(L"assets") && WriteAssetBody(&sink, 0, this) && sink.w.EndElement(L"sporemodel"))
         result = true;
-    sink.vtbl = PTR_FUN_0148c67c;
+    sink.vtbl = &PTR_FUN_0148c67c;
     sink.w.~XmlTextWriter();
     return result;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f2c070 / 0x00f2c330
+// 0x00f2c070 / 0x00f2c330
 // ---------------------------------------------------------------------------
 struct IAssetBrowser { bool Resolve(Key key, Key* out, int mode, bool flag); };   // @ 0x646370
 IAssetBrowser* GetAssetBrowser();                                                    // @ 0x401030
@@ -444,6 +446,7 @@ struct NamespaceHolder { char pad[0x44]; uint32_t f44; };
 NamespaceHolder* GetNamespace();                                                     // @ 0x5f7930
 int __cdecl GetKeyKind(Key* k);                                                      // @ 0x552300
 
+// @ 0x00f2c070
 bool AssetSet::FUN_00f2c070(KeyVec* in, KeyVec* out)
 {
     KeyMap map; map.b = 0; map.e = 0; map.c = 0;
@@ -452,7 +455,7 @@ bool AssetSet::FUN_00f2c070(KeyVec* in, KeyVec* out)
         Key* kp = &in->b[i];
         Key res; res.a = 0; res.b = 0; res.c = 0;
         if (GetAssetBrowser()->Resolve(*kp, &res, -1, true)) {
-            *map[*kp] = res;
+            *map.Lookup(*kp) = res;
             if (out) out->push_back(res);
         }
     }
@@ -494,6 +497,7 @@ bool AssetSet::FUN_00f2c070(KeyVec* in, KeyVec* out)
     return true;
 }
 
+// @ 0x00f2c330
 bool AssetSet::FUN_00f2c330(bool stopOnFirst, KeyVec* out)
 {
     KeyVec keys; keys.b = 0; keys.e = 0; keys.c = 0;

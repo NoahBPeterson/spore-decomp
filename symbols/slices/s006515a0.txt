@@ -1,2 +1,9 @@
 00651c80 SP::cSPUIAssetGrid::~cSPUIAssetGrid  # PDB candidate (callee-single) card.py
 006524a0 cSPUIAssetGrid::UpdateScrollRegion  # slice source name (equiv.py symbol lookup)
+013eb384 ??_7GB1@@6B@  # base vtable stored by the ctor 00651990 (image: cListenerBase vtable); equiv.py vtable mapping
+0140b5a0 ??_7GB2@@6B@  # base vtable stored by the ctor 00651990
+013ec458 ??_7GB3@@6B@  # base vtable stored by the ctor 00651990 (image: EA::RefCountVTemplate<int> vtable)
+013ffad0 ??_7cSPUIAssetGrid@@6BGB0@@@  # cSPUIAssetGrid vtable, GB0 subobject (+0)
+013ffac0 ??_7cSPUIAssetGrid@@6BGB1@@@  # cSPUIAssetGrid vtable, GB1 subobject (+4)
+013ffabc ??_7cSPUIAssetGrid@@6BGB2@@@  # cSPUIAssetGrid vtable, GB2 subobject (+8)
+013ffaac ??_7cSPUIAssetGrid@@6BGB3@@@  # cSPUIAssetGrid vtable, GB3 subobject (+0xc)

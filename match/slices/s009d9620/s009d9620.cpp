@@ -7,7 +7,7 @@ typedef unsigned int u32;
 inline void* operator new(unsigned int, void* p) { return p; }
 
 void __cdecl EastlFree(void* p);   // 0xf47380 operator delete[]
-void* __cdecl memcpy(void* d, const void* s, unsigned int n);
+void* __cdecl memcpy(void* d, const void* s, unsigned int n);   // 0x11e0744 (msvcr90 memcpy import thunk)
 
 static inline void FreeArr(void* p)
 {
@@ -42,7 +42,8 @@ struct ItemVec {
     Item* c;
     u32 alloc;
     ItemVec& operator=(const ItemVec& o);   // 0x9d8fd0
-    void DestroyRange(Item* first, Item* last);    // 0x9c15f0 / 0x9d8e20 range destroy
+    void DestroyRange(Item* first, Item* last);    // 0x9c15f0 range destroy
+    Item* Erase(Item* first, Item* last);          // 0x9d8e20 erase(first,last), returns first
     void DoInsertValue(Item* pos, const Item& v);  // 0x9d8e80
 };
 
@@ -270,7 +271,7 @@ void __cdecl SwapRecords(S* a, S* b)
 void S::FillGroups(void* y)
 {
     int n = idx.e - idx.b;
-    items.DestroyRange(items.b, items.e);
+    items.Erase(items.b, items.e);
     for (int i = 0; i < n; ++i) {
         char* elem = owner->arr + idx.b[i] * 0x108;
         char* ybase = *(char**)((char*)y + 0x2e4);

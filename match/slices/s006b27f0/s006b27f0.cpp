@@ -3,6 +3,7 @@
 #include "s006b27f0.h"
 
 void* __cdecl operator new(size_t, const char*, int, int, int, int);   // EA::Allocator::ZoneObject::operator_new (0x926020)
+void __cdecl operator delete(void* p);                                 // 0x00f47380
 
 // @ 0x6b2aa0
 void SaveMap5::Nuke(RBNode5* n) {

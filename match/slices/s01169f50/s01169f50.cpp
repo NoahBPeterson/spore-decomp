@@ -2,7 +2,7 @@
 // Original uses a register convention: input pointer in EAX, outputs in ECX/EDX.
 // Modeled here as a plain 3-argument function.
 // Scratch table at 0x016F1740 (64 floats).
-float g[0x40];
+float g[0x40];   // 0x016f1740
 
 // @ 0x01169f50
 void Dct32(float *in, float *param_1, float *param_2)

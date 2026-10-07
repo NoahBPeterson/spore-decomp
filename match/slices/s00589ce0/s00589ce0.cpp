@@ -152,7 +152,10 @@ struct ModelHook { void FUN_004ae0f0(); };   // 0x004AE0F0
 extern wchar_t gDelimiters[];          // 0x013F5CA8
 extern Key16 gNullKey;                 // 0x015DAC10
 extern TokenTranslator* gTokenTranslator;   // 0x015EEBEC
-extern struct PropList { bool GetDescription(uint id); }* sAppProperties;   // 0x015FD918
+struct PropList {
+    bool GetDescription(uint id);   // 0x006A25A0
+};
+extern PropList* sAppProperties;   // 0x015FD918
 
 const wchar_t* __cdecl GetTypeExtension(uint typeId);                                      // 0x004BB490
 int  __cdecl WStrNCompare(const wchar_t* a, const wchar_t* b, int n);                      // 0x00572930
@@ -181,7 +184,9 @@ UIHints* __stdcall GetUIHints(int a, int b);         // 0x0067CAC0
 int  __cdecl FUN_00552300(void* key);
 bool __cdecl GetCreatorType(void* key);              // 0x00641900
 
-struct PaintTheme { void ReadFromAsset(void* model); };   // 0x004B2800
+struct PaintTheme {
+    void ReadFromAsset(void* model);   // 0x004B2800
+};
 struct CamController { void SetCenterCameraOffset(); };   // 0x005A2370
 struct IFace3 { virtual void v0(); virtual void v1(); virtual void v2(); virtual CamController* Cast(uint id); };
 struct IFace2 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -204,8 +209,13 @@ struct EditorUIEx : EditorUI {
 };
 
 // Container helpers
-struct UndoListVec { UndoEntry** mpBegin; void Resize(int n); };       // 0x005E77E0
-struct LocalStateVec { void Resize(int n); };     // 0x00584160
+struct UndoListVec {
+    UndoEntry** mpBegin;
+    void Resize(int n);   // 0x005E77E0
+};
+struct LocalStateVec {
+    void Resize(int n);   // 0x00584160
+};
 
 struct ModelMem { char pad0[0xC]; Key12 key; char pad1[0x40]; uint f58; };
 

@@ -1,0 +1,3 @@
+013ef094  ??_7Base0@@6B@  # base refcount vtable (GmeRefCount), restored by the Ability dtors
+0140ffb0  ??_7AbilityA@@6B@
+0140ffbc  ??_7AbilityB@@6B@

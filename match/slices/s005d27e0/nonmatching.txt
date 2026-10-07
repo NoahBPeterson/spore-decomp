@@ -1,4 +1,4 @@
-005d27e0  1793  complete (spine grow: phantom probe + block/body build); SSE math/regalloc differs from original
+005d27e0  1793  complete (spine grow: phantom probe + block/body build); SSE math/regalloc differs from original; difftest WEAK (3.8% coverage: the entry guard needs src == this->+0xe8 or +0xec, which random inputs never produce, even with --alias 1.0; resolved by moving the deallocateChunk "// 0x0107db10" annotation onto the method line)
 005d3010  122   complete; lower_bound jump layout + key param spill differ
 005d3100  1     complete; only the lower_bound null-root branch target differs (jump threading)
 005d3300  461   complete; reg alloc (this/next) and zero-compare form differ

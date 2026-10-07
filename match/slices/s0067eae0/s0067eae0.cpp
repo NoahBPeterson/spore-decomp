@@ -12,7 +12,7 @@ extern "C" void  __cdecl FUN_009216a0(void*, void*, void*, int);  // eastl::RBTr
 // @ 0x0067EC70  anonymous::cCheatHistoryCommand::Execute
 // ===========================================================================
 struct Arguments {
-    void* MainArguments(void** out, int a, int b);   // EA::ArgScript::cArguments::MainArguments
+    void* MainArguments(void** out, int a, int b);   // 0x00838020 EA::ArgScript::cArguments::MainArguments
 };
 struct CheatManager;
 struct Cmd_ec70 {
@@ -26,7 +26,7 @@ struct CheatManager {
     char pad0[0x4c];
     void* setEnd;    // +0x4c
     void* setRoot;   // +0x50
-    void ActivateConsole(unsigned code);
+    void ActivateConsole(unsigned code);   // 0x0067e7f0
 };
 
 void Cmd_ec70::Execute(void* args)
@@ -67,7 +67,7 @@ struct EString {
     char* c_str();
 };
 struct Parser {
-    void Set(const char* s);   // FUN_0067e7b0
+    void Set(const char* s);   // 0x0067e7b0
 };
 struct Cmd_ef60 {
     char pad0[0xc];
@@ -126,10 +126,10 @@ void Cmd_f640::push_back(void** v)
 #define TC2(R, p, off, A, a, B, b) ((R(__thiscall*)(void*, A, B))VT(p)[(off) / 4])(p, a, b)
 #define TC3(R, p, off, A, a, B, b, C, c) ((R(__thiscall*)(void*, A, B, C))VT(p)[(off) / 4])(p, a, b, c)
 
-void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int) throw();
+void* __cdecl operator new(unsigned int, const char*, int, int, const char*, int) throw(); // 0x00f473a0
 inline void* __cdecl operator new(unsigned int, void* p) { return p; }
 inline void __cdecl operator delete(void*, void*) {}
-void __cdecl operator delete(void*) throw();
+void __cdecl operator delete(void*) throw();   // 0x00f47380
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 #pragma intrinsic(memcpy)
 
@@ -156,7 +156,7 @@ struct EAlloc { EAlloc() {} };
 struct EStr {
     char* b; char* e; char* c; int al;
     EStr() : b(0), e(0), c(0) {}
-    EStr(const char* first, const char* last, const EAlloc& al_ = EAlloc());   // @0x5e96a0
+    EStr(const char* first, const char* last, const EAlloc& al_ = EAlloc());   // 0x5e96a0
     __forceinline EStr(const char* s)
     {
         const char* q = s;
@@ -176,21 +176,21 @@ struct EStr {
         *e = 0;
     }
     ~EStr() { if (c - b > 1 && b) operator delete(b); }
-    void AllocateSelf(unsigned n);   // @0x475ab0 (RangeInitialize shape)
+    void AllocateSelf(unsigned n);   // 0x475ab0 (RangeInitialize shape)
 };
 
 // pair<const string, AutoRefCount<cICommand>>
 struct PairB {
     EStr k;
     ICmdRef* v;
-    PairB(const EStr& key, ICmdRef* const& val);   // @0x67ee60
-    PairB(const PairB& o);                            // @0x67e900
-    ~PairB();                                         // @0x67e830
+    PairB(const EStr& key, ICmdRef* const& val);   // 0x67ee60
+    PairB(const PairB& o);                            // 0x67e900
+    ~PairB();                                         // 0x67e830
 };
 
 struct CmdRef { ICmdRef* p; ~CmdRef() { if (p) p->Release(); } };
 struct PairBInl { EStr k; CmdRef v; };   // same layout as PairB, with the dtor inline
-struct Node : NodeHdr { PairB v; };   // 0x24 bytes
+struct Node : NodeHdr { PairB v; };   // 36 bytes
 
 struct InsResult { NodeHdr* it; bool ok; };
 
@@ -199,15 +199,15 @@ struct StrTree {
     NodeHdr a;       // anchor: right = rightmost, left = leftmost, parent = root
     int count;
     int ext;
-    Node* NewNodeFromKey(const EStr* k);     // @0x67e890
-    Node* NewNodeFromPair(const PairB* v);      // @0x67eef0
-    void InsertKey(InsResult* out, const EStr* key, char flag);     // @0x67f0c0
-    void InsertPair(InsResult* out, const PairB* v, char flag);        // @0x67f260
-    void InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // @0x67f1f0
-    NodeHdr** InsertHint(NodeHdr** out, NodeHdr* pos, const PairB* v, int unused4);  // @0x67f790
-    NodeHdr** find(NodeHdr** out, const EStr& key) throw();   // @0x923ac0
-    void NukeSub(Node* n);                                // @0x67f670
-    void Nuke2(NodeHdr* root);                            // @0xe84940
+    Node* NewNodeFromKey(const EStr* k);     // 0x67e890
+    Node* NewNodeFromPair(const PairB* v);      // 0x67eef0
+    void InsertKey(InsResult* out, const EStr* key, char flag);     // 0x67f0c0
+    void InsertPair(InsResult* out, const PairB* v, char flag);        // 0x67f260
+    void InsertAt(NodeHdr** out, NodeHdr* at, const PairB* v, char flag);  // 0x67f1f0
+    NodeHdr** InsertHint(NodeHdr** out, NodeHdr* pos, const PairB* v, int unused4);  // 0x67f790
+    NodeHdr** find(NodeHdr** out, const EStr& key) throw();   // 0x923ac0
+    void NukeSub(Node* n);                                // 0x67f670
+    void Nuke2(NodeHdr* root);                            // 0xe84940
 };
 struct NamesTree : StrTree { ~NamesTree() { NukeSub((Node*)a.parent); } };
 struct Tree2 : StrTree { ~Tree2() { Nuke2(a.parent); } };
@@ -219,7 +219,7 @@ struct ParserRef {   // EA::AutoRefCount<cIParser>
 struct PtrVec {
     const char** b; const char** e; const char** c;
     ~PtrVec() { if (b && ((int*)b)[-1] != 0) operator delete(b); }
-    void grow(const char** at, const char** v);     // @0x690b80
+    void grow(const char** at, const char** v);     // 0x690b80
 };
 
 struct ConsoleRef {   // EA::AutoRefCount<cICheatConsole>
@@ -227,29 +227,30 @@ struct ConsoleRef {   // EA::AutoRefCount<cICheatConsole>
     ConsoleRef(IRef* x) : p(x) { if (p) p->AddRef(); }
     ~ConsoleRef() { if (p) p->Release(); }
 };
+struct UniqueTag {};   // eastl::true_type (unique keys), passed by value
 struct SetNode : NodeHdr { IRef* v; };
 struct RefSet {
     int al;
     NodeHdr a;
     int count;
     int ext;
-    void Nuke(NodeHdr* root);                                          // @0xeb6280
+    void Nuke(NodeHdr* root);                                          // 0xeb6280
     ~RefSet() { Nuke(a.parent); }
-    void Insert(InsResult* out, const ConsoleRef* v, char flag);       // @0x68a140
-    NodeHdr** Find(NodeHdr** out, const ConsoleRef* key);              // @0xe5c780
+    InsResult Insert(const ConsoleRef& v, UniqueTag tag);   // 0x68a140
+    NodeHdr** Find(NodeHdr** out, const ConsoleRef* key);              // 0xe5c780
 };
 
 struct ScriptErr { const char* msg; };
 
-extern "C" void* __cdecl CreateParser();                 // EA::ArgScript::CreateParser
+extern "C" void* __cdecl CreateParser();                 // 0x008408d0 EA::ArgScript::CreateParser
 extern "C" void* __cdecl EA_Trace_GetServer();           // 0x9234c0
 extern "C" void* __cdecl SP_MessageServer();             // 0x67dcc0
 extern "C" const char* __cdecl Tokenize(const char* s, const char** end, const char* delims);   // 0x840890
 extern "C" bool __cdecl WildcardMatch(const char*, const char*, int);   // EA::Text::WildcardMatch
-extern "C" void __cdecl Output(void*, const char*, ...);                // EA::ArgScript::Output
+extern "C" void __cdecl Output(void*, const char*, ...);                // 0x00841000 EA::ArgScript::Output
 
-struct AppCheatHandler { char pad[0x20]; AppCheatHandler(struct CheatMgr*); };            // @0x67e9a0
-struct AppCheatConsole { char pad[0x28]; AppCheatConsole(const char*, struct CheatMgr*); };  // @0x67e100
+struct AppCheatHandler { char pad[0x20]; AppCheatHandler(struct CheatMgr*); };            // 0x67e9a0
+struct AppCheatConsole { char pad[0x28]; AppCheatConsole(const char*, struct CheatMgr*); };  // 0x67e100
 
 extern char g_vt_1401b78[], g_vt_1401b74[], g_vt_13ef094[], g_vt_13eb938[];
 
@@ -261,25 +262,25 @@ struct CheatMgr : B0, B4 {
     Tree2 mTree2;             // +0x28
     ParserRef mParser;        // +0x44
     RefSet mConsoles;         // +0x48
-    virtual ~CheatMgr();                        // @0x67f910
-    bool Init();                                // @0x67ed00
-    bool RunCheat(const char* cmd);             // @0x67efc0
-    bool Shutdown();                            // @0x67f390
-    void* FindCommand(const char* name);        // @0x67f470
-    void InsertConsole(IRef* c);                // @0x67f540
-    void RemoveConsole(IRef* c);                // @0x67f5c0
-    int  FindMatches(const char* pat, PtrVec* out);   // @0x67f710
-    void RemoveCommand(const char* name);       // @0x67f9b0
-    void AddBuiltInCheats();                    // @0x67e480
-    void Print(const char* s);                  // @0x67e7b0
+    virtual ~CheatMgr();                        // 0x67f910
+    bool Init();                                // 0x67ed00
+    bool RunCheat(const char* cmd);             // 0x67efc0
+    bool Shutdown();                            // 0x67f390
+    void* FindCommand(const char* name);        // 0x67f470
+    void InsertConsole(IRef* c);                // 0x67f540
+    void RemoveConsole(IRef* c);                // 0x67f5c0
+    int  FindMatches(const char* pat, PtrVec* out);   // 0x67f710
+    void RemoveCommand(const char* name);       // 0x67f9b0
+    void AddBuiltInCheats();                    // 0x67e480
+    void Print(const char* s);                  // 0x0067e7b0
 };
 
 // ===========================================================================
 // @ 0x0067EAE0  anonymous::cCheatHelpCommand::Execute
 // ===========================================================================
 struct HelpArgs {
-    char** MainArguments(int* argc, int a, int b);   // EA::ArgScript::cArguments::MainArguments
-    bool HasFlag(const char* name);                  // cArguments::HasFlag
+    char** MainArguments(int* argc, int a, int b);   // 0x00838020 EA::ArgScript::cArguments::MainArguments
+    bool HasFlag(const char* name);                  // 0x008380b0 cArguments::HasFlag
 };
 struct Cmd_eae0 {
     char pad0[4];
@@ -547,9 +548,7 @@ void* CheatMgr::FindCommand(const char* name)
 // ===========================================================================
 void CheatMgr::InsertConsole(IRef* c)
 {
-    ConsoleRef k(c);
-    InsResult r;
-    mConsoles.Insert(&r, &k, 0);
+    mConsoles.Insert(ConsoleRef(c), UniqueTag());
 }
 
 // ===========================================================================

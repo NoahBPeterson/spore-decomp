@@ -5,9 +5,9 @@
 #include "types.h"
 
 void* operator new[](size_t size);
-void  operator delete[](void* p) throw();
+void  operator delete[](void* p) throw();                // 0xf47380
 void* operator new(size_t size, const char* pName, int a, int b, const char* file, int line);  // 0xf473a0
-void  operator delete(void* p) throw();
+void  operator delete(void* p) throw();                  // 0xf47380 (same EA allocator free)
 inline void* operator new(size_t, void* p) throw() { return p; }
 
 #define EASTL_ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -38,12 +38,12 @@ struct cTransform {                                   // size 0x38
 };
 
 // ------------------------------------------------------------------ ref-counted helpers
-struct RefObj {                                       // RefCountTemplate<int>: vptr + count
-    RefObj() : mnRefCount(0) {}
-    virtual ~RefObj() {}                              // slot 0: scalar deleting dtor
+struct GmeRefCount {                                       // RefCountTemplate<int>: vptr + count
+    GmeRefCount() : mnRefCount(0) {}
+    virtual ~GmeRefCount() {}                              // slot 0: scalar deleting dtor
     int mnRefCount;                                   // +4
 };
-inline void ReleaseRef(RefObj* p) {                   // inline RefCountTemplate::Release
+inline void ReleaseRef(GmeRefCount* p) {                   // inline RefCountTemplate::Release
     volatile int* r = &p->mnRefCount;
     int n = *r + -1;
     *r = n;
@@ -82,7 +82,7 @@ struct AutoModelRef {
     void Assign(cMWModel* m);                         // 0x478db0
 };
 
-struct IComponent {                                   // EA::Swarm::cIComponent
+struct GmeIComponent {                                   // EA::Swarm::cIComponent
     virtual void Initialize(void* world, void* manager, void* params);   // +0x00
     virtual void Dispose();                                              // +0x04
     virtual void w2(); virtual void w3(); virtual void w4(); virtual void w5();
@@ -90,25 +90,29 @@ struct IComponent {                                   // EA::Swarm::cIComponent
     virtual void w7(); virtual void w8(); virtual void w9(); virtual void w10(); virtual void w11(); virtual void w12();
     virtual void AddRef();                                               // +0x34
     virtual void Release();                                              // +0x38
+    ~GmeIComponent() {}
 };
 struct AutoComponentRef {
-    IComponent* mpObject;
+    GmeIComponent* mpObject;
     AutoComponentRef(const AutoComponentRef& o);      // inline in 0x7d5300 (copy ctor of cSplitController)
     ~AutoComponentRef() { if (mpObject) mpObject->Release(); }
 };
 
 // ------------------------------------------------------------------ cSplitController vector
-struct cEffectParams { void* vtbl; char pad[0xcc]; ~cEffectParams(); };   // 0x7d4ae0
+struct cEffectParams {
+    void* vtbl; char pad[0xcc];
+    ~cEffectParams();                                 // 0x7d4ae0
+};
 struct cSplitController {                             // size 0x40
     cTransform mLocalXform;                           // +0
     cEffectParams* mParams;                           // +0x38
-    IComponent* mComponent;                           // +0x3c (AutoRefCount<cIComponent>)
+    GmeIComponent* mComponent;                           // +0x3c (AutoRefCount<cIComponent>)
     cSplitController(const cSplitController& o);      // 0x7d5300
     cSplitController& operator=(const cSplitController& o) {
         mLocalXform = o.mLocalXform;
         mParams = o.mParams;
-        IComponent* nc = o.mComponent;
-        IComponent* oc = mComponent;
+        GmeIComponent* nc = o.mComponent;
+        GmeIComponent* oc = mComponent;
         if (nc != oc) {
             if (nc) nc->AddRef();
             mComponent = nc;
@@ -116,7 +120,7 @@ struct cSplitController {                             // size 0x40
         }
         return *this;
     }
-    ~cSplitController() { IComponent* c = mComponent; if (c) c->Release(); }
+    ~cSplitController() { GmeIComponent* c = mComponent; if (c) c->Release(); }
 };
 cSplitController* __cdecl CtrlCopyBackward(cSplitController* first, cSplitController* last, cSplitController* dest);   // 0x7d5520
 cSplitController* __cdecl CtrlMoveRange(cSplitController* first, cSplitController* last, cSplitController* dest);      // 0x7d53a0
@@ -173,7 +177,17 @@ void CtrlVec::DoInsertValue(cSplitController* position, const cSplitController& 
 
 // ------------------------------------------------------------------ cAnimationInfo vector
 struct cAnimationInfo { float mAge, mInvLength, mCurveMultiplier; };   // size 0xc
-cAnimationInfo* __cdecl AnimUninitCopy(cAnimationInfo* first, cAnimationInfo* last, cAnimationInfo* dest);   // 0x898b80 / 0xa11310
+struct AnimIter {                                     // eastl::generic_iterator<cAnimationInfo*> (non-POD: returned via hidden pointer)
+    cAnimationInfo* mpNode;
+    AnimIter(cAnimationInfo* p) : mpNode(p) {}
+};
+struct AnimFalseType {};                              // eastl::integral_constant<bool, false>
+AnimIter __cdecl AnimUninitCopyIter(AnimIter first, AnimIter last, AnimIter dest, AnimFalseType);   // 0x898b80
+inline AnimIter AnimUninitCopyWrap(cAnimationInfo* first, cAnimationInfo* last, cAnimationInfo* dest) {   // eastl::uninitialized_copy
+    const AnimIter f(first), l(last), d(dest);
+    return AnimUninitCopyIter(f, l, d, AnimFalseType());
+}
+cAnimationInfo* __cdecl AnimUninitCopy(cAnimationInfo* first, cAnimationInfo* last, cAnimationInfo* dest);   // 0xa11310
 void __cdecl AnimCopyBackward(cAnimationInfo* first, cAnimationInfo* last, cAnimationInfo* destEnd);          // 0xabced0
 void __cdecl AnimFill(cAnimationInfo* first, cAnimationInfo* last, const cAnimationInfo* v);                  // 0xa177f0
 void __cdecl AnimUninitFillN(cAnimationInfo* dest, unsigned n, const cAnimationInfo* v);                      // 0x6e5760
@@ -191,7 +205,7 @@ void AnimVec::DoInsertValues(cAnimationInfo* position, unsigned n, const cAnimat
             unsigned nExtra = (unsigned)(mpEnd - position);
             if (n < nExtra) {
                 cAnimationInfo* pOldEnd = mpEnd;
-                AnimUninitCopy(pOldEnd - n, pOldEnd, pOldEnd);
+                AnimUninitCopyWrap(pOldEnd - n, pOldEnd, pOldEnd);
                 mpEnd += n;
                 AnimCopyBackward(position, pOldEnd - n, pOldEnd);
                 AnimFill(position, position + n, &temp);
@@ -199,7 +213,7 @@ void AnimVec::DoInsertValues(cAnimationInfo* position, unsigned n, const cAnimat
                 cAnimationInfo* pOldEnd = mpEnd;
                 AnimUninitFillN(pOldEnd, n - nExtra, &temp);
                 mpEnd += n - nExtra;
-                AnimUninitCopy(position, pOldEnd, mpEnd);
+                AnimUninitCopyWrap(position, pOldEnd, mpEnd);
                 mpEnd += nExtra;
                 AnimFill(position, pOldEnd, &temp);
             }
@@ -238,7 +252,7 @@ struct SplitListVec {                                 // eastl::vector<cSplitIns
         if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete[](mpBegin);
     }
 };
-struct cSplitManager : RefObj {
+struct cSplitManager : GmeRefCount {
     cTransform mComponentTransform;                   // +0x8
     SplitListVec mSplitClientList;                    // +0x40
     cSplitManager();
@@ -265,7 +279,7 @@ struct AnimVec5 {                                     // eastl::vector<cAnimatio
 };
 struct CtrlVec5 : CtrlVec { int mAlloc2; };
 struct cIModelManager;
-struct cGameModelEffect : IComponent, RefObj {
+struct cGameModelEffect : GmeIComponent, GmeRefCount {
     void* mDesc;                                      // +0x0c
     int mPackageID;                                   // +0x10
     bool mActive, mIsVisible, mIsLoaded;              // +0x14..0x16
@@ -281,7 +295,7 @@ struct cGameModelEffect : IComponent, RefObj {
     float mLODSizeScale[2];                           // +0x80
     float mLODAlphaScale[2];                          // +0x88
     AnimVec5 mAnimationInfo;                          // +0x90
-    AutoRef<RefObj> mModelSplitter;                   // +0xa4
+    AutoRef<GmeRefCount> mModelSplitter;                   // +0xa4
     AutoRef<cSplitManager> mSplitManager;             // +0xa8
     CtrlVec5 mSplitControllers;                       // +0xac
     cIModelManager* mModelManager;                    // +0xc0
@@ -303,19 +317,19 @@ cGameModelEffect::cGameModelEffect(void* desc, int packageID) {
     mIsLoaded = false;
     mGameModelInstanceID = 0xffffffff;
     mGameModelGroupID = 0xffffffff;
-    mGameModelColor[0] = g_one;
-    mGameModelColor[1] = g_one;
-    mGameModelColor[2] = g_one;
-    mGameModelAlpha = g_one;
-    mGameModelScale = g_one;
-    mIntersectionRadius = g_radiusInit;
+    mGameModelColor[0] = 1.0f;
+    mGameModelColor[1] = 1.0f;
+    mGameModelColor[2] = 1.0f;
+    mGameModelAlpha = 1.0f;
+    mGameModelScale = 1.0f;
+    mIntersectionRadius = 1e-5f;
     mGameModel.mpObject = 0;
     mComponentXform.mFlags = 0;
     mComponentXform.mModificationCount = 0;
     mComponentXform.mTranslation[0] = g_vecInit[0];
     mComponentXform.mTranslation[1] = g_vecInit[1];
     mComponentXform.mTranslation[2] = g_vecInit[2];
-    mComponentXform.mScale = g_one;
+    mComponentXform.mScale = 1.0f;
     mComponentXform.mRotation.Assign(&g_matIdentityA);
     mLastLocation[0] = g_vecInit[0];
     mLastLocation[1] = g_vecInit[1];
@@ -323,9 +337,9 @@ cGameModelEffect::cGameModelEffect(void* desc, int packageID) {
     mAnimationInfo.mpBegin = 0; mAnimationInfo.mpEnd = 0; mAnimationInfo.mpCapacity = 0;
     mModelSplitter.mpObject = 0;
     mSplitManager.mpObject = 0;
-    mLODSizeScale[0] = g_one; mLODSizeScale[1] = g_one;
+    mLODSizeScale[0] = 1.0f; mLODSizeScale[1] = 1.0f;
     mSplitControllers.mpBegin = 0; mSplitControllers.mpEnd = 0; mSplitControllers.mpCapacity = 0;
-    mLODAlphaScale[0] = g_one; mLODAlphaScale[1] = g_one;
+    mLODAlphaScale[0] = 1.0f; mLODAlphaScale[1] = 1.0f;
     mModelManager = 0;
     mGameModelWorld = 0;
 }
@@ -356,7 +370,7 @@ __forceinline void CopyXformInline(cTransform& d, const cTransform& s) {
     for (int k = 0; k < 3; ++k) ((Row*)d.mRotation.m)[k] = r[k];
 }
 
-// @ 0x007d56f0  cGameModelEffect::SetTransforms (IComponent slot 0x18)
+// @ 0x007d56f0  cGameModelEffect::SetTransforms (GmeIComponent slot 0x18)
 void cGameModelEffect::SetTransforms(const cTransform& source, const cTransform& rigid) {
     cTransform xf;
     if (mSplitManager.mpObject) {
@@ -404,7 +418,7 @@ void cGameModelEffect::Unload() {
     mModelManager = 0;
 }
 
-// @ 0x007d5e60  find the game model of this effect among the models near its position
+// find the game model of this effect among the models near its position (0x007d5e60)
 struct ModelQueryFilter { int a[5]; char b0, b1; };
 struct ModelPtrVec {                                  // eastl::fixed_vector<cMWModel*, 17>
     cMWModel** mpBegin; cMWModel** mpEnd; cMWModel** mpCapacity; cMWModel** mpBuffer;
@@ -412,6 +426,7 @@ struct ModelPtrVec {                                  // eastl::fixed_vector<cMW
     ModelPtrVec() { mpBegin = mBuffer; mpEnd = mBuffer; mpBuffer = mBuffer; mpCapacity = mBuffer + 17; }
     ~ModelPtrVec() { if (mpBegin && mpBegin != mBuffer) operator delete[](mpBegin); }
 };
+// @ 0x007d5e60
 void cGameModelEffect::FindGameModel() {
     ModelPtrVec found;
     float pos[3] = { mComponentXform.mTranslation[0], mComponentXform.mTranslation[1], mComponentXform.mTranslation[2] };
@@ -495,7 +510,7 @@ struct RbMap {                                        // eastl::map copy-constru
     ~RbMap() { DoNuke(mAnchor.mpNodeParent); }
     void DoNuke(RBNodeBase* root);                    // 0x9a9600
 };
-struct cMapResABase : RefObj {
+struct cMapResABase : GmeRefCount {
     int mType;                                        // +8
     cMapResABase() : mType(4) {}
 };
@@ -506,22 +521,19 @@ struct cMapResA : cMapResABase, RbMap {               // 0x7d6380 ctor / 0x7d63e
 cMapResA* MakeMapResA(void* mem, const RbMap& m) { return new (mem) cMapResA(m); }
 // @ 0x007d63e0  scalar deleting destructor of cMapResA (vtable emitted by the ctor above)
 
-struct __declspec(novtable) ResBase0 { virtual ~ResBase0() {} };
-struct cMapResB : ResBase0, RefObj, RbMap {           // 0x7d6440 ctor / 0x7d6500 dtor (map at +0x0c)
+struct GmeEditorResBase { virtual ~GmeEditorResBase() {} };
+struct cMapResB : GmeEditorResBase, GmeRefCount {                  // 0x7d6440 ctor / 0x7d6500 dtor (map at +0x0c)
+    RbMap mMap;                                       // +0x0c
     float mVec[3];                                    // +0x28
-    RefObj* mpRef;                                    // +0x34
-    cMapResB(const RbMap& m, const float* v, RefObj* r);
-    ~cMapResB();
+    AutoRef<GmeRefCount> mpRef;                            // +0x34
+    cMapResB(const RbMap& m, const float* v, GmeRefCount* r);
 };
 // @ 0x007d6440
-cMapResB::cMapResB(const RbMap& m, const float* v, RefObj* r) : RbMap(m) {
+cMapResB::cMapResB(const RbMap& m, const float* v, GmeRefCount* r) : mMap(m) {
     mVec[0] = v[0];
     mVec[1] = v[1];
     mVec[2] = v[2];
-    mpRef = r;
+    mpRef.mpObject = r;
     if (r) ++r->mnRefCount;
 }
-// @ 0x007d6500
-cMapResB::~cMapResB() {
-    if (mpRef) ReleaseRef(mpRef);
-}
+// @ 0x007d6500  compiler-generated ~cMapResB (no vptr reset at entry)

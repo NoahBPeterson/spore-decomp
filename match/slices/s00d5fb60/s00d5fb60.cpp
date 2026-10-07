@@ -96,7 +96,9 @@ extern void FUN_00d57800(void* effect, Viz* viz, void* profile, int civ, int idx
 extern void FUN_00d995f0(float dt, double gameTime, int a, void* creature, void* b, int c, int flags, int t);
 extern void FUN_00aea5d0_push(void* vec, void** pos, void** val);   // 0xaea5d0 (thiscall vector grow-insert)
 extern Rand sMathRandom;                    // 0x1601760
-extern float g_PosX, g_PosY, g_PosZ;        // 0x169ec28, 0x169ec2c, 0x169ec30 (invalid-position sentinel)
+extern float g_PosX;  // 0x169ec28 (invalid-position sentinel)
+extern float g_PosY;  // 0x169ec2c
+extern float g_PosZ;  // 0x169ec30
 
 static inline u32 Pad() { return 0; }
 

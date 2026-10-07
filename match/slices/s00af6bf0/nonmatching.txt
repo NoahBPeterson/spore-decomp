@@ -1,1 +1,1 @@
-00af6bf0 3676 complete source (4KB SSE path tracer); /O2 x87/SSE mix and frame layout differ, not chased
+00af6bf0 3676 complete source (4KB SSE path tracer); /O2 x87/SSE mix and frame layout differ, not chased ; difftest WEAK (274 valid, 17% coverage); fixes: ProbeHit/SweepSide annotated 0xaf5b40/0xaf6400, /fp:fast (original inlines fsqrt, ours called _CIsqrt under /fp:precise), firstHit constructed after PlanetModel() as in the original

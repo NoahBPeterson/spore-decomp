@@ -1,6 +1,6 @@
 009d75b0 59 complete; only reg alloc/store schedule differs (constant 1.0 hoisted into xmm1 in original); flags /O2 /MD /Gy /TP /arch:SSE
 009d7b20 13 complete std::sort wrapper; log2 loop reuses add flags (mov ecx,0) instead of xor+test, esi push order
-009d7bb0 182 complete PtrVec::operator= (vector<T*> assign); register/ordering differs, not chased
+009d7bb0 182 complete PtrVec::operator= (vector<T*> assign); register/ordering differs, not chased; difftest WEAK (173 valid, 42% coverage); renamed operator= to PtrVec::Assign (checker cannot match ??4 names), annotated EastlFree/memcpy
 009d7dd0 33 complete Item copy ctor; register allocation of memcpy result differs
 009d7f20 105 complete copy loop; original strides pointers biased by +0x20 (field-pointer form), mine indexes from item base
 009d7fa0 118 complete copy_backward of Items; same pointer-bias difference as 009d7f20

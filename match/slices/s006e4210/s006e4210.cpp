@@ -17,7 +17,7 @@
 #include <string.h>
 #include <intrin.h>
 
-void* operator new(unsigned size, const char* tag, int a, int b, int c, int d);
+void* operator new(unsigned size, const char* tag, int a, int b, int c, int d);   // 0x00f473a0
 
 // ---- engine interfaces ---------------------------------------------------------------------
 struct TargetHandle { unsigned a, b; };               // render-target id pair (two dwords)
@@ -67,13 +67,13 @@ struct CaptureMsgB : MsgBase {                        // 0x30 bytes
 };
 
 struct EffectsCollection {                            // 0x20 bytes (ctor 0x00760c00)
-    EffectsCollection();
+    EffectsCollection();                              // 0x00760c00
     virtual int AddRef();                             // +0
     virtual int Release();                            // +4
     void AddEffect(unsigned a, unsigned kind, unsigned c);   // 0x00760fd0
 };
 struct CaptureCommand {                               // ctor 0x0076b660 (D660)
-    CaptureCommand();
+    CaptureCommand();                                 // 0x0076b660
     virtual int AddRef();                             // +0
     virtual int Release();                            // +4
     void Init(unsigned face, unsigned target, TargetHandle* handle, EffectsCollection* fx,

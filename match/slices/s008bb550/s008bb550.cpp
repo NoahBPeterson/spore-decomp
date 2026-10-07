@@ -178,10 +178,10 @@ void Seek_InputStream(InputStream* t, unsigned long offset);    // 0x008cc580 ar
 void PrimeT2KInputStream(InputStream* t);                       // 0x008cc0b0
 void tsi_Error(tsiMemObject* t, int errcode);                   // 0x008d10c0
 void glyph_StartLine(GlyphClass* t, long x, long y);            // 0x008b0440
-void glyph_AddPoint(GlyphClass* t, long x, long y, uint8 onCurveBit);
-void glyph_CloseContour(GlyphClass* t);
-F16Dot16 util_FixMul(F16Dot16 a, F16Dot16 b);
-F16Dot16 util_FixDiv(F16Dot16 a, F16Dot16 b);
+void glyph_AddPoint(GlyphClass* t, long x, long y, uint8 onCurveBit);   // 0x008b0320
+void glyph_CloseContour(GlyphClass* t);         // 0x008afde0
+F16Dot16 util_FixMul(F16Dot16 a, F16Dot16 b);  // 0x008d1590
+F16Dot16 util_FixDiv(F16Dot16 a, F16Dot16 b);  // 0x008d16d0
 void Type2BuildChar(CFFClass* t, InputStream* in, long byteCount, long recursionLevel);
 #ifdef __cplusplus
 }

@@ -96,7 +96,7 @@ struct RbNode {
 RbNode* __cdecl RBTreeIncrement(RbNode*);
 void __cdecl RBTreeErase(RbNode*, RbNode* anchor);
 void __cdecl RBTreeInsert(RbNode* node, RbNode* parent, RbNode* anchor, int side);
-void* __cdecl memcpy(void*, const void*, unsigned);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 
 struct RbIter {
     RbNode* p;
@@ -192,7 +192,7 @@ extern char vtbl_Base4[];              // 0x13eb938
 extern char vtbl_Base0[];              // 0x13effb8
 extern wchar_t kEmptyWString[];        // 0x1667bac
 extern const char kStrRaw[];           // "Resource/Raw"
-extern const char kStrPackedRecord[];  // "Resource/PackedRecord"
+extern const char kStrPackedRecord[];  // 0x0140a10c "Resource/PackedRecord"
 extern const char kStrRecordData[];    // "Resource/RecordData"
 extern const char kBusy[];             // "BUSY"
 extern const float kHoleRatio;         // 0x1436794 (0.15f)

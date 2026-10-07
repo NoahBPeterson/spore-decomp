@@ -148,8 +148,22 @@ void FUN_004a88d0(uint32_t id);                                                 
 void FUN_0049bcc0(cSPEditorBlock* b, Vec3 origin, Vec3 dir, Vec3 a, Vec3 b2, int one);              // 0x0049bcc0
 void* FUN_0067cac0(uint32_t id, int a);                                                             // 0x0067cac0
 void FUN_0067c8c0(void* p);                                                                         // 0x0067c8c0 (thiscall on result)
-struct cViewer { void GetWorldRayFromScreenCoords(float x, float y, Vec3* origin, Vec3* dir); };   // 0x007c4730
-namespace SP { cViewer* GetViewer(); }
+struct cViewer {
+    void GetWorldRayFromScreenCoords(float x, float y, Vec3* origin, Vec3* dir);   // 0x007c4730
+};
+struct cIAppViewer {                 // cIApp: GetViewer is vtable slot 22 (+0x58)
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21();
+    virtual cViewer* GetViewer();    // +0x58
+};
+namespace SP {
+    cIAppViewer* App();              // 0x0067dd10
+    inline cViewer* GetViewer() { return App()->GetViewer(); }
+}
 
 extern uint32_t gUIStateIdOn;    // 0x015ea8e4
 extern uint32_t gUIStateIdOff;   // 0x015ea87c

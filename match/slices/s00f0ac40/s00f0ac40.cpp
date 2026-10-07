@@ -120,13 +120,15 @@ extern "C" void FUN_00f09d70(Rec* dst, uint n, const Rec* val, Rec* hint);
 extern "C" void FUN_00f09880(Rec* a, Rec* b, Rec* c);
 extern "C" void FUN_00f09800(Rec* a, Rec* b, const Rec* val);
 extern "C" void FUN_00dfb8e0(Rec** out, Rec* a, Rec* b, Rec* c, Rec* d);
-extern "C" void* operator_new(uint size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void operator_delete__(void* p);
+extern "C" void* operator_new(uint size, const char* tag, int a, int b, const char* file, int line);  // 0x00f473a0
+extern "C" void operator_delete__(void* p);  // 0x00f47380
 
 // SubObj/Rec/Ctx helpers (thiscall members)
 extern "C" void FUN_00f0aa80();
 
-struct Layout { IWin* FindWindowByID(uint id, int b); };  // cSPUILayout::FindWindowByID @ 0x8105b0
+struct Layout {  // cSPUILayout
+    IWin* FindWindowByID(uint id, int b);  // 0x008105b0
+};
 extern "C" void* SPUIHelpers_SetButtonState(IWin* w, int b);   // 0x806880
 extern "C" void  SPUIHelpers_SetImageIcon(IWin* w, void* img, int b);  // 0x806aa0
 
@@ -394,7 +396,9 @@ void RefreshEntries()
 }
 
 extern "C" void* __stdcall AddBoundingBox_67cad0(IWin* panel, int a, int b);   // 0x67cad0
-struct BBox { void Renderer(); };                                      // 0x80d710
+struct BBox {
+    void Renderer();  // 0x0080d710 SPUIHelpers::Renderer
+};
 
 // @ 0x00f0b940
 void SetToolMode(int mode)

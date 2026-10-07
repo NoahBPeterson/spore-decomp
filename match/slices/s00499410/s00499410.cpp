@@ -27,11 +27,15 @@ struct Vec3C {
     Vec3C(const Vec3C& o);                          // 0x004098A0
 };
 
-struct Plane { float a, b, c, d; Plane() {} Plane(float ax, float bx, float cx, float dx); };   // 0x0044E410
+struct Plane {
+    float a, b, c, d;
+    Plane() {}
+    Plane(float ax, float bx, float cx, float dx);   // 0x0044E410
+};
 
 extern Vector3 g_15d64d8;
 extern Vector3 g_15d6324;
-extern Vec3C   g_15d64d8c;
+extern Vec3C   g_15d64d8_v3c;                    // 0x015d64d8 (g_15d64d8 seen as Vec3C)
 
 Vector3* VectorSub(Vector3* out, const Vector3* a, const Vector3* b);            // 0x41db10
 Vector3* VectorAdd(Vector3* out, const Vector3* a, const Vector3* b);            // 0x41dc10
@@ -71,21 +75,29 @@ struct IRefCount {
 };
 struct RefObj : IBase0, IRefCount { };
 
-template <class T> struct AutoRefCount {
-    T* mpObject;
-    AutoRefCount(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
-    ~AutoRefCount();                                       // out-of-line
-    T* operator->() const { return mpObject; }
-    operator T*() const { return mpObject; }
+// AutoRefCount<T>: the out-of-line destructors of the two instantiations used here are
+// written as two classes so each carries its original address.
+struct RefObj;
+struct SkinMgr;
+struct AutoRefCountRefObj {
+    RefObj* mpObject;
+    AutoRefCountRefObj(RefObj* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCountRefObj();                                 // 0x004A9AE0
+};
+struct AutoRefCountSkinMgr {
+    SkinMgr* mpObject;
+    ~AutoRefCountSkinMgr();                                // 0x004A9B10
+    SkinMgr* operator->() const { return mpObject; }
+    operator SkinMgr*() const { return mpObject; }
 };
 
 struct Block;
 struct Entity;
 struct SkinMgr {
-    // 0x004C4A30
-    bool   PickSkin(int pickId, Vector3 org, Vector3 dir, Vector3* a, Vector3* b, float* t, int c);
-    // 0x004C4D30
-    Block* GetBlockAtSkinPoint(Vec3C pt, int id);
+    bool   PickSkin(int pickId, Vector3 org, Vector3 dir, Vector3* a, Vector3* b, float* t, int c);  // 0x004C4A30
+    // same function, origin given as a Vec3C (copied with the out-of-line copy ctor)
+    bool   PickSkin(int pickId, Vec3C org, Vector3 dir, Vector3* a, Vector3* b, float* t, int c);    // 0x004C4A30
+    Block* GetBlockAtSkinPoint(Vec3C pt, int id);  // 0x004C4D30
 };
 struct Entity {
     char     pad0[0x28];
@@ -107,10 +119,10 @@ Block* PickBlockForPinning(Entity* e, unsigned arg, Vector3 org, Vector3 dir,
 void   FUN_0049c630(Vector3* out, Vec3C pt, SkinMgr* skin);                   // 0x0049C630 cdecl
 
 // @ 0x00499410
-Block* FUN_00499410(Entity* e, Vector3 org, Vector3 dir, AutoRefCount<SkinMgr> skin,
+Block* FUN_00499410(Entity* e, Vector3 org, Vector3 dir, AutoRefCountSkinMgr skin,
                     Vector3* outPt, Vector3* outN, unsigned arg30)
 {
-    AutoRefCount<RefObj> u(e->GetRefObj());
+    AutoRefCountRefObj u(e->GetRefObj());
     Block* p30 = 0;
     int n37 = e->GetSkinIdentifierForPicking();
     Block* obj = 0;
@@ -144,7 +156,7 @@ Block* FUN_00499410(Entity* e, Vector3 org, Vector3 dir, AutoRefCount<SkinMgr> s
             float pt[3] = { 0.0f, 0.0f, 0.0f };
             Plane pl(nrm[0], nrm[1], nrm[2], -Dot3(pt, nrm));
             Vec3C hit;
-            hit = g_15d64d8c;
+            hit = g_15d64d8_v3c;
             float t;
             if (IntersectRayPlane(&org, &dir, &pl, &t)) {
                 Vector3 sv, sum;
@@ -158,7 +170,7 @@ Block* FUN_00499410(Entity* e, Vector3 org, Vector3 dir, AutoRefCount<SkinMgr> s
             Vector3 d = *VectorSub(&tmp, &onPlane, (Vector3*)&hit);
             Vector3 nd;
             Vector3_Normalize(&nd, &d);
-            if (skin->PickSkin(n37, *(Vector3*)&hit, nd, &t25, &m, &n1, 1)) {
+            if (skin->PickSkin(n37, hit, nd, &t25, &m, &n1, 1)) {
                 if (n1 < 1.0f && e->HasAnyBlockFlag())
                     t14 = true;
             }
@@ -236,7 +248,6 @@ Vector3* FUN_00499f10(Vector3* ret, Vector3 a, Vector3 b, Vector3 c)
     return ret;
 }
 
-// @ 0x0049a0c0
 struct DirSrc;
 struct DirOwner {
     char pad0[0x28];
@@ -247,9 +258,9 @@ struct DirOwner {
     const Vec3I& GetDir() { return mDir; }
 };
 struct DirSrc {
-    // 0x004ABBC0 (hidden return slot first)
-    Vector3 GetDir(Vec3I a, DirOwner* o, int z0, int z1, Vector3 b);
+    Vector3 GetDir(Vec3I a, DirOwner* o, int z0, int z1, Vector3 b);  // 0x004ABBC0 (hidden return slot first)
 };
+// @ 0x0049a0c0
 Vector3* FUN_0049a0c0(Vector3* ret, DirOwner* o)
 {
     DirSrc* m;

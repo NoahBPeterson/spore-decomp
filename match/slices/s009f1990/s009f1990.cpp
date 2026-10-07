@@ -13,7 +13,10 @@
 #include "types.h"
 #include <math.h>
 
-struct Vec3 { float x, y, z; };
+struct Vec3 {
+    float x, y, z;
+    Vec3& operator=(const Vec3& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
 
 struct Quat;
 extern "C" {
@@ -27,7 +30,7 @@ extern "C" {
 struct Quat {
     float x, y, z, w;
     // 0x009edcf0: out(ecx) = quaternion from (axis*s ... c); ret 0x10
-    Quat* __thiscall FromAxisSC(const Vec3* axis, float s, float c, int flag);
+    Quat* __thiscall FromAxisSC(const Vec3* axis, float s, float c, int flag);   // 0x009edcf0
 };
 extern float g_leashBase;     // DAT_01550a10
 extern float g_leashExtra;    // DAT_01550a14
@@ -79,8 +82,8 @@ struct IKParticle {
     float       radius;           // +0x214
     uint32_t    pad218[(0x234 - 0x218) / 4];
     uint8_t     active;           // +0x234
-    uint8_t     pad235[0x2a0 + 8 - 0x235];
-    uint8_t     hasPlane;         // +0x2a0 (index 0xa8 -> +0x2a0)
+    uint8_t     pad235[0x2a0 - 0x235];
+    uint8_t     hasPlane;         // +0x2a0
     uint8_t     pad2a1[3];
     Vec3        planeN;           // +0x2a4
     Vec3        planeP;           // +0x2b0
@@ -90,7 +93,7 @@ struct IKContext {
     IKWorld* world;               // +0x00
     Quat*    rootQuat;            // +0x04
     Vec3     axis;                // +0x08
-    uint32_t pad14[5];
+    uint32_t pad14[3];
     float    d;                   // +0x20
 
     void __thiscall Update(IKParticle* p);   // 0x009f1990
@@ -117,9 +120,7 @@ void __thiscall IKContext::Update(IKParticle* p)
     IKParticle* parent = p->parent;
 
     if (flagsBit == 0 && p->active != 0) {
-        p->prev.x = p->pos.x;
-        p->prev.y = p->pos.y;
-        p->prev.z = p->pos.z;
+        p->prev = p->pos;
 
         bool near_ = ((p->state & 7) == 0) && ((p->body->flags & 4) != 0);
         float lo = g_leashBase;
@@ -131,14 +132,25 @@ void __thiscall IKContext::Update(IKParticle* p)
             hi = 0.0f;
         }
 
+        // The original squares the x difference unrounded (x87) and the y/z differences
+        // after rounding them to float (SSE); dx is double and vy/vz volatile to keep that rounding.
+        double dx = (double)p->pos.x - (double)parent->pos.x;
         Vec3 c;
-        c.x = p->pos.x - parent->pos.x;
-        c.y = p->pos.y - parent->pos.y;
-        c.z = p->pos.z - parent->pos.z;
+        c.x = (float)dx;
+        volatile float vy = p->pos.y - parent->pos.y;
+        volatile float vz = p->pos.z - parent->pos.z;
+        c.y = vy;
+        c.z = vz;
         float maxLen = (lo + 1.0f) * p->radius;
-        float len = sqrtf(c.z * c.z + (c.y * c.y + c.x * c.x)) + 1e-08f;
+        float len = (float)(sqrt(dx * dx + (double)(c.y * c.y) + (double)(c.z * c.z)) + 1e-08f);
         t4c = len;
-        if (len <= maxLen) {
+        if (len > maxLen) {
+            float s = maxLen / len;
+            p->pos.x = c.x * s + parent->pos.x;
+            p->pos.y = parent->pos.y + c.y * s;
+            p->pos.z = parent->pos.z + c.z * s;
+            t4c = maxLen;
+        } else {
             float minLen = (1.0f - hi) * p->radius;
             if (len < minLen) {
                 float s = minLen / len;
@@ -147,12 +159,6 @@ void __thiscall IKContext::Update(IKParticle* p)
                 p->pos.z = parent->pos.z + c.z * s;
                 t4c = minLen;
             }
-        } else {
-            float s = maxLen / len;
-            p->pos.x = c.x * s + parent->pos.x;
-            p->pos.y = parent->pos.y + c.y * s;
-            p->pos.z = parent->pos.z + c.z * s;
-            t4c = maxLen;
         }
 
         if (g_collideFlag != 0 && near_ && world->enabled != 0) {

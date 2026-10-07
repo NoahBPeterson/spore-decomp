@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-008bb550  4  Type2BuildChar (T2K CFF Type-2 charstring interpreter), complete; compile with /O2 /MD /Gy /TC. Only 4 code bytes differ: operand order of two commutative adds (hflex1/flex1 dy sums); frame, calls, tables identical.
+008bb550  4  Type2BuildChar (T2K CFF Type-2 charstring interpreter), complete; compile with /O2 /MD /Gy /TC. Only 4 code bytes differ: operand order of two commutative adds (hflex1/flex1 dy sums); frame, calls, tables identical.; difftest WEAK (1600 inputs: 1157 valid, no mismatch, 53.4% coverage; fix: glyph_AddPoint/glyph_CloseContour/util_FixMul/util_FixDiv annotated)

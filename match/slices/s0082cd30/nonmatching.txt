@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 0082cd30 1663 ProcessStream: complete (header, bindings, hit masks, objects, property blocks, trailer); frame layout/register allocation and exit-path merging differ
-0082d480 291 ParseProp: complete; this/token register assignment (ebx/edi swapped) and spill order differ
-0082d7b0 250 ParseProps: complete (fixed_vector<Prop*,64> collect + link); cleanup blocks are merged where the original duplicates them
+0082d480 291 ParseProp: complete; this/token register assignment (ebx/edi swapped) and spill order differ; difftest WEAK (7.8% coverage: random tokens rarely name <prop>; fixed '// @' markers on the class declarations that made the checker pick ParseObject)
+0082d7b0 250 ParseProps: complete (fixed_vector<Prop*,64> collect + link); cleanup blocks are merged where the original duplicates them; difftest WEAK (42.6% coverage)
 0082d910 62 ParseObject: complete; obj pointer spill timing around vector push_back differs
-0082dae0 119 map<uint, 16-byte record>::operator[]: complete; value_type temporary zero-store scheduling and callee-saved register choice differ
-0082db80 15 map<Object*, int>::operator[]: complete; one zero-store of the temporary value_type is scheduled earlier than the original
+0082dae0 119 map<uint, 16-byte record>::operator[]: complete; value_type temporary zero-store scheduling and callee-saved register choice differ; difftest PASS (operator[] wrapped as XmlIdMap::Index with __forceinline operator[]; per-map DoInsertValue annotated 0x0082cac0 via CRTP)
+0082db80 15 map<Object*, int>::operator[]: complete; one zero-store of the temporary value_type is scheduled earlier than the original; difftest PASS (operator[] wrapped as ObjectBindingMap::Index; DoInsertValue annotated 0x0082cb90)

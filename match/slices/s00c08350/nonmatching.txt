@@ -1,1 +1,1 @@
-00c08350 3657 complete behavior (all paths/calls); 4KB, scheduling/regalloc/float-expression order differs from original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
+00c08350 3657 complete behavior (all paths/calls); 4KB, scheduling/regalloc/float-expression order differs from original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; difftest WEAK (9.6% coverage, no mismatch)

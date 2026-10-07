@@ -2,6 +2,6 @@
 00a25090  6  complete; only xchg register choice (ecx/edx) differs
 00a25190  -    complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame)
 00a252b0  1378  complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ
-00a25980  4  complete; eax/edx choice for string begin vs &out
+00a25980  4  complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString)
 00a25aa0  4  complete; ebx/ebp swap for args a and c
 00a25bd0  8  complete; two iterator temps do not share one slot

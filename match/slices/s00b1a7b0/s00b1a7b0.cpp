@@ -4,7 +4,8 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
 
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);  // 0x00f473a0
+void operator delete[](void* p);  // 0x00f47380
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 #pragma intrinsic(memcpy)
 
@@ -292,9 +293,11 @@ struct IGameData {
 };
 struct GameDataPtrVec { IGameData** mpBegin; IGameData** mpEnd; IGameData** mpCapacity; };
 struct GameDataVector { int pad; GameDataPtrVec vec; };  // vector at +4
-struct cTerrainCameraController { const float* __thiscall GetAnchorDirection1(); };  // 0x00b10260
+struct cTerrainCameraController {
+  const float* __thiscall GetAnchorDirection1();  // 0x00b10260
+};
 struct cGameNounManager {
-  GameDataVector* __thiscall GetGameDataVector(void (*fa)(), void (*fb)(), void (*fc)(), void (*fd)(), int kind);  // 0x00b21340
+  GameDataVector* __thiscall FUN_00b21340(void (*fa)(), void (*fb)(), void (*fc)(), void (*fd)(), int kind);  // 0x00b21340
 };
 cTerrainCameraController* GetTerrainCameraController();  // 0x00b3d280
 cGameNounManager* NounManager();                         // 0x00b3d300
@@ -306,7 +309,7 @@ IGameData* FindClosestGameData(int kind, int flags) {
   float ax = a[0], ay = a[1], az = a[2];
   IGameData* best = 0;
   float bestD = 0.0f;
-  GameDataPtrVec* v = &NounManager()->GetGameDataVector(FUN_00cd7d10, FUN_00d3d420, FUN_00b1a4c0, FUN_00b1e520, kind)->vec;
+  GameDataPtrVec* v = &NounManager()->FUN_00b21340(FUN_00cd7d10, FUN_00d3d420, FUN_00b1a4c0, FUN_00b1e520, kind)->vec;
   unsigned n = (unsigned)(v->mpEnd - v->mpBegin);
   for (unsigned i = 0; i < n; i++) {
     if (GameDataMatches(v->mpBegin[i], flags)) {
@@ -528,7 +531,9 @@ struct ITerrainCursor {
   virtual void WorldToTerrain(Vec3* p);  // +0x38
 };
 struct cTerrainCursor { char pad[0x34]; ITerrainCursor mCursor; };  // +0x34
-struct cTribeInputStrategy { void Init(); };                           // 0x00cd0aa0
+struct cTribeInputStrategy {
+  void Init();  // 0x00cd0aa0
+};
 struct cTribeModeStrategy {
   PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16)
   PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27)

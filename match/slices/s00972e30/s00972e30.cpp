@@ -170,29 +170,31 @@ struct WinGrid {
     void RemoveScrollBar(bool a, bool b);              // 0x972600
     void SetScrollBarValues();                         // 0x9726c0
 };
-struct ListHead { void Clear(); };                     // 0x972d30 (eastl::list<CellCoordinates>::clear)
+struct ListHead {
+    void Clear();                                      // 0x972d30 (eastl::list<CellCoordinates>::clear)
+};
 
 // @ 0x972e90
 void WinGrid::DoArrowKey(int vk, bool bExtend)
 {
-    int curCol = 0, curRow = 0;
+    struct { int col, row; } cur = {0, 0};   // CellCoordinates: msg.pCur points at both
     int vis[4] = {0, 0, 0, 0};
     void* view = (char*)this + 0x20c;
     VCALL1(void, view, 0xc4, vis);
     RBNode* sel = (RBNode*)((char*)this + 0x2b4);
     if (sel->right != sel) {                 // list not empty: start from the first selected cell
         RBNode* first = (RBNode*)sel->left;
-        curCol = FLD(int, first, 8);
-        curRow = FLD(int, first, 0xc);
+        cur.col = FLD(int, first, 8);
+        cur.row = FLD(int, first, 0xc);
     }
     switch (vk) {
     case 0x25:
-        if (curCol <= 0) return;
-        curCol--;
+        if (cur.col <= 0) return;
+        cur.col--;
         break;
     case 0x26:
-        if (curRow <= 0) return;
-        curRow--;
+        if (cur.row <= 0) return;
+        cur.row--;
         break;
     case 0x27: {
         int t = FLD(int, this, 0x264);
@@ -200,12 +202,12 @@ void WinGrid::DoArrowKey(int vk, bool bExtend)
         if ((t != -1 && t != 0) || !(FLD(unsigned, this, 0x210) & 0x8000)) {
             bit = FLD(unsigned, this, 0x210) & 0x8000;
             if (!bit) t = vis[2] + 1;
-            if (curCol >= t - 1) {
+            if (cur.col >= t - 1) {
                 if (bit) return;
                 break;
             }
         }
-        curCol++;
+        cur.col++;
         break;
     }
     case 0x28: {
@@ -214,43 +216,43 @@ void WinGrid::DoArrowKey(int vk, bool bExtend)
         if ((t != -1 && t != 0) || !(FLD(unsigned, this, 0x210) & 0x10000)) {
             bit = FLD(unsigned, this, 0x210) & 0x10000;
             if (!bit) t = vis[3] + 1;
-            if (curRow >= t - 1) {
+            if (cur.row >= t - 1) {
                 if (bit) return;
                 break;
             }
         }
-        curRow++;
+        cur.row++;
         break;
     }
     default:
         return;
     }
     if (sel->right != sel && !bExtend) ((ListHead*)sel)->Clear();
-    VCALL3(void, view, 0xac, curCol, curRow, 1);
+    VCALL3(void, view, 0xac, cur.col, cur.row, 1);
     Msg msg;
     msg.id = 0x9a1552d2;
     msg.tmp = FLD(int, this, 0x84);
     if (msg.tmp == 0) msg.tmp = FLD(int, this, 0x80);
-    msg.pCur = &curCol;
+    msg.pCur = &cur.col;
     void* win = (char*)this + 4;
     VCALL1(void, win, 0x114, &msg);
     switch (vk - 0x25) {
     case 0:
-        if (curCol < FLD(int, this, 0x254)) VCALL1(void, view, 0x88, curCol);
+        if (cur.col < FLD(int, this, 0x254)) VCALL1(void, view, 0x88, cur.col);
         break;
     case 1:
-        if (curRow < FLD(int, this, 0x258)) VCALL1(void, view, 0x8c, curRow);
+        if (cur.row < FLD(int, this, 0x258)) VCALL1(void, view, 0x8c, cur.row);
         break;
     case 2: {
         float vc = FLD(float, this, 0x25c);
-        if ((float)curCol >= (float)FLD(int, this, 0x254) + vc)
-            VCALL1(void, view, 0x88, curCol - (int)vc + 1);
+        if ((float)cur.col >= (float)FLD(int, this, 0x254) + vc)
+            VCALL1(void, view, 0x88, cur.col - (int)vc + 1);
         break;
     }
     case 3: {
         float vr = FLD(float, this, 0x260);
-        if ((float)curRow >= (float)FLD(int, this, 0x258) + vr)
-            VCALL1(void, view, 0x8c, curRow - (int)vr + 1);
+        if ((float)cur.row >= (float)FLD(int, this, 0x258) + vr)
+            VCALL1(void, view, 0x8c, cur.row - (int)vr + 1);
         break;
     }
     }

@@ -16,6 +16,8 @@
 
 typedef unsigned int uint32_t;
 
+void operator delete[](void* p);       // 0x00f47380
+
 extern wchar_t gEmptyWStr[];            // 0x01667bac, eastl empty-string sentinel
 
 // ---- stub EASTL strings / vectors -------------------------------------------------

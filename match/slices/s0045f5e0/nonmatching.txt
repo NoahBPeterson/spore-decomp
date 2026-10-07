@@ -1,2 +1,2 @@
-45f5e0 - complete: mesh merge routine (/Od, inlined vector/size helpers and struct copies not reproduced)
-4600f0 666 complete: stream append; /Od slot order and ternary bool temps not matched
+0045f5e0 - complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-): mesh merge routine (/Od, inlined vector/size helpers and struct copies not reproduced); difftest WEAK (15% coverage, no mismatch; fixed: GetResourceTypeFromModelType is called on cluster+0x44, not the cluster)
+004600f0 666 complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-): stream append; /Od slot order and ternary bool temps not matched; difftest WEAK (53% coverage, no mismatch)

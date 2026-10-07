@@ -1,1 +1,1 @@
-00b3ac20 3693 complete behavior (stub-class vcalls, 104-entry table); regalloc/frame differ (this in ebp not esi, 0x28 vs 0x24 frame); flags /O2 /MD /Gy /TP /GS-
+00b3ac20 3693 complete behavior (stub-class vcalls, 104-entry table); regalloc/frame differ (this in ebp not esi, 0x28 vs 0x24 frame); flags /O2 /MD /Gy /TP /GS-; difftest WEAK (282 valid, 0.8% coverage, no mismatch: random inputs mostly take the f_b8 early return, the rest fault in the singleton callees) after annotating the 8 direct callees

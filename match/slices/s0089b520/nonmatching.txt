@@ -1,9 +1,9 @@
 0089b520 691 Typesetter shaping driver (FUN_0089b520): complete; run-splitting loops and RunInfo push_back schedule differ
 0089b7e0 213 Typesetter::AdjustWhitespaceEmbedding: complete; register allocation differs (esi/ebp vs edi/ebx); difftest FAIL was a checker artifact (ours passed its own copy of the byte-identical L" \r\n\t" literal); source now references the image constant 0x0142ef80, difftest PASS
 0089b900 362 Typesetter::Justify: complete; fixed-vector scratch (uint[64]) scheduling and x87/SSE mix differ
-0089ba90 179 vector<uint32,EASTLCoreAllocator>::operator=: complete; register allocation / load order differ
-0089bc80 170 vector<uint16,EASTLCoreAllocator>::operator=: complete; register allocation / load order differ
-0089bdb0 22 vector<GlyphLayoutInfo>::resize: complete; zero-init temp register choice (eax vs edx)
+0089ba90 168 vector<uint32,EASTLCoreAllocator>::operator=: complete; register allocation / load order differ; difftest WEAK (196 valid, 39.4% coverage, many inputs discarded at memcpy; no difference); body moved into force-inlined cvec::DoAssign so this wrapper carries it
+0089bc80 159 vector<uint16,EASTLCoreAllocator>::operator=: complete; register allocation / load order differ; difftest WEAK (177 valid, 40.2% coverage, many inputs discarded at memcpy; no difference); body moved into force-inlined cvec::DoAssign so this wrapper carries it
+0089bdb0 22 vector<GlyphLayoutInfo>::resize: complete; zero-init temp register choice (eax vs edx); difftest PASS (body moved into force-inlined ResizableVec::DoResize so this wrapper carries it)
 0089bea0 195 AddRectangleToRectangleSet: complete; float compare shape (ucomiss parity checks) differs
 0089bf70 81 LineLayout copy ctor: complete; allocator store ordering differs
 0089c110 319 LineLayout::GetGlyphSelection: complete; fixed_list<Span,16> inlined parts and loop shape differ

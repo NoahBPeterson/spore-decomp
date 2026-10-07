@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
-004845d0  52   GetHandlePosition: VMul return pointer local and fld/fstp out-copy flavour differ
+004845d0  52   GetHandlePosition: VMul return pointer local and fld/fstp out-copy flavour differ; difftest PASS
 00483f10  1130  Update: complete; Vec3 member copies use lea/lea inline operator= in original, frame temps differ
 004849e0  338   Resume: complete; inlined bitset::set pointer temps land at different frame slots

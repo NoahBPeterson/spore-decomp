@@ -128,7 +128,7 @@ struct MeshBuilder {
     void GatherB(int key, GatherResult* r1, GatherResult* r2);   // 0x007a2180
 
     template <void (MeshBuilder::*Gather)(int, GatherResult*, GatherResult*)>
-    void Build(EntryVecVec* out) {
+    __forceinline void Build(EntryVecVec* out) {
         KeyTagVecVec src;
         src.mpBegin = src.mpEnd = src.mpCapacity = 0;
         src.Fill(out);

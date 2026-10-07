@@ -1,0 +1,5 @@
+004b2400 ??$uninitialized_copy_impl@PAUS24@eastl@@PAU12@@eastl@@YA?AU?$generic_iterator@PAUS24@eastl@@@0@U10@00Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<S24> (COMDAT-folded with the Rec18 copy; called by 004b1800)
+00511990 ??$uninitialized_fill_n_impl@PAUS24@eastl@@U12@@eastl@@YAXU?$generic_iterator@PAUS24@eastl@@@0@IABUS24@0@Ufalse_type@0@@Z  # uninitialized_fill_n<S24> (called by 004b1800)
+0050e7b0 ??$uninitialized_copy_ool@US24@eastl@@@eastl@@YAPAUS24@0@PAU10@00@Z  # uninitialized_copy<S24> (called by 004b1800, 004b1cc0)
+00424340 ??$uninitialized_move@US24@eastl@@@eastl@@YAPAUS24@0@PAU10@00@Z  # Vec24_UninitCopy: move of 24-byte records (called by 004b1800)
+00512000 ??$uninitialized_move_start@US24@eastl@@@eastl@@YAPAUS24@0@PAU10@00@Z  # uninitialized_move tail of S24 (called by 004b1800 realloc path)

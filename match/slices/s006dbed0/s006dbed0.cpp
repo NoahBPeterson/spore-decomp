@@ -24,7 +24,7 @@ void* operator new(size_t size, const char* pName, int flags, unsigned debugFlag
 void operator delete[](void* p);
 
 // 0x0140a644: value mask per element component size (1 -> 0xff, 2 -> 0xffff, 4 -> 0xffffffff)
-extern const uint32_t kElementMask[];
+extern const uint32_t kElementMask[];   // 0x140a644
 
 // ---------------------------------------------------------------------------------------------
 // Shared types

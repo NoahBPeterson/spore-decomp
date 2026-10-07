@@ -2,5 +2,5 @@
 00589ce0 978 complete; large function, frame/register allocation differs
 0058a1e0 55 complete; std::find loop register allocation (ebp value, edi begin)
 0058a350 2 complete; GetSkin result tested with test eax,eax instead of cmp eax,ebx
-0058a5a0 473 complete; extra spill of undo entry (frame 0x50 vs 0x4c), ebx/edi allocation
+0058a5a0 473 complete; extra spill of undo entry (frame 0x50 vs 0x4c), ebx/edi allocation; difftest WEAK (5% coverage: random editor state rarely gets past FUN_00576140 and the undo-list callees)
 0058a950 8 complete; refcount release emits sub/pop order instead of dec/cmp

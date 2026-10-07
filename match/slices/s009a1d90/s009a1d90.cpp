@@ -16,7 +16,7 @@ struct Vec8b {
 extern "C" void FUN_009a1670(int* obj, float f, char p3, char p4, uint p5, uint p6, uint p7, uint p8);  // cdecl, 0x009a1670
 
 // ===========================================================================
-// @ 0x009a1d90  advance an animation instance to time t, returning the phase
+// advance an animation instance to time t, returning the phase (0x009a1d90)
 // ===========================================================================
 extern "C" double FUN_0099bfe0(float f);             // fractional part (slice s0099bf80)
 extern int g_animSerial;                             // 0x0166b260
@@ -46,6 +46,7 @@ struct AnimInst2 {
   uint mLastLoop;       // +0x0c4
   Vec8b mTimes;         // +0x0c8
 };
+// @ 0x009a1d90
 float FUN_009a1d90(AnimInst2* a, float t, char p3, char p4) {
   if (a->mpData == 0 || a->mActive == 0) return 0.0f;
   a->mTimes.resize(0);

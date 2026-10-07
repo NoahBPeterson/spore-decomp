@@ -21,7 +21,7 @@ namespace eastl {
 
 struct allocator_tag { allocator_tag() {} };
 struct sp_vector_allocator {
-    sp_vector_allocator(const allocator_tag& tag);
+    sp_vector_allocator(const allocator_tag& tag);  // 0x00429360
     const char* mpName;
     uint32_t mFlags;
 };
@@ -34,7 +34,7 @@ struct VectorBase {
     A mAllocator;
     VectorBase(const allocator_tag& a)
         : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(a) {}
-    ~VectorBase();
+    ~VectorBase();  // <Constraint> 0x004AB0D0, <ResourceKey> 0x005156B0 (see the specializations below)
 };
 
 template<typename T, typename A = sp_vector_allocator>
@@ -46,9 +46,9 @@ public:
     ~vector() { DoDestroyValues(base_type::mpBegin, base_type::mpEnd); }
     iterator begin() { return base_type::mpBegin; }
     iterator end() { return base_type::mpEnd; }
-    bool empty() const;
-    void push_back(const T& value);
-    iterator erase(iterator first, iterator last);
+    bool empty() const;  // <ResourceKey> 0x00526430
+    void push_back(const T& value);  // <Constraint> 0x004E18E0
+    iterator erase(iterator first, iterator last);  // <Constraint> 0x00565B50
     void clear() { erase(base_type::mpBegin, base_type::mpEnd); }
     void DoDestroyValues(T* first, T* last) {
         for (; first < last; ++first)
@@ -56,7 +56,7 @@ public:
     }
 };
 
-extern char gEmptyString[1];
+extern char gEmptyString[1];  // 0x01667BAC
 
 template<typename T>
 class basic_string {
@@ -87,7 +87,7 @@ struct ResourceKey {
 };
 
 extern "C" __declspec(dllimport) int sscanf(const char* buffer, const char* format, ...);
-bool SPKeyFromName(ResourceKey& key, const char* pName, uint32_t defaultType, uint32_t defaultGroup);
+bool SPKeyFromName(ResourceKey& key, const char* pName, uint32_t defaultType, uint32_t defaultGroup);  // 0x0068D5A0
 
 namespace SP {
 namespace FunctionalMatch {
@@ -111,10 +111,10 @@ struct Constraint {
     };
     eastl::vector<Constraint, eastl::sp_vector_allocator> mConstraints;
 
-    Constraint(Sentinel);
-    Constraint(unsigned int param, ToleranceConstraint, float value, float tolerance);
-    Constraint(unsigned int param, RangeConstraint, float minVal, float maxVal);
-    Constraint(unsigned int param, EqualConstraint, int value);
+    Constraint(Sentinel);                                                              // 0x00558830
+    Constraint(unsigned int param, ToleranceConstraint, float value, float tolerance);  // 0x00558880
+    Constraint(unsigned int param, RangeConstraint, float minVal, float maxVal);       // 0x005588F0
+    Constraint(unsigned int param, EqualConstraint, int value);                        // 0x00558960
 };
 
 struct DeclareParam {
@@ -126,7 +126,7 @@ struct DeclareParam {
 }
 
 struct cAssetSummary {
-    eastl::vector<FunctionalMatch::DeclareParam, eastl::sp_vector_allocator>& GetParameters();
+    eastl::vector<FunctionalMatch::DeclareParam, eastl::sp_vector_allocator>& GetParameters();  // 0x005507A0
 };
 
 class cISPObjectTemplateDB {
@@ -149,7 +149,7 @@ public:
 cISPObjectTemplateDB* ObjectTemplateDB();
 
 // Empty in this build (metadata lookup compiled out).
-void GetAssetMetadata(const ResourceKey& key, eastl::string& msg);
+void GetAssetMetadata(const ResourceKey& key, eastl::string& msg);  // 0x00563DE0
 
 namespace Pollen {
 class cAssetDirectory {
@@ -160,7 +160,7 @@ struct cPollenManager {
     uint32_t pad00[0x58 / 4];
     cAssetDirectory* mpAssetDirectory;   // +0x58
 };
-cPollenManager* GetPollenManager();
+cPollenManager* GetPollenManager();  // 0x0067CB30
 inline cAssetDirectory* AssetDirectory() {
     cPollenManager* pManager = GetPollenManager();
     return pManager->mpAssetDirectory;
@@ -170,7 +170,9 @@ inline cAssetDirectory* AssetDirectory() {
 }
 
 namespace EA {
-namespace StdC { uint64_t StrtoU64(const char* pString, char** ppStringEnd, int nBase); }
+namespace StdC {
+uint64_t StrtoU64(const char* pString, char** ppStringEnd, int nBase);  // 0x0092D6F0
+}
 
 namespace Random {
 class RandomLinearCongruential {
@@ -178,7 +180,7 @@ public:
     RandomLinearCongruential(uint32_t nSeed) { SetSeed(nSeed); }
     void SetSeed(uint32_t nSeed);
     double RandomDoubleUniform();
-    uint32_t RandomUint32Uniform(uint32_t nLimit);
+    uint32_t RandomUint32Uniform(uint32_t nLimit);  // 0x00A68FB0
     uint32_t mnSeed;
 };
 }
@@ -200,8 +202,8 @@ class cIParser;
 void Output(cIParser* pParser, const char* pFormat, ...);
 class cArguments {
 public:
-    bool HasArgument(const char* pName);
-    const char** OptionArguments(const char* pName, int count);
+    bool HasArgument(const char* pName);                          // 0x00837EE0
+    const char** OptionArguments(const char* pName, int count);   // 0x00838330
     bool HasFlag(const char* pName);
 };
 class cCommandBase {
@@ -236,12 +238,12 @@ struct IntrusivePtr {
 
 namespace SP {
 
-cAssetSummary* object_cast_summary(IntrusivePtr<EA::ResourceMan::IResource>& res);
+cAssetSummary* object_cast_summary(IntrusivePtr<EA::ResourceMan::IResource>& res);  // 0x00564ED0
 
 struct IntPair { int a; int b; };
 // Pairs of integer parameter values (0x2dd90af, 0x2dc9d1e) for the integer stress queries,
 // terminated by {-1, -1} (data at 0x013f4358, 28 entries).
-extern const IntPair kStressIntegerPairs[];
+extern const IntPair kStressIntegerPairs[];  // 0x013F4358
 
 using namespace FunctionalMatch;
 typedef eastl::vector<ResourceKey, eastl::sp_vector_allocator> KeyVector;

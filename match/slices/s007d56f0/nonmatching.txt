@@ -1,14 +1,13 @@
 # <va>  <diff-bytes>  <reason>
 007d56f0  ~150 cGameModelEffect::SetTransforms: complete; first rotation copy via Matrix3::Assign, later copies inlined through a temp; register allocation (source/rigid/this in edi/ebp/ebx, loop counters in arg slots) differs; needs /fp:fast for SSE mulss; difftest PASS after fixing the loop/final cTransform copies, which called Matrix3::Assign (an extra call the original inlines)
-007d5af0  ~80  cGameModelEffect ctor: complete; scheduling of the float-constant loads and the refcount store order differ
-007d5c50  19   ~cGameModelEffect: complete; EH state numbering (anim vector has no state in the original) and base-vptr store at the end differ
+007d5af0  ~100 cGameModelEffect ctor: complete; scheduling of the float-constant loads and the refcount/ID store order differ; difftest PASS (vtables mapped in symbols/slices; 1.0f/1e-5f are now literals as in the original)
+007d5c50  11   ~cGameModelEffect: complete; EH state numbering (anim vector has no state in the original, the GmeIComponent base has one here) and the `add eax,-1` refcount idiom differ; difftest PASS (fix: GmeIComponent got a non-virtual dtor so its vptr is reset at the end, as in the original)
 007d5d50  16   cSplitManager ctor: complete; refcount store is scheduled after the u16 stores here
-007d5dc0  2    cGameModelEffect::Unload: complete; only the [edi+eax+0x3c] vs [eax+edi+0x3c] addressing order differs
+007d5dc0  2    cGameModelEffect::Unload: complete; only the [edi+eax+0x3c] vs [eax+edi+0x3c] addressing order differs; difftest PASS
 007d5e60  ~70  cGameModelEffect::FindGameModel: complete; stack layout of the fixed vector / key copy differs
-007d6030  ~120 eastl::vector<cAnimationInfo>::DoInsertValues: complete (callee helpers declared extern); call shapes of the generic_iterator helpers differ
+007d6030  ~120 eastl::vector<cAnimationInfo>::DoInsertValues: complete (callee helpers declared extern); register allocation around the generic_iterator helper calls differs; difftest WEAK (no mismatch, 42% coverage) after fixing the in-place branch to call 0x898b80 with its real shape (hidden generic_iterator return pointer + 4 args) instead of the 3-arg 0xa11310
 007d6320  ~35  eastl::vector<cElement0x78>::vector(const vector&): complete; this/arg register swap
-007d6440  ~15  cMapResB ctor: complete; EH state numbering and vptr store order differ
-007d6500  ~25  cMapResB dtor: complete; EH state numbering and `add eax,-1` refcount idiom differ
+007d6500  2    cMapResB dtor (compiler-generated): complete; only the `add eax,-1` vs `sub eax,1` refcount idiom differs; difftest PASS (fix: base dtor now resets the GmeEditorResBase vptr, map and ref are members)
 007d6620  ~130 eastl::vector<cSplitController>::DoInsertValue: complete; original has an EH frame around the placement copy
 007d5aa0  56   uninitialized_copy of the 0x78-byte records: per-element field copy + cSplitInstance ctor present; original keeps `first` in its stack slot, no callee-saved regs
 007d61f0  27   allocate(n*0x78) + uninitialized_copy: both parts present; the 5-argument helper call and register assignment differ

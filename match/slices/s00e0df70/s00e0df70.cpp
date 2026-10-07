@@ -66,10 +66,10 @@ struct RefHolder {
     char  pad_05[3];
     void* mp8;                   // +0x08
     void* mpc;                   // +0x0c
-    RefHolder* operator=(const RefHolder& o);
+    RefHolder* Assign(const RefHolder& o);   // copy-assign (likely operator=; named so the checker can find it)
 };
 // @ 0x00e0ea40
-RefHolder* RefHolder::operator=(const RefHolder& o) {
+RefHolder* RefHolder::Assign(const RefHolder& o) {
     mp0 = o.mp0;
     b4 = o.b4;
     if (o.mp8 != mp8) {
@@ -364,9 +364,14 @@ struct TexImage : IRef0 {
     TexImage(Image* img, int w, int h, float a, float b, float c, float d, int e);   // 0x9579f0
 };
 struct AllocObj { int pad; unsigned flags; int Fn46f260(); };
-struct ResObj { AllocObj* GetAllocator(); };
+struct ResObj {
+    AllocObj* GetAllocator();                        // 0x7f54d0 Resource::DatabasePackedFile::GetAllocator
+};
 struct Obj3Ret { void Fn82eb80(int a, void* alloc); };           // 0x82eb80
-struct RefSlot { IRef0* p; void Assign(IRef0* v); };         // 0xb5f950 AutoRefCount::operator=
+struct RefSlot {
+    IRef0* p;
+    void Assign(IRef0* v);                           // 0xb5f950 AutoRefCount::operator=
+};
 struct Layout : IRef1 {
     char pad4[0x14];
     Layout();                                        // 0x810000
@@ -376,7 +381,7 @@ struct Layout : IRef1 {
 struct IconTree {
     char hdr[4];
     char sentinel[4];                                // +4 = end()
-    void Find(void** out, const unsigned* key);      // eastl::rbtree::find
+    void Find(void** out, const unsigned* key);      // 0xe5c780 eastl::rbtree::find
 };
 struct GridData : IRef0 { char pad4[0x18]; int count; char pad20[8]; int* table; };
 struct GridSub { char pad[0x3c]; float f3c; };

@@ -302,7 +302,11 @@ struct AutoRef {
     AutoRef(RefObj* x) { p = x; if (p) p->AddRef(); }
     ~AutoRef() { if (p) p->Release(); }
 };
-struct EditorPropList { char pad[0x38]; EditorPropList(); void __thiscall SetParent(int parent); };
+struct EditorPropList {
+    char pad[0x38];
+    EditorPropList();                              // 0x6a1c40
+    void __thiscall SetParent(int parent);         // 0x6a1710
+};
 struct PropMgr2 {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
     virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
@@ -367,7 +371,10 @@ struct MatInfo {
     float f10, f14, f18, f1c;
     MatInfo();        // 0x432cf0
 };
-extern float g_f1485720, g_f13eecd8, g_f13ec480, g_f1471064;
+extern float g_f1485720;   // 0x1485720
+extern float g_f13eecd8;   // 0x13eecd8
+extern float g_f13ec480;   // 0x13ec480
+extern float g_f1471064;   // 0x1471064
 struct IRef { virtual void v0(); virtual void Release(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
               virtual void v6(); virtual void v7(); virtual void v8();
               virtual bool GetProperty(unsigned key, struct Property** out); };

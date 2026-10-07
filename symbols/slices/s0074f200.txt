@@ -3,3 +3,6 @@
 0074f420  -  # unknown
 0074fea0  -  # unknown
 00750030  spstl::slot_vector_base<SP::cModelWorld::cOccluderInfo,eastl::vector<spstl::slot_vector_entry<SP::cModelWorld::cOccluderInfo>,eastl::allocator>_>::create  # PDB name
+0140d720  ??_7cFeedbackMgr@@6BFeedbackBaseA@@@  # vtable stored at this+0 by the ctor 0x0074fd90
+0140d71c  ??_7cFeedbackMgr@@6BFeedbackBaseB@@@  # vtable stored at this+4 by the ctor 0x0074fd90
+013ef094  ??_7FeedbackBaseB@@6B@  # base vtable stored first at this+4 by the ctor 0x0074fd90 (shared/folded vtable)

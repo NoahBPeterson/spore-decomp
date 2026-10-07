@@ -221,8 +221,8 @@ class GraphicsFactoryAsyncRequest : public EA::RefCountVTemplate<int> {
 
 struct ResourceReadRequest {  // 0x008e2380 ctor / 0x008e2350 dtor
   uint32_t pad[9];
-  ResourceReadRequest(int a, Graphics::GraphicsFactoryAsyncRequest* gfar, const ResKey* key, bool f1, bool f2);
-  ~ResourceReadRequest();
+  ResourceReadRequest(int a, Graphics::GraphicsFactoryAsyncRequest* gfar, const ResKey* key, bool f1, bool f2);  // 0x008e2380
+  ~ResourceReadRequest();  // 0x008e2350
 };
 
 namespace SP {

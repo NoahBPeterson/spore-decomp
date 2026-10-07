@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00780b70  3680  complete (every path and call); x87/SSE float scheduling, fsqrt/fptan inline and register allocation not reproduced (our build is ~500 bytes shorter)
+00780b70  3680  complete (every path and call); x87/SSE float scheduling, fsqrt/fptan inline and register allocation not reproduced (our build is ~500 bytes shorter); difftest WEAK (330 valid, 7% coverage: g_AppProperties in the image makes it return early) with flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (original inlines fptan/fsqrt and uses SSE; the default flags called __CItan)

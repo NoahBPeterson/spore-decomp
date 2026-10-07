@@ -31,17 +31,24 @@ struct RbNodeU {
 };
 
 struct cFeedbackEvent {
-    void Release();    // ref-counted event
+    virtual void AddRef();
+    virtual void Release();    // ref-counted event: vtable slot 1 (the original unwind funclets 0x7455d0/0x7a9610 call [vt+4])
 };
-struct PairUU {
+struct AutoRefFE {            // AutoRefCount<cFeedbackEvent>
+    cFeedbackEvent* mp;
+    AutoRefFE() : mp(0) {}
+    AutoRefFE(const AutoRefFE& o) : mp(o.mp) { if (mp) mp->AddRef(); }
+    ~AutoRefFE() { if (mp) mp->Release(); }
+};
+struct PairUU {               // eastl::pair<const uint32_t, AutoRefCount<cFeedbackEvent>>
     uint32_t first;
-    cFeedbackEvent* second;
-    PairUU(uint32_t k) : first(k), second(0) {}
-    ~PairUU()
-    {
-        if (second)
-            second->Release();
-    }
+    AutoRefFE second;
+    PairUU(const uint32_t& k, const AutoRefFE& v) : first(k), second(v) {}
+};
+struct RbIterU {
+    RbNodeU* mpNode;
+    RbIterU(RbNodeU* p) : mpNode(p) {}
+    RbIterU(const RbIterU& o) : mpNode(o.mpNode) {}
 };
 
 struct CompactMapUU {
@@ -49,12 +56,13 @@ struct CompactMapUU {
     RbNodeU mAnchor;          // +4 (right/left/parent/color)
     uint32_t mKeyDummy;
     uint32_t mnSize;
-    RbNodeU* Insert(RbNodeU** result, RbNodeU* pos, const PairUU* value, bool bForceToLeft);   // 0x0074c170
-    cFeedbackEvent*& operator[](const uint32_t& key);                                           // 0x0074f200
+    struct TrueTag {};        // eastl::true_type (1-byte empty tag passed by value)
+    RbIterU Insert(RbIterU pos, const PairUU& value, TrueTag tag);   // 0x0074c170 (DoInsertValue with hint)
+    cFeedbackEvent*& Subscript(const uint32_t& key);                                             // 0x0074f200
 };
 
 // @ 0x0074f200
-cFeedbackEvent*& CompactMapUU::operator[](const uint32_t& key)
+cFeedbackEvent*& CompactMapUU::Subscript(const uint32_t& key)
 {
     RbNodeU* const pEnd = &mAnchor;
     RbNodeU* pCurrent = mAnchor.mpNodeParent;
@@ -67,13 +75,10 @@ cFeedbackEvent*& CompactMapUU::operator[](const uint32_t& key)
             pCurrent = pCurrent->mpNodeRight;
         }
     }
-    RbNodeU* itLowerBound = pRangeEnd;
-    if ((itLowerBound == pEnd) || (key < itLowerBound->mKey)) {
-        PairUU value(key);
-        bool bForceToLeft = false;
-        Insert(&itLowerBound, itLowerBound, &value, bForceToLeft);
-    }
-    return itLowerBound->mValue;
+    RbIterU itLowerBound(pRangeEnd);
+    if ((itLowerBound.mpNode == pEnd) || (key < itLowerBound.mpNode->mKey))
+        itLowerBound = Insert(itLowerBound, PairUU(key, AutoRefFE()), TrueTag());
+    return itLowerBound.mpNode->mValue;
 }
 
 // ===========================================================================

@@ -6,18 +6,21 @@ struct Vector2 { float x, y; };
 
 struct WStr {  // eastl::basic_string<wchar_t> (begin, end, capacity-end)
     wchar_t *b, *e, *cap;
-    void RangeInitialize(const wchar_t* s);
+    void RangeInitialize(const wchar_t* s);   // 0x00579a90
 };
 
 struct Variant {  // EA::Variant
     char data[0x10];
     unsigned short mFlags;
     unsigned short mTypeId;
-    void Set(int type, int kind, void* p, int size, int copy);
-    void Destruct(int);
+    void Set(int type, int kind, void* p, int size, int copy);   // 0x0093dd80
+    void Destruct(int);   // 0x0093db80
 };
 
-struct cString { char d[0x14]; const wchar_t* GetText(); };
+struct cString {
+    char d[0x14];
+    const wchar_t* GetText();   // 0x006b55c0
+};
 
 struct IWindow {
     virtual void v00(); virtual void v04(); virtual void v08();
@@ -47,9 +50,13 @@ struct IWindow {
     virtual IWindow* FindWindow(unsigned id, int recurse);    // 0xf0
 };
 
-struct Civ { int Index(); };            // FUN_00bf0f40
+struct Civ {
+    int Index();   // 0x00bf0f40
+};
 
-struct Sphere { bool Check(); };        // FUN_00c75650
+struct Sphere {
+    bool Check();   // 0x00c75650
+};
 
 struct Owner { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
                virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
@@ -58,12 +65,14 @@ struct Owner { virtual void v0(); virtual void v1(); virtual void v2(); virtual 
                virtual int GetEmpireId(); };  // 0x4c
 
 struct cGameNounManager {
-    Civ* GetPlayerCivilization();       // SP::cGameNounManager::GetPlayerCivilization
+    Civ* GetPlayerCivilization();       // 0x00b25fb0 SP::cGameNounManager::GetPlayerCivilization
     Owner* GetPlayerTribe();            // 0xbfc5f0
     Civ* FindCivById(int id);           // FUN_00b25f40
     Sphere* GetCurrentTerrainSphere();  // 0xf67d90
 };
-struct cStarManager { void* GetEmpireByID(int id); };
+struct cStarManager {
+    void* GetEmpireByID(int id);   // 0x00ba9370
+};
 struct cRelationshipManager {
     float CalculateRelationshipAbsolute(int a, int b, int c);
     float CalculateRelationshipPersonality(Civ* a, Civ* b);
@@ -74,15 +83,17 @@ struct cRelationshipManager {
     void  GetThresholds(float* a, float* b, float* c, float* d);  // FUN_00d00750
 };
 
-extern char kGameModeA, kGameModeB, kGameModeC;   // 0x1654c02 / 0x1654c04 / 0x1654c05
+extern char kGameModeA;   // 0x01654c02
+extern char kGameModeB;   // 0x01654c04
+extern char kGameModeC;   // 0x01654c05
 const void* GetCurrentGameMode();
 cGameNounManager* NounManager();
-cStarManager* StarManager();
+cStarManager* StarManager();   // 0x00b3d2a0
 cRelationshipManager* RelationshipManager();
 int GetPlayerEmpireOrMinus1();
 
 struct Events { unsigned *b, *e, *c; char alloc; };
-Events* GetRelationshipEvents();
+Events* GetRelationshipEvents();   // 0x00d026d0
 
 struct U32Vec {
     unsigned *b, *e, *c;
@@ -105,10 +116,10 @@ struct RelMap {   // 28-byte scored-event map / comparator
 };
 void SortEvents(unsigned* b, unsigned* e, RelMap cmp);        // FUN_00e2d5f0
 
-void* op_new(unsigned n, const char* name, int a, unsigned b, const char* file, int line);
-void op_delete(void* p);
-extern wchar_t gEmptyW[2];
-void SetNumberString(long long v, wchar_t* buf, int n);
+void* op_new(unsigned n, const char* name, int a, unsigned b, const char* file, int line);   // 0x00f473a0
+void op_delete(void* p);   // 0x00f47380
+extern wchar_t gEmptyW[2];   // 0x01667bac
+void SetNumberString(long long v, wchar_t* buf, int n);   // 0x00881ae0
 void FUN_00808b20(IWindow* a, IWindow* b, int c);
 
 struct cSPUIPropertyLayout {
@@ -136,7 +147,7 @@ struct cSPUIRolloverCivRelationship : cSPUIPropertyLayout {
     void ShowRelationshipRollover(IWindow* anchor, int empireId, int anchorMode);
 };
 
-void SetValueTextForRollover(cSPUIRolloverCivRelationship* t, unsigned id, float v);
+void SetValueTextForRollover(cSPUIRolloverCivRelationship* t, unsigned id, float v);   // 0x00e2c590
 
 static const char kEastlFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";

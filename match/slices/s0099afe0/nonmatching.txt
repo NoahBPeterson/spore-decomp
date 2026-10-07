@@ -1,8 +1,8 @@
 0099afe0 250 complete Fixup (recursive LazyReference id resolution); residual is register allocation and find() iterator temps
 0099b110 80 complete CreateLazyReference (stack-allocator pool); residual is register allocation around the zero-fill
 0099b1f0 480 complete ReadProperty (all type paths: object array, struct array, value array, key ref, plain value); CheckType (0x99a3f0) takes eax/ecx, a register convention not expressible here
-0099b660 114 complete XmlReaderState ctor; interleaving of the two StackAllocator calls and field stores differs
+0099b660 114 complete XmlReaderState ctor; interleaving of the two StackAllocator calls and field stores differs; difftest PASS
 0099b730 60 complete ReadPropertyList; residual is shrink-wrapped registers and block order
-0099b8a0 120 complete ReadObject; residual is this/obj register swap (esi/edi) and error-block placement
+0099b8a0 120 complete ReadObject; residual is this/obj register swap (esi/edi) and error-block placement; difftest WEAK
 0099b9e0 80 complete ReadBindings; reader vcalls 0x10/0x14 and 0x113ae10 are caller-cleaned in the original (not expressible)
 0099bc00 460 complete XmlReaderState::Read; residual is block layout of the graph/object dispatch and hash-iterator registers

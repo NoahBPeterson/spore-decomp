@@ -45,8 +45,18 @@ template<class T> struct vector {
     ~vector();                                               // @ 0x425990
 };
 
+// eastl::vector<unsigned int, sp_vector_allocator>: same layout as vector<T>, spelled as a plain
+// struct so the equivalence checker can map its members by their '// 0x' annotations.
+struct UIntVector {
+    uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity; uint32_t mAllocator[2];
+    void AllocatorInit(struct SPAllocTmp* tmp);              // 0x429360
+    void push_back(const uint32_t& v);                       // 0x454860
+    ~UIntVector();                                           // 0x425990
+};
+
 struct cSPEditorBlock;
 struct cSPEditorModel {
+    bool FUN_4adc40();                                       // 0x4adc40 (returns byte +0x4f)
     cSPEditorBlock* GetBlock(int i);                         // @ 0x4accb0
     int GetBlockCount();                                     // @ 0x4accf0
     float GetScale();                                        // @ 0x4adaa0
@@ -141,7 +151,6 @@ void* __cdecl operator new(unsigned sz, const char* name, int a, int b, int c, i
 
 extern int g_ModelWorld;                                     // @ 0x15d60f4
 
-bool __cdecl FUN_4adc40();                                   // @ 0x4adc40
 void __cdecl SetSymmetricBlocksUIState(cSPEditorBlock* b, int a, int c);   // @ 0x4a7f30
 void __cdecl DeleteInvalidBlocks(cSPEditorBlock* b, int a);                // @ 0x4a6f10
 bool __cdecl FUN_4a7e60(cSPEditorBlock* b);
@@ -229,11 +238,10 @@ void FUN_4a0bf0(cSPEditorBlock* block)
 void FUN_4a1070(cSPEditorBlock* block)
 {
     cSPEditorModel* model = block->mEditorModel;
-    (void)model;
     cSPEditorHandle* handle = block->mHandle;
     block->SetBooleanAttribute(0xc, false);
     handle->SetActive(true, false);
-    if (FUN_4adc40()) {
+    if (model->FUN_4adc40()) {
         cSPEditorBlock* sym = block->mSymmetricBlock;
         if (sym && sym->mHandle) {
             sym->mHandle->SetActive(true, false);
@@ -248,7 +256,7 @@ void FUN_4a1070(cSPEditorBlock* block)
     bool anyUnsnapped = false;
     cSPEditorBlock* liveBlock = 0;
     cSPEditorHandle* firstHandle = 0;
-    vector<uint32_t> selected;
+    UIntVector selected;
     selected.mpBegin = 0; selected.mpEnd = 0; selected.mpCapacity = 0;
     SPAllocTmp allocTmp;
     selected.AllocatorInit(&allocTmp);

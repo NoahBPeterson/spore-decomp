@@ -5,3 +5,4 @@
 00900070 EA::XHTML::Resource::ResourceProvider::Request  # PDB candidate on card
 009002f0 EA::XHTML::Resource::ResourceRequest::SetEncoding  # PDB name on card, byte-exact
 00900310 EA::XHTML::Resource::ResourceRequest::ResourceRequest  # ctor, mRequestId = gNextRequestId++
+0143a02c ??_7ResourceProvider@@6B@  # ResourceProvider vtable (our class models only the dtor slot)

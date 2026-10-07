@@ -1,3 +1,3 @@
 007c2ab0  970  complete DXT3->ARGB8888 decode (alpha nibbles + colour interp); different loop/register scheduling
 007c2ee0  1091  complete DXT5->ARGB8888 decode (interpolated alpha, 8/6-level); different loop/register scheduling
-007c3410  1058  complete WriteAnimatedCSAGIF (SEH, string, GIF writer, message post); frame/layout differences
+007c3410  1062  complete WriteAnimatedCSAGIF (SEH, string, GIF writer, message post); frame/layout differences; difftest WEAK (149 valid, 14% coverage: the bitmap path needs the FileStream ctor, which calls the unemulated MultiByteToWideChar; GetSaveArea key 0x011ac198 is now passed as a value)

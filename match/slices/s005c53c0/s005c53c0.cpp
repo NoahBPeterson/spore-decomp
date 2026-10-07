@@ -130,20 +130,22 @@ struct IRC {
   virtual int Release();
 };
 
+// EA::RefCountVTemplate<int>, vtable 0x013ec458: dtor, AddRef, Release, GetReferenceCount.
 class RefCountVTemplate {
  public:
   RefCountVTemplate() { mRefCount = 0; }
-  ~RefCountVTemplate() {}
-  virtual int AddRef();
-  virtual int Release();
+  virtual ~RefCountVTemplate() {}
+  virtual int AddRef();             // 0x005454f0
+  virtual int Release();            // 0x00453540
+  virtual int GetReferenceCount();  // 0x004535b0
   int mRefCount;
 };
+// Interface base at +8, vtable 0x013eb938: AddRef = 0, Release = 0, dtor.
 class IUnknown32 {
  public:
-  ~IUnknown32() {}
-  virtual int QueryInterface(int);
-  virtual int AddRef();
-  virtual int Release();
+  virtual int AddRef() = 0;
+  virtual int Release() = 0;
+  virtual ~IUnknown32() {}
 };
 
 struct CatVector {
@@ -170,6 +172,8 @@ class cSPPalette : public RefCountVTemplate, public IUnknown32 {
 
   cSPPalette();
   ~cSPPalette();
+  virtual int AddRef();   // 0x00804910
+  virtual int Release();  // 0x00834200
   void ShutdownChildren();                                   // 0x005c5c20
   __declspec(noinline) int CountItems(cSPPalettePage* page, int* pOut);           // 0x005c5c50
   __declspec(noinline) bool AllItemsListed(cSPPalettePage* page, cSPPaletteCategory* cat);  // 0x005c5cc0

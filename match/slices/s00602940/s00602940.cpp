@@ -2,7 +2,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE
 #include "../s005fa8d0/s005fa8d0.h"
 #include <stdlib.h>
-void* operator new(size_t, const char*, int, int, int, int);
+void* operator new(size_t, const char*, int, int, int, int);   // 0x00f473a0
 
 #define CAT2(a, b) a##b
 #define CAT(a, b) CAT2(a, b)
@@ -81,7 +81,8 @@ void __cdecl SetRotation(IWin* w, const float* q);              // 0x00808230 UI
 IWin* __stdcall GetLayoutManager(uint32_t id);          // 0x00805070 (SPUIHelpers::GetLayoutManager)
 struct cSPUILayoutManager { IWin* GetWorldMainWindow(); };  // 0x00810620
 const float* __cdecl FUN_00805260(IWin* w);             // 0x00805260 -> float[4]
-extern float gF1485720, gF151d728;
+extern float gF1485720;   // 0x01485720
+extern float gF151d728;   // 0x0151d728
 
 struct IMsgListener;
 struct IMsgServer {

@@ -1,0 +1,1 @@
+0041daf0  ??D@YA?AUcSPVector3@@ABUVec3@@ABUcSPMatrix3@@@Z  # cSPVector3 operator*(const Vec3&, const cSPMatrix3&) as declared in s0049de30.cpp

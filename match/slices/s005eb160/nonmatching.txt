@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
-005eb160  550  complete LoadStringList (UTF-8 text record -> trimmed/lowered wstring list); EASTL string inlines scheduled differently
-005eb540  873  complete CreateRandomCompoundName (3 list picks, format, dup/excluded checks, suffixing); EASTL string temps differ
-005ebb00  428  complete CreateRandomName (random pick, namesUsed map, dup suffix); register/loop shape differs
+005eb160  550  complete LoadStringList (UTF-8 text record -> trimmed/lowered wstring list); EASTL string inlines scheduled differently; difftest WEAK (400 valid, 9.7% coverage: random inputs rarely get past the resource lookup) after mapping operator new/delete[] to 0xf473a0/0xf47380
+005eb540  873  complete CreateRandomCompoundName (3 list picks, format, dup/excluded checks, suffixing); EASTL string temps differ; difftest WEAK (191 valid, 26.8% coverage) after mapping operator new/delete[], RandomUint32Uniform (0xa68fb0) and declaring tolower dllimport
+005ebb00  428  complete CreateRandomName (random pick, namesUsed map, dup suffix); register/loop shape differs; difftest WEAK (174 valid, 14.2% coverage) after mapping operator delete[] to 0xf47380
 005ebe90  98  complete LoadProperty (single key or key array); cl folds the mode test differently (movzx cx)
 005ebf10  233  complete hinted rbtree insert (EASTL DoInsertValue(position, value, true_type) shape); register assignment of position/value pointers differs; difftest PASS after fixing the has_unique_keys tag: an empty struct passed by value (cl stores its byte into the dead value-arg slot), not a bool 0

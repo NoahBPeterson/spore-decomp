@@ -228,7 +228,7 @@ struct cParticlesEffect {
   void StreamModelParticles(float a, float b, cStreamContext* ctx);
 };
 
-// ---------------------------------------------------------------- 0x00a9f170
+// @ 0x00a9f170
 void cParticlesEffect::StreamModelParticles(float a, float b, cStreamContext* ctx) {
   // screen-bloom factors (bytes scaled to [0,1] / [0,16])
   float alphaBase, alphaRate, sizeBase, sizeRate;

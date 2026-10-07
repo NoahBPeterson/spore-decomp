@@ -3,3 +3,6 @@ slices/s006ac630/s006ac630.cpp  ?FUN_006ad030@@YA_NPAD@Z  006ad030
 slices/s006ac630/s006ac630.cpp  ?FUN_006ad050@@YA_NPAD@Z  006ad050
 slices/s006ac630/s006ac630.cpp  ?FUN_006ad250@@YGXPAD@Z  006ad250
 slices/s006ac630/s006ac630.cpp  ?FUN_006ad590@@YA_NPAD_N@Z  006ad590
+slices/s006ac630/s006ac630.cpp  ??1RegList@@UAE@XZ  006ac6f0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006ac630/s006ac630.cpp  ??0RegList@@QAE@XZ  006ac770  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s006ac630/s006ac630.cpp  ??1RegTableOwner@@QAE@XZ  006ad0f0  /O2 /MD /Gy /EHsc /TP /GS-

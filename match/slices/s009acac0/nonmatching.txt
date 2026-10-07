@@ -1,1 +1,1 @@
-009acac0  3724  COMPLETE baked_animation::Evaluate (frame lerp + pose/delta accumulation, all 6 calls); /arch:SSE /fp:fast scheduling and frame size (0x90 vs 0x9c) differ
+009acac0  3724  COMPLETE baked_animation::Evaluate (frame lerp + pose/delta accumulation, all 6 calls); /arch:SSE /fp:fast scheduling and frame size (0x90 vs 0x9c) differ; difftest PASS (291 valid, 99.9% coverage) after moving the 0x0099cba0/0x0099c310/0x0099ce40 annotations onto the declaration lines

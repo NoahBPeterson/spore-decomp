@@ -87,8 +87,9 @@ struct ConfigTable {                                                      // `th
     CardFactory GetFactory(uint32_t typeId);                              // 0x642c10
     CardWrapFn  GetWrapper(uint32_t kind);                                // 0x642c40
 };
-struct TimelineSporepediaCardData : Card {
+struct TimelineSporepediaCardData : Card {                                // 0x78 bytes (operator new size)
     TimelineSporepediaCardData();                                         // 0x642100
+    uint32_t data[(0x78 - 0x14) / 4];
 };
 struct AssetHolder {                                                      // 8 bytes at stack
     uint32_t a, b;
@@ -104,7 +105,9 @@ struct IPropList {
     S(0) S(1) S(2) S(3) S(4) S(5) S(6) S(7) S(8)
     virtual bool GetProperty(uint32_t id, IProp** out);                   // slot 9 (+0x24)
 };
-struct FeedCategory { void Expand(int b); };                              // 0x664480
+struct FeedCategory {
+    void Expand(int b);                                                    // 0x664480
+};
 struct FeedList {
     void SetHidden(bool b);                                               // 0x662a90
     FeedCategory* FindCategory(uint32_t id);                              // 0x662a40

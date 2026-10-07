@@ -1,0 +1,1 @@
+0140075c ??_7cCardRollover@SP@@6B@  # SP::cCardRollover vftable (stored by the inlined ctor in LoadAssetViewLarge)

@@ -17,7 +17,7 @@ struct cSPTransform {
     float mScale;
     Mat3 mRotation;
     void BackTransformPoint(Vec3* p);
-    cSPTransform& operator=(const cSPTransform& o);
+    cSPTransform& operator=(const cSPTransform& o);  // 0x00537dc0
 };
 
 void __cdecl FUN_004fc5a0(Vec3* p, Vec3* t);
@@ -50,7 +50,7 @@ template<class T, int N> struct Vec {
     T* mpBegin; T* mpEnd; T* mpCap; uint32_t mAlloc[2];
     void erase(T* f, T* l);
     void clear() { ScratchSlots<N>(); erase(mpBegin, mpEnd); }
-    void resize(uint32_t n);
+    void resize(uint32_t n);  // 0x004cd3c0 (only Vec<int,4> uses it)
     void grow(uint32_t n);
     T& operator[](uint32_t i) { return mpBegin[i]; }
     int size() const { return mpEnd - mpBegin; }
@@ -83,20 +83,28 @@ struct GraphEdge {      // 0x54 bytes
     int mC;             // +0x50
 };
 
+// The two grow instantiations live at different addresses; separate classes let each carry its own.
+struct NodeVec : Vec<GraphNode, 7> {
+    void grow(uint32_t n);  // 0x00501350
+};
+struct EdgeVec : Vec<GraphEdge, 6> {
+    void grow(uint32_t n);  // 0x00501430
+};
+
 struct UIntVec {
     uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCap; uint32_t mAlloc[2];
-    UIntVec(uint32_t n);
-    ~UIntVec();
+    UIntVec(uint32_t n);  // 0x005012d0
+    ~UIntVec();  // 0x004c0b80
     uint32_t& operator[](uint32_t i) { return mpBegin[i]; }
 };
 struct UIntDeque {
     uint32_t pad[17];
-    UIntDeque(char* tag);
-    ~UIntDeque();
-    bool empty();
-    uint32_t* front();
-    void pop_front();
-    void push_back(const uint32_t* v);
+    UIntDeque(char* tag);  // 0x004aa100
+    ~UIntDeque();  // 0x004aa120
+    bool empty();  // 0x00425430
+    uint32_t* front();  // 0x00501e20
+    void pop_front();  // 0x00501eb0
+    void push_back(const uint32_t* v);  // 0x00501e40
 };
 
 struct cSPModelGraph {
@@ -104,8 +112,8 @@ struct cSPModelGraph {
     wchar_t* mpNameEnd;
     wchar_t* mpNameCap;
     uint32_t mNameAlloc;
-    Vec<GraphNode, 7> mNodes;     // +0x10
-    Vec<GraphEdge, 6> mEdges;     // +0x24
+    NodeVec mNodes;     // +0x10
+    EdgeVec mEdges;     // +0x24
     int mRoot;          // +0x38
     uint8_t mFlag;      // +0x3c
     uint8_t pad3d[3];
@@ -117,13 +125,13 @@ struct cSPModelGraph {
     void Reset();
     void Build(const wchar_t* name, Vec<SrcNode, 0>* nodes, Vec<SrcLink, 0>* links, Vec<cSPTransform, 0>* xforms, int firstChild, char flag);
     void ComputeTree();
-    void NameAssign(const wchar_t* b, const wchar_t* e);
+    void NameAssign(const wchar_t* b, const wchar_t* e);  // 0x00423650
     void FUN_004ff750();
     void Finish();
 };
 
 extern "C" __declspec(dllimport) int __cdecl fclose(void*);
-char __fastcall GetResourceTypeFromModelType(Vec<GraphNode, 7>* v);
+char __fastcall GetResourceTypeFromModelType(Vec<GraphNode, 7>* v);  // 0x00526430
 
 // @ 0x004feb50
 void cSPModelGraph::Reset() {

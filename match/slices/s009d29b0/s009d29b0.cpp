@@ -546,7 +546,10 @@ float Locomotion::GetTurnFactor(Vec3* v)
 {
     float vlen = Sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
     float slen = Sqrt(mVelocity.x * mVelocity.x + mVelocity.y * mVelocity.y + mVelocity.z * mVelocity.z);
-    extern const float kFactorA, kFactorB, kFactorC, kFactorD;   // 0x15514f0, 0x15514f4, 0x15514f8, 0x15514fc
+    extern const float kFactorA;   // 0x15514f0
+    extern const float kFactorB;   // 0x15514f4
+    extern const float kFactorC;   // 0x15514f8
+    extern const float kFactorD;   // 0x15514fc
     float k = kFactorA;
     if ((slen * vlen) * 0.5f < (mVelocity.y * v->y + mVelocity.z * v->z) + v->x * mVelocity.x)
         k = kFactorB;

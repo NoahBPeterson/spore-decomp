@@ -61,14 +61,17 @@ struct HMapRaw {                                          // eastl hash_map reac
 };
 struct MsgCtor { void Init(uint id); };                   // FUN_00a227a0, this = &Msg::refcount
 struct ListA { void Add(uint32_t* key); };                // FUN_00a30f10
-struct ListB { void Push(uint32_t* key); };               // FUN_00a21d30
+struct ListB {
+    void Push(uint32_t* key);                             // 0x00a21d30
+};
 
 // ---------------------------------------------------------------------------
-// @ 0x00a31f20  EA::Audio::System::DoCommandMainThread
+// ---- 0x00a31f20  EA::Audio::System::DoCommandMainThread
 struct System {
     bool DoCommandMainThread(EA::Audio::Command* cmd);
 };
 
+// @ 0x00a31f20
 bool System::DoCommandMainThread(EA::Audio::Command* cmd)
 {
     uint8_t* self = (uint8_t*)this;
@@ -225,42 +228,66 @@ void FUN_00a32320(uint32_t* x, uint32_t* y)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a323e0  hash_map<uint, fixed_hash_map<uint,float,20,21,...>, ...>::operator[]
+// ---- 0x00a323e0  hash_map<uint, fixed_hash_map<uint,float,20,21,...>, ...>::operator[]
 struct OuterMap {
     uint32_t pad[1];
     uint32_t* mpBuckets;        // +4
     uint32_t mnBucketCount;     // +8
     uint32_t* operator_index(uint32_t* key);
 };
-struct OMFind { void Find(uint32_t* out, uint32_t* key); };                // FUN_00a23b00
-struct OMNodeCtor { void Ctor(void* a); };                                 // FUN_00a2e2f0
-struct OMTmp { void* Make(char* a, char* b); };                            // FUN_00a1e320
-struct OMInsert { void Insert(uint32_t* out, void* node, uint32_t flag); };// FUN_00a30f80
-struct OMNodeDtor { void Dtor(); };                                        // 0x00a2aa70
-struct OMFree { void DoFreeNodes(uint32_t nodes, uint32_t count); };       // 0x00a1b6c0
+struct OMFind {
+    void Find(uint32_t* out, uint32_t* key);               // 0x00a23b00
+};
+struct OMNodeCtor {
+    void Ctor(void* a);                                    // 0x00a2e2f0
+};
+struct OMTmp {
+    void* Make(char* a, char* b);                          // 0x00a1e320
+};
+struct OMInsert {
+    void Insert(uint32_t* out, void* node, uint32_t flag); // 0x00a30f80
+};
+struct OMNodeDtor {
+    void Dtor();                                           // 0x00a2aa70
+};
+struct OMFree {
+    void DoFreeNodes(uint32_t nodes, uint32_t count);      // 0x00a1b6c0
+};
 
+// @ 0x00a323e0
+// return find(k) != end() ? it->second : insert(value_type(k, mapped_type())).first->second
 uint32_t* OuterMap::operator_index(uint32_t* key)
 {
-    uint32_t it[4];
+    uint32_t it[2];
     ((OMFind*)this)->Find(it, key);
-    uint32_t found = it[0];
-    if (found == mpBuckets[mnBucketCount])
-        return (uint32_t*)(found + 4);
-    char flag1, flag2;
-    void* t = ((OMTmp*)it)->Make(&flag1, &flag2);
-    struct { uint32_t key; char val[0x1ec - 4]; uint32_t buckets; uint32_t bcount; uint32_t ecount; } node;
+    if (it[0] != mpBuckets[mnBucketCount])
+        return (uint32_t*)(it[0] + 4);
+    char cmp;                                   // empty hash/equal_to temporaries
+    uint32_t t[0x1e0 / 4];                      // mapped_type() (fixed_hash_map<uint,float,20,21>)
+    void* pt = ((OMTmp*)t)->Make(&cmp, &cmp);
+    struct { uint32_t key; char val[0x1dc - 4]; } node;     // value_type(k, t)
     node.key = *key;
-    ((OMNodeCtor*)&node.val)->Ctor(t);
-    ((OMInsert*)this)->Insert(it, &node, 0);
-    found = it[0];
-    ((OMNodeDtor*)&node.val)->Dtor();
-    ((OMFree*)&node.val)->DoFreeNodes(node.buckets, node.bcount);
-    node.ecount = 0;
-    return (uint32_t*)(found + 4);
+    ((OMNodeCtor*)&node.val)->Ctor(pt);
+    ((OMInsert*)this)->Insert(it, &node, it[0] & 0xffffff00);   // by-value true_type: low byte 0
+    uint32_t* r = (uint32_t*)(it[0] + 4);
+    ((OMNodeDtor*)&node)->Dtor();
+    // ~t: DoFreeNodes, then release the bucket array (pool slot or heap)
+    ((OMFree*)t)->DoFreeNodes(t[1], t[2]);
+    uint32_t* b = (uint32_t*)t[1];
+    t[3] = 0;
+    if (t[2] > 1 && b != (uint32_t*)t[0xc]) {
+        if (b < (uint32_t*)t[9] || (uint32_t*)t[10] <= b)
+            operator_delete__(b);
+        else {
+            *b = t[7];
+            t[7] = (uint32_t)b;
+        }
+    }
+    return r;
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a32550  EA::Audio::System destructor body (tears down ~40 fixed EASTL containers)
+// ---- 0x00a32550  EA::Audio::System destructor body (tears down ~40 fixed EASTL containers)
 struct HT {
     void Key_Free(uint32_t, uint32_t);          // 0x007611f0
     void TS_Free(uint32_t, uint32_t);           // 0x00a1b6c0 (TextStyle pair table DoFreeNodes)
@@ -274,7 +301,13 @@ struct HT {
     void RbNuke(uint32_t node);                 // 0x009a9600
 };
 struct Simple { void Dtor(); };                 // thiscall, no args
-struct SimpleA { void a26da0(); void a222c0(); void a23920(); void ilb(); void a227d0(); void f11e64d0(); void mutexDtor(); void f921e40(); void f922e10(); };
+struct SimpleA {
+    void a26da0(); void a222c0(); void a23920(); void ilb(); void a227d0();
+    void f11e64d0();                            // 0x011e64d0
+    void mutexDtor();                           // 0x00922130 (EA::Thread::Mutex::~Mutex)
+    void f921e40();                             // 0x00921e40
+    void f922e10();                             // 0x00922e10
+};
 
 template<int I> static inline void PoolTail(uint32_t* d)
 {
@@ -405,20 +438,27 @@ void SystemDtor::Destroy()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00a32ea0  EA::Audio::System::SetOutputProperty
+// ---- 0x00a32ea0  EA::Audio::System::SetOutputProperty
 struct InnerMap {
     uint32_t pad;
     uint32_t* mpBuckets;
     uint32_t mnBucketCount;
 };
-struct OuterIdx { InnerMap* Index(uint32_t* key); };     // 0x00a323e0 (operator[], ret 4)
-struct InnerFind { void Find(uint32_t* out, uint32_t* key); };   // 0x00645ed0
-struct InnerInsert { void Insert(uint32_t* pairOut, uint32_t* pairKV, uint32_t flag); };   // FUN_00a26ce0
+struct OuterIdx {
+    InnerMap* Index(uint32_t* key);                        // 0x00a323e0 (operator[], ret 4)
+};
+struct InnerFind {
+    void Find(uint32_t* out, uint32_t* key);               // 0x00645ed0
+};
+struct InnerInsert {
+    void Insert(uint32_t* pairOut, uint32_t* pairKV, uint32_t flag);   // 0x00a26ce0
+};
 
 struct SystemProps {
     void SetOutputProperty(uint32_t id, uint32_t prop, float value);
 };
 
+// @ 0x00a32ea0
 void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
 {
     InnerMap* m = ((OuterIdx*)((char*)this + 0x11b3c8))->Index(&id);

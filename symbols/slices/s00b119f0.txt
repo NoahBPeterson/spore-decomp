@@ -1,2 +1,7 @@
 # va  Name  # evidence
 00b119f0 SP::cTerrainCameraController::UpdateInterpolation  # name guessed; advances the six cInterpolationData blocks (PDB layout), writes mLastDeltaTime (+0x25c)
+0069a5f0 ?Evaluate@?$cHermiteSplineInterpolation@M@SP@@QAEMM@Z  # this slice's name for cHermiteSplineInterpolation<float>::Interpolate (call order in 0x00b119f0)
+0069a9a0 ?Evaluate@?$cHermiteSplineInterpolation@UcSPVector3@@@SP@@QAE?AUcSPVector3@@M@Z  # <cSPVector3>::Interpolate, spline member +0x1e4
+0069aee0 ?Evaluate@?$cHermiteSplineInterpolation@UcSPQuaternion@@@SP@@QAE?AUcSPQuaternion@@M@Z  # <cSPQuaternion>::Interpolate, spline member +0x220
+00b10e50 ?HermiteEval@@YA?AUcSPVector3@@PBU1@000MM@Z  # SP::SplineInterpolation<cSPVector3> (overload; the checker cannot tell class-typed overloads apart by annotation)
+00b11160 ?HermiteEval@@YA?AUcSPQuaternion@@PBU1@000MM@Z  # SP::SplineInterpolation<cSPQuaternion>

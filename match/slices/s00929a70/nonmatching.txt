@@ -3,7 +3,7 @@
 00929d10  7    CallbackCancel (cdecl tail-call of Cancel): complete; same mpObj load order as Cancel
 00929d50  7    Callback::~Callback: complete; same mpObj load order as Cancel
 00929e00  53   Callback::Callback(): complete; original keeps the SetObj(0) release path (mpObj reload not folded)
-00929e70  98   Callback::Callback(7 args): complete; store schedule and register allocation differ
+00929e70  98   Callback::Callback(7 args): complete; store schedule and register allocation differ; difftest PASS (after marking the definition "// @ 0x00929e70")
 0092a220  -    CallbackProcessor::Run: complete; register assignment (this in edi) and loop layout differ
 0092a4c0  103  CallbackProcessor::~CallbackProcessor: complete; register allocation and vector-erase loop shape differ
 0092a5d0  -    CallbackProcessor::Add: complete; register/spill schedule and loop shape differ

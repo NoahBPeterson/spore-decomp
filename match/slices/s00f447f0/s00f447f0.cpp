@@ -114,8 +114,16 @@ struct ActionVec {   // eastl::vector<Action>, at ScenarioResource+0x23c
     void Init446f0();                            // 0xf446f0
 };
 
-struct Vec4e0 { char* mpBegin; void set_capacity(int n); void Copy(char* dst, char* src); };   // 0xf2dbe0 / 0xf43880
-struct Vec34 { char* mpBegin; void set_capacity(int n); void Copy(char* dst, char* src); };    // 0xf2bb10 / 0xf42dc0
+struct Vec4e0 {
+    char* mpBegin;
+    void set_capacity(int n);           // 0xf2dbe0
+    void Copy(char* dst, char* src);    // 0xf43880
+};
+struct Vec34 {
+    char* mpBegin;
+    void set_capacity(int n);           // 0xf2bb10
+    void Copy(char* dst, char* src);    // 0xf42dc0
+};
 
 struct PerActionBlock {   // 0x27e8 bytes, vec at +0x78
     char pad[0x78];
@@ -130,7 +138,7 @@ struct HashNode {   // 0x238 bytes
     char pad2[0x238 - 0x30];
 };
 
-struct __declspec(align(8)) ScenarioResource : IRef {
+__declspec(align(8)) struct ScenarioResource : IRef {
     uint32_t pad04;
     ResourceKey key;          // +0x08
     char pad14[0x78 - 0x14];
@@ -164,22 +172,37 @@ struct __declspec(align(8)) ScenarioResource : IRef {
     ScenarioResource();                       // 0xf2e7d0
     ~ScenarioResource();                      // 0xdfef70
     void CopyFrom(const ScenarioResource& o); // 0xdffa30
-    void Init2c470();  void Init26230();  void Init2b340();  void Init27d80();
+    void Init2c470();   // 0xf2c470
+    void Init26230();   // 0xf26230
+    void Init2b340();   // 0xf2b340
+    void Init27d80();   // 0xf27d80
     void GatherObjects(void* outVec, uint32_t type, int a);   // 0xf2b040
     int NumActions() { return (int)((char*)actions.mpEnd - (char*)actions.mpBegin) / 0x534; }
 };
 
 // ---- globals ---------------------------------------------------------------------------------
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
-struct G534 { void Call(uint32_t a, uint32_t b); };          // 0xddddf0
+struct G534 {
+    void Call(uint32_t a, uint32_t b);   // 0xddddf0
+};
 extern G534 g15b0534;   extern uint32_t g15b0530;
-struct LogVec { void erase(void* b, void* e); void* mpBegin; void* mpEnd; };   // 0xe25bd0
+struct LogVec {
+    void erase(void* b, void* e);   // 0xe25bd0
+    void* mpBegin;
+    void* mpEnd;
+};
 extern LogVec g16065d8;
 extern uint32_t g16065ec, g16065f0;
 extern uint8_t g16065f8;
 extern IRef* g16065fc;
-struct G15ad328 { void Init(); };  extern G15ad328 g15ad328;      // 0xf03290
-struct G16c7c08 { void Init(); };  extern G16c7c08 g16c7c08;      // 0xf02670
+struct G15ad328 {
+    void Init();   // 0xf03290
+};
+extern G15ad328 g15ad328;
+struct G16c7c08 {
+    void Init();   // 0xf02670
+};
+extern G16c7c08 g16c7c08;
 extern V3u g16c87f8;
 extern V4u g15b0398;
 extern uint32_t g15b03a8;
@@ -189,7 +212,8 @@ V3u* F43010();                                // 0xf43010 (cdecl, returns vec3*)
 float __cdecl F_eed280(V3u* v, int n);        // 0xeed280
 IMsgServer* MessageServer();                    // 0x67dcc0
 IResMan* GetManager();                          // 0x67dcd0
-extern "C++" void* operator new(size_t, const char*, int, int, int, int);
+extern "C++" void* operator new(size_t, const char*, int, int, int, int);   // 0xf473a0
+void operator delete(void* p);   // 0xf47380
 void F_ef29c0();   void F_b3d3c0();
 extern void* g_msgIds;   // 0x148d35c
 
@@ -203,12 +227,22 @@ void* GetSaveArea(uint32_t id);        // 0x6b1f90
 IDGen* IDGenerator();                  // 0x67de60
 void MakeFileNameValid(const wchar_t* src, wchar_t* dst, int mode);   // 0x931250
 void Replace(wchar_t* b, wchar_t* e, const wchar_t& oldv, const wchar_t& newv);   // 0x63eda0
-__declspec(dllimport) void __cdecl BuildPaths(ResourceKey* key, struct EStr16* out, IResMan* mgr, void* area, const wchar_t* name);   // [0x154c468]
+// BuildPaths is called through a const function pointer in .rdata (0x154c468 -> 0x8ddc80)
+typedef void (__cdecl* BuildPathsFn)(ResourceKey* key, struct EStr16* out, IResMan* mgr, void* area, const wchar_t* name);
+extern BuildPathsFn const BuildPaths;   // 0x154c468
 void* F_414e10(AssetMetadata* m);      // 0x414e10
 void* F_5508c0(AssetMetadata* m);      // 0x5508c0
 
-struct SingA { void m781d0(); void m79aa0(); };  SingA* GetSingA();   // 0xb3d3c0
-struct SingB { void m5a390(); void m515e0(); };  SingB* GetSingB();   // 0xb3d310
+struct SingA {
+    void m781d0();   // 0xb781d0
+    void m79aa0();   // 0xb79aa0
+};
+SingA* GetSingA();   // 0xb3d3c0
+struct SingB {
+    void m5a390();   // 0xb5a390
+    void m515e0();   // 0xb515e0
+};
+SingB* GetSingB();   // 0xb3d310
 struct Obj37be0 { void Init37be0(); };
 struct G7aa4 { char pad[0x18]; Obj37be0* p; };
 extern G7aa4* g16c7aa4;
@@ -219,7 +253,11 @@ struct FStr {   // eastl fixed string header: begin, end, capacity, +1 dword
     void append(const wchar_t* s);   // 0x5c3d90
 };
 
-struct CamObj { float* GetAnchorDirection(); float* GetRotation(); float GetDistance(); };   // 0xb10260 / 0x644a70 / 0xc37540
+struct CamObj {
+    float* GetAnchorDirection();   // 0xb10260
+    float* GetRotation();          // 0x644a70
+    float GetDistance();           // 0xc37540
+};
 struct Obj1 {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
     virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
@@ -234,7 +272,10 @@ struct AppX {
 AppX* SP_App();   // 0x67dd10
 
 struct ImgData { void* handle; uint32_t flags; };
-struct ImgRef { ImgData* p; void GetImageResource(void* r); };   // 0x576650
+struct ImgRef {
+    ImgData* p;
+    void GetImageResource(void* r);   // 0x576650
+};
 struct ImgMan {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
     virtual void* LoadImage(ResourceKey k, int zero);   // 0x1c
@@ -242,7 +283,10 @@ struct ImgMan {
     virtual void Register(ImgData* d);                  // 0x34
 };
 ImgMan* GetImgMan();   // 0x67dd60
-struct ThumbMgr { bool CreateExportThumb(void* r, void* img, void* area, int a, int b); void RemoveExportThumb(ResourceKey* k); };   // 0x5fa8d0 / 0x5faec0
+struct ThumbMgr {
+    bool CreateExportThumb(void* r, void* img, void* area, int a, int b);   // 0x5fa8d0
+    void RemoveExportThumb(ResourceKey* k);   // 0x5faec0
+};
 ThumbMgr* GetThumbMgr();   // 0x5f7930 (thiscall target is the returned object)
 struct ObjTemplateDB {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
@@ -253,7 +297,9 @@ struct ObjTemplateDB {
     virtual void Invalidate(ResourceKey* k, int z);     // 0x78
 };
 ObjTemplateDB* GetObjectTemplateDB();   // 0x67cb40
-struct LayoutCollection { void Hide(); };   // 0x801380
+struct LayoutCollection {
+    void Hide();   // 0x801380
+};
 LayoutCollection* GetLayoutCollection();    // 0x67cab0
 
 // ScenarioObj8: the scenario-mode controller (vtable at +0, ISink subobject at +4, ScenarioResource at +0x10)

@@ -1,7 +1,7 @@
-0057a960  88    complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)
-00579e20  1727  complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original
-0057a610  163   complete AddTorsoToEffectsMask; uninitialized vec3 local copied as in original, sched differs
-0057a6d0  3     complete ctor; only mov ecx,<addr> scheduling differs
-0057a710  423   complete SendBehaviorMessage; this/msg register roles swapped vs original
-0057a9e0  110   complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores
+0057a960  88    complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)  ; difftest PASS (mapped g_mf* globals: split decls so each // 0x annotation applies)
+00579e20  1727  complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original  ; difftest WEAK (--repairs 64: 904 valid of 2000, no mismatch, coverage 55.8%; mapped the cEditorResource/PaintSystem/cContentValidationSummarizer vtables)
+0057a610  26    complete AddTorsoToEffectsMask(Vector3 by value as x,y,z floats, int); original loads all three floats before storing  ; difftest PASS (fix: the copied vec3 is the by-value argument, not an uninitialized local)
+0057a6d0  3     complete ctor; only mov ecx,<addr> scheduling differs  ; difftest PASS (marker moved onto the ctor; RefObj base vtable mapped via novtable + explicit store)
+0057a710  384   complete SendBehaviorMessage; this/msg register roles swapped vs original  ; difftest PASS at --inputs 1000 (fixes: 0x5942e0 callee was mis-annotated as 0xae6970; vtable+0xc call double-dereferenced; AddRef is a virtual call after new, not in the ctor)
+0057a9e0  110   complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)
 0057ac00  366   complete BuildPartMask (masks | defaults + ability/property bits); schedule differs

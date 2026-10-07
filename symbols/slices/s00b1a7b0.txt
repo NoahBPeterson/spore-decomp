@@ -1,0 +1,1 @@
+00b1a7b0 ?4Elem38Vector  # Elem38Vector::operator= (??4Elem38Vector@@QAEAAU0@ABU0@@Z); written as the mangled base identifier because the checker cannot map "operator=" to ??4

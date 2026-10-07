@@ -5,3 +5,4 @@ slices/s009a0d60/s009a0d60.cpp  ?AddRecordCountedS@?A0x  009a0eb0  /O2 /MD /Gy /
 slices/s009a0d60/s009a0d60.cpp  ?CopyAssign@SlotObj@@QAEPAU1@PBU1@@Z  009a18a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s009a0d60/s009a0d60.cpp  ?FUN_009a1ad0@@YAXPAD@Z  009a1ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE
 slices/s009a0d60/s009a0d60.cpp  ?GenerateVariantsS@?A0x  009a1a60  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s009a0d60/s009a0d60.cpp  ?resize@Vec8b@@QAEXI@Z  009a1770  /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -227,7 +227,7 @@ struct Scenario9 {
     Obj* FUN_00f3d780(uint32_t* pId);
     void FUN_00f43420(float* a, float* b);
     void f45c30(int mode, int idx, char c4, char c5);   // 0x00f45c30
-    int  f46020(int mode, int ia, int ib, char c4, char c5);  // 0x00f46020
+    void f46020(int mode, int ia, int ib, char c4, char c5);  // 0x00f46020
 
     void f455e0(uint32_t id);                        // 0x00f455e0
     void f45970();                                   // 0x00f45970
@@ -267,6 +267,7 @@ static inline PoolNode* PoolStart(State* s)
 
 // ------------------------------------------------------------------ 0x00f455e0
 // Remove scenario object `id`: clears references to it, destroys its pool nodes, drops the slot.
+// @ 0x00f455e0
 void Scenario9::f455e0(uint32_t id)
 {
     int sid = (int)id;
@@ -511,6 +512,7 @@ static inline Obj* RegisterObj(Scenario9* self, PoolNode* it, Slot* slot, int id
     return o;
 }
 
+// @ 0x00f45c30
 void Scenario9::f45c30(int mode, int idx, char c4, char c5)
 {
     bool idxIsM1 = idx == -1;
@@ -586,13 +588,14 @@ void Scenario9::f45c30(int mode, int idx, char c4, char c5)
 
 // ------------------------------------------------------------------ 0x00f46020
 // Compare two element rows (ia, ib) of every slot and sync the objects whose state differs.
-int Scenario9::f46020(int mode, int ia, int ib, char c4, char c5)
+// @ 0x00f46020
+void Scenario9::f46020(int mode, int ia, int ib, char c4, char c5)
 {
     State* s = mpManager;
     PoolNode* it = PoolStart(s);
     PoolNode* end = (PoolNode*)s->pool.mEnd;
     if (end == it)
-        return 0;
+        return;
     int offB = ib * 0x4e0;
     int offA = ia * 0x4e0;
     do {
@@ -703,10 +706,10 @@ next:
                 break;
         } while ((it->mFlags >> 0x1f) & 1);
     } while (end != it);
-    return 0;
 }
 
 // ------------------------------------------------------------------ 0x00f46450
+// @ 0x00f46450
 int Scenario9::f46450(int param)
 {
     State* s = mpManager;

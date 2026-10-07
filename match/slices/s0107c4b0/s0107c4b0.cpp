@@ -26,7 +26,7 @@ struct StateBuilder
     void AddState(int idx, const char* name);   // FUN_00b1c080
     void AddTransition(int a, int b, int c, int d, int e, int f, int g, int h, int i, int j,
                        BoolVec* v, int k);      // FUN_00b1c8d0
-    ~StateBuilder();                  // EA::ArgScript::cCommandBase::~cCommandBase
+    ~StateBuilder();                  // 0x0083c750 EA::ArgScript::cCommandBase::~cCommandBase
 };
 
 struct Entry { uint32_t id, z, w; };

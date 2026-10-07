@@ -2,7 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast.
 //
 // Identified from the 2008 dev build (work/devbuild: SPGraphicsMeshJoin.obj, SP::QuantizeVertices
-// @ 0x00f487c0, 2559 bytes, signature (cMeshData*, float granularity, tQuantizeType)); the local
+// at dev-build address 00f487c0, 2559 bytes, signature (cMeshData*, float granularity, tQuantizeType)); the local
 // names below are the dev PDB's. The retail function grew a fourth parameter (a per-class table of
 // {scale, flags}) and classifies points by bone, normal octant and section before welding them.
 // Retail layouts (from the disassembly): eastl::vector is 0x14 bytes, fixed_vector keeps its buffer
@@ -10,7 +10,7 @@
 #include <new>
 #include "types.h"
 
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
 
 struct cSPVector3 {
   float x, y, z;

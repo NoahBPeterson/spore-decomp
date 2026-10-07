@@ -30,7 +30,10 @@ struct Xform {
     Matrix3  m;
     void AccumulateScaled(const uint32_t* flags);   // 0x40cd80
 };
-struct Transform : Xform { Transform(); void Init(); };   // 0x409930 / 0x5aa530
+struct Transform : Xform {
+    Transform();   // 0x409930
+    void Init();   // 0x5aa530
+};
 
 extern "C" float __cdecl VectorLength(const float* v);         // 0x40ae50
 
@@ -70,8 +73,12 @@ struct TexHash {                       // 0x20 bytes, at +0x140
     int* Find(const ResKey* key);      // 0x6f6630 operator[]
 };
 
-struct CompiledState { void Dispatch(); };
-struct ActiveState { static void SetTexture(int slot, void* tex); };
+struct CompiledState {
+    void Dispatch();   // 0x11ee580
+};
+struct ActiveState {
+    static void SetTexture(int slot, void* tex);   // 0x11f1280
+};
 extern uint32_t g_rasterDelta;          // 0x16f8b00
 extern "C" void __cdecl FUN_00761f90(CompiledState* cs, const void* vec, uint32_t flags);
 
@@ -82,8 +89,8 @@ struct ShConst {
 };
 
 struct cViewer {
-    cViewer();
-    ~cViewer();
+    cViewer();    // 0x7c3f70
+    ~cViewer();   // 0x7c4000
     void Copy(uint32_t v, int a, int b);   // 0x7c50b0
     void GetXform(Xform* out);             // 0x7c40f0
     void SetXform(const Xform* in);        // 0x7c4d00
@@ -94,9 +101,19 @@ struct cViewer {
 };
 
 struct cImageInfo { uint32_t pad[3]; uint16_t width; uint16_t height; };
-struct cImageRes { uint32_t pad; uint32_t flags; cImageInfo* GetInfo(); };   // 0x46f260
-struct ImgPtr { cImageRes* p; void Assign(void* res); };                      // 0x576650
-struct ImgRef { void* p; ImgRef() : p(0) {} ~ImgRef(); };                     // dtor 0x576620
+struct cImageRes {
+    uint32_t pad; uint32_t flags;
+    cImageInfo* GetInfo();   // 0x46f260
+};
+struct ImgPtr {
+    cImageRes* p;
+    void Assign(void* res);   // 0x576650
+};
+struct ImgRef {
+    void* p;
+    ImgRef() : p(0) {}
+    ~ImgRef();   // 0x576620
+};
 struct SlotEntry { uint32_t pad; CompiledState* cs; };
 struct IImageSource {
     virtual void i0(); virtual void i1(); virtual void i2(); virtual void i3();
@@ -135,8 +152,8 @@ extern "C" IMessageServer*   __cdecl GetMessageServer();      // 0x67dcc0
 extern "C" IMaterialManager* __cdecl GetMaterialManager();    // 0x67dd70
 extern "C" IResSource*       __cdecl GetResSourceA();         // 0x67dda0
 extern "C" IResSource*       __cdecl GetResSourceB();         // 0x67dd40
-extern "C" void*             __cdecl operator_new(uint32_t sz, const char* name, int, int, int, int);
-extern "C" void              __cdecl operator_delete__(void* p);
+extern "C" void*             __cdecl operator_new(uint32_t sz, const char* name, int, int, int, int);   // 0xf473a0
+extern "C" void              __cdecl operator_delete__(void* p);   // 0xf47380
 extern char g_matDesc[];                 // 0x1631058
 extern Matrix3 g_identityB;              // 0x1630f38
 extern float g_xfInit[3];                // 0x1630df8

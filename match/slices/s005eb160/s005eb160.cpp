@@ -9,9 +9,9 @@ typedef unsigned short ushort;
 #define VSLOT(obj, idx) ((*(void***)(obj))[idx])
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 
-void* operator new(unsigned int, const char*, int, int, const char*, int);
-void  operator delete[](void*);
-extern "C" int __cdecl tolower(int);
+void* operator new(unsigned int, const char*, int, int, const char*, int);   // 0x00f473a0
+void  operator delete[](void*);   // 0x00f47380
+extern "C" __declspec(dllimport) int __cdecl tolower(int);
 
 extern wchar_t gEmptyW[];               // 0x1667bac: shared empty-string buffer (wchar_t[2] / char[2] overlay)
 
@@ -103,7 +103,9 @@ void  WStr_Format2(WStr*, const wchar_t*, ...);                 // 004e0850
 const wchar_t* eastl_search(const wchar_t*, const wchar_t*, const wchar_t*, const wchar_t*);   // 005e8ff0
 void  ConvertToString16(WStr* dst, NStr* src);                  // 0093c6d0
 
-struct RandomLCG { uint Uniform(uint n); };                     // 00a68fb0
+struct RandomLCG {
+    uint Uniform(uint n);   // 0x00a68fb0
+};
 extern RandomLCG gMathRandom;                                   // 01601760
 extern WStr gDefaultName;                                       // 015f0a1c (begin) / 015f0a20 (end)
 

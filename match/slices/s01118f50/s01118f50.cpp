@@ -119,6 +119,17 @@ struct __declspec(align(16)) hkVector4
 		const float inv = (len2 == kZero) ? kZero : kOne / hkMath_sqrt(len2);
 		mul4(inv);
 	}
+	// normalize3 of a cross product the original had just stored: it re-reads the stored (float-rounded)
+	// components, while cl here would keep the unrounded x87 values (a 1-ulp difference in the plane).
+	__forceinline void normalize3Stored()
+	{
+		const float x0 = *(volatile float*)&x;
+		const float y0 = *(volatile float*)&y;
+		const float z0 = *(volatile float*)&z;
+		const float len2 = z0 * z0 + y0 * y0 + x0 * x0;
+		const float inv = (len2 == kZero) ? kZero : kOne / hkMath_sqrt(len2);
+		x = x0 * inv; y = y0 * inv; z = z0 * inv; w = w * inv;
+	}
 	// Plane through p with this (unit) normal: w = -n.p
 	__forceinline void setPlaneDistance(const hkVector4& p) { w = -dot3(p); }
 };
@@ -168,10 +179,10 @@ public:
 
 	// 0x01115730 (name guessed): true when face a's edge pair (a0,a1) and face b's edge pair (b0,b1) are shared
 	static hkBool sharesEdgePair(const hkGeomEdge* edges, const hkGeomEdge* a0, const hkGeomEdge* b0,
-		const hkGeomEdge* a1, const hkGeomEdge* b1, const PlaneAndPoints& a, const PlaneAndPoints& b);
+		const hkGeomEdge* a1, const hkGeomEdge* b1, const PlaneAndPoints& a, const PlaneAndPoints& b);   // 0x01115730
 	// 0x01116F90 (name guessed): adds the extra planes for an opposing face pair
 	static void addPlanesForOpposingFace(const hkVector4& plane, const hkVector4& v0, const hkVector4& v1,
-		const hkVector4& v2, hkArray<hkVector4>& planeEquations);
+		const hkVector4& v2, hkArray<hkVector4>& planeEquations);   // 0x01116f90
 
 	static hkBool vectorLessAndMergeCoordinates(hkVector4& a, hkVector4& b);                   // 0x01115950
 	static void weldXsortedVertices(float tolerance, hkArray<hkVector4>& verts, int& numWelded);   // 0x01116D50
@@ -328,12 +339,12 @@ hkBool hkGeomConvexHullBuilder::buildPlaneEquations(const hkGeomConvexHullTolera
 		planeEquations.setSize(numPlanes + 6);
 		hkVector4& e0 = planeEquations[numPlanes];
 		e0.setCross(dir, bestAxis);
-		e0.normalize3();
+		e0.normalize3Stored();
 		e0.setPlaneDistance(p0);
 
 		hkVector4& e1 = planeEquations[numPlanes + 1];
 		e1.setCross(dir, e0);
-		e1.normalize3();
+		e1.normalize3Stored();
 		e1.setPlaneDistance(p0);
 
 		hkVector4& e2 = planeEquations[numPlanes + 2];

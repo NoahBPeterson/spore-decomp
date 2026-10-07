@@ -36,6 +36,7 @@ struct C25b {
   int m10;            // +0x10
   void Do(int arg);
 };
+// @ 0x00828df0
 void C25b::Do(int arg) {
   if (m10 && mObj) {
     mObj->v4();

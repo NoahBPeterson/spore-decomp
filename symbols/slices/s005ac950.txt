@@ -1,2 +1,5 @@
 005ac950 SP::cSPEditorManipulationCellPinning::AsInterface  # PDB 00d63230; shared/folded in several vtables
 005ad930 ?SetBlock  # unknown editor manipulation class (mBlock +0x1c, mMouseOffset +0x38, bool +0x44)
+013f7224 ??_7PinRot@@6BPinBase@@@  # PinRot primary vtable (stored by ctor 005ac9f0 and dtor 005acd60)
+013f7214 ??_7PinRot@@6B?$RefCountVTemplate@H@EA@@@  # PinRot RefCount-subobject vtable at +0x14
+013ec458 ??_7?$RefCountVTemplate@H@EA@@6B@  # EA RefCountVTemplate<int> vtable (cRC), stored first by inlined base ctor

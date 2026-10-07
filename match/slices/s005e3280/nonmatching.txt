@@ -1,4 +1,4 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
-005e3280  22  VerbIcon::Update complete; only the dt+elapsed addss operand order differs in the mid/upg interpolators
+005e3280  22  VerbIcon::Update complete; only the dt+elapsed addss operand order differs in the mid/upg interpolators; difftest PASS with flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 005e3920  405  complete; store scheduling / shared-tail layout of the scale-interp field stores differs
 005e3d50  537  VerbIcon::Disappear complete; store scheduling and register choice (xmm) differ

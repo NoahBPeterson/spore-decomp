@@ -5,7 +5,7 @@
 #include <string.h>
 #include "types.h"
 
-void __cdecl operator_delete__(void* p);
+void __cdecl operator_delete__(void* p);  // 0x00f47380
 void* __cdecl operator_new(unsigned n, const char* name, int a, int b, const char* file, int line);
 // ---------------------------------------------------------------------------
 // intrusive doubly-linked list (header node == this)
@@ -18,7 +18,7 @@ struct ListHdr {
         mpPrev = this;
         mpNext = this;
     }
-    void Find(void** out, void* limit);
+    __declspec(noinline) void Find(void** out, void* limit);
 };
 
 struct LNode {
@@ -60,13 +60,15 @@ static __forceinline void SpliceInl(void* pos_, void* node_)
 }
 
 // @ 0x008fe6a0
-__declspec(noinline) void ListHdr::Find(void** out, void* limit)
+void ListHdr::Find(void** out, void* limit)
 {
     FindInl(this, out, limit);
 }
 
+__declspec(noinline) void __stdcall Splice(void* pos, void* x, void* node);
+
 // @ 0x008fe6d0
-__declspec(noinline) void __stdcall Splice(void* pos, void* x, void* node)
+void __stdcall Splice(void* pos, void* x, void* node)
 {
     (void)x;
     SpliceInl(pos, node);
@@ -651,8 +653,8 @@ struct WStr2 {  // eastl::basic_string<wchar_t> with fixed buffer
     WStr2(const uint16_t* f, const uint16_t* l, const Alloc4&);  // 0x00630750
 };
 const uint16_t* __cdecl CharTypeFindFirstOf(const uint16_t* f, const uint16_t* l, const uint16_t* a, const uint16_t* b);
-extern const uint16_t gSep1[];
-extern const uint16_t gSep2[];
+extern const uint16_t gSep1[];  // 0x01430254
+extern const uint16_t gSep2[];  // 0x01430258
 
 // @ 0x008feef0
 void* HolderMap::Resolve(const uint16_t* s)
@@ -777,8 +779,8 @@ struct WS {
     void Assign(const uint16_t* f, const uint16_t* l);  // 0x00423650
 };
 void __cdecl WStr_Format(WS* s, const wchar_t* fmt, const char* arg);  // 0x0041e050
-extern uint16_t gEmptyStr[2];
-extern const uint16_t gDefaultMsg[];
+extern uint16_t gEmptyStr[2];          // 0x01667bac
+extern const uint16_t gDefaultMsg[];   // 0x01439fe4
 
 struct ResourceProvider {
     char pad[0xc];

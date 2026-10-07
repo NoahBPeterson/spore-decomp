@@ -1,16 +1,16 @@
 # va  diff-bytes  reason
 0067ec70  21  complete: command-history Execute; vtable/temp register scheduling differs from original
 0067eae0  286  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067ed00  183  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
+0067ed00  183  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest WEAK (no mismatch; 341 valid, 14% coverage)
 0067ee60  89  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067efc0  117  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
+0067efc0  117  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest WEAK (no mismatch; 275 valid, 34% coverage)
 0067f0c0  150  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067f1f0  19  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067f260  150  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f390  122  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f470  182  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f540  85  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f5c0  153  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
+0067f390  122  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS
+0067f470  182  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS
+0067f540  81  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS (fixed: 0x68a140 third arg is an empty tag struct passed by value, as EASTL true_type, not a char)
+0067f5c0  153  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)  ; difftest PASS
 0067f710  89  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
 0067f790  248  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
-0067f9b0  190  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences)
+0067f9b0  190  complete: reconstructed with full paths/calls; not byte-exact (register allocation/EH layout differences); difftest PASS

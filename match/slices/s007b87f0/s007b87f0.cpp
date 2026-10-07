@@ -1,6 +1,6 @@
 // Slice s007b87f0 - cThumbnailManager filter-chain/large-image helpers.
 
-void operator delete[](void*);
+void operator delete[](void*);   // 0x00f47380
 
 struct Pair2 { int a, b; };
 
@@ -94,7 +94,7 @@ void cJobPostFilter::Shutdown()
     m_flag = false;
 }
 
-void operator delete[](void*);
+void operator delete[](void*);   // 0x00f47380
 
 
 // ---------------------------------------------------------------------------
@@ -291,6 +291,7 @@ struct PtrFixedVec {
 };
 struct BBox6 { float mn[3]; float mx[3]; };
 
+// @ 0x007b87f0
 void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadius)
 {
     PtrFixedVec vec;
@@ -343,6 +344,8 @@ void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadi
 
 // ---------------------------------------------------------------------------
 // @ 0x007b91f0 : set up the planet-capture viewer and kick off a capture
+// The original inlines atan2 as fpatan (fast float model): this section only.
+#pragma float_control(precise, off, push)
 struct CaptureCam {
     virtual void v0();
     virtual void AddRef();
@@ -350,7 +353,12 @@ struct CaptureCam {
     int pad[2];
     float radius;                       // +0xc
 };
-struct CapBox { float mn[3]; float mx[3]; };
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+struct CapBox { Vec3 mn; Vec3 mx; };
 struct CapBoxVec {
     CapBox* b; CapBox* e; CapBox* c;
     void DoInsertValue(CapBox* pos, const CapBox* v);                  // 00424010
@@ -369,6 +377,7 @@ struct cPlanetCapture {
     void Setup(CaptureCam* cam);
 };
 
+// @ 0x007b91f0
 void cPlanetCapture::Setup(CaptureCam* cam)
 {
     if (mInit)
@@ -384,27 +393,29 @@ void cPlanetCapture::Setup(CaptureCam* cam)
     v->Init(0);
     mInit = true;
 
-    float r = mCam->radius;
     CapBox bb;
-    bb.mn[0] = bb.mn[1] = bb.mn[2] = FLT_MAX - r;
-    bb.mx[0] = bb.mx[1] = bb.mx[2] = -FLT_MAX + r;
+    bb.mn = Vec3(FLT_MAX, FLT_MAX, FLT_MAX);
+    bb.mx = Vec3(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+    float r = mCam->radius;
+    bb.mn.x -= r; bb.mn.y -= r; bb.mn.z -= r;
+    bb.mx.x += r; bb.mx.y += r; bb.mx.z += r;
 
     CapBoxVec boxes;
     boxes.b = 0; boxes.e = 0; boxes.c = 0;
     boxes.DoInsertValue(0, &bb);
 
     unsigned int key = FNV1_String8("PlanetCapture", 0x811c9dc5u, 1);
-    float sun[3];
-    typedef void (__thiscall* GetDirFn)(void*, float*);
+    Vec3 sun;
+    typedef void (__thiscall* GetDirFn)(void*, Vec3*);
     void* lm = LightingManager();
-    ((GetDirFn)VSLOT(lm, 9))(lm, sun);
-    float angle = (float)atan2((double)sun[1], (double)sun[0]);
+    ((GetDirFn)VSLOT(lm, 9))(lm, &sun);
 
-    float origin[3] = { 0.0f, 0.0f, 0.0f };
-    typedef void (__thiscall* CaptureFn)(void*, CapBoxVec*, unsigned int, cViewer*, float*, float, float);
+    typedef void (__thiscall* CaptureFn)(void*, CapBoxVec*, cViewer*, unsigned int, Vec3*, float, float);
     void* svc = CaptureService();
-    ((CaptureFn)VSLOT(svc, 20))(svc, &boxes, key, mViewer, origin, 30.0f, angle);
+    Vec3 origin(0.0f, 0.0f, 0.0f);
+    ((CaptureFn)VSLOT(svc, 20))(svc, &boxes, mViewer, key, &origin, 30.0f, (float)atan2((double)sun.y, (double)sun.x));
 }
+#pragma float_control(pop)
 
 // ---------------------------------------------------------------------------
 // @ 0x007b8cb0 : cCSAThumbnailJob::RenderLargeTiledImage

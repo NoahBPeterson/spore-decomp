@@ -3,12 +3,12 @@
 #include "types.h"
 
 typedef unsigned int size_t_;
-void* operator new(size_t_ n, const char* name, int flags, unsigned dbg, const char* file, int line);
-void operator delete(void* p) throw();
+void* operator new(size_t_ n, const char* name, int flags, unsigned dbg, const char* file, int line);   // 0x00f473a0
+void operator delete(void* p) throw();   // 0x00f47380
 inline void* operator new(size_t_, void* p) { return p; }
 inline void operator delete(void*, void*) throw() {}
-extern "C" int __cdecl isalpha(int);
-extern "C" int __cdecl isdigit(int);
+extern "C" __declspec(dllimport) int __cdecl isalpha(int);
+extern "C" __declspec(dllimport) int __cdecl isdigit(int);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned);
 extern char gEmptyStr[2];   // 0x01667bac: shared empty-string storage

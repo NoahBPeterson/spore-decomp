@@ -9,8 +9,8 @@ inline void* operator new(unsigned int, void* p) { return p; }
 
 // EASTL allocator / free (0xf473a0 / 0xf47380) and memcpy thunk (0x11e0744)
 void* __cdecl EastlAlloc(u32 size, const char* name, int flags, u32 align, const char* file, int line);
-void __cdecl EastlFree(void* p);
-void* __cdecl memcpy(void* d, const void* s, unsigned int n);
+void __cdecl EastlFree(void* p);   // 0xf47380
+void* __cdecl memcpy(void* d, const void* s, unsigned int n);   // 0x11e0744
 
 static inline void FreeArr(void* p)
 {
@@ -59,7 +59,7 @@ struct PtrVec {
     u32 alloc;
     u32* DoAllocate(u32 n, u32* first, u32* last);      // 0x9d7560
     void DoAllocateN(u32 n, void* a);                   // 0x9d69b0
-    PtrVec& operator=(const PtrVec& o);                 // 0x9d7bb0
+    PtrVec& Assign(const PtrVec& o);                    // 0x9d7bb0 operator= (named so the checker finds it)
 };
 
 struct Item {
@@ -254,7 +254,7 @@ void __cdecl SortElems(TElem* first, TElem* last, CmpObj cmp)
 }
 
 // @ 0x9d7bb0
-PtrVec& PtrVec::operator=(const PtrVec& o)
+PtrVec& PtrVec::Assign(const PtrVec& o)
 {
     if (&o != this) {
         u32* oe = o.e;
@@ -345,7 +345,7 @@ Item::Item(const Item& o)
 Item& Item::operator=(const Item& o)
 {
     key = o.key;
-    v = o.v;
+    v.Assign(o.v);
     f18 = o.f18;
     f1c = o.f1c;
     f20 = o.f20;

@@ -159,7 +159,7 @@ struct FeedEntryVector {
 struct AssetList {                   // 12 bytes, dtor 0x007a41a0
     uint32_t mpBegin, mpEnd, mpCapacity;
     AssetList() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~AssetList();
+    ~AssetList();                                                // 0x007a41a0
 };
 
 struct cAssetFilterPreview {
@@ -215,7 +215,7 @@ struct BrowserMessage {              // id 0xb3d53f95
     ~BrowserMessage();                                          // 0x00644ff0
 };
 
-template<class T> struct AutoRefCount {
+template<typename T> struct AutoRefCount {
     T* mpObject;
     AutoRefCount() : mpObject(0) {}
     ~AutoRefCount() { if (mpObject) mpObject->Release(); }

@@ -33,7 +33,7 @@ extern "C" long __cdecl _InterlockedExchange(long volatile* p, long v);
 
 // 0x00F473A0: EA named-allocation operator new / new[] (folded to one address)
 void* operator new(unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line) throw();
-void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line) throw();
+void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line) throw();  // 0x00F473A0
 void operator delete(void* p) throw();     // 0x00F47380
 void operator delete[](void* p) throw();   // 0x00F47380
 // matching deletes for the placement forms (never called: the allocator returns 0 on failure)
@@ -174,6 +174,10 @@ template <class K> struct hash_map {
     }
     const char*& operator[](const K& key);
 };
+// The two out-of-line instances this file calls (declared as explicit specializations so each
+// carries its own address for the equivalence checker).
+template <> const char*& hash_map<const wchar_t*>::operator[](const wchar_t* const& key);  // 0x005D74C0
+template <> const char*& hash_map<uint32_t>::operator[](const uint32_t& key);            // 0x005D71E0
 }  // namespace eastl
 
 typedef eastl::fixed_string16<97> PathString;
@@ -271,15 +275,16 @@ struct Variant {
     unsigned short mFlags;     // +0x10
     unsigned short mTypeId;    // +0x12
     enum { kFlagAllocated = 4 };
-    Variant(const eastl::string& s) : mFlags(0), mTypeId(0) { Construct(0x12, 9, &s, sizeof(s), 1); }
+    Variant(const eastl::string& s) : mFlags(0), mTypeId(0) { Set(0x12, 9, &s, sizeof(s), 1); }
     ~Variant()
     {
         if (mFlags & kFlagAllocated)
             Destruct(false);
     }
     void Destruct(bool bReconstruct);                                       // 0x0093DB80
-    void Construct(unsigned short typeId, unsigned short flags, const void* pData, unsigned int nSize,
-                   unsigned int nCount);                                    // 0x0093DD80
+    // EA::Variant::Set (0x0093DD80); not the debug-build EA::Variant::Construct at 0x00542C30
+    void Set(unsigned short typeId, unsigned short flags, const void* pData, unsigned int nSize,
+             unsigned int nCount);                                          // 0x0093DD80
 };
 
 namespace Hash { uint32_t FNV1_String8(const char* p, uint32_t seed, int bCaseConvert); }   // 0x00932E80
@@ -399,7 +404,7 @@ struct IResourceManager {
     virtual void v16();
     virtual bool RegisterFactory(bool bRegister, void* pFactory, uint32_t typeID);   // +0x44
 };
-IResourceManager* ResourceManager();                       // 0x0067DCD0
+IResourceManager* GetManager();                            // EA::ResourceMan::GetManager 0x0067DCD0 (not the SP::ResourceManager wrapper)
 void InitEditorMemory(int a, int b);                        // 0x006ADC60
 
 struct cPollinator {
@@ -593,7 +598,7 @@ namespace nSPSkinner {
 struct cPaintSystem : public EA::Messaging::IHandler {
     char pad04[0x108 - 4];
     cPaintSystem();                            // 0x0051E180
-    void Init();                               // 0x0051E5B0
+    void Setup();                              // 0x0051E5B0 (symbols name 0x0075D990 cPaintSystem::Init; this is a different method)
 };
 }
 namespace SP {
@@ -625,7 +630,7 @@ struct cHUD : public EA::IRefCountV {
 void SetHUD(cHUD*);                            // 0x0067CBF0
 
 // Message IDs the editor system listens to (0x013F8D78).
-extern const uint32_t kEditorSystemMessages[3];
+extern const uint32_t kEditorSystemMessages[3];  // 0x013F8D78
 
 class cEditorSystem : public EA::Messaging::IHandler {
 public:
@@ -651,7 +656,7 @@ bool cEditorSystem::Init(EA::AppCommandLine& cmdLine)
 {
     cSPEditorResourceFactory* pFactory = CreateEditorResourceFactory();
     if (pFactory && pFactory->IsValid()) {
-        ResourceManager()->RegisterFactory(true, pFactory, 0);
+        GetManager()->RegisterFactory(true, pFactory, 0);
         SetEditorResourceFactory(pFactory);
     }
 
@@ -848,7 +853,7 @@ bool cEditorSystem::Init(EA::AppCommandLine& cmdLine)
     ObjectTemplateDB()->AddSummarizer(pBuildingSummarizer);
 
     mSkinPaintSystem = EDITOR_NEW("Skinner/PaintSystem") nSPSkinner::cPaintSystem;
-    mSkinPaintSystem->Init();
+    mSkinPaintSystem->Setup();
     SetSkinPaintSystem(mSkinPaintSystem);
 
     if (sAppProperties->mpBlock->mbCSAMode) {

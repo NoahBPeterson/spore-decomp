@@ -1,5 +1,5 @@
 0089d3b0 484 ReorderBidiRunInfoArray: complete (UBA run reorder via index list); register alloc / fixed_vector inlining differ; difftest WEAK (30.6% coverage, reorder loops unreached) after fixing out->clear (original inlines erase(begin,end): mpEnd -= (end-begin)/16 elements; ours set mpEnd = mpBegin)
 0089d610 479 OrderGlyphs: complete; frame size and xmm register use differ (original keeps pen in xmm7/xmm6)
 0089d820 154 Typesetter ctor: complete; member-init order (LineLayout built mid-ctor), null check on placement new, reg alloc; difftest PASS after fixing the missing mCharIndexArray allocator store (LineLayout +0x7c+0xc = this+0x4a0)
-0089d9a0 262 FinalizeLine: complete; original inlines glyph-index lookup via ecx=LineLayout, resize calls take ecx=vec
+0089d9a0 262 FinalizeLine: complete; original inlines glyph-index lookup via ecx=LineLayout, resize calls take ecx=vec; difftest WEAK (seed 2: 187 valid, 49.5% coverage, no mismatch; seed 1 crashes the checker in machine.take_dirty) after splitting the one-line *Vec structs so each resize annotation gets its class scope
 0089dc00 988 LayoutParagraph: complete; /arch:SSE x87 float arg scheduling and EH-less frame differ

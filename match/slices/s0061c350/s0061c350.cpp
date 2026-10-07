@@ -3,6 +3,8 @@
 #include "../s00622f20/s00622f20.h"
 #include <intrin.h>
 
+extern char gEmptyString[];   // 0x01667bac (re-declared here so the checker can map it)
+
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line);
 extern "C" void EASTL_allocator_deallocate(void* p);
@@ -51,6 +53,13 @@ class cEditFeedTransaction : public cFeedTransactionBase {
  public:
   bool HandleResult(int code, void* result, struct Deque* queue);
 };
+
+// @ 0x0061c570
+cFeedTransactionBase::cFeedTransactionBase(uint32_t type, const FixedPtrVector& assets)
+    : mpFeed(0), mFeedType(type), mnIntParam(0), mnCount(0xffffffff), mUnk18(0) {
+  mAssets = assets;
+  mFlag = 0;
+}
 
 // @ 0x0061c5e0
 cGetAssetFeedTransaction::cGetAssetFeedTransaction(const FixedPtrVector& assets)
@@ -104,8 +113,8 @@ struct FeedDescription {
   unsigned lo, hi;
   uint32_t pad[0x19];
   int tail;
-  FeedDescription();
-  ~FeedDescription();
+  FeedDescription();    // 0x546630
+  ~FeedDescription();   // 0x547840
 };
 void FillFeedInfo(void* feed, FeedDescription* out);          // 0x618c70, cdecl
 struct DateTimeLike { void Set(int now); };                   // 0x92e3d0
@@ -128,8 +137,8 @@ struct FeedEvent {
   }
 };
 extern void* gFeedEventPoolHead;   // 0x15f5264, free list head of the pool at 0x15f5254
-bool FeedEventPool_AddCore(void* pool, int, int);   // EA::Allocator::FixedAllocatorBase::AddCore
-extern char gFeedEventPool[];
+struct FeedEventPoolT { bool AddCore(int, int); };   // 0x00926650 EA::Allocator::FixedAllocatorBase::AddCore (thiscall)
+extern FeedEventPoolT gFeedEventPool;   // 0x015f5254
 
 unsigned* LowerBound(unsigned* b, unsigned* e, const unsigned* key, char flag);   // 0x555a20 cdecl
 struct SortedUIntVec {
@@ -141,6 +150,7 @@ struct cAssetFeedTransaction {
   bool HandleResult(int code, void* result, Deque* queue);
 };
 
+// @ 0x0061c350
 bool cAssetFeedTransaction::HandleResult(int code, void* result, Deque* queue) {
   if (result) {
     void* o = PI(result, 0xf3c);
@@ -170,7 +180,7 @@ bool cAssetFeedTransaction::HandleResult(int code, void* result, Deque* queue) {
             }
             break;
           }
-          if (!FeedEventPool_AddCore(gFeedEventPool, 0, 0)) { ev = 0; break; }
+          if (!gFeedEventPool.AddCore(0, 0)) { ev = 0; break; }
         }
         queue->Push(ev, 1);
         unsigned* vb = (unsigned*)PI(this, 0xf8);
@@ -203,15 +213,16 @@ struct FDVec {
   FeedDescription* AllocCopyBackward(unsigned n, FeedDescription* a, FeedDescription* b);   // 0x61c1c0
   FeedDescription* AllocCopy(unsigned n, FeedDescription* a, FeedDescription* b);           // 0x61c220
   void DestructRange(FeedDescription* newEnd, FeedDescription* oldEnd);                      // 0x60e910
-  void AssignBackward(FeedDescription* last, FeedDescription* first);
-  void Assign(FeedDescription* first, FeedDescription* last);
+  // third argument: the iterator-tag slot (ignored, but it makes both ret 0xc)
+  void AssignBackward(FeedDescription* last, FeedDescription* first, int tag);
+  void Assign(FeedDescription* first, FeedDescription* last, int tag);
 };
 FeedDescription* CopyBackward(FeedDescription* last, FeedDescription* first, FeedDescription* destEnd);   // 0x619650
 void UninitializedCopyBackward(FeedDescription** out, FeedDescription* a, FeedDescription* b, FeedDescription* c, FeedDescription* d);  // 0x6195d0
 FeedDescription* Copy(FeedDescription* first, FeedDescription* last, FeedDescription* dest);              // 0x60ee50
 void UninitializedCopy(FeedDescription** out, FeedDescription* a, FeedDescription* b, FeedDescription* c, FeedDescription* d);        // 0x619610
 
-static inline void DestroyAndFree(FDVec* v) {
+static __forceinline void DestroyAndFree(FDVec* v) {
   FeedDescription* b = v->mpBegin;
   FeedDescription* e = v->mpEnd;
   for (; b < e; ++b) b->~FeedDescription();
@@ -220,9 +231,9 @@ static inline void DestroyAndFree(FDVec* v) {
 }
 
 // @ 0x0061c610
-void FDVec::AssignBackward(FeedDescription* last, FeedDescription* first) {
+void FDVec::AssignBackward(FeedDescription* last, FeedDescription* first, int) {
   unsigned n = (unsigned)(last - first);
-  if ((unsigned)(mpCapacity - mpBegin) < n) {
+  if (n > (unsigned)(mpCapacity - mpBegin)) {
     FeedDescription* nb = AllocCopyBackward(n, last, first);
     DestroyAndFree(this);
     mpBegin = nb;
@@ -245,9 +256,9 @@ void FDVec::AssignBackward(FeedDescription* last, FeedDescription* first) {
 }
 
 // @ 0x0061c760
-void FDVec::Assign(FeedDescription* first, FeedDescription* last) {
+void FDVec::Assign(FeedDescription* first, FeedDescription* last, int) {
   unsigned n = (unsigned)(last - first);
-  if ((unsigned)(mpCapacity - mpBegin) < n) {
+  if (n > (unsigned)(mpCapacity - mpBegin)) {
     FeedDescription* nb = AllocCopy(n, first, last);
     DestroyAndFree(this);
     mpEnd = nb + n;
@@ -265,7 +276,7 @@ void FDVec::Assign(FeedDescription* first, FeedDescription* last) {
   FeedDescription* mid = first + sz;
   Copy(first, mid, mpBegin);
   FeedDescription* res;
-  UninitializedCopy(&res, mpEnd, mid, last, last);
+  UninitializedCopy(&res, mid, last, mpEnd, last);
   mpEnd = res;
 }
 
@@ -302,7 +313,7 @@ void* AllocTx24(unsigned size);                                        // 0x6159
 struct TxA { TxA* Init(Key3 key, cAssetMetadata* md, void* feed, void* entry, int flag); };   // 0x6163e0 (thiscall, key by value)
 struct TxB { TxB* Init(Key3* key, void* feed, void* entry); };         // 0x616300
 void WStr_Format(void* wstr, const wchar_t* fmt, ...);                 // 0x41e050 cdecl
-extern wchar_t gEmptyWide[];
+extern wchar_t gEmptyWide[];   // 0x01667bac (shared empty string)
 
 unsigned RequestAssetsFromFeed(void* feed, unsigned maxCount, Deque* queue, char flag) {
   unsigned count = 0;

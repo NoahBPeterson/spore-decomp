@@ -1,9 +1,9 @@
 # va  diff-bytes  reason
-006b6920  77   ~cStringManager complete; vcall method load scheduled before pushes
+006b6920  77   ~cStringManager complete; vcall method load scheduled before pushes; difftest PASS (cStringManager vtable mapped in symbols/slices/s006b6920.txt)
 006b6a00  45   LoadAll complete; mpBucketArray reloaded for end sentinel in original
-006b6bf0  193  StringTableResourceFactory::Create complete; StringTable ctor not inlined
+006b6bf0  6    StringTableResourceFactory::Create complete; only the inlined RefObj ctor's xchg register pair (eax/ecx) differs; difftest PASS with --inputs 2000 (WEAK at 400: type==0x2fac0b6 rarely generated) (operator new annotated 0x00f473a0, AddRef moved to AutoRefCount assignment, ResourceObjectST base + ResourceKey copy)
 006b6d10  177  cStringManager ctor complete; init store order/ctor inlining differs
 006b6f80  364  vector<ushort>::insert(pos,n,val) complete; fill helper (rep stos) shape differs; difftest FAIL is a checker artifact: an earlier, discarded input made the original call memcpy(0x6b709a, 0x6b708a, 16) (a soup end pointer into .text) and the checker's memcpy handler wrote the original's code without a write-protection fault; .text is not restored between inputs, so on input 258 the original executed corrupted code and returned early without growing; replaying the saved input in a fresh emulator both sides fault identically in operator_new, and with --repairs 0 the checker finds no mismatch (WEAK, 178 valid, 11% coverage)
 006b7180  319  vector<uchar>::insert(pos,n,val) complete; fill/memset order differs
 006b7320  76   StringTable::GetString complete; find() jump threading differs
-006b7430  841  ReadResource complete; register allocation / scheduling differs
+006b7430  841  ReadResource complete; register allocation / scheduling differs; difftest WEAK (3000 valid, 6.6% coverage: random inputs never pass the type==0x2fac0b6 check; operator new annotated 0x00f473a0)

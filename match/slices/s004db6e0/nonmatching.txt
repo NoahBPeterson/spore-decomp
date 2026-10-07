@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-004db6e0  3249  complete /Od source (all paths/calls, EASTL stubs); /Od frame slot order and inline stub codegen not reconstructed
+004db6e0  3249  complete source (flags /Od /Ob1 /MD /Gy /TP /arch:SSE) (all paths/calls, EASTL stubs); /Od frame slot order and inline stub codegen not reconstructed; difftest WEAK (130 valid, 6.7% coverage: inputs fault in real callees; fix: operator delete[] annotated 0x00f47380, OptionArguments mangled name mapped to 0x00838330)

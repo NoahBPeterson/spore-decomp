@@ -5,10 +5,10 @@
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
 extern "C" __declspec(nothrow) void* __cdecl memset(void*, int, unsigned int);
-extern "C" int __cdecl fprintf(void*, const char*, ...);
-extern "C" void* __cdecl fopen(const char*, const char*);
-extern "C" int __cdecl fclose(void*);
-extern "C" float __cdecl sqrtf(float);
+extern "C" __declspec(dllimport) int __cdecl fprintf(void*, const char*, ...);
+extern "C" __declspec(dllimport) void* __cdecl fopen(const char*, const char*);
+extern "C" __declspec(dllimport) int __cdecl fclose(void*);
+#include <math.h>
 #pragma function(memcpy)
 
 // ===========================================================================
@@ -38,7 +38,7 @@ struct SpriteRef {
     unsigned short f5;     // +10
 };
 
-extern SpriteDispatchSlot g_spriteDispatch[];
+extern SpriteDispatchSlot g_spriteDispatch[];   // 0x016fa604
 
 void ShaderDispatch(int count, SpriteRef* refs, bool flag, int softState, bool dirty)
 {
@@ -348,7 +348,7 @@ void ShaderState::Reset()
     }
 }
 
-// @ 0x006e5d50  read a shader blob: per-id vertex shader, pixel shader and two sprite tables
+// ShaderState::Read (0x006e5d50): read a shader blob: per-id vertex shader, pixel shader and two sprite tables
 int SP_DirectShaderDispatchCallback();
 
 static void ReadTable(Stream* s, SprVec* v, int count)
@@ -365,6 +365,7 @@ static void ReadTable(Stream* s, SprVec* v, int count)
 
 extern Dev* g_d3dDevice;   // 0x16f89d0
 
+// @ 0x006e5d50
 bool ShaderState::Read(Stream* s, int a, int b)
 {
     if (!BaseRead(s, a, b)) {
@@ -483,7 +484,7 @@ int SP_DirectShaderDispatchCallback()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006e51b0  SP::SHFromCubeMap
+// SP::SHFromCubeMap (0x006e51b0)
 // Project a cube map onto spherical-harmonic coefficients (6 prefiltered faces) and
 // optionally dump the coefficients to "<dir><name>.txt".
 struct Vec4 { float v[4]; };
@@ -515,6 +516,7 @@ struct EStr {
 extern EStr __cdecl ConvertToString8(int v);                               // 0x93c440
 extern int __cdecl StrSprintf(EStr* self, const char* fmt, ...);           // 0x472fe0
 
+// @ 0x006e51b0
 void SP_SHFromCubeMap(CubeFace* tex, int size, char dump, const char* name, int extra,
                       float x, float y, float z)
 {
@@ -522,7 +524,10 @@ void SP_SHFromCubeMap(CubeFace* tex, int size, char dump, const char* name, int 
     __declspec(align(16)) Vec4 coeffs[25];
     memset(coeffs, 0, sizeof(coeffs));
 
-    float inv = 1.0f / sqrtf(x * x + (y * y + z * z) + 1e-08f);
+    // The original sums the squares on the x87 stack (double precision) before fsqrt and
+    // rounds only the root to float; the double arithmetic here reproduces that.
+    float root = (float)sqrt((double)x * x + ((double)y * y + (double)z * z) + (double)1e-08f);
+    float inv = 1.0f / root;
     x = inv * x;
     y = y * inv;
     z = z * inv;

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-0099bf80  28  tree dtor: cl drops the redundant null test before delete and keeps no dec after xadd
+0099bf80  28  tree dtor: cl drops the redundant null test before delete and keeps no dec after xadd; difftest WEAK at default (185/400 valid, 100% coverage), PASS with --inputs 800 (367 valid) after annotating operator_delete // 0x00f47380
 0099c0b0  220  quaternion multiply: SSE scheduling/register allocation differs; difftest PASS after fixing the source Flags comment (lacked /fp:fast, so the checker built without it: sqrt became a _CIsqrt call and SSE/x87 rounding differed)
 0099c1a0  335  rotate vector by quaternion A: SSE scheduling differs; difftest PASS after fixing the source Flags comment (lacked /fp:fast, so the checker built without it: sqrt became a _CIsqrt call and SSE/x87 rounding differed)
 0099c310  326  rotate vector by quaternion B: SSE scheduling differs; difftest PASS after fixing the source Flags comment (lacked /fp:fast, so the checker built without it: sqrt became a _CIsqrt call and SSE/x87 rounding differed)

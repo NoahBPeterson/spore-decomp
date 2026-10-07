@@ -1,1 +1,1 @@
-0064c8e0  3935  complete (every case/call/store of the message switch); not exact: frame 0x64 vs 0x6c, dead zero-stores to [esp+0x1c] not reproduced, some branch layout
+0064c8e0  3935  complete (every case/call/store of the message switch); not exact: frame 0x64 vs 0x6c, dead zero-stores to [esp+0x1c] not reproduced, some branch layout; difftest WEAK (6.6% coverage: message-id switch; mapped ~AssetList 0x007a41a0, AutoRefCount::operator= 0x00b5f950)

@@ -1,1 +1,1 @@
-00bf5cb0 3119 complete behavior; 4090-byte function, loop/register layout differs (flags /O2 /arch:SSE /fp:fast best)
+00bf5cb0 3134 complete behavior; 4090-byte function, loop/register layout differs (flags /O2 /arch:SSE /fp:fast best); difftest WEAK (174 valid, 12.5% coverage) after fixing two real differences: GetGameDataVector arguments were reversed (now FnD,FnC,FnB,FnA, tag 0x18c43e8 as an integer) and a stray extra GetFactor() call

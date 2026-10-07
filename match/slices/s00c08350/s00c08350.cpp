@@ -7,11 +7,17 @@
 struct Vec3 { float x, y, z; };
 
 // Growable array of 4-byte elements (begin/end/capacity), eastl::vector layout.
-struct Vec32 { uint32_t* b; uint32_t* e; uint32_t* cap; void __thiscall DoInsert(uint32_t* pos, uint32_t* val);   // 0x00b96600
-    void __thiscall AddUnique(uint32_t* val); };              // 0x00c072f0
+struct Vec32 {
+    uint32_t* b; uint32_t* e; uint32_t* cap;
+    void __thiscall DoInsert(uint32_t* pos, uint32_t* val);   // 0x00b96600
+    void __thiscall AddUnique(uint32_t* val);                 // 0x00c072f0
+};
 
 // A scored-target container: 0x00c05ee0 resets it, 0x00c06750/0x00c066a0 add an entry.
-struct TargetSet { uint8_t data[0x2c]; void __thiscall Reset(); };                      // 0x00c05ee0
+struct TargetSet {
+    uint8_t data[0x2c];
+    void __thiscall Reset();  // 0x00c05ee0
+};
 uint32_t __cdecl AddTarget(TargetSet* set, void* obj, float dist, bool a, bool b);    // 0x00c06750
 uint32_t __cdecl AddTargetOld(TargetSet* set, void* obj, float dist, bool a, bool b); // 0x00c066a0
 void __cdecl SortScores(uint32_t* b, uint32_t* e, uint32_t extra);  // 0x00c07320
@@ -55,8 +61,14 @@ struct Owner {
     uint8_t pad1[0x420];
     uint32_t flags;
 };
-struct OwnerSub { void __thiscall PostEvent(uint32_t id, uint32_t zero, float f, Node* who); };   // 0x00bc97f0 (on Owner+8)
-struct Tuning { uint8_t pad[0xa8]; float range; float __thiscall GetBound(bool b); };            // TuningObj::GetBound 0x004d3d70
+struct OwnerSub {
+    void __thiscall PostEvent(uint32_t id, uint32_t zero, float f, Node* who);  // 0x00bc97f0 (on Owner+8)
+};
+struct Tuning {
+    uint8_t pad[0xa8];
+    float range;
+    float __thiscall GetBound(bool b);  // TuningObj::GetBound 0x004d3d70
+};
 
 struct Entity {
     virtual void v0() {}
@@ -195,19 +207,31 @@ struct Node {
 };
 Node* __cdecl FindSubNode(Node* n, uint32_t id);   // 0x00ac80d0
 
-struct Sink { int __thiscall Run(); };             // 0x00bca620
+struct Sink {
+    int __thiscall Run();  // 0x00bca620
+};
 struct Msg { void* p; uint32_t z; };
 Sink* __stdcall MakeSink(uint32_t id, void (__cdecl* fn)(), Msg* m);   // 0x00bc9b00
 
 struct Tuning;
-struct Tracker { void __thiscall Update(); };      // 0x00c7dcb0
-struct Planet { Vec3* __thiscall GetCenter(); };   // 0x00b816f0
+struct Tracker {
+    void __thiscall Update();  // 0x00c7dcb0
+};
+struct Planet {
+    Vec3* __thiscall GetCenter();  // 0x00b816f0
+};
 Planet* __stdcall PlanetModel(void* out, Vec3* p); // SP::PlanetModel 0x00b3d350
-struct EntityQuery { void __thiscall Run(); };     // 0x00b09070
+struct EntityQuery {
+    void __thiscall Run();  // 0x00b09070
+};
 struct EntityList { Entity** b; Entity** e; Entity** cap; uint32_t alloc; Entity* buf[256]; };
 EntityQuery* __stdcall QueryEntities(Vec3* center, float radius, EntityList* out, int zero);   // 0x00b3d440
-struct FlagSet { bool __thiscall Test(uint32_t mask); };   // 0x00bc9a00
-struct NounMgr { void* __thiscall GetAvatar(); };  // SP::cGameNounManager::GetAvatar 0x00b1fdb0
+struct FlagSet {
+    bool __thiscall Test(uint32_t mask);  // 0x00bc9a00
+};
+struct NounMgr {
+    void* __thiscall GetAvatar();  // SP::cGameNounManager::GetAvatar 0x00b1fdb0
+};
 NounMgr* __cdecl NounManager();                    // SP::NounManager 0x00b3d300
 struct ListPair { Entity** b; Entity** e; };
 uint32_t __cdecl GetCurrentGameMode();             // SP::GetCurrentGameMode 0x00b5b800

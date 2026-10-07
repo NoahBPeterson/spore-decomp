@@ -39,12 +39,24 @@ struct StyleVec {
 };
 
 struct Vec { char* mpBegin; char* mpEnd; char* mpCapacity; void* mpAllocator; uint32_t pad; };  // 0x14
-struct StringVec : Vec { void resize(uint32_t n); };      // 0x00898a30
-struct AnalysisVec : Vec { void resize(uint32_t n); };    // 0x0089bc00
-struct GlyphVec : Vec { void resize(uint32_t n); };       // 0x00893480
-struct GlyphInfoVec : Vec { void resize(uint32_t n); };   // 0x0089bd50
-struct GlyphLayoutVec : Vec { void resize(uint32_t n); }; // 0x0089bdb0
-struct UIntVec : Vec { void resize(uint32_t n); };        // 0x00887240
+struct StringVec : Vec {
+    void resize(uint32_t n);   // 0x00898a30
+};
+struct AnalysisVec : Vec {
+    void resize(uint32_t n);   // 0x0089bc00
+};
+struct GlyphVec : Vec {
+    void resize(uint32_t n);   // 0x00893480
+};
+struct GlyphInfoVec : Vec {
+    void resize(uint32_t n);   // 0x0089bd50
+};
+struct GlyphLayoutVec : Vec {
+    void resize(uint32_t n);   // 0x0089bdb0
+};
+struct UIntVec : Vec {
+    void resize(uint32_t n);   // 0x00887240
+};
 
 struct GlyphLayoutInfo { uint32_t pad0; float mfX; uint32_t pad1; float mfAdvance; uint32_t pad2[4]; };  // 0x20
 

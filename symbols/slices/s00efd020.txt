@@ -1,4 +1,5 @@
 # va  Name  # evidence
-00efd8e0  FUN_00efd8e0  # view-space Vector3 via FUN_00b18e00/FUN_00eebf80 + FUN_0059aed0; implicit ESI return buffer
-00efd6e0  FUN_00efd6e0  # SP::App()->cViewer::GetCameraLocationInfo ray/plane test; implicit ESI/EDI args
+00efd8e0  ObjPlaneVec  # view-space Vector3 via FUN_00b18e00/FUN_00eebf80 + FUN_0059aed0; implicit ESI return buffer
+00efd6e0  RayHitPlane  # SP::App()->cViewer::GetCameraLocationInfo ray/plane test; implicit ESI/EDI args
+00efd830  ProjectHit  # projects RayHitPlane hit onto a normalized vector; implicit ECX/EAX args
 00efde90  FUN_00efde90  # selection predicate over param+0x20 -> +0x10 -> +0xc object, tests this+4

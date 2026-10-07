@@ -156,7 +156,7 @@ struct SkelNode {
 };
 
 // 0x00460a80: depth-first reorder of the ids whose parent is `target`, returns count placed.
-int ReorderChildren(const SkelNode* nodes, int target, int* ids, int count);
+int ReorderChildren(const SkelNode* nodes, int target, int* ids, int count);   // 0x00460a80
 
 // @ 0x00461680
 // Orders the skeleton's node indices into pOrder by class (5,4,3,2,1 from the highest root

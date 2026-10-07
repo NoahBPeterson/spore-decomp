@@ -25,7 +25,10 @@ struct Loco {                 // SP::cLocomotiveObject sub-object (at owner + 0x
     bool IsNearGoal();        // 0xc42e20
 };
 
-struct Transform { char d[0x3c]; Transform(); };   // 0x409930
+struct Transform {
+    char d[0x3c];
+    Transform();   // 0x409930
+};
 
 struct Mesh {
     char pad00[0x40];
@@ -33,14 +36,20 @@ struct Mesh {
     Vec3* mpBegin;            // +0x4c
     Vec3* mpEnd;              // +0x50
 };
-struct MeshRef { Mesh* GetMesh(); };               // 0xb7c360
+struct MeshRef {
+    Mesh* GetMesh();   // 0xb7c360
+};
 
 struct Obj {                  // spatial object seen through the entity's component
     void LocalToWorldTransform(Transform* xf);     // 0xc897e0
 };
 
-struct Creature { bool Check(); };                 // 0xc0c0e0
-struct Flag10c { int Check(); };                   // 0xc90460
+struct Creature {
+    bool Check();   // 0xc0c0e0
+};
+struct Flag10c {
+    int Check();   // 0xc90460
+};
 
 struct Hit { void* first; void* second; };
 

@@ -4,3 +4,4 @@
 004d3d40  TuningObj::GetActive
 004d3d70  TuningObj::GetBound
 004d3da0  TuningObj::SetBounds
+004d3dd0  cSpeciesProfile::cSpeciesProfile

@@ -10,4 +10,4 @@
 009d3410  116  FindLimbAboveThreshold: complete; x87 temp scheduling differs
 009d34a0  60  ComputeRatios: complete; only loop-head alignment nop differs
 009d3610  148  GetAmplitude: complete; frame layout differs (orig 0xc-byte frame); difftest FAIL is a checker artifact: the function-local static sMax (orig 0x166c694, guard 0x166c698) cannot be mapped by resolve.py, so ours writes its own copy (a mutant using explicit globals at those addresses PASSes, 383 inputs); fixed before that: MoveObj::mScale offset 0x1c0 -> 0x70, sMax was a constant-initialised static (orig initialises it at first use from 0x1447a2c), sqrt operand order
-009d3840  205  GetTurnFactor: complete; x87 scheduling differs
+009d3840  205  GetTurnFactor: complete; x87 scheduling differs; difftest PASS (split the kFactor declarations so each carries its own address annotation)

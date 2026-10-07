@@ -82,7 +82,7 @@ struct t_glist {
 struct t_widgetbehavior;
 extern t_widgetbehavior text_widgetbehavior;   // 0x1554364
 extern t_widgetbehavior gatom_widgetbehavior;
-extern t_class* gpTextClass;
+extern t_class* gpTextClass;   // 0x016754f0
 extern t_class* gpCanvasClass;                 // 0x1675490
 extern t_class* spMessageClass;
 extern t_class* spMessresponderClass;

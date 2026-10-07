@@ -178,7 +178,7 @@ struct RefHolder { RefCounted* p; RefHolder() : p(0) {} ~RefHolder() { if (p) p-
 struct ResW : RefCounted { };
 void __cdecl FillResourceList(RefCounted* res, TmpVec* out, void* fn);   // 0x7141e0
 void __fastcall DestructRange(TmpVec* v, int, uint32_t* b, uint32_t* e); // 0x70f520
-extern "C" void __cdecl OpDeleteArr(void* p);
+extern "C" void __cdecl OpDeleteArr(void* p);   // 0xf47380
 extern char g_fn743910[];
 
 struct cModelInstance;
@@ -186,7 +186,11 @@ struct LoadReq {
     uint32_t key; RefCounted* model; uint32_t a4, a5, idx, z0, z1;
     ~LoadReq() { if (model) model->Release(); }
 };
-struct LoadQueue { uint32_t d; void Push(LoadReq* r); void Remove(uint32_t* pkey); };   // 0x74bda0 / 0x74be40
+struct LoadQueue {
+    uint32_t d;
+    void Push(LoadReq* r);           // 0x74bda0
+    void Remove(uint32_t* pkey);     // 0x74be40
+};
 struct ModelEntry {
     char pad0[8]; uint32_t key; uint32_t flags0; char pad10[0x128]; int idx;   // flags at +0xc, idx at +0x138
 };
@@ -198,7 +202,7 @@ struct cModelWorld {
     bool ModelIsResidentInMemory(RefCounted* model);
     void __stdcall UpdateFromPropList(RefCounted* model, ModelEntry* entry, int idx, int z);   // 0x74b760 (free in orig)
     void ScheduleForLoad(ModelEntry* entry, RefCounted* model, uint32_t a4, uint32_t a5);
-    void Load74a920(RefCounted* model, ModelEntry* entry, int idx);
+    void Load74a920(RefCounted* model, ModelEntry* entry, int idx);   // 0x74a920
 };
 void __stdcall UpdateFromPropList(RefCounted* model, ModelEntry* entry, int idx, int z);
 
@@ -298,12 +302,17 @@ void cModelWorld::ScheduleForLoad(ModelEntry* entry, RefCounted* model, uint32_t
 // @ 0x0074CAD0  per-model load job step (state machine over +0x2c)
 // ---------------------------------------------------------------------------
 struct JobW { char pad[0x20]; RefCounted* res; };
-struct cJobW { void Wait(); void GetStatus(); };
+struct cJobW {
+    void Wait();        // 0x6926b0
+    void GetStatus();   // 0x690120
+    void Run6913c0(struct JobW* j);              // 0x6913c0
+    bool Continuation(void* fn, void* arg);      // 0x68f9f0
+};
+extern char g_fn74d080[];   // 0x74d080
+struct ResListW { void Fill(TmpVec* out, void* fn); };   // 0x73bd60 (thiscall on the resource)
 struct PropOwner { char pad[0x10]; uint32_t flags; };
 extern bool __cdecl GetPropertyAsKeyP(void* props, uint32_t id, ModelKey* out);
 void __cdecl FUN_00756790(JobW** job, uint32_t inst, uint32_t grp, uint32_t flags);
-void __cdecl FUN_006913c0(JobW* j);
-uint32_t __cdecl JobContinuation(cJobW* job, void* fn, void* arg);   // 0x68f9f0
 struct LoadJob {
     uint32_t pad0;
     PropOwner* props;      // +0x04
@@ -317,9 +326,9 @@ struct LoadJob {
     JobW* job;             // +0x30
     RefCounted* refs[6];   // +0x34
     uint32_t count;        // +0x4c (overlaps refs end; see original)
-    uint32_t Step(cJobW* cj);
+    bool Step(cJobW* cj);
 };
-uint32_t LoadJob::Step(cJobW* cj)
+bool LoadJob::Step(cJobW* cj)
 {
     if (state == 6) {
         state = 0;
@@ -348,7 +357,7 @@ uint32_t LoadJob::Step(cJobW* cj)
         }
         if (r) {
             TmpVec v;
-            FillResourceList(r, &v, g_fn743910);
+            ((ResListW*)r)->Fill(&v, g_fn743910);
             uint32_t* p = v.b;
             if (p != v.e) {
                 do {
@@ -364,11 +373,12 @@ uint32_t LoadJob::Step(cJobW* cj)
     }
     JobW** pj = &job;
     if (*pj != 0) {
+        cJobW* oj = (cJobW*)*pj;
         *pj = 0;
-        ((cJobW*)0)->GetStatus();
+        oj->GetStatus();
     }
     if (state == 6)
-        return 1;
+        return true;
     ModelKey k = { 0, 0, 0 };
     uint32_t sz;
     uint32_t fl;
@@ -402,8 +412,8 @@ uint32_t LoadJob::Step(cJobW* cj)
             ++count;
         }
     }
-    FUN_006913c0(*pj);
-    return JobContinuation(cj, 0, this);
+    cj->Run6913c0(*pj);
+    return cj->Continuation(g_fn74d080, this);
 }
 
 // ---------------------------------------------------------------------------
@@ -432,6 +442,7 @@ struct VecE14 {
     E14* mBegin; E14* mEnd; E14* mCap;
     void DoInsertValue(E14* pos, const E14& value);
 };
+// @ 0x0074CE20
 void VecE14::DoInsertValue(E14* pos, const E14& value)
 {
     if (mEnd != mCap) {
@@ -486,8 +497,8 @@ struct cModelWorldMsg {
 };
 void __stdcall ShutdownModel(cModelWorld* w, ModelNode* n);                       // 0x746b90 (thiscall)
 struct cModelWorldX {
-    void ShutdownModel(ModelNode* n);
-    void ScheduleForLoad(ModelNode* n, ResChain* chain, uint32_t a, uint32_t b);
+    void ShutdownModel(ModelNode* n);                                              // 0x746b90
+    void ScheduleForLoad(ModelNode* n, ResChain* chain, uint32_t a, uint32_t b);   // 0x74c910
 };
 
 bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)

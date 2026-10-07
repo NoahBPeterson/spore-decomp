@@ -1,5 +1,5 @@
 // Slice s00af6bf0: planet-surface path tracer (iterative ray march that follows hits around the planet).
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
 #include <float.h>
@@ -35,10 +35,10 @@ extern Vec3 gInvalidVec;                              // 0x0167ae24 sentinel vec
 typedef float (*CastFn)(void* ctx, const float* origin, const float* dir, float maxDist, Hit* hit);
 
 // 0x00af5b40: probe/refine a hit; returns nonzero on success
-char ProbeHit(Hit* hit, const float* a, const float* b, bool flag, char* outFlag, float p3);
+char ProbeHit(Hit* hit, const float* a, const float* b, bool flag, char* outFlag, float p3);  // 0x00af5b40
 // 0x00af6400: sweep to one side, fills 'outArr' with up to 'count' hits, returns the count
 int SweepSide(void* ctx, float p3, CastFn cast, const float* a, const float* b, float side,
-              Hit* hit, Hit* outArr, int count, Hit* outBase, int idx, float* outDist, int extra);
+              Hit* hit, Hit* outArr, int count, Hit* outBase, int idx, float* outDist, int extra);  // 0x00af6400
 
 static inline bool IsInvalid(const Vec3& v)
 {
@@ -59,7 +59,6 @@ int TracePlanetPath(void* ctx, const float* initDir, float p3, CastFn cast, cons
                     const float* end, Hit* out, int maxHits, int* state, float* outLen,
                     const Hit* prev, int extra)
 {
-    Hit firstHit;
     Vec3 pos, target, dir, d;
     float total, len, inv, dist;
     int n, iter;
@@ -72,7 +71,7 @@ int TracePlanetPath(void* ctx, const float* initDir, float p3, CastFn cast, cons
     cont = true;
     *state = 4;
     total = 0.0f;
-    // firstHit is constructed by Hit() above
+    Hit firstHit;                       // constructed after the setup stores, as in the original
     n = 0;
     iter = 0;
 

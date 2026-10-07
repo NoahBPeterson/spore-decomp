@@ -29,7 +29,10 @@ void UnpackColor(unsigned int c, float* out)
 
 struct Vec3 { float x, y, z; };
 struct Vec2 { float x, y; };
-struct Mat33 { float m[9]; void __thiscall Assign(const void* src); };
+struct Mat33 {
+    float m[9];
+    void __thiscall Assign(const void* src);  // 0x0041cb40 Matrix3::Assign
+};
 
 struct StreamDesc {
     unsigned int count;          // +0
@@ -45,16 +48,28 @@ struct MeshEntry {
     StreamDesc& GetStream() { return stream; }
     char pad2[0x20 - 0x10 - sizeof(StreamDesc)];
 };
+struct ModelType {              // 0x48 bytes at Cluster+0x44
+    unsigned char raw[0x8c - 0x44];
+    bool __thiscall GetResourceTypeFromModelType();  // 0x00526430
+};
 struct Cluster {                 // 0x8c bytes
     StreamDesc indices;          // +0
     unsigned char pad[0x14 - sizeof(StreamDesc)];
     unsigned char formats[0x44 - 0x14]; // +0x14 (format list)
-    unsigned char modelType[0x8c - 0x44]; // +0x44
-    bool __thiscall GetResourceTypeFromModelType();
+    ModelType modelType;         // +0x44
 };
-struct VecU32 { unsigned int* mpBegin; unsigned int* mpEnd; unsigned int* mpCap; int pad[2]; void __thiscall Resize(unsigned n); };
-struct VecV3  { Vec3* mpBegin; Vec3* mpEnd; Vec3* mpCap; int pad[2]; void __thiscall Resize(unsigned n); };
-struct VecV2  { Vec2* mpBegin; Vec2* mpEnd; Vec2* mpCap; int pad[2]; void __thiscall Resize(unsigned n); };
+struct VecU32 {
+    unsigned int* mpBegin; unsigned int* mpEnd; unsigned int* mpCap; int pad[2];
+    void __thiscall Resize(unsigned n);  // 0x004cd3c0
+};
+struct VecV3  {
+    Vec3* mpBegin; Vec3* mpEnd; Vec3* mpCap; int pad[2];
+    void __thiscall Resize(unsigned n);  // 0x00473810
+};
+struct VecV2  {
+    Vec2* mpBegin; Vec2* mpEnd; Vec2* mpCap; int pad[2];
+    void __thiscall Resize(unsigned n);  // 0x00473dc0
+};
 struct ClusterVec { Cluster* mpBegin; Cluster* mpEnd; };
 struct MeshDesc {
     char pad0[8];
@@ -78,15 +93,15 @@ struct Xform {
 };
 
 void __cdecl FUN_00733ed0(MeshDesc*);
-void __cdecl CreateClustersAndEdges(MeshDesc*, int);     // SP::cMeshClusterer::CreateClustersAndEdges
+void __cdecl CreateClustersAndEdges(MeshDesc*, int);     // 0x00735470 SP::cMeshClusterer::CreateClustersAndEdges
 int  __cdecl FUN_0071ddc0(MeshDesc*, int, int, int, int);
 void __cdecl FUN_00736b00(MeshDesc*);
 bool __cdecl FUN_0071ded0(MeshDesc*, int, int*, int*, int, int*, int);
 bool __cdecl FUN_0071e230(void*, int, int*, int);
 Mat33* __cdecl FUN_00475550(Mat33*, const Mat33*, const float*);
-Vec3* __cdecl _Unchecked_idl0(Vec3*, const void*, const Mat33*);
+Vec3* __cdecl _Unchecked_idl0(Vec3*, const void*, const Mat33*);  // 0x0041daf0
 Vec3* __cdecl FUN_0041dc10(Vec3*, const Vec3*, const Vec3*);
-Vec3* __cdecl normalized_safe(Vec3*, const Vec3*);       // SP::normalized_safe
+Vec3* __cdecl normalized_safe(Vec3*, const Vec3*);       // 0x00449c20 SP::normalized_safe
 extern unsigned int g_indexMask[];                         // 0x13eec84
 
 static inline float ClampUnit(float v) {
@@ -98,8 +113,14 @@ static inline float ClampUnit(float v) {
 
 struct Half4 { unsigned short v[4]; };
 struct Float4 { float v[4]; };
-struct Vec8T { Half4* mpBegin; Half4* mpEnd; void resize(unsigned n, const Half4& v); };
-struct Vec16T { Float4* mpBegin; Float4* mpEnd; void resize(unsigned n, const Float4& v); };
+struct Vec8T {
+    Half4* mpBegin; Half4* mpEnd;
+    void resize(unsigned n, const Half4& v);  // 0x004740f0
+};
+struct Vec16T {
+    Float4* mpBegin; Float4* mpEnd;
+    void resize(unsigned n, const Float4& v);  // 0x00474450
+};
 int __cdecl FUN_0071de40(MeshDesc*, int, int, int, int);
 
 // @ 0x4600f0  (appends one mesh stream's positions and colours to the output vectors)
@@ -160,7 +181,7 @@ bool FUN_0045f5e0(MeshDesc* mesh, MeshOut* out, Xform* xf)
     unsigned nClusters0 = (unsigned)(mesh->clusters.mpEnd - mesh->clusters.mpBegin);
     for (unsigned c = 0; c < nClusters0; c++) {
         Cluster* cl = &mesh->clusters.mpBegin[c];
-        if (!cl->GetResourceTypeFromModelType()) return false;
+        if (!cl->modelType.GetResourceTypeFromModelType()) return false;
     }
     if (FUN_0071ddc0(mesh, 3, -1, 3, 0xe) < 0)
         FUN_00736b00(mesh);

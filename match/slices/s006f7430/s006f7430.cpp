@@ -5,11 +5,20 @@
 #include <intrin.h>
 
 // ---- external callees -------------------------------------------------------------------
-void  __cdecl FUN_0070f520(void* b, void* e);
-void  __cdecl FUN_006f6910();
 void* __cdecl FUN_006f43e0(void* a, void* b, void* c);
-void  __cdecl Hashtable_DoFreeNodes(void* b, void* e);
-void  __cdecl Hashtable_DoAllocateBuckets(void* b, void* e);
+// thiscall callees (ret 8 / this in ecx)
+struct cRefPtrVec {
+    void ReleaseRange(void* b, void* e);    // 0x0070f520
+};
+struct cFilterChainSelf {
+    void RemoveCameraTextures();            // 0x006f6910
+};
+struct cHashtableStr {
+    void DoFreeNodes(void* b, void* e);     // 0x00693230
+};
+struct cHashtableKey {
+    void DoFreeNodes(void* b, void* e);     // 0x007611f0
+};
 
 
 struct cVecBool {
@@ -34,7 +43,7 @@ char* FUN_006f8140(char* first, char* last, char* dest) {
 
 // @ 0x006f8190
 void __fastcall FUN_006f8190(int self) {
-    FUN_006f6910();
+    ((cFilterChainSelf*)self)->RemoveCameraTextures();
     int* v = (int*)(self + 0x78);
     unsigned i = 0;
     if ((*(int*)(self + 0x7c) - *v) >> 2 != 0) {
@@ -54,11 +63,11 @@ void __fastcall FUN_006f8190(int self) {
     int begin = *v;
     int end = *(int*)(self + 0x7c);
     void* r = FUN_006f43e0((void*)end, (void*)end, (void*)begin);
-    FUN_0070f520(r, *(void**)(self + 0x7c));
+    ((cRefPtrVec*)v)->ReleaseRange(r, *(void**)(self + 0x7c));
     *(int*)(self + 0x7c) = *(int*)(self + 0x7c) + (end - begin >> 2) * -4;
-    Hashtable_DoAllocateBuckets(*(void**)(self + 0x10), *(void**)(self + 0x14));
+    ((cHashtableStr*)(self + 0xc))->DoFreeNodes(*(void**)(self + 0x10), *(void**)(self + 0x14));
     *(void**)(self + 0x18) = 0;
-    Hashtable_DoFreeNodes(*(void**)(self + 0x30), *(void**)(self + 0x34));
+    ((cHashtableKey*)(self + 0x2c))->DoFreeNodes(*(void**)(self + 0x30), *(void**)(self + 0x34));
     *(void**)(self + 0x38) = 0;
 }
 

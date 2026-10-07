@@ -1,8 +1,6 @@
 00a206c0  6  SetFp: complete, short-branch/tail schedule differs
-00a20700  89  ConstructEmitterSndPlayer: complete intent; EA new-expression EH frame not reproduced
 00a20a40  98  SetSlot: complete, vcall/property-commit schedule differs
-00a20d60  77  MakeSound: complete intent; EA new-expression EH frame / ctor shape differs
 00a20060  1320  Sound::ConfigureSound: complete (all config keys, groups, bitvec, fx); register allocation/stack layout differs, needs /GS-
 00a207d0  169  System::Shutdown: complete; guard mutex kept in separate reg (ebx) in original, loop shapes differ, needs /GS-
-00a20be0  114  worker drain (Flush): complete; scoped-lock register/ordering differs
+00a20be0  114  worker drain (Flush): complete; scoped-lock register/ordering differs; difftest WEAK (32% coverage: early return on global g_166d9fc == 0 in the image)
 00a20eb0  267  emitter ordering predicate Less2: complete; tail-block placement and flag-bool materialization differ

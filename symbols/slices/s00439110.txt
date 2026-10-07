@@ -1,1 +1,9 @@
 00439110 SP::cSPEditorBlock::SetModelBasedOnSymmetrySign  # PDB anchor
+00526430 ?empty@?$FixedVectorRef@U?$AutoRefCount@UcMorphHandle@SP@@@SP@@@SP@@QBE_NXZ  # folded empty(), called 3x in 0x00439110
+00526430 ?empty@?$FixedVectorRef@PAUcSPEditorBlock@SP@@@SP@@QBE_NXZ  # same folded body (mChildren)
+004769b0 ?erase@?$SimpleVector@M@SP@@QAEPAMPAM0@Z  # folded vector erase (mMorphHandleWeights.clear)
+004769b0 ?erase@?$SimpleVector@I@SP@@QAEPAIPAI0@Z  # same folded body (mMorphHandleChannels.clear)
+004547f0 ?push_back@?$SimpleVector@M@SP@@QAEXABM@Z  # vector<float>::push_back, declined inline (+0x704)
+00454860 ?push_back@?$SimpleVector@I@SP@@QAEXABI@Z  # vector<unsigned>::push_back, declined inline (+0x73c)
+00455660 ?DoInsertValue@?$SimpleVector@M@SP@@QAEXPAMABM@Z  # called from 0x004547f0
+004558a0 ?DoInsertValue@?$SimpleVector@I@SP@@QAEXPAIABI@Z  # called from 0x00454860

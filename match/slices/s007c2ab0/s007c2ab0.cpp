@@ -266,9 +266,9 @@ struct SaveArea { virtual void v0(); virtual void v1(); virtual void v2();
     virtual int GetType();                // +0x0c
     virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
     virtual const wchar_t* GetPath(); };  // +0x28
-SaveArea* __cdecl GetSaveArea(const void* id);       // 0x006b1f90
+SaveArea* __cdecl GetSaveArea(unsigned id);          // 0x006b1f90 (id is a key value, not a pointer)
 extern const wchar_t kDefaultSavePath[];             // 0x013ec468
-extern const char kSaveAreaId[];                     // 0x011ac198
+static const unsigned kSaveAreaId = 0x011ac198;      // save-area key (an id value; points into .text, not data)
 
 struct StrBuf {                           // eastl::basic_string<char> in place
     char* mpBegin; char* mpEnd; char* mpCapacity;

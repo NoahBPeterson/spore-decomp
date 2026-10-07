@@ -1,1 +1,1 @@
-004d3dd0  1193  complete cSpeciesProfile ctor; frame slots/register rotation differ (original zero-inits a bool tag via xor/al and has an arg temp for the key-group check that I could not reproduce)
+004d3dd0  1193  complete cSpeciesProfile ctor; frame slots/register rotation differ (original zero-inits a bool tag via xor/al and has an arg temp for the key-group check that I could not reproduce); difftest PASS (395 valid, 100% cov; added symbols entry, mapped CapsMap/ObjAB/ProfObjA ctors, gEmptyWStr, BadModelKey)

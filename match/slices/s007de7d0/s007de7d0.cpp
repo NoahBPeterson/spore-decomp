@@ -1,8 +1,18 @@
 // Slice s007de7d0 (w2g5 slice 24): SP::cSmoothCameraController reset / pitch / edge / ctor / factory
 // plus the (byte-exact) Cam24 zoom/clip setters.
-// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast (Cam24 setters: /O2 /MD /Gy /TP /arch:SSE2 /fp:fast)
 #include "types.h"
 #include "../s007dd880/s007dd880.h"
+
+#if 0
+// Original addresses of callees declared in ../s007dd880/s007dd880.h, for the equivalence
+// checker (tools/difftest), which reads annotations only from this slice's own files.
+void* __cdecl EA_Alloc(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
+void  __cdecl EA_Free(void* p) throw();  // 0x00f47380
+struct FloatVec {
+    void DoInsertValue(float* pos, const float& v);  // 0x00455660
+};
+#endif
 
 // ---- Cam24: minimal view used by the two byte-exact setters (vtable slots 0x70 / 0x78) ----
 struct FVec { void* b; void* e; void* c; void* a; FVec& operator=(const FVec&); };

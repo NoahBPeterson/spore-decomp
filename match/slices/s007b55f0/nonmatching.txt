@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-007b55f0  841  FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ
+007b55f0  830  FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ; difftest PASS after fixes: viewProj copied as a 64-byte struct (rep movsd) instead of a float loop (fld/fstp quiets SNaNs), length sum order x,y,z restored, and r computed before the centre so the frame is 0x1bc like the original (a callee with an aligned frame copies an unwritten Inverse result, so the frame size mod 16 showed up as a FAIL)
 007b5ad0  101  PostRenderJob: complete (job + message objects, EH smart ptrs); vtable-load order and a null-check differ
 007b5c80  184  MeshBoundingSphere: complete; float scheduling and Vector3 temp copies differ
 007b5e20  393  FrameJob::Fit: complete (opaque-pixel box fit); member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)

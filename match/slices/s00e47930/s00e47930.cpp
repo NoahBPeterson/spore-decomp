@@ -5,7 +5,7 @@
 
 typedef unsigned int size_t_;
 void* operator new(unsigned int, const char*, int, int, int, int);
-void operator delete[](void*);
+void operator delete[](void*);   // 0x00f47380
 
 struct IWinProc { virtual void wp0(); };
 struct Key3 { uint32_t a, b, c; };
@@ -48,7 +48,7 @@ struct cSPUILayout {
     virtual void p0();
     virtual void AddRef();
     virtual void Release();
-    cSPUILayout();
+    cSPUILayout();                                  // 0x00810000
     IWindow* FindWindowByID(uint32_t id, int b);   // 0x008105b0
     void Init(Key3* k, int a, uint32_t b);          // 0x008120d0
     void SetParentWin(void* w, int a, uint32_t b);  // 0x008121b0
@@ -117,7 +117,10 @@ struct AssetData {
     char pad2[0xb0 - 0x14];
     AssetData();               // 0x00dd0ca0 / 0x00dd0da0
 };
-struct AssetDataRef { AssetData* p; void Assign(AssetData* d); };   // 0x006428c0
+struct AssetDataRef {
+    AssetData* p;
+    void Assign(AssetData* d);   // 0x006428c0
+};
 struct AssetView {
     virtual void AddRef();
     virtual void Release();
@@ -129,7 +132,9 @@ struct AssetView {
     IWindow* sub;              // +0x28
     AssetView();               // 0x00657f70
 };
-struct DataHelper { void Fn5950(void* mgr, void* entry, int idx); };   // 0x005e5950
+struct DataHelper {
+    void Fn5950(void* mgr, void* entry, int idx);   // 0x005e5950
+};
 struct VerbIconData {
     virtual void AddRef();
     virtual void Release();
@@ -151,7 +156,10 @@ struct VerbIcon {
     float Fn2910(int a);       // 0x005e2910
     Rollover* Fn2cb0();        // 0x005e2cb0
 };
-struct ResObj { const wchar_t* Fn0880(); const wchar_t* Fn4e10(); };   // 0x00550880 / 0x00414e10
+struct ResObj {
+    const wchar_t* Fn0880();   // 0x00550880
+    const wchar_t* Fn4e10();   // 0x00414e10
+};
 struct IResult {
     virtual void AddRef();
     virtual void Release();

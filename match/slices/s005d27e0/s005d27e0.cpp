@@ -37,7 +37,9 @@ struct HkWorld : HkRef {
     void addPhantom(HkRef* p);                       // 0x01083320 hkWorld::addPhantom
     void removePhantom(HkRef* p);                    // 0x01083400 hkWorld::removePhantom
 };
-struct hkThreadMem { void deallocateChunk(void* p, int size, int type); };   // 0x0107db10
+struct hkThreadMem {
+    void deallocateChunk(void* p, int size, int type);   // 0x0107db10
+};
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long idx);
 extern unsigned long g_tlsThreadMem;                 // 0x016e4174
 void* operator new(size_t, const char*, int, int, int, int);   // 0x00f473a0 (EA)

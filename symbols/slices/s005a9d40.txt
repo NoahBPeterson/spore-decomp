@@ -11,3 +11,8 @@
 005aa9c0 manipulation helper  # unnamed
 005aab00 manipulation helper  # unnamed
 005aac30 manipulation helper  # unnamed
+013f7038  ??_7cManipTactile@@6BcManipBase@@@  # primary vtable stored by ctor 005aa420 / dtor 005aa4e0
+013f7028  ??_7cManipTactile@@6BcRC@@@  # cRC-subobject vtable (+0x14) stored by ctor 005aa420
+013f70e4  ??_7cCellPinning@@6BcManipBase@@@  # primary vtable stored by ctor 005aac30
+013f70d4  ??_7cCellPinning@@6BcRC@@@  # cRC-subobject vtable (+0x14) stored by ctor 005aac30
+013ec458  ??_7cRC@@6B@  # refcount base vtable (same as ??_7BaseB2@@6B@), stored first by both ctors

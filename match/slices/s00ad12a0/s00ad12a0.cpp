@@ -271,8 +271,10 @@ void __cdecl FUN_00d3d420();
 void __cdecl FUN_00accb30();
 void __cdecl FUN_00accbb0();
 void __cdecl FUN_00b1e500();
-extern const char g_CitizenTypeTag;                  // 0x18eb4b7
-extern const char g_TribeTypeTag;                    // 0x18c6d19
+// Game-data type tags: the original pushes these fixed addresses, which lie in the image's
+// .bind/.reloc range (no data the checker can map), so they are written as address constants.
+#define kCitizenTypeTag ((const void*)0x018eb4b7)
+#define kTribeTypeTag   ((const void*)0x018c6d19)
 struct cGameNounManager {
     void* GetGameDataVector(GameDataFn a, GameDataFn b, GameDataFn c, GameDataFn d, const void* tag);   // 0xb21340
 };
@@ -355,12 +357,13 @@ struct cCastingManager {
     void Update();
 };
 
+// @ 0x00ad12a0
 void cCastingManager::Update()
 {
     // ---- citizen idle statistics (tribe stage only) ---------------------------
     if (SP::GetSpaceRelationshipTuning()->mbEnabled && GetGameModeInfo()->GetLocation() == &g_LocationTribe) {
         cGameDataList<cCreature>* citizens = (cGameDataList<cCreature>*)SP::NounManager()->GetGameDataVector(
-            FUN_00cd7d10, FUN_00d3d420, FUN_00accb30, FUN_00b1e500, &g_CitizenTypeTag);
+            FUN_00cd7d10, FUN_00d3d420, FUN_00accb30, FUN_00b1e500, kCitizenTypeTag);
         int idle = 0;
         unsigned count = citizens->mItems.size();
         for (unsigned i = 0; i < count; ++i) {
@@ -385,7 +388,7 @@ void cCastingManager::Update()
 
     // ---- pick the active tribes nearest to the camera ---------------------------
     SpVector<AutoRefCount<cTribe> >& tribes = ((cGameDataList<cTribe>*)SP::NounManager()->GetGameDataVector(
-        FUN_00cd7d10, FUN_00d3d420, FUN_00accbb0, FUN_00b1e500, &g_TribeTypeTag))->mItems;
+        FUN_00cd7d10, FUN_00d3d420, FUN_00accbb0, FUN_00b1e500, kTribeTypeTag))->mItems;
     static SpVector<AutoRefCount<cTribe> > sActiveTribes;
     sActiveTribes.erase(sActiveTribes.mpBegin, sActiveTribes.mpEnd);
 
@@ -476,7 +479,7 @@ void cCastingManager::Update()
         int have = (int)creatures->size();
         if (have < adults) {
             int toSpawn = adults - have;
-            const void* key = &g_CitizenTypeTag;
+            const void* key = kCitizenTypeTag;
             do {
                 cCreaturePool* pool = mPools.GetPool(&key);
                 int nEntries = (int)pool->mEntries.size();

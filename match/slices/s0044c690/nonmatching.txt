@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-0044c690 3000  CalculateSnapAxes: complete (all paths and calls, 21 calls in order); /Od frame slot layout and Vector3 copy flavours (movss/fld/int) differ
+0044c690 3096  CalculateSnapAxes: complete (all paths and calls, 21 calls in order); /Od frame slot layout and Vector3 copy flavours (movss/fld/int) differ; difftest WEAK (3% coverage: paths past the snap-axis count fault on random objects; fmod/cos/sin now intrinsic (_CIfmod/_CIcos/_CIsin) as in the original)

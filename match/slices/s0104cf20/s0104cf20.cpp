@@ -36,8 +36,8 @@ struct cString {
 struct Key { uint32_t instance, type, group; };
 
 bool GetPropertyAsKeyInstance(PropertyList* pl, uint32_t id, uint32_t* out);
-bool GetPropertyAsText(PropertyList* pl, uint32_t id, int* out);
-void UpdateColorTuning(PropertyList* pl, int* out);
+bool GetPropertyAsText(PropertyList* pl, uint32_t id, int* out);  // 0x006a1360
+void UpdateColorTuning(PropertyList* pl, int* out);  // 0x0104c120
 
 struct cSPSpaceToolData {
     char pad0[0x2c];

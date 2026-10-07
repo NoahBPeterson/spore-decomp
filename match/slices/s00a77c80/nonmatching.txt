@@ -3,6 +3,6 @@
 00a77cc0 52 complete InvLengthSqScale; SSE register assignment and load order differ
 00a77d30 19 complete WaveVec4 (sin/cos pairs); x87 operand order differs
 00a781f0 719 complete Add (9-case MapInfo factory); case block layout differs, o in case 6 reuses param home slot in original
-00a78590 26 complete MapDescription ctor; vptr/float-store scheduling differs
+00a78590 26 complete MapDescription ctor; vptr/float-store scheduling differs; difftest PASS after mapping ??_7MapDescription@@6B@ to 0x01453948 (symbols/slices/s00a77c80.txt)
 00a787f0 375 complete vector<MaterialParam>::insert (EASTL DoInsertValues); register allocation/scheduling differs
 00a78a80 175 complete MaterialDescription::Clear (frees param arrays, erase-all); inlined erase loop shape differs

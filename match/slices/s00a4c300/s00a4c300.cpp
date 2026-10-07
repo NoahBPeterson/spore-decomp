@@ -239,7 +239,7 @@ bool savepanel_setup() {
     return ok;
 }
 
-// 0xa4c470
+// @ 0x00a4c470
 void gfxstub_new(t_gobj* owner, void* key, const char* cmd) {
     char buf1[80];
     char buf2[4000];

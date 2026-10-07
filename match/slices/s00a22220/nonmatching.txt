@@ -1,11 +1,11 @@
 00a22220  131  HTable28::Rehash: complete; original re-reads this->buckets each iteration, mine hoists
 00a22370  131  HTable20::Rehash: complete; same bucket-array reload difference
 00a22410  63  SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
-00a227a0  13  ctor (RefBase + [0x80]=arg): complete; store scheduling differs (arg store before vtable store)
+00a227a0  13  DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)
 00a228d0  65  worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
-00a22b20  46  ~SharedHolder (inline shared-ref release): complete; 8-byte local frame and register choice differ
+00a22b20  47  ~SharedHolder (inline shared-ref release): complete; 8-byte local frame and register choice differ; difftest PASS (base renamed GmeEditorResBase so its vtable resolves; name comment added)
 00a22b90  66  LoadShared: complete; inline Release uses dec vs add -1 and register order
-00a22cf0  13  PropList ctor: complete; fstp of the double scheduled earlier than original
+00a22cf0  13  PropListA22 ctor: complete; fstp of the double scheduled earlier than original; difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)
 00a22df0  371  AttachEffect: complete (all vcalls, refs, out param); only ebx zero-register placement/prologue push order differ
 00a231e0  75  PickBest: complete; double compare emitted fcompi vs original fxch/fcomi form
 00a232a0  100  PickNearest: complete; best-local stack slot and float compare orientation differ

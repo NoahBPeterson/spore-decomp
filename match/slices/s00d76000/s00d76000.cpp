@@ -1,4 +1,5 @@
 // Slice s00d76000 -- SP::TRIBE_GATHER_Tick (0x00D76000, __cdecl, /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 // Tribe-member "gather" behaviour tick: a 26-state machine keyed on st->mState (the 6th stack
 // argument). Like its sibling behaviour ticks it takes 8 stack arguments (creature, 4 scalars,
 // the state block, 2 more); only the creature and the state block are used here.
@@ -60,7 +61,10 @@ struct Positionable {   // sub-object at +0x34 of the spawned effect; slot +0x38
     virtual void SetPosition(const Vec3* p);
 };
 struct Attacher { V4(a) V4(b) V4(c) virtual void Attach(void* obj); };  // slot +0x30
-struct RefPtr { IRefObj* mp; void __thiscall Assign(void* p); };    // 0xB5F950
+struct RefPtr {
+    IRefObj* mp;
+    void __thiscall Assign(void* p);  // 0x00b5f950
+};
 
 struct Mgr1 {  // returned by 0xB3D2B0
     void* __thiscall FUN_00ac79d0();
@@ -78,7 +82,9 @@ struct Mgr3 {  // returned by 0xAF13B0
 struct cPlanetModel {
     Vec3* __thiscall DirectionToSurfacePosition(Vec3* out, const Vec3* dir);  // 0xB815A0
 };
-struct UIntMap { unsigned& __thiscall operator_idx(const unsigned& key); };    // 0x643A40
+struct UIntMap {
+    unsigned& __thiscall operator_idx(const unsigned& key);  // 0x00643a40
+};
 
 // The behaviour state block (6th stack arg).
 struct TribeGatherState {
@@ -134,12 +140,15 @@ Vec3* __cdecl normalized_safe(Vec3* out, const Vec3* in);   // 0x449C20
 }
 using namespace SP;
 
-struct CombatantPart { float __thiscall FUN_00bfc490(); void __thiscall PartialRepair(float v); };  // at c+0x5a8
+struct CombatantPart {  // at c+0x5a8
+    float __thiscall FUN_00bfc490();
+    void __thiscall PartialRepair(float v);  // 0x00bfd1a0
+};
 Mgr1* __cdecl FUN_00b3d2b0();
 Mgr2* __cdecl FUN_00b3d440();
 Mgr3* __cdecl FUN_00af13b0();
 unsigned __cdecl FUN_00ac8fa0(void* props, unsigned id, int n);
-float __cdecl GetPropertyFloat(void* props, unsigned id, float def);   // SP::GetPropertyT<float>
+float __cdecl GetPropertyFloat(void* props, unsigned id, float def);   // 0x004e1c70 SP::GetPropertyT<float>
 bool __cdecl FUN_0041dd30(const Vec3* a, const Vec3* b);
 void __cdecl FUN_00da6270(cSPCreatureCitizen* c, int a);
 bool __cdecl FUN_00d75f40(cSPCreatureCitizen* c, TribeGatherState* st);

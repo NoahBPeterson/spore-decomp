@@ -131,6 +131,10 @@ void WigglePoint(float time, const SPVector<cWiggle>& wiggles, const Vector3& or
 
 using namespace EA::Swarm;
 
+// Declared outside the anonymous namespace so the checker can map it by its annotation.
+void ApplyLoopBox(cParticlesEffect* effect, cParticlesDescription* desc, Vector3* pos,
+                  Vector3* color, float* alpha);                                                 // 0x00f58ed0
+
 namespace {
 
 struct StreamerInfo {                         // 0x48
@@ -146,8 +150,6 @@ struct StreamerInfo {                         // 0x48
 };
 
 void StreamerSetup(cParticlesEffect* effect, cParticlesDescription* desc, StreamerInfo* info);  // 0x00f5a200
-void ApplyLoopBox(cParticlesEffect* effect, cParticlesDescription* desc, Vector3* pos,
-                  Vector3* color, float* alpha);                                                 // 0x00f58ed0
 
 // ---- math helpers -------------------------------------------------------------------
 

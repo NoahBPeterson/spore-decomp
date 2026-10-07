@@ -1,2 +1,2 @@
 # va  diff-bytes  reason
-00f502b0 2509 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same blocks and ordered calls (20/20), SSE register allocation/scheduling differs
+00f502b0 3266 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same blocks and ordered calls (20/20), SSE register allocation/scheduling differs; difftest PASS --inputs 3000 (2435 valid, 97.8% cov). Fixed: spline instances given addresses (plain SplineInterpolation overloads, Interpolate renamed Evaluate to hit the symbols names); renormalize now 1/sqrt on x87 rounded once to float (volatile inv, was sqrt rounded then divss); velocity projections accumulate the dot x-first (DotXYZ/DotXYZW). Byte diff grew from 2509 with these changes

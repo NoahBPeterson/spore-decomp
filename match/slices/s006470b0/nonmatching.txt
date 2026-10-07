@@ -1,2 +1,2 @@
 006470b0 1818 complete: creates one large-asset view and registers it under 28 type keys; cl duplicates the first block / differs in spill layout
-006478c0 1325 complete: SetLargeCardVisibililty; cl emits x87 rect math where original used SSE via inline helpers
+006478c0 1325 complete: SetLargeCardVisibililty; cl emits x87 rect math where original used SSE via inline helpers; difftest WEAK (229 valid, 10.4% cov: AssetBrowser animator is an image global, so the animation paths are unreachable); fixed: AddRef/Release on the current view were qualified non-virtual IRefCounted2:: calls, original calls through the vtable

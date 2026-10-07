@@ -1,8 +1,8 @@
 # va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
 00e0e9a0  31   begin pointer kept in esi instead of eax before the magic division
-00e0ea40  96   member assignment register allocation (ebx/edi/ebp) differs
-00e0df70  356  FindIcon: complete (find node, normalize dir, anchor window); x87 normalize shape / register scheduling differ
+00e0ea40  96   member assignment register allocation (ebx/edi/ebp) differs; difftest PASS (renamed operator= to RefHolder::Assign so the checker finds the symbol)
+00e0df70  356  FindIcon: complete (find node, normalize dir, anchor window); x87 normalize shape / register scheduling differ; difftest WEAK (15% coverage: random rbtree rarely holds the id; IconTree::Find annotated 0xe5c780)
 00e0e0e0  4    GetInverseOffset: complete; only ecx/edx register swap in the 12-byte position copy
-00e0e1a0  1174 Update: complete (texture setup, palette refresh, scroll state machine); float->int conversions use x87 for colours, register/frame layout differ
+00e0e1a0  1174 Update: complete (texture setup, palette refresh, scroll state machine); float->int conversions use x87 for colours, register/frame layout differ; difftest WEAK (10% coverage: early returns on global state; RefSlot/ResObj declarations split so 0xb5f950/0x7f54d0 annotations resolve)
 00e0e840  298  build_edge_offsets: complete; loop counter/register shape and this-spill differ
 00e0eab0  358  Init: complete (cursor, resources, layout, handlers, camera child); AddRef/Release eax/edx register order differs

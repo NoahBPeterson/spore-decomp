@@ -1,6 +1,6 @@
 006f0890  705  complete cEffectsRenderer shutdown; register allocation/store scheduling differ (loop locals, hoisted stores)
-006f0b90  631  complete Render pass; global |= sequences merged by cl (orig keeps separate or's), reg alloc differs
+006f0b90  631  complete Render pass; global |= sequences merged by cl (orig keeps separate or's), reg alloc differs; difftest PASS (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE): plain run reports FAIL only as a checker artifact, a fake IProps::Get returns true without writing its out-pointer and the original reuses the flags argument slot for it while ours reads an uninitialised local; PASS (200 valid, 64.8%) with the out-pointer pre-seeded to flags (work/match/scratch_s006f0890_probe.cpp)
 006f0fb0  703  complete AddParticleSet; EH frame/refcount-release layout differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; difftest FAIL is a checker artifact: the set slot (mSetsBegin + garbage index*0x70 = 0x522b9850) lies in unallocated DYN heap beyond dyn_next, which the harness does not reset between runs, so our run starts with the original's image pointer already stored at slot+0x28 and E70::Assign releases it once more (traced with work/match/scratch_s006f0890_trace2.py)
 006f13a0  21   complete; orig pushes ebp/edi before the flags fixup (push order only)
 006f1510  197  complete vector Insert; EH unwind states (objects with dtors) not reproduced
-006f16c0  190  complete vector push_back; temp ctor-return/EH state layout differs
+006f16c0  190  complete vector push_back; temp ctor-return/EH state layout differs; difftest PASS

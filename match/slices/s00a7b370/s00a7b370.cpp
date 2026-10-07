@@ -478,15 +478,15 @@ HIter HashMapBase::find(const HKey& k)
 
 struct HashMap1 : HashMapBase {
     HInsRes insert(const HPair<IRefT1>& v, HTag t);   // 0x00a7be70
-    IRefT1** operator[](const HKey& k);             // 0x00a7c100
+    IRefT1** Subscript(const HKey& k);              // operator[] at 0x00a7c100
 };
 struct HashMap2 : HashMapBase {
     HInsRes insert(const HPair<IRefT2>& v, HTag t);   // 0x00a7bfb0
-    IRefT2** operator[](const HKey& k);             // 0x00a7c180
+    IRefT2** Subscript(const HKey& k);              // operator[] at 0x00a7c180
 };
 
 // @ 0x00a7c100
-IRefT1** HashMap1::operator[](const HKey& k)
+IRefT1** HashMap1::Subscript(const HKey& k)
 {
     {
         HIter it = find(k);
@@ -503,7 +503,7 @@ IRefT1** HashMap1::operator[](const HKey& k)
 }
 
 // @ 0x00a7c180
-IRefT2** HashMap2::operator[](const HKey& k)
+IRefT2** HashMap2::Subscript(const HKey& k)
 {
     {
         HIter it = find(k);
@@ -531,7 +531,7 @@ struct Registry {
 // @ 0x00a7c200
 void Registry::Set1(HKey key, IRefT1* val)
 {
-    IRefT1** slot = mMap1[key];
+    IRefT1** slot = mMap1.Subscript(key);
     IRefT1* old = *slot;
     if (val != old) {
         if (val) val->AddRef();
@@ -543,7 +543,7 @@ void Registry::Set1(HKey key, IRefT1* val)
 // @ 0x00a7c240
 void Registry::Set2(HKey key, IRefT2* val)
 {
-    IRefT2** slot = mMap2[key];
+    IRefT2** slot = mMap2.Subscript(key);
     IRefT2* old = *slot;
     if (val != old) {
         if (val) val->AddRef();

@@ -19,7 +19,7 @@ int __stdcall QueryPerformanceCounter(__int64* lpPerformanceCount);
 
 // ---- eastl::map<unsigned long,unsigned long>::operator[]  (0xa2e060) --------
 struct MapUU {
-    int& operator[](const uint32_t& key);
+    int& operator[](const uint32_t& key);  // 0x00a2e060
 };
 
 // ---- generic refcounted pointer used by the effect code ------------------------
@@ -498,8 +498,8 @@ class cTypeMapHolder {
 public:
     char pad[0x118a5c];
     MapUU mMap;                                               // +0x118a5c
-    void SetTypePriority(uint32_t type, uint32_t priority);   // @ 0xa2f180
-    void InitDefaultPriorities();                             // @ 0xa2f1a0
+    void SetTypePriority(uint32_t type, uint32_t priority);   // 0xa2f180
+    void InitDefaultPriorities();                             // 0xa2f1a0
 };
 
 // @ 0xa2f180

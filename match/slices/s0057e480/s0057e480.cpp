@@ -382,11 +382,17 @@ struct IResMan { virtual void m0(); virtual void m1(); virtual void m2();
                  virtual void SaveResource(IMeta*, int, int, int, int); };              // +0x20
 IResMan* __cdecl GetManager();                                      // 0x0067DCD0
 int __cdecl GetSaveArea(int);                                       // 0x006B1F90
-struct Thumb { void UpdateExportThumb(void* key); };                // 0x005FB430
+struct Thumb {
+    void UpdateExportThumb(void* key);                              // 0x005FB430
+};
 Thumb* __cdecl GetThumb();                                          // 0x005F7930
-struct TokTrans { void SetOldModelName(const wchar_t*); };          // 0x005D6090
+struct TokTrans {
+    void SetOldModelName(const wchar_t*);                           // 0x005D6090
+};
 extern TokTrans* gTokTrans;                                         // 0x015EEBEC
-struct Hints { void F67c420(); };                                   // 0x0067C420
+struct Hints {
+    void F67c420();                                                 // 0x0067C420
+};
 Hints* __stdcall GetHints(int, int);                                // 0x0067CAC0
 struct INameProv { virtual void v0(); virtual const wchar_t* GetName(); virtual void v2(); virtual void v3(); virtual void v4();
                    virtual const wchar_t* GetName5(); };

@@ -7,3 +7,4 @@ slices/s0092e3d0/s0092e3d0.cpp  ??YDequeIter@@QAEAAU0@H@Z  0092e9f0  /O2 /MD /Gy
 slices/s0092e3d0/s0092e3d0.cpp  ?DoPushBack@Deque@@QAEXABUEntry@@@Z  0092ee20  /O2 /MD /Gy /TP /GS-
 slices/s0092e3d0/s0092e3d0.cpp  ?push_back@Deque@@QAEXXZ  0092eec0  /O2 /MD /Gy /TP /GS-
 slices/s0092e3d0/s0092e3d0.cpp  ?SetDateFromTm@@YAXPBUtm@@PAUDateTime@@@Z  0092e440  /O2 /MD /Gy /TP /GS-
+slices/s0092e3d0/s0092e3d0.cpp  ?FileTimeToUnix@@YA_JPBU_FILETIME@@@Z  0092e6e0  /O2 /MD /Gy /TP /GS-

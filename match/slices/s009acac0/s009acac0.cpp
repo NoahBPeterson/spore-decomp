@@ -28,9 +28,9 @@ struct Vec3 {
 
 // Sign-aligned quaternion accumulation: a +/- b depending on the hemisphere of b.
 // Out of line at 0x0099cba0 (cdecl, result by hidden pointer).
-Quat QuatAccumulate(const Quat& a, const Quat& b);
+Quat QuatAccumulate(const Quat& a, const Quat& b);   // 0x0099cba0
 // Rotates v by the unit quaternion q.  0x0099c310 (cdecl, result by hidden pointer).
-Vec3 QuatRotate(const Quat& q, const Vec3& v);
+Vec3 QuatRotate(const Quat& q, const Vec3& v);   // 0x0099c310
 
 // Inlined form of QuatAccumulate.
 inline void AccumQuat(Quat& out, const Quat& a, const Quat& b) {
@@ -73,7 +73,7 @@ struct BlendTransform {
   float weight;   // +0x20
 
   // 0x0099ce40: divides the position by its weight and normalises the rotation.
-  void Normalize();
+  void Normalize();   // 0x0099ce40
 
   void Set(const BlendTransform& o) {
     pos[0] = o.pos[0];

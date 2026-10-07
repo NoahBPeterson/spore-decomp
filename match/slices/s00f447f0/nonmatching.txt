@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00f447f0  330  complete; original has an extra 12-byte frame hole + edi-passed static helper for F43010 (not reproducible), dec vs sub
-00f44a40  361  complete; cl CSEs the action count twice where the original recomputes it; register assignment differs
+00f44a40  361  complete; cl CSEs the action count twice where the original recomputes it; register assignment differs; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
 00f44bf0  382  complete; register allocation / key slot placement differ (esp+0x1c vs 0x28)
 00f44dd0  242  complete; only the 12-byte hole from the register-convention F43010 helper and ebx/edi swap differ
-00f44fe0  1200  complete; long save routine, frame layout and register allocation not tuned
+00f44fe0  1200  complete; long save routine, frame layout and register allocation not tuned; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)

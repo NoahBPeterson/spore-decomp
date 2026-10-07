@@ -4,7 +4,7 @@
 006b6a70 SP::cStringManager::~cStringManager  # PDB
 006b6af0 cStringManager helper
 006b6b70 cStringManager helper
-006b6bf0 cStringManager helper
+006b6bf0 SP::cStringTableResourceFactory::Create  # creates + reads a StringTable (type 0x2fac0b6)
 006b6d10 App::cStringManager::cStringManager  # vtable_names.txt
 006b6e50 SP::cStringManager::AddString  # hash-set insert(&p), return true (vtable slot 1)
 006b6e80 cStringManager helper
@@ -14,3 +14,6 @@
 006b7380 byte-vector resize/append
 006b73e0 byte-vector resize/append
 006b7430 SP::cStringTableResourceFactory::ReadResource  # vtable_names/PDB
+01409c40 ??_7cStringManager@SP@@6B@  # cStringManager vtable (vtbl_App::cStringManager), stored by ~cStringManager 006b6920
+01409c20 ??_7StringTable@SP@@6B@  # StringTable vtable, stored by the inlined ctor in Create 006b6bf0
+013ebcdc ??_7RefObj@SP@@6B@  # refcounted base vtable (shared with Editor::cPropertyList base), Create 006b6bf0

@@ -1,1 +1,1 @@
-0104cf20 3971 complete; cl threads the bool-materialize/test branches and hoists a zero into ebx (orig: xor bl,bl; mov bl,[eax]; test bl,bl per site, no hoist)
+0104cf20 3971 complete; cl threads the bool-materialize/test branches and hoists a zero into ebx (orig: xor bl,bl; mov bl,[eax]; test bl,bl per site, no hoist); difftest WEAK (0.6% coverage: every input with a non-null property list faults in the real property callees)

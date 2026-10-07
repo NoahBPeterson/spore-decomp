@@ -32,7 +32,7 @@ typedef void (__stdcall *PFN_SetConstF)(void* self, unsigned reg, const float* d
 #define SETPS(dev, reg, data, n) (((PFN_SetConstF)(((D3D9Vtbl*)(*(void**)(dev)))->slots[109]))((dev), (reg), (data), (n)))
 
 // 3x3 minor of the 4x4 matrix m (row-major) with row r and column c removed.
-static float Minor3(const float* m, int r, int c) {
+static __forceinline float Minor3(const float* m, int r, int c) {
     float a[9];
     int k = 0;
     for (int i = 0; i < 4; ++i) {
@@ -48,7 +48,7 @@ static float Minor3(const float* m, int r, int c) {
 }
 
 // 1/det with the rcpps estimate refined by two Newton steps, as in the original.
-static float RcpRefined(float d) {
+static __forceinline float RcpRefined(float d) {
     __m128 x = _mm_set1_ps(d);
     __m128 two = _mm_set1_ps(2.0f);
     __m128 r = _mm_rcp_ps(x);
@@ -58,7 +58,7 @@ static float RcpRefined(float d) {
 }
 
 // n = inverse(m) (row-major).  Leaves n zeroed when the determinant is 0.
-static void Inverse44(const float* m, float* n) {
+static __forceinline void Inverse44(const float* m, float* n) {
     float c[16];
     for (int i = 0; i < 4; ++i)
         for (int j = 0; j < 4; ++j)
@@ -74,7 +74,7 @@ static void Inverse44(const float* m, float* n) {
 }
 
 // Upload data[0..15] = transpose(v) (v row-major) to the vertex or pixel shader constant registers.
-static void UploadTransposed(const float* v, unsigned reg, unsigned count, int isVS) {
+static __forceinline void UploadTransposed(const float* v, unsigned reg, unsigned count, int isVS) {
     float data[16];
     for (int j = 0; j < 4; ++j)
         for (int k = 0; k < 4; ++k)

@@ -1,3 +1,12 @@
 # source  symbol  va  flags
 slices/s0088b250/s0088b250.cpp  ?IsFilePathSeparator@IO@EA@@YA_NH@Z  0088b850  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
 slices/s0088b250/s0088b250.cpp  ?GetSystemFontDirectory@Text@EA@@YAIPA_WI@Z  0088b8a0  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ?GetFileName@Path@IO@EA@@YAPA_WPB_W0@Z  0088b870  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ?GetFontTypeFromFilePath@Text@EA@@YA?AW4FontType@12@PB_W@Z  0088b930  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ??1GlyphCache@RT@@UAE@XZ  0088b450  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ??8FontDescription@RT@@QBE_NABU01@@Z  0088b500  /O2 /MD /GS- /GR- /TP /arch:SSE2 /fp:fast /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ??1Font@RT@@UAE@XZ  0088b560  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ?Release@Font@RT@@QAEHXZ  0088b580  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ??0Font@RT@@QAE@PAX@Z  0088b5b0  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ??_GFont@RT@@UAEPAXI@Z  0088b600  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc
+slices/s0088b250/s0088b250.cpp  ?SetupSupportedScriptSet@Font@RT@@QAEXXZ  0088b640  /O2 /MD /GS- /GR- /TP /Iscratch_s0088b250_inc

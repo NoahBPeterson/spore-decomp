@@ -4,7 +4,7 @@
 #include <string.h>
 #include "types.h"
 
-void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);  // 0xf473a0
 extern "C" void operator_delete__(void* p);
 
 #define EASTL_ALLOC_H \
@@ -22,7 +22,7 @@ struct VBool {
   void* begin; void* end; void* cap;
   void CopyFrom(const VBool& o);
 };
-extern void* __cdecl vb_memmove(void* dst, const void* src, unsigned int n);  // eastl vector<bool>::DoInsertValue
+extern void* __cdecl vb_memmove(void* dst, const void* src, unsigned int n);  // 0x11e0744 msvcr90 memcpy thunk (named eastl vector<bool>::DoInsertValue)
 inline void VBool::CopyFrom(const VBool& o) {
   int size = (char*)o.end - (char*)o.begin;
   void* mem = EALLOC(size);
@@ -474,7 +474,7 @@ void __cdecl FUN_00abbd30(FilterElem* first, FilterElem* last, FilterElem* src) 
 }
 
 // @ 0x00abbd80   uninitialized_fill_n of FilterElem
-FilterElem* __cdecl FUN_00abbd80(FilterElem* dest, unsigned int n, FilterElem* src) {
+void __cdecl FUN_00abbd80(FilterElem* dest, unsigned int n, FilterElem* src) {
   for (; n > 0; --n, ++dest) {
     if (dest) {
       dest->a = src->a;
@@ -484,7 +484,6 @@ FilterElem* __cdecl FUN_00abbd80(FilterElem* dest, unsigned int n, FilterElem* s
       dest->v.CopyFrom(src->v);
     }
   }
-  return dest;
 }
 
 // @ 0x00abbe20   copy_backward of FilterElem range

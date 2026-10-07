@@ -1,1 +1,1 @@
-00d76000 3821 complete 26-state switch; locals/frame layout (0x7c vs 0xa0), ebx/ebp register assignment, helper signatures untuned
+00d76000 3821 complete 26-state switch; locals/frame layout (0x7c vs 0xa0), ebx/ebp register assignment, helper signatures untuned; difftest WEAK (no mismatch in 2222 valid inputs, 25% coverage at --inputs 3000)

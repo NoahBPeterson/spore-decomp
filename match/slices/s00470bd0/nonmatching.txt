@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00470bd0 706 complete; second loop's Vec4 ctor temps need own frame slots (loops are separate inlines); name-hash slot order not fitted
 00471000 1883 complete; /Od frame slot order and eastl/Variant helper shapes not fitted; fixed the Variant setter annotations (one template operator= carried both 0x428060 and 0x478300, so the Box set resolved to SetFloat); remaining difftest FAIL is a checker artifact: (a) Variant::Destruct frees a block with a garbage soup size header into an allocator bin page outside the snapshot, so ours sees the free-list head the original run left behind, (b) a soup vtable slot points into the original function's own code (0x47162d), which only runs correctly on the original's frame
-00471830 681 complete; original frame is esp-based after and esp,-8 (cause not found); slot order not fitted
+00471830 681 complete; original frame is esp-based after and esp,-8 (cause not found); slot order not fitted; difftest WEAK (191 valid, 41.3% coverage, no mismatch; mapped Vec3C copy ctor 0x004098a0)

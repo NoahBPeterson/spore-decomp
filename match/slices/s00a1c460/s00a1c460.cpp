@@ -12,10 +12,12 @@ template<int N> inline void ScratchSlots() { u32 s[N]; }
 
 struct SystemAT;
 void* operator_new(void* alloc, const char* name, int flags, int align, const char* file, int line);
-void  FUN_00a1aad0(void* self, void* arg, int zero);
+struct CurveData {
+    void SetFrom(void* arg, int zero);   // 0x00a1aad0 (thiscall)
+};
 
 struct BasicString {
-    void assign(void* v);
+    void assign(void* v);  // 0x006a4380
 };
 
 inline const float& FMin(const float& a, const float& b) { return (b < a) ? b : a; }
@@ -159,7 +161,7 @@ struct ISystem {
     virtual float GetSpeed(Vec3* pos);                   // +0x1a8
 };
 
-ISystem* GetSystemAT();                                  // EA::Audio::GetSystemAT
+ISystem* GetSystemAT();                                  // 0x00a206f0 EA::Audio::GetSystemAT
 
 // Newly allocated response-curve primitive (PResp, 0x38c bytes; ctor at 0xa173f0).
 struct PRespObj : IPrim {
@@ -411,7 +413,7 @@ void Sound::SetData(u32 id, void* arg, u32 arg4)
         break;
     }
     if (target != 0)
-        FUN_00a1aad0(target, arg, 0);
+        ((CurveData*)target)->SetFrom(arg, 0);
     IEmitter* em = mpEmitter;
     if (em != 0 && arg != 0)
         em->SetData(id, arg, arg4);

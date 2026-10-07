@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00efde90  10  complete: selection predicate; only register choice differs (p base in eax vs original edx)
-00efd020  1102  CtlQ::Update: complete (1721 B vs 1722); vtable-call/local slot scheduling differs
+00efd020  1102  CtlQ::Update: complete (1721 B vs 1722); vtable-call/local slot scheduling differs; difftest WEAK (285 valid, 23.5% cov: image globals at 0x016c7b88 fixed; fix: tail callee 0x00ed4e90 declared as a thiscall member with no stack args, was a cdecl taking the ecx value on the stack)
 00efd6e0  190  RayHitPlane: complete; original takes plane in esi and out in edi (static usercall), mine uses stack args
 00efd830  169  ProjectHit: complete; original takes ecx/eax implicit args
 00efd8e0  103  ObjPlaneVec: complete; original takes esi/edi implicit args

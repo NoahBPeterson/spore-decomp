@@ -6,7 +6,7 @@ extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long _InterlockedExchange(volatile long*, long);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
 
-void* operator new(unsigned int, const char*, int, int, int, int);
+void* operator new(unsigned int, const char*, int, int, int, int);   // 0x00f473a0
 
 // ---- atomic intrusive refcount (EA RefCount with underflow guard) ------------------------
 // obj layout: +0 payload, +4 flags, +8 refcount
@@ -530,7 +530,7 @@ struct XForm {                      // transform block: flags, change counter, p
 };
 
 struct cFrustumCull {
-    char data[0xf0];
+    unsigned int data[0x3c];
     void Setup(const float* viewProj);                          // 006ffe00
     unsigned FrustumTestSphere(const float* a, const float* b, int c);   // 00700120
 };
@@ -573,7 +573,11 @@ struct FitApp {
 FitApp* GetApp();                   // 0067dd10 (SP::App)
 
 extern const Matrix3 g_identityBasis;       // 01635788
-extern float g_defaultPosX, g_defaultPosY, g_defaultPosZ;   // 01635648..50
+extern float g_defaultPosX;   // 0x01635648
+extern float g_defaultPosY;   // 0x0163564c
+extern float g_defaultPosZ;   // 0x01635650
+
+struct Mat16 { float m[16]; };
 
 // @ 0x007b55f0
 void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float yaw)
@@ -600,7 +604,7 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     Vector3 np = xf.pos;
     Matrix3 m2;
     m2.Assign(xf.m);
-    float len = sqrtf(m2.row1.x * m2.row1.x + m2.row1.y * m2.row1.y + m2.row1.z * m2.row1.z + 1e-8f);
+    float len = sqrtf(m2.row1.z * m2.row1.z + m2.row1.y * m2.row1.y + m2.row1.x * m2.row1.x + 1e-8f);
     float inv = 1.0f / len;
     Vector3 dir(m2.row1.x * inv, m2.row1.y * inv, m2.row1.z * inv);
     v->SetFov(1.0f);
@@ -609,10 +613,10 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     float ex = b[3] - b[0];
     float ey = b[4] - b[1];
     float ez = b[5] - b[2];
+    float r = sqrtf(ey * ey + (ez * ez + ex * ex)) * 0.5f;
     float cx = (b[3] + b[0]) * 0.5f;
     float cy = (b[4] + b[1]) * 0.5f;
     float cz = (b[5] + b[2]) * 0.5f;
-    float r = sqrtf(ey * ey + (ez * ez + ex * ex)) * 0.5f;
     xf.flags |= 4;
     xf.rev++;
     np.x = cx - dir.x * r;
@@ -621,11 +625,9 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
     xf.pos = np;
     v->ApplyXForm(&xf);
     for (unsigned k = 0; k < 5000; k++) {
-        float vp[16];
-        for (int i = 0; i < 16; i++)
-            vp[i] = v->viewProj[i];
+        Mat16 vp = *(const Mat16*)v->viewProj;
         cFrustumCull cull;
-        cull.Setup(vp);
+        cull.Setup(vp.m);
         unsigned res = cull.FrustumTestSphere(b, b + 3, 0);
         if (res & 0xc0)
             return;

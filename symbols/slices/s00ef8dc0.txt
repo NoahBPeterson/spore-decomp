@@ -9,3 +9,7 @@
 00ef9af0  Simulator::cScenarioTutorials::OnStepDone  # inserts step, checks group completion, marks group done
 00ef9d00  cTutorialPage::CreateLayout  # new cSPUILayout, Init/SetParentWin/SetReloadCallback then BuildList
 00ef9d90  Simulator::cScenarioTutorials::cScenarioTutorials  # vtable + Stopwatch(this+0x10) + step ctors
+0148b5c8  ??_7cScenarioTutorials@@6BPaintSystem@@@  # primary vtable, stored at +0 by ctor 0xef9d90 / dtor 0xef9180
+0148b5b8  ??_7cScenarioTutorials@@6BContentValidationSummarizer@@@  # secondary vtable at +4
+013eb394  ??_7PaintSystem@@6B@  # base vtable restored by the dtor
+013ec458  ??_7ContentValidationSummarizer@@6B@  # base vtable restored by the dtor

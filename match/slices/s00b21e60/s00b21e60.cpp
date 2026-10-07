@@ -15,7 +15,7 @@ struct IRefCount {
 };
 
 extern void* __cdecl SporeNew(unsigned size, const char* name, int a, int b, const char* file, int line);
-extern void __cdecl operator_delete__(void* p);
+extern void __cdecl operator_delete__(void* p);   // 0x00f47380
 
 template <class T> struct ARC {
     T* p;
@@ -45,7 +45,7 @@ struct ISerializer {
     virtual void v9();
     virtual void ReadObject(unsigned id, IRefCount** out, int flag);
 };
-extern int __cdecl ReadInt32(IFile* f, void* dst, int count, int endian);
+extern int __cdecl ReadInt32(IFile* f, void* dst, int count, int endian);   // 0x0093a780
 
 struct ClsKV {
     int key; IRefCount* val;
@@ -58,8 +58,8 @@ struct ClsMap {
     int pad0;
     RBNode anchor;
     uint size;
-    void __thiscall DoNuke(RBNode* root);
-    void __thiscall Insert(ClsInsRes* out, ClsKV* kv, bool bUnique);
+    void __thiscall DoNuke(RBNode* root);   // 0x00d0c930
+    void __thiscall Insert(ClsInsRes* out, ClsKV* kv, bool bUnique);   // 0x00dd6740
 };
 
 // @ 0x00b21e60
@@ -135,9 +135,9 @@ ClsIter __thiscall ClsMap2::InsertValue(RBNode* pos, ClsKV* v, bool bForceLeft)
 // 0x00b22060: SP vector swap (retail layout: begin, end, cap, allocator, inline buffer)
 struct SPVecP {
     void** begin; void** end; void** cap; int alloc; void** inlineBuf;
-    SPVecP(const SPVecP& o);
+    SPVecP(const SPVecP& o);   // 0x00b20c00
     ~SPVecP() { if ((int)((char*)cap - (char*)begin) > 1 && begin && begin != inlineBuf) operator_delete__(begin); }
-    void __thiscall AssignRange(void** b, void** e);
+    void __thiscall AssignRange(void** b, void** e);   // 0x009199c0
     void __thiscall swap(SPVecP& x);
 };
 
@@ -173,7 +173,17 @@ struct VGOTree {
     VGOTree() : anchor() { anchor.left = &anchor; anchor.right = &anchor; anchor.parent = 0; *(char*)&anchor.color = 0; size = 0; }
 };
 struct VecP3 { int* a; int* b; int* c; VecP3() : a(0), b(0), c(0) {} };
-struct cVehicleGroupOrder : cGameData {
+// Non-polymorphic view of cGameData so the vtable stores name the image's vtables.
+struct cGameDataNV {
+    void* vp0; void* vp1; char pad[0x2c];
+    cGameDataNV();   // 0x00b18660
+};
+extern void* vtbl_cVehicleGroupOrder[];    // 0x0145ee58
+extern void* vtbl_cVehicleGroupOrder_1[];  // 0x0145ee44
+struct VGOBase : cGameDataNV {
+    VGOBase() { vp0 = vtbl_cVehicleGroupOrder; vp1 = vtbl_cVehicleGroupOrder_1; }
+};
+struct cVehicleGroupOrder : VGOBase {
     VGOTree tree;       // +0x34
     int f4c;
     VecP3 stars;        // +0x50 vector of ARC<cStarRecord>
@@ -182,7 +192,6 @@ struct cVehicleGroupOrder : cGameData {
     char pad68[0x14];
     int f7c, f80, f84;  // vector of 0x178-byte elements
     cVehicleGroupOrder();
-    virtual ~cVehicleGroupOrder();
 };
 
 // @ 0x00b22100
@@ -281,7 +290,7 @@ struct cNoun {                       // cGameData seen through its refcount base
 // vector<ARC<T>> with sp_vector_allocator (begin, end, cap)
 struct NounVec {
     cNoun** begin; cNoun** end; cNoun** cap;
-    void __thiscall DoInsertValue(cNoun** pos, ARC<cNoun>* v);
+    void __thiscall DoInsertValue(cNoun** pos, ARC<cNoun>* v);   // 0x00aea5d0
     void push_back(ARC<cNoun>& v)
     {
         if (end < cap) {
@@ -293,7 +302,7 @@ struct NounVec {
     }
     void erase(cNoun** first, cNoun** last);
 };
-extern cNoun** __cdecl do_copy(cNoun** last, cNoun** end, cNoun** first);
+extern cNoun** __cdecl do_copy(cNoun** last, cNoun** end, cNoun** first);   // 0x006782c0
 void NounVec::erase(cNoun** first, cNoun** last)
 {
     cNoun** pos = do_copy(last, end, first);
@@ -303,9 +312,9 @@ void NounVec::erase(cNoun** first, cNoun** last)
 
 struct StaticNounVec : NounVec {
     StaticNounVec() { begin = 0; end = 0; cap = 0; }
-    ~StaticNounVec();
+    ~StaticNounVec();   // 0x00ae6970
 };
-struct IMapFn { char d[0x1c]; void __thiscall Fn(void* other); };
+struct IMapFn { char d[0x1c]; void __thiscall Fn(void* other); };   // Fn: 0x00b21da0
 struct cHerd;
 struct cGameNounManager {
     char pad0[0x58];
@@ -390,7 +399,7 @@ void __thiscall cGameNounManager::RemoveNounsWithInterface(unsigned id)
 // 0x00b22bc0: for every noun implementing interface 0xce9f6639 run PostRemove
 struct RawVec {
     cNoun** begin; cNoun** end; cNoun** cap;
-    void __thiscall DoInsertValue(cNoun** pos, cNoun** v);
+    void __thiscall DoInsertValue(cNoun** pos, cNoun** v);   // 0x00b96600
     ~RawVec() { if (begin && ((int*)begin)[-1]) operator_delete__(begin); }
 };
 
@@ -435,9 +444,9 @@ struct cNounData {                    // result of Cast(0x1186577)
     char pad72[0x1a];
     float f8c;                        // +0x8c
 };
-extern bool __cdecl GetBoolProperty(IProps* p, unsigned id, bool* out);
-extern bool __cdecl GetPropertyAsUint32(IProps* p, unsigned id, unsigned* out);
-extern bool __cdecl GetFloatProperty(IProps* p, unsigned id, float* out);
+extern bool __cdecl GetBoolProperty(IProps* p, unsigned id, bool* out);   // 0x00407190
+extern bool __cdecl GetPropertyAsUint32(IProps* p, unsigned id, unsigned* out);   // 0x004af210
+extern bool __cdecl GetFloatProperty(IProps* p, unsigned id, float* out);   // 0x0040cf10
 extern const float kFloat1;
 
 // @ 0x00b22cc0
@@ -527,13 +536,13 @@ struct SetMap {
             p = l;
         }
     }
-    void __thiscall DoNuke(RBNode* p);
+    void __thiscall DoNuke(RBNode* p);   // 0x009a9600
 };
 extern RBNode g_ClassRegistry;       // 0x01568550 (anchor of the registry map)
 extern char g_Logger[];              // 0x01568584
-extern void __cdecl LogError(void* logger, const char* fmt, ...);
-extern RBNode* __cdecl RBTreeIncrement(RBNode* n);
-extern void __stdcall BuildClassSets(SetMap* a, SetMap* b);
+extern void __cdecl LogError(void* logger, const char* fmt, ...);   // 0x00b21060
+extern RBNode* __cdecl RBTreeIncrement(RBNode* n);   // 0x00921580
+extern void __stdcall BuildClassSets(SetMap* a, SetMap* b);   // 0x00b211e0
 
 static __forceinline void CheckRegistered(SetMap& m)
 {
@@ -562,15 +571,32 @@ void ValidateClassSets()
 
 // ---------------------------------------------------------------------------
 // 0x00b22440: Skinner::PaintSystem destructor body
-extern void* vtbl_PaintSystemA[]; extern void* vtbl_PaintSystemB[]; extern void* vtbl_PaintSystemC[];
-extern void* vtbl_PaintSystem[];
-struct PS_Tree { void __thiscall Nuke(RBNode* root); };
-struct PS_Vec { void __thiscall Dtor(); };
-struct PS_ListBase { void __thiscall Dtor(); };
-struct PS_RenderJobs { void __thiscall Clear(); };
-struct PS_Hash { void __thiscall Clear(int a, int b); };
-struct PS_Gonzago { void __thiscall Dtor(); };
-extern void __cdecl RemoveHandler(int h, int a, int b, int c, int d);
+extern void* vtbl_PaintSystemA[];   // 0x0145ef10
+extern void* vtbl_PaintSystemB[];   // 0x0145eec0
+extern void* vtbl_PaintSystemC[];   // 0x0145eeb8
+extern void* vtbl_PaintSystem[];   // 0x013eb394
+struct PS_Tree {
+    void __thiscall Nuke(RBNode* root);   // 0x00d0c930
+};
+struct PS_Tree2 {
+    void __thiscall Nuke(RBNode* root);   // 0x009a9600
+};
+struct PS_Vec {
+    void __thiscall Dtor();   // 0x00ae6970
+};
+struct PS_ListBase {
+    void __thiscall Dtor();   // 0x00620230
+};
+struct PS_RenderJobs {
+    void __thiscall Clear();   // 0x0075f3f0
+};
+struct PS_Hash {
+    void __thiscall Clear(int a, int b);   // 0x00b20a50
+};
+struct PS_Gonzago {
+    void __thiscall Dtor();   // 0x00b5b9a0
+};
+extern void __cdecl RemoveHandler(int h, int a, int b, int c, int d);   // 0x00571db0
 template <class T> static inline T* At(void* base, int off) { return (T*)((char*)base + off); }
 template <class T> static inline T& Fld(void* base, int off) { return *(T*)((char*)base + off); }
 
@@ -583,8 +609,8 @@ void __fastcall PaintSystem_DtorBody(void* self)
     At<PS_RenderJobs>(self, 0x10c)->Clear();
     At<PS_Tree>(self, 0xec)->Nuke(Fld<RBNode*>(self, 0xf8));
     At<PS_Tree>(self, 0xd0)->Nuke(Fld<RBNode*>(self, 0xdc));
-    At<PS_Tree>(self, 0xb4)->Nuke(Fld<RBNode*>(self, 0xc0));
-    At<PS_Tree>(self, 0x98)->Nuke(Fld<RBNode*>(self, 0xa4));
+    At<PS_Tree2>(self, 0xb4)->Nuke(Fld<RBNode*>(self, 0xc0));
+    At<PS_Tree2>(self, 0x98)->Nuke(Fld<RBNode*>(self, 0xa4));
     At<PS_Vec>(self, 0x80)->Dtor();
     At<PS_ListBase>(self, 0x78)->Dtor();
     if (Fld<IRefCount*>(self, 0x74)) Fld<IRefCount*>(self, 0x74)->Release();
@@ -608,13 +634,13 @@ void __fastcall PaintSystem_DtorBody(void* self)
 // ---------------------------------------------------------------------------
 // 0x00b22960: per-frame processing of the pending-data list
 extern void* kSysGui;
-struct SysGui { void __thiscall SetSerializer(); };
+struct SysGui { void __thiscall SetSerializer(); };   // 0x00c2e4e0
 struct ModelMgr {
     virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3();
     virtual void m4(); virtual void m5(); virtual void m6();
     virtual IRefCount* Lookup(unsigned id);   // 7 (+0x1c)
 };
-extern ModelMgr* __cdecl GetModelManager();
+extern ModelMgr* __cdecl GetModelManager();   // 0x0067dd80
 struct IPending {                       // result of Cast(0x1186577)
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
     virtual void s4(); virtual void s5(); virtual void s6(); virtual void s7();
@@ -639,22 +665,23 @@ struct IPending {                       // result of Cast(0x1186577)
 struct PInfo { int pad; unsigned f4; char pad8[0x68]; char data[1]; };  // data at +0x70
 struct PNode { PNode* next; PNode* prev; IRefCount* value; };
 struct UIMessage {
-    void __thiscall Destruct();
+    void __thiscall Destruct();   // 0x00421cf0
     void** vptr; int rc; int d0; int padc; void* d1; char pad14[0x1c]; int id; char pad34[4]; int flags;
 };
-extern void* vtbl_UIMessageBase[]; extern void* vtbl_UIMessage[];
+extern void* vtbl_UIMessageBase[];   // 0x013eb90c
+extern void* vtbl_UIMessage[];   // 0x013eb844
 struct MsgServer {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
     virtual void Post(unsigned type, UIMessage* m, int flag);   // 5 (+0x14)
 };
-extern MsgServer* __cdecl GetMessageServer();
+extern MsgServer* __cdecl GetMessageServer();   // 0x0067dcc0
 
 struct cGNM2 {
     char pad[0x80];
     NounVec mTempNouns;     // +0x80
     char pad8c[0x80];
     PNode mPending;         // +0x10c
-    void __thiscall FlushTemp();
+    void __thiscall FlushTemp();   // 0x00b206d0
     void __thiscall ProcessPending();
 };
 
