@@ -1,0 +1,1 @@
+010593e0 SP::cSPToolStrategy::OnHit  # vtable slot 0x30 OnHit(pTool, position, SpaceToolHit, int) per ModAPI cToolStrategy; PDB caller-scored candidate cSPToolStrategy

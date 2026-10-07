@@ -1,0 +1,1 @@
+00cfd3a0 SP::cCivModeStrategy::HandleMessage  # PDB caller-scored; IMessageListener override at +0x24 (this-0x24 for strategy calls)

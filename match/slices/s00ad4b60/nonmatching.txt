@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00ad4b60  1795  complete cinematic/scripted-action target resolver (9-way switch on target kind, then register/place/locomote/wake): same 147 ordered call + vtable-slot + constant items except one duplicated target-assign call site and block placement of a no-op null-herd release; frame 0x114 matches; callee-saved pushes are shrink-wrapped and data/herd live in different registers (herd reloaded from its AutoRefCount slot)

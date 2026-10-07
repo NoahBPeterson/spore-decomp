@@ -1,0 +1,6 @@
+00a82d90 EA::Swarm::cVisualEffect::UpdateTransforms  # card name; retail layout = ModAPI Swarm::cVisualEffect, flag bits = PDB cVisualEffectDescription::tEffectFlags
+00a72bf0 EA::Swarm::cTransform::FixPoint  # coined: offset += p - (p*scale)*R; flags|=4; ++modcount (inlined in UpdateTransforms' view-relative block)
+00a81de0 EA::Swarm::SmoothStepClamp  # coined: clamp to [lo,hi] then lo + (hi-lo)*t*t*(3-2t)
+00a78d90 EA::Swarm::FastAtan2  # coined: polynomial atan2 (0.9817/0.1963 coefficients), args (y, x)
+007d5590 EA::Swarm::operator*(cTransform,cTransform)  # r = b; r.PreTransformBy(a); returns sret
+00832dc0 EA::Swarm::cTransform::Reset  # identity rotation, zero offset, scale 1, flags/modcount 0 (thiscall, no args)

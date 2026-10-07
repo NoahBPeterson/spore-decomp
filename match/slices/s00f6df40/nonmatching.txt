@@ -1,0 +1,1 @@
+00f6e120  2176  complete cube-face split of ribbon-brush polys (clip, project, bounds, push_back, render, vector dtors); stack frame 0x10 smaller, locals laid out differently

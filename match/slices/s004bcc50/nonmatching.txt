@@ -1,0 +1,1 @@
+004bcc50  207  complete (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast, no EH); instruction-for-instruction identical (721/721) except stack offsets: our cl 8-aligns the 0x418-byte fixed_vector `next` and the writer (-0x840/-0x860 vs -0x83c/-0x85c), shifting every lower slot by 4-8 bytes

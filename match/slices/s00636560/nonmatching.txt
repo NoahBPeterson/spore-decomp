@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00636560  2870  complete: all 117 case values/bodies verified against the original dispatch (emulated); leaf `je B; return false` tails not cross-jumped like the original (layout only); flags /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,1 @@
+00fab2b0  995  complete (AddRibbonQuad: all 4 corner projections, same-face fast path, 6-face clip/re-project loop; 9/9 calls and all constants in original order; 2655 vs 2736 B); frame 0x22c vs 0x234, original multiplies the normalize factor in SSE after spilling it while cl keeps it on x87

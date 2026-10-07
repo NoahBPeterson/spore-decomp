@@ -1,0 +1,1 @@
+00bc5730 ReadPropRecord  # loads property list (instance,group) into the 0x7b4-byte record built by 0x00bc4630; name descriptive (pdb candidate cGameplayMarker::AddDebugInfo is caller-scored, unreliable)

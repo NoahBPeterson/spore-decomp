@@ -1,0 +1,1 @@
+01106490  2924  complete (flags /O2 /MD /Gy /EHsc /TP /fp:fast); difftest PASS bit-identical (3x400 + 400 NaN inputs, 99.9% cov); older-cl Havok x87 codegen (constant-pool 0/1, spill schedule, volatile rounding points) differs, size 3009 vs 2798, 0 calls both

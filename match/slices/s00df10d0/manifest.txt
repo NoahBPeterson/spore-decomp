@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00df10d0/s00df10d0.cpp  ?ReadPropList@tNewGameFlow@SP@@QAEXI@Z  00df10d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+010f87e0  2982  complete hk3AxisSweep::castAabb (start-aabb bitfield per axis from the nearer end, start-overlap report, time-ordered endpoint walk with early-out, cache input, timers, stack buffer); x87 schedule, frame (0x114 vs 0xf4) and register allocation differ; flags /O2 /MD /Gy /TP

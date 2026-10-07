@@ -1,0 +1,1 @@
+01335000  1541  complete table of 35 Simulator::Attribute records (all rows verified equal by store simulation); cl keeps different callback constants in ebp/ebx (original: validate/toXml, with region re-assignment) so store scheduling differs (original is the CRT dynamic initializer $E259)

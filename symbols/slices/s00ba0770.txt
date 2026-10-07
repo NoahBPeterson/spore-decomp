@@ -1,0 +1,1 @@
+00ba0770 SetupPlanetSpots  # cdecl(planetType 0x1654c01..05, bool); callers at 0xba1c81.. pass planet-type IDs; clears spot vector 0x16888ec + multimap 0x156c040, feeds grid 0x156c060

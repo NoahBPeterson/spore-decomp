@@ -1,1 +1,1 @@
-004bcc50 SP::cSPEditorResourceFactory::WriteResourceToStream  # card name; XML serializer over cSPEditorModel
+004bcc50 SP::cSPEditorResourceFactory::WriteResourceToStream  # card name; cdecl static, writes <sporemodel> XML (blocks, paint, childlist, handles)

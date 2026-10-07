@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007b7ac0  1994  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) complete thumbnail render (mode 0 single capture; mode 1 n*n orbit tiles: property save/override/restore, double render, viewport per tile, spherical camera step, RwMatrix basis); not byte-exact: stack slot layout, x87/SSE scheduling, fp:fast reassociates the deg->rad product (1/180 kept as extern 0x0140ffcc)

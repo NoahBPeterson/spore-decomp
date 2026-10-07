@@ -1,0 +1,1 @@
+004a4d60 SP::EditorUtils::PickBlockForPinning  # dev PDB name (callee-scored) + signature from dev mangled name; byte-exact

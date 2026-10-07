@@ -1,0 +1,1 @@
+0106cc70  2145  complete (hide path, star rollover: owner/planets/SETI/travel range, frame + mission layout, travel-line effect); 174/176 calls in order (cl tail-merges the two mRolloverTarget assignments), frame 4 bytes smaller (ebx/edi pushed late), slot/register choice differs [flags /O2 /MD /Gy /TP /arch:SSE /fp:fast]

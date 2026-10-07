@@ -1,0 +1,2 @@
+# source  symbol  va  [flags]
+slices/s00464bb0/s00464bb0.cpp  Export@cBlockGeometryExporter  00464bb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00d1afe0 SP::cGameEditInputStrategy::HandleMessage  # card/xmatch name; ret 8 via the +0x3c handler base, dispatches level-editor messages

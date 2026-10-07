@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d342d0  2050  COMPLETE cCreatureModeInputStrategy::UpdateCreaturePickBoxes; 3292 vs 3260 B, 51 vs 50 calls (same ordered direct calls / vtable slots / IDs; the empty-objects exit keeps its own operator delete[] where the original cross-jumps it); frame 0x530 vs 0x50c (scalar slot packing), /fp:fast dot-product association order

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01205f30  2572  complete: CapsuleVolume linear cast (cap sphere / cap plane / cylinder side walk, 3 steps); flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast; difftest PASS bit-exact (6 seeds, 99.9-100% coverage, also --nan); our cl folds `0.0f - x` into a sign flip (xorps) where the original keeps subss (as in the TriangleVolume/BoxVolume siblings), and register/stack allocation differs

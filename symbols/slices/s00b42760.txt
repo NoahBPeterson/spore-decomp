@@ -1,0 +1,5 @@
+# Slice s00b42760 names.
+00b42760 CollisionShape::GetSupportFeature  # Claude-coined: box face(4)/edge(2)/corner(1) furthest along -dir, sphere point towards other shape (descriptive name)
+0167ec58 ?sCorners@?1??UnitCubeCorners@@YAPBUVector3@@XZ@4QBU2@B  # function-local static unit-cube corners, initialized at 0x00b4279b
+0167ecb8 ??_B?1??UnitCubeCorners@@YAPBUVector3@@XZ@51  # init guard of the corners (bit 1)
+01461158 ?kBoxFaceCorners@@3QAY03$$CBHA  # int[6][4] corner indices per face, read at 0x00b42a0c

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e3cf60  2225  complete (all paths/calls; same ordered call/vtable-slot/constant sequence, size 2733 vs 2687); frame 0x2a0 vs 0x288 (no slot sharing for key locals), record-key copy reloads, regalloc; AsPPTypeParam inlined/out-of-line split mirrored by hand; flags /O2 /MD /Gy /TP /GS-

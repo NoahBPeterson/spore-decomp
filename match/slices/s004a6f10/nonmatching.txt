@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast)
+004a6f10  1807  SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form

@@ -1,0 +1,1 @@
+0116e4f0 rw::audio::core::HELPER_Imdct36X1  # card/PDB name; 36-pt IMDCT+window, twin of 0x011666d0

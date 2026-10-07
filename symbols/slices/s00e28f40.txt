@@ -1,0 +1,1 @@
+00e28f40 SP::cSPUINewProgressBar::UpdateLevelWindows  # PDB name (pdb_names.json anchor); retail adds a trailing bool (ret 0x14)

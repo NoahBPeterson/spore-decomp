@@ -1,0 +1,1 @@
+009bd6f0 nSPCreatureAnim::FloorBodies  # Claude-coined name; dc: per body, push the body above the creature/body ground plane (floored_weight, known_ground_pos, ground_pos/ground_normal at retail offsets)

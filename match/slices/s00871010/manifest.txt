@@ -1,0 +1,1 @@
+slices/s00871010/s00871010.cpp  _png_init_read_transformations  00871010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

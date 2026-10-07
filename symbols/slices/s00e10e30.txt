@@ -1,0 +1,1 @@
+00e10e30 ?draw_trade_routes@cSPUIMinimapWin@@IAEXAAVDraw2D@UTFWin@EA@@@Z  # dev PDB name (card)

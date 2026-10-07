@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009c9910  2603  nSPCreatureAnim::creature_instance_data::UpdateEffect: complete (event-located and bone-attached modes, 4 ComputeEventLocationState calls, XformMsg updates, sound/callback/xform target; 27/27 calls in identical order, same store/compare/float-op multiset modulo fp:fast operand commutation); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame 0xd4 vs 0xcc (local slot packing) and xmm/register allocation differ

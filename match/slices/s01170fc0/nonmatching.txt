@@ -1,0 +1,1 @@
+01170fc0  3185  complete rw::audio::core::CMpegBase::PolySynth (phase rotate, MMX Dct32 call, 32 windowed taps incl. pmulhw centre tap, emms, s16->f32); original windowing is a hand-scheduled MMX __asm block, written here with MMX intrinsics (same lane ops) so never byte-exact; flags /O2 /MD /Gy /TP /arch:SSE /GS-

@@ -1,0 +1,1 @@
+00fe2ec0 SP::cAppModeSpace::HandleMessage  # cAppModeSpace vtable 0x1493f60 group, IHandler subobject slot at 0x1493fb4; calls SetDefaultPickPriority/LoadStateMachine via this-4

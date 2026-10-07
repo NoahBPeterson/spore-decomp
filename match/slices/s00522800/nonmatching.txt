@@ -2,3 +2,4 @@
 005229c0  127  /Od stack-temp Vector3 pass schedule differs; complete global user-colour setter
 00522a40  135  /Od request-complete + AutoRefCount release schedule differs; complete
 00523570  11   /Od mem/this/result slot permutation only; complete alloc factory
+00522b40  1568  /Od frame: original has ~0xc0 more temp slots (inline ref/copy temps); complete SetCreatureSkin, same calls in order (fabs inline needs /Oi)

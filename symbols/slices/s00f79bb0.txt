@@ -1,0 +1,1 @@
+00f79bf0 EA::Swarm::cParticlesEffectOld::InitParticle  # Claude-coined class name: older-layout twin of 0x00f5ebf0 (s00f5e910) in the older cParticlesEffect.obj region (quad streamers s00f77940/s00f78a60); same spawn algorithm

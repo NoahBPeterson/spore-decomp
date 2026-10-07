@@ -1,0 +1,2 @@
+00df10d0 SP::tNewGameFlow::ReadPropList  # card/PDB name; ChooseXxx panel flags, string16 flow array
+00685520 IsWorldLayoutFlagSet  # byte flag of 0x28-byte entry, bounds-checked index (role name)

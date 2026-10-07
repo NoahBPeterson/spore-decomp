@@ -1,0 +1,1 @@
+004ca6e0 SP::cSkinObject::BuildSkeleton  # rebuilds mNodes(+0x40)/mBones(+0x54)/mBoneTransforms(+0x68) from cRuntimeCreatureResource blocks (stride 0x8c); dev PDB SP::cSkinObject::BuildSkeleton (2016 B), same vectors in the PDB cSkinObject layout (shifted in retail)

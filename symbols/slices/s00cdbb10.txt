@@ -1,0 +1,1 @@
+00cdbd20 SP::cTribeModeStrategy::HandleUIMessage  # card PDB name DoMessage; IWinProc subobject at +4 (this-4 adjust for strategy calls)

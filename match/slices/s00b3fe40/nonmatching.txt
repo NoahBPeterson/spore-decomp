@@ -1,0 +1,1 @@
+00b3fe40  2731  complete sphere-vs-box contact (difftest PASS bit-exact, 3000 inputs, 95.8% coverage; no calls in either, size 3092 vs 3036); register allocation (orig keeps xform in ebx, pushes ebp only around the face loop), x87 length sums not CSEd in orig, scheduling differ

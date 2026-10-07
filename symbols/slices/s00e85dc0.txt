@@ -1,0 +1,3 @@
+00e85dc0 ComputeShapeMatchGoals  # descriptive: Apq = sum m(x-c)(s q)^T, Jacobi, T = beta*Apq*Aqq/s^2 + (1-beta)*R, goals = (s q) T + c
+00e853c0 ComputeCenterOfMass  # cdecl (n, positions, masses, Vector3* out); starts from the zero vector at 0x016c4584
+00e851c0 JacobiDecompose  # cdecl (const Matrix3& m, Matrix3& V = identity 0x016c4590 then rotations, Matrix3& D = copy of m)

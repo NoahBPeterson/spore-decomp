@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00c91ca0  2931  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) cSpear::Update complete: miss/ground-hit/combatant-hit paths, ornament re-attach + slot recycling, bone-local attachment transform, damage, sounds; call/vslot sequence identical (87 calls), size 1.015x; frame 0x10c vs 0x108, stack-slot and SSE register allocation differ

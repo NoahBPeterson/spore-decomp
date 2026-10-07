@@ -1,0 +1,1 @@
+008e8af0  778  Block::PlaceOutOfFlow: complete (50/50 calls and vtable slots +0x10/+0x20/+0x34 in original order, 573 vs 573 insns, same 0xf74 64-aligned frame); all locals sit 8 bytes lower (original has an unused 8-byte low slot, also seen in SetMargins) plus xmm register choice in the vertical/Inflate tail; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

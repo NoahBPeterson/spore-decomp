@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00ade8b0/s00ade8b0.cpp  ?Initialize@cCinematicManager@SP@@UAEXXZ  00ade8b0  /O2 /MD /Gy /TP /GS-

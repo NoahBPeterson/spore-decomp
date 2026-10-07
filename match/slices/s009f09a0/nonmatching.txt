@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009f09a0  2960  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete IK rigid-follow of a body's descendants (reference accumulation, rotation+stretch matrices, all four re-pose paths, smoothstep push-out); register-ABI helper 009ed370 re-written as a static helper (AccumulateReference), /fp:fast x87/SSE scheduling and frame layout differ; equiv PASS 311 inputs 88.7% cov

@@ -1,0 +1,3 @@
+008c9000 MakeBits  # dev-PDB name (pdb_candidates caller-single); T2K scan converter bitmap generation
+008c8f00 IsStub  # dev-PDB name; static, y in eax, maxIndex in ecx
+008c8eb0 CountInterSections  # dev-PDB name; static, count in eax, list in ecx, hi in edx, lo on stack

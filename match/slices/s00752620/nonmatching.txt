@@ -1,0 +1,1 @@
+00752620  1756  complete cModelWorld::Update (group xforms, per-model grid/lighting/anim/effects/lights/listeners/fade, highlight pulse+curve, preload compaction); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; register/stack-slot allocation and x87 vs SSE choice in the highlight-curve block differ; size 3125/3151, 20/20 calls, vtable slots+constants identical

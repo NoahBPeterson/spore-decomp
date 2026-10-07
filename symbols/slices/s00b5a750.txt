@@ -1,0 +1,1 @@
+00b5a750 RebuildStaticCollision  # name guessed: rebuilds fixed hkRigidBodies/phantoms for city objects and planet objects (sRebuild flags 0x167ece0/0x167ecdb, hkWorld 0x167ecd0)

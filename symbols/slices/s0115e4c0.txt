@@ -1,0 +1,1 @@
+0115e4c0 ComplexFFTForward  # rw::audio::core FFT: allocs "FFT Buffer" via System::Alloc; forward twin of 0115f2a0 (conjugate twiddles, no 1/N)

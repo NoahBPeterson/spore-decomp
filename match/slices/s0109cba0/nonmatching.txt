@@ -1,0 +1,1 @@
+0109cba0  2357  complete (all 25 direct calls in original order incl. 3x _reserveMore/2x deallocateChunk, vtable slots 8/0x10/0x14/0x18/0x1c identical; 114 vs 115 calls: cl tail-merges one TlsSetValue); 3456 vs 3604 B; Havok lib codegen (call [mem], dec) not reproducible with cl 15 /O2

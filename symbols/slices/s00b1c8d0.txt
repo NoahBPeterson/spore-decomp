@@ -1,0 +1,6 @@
+00b1cca0 cStateMachineHost::ParseLine  # image symbol $E259; ArgScript handler for DeclareState/DeclareMessage/DeclareMenu/AddTransition/IncludeMachine
+00b1c8d0 cStateMachineHost::AddTransition  # thiscall, 12 args (ret 0x30): from, event, keymod, value, object, objflags, msg, msgparam, to, longmousemove, comment, push
+00b1c080 cStateMachineHost::DeclareState  # thiscall (index, name), ret 8
+00b1c220 eastl::map<eastl::string,int>::operator[]  # on the menu-name map 0x015680cc
+00b20930 eastl::map<eastl::string,int>::find  # on the message-name map 0x015682ec
+006a3f40 eastl::pair<const eastl::string,int>::pair(const string&, const int&)  # ret 8

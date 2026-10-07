@@ -1,0 +1,1 @@
+00649340  1678  ReloadCallback complete (teardown + 21 window lookups + glides/sub-UIs); 2-byte size diff from vtable-load/arg scheduling at AddWinProc and glide SetOffset

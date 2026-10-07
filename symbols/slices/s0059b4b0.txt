@@ -1,4 +1,4 @@
-0059b4b0 SP::cSPEditorAnimatedCreatureData::Update  # PDB caller-scored
+0059b4b0 SP::cSPEditorAnimatedCreatureData::Update  # PDB caller-scored; fields match PDB layout (mActualPosition, mIsTurning, ...)
 0059c010 float* min-pointer helper  # comiss + select
 0059c030 float angle wrap to [-pi,pi)  # _CIfmod + pi compare
 0059c060 SP::cSPEditorAnimatedCreatureManager::Init  # PDB name

@@ -1,0 +1,1 @@
+00d824a0  2876  complete SP::POSSE_IDLE_Tick (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 3333 B vs 3463 B, same 43 direct calls in identical order, same 15 vcalls, same constants); difftest UNSUPPORTED (original faults in GetCurrentGameMode/NounManager on synthetic inputs); register allocation, frame size (0x6c vs 0x50) and SSE/x87 scheduling differ

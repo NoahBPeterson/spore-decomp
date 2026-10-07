@@ -1,0 +1,1 @@
+009f09a0 IKRigidFollow  # name guessed: re-poses all descendants of an IK body by the best-fit rotation+stretch of its reference bodies

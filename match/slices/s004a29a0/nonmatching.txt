@@ -1,0 +1,1 @@
+004a29a0  1928  SnapBlockToSocket: complete (56/56 calls same order and targets, vcall slots 0x14/0x24/0x30, msg ids); /Od frame slot layout (name hash, 0x2f8 vs 0x380) differs

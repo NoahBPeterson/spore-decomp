@@ -1,1 +1,0 @@
-00451400  2592  Shutdown2 - 2.5KB teardown body only outlined (model/socket/handle release and resource-map clear omitted)

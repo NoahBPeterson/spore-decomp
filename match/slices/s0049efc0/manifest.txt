@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0049efc0/s0049efc0.cpp  ?MoveBlocks@@YAXPAUcSPEditorBlock@@UVector3T@@1UMatrix33T@@2PAUBlockVec@@@Z  0049efc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00fe9580 SP::cEmpireGrowthSim::TakeTurn  # card PDB name

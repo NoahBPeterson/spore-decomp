@@ -1,0 +1,6 @@
+008e7230 EA::XHTML::Layout::Block::SetMargins  # PDB vtable-slot name; args (StackingContext&, Style::StyleState&)
+008f95c0 EA::XHTML::Style::Length::ToPixels  # thiscall (float ref, const FontMetrics&), called on StyleState edge lengths
+008f9660 EA::XHTML::Style::Length::ToPixelsNonNeg  # max(0, ToPixels(ref, fm))
+008ef870 EA::XHTML::Layout::SizingContext::SizingContext  # Typesetter ctor + Reset, stores enclosing width at +0x538
+008f0240 EA::XHTML::Layout::StackingContext::ClampWidth  # min(max(w, +0x568), +0x564) = mMinBreak/mMaxBreak (retail offsets)
+008f01b0 EA::XHTML::Layout::StackingContext::CollapseMargin  # updates mYPos (+0x55c) / mPendingCollapse (+0x560)

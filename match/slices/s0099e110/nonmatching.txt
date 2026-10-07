@@ -2,3 +2,4 @@
 0099efa0 40 complete uninitialized_copy of 8-byte pairs; register/loop shape differs
 0099efd0 83 complete nSPCreatureAnim::LoadAnimationStaticData; frame/local-struct layout differs
 0099f050 29 complete heap-block array free loop; induction variable folded differently
+0099e110 2955 complete AccumulateAnimationMotion (bone-binding pos/rot motion accumulation, sibling of 0x0099d460), flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; all 17 calls in order; final type-3 channel loop unrolled 4x by cl (orig not), register/frame layout differ

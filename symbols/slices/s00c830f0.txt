@@ -1,0 +1,1 @@
+00c830f0 SP::cSimPlanetLowLOD::UpdateTerraforming  # existing name (card); body reconstructed

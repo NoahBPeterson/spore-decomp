@@ -1,0 +1,1 @@
+00dd7970  2737  complete cSPUIEventLog per-frame event layout/timer update (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; 3228 B vs 3151 B; ordered direct-call targets and vtable slots identical except one tail-merged AddRef site, 67 vs 68 calls; all id/mask immediates identical); aligned-frame slot layout, block order and register allocation differ

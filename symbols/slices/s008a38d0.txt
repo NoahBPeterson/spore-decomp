@@ -1,0 +1,5 @@
+008a3b70 EA::Text::Typesetter::GetThaiGlyphs  # PDB name + EAText EATextShapeThai.cpp, byte-exact
+01430410 EA::Text::gThaiCharLayoutFlagsTable  # data; referenced as 0x142e810 + c*2 (c-0xE00 folded)
+014307a0 EA::Text::gThaiCharTable  # data; referenced as 0x142eba0 + c*2
+014309a0 EA::Text::gThaiCharAdjustment  # data, 0x2c bytes
+014309cc EA::Text::gLaoCharAdjustment  # data, 0x2c bytes

@@ -1,0 +1,1 @@
+00f16580  2284  cScenarioResultsRecorder::RecordResults (names Claude-coined): complete; same 80 calls in original order with identical pushed ids/vtable slots (0x24,0x14,0x14,0x14,0x8,0x4,0x4), size 1.019x; register allocation differs (push_back value kept in ebx vs reloaded, constant 5 hoisted into ebx). Flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

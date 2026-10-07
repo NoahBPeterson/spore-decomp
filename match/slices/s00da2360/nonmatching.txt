@@ -1,0 +1,1 @@
+00da2360  2063  complete (all 27 calls/vcalls in original order incl. 5 inline push_backs, qsort, 7 float constants identical; 3124 vs 3148 B); stack-slot packing, register choice and x87/SSE scheduling differ. Function index wrongly runs to 0xda3b30 (next fn 0xda2fd0 unindexed), so chk.py finds no similar-size symbol: score with cmpdis/exact name

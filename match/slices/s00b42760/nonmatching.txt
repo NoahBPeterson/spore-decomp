@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b42760  2144  complete: collision shape support feature (box face/edge/corner, sphere point); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS bit-exact (5 seeds, up to 100% coverage with --nan); stack layout (orig 0x3c frame, box/dots share slots), register allocation and the face-corner temporaries differ

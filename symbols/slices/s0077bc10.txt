@@ -1,0 +1,2 @@
+# va  name  evidence
+0077bc10  rw::graphics::RWShader_SetShConst_lightBlock  # uploads transpose(inverse(4x4 matrix at 0x16f90d0)) as VS/PS constants (vtable +0x178/+0x1b4); same shape as 0x77af70 (s0077a160)

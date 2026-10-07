@@ -1,0 +1,1 @@
+00887530 EA::Text::BmpFont::ReadBmpFontInfo  # retail symbol shown by card.py; matches EAWebKit EATextBmpFont.cpp ReadBmpFontInfo with retail changes; byte-exact

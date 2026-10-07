@@ -1,0 +1,1 @@
+00b88590 SP::cPlanetModel::GetContinent  # thiscall(const Vector3*) -> continent index; same name in s00b97280 / s00b9d820

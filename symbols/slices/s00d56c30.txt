@@ -1,0 +1,1 @@
+00d56c30 SP::cBehaviorSpaceTurret::Action  # card PDB name (caller-scored); retail layout from disassembly

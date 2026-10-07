@@ -1,1 +1,2 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason (complete, not byte-exact)
+0079d190  2399  two-sided plane split of a triangle list, all 4 modes complete; frame 0x54 vs 0x2c, regalloc/spills and tail-merging differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

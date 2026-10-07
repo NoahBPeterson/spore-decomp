@@ -1,0 +1,1 @@
+00ca5b10 cPathLocomotion::Turn  # called from cPathLocomotion::Update (s00ca8710) as Turn(dir, dt); sibling of cPathLocomotion::Steer 0x00ca4f90 (same frame/angle/quaternion code)

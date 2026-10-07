@@ -1,0 +1,1 @@
+01169370 3010 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; complete; the windowing is a hand-scheduled inline __asm MMX block in the original (no byte-exact source possible without asm transcription), written with the equivalent MMX intrinsics; prologue/Dct32 call/float tail loop same shape; difftest PASS (300 valid, 100% coverage)

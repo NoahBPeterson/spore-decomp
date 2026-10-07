@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00aefc80  2524  SP::SPCreatureProxy::StepDeltaTime (retail): drift pull-back + depenetration, two hkLocalArray surface-constraint arrays (contact planes + support plane), particle step, surface-aligned or stored orientation, soft/hard keyframe; 27/27 calls same order, size 0.99x; frame layout (0x124 vs 0x114), TlsGetValue kept in edi, quaternion-rotate temps kept in memory differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

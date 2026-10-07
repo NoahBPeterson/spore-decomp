@@ -1,0 +1,8 @@
+008e8af0 EA::XHTML::Layout::Block::PlaceOutOfFlow  # PDB name (Block vtable 0x01437c20 slot +0x3c)
+008e6d30 EA::XHTML::Layout::Block::Layout  # PDB vtable-slot name, Block vtable slot +0x34
+008eaa90 EA::XHTML::Layout::ContainerItem::MeasureContent  # PDB vtable-slot name, slot +0x20
+008fc130 EA::XHTML::Style::StyleState::StyleState(StyleState*)  # stores mpBase = arg, copies the base's text style/lengths
+008efba0 EA::XHTML::Layout::StackingContext::StackingContext  # (Item* root, StackingContext& parent, StyleState&): stores root, Typesetter ctor, zeroes rects
+008ee740 EA::XHTML::Layout::StackingContext::SetParagraphStyle  # copies the 8-byte ContainerItem::mParaStyle into the typesetter
+008efc80 EA::XHTML::Layout::StackingContext::SetContextRect  # copies rect to +0x534 and its left/right to mMarginLeft/Right
+008e8650 EA::XHTML::Style::StyleState::~StyleState  # called on the StyleState local at scope exit

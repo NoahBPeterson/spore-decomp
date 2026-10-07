@@ -1,0 +1,1 @@
+00f64290  2566  complete; diffs are register choice (this in edi vs ebx), frame 0x304 vs 0x310 and pointer- vs index-form strength reduction in the mixed-type loop

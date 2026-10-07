@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ca5b10  2018  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) complete cPathLocomotion::Turn (local frame, 4 wrapped signed angles, path lookahead via Evaluate, 3 rate-limited angle steps, 3 axis-angle quaternion products, normalize, SetOrientation); same calls/vtable slots/constants as original; not byte-exact: xmm register assignment and stack-slot layout (frame 0xb0 vs 0xa0), as in sibling s00ca4f90

@@ -1,0 +1,1 @@
+009b2340 nSPCreatureAnim::EvaluateContextTargetQuery  # dev PDB caller-scored candidate; signature ?EvaluateContextTargetQuery@nSPCreatureAnim@@YAKPAKKABUcreature_static_data@1@ABUcontext_target@1@K_N@Z matches arg use

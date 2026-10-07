@@ -1,0 +1,1 @@
+00bc08d0  2473  complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, no EH); identical ordered call/vtable-slot/constant sequence (46 calls), size 2959 vs 2931; register allocation (original keeps ebp=0 and the planet pointer in memory), frame 0xa4 vs 0xa8 and block layout differ

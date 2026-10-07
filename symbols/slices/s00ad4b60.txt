@@ -1,0 +1,4 @@
+00ad4b60 ResolveActionTarget  # cdecl callback stored at 0xad587f (struct+0x10); casts its arg to type 0x0447FF9B, switch on +0xC (9 kinds), always returns 1 (Claude-coined name)
+00ad7940 cActionTarget::cActionTarget  # 0x30-byte target ctor (position, scale 1.0, object ptr +0x2C = 0)
+00ad7ad0 cActionTarget::~cActionTarget  # releases +0x2C through vtable slot 0xC0
+00c70110 cGameObjectPtr::operator=  # intrusive ptr assign, AddRef slot 0xBC / Release slot 0xC0

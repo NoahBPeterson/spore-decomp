@@ -1,0 +1,1 @@
+00cc4270 SP::cDefaultBeamProjectileView::HandleSimulationUpdate  # PDB candidate (caller-scored) on card; calls cSpatialObjectView::HandleSimulationUpdate and cDefaultBeamProjectile::IsHittingPlayer

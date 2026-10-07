@@ -1,0 +1,1 @@
+00e35370  2856  complete; vtable-slot sequence identical to the original (51 vcalls), direct calls differ only by cl tail-merging the commodity-node SetLocalCursor/~vector returns; frame 0x44 vs 0x58 and register choice differ

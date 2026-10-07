@@ -1,0 +1,1 @@
+00871010 png_init_read_transformations  # libpng 1.2.25 pngrtran.c, byte-exact from upstream source with /arch:SSE /fp:fast

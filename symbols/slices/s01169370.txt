@@ -1,0 +1,2 @@
+01169370 Snd::CMpegBase::PolySynth  # matches the BurnoutDecomp X360 PolySynth structure (phase byte +0x38+ch, history +0x50, Dct32 call, 16+1+15 windowed outputs); neighbours 01168380/011683e0 are CMpegBase lib matches
+011689e0 Snd::Dct32  # PolySynth matrixing helper (cdecl, 3 args), per b5 reconstruction

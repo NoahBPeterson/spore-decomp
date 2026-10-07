@@ -4,3 +4,4 @@
 0055fa20  212  complete asset activate/deactivate path; /Od frame differs
 0055fb30  101  complete asset-membership query; /Od frame differs
 0055fbb0   90  complete asset timestamp setter; /Od frame differs
+0055ec70  2185  complete index-rebuild driver (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast) (all 55 calls in order); /Od frame slots differ, 2 out-of-line key_vector ctor/dtor instances inlined

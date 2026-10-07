@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00be7bf0  2089  complete (all paths/calls; same ordered call/vtable-slot/constant sequence, size 2699 vs 2696); regalloc (pTarget kept in memory, not edi), frame 0x74 vs 0x78, x87 sum order in the normalize, transform-init scheduling; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

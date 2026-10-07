@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+0101ed80  2811  complete planet-camera orbit update (all paths/calls: snap-Update, zoom clamp, distance blend, yaw/pitch/orbit-angle quaternions, water clearance, viewer/listener); frame 0x274 vs 0x21c (local slot sharing), x87/SSE scheduling differs

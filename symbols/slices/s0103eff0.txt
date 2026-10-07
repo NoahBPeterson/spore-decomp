@@ -1,0 +1,1 @@
+0103eff0 SP::cSPSpaceTrading::PerformTrade  # card PDB name

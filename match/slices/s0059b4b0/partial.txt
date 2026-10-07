@@ -1,1 +1,0 @@
-0059b4b0  2911  cSPEditorAnimatedCreatureData::Update: skeleton only (body stubbed); 2.9 KB body not reconstructed

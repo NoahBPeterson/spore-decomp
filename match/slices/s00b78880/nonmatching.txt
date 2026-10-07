@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00b78880  2247  complete footprint-hull builder; same 21 ordered calls/3 vcall slots (0x24,0xdc,0xe0), ids and axis/zero constants, size 0.99x; residual is register allocation, store scheduling of the fixed_vector headers and the center/rotation float schedule

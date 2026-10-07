@@ -1,0 +1,10 @@
+008cffd0 CacheKeyTables_sfntClass  # T2K truetype.c; frees and re-reads the cached sfnt tables (ttcf/head/hhea/vhea/maxp/loca/CFF/DSIG/sloc/ffst/ffhm/hmtx/vmtx/kern/EBLC/EBSC/post/OS2); byte-exact
+008cdb00 New_ttcfClass  # reads the ttcf header (tag check 0x74746366), static in the same TU
+008cdb80 New_headClass  # reads the head table into headClass (PDB layout)
+008cd940 New_hheaClass  # reads hhea/vhea into hheaClass (PDB layout)
+008cdc50 New_maxpClass  # reads maxp; version != 1.0 gets default limits
+008cda70 New_hmtxClass  # reads hmtx/vmtx via New_hmtxEmptyClass
+008cd6f0 New_kernClass  # reads kern header (Apple 32-bit form when version==1 && nTables==0)
+008cd660 New_kernSubTable  # one kern subtable header, format 0 data via 0x008cd580
+008cd580 New_kernSubTable0Data  # kern format 0 pair list (8-byte pairs)
+008cef90 GetNumGlyphs_sfntClass  # T1/CFF/PFR NumCharStrings, else maxp numGlyphs clamped by loca

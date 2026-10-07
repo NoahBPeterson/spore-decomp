@@ -1,0 +1,1 @@
+0138c850 InitScenarioResourceAttributes  # dynamic initializer of the cScenarioResource attribute table at 0x015af500 (names/offsets match ModAPI cScenarioResource.h)

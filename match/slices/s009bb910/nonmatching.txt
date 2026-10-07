@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009bb910  2874  complete FinalizeCreatureGoals (4 goal_pos_rot accumulators, walk-delta motion, 4 Normalize calls; /O2 /MD /Gy /TP /arch:SSE /fp:fast): same control flow, stores and call sequence; differs in xmm register allocation (1.0f kept in xmm1 vs xmm6/xmm0) and x87 sqrt-sum operand order

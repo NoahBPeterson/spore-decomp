@@ -1,0 +1,1 @@
+00752620 SP::cModelWorld::Update  # PDB cModelWorld layout shifted (+0x4 lists, +0x20c highlight block); mModelList/mGroupList/mPreloadModels/mHighlight* usage

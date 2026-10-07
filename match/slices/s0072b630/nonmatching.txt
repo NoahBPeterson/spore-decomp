@@ -1,2 +1,1 @@
-0072c040  88   Complete dispatch loop; register allocation (n in edi vs ecx) differs.
-0072c0a0  68   Complete two-call dispatcher; caller-saved/callee-saved register choice differs.
+0072b630  1875  SP::CompileToRwMeshes: complete (all 3 fixed_vectors, vertex descriptor/buffer build, element copy, index buffers 16/32-bit, meshes, materials, textures, EH temps); needs /GS-; stack-slot packing and register allocation differ (frame 0x180 vs 0x170)

@@ -1,0 +1,1 @@
+0046ff00 ExportModelTriangles  # writes 0x14 triangle chunk + 0x32 UV chunk with fwrite, then fclose; descriptive name

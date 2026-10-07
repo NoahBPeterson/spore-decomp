@@ -1,1 +1,0 @@
-006a8610  3666  giant per-type description switch: dispatch/output only; formatted arms not reconstructed (no similar-size symbol)

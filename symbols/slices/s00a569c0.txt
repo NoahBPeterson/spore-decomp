@@ -1,0 +1,1 @@
+00a569c0 EA::Audio::Eapd::x_arithmetic_setup  # PDB name; Pd x_arithmetic.c binop1/2/3 + math class registration

@@ -1,0 +1,2 @@
+# va  name  # evidence
+0096c6f0  EA::UTFWinControls::WinDialog::Refresh  # PDB candidate (caller-scored); byte-exact against WinDialog layout (+0x14) with close button/title text logic

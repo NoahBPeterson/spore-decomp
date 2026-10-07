@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00f61b40  2033  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; complete (secondary-base override, effect=this-8); same 19 calls in order, fp:fast operand order + ebx/ebp swap differ

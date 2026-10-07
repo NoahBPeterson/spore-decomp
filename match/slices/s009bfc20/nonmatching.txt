@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+009bfc20 2321 nSPCreatureAnim creature_body_instance_data::GroundGoal (thiscall, ret 0x18; /O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; 2601 vs 2652 bytes, same 9 calls in the same order (QuaternionVectorTransform, Normalize, GetGroundHeight 0x9b6220, SmoothStep 0x9b01e0, QuaternionFromTwoVectors, Normalize, GetGroundUp 0x9b62c0, 0x99c310 x2); differs in frame size (0x9c vs 0x68: the original keeps lpos in memory and copies it) and SSE register allocation

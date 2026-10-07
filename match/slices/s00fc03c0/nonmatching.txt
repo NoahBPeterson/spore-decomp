@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00fc04b0  357  complete cTerrainStateMgr default-state reset + property reload; same 47 calls / 65-item ordered call+vslot+const sequence, size 1.002x; residual: store scheduling of two Vector3 temps, max-altitude arg built in a temp instead of the arg slot, mpMapSet not reloaded before the second cliff-gradient copy

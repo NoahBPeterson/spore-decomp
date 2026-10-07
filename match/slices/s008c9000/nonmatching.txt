@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+008c9000 2624 T2K MakeBits (cdecl, 8 args; /O2 /MD /Gy /TP /arch:SSE): complete (bbox/bitmap setup, cache or tsi_FastAllocN alloc + clear, grey horizontal+vertical coverage with weighted mix, bitRange255/remap, mono fill, x and y dropout with IsStub/smartDropout); 2711 vs 2669 bytes, same 6 calls in order (ComputeScanBBox, cache icall, tsi_FastAllocN, memset, IsStub x2, IsStub with the original eax/ecx static convention); differs in register allocation (t kept in ebp instead of esi) and stack slot assignment

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00cbda10  2777  cCulturalProjectile::LaunchProjectile: complete (all branches: ring/nearest-point spin path, aim-point path, pushed-out target path, 32-point arc, 60-point spiral, locomotion + speed); ordered calls/vtable slots/type-id and string pushes identical (32 calls, 41 items), size 3217 vs 3113; x87/SSE scheduling and stack-slot layout differ (frame 0xb4 vs 0x88)

@@ -1,0 +1,1 @@
+0110b3a0 ?calcManifold@hkBoxBoxCollisionDetection@@QBEXAAVhkBoxBoxManifold@@@Z  # havok_names.txt (real mangled name)

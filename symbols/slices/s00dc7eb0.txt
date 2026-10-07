@@ -1,0 +1,1 @@
+00dc7eb0 SP::cCulturalConvertCityOrder::OnTick  # PDB name; retail fields +0x94 mpCulturalTarget, +0x98 mAttackerId, +0x9c mpHologram, +0xa0 mpHoloVehicle, +0xa4 mpHoloEffect (PDB +0x84.. shifted by 0x10)

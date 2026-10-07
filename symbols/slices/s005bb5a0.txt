@@ -1,0 +1,1 @@
+005bb5a0 SP::cSPEditorManipulationStacking::MoveBlockStacking  # PDB candidate (caller-scored); calls FindStackingTarget 0x5ba320 with the same ray args; complete, not byte-exact

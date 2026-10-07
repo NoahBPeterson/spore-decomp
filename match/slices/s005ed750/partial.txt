@@ -1,1 +1,0 @@
-005ed750  -  cSPPaletteItemRollover::Show: skeleton (3370-byte layout/animation logic omitted)

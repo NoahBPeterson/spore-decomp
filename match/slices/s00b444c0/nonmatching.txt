@@ -1,0 +1,1 @@
+00b444c0  2798  complete planet-correction switch (all 9 modes); direct-call targets/vtable slots/constants match, but planet/obj live in esi/ebp (orig edi/esi), larger frame (0x228 vs 0x1e8), case 7 tail merged with common tail

@@ -1,0 +1,1 @@
+0073d6b0  2255  COMPLETE SP::cModelInstance::GetPoseTransforms(dst, original): per-bone 4x4 copy, SIMD affine cofactor inverse when !original (singular -> the uninitialized result local is stored, as in the original), transposed 3x4 store; returns bone count or 0. SSE register allocation/temp layout differ (frame 0x444 vs ~0x2a0).

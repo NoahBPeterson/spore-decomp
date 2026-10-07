@@ -1,0 +1,1 @@
+00a82d90  2360  EA::Swarm::cVisualEffect::UpdateTransforms, complete (same ordered direct calls, vtable slot and flag tests as the original); remaining diff is SSE register scheduling in the inlined FixPoint/camera-facing math and stack slot assignment (pos at esp+0x24 vs 0x30)

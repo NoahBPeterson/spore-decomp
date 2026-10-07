@@ -1,0 +1,1 @@
+005bb5a0 2395 complete (42/42 calls, vtable slots +0xc/+0x58 and x87/SSE float shapes in original order); stack frame 0x364 vs 0x384 (slot packing) and register allocation (this/rb/model) differ

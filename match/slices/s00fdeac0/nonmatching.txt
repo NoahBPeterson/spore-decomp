@@ -1,0 +1,1 @@
+00fdeac0  2098  /O2 /MD /Gy /TP (no /EHsc: RAII locals without EH frame); complete. same 120 calls in order, same vtable slots (0x18,0x16c,0x170,0x40,0x1c,0x4c,0x60,0x14,0x2c,4) and all 33 switch keys/10 result hashes; size 2815 vs 2793; diffs are register allocation (this in edi vs ebx), LoadModel arg evaluation order, ModelPtr kept in memory

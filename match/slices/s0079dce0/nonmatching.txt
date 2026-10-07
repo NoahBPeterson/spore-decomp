@@ -1,1 +1,2 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason
+0079dce0  2924  complete cylinder triangle clipper (CylinderSlicer::Run; all-same copy, modes 0-3, all six split cases verified call-by-call against the asm; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): register allocation and tail merging differ

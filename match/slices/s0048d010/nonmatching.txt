@@ -1,4 +1,4 @@
+0048d010  729  /Od /Oy; complete. MoveBlockLowAngleStacking: same 22 calls/vslots/constants in order, frame 0x390 equal; diffs: inlined setInterpolate4 lacks the this/t slots, fabs return-slot copy, ToSPVector3 temp slots, uninit shape-ptr copies emulated
 0048db10  7  /Od; complete. Havok deleting-ctor: vtable set + hkMemory::Free; this-spill/mem temp slots swapped
 0048db60  48  /Od; complete. init +0x30/+0x2c/+4; constant-indexed array store not reproduced
 0048dbb0  8  /Od; complete. two vtable stores + hkMemory::Free; temp slot order swapped
-0048dc00  63  /Od; complete. F_48dc50 then +0x20..+0x2c copy; frame/temp layout differs

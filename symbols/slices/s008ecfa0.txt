@@ -1,0 +1,1 @@
+008ecfa0 EA::XHTML::Layout::Page::CreateLayoutItems  # recursive layout-tree builder (thiscall Element*, const StyleState&, bool); dev PDB Page::CreateLayoutItems is 3872 B in Page.obj; recursion target of itself, callees Block/Table/TableCell ctors and the rule collector 0x008ec970

@@ -1,0 +1,1 @@
+01375e30 ??__EFIELDS_DT_CELL@SP@@YAXXZ  # dynamic initializer $E179 of the SP::cFieldDef table at 0x015a5fc8 (cell fields: name/structure/eat/ai/.../pieces); FIELDS_DT_CELL exists in the dev build symbols, absent from retail globals list

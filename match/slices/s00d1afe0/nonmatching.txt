@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d1afe0  1700  SP::cGameEditInputStrategy::HandleMessage: complete (all 40 message ids, 101/101 calls with identical ordered call/vslot/constant sequence, same field/global stores, same frame 0x60 and this/msgID registers); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; residual: block order of a few switch leaves (je common-true vs jne), pTarget=0 zeroing, 3-4 scheduling swaps -> branch displacements shift

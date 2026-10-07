@@ -1,0 +1,1 @@
+00505850 SqrDistancePointTriangle  # Eberly point-triangle squared distance (regions 0-6, returns fabs(sqrDist), writes s,t); byte-exact

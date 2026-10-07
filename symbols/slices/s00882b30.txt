@@ -1,0 +1,2 @@
+# va  name  # evidence
+00882b30  EA::Locale::SetLocale  # PDB name on card; recursive self-call, CRTGetLocale/CRTSetLocale/CRTFindAliasDataByLocaleId callees

@@ -1,0 +1,1 @@
+0103eff0 2389 complete (sell loop, tool/rare/spice paths, buy loop, NPC stock update, relationship event); same calls/vslots/constants; differs in register allocation and stack slot layout (/O2 /MD /Gy /TP /arch:SSE)

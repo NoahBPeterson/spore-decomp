@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e85dc0  2709  shape-matching goal step complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same 3 calls, same loop/unroll skeleton (both loops, x4 unroll, two rep movsd), size 0xb42 vs 0xaba; SSE register allocation, product order and temp slots differ

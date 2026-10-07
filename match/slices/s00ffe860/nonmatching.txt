@@ -1,0 +1,1 @@
+00ffe860  52  complete (all paths/calls; size 2564=2564, 142/142 calls, identical ordered call/vcall/constant sequence); residual: stack-slot coloring (minAltitude/t share a slot in the original, dtSec at esp+1c) and lea vs add ecx,0x34 for the GetPosition vcall

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)
+0077bc10  2927  complete: transpose(inverse(M@0x16f90d0)) uploaded via SetVertex/PixelShaderConstantF; cofactor/det association read off the asm, differential test bit-exact on the uploaded block (298 inputs, 99.4% cov); SSE scheduling/spills differ (frame 0x370 vs 0x1c0)

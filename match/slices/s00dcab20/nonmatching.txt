@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00dcab20  2216  HarvestResourceOrder_Tick complete (states 0-2, all branches, 142 calls); regalloc (self in ebp vs ebx, no hoisted 0/0x800 regs), frame 0x120 vs 0x138, block layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

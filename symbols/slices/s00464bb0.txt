@@ -1,0 +1,1 @@
+00464bb0 (anonymous namespace)::cBlockGeometryExporter::Export  # dev PDB SPEditorExportUtilities.obj ?Export@cBlockGeometryExporter@?A0x0560a4a0@@QAEXAAVcExportHelper@nSPSkinner@@PAVcSPEditorBlock@SP@@AAV?$RectT@M@EA@@I_N@Z; calls BuildBoundingBoxGeometry + ExportMeshAdd

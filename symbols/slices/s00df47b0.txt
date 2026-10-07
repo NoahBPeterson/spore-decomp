@@ -1,0 +1,1 @@
+00df47b0 cGalaxyGameEntryUIStateMachine::SetupForGame  # role name (no PDB/ModAPI name): stores cGameInfo* at +0x628, rebuilds new-game flow order from the flow-layout property, calls SetCurrentState(0)/(0xc), UpdateNavigationControls

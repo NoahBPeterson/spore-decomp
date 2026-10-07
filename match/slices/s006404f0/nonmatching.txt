@@ -1,0 +1,1 @@
+006404f0  1562  HandleButton complete (all 33 cases, same call/vslot sequence); layout differs: cl places the shared return block last and tail-merges callout epilogues, original puts it after pose case 0

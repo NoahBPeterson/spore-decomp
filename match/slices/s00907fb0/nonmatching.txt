@@ -1,0 +1,1 @@
+00907fb0  2456  expat 2.0.1 doContent (lib/xmlparse.c, XML_UNICODE build), complete; original built with LTCG: static helpers take register args (poolStoreString ecx/eax/edi, processInternalEntity esi, getContext edi) and poolStoreString is inlined at the empty-element site only, so register allocation/layout differ

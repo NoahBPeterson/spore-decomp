@@ -2,8 +2,8 @@
 //
 // Flags for this region: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (scalar SSE).
 //
-// 0x505850 is a 2.7 KB /Od two-segment closest-point routine (six Vector3*
-// args); too large for the per-function budget, so it is recorded as PARTIAL.
+// 0x505850 is the 2.7 KB /Od point-to-triangle squared distance (Eberly); it is
+// byte-exact with /Oi added (intrinsic fabs: fabs; fstp tmp; fld tmp).
 // The remaining four functions are small ctors/dtors around
 // nSPSkinner::cRTTBuffer and Simulator::cCreatureAbility; complete behavioural
 // ports are given, but they are not byte-exact (class/vtable scheduling).
@@ -17,19 +17,189 @@ void  ea_free(void* p);                                                    // 0x
 void  ea_delete(void* p);                                                  // operator_delete__
 
 // ---------------------------------------------------------------------------
-// @ 0x00505850  (PARTIAL skeleton)
+// @ 0x00505850  SqrDistancePointTriangle
+// Squared distance from a point to the triangle (v0, v1, v2) (Eberly / Magic Software
+// "MgcSqrDistance(point, triangle)"): writes the barycentric parameters s (along v1-v0) and
+// t (along v2-v0) of the closest point and returns |squared distance|.
 // ---------------------------------------------------------------------------
-float __cdecl ClosestSegSeg(const float* a0, const float* a1,
-                            const float* b0, const float* b1,
-                            float* s, float* t)
+#include <math.h>
+#pragma intrinsic(fabs)
+
+struct Vector3 {
+    float x, y, z;
+};
+
+float __cdecl SqrDistancePointTriangle(const Vector3* rkPoint, const Vector3* rkV0,
+                                       const Vector3* rkV1, const Vector3* rkV2,
+                                       float* pfSParam, float* pfTParam)
 {
-    // Original: d1=a1-a0, d2=b1-b0, r=a0-b0, a=d1.d1, e=d2.d2, f=d2.r,
-    // c=d1.r, b=d1.d2, denom=abs(a*e-b*b), then clamped s,t in [0,1].
-    // Only the parameter skeleton is reproduced here (see partial.txt).
-    (void)a0; (void)a1; (void)b0; (void)b1;
-    *s = 0.0f;
-    *t = 0.0f;
-    return 0.0f;
+    Vector3 kDiff;
+    kDiff.x = rkV0->x - rkPoint->x;
+    kDiff.y = rkV0->y - rkPoint->y;
+    kDiff.z = rkV0->z - rkPoint->z;
+    Vector3 kDir;
+    kDir.x = rkV1->x - rkV0->x;
+    kDir.y = rkV1->y - rkV0->y;
+    kDir.z = rkV1->z - rkV0->z;
+    Vector3 kEdge1;
+    kEdge1.x = rkV2->x - rkV0->x;
+    kEdge1.y = rkV2->y - rkV0->y;
+    kEdge1.z = rkV2->z - rkV0->z;
+    float fA00 = kDir.x * kDir.x + kDir.y * kDir.y + kDir.z * kDir.z;
+    float fA01 = kDir.x * kEdge1.x + kDir.y * kEdge1.y + kDir.z * kEdge1.z;
+    float fA11 = kEdge1.x * kEdge1.x + kEdge1.y * kEdge1.y + kEdge1.z * kEdge1.z;
+    float fB0 = kDiff.x * kDir.x + kDiff.y * kDir.y + kDiff.z * kDir.z;
+    float fB1 = kDiff.x * kEdge1.x + kDiff.y * kEdge1.y + kDiff.z * kEdge1.z;
+    float fC = kDiff.x * kDiff.x + kDiff.y * kDiff.y + kDiff.z * kDiff.z;
+    float fDet = fabs(fA00 * fA11 - fA01 * fA01);
+    float fS = fA01 * fB1 - fA11 * fB0;
+    float fT = fA01 * fB0 - fA00 * fB1;
+    float fSqrDist;
+
+    if (fS + fT <= fDet) {
+        if (fS < 0.0f) {
+            if (fT < 0.0f) {  // region 4
+                if (fB0 < 0.0f) {
+                    fT = 0.0f;
+                    if (-fB0 >= fA00) {
+                        fS = 1.0f;
+                        fSqrDist = fA00 + 2.0f * fB0 + fC;
+                    } else {
+                        fS = -fB0 / fA00;
+                        fSqrDist = fB0 * fS + fC;
+                    }
+                } else {
+                    fS = 0.0f;
+                    if (fB1 >= 0.0f) {
+                        fT = 0.0f;
+                        fSqrDist = fC;
+                    } else if (-fB1 >= fA11) {
+                        fT = 1.0f;
+                        fSqrDist = fA11 + 2.0f * fB1 + fC;
+                    } else {
+                        fT = -fB1 / fA11;
+                        fSqrDist = fB1 * fT + fC;
+                    }
+                }
+            } else {  // region 3
+                fS = 0.0f;
+                if (fB1 >= 0.0f) {
+                    fT = 0.0f;
+                    fSqrDist = fC;
+                } else if (-fB1 >= fA11) {
+                    fT = 1.0f;
+                    fSqrDist = fA11 + 2.0f * fB1 + fC;
+                } else {
+                    fT = -fB1 / fA11;
+                    fSqrDist = fB1 * fT + fC;
+                }
+            }
+        } else if (fT < 0.0f) {  // region 5
+            fT = 0.0f;
+            if (fB0 >= 0.0f) {
+                fS = 0.0f;
+                fSqrDist = fC;
+            } else if (-fB0 >= fA00) {
+                fS = 1.0f;
+                fSqrDist = fA00 + 2.0f * fB0 + fC;
+            } else {
+                fS = -fB0 / fA00;
+                fSqrDist = fB0 * fS + fC;
+            }
+        } else {  // region 0
+            // minimum at interior point
+            float fInvDet = 1.0f / fDet;
+            fS *= fInvDet;
+            fT *= fInvDet;
+            fSqrDist = fS * (fA00 * fS + fA01 * fT + 2.0f * fB0) +
+                       fT * (fA01 * fS + fA11 * fT + 2.0f * fB1) + fC;
+        }
+    } else {
+        float fTmp0, fTmp1, fNumer, fDenom;
+
+        if (fS < 0.0f) {  // region 2
+            fTmp0 = fA01 + fB0;
+            fTmp1 = fA11 + fB1;
+            if (fTmp1 > fTmp0) {
+                fNumer = fTmp1 - fTmp0;
+                fDenom = fA00 - 2.0f * fA01 + fA11;
+                if (fNumer >= fDenom) {
+                    fS = 1.0f;
+                    fT = 0.0f;
+                    fSqrDist = fA00 + 2.0f * fB0 + fC;
+                } else {
+                    fS = fNumer / fDenom;
+                    fT = 1.0f - fS;
+                    fSqrDist = fS * (fA00 * fS + fA01 * fT + 2.0f * fB0) +
+                               fT * (fA01 * fS + fA11 * fT + 2.0f * fB1) + fC;
+                }
+            } else {
+                fS = 0.0f;
+                if (fTmp1 <= 0.0f) {
+                    fT = 1.0f;
+                    fSqrDist = fA11 + 2.0f * fB1 + fC;
+                } else if (fB1 >= 0.0f) {
+                    fT = 0.0f;
+                    fSqrDist = fC;
+                } else {
+                    fT = -fB1 / fA11;
+                    fSqrDist = fB1 * fT + fC;
+                }
+            }
+        } else if (fT < 0.0f) {  // region 6
+            fTmp0 = fA01 + fB1;
+            fTmp1 = fA00 + fB0;
+            if (fTmp1 > fTmp0) {
+                fNumer = fTmp1 - fTmp0;
+                fDenom = fA00 - 2.0f * fA01 + fA11;
+                if (fNumer >= fDenom) {
+                    fT = 1.0f;
+                    fS = 0.0f;
+                    fSqrDist = fA11 + 2.0f * fB1 + fC;
+                } else {
+                    fT = fNumer / fDenom;
+                    fS = 1.0f - fT;
+                    fSqrDist = fS * (fA00 * fS + fA01 * fT + 2.0f * fB0) +
+                               fT * (fA01 * fS + fA11 * fT + 2.0f * fB1) + fC;
+                }
+            } else {
+                fT = 0.0f;
+                if (fTmp1 <= 0.0f) {
+                    fS = 1.0f;
+                    fSqrDist = fA00 + 2.0f * fB0 + fC;
+                } else if (fB0 >= 0.0f) {
+                    fS = 0.0f;
+                    fSqrDist = fC;
+                } else {
+                    fS = -fB0 / fA00;
+                    fSqrDist = fB0 * fS + fC;
+                }
+            }
+        } else {  // region 1
+            fNumer = fA11 + fB1 - fA01 - fB0;
+            if (fNumer <= 0.0f) {
+                fS = 0.0f;
+                fT = 1.0f;
+                fSqrDist = fA11 + 2.0f * fB1 + fC;
+            } else {
+                fDenom = fA00 - 2.0f * fA01 + fA11;
+                if (fNumer >= fDenom) {
+                    fS = 1.0f;
+                    fT = 0.0f;
+                    fSqrDist = fA00 + 2.0f * fB0 + fC;
+                } else {
+                    fS = fNumer / fDenom;
+                    fT = 1.0f - fS;
+                    fSqrDist = fS * (fA00 * fS + fA01 * fT + 2.0f * fB0) +
+                               fT * (fA01 * fS + fA11 * fT + 2.0f * fB1) + fC;
+                }
+            }
+        }
+    }
+
+    *pfSParam = fS;
+    *pfTParam = fT;
+    return fabs(fSqrDist);
 }
 
 // ---------------------------------------------------------------------------

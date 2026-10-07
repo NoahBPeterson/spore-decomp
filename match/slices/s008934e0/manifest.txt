@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+
+slices/s008934e0/s008934e0.cpp  ?Open@PolygonFont@Text@EA@@UAE_NPAVIStream@IO@3@@Z  008934e0  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc

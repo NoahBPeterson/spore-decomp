@@ -1,0 +1,1 @@
+00bb80f0 Simulator::cStarManager::GeneratePass4  # called from LoadStarDatabase (s00bb8b20) after the seed points; picks mPossibleStartLocations and seeds AI empires (Claude-coined name)

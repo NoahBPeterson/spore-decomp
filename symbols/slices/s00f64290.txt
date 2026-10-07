@@ -1,0 +1,1 @@
+00f64290 SP::cDistGrid::SetupEffect  # dev-build public ?SetupEffect@cDistGrid@SP@@QAEXABUcCellEffectInfo@2@PAVcIVisualEffect@Swarm@EA@@ABUcCell@2@HHHH@Z (caller-scored PDB candidate; signature and ret 0x1c agree)

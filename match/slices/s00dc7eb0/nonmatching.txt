@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00dc7eb0  2093  complete (all branches: empty-group teardown, closest-vehicle hologram spawn + effect, hologram follow/beam points; 71 calls in original order); frame 0x13c vs 0x114 shifts every stack offset, some x87 sum orders and register choices differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

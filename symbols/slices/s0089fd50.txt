@@ -1,0 +1,1 @@
+0089fd50 EA::Text::OTF::ReadGsubArrayEntry  # matches EAText EATextOpenType.cpp (work/ext/EAWebKitSupportPackages) case-for-case; retail create_array has no NULL check

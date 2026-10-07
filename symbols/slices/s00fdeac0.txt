@@ -1,0 +1,1 @@
+00fdeac0 SP::cAppModeSpace::TransitionFromSolarToPlanet  # card/PDB name; members match dev cAppModeSpace shifted +0x5c (mLastBakedTag +0x16c, mNeedsBakingForTransition +0x170, mOldRenderLayerStates +0x17c)

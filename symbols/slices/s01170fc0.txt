@@ -1,0 +1,1 @@
+01170fc0 rw::audio::core::CMpegBase::PolySynth  # same algorithm/index algebra as BurnoutDecomp MpegBase_wM_01.cpp PolySynth (phase byte at this+0x2c+ch, history base +0x44, Dct32 call, 16/1/15 windowed taps); cdecl callee 01170630 is the MMX Dct32

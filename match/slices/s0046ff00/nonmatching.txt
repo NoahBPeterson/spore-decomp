@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0046ff00  2675  complete: /Od frame differs (original has ~35 more inline-temp slots, 0x198 vs 0x140 frame); ordered call sequence identical; flags /Od /Ob1 /arch:SSE /MD /Gy /TP

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c09fa0  2657  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete herd spawn: all 64 calls/vtable slots in original order (template preload, spawn frame, adult/baby counts, per-animal create/attach/place/reset/strength/random scale+speed); quaternion x87/SSE schedule, identity Transform copies and frame layout (0x148 vs 0x138) differ; equiv UNSUPPORTED (singletons fault)

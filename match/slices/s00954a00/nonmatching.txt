@@ -1,0 +1,1 @@
+00954a00  901  complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv.py PASS (219 valid, 65.5% cov); 29/29 calls in order, 2547 vs 2523 B; first ~1060 bytes (clip tests, both clipped-triangle paths, out-of-line tri0) match modulo jump offsets; inline push_back copies in the tri1/quad paths reload v.c from the stack (original forwards it in edx, edi holds the new end)

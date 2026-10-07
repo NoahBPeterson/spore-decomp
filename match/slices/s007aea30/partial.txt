@@ -1,4 +1,3 @@
 007aea30  118  PARTIAL DXT surface dtor (three refcounted member releases) skeleton only.
-007aeab0 2519  PARTIAL findendpoints (DXT endpoint search) skeleton only.
 007af490  307  PARTIAL eadxt (whole-surface DXT encode) skeleton only.
 007af720  398  PARTIAL DXT block encode + stream write skeleton only.

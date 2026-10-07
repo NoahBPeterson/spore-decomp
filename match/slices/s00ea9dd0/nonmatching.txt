@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00ea9dd0  1985  complete cMixModeManager::HandleMessage: same compare tree, all 86 calls/mode ids/vtable slots in original order; original reuses the pMessage slot for lookup keys (frame 0xc, ebp saved) so stack offsets and branch targets shift

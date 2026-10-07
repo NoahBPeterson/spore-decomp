@@ -1,0 +1,1 @@
+00c20230 SP::cSPCreatureBase::ApplyAttackEffect  # PDB name on card; ModAPI cCreatureBase vtable 0xb8 funcB8h(cCombatant*, int, Vector3*)

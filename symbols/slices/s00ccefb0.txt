@@ -1,0 +1,1 @@
+00ccefb0 GetTribeCursorID  # tribe-stage cursor id for the picked object (cTribeInputStrategy region; returns cursor ids 0..0x30 by noun type kTribeTool/kTribeHut/kCreatureCitizen/...)

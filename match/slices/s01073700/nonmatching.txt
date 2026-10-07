@@ -1,0 +1,1 @@
+01073700  607  SP::cSPUISpace::Init (3229 B): same size, 87/87 direct + 49/49 virtual calls in identical order; only diffs are the two inlined RefCount Release decrements (orig mov/add -1/mov, mine sub reg) shifting 1 byte, and the UFO ResourceKey copy store order. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

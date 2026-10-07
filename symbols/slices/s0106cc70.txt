@@ -1,0 +1,1 @@
+0106cc70 SP::cSPUISpace::UpdateTravelLine  # PDB-derived name (card); retail offsets, thiscall ret 4

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ff7530  2336  complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast): device move toward map centre (uint64 timer/delta conversions, double distance, radius-based speed), terraform level query, level-up loop (T1..T3 stamps, foreign-owner relationship event), seed of new-level plants (species list pick) and animals (creature lookup), density ramp over the genesis cells (3 bands, Clamp/RoundToInt asm helpers), device switch-off. 42/42 calls in original order; 2973 vs 2938 B. Not exact: register allocation / stack slot packing (frame 0xdc vs 0xd0)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00bb80f0  1808  complete cStarManager galaxy pass 4 (start locations + AI empire seeds): same 85 calls / 102 call+vtable-slot+constant items in identical order, size 2649 vs 2586; frame 0xb0 vs 0x9c (stack-slot sharing of the filters/points/neighbour vector differs) and register allocation in the grid loop differ

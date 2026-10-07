@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00b708d0  6  complete (terrain-index group lookup, static PropertyList reload, all 50 float/uint32 property reads); same size, only edi/ebx swapped between terrain index and PropertyManager ptr; flags /O2 /MD /Gy /EHsc /TP

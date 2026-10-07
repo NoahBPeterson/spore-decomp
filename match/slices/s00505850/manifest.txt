@@ -1,0 +1,1 @@
+slices/s00505850/s00505850.cpp  ?SqrDistancePointTriangle@@YAMPBUVector3@@000PAM1@Z  0x00505850  /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00c3cd60 SP::cSPGameDataUFO::TakeHit  # PDB name; cCombatant slot 0x18 override (this = cCombatant subobject at +0x508)

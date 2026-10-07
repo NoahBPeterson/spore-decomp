@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+011048d0 2755 hkAgent1nMachine_Process (Havok 3.1, /O2 /MD /Gy /TP): complete reconstruction (welding potential-contact setup, sector walk with hit-list merge, agent create/destroy, stream commands 0-6 incl. flipped and TIM paths, monitor timers, sector split/insert, weld); not exact: block layout differs, and the same-TU helpers 0x01103aa0 (ECX/EAX) and 0x01103a10 (ESI/EDI) use register arguments in the original (/GL-style custom convention) but stack arguments here

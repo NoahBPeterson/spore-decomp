@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /fp:fast)
+0110b3a0  3198  complete hkBoxBoxCollisionDetection::calcManifold (point revalidation, normal check, SAT, closest point, normal refresh, duplicate/opposing checks, face/edge point additions); prebuilt Havok toolset (memory-indirect vcalls, xor/mov ax zero-extension) so x87 schedule and block layout differ; same-TU helper 0x011088b0 is emitted as a static with an EDI (orig ESI) register argument

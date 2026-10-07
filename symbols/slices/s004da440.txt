@@ -1,0 +1,1 @@
+004da440 SP::cSpeciesArchetype::cSpeciesArchetype  # called as cSpeciesArchetype() by hash_map<uint,cSpeciesArchetype>::operator[] (s004e01d0); member defaults match the dev PDB field list

@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00d41a70/s00d41a70.cpp  ?SetGlobalAudioProperties@?A0x  00d41a70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

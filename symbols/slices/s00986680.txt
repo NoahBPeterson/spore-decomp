@@ -1,0 +1,1 @@
+00986680 EA::UTFWinControls::SpinnerDrawable::CreateRenderables  # PDB candidate (caller-scored) on card; same body shape as SliderDrawable 0x984a70

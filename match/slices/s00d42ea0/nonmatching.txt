@@ -1,0 +1,1 @@
+00d42ea0  4  complete (flags /O2 /MD /Gy /TP /arch:SSE, no EH); only diff: the two RefPtr locals take the messageID param slot instead of the msg param slot ([esp+0x34] vs [esp+0x38]); all 150 calls, sizes and constants identical

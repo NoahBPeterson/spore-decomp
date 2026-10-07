@@ -1,0 +1,1 @@
+00be9d60 2730 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; complete (all paths; ordered call/vtable-slot sequence identical, 22 calls, size 3143 vs 3021); frame 0x17f0 vs 0x17d8 (push_back temporaries not sharing the slots[14] area) shifts every stack offset, plus regalloc

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b38e50 2407 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc); same blocks and 55/55 calls with identical targets and vtable slots in order, 2833 vs 2848 bytes; stack-slot permutation of ~15 scalar locals and register choice differ

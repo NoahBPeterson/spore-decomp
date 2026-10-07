@@ -1,3 +1,4 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
 00f002d0  168  surface-node lookup: faithful translation of the 0x238-stride scan, but MSVC
                schedules the run/flag logic differently (next-field test and loop break)
+00eff790  3    ScenarioTutorials_BuildChecklist (/O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc): complete; 785/785 instrs, 124/124 calls and 53 vcall slots in order; only the epilogue places 'mov ecx,esi' one instruction earlier than the original (before pop edi)

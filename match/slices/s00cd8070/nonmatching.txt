@@ -1,0 +1,1 @@
+00cd8070  1285  complete (all 21 message cases); same calls/order, frame and slots; cl keeps the shared hut/pop-destroyed tail in the other case and 16-aligns the two loops (original does not) [flags /O2 /MD /Gy /TP /arch:SSE /fp:fast]

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)
+0099d460  2761  complete nSPCreatureAnim::EvaluateAnimationBodyState: all 20 calls in order, every store/flag path; register allocation, block layout and frame (0x25fc vs 0x25f4) differ

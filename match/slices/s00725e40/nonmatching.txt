@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00725e40  2264  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; SP::cMeshClusterer::AssignCharts complete (all 16 calls in order, EH, both bool paths); register allocation/scheduling and frame 0xe8 vs 0xdc differ

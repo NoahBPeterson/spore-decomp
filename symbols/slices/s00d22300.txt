@@ -1,0 +1,1 @@
+00d22300 SP::cCreatureCamera::ManageAutoCameraMovement  # PDB candidate (caller-scored); swings target theta (+0x174) toward avatar travel direction and eases pitch (+0x178) into the auto-pitch range

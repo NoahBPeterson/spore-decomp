@@ -1,0 +1,1 @@
+00fe0f40 1797 complete (all calls/paths, size 1.01x, 145/145 calls); register allocation (this in ebx vs esi in parts), flag-test 'add eax,0x50' form, block order of the input-key path, local slot offsets differ

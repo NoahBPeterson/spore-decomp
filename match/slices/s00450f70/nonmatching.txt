@@ -1,3 +1,4 @@
 00450f70  493  Rebuild: inlined bit-array set/clear and the 9-arg BuildBlock wrapper not reproduced
 00451330  49   SetVec194: original materialises &mVec194 once (add eax,0x194); this cl folds the displacement
 00451e90  10   GetSub38: only the /Od inline branch layout (extra jmp) differs
+00451400  3    SP::cSPEditorBlock::Shutdown2: complete, instruction stream identical (647/647 instrs, 42/42 calls+vcalls in order, size 2592/2592); one inline slot (operator= pTemp of the socket-connector release) sits 8 bytes off (an unexplained 2-dword hole; filled with ScratchSlots)

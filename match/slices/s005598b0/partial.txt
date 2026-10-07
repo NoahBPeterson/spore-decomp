@@ -1,1 +1,0 @@
-005598b0 3187 SP::cSPObjectTemplateDB::Init; stub only

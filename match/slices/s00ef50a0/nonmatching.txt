@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ef50a0  2163  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete large-asset-view window setup: all 144 calls/vtable slots and 25 control IDs in order, same frame size; remaining diffs are register choice (vtable-call eax/edx alternation, Rect fields), a few scheduling swaps and the TextZoom zero-struct temp; equiv WEAK 300 inputs 34% cov, no mismatch

@@ -1,0 +1,1 @@
+00f5dbb0 2544 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); single-description sibling of 00f5ccf0 with a cube-map height in pos.w; original keeps Vector3 temporaries in stack slots (int-register copies) and a dead curve-index conversion, so it is larger (3418 vs 2945 B); register/scheduling differences

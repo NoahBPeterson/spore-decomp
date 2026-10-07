@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00ca8b10  2229  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) complete path-locomotion update (restart, brake/accel speed, path advance + waypoint pop, all 3 mode tails); not byte-exact: original built with LTCG (edx kept live across 0x00c9eaf0 calls), register/slot allocation and mode-1 tail merged in ours

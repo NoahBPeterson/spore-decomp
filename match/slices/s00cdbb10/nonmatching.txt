@@ -1,0 +1,1 @@
+00cdbd20 1870 complete (all 8 command cases + VerbTray path); same 159 calls/vslots/constants as original; differs in register allocation and 16-byte larger aligned frame (/O2 /MD /Gy /TP /arch:SSE /fp:fast)

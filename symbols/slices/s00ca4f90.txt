@@ -1,0 +1,1 @@
+00ca4f90 cPathLocomotion::Steer  # called from cPathLocomotion::Update (s00ca8710) mode 2 with (dir, dt, speed, accelSign); rotates owner orientation toward dir

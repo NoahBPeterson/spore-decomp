@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00c12640  2973  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) UpdateRangedAttacks complete: bitset walk, moving (bbox aim, ballistic/homing step, trail transform, cylinder hit test, impact effect, HitBody, hit callback, range drop) and hit states; call/vslot sequence identical (49 calls), size 1.019x; cl biases the record pointer differently (ebp=rec+0x1c) and allocates stack/SSE registers differently

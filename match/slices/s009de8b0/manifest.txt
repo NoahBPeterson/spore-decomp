@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s009de8b0/s009de8b0.cpp  ?OnRegister@cGaitKeyBlockCommand@  009de8b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00cbda10 Simulator::cCulturalProjectile::LaunchProjectile  # ModAPI cCulturalProjectile.h (LaunchProjectile, fields 0x518-0x560 match; cast ids cCulturalTarget/cBuilding/cTurret/cVehicle/cCreatureAnimal)

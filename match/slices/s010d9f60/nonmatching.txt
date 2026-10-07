@@ -1,0 +1,1 @@
+010d9f60  2659  complete hkPredGskfAgent::processCollision (init/recalcT0/tim/toi/getPoints/process); same call multiset, consts, 4x-unrolled transformPoints; basic-block order, frame (0x214 vs 0x374) and x87 scheduling differ. flags /O2 /MD /Gy /TP /fp:fast; rdtsc via inline asm as in Havok hkStopwatch

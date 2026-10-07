@@ -1,0 +1,1 @@
+slices/s00fc31f0/s00fc31f0.cpp  ?UpdateProperties@cWeatherManager@SP@@QAEXXZ  00fc31f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

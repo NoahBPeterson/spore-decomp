@@ -1,0 +1,1 @@
+00954a00 EA::UTFWin::Draw2D::FillQuadGrad  # inferred: follows dev-PDB Draw2D::FillGradH/FillGradV/FillTriGrad, 4 (point,color) pairs, Draw2D layout (mpRenderable/mColor/mbClip/mClipRect)

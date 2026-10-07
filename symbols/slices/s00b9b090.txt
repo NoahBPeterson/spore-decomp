@@ -1,0 +1,1 @@
+00b9b090 PlaceSpawnDefinitionsOnPlanet  # descriptive name: loops property lists (group 0x302a1c9), rolls chance 0x4934caca, places objects via FUN_00b94090 + cPlanetModel::MakeRandomWorldPosition, returns count

@@ -1,0 +1,1 @@
+00d79470 SP::cTribeGameBehaviorParty::Action  # vtable 0x0147bf60 (vtbl_Simulator::cTribeGameBehaviorParty) slot 6, same slot as cTribeGameBehaviorFish::Action; PDB names neighbours AddAgent/RemoveAgent/PostAction

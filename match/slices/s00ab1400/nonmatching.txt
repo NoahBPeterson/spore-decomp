@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00ab18d0  2244  complete EA::Swarm::cParticlesEffect::ApplyEffect: same 19 calls and vtable slots in order, size 2584 vs 2578; normalized instruction streams differ only in the inlined UpdatePhysicsSimple velocity block (register reuse vs reloads), the LOD flag-bit test shape and a few schedule swaps (raw diff count is inflated by shifted jump displacements)

@@ -1,2112 +1,260 @@
-// slice s0079d190
-// Per-instruction reconstruction (MSVC x86, cl 15.00 /O2 /MD /Gy /EHsc /TP).
-// Control flow is decoded recursively; call targets are symbolic so COFF
-// relocation bytes are masked by the verifier. Unreachable bytes are data.
+// slice s0079d190: two-sided plane split of a triangle list (SP model compile).
+// Sibling of SplitPlane::SplitTriangles (0x0079b7b0, slice s0079b020): this variant keeps
+// both halves, writing whole triangles to an "above" and a "below" index list and, in
+// cut mode, emitting the new vertices/indices for both sides through two SplitCtx builders.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+#include "types.h"
 
-extern "C" void EXT_6f5bc0();
-extern "C" void EXT_71ddc0();
+inline void* operator new(unsigned int, void* p) { return p; }
+inline void operator delete(void*, void*) {}
 
-// @ 0x0079d190
-__declspec(naked) void FUN_0079d190() {
-  __asm {
-    sub esp, 2ch
-    push ebp
-    push esi
-    push edi
-    mov edi, dword ptr [esp + 3ch]
-    push 0eh
-    push 3
-    push 0
-    push 1
-    push edi
-    mov dword ptr [esp + 20h], ecx
-    call EXT_71ddc0
-    mov ebp, dword ptr [esp + 54h]
-    mov esi, dword ptr [ebp + 4]
-    mov ecx, dword ptr [edi + 8]
-    imul esi, esi, 8ch
-    add esi, dword ptr [edi + 1ch]
-    mov dword ptr [esp + 40h], eax
-    shl eax, 5
-    lea edx, [eax + ecx + 10h]
-    mov eax, dword ptr [ebp + 8]
-    add esp, 14h
-    cmp eax, dword ptr [ebp + 0ch]
-    mov dword ptr [esp + 30h], edx
-    mov dword ptr [esp + 3ch], eax
-    _emit 0x0f
-    _emit 0x8d
-    _emit 0xe5
-    _emit 0x0a
-    _emit 0x00
-    _emit 0x00  ; jge 0x79dcc6
-    push ebx
-    mov ecx, dword ptr [esp + 40h]
-    mov eax, dword ptr [esi + 44h]
-    lea ebx, [ecx + 1]
-    lea edi, [ecx + 2]
-    cmp eax, dword ptr [esi + 48h]
-    _emit 0x0f
-    _emit 0x84
-    _emit 0xd8
-    _emit 0x00
-    _emit 0x00
-    _emit 0x00  ; je 0x79d2d0
-    mov eax, dword ptr [esp + 30h]
-    mov edx, dword ptr [esi + 14h]
-    movsx edx, word ptr [edx + eax*4 + 2]
-    mov eax, dword ptr [esi + 44h]
-    shl edx, 4
-    add eax, edx
-    movzx edx, word ptr [esi + 0ah]
-    mov dword ptr [esp + 44h], edx
-    movzx edx, word ptr [esi + 8]
-    mov edx, dword ptr [edx*4 + 140f544h]
-    mov dword ptr [esp + 20h], edx
-    mov edx, dword ptr [esp + 44h]
-    imul edx, ecx
-    mov ecx, dword ptr [esi + 4]
-    mov ecx, dword ptr [edx + ecx]
-    movzx edx, word ptr [eax + 0ah]
-    and ecx, dword ptr [esp + 20h]
-    mov dword ptr [esp + 28h], eax
-    imul ecx, edx
-    mov edx, dword ptr [eax + 4]
-    movzx eax, word ptr [eax + 8]
-    mov dword ptr [esp + 2ch], eax
-    mov eax, dword ptr [ecx + edx]
-    mov edx, dword ptr [esp + 44h]
-    mov ecx, dword ptr [esp + 2ch]
-    imul edx, ebx
-    and eax, dword ptr [ecx*4 + 140f544h]
-    mov dword ptr [esp + 24h], eax
-    mov eax, dword ptr [esi + 4]
-    mov ecx, dword ptr [edx + eax]
-    and ecx, dword ptr [esp + 20h]
-    mov eax, dword ptr [esp + 28h]
-    movzx edx, word ptr [eax + 0ah]
-    imul ecx, edx
-    mov edx, dword ptr [eax + 4]
-    movzx eax, word ptr [eax + 8]
-    mov dword ptr [esp + 2ch], eax
-    mov eax, dword ptr [ecx + edx]
-    mov ecx, dword ptr [esp + 2ch]
-    and eax, dword ptr [ecx*4 + 140f544h]
-    mov ecx, dword ptr [esi + 4]
-    mov dword ptr [esp + 2ch], eax
-    mov eax, dword ptr [esp + 44h]
-    imul eax, edi
-    mov edx, dword ptr [eax + ecx]
-    mov eax, dword ptr [esp + 28h]
-    movzx ecx, word ptr [eax + 0ah]
-    and edx, dword ptr [esp + 20h]
-    imul edx, ecx
-    mov ecx, dword ptr [eax + 4]
-    movzx eax, word ptr [eax + 8]
-    mov dword ptr [esp + 44h], eax
-    mov eax, dword ptr [edx + ecx]
-    mov edx, dword ptr [esp + 44h]
-    and eax, dword ptr [edx*4 + 140f544h]
-    mov edx, dword ptr [esp + 2ch]
-    _emit 0xeb
-    _emit 0x3f  ; jmp 0x79d30f
-    movzx edx, word ptr [esi + 8]
-    mov edx, dword ptr [edx*4 + 140f544h]
-    movzx eax, word ptr [esi + 0ah]
-    mov dword ptr [esp + 44h], edx
-    mov edx, eax
-    imul edx, ecx
-    mov ecx, dword ptr [esi + 4]
-    mov ecx, dword ptr [edx + ecx]
-    and ecx, dword ptr [esp + 44h]
-    mov edx, eax
-    imul eax, edi
-    imul edx, ebx
-    mov dword ptr [esp + 24h], ecx
-    mov ecx, dword ptr [esi + 4]
-    mov edx, dword ptr [edx + ecx]
-    mov eax, dword ptr [eax + ecx]
-    and edx, dword ptr [esp + 44h]
-    and eax, dword ptr [esp + 44h]
-    mov ecx, dword ptr [esp + 34h]
-    mov dword ptr [esp + 28h], eax
-    movzx eax, word ptr [ecx + 0ah]
-    mov ecx, dword ptr [ecx + 4]
-    mov dword ptr [esp + 44h], eax
-    imul eax, dword ptr [esp + 24h]
-    add eax, ecx
-    mov dword ptr [esp + 20h], ecx
-    mov ecx, dword ptr [esp + 44h]
-    imul ecx, edx
-    add ecx, dword ptr [esp + 20h]
-    mov edx, dword ptr [esp + 10h]
-    movss xmm0, dword ptr [edx + 14h]
-    mulss xmm0, dword ptr [eax + 8]
-    movss xmm1, dword ptr [edx + 10h]
-    mulss xmm1, dword ptr [eax + 4]
-    mov dword ptr [esp + 14h], ecx
-    mov ecx, dword ptr [esp + 44h]
-    imul ecx, dword ptr [esp + 28h]
-    add ecx, dword ptr [esp + 20h]
-    add edx, 0ch
-    addss xmm0, xmm1
-    movss xmm1, dword ptr [edx]
-    mulss xmm1, dword ptr [eax]
-    addss xmm0, xmm1
-    comiss xmm0, dword ptr [edx + 0ch]
-    mov dword ptr [esp + 18h], eax
-    mov dword ptr [esp + 44h], ecx
-    mov dword ptr [esp + 2ch], edx
-    mov dword ptr [esp + 20h], 1
-    _emit 0x77
-    _emit 0x08  ; ja 0x79d396
-    mov dword ptr [esp + 20h], 0
-    mov eax, dword ptr [esp + 14h]
-    movss xmm0, dword ptr [edx + 8]
-    mulss xmm0, dword ptr [eax + 8]
-    movss xmm1, dword ptr [edx + 4]
-    mulss xmm1, dword ptr [eax + 4]
-    addss xmm0, xmm1
-    movss xmm1, dword ptr [edx]
-    mulss xmm1, dword ptr [eax]
-    addss xmm0, xmm1
-    comiss xmm0, dword ptr [edx + 0ch]
-    _emit 0x76
-    _emit 0x07  ; jbe 0x79d3cb
-    mov edx, 1
-    _emit 0xeb
-    _emit 0x02  ; jmp 0x79d3cd
-    xor edx, edx
-    mov eax, dword ptr [esp + 2ch]
-    movss xmm0, dword ptr [eax + 8]
-    mulss xmm0, dword ptr [ecx + 8]
-    movss xmm1, dword ptr [eax + 4]
-    mulss xmm1, dword ptr [ecx + 4]
-    addss xmm0, xmm1
-    movss xmm1, dword ptr [ecx]
-    mulss xmm1, dword ptr [eax]
-    addss xmm0, xmm1
-    comiss xmm0, dword ptr [eax + 0ch]
-    mov dword ptr [esp + 24h], edx
-    _emit 0x76
-    _emit 0x07  ; jbe 0x79d406
-    mov eax, 1
-    _emit 0xeb
-    _emit 0x02  ; jmp 0x79d408
-    xor eax, eax
-    lea ecx, [eax + edx]
-    add ecx, dword ptr [esp + 20h]
-    mov dword ptr [esp + 28h], eax
-    mov eax, 55555556h
-    imul ecx
-    mov eax, edx
-    shr eax, 1fh
-    add eax, edx
-    lea eax, [eax + eax*2]
-    mov dword ptr [esp + 2ch], ecx
-    sub ecx, eax
-    _emit 0x0f
-    _emit 0x85
-    _emit 0xcc
-    _emit 0x01
-    _emit 0x00
-    _emit 0x00  ; jne 0x79d5fc
-    cmp dword ptr [esp + 20h], ecx
-    _emit 0x0f
-    _emit 0x85
-    _emit 0xe2
-    _emit 0x00
-    _emit 0x00
-    _emit 0x00  ; jne 0x79d51c
-    movzx ecx, word ptr [esi + 0ah]
-    imul ecx, dword ptr [esp + 40h]
-    mov edx, dword ptr [esi + 4]
-    movzx eax, word ptr [esi + 8]
-    mov cx, word ptr [ecx + edx]
-    and cx, word ptr [eax*4 + 140f544h]
-    movzx edx, cx
-    mov dword ptr [esp + 44h], edx
-    mov eax, dword ptr [esp + 4ch]
-    mov ecx, dword ptr [eax + 4]
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x73
-    _emit 0x14  ; jae 0x79d47d
-    lea edx, [ecx + 2]
-    mov dword ptr [eax + 4], edx
-    test ecx, ecx
-    _emit 0x74
-    _emit 0x1d  ; je 0x79d490
-    mov dx, word ptr [esp + 44h]
-    mov word ptr [ecx], dx
-    _emit 0xeb
-    _emit 0x13  ; jmp 0x79d490
-    lea eax, [esp + 44h]
-    push eax
-    push ecx
-    mov ecx, dword ptr [esp + 54h]
-    call EXT_6f5bc0
-    mov eax, dword ptr [esp + 4ch]
-    movzx ecx, word ptr [esi + 0ah]
-    mov edx, dword ptr [esi + 4]
-    imul ecx, ebx
-    movzx ebx, word ptr [esi + 8]
-    mov cx, word ptr [ecx + edx]
-    and cx, word ptr [ebx*4 + 140f544h]
-    movzx edx, cx
-    mov ecx, dword ptr [eax + 4]
-    mov dword ptr [esp + 44h], edx
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x73
-    _emit 0x0f  ; jae 0x79d4c8
-    lea ebx, [ecx + 2]
-    mov dword ptr [eax + 4], ebx
-    test ecx, ecx
-    _emit 0x74
-    _emit 0x18  ; je 0x79d4db
-    mov word ptr [ecx], dx
-    _emit 0xeb
-    _emit 0x13  ; jmp 0x79d4db
-    lea edx, [esp + 44h]
-    push edx
-    push ecx
-    mov ecx, dword ptr [esp + 54h]
-    call EXT_6f5bc0
-    mov eax, dword ptr [esp + 4ch]
-    movzx ecx, word ptr [esi + 0ah]
-    mov edx, dword ptr [esi + 4]
-    imul ecx, edi
-    movzx edi, word ptr [esi + 8]
-    mov cx, word ptr [ecx + edx]
-    and cx, word ptr [edi*4 + 140f544h]
-    movzx edx, cx
-    mov ecx, dword ptr [eax + 4]
-    mov dword ptr [esp + 44h], edx
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x0f
-    _emit 0x82
-    _emit 0xde
-    _emit 0x00
-    _emit 0x00
-    _emit 0x00  ; jb 0x79d5e6
-    lea edx, [esp + 44h]
-    push edx
-    push ecx
-    mov ecx, dword ptr [esp + 54h]
-    call EXT_6f5bc0
-    _emit 0xe9
-    _emit 0x95
-    _emit 0x07
-    _emit 0x00
-    _emit 0x00  ; jmp 0x79dcb1
-    movzx eax, word ptr [esi + 0ah]
-    imul eax, dword ptr [esp + 40h]
-    mov ecx, dword ptr [esi + 4]
-    movzx edx, word ptr [esi + 8]
-    mov ax, word ptr [eax + ecx]
-    and ax, word ptr [edx*4 + 140f544h]
-    movzx ecx, ax
-    mov dword ptr [esp + 44h], ecx
-    mov eax, dword ptr [esp + 48h]
-    mov ecx, dword ptr [eax + 4]
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x73
-    _emit 0x14  ; jae 0x79d55f
-    lea edx, [ecx + 2]
-    mov dword ptr [eax + 4], edx
-    test ecx, ecx
-    _emit 0x74
-    _emit 0x1d  ; je 0x79d572
-    mov dx, word ptr [esp + 44h]
-    mov word ptr [ecx], dx
-    _emit 0xeb
-    _emit 0x13  ; jmp 0x79d572
-    lea eax, [esp + 44h]
-    push eax
-    push ecx
-    mov ecx, dword ptr [esp + 50h]
-    call EXT_6f5bc0
-    mov eax, dword ptr [esp + 48h]
-    movzx ecx, word ptr [esi + 0ah]
-    mov edx, dword ptr [esi + 4]
-    imul ecx, ebx
-    movzx ebx, word ptr [esi + 8]
-    mov cx, word ptr [ecx + edx]
-    and cx, word ptr [ebx*4 + 140f544h]
-    movzx edx, cx
-    mov ecx, dword ptr [eax + 4]
-    mov dword ptr [esp + 44h], edx
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x73
-    _emit 0x0f  ; jae 0x79d5aa
-    lea ebx, [ecx + 2]
-    mov dword ptr [eax + 4], ebx
-    test ecx, ecx
-    _emit 0x74
-    _emit 0x18  ; je 0x79d5bd
-    mov word ptr [ecx], dx
-    _emit 0xeb
-    _emit 0x13  ; jmp 0x79d5bd
-    lea edx, [esp + 44h]
-    push edx
-    push ecx
-    mov ecx, dword ptr [esp + 50h]
-    call EXT_6f5bc0
-    mov eax, dword ptr [esp + 48h]
-    movzx ecx, word ptr [esi + 0ah]
-    mov edx, dword ptr [esi + 4]
-    imul ecx, edi
-    movzx edi, word ptr [esi + 8]
-    mov cx, word ptr [ecx + edx]
-    and cx, word ptr [edi*4 + 140f544h]
-    movzx edx, cx
-    mov ecx, dword ptr [eax + 4]
-    mov dword ptr [esp + 44h], edx
-    cmp ecx, dword ptr [eax + 8]
-    _emit 0x73
-    _emit 0x55  ; jae 0x79d63b
-    lea edi, [ecx + 2]
-    mov dword ptr [eax + 4], edi
-    test ecx, ecx
-    _emit 0x0f
-    _emit 0x84
-    _emit 0xbd
-    _emit 0x06
-    _emit 0x00
-    _emit 0x00  ; je 0x79dcb1
-    mov word ptr [ecx], dx
-    _emit 0xe9
-    _emit 0xb5
-    _emit 0x06
-    _emit 0x00
-    _emit 0x00  ; jmp 0x79dcb1
-    mov eax, dword ptr [esp + 10h]
-    mov eax, dword ptr [eax + 8]
-    cmp eax, 3
-    _emit 0x0f
-    _emit 0x87
-    _emit 0xa5
-    _emit 0x06
-    _emit 0x00
-    _emit 0x00  ; ja 0x79dcb1
-    jmp dword ptr [eax*4 + 79dcd0h]
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x4e
-    _emit 0x0a
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x56
-    _emit 0x04
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x08
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x0c
-    _emit 0x11
-    _emit 0x66
-    _emit 0x23
-    _emit 0x0c
-    _emit 0x85
-    _emit 0x44
-    _emit 0xf5
-    _emit 0x40
-    _emit 0x01
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xd1
-    _emit 0x89
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0xe9
-    _emit 0x04
-    _emit 0xff
-    _emit 0xff
-    _emit 0xff  ; data
-    lea edx, [esp + 44h]
-    push edx
-    push ecx
-    mov ecx, dword ptr [esp + 50h]
-    call EXT_6f5bc0
-    _emit 0xe9
-    _emit 0x62
-    _emit 0x06
-    _emit 0x00
-    _emit 0x00  ; jmp 0x79dcb1
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x0a
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0x44
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x4e
-    _emit 0x04
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x56
-    _emit 0x08
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x04
-    _emit 0x08
-    _emit 0x66
-    _emit 0x23
-    _emit 0x04
-    _emit 0x95
-    _emit 0x44
-    _emit 0xf5
-    _emit 0x40
-    _emit 0x01
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xe9
-    _emit 0xe6
-    _emit 0xfd
-    _emit 0xff
-    _emit 0xff
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x0a
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0x44
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x4e
-    _emit 0x04
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x56
-    _emit 0x08
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x04
-    _emit 0x08
-    _emit 0x66
-    _emit 0x23
-    _emit 0x04
-    _emit 0x95
-    _emit 0x44
-    _emit 0xf5
-    _emit 0x40
-    _emit 0x01
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x2c
-    _emit 0x01
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x7e
-    _emit 0x16
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x4c
-    _emit 0xe8
-    _emit 0xf1
-    _emit 0x8f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x0a
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0xc3
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x48
-    _emit 0xeb
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xdb
-    _emit 0x8f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x0a
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0xc3
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x4c
-    _emit 0x8b
-    _emit 0x4e
-    _emit 0x04
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x04
-    _emit 0x08
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x56
-    _emit 0x08
-    _emit 0x66
-    _emit 0x23
-    _emit 0x04
-    _emit 0x95
-    _emit 0x44
-    _emit 0xf5
-    _emit 0x40
-    _emit 0x01
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0xaa
-    _emit 0x8f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x46
-    _emit 0x0a
-    _emit 0x8b
-    _emit 0x4e
-    _emit 0x04
-    _emit 0x0f
-    _emit 0xaf
-    _emit 0xc7
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x04
-    _emit 0x08
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x56
-    _emit 0x08
-    _emit 0x66
-    _emit 0x23
-    _emit 0x04
-    _emit 0x95
-    _emit 0x44
-    _emit 0xf5
-    _emit 0x40
-    _emit 0x01
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x7d
-    _emit 0x8f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0xe9
-    _emit 0x89
-    _emit 0x05
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x2b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xc1
-    _emit 0xf8
-    _emit 0x04
-    _emit 0x89
-    _emit 0x44
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x2b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xc1
-    _emit 0xf8
-    _emit 0x04
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x20
-    _emit 0x00
-    _emit 0x89
-    _emit 0x44
-    _emit 0x24
-    _emit 0x38
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x40
-    _emit 0x50
-    _emit 0x51
-    _emit 0x0f
-    _emit 0x84
-    _emit 0xe4
-    _emit 0x01
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x58
-    _emit 0xe8
-    _emit 0x49
-    _emit 0xdd
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x10
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x24
-    _emit 0x00
-    _emit 0x0f
-    _emit 0x84
-    _emit 0xb6
-    _emit 0x00
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x14
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x18
-    _emit 0xc1
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x28
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x18
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x14
-    _emit 0x52
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0xfe
-    _emit 0xc0
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x53
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xfc
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x44
-    _emit 0x24
-    _emit 0x28
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x60
-    _emit 0xe8
-    _emit 0x55
-    _emit 0xdd
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x44
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x3a
-    _emit 0xdd
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0x57
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x1d
-    _emit 0xdd
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x28
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x51
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0x57
-    _emit 0x50
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x02
-    _emit 0xdd
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0x57
-    _emit 0x51
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x86
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0xe9
-    _emit 0xe3
-    _emit 0x02
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x18
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x62
-    _emit 0xc0
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x54
-    _emit 0x24
-    _emit 0x24
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0x52
-    _emit 0xe8
-    _emit 0xc7
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x24
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x40
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x64
-    _emit 0xe8
-    _emit 0xaa
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0x53
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x2c
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x28
-    _emit 0x00
-    _emit 0x74
-    _emit 0x5d
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x50
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x18
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0xff
-    _emit 0xbf
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x57
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x68
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x57
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xea
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0x51
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x48
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x64
-    _emit 0xe8
-    _emit 0x41
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xe9
-    _emit 0x2a
-    _emit 0x02
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x18
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x10
-    _emit 0x52
-    _emit 0x50
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0xa2
-    _emit 0xbf
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x07
-    _emit 0xdc
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x54
-    _emit 0x57
-    _emit 0x50
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x87
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x51
-    _emit 0x57
-    _emit 0x52
-    _emit 0xe9
-    _emit 0xc9
-    _emit 0x01
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0xe8
-    _emit 0x65
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x24
-    _emit 0x00
-    _emit 0x0f
-    _emit 0x84
-    _emit 0x04
-    _emit 0x01
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x18
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x10
-    _emit 0x52
-    _emit 0x50
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0x34
-    _emit 0xbf
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x54
-    _emit 0x24
-    _emit 0x24
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x58
-    _emit 0x53
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x99
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x53
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x1b
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x24
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x60
-    _emit 0x52
-    _emit 0xe8
-    _emit 0x6e
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x28
-    _emit 0x00
-    _emit 0x74
-    _emit 0x48
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x18
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x50
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x18
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0xd1
-    _emit 0xbe
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x57
-    _emit 0x52
-    _emit 0xe8
-    _emit 0xcf
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x44
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x57
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x24
-    _emit 0xdb
-    _emit 0xff
-    _emit 0xff
-    _emit 0xe9
-    _emit 0xc5
-    _emit 0xfe
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x10
-    _emit 0x52
-    _emit 0x50
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0x89
-    _emit 0xbe
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x53
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x60
-    _emit 0xe8
-    _emit 0xf2
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x51
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x5c
-    _emit 0x57
-    _emit 0x52
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0xd7
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x57
-    _emit 0x50
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x5b
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0xe9
-    _emit 0xb8
-    _emit 0x00
-    _emit 0x00
-    _emit 0x00
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x18
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x14
-    _emit 0x52
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0x30
-    _emit 0xbe
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x28
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x14
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x50
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x18
-    _emit 0x83
-    _emit 0xc1
-    _emit 0x0c
-    _emit 0xe8
-    _emit 0x16
-    _emit 0xbe
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x44
-    _emit 0xd9
-    _emit 0x44
-    _emit 0x24
-    _emit 0x28
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x52
-    _emit 0x57
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x77
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0x44
-    _emit 0x24
-    _emit 0x44
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x53
-    _emit 0x57
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x60
-    _emit 0xe8
-    _emit 0x60
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x55
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x57
-    _emit 0x52
-    _emit 0xe8
-    _emit 0xe2
-    _emit 0xd9
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x54
-    _emit 0x53
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xd4
-    _emit 0xd9
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x44
-    _emit 0x51
-    _emit 0x8b
-    _emit 0x4d
-    _emit 0x04
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x53
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x60
-    _emit 0x51
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x29
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0xd9
-    _emit 0xe8
-    _emit 0xd8
-    _emit 0x64
-    _emit 0x24
-    _emit 0x28
-    _emit 0x8b
-    _emit 0x54
-    _emit 0x24
-    _emit 0x40
-    _emit 0x8b
-    _emit 0x45
-    _emit 0x04
-    _emit 0x51
-    _emit 0xd9
-    _emit 0x1c
-    _emit 0x24
-    _emit 0x57
-    _emit 0x52
-    _emit 0x50
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0x0e
-    _emit 0xda
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x8b
-    _emit 0x47
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x14
-    _emit 0x80
-    _emit 0x8b
-    _emit 0x47
-    _emit 0x18
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x90
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x3b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x73
-    _emit 0x14
-    _emit 0x8d
-    _emit 0x50
-    _emit 0x02
-    _emit 0x89
-    _emit 0x51
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x15
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x66
-    _emit 0x89
-    _emit 0x08
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x6e
-    _emit 0x80
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x40
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x8b
-    _emit 0x47
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x14
-    _emit 0x80
-    _emit 0x8b
-    _emit 0x47
-    _emit 0x18
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x90
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x3b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x73
-    _emit 0x14
-    _emit 0x8d
-    _emit 0x50
-    _emit 0x02
-    _emit 0x89
-    _emit 0x51
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x15
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x66
-    _emit 0x89
-    _emit 0x08
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x2f
-    _emit 0x80
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x8b
-    _emit 0x4f
-    _emit 0x18
-    _emit 0x83
-    _emit 0xc0
-    _emit 0x02
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xd0
-    _emit 0x8b
-    _emit 0x47
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x04
-    _emit 0x80
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x81
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x89
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x3b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x73
-    _emit 0x0f
-    _emit 0x8d
-    _emit 0x78
-    _emit 0x02
-    _emit 0x89
-    _emit 0x79
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x10
-    _emit 0x66
-    _emit 0x89
-    _emit 0x10
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xf3
-    _emit 0x7f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x38
-    _emit 0x8b
-    _emit 0x53
-    _emit 0x18
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc7
-    _emit 0x89
-    _emit 0x44
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x43
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x80
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x8a
-    _emit 0x04
-    _emit 0x3b
-    _emit 0x44
-    _emit 0x8a
-    _emit 0x08
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x8a
-    _emit 0x73
-    _emit 0x0f
-    _emit 0x8d
-    _emit 0x50
-    _emit 0x02
-    _emit 0x89
-    _emit 0x51
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x10
-    _emit 0x66
-    _emit 0x89
-    _emit 0x38
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0xb8
-    _emit 0x7f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x8d
-    _emit 0x47
-    _emit 0x01
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc8
-    _emit 0x8b
-    _emit 0x43
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x14
-    _emit 0x80
-    _emit 0x8b
-    _emit 0x43
-    _emit 0x18
-    _emit 0x89
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x90
-    _emit 0x8b
-    _emit 0x41
-    _emit 0x04
-    _emit 0x3b
-    _emit 0x41
-    _emit 0x08
-    _emit 0x73
-    _emit 0x14
-    _emit 0x8d
-    _emit 0x50
-    _emit 0x02
-    _emit 0x89
-    _emit 0x51
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x15
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x66
-    _emit 0x89
-    _emit 0x08
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x7b
-    _emit 0x7f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x8b
-    _emit 0x53
-    _emit 0x18
-    _emit 0x8d
-    _emit 0x47
-    _emit 0x02
-    _emit 0x0f
-    _emit 0xb7
-    _emit 0xc0
-    _emit 0x89
-    _emit 0x44
-    _emit 0x24
-    _emit 0x44
-    _emit 0x8b
-    _emit 0x43
-    _emit 0x30
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x80
-    _emit 0x8b
-    _emit 0x44
-    _emit 0x8a
-    _emit 0x04
-    _emit 0x3b
-    _emit 0x44
-    _emit 0x8a
-    _emit 0x08
-    _emit 0x8d
-    _emit 0x0c
-    _emit 0x8a
-    _emit 0x73
-    _emit 0x14
-    _emit 0x8d
-    _emit 0x50
-    _emit 0x02
-    _emit 0x89
-    _emit 0x51
-    _emit 0x04
-    _emit 0x85
-    _emit 0xc0
-    _emit 0x74
-    _emit 0x15
-    _emit 0x66
-    _emit 0x8b
-    _emit 0x4c
-    _emit 0x24
-    _emit 0x44
-    _emit 0x66
-    _emit 0x89
-    _emit 0x08
-    _emit 0xeb
-    _emit 0x0b
-    _emit 0x8d
-    _emit 0x54
-    _emit 0x24
-    _emit 0x44
-    _emit 0x52
-    _emit 0x50
-    _emit 0xe8
-    _emit 0x3c
-    _emit 0x7f
-    _emit 0xf5
-    _emit 0xff
-    _emit 0x83
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x2c
-    _emit 0x01
-    _emit 0x7e
-    _emit 0x08
-    _emit 0x8b
-    _emit 0x7c
-    _emit 0x24
-    _emit 0x1c
-    _emit 0x8b
-    _emit 0x5c
-    _emit 0x24
-    _emit 0x50
-    _emit 0x57
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0xf5
-    _emit 0xd8
-    _emit 0xff
-    _emit 0xff
-    _emit 0x8d
-    _emit 0x47
-    _emit 0x02
-    _emit 0x50
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0xea
-    _emit 0xd8
-    _emit 0xff
-    _emit 0xff
-    _emit 0x83
-    _emit 0xc7
-    _emit 0x03
-    _emit 0x57
-    _emit 0x8b
-    _emit 0xcb
-    _emit 0xe8
-    _emit 0xdf
-    _emit 0xd8
-    _emit 0xff
-    _emit 0xff  ; data
-    mov eax, dword ptr [esp + 40h]
-    add eax, 3
-    cmp eax, dword ptr [ebp + 0ch]
-    mov dword ptr [esp + 40h], eax
-    _emit 0x0f
-    _emit 0x8c
-    _emit 0x1d
-    _emit 0xf5
-    _emit 0xff
-    _emit 0xff  ; jl 0x79d1e2
-    pop ebx
-    pop edi
-    pop esi
-    pop ebp
-    add esp, 2ch
-    ret 18h
-    _emit 0x90
-    _emit 0x13
-    _emit 0xd6
-    _emit 0x79
-    _emit 0x00
-    _emit 0x4f
-    _emit 0xd6
-    _emit 0x79
-    _emit 0x00
-    _emit 0x77
-    _emit 0xd6
-    _emit 0x79
-    _emit 0x00
-    _emit 0x28
-    _emit 0xd7
-    _emit 0x79
-    _emit 0x00  ; data
-  }
+// eastl::vector<uint16_t>
+struct UShortVec {
+    uint16_t* mpBegin;
+    uint16_t* mpEnd;
+    uint16_t* mpCapacity;
+    int       mAllocator;
+    void DoInsertValue(uint16_t* pos, const uint16_t& v);       // 0x006f5bc0
+    void push_back_call(const uint16_t& v);                     // 0x006f66a0 (out-of-line push_back)
+    void push_back(const uint16_t& v)
+    {
+        if (mpEnd < mpCapacity) {
+            uint16_t* p = mpEnd;
+            mpEnd = p + 1;
+            if (p) *p = v;
+        } else
+            DoInsertValue(mpEnd, v);
+    }
+};
+
+// 0x14-byte record: a vector<uint16_t> plus one more word.
+struct UShortVecRec : UShortVec {
+    int mExtra;
+};
+
+struct Rec16 {          // vertex/edge origin record
+    int   mSub;
+    int   mA;
+    int   mB;
+    float mT;
+};
+struct Rec16Vec {
+    Rec16* mpBegin;
+    Rec16* mpEnd;
+    Rec16* mpCapacity;
+};
+
+struct SplitCtx {
+    void*         mpParent;     // +0
+    Rec16Vec      mVerts;       // +4
+    int           pad10[2];
+    UShortVecRec* mpIndexSets;  // +0x18
+    int           pad1c[5];
+    int           mCurIdx;      // +0x30 current index set
+    void AddVertex(int sub, int i);                       // 0x0079b4b0
+    void AddEdge(int sub, int i, int j, float t);         // 0x0079b520
+    void AddIndex(uint16_t v);                            // 0x0079b590
+    int VertexCount() const { return (int)(mVerts.mpEnd - mVerts.mpBegin); }
+    void AddIndexInline(uint16_t v) { mpIndexSets[mCurIdx].push_back(v); }
+};
+
+extern uint32_t g_IndexMask[];          // 0x0140f544: mask per index-format code
+
+struct Remap {                          // 0x10-byte index remap table
+    int      pad0;
+    char*    mpData;                    // +4
+    uint16_t mFormat;                   // +8
+    uint16_t mStride;                   // +0xa
+    int      pad[1];
+};
+struct IndexBuf {                       // 0x8c-byte index buffer description
+    int      pad0;
+    char*    mpData;                    // +4
+    uint16_t mFormat;                   // +8
+    uint16_t mStride;                   // +0xa
+    int      pad[2];
+    char*    mpRemapSel;                // +0x14
+    int      pad18[11];
+    Remap*   mpRemapBegin;              // +0x44
+    Remap*   mpRemapEnd;                // +0x48
+    int      pad4c[(0x8c - 0x4c) / 4];
+};
+struct VertStream {                     // 0x20-byte vertex stream description
+    int      pad0;
+    char*    mpData;                    // +4
+    uint16_t mFormat;                   // +8
+    uint16_t mStride;                   // +0xa
+    int      pad[5];
+};
+struct SplitModel {
+    int         pad[2];
+    VertStream* mpStreams;              // +8
+    int         pad0c[4];
+    IndexBuf*   mpIndexBufs;            // +0x1c
+};
+struct SplitRange {
+    int pad0;
+    int mSub;       // +4
+    int mStart;     // +8
+    int mEnd;       // +0xc
+};
+extern int __cdecl FindStream(SplitModel* model, int a, int b, int c, int d);    // 0x0071ddc0
+
+struct PlaneEq {
+    float x, y, z, d;
+    float Intersect(const float* a, const float* b);      // 0x007998a0
+};
+
+static inline uint16_t FetchIndex16(const IndexBuf* ib, int i)
+{
+    return *(uint16_t*)(ib->mStride * i + ib->mpData) & (uint16_t)g_IndexMask[ib->mFormat];
 }
 
+struct SplitPlane2 {
+    int     pad0[2];
+    int     mMode;          // +8: 0 keep straddlers above, 1 below, 2 by majority, 3 cut
+    PlaneEq mEq;            // +0xc
+    void SplitTriangles(SplitModel* model, SplitRange* rng, UShortVec* above, UShortVec* below,
+                        SplitCtx* ctxAbove, SplitCtx* ctxBelow);
+};
 
+// @ 0x0079d190
+void SplitPlane2::SplitTriangles(SplitModel* model, SplitRange* rng, UShortVec* above, UShortVec* below,
+                                 SplitCtx* ctxAbove, SplitCtx* ctxBelow)
+{
+    int streamSel = FindStream(model, 1, 0, 3, 0xe);
+    IndexBuf* ib = model->mpIndexBufs + rng->mSub;
+    VertStream* vs = (VertStream*)((char*)model->mpStreams + streamSel * 0x20 + 0x10);
+    for (int i = rng->mStart; i < rng->mEnd; i += 3) {
+        uint32_t i0, i1, i2;
+        if (ib->mpRemapBegin == ib->mpRemapEnd) {
+            uint32_t mask = g_IndexMask[ib->mFormat];
+            uint32_t stride = ib->mStride;
+            i0 = *(uint32_t*)(stride * i + ib->mpData) & mask;
+            i1 = *(uint32_t*)(stride * (i + 1) + ib->mpData) & mask;
+            i2 = *(uint32_t*)(stride * (i + 2) + ib->mpData) & mask;
+        } else {
+            const Remap* r = (const Remap*)((char*)ib->mpRemapBegin + *(int16_t*)(ib->mpRemapSel + 2 + streamSel * 4) * 0x10);
+            uint32_t stride = ib->mStride;
+            uint32_t mask = g_IndexMask[ib->mFormat];
+            i0 = *(uint32_t*)((*(uint32_t*)(stride * i + ib->mpData) & mask) * r->mStride + r->mpData) & g_IndexMask[r->mFormat];
+            i1 = *(uint32_t*)((*(uint32_t*)(stride * (i + 1) + ib->mpData) & mask) * r->mStride + r->mpData) & g_IndexMask[r->mFormat];
+            i2 = *(uint32_t*)((*(uint32_t*)(stride * (i + 2) + ib->mpData) & mask) * r->mStride + r->mpData) & g_IndexMask[r->mFormat];
+        }
+        const float* v0 = (const float*)(vs->mStride * i0 + vs->mpData);
+        const float* v1 = (const float*)(vs->mStride * i1 + vs->mpData);
+        const float* v2 = (const float*)(vs->mStride * i2 + vs->mpData);
+        int s0 = (mEq.z * v0[2] + mEq.y * v0[1] + mEq.x * v0[0]) > mEq.d;
+        int s1 = (mEq.z * v1[2] + mEq.y * v1[1] + mEq.x * v1[0]) > mEq.d;
+        int s2 = (mEq.z * v2[2] + mEq.y * v2[1] + mEq.x * v2[0]) > mEq.d;
+        int sum = s2 + s1 + s0;
+        if (sum % 3 == 0) {
+            // whole triangle on one side
+            if (s0 == sum % 3)
+                goto emitBelow;
+            goto emitAbove;
+        }
+        switch (mMode) {
+        case 0:
+            goto emitAbove;
+        case 1:
+            goto emitBelow;
+        case 2: {
+            UShortVec* dst = sum > 1 ? above : below;
+            dst->push_back_call(FetchIndex16(ib, i));
+            dst->push_back_call(FetchIndex16(ib, i + 1));
+            dst->push_back_call(FetchIndex16(ib, i + 2));
+            continue;
+        }
+        case 3: {
+            int baseA = ctxAbove->VertexCount();
+            int baseB = ctxBelow->VertexCount();
+            if (s0 != 0) {
+                ctxAbove->AddVertex(rng->mSub, i);
+                if (s1 != 0) {
+                    float t12 = mEq.Intersect(v1, v2);
+                    float t02 = mEq.Intersect(v0, v2);
+                    ctxAbove->AddVertex(rng->mSub, i + 1);
+                    ctxAbove->AddEdge(rng->mSub, i + 1, i + 2, t12);
+                    ctxAbove->AddEdge(rng->mSub, i, i + 2, t02);
+                    ctxBelow->AddEdge(rng->mSub, i + 2, i, 1.0f - t02);
+                    ctxBelow->AddEdge(rng->mSub, i + 2, i + 1, 1.0f - t12);
+                    ctxBelow->AddVertex(rng->mSub, i + 2);
+                } else {
+                    float t01 = mEq.Intersect(v0, v1);
+                    ctxAbove->AddEdge(rng->mSub, i, i + 1, t01);
+                    ctxBelow->AddEdge(rng->mSub, i + 1, i, 1.0f - t01);
+                    ctxBelow->AddVertex(rng->mSub, i + 1);
+                    if (s2 != 0) {
+                        float t21 = mEq.Intersect(v2, v1);
+                        ctxAbove->AddEdge(rng->mSub, i + 2, i + 1, t21);
+                        ctxAbove->AddVertex(rng->mSub, i + 2);
+                        ctxBelow->AddEdge(rng->mSub, i + 1, i + 2, 1.0f - t21);
+                    } else {
+                        float t02 = mEq.Intersect(v0, v2);
+                        ctxAbove->AddEdge(rng->mSub, i, i + 2, t02);
+                        ctxBelow->AddVertex(rng->mSub, i + 2);
+                        ctxBelow->AddEdge(rng->mSub, i + 2, i, 1.0f - t02);
+                    }
+                }
+            } else {
+                ctxBelow->AddVertex(rng->mSub, i);
+                if (s1 != 0) {
+                    float t10 = mEq.Intersect(v1, v0);
+                    ctxAbove->AddEdge(rng->mSub, i + 1, i, t10);
+                    ctxAbove->AddVertex(rng->mSub, i + 1);
+                    ctxBelow->AddEdge(rng->mSub, i, i + 1, 1.0f - t10);
+                    if (s2 != 0) {
+                        float t20 = mEq.Intersect(v2, v0);
+                        ctxAbove->AddVertex(rng->mSub, i + 2);
+                        ctxAbove->AddEdge(rng->mSub, i + 2, i, t20);
+                        ctxBelow->AddEdge(rng->mSub, i, i + 2, 1.0f - t20);
+                    } else {
+                        float t12 = mEq.Intersect(v1, v2);
+                        ctxAbove->AddEdge(rng->mSub, i + 1, i + 2, t12);
+                        ctxBelow->AddEdge(rng->mSub, i + 2, i + 1, 1.0f - t12);
+                        ctxBelow->AddVertex(rng->mSub, i + 2);
+                    }
+                } else {
+                    float t20 = mEq.Intersect(v2, v0);
+                    float t21 = mEq.Intersect(v2, v1);
+                    ctxAbove->AddEdge(rng->mSub, i + 2, i, t20);
+                    ctxAbove->AddEdge(rng->mSub, i + 2, i + 1, t21);
+                    ctxAbove->AddVertex(rng->mSub, i + 2);
+                    ctxBelow->AddVertex(rng->mSub, i + 1);
+                    ctxBelow->AddEdge(rng->mSub, i + 1, i + 2, 1.0f - t21);
+                    ctxBelow->AddEdge(rng->mSub, i, i + 2, 1.0f - t20);
+                }
+            }
+            ctxAbove->AddIndexInline((uint16_t)baseA);
+            ctxAbove->AddIndexInline((uint16_t)(baseA + 1));
+            ctxAbove->AddIndexInline((uint16_t)(baseA + 2));
+            ctxBelow->AddIndexInline((uint16_t)baseB);
+            ctxBelow->AddIndexInline((uint16_t)(baseB + 1));
+            ctxBelow->AddIndexInline((uint16_t)(baseB + 2));
+            // the side holding two original vertices is a quad: add its second triangle
+            SplitCtx* quad = ctxBelow;
+            int base = baseB;
+            if (sum > 1) {
+                base = baseA;
+                quad = ctxAbove;
+            }
+            quad->AddIndex((uint16_t)base);
+            quad->AddIndex((uint16_t)(base + 2));
+            quad->AddIndex((uint16_t)(base + 3));
+            continue;
+        }
+        default:
+            continue;
+        }
+    emitAbove:
+        above->push_back(FetchIndex16(ib, i));
+        above->push_back(FetchIndex16(ib, i + 1));
+        above->push_back(FetchIndex16(ib, i + 2));
+        continue;
+    emitBelow:
+        below->push_back(FetchIndex16(ib, i));
+        below->push_back(FetchIndex16(ib, i + 1));
+        below->push_back(FetchIndex16(ib, i + 2));
+    }
+}

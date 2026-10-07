@@ -1,0 +1,2 @@
+0045df90 rw::math::fpu::Inverse<float>  # adj(m)/det 4x4 inverse, returns via copy ctor 0x45dca0 (PDB name rw::math::fpu::Matrix44Template<float,0>); det from 0x45ec30
+0045ec30 rw::math::fpu::Determinant<float>  # called by Inverse, result stored to det (x87 return of 4x4 cofactor expansion)

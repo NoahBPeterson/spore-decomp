@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00882b30  744  EA::Locale::SetLocale: complete (all 96 calls, same targets/order; frame 0xa30 matches); flags /O2 /MD /GS- /GR- /TP, no /EHsc, plus /Iscratch_s00880170_inc (vendored EASTL); remaining diff: locale kept in esi across GetCountryFromLocale(locale) in the original, and the fallback's fixed_string temporaries get swapped stack slots

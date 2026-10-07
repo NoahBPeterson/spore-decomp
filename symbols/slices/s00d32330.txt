@@ -1,0 +1,6 @@
+00d32330 SP::cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard  # PDB caller-scored candidate; body = WASD/auto-run/edge-turn goal steering, ends in UpdateAvatarGoal(false,true)
+00d2f2a0 GetScenarioTurnSpeed  # static helper (avatar in eax): exp ease from 50 deg/s at rest to 20 at |max(standard,desired speed)|*0.25; compiled byte-identical as a same-TU static
+00d2eab0 IsStrafeLeftDown  # key 5, or modifier 0x3ea + key 3
+00d2eaf0 IsStrafeRightDown  # key 6, or modifier 0x3ea + key 4
+008d2fb0 IsModifierKeyDown  # maps 0x3e8..0x3ec to virtual keys, GetKeyState high bit
+00d2ee70 GetCameraMoveVectors  # cdecl (Vector3* forward, Vector3* right) from the avatar up vector

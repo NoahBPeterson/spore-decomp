@@ -4,3 +4,4 @@
 0055fa20 SP::cSPObjectTemplateDB::SetAssetActive  # activates/deactivates an asset
 0055fb30 SP::cSPObjectTemplateDB::IsAssetActive  # whether asset index is in the active set
 0055fbb0 SP::cSPObjectTemplateDB::TouchAsset  # writes current time into asset record
+0055ec70 SP::cSPObjectTemplateDB::RebuildIndex  # name descriptive; GroupsChanged/time-limited IndexAsset loop/job hand-off, offsets +0x44 job, +0x48 pending set, +0x228 group set

@@ -1,0 +1,1 @@
+009a1ee0  3169  complete CreateAnimationBindRecords (31/31 calls in original order, size 0.98x); local-class helpers (ctor/InitChannel/AddBindRecord/GenerateVariants/RemoveEdges) use cl custom register conventions in the original, plain conventions here; register allocation differs

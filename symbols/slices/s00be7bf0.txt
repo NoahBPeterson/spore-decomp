@@ -1,0 +1,1 @@
+00be7bf0 Simulator::cCity::Initialize  # class: ModAPI cCity layout (+0x320 CityHall, +0x324 CityWalls, +0x328 CityTerritory, +0x618/+0x62c culture targets) and the noun IDs it creates; method name Claude-coined

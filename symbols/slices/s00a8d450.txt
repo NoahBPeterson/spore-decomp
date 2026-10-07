@@ -1,0 +1,1 @@
+00a8d450 EA::Swarm::cDistributeEffect::CreateSamples2D  # name shown by card.py (retail symbol data); 2D Halton sample creation, sibling of 0x00a8e7c0

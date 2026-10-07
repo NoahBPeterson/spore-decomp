@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00f51680  744  SP::cGameCameraController::MoveCamera: complete; same 45 ordered calls/vtable slots/constants, register allocation, stopped-flag codegen and quaternion temp copy differ

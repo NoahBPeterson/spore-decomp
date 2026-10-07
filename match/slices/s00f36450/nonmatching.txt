@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00f368b0  2180  complete property-list parameter reader (class unidentified): all 56 calls, property ids and vtable slots in original order; register allocation (ebp=&mKeys), Vector3 default copies and stack slots differ

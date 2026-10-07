@@ -1,0 +1,2 @@
+# Slice s01205c00 names.
+01205f30 CapsuleVolume::LinearCast  # slot 4 of the "CapsuleVolume" volume-type table at 0x015d0ab4 (descriptive name)

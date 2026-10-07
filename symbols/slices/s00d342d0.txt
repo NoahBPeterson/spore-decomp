@@ -1,0 +1,1 @@
+00d342d0 SP::cCreatureModeInputStrategy::UpdateCreaturePickBoxes  # PDB candidate on card; body rebuilds mCreatureHitBoxes (+0x58)

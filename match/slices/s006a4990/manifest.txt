@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s006a4990/s006a4990.cpp  ?SetDefaultVariantValue@@YA_NIPAUVariant@@@Z  006a4990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

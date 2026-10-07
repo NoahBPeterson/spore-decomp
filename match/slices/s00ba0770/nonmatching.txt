@@ -1,0 +1,1 @@
+00ba0770 1005 complete (same size 2824, same 26 direct calls in order, same 22 vtable slots, same constants); diffs are stack-slot packing of loop-1 counters, planetType/index register swap, region-alloc copy; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+01003df0  2718  complete interceptor-UFO update (both universe contexts, leave/abandon path, timed orbit around the player, nearest-attacker targeting); frame 0x9c vs 0xc0, register allocation and SSE scheduling differ

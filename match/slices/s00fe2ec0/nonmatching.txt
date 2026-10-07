@@ -1,0 +1,1 @@
+00fe2ec0  2173  complete (all 20 message cases); stack-slot packing of temporaries, player-ID register spill (orig spills ID, cl here spills this unless ID is re-read) and merged flag test (test byte 2 / 0x10 -> 0x12) shift offsets; size 3140/3149, 171/171 calls, vtable slots+constants identical

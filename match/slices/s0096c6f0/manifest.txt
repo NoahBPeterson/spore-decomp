@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0096c6f0/s0096c6f0.cpp  ?Refresh@WinDialog@UTFWinControls@EA@@QAE_NXZ  0096c6f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

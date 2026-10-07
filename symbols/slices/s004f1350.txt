@@ -1,0 +1,1 @@
+004f1350 SP::cSPEditorModelValidity::TestComplexity  # card/PDB name (caller-scored); declared as TestComplexity in CalculateValidity (s004f3de0); sets kValidityTooComplex (bit 0)

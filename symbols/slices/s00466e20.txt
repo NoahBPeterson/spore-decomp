@@ -1,0 +1,3 @@
+00466e20 MeshAccum::Export  # gathers model triangles into index/pos/normal/uv vectors then calls nSPSkinner::cExportHelper::ExportMeshAdd (0x00500ef0)
+00467980 ArrF::get  # stream element read: *(uint*)(data + stride*i) & mask[fmt] (mask table 0x013eec84)
+004679b0 ArrG::f  # primitive triangle count from type tables 0x0140cf84/0x0140cf90

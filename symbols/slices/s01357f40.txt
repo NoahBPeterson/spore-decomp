@@ -1,0 +1,1 @@
+01357f40 Simulator::cVehicle_InitAttributes  # $E615 dynamic initializer of the cVehicle serializer Attribute table (names/offsets agree with ModAPI cVehicle.h)

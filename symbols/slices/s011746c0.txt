@@ -1,0 +1,2 @@
+011746c0 LpcSynthesize  # 12th-order all-pole (LPC) synthesis filter over 12-sample blocks; calls 0x01174420 (reflection->LPC step-up)
+01174420 ReflectionToLpc  # converts 12 reflection coefficients to direct-form LPC by running the lattice (only caller 0x011746c0)

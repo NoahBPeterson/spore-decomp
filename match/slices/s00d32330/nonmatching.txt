@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d32330  1322  cCreatureModeInputStrategy::UpdateAvatarGoalKeyboard complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same 65 calls/vslots in order, size 0xabf vs 0xab6; frame 0x10 larger, stack slots and move-vector register allocation differ

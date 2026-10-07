@@ -1,0 +1,1 @@
+00aefc80 SP::SPCreatureProxy::StepDeltaTime  # this = 0x150-byte proxy (ctor 0x00aefb80); steps the embedded SPDynamicsParticle (+0x80, 0x00af8b50) with hkLocalArray surface constraints, then hkKeyFrameUtility::applySoftKeyFrame/applyHardKeyFrame on the body (+0x54) and stores dt at +0x140; dev PDB has SPCreatureProxy::StepDeltaTime

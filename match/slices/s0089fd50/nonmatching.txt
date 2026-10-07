@@ -1,0 +1,1 @@
+0089fd50  974  EA::Text::OTF::ReadGsubArrayEntry: complete (65/65 calls, same inline/out-of-line choices); only diff is register allocation of the first inline StackAllocator::Malloc (backtrack array, case 6), which shifts later code by 8 bytes

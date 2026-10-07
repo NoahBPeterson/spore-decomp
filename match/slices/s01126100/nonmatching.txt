@@ -1,0 +1,1 @@
+01126100 2124 hkInertiaTensorComputer::computeCapsuleVolumeMassProperties: complete (cylinder + 2 hemispheres via hkInplaceArray<hkMassElement,3>, combineMassProperties); compile /O2 /MD /Gy /TP /fp:fast. 33/33 calls same order and targets, size 2290/2615; Havok's older-toolset x87 schedule (constants re-read from the pool, temps in stack slots) not reproduced.

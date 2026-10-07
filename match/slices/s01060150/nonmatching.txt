@@ -1,0 +1,1 @@
+01060150  2600  SP::cUFOLocomotion::ResolvePlanetaryCollisions (3217 B, mine 3189): 42/42 direct + 12/12 virtual calls in identical order (Apply vslot 0x18 reached via vptr+0x18 in a register), same float constants; register roles of this/pUFO swapped and SSE/x87 scheduling differs. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

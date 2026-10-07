@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s004d15c0/s004d15c0.cpp  ?BuildParameters@SP@@YAXPAUcCreatureSummary@@AAU?$sp_vector@UDeclareParam@FunctionalMatch@SP@@@eastl@@_N@Z  004d15c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

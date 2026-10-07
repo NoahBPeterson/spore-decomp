@@ -1,0 +1,1 @@
+009de8b0 `anonymous namespace'::cGaitKeyBlockCommand::OnRegister  # retail name from card; byte-exact, registers 43 ArgScript gait sub-commands

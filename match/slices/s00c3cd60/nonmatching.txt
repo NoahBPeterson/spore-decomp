@@ -1,0 +1,1 @@
+00c3cd60  2435  complete; same call/vcall/constant sequence, size 3364 vs 3384; register allocation + SSE scheduling of the damage-impulse block differ (orig keeps impulse spilled twice), frame 0xa4 vs 0x9c. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

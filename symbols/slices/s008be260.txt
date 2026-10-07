@@ -1,0 +1,1 @@
+008be260 BuildT2CMAP  # card/Ghidra name; T2K CFF reader, builds T2_CMAPTable and charCodeToSID

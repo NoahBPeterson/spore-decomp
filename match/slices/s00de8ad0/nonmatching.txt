@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00de8ad0  1439  complete (flags /O2 /MD /Gy /TP): message dispatch with the original compare tree, both jump tables (dialog state 1..7, error text 0..4), all 37 message IDs. 83 vs 84 calls: cl cross-jumps the two identical `mpDialog->Close(); return true;` tails that the original keeps apart (same target, same behaviour); 2724 vs 2756 B. Not exact: frame 0x30 vs 0x24 (original packs the loop offset, the insert temp and the allocator temp into the dead parameter homes), that tail merge

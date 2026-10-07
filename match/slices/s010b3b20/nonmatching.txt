@@ -1,0 +1,1 @@
+010b3b20  3210  complete Havok powered-chain solve driver (/O2 /MD /Gy /EHsc /TP; 3274 B vs 3470 B, same 14 calls in order, same strides 0x90/0xf0/0x3c0/0x4b0/0x4d0); difftest PASS bit-exact (203 valid, 90.7% cov); original is Havok prebuilt-lib x87 codegen with per-row reassociated sums (grouping reproduced explicitly), not reproducible with cl 15.00

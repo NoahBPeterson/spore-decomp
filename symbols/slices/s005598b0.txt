@@ -1,1 +1,5 @@
 005598b0 SP::cSPObjectTemplateDB::Init  # PDB name
+0056df80 SP::cSPObjectTemplateDB asset table Rebuild  # thiscall on this+0x1d4 in Init before reading the asset list (name guessed)
+0055d9e0 SP::cSPObjectTemplateDB::LoadAssetParameters  # (asset, count, data, stale) per asset property list in Init (name guessed)
+00562680 SP::cSPObjectTemplateDB::AddPriorityConstraint  # (const Constraint&, int) copies into the +0x258 list (name guessed)
+0055ff10 SP::cSPObjectTemplateDB::LoadDatabase  # last call of Init, its bool is Init's result (name guessed)

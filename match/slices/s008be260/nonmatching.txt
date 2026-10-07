@@ -1,0 +1,1 @@
+008be260 36 BuildT2CMAP (T2K CFF charset/encoding -> T2_CMAPTable/charCodeToSID), complete; compile as C with /O2 /MD /Gy /TC. Same size and call sequence; remaining bytes are register choice (charset table pointer ecx->esi, encoding format-0 count in edi vs ebx).

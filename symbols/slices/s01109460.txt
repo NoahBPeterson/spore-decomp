@@ -1,0 +1,1 @@
+01109460 checkIntersection  # hkBoxBoxCollisionDetection (Havok 3.1) separating-axis test; Claude-coined method name, class from neighbouring havok_names (tryToAddPointFaceB 011090b0, faceAVertexB... 0110a0d0); callees cmpAllGT3/rsqrtAll3/selectIfGT3 are real hkBoxBoxUtils names

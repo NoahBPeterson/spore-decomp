@@ -1,2 +1,2 @@
 # va  Name  # evidence
-005d9d10  EditorRoutine_005d9d10  # card (unnamed)
+005d9d10  SP::cSPEditorTactilityManager::Update  # PDB caller-scored candidate; member layout matches dev-PDB cSPEditorTactilityManager (5 maps + mCursorAnimation)

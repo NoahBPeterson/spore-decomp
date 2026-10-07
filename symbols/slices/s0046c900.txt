@@ -1,0 +1,1 @@
+0046c900 SP::EditorUtils::CreateExportCreatureModel  # PDB candidate (caller-scored); dev-PDB params pSkin/modelpath/pExportModel/helper/ignorePartModels and locals (numBlocks, blocks, pBlocks, tempString, idxPlantRoot, blockindex, mn, mx, p, np) reproduce the retail /Od frame byte-exact

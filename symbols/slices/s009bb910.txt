@@ -1,0 +1,1 @@
+009bb910 nSPCreatureAnim::FinalizeCreatureGoals  # Claude-coined: normalises the four creature goal_pos_rot accumulators and applies the requested motion to walk_goal_delta

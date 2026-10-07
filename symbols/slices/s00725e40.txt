@@ -1,0 +1,1 @@
+00725e40 SP::cMeshClusterer::AssignCharts  # dev-build function order (dev 0xf47690, 2620 B, between Simplify and cUVGenJobInfo); uses cClusterInfo/mClusterFaces/mClusterIndices per PDB layout

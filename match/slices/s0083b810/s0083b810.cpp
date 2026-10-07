@@ -13,9 +13,19 @@ void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, c
 void  __cdecl EASTL_allocator_deallocate(void* p);
 void* __cdecl memcpy(void* dst, const void* src, unsigned n);
 long  __cdecl atol(const char*);
-int   __cdecl isalpha(int);
-int   __cdecl _stricmp(const char* a, const char* b);
+__declspec(dllimport) int   __cdecl isalpha(int);
+__declspec(dllimport) int   __cdecl _stricmp(const char* a, const char* b);
+__declspec(dllimport) void* __cdecl memmove(void* dst, const void* src, unsigned n);
+unsigned __cdecl strlen(const char*);
 }
+#pragma intrinsic(strlen)
+
+// MSVC <stdarg.h>
+typedef char* va_list;
+#define _INTSIZEOF(n)   ((sizeof(n) + sizeof(int) - 1) & ~(sizeof(int) - 1))
+#define va_start(ap, v) (ap = (va_list)&(v) + _INTSIZEOF(v))
+#define va_arg(ap, t)   (*(t*)((ap += _INTSIZEOF(t)) - _INTSIZEOF(t)))
+#define va_end(ap)      (ap = (va_list)0)
 inline void* operator new(unsigned, void* p) { return p; }
 inline void  operator delete(void*, void*) {}
 
@@ -29,32 +39,106 @@ namespace eastl {
 struct allocator { unsigned char pad[4]; };
 struct sp_vector_allocator : allocator {};
 
+template <typename T> inline const T& min_alt(const T& a, const T& b) { return b < a ? b : a; }
+
 struct string8 {
+    enum { npos = 0xffffffff };
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
     string8() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    __forceinline string8(const char* p) : mpBegin(0), mpEnd(0), mpCapacity(0) { RangeInitialize(p, p + strlen(p)); }
+    string8(const string8& x);                          // 0x0057cb10
+    ~string8() { DeallocateSelf(); }
     void assign(const char* first, const char* last);   // 0x00454cb0
     void assign(const char* p);                         // 0x006a4380
+    void assign(const string8& x, unsigned position, unsigned n) {
+        assign(x.mpBegin + position, x.mpBegin + position + min_alt(n, x.size() - position));
+    }
     void append(const char* first, const char* last);   // 0x00455d60
-    string8(const string8& x);                          // 0x0057cb10
-    ~string8();
+    string8& operator=(const string8& x) { if (&x != this) assign(x.mpBegin, x.mpEnd); return *this; }
+    string8& operator=(const char* p) { assign(p, p + strlen(p)); return *this; }
+    string8& operator+=(const string8& x) { append(x.mpBegin, x.mpEnd); return *this; }
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    bool empty() const { return mpBegin == mpEnd; }
+    const char* c_str() const { return mpBegin; }
+    char& operator[](unsigned i) { return mpBegin[i]; }
+    char& back() { return *(mpEnd - 1); }
+    char* erase(char* pBegin, char* pEnd) {
+        if (pBegin != pEnd) {
+            memmove(pBegin, pEnd, (unsigned)((mpEnd - pEnd) + 1));
+            char* const pNewEnd = (mpEnd - (pEnd - pBegin));
+            mpEnd = pNewEnd;
+        }
+        return pBegin;
+    }
+    __forceinline string8& erase(unsigned position, unsigned n) {
+        n = min_alt(n, size() - position);
+        erase(mpBegin + position, mpBegin + position + n);
+        return *this;
+    }
+    void AllocateSelf() { mpBegin = gEmptyString; mpEnd = mpBegin; mpCapacity = mpBegin + 1; }
+    void AllocateSelf(unsigned n) {
+        if (n > 1) { mpBegin = DoAllocate(n); mpEnd = mpBegin; mpCapacity = mpBegin + n; }
+        else AllocateSelf();
+    }
+    char* DoAllocate(unsigned n) {
+        return (char*)EASTL_allocator_allocate(n, g_allocName, 0, 0, g_allocFile, 0xd1);
+    }
+    void DoFree(char* p, unsigned) { if (p) EASTL_allocator_deallocate(p); }
+    void DeallocateSelf() {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned)(mpCapacity - mpBegin));
+    }
+    static char* CharStringUninitializedCopy(const char* pSource, const char* pSourceEnd, char* pDestination) {
+        memcpy(pDestination, pSource, (unsigned)(pSourceEnd - pSource));
+        return pDestination + (pSourceEnd - pSource);
+    }
+    __forceinline void RangeInitialize(const char* pBegin, const char* pEnd) {
+        const unsigned n = (unsigned)(pEnd - pBegin);
+        AllocateSelf(n + 1);
+        mpEnd = CharStringUninitializedCopy(pBegin, pEnd, mpBegin);
+        *mpEnd = 0;
+    }
 };
+
+// out-of-line eastl::copy(first, last, dest) instances (cdecl)
+template <typename T> T* CopyRange(T* first, T* last, T* dest);
 
 template <typename T>
 struct vec {
     T* mpBegin; T* mpEnd; T* mpCapacity; sp_vector_allocator mAllocator;
     vec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    bool empty() const { return mpBegin == mpEnd; }
+    T& back() { return *(mpEnd - 1); }
+    void DestroyValues(T* first, T* last);          // out of line (0x0076e430 / 0x0076e470)
+    void DoInsertValue(T* position, const T& value); // out of line (0x0083a3c0)
+    T* erase(T* first, T* last) {
+        T* const position = CopyRange(last, mpEnd, first);
+        DestroyValues(position, mpEnd);
+        mpEnd -= (last - first);
+        return first;
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+    void push_back(const T& value) {
+        if (mpEnd < mpCapacity)
+            ::new((void*)mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
 };
 }  // namespace eastl
 
 struct cArgInfo {
     int mType; eastl::string8 mName; void* mLocation; bool mIsDependent; int mFlagToSet;
+    cArgInfo() {}
     cArgInfo(const cArgInfo& x);   // 0x00838ab0
 };
 struct cEnumParseInfo { char* mToken; int mValue; };
+// 0x00839090: strips the first whitespace-delimited token off `line` and returns it
+eastl::string8 __cdecl SplitFirstToken(eastl::string8& line, const char* delims);
 struct cEnumSpec {
     eastl::string8 mName; cEnumParseInfo* mEnumInfo; int mPad14;
+    __forceinline cEnumSpec(const char* name, cEnumParseInfo* info, int x) : mName(name), mEnumInfo(info), mPad14(x) {}
     cEnumSpec(const cEnumSpec& x); // 0x00e84850
-    ~cEnumSpec();
 };
 typedef eastl::vec<cArgInfo>  VecArgInfo;
 typedef eastl::vec<cEnumSpec> VecEnumSpec;
@@ -65,6 +149,7 @@ struct cOptionsSpec {
     VecArgInfo     mArguments;       // +0x20
     int            mPad30;           // +0x30
     int            mFlagToSet;       // +0x34
+    cOptionsSpec() {}
     cOptionsSpec(const cOptionsSpec& x);              // 0x00839e00
     cOptionsSpec& operator=(const cOptionsSpec& x);   // 0x0083a8b0
     ~cOptionsSpec();
@@ -86,7 +171,17 @@ struct cArguments {
     char* operator[](int i);                  // 0x00837f20
 };
 
-typedef eastl::vec<cOptionsSpec> VecOptionsSpec;
+// 0083baa0 DoInsertValue<cOptionsSpec> is a member of this concrete vector type
+struct VecOptions {
+    cOptionsSpec* mpBegin; cOptionsSpec* mpEnd; cOptionsSpec* mpCapacity;
+    eastl::sp_vector_allocator mAllocator;
+    void DoInsertValue(cOptionsSpec* pos, const cOptionsSpec& v);      // 0x0083baa0
+    cOptionsSpec* erase(cOptionsSpec* first, cOptionsSpec* last);      // 0x0083ba40
+    void DestroyRangeA(cOptionsSpec* first, cOptionsSpec* last);       // 0x0076e7a0
+    void push_back(const cOptionsSpec& v);                             // 0x0083bc50
+    void clear() { erase(mpBegin, mpEnd); }
+};
+typedef VecOptions VecOptionsSpec;
 
 struct ArgParser { void** vtbl; };
 
@@ -115,7 +210,8 @@ struct cArgumentSpec {
     int  ParseOptionArgs(cOptionsSpec* opt, int** ppArgs, const char** ppEnd, ArgParser* p);
     int  ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p);
     void CreateHelpString(const char* name, eastl::string8* out, int style);  // 0x00839f90
-    int  ConstructSpec(int a, const char* cmd, const char* spec);          // 0x0083bcd0
+    void FindNameAndTypeFromOption(const eastl::string8& word, int& type, eastl::string8& name);  // 0x00839540
+    int  ConstructSpec(const char* name, const char* spec, ...);           // 0x0083bcd0
     void ParseThrowing(int argc, const char** argv, ArgParser* p);         // 0x0083b9d0
 };
 
@@ -131,14 +227,6 @@ cOptionsSpec* __cdecl CopyOptionsRange(cOptionsSpec* first, cOptionsSpec* last, 
 cOptionsSpec* __cdecl CopyBackwardOptionsRange(cOptionsSpec* first, cOptionsSpec* last, cOptionsSpec* destEnd); // 0x0083a970
 void __cdecl DestroyOptionsRangeV(cOptionsSpec* first, cOptionsSpec* last);  // 0x0076e7a0
 
-// 0083baa0 DoInsertValue<cOptionsSpec> is a member of this concrete vector type
-struct VecOptions {
-    cOptionsSpec* mpBegin; cOptionsSpec* mpEnd; cOptionsSpec* mpCapacity;
-    eastl::sp_vector_allocator mAllocator;
-    void DoInsertValue(cOptionsSpec* pos, const cOptionsSpec& v);      // 0x0083baa0
-    cOptionsSpec* erase(cOptionsSpec* first, cOptionsSpec* last);      // 0x0083ba40
-    void DestroyRangeA(cOptionsSpec* first, cOptionsSpec* last);       // 0x0076e7a0
-};
 
 // ---- command base classes (refcounted) ----
 extern void* vtbl_SPSkinPaintClear[];
@@ -265,15 +353,116 @@ void VecOptions::DoInsertValue(cOptionsSpec* pos, const cOptionsSpec& v) {
 }
 
 // ===========================================================================
-// 0x0083bcd0  EA::ArgScript::cArgumentSpec::ConstructSpec  (partial)
+// 0x0083bcd0  EA::ArgScript::cArgumentSpec::ConstructSpec
 // ===========================================================================
+// Variadic: a NULL-terminated list of spec lines, each followed by the
+// varargs its tokens consume.  A line is
+//   ":name"  (+ cEnumParseInfo*)        -> enum spec
+//   "*name"  (+ int)                    -> enum spec with a callback/flag
+//   "-opt[^] arg... "  (+ flag if ^, + one location per arg, + description)
+//   "arg [opt]... ..." (+ one location per arg, + description)  -> default args
+// An argument token is "[name:type]^" (brackets = optional, ^ = flag pointer
+// follows), "..." marks the previous argument as a vector argument.
+template <> void eastl::vec<cEnumSpec>::push_back(const cEnumSpec& value);   // 0x0083a830
+
+static const char kTokenDelims[] = " \t\n";
+
 // @ 0x0083bcd0
-// This is a 2682-byte command-spec parser (resets the default/options/enum
-// vectors, splits the command string, then walks option/enum definitions).
-// Not reconstructed here; kept as a compiling stub. See partial.txt.
-int cArgumentSpec::ConstructSpec(int a, const char* cmd, const char* spec) {
-    (void)a; (void)cmd; (void)spec;
-    return 0;
+int cArgumentSpec::ConstructSpec(const char* name, const char* spec, ...) {
+    mBriefDescription = name;
+    mFullDescription = "";
+    mDefaultArguments.clear();
+    mOptions.clear();
+    mEnumSpecs.clear();
+    mErrorString = "no error";
+
+    va_list args;
+    va_start(args, spec);
+    int result = 0;
+
+    while (spec) {
+        eastl::string8 line(spec);
+        eastl::string8 word;
+
+        if (!line.empty() && line[0] == ':') {
+            mEnumSpecs.push_back(cEnumSpec(line.c_str() + 1, va_arg(args, cEnumParseInfo*), 0));
+        } else if (!line.empty() && line[0] == '*') {
+            mEnumSpecs.push_back(cEnumSpec(line.c_str() + 1, 0, va_arg(args, int)));
+        } else {
+            word = SplitFirstToken(line, kTokenDelims);
+
+            cOptionsSpec option;
+            VecArgInfo* pArgs;
+            bool isOption;
+
+            if (!word.empty() && word[0] == '-' && isalpha((unsigned char)word[1])) {
+                isOption = true;
+                if (word.back() == '^') {
+                    word.erase(word.size() - 1, 1);
+                    option.mFlagToSet = va_arg(args, int);
+                } else {
+                    option.mFlagToSet = -1;
+                }
+                option.mName.assign(word, 1, eastl::string8::npos);
+                word = SplitFirstToken(line, kTokenDelims);
+                pArgs = &option.mArguments;
+            } else {
+                pArgs = &mDefaultArguments;
+                isOption = false;
+            }
+
+            int optionalDepth = 0;
+            int lastDepth = 0;
+            while (!word.empty()) {
+                if (_stricmp(word.c_str(), "...") == 0) {
+                    // "..." must be the last token and follow an argument
+                    if (!line.empty())
+                        return 2;
+                    if (pArgs->empty())
+                        return 2;
+                    pArgs->back().mType |= 0xc000;
+                    word = SplitFirstToken(line, kTokenDelims);
+                    continue;
+                }
+
+                cArgInfo argInfo;
+                if (word[0] == '[') {
+                    ++optionalDepth;
+                    word.erase(0, 1);
+                }
+                argInfo.mIsDependent = (optionalDepth == lastDepth);
+                while (!word.empty() && word.back() == ']') {
+                    --optionalDepth;
+                    word.erase(word.size() - 1, 1);
+                }
+                argInfo.mLocation = va_arg(args, void*);
+                if (word.back() == '^') {
+                    word.erase(word.size() - 1, 1);
+                    argInfo.mFlagToSet = va_arg(args, int);
+                } else {
+                    argInfo.mFlagToSet = -1;
+                }
+                FindNameAndTypeFromOption(word, argInfo.mType, argInfo.mName);
+                if (argInfo.mType == 0)
+                    result = 3;
+                pArgs->push_back(argInfo);
+                lastDepth = optionalDepth;
+                word = SplitFirstToken(line, kTokenDelims);
+            }
+            if (optionalDepth != 0)
+                return 1;
+
+            eastl::string8 description(va_arg(args, const char*));
+            if (isOption) {
+                option.mDescription = description;
+                mOptions.push_back(option);
+            } else {
+                mFullDescription += description;
+            }
+        }
+        spec = va_arg(args, const char*);
+    }
+    return result;
 }
 
 // ===========================================================================

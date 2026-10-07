@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00887530/s00887530.cpp  ?ReadBmpFontInfo@RBmpFont@RT2@@QAE_NPAVIStream@IO@EA@@@Z  00887530  /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc

@@ -1,0 +1,1 @@
+011666d0 Imdct36  # EA Layer3 decoder long-block 36-point IMDCT + window (mpg123 dct36 shape, doubled COS9); TU-static, register args

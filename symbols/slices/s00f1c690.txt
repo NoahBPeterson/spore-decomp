@@ -1,0 +1,1 @@
+00f1c690 Simulator::cScenarioPlayMode::HandleMessage  # slot 1 of vtable 0x0148c2fc installed by ctor 0x00f1e450; fields match ModAPI cScenarioPlayMode (mCurrentGoals +0x64, mCurrentPlayModeState +0x90, mSummary +0x0c)

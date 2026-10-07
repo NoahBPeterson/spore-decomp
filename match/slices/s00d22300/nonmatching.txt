@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d22300  1907  complete (same 34 direct calls in order, 1 vcall +0x38, same 52 global/constant refs, 3106 vs 3108 B, 719 vs 719 insns, frame 0x64 matches); /fp:fast operand order of the dot/cross products, slot choice of the RotateTowards/Cross temps, and placement of the shared Min(dist/k,1) tail differ

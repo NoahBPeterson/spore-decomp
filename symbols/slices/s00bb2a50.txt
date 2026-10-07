@@ -1,0 +1,1 @@
+00bb2a50 Simulator::cStarManager::GenerateSolSystem  # ModAPI StarManager.h doc (closest star to 257.348,257.348 becomes mSol at +0x148, Sol planets created)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007c0780  2110  AO capture setup (cThumbnailManager, 0x40200100 prop list, per-direction shadow viewers + AO jobs) complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; frame 0x20 smaller, x87/SSE split of the vector math and stack slots differ; local mesh vector dtor reloads begin/end (original constant-folded them to 0 via same-TU Init)

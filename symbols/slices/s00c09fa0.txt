@@ -1,0 +1,1 @@
+00c09fa0 SpawnHerdAnimals  # name guessed: cdecl(pos, species, count, babyFrac, herd); creates count animals via the sim factory and adds them to herd->mHerd

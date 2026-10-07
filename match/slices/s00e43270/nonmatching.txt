@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00e43830 394 UITimeline subsystem ctor (/O2 /MD /Gy /TP /arch:SSE, no /EHsc): complete; same size (2512), identical instruction multiset and call order (cGonzagoSubsystem, cStringTokenTranslator, 11 Stopwatch ctors, fixed_vector DoInsertValues, LimitStopwatch::SetTimeLimit); only store/push scheduling differs (vptr stores, 0x68/0x88 int/float interleave, Stopwatch arg pushes)

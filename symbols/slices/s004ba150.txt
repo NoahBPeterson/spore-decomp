@@ -1,4 +1,4 @@
-004ba150  SP::EditorValidity::AddCellUpgradeForBlockPropList  # PDB caller-scored
+004ba150  SP::EditorValidity::AddCellUpgradeForBlockPropList  # PDB caller-scored; thiscall on SP::cEditorResource (copies a cell resource, retypes it 0x9ea3031a); source names it cEditorResource::CreateCellUpgradeCopy (descriptive)
 004bab30  Editor::cEditorResource::cEditorResource  # PDB anchor
 004babe0  FUN_004babe0  # 7-arg Apply wrapper
 004bac30  FUN_004bac30  # Apply wrapper with explicit args

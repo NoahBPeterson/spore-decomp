@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00df8730  1833  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; complete; same 62 calls/vslots in order, x87 clamp shape + stack-slot/xmm scheduling differ

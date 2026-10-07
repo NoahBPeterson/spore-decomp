@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b89a30  2987  NatlBounds builder (tile-edge tracer): complete; same 28 ordered calls/vtable slots/constants, frame 0x154 vs 0x18c (fewer spilled float temps), register allocation and Release shape (sub vs dec, extra null check before delete) differ

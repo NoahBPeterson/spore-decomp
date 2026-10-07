@@ -1,3 +1,2 @@
-00505850  2720  two-segment closest-point routine (6 Vector3* args): skeleton only, 2.7 KB exceeds the per-function budget
 005062f0   155  cCreatureAbility constructor: approximate - vtable initialisation and resource-key lookup omitted
 005064a0    93  cCreatureAbility destructor: approximate - vtable reset and base cleanup call omitted

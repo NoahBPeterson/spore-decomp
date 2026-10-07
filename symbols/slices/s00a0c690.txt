@@ -1,0 +1,1 @@
+00a0c690 SP::cSPCreatureAnimWorld::Update  # PDB caller-scored candidate; matches cSPCreatureAnimWorld layout (mManager +0x1c, mCreatures +0x24, LOD counters), cAnimatingCreature -> creature_instance_data sync

@@ -1,0 +1,1 @@
+005a33c0  18  SP::cEditorCameraController::UpdateAutoZoom: complete; same size (2638) and identical ordered call list (56 calls); only the /O2 stack-slot coloring of the Clamp constants, fov and the spilled this differs (lo/hi/this slots permuted). Flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+01038410  2106  complete cSpaceTradeRouteManager trade-route tick (validate/erase, relationship warnings, galaxy+solar merchant UFOs, trade exchange, capture progress); 103/106 calls, 114/117-item ordered call+vslot+const sequence (only diffs: erase block laid out at loop end, cl cross-jumps the two RelationshipManager()->RecordEvent tails), size 0.996x; residual: esi/edi swapped (this vs StarManager), frame 0x100 vs 0xf4

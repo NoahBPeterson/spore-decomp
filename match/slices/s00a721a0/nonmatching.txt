@@ -1,0 +1,1 @@
+00a721a0  2297  complete EA::Swarm effects-world update (LOD pick, light bending, effect updates, pending-effect passes); register allocation/block order differ. Clamp is a 4-instruction inline-asm helper (original frame 0xc4 has no 16-byte alignment, so not xmmintrin)

@@ -1,0 +1,6 @@
+00ab18d0 EA::Swarm::cParticlesEffect::ApplyEffect  # dev build symbols.json: ParticlesEffect.obj, 2534 B, same callees in the same order (TransformPoint, BackTransformVector, AccumulateForce, sPhysicsUpdate, UpdatePhysicsTimeStep, DestroyParticle, GenerateNewParticles, cBoundingBox::Transform, cRWState::Update)
+00aaf670 EA::Swarm::cParticlesEffect::DestroyParticle  # dev callee at the same call sites
+00ab1840 EA::Swarm::cParticlesEffect::GenerateNewParticles  # dev callee at the same call site
+00aae900 EA::Swarm::UpdatePhysicsTimeStep  # dev callee, same args
+00a790a0 EA::Swarm::cRWState::Update  # dev callee
+00a79300 EA::Swarm::cRWState::AccumulateForce  # dev callee

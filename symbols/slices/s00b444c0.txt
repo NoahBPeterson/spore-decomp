@@ -1,0 +1,1 @@
+00b444c0 ApplyPlanetCorrection  # Claude-coined name; switch on cLocomotiveObject::mPlanetCorrection (retail +0x1f0, ePlanetCorrection 0..8 from PDB enum), then UpdateWaterState (00b421b0)

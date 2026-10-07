@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006a8610  1981  complete; register assignment (esi/edi swapped), switch lowering and tail merging differ; flags: /O2 /MD /Gy /EHsc /TP /GS-

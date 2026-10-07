@@ -190,7 +190,91 @@ namespace SP {
 
 class cSPEditorAnimatedCreatureData;
 
-struct cSPVector3 { float x, y, z; cSPVector3() {} cSPVector3(const cSPVector3& o) : x(o.x), y(o.y), z(o.z) {} };
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+inline float Abs(float x) { return (float)fabs(x); }
+
+// Clamp: the original uses the SSE max/min asm helper (maxss/minss on memory operands).
+inline float Clamp(float x, float lo, float hi)
+{
+    __asm {
+        movss xmm0, x
+        maxss xmm0, lo
+        minss xmm0, hi
+        movss x, xmm0
+    }
+    return x;
+}
+
+struct cSPVector3 {
+    float x, y, z;
+    cSPVector3() {}
+    cSPVector3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    cSPVector3(const cSPVector3& o) : x(o.x), y(o.y), z(o.z) {}
+    cSPVector3 operator-(const cSPVector3& o) const { return cSPVector3(x - o.x, y - o.y, z - o.z); }
+    cSPVector3 operator+(const cSPVector3& o) const { return cSPVector3(x + o.x, y + o.y, z + o.z); }
+    cSPVector3 operator*(float s) const { return cSPVector3(x * s, y * s, z * s); }
+    cSPVector3 operator-() const { return cSPVector3(-x, -y, -z); }
+    bool operator!=(const cSPVector3& o) const { return x != o.x || y != o.y || z != o.z; }
+    float Length() const { return (float)sqrt(x * x + y * y + z * z); }
+    __forceinline cSPVector3 Normalized() const
+    {
+        float inv = 1.0f / (float)sqrt(x * x + (y * y + z * z));
+        return cSPVector3(x * inv, y * inv, z * inv);
+    }
+    __forceinline cSPVector3 Normalize() const
+    {
+        float ax = x, ay = y, az = z;
+        float inv = 1.0f / (float)sqrt(ax * ax + ay * ay + az * az);
+        return cSPVector3(ax * inv, ay * inv, az * inv);
+    }
+    cSPVector3& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
+};
+
+struct cSPQuaternion {
+    float x, y, z, w;
+    cSPQuaternion() {}
+    cSPQuaternion(float ax, float ay, float az, float aw) : x(ax), y(ay), z(az), w(aw) {}
+};
+
+struct cSPMatrix3 {
+    cSPVector3 mRow[3];
+};
+
+// row vector times matrix (inlined in the original)
+inline cSPVector3 operator*(const cSPVector3& v, const cSPMatrix3& m)
+{
+    return cSPVector3(m.mRow[0].x * v.x + m.mRow[1].x * v.y + m.mRow[2].x * v.z,
+                      m.mRow[0].y * v.x + m.mRow[1].y * v.y + m.mRow[2].y * v.z,
+                      m.mRow[0].z * v.x + m.mRow[1].z * v.y + m.mRow[2].z * v.z);
+}
+
+inline cSPQuaternion QuaternionFromAxisAngle(const cSPVector3& axis, float angle)
+{
+    float half = angle * 0.5f;
+    float s = sinf(half);
+    float c = cosf(half);
+    return cSPQuaternion(axis.x * s, axis.y * s, axis.z * s, c);
+}
+
+struct cAnimInfo {
+    char pad00[0x1d];
+    bool mbNoOrientation;   // +0x1d
+};
+
+class cAnimManager {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+    virtual cAnimInfo* GetAnimInfo(uint32_t animID);   // +0x40
+};
+
+struct cCreatureAnimData {
+    char pad000[0x2d4];
+    bool mbOrientIdle;      // +0x2d4
+};
 
 class cAnimatingCreature {
 public:
@@ -199,21 +283,54 @@ public:
     virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
     virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
     virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
-    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
-    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
-    virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
-    virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
-    virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
-    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
-    virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
-    virtual void v48(); virtual void v49(); virtual void v50(); virtual void v51();
-    virtual void v52(); virtual void v53(); virtual void v54(); virtual void v55();
+    virtual void v20(); virtual void v21();
+    virtual int GetCurrentAnimation(uint32_t* dstAnimID, float* dstTime, int* p3, int* dstAnimIndex);  // +0x58
+    virtual bool GetAnimationProgress(int animIndex, float* pLength, float* pTime);                    // +0x5c
+
+    bool IsOrientStartAnim(uint32_t animID);   // 0x00a02710
+    bool IsOrientIdleAnim(uint32_t animID);    // 0x00a027a0
+    void AddRef();                             // 0x00a02c30
+    void Release();                            // 0x00a05270
+
+    cSPVector3 mPosition;                      // +0x04
+    cSPQuaternion mOrientation;                // +0x10
+    char pad20[0x164 - 0x20];
+    cSPVector3 mLookAtPosition;                // +0x164
+    char pad170[0x17c - 0x170];
+    cCreatureAnimData* mpAnimData;             // +0x17c
+};
+
+struct FilterSettings {
+    unsigned __int64 requiredGroupFlags;   // +0x00
+    unsigned __int64 excludedGroupFlags;   // +0x08
+    void* filterFunction;                  // +0x10
+    uint8_t collisionMode;                 // +0x14
+    uint8_t flags;                         // +0x15
+    FilterSettings() : requiredGroupFlags(), excludedGroupFlags(), filterFunction(0), collisionMode(4), flags(0) {}
+    void SetRequiredGroup(uint32_t group)
+    {
+        if (group < 64)
+            ((uint32_t*)&requiredGroupFlags)[group >> 5] |= 1 << (group & 31);
+    }
+};
+
+class cIModelManager {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09();
+    virtual uint32_t GetGroupFlag(uint32_t groupID, int a);   // +0x28
 };
 
 class cIModelWorld {
 public:
     virtual void AddRef();     // +0x0
     virtual void Release();    // +0x4
+    virtual void v02(); virtual void v03(); virtual void v04(); virtual void v05();
+    virtual void v06(); virtual void v07(); virtual void v08();
+    virtual void* FindFirstModelAlongLine(const cSPVector3& p1, const cSPVector3& p2, float* factorDst,
+                                          cSPVector3* dstPoint, cSPVector3* dstNormal,
+                                          FilterSettings& settings, int* a, int* b);   // +0x24
 };
 
 class cISPCreatureAnimWorld {
@@ -251,10 +368,29 @@ private:
 
 class cSPEditorAnimatedCreatureData : public EA::RefCountTemplate<int> {
 public:
-    void Update(int milliseconds);                             // 0x0059b4b0
+    void Update(unsigned int milliseconds);                    // 0x0059b4b0
+    void RefreshTargetPosition();                              // 0x0059b390
     EA::AutoRefCount<cAnimatingCreature> mAnimatingCreature;   // +0x8
     cIModelWorld* mModelWorld;                                 // +0xc
-    char pad_10[0x88 - 0x10];
+    uint32_t mKeyToUnregister[3];                              // +0x10
+    unsigned int mLastAnimationPlayed;                         // +0x1c
+    cSPVector3 mRawTargetPosition;                             // +0x20
+    cSPVector3 mTargetPosition;                                // +0x2c
+    cSPVector3 mActualPosition;                                // +0x38
+    float mTargetAngle;                                        // +0x44
+    float mActualAngle;                                        // +0x48
+    float mMovementSpeed;                                      // +0x4c
+    float mRotationSpeed;                                      // +0x50
+    bool mPreserveHeight;                                      // +0x54
+    bool mLookAtTarget;                                        // +0x55
+    cSPVector3 mTargetLookAtPosition;                          // +0x58
+    cSPVector3 mActualLookAtPosition;                          // +0x64
+    bool mAnimInterruptible;                                   // +0x70
+    float mHeightOffset;                                       // +0x74
+    float mHeightOffsetTarget;                                 // +0x78
+    float mHeightDropWaitTime;                                 // +0x7c
+    float mHeightDropSpeed;                                    // +0x80
+    bool mIsTurning;                                           // +0x84
 };
 
 class cSPEditorAnimatedCreatureManager : public EA::RefCountTemplate<int> {
@@ -365,7 +501,152 @@ void __stdcall ReleaseAutoRefRange(EventRef* first, EventRef* last)
 
 // ===========================================================================
 // @ 0x0059b4b0
-void SP::cSPEditorAnimatedCreatureData::Update(int milliseconds)
+cAnimManager* AnimManager();                                                        // 0x0067cb20
+cIModelManager* ModelManager();                                                     // 0x0067dd80
+cSPVector3 MoveTowards(const cSPVector3& from, const cSPVector3& to, float step);    // 0x00699600
+float ApproachAngle(float current, float target, float step);                       // 0x0069b840
+float SignedAngle(const cSPVector3* a, const cSPVector3* b, const cSPVector3* axis); // 0x0069b760
+float WrapAngle(float angle);                                                       // 0x0059ac00
+cSPMatrix3 RotationMatrix(const cSPVector3& axis, float angle);                     // 0x00576b00
+cSPVector3 RotateVector(const cSPVector3& v, const cSPQuaternion& q);               // 0x0059aed0
+bool IsFiniteVector(const cSPVector3& v);                                           // 0x0059ab70
+cSPVector3 Normalize(const cSPVector3& v);                                          // 0x00436ce0
+
+extern cSPVector3 kZeroVector;   // 0x015e590c
+extern cSPVector3 kAxisY;        // 0x015e5a88
+extern cSPVector3 kAxisZ;        // 0x015e5a0c
+extern float kLookAtDistance;    // 0x0150dfe4 (10.0)
+extern float kLookAtTurnSpeed;   // 0x0150dfe8 (5.0)
+extern float kMinLookDistance;   // 0x0150dfe0 (0.1)
+extern float kLookAtSmoothing;   // 0x0150dfdc (0.85)
+extern float kQuarterPi;         // 0x0150de50
+
+void SP::cSPEditorAnimatedCreatureData::Update(unsigned int milliseconds)
 {
-    (void)milliseconds;
+    if (!mAnimatingCreature || !mModelWorld)
+        return;
+
+    float dt = (float)milliseconds * 0.001f;
+    uint32_t animID;
+    int animIndex = 0;
+    float moveScale = 1.0f;
+    float turnScale = 1.0f;
+    mAnimatingCreature->GetCurrentAnimation(&animID, 0, 0, &animIndex);
+
+    cAnimInfo* pInfo = AnimManager()->GetAnimInfo(animID);
+    if (pInfo && !pInfo->mbNoOrientation) {
+        moveScale = 0.0f;
+        turnScale = 0.0f;
+        RefreshTargetPosition();
+    }
+
+    if (mAnimatingCreature->IsOrientStartAnim(animID)) {
+        float length = 0.0f;
+        float time = 0.0f;
+        if (mAnimatingCreature->GetAnimationProgress(animIndex, &length, &time)) {
+            moveScale = Clamp(time / length, 0.0f, 1.0f);
+            turnScale = moveScale;
+        } else {
+            turnScale = 0.0f;
+            moveScale = 0.0f;
+        }
+    }
+
+    mActualPosition = MoveTowards(mActualPosition, mTargetPosition, mMovementSpeed * moveScale * dt);
+    if (mActualPosition.Length() > 5.0f)
+        mActualPosition = mActualPosition.Normalize() * 5.0f;
+
+    mActualAngle = ApproachAngle(mActualAngle, mTargetAngle, mRotationSpeed * turnScale * dt);
+
+    cSPVector3 toTarget = mTargetLookAtPosition - mActualPosition;
+    cSPVector3 toLook = mActualLookAtPosition - mActualPosition;
+    cSPVector3 targetDir = toTarget;
+    if (toTarget != kZeroVector)
+        targetDir = toTarget.Normalized();
+    cSPVector3 lookDir = toLook;
+    if (toLook != kZeroVector)
+        lookDir = toLook.Normalized();
+
+    if (mIsTurning) {
+        float targetAngle = SignedAngle(&targetDir, &kAxisY, &kAxisZ);
+        float lookAngle = SignedAngle(&lookDir, &kAxisY, &kAxisZ);
+        float angle = ApproachAngle(lookAngle, targetAngle, kLookAtTurnSpeed * dt);
+        mActualLookAtPosition = mActualPosition + cSPVector3(sinf(angle), cosf(angle), 0.0f) * kLookAtDistance;
+    } else {
+        mActualLookAtPosition = mActualPosition + MoveTowards(lookDir, targetDir, dt * 2.0f) * kLookAtDistance;
+    }
+
+    if (mLookAtTarget) {
+        targetDir.z = 0.0f;
+        cSPVector3 back = -kAxisY;
+        float targetAngle = -SignedAngle(&targetDir, &back, &kAxisZ);
+        float actualAngle = mActualAngle;
+        float diff = WrapAngle(WrapAngle(actualAngle) - WrapAngle(targetAngle));
+        if (Abs(diff) > kQuarterPi) {
+            float sign = (diff < 0.0f) ? -1.0f : 1.0f;
+            cSPMatrix3 rot = RotationMatrix(kAxisZ, actualAngle - sign * kQuarterPi);
+            mActualLookAtPosition = mAnimatingCreature->mPosition + cSPVector3(0.0f, -1.5f, 0.5f) * rot;
+        }
+    }
+
+    mAnimatingCreature->mPosition = mActualPosition;
+    mAnimatingCreature->mOrientation = QuaternionFromAxisAngle(kAxisZ, mActualAngle);
+
+    if (mAnimatingCreature->IsOrientIdleAnim(animID) && mAnimatingCreature->mpAnimData->mbOrientIdle) {
+        cAnimatingCreature* pCreature = mAnimatingCreature;
+        if (mIsTurning) {
+            pCreature->mLookAtPosition = mActualLookAtPosition;
+        } else {
+            cSPVector3 toTarget = mRawTargetPosition - mActualPosition;
+            toTarget.z = 0.0f;
+            cSPVector3 dir;
+            if (toTarget.Length() > kMinLookDistance) {
+                dir = Normalize(toTarget);
+            } else {
+                cSPVector3 fallback = -kAxisY;
+                cSPVector3 v = fallback;
+                v = RotateVector(v, pCreature->mOrientation);
+                if (!IsFiniteVector(v))
+                    v = fallback;
+                dir = v;
+            }
+            cSPVector3 target = mActualPosition + dir * kLookAtDistance;
+            pCreature->mLookAtPosition = pCreature->mLookAtPosition * kLookAtSmoothing + target * (1.0f - kLookAtSmoothing);
+            if (Abs(mAnimatingCreature->mLookAtPosition.z) < 1.5258789e-05f)
+                mAnimatingCreature->mLookAtPosition.z = 0.0f;
+            mActualLookAtPosition = mAnimatingCreature->mLookAtPosition;
+            mTargetLookAtPosition = mAnimatingCreature->mLookAtPosition;
+        }
+    } else {
+        mAnimatingCreature->mLookAtPosition = mActualLookAtPosition;
+    }
+
+    if (!mPreserveHeight) {
+        const cSPVector3& pos = mAnimatingCreature->mPosition;
+        cSPVector3 start(pos.x, pos.y, 500.0f);
+        FilterSettings settings;
+        settings.SetRequiredGroup(ModelManager()->GetGroupFlag(0x26f3933, 0));
+        cSPVector3 end(start.x, start.y, start.z - 1000.0f);
+        cSPVector3 hit;
+        if (mModelWorld->FindFirstModelAlongLine(start, end, 0, &hit, 0, settings, 0, 0)) {
+            if (mHeightDropWaitTime > 0.0f) {
+                mHeightDropWaitTime -= dt;
+                return;
+            }
+            mAnimatingCreature->mPosition.z = mHeightOffset + hit.z;
+            float cur = mHeightOffset;
+            float target = mHeightOffsetTarget;
+            if (target > cur) {
+                cur = mHeightDropSpeed * dt + cur;
+                mHeightOffset = cur;
+                if (cur > target)
+                    mHeightOffset = target;
+            } else if (cur > target) {
+                cur = cur - mHeightDropSpeed * dt;
+                mHeightOffset = cur;
+                if (target > cur)
+                    mHeightOffset = target;
+            }
+        }
+    }
 }

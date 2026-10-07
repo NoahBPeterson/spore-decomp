@@ -1,0 +1,1 @@
+00a73110 EA::Swarm::cEffectCheat::ParseLine  # PDB candidate (caller-scored) cEffectCheat; uses mArgSpec.Parse, mTestEffects, OpenEffectsFile, "Couldn't open '%s'"

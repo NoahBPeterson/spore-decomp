@@ -1,3 +1,4 @@
 0052dfe0 vector range ctor  # card decompile; 3 zeroed words + range assign 0x47d390
 0052e030 cSPSkinPaintClearCommand::Read (versioned IO)  # card decompile; EA::IO::ReadInt32 + virtual reads
 0052df30 cError string ctor  # card decompile; vsnprintf8 + eastl string assign
+0052d460 `anonymous namespace'::cSPSkinPaintClearCommand::Execute  # card name; PDB cSPSkinPaintClearDescription layout (+0x68 mBitFlags); byte-exact

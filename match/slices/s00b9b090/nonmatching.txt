@@ -1,0 +1,1 @@
+00b9b090  2556  complete (all paths/calls/stores; ordered call/vslot/immediate sequence identical, 59 calls, size 1.02x); /O2 /MD /Gy /TP /arch:SSE /fp:fast. Frame layout (0x158 vs 0x148) and register allocation (propManager/placed in esi/edi) differ

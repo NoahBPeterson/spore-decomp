@@ -1,0 +1,4 @@
+00f16580 cScenarioResultsRecorder::RecordResults  # Claude-coined; dc: adventure end: points->level (FindFirstGE), achievement 0x8b16db09 at level 10, lifetime stat totals via AddToIntProperty, Pollinator telemetry 0xd9d7edf2/0xa31b4d50/0x0fdb0e00
+00f16280 eastl::fixed_vector<int64_t,32>::DoAssignFromIterator<list_iterator>  # dc: copies list node values (+8) over existing elements, then inserts/erases the rest
+00f14140 eastl::fixed_vector<int64_t,32>::DoInsertValue  # push_back slow path (this, position, const value&)
+005939a0 Simulator::cCollectableItems::GetUnlockedItems  # lea eax,[ecx+0x6d80]; ModAPI mUnlockedItems at 6D80h

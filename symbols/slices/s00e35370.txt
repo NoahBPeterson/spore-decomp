@@ -1,0 +1,1 @@
+00e35370 cSPUITCCCursorStrategy::UpdateCursorStrategy  # PDB name already on the card; dev ?UpdateCursorStrategy@cSPUITCCCursorStrategy@@UAE_NI@Z, ret 4 returning bool agrees

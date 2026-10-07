@@ -1,0 +1,2 @@
+# va  diff  reason
+00466e20 2002 complete (call sequence identical, 63/63); /Od frame differs: original frame 0x1e0 vs 0x168 (holes of inline callees cl declined: size/at/get/push_back called out of line) and name-hash slot order; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

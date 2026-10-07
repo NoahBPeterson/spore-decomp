@@ -1,0 +1,4 @@
+01125560 hkInertiaTensorComputer::computeTriangleSurfaceMassProperties  # havok_names.txt mangled name; body reconstructed (thin / point-mass / 6-vertex prism branches)
+00453250 hkMassProperties::hkMassProperties  # called on the prism-branch local (see Papercuts s00452080)
+00453460 hkGeometry::~hkGeometry  # called on the prism geometry local
+0107f4a0 hkArrayUtil::_reserveExactly  # (array, numElem, sizeElem=0xc) in hkArray<Triangle>::expandOne

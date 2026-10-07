@@ -1,0 +1,1 @@
+008e7230  2341  Block::SetMargins: complete (42/42 calls in original order, same 64-aligned 0x5b4 frame); StackingContext in ebx vs esi and locals 4 bytes lower (original has an unused low slot); flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -2,3 +2,4 @@
 005348e0  327  PackColor: clamp/pack schedule differs (mine 452 vs orig 266)
 005349f0  76   vector<Sample>::push_back: /Od slot schedule differs
 00534a70  404  vector<Sample>::DoInsertValue: reimplemented with plain loops (orig uses memmove + helpers)
+00533dc0  2132  complete; /Od name-hash slot order and 16-byte aligned frame differ; needs /EHsc (remap vector unwind)

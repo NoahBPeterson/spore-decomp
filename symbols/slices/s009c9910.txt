@@ -1,0 +1,1 @@
+009c9910 nSPCreatureAnim::creature_instance_data::UpdateEffect  # card/xmatch name; thiscall ret 4, updates one effect attachment

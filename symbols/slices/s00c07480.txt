@@ -1,0 +1,1 @@
+00c07480 Simulator::cCreatureAnimal::TakeDamage  # vtable 0x01469e90 slot 0x18 (cCombatant::TakeDamage); fields match ModAPI cCreatureAnimal (mCharmDamage/mpCharmer/mCharmTime 0x1694-0x169c, mHerd 0x1674, timers 0xfc0/0xfe0)

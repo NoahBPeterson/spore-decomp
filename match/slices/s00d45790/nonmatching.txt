@@ -1,0 +1,1 @@
+00d45790  2208  complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast, no EH); all 91 direct/virtual calls in identical order; frame 0xc4 vs 0xf0, prologue shrink-wrapping, suspended-path tail not cross-jumped, register allocation differ

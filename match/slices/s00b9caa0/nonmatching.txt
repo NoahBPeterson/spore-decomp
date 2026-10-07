@@ -1,0 +1,1 @@
+00b9caa0 2470 complete tribe-stage planet setup (start pos, player tribe, start effects, site paths into cTribeModeStrategy, continent effects), flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; 78/78 calls and 19/19 vtable slots in original order; frame 0x184 vs 0x19c, register/stack-slot allocation differs

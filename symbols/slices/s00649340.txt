@@ -1,1 +1,1 @@
-00649340 SP::cSPUIAssetBrowser::ReloadCallback  # anchor PDB name (card.py)
+00649340 SP::cSPUIAssetBrowser::ReloadCallback  # card/PDB name

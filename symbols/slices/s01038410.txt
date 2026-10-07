@@ -1,0 +1,1 @@
+01038410 SP::cSpaceTradeRouteManager::UpdateTradeRoutes  # PDB candidate (caller-scored); this layout = PDB cSpaceTradeRouteManager (mTradeRoutes map at +4, mLastStarID +0x20), node value = PDB cTradeRouteData

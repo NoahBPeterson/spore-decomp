@@ -1,4 +1,3 @@
-006404f0  -  cSPPlayModeSubModePhoto::HandleButton: PARTIAL skeleton (2537 B)
 00640ee0  -  FUN_00640ee0: PARTIAL skeleton (167 B; operator new + BehaviorMessage)
 00640fa0  -  FUN_00640fa0: PARTIAL skeleton (521 B)
 006411b0  -  CaptureImageDone: PARTIAL skeleton (231 B; rdtsc/QPC + sprite texture job)

@@ -1,1 +1,2 @@
-# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /GS-)
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+005d9d10  2926  complete cSPEditorTactilityManager::Update; same 58 calls/vcalls in order, size 0.96x; differs in register/stack allocation (frame 0x80 vs 0xb0) and Matrix3 arg copy shape

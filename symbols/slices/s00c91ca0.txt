@@ -1,0 +1,1 @@
+00c91ca0 SP::cSpear::Update  # PDB name (card); cProjectile-subobject override (this-0x504 cGameData, this-0x4d0 cLocomotiveObject)

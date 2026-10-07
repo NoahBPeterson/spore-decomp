@@ -1,0 +1,1 @@
+010f9f30  2258  complete hk3AxisSweep::calcAabbCache (inlined _querySingleAabb: marker+bitfield x scan, binary-search y/z, yzDisjoint scan; cache arrays + sentinels + sort); x87 vector spills, frame layout and register allocation differ

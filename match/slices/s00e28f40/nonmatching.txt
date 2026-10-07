@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00e28f40 2579 SP::cSPUINewProgressBar::UpdateLevelWindows (/O2 /MD /Gy /TP /arch:SSE /fp:fast, 64-byte aligned frame): complete reconstruction (screen-space boundary clamps, 5 level windows, ui_material_split fallback string, RemoveAnimation, 5 material parameters with instant set vs sequence/ramp animations); same 77 calls in the same order; not exact: the GetBoundingScreenRect result is copied out of its return slot and block layout/register allocation differ

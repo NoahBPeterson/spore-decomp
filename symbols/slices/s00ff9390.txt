@@ -1,0 +1,1 @@
+00ff9800 cSPSimPlanetHighLOD::ActivatePlanet  # descriptive (not PDB): thiscall on cSPSimPlanetHighLOD (+0x20 mSimulationStepTime=2000, +0x1b0 helper ptr, +0x1b4, +0x1b8 per ModAPI cSimPlanetHighLOD), arg cPlanet*, calls SpawnArtifact 0x00ff5d20

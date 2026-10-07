@@ -1,1 +1,2 @@
 # source  symbol  va  [flags override]
+slices/s00587a20/s00587a20.cpp  ?Deactivate@cAppModeEditorBase@SP@@QAEXXZ  00587a20  /O2 /MD /Gy /TP /arch:SSE /fp:fast

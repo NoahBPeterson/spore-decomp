@@ -1,0 +1,1 @@
+00f1c690  1891  complete cScenarioPlayMode::HandleMessage, all 19 messages (115/115 calls in original order, size 1.009x); register allocation/scheduling differs (GetScenarioAct arg loads, enregistered hashtable iterator, dialog-result spill)

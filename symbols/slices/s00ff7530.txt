@@ -1,0 +1,2 @@
+00ff7530 SP::cSPSimPlanetHighLOD::UpdateGenesisDevice  # symbols/pdb_candidates.json (dev 0x0089cf80, caller-single from OnTick 0x00ffbb20); members match the dev PDB mGenesis* fields
+00fc1fa0 SP::GetTerraformRadius  # descriptive: returns kTerraformRadiusT1/T2/T3 by level

@@ -1,0 +1,1 @@
+01109460  2950  complete SAT (2 face tests + 3 edge blocks, stores +0xe0..+0x12c, returns 1 on separation); calls/consts match, x87 scheduling differs (orig reloads |R| from memory, /fp:fast reassociation), select constants via fld/fstp instead of mov imm

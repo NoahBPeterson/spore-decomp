@@ -1,0 +1,1 @@
+00ca4f90  2308  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast) complete cPathLocomotion::Steer (frame, 4 signed angles, bank roll, mode-5 tilt, 2 rate-limited steps, 3 axis-angle quaternion products, normalize, SetOrientation); not byte-exact: original built with LTCG (edx kept live across 0x00c9eaf0), regalloc/slot layout, fp:fast dot reassociation

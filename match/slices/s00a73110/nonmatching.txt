@@ -1,0 +1,2 @@
+# va  diff  reason
+00a73110 1774 complete (call/vcall sequence identical, 62/62); /O2 register allocation and SSE scheduling differ (scale-transform math, cached string c_str across calls, flag-store placement); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

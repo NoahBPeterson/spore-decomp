@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+009ba990 2218 nSPCreatureAnim goal spring update (creature_instance_data thiscall, ret 0x14; /O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; 2403 vs 2509 bytes, same 4 calls in order (0x9ba8d0, QuaternionVectorTransform x2, 0x9ba7d0), same 11 global/constant references; differs in stack-slot sharing (frame 0x68 vs 0x40: the original reuses one vector_3 slot for local pos, particle pos and offset) and register allocation in the quaternion/spring math

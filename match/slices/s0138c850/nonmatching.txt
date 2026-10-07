@@ -1,0 +1,1 @@
+0138c850  191  complete table of 34 cScenarioResource Simulator::Attribute records (store simulation: all 34 records equal to the original, same size 3324 B); only cl's choice of which callback addresses to keep in ebp/ebx differs (original is a CRT dynamic initializer of a static array)

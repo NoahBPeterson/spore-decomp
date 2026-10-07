@@ -1,0 +1,2 @@
+00b89a30 cNatlBoundsBuilder::Build  # operator_new "Simulator/NatlBounds" 0x48, traces tile-map edges into ground/curve Vec3 strips, calls 0xb899b0 per boundary
+00b899b0 cNatlBounds::AddBoundary  # thiscall on the NatlBounds object, (ground*, curve*, count, level), called once per traced boundary

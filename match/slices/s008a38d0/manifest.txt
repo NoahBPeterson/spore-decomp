@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008a38d0/s008a38d0.cpp  ?GetThaiGlyphs@Typesetter@Text@EA@@QAEIIPB_WIPAG@Z  008a3b70  /O2 /MD /Gy /TP /arch:SSE /GS-

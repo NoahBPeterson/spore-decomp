@@ -1,0 +1,1 @@
+013551e0  134  complete table of 36 cTribe Simulator::Attribute records (store simulation: all 36 records equal to the original); only cl's choice of which callback addresses to keep in ebp/ebx differs in the first 3 regions

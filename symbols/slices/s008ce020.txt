@@ -1,0 +1,1 @@
+008ce020 New_GlyphClass  # card/component symbol; T2K glyph.c structure (glyf simple/composite parse + 4 phantom points), byte-exact

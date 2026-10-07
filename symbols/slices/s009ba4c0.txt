@@ -1,0 +1,1 @@
+009ba990 nSPCreatureAnim::creature_instance_data::UpdateGoalSpring  # Claude-coined: damped spring goal particle (K=100, damping=8, gravity 0x166c010) blended into body.goal (+0x58), sets creature goal bit 2*bidx at +0x1b8

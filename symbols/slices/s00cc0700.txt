@@ -1,0 +1,1 @@
+00cc0b40 SP::cDefaultBeamProjectile::Update  # card PDB name; ModAPI cDefaultBeamProjectile layout (this = +0x108 base)

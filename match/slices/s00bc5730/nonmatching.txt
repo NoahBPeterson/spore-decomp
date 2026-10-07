@@ -1,0 +1,1 @@
+00bc5730  2824  property-record loader complete (all 34 calls/14 vcalls in order, incl. original zero-fill into +0x40); frame 0x184 vs 0x180, block layout/register allocation differ

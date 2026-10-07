@@ -1,0 +1,1 @@
+01203110  3134  complete: TriangleVolume swept-sphere cast (face, closest feature, 5-step vertex/edge walk); flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast; original is a static with a register ABI (from in ecx, out in esi) that cl reproduces only as out-in-edi, 0x01201c70 is called with stack args here; register/stack allocation differs

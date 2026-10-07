@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d7ff20  2610  (flags /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) complete SP::ATTACK_Tick: same 63 calls in the same order, same vtable slots/constants/compares; stack-slot packing and register allocation differ (frame 0x8c vs 0x64), size 2954 vs 2852

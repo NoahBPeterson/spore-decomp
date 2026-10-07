@@ -1,0 +1,3 @@
+009bfc20 nSPCreatureAnim::creature_body_instance_data::GroundGoal  # Claude-coined name; dc: grounds goal_b via creature ground height/normal, stores ground_pos/ground_normal
+009b6220 nSPCreatureAnim::creature_instance_data::GetGroundHeight  # Claude-coined; dc: calls ground callback at +0x1688, else normal=(0,0,1), returns 0
+009b62c0 nSPCreatureAnim::creature_instance_data::GetGroundUp  # Claude-coined; dc: out=(0,0,1) or FUN_009a49d0(pos) when callback active

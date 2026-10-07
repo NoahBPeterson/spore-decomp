@@ -2,3 +2,4 @@
 004babe0  41  Apply wrapper (7-arg cdecl helper); argument-build frame differs
 004bac30  45  Apply wrapper (extra args); argument-build frame differs
 004bad50  103  resource dtor; releases/loops present, inlined release frames differ
+004ba150  1286  cEditorResource cell-upgrade copy (PDB cand. EditorValidity::AddCellUpgradeForBlockPropList): complete (copy+retype, 3 block loops, bbox/transform min-z, static axis Vector3s, prop bools, key remap, detach); size 2512 vs 2513, same call/vcall sequence; /Od frame 0x14c vs 0x1dc (slot layout/holes) and one Matrix3 result-pointer slot differ

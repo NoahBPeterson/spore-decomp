@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00fe9580  2211  COMPLETE cEmpireGrowthSim::TakeTurn (rules 0-4); 3372 vs 3252 B, 201/201 calls with identical ordered direct targets, vtable slots and IDs; frame 0x80 vs 0x84 and different stack-slot assignment, register choice

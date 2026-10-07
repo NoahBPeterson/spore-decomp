@@ -1,0 +1,1 @@
+004655e0 (anonymous namespace)::cBlockGeometryExporter::BuildBoundingBoxGeometry  # dev PDB SPEditorExportUtilities.obj (thiscall, PAVcSPEditorBlock); class layout = 4 vectors (indices, positions, normals, UVs) as used; GetCorners callee follows at +0xd40

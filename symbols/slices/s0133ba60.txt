@@ -1,0 +1,1 @@
+0133ba60 Simulator::InitMissionAttributes  # $E577 dynamic initializer of the cMission serializer attribute table (26 records at 0x015745f0: mMissionID..mpGalaxyCommEvent); name coined like s013388f0

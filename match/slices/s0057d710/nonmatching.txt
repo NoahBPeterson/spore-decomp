@@ -1,1 +1,2 @@
 0057e340 204 complete but not byte-exact (loop shape / register scheduling of the two effect-mask update loops)
+0057d710 2112 complete, not byte-exact (register allocation/stack layout of the camera-plane math and ray hit; needs /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)

@@ -1,0 +1,1 @@
+008934e0 EA::Text::PolygonFont::Open  # lib_eatext name in card; matches upstream EATextPolygonFont.cpp structure byte-exact

@@ -1,2 +1,2 @@
-0073d6b0 SP::cModelInstance::GetPoseTransforms  # PDB name (symbols/pdb_names.json)
-0073e080 SP::cModelInstance::PickLineWithHit  # Ghidra PDB candidate (caller-scored)
+0073d6b0 SP::cModelInstance::GetPoseTransforms  # PDB name; called by cModelWorld::GetPoseTransforms 0x744a10
+0073e080 SP::cModelInstance::PickLineWithHit  # PDB candidate (caller-scored, dev 00ec2b10)

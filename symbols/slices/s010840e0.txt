@@ -1,0 +1,1 @@
+010840e0 hkWorld::hkWorld  # ".\world\hkWorld.cpp" + Havok version-mismatch warning (0x765c), dev-PDB hkWorld member layout, callees setTauAndDamping/addEntity/hkSimulationIsland ctor

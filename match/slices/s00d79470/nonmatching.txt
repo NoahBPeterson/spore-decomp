@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d79470  2242  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-) complete SP::cTribeGameBehaviorParty::Action: same 51 direct/virtual calls in the same order (1:1 callee map), same vtable slots (+4/+8 casts, +0x10, +0x20, +0x2c, +0x44, +0x74, +0xac), constants and 7-way switch; code 2912 vs 2880 B; /fp:fast sum/dot operand order in the slot-scoring and fallback/facing normalisations, register choice and stack-slot packing (frame 0x11c vs 0x118) differ

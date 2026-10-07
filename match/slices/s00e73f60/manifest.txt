@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s00e73f60/s00e73f60.cpp  ?sUpdateGfx@SP@@YAXXZ  00e73f60  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+00da2360 SP::SOCIAL_BAND_PLAY_Tick  # anchor name kept; retail is a cdecl helper taking cSocialBand* that lays out the band sections (dev 0x9b7750 has the behavior-tree signature)
+00da2fd0 FUN_00da2fd0  # separate function after the 0xda2fac jump table (sub esp,0x10 prologue); missing from the function index

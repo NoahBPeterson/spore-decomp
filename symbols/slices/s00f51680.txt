@@ -1,0 +1,3 @@
+00f51680 SP::cGameCameraController::MoveCamera  # PDB caller-scored candidate cTerrainCameraController::MoveCamera; layout of s00f502b0's cGameCameraController
+00b0f060 KeyboardRamp  # (0, kKeyboardAccelerationTime, heldTime) -> scale for keyboard camera motion
+00f4f000 cGameCameraController::ApplyMotion  # thiscall (dx, dy, zoom, rotate, dt) called by MoveCamera

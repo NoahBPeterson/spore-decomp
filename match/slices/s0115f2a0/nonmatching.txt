@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0115f2a0  -  complete (3821 vs 3381 bytes); the 4-wide SSE passes are an inline __asm block in the original (rewritten as same-order intrinsics, outputs bit-identical under emulation); flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00986680  9999  complete SpinnerDrawable::CreateRenderables (image strip / XP bevel frames / arrow triangles, all 4 arrow cases); original keeps every quad Point unshared (0x25c frame vs 0x34), cl tail-merges two arrow FillQuad call sites; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

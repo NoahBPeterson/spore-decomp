@@ -1,0 +1,1 @@
+013388f0 Simulator::cGameDataUFO_InitAttributes  # $E432 dynamic initializer of the cGameDataUFO serializer Attribute table (names/offsets agree with ModAPI cGameDataUFO.h)

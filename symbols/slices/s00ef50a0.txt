@@ -1,0 +1,1 @@
+00ef50a0 Simulator::cSPScenarioModeSporepediaLargeAssetView::Load  # name guessed (method name); thiscall setup of all layout windows, guarded by mIsLoaded at +0xc0; tail-jumped from 0x00ef5d80

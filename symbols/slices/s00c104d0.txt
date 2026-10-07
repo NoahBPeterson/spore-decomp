@@ -1,0 +1,1 @@
+00c104d0 FUN_00c104d0  # cdecl planet-surface aim/orbit helper (out, up, fwd, target, goal, t); name unknown, behaviour described in match/slices/s00c104d0

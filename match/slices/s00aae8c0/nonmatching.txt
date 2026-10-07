@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00aaeb90 2166 Swarm particle-effect InitParticle (sister of 0x00a9ddd0; /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete; 2520 vs 2510 bytes, same 22 calls in the same order (6+1 RandomDoubleUniform, 2 RandomUint32Uniform, a79660/a817c0/a816d0/7cdbe0/7cdb90/a78f80, CheckSpawn, 2 Transform, sampler +0x18/+0x2c, Collide +0x10), same constants; differs in stack-slot packing (frame 0x44 vs 0x2c), vel/dx values kept in regs instead of reloaded, and the f64/7cdbe0 call-tail merge

@@ -1,0 +1,1 @@
+010593e0  406  complete tool OnHit (/O2 /MD /Gy /TP /arch:SSE /fp:fast): 156 calls identical order; diffs are msg-ctor store scheduling, one squared-length operand order, planet-conversion temp order, 2 vcall reg swaps

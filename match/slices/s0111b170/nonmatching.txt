@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0111b170 2400 complete (flags /O2 /MD /Gy /TP /fp:fast); Havok 3.1 older-cl frame/x87 scheduling differs (2471 vs 2828 bytes); ordered call sequence 32/32 identical

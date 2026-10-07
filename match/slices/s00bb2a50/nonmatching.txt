@@ -1,0 +1,1 @@
+00bb2a50  2404  complete cStarManager::GenerateSolSystem (all 12 Sol planet records); same 137 calls in the same order with identical pushed constants, identical ordered member stores/float constants, size 3336 vs 3327; differs in callee-saved register assignment (planet pointers in edi/ebp swapped) and the temp string16 begin not cached across assign (LTCG alias knowledge)

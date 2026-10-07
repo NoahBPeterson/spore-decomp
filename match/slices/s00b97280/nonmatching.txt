@@ -1,0 +1,1 @@
+00b97720  1809 complete: planet cube-grid spawn-point picker (ring search + random candidate); size 2696/2684, 17/17 calls in same order, same compare/branch kinds; register/stack-slot allocation differs

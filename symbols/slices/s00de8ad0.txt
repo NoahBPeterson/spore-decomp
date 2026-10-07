@@ -1,0 +1,1 @@
+00de8ad0 SP::cSPEditorUI::DoMessage  # symbols/pdb_names.json anchor (dev 0x00d45ce0); this = handler sub-object at +8

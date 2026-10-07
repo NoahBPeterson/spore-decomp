@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008ce020/s008ce020.cpp  ?New_GlyphClass@@YAPAUGlyphClass@@PAUtsiMemObject@@PAUInputStream@@DFGFG@Z  008ce020

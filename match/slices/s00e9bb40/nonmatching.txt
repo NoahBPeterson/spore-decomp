@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00e9bb40  1999  complete cSPUFOGfx::CreateHitEffects: all 28 calls/vtable slots/effect ids in order; quaternion-rotate float schedule, /fp:fast dot order, IDENTITY row-temp copies and frame layout differ

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010ef580  2583  complete (flags /O2 /MD /Gy /TP /fp:fast): keycode check, A/B frames to world, motors-active path (begin, target frame setMul, twist/plane/cone motors with calcRelativeAngle x2, motor vcall +8, commit, runtime target angles), friction / no-friction begin paths, inlined twist-limit relative angle + hk1dAngularLimit, buildLimits, ball socket; x87 register/slot rounding modelled (hkX87Real / hkStoreF). 25/25 calls in original order; 2651 vs 2919 B. Not exact: Havok 3.1 older-cl x87 scheduling, call [reg+8] vs mov/call reg

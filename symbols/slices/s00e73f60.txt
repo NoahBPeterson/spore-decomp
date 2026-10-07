@@ -1,0 +1,2 @@
+00e73f60 SP::sUpdateGfx  # retail symbol name shown by card.py; byte-exact source
+00e50620 RemoveEffectEntry  # static helper (eax=set, esi=key, edi=out), reproduced byte-identical call shape in s00e73f60

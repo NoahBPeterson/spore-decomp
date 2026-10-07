@@ -1,1 +1,2 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s005598b0/s005598b0.cpp  ?Init@cSPObjectTemplateDB@SP@@QAE_NXZ  005598b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast

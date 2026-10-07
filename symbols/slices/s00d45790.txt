@@ -1,0 +1,1 @@
+00d45790 SP::cCreatureModeStrategy::HandleSimulationUpdate  # PDB candidate (caller-scored); ret 8 (float,float), calls ContinueLoading while loading

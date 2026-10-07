@@ -1,0 +1,1 @@
+0043d690 SP::cSPEditorBlock::SetMorphHandleWeight  # sets a deform handle's weight, MoveToTime on its anim, csnap/socket updates; name from s00441440 BuildBlock call site

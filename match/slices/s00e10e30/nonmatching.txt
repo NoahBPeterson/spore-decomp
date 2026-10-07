@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>   (complete, behaviorally equivalent, not byte-exact)
+00e10e30  2347  cSPUIMinimapWin::draw_trade_routes: both branches (noun-manager road polylines, planet trade-route dot cache with horizon test) complete; same call/vslot sequence, size 0.98x; /O2 register allocation (this in ebx+spill vs edi) and frame layout differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

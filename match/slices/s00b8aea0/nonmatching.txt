@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b8aea0  2723  COMPLETE cPlanetModel political-zone cube map build; 3155 vs 3275 B, 24/24 calls same targets (claim block laid out inline instead of after the loop nest); frame/stack-slot packing and x87/SSE register scheduling differ

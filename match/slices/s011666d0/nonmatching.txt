@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+011666d0  1971  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; complete 36-point IMDCT+window (static helper, eax=in ecx=win edx=out reproduced via stand-in caller); float constants bit-identical, same op association; SSE register allocation/scheduling differs

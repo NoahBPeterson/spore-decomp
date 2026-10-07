@@ -1,0 +1,1 @@
+00ccefb0  2575  complete GetTribeCursorID (all 10 noun cases, difficulty/relationship sub-switches, selection fixed_vector loop); same ordered calls/vslots/constants, all 6 x87 compares in the original NaN shape, size 1.005x; cl tail-merges the RelationshipManager/GetPoliticalID tails and the return-2/0x2f blocks differently [flags /O2 /MD /Gy /TP /arch:SSE /fp:fast]

@@ -1,0 +1,1 @@
+00611860  2094  complete (every message id/arm, all calls; size 2574 vs 2563 = 1.004x, 98/98 calls, same per-target call counts incl. 1 inlined + 4 called string dtors); residual: stack-slot packing (orig frame 0x88 with separate slots per Variant, mine 0x78), block placement of the shared Add(0,0) failure path, one erase call site tail-merged

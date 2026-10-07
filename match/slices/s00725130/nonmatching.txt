@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviorally-equivalent source, not byte-exact)
+00725130  2678  (flags /O2 /MD /Gy /EHsc /TP /GS-) CreateEdges complete: all 5 FindElementArray fallbacks, corner list (4/2-byte/no index), degenerate-triangle compaction for 4- and 2-byte position indices, edge-ring merging, index write-back, primitive remap, ring collapse into the adjacency stream, EH-scoped AutoRefCount/vector temporaries; call sequence identical (41 calls), size 0.977x; frame 0xb8 vs 0xd4, slot layout and register allocation differ

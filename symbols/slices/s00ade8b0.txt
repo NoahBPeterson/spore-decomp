@@ -1,0 +1,1 @@
+00ade8b0 SP::cCinematicManager::Initialize  # 33 cinematic ArgScript commands (letterbox..switchToExitState); ModAPI cCinematicManager layout; vtable 0x145b880 slot 2 (cGonzagoSubsystem at +4)

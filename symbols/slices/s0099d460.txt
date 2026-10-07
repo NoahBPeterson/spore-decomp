@@ -1,0 +1,1 @@
+0099d460 nSPCreatureAnim::EvaluateAnimationBodyState  # PDB candidate (caller-scored); calls EvaluateBoneTransform (0x9b0e90) and creature_instance_data::HitBody (0x9bb680)

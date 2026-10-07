@@ -1,0 +1,2 @@
+004a6f10 SP::EditorUtils::DeleteInvalidBlocks  # PDB name (card); deletes flag-1 blocks, sends 0x7f18f481 per block and 0xf058b0f2 summary
+004acab0 SP::cSPEditorModel::RemoveBlock  # (block, false) after the per-block delete message

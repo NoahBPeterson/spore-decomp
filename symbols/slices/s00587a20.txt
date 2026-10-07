@@ -1,1 +1,1 @@
-00587a20 SP::cAppModeEditorBase::Deactivate  # PDB candidate caller-scored; thiscall, no args
+00587a20 SP::cAppModeEditorBase::Deactivate  # PDB candidate (caller-scored); mirror of Activate 0x0058e6d0; byte-exact

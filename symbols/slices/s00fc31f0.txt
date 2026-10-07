@@ -1,0 +1,1 @@
+00fc31f0 SP::cWeatherManager::UpdateProperties  # dev-PDB name on card; byte-exact

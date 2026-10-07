@@ -1,0 +1,1 @@
+00cc4270  2430  complete cDefaultBeamProjectileView::HandleSimulationUpdate: all 67 calls / vtable slots / effect ids in source order, frame 0x700 matches; register allocation of the vertex fill loop and stack-slot reuse differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

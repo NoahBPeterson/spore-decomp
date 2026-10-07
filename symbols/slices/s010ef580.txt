@@ -1,0 +1,2 @@
+010ef580 hkPoweredRagdollConstraintData::buildJacobian  # symbols/havok_names.txt (havok identical-code)
+010aa080 hkBeginConstraints  # guessed: (in, out, solverResults, stride=8) matches Havok 6 hkBeginConstraints; called first by every buildJacobian path

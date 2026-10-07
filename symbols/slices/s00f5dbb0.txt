@@ -1,0 +1,1 @@
+00f5dbb0 WriteParticleQuadsHeight  # Claude-coined: EA::Swarm particle quad streamer (sibling of 00f5ccf0) with cube-map height lookup; callee 00f5a200=StreamerSetup/BuildDrawParams
