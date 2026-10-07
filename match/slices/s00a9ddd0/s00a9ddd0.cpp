@@ -209,6 +209,8 @@ struct ParticleEmitter {
     bool InitParticle(Particle* p);        // @ 0x00a9ddd0
 };
 
+static inline Vec3 V3Mul(float x, float y, float z, float s) { Vec3 r; r.x = x * s; r.y = y * s; r.z = z * s; return r; }
+static inline void V3AddTo(Vec3& v, const Vec3& a) { v.x += a.x; v.y += a.y; v.z += a.z; }
 static inline float AtanApprox(float y, float x)
 {
     float ay = fabsf(y) + 1e-10f;
@@ -285,9 +287,8 @@ bool ParticleEmitter::InitParticle(Particle* p)
             float m2 = (dz * dz + dy * dy) + dx * dx;
             if (m2 > 1e-6f) {
                 float s = k / sqrtf(m2);
-                p->vel.x = p->vel.x + dx * s;
-                p->vel.y = dy * s + p->vel.y;
-                p->vel.z = dz * s + p->vel.z;
+                Vec3 a = V3Mul(dx, dy, dz, s);
+                V3AddTo(p->vel, a);
             }
         }
     }

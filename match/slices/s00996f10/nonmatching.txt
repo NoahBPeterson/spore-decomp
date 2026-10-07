@@ -4,13 +4,12 @@
 009972a0  142  LoadRequestCallback: vcall/arg block schedule differs
 00997350  116  vector_map::insert: lower_bound/hash call schedule differs
 009978b0  252  cXHTMLFrameSet::HandleFormSubmit: wide-string and param callback schedule differs
-00997b10  2    push_back: second-argument register (edx vs ecx) differs
 00997b60  16   Obj33::ctor: dead first vtable store and register choice differ
 00997ba0  46   Obj33::clear: end-pointer kept in a register instead of reloaded; zero arg folded
 00997d90  34   Obj33::Release: lock/dec scheduling and branch layout differ
 00997dc0  300  HitMaskFactory::ReadResource: image decode arg/loop schedule differs
 00996f10  397  JobDeque::erase: complete; iterator-by-value copy/arg schedule differs
 009973e0  -    FrameSet::CreateFrame: complete; vcall sequence written as a loop over flag bits (not unrolled)
-00997730  307  FrameSet::HandleLocationChange: complete; reg alloc/schedule differs
+00997730  305  FrameSet::HandleLocationChange: complete; reg alloc/schedule differs; difftest WEAK after fixing lower_bound 0xd01260 arity (4 args incl. by-value compare object, not 5)
 009979f0  213  FrameSet::FindFrames: complete; stack-vector end kept in memory not register
 00997bf0  29   HitMaskBinder::Bind: complete; vcall fetch scheduling differs

@@ -1,4 +1,3 @@
-0092e440 24 tm pointer passed as 'this': original reloads ecx from the stack arg (register allocation)
 0092e470 51 DateTime::Add: same logic, callee-saved register choice (esi vs edi) differs
 0092e5a0 131 GetLocalTimeBias: calls SetDate with garbage this (ecx), block order/regalloc differs
 0092e680 52 FILETIME epoch: SYSTEMTIME zero-init stores scheduled differently

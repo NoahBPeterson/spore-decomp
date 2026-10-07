@@ -1,4 +1,4 @@
-// slice s00699a10 — SP animated-event curve helpers (float arrays). Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+// slice s00699a10 — SP animated-event curve helpers (float arrays). Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast
 #include "types.h"
 #include <math.h>
 
@@ -57,64 +57,60 @@ class HermiteTrack3 {
 
 // @ 0x00699a10  2D convex hull (monotone chain) of points with stride 3 floats; returns hull point count
 int ConvexHull2D(const float* pts, int n, float* out) {
-  float x0 = pts[0];
+  const Vec3* P = (const Vec3*)pts;
+  Vec3* O = (Vec3*)out;
+  float x0 = P[0].x;
   int first = 1;
-  while (first < n && pts[first * 3] == x0) ++first;
+  while (first < n && P[first].x == x0) ++first;
   int lo = first - 1;
   int hi = n - 1;
   if (lo == hi) {
-    out[0] = pts[0]; out[1] = pts[1]; out[2] = pts[2];
-    const float* q = pts + lo * 3;
-    unsigned k = (q[1] != pts[1]);
-    if (k) { out[3] = q[0]; out[4] = q[1]; out[5] = q[2]; }
-    float* o = out + (k + 1) * 3;
-    o[0] = pts[0]; o[1] = pts[1]; o[2] = pts[2];
+    O[0] = P[0];
+    unsigned k = (P[lo].y != P[0].y);
+    if (k) O[1] = P[lo];
+    O[k + 1] = P[0];
     return (int)k + 2;
   }
   int last = n - 2;
-  float xl = pts[n * 3 - 3];
-  while (last >= 0 && pts[last * 3] == xl) --last;
+  float xl = P[n - 1].x;
+  while (last >= 0 && P[last].x == xl) --last;
   int split = last + 1;
-  out[0] = pts[0]; out[1] = pts[1]; out[2] = pts[2];
+  O[0] = P[0];
   int k = 0;
   for (int i = first; i <= split; ++i) {
-    const float* p = pts + i * 3;
-    float c = (p[1] - pts[1]) * (pts[split * 3] - pts[0]) - (pts[split * 3 + 1] - pts[1]) * (p[0] - pts[0]);
-    if (c < 0.0f || split <= i) {
-      while (k > 0) {
-        const float* a = out + (k - 1) * 3;
-        const float* b = out + k * 3;
-        if (0.0f < (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) break;
-        --k;
-      }
-      ++k;
-      out[k * 3] = p[0]; out[k * 3 + 1] = p[1]; out[k * 3 + 2] = p[2];
+    const Vec3* p = &P[i];
+    float c = (p->y - P[0].y) * (P[split].x - P[0].x) - (P[split].y - P[0].y) * (p->x - P[0].x);
+    if (c >= 0.0f && i < split) continue;
+    while (k > 0) {
+      const Vec3* a = &O[k - 1];
+      const Vec3* b = &O[k];
+      if ((b->x - a->x) * (p->y - a->y) - (b->y - a->y) * (p->x - a->x) > 0.0f) break;
+      --k;
     }
+    ++k;
+    O[k] = *p;
   }
   if (hi != split) {
     ++k;
-    const float* p = pts + hi * 3;
-    out[k * 3] = p[0]; out[k * 3 + 1] = p[1]; out[k * 3 + 2] = p[2];
+    O[k] = P[hi];
   }
   int m = k;
   for (int i = last; i >= lo; --i) {
-    const float* p = pts + i * 3;
-    float hx = pts[hi * 3], hy = pts[hi * 3 + 1];
-    float c = (pts[lo * 3] - hx) * (p[1] - hy) - (pts[lo * 3 + 1] - hy) * (p[0] - hx);
-    if (c < 0.0f || i <= lo) {
-      while (m > k) {
-        const float* a = out + (m - 1) * 3;
-        const float* b = out + m * 3;
-        if (0.0f < (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])) break;
-        --m;
-      }
-      ++m;
-      out[m * 3] = p[0]; out[m * 3 + 1] = p[1]; out[m * 3 + 2] = p[2];
+    const Vec3* p = &P[i];
+    float c = (P[lo].x - P[hi].x) * (p->y - P[hi].y) - (P[lo].y - P[hi].y) * (p->x - P[hi].x);
+    if (c >= 0.0f && i > lo) continue;
+    while (m > k) {
+      const Vec3* a = &O[m - 1];
+      const Vec3* b = &O[m];
+      if ((b->x - a->x) * (p->y - a->y) - (b->y - a->y) * (p->x - a->x) > 0.0f) break;
+      --m;
     }
+    ++m;
+    O[m] = *p;
   }
   if (lo != 0) {
     ++m;
-    out[m * 3] = pts[0]; out[m * 3 + 1] = pts[1]; out[m * 3 + 2] = pts[2];
+    O[m] = P[0];
   }
   return m + 1;
 }
@@ -186,16 +182,18 @@ float HermiteTrack::Evaluate(float t) {
   int n = (int)(mpTimesEnd - mpTimes);
   int seg = 0;
   for (int i = 1; i < n; ++i) {
-    if (t <= mpTimes[i]) break;
+    if (!(t > mpTimes[i])) break;
     seg = i;
   }
   float h = mpTimes[seg + 1] - mpTimes[seg];
   float s = (t - mpTimes[seg]) / h;
+  // tangents scaled into a small array: forces float-rounded SSE products, as in the original
+  float m[2];
+  m[0] = mpTangents[seg] * h;
+  m[1] = mpTangents[seg + 1] * h;
   float s2 = s * s;
-  float m0 = mpTangents[seg] * h;
-  float m1 = mpTangents[seg + 1] * h;
-  return ((s - 1.0f) * s2) * m1 + (((s - 2.0f) * s + 1.0f) * s) * m0 +
-         ((3.0f - s * 2.0f) * s2) * mpValues[seg + 1] + ((s * 2.0f - 3.0f) * s2 + 1.0f) * mpValues[seg];
+  return ((s * 2.0f - 3.0f) * s2 + 1.0f) * mpValues[seg] + ((3.0f - s * 2.0f) * s2) * mpValues[seg + 1] +
+         (((s - 2.0f) * s + 1.0f) * s) * m[0] + ((s - 1.0f) * s2) * m[1];
 }
 
 // @ 0x0069a750  finite-difference tangents for the interior keys

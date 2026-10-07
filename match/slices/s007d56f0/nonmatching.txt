@@ -1,6 +1,5 @@
 # <va>  <diff-bytes>  <reason>
-007d56f0  ~200 cGameModelEffect::SetTransforms: complete; cTransform copies use one stack temp in the original (Matrix3::Assign call only for the first copy), three temps here
-007d5a30  ~40  vector<cSplitController>::~vector: complete; original keeps an EH frame (this + state 0) around the release loop
+007d56f0  ~150 cGameModelEffect::SetTransforms: complete; first rotation copy via Matrix3::Assign, later copies inlined through a temp; register allocation (source/rigid/this in edi/ebp/ebx, loop counters in arg slots) differs; needs /fp:fast for SSE mulss; difftest PASS after fixing the loop/final cTransform copies, which called Matrix3::Assign (an extra call the original inlines)
 007d5af0  ~80  cGameModelEffect ctor: complete; scheduling of the float-constant loads and the refcount store order differ
 007d5c50  19   ~cGameModelEffect: complete; EH state numbering (anim vector has no state in the original) and base-vptr store at the end differ
 007d5d50  16   cSplitManager ctor: complete; refcount store is scheduled after the u16 stores here

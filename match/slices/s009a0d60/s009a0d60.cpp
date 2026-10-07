@@ -714,7 +714,7 @@ void FUN_009a1ad0(char* obj) {
 // ===========================================================================
 // @ 0x009a1b00  destroy a slot range
 // ===========================================================================
-void FUN_009a1b00(SlotObj* first, SlotObj* last) {
+void __stdcall FUN_009a1b00(SlotObj* first, SlotObj* last) {
   if (first < last) {
     do {
       first->mState = 0;

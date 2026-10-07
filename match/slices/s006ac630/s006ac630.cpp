@@ -50,21 +50,25 @@ struct RegTable {                           // eastl hashtable at Registry+0xc
     RegIter* erase(RegIter* out, RegIter it);                         // 0x006aca20
 };
 
+struct RWSpinLock {                         // at Registry+0x48
+    long state;                             // +0 (bit0 = writer, +2 per reader)
+    long pad4;
+    long generation;                        // +8 (Registry+0x50)
+    void AcquireShared();                    // 0x006abf20
+    void AcquireExclusive();                 // 0x006abfa0
+};
+
 struct Registry {
     char pad0[0xc];
     RegTable table;                         // +0xc
     char pad1[0x48 - 0xc - sizeof(RegTable)];
-    long lock;                              // +0x48
-    long pad4c;
-    long generation;                        // +0x50
+    RWSpinLock lock;                        // +0x48
     char padRegistry[0x34];
     bool Register(void* key, void* obj);     // 0x006acc60
     bool Unregister(void* key, void* obj);   // 0x006ace70
     bool Lookup(const uint32_t* key, IObj** out);     // 0x006ac840
     int Enumerate(void* list, struct IFilter* f);    // 0x006ac8d0
     bool ClearAll();                         // 0x006ac7d0
-    void AcquireShared();                    // 0x006abf20
-    void AcquireExclusive();                 // 0x006abfa0
 };
 extern Registry* sRegistry;   // 0x01603118
 
@@ -143,13 +147,13 @@ struct LockGuard {
 
 struct ReadGuard {
     long* p;
-    ReadGuard(Registry* r) : p(&r->lock) { r->AcquireShared(); }
+    ReadGuard(Registry* r) : p(&r->lock.state) { r->lock.AcquireShared(); }
     ~ReadGuard() { _InterlockedExchangeAdd(p, -2); }
 };
 struct WriteGuard {
     Registry* r;
-    WriteGuard(Registry* rr) : r(rr) { r->AcquireExclusive(); }
-    ~WriteGuard() { _InterlockedExchangeAdd(&r->lock, -1); _InterlockedExchangeAdd(&r->generation, 1); }
+    WriteGuard(Registry* rr) : r(rr) { r->lock.AcquireExclusive(); }
+    ~WriteGuard() { _InterlockedExchangeAdd(&r->lock.state, -1); _InterlockedExchangeAdd(&r->lock.generation, 1); }
 };
 
 void OnRegister(bool added, IObj* obj);
@@ -193,6 +197,7 @@ struct RegList {
     void* mpBuf;            // +0x14
     int pad18;
     RegEntry mBuf[32];      // +0x1c
+    int pad11c;             // +0x11c
     Mutex mMutex;           // +0x120
     RegList();
     bool ReleaseAll();      // 0x006ad270

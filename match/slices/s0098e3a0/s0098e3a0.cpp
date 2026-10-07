@@ -43,8 +43,9 @@ FontServer* GetFontServer(bool create);                      // 0x885a60
 void GetMaxFontMetrics(void* fonts, float* a, float* b);     // 0x8985b0
 
 struct TextRunInfo { const wchar_t* text; uint32_t length; };
-struct CharBreakIterator {
-    uint32_t d[6];
+struct CharBreakIterator {          // 0x20 bytes (the original reserves 0x20 for it on the stack)
+    uint32_t d[7];
+    uint32_t mnPosition;                // +0x1c, zeroed by the caller before SetPosition
     void SetTextRunArray(const TextRunInfo* runs, uint32_t n, uint32_t a, uint32_t b, int c);  // 0x88f790
     uint32_t SetPosition(uint32_t p);                        // 0x888220
     uint32_t GetNextCharBreak();                             // 0x888240
@@ -293,6 +294,7 @@ bool IWinTextEdit::MoveCursor(int kind, int amount, uint32_t extend)
         info.length = GetTextLength();
         EA::Text::CharBreakIterator it;
         it.SetTextRunArray(&info, 1, 0, 0, -1);
+        it.mnPosition = 0;
         it.SetPosition(mCursorIndex);
         while (n > 0) {
             cursor = forward ? it.GetNextCharBreak() : it.GetPrevCharBreak();

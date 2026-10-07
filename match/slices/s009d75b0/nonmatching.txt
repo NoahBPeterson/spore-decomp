@@ -4,8 +4,8 @@
 009d7dd0 33 complete Item copy ctor; register allocation of memcpy result differs
 009d7f20 105 complete copy loop; original strides pointers biased by +0x20 (field-pointer form), mine indexes from item base
 009d7fa0 118 complete copy_backward of Items; same pointer-bias difference as 009d7f20
-009d8020 400 complete 3-pointer sort; branch layout and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-009d81f0 696 complete 4-pointer sort by squared distance; x87/SSE scheduling and arg order differ
+009d8020 400 complete 3-pointer sort; branch layout and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); difftest PASS after fixing the sort predicate argument (an empty struct passed by value: only its low byte is written, the rest is the stale arg slot; was passed as int 0)
+009d81f0 577 complete 4-pointer sort by squared distance; SSE scheduling and register allocation differ; difftest PASS after fixing the last compare (original measures from (d, e), not (e, f)) and the empty-struct sort predicate argument
 009d84f0 267 complete per-item dispatch on pointer count; locals/regalloc differ
 009d8660 27 complete alloc+uninitialized_copy; n reloaded from stack after call in original
 009d86c0 36 complete ItemVec copy-init; arg slot reuse differs

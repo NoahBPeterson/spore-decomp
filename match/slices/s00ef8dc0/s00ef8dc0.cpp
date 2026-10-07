@@ -218,9 +218,9 @@ struct StepIterator {
 
 struct HashFn { HashFn() {} };
 struct EqFn { EqFn() {} };
-struct ModRangeHashing {};
-struct RangedHash {};
-struct UseSelf {};
+struct ModRangeHashing { ModRangeHashing() {} };
+struct RangedHash { RangedHash() {} };
+struct UseSelf { UseSelf() {} };
 
 // hash_set<int, ..., fixed_hashtable_allocator>: 0x34 bytes of table state
 struct StepSet {
@@ -278,16 +278,24 @@ struct StepSetSmall;
 struct StepSetBig : StepSet {                // 0x33c bytes: 0x34 table + 0x108 buckets + 0x200 nodes
     StepNode* mBuckets[0x108 / 4];
     char mNodes[0x200];
-    void Construct(uint32_t n, const HashFn& h, const EqFn& e0, const EqFn& e1, const HashFn& h2, const EqFn& e2,
+    void Construct(uint32_t n, const HashFn& h, const ModRangeHashing& h2, const RangedHash& rh, const EqFn& e, const UseSelf& ek,
                    const fixed_hashtable_allocator& a);                  // 0x00ef86c0
+    void HashSetCtor(uint32_t n, const HashFn& h, const EqFn& p, const fixed_hashtable_allocator& a)
+    {
+        Construct(n, h, ModRangeHashing(), RangedHash(), p, UseSelf(), a);
+    }
     StepSetBig(const HashFn& h = HashFn(), const EqFn& e = EqFn());                                        // 0x00ef9880
     ~StepSetBig() {}
 };
 struct StepSetSmall : StepSet {              // 0xfc bytes: 0x34 table + 0x48 buckets + 0x80 nodes
     StepNode* mBuckets[0x48 / 4];
     char mNodes[0x80];
-    void Construct(uint32_t n, const HashFn& h, const EqFn& e0, const EqFn& e1, const HashFn& h2, const EqFn& e2,
+    void Construct(uint32_t n, const HashFn& h, const ModRangeHashing& h2, const RangedHash& rh, const EqFn& e, const UseSelf& ek,
                    const fixed_hashtable_allocator& a);                  // 0x00ef8770
+    void HashSetCtor(uint32_t n, const HashFn& h, const EqFn& p, const fixed_hashtable_allocator& a)
+    {
+        Construct(n, h, ModRangeHashing(), RangedHash(), p, UseSelf(), a);
+    }
     StepSetSmall(const HashFn& h = HashFn(), const EqFn& e = EqFn());                                      // 0x00ef9950
     ~StepSetSmall() {}
 };
@@ -304,7 +312,7 @@ StepSetBig::StepSetBig(const HashFn& h, const EqFn& e)
         a.mPool.mnNodeSize = 8;
         a.mpBucketBuffer = mBuckets;
         uint32_t nBuckets = GetPrevBucketCountOnly(0x41);
-        Construct(nBuckets, h, e, e, h, e, a);
+        HashSetCtor(nBuckets, h, e, a);
     }
     set_max_load_factor(10000.0f);
 }
@@ -321,7 +329,7 @@ StepSetSmall::StepSetSmall(const HashFn& h, const EqFn& e)
         a.mPool.mnNodeSize = 8;
         a.mpBucketBuffer = mBuckets;
         uint32_t nBuckets = GetPrevBucketCountOnly(0x11);
-        Construct(nBuckets, h, e, e, h, e, a);
+        HashSetCtor(nBuckets, h, e, a);
     }
     set_max_load_factor(10000.0f);
 }

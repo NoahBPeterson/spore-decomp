@@ -1,4 +1,4 @@
-00a4d340  1  linked-list tail walk picks eax vs ecx for node reg
+00a4d340  1  linked-list tail walk picks eax vs ecx for node reg; difftest FAIL is a checker artifact: on the saved input the list walk ends at soup node 0x50394c39, the original writes y into its g_next, and our run (same instructions up to one register choice) then reads that same y back from the cached lazy page, i.e. the original's write leaked into our run's input
 00a4d4d0  2  xmax/maxp update store order
 00a4d6a0  2  xmax/maxp update store order
 00a4de50  140  x and y swap callee-saved regs (edi/ebx)

@@ -1,4 +1,5 @@
 // Slice s00ab7720 -- 0x00ab7720: ribbon/trail geometry builder (~3.9 KB, /O2 /arch:SSE, cdecl).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast  (inline fsqrt and x87 math kept in registers, as in the original)
 // Unnamed in the PDB. Locks a vertex sink (param_2) for N quads of 4 vertices each, then for every
 // step along the trail samples alpha/color/width curves (effect data at +0x14), the path
 // (self+0x134) and a fade curve (self+0x570), optionally transforms the point (Transform at

@@ -1,5 +1,5 @@
 005fa1d0  33  hashtable bucket teardown A (string node free loop): complete; current/next register allocation is swapped (esi/edi)
 005fa230  55  hashtable bucket teardown B (node free loop, +0xc/+0x14 fields): complete; register allocation differs
 005f9920  1403  WriteAssetDataToImage: complete; callee-saved register assignment (edi/esi/ebp order) and frame size differ
-005fa100  7  string-key hashtable erase: complete; ecx/edx swap in second equal-loop
+005fa100  4  string-key hashtable erase: complete; ecx/edx swap in second equal-loop; difftest PASS after fixing StrNode::next offset (0x14 -> 0x10, spurious pad after the 16-byte key)
 005fa290  1369  RestoreImportTable: complete; stream/local init scheduling and frame size (0x4f0 vs 0x4e8) differ

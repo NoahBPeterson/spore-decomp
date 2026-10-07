@@ -4,3 +4,4 @@ slices/s008fd6c0/s008fd6c0.cpp  ?SetRequestTypeInfo@@YAXPAUResourceRequest@@PBD@
 slices/s008fd6c0/s008fd6c0.cpp  ?FindFirstOf@@YAPBGPBG000@Z                  008fe3f0  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fd6c0/s008fd6c0.cpp  ?NotificationTargetTest@HttpHandler2@@QAE_NPBD@Z  008fdaf0  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fd6c0/s008fd6c0.cpp  ?erase@IHTable@@QAEIABQB_W@Z  008fe510  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fd6c0/s008fd6c0.cpp  ?DoFindNode@IHTableW@@QBEPAHPAHPAPBG@Z  008fe430  /O2 /MD /Gy /TP /GS- /arch:SSE2

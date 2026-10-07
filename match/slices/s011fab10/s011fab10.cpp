@@ -251,14 +251,24 @@ void __cdecl SetLightRange(u32 a, u32 b, int c)
 // @ 0x011fae40
 void __cdecl SetWorldMatrixRow3(u32 a, u32 b, int c)
 {
-    Mat4 m = *g_worldMat;
+    Mat4 m;
+    const Mat4* w = g_worldMat;
+    m.r[0].m = w->r[0].m;
+    m.r[1].m = w->r[1].m;
+    m.r[2].m = w->r[2].m;
+    m.r[3].m = w->r[3].m;
     DEV_SET(a, &m.r[3], 1);
 }
 
 // @ 0x011faea0
 void __cdecl SetWorldMatrixRows23(u32 a, u32 b, int c)
 {
-    Mat4 m = *g_worldMat;
+    Mat4 m;
+    const Mat4* w = g_worldMat;
+    m.r[0].m = w->r[0].m;
+    m.r[1].m = w->r[1].m;
+    m.r[2].m = w->r[2].m;
+    m.r[3].m = w->r[3].m;
     DEV_SET(a, &m.r[2], 1);
 }
 
@@ -410,10 +420,20 @@ void __cdecl Matrix44InvertRigid(Mat4* out, const Mat4* in)
     o[0] = m[0]; o[4] = m[1]; o[8] = m[2];
     o[1] = m[4]; o[5] = m[5]; o[9] = m[6];
     o[2] = m[8]; o[6] = m[9]; o[10] = m[10];
-    float tx = m[12], ty = m[13], tz = m[14];
-    o[12] = 0.0f - ((tx * m[0] + ty * m[1]) + tz * m[2]);
-    o[13] = 0.0f - ((tx * m[4] + ty * m[5]) + tz * m[6]);
-    o[14] = 0.0f - ((tx * m[8] + ty * m[9]) + tz * m[10]);
+    // translation = -(t . row_i), each dot product in SSE single precision as x*a + (y*b + z*c)
+    __m128 t = in->r[3].m;
+    t = _mm_shuffle_ps(_mm_shuffle_ps(t, t, 0x10), t, 0x28);
+    __m128 zero = _mm_setzero_ps();
+    for (int i = 0; i < 3; i++) {
+        __m128 r = in->r[i].m;
+        r = _mm_shuffle_ps(_mm_shuffle_ps(r, r, 0x10), r, 0x28);
+        __m128 p = _mm_mul_ps(t, r);
+        __m128 d = _mm_add_ps(p, _mm_add_ps(_mm_shuffle_ps(p, p, 1), _mm_shuffle_ps(p, p, 2)));
+        Vec4 row3;
+        row3.m = out->r[3].m;
+        (&row3.x)[i] = _mm_cvtss_f32(_mm_sub_ss(zero, d));
+        out->r[3].m = row3.m;
+    }
 }
 
 // @ 0x011fb950

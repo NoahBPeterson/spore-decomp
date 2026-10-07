@@ -1,1 +1,1 @@
-00a02da0 4093 complete, compiles to 3302 bytes; original builds 24 9-float vertices via struct-copy temporaries (movss/mov edx round trips) that plain stores don't reproduce
+00a02da0 4093 complete, compiles to 3302 bytes; original builds 24 9-float vertices via struct-copy temporaries (movss/mov edx round trips) that plain stores don't reproduce; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the flags (default x87 build rounded sums once in extended precision, 1 ulp off the original's per-op SSE single rounding)

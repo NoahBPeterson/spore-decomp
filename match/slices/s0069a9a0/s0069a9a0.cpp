@@ -1,4 +1,4 @@
-// slice s0069a9a0 -- animated-event keyframe tracks (Hermite) and orientation math. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+// slice s0069a9a0 -- animated-event keyframe tracks (Hermite) and orientation math. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
 #include "types.h"
 
 extern "C" double __cdecl sqrt(double);
@@ -285,10 +285,19 @@ void SegmentClosestPoint2D(Vec2f* out, const Vec2f* p, const Vec2f* a, const Vec
 float SignedAngleBetween(const Vector3* a, const Vector3* b, const Vector3* axis);   // 0x006994a0
 
 // @ 0x0069b760  angle between two (normalized copies of) vectors about an axis
+static inline void NormalizeTo(Vector3* o, const Vector3* v)
+{
+  float inv = 1.0f / (float)sqrt(v->x * v->x + v->y * v->y + v->z * v->z);
+  o->x = v->x * inv;
+  o->y = v->y * inv;
+  o->z = v->z * inv;
+}
+
 float SignedAngleNormalized(const Vector3* a, const Vector3* b, const Vector3* axis)
 {
-  Vector3 nb = Normalized(*b);
-  Vector3 na = Normalized(*a);
+  Vector3 nb, na;
+  NormalizeTo(&nb, b);
+  NormalizeTo(&na, a);
   return SignedAngleBetween(&na, &nb, axis);
 }
 

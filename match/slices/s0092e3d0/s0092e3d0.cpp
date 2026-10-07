@@ -32,9 +32,10 @@ void DateTime::Set(int utc) {
         SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
 }
 
-// @ 0x0092e440  fields of a struct tm forwarded to SetDate (the original passes the tm pointer as 'this')
-void SetDateFromTm(tm* p) {
-    ((DateTime*)p)->SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
+// @ 0x0092e440  fields of a struct tm forwarded to SetDate on the DateTime passed second
+// (cdecl, two stack args: the original loads ecx from [esp+0x1c] after five pushes = arg 2)
+void SetDateFromTm(const tm* p, DateTime* d) {
+    d->SetDate(p->tm_year + 1900, p->tm_mon + 1, p->tm_mday, p->tm_hour, p->tm_min, p->tm_sec);
 }
 
 // @ 0x0092e470  EA::DateTime::DateTime::Add(unit, amount)

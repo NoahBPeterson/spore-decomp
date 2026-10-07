@@ -1,6 +1,6 @@
 // Slice s009568c0 - UTFWin 2D render system, display/renderable list pools,
 // EASTL vector helpers and Object/UI::Image layer code.
-// Flags: /O2 /MD /Gy /EHsc /TP /GS-  (SSE2 float code).
+// Flags: /O2 /MD /Gy /TP /GS- /arch:SSE2 /fp:fast  (as every manifest row; no /EHsc: the originals have no EH frames)
 #include "types.h"
 #include <intrin.h>
 

@@ -77,7 +77,8 @@ void* __cdecl UninitCopyOut(Item** out, Item* first, Item* last, Item* dst, u32 
 void __cdecl SortRangeA(void* first, void* last, u32 pred);   // 0x9d7a40
 void __cdecl SortRangeB(void* first, void* last, u32 pred);   // 0x9d79d0
 void __cdecl SortRangeC(void* first, void* last, u32 pred);   // 0x9d7ab0
-u32 __cdecl MakePred(u32 tag);                                // 0x921240
+struct EmptyPred {};
+u32 __cdecl MakePred(EmptyPred tag);                             // 0x921240
 
 struct ItemVec {
     Item* b;
@@ -400,7 +401,7 @@ static inline float PZ(u32 p) { return *(float*)(p + 0x80); }
 void GaitSorter::Sort3(PtrVec* vec, float a, float b)
 {
     if (a < 1e-06f || 100.0f < b / a) {
-        SortRangeA(vec->b, vec->e, MakePred(0));
+        SortRangeA(vec->b, vec->e, MakePred(EmptyPred()));
     } else if (b < 1e-06f || 100.0f < a / b) {
         u32* p = vec->b;
         u32 t = p[0];
@@ -474,49 +475,52 @@ void GaitSorter::Sort3(PtrVec* vec, float a, float b)
 
 static inline float Sq2(float dx, float dz) { return dz * dz + dx * dx; }
 
+static inline void SortA(u32* b, u32* e, EmptyPred pr) { SortRangeA(b, e, MakePred(pr)); }
+static inline void SortB(u32* b, u32* e, EmptyPred pr) { SortRangeB(b, e, MakePred(pr)); }
+
 // @ 0x9d81f0
 void GaitSorter::Sort4(PtrVec* vec, float a, float b, float c, float d, float e, float f)
 {
     if (a == 0.0f) {
-        SortRangeA(vec->b, vec->e, MakePred(0));
+        SortA(vec->b, vec->e, EmptyPred());
         return;
     }
     if (b == 0.0f) {
-        SortRangeB(vec->b, vec->e, MakePred(0));
+        SortB(vec->b, vec->e, EmptyPred());
         return;
     }
     u32* p = vec->b;
-    if (Sq2(PX(p[1]) - d, PZ(p[1]) - f) < Sq2(PX(p[0]) - d, PZ(p[0]) - f)) {
+    if (Sq2(PX(p[0]) - d, PZ(p[0]) - f) > Sq2(PX(p[1]) - d, PZ(p[1]) - f)) {
         u32 t = p[0];
         p[0] = p[1];
         p[1] = t;
     }
     p = vec->b;
-    if (Sq2(PX(p[2]) - d, PZ(p[2]) - f) < Sq2(PX(p[0]) - d, PZ(p[0]) - f)) {
+    if (Sq2(PX(p[0]) - d, PZ(p[0]) - f) > Sq2(PX(p[2]) - d, PZ(p[2]) - f)) {
         u32 t = p[0];
         p[0] = p[2];
         p[2] = t;
     }
     p = vec->b;
-    if (Sq2(PX(p[3]) - d, PZ(p[3]) - f) < Sq2(PX(p[0]) - d, PZ(p[0]) - f)) {
+    if (Sq2(PX(p[0]) - d, PZ(p[0]) - f) > Sq2(PX(p[3]) - d, PZ(p[3]) - f)) {
         u32 t = p[0];
         p[0] = p[3];
         p[3] = t;
     }
     p = vec->b;
-    if (Sq2(PX(p[2]) - c, PZ(p[2]) - f) < Sq2(PX(p[1]) - c, PZ(p[1]) - f)) {
+    if (Sq2(PX(p[1]) - c, PZ(p[1]) - f) > Sq2(PX(p[2]) - c, PZ(p[2]) - f)) {
         u32 t = p[1];
         p[1] = p[2];
         p[2] = t;
     }
     p = vec->b;
-    if (Sq2(PX(p[3]) - c, PZ(p[3]) - f) < Sq2(PX(p[1]) - c, PZ(p[1]) - f)) {
+    if (Sq2(PX(p[1]) - c, PZ(p[1]) - f) > Sq2(PX(p[3]) - c, PZ(p[3]) - f)) {
         u32 t = p[1];
         p[1] = p[3];
         p[3] = t;
     }
     p = vec->b;
-    if (Sq2(PX(p[3]) - e, PZ(p[3]) - f) < Sq2(PX(p[2]) - e, PZ(p[2]) - f)) {
+    if (Sq2(PX(p[2]) - d, PZ(p[2]) - e) > Sq2(PX(p[3]) - d, PZ(p[3]) - e)) {
         u32 t = p[2];
         p[2] = p[3];
         p[3] = t;
@@ -547,9 +551,9 @@ void __fastcall GaitSorter_SortAll(GaitSorter* self)
                 break;
             case 2:
                 if (fa > fb)
-                    SortRangeB(it->v.b, it->v.e, MakePred(0));
+                    SortRangeB(it->v.b, it->v.e, MakePred(EmptyPred()));
                 else
-                    SortRangeA(it->v.b, it->v.e, MakePred(0));
+                    SortRangeA(it->v.b, it->v.e, MakePred(EmptyPred()));
                 break;
             case 3:
                 self->Sort3(&it->v, fa, fb);
@@ -558,7 +562,7 @@ void __fastcall GaitSorter_SortAll(GaitSorter* self)
                 self->Sort4(&it->v, fa, fb, f0, f1, f2, f3);
                 break;
             default:
-                SortRangeC(it->v.b, it->v.e, MakePred(0));
+                SortRangeC(it->v.b, it->v.e, MakePred(EmptyPred()));
                 break;
             }
             off += 0x38;

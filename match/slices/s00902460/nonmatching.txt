@@ -1,7 +1,7 @@
 00902460  129  TokenIOContext::ClearStrings: complete; hashtable re-init store schedule differs (InitEmpty field write order)
-00902640  317  sWriteString: complete; wide/narrow split and register schedule differ
+00902640  313  sWriteString: complete; returns bool (!stream->v05()), GetString is a thiscall TokenIOContext method, wide flag set by any char > 0xff, narrow chunks written through vtable +0x38, shared length/id write; register/branch layout differs; difftest WEAK after fixing void return, cdecl GetString call, inverted wide-char loop, read-slot (+0x30) used for narrow writes and a /GS cookie on the char buffer (int buffer now, original has no cookie)
 00902c20  203  sWriteToken: complete; switch tail / dup-call schedule differs (int vs bool return)
-00902fc0  185  sWriteTokenList: complete; header write schedule and marker compare differ
+00902fc0  129  sWriteTokenList: complete; frame slot reuse for the marker differs; difftest PASS after fixing int-0 return (original returns !stream->v05()), version word written from the 0x143a2bc constant (1, not 0) and the missing IsBlank(name)/IsBlank(value) skip test
 009030b0  58   TokenIOContext ctor: complete; placement-new null check and allocator store schedule differ
 00902590  147  AddString: complete; hashtable find/insert temp (pair/iterator) stack layout and ebx/ebp roles differ
 009027b0  155  sReadString: complete; register roles (stream/out) and in-place widen loop schedule differ

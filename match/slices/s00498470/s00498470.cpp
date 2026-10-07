@@ -1,6 +1,7 @@
 // Slice s00498470 (batch w1g0, slice 96), 0x00498470..0x00498f??.
 // /Od editor-region code: block placement / pinning helpers (SP::EditorUtils neighbourhood).
 // Built unoptimized: /Od /Ob1 /arch:SSE /fp:fast. Callees are declared with the convention seen at the call site.
+// Flags: /Od /Ob1 /arch:SSE /fp:fast /MD /Gy /TP /GS-
 
 #include "types.h"
 
@@ -127,7 +128,7 @@ struct Handle {                                 // gizmo / handle object with a 
 };
 
 // @ 0x00498470
-bool FUN_00498470(Block* blk, P3* pos, Matrix3* m1, Matrix3* m2, uint8_t e, float f, uint8_t g, char h)
+bool FUN_00498470(Block* blk, P3* pos, Matrix3* m1, Matrix3* m2, bool e, float f, uint8_t g, char h)
 {
     if (blk != 0 && (blk->mSocketBlock || g != 0) && blk->mEditorModel && blk->mEditorModel->FUN_004adc40()) {
         bool is15 = blk->mFlags.test(0xf);
@@ -138,17 +139,17 @@ bool FUN_00498470(Block* blk, P3* pos, Matrix3* m1, Matrix3* m2, uint8_t e, floa
             *m1 = *MoveBlockAndTranslateSnappedBlocks(&tmpRet, blk, *m1);
             Matrix3 saved(*m2);
             if (FUN_004973f0(blk, m2, f, g)) {
-                e = 1;
+                e = true;
             } else if (is15) {
-                e = 0;
+                e = false;
                 *m2 = saved;
             }
             if (!b1) {
-                e = 0;
+                e = false;
                 *m2 = saved;
             }
             *pos = outPos;
-            FUN_0049ec40(blk, pos, m1, m2, e != 0);
+            FUN_0049ec40(blk, pos, m1, m2, e);
             if (!is15) {
                 blk->SetBooleanAttribute(0xf, true);
                 if (h)

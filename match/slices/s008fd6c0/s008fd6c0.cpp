@@ -102,12 +102,20 @@ const wchar16* FindFirstOf(const wchar16* first, const wchar16* last,
 }
 
 // @ 0x008fe430
-int* DoFindNode(int* node, const wchar16** key)
+// eastl::intrusive_hashtable<...>::DoFindNode: a thiscall member that never uses this.
+struct IHTableW {
+    int* DoFindNode(int* node, const wchar16** key) const;
+};
+int* IHTableW::DoFindNode(int* node, const wchar16** key) const
 {
     while (node) {
         const wchar16* a = *key;
         const wchar16* b = *(const wchar16**)((char*)node + 4);
-        if (wcscmp((const wchar_t*)a, (const wchar_t*)b) == 0)
+        while (*a && *a == *b) {
+            ++a;
+            ++b;
+        }
+        if (*a == *b)
             return node;
         node = (int*)*node;
     }
@@ -127,7 +135,7 @@ unsigned __fastcall HT_Find(int* self, const wchar16** key)
     }
     h &= 0x3f;
     int* bucket = (int*)((char*)self + h * 4);
-    int* node = DoFindNode(*(int**)bucket, key);
+    int* node = ((const IHTableW*)self)->DoFindNode(*(int**)bucket, key);
     return (unsigned)node;
 }
 

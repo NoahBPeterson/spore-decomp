@@ -294,25 +294,25 @@ bool Factory::MakeProps(const char* a, Obj** out, int c, int d)
 bool Factory::MakeAudio(const char* a, ARC* out, int c, int id)
 {
     bool ok = false;
-    if (out != 0) {
-        if (a != 0) {
-            ARC tmp;
-            if (id == 0x1a527db) {
-                void* m = operator new(0x30, "Audio", 0, 0, 0, 0);
-                Obj* o = m ? ((Obj30*)m)->Init() : 0;
-                tmp.assign(o);
-            } else if (id == 0x42c9cbb) {
-                void* m = operator new(0x30, "Audio", 0, 0, 0, 0);
-                Obj* o = m ? ((Obj30b*)m)->Init() : 0;
-                tmp.assign(o);
-            }
-            if (tmp.p) {
-                if (Create(a, tmp.p, c, id)) {
-                    tmp.p->AddRef();
-                    out->p = tmp.p;
-                    ok = true;
-                }
-            }
+    if (out != 0 && a != 0) {
+        ARC tmp;
+        switch (id) {
+        case 0x1a527db: {
+            void* m = operator new(0x30, "Audio", 0, 0, 0, 0);
+            tmp.assign(m ? ((Obj30*)m)->Init() : 0);
+            break;
+        }
+        case 0x42c9cbb: {
+            void* m = operator new(0x30, "Audio", 0, 0, 0, 0);
+            tmp.assign(m ? ((Obj30b*)m)->Init() : 0);
+            break;
+        }
+        }
+        Obj* o = tmp.p;
+        if (o && Create(a, o, c, id)) {
+            o->AddRef();
+            out->p = o;
+            ok = true;
         }
     }
     return ok;

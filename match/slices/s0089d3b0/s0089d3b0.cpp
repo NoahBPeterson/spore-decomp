@@ -70,7 +70,7 @@ struct LineLayoutBase {
     void SetAllocator(void* a) {
         mpCoreAllocator = a; mCharArray.mpAllocator = a; mAnalysisInfoArray.mpAllocator = a;
         mGlyphArray.mpAllocator = a; mGlyphInfoArray.mpAllocator = a; mGlyphLayoutInfoArray.mpAllocator = a;
-        mGlyphIndexArray.mpAllocator = a;
+        mGlyphIndexArray.mpAllocator = a; mCharIndexArray.mpAllocator = a;
     }
     LineLayoutBase(void* arg);                                              // 0x00898bd0
     void FUN_00897d60();                                                    // 0x00897d60
@@ -198,8 +198,13 @@ void Typesetter::ReorderBidiRunInfoArray(RunVec* out)
             it = e;
         }
     }
-    // out->clear()
-    out->mpEnd = out->mpBegin;
+    // out->erase(out->begin(), out->end()): mpEnd -= (end - begin) elements
+    {
+        RunInfo* b = out->mpBegin;
+        RunInfo* e = out->mpEnd;
+        for (RunInfo* d = b, *src = e; src != e; ++src, ++d) *d = *src;
+        out->mpEnd -= (e - b);
+    }
     uint32_t cnt = (uint32_t)(idx.mpEnd - idx.mpBegin);
     for (uint32_t i = 0; i < cnt; ++i) {
         RunInfo* src = runs.mpBegin + idx.mpBegin[i];

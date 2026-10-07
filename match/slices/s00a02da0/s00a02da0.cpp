@@ -1,3 +1,4 @@
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 
 extern float g_flt_01551a88;

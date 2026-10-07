@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
-009d29b0  375  DistanceBetween: complete; Vec3 subtract flavour (x87 x, SSE y/z spills) and frame differ
-009d2b90  210  PathSection::ComputeLength: complete; mixed x87/SSE subtract flavour differs
-009d2c80  319  AssignWeights: complete; sin/cos/sqrt scheduling differs
+009d29b0  346  DistanceBetween: complete; Vec3 subtract flavour (x87 dx, SSE-rounded dy/dz) and frame differ; dy/dz forced to float with Reload; difftest PASS after fixing the sum order (dy*dy+dz*dz+dx*dx) and the float rounding of dy/dz
+009d2b90  168  PathSection::ComputeLength: complete; mixed x87/SSE subtract flavour differs (dx kept as double, dy/dz/ey/ez forced to float with Reload); difftest PASS after fixing the endpoint sum order and the float rounding of dx (must stay unrounded) and dy/dz (must be rounded)
+009d2c80  148  AssignWeights: complete; register allocation and frame differ; difftest PASS after fixing the clamp order (0 < t tested first, so NaN clamps to 0) and computing 1/len once as a float
 009d2dd0  243  PathSection::Setup: complete; register allocation differs
 009d2f50  173  GetSlotDirection: complete; register allocation differs
 009d3020  126  IsPointUnique: complete; register pressure/hoisting differs
@@ -9,7 +9,5 @@
 009d32d0  159  UpdatePhases: complete; x87 stack scheduling differs
 009d3410  116  FindLimbAboveThreshold: complete; x87 temp scheduling differs
 009d34a0  60  ComputeRatios: complete; only loop-head alignment nop differs
-009d3580  107  GetStepScale: complete; original keeps this in esi
-009d3610  154  GetAmplitude: complete; x87 scheduling differs
-009d3790  136  GetStepScale2: complete; original keeps this in esi
+009d3610  148  GetAmplitude: complete; frame layout differs (orig 0xc-byte frame); difftest FAIL is a checker artifact: the function-local static sMax (orig 0x166c694, guard 0x166c698) cannot be mapped by resolve.py, so ours writes its own copy (a mutant using explicit globals at those addresses PASSes, 383 inputs); fixed before that: MoveObj::mScale offset 0x1c0 -> 0x70, sMax was a constant-initialised static (orig initialises it at first use from 0x1447a2c), sqrt operand order
 009d3840  205  GetTurnFactor: complete; x87 scheduling differs

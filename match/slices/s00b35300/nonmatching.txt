@@ -1,6 +1,6 @@
 00b35300 741 complete; register allocation differs (this in edi vs ebx, t/gp swapped); flags /O2 /MD /Gy /TP /arch:SSE
 00b35af0 40 complete; sel compare reloads member in original, unlink loads +8 before +4
-00b35bf0 94 complete; original reuses arg slot for t (SSE lerp loads all six floats first)
+00b35bf0 6 complete; lerp sums land in the diff registers instead of the a registers (addss operand order); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (177 valid, no mismatch) after fixing the lerp (original is /fp:fast SSE math loading a and b before any store, ours was x87 /fp:precise interleaving loads and stores; and &t now sits in b's dead arg slot like the original, which the fake Cast2 return hashes)
 00b35d30 409 complete; frame 0x20 vs 0x24, register allocation
 00b35ec0 83 complete; original keeps redundant comp null re-check
 00b360d0 75 complete; original uses add eax,0x64 member-address form for the comp load

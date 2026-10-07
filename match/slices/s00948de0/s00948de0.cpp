@@ -534,8 +534,11 @@ bool INetFileCache::CommitNewCachedDataStream(IStream* pStream, const char* pURL
 // @ 0x009498c0  INetFileCache::GetCachedDataStream
 bool INetFileCache::GetCachedDataStream(const char* pURL, IStream** ppStream, const char** ppMIMEType) {
     bool bResult = false;
-    String sKey((String::NoInit()));
+    Node* pNode;
     {
+        // the key string is built in place and freed by hand right after the find (the original
+        // has no EH frame, so no String object with a destructor is live across the calls)
+        struct { char* mpBegin; char* mpEnd; char* mpCapacity; int mAlloc; } sKey;
         uint n = (uint)strlen(pURL);
         const char* pEnd = pURL + n;
         uint nCap = n + 1;
@@ -554,10 +557,10 @@ bool INetFileCache::GetCachedDataStream(const char* pURL, IStream** ppStream, co
         memcpy_thunk(p, pURL, n);
         sKey.mpEnd = p + (pEnd - pURL);
         *sKey.mpEnd = 0;
+        pNode = mDataMap.find(*(const String*)&sKey).mpNode;
+        if (sKey.mpCapacity - sKey.mpBegin > 1 && sKey.mpBegin)
+            operator_delete__(sKey.mpBegin);
     }
-    Iter it = mDataMap.find(sKey);
-    sKey.~String();
-    Node* pNode = it.mpNode;
     if (pNode != mDataMap.end().mpNode) {
         pNode->mValue.second.mnTimeLastUsed = GetTime64();
         if ((pNode->mValue.second.mnLocation & 1) && pNode->mValue.second.mpMemoryStream) {

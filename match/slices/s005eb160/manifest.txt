@@ -2,4 +2,4 @@
 slices/s005eb160/s005eb160.cpp  ?LoadAll@cSPNameGenerator@@QAEXPAX0HHH0H@Z  005eb440  /O2 /MD /Gy /TP
 slices/s005eb160/s005eb160.cpp  ?LoadPropertyKey@cSPNameGenerator@@QAEXPAXIPAUWStrVec@@@Z  005eba70  /O2 /MD /Gy /TP
 slices/s005eb160/s005eb160.cpp  ?DoInsertValueImpl@U16Map@@QAEPAPAUMapNode@@PAPAU2@PAU2@PBUMapValueType@@_N@Z  005ebd10  /O2 /MD /Gy /TP
-slices/s005eb160/s005eb160.cpp  ?DoInsertValue@U16Map@@QAEPAUInsertResult@@PAU2@PBUMapValueType@@_N@Z  005ebdb0  /O2 /MD /Gy /TP
+slices/s005eb160/s005eb160.cpp  ?DoInsertValue@U16Map@@QAEPAUInsertResult@@PAU2@PBUMapValueType@@UUniqueKeysTag@@@Z  005ebdb0  /O2 /MD /Gy /TP

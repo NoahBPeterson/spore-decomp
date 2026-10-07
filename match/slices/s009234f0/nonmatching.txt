@@ -1,14 +1,12 @@
-00923680  42   Server::AsInterface: complete; `this` kept in eax vs ecx (register allocation)
 009236d0  34   Server::Release: complete; interlocked schedule + dec/sub differ
 00923700  21   LogReporter::FilterEnabled: complete; `this` in eax vs ecx
 00923740  21   LogReporter::FilterEnabled2: complete; `this` in eax vs ecx
 009237c0  91   Server::GetLogReporter: complete; vector walk/return schedule differs
 00923840  43   Server::EnumerateLogReporters: complete; loop schedule differs
 00923930  49   Server::IsFiltered: complete; loop tail/return schedule differs
-00923ac0  87   rbtree::find: complete; template traversal schedule differs
-00923b80  2    map::erase: complete; final out-pointer register (eax vs ecx)
+00923ac0  87   rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
-00923c90  67   LogFilterGroupLevels::IsFiltered: complete; map find/setl schedule differs
+00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
 00923dc0  20   FUN_00923dc0: complete; iterator construction schedule differs
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
 00923d40  47   Server::Server: complete; MI vtable/new/mutex schedule differs

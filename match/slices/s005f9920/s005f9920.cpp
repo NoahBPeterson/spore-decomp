@@ -437,9 +437,8 @@ done:
 
 // @ 0x005FA100
 struct StrNode {
-  WStr key;
-  unsigned pad;
-  StrNode* next;
+  WStr key;        // 0x10 bytes (with allocator)
+  StrNode* next;   // +0x10
 };
 struct StrTable {
   unsigned pad0;

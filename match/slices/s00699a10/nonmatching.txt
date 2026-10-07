@@ -1,5 +1,5 @@
-00699a10  1555  ConvexHull2D complete (monotone chain); loop unrolling/schedule differs
-0069a050  78  PointInPolygon2D complete; condition/schedule differs slightly
-0069a240  550  ClipSegmentToPolygon complete; FPU/SSE schedule differs
-0069a5f0  257  HermiteTrack::Evaluate complete; x87/SSE mix differs
+00699a10  1589  ConvexHull2D complete (monotone chain), Vec3 struct copies; loop unrolling/schedule differs; difftest PASS after fixing NaN-sensitive cross-product tests (original takes the hull branch when c is NaN: !(c >= 0)), x87 fld/fstp point copies (now struct copies) and the slice flags (module is /fp:fast)
+0069a050  78  PointInPolygon2D complete; condition/schedule differs slightly; difftest PASS after fixing the slice flags (module is /fp:fast; the checker had compiled ours /fp:precise)
+0069a240  550  ClipSegmentToPolygon complete; FPU/SSE schedule differs; difftest PASS after fixing the slice flags (module is /fp:fast; the checker had compiled ours /fp:precise)
+0069a5f0  149  HermiteTrack::Evaluate complete; x87/SSE mix differs; difftest PASS after fixing the slice flags (/fp:fast: ours was all-SSE float precision), float-rounded tangent*h products (m[2] array) and the NaN-sensitive segment search (!(t > x))
 0069a750  580  HermiteTrack3::ComputeTangents complete; unroll by 4 not reproduced

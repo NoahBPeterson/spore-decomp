@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 #define F2I(x) ((int)(x))
 
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
@@ -45,7 +46,7 @@ struct wstr {
 
 // ---- string table object (UI string source) ----
 struct cString {
-  unsigned int pad[4];
+  unsigned int pad[5];  // 0x14 bytes: the ctor writes bytes +0x10/+0x11
   cString();                                                                // @ 0x6b5060
   cString(unsigned int tbl, unsigned int key, const wchar_t* def);          // @ 0x6b5770
   void Load(unsigned int tbl, unsigned int key, const wchar_t* def);        // @ 0x6b54b0
@@ -111,6 +112,7 @@ struct PropList {
   virtual void v6();
   virtual bool HasProperty(unsigned int id);  // +0x1c
   virtual void v8();
+  virtual void v9();
   virtual void* GetProperty(unsigned int id);  // +0x28 (property record)
 };
 struct PropMgr {
@@ -274,9 +276,8 @@ Vec3* AdjustColor(Vec3* out, float r, float g, float b, float minS, float minL) 
   if (1.0f <= s) s = 1.0f;
   if (l <= minL) l = minL;
   if (1.0f <= l) l = 1.0f;
-  Vec3* res = HSLToRGB(out, h, s, l);
-  Vec3 t = *res;
-  *out = t;
+  Vec3 tmp;
+  *out = *HSLToRGB(&tmp, h, s, l);
   return out;
 }
 
@@ -434,6 +435,7 @@ void InitColorManager() {
         char* data;
         int pad[1];
         unsigned int count;
+        int pad2;
         unsigned short flags;
         unsigned short has;
       };
@@ -455,15 +457,17 @@ void InitColorManager() {
     }
     g_x1687968 = 0x53dbcf2;
     g_x156b018 = 0x53dbcf3;
-    cString nm(0xcdf005ab, 0x53dbcf2, L"!!!Color 0");
-    ColorTranslator* t = new ("Simulator", 0, 0, 0, 0) ColorTranslator;
-    ColorTranslator* old = g_translator;
-    if (t != old) {
-      if (t) t->AddRef();
-      g_translator = t;
-      if (old) old->Release();
+    {
+      cString nm(0xcdf005ab, 0x53dbcf2, L"!!!Color 0");
+      ColorTranslator* t = new ("Simulator", 0, 0, 0, 0) ColorTranslator;
+      ColorTranslator* old = g_translator;
+      if (t != old) {
+        if (t) t->AddRef();
+        g_translator = t;
+        if (old) old->Release();
+      }
+      GetUIHolder()->GetMgr()->Register(g_translator);
     }
-    GetUIHolder()->GetMgr()->Register(g_translator);
     if (list) list->Release();
   }
 }
@@ -473,15 +477,17 @@ Vec3& GetColor(unsigned int key) {
   return g_colorMap[key];
 }
 
+// the original truncates in single precision with cvttss2si (mulss, no x87 round trip)
+static __forceinline int F2IS(const float* p) {
+  return _mm_cvtt_ss2si(_mm_mul_ss(_mm_load_ss(p), _mm_set_ss(255.0f)));
+}
 static __forceinline unsigned int PackARGB(const Vec3& c) {
-  return ((((F2I(c.x * 255.0f)) | 0xffffff00u) << 8 | (F2I(c.y * 255.0f) & 0xff)) << 8) |
-         (F2I(c.z * 255.0f) & 0xff);
+  return (((F2IS(&c.x) | 0xffffff00u) << 8 | (F2IS(&c.y) & 0xff)) << 8) | (F2IS(&c.z) & 0xff);
 }
 
 // @ 0x00B6F0D0  palette color as 0xFFRRGGBB
 unsigned int GetColorARGB(unsigned int key) {
-  unsigned int k = key;
-  return PackARGB(g_colorMap[k]);
+  return PackARGB(g_colorMap[key]);
 }
 
 // @ 0x00B6F140  set the base palette entry

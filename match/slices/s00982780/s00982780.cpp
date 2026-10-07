@@ -1,3 +1,4 @@
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (the original uses scalar SSE float math)
 #include "types.h"
 
 namespace EA { namespace UTFWin {
@@ -48,7 +49,7 @@ void ScrollbarDrawable::Paint(RenderContext* rc, const float* r, const DrawInfo*
     c->SetColor(0xffffffff);
     uint32_t part = info->part;
     Image* img = mComponentImage[part];
-    const float L = r[0], T = r[1], R = r[2], B = r[3];
+    float L, T, R, B;                    // read from r only on the paths that draw quads
 
     switch (part) {
     case 0:
@@ -92,6 +93,7 @@ void ScrollbarDrawable::Paint(RenderContext* rc, const float* r, const DrawInfo*
             return;
         }
 
+        L = r[0]; T = r[1]; R = r[2]; B = r[3];
         if ((info->flags & 7) == 3) {
             c->SetColor(0xffece9d8);
             Quad(c, L + 1.0f, T + 1.0f, R - 1.0f, T + 1.0f, R - 1.0f, B - 1.0f, L + 1.0f, B - 1.0f);
@@ -159,6 +161,7 @@ void ScrollbarDrawable::Paint(RenderContext* rc, const float* r, const DrawInfo*
             return;
         }
         c->SetColor(0xffaca899);
+        L = r[0]; T = r[1]; R = r[2]; B = r[3];
         Quad(c, L, T, R, T, R, B, L, B);
         return;
     }

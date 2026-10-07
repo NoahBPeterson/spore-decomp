@@ -404,7 +404,7 @@ struct PosMap {                        // eastl::map<cSPEditorBlock*, Vec3>: rbt
     void DoNukeSubtree(void* node);   // @ 0x009a9600 (rbtree::DoNukeSubtree)
     struct Value { uint32_t key; Vec3C v; Value() {} Value(const Value& o) : key(o.key), v(o.v) {} };
     struct Iter { void* node; };
-    Iter* DoInsertValueImpl(Iter* out, void* hint, const Value* v, bool bForceToLeft);   // @ 0x005bdb60
+    Iter* DoInsertValueImpl(Iter* out, void* hint, const Value* v, bool bForceToLeft);   // 0x005bdb60
 };
 
 struct ModelRef {                      // EA::AutoRefCount<cSPEditorModel>
@@ -512,7 +512,7 @@ PosMap::Iter* PosMap::DoInsertValueImpl(Iter* out, void* hint, const Value* v, b
     else
         side = 1;
     char* node = (char*)operator new(0x20, "Editor", 0, 0,
-        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL\\internal\\red_black_tree.h", 0xd1);
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     new (node + 0x10, 0) Value(*v);
     RBTreeInsert(node, hint, &anchor, side);
     mnSize++;

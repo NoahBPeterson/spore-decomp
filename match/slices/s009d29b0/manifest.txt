@@ -4,3 +4,5 @@ slices/s009d29b0/s009d29b0.cpp  ?ClassifyLimbs@Locomotion@@QAEXXZ  009d3170  /O2
 slices/s009d29b0/s009d29b0.cpp  ?ComputeLimbs@Locomotion@@QAEXPAULimbParams@@@Z  009d33a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s009d29b0/s009d29b0.cpp  ?GetMaxSpeed@Locomotion@@QAEMXZ  009d3530  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s009d29b0/s009d29b0.cpp  ?GetStepRate@Locomotion@@QAEMPAUMoveObj@@MM@Z  009d3710  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009d29b0/s009d29b0.cpp  ?GetStepScale@Locomotion@@QAEMM@Z  009d3580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s009d29b0/s009d29b0.cpp  ?GetStepScale2@Locomotion@@QAEMM@Z  009d3790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -21,8 +21,8 @@ float* __cdecl AdjustFrame(float* out, char* inst, int boneAux, float* in, int z
 void   __cdecl SolveTarget(float* outM, float* pos, float* target, float* outLen, int a, int b, V3 up);   // 0x009B0340
 float  __cdecl ChannelWeight(float* v, uint32_t ctxFlags, uint32_t animFlags, char* inst, char** skel);   // 0x009B0CB0
 float* __cdecl Normalize3(float* out, float* v, float* outLen);                        // 0x009A49D0
-float* __cdecl MatToQuat(float* out, float* m, float* q);                              // 0x009A4F10
-float* __cdecl MatToQuat(float* out, float* m);
+// 0x009A4F10 (checkerlib::matrix_to_quaternion, 2 args)
+float* __cdecl MatToQuat(float* out, float* m);                                        // 0x009A4F10
 void   __cdecl SolveFrame(char* inst, float* q, float* q2, float* frame, float* pos, float* m);   // 0x009B07D0
 extern int g_adjustFrameEnabled;                                                       // 0x01550A70
 
@@ -225,25 +225,25 @@ void __cdecl EvaluateBoneTransform(uint32_t* p1, int p2, uint32_t* p3, float* p4
         }
     }
 
-    // target orientation
+    // target orientation: the (optionally mirrored) target quaternion is copied into the result
+    // orientation itself, so a combine mode other than 0x20/0x60 leaves the target as the result
     if (p6 != 0 && p5 != 0 && (*p5 & 0x10) != 0) {
         uint32_t f5 = *p5;
-        float tq[4];
         float* res;
         if ((*p1 & 1) == 0) {
-            tq[0] = p6[0]; tq[2] = p6[2]; tq[3] = p6[3]; tq[1] = p6[1];
-            if (p13 != 0) { tq[1] = -tq[1]; tq[2] = -tq[2]; }
+            bq[0] = p6[0]; bq[2] = p6[2]; bq[3] = p6[3]; bq[1] = p6[1];
+            if (p13 != 0) { bq[1] = -bq[1]; bq[2] = -bq[2]; }
             if ((f5 & 0x60) != 0x20 && (f5 & 0x60) != 0x60) goto done;
             float out10[4];
-            res = QuatMul(out10, tq, oqa);
+            res = QuatMul(out10, bq, oqa);
         } else {
             uint32_t mode = *p1 & 6;
             if (mode == 0) {
-                tq[0] = p6[0]; tq[2] = p6[2]; tq[3] = p6[3]; tq[1] = p6[1];
-                if (p13 != 0) { tq[1] = -tq[1]; tq[2] = -tq[2]; }
+                bq[0] = p6[0]; bq[2] = p6[2]; bq[3] = p6[3]; bq[1] = p6[1];
+                if (p13 != 0) { bq[1] = -bq[1]; bq[2] = -bq[2]; }
                 if ((f5 & 0x60) != 0x20 && (f5 & 0x60) != 0x60) goto done;
                 float out98[4];
-                res = QuatMul(out98, tq, oqa);
+                res = QuatMul(out98, bq, oqa);
             } else if (mode == 2) {
                 float f78[4];
                 BuildFrame(f78, p7, p1, p2);
@@ -258,12 +258,12 @@ void __cdecl EvaluateBoneTransform(uint32_t* p1, int p2, uint32_t* p3, float* p4
                 SolveFrame(p7, oqa, qq, f78, cpa, m54);
                 cx = cpa[0]; cy = cpa[1]; cz = cpa[2];
                 if ((((uint8_t)*p5) & 0x60) == 0x40) {
-                    tq[0] = p6[0]; tq[2] = p6[2]; tq[3] = p6[3]; tq[1] = p6[1];
-                    if (p13 != 0) { tq[1] = -tq[1]; tq[2] = -tq[2]; }
+                    bq[0] = p6[0]; bq[2] = p6[2]; bq[3] = p6[3]; bq[1] = p6[1];
+                    if (p13 != 0) { bq[1] = -bq[1]; bq[2] = -bq[2]; }
                     float t88[4];
-                    float* m = MatToQuat(t88, m54, tq);
+                    float* m = MatToQuat(t88, m54);
                     float out24[4];
-                    res = QuatMul(out24, m, tq);
+                    res = QuatMul(out24, m, bq);
                 } else {
                     float t6c[4];
                     res = MatToQuat(t6c, m54);

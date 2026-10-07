@@ -1,6 +1,5 @@
 00a206c0  6  SetFp: complete, short-branch/tail schedule differs
 00a20700  89  ConstructEmitterSndPlayer: complete intent; EA new-expression EH frame not reproduced
-00a207a0  15  ReleaseSub: complete, adjusted-this null-check schedule differs
 00a20a40  98  SetSlot: complete, vcall/property-commit schedule differs
 00a20d60  77  MakeSound: complete intent; EA new-expression EH frame / ctor shape differs
 00a20060  1320  Sound::ConfigureSound: complete (all config keys, groups, bitvec, fx); register allocation/stack layout differs, needs /GS-

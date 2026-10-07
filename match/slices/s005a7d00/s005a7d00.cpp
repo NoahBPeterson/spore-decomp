@@ -318,7 +318,7 @@ float SP::cSPEditorHandBadnessCalculator::CalculateBadness(cSPEditorLimbJoint* j
             + mDistanceFromOriginalPositionTuning * mDistanceFromOriginalPosition + mArmAngleChangeTuning * mArmAngleChange;
         SetMode(0x14e0be29);
         float f = mCameraAngle;
-        float s2 = mCameraAngleTuning * mCameraAngle + mInvalidLengthTuning * mInvalidLength + mPlaneOfSymmetryAlignmentTuning * mPlaneOfSymmetryAlignment
+        float s2 = f * mCameraAngleTuning + mInvalidLengthTuning * mInvalidLength + mPlaneOfSymmetryAlignmentTuning * mPlaneOfSymmetryAlignment
             + mChangeInDistanceFromSymmetryPlaneTuning * mChangeInDistanceFromSymmetryPlane + mArmAngleTuning * mArmAngle
             + mChangeInDistanceFromParallelPlaneTuning * mChangeInDistanceFromParallelPlane + mDistanceFromCameraPlaneTuning * mDistanceFromCameraPlane
             + mLowerLimbLengthTuning * mLowerLimbLength + mChangeInLowerLimbTuning * mChangeInLowerLimb
@@ -327,7 +327,7 @@ float SP::cSPEditorHandBadnessCalculator::CalculateBadness(cSPEditorLimbJoint* j
         float b2 = (s2 - s1) * f + s1;
         if (BitSet(j->mJointBlock->mFlags, 15)) {
             float inv = 1.0f / sqrtf(c.x * c.x + c.y * c.y);
-            float nx = inv * c.y, ny = inv * c.x, nz = inv * gAxisZero;
+            float nx = inv * c.x, ny = inv * c.y, nz = inv * gAxisZero;
             float t = fabsf(-a.x) * 10.0f;
             float dot = fabsf(nx * gHandAxis.x + (nz * gHandAxis.z + ny * gHandAxis.y));
             return (b2 - t) * dot + t;

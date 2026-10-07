@@ -439,6 +439,7 @@ struct MapValueType {
 struct MapNode { MapNode* right; MapNode* left; MapNode* parent; int color; MapValueType value; };
 struct MapIter { MapNode* node; MapIter() {} MapIter(MapNode* n) : node(n) {} };
 struct InsertResult { MapNode* node; bool inserted; };
+struct UniqueKeysTag {};   // eastl::true_type (has_unique_keys)
 
 void RBTreeInsert(MapNode* node, MapNode* parent, MapNode* anchor, int bInsertOnRight);   // 009216a0
 MapNode* RBTreeDecrement(MapNode*);                                            // 009215c0
@@ -460,8 +461,8 @@ struct U16Map {
     bool KeyLessOOL(const U16Pair& a, const U16Pair& b);                       // 005e90f0
 
     MapNode** DoInsertValueImpl(MapNode** ret, MapNode* parent, const MapValueType* v, bool bForceToLeft);   // 005ebd10
-    InsertResult* DoInsertValue(InsertResult* ret, const MapValueType* v, bool);          // 005ebdb0
-    MapNode** insert(MapNode** ret, MapIter pos, const MapValueType* v, bool);           // 005ebf10
+    InsertResult* DoInsertValue(InsertResult* ret, const MapValueType* v, UniqueKeysTag);          // 005ebdb0
+    MapNode** insert(MapNode** ret, MapIter pos, const MapValueType* v, UniqueKeysTag);           // 005ebf10
 };
 
 // @ 0x005ebd10
@@ -477,7 +478,7 @@ MapNode** U16Map::DoInsertValueImpl(MapNode** ret, MapNode* parent, const MapVal
 }
 
 // @ 0x005ebdb0
-InsertResult* U16Map::DoInsertValue(InsertResult* ret, const MapValueType* v, bool)
+InsertResult* U16Map::DoInsertValue(InsertResult* ret, const MapValueType* v, UniqueKeysTag)
 {
     MapNode* pCurrent = anchorParent;
     MapNode* pLowerBound = anchor();
@@ -512,30 +513,29 @@ InsertResult* U16Map::DoInsertValue(InsertResult* ret, const MapValueType* v, bo
 }
 
 // @ 0x005ebf10 : hinted insert
-MapNode** U16Map::insert(MapNode** ret, MapIter position, const MapValueType* v, bool tag)
+MapNode** U16Map::insert(MapNode** ret, MapIter position, const MapValueType* v, UniqueKeysTag)
 {
     if (position.node != anchorRight && position.node != anchor()) {
-        MapNode* pNext = RBTreeIncrement(position.node);
-        if (KeyLess(position.node->value.key, v->key) && KeyLessOOL(v->key, pNext->value.key)) {
-            if (position.node->right == 0)
-                DoInsertValueImpl(ret, position.node, v, false);
-            else
-                DoInsertValueImpl(ret, pNext, v, true);
-            return ret;
+        MapIter itNext(position);
+        itNext.node = RBTreeIncrement(itNext.node);
+        const bool bPositionLessThanValue = KeyLess(position.node->value.key, v->key);
+        if (bPositionLessThanValue) {
+            const bool bValueLessThanNext = KeyLessOOL(v->key, itNext.node->value.key);
+            if (bValueLessThanNext) {
+                if (position.node->right)
+                    return DoInsertValueImpl(ret, itNext.node, v, true);
+                return DoInsertValueImpl(ret, position.node, v, false);
+            }
         }
         InsertResult r;
-        tag = false;
-        DoInsertValue(&r, v, tag);
+        DoInsertValue(&r, v, UniqueKeysTag());
         *ret = r.node;
         return ret;
     }
-    if (mnSize != 0 && KeyLess(anchorRight->value.key, v->key)) {
-        DoInsertValueImpl(ret, anchorRight, v, false);
-        return ret;
-    }
+    if (mnSize && KeyLess(anchorRight->value.key, v->key))
+        return DoInsertValueImpl(ret, anchorRight, v, false);
     InsertResult r;
-    tag = false;
-    DoInsertValue(&r, v, tag);
+    DoInsertValue(&r, v, UniqueKeysTag());
     *ret = r.node;
     return ret;
 }

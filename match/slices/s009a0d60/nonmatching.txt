@@ -9,5 +9,5 @@
 009a1770  20  Vec8b::resize: register choice (esi vs ecx) for end pointer load
 009a17d0  34  slot copy-construct: register assignment (src in ebx vs ebp)
 009a1960  178  slot range destroy: strength-reduced induction var in original
-009a1b00  171  slot range destroy: strength-reduced induction var in original
+009a1b00  171  slot range destroy (__stdcall, ret 8): strength-reduced induction var in original; difftest WEAK after fixing calling convention (original is __stdcall, ours was cdecl)
 009a1c60  272  per-key variant lists: entry pointer induction var and spill layout

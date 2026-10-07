@@ -4,8 +4,8 @@
 011fac30 118 complete: light-colour constant (w=0); call form + scan scheduling
 011face0 94 complete: light-direction constant; call form + scan scheduling
 011fad70 131 complete: light range constant (z lane, FLT_MAX default); call form + scan scheduling
-011fae40 68 complete: world-matrix row 3 (64-byte matrix copy, passes &copy.r[3]); call form; Mat4 copy is rep movsd not 4 movaps
-011faea0 68 complete: world-matrix rows 2-3 (passes &copy.r[2]); same
+011fae40 68 complete: world-matrix row 3 (64-byte matrix copy as 4 movaps rows, passes &copy.r[3]); call form + load scheduling differ; difftest PASS after copying the Mat4 row by row (no rep movsd / esi-edi saves)
+011faea0 68 complete: world-matrix rows 2-3 (64-byte matrix copy as 4 movaps rows, passes &copy.r[2]); call form + load scheduling differ; difftest PASS after fixing the Mat4 copy (rep movsd saved/restored esi/edi around the stdcall device call; the checker's fake-arity guess stops at the je before the call so it popped 0 args and the pops read wrong slots; the original never touches esp after the call)
 011faf00 29 complete: material colour constant setter; call form difference
 011faf30 29 complete: ambient colour constant setter; call form difference
 011faf60 29 complete: time constant setter; call form difference
@@ -14,5 +14,5 @@
 011fb0f0 136 complete: elapsed-time-modulo constant (allrem); call form + temp vector copies
 011fb230 145 complete: fog constant (x,y by fog type, z=0, w=1); vector lane-merge shuffles not reproduced
 011fb310 500 complete: affine 4x4 inverse (3x3 cofactors, epsilon-guarded 1/det, translation); original SSE shufps vector code, w lanes of result are uninitialised stack in the original
-011fb750 505 complete: rigid-matrix inverse (3x3 transpose + translation -t*R^T); original SSE shufps code
+011fb750 505 complete: rigid-matrix inverse (3x3 transpose + translation -t*R^T); original SSE shufps code, ours scalar transpose + intrinsic dot products; difftest PASS after fixing translation rounding (original sums x*a + (y*b + z*c) in SSE single precision; ours summed left to right on x87)
 011fb950 175 complete: cached-inverse point transform (rigid/identity/general inverse cache, D3DXVec3Transform, keep w); SSE lane-merge form differs

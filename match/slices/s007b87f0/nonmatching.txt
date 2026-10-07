@@ -4,7 +4,3 @@
 007b8be0  99  complete dtor (vtable restore + ~RefVector + 2 releases); no EH frame in mine
 007b8cb0  1108  complete RenderLargeTiledImage (tile loop, stitch, save png); not exact
 007b91f0  400  complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox
-007b9420  80  complete cJobPostFilter::Init(bool); only the begin/end reload in the erase guard differs
-007b9510  89  complete cJobPostFilter::Init(int,vec2,vec2,bool); only the begin/end reload in the erase guard differs
-007b9620  6  complete viewer/vector teardown; cl hoists the `this+0x24` lea above the empty check (scheduling only)
-007b9690  44  complete vector<pair>::push_back (capacity check + copy, out-of-line grow); cl folds the `this+0x24` subobject pointer so addressing differs

@@ -1,5 +1,5 @@
 460a80  -  recursive batch reorder; reference-temp frame differs
 461400  -  string sub-object ctor; one extra reserved local slot differs
 4604f0  1097  BuildCreatureMaterialInfo complete (all three shader-state blocks, property lookup, extra ctor pushes); /Od frame/temp slot layout differs
-460bf0  5  complete; one reserved 4-byte hole between locals not reproduced (frame 0x3c vs 0x38); needs /fp:fast
+460bf0  5  complete; one reserved 4-byte hole between locals not reproduced (frame 0x3c vs 0x38); needs /fp:fast; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL is a checker artifact: the checker took only the loose /fp:fast token from this reason and compiled ours at /O2 (which stores 1-t into t's own argument slot, so the pointer passed to FUN_0041dca0 is not normalised to STK); with the slice's real flags it is PASS (324 valid, 100% coverage)
 460d40  397  complete; /Od local slot order (named locals/temp holes) differs

@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+0069b760  204  complete: normalize both vectors then signed-angle tail call; ours multiplies y,z by the unrounded x87 reciprocal while the original rounds 1/len to float and multiplies all three in SSE; difftest FAIL: float precision of the normalized vectors (st0 result -pi vs 0 after the callee's acos), not reproducible with ~20 source variants under /fp:fast

@@ -1,5 +1,5 @@
 // Slice s0099bf80 (bfs4 #36): vector/quaternion math helpers, anim bind-record helpers,
-// and a few intrusive-container utilities. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// and a few intrusive-container utilities. Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <intrin.h>
 #pragma intrinsic(_InterlockedDecrement, _InterlockedExchange, _InterlockedExchangeAdd)

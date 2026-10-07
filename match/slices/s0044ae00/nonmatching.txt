@@ -2,4 +2,4 @@
 0044b590  28   tight loop body identical; original reserves a 0x30 frame (extra 0x24 local), ours only reserves the this slot
 0044ae00  -    complete GetBBox; /Od hole/slot layout differs (frame 0x108 vs 0x168), instruction shapes otherwise close
 0044b5c0  16   complete GetDefaultScale; only local slot order (hash) differs
-0044ba20  -    complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ
+0044ba20  -    complete recursive visibility/flags update; /Od named-local slot order and inline-set this temps differ; difftest FAIL is a checker artifact: the generated vtable slot m3ec->vtbl[0x30] holds 0x44bc01 (a jump target inside the original Ba20, harvested from its immediates), so both sides jump into the middle of the original body, which reads the original's own frame slots; seed 2 gives PASS (324 valid, 69.8% coverage)

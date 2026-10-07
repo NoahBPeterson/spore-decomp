@@ -7,10 +7,10 @@
 extern "C" void* __cdecl operator_new(unsigned int size, const char* name,
                                       int a, int b, int c, int d);   // 0x00f473a0
 extern "C" void  __cdecl operator_delete__(void* p);                 // 0x00f47380
-extern "C" void  __fastcall FUN_009a1ad0(void* p);                   // 0x009a1ad0
+extern "C" void  __cdecl FUN_009a1ad0(void* p);                      // 0x009a1ad0
 
 
-struct Vec3 { float x, y, z; Vec3(float a, float b, float c) : x(a), y(b), z(c) {} };
+struct Vec3 { float x, y, z; Vec3() {} Vec3(float a, float b, float c) : x(a), y(b), z(c) {} Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {} };
 struct CreatureStatic { char pad[0x3f5]; char field_3f5; };
 struct CreatureSub {
     int field_00;
@@ -262,26 +262,27 @@ int QueuedBlender::FindFreeSlot() {
     int result = (int)mCurrent;
     if (mPending == 0xffffffff)
         return result;
-    for (int i = 0; i < 16; ++i) {
-        if (mActive[i] == mPending)
-            mActive[i] = 0xffffffff;
+    for (int k = 0; k < 16; ++k) {
+        if (mActive[k] == mPending)
+            mActive[k] = 0xffffffff;
     }
-    int i = 0;
     uint32_t* p = mActive;
-    AnimGoal* g;
-    while (*p < 0x11 &&
-           ((g = (AnimGoal*)((char*)this + *p * 0xf0 + 8))->field_00 != 0 ||
-            ((uint32_t)g->mChildCount < 8 && g->mChildren[g->mChildCount * 3] != 0))) {
-        ++i;
-        ++p;
-        if (i > 15)
-            return result;
+    int i;
+    for (i = 0; i < 16; ++i, ++p) {
+        uint32_t v = *p;
+        if (v > 0x10)
+            goto found;
+        AnimGoal* a = (AnimGoal*)((char*)this + v * 0xf0 + 8);
+        if (a->field_00 == 0 && ((uint32_t)a->mChildCount >= 8 || a->mChildren[a->mChildCount * 3] == 0))
+            goto found;
     }
-    g = (AnimGoal*)((char*)this + mPending * 0xf0 + 8);
+    return result;
+found:
+    AnimGoal* g = (AnimGoal*)((char*)this + mPending * 0xf0 + 8);
     if (g->field_00 != 0)
         FUN_009a1ad0((void*)g->field_00);
-    g->field_c0 = 0;
     g->field_c4 = 0.0f;
+    g->field_c0 = 0;
     mActive[i] = mPending;
     return i;
 }
@@ -378,37 +379,48 @@ void __cdecl UpdateGoalWeight(int src, AnimGoal* g) {
         g->field_c0 = 0;
 }
 
+// Ring-buffer index wrap that stays non-negative for negative inputs.
+static inline int WrapIndex(int x) {
+    if (x >= 0)
+        return x % 16;
+    int r = -x % 16;
+    if (r != 0)
+        r = 16 - r;
+    return r;
+}
+
 // @ 0x009FF040
 int QueuedBlender::QueuedToActive() {
     int result = -1;
+    int i = 0;
     uint32_t* slot = mActive;
-    for (int i = 0; i < 16; ++i, ++slot) {
+    for (; i < 16; ++i, ++slot) {
         if (result != -1)
             return result;
         uint32_t v = *slot;
-        AnimGoal* a = (AnimGoal*)((char*)this + v * 0xf0 + 8);
-        if (v > 0x10 || (a->field_00 == 0 &&
-                         ((uint32_t)a->mChildCount >= 8 ||
-                          a->mChildren[a->mChildCount * 3] == 0))) {
-            for (int j = 0; j < 16; ++j) {
-                if (result != -1)
-                    break;
-                if (field_fa0 == -1)
-                    break;
-                uint32_t idx = mQueue[field_fa0];
-                AnimGoal* g = (AnimGoal*)((char*)this + idx * 0xf0 + 8);
-                if (g->field_00 != 0 ||
-                    ((uint32_t)g->mChildCount < 8 && g->mChildren[g->mChildCount * 3] != 0)) {
-                    *slot = idx;
-                    mQueue[field_fa0] = 0xffffffff;
-                    result = i;
-                }
-                if (field_fa0 == field_f9c) {
-                    field_fa0 = -1;
-                    field_f9c = -1;
-                } else {
-                    field_fa0 = (field_fa0 + 1) % 16;
-                }
+        if (v <= 0x10) {
+            AnimGoal* a = (AnimGoal*)((char*)this + v * 0xf0 + 8);
+            if (a->field_00 != 0 || ((uint32_t)a->mChildCount < 8 && a->mChildren[a->mChildCount * 3] != 0))
+                continue;
+        }
+        for (int j = 0; j < 16; ++j) {
+            if (result != -1)
+                break;
+            if (field_fa0 == -1)
+                break;
+            uint32_t idx = mQueue[field_fa0];
+            AnimGoal* g = (AnimGoal*)((char*)this + idx * 0xf0 + 8);
+            if (g->field_00 != 0 ||
+                ((uint32_t)g->mChildCount < 8 && g->mChildren[g->mChildCount * 3] != 0)) {
+                *slot = idx;
+                mQueue[field_fa0] = 0xffffffff;
+                result = i;
+            }
+            if (field_fa0 == field_f9c) {
+                field_fa0 = -1;
+                field_f9c = -1;
+            } else {
+                field_fa0 = WrapIndex(field_fa0 + 1);
             }
         }
     }

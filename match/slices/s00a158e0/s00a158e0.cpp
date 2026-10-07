@@ -78,7 +78,7 @@ int ApplyGainRamp(char* node, MixCtx* ctx)
         int n = ctx->count;
         float inv = 1.0f - blend;
         uint32_t step = (uint32_t)(((ctx->tempo / ctx->cfg->rate) * fld<float>(node, 0x70)) * 4096.0f * 65536.0f);
-        uint32_t phase = 0;
+        uint32_t phase;   // uninitialized in the original: with no channels it stores whatever shares its slot
         int ch = 0;
         if (channels > 0) {
             do {

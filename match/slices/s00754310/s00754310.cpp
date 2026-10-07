@@ -453,25 +453,59 @@ struct E4b {
   E4b();  // 0x743b50
   ~E4b();  // 0x472520
 };
+extern "C" long _InterlockedExchange(volatile long*, long);
+#pragma intrinsic(_InterlockedExchange)
 struct Slot8 {
   float value;
   bool a, b, c;
+  Slot8() : value(1.0f), a(true), b(false), c(false) {}
 };
 extern char vtbl_job0[];  // 0x140d9c4
 extern char vtbl_job4[];  // 0x140d9c0
-extern float g_One;  // 0x1485720
-struct JobObj {
+extern char vtbl_jobbase0[];  // 0x13f1ab0
+extern char vtbl_jobbase4[];  // 0x13ef094
+struct JobBase0 {
   void* vt0;  // +0
+  JobBase0() { vt0 = vtbl_jobbase0; }
+  ~JobBase0();
+};
+struct AtomicLong {
+  volatile long v;
+  AtomicLong() { _InterlockedExchange(&v, 0); }
+};
+struct JobVt4 {
   void* vt4;  // +4
-  volatile long rc;  // +8
+  JobVt4() { vt4 = vtbl_jobbase4; }
+};
+struct JobBase4 : JobVt4 {
+  AtomicLong rc;  // +8
+  ~JobBase4();
+};
+// three-pointer containers whose destructors give the original its EH states 3 and 4
+struct Vec3a {
+  uint32_t b, e, c;
+  Vec3a() : b(0), e(0), c(0) {}
+  ~Vec3a();
+};
+struct Vec4a {
+  uint32_t b, e, c, d;
+  Vec4a() : b(0), e(0), c(0), d(0) {}
+  ~Vec4a();
+};
+struct Opaque8 {
+  uint32_t a, b;
+  Opaque8() {}
+  ~Opaque8();
+};
+struct JobObj : JobBase0, JobBase4 {
   uint32_t m0c, m10, m14, m18, m1c, m20;
   float m24, m28, m2c, m30;
   uint32_t m34, m38, m3c, m40;
   E4a arr44[4];  // +0x44
   Slot8 slots[6];  // +0x54..0x84
-  uint32_t m84, m88, m8c;
-  uint32_t pad90[2];
-  uint32_t m98, m9c, ma0, ma4;
+  Vec3a v84;  // +0x84
+  Opaque8 o90;  // +0x90
+  Vec4a v98;  // +0x98
   uint32_t pada8[2];
   bool mb0;
   char padb1[3];
@@ -485,45 +519,10 @@ struct JobObj {
   bool mf0;
   char padf1[3];
   uint32_t mf4, mf8, mfc, m100, m104, m108;
-  JobObj* FUN_00755070();
+  JobObj();
 };
-JobObj* JobObj::FUN_00755070() {
-  vt0 = vtbl_job0;
-  vt4 = vtbl_job4;
-  rc = 0;
-  m0c = 0;
-  m10 = 0;
-  // arr44 constructed by the eh vector constructor iterator
-  float one = g_One;
-  for (int i = 0; i < 6; i++) {
-    slots[i].value = one;
-    slots[i].a = true;
-    slots[i].b = false;
-    slots[i].c = false;
-  }
-  m84 = 0;
-  m88 = 0;
-  m8c = 0;
-  m98 = 0;
-  m9c = 0;
-  ma0 = 0;
-  ma4 = 0;
-  mb0 = false;
-  mc4 = false;
-  mc5 = false;
-  mc8 = 0;
-  mcc = 0;
-  md0 = 0;
-  mdc = 0;
-  me0 = 0;
-  me4 = 0;
-  mf0 = false;
-  mf4 = 0;
-  mf8 = 0;
-  mfc = 0;
-  m100 = 0;
-  m104 = 0;
-  m108 = 0;
+JobObj::JobObj() : m0c((vt0 = vtbl_job0, vt4 = vtbl_job4, 0)), m10(0), mb0(false), mc4(false), mc5(false), mc8(0), mcc(0), md0(0),
+                   mdc(0), me0(0), me4(0), mf0(false), mf4(0), mf8(0), mfc(0), m100(0), m104(0), m108(0) {
   m14 = 0;
   m34 = 0;
   m18 = 0;
@@ -536,7 +535,6 @@ JobObj* JobObj::FUN_00755070() {
   m28 = 0.0f;
   m2c = 0.0f;
   m30 = 0.0f;
-  return this;
 }
 
 // @ 0x00755240  cCreateModelInstanceJob::LoadAsArenaJob (160 bytes): thiscall(job)

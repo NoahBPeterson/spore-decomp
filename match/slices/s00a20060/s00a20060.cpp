@@ -54,7 +54,7 @@ struct Sub214 {
 };
 
 struct Node {
-    virtual void n0();
+    virtual void n0(int flags);   // scalar deleting destructor slot
 };
 
 struct Obj {
@@ -126,8 +126,9 @@ int Sys::ReleaseSub()
     int n = --*(int*)((char*)this + 0x18);
     if (n <= 0) {
         *(int*)((char*)this + 0x18) = 1;
-        if ((char*)this - 4 != 0)
-            ((Node*)((char*)this - 4))->n0();
+        char* full = (char*)this - 4;
+        if (full != 0)
+            ((Node*)(full + 4))->n0(1);
         return 0;
     }
     return n;

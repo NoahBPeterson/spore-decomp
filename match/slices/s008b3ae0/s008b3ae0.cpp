@@ -71,7 +71,7 @@ struct PFRRec { int v[4]; int offset; uint32 size; };   // component record / sa
 
 // Callees (custom register conventions in the original)
 extern "C" void FUN_008b2630(PFRClass* pfr, uint8** cursor, PFRRec* out, int* scratch);          // 0x008b2630
-extern "C" void FUN_008b0920(PFRClass* pfr, uint32 flags, uint8** cursor, PFRPts* pts);          // 0x008b0920
+extern "C" void FUN_008b0920(PFRClass* pfr, uint8 flags, uint8** cursor, PFRPts* pts);          // 0x008b0920
 extern "C" void FUN_008b0f10(uint8** cursor, uint32 flags, PFRPts* pts, uint32* a, uint32* b);   // 0x008b0f10
 extern "C" void FUN_008b3390(PFROutline* o, PFRClass* pfr, uint8** extra);                       // 0x008b3390 (eax = o)
 extern "C" void FUN_008b3680(PFRPts* pts, PFRState* st, int16* out, int* type);                  // 0x008b3680 (ecx/eax/edi)
@@ -100,7 +100,7 @@ extern "C" void PFRBuildChar(PFRClass* pfr, uint8* data, int param_3, uint16 dat
                              int p5, int p6, int p7, int p8, PFROutline* out)
 {
     uint8* cur = data + 1;
-    uint32 flags = *data;
+    uint8 flags = *data;
     PFRRec rec;
     PFRPts pts;
 

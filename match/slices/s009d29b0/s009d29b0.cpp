@@ -12,6 +12,9 @@ static __forceinline float Fabs(float x) { return (float)fabs((double)x); }
 extern "C" __declspec(dllimport) double __cdecl ceil(double);
 
 struct Vec3 { float x, y, z; };
+struct Vec2 { float x, y; };
+// by-value Vec3 argument built with float loads/stores (fld/fstp), as the original passes it
+struct Vec3Arg { float x, y, z; Vec3Arg(const Vec3Arg& v) : x(v.x), y(v.y), z(v.z) {} };
 template <class T> inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
 template <class T> inline const T& Max(const T& a, const T& b) { return (a < b) ? b : a; }
 template <class T> inline T Reload(const T& v) { return *(const volatile T*)&v; }
@@ -36,6 +39,8 @@ extern const float kBlendNear;         // 0x141b034  0.625
 extern const float kBlendFar;          // 0x13fe14c  0.375
 extern const float kHalfPi;            // 0x1447a08
 extern const float kHalfSpeedTerm;     // 0x1485548  1.5
+extern const float kZero;              // 0x1485378  0.0
+extern const float kMaxAngle;          // 0x1447a2c  7.853982 (copied into a function-local static on first use)
 
 // ------------------------------------------------------------------ path data
 struct WaypointInfo { uint32_t pad0; uint8_t mFlag; };      // +4 byte tested by FUN_009d29b0
@@ -107,6 +112,8 @@ struct Limb {                      // 0x104 bytes
     float GetA();                  // 0x9d0c90
     float GetB();                  // 0x9d0db0
     void Compute(void* item, void* a, void* b, void* c, void* d);   // 0x9d24c0
+    float GetStepTime(float speed);  // 0x9d2700
+    float GetStepTime2(Vec3Arg vel); // 0x9d25b0
 };
 
 struct LimbParams {
@@ -116,7 +123,7 @@ struct LimbParams {
 };
 
 struct MoveInfo { uint32_t pad[0xd9]; float vx, vy; };      // +0x364, +0x368
-struct MoveObj { MoveInfo* info; uint32_t pad[0x6f]; float mScale; };   // +0x70
+struct MoveObj { MoveInfo* info; uint32_t pad[(0x70 - 4) / 4]; float mScale; };   // +0x70
 
 struct XItem { uint32_t pad[0x16c / 4]; };
 
@@ -154,8 +161,6 @@ struct Locomotion {
     float GetTurnFactor(Vec3* v);                              // 0x9d3840
 };
 
-float __stdcall FUN_009d2700(float v);                         // 0x9d2700
-float __stdcall FUN_009d25b0(Vec3 v);                          // 0x9d25b0
 float __cdecl FUN_009cdbe0(float a, float b, float c, float d, float e);   // 0x9cdbe0
 
 // @ 0x9d29b0
@@ -175,7 +180,9 @@ float __stdcall DistanceBetween(WaypointList* v, Waypoint* cur, bool useScale)
                 float dx = cur->x - w->x;
                 float dy = cur->y - w->y;
                 float dz = cur->z - w->z;
-                before = Sqrt(dx * dx + dy * dy + dz * dz);
+                dy = Reload(dy);   // the original rounds dy/dz to float (SSE subss + spill) but keeps dx on the x87 stack
+                dz = Reload(dz);
+                before = Sqrt(dy * dy + dz * dz + dx * dx);
             }
             break;
         }
@@ -189,6 +196,8 @@ float __stdcall DistanceBetween(WaypointList* v, Waypoint* cur, bool useScale)
                 float dx = cur->x - w->x;
                 float dy = cur->y - w->y;
                 float dz = cur->z - w->z;
+                dy = Reload(dy);
+                dz = Reload(dz);
                 after = Sqrt(dx * dx + dy * dy + dz * dz);
             }
             break;
@@ -206,9 +215,11 @@ float __stdcall DistanceBetween(WaypointList* v, Waypoint* cur, bool useScale)
 // @ 0x9d2b90
 float PathSection::ComputeLength(WaypointList* v, Waypoint* a, Waypoint* b)
 {
-    float dx = a->x - b->x;
+    double dx = (double)a->x - b->x;   // x87, never rounded to float
     float dy = a->y - b->y;
     float dz = a->z - b->z;
+    dy = Reload(dy);   // dy/dz rounded to float (SSE in the original), dx stays on the x87 stack
+    dz = Reload(dz);
     float total = 0.0f;
     uint32_t start = mStart;
     if (start <= mEnd) {
@@ -220,13 +231,15 @@ float PathSection::ComputeLength(WaypointList* v, Waypoint* a, Waypoint* b)
             float ex = prev->x - cur->x;
             float ey = prev->y - cur->y;
             float ez = prev->z - cur->z;
+            ey = Reload(ey);
+            ez = Reload(ez);
             ++p;
             --n;
             total = Sqrt(ex * ex + ey * ey + ez * ez) + total;
             prev = cur;
         } while (n != 0);
     }
-    return Sqrt(dx * dx + dy * dy + dz * dz) * kBlendFar + total * kBlendNear;
+    return (float)sqrt(dy * dy + dz * dz + dx * dx) * kBlendFar + total * kBlendNear;
 }
 
 // @ 0x9d2c80
@@ -237,17 +250,22 @@ void PathSection::AssignWeights(WaypointList* v, Waypoint* a, Waypoint* b)
     a->mWeightA = 0.0f;
     a->mWeightB = 0.0f;
     a->mWeightC = 1.0f;
+    float len = Sqrt(dy * dy + dx * dx);
     for (uint32_t i = mStart + 1; i < mEnd; ++i) {
         Waypoint* p = &v->mBegin[i];
+        float inv = 1.0f / len;
         float ax = p->x - a->x;
         float bx = p->x - b->x;
         float ay = p->y - a->y;
         float by = p->y - b->y;
-        float t = ((Sqrt(ax * ax + ay * ay) - Sqrt(bx * bx + by * by)) * (1.0f / Sqrt(dy * dy + dx * dx)) + 1.0f) * 0.5f;
-        if (t <= 0.0f)
+        float t = ((Sqrt(ay * ay + ax * ax) - Sqrt(by * by + bx * bx)) * inv + 1.0f) * 0.5f;
+        // NaN (a == b) clamps to 0: the original tests 0 < t first
+        if (0.0f < t) {
+            if (1.0f < t)
+                t = 1.0f;
+        } else {
             t = 0.0f;
-        else if (1.0f < t)
-            t = 1.0f;
+        }
         p->mWeightA = t;
         p->mWeightB = Sin(t * 3.1415927f);
         p->mWeightC = Cos(t * 3.1415927f);
@@ -463,11 +481,11 @@ float Locomotion::GetStepScale(float f)
     float s = Sin(mLimbsBegin->mPhase * kHalfPi) * *(float*)((uint8_t*)mLimbsBegin + 0x64);
     if ((mItemsEnd - mItemsBegin) / 0x108 != 0 && (mWaypointsEnd - mWaypointsBegin) == 0)
     {
-        float r = FUN_009d2700(mSpeed);
+        float r = mLimbsBegin->GetStepTime(mSpeed);
         float q = r / s;
         return q * f;
     }
-    float r = FUN_009d2700(mSpeed);
+    float r = mLimbsBegin->GetStepTime(mSpeed);
     float q = r * kHalfSpeedTerm;
     q = q / s;
     return q * f;
@@ -476,16 +494,20 @@ float Locomotion::GetStepScale(float f)
 // @ 0x9d3610
 float Locomotion::GetAmplitude(MoveObj* o, float angle)
 {
-    if (g_RampScale <= 0.0f)
-        return 1.0f;
-    float vy = o->info->vy * o->mScale;
-    float vx = o->info->vx * o->mScale;
-    static float sMax = 7.853982f;
-    float a = Fabs(angle);
-    float t = g_RampLow < a ? a : g_RampLow;
-    if (sMax < t)
-        t = sMax;
-    return (((kAmpA - g_RampLowOut) / (sMax - g_RampLow)) * g_RampScale * t) * Sqrt(vx * vx + vy * vy) + 1.0f;
+    if (g_RampScale > kZero) {
+        float scale = o->mScale;
+        Vec2* v = (Vec2*)&o->info->vx;
+        float vx = v->x * scale;
+        float vy = v->y * scale;
+        float speed = Sqrt(vy * vy + vx * vx);
+        static const float sMax = kMaxAngle;   // 0x166c694 (guard bit 1 of 0x166c698)
+        float a = Fabs(angle);
+        float t = g_RampLow < a ? a : g_RampLow;
+        if (sMax < t)
+            t = sMax;
+        return (((kAmpA - g_RampLowOut) / (sMax - g_RampLow)) * g_RampScale * t) * speed + 1.0f;
+    }
+    return 1.0f;
 }
 
 // @ 0x9d3710
@@ -505,14 +527,15 @@ float Locomotion::GetStepRate(MoveObj* o, float f, float angle)
 // @ 0x9d3790
 float Locomotion::GetStepScale2(float f)
 {
-    float s = Sin(mLimbsBegin->mPhase * kHalfPi) * *(float*)((uint8_t*)mLimbsBegin + 0x64);
+    Limb* limb = mLimbsBegin;
+    float s = Sin(limb->mPhase * kHalfPi) * *(float*)((uint8_t*)limb + 0x64);
     if ((mItemsEnd - mItemsBegin) / 0x108 != 0 && (mWaypointsEnd - mWaypointsBegin) == 0)
     {
-        float r = FUN_009d25b0(mVelocity);
+        float r = limb->GetStepTime2(*(Vec3Arg*)&mVelocity);
         float q = r / s;
         return q * f;
     }
-    float r = FUN_009d25b0(mVelocity);
+    float r = limb->GetStepTime2(*(Vec3Arg*)&mVelocity);
     float q = r * kHalfSpeedTerm;
     q = q / s;
     return q * f;

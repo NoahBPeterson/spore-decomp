@@ -8,7 +8,7 @@
 008feae0  137  ResourceCache::Clear: complete; list pop and release order scheduling differ
 008feba0  22  ResourceCache::Find: complete; edi (node) reloaded after inlined splice stores
 008fec20  323  ResourceCache::Insert: complete; original keeps the bool result in a reused param slot
-008fedb0  77  protocol hashtable DoInsertValue: complete; bucket-offset arithmetic and slot spill differ
+008fedb0  77  protocol hashtable DoInsertValue: complete; bucket-offset arithmetic and slot spill differ; difftest FAIL is a checker artifact: on the saved input (bucket count 0x80000000, slot offset wraps) the first side to run succeeds and writes its new node into a bucket slot outside the restored state, so whichever side runs second (orig or ours) faults in DoFindNode; replaying ours first makes the original fail identically
 008feef0  140  Resolve (scheme lookup): complete; temp-slot reuse (alloc tag and key share a slot in original) differs
 008fefb0  201  protocol hashtable erase(key): complete; loop/register differences
 008ff0b0  69  vector copy ctor: complete; register allocation differs

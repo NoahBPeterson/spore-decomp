@@ -234,22 +234,23 @@ void __thiscall VecP8::InsertN_A(P8* pos, unsigned int n, const P8* val) {
   if (n <= (unsigned int)(mCap - mEnd)) {
     if (n != 0) {
       P8 tmp = *val;
+      P8* where = pos;  // eastl::copy writes its result into pos's slot; later uses keep the original pos
       P8* oldEnd = mEnd;
-      unsigned int after = mEnd - pos;
+      unsigned int after = mEnd - where;
       if (n < after) {
         P8* mid = oldEnd - n;
         CopyFwdA(&pos, mid, oldEnd, oldEnd, (unsigned int)mid);
         mEnd += n;
-        CopyBackward(pos, mid, oldEnd);
-        FillRange(pos, pos + n, &tmp);
+        CopyBackward(where, mid, oldEnd);
+        FillRange(where, where + n, &tmp);
         return;
       }
       unsigned int extra = n - after;
       FillN(oldEnd, extra, &tmp);
       mEnd += extra;
-      CopyFwdA(&pos, pos, oldEnd, mEnd, after);
+      CopyFwdA(&pos, where, oldEnd, mEnd, after);
       mEnd += after;
-      FillRange(pos, oldEnd, &tmp);
+      FillRange(where, oldEnd, &tmp);
     }
   } else {
     int size = mEnd - mBegin;

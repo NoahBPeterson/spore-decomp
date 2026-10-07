@@ -66,17 +66,13 @@ extern "C" int* __cdecl Fd01260(int* first, int* last, int* value)
 // ===========================================================================
 int* __fastcall Fd018d0(void* self, int, int* first, int* last)
 {
-    char* end = *(char**)((char*)self + 4);
-    char* d = (char*)first;
-    char* s = (char*)last;
-    int cnt = (int)((char*)last - (char*)first);
-    while (s != end) {
-        *(int*)d = *(int*)s;
-        *(int*)(d + 4) = *(int*)(s + 4);
-        d += 8;
-        s += 8;
-    }
-    *(char**)((char*)self + 4) = end - cnt;
+    struct E8 { int a, b; };
+    E8* end = *(E8**)((char*)self + 4);
+    E8* d = (E8*)first;
+    for (E8* s = (E8*)last; s != end; ++s, ++d)
+        *d = *s;
+    // element count (pointer difference of 8-byte elements), not the raw byte count
+    *(E8**)((char*)self + 4) -= ((E8*)last - (E8*)first);
     return first;
 }
 

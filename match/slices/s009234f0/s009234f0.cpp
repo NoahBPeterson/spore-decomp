@@ -153,8 +153,8 @@ struct RBTreeMap {
 
     void  DeallocNode(RBNode* node);
     void  DoNukeSubtree(RBNode* node);
-    RBNode* find(const char** key, RBNode** out);
-    RBNode* erase(RBNode** outNext, RBNode* pos);
+    RBNode** find(RBNode** out, const char** key);
+    RBNode** erase(RBNode** outNext, RBNode* pos);
     void  DoInsertValueImpl(RBNode** out, RBNode* parent, const void* value, char hasParent);
     void  DoInsertValue(RBNode** out, const void* value);
 };
@@ -198,7 +198,7 @@ struct LogFilterGroupLevels : ILogFilter {
     virtual ~LogFilterGroupLevels();
     void SetName(const char* name);
     bool RemoveGroupLevel(const char* name);
-    int  IsFiltered2(void* rec);
+    bool IsFiltered2(void* rec);
 };
 
 struct LogRecordFwd { int pad0[4]; };
@@ -446,12 +446,11 @@ Server* Server::AsInterface(int id)
     Server* self = this;
     if (id == 0x23ab34a1)
         return self;
-    if (id == 0x6c7ca8e4) {
-        if (self)
-            return (Server*)((char*)self + 4);
-        return 0;
-    }
-    return (id != (int)0xee3f516e) ? self : 0;
+    if (id != 0x6c7ca8e4)
+        return (id == (int)0xee3f516e) ? self : 0;
+    if (self)
+        return (Server*)((char*)self + 4);
+    return 0;
 }
 
 // @ 0x009236D0
@@ -787,35 +786,36 @@ void RBTreeMap::DoNukeSubtree(RBNode* node)
 }
 
 // @ 0x00923B80
-RBNode* RBTreeMap::erase(RBNode** outNext, RBNode* pos)
+RBNode** RBTreeMap::erase(RBNode** outNext, RBNode* pos)
 {
     mnSize--;
     RBNode* next = (RBNode*)eastl_RBTreeIncrement(pos);
     eastl_RBTreeErase(pos, &mAnchor);
     ((void(__thiscall*)(void*, RBNode*, int))(*(void***)mpAllocator)[3])(mpAllocator, pos, 0x18);
-    return *outNext = next;
+    *outNext = next;
+    return outNext;
 }
 
 // @ 0x00923AC0
-RBNode* RBTreeMap::find(const char** key, RBNode** out)
+RBNode** RBTreeMap::find(RBNode** out, const char** key)
 {
-    RBNodeBase* end = &mAnchor;
+    RBNode* end = (RBNode*)&mAnchor;
+    RBNode* candidate = end;
     RBNode* node = (RBNode*)mAnchor.mpParent;
-    RBNode* candidate = (RBNode*)end;
     while (node) {
-        int c = _stricmp(node->mpKey, *key);
-        if (c < 0) {
-            node = node->mpLeft;
-        } else {
+        if (!(_stricmp(node->mpKey, *key) < 0)) {
             candidate = node;
             node = node->mpRight;
+        } else {
+            node = node->mpLeft;
         }
     }
-    if (candidate != (RBNode*)end && _stricmp(*key, candidate->mpKey) >= 0)
+    if (candidate != end && !(_stricmp(*key, candidate->mpKey) < 0)) {
         *out = candidate;
-    else
-        *out = (RBNode*)end;
-    return *out;
+        return out;
+    }
+    *out = end;
+    return out;
 }
 
 // @ 0x00923BC0
@@ -840,7 +840,7 @@ bool LogFilterGroupLevels::RemoveGroupLevel(const char* name)
         return false;
     }
     RBNode* found = 0;
-    mGroupLevelMap.find(&name, &found);
+    mGroupLevelMap.find(&found, &name);
     if (found != (RBNode*)&mGroupLevelMap.mAnchor) {
         EA_operator_delete((void*)found->mpKey);
         RBNode* next = 0;
@@ -851,12 +851,12 @@ bool LogFilterGroupLevels::RemoveGroupLevel(const char* name)
 }
 
 // @ 0x00923C90
-int LogFilterGroupLevels::IsFiltered2(void* rec)
+bool LogFilterGroupLevels::IsFiltered2(void* rec)
 {
     char* name = *(char**)((char*)rec + 0x10);
     if (name != 0 && *name != 0) {
-        RBNode* found = 0;
-        mGroupLevelMap.find((const char**)&name, &found);
+        RBNode* it;
+        RBNode* found = *mGroupLevelMap.find(&it, (const char**)&name);
         if (found != (RBNode*)&mGroupLevelMap.mAnchor)
             return *(int*)((char*)rec + 0xc) < found->mnValue;
     }

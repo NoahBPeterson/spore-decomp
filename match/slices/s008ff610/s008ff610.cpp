@@ -660,7 +660,9 @@ void ResourceProvider::FinishRequest(ResourceRequest* r, int stage)
     evt.flag = 0;
 flagdone:
     if (stage == 2) {
-        IUnk* res = 0;
+        // the original keeps the created resource in the dead `stage` argument slot
+        IUnk*& res = *(IUnk**)&stage;
+        res = 0;
         unsigned size = 0;
         int rc = CreateResource((void**)&res, &size, r);
         if (rc == 0) {
@@ -691,9 +693,10 @@ flagdone:
     mWaiting.Notify(&evt);
     if (r->mpURL)
         mpAllocator->Free((void*)r->mpURL, 0);
-    unsigned id = r->mRequestId;
+    // the original keeps the request id in the dead `stage` argument slot
+    *(unsigned*)&stage = r->mRequestId;
     r->mpURL = 0;
-    mRequests.erase(&id);
+    mRequests.erase((unsigned*)&stage);
     IAlloc* a = mpAllocator;
     if (r->mpStream)
         r->mpStream->Release();

@@ -1,4 +1,4 @@
-00977f90 551 SetCellFormat: complete (default/row/column/cell formats, new CellData+CellFormat, recalc + redraw); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; regalloc and inline-ctor schedule differ
+00977f90 551 SetCellFormat: complete (default/row/column/cell formats, new CellData+CellFormat, recalc + redraw); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; regalloc and inline-ctor schedule differ; difftest FAIL is a checker artifact: only operator new's name argument differs, the address of the identical "UTFWin/Grid" literal (orig 0x1442bc4, ours in our .rdata); the call-trace compare does not apply the pooled-constant rule to call args; with the literal pointed at 0x1442bc4 in a scratch copy, 293 valid inputs show no mismatch (WEAK, 44% coverage)
 00978250 326 SetCellTextStyle: complete (existing/new cell format, changed flag, dirty+notify); flags +/arch:SSE; regalloc/arg reloads differ
 009783f0 273 SetCellColors: complete; original keeps col/row in the stack arg slots and reloads, mine enregisters them
 00978560 265 SetCellWrapping: complete; same regalloc pattern as SetCellColors

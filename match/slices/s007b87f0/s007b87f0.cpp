@@ -4,13 +4,12 @@ void operator delete[](void*);
 
 struct Pair2 { int a, b; };
 
-void __stdcall GrowVec(Pair2* e, Pair2* p);    // out-of-line vector grow (006ec390)
-
 struct RawVec {
     Pair2* begin;
     Pair2* end;
     Pair2* cap;
     void push_back(Pair2* p);
+    void DoInsertValue(Pair2* pos, Pair2* p);   // out-of-line vector grow (006ec390)
 };
 
 struct VecPair {
@@ -27,7 +26,7 @@ void RawVec::push_back(Pair2* p)
         if (e)
             *e = *p;
     } else {
-        GrowVec(e, p);
+        DoInsertValue(e, p);
     }
 }
 
@@ -47,10 +46,14 @@ struct ShutdownViewer {
     void Destroy2();                    // 007c4000
 };
 
-struct SimpleVec {
-    int* mpBegin;
-    int* mpEnd;
-    void erase(int* first, int* last);
+
+struct PostFilterVec {
+    void* b; void* e; void* c;
+    void erase(void* first, void* last);   // 00d018d0
+    void* begin() { return b; }
+    void* end() { return e; }
+    bool empty() const { return b == e; }
+    void clear() { erase(begin(), end()); }
 };
 
 struct cJobPostFilter {
@@ -59,9 +62,8 @@ struct cJobPostFilter {
     char pad0[0x18 - 4];
     int* m_p18;                         // +0x18
     char pad1[0x24 - 0x1c];
-    int* m_vecBegin;                    // +0x24
-    int* m_vecEnd;                      // +0x28
-    char pad2[0x38 - 0x2c];
+    PostFilterVec m_vec;                // +0x24
+    char pad2[0x38 - 0x30];
     ShutdownViewer* m_viewer;           // +0x38
     char pad3[0x80 - 0x3c];
     bool m_flag;                        // +0x80
@@ -87,10 +89,8 @@ void cJobPostFilter::Shutdown()
     }
     if (m_p18)
         m_p18 = 0;
-    if (m_vecBegin != m_vecEnd) {
-        SimpleVec* vec = (SimpleVec*)((char*)this + 0x24);
-        vec->erase(vec->mpBegin, vec->mpEnd);
-    }
+    if (!m_vec.empty())
+        m_vec.clear();
     m_flag = false;
 }
 
@@ -175,12 +175,7 @@ struct cViewer {
     void Init(int);                     // 007c4dd0
     void Fn3cc0(int);                   // 007c3cc0
 };
-struct PostFilterVec {
-    void* b; void* e; void* c;
-    void erase(void* first, void* last);
-    void* begin() { return b; }
-    void* end() { return e; }
-};   // 00d018d0
+
 
 static __forceinline cViewer* NewViewer()
 {
@@ -197,9 +192,8 @@ void cJobPostFilter::Init(bool b)
     v->Init(0);
     ((cViewer*)m_viewer)->Fn3cc0(0);
     m_b81 = b;
-    PostFilterVec* vec = (PostFilterVec*)((char*)this + 0x24);
-    if (vec->begin() != vec->end())
-        vec->erase(vec->begin(), vec->end());
+    if (!m_vec.empty())
+        m_vec.clear();
     int* z = (int*)((char*)this + 0x3c);
     for (int i = 0; i < 16; i++) z[i] = 0;
     m_flag = true;
@@ -220,9 +214,8 @@ void cJobPostFilter::Init(int a, const int* p, const int* q, bool b)
     me[5] = p[1];
     me[7] = q[0];
     me[8] = q[1];
-    PostFilterVec* vec = (PostFilterVec*)((char*)this + 0x24);
-    if (vec->begin() != vec->end())
-        vec->erase(vec->begin(), vec->end());
+    if (!m_vec.empty())
+        m_vec.clear();
     int* z = (int*)((char*)this + 0x3c);
     for (int i = 0; i < 16; i++) z[i] = 0;
     m_b81 = b;

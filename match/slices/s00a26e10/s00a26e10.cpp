@@ -161,6 +161,7 @@ struct FixedVec {
     char* mpCap;
     int   pad;
     char* mpLocal;
+    ~FixedVec() { if (mpBegin && mpBegin != mpLocal) operator delete(mpBegin); }
 };
 struct PropList : PropBase {
     FixedVec v1;            // +0x14
@@ -192,8 +193,7 @@ void PropList::Release() {}
 // @ 0x00a27110   scalar deleting destructor of the property list
 PropList::~PropList()
 {
-    if (v2.mpBegin && v2.mpBegin != v2.mpLocal) operator delete(v2.mpBegin);
-    if (v1.mpBegin && v1.mpBegin != v1.mpLocal) operator delete(v1.mpBegin);
+    // the two fixed vectors free their heap buffers in their own destructors (v2, then v1)
 }
 
 // ---------------------------------------------------------------------------

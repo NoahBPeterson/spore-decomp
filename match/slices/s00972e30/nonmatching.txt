@@ -8,10 +8,10 @@
 009736c0 80 ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>): complete; loop layout differs
 00973740 70 SparseMatrix::RowBegin (outer find + inner begin iterator): complete; arg-slot reuse for the key differs
 009737a0 70 SparseMatrix::RowEnd (outer find + inner end iterator): complete; arg-slot reuse for the key differs
-00973800 172 SparseMatrix::GetMinMaxUsedRowForCol: complete; original forms inner-tree pointers via node+0x14 and keeps a result flag in al
+00973800 163 SparseMatrix::GetMinMaxUsedRowForCol: complete; original forms inner-tree pointers via node+0x14 and keeps a result flag in al; difftest WEAK after fixing the backward walk (original uses a reverse_iterator: two RBTreeDecrement calls per step, one on a copy for the dereference)
 00973930 40 SparseMatrix::GetMinUsedColAndRow: complete; load of node key hoisted by cl, original reads first-inner key through a pointer
 00973980 46 SparseMatrix::GetMaxUsedColAndRow: complete; same pattern as 00973930
-00973a40 60 SparseMatrix::IsCellUsed: complete; original reuses the dead arg slot as the second find's out iterator
-00973a90 86 SparseMatrix::GetCellPtr: complete; same arg-slot reuse
+00973a40 60 SparseMatrix::IsCellUsed: complete; original reuses the dead arg slot as the second find's out iterator; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator address (original: its own dead row arg slot, ours: a frame local); the checker normalises frame pointers to STK but not arg-slot pointers; return value and all memory identical on replay
+00973a90 86 SparseMatrix::GetCellPtr: complete; same arg-slot reuse; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator/key addresses (original: its own arg slots after copying col over row, ours: frame locals), which the checker does not normalise to STK; return value and memory identical on replay
 00973c30 106 SparseMatrix::FindByValue (iterator to first inner node with value): complete; layout differs
 00973cc0 34 SparseMatrix::FirstUsed: complete; iterator store order differs

@@ -8,4 +8,4 @@
 007771f0 79 complete cShaderPreviewB::Shutdown; clear idiom schedule differs
 00777290 232 complete cShaderBase::LoadTexture; refcount inline/EH shape differs
 007773c0 418 complete cShaderPreviewA::SetSlot; branch layout and EH differ
-007775a0 116 complete cShaderPreviewB::SetSlot; switch/jump table layout differs
+007775a0 116 complete cShaderPreviewB::SetSlot; switch/jump table layout differs; difftest FAIL is a checker artifact: the input's hash bucket array (via a garbage bucket index) lands in unallocated DYN heap (0x519ad970, beyond dyn_next), the original's LoadTexture find-or-insert links a node there, and the harness does not reset that memory, so our run's hash walk follows the original's leftover node and faults (traced with work/match/scratch_s00776730_trace.py)

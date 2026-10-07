@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b18f90  90  CheckPawnFlags: complete; original is a custom-convention (ecx + caller-popped stack arg) static, not reproducible; difftest FAIL: esp after return differs by 4 (ours __fastcall pops the flags byte with ret 4, the original's LTCG convention takes o in ecx and leaves the stack arg to the caller); no MSVC 2008 non-LTCG convention reproduces ecx + caller-popped stack args

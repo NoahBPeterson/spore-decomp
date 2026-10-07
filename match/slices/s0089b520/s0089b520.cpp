@@ -138,26 +138,54 @@ struct FixedRunVec {
     RunInfo* mpPoolBegin;                                      // +0x10
     void push_back(const RunInfo& v);                          // 0x0089a620
     void DoInsertValue(RunInfo* pos, const RunInfo& v);        // 0x008996d0
+    void DoInsertValues(RunInfo* pos, unsigned n, const RunInfo& v);   // 0x00899e10
     void resize(unsigned n);                                   // 0x0089be20
     void erase(RunInfo* first, RunInfo* last);
+    ~FixedRunVec()
+    {
+        if (mpBegin && mpBegin != mpPoolBegin)
+            operator delete(mpBegin);
+    }
 };
 
 // ---- Typesetter (retail offsets) ---------------------------------------
-struct FontSelectionTree { void DoNukeSubtree(void* root); };   // 0x0088fda0
+// fixed_set<AutoRefCount<Font>> (Typesetter +0x18): anchor at +4, root (anchor parent) at +0xc
+struct FontSelectionTree {
+    unsigned char pad0[0xc];
+    void* mpRoot;                                   // +0xc
+    void DoNukeSubtree(void* root);                 // 0x0088fda0
+    ~FontSelectionTree() { DoNukeSubtree(mpRoot); }
+};
+// fixed_vector of text styles (Typesetter +0x384): pool buffer pointer at +0x10
+struct TextStyleVec {
+    void* mpBegin;                                  // +0
+    unsigned char pad0[0xc];
+    void* mpPool;                                   // +0x10
+    ~TextStyleVec()
+    {
+        if (mpBegin && mpBegin != mpPool)
+            operator delete(mpBegin);
+    }
+};
+// vector<Item> with EASTLCoreAllocator (Typesetter +0x3d0), Item is 0x2c bytes
+struct ScheduleVec : cvec<unsigned char> {
+    ~ScheduleVec()
+    {
+        unsigned char* p = mpBegin;
+        if (p)
+            mpAllocator->Free(p, ((mpCapacity - p) / 0x2c) * 0x2c);
+    }
+};
 struct Typesetter {
     unsigned char pad0[0x14];
     int mDirection;                                 // +0x14
-    FontSelectionTree mFontSelection;               // +0x18
-    unsigned char pad1[0x24 - 0x18 - 1];
-    void* mpFontRoot;                               // +0x24
+    FontSelectionTree mFontSelection;               // +0x18 (root at +0x24)
     unsigned char pad2[0x384 - 0x28];
-    void* mpTextStyleBegin;                         // +0x384
-    unsigned char pad3[0x394 - 0x388];
-    void* mpTextStylePool;                          // +0x394
+    TextStyleVec mTextStyleArray;                   // +0x384 (pool at +0x394)
     unsigned char pad4[0x3c0 - 0x398];
     float mfLayoutPenX;                             // +0x3c0
     unsigned char pad5[0x3d0 - 0x3c4];
-    cvec<unsigned char> mSchedule;                  // +0x3d0 (Item is 0x2c bytes)
+    ScheduleVec mSchedule;                          // +0x3d0 (Item is 0x2c bytes)
     unsigned char pad6[0x418 - 0x3e4];
     LineLayout mLineLayout;                         // +0x418
     unsigned char pad7[0x4cc - 0x4c8];
@@ -276,7 +304,7 @@ void Typesetter::ShapeLine()
 // ===========================================================================
 // 0x0089b7e0: Typesetter::AdjustWhitespaceEmbedding
 // ===========================================================================
-extern const wchar_t kWhitespaceChars[];   // L" \r\n\t" at 0x142ef80
+extern const wchar_t kWhitespaceChars[];   // 0x0142ef80 (L" \r\n\t")
 unsigned CharTypeStringRFindFirstNotOf(const wchar_t* pEnd, const wchar_t* pBegin, const wchar_t* pSet, const wchar_t* pSetEnd);   // 0x00897a60 (cdecl)
 
 void Typesetter::AdjustWhitespaceEmbedding()
@@ -286,7 +314,7 @@ void Typesetter::AdjustWhitespaceEmbedding()
     int embedding = pBack->mnBidiLevel % 2;
     if (embedding == mDirection) return;
 
-    const wchar_t* pSet = L" \r\n\t";
+    const wchar_t* pSet = kWhitespaceChars;
     const wchar_t* pSetEnd = pSet;
     while (*pSetEnd) ++pSetEnd;
     pSetEnd = pSet + (pSetEnd - pSet);
@@ -402,14 +430,13 @@ void FixedRunVec::resize(unsigned n)
 {
     RunInfo* e = mpEnd;
     unsigned sz = e - mpBegin;
-    if (sz < n) {
+    if (n > sz) {
         RunInfo v;
         v.mScript = -1;
         v.mnBidiLevel = 0;
         v.mnCharBegin = 0;
         v.mnCharEnd = 0;
-        extern void RunInfoInsert(FixedRunVec*, RunInfo*, unsigned, const RunInfo&);   // 0x00899e10
-        RunInfoInsert(this, e, n - sz, v);
+        DoInsertValues(e, n - sz, v);
         return;
     }
     RunInfo* newEnd = mpBegin + n;
@@ -572,7 +599,9 @@ unsigned LineLayout::GetGlyphSelection(unsigned a, unsigned b, RectSet* out)
 unsigned LineLayout::GetGlyphDecoration(int type, unsigned a, unsigned b, RectSet* out)
 {
     if (type == 0) return out->mnSize;
-    unsigned g0, g1;
+    // the glyph range is written back into the (now dead) char-range parameters
+    unsigned& g0 = b;
+    unsigned& g1 = a;
     GetGlyphRangeFromCharRange(a, b, g0, g1);
     GlyphLayoutInfo* base = mGlyphLayoutInfoArray.mpBegin;
     GlyphLayoutInfo* pLayout = base + g0;
@@ -643,15 +672,8 @@ unsigned LineLayout::GetGlyphDecoration(int type, unsigned a, unsigned b, RectSe
 // ===========================================================================
 // 0x0089c540: Typesetter::~Typesetter
 // ===========================================================================
+// The body is empty: the members are destroyed in reverse declaration order (bidi runs,
+// LineLayout, schedule, text styles, font-selection tree), which is the original's call order.
 Typesetter::~Typesetter()
 {
-    if (mBidiRunInfoArray.mpBegin && mBidiRunInfoArray.mpBegin != mBidiRunInfoArray.mpPoolBegin)
-        operator delete(mBidiRunInfoArray.mpBegin);
-    mLineLayout.~LineLayout();
-    unsigned char* pSched = mSchedule.mpBegin;
-    if (pSched)
-        mSchedule.mpAllocator->Free(pSched, ((mSchedule.mpCapacity - pSched) / 0x2c) * 0x2c);
-    if (mpTextStyleBegin && mpTextStyleBegin != mpTextStylePool)
-        operator delete(mpTextStyleBegin);
-    mFontSelection.DoNukeSubtree(mpFontRoot);
 }

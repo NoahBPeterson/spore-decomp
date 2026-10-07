@@ -4,5 +4,5 @@
 0098e8d0  32  GetParagraphAtTextIndex: complete; original folds -0x18-begin before the add, ours subtracts after
 0098e930  32  GetParagraphAtPosition: complete; same final-subtract ordering difference
 0098e9d0  374  RecalculateCursorPosition: complete; float temp/slot layout, x87 vs SSE for caret x, line-break index ordering
-0098ec70  876  MoveCursor: complete (all 10 kinds); frame/register allocation differs, owner pointer hoisted
+0098ec70  876  MoveCursor: complete (all 10 kinds); frame/register allocation differs, owner pointer hoisted; difftest WEAK after fixing CharBreakIterator size (was 0x18, the real EAText iterator is 0x20: SetTextRunArray overwrote the return address) and the explicit zeroing of its +0x1c field before SetPosition
 0098f120  288  ScrollToCursor: complete; original recomputes visible width per use, register allocation differs

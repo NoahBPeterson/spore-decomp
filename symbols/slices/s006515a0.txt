@@ -1,1 +1,2 @@
 00651c80 SP::cSPUIAssetGrid::~cSPUIAssetGrid  # PDB candidate (callee-single) card.py
+006524a0 cSPUIAssetGrid::UpdateScrollRegion  # slice source name (equiv.py symbol lookup)

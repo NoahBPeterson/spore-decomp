@@ -1,3 +1,7 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s007b87f0/s007b87f0.cpp  ?Shutdown@cFilterChainJob@@QAEXXZ  007b96d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s007b87f0/s007b87f0.cpp  ?AddFilter@cFilterChainJob@@QAEHPAUIRel@@@Z  007b9750  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007b87f0/s007b87f0.cpp  ?Init@cJobPostFilter@@QAEX_N@Z  007b9420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007b87f0/s007b87f0.cpp  ?Init@cJobPostFilter@@QAEXHPBH0_N@Z  007b9510  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007b87f0/s007b87f0.cpp  ?Shutdown@cJobPostFilter@@QAEXXZ  007b9620  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007b87f0/s007b87f0.cpp  ?Push@VecPair@@QAEXPAUPair2@@@Z  007b9690  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

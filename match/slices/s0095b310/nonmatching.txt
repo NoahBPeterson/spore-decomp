@@ -2,4 +2,3 @@
 0095ba90 68 Chunk::Swap complete; cl emits cmova for the unsigned max, original uses a branch
 0095bc40 196 RenderCtx::RenderBatch complete; frame/spill layout of the fixed_vector header and head param differs
 0095bd60 645 RenderCtx::RenderList complete; argument load order and SSE scheduling differ
-0095c0d0 339 DrawClippedRect complete; original reuses param home slots for w/h (frame 0x24 vs 0x30)

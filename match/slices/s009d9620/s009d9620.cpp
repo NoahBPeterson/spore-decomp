@@ -81,14 +81,15 @@ struct S {
         FreeArr(items.b);
     }
     void FillGroups(void* y);           // 0x9da000
-    void SortGroups();                  // 0x9da5b0
+    void SortGroups(u32 unused);        // 0x9da5b0 (ret 4: one unused stack arg)
 };
 
 struct LessIdx { bool operator()(S a, S b); };    // 0x9d7840
 struct LessWord { bool operator()(S a, S b); };   // 0x9d7920
 
 typedef void (__cdecl *DummyFn)();
-u32 __cdecl MakePred(u32 tag);            // 0x921240
+struct PredTag { char c; };
+u32 __cdecl MakePred(PredTag tag);        // 0x921240
 void __cdecl SortGroupsSmall(Item* first, Item* last, u32 pred);   // 0x9d9420
 void __cdecl SortGroupsLarge(Item* first, Item* last, u32 pred);   // 0x9d9520
 
@@ -370,12 +371,19 @@ void __cdecl PopHeapWord(S* first, S* last)
     AdjustHeapWord(first, 0, (int)(last - first) - 1, 0, val);
 }
 
-// @ 0x9da5b0
-void S::SortGroups()
+template <void (__cdecl *F)(Item*, Item*, u32)>
+static inline void SortRange(Item* first, Item* last)
 {
-    if (((char*)idx.e - (char*)idx.b & ~3) == 0xc && (items.e - items.b) == 2) {
-        SortGroupsSmall(items.b, items.e, MakePred(0));
-        return;
-    }
-    SortGroupsLarge(items.b, items.e, MakePred(0));
+    F(first, last, MakePred(PredTag()));
+}
+static inline int ISize(const ItemVec& v) { return v.e - v.b; }
+static inline u32 FSize(const FloatVec& v) { return v.e - v.b; }
+
+// @ 0x9da5b0
+void S::SortGroups(u32)
+{
+    if (FSize(idx) == 3 && ISize(items) == 2)
+        SortRange<SortGroupsSmall>(items.b, items.e);
+    else
+        SortRange<SortGroupsLarge>(items.b, items.e);
 }

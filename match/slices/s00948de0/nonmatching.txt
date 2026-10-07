@@ -1,5 +1,5 @@
-00948f80 725 IniFileCallbackFunction: complete; array-of-8 wstring ctor loop unrolled (orig keeps a loop), frame/regs differ
+00948f80 725 IniFileCallbackFunction: complete; array-of-8 wstring ctor loop unrolled (orig keeps a loop), frame/regs differ; difftest FAIL is a checker artifact: the game allocator's free-list bins live in emulator memory (malloc heap/MISC) that is not reset between the two runs, so operator delete's next-link store differs in whichever side runs second (swapping the run order swaps the values; with those regions restored between runs: WEAK, 0/311 mismatches)
 009492e0 505 DoPeriodicCacheMaintenance: complete; local slot order (nRAMUsed/nFileUsed) and iterator temps differ
 00949530 190 RemoveCachedData: complete; find_as empty-tag temps share the param slot in orig
 00949620 150 CommitNewCachedDataStream: complete; reverse-find CSE, tmp pair slots/dtor order, length test shape
-009498c0 120 GetCachedDataStream: complete; register allocation (ebx vs edi) and prologue push order
+009498c0 439 GetCachedDataStream: complete; register allocation (ebx vs edi) and prologue push order; difftest WEAK after fixing a double free (the key String was destroyed explicitly and again at scope exit; now a destructor-less key freed once after find, which also drops the EH frame the original lacks)

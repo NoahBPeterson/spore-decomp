@@ -7,5 +7,5 @@
 00844c40 373 cDefineCommand::Execute: complete; name reloaded from MainArguments in original, inline ctor scheduling
 00844ec0 23 cParser::ParseEnd: complete; trailing eax load (mArgs field) scheduled earlier than original
 00844fb0 449 cParser::InstantiateMacro: complete incl. try/catch rethrow; funclet layout/sizes differ
-00845260 55 cParser::PushScope: complete; vector push_back + string append scheduling
+00845260 55 cParser::PushScope: complete; vector push_back + string append scheduling; difftest FAIL is a checker artifact: rdata-literal resolution maps our ":" to a ':' byte inside a UTF-16 string (0x13f3728) instead of the original's ":" at 0x13fe618, so append's zero-length memcpy gets a different end pointer; with the literal pinned to 0x13fe618 (scratch copy) the checker finds no mismatch (WEAK, 184 valid, 100% coverage)
 00845320 68 cParser::PushMeta: complete; temp cMetaEntry store order

@@ -1,9 +1,8 @@
 007545b0  98  complete behaviourally (refcounted swap into m44+0x13c); register allocation of this/object/slot differs
 00754310  330  SP::RegisterModel: complete (property list build + register); EH state/register allocation differ
 00754620  219  complete (property lookup loop, key registration); register allocation differs
-00754770  242  complete (job model load by key type); EH/register allocation differ
-00754960  469  complete (resource manager load by key type, *out = res); EH/register allocation differ
+00754770  242  complete (job model load by key type); EH/register allocation differ; difftest FAIL is a checker artifact: the original's "Graphics" literal at 0x13eb8a4 follows a float constant (3e800000) with no NUL before it, so resolve.rdata_find misses it and ours passes its own copy to operator new; with the literal mapped (scratch source using an extern at 0x13eb8a4) the checker reports WEAK, no mismatch
+00754960  469  complete (resource manager load by key type, *out = res); EH/register allocation differ; difftest FAIL is a checker artifact: the original's "Graphics" literal at 0x13eb8a4 follows a float constant (3e800000) with no NUL before it, so resolve.rdata_find misses it and ours passes its own copy to operator new; with the literal mapped (scratch source using an extern at 0x13eb8a4) the checker reports WEAK, no mismatch
 00754c20  39  complete (job continuation step); branch/epilogue layout differs
 00754ca0  594  SP::CompileToPropertyModel: complete (keys, mask variant, BehaviorMessage send); Variant/EH layout differs
-00755070  368  complete (job object constructor, 0x10c bytes); EH vector ctor frame differs
 007552e0  138  complete (EASTL vector<GlyphInfo>::operator=); allocator/copy helper shapes differ

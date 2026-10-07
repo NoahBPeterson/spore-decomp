@@ -10,7 +10,7 @@ __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 }
 void* __cdecl memcpy(void*, const void*, unsigned int);
 inline void* operator new(unsigned int, void* p) { return p; }
-static const char kEastlFile[] = "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\allocator.h";
+#define kEastlFile "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl memset(void*, int, unsigned int);
 void __cdecl operator_delete__(void*) throw();
 void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
@@ -112,6 +112,7 @@ __forceinline wstr16::wstr16(const wstr16& o) {
 }
 
 bool __cdecl StrEqual(const str8* a, const str8* b);   // eastl::operator==<char>
+bool __cdecl StrEqualC(const str8* a, const char* b);  // 0x555020 eastl::operator==<char>(const basic_string&, const char*)
 
 // ---------------------------------------------------------------------------
 // IO stubs
@@ -244,7 +245,7 @@ struct HashTable {                  // object at INetFileCache+0x34
     Iter* Find(Iter* out, const str8* key);         // 0x9486e0
     struct Tag1 { Tag1() {} };
     struct Tag2 { Tag2() {} };
-    Iter FindAs(const str8& key, Tag1, Tag2);   // 0x948300 (find_as<const char*>)
+    Iter FindAs(const char* const& key, Tag1, Tag2);   // 0x948300 (find_as<const char*>)
     InsertResult* DoInsert(InsertResult* out, const Pair* v);   // 0x948cb0
 };
 
@@ -406,9 +407,10 @@ Iter* INetFileCache::FindOldest(Iter* out, unsigned mask) {
 }
 
 // @ 0x00948300
-Iter HashTable::FindAs(const str8& key, Tag1, Tag2) {
+Iter HashTable::FindAs(const char* const& key, Tag1, Tag2) {
+    const char* k = key;
     unsigned h = 0x811c9dc5;
-    const char* cp = key.mpBegin;
+    const char* cp = k;
     unsigned c = (unsigned char)*cp;
     while (c) {
         h = h * 0x1000193;
@@ -416,19 +418,21 @@ Iter HashTable::FindAs(const str8& key, Tag1, Tag2) {
         h ^= c;
         c = (unsigned char)*cp;
     }
-    unsigned n = h % mnBucketCount;
-    Node** bucket = &mpBucketArray[n];
-    Node* e = *bucket;
-    for (; e; e = e->mpNext) {
-        if (StrEqual((const str8*)e, &key))
+    unsigned nb = mnBucketCount;
+    Node** buckets = mpBucketArray;
+    unsigned n = h % nb;
+    Node** bucket = &buckets[n];
+    Node* e;
+    for (e = *bucket; e; e = e->mpNext) {
+        if (StrEqualC((const str8*)e, k))
             break;
     }
-    Iter result(mpBucketArray[mnBucketCount], &mpBucketArray[mnBucketCount]);
-    if (e) {
-        result.mpNode = e;
-        result.mpBucket = bucket;
-    }
-    return result;
+    Iter it;
+    if (e)
+        it = Iter(e, bucket);
+    else
+        it = Iter(buckets[nb], &buckets[nb]);
+    return Iter(it);
 }
 
 // @ 0x00948400

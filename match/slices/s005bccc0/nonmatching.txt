@@ -1,3 +1,3 @@
 005bccc0 2009 cSPEditorManipulationStackingSimple::DoOnMouseMove; complete (all calls in order), /O2 SSE scheduling and register allocation differ
 005bd7c0 779 cSPEditorManipulationTranslateCreature::PickPlaneOfSymmetry; complete, float math scheduling and Vec3 temp copies differ (618 vs 779 bytes)
-005bdb60 15 PosMap (eastl::map<block*,Vec3>) DoInsertValueImpl; complete, key store order and size++ scheduling differ
+005bdb60 15 PosMap (eastl::map<block*,Vec3>) DoInsertValueImpl; complete, key store order and size++ scheduling differ; difftest PASS after fixing the operator new file-name literal (allocator.h) and the declaration's @-marker that made the checker test ~ModelRef

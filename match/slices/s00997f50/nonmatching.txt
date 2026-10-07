@@ -4,7 +4,7 @@
 00998050  -    HitMaskFactory::CreateResource: vcall/arg-block schedule differs
 00998200  34   Release: lock/dec and refcount branch layout differ
 009986e0  33   FUN_009986e0 ctor: vtable/zero-init scheduling differs
-00998770  126  RWTextureFactory::CreateResource: ctor inline and vcall schedule differs
+00998770  126  RWTextureFactory::CreateResource: ctor inline and vcall schedule differs; difftest FAIL is a checker artifact: the only difference is a free-list link written by the game allocator (0x92701f) when Release frees the object; allocator state carries over from the first-run side, and swapping run order moves the difference to the original (identical instruction trace otherwise)
 00998820  18   FUN_00998820 ctor: register choice / vtable store order differs
 00998fc0  53   FUN_00998fc0: AddRef vcall and grow-path schedule differ
 00999000  29   SerCollection::RemoveAll: pointer-diff arithmetic schedule differs
@@ -13,9 +13,8 @@
 009983d0  -    RWTextureFactory::ReadResource: complete; vtable-fetch schedule and info struct copy differ
 00998530  -    RWTextureFactory::WriteResource: complete; local layout differs
 00998920  -    KeyHT::equal_range: complete; register allocation not checked
-009989d0  91   KeyHT::insert (multi): complete; schedule differs
+009989d0  91   KeyHT::insert (multi): complete; schedule differs; flag param is now eastl::false_type (by-value empty tag); difftest FAIL is a checker artifact: the input's bucket index is out of range and the bucket slot it reads is a pool page that the first-run side wrote (buckets[idx] = new node) and that is not restored before the second side runs; swapping run order moves the 'difference' to the original (verified with work/match/scratch_s00997f50_trace.py)
 00998ac0  -    SerAutoUpdate::RemoveEntry: complete; schedule not checked
-00998b60  42   SerAutoUpdate::AddEntry: complete; local struct layout differs
 00998bd0  -    SerAutoUpdate::ProcessChanges: complete; iterator/register schedule not checked
 00998d30  -    ReloadChangedLayouts callback: complete; tail call not checked
 00998d70  55   OnResourceChanged callback: complete; schedule differs

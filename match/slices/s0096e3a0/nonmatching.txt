@@ -1,6 +1,6 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 0096e3a0  339  CopyWithQualityAdjustment: branch layout / float clamp schedule differs (399 vs 338 bytes)
-0096e540  371  GlyphVec::insert: EASTL grow path and call scheduling differ
+0096e540  390  GlyphVec::insert: complete; EASTL grow path and call scheduling differ; difftest WEAK after fixing the capacity test (must compare n with the free capacity end..capacity, not the size) and the uninitialized_copy return slot (was a null pointer; now the dead val argument slot, like the original)
 0096e6d0  71   GlyphVec::resize: grow/erase call scheduling differs
 0096f080  35   BiStateEffect_func84h: float temp kept in register and 0xffffff add folded to a subtract
 0096f240  43   Ctx96::q(AsInterface): this register allocation / compare order differs

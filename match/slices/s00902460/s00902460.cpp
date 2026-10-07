@@ -6,6 +6,8 @@
 #include <intrin.h>
 
 typedef unsigned int size_t;
+extern "C" size_t wcslen(const wchar_t*);
+#pragma intrinsic(wcslen)
 
 // ---------------------------------------------------------------------------
 // forward types
@@ -95,8 +97,7 @@ void* EA_GetDefaultAllocator();                                      // 0x925cb0
 // EA::XML anonymous-namespace helpers
 namespace EA { namespace XML {
 wchar_t* sStrDup(const wchar_t* s, void* allocCtx);                  // 0x902380
-int      HashStringFind(const wchar_t* s);                           // 0x902250
-void     WriteString(IStream* s, const wchar_t* str, TokenIOContext* ctx); // 0x902640
+bool     WriteString(IStream* s, const wchar_t* str, TokenIOContext* ctx); // 0x902640
 
 }}
 
@@ -217,6 +218,7 @@ struct TokenIOContext {
     ~TokenIOContext();
 
     unsigned AddString(const wchar_t* str, unsigned id);
+    int      GetString(const wchar_t* str);                // 0x902250
     void     ClearStrings();
     void     Reset();
 };
@@ -281,57 +283,58 @@ unsigned TokenIOContext::AddString(const wchar_t* str, unsigned id)
 }
 
 // @ 0x00902640
-void WriteString(IStream* pStream, const wchar_t* s, TokenIOContext* ctx)
+bool WriteString(IStream* pStream, const wchar_t* s, TokenIOContext* ctx)
 {
-    unsigned len;
+    int len;
+    unsigned found;
+    void* pv;
     if (s == 0) {
         len = 0;
+        pv = &len;
     } else {
-        const wchar_t* p = s;
-        wchar_t c;
-        do { c = *p; ++p; } while (c != 0);
-        len = (unsigned)((p - s) - 1);
-        if ((int)len < 1) {
-            io_WriteUint32(pStream, &len, 1, 0);
-            goto done;
-        }
-        {
-            int found = HashStringFind(s);
-            if (found == 0) {
+        len = (int)wcslen(s);
+        if (len <= 0) {
+            pv = &len;
+        } else {
+            found = (unsigned)ctx->GetString(s);
+            if (found != 0) {
+                found |= 0x80000000u;
+                pv = &found;
+            } else {
                 io_WriteUint32(pStream, &len, 1, 0);
                 unsigned id = ctx->AddString(s, 0);
                 io_WriteUint32(pStream, &id, 1, 0);
 
                 bool wide = false;
-                for (const wchar_t* q = s; *q; ++q) {
+                for (const wchar_t* q = s; *q != 0; ++q) {
                     wide = (*q > 0xff);
-                    if (*q < 0x100) break;
+                    if (wide) break;
                 }
-                unsigned char wb = wide ? 1 : 0;
+                unsigned char wb = wide;
                 io_WriteBytes(pStream, &wb, 1);
                 if (wide) {
-                    pStream->v14(s, (int)len * 2);
+                    pStream->v14(s, len * 2);
                 } else {
-                    unsigned remaining = len;
                     const wchar_t* q = s;
-                    char buf[32];
-                    while ((int)remaining > 0) {
-                        int n = (int)remaining < 0x21 ? (int)remaining : 0x20;
-                        for (int i = 0; i < n; ++i)
-                            buf[i] = (char)q[i];
-                        pStream->v12(buf, n);
-                        remaining -= n;
-                        q += n;
+                    int bufs[8];   // int array: the original has no /GS cookie for it
+                    char* buf = (char*)bufs;
+                    while (len > 0) {
+                        int n = len > 0x20 ? 0x20 : len;
+                        for (int i = 0; i < n; ++i) {
+                            buf[i] = (char)*q;
+                            q++;
+                        }
+                        pStream->v14(buf, n);
+                        len -= n;
                     }
                 }
                 goto done;
             }
-            unsigned tagged = (unsigned)found | 0x80000000u;
-            io_WriteUint32(pStream, &tagged, 1, 0);
         }
     }
+    io_WriteUint32(pStream, pv, 1, 0);
 done:
-    pStream->v05();
+    return pStream->v05() == 0;
 }
 
 // @ 0x009027b0
@@ -583,28 +586,28 @@ out:
 }
 
 // @ 0x00902FC0
-int WriteTokenList(IStream* pStream, TokenNode* p, unsigned flags, TokenIOContext* ctx)
+extern const unsigned short g_tokenListVersion;                                       // 0x143a2bc (== 1)
+bool WriteTokenList(IStream* pStream, TokenNode* p, unsigned flags, TokenIOContext* ctx)
 {
-    unsigned short marker = 0x5444;
-    unsigned short zero = 0;
+    unsigned zero = 0;
+    unsigned marker = 0x5444;
     if (flags & 2) marker = 0x5450;
     io_WriteUint16(pStream, &zero, 1, 0);
     io_WriteUint16(pStream, &marker, 1, 0);
-    io_WriteUint16(pStream, &zero, 1, 0);
+    io_WriteUint16(pStream, &g_tokenListVersion, 1, 0);
 
-    if (marker == 0x5444) {
+    if ((unsigned short)marker == 0x5444) {
         while (p) {
-            if (!((flags & 4) && p->mToken == 4)) {
+            if (!((flags & 4) && p->mToken == 4 && IsBlank(p->msName) && IsBlank(p->msValue))) {
                 WriteToken(pStream, p, ctx);
             }
             p = p->mpNext;
         }
-    } else if (marker == 0x5450) {
+    } else if ((unsigned short)marker == 0x5450) {
         unsigned long long v = (unsigned long long)(size_t)p;
         io_WriteUInt64(pStream, &v, 1, 0);
     }
-    pStream->v05();
-    return 0;
+    return pStream->v05() == 0;
 }
 
 // @ 0x009030B0

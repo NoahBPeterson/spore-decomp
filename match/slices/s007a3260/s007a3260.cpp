@@ -301,7 +301,7 @@ extern Stream gStream0;             // 0x016f9138
 extern int gCurIndexBuffer;         // 0x016f8afc
 extern RendererFns* gRendererFns;   // 0x016f6568
 extern int gRendererArg;            // 0x016079a0
-extern IndexInfo** gDefaultIndexSet;// 0x016079a4
+extern IndexInfo* gDefaultIndexSet; // 0x016079a4
 extern D3DDevice* gDevice;          // 0x016f89d0
 
 // @ 0x007a3e60
@@ -317,7 +317,8 @@ void cStaticBuffer::Dispatch(DrawStats* stats, ShaderData* sd) {
         gDirtyFlags |= 0x100000;
     gCurVertexDesc = desc;
     FUN_011f2bc0(desc);
-    if (!gRendererFns->IsReady(gRendererArg))
+    int (__cdecl* isReady)(int) = gRendererFns->IsReady;
+    if (!isReady(gRendererArg))
         return;
 
     D3DDevice* dev = gDevice;
@@ -353,7 +354,7 @@ void cStaticBuffer::Dispatch(DrawStats* stats, ShaderData* sd) {
             int ib = 0;
             int startIndex = 0;
             if (mPrimType == 3) {
-                IndexInfo* d = *gDefaultIndexSet;
+                IndexInfo* d = gDefaultIndexSet;
                 ib = d->mIB;
                 startIndex = d->mBase;
             } else if (idx) {

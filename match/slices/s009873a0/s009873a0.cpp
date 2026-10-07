@@ -41,16 +41,49 @@ struct ShadowDesc32 {
     void SetMode2(int);   // 0x830150
 };
 
+// the descriptor's default constructor, inlined into StdDrawable's ctor
+struct ShadowDescC : ShadowDesc32 {
+    void Init()
+    {
+        m00 = 0;
+        m04 = 2;
+        m08 = 3;
+        f14 = 0.0f;
+        f18 = 0.0f;
+        f0c = 0.0f;
+        f10 = 0.0f;
+        m24 = 0;
+        SetMode2(2);
+    }
+};
+
 // ---------------------------------------------------------------- UI::StdDrawable
-struct StdDrawable {
+// stand-ins for the inlined base-class constructors (vtable pointer stores)
+struct StdDrawableBase0 {
     void* v[4];                     // +0x00 vtable ptrs (0,4,8,c)
+    StdDrawableBase0()
+    {
+        *(void* volatile*)&v[1] = (void*)0x13fa72c;
+        v[2] = 0;
+        *(void* volatile*)&v[3] = (void*)0x1445200;
+    }
+};
+struct StdDrawableBase : StdDrawableBase0 {
+    StdDrawableBase()
+    {
+        *(void* volatile*)&v[0] = (void*)0x1445298;
+        *(void* volatile*)&v[1] = (void*)0x1445280;
+        *(void* volatile*)&v[3] = (void*)0x1445240;
+    }
+};
+struct StdDrawable : StdDrawableBase {
     void* mpImage[8];               // +0x10
     int   mScalingType;             // +0x30
     float mAreaL, mAreaT, mAreaR, mAreaB;  // +0x34
     float mScaleX, mScaleY;         // +0x44
     void* mHitMask;                 // +0x4c
     float mBevelWidth;              // +0x50
-    ShadowDesc32 mShadow;           // +0x54
+    ShadowDescC  mShadow;           // +0x54
 
     void  SetSerializerX();                        // 0xc2e4e0
     void  FUN_00987900();                          // 0x987900
@@ -340,27 +373,17 @@ bool StdDrawable::GetNaturalSize(float* out, int state, int unused)
 // @ 0x00988420
 StdDrawable::StdDrawable()
 {
-    v[1] = (void*)0x13fa72c;
-    v[2] = 0;
-    v[3] = (void*)0x1445200;
-    v[0] = (void*)0x1445298;
-    v[1] = (void*)0x1445280;
-    v[3] = (void*)0x1445240;
-    mScalingType = 1;
-    mAreaL = mAreaT = mAreaR = mAreaB = 0.33333334f;
-    mScaleX = 1.0f;
-    mScaleY = 1.0f;
-    mHitMask = 0;
-    mBevelWidth = 6.0f;
-    mShadow.m00 = 0;
-    mShadow.m04 = 2;
-    mShadow.m08 = 3;
-    mShadow.f0c = 0.0f;
-    mShadow.f10 = 0.0f;
-    mShadow.f14 = 0.0f;
-    mShadow.f18 = 0.0f;
-    mShadow.m1c = 0;
-    mShadow.SetMode2(2);
+    // volatile stores keep the original's order (vtable stores first, then the members)
+    *(volatile int*)&mScalingType = 1;
+    *(volatile float*)&mAreaL = 0.33333334f;
+    *(volatile float*)&mAreaT = 0.33333334f;
+    *(volatile float*)&mAreaR = 0.33333334f;
+    *(volatile float*)&mAreaB = 0.33333334f;
+    *(volatile float*)&mScaleX = 1.0f;
+    *(volatile float*)&mScaleY = 1.0f;
+    *(void* volatile*)&mHitMask = 0;
+    *(volatile float*)&mBevelWidth = 6.0f;
+    mShadow.Init();
     for (int i = 0; i < 8; i++)
         mpImage[i] = 0;
 }

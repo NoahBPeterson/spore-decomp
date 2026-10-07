@@ -317,7 +317,7 @@ void NodePool::Insert(void* v)
     if (p != 0) {
         mpFree = *(void**)p;
     } else {
-        p = operator_new(mpAlloc, "EASTL", 0, 0, "EASTL/allocator.h", 0xd1);
+        p = operator_new(mpAlloc, "EASTL", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
     }
     if (p != 0) {
         *(u32*)p = *(const u32*)v;

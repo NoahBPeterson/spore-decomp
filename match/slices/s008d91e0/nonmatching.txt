@@ -4,5 +4,5 @@
 008d95f0 300 WriteIndexRecord: complete; original has a partial prologue (ebx pushed only inside the dirty-index branch, mov al,1 hoisted)
 008d9850 91 TryCompress: complete; register assignment size/pOutSize (ebx/ebp) swapped vs original
 008d98f0 8 RecMap::DoInsertValue: complete; original loads *out before ++mnSize
-008d9a10 900 CloseRecord: complete; large function, many scheduling and register differences
+008d9a10 900 CloseRecord: complete; large function, many scheduling and register differences; difftest FAIL is a checker artifact: the original reuses its own incoming 'rec' arg slot as the rbtree::find result iterator while ours uses a frame local, and the checker normalises only pointers below esp at entry as STK; all 5 mismatches are this find argument, and with the arg slots normalised too (scratch copy of the checker) it reports no mismatch (WEAK, 296 valid, 14% coverage)
 008d9f80 229 DatabasePackedFile ctor: complete; dead stores (anchor zeros at 2f0..2f8) and string-empty constant schedule differ

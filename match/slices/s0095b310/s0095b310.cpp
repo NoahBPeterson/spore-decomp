@@ -524,13 +524,13 @@ void __thiscall RenderCtx::RenderList(Node* lst, const RectF* r)
 }
 
 // @ 0x95c0d0
-void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* b)
+void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* c, const RectF* b)
 {
     float x0 = a->x0;
+    RectF R;
     if (x0 >= b->x0 && b->x1 >= a->x1 && a->y0 >= b->y0 && b->y1 >= a->y1) {
-        RectF uv;
-        uv.x0 = 0.0f; uv.y0 = 0.0f; uv.x1 = g_1485720; uv.y1 = g_1485720;
-        obj->DrawRect(a, b, &uv);
+        R.x0 = 0.0f; R.y0 = 0.0f; R.x1 = g_1485720; R.y1 = g_1485720;   // full-texture uv
+        obj->DrawRect(a, c, &R);
         return;
     }
     float x1 = a->x1;
@@ -540,7 +540,6 @@ void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* b)
     float h = y1 - y0;
     if (g_1485720 > w || g_1485720 > h)
         return;
-    RectF R;
     R.x0 = x0; R.y0 = y0; R.x1 = x1; R.y1 = y1;
     R.Intersect(*a, *b);
     if (R.x0 == R.x1 || R.y0 == R.y1)
@@ -552,5 +551,5 @@ void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* b)
     uv.y0 = (R.y0 - a->y0) * sy;
     uv.x1 = (R.x1 - x0) * sx;
     uv.y1 = (R.y1 - a->y0) * sy;
-    obj->DrawRect(&R, b, &uv);
+    obj->DrawRect(&R, c, &uv);
 }

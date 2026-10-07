@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00a158e0  749  complete; 4x-unrolled crossfade loop, register allocation differs
+00a158e0  735  complete; 4x-unrolled crossfade loop, register allocation differs; difftest PASS after fixing phase: it is uninitialized in the original, which with no channels stores the stale arg slot (node pointer) to node+0xe0, not 0
 00a15d40  241  complete; loop/spill layout (node param slot reused as position) differs
 00a15fb0  27  complete; store order of mActive vs clear args
 00a16020  238  complete; switch/xorps negate and register scheduling

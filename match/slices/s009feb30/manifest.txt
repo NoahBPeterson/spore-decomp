@@ -8,3 +8,5 @@ slices/s009feb30/s009feb30.cpp  ?FindGoalByHandle@@YAPAUAnimGoal@@PAUQueuedBlend
 slices/s009feb30/s009feb30.cpp  ?GetCurrentGoal@@YAPAUAnimGoal@@PAUQueuedBlender@@@Z  009ff750  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009feb30/s009feb30.cpp  ?FindGoalValue@@YAHPAUQueuedBlender@@I@Z  009ff7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009feb30/s009feb30.cpp  ?FindGoalByID@@YA_NPAUQueuedBlender@@HPAH@Z  009ff7c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?QueuedToActive@QueuedBlender@@QAEHXZ  009ff040  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009feb30/s009feb30.cpp  ?FindFreeSlot@QueuedBlender@@QAEHXZ  009ff380  /O2 /MD /Gy /TP /arch:SSE /fp:fast

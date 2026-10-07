@@ -522,15 +522,13 @@ bool SparseMatrix::GetMinMaxUsedRowForCol(int key, int* pMin, int* pMax)
             *pMin = n->f14;
             *pMax = n->f14;
             r = true;
-            OutNode* m = End();
-            if (m != Begin()) {
-                do {
-                    m = (OutNode*)RBTreeDecrement(&m->b);
-                    if (InnerFind(&m->inner, key) != (InNode*)&m->inner.anchor) {
-                        *pMax = m->f14;
-                        return true;
-                    }
-                } while (m != Begin());
+            // reverse_iterator walk: each dereference decrements a copy of the base, ++ decrements the base
+            for (OutNode* base = End(); base != Begin(); base = (OutNode*)RBTreeDecrement(&base->b)) {
+                OutNode* m = (OutNode*)RBTreeDecrement(&base->b);
+                if (InnerFind(&m->inner, key) != (InNode*)&m->inner.anchor) {
+                    *pMax = m->f14;
+                    return true;
+                }
             }
             return true;
         }

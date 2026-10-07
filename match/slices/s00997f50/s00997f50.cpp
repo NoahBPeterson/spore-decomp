@@ -574,6 +574,7 @@ struct Key3 { unsigned a, b, c; };
 struct KV   { Key3 k; unsigned v; };
 struct HNode { KV kv; HNode* next; };            // 0x14
 struct HIter { HNode* node; HNode** bucket; };
+struct false_type {};   // eastl::false_type (has_unique_keys_type of a multi-hashtable), passed by value as 1 byte
 struct HRange { HNode* first; HNode** fb; HNode* last; HNode** lb; };
 struct RehashRes { char need; unsigned n; };
 
@@ -589,7 +590,7 @@ struct KeyHT {            // eastl::hashtable<Key, pair<Key,int>> (multi); membe
     unsigned count;       // +0xc
     HashPolicy policy;    // +0x10
     void equal_range(HRange* out, const Key3* k);          // 0x998920
-    HIter* insert(HIter* out, const KV* v, char flag);     // 0x9989d0
+    HIter* insert(HIter* out, const KV* v, false_type);    // 0x9989d0 DoInsertValue(value, false_type)
     void __thiscall DoRehash(unsigned n);                  // 0x998870
     HIter* __thiscall find(HIter* out, const Key3* k);     // 0x833840
     void __thiscall erase(HIter* out, HIter pos);          // 0xb4f930
@@ -695,9 +696,8 @@ void KeyHT::equal_range(HRange* out, const Key3* k)
 }
 
 // @ 0x009989d0
-HIter* KeyHT::insert(HIter* out, const KV* v, char flag)
+HIter* KeyHT::insert(HIter* out, const KV* v, false_type)
 {
-    (void)flag;
     RehashRes rr;
     policy.GetRehash(&rr, bcount, count, 1);
     if (rr.need)
@@ -763,7 +763,7 @@ void SerAutoUpdate::AddEntry(Key3* k, int value)
     kv.k = *k;
     kv.v = (unsigned)value;
     HIter out;
-    mFiles.insert(&out, &kv, 0);
+    mFiles.insert(&out, &kv, false_type());
     mMutex.Unlock();
 }
 

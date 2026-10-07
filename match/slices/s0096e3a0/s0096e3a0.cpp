@@ -159,9 +159,9 @@ void GlyphVec::insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val)
 {
     int begin = (int)v[0];
     int end   = (int)v[1];
-    unsigned cur = (unsigned)(end - begin) >> 5;
-    if (cur < n) {
-        unsigned cnt = (unsigned)(end - begin) >> 5;
+    unsigned room = (unsigned)(((int)v[2] - end) >> 5);   // free capacity
+    if (n > room) {
+        unsigned cnt = (unsigned)((end - begin) >> 5);
         unsigned cap = cnt * 2;
         if (cnt == 0) cap = 1;
         unsigned want = cnt + n;
@@ -184,7 +184,7 @@ void GlyphVec::insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val)
     }
     if (n == 0)
         return;
-    unsigned before = (unsigned)(end - (int)pos) >> 5;
+    unsigned before = (unsigned)((end - (int)pos) >> 5);
     GlyphLayoutInfo tmp;
     for (int i = 0; i < 8; i++)
         ((unsigned*)&tmp)[i] = ((unsigned*)val)[i];
@@ -192,16 +192,18 @@ void GlyphVec::insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val)
         unsigned extra = n - before;
         FUN_00898550((void*)end, extra, &tmp);
         v[1] = (unsigned)(end + extra * 0x20);
-        FUN_00c04920(0, pos, (void*)end, (void*)v[1], pos);
+        // the original reuses the dead `val` argument slot for uninitialized_copy's returned iterator
+        FUN_00c04920(&val, pos, (void*)end, (void*)v[1], pos);
         v[1] = (unsigned)(v[1] + before * 0x20);
         FUN_00898520(pos, (void*)end, &tmp);
         return;
     } else {
-        unsigned char* mid = (unsigned char*)(end - n * 0x20);
-        FUN_00c04920(0, mid, (void*)end, (void*)end, pos);
-        v[1] = (unsigned)(v[1] + n * 0x20);
+        unsigned bytes = n * 0x20;
+        unsigned char* mid = (unsigned char*)(end - bytes);
+        FUN_00c04920(&val, mid, (void*)end, (void*)end, pos);
+        v[1] = (unsigned)(v[1] + bytes);
         FUN_00898f90(pos, mid, (void*)end);
-        FUN_00898520(pos, (void*)(n * 0x20 + (unsigned)pos), &tmp);
+        FUN_00898520(pos, (void*)(bytes + (unsigned)pos), &tmp);
         return;
     }
 }

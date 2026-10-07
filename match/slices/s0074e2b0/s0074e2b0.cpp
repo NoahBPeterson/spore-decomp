@@ -2,12 +2,25 @@
 // /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "../../include/types.h"
 
-extern "C" void __cdecl FUN_006ec4a0(int* pos, const int* v);   // grow path
 
 // ---------------------------------------------------------------------------
-// @ 0x0074F1A0  add-unique to vector<int> (begin +0x4c)
+// 0x0074F1A0  add-unique to vector<int> (begin +0x4c)
 // ---------------------------------------------------------------------------
-struct IntVec { int* begin; int* end; int* cap; };
+struct IntVec {
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    int size() const { return (int)(mpEnd - mpBegin); }
+    int& operator[](int i) { return mpBegin[i]; }
+    void DoInsertValue(int* pos, const int& v);   // 0x006ec4a0 (eastl::vector<int>::DoInsertValue, grow path)
+    void push_back(const int& x)
+    {
+        if (mpEnd < mpCapacity) {
+            int* e = mpEnd++;
+            if (e)
+                *e = x;
+        } else
+            DoInsertValue(mpEnd, x);
+    }
+};
 
 struct VecIntAdd {
     char pad0[0x4c];
@@ -15,27 +28,15 @@ struct VecIntAdd {
     bool add_unique(int x);
 };
 
+// @ 0x0074f1a0
 bool VecIntAdd::add_unique(int x)
 {
-    int n = (int)((char*)v.end - (char*)v.begin) >> 2;
-    if (n > 0) {
-        int i = 0;
-        int* p = v.begin;
-        do {
-            if (*p == x)
-                return false;
-            ++i;
-            ++p;
-        } while (i < n);
-    }
-    if (v.end < v.cap) {
-        int* e = v.end;
-        v.end = e + 1;
-        if (e)
-            *e = x;
-    } else {
-        FUN_006ec4a0(v.end, &x);
-    }
+    IntVec& vec = v;
+    int n = vec.size();
+    for (int i = 0; i < n; ++i)
+        if (vec[i] == x)
+            return false;
+    vec.push_back(x);
     return true;
 }
 

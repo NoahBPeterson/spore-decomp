@@ -1,1 +1,1 @@
-00982780 -1 complete; Quad helper + ternary color, not tuned for byte match
+00982780 -1 complete; Quad helper + ternary color, not tuned for byte match; difftest WEAK (216 valid, 18% coverage, no mismatch) after fixing an unconditional read of the rect before the switch (the original reads r only on the quad-drawing paths; ours faulted on inputs where r is not readable) and building with /arch:SSE /fp:fast like the original's scalar SSE math

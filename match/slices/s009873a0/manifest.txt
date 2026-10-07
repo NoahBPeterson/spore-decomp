@@ -6,3 +6,4 @@ slices/s009873a0/s009873a0.cpp  ?GetImageForState@StdDrawable@@QAEPAXI@Z  009879
 slices/s009873a0/s009873a0.cpp  ??1StdDrawable@@QAE@XZ                   00987b10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s009873a0/s009873a0.cpp  ?QueryAttribute@StdDrawable@@QAE_NHPAI@Z  009883c0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s009873a0/s009873a0.cpp  ?GetNaturalSize@StdDrawable@@QAE_NPAMHH@Z 009883f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s009873a0/s009873a0.cpp  ??0StdDrawable@@QAE@XZ                     00988420  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

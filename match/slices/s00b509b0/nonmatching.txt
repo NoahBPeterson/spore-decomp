@@ -4,5 +4,5 @@
 00b512f0 32 complete; addProperty value args pushed as consts instead of via regs
 00b51640 115 complete; register allocation (this in ebx) and bucket += 4 hoisted in original
 00b51780 100 complete; found node kept in stack slot by original, iterator stores reordered
-00b51840 12 complete; out->node store ordered before buckets reload in original
+00b51840 12 complete; out->node store ordered before buckets reload in original; difftest FAIL is a checker artifact: with a garbage bucketCount the original writes buckets[idx]=node into unallocated DYN heap (0x52bff1d8, beyond dyn_next), which the harness does not reset, so our run reads back the original's node as the bucket head (instruction streams identical up to that load; traced with work/match/scratch_s00b509b0_trace2.py)
 00b51930 14 complete; buckets pointer reloaded before node store in original

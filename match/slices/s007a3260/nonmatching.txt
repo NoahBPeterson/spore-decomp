@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 007a3260  1165  complete mesh pair-list builder (template over Gather helper); frame layout/temp slots differ
 007a37a0  1153  same body as 007a3260 with Gather helper 007a2180; frame layout/temp slots differ
-007a3e60  496  complete static-buffer dispatch; case order/register allocation differ
+007a3e60  497  complete static-buffer dispatch; case order/register allocation differ; difftest WEAK after fixing gDefaultIndexSet (0x16079a4 holds an IndexInfo*, our source dereferenced it once too often) and loading IsReady before its argument like the original (the FAIL itself was the fake IsReady returning differently because its hash includes the stale ecx)

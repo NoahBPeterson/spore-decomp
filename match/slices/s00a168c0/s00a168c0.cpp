@@ -49,7 +49,7 @@ struct IPrimitive {
     virtual void  v1c();
     virtual bool  v20(int);
     virtual void  v24(int);
-    virtual void  v28(int, float);
+    virtual void  v28(float value, int mod);   // SetModificationSource(value, mod)
     virtual void  v2c(int);
     virtual int   v30();
     virtual void  v34();
@@ -86,7 +86,7 @@ struct PAgg {
     void   OnConfigurePrimitive(void* p);       // 00a16b40
     bool   RemoveElement(IPrimitive* p);        // 00a16b80
     bool   UpdateValueFromChildren();           // 00a16bc0
-    void   SetModificationSource(void* src, int mod); // 00a16be0
+    void   SetModificationSource(float value, int mod); // 00a16be0
     void*  Destroy(u8 flags);                   // 00a16ca0
     bool   UpdatePrimitives();                  // 00a16da0
     float  CalculateAggregate();
@@ -197,17 +197,17 @@ bool PAgg::UpdateValueFromChildren()
 }
 
 // ---- PrimitiveAggregate::SetModificationSource @ 0x00a16be0 ---------------
-void PAgg::SetModificationSource(void* src, int mod)
+void PAgg::SetModificationSource(float value, int mod)
 {
-    if (mod == 0 || mModify == mod)
+    if (mod != 0 && mModify == mod)
         return;
     bool dirty = mbDirty;
     void** begin = mpBegin;
-    void** end = mpEnd;
     mModify = mod;
+    void** end = mpEnd;
     for (void** it = begin; it != end; ++it) {
         IPrimitive* e = (IPrimitive*)*it;
-        e->v28((int)src, (float)*(float*)&dirty);
+        e->v28(value, mod);
         if (e->v20(0))
             dirty = true;
     }
@@ -490,7 +490,7 @@ struct PResp {
     void  SetEnabled(bool b);            // 00a17170
     bool  RecomputeValue();              // 00a17250
     bool  Reconfigure();                 // 00a17280
-    void  SetModificationSource(void* src, int mod); // 00a172e0
+    void  SetModificationSource(float value, int mod); // 00a172e0
     void* Destroy(u8 flags);             // 00a17360
 };
 
@@ -551,7 +551,7 @@ bool PResp::Reconfigure()
 }
 
 // ---- PResp::SetModificationSource @ 0x00a172e0 --------------------------
-void PResp::SetModificationSource(void* src, int mod)
+void PResp::SetModificationSource(float value, int mod)
 {
     if (mod != 0 && mModify == mod)
         return;
@@ -559,7 +559,7 @@ void PResp::SetModificationSource(void* src, int mod)
     mModify = mod;
     if (p == 0)
         return;
-    p->v28((int)src, (float)mod);
+    p->v28(value, mod);
     if (p->v20(0)) {
         float v = (float)((float (__thiscall*)(void*))((*(void***)p)[0x1c / 4]))(p);
         mValue = mCurve.GetOutputValue(v);

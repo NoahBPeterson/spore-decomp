@@ -12,7 +12,6 @@ extern "C" void* FUN_009512d0(int size, int align, const char* name, void* alloc
 extern "C" void  FUN_00f47380(void* p);                                 // operator delete
 extern "C" void* FUN_00f473a0(unsigned size, const char* cat, int a, int b, int c, int d);
 extern "C" void* FUN_011e0744(void* dst, void* src, unsigned n);        // vector<bool>::DoInsertValue
-extern "C" void __stdcall FUN_00a80dd0(void* a, void* b);              // vector grow push
 extern "C" void  FUN_00996b40(void* a, void* b, void* c);               // deque push_front helper
 extern "C" void  FUN_00996ad0(void* a, void* b, void* c, void* d);      // deque push_back helper
 extern "C" void  FUN_00993390(void* self);                              // 0x993390
@@ -38,7 +37,7 @@ extern "C" void  FUN_00957300(void* a, int b, void* c);                 // 0x957
 extern "C" void  FUN_00957230(void* a, int b, void* c);                 // 0x957230
 extern "C" void* FUN_00904b00(void* a, void* b);                        // WinXHTML::SetDocument 0x994b00
 extern "C" int   FUN_00932f30(const wchar_t* s, unsigned seed, int a);   // FNV1_String16
-extern "C" void* FUN_00d01260(void* a, void* b, void* c, void* d, int e); // lower_bound
+extern "C" void* FUN_00d01260(void* a, void* b, void* c, void* d); // lower_bound (d = empty compare object by value)
 extern "C" void  FUN_009970e0(void* a, void* b, void* c);               // vector<map pair>::insert
 extern "C" void  FUN_00992e60_(void* a);
 extern "C" unsigned g_frameMapTypes[];                                 // 0x1446868
@@ -168,7 +167,7 @@ bool FUN_00997350(char* self, int key, const wchar_t* name)
 {
     unsigned hash = (unsigned)FUN_00932f30(name, 0x811c9dc5, 0);
     char* end = *(char**)(self + 0x10);
-    char* low = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &hash, (void*)(unsigned)*(unsigned char*)(self + 0x20), 0);
+    char* low = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &hash, (void*)(unsigned)*(unsigned char*)(self + 0x20));
     if (low != end && *(unsigned*)low <= hash)
         return false;
     FUN_009970e0(low, &key, &hash);
@@ -319,7 +318,7 @@ bool FrameSet::HandleLocationChange(int* p, void* a3, wchar_t* name, int flag)
     if (name != 0) {
         unsigned h = (unsigned)FUN_00932f30(name, 0x811c9dc5, 0);
         char* end = *(char**)(self + 0x10);
-        char* it = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &h, (void*)(unsigned)*(unsigned char*)(self + 0x20), 0);
+        char* it = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &h, (void*)(unsigned)*(unsigned char*)(self + 0x20));
         if (it == end || h < *(unsigned*)it)
             it = end;
         else if (it == it + 8)
@@ -441,6 +440,7 @@ struct VecPB {
     unsigned* mEnd;     // +4
     unsigned* mCap;     // +8
     __declspec(noinline) void push_back(unsigned* v);
+    void DoInsertValue(unsigned* pos, unsigned* v);     // 0xa80dd0 (thiscall on the vector)
 };
 
 // @ 0x00997b10
@@ -453,7 +453,7 @@ void VecPB::push_back(unsigned* v)
             *p = *v;
         return;
     }
-    FUN_00a80dd0(p, v);
+    DoInsertValue(p, v);
 }
 
 // ---------------------------------------------------------------- 00997b60 ctor

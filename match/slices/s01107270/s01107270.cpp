@@ -28,7 +28,7 @@ extern const signed char g_edgeEnd[];    // 0x014a5e70, pairs (end, start) per e
 #define EDGE_START(i) (*(const signed char*)(0x014a5e72 + (i)))
 
 // @ 0x01107270
-extern "C" void hkCollideCapsuleUtilManifoldCapsVsTriangle(const float* cap, float capRadius, const float* tri,
+void hkCollideCapsuleUtilManifoldCapsVsTriangle(const float* cap, float capRadius, const float* tri,
                                                            float triRadius, const float* sc, float extraRadius,
                                                            int singleCheck, hkContactPointF* out)
 {

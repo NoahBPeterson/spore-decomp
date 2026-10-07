@@ -112,7 +112,9 @@ struct Variant {
     u16 mTypeId;
     Variant() : mFlags(0), mTypeId(0) {}
     ~Variant() { if (mFlags & 4) Destruct(false); }
-    template <typename T> Variant& operator=(const T& x);      // 0x428060 <float>, 0x478300 <Box>
+    // operator=<float> / operator=<Box> instantiations; named apart so each annotation is unique
+    Variant& SetFloat(const float& x);                          // 0x428060
+    Variant& SetBox(const Box& x);                              // 0x478300
     void Destruct(bool bReconstruct);                           // 0x93db80
 };
 
@@ -210,7 +212,7 @@ void AddInitialBoundInfo(u64* ids, Box* boxes, int count, int unused, IPropList*
 
     {
         Variant v;
-        v = bound;
+        v.SetBox(bound);
         pl->Set(0xf9efba, &v);
     }
     Vec3 neg;
@@ -221,12 +223,12 @@ void AddInitialBoundInfo(u64* ids, Box* boxes, int count, int unused, IPropList*
     float radius = VectorLength(Vector3_MaxVec(&mx, &negCopy, &bound.mMax));
     {
         Variant v;
-        v = radius;
+        v.SetFloat(radius);
         pl->Set(0xf9efb9, &v);
     }
     {
         Variant v;
-        v = bound.mMax[2];
+        v.SetFloat(bound.mMax[2]);
         pl->Set(0x254cf97, &v);
     }
 
@@ -296,12 +298,12 @@ void AddInitialBoundInfo(u64* ids, Box* boxes, int count, int unused, IPropList*
         f624 = g_Third;
     {
         Variant v;
-        v = f624;
+        v.SetFloat(f624);
         pl->Set(0x254cf89, &v);
     }
     {
         Variant v;
-        v = f4;
+        v.SetFloat(f4);
         pl->Set(0x254cf8f, &v);
     }
     for (char* p = (char*)v2.mpBegin; p < (char*)v2.mpEnd; p += 8) {}

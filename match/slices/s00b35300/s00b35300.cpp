@@ -470,9 +470,11 @@ bool __stdcall PickSegment(Thing* obj, Vec3* a, Vec3* b, Vec3* out)
             f.w0 = 0; f.w1 = 0; f.w2 = 0; f.w3 = 0; f.e = 0; f.z = 0;
             f.type = 4;
             if (w->Cast2(a, b, h, &t, &f)) {
-                out->x = a->x + (b->x - a->x) * t;
-                out->y = a->y + (b->y - a->y) * t;
-                out->z = a->z + (b->z - a->z) * t;
+                Vec3 A(*a);
+                Vec3 B(*b);
+                out->x = A.x + (B.x - A.x) * t;
+                out->y = A.y + (B.y - A.y) * t;
+                out->z = A.z + (B.z - A.z) * t;
                 w->Release();
                 return true;
             }

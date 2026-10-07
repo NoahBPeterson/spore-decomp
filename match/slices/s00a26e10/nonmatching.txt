@@ -1,9 +1,8 @@
 # va  diff-bytes  reason
-00a26e10  225  complete; DoInsertKey node order / register allocation differs
+00a26e10  225  complete; DoInsertKey node order / register allocation differs; difftest FAIL is a checker artifact: a random bucket index puts &mpBuckets[idx] in emulator-owned memory (malloc heap 0x5xxxxxxx, MISC 0x7f8xxxxx) that is not reset between the two runs, so the second run reads the first run's bucket store (order-swapped replay flips the sides; with the heap zeroed between runs 203/204 pass and the last one is the MISC case)
 00a26f30  13  complete; refcount store (rc=1) scheduled after vtable load
 00a27010  79  complete; original has EH frame (node alloc unwind) not reproduced
 00a270b0  44  complete; member-init store order of the two fixed vectors differs
-00a27110  4  complete; scalar deleting dtor, one vtable store differs
 00a27170  131  complete; EH state/AutoRefCount temps not reproduced
 00a27340  87  complete; hashtable iterator by-value arg plumbing differs
 00a273d0  104  complete; iterator loop shape differs

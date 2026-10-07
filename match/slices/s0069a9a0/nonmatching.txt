@@ -1,9 +1,8 @@
 # va  diff-bytes  reason
-0069a9a0  548  complete: Vec3 Hermite track evaluate (4x-unrolled segment search); first compare/operand order and register alloc differ
+0069a9a0  548  complete: Vec3 Hermite track evaluate (4x-unrolled segment search); first compare/operand order and register alloc differ; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
 0069ac00  600  complete: Vec4 track tangent builder (compiler 4x unroll); /fp:fast SSE operand order differs
-0069aee0  678  complete: Vec4 Hermite track evaluate; register alloc and first-branch compare layout differ
-0069b1c0  560  complete: rotation matrix taking vector a onto b (axis-angle, OrthogonalVector fallback); x87 normalize scheduling differs
-0069b440  301  complete: SP::Matrix3FromFacingAndUp; only SSE register allocation differs
-0069b650  204  complete: 2D closest point on segment; len compare stays in x87 (orig stores len then SSE compares)
-0069b760  204  complete: normalize both vectors then signed-angle tail call; operand/regalloc differences
+0069aee0  678  complete: Vec4 Hermite track evaluate; register alloc and first-branch compare layout differ; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069b1c0  560  complete: rotation matrix taking vector a onto b (axis-angle, OrthogonalVector fallback); x87 normalize scheduling differs; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069b440  301  complete: SP::Matrix3FromFacingAndUp; only SSE register allocation differs; difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
+0069b650  204  complete: 2D closest point on segment; len compare stays in x87 (orig stores len then SSE compares); difftest PASS after fixing the source's Flags comment (it lacked the fast floating-point flag, so the checker built x87 code calling _CIsqrt and rounding differently)
 0069b840   69  complete: angle step toward target with fmod wrap; select/wrap x87 vs xmm moves differ

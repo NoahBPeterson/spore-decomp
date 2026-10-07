@@ -1,3 +1,1 @@
-0074f1a0  75  complete vector<int> add-unique; register allocation differs (v/this cached in different callee-saved regs)
-0074e2b0  -  complete ray/capsule cast (grid + list paths, sorted insert); frame 4 bytes smaller, EASTL find_if unroll and constant/temporary layout differ
-0074f130  -  complete erase-by-key (find, notify, erase, release, free); esi/edi roles swapped and extra field-address CSE
+0074f1a0  76  complete vector<int> add-unique; register allocation differs (size/begin/end kept in callee-saved regs where the original reloads them); difftest PASS after fixing the grow-path callee 0x006ec4a0 declared cdecl (it is thiscall vector::DoInsertValue, so ecx was garbage)

@@ -7,3 +7,4 @@ slices/s0095b310/s0095b310.cpp  ?End2D@RenderCtx@@ 0095bb20    /O2 /MD /Gy /TP /
 slices/s0095b310/s0095b310.cpp  ??0RenderCtx@@ 0095bb80    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0095b310/s0095b310.cpp  ?AddRenderable@RenderCtx@@ 0095bbc0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 slices/s0095b310/s0095b310.cpp  ?Begin2D@RenderCtx@@ 0095bc10    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0095b310/s0095b310.cpp  ?DrawClippedRect@@ 0095c0d0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

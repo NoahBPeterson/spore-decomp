@@ -1,7 +1,7 @@
 // Slice s008d2590: EA::Input (EAInput library) - InputMan controller polling (XInput / DirectInput),
 // Controller / Keyboard / Mouse device queries and the InputMan constructor/destructor.
 // Layouts follow the 2008 dev PDB (EA::Input::InputMan / Controller / Keyboard / Mouse).
-// Flags: /O2 /arch:SSE (scalar SSE for float stores, x87 for float args/returns).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-  (scalar SSE for float stores, x87 for float args/returns)
 #include "types.h"
 #include <math.h>
 #include <string.h>
@@ -242,8 +242,8 @@ void InputMan::UpdateController(unsigned idx)
         c->mState[17] = (float)((w >> 4) & 1);
         c->mState[18] = (float)((w >> 8) & 1);
         c->mState[19] = (float)((w >> 9) & 1);
-        c->mState[20] = (float)st.Gamepad.bLeftTrigger * (1.0f / 255.0f);
-        c->mState[21] = (float)st.Gamepad.bRightTrigger * (1.0f / 255.0f);
+        c->mState[20] = (float)st.Gamepad.bLeftTrigger * 0.0039215684f;   // 0x3b808080: 1/255 rounded down
+        c->mState[21] = (float)st.Gamepad.bRightTrigger * 0.0039215684f;
         c->mState[22] = (float)((w >> 6) & 1);
         c->mState[23] = (float)((w >> 7) & 1);
         for (unsigned j = 0; j < 16; ++j) {

@@ -1,4 +1,3 @@
-00f3ec90 21 complete reconstruction; cl emits fcomp/fnstsw instead of fld1/fcompi for the 1.0f compare
 00f3de30 43 complete SummaryVec copy ctor; uninitialized_copy out-param/arg reload differs
 00f3dec0 116 complete fill_n of SummaryEntry; memberwise operator= schedule differs
 00f3df50 669 complete cX dtor; member-dtor/base-vptr store order differs

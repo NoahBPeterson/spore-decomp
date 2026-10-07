@@ -1,7 +1,7 @@
 // SP::cGameModelEffect / SP::cSplitManager cluster (0x007d56f0..0x007d67xx).
 // Retail layout of cGameModelEffect is the 2008 PDB layout shifted by +4/+8 (see members).
 //
-// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE
+// Flags: /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 #include "types.h"
 
 void* operator new[](size_t size);
@@ -116,7 +116,7 @@ struct cSplitController {                             // size 0x40
         }
         return *this;
     }
-    ~cSplitController() { if (mComponent) mComponent->Release(); }
+    ~cSplitController() { IComponent* c = mComponent; if (c) c->Release(); }
 };
 cSplitController* __cdecl CtrlCopyBackward(cSplitController* first, cSplitController* last, cSplitController* dest);   // 0x7d5520
 cSplitController* __cdecl CtrlMoveRange(cSplitController* first, cSplitController* last, cSplitController* dest);      // 0x7d53a0
@@ -127,19 +127,25 @@ inline cSplitController* CtrlRelocate(cSplitController* f, cSplitController* l, 
     return r;
 }
 
-struct CtrlVec {                                      // eastl::vector<cSplitController, sp_vector_allocator>
+struct CtrlVecBase {                                  // eastl::VectorBase<cSplitController, sp_vector_allocator>
     cSplitController* mpBegin;
     cSplitController* mpEnd;
     cSplitController* mpCapacity;
     int mAlloc;
+    ~CtrlVecBase() { if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete[](mpBegin); }
+};
+struct CtrlVec : CtrlVecBase {                        // eastl::vector<cSplitController, sp_vector_allocator>
     ~CtrlVec();
     void DoInsertValue(cSplitController* position, const cSplitController& value);
 };
 
+inline void CtrlDestroyValues(cSplitController* first, cSplitController* last) {
+    for (; first < last; ++first) first->~cSplitController();
+}
+
 // @ 0x007d5a30  eastl::vector<cSplitController>::~vector
 CtrlVec::~CtrlVec() {
-    for (cSplitController* p = mpBegin; p < mpEnd; ++p) p->~cSplitController();
-    if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete[](mpBegin);
+    CtrlDestroyValues(mpBegin, mpEnd);
 }
 
 // @ 0x007d6620  eastl::vector<cSplitController>::DoInsertValue(position, value)
@@ -328,25 +334,49 @@ cGameModelEffect::cGameModelEffect(void* desc, int packageID) {
 // model splitter, animation vector, game model)
 cGameModelEffect::~cGameModelEffect() {}
 
+// Field-wise cTransform copies: the first rotation goes through Matrix3::Assign, the later ones
+// are inlined float copies through a temporary matrix.
+inline void CopyXformHead(cTransform& d, const cTransform& s) {
+    d.mFlags = s.mFlags;
+    d.mModificationCount = s.mModificationCount;
+    d.mTranslation[0] = s.mTranslation[0];
+    d.mTranslation[1] = s.mTranslation[1];
+    d.mTranslation[2] = s.mTranslation[2];
+    d.mScale = s.mScale;
+}
+__forceinline void CopyXformInline(cTransform& d, const cTransform& s) {
+    CopyXformHead(d, s);
+    struct Row { float x, y, z; };
+    Row r[3];
+    for (int k = 0; k < 3; ++k) {
+        r[k].x = s.mRotation.m[3 * k];
+        r[k].y = s.mRotation.m[3 * k + 1];
+        r[k].z = s.mRotation.m[3 * k + 2];
+    }
+    for (int k = 0; k < 3; ++k) ((Row*)d.mRotation.m)[k] = r[k];
+}
+
 // @ 0x007d56f0  cGameModelEffect::SetTransforms (IComponent slot 0x18)
 void cGameModelEffect::SetTransforms(const cTransform& source, const cTransform& rigid) {
+    cTransform xf;
     if (mSplitManager.mpObject) {
-        cTransform xf(source);
+        CopyXformHead(xf, source);
+        xf.mRotation.Assign(&source.mRotation);
         xf.mScale = mGameModelScale * xf.mScale;
         xf.mFlags |= 1;
         xf.mModificationCount += 1;
         mSplitManager.mpObject->SetComponentTransform(xf);
         unsigned n = (unsigned)(mSplitControllers.mpEnd - mSplitControllers.mpBegin);
         for (unsigned i = 0; i < n; ++i) {
-            cTransform t(source);
-            t.Concat(mSplitControllers.mpBegin[i].mLocalXform);
-            t.mScale = mGameModelScale * t.mScale;
-            t.mFlags |= 1;
-            t.mModificationCount += 1;
-            mSplitControllers.mpBegin[i].mComponent->SetTransforms(t, rigid);
+            CopyXformInline(xf, source);
+            xf.Concat(mSplitControllers.mpBegin[i].mLocalXform);
+            xf.mScale = mGameModelScale * xf.mScale;
+            xf.mFlags |= 1;
+            xf.mModificationCount += 1;
+            mSplitControllers.mpBegin[i].mComponent->SetTransforms(xf, rigid);
         }
     }
-    cTransform xf(rigid);
+    CopyXformInline(xf, rigid);
     xf.Concat(source);
     mComponentXform = xf;
     mComponentXform.mScale = mGameModelScale * mComponentXform.mScale;

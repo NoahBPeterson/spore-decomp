@@ -10,4 +10,3 @@
 009da2d0 350 complete adjust_heap (LessWord); same
 009da430 118 complete pop_heap (LessIdx); inlined dtor differs
 009da4f0 118 complete pop_heap (LessWord); same
-009da5b0 102 complete small/large group sort dispatch; original keeps pred tag byte in a stack slot (push ecx)

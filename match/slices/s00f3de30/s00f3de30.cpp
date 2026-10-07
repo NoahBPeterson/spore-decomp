@@ -566,12 +566,12 @@ __declspec(noinline) float cX::FUN_00f3e910() {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00f3ec90 (nonmatching: cl emits fcomp/fnstsw instead of fld1/fcompi)
+// @ 0x00f3ec90 (byte-exact with /arch:SSE, manifest override)
 // ---------------------------------------------------------------------------
 int cX::FUN_00f3ec90(int arg) {
     (void)arg;
-    if (1.0f <= FUN_00f3e910()) return 0;
-    return 1;
+    if (1.0f > FUN_00f3e910()) return 1;
+    return 0;
 }
 
 // ---------------------------------------------------------------------------

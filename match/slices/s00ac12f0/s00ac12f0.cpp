@@ -1,6 +1,6 @@
 // Slice s00ac12f0: cube-sphere (planet) cell helpers: neighbor lookup, cube-face cell mapping,
 // water-aware distance, plus a few small copy / heap helpers.
-// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include <new>
 #include <math.h>
 #include <xmmintrin.h>

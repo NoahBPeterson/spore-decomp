@@ -1,4 +1,5 @@
 // Slice s007b55f0 - cThumbnailManager job plumbing (refcounted render-job setup).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);

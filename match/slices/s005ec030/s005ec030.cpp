@@ -1,5 +1,5 @@
 // Slice s005ec030: name-generator helpers (SP::cSPNameGenerator, markov-chain name tables).
-// Flags: /O2 /MD /Gy /TP /EHsc (checked with chk.py)
+// Flags: /O2 /MD /Gy /TP /GS- (no EH frames or cookies anywhere in the original slice)
 #include "types.h"
 
 // ---- local stubs (retail layout) ----
@@ -73,19 +73,28 @@ struct ChainRow {
   ~ChainRow() { SpFree(weights.b); SpFree(chars.b); }
 };
 struct Key2 { wchar_t a, b; };
+// eastl::less<eastl::pair<wchar_t, wchar_t> >
+inline bool KeyLess(const Key2& x, const Key2& y) { return x.a < y.a || (!(y.a < x.a) && x.b < y.b); }
 struct ChainNode : NodeBase { Key2 key; ChainRow row; };
 struct ChainPair { Key2 key; ChainRow row; ChainPair(const Key2& k, const ChainRow& r) : key(k), row(r) {} };
 struct ChainIter {
   ChainNode* node;
   ChainIter() {}
   ChainIter(const ChainIter& o) : node(o.node) {}
+  explicit ChainIter(ChainNode* n) : node(n) {}
+  ChainIter& operator=(const ChainIter& o) { node = o.node; return *this; }
+  bool operator==(const ChainIter& o) const { return node == o.node; }
 };
+struct UniqueKeys {};  // eastl::true_type (has_unique_keys_type), passed by value
 struct ChainMap {  // eastl::map<pair<wchar_t,wchar_t>, chainData>
   uint32_t cmp;
   NodeBase anchor;  // +4
   uint32_t size, alloc;
-  void lower_bound(ChainIter* out, const Key2* k);                              // @ 0x005e91c0
-  ChainIter DoInsertValueHint(ChainIter pos, const ChainPair& v, bool b);      // @ 0x005ebf10
+  ChainIter end() { return ChainIter((ChainNode*)&anchor); }
+  void lower_bound(ChainIter* out, const Key2* k);
+  ChainIter lower_bound_v(const Key2* k) { ChainIter r; lower_bound(&r, k); return r; }                              // @ 0x005e91c0
+  void DoInsertValueHint(ChainIter* out, ChainIter pos, const ChainPair& v, UniqueKeys);
+  ChainIter DoInsertValue_v(ChainIter pos, const ChainPair& v, UniqueKeys u) { ChainIter r; DoInsertValueHint(&r, pos, v, u); return r; }      // @ 0x005ebf10
   ChainRow* FUN_005ec030(const Key2* key);
 };
 
@@ -109,18 +118,15 @@ struct NameGenData {  // 0x28 bytes
 
 // @ 0x005EC030
 ChainRow* ChainMap::FUN_005ec030(const Key2* key) {
-  ChainIter it;
-  lower_bound(&it, key);
-  ChainNode* n = it.node;
-  if (n == (ChainNode*)&anchor || key->a < n->key.a || (key->a <= n->key.a && key->b < n->key.b)) {
-    ChainRow tmp;
-    ChainPair v(*key, tmp);
-    ChainIter hint;
-    hint.node = n;
-    ChainIter res = DoInsertValueHint(hint, v, false);
-    n = res.node;
+  // eastl::map::operator[]
+  ChainIter itLower;
+  itLower = lower_bound_v(key);
+  if (itLower.node == (ChainNode*)&anchor || KeyLess(*key, itLower.node->key)) {
+    ChainRow t;
+    ChainPair v(*key, t);
+    itLower = DoInsertValue_v(itLower, v, UniqueKeys());
   }
-  return &n->row;
+  return &itLower.node->row;
 }
 
 // ---- name generator ----
