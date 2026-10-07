@@ -1516,12 +1516,12 @@ def fmt_tcall(x):
 
 # ====================================================================== driver
 
-MAX_PROCS = int(os.environ.get("DIFFTEST_MAX_PROCS", max(1, (os.cpu_count() or 2) // 2)))
+MAX_PROCS = int(os.environ.get("DIFFTEST_MAX_PROCS", os.cpu_count() or 2))
 
 
 def cpu_slot():
     """Hold one of MAX_PROCS machine-wide slots (flock'd files) while emulating, so concurrent
-    checkers (batch shards, agents) use at most half the cores. Blocks until a slot is free."""
+    checkers (batch shards, agents) use at most one core each (DIFFTEST_MAX_PROCS, default all). Blocks until a slot is free."""
     import fcntl
     d = os.path.join("/tmp", "difftest-slots-%d" % os.getuid())
     os.makedirs(d, exist_ok=True)
