@@ -79,9 +79,29 @@ Writing matchable source:
 - Calling conventions are visible in the epilogue: `ret N` with ECX used as `this` = `__thiscall`
   member (declare a local stub class with fields at the right offsets, `char pad[N]` gaps);
   `ret N` without ECX = `__stdcall`; ECX+EDX args = `__fastcall`; plain `ret` = `__cdecl`.
-- Callees, globals and vtable targets are masked relocations, so any declaration with the right
-  calling convention and argument types works. Virtual calls need a stub class with the vtable
-  slot at the right index (pad with placeholder virtuals).
+- **Every callee needs the right calling convention, not just the right address.** Callees, globals
+  and vtable targets are masked relocations, so the byte diff does not check where a call goes. It also
+  barely notices a wrong convention, so a wrong declaration can look nearly matching. The most common
+  bug found by the equivalence checker (docs/equivalence.md) is a **thiscall method declared as a free
+  `cdecl`/`stdcall` function**: `this` is never passed in ECX, the callee runs on garbage, and the
+  stack is cleaned up wrongly. Before you record a function as complete, check every direct callee
+  at its call site in the original:
+  - `mov ecx, ...` / `lea ecx, ...` right before the call (and ECX not otherwise an argument) means
+    the callee is a **thiscall member**. Declare it as a member of a stub class (`__thiscall` is
+    rejected on free functions) and call it as `obj->Method(...)`. Pushed arguments go in the
+    member's parameter list; the callee's `ret N` gives their total size (`.venv/bin/python
+    tools/matching/disasm.py work/SporeApp.analysis.bin <callee-va>`).
+  - No `add esp, N` after the call means the callee pops its arguments (`ret N`): thiscall or
+    stdcall. A free cdecl declaration is wrong there.
+  - Also compare return types: if the original never writes EAX before `ret`, the function is
+    `void`, even when a caller-side convention made `bool` look plausible.
+  Run `.venv/bin/python tools/difftest/equiv.py <slice> <va>` on functions you record in
+  nonmatching.txt. A FAIL on `esp`, on a call trace, or "original reads ecx at entry" almost always
+  means one of these declarations is wrong.
+- Virtual calls need a stub class with the vtable slot at the right index (pad with placeholder
+  virtuals). Reference-counted objects (`AddRef`/`Release`, `AutoRefCount<T>`/`intrusive_ptr`):
+  copying a smart pointer calls `AddRef`. A raw-pointer store where the original copies an
+  `AutoRefCount` drops a reference, and the byte diff will not catch it.
 - Prefer the levers listed above: intrinsics, explicit `return true/false`, loop shapes,
   `while (n--)`, field types (`bool` vs `int`), signedness (`movsx`/`movzx`, `sar`/`shr`, `jl`/`jb`),
   and evaluation order of conditions.
