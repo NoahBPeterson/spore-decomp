@@ -220,6 +220,13 @@ class Machine:
         for r in (UC_X86_REG_SS, UC_X86_REG_DS, UC_X86_REG_ES, UC_X86_REG_GS):
             uc.reg_write(r, 2 << 3)
         uc.reg_write(UC_X86_REG_FS, 3 << 3)
+        # Clean control state, restored before every run: a garbage input can make the emulated
+        # code load a bogus CS or set EFLAGS.VM (iret/retf/popfd), which broke every later run.
+        # Setting a segment register one at a time fails once the CPL has changed, so the whole CPU
+        # context (incl. hidden segment state) is snapshotted here and restored in reset_cpu.
+        self.gdt_bytes = gdt
+        uc.reg_write(UC_X86_REG_EFLAGS, 0x202)
+        self.cpu_ctx = uc.context_save()
         teb = bytearray(0x1000)
         struct.pack_into("<IIII", teb, 0, 0xFFFFFFFF, STACK_TOP, STACK_TOP - STACK_SIZE, 0)
         struct.pack_into("<I", teb, 0x18, TEB)
@@ -242,6 +249,8 @@ class Machine:
 
     def reset_cpu(self, regs, xmm):
         uc = self.uc
+        uc.mem_write(GDT_BASE, self.gdt_bytes)
+        uc.context_restore(self.cpu_ctx)
         uc.reg_write(UC_X86_REG_ESP, STACK_TOP - 0x100)
         uc.emu_start(INIT_CODE, self.init_end)
         for k in range(8):          # no stale x87 register contents from the previous run
