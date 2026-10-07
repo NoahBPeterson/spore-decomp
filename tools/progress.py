@@ -3,6 +3,8 @@
 
   .venv/bin/python tools/progress.py            # coverage + components
   .venv/bin/python tools/progress.py --groups    # also live opencode wave groups
+  .venv/bin/python tools/progress.py --plot [out.png]  # chart of progress over time (default work/progress.png;
+                                                       # one point per committed docs/STATUS.md; needs matplotlib)
   .venv/bin/python tools/progress.py --no-refresh # reuse docs/STATUS.md-derived cache? (still recomputes)
 
 Coverage is computed with the exact logic of tools/status.py (reused via runpy), so numbers
@@ -361,6 +363,117 @@ def groups_table():
     rows.append(("TOTAL", "", "%d/%d" % (tot["account"], tot["tot"]), str(tot["exact"]), str(tot["equiv"]), "$%.2f" % tot["cost"], str(tot["active"]), ""))
     return table(["Group", "Model", "Accounted", "Exact", "Equiv", "Cost", "Active", "Launched"], rows,
                  aligns=["<", "<", ">", ">", ">", ">", ">", ">"])
+
+def parse_status_md(md):
+    """Byte-exact and compilable shares from one committed docs/STATUS.md. The table changed
+    shape over time: sum the 'byte-exact' rows (not library/upstream ones), take the 'Total with
+    compilable source' row (or exact + equivalent/behavioral rows), and the share-by-size column
+    when it exists. -> dict or None."""
+    rows = []
+    for line in md.splitlines():
+        if not line.startswith("|") or line.startswith("|---"):
+            continue
+        cells = [c.strip().strip("*") for c in line.strip("|").split("|")]
+        rows.append(cells)
+        if len(rows) > 1 and not rows[-1][0]:
+            break
+    if not rows:
+        return None
+    head = [h.lower() for h in rows[0]]
+    size_col = next((i for i, h in enumerate(head) if "by size" in h), None)
+    num = lambda s: float(re.sub(r"[^0-9.]", "", s.split("(")[0]) or "nan")
+    denom = exact = comp = None
+    exact_sz = comp_sz = None
+    eq = 0
+    for r in rows[1:]:
+        lab = r[0].lower()
+        if len(r) < 2 or not re.match(r"^[\d,]+$", r[1].replace(" ", "")):
+            continue
+        n = num(r[1])
+        if "denominator" in lab or lab.startswith("total functions"):
+            denom = n
+        elif "total with compilable source" in lab:
+            comp = n
+            if size_col is not None: comp_sz = num(r[size_col])
+        elif "byte-exact" in lab and not any(k in lab for k in ("library", "upstream", "total")):
+            exact = (exact or 0) + n
+            if size_col is not None: exact_sz = (exact_sz or 0) + num(r[size_col])
+        elif ("equivalent" in lab or "behavioral" in lab) and "total" not in lab:
+            eq += n
+    if not denom or exact is None:
+        return None
+    if comp is None:
+        comp = exact + eq
+    return {"exact": 100.0 * exact / denom, "comp": 100.0 * comp / denom, "exact_sz": exact_sz, "comp_sz": comp_sz}
+
+
+def plot_history(path):
+    """PNG of progress over time: one point per committed docs/STATUS.md plus the live numbers."""
+    import datetime
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.dates as mdates
+    import matplotlib.pyplot as plt
+    log = subprocess.run(["git", "-C", ROOT, "log", "--format=%H %cI", "--", "docs/STATUS.md"],
+                         capture_output=True, text=True).stdout.split("\n")
+    pts = []
+    for line in log:
+        if not line.strip():
+            continue
+        sha, when = line.split()
+        md = subprocess.run(["git", "-C", ROOT, "show", sha + ":docs/STATUS.md"], capture_output=True, text=True).stdout
+        p = parse_status_md(md)
+        if p:
+            pts.append((datetime.datetime.fromisoformat(when), p))
+    now = datetime.datetime.now().astimezone()
+    pts.append((now, {"exact": 100.0 * len(byte_exact) / G, "comp": 100.0 * len(exact_total) / G,
+                      "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total)}))
+    pts.sort(key=lambda t: t[0])
+
+    BLUE, ORANGE = "#2a78d6", "#eb6834"          # dataviz reference palette, slots 1-2 (validated)
+    INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), dpi=150, sharey=True, sharex=True)
+    fig.patch.set_facecolor("white")
+    panels = (("Share of functions", "exact", "comp"), ("Share of code size", "exact_sz", "comp_sz"))
+    for ax, (title, ke, kc) in zip(axes, panels):
+        for key, color, label in ((kc, ORANGE, "Compilable (byte-exact + equivalent)"), (ke, BLUE, "Byte-exact")):
+            xs = [t for t, p in pts if p.get(key) is not None]
+            ys = [p[key] for t, p in pts if p.get(key) is not None]
+            if not xs:
+                continue
+            ax.plot(xs, ys, color=color, lw=2, marker="o", ms=4, label=label, solid_capstyle="round")
+            ax.annotate("%.1f%%" % ys[-1], (xs[-1], ys[-1]), xytext=(6, 0), textcoords="offset points",
+                        va="center", fontsize=9, color=INK)
+        ax.set_title(title, loc="left", fontsize=11, color=INK)
+        ax.set_ylim(0, 100)
+        ax.yaxis.set_major_formatter(matplotlib.ticker.PercentFormatter(decimals=0))
+        ax.grid(axis="y", color=GRID, lw=1)
+        ax.set_axisbelow(True)
+        for s in ("top", "right", "left"):
+            ax.spines[s].set_visible(False)
+        ax.spines["bottom"].set_color(GRID)
+        ax.tick_params(colors=MUTED, labelsize=9, length=0)
+        ax.xaxis.set_major_locator(mdates.DayLocator())
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %d"))
+        ax.margins(x=0.08)
+    axes[0].legend(loc="upper left", frameon=False, fontsize=9, labelcolor=INK)
+    fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
+                 x=0.01, ha="left", fontsize=12, color=INK)
+    fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, plus now. Equivalent = complete compilable source, "
+             "not yet byte-identical. Size shares only exist in later snapshots.", fontsize=8, color=MUTED)
+    fig.tight_layout(rect=(0, 0.04, 1, 0.95))
+    fig.savefig(path)
+    print("wrote %s (%d snapshots)" % (os.path.relpath(path, ROOT), len(pts)))
+
+
+def pctb_f(items):
+    return 100.0 * sum(funcs[a]["size"] for a in items) / GB
+
+
+if "--plot" in sys.argv:
+    i = sys.argv.index("--plot")
+    out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "progress.png")
+    plot_history(out)
 
 if "--groups" in sys.argv:
     t = groups_table()
