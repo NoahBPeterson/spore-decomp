@@ -3,7 +3,7 @@
 0073f440  10  complete copy_backward for refcounted pairs; only the load of result->p is scheduled before the pointer decrements
 0073f4b0  107  complete SetAnimationGroupTransform; branch layout (translate block first) and hoisted lea differ
 0073f540  825  complete PickLine (box+basis build, lazy global query, query loop); SSE lane build and EH/static-init codegen differ
-0073f910  912  complete IntersectsSphere (same shape as PickLine); SSE lane build and EH/static-init codegen differ
+0073f910  891  complete IntersectsSphere (same shape as PickLine); SSE lane build and EH/static-init codegen differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS after fixing a spurious 0x40-byte copy of the inverse matrix (the item tests take the matrix object itself; ours memcpy'd it into a second buffer)
 0073fe80  72  complete 3-binding validator (mesh query + 3x Check); this/loop-index register swap (esi/edi)
 0073ffb0  75  complete 3-binding validator with extra CheckEntry; same esi/edi register swap
 00740160  273  complete BindingSet dtor (interpolator reset loop, member frees); register swap and fewer EH states than original

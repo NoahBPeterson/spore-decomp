@@ -1,4 +1,4 @@
 005c4500  2274  PopulateExpansionPackPane: complete (hide/show pane, pack buttons, tooltips); button creation split into a helper and the two near-identical loops merged
-005c4e40  498  Shutdown: complete; register allocation and inline erase scheduling differ
-005c50b0  228  SelectPalette: complete; register allocation differs
+005c4e40  499  Shutdown: complete; register allocation and inline erase scheduling differ; difftest WEAK after fixing the this pointers of two calls (FUN_005c41b0 is called on the vector at +0xe8, FUN_005ca7b0 on mSubCategoryUI, both were called on this)
+005c50b0  228  SelectPalette: complete; register allocation differs; difftest FAIL is a checker artifact: an in-class '// @ 0x005c50b0' marker made it test ClearPalettes (the next out-of-class definition) instead of SelectPalette; markers removed from the class body, now PASS
 005c51e0  397  SetCategory: complete; register allocation / spill slots differ

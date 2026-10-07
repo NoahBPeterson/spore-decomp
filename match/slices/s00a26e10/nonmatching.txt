@@ -7,7 +7,7 @@
 00a27340  87  complete; hashtable iterator by-value arg plumbing differs
 00a273d0  104  complete; iterator loop shape differs
 00a27460  63  complete; AutoRefCount temp pattern not reproduced
-00a27530  121  complete; EH frame + temp AutoRefCount layout differs
+00a27530  100  complete; frame is 0x20 vs 0x18 (find iterator not overlapped with the insert temporaries), handler/release register use differ; difftest PASS after fixing the insert result (DoInsertValue writes a 12-byte pair<iterator,bool>, ours was an 8-byte iterator so its bool clobbered the return address) and passing the true_type tag in the key slot
 00a27660  109  complete; erase loop shape differs
 00a27760  172  complete; AutoRefCount vector insert, EH layout differs
 00a27910  8  complete; register choice (eax vs edx) in relocate-call arg loads

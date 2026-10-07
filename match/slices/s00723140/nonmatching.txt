@@ -1,8 +1,6 @@
 # va  diff-bytes  reason
 00723140 1094 complete MeshBuild::Build vertex-remap loop; register/scheduling and EH differences
 00723680 60 complete IntVecObj(n) ctor; base-class ctor chain / EH state not reproduced
-00723720 38 complete IntVecObj(n, v) ctor; base-class ctor chain / EH state not reproduced
 00723930 212 complete ChartRec copy ctor; EH prolog/state stores missing
 00723af0 16 complete vector<cSPTransform>::DoAssign; cap/end store order and tag arg load order
-00723cf0 102 complete PairVec::Reset; inline insert/erase scheduling
 00723d60 619 complete submesh remap export; EH and loop scheduling differ

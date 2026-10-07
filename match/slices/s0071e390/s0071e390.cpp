@@ -31,6 +31,7 @@ struct VecInt {
     void DoInsertValue(int* position, const int& value);               // 0x004558a0
     void reserve(unsigned n);                                          // 0x004e0880
     void resize(unsigned n);                                           // 0x0071ef50
+    int* erase(int* first, int* last);                                 // 0x004ce270
     void push_back(const int& v)
     {
         if (mpEnd < mpCapacity) {
@@ -42,7 +43,6 @@ struct VecInt {
         }
     }
 };
-void EraseIntRange(int* first, int* last);                        // 0x004ce270
 
 // ---------------------------------------------------------------------------
 // Mesh container layout (as seen by WriteMesh / FindPrimitives / collectors)
@@ -139,11 +139,13 @@ void FillNInt(int* first, unsigned n, const int* value)
 // ===========================================================================
 void VecInt::resize(unsigned n)
 {
-    if ((unsigned)(mpEnd - mpBegin) < n) {
-        int v = 0;
-        DoInsertValues(mpEnd, n - (unsigned)(mpEnd - mpBegin), &v);
+    if (n > (unsigned)(mpEnd - mpBegin)) {
+        struct { short lo, hi; } v;   // element default value: two zeroed 16-bit halves
+        v.lo = 0;
+        v.hi = 0;
+        DoInsertValues(mpEnd, n - (unsigned)(mpEnd - mpBegin), (const int*)&v);
     } else {
-        EraseIntRange(mpBegin + n, mpEnd);
+        erase(mpBegin + n, mpEnd);
     }
 }
 

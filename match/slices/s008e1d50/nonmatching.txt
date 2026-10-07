@@ -1,7 +1,6 @@
 008e2350  22  refcount force-release destructor: cl reorders/keeps address in eax and drops the out-of-line ForceRelease call
 008e23e0  33  deleting-destructor variant of 008e2350 (same body)
-008e24a0  57  eastl::equal_range iterator return protocol (two allocator/table args) not reproduced
-008e2580  21  static register-argument helper (attr id in eax, string in esi) cannot be a standalone thiscall
+008e2580  21  static register-argument helper (attr id in eax, string in esi) cannot be a standalone thiscall; callee now declared thiscall Element::GetAttrValue; difftest FAIL is a checker artifact: the original takes elem in ecx, id in eax and s in esi (custom register convention), which no declarable signature reproduces, so the checker feeds the original garbage registers
 008e25d0  1   trailing null store encoded [esi+ebx] instead of [ebx+esi]
 008e2650  23  the two interned-string results land in ebx/ebp swapped vs original
 008e26e0  72  parameter register assignment (s->edi, len->ebx) swapped vs original

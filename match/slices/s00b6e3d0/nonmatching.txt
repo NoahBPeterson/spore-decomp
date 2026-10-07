@@ -7,6 +7,5 @@
 00b6eee0 121 InitColorManager: complete; property array/refptr shapes differ; difftest WEAK (58% coverage) after fixing cString size (0x14 not 0x10: ctor overwrote the return address), PropList::GetProperty vtable slot (+0x28), Prop flags/has offsets (+0x10/+0x12) and list release after ~cString
 00b6f0d0 95 GetColorARGB: complete; cvttss2si now via SSE intrinsics (same ops, extra xorps lane-zeroing and aligned frame); difftest PASS after fixing x87 extended-precision multiply/fistp and passing &key directly
 00b6f180 83 MarkNearestColors: complete; loop/scheduling differs
-00b6f280 18 cColorSet ctor: complete; zero-init store order of embedded map differs
 00b6f310 93 cColorSet::GetARGB: complete; cvttss2si via SSE intrinsics (see GetColorARGB); difftest PASS after fixing x87 extended-precision multiply/fistp (original: mulss + cvttss2si, single precision)
 00b6f380 108 cColorSet::LoadNames: complete; scheduling differs

@@ -8,7 +8,6 @@
 00998820  18   FUN_00998820 ctor: register choice / vtable store order differs
 00998fc0  53   FUN_00998fc0: AddRef vcall and grow-path schedule differ
 00999000  29   SerCollection::RemoveAll: pointer-diff arithmetic schedule differs
-00999080  104  SerCollection::SerCollection: large field-init store scheduling differs
 00998250  39   RWTextureResource::InitTextureResources: complete; stack-slot layout of locals differs (frame 0x5c vs 0x68)
 009983d0  -    RWTextureFactory::ReadResource: complete; vtable-fetch schedule and info struct copy differ
 00998530  -    RWTextureFactory::WriteResource: complete; local layout differs

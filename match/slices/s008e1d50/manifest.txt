@@ -17,3 +17,4 @@ slices/s008e1d50/s008e1d50.cpp  ?Free@Vec2b@@QAEXXZ                   008e2b20  
 slices/s008e1d50/s008e1d50.cpp  ??0D2b6@@QAE@PAX0@Z                   008e2b60  /O2 /MD /Gy /TP /GS-
 slices/s008e1d50/s008e1d50.cpp  ??1ManagerX@@QAE@XZ  008e1f10  /O2 /MD /Gy /TP /GS- /arch:SSE
 slices/s008e1d50/s008e1d50.cpp  ?RemoveAttr@DocX@@QAEXPAUIKV@@@Z  008e2a10  /O2 /MD /Gy /TP /GS-
+slices/s008e1d50/s008e1d50.cpp  ?LookupStyle@DocX@@QAEHXZ  008e24a0  /O2 /MD /Gy /TP /GS-

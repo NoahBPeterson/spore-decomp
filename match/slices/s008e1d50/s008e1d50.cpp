@@ -16,12 +16,12 @@ void __cdecl FUN_008e12c0(void* a, void* b);
 void __cdecl FUN_008e55d0(void* a, void* b, int c);
 void __cdecl FUN_008e4380(void* self, void* v);
 void* __cdecl FUN_008e4480(void* self, const wchar_t* name, int flag);
-int   __cdecl FUN_008e45b0(void* self, int id);
+struct XElem { const wchar_t* GetAttrValue(int id); };   // 0x008e45b0 EA::XHTML::DOM::Element::GetAttrValue (thiscall)
 void __cdecl FUN_008e4940(void* self, void* a, void* b);
 void __cdecl FUN_008e52b0(void* self, void* a, int b);
 void __cdecl FUN_008e52e0(void* self);
 void __cdecl FUN_008e5370(void* self, void* a, int b, void* c);
-void __cdecl FUN_008e3790(void* out, int a, void* b, void* c, void* d);
+void __cdecl FUN_008f3790(void* out, const void* first, const void* last, const void* key);   // eastl::equal_range over a static definition table
 char __cdecl FUN_008e42c0(void);
 void __cdecl FUN_008e42e0(void*);
 void __cdecl operator_delete(void* p);
@@ -741,22 +741,23 @@ ManagerX::ManagerX(CAlloc* alloc)
 // small lookups / helpers
 // ---------------------------------------------------------------------------
 // @ 0x008e24a0
+extern const void* gListStyleDefs[];      // 0x154c490 static definition table (begin)
+extern const void* gListStyleDefsEnd[];   // 0x154c5d8 (end)
 int DocX::LookupStyle()
 {
-    int key = *(int*)((char*)this + 0x18);
-    struct Range { int* first; int* last; } r;
-    r.first = 0;
-    r.last = 0;
-    FUN_008e3790(&r, 0, &key, 0, 0);
-    if ((char*)r.first + 8 == (char*)r.last)
-        return 0;
-    return *(int*)((char*)r.first + 4);
+    struct Key { int name; int value; } key;
+    key.value = 0;
+    key.name = *(int*)((char*)this + 0x18);
+    struct Range { char* first; char* last; } r;
+    FUN_008f3790(&r, gListStyleDefs, gListStyleDefsEnd, &key);
+    const int* p = (r.first + 8 == r.last) ? (const int*)(r.first + 4) : &key.value;
+    return *p;
 }
 
 // @ 0x008e2580
 bool EqAttr(void* elem, int id, const wchar_t* s)
 {
-    const wchar_t* v = (const wchar_t*)FUN_008e45b0(elem, id);
+    const wchar_t* v = ((XElem*)elem)->GetAttrValue(id);
     if (v == s)
         return true;
     if (v != 0 && s != 0)

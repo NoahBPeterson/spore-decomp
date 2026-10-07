@@ -16,7 +16,7 @@ extern "C" void  FUN_0095d000(void*, void*, void*, void*, float*, float, float);
 extern "C" void  FUN_0095d780(void*, void*, int, int, float);                      // 0x95d780 DrawStdButton
 extern "C" void  FUN_0095da40(void*, void*, int, float);                           // 0x95da40
 extern "C" double FUN_011e0906(double);                       // floor
-extern "C" int   FUN_0095bc10(void* ctx, int);               // Begin2D
+struct RenderContext { int* Begin2D(int mode); };            // 0x95bc10 EA::UTFWin::RenderContext::Begin2D (thiscall)
 struct ShadowDesc32;
 extern "C" int*  FUN_00c2e4e0(void* self);                   // ILayoutElement::SetSerializer-ish
 void __cdecl CopyWithQualityAdjustment(ShadowDesc32* dst, ShadowDesc32* src, int quality); // 0x96e3a0
@@ -215,7 +215,7 @@ void StdDrawable::draw_with_image(int* sink, void* p3, void* p4)
 // @ 0x00987d40
 void StdDrawable::CreateRenderables(void* ctx, float* rect, unsigned* flags)
 {
-    int* piVar8 = (int*)FUN_0095bc10(ctx, 0);
+    int* piVar8 = ((RenderContext*)ctx)->Begin2D(0);
     (*(void(__thiscall**)(int*, int))((char*)*piVar8 + 4))(piVar8, -1);
     int image = (int)GetImageForState(*flags);
     if (image != 0) {
@@ -239,8 +239,11 @@ void StdDrawable::CreateRenderables(void* ctx, float* rect, unsigned* flags)
         float rad2 = dv * dv + du * du + 1.0f;
         unsigned baseColor = (unsigned)sd.m24 & 0xffffff;
         for (float u = -sd.f14; u <= sd.f14; u += 1.0f) {
-            for (float v = -sd.f18; v <= sd.f18; v += 1.0f) {
-                float a = (float)FUN_011e0906((double)(u + sd.f0c));
+            float v = -sd.f18;
+            if (!(v <= sd.f18))
+                continue;
+            float a = (float)FUN_011e0906((double)(u + sd.f0c));   // hoisted floor: only once the inner loop runs
+            for (; v <= sd.f18; v += 1.0f) {
                 float b = (float)FUN_011e0906((double)(v + sd.f10));
                 if (a != 0.0f || b != 0.0f) {
                     float r[4];
@@ -248,11 +251,11 @@ void StdDrawable::CreateRenderables(void* ctx, float* rect, unsigned* flags)
                     r[1] = rect[1] + b;
                     r[2] = rect[2] + a;
                     r[3] = rect[3] + b;
-                    float eu = u - b, ev = v - a;
+                    float eu = u - cu, ev = v - cv;
                     float t = (amp / rad1) * (1.0f - (eu * eu + ev * ev) / rad2) + bias;
                     if (t < 0.0f) t = 0.0f;
                     else if (t > 1.0f) t = 1.0f;
-                    int alpha = (int)(t * 255.0f);
+                    unsigned alpha = (unsigned)(t * 255.0f);
                     (*(void(__thiscall**)(int*, int))((char*)*piVar8 + 4))(piVar8, (alpha << 24) + baseColor);
                     draw_with_image(piVar8, r, (void*)image);
                 }

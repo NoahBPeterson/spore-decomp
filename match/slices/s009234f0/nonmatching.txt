@@ -2,15 +2,12 @@
 00923700  21   LogReporter::FilterEnabled: complete; `this` in eax vs ecx
 00923740  21   LogReporter::FilterEnabled2: complete; `this` in eax vs ecx
 009237c0  91   Server::GetLogReporter: complete; vector walk/return schedule differs
-00923840  43   Server::EnumerateLogReporters: complete; loop schedule differs
-00923930  49   Server::IsFiltered: complete; loop tail/return schedule differs
 00923ac0  87   rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
 00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
-00923dc0  20   FUN_00923dc0: complete; iterator construction schedule differs
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
 00923d40  47   Server::Server: complete; MI vtable/new/mutex schedule differs
-00923f30  64   LogFilterGroupLevels::LogFilterGroupLevels: complete; map init store schedule differs
+00923f30  36   LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
 00923f90  11   LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
 00924010  52   LogReporter::SetName: complete; notify-vcall local vs memory loads
 00924060  144  rbtree::DoInsertValue: complete; traversal/insert schedule differs
@@ -21,6 +18,6 @@
 00924350  42   LogReporter::SkipFilter3: complete; register allocation differs
 00924390  45   LogReporter::SkipFilter4: complete; register allocation differs
 009243d0  42   LogFormatterSimple::LogFormatterSimple: complete; fixed-string init schedule differs
-009244d0  104  LogFormatterFancy::LogFormatterFancy: complete; fixed-string/Stopwatch init schedule differs
+009244d0  43   LogFormatterFancy::LogFormatterFancy: complete; fixed-string init schedule differs; difftest PASS after fixing the Stopwatch constructor call (thiscall with 2 args; was a free function taking the timer as first arg)
 009234f0  254  ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
 00923990  128  ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ

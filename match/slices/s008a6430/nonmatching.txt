@@ -1,1 +1,1 @@
-008a6430 2129 complete behavioral source (565 colour-block LSQ endpoint fit); original 4048B is a union/Vector3-temporary-heavy expansion, ours 1919B at /O2 /arch:SSE
+008a6430 175 complete (squish ClusterFit::SolveLeastSquares with its Vec3 class), flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; remaining diff is instruction scheduling in the error term; difftest PASS after fixing the sample count (one deref, not two), NaN clamping (std::max/min selects), float rounding before floor, and SSE single-precision accumulation (/fp:fast, Dot(e1, m_metric))

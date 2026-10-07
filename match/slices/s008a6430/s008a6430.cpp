@@ -1,108 +1,114 @@
-// Least-squares endpoint fit for a 565 colour block (BC1-style): finds two endpoint colours
-// (weights a[] and b[] per sample) quantised to 5/6/5 bits, and returns the weighted error.
+// Least-squares endpoint fit for a 565 colour block (BC1-style): squish's
+// ClusterFit::SolveLeastSquares. Finds two endpoint colours (weights m_alpha/m_beta per sample)
+// quantised to 5/6/5 bits and returns the metric-weighted error.
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast (the loop's split partial sums need /fp:fast).
 #include "types.h"
 #include <math.h>
 
-struct ColorFit {
-    uint32_t pad0;
-    int**    pCount;       // 0x04: **pCount = sample count
-    uint32_t pad1[4];      // 0x08
-    float    v[112];       // 0x18: samples, 3 floats each (stride 12)
-    float    wx, wy, wz;   // 0x1d8..0x1e0: per-channel error weights
-    float    a[16];        // 0x1e4
-    float    b[16];        // 0x224
-    float    kx, ky, kz;   // 0x264..0x26c: per-channel constant error terms
-    float    __thiscall Fit(float* outA, float* outB);
+// std::min / std::max: return a reference to the selected argument
+inline const float& fmin_(const float& l, const float& r) { return (r < l) ? r : l; }
+inline const float& fmax_(const float& l, const float& r) { return (l < r) ? r : l; }
+
+class Vec3 {
+public:
+    typedef Vec3 const& Arg;
+    Vec3() {}
+    explicit Vec3(float s) { m_x = s; m_y = s; m_z = s; }
+    Vec3(float x, float y, float z) { m_x = x; m_y = y; m_z = z; }
+    float X() const { return m_x; }
+    float Y() const { return m_y; }
+    float Z() const { return m_z; }
+    Vec3& operator+=(Arg v) { m_x += v.m_x; m_y += v.m_y; m_z += v.m_z; return *this; }
+    Vec3& operator-=(Arg v) { m_x -= v.m_x; m_y -= v.m_y; m_z -= v.m_z; return *this; }
+    Vec3& operator*=(Arg v) { m_x *= v.m_x; m_y *= v.m_y; m_z *= v.m_z; return *this; }
+    Vec3& operator*=(float s) { m_x *= s; m_y *= s; m_z *= s; return *this; }
+    Vec3& operator/=(float s) { float t = 1.0f / s; m_x *= t; m_y *= t; m_z *= t; return *this; }
+    friend Vec3 operator+(Arg left, Arg right) { Vec3 copy(left); return copy += right; }
+    friend Vec3 operator-(Arg left, Arg right) { Vec3 copy(left); return copy -= right; }
+    friend Vec3 operator*(Arg left, Arg right) { Vec3 copy(left); return copy *= right; }
+    friend Vec3 operator*(Arg left, float right) { Vec3 copy(left); return copy *= right; }
+    friend Vec3 operator*(float left, Arg right) { Vec3 copy(right); return copy *= left; }
+    friend Vec3 operator/(Arg left, float right) { Vec3 copy(left); return copy /= right; }
+    friend Vec3 Min(Arg left, Arg right)
+    {
+        return Vec3(fmin_(left.m_x, right.m_x), fmin_(left.m_y, right.m_y), fmin_(left.m_z, right.m_z));
+    }
+    friend Vec3 Max(Arg left, Arg right)
+    {
+        return Vec3(fmax_(left.m_x, right.m_x), fmax_(left.m_y, right.m_y), fmax_(left.m_z, right.m_z));
+    }
+    friend float Dot(Arg left, Arg right)
+    {
+        return left.m_x * right.m_x + left.m_y * right.m_y + left.m_z * right.m_z;
+    }
+    friend Vec3 Floor(Arg v)
+    {
+        return Vec3((float)floor(v.m_x), (float)floor(v.m_y), (float)floor(v.m_z));
+    }
+private:
+    float m_x, m_y, m_z;
 };
 
-static inline float clamp01(float x) { return x <= 0.0f ? 0.0f : (1.0f <= x ? 1.0f : x); }
+struct ColorSet { int m_count; };
+
+struct ColorFit {
+    uint32_t  pad0;
+    ColorSet* m_colours;   // 0x04
+    uint32_t  pad1[4];     // 0x08
+    Vec3      m_points[37];// 0x18
+    float     pad2;        // 0x1d4
+    Vec3      m_metric;    // 0x1d8
+    float     m_alpha[16]; // 0x1e4
+    float     m_beta[16];  // 0x224
+    Vec3      m_xxsum;     // 0x264
+    float     __thiscall Fit(Vec3* start, Vec3* end);
+};
 
 // @ 0x008A6430
-float ColorFit::Fit(float* outA, float* outB)
+// squish::ClusterFit::SolveLeastSquares
+float ColorFit::Fit(Vec3* start, Vec3* end)
 {
-    int n = **pCount;
-    int i = 0;
-    float sAA0 = 0, sAA1 = 0, sBB0 = 0, sBB1 = 0, sAB0 = 0, sAB1 = 0;
-    float xa0 = 0, xa1 = 0, xa2 = 0, xb0 = 0, xb1 = 0, xb2 = 0;
-    float tAA = 0, tBB = 0, tAB = 0;
-
-    if (n > 1) {
-        int cnt = ((n - 2) >> 1) + 1;
-        i = cnt * 2;
-        const float* p = &v[0];
-        const float* pa = &a[0];
-        const float* pb = &b[0];
-        do {
-            float a0 = pa[0], b0 = pb[0];
-            float a1 = pa[1], b1 = pb[1];
-            sAA0 = a0 * a0 + sAA0;
-            sBB0 = b0 * b0 + sBB0;
-            sAB0 = b0 * a0 + sAB0;
-            sAA1 = a1 * a1 + sAA1;
-            sBB1 = b1 * b1 + sBB1;
-            sAB1 = b1 * a1 + sAB1;
-            xa0 = p[3] * a1 + (p[0] * a0 + xa0);
-            xa1 = p[4] * a1 + (p[1] * a0 + xa1);
-            xa2 = p[5] * a1 + (p[2] * a0 + xa2);
-            xb0 = p[3] * b1 + (p[0] * b0 + xb0);
-            xb1 = p[4] * b1 + (p[1] * b0 + xb1);
-            xb2 = p[5] * b1 + (p[2] * b0 + xb2);
-            p += 6; pa += 2; pb += 2;
-        } while (--cnt != 0);
+    int const count = m_colours->m_count;
+    float alpha2_sum = 0.0f;
+    float beta2_sum = 0.0f;
+    float alphabeta_sum = 0.0f;
+    Vec3 alphax_sum(0.0f);
+    Vec3 betax_sum(0.0f);
+    for (int i = 0; i < count; ++i) {
+        float alpha = m_alpha[i];
+        float beta = m_beta[i];
+        Vec3 const& x = m_points[i];
+        alpha2_sum += alpha * alpha;
+        beta2_sum += beta * beta;
+        alphabeta_sum += alpha * beta;
+        alphax_sum += alpha * x;
+        betax_sum += beta * x;
     }
-    if (i < n) {
-        float a0 = a[i], b0 = b[i];
-        const float* p = &v[i * 3];
-        tAA = a0 * a0;
-        tBB = b0 * b0;
-        tAB = b0 * a0;
-        xa0 = p[0] * a0 + xa0;
-        xa1 = p[1] * a0 + xa1;
-        xa2 = p[2] * a0 + xa2;
-        xb0 = p[0] * b0 + xb0;
-        xb1 = p[1] * b0 + xb1;
-        xb2 = p[2] * b0 + xb2;
-    }
-    float sBB = (sBB0 + sBB1) + tBB;
-    float sAB = (sAB0 + sAB1) + tAB;
-    float sAA = (sAA0 + sAA1) + tAA;
-
-    float ca0, ca1, ca2, cb0, cb1, cb2;
-    if (sBB == 0.0f) {
-        float inv = 1.0f / sAA;
-        ca0 = inv * xa0; ca1 = xa1 * inv; ca2 = xa2 * inv;
-        cb0 = 0.0f; cb1 = 0.0f; cb2 = 0.0f;
-    } else if (sAA == 0.0f) {
-        float inv = 1.0f / sBB;
-        ca0 = 0.0f; ca1 = 0.0f; ca2 = 0.0f;
-        cb0 = inv * xb0; cb1 = xb1 * inv; cb2 = xb2 * inv;
+    Vec3 a, b;
+    if (beta2_sum == 0.0f) {
+        a = alphax_sum / alpha2_sum;
+        b = Vec3(0.0f);
+    } else if (alpha2_sum == 0.0f) {
+        a = Vec3(0.0f);
+        b = betax_sum / beta2_sum;
     } else {
-        float inv = 1.0f / (sBB * sAA - sAB * sAB);
-        ca0 = (xa0 * sBB - xb0 * sAB) * inv;
-        ca1 = (xa1 * sBB - xb1 * sAB) * inv;
-        ca2 = (xa2 * sBB - xb2 * sAB) * inv;
-        cb0 = (xb0 * sAA - xa0 * sAB) * inv;
-        cb1 = (xb1 * sAA - xa1 * sAB) * inv;
-        cb2 = (xb2 * sAA - xa2 * sAB) * inv;
+        float factor = 1.0f / (alpha2_sum * beta2_sum - alphabeta_sum * alphabeta_sum);
+        a = (alphax_sum * beta2_sum - betax_sum * alphabeta_sum) * factor;
+        b = (betax_sum * alpha2_sum - alphax_sum * alphabeta_sum) * factor;
     }
-
-    float qa0 = clamp01(ca0), qa1 = clamp01(ca1), qa2 = clamp01(ca2);
-    float qb0 = clamp01(cb0), qb1 = clamp01(cb1), qb2 = clamp01(cb2);
-
-    float ra0 = (float)floor((double)(qa0 * 31.0f + 0.5f)) * (1.0f / 31.0f);
-    float ra1 = (float)floor((double)(qa1 * 63.0f + 0.5f)) * (1.0f / 63.0f);
-    float ra2 = (float)floor((double)(qa2 * 31.0f + 0.5f)) * (1.0f / 31.0f);
-    float rb0 = (float)floor((double)(qb0 * 31.0f + 0.5f)) * (1.0f / 31.0f);
-    float rb1 = (float)floor((double)(qb1 * 63.0f + 0.5f)) * (1.0f / 63.0f);
-    float rb2 = (float)floor((double)(qb2 * 31.0f + 0.5f)) * (1.0f / 31.0f);
-
-    outA[0] = ra0; outA[1] = ra1; outA[2] = ra2;
-    outB[0] = rb0; outB[1] = rb1; outB[2] = rb2;
-
-    return wz * ((kz + ((ra2 * ra2) * sAA + (rb2 * rb2) * sBB))
-                 + (((ra2 * rb2) * sAB - ra2 * xa2) - rb2 * xb2) * 2.0f)
-         + wy * ((ky + ((ra1 * ra1) * sAA + (rb1 * rb1) * sBB))
-                 + (((ra1 * rb1) * sAB - ra1 * xa1) - rb1 * xb1) * 2.0f)
-         + ((((ra0 * ra0) * sAA + (rb0 * rb0) * sBB) + kx)
-                 + (((rb0 * ra0) * sAB - ra0 * xa0) - rb0 * xb0) * 2.0f) * wx;
+    Vec3 const one(1.0f);
+    Vec3 const zero(0.0f);
+    a = Min(one, Max(zero, a));
+    b = Min(one, Max(zero, b));
+    Vec3 const grid(31.0f, 63.0f, 31.0f);
+    Vec3 const gridrcp(1.0f / 31.0f, 1.0f / 63.0f, 1.0f / 31.0f);
+    Vec3 const half(0.5f);
+    a = Floor(grid * a + half) * gridrcp;
+    b = Floor(grid * b + half) * gridrcp;
+    Vec3 e1 = a * a * alpha2_sum + b * b * beta2_sum + m_xxsum
+            + 2.0f * (a * b * alphabeta_sum - a * alphax_sum - b * betax_sum);
+    float error = Dot(e1, m_metric);
+    *start = a;
+    *end = b;
+    return error;
 }

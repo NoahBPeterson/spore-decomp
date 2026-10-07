@@ -1,5 +1,4 @@
 008fe380  83  Ratio::Set: 16-bit zero compare (xor edx,edx; cmp dx,ax) vs cl's test ax,ax
-008fe490  99  intrusive_hashtable::find returns an 8-byte iterator (sret) with inlined FNV hash
 008fd790  594  HttpHandler::CalculateCacheTimeout: register allocation (hdrs/this) + string ctor schedule differ
 008fdb70  19  HttpHandler::CheckInit: vcall register choice and push edi placement
 008fdc00  123  HttpHandler::RemoveJobFor: register allocation and copy-loop addressing

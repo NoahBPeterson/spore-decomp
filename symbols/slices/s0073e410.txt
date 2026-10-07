@@ -1,1 +1,3 @@
 0073eb90 SP::cModelInstance::GetMeshes  # PDB name (symbols/pdb_names.json)
+0073eca0 cModelInstance::SetDrawTransform  # slice source name (draw-matrix setup)
+0073ede0 cModelInstance::DispatchMesh  # slice source name

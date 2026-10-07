@@ -23,7 +23,6 @@ extern "C" void  FUN_00957c20(void* self, int v);
 extern "C" void  FUN_00a80dd0(void* a, void* b);
 extern "C" void* g_16c8b44;
 extern "C" void FUN_011e0744_(void* a, void* b, int c);
-extern "C" void FUN_00579a90(void* a, void* b, int c, int d, int e, int f);
 extern "C" unsigned g_rwTypes[];      // 0x14469c4
 
 struct Inner { void f11eff60(); };
@@ -307,36 +306,64 @@ void __fastcall FUN_00999050(char* self)
 }
 
 // ---------------------------------------------------------------- 00999080 SerCollection ctor
+extern void* g_SerCollection_vftable[];       // 0x1446abc
+extern void* g_hashEmptyBucketArray[];        // 0x154df28 (eastl gpEmptyBucketArray)
+extern const wchar_t g_emptyWString[];        // 0x13fe144
+struct WString16b {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity;
+    void FUN_00579a90(const wchar_t* s);      // basic_string<wchar_t>::RangeInitialize, thiscall
+};
+
+struct SerRehashPolicy {                       // eastl::prime_rehash_policy
+    float    mfMaxLoadFactor;
+    float    mfGrowthFactor;
+    unsigned mnNextResize;
+    SerRehashPolicy() : mfMaxLoadFactor(1.0f), mfGrowthFactor(2.0f), mnNextResize(0) {}
+};
+struct SerHashtable {                         // eastl::hashtable<uint, AutoRefCount<...>> (0x20 bytes)
+    int             mHashObj;                 // +0 (empty functor slot)
+    void**          mpBucketArray;            // +4
+    unsigned        mnBucketCount;            // +8
+    unsigned        mnElementCount;           // +0xc
+    SerRehashPolicy mRehashPolicy;            // +0x10
+    int             mAllocator;               // +0x1c
+    SerHashtable() : mnBucketCount(0), mnElementCount(0) { reset_lose_memory(); }
+    void reset_lose_memory() {
+        mnBucketCount = 1;
+        mpBucketArray = g_hashEmptyBucketArray;
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+};
+struct SerPtrVector {                         // eastl::vector<T*> (0x10 bytes)
+    void** mpBegin; void** mpEnd; void** mpCapacity; int mAllocator;
+    SerPtrVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+};
+struct SerWString : WString16b {
+    SerWString() { mpBegin = 0; mpEnd = 0; mpCapacity = 0; FUN_00579a90(g_emptyWString); }
+};
+struct SerKey {
+    unsigned mInstance, mType, mGroup;
+    SerKey() : mInstance(0), mType(0), mGroup(0) {}
+};
+struct SerCollection {
+    void**       mpVtbl;                      // +0
+    void*        mService;                    // +4
+    void*        mAutoUpdate;                 // +8
+    SerKey       mKey;                        // +0xc
+    unsigned     mSerFlags;                   // +0x18
+    SerHashtable mImports;                    // +0x1c
+    SerHashtable mExports;                    // +0x3c
+    SerPtrVector mList;                       // +0x5c
+    int          mPad6c;                      // +0x6c
+    SerWString   mName;                       // +0x70
+    SerCollection();
+};
+
 // @ 0x00999080
-void __fastcall SerCollection_Ctor(void* self)
+SerCollection::SerCollection()
+    : mpVtbl(g_SerCollection_vftable), mService(0), mAutoUpdate(0), mSerFlags(0)
 {
-    char* a = (char*)self;
-    *(void**)(a + 0) = (void*)0x1446abc;
-    *(unsigned*)(a + 4) = 0;
-    *(unsigned*)(a + 8) = 0;
-    *(unsigned*)(a + 0xc) = 0;
-    *(unsigned*)(a + 0x10) = 0;
-    *(unsigned*)(a + 0x14) = 0;
-    *(unsigned*)(a + 0x18) = 0;
-    *(float*)(a + 0x2c) = 1.0f;
-    *(float*)(a + 0x30) = 2.0f;
-    *(unsigned*)(a + 0x28) = 0;
-    *(unsigned*)(a + 0x34) = 0;
-    *(unsigned*)(a + 0x24) = 1;
-    *(void**)(a + 0x20) = (void*)0x154df28;
-    *(float*)(a + 0x4c) = 1.0f;
-    *(float*)(a + 0x50) = 2.0f;
-    *(void**)(a + 0x40) = (void*)0x154df28;
-    *(unsigned*)(a + 0x44) = 1;
-    *(unsigned*)(a + 0x48) = 0;
-    *(unsigned*)(a + 0x54) = 0;
-    *(unsigned*)(a + 0x5c) = 0;
-    *(unsigned*)(a + 0x60) = 0;
-    *(unsigned*)(a + 0x64) = 0;
-    *(unsigned*)(a + 0x70) = 0;
-    *(unsigned*)(a + 0x74) = 0;
-    *(unsigned*)(a + 0x78) = 0;
-    FUN_00579a90(a + 0x70, (void*)0x13fe144, 0, 0, 0, 0);
 }
 
 // ================================================================ image reader/writer helpers

@@ -381,7 +381,7 @@ IOutObj* __cdecl WriteNineUint32(IOutObj* s, u32* d)
 // ---- "settime" cheat command -----------------------------------------------------------------
 struct cArguments {
     const char** MainArguments(int* outCount, int a, int b);     // 00838020
-    const char** OptionArguments(const char* name, int n);       // 00838330
+    const char** OptionArguments_00838330(const char* name, int n);       // 00838330 cArguments::OptionArguments(const char*,int); address in the name so the checker does not pick the 0x838130 overload
 };
 struct cCommandBase {
     void* mpOwner;
@@ -467,7 +467,7 @@ void cSetTimeCommand::ParseLine(cArguments* args)
         float f = t * TimeOfDay_Instance()->mfDayLength;
         TimeOfDay_Instance()->SetTime(f, pos);
     }
-    const char** opt = args->OptionArguments("speed", 1);
+    const char** opt = args->OptionArguments_00838330("speed", 1);
     if (opt) {
         float v = VFN(mpOwner, 0x98, float(__thiscall*)(void*, const char*))(mpOwner, *opt);
         const float lo = 1.52587890625e-05f;

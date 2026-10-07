@@ -13,3 +13,6 @@ slices/s009234f0/s009234f0.cpp  ?Clone@LogFormatterSimple@Trace@EA@@QAEPAXXZ  00
 slices/s009234f0/s009234f0.cpp  ?SetName@LogFormatterFancy@Trace@EA@@QAEXPBD@Z  00924570  /O2 /MD /Gy /TP
 slices/s009234f0/s009234f0.cpp  ?AsInterface@Server@Trace@EA@@QAEPAU123@H@Z  00923680  /O2 /MD /Gy /TP
 slices/s009234f0/s009234f0.cpp  ?erase@RBTreeMap@Trace@EA@@QAEPAPAURBNode@23@PAPAU423@PAU423@@Z  00923b80  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?EnumerateLogReporters@Server@Trace@EA@@QAEIPAPAXI@Z  00923840  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?IsFiltered@ServerTracer@Trace@EA@@QAE_NPAX@Z  00923930  /O2 /MD /Gy /TP
+slices/s009234f0/s009234f0.cpp  ?FUN_00923dc0@@YAPAXPAXPBDZZ  00923dc0  /O2 /MD /Gy /TP

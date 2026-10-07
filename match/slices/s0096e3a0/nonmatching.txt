@@ -1,7 +1,7 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 0096e3a0  339  CopyWithQualityAdjustment: branch layout / float clamp schedule differs (399 vs 338 bytes)
 0096e540  390  GlyphVec::insert: complete; EASTL grow path and call scheduling differ; difftest WEAK after fixing the capacity test (must compare n with the free capacity end..capacity, not the size) and the uninitialized_copy return slot (was a null pointer; now the dead val argument slot, like the original)
-0096e6d0  71   GlyphVec::resize: grow/erase call scheduling differs
+0096e6d0  22   GlyphVec::resize: complete; n/size register assignment swapped (eax/edx); difftest PASS after fixing the erase call (thiscall vector::erase on this; was a free cdecl call)
 0096f080  35   BiStateEffect_func84h: float temp kept in register and 0xffffff add folded to a subtract
-0096f240  43   Ctx96::q(AsInterface): this register allocation / compare order differs
-0096e740  1152  DropShadowText::draw (DrawTextGlyphs): complete; original has ebp frame with 8-aligned fistp slot, loop scheduling differs
+0096f240  23   Ctx96::q(AsInterface): complete; return-this block placement differs; difftest PASS after fixing the base AsInterface tail call (thiscall on this; was a free cdecl call with the iid only)
+0096e740  1136  DropShadowText::draw (DrawTextGlyphs): complete; original has ebp frame with 8-aligned fistp slot (EA inline-asm FloatToInt helper), loop scheduling differs; difftest WEAK after fixing the vector<bool> resize call (thiscall on 0x166b1c0; was cdecl), the memcpy-style DoInsertValue destination (the vector's data pointer, not the vector), and the alpha float->int (round to nearest like the original's fistp, via 1.5*2^23 addition; was a truncating cast)

@@ -6,3 +6,4 @@ slices/s008fc670/s008fc670.cpp  ??0D290@@QAE@H@Z                   008fd290  /O2
 slices/s008fc670/s008fc670.cpp  ?SetAcceptEncoding@HTTPy@@QAEXPBD@Z 008fd670  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fc670/s008fc670.cpp  ?HandlerMsgCb@@YAXIIHPAUHMsg@@@Z  008fd350  /O2 /MD /Gy /TP /GS- /arch:SSE2
 slices/s008fc670/s008fc670.cpp  ??1HttpHandler@@UAE@XZ  008fd3d0  /O2 /MD /Gy /TP /GS- /arch:SSE2
+slices/s008fc670/s008fc670.cpp  ?SetFilter@HTTPz@@QAEXPAULogFilter@@I@Z  008fd1a0  /O2 /MD /Gy /TP /GS- /arch:SSE2

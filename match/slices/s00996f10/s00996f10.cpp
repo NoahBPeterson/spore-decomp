@@ -15,7 +15,6 @@ extern "C" void* FUN_011e0744(void* dst, void* src, unsigned n);        // vecto
 extern "C" void  FUN_00996b40(void* a, void* b, void* c);               // deque push_front helper
 extern "C" void  FUN_00996ad0(void* a, void* b, void* c, void* d);      // deque push_back helper
 extern "C" void  FUN_00993390(void* self);                              // 0x993390
-extern "C" void  FUN_0098e3600(void* a);                                // 0x8e3600
 extern "C" void* FUN_008fe480(void);                                    // XHTML::Resource::GetResourceProvider
 extern "C" void  FUN_00992e60(void* a);                                // 0x992e60 (thiscall, see casts)
 extern "C" void  FUN_00992ea0(void* a);                                // 0x992ea0
@@ -35,7 +34,6 @@ extern "C" void  FUN_0087cef0(void* a);                                 // gfree
 extern "C" void  FUN_0087d070(void);                                    // 0x87d070
 extern "C" void  FUN_00957300(void* a, int b, void* c);                 // 0x957300
 extern "C" void  FUN_00957230(void* a, int b, void* c);                 // 0x957230
-extern "C" void* FUN_00904b00(void* a, void* b);                        // WinXHTML::SetDocument 0x994b00
 extern "C" int   FUN_00932f30(const wchar_t* s, unsigned seed, int a);   // FNV1_String16
 extern "C" void* FUN_00d01260(void* a, void* b, void* c, void* d); // lower_bound (d = empty compare object by value)
 extern "C" void  FUN_009970e0(void* a, void* b, void* c);               // vector<map pair>::insert
@@ -100,9 +98,103 @@ void FUN_00997140(char* self)
 }
 
 // ---------------------------------------------------------------- 00997210 GetJobInfo
+struct FrameMessage {                    // UTFWin message block passed to the window's +0x114 handler
+    int mPad0[2];
+    int mID;        // +8
+    int mSource;    // +0xc
+    int mPad10[2];
+    int mValue;     // +0x18
+    FrameMessage(int id, int source, int value) { mID = id; mSource = source; mValue = value; }
+};
+struct XHTMLDocument {
+    void FUN_008e3600(bool flag);                                        // 0x8e3600
+};
+struct IWindowMsg {                      // WinXHTML's interface at +4; slot 0x114 handles a message
+    virtual void s00();
+    virtual void s04();
+    virtual void s08();
+    virtual void s0c();
+    virtual void s10();
+    virtual void s14();
+    virtual void s18();
+    virtual void s1c();
+    virtual void s20();
+    virtual void s24();
+    virtual void s28();
+    virtual void s2c();
+    virtual void s30();
+    virtual void s34();
+    virtual void s38();
+    virtual void s3c();
+    virtual void s40();
+    virtual void s44();
+    virtual void s48();
+    virtual void s4c();
+    virtual void s50();
+    virtual void s54();
+    virtual void s58();
+    virtual void s5c();
+    virtual void s60();
+    virtual void s64();
+    virtual void s68();
+    virtual void s6c();
+    virtual void s70();
+    virtual void s74();
+    virtual void s78();
+    virtual void s7c();
+    virtual void s80();
+    virtual void s84();
+    virtual void s88();
+    virtual void s8c();
+    virtual void s90();
+    virtual void s94();
+    virtual void s98();
+    virtual void s9c();
+    virtual void sa0();
+    virtual void sa4();
+    virtual void sa8();
+    virtual void sac();
+    virtual void sb0();
+    virtual void sb4();
+    virtual void sb8();
+    virtual void sbc();
+    virtual void sc0();
+    virtual void sc4();
+    virtual void sc8();
+    virtual void scc();
+    virtual void sd0();
+    virtual void sd4();
+    virtual void sd8();
+    virtual void sdc();
+    virtual void se0();
+    virtual void se4();
+    virtual void se8();
+    virtual void sec();
+    virtual void sf0();
+    virtual void sf4();
+    virtual void sf8();
+    virtual void sfc();
+    virtual void s100();
+    virtual void s104();
+    virtual void s108();
+    virtual void s10c();
+    virtual void s110();
+    virtual void HandleMessage(FrameMessage* msg);
+};
+struct WinXHTML {
+    void* mpVtbl0;
+    IWindowMsg mWindow;                   // +4
+    void SetDocument(XHTMLDocument* doc);                                // 0x994b00
+};
+struct cXHTMLFrameSet {
+    WinXHTML* GetJobInfo(void* key, bool* outFlag);
+    void LoadRequestCallback(int* p);
+};
+
 // @ 0x00997210
-void* GetJobInfo(char* self, void* key, unsigned char* outFlag)
+WinXHTML* cXHTMLFrameSet::GetJobInfo(void* key, bool* outFlag)
 {
+    char* self = (char*)this;
     char* a = *(char**)(self + 0x2c);
     char* end = *(char**)(self + 0x3c);
     char* ebp = *(char**)(self + 0x34);
@@ -121,8 +213,8 @@ void* GetJobInfo(char* self, void* key, unsigned char* outFlag)
     }
     if (a == end)
         return 0;
-    void* ret = *(void**)(a + 4);
-    *outFlag = *(unsigned char*)(a + 8);
+    WinXHTML* ret = *(WinXHTML**)(a + 4);
+    *outFlag = *(bool*)(a + 8);
     DqIter found;
     found.cur = a; found.begin = esi; found.end = ebp; found.arr = (char**)edi;
     DqIter res;
@@ -132,31 +224,27 @@ void* GetJobInfo(char* self, void* key, unsigned char* outFlag)
 
 // ---------------------------------------------------------------- 009972a0 LoadRequestCallback
 // @ 0x009972a0
-void FUN_009972a0(char* self, int* p)
+void cXHTMLFrameSet::LoadRequestCallback(int* p)
 {
     if (*p == 4)
         return;
-    unsigned char flag;
-    void* win = GetJobInfo(self, (void*)p[1], &flag);
+    bool flag;
+    WinXHTML* win = GetJobInfo((void*)p[1], &flag);
     if (*p == 3) {
-        int a = p[3];
-        int b = p[1];
-        int local[3];
-        local[0] = 0x43b0aee;
-        local[1] = b;
-        local[2] = a;
-        (*(void(__thiscall**)(char*, int*))((char*)*(void**)((char*)win + 4) + 0x114))((char*)win + 4, local);
+        FrameMessage msg(0x43b0aee, p[1], p[3]);
+        win->mWindow.HandleMessage(&msg);
         return;
     }
-    if (*p == 2 && p[4] != 0) {
-        char* q = (char*)(*(void*(__thiscall**)(int, int))((char*)*(void**)p[4] + 0xc))(p[4], 0x2b29464);
+    void* src;
+    if (*p == 2 && (src = (void*)p[4]) != 0) {
+        XHTMLDocument* q = (XHTMLDocument*)(*(void*(__thiscall**)(void*, int))((char*)*(void**)src + 0xc))(src, 0x2b29464);
         if (q) {
-            (*(void(__thiscall**)(char*))*(void**)q)(q);
+            (*(void(__thiscall**)(XHTMLDocument*))*(void**)q)(q);
             if (win) {
-                FUN_0098e3600((void*)0);
-                FUN_00904b00(win, q);
+                q->FUN_008e3600(flag);
+                win->SetDocument(q);
             }
-            (*(void(__thiscall**)(char*))((char*)*(void**)q + 4))(q);
+            (*(void(__thiscall**)(XHTMLDocument*))((char*)*(void**)q + 4))(q);
         }
     }
 }

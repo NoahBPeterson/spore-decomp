@@ -14,11 +14,12 @@ static inline void SpFree(void* p) {
   if (p && ((int*)p)[-1] != 0) operator_delete_array(p);
 }
 
-struct WStr {  // eastl::basic_string<wchar_t>: begin, end, capacity
+struct WStr {  // eastl::basic_string<wchar_t>: begin, end, capacity, allocator (0x10 bytes)
   wchar_t* b;
   wchar_t* e;
   wchar_t* c;
-  void Init(const wchar_t* s);          // @ 0x0056e2d0
+  uint32_t alloc;
+  void Init(const WStr& s);             // @ 0x0056e2d0 (copy constructor)
   void AllocateSelf(unsigned n);        // @ 0x00429760
   void push_back(wchar_t ch);           // @ 0x004f6510
   void make_lower();                    // @ 0x005e8e80
@@ -28,16 +29,24 @@ struct WStr {  // eastl::basic_string<wchar_t>: begin, end, capacity
     if ((((int)c - (int)b) & ~1) > 2 && b) operator_delete_array(b);
   }
 };
+extern WStr g_EmptyWStrObj;  // @ 0x015f0a1c (shared empty string object)
 void sprintfW(WStr* dst, const wchar_t* fmt, ...);  // @ 0x004e0850
 const wchar_t* Search(const wchar_t* b1, const wchar_t* e1, const wchar_t* b2, const wchar_t* e2);  // @ 0x005e8ff0
 void Normalize(WStr* s);  // @ 0x005e9320
 
+struct WStr;
+WStr* CopyWStrRange(WStr* first, WStr* last, WStr* dest);  // @ 0x0084ab40 (eastl::copy_impl::do_copy, cdecl)
 struct StrVec {  // eastl::vector<wstring, sp_vector_allocator>
   WStr* b;
   WStr* e;
   WStr* c;
   void DoDestroyValues(WStr* first, WStr* last);   // @ 0x0084aad0
-  void erase(WStr* first, WStr* last);              // (copy + DoDestroyValues)
+  // erase(first, last), inlined: move the tail down, destroy the leftovers, shrink
+  void erase(WStr* first, WStr* last) {
+    WStr* p = CopyWStrRange(last, e, first);
+    DoDestroyValues(p, e);
+    e -= (last - first);
+  }
   void Insert(WStr* pos, WStr* first, WStr* last, int tag);  // @ 0x005ea200
 };
 struct StrSet {  // eastl::set<wstring>, anchor at +4, size at +0x14
@@ -165,7 +174,7 @@ struct WStrSetT {
   uint32_t cmp; NodeBase anchor; uint32_t size, alloc;
   TreeIter find(const WStr& k);              // @ 0x005e96f0
 };
-struct NameNode : NodeBase { WStr key; int pad; int count; };  // count at +0x20
+struct NameNode : NodeBase { WStr key; int count; };  // count at +0x20
 struct WStrMapT {
   uint32_t cmp; NodeBase anchor; uint32_t size, alloc;
   TreeIter find(const WStr& k);              // @ 0x005e96f0
@@ -261,7 +270,7 @@ void cSPNameGenerator::FUN_005ec130(StrVec* names, NameGenData* data) {
 WStr* cSPNameGenerator::FUN_005ec370(WStr* out, NameGenData* data, StrSet* excluded, StrVec* subs,
                                      StrVec* fallback, bool allowDup) {
   if (data->maxLen < 1) {
-    out->Init(L"");
+    out->Init(g_EmptyWStrObj);
     return out;
   }
   WStr str;

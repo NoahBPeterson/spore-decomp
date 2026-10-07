@@ -4,3 +4,4 @@ slices/s007a07b0/s007a07b0.cpp  ?Reset@SplitState@@QAEXHH@Z  007a0cd0  /O2 /MD /
 slices/s007a07b0/s007a07b0.cpp  ?Reset@SplitState2@@QAEXHH@Z  007a0de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s007a07b0/s007a07b0.cpp  ?Process@IModelSplitter@@QAEXHPAUV12@@@Z  007a0ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s007a07b0/s007a07b0.cpp  ?Split@IModelSplitter@@QAEXHPAUV12@@@Z  007a0f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s007a07b0/s007a07b0.cpp  ?Resize@VecPod20@@QAEXI@Z  007a0ae0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

@@ -4,3 +4,4 @@ slices/s00996f10/s00996f10.cpp  ?GetSupportedTypes@Obj33@@QAEHPAII@Z     00997d4
 slices/s00996f10/s00996f10.cpp  ?CanConvert@Obj33@@QAE_NHH@Z             00997d80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00996f10/s00996f10.cpp  ?ctor2@Obj33@@QAEPAXXZ                  00997f30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00996f10/s00996f10.cpp  ?push_back@VecPB@@QAEXPAI@Z              00997b10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00996f10/s00996f10.cpp  ?LoadRequestCallback@cXHTMLFrameSet@@QAEXPAH@Z  009972a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

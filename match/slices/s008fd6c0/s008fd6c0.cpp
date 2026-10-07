@@ -103,8 +103,16 @@ const wchar16* FindFirstOf(const wchar16* first, const wchar16* last,
 
 // @ 0x008fe430
 // eastl::intrusive_hashtable<...>::DoFindNode: a thiscall member that never uses this.
+struct IHTableWIter {
+    int* mpNode;
+    int** mpBucket;
+    IHTableWIter(int* n, int** b) : mpNode(n), mpBucket(b) {}
+};
 struct IHTableW {
+    int* mBucket[64];
+    int* mEnd;                      // +0x100 end sentinel
     int* DoFindNode(int* node, const wchar16** key) const;
+    IHTableWIter find(const wchar16** key);
 };
 int* IHTableW::DoFindNode(int* node, const wchar16** key) const
 {
@@ -123,7 +131,8 @@ int* IHTableW::DoFindNode(int* node, const wchar16** key) const
 }
 
 // @ 0x008fe490
-unsigned __fastcall HT_Find(int* self, const wchar16** key)
+// intrusive_hashtable::find: inlined FNV-1 hash, returns an 8-byte iterator via sret.
+IHTableWIter IHTableW::find(const wchar16** key)
 {
     const wchar16* s = *key;
     unsigned h = 0x811c9dc5;
@@ -133,10 +142,9 @@ unsigned __fastcall HT_Find(int* self, const wchar16** key)
         h = (h * 0x1000193) ^ c;
         c = *s;
     }
-    h &= 0x3f;
-    int* bucket = (int*)((char*)self + h * 4);
-    int* node = ((const IHTableW*)self)->DoFindNode(*(int**)bucket, key);
-    return (unsigned)node;
+    int** bucket = &mBucket[h & 0x3f];
+    int* node = DoFindNode(*bucket, key);
+    return node ? IHTableWIter(node, bucket) : IHTableWIter(mEnd, &mEnd);
 }
 
 // @ 0x008fe510

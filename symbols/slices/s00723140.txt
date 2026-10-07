@@ -1,3 +1,5 @@
 # va  Name  # evidence
 007237a0 eastl::vector<EA::Text::Vertex3D>::resize  # do_copy<Vertex3D*> callee, 0x18 stride
 00723af0 eastl::vector<cSPTransform>::DoAssign  # do_copy<cSPTransform*> callee, 0x38 stride
+00472a70 ??_EIntVecObj@@UAEPAXI@Z  # IntVecObj vtable 0x13ef09c slot 2 (deleting dtor)
+0047d670 ??_EIntVecObj@@W3AEPAXI@Z  # IntVecObj secondary vtable 0x13ef098 slot 0 (this-4 thunk to 0x472a70)

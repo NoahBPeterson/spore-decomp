@@ -84,12 +84,15 @@ struct NameMap {
   rbtree_node_base mAnchor;
   unsigned int mnSize;
   void DoNukeSubtree(void* p);        // @ 0x801ef0
-  NameMap() {
-    mAnchor.mpNodeLeft = 0;
-    mAnchor.mpNodeParent = 0;
-    *(int*)&mAnchor.mColor = 0;
-  }
+  NameMap() : mAnchor() { reset(); }
   ~NameMap() { DoNukeSubtree(mAnchor.mpNodeParent); }
+  void reset() {
+    mAnchor.mpNodeRight = &mAnchor;
+    mAnchor.mpNodeLeft = &mAnchor;
+    mAnchor.mpNodeParent = 0;
+    mAnchor.mColor = 0;
+    mnSize = 0;
+  }
   void clear() {
     DoNukeSubtree(mAnchor.mpNodeParent);
     mAnchor.mpNodeRight = &mAnchor;
@@ -389,12 +392,8 @@ cColorSet::~cColorSet() {}
 
 void cColorSet::clear() { mNames.clear(); }
 
+// @ 0x00B6F280
 cColorSet::cColorSet() : mKey(0x53dbcf1) {
-  mNames.mAnchor.mpNodeRight = &mNames.mAnchor;
-  mNames.mAnchor.mpNodeLeft = &mNames.mAnchor;
-  mNames.mAnchor.mpNodeParent = 0;
-  mNames.mAnchor.mColor = 0;
-  mNames.mnSize = 0;
   mDefault = g_defaultColor;
 }
 

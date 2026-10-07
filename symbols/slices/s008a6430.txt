@@ -1,1 +1,1 @@
-008a6430 ColorFit::Fit  # 565 least-squares endpoint fit, floor() quantisation to /31 /63
+008a6430 ColorFit::Fit  # squish ClusterFit::SolveLeastSquares: 565 least-squares endpoint fit, floor() quantisation to /31 /63

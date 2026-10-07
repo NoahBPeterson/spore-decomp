@@ -2,3 +2,5 @@
 slices/s00723140/s00723140.cpp  ?resize@Vec24@@QAEXI@Z  007237a0
 slices/s00723140/s00723140.cpp  ?resize@Vec24@@QAEXIPBUVertex3D@@@Z  007238b0
 slices/s00723140/s00723140.cpp  ??4ChartRec@@QAEAAU0@ABU0@@Z  00723a70
+slices/s00723140/s00723140.cpp  ??0IntVecObj@@QAE@HPBH@Z  00723720  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00723140/s00723140.cpp  ?Reset@PairVec@@QAEXIIHHE@Z  00723cf0  /O2 /MD /Gy /EHsc /TP /GS-

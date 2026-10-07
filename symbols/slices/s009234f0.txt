@@ -6,7 +6,7 @@
 00923740 EA::Trace::LogReporter::FilterEnabled2  # inferred (mFilter vtbl +0x10)
 009237c0 EA::Trace::Server::GetLogReporter  # PDB name (card); _stricmp on GetName
 00923840 EA::Trace::Server::EnumerateLogReporters  # PDB name (card)
-00923930 EA::Trace::Server::IsFiltered  # PDB name (card)
+00923930 EA::Trace::ServerTracer::IsFiltered  # PDB name Server::IsFiltered; ITracer-side (this = Server+4)
 00923990 EA::Trace::Server::Trace  # ITracer-side member (this = Server+4)
 00923a60 EA::Trace::LogReporter::ShowAlert  # inferred (mFormatter vtbl +0x10)
 00923aa0 EA::Trace::LogReporter::DebugPrint  # inferred (OutputDebugStringA)

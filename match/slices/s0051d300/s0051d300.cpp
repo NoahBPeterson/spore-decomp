@@ -5,7 +5,6 @@
 void  EASTL_allocator_deallocate(void* p);                         // 0x00f47380
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void  Memset32(void* dst, int value, int count);                   // 0x0092cb00
-void  BaseBca_ctor(void* self, int w, int h);                      // 0x00432960
 
 extern void* g_vtblSimCreatureAbility;   // 0x013ef094
 extern void* g_vtblF1c6c;                // 0x013f1c6c
@@ -31,7 +30,10 @@ struct RefHolder {
 struct ThreadedRes {
     void dtor();
 };
-struct Bitmap {
+struct BitmapBase {
+    BitmapBase(int w, int h);                                     // 0x00432960 (thiscall)
+};
+struct Bitmap : BitmapBase {
     Bitmap(int w, int h, int fill);
 };
 
@@ -328,14 +330,14 @@ void* SimAbility::deleting_dtor(unsigned flags)
 
 // @ 0x0051d690 Bitmap ctor
 Bitmap::Bitmap(int w, int h, int fill)
+    : BitmapBase(w, h)
 {
-    BaseBca_ctor(this, w, h);
     *(void**)this = &g_vtblBca4;
     *(void**)((char*)this + 0x18) = &g_vtblBcb8;
     void* buf = EA_alloc((unsigned)(w * h * 4), "Graphics", 0, 0, 0, 0);
     *(void**)((char*)this + 0x28) = buf;
     *(int*)((char*)this + 0x24) = 2;
-    Memset32(buf, fill, w * h);
+    Memset32(*(void**)((char*)this + 0x28), fill, w * h);
 }
 
 // eastl::intrusive_ptr-style holder; its inlined dtor gives the /Od member-address temps.

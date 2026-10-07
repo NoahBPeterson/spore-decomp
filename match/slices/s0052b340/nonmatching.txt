@@ -1,1 +1,1 @@
-0052b340 3756 complete (all paths/calls); /Od temp-slot layout differs (original frame 0x4a8 vs ours smaller), flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-
+0052b340 3369 complete (all paths/calls); /Od temp-slot layout differs (original frame 0x4a8 vs ours smaller), flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-; difftest WEAK after fixing the two local fixed_vectors (float x65, pair x32) to carry their inline buffers (they were bare 16-byte vectors, so Init pointed begin at unrelated stack and Free deleted it)

@@ -1,5 +1,5 @@
 00956b30 92 GlyphRenderer::DrawText(x,y,...): complete; wcslen loop shape and fixed_vector ctor store order/regalloc differ; difftest PASS after fixing the checker's flags (the source's // Flags comment said /EHsc, unlike every manifest row; the EH frame it added shifted the glyph buffer by 12 bytes, which LayoutTextLine turned into different floats)
-00956c40 116 GlyphRenderer::DrawText(4 floats,...): complete; same wcslen/fixed_vector ctor schedule differences
+00956c40 110 GlyphRenderer::DrawText(4 floats,...): complete; same wcslen/fixed_vector ctor schedule differences; difftest PASS after fixing LayoutTextLine (0x890830) parameter order (text,len before the 4 floats)
 00956f30 27 free pool drain: complete; pop_front register choice (ecx copy of node) differs
 00956fa0 22 FreeDisplayListEntries splice: complete; prologue push order (orig pushes esi/edi before Lock) differs
 00956ff0 60 AllocDisplayListEntry: complete; anchor held in ecx vs eax, node copy and DisplayList ctor store order differ

@@ -366,12 +366,19 @@ void ReleaseAndClear(RefVec* v)
                 if (s)
                     *s = (void*)v->mpBegin[i].p;
             } else {
-                void* p = (void*)v->mpBegin[i].p;
-                held.DoInsert(held.mpEnd, &p);
+                held.DoInsert(held.mpEnd, (void* const*)&v->mpBegin[i].p);
             }
             v->mpBegin[i].p = 0;
         }
     }
     FUN_00762d70((int)(held.mpEnd - held.mpBegin), held.mpBegin);
-    v->mpEnd = v->mpBegin;
+    // inlined vector::erase(begin(), end()): copy [end, end) down, then end -= count
+    RefElem* first = v->mpBegin;
+    RefElem* last = v->mpEnd;
+    RefElem* d = first;
+    for (RefElem* s = last; s != last; ++s, ++d) {
+        d->p = s->p;
+        d->x = s->x;
+    }
+    v->mpEnd -= (last - first);
 }

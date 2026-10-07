@@ -1,7 +1,6 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
 00997140  200  FUN_00997140: deque walk and copy-back schedule differs
-00997210  130  cXHTMLFrameSet::GetJobInfo: iterator walk/erase block layout differs
-009972a0  142  LoadRequestCallback: vcall/arg block schedule differs
+00997210  85   cXHTMLFrameSet::GetJobInfo: iterator walk/erase block layout differs; difftest PASS after making it a thiscall member (was a cdecl free function taking self)
 00997350  116  vector_map::insert: lower_bound/hash call schedule differs
 009978b0  252  cXHTMLFrameSet::HandleFormSubmit: wide-string and param callback schedule differs
 00997b60  16   Obj33::ctor: dead first vtable store and register choice differ

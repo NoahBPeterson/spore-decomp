@@ -2,4 +2,4 @@
 0079e950  2515  complete sphere/triangle clipper (all 4 mode cases + split cases); reg alloc and scheduling differ
 0079f4e0  186  complete vector<RefElem>::DoInsertValue; alloc-size branch shape and xadd operand order
 0079f640  143  complete vector<RefElem>::operator=; register allocation
-0079f7b0  229  complete release-and-clear; fixed-vector local layout/EH frame differs
+0079f7b0  231  complete release-and-clear; fixed-vector local layout/EH frame differs; difftest WEAK (59.8% coverage: the original keeps an unreachable erase copy loop) after fixing the final erase (end -= (end-begin) elements, not end = begin; differs when end-begin is not a multiple of 8)

@@ -387,7 +387,7 @@ struct cSPBoundingBox { float mMin[3]; float mMax[3];
 };
 struct PartTransform64 {                           // 0x40-byte matrix helper
     char d[0x40];
-    PartTransform64(const cSPTransform& t);        // 0x40ce80 (thiscall, ret 4)
+    void Construct(const cSPTransform& t);         // 0x40ce80 (the constructor; thiscall, ret 4)
     void Invert();                                 // 0x40efa0
 };
 
@@ -544,7 +544,7 @@ bool cModelInstanceQ::IntersectsSphere(const cSPBoundingBox* box, const cSPTrans
     if (!mExternalBoneTable)
         return false;
     M4 basis;
-    char invMatrix[0x40];
+    PartTransform64 inv;   // only built when the scale is not 1; the item tests below read it either way
     V4 mn, mx;
     if (xf->mScale == 1.0f) {
         mx.x = box->mMax[0]; mx.y = box->mMax[1]; mx.z = box->mMax[2]; mx.w = box->mMax[0];
@@ -555,11 +555,10 @@ bool cModelInstanceQ::IntersectsSphere(const cSPBoundingBox* box, const cSPTrans
         basis.r1.x = xf->mRotation[3] * s; basis.r1.y = xf->mRotation[4] * s; basis.r1.z = xf->mRotation[5] * s;
         basis.r2.x = s * xf->mRotation[6]; basis.r2.y = xf->mRotation[7] * s; basis.r2.z = xf->mRotation[8] * s;
     } else {
-        PartTransform64 inv(*xf);
+        inv.Construct(*xf);
         inv.Invert();
         cSPBoundingBox bb = *box;
         bb.Transform(&inv);
-        for (int k = 0; k < 0x40; ++k) invMatrix[k] = inv.d[k];
         mn.x = bb.mMin[0]; mn.y = bb.mMin[1]; mn.z = bb.mMin[2]; mn.w = bb.mMin[0];
         mx.x = bb.mMax[0]; mx.y = bb.mMax[1]; mx.z = bb.mMax[2]; mx.w = bb.mMax[0];
         basis.r0.x = 1.0f; basis.r0.y = 0.0f; basis.r0.z = 0.0f; basis.r0.w = 0.0f;
@@ -582,7 +581,7 @@ bool cModelInstanceQ::IntersectsSphere(const cSPBoundingBox* box, const cSPTrans
             do {
                 QueryItem* it = (QueryItem*)((char*)gSphereQuery->mItems + off);
                 it->mFlags &= ~1u;
-                if (it->Test(0, 0, invMatrix) && bp.Overlaps(invMatrix))
+                if (it->Test(0, 0, &inv) && bp.Overlaps(&inv))
                     return true;
                 ++i;
                 off += 0x60;

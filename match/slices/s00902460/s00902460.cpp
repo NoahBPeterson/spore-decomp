@@ -44,6 +44,8 @@ struct ICoreAllocator;
 struct ContextCoreAllocator {
     const char* mpName;          // +0x0
     ICoreAllocator* mpAllocator; // +0x4
+    ContextCoreAllocator() {}
+    ContextCoreAllocator(const char* name, ICoreAllocator* a);
 };
 
 struct StackAllocator {
@@ -93,6 +95,16 @@ int   io_WriteBytes(IStream* s, const void* src, int count);         // 0x93a9a0
 
 void  EA_operator_delete(void* p);                                   // 0xf47380
 void* EA_GetDefaultAllocator();                                      // 0x925cb0
+void  FUN_00925bf0();   // StackAllocator core alloc callback
+void  FUN_00925c20();   // StackAllocator core free callback
+
+inline EA::Allocator::ContextCoreAllocator::ContextCoreAllocator(const char* name, ICoreAllocator* a)
+{
+    mpName = name;
+    if (a == 0)
+        a = (ICoreAllocator*)EA_GetDefaultAllocator();
+    mpAllocator = a;
+}
 
 // EA::XML anonymous-namespace helpers
 namespace EA { namespace XML {
@@ -612,17 +624,14 @@ bool WriteTokenList(IStream* pStream, TokenNode* p, unsigned flags, TokenIOConte
 
 // @ 0x009030B0
 TokenIOContext::TokenIOContext(EA::Allocator::ICoreAllocator* alloc)
+    : mAllocatorContext("UTF/XmlTokenReader/TokenIOContext/mAllocator", alloc),
+      mAllocator(0, 0xffffffffu, 0, 0, 0)
 {
-    mAllocatorContext.mpName = "UTF/XmlTokenReader/TokenIOContext/mAllocator";
-    if (alloc == 0)
-        alloc = (EA::Allocator::ICoreAllocator*)EA_GetDefaultAllocator();
-    mAllocatorContext.mpAllocator = alloc;
-    new (&mAllocator) EA::Allocator::StackAllocator(0, 0, 0xffffffffu, 0, 0);
     mNextStringID = 1;
     mStringsA = 0;
     mStringsB = 0;
     mAllocator.mnDefaultBlockSize = 0x800;
-    mAllocator.Init(0, 0, 0, 0, 0);
+    mAllocator.Init(0, 0, (void*)&FUN_00925bf0, (void*)&FUN_00925c20, this);
     ClearStrings();
 }
 

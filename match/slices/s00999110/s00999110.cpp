@@ -26,7 +26,7 @@ extern void FUN_00620230(void*);
 extern void FUN_00928ba0(void*, uint);
 extern void FUN_00a16a20(void*);
 extern void FUN_00a23ef0(void*, void*);
-extern void FUN_004b5440(void*);
+struct PluginVecRaw { void FUN_004b5440(); };   // eastl::vector<T*> dtor body, thiscall
 extern void FUN_00928dc0(void*);
 
 #define VF(o, off, sig) ((sig)(*(void***)(o))[(off) / 4])
@@ -136,16 +136,29 @@ struct StringTableXml : StringTable {
 // ===========================================================================
 // EA::UTFWinTools::SerializationService
 // ===========================================================================
+struct SSPluginVec {        // eastl::vector<IUnknown32*> (refcounted plugins)
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCap;
+  char   mAlloc[8];
+  SSPluginVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
+  ~SSPluginVec() { ((PluginVecRaw*)this)->FUN_004b5440(); }
+};
+struct SSBinderVec {        // vector of binders; buffer freed only when its header word is set
+  void** mpBegin;
+  void** mpEnd;
+  void** mpCap;
+  char   mAlloc[8];
+  SSBinderVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
+  ~SSBinderVec() {
+    if (mpBegin != 0 && ((int*)mpBegin)[-1] != 0) operator_delete(mpBegin);
+  }
+};
+
 struct SerializationService {
   virtual ~SerializationService();
-  void** mpPluginsBegin;    // +0x04
-  void** mpPluginsEnd;      // +0x08
-  void** mpPluginsCap;      // +0x0c
-  char   pad10[8];          // +0x10
-  void** mpBindersBegin;    // +0x18
-  void** mpBindersEnd;      // +0x1c
-  void** mpBindersCap;      // +0x20
-  char   pad24[8];          // +0x24
+  SSPluginVec mPlugins;     // +0x04 (begin/end/cap + 8-byte allocator)
+  SSBinderVec mBinders;     // +0x18
   void*  mErrorCallback;    // +0x2c
   void*  mpCallbackContext; // +0x30
   SerializationService();
@@ -187,15 +200,15 @@ uint SerializationService::Read(uint a, uint b, uint c, uint d) {
   void* p = VF(this, 0x10, void*(__thiscall*)(void*, uint))(this, 0xafc46457);
   if (p != 0)
     return VF(p, 0x10, uint(__thiscall*)(void*, uint, uint, uint, void*, void*, void*))
-      (p, a, b, c, &mpBindersBegin, mErrorCallback, mpCallbackContext);
+      (p, a, b, c, &mBinders.mpBegin, mErrorCallback, mpCallbackContext);
   return 0x4fc40001;
 }
 
 // @ 0x009994f0  SerializationService::GetReader
 void* SerializationService::GetReader(void* arg) {
   void* result = 0;
-  void** it = mpPluginsBegin;
-  void** end = mpPluginsEnd;
+  void** it = mPlugins.mpBegin;
+  void** end = mPlugins.mpEnd;
   if (it != end) {
     do {
       if (result) break;
@@ -208,39 +221,34 @@ void* SerializationService::GetReader(void* arg) {
 
 // @ 0x00999520
 SerializationService::SerializationService()
-  : mpPluginsBegin(0), mpPluginsEnd(0), mpPluginsCap(0),
-    mpBindersBegin(0), mpBindersEnd(0), mpBindersCap(0),
-    mErrorCallback(0), mpCallbackContext(0) {}
+  : mErrorCallback(0), mpCallbackContext(0) {}
 
 // @ 0x00999550  SerializationService::_virtual_dtor
 SerializationService::~SerializationService() {
-  void* p = mpBindersBegin;
-  if (p != 0 && *(int*)((char*)p - 4) != 0) operator_delete(p);
-  FUN_004b5440(&mpPluginsBegin);
 }
 
 // @ 0x00999590  SerializationService::func04h  (add plugin, bind object)
 void FUN_00999590(SerializationService* self, IUnknown32* obj) {
   if (obj) obj->AddRef();
-  if (self->mpPluginsEnd < self->mpPluginsCap) {
-    *self->mpPluginsEnd++ = obj;
+  if (self->mPlugins.mpEnd < self->mPlugins.mpCap) {
+    *self->mPlugins.mpEnd++ = obj;
   } else {
-    FUN_004b6000(&self->mpPluginsBegin, self->mpPluginsEnd, &obj);
+    FUN_004b6000(&self->mPlugins.mpBegin, self->mPlugins.mpEnd, &obj);
   }
   if (obj) obj->Release();
   if (obj) {
     IUnknown32* casted = (IUnknown32*)obj->Cast(0x4fc56322);
     if (casted) {
-      if (self->mpBindersEnd < self->mpBindersCap) *self->mpBindersEnd++ = casted;
-      else FUN_00a80dd0(self->mpBindersEnd, &casted);
+      if (self->mBinders.mpEnd < self->mBinders.mpCap) *self->mBinders.mpEnd++ = casted;
+      else FUN_00a80dd0(self->mBinders.mpEnd, &casted);
     }
   }
 }
 
 // @ 0x00999640  SerializationService::RemovePlugin
 void SerializationService::RemovePlugin(IUnknown32* obj) {
-  RcVec* plugins = (RcVec*)&mpPluginsBegin;
-  SpVec* binders = (SpVec*)&mpBindersBegin;
+  RcVec* plugins = (RcVec*)&mPlugins.mpBegin;
+  SpVec* binders = (SpVec*)&mBinders.mpBegin;
   void** it = plugins->b;
   void** end = plugins->e;
   for (; it != end; ++it) {
@@ -267,8 +275,8 @@ void SerializationService::RemovePlugin(IUnknown32* obj) {
 
 // @ 0x00999720  SerializationService::ClearAll  (clear binders + plugins)
 void SerializationService::ClearAll() {
-  ((SpVec*)&mpBindersBegin)->clear_all();
-  RcVec* plugins = (RcVec*)&mpPluginsBegin;
+  ((SpVec*)&mBinders.mpBegin)->clear_all();
+  RcVec* plugins = (RcVec*)&mPlugins.mpBegin;
   plugins->erase(plugins->b, plugins->e);
 }
 

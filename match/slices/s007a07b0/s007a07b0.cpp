@@ -38,6 +38,7 @@ struct VecV20 {
     void Insert(V20* pos, unsigned n, const V20* val);
     void InsertC(V20* pos, unsigned n, const V20& val);   // same routine, by-reference spelling   // 0x7a07b0
     void Resize(unsigned n);                              // 0x7a1100
+    V20* EraseTail(V20* first, V20* last);                // 0x7a05b0
 };
 
 // @ 0x7a07b0
@@ -85,7 +86,6 @@ void VecV20::Insert(V20* position, unsigned n, const V20* pValue)
 }
 
 // @ 0x7a1100
-extern V20* __stdcall EraseTail(V20* first, V20* last);   // 0x7a05b0
 
 void VecV20::Resize(unsigned n)
 {
@@ -98,12 +98,11 @@ void VecV20::Resize(unsigned n)
 // ---------------------------------------------------------------------------
 // vector<cSplitInstanceList>-like resize (0x7a0ae0)
 // ---------------------------------------------------------------------------
-V20Pod* __stdcall UninitInsertN(V20Pod* pos, unsigned n, const V20Pod& val);   // 0x7a0110
-void __stdcall DestroyRangeP(V20Pod* first, V20Pod* last);                  // 0x7a00c0
-
 struct VecPod20 {
     V20Pod* mpBegin; V20Pod* mpEnd; V20Pod* mpCapacity;
     void Resize(unsigned n);
+    void UninitInsertN(V20Pod* pos, unsigned n, const V20Pod& val);   // 0x7a0110
+    V20Pod* DestroyRangeP(V20Pod* first, V20Pod* last);              // 0x7a00c0
 };
 
 // @ 0x7a0ae0

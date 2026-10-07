@@ -60,16 +60,22 @@ struct RowVec {                                                                 
     void Free();                                                                    // 0050ea50
     ~RowVec() { for (Row* p = mpBegin; p < mpEnd; ++p) {} Free(); }
 };
-struct FloatVec {                                                                   // vector<float>
+struct FloatVec {                                                                   // fixed_vector<float, 65> (0x11c bytes)
     float* mpBegin; float* mpEnd; float* mpCap; char mAlloc[4];
+    int    mPoolPad;                                                                // +0x10
+    int    mOverflowFlag;                                                           // +0x14 (read by Free as begin[-1])
+    float  mBuffer[65];                                                             // +0x18
     void Construct(const char* n);                                                  // 00540470
     void Init();                                                                    // 0052c1f0
     void resize(unsigned n, const float* v);                                        // 0052c380
     void Free();                                                                    // 00425990
     ~FloatVec() { for (float* p = mpBegin; p < mpEnd; ++p) {} Free(); }
 };
-struct PairVec {                                                                    // vector<PairIF>
+struct PairVec {                                                                    // fixed_vector<PairIF, 32> (0x118 bytes)
     PairIF* mpBegin; PairIF* mpEnd; PairIF* mpCap; char mAlloc[4];
+    int     mPoolPad;                                                               // +0x10
+    int     mOverflowFlag;                                                          // +0x14 (read by Free as begin[-1])
+    PairIF  mBuffer[32];                                                            // +0x18
     void Construct(const char* n);                                                  // 00540470
     void Init();                                                                    // 004c5e70
     void erase(PairIF* first, PairIF* last);                                        // 00530c80

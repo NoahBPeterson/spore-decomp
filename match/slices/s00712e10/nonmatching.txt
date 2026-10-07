@@ -1,7 +1,7 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
-00712e10 239 GetIDFromCompiledState: complete (find, id probe loop, insert); inlined hash lookup/EH shape differs
+00712e10 239 GetIDFromCompiledState: complete (find, id probe loop, insert); inlined hash lookup/EH shape differs; difftest WEAK after fixing the mutex-param argument (pass &gMutexParams, not its value), the fixed-vector layout (+8 bytes: allocator word and pad, mutex at +0x258), the find() iterator (two words; a one-word local let find overwrite the saved mutex pointer) and the not-found test (end() is mpBuckets[mnBuckets], not [mnNextResize])
 00712f50 214 RegisterMaterial: complete; eastl::copy and AutoRef push shape not byte-exact
-00713070 1027 ReadExternalReferences: complete; EH/vec-ctor and inline AutoRef shapes differ
+00713070 1027 ReadExternalReferences: complete; EH/vec-ctor and inline AutoRef shapes differ; difftest WEAK after fixing the mutex-param argument (&gMutexParams) and the member layout (mutex at +0x258)
 00713560 419 cMaterialScriptState dtor: complete; member table frees in order, inlined helper shapes differ
 00713780 222 cMaterialManager dtor: complete; member teardown order reproduced, EH frame differs
 007138f0 260 cMaterialScriptState ctor: complete; store order/scheduling differs

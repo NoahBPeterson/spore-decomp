@@ -10,3 +10,4 @@ slices/s00999110/s00999110.cpp  ?Read@SerializationService@@QAEIIIII@Z  009994a0
 slices/s00999110/s00999110.cpp  ?ClearAll@SerializationService@@QAEXXZ  00999720
 slices/s00999110/s00999110.cpp  ??_GStringTableFilter@@UAEPAXI@Z  009998d0
 slices/s00999110/s00999110.cpp  ??_GStringTableXml@@UAEPAXI@Z  00999ce0
+slices/s00999110/s00999110.cpp  ??_GSerializationService@@UAEPAXI@Z  00999550

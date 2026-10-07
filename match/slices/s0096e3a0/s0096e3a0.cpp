@@ -9,7 +9,6 @@ extern "C" int  g_sQuality[];                  // 0x154f514
 extern "C" void* g_vec1c0[];                   // 0x166b1c0 (eastl vector<bool>)
 extern "C" void* g_vec1d4[];                   // 0x166b1d4 (eastl vector<GlyphLayoutInfo>)
 
-extern "C" int  FUN_00951240(int id);                       // 0x951240
 extern "C" void* FUN_009512c0(void);                        // 0x9512c0
 extern "C" void* FUN_009512d0(int size, int align, const char* name, void* alloc); // 0x9512d0
 
@@ -62,8 +61,6 @@ extern "C" void  FUN_00898550(void* a, unsigned n, void* v);     // uninitialize
 extern "C" void  FUN_00c04920(void* sret, void* a, void* b, void* c, void* d); // uninitialized_copy
 extern "C" void  FUN_00898520(void* a, void* b, void* v);        // fill
 extern "C" void  FUN_00898f90(void* a, void* b, void* c);        // copy_backward
-extern "C" void  FUN_00899420(void* a, void* b);                 // erase
-extern "C" void  FUN_006eea80(unsigned n);                       // resize
 extern "C" void* FUN_00f473a0(unsigned size, const char* cat, int a, int b, const char* file, int line);
 extern "C" void  FUN_00f47380(void* p);                          // operator delete
 extern "C" void  FUN_011e0744(void*, void*, unsigned);          // vector<bool>::DoInsertValue
@@ -146,12 +143,19 @@ two:
 }
 
 // ---------------------------------------------------------------- 0096e540 / 0096e6d0
+struct BoolVec {
+    void* v[3];
+    void FUN_006eea80(unsigned n);   // 0x6eea80 vector resize (thiscall)
+};
+
 struct GlyphLayoutInfo { unsigned char b[0x20]; };
 
 struct GlyphVec {
     unsigned v[3];
     void insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val);   // 0x96e540
     void resize(unsigned n);                                                // 0x96e6d0
+    void* FUN_00899420(void* first, void* last);                            // 0x899420 vector::erase (thiscall)
+    unsigned size() const { return (unsigned)(((int)v[1] - (int)v[0]) >> 5); }
 };
 
 // @ 0x0096e540
@@ -211,11 +215,10 @@ void GlyphVec::insert(GlyphLayoutInfo* pos, unsigned n, GlyphLayoutInfo* val)
 // @ 0x0096e6d0
 void GlyphVec::resize(unsigned n)
 {
-    unsigned cnt = (unsigned)((int)v[1] - (int)v[0]) >> 5;
-    if (cnt < n) {
+    if (n > size()) {
         GlyphLayoutInfo tmp;
         for (int i = 0; i < 8; i++) ((unsigned*)&tmp)[i] = 0;
-        insert((GlyphLayoutInfo*)v[1], n - cnt, &tmp);
+        insert((GlyphLayoutInfo*)v[1], n - size(), &tmp);
         return;
     }
     FUN_00899420((void*)((unsigned)v[0] + n * 0x20), (void*)v[1]);
@@ -231,9 +234,9 @@ struct DropShadowText {
 void DropShadowText::draw(int* sink, void* a, void* glyphs, unsigned count,
                           unsigned color, short flag, unsigned char mode)
 {
-    FUN_006eea80(count);
+    ((BoolVec*)g_vec1c0)->FUN_006eea80(count);
     ((GlyphVec*)g_vec1d4)->resize(count);
-    FUN_011e0744(g_vec1c0, a, count * 2);
+    FUN_011e0744(g_vec1c0[0], a, count * 2);
     {
         struct G32 { unsigned d[8]; };
         G32* dst = (G32*)g_vec1d4[0];
@@ -279,7 +282,11 @@ void DropShadowText::draw(int* sink, void* a, void* glyphs, unsigned count,
                 float t = (amp / rad1) * (1.0f - (eu * eu + ev * ev) / rad2) + bias;
                 if (t < 0.0f) t = 0.0f;
                 else if (t > 1.0f) t = 1.0f;
-                int alpha = (int)(t * 255.0f);
+                // The original rounds with an x87 fistp (current mode: round to nearest even), not a
+                // truncating cast. Adding 1.5*2^23 rounds the same way for |x| < 2^22 (here 0..255).
+                union { float f; int i; } r;
+                r.f = t * 255.0f + 12582912.0f;
+                int alpha = r.i - 0x4b400000;
                 (*(void(__thiscall**)(int*, int))((char*)*(void**)sink + 4))(sink, (alpha << 24) + baseColor);
                 (*(void(__thiscall**)(int*, void*, void*, unsigned))((char*)*(void**)sink + 0x30))(sink, g_vec1c0, g_vec1d4[0], count);
             }
@@ -457,6 +464,7 @@ struct Ctx96 {
     void a(float* p, float f);       // 0x96f1b0
     void b(float* p);                // 0x96f1f0
     int  q(int iid);                 // 0x96f240
+    int  FUN_00951240(int iid);      // 0x951240 base AsInterface (thiscall)
     int  s(unsigned flags);          // 0x96f280
 };
 
@@ -477,13 +485,13 @@ void Ctx96::b(float* p)
 // @ 0x0096f240
 int Ctx96::q(int iid)
 {
-    if (iid == 0x30d54ac)
+    switch (iid) {
+    case 0x30d54ac:
         return (int)this;
-    if (iid != (int)0xeec58382)
-        return FUN_00951240(iid);
-    if (this)
-        return (int)this + 4;
-    return 0;
+    case (int)0xeec58382:
+        return this ? (int)this + 4 : 0;
+    }
+    return FUN_00951240(iid);
 }
 
 // @ 0x0096f280

@@ -1,6 +1,6 @@
 0073f110  167  complete AABB overlap test; original materializes the 16-byte Vector3 locals with movaps (SSE) while cl here forward-substitutes scalar component loads
 0073f000  195  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
 0073eb90  162  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
-0073eca0  206  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
-0073ede0  313  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
+0073eca0  206  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies); difftest PASS after fixing the checker symbol pick (the in-class "// @0x73eca0" comment made it test GetMeshes; added SetDrawTransform to symbols/slices/s0073e410.txt)
+0073ede0  313  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies); difftest WEAK (no mismatch, 167 valid inputs) after fixing the checker symbol pick (it tested GetMeshes; added DispatchMesh to symbols/slices/s0073e410.txt) and the ShaderDataObj::Push 0x7789d0 annotation
 0073e410  1241  complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)

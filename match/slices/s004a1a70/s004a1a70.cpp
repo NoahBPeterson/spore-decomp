@@ -126,7 +126,7 @@ IMessageServer* MessageServer();                                    // 0x67dcc0
 void BuildPileList(cSPEditorBlock* b, BlockVec* v, int flag);       // 0x48c790
 void SetSymmetricBlocksUIState(cSPEditorBlock* b, int a, int c);    // 0x4a7f30
 void FUN_4a6d20(cSPEditorBlock* b, int a, int c, int d, int e, int f, int g, int h);  // 0x4a6d20
-bool FUN_4a1e10(cSPEditorBlock* block);          // @ 0x4a1e10
+bool FUN_4a1e10(cSPEditorBlock* block);          // defined below
 void FUN_4a1d60g(cSPEditorBlock* b, const cSPVector3* p);
 void FUN_43f050(BBox* acc, BBox* other);        // 0x43f050 (merge)
 rwVec3* Mat3MulVec(rwVec3* out, rwVec3* v, rwMat3* m);   // 0x41daf0 (_Unchecked_idl0)

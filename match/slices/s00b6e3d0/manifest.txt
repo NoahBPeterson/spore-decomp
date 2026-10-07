@@ -7,3 +7,4 @@ slices/s00b6e3d0/s00b6e3d0.cpp  ?GetColor@@YAAAUVec3@@I@Z  00b6f0c0  /O2 /MD /Gy
 slices/s00b6e3d0/s00b6e3d0.cpp  ?SetBaseColor@@YAXUVec3@@@Z  00b6f140  /O2 /MD /Gy /TP /arch:SSE
 slices/s00b6e3d0/s00b6e3d0.cpp  ??_GcColorSet@@UAEPAXI@Z  00b6f2e0  /O2 /MD /Gy /TP /arch:SSE
 slices/s00b6e3d0/s00b6e3d0.cpp  ?NotifyTicker@cColorSet@@QAEXXZ  00b6f4c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00b6e3d0/s00b6e3d0.cpp  ??0cColorSet@@QAE@XZ  00b6f280  /O2 /MD /Gy /TP /arch:SSE

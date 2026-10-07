@@ -1,0 +1,4 @@
+005ec030  ChainMap::FUN_005ec030  # eastl::map operator[] (chain table)
+005ec130  cSPNameGenerator::FUN_005ec130  # n-gram count + chain table build
+005ec370  cSPNameGenerator::FUN_005ec370  # markov name generation
+005ec7c0  cSPNameGenerator::Init  # property loading and chain setup

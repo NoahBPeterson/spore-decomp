@@ -96,19 +96,32 @@ struct VecFloat {  // eastl::vector<float, sp_vector_allocator>
 // ======================================================================
 // @ 0x00723680 / 0x00723720: ref-counted int-vector object (two vptrs, refcount at +8)
 // ======================================================================
-struct VtblA { virtual void a0(); };
-struct VtblB { virtual void b0(); };
-struct IntVecObj : VtblA, VtblB {
-    long mRefCount;        // +8
+struct ObjBase {           // Object: vtable 0x13eb938 {AddRef, Release, dtor}
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+    virtual ~ObjBase();    // 0x517400
+};
+struct AtomicInt {         // EA::Thread::AtomicInt32: the ctor stores with xchg
+    volatile long mValue;
+    AtomicInt(long v) { _InterlockedExchange(&mValue, v); }
+};
+struct RefCounted {        // vtable 0x13ef094 {dtor}; refcount at +4 of this base
+    virtual ~RefCounted(); // 0x41d780
+    AtomicInt mRefCount;   // +8 in IntVecObj
+    RefCounted() : mRefCount(0) {}
+};
+struct IntVecObj : ObjBase, RefCounted {   // vtables 0x13ef09c / 0x13ef098
     VecInt mVec;           // +0xc
     int mField20;          // +0x20
     IntVecObj(int n);                // 0x723680
     IntVecObj(int n, const int* v);  // 0x723720
+    int AddRef();                    // 0x461290
+    int Release();                   // 0x472970
+    ~IntVecObj();                    // 0x472a70
 };
 
 // @ 0x00723680
 IntVecObj::IntVecObj(int n) {
-    _InterlockedExchange(&mRefCount, 0);
     mVec.Alloc(n, &n);
     int* p = mVec.mpBegin;
     if ((uint32_t)n > 0) {
@@ -120,7 +133,6 @@ IntVecObj::IntVecObj(int n) {
 
 // @ 0x00723720
 IntVecObj::IntVecObj(int n, const int* v) {
-    _InterlockedExchange(&mRefCount, 0);
     mVec.Fill(n, *v);
     mField20 = 0;
 }
@@ -419,7 +431,8 @@ struct PairVec {  // eastl::vector<pair<fn, void*>> plus Vertex3D vector and boo
 // @ 0x00723cf0
 void PairVec::Reset(uint32_t nVerts, uint32_t nPairs, int a, int b, uint8_t flag) {
     char* pEnd = mpEnd;
-    uint32_t size = (uint32_t)(pEnd - mpBegin) >> 3;
+    struct Pair8 { int first, second; };
+    uint32_t size = (uint32_t)((Pair8*)pEnd - (Pair8*)mpBegin);  // signed ptrdiff (sar), then unsigned compare
     if (nPairs > size) {
         char tmp[8];
         Insert(pEnd, nPairs - size, tmp);

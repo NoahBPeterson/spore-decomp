@@ -320,31 +320,50 @@ void* TexMgr_Find(TexMgr* self, const void* key)
 // ---------------------------------------------------------------------------
 // Find-or-insert in hashtable<uint, pair<uint, AutoRefCount<X>>>; returns the mapped value slot.
 struct MapNode { uint32_t key; CountedRes* value; };
+struct RefSlot {                                            // AutoRefCount<CountedRes>
+    CountedRes* p;
+    RefSlot() : p(0) {}
+    RefSlot(const RefSlot& o) : p(o.p) { if (p) p->mnRefCount++; }
+    ~RefSlot()
+    {
+        if (p) {
+            int n = p->mnRefCount - 1;
+            p->mnRefCount = n;
+            if (n == 0) {
+                p->mnRefCount = 1;
+                p->Destroy(1);
+            }
+        }
+    }
+};
+struct MapValue {                                           // pair<const uint, AutoRefCount<X>>
+    uint32_t key;
+    RefSlot value;
+    MapValue(uint32_t k, const RefSlot& v) : key(k), value(v) {}
+};
+struct MapIter {
+    MapNode* node; void** bucket;
+    MapIter() {}
+    explicit MapIter(void** b) : node((MapNode*)*b), bucket(b) {}
+};
+struct MapInsertRet { MapIter first; bool second; };      // pair<iterator, bool> (12 bytes)
+struct MapTrueType {};                                      // eastl::true_type tag passed by value
 struct RefMap {
     char pad0[4];
     void** mpBuckets;       // +4
     uint32_t mnBuckets;     // +8
-    void find(HIter* out, const uint32_t* key) const;       // 0x00645ed0
-    void Insert(HIter* out, const MapNode* v, int tag);     // 0x00a23830
+    MapIter find(const uint32_t& key) const;                // 0x00645ed0
+    MapInsertRet Insert(const MapValue& v, MapTrueType tag);   // 0x00a23830 (DoInsertValue)
     CountedRes** FindOrInsert(const uint32_t* key);
 };
 // @ 0x00a27530
+// hash_map::operator[]: find, else insert value_type(key, T()) and return the mapped slot.
 CountedRes** RefMap::FindOrInsert(const uint32_t* key)
 {
-    HIter it;
-    find(&it, key);
-    if (it.node != mpBuckets[mnBuckets]) {
-        return &((MapNode*)it.node)->value;
-    }
-    MapNode v;
-    v.key = *key;
-    v.value = 0;
-    int tag = 0;
-    HIter res;
-    Insert(&res, &v, tag);
-    CountedRes** slot = &((MapNode*)res.node)->value;
-    ReleaseCounted(v.value);
-    return slot;
+    MapIter it = find(*key);
+    if (it.node != MapIter(mpBuckets + mnBuckets).node)
+        return &it.node->value;
+    return &Insert(MapValue(*key, RefSlot()), MapTrueType()).first.node->value;
 }
 
 // ---------------------------------------------------------------------------

@@ -212,7 +212,7 @@ struct GlyphFixedVec {                     // eastl::fixed_vector<GlyphDisplayEn
 struct TextLayout {                        // EA::Text::Layout
     int LayoutTextLine(const wchar_t* text, int len, float x, float y, const void* style,
                        GlyphDisplayEntry* out, unsigned int cap, void* extra);                    // 0x890570
-    int LayoutTextLine(float a, float b, float c, float d, const wchar_t* text, int len, const void* style,
+    int LayoutTextLine(const wchar_t* text, int len, float a, float b, float c, float d, const void* style,
                        GlyphDisplayEntry* out, unsigned int cap, void* extra);                    // 0x890830
 };
 extern char g_defaultTextStyle[];          // 0x166ae78
@@ -267,7 +267,7 @@ void GlyphRenderer::DrawText(float a, float b, float c, float d, const wchar_t* 
         pLayout = &g_defaultTextLayout;
     GlyphFixedVec glyphs;
     glyphs.resize(nLen * 2);
-    int n = pLayout->LayoutTextLine(a, b, c, d, pText, nLen, pStyle, glyphs.mpBegin, nLen * 2, pExtra);
+    int n = pLayout->LayoutTextLine(pText, nLen, a, b, c, d, pStyle, glyphs.mpBegin, nLen * 2, pExtra);
     DrawGlyphs(glyphs.mpBegin, n, pStyle);
 }
 

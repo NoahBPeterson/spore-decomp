@@ -193,7 +193,9 @@ struct DynDraw {
 };
 struct Pair8 { unsigned a, b; };
 struct CompiledState { void Dispatch(); };                  // rw::graphics::CompiledState::Dispatch @0x11ee580
-struct ShaderDataObj { void Push(); };                      // rw::graphics::ShaderDataState_Push @0x7789d0
+struct ShaderDataObj {
+    void Push();                                            // 0x7789d0 rw::graphics::ShaderDataState_Push
+};
 struct VertDesc {
     char pad0[0xc];
     unsigned short count;              // +0x0c

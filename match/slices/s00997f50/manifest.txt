@@ -7,3 +7,4 @@ slices/s00997f50/s00997f50.cpp  ?CanConvert@RWTexFactory@@QAE_NHH@Z    009981b0 
 slices/s00997f50/s00997f50.cpp  ?f98f80@Misc34@@QAEXPAH@Z              00998f80  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00997f50/s00997f50.cpp  ?FUN_00999050@@YIXPAD@Z               00999050  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 slices/s00997f50/s00997f50.cpp  ?AddEntry@SerAutoUpdate@@QAEXPAUKey3@@H@Z 00998b60 /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+slices/s00997f50/s00997f50.cpp  ??0SerCollection@@QAE@XZ  00999080  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

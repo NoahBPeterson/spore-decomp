@@ -39,11 +39,19 @@ void* EA_GetDefaultAllocator();                                      // 0x925cb0
 int   Vsnprintf8(char* buf, size_t n, const char* fmt, void* ap);    // 0x938400
 }
 void EA_DisplayTraceDialog(const char* title, void* msg);            // 0x925100
-void FUN_0057cc10(void* s);                                          // 0x57cc10
-void FUN_0091a530(void* self, void* a, void* b);                     // 0x91a530
+struct EaStringInit {
+    void FUN_0057cc10(const char* s);   // 0x57cc10 (basic_string(const char*) init)
+};
+struct VaString {
+    void FUN_0091a530(const char* fmt, char* ap);   // 0x91a530 (string append_sprintf_va_list)
+};
 struct SimpleStringOps { void assign(const char* first, const char* last); }; // 0x942e50
-struct FancyStringOps { void assign(const char* first, const char* last); };  // 0x60a150
-void Stopwatch_ctor(void* self, int a, int b);                       // 0x93a560
+struct FancyStringOps {
+    void assign(const char* first, const char* last);   // 0x60a150
+};
+struct Stopwatch {
+    void* Stopwatch_ctor(int units, int start);   // 0x93a560 (EA::Stopwatch::Stopwatch, thiscall)
+};
 
 // eastl free helpers
 void* eastl_RBTreeIncrement(void* node);                             // 0x921580 (returns node)
@@ -295,7 +303,6 @@ struct Server : IServer, ITracer {
     int Release();
     bool GetLogReporter(char* name, int* out);
     unsigned EnumerateLogReporters(void** out, unsigned max);
-    bool IsFiltered(void* rec);
     bool RemoveLogReporter(ILogReporter* p);
 };
 
@@ -319,7 +326,7 @@ struct IReporterView {
     virtual void a2() = 0;
     virtual void a3() = 0;
     virtual bool Skips(void* rec) = 0;              // +0x10
-    virtual void a5() = 0;
+    virtual bool IsFiltered(void* rec) = 0;         // +0x14
     virtual unsigned Report(void* rec) = 0;         // +0x18
 };
 
@@ -345,9 +352,18 @@ struct ServerTracer {
     int   mLogRecordCounter;       // +0x10
     IReporterView** mpReportersBegin;   // +0x14
     IReporterView** mpReportersEnd;     // +0x18
+    IReporterView** mpReportersCap;     // +0x1c
+    char  pad6[4];                      // +0x20
+    void* mDefaultFilter;               // +0x24
+    void* mDefaultFormatter;            // +0x28
+    int   mUnknown2c;                   // +0x2c
+    int   mnRefCount;                   // +0x30
+    char  mMutex[0x2c];                 // +0x34 EA::Thread::Mutex (raw: its 8-byte alignment would pad the vfptr)
+    EA::Thread::Mutex* M() { return (EA::Thread::Mutex*)mMutex; }
 
     unsigned TraceVaList(void* sender, const char* fmt, void* ap);     // @ 0x9234f0
     unsigned Trace(void* sender, const char* msg);                     // @ 0x923990
+    bool IsFiltered(void* rec);                                        // @ 0x923930 (Server::IsFiltered, ITracer side)
 };
 
 }} // namespace EA::Trace
@@ -527,9 +543,11 @@ Server::Server()
 }
 
 // @ 0x00923DC0
-void FUN_00923dc0(void* a1, void* a2, void* a3)
+void* FUN_00923dc0(void* out, const char* fmt, ...)
 {
-    FUN_0091a530(a2, a3, (char*)a3 + 4);
+    char* ap = (char*)&fmt + sizeof(fmt);
+    ((VaString*)out)->FUN_0091a530(fmt, ap);
+    return out;
 }
 
 // @ 0x00923E70
@@ -573,19 +591,20 @@ LogFilterGroupLevels::LogFilterGroupLevels(void* cfg)
     mName.mpBegin = 0;
     mName.mpEnd = 0;
     mName.mpCapacity = 0;
-    FUN_0057cc10(cfg);
+    ((EaStringInit*)&mName)->FUN_0057cc10((const char*)cfg);
     mGlobalLevel = 1;
     void* alloc = EA_GetDefaultAllocator();
     RBNodeBase* anchor = &mGroupLevelMap.mAnchor;
-    anchor->mpLeft = 0;
-    anchor->mpRight = 0;
-    anchor->mpParent = 0;
-    anchor->mColor = 0;
+    // the original zeroes anchor dwords +4..+0xc (color and its padding as one dword) first
+    struct Zero3 { int a, b, c; };
+    *(Zero3*)((int*)anchor + 1) = Zero3();
     mGroupLevelMap.mpAllocator = alloc;
     mGroupLevelMap.mpAllocator2 = 0;
+    anchor->mpParent = 0;
+    anchor->mColor = 0;
     mGroupLevelMap.mnSize = 0;
-    anchor->mpLeft = anchor;
     anchor->mpRight = anchor;
+    anchor->mpLeft = anchor;
 }
 
 // @ 0x00923F90
@@ -751,7 +770,7 @@ LogFormatterFancy::LogFormatterFancy(const char* name)
     ((FancyStringOps*)&mName)->assign(name, name + strlen(name));
     mnFlags = 0;
     mnFileInfoLevel = 100;
-    Stopwatch_ctor(&mTimer, 4, 1);
+    ((Stopwatch*)&mTimer)->Stopwatch_ctor(4, 1);
     FixedString2048* l = &mLine;
     l->mpPool = l->buffer;
     l->mpEnd = l->buffer;
@@ -968,7 +987,7 @@ unsigned Server::EnumerateLogReporters(void** out, unsigned max)
         while (it != end) {
             if (n >= max)
                 break;
-            ILogReporter* p = *(ILogReporter**)*it;
+            ILogReporter* p = (ILogReporter*)*it;
             ((void(__thiscall*)(void*))(*(void***)p)[0])(p);
             out[n] = p;
             ++it;
@@ -979,22 +998,20 @@ unsigned Server::EnumerateLogReporters(void** out, unsigned max)
     return n;
 }
 
-// @ 0x00923930
-bool Server::IsFiltered(void* rec)
+// @ 0x00923930  (Server::IsFiltered; an ITracer-side member, so `this` is Server+4)
+bool ServerTracer::IsFiltered(void* rec)
 {
-    mMutex.Lock((unsigned*)&g_timeoutP);
-    void** it = (void**)mpVecBegin;
-    void** end = (void**)mpVecEnd;
+    M()->Lock((unsigned*)&g_timeoutP);
+    IReporterView** it = mpReportersBegin;
+    IReporterView** end = mpReportersEnd;
     while (it != end) {
-        ILogReporter* p = *(ILogReporter**)*it;
-        int r = ((int(__thiscall*)(void*, void*))(*(void***)p)[5])(p, rec);
-        if (!r) {
-            mMutex.Unlock();
+        if (!(*it)->IsFiltered(rec)) {
+            M()->Unlock();
             return false;
         }
         ++it;
     }
-    mMutex.Unlock();
+    M()->Unlock();
     return true;
 }
 

@@ -25,7 +25,7 @@ extern char vtblMaterialManagerBaseA[];                  // 0x013EB938
 extern char vtblMaterialManagerBaseB[];                  // 0x013EF094
 extern char gEmptyStringChars[];                         // 0x01667BAC (empty string literal)
 extern char gEmptyStringCharsEnd[];                      // 0x01667BAD
-extern const void* gMutexParams;                         // 0x0140C860
+extern const char gMutexParams[];                        // 0x0140C860 (mutex parameter block; passed by address)
 
 struct Mutex {
     void Lock(const void* params);         // 0x009221B0
@@ -188,8 +188,13 @@ struct MaterialMap : HashTable {
     MaterialEntry* operator_index(const uint32_t* key);   // 0x007129E0 hash_map::operator[]
 };
 
+struct HashIter {                          // eastl hashtable_iterator (node, bucket)
+    uint32_t* mpNode;
+    void** mpBucket;
+};
+
 struct StateIdMap : HashTable {
-    void find(uint32_t** out, const uint32_t* key);       // 0x00645ED0 hashtable::find
+    void find(HashIter* out, const uint32_t* key);        // 0x00645ED0 hashtable::find (writes both words)
     int* operator_index(const uint32_t* key);             // 0x0070F9D0
 };
 
@@ -219,7 +224,9 @@ struct PtrVec {                            // fixed vector<void*> at +0x1d8
     void** mpBegin;
     void** mpEnd;
     void** mpCapacity;
+    uint32_t mAllocator;                   // +0xC (allocator word)
     void** mpLocal;                        // +0x10 (address of the inline buffer)
+    uint32_t mPad14;                       // +0x14 (buffer starts at +0x18)
     void DoDestroy(void** first, void** last);   // 0x0070F520
 };
 
@@ -467,10 +474,11 @@ void __cdecl ForwardToMaterialManager(uint32_t a, uint32_t b, uint32_t c)
 uint32_t cMaterialManager::GetIDFromCompiledState(uint32_t state, uint32_t id)
 {
     mMutex.Lock(gMutexParams);
-    uint32_t* found = 0;
-    mCompiledStateToIDMap.find(&found, &state);
+    HashIter it;
+    mCompiledStateToIDMap.find(&it, &state);
+    uint32_t* found = it.mpNode;
     uint32_t result;
-    if (found == (uint32_t*)mCompiledStateToIDMap.mpBuckets[mCompiledStateToIDMap.mnNextResize]) {
+    if (found == (uint32_t*)mCompiledStateToIDMap.mpBuckets[mCompiledStateToIDMap.mnBuckets]) {
         // not found: pick the next unused material id
         MaterialEntry* e;
         uint32_t n;
@@ -482,7 +490,11 @@ uint32_t cMaterialManager::GetIDFromCompiledState(uint32_t state, uint32_t id)
                     break;
                 node = (uint32_t*)node[0x4c / 4];
             }
+            // iterator: the node, or end() (the bucket-array sentinel) when the chain ran out
+            uint32_t* endNode = (uint32_t*)mMaterialsMap.mpBuckets[mMaterialsMap.mnBuckets];
             if (node == 0)
+                node = endNode;
+            if (node == endNode)
                 break;           // id not used yet (iterator == end)
         }
         e = mMaterialsMap.operator_index(&n);

@@ -2,7 +2,7 @@
 00b31a90 43 complete; (__int64)float emitted as _ftol2 call, original inline fistp qword + and-esp frame
 00b31ae0 97 complete; same (int64)float cast as _ftol2 vs inline fistp; frame alignment
 00b31c60 57 complete; register choice (edx vs eax) for the 100 clamp and cvtss2si helper asm
-00b31cc0 321 complete; "settime" ParseLine, locals/frame layout and float clamp ordering differ
+00b31cc0 321 complete; "settime" ParseLine, locals/frame layout and float clamp ordering differ; difftest FAIL is a checker artifact: it resolved our OptionArguments(const char*,int) call by qualified name to the 4-argument overload 0x838130 instead of the 2-argument wrapper 0x838330 the original calls; with the address put in the callee's name it is WEAK (115 valid, 21% coverage, most inputs throw)
 00b31ea0 66 complete; store ordering of member inits (vptr stores earlier in original)
 00b31fa0 198 complete; old pause bits kept in a stack slot in original, bitset byte ops
 00b32190 100 complete; push_back temp slots (two locals) and gate field store order

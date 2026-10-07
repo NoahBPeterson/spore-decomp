@@ -122,6 +122,16 @@ void __cdecl RemoveHandler(uint32_t a, uint32_t b, uint32_t c, uint32_t d, uint3
 
 namespace SP {
 
+struct PaintLikeVec {
+  void** mpBegin;
+  void** mpEnd;
+  void Erase(void** first, void** last);  // FUN_005c41b0 (vector erase, this = the vector at +0xe8)
+};
+class cSPSubCategoryUI {
+ public:
+  void Shutdown();  // FUN_005ca7b0
+};
+
 class cSPPalettePageUI {
  public:
   void Shutdown();  // 0x5c8cc0
@@ -225,18 +235,11 @@ class cSPPaletteCategoryUI {
   void SetButtonPositions();  // 0x5c2660
   void SetWindowPositions();  // 0x5c3000
   void ShowPage(uint32_t paintId);  // 0x5c3cb0
-  void ClearPaintLikeThis(void** first, void** last);  // FUN_005c41b0 (vector erase)
-  void SubCategoryShutdown();  // FUN_005ca7b0 (on mSubCategoryUI)
 
-  // @ 0x005c4500
   void PopulateExpansionPackPane(cSPPaletteCategory* unused);
-  // @ 0x005c4df0
   void ClearPalettes();
-  // @ 0x005c4e40
   void Shutdown();
-  // @ 0x005c50b0
   bool SelectPalette(int index);
-  // @ 0x005c51e0
   void SetCategory(cSPPaletteCategory* cat, int a2);
 };
 
@@ -416,9 +419,9 @@ void cSPPaletteCategoryUI::Shutdown() {
   int nw = (int)(mPaintLikeEnd - mPaintLikeBegin);
   for (int i = 0; i < nw; i++)
     vc0(mPaintLikeBegin[i], 8);
-  ClearPaintLikeThis(mPaintLikeBegin, mPaintLikeEnd);
+  ((PaintLikeVec*)&mPaintLikeBegin)->Erase(mPaintLikeBegin, mPaintLikeEnd);
   if (mSubCategoryUI) {
-    SubCategoryShutdown();
+    ((cSPSubCategoryUI*)mSubCategoryUI)->Shutdown();
     ResetRef(&mSubCategoryUI, 4);
   }
   if (mLayout) {

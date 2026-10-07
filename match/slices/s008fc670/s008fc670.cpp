@@ -9,8 +9,6 @@
 // ---------------------------------------------------------------------------
 // external helpers (relocation-masked)
 // ---------------------------------------------------------------------------
-void __cdecl FUN_00949d90(void);
-unsigned __cdecl FUN_00989360(void);
 extern "C" unsigned __cdecl strlen(const char* s);
 
 // ---------------------------------------------------------------------------
@@ -183,29 +181,40 @@ D2e0::~D2e0() {}
 // LogFilter setter
 // ---------------------------------------------------------------------------
 struct LogFilter {
-    void AddRef();
+    void AddRef();              // 0x93c3e0
+    void Release();             // 0x949d90
+    unsigned GetLevelMask();    // 0x989360
+};
+
+struct LogFilterPtr {        // eastl/EA AutoRefCount<LogFilter>
+    LogFilter* mp;
+    LogFilterPtr& operator=(LogFilter* p) {
+        if (p != mp) {
+            LogFilter* old = mp;
+            if (p)
+                p->AddRef();
+            mp = p;
+            if (old)
+                old->Release();
+        }
+        return *this;
+    }
 };
 
 struct HTTPz {
     char pad0[0x1cc];
     int m1cc;               // +0x1cc
-    LogFilter* m1d8;        // +0x1d8
+    char pad1d0[0x1d8 - 0x1d0];
+    LogFilterPtr m1d8;      // +0x1d8
     void SetFilter(LogFilter* p, unsigned mask);
 };
 
 // @ 0x008fd1a0
 void HTTPz::SetFilter(LogFilter* p, unsigned mask)
 {
-    LogFilter* old = m1d8;
-    if (p != old) {
-        if (p)
-            p->AddRef();
-        m1d8 = p;
-        if (old)
-            FUN_00949d90();
-    }
+    m1d8 = p;
     if (p) {
-        unsigned u = FUN_00989360();
+        unsigned u = p->GetLevelMask();
         if ((u & mask) != 0) {
             m1cc = (int)(u & mask);
             return;
@@ -219,10 +228,7 @@ void HTTPz::SetFilter(LogFilter* p, unsigned mask)
             return;
         }
         m1cc = 0;
-        if (m1d8 != 0) {
-            m1d8 = 0;
-            FUN_00949d90();
-        }
+        m1d8 = 0;
     }
 }
 

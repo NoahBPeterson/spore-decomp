@@ -1,4 +1,4 @@
 005ec030  36    complete (eastl::map operator[]: lower_bound + DoInsertValue(hint, value, true_type)); only register allocation differs (key/node in ebp/esi swapped); flags /O2 /MD /Gy /TP /GS-; difftest PASS after fixing the iterator temporaries (the original keeps lower_bound/insert results and the true_type tag in the dead key-parameter slot; ours used separate locals, so the callee got a different pointer)
 005ec130  495   complete (n-gram count + chain table build); EASTL inlines differ
-005ec370  940   complete (markov name generation with retries, exclusions, duplicate suffix); EASTL inlines differ
-005ec7c0  -     complete (cSPNameGenerator::Init property loading and chain setup); inlines differ
+005ec370  851   complete (markov name generation with retries, exclusions, duplicate suffix); EASTL inlines differ; difftest WEAK after fixing the empty-result path (0x0056e2d0 is the basic_string copy constructor; it takes the empty string object at 0x015f0a1c, not an L"" literal) and the wstring size (0x10 with the allocator word)
+005ec7c0  -     complete (cSPNameGenerator::Init property loading and chain setup); inlines differ; difftest WEAK after fixing the symbol mapping (checker tested FUN_005ec130), defining the inlined vector erase (copy_impl 0x0084ab40 + DoDestroyValues) that was only declared, and the wstring size (0x10)
