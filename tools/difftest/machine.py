@@ -5,12 +5,14 @@ Maps the analysis image at its preferred base with per-section protections (code
 gives FS a TEB, and loads OUR object's sections (relocated to original addresses) next to it.
 Every writable region a test can touch is listed in `regions` so runs can be compared and undone.
 """
-import math, struct
+import ctypes, math, struct
 
 from unicorn import (Uc, UcError, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE, UC_HOOK_BLOCK,
-                     UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT,
+                     UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT, UC_HOOK_INSN,
                      UC_PROT_READ, UC_PROT_WRITE, UC_PROT_EXEC, UC_PROT_ALL)
 from unicorn import unicorn_const as UCC
+from unicorn.unicorn_py3.arch import intel
+from unicorn.unicorn_py3.unicorn import uccallback
 from unicorn.x86_const import *  # noqa: F401,F403
 
 from coff import REL_DIR32, REL_DIR32NB, REL_REL32
@@ -18,6 +20,10 @@ from coff import REL_DIR32, REL_DIR32NB, REL_REL32
 OBJ_BASE = 0x30000000
 POOL_BASE, POOL_SIZE = 0x40000000, 0x10000000     # lazily materialised input objects (64 KB slots)
 SLOT = 0x10000
+# Pool objects (64 KB slots) one run may materialise: 4 MB. Each is one Unicorn mem_map, whose cost
+# grows steeply with the number of mapped regions (31 us each at 100 regions, 5.6 ms at 2000), so
+# slots are mapped whole rather than per 4 KB page, and runaway loops on random inputs stop here.
+MAX_POOL_SLOTS = 64
 DYN_BASE, DYN_SIZE = 0x50000000, 0x04000000
 STACK_TOP, STACK_SIZE = 0x7E000000, 0x00200000
 SENTINEL = 0x7EFFF000
@@ -87,15 +93,13 @@ class Machine:
         uc.mem_map(SENTINEL, 0x1000, UC_PROT_ALL)
         uc.mem_map(MISC_BASE, MISC_SIZE, UC_PROT_ALL)
         self._setup_cpu()
-        # rdtsc is not deterministic under Unicorn: hook every 0F 31 in .text (most are not
-        # instruction starts and never fire) and return a per-run counter instead.
+        # rdtsc is not deterministic under Unicorn: one instruction hook returns a per-run counter
+        # instead. (A code hook per 0F 31 byte pair in .text, 674 of them, made every translation
+        # scan them all and halved the harness's speed.)
         self.tsc = 0
-        t0, tn = image.section(".text")
-        text = image.read(t0, tn)
-        i = text.find(b"\x0f\x31")
-        while i >= 0:
-            uc.hook_add(UC_HOOK_CODE, self._on_rdtsc, begin=t0 + i, end=t0 + i)
-            i = text.find(b"\x0f\x31", i + 1)
+        self._rdtsc_cb = uccallback(uc, intel.HOOK_INSN_CPUID_CFUNC)(self._on_rdtsc)
+        # The Python binding only maps in/out/syscall/cpuid; rdtsc hooks share cpuid's C signature.
+        uc._Uc__do_hook_add(UC_HOOK_INSN, self._rdtsc_cb, 1, 0, ctypes.c_int(UC_X86_INS_RDTSC))
         self.image_baseline = {nm: bytes(uc.mem_read(lo, hi - lo)) for nm, lo, hi in self.writable}
         self.misc_baseline = bytes(uc.mem_read(MISC_BASE, 0x80200))
         self.obj = None
@@ -108,25 +112,33 @@ class Machine:
         self.last_fault = None
         self.lazy = None            # callable(page) -> bytes for pool pages, set by the runner
         self.pool_pages = {}        # page -> initial bytes of every page mapped during this run
+        self.pool_slots = []        # slots mapped during this run
+        self.pool_entry = set()     # page of the first access to each slot (for mutation)
         uc.hook_add(UC_HOOK_MEM_UNMAPPED | UC_HOOK_MEM_PROT, self._on_bad_mem)
 
-    def _on_rdtsc(self, uc, address, size, _):
-        if size == 2:
-            self.tsc += 100000
-            uc.reg_write(UC_X86_REG_EAX, self.tsc & 0xFFFFFFFF)
-            uc.reg_write(UC_X86_REG_EDX, 0)
-            uc.reg_write(UC_X86_REG_EIP, address + 2)
+    def _on_rdtsc(self, uc, _key):
+        self.tsc += 100000
+        uc.reg_write(UC_X86_REG_EAX, self.tsc & 0xFFFFFFFF)
+        uc.reg_write(UC_X86_REG_EDX, 0)
+        return 1                    # skip the real rdtsc
 
     def _on_bad_mem(self, uc, access, address, size, value, _):
         if (access in (UCC.UC_MEM_READ_UNMAPPED, UCC.UC_MEM_WRITE_UNMAPPED) and self.lazy is not None
                 and POOL_BASE <= address < POOL_BASE + POOL_SIZE):
-            page = address & ~0xFFF
-            if page not in self.pool_pages and len(self.pool_pages) < 8192:
-                data = self.lazy(page)
-                uc.mem_map(page, 0x1000, UC_PROT_READ | UC_PROT_WRITE)
-                uc.mem_write(page, data)
-                self.pool_pages[page] = data
+            slot = address & ~(SLOT - 1)
+            if slot not in self.pool_slots and len(self.pool_slots) < MAX_POOL_SLOTS:
+                pages = [self.lazy(slot + k) for k in range(0, SLOT, 0x1000)]
+                uc.mem_map(slot, SLOT, UC_PROT_READ | UC_PROT_WRITE)
+                uc.mem_write(slot, b"".join(pages))
+                for k, data in enumerate(pages):
+                    self.pool_pages[slot + k * 0x1000] = data
+                self.pool_slots.append(slot)
+                self.pool_entry.add(address & ~0xFFF)
                 return True
+            if slot not in self.pool_slots:
+                # Out of pool objects: a runaway walk through memory, not a repairable bad pointer.
+                self.last_fault = ("pool-limit", address, size)
+                return False
         kind = {UCC.UC_MEM_READ_UNMAPPED: "read", UCC.UC_MEM_WRITE_UNMAPPED: "write",
                 UCC.UC_MEM_FETCH_UNMAPPED: "fetch", UCC.UC_MEM_READ_PROT: "read-prot",
                 UCC.UC_MEM_WRITE_PROT: "write-prot", UCC.UC_MEM_FETCH_PROT: "fetch-prot"}.get(access, "?")
@@ -269,12 +281,15 @@ class Machine:
         return bytes(out)
 
     def unmap_pool(self):
-        """-> {page: bytes after the run}; unmaps every materialised pool page."""
+        """-> {page: bytes after the run}; unmaps every materialised pool slot."""
         out = {}
-        for page in self.pool_pages:
-            out[page] = bytes(self.uc.mem_read(page, 0x1000))
-            self.uc.mem_unmap(page, 0x1000)
+        for slot in self.pool_slots:
+            data = bytes(self.uc.mem_read(slot, SLOT))
+            for k in range(0, SLOT, 0x1000):
+                out[slot + k] = data[k:k + 0x1000]
+            self.uc.mem_unmap(slot, SLOT)
         self.pool_pages = {}
+        self.pool_slots = []
         return out
 
     def dyn_alloc(self, n, align=16):

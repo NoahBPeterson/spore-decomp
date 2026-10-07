@@ -19,6 +19,7 @@ import argparse, glob, json, math, os, random, struct, sys, time, zlib
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import capstone                                    # noqa: E402
+import numpy as np                                 # noqa: E402
 from capstone import x86_const as CX               # noqa: E402
 from unicorn import UC_HOOK_CODE, UC_HOOK_BLOCK, UC_HOOK_MEM_READ    # noqa: E402
 from unicorn.x86_const import *                    # noqa: E402,F401,F403
@@ -33,6 +34,8 @@ DEFAULT_INPUTS = 400
 DEFAULT_K = 200
 DEFAULT_C = 60.0
 DEFAULT_BUDGET = 10_000_000
+START_BUDGET = 100_000
+BUDGET_PROBES = 3
 FAIL_DIR = os.path.join(S.ROOT, "work", "difftest", "fail_inputs")
 
 _md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
@@ -281,13 +284,17 @@ class Input:
     4 KB pool page is a pure function of (seed, profile, page) plus `pool_over` edits, so both
     runs see identical bytes wherever they look. Pointers inside generated pages lead to random
     64 KB slots (distinct objects; aliasing only by chance or with --alias). `overrides` are image
-    .data dwords set for this input by fault repair."""
+    .data dwords set for this input by fault repair. `pagegen` selects the page generator
+    (1: the original per-dword Python one, kept so older saved inputs replay identically)."""
+
+    pagegen = 2
 
     def copy(self):
         n = Input()
         n.seed, n.profile, n.args, n.pad = self.seed, self.profile, list(self.args), list(self.pad)
         n.pool_over, n.regs, n.xmm, n.overrides = dict(self.pool_over), dict(self.regs), list(self.xmm), dict(self.overrides)
         n.origin, n.touched = self.origin, list(self.touched)
+        n.pagegen = self.pagegen
         return n
 
 
@@ -304,6 +311,7 @@ class InputGen:
         self.nan = nan
         self.dic = [self.fin(v) for v in (t.dict or [0])]
         self.specials = SPECIAL_F if nan else SPECIAL_F[:8]
+        self.slot_cache = {}
 
     def fin(self, v):
         """Unless --nan: never produce a dword whose float32 reading is NaN/Inf (clears the top
@@ -343,7 +351,63 @@ class InputGen:
             return rng.choice(self.dic)
         return rng.getrandbits(32)
 
-    def page(self, inp, page):
+    def slot_pages(self, inp, slot):
+        """{page: 4 KB} for the 16 pages of one 64 KB pool slot."""
+        pages = range(slot, slot + M.SLOT, 0x1000)
+        if inp.pagegen == 1:
+            return {p: self.page_v1(inp, p) for p in pages}
+        # Fault repair re-runs an input many times with a few pool_over edits: cache the soup.
+        key = (inp.seed, inp.profile, slot)
+        b = self.slot_cache.get(key)
+        if b is None:
+            if len(self.slot_cache) >= 512:
+                self.slot_cache.clear()
+            b = self.slot_cache[key] = self._slot_soup(inp, slot)
+        over = [(a, v) for a, v in inp.pool_over.items() if slot <= a < slot + M.SLOT]
+        if over:
+            b = bytearray(b)
+            for a, v in over:
+                struct.pack_into("<I", b, a - slot, v)
+            b = bytes(b)
+        return {pg: b[pg - slot:pg - slot + 0x1000] for pg in pages}
+
+    def _slot_soup(self, inp, slot):
+        rng = np.random.default_rng([inp.seed, slot])
+        kinds, weights = PROFILE_KW[inp.profile]
+        p = np.array(weights, dtype=float)
+        n_all = M.SLOT // 4
+        k = rng.choice(len(kinds), n_all, p=p / p.sum())
+        w = np.zeros(n_all, dtype=np.int64)
+        for idx, kind in enumerate(kinds):
+            sel = k == idx
+            n = int(sel.sum())
+            if n and kind != "zero":
+                w[sel] = self._soup_n(rng, kind, n)
+        w = w.astype(np.uint32)
+        if not self.nan:
+            w[((w >> 23) & 0xFF) == 0xFF] &= np.uint32(0xFF7FFFFF)
+        return w.astype("<u4").tobytes()
+
+    def _soup_n(self, rng, kind, n):
+        """n dwords of one soup kind, with the same distributions as _soup."""
+        if kind == "ptr":
+            hot = rng.integers(0, HOT_SLOTS, n)
+            cold = HOT_SLOTS + rng.integers(0, NSLOTS - HOT_SLOTS, n)
+            slot = np.where(rng.random(n) < self.alias, hot, cold) if self.alias else cold
+            off = np.where(rng.random(n) < 0.7, 0, 4 * rng.integers(0, 64, n))
+            return M.POOL_BASE + slot * M.SLOT + off
+        if kind == "small":
+            return np.where(rng.random(n) < 0.9, rng.integers(0, 9, n), 0xFFFFFFFF)
+        if kind == "float":
+            r = rng.random(n)
+            f = np.where(r < 0.6, rng.uniform(-4, 4, n),
+                         np.where(r < 0.85, rng.uniform(-1000, 1000, n), rng.choice(SPECIAL_F[:8], n)))
+            return f.astype(np.float32).view(np.uint32).astype(np.int64)
+        if kind == "dict":
+            return np.array(self.dic, dtype=np.int64)[rng.integers(0, len(self.dic), n)]
+        return rng.integers(0, 1 << 32, n, dtype=np.int64)
+
+    def page_v1(self, inp, page):
         rng = random.Random((inp.seed << 32) ^ page)
         words = [self.soup(rng, inp.profile) for _ in range(1024)]
         for a, v in inp.pool_over.items():
@@ -530,6 +594,9 @@ class Runner:
         self.hooks = []
         self.cur = None
         self.calls = []
+        # Original's instruction cap: starts low (random inputs often send a loop into the
+        # billions) and rises to --budget if a probe shows a real input needs more; see run_function.
+        self.budget = min(getattr(opts, "start_budget", opts.budget), opts.budget)
         for side in (self.orig, self.ours):
             for a, info in side.sites.items():
                 self.hooks.append(m.uc.hook_add(UC_HOOK_CODE, self._on_site, user_data=(side, info), begin=a, end=a))
@@ -943,10 +1010,13 @@ class Runner:
         def lazy(page, inp=inp, cache=cache):
             d = cache.get(page)
             if d is None:
-                d = cache[page] = self.gen.page(inp, page)
+                cache.update(self.gen.slot_pages(inp, page & ~(M.SLOT - 1)))
+                d = cache[page]
             return d
         m.lazy = lazy
         m.pool_pages = {}
+        m.pool_slots = []
+        m.pool_entry = set()
         for a_, v_ in inp.overrides.items():
             m.write(a_, struct.pack("<I", v_))
         m.dyn_next = M.DYN_BASE
@@ -969,7 +1039,7 @@ class Runner:
         self.cur = side
         self.cov_on = side is self.orig
         self.run_blocks = set()
-        budget = self.opts.budget if side is self.orig else self.opts.budget * 4
+        budget = self.budget if side is self.orig else self.opts.budget * 4
         t0 = time.time()
         status = m.run(side.entry, None, budget, self.opts.run_seconds * (1 if side is self.orig else 4))
         self.cur = None
@@ -999,10 +1069,12 @@ class Runner:
                         pages[lo + p] = cur[p:p + 0x1000]
                         m.write(lo + p, base[p:p + 0x1000])
                 mem[nm] = pages
-        o["pool_init"] = dict(m.pool_pages)
+        o["pool_init"] = init = dict(m.pool_pages)
+        entry = m.pool_entry
         mem["pool"] = m.unmap_pool()
         if side is self.orig:
-            inp.touched = sorted(mem["pool"])
+            # pages to mutate: where each object was first accessed, plus every page written
+            inp.touched = sorted(entry | {p for p, d in mem["pool"].items() if d != init[p]})
         o["dyn_hi"] = m.dyn_next
         mem["heap"] = m.read(M.DYN_BASE, m.dyn_next - M.DYN_BASE) if m.dyn_next > M.DYN_BASE else b""
         if m.dyn_next > M.DYN_BASE:
@@ -1381,6 +1453,7 @@ def test_function(sid, va, opts, log=print):
     repaired = 0
     faked = 0
     ran = 0
+    probes = 0
     deadline = time.time() + opts.time_limit
     try:
         for i in range(opts.inputs):
@@ -1395,13 +1468,24 @@ def test_function(sid, va, opts, log=print):
                 inp = gen.fresh(rng)
             a = runner.run_side(runner.orig, inp)
             fixes = 0
-            while a["status"][0] == "fault" and a["fault"] and fixes < opts.repairs and time.time() < deadline:
+            while (a["status"][0] == "fault" and a["fault"] and a["fault"][0] != "pool-limit"
+                   and fixes < opts.repairs and time.time() < deadline):
                 rep = runner.repair(inp, a["fault"], rng)
                 if rep is None:
                     break
                 inp = rep
                 fixes += 1
                 a = runner.run_side(runner.orig, inp)
+            if a["status"][0] == "budget" and runner.budget < opts.budget and probes < BUDGET_PROBES:
+                # Runaway input, or a function whose real runs are long? Retry with the full cap.
+                probes += 1
+                low, runner.budget = runner.budget, opts.budget
+                a2 = runner.run_side(runner.orig, inp)
+                if a2["status"][0] == "budget":
+                    runner.budget = low
+                else:
+                    a = a2
+                    out["budget_raised"] = "input %d needed more than %d instructions" % (i, low)
             st = a["status"][0]
             if st != "ok":
                 key = st if st != "import" else "import:%s" % str(a["status"][1]).split(":")[0]
@@ -1460,7 +1544,7 @@ def test_function(sid, va, opts, log=print):
                         os.makedirs(FAIL_DIR, exist_ok=True)
                         pth = os.path.join(FAIL_DIR, "%s_%08x.pkl" % (sid, va))
                         with open(pth, "wb") as f:
-                            pickle.dump(inp.__dict__, f)
+                            pickle.dump(dict(inp.__dict__, pagegen=inp.pagegen), f)
                         first["input_file"] = os.path.relpath(pth, S.ROOT)
                     except OSError:
                         pass
@@ -1513,6 +1597,7 @@ def replay(sid, va, path, opts):
     runner = Runner(t, opts)
     inp = Input()
     inp.__dict__.update(pickle.load(open(path, "rb")))
+    inp.__dict__.setdefault("pagegen", 1)       # saved before pagegen existed
     a = runner.run_side(runner.orig, inp)
     b = runner.run_side(runner.ours, inp)
     cmp_ = Comparer(runner, opts)
@@ -1543,7 +1628,9 @@ def parse_args(argv=None):
     ap.add_argument("--min-cov", type=float, default=DEFAULT_C)
     ap.add_argument("--ulp", type=int, default=0)
     ap.add_argument("--strict-calls", action="store_true")
-    ap.add_argument("--budget", type=int, default=DEFAULT_BUDGET)
+    ap.add_argument("--budget", type=int, default=DEFAULT_BUDGET, help="max instructions per original run (ours: 4x)")
+    ap.add_argument("--start-budget", type=int, default=START_BUDGET,
+                    help="initial cap; raised to --budget if one of the first %d capped inputs finishes under it" % BUDGET_PROBES)
     ap.add_argument("--time-limit", type=int, default=600, help="seconds per function")
     ap.add_argument("--run-seconds", type=float, default=10, help="wall-clock cap per original run (ours: 4x)")
     ap.add_argument("--max-mismatch", type=int, default=5)
