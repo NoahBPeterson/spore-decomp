@@ -1,0 +1,1 @@
+01170630 MmxDct32  # 32-point integer DCT (PC MMX build): even/odd butterfly, two 16-row Q14 matrices from 0x015c4638, cdecl 3 args; code identical to 011689e0 (table copies differ)

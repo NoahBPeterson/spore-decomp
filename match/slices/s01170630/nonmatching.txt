@@ -1,0 +1,1 @@
+01170630 2320 complete; MMX intrinsics reproduce the butterfly and 2x16 Q14 taps (pmaddwd, psrad 14, low word); frame gets and esp,-8 plus __m64 spills (3023 vs 2441 bytes), so no byte-exact

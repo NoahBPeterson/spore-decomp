@@ -1,0 +1,1 @@
+01070ba0 SP::cSPUISpace::cSPUISpace  # ctor: inlined base vtables (RefCountVTemplate<int>, IHandler, IWinProc), 26+24 cString ctors, 49 cString::Load, animator and translator news

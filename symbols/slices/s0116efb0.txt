@@ -1,0 +1,1 @@
+0116efb0 rw::audio::core::HELPER_Imdct36X4Implementation  # caller-single in pdb_candidates.json; 4-lane SSE 36-pt IMDCT (aligned path) + scalar HELPER_Imdct36X1 fallback per lane; name from header/PDB candidate

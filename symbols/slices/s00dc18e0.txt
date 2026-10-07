@@ -1,0 +1,1 @@
+00dc1d70 SP::cSpace::Update  # Claude-coined class name cSpace; thiscall, 7 stack args (ret 0x1c); Retail member names unknown

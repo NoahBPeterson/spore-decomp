@@ -1,0 +1,1 @@
+00b55680  2436  top-level dispatch and b532b0 query written; hashtable-find path, Havok phantom build (hkRotation/hkSimpleShapePhantom/addPhantom/setPosition) and vt tails missing

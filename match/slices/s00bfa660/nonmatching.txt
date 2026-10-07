@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP)
+00bfa660  1913  UNVERIFIED: hand-written from asm; equiv WEAK (2.1% coverage, inputs never pass entry checks); float order and register use not checked

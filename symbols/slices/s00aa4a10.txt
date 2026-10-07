@@ -1,0 +1,1 @@
+00aa4e50 cParticleEffectCommand::OnRegister  # byte-exact; mState(+0x30)=state-0xc, base OnRegister, SetChildState(+0x38), 38 ArgScript keyword AddCommands (cParticleCmdT<N> per vtable), RegisterPathCommand at +0x29c/+0x2c8/+0x2c9

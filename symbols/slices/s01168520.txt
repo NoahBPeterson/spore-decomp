@@ -1,0 +1,1 @@
+011689e0 Snd::Dct32  # 32-point integer DCT (Snd MMX build): even/odd butterfly, two 16-row Q14 matrices at 0x015c41f8, cdecl 3 args; same code as 01170630 (MmxDct32), own table copy

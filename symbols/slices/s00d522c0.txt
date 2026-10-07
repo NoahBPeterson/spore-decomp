@@ -1,4 +1,4 @@
-00d522c0  FUN_00d522c0  # cSpaceInventoryItem large update
+00d522c0  SP::cSPDramaManager::Update  # asm: mode gate 0x1654c01/02, stalker search, mate timer 0x3c, herd placement; Ghidra agrees
 00d52c90  FUN_00d52c90  # __cdecl compare floats at +8 (return b > a)
 00d52cb0  FUN_00d52cb0  # __cdecl heap sift with comparator
 00d52d80  SP::cPosseSimulator::Write  # PDB candidate; cVarListSerializer

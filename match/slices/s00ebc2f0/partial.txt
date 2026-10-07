@@ -1,0 +1,1 @@
+00ebc2f0  2436  prologue, model/manager queries and vt+0x38 query written; loop body (property queries, feedback-event rbtree lookup, vt+0x58, Matrix3/vt+0x18 submit, vector cleanup) missing; ECX [esp+0x5c] read at loop top is unexplained

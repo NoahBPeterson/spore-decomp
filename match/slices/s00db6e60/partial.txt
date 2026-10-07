@@ -1,0 +1,1 @@
+00db7190    2500  0 diff  SP::MOVE_Tick  control flow only; missing: path step (FUN_00bca2a0, FUN_00bcb510, pool GetObject, FUN_00db6fa0/6ef0), IsNearGoal/IsEligible branches, animation and hover branches, hash-table find at +0x54, final return values; callee conventions unverified

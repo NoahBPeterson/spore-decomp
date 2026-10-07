@@ -1,0 +1,1 @@
+010abb90    2496  0 diff  FUN_010abb90  only the outer loop shape; missing: 3x3 accumulate body (asm not read), FUN_01081c30/FUN_01081da0 identities, row/column stores; calling convention doubtful (plain ret, Ghidra says __fastcall)

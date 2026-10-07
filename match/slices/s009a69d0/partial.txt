@@ -1,0 +1,2 @@
+# va  reason
+009a6e60  not written. Read the card and the Ghidra decompile (nSPCreatureAnim::HandleEventType candidate, 2480 bytes, 0x20007 mode switch with a jump table at 0x9a77f0, 0x20000/0x20001 special modes, EASTL hashtable equal_range over the 0x17a4/0x17a8 lists, PlaySound/SP::MessageServer/FUN_009cb300 helpers). Not started in source.

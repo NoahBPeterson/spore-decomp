@@ -1,4 +1,4 @@
-00696c80  2507  skeleton only; the 2.5 KB locale apply/merge loop (vtable +0xc/+0x18 messages, EASTL vector) not reconstructed
+00696c80  2507  partial: Load() skeleton. Stage 1 (GetProp/GetLocaleInfoString/FNV1 + key-list setup) is written; the vt[0x5c]/vt[0x54]/vt[0x30] key walk, ReadPropRecords2 record loop, the .package DirectoryIterator scan with DbFile construction, the fallback recursion Load(default,true) and the EH states are still missing
 00697650  186  skeleton only; ChangeManager broadcast (vtable +0x20/+0x14, MessageServer dispatch) not reconstructed
 00697710  582  skeleton only; cLocaleManager::SetLocale (IsLocaleAvailable + list walk + SetLocale + message) not reconstructed
 00697bb0  135  skeleton only; mutex-guarded noAsserts check + vtable +0x18 call not reconstructed

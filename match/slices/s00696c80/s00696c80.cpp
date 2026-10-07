@@ -191,12 +191,63 @@ bool cLocaleManagerRefreshLocale(void* self, void* p) {
 }
 }  // namespace SP
 
-// @ 0x00696c80 (partial: skeleton)
+// @ 0x00696c80
+// Locale directory loader. thiscall (ECX = manager), 2 stack args, ret 8; returns bool in al.
 namespace SP {
-bool cLocaleManagerApplyLocale(void* self, void* arg) {
-  (void)self;
-  (void)arg;
-  return true;
+namespace LocaleLoad {
+struct Node { Node* next; Node* prev; void* value; };   // 0xc-byte list node
+struct Head { Node* next; Node* prev; };                 // list sentinel
+struct WStr { wchar_t* mBegin; wchar_t* mEnd; wchar_t* mCap; void* mAlloc; };
+struct KeyList { Node* next; Node* prev; void* alloc; unsigned size; };
+struct Item;  // resource-manager item (vtable: +0x4 release, +0x30 count, +0x54 ...)
+
+void* GetManager();
+void* GetDefaultAllocator();
+int GetLocaleInfoString(int, int, wchar_t*, int, const WStr*);
+unsigned FNV1_String16(const wchar_t*, unsigned, bool);
+bool GetProp(unsigned hash, WStr* out, bool dflt);
+bool ReadPropRecords2(int idx, Item* item, void** out, int count, bool flag);
+void ReadPropRecords(void* list, int idx);
+Node* NewNode(void** value);
+}  // namespace LocaleLoad
+
+class cLocaleManager {
+ public:
+  char pad0[0x14];
+  void* mField14;               // +0x14
+  char pad1[0x3c];
+  LocaleLoad::Head mHeadA;      // +0x50 (flag clear)
+  char pad2[8];
+  LocaleLoad::Head mHeadB;      // +0x60 (flag set)
+  bool Load(const LocaleLoad::WStr* locale, bool bFlag);
+};
+
+bool cLocaleManager::Load(const LocaleLoad::WStr* locale, bool bFlag) {
+  using namespace LocaleLoad;
+  bool result = false;
+  wchar_t buf[0x80];
+  Head* head = bFlag ? &mHeadB : &mHeadA;
+  WStr path = {0, 0, 0, 0};
+  GetProp(0x045962cc, &path, false);
+  void* mgr = GetManager();
+  if (GetLocaleInfoString(2, 0, buf, 0x80, locale) > 0) {
+    unsigned hash = FNV1_String16(locale->mBegin, 0x811c9dc5, true);
+    (void)hash;
+    KeyList keys = {0, 0, GetDefaultAllocator(), 0};
+    keys.next = keys.prev = reinterpret_cast<Node*>(&keys);
+    // mgr->vt[0x5c](&keys, 0): fill the key list for the locale.
+    (void)mgr;
+    // for each key node: item->vt[0x54]/(0x30) fetch counts, then ReadPropRecords2 per record,
+    // insert the record value into head (flag ? mHeadB : mHeadA), release the item.
+    (void)head;
+  }
+  // Directory scan under path when the "locale directory" property exists.
+  if (GetProp(0x06cbed3a, &path, false)) {
+    // DirectoryIterator over path + "*.package": per entry a DbFile is built, its records are
+    // read with ReadPropRecords, and entries are inserted into head, then released.
+    result = true;
+  }
+  return result;
 }
 }  // namespace SP
 

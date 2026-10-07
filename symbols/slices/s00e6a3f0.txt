@@ -1,0 +1,1 @@
+00e6a3f0 sResolvePartCollision  # Claude-coined name from the PDB candidate SP::sResolvePartCollision (symbols/pdb_candidates.json, caller-single); cdecl, 14 args, ret

@@ -1,0 +1,2 @@
+# va  reason   (not started: slice 9 needs its own full read of work/match/scratch_s00bb4100_card.txt)
+00bb4100  not started; 2532-byte thiscall function, decompile at scratch card lines 758-1198

@@ -1,0 +1,1 @@
+009f2a00  -  signature only: IK update loop and quaternion/float solve (0x9f2aa2 onward, 726 card lines) not written; returns nullptr as placeholder

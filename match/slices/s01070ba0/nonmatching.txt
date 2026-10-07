@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-)
+01070ba0  1841  SP::cSPUISpace::cSPUISpace: complete (all straight-line stores, 49 cString::Load, 50 cString ctors, animator/translator news, vcalls on 0x67de40 singleton); original keeps push edi and lea edi after the first three vtable stores while cl hoists them into the prologue area, which shifts all later bytes; difftest UNSUPPORTED (0/400 valid inputs: ctor writes a 0x6a4-byte object, random pointers fault)

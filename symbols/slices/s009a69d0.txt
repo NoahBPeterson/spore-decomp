@@ -1,0 +1,1 @@
+009a6e60 nSPCreatureAnim::HandleEventType  # Claude-coined from the caller-scored PDB candidate nSPCreatureAnim::HandleEventType (symbols/pdb_candidates.json); unverified

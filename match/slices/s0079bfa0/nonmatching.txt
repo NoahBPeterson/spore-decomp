@@ -1,1 +1,2 @@
 # va  diff-bytes  reason (none: every function below is byte-exact)
+0079bfa0  2206  complete cylinder clipper (CylinderClipper::Run, one output; all-same copy, mixed modes 0-3 and the six split cases written from the Ghidra decompile and checked against the card asm; Cylinder::Intersect called on this+0xc as the asm does): register allocation and block layout differ. equiv.py: WEAK, no mismatch in 279 valid inputs, but only 4.3% (33/768) instructions covered because the random pointer-soup inputs rarely build a valid mesh/job/out triple

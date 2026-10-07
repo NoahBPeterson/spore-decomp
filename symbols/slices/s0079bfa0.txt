@@ -1,0 +1,1 @@
+0079bfa0 CylinderClipper::Run  # Claude-coined: one-output variant of CylinderSlicer::Run 0x0079dce0 (keep-side flag at +0x28 inverts the per-vertex bit); thiscall, ret 0x10

@@ -1,0 +1,1 @@
+00c987b0  -  early exits only; hash-map fill (0xc27d20 / fixed_hash_map / 0xfcc210 / 0xb76460 loop), tool-type switch (0xa, 0xb, 0xc, 0xd, default 0xc9cec0 path) and the position float math not written
