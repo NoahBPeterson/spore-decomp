@@ -23,7 +23,7 @@ matched addresses are recorded in `symbols/lib_names.txt` and `work/oss/*_matche
 | Microsoft C runtime | MSVC 15.00 (VS2008 SP1) | Microsoft EULA |
 | EA EAText / EAIO | EAWebKit 1.21.00 | EA WebKit license (3-clause BSD-style) |
 | EA EAThread | github.com/BurnoutDecomp/EAThread (fork of electronicarts/EAThread) | EA BSD 3-clause |
-| RenderWare 4 / EATech reconstructions (rw::audio::core, rw::core, EA::Thread) | github.com/BurnoutDecomp/b5-decomp (`vendor/renderware`, `src/SDKs/EATech`) | EA-style BSD 3-clause, assumed (see below) |
+| RenderWare 4 / EATech reconstructions (rw::audio::core, rw::core, EA::Thread, Snd, vp6) | github.com/BurnoutDecomp/b5-decomp (`vendor/renderware`, `src/vendor/renderware`, `src/SDKs/EATech`, `src/GameShared/GameClasses/RenderWare`) | EA-style BSD 3-clause, assumed (see below) |
 
 The EA EAText/EAIO sources used for the `lib_eatext` matches are obtained from the
 EAWebKit distribution and are built locally under `work/` (git-ignored); **no EA
@@ -44,14 +44,25 @@ byte-exact with cl 15.00.30729 from:
   of the EATech SDK, decompiled from Burnout Paradise: `git clone --filter=blob:none --sparse -b dev
   https://github.com/BurnoutDecomp/b5-decomp work/ext/gh_b5`, then `git -C work/ext/gh_b5 sparse-checkout
   set vendor/renderware src/SDKs/EATech src/vendor/renderware src/GameShared/GameClasses/Sound/Playback
-  vendor/PPMalloc` and `sparse-checkout add --skip-checks src/types.hpp`. The b5-decomp repository
+  vendor/PPMalloc` and `sparse-checkout add --skip-checks src/types.hpp`; the `b5more` target also needs
+  `sparse-checkout add src/GameShared/GameClasses/RenderWare src/GameShared/GameClasses/Core
+  src/GameShared/GameClasses/Development/Log src/GameShared/GameClasses/Graphics
+  src/GameShared/GameClasses/System/Resource src/SDKs/RenderEngineClub src/SDKs/Packages/Apt
+  src/pc/gcm/renderengine` (headers). The b5-decomp repository
   carries no license notice; we treat it under the same EA-style BSD 3-clause terms as the EA libraries
   above, on the assumption that the notice is simply missing.
 
 `tools/third_party/build_ea_libs.py {eathread,b5rw} --emit` builds both against the ~2010 EABase and
 coreallocator from the EAWebKit bundle (through `tools/third_party/compat`, our own shims for newer
 EABase macros and C++11 headers), applies a few VS2008 compatibility edits to copies under `work/oss`,
-matches the objects against the image (libmatch + libresolve), and appends the unique placements. No
+matches the objects against the image (libmatch + libresolve), and appends the unique placements.
+`build_ea_libs.py b5more --emit` does the same, under the same `lib_b5rw` tag, for the rest of
+b5-decomp's PC code: `src/vendor/renderware` (collision, physics), `src/SDKs/EATech` (Apt, eajobs,
+rwcollision, rwmovie, and the sources under `include/`: Apt, NFSMix, Nicotine, rw, snd) and
+`src/GameShared/GameClasses/RenderWare` (without the PS3/x360 subdirectories). It rewrites their
+C++11/17 syntax for VS2008 on copies under `work/oss/b5more_src`, and before appending it drops generic
+bodies (deleting destructors, STL helpers, EH funclets), Apt and Criterion `Cgs*` code (absent from
+Spore) and addresses already named by the PDB or a slice, then re-checks each entry with `cmpobj.py`. No
 upstream source is committed; if you vendor it in-tree, keep the copyright and license notices.
 
 ## Binary-derived artifacts
