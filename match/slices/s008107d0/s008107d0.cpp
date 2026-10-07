@@ -188,7 +188,7 @@ void* __thiscall cSPUILayoutResourceFactory::Function8a0(void* a, void* b, u32 t
 void __thiscall RBTree::insertNode(void** out, RBNode* hint, u32* key, bool right)
 {
     int created;
-    if (!right && hint != (RBNode*)((u8*)this + 4) && *key >= *(u32*)((u8*)hint + 0x10))
+    if (!right && hint != (RBNode*)((u8*)this + 4) && *(u32*)((u8*)hint + 0x10) <= *key)
         created = 1;
     else
         created = 0;

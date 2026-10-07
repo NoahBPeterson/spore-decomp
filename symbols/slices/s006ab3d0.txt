@@ -5,6 +5,6 @@
 006abe50 EA::Allocator::FixedAllocatorBase::AllocateChunk  # PDB callee 0x926650
 006abeb0 wrapper -> 0x009289f0 via global 0x016c8b44
 006ac040 SP::SetCachingType  # PDB name
-006ac0a0/-d0 cache-type setter/getter via vtable+0xc (id 0x355d6f5)
+006ac0a0 cache-type setter/getter via vtable+0xc (id 0x355d6f5)
 006ac440 8-byte element copy loop (uninitialized_copy style)
 006ac470 small-vector free  # EASTL_allocator_deallocate
