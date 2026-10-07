@@ -156,7 +156,9 @@ def comp_rows():
     for name, items in rows:
         b = sum(funcs[a]["size"] for a in items); src = items & (byte_exact | equiv)
         bs = sum(funcs[a]["size"] for a in src)
-        out.append("| %s | %d | %d (%s) | %.2f MB | %s |" % (name, len(items), len(src), pct(len(src), len(items)), b / 2**20, pct(bs, b)))
+        ex = items & byte_exact; bx = sum(funcs[a]["size"] for a in ex)
+        out.append("| %s | %d | %d (%s) | %s | %d (%s) | %.2f MB | %s |" % (
+            name, len(items), len(ex), pct(len(ex), len(items)), pct(bx, b), len(src), pct(len(src), len(items)), b / 2**20, pct(bs, b)))
     return out
 def r(label, items, note=""):
     b = sum(funcs[a]["size"] for a in items)
@@ -178,7 +180,7 @@ out = ["# Status", "",
        r("Other: no source yet", nosrc, "Ghidra pseudocode only (readable, not compilable)"),
        r("**Total with compilable source**", byte_exact | equiv),
        r("Game functions (denominator)", game),
-       "", "| Component | Functions | With compilable source | Code size | With source (by size) |", "|---|---:|---:|---:|---:|"] + comp_rows() + [
+       "", "| Component | Functions | Byte-exact | Byte-exact (by size) | With compilable source | Code size | With source (by size) |", "|---|---:|---:|---:|---:|---:|---:|"] + comp_rows() + [
        "", "Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling",
        "convention (reads ECX = `this` before writing it).",
        "Checked against PDB-named functions, that heuristic labels 79% of member functions as class code and 88% of",

@@ -100,15 +100,15 @@ print(table(["Tier", "Functions", "% count", "MB", "% size"],
             aligns=["<", ">", ">", ">", ">"]))
 
 # ---- components ----
-comp = ns["comp_rows"]()  # markdown rows: | name | funcs | src (pct) | MB | src% |
+comp = ns["comp_rows"]()  # markdown rows: | name | funcs | exact (pct) | exact% by size | src (pct) | MB | src% |
 crows = []
 for line in comp:
     p = [x.strip() for x in line.strip().strip("|").split("|")]
-    name, nfuncs, src, size, srcby = p[0], p[1], p[2], p[3], p[4]
-    crows.append((name, src, size, srcby))
+    name, nfuncs, ex, exby, src, size, srcby = p
+    crows.append((name, ex, exby, src, srcby, size))
 print()
-print(table(["Component", "With compilable source", "Code size", "With source (by size)"],
-            crows, aligns=["<", ">", ">", ">"]))
+print(table(["Component", "Byte-exact", "(by size)", "With compilable source", "(by size)", "Code size"],
+            crows, aligns=["<", ">", ">", ">", ">", ">"]))
 
 # ---- breadth-first coverage from the program entry point ----
 def bfs_table():
