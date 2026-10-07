@@ -58,6 +58,7 @@ public:
     void clear();
     void insert(KEY k, KEY v);
     Dummy* findKey(KEY k) const;
+    int findIndex(KEY k) const;   // findKey as Havok inlines it into get/hasKey
     hkResult get(KEY k, KEY* out) const;
     void remove(Dummy* d);
     hkResult remove(KEY k);
@@ -117,22 +118,23 @@ template<class KEY> Dummy* hkPointerMapBase<KEY>::findKey(KEY k) const
     return (Dummy*)(mMask + 1);
 }
 
+template<class KEY> inline int hkPointerMapBase<KEY>::findIndex(KEY k) const
+{
+    for (int i = (int)(((k >> 4) * (KEY)0x9e3779b1ul) & (KEY)mMask); mTable[i] != 0; i = (i + 1) & mMask)
+        if (mTable[i] == k)
+            return i;
+    return mMask + 1;
+}
+
 // @ 0x0107df30 (K) / (no _K get in range)
 template<class KEY> hkResult hkPointerMapBase<KEY>::get(KEY k, KEY* out) const
 {
-    KEY h = (KEY)((k >> 4) * (KEY)0x9e3779b1ul);
-    int idx = (int)(h & (KEY)mMask);
-    while (mTable[idx] != 0) {
-        if (mTable[idx] == k)
-            goto found;
-        idx = (idx + 1) & mMask;
+    int i = findIndex(k);
+    if (i <= mMask) {
+        *out = mTable[mMask + 1 + i];
+        return HK_SUCCESS;
     }
-    idx = mMask + 1;
-found:
-    if (idx > mMask)
-        return HK_FAILURE;
-    *out = mTable[mMask + 1 + idx];
-    return HK_SUCCESS;
+    return HK_FAILURE;
 }
 
 // @ 0x0107df90 (K) / 0x0107e2d0 (_K)

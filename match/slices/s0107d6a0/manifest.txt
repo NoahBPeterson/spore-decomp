@@ -2,3 +2,4 @@
 slices/s0107d6a0/s0107d6a0.cpp  ?getAllocatedSize@hkMemory@@QAEHH@Z                 0107dcf0
 slices/s0107d6a0/s0107d6a0.cpp  ?clear@?$hkPointerMapBase@K@@QAEXXZ                0107ddd0
 slices/s0107d6a0/s0107d6a0.cpp  ?findKey@?$hkPointerMapBase@K@@QBEPAVDummy@@K@Z   0107def0
+slices/s0107d6a0/s0107d6a0.cpp  ?get@?$hkPointerMapBase@K@@QBE?AW4hkResult@@KPAK@Z   0107df30

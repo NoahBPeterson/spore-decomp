@@ -14,7 +14,6 @@
 0107de00  54  hkPointerMapBase<unsigned long> constructor
 0107de50  15  hkPointerMapBase<unsigned long> destructor
 0107de70  102  hkPointerMapBase<unsigned long>::insert
-0107df30  27  hkPointerMapBase<unsigned long>::get
 0107df90  179  hkPointerMapBase<unsigned long>::remove(Dummy*)
 0107e050  113  hkPointerMapBase<unsigned long>::resizeTable
 0107e0f0  54  hkPointerMapBase<unsigned __int64> constructor
