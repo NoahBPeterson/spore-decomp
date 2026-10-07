@@ -18,6 +18,10 @@ CL = os.path.join(ROOT, "tools", "matching", "cl.sh")
 FLAG_RE = re.compile(r"(?<![\w/])(/(?:O[12dxyst]-?|Ob\d|Oi-?|Oy-?|M[DT]d?|Gy-?|EH\w+|TP|TC|arch:\w+|fp:\w+|GS-?|GR-?|Gz|Gr|Gd|Zp\d+|GF|Gs\d*|J))(?![\w:])")
 
 
+# an explicit note: 'flags' (or 'Flags:') immediately followed by the flag list
+EXPLICIT_RE = re.compile(r"\bflags?\s*[:=]?\s*((?:/[\w:+\-]+(?![\w:+\-])[\s,]*)+)", re.I)
+
+
 def winpath(p):
     return "Z:" + p.replace("/", "\\")
 
@@ -124,39 +128,76 @@ def flags_from_source(src):
         if "//" not in line:
             continue
         c = line.split("//", 1)[1]
-        if re.search(r"\bflags?\b", c, re.I) and FLAG_RE.search(c):
-            f = flags_from_reason(c[re.search(r"\bflags?\b", c, re.I).start():])
+        m = re.search(r"\bflags?\b|\b(?:compiled?|built|build) with\b", c, re.I)
+        if m and FLAG_RE.search(c):
+            f = flags_from_reason(c[m.start():])
             if f:
                 return f
     return None
 
 
 def choose_flags(sid, va, override=None):
-    """(flags, provenance): explicit override, the nonmatching reason, a 'Flags:' comment in the
-    source, the slice manifest, then the defaults."""
+    """(flags, provenance), first found wins:
+    1. --flags (override);
+    2. an explicit 'flags /O2 ...' note in this VA's nonmatching reason ("reason");
+    3. the flags column of the slice's manifest.txt: the row for this VA, else the rows' flags when
+       they all agree ("manifest(va)" / "manifest(slice)"); with no flagged rows, a
+       '# ... flags: /Od ...' note in the manifest ("manifest(note)");
+    4. a '// Flags: ...' / '// compile with ...' comment near the top of the source ("source comment");
+    5. the most common flags of disagreeing manifest rows ("manifest(majority)");
+    6. a complete flag list (one naming /O1, /O2, /Od or /Ox) anywhere in the reason ("reason(loose)");
+    7. the defaults.
+    Lone loose tokens in a reason ("needs /fp:fast") are never merged onto the defaults: they are
+    often stale or describe an experiment, and compiling with them gave wrong /fp modes."""
     if override:
         return override.split(), "override"
     for rva, _d, reason in read_rows(os.path.join(slice_dir(sid), "nonmatching.txt")):
         if rva == va:
-            m = re.search(r"\bflags?\b", reason, re.I)
-            f = flags_from_reason(reason[m.start():]) if m else None
-            if f:
-                return f, "reason"
-            f2 = flags_from_source(source_path(sid))
-            if f2:
-                return f2, "source comment"
-            f = flags_from_reason(reason)
-            if f:
-                return f, "reason(loose)"
+            for m in EXPLICIT_RE.finditer(reason):
+                f = flags_from_reason(m.group(1))
+                if f:
+                    return f, "reason"
+            break
     rows = manifest_rows(sid)
     for _src, _sym, mva, fl in rows:
         if mva == va and fl:
             return fl, "manifest(va)"
-    fls = [tuple(r[3]) for r in rows if r[3]]
+    fls = {tuple(r[3]) for r in rows if r[3]}
+    if len(fls) == 1:
+        return list(fls.pop()), "manifest(slice)"
+    if not fls:
+        f = manifest_note_flags(sid)
+        if f:
+            return f, "manifest(note)"
+    f2 = flags_from_source(source_path(sid))
+    if f2:
+        return f2, "source comment"
     if fls:
-        best = max(set(fls), key=fls.count)
-        return list(best), "manifest(slice)"
+        allf = [tuple(r[3]) for r in rows if r[3]]
+        return list(max(fls, key=lambda f: (allf.count(f), f))), "manifest(majority)"
+    for rva, _d, reason in read_rows(os.path.join(slice_dir(sid), "nonmatching.txt")):
+        if rva == va:
+            toks = [m.group(1) for m in FLAG_RE.finditer(reason)]
+            if any(t.startswith(("/O1", "/O2", "/Od", "/Ox")) for t in toks):
+                f = flags_from_reason(reason)
+                if f:
+                    return f, "reason(loose)"
+            break
     return list(DEFAULT_FLAGS), "default"
+
+
+def manifest_note_flags(sid):
+    """Flags in a '# ... flags: /Od /Ob1 ...' comment of the slice manifest."""
+    path = os.path.join(slice_dir(sid), "manifest.txt")
+    if not os.path.exists(path):
+        return None
+    for line in open(path, encoding="utf-8", errors="replace"):
+        if "#" in line:
+            for m in EXPLICIT_RE.finditer(line.split("#", 1)[1]):
+                f = flags_from_reason(m.group(1))
+                if f and any(t.startswith(("/O1", "/O2", "/Od", "/Ox")) for t in f):
+                    return f
+    return None
 
 
 def source_path(sid):
@@ -223,10 +264,21 @@ def demangle_qual(name):
 
 
 def _def_name_after(lines, i):
-    """Name of the first function *definition* (a '(' ... '{' before any ';') after line i."""
+    """Name of the first function *definition* (a '(' ... '{' before any ';') after line i.
+    A file-local 'static inline' / 'static __forceinline' helper defined between the marker and
+    the free function it labels is skipped when such a definition follows before the next
+    '// ... @ 0x' marker (and before any class body)."""
     buf = ""
+    first = None
+    depth = 0
     for j in range(i + 1, min(i + 80, len(lines))):
-        l = lines[j].split("//")[0].strip()
+        if first is not None and re.search(r"//.*@\s*0x[0-9a-fA-F]{5,8}\b", lines[j]):
+            break
+        raw = lines[j].split("//")[0]
+        if depth:                       # inside the skipped helper's body
+            depth += raw.count("{") - raw.count("}")
+            continue
+        l = raw.strip()
         if not l or l.startswith(("#", "template", "/*", "*")):
             continue
         buf += " " + l
@@ -236,12 +288,22 @@ def _def_name_after(lines, i):
                 head = buf[:buf.index("(")]
                 m = re.search(r"((?:[A-Za-z_]\w*\s*::\s*)*~?(?:operator\s*\S+|[A-Za-z_]\w*))\s*$", head)
                 if m:
-                    return re.sub(r"\s+", "", m.group(1))
+                    nm = re.sub(r"\s+", "", m.group(1))
+                    helper = re.search(r"\bstatic\b", head) and re.search(r"\b(?:inline|__inline|__forceinline)\b", head)
+                    if not helper:
+                        return nm if first is None or "::" not in nm else first
+                    if first is None:
+                        first = nm              # a file-local inline helper: look further
+                    depth = buf.count("{") - buf.count("}")
+                    buf = ""
+                    continue
             if brace >= 0 and (semi < 0 or brace < semi) and "(" not in buf[:brace]:
+                if first is not None:
+                    return first   # past a helper into a class body: the helper was the target
                 buf = ""   # class/namespace opening: keep looking
                 continue
             buf = ""
-    return None
+    return first
 
 
 def marker_names(src, va):

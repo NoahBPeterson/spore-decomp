@@ -3,12 +3,22 @@
 Maps the analysis image at its preferred base with per-section protections (code R-X, .rdata R,
 .data RW), routes every IAT slot to a stub (Python handler or a few bytes of native x87 code),
 gives FS a TEB, and loads OUR object's sections (relocated to original addresses) next to it.
-Every writable region a test can touch is listed in `regions` so runs can be compared and undone.
+Every byte a run can write is put back before the next run, so the two sides of a test (and
+successive inputs) never see each other's leftovers:
+- image .data/.bss/.tls and our object's writable data: compared to a baseline and restored;
+- the DYN heap (malloc) and the MISC region (TEB, TLS, scratch): a write hook and `write()` record
+  the dirty pages, which are compared and restored after the run (`take_dirty`), including pages
+  beyond `dyn_next` reached through garbage indices;
+- the stack: refilled before every run; pool objects: unmapped after every run;
+- code, .rdata, import stubs, the sentinel page and the GDT are not writable at all: emulated
+  writes fault, and `write()` (used by import handlers such as memcpy) raises a write-protection
+  fault instead of silently patching code.
 """
 import ctypes, math, struct
 
 from unicorn import (Uc, UcError, UC_ARCH_X86, UC_MODE_32, UC_HOOK_CODE, UC_HOOK_BLOCK,
-                     UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT, UC_HOOK_INSN,
+                     UC_HOOK_MEM_UNMAPPED, UC_HOOK_MEM_PROT, UC_HOOK_INSN, UC_HOOK_MEM_WRITE,
+                     UC_ERR_WRITE_PROT,
                      UC_PROT_READ, UC_PROT_WRITE, UC_PROT_EXEC, UC_PROT_ALL)
 from unicorn import unicorn_const as UCC
 from unicorn.unicorn_py3.arch import intel
@@ -79,6 +89,7 @@ class Machine:
         # protections after the IAT is patched
         uc.mem_protect(base, 0x1000, UC_PROT_READ)
         self.writable = []
+        self.readonly = [(base, base + 0x1000)]     # ranges write() refuses (code, constants, stubs)
         for nm, va, size, ch in image.sections:
             lo, hi = va, va + _page(size)
             prot = UC_PROT_READ
@@ -87,12 +98,18 @@ class Machine:
             if ch & 0x80000000:
                 prot |= UC_PROT_WRITE
                 self.writable.append((nm, lo, hi))
+            else:
+                self.readonly.append((lo, hi))
             uc.mem_protect(lo, hi - lo, prot)
         uc.mem_map(DYN_BASE, DYN_SIZE, UC_PROT_READ | UC_PROT_WRITE)
         uc.mem_map(STACK_TOP - STACK_SIZE, STACK_SIZE + 0x1000, UC_PROT_READ | UC_PROT_WRITE)
-        uc.mem_map(SENTINEL, 0x1000, UC_PROT_ALL)
+        uc.mem_map(SENTINEL, 0x1000, UC_PROT_READ | UC_PROT_EXEC)
         uc.mem_map(MISC_BASE, MISC_SIZE, UC_PROT_ALL)
         self._setup_cpu()
+        uc.mem_protect(STUB_BASE, _page(self.stub_end - STUB_BASE), UC_PROT_READ | UC_PROT_EXEC)
+        uc.mem_protect(GDT_BASE, 0x1000, UC_PROT_READ)
+        self.readonly += [(STUB_BASE, _page(self.stub_end)), (SENTINEL, SENTINEL + 0x1000),
+                          (GDT_BASE, GDT_BASE + 0x1000)]
         # rdtsc is not deterministic under Unicorn: one instruction hook returns a per-run counter
         # instead. (A code hook per 0F 31 byte pair in .text, 674 of them, made every translation
         # scan them all and halved the harness's speed.)
@@ -101,7 +118,12 @@ class Machine:
         # The Python binding only maps in/out/syscall/cpuid; rdtsc hooks share cpuid's C signature.
         uc._Uc__do_hook_add(UC_HOOK_INSN, self._rdtsc_cb, 1, 0, ctypes.c_int(UC_X86_INS_RDTSC))
         self.image_baseline = {nm: bytes(uc.mem_read(lo, hi - lo)) for nm, lo, hi in self.writable}
-        self.misc_baseline = bytes(uc.mem_read(MISC_BASE, 0x80200))
+        self.misc_baseline = bytes(uc.mem_read(MISC_BASE, MISC_SIZE))
+        # Dirty-page tracking for DYN and MISC: emulated writes through a hook, handler writes in
+        # write(). Both sides start from the baseline (zeros / misc_baseline) on every run.
+        self.dirty = set()
+        self._dirty_hooks = [uc.hook_add(UC_HOOK_MEM_WRITE, self._on_tracked_write, begin=lo, end=hi - 1)
+                             for lo, hi in ((DYN_BASE, DYN_BASE + DYN_SIZE), (MISC_BASE, MISC_BASE + MISC_SIZE))]
         self.obj = None
         self.dyn_next = DYN_BASE
         self.dyn_sizes = {}
@@ -115,6 +137,35 @@ class Machine:
         self.pool_slots = []        # slots mapped during this run
         self.pool_entry = set()     # page of the first access to each slot (for mutation)
         uc.hook_add(UC_HOOK_MEM_UNMAPPED | UC_HOOK_MEM_PROT, self._on_bad_mem)
+
+    def _on_tracked_write(self, uc, access, address, size, value, _):
+        self.dirty.add(address & ~0xFFF)
+        if (address + size - 1) & ~0xFFF != address & ~0xFFF:
+            self.dirty.add((address + size - 1) & ~0xFFF)
+
+    @staticmethod
+    def tracked(a):
+        return DYN_BASE <= a < DYN_BASE + DYN_SIZE or MISC_BASE <= a < MISC_BASE + MISC_SIZE
+
+    def take_dirty(self):
+        """-> ({DYN page: bytes}, {MISC page: bytes}) for pages written since the last call that
+        differ from the baseline; restores every dirty page."""
+        dyn, misc = {}, {}
+        zero = b"\0" * 0x1000
+        for p in sorted(self.dirty):
+            cur = bytes(self.uc.mem_read(p, 0x1000))
+            if DYN_BASE <= p < DYN_BASE + DYN_SIZE:
+                base, out = zero, dyn
+            else:
+                base, out = self.misc_base_page(p), misc
+            if cur != base:
+                out[p] = cur
+                self.uc.mem_write(p, base)
+        self.dirty = set()
+        return dyn, misc
+
+    def misc_base_page(self, p):
+        return self.misc_baseline[p - MISC_BASE:p - MISC_BASE + 0x1000]
 
     def _on_rdtsc(self, uc, _key):
         self.tsc += 100000
@@ -193,6 +244,8 @@ class Machine:
         uc = self.uc
         uc.reg_write(UC_X86_REG_ESP, STACK_TOP - 0x100)
         uc.emu_start(INIT_CODE, self.init_end)
+        for k in range(8):          # no stale x87 register contents from the previous run
+            uc.reg_write(UC_X86_REG_FP0 + k, (0, 0))
         for r, v in regs.items():
             uc.reg_write(r, v & 0xFFFFFFFF)
         for k, v in enumerate(xmm):
@@ -268,6 +321,18 @@ class Machine:
         return bytes(self.uc.mem_read(a, n))
 
     def write(self, a, data):
+        """Write on behalf of the emulated program (import handlers, input setup): refuses read-only
+        memory (a write-protection fault, as the CPU would raise) and records dirty pages."""
+        n = len(data)
+        if n:
+            e = a + n
+            for lo, hi in self.readonly:
+                if a < hi and e > lo:
+                    raise UcError(UC_ERR_WRITE_PROT)
+            if self.tracked(a) or self.tracked(e - 1):
+                for p in range(a & ~0xFFF, e, 0x1000):
+                    if self.tracked(p):
+                        self.dirty.add(p)
         self.uc.mem_write(a, bytes(data))
 
     def cstr(self, a, wide=False, limit=1 << 16):
@@ -355,10 +420,13 @@ class Machine:
                     continue
                 struct.pack_into("<I", data, off, v)
             uc.mem_write(addr[i], bytes(data))
+        self.readonly = [r for r in self.readonly if not (OBJ_BASE <= r[0] < POOL_BASE)]
         for g, prot in (("x", UC_PROT_READ | UC_PROT_EXEC), ("r", UC_PROT_READ), ("w", UC_PROT_READ | UC_PROT_WRITE)):
             lo, hi = spans[g]
             if hi > lo:
                 uc.mem_protect(lo, hi - lo, prot)
+                if g != "w":
+                    self.readonly.append((lo, hi))
         if map_hi > spans["w"][1] and spans["w"][1] >= map_lo:
             pass
         self.obj = {

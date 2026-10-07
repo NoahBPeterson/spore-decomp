@@ -34,6 +34,8 @@ from machine import BUILTIN_ADDR  # noqa: E402
 
 EH_PREFIXES = ("??_R", "__ehhandler$", "__unwindfunclet$", "__ehfuncinfo$", "__unwindtable$", "__catchsym$",
                "__tryblocktable$", "__catch$", "__tryend$", "__catchblock", "$unwind", "__ehvec", "__TI", "__CT", "__CTA")
+# a function-local static ('?sMax@?1??Update@C@@QAEXXZ@4MA') or its guard ('?$S1@?1??Update@...')
+LOCAL_STATIC_RE = re.compile(r"@\?[0-9A-P]*\?\?")
 LOCAL_CONST_PREFIXES = ("__real@", "__xmm@", "__mask@", "__int64@", "??_C@", "__fltused")
 HEX_RE = re.compile(r"(?<![0-9A-Fa-f])(?:0x)?([0-9A-Fa-f]{6,8})(?![0-9A-Fa-f])")
 ADDR_IN_COMMENT = re.compile(r"(?:\b0x([0-9A-Fa-f]{6,8})|(?:\b|DAT_|FUN_|PTR_|LAB_|g_|_)([0-9A-Fa-f]{8}))\b")
@@ -136,8 +138,12 @@ class Image:
                 i = text.find(b"\xff\x25", i + 1)
         return self._thunks
 
-    def rdata_find(self, blob):
-        """VA of blob in .rdata at a string start (preceded by a NUL), or None."""
+    def rdata_find(self, blob, wide=False):
+        """VA of the string literal `blob` (with its terminator) in .rdata, or None. Candidates,
+        best first: a string start (preceded by a NUL) at a 4-aligned address; any string start;
+        a 4-aligned address after non-string data (a literal placed right after a float constant).
+        A one-character narrow match that is really a character of a UTF-16 string ('sp:max' as
+        73 00 70 00 3a 00 6d 00) is never taken."""
         r = self.section(".rdata")
         if r is None or not blob:
             return None
@@ -145,12 +151,23 @@ class Image:
         if key not in self._mem:
             self._mem[key] = self.read(r[0], r[1])
         data = self._mem[key]
+        n = len(blob)
+        best = None
         i = data.find(blob)
         while i >= 0:
-            if i == 0 or data[i - 1] == 0:
+            e = i + n
+            # a one-character narrow literal followed by "x\0" is (very likely) a UTF-16 character
+            in_utf16 = not wide and n == 2 and e + 1 < len(data) and data[e] != 0 and data[e + 1] == 0
+            start = i == 0 or data[i - 1] == 0
+            tier = 0 if start and i % 4 == 0 else 1 if start else 2 if (i % 4 == 0 and n >= 4) else None
+            if tier is not None and in_utf16:
+                tier = None
+            if tier == 0:
                 return r[0] + i
+            if tier is not None and (best is None or tier < best[0]):
+                best = (tier, i)
             i = data.find(blob, i + 1)
-        return None
+        return r[0] + best[1] if best else None
 
 
 # ------------------------------------------------------------------ symbol databases
@@ -695,6 +712,7 @@ class Resolver:
         required_secs, eh_secs = set(), set()
         pending = {}   # symbol index -> note
         vtables = {}   # defined vtable symbol index -> (section, eh): resolved by alignment or loaded
+        statics = {}   # function-local static / its init guard -> section: by alignment, else loaded
         work = [(func_sec, False)]
 
         def close(work):
@@ -725,13 +743,15 @@ class Resolver:
                     if va is None and s.name.startswith("??_C@"):
                         tsec_o = coff.sections[tsec]
                         blob = tsec_o.data[s.value:]
-                        va = self.img.rdata_find(blob)
+                        va = self.img.rdata_find(blob, wide=s.name.startswith("??_C@_1"))
                         how = "rdata-literal" if va else None
                     if va is not None:
                         r.addr[si] = va
                         r.method[s.name] = how
                     elif s.name.startswith("??_7") and si_sec == func_sec and si not in vtables:
                         vtables[si] = (tsec, sub_eh)        # decide after alignment
+                    elif LOCAL_STATIC_RE.search(s.name) and si_sec == func_sec and not sub_eh:
+                        statics[si] = tsec                  # decide after alignment
                     elif si not in vtables:
                         work.append((tsec, sub_eh))
                     continue
@@ -750,7 +770,7 @@ class Resolver:
         r.local_sections = required_secs | eh_secs
 
         # alignment fallback for required unresolved symbols
-        req = {si for si, (k, _n) in pending.items() if k == "req"} | set(vtables)
+        req = {si for si, (k, _n) in pending.items() if k == "req"} | set(vtables) | set(statics)
         got, check = self.align(coff, func_sym, orig_va, r, req)
         for si, va in got.items():
             r.addr[si] = va
@@ -763,6 +783,7 @@ class Resolver:
                 r.addr[si] = va
                 r.method[syms[si].name] = "vtable-content"
         rest = [(tsec, True) for si, (tsec, _eh) in vtables.items() if si not in r.addr]
+        rest += [(tsec, False) for si, tsec in statics.items() if si not in r.addr]
         if rest:   # vtables we could not map: load ours; their slots and RTTI are trapped, not required
             close(rest)
             r.local_sections = required_secs | eh_secs

@@ -121,9 +121,35 @@ def prepare(sid, va, flags_override=None, log=print, src=None):
     except SIG.SigError as e:
         t.sig = None
         t.sig_error = str(e)
+    if not sym.startswith("?"):
+        # extern "C": the symbol carries no types; read the C declaration from our source
+        cname = sym[1:] if sym[:1] in "_@" else sym
+        cname = cname.split("@")[0]
+        hdrs = [src] + glob.glob(os.path.join(os.path.dirname(src), "*.h"))
+        try:
+            cs = SIG.parse_c_decl(cname, [open(h, encoding="utf-8", errors="replace").read() for h in hdrs],
+                                  [open(h, encoding="utf-8", errors="replace").read() for h in include_headers()])
+            pops = sum(n for _k, n in cs.params if n) if cs.params else 0
+            stdn = int(sym.rsplit("@", 1)[1]) // 4 if "@" in sym[1:] and sym.rsplit("@", 1)[1].isdigit() else None
+            if stdn is None or (stdn == pops and not any(k == "struct" for k, _n in cs.params)):
+                t.sig, t.sig_how = cs, "C declaration"
+        except (SIG.SigError, OSError) as e:
+            t.sig_error = getattr(t, "sig_error", "") + "; C declaration: %s" % e
     analyse_original(t)
     build_layout(t)
     return t
+
+
+_include_headers = []
+
+
+def include_headers():
+    """Headers under match/include (typedefs for C declarations), listed once per process."""
+    if not _include_headers:
+        for d, _sub, files in os.walk(os.path.join(S.ROOT, "match", "include")):
+            _include_headers.extend(os.path.join(d, f) for f in files if f.endswith((".h", ".hpp")))
+        _include_headers.append(os.devnull)
+    return [h for h in _include_headers if h != os.devnull]
 
 
 def best_by_size(coff, names, n0):
@@ -185,9 +211,14 @@ def entry_reads(insns, entry):
             r, w = ins.regs_access()
         except capstone.CsError:
             break
-        if ins.id == CX.X86_INS_XOR and len(ins.operands) == 2 and ins.operands[0].type == CX.X86_OP_REG \
-                and ins.operands[1].type == CX.X86_OP_REG and ins.operands[0].reg == ins.operands[1].reg:
-            r = []
+        ops = ins.operands
+        if ins.id in (CX.X86_INS_XOR, CX.X86_INS_SUB, CX.X86_INS_SBB) and len(ops) == 2 \
+                and ops[0].type == CX.X86_OP_REG and ops[1].type == CX.X86_OP_REG and ops[0].reg == ops[1].reg:
+            r = []          # zeroing (or carry-mask) idiom: the old value is not used
+        if len(ops) == 2 and ops[0].type == CX.X86_OP_REG and ops[1].type == CX.X86_OP_IMM and \
+                ((ins.id == CX.X86_INS_OR and ops[1].imm & 0xFFFFFFFF == 0xFFFFFFFF) or
+                 (ins.id == CX.X86_INS_AND and ops[1].imm == 0)):
+            r = []          # 'or eax,-1' / 'and eax,0': constant result
         if ins.id == CX.X86_INS_PUSH:
             r = []          # 'push ecx' is MSVC's 4-byte stack allocation / a save, not a use
         for x in r:
@@ -309,10 +340,15 @@ HOT_SLOTS = 8          # slots 0..7 hold the argument / `this` objects
 class InputGen:
     """Random inputs ('pointer soup' objects + typed arguments) and their mutations."""
 
-    def __init__(self, t, alias=0.0, nan=False):
+    def __init__(self, t, alias=0.0, nan=False, code=()):
         self.t = t
         self.alias = alias
         self.nan = nan
+        # Generated values never point into real code (image .text, our object's code): a soup
+        # "method pointer" taken from the original's immediates (a jump target inside the function
+        # itself) would otherwise run part of the original on the wrong frame. Such values are
+        # moved to the unmapped upper half (bit 31 flipped), where a call becomes a fake method.
+        self.code = list(code)
         self.dic = [self.fin(v) for v in (t.dict or [0])]
         self.specials = SPECIAL_F if nan else SPECIAL_F[:8]
         self.slot_cache = {}
@@ -321,7 +357,10 @@ class InputGen:
         """Unless --nan: never produce a dword whose float32 reading is NaN/Inf (clears the top
         exponent bit), since NaN comparisons are not preserved across equivalent spellings."""
         if not self.nan and (v >> 23) & 0xFF == 0xFF:
-            return v & 0xFF7FFFFF
+            v &= 0xFF7FFFFF
+        for lo, hi in self.code:
+            if lo <= v < hi:
+                return v ^ 0x80000000
         return v
 
     def slot_ptr(self, rng):
@@ -390,6 +429,8 @@ class InputGen:
         w = w.astype(np.uint32)
         if not self.nan:
             w[((w >> 23) & 0xFF) == 0xFF] &= np.uint32(0xFF7FFFFF)
+        for lo, hi in self.code:
+            w[(w >= lo) & (w < hi)] ^= np.uint32(0x80000000)
         return w.astype("<u4").tobytes()
 
     def _soup_n(self, rng, kind, n):
@@ -550,6 +591,7 @@ REGS = {"eax": UC_X86_REG_EAX, "ecx": UC_X86_REG_ECX, "edx": UC_X86_REG_EDX}
 CALLEE_SENTINEL = {UC_X86_REG_EBX: 0x0BB0BB00, UC_X86_REG_ESI: 0x05150515, UC_X86_REG_EDI: 0x0D1D0D1D,
                    UC_X86_REG_EBP: 0x0E0B0E0B}
 STACK_FILL = b"\xcc"
+STACK_END = M.STACK_TOP + 0x1000           # end of the stack mapping (one guard-free page above the top)
 
 
 class Side:
@@ -607,7 +649,8 @@ class Runner:
         self.blocks = set()
         self.run_blocks = set()
         self.page_cache = {}
-        self.gen = InputGen(t, opts.alias, opts.nan)
+        code = [(a, a + n) for nm, a, n, ch in self.img.sections if ch & 0x20000000]
+        self.gen = InputGen(t, opts.alias, opts.nan, code + list(obj["code"]))
         self.cov_on = False
         self.reads = None
         self.hooks.append(m.uc.hook_add(UC_HOOK_BLOCK, self._on_block, begin=t.orig_lo, end=t.orig_hi - 1))
@@ -617,6 +660,14 @@ class Runner:
         self.esp_entry &= ~0xF
         self.esp_entry -= 4         # as after a call from 16-aligned code
         self.args_hi = self.esp_entry + 4 * (1 + nst)
+        # The function owns its incoming argument slots (callers never read them back, compilers
+        # reuse them as scratch), so pointers into them count as stack pointers ("STK") like
+        # pointers into the frame. The 4 padding dwords above them belong to the caller.
+        self.stk_hi = self.esp_entry + 4 + 4 * len(t.stack_kinds)
+        # read-only constants (image .rdata, our object's code/constants): pointers to byte-identical
+        # contents compare equal (the same literal pooled at two addresses)
+        self.ro = [(a, a + n) for nm, a, n, ch in self.img.sections if nm == ".rdata"]
+        self.ro += [(lo, hi) for lo, hi in m.readonly if obj["map_lo"] <= lo < obj["map_hi"]]
 
     def close(self):
         for h in self.hooks:
@@ -773,6 +824,23 @@ class Runner:
             return False
         return o["esp"] == 4 + self.t.callee_pop
 
+    def in_ro(self, v):
+        return any(lo <= v < hi for lo, hi in self.ro)
+
+    def norm_key(self, v):
+        """Run-independent identity of a value for hashing: stack pointers -> 'STK', pointers to
+        read-only constants -> their contents (C string, else 64 bytes)."""
+        if in_stack_frame(v, self.stk_hi):
+            return "STK"
+        if self.in_ro(v):
+            try:
+                b = self.m.read(v, 64)
+            except Exception:
+                return v
+            z = b.find(b"\0")
+            return ("RO", b[:z] if z > 0 else b)
+        return v
+
     # --- calls through generated function pointers ("fake methods")
     def _insns_around(self, site):
         """(sorted addresses, insns) of the code containing site."""
@@ -868,10 +936,8 @@ class Runner:
         n, pops = ar
         args = []
         for k in range(n):
-            v = m.u32(esp + 4 + 4 * k)
-            args.append("STK" if in_stack_frame(v, self.esp_entry) else v)
-        ecx = uc.reg_read(UC_X86_REG_ECX)
-        ecx = "STK" if in_stack_frame(ecx, self.esp_entry) else ecx
+            args.append(self.norm_key(m.u32(esp + 4 + 4 * k)))
+        ecx = self.norm_key(uc.reg_read(UC_X86_REG_ECX))
         h = zlib.crc32(repr((target, ecx, args)).encode())
         k = h % 4
         eax = (0, 1, h % 9, M.POOL_BASE + M.SLOT * (HOT_SLOTS + (h >> 8) % (NSLOTS - HOT_SLOTS)))[k]
@@ -1017,6 +1083,7 @@ class Runner:
                 cache.update(self.gen.slot_pages(inp, page & ~(M.SLOT - 1)))
                 d = cache[page]
             return d
+        m.take_dirty()              # DYN/MISC back to baseline (normally already clean)
         m.lazy = lazy
         m.pool_pages = {}
         m.pool_slots = []
@@ -1027,8 +1094,7 @@ class Runner:
         m.dyn_sizes = {}
         m.rand_state = 1
         stk_lo = M.STACK_TOP - M.STACK_SIZE
-        m.write(stk_lo, STACK_FILL * (M.STACK_TOP - stk_lo))
-        m.write(M.MISC_BASE, m.misc_baseline)
+        m.write(stk_lo, STACK_FILL * (STACK_END - stk_lo))
         frame = struct.pack("<I", M.SENTINEL) + struct.pack("<%dI" % (len(inp.args) + 4), *(inp.args + inp.pad))
         m.write(self.esp_entry, frame)
         regs = dict(CALLEE_SENTINEL)
@@ -1080,13 +1146,16 @@ class Runner:
             # pages to mutate: where each object was first accessed, plus every page written
             inp.touched = sorted(entry | {p for p, d in mem["pool"].items() if d != init[p]})
         o["dyn_hi"] = m.dyn_next
-        mem["heap"] = m.read(M.DYN_BASE, m.dyn_next - M.DYN_BASE) if m.dyn_next > M.DYN_BASE else b""
-        if m.dyn_next > M.DYN_BASE:
-            m.write(M.DYN_BASE, b"\0" * (m.dyn_next - M.DYN_BASE))
-        mem["stack"] = m.read(self.args_hi, M.STACK_TOP - self.args_hi)
-        misc = bytearray(m.read(M.MISC_BASE, len(m.misc_baseline)))
-        misc[M.SCRATCH - M.MISC_BASE:M.SCRATCH - M.MISC_BASE + 16] = b"\0" * 16   # harness scratch
-        mem["misc"] = bytes(misc)
+        # every dirty DYN page (also beyond dyn_next, reached through garbage indices) and every
+        # dirty MISC page (TEB, TLS, scratch), restored to the baseline for the next run
+        mem["heap"], misc = m.take_dirty()
+        sp = M.SCRATCH & ~0xFFF
+        if sp in misc:                                  # harness scratch (float results) is not compared
+            pg = bytearray(misc[sp])
+            pg[M.SCRATCH - sp:M.SCRATCH - sp + 16] = m.misc_base_page(sp)[M.SCRATCH - sp:M.SCRATCH - sp + 16]
+            misc[sp] = bytes(pg)
+        mem["misc"] = misc
+        mem["stack"] = m.read(self.args_hi, STACK_END - self.args_hi)
         for (lo, hi), base in zip(self.obj["data_rw"], self.obj["rw_baseline"]):
             cur = m.read(lo, hi - lo)
             mem["ours_data"] = cur
@@ -1101,12 +1170,14 @@ class Runner:
 
 # ====================================================================== comparison
 
-def in_stack_frame(v, esp_entry):
-    return M.STACK_TOP - M.STACK_SIZE <= v < esp_entry
+def in_stack_frame(v, hi):
+    """v points into the function's own stack: its frame (below esp at entry), the return address
+    slot or its incoming argument slots (hi = Runner.stk_hi)."""
+    return M.STACK_TOP - M.STACK_SIZE <= v < hi
 
 
-def norm_val(v, esp_entry):
-    return "STK" if in_stack_frame(v, esp_entry) else v
+def norm_val(v, hi):
+    return "STK" if isinstance(v, int) and in_stack_frame(v, hi) else v
 
 
 def ulp_close(a, b, ulp, bits=32):
@@ -1128,11 +1199,8 @@ class Comparer:
     def __init__(self, runner, opts):
         self.r, self.opts = runner, opts
         self.tolerated = {"stack-pointer": 0, "inline-calls": 0, "ulp": 0, "const-pointer": 0}
-        img = context()["img"]
-        self.ro = [(a, a + n) for nm, a, n, ch in img.sections if nm == ".rdata"]
-        obj = runner.obj
-        if obj["map_hi"] > obj["map_lo"]:
-            self.ro.append((obj["map_lo"], obj["map_hi"]))
+        self.ro = runner.ro
+        self.last_kind = None
 
     def same_constant(self, x, y):
         """Two different pointers into read-only data whose 64 bytes (or C strings) are identical:
@@ -1164,7 +1232,8 @@ class Comparer:
             if rk == "small":
                 mask = 0xFFFF
             ea, eb = a["eax"] & mask, b["eax"] & mask
-            if ea != eb and not (in_stack_frame(ea, self.r.esp_entry) and in_stack_frame(eb, self.r.esp_entry)):
+            if ea != eb and not (in_stack_frame(ea, self.r.stk_hi) and in_stack_frame(eb, self.r.stk_hi)) \
+                    and not (mask == 0xFFFFFFFF and self.same_constant(ea, eb)):
                 return ("eax" if mask == 0xFFFFFFFF else "eax&%#x" % mask, "%08x" % ea, "%08x" % eb, "return value")
             if rk == "i64" and a["edx"] != b["edx"]:
                 return ("edx", "%08x" % a["edx"], "%08x" % b["edx"], "64-bit return high half")
@@ -1202,7 +1271,7 @@ class Comparer:
 
     def compare_mem(self, a, b):
         ma, mb = a["mem"], b["mem"]
-        esp = self.r.esp_entry
+        esp = self.r.stk_hi
         for region in sorted(set(ma) | set(mb)):
             if region == "ours_data":
                 continue
@@ -1215,26 +1284,32 @@ class Comparer:
                     if d:
                         return d
                 continue
+            if region == "heap" and a["dyn_hi"] != b["dyn_hi"]:
+                return ("heap size", "%#x" % (a["dyn_hi"] - M.DYN_BASE), "%#x" % (b["dyn_hi"] - M.DYN_BASE),
+                        "bytes allocated through malloc-like imports")
             if isinstance(xa, dict) or isinstance(xb, dict):
                 xa, xb = xa or {}, xb or {}
-                base = self.r.m.image_baseline
-                lo = dict((nm, l) for nm, l, h in self.r.m.writable)[region]
+                m = self.r.m
+                if region == "heap":
+                    def basepg(page):
+                        return b"\0" * 0x1000
+                elif region == "misc":
+                    basepg = m.misc_base_page
+                else:
+                    lo = dict((nm, l) for nm, l, h in m.writable)[region]
+
+                    def basepg(page, lo=lo, base=m.image_baseline[region]):
+                        return base[page - lo:page - lo + 0x1000]
                 for page in sorted(set(xa) | set(xb)):
-                    pa = xa.get(page) or base[region][page - lo:page - lo + 0x1000]
-                    pb = xb.get(page) or base[region][page - lo:page - lo + 0x1000]
+                    pa = xa.get(page) or basepg(page)
+                    pb = xb.get(page) or basepg(page)
                     d = self.diff_bytes(pa, pb, page, region, esp)
                     if d:
                         return d
                 continue
             if xa == xb:
                 continue
-            if region == "heap":
-                n = max(len(xa), len(xb))
-                xa, xb = xa.ljust(n, b"\0"), xb.ljust(n, b"\0")
-                if a["dyn_hi"] != b["dyn_hi"]:
-                    return ("heap size", "%#x" % (a["dyn_hi"] - M.DYN_BASE), "%#x" % (b["dyn_hi"] - M.DYN_BASE),
-                            "bytes allocated through malloc-like imports")
-            base_addr = {"heap": M.DYN_BASE, "stack": self.r.args_hi, "misc": M.MISC_BASE}[region]
+            base_addr = {"stack": self.r.args_hi}[region]
             d = self.diff_bytes(xa, xb, base_addr, region, esp)
             if d:
                 return d
@@ -1312,8 +1387,20 @@ class Comparer:
             return ("memory %s" % region, "len %d" % len(xa), "len %d" % len(xb), "")
         return None
 
+    def veq(self, x, y):
+        """Normalised values equal, or two pointers to the same read-only constant."""
+        if x == y:
+            return True
+        if isinstance(x, int) and isinstance(y, int) and self.same_constant(x, y):
+            self.tolerated["const-pointer"] += 1
+            return True
+        return False
+
+    def seq_eq(self, xs, ys):
+        return len(xs) == len(ys) and all(self.veq(x, y) for x, y in zip(xs, ys))
+
     def compare_imports(self, ia, ib):
-        esp = self.r.esp_entry
+        esp = self.r.stk_hi
         na = [(n, tuple(norm_val(v, esp) for v in args)) for n, args in ia]
         nb = [(n, tuple(norm_val(v, esp) for v in args)) for n, args in ib]
         if na == nb:
@@ -1321,13 +1408,13 @@ class Comparer:
         for k in range(max(len(na), len(nb))):
             x = na[k] if k < len(na) else None
             y = nb[k] if k < len(nb) else None
-            if x != y:
+            if x is None or y is None or x[0] != y[0] or not self.seq_eq(x[1], y[1]):
                 return ("import call #%d" % k, fmt_call(x), fmt_call(y), "imports called (any depth), args normalised")
         return None
 
     def norm_calls(self, calls):
         out = []
-        esp = self.r.esp_entry
+        esp = self.r.stk_hi
         for tgt, ecx, edx, words, add_esp, is_jmp in calls:
             n = self.r.callee_arity(tgt)
             if n is None:
@@ -1345,10 +1432,10 @@ class Comparer:
         A, B = self.norm_calls(ca), self.norm_calls(cb)
 
         def same(x, y):
-            if x[0] != y[0]:
+            if x[0][0] != y[0][0] or not self.seq_eq(x[0][1:], y[0][1:]):
                 return False
             n = min(len(x[1]), len(y[1]))
-            return x[1][:n] == y[1][:n]
+            return self.seq_eq(x[1][:n], y[1][:n])
 
         def first_diff(A, B):
             for k in range(max(len(A), len(B))):
@@ -1559,6 +1646,7 @@ def _test_function(sid, va, opts, log=print):
             if run_blocks - runner.blocks:
                 runner.blocks |= run_blocks
                 corpus.append(inp)
+            cmp_.last_kind = None
             if sb[0] != "ok":
                 d = ("execution", "returned normally", "%s: %s" % sb, "ours failed where the original succeeded")
             else:
@@ -1641,7 +1729,7 @@ def replay(sid, va, path, opts):
         for ent in cmp_.norm_calls(o["calls"])[:60]:
             print("    call", fmt_tcall(ent))
         for ent in o["imports"][:40]:
-            print("    import", fmt_call((ent[0], tuple(norm_val(v, runner.esp_entry) for v in ent[1]))))
+            print("    import", fmt_call((ent[0], tuple(norm_val(v, runner.stk_hi) for v in ent[1]))))
     print("first difference:", cmp_.compare(a, b, t) if a["status"][0] == b["status"][0] == "ok" else "status differs")
     runner.close()
     return 0

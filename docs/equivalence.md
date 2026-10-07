@@ -38,36 +38,61 @@ Neither tool writes anything under `match/`; objects go to `work/difftest/obj/`,
 | `--replay file.pkl` | | re-run one saved failing input and print both sides' registers, calls and imports |
 | `--json out.json` | | write the per-function results |
 
-Flags come from, in order: `--flags`; a `flags /O2 ...` note in the nonmatching reason; a
-`// Flags: ...` comment near the top of the source; the reason's loose flag tokens; the slice
-manifest; `/O2 /MD /Gy /EHsc /TP`. Only `/O2`-vs-`/Od` and `/fp:` change behavior in practice.
+Flags come from, first match wins (`flags_from` in the JSON names the source):
+
+1. `--flags` (`override`);
+2. an explicit note in this VA's nonmatching reason: the word `flags` immediately followed by the
+   flag list, e.g. `flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast` (`reason`); a list without an
+   `/O` flag is merged onto the defaults;
+3. the flags column of the slice's `manifest.txt`: this VA's row (`manifest(va)`), else the rows'
+   flags when they all agree (`manifest(slice)`); a slice without flagged rows may give them in a
+   `# ... flags: /Od ...` manifest comment (`manifest(note)`);
+4. a `// Flags: ...` or `// compile with ...` comment near the top of the source (`source comment`);
+5. the most common flags when the manifest rows disagree (`manifest(majority)`);
+6. a complete flag list (one with `/O1`, `/O2`, `/Od` or `/Ox`) anywhere in the reason, such as
+   `Update (/Od /Ob1 /MD /Gy /TP): ...` (`reason(loose)`);
+7. `/O2 /MD /Gy /EHsc /TP` (`default`).
+
+Lone loose tokens in a reason (`needs /fp:fast`, `the checker compiled ours at /O2`) are never
+used: they were often stale or described an experiment, and merging them onto the defaults compiled
+about 25 functions with the wrong `/fp` mode. Manifest flags beat source comments for the same
+reason (comments go stale; manifest rows are what the byte-exact functions were verified with).
+Only `/O2`-vs-`/Od` and `/fp:` change behavior in practice.
 
 ## What happens
 
 1. **Our function**: compile, then find our symbol for the VA: the manifest row, else the name in
    `symbols/slices/<id>.txt` or after the `// @ 0x<va>` marker, matched against the object's
-   symbols (an implausible size, more than 5x off, is rejected).
+   symbols (an implausible size, more than 5x off, is rejected). A file-local `static inline`
+   helper defined between the marker and the free function it labels is skipped.
 2. **Relocations** (`tools/difftest/resolve.py`): every symbol our function, its local helpers and
    its data reference is mapped to the ORIGINAL address, so both sides call the same real callees
    and touch the same real globals. Methods, in order: `__imp_` imports and import thunks; CRT
    helpers from `symbols/lib_names.txt`; exact mangled or unique qualified names in `symbols/`;
    an address in the name (`FUN_00abcdef`, `Fn9467b0`, `g_01582df8`); a `// 0x...` (or
    `// DAT_...`, `// 0169cc88`) comment on the declaration, matched by identifier, enclosing class
-   and, for overloads, parameter types; string literals found in `.rdata`; and finally
+   and, for overloads, parameter types; string literals found in `.rdata` (best candidate first: a
+   4-aligned string start after a NUL, any string start, a 4-aligned address after non-string
+   data such as a float constant; never a one-character match inside a UTF-16 string); and finally
    **alignment**: our N-th call/global reference against the original's, accepted only for a
    single unresolved reference between two agreeing anchors (on op1, held-out resolved symbols
    pair correctly 99% of the time that way, 89% for two-reference gaps, worse beyond, so longer gaps
    may only veto; it iterates, newly resolved symbols becoming anchors). A vtable our code
    constructs is mapped to the original's when all its slots resolve and that slot sequence
-   occurs once in `.rdata`. Anything still unresolved makes the function **UNSUPPORTED** and is listed.
+   occurs once in `.rdata`. Function-local statics and their init guards (`?x@?1??f@@...`,
+   `?$S1@...`) are mapped by alignment too, else loaded from our object. Anything still unresolved makes the function **UNSUPPORTED** and is listed.
    Symbols reachable only from EH tables, RTTI or a vtable we could not map are not required:
    they point at trap addresses, and an input that reaches one is discarded (`ours-trap`).
    Disagreements between alignment and the other methods are reported as `resolution_conflicts`.
 3. **Inputs**: arguments follow the decorated name's signature (pointer, int, float, double, bool;
-   `this` in ecx). Pointers lead to lazily materialised 64 KB objects whose 4 KB pages are filled,
+   `this` in ecx). An `extern "C"` function has no decorated signature: its C declaration is
+   parsed from our source (return type, parameters, `__stdcall`/`__fastcall`; typedefs and
+   struct names from the source, its headers and `match/include`). Pointers lead to lazily materialised 64 KB objects whose 4 KB pages are filled,
    on first touch, with "pointer soup": a deterministic mix of pointers to further objects,
    zeros, small ints, floats and constants harvested from the original's immediates. Both runs
-   see identical bytes. Then:
+   see identical bytes. No generated value points into real code (image `.text`, our object's
+   code): such values (often jump targets among the immediates) get bit 31 flipped, so a call
+   through them is a fake method rather than a jump into the middle of the original. Then:
    - **fault repair**: when the original faults on a bad pointer, the dword it was loaded from
      (found by tracing reads; the faulting instruction's base register gives the exact value) is
      replaced by a pointer to a fresh object and the input is retried;
@@ -80,17 +105,32 @@ manifest; `/O2 /MD /Gy /EHsc /TP`. Only `/O2`-vs-`/Od` and `/fp:` change behavio
    hits an unhandled import, exceeds the budget, or returns with clobbered callee-saved
    registers / wrong esp (garbage input). Otherwise ours runs on a restored snapshot; if ours
    faults, times out or breaks the ABI where the original did not, that is a mismatch.
+   **Every byte a run can write is reset before the next run** (either side, any input), so one
+   side never sees the other's leftovers: image `.data`/`.bss`/`.tls` and our own data are diffed
+   against a baseline and restored; the malloc heap (DYN, including pages beyond the allocation
+   pointer reached through garbage or wrapped indices) and the MISC region (TEB, TLS, scratch) are
+   tracked page by page with a write hook and restored; the stack (2 MB, also the page above its
+   top) is refilled with `0xCC`; input objects are unmapped; the x87 registers are cleared.
+   Code, `.rdata`, import stubs, the return sentinel and the GDT are not writable: an emulated
+   store faults, and an import handler (memcpy, memset, ...) writing there raises a
+   write-protection fault instead of patching code.
 5. **Observables compared**: return value per the declared type (al for bool, ax for short,
    eax, edx:eax for 64-bit; never for void), ebx/esi/edi/ebp, esp after return, x87 stack depth,
    st0 (80-bit, bit-exact), x87 control word, MXCSR control bits, every byte of image
-   `.data`/`.bss`/`.tls`, every touched input page, the malloc heap, the caller's stack above the
-   arguments, TEB/TLS, and any write by ours to its own static data. Plus the ordered **import
+   `.data`/`.bss`/`.tls`, every touched input page, every written heap page, the caller's stack
+   above the arguments, every written MISC page (TEB/TLS), and any write by ours to its own static
+   data. Plus the ordered **import
    trace** at any depth (name + arguments) and the **depth-1 call trace** of the function itself
    (callee, `this`/edx when the callee uses them, stack arguments up to the callee's `ret N`, or
    our declaration's arity for cdecl callees; by-value struct arguments are not compared).
-   Pointers into either side's own stack frame compare equal to each other ("STK"), since frame
-   layouts legitimately differ; so do two pointers to byte-identical read-only constants (the same
-   string pooled at two addresses). Call-trace differences consisting only of callees that one side
+   Pointers into either side's own stack compare equal to each other ("STK"), since frame
+   layouts legitimately differ: the frame below esp at entry, the return address slot and the
+   function's own incoming argument slots (a function owns them; compilers reuse them as scratch,
+   e.g. for an out-iterator). The caller's stack above the arguments is not normalised. Two
+   pointers to byte-identical read-only constants (the same string pooled at two addresses, or
+   our own copy of a literal) also compare equal, in memory, return values, import arguments and
+   call arguments (e.g. the name passed to operator new); fake-method return values are derived
+   from the same normalised arguments. Call-trace differences consisting only of callees that one side
    never calls on that input are tolerated as inlining differences (counted in `tolerated`).
 6. **Coverage**: distinct instructions of the original (recursive-descent disassembly, jump
    tables followed) executed by valid inputs.
@@ -140,6 +180,13 @@ least 60% of the original's instructions. It is evidence, not proof. In particul
 - Resolution relies on the source's annotations being right. A wrong `// 0x...` comment makes
   ours call the wrong function and produces a FAIL that is the annotation's fault (often visible
   in `resolution_conflicts`).
+- Image globals are never varied: every input starts from the image's `.data`. A difference
+  that only shows for other global state (e.g. a timer that is zero in the image) is not seen.
+- Reads of uninitialised stack memory: both stacks start as `0xCC`, but a slot the original's own
+  earlier code (or a callee) left a value in differs from ours. When a fake method or a callee
+  never writes an output local, such a read shows up as a FAIL (seen in `s005ce9b0`, `s00a9ddd0`).
+- A register is an "argument read at entry" only if its old value is used: `xor/sub/sbb r,r`,
+  `or r,-1` and `and r,0` do not count.
 - A register-argument ABI (LTCG) in the original that our declaration does not reproduce is
   reported UNSUPPORTED rather than tested.
 - Only CRT/Win32 imports with a handler in `tools/difftest/machine.py` run; any other import in
