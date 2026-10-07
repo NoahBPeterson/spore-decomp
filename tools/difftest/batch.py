@@ -18,12 +18,14 @@ def targets(spec):
     out = []
     for s in spec:
         if s.endswith(".json"):
-            ids = [x["id"] for x in json.load(open(s))]
+            # an entry's optional "test_vas" restricts it to those VAs (e.g. to finish an interrupted run)
+            ids = [(x["id"], x.get("test_vas")) for x in json.load(open(s))]
         else:
-            ids = [s]
-        for sid in ids:
+            ids = [(s, None)]
+        for sid, only in ids:
             for va, _d, _r in S.read_rows(os.path.join(S.slice_dir(sid), "nonmatching.txt")):
-                out.append((sid, va))
+                if only is None or "%08x" % va in only:
+                    out.append((sid, va))
     return out
 
 

@@ -19,6 +19,10 @@ import argparse, glob, json, math, os, random, struct, sys, time, zlib
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import capstone                                    # noqa: E402
+try:
+    os.nice(10)                                    # yield the CPU to interactive work
+except OSError:
+    pass
 import numpy as np                                 # noqa: E402
 from capstone import x86_const as CX               # noqa: E402
 from unicorn import UC_HOOK_CODE, UC_HOOK_BLOCK, UC_HOOK_MEM_READ    # noqa: E402
@@ -1425,7 +1429,35 @@ def fmt_tcall(x):
 
 # ====================================================================== driver
 
+MAX_PROCS = int(os.environ.get("DIFFTEST_MAX_PROCS", max(1, (os.cpu_count() or 2) // 2)))
+
+
+def cpu_slot():
+    """Hold one of MAX_PROCS machine-wide slots (flock'd files) while emulating, so concurrent
+    checkers (batch shards, agents) use at most half the cores. Blocks until a slot is free."""
+    import fcntl
+    d = os.path.join("/tmp", "difftest-slots-%d" % os.getuid())
+    os.makedirs(d, exist_ok=True)
+    while True:
+        for i in range(MAX_PROCS):
+            fd = os.open(os.path.join(d, "slot%d" % i), os.O_CREAT | os.O_RDWR)
+            try:
+                fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                return fd
+            except OSError:
+                os.close(fd)
+        time.sleep(0.5)
+
+
 def test_function(sid, va, opts, log=print):
+    fd = cpu_slot()
+    try:
+        return _test_function(sid, va, opts, log)
+    finally:
+        os.close(fd)          # releases the flock
+
+
+def _test_function(sid, va, opts, log=print):
     t0 = time.time()
     t = prepare(sid, va, opts.flags, log, getattr(opts, "src", None))
     out = {"slice": sid, "va": "%08x" % va, "flags": " ".join(t.flags), "flags_from": t.flags_how,
