@@ -67,9 +67,13 @@ struct JobDeque {
 };
 
 // ---------------------------------------------------------------- 00997140
+struct FrameSetJobs {                   // cXHTMLFrameSet viewed from its job-cleanup method
+    bool ClearJobs();
+};
 // @ 0x00997140
-void FUN_00997140(char* self)
+bool FrameSetJobs::ClearJobs()
 {
+    char* self = (char*)this;
     char* piVar4 = (char*)FUN_008fe480();
     if (piVar4 != 0) {
         char* puVar1 = *(char**)(self + 0x3c);
@@ -86,15 +90,17 @@ void FUN_00997140(char* self)
             }
         }
     }
-    FUN_00996460(self + 0x24);
+    ((void(__thiscall*)(char*))FUN_00996460)(self + 0x24);
     char* iVar3 = *(char**)(self + 0x10);
     for (char* iVar5 = *(char**)(self + 0xc); iVar5 != iVar3; iVar5 += 8) {
-        FUN_00993390(*(void**)(iVar5 + 4));
+        ((void(__thiscall*)(void*))FUN_00993390)(*(void**)(iVar5 + 4));
         (*(void(__thiscall**)(char*, char*))
             ((char*)*(void**)(*(int*)(iVar5 + 4) + 4) + 0x108))((char*)(*(int*)(iVar5 + 4) + 4), self);
     }
-    int n = (int)((iVar3 - *(char**)(self + 0xc)) >> 3);
-    *(int*)(self + 0x10) = (int)iVar3 + n * -8;
+    char* end = *(char**)(self + 0x10);
+    int n = (int)((end - *(char**)(self + 0xc)) >> 3);
+    *(char**)(self + 0x10) = end + n * -8;
+    return true;
 }
 
 // ---------------------------------------------------------------- 00997210 GetJobInfo
@@ -250,16 +256,24 @@ void cXHTMLFrameSet::LoadRequestCallback(int* p)
 }
 
 // ---------------------------------------------------------------- 00997350 vector_map::insert
+struct FrameMapPair { unsigned hash; void* win; };
+struct FrameMapVM {                      // vector_map<hash, WinXHTML*> part of cXHTMLFrameSet
+    bool insert(void* win, const wchar_t* name);
+};
 // @ 0x00997350
-bool FUN_00997350(char* self, int key, const wchar_t* name)
+bool FrameMapVM::insert(void* win, const wchar_t* name)
 {
-    unsigned hash = (unsigned)FUN_00932f30(name, 0x811c9dc5, 0);
+    char* self = (char*)this;
+    FrameMapPair v;
+    v.hash = (unsigned)FUN_00932f30(name, 0x811c9dc5, 0);
+    v.win = win;
     char* end = *(char**)(self + 0x10);
-    char* low = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &hash, (void*)(unsigned)*(unsigned char*)(self + 0x20));
-    if (low != end && *(unsigned*)low <= hash)
+    char* low = (char*)FUN_00d01260(*(void**)(self + 0xc), end, &v.hash, (void*)(unsigned)*(unsigned char*)(self + 0x20));
+    if (low != end && *(unsigned*)low <= v.hash)
         return false;
-    FUN_009970e0(low, &key, &hash);
-    (*(void(__thiscall**)(int, char*))((char*)*(void**)(key + 4) + 0x104))(key, self);
+    ((void(__thiscall*)(char*, void*, void*))FUN_009970e0)(self + 0xc, low, &v);
+    char* iface = (char*)win + 4;
+    (*(void(__thiscall**)(char*, char*))((char*)*(void**)iface + 0x104))(iface, self);
     return true;
 }
 
@@ -456,30 +470,39 @@ bool FrameSet::HandleLocationChange(int* p, void* a3, wchar_t* name, int flag)
 }
 
 // ---------------------------------------------------------------- 009978b0 HandleFormSubmit
+struct FixedWString96 {                 // eastl::fixed_string<wchar_t, 96> on the stack
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; int mAllocName; wchar_t* mpPoolBegin;
+    wchar_t mBuffer[96];
+};
+struct WString { wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; int mAlloc; };
+struct FrameSetForm : FrameSet {
+    bool HandleFormSubmit(int* p, void* form);
+};
 // @ 0x009978b0
-bool HandleFormSubmit(char* self, void* form)
+bool FrameSetForm::HandleFormSubmit(int* p, void* form)
 {
-    if (!form)
-        return false;
-    unsigned short buf[4];
-    buf[0] = 0;
-    int local[4];
-    local[0] = 0;
-    local[1] = 0;
-    local[2] = 0;
-    char ok = 0;
-    FUN_008e4b10(form, &ok);
-    if (ok == 0)
-        return false;
-    // build string and iterate params
-    FUN_00579a90(local, 0, 0, 0, 0, 0);
-    FUN_00599bb0(local, (void*)0x1459c40);
-    int outStr = 0;
-    FUN_008e4f00(form, (void*)0x996da0, &outStr);
-    ((FrameSet*)self)->HandleLocationChange(0, 0, 0, outStr);
-    if (outStr) FUN_00f47380((void*)outStr);
-    (void)buf;
-    return true;
+    FixedWString96 fs;
+    fs.mpBegin = fs.mBuffer;
+    fs.mpEnd = fs.mBuffer;
+    fs.mpCapacity = fs.mBuffer + 96;
+    fs.mpPoolBegin = fs.mBuffer;
+    fs.mBuffer[0] = 0;
+    bool result = false;
+    if (form != 0 && ((bool(__thiscall*)(void*, FixedWString96*))FUN_008e4b10)(form, &fs)
+        && (fs.mpEnd - fs.mpBegin) != 0) {
+        WString s;
+        s.mpBegin = 0; s.mpEnd = 0; s.mpCapacity = 0;
+        ((void(__thiscall*)(WString*, const wchar_t*))FUN_00579a90)(&s, fs.mpBegin);
+        ((void(__thiscall*)(WString*, const void*))FUN_00599bb0)(&s, (const void*)0x1459c40);
+        ((void(__thiscall*)(void*, void*, WString*))FUN_008e4f00)(form, (void*)0x996da0, &s);
+        HandleLocationChange(p, s.mpBegin, 0, 0);
+        if ((s.mpCapacity - s.mpBegin) > 1 && s.mpBegin)
+            FUN_00f47380(s.mpBegin);
+        result = true;
+    }
+    if ((fs.mpCapacity - fs.mpBegin) > 1 && fs.mpBegin && fs.mpBegin != fs.mpPoolBegin)
+        FUN_00f47380(fs.mpBegin);
+    return result;
 }
 
 // ---------------------------------------------------------------- 009979f0 FindOrCreateFrames

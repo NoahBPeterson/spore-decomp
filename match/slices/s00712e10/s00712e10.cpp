@@ -30,12 +30,12 @@ extern const char gMutexParams[];                        // 0x0140C860 (mutex pa
 struct Mutex {
     void Lock(const void* params);         // 0x009221B0
     void Unlock();                         // 0x00922270
-    void Construct(int a, int b);          // 0x00922200 (Mutex::Mutex)
+    void Construct(int a, int b);          // 0x009222A0 (Mutex::Mutex)
     void Destroy();                        // 0x00922130 (Mutex::~Mutex)
 };
 
 struct Stopwatch {
-    void Construct(int a, int b);          // 0x00093A50 (Stopwatch::Stopwatch)
+    void Construct(int a, int b);          // 0x0093A560 (Stopwatch::Stopwatch)
 };
 
 // eastl hashtable header (the part used here). bucket count 1 and the shared empty array

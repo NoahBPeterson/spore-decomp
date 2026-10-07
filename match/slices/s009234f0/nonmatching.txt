@@ -6,7 +6,7 @@
 00923bc0  -    LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
 00923c90  13   LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
 00923de0  103  rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
-00923d40  47   Server::Server: complete; MI vtable/new/mutex schedule differs
+00923d40  36   Server::Server: complete; MI vtable/new/mutex schedule differs; difftest PASS after mapping the vtables (IServer/ITracer slots annotated with the original targets of 0x143dd20/0x143dd04) and fixing the init (the original leaves +0x28 unwritten)
 00923f30  36   LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
 00923f90  11   LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
 00924010  52   LogReporter::SetName: complete; notify-vcall local vs memory loads
@@ -20,4 +20,4 @@
 009243d0  42   LogFormatterSimple::LogFormatterSimple: complete; fixed-string init schedule differs
 009244d0  43   LogFormatterFancy::LogFormatterFancy: complete; fixed-string init schedule differs; difftest PASS after fixing the Stopwatch constructor call (thiscall with 2 args; was a free function taking the timer as first arg)
 009234f0  254  ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
-00923990  128  ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ
+00923990  128  ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ; difftest PASS after annotating g_timeoutP (0x143dc78) and fixing the symbol lookup (declaration comments no longer look like @ markers)

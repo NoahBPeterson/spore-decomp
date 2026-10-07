@@ -61,7 +61,7 @@ struct StackAllocator {
 
     void  Init(unsigned defBlockSize, void* a, void* b, void* c, void* d);
     void  Reset();
-    bool  AllocateNewBlock(unsigned n);
+    bool  AllocateNewBlock(unsigned n);   // 0x928ba0
     StackAllocator() {}
     StackAllocator(unsigned, unsigned, unsigned, unsigned, unsigned);
 
@@ -181,7 +181,7 @@ struct Hashtable {
     void*    mpUnknown18;      // +0x18
     void*    mpUnknown1c;      // +0x1c
 
-    static int g_emptyBucket;
+    static int g_emptyBucket;   // 0x154df28
 
     void DoAllocateBuckets(void* bucket, unsigned count);            // 0x693230
     void InitEmpty() {

@@ -13,3 +13,8 @@
 008fd350 EA::XHTML::Resource::HTTPHandler::HandlerMsgCb  # notification target callback (id 0x700af301)
 008fd3d0 EA::XHTML::Resource::HTTPHandler::~HTTPHandler  # unregisters msg handler 0x338cd0e, frees strings, HTTPClient dtor
 008fd540 EA::XHTML::Resource::HTTPHandler::HTTPHandler  # UA string "EA UTF XHTML browser with HTTP"
+013eb918  ??_7BaseA2@@6B@  # base vtable stored by D2e0 dtor 0x8fd2e0 (COMDAT-folded, shared)
+013ec458  ??_7BaseB2@@6B@  # base vtable stored by D290 ctor / D2e0 dtor (COMDAT-folded, shared)
+01439e80  ??_7HttpHandler@@6BIProtocolHandler@@@  # HTTPHandler primary vtable (ctor 0x8fd540)
+01439e78  ??_7HttpHandler@@6BIMsgHandler@@@  # HTTPHandler IMsgHandler-subobject vtable at +0xc
+013eb394  ??_7IMsgHandler@@6B@  # base vtable stored first by ctor 0x8fd540 (COMDAT-folded, shared)

@@ -1,7 +1,7 @@
 008fe380  83  Ratio::Set: 16-bit zero compare (xor edx,edx; cmp dx,ax) vs cl's test ax,ax
-008fd790  594  HttpHandler::CalculateCacheTimeout: register allocation (hdrs/this) + string ctor schedule differ
+008fd790  594  HttpHandler::CalculateCacheTimeout: register allocation (hdrs/this) + string ctor schedule differ; difftest WEAK (219 valid, 15% coverage) after mapping gEmptyStr to 0x1667bac
 008fdb70  19  HttpHandler::CheckInit: vcall register choice and push edi placement
 008fdc00  123  HttpHandler::RemoveJobFor: register allocation and copy-loop addressing
 008fdca0  63  vector_map<uint,uint>::erase: callee-saved register order, eax-8 copy addressing
-008fdd10  645  HttpHandler::ProcessRequest: complete; scheduling and register allocation differ
-008fe0c0  557  HttpHandler IHandler::HandleMessage (IHandler subobject this): complete; allocation differs
+008fdd10  727  HttpHandler::ProcessRequest: complete; scheduling and register allocation differ; difftest PASS after fixing three real bugs: sizeof MemStream (0x24) and cJob (0x20) passed to operator new, and the stream reference was never released on the failure/success-after-request paths (now an RAII holder destroyed after url, as in the original); mapped gEmptyStr/assign/EncodingFromName/SetEncoding
+008fe0c0  557  HttpHandler IHandler::HandleMessage (IHandler subobject this): complete; allocation differs; difftest WEAK (394 valid, 18.5% coverage) after fixing JobMsg layout (reqId/event/job/resp were 4 bytes low) and mapping gEmptyWStr

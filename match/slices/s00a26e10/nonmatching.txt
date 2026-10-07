@@ -2,11 +2,10 @@
 00a26e10  225  complete; DoInsertKey node order / register allocation differs; difftest FAIL is a checker artifact: a random bucket index puts &mpBuckets[idx] in emulator-owned memory (malloc heap 0x5xxxxxxx, MISC 0x7f8xxxxx) that is not reset between the two runs, so the second run reads the first run's bucket store (order-swapped replay flips the sides; with the heap zeroed between runs 203/204 pass and the last one is the MISC case)
 00a26f30  13  complete; refcount store (rc=1) scheduled after vtable load
 00a27010  79  complete; original has EH frame (node alloc unwind) not reproduced
-00a270b0  44  complete; member-init store order of the two fixed vectors differs
 00a27170  131  complete; EH state/AutoRefCount temps not reproduced
-00a27340  87  complete; hashtable iterator by-value arg plumbing differs
-00a273d0  104  complete; iterator loop shape differs
-00a27460  63  complete; AutoRefCount temp pattern not reproduced
+00a27340  87  complete; hashtable iterator by-value arg plumbing differs; difftest WEAK after making it a thiscall member StyleMgr::Remove (original takes this in ecx, ret 4); coverage 48% because the found path needs the real hashtable find to hit
+00a273d0  104  complete; iterator loop shape differs; difftest PASS after making it a thiscall member StyleMgr::RemoveAll (this in ecx)
+00a27460  63  complete; AutoRefCount temp pattern not reproduced; difftest PASS after making it a thiscall member TexMgr::Find (this in ecx, ret 4)
 00a27530  100  complete; frame is 0x20 vs 0x18 (find iterator not overlapped with the insert temporaries), handler/release register use differ; difftest PASS after fixing the insert result (DoInsertValue writes a 12-byte pair<iterator,bool>, ours was an 8-byte iterator so its bool clobbered the return address) and passing the true_type tag in the key slot
 00a27660  109  complete; erase loop shape differs
 00a27760  172  complete; AutoRefCount vector insert, EH layout differs
@@ -15,4 +14,4 @@
 00a27b90  14  complete; operand load order in final relocate call
 00a27e60  8  complete; true_type tag is built in a temp slot instead of the dead key parameter slot (stack slot choice); difftest PASS after fixing the insert tag (an empty eastl::true_type by value, not int 0; upper bytes are unspecified padding the callee never reads)
 00a27ed0  15  complete; register choice (eax/ecx/edx) around the sprintf and SetName calls; difftest WEAK after fixing mpName offset (empty VoiceContainer member padded to 4 made it +0x98c instead of +0x988), plus lock-guard/string RAII for the EH frame
-00a27ff0  187  complete; pair value layout guessed, EH temps differ
+00a27ff0  187  complete; pair value layout guessed, EH temps differ; difftest WEAK after making it the thiscall member EvOwner::Register (this in ecx, ret 0x14); coverage 29% because the create path needs the real hashtable find to miss

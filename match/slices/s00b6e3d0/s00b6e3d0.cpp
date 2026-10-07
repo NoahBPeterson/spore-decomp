@@ -65,7 +65,7 @@ struct ColorMap {
   rbtree_node_base mAnchor;  // +4
   unsigned int mnSize;       // +0x14
   void DoNukeSubtree(ColorNode* p);                                        // @ 0x9a9600
-  Vec3& operator[](const unsigned int& key);                               // @ 0xb6ee40
+  Vec3& Index(const unsigned int& key);   // original 0xb6ee40 map::operator[] (named so the checker can find it)
   void DoInsertValueImpl(ColorNode** out, ColorNode* parent, const void* v, bool left);  // @ 0xb6eb30
   void DoInsertValue(ColorNode** out, ColorIter parent, const void* v, bool left);       // @ 0xb6ed20
   void reset() {
@@ -397,8 +397,8 @@ cColorSet::cColorSet() : mKey(0x53dbcf1) {
   mDefault = g_defaultColor;
 }
 
-// @ 0x00B6EE40  ColorMap::operator[]
-Vec3& ColorMap::operator[](const unsigned int& key) {
+// @ 0x00B6EE40  ColorMap::Index (eastl map::operator[])
+Vec3& ColorMap::Index(const unsigned int& key) {
   ColorNode* parent = (ColorNode*)&mAnchor;
   ColorNode* n = (ColorNode*)mAnchor.mpNodeParent;
   while (n) {
@@ -410,8 +410,10 @@ Vec3& ColorMap::operator[](const unsigned int& key) {
     }
   }
   if (parent == (ColorNode*)&mAnchor || key < parent->key) {
-    struct Pair { unsigned int first; Vec3F second; } v;
-    v.first = key;
+    struct Pair {
+      unsigned int first; Vec3F second;
+      Pair(const unsigned int& k, const Vec3F& s) : first(k), second(s) {}
+    } v(key, Vec3F());   // eastl: value_type(key, T()); T() is an uninitialised temp, copied
     ColorNode* r;
     DoInsertValue(&r, ColorIter(parent), &v, false);
     return r->val;
@@ -451,7 +453,7 @@ void InitColorManager() {
       for (unsigned int i = 0; i < count; i++) {
         Vec3 v = d[i];
         unsigned int k = 0x53dbcf1 + i;
-        g_colorMap[k] = v;
+        g_colorMap.Index(k) = v;
       }
     }
     g_x1687968 = 0x53dbcf2;
@@ -473,7 +475,7 @@ void InitColorManager() {
 
 // @ 0x00B6F0C0  palette lookup
 Vec3& GetColor(unsigned int key) {
-  return g_colorMap[key];
+  return g_colorMap.Index(key);
 }
 
 // the original truncates in single precision with cvttss2si (mulss, no x87 round trip)
@@ -486,14 +488,14 @@ static __forceinline unsigned int PackARGB(const Vec3& c) {
 
 // @ 0x00B6F0D0  palette color as 0xFFRRGGBB
 unsigned int GetColorARGB(unsigned int key) {
-  return PackARGB(g_colorMap[key]);
+  return PackARGB(g_colorMap.Index(key));
 }
 
 // @ 0x00B6F140  set the base palette entry
 void SetBaseColor(Vec3 col) {
   if (g_translator && g_colorMap.mnSize) {
     unsigned int k = 0x53dbcf1;
-    Vec3& c = g_colorMap[k];
+    Vec3& c = g_colorMap.Index(k);
     c = col;
   }
 }
@@ -507,7 +509,7 @@ void MarkNearestColors() {
   *(unsigned int*)&g_used[4] = 0;
   *(unsigned int*)&g_used[8] = 0;
   unsigned int k0 = 0x53dbcf1;
-  const Vec3& base = g_colorMap[k0];
+  const Vec3& base = g_colorMap.Index(k0);
   for (int n = 2; n != 0; n--) {
     unsigned int found = 0xffffffff;
     float best = 0.25f;
@@ -515,7 +517,7 @@ void MarkNearestColors() {
       unsigned int k = i + 0x53dbcf3;
       if (!g_used[i]) {
         if (i > 0xb) k = 0x53dbcf3;
-        const Vec3& c = g_colorMap[k];
+        const Vec3& c = g_colorMap.Index(k);
         float d = (c.x - base.x) * (c.x - base.x) + (c.y - base.y) * (c.y - base.y) + (c.z - base.z) * (c.z - base.z);
         if (d < best) {
           found = i;
@@ -530,7 +532,7 @@ void MarkNearestColors() {
 // @ 0x00B6F310  ColorSet color as 0xFFRRGGBB
 unsigned int cColorSet::GetARGB() {
   unsigned int k = mKey;
-  return PackARGB(g_colorMap[k]);
+  return PackARGB(g_colorMap.Index(k));
 }
 
 // @ 0x00B6F380  ColorSet::LoadNames

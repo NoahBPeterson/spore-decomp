@@ -3,7 +3,7 @@
 00b6e7b0 279 ColorTranslator::Translate: hash switch complete; switch tail-merging/find-call sharing differs
 00b6eb30 66 ColorMap::DoInsertValueImpl: complete; stack/arg shape of value copy differs
 00b6ec50 84 LoadColorNames: complete; string temp / cString init scheduling differs
-00b6ee40 60 ColorMap::operator[]: complete; value_type temp copies and by-value iterator arg shape differ
+00b6ee40 100 ColorMap::operator[] (ColorMap::Index here): complete; value_type temp copies and by-value iterator arg shape differ; difftest PASS after renaming operator[] to Index (the checker cannot match operator names) and fixing the inserted value (value_type(key, T()) copies the uninitialised T() temp into the node, as the original does; ours left it unwritten)
 00b6eee0 121 InitColorManager: complete; property array/refptr shapes differ; difftest WEAK (58% coverage) after fixing cString size (0x14 not 0x10: ctor overwrote the return address), PropList::GetProperty vtable slot (+0x28), Prop flags/has offsets (+0x10/+0x12) and list release after ~cString
 00b6f0d0 95 GetColorARGB: complete; cvttss2si now via SSE intrinsics (same ops, extra xorps lane-zeroing and aligned frame); difftest PASS after fixing x87 extended-precision multiply/fistp and passing &key directly
 00b6f180 83 MarkNearestColors: complete; loop/scheduling differs

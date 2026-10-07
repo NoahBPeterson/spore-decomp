@@ -1,0 +1,2 @@
+00a27110  ??_EPropList@@UAEPAXI@Z
+00432b10  ??_EPropBase@@UAEPAXI@Z

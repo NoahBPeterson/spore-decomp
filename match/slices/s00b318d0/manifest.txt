@@ -7,3 +7,4 @@ slices/s00b318d0/s00b318d0.cpp  ?IncPauseGate@cGameTimeManager@@QAEHI@Z  00b3222
 slices/s00b318d0/s00b318d0.cpp  ?DecPauseGate@cGameTimeManager@@QAEHI@Z  00b32250  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?TogglePauseGate@cGameTimeManager@@QAE_NI@Z  00b32280  /O2 /MD /Gy /TP /arch:SSE /GS-
 slices/s00b318d0/s00b318d0.cpp  ?SetTimeFlowSetting@cGameTimeManager@@QAEXH@Z  00b32450  /O2 /MD /Gy /TP /arch:SSE /GS-
+slices/s00b318d0/s00b318d0.cpp  ?NextStateEnum@@YAHH@Z  00b32890  /O2 /MD /Gy /TP /arch:SSE /GS-

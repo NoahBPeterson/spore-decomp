@@ -8,9 +8,9 @@
 typedef unsigned int u32;
 
 extern "C" __declspec(dllimport) int __stdcall QueryPerformanceCounter(__int64*);
-extern "C" unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
-extern "C" int __cdecl wcsncmp(const wchar_t*, const wchar_t*, unsigned);
-extern "C" wchar_t* __cdecl wcschr(const wchar_t*, wchar_t);
+extern "C" __declspec(dllimport) unsigned long __cdecl wcstoul(const wchar_t*, wchar_t**, int);
+extern "C" __declspec(dllimport) int __cdecl wcsncmp(const wchar_t*, const wchar_t*, unsigned);
+extern "C" __declspec(dllimport) wchar_t* __cdecl wcschr(const wchar_t*, wchar_t);
 
 #define VT(p) (*(void***)(p))
 #define VFN(p, off, T) ((T)(VT(p)[(off) / 4]))
@@ -80,8 +80,33 @@ struct cVarListSerializer {
     void Serialize(void* stream);                                      // 00692900
 };
 
-struct cGonzagoSubsystemBase { virtual ~cGonzagoSubsystemBase(); virtual void g1(); };
-struct cRefCountBase { virtual void r0(); virtual void r1(); int mnRefCount; };
+// cGameTimeManager's primary vtable (0x01460390) has 20 slots and no destructor; the virtual
+// destructor lives in the +4 base (vtable 0x0146038c: one slot, the this-adjusting thunk 0x00b31f60
+// to the scalar deleting destructor 0x00b32140). The slot addresses let the equivalence checker
+// map our vtables to the original's.
+struct cGonzagoSubsystemBase {
+    virtual int  AddRef();                  // 0x00c6a960
+    virtual int  Release();                 // 0x007b86e0
+    virtual void s02();                     // 0x00b31bc0
+    virtual void s03();                     // 0x00c2e4e0
+    virtual void s04();                     // 0x00b31f30
+    virtual void s05();                     // 0x00b5b930
+    virtual void s06();                     // 0x00b5b900
+    virtual void s07();                     // 0x00fc7e50
+    virtual void s08();                     // 0x007f54d0
+    virtual void s09();                     // 0x00b5b840
+    virtual void s10();                     // 0x00b31ae0
+    virtual void s11();                     // 0x00b31740
+    virtual void s12();                     // 0x010829f0
+    virtual void s13();                     // 0x00b31f40
+    virtual void s14();                     // 0x00b267f0
+    virtual void s15();                     // 0x00b267f0
+    virtual void s16();                     // 0x00b5b880
+    virtual void s17();                     // 0x00b5b8a0
+    virtual void s18();                     // 0x00b5b8c0
+    virtual void s19();                     // 0x00b5b8e0
+};
+struct cRefCountBase { virtual ~cRefCountBase(); int mnRefCount; };
 struct cGonzagoSubsystem : cGonzagoSubsystemBase, cRefCountBase {
     int mPre, mPost, mCurTrans, mPhase;
     cGonzagoSubsystem();                    // 00b5b960
@@ -620,8 +645,8 @@ bool cTokenTranslator::Translate(const wchar_t* tok, WStr* out)
     return true;
 }
 
-// @ 0x00b32890
-int __cdecl NextStateEnum(int v)
+// @ 0x00b32890  (static: cl passes v in eax, as the original does, because its callers are in this file)
+static int NextStateEnum(int v)
 {
     switch (v) {
     case 0x1654c00: return 0x1654c01;
@@ -631,3 +656,7 @@ int __cdecl NextStateEnum(int v)
     default:        return -1;
     }
 }
+
+// Forces the out-of-line static NextStateEnum with its eax register argument (the real callers,
+// 0x00b3365b and 0x00b33a25, are outside this slice).
+void ForceNextStateEnum(int* p) { *p = NextStateEnum(*p); }

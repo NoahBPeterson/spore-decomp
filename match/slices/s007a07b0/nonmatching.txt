@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 007a07b0  413  complete; eastl vector insert(pos,n,value); original hoists the 5th-arg push of pos above the branch and spills pos through the address-taken slot
-007a09f0  4  complete dtor; only add eax,-1 vs sub eax,1 in the two refcount releases
+007a09f0  4  complete dtor; only add eax,-1 vs sub eax,1 in the two refcount releases; difftest PASS (255 valid, 92% coverage) after naming the second base GmeRefCount (virtual dtor) and mapping both SplitDrawBase vtables (0x140f58c, 0x140f588) in symbols/slices
 007a1000  171  complete; register allocation/spill of loop pointer differs
 007a1100  42  complete; begin/end load order (ebx/edi swapped); difftest PASS after fixing EraseTail 0x7a05b0 to a thiscall member of VecV20 (was __stdcall, so ecx was not the vector)
 007a11c0  420  complete; loop/iterator skeleton and spill layout differ
-007a1400  657  complete; register allocation and local layout differ
+007a1400  657  complete; register allocation and local layout differ; difftest WEAK (200 valid, 27% coverage) after giving each FixedIdVec6/StreamIdVec/ElemVec method its own // 0x annotation line

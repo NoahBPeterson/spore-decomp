@@ -88,7 +88,7 @@ struct cSPTransformS {
     float    mTranslation[3];
     float    mScale;
     float    mRotation[9];           // +0x14
-    cSPTransformS& operator=(const cSPTransformS& o);
+    cSPTransformS& operator=(const cSPTransformS& o);   // 0x537dc0
 };
 
 struct cSkinBinding {
@@ -101,6 +101,7 @@ struct cSkinBinding {
     cSkinBinding& operator=(const cSkinBinding& o);
 };
 
+// @ 0x0073f320
 cSkinBinding& cSkinBinding::operator=(const cSkinBinding& o)
 {
     f0 = o.f0;
@@ -306,8 +307,13 @@ struct BindPodVec {
 };
 struct BindRcObj { virtual void v0(); virtual void Release(); };
 struct BindSmartPtr { BindRcObj* p; BindSmartPtr() { p = 0; } ~BindSmartPtr() { if (p) p->Release(); } };
-struct BindElem { void ResetInterpolators(); void NoOp(); };   // 0x75b410 / 0x11fb220
-struct BindPool { void Free(BindElem* e); };                       // 0x9276c0
+struct BindElem {
+    void ResetInterpolators();     // 0x75b410
+    void NoOp();                   // 0x11fb220
+};
+struct BindPool {
+    void Free(BindElem* e);        // 0x9276c0
+};
 extern BindPool* gBindPool;                                        // 0x16c8b44
 struct BindRefVec {
     int* b; int* e; int* c; int alloc[2];
@@ -436,7 +442,9 @@ extern char Elem8Dtor;                                                    // 0xc
 extern QueryState* gPickQuery;                                            // 0x162eaf4
 extern QueryState* gSphereQuery;                                          // 0x162eaf8
 
-extern const float kRay0, kRay1, kRay2;            // 0x153782c / 0x1537830 / 0x1537834
+extern const float kRay0;                          // 0x153782c
+extern const float kRay1;                          // 0x1537830
+extern const float kRay2;                          // 0x1537834
 extern const float kOne;                           // 0x1485720
 
 static int RunQuery(ExternalTable* table, QueryState* q, const void* basis)

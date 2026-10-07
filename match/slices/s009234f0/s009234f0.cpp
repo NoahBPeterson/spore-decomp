@@ -9,7 +9,7 @@ typedef unsigned int size_t;
 extern "C" size_t strlen(const char*);
 
 extern "C" char DAT_01667bac;
-extern unsigned g_timeoutP;
+extern unsigned g_timeoutP;  // 0x0143dc78
 
 // ---------------------------------------------------------------------------
 // EA::Thread::Mutex
@@ -243,41 +243,34 @@ struct LogFormatterFancy : ILogFormatter {
 // ---------------------------------------------------------------------------
 // Server
 // ---------------------------------------------------------------------------
+// Slots declared (not defined) and annotated with the original targets so the checker can map
+// the vtables Server::Server stores (0x143dd20 / 0x143dd04) by content.
 struct IServer {
-    virtual void AddRef() {}
-    virtual int  Release() { return 0; }
-    virtual void QueryInterface() {}
-    virtual void s3() {}
-    virtual void s4() {}
-    virtual void s5() {}
-    virtual void s6() {}
-    virtual void s7() {}
-    virtual void s8() {}
-    virtual void s9() {}
-    virtual void s10() {}
-    virtual void s11() {}
-    virtual void s12() {}
-    virtual void s13() {}
-    virtual void s14() {}
-    virtual void s15() {}
-    virtual void s16() {}
-    virtual void s17() {}
-    virtual void s18() {}
-    virtual void s19() {}
-    virtual void s20() {}
+    virtual void s0();  // 0x009236c0
+    virtual void s1();  // 0x009236d0
+    virtual void s2();  // 0x00924cf0
+    virtual void s3();  // 0x00923680
+    virtual void s4();  // 0x007f30d0
+    virtual void s5();  // 0x00924790
+    virtual void s6();  // 0x009234e0
+    virtual void s7();  // 0x009248f0
+    virtual void s8();  // 0x009241f0
+    virtual void s9();  // 0x00924a50
+    virtual void s10();  // 0x00923840
+    virtual void s11();  // 0x009237c0
+    virtual void s12();  // 0x00924a80
+    virtual void s13();  // 0x009238b0
+    virtual void s14();  // 0x009238f0
 };
 
 struct ITracer {
-    virtual void t0() {}
-    virtual void t1() {}
-    virtual void t2() {}
-    virtual void t3() {}
-    virtual void t4() {}
-    virtual void t5() {}
-    virtual void t6() {}
-    virtual void t7() {}
-    virtual void t8() {}
-    virtual void t9() {}
+    virtual void t0();  // 0x00697eb0
+    virtual void t1();  // 0x00697ed0
+    virtual void t2();  // 0x00923db0
+    virtual void t3();  // 0x00697ec0
+    virtual void t4();  // 0x00923990
+    virtual void t5();  // 0x009234f0
+    virtual void t6();  // 0x00923930
 };
 
 struct Server : IServer, ITracer {
@@ -361,9 +354,9 @@ struct ServerTracer {
     char  mMutex[0x2c];                 // +0x34 EA::Thread::Mutex (raw: its 8-byte alignment would pad the vfptr)
     EA::Thread::Mutex* M() { return (EA::Thread::Mutex*)mMutex; }
 
-    unsigned TraceVaList(void* sender, const char* fmt, void* ap);     // @ 0x9234f0
-    unsigned Trace(void* sender, const char* msg);                     // @ 0x923990
-    bool IsFiltered(void* rec);                                        // @ 0x923930 (Server::IsFiltered, ITracer side)
+    unsigned TraceVaList(void* sender, const char* fmt, void* ap);     // original 0x9234f0
+    unsigned Trace(void* sender, const char* msg);                     // original 0x923990
+    bool IsFiltered(void* rec);                                        // original 0x923930 (Server::IsFiltered, ITracer side)
 };
 
 }} // namespace EA::Trace
@@ -535,7 +528,7 @@ Server::Server()
     mpVecBegin = 0;
     mpVecEnd = 0;
     mpVecCapacity = 0;
-    mDefaultFilter = 0;
+    // +0x28 (mDefaultFilter) is left uninitialised by the original
     mDefaultFormatter = 0;
     mUnknown30 = 0;
     _InterlockedExchange((volatile long*)&mnRefCount, 0);

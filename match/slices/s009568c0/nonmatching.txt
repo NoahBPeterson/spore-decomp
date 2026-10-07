@@ -3,7 +3,7 @@
 00956f30 27 free pool drain: complete; pop_front register choice (ecx copy of node) differs
 00956fa0 22 FreeDisplayListEntries splice: complete; prologue push order (orig pushes esi/edi before Lock) differs
 00956ff0 60 AllocDisplayListEntry: complete; anchor held in ecx vs eax, node copy and DisplayList ctor store order differ
-00957160 129 UShortVec::operator=: complete; load order and ebx/ebp regalloc differ
+00957160 129 UShortVec::operator=: complete; load order and ebx/ebp regalloc differ; difftest WEAK (176 valid, 42% coverage) after naming it UShortVec::Assign so the checker finds the symbol (operator= has no identifier to match)
 00957300 148 HitMask::BuildFromAlpha: complete; compiler strength-reduces data[x*4+3] where orig indexes; difftest FAIL is a checker artifact: the push_back value's address is a reused incoming-argument slot (orig the dims slot at entry+4, ours the stride slot at entry+8), which the checker compares raw instead of as STK; with argument-slot pointers normalised: PASS, 273 valid, 100% coverage
 009573e0 23 UShortVec::swap: complete; extra 8-byte frame slots and ternary shape differ
 00957710 68 Int2 property getter copy: complete; register allocation/load order differs

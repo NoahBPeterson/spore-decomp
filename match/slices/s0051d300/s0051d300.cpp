@@ -246,16 +246,30 @@ void Sampler::Sample(float t, SrcA* a, int p4, int p5, S6* p6, OutB* p7)
 }
 
 // ---- constructors (/Od inline-ctor chains) --------------------------------------------------
-struct RootA { virtual void ra(); RootA() {} };                          // vtbl 0x013eb394
-struct Base0 : RootA { virtual void ra(); virtual void b0(); Base0() {} };   // vtbl 0x013eb384
-struct SimBase { virtual void sb(); int f4; SimBase() : f4(0) {} };      // vtbl 0x013ef094
+// Virtual slots are annotated with the original targets so the checker can map the vtables
+// by content (RootA 0x013eb394, Base0 0x013eb384, SimBase 0x013ef094).
+struct RootA {                                                           // vtbl 0x013eb394
+    virtual void ra();                                                   // 0x00404430
+    virtual void r1() = 0;
+    RootA() {}
+};
+struct Base0 : RootA {                                                   // vtbl 0x013eb384
+    virtual void r2() = 0;
+    virtual void r3() = 0;
+    Base0() {}
+};
+struct SimBase {                                                         // vtbl 0x013ef094
+    virtual void sb();                                                   // 0x0041d780
+    int f4;
+    SimBase() : f4(0) {}
+};
 struct PtrZ { void* p; PtrZ() : p(0) {} };
 struct Elem12 { int a, b, c; Elem12() {} };
 struct Vec3z { int a, b, c; Vec3z() { a = 0; b = 0; c = 0; } };
 extern Vec3z g_default12;                                                // 0x015de460
 
 struct ThreadedResObj : SimBase {                                        // final vtbl 0x013f1c6c
-    virtual void sb();
+    virtual void sb();                                                   // 0x0051e0d0
     PtrZ f8;                // +8
     Vec3z fc;               // +0xc
     int f18[4];             // +0x18
@@ -284,9 +298,15 @@ ThreadedResObj::ThreadedResObj()
 }
 
 template <int N> inline void ScratchSlots() { unsigned s[N]; }
-struct BBox { void Reset(); __forceinline BBox() { ScratchSlots<6>(); Reset(); } };   // Reset: 0x00409c00
+struct BBox {
+    void Reset();                                         // 0x00409c00
+    __forceinline BBox() { ScratchSlots<6>(); Reset(); }
+};
 struct Tag { Tag() {} };
-struct AllocFixed { int x; AllocFixed(const Tag&); };   // 0x00429360
+struct AllocFixed {
+    int x;
+    AllocFixed(const Tag&);                               // 0x00429360
+};
 struct FixedVec {
     void* b; void* e; void* c; AllocFixed a;
     __forceinline FixedVec(const Tag& t) : b(0), e(0), c(0), a(t) {}
@@ -295,12 +315,24 @@ struct FixedVec2 {
     void* b; void* e; void* c; AllocFixed a;
     __forceinline FixedVec2(const Tag& t) : b(0), e(0), c(0), a(t) { ScratchSlots<2>(); }
 };
-struct Sub94 { char pad[0x5c]; Sub94(); };                // 0x0041cfe0
+struct Sub94 {
+    char pad[0x5c];
+    Sub94();                                              // 0x0041cfe0
+};
 
-struct PaintSystemObj : Base0, SimBase {                  // final vtbls 0x013f1c74 / 0x013f1c70
-    virtual void ra();
-    virtual void b0();
-    virtual void sb();
+// The original's PaintSystem slot 0 overrides both bases' slot 0, so the SimBase-side vtable holds
+// an adjustor thunk (0x005288e0 -> 0x0051e3a0). Modelled as a novtable intermediate whose sb is
+// that thunk, so the secondary vtable maps by content and no extra vtable store is emitted.
+struct __declspec(novtable) SimBaseP : SimBase {
+    virtual void sb();                                                   // 0x005288e0
+    SimBaseP() {}
+};
+
+struct PaintSystemObj : Base0, SimBaseP {                 // final vtbls 0x013f1c74 / 0x013f1c70
+    virtual void ra();                                    // 0x0051e3a0
+    virtual void r1();                                    // 0x005219d0
+    virtual void r2();                                    // 0x0051e340
+    virtual void r3();                                    // 0x0051e380
     PtrZ f0c, f10, f14, f18, f1c;
     char p20[4];
     BBox bb24;                                            // +0x24 (0x18 bytes)

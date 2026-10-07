@@ -1,0 +1,1 @@
+00810000 ??0cSPUILayout@@QAE@XZ  # cSPUILayout ctor as called by PopulateExpansionPackPane (original calls 0x810000 there); pdb_names 00dd1ca0 is a different stub

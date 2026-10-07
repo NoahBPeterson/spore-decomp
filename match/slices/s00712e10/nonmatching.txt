@@ -5,5 +5,5 @@
 00713560 419 cMaterialScriptState dtor: complete; member table frees in order, inlined helper shapes differ
 00713780 222 cMaterialManager dtor: complete; member teardown order reproduced, EH frame differs
 007138f0 260 cMaterialScriptState ctor: complete; store order/scheduling differs
-00713a80 265 cMaterialManager ctor: complete; store order differs
+00713a80 265 cMaterialManager ctor: complete; store order differs; difftest PASS (fixed wrong Mutex::Mutex and Stopwatch::Stopwatch address annotations: 0x9222a0, 0x93a560)
 00713cb0 201 CompileVertexAndPixelShaders: complete (D3DXCompileShader + Create*Shader); locals/arg order differ

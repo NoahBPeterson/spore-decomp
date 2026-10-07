@@ -1,15 +1,13 @@
-00999590 147 complete add-plugin/bind path; inlined vector DoInsertValue shape differs
-00999790 51 complete intrusive-list teardown; node offset/loop register schedule differs
-00999820 6 complete UI::StringMan ctor; only vptr-store scheduling order differs
-00999850 26 complete UI::StringMan deleting dtor; base-vptr store position differs
+00999590 141 complete add-plugin/bind path (thiscall member; fast path AddRefs the stored copy); register allocation (this in edi vs ebx) and casted-temp slot differ; difftest PASS (fixed: was a cdecl free function with cdecl DoInsertValue calls and a missing AddRef on the fast path)
+00999820 6 complete UI::StringMan ctor; only vptr-store scheduling order differs; difftest PASS
+00999850 22 complete UI::StringMan deleting dtor; base-vptr store position differs
 00999b20 81 complete StringTableXml::StrDup; length loop and allocator branch shape differ
-00999c50 32 complete StringTableXml ctor; member-init/argument scheduling differs
+00999c50 25 complete StringTableXml ctor; member-init/argument scheduling differs; difftest PASS
 0099a010 17 complete StringTableXml::SetString; this/vector register allocation differs
 00999110 107 complete SerCollection dtor; only prologue register-save (push edi) placement differs
-00999250 352 complete SerCollection::Reload; schedule/register allocation differs
+00999250 352 complete SerCollection::Reload; schedule/register allocation differs; difftest WEAK (37% coverage: the ResourceMan singleton 0x1667aa0 is a fixed global, not an input)
 00999640 200 complete SerializationService::RemovePlugin; register allocation differs
 00999890 19 complete finder-compare helper; add ecx,4 placement differs
 00999930 367 complete StringMan::Manager::Open; frame is 16-byte aligned (and esp) when filter local present, not reproduced
-00999bc0 9 complete load callback; original calls caller-cleanup virtuals (unpopped args), not reproducible
 00999d30 23 complete FactoryStringTableXml::CreateResource; key-copy/count schedule differs
 00999dd0 382 complete SpVec::insert(pos,n,value); register allocation and this-reload differ

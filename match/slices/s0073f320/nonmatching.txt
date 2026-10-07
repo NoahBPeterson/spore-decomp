@@ -1,9 +1,9 @@
-0073f320  88  complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ
+0073f320  88  complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% coverage) after annotating cSPTransformS::operator= with 0x537dc0 (the checker had mapped it to 0x73f320 itself); the checker cannot find operator= symbols, so it was run on a scratch copy with the method renamed Assign
 0073fe50  16  complete eastl::copy_backward<8-byte POD*>; only the last/result register assignment differs
 0073f440  10  complete copy_backward for refcounted pairs; only the load of result->p is scheduled before the pointer decrements
 0073f4b0  107  complete SetAnimationGroupTransform; branch layout (translate block first) and hoisted lea differ
-0073f540  825  complete PickLine (box+basis build, lazy global query, query loop); SSE lane build and EH/static-init codegen differ
+0073f540  825  complete PickLine (box+basis build, lazy global query, query loop); SSE lane build and EH/static-init codegen differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS (263 valid, 70.7% coverage) after giving kRay1/kRay2 their own address comments
 0073f910  891  complete IntersectsSphere (same shape as PickLine); SSE lane build and EH/static-init codegen differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS after fixing a spurious 0x40-byte copy of the inverse matrix (the item tests take the matrix object itself; ours memcpy'd it into a second buffer)
 0073fe80  72  complete 3-binding validator (mesh query + 3x Check); this/loop-index register swap (esi/edi)
 0073ffb0  75  complete 3-binding validator with extra CheckEntry; same esi/edi register swap
-00740160  273  complete BindingSet dtor (interpolator reset loop, member frees); register swap and fewer EH states than original
+00740160  273  complete BindingSet dtor (interpolator reset loop, member frees); register swap and fewer EH states than original; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; difftest PASS (223 valid, 74.8% coverage) after giving BindElem/BindPool methods per-line address comments

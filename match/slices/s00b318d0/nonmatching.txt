@@ -8,6 +8,5 @@
 00b32190 100 complete; push_back temp slots (two locals) and gate field store order
 00b323f0 40 complete; four RegisterPauseGate calls (see 00b32190), differs only by wrong best-symbol pairing
 00b32490 2 complete; vptr store scheduled after the [this+8] load
-00b324b0 2 complete; same as 00b32490 (scalar deleting dtor with inlined body)
+00b324b0 2 complete; same as 00b32490 (scalar deleting dtor with inlined body); difftest PASS (308 valid, 100% cov) once symbols/slices names it ?_GcTokenTranslator
 00b324f0 876 complete; token translator (^p / prop_file / tuning_float / tuning_int / br); wstring helpers are local stubs
-00b32890 39 complete; register-arg (eax) switch in the original, written as a __cdecl int(int)

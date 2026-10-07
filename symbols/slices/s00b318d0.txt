@@ -11,3 +11,4 @@
 00b322c0 SP::cGameTimeManager::SetTimeFlowRate  # mTimeFlowRate
 00b323f0 SP::cGameTimeManager::RegisterDefaultPauseGates  # "user toggle","gameplay","ui toggle","modal dialog"
 00b32450 SP::cGameTimeManager::SetTimeFlowSetting  # mTimeFlowRates[idx]
+00b324b0 ?_GcTokenTranslator  # = ??_GcTokenTranslator@@UAEPAXI@Z (difftest name lookup only matches the base_ident form); cTokenTranslator scalar deleting dtor (inlined ~cTokenTranslator)

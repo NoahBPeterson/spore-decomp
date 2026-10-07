@@ -10,7 +10,7 @@ void __cdecl operator_delete__(void* p);
 extern "C" unsigned __cdecl strlen(const char* s);
 extern "C" __declspec(dllimport) char* __cdecl strstr(const char* s, const char* sub);
 extern "C" int __cdecl wcscmp(const wchar_t* a, const wchar_t* b);
-unsigned __cdecl EncodingFromName(const char* name);
+unsigned __cdecl EncodingFromName(const char* name);   // 0x8fd0a0
 
 // ---------------------------------------------------------------------------
 // EASTL narrow string
@@ -18,7 +18,7 @@ unsigned __cdecl EncodingFromName(const char* name);
 struct EStr {
     char* mpBegin;
     char* mpEnd;
-    void assign(const char* first, const char* last);
+    void assign(const char* first, const char* last);   // 0x454cb0
 };
 
 // @ 0x008fd6c0
@@ -53,7 +53,7 @@ struct ResourceRequest {
     bool mb2c;                  // +0x2c
     char pad2d[0x38 - 0x2d];
     unsigned mKey;              // +0x38
-    void SetEncoding(unsigned enc, int a);
+    void SetEncoding(unsigned enc, int a);   // 0x9002f0
     void SetStream(IStreamLike* s);     // 0x836480
 };
 
@@ -213,14 +213,19 @@ inline void* operator new(unsigned size, const char* name, int a, int b, int c, 
 {
     return operator_new(size, name, a, b, c, d);
 }
-extern char gEmptyStr[2];
-extern wchar_t gEmptyWStr[2];
+extern char gEmptyStr[2];      // 0x1667bac
+extern wchar_t gEmptyWStr[2];  // 0x1667bac (same empty-string object as gEmptyStr)
 const char* __cdecl StrIStr(const char* hay, const char* needle);      // 0x92cc00
 
 struct IUnk {
     virtual void d0(int);
     virtual void AddRef();          // +4
     virtual void Release();         // +8
+};
+struct UnkRef {                     // intrusive_ptr-style holder
+    IUnk* p;
+    UnkRef() : p(0) {}
+    ~UnkRef() { if (p) p->Release(); }
 };
 
 struct HeaderSet {
@@ -398,6 +403,7 @@ struct JobMsg {
     virtual void d0(int);
     virtual void AddRef();      // +4
     virtual void Release();     // +8
+    int pad4;
     int pad8;
     int reqId;                  // +0xc
     int event;                  // +0x10
@@ -451,6 +457,7 @@ struct AuthSvc {
 };
 
 struct cJob {
+    char data[0x20];                                // sizeof 0x20 (operator new size)
     cJob(unsigned key);                             // 0x8fd290
 };
 struct MemStream {
@@ -460,6 +467,7 @@ struct MemStream {
     virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
     virtual void v8(); virtual void v9();
     virtual void Open(int a, int b);                // +0x28
+    char data[0x24 - 4];                            // sizeof 0x24 (operator new size)
     MemStream(const char* name);                    // 0x93bd50
     void SetProperty(int id, float v);              // 0x93bb40
 };
@@ -635,8 +643,8 @@ bool HttpHandler2::ProcessRequest(ResourceRequest* req, bool bForce)
 {
     if (!CheckInit())
         return false;
+    UnkRef stream;      // released after url is freed, on every return path
     NStrE url;
-    IUnk* stream = 0;
     url.sprintf("%ls", req->mUrl);
     if (cache == 0) {
         MemStream* ms = new("XHTML/Resource/HTTPHandler/MemoryStream", 0, 0, 0, 0)
@@ -645,10 +653,10 @@ bool HttpHandler2::ProcessRequest(ResourceRequest* req, bool bForce)
         ms->SetProperty(1, 1.0f);
         ms->SetProperty(2, 2.0f);
         ms->Open(0, 0);
-        if (ms != (MemStream*)stream) {
+        if (ms != (MemStream*)stream.p) {
             ms->AddRef();
-            IUnk* old = stream;
-            stream = (IUnk*)ms;
+            IUnk* old = stream.p;
+            stream.p = (IUnk*)ms;
             if (old)
                 old->Release();
         }
@@ -663,17 +671,15 @@ bool HttpHandler2::ProcessRequest(ResourceRequest* req, bool bForce)
                 SetRequestTypeInfo(req, mime);
                 req->SetStream(cached);
                 mpProvider->Complete(req, 2);
-                if (stream)
-                    stream->Release();
                 return true;
             }
         }
-        if (stream) {
-            IUnk* old = stream;
-            stream = 0;
+        if (stream.p) {
+            IUnk* old = stream.p;
+            stream.p = 0;
             old->Release();
         }
-        if (!cache->CreateNewCachedDataStream(&stream)) {
+        if (!cache->CreateNewCachedDataStream(&stream.p)) {
             if (req->mpListener)
                 req->mpListener->Report(0x2420001, req->mUrl, -1, -1, L"Failed to create cache file.\n");
             mpProvider->Complete(req, 3);
@@ -681,7 +687,7 @@ bool HttpHandler2::ProcessRequest(ResourceRequest* req, bool bForce)
         }
     }
     HttpRequestObj* hreq = 0;
-    if (CreateHTTPGetRequest(url.b, stream, &hreq)) {
+    if (CreateHTTPGetRequest(url.b, stream.p, &hreq)) {
         HeaderSet* h = &hreq->hdrs;
         if (accept.b != accept.e)
             h->SetHeader(8, &accept);

@@ -68,8 +68,9 @@ struct IRef {                       // virtual AddRef/Release (+0, +4)
 };
 
 struct Handle {                     // 16-byte handle member of a vertex record
-    IRef* mpRef;
-    char pad[12];
+    int mF0, mF4;                   // +0x00, +0x04
+    short mS8, mSA;                 // +0x08, +0x0a
+    IRef* mpRef;                    // +0x0c (refcounted)
     void Assign(const Handle* src);                                          // 0x00424f70
 };
 struct Vertex20 {                   // 0x20 bytes
@@ -389,6 +390,7 @@ struct Rec20 {
     AutoRefIRef mRef;               // +0x1c
 };
 
+// @ 0x0071e7d0
 void CopyRec20(Rec20* first, Rec20* last, Rec20* dest)
 {
     for (; first != last; ++first, ++dest)
@@ -539,6 +541,7 @@ struct VecFC {
     void resize(unsigned n);                                                              // 0x0071efa0
 };
 
+// @ 0x0071ea40
 void VecFC::DoInsertValues(cFaceCluster* position, unsigned n, const cFaceCluster* value)
 {
     if (n <= (unsigned)(mpCapacity - mpEnd)) {
@@ -612,6 +615,7 @@ struct MeshEntries {
 };
 int FindPairIndex(MeshEntries* m, int entry, int key);              // 0x0071e040
 
+// @ 0x0071f040
 void SetEntryKey(MeshEntries* m, int entry, int key, int arg)
 {
     EntryFor70* e = &m->mpEntries[entry];
@@ -658,6 +662,7 @@ inline void CopyVertex(Vertex20* dst, const VertexKey& src)
     dst->mHandle.Assign(&src.mHandle);
 }
 
+// @ 0x0071f0f0
 int AddVertex(VertexMesh* mesh, unsigned a, unsigned b, unsigned c, unsigned d, unsigned e)
 {
     int idx = FindVertexIndex(mesh, a, b, c, 0xe);

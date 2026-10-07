@@ -1,9 +1,7 @@
-008e2350  22  refcount force-release destructor: cl reorders/keeps address in eax and drops the out-of-line ForceRelease call
-008e23e0  33  deleting-destructor variant of 008e2350 (same body)
 008e2580  21  static register-argument helper (attr id in eax, string in esi) cannot be a standalone thiscall; callee now declared thiscall Element::GetAttrValue; difftest FAIL is a checker artifact: the original takes elem in ecx, id in eax and s in esi (custom register convention), which no declarable signature reproduces, so the checker feeds the original garbage registers
 008e25d0  1   trailing null store encoded [esi+ebx] instead of [ebx+esi]
 008e2650  23  the two interned-string results land in ebx/ebp swapped vs original
-008e26e0  72  parameter register assignment (s->edi, len->ebx) swapped vs original
+008e26e0  72  parameter register assignment (s->edi, len->ebx) swapped vs original; difftest PASS (214 valid, 85.7% cov) after annotating SA::AllocateNewBlock 0x928ba0 and the DNodeA ctor 0x8e55d0
 008e2770  72  parameter register assignment (s->edi, len->ebx) swapped vs original
 008e2810  60  inline wcscmp expansion differs (no CRT call in original)
 008e28b0  72  vector element refcount assignment register schedule differs
@@ -11,4 +9,4 @@
 008e2b90  103 destructor over three intrusive lists + list anchor + stack-allocator reset
 008e1d50  368  Manager::RegisterFactory: complete; refcount inlines and loop schedule differ (register choice ebx/edi, rotated loop)
 008e20c0  347  Manager::Manager: complete (all members/containers initialised); store schedule of hashtable/rbtree ctors differs and zero reg is ebx vs edx
-008e2c10  284  Holder::CreateElement: complete; register assignment (this in edi/ebp, element var) differs, failure epilogue not shared
+008e2c10  284  Holder::CreateElement: complete; register assignment (this in edi/ebp, element var) differs, failure epilogue not shared; difftest PASS at --inputs 1000 (441 valid, 66.7% cov; WEAK 161 valid at the default 400) after annotating SA::AllocateNewBlock 0x928ba0

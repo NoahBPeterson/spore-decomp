@@ -1,2 +1,4 @@
 007a0f90 SP::cIModelSplitter::Split  # PDB caller-single candidate
 007a11c0 SP::anonymous_namespace::cSplitDrawImpl::Dispatch  # PDB caller-single candidate
+0140f58c ??_7SplitDrawBase@@6BBaseA@@@  # split-draw object primary vtable (AddRef, Release, 0x402ab0, Dispatch 0x7a11c0); stored by dtor 0x7a09f0
+0140f588 ??_7SplitDrawBase@@6BGmeRefCount@@@  # its GmeRefCount-base vtable (slot 0: this-4 thunk 0x79ab80 to deleting dtor 0x7a0ac0)

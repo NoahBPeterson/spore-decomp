@@ -233,8 +233,16 @@ void SplitState2::Reset(int a, int b)
 struct IntVecVec { int* mpBegin; int* mpEnd; int* mpCap; };
 void ClearVecVec(IntVecVec* v);                            // 0x7a0410
 
-struct BaseA { virtual void vA(); };
-struct BaseB { virtual void vB(); ~BaseB() {} };
+// primary vtable 0x140f58c: AddRef, Release, 0x402ab0, Dispatch (0x7a11c0); secondary (GmeRefCount) 0x140f588
+struct BaseA {
+    virtual void vA();      // 0x51e340
+    virtual void vA1();     // 0x51e380
+    virtual void vA2();     // 0x402ab0
+    virtual void vA3();     // 0x7a11c0
+};
+struct GmeRefCount {        // RefCountTemplate<int> base; vtable 0x13ef094
+    virtual ~GmeRefCount() {}   // slot 0 (in SplitDrawBase: this-4 thunk 0x79ab80 -> deleting dtor 0x7a0ac0)
+};
 struct PlainRc {
     virtual ~PlainRc() {}
     int mnRefCount;
@@ -260,7 +268,7 @@ struct CIntVec {
     }
 };
 
-struct SplitDrawBase : BaseA, BaseB {
+struct SplitDrawBase : BaseA, GmeRefCount {
     int pad8;
     RcPtr<PlainRc> mA;            // +0xc
     CIntVec mVec;                 // +0x10
@@ -493,9 +501,16 @@ struct StreamDesc {                     // 0x8c bytes
     int w0; char* data; unsigned short maskIdx; unsigned short stride; char pad[0x8c - 12];
 };
 
-struct FixedIdVec6 { void Assign(const void* src); };   // 0x719170 FixedIdVector6::operator=
-struct StreamIdVec { void Resize(int n); };             // 0x71f7e0
-struct ElemVec    { void Resize(int n); void Grow(); };   // 0x475320 / 0x79fe20
+struct FixedIdVec6 {
+    void Assign(const void* src);   // 0x719170 FixedIdVector6::operator=
+};
+struct StreamIdVec {
+    void Resize(int n);             // 0x71f7e0
+};
+struct ElemVec {
+    void Resize(int n);             // 0x475320
+    void Grow();                    // 0x79fe20
+};
 
 struct IObjRelease { virtual void v0(); virtual void Release(); };
 

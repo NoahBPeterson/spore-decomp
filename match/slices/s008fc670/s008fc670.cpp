@@ -139,11 +139,12 @@ void HTTPy::SetAcceptEncoding(const char* s)
 // ---------------------------------------------------------------------------
 // multiple-inheritance handler objects (ctor stores two vtables)
 // ---------------------------------------------------------------------------
-struct BaseA2 { virtual void a(); };
+struct BaseA2 { virtual void a(); ~BaseA2() {} };
 struct BaseB2 {
     virtual void b();
     int m4;
     BaseB2() { m4 = 0; }
+    ~BaseB2() {}
 };
 
 struct D290 : BaseA2, BaseB2 {
@@ -253,10 +254,10 @@ struct MsgServer {
 };
 MsgServer* __cdecl GetServer();
 
-extern char gEmptyStr[2];
+extern char gEmptyStr[2];                  // 0x01667bac
 struct EStr16 {
     char* b; char* e; char* c; int al;
-    void RangeInit(unsigned n);                                     // eastl RangeInitialize (thiscall)
+    void RangeInit(unsigned n);                                     // 0x00475ab0 eastl RangeInitialize (thiscall)
     EStr16()
     {
         b = gEmptyStr;
@@ -284,7 +285,7 @@ struct HClientV {
 struct HClient {
     unsigned raw[0x168 / 4];
     HClientV* v() { return (HClientV*)this; }
-    HClient();
+    HClient();      // 0x00943f60
 };
 void __fastcall HClientDtor(HClient*);
 
@@ -345,8 +346,8 @@ extern char kVtHandlerBase0[];
 extern char kVtHandlerBase1[];
 extern char kVtHandler0[];
 extern char kVtHandler1[];
-extern const char kUserAgent[31];
-extern const float kDefLMRatio;
+extern const char kUserAgent[31];   // 0x01439e20
+extern const float kDefLMRatio;     // 0x013ec480
 
 // @ 0x008fd350
 void __cdecl HandlerMsgCb(unsigned a, unsigned b, int id, HMsg* m)
@@ -633,7 +634,7 @@ void TextStyle::Update()
 // ---------------------------------------------------------------------------
 extern "C" int __cdecl strcmp(const char*, const char*);
 #pragma intrinsic(strcmp)
-void* __cdecl operator_new(unsigned size, const char* name, int a, int b, int c, int d);
+void* __cdecl operator_new(unsigned size, const char* name, int a, int b, int c, int d);   // 0x00f473a0
 extern const char* gMimeTextHtml;       // "text/html"
 
 struct DomDoc {
@@ -642,7 +643,7 @@ struct DomDoc {
     char pad[0x44 - 4];
     int mSourceId;      // +0x44
     char pad2[0x31c - 0x48];
-    DomDoc(int arg);
+    DomDoc(int arg);                    // 0x008e2dd0
 };
 inline void* operator new(unsigned size, const char* name, int a, int b, int c, int d)
 {
@@ -662,9 +663,9 @@ struct DomStream {
 };
 struct XmlParser {
     char raw[0x43c];
-    XmlParser(DomDoc* doc);
-    ~XmlParser();
-    int Parse(DomStream* s);
+    XmlParser(DomDoc* doc);                // 0x008e5ea0
+    ~XmlParser();                          // 0x008e5ca0
+    int Parse(DomStream* s);               // 0x008e60a0
 };
 
 struct DocRequest {

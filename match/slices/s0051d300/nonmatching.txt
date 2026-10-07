@@ -3,4 +3,4 @@
 0051e340  8    /Od this/n slot assignment swap only; complete RefHolder::AddRef
 0051d300  -  complete fixed_vector<intrusive_ptr>::DoInsertValue; original inlines the move/uninitialized-copy helpers with extra flag locals (frame 0x84 vs mine)
 0051d720  -  complete sampler (all paths, calls, clamps); original inlines item-vector size/begin helpers differently, frame 0x12c vs 0x110
-0051e180  5  complete PaintSystem ctor; only the 2-dword /Od scratch gap lands before the second FixedVec temp instead of after (slot order)
+0051e180  5  complete PaintSystem ctor; only the 2-dword /Od scratch gap lands before the second FixedVec temp instead of after (slot order); difftest PASS after annotating BBox::Reset/AllocFixed/Sub94 (one declaration per line) and modelling the vtables so they map by content (RootA/Base0/SimBase slots, novtable SimBaseP for the 0x5288e0 adjustor thunk)

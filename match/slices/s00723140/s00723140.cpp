@@ -10,8 +10,8 @@ long __cdecl _InterlockedExchange(long volatile*, long);
 #pragma intrinsic(_InterlockedExchange)
 
 void* __cdecl operator_new(size_t, const char*, int, int, const char*, int);
-void __cdecl operator_delete__(void* p);
-extern const char kEastlAllocFile[];  // ".../EASTL/allocator.h"
+void __cdecl operator_delete__(void* p);  // 0xf47380
+extern const char kEastlAllocFile[];  // 0x13ebb38 ".../EASTL/allocator.h"
 
 extern uint32_t gBitMask[];  // 0x140d0ac: per-format value masks, indexed by BufView::maskIdx
 

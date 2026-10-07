@@ -2,3 +2,4 @@
 slices/s00a26e10/s00a26e10.cpp  ??_GAbilityList@@UAEPAXI@Z  00a27290  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00a26e10/s00a26e10.cpp  ?DoFreeNodes@SubTable@@QAEXPAPAUSubNode@@I@Z  00a276e0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s00a26e10/s00a26e10.cpp  ??_GPropList@@UAEPAXI@Z  00a27110  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s00a26e10/s00a26e10.cpp  ??0PropList@@QAE@XZ  00a270b0  /O2 /MD /Gy /EHsc /TP /GS-

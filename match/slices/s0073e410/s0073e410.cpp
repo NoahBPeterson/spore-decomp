@@ -118,8 +118,7 @@ struct cSPTransform {
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x0073f000  PartTransform constructor (ret 0x10)
-// @ 0x0073f1c0  PartTransform copy constructor (ret 4)
+// PartTransform constructor (0x0073f000, ret 0x10) and copy constructor (0x0073f1c0, ret 4)
 // ---------------------------------------------------------------------------
 struct RCObj { void** vt; int mnRefCount; };       // refcount at +4, slot 0 = deleting dtor
 struct PTBase {
@@ -157,6 +156,7 @@ struct PartTransform : PTBase {
     PartTransform(const PartTransform& o);
 };
 
+// @ 0x0073f000
 PartTransform::PartTransform(int a1, RCObj* obj, const cSPTransform* t1, const cSPTransform* t2)
     : PTBase(a1, obj), mXf(*t1), mXf2(*t2), mInverse(*t2)
 {
@@ -167,6 +167,7 @@ PartTransform::PartTransform(int a1, RCObj* obj, const cSPTransform* t1, const c
     mInverse.Invert();
 }
 
+// @ 0x0073f1c0
 PartTransform::PartTransform(const PartTransform& o)
     : PTBase(o), mXf(o.mXf), mXf2(o.mXf2), mInverse(o.mInverse)
 {

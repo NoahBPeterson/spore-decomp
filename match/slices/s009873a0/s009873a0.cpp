@@ -22,8 +22,13 @@ extern "C" int*  FUN_00c2e4e0(void* self);                   // ILayoutElement::
 void __cdecl CopyWithQualityAdjustment(ShadowDesc32* dst, ShadowDesc32* src, int quality); // 0x96e3a0
 
 struct WinBase { void ctor962a10(); void dtor962740(); };
-struct Sw      { void ctor(unsigned a, unsigned b); void SetUnits(int u); };
-struct IWinSub { void SetFlag(unsigned flag, unsigned char on); };
+struct Sw {                                     // EA::Stopwatch
+    void ctor(unsigned a, unsigned b);          // 0x0093a560
+    void SetUnits(int u);                       // 0x0093a1a0
+};
+struct IWinSub {
+    void SetFlag(unsigned flag, unsigned char on);  // 0x00961760 EA::UTFWin::Window::SetFlag
+};
 
 // ---------------------------------------------------------------- shadow descriptor
 struct ShadowDesc32 {

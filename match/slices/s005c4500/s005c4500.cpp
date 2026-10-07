@@ -20,7 +20,8 @@ static inline void ResetRef(void** field, int off) {
   }
 }
 
-void* operator new(unsigned int, const char*, int, int, int, int);
+void* operator new(unsigned int, const char*, int, int, int, int);   // 0x00f473a0
+void operator delete(void* p);   // 0x00f47380
 inline void* operator new(unsigned int, void* p) { return p; }
 
 struct Rect4 {

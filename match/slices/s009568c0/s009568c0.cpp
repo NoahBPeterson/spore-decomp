@@ -84,8 +84,8 @@ extern char   g_154ecd0[];           // 0x154ecd0
 
 // Mutex helpers (thiscall members on g_mutexHeaps)
 struct Mutex {
-    void Lock(const char*);
-    void Unlock();
+    void Lock(const char*);   // 0x9221b0
+    void Unlock();            // 0x922270
 };
 
 // vtable-call helpers
@@ -456,7 +456,7 @@ struct UShortVec {
     unsigned short* mpBegin;
     unsigned short* mpEnd;
     unsigned short* mpCapacity;
-    UShortVec& operator=(const UShortVec& x);                                                // 0x957160
+    UShortVec& Assign(const UShortVec& x);   // 0x957160 (eastl operator=; a named method so the checker can find the symbol)
     void swap(UShortVec& x);                                                                 // 0x9573e0
     unsigned short* DoAllocateAndCopy(unsigned int n, const unsigned short* first, const unsigned short* last);   // 0x957110
     void DoInsertValue(unsigned short* pPos, const unsigned short& v);                       // 0x6f5bc0
@@ -505,7 +505,7 @@ bool HitMask::Contains(const int* pt) {
 // ===========================================================================
 // @ 0x00957160  UShortVec::operator=
 // ===========================================================================
-UShortVec& UShortVec::operator=(const UShortVec& x) {
+UShortVec& UShortVec::Assign(const UShortVec& x) {
     if (&x != this) {
         const unsigned int n = (unsigned int)(x.mpEnd - x.mpBegin);
         if (n > (unsigned int)(mpCapacity - mpBegin)) {
@@ -585,8 +585,8 @@ void UShortVec::swap(UShortVec& x) {
         int nBytes = (int)((char*)mpEnd - (char*)mpBegin);
         unsigned short* pDest = (unsigned short*)_DoInsertValue_(pNew, mpBegin, nBytes);
         temp.mpEnd = pDest + (nBytes >> 1);
-        *this = x;
-        x = temp;
+        Assign(x);
+        x.Assign(temp);
         if (pNew && ((int*)pNew)[-1] != 0)
             operator_delete__(pNew);
     } else {

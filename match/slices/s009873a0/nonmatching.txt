@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-009873a0  127  WinSpinner::Ctor: vtable init and member-store scheduling differ
+009873a0  127  WinSpinner::Ctor: vtable init and member-store scheduling differ; difftest PASS after annotating Stopwatch::SetUnits (0x93a1a0) and Window::SetFlag (0x961760)
 00987470  16   WinSpinner scalar deleting dtor: member load hoisted before vtable stores
 00987530  33   BasicFactory_SpinnerDrawable::CreateInstance: vtable/member store order differs
 009880e0  446  StdDrawable::HitTest: scaling switch and modulo/div schedule differs

@@ -14,8 +14,8 @@ typedef wchar_t wchar16;
 // ===========================================================================
 // generic declarations
 // ===========================================================================
-extern "C" void  operator_delete(void*) throw();
-extern "C" void* operator_new(unsigned int, const char*, int, int, const char*, int);
+extern "C" void  operator_delete(void*) throw();   // 0x00f47380
+extern "C" void* operator_new(unsigned int, const char*, int, int, const char*, int);   // 0x00f473a0
 
 
 extern void FUN_004b6000(void*, void*, void*);
@@ -67,11 +67,11 @@ struct StackAllocator {
   void*  mpCoreFreeFunction;         // +0x18
   void*  mpCoreFunctionContext;      // +0x1c
   void*  mpTopBookmark;              // +0x20
-  StackAllocator(int, int, int, int, int) throw();
+  StackAllocator(int, int, int, int, int) throw();   // 0x00928cd0
   ~StackAllocator() { Reset(); }
   void __thiscall Reset() throw();                 // 0x928dc0
-  void   Init(int, int, int, int, int) throw();
-  bool   AllocateNewBlock(uint) throw();
+  void   Init(int, int, int, int, int) throw();   // 0x00928b00
+  bool   AllocateNewBlock(uint) throw();   // 0x0082b0d0
   void* AllocInline(uint size) {
     if ((int)(mpCurrentBlockEnd - mpCurrentObjectBegin) - (int)size < 0) {
       if (!AllocateNewBlock(size)) return 0;
@@ -169,6 +169,7 @@ struct SerializationService {
   }
   void*  GetReader(void* arg);
   uint   Read(uint a, uint b, uint c, uint d);
+  void   AddPlugin(IUnknown32* obj);
   void   RemovePlugin(IUnknown32* obj);
   void   ClearAll();
 };
@@ -227,21 +228,29 @@ SerializationService::SerializationService()
 SerializationService::~SerializationService() {
 }
 
+struct RcVecIns {                    // eastl::vector<AutoRefCount<T>, sp_vector_allocator>
+  void __thiscall DoInsertValue(void** pos, IUnknown32** v);   // 0x004b6000
+};
+
 // @ 0x00999590  SerializationService::func04h  (add plugin, bind object)
-void FUN_00999590(SerializationService* self, IUnknown32* obj) {
-  if (obj) obj->AddRef();
-  if (self->mPlugins.mpEnd < self->mPlugins.mpCap) {
-    *self->mPlugins.mpEnd++ = obj;
-  } else {
-    FUN_004b6000(&self->mPlugins.mpBegin, self->mPlugins.mpEnd, &obj);
-  }
-  if (obj) obj->Release();
-  if (obj) {
-    IUnknown32* casted = (IUnknown32*)obj->Cast(0x4fc56322);
-    if (casted) {
-      if (self->mBinders.mpEnd < self->mBinders.mpCap) *self->mBinders.mpEnd++ = casted;
-      else FUN_00a80dd0(self->mBinders.mpEnd, &casted);
+void SerializationService::AddPlugin(IUnknown32* obj) {
+  IUnknown32* tmp = obj;                       // AutoRefCount temporary
+  if (tmp) tmp->AddRef();
+  void** p = mPlugins.mpEnd;
+  if (p < mPlugins.mpCap) {
+    mPlugins.mpEnd = p + 1;
+    if (p) {
+      *p = tmp;                                // AutoRefCount copy-construct
+      if (tmp) tmp->AddRef();
     }
+  } else {
+    ((RcVecIns*)&mPlugins.mpBegin)->DoInsertValue(p, &tmp);
+  }
+  if (tmp) tmp->Release();
+  if (obj) {
+    void* casted = obj->Cast(0x4fc56322);
+    if (casted)
+      ((SpVec*)&mBinders.mpBegin)->push_back(casted);
   }
 }
 
@@ -308,7 +317,9 @@ struct UIStringMan {
   void*  mpArg;            // +0x08
   IntrusiveListHead mList; // +0x0c
   UIStringMan(void* arg);
+  __declspec(noinline) void ClearList();
 };
+// @ 0x00999820  UI::StringMan::StringMan
 UIStringMan::UIStringMan(void* arg)
   : mpArg(arg), mField04(0) {
   mList.mpPrev = &mList;
@@ -316,24 +327,24 @@ UIStringMan::UIStringMan(void* arg)
 }
 
 // @ 0x00999790  intrusive-list teardown helper (this in ecx; list at +0xc)
-void FUN_00999790(void* self) {
-  IntrusiveListHead* head = (IntrusiveListHead*)((char*)self + 0xc);
-  while (head->mpNext != head) {
-    char* node = (char*)head->mpNext;
-    char* obj = node - 0x14;
-    ((IntrusiveListHead*)node)->mpPrev = head;
-    head->mpNext = *(void**)node;
-    if (node != (char*)head) {
-      ((IntrusiveListHead*)node)->mpPrev = 0;
-      *(void**)node = 0;
+void UIStringMan::ClearList() {
+  IntrusiveListHead* head = &mList;
+  while (head->mpPrev != head) {
+    IntrusiveListHead* node = (IntrusiveListHead*)head->mpNext;
+    IUnknown32* obj = node ? (IUnknown32*)((char*)node - 0x14) : 0;
+    ((IntrusiveListHead*)node->mpNext)->mpPrev = head;
+    head->mpNext = ((IntrusiveListHead*)head->mpNext)->mpNext;
+    if (node != head) {
+      node->mpPrev = 0;
+      node->mpNext = 0;
     }
-    ((IUnknown32*)obj)->Release();
+    obj->Release();
   }
 }
 
 // @ 0x00999850
 UIStringMan::~UIStringMan() {
-  FUN_00999790(this);
+  ClearList();
   FUN_00620230(&mList);
 }
 
@@ -464,8 +475,6 @@ int __stdcall FUN_00999ba0(uint* types, uint count) {
   return 1;
 }
 
-// @ 0x00999ba0  FactoryStringTableXml::GetSupportedTypes
-// @ 0x00999bc0  factory load callback
 struct FactoryBase {
   virtual ~FactoryBase();
   FactoryBase() { _InterlockedExchange(&mRefCount, 0); }
@@ -473,8 +482,8 @@ struct FactoryBase {
 };
 struct ILoadSrc {
   virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
-  virtual uint GetOffset(uint);   // +0x10 (caller-cleans in the original; not reproducible)
-  virtual uint GetBase(uint);     // +0x14 (caller-cleans in the original; not reproducible)
+  virtual uint GetOffset();       // +0x10
+  virtual uint GetBase();         // +0x14
 };
 struct LoadCallbackHolder {
   char pad[8];
@@ -482,11 +491,11 @@ struct LoadCallbackHolder {
   uint  mArg;         // +0x0c
   void Invoke(ILoadSrc* src, uint extra);
 };
+// @ 0x00999bc0  factory load callback
 void LoadCallbackHolder::Invoke(ILoadSrc* src, uint extra) {
   if (mpCallback != 0) {
-    uint base = src->GetBase(mArg);
-    uint off = src->GetOffset(base);
-    ((void (__cdecl*)(uint, uint))mpCallback)(extra, off);
+    // four cdecl arguments, evaluated right to left: mArg is pushed before GetBase is called
+    ((void (__cdecl*)(uint, uint, uint, uint))mpCallback)(extra, src->GetOffset(), src->GetBase(), mArg);
   }
 }
 
@@ -635,7 +644,9 @@ struct IListener {
 };
 
 extern wchar_t g_emptyWStr[2];     // 0x1667bac (empty string literal storage)
-struct SpVecDtor { void __thiscall Destroy(); };   // 0x7a41a0
+struct SpVecDtor {
+  void __thiscall Destroy();   // 0x007a41a0
+};
 extern void __fastcall FUN_00999050_(char*) throw();       // SerCollection::ClearObjects helper (0x999050)
 extern void __fastcall FUN_00999000_(char*) throw();       // SerCollection::RemoveAll (0x999000)
 struct WStrOps {

@@ -100,14 +100,16 @@ bool Ref::Release()
 // a small refcounted value class (ctor / non-deleting & deleting dtors)
 // ---------------------------------------------------------------------------
 struct BaseV {
-    virtual void bv0();
+    virtual ~BaseV() {}     // vtable 0x013effb8: only the deleting dtor
     int mRef4;      // +0x04
     int m8;         // +0x08
     int m12;        // +0x0c
     BaseV(int a, int b) { _InterlockedExchange((volatile long*)&mRef4, 0); m8 = a; m12 = b; }
-    void ForceRelease();
+    void ForceRelease();    // 0x008e2300
+    static void operator delete(void* p);   // 0x00926060
 };
 
+// vtable 0x01436b98: deleting dtor 0x008e23e0, then DerV's own virtuals
 struct DerV : BaseV {
     virtual void bv0();
     int v10, v14, v18;      // +0x10,14,18
@@ -115,7 +117,7 @@ struct DerV : BaseV {
     char pad1e[2];
     int mRef20;             // +0x20
     DerV(int a, int b, const int* c, uint8_t d, uint8_t e);
-    ~DerV();
+    virtual ~DerV();
 };
 
 // @ 0x008e2380
@@ -188,7 +190,7 @@ struct SA {
     void* m8;       // end
     void* mc;       // cur
     void* m10;
-    bool AllocateNewBlock(unsigned n);
+    bool AllocateNewBlock(unsigned n);     // 0x00928ba0 EA::Allocator::StackAllocator::AllocateNewBlock
 };
 
 inline void* RawAlloc(SA* a, unsigned n)
@@ -281,7 +283,7 @@ Der43* Holder::CreateDer43(const wchar_t* a, const wchar_t* b, bool convert)
     return new (p) Der43((void*)this, x, y);
 }
 
-struct DNodeA { __declspec(noinline) DNodeA(void*, void*, void*); };
+struct DNodeA { __declspec(noinline) DNodeA(void*, void*, void*); };   // 0x008e55d0
 
 // @ 0x008e26e0
 void* Holder::CreateNodeA(const wchar_t* s, int len, bool convert)

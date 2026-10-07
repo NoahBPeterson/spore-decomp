@@ -1,8 +1,8 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00997140  200  FUN_00997140: deque walk and copy-back schedule differs
+00997140  -    cXHTMLFrameSet job cleanup (FrameSetJobs::ClearJobs): deque walk and copy-back schedule differs; difftest WEAK (199 valid, 53.8% coverage: provider/deque paths rarely reached) after making it a thiscall member returning true (was a cdecl free function taking self), calling 0x996460/0x993390 as thiscall, and reloading the vector end after the loop
 00997210  85   cXHTMLFrameSet::GetJobInfo: iterator walk/erase block layout differs; difftest PASS after making it a thiscall member (was a cdecl free function taking self)
-00997350  116  vector_map::insert: lower_bound/hash call schedule differs
-009978b0  252  cXHTMLFrameSet::HandleFormSubmit: wide-string and param callback schedule differs
+00997350  89   vector_map::insert (FrameMapVM::insert): lower_bound/hash call schedule differs; difftest PASS after making it a thiscall member, passing a {hash, win} pair to the thiscall 0x9970e0 insert, and calling slot 0x104 on win+4 (was on win)
+009978b0  268  cXHTMLFrameSet::HandleFormSubmit (FrameSetForm::HandleFormSubmit): wide-string and param callback schedule differs; difftest WEAK (1135/3000 valid, 30.5% coverage: 0x8e4b10 needs a real DOM element) after rewriting it as a thiscall member with the stack fixed_string<wchar_t,96>, thiscall callees, RangeInitialize(1 arg) and HandleLocationChange(p, s.begin, 0, 0)
 00997b60  16   Obj33::ctor: dead first vtable store and register choice differ
 00997ba0  46   Obj33::clear: end-pointer kept in a register instead of reloaded; zero arg folded
 00997d90  34   Obj33::Release: lock/dec scheduling and branch layout differ

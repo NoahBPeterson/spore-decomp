@@ -141,10 +141,13 @@ void* NodePool::Alloc(const Payload* src)
 
 // ---------------------------------------------------------------------------
 // Property-list style resource with two fixed-capacity vectors (size 0x47c).
+// base vtable at 0x013eb938; cPropertyList 0x013ebcdc; derived 0x01452b98
 struct EdRes {
-    virtual void AddRef();                                  // vtable 0x013eb938 (base)
-    virtual void Release();
+    virtual void AddRef();                                  // 0x00432a50
+    virtual void Release();                                 // 0x00432a70
     virtual ~EdRes() {}
+    virtual void Slot3();                                   // 0x00432ad0
+    virtual int GetReferenceCount();                        // 0x004c0190
 };
 struct PropBase : EdRes {                                   // vtable 0x013ebcdc
     long mnRefCount;        // +4
@@ -163,32 +166,26 @@ struct FixedVec {
     char* mpLocal;
     ~FixedVec() { if (mpBegin && mpBegin != mpLocal) operator delete(mpBegin); }
 };
+template <int N> struct FixedVecBuf : FixedVec {           // fixed_vector: header, pad, inline buffer
+    int pad;
+    char buf[N];
+    FixedVecBuf()
+    {
+        mpLocal = buf;
+        mpBegin = mpEnd = buf;
+        mpCap = mpBegin + N;
+    }
+};
 struct PropList : PropBase {
-    FixedVec v1;            // +0x14
-    int pad28;
-    char buf1[0x168];       // +0x2c
-    FixedVec v2;            // +0x194
-    int pad1a8;
-    char buf2[0x2d0];       // +0x1ac
+    FixedVecBuf<0x168> v1;  // +0x14 (buffer +0x2c)
+    FixedVecBuf<0x2d0> v2;  // +0x194 (buffer +0x1ac)
     PropList();
-    virtual void AddRef();                                  // vtable 0x01452b98
-    virtual void Release();
     virtual ~PropList();
 };
 // @ 0x00a270b0
 PropList::PropList()
 {
-    v1.mpLocal = buf1;
-    v1.mpEnd = buf1;
-    v1.mpBegin = buf1;
-    v1.mpCap = buf1 + 0x168;
-    v2.mpLocal = buf2;
-    v2.mpEnd = buf2;
-    v2.mpBegin = buf2;
-    v2.mpCap = buf2 + 0x2d0;
 }
-void PropList::AddRef() {}
-void PropList::Release() {}
 
 // @ 0x00a27110   scalar deleting destructor of the property list
 PropList::~PropList()
@@ -251,14 +248,17 @@ struct StyleMgr {
     virtual void v0();
     char pad[0x119bb4];
     StyleTable mStyles;     // +0x119bb8
+    bool Remove(uint32_t key);
+    void RemoveAll();
 };
 typedef void (__thiscall* VFn1)(void*, void*);
 typedef bool (__thiscall* VFnB)(void*);
 #define VSLOT(obj, off) ((*(void***)(obj))[(off) / 4])
 
 // @ 0x00a27340
-bool StyleMgr_Remove(StyleMgr* self, uint32_t key)
+bool StyleMgr::Remove(uint32_t key)
 {
+    StyleMgr* self = this;
     HIter it;
     self->mStyles.find(&it, &key);
     HIter end; end.node = self->mStyles.mpBuckets[self->mStyles.mnBuckets];
@@ -273,8 +273,9 @@ bool StyleMgr_Remove(StyleMgr* self, uint32_t key)
 }
 
 // @ 0x00a273d0
-void StyleMgr_RemoveAll(StyleMgr* self)
+void StyleMgr::RemoveAll()
 {
+    StyleMgr* self = this;
     void** bucket = self->mStyles.mpBuckets;
     void* node = *bucket;
     if (!node) {
@@ -304,10 +305,11 @@ struct TexTable {
     uint32_t mnBuckets;     // +8
     void find(HIter* out, const void* key) const;           // 0x00833840
 };
-struct TexMgr { char pad[0x80424]; TexTable mTex; };
+struct TexMgr { char pad[0x80424]; TexTable mTex; void* Find(const void* key); };
 // @ 0x00a27460
-void* TexMgr_Find(TexMgr* self, const void* key)
+void* TexMgr::Find(const void* key)
 {
+    TexMgr* self = this;
     HIter it;
     it.node = 0;
     self->mTex.find(&it, key);
@@ -704,8 +706,9 @@ typedef bool (__thiscall* VCreate)(void*, uint32_t, uint32_t, void*, int, RefObj
 typedef void (__thiscall* VNotify)(void*, uint32_t, int);
 typedef bool (__thiscall* VFire)(void*, double);
 // @ 0x00a27ff0
-bool EvOwner_Register(EvOwner* self, uint32_t a1, uint32_t a2, void* a3, double a4)
+bool EvOwner::Register(uint32_t a1, uint32_t a2, void* a3, double a4)
 {
+    EvOwner* self = this;
     HIter it;
     EvTable& t = self->mEvents;
     void* end = t.mpBuckets[t.mnBuckets];

@@ -1,7 +1,7 @@
-008fd240  35  AutoRef::operator=: cl folds the refcount decrement compare into the xadd flags (missing dec)
-008fd2e0  92  handler destructor: derived vtable stores at entry and dec-fold differ
+008fd240  35  AutoRef::operator=: cl folds the refcount decrement compare into the xadd flags (missing dec); difftest PASS (80.6% coverage) run on a scratch copy with operator= renamed to Assign: the checker cannot match operator symbols (??4) by name, so on this source it stays "our symbol not found"
+008fd2e0  83  handler destructor: derived vtable stores at entry and dec-fold differ; added inline ~BaseA2/~BaseB2 so ours stores the base vtables at exit like the original, mapped ??_7BaseA2/??_7BaseB2 in symbols/slices; difftest PASS
 008fc670  856  TextStyle::Update: register naming (esi/edi swap) + 64-byte frame alignment + needs /fp:fast; semantics complete
-008fcab0  8  DocumentFactory::CreateResource: vcall eax/edx register choice differs
+008fcab0  8  DocumentFactory::CreateResource: vcall eax/edx register choice differs; difftest WEAK (3000 valid inputs, 21.4% coverage: random mime strings never equal "text/html") after annotating operator_new, DomDoc ctor and XmlParser ctor/Parse/dtor addresses
 008fcbd0  163  StripLeadingDotComponents: whole-function register permutation (edi/esi swapped)
 008fce50  390  FileHandler::ProcessRequest: this/req register allocation swapped (ebx/edi) shifts everything
-008fd540  86  HttpHandler ctor: float constant load hoisting (movss placement)
+008fd540  86  HttpHandler ctor: float constant load hoisting (movss placement); difftest PASS after annotating HClient ctor, RangeInit, gEmptyStr, kUserAgent, kDefLMRatio and mapping the HttpHandler/IMsgHandler vtables in symbols/slices
