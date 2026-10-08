@@ -1685,7 +1685,8 @@ def _test_function(sid, va, opts, log=print):
     total = len(t.orig_insns)
     cov = 100.0 * len(covered) / total if total else 0.0
     out.update(inputs=ran, valid=valid, discarded=discarded, mismatches=mism, first_mismatch=first,
-               coverage={"covered_insns": len(covered), "total_insns": total, "pct": round(cov, 1)},
+               coverage={"covered_insns": len(covered), "total_insns": total, "pct": round(cov, 1),
+                         "all": len(covered) >= total},
                tolerated=cmp_.tolerated, ours_traps=traps)
     if opts.ulp:
         out["ulp"] = opts.ulp
@@ -1699,10 +1700,11 @@ def _test_function(sid, va, opts, log=print):
     elif valid < max(10, ran // 20):
         top = sorted(discarded.items(), key=lambda x: -x[1])[:3]
         v, why = "UNSUPPORTED", "only %d/%d inputs valid (discards: %s)" % (valid, ran, ", ".join("%s=%d" % x for x in top))
-    elif valid >= opts.min_valid and cov >= opts.min_cov:
-        v, why = "PASS", "%d valid inputs, %.1f%% coverage" % (valid, cov)
+    elif valid >= opts.min_valid and (len(covered) >= total if getattr(opts, "require_all", False) else cov >= opts.min_cov):
+        v, why = "PASS", "%d valid inputs, %.1f%% coverage%s" % (valid, cov, " (all insns)" if getattr(opts, "require_all", False) else "")
     else:
-        v, why = "WEAK", "%d valid inputs (need %d), %.1f%% coverage (need %.0f%%)" % (valid, opts.min_valid, cov, opts.min_cov)
+        need = "100%% (all insns)" if getattr(opts, "require_all", False) else "%.0f%%" % opts.min_cov
+        v, why = "WEAK", "%d valid inputs (need %d), %.1f%% coverage (need %s)" % (valid, opts.min_valid, cov, need)
     out.update(verdict=v, reason=why, seconds=round(time.time() - t0, 1))
     return out
 
@@ -1746,6 +1748,8 @@ def parse_args(argv=None):
     ap.add_argument("--json")
     ap.add_argument("--min-valid", type=int, default=DEFAULT_K)
     ap.add_argument("--min-cov", type=float, default=DEFAULT_C)
+    ap.add_argument("--require-all", action="store_true",
+                    help="a PASS requires every original instruction to execute (coverage 100%%), not just --min-cov")
     ap.add_argument("--ulp", type=int, default=0)
     ap.add_argument("--strict-calls", action="store_true")
     ap.add_argument("--budget", type=int, default=DEFAULT_BUDGET, help="max instructions per original run (ours: 4x)")
