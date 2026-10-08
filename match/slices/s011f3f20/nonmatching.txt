@@ -1,10 +1,5 @@
-011f4200 23 complete: Shader::Release; the pre-decrement emits `sub [m],1` in cl 15.00.30729 but `dec [m]` in the original toolset
 011f4220 25 complete: __cdecl Release wrapper; same dec-vs-sub difference plus one register choice
-011f42c0 39 complete: shader handle remap; cl folds the two 16-bit range compares into a lea+cmp range check
-011f42f0 52 complete: Shader::D3D9DefaultDispatchCB; loop `dec edi` vs `sub edi,1` and prologue global-load order differ
 011f4440 136 complete: Shader ctor; cl condenses the four `_byteswap_ushort` field stores (16-bit loads vs the original's 32-bit shift/mov dh/dl)
 011f44f0 167 complete: Shader::CheckShaderVersionSupport; cl keeps D3DCAPS9 in eax (no push ebp) and allocates the ternaries differently
-011f45a0 13 complete: default-shader release; dec-vs-sub and the load-test of m_id differ
-011f45d0 2 complete: GetDefaultShader; original loads m_id and tests (`mov eax,[g]; test`) while cl folds it to `cmp [g],0`
 011f4630 1716 complete: default shader-table registration; 44 fixed entries written with explicit field stores, not the original's scheduled per-entry sequence
 011f3f20 398 complete: rw::graphics::Camera::Check; view/proj matrix build, transform calls, viewport compare; register/scheduling and inlined abs-diff differ

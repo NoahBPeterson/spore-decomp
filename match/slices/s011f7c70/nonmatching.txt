@@ -5,7 +5,6 @@
                stores to different registers (the module is a prebuilt RenderWare object)
 011f7f10   40  Device::Stop: complete; the vcall form differs (cl 15 emits mov+call, the
                original uses call [reg+8])
-011f7fa0   14  Device::ShutdownD3D: complete; same vcall-form difference
 011f7fd0   70  Device::Reset: complete; the 15-dword rep movsd block copies and the
                changed-check schedule differ
 011f8070   75  Device::D3D9WindowResize: complete; vcall form and register schedule differ
@@ -14,7 +13,6 @@
 011f81d0   53  Device::RestoreVertexShader: complete; vcall form differs
 011f8270   20  Device::D3D9GetDesktopDisplayMode: complete; register assignment differs
 011f82a0   78  Device::D3D9CreateDevice: complete; vcall form / 6-arg schedule differ
-011f8310   20  D3D9AdapterInfo::GetAdapterString: complete; register assignment differs
 011f8340   119 Device::GetDefaultParameters: complete; the 15-dword copy + switch layout
                differs
 011f8400  139  Device::D3D9GetMaxSamplerStage: complete; DevCapsManager/DocMessage argument

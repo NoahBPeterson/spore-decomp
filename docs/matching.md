@@ -16,6 +16,11 @@
   extracted from its embedded MSI without running the installer into `work/toolchain/vc71tk/`).
   3052 is a slightly earlier build than 3077; so far it has matched. VC7.1 has no `/fp:` switch
   (it warns and ignores it); its default is what Havok used.
+- **RenderWare 4's core libraries are VC .NET 2003 too** (rw_HashString, Shader, Device/D3D9
+  adapter code, ArenaManager): those match only with `/vc71`. Code elsewhere in the RenderWare
+  address range (e.g. NegateRows, LpcSynthesize) and the EA framework (UTFSpore: 751 functions
+  exact with VS2008 vs 82 with 7.1) are VS2008. When a function in a prebuilt library is
+  complete but a few bytes off (`dec [m]` vs `sub [m],1`, x87 operand order), try `/vc71`.
 
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.

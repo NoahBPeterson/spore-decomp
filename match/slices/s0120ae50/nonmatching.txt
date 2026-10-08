@@ -2,7 +2,5 @@
 0120b890  42  complete hkUnaryAction ctor; base-vtable/field store scheduling differs
 0120b8d0  15  complete hkUnaryAction::removeFromWorld; tail-call argument shape differs
 0120b8f0  20  complete hkUnaryAction dtor; base-vptr restore shape differs
-0120b920  45  complete hkUnaryAction::getEntities; hkArray pushBack inlining differs
 0120b960  77  complete hkBinaryAction ctor; reference-add branch shape differs
 0120b9c0  42  complete hkBinaryAction dtor
-0120ba00  72  complete hkBinaryAction::getEntities; two pushBack inlines differ

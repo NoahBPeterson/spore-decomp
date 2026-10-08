@@ -1,1 +1,3 @@
-slices/s0120ae50/s0120ae50.cpp  ?f_0120bc40@@YAXPADIPBDPAX@Z  0120bc40
+slices/s0120ae50/s0120ae50.cpp  ?f_0120bc40@@YAXPADIPBDPAX@Z  0120bc40  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s0120ae50/s0120ae50.cpp  ?getEntities@hkUnaryAction@@UAEXAAU?$hkArray@PAUhkEntity@@@@@Z  0120b920  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s0120ae50/s0120ae50.cpp  ?getEntities@hkBinaryAction@@UAEXAAU?$hkArray@PAUhkEntity@@@@@Z  0120ba00  /vc71 /O2 /MD /Gy /EHsc /TP

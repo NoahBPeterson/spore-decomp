@@ -1,4 +1,9 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s011f3f20/s011f3f20.cpp  ?SetShaderDef@@YAXGIIII@Z  011f4270
-slices/s011f3f20/s011f3f20.cpp  ?ShaderCleanup@@YAHXZ  011f4420
-slices/s011f3f20/s011f3f20.cpp  ?RegisterArenaReadCallbacks@@YAXXZ  011f4e70
+slices/s011f3f20/s011f3f20.cpp  ?SetShaderDef@@YAXGIIII@Z  011f4270  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?ShaderCleanup@@YAHXZ  011f4420  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?RegisterArenaReadCallbacks@@YAXXZ  011f4e70  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?Release@Shader@@QAEXXZ  011f4200  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?MapShaderHandle@@YAHHPAX@Z  011f42c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?ShaderDispatch@@YAHXZ  011f42f0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?ReleaseDefaultShader@@YAXXZ  011f45a0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3f20/s011f3f20.cpp  ?GetDefaultShader@@YAPAUShader@@XZ  011f45d0  /vc71 /O2 /MD /Gy /EHsc /TP
