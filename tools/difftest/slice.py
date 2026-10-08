@@ -15,7 +15,7 @@ INCLUDE = "/I" + "Z:" + os.path.join(ROOT, "match", "include").replace("/", "\\"
 OBJDIR = os.path.join(ROOT, "work", "difftest", "obj")
 CL = os.path.join(ROOT, "tools", "matching", "cl.sh")
 
-FLAG_RE = re.compile(r"(?<![\w/])(/(?:O[12dxyst]-?|Ob\d|Oi-?|Oy-?|M[DT]d?|Gy-?|EH\w+|TP|TC|arch:\w+|fp:\w+|GS-?|GR-?|Gz|Gr|Gd|Zp\d+|GF|Gs\d*|J))(?![\w:])")
+FLAG_RE = re.compile(r"(?<![\w/])(/(?:O[12dxyst]-?|Ob\d|Oi-?|Oy-?|M[DT]d?|Gy-?|EH\w+|TP|TC|arch:\w+|fp:\w+|GS-?|GR-?|Gz|Gr|Gd|Zp\d+|GF|Gs\d*|J|vc71))(?![\w:])")
 
 
 # an explicit note: 'flags' (or 'Flags:') immediately followed by the flag list

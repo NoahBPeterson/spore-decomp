@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+011e2b30  20  complete: same calls, loads, probe loop and stores; flags /vc71 /O2 /MD /Gy /TP; only register assignment differs (original keeps the index in ecx and the key in edx, loading the key after the first table read; cl 13.10.3052 swaps them; EA used 13.10.3077, so this may be the compiler build); out-parameter form confirmed (by-value return gives a different prologue); difftest WEAK (188 valid inputs, 100% coverage, no mismatch)
