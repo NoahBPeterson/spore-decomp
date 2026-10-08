@@ -9,23 +9,23 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 
 | Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |
 |---|---:|---:|---:|---:|---|
-| Functions, byte-exact | 8293 | 9.39% | 0.47 MB | 3.28% | free (non-member) functions |
-| Classes, templates, byte-exact | 13234 | 14.99% | 1.01 MB | 7.05% | member functions and template instantiations |
-| Globals, other code, byte-exact | 31073 | 35.19% | 1.19 MB | 8.35% | static initializers/destructors of globals, compiler stubs; 16626 of these written as a plain function rather than `T g = ...;` (shape-only) |
-| Functions, equivalent but not exact | 2230 | 2.53% | 1.27 MB | 8.94% |  |
-| Classes, templates, equivalent | 5184 | 5.87% | 2.25 MB | 15.82% |  |
-| Globals, other code, equivalent | 40 | 0.05% | 0.04 MB | 0.26% |  |
-| Other: partial source | 4199 | 4.76% | 1.82 MB | 12.76% | incomplete or approximate source, not counted as decompiled |
-| Other: no source yet | 24040 | 27.23% | 6.20 MB | 43.54% | Ghidra pseudocode only (readable, not compilable) |
-| **Total with compilable source** | 60054 | 68.02% | 6.23 MB | 43.70% |  |
+| Functions, byte-exact | 8358 | 9.47% | 0.51 MB | 3.54% | free (non-member) functions |
+| Classes, templates, byte-exact | 13396 | 15.17% | 1.07 MB | 7.53% | member functions and template instantiations |
+| Globals, other code, byte-exact | 31084 | 35.21% | 1.21 MB | 8.49% | static initializers/destructors of globals, compiler stubs; 16626 of these written as a plain function rather than `T g = ...;` (shape-only) |
+| Functions, equivalent but not exact | 2355 | 2.67% | 1.55 MB | 10.90% |  |
+| Classes, templates, equivalent | 5425 | 6.14% | 2.88 MB | 20.19% |  |
+| Globals, other code, equivalent | 43 | 0.05% | 0.04 MB | 0.30% |  |
+| Other: partial source | 4097 | 4.64% | 1.63 MB | 11.43% | incomplete or approximate source, not counted as decompiled |
+| Other: no source yet | 23535 | 26.66% | 5.36 MB | 37.61% | Ghidra pseudocode only (readable, not compilable) |
+| **Total with compilable source** | 60661 | 68.70% | 7.26 MB | 50.96% |  |
 | Game functions (denominator) | 88293 | 100.00% | 14.25 MB | 100.00% |  |
 
-| Component | Functions | With compilable source | Code size | With source (by size) |
-|---|---:|---:|---:|---:|
-| Havok 3.1.0 | 2118 | 1131 (53.40%) | 0.66 MB | 40.34% |
-| RenderWare | 1944 | 417 (21.45%) | 0.43 MB | 16.04% |
-| EA framework (UTFSpore) | 6382 | 2798 (43.84%) | 1.22 MB | 32.65% |
-| Spore game code (everything else) | 77849 | 55708 (71.56%) | 11.95 MB | 46.01% |
+| Component | Functions | Byte-exact | Byte-exact (by size) | With compilable source | Code size | With source (by size) |
+|---|---:|---:|---:|---:|---:|---:|
+| Havok 3.1.0 | 2118 | 564 (26.63%) | 3.67% | 1169 (55.19%) | 0.66 MB | 51.04% |
+| RenderWare | 1944 | 330 (16.98%) | 3.50% | 442 (22.74%) | 0.43 MB | 24.70% |
+| EA framework (UTFSpore) | 6382 | 1988 (31.15%) | 11.71% | 2831 (44.36%) | 1.22 MB | 36.87% |
+| Spore game code (everything else) | 77849 | 49956 (64.17%) | 21.83% | 56219 (72.22%) | 11.95 MB | 53.33% |
 
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
