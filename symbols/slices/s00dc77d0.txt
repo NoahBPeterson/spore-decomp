@@ -1,0 +1,1 @@
+00dc7e00 cConvertCityOrder5::Init  # swap AutoRefCount +0x94 (vslot3 query on src, AddRef/Release), apply effect with +0x78, release +0x9c

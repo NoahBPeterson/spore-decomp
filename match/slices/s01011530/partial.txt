@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01011900  -  complete source (adjust_heap, promote_heap call, comp indirect call); equiv.py FAIL 5/41 at call #1 (orig none, ours target cccccccc on input 9); unresolved; dtor 0xb638b0 call and temp ctor stores not reproduced

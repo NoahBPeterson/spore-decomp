@@ -1,0 +1,1 @@
+00911ae0 little2_scanPercent  # static register-convention scanner, (enc, p, e, nextTokPtr); calls unicode_byte_type (0x90fcb0) at 5 sites in original

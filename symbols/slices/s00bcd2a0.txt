@@ -1,0 +1,1 @@
+00bcdd00 cUpdater::UpdateFromSubobject  # owner stub from slice; vslots 0x2c/0x5c/0x70 are virtual calls on cSubObject

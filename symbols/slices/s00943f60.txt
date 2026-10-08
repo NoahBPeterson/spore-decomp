@@ -1,0 +1,1 @@
+009440e0 EA::Internet::HTTPClient::Shutdown  # PDB candidate name (caller-scored) + layout (notify +0x24, streams +0x54/58, mutex +0x60, worker +0x90)

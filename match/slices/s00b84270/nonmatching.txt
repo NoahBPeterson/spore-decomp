@@ -1,0 +1,1 @@
+00b84730 363 cl register allocation and loop shape differ: frame 0x3c vs 0x28, loop rotated (mov edi,1), surf kept on x87 stack; calls, vcalls, GetHeightAt/RandomDirection3 order and constant fallback match; equiv WEAK (33%), no FAIL

@@ -1,0 +1,1 @@
+00e5f8c0 SP::sCellIsOutOfRange  # calls sGetSourceLevel(fastcall, level in EDX), FUN_00b721d0 (thiscall on gspCellGame+0x1c), sGetBoxSizeMultiplier2, sBlockIsInRange

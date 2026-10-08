@@ -1,0 +1,1 @@
+0100f930 350 partial: source compiles and covers every path and call, but equiv.py reports FAIL (fake-arity at a call through an extern global vtable); cl also differs in the uint64 to float fild/mask order, so treated as partial until the harness resolves it

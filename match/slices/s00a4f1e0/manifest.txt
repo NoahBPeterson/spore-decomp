@@ -1,0 +1,1 @@
+slices/s00a4f1e0/s00a4f1e0.cpp  ?gatom_bang@Eapd@Audio@EA@@  00a4fdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

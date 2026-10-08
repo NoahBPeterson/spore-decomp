@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e8f0b0/s00e8f0b0.cpp  ?UpdateLoyaltyBar@cMineralView_e8f0@@QAEPAUcSPUIMeter_e8f0@@PAU2@DI@Z  00e8f120

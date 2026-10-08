@@ -1,0 +1,1 @@
+00bfd0d0  171  complete shape (vslot order, FUN_00b18740 test, FUN_00bfca80 call, message build/send/destroy, ret 4), not byte-exact: compiled with a fresh float spill and different frame order. equiv UNSUPPORTED (0/600 valid, fake-arity disagreements on the object vslots and FUN_00bfca80 arity, which is inferred from add esp,0xc). Flags /O2 /MD /Gy /GS- /TP

@@ -1,0 +1,1 @@
+00afbde0 SpatialTeardown::Teardown  # teardown order and vtable slot 48 (Dispose) verified byte-exact

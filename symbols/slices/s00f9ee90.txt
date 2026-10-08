@@ -1,0 +1,1 @@
+00f9f200 CopyImageRectToSurface  # cdecl (ret plain), Lock/Unlock thiscall (ret 0xc / ret 4): copies a w*w 16-bit layer rect into a locked surface

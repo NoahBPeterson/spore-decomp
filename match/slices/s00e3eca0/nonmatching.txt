@@ -1,0 +1,1 @@
+00e3ee30 399 Interp::Run: state machine complete; x87 fld/fadd for float math (SSE codegen not reproduced) and register/loop layout differ

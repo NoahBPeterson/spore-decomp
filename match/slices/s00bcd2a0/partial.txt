@@ -1,0 +1,1 @@
+00bcdd00  66  complete body but equiv.py UNSUPPORTED (0/400 valid: harness faults on fake vtable callees); keeps esi to epilogue, k via fstp to stack, store/load order differs

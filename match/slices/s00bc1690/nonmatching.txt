@@ -1,0 +1,1 @@
+00bc1940 248 complete algorithm (median-of-3 introsort recursion, heap fallback); 28-byte by-value rbtree arg copies/dtor placement not reproduced, equiv UNSUPPORTED (TreeArg copy ctor has no body)

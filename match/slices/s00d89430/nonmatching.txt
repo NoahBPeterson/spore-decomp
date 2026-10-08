@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d896f0  53  (flags /O2 /MD /Gy /GS- /TP /arch:SSE /fp:fast) complete source; creature update step: SetStealthed(false,false), fills a 0x74-byte record, calls locomotion vslot 0x37 (+0xdc) with the record, frees its buffer if header nonzero, then FUN_00bcb430 on +0xb4c and Hover(false). Same call order and targets as the original; the 53 remaining diff bytes are register/store scheduling of the record fill (original loads two constants before the vtable read and keeps one in xmm1 across the store)

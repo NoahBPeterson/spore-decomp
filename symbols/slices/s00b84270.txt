@@ -1,0 +1,1 @@
+00b84730 cPlanetModel::GetRandomSurfacePoint  # placeholder name; thiscall void(float*) ret 4

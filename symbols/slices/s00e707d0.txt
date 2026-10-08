@@ -1,0 +1,1 @@
+00e70e30 FUN_00e70e30  # cTimedHandles timer countdown (cdecl, 3 args); GetSafe on two pool handles, decrements +0x238 by dt; called only from FUN_00e7a0a0

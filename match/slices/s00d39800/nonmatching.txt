@@ -1,0 +1,1 @@
+00d39dc0 26 cl orders the cSPTransform ctor loads/xor differently (xor ecx hoisted, y/z-load interleave); calls, vcalls, constants and flag logic match

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP)
+00e1f5c0   220  PartialSort: complete; equiv.py WEAK (2623 valid inputs, 0 mismatches, 40.5% coverage); 8 calls in original order; size 290 vs 286; frame is 0x10 not 0x14 and first/middle take different registers (ebp/esi vs esi/edi)

@@ -1,0 +1,1 @@
+00b6cde0  342  complete semantics but three callees take register inputs (FUN_00b686a0: EAX = P->vptr; FUN_00b6a720: EDI = P and EAX = the 2-float pair pointer) that C++ cannot express; stand-in calls pass only the stack args; frame 0x20 vs 0x60 and P kept in edi not esi

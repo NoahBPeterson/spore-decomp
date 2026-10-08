@@ -1,0 +1,1 @@
+00a4fdb0 EA::Audio::Eapd::gatom_bang  # /O2 byte-exact; outlet fanout loop with reentrancy guard 1000 on global 0x0167545c; float/symbol atom send

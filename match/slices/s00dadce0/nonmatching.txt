@@ -1,0 +1,1 @@
+00dadfb0 14 complete; vtable register choice for host->Attach (edx vs eax) differs, all else identical

@@ -1,0 +1,1 @@
+008f7f20  147  complete; diff is register allocation (this kept in ebx in the original, esi here) and the compare loop shape (original uses dx/eax/ecx with a -1/0/1 result and an extra jump), so later jumps shift. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE

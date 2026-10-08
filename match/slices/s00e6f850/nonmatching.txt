@@ -1,0 +1,1 @@
+00e70650  298  register: self is taken in ESI (cl static convention, live across calls) instead of the original EAX + push esi/mov esi,eax; float products x87 (fmul/fchs) instead of SSE; frame 0x30 vs 0x24; call sequence and size 371 match, equiv UNSUPPORTED (eax ABI)

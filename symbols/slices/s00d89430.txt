@@ -1,0 +1,1 @@
+00d896f0 FUN_00d896f0  # creature update step (cdecl, one arg): SetStealthed(false,false), locomotion vslot 0x37 record call, FUN_00bcb430 on +0xb4c, Hover(false); name left as Ghidra's, role unconfirmed

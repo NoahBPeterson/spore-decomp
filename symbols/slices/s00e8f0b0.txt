@@ -1,0 +1,1 @@
+00e8f120 SP::cMineralView::UpdateLoyaltyBar  # thiscall; bShow==0 -> cSPUIMeter::Shutdown(1) or return 0; else vcall slot 46 (+0xb8) on mpObject, then if p null: operator_new(0x50,...) + Init(5 args) + 0xe06ca0/0xe06cf0

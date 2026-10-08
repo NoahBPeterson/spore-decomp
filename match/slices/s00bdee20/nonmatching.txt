@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bdf600  71  complete (DoCopy / UninitCopy / DestroyRange / operator delete in original order, same branch structure and store order); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; register choice for first/last/capacity differs (first lives in eax in the original, cl keeps it in ecx)

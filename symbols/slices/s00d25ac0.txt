@@ -1,0 +1,1 @@
+00d266c0 BuildTransformFromTranslation  # Claude-coined name: builds a cSPTransform from a translation and accumulates it onto the target

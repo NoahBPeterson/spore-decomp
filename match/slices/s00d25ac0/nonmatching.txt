@@ -1,0 +1,1 @@
+00d266c0  136  complete; equiv PASS (100% coverage, 1290 inputs). Size 183 vs 199 original (16-byte gap unexplained); the rest is register/shift differences from the placement-new Matrix3 construction and the Accumulate call. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE

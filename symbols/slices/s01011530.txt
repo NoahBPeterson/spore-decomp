@@ -1,0 +1,1 @@
+01011900 SP::cSimulatorUniverse::adjust_heap_grob  # eastl adjust_heap<tGrobShockData*,int,tGrobShockData,comp>; calls comp via fn ptr at [esp+0x54], promote_heap (0x1010ea0)

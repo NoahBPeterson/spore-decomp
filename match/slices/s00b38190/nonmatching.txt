@@ -1,0 +1,1 @@
+00b389f0  312  complete insertion sort of {RefObj*,float} by comparator (2 direct cmp calls, 3 vt+0x170 releases); cl adds push ebp/and esp,-8 frame that original lacks

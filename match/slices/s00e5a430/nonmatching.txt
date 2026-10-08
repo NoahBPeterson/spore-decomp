@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e5a850  116  complete (same calls in order: sGetBoxSizeMultiplier2 cdecl, kLevelSize and gspCellGame loads, x87 mul/div, RoundToInt/cvtss2si pair, both wrap-and-clamp fixups); volatile temps force 32-bit float rounding at the original's store points; the 1/x is an SSE divss where cl emits x87 (fld1/fdivrp), so the bytes differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

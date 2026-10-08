@@ -1,0 +1,1 @@
+00f9f200  324  complete; diff is register allocation (ebx/edx vs ebp/edi roles) and bool ok folding, frame size matches

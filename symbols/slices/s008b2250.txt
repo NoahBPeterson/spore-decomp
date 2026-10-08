@@ -1,0 +1,1 @@
+008b2b30 cNibbleReader::ReadPacked  # packed nibble-stream reader; name from the EA framework neighbourhood, not a PDB symbol

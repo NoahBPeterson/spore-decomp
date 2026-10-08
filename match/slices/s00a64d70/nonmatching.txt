@@ -1,0 +1,1 @@
+00a64ed0  143  complete (find, end check, RemoveEntry, IsEmpty -> listener vcall slot 2 + erase, all paths; equiv PASS); register/frame allocation differs (orig keeps this in edi, r in memory)

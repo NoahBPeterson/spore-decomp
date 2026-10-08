@@ -1,0 +1,2 @@
+008f7f20 EA::XHTML::Style::CSSParser::ParseBoxHeight  # Claude-coined name from the PDB class/method; body: 'auto' ident (Advance) or MatchLength, then CreatePropertyFunc<Length>(SetHeight) pushed onto the list
+008f2c10 EA::XHTML::Style::StyleState::SetHeight  # Claude-coined name: thiscall, writes Length (value +0x374, units +0x378)

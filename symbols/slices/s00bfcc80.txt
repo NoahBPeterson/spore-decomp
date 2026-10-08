@@ -1,0 +1,4 @@
+00bfd0d0 Simulator::cGameData::IsDestroyed  # Claude-coined name from the card: thiscall(char); compares +0x38 with vslot +0x58 float, sends a destroy message if the +0x34 pointer was set
+00b18740 Claude::IsDestroyedCheck  # Claude-coined name: cdecl(void*) -> char; zero means continue to FUN_00bfca80
+00bfca80 Claude::IsDestroyedNotify  # Claude-coined name: cdecl(void*, void*, uint) notifier, three arguments
+0067dcc0 SP::MessageServer  # Claude-coined name from the callers: cdecl() returns the message server singleton

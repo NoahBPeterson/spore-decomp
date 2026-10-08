@@ -1,0 +1,1 @@
+00be6180  274  loop body and trim logic written from decompile; pA/pB (virtual deletes at slot 0xc0) never assigned, cGonzagoTimer dtor ret-4 convention unverified, frame 0xa98 layout differs

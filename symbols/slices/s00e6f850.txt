@@ -1,0 +1,1 @@
+00e70650 OrientToAvatar  # cdecl-ish static (self in EAX via stand-in caller, float on stack): orients a cell quaternion toward the avatar cell when within its radius

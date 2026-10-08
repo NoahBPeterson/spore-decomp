@@ -1,0 +1,1 @@
+SP::sLevelGetTextureCoord  # PDB name (pdb_names.json); byte-diff 118, body checked by hand

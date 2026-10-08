@@ -1,0 +1,8 @@
+0100f930 SP::BiosphereCollapseEvent::GetEventFrequency  # Ghidra name; thiscall float(uint64) ret 8
+01002bd0 SP::SpaceGameGet  # cdecl, no args, returns the space game
+0041ea70 Property::GetFloat  # thiscall, returns float*
+00b3d300 SP::NounManager  # callee pops its arg
+00f67d90 cTerrainEditor::GetCurrentTerrainSphere  # thiscall
+00c75c30 FUN_00c75c30  # thiscall, returns float
+01005c60 FUN_01005c60  # thiscall ret 4, takes one arg, returns float
+016dc798 gSimUniverse  # global pointer; +0x10 is the property manager

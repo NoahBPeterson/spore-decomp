@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00eb0a60  -  incomplete: 272-byte /O2 cPlayerCityMusic::Read, 0xa14 frame; cVarListSerializer size (mData 0xa14 in s00593840) overlaps the arg at esp+0xa24, so the object extent is unresolved; vector<bool> DoInsert field roles at 0x198/0x19c, 0x1cc/0x1d0, 0x1e0/0x1e4 and the list clear at 0x1b8 not pinned; FUN_00eb05a0 and bool return path (bl) unnamed

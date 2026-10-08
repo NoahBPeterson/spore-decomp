@@ -1,0 +1,8 @@
+00d39dc0 UpdateEffectPlacement  # placeholder name
+0067ddd0 SP::EffectsManager  # getter returning the global at 0x015fd8e8
+00b3d350 SP::PlanetModel  # getter returning the global at 0x0167eaf8
+00b7f190 SP::cPlanetModel::BuildSurfaceOrientation  # thiscall ret 8
+0059c190 Matrix3FromQuaternion  # cdecl
+0041cb40 Matrix3::Assign  # thiscall ret 4
+004df420 SP::cSPEditorSpeciesManager::GetAvatarProfile  # thiscall
+00401090 GetSetting9  # returns the global at 0x015d0c24 (see s00401000)

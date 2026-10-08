@@ -1,0 +1,1 @@
+00a64ed0 RemoveGroupEntry (cEapdOwner18)  # Eapd: find key in map; remove p from group list; if group empty, listener vcall[2] and erase node
