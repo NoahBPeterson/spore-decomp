@@ -18,13 +18,24 @@ struct RwHashIterator
 {
 	unsigned int index;
 	unsigned int size;
+	RwHashIterator& operator++() { if (++index == size) index = 0; return *this; }
+};
+
+// What find() hands back: the entry (or end when the key is absent) and the end of the table.
+struct RwHashEntryRange
+{
+	RwHashEntry* entry;
+	RwHashEntry* end;
 };
 
 struct RwHashMap
 {
 	RwHashEntry* mTable;
-	unsigned int mSize;
+	unsigned int mSize;    // slots
+	unsigned int mCount;   // occupied slots
 	void Find(RwHashIterator& out, const unsigned int& key) const;
+	void FindEntry(RwHashEntryRange& out, const unsigned int& key) const;
+	void EraseAt(RwHashIterator it);
 };
 
 // @ 0x011e2b30
@@ -41,4 +52,56 @@ void RwHashMap::Find(RwHashIterator& out, const unsigned int& key) const
 	}
 	out.size = n;
 	out.index = i;
+}
+
+// @ 0x011e3a60
+// Find() stops at the key's slot or at the first empty slot; only the former is a hit.
+void RwHashMap::FindEntry(RwHashEntryRange& out, const unsigned int& key) const
+{
+	RwHashIterator it;
+	Find(it, key);
+	RwHashEntry* e = &mTable[it.index];
+	if (key == e->key)
+	{
+		out.end = &mTable[mSize];
+		out.entry = e;
+		return;
+	}
+	RwHashEntry* end = &mTable[mSize];
+	out.end = end;
+	out.entry = end;
+}
+
+// @ 0x011e2b90
+// Backward-shift deletion: `it` is the hole. Walk the probe run after it and pull back every entry
+// whose home slot does not lie cyclically in (hole, cur], so lookups never stop early at the hole.
+void RwHashMap::EraseAt(RwHashIterator it)
+{
+	RwHashIterator start = it;
+	RwHashIterator cur = it;
+	for (;;)
+	{
+		++cur;
+		if (cur.index == start.index)
+			break;
+		RwHashEntry* e = mTable + cur.index;
+		if (e->key == 0xffffffffu)
+			break;
+		unsigned int n = mSize;
+		unsigned int home = rw_HashUInt(e->key, g_rwHashSeed) % n;
+		RwHashIterator next = it;
+		++next;
+		if (next.index <= cur.index)
+		{
+			if (next.index <= home && home <= cur.index)
+				continue;
+		}
+		else if (next.index <= home || home <= cur.index)
+			continue;
+		mTable[it.index] = mTable[cur.index];
+		it = cur;
+	}
+	mTable[it.index].key = 0xffffffffu;
+	mTable[it.index].value = 0;
+	--mCount;
 }

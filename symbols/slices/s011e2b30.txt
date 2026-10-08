@@ -1,1 +1,3 @@
 011e2b30 RwHashMap::Find  # rw::core::arena pointer hash map lookup (linear probing, 0xffffffff = empty); called from UnfixContextImpl::Serialize
+011e3a60 RwHashMap::FindEntry  # find(): {entry or end, end}
+011e2b90 RwHashMap::EraseAt  # backward-shift deletion; map has mCount at +8
