@@ -1,1 +1,4 @@
-slices/s0108c140/s0108c140.cpp  ?reserveContactPoints@hkSimpleConstraintContactMgr@@UAE?AW4hkResult@@H@Z  0108d070  /O2 /MD /Gy /TP
+slices/s0108c140/s0108c140.cpp  ?reserveContactPoints@hkSimpleConstraintContactMgr@@UAE?AW4hkResult@@H@Z  0108d070  /vc71 /O2 /MD /Gy /TP
+slices/s0108c140/s0108c140.cpp  ?isOverlappingCollidableAdded@hkSimpleShapePhantom@@UAE?AVhkBool@@PAUhkCollidable@@@Z  0108c550  /vc71 /O2 /MD /Gy /TP
+slices/s0108c140/s0108c140.cpp  ?getConstraintInfo@hkMovingSurfaceConstraintData@@UBEXAAUhkConstraintInfo@@@Z  0108cbb0  /vc71 /O2 /MD /Gy /TP
+slices/s0108c140/s0108c140.cpp  ?getContactPointId@hkContactPointConfirmedEvent@@QBEGXZ  0108d040  /vc71 /O2 /MD /Gy /TP

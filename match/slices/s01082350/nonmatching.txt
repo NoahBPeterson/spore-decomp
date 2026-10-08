@@ -9,17 +9,13 @@
 01082800 129 havok-equivalent
 01082890 77 havok-equivalent
 01082990 43 havok-equivalent
-010829e0 4 havok-equivalent
 01082a00 3 havok-equivalent
-01082a40 17 havok-equivalent
 01082a90 149 havok-equivalent
 01082b90 59 havok-equivalent
 01082bf0 99 havok-equivalent
-01082ca0 44 havok-equivalent
 01082cf0 22 havok-equivalent
 01082df0 182 havok-equivalent
 01082ee0 0 havok-equivalent
 01083110 0 havok-equivalent
 01083320 123 havok-equivalent
 01082910 0 havok-equivalent
-01082d20 0 havok-equivalent

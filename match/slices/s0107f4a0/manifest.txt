@@ -1,8 +1,16 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s0107f4a0/s0107f4a0.cpp  ?printStatistics@hkPoolMemory@@UAEXPAVhkOstream@@@Z  0107f700  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ?getStatSynopsis@hkPoolMemory@@UAEXPAUhkMemoryStatistics@@@Z  0107f800  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ?setMark@hkMemoryStreamReader@@UAE?AW4hkResult@@H@Z  01080140  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ?rewindToMark@hkMemoryStreamReader@@UAE?AW4hkResult@@XZ  01080150  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ??0hkClass@@QAE@PBDPBV0@HPAPBV0@HPBVhkClassEnum@@HPBVhkClassMember@@HPBX@Z  010802b0  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ?isSuperClass@hkClass@@QBE?AVhkBool@@ABV1@@Z  01080300  /O2 /MD /Gy /TP
-slices/s0107f4a0/s0107f4a0.cpp  ?getDeclaredMember@hkClass@@QBEABVhkClassMember@@H@Z  010803b0  /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?printStatistics@hkPoolMemory@@UAEXPAVhkOstream@@@Z  0107f700  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?getStatSynopsis@hkPoolMemory@@UAEXPAUhkMemoryStatistics@@@Z  0107f800  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?setMark@hkMemoryStreamReader@@UAE?AW4hkResult@@H@Z  01080140  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?rewindToMark@hkMemoryStreamReader@@UAE?AW4hkResult@@XZ  01080150  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ??0hkClass@@QAE@PBDPBV0@HPAPBV0@HPBVhkClassEnum@@HPBVhkClassMember@@HPBX@Z  010802b0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?isSuperClass@hkClass@@QBE?AVhkBool@@ABV1@@Z  01080300  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?getDeclaredMember@hkClass@@QBEABVhkClassMember@@H@Z  010803b0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?allocate@hkPoolMemory@@UAEPAXHH@Z  0107f720  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?deallocate@hkPoolMemory@@UAEXPAX@Z  0107f750  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?alignedAllocate@hkPoolMemory@@UAEPAXHHH@Z  0107f780  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?alignedDeallocate@hkPoolMemory@@UAEXPAX@Z  0107f7d0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?skip@hkMemoryStreamReader@@UAEHH@Z  010800b0  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?isOk@hkMemoryStreamReader@@UBE?AVhkBool@@XZ  01080100  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ?markSupported@hkMemoryStreamReader@@UBE?AVhkBool@@XZ  01080120  /vc71 /O2 /MD /Gy /TP
+slices/s0107f4a0/s0107f4a0.cpp  ??0hkMemoryStreamReader@@QAE@PBXHW4MemoryType@0@@Z  010801d0  /vc71 /O2 /MD /Gy /TP

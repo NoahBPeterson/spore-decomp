@@ -1,13 +1,9 @@
 010df100 52 havok-equivalent
 010df160 166 havok-equivalent
 010df280 39 havok-equivalent
-010df350 48 havok-equivalent
-010df390 12 havok-equivalent
-010df3b0 14 havok-equivalent
 010df3d0 76 havok-equivalent
 010df440 198 havok-equivalent
 010df500 43 havok-equivalent
-010df560 18 havok-equivalent
 010df5d0 175 havok-equivalent
 010df6b0 164 havok-equivalent
 010df7a0 451 havok-equivalent
@@ -20,4 +16,3 @@
 010e0020 72 havok-equivalent
 010e0200 3 havok-equivalent
 010e0240 12 havok-equivalent
-010e0280 80 havok-equivalent

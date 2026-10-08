@@ -494,17 +494,27 @@ hkBool hkMath::equal(float a, float b, float eps)
 	return false;
 }
 
+// Havok's hkVector4 is 16-byte aligned (the caller's frame does `and esp,-16`); this stand-in carries the
+// two inline setters setInverse uses. setRotatedDir leaves w alone: setInverse zeroes it afterwards.
+struct __declspec(align(16)) hkVector4A
+{
+	float x, y, z, w;
+	__forceinline void setNeg4(const float* v) { x = -v[0]; y = -v[1]; z = -v[2]; w = -v[3]; }
+	__forceinline void setRotatedDir(const float* r, const hkVector4A& v)
+	{
+		x = v.z * r[8]  + v.y * r[4] + v.x * r[0];
+		y = v.z * r[9]  + v.y * r[5] + v.x * r[1];
+		z = v.z * r[10] + v.y * r[6] + v.x * r[2];
+	}
+};
+
 // @ 0x01080e70
 void hkTransform::setInverse(const hkTransform& t)
 {
 	((hkRotation*)m)->setTranspose(*(const hkRotation*)t.m);
-	float a = -t.m[12];
-	float b = -t.m[13];
-	float c = -t.m[14];
-	// X87-PRECISION: three-term dot products accumulate on the FPU stack (z term first) and round only at the store.
-	m[12] = (c * m[8] + b * m[4]) + a * m[0];
-	m[13] = (c * m[9] + b * m[5]) + a * m[1];
-	m[14] = (c * m[10] + b * m[6]) + a * m[2];
+	hkVector4A tr;
+	tr.setNeg4(&t.m[12]);
+	((hkVector4A*)&m[12])->setRotatedDir(m, tr);
 	m[15] = 0.0f;
 }
 

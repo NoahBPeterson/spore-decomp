@@ -1,2 +1,8 @@
-slices/s0111c7f0/s0111c7f0.cpp  ?addFourBytes@MoppAssembler@@QAEXPBX@Z  0111cfe0  /O2 /MD /Gy /TP
-slices/s0111c7f0/s0111c7f0.cpp  ?addJump@MoppAssembler@@QAEXH@Z  0111d260  /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addFourBytes@MoppAssembler@@QAEXPBX@Z  0111cfe0  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addJump@MoppAssembler@@QAEXH@Z  0111d260  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ??0hkDefaultToiResourceMgr@@QAE@XZ  0111ccf0  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?endToiAndFreeResources@hkDefaultToiResourceMgr@@UAEXABUhkToiEvent@@ABU?$hkArray@UhkToiEvent@@@@ABUh  0111cd80  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?releaseBuffers@MoppContextOwner@@QAEXPAX@Z  0111ce50  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?markChainVisited@@YGXPAX@Z  0111cea0  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addProperty@MoppAssembler@@QAEXHH@Z  0111cf70  /vc71 /O2 /MD /Gy /TP
+slices/s0111c7f0/s0111c7f0.cpp  ?addTerminalReoffset@MoppAssembler@@QAEXI@Z  0111d020  /vc71 /O2 /MD /Gy /TP

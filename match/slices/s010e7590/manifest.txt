@@ -1,2 +1,8 @@
-slices/s010e7590/s010e7590.cpp  ?registerAlternateShapeTypes@hkAgentRegisterUtil@@  010e7d70  /O2 /MD /Gy /TP
-slices/s010e7590/s010e7590.cpp  ?hkShapeType_toString@@YAPBDH@Z  010e7e30  /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?registerAlternateShapeTypes@hkAgentRegisterUtil@@  010e7d70  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?hkShapeType_toString@@YAPBDH@Z  010e7e30  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?processCollision@hkSymmetricAgent_hkBvAgent@@UAEXABUhkCdBody@@0ABUhkProcessCollisionInput@@AAUhkPro  010e7b30  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?createShapeBvAgent@hkBvAgent@@SAPAUhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollisionInput@@PAUhkContac  010e7ca0  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?getNumChildShapes@hkShapeCollection@@UBEHXZ  010e7f80  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?calcStatistics@hkShapeCollection@@UBEXPAUhkStatisticsCollector@@@Z  010e7fb0  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ??0hkShapeCollection@@QAE@XZ  010e7fd0  /vc71 /O2 /MD /Gy /TP
+slices/s010e7590/s010e7590.cpp  ?calcStatistics@hkBvTreeShape@@UBEXPAUhkStatisticsCollector@@@Z  010e8630  /vc71 /O2 /MD /Gy /TP

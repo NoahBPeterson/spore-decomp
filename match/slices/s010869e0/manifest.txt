@@ -1,2 +1,13 @@
-slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01087010  /O2 /MD /Gy /TP
-slices/s010869e0/s010869e0.cpp  ??0hkStabilizedSphereMotion@@  01087030  /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ??0hkSphereMotion@@  01087010  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ??0hkStabilizedSphereMotion@@  01087030  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?removeConstraint@hkWorld@@QAE?AVhkBool@@PAVhkConstraintInstance@@@Z  01086e90  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?removeAction@hkWorld@@QAEXPAVhkAction@@@Z  01086f40  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setCollisionFilter@hkWorld@@QAEXPAVhkCollisionFilter@@VhkBool@@W4hkUpdateCollisionFilterOnWorldMode  01086f80  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ??1hkRigidBody@@UAE@XZ  01087140  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ??$min2@M@hkMath@@YAMMM@Z  010871f0  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?hkRigidBody_calcAllowedPenetrationDepth@@YAXPBUhkVector4@@PAUhkCollidable@@@Z  01087240  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?updateBroadphaseAndResetCollisionInformationOfWarpedBody@hkRigidBody@@SAXPAVhkEntity@@@Z  01087750  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setPosition@hkRigidBody@@QAEXABUhkVector4@@@Z  01087820  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setRotation@hkRigidBody@@QAEXABUhkVector4@@@Z  01087840  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setPositionAndRotation@hkRigidBody@@QAEXABUhkVector4@@0@Z  01087860  /vc71 /O2 /MD /Gy /TP
+slices/s010869e0/s010869e0.cpp  ?setTransform@hkRigidBody@@QAEXABUhkTransform@@@Z  01087890  /vc71 /O2 /MD /Gy /TP

@@ -1,1 +1,10 @@
-slices/s01088960/s01088960.cpp  ?isActive@hkEntity@@QBE?AUhkBool@@XZ  01088ac0  /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?isActive@hkEntity@@QBE?AUhkBool@@XZ  01088ac0  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?setDeactivator@hkEntity@@QAEXPAUhkEntityDeactivator@@@Z  010889e0  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?removeEntityListener@hkEntity@@QAEXPAUhkEntityListener@@@Z  01088a20  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?removeCollisionListener@hkEntity@@QAEXPAUhkCollisionListener@@@Z  01088a70  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?activate@hkEntity@@QAEXXZ  01088ae0  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?deactivate@hkEntity@@QAEXXZ  01088b10  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?constrainLinearDof@hkConstraintConstructionKit@@QAEXH@Z  01089390  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?setAngularBasisABodyFrame@hkConstraintConstructionKit@@QAEXXZ  01089420  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?setAngularBasisBBodyFrame@hkConstraintConstructionKit@@QAEXXZ  01089460  /vc71 /O2 /MD /Gy /TP
+slices/s01088960/s01088960.cpp  ?end@hkConstraintConstructionKit@@QAEXXZ  01089670  /vc71 /O2 /MD /Gy /TP

@@ -8,7 +8,6 @@
 010880e0 0 havok-equivalent
 010881d0 0 havok-equivalent
 01088200 0 havok-equivalent
-01088230 0 havok-equivalent
 01088270 0 havok-equivalent
 010883c0 0 havok-equivalent
 01088410 0 havok-equivalent

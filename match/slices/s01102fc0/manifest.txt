@@ -1,2 +1,5 @@
-slices/s01102fc0/s01102fc0.cpp  hkFun_011032a0  011032a0  /O2 /MD /Gy /TP
-slices/s01102fc0/s01102fc0.cpp  setC@hkMoppSettings  011037a0  /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  hkFun_011032a0  011032a0  /vc71 /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  setC@hkMoppSettings  011037a0  /vc71 /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  ?fillKeys@hkShapeKeyList@@QBEXPAE@Z  011032c0  /vc71 /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  ?hkFun_01103300@@YGXPBUhkVector4@@IIIPAU1@@Z  01103300  /vc71 /O2 /MD /Gy /TP
+slices/s01102fc0/s01102fc0.cpp  ?copyFrom@hkBytes48@@QAEPAU1@PBU1@@Z  01103af0  /vc71 /O2 /MD /Gy /TP

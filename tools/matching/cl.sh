@@ -2,6 +2,16 @@
 # Run the VS2008 SP1 x86 compiler (cl 15.00.30729.01) under wine.
 # Toolchain: work/toolchain/vc9sp1 (from Microsoft's VCForPython27.msi, SHA-1 7800d037...befe).
 root=$(cd "$(dirname "$0")/../.." && pwd)
+
+# Pseudo-flag /vc71: compile with VC .NET 2003 instead (cl71.sh), for code EA linked from libraries
+# built with it (Havok). It lives in the flag list so manifests, chk.py and difftest select it per line.
+for a in "$@"; do
+  if [ "$a" = "/vc71" ]; then
+    for b in "$@"; do shift; [ "$b" = "/vc71" ] || set -- "$@" "$b"; done
+    exec "$root/tools/matching/cl71.sh" "$@"
+  fi
+done
+
 tc="$root/work/toolchain/vc9sp1"
 winpath() { printf 'Z:%s' "$1" | tr '/' '\\'; }
 export WINEPREFIX="${CL_WINEPREFIX:-$root/work/toolchain/wineprefix}" WINEDEBUG=-all

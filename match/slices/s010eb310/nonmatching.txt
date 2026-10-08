@@ -1,20 +1,10 @@
 # va  diff-bytes  reason
 010eb310 0 havok-equivalent
-010eb440 0 havok-equivalent
-010eb460 0 havok-equivalent
 010eb480 0 havok-equivalent
 010eb4d0 0 havok-equivalent
 010eb570 0 havok-equivalent
 010eb730 0 havok-equivalent
 010eb820 0 havok-equivalent
-010eb9b0 0 havok-equivalent
-010eb9e0 0 havok-equivalent
-010eb9f0 0 havok-equivalent
-010eba10 0 havok-equivalent
-010eba30 0 havok-equivalent
-010eba50 0 havok-equivalent
-010eba70 0 havok-equivalent
-010eba90 0 havok-equivalent
 010ebab0 0 havok-equivalent
 010ebb30 0 havok-equivalent
 010ebbb0 0 havok-equivalent

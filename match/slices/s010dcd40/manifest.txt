@@ -1,1 +1,12 @@
-slices/s010dcd40/s010dcd40.cpp  hkConvexListAgent_staticLinearCastForwarder  010ddde0  /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  hkConvexListAgent_staticLinearCastForwarder  010ddde0  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?processCollision@hkSymmetricAgentLinearCast_hkHeightFieldAgent@@UAEXABUhkCdBody@@0ABUhkProcessColli  010dcd40  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?createHeightFieldAAgent@hkHeightFieldAgentCreator@@SAPAUhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollis  010dcf80  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?getFirstVertex@hkConvexListConvexShape@@UBEXAAUhkVector4@@@Z  010dd050  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?getCollisionSpheres@hkConvexListConvexShape@@UBEPBUhkSphere@@PAU2@@Z  010dd060  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?invalidateTim@hkConvexListAgent@@UAEXAAUhkCollisionInput@@@Z  010dd0c0  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?warpTime@hkConvexListAgent@@UAEXMMAAUhkCollisionInput@@@Z  010dd0f0  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd120  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd140  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?removePoint@hkConvexListAgent@@UAEXG@Z  010dd160  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?createConvexListAgent@hkConvexListAgent@@SAPAUhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollisionInput@@  010dd750  /vc71 /O2 /MD /Gy /TP
+slices/s010dcd40/s010dcd40.cpp  ?createListConvexAgent@hkConvexListAgent@@SAPAUhkCollisionAgent@@ABUhkCdBody@@0ABUhkCollisionInput@@  010de010  /vc71 /O2 /MD /Gy /TP

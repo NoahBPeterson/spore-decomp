@@ -1,1 +1,8 @@
-slices/s0108d0b0/s0108d0b0.cpp  ?getContactPointProperties@hkSimpleConstraintContactMgr@@UAEPAUhkContactPointProperties@@G@Z  0108d570  /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?getContactPointProperties@hkSimpleConstraintContactMgr@@UAEPAUhkContactPointProperties@@G@Z  0108d570  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?getContactPoint@hkSimpleConstraintContactMgr@@QAEPAUhkContactPoint@@G@Z  0108d550  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?getAllUsedIds@hkDynamicsCpIdMgr@@QBEXAAU?$hkArray@G@@@Z  0108d8a0  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?thunkData9@hkSimpleConstraintContactMgr@@QAEXXZ  0108da30  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?thunkData10@hkSimpleConstraintContactMgr@@QAEXXZ  0108da40  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ??1hkSimpleConstraintContactMgr@@UAE@XZ  0108da50  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?createContactMgr@Factory@hkSimpleConstraintContactMgr@@QAEPAU2@ABUhkCollidable@@0PBX@Z  0108dab0  /vc71 /O2 /MD /Gy /TP
+slices/s0108d0b0/s0108d0b0.cpp  ?calcAabb@hkShapePhantom@@UAEXAAUhkAabb@@@Z  0108dc20  /vc71 /O2 /MD /Gy /TP

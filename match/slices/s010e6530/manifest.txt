@@ -1,0 +1,6 @@
+slices/s010e6530/s010e6530.cpp  ?cleanup@hkBvAgent@@UAEXXZ  010e6b00  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010e6530/s010e6530.cpp  ?invalidateTim@hkBvAgent@@UAEXAAUhkCollisionInput@@@Z  010e6b30  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010e6530/s010e6530.cpp  ?warpTime@hkBvAgent@@UAEXMMAAUhkCollisionInput@@@Z  010e6b60  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010e6530/s010e6530.cpp  ?removePoint@hkBvAgent@@UAEXG@Z  010e6ba0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010e6530/s010e6530.cpp  ?commitPotential@hkBvAgent@@UAEXG@Z  010e6bc0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010e6530/s010e6530.cpp  ?createZombie@hkBvAgent@@UAEXG@Z  010e6be0  /vc71 /O2 /MD /Gy /EHsc /TP

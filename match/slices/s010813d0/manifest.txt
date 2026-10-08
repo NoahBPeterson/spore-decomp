@@ -1,1 +1,2 @@
-slices/s010813d0/s010813d0.cpp  ?setTranspose@hkRotation@@QAEXABU1@@Z  01081550  /O2 /MD /Gy /TP
+slices/s010813d0/s010813d0.cpp  ?setTranspose@hkRotation@@QAEXABU1@@Z  01081550  /vc71 /O2 /MD /Gy /TP
+slices/s010813d0/s010813d0.cpp  ??$max2@M@hkMath@@YAMMM@Z  01081500  /vc71 /O2 /MD /Gy /TP

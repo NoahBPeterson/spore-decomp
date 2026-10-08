@@ -1,3 +1,7 @@
-slices/s01082350/s01082350.cpp  ?addReference@hkReferencedObject@@QAEXXZ  01082590  /O2 /MD /Gy /TP
-slices/s01082350/s01082350.cpp  ??0hkMultithreadConfig@@QAE@XZ  01082900  /O2 /MD /Gy /TP
-slices/s01082350/s01082350.cpp  ?createContactMgr@hkNullContactMgrFactory@@UAEPAUhkNullContactMgr@@HHH@Z  01082ce0  /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?addReference@hkReferencedObject@@QAEXXZ  01082590  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ??0hkMultithreadConfig@@QAE@XZ  01082900  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?createContactMgr@hkNullContactMgrFactory@@UAEPAUhkNullContactMgr@@HHH@Z  01082ce0  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?addContactPoint@hkNullContactMgr@@UAEGHHHH@Z  010829e0  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?removeWorldDeletionListener@hkWorld@@QAEXPAUhkWorldDeletionListener@@@Z  01082a40  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ?calcMaxIslandSizeEstimate@hkWorld@@QBEHXZ  01082ca0  /vc71 /O2 /MD /Gy /TP
+slices/s01082350/s01082350.cpp  ??0hkCollisionFilter@@QAE@XZ  01082d20  /vc71 /O2 /MD /Gy /TP

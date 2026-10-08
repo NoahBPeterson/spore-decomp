@@ -1,7 +1,5 @@
 01102fc0 300 havok-equivalent
 01103140 281 havok-equivalent
-011032c0 49 havok-equivalent
-01103300 15 havok-equivalent
 01103330 25 havok-equivalent
 01103360 9 havok-equivalent
 01103370 197 havok-equivalent
@@ -18,6 +16,5 @@
 01103930 180 havok-equivalent
 01103a10 117 havok-equivalent
 01103aa0 67 havok-equivalent
-01103af0 12 havok-equivalent
 01103b50 88 havok-equivalent
 01103bc0 64 havok-equivalent

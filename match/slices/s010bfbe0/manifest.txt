@@ -1,1 +1,9 @@
-slices/s010bfbe0/s010bfbe0.cpp  _hkSolverGetSystemTime  010bfe20  /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  _hkSolverGetSystemTime  010bfe20  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getCollisionSpheresInfo@hkConvexTranslateShape@@UBEXAAUhkCollisionSpheresInfo@@@Z  010bfe30  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?calcStatistics@hkConvexTranslateShape@@UBEXPAVhkStatisticsCollector@@@Z  010bfe50  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getMaximumProjection@hkConvexTranslateShape@@UBEMABUhkVector4@@@Z  010bff00  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getSupportingVertex@hkConvexTranslateShape@@UBEXABUhkVector4@@AAUhkCdVertex@@@Z  010bff30  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getFirstVertex@hkConvexTranslateShape@@UBEXAAUhkVector4@@@Z  010c0060  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?calcStatistics@hkBoxShape@@UBEXPAVhkStatisticsCollector@@@Z  010c0360  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getFirstVertex@hkBoxShape@@UBEXAAUhkVector4@@@Z  010c0640  /vc71 /O2 /MD /Gy /TP
+slices/s010bfbe0/s010bfbe0.cpp  ?getAabb@hkBoxShape@@UBEXABUhkTransform@@MAAUhkAabb@@@Z  010c0660  /vc71 /O2 /MD /Gy /TP

@@ -1,1 +1,5 @@
-slices/s010cbaa0/s010cbaa0.cpp  create@hkNullAgent3  010cca40  /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  create@hkNullAgent3  010cca40  /vc71 /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  ?calcStatistics@hkBvShape@@UBEXPAUhkStatisticsCollector@@@Z  010cbaa0  /vc71 /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  ??1hkBvShape@@UAE@XZ  010cbb30  /vc71 /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  ??1hkTypedBroadPhaseDispatcher@@QAE@XZ  010cc3f0  /vc71 /O2 /MD /Gy /TP
+slices/s010cbaa0/s010cbaa0.cpp  ??0hkTypedBroadPhaseDispatcher@@QAE@XZ  010cc4c0  /vc71 /O2 /MD /Gy /TP

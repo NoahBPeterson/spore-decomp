@@ -1,10 +1,16 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s0107e670/s0107e670.cpp  ?read@hkStdioStreamReader@@UAEHPAXH@Z  0107e770  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?seek@hkStdioStreamReader@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamReader@@@Z  0107e7b0  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?tell@hkStdioStreamReader@@UBEHXZ  0107e7d0  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?flush@hkStdioStreamWriter@@UAEXXZ  0107e940  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?seek@hkStdioStreamWriter@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamWriter@@@Z  0107e970  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?tell@hkStdioStreamWriter@@UBEHXZ  0107e990  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?snprintf@hkString@@SAXPADHPBDZZ  0107f390  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?sprintf@hkString@@SAXPADPBDZZ  0107f3b0  /O2 /MD /Gy /TP
-slices/s0107e670/s0107e670.cpp  ?strLen@hkString@@SAHPBD@Z  0107f420  /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?read@hkStdioStreamReader@@UAEHPAXH@Z  0107e770  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?seek@hkStdioStreamReader@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamReader@@@Z  0107e7b0  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?tell@hkStdioStreamReader@@UBEHXZ  0107e7d0  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?flush@hkStdioStreamWriter@@UAEXXZ  0107e940  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?seek@hkStdioStreamWriter@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamWriter@@@Z  0107e970  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?tell@hkStdioStreamWriter@@UBEHXZ  0107e990  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?snprintf@hkString@@SAXPADHPBDZZ  0107f390  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?sprintf@hkString@@SAXPADPBDZZ  0107f3b0  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?strLen@hkString@@SAHPBD@Z  0107f420  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?setMark@hkSeekableStreamReader@@UAE?AW4hkResult@@H@Z  0107e740  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?rewindToMark@hkSeekableStreamReader@@UAE?AW4hkResult@@XZ  0107e760  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ?isOk@hkStdioStreamWriter@@UBE?AVhkBool@@XZ  0107e950  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ??6hkOstream@@QAEAAV0@D@Z  0107ee10  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ??0hkOstream@@QAE@PAXHVhkBool@@@Z  0107ef80  /vc71 /O2 /MD /Gy /TP
+slices/s0107e670/s0107e670.cpp  ??1hkOstream@@UAE@XZ  0107efd0  /vc71 /O2 /MD /Gy /TP

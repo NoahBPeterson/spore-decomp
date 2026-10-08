@@ -1,5 +1,17 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
-slices/s01080450/s01080450.cpp  ?init@hkMonitorStream@@SAXXZ  01080480  /O2 /MD /Gy /TP
-slices/s01080450/s01080450.cpp  ?rewindToMark@hkBufferedStreamReader@@UAE?AW4hkResult@@XZ  010807b0  /O2 /MD /Gy /TP
-slices/s01080450/s01080450.cpp  ?hkGetCurrentThreadId@@YA_KXZ  01080cc0  /O2 /MD /Gy /TP
-slices/s01080450/s01080450.cpp  ?getCstyleArraySize@hkClassMember@@QBEHXZ  01080cd0  /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?hasVtable@hkClass@@QBE?AVhkBool@@XZ  01080450  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?init@hkMonitorStream@@SAXXZ  01080480  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?refillBuffer@hkBufferedStreamReader@@UAE?AW4hkResult@@XZ  010805e0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?markSupported@hkBufferedStreamReader@@UBE?AVhkBool@@XZ  01080770  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?rewindToMark@hkBufferedStreamReader@@UAE?AW4hkResult@@XZ  010807b0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?seekTellSupported@hkBufferedStreamReader@@UBE?AVhkBool@@XZ  010807d0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?seek@hkBufferedStreamReader@@UAE?AW4hkResult@@HW4SeekWhence@hkStreamReader@@@Z  010807f0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?tell@hkBufferedStreamReader@@UBEHXZ  01080810  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?flush@hkBufferedStreamWriter@@UAEXXZ  01080a60  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?seekTellSupported@hkBufferedStreamWriter@@UBE?AVhkBool@@XZ  01080ac0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?tell@hkBufferedStreamWriter@@UBEHXZ  01080b50  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ??0hkBufferedStreamWriter@@QAE@PAXHVhkBool@@@Z  01080b70  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ??1hkBufferedStreamWriter@@UAE@XZ  01080bd0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?hkGetCurrentThreadId@@YA_KXZ  01080cc0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?getCstyleArraySize@hkClassMember@@QBEHXZ  01080cd0  /vc71 /O2 /MD /Gy /TP
+slices/s01080450/s01080450.cpp  ?setInverse@hkTransform@@QAEXABU1@@Z  01080e70  /vc71 /O2 /MD /Gy /TP

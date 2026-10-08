@@ -1,1 +1,11 @@
-slices/s010eb310/s010eb310.cpp  ?getCollisionSpheresInfo@hkConvexPieceShape@@UBEXAAUhkCollisionSpheresInfo@@@Z  010eb430  /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?getCollisionSpheresInfo@hkConvexPieceShape@@UBEXAAUhkCollisionSpheresInfo@@@Z  010eb430  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ??0hkConvexPieceShape@@QAE@M@Z  010eb440  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?getFirstVertex@hkConvexPieceShape@@UBEXAAUhkVector4@@@Z  010eb460  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?process@hkAgent3Bridge@@SAPAXABUhkAgent3ProcessInput@@PAUhkAgentEntry@@PAXPAUhkVector4@@AAUhkProces  010eb9b0  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?destroy@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXPAUhkContactMgr@@@Z  010eb9e0  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?updateFilter@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXAAUhkCdBody@@2ABUhkCollisionInput@@@Z  010eb9f0  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?invalidateTim@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXAAUhkCollisionInput@@@Z  010eba10  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?warpTime@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXMMAAUhkCollisionInput@@@Z  010eba30  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?removePoint@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXG@Z  010eba50  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?commitPotential@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXG@Z  010eba70  /vc71 /O2 /MD /Gy /TP
+slices/s010eb310/s010eb310.cpp  ?createZombie@hkAgent3Bridge@@SAXPAUhkAgentEntry@@PAXG@Z  010eba90  /vc71 /O2 /MD /Gy /TP

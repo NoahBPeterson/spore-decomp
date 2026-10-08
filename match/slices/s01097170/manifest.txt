@@ -1,0 +1,3 @@
+slices/s01097170/s01097170.cpp  ?getPositionAndVelocities@hkFixedRigidMotion@@UAEXPAVhkRigidMotion@@@Z  01097280  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01097170/s01097170.cpp  ?isOverlappingCollidableAdded@hkCachingShapePhantom@@UAE?AVhkBool@@PAUhkCollidable@@@Z  01097780  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s01097170/s01097170.cpp  ?setMass@hkBoxMotion@@UAEXM@Z  01098120  /vc71 /O2 /MD /Gy /EHsc /TP

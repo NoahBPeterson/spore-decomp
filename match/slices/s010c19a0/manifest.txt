@@ -1,1 +1,3 @@
 slices/s010c19a0/s010c19a0.cpp  ?getFirstVertex@hkCapsuleShape@@QBEXAAUhkVector4@@@Z  010c2830
+slices/s010c19a0/s010c19a0.cpp  ?getAabb@hkConvexVerticesShape@@UBEXABUhkTransform@@MAAUhkAabb@@@Z  010c1c60  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s010c19a0/s010c19a0.cpp  ?calcStatistics@hkCapsuleShape@@UBEXPAUhkStatisticsCollector@@@Z  010c26f0  /vc71 /O2 /MD /Gy /EHsc /TP

@@ -1,3 +1,11 @@
-slices/s0112adf0/s0112adf0.cpp  ?getClassByName@hkClassNameRegistry@@UBEPBUhkClass@@PBD@Z  0112bad0  /O2 /MD /Gy /TP
-slices/s0112adf0/s0112adf0.cpp  ?registerTypeInfo@hkFinishLoadedObjectRegistry@@UAEXPBUhkTypeInfo@@@Z  0112baf0  /O2 /MD /Gy /TP
-slices/s0112adf0/s0112adf0.cpp  ?finishLoadedObject@hkFinishLoadedObjectRegistry@@UBEXPAXPBD@Z  0112bb10  /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?getClassByName@hkClassNameRegistry@@UBEPBUhkClass@@PBD@Z  0112bad0  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?registerTypeInfo@hkFinishLoadedObjectRegistry@@UAEXPBUhkTypeInfo@@@Z  0112baf0  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?finishLoadedObject@hkFinishLoadedObjectRegistry@@UBEXPAXPBD@Z  0112bb10  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?loadEntireFile@hkBinaryPackfileReader@@UAE?AW4hkResult@@PAUhkStreamReader@@@Z  0112b090  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?addAllocation@hkPackfileObjectUpdateTracker@@UAEXPAX@Z  0112b4d0  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?addChunk@hkPackfileData@@QAEXPAXHH@Z  0112b520  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?addType@hkBuiltinTypeRegistry@@UAEXPAUhkTypeInfo@@PAUhkClass@@@Z  0112ba20  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?registerList@hkClassNameRegistry@@UAEXPBQBUhkClass@@@Z  0112ba70  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?registerClass@hkClassNameRegistry@@UAEXPBUhkClass@@PBD@Z  0112baa0  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ??1hkDefaultBuiltinTypeRegistry@@UAE@XZ  0112bd80  /vc71 /O2 /MD /Gy /TP
+slices/s0112adf0/s0112adf0.cpp  ?hkDefaultBuiltinTypeRegistry_create@@YAPAUhkDefaultBuiltinTypeRegistry@@XZ  0112bdf0  /vc71 /O2 /MD /Gy /TP

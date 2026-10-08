@@ -7,6 +7,15 @@
 - RTM vs SP1 is still open. The Rich header was destroyed by SteamStub, and the manifest's
   9.0.21022.8 CRT binding is SP1's default too. So far every function matches with SP1.
   If residual mismatches appear, test them with a VS2008 RTM cl (15.00.21022.08).
+- **Havok was built with VC .NET 2003, not VS2008.** The dev PDB's S_COMPILE records give
+  cl 13.10.3077 for all 469 Havok objects. Integer code often matches with VS2008, but x87 code
+  never does (instruction selection differs, e.g. `fld st(i); fmul [m]` vs `fld [m]; fmul st(i)`).
+  Add the pseudo-flag **`/vc71`** to a manifest line's flags (or `chk.py --flags`) and `cl.sh`
+  hands the compile to `tools/matching/cl71.sh`: cl **13.10.3052** from the Visual C++ Toolkit
+  2003 (`VCToolkitSetup.exe`, SHA-1 `956c81c3106b97042c4126b23c81885c4b5211f4`; bin/include/lib
+  extracted from its embedded MSI without running the installer into `work/toolchain/vc71tk/`).
+  3052 is a slightly earlier build than 3077; so far it has matched. VC7.1 has no `/fp:` switch
+  (it warns and ignores it); its default is what Havok used.
 
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.
