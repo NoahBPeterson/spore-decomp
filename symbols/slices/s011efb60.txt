@@ -1,0 +1,1 @@
+011efeb0 rw::graphics::Raster::Initialize

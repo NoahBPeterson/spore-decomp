@@ -21,6 +21,13 @@
   address range (e.g. NegateRows, LpcSynthesize) and the EA framework (UTFSpore: 751 functions
   exact with VS2008 vs 82 with 7.1) are VS2008. When a function in a prebuilt library is
   complete but a few bytes off (`dec [m]` vs `sub [m],1`, x87 operand order), try `/vc71`.
+- **RenderWare 4's core was also built with link-time code generation (`/GL` + `/LTCG`).**
+  Evidence: `Raster::Initialize` (0x011efeb0) keeps `edx = 0` live across a call to
+  `FormatGetDepth`, which is only legal when the compiler knows the callee leaves `edx` alone.
+  A `/GL` compile linked with the 2003 `link.exe /LTCG` reproduces that, but register choices
+  then depend on the callees' real bodies, so a single-object compile cannot match these
+  functions byte for byte. Record them as complete (equivalence-checked) unless a function
+  makes no calls. Havok shows no sign of LTCG.
 
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.

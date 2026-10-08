@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+011efeb0  119  complete: same stores, mip-count loop, flag tests and calls; flags /vc71 /O2 /MD /Gy /TP; the original was built with /GL + /LTCG (it keeps edx = 0 live across the call to FormatGetDepth, which it knows does not touch edx); a /GL + /LTCG test link reproduces that but needs faithful callee bodies to match registers
