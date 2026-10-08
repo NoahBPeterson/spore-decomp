@@ -1,1 +1,4 @@
 011efeb0 rw::graphics::Raster::Initialize
+011efe30 rw::graphics::Raster::D3D9GetStreamedMipLevelPitch
+011f0000 rw::graphics::Raster::D3D9GetMipLevelSize  # dev PDB: Raster::Fill
+011f0270 rw::graphics::Raster::SetMipLevelData  # dev PDB: D3D9GetStreamedMipLevelSize
