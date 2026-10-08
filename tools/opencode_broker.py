@@ -24,12 +24,13 @@ LOG = os.path.join(ROOT, "work/opencode/decisions.jsonl")
 batch = sys.argv[1]
 ids = [s["id"] for s in json.load(open(os.path.join(ROOT, "work/batches", batch + ".json")))]
 IDS = "(?:" + "|".join(map(re.escape, ids)) + ")"
-ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/scratch_%s[^/]*)$"
-                          % (re.escape(ROOT), IDS, IDS, IDS))
+ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
+                          % (re.escape(ROOT), IDS, IDS))
 PY_TOOLS = re.compile(r"^\.venv/bin/python3? (?:tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
-                      r"disasm|pattern_info|cmpobj|patterns|libmatch)\.py|tools/pdb_type\.py)(?:\s|$)")
+                      r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
+                      r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
-                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed -n|nl|column|date|which|ps|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|nm|objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
+                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|nm|objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
 DENY_CMD = re.compile(r"^(?:sudo|git|curl|wget|pip3?|uv|brew|npm|npx|ssh|scp|rsync|ghidra|pyghidra|analyzeHeadless|"
                       r"kill|pkill|killall|open|osascript|chmod|chown|ln|dd|truncate|shutdown|launchctl|crontab)(?:\s|$)")
 
@@ -151,7 +152,9 @@ def decide_manual(r):
 
 def decide(r):
     act, res = r.get("action"), r.get("resources") or []
-    if act in ("read", "glob", "grep", "list", "lsp", "todowrite", "todoread", "task", "skill"):
+    if act in ("task", "subagent"):
+        return "reject", "subagent spawning is forbidden; do the work yourself in this session"
+    if act in ("read", "glob", "grep", "list", "lsp", "todowrite", "todoread", "skill"):
         return "once", "read-only/agent tool"
     if act in ("edit", "write", "patch", "apply_patch"):
         bad = [p for p in res if not ok_path(os.path.relpath(p, ROOT) if os.path.isabs(p) else p)]
@@ -179,16 +182,21 @@ def decide(r):
             if code is not None:
                 if safe_python(code):
                     continue
-                return "hold", "inline python with side effects or unknown imports"
+                return "reject", "inline python with side effects or unknown imports; use .venv/bin/python <script> or a repo tool"
+            if re.match(r"^(?:python3?|python)(?:\s|$)", s):
+                return "reject", "bare python; use .venv/bin/python <script>"
+            if s == "perl" or s.startswith("perl "):
+                return "reject", "no perl; use the edit/write tools or .venv/bin/python"
             if s.startswith("tools/matching/cl.sh "):  # compiler; object output must stay in work/match
-                fo = re.search(r"/Fo\S*?(work[/\\\\]match\S*)?(?:\s|$)", s)
-                if "/Fo" in s and not re.search(r"/Fo\"?(?:Z:)?\S*work[/\\\\]match", s):
-                    return "hold", "compiler output outside work/match: %s" % s[:120]
+                if "/Fo" in s and not re.search(r"/Fo[^\s]*?work[\\/]+match", s):
+                    return "reject", "compiler output outside work/match: %s" % s[:120]
                 continue
             if not (PY_TOOLS.match(s) or SAFE_CMD.match(s)):
                 return "hold", "unrecognized command: %s" % s[:120]
-            if re.search(r"\bsed\b(?!\s+-n)", s) or "system(" in s or (s.startswith("awk") and re.search(r"print[^;}]*>|getline", s)) or (s.startswith("find") and re.search(r"-(?:exec|execdir|delete|ok|fprint)", s)):
-                return "hold", "possible in-place edit / shell escape: %s" % s[:120]
+            if "system(" in s or (s.startswith("awk") and re.search(r"print[^;}]*>|getline", s)) or (s.startswith("find") and re.search(r"-(?:exec|execdir|delete|ok|fprint)", s)):
+                return "reject", "possible in-place edit / shell escape: %s" % s[:120]
+            if re.search(r"(?:^|\s)sed\b[^|;&]*\s-i", s) and "work/match/" not in s and "work\\match" not in s:
+                return "reject", "in-place sed outside work/match scratch; use the edit tool: %s" % s[:120]
         return "once", "allowed shell"
     if act in ("webfetch", "websearch"):
         return "reject", "no network"

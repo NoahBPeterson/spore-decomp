@@ -55,7 +55,7 @@ def model():
     return {"providerID": G["provider"], "id": G["model"]}
 
 
-PROMPT = open(W("work/opencode/wave_prompt.txt")).read()
+PROMPT = open(W("work/opencode", G.get("prompt") or "wave_prompt.txt")).read()
 
 
 def prompt_for(k):
