@@ -26,7 +26,7 @@ ids = [s["id"] for s in json.load(open(os.path.join(ROOT, "work/batches", batch 
 IDS = "(?:" + "|".join(map(re.escape, ids)) + ")"
 ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
                           % (re.escape(ROOT), IDS, IDS))
-PY_TOOLS = re.compile(r"^\.venv/bin/python3? (?:tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
+PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
                       r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
@@ -164,6 +164,7 @@ def decide(r):
             s = re.sub(r"\s*2>&1\s*", " ", seg).strip()
             s = re.sub(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)+", "", s)  # leading VAR=value
             s = re.sub(r"^(?:timeout|gtimeout)\s+(?:-\S+\s+)*\d+[smh]?\s+", "", s)  # `timeout N cmd` wrapper
+            s = re.sub(r"^(?:time|/usr/bin/time)\s+", "", s)  # `time cmd` wrapper
             if DENY_CMD.match(s):
                 return "reject", "denied command: %s" % s[:80]
             for p in paths_in(s):
@@ -187,12 +188,14 @@ def decide(r):
                 return "reject", "bare python; use .venv/bin/python <script>"
             if s == "perl" or s.startswith("perl "):
                 return "reject", "no perl; use the edit/write tools or .venv/bin/python"
-            if re.search(r"(?:^|[/\s])tools/matching/cl71?\.sh\s", s):  # compiler; object output must stay in work/match
+            if re.search(r"(?:^|[/\s])tools/matching/cl(?:71)?\.sh\s", s):  # compiler; object output must stay in work/match
                 if "/Fo" in s and not re.search(r"/Fo[^\s]*?work[\\/]+match", s):
                     return "reject", "compiler output outside work/match: %s" % s[:120]
                 continue
             if "/tmp/" in s or re.search(r"(?:^|\s)/(?:private/)?tmp(?:/|\s|$)", s):
                 return "reject", "no /tmp; keep scratch under work/match/: %s" % s[:120]
+            if re.match(r"^(?:\S*/)?(?:llvm-|[\w]+-w64-mingw32-)?objdump(?:\s|$)", s):
+                continue  # read-only disassembly
             if not (PY_TOOLS.match(s) or SAFE_CMD.match(s)):
                 return "hold", "unrecognized command: %s" % s[:120]
             if "system(" in s or (s.startswith("awk") and re.search(r"print[^;}]*>|getline", s)) or (s.startswith("find") and re.search(r"-(?:exec|execdir|delete|ok|fprint)", s)):
