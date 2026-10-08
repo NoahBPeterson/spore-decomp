@@ -266,7 +266,17 @@ int Dac_CmdStop(int arg)
 void Dac::PostCmd(int cmd, void* val)
 {
     Dac* self = this;
-    System* sys = *(System**)((char*)self + 4);
+    // The case-5 path must be a real tail call (the original ends the frame with `jmp 0xa16170`).
+    // Computing `sys` only where it is needed keeps it out of a callee-saved register across the
+    // large case-0 body, which is what lets cl turn `return sys->Queue2(...)` into a `jmp`.
+    if (cmd == 5) {
+        System* sys = *(System**)((char*)self + 4);
+        return sys->Queue2((void*)0x113d770, self);
+    }
+    if (cmd == 6) {
+        self->Func_cea0();
+        return;
+    }
     if (cmd == 0) {
         float x = *(float*)val;
         int idx;
@@ -287,6 +297,7 @@ void Dac::PostCmd(int cmd, void* val)
         return;
     }
     if (cmd >= 1 && cmd <= 4) {
+        System* sys = *(System**)((char*)self + 4);
         unsigned index = sys->mCommandIndex;
         char* base = sys->mpCommandBuffer;
         if (cmd == 1) {
@@ -314,11 +325,6 @@ void Dac::PostCmd(int cmd, void* val)
             c->val = (int)*(float*)val;
         }
         return;
-    }
-    if (cmd == 5) {
-        sys->Queue2((void*)0x113d770, self);
-    } else if (cmd == 6) {
-        self->Func_cea0();
     }
 }
 

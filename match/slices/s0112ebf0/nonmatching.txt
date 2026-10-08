@@ -1,6 +1,11 @@
 # va  diff-bytes  reason
 0112ebf0  525  WAVE decode-buffer/timer setup: complete; /LTCG register/inline scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid; original faults on garbage buffers)
+0112eeb0  338  WAVE packet submit (main): complete; id-slot match + vtable slot0/slot1 submit + SNDPKTPLAY packet (count@+4, offsets@+0xc); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (297 valid, 87.1% cov)
+0112f080  35  set plug-in parameter from scaled float: complete; round-to-nearest cvtss2si asm helper; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (369 valid, 100% cov)
+0112f0f0  71  stop playback with current gain: complete; cvtss2si round; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% cov)
 0112f130  142  WAVE player shutdown/release: complete; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 81.3% cov)
+0112f230  54  set plug-in parameter from float: complete; cvtss2si round; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% cov)
+0112f2d0  60  playback progress: complete; x87 float division (this TU is x87, not SSE); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
 0112f340  80  buffer-fill protocol: complete; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (359 valid, 100% cov)
 0112f3c0  298  WAVE init-from-header: complete; object-heavy header parsing; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid; original faults/budget)
 0112f550  669  WAVE player Create: complete; object-heavy; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid)

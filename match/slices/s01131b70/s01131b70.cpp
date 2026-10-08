@@ -108,7 +108,7 @@ int  SndStream_destroy(int index);
 int  SndStream_isHeld(SndStreamState* self);
 void SndStream_releaseCallback(int p);
 void SndStream_removeLine(unsigned a);
-void SndStream_releaseLine(unsigned p);
+void SndStream_releaseLine(int unused, unsigned b, SndStreamState* self);
 int  SndStream_getState(int index);
 
 // @ 0x01131b70
@@ -199,12 +199,12 @@ checkp:
 }
 
 // @ 0x01131e00
-SndStreamState* SndStream_init(int a0, int a1, int a2, int a3, int a4, SndStreamState* self, int a6, int* out)
+SndStreamState* SndStream_init(int a0, int a1, int a2, int a3, int a4, int* out, int a6, SndStreamState* self)
 {
     fi(self, 0x9c) = a6;
     fi(self, 0x20) = a0;
-    fi(self, 0xac) = a2;
-    fi(self, 0xa8) = a3;
+    fi(self, 0xac) = a1;
+    fi(self, 0xa8) = a2;
     fi(self, 0xe0) = a4;
     fi(self, 0x00) = 0;
     fi(self, 0xe8) = 0;
@@ -218,7 +218,7 @@ SndStreamState* SndStream_init(int a0, int a1, int a2, int a3, int a4, SndStream
     fi(self, 0xd8) = 0; fi(self, 0xdc) = 0;
     fi(self, 0x0c) = -1;
     if (fi(self, 0x9c) == -1)
-        fi(self, 0x9c) = ((Stream*)a2)->FUN_011e6cc0();
+        fi(self, 0x9c) = ((Stream*)a4)->FUN_011e6cc0();
     fi(self, 0xa0) = fi(self, 0x9c);
     fi(self, 0xa4) = fi(self, 0x00);
     fi(self, 0xa0) = fi(self, 0x9c) - fi(self, 0x00);
@@ -343,12 +343,11 @@ void SndStream_releaseCallback(int p)
 }
 
 // @ 0x011323a0
-void SndStream_releaseLine(unsigned a, unsigned b)
+void SndStream_releaseLine(int unused, unsigned b, SndStreamState* self)
 {
-    int* node = (int*)(fi((SndStreamState*)a, 0x114));
+    (void)unused;
+    int* node = (int*)(fi(self, 0x114));
     int iter = 1;
-    (void)b;
-    int s = 0;
     for (;;) {
         unsigned v3 = b;
         unsigned v5 = 0;
@@ -369,7 +368,7 @@ void SndStream_releaseLine(unsigned a, unsigned b)
         }
         if (b == 0)
             return;
-        node = (int*)(fi((SndStreamState*)b, 0x114));
+        node = (int*)(fi(self, 0x114));
         ++iter;
         if (iter > 200) {
             SndStream_removeLine((unsigned)node[3]);
@@ -394,11 +393,11 @@ int SndStream_parseHeaderAndStart(int index, int chunk)
     int* p = (int*)(s->m + 0xc8);
     int cur = *p;
     while (cur != 0) {
-        int local30[4];
+        int local30[5];
         local30[0] = 3;
         local30[1] = *p;
         local30[2] = p[4];
-        local30[3] = fi(s, 0xc);
+        local30[4] = *(int*)(hdr + 0xc);
         cur = 0;
         *p = 0;
         p[4] = 0;
@@ -414,7 +413,7 @@ int SndStream_parseHeaderAndStart(int index, int chunk)
     }
     Stream* stream = *(Stream**)&fi(s, 0x04);
     stream->ReleaseChunk((void*)chunk);
-    fi(s, 0x10) = SndStream_bitrateToFrames((unsigned short*)(s->m + 0x1c));
+    *(int*)(hdr + 0x10) = SndStream_bitrateToFrames((unsigned short*)(s->m + 0x1c));
     if (fi(s, 0x18) == fi(s, 0x1c)) {
         int* a = (int*)(s->m + 0x20);
         int* q = (int*)(s->m + 0x84);
@@ -532,29 +531,22 @@ void SndStream_parseData(unsigned int a, int b)
             val = v;
     }
     acc = acc ^ ((acc ^ val) & 0x7fffffff);
-    fi(s, 0x14) = acc;
 
     unsigned char nch = fb(s, 0x1a);
     int base = v7 + 0xc;
     int end = base + (int)nch * 4;
-    int* dest = (int*)(s->m + 0x24);
+    SndPacket pkt;
     for (int i = 0; i < (int)nch; ++i) {
         unsigned vv = *(unsigned*)(base + i * 4);
         if (swapped)
             vv = (vv >> 24) | ((vv >> 8) & 0xff00) | ((vv << 8) & 0xff0000) | (vv << 24);
-        dest[i] = end + vv;
+        pkt.channel[i] = (void*)(end + vv);
     }
     if ((acc & 0x7fffffff) != 0) {
-        *(int*)(dest[0] - 8) = b;
-        *(int*)(dest[0] - 4) = fi(s, 0x0c);
-        fi(s, 0x1c) += (int)(acc & 0x7fffffff);
-        unsigned sz = ((unsigned)fb((SndStreamState*)hdr, 0x24) << 31) | (acc & 0x7fffffff);
-        SndPacket pkt;
-        pkt.field0 = (int)dest[0];
-        pkt.size = (uint32_t)(dest[1] - dest[0]);
-        pkt.field8 = (int)dest[2];
-        pkt.channel[0] = (void*)dest[3];
-        (void)sz;
+        *(int*)((char*)pkt.channel[0] - 8) = b;
+        *(int*)((char*)pkt.channel[0] - 4) = fi((SndStreamState*)hdr, 0xc);
+        *(int*)(hdr + 0x1c) += (int)(acc & 0x7fffffff);
+        pkt.size = ((unsigned)fb((SndStreamState*)hdr, 0x24) << 31) | (acc & 0x7fffffff);
         SNDPKTPLAY_submit(fi(s, 0x0c), &pkt);
         fb((SndStreamState*)hdr, 0x24) = 1;
         return;

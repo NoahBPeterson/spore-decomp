@@ -19,7 +19,7 @@ static inline int RwFloat2Int(float f)
 // ---------------------------------------------------------------- filesys Stream
 struct Stream {
     void* GetChunk();                 // 0x011e6b50
-    bool  FUN_011e6bf0();             // 0x011e6bf0  (has data?)
+    int   FUN_011e6bf0();             // 0x011e6bf0  (has data?)
     bool  FUN_011e6c50();             // 0x011e6c50
     void  ReleaseChunk(void* chunk);  // 0x011e7c70
 };
@@ -79,7 +79,7 @@ struct AiffPuller {
     uint32_t f54, f58, f5c, f60;
 };
 
-struct Chunk { int size; void* data; };   // filesys Stream chunk: +4 length, +8 data
+struct Chunk { int field0; int size; void* data; };   // filesys Stream chunk: +4 length, +8 data
 
 struct Mp3Format {            // sound format block pointed to by the player's +0x20
     float  f0, f1, f2;

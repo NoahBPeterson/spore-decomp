@@ -2,7 +2,7 @@
 # Built with VC .NET 2003 (/vc71) + /GL /LTCG and /arch:SSE; functions with calls cannot be
 # byte-exact from a single object.  Each reason names the flags and the difftest verdict.
 01142a20   31  voice sub-voice param store leaf; complete; difftest PASS 100% cov; /LTCG schedules the global load differently. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01142a80  151  MIX_create: allocate voice state / ping-pong temp / output buffers, install codecs; complete; difftest FAIL 5/93 valid inputs (ours faults on a fake-method pointer after fault repair; object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142a80  135  MIX_create: allocate voice state / ping-pong temp / output buffers, install codecs; complete; difftest WEAK 186/400 valid, 0 mismatches (79.5% cov) -- remaining inputs are discarded because the original itself faults on fuzzed g_numOutputs-driven out-of-range writes; object-heavy. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01142c90  503  MIXI_stop/slice: mix channels, run each voice's codec, stretch into output buses; complete; difftest WEAK 16.1% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 011431a0   13  MIX_audioslice: chunked submit wrapper over FUN_01142c90; complete; difftest PASS 73.0% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143210  118  voice volume/pitch scale (cvtss2si rounded table lookup); complete; difftest WEAK 100% cov, 145 valid. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
@@ -10,6 +10,7 @@
 01143310  111  iSNDdetunetolinear: cents<->linear detune conversion leaf; complete; difftest PASS 95.8% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 011433b0   71  iSNDcalcpitch: compute pitch word from detune table; complete; difftest WEAK 100% cov, 146 valid. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143430   27  init a small 0x14-byte descriptor struct; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01143600   86  streamed MMX coefficient decode into an output ring (calls FUN_01143460 + memmove); complete; difftest FAIL 5/20 valid inputs (ours diverges during fault repair on a zeroish object; object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01143460  375  FUN_01143460: 16-byte -> 64-coefficient filter decode, two-stage scalar/MMX+SSE; complete (stdcall, ret 8); scalar lowering of the punpck/cvtpi2ps nibble-lattice stage; difftest PASS 400 valid, 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01143600  250  streamed MMX coefficient decode into an output ring (calls FUN_01143460 + memmove); complete; difftest PASS 264 valid, 97.7% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 011436e0  318  streamed signed-byte sample convert (0.0078125) into an output ring; complete; difftest PASS 98.1% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
 01143830  292  streamed unsigned-byte sample convert (0.0078125) into an output ring; complete; difftest PASS 98.0% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE

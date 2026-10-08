@@ -4,6 +4,8 @@
 #include <string.h>
 
 #pragma function(memset)
+#pragma function(memcpy)
+#pragma function(memmove)
 
 namespace rw { namespace audio { namespace core {
 
@@ -63,8 +65,9 @@ public:
     unsigned short mFrameSamples;             // +0x14
     unsigned char mLayer;                     // +0x16
     unsigned char mOpened;                    // +0x17
-    unsigned char mChannels;                  // +0x18
-    char pad19[0x1b0];                        // +0x19 .. +0x1c8
+    char pad18[0x24];                         // +0x18 .. +0x3b
+    unsigned char mChannels;                  // +0x3c
+    char pad3d[0x1c8 - 0x3d];                 // +0x3d .. +0x1c7
     void* mTail1c8;                           // +0x1c8
     int   mFrameStart;                        // +0x1cc
     float* mpDecodedFrame;                    // +0x1d0

@@ -1,18 +1,22 @@
-01136b40 8 complete FUN_01136b40: tail-call the HELPER_CEALayer3DecF destructor on *(this+0x34); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 131/400 valid 100% cov.
+011369e0 212 complete EaLayer3DecBase::DecodeGranule (block header walk, FUN_01136460 granule fill, per-channel memcpy + ScaleSamples via FUN_01148cb0/FUN_01136980/FUN_01148a00/FUN_01136460 thiscalls); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 238/400 valid 51.1% cov (no mismatches; the corpus does not reach the deeper decode paths).
+01136b10 32 complete EaLayer3Dec::SetupBuffer: aligned base (this+0x47)&~7, zero +0x38/+0x3c, call __fastcall FUN_01148e80(p) (returns ecx); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
 01136b50 178 complete EaLayer3Dec::DecodeEvent: block header walk + Feed + FUN_01149490 loop + ScaleSamples; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (budget/fault(read)/fault(fetch)).
-01136c60 48 complete FUN_01136c60: call each per-core virtual with 0 then Free the core array; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 215/400 valid 25.9% cov.
-01136cc0 203 complete EaLayer3DecBase::CreateInstance: build the EALayer3Core instances (aligned 0x2e0 blocks, operator_new, ctor, back-pointer) and init fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid.
+01136c60 48 complete FUN_01136c60: call each per-core virtual slot 0 with 0 (ecx=core) then Free the core array; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 238/400 100% cov.
+01136cc0 254 complete EaLayer3DecBase::CreateInstance: aligned running total ((total+15)&~15)+0x2e0 per core, Alloc, operator_new, thiscall ctor, back-pointer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 195/400 valid 42.2% cov (no mismatches; <200 valid).
 01136de0 6 complete FUN_01136de0: CreateInstance(this,2); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid.
 01136e10 144 complete FUN_01136e10: zero 0x12 pairs at +0x40 then 18 tail floats; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 184/400 valid 100% cov.
 01136ee0 130 complete FUN_01136ee0: sample-rate-derived short at +0x148 and 12 float clears; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 387/400 100% cov (cvtss2si via inline asm).
+01136fa0 192 complete VuMeter ctor: vtable, PlugIn::Initialize, Cvtss2si sample-rate, zero 0x40..0x98, six thiscall ResetSlot, TimerManager::AddTimer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 315/400 100% cov.
 01137150 15 complete FUN_01137150: return channels*0x1c + 0x80; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
-01137170 - complete TimeStretch::CreateInstance: sample-rate/spacing sizing, per-channel buffer slicing, Alloc, field init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid.
+01137170 509 complete TimeStretch::CreateInstance: signed cvttss2si rate + spacing rounding, per-channel buffer slicing, Alloc, field init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 377/400 100% cov.
 011373c0 14 complete FUN_011373c0: pop the head 0x16e6288 list node (base -0x2c); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 400/400 valid 55.6% cov.
 011373e0 16 complete FUN_011373e0: push this+0x2c on the 0x16e628c list, set +0x8e; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 210/400 92.9% cov.
 01137450 133 complete DecoderThunk::FUN_01137450: unlink from the mix owner, optionally accumulate the float block, clear fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 95.7% cov.
 011374f0 11 complete FUN_011374f0: unlink all mix entries, pop the timer list node, Free +0x24; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 216/400 valid 47.5% cov.
-01137590 141 complete SubMix::CreateInstance: vtable, name copy, per-channel 1KB buffer Alloc + operator_new, timer node, zero mix fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid.
+01137590 200 complete SubMix::CreateInstance: vtable, name copy, per-channel 1KB buffer Alloc + operator_new, timer node, zero mix fields; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 299/400 100% cov.
 011376a0 16 complete FUN_011376a0: return (format!=4 && format!=0); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
+011376d0 282 complete DecoderThunk::FUN_011376d0: thiscall FUN_00a10ef0 bit reads on a 2-dword state, sample tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 257/400 98.9% cov.
+011377f0 163 complete DecoderThunk::FUN_011377f0: thiscall FUN_0114c880 mix parse, spread into the mix state; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 264/400 100% cov.
 011378a0 23 complete DecoderThunk::FUN_011378a0: remaining bytes for channel (subtract head or +0x1c); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 316/400 100% cov.
 01137910 42 complete FUN_01137910: ((channels*4+0x1d7)&~7) + round(*ptr)*0x30; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov (cvtss2si).
 01137950 143 complete FUN_01137950: retire 20 slot entries (drop finished decoders, advance buffer, free); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 217/400 valid 33.3% cov.

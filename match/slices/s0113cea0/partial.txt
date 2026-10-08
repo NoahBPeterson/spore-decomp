@@ -1,2 +1,2 @@
 # <va>  <diff-bytes>  <reason>
-0113d5d0  241  approximate: the buffer-lock success path is complete, but the timed fallback calls the x87 asm helper FUN_011e0810 (0x11e0810) which I replaced with a plain (int) conversion of the same double; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved _timeGetTime@0)
+# (none -- every function in this slice is complete)

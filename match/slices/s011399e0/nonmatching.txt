@@ -1,11 +1,11 @@
 # va  diff-bytes  reason
-011399e0  592 complete ReverbModel1 EQ-table configure; LTCG SSE blend over two 0x48-stride tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01139d60  145 complete ReverbModel1 damping-vector; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01139e10  83 complete ReverbModel1 ctor; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01139eb0  50 complete ReverbModel1 dtor; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01139f20  170 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-01139fe0  969 complete ReverbModel1 timer configure; LTCG (delay-line/FIR marshalling); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-0113a4c0  209 complete ReverbModel1 timer callback; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-0113a5c0  269 complete ReverbModel1::CreateInstance; LTCG DelayLine::Init/AddTimer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-0113a7a0  131 complete ReverbIR1::Configure; LTCG FastFirEngine::Configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
-0113a840  0 complete ReverbIR1 deleting destructor; defined but no same-size symbol found by chk (inline/COMDAT split); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+011399e0  592 complete ReverbModel1 EQ-table configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (274 valid, 94.8% coverage)
+01139d60  145 complete ReverbModel1 damping-vector; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+01139e10  83 complete ReverbModel1 ctor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
+01139eb0  50 complete ReverbModel1 dtor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (386 valid, 100% coverage)
+01139f20  170 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (1 unresolved reference _log2)
+01139fe0  969 complete ReverbModel1 timer configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (231 valid, 89.4% coverage)
+0113a4c0  209 complete ReverbModel1 timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (294 valid, 78.9% coverage)
+0113a5c0  269 complete ReverbModel1::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (181 valid, 97% coverage, no mismatch; original faults on ~half the random inputs)
+0113a7a0  131 complete ReverbIR1::Configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (83 valid, 100% coverage, no mismatch)
+0113a840  0 complete ReverbIR1 deleting destructor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (228 valid, 100%)

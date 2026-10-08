@@ -8,7 +8,7 @@
 01140030  2  F_01140030 (apply lowpass to a play) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (15.0% coverage). Only the global byte test is mov/test vs cmp.
 011400a0  2  F_011400a0 (apply highpass to a play) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (15.0% coverage). Only the global byte test is mov/test vs cmp.
 01140110  93  F_01140110 (scan for a 4-byte tag, special-case "data") complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (397 valid, 82.2% coverage)
-01140190  205  F_01140190 (SND 10-byte extended float -> double) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv FAIL 5/6: the second ldexp argument differs; x87 80-bit intermediate vs double ordering. Needs the original's fild/fadd sequence.
+01140190  253  F_01140190 (SND 10-byte extended float -> double) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage). Original uses fild (signed) for mid+2^31 and lo+2^31; source casts through int to match.
 011402f0  116  SndDecoder::DecodeS16 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (367 valid, 100% coverage)
 011403b0  115  SndDecoder::DecodeRaw complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (379 valid, 100% coverage)
 01140460  114  SndDecoder::DecodeSwap complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (374 valid, 100% coverage)

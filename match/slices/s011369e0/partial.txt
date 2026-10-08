@@ -1,6 +1,0 @@
-011369e0 212 EaLayer3DecBase::DecodeGranule: complete reconstruction (block header walk, FUN_01136460 granule fill, per-channel memcpy + ScaleSamples) but equiv FAIL (execution) - a kept-alive state/register or callee convention differs, not verified equivalent; flags /vc71 /O2 /MD /Gy /TP /arch:SSE.
-01136b10 32 EaLayer3Dec::SetupBuffer: computes the aligned base (this+0x47)&~7, zeroes +0x38/+0x3c and calls FUN_01148e80 with that aligned pointer in ecx; equiv FAIL (execution) - FUN_01148e80 is a thiscall we cannot call correctly; flags /vc71 /O2 /MD /Gy /TP /arch:SSE.
-01136f80 8 FUN_01136f80: calls FUN_01136e10(*(this+4)) and returns 8; equiv FAIL (execution) - FUN_01136e10 zeroes a frame the harness input is too small for; flags /vc71 /O2 /MD /Gy /TP /arch:SSE.
-01136fa0 104 VuMeter ctor: vtable, PlugIn::Initialize, sample-rate rounding, zero 0x40..0x98, six FUN_0114a4a0, TimerManager::AddTimer; equiv FAIL (execution); flags /vc71 /O2 /MD /Gy /TP /arch:SSE.
-011376d0 223 parser block (FUN_00a10ef0 bit reads, sample tables); equiv FAIL (execution) - FUN_00a10ef0 is a thiscall bit reader declared free; flags /vc71 /O2 /MD /Gy /TP /arch:SSE.
-011377f0 147 parser block (FUN_0114c880 result spread into the mix state); equiv FAIL (execution) - FUN_0114c880 writes through its ecx/output; flags /vc71 /O2 /MD /Gy /TP /arch:SSE.

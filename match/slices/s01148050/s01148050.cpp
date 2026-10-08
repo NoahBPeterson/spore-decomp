@@ -72,7 +72,8 @@ public:
     CMpegBase();
     void SetBuffer(unsigned char* p);
     void ResetLoadedHistory();
-    __declspec(noinline) int ParseHeader(unsigned int header);
+    int ParseHeader(unsigned int header);      // 0x1148a40 (body below as ParseHeaderImpl)
+    int ParseHeaderImpl(unsigned int header);
     int  ReadHeader();
     int  PeekHeader();
     void ResetBits();
@@ -85,7 +86,11 @@ public:
 
 void SynthesisMatrix(int dst, float* out2, const float* in);
 
-extern void Dct32(const float* in, float* outA, float* outB);
+// Scratch and local body for the shared 32-point matrixing DCT (0x01146dd0), whose custom
+// register convention (eax=in, edx=outA, stack=outB) a single-object cl cannot emit.
+extern float g_dct32Scratch[64];                 // 0x016e8180
+void Dct32Local(const float* in, float* outA, float* outB);
+#include "s01148050_dct32.h"
 
 // @ 0x01148050
 void CMpegBase::PolySynth(int iChannel, float* pOutSamples, float* pInSamples)
@@ -100,7 +105,7 @@ void CMpegBase::PolySynth(int iChannel, float* pOutSamples, float* pInSamples)
     float* pHistory = (float*)((char*)mpLoadedPolySynthHistory + iChannel * 0x900);
     float* pColumnA = pHistory + iOdd * 288 + ((iPhase + iOdd) & 0xF);
     float* pColumnB = pHistory + iNotOdd * 288 + iCol;
-    Dct32(pInSamples, pColumnB, pColumnA);
+    Dct32Local(pInSamples, pColumnB, pColumnA);
 
     float* pBank = pHistory + iNotOdd * 288;
     float* pWindow = (float*)g_synthWindow + 16 - iCol;
@@ -137,7 +142,14 @@ void CMpegBase::PolySynth(int iChannel, float* pOutSamples, float* pInSamples)
             float* pW2 = pWindowRev - 32 * k;
             float* pH = pBank + 240 - 16 * k;
             float acc = pW2[-1] * pH[0];
-            acc = -acc;
+            // The original negates with `xorps` against 0x80000000, which flips a NaN's sign
+            // bit; an arithmetic 0.0f - acc does not.  Flip the bit explicitly to match.
+            {
+                union { float f; unsigned int u; } bits;
+                bits.f = acc;
+                bits.u ^= 0x80000000u;
+                acc = bits.f;
+            }
             for (int t = 1; t < 15; ++t)
                 acc = acc - pW2[-1 - t] * pH[t];
             acc = acc - pW2[0] * pH[15];
@@ -525,7 +537,7 @@ void CMpegBase::ResetLoadedHistory()
 }
 
 // @ 0x01148a40
-__declspec(noinline) int CMpegBase::ParseHeader(unsigned int header)
+int CMpegBase::ParseHeaderImpl(unsigned int header)
 {
     if ((header & 0xffe00000) != 0xffe00000)
         return -1;

@@ -9,7 +9,13 @@
 #include <math.h>
 #include <xmmintrin.h>
 
+// The original routes the zero-fill paths through the real memset import (with a 32-bit
+// byte count that wraps), so keep memset as a call instead of letting cl emit an inlined
+// rep-stosd with a raw element count.
+#pragma function(memset)
+
 typedef float f32;
+typedef double f64;
 typedef int s32;
 typedef unsigned int u32;
 typedef unsigned short u16;
@@ -78,25 +84,15 @@ void* AllPassFilterApply(AllPassFilter* self, s32 count, s32 src, s32 /*channel*
 f32 CombFilterFunc(s32 count, f32 g1, f32 g2, f32 g3, f32 g4, f32 state, f32* base, f32* work,
                    f32* accum, f32* feedforward, s32 lowPass)
 {
-    const f32 kFlush = 1.0e-18f;
-    if (lowPass) {
-        for (s32 n = 0; n < count; ++n) {
-            f32 w0 = work[n] + kFlush; work[n] = w0 - kFlush;
-            f32 w1 = work[n + 1] + kFlush; work[n + 1] = w1 - kFlush;
-            const f32 out = base[n] - state * g1 - work[n + 1] * g2;
-            accum[n] = out;
-            feedforward[n] = (work[n] * g3 + work[n + 1]) * g4 + feedforward[n];
-            state = accum[n];
-        }
-    } else {
-        for (s32 n = 0; n < count; ++n) {
-            f32 w0 = work[n] + kFlush; work[n] = w0 - kFlush;
-            f32 w1 = work[n + 1] + kFlush; work[n + 1] = w1 - kFlush;
-            const f32 out = base[n] - state * g1 - work[n + 1] * g2;
-            accum[n] = out;
-            feedforward[n] = (work[n] * g3 + work[n + 1]) * g4;
-            state = accum[n];
-        }
+    if (lowPass == 0)
+        memset(feedforward, 0, (size_t)count * 4);
+    for (s32 n = 0; n < count; ++n) {
+        // the SSE kernel computes base - work*g2 as one vector lane, then subtracts
+        // state*g1 serially, so preserve that association for bit-exact rounding.
+        const f32 out = (base[n] - work[n + 1] * g2) - state * g1;
+        accum[n] = out;
+        feedforward[n] = (work[n] * g3 + work[n + 1]) * g4 + feedforward[n];
+        state = accum[n];
     }
     return state;
 }
@@ -171,7 +167,6 @@ void* CombFilterApply(CombFilter* self, s32 count, s32 src, s32 /*channel*/, Tap
     self->mfState = CombFilterFunc(count, self->mfGain1, self->mfGain2, self->mfGain3, self->mfGain4,
                                    self->mfState, ctx->mpBase, ctx->mpTap, ctx->mpLoadedEnd,
                                    ctx->mpOut, src);
-    return 0;
 }
 
 // 0x0114e1b0 -- AllPassFilter apply dispatch
@@ -181,8 +176,11 @@ void* AllPassFilterApply(AllPassFilter* self, s32 count, s32 src, s32 /*channel*
     if (ctx->mpTap2)
         return memset(ctx->mpOut, 0, (size_t)count * 4);
     AllPassFilterFunc(count, self->mfGain1, self->mfGain2, ctx->mpBase, ctx->mpTap,
-                      ctx->mpLoadedEnd, ctx->mpOut, src != 0 ? 1 : 0);
-    return 0;
+                      ctx->mpLoadedEnd, ctx->mpOut, src);
+    // For count <= 0 the kernel never enters either loop, so it leaves eax holding whatever
+    // the caller had live there (the receiver). The positive cases leave the kernel's own eax.
+    if (count <= 0)
+        return self;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -200,7 +198,9 @@ struct AudioProcessContext {
     char pad30000[0x0C];
     AudioChannelBuffer* mpSrcBuffer; // +0x3000C
     AudioChannelBuffer* mpDstBuffer; // +0x30010
+    char  pad14[4];
     char* mpFormat;                  // +0x30018
+    char  pad1c[4];
     s32   mNumSamples;               // +0x30020
     f32   mfField24;                 // +0x30024
     f32   mfResampleGain;            // +0x30028
@@ -398,8 +398,7 @@ void FastFirEngine::LoadDistributionCalc(s32 param_2, s32 param_3)
 f32 FastFirEngine::EstimateLoad(s32 a2, s32 a3, s32 a4, s32 a5)
 {
     const float p3 = (float)a3;
-    const float log2p3 = (float)(log((double)p3) / log(2.0));
-    const float fVar3 = p3 * log2p3;             // (ln(p3)/ln2) * p3
+    const float fVar3 = (float)(p3 * log((double)p3) / log(2.0)); // p3 * log2(p3)
     const float outCh = (float)miOutputChannels;
     return ((outCh * 18.09f) * fVar3 +
             ((outCh * p3) * 10.97f +
@@ -449,15 +448,15 @@ int FastFirEngine::Configure(s32 channels, s32 blockSize, s32 a4, s32 a5, s32 a6
 
     const s32 numBlocks = miNumBlocks;
     const s32 numPasses = blockSize / channels;
-    const s32 outPartBytes = 8 * outputChannels * blockSize;
+    const u32 outPartBytes = ((u32)outputChannels * (u32)blockSize) * 8u;
     const s32 inFreqBytes = 4 * inputChannels * blockFftLen;
     const s32 convBytes = 4 * outputChannels * blockFftLen;
     const s32 impFreqBytes = 4 * numBlocks * inputChannels * a5;
 
     miConvBytes = convBytes;
 
-    const u32 totalBytes = (u32)(2 * (6 * numPasses + inFreqBytes) + convBytes + outPartBytes +
-                                 impFreqBytes);
+    const u32 totalBytes = (u32)(2 * (6 * numPasses + inFreqBytes) + convBytes) + outPartBytes +
+                           (u32)impFreqBytes;
 
     void* buffer = g_pSystem->Alloc(totalBytes, "Reverb IR Buffer", 0x10, 0);
     mpBuffer = buffer;
@@ -470,6 +469,8 @@ int FastFirEngine::Configure(s32 channels, s32 blockSize, s32 a4, s32 a5, s32 a6
     mpOutput[0] = (f32*)cursor; cursor += outPartBytes / 2;
     mpOutput[1] = (f32*)cursor; cursor += outPartBytes / 2;
     mpDist = cursor;
+
+    memset(mpDist, 0, (size_t)((blockSize / channels) * 12));
 
     s32 sizeLog2 = 0;
     for (s32 n = 2 * blockSize; n > 1; n /= 2)
@@ -492,11 +493,12 @@ int FastFirEngine::Configure(s32 channels, s32 blockSize, s32 a4, s32 a5, s32 a6
 // ReverbIR1 -- 0x0114e260 = Process (drives the embedded FastFirEngine).
 // ---------------------------------------------------------------------------------------
 struct ReverbIR1 {
-    char pad0[0x21];
+    char pad0[4];
+    s32  miField04;        // +0x04
+    char pad8[0x21 - 0x08];
     u8   mbChannelCount;   // +0x21
     char pad22[0x50 - 0x22];
-    FastFirEngine mEngine; // +0x50
-    char padDC[0xE4 - 0xDC];
+    FastFirEngine mEngine; // +0x50 (sizeof == 0x94)
     s32  miFieldE4;        // +0xE4
     s32  miState;          // +0xE8
 
@@ -512,7 +514,7 @@ int ReverbIR1::Process(ReverbIR1* self, AudioProcessContext* ctx)
         for (u32 ch = 0; ch < self->mbChannelCount; ++ch)
             memset(src->mpSamples + src->muStride * ch, 0, 0x400);
     } else if (self->miState == 1) {
-        FastFirFilter(&self->mEngine, src, ctx->mpDstBuffer, self->miFieldE4, 0);
+        FastFirFilter(&self->mEngine, src, ctx->mpDstBuffer, self->miField04, self->miFieldE4);
         AudioChannelBuffer* a = ctx->mpSrcBuffer;
         ctx->mpSrcBuffer = ctx->mpDstBuffer;
         ctx->mpDstBuffer = a;
@@ -535,7 +537,7 @@ PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
         s32 limit = (s32)(end - (u32)step);         // end - step
         if ((s32)pos < limit) {
             do {
-                const int whole = (int)pos >> 16;
+                const u32 whole = pos >> 16;
                 const f32 s0 = src[whole];
                 const f32 s1 = src[whole + 1];
                 U32F32 cv; cv.u = (pos & 0xFFFFu) | 0x43000000u;
@@ -549,7 +551,7 @@ PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
                 return r;
             }
         }
-        const int whole = (int)pos >> 16;
+        const u32 whole = pos >> 16;
         f32 s0 = src[whole];
         if (pos & 0xFFFFu) {
             const f32 s1 = src[whole + 1];
@@ -626,14 +628,14 @@ int ResamplePreProcess(Resample* self, AudioProcessContext* ctx, s32 a3, s32 out
     self->miField3C = 0;
 
     if (self->mfPrevRate >= 0.0f) {
-        f32 ratio = (self->mfPrevRate / *(f32*)(ctx->mpFormat + 0x0C)) * self->mfPitch;
+        f64 ratio = ((f64)self->mfPrevRate / (f64)*(f32*)(ctx->mpFormat + 0x0C)) * (f64)self->mfPitch;
 
-        f32 diff = ratio - self->mfRequestedRatio;
-        if (diff < 0.0f)
+        f64 diff = ratio - (f64)self->mfRequestedRatio;
+        if (diff < 0.0)
             diff = -diff;
-        if (!(1.5258789e-05f > diff)) {
+        if (!((f64)1.5258789e-05f > diff)) {
             self->miAcc16_16 = 0;
-            self->SetResampleIncrement(ratio);
+            self->SetResampleIncrement((f32)ratio);
         }
 
         ctx->mfResampleGain = self->mfActualRatio * ctx->mfResampleGain;

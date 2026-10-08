@@ -2,11 +2,15 @@
 // handlers and constructors. RenderWare 4 core is VC .NET 2003 (cl 13.10) + /GL + /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP
 //
+// The Pan3D trig/matrix trio (0113b330/0113b750/0113b810) additionally needs /arch:SSE;
+// their per-VA flags live in nonmatching.txt (equiv reads them from the reason).
+//
 // The plugin objects are accessed by byte offset: the retail layouts differ from the 2008
 // dev-build PDB in a few fields, so each function uses the offsets that the disassembly shows.
 #include "types.h"
 #include <string.h>
 #include <math.h>
+#include <xmmintrin.h>
 
 // the original calls the imported memset/memcpy thunks (0x11e073e / 0x11e0744); keep the
 // calls out of line so the import trace matches as well.
@@ -76,6 +80,17 @@ static inline void StoreBE(void* dst, uint32_t v)
     d[1] = (uint8_t)(v >> 16);
     d[2] = (uint8_t)(v >> 8);
     d[3] = (uint8_t)v;
+}
+
+// Unary negation of a float. cl 13.10.3052 lowers `-x` to `0 - x`, which loses the sign of a
+// zero result (and the sign of an out-of-range special); the retail build (13.10.3077) lowered
+// it to a sign-bit flip (xorps). Flip the sign bit explicitly so +-0, +-inf and NaN signs match.
+static inline float NegF(float x)
+{
+    union { float f; uint32_t u; } v;
+    v.f = x;
+    v.u ^= 0x80000000u;
+    return v.f;
 }
 
 // @ 0x0113a8b0
@@ -232,8 +247,8 @@ void Ctx::FUN_0113ae30()
 // @ 0x0113ae50
 void FUN_0113ae50(uint8_t* p)
 {
-    volatile float fv = ((Ctx*)P(p, 8))->VoiceDecayRate() * F((uint8_t*)P(p, 4), 0xc0) + 1.0f;
-    *(int*)(p + 0x4c) = (int)fv;
+    float fv = ((Ctx*)P(p, 8))->VoiceDecayRate() * F((uint8_t*)P(p, 4), 0xc0) + 1.0f;
+    *(int*)(p + 0x4c) = _mm_cvt_ss2si(_mm_set_ss(fv));
 }
 
 // @ 0x0113aeb0
@@ -394,13 +409,13 @@ void Ctx::FUN_0113b330()
     F(this, 0x88) = (float)(cos(a) * 2.0);
     F(this, 0x13c) = (float)cos(a);
     F(this, 0x140) = (float)sin(a);
-    float na = -a;
+    float na = NegF(a);
     F(this, 0x14c) = (float)cos(na);
     F(this, 0x150) = (float)sin(na);
     float b = F(this, 0x80);
     F(this, 0x154) = (float)cos(b);
     F(this, 0x158) = (float)sin(b);
-    float nb = -b;
+    float nb = NegF(b);
     F(this, 0x15c) = (float)cos(nb);
     F(this, 0x160) = (float)sin(nb);
     F(this, 0x148) = 0.0f;
@@ -410,30 +425,30 @@ void Ctx::FUN_0113b330()
     float c2 = F(this, 0x14c), s2 = F(this, 0x150);
     float i1 = 1.0f / (c1 * s2 - s1 * c2);
     F(this, 0x8c) = i1 * c1;
-    F(this, 0x90) = -(i1 * s1);
+    F(this, 0x90) = NegF(i1 * s1);
     F(this, 0x98) = i1 * s2;
-    F(this, 0x94) = -(i1 * c2);
+    F(this, 0x94) = NegF(i1 * c2);
 
     float c3 = F(this, 0x154), s3 = F(this, 0x158);
     float i2 = 1.0f / (c3 * s1 - s3 * c1);
     F(this, 0xbc) = i2 * c3;
-    F(this, 0xc0) = -(i2 * s3);
-    F(this, 0xc4) = -(i2 * c1);
+    F(this, 0xc0) = NegF(i2 * s3);
+    F(this, 0xc4) = NegF(i2 * c1);
     F(this, 0xc8) = i2 * s1;
 
     float c4 = F(this, 0x15c), s4 = F(this, 0x160);
     float i3 = 1.0f / (c4 * s3 - s4 * c3);
     F(this, 0xac) = i3 * c4;
-    F(this, 0xb0) = -(i3 * s4);
-    F(this, 0xb4) = -(i3 * c3);
+    F(this, 0xb0) = NegF(i3 * s4);
+    F(this, 0xb4) = NegF(i3 * c3);
     F(this, 0xb8) = i3 * s3;
 
     float c2b = F(this, 0x14c), s2b = F(this, 0x150);
     float c3b = F(this, 0x15c), s3b = F(this, 0x160);
     float i4 = 1.0f / (c2b * s3b - s2b * c3b);
     F(this, 0x9c) = i4 * c2b;
-    F(this, 0xa0) = -(i4 * s2b);
-    F(this, 0xa4) = -(i4 * c3b);
+    F(this, 0xa0) = NegF(i4 * s2b);
+    F(this, 0xa4) = NegF(i4 * c3b);
     F(this, 0xa8) = i4 * s3b;
 }
 
@@ -499,8 +514,8 @@ void Ctx::FUN_0113b750(int idx, float a, float b)
     float inv = 1.0f / (cb * sa - sb * ca);
     uint8_t* e = (uint8_t*)this + idx * 0x10;
     F(e, 0x7c) = inv * cb;
-    F((uint8_t*)this + (idx + 8) * 0x10, 0) = -(inv * sb);
-    F(e, 0x84) = -(inv * ca);
+    F((uint8_t*)this + (idx + 8) * 0x10, 0) = NegF(inv * sb);
+    F(e, 0x84) = NegF(inv * ca);
     F(e, 0x88) = inv * sa;
 }
 
@@ -518,15 +533,15 @@ void Ctx::FUN_0113b810()
     }
     F(this, 0x6c) = a;
     F(this, 0x70) = b * K;
-    F(this, 0x74) = (float)(cos(a) * 2.0);
-    F(this, 0x78) = (float)(cos(3.1415927 - (double)F(this, 0x70)) * 2.0);
+    F(this, 0x74) = cos(a) * 2.0f;
+    F(this, 0x78) = cos(3.1415927f - F(this, 0x70)) * 2.0f;
 
     float a2 = F(this, 0x6c);
     float b2 = F(this, 0x70);
-    FUN_0113b750(0, -a2, a2);
+    FUN_0113b750(0, NegF(a2), a2);
     FUN_0113b750(1, a2, b2);
-    FUN_0113b750(2, b2, -b2);
-    FUN_0113b750(3, -b2, -a2);
+    FUN_0113b750(2, b2, NegF(b2));
+    FUN_0113b750(3, NegF(b2), NegF(a2));
 }
 
 // @ 0x0113b910

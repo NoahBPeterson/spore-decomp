@@ -5,6 +5,7 @@
 0113cff0  519  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (241 valid, 76.5% cov); /LTCG scheduling + the SSE gain-ramp loop
 0113d200  326  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/171 valid inputs (a spread/limit float field is written on a differently-scheduled branch)
 0113d3a0  507  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: the DirectSound buffer vtable is a generated fake -> fake-arity/fault)
+0113d5d0  243  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 8.9% cov < 60%): the leading `if (g_16e7b9c == 0) return 0` guard reads an image global the harness never varies, so the buffer-lock/fallback body is unreached; timeGetTime is now a real dllimport and the fallback double->int lowers to the CRT `_ftol2` (the helper the original calls at 0x11e0810)
 0113d710  17   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (393 valid, 96.2% cov); cl hoists the state load/test before the prologue moves
 0113d7b0  226  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: fake DirectSound enumerator vtable)
 0113d930  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved DirectSound/user32 imports)

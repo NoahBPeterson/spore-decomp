@@ -3,3 +3,4 @@ slices/s0112dca0/s0112dca0.cpp  ?QueueRelease@StreamPool@core@audio@rw@@QAEXXZ  
 slices/s0112dca0/s0112dca0.cpp  ?FUN_0112e700@core@audio@rw@@YAHH@Z  0112e700  /vc71 /O2 /MD /Gy /TP
 slices/s0112dca0/s0112dca0.cpp  ?QueueRelease@Voice@core@audio@rw@@QAEXXZ  0112e950  /vc71 /O2 /MD /Gy /TP
 slices/s0112dca0/s0112dca0.cpp  ?FUN_0112e980@core@audio@rw@@YAXPAXH@Z  0112e980  /vc71 /O2 /MD /Gy /TP
+slices/s0112dca0/s0112dca0.cpp  ?RegisterBuiltInDecoders@core@audio@rw@@  0112dca0  /vc71 /O2 /MD /Gy /TP

@@ -1,4 +1,0 @@
-01131e00 189 incomplete: the FUN_011e6cc0() call and the 0x9c/-1 default path are reconstructed approximately; difftest FAIL 5/5 (return eax differs)
-011323a0 167 incomplete: the line-accounting loop is reconstructed approximately (source does not advance the same way); difftest FAIL 5/5 (ours faults where the original returns)
-01132450 310 incomplete: SNDI_patchtohdr local layout and the 0x18/0x1c block comparison are approximate; difftest FAIL 5/5 (one heap dword)
-01132770 256 incomplete: the CSDl de-interleave / packet construction is approximate; difftest FAIL 5/5

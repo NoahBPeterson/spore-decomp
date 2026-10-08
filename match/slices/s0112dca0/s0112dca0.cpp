@@ -6,6 +6,10 @@
 #include "types.h"
 #include <string.h>
 
+// The original's grow path calls the CRT memcpy (E8 to 0x11e0744); with /O2 the compiler
+// would inline it as `rep movsd`, dropping the call from the observable trace.
+#pragma function(memcpy)
+
 typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
@@ -28,8 +32,8 @@ struct StreamDesc
 {
     double timeStamp;            // +0x0
     float  priority;             // +0x8
-    void*  pStreamLostContext;   // +0xc
-    void*  pStreamLostCallback;  // +0x10
+    void*  pStreamLostCallback;  // +0xc
+    void*  pStreamLostContext;   // +0x10
     void*  pStream;              // +0x14
     u16    refCount;             // +0x18
     u8     allocated;            // +0x1a
@@ -132,7 +136,9 @@ struct System
     u16    mMaxActiveVoices;     // +0xf2
 
     void* Alloc(int size, const char* name, int align, int a5); // 0x0112c820
-    void  Free(void* p, int a3);                                // 0x0112c850
+    void  Free(void* p, void* allocator);                       // 0x0112c850
+    void  RemoveTimer(void* timerHandle);                       // 0x0112dad0
+    void  FUN_0112c590();                                       // 0x0112c590
 };
 
 // =====================================================================================
@@ -193,15 +199,18 @@ void* FUN_011390a0(); void* FUN_01138f80(); void* FUN_01138cf0(); void* FUN_0113
 void* FUN_011373b0(); void* FUN_01137120(); void* FUN_011370c0(); void* FUN_01136e00();
 
 // StreamPool / Voice / System callees.
+// Decoder registry (FUN_0112cd60 is a __thiscall method: `mov ecx,esi; call`).
+struct DecoderRegistry { void* Register(void* desc); };                        // 0x0112cd60
+
 void* FUN_0112c580(System* s);                                                 // 0x0112c580
-void  FUN_0112cd60(u32 desc);                                                  // 0x0112cd60 (register)
-void  FUN_0112dad0(void* timerHandle);                                         // 0x0112dad0
-void  FUN_0112c590(void* p);                                                   // 0x0112c590
-int __fastcall FUN_011e6c40(void* p);                                                   // 0x011e6c40
+int __fastcall FUN_011e6c40(void* p);                                          // 0x011e6c40
 void __fastcall FUN_011e7cf0(void* p);                                                   // 0x011e7cf0
 int   FUN_011e7910(int, int, int, int, int, int);                              // 0x011e7910
 void  FUN_011e7c70(void* p);                                                   // 0x011e7c70
+// Stream::ReleaseChunk is a __thiscall method (ecx = stream, one stack arg).
+struct Stream { void ReleaseChunk(void* chunk); };                             // 0x011e7c70
 void* FUN_0112cc10(void*, void*, void*, void*, unsigned char);                 // 0x0112cc10
+struct PlugIn { void Initialize(); };  // 0x0112dbb0 (thiscall: ecx = plug-in)
 void  FUN_0112dbb0(void* plugIn);                                              // 0x0112dbb0
 void __fastcall FUN_011e7b70(void* p);                                         // 0x011e7b70
 void  FUN_0112e380(void);                                                      // 0x0112e380
@@ -212,49 +221,49 @@ int __fastcall Stream_GetChunk(void* stream);                                   
 
 // ---- System built-in registration list (0x0112dca0) -------------------------------
 // @ 0x0112dca0 -- register every built-in decoder descriptor (ecx = this registry).
-void __fastcall RegisterBuiltInDecoders(void* self)
+void __fastcall RegisterBuiltInDecoders(DecoderRegistry* self)
 {
     FUN_0113ec60();
-    FUN_0112cd60((u32)FUN_0113e7e0());
-    FUN_0113e730(); FUN_0112cd60((u32)FUN_0113e660());
-    FUN_0113e630(); FUN_0112cd60((u32)FUN_0113e5c0());
-    FUN_0113e590(); FUN_0112cd60((u32)FUN_0113e4d0());
-    FUN_0113e4a0(); FUN_0112cd60((u32)FUN_0113cdc0());
-    FUN_0113ccc0(); FUN_0112cd60((u32)FUN_0113cb10());
-    FUN_0113cae0(); FUN_0112cd60((u32)FUN_0113caa0());
-    FUN_0113ca60(); FUN_0112cd60((u32)FUN_0113c940());
-    FUN_0113c900(); FUN_0112cd60((u32)FUN_0113c860());
-    FUN_0113c830(); FUN_0112cd60((u32)FUN_0113c790());
-    FUN_0113c760(); FUN_0112cd60((u32)FUN_0113c700());
-    FUN_0113c6d0(); FUN_0112cd60((u32)FUN_0113c610());
-    FUN_0113c5d0(); FUN_0112cd60((u32)FUN_0113c540());
-    FUN_0113c510(); FUN_0112cd60((u32)FUN_0113c450());
-    FUN_0113c420(); FUN_0112cd60((u32)FUN_0113c350());
-    FUN_0113c320(); FUN_0112cd60((u32)FUN_0113c280());
-    FUN_0113c240(); FUN_0112cd60((u32)FUN_0113c1c0());
-    FUN_0113c190(); FUN_0112cd60((u32)FUN_0113c110());
-    FUN_0113c0e0(); FUN_0112cd60((u32)FUN_0113c050());
-    FUN_0113c010(); FUN_0112cd60((u32)FUN_0113b9c0());
-    FUN_0113b990(); FUN_0112cd60((u32)FUN_0113b740());
-    FUN_0113b700(); FUN_0112cd60((u32)FUN_0113b320());
-    FUN_0113b2e0(); FUN_0112cd60((u32)FUN_0113af60());
-    FUN_0113af30(); FUN_0112cd60((u32)FUN_0113ae20());
-    FUN_0113add0(); FUN_0112cd60((u32)FUN_0113ad00());
-    FUN_0113acc0(); FUN_0112cd60((u32)FUN_0113abc0());
-    FUN_0113abb0(); FUN_0112cd60((u32)FUN_0113aba0());
-    FUN_0113ab60(); FUN_0112cd60((u32)FUN_0113aad0());
-    FUN_0113aaa0(); FUN_0112cd60((u32)FUN_0113a760());
-    FUN_0113a720(); FUN_0112cd60((u32)FUN_01139890());
-    FUN_01139860(); FUN_0112cd60((u32)FUN_01139720());
-    FUN_011396e0(); FUN_0112cd60((u32)FUN_01139380());
-    FUN_01139350(); FUN_0112cd60((u32)FUN_011390a0());
-    FUN_01139060(); FUN_0112cd60((u32)FUN_01138f80());
-    FUN_01138f70(); FUN_0112cd60((u32)FUN_01138cf0());
-    FUN_01138cb0(); FUN_0112cd60((u32)FUN_011376c0());
-    FUN_01137660(); FUN_0112cd60((u32)FUN_011373b0());
-    FUN_01137370(); FUN_0112cd60((u32)FUN_01137120());
-    FUN_011370f0(); FUN_0112cd60((u32)FUN_011370c0());
-    FUN_01137090(); FUN_0112cd60((u32)FUN_01136e00());
+    self->Register(FUN_0113e7e0());
+    FUN_0113e730(); self->Register(FUN_0113e660());
+    FUN_0113e630(); self->Register(FUN_0113e5c0());
+    FUN_0113e590(); self->Register(FUN_0113e4d0());
+    FUN_0113e4a0(); self->Register(FUN_0113cdc0());
+    FUN_0113ccc0(); self->Register(FUN_0113cb10());
+    FUN_0113cae0(); self->Register(FUN_0113caa0());
+    FUN_0113ca60(); self->Register(FUN_0113c940());
+    FUN_0113c900(); self->Register(FUN_0113c860());
+    FUN_0113c830(); self->Register(FUN_0113c790());
+    FUN_0113c760(); self->Register(FUN_0113c700());
+    FUN_0113c6d0(); self->Register(FUN_0113c610());
+    FUN_0113c5d0(); self->Register(FUN_0113c540());
+    FUN_0113c510(); self->Register(FUN_0113c450());
+    FUN_0113c420(); self->Register(FUN_0113c350());
+    FUN_0113c320(); self->Register(FUN_0113c280());
+    FUN_0113c240(); self->Register(FUN_0113c1c0());
+    FUN_0113c190(); self->Register(FUN_0113c110());
+    FUN_0113c0e0(); self->Register(FUN_0113c050());
+    FUN_0113c010(); self->Register(FUN_0113b9c0());
+    FUN_0113b990(); self->Register(FUN_0113b740());
+    FUN_0113b700(); self->Register(FUN_0113b320());
+    FUN_0113b2e0(); self->Register(FUN_0113af60());
+    FUN_0113af30(); self->Register(FUN_0113ae20());
+    FUN_0113add0(); self->Register(FUN_0113ad00());
+    FUN_0113acc0(); self->Register(FUN_0113abc0());
+    FUN_0113abb0(); self->Register(FUN_0113aba0());
+    FUN_0113ab60(); self->Register(FUN_0113aad0());
+    FUN_0113aaa0(); self->Register(FUN_0113a760());
+    FUN_0113a720(); self->Register(FUN_01139890());
+    FUN_01139860(); self->Register(FUN_01139720());
+    FUN_011396e0(); self->Register(FUN_01139380());
+    FUN_01139350(); self->Register(FUN_011390a0());
+    FUN_01139060(); self->Register(FUN_01138f80());
+    FUN_01138f70(); self->Register(FUN_01138cf0());
+    FUN_01138cb0(); self->Register(FUN_011376c0());
+    FUN_01137660(); self->Register(FUN_011373b0());
+    FUN_01137370(); self->Register(FUN_01137120());
+    FUN_011370f0(); self->Register(FUN_011370c0());
+    FUN_01137090(); self->Register(FUN_01136e00());
 }
 
 // @ 0x0112df80 -- StreamPool::GetInstance: find the pool with the given guid.
@@ -361,24 +370,22 @@ void StreamPool_ReleaseHandler(StreamPool* self)
     int i = 0;
     if (self->mNumStreams > 0)
     {
-        int off = 0;
         do
         {
-            if (FUN_011e6c40(self->mpStreamDesc[off].pStream) != 0)
+            if (FUN_011e6c40(self->mpStreamDesc[i].pStream) != 0)
                 return;
-            ++i; off += 0x20;
+            ++i;
         } while (i < (int)self->mNumStreams);
     }
     i = 0;
     if (self->mNumStreams > 0)
     {
-        int off = 0;
-        do { FUN_011e7cf0(self->mpStreamDesc[off].pStream); ++i; off += 0x20; }
+        do { FUN_011e7cf0(self->mpStreamDesc[i].pStream); ++i; }
         while (i < (int)self->mNumStreams);
     }
-    FUN_0112dad0(&self->mTimerHandle);
-    FUN_0112c590(0);
-    self->mpSystem->Free(self, 0);
+    self->mpSystem->RemoveTimer(&self->mTimerHandle);
+    self->mpSystem->FUN_0112c590();
+    self->mpSystem->Free(self, self->mpAllocator);
 }
 
 // @ 0x0112e290 -- StreamPool::Create (System::CreateStreamPool).
@@ -389,7 +396,7 @@ void* StreamPool_Create(int a1, int numStreams, int chunkSize, int a4, System* s
     char* p = (char*)system->Alloc(size, 0, 0x10, a6);
     if (!p) return 0;
 
-    FUN_0112dbb0(p + 8); // PlugIn::Initialize<SndPlayer1>
+    ((PlugIn*)(p + 8))->Initialize(); // PlugIn::Initialize<SndPlayer1>
 
     unsigned start = ((unsigned)(p + 0x3b)) & 0xfffffff8u;
     *(int*)(p + 4) = (int)start;
@@ -771,7 +778,7 @@ void FUN_0112eab0(int p)
         if (*(int*)(p + 0xb4) == 0)
         {
             *(int*)(p + 0xb4) = Stream_GetChunk(*(void**)(p + 0x94));
-            FUN_011e7c70(*(void**)(p + 0xb4));
+            ((Stream*)*(void**)(p + 0x94))->ReleaseChunk(*(void**)(p + 0xb4));
         }
         int chunk = Stream_GetChunk(*(void**)(p + 0x94));
         if (chunk != 0)
@@ -799,7 +806,7 @@ void FUN_0112eb70(int id, int p)
     int chunk = *(int*)(p + 0xd8 + i * 4);
     if (chunk != 0)
     {
-        FUN_011e7c70((void*)chunk);
+        ((Stream*)*(void**)(p + 0x94))->ReleaseChunk((void*)chunk);
         *(int*)(p + 0xd8 + i * 4) = 0;
     }
     *(int*)(p + 0xe8 + i * 4) = 0;

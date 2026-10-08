@@ -14,7 +14,9 @@
 01134200 178 complete FUN_01134200: dst[0..15]=src[0..15]*scale chunked 16-wide do/while; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 164/400 valid 100% cov.
 01134260 103 complete FUN_01134260: aligned -> FUN_01134200 else scalar; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 312/400 100% cov (needs a non-tail call barrier so the depth-1 call trace matches).
 011342c0 294 complete FUN_011342c0: aligned -> dst += src*scale chunked 16-wide else scalar; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 324/400 100% cov.
+011343b0 709 complete Xas1 decoder block-fill (block header walk, per-channel Xas1 predictor with the 0x14a7e88/0x14a7ea8 tables, 6 half-blocks per channel); /GL register allocation differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 285/400 99.1% cov.
+01134740 220 complete Pcm16Big big-endian 16-bit -> float: guard `a < b` kept explicit (a `for(i=a;i<b;i++)` lets /O2 fold it into a wrapping `b-a` count and enters the loop on overflow inputs), byte-swap + sign-extend per element; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 327/400 100% cov.
 01134880 447 complete FUN_01134880: unrolled 8-wide big-endian 16-bit -> float then tail FUN_01134740; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 365/400 100% cov.
 011349a0 190 complete FUN_011349a0: Pcm16Big block fill (block header walk, per-channel FUN_01134880); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 297/400 97.2% cov.
 01134a60 107 complete BitReader::FUN_01134a60: refill buffer with whole bytes then extract n bits; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 350/400 100% cov.
-01134ae0 10 complete FUN_01134ae0: call the virtual at vtable+4 with 0; /GL differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
+01134ae0 10 complete FUN_01134ae0: indirect __stdcall call through vtable+4 with 0 (callee pops the arg; a __cdecl cast makes VC add `add esp,4` and double-pops after the fake-call emulation); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.

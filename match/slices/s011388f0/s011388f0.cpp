@@ -95,6 +95,15 @@ struct AudioObj {
     void F_820(int, int*);     // 0x01139820
     void F_8b0();              // 0x011398b0
 };
+// SubMix mix-input link/unlink helpers: __thiscall (this = the input node).
+struct SubMix {
+    void FUN_01137420(int, int);   // 0x01137420
+    void FUN_01137450(void*);      // 0x01137450
+};
+// TimerManager::AddTimer is __thiscall: this = TimerManager, 6 stack args, ret 8.
+struct TimerMgr {
+    char AddTimer(void*, void*, void*, const char*, int, int); // 0x0112d8e0
+};
 } } } // namespace rw::audio::core
 
 using namespace rw::audio::core;
@@ -118,9 +127,6 @@ int  FUN_01133290(void);                            // 0x01133290
 int  FUN_011431a0(void* ptrs, int n);               // 0x011431a0
 int  FUN_0113f940(void);                            // 0x0113f940
 void FUN_0112d590(void** a, void** b, float g, int c, int d, int e); // 0x0112d590
-char FUN_0112d8e0(void*, void*, void*, void*, const char*, int, int); // 0x0112d8e0 AddTimer
-int  FUN_01137450(void* ctx, void* out);            // 0x01137450  thiscall ctx, ret 4
-int  FUN_01137420(void* ctx, int a, int b);         // 0x01137420  thiscall ctx, ret 8
 void* FUN_011373c0(void);                           // 0x011373c0
 int  FUN_0114d770(void* ctx);                       // 0x0114d770
 void* operator_new_arr(unsigned sz, int a, unsigned n); // 0x011e073e
@@ -186,10 +192,14 @@ void __cdecl FUN_011388f0(SndPlayer1* self)
 bool __cdecl FUN_01138af0(SndPlayer1* self, float* pReq)
 {
     if (pReq == 0) pReq = (float*)1;
-    else pReq = (float*)(int)*pReq;   /* ROUND */
+    else pReq = (float*)_mm_cvtss_si32(_mm_load_ss(pReq));   /* cvtss2si: round to nearest */
     if (self) {
         *(void**)self = (void*)0x14ab718;
-        A<unsigned char*>(self, 0xc) = 0;   /* PlugIn::Initialize<...>(self+0x40) stub */
+        /* PlugIn::Initialize<...>(self+0x40) */
+        A<int>(self, 0x40) = 0;
+        A<int>(self, 0x4c) = 0x13f9034;
+        A<int>(self, 0x50) = 0;
+        A<u8>(self, 0x54) = 3;
     }
     int a = (int)self;
     int b = (a + 0x1d7) & 0xfffffff8;
@@ -197,7 +207,7 @@ bool __cdecl FUN_01138af0(SndPlayer1* self, float* pReq)
     self->mDeclickBufferOffset = (u16)(b - a);
     A<int>(self, 0xc) = (int)((char*)self + 0x28);
     self->mTimerAdded = 0;
-    void* buf = g_pSystem->Alloc((int)pReq * 0x50 + 4, "SndPlayer1 RequestHandle and RequestExternal array", 0x10, 0);
+    void* buf = self->mpSystem->Alloc((int)pReq * 0x50 + 4, "SndPlayer1 RequestHandle and RequestExternal array", 0x10, 0);
     self->mpRequestHandle = (float*)buf;
     if (!buf) return false;
     self->mpRequestExternal = (RequestExternal*)((char*)buf + 4);
@@ -218,8 +228,9 @@ bool __cdecl FUN_01138af0(SndPlayer1* self, float* pReq)
     self->mPreviousSampleRate = A<float>(self->mpSystem, 0xc0);
     self->mNextFeedSlotToFill = 0; self->mNextFeedSlotToFree = 0;
     for (int i = 0; i < 20; i++) { A<int>(self, 0x5c + i * 0x10) = 0; A<u8>(self, 0x5c + i * 0x10 + 0xd) = 0; }
-    if (FUN_0112d8e0((void*)((char*)self->mpSystem + 0x60), (void*)((char*)self + 0x40),
-                     (void*)&FUN_011388f0, self, "SndPlayer", 1, 1) == false)
+    char ok = ((TimerMgr*)((char*)self->mpSystem + 0x60))->AddTimer(
+                   (void*)((char*)self + 0x40), (void*)&FUN_011388f0, self, "SndPlayer", 1, 1);
+    if (ok != 0)
         return false;
     self->mTimerAdded = 1;
     return true;
@@ -290,7 +301,14 @@ void __cdecl FUN_01138d90(void* self)
 // @ 0x01138ec0  Snd9Service::CreateInstance
 bool __cdecl FUN_01138ec0(void* self)
 {
-    if (self) { *(void**)self = (void*)0x14b085c; A<void*>(self, 0xc) = 0; }
+    if (self) {
+        *(void**)self = (void*)0x14b085c;
+        /* PlugIn::Initialize<...>(self+0x24) */
+        A<int>(self, 0x24) = 0;
+        A<int>(self, 0x30) = 0x13f9034;
+        A<int>(self, 0x34) = 0;
+        A<u8>(self, 0x38) = 3;
+    }
     A<u8>(self, 0x68) = 0;
     void* buf = A<System*>(self, 4)->Alloc(0x1800, "rw::audio::core::Snd9Service::mpMixBufStart", 0x80, 0);
     A<int>(self, 0x3c) = (int)buf;
@@ -301,10 +319,11 @@ bool __cdecl FUN_01138ec0(void* self)
     A<int>(self, 0x48) = (int)((char*)buf + 0x1000);
     A<int>(self, 0x54) = (int)((char*)buf + 0x1400);
     A<int>(self, 0x4c) = (int)((char*)buf + 0xc00);
-    A<int>(self, 0x58) = (int)A<float>(A<void*>(self, 4), 0xc0);
+    A<float>(self, 0x58) = A<float>(A<void*>(self, 4), 0xc0);
     A<int>(self, 0x5c) = 0; A<int>(self, 0x60) = 0; A<int>(self, 0x64) = 0;
-    if (FUN_0112d8e0((void*)((char*)A<void*>(self, 4) + 0x60), (void*)((char*)self + 0x24),
-                     (void*)&FUN_01138d90, self, "Snd9Service", 1, 1) == false)
+    char ok = ((TimerMgr*)((char*)A<void*>(self, 4) + 0x60))->AddTimer(
+                   (void*)((char*)self + 0x24), (void*)&FUN_01138d90, self, "Snd9Service", 1, 1);
+    if (ok != 0)
         return false;
     A<u8>(self, 0x68) = 1;
     return true;
@@ -361,13 +380,18 @@ void AudioObj::F_000(int cmd, int* param)
 void AudioObj::F_0b0()
 {
     void* self = this;
-    if (A<char>(self, 0x40) == 0) { FUN_01137450((char*)self + 0x30, 0); return; }
-    void* l30[6];
+    SubMix* mix = (SubMix*)((char*)self + 0x30);
+    if (A<char>(self, 0x40) == 0) { mix->FUN_01137450(0); return; }
+    // The original keeps dst[] immediately below the six output floats, so an out-of-range
+    // channel read (count > 6) aliases dst[6] onto out[0]; mirror that with one block.
+    struct { void* dst[6]; float out[6]; } b;
+    b.dst[0] = &b.out[0]; b.dst[1] = &b.out[1]; b.dst[2] = &b.out[2];
+    b.dst[3] = &b.out[3]; b.dst[4] = &b.out[4]; b.dst[5] = &b.out[5];
     void* src[6];
     src[0] = (char*)self + 0x44; src[1] = (char*)self + 0x48; src[2] = (char*)self + 0x4c;
     src[3] = (char*)self + 0x50; src[4] = (char*)self + 0x54; src[5] = (char*)self + 0x58;
-    FUN_0112d590(l30, src, 1.0f, (int)A<char>(self, 0x40), (int)A<char>(self, 0x20), 1);
-    FUN_01137450((char*)self + 0x30, l30[0]);
+    FUN_0112d590(b.dst, src, 1.0f, (int)A<u8>(self, 0x40), (int)A<u8>(self, 0x20), 1);
+    mix->FUN_01137450(b.dst[0]);
     A<float>(self, 0x44) = 0.0f; A<float>(self, 0x4c) = 0.0f; A<float>(self, 0x48) = 0.0f;
     A<float>(self, 0x50) = 0.0f; A<float>(self, 0x54) = 0.0f; A<float>(self, 0x58) = 0.0f;
 }
@@ -380,7 +404,7 @@ int __cdecl FUN_011391a0(void* rec)
     g_pTimerList = g_pTimerList2;
     for (void* p = FUN_011373c0(); p; p = FUN_011373c0()) {
         if (strcmp((char*)rec + 0xc, (char*)p + 0x4c) == 0) {
-            FUN_01137420((char*)self + 0x30, A<int>(self, 8), (int)p);
+            ((SubMix*)((char*)self + 0x30))->FUN_01137420(A<int>(self, 8), (int)p);
             break;
         }
     }
@@ -393,7 +417,7 @@ int __cdecl FUN_01139230(void* rec)
     void* self = A<void*>(rec, 4);
     ((AudioObj*)self)->F_0b0();
     if (A<int>(rec, 8))
-        FUN_01137420((char*)self + 0x30, A<int>(self, 8), A<int>(rec, 8));
+        ((SubMix*)((char*)self + 0x30))->FUN_01137420(A<int>(self, 8), A<int>(rec, 8));
     return 0xc;
 }
 
@@ -455,13 +479,20 @@ void __cdecl FUN_011393d0(void* self)
 // @ 0x01139450  SampleCapture ctor
 bool __cdecl FUN_01139450(void* p)
 {
-    if (p) { *(void**)p = (void*)0x14b1788; A<void*>(p, 0xc) = 0; }
+    if (p) {
+        *(void**)p = (void*)0x14b1788;
+        /* PlugIn::Initialize<...>(p+0x24) */
+        A<int>(p, 0x24) = 0;
+        A<int>(p, 0x30) = 0x13f9034;
+        A<int>(p, 0x34) = 0;
+        A<u8>(p, 0x38) = 3;
+    }
     A<float>(p, 0x40) = 0.0f;
     A<int>(p, 0xc) = (int)((char*)p + 0x40);
     u16 u = (u16)((((int)p + 0x87) & 0xfffffff8) - (int)p);
     A<u16>(p, 0x74) = u;
     A<u8>(p, 0x7e) = 0; A<int>(p, 0x78) = 0; A<int>(p, 0x70) = 0; A<int>(p, 0x54) = 0;
-    operator_new_arr((unsigned)0, 0, 0x90);
+    operator_new_arr((unsigned)((char*)p + u), 0, 0x90);
     return true;
 }
 
@@ -500,8 +531,9 @@ int __cdecl FUN_01139500(void* rec)
     if (!buf) return 0;
     A<int>(self, 0x5c) = (int)0xbf800000;
     A<int>(self, 0x64) = 0; A<int>(self, 0x68) = 0; A<u8>(self, 0x7c) = 0; A<u8>(self, 0x7d) = 2;
-    if (FUN_0112d8e0((void*)((char*)A<void*>(self, 4) + 0x60), (void*)((char*)self + 0x24),
-                     (void*)&FUN_011393d0, self, "SampleCapture", 1, 1) == false) {
+    char ok = ((TimerMgr*)((char*)A<void*>(self, 4) + 0x60))->AddTimer(
+                   (void*)((char*)self + 0x24), (void*)&FUN_011393d0, self, "SampleCapture", 1, 1);
+    if (ok == 0) {
         A<u8>(self, 0x7e) = 1; A<float>(self, 0x40) = g_one;
     }
     return A<int>(rec, 8);
@@ -512,8 +544,8 @@ void AudioObj::F_660(int cmd, int* param)
 {
     void* self = this;
     System* sys = A<System*>(self, 4);
-    char* rec = RING(sys);
     if (cmd == 0) {
+        char* rec = RING(sys);
         sys->mCommandIndex += 0x20;
         A<int>(rec, 4) = (int)self; A<int>(rec, 0) = (int)&FUN_01139500; A<int>(rec, 8) = 0x20;
         A<int>(rec, 0xc) = param[0]; A<int>(rec, 0x10) = param[1]; A<int>(rec, 0x14) = param[2];
@@ -521,6 +553,7 @@ void AudioObj::F_660(int cmd, int* param)
         return;
     }
     if (cmd == 1) {
+        char* rec = RING(sys);
         sys->mCommandIndex += 8;
         A<int>(rec, 0) = (int)&FUN_01139390; A<int>(rec, 4) = (int)self;
     }
@@ -530,7 +563,7 @@ void AudioObj::F_660(int cmd, int* param)
 void AudioObj::F_730()
 {
     void* self = this;
-    FUN_01137450((char*)self + 0x24, (char*)self + 0x38);
+    ((SubMix*)((char*)self + 0x24))->FUN_01137450((char*)self + 0x38);
     A<float>(self, 0x38) = 0.0f; A<float>(self, 0x3c) = 0.0f; A<float>(self, 0x40) = 0.0f;
     A<float>(self, 0x44) = 0.0f; A<float>(self, 0x48) = 0.0f; A<float>(self, 0x4c) = 0.0f;
 }
@@ -539,11 +572,11 @@ void AudioObj::F_730()
 int __cdecl FUN_01139770(void* rec)
 {
     void* self = A<void*>(rec, 4);
-    FUN_01137450((char*)self + 0x24, (char*)self + 0x38);
+    ((SubMix*)((char*)self + 0x24))->FUN_01137450((char*)self + 0x38);
     A<float>(self, 0x38) = 0.0f; A<float>(self, 0x3c) = 0.0f; A<float>(self, 0x40) = 0.0f;
     A<float>(self, 0x44) = 0.0f; A<float>(self, 0x48) = 0.0f; A<float>(self, 0x4c) = 0.0f;
     if (A<int>(rec, 8)) {
-        FUN_01137420((char*)self + 0x24, A<int>(self, 8), A<int>(rec, 8));
+        ((SubMix*)((char*)self + 0x24))->FUN_01137420(A<int>(self, 8), A<int>(rec, 8));
         A<u8>(self, 0x50) = (u8)(int)A<float>(rec, 0xc);
         A<u8>(self, 0x51) = (u8)(int)A<float>(rec, 0x10);
         A<u8>(self, 0x52) = (u8)(int)A<float>(rec, 0x14);
@@ -584,8 +617,8 @@ void AudioObj::F_8b0()
         g_pSystem->RemoveTimer((TimerHandle*)((char*)self + 0x13c));
 }
 
-// @ 0x01139920  frequency/table converter
-int __cdecl FUN_01139920(float* src, int* out, float f)
+// @ 0x01139920  frequency/table converter  (__stdcall: ret 0xc)
+int __stdcall FUN_01139920(float* src, int* out, float f)
 {
     int i = 0;
     out[5] = 0;

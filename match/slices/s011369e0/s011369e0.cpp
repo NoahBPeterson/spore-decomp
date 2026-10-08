@@ -42,25 +42,49 @@ struct DecoderThunk
 	void FUN_01137060(int, int);        // 0x01137060
 };
 
+// thiscall helpers located in the core image (resolved by the FUN_<va> name in their mangling)
+struct BitReaderState
+{
+	int  FUN_00a10ef0(int n);          // 0x00a10ef0  bit reader; this = { byte* ptr; int bitpos; }
+};
+struct MixParser
+{
+	void FUN_0114c880(int a, int b);   // 0x0114c880  mix-block parser; this = 6-dword output
+};
+struct EALayer3CoreH
+{
+	int   FUN_0114a4a0(int slot);      // 0x0114a4a0  EALayer3Core::ResetSlot
+	void* FUN_01149f70(int a);         // 0x01149f70  EALayer3Core ctor (this = storage)
+};
+struct Layer3F                        // HELPER_CEALayer3DecF
+{
+	void FUN_01148cb0(void);           // 0x01148cb0
+	void FUN_01148a00(int a);          // 0x01148a00
+	void FUN_01148e30(void);           // 0x01148e30
+	void FUN_01148eb0(int a, int b, int c);   // 0x01148eb0  Feed
+	int  FUN_01149490(int a, int* b);  // 0x01149490  Decode
+	void FUN_01148fd0(void);           // 0x01148fd0  destructor
+};
+struct GranuleCtx                     // EaLayer3DecBase bits
+{
+	int  FUN_01136460(void* p);        // 0x01136460  fill granule
+	int  FUN_01136980(int a, int b);   // 0x01136980
+};
+struct MixSlotFree
+{
+	void FUN_011e7c70(int a);          // 0x011e7c70
+};
+struct DecoderCoreVt                   // vtable-only view of an EALayer3Core (slot 0 called with 0)
+{
+	virtual void FUN_call(int a);
+};
+
 // extern "C" helpers
-extern void  __cdecl FUN_01148cb0(void);                  // 0x01148cb0
-extern void  __cdecl FUN_01148a00(int);                   // 0x01148a00
-extern int   __cdecl FUN_01136460(void*);                 // 0x01136460
-extern void  __cdecl FUN_01136980(int, int);              // 0x01136980
-extern int   __cdecl FUN_01148e80(void);                  // 0x01148e80
-extern void  __cdecl FUN_01148fd0(void*);                 // 0x01148fd0
-extern void  __cdecl FUN_01148e30(void);                  // 0x01148e30
-extern void  __cdecl FUN_01148eb0(int, int, int);         // 0x01148eb0
-extern int   __cdecl FUN_01149490(int, int*);             // 0x01149490
+extern int   __fastcall FUN_01148e80(int p);              // 0x01148e80
 extern void  __cdecl FUN_01148da0(float*, float, int);    // 0x01148da0 ScaleSamples
 extern void  __cdecl memcpy_thunk(void*, const void*, unsigned);   // 0x011e0744
-extern int   __cdecl FUN_0114a4a0(int);                   // 0x0114a4a0
-extern void  __cdecl FUN_0114c880(int*, int, int);        // 0x0114c880
 extern void* __cdecl operator_new_arr(void*, int, int);   // 0x011e073e
-extern int   __cdecl FUN_011e7c70(int);                   // 0x011e7c70
-extern int   __cdecl FUN_00a10ef0(int);                   // 0x00a10ef0 (bit reader; this=int,int)
 extern void  __cdecl FUN_0112dae0(int, int, int);         // 0x0112dae0 PlugInDescFixup
-extern void* __cdecl EALayer3Core_ctor(void*, int);       // 0x01149f70
 
 static Sys* sys_of(int p) { return (Sys*)*(int*)(p + 4); }
 
@@ -89,17 +113,17 @@ uint32_t __cdecl FUN_011369e0(int param_1, int param_2)
 				*(uint8_t*)(param_1 + 0x30) = 0;
 		}
 		if (*(char*)((char*)blk + 0x10) == 0)
-			FUN_01148cb0();
+			((Layer3F*)(param_1 + 0x34))->FUN_01148cb0();
 		int v = blk[0];
 		*(int*)(param_1 + 0x2f20) = v;
 		*(int*)(param_1 + 0x2f24) = blk[3];
-		FUN_01136980(v, 0);
+		((GranuleCtx*)param_1)->FUN_01136980(v, 0);
 	}
 	else
 	{
-		FUN_01148a00(*(int*)(param_1 + 0x2f20));
+		((Layer3F*)(param_1 + 0x34))->FUN_01148a00(*(int*)(param_1 + 0x2f20));
 	}
-	int r = FUN_01136460((void*)(param_1 + 0x310));
+	int r = ((GranuleCtx*)param_1)->FUN_01136460((void*)(param_1 + 0x310));
 	if (r < 0)
 		return 0;
 	uint32_t nch = *(uint8_t*)(param_1 + 0x2e);
@@ -118,7 +142,7 @@ uint32_t __cdecl FUN_011369e0(int param_1, int param_2)
 // ---------------------------------------------------------------------------
 // @ 0x01136b10
 // ---------------------------------------------------------------------------
-int __cdecl FUN_01136b10(int param_1)
+bool __cdecl FUN_01136b10(int param_1)
 {
 	int u = (param_1 + 0x47) & ~7;
 	*(int*)(param_1 + 0x3c) = 0;
@@ -126,7 +150,7 @@ int __cdecl FUN_01136b10(int param_1)
 	*(int*)(param_1 + 0x34) = u;
 	int r = 0;
 	if (u != 0)
-		r = FUN_01148e80();
+		r = FUN_01148e80(u);
 	*(int*)(param_1 + 0x34) = r;
 	return 1;
 }
@@ -136,7 +160,7 @@ int __cdecl FUN_01136b10(int param_1)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01136b40(int param_1)
 {
-	FUN_01148fd0((void*)*(int*)(param_1 + 0x34));
+	((Layer3F*)*(int*)(param_1 + 0x34))->FUN_01148fd0();
 }
 
 // ---------------------------------------------------------------------------
@@ -159,19 +183,19 @@ void __cdecl FUN_01136b50(int param_1, int param_2)
 		{
 			*(int*)(param_1 + 0x3c) = 0;
 			*(int*)(param_1 + 0x38) = 0;
-			FUN_01148e30();
+			((Layer3F*)*(int*)(param_1 + 0x34))->FUN_01148e30();
 		}
 		int v = blk[0];
 		*(int*)(param_1 + 0x38) = v;
 		int len = blk[3];
 		*(int*)(param_1 + 0x3c) = len;
-		FUN_01148eb0(v, len, *(uint8_t*)(param_1 + 0x2e));
+		((Layer3F*)*(int*)(param_1 + 0x34))->FUN_01148eb0(v, len, *(uint8_t*)(param_1 + 0x2e));
 	}
 	int consumed;
 	int n;
 	do
 	{
-		consumed = FUN_01149490(param_2, &n);
+		consumed = ((Layer3F*)*(int*)(param_1 + 0x34))->FUN_01149490(param_2, &n);
 		uint32_t nch = *(uint8_t*)(param_1 + 0x2e);
 		for (uint32_t ch = 0; ch < nch; ch++)
 			FUN_01148da0((float*)(*(int*)(param_2 + 4) + *(uint16_t*)(param_2 + 0xe) * ch * 4),
@@ -190,7 +214,10 @@ void __cdecl FUN_01136c60(int param_1)
 	if (arr[0] != 0)
 	{
 		for (int i = 0; i < *(int*)(param_1 + 0x48); i++)
-			((void (__cdecl*)(int))**(int**)(*(int*)(param_1 + 0x3c) + i * 4))(0);
+		{
+			int core = *(int*)(*(int*)(param_1 + 0x3c) + i * 4);
+			((DecoderCoreVt*)core)->FUN_call(0);
+		}
 		sys_of(param_1)->Free((void*)arr[0], 0);
 	}
 }
@@ -207,7 +234,7 @@ int __cdecl FUN_01136ca0(int param_1, int* param_2)
 // ---------------------------------------------------------------------------
 // @ 0x01136cc0  rw::audio::core::EaLayer3DecBase::CreateInstance
 // ---------------------------------------------------------------------------
-int __cdecl FUN_01136cc0(int param_1, uint8_t param_2)
+bool __cdecl FUN_01136cc0(int param_1, uint8_t param_2)
 {
 	*(uint8_t*)(param_1 + 0x54) = param_2;
 	*(uint32_t*)(param_1 + 0x44) = (uint32_t)*(uint8_t*)(param_1 + 0x2e);
@@ -217,7 +244,10 @@ int __cdecl FUN_01136cc0(int param_1, uint8_t param_2)
 	*(int*)(param_1 + 0x3c) = param_1 + 0x58;
 	int total = 0;
 	for (int i = 0; i < *(int*)(param_1 + 0x48); i++)
+	{
+		total = (total + 0xf) & ~0xf;
 		total += 0x2e0;
+	}
 	int base = (int)sys_of(param_1)->Alloc(total, "EALayer3Core Instances", 0x10, 0);
 	for (int i = 0; i < *(int*)(param_1 + 0x48); i++)
 	{
@@ -228,7 +258,7 @@ int __cdecl FUN_01136cc0(int param_1, uint8_t param_2)
 		base = p + 0x2e0;
 		operator_new_arr((void*)p, 0, 0x2e0);
 		void* core = (void*)*(int*)slot;
-		void* r = core ? EALayer3Core_ctor(core, half + 1) : 0;
+		void* r = core ? ((EALayer3CoreH*)core)->FUN_01149f70(half + 1) : 0;
 		*(int*)slot = (int)r;
 		*(int*)(*(int*)slot + 0x2dc) = *(int*)(param_1 + 4);
 	}
@@ -306,7 +336,7 @@ void __cdecl FUN_01136ee0(int param_1)
 // ---------------------------------------------------------------------------
 // @ 0x01136f80
 // ---------------------------------------------------------------------------
-int __fastcall FUN_01136f80(int param_1)
+int __cdecl FUN_01136f80(int param_1)
 {
 	FUN_01136e10(*(int*)(param_1 + 4));
 	return 8;
@@ -315,7 +345,7 @@ int __fastcall FUN_01136f80(int param_1)
 // ---------------------------------------------------------------------------
 // @ 0x01136fa0
 // ---------------------------------------------------------------------------
-int __cdecl FUN_01136fa0(int* param_1)
+bool __cdecl FUN_01136fa0(int* param_1)
 {
 	if (param_1 != 0)
 	{
@@ -325,14 +355,14 @@ int __cdecl FUN_01136fa0(int* param_1)
 	param_1[3] = (int)(param_1 + 0x10);
 	*(uint8_t*)((char*)param_1 + 0x14d) = 0;
 	*(int16_t*)((char*)param_1 + 0x148) =
-		(int16_t)(*(float*)(param_1[1] + 0xc0) * 0.01f);
+		(int16_t)Cvtss2si(*(float*)(param_1[1] + 0xc0) * 0.01f);
 	for (int off = 0; off < 0x90; off += 8)
 		*(float*)((char*)param_1 + 0x40 + off) = 0.0f;
 	*(uint8_t*)((char*)param_1 + 0x14c) = 0;
 	FUN_01136e10((int)param_1);
 	*(int16_t*)((char*)param_1 + 0x14a) = 0;
 	for (int i = 0; i < 6; i++)
-		FUN_0114a4a0(i);
+		((EALayer3CoreH*)param_1)->FUN_0114a4a0(i);
 	char ok = ((TimerMgr*)(param_1[1] + 0x60))->AddTimer((void*)((char*)param_1 + 0x24),
 	                                                      (void*)&FUN_01136ee0, param_1, "VuMeter", 1, 1);
 	if (ok != 0)
@@ -396,7 +426,7 @@ int __cdecl FUN_01137150(int param_1)
 // ---------------------------------------------------------------------------
 // @ 0x01137170  rw::audio::core::TimeStretch::CreateInstance
 // ---------------------------------------------------------------------------
-int __cdecl FUN_01137170(int* param_1, float* param_2)
+bool __cdecl FUN_01137170(int* param_1, float* param_2)
 {
 	if (param_1 != 0)
 		*param_1 = 0x014a8150;
@@ -416,8 +446,8 @@ int __cdecl FUN_01137170(int* param_1, float* param_2)
 		mode = (int)param_2[1];
 		count = (int)param_2[2];
 	}
-	uint32_t rate = (uint32_t)((*(float*)(param_1[1] + 0xc0) * scale) * 0.001f);
-	uint32_t rounded = rate & ~7;
+	int rate = (int)((*(float*)(param_1[1] + 0xc0) * scale) * 0.001f);
+	int rounded = rate & ~7;
 	if ((rate & 7) > 4)
 		rounded += 8;
 	uint32_t strideFloats = rounded * 4;
@@ -610,7 +640,7 @@ void __fastcall FUN_011374f0(int param_1)
 // ---------------------------------------------------------------------------
 // @ 0x01137590  rw::audio::core::SubMix::CreateInstance
 // ---------------------------------------------------------------------------
-int __cdecl FUN_01137590(int* param_1, int* param_2)
+bool __cdecl FUN_01137590(int* param_1, int* param_2)
 {
 	if (param_1 != 0)
 	{
@@ -669,33 +699,35 @@ void DecoderThunk::FUN_011376d0(int param_2, int param_3)
 	int param_1 = (int)this;
 	int iVar7 = param_2 * 0x50 + *(int*)(param_1 + 0x58);
 	int iVar6 = param_2 * 0x30 + (uint32_t)*(uint16_t*)(param_1 + 0x1c4) + param_1;
-	int local = param_3;
-	FUN_00a10ef0(4);
-	uint8_t b = (uint8_t)FUN_00a10ef0(4);
+	int state[2];
+	state[0] = param_3;
+	state[1] = 0;
+	((BitReaderState*)state)->FUN_00a10ef0(4);
+	uint8_t b = (uint8_t)((BitReaderState*)state)->FUN_00a10ef0(4);
 	*(uint8_t*)(iVar7 + 0x48) = b;
-	int c = FUN_00a10ef0(6);
+	int c = ((BitReaderState*)state)->FUN_00a10ef0(6);
 	*(char*)(iVar6 + 0x2b) = (char)c + 1;
-	int n = FUN_00a10ef0(0x12);
+	int n = ((BitReaderState*)state)->FUN_00a10ef0(0x12);
 	*(float*)(iVar6 + 0x10) = (float)(uint32_t)n;
-	uint8_t d = (uint8_t)FUN_00a10ef0(2);
+	uint8_t d = (uint8_t)((BitReaderState*)state)->FUN_00a10ef0(2);
 	*(uint8_t*)(iVar7 + 0x49) = d;
-	char e = (char)FUN_00a10ef0(1);
-	*(int*)(iVar6 + 0x14) = FUN_00a10ef0(0x1d);
+	char e = (char)((BitReaderState*)state)->FUN_00a10ef0(1);
+	*(int*)(iVar6 + 0x14) = ((BitReaderState*)state)->FUN_00a10ef0(0x1d);
 	if (e == 0)
 		*(int*)(iVar6 + 0x18) = -1;
 	else
-		*(int*)(iVar6 + 0x18) = FUN_00a10ef0(0x20);
+		*(int*)(iVar6 + 0x18) = ((BitReaderState*)state)->FUN_00a10ef0(0x20);
 	if (*(char*)(iVar7 + 0x49) == 2)
-		*(int*)(iVar7 + 0x10) = FUN_00a10ef0(0x20);
+		*(int*)(iVar7 + 0x10) = ((BitReaderState*)state)->FUN_00a10ef0(0x20);
 	if (e != 0)
 	{
 		if (*(char*)(iVar7 + 0x49) == 1 ||
 		    (*(char*)(iVar7 + 0x49) == 2 && *(int*)(iVar7 + 0x10) <= *(int*)(iVar6 + 0x18)))
-			*(int*)(iVar7 + 0xc) = FUN_00a10ef0(0x20);
+			*(int*)(iVar7 + 0xc) = ((BitReaderState*)state)->FUN_00a10ef0(0x20);
 		else
 			*(int*)(iVar7 + 0xc) = 0;
 	}
-	*(int*)(iVar7 + 8) = param_3;
+	*(int*)(iVar7 + 8) = (state[1] >> 3) + param_3;
 }
 
 // ---------------------------------------------------------------------------
@@ -708,16 +740,16 @@ void DecoderThunk::FUN_011377f0(int param_2, int param_3, int param_4)
 	int iVar2 = param_2 * 0x30 + (uint32_t)*(uint16_t*)(param_1 + 0x1c4) + param_1;
 	if (param_4 > 0 && param_3 != 0)
 	{
-		int loc[6];
-		char b;
-		FUN_0114c880(loc, param_3, param_4);
-		*(int*)(iVar2 + 0x20) = loc[3];
-		*(int*)(iVar2 + 0x24) = loc[2];
-		*(int*)(iVar1 + 0x3c) = loc[1];
-		*(int*)(iVar1 + 0x40) = loc[0];
-		*(int*)(iVar1 + 0x38) = loc[4];
-		*(int*)(iVar1 + 0x44) = loc[5];
-		*(uint8_t*)(iVar1 + 0x4c) = b;
+		typedef struct { int f[6]; int pad; unsigned char b; } MixLoc;
+		MixLoc loc;
+		((MixParser*)&loc)->FUN_0114c880(param_3, param_4);
+		*(int*)(iVar2 + 0x20) = loc.f[2];
+		*(int*)(iVar2 + 0x24) = loc.f[1];
+		*(int*)(iVar1 + 0x3c) = loc.f[3];
+		*(int*)(iVar1 + 0x40) = loc.f[4];
+		*(int*)(iVar1 + 0x38) = loc.f[0];
+		*(int*)(iVar1 + 0x44) = loc.f[5];
+		*(uint8_t*)(iVar1 + 0x4c) = loc.b;
 		*(int*)(iVar2 + 0x1c) = 0;
 		*(int*)(iVar1 + 0x14) = *(int*)(iVar2 + 0x24);
 		return;
@@ -789,7 +821,7 @@ void __fastcall FUN_01137950(int param_1)
 				int* pi = (int*)((uint32_t)(uint8_t)pc[1] * 0x50 + *(int*)(param_1 + 0x58) + 0x18);
 				*pi -= *(int*)(*(int*)(pc - 0xd) + 4);
 				if (*(int*)(pc - 9) != 0)
-					FUN_011e7c70(*(int*)(pc - 0xd));
+					((MixSlotFree*)*(int*)(pc - 9))->FUN_011e7c70(*(int*)(pc - 0xd));
 				*(int*)(pc - 0xd) = 0;
 			}
 		}

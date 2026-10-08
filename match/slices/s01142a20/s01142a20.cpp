@@ -35,8 +35,8 @@ extern "C" uint8_t g_16e7c23;     // 0x16e7c23
 extern "C" void* g_sndvoices;     // 0x16e7c78  voice record array (0x84)
 extern "C" uint8_t g_15bffe0[];   // 0x15bffe0
 extern "C" uint8_t g_15bfee0[];   // 0x15bfee0
-extern "C" uint32_t g_tab300[];   // 0x14cb300
-extern "C" uint32_t g_tab2c4[];   // 0x14cb2c4
+extern "C" float g_tab300[];      // 0x14cb300  packed (E0,E1) float pairs, 16 entries
+extern "C" float g_tab2c4[];      // 0x14cb2c4  16 float coefficients
 extern "C" System* g_system;      // 0x16e61a8
 
 class System {
@@ -70,7 +70,7 @@ int   FUN_01141150(uint32_t);                     // 0x1141150
 int   FUN_01156660(int, void*);                   // 0x1156660
 void  SNDPLATFORM_stop(int);                      // 0x1140ab0
 extern "C" int   iSNDdetunetolinear(uint32_t);     // 0x1143310
-extern "C" void  FUN_01143460(int, void*);         // 0x1143460
+extern "C" void  __stdcall FUN_01143460(int, void*);  // 0x1143460
 void  FUN_01142c90(void*, int);                   // 0x1142c90
 void  FUN_01158d00(void);                         // 0x1158d00
 void  FUN_01158c60(void);                         // 0x1158c60
@@ -127,7 +127,7 @@ extern "C" void MIX_create(int* cfg)
         p += 4;
     } while ((int)p < (int)&g_16e8128);
 
-    for (int i = 0; i < (g_16e8078 >> 8); i++) {
+    for (int i = 0; i < (int)g_numOutputs; i++) {
         void* buf = g_system->Alloc(0x440, "Mixer Output Buffer", 0x10, 0);
         g_16e8128[i] = buf;
         g_16e8140[i] = (void*)(((uint32_t)buf + 0x3f) & 0xffffffc0);
@@ -154,7 +154,7 @@ extern "C" void MIX_create(int* cfg)
     g_16e8178 = (int)&FUN_01158c60;
     if ((g_16e7c23 & 2) == 0)
         g_16e8178 = (int)&FUN_01158be0;
-    for (int i = 0; i < (g_16e8078 >> 8); i++)
+    for (int i = 0; i < (int)g_numOutputs; i++)
         SNDMEMI_alloc(g_16e8140[i], 0x400);
 }
 
@@ -380,25 +380,52 @@ extern "C" void FUN_01143430(uint8_t a, int b, uint16_t c, int* d, int e, int f)
 //  FUN_01143460   (decode 16 raw bytes -> filter coefficients, SIMD)
 // ===========================================================================
 // @ 0x01143460
-// INCOMPLETE: the MMX second stage (15-iteration nibble matrix decode) is not
-// reconstructed here; see partial.txt.
-extern "C" void FUN_01143460(int src, void* dstf)
+// Stage 1 (scalar): for each of 4 input dwords seed two floats and pick the
+//   coefficient triple (E0,E1 from tab300[b0&0xf], C from tab2c4[b2&0xf]).
+// Stage 2 (MMX/SSE): 15 iterations.  Each input dword's four bytes give four
+//   lanes; byte i supplies nibble-pair (hi = nibA, lo = nibB), each shifted into
+//   the exponent bits (<<28) and converted with cvtpi2ps.  The lattice is
+//   P' = P*E1 + (nibA*C + Q*E0);  Q' = Q*E1 + (nibB*C + P'*E0).
+// Scalar lowering of the punpck/cvtpi2ps stage; lane order is byte order.
+extern "C" void __stdcall FUN_01143460(int src, void* dstf)
 {
     uint8_t* s = (uint8_t*)src;
-    float* out = (float*)dstf;
+    float* dst = (float*)dstf;
+    float P[4], Q[4], E0[4], E1[4], C[4];
     for (int i = 0; i < 4; i++) {
-        uint8_t b0 = s[0];
-        uint32_t lo = b0 & 0xf;
-        (void)g_tab300[lo * 2 + 1];
-        (void)g_tab300[lo * 2];
-        uint8_t b2 = s[2];
-        (void)g_tab2c4[b2 & 0xf];
-        float f1 = (float)(int)((int8_t)s[1] * 0x100 + (b0 & 0xf0)) * 3.0517578e-05f;
-        out[0] = f1;
-        float f2 = (float)(int)((int8_t)s[3] * 0x100 + (b2 & 0xf0)) * 3.0517578e-05f;
-        out[1] = f2;
+        uint8_t b0 = s[0], b1 = s[1], b2 = s[2], b3 = s[3];
+        E0[i] = g_tab300[(b0 & 0xf) * 2];
+        E1[i] = g_tab300[(b0 & 0xf) * 2 + 1];
+        C[i]  = g_tab2c4[b2 & 0xf];
+        float pv = (float)(int)((int8_t)b1 * 0x100 + (b0 & 0xf0)) * 3.0517578e-05f;
+        float qv = (float)(int)((int8_t)b3 * 0x100 + (b2 & 0xf0)) * 3.0517578e-05f;
+        P[i] = pv;
+        Q[i] = qv;
+        dst[i * 0x20 + 0] = pv;
+        dst[i * 0x20 + 1] = qv;
         s += 4;
-        out += 0x80 / 4;
+    }
+    float* o = (float*)((char*)dst + 8);
+    for (int k = 0; k < 15; k++) {
+        uint32_t w = *(uint32_t*)s;
+        float Pn[4], Qn[4];
+        for (int i = 0; i < 4; i++) {
+            uint32_t b = (w >> (i * 8)) & 0xff;
+            float nibA = (float)(int)((b & 0xf0u) << 24);   // high nibble << 28
+            float nibB = (float)(int)(b << 28);             // low  nibble << 28
+            Pn[i] = P[i] * E1[i] + (nibA * C[i] + Q[i] * E0[i]);
+            Qn[i] = Q[i] * E1[i] + (nibB * C[i] + Pn[i] * E0[i]);
+        }
+        o[0] = Pn[0]; o[1] = Qn[0];
+        *(float*)((char*)o + 0x80)  = Pn[1];
+        *(float*)((char*)o + 0x84)  = Qn[1];
+        *(float*)((char*)o + 0x100) = Pn[2];
+        *(float*)((char*)o + 0x104) = Qn[2];
+        *(float*)((char*)o + 0x180) = Pn[3];
+        *(float*)((char*)o + 0x184) = Qn[3];
+        for (int i = 0; i < 4; i++) { P[i] = Pn[i]; Q[i] = Qn[i]; }
+        s += 4;
+        o += 2;
     }
 }
 
@@ -431,10 +458,9 @@ extern "C" void FUN_01143600(int p, int param2)
         *(int*)(p + 0x38) = *(int*)(e + 0xc) - *(int*)(e + 8);
     }
     uint32_t n = *(uint8_t*)(p + 0x2e);
-    int src = *(int*)(p + 0x34);
     for (uint32_t i = 0; i < n; i++) {
         int d = *(int*)(param2 + 4) + (uint32_t)*(uint16_t*)(param2 + 0xe) * i * 4;
-        FUN_01143460(src, (void*)d);
+        FUN_01143460(*(int*)(p + 0x34), (void*)d);
         *(int*)(p + 0x34) += 0x4c;
         if (off > 0)
             memmove((void*)d, (void*)(d + off * 4), (0x80 - off) * 4);

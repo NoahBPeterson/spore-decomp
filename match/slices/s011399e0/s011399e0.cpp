@@ -15,7 +15,22 @@ template <class T> static inline T& A(void* p, int off) { return *(T*)((char*)p 
 namespace rw { namespace audio { namespace core {
 
 struct DelayLine {
-    int Init(int a, int b, int size);   // 0x0114d7b0  thiscall, ret 0xc
+    int  Init(int a, int b, int size);   // 0x0114d7b0  thiscall, ret 0xc
+    void FUN_0114d730();                 // 0x0114d730  ctor
+    void FUN_0114d770();                 // 0x0114d770  Release
+    void FUN_0114d9d0(int);              // 0x0114d9d0  Reset, ret 4
+    int  FUN_0114d840(int);              // 0x0114d840  Resize, ret 4
+};
+struct CombFilter {
+    void FUN_0114dcb0(float, int, float, float); // 0x0114dcb0 SetGains, ret 0x10
+    void FUN_0114dce0();                 // 0x0114dce0  ctor
+};
+struct AllPassFilter {
+    void FUN_0114e230();                 // 0x0114e230  ctor
+    void FUN_0114e210(float, float);     // 0x0114e210  ret 8
+};
+struct TimerMgr {
+    char AddTimer(void*, void*, void*, const char*, int, int); // 0x0112d8e0
 };
 struct FastFirEngine {
     int  Reset();                                    // 0x0114e580
@@ -47,16 +62,8 @@ extern const float g_revB[];              // 0x014b232c
 extern const float g_freqTab[];           // 0x014b23e0 (shared frequency table)
 
 extern "C" {
-int  FUN_0114d730(void*);                 // 0x0114d730  thiscall, ret
-int  FUN_0114d770(void*);                 // 0x0114d770  thiscall, ret
-void FUN_0114d9d0(void* ctx, int);        // 0x0114d9d0  thiscall ctx, ret 4
-int  FUN_0114d840(void* ctx, int);        // 0x0114d840  thiscall ctx, ret 4
-int  FUN_0114dca0(void*);                 // 0x0114dca0  thiscall, ret
-int  FUN_0114dcb0(float, int, float, float); // 0x0114dcb0
-int  FUN_0114dce0(void*);                 // 0x0114dce0  thiscall, ret
-int  FUN_0114e210(void* ctx, int a, float b); // 0x0114e210 thiscall-ish
-int  FUN_0114e230(void*);                 // 0x0114e230  thiscall
-char FUN_0112d8e0(void*, void*, void*, void*, const char*, int, int); // AddTimer
+int  FUN_0114dca0(void*);                 // 0x0114dca0  cdecl, ret
+void* memset(void*, int, unsigned);       // 0x011e073e  msvcr90!memset
 void operator_delete__(void*);            // 0x00f47380
 void EA_Audio_sys_gui(void);              // 0x00c2e4e0
 double log2(double);
@@ -78,6 +85,9 @@ void RevObj::F_9e0(int out, float sr)
     } else { sr = 50000.0f; blend = (50000.0f - sr) * 4e-05f; idx = 1; }
     float inv = 1.0f - blend;
     float tab[17];
+    // keep the external memset call the original makes (an intrinsic would inline it)
+    void* (__cdecl *volatile clearTab)(void*, int, unsigned) = memset;
+    clearTab(tab, 0, 0x44);
     tab[0] = 12.5f; tab[1] = 25.0f; tab[2] = 37.5f; tab[3] = 50.0f;
     tab[4] = 62.5f; tab[5] = 75.0f; tab[6] = 87.5f; tab[7] = 100.0f;
     tab[8]  = g_revA[idx * 0x12] * inv + g_revB[idx * 0x12] * blend;
@@ -93,7 +103,7 @@ void RevObj::F_9e0(int out, float sr)
     float* pf = (float*)((char*)p + 0x164);
     for (int i = 0; i < 6; i++, pf++) {
         int k = 0;
-        while (k < 16 && tab[k] < *pf) k++;
+        while (!(tab[k] >= *pf)) k++;   // comiss/jb: continues on unordered (NaN)
         float f = (tab[k] - *pf) * 0.08f;
         *(float*)(out + i * 4) = (1.0f - f) * tab[k + 9] + tab[k + 8] * f;
     }
@@ -103,8 +113,9 @@ void RevObj::F_9e0(int out, float sr)
         int* pi = (int*)((char*)p + 0x17c);
         for (int i = 0; i < 6; i++, pi++) {
             FUN_0114dca0((char*)p + 0x1dc + i * 0x24);
-            FUN_0114d840((char*)p + 0x2b4 + i * 0x3c, *pi + 3);
-            FUN_0114d9d0((char*)p + 0x2b4 + i * 0x3c, *pi + 1);
+            DelayLine* dl = (DelayLine*)((char*)p + 0x2b4 + i * 0x3c);
+            dl->FUN_0114d840(*pi + 3);
+            dl->FUN_0114d9d0(*pi + 1);
             *(float*)(out + i * 4) = *(float*)(out + i * 4) / A<float>(p, 0x38);
         }
     }
@@ -131,11 +142,15 @@ RevObj* RevObj::F_e10()
 {
     void* p = this;
     *(void**)p = (void*)0x14b3dd4;
-    for (int i = 0; i < 3; i++) FUN_0114e230((char*)p + 0x40 + i * 0x18);
-    for (int i = 0; i < 3; i++) FUN_0114d730((char*)p + 0x88 + i * 0x3c);
-    A<void*>(p, 0xc) = 0;
-    for (int i = 0; i < 6; i++) FUN_0114dce0((char*)p + 0x1dc + i * 0x24);
-    for (int i = 0; i < 6; i++) FUN_0114d730((char*)p + 0x2b4 + i * 0x3c);
+    for (int i = 0; i < 3; i++) ((AllPassFilter*)((char*)p + 0x40 + i * 0x18))->FUN_0114e230();
+    for (int i = 0; i < 3; i++) ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d730();
+    /* PlugIn::Initialize<...>(p+0x13c) */
+    A<int>(p, 0x13c) = 0;
+    A<int>(p, 0x148) = 0x13f9034;
+    A<int>(p, 0x14c) = 0;
+    A<u8>(p, 0x150) = 3;
+    for (int i = 0; i < 6; i++) ((CombFilter*)((char*)p + 0x1dc + i * 0x24))->FUN_0114dce0();
+    for (int i = 0; i < 6; i++) ((DelayLine*)((char*)p + 0x2b4 + i * 0x3c))->FUN_0114d730();
     return this;
 }
 
@@ -143,9 +158,9 @@ RevObj* RevObj::F_e10()
 void RevObj::F_eb0()
 {
     void* p = this;
-    for (int i = 0; i < 6; i++) FUN_0114d770((char*)p + 0x1e0 + i * 0x3c);
+    for (int i = 5; i >= 0; i--) ((DelayLine*)((char*)p + 0x2b4 + i * 0x3c))->FUN_0114d770();
     EA_Audio_sys_gui();
-    for (int i = 0; i < 3; i++) FUN_0114d770((char*)p + 0xc4 + i * 0x3c);
+    for (int i = 2; i >= 0; i--) ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d770();
     *(void**)p = (void*)0x14bc0fc;
 }
 
@@ -181,14 +196,15 @@ int RevObj::F_fe0(void* sys)
                 F_9e0((int)((char*)p + 0x1ac), sr);
             F_d60((float*)((char*)p + 0x1c4));
         } else {
-            extern int FUN_01139920(float*, int*, float);
+            extern int __stdcall FUN_01139920(float*, int*, float);
             FUN_01139920((float*)((char*)p + 0x164), (int*)((char*)p + 0x17c), sr);
             F_9e0((int)((char*)p + 0x1ac), sr);
             F_d60((float*)((char*)p + 0x1c4));
             b3 = true;
         }
     } else {
-        if (g > 83.3f || g < 2.0f) A<float>(p, 0x30) = 83.3f;
+        if (g > 83.3f) A<float>(p, 0x30) = 83.3f;
+        else if (g < 2.0f) A<float>(p, 0x30) = 2.0f;
         g = A<float>(p, 0x30) * 0.8f;
         float hi = g * 1.5f;
         if (hi > 100.0f) { g = 66.666664f; hi = 100.0f; A<float>(p, 0x30) = 83.333336f; }
@@ -199,7 +215,7 @@ int RevObj::F_fe0(void* sys)
         A<float>(p, 0x170) = ((step + g) + step) + step;
         A<float>(p, 0x174) = (((step + g) + step) + step) + step;
         A<float>(p, 0x178) = hi;
-        extern int FUN_01139920(float*, int*, float);
+        extern int __stdcall FUN_01139920(float*, int*, float);
         FUN_01139920((float*)((char*)p + 0x164), (int*)((char*)p + 0x17c), sr);
         F_9e0((int)((char*)p + 0x1ac), sr);
         F_d60((float*)((char*)p + 0x1c4));
@@ -207,10 +223,16 @@ int RevObj::F_fe0(void* sys)
     }
     int* pi = (int*)((char*)p + 0x17c);
     for (int i = 0; i < 6; i++, pi++) {
-        FUN_0114dcb0(-(float)pi[0xc], pi[0x12] ^ 0x80000000, -(float)pi[0xc], 0.16666667f);
+        // pi[0xc] loaded as float bits and negated with a sign flip (x87 fchs), so a NaN keeps
+        // its payload and only the sign changes -- unlike an SSE 0.0-x.
+        int g1bits = A<int>((char*)p, 0x1ac + i * 4) ^ 0x80000000;
+        float g1 = *(float*)&g1bits;
+        ((CombFilter*)((char*)p + 0x1dc + i * 0x24))->FUN_0114dcb0(
+            g1, pi[0x12] ^ 0x80000000, g1, 0.16666667f);
+        DelayLine* dl = (DelayLine*)((char*)p + 0x2b4 + i * 0x3c);
         if (A<int>((char*)p + 0x2b4 + i * 0x3c, 0x28) != *pi + 1) {
-            if (FUN_0114d840((char*)p + 0x2b4 + i * 0x3c, *pi + 3) == 0) return 0;
-            FUN_0114d9d0((char*)p + 0x2b4 + i * 0x3c, *pi + 1);
+            if (dl->FUN_0114d840(*pi + 3) == 0) return 0;
+            dl->FUN_0114d9d0(*pi + 1);
         }
     }
     float fVar1 = sr;
@@ -223,7 +245,7 @@ int RevObj::F_fe0(void* sys)
         } else if (c == 2 || c == 4) {
             A<float>(p, 0x41c) = 0.63f;
             A<u8>(p, 0x439) = 2;
-            A<float>(p, 0x420) = 0.77700001f;
+            A<float>(p, 0x420) = 0.77777779f;
             A<int>(p, 0x428) = _mm_cvtss_si32(_mm_load_ss(&(fVar1 = sr * 0.006666667f)));
             fVar1 = sr * 0.0053999997f;
             A<int>(p, 0x42c) = _mm_cvtss_si32(_mm_load_ss(&fVar1));
@@ -233,7 +255,7 @@ int RevObj::F_fe0(void* sys)
             fVar1 = sr * 0.006666667f;
             A<int>(p, 0x428) = _mm_cvtss_si32(_mm_load_ss(&fVar1));
             A<float>(p, 0x420) = 0.69999999f;
-            A<float>(p, 0x424) = 0.77700001f;
+            A<float>(p, 0x424) = 0.77777779f;
             fVar1 = sr * 0.006f;
             A<int>(p, 0x42c) = _mm_cvtss_si32(_mm_load_ss(&fVar1));
             fVar1 = sr * 0.0053999997f;
@@ -241,15 +263,17 @@ int RevObj::F_fe0(void* sys)
         }
         int* q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++) {
-            FUN_0114e210((char*)p + 0x88 + i * 0x3c, q[-3], A<float>(p, 0x434));
-            if (FUN_0114d840((char*)p + 0x88 + i * 0x3c, *q + 2) == 0) return 0;
-            FUN_0114d9d0((char*)p + 0x88 + i * 0x3c, *q);
+            ((AllPassFilter*)((char*)p + 0x40 + i * 0x18))->FUN_0114e210(
+                A<float>(p, 0x41c + i * 4), A<float>(p, 0x434));
+            DelayLine* dl = (DelayLine*)((char*)p + 0x88 + i * 0x3c);
+            if (dl->FUN_0114d840(*q + 2) == 0) return 0;
+            dl->FUN_0114d9d0(*q);
         }
         A<char>(p, 0x438) = 1;
     } else if (b4) {
         int* q = (int*)((char*)p + 0x428);
         for (int i = 0; i < (int)A<u8>(p, 0x439); i++, q++)
-            FUN_0114d9d0((char*)p + 0x88 + i * 0x3c, *q);
+            ((DelayLine*)((char*)p + 0x88 + i * 0x3c))->FUN_0114d9d0(*q);
     }
     A<float>(p, 0x158) = A<float>(p, 0x28);
     A<float>(p, 0x154) = sr;
@@ -272,18 +296,18 @@ void __cdecl FUN_0113a4c0(void* self)
     }
     if (A<float>(self, 0x158) <= 0.0f) return;
     for (int i = 0; i < 6; i++) {
-        FUN_0114d9d0((char*)self + 0x2b4 + i * 0x3c, A<int>(self, 0x17c + i * 4) + 1);
+        ((DelayLine*)((char*)self + 0x2b4 + i * 0x3c))->FUN_0114d9d0(A<int>(self, 0x17c + i * 4) + 1);
         FUN_0114dca0((char*)self + 0x1dc + i * 0x24);
     }
     for (int i = 0; i < (int)A<u8>(self, 0x439); i++)
-        FUN_0114d9d0((char*)self + 0x88 + i * 0x3c, A<int>(self, 0x428 + i * 4));
+        ((DelayLine*)((char*)self + 0x88 + i * 0x3c))->FUN_0114d9d0(A<int>(self, 0x428 + i * 4));
 }
 
 // @ 0x0113a5c0  ReverbModel1::CreateInstance
 bool __cdecl FUN_0113a5c0(void* self)
 {
     if (self) ((RevObj*)self)->F_e10();
-    char ch = A<char>(self, 0x21);
+    u8 ch = A<u8>(self, 0x21);
     A<void*>(self, 0xc) = (char*)self + 0x28;
     A<char>(self, 0x43a) = 0;
     u8 mode;
@@ -301,12 +325,13 @@ bool __cdecl FUN_0113a5c0(void* self)
         ((DelayLine*)((char*)self + 0x2b4 + i * 0x3c))->Init(1, 0, A<int>(self, 0x1e4 + i * 0x24));
     for (int i = 0; i < (int)mode; i++)
         ((DelayLine*)((char*)self + 0x88 + i * 0x3c))->Init(1, 0, A<int>(self, 0x48 + i * 0x18));
-    char c = A<char>(self, 0x21);
+    u8 c = A<u8>(self, 0x21);
     float f = (c <= 4) ? (float)c : (float)c - 1.0f;
     A<float>(self, 0x434) = 2.0f / f;
     A<char>(self, 0x438) = 0;
-    if (FUN_0112d8e0((void*)((char*)A<void*>(self, 4) + 0x60), (char*)self + 0x13c,
-                     (void*)&FUN_0113a4c0, self, "ReverbModel1", 1, 1) != 0)
+    char ok = ((TimerMgr*)((char*)A<void*>(self, 4) + 0x60))->AddTimer(
+                  (char*)self + 0x13c, (void*)&FUN_0113a4c0, self, "ReverbModel1", 1, 1);
+    if (ok != 0)
         return false;
     A<char>(self, 0x43a) = 1;
     return true;

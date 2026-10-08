@@ -445,8 +445,8 @@ float F_01140190(unsigned char* p)
         goto sign;
     }
     {
-        double a = ldexp((double)(mid - 0x80000000) + 2147483648.0, (int)hi - 0x401e);
-        double b = ldexp((double)(lo - 0x80000000) + 2147483648.0, (int)hi - 0x403e);
+        double a = ldexp((double)(int)((unsigned)mid + 0x80000000u) + 2147483648.0, (int)hi - 0x401e);
+        double b = ldexp((double)(int)((unsigned)lo + 0x80000000u) + 2147483648.0, (int)hi - 0x403e);
         res = a + b;
     }
 sign:

@@ -5,7 +5,7 @@
 0113e200  39  Dac_CmdB (rate selector against 0x16e6320) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 28.1% coverage)
 0113e280  59  Dac_CmdStart (queue device start) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (137 valid, 26.1% coverage)
 0113e300  2  Dac_CmdStop (queue device stop) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (323 valid, 100% coverage)
-0113e340  266  Dac::PostCmd (attribute command queue) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv FAIL 5/203 valid inputs: the only difference is the depth-1 call trace of the case-5 tail-call into FUN_00a16170 (a tail jmp in the original vs a direct member call here records the two stack args in the other order); every other observable matches.
+0113e340  298  Dac::PostCmd (attribute command queue) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (371 valid, 83.7% coverage). Not byte-exact: case 5 must be emitted as a tail `jmp 0xa16170` (the original's layout), so the cmd==5/6 checks are hoisted before the cmd==0 and cmd 1..4 bodies and `sys` is loaded per-branch to keep it out of a callee-saved register; that reorders the dispatch and disables the old shared epilogue.
 0113e4e0  100  Plugin_InitA (attribute defaults) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage)
 0113e690  112  Plugin_InitC (Fir64-backed plug-in) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage)
 0113e770  79  AiffWriter_IntToExtended (integer -> 80-bit extended) complete, leaf. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (400 valid, 100% coverage). Register scheduling of the exponent loop and the byte stores differs.

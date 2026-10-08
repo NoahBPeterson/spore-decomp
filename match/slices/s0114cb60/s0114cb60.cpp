@@ -36,7 +36,9 @@ struct AudioProcessContext {
     char pad30000[0x0C];
     AudioChannelBuffer* mpSrcBuffer;     // +0x3000C
     AudioChannelBuffer* mpDstBuffer;     // +0x30010
+    char  pad14[4];
     char* mpFormat;                      // +0x30018 (rate at +0x0C)
+    char  pad1c[4];
     s32   mNumSamples;                   // +0x30020
     f32   mfField24;                     // +0x30024
     f32   mfResampleGain;                // +0x30028
@@ -100,36 +102,37 @@ int Send::Process(Send* self, AudioProcessContext* ctx, char resetRamp)
         self->mfCurrentGain = self->mfGain;
     }
 
-    const u32 numSubMixChannels = self->mSubMixConnector.mNumSubMixChannels;
-    if (numSubMixChannels == 0) {
-        self->mbNeedReset = 1;
-        return 1;
+    if (self->mfGain != self->mfCurrentGain || self->mfCurrentGain != 0.0f) {
+        const u32 numSubMixChannels = self->mSubMixConnector.mNumSubMixChannels;
+        if (numSubMixChannels == 0) {
+            self->mbNeedReset = 1;
+            return 1;
+        }
+
+        const u32 inputChannels = self->mbFlag20;
+        f32* const pSubMixBuffer = self->mSubMixConnector.GetSubMixBuffer();
+        AudioChannelBuffer* srcBuffer = ctx->mpSrcBuffer;
+
+        f32* local[12];
+
+        for (u32 c = 0; c < inputChannels; ++c)
+            local[c] = srcBuffer->mpSamples + srcBuffer->muStride * c;
+
+        for (u32 i = 0; i < numSubMixChannels; ++i)
+            local[6 + i] = pSubMixBuffer + KI_MIXER_FRAME_SIZE * i;
+
+        if (self->mfGain == self->mfCurrentGain)
+            ReChannelGainMix(local + 6, local, self->mfGain, numSubMixChannels, inputChannels,
+                             KI_MIXER_FRAME_SIZE);
+        else
+            ReChannelGainMixRamp(local + 6, local, self->mfGain, self->mfCurrentGain,
+                                 numSubMixChannels, inputChannels, KI_MIXER_FRAME_SIZE);
+
+        self->mfCurrentGain = self->mfGain;
+
+        for (u32 c = 0; c < inputChannels; ++c)
+            self->mDeClickValue[c] = local[c][KI_MIXER_FRAME_SIZE - 1] * self->mfGain;
     }
-
-    const u32 inputChannels = self->mbFlag20;
-    f32* const pSubMixBuffer = self->mSubMixConnector.GetSubMixBuffer();
-    AudioChannelBuffer* srcBuffer = ctx->mpSrcBuffer;
-
-    f32* srcChannel[8];
-    f32* dstChannel[6];
-
-    for (u32 c = 0; c < inputChannels; ++c)
-        srcChannel[c] = srcBuffer->mpSamples + srcBuffer->muStride * c;
-
-    for (u32 i = 0; i < numSubMixChannels; ++i)
-        dstChannel[i] = pSubMixBuffer + KI_MIXER_FRAME_SIZE * i;
-
-    if (self->mfGain == self->mfCurrentGain)
-        ReChannelGainMix(dstChannel, srcChannel, self->mfGain, numSubMixChannels, inputChannels,
-                         KI_MIXER_FRAME_SIZE);
-    else
-        ReChannelGainMixRamp(dstChannel, srcChannel, self->mfGain, self->mfCurrentGain,
-                             numSubMixChannels, inputChannels, KI_MIXER_FRAME_SIZE);
-
-    self->mfCurrentGain = self->mfGain;
-
-    for (u32 c = 0; c < inputChannels; ++c)
-        self->mDeClickValue[c] = srcChannel[c][KI_MIXER_FRAME_SIZE - 1] * self->mfGain;
 
     return 1;
 }
@@ -165,7 +168,9 @@ void LinearInterpolate(u32 frames, const f32* pSrc, f32* pDst, u32* pAccWhole, u
 s32 Scp0MixChannels(s32* pDst, s32* pSrc, f32 gain, s32 dstCh, s32 srcCh, s32 frame); // 0x0112d590
 
 struct Scp0 {
-    char pad0[0x21];
+    char pad0[4];
+    void* mpSystem;           // +0x04 (System; its first field is the stack allocator table)
+    char pad8[0x21 - 0x08];
     u8   mbChannelCount;      // +0x21
     char pad22[0x48 - 0x22];
     f32  mfInputRate;         // +0x48
@@ -208,7 +213,10 @@ int Scp0::Process(Scp0* self, AudioProcessContext* ctx)
             aChan[i] = (s32)(pSrc->mpSamples + pSrc->muStride * i);
     }
 
-    s32* pAllocTop = (s32*)(*g_pSystem->mpObjectTable + 0x0C); // StackAllocator cursor
+    // The original reads the stack-allocator cursor through the System cached at self+0x04:
+    // cursor = *(*self->mpSystem + 0x0C) (the allocator table's 4th dword).
+    void* pSystem = *(void**)((char*)self + 4);
+    s32* pAllocTop = (s32*)(*(s32*)pSystem + 0x0C); // StackAllocator cursor
 
     if (uNumChannels != uCount) {
         s32 saved = *pAllocTop;

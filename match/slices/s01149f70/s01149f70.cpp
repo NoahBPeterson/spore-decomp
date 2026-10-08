@@ -2,6 +2,11 @@
 // Build: VC .NET 2003 (cl 13.10) + /GL /LTCG.
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 #include <string.h>
+#include <math.h>
+
+#pragma function(memcpy)
+#pragma function(memmove)
+#pragma intrinsic(sqrtf)
 
 namespace rw { namespace audio { namespace core {
 
@@ -27,15 +32,15 @@ public:
     EALayer3Core(int n);
     void SetMode();                                             // 01149fd0
     void AnalyzeStatistics(int a2, int a3);                     // 0114a160
-    void OnInterface(int a2);                                   // 0114a470
+    static void OnInterface(EALayer3Core* self, int a2);        // 0114a470
     void ResetSlot(int idx);                                    // 0114a4a0
     void Interpolate(int a2, int a3, float* a4, int a5);        // 0114a4c0
-    float AdjustOffset(float* a2);                              // 0114a680
+    int AdjustOffset(float* a2);                                // 0114a680
     void AppendSamples(int a2, int a3, int a4, int a5, int a6); // 0114a750
     void UpdateCorrelation(int a2, int a3, float a4, float* a5);// 0114a970
     void AddToOutput(int a2, int a3, int a4, int a5, int a6, int a7, char a8); // 0114aa40
     void ResetSlots();                                          // 0114ad10
-    int  SelectPath(int a2, int a3, int a4);                    // 0114ad50
+    static int  SelectPath(EALayer3Core* self, int a2, int a3, int a4); // 0114ad50
 
     int   i32(int off) const { return *(const int*)((const char*)this + off); }
     int&  i32(int off) { return *(int*)((char*)this + off); }
@@ -45,7 +50,7 @@ public:
     unsigned char& u8(int off) { return *(unsigned char*)((char*)this + off); }
 };
 
-extern float __stdcall DotProduct(float* a, float* b, unsigned int n);  // 0x114a8b0
+extern float __stdcall DotProduct(float* a, float* b, int n);  // 0x114a8b0
 
 // @ 0x01149f70
 EALayer3Core::EALayer3Core(int n)
@@ -111,8 +116,7 @@ void EALayer3Core::SetMode()
     f32(0x68) = f32(0xfc);
 }
 
-// @ 0x0114a160  (best-effort: per-sample statistics accumulation; the original is
-// hand-vectorised SSE - this is the scalar equivalent)
+// @ 0x0114a160  (per-channel packed/scalar statistics accumulation)
 void EALayer3Core::AnalyzeStatistics(int a2, int a3)
 {
     unsigned char nch = u8(0x21);
@@ -120,69 +124,97 @@ void EALayer3Core::AnalyzeStatistics(int a2, int a3)
         *(unsigned short*)((char*)this + 0x14a) = 0;
         return;
     }
-    unsigned int idx = 0;
-    unsigned short base = 0x14a;
-    (void)base;
-    for (unsigned int ch = 0; ch < nch; ++ch) {
-        unsigned int cnt = *(unsigned short*)((char*)this + 0x14a);
-        float* p = (float*)(*(int*)(a2 + 4) + *(unsigned short*)(a2 + 0xe) * ch * 4);
+    float* stat = (float*)((char*)this + 0x100);
+    unsigned int ch = 0;
+    unsigned int cnt = 0;
+    do {
+        cnt = *(unsigned short*)((char*)this + 0x14a);
+        float* p = (float*)(*(int*)(a2 + 4) +
+                            (unsigned)*(unsigned short*)(a2 + 0xe) * ch * 4);
         float* end = p + a3;
-        float* stat = (float*)((char*)this + 0x100 + ch * 4);
+        float* last = p;
         while (p < end) {
-            unsigned int lim = *(unsigned short*)((char*)this + 0x148) - cnt;
             unsigned int avail = (unsigned int)(end - p);
+            unsigned int lim = (unsigned)*(unsigned short*)((char*)this + 0x148) - cnt;
             if (avail < lim) lim = avail;
             lim &= 0xfffffffc;
             if (lim == 0) {
+                float x = *p;
+                if (!(x > 0.0f)) x = x * -1.0f;
+                if (*stat <= x && x != *stat) *stat = x;
+                if (stat[0xc] <= x && x != stat[0xc]) stat[0xc] = x;
                 float v = *p;
-                if (v <= 0.0f) v = -v;
-                if (*stat <= v && v != *stat) *stat = v;
-                float* max2 = (float*)((char*)this + 0x100 + (ch + 3) * 4);
-                if (*max2 <= v && v != *max2) *max2 = v;
-                float vv = *p;
                 ++p; ++cnt;
-                float& acc = *(float*)((char*)this + 0xd0 + ch * 4);
-                acc = vv * vv + acc;
-            } else {
+                stat[-0xc] = v * v + stat[-0xc];
+                last = p;
+            } else if (((unsigned int)p & 0xf) == 0) {
                 float* q = p + lim;
+                p = last;
                 do {
-                    float a = p[0], b = p[1], c = p[2], d = p[3];
-                    float ma = a < 0 ? -a : a, mb = b < 0 ? -b : b;
-                    float mc = c < 0 ? -c : c, md = d < 0 ? -d : d;
-                    float mx = *stat;
-                    if (ma > mx) mx = ma;
-                    if (mb > mx) mx = mb;
-                    if (mc > mx) mx = mc;
-                    if (md > mx) mx = md;
-                    *stat = mx;
-                    float* max2 = (float*)((char*)this + 0x100 + (ch + 3) * 4);
-                    if (mx > *max2) *max2 = mx;
-                    float& acc = *(float*)((char*)this + 0xd0 + ch * 4);
-                    acc = (((a * a + b * b) + (c * c + d * d)) + acc);
+                    float s0 = p[0] * p[0];
+                    float s1 = p[1] * p[1];
+                    float s2 = p[2] * p[2];
+                    float s3 = p[3] * p[3];
+                    float mx = s0 > s1 ? s0 : s1;
+                    float my = s2 > s3 ? s2 : s3;
+                    if (my > mx) mx = my;
+                    float m = sqrtf(mx);
+                    *stat = *stat > m ? *stat : m;
+                    stat[0xc] = stat[0xc] > m ? stat[0xc] : m;
+                    stat[-0xc] = ((s0 + s1) + (s2 + s3)) + stat[-0xc];
                     cnt += 4;
                     p += 4;
+                    last = p;
                 } while (p != q);
+            } else if (lim != 0) {
+                int it = ((lim - 1) >> 2) + 1;
+                do {
+                    float x0 = p[0], x1 = p[1], x2 = p[2], x3 = p[3];
+                    if (!(x0 > 0.0f)) x0 = x0 * -1.0f;
+                    if (!(x1 > 0.0f)) x1 = x1 * -1.0f;
+                    if (!(x2 > 0.0f)) x2 = x2 * -1.0f;
+                    if (!(x3 > 0.0f)) x3 = x3 * -1.0f;
+                    if (*stat <= x0 && x0 != *stat) *stat = x0;
+                    if (*stat <= x1 && x1 != *stat) *stat = x1;
+                    if (*stat <= x2 && x2 != *stat) *stat = x2;
+                    if (*stat <= x3 && x3 != *stat) *stat = x3;
+                    float t = *stat;
+                    if (stat[0xc] <= t && t != stat[0xc]) stat[0xc] = t;
+                    float a = stat[-0xc];
+                    a = x0 * x0 + a;
+                    a = x1 * x1 + a;
+                    a = x2 * x2 + a;
+                    a = x3 * x3 + a;
+                    stat[-0xc] = a;
+                    cnt += 4;
+                    p += 4;
+                    last = p;
+                    --it;
+                } while (it != 0);
             }
             if (*(unsigned short*)((char*)this + 0x148) <= cnt) {
                 stat[6] = *stat;
-                float& acc = *(float*)((char*)this + 0xd0 + ch * 4);
-                acc = acc / (float)*(unsigned short*)((char*)this + 0x148);
-                stat[-6] = acc;   // sqrt applied by the original (fsqrt)
+                float m = stat[-0xc] / (float)*(unsigned short*)((char*)this + 0x148);
+                stat[-0xc] = m;
+                stat[-6] = sqrtf(m);
                 ResetSlot((int)ch);
                 cnt = 0;
+                p = last;
             }
         }
-        idx = ch;
-    }
-    *(unsigned short*)((char*)this + 0x14a) = (unsigned short)idx;
+        ++ch;
+        ++stat;
+    } while (ch < nch);
+    *(unsigned short*)((char*)this + 0x14a) = (unsigned short)cnt;
 }
 
 // @ 0x0114a470
-void EALayer3Core::OnInterface(int a2)
+void EALayer3Core::OnInterface(EALayer3Core* self, int a2)
 {
-    AnalyzeStatistics(*(int*)(a2 + 0x3000c), 0x100);
-    SetMode();
-    u8(0x14c) = 1;
+    EALayer3Core* volatile s = self;
+    s->AnalyzeStatistics(*(int*)(a2 + 0x3000c), 0x100);
+    s->SetMode();
+    s->u8(0x14c) = 1;
 }
 
 // @ 0x0114a4a0
@@ -237,34 +269,34 @@ void EALayer3Core::Interpolate(int a2, int a3, float* a4, int a5)
 }
 
 // @ 0x0114a680
-float EALayer3Core::AdjustOffset(float* a2)
+int EALayer3Core::AdjustOffset(float* a2)
 {
     float d = 1.0f - f32(0x44);
-    int iv = *(int*)(a2 + 0x10);
+    int iv = *(int*)((char*)a2 + 0x10);
     if (f32(0x44) >= 1.0f) {
         float x = d * (float)i32(0x4c);
         float y = x + a2[0];
         float z = ((float)iv + x) + a2[0];
         float ay = y < 0 ? -y : y;
         float az = z < 0 ? -z : z;
-        if (ay < az) { a2[0] = y; return 0.0f; }
+        if (ay < az) { a2[0] = y; return 0; }
         a2[0] = z;
-        return (float)iv;
+        return iv;
     }
     float y = (float)(i32(0x4c) * 2) * d + a2[0];
     float z = y - (float)iv;
     float ay = y < 0 ? -y : y;
     float az = z < 0 ? -z : z;
-    if (ay < az) { a2[0] = y; return 0.0f; }
+    if (ay < az) { a2[0] = y; return 0; }
     a2[0] = z;
-    return (float)(-iv);
+    return -iv;
 }
 
 // @ 0x0114a750  (best-effort)
 void EALayer3Core::AppendSamples(int a2, int a3, int a4, int a5, int a6)
 {
     int N = i32(0x4c);
-    if (0 < i32(a5 + 0x14)) {
+    if (0 < *(int*)(a5 + 0x14)) {
         memmove((void*)a4, (void*)((char*)a4 + *(int*)(a5 + 0x18) * 4), *(int*)(a5 + 0x14) * 4);
         *(int*)(a5 + 0x18) = 0;
     }
@@ -275,7 +307,7 @@ void EALayer3Core::AppendSamples(int a2, int a3, int a4, int a5, int a6)
             return;
         }
         memcpy((void*)((char*)a4 + *(int*)(a5 + 0x14) * 4), (void*)a2, a6 * 4);
-        Interpolate(a3, a2, (float*)((char*)a4 + (*(int*)(a5 + 0x14) + a6) * 4), a6);
+        Interpolate(a2, a3, (float*)((char*)a4 + (*(int*)(a5 + 0x14) + a6) * 4), a6);
         *(int*)(a5 + 0x14) += N + a6;
         return;
     }
@@ -291,7 +323,7 @@ void EALayer3Core::AppendSamples(int a2, int a3, int a4, int a5, int a6)
 }
 
 // @ 0x0114a8b0
-float __stdcall DotProduct(float* a, float* b, unsigned int n)
+float __stdcall DotProduct(float* a, float* b, int n)
 {
     float f0 = 0.0f, f1 = 0.0f, f2 = 0.0f, f3 = 0.0f;
     if ((((unsigned int)a | (unsigned int)b) & 0xf) == 0 && (n & 3) == 0) {
@@ -303,10 +335,14 @@ float __stdcall DotProduct(float* a, float* b, unsigned int n)
             f3 += a[3] * b[3];
             a += 4; b += 4;
         } while (a != end);
-        return ((f3 + f2) + f1) + f0;
+        volatile float r = f3;
+        r = r + f2;
+        r = r + f1;
+        r = r + f0;
+        return r;
     }
-    float acc = 0.0f;
-    for (unsigned int i = 0; i < n; ++i)
+    volatile float acc = 0.0f;
+    for (int i = 0; i < n; ++i)
         acc = a[i] * b[i] + acc;
     return acc;
 }
@@ -315,21 +351,21 @@ float __stdcall DotProduct(float* a, float* b, unsigned int n)
 void EALayer3Core::UpdateCorrelation(int a2, int a3, float a4, float* a5)
 {
     int N = i32(0x4c);
-    int ip = (int)a4;
+    int ip = *(int*)&a4;
     float r;
     if (*(unsigned char*)(a5 + 2) == 0) {
         float* pa = (float*)(a2 + ip * 4);
-        float* pb = (float*)(a3 + ip * 4);
+        float* pb = (float*)a3;
         float x = DotProduct(pa, pa, N - ip);
         float y = DotProduct(pb, pb, ip);
         r = y + x;
     } else {
-        int off = (int)a5[1];
+        int off = *(int*)(a5 + 1);
         int count = ip - off;
         float* pa; float* pb;
         if (count < 1) {
-            pb = (float*)(a3 + ip * 4);
-            pa = (float*)(a2 + ip * 4);
+            pa = (float*)(a3 + ip * 4);
+            pb = (float*)(a2 + ip * 4);
             count = -count;
         } else {
             pa = (float*)(a2 + off * 4);
@@ -337,7 +373,7 @@ void EALayer3Core::UpdateCorrelation(int a2, int a3, float a4, float* a5)
         }
         float x = DotProduct(pa, pa, count);
         float y = DotProduct(pb, pb, count);
-        r = (a5[0] - x) + y;
+        r = (float)((double)a5[0] - (double)x + (double)y);
     }
     a5[1] = a4;
     a5[0] = r;
@@ -401,28 +437,28 @@ void EALayer3Core::ResetSlots()
 }
 
 // @ 0x0114ad50
-int EALayer3Core::SelectPath(int param_2, int param_3, int param_4)
+int EALayer3Core::SelectPath(EALayer3Core* self, int param_2, int param_3, int param_4)
 {
-    int N = i32(0x4c);
-    char* base = (char*)this + *(unsigned short*)((char*)this + 0x7e);
-    if (f32(0x38) != f32(0x44)) {
-        if (f32(0x38) == 1.0f) {
-            i32(0x6c) = 2;
-        } else if (f32(0x44) == 1.0f) {
-            ResetSlots();
-            i32(0x6c) = 1;
+    int N = self->i32(0x4c);
+    char* base = (char*)self + *(unsigned short*)((char*)self + 0x7e);
+    if (self->f32(0x38) != self->f32(0x44)) {
+        if (self->f32(0x38) == 1.0f) {
+            self->i32(0x6c) = 2;
+        } else if (self->f32(0x44) == 1.0f) {
+            self->ResetSlots();
+            self->i32(0x6c) = 1;
         }
-        if (1 < i32(0x58) && i32(0x40) == 0) {
-            if (1.5f < f32(0x38) || f32(0x38) < 0.75f)
-                f32(0x38) = (1.5f < f32(0x38)) ? g_float1_5 : g_float0_75;
+        if (1 < (unsigned)self->i32(0x58) && self->i32(0x40) == 0) {
+            if (1.5f < self->f32(0x38) || self->f32(0x38) < 0.75f)
+                self->f32(0x38) = (1.5f < self->f32(0x38)) ? g_float1_5 : g_float0_75;
         }
-        f32(0x44) = f32(0x38);
+        self->f32(0x44) = self->f32(0x38);
     }
-    if (i32(0x6c) == 0)
+    if (self->i32(0x6c) == 0)
         return param_4;
     unsigned int i = 0;
     int mn = 0;
-    unsigned int cnt = i32(0x58);
+    unsigned int cnt = self->i32(0x58);
     while (i < cnt) {
         if (i == 0) mn = *(int*)(base + 0x14);
         else {
@@ -431,21 +467,21 @@ int EALayer3Core::SelectPath(int param_2, int param_3, int param_4)
         }
         ++i;
     }
-    i32(0x68) = mn;
-    if (i32(0x6c) != 1) {
-        int k = i32(0x5c) + mn;
+    self->i32(0x68) = mn;
+    if (self->i32(0x6c) != 1) {
+        int k = self->i32(0x5c) + mn;
         if (k < param_4) {
-            i32(0x60) = param_4;
-            i32(0x64) = param_4 - k;
+            self->i32(0x60) = param_4;
+            self->i32(0x64) = param_4 - k;
             return param_4 - k;
         }
-        i32(0x60) = param_4;
-        i32(0x64) = 0;
+        self->i32(0x60) = param_4;
+        self->i32(0x64) = 0;
         return 0;
     }
-    int r = N * 2 - i32(0x5c);
-    i32(0x60) = param_4;
-    i32(0x64) = r;
+    int r = N * 2 - self->i32(0x5c);
+    self->i32(0x60) = param_4;
+    self->i32(0x64) = r;
     return r;
 }
 

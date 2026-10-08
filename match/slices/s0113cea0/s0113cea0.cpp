@@ -27,7 +27,7 @@ extern uint8_t  g_14f8eb4[];                // 0x14f8eb4  DirectSound GUID
 extern uint8_t  g_16e7ba0[];                // 0x16e7ba0 (object lives at this address)
 
 // --- imports / other-TU helpers ---
-extern "C" unsigned int __stdcall timeGetTime();          // winmm!timeGetTime
+extern "C" __declspec(dllimport) unsigned int __stdcall timeGetTime(); // winmm!timeGetTime
 extern "C" void* __stdcall GetForegroundWindow();
 extern "C" void* __stdcall GetDesktopWindow();
 extern "C" int __stdcall DS_Ordinal9(void*, void*);       // DSOUND ordinal 9

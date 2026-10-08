@@ -7,6 +7,7 @@
 #include "types.h"
 #include <string.h>
 #include <math.h>
+#include <xmmintrin.h>
 
 // --- globals referenced by the original (addresses for the equivalence mapper) ---
 extern uint8_t  g_vtbl_014bc0fc[];          // 0x14bc0fc  shared base vtable
@@ -137,6 +138,7 @@ bool Ctx::FUN_0113bb90(int param_2)
         uint8_t bl = B(this, 0x167);
         if (*(uint8_t*)((char*)this + 0x55 + (uint32_t)bl * 0xc) != 0)
             return result;
+        uint8_t cur = bl;
         bl = (uint8_t)((bl + 1 == 0x14) ? 0 : bl + 1);
         B(this, 0x167) = bl;
         uint8_t* node = (uint8_t*)W(this, 0x140);
@@ -150,9 +152,9 @@ bool Ctx::FUN_0113bb90(int param_2)
             got = node;
         }
         uint8_t* feed = (uint8_t*)P(this, 0x48);
-        B(feed, 5) = bl;
-        W((char*)this + 0x4c + (uint32_t)bl * 0xc, 0) = (uint32_t)got;
-        uint8_t* slot = (uint8_t*)((char*)this + 0x4c + (uint32_t)B(feed, 5) * 0xc);
+        B(feed, 5) = cur;
+        W((char*)this + 0x4c + (uint32_t)cur * 0xc, 0) = (uint32_t)got;
+        uint8_t* slot = (uint8_t*)((char*)this + 0x4c + (uint32_t)cur * 0xc);
         W(slot, 4) = 0;
         B(slot, 9) = 1;
         uint8_t ok = (uint8_t)((Ctx*)W(this, 0x148))->SubFeed((void*)W(got, 8), W(got, 0),
@@ -582,7 +584,7 @@ void Ctx::FUN_0113ca00(int param_2, uint8_t* param_3)
         *(double*)(q + 8) = *(double*)(param_3 + 0);
         F(q, 0x10) = F(param_3, 8);
         F(q, 0x14) = F(param_3, 0xc);
-        W(q, 0x18) = (uint32_t)(int)F(param_3, 0x10);
+        W(q, 0x18) = (uint32_t)_mm_cvtt_ss2si(_mm_set_ss(F(param_3, 0x10)));
     }
 }
 
@@ -650,7 +652,7 @@ bool FUN_0113cbf0(uint8_t* p, float* params)
     F(p, 0x40) = 0.0f;
     if (params != 0)
         F(p, 0x40) = F(params, 0);
-    uint32_t delaySamples = (uint32_t)(int)(F(p, 0x40) * F(p, 0x3c));
+    uint32_t delaySamples = (uint32_t)_mm_cvtt_ss2si(_mm_set_ss(F(p, 0x40) * F(p, 0x3c)));
     bool ok = ((Ctx*)(p + 0x5c))->DelayLineInit(B(p, 0x20), (int)delaySamples, W(p, 0x4c));
     if (ok) {
         bool r = ((Ctx*)((char*)P(p, 4) + 0x60))->AddTimer((void*)(p + 0x98), (void*)&FUN_0113cb50,

@@ -716,6 +716,8 @@ bool __cdecl FUN_01134700(int p)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01134740(int a, int b, uint16_t* s, float* out, int stride)
 {
+	if (a >= b)
+		return;
 	for (int i = a; i < b; i++)
 	{
 		uint16_t v = *s;
@@ -814,5 +816,8 @@ unsigned BitReader::FUN_01134a60(int n)
 // ---------------------------------------------------------------------------
 void __cdecl FUN_01134ae0(int* p)
 {
-	(*(void (__cdecl*)(int))(*p + 4))(0);
+	void (__stdcall* f)(int) = *(void (__stdcall**)(int))(*p + 4);
+	f(0);
+	volatile int barrier = 0;
+	(void)barrier;
 }

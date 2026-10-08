@@ -10,6 +10,19 @@ typedef unsigned short u16;
 typedef unsigned int   u32;
 typedef float          f32;
 
+// Original converts float->int with the round-to-nearest `cvtss2si` opcode (not the
+// truncating `cvttss2si` a plain C `(int)` cast emits). The conversion goes through a
+// memory operand because the source used an asm helper; reproduce that shape.
+static inline int RoundToInt(float f)
+{
+    int r;
+    __asm {
+        cvtss2si eax, f
+        mov r, eax
+    }
+    return r;
+}
+
 namespace rw { namespace audio { namespace core {
 
 struct System;
@@ -24,6 +37,25 @@ struct System
     u32  mCommandIndex;         // +0xe0 (approx)
     void* Alloc(int size, const char* name, int align, int a5); // 0x0112c820
     void  Free(void* p, int a3);                                // 0x0112c850
+};
+
+// Stream::ReleaseChunk is a __thiscall method (ecx = stream, one stack arg) at 0x011e7c70.
+struct Stream { void ReleaseChunk(void* chunk); };                            // 0x011e7c70
+
+// The sound player the WAVE pump submits packets to (called via its vtable; slots 0 and 1).
+struct SndPlayer
+{
+    virtual void SubmitPacket(int param, unsigned len, unsigned blocks);      // vt[0]
+    virtual void SubmitOffsets(unsigned* offsets, unsigned blocks);           // vt[1]
+};
+
+// SNDPKTPLAY_submit reads count at +4 and the per-channel offset table at +0xc.
+struct SndPacket
+{
+    u32 header0;      // +0x0
+    u32 count;        // +0x4 (blocks | 0x80000000)
+    u32 header8;      // +0x8
+    u32 data[8];      // +0xc
 };
 
 // Decoder / plug-in helpers (sibling TU).
@@ -150,36 +182,49 @@ LAB_ee5f:
 }
 
 // @ 0x0112eeb0 -- WAVE packet submit (gain table + sound player).
-void FUN_0112eeb0(int p, int* d)
+void FUN_0112eeb0(int id, int* d)
 {
-    (void)d;
-    int n = (short)d[0x30];
-    unsigned blocks = 0;
-    if (*d < d[0x26])
+    int i = 0;
+    int* q = d + 0x32;
+    while (i < 4)
     {
-        u32 uVar4 = (u32)d[0x24];
-        if (uVar4 != 0)
+        if (id == *q) break;
+        ++i;
+        ++q;
+    }
+    d[0x31] -= 1;
+    if (*d < d[0x26] && (u32)d[0x24] != 0)
+    {
+        u32 uVar7 = (u32)d[0x2a];
+        unsigned ch = *(u16*)((char*)d + 0xc2);
+        if ((short)ch < 2) uVar7 = uVar7 >> 1;
+        if (uVar7 > (u32)d[0x24]) uVar7 = (u32)d[0x24];
+        int n = (short)d[0x30];
+        unsigned blocks = uVar7 / (u32)(n * (int)(short)ch);
+
+        SndPlayer* player = (SndPlayer*)d[0x2b];
+        player->SubmitPacket(d[0x27], uVar7, blocks);
+
+        int base = d[0x32 + i];
+        unsigned vals[8];
+        SndPacket pkt;
+        int step = n ? (0x4000 / (n * 4)) : 0;
+        for (int k = 0; k < n; ++k)
         {
-            u32 uVar7 = (u32)d[0x2a];
-            if (*(short*)((char*)d + 0xc2) < 2) uVar7 = uVar7 >> 1;
-            if (uVar4 < uVar7) uVar7 = uVar4;
-            blocks = uVar7 / (u32)(n * (int)*(short*)((char*)d + 0xc2));
-            typedef void (*SubmitFn)(int, unsigned, unsigned);
-            ((SubmitFn)(*(int*)d[0x2b]))(d[0x27], uVar7, blocks);
-            int base = d[0x32 + 0];
-            unsigned vals[8];
-            for (int i = 0; i < n; ++i)
-                vals[i] = (unsigned)(base + (0x4000 / (n * 4)) * i);
-            ((void(*)(unsigned*, unsigned))(*(int*)d[0x2b] + 4))(vals, blocks);
-            SNDPKTPLAY_submit(d[0x28], vals);
-            d[1] += uVar7;
-            d[2] += blocks;
-            *d += uVar7;
-            d[0x27] += uVar7;
-            d[0x31] += 1;
-            d[0x24] -= uVar7;
-            return;
+            vals[k] = (unsigned)base;
+            pkt.data[k] = (unsigned)base;
+            base += step;
         }
+        player->SubmitOffsets(vals, blocks);
+        pkt.count = blocks | 0x80000000u;
+        SNDPKTPLAY_submit(d[0x28], &pkt);
+        d[1] += uVar7;
+        d[2] += blocks;
+        *d += uVar7;
+        d[0x27] += uVar7;
+        d[0x31] += 1;
+        d[0x24] -= uVar7;
+        return;
     }
     if (d[0x31] == 0 && d[0x24] == 0) d[3] = 3;
 }
@@ -188,7 +233,7 @@ void FUN_0112eeb0(int p, int* d)
 int FUN_0112f080(int p, int index, int obj)
 {
     FUN_0113fdd0(*(u32*)(obj + 0xa4), index,
-                 (int)(*(f32*)(*(int*)(p + 0xc) + index * 4) * 127.0f));
+                 RoundToInt(*(f32*)(*(int*)(p + 0xc) + index * 4) * 127.0f));
     return 0;
 }
 
@@ -203,7 +248,7 @@ int FUN_0112f0c0(int p)
 // @ 0x0112f0f0 -- stop playback (state 0) with the current gain.
 int FUN_0112f0f0(int p, int obj)
 {
-    FUN_0113fba0(*(u32*)(obj + 0xa4), (int)(*(f32*)(p + 4) * 4096.0f));
+    FUN_0113fba0(*(u32*)(obj + 0xa4), RoundToInt(*(f32*)(p + 4) * 4096.0f));
     *(int*)(obj + 0xc) = 0;
     return 0;
 }
@@ -230,7 +275,7 @@ int FUN_0112f130(int p)
             FUN_0113f750(*(u32*)(p + 0xa0));
             if (*(int*)(p + 0xb4) != 0 && *(int*)(p + 0xb0) != 0)
             {
-                FUN_011e7c70(*(void**)(p + 0xb4));
+                ((Stream*)*(void**)(p + 0x94))->ReleaseChunk(*(void**)(p + 0xb4));
                 *(int*)(p + 0xb4) = 0;
             }
             int* q = (int*)(p + 0xe8);
@@ -260,7 +305,7 @@ int FUN_0112f130(int p)
 // @ 0x0112f230 -- set a plug-in parameter from a scaled float.
 int FUN_0112f230(float* p, int obj)
 {
-    FUN_0113ff00(*(u32*)(obj + 0xa4), (int)(*p * 127.0f));
+    FUN_0113ff00(*(u32*)(obj + 0xa4), RoundToInt(*p * 127.0f));
     return 0;
 }
 
@@ -506,7 +551,7 @@ void FUN_0112fb50(int p)
         if (*(int*)(p + 0xc4) == 0)
         {
             *(int*)(p + 0xc4) = Stream_GetChunk(*(void**)(p + 0x94));
-            FUN_011e7c70(*(void**)(p + 0xc4));
+            ((Stream*)*(void**)(p + 0x94))->ReleaseChunk(*(void**)(p + 0xc4));
         }
         int chunk = Stream_GetChunk(*(void**)(p + 0x94));
         if (chunk != 0)

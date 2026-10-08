@@ -75,7 +75,8 @@ def ok_path(p):
 
 import ast
 SAFE_MODULES = {"json", "re", "struct", "collections", "math", "itertools", "bisect", "glob", "csv", "pefile", "capstone",
-                "functools", "string", "textwrap", "pprint", "binascii", "hashlib", "operator", "sys", "os", "cmpobj", "card", "difflib"}
+                "functools", "string", "textwrap", "pprint", "binascii", "hashlib", "operator", "sys", "os", "cmpobj", "card", "difflib",
+                "unicorn", "equiv", "shlex", "slice", "coff", "machine", "resolve", "sig", "emu", "smoke", "batch", "smoke"}
 BAD_NAMES = {"exec", "eval", "compile", "__import__", "input", "breakpoint", "globals", "locals", "setattr", "delattr"}
 BAD_ATTRS = {"write", "writelines", "remove", "unlink", "rename", "replace", "rmdir", "rmtree", "mkdir", "makedirs",
              "system", "popen", "run", "call", "check_call", "check_output", "Popen", "spawn", "kill", "chmod", "chown",
