@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008f5960 1176  complete ParseSimpleSelector (55 calls in the same order); token-swap scheduling and this/list register allocation differ, shifting later jumps

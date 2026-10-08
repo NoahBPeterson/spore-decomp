@@ -1,0 +1,1 @@
+00cc1c30 SP::cDefaultToolProjectile::UpdateBombPhase1  # Claude-coined name; ModAPI cDefaultToolProjectile layout (mBombPhase 0x544, mPhaseTimer 0x548, effect 0x5cc, cities 0x5dc); sets phase 2 after 20 s

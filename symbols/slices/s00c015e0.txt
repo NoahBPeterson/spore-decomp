@@ -1,0 +1,4 @@
+00c015e0 Avoider::Avoid  # steering/obstacle avoidance pass; fills ctx->out with 0x2c-byte entries
+00b47600 SteerVec::DoInsertValue  # vector<0x2c entry> realloc insert, thiscall ret 8
+00b48e00 SteerVec::push_back  # default-constructs one entry (flag=1) at end, no args
+00bed3c0 Zone::FillPoints  # this+0x198 sub-object fills Vec3 vector

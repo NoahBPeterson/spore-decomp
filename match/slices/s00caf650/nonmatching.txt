@@ -1,0 +1,1 @@
+00caf650 1791 complete cFlyingLocomotion::ApplyFacing (bank follow, bank-tilted frame, yaw limit, quaternion write-back); SSE/x87 scheduling, register and frame layout (0xa4 vs 0xb4) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

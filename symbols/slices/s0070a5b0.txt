@@ -1,0 +1,1 @@
+0070a5b0 SP::cLightingWorld::Update  # card header; per-frame SH lighting refresh (atmosphere ZH -> mInfo coeffs, env/local sample budget loops)

@@ -1,0 +1,1 @@
+008eeee0 1388 RenderingContext::DrawTextLine: complete (span backgrounds incl. Background::Draw, selection highlight, glyph runs with decorations); register allocation (original pins constant 0 in ebx) and stack layout differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

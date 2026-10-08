@@ -1,0 +1,6 @@
+00b3d4d0 GetTriggerMgr  # returns global [0x167eb50]; ae09b0/ae0930 are its PostAction/PostTrigger methods
+00ae09b0 cTriggerMgr::PostAction  # thiscall(id, ActionTarget&, int) ret 0xc
+00ae0930 cTriggerMgr::PostTrigger  # thiscall(name, 5 ints) ret 0x18; called with "TRG_PRE_FirstTribeAppears"
+00ad7a30 cActionTarget::cActionTarget_obj  # ctor from an object pointer (ret 4); dtor is 00ad7ad0
+00c8e820 cTribe::GetSlot0  # returns [this + idx*4 + 0x18cc] for idx on stack
+00c6acc0 cNearNoun::GetPosition  # returns &this->field_0x34 or the linked object's vf2c()

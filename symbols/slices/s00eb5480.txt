@@ -1,0 +1,8 @@
+00eb5480 SP::cGameCinematicsCameraController::UpdateInterpolation  # dev-PDB method (IAEXM, size 1731) + tELerp*/tSLerpVector3 member layout (mSubjectDirection +0x8c, mOrientation +0x130, splines +0x1b0..)
+00eb5c00 ?sCalculateOrientation@SP@@YA?AUcSPQuaternion@@ABUcSPVector3@@0ABU2@0@Z  # dev-PDB anonymous-namespace function sCalculateOrientation (size 1640 vs 1649 retail): shortest-arc quaternion composed with the current orientation
+00b0fc40 ?SplineInterpolation@SP@@YAMABM000MM@Z  # SP::SplineInterpolation<float> (dev-PDB template); float tracks of UpdateInterpolation
+0069a5f0 ?Evaluate@?$cHermiteSplineInterpolation@M@SP@@QAEMM@Z  # cHermiteSplineInterpolation<float>::Interpolate (dev-PDB method)
+0069a9a0 ?Evaluate@?$cHermiteSplineInterpolation@UcSPVector3@@@SP@@QAE?AUcSPVector3@@M@Z  # <cSPVector3>::Interpolate
+0069aee0 ?Evaluate@?$cHermiteSplineInterpolation@UcSPQuaternion@@@SP@@QAE?AUcSPQuaternion@@M@Z  # <cSPQuaternion>::Interpolate
+00f9c960 ?BuildSurfaceOrientation@cTerrainSphere@SP@@QAE?AUcSPQuaternion@@ABUcSPVector3@@ABU2@@Z  # SP::cTerrainSphere::BuildSurfaceOrientation (pdb_names)
+00f48aa0 ?GetActiveTerrainSphere@SP@@YAPAUcTerrainSphere@1@XZ  # planet-model getter (name guessed)

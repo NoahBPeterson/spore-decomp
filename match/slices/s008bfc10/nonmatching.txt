@@ -1,0 +1,1 @@
+008c0000 561 T2K_NewTransformation: complete (raw-offset T2K struct; same-TU register-convention helpers FUN_008bfc10 and FUN_008bf2b0 are byte-exact, T2K_NewTransformationInternal too, ConcatFontMatrix 6 bytes off); local stack slot order (upem/fy) and store scheduling differ; difftest UNSUPPORTED (_setjmp3 import); flags /O2 /MD /Gy /TP /arch:SSE

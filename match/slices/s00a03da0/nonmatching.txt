@@ -1,0 +1,1 @@
+00a03f50 1300 complete debug-draw of body boxes (matrix from quaternion, bulk lock + per-entry fallback); SSE schedule/register allocation and frame (0x60 vs 0x54; original puts the lock out-pointer in the dead param slot) differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

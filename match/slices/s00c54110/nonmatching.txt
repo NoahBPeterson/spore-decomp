@@ -1,0 +1,1 @@
+00c545f0 1678 complete: FetchHandler message switch (stub offsets), not yet byte-exact (frame layout / tail merging)

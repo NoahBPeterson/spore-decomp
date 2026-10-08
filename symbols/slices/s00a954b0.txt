@@ -1,0 +1,1 @@
+00a954b0 EA::Swarm::Stream_Quad_V4F_N4F_C4B_T2F  # lock buffer, 4 vertices per particle, vtbl slot0 GetBuffer / slot2 Release

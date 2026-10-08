@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+007bced0  722  complete (DilateWithoutAOStart: six chained dilate filters + posted BehaviorMessage 0x21d752f); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (52 calls, 0.99x size); register allocation differs (chain in edi vs ebp, filter 5 in ebp vs edi) and the request locals sit at different frame slots
+007bd750  972  complete (cCSAThumbnailJob::DrawLayer: single pass, or 2x2 tiled pass with a per-tile post filter); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (43 calls, 0.98x size); x87 temps and strength reduction of j*tileH differ, the dead erase-copy loop of cJobPostFilter::Shutdown is folded away

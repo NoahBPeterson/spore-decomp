@@ -1,0 +1,1 @@
+01175310  1566  complete speech-codec frame decode (12 reflection deltas, 4 sub-frames, memcpy via IAT, 4 LpcSynthesize steps; equiv PASS 400/400); diff is register allocation and instruction scheduling

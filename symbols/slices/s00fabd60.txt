@@ -1,0 +1,2 @@
+00fabd60 SP::cRibbonBuilder::BuildRibbon  # builds ribbon quads along a path and calls AddRibbonQuad (0xfab2b0) per segment, then hands the 6 per-face poly lists to the face quads at this+0x118 (0xfb7920); Claude-coined name
+00fb7920 SP::cTerrainSphereQuad::AddRibbonPolys  # thiscall(list) on the face quad (this+0x18c = ribbon verts, see 0xfb50d0); Claude-coined name

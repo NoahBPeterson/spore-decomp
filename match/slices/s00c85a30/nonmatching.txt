@@ -1,0 +1,1 @@
+00c85a30 1645 complete source (30 calls, same callees/order of work); not byte-exact: x87/SSE scheduling of the inlined quaternion math and register allocation; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

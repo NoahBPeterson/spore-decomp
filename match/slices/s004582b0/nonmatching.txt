@@ -1,3 +1,4 @@
 00458a40  271  ColorRGBToU32: opaque-alpha variant; compact maxss/minss/mulss sequence not reproduced
 00458c00  51   InitLayoutWidget: /Od local frame (p, local_c) and this-relative store scheduling not exact
 00458d80  31   FUN_00458d80: AutoRefCount operator= shape (unreachable AddRef path) not reproduced
+004582b0  1490  cSPEditorBudget::Update: complete; /Od frame is 0x84 bytes smaller (three inline-callee holes between the window temps not reproduced), so slots shift

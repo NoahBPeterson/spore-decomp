@@ -1,0 +1,1 @@
+00fa1bc0 SP::cTerrainSphere::cTerrainSphere  # constructor: five bases (+0..+0x10), 3 generation-step members at +0x30/+0x74/+0xb8, singleton g_pTerrainSphere (0x016c9e5c), memset +0x6d8 len 0x80

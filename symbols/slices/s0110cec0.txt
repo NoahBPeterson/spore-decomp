@@ -1,0 +1,1 @@
+0110d1d0 hkGsk_getClosestPointFromSimplex  # cdecl 7-arg helper; switch on dimA<<3|dimB over the six simplex pairs, calls hkCollideTriangleUtil::closestLineSegLineSeg 0x01105940 for edge/edge; name Claude-coined (declared as such in s01112950)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00ca3770  1467  complete (11 direct calls in order, same constants); x87/SSE scheduling of the normalize/cross-product block and frame (0xb4 vs 0xb8) differ

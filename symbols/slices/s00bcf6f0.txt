@@ -1,0 +1,1 @@
+00bcf6f0  SP::cBuilding::TakeDamage_Combatant  # Claude-coined name; cCombatant::TakeDamage override (vtable slot 0x18 of the cCombatant subobject at cBuilding+0x120); tail-calls base 0x00bcece0

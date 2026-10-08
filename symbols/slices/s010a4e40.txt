@@ -1,0 +1,1 @@
+010a5070 hkBuildAndSolve  # Havok 3.1 solver driver: sizes the stack block, builds accumulators/jacobians/schemas, hkSolveConstraints, export impulses; inferred from structure

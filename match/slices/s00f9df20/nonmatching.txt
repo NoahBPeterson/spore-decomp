@@ -1,0 +1,1 @@
+00f9e4d0 1167 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast complete (both modes: 6-face scatter refresh, and single-face quad draw with 5 textures); frame/regalloc and stack-temp shapes differ

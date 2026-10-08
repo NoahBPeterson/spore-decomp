@@ -1,0 +1,1 @@
+01070290  973  Complete cSPUISpace tool/property-list setup (flags /O2 /MD /Gy /TP /GS-); zero constant kept in esi not ebx and a few schedule differences; no call/vtable-slot differences

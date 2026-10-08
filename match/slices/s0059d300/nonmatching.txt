@@ -3,3 +3,4 @@
 0059d960  51  cSPEditorAnimatedEventInfo ctor: complete; two-phase vptr stores + atomic refcount init layout
 0059da80  21  RandomRange: complete; float/double conversion schedule differs
 0059dac0  17  cSPEditorAnimationManager ctor: complete; vtable setup requires the real base layout
+0059dc70  1625  GetAnimation: complete; register allocation/frame (0x70 vs 0x90) differs, all 36 calls/vtable slots in order, size 1801 vs 1763

@@ -1,0 +1,1 @@
+00be1860 1020 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; size 1549 vs 1563 (0.99x), 73 calls = 73, same multiset of direct-call targets and vcall slots (47 direct + 26 virtual); diff is register assignment (this/noun/sub swapped: original this=edi noun=ebx, keeps the zero constant in esi) and frame layout (0xf4 vs 0xe4)

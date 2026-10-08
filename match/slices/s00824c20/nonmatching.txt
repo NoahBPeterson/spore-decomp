@@ -1,1 +1,2 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+008252b0  1372  cPropertyUI::AddIntSpinnerRow complete; same call/vslot sequence as AddSpinnerRow (%d text instead of %f), locals held by AddRef/Release scope guards, narrow string dtor; 1662 B vs 1662 B; differs in vcall register order (eax/edx swapped) and frame/reg alloc; flags /O2 /MD /Gy /TP /arch:SSE

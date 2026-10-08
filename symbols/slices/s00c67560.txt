@@ -1,0 +1,1 @@
+00c678f0 Ctrl::Update  # camera ring controller: camera ray vs target plane -> angle -> quaternion compose; writes +0x1a4 quat, calls 0x00c66c10 when changed

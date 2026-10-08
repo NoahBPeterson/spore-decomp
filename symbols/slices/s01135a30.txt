@@ -1,0 +1,2 @@
+01135ba0 Layer3Decoder::HuffmanDecode  # ISO dist10 III_huffman_decode: region0/1/2 table selects, linbits, |x|^(4/3) via 0x1143e70, count1 quads, rewind
+01134af0 BitReader::ReadBits  # thiscall(this=bitreader at +0x2710, n) reads n bits MSB-first

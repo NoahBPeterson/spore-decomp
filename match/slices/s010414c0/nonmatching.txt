@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010414c0  1  complete; one operand-order difference (mov eax,[eax+ecx] vs [ecx+eax]) in the first key-array switch loop

@@ -1,0 +1,1 @@
+00ca6630 1344 complete: cVehicle::Init, 68/68 calls in identical order incl. vcalls (property slots 0x2c/0x30/0x24, template DB 0x28/0x58, sub34 0x2c/0x58/0x70/0x94); original has an and esp,-8 ebp frame and a bare fld/fistp (asm helper) that were not reproduced; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

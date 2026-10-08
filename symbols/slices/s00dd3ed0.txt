@@ -1,0 +1,1 @@
+00dd4260 SP::cSPUICommScreen::Init  # PDB name; thiscall ret 4 (layout key), byte-exact

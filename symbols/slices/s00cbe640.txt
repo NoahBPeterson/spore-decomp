@@ -1,0 +1,1 @@
+00cbea20 cAttackTick::Update  # Claude-coined class name; PDB candidate SP::cDefaultAoEArea::Update (caller-scored); launches cCulturalProjectile via 0x00cbda10 every 3000 ms

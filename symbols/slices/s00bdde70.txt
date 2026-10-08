@@ -1,0 +1,1 @@
+00bdde70 SP::cCity::UpdateCityHallRollover  # thiscall (cSPUIRolloverCivCityHall*) ret 4; this offsets (+0x540 specialty, +0x590 civilization, +0x5a4 allegiance map, +0x668/66c happy/unhappy, +0x678 income, +0x698 party, +0x6c0 riot) match the dev PDB cCity members shifted by 0xe0..0xf8

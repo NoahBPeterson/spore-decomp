@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00b16620  1733  complete shape-vs-object overlap test (sphere reject, ref point + 9 sample points vs local box, optional push-out vector via ray/box); same 12 ordered calls/vslots (v68 v2c v70 v68 Matrix3::Assign LocalToWorldTransform Invert normalized_safe RayBox ...); frame 0x7c vs 0x6c (original spills floats into the dead param home slots), register allocation and rotation operand order differ

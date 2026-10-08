@@ -1,1 +1,1 @@
-00769200  245  WriteResource dispatch: dynamic type switch modelled but vcall/return schedule differs
+007689a0 825 complete; same instruction stream shape (697 vs 698 insns) but local/register allocation of the BitVec ctor, vertex-lock stride bytes and a few spills differ; flags /O2 /MD /Gy /EHsc /TP /GS-

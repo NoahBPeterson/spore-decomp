@@ -1,0 +1,1 @@
+00e0d2e0 MinimapWin::DrawCameraArrow  # draws camera direction arrow quad on minimap; Begin2D/DrawQuads/End2D

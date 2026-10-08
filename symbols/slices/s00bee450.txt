@@ -1,0 +1,1 @@
+00bee450 Simulator::cCityWalls::cSpatialObject::LoadModel  # override; this = cSpatialObject sub-object at cCityWalls+0x34; reads Turrets/gates/Plazas/Decorations/building links from the model property list (ModAPI cCityWalls layout)

@@ -1,0 +1,1 @@
+00b9aa10  1268  complete (all paths/calls; ordered call/vslot/constant sequence identical, 35 calls, size 1.01x); /O2 /MD /Gy /TP /arch:SSE /fp:fast; register allocation (species manager spilled instead of kept in ebx, id in ebx) and frame layout (0xdc vs 0x...) differ

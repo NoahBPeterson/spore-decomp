@@ -1,0 +1,1 @@
+00a99b20 cEffectParams::cEffectParams  # Swarm effect parameter block ctor, vtable 0x01458aec (Claude-coined)

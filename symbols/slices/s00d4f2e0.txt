@@ -1,0 +1,1 @@
+00d4f2e0 SP::cNightPredatorEvent::TriggerEvent  # PDB name; finds/creates the predator herd, positions it near the creature/water, spawns members at a surface transform

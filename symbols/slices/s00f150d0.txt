@@ -1,0 +1,1 @@
+00f150d0 Owner::Load  # reads 21 int properties into setter calls (Claude-coined name)

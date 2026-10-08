@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00c42710  1424  EvaluateForces: complete (5 force types, x87 sqrt via by-value SVec helpers, clamp+smoothstep, point-to-segment swirl); size 1692 vs 1740; SSE register allocation, zero-force path (stack temp vs register) and case-3 load/sub scheduling differ; equiv PASS 223 inputs 100% cov flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,4 +1,4 @@
-00482670  SP::cSPEditorHandleRotationBall::Update  # large ball update
+00482670  SP::cSPEditorHandleDeform::Update  # class by use: pinning type +0xac, mData start/end +0x90/+0x9c, mDelta +0x180 (PDB cSPEditorHandleDeform)
 00482f90  SP::cSPEditorHandleRotationBall::cSPEditorHandleRotationBall  # base ctor 0x47d6a0 + vptrs + mOffset
 00483040  SP::cSPEditorHandleRotationBall::~cSPEditorHandleRotationBall  # BallCleanup 0x483d10 + base dtor 0x47d870
 00483070  SP::cSPEditorHandleRotationBall::AsInterface  # ids 0xee3f516e / 0x050a1fe5 / 0x050a510e

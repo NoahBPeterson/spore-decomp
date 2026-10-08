@@ -1,0 +1,1 @@
+00f8d620 SP::cTerrainMap<unsigned short>::GetFloat  # PDB name; bilinear cube-map sample of 16-bit texels, (v-32768)/32768

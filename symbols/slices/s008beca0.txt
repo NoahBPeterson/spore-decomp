@@ -1,0 +1,1 @@
+008bf300 FillTable  # 13x13x13 byte table filler, table ptr in eax

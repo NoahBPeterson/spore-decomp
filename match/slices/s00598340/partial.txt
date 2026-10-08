@@ -1,6 +1,5 @@
 00598340 - PARTIAL: EASTL rbtree lower_bound+insert helper 292B; skeleton only
 00598470 - PARTIAL: pool-backed ctor 206B; skeleton only
-00598540 - PARTIAL: cCollectableItems::EnsureBaseUnlocksForEditor 1547B; skeleton only
 00598b50 - PARTIAL: rbtree node plumbing 342B; skeleton only
 00598cb0 - PARTIAL: rbtree emplace 252B; skeleton only
 00598db0 - PARTIAL: metadata append 220B; skeleton only

@@ -1,0 +1,1 @@
+00e62b80 cAnimGroup::Place  # poses root/second object and per-part transforms from a base cSPTransform; part types 0/1/3 switch

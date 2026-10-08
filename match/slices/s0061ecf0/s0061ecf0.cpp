@@ -23,9 +23,6 @@ int  __cdecl Sprintf8(char* dst, const char* fmt, ...);                         
 void* __cdecl EA_Allocate(unsigned size, const char* name, int a, int b,
                           const char* file, int line);                              // 0xf473a0
 void  __cdecl EA_Free(void* p);                                                     // 0xf47380
-void  __cdecl String8_Dtor(void* self);                                             // 0x530670
-void* __cdecl String8_CtorSprintf(void* self, int tag, const char* fmt, ...);       // 0x472f50
-void  __cdecl EmitLine(void* pOut, const void* str);                                // 0x61dea0
 bool  __cdecl FUN_0061e040(void* dst, int a);                                       // 0x61e040
 void  __cdecl FUN_0061e430(void* out, void* in);                                    // 0x61e430
 void  __cdecl FUN_0061eba0(void);                                                   // 0x61eba0
@@ -78,6 +75,44 @@ struct DateTime {
 // cEventDisplay : the object printed by the feed event list.  Layout:
 //   +0x0c verb-hash, +0x10/+0x14 asset id, +0x18 DateTime, +0x20 Variant
 // ---------------------------------------------------------------------------------------------
+// Static XML fragments: pointer table in .data, lengths filled at startup.
+extern const char* g_pEventFmt;       // 0x1520704
+extern const char* g_pEventAssetFmt;  // 0x1520708
+extern const char* g_pEventClose;     // 0x152070c
+extern const char* g_pArgOpen;        // 0x1520710
+extern const char* g_pArgClose;       // 0x1520714
+extern const char* g_pBoolOpen;       // 0x1520718
+extern const char* g_pBoolClose;      // 0x152071c
+extern const char* g_pStringOpen;     // 0x1520720
+extern const char* g_pStringClose;    // 0x1520724
+extern uint16_t g_nEventClose;        // 0x15f588c
+extern uint16_t g_nArgOpen;           // 0x15f5884
+extern uint16_t g_nArgClose;          // 0x15f589c
+extern uint16_t g_nBoolOpen;          // 0x15f5894
+extern uint16_t g_nBoolClose;         // 0x15f5890
+extern uint16_t g_nStringOpen;        // 0x15f5898
+extern uint16_t g_nStringClose;       // 0x15f58c4
+
+// Output sink: slot 14 writes a (ptr, length) fragment and returns success.
+struct IEventSink {
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+  virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+  virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+  virtual void v12(); virtual void v13();
+  virtual bool Write(const char* p, unsigned n);
+};
+
+struct EmptyAlloc {};
+struct String8 {            // eastl::basic_string<char>, 16 bytes
+  char* mpBegin;
+  char* mpEnd;
+  char* mpCap;
+  char* mpAlloc;
+  ~String8();               // 0x530670
+};
+String8* __cdecl String8_Format(String8* self, EmptyAlloc a, const char* fmt, ...);  // 0x472f50
+void __cdecl EmitLine(IEventSink* pOut, const char* str);                             // 0x61dea0
+
 struct EVariant {
   void*    mpValue;       // +0x00
   uint32_t mPad04;
@@ -85,10 +120,16 @@ struct EVariant {
   uint32_t mPad0c;
   uint8_t  mFlags;        // +0x10
   uint8_t  mPad11;
-  uint16_t mArrayCount;   // +0x12
-  uint16_t mPad14;
-  uint16_t mPad16;
-  uint16_t mType;         // +0x16
+  uint16_t mType;         // +0x12 (also the "is non-empty" word of an inline value)
+
+  uint32_t Count() {
+    if (mFlags & 0x30) return mCount;
+    return mType != 0 ? 1 : 0;
+  }
+  char* Data() {
+    if (mFlags & 0x30) return (char*)mpValue;
+    return mType != 0 ? (char*)this : 0;
+  }
 };
 
 struct cEventDisplay {
@@ -99,120 +140,114 @@ struct cEventDisplay {
   DateTime mDate;         // +0x18 (8 bytes)
   EVariant mVariant;      // +0x20
 
-  bool Show(void* pOut);  // 0x0061ecf0
+  bool Show(IEventSink* pOut);  // 0x0061ecf0
 };
 
-// Helper used by every switch arm: format one value into a temporary eastl::string and emit it.
-static void EmitFormatted(void* pOut, const char* fmt, ...) {
-  char strbuf[16];
-  void* s = String8_CtorSprintf(strbuf, 0, fmt, 0);
-  EmitLine(pOut, *(void**)s);
-  String8_Dtor(strbuf);
-}
+#define EMIT_STR(str) EmitLine(pOut, (str))
+#define EMIT_FMT(fmt, ...) { String8 s_; EmitLine(pOut, String8_Format(&s_, EmptyAlloc(), fmt, __VA_ARGS__)->mpBegin); }
 
 // @ 0x0061ecf0
-bool cEventDisplay::Show(void* pOut) {
-  char buf[0x100];
-  int  n;
+bool cEventDisplay::Show(IEventSink* pOut) {
+  char buf[0x80];
+  unsigned n;
   if (mAsset0 == 0 && mAsset1 == 0) {
-    int p10 = mDate.GetParameter(10);
-    int p9  = mDate.GetParameter(9);
-    int p8  = mDate.GetParameter(8);
-    int p6  = mDate.GetParameter(6);
-    int p2  = mDate.GetParameter(2);
-    int p1  = mDate.GetParameter(1);
-    Sprintf8(buf, "<event verb (0x%08x), timestamp: %04u-%02u-%02u %02u:%02u:%02u>",
-             mVerb, p1, p2, p6, p8, p9, p10);
+    Sprintf8(buf, g_pEventFmt, mVerb, mDate.GetParameter(1), mDate.GetParameter(2),
+             mDate.GetParameter(6), mDate.GetParameter(8), mDate.GetParameter(9),
+             mDate.GetParameter(10));
     n = 0x3e;
   } else {
-    int p10 = mDate.GetParameter(10);
-    int p9  = mDate.GetParameter(9);
-    int p8  = mDate.GetParameter(8);
-    int p6  = mDate.GetParameter(6);
-    int p2  = mDate.GetParameter(2);
-    int p1  = mDate.GetParameter(1);
-    Sprintf8(buf, "<event verb (0x%08x), assetid (0x%08x:%08x) %04u-%02u-%02u %02u:%02u:%02u>",
-             mVerb, mAsset0, mAsset1, p1, p2, p6, p8, p9, p10);
+    Sprintf8(buf, g_pEventAssetFmt, mVerb, mAsset0, mAsset1, mDate.GetParameter(1),
+             mDate.GetParameter(2), mDate.GetParameter(6), mDate.GetParameter(8),
+             mDate.GetParameter(9), mDate.GetParameter(10));
     n = 0x5b;
   }
-  if (!((FBool_VPV)Vt(pOut)[14])(pOut, buf, n)) return false;
+  if (!pOut->Write(buf, n)) return false;
 
   uint32_t count;
-  uint32_t data;
-  if ((mVariant.mFlags & 0x30) == 0) {
-    if (mVariant.mArrayCount == 0) goto done;
-    count = 1;
-    data  = (uint32_t)&mVariant;
-  } else {
+  if (mVariant.mFlags & 0x30) {
     count = mVariant.mCount;
     if (count == 0) goto done;
-    data  = (uint32_t)mVariant.mpValue;
+  } else {
+    if (mVariant.mType == 0) goto done;
+    count = 1;
   }
-  for (uint32_t i = 0; i < count; ++i) {
-    uint32_t base = data;
-    switch (mVariant.mType) {
-      case 1:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<bool>", 0)) goto fail;
-        EmitLine(pOut, mVariant.mpValue);
-        break;
-      case 5:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I8d", (int)*(char*)(base + i));
-        break;
-      case 6:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I8u", (unsigned)*(uint8_t*)(base + i));
-        break;
-      case 7:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I16d", (int)*(int16_t*)(base + i * 2));
-        break;
-      case 8:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I16u", (unsigned)*(uint16_t*)(base + i * 2));
-        break;
-      case 9:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I32d", *(int*)(base + i * 4));
-        break;
-      case 10:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I32u", *(unsigned*)(base + i * 4));
-        break;
-      case 11:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I64d", *(int*)(base + i * 8));
-        break;
-      case 12:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%I64u", *(unsigned*)(base + i * 8));
-        break;
-      case 13:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%f", (double)*(float*)(base + i * 4));
-        break;
-      case 14:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<arg>", 0)) goto fail;
-        EmitFormatted(pOut, "%f", *(double*)(base + i * 8));
-        break;
-      case 0x12:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<string>", 0)) goto fail;
-        EmitLine(pOut, mVariant.mpValue);
-        break;
-      case 0x13:
-        if (!((FBool_VPV)Vt(pOut)[14])(pOut, "<string>", 0)) goto fail;
-        EmitFormatted(pOut, "%ls", mVariant.mpValue);
-        break;
-      default:
-        break;
+  {
+    char* data = mVariant.Data();
+    String8* strs = (String8*)data;
+    for (uint32_t i = 0; i < count; ++i) {
+      switch (mVariant.mType) {
+        case 1:
+          if (!pOut->Write(g_pBoolOpen, g_nBoolOpen)) return false;
+          EMIT_STR(data[i] != 0 ? "true" : "false");
+          if (!pOut->Write(g_pBoolClose, g_nBoolClose)) return false;
+          break;
+        case 0x12:
+          if (!pOut->Write(g_pStringOpen, g_nStringOpen)) return false;
+          EMIT_STR(strs[i].mpBegin);
+          if (!pOut->Write(g_pStringClose, g_nStringClose)) return false;
+          break;
+        case 0x13:
+          if (!pOut->Write(g_pStringOpen, g_nStringOpen)) return false;
+          EMIT_FMT("%ls", strs[i].mpBegin);
+          if (!pOut->Write(g_pStringClose, g_nStringClose)) return false;
+          break;
+        case 5:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I8d", (int)((char*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 6:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I8u", (unsigned)((uint8_t*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 7:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I16d", (int)((int16_t*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 8:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I16u", (unsigned)((uint16_t*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 9:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I32d", ((int*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 10:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I32u", ((unsigned*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 11:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I64d", ((int64_t*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 12:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%I64u", ((uint64_t*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 13:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%f", (double)((float*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        case 14:
+          if (!pOut->Write(g_pArgOpen, g_nArgOpen)) return false;
+          EMIT_FMT("%f", ((double*)data)[i]);
+          if (!pOut->Write(g_pArgClose, g_nArgClose)) return false;
+          break;
+        default:
+          break;
+      }
     }
-    if (!((FBool_V)Vt(pOut)[14])(pOut)) goto fail;
-    continue;
-  fail:
-    return false;
   }
 done:
-  return ((FBool_VPV)Vt(pOut)[14])(pOut, "<event>", 0);
+  return pOut->Write(g_pEventClose, g_nEventClose);
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -345,7 +380,7 @@ bool cFeedManager::Pump(void* pA) {
   }
   if (mpStream != 0 && mpOut != 0) {
     if (((FInt_V)Vt(mpOut)[5])(mpOut) == 0) {   // +0x14
-      if (((cEventDisplay*)data)->Show(mpOut)) {
+      if (((cEventDisplay*)data)->Show((IEventSink*)mpOut)) {
         ((FInt_V)Vt(mpStream)[6])(mpStream);    // +0x18
         return true;
       }

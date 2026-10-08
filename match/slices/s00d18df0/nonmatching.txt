@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d18df0  1252  SP::cGameEditInputStrategy::DoSaveSelectedFile: complete (30/30 calls in the same order, same vcall slots 0xb8/0x50/0x2c/0x78/0x34/0x18/0x38/0x24/0x8, same constants and format strings, prologue and frame size identical; size 1604 vs 1633); residual: stack slot order of sum/count/inv, centroid scaling done in x87 instead of SSE with a spilled inv, redundant loop pre-check and count store not reproduced

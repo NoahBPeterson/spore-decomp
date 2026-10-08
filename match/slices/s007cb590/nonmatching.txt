@@ -4,3 +4,4 @@
 007cc3c0  42  eastl::vector<vector_map,...>::resize(n): complete; begin/end register assignment and the &value temp push position differ.
 007cc580  74  eastl::fixed_vector<vector_map,4,1>::fixed_vector(const fixed_vector&): complete; retail passes the source object as the third DoAssignFromIterator argument (x, begin, end) rather than an iterator tag.
 007cc480  214  `anonymous namespace'::cOptionSettingCommand::Execute: complete; source vtable getter, resize of the two cOption vectors, and the `new ("App",...) Editor::cPropertyList` AutoRefCount store with different register scheduling.
+007cb590  ~1300  SP::cConfigScriptState::GatherInformation: complete (all 40 calls, string/number stores, D3D caps reads); `this` is kept in a register instead of spilled (frame 4 bytes smaller, register assignment shifted); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00d29ca0 800 complete FUN_00d29ca0 (cCreatureCamera occluder fade; 34/34 calls, same vtable slots and order, size 1.01x); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-. Not exact: Vec3 temp/copy flavours and x87/SSE scheduling of the two sweep-volume setups differ

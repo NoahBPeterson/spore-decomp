@@ -1,0 +1,1 @@
+00cb7e50 Steering::Update  # homing steering: tangent+sphere-projected target direction, wobble spiral, RotateTowards, QuaternionFromDirections(kForward)

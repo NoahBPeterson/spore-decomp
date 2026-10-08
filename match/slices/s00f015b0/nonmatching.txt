@@ -1,0 +1,1 @@
+00f015b0 767 DragObjectToSurface: complete behaviour (all paths, calls and vtable slots); ObjPlaneVec (esi/edi implicit args) is called with explicit args, frame 0xe4 vs 0x98; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

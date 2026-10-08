@@ -1,0 +1,1 @@
+00fb0e00 SP::cTerrainSphereQuad::RebuildHeightVB  # locks mHeightVB (+0x94), fills (mChunkRes+3)^2 grid with packed 16-bit heights from cTerrainMap<ushort>::GetFloat (Claude-coined name)

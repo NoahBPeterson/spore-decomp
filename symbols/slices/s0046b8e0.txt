@@ -1,0 +1,1 @@
+0046b8e0 ComputeEditorModelOffset  # volume-weighted center of flagged editor blocks / lowest-z offset; writes Vector3 to out

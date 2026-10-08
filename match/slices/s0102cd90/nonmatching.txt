@@ -1,0 +1,1 @@
+0102d1b0 1034 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; size 1602 vs 1569 (1.02x), 83 calls = 83, same multiset of direct-call targets and vcall slots; diff is basic-block layout (else-chain placed after the shared tail), register allocation and frame slot sharing of the locals

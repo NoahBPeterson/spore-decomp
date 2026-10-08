@@ -1,0 +1,1 @@
+0066d430 KeyPanel::HandleMessage  # UTFWin-style message handler: types 1/2/9/0x1b/0x1c/0x287259f6 (kMsgComponentActivated), keys '1'-'5' cycle 4 resource-key axes

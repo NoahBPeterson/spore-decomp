@@ -1,0 +1,1 @@
+00e87db0 1668 complete (flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast): same vtable slots and callees in order, size 1947 vs 2113; ring-loop SSE/x87 scheduling and register allocation differ

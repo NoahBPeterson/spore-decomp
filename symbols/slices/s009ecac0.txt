@@ -1,0 +1,1 @@
+009ecac0 IkSolver::UpdateBone  # thiscall ret 4 (bone); distance clamp, child recursion, constraint re-aim via 0x9ec360, pivotPos refresh (name guessed)

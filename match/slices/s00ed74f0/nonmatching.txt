@@ -1,0 +1,1 @@
+00ed7a10 1253 scenario-editor toolbar handler: complete; register homes (zero const/sim/panel) and the shared hint-text call tail differ

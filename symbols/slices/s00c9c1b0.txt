@@ -1,0 +1,1 @@
+00c9c8a0 SP::cTribeHut::TakeHit  # PDB candidate; cCombatant::TakeHit override (this = cCombatant subobject hut+0x120), calls cCombatant::TakeHit 0xbfcdd0

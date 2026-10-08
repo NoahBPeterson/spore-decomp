@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0108eb30 1500 complete (flags /vc71 /O2 /MD /Gy /TP /fp:fast): all 7 calls in original order, same callees/conventions; x87 scheduling and frame (0xb4 vs 0xd4) differ; equiv 5/165 float-rounding mismatches on huge-magnitude inputs (cancellation), cause not found

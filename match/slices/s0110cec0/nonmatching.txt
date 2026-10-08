@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete, behaviorally equivalent, not byte-exact)
+0110d1d0 1585 hkGsk_getClosestPointFromSimplex: all six simplex pairs ((1,1) (1,2) (1,3) (2,1) (2,2) (3,1)); x87 operand schedule / FP-stack CSE of partial dot products and compare forms differ (flags /vc71 /O2 /MD /Gy /TP). equiv.py FAILs only where normalOut aliases verticesA

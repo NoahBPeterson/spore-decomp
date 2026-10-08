@@ -1,0 +1,1 @@
+010154f0 SP::cSimulatorUniverse::cSimulatorUniverse  # PDB name via card; retail layout differs from the 2008 PDB (event/action sub-objects at 0x34..0xf4, event vector_map at 0xf8)

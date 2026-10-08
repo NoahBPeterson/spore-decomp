@@ -12,7 +12,6 @@ struct S9ae1c0 { void f(); };
 struct S99c970 { void f(); };
 struct S9ac2b0 { float f(); };
 struct S9ae350 { void f(); };
-extern void FUN_009a9c00(int, int, int);
 extern void __stdcall FUN_009ae350(int, int, int, int);
 
 extern "C" __declspec(dllimport) unsigned long __stdcall
@@ -97,8 +96,115 @@ bool __stdcall FUN_009a9bc0(unsigned* a, unsigned* b) {
 // ---------------------------------------------------------------------------
 // @ 0x009a9c00  (1949 bytes; skeleton)
 // ---------------------------------------------------------------------------
-struct S9a9c00 { void f(); };
-void S9a9c00::f() {}
+struct Vec4A { float x, y, z, w; };
+struct AnimDesc {                       // *(anim+0) : creature animation descriptor
+  uint32_t pad0[0x43];
+  float scaleX, scaleY, scaleZ;         // 0x10c..0x114
+  Vec4A tint;                           // 0x118: x unused here, y(0x11c) = speed
+  uint32_t pad128[10];
+  uint32_t flags;                       // 0x150
+};
+struct AnimInfo { uint32_t pad[4]; uint32_t flags; };   // *(anim+8): flags at +0x10
+struct AnimBlock {                      // 9 floats; normalized by FUN_0099ce40
+  float pos[4];                         // +0x00
+  float rot[5];                         // +0x10 (quaternion) .. +0x20
+  void Normalize();                     // 0x0099ce40, thiscall
+};
+struct AnimState {
+  AnimDesc* desc;                       // 0x00
+  uint32_t pad04;
+  AnimInfo* info;                       // 0x08
+  uint32_t pad0c[8];                    // 0x0c..0x2b
+  AnimBlock blockA;                     // 0x2c
+  AnimBlock blockB;                     // 0x50 (0x2c + 0x24)
+};
+struct BoneSlot {                       // 700 bytes
+  AnimDesc* desc;                       // 0x00
+  uint32_t pad04[0x18];
+  float f64;
+  uint32_t pad68[4];
+  float f78;
+  float f7c, f80, f84;
+  float f88;
+  Vec4A v8c;                            // 0x8c..0x98
+  float f9c;
+  uint32_t padA0[0x2bc / 4 - 0x28];
+};
+struct CreatureDesc { uint32_t pad[0xfd]; uint8_t pad3f4; uint8_t flag3f5; };
+struct CreatureAnim {
+  CreatureDesc* desc;                   // 0x00
+  uint32_t pad04[5];
+  float outPos[3];                      // 0x18
+  uint32_t pad24[6];
+  float outRot[4];                      // 0x3c
+  uint32_t pad4c[9];
+  float timeScale;                      // 0x70
+  uint32_t pad74[(0x2e4 - 0x74) / 4];
+  BoneSlot* slotsBegin;                 // 0x2e4
+  BoneSlot* slotsEnd;                   // 0x2e8
+  uint32_t pad2ec[(0x168c - 0x2ec) / 4];
+  uint8_t flag168c;
+  void RefreshDirty(float);             // 0x009b8f40 thiscall
+  void FUN_009c0680();                  // thiscall
+};
+extern int g_015509f0, g_015509dc;
+extern float __cdecl FUN_009a1d90(AnimState*, float, int, int);
+extern void __cdecl FUN_009be260(CreatureAnim*);
+extern void __cdecl FUN_009bd340(CreatureAnim*);
+extern void __cdecl FUN_009b3bc0(CreatureAnim*);
+extern void __cdecl FUN_0099e110(float, CreatureAnim*, AnimState*, int, int, int);
+extern float* __cdecl QuaternionVectorTransform(float* out, const float* q, const float* v);
+extern void __cdecl FUN_009bc580(CreatureAnim*, float);
+extern void __cdecl FUN_0099d460(float, CreatureAnim*, AnimState*, float);
+extern void __cdecl FUN_009f9b40(CreatureAnim*);
+extern void __cdecl FUN_009bd550(float, float, CreatureAnim*, int);
+
+static inline void ClearBlock(AnimBlock* b) {
+  b->pos[0] = 0.0f; b->pos[1] = 0.0f; b->pos[2] = 0.0f; b->pos[3] = 0.0f;
+  b->rot[0] = 0.0f; b->rot[1] = 0.0f; b->rot[2] = 0.0f; b->rot[3] = 0.0f; b->rot[4] = 0.0f;
+}
+static __forceinline void InitSlot(CreatureAnim* c, BoneSlot* s) {
+  if ((s->desc->flags & 4) && s->f64 == 0.0f && s->f78 == 0.0f && s->f88 == 0.0f && s->f9c == 0.0f) {
+    float t = c->timeScale;
+    s->f7c = t * s->desc->scaleX;
+    s->f80 = s->desc->scaleY * t;
+    s->f84 = s->desc->scaleZ * t;
+    s->f88 = 1.0f;
+    s->v8c = s->desc->tint;
+    s->f9c = 1.0f;
+  }
+}
+
+// @ 0x009a9c00
+void FUN_009a9c00(CreatureAnim* c, AnimState* a, float t) {
+  float speed = a->desc->tint.y;
+  FUN_009a1d90(a, t, 1, 0);
+  if ((a->info->flags & 1) && (a->info->flags & 2)) FUN_009be260(c);
+  FUN_009bd340(c);
+  FUN_009b3bc0(c);
+  ClearBlock(&a->blockA);
+  ClearBlock(&a->blockB);
+  FUN_0099e110(1.0f, c, a, 0, 1, 1);
+  a->blockA.Normalize();
+  a->blockB.Normalize();
+  float tmp[3];
+  const float* r = QuaternionVectorTransform(tmp, a->blockB.rot, a->blockA.pos);
+  c->outPos[0] = r[0] + a->blockB.pos[0];
+  c->outPos[1] = r[1] + a->blockB.pos[1];
+  c->outPos[2] = r[2] + a->blockB.pos[2];
+  c->outRot[0] = ((a->blockA.rot[0] * a->blockB.rot[3] + a->blockB.rot[0] * a->blockA.rot[3]) - a->blockA.rot[1] * a->blockB.rot[2]) + a->blockA.rot[2] * a->blockB.rot[1];
+  c->outRot[1] = ((a->blockB.rot[2] * a->blockA.rot[0] + a->blockA.rot[1] * a->blockB.rot[3]) + a->blockB.rot[1] * a->blockA.rot[3]) - a->blockA.rot[2] * a->blockB.rot[0];
+  c->outRot[2] = ((a->blockB.rot[2] * a->blockA.rot[3] - a->blockB.rot[1] * a->blockA.rot[0]) + a->blockA.rot[2] * a->blockB.rot[3]) + a->blockA.rot[1] * a->blockB.rot[0];
+  c->outRot[3] = ((a->blockB.rot[3] * a->blockA.rot[3] - a->blockA.rot[0] * a->blockB.rot[0]) - a->blockB.rot[1] * a->blockA.rot[1]) - a->blockA.rot[2] * a->blockB.rot[2];
+  FUN_009bc580(c, speed);
+  FUN_0099d460(1.0f, c, a, 1.0f);
+  int n = (int)(c->slotsEnd - c->slotsBegin);
+  for (int i = 0; i < n; i++) InitSlot(c, &c->slotsBegin[i]);
+  if (g_015509f0 && !c->desc->flag3f5 && c->flag168c) c->FUN_009c0680();
+  if (!c->desc->flag3f5) c->RefreshDirty(1.0f);
+  if (g_015509dc) FUN_009f9b40(c);
+  FUN_009bd550(speed, 0.0f, c, 0);
+}
 
 // ---------------------------------------------------------------------------
 // @ 0x009aa3a0  scale/seek helper (x87; approximate)
@@ -111,7 +217,7 @@ void S9aa3a0::f(int a, int b, int* p3, int p4) {
   if (n < 2) frac = 0.0f;
   else frac = ((float)p4 * sc) / (float)(n - 1);
   int fi = (int)frac;
-  FUN_009a9c00(a, b, fi);
+  FUN_009a9c00((CreatureAnim*)(size_t)a, (AnimState*)(size_t)b, frac);
   FUN_009ae350(p4, fi, a, b);
 }
 

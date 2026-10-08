@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d28e60 897 cCreatureCamera::cCreatureCamera(IRefObject*): complete (2/2 direct calls: Matrix3 copy ctor, cLocalInputState ctor; AddRef vcall; all ~230 member stores; size 0.993x); store scheduling/register allocation of constants (xmm1-4 hoisting, bounds temps) differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

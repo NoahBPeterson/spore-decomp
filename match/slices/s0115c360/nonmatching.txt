@@ -1,0 +1,1 @@
+0115c360 2007 complete HELPER_CMpegLayer3B::HuffmanDecode (second copy of III_huffman_decode, inline bit reader); register allocation/scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

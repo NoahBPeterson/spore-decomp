@@ -1,0 +1,1 @@
+0079c960 Clipper::Run  # clips a triangle index list against a sphere (modes 0/2/3), emitting kept triangles and split-edge vertices

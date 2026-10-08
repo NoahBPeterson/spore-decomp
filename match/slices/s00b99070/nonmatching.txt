@@ -1,0 +1,1 @@
+00b998a0 1156 complete; register roles differ (mine keeps mgr/city/civ in esi/ebx, original also uses edi and spills city), frame 0xb8 vs 0xb4, size 1574 vs 1581

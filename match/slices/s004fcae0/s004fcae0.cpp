@@ -1,6 +1,7 @@
 // Slice s004fcae0: Simulator::cCreatureAbility ctor/dtor and small vector methods
 // (unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast).
 #include "types.h"
+#include <cmath>
 
 struct Vector3 { float x, y, z; };
 
@@ -142,8 +143,102 @@ void CopyPod24(void* dst, const void* src)
 // The remaining functions are large /Od bodies whose full reconstruction was out
 // of budget; they are listed in partial.txt as skeletons.
 // ---------------------------------------------------------------------------
+// Samples a relativistic-style acceleration profile between two points and emits one
+// FUN_004f8a40 record per step (log-spaced when |d| > 1e-6, linear otherwise).
+struct Vec3f {
+    float x, y, z;
+    Vec3f() {}
+    Vec3f(const Vec3f& o) : x(o.x), y(o.y), z(o.z) {}
+    Vec3f& operator=(const Vec3f& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+extern float g_013f11b4;   // 0x013f11b4 (0.25f at runtime, read from memory)
+struct Owner {
+    char pad[0xc];
+    float mScale;                                                // +0xc
+    void Emit(const Vec3f* pos, float a, float b, int c);        // 0x004f8a40 (ret 0x10)
+};
+Vec3f Vec3Sub(const Vec3f* a, const Vec3f* b);               // 0x0041db10 (sret, cdecl)
+Vec3f Vec3Add(const Vec3f* a, const Vec3f& b);               // 0x0041dc10
+Vec3f Vec3Scale(const float* s, const Vec3f* v);             // 0x0041de40
+Vec3f Vec3Div(const Vec3f* v, const float* s);               // 0x00453880
+float VectorLength(const Vec3f* v);                          // 0x0040ae50
+
+struct Stepper {
+    void Run(Owner* owner, float k0, Vec3f* pA, float pSpeed, float p5, Vec3f* pB, float p7,
+             float p8, int p9);
+};
+
+// Local names below are chosen only to reproduce the /Od frame slot order.
 // @ 0x004fcd00
-void FUN_004fcd00() {}
+void Stepper::Run(Owner* owner, float k0, Vec3f* pA, float pSpeed, float p5, Vec3f* pB, float p7,
+                  float p8, int p9)
+{
+    float begin;
+    Vec3f where;
+    float mid;
+    float p30;
+    float p4;
+    Vec3f p18;
+    float n31;
+    where = Vec3Sub(pB, pA);
+    n31 = VectorLength(&where);
+    p18 = Vec3Div(&where, &n31);
+    begin = (float)sqrt((double)(1.0f - pow(owner->mScale / pSpeed, g_013f11b4))) * p5 + 1e-6f;
+    mid = (float)sqrt((double)(1.0f - pow(owner->mScale / p7, g_013f11b4))) * p8 + 1e-6f;
+    p4 = (begin - mid) / n31;
+    p30 = k0;
+    if ((float)fabs((double)p4) > 1e-6) {
+    float t25;
+    int v1;
+    float p20;
+    float i;
+    float n16;
+        n16 = (1.0f - p30 * p4) / (p30 * p4 + 1.0f);
+        p20 = log(1.0f - n31 * p4 / begin) / (float)log((double)n16);
+        t25 = ceil(p20);
+        i = pow(1.0f - n31 * p4 / begin, 1.0f / t25);
+        p30 = (1.0f - i) / ((1.0f + i) * p4);
+        n16 = (1.0f - p30 * p4) / (p30 * p4 + 1.0f);
+        v1 = (int)t25;
+        for (int v37 = 1; v37 < v1; v37++) {
+    float chunk;
+    float v13;
+    float n30;
+    float t35;
+    float p14;
+    Vec3f pos;
+            n30 = pSpeed;
+            p14 = pow(n16, (float)v37);
+            t35 = p14 * begin;
+            v13 = t35 / (float)sqrt((double)(1.0f - pow(owner->mScale / n30, g_013f11b4)));
+            chunk = (1.0f - p14) * begin / p4;
+            pos = Vec3Add(pA, Vec3Scale(&chunk, &p18));
+            owner->Emit(&pos, n30, v13, p9);
+        }
+    } else {
+    float buf;
+    int p6;
+    float p10;
+        buf = (p30 * p4 + 1.0f) * n31 / (2.0f * p30 * begin);
+        p10 = ceil(buf);
+        p30 = n31 / (2.0f * begin * p10 - p4 * n31);
+        p6 = (int)p10;
+        for (int p22 = 1; p22 < p6; p22++) {
+    float p21;
+    float v34;
+    float n6;
+    float hash;
+    Vec3f pos;
+            n6 = pSpeed;
+            p21 = begin;
+            hash = p21 / (float)sqrt((double)(1.0f - pow(owner->mScale / n6, g_013f11b4)));
+            v34 = 2.0f * p30 * begin * (float)p22 / (p30 * p4 + 1.0f);
+            pos = Vec3Add(pA, Vec3Scale(&v34, &p18));
+            owner->Emit(&pos, n6, hash, p9);
+        }
+    }
+}
+
 // @ 0x004fd380
 void FUN_004fd380() {}
 // @ 0x004fd6d0

@@ -1,0 +1,1 @@
+01076b80  ~300  complete (all message types/cases; ordered call/vslot/const sequence equal to orig); 1976 vs 1976 B; reg alloc (parent/item ebp/ebx), spilled 'bad' flag, loop alignment pad differ; flags /O2 /MD /Gy /TP

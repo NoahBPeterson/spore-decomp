@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00ddd1a0  1170  cModelSetup::Setup complete (calls: all 74 original targets present in order, mine 78 because cl tail-duplicates the inline temp-Constraint dtor after each push_back; size 2049 vs 1985); register allocation of the ModelWorld()->SetModelType(model->GetModelType()) vcall triples differs (orig keeps model in ebx and spills the vtable) (compiled with /O2 /MD /Gy /TP)

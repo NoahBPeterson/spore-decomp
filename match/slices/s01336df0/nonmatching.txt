@@ -1,0 +1,1 @@
+01336df0  867  complete table of 19 Simulator::Attribute records (same shape as s01335000); cl keeps different callback constants in registers so store scheduling differs (CRT dynamic initializer $E259)

@@ -4,3 +4,4 @@
 007602a0  180  SetLayer: temp cLayerInfo/EH state layout and search shape
 00760c00    8  Poly2 ctor: derived vptr stores scheduled after base field zeroes instead of interleaved
 00760c40   31  PtrVec::erase: interlocked release register allocation (mov ecx,eax / or edx,-1 order)
+00760450 1280 cRenderer::Render (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): complete; register allocation differs (bool in memory, CSE'd +0x648) and the two tail list dtors call clear() out of line instead of inlining

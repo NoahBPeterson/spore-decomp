@@ -1,0 +1,1 @@
+010f62e0 1706 complete hk3AxisSweep::querySingleAabb (timers, stack bitfield, marker-accelerated x scan, y/z binary search, yz-disjoint scan with pairs appended via pushBack/_reserveMore); x87 operand order, frame/register allocation differ (toolset); flags /O2 /MD /Gy /TP /vc71

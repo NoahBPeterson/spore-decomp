@@ -1,0 +1,2 @@
+# s01313370 manifest
+slices/s01313370/s01313370.cpp  ?InitCityAttributes@Simulator@@YAXXZ  01313ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE

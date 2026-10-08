@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+009ec360 1762 complete: IK ApplyConstraintRotation (slerp-like limited turn of bone quat toward target, fast-rsqrt axis quaternion, smoothstep window, atan2/sin/cos blend); size 1946 vs 1886, 6/6 direct calls in order, fsin/fcos/fpatan/fsqrt inline; original uses a register ABI (EAX=bone, ESI=target quat, 2 stack args, ret 8) modeled as 4 cdecl args, so byte-exact is impossible; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

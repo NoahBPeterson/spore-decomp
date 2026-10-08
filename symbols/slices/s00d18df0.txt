@@ -1,0 +1,5 @@
+00d18df0 SP::cGameEditInputStrategy::DoSaveSelectedFile  # anchor PDB name; writes "<name>.ltp" with GameplayMarkerTemplate lines
+00d1bf00 GetEditSelection  # returns global 0x169dca8 (object with selected-object vector at +0x40)
+00b3d280 GetCameraCtl  # returns global 0x167eacc; 0xb13a10 is its thiscall GetDirection(Vec3*) ret 4
+00b7e3b0 cPlanetModel::GetNormalAt  # thiscall(Vec3* out, const Vec3* pos) ret 8; PlanetModel() at 0xb3d350 returns the object
+00685d40 FindRecordDB  # cdecl(ResKey*) -> db whose vcall +0x34 opens a record stream

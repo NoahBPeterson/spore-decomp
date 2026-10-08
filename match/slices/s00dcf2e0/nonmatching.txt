@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dcf2e0  2004  complete; same size (2387), 50 direct/virtual calls in original order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; register allocation, x/y/z SSE scheduling and stack-slot layout differ

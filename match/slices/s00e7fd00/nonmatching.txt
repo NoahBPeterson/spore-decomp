@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e7fd00  1331  complete (every call in original order, same constants and stores); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; static register-convention helpers (EDI/EAX/ESI/ECX+EDX implicit args of 0xe7e130 0xe66010 0xe50810 0xe78b80 0xe78b20) are modeled as ordinary args; stack temp layout and tail-merge differ

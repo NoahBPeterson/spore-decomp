@@ -1,0 +1,1 @@
+00b46660 cSurfaceMover::Update  # per-frame surface mover: vel/angVel integration, orientation quaternion, DirectionToSurfacePosition on mode 1

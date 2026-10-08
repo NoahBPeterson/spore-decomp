@@ -1,0 +1,1 @@
+00b983b0 1895 complete (flags /O2 /MD /Gy /TP /GS-): 15 call sites in original order (sort, 10 WrapCubeFace, memcpy-erase, introsort, 2 insertion sorts), size 2071 vs 2122; register allocation and frame slot packing differ

@@ -8,3 +8,4 @@
 004b8980  DerivedCmp::SetEqFromNodes
 004b89c0  DerivedCmp::SetEqFromRoots
 004b8a70  FUN_004b8a70  # model-type comparator helper
+013ef094  ??_7AbilityItem@@6B@  # GmeRefCount vtable (stored by the 0x40cfd0 base ctor and the derived ctor)

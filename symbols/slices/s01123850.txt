@@ -1,0 +1,1 @@
+01123850 _hkCvxCvxDistByHeuristicSampling  # havok_names; closest points of two convex shapes by sampling 3 axis directions then refining

@@ -17,3 +17,4 @@
 007aa0d0 SP::cTextureManager::AddTextureLoadDependency  # pdb_names.json
 007aa200 SP::cTextureManager::ReloadTexture  # pdb_names.json
 007aa800 SP::cNodeAllocator<SP::cTextureInstanceInternal>::Create  # pdb_names.json
+007a8a50 EA::Text::Render_RenderWare::DrawGlyphs  # thiscall (GlyphDisplayEntry* [0x28 B], count, colors, bool perGlyphColor) ret 0x10; GlyphCache vslots 0x14 GetGlyphTextureInfo / 0x1c AddGlyphTexture / 0x28 GetTextureInfo / 0x40 BeginUpdate / 0x44 EndUpdate, Font vslots 0x50 RenderGlyphBitmap / 0x54 DoneGlyphBitmap (EAText headers + PDB layouts)

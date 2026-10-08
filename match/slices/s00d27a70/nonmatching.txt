@@ -1,0 +1,2 @@
+00d27a70 1718 complete (18/18 calls, size 1.01x, equiv PASS 315 valid inputs 71.8% coverage); frame layout matches (hits at +0x68/+0x80); operand load order of the first Vec3 subtraction and sqrt/inverse-sqrt scheduling differ
+00d28300 1030 complete (23/23 calls, size 0.98x); frame 0x68 vs 0x4c (original reuses locals more tightly), SSE load order of the pos vector

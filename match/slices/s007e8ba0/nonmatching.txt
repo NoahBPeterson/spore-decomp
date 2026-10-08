@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+007e8ba0  1200  PreInit complete (all paths/calls); frame layout differs (EH string temps, SYSTEM_INFO zero-init schedule, ok?-arm pushes) flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

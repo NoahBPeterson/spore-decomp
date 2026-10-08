@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b8a760  1459  complete cPlanetModel::RebuildPoliticalZones (zone-border vertex hash map + averaged surface positions + NatlBounds build); same 11 calls in order with the same conventions, size 0.98x; difftest UNSUPPORTED (0/800 valid inputs: the zone byte map needs a real 6x64x64 buffer); local WrapTile body (FUN_00b7e220, only so cl knows its register use) keeps the sums in xmm regs; stack-slot layout, x87 vertex-direction scheduling and the face-sign select differ

@@ -1,0 +1,2 @@
+00eb73f0 CamBlend::Build  # builds the zoom/fov/direction Hermite tracks (+1b0,+1ec,+228,+264) for the camera transition; blend factor from acos(dot(dirA,dirB))
+00eb7b30 CamMsg::HandleMessage  # camera message handler (this = camera+4): target pos 0x101b534/537, orientation 0x101b543/d51f/d576, zoom 0x101d445/4c7, distance 0x109d174/352

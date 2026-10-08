@@ -8,3 +8,4 @@
 0074c910  SP::cModelWorld::ScheduleForLoad  # PDB name
 0074d190  eastl::quick_sort_impl<cOccluder*,int,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
 0074d2c0  SP::cModelWorld::HandleMessage  # PDB name
+0074b760 SP::cModelWorld::UpdateFromPropList  # anchor PDB name; reads model props 0xfba610-13 transform, bounds 0xf9efba/0x31d2791, radius

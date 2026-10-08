@@ -1,0 +1,1 @@
+010021a0 TravelToStarCharge  # thiscall(Civ* target): charges travel cost, plays UI_common_reticle_goto_screen, rebuilds star map filter, bumps awareness of nearby empires

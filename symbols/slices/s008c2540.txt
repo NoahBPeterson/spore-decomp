@@ -1,0 +1,1 @@
+008c2540 T2K_TV_Effects  # PDB candidate (caller-scored); expands glyph bitmap to ARGB with outline/shadow modes 1..5

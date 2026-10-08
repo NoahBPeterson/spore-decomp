@@ -3,6 +3,7 @@
 // / vector<Constraint> template pieces they use.
 // Flags: /O2 /MD /Gy /TP /arch:SSE /GS- (no /EHsc).
 #include "types.h"
+#include <string.h>
 
 extern "C" long _InterlockedExchange(volatile long*, long);
 #pragma intrinsic(_InterlockedExchange)
@@ -225,21 +226,186 @@ void DestroyElem16VectorD(Elem16VectorD* v) { v->~Elem16VectorD(); }
 template struct eastl::pair<uint32_t, EA::Variant>;
 
 // ---------------------------------------------------------------------------------------------
+typedef unsigned __int64 u64;
+void __cdecl operator delete[](void* p);  // 0x00f47380
+
+struct ResourceKey { uint32_t a, b, c; };
+
+// Intrusive-refcounted transaction: AddRef at +4, Release at +8.
+struct ITx {
+    virtual int v0();
+    virtual int AddRef();
+    virtual int Release();
+};
+
+// AutoRefCount<ITx>
+struct AutoTx {
+    ITx* mpObject;
+    AutoTx(ITx* p) : mpObject(p) {
+        if (mpObject) mpObject->AddRef();
+    }
+    AutoTx(const AutoTx& x) : mpObject(x.mpObject) {
+        if (mpObject) mpObject->AddRef();
+    }
+    ~AutoTx() {
+        if (mpObject) mpObject->Release();
+    }
+};
+
+// deque<AutoRefCount<ITx>> at cPollinator+8 (only the end iterator matters inline).
+struct TxQueue {
+    char pad0[0x18];
+    AutoTx* mpCurrent;  // +0x18
+    char pad1c[4];
+    AutoTx* mpEnd;      // +0x20
+    char pad24[0x2c];
+    void PushBackSlow(const AutoTx* pItem);   // 0x0060dbd0
+    bool Push(ITx* pTx, bool bFront);         // 0x0060eaf0 (ret 8)
+    void push_back(const AutoTx& v) {
+        AutoTx* const pSlot = mpCurrent;
+        if (pSlot + 1 == mpEnd) {
+            PushBackSlow(&v);
+        } else {
+            mpCurrent = pSlot + 1;
+            ::new (pSlot) AutoTx(v);
+        }
+    }
+};
+
+// Pooled 0xf0-byte transactions.
+struct cTxKind2 : public ITx {
+    cTxKind2* Construct(int kind, uint32_t a, uint32_t b);  // 0x00618da0 (ret 0xc)
+};
+void* __cdecl PoolAllocKind2(uint32_t size);                 // 0x006158b0
+struct U64FixedVec20;
+struct cTxFeedGet : public ITx {
+    cTxFeedGet* Construct(U64FixedVec20* pIds);              // 0x0061c5e0 (ret 4)
+};
+void* __cdecl PoolAllocFeedGet(uint32_t size);               // 0x006158e0
+
+struct __declspec(align(8)) DateTime {  // EA::DateTime::DateTime
+    u64 mTime;
+    void FUN_0092e3d0(int);                  // Set(0x0092e3d0)
+    void FUN_0092e470(int unit, int value);  // Add(0x0092e470)
+};
+struct AppProps2 { char pad[0x118]; int mBlocked; };
+struct AppProps { char pad[0x3c]; AppProps2* mpState; };
+extern AppProps* gpAppProps;  // 0x015fd918
+
 namespace SP {
 namespace Pollen {
 struct cAssetDirectory {
     void Flush();  // 0x0054efb0
-    uint32_t GetLastRefreshTime(uint32_t key);  // 0x0054e9a0 (returns 64-bit in edx:eax)
+    u64 GetLastRefreshTime(uint32_t key);                         // 0x0054e9a0 (ret 4, edx:eax)
+    bool GetServerId(const ResourceKey* pKey, u64* pId, bool b);  // 0x0054e530 (ret 0xc)
 };
 }  // namespace Pollen
+
+namespace FunctionalMatch {
+struct Constraint;
+struct CVec {
+    Constraint* mpBegin;
+    Constraint* mpEnd;
+    Constraint* mpCapacity;
+    const char* mpName;
+    uint32_t mFlags;
+    CVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    CVec(const CVec& x);                                          // 0x004e38d0
+    void DoDestroyValues(Constraint* first, Constraint* last);    // 0x004e39a0
+    void DoInsertValue(Constraint* pos, const Constraint& v);     // 0x004e39d0
+    ~CVec() {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin);
+    }
+    inline void push_back(const Constraint& v);
+};
+struct Constraint {
+    uint32_t mParameter;
+    uint32_t mType;
+    union {
+        struct { int mMin; int mMax; } mIntVal;
+        struct { float mMin; float mMax; } mFloatVal;
+    };
+    CVec mConstraints;
+    Constraint(int sentinel);                              // 0x00558830
+    Constraint(uint32_t param, int op, int value);          // 0x00558960
+    Constraint(int any, CVec constraints);                  // 0x00558ae0
+};
+inline void CVec::push_back(const Constraint& v) {
+    if (mpEnd < mpCapacity) {
+        ::new (mpEnd++) Constraint(v);
+    } else {
+        DoInsertValue(mpEnd, v);
+    }
+}
+}  // namespace FunctionalMatch
+
+struct KeyVec {
+    ResourceKey* mpBegin;
+    ResourceKey* mpEnd;
+    ResourceKey* mpCapacity;
+    KeyVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~KeyVec() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+};
+struct U64Vec {
+    u64* mpBegin;
+    u64* mpEnd;
+    u64* mpCapacity;
+    U64Vec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~U64Vec() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    void reserve(size_t n);               // 0x004756f0 (ret 4)
+    void DoInsertValue(u64* pos, const u64& v);  // 0x004786e0 (ret 8)
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+    void push_back(const u64& v) {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) u64(v);
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+// By-value Constraint arguments are bit copies (the caller keeps ownership of the sub-vectors).
+struct ConstraintRaw { uint32_t w[9]; };
+struct IObjectTemplateDB {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0a(); virtual void v0b();
+    virtual void v0c();
+    virtual bool __cdecl Query(KeyVec* pResults, ConstraintRaw first, ConstraintRaw second);
+};
+IObjectTemplateDB* ObjectTemplateDB();  // 0x0067cb40
+
+struct U32Range { uint32_t* mpBegin; uint32_t* mpEnd; };
+struct cFilterOwner {
+    char pad[0x1c];
+    U32Range mList;
+    U32Range* GetList();  // 0x006b42e0 (lea eax,[ecx+0x1c])
+};
 
 struct cPollinator {
     virtual void v0();
     virtual bool HandleMessage(uint32_t id, void* msg);
-    char pad[0x54];
-    Pollen::cAssetDirectory* mpAsssetDirectory;  // +0x58
-    void FUN_006103d0(uint32_t lo, uint32_t hi);  // 0x006103d0
-    void ProcessTransactionTick();                // 0x00612270
+    char pad4[4];
+    TxQueue mQueue;                                // +8
+    Pollen::cAssetDirectory* mpAsssetDirectory;    // +0x58
+    cFilterOwner* mpFilters;                       // +0x5c
+    char pad60[0x54];
+    char* mpRecordsA;                              // +0xb4
+    char* mpRecordsAEnd;                           // +0xb8
+    char padbc[0x0c];
+    char* mpRecordsB;                              // +0xc8
+    char* mpRecordsBEnd;                           // +0xcc
+    char padd0[0x0c];
+    char* mpRecordsC;                              // +0xdc
+    char* mpRecordsCEnd;                           // +0xe0
+    char pade4[0x0d];
+    bool mbEnabled;                                // +0xf1
+    char padf2[0x1a];
+    int mRefreshInterval;                          // +0x10c
+    void FUN_006103d0(uint32_t lo, uint32_t hi);   // 0x006103d0
+    void ProcessTransactionQueue();                // 0x00610140
+    void ProcessTransactionTick();                 // 0x00612270
 };
 cPollinator* GetPollinator();  // 0x0067cb30
 }  // namespace SP
@@ -419,20 +585,16 @@ store:
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00612270  SP::cPollinator::ProcessTransactionTick   (PARTIAL: only the three queue-scan loops and
-// the call into ProcessTransactionQueue are transcribed; the FunctionalMatch constraint section at
-// 0x006124f5..0x00612944 is a documented stub.)
-//
-// Structure of the original:
-//  1. Return unless mbPollinationEnabled(+0xf1) and the global application state allows it.
-//  2. now = DateTime(1) - mRefreshInterval(+0x10c)  (a 64-bit time stamp).
-//  3. For each of three vectors of 0x70-byte records (+0xc8, +0xb4, +0xdc): if the record has a pending
-//     entry (+0x44 != +0x48) and cAssetDirectory::GetLastRefreshTime(record+0x64) < now, create a job
-//     object (0xf0 bytes) and push it (add-ref'd) on the message deque at this+8.
-//  4. If the directory's refresh time for key 0xa86067e7 is older than now, build a FunctionalMatch
-//     constraint list from the object template database, collect the matching server ids into an
-//     8-byte-element vector, wrap them in a second job and push it on the same deque.
-//  5. Finally call ProcessTransactionQueue().
+// @ 0x00612270  SP::cPollinator::ProcessTransactionTick
+//  1. Return unless enabled (+0xf1) and the application state is not blocked.
+//  2. now = DateTime(1) - refresh interval.
+//  3. For each of the record vectors at +0xc8, +0xb4, +0xdc (0x70-byte records): if the record has pending
+//     data (+0x44 != +0x48) and its directory refresh time is older than now, create a kind-2 transaction
+//     and queue it.
+//  4. If the directory's refresh time for key 0xa86067e7 is older than now: query the ObjectTemplateDB with
+//     an Any-constraint over the filter list, resolve server ids, and send them in batches of 20 as
+//     get-feed transactions.
+//  5. Always finish with ProcessTransactionQueue().
 struct JobRecord {
     char pad[0x44];
     uint32_t mPendingBegin;  // +0x44
@@ -442,25 +604,106 @@ struct JobRecord {
     uint32_t mState;         // +0x68
     char pad3[4];
 };
-void* __cdecl NewJobObject(uint32_t size);                                   // 0x006158b0
-void CreateJob(void* pJob, int kind, uint32_t pending, uint32_t key);        // 0x00618da0
-void QueueJob(void* pQueue, void* pJob, bool bLast);                         // 0x0060eaf0
 
-static void ScanRecords(SP::cPollinator* p, JobRecord* first, JobRecord* last, uint32_t nowLo, uint32_t nowHi) {
-    for (JobRecord* r = first; r != last; ++r) {
-        if (r->mPendingBegin != r->mPendingEnd) {
-            // if (p->mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) { create + queue the job }
-            (void)nowLo; (void)nowHi;
-            void* pJob = NewJobObject(0xf0);
-            if (pJob) CreateJob(pJob, 2, r->mPendingBegin, r->mKey);
-            QueueJob((char*)p + 8, pJob, r->mState == 0xb);
+// vector<u64, fixed_vector_allocator<8,20>>: inline buffer preceded by a zero count cookie.
+struct U64FixedVec20 {
+    u64* mpBegin;
+    u64* mpEnd;
+    u64* mpCapacity;
+    uint32_t mAllocName;
+    uint32_t mAllocFlags;
+    uint32_t mCookie;
+    u64 mBuffer[20];
+    U64FixedVec20() : mCookie(0) {
+        mpBegin = mpEnd = mBuffer;
+        mpCapacity = mBuffer + 20;
+    }
+    ~U64FixedVec20() { if (mpBegin && ((int*)mpBegin)[-1]) operator delete[](mpBegin); }
+    void DoInsertValue(u64* pos, const u64& v);  // 0x004786e0 (ret 8)
+    size_t size() const { return (size_t)(mpEnd - mpBegin); }
+    void push_back(const u64& v) {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) u64(v);
+        } else {
+            DoInsertValue(mpEnd, v);
         }
     }
-}
+    void erase(u64* first, u64* last) {
+        memmove(first, last, (char*)mpEnd - (char*)last);
+        mpEnd -= (last - first);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
 
 void SP::cPollinator::ProcessTransactionTick() {
-    // (partial) see the comment above; the three scans use ScanRecords on the vectors at +0xc8/+0xb4/+0xdc.
-    ScanRecords(this, *(JobRecord**)((char*)this + 0xc8), *(JobRecord**)((char*)this + 0xcc), 0, 0);
-    ScanRecords(this, *(JobRecord**)((char*)this + 0xb4), *(JobRecord**)((char*)this + 0xb8), 0, 0);
-    ScanRecords(this, *(JobRecord**)((char*)this + 0xdc), *(JobRecord**)((char*)this + 0xe0), 0, 0);
+    if (!mbEnabled) return;
+    if (gpAppProps->mpState->mBlocked != 0) return;
+
+    DateTime dt;
+    dt.FUN_0092e3d0(1);
+    dt.FUN_0092e470(9, -mRefreshInterval);
+    const u64 now = dt.mTime;
+
+    JobRecord* const pEndB = (JobRecord*)mpRecordsBEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsB; r != pEndB; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            mQueue.Push(pTx, r->mState == 0xb);
+        }
+    }
+    JobRecord* const pEndA = (JobRecord*)mpRecordsAEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsA; r != pEndA; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+        }
+    }
+    JobRecord* const pEndC = (JobRecord*)mpRecordsCEnd;
+    for (JobRecord* r = (JobRecord*)mpRecordsC; r != pEndC; ++r) {
+        if (r->mPendingBegin != r->mPendingEnd && mpAsssetDirectory->GetLastRefreshTime(r->mKey) < now) {
+            void* const pMem = PoolAllocKind2(0xf0);
+            cTxKind2* const pTx = pMem ? ((cTxKind2*)pMem)->Construct(2, r->mPendingBegin, r->mKey) : 0;
+            if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+        }
+    }
+
+    if (mpAsssetDirectory->GetLastRefreshTime(0xa86067e7) < now) {
+        using namespace FunctionalMatch;
+        CVec filters;
+        U32Range* const pList = mpFilters->GetList();
+        for (uint32_t* p = pList->mpBegin; p != pList->mpEnd; ++p)
+            filters.push_back(Constraint(0x2dd90af, 0, *p));
+
+        KeyVec results;
+        IObjectTemplateDB* const pDb = ObjectTemplateDB();
+        bool bFound;
+        {
+            Constraint sentinel(0);
+            Constraint anyOf(0, filters);
+            bFound = pDb->Query(&results, *(ConstraintRaw*)&anyOf, *(ConstraintRaw*)&sentinel);
+        }
+        if (bFound) {
+            U64Vec ids;
+            ids.reserve(results.size());
+            for (uint32_t i = 0; i < results.size(); ++i) {
+                u64 id;
+                if (mpAsssetDirectory->GetServerId(&results.mpBegin[i], &id, false)) ids.push_back(id);
+            }
+            U64FixedVec20 batch;
+            const uint32_t n = (uint32_t)ids.size();
+            const u64* pId = ids.mpBegin;
+            for (uint32_t i = 0; i < n; ++i, ++pId) {
+                batch.push_back(*pId);
+                if (batch.size() == 20 || i == n - 1) {
+                    void* const pMem = PoolAllocFeedGet(0xf0);
+                    cTxFeedGet* const pTx = pMem ? ((cTxFeedGet*)pMem)->Construct(&batch) : 0;
+                    if (pTx) { AutoTx tx(pTx); mQueue.push_back(tx); }
+                    batch.clear();
+                }
+            }
+        }
+    }
+    ProcessTransactionQueue();
 }

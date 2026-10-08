@@ -1,0 +1,2 @@
+00d27a70 SP::cCreatureCamera::ApplyPlayerDeltas  # PDB candidate (caller-scored); moves the camera along the player-delta direction clipped by nearby objects, or applies pitch/yaw/zoom deltas about the anchor
+00d28300 cFreeCamera::Update  # keyboard-driven free-look camera update(dt): distance/yaw/pitch/pan keys via the GameInputManager

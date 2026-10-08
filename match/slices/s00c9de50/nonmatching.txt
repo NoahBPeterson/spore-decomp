@@ -1,0 +1,1 @@
+00c9de50 1300 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same ordered calls/vslots/constants, 1745 vs 1759 bytes; differs in scratch-register naming of zero constants, ctor store order, load hoisting of property ids, shared false-return tail duplicated

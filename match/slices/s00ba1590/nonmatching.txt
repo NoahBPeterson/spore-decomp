@@ -1,0 +1,1 @@
+00ba1590 1130 complete; call sequence identical (56/56, 0 non-equal); regalloc differs (original keeps gd/loop vars in stack slots, ebx as zero), frame 0x814 vs 0x81c; needs /GS-

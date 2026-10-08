@@ -1,0 +1,1 @@
+00f1d5d0  1000  complete: all 11 switch cases, 91-call original vs 87 mine (size 1588/1660); common tail placed at end instead of after case 0, creature/other/building stat call tails merged

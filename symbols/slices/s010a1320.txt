@@ -1,0 +1,5 @@
+010a1320 hkWorldOperationUtil::splitSimulationIslands  # PDB name; splits active islands whose split check flag is set
+016e4174 g_hkThreadMemoryTls  # TLS index of the per-thread hkThreadMemory
+016e42a4 g_hkMonitorStreamCurrentTls  # TLS index of the monitor stream write pointer
+016e42a8 g_hkMonitorStreamEndTls  # TLS index of the monitor stream end pointer
+016e4178 hkMemory::s_instance  # global hkMemory*

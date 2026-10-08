@@ -1,0 +1,1 @@
+00fa5610 1290 cTerrainSphere::UpdateQuadsPostCamera (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete, 25/25 calls in order, size 1640 vs 1710; clear() schedule and frame size differ

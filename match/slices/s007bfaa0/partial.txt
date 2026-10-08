@@ -1,4 +1,3 @@
 # va  diff-bytes  reason (incomplete / approximated source)
 007bfaa0  0  skeleton: 1029-byte SP::cTestScript::HandleMessage renderer; global-state matrix setup and draw omitted
 007bfeb0  0  skeleton: 37-byte function that is only a C++ EH frame around an empty body; source construct that produces the bare frame not identified
-007bfee0  0  skeleton: 2197-byte capture routine; split-model capture pipeline omitted

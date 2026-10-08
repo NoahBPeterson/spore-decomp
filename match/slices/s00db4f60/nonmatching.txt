@@ -1,0 +1,1 @@
+00db5300 1209 SP::TRIBE_TAKE_OUT_TOOL_Tick complete (states 0-2, all branches; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- = no EH frame/cookie like the original); 2076 B vs 2089 B, 70/70 calls, same vtable slots/constants; diffs: Vec3 temp load order (y,z,x vs x,y,z), tail-merged returns, case-2 weight blend operand order, frame 0xb0 vs 0xb4

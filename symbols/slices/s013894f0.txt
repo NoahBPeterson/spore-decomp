@@ -1,0 +1,1 @@
+0138a710 SP::InitScenarioClassActAttributes  # fills 25 Simulator::Attribute records (globals 0x15adf20..) for cScenarioClassAct (ModAPI member offsets 0x484..0x4cc, +0/1/2 flags, dialogs +4/+0x170, description +0x448); name Claude-coined

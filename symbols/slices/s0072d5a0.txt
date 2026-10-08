@@ -1,0 +1,1 @@
+0072d6a0 MergeMeshesIntoModels  # guess: groups meshes by vertex group into GmeModel (0x58, 'Graphics' alloc) with vertex elements, sections, ranges and a material list

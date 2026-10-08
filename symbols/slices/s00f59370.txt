@@ -1,0 +1,1 @@
+00f595e0 EA::Swarm::cParticlesEffect::ApplyForceMap  # moves a particle through mForceMap (+0x1b8, world-space flag +0x1c4, scale mCurrentMapForceScale +0x1a4) with velocity/repulse/bounce modes; Claude-coined name

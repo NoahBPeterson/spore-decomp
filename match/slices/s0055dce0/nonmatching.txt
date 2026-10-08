@@ -4,3 +4,4 @@
 0055eae0  109  complete vector constructor; vtable/frame schedule differs
 0055eb70  137  complete key-membership query; rbtree helper call shape differs
 0055ec10   76  complete scalar deleting destructor; vtable/frame schedule differs
+0055e190  1800  complete rebuild/flush driver (stub-class form); /Od temp schedule and inline iterator copies differ

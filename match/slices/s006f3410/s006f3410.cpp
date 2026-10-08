@@ -24,9 +24,29 @@ extern char  g_1619530;   // 0x1619530
 // -----------------------------------------------------------------------------------------
 // SP::cModelInstanceSet
 // -----------------------------------------------------------------------------------------
+// Destination of the vertex expansion: hands out a writable run of vertices.
+struct IVertexSink {
+    virtual int  Lock(int wanted, char** pDst, int* pStride);   // returns how many it granted
+    virtual void Unlock();
+};
+
+// One entry of the instance vector at +0xc (0x38 bytes).
+struct sInstance {
+    float pad0;          // +0x00
+    float pos[3];        // +0x04
+    float scale;         // +0x10
+    float m[9];          // +0x14  3x3 matrix, row-major
+};
+
+struct V3 {
+    float x, y, z;
+    V3() {}
+    V3(float a, float b, float c) : x(a), y(b), z(c) {}
+};
+
 class cModelInstanceSet {
 public:
-    virtual void v0(void* pRenderer);            // 0x6f3410
+    virtual void v0(IVertexSink* pSink);         // 0x6f3410
     virtual void v1();                           // 0x6f3dd0
 
     unsigned int mModelInstance;                 // +0x4
@@ -132,9 +152,44 @@ void cModelInstanceSet::AddToRenderer(void* pRenderer) {
     }
 }
 
-// @ 0x006f3410  (large vertex-buffer builder; skeleton, see partial.txt)
-void cModelInstanceSet::v0(void* pRenderer) {
-    (void)pRenderer;
+// Expands one instance into a vertex: scaled 3x3 matrix rows, the position, and a colour.
+static __forceinline void WriteInstance(char* dst, int matOff, int colOff, const sInstance* in,
+                                        const float*& color, const float* white) {
+    float sc = in->scale;
+    *(V3*)(dst + matOff + 0x00) = V3(in->m[0] * sc, in->m[1] * sc, in->m[2] * sc);
+    *(V3*)(dst + matOff + 0x10) = V3(in->m[3] * sc, in->m[4] * sc, in->m[5] * sc);
+    *(V3*)(dst + matOff + 0x20) = V3(in->m[6] * sc, in->m[7] * sc, in->m[8] * sc);
+    ((float*)(dst + matOff + 0x30))[0] = in->pos[0];
+    ((float*)(dst + matOff + 0x30))[1] = in->pos[1];
+    ((float*)(dst + matOff + 0x30))[2] = in->pos[2];
+    float* c = (float*)(dst + colOff);
+    if (color) {
+        c[0] = color[0]; c[1] = color[1]; c[2] = color[2]; c[3] = color[3];
+        color += 4;
+    } else {
+        c[0] = white[0]; c[1] = white[1]; c[2] = white[2]; c[3] = white[3];
+    }
+}
+
+// @ 0x006f3410  (expand the instance vector into vertices handed out by pSink, 4 at a time)
+void cModelInstanceSet::v0(IVertexSink* pSink) {
+    int matOff = *(unsigned char*)&m5c;
+    int remaining = (int)(((char*)mTEnd - (char*)mTBegin) / 0x38);
+    const float* color = (const float*)mREnd;   // +0x20: optional per-instance RGBA array
+    int colOff = *((unsigned char*)&m5c + 1);
+    float white[4] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    const sInstance* src = (const sInstance*)mTBegin;
+    while (remaining > 0) {
+        char* dst;
+        int stride;
+        int n = pSink->Lock(remaining, &dst, &stride);
+        remaining -= n;
+        for (int i = 0; i < n; ++i) {
+            WriteInstance(dst, matOff, colOff, src++, color, white);
+            dst += stride;
+        }
+        pSink->Unlock();
+    }
 }
 
 // -----------------------------------------------------------------------------------------

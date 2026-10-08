@@ -4,3 +4,4 @@
 0047d910  32   AsInterface: implicit `this` home-slot ordering at /Od cannot be reproduced by naming
 0047d950  415  LoadProps: inlined GetPropertyT/GetPropertyAsKey templates and /Od slots differ
 0047e2c0  419  Shutdown: inlined AutoRefCount release sequences and /Od slots differ
+0047db30  1697  Init: complete (27/27 calls, all vtable slots 0x16c/0x58/0x48/0x40/0x44/0x38/0x3c, size 1889 vs 1925); /Od local slot order and a few accessor temporaries differ

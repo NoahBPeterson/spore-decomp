@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00bb7940  1504  PickRandomAsset: complete (45 calls like the original; same call order and vtable slots 0x4,0xc,0xc,0x74,0x4,0x2c,0x4,0x58; size 1759 vs 1737); stack-slot placement of the first-block Key vs the 4 bucket vectors, shrink-wrapped prologue/edi hoisting and a few cmp-vs-test choices differ

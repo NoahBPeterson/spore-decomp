@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00fe5a20  1552  UnlockBadge: complete (all paths, calls and vtable slots checked in order against the original; 91 calls each); badge stays in memory vs ebp in the original, so register allocation and block layout differ (size 2056 vs 2032). equiv.py: UNSUPPORTED (0/400 valid inputs).

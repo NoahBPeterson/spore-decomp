@@ -1,7 +1,7 @@
 // Slice s006775f0: Simulator::cSpaceInventory (UI inventory panel): ctor/dtor, item refresh,
 // two message handlers, EA::RectT<float>::Contains, window-tree find callbacks (AutoRefCount
 // handoff), and an eastl::deque<T(0x134),4> DequeBase::DoReallocPtrArray / DoInit.
-// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- (no /EHsc in this module).
+// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast (no /EHsc in this module).
 #include "types.h"
 
 typedef unsigned int uint32_t;
@@ -77,10 +77,8 @@ struct CamObj0 {
     virtual void c24(); virtual void c25(); virtual void c26(); virtual void c27();
     virtual void c28(); virtual void c29(); virtual void c2A(); virtual void c2B();
     virtual void c2C(); virtual void c2D(); virtual void c2E(); virtual void c2F();
-    virtual void c30(); virtual void c31(); virtual void c32(); virtual void c33();
-    virtual void c34(); virtual void c35(); virtual void c36(); virtual void c37();
-    virtual void c38(); virtual void c39();
-    virtual void ShowVec(Vector2 v, void* p);   // +0xc4 = slot 49
+    virtual void c30();
+    virtual void ShowVec(Vector2 v, Vector2* out);   // +0xc4 = slot 49
     virtual void c50(); virtual void c51(); virtual void c52(); virtual void c53();
     virtual void c54(); virtual void c55(); virtual void c56(); virtual void c57();
     virtual void SetThing(void*);               // +0xe8 = slot 58
@@ -95,10 +93,9 @@ struct LayoutWin {
     virtual void* GetRect();                    // +0x38 = slot 14
     virtual void v0F(); virtual void v10(); virtual void v11(); virtual void v12();
     virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
-    virtual void v17(); virtual void v18();
     virtual void SetImage(uint32_t);            // +0x5c = slot 23
-    virtual void v18b(); virtual void v19b();
-    virtual void Move(void*);                   // +0x6c = slot 27
+    virtual void v18b(); virtual void v19b(); virtual void v19c();
+    virtual void Move(struct RectF*);           // +0x6c = slot 27
     virtual void v1Cb(); virtual void v1Db(); virtual void v1Eb();
     virtual void SetState(int a, int b);        // +0x7c = slot 31
     virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
@@ -123,7 +120,7 @@ struct Key { uint32_t instanceID; uint32_t typeID; uint32_t groupID; };
 struct PropMgr {
     virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
     virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
-    virtual void p08(); virtual void p09();
+    virtual void p08(); virtual void p09(); virtual void p0A();
     virtual bool GetOrCreate(uint32_t id, uint32_t group, void* out);   // +0x2c = slot 11
 };
 
@@ -132,8 +129,8 @@ bool  __cdecl GetPropertyAsText(void* src, uint32_t key, void* dst);        // 0
 bool  __cdecl GetPropertyAsColorRGB(void* src, uint32_t key, void* dst);    // 0x006A11B0
 bool  __cdecl GetPropertyAsKey(void* src, uint32_t key, void* dst);         // 0x006A1250
 bool  __cdecl GetPropertyAsKeyInstance(void* src, uint32_t key, void* dst); // 0x006A12A0
-bool  __cdecl GetFloatArray(void* src, uint32_t key, void** dst, uint32_t* cnt); // 0x006A0AE0
-bool  __stdcall CheckThing(uint32_t a);                                     // 0x00828020
+struct SlotEnt { uint32_t a, b, c; };
+bool  __cdecl GetFloatArray(void* src, uint32_t key, uint32_t* cnt, SlotEnt** dst); // 0x006A0AE0
 
 struct String16 {                     // basic_string at +0x54 (16 bytes with allocator)
     char pad[16];
@@ -168,7 +165,7 @@ struct VecB {
     }
     void clear() {
         if (mpBegin != mpEnd) {
-            *(uint32_t*)mpBegin = 0;
+            *(unsigned short*)mpBegin = 0;
             mpEnd = mpBegin;
         }
     }
@@ -193,10 +190,11 @@ struct IWinProcVt {
 struct RefCountVt { virtual void r00(); };
 
 struct cSPUIPropertyLayout : IWinProcVt, RefCountVt {
-    char pad8[8];                               // +0x08
+    char pad8[4];                               // +0x08
     cSPUILayout mLayout;                        // +0x0c
-    char pad10[0x10];                           // +0x10..0x24
+    char pad10[0x14];                           // +0x10..0x24
     char pad24[0x54];                           // +0x24..0x78
+    void SetFlag(bool b);                       // 0x00828020 (writes +0x74)
     void SetCargoKey(uint32_t a, uint32_t b);   // 0x00827FA0 (writes +0x24/+0x28)
     cSPUIPropertyLayout();                      // 0x008286D0
     ~cSPUIPropertyLayout();                     // 0x00828670
@@ -215,20 +213,20 @@ extern float gS1486110;   // 0x01486110
 
 struct cSpaceInventory : cSPUIPropertyLayout {
     struct RcN { RefObj* p; RcN() : p(0) {} ~RcN() { if (p) p->Release(); }
-                 void reset() { RefObj* q = p; p = 0; if (q) q->Release(); } };
+                 void reset() { RefObj* q = p; if (q) { p = 0; q->Release(); } } };
     RcN      m78;       // +0x78
     RcN      m7c;       // +0x7c
     RcN      m80;       // +0x80
     VecB     mVec84;    // +0x84
     char     pad90[4];  // +0x90
-    uint32_t m94;       // +0x94
+    int      m94;       // +0x94
     bool     mb98;      // +0x98
     char     pad99[3];
     uint32_t m9c;       // +0x9c
 
     cSpaceInventory();                                  // 0x006775F0
     ~cSpaceInventory();                                 // 0x00677670
-    int  Update(uint32_t mode, Key* key, uint32_t c);   // 0x00677700
+    void Update(bool bEnable, Key* key, uint32_t c);    // 0x00677700
     bool HandleMsgA(uint32_t a, uint32_t b, uint32_t c, uint32_t d);  // 0x00677D90
     bool HandleMsgB(uint32_t a, uint32_t b, uint32_t c);              // 0x00677DF0
     void SetMaxCargoAmount(uint32_t n);                 // 0x00C87BC0 (external)
@@ -253,24 +251,25 @@ cSpaceInventory::~cSpaceInventory()
 }
 
 // @ 0x00677700
-int cSpaceInventory::Update(uint32_t mode, Key* key, uint32_t c)
+void cSpaceInventory::Update(bool bEnable, Key* key, uint32_t c)
 {
     m9c = key->instanceID;
     if (m78.p)
     {
-        if (CheckThing(mode))
+        SetFlag(bEnable);
+        if (bEnable)
         {
             if (m78.p->GetCam()) {
                 CamObj0* pCam = m78.p->GetCam();
-                pCam->SetThing(*(void**)pCam);
+                pCam->SetThing(m78.p);
             }
             RcN* pSel = &m80;
-            pSel->reset();
             PropMgr* pMgr = (PropMgr*)GetPropertyManager();
-            String16 str;
-            mVec84.clear();
+            pSel->reset();
             if (pMgr->GetOrCreate(key->instanceID, key->groupID, pSel))
             {
+                String16 str;
+                mVec84.clear();
                 if (GetPropertyAsText(pSel->p, 0x54d95160, &str))
                 {
                     {
@@ -301,110 +300,123 @@ int cSpaceInventory::Update(uint32_t mode, Key* key, uint32_t c)
                 if (w3)
                 {
                     Key key2;
+                    key2.instanceID = 0; key2.typeID = 0; key2.groupID = 0;
                     if (GetPropertyAsKey(pSel->p, 0x54d95162, &key2))
                         SelectItem(w3, &key2);
                 }
                 m94 = 0;
                 if (GetPropertyAsKeyInstance(pSel->p, 0x54d95164, &m94))
                 {
-                    uint32_t page = 0;
+                    int page = 0;
                     switch (m94)
                     {
-                        case 0xa426730b: page = 0x6133600; break;
-                        case 0xad56080c: page = 0x6133601; break;
-                        case 0xf71fa311: page = 0x6133602; break;
-                        case 0xbeb528cb: page = 0x6133603; break;
-                        case 0x2db6dad3: page = 0x6133604; break;
+                        case (int)0xa426730b: page = 0x6133600; break;
+                        case (int)0xad56080c: page = 0x6133601; break;
+                        case (int)0xf71fa311: page = 0x6133602; break;
+                        case (int)0xbeb528cb: page = 0x6133603; break;
+                        case (int)0x2db6dad3: page = 0x6133604; break;
                     }
                     for (int id = 0x6133600; id < 0x6133605; ++id)
                     {
                         LayoutWin* w = mLayout.FindWindowByID(id, 1);
-                        if (w)
-                            w->SetState(1, id == (int)page);
-                    }
-                }
-                {
-                    // per-slot visibility pass over the four cargo-slot pages
-                    uint32_t count = 0;
-                    uint32_t* arr = 0;
-                    GetFloatArray(pSel->p, 0x54d95163, (void**)&arr, &count);
-                    for (int i = 0; i < 4; ++i)
-                    {
-                        bool bValid = (i >= (int)count);
-                        LayoutWin* w = mLayout.FindWindowByID(0x4c01bbe + i, 1);
-                        if (w)
-                        {
-                            RectF* r = (RectF*)w->GetRect();
-                            float width = r->mRight - r->mLeft;
-                            w->SetState(1, (int)bValid);
+                        if (w) {
+                            bool bSel = (id == page);
+                            w->SetState(1, bSel);
                         }
-                        (void)bValid;
+                    }
+                }
+                float fWidth = 0.0f;
+                uint32_t count = 0;
+                SlotEnt* arr = 0;
+                GetFloatArray(pSel->p, 0x54d95163, &count, &arr);
+                int nSkip = 4 - (int)count;
+                for (int i = 0; i < 4; ++i)
+                {
+                    bool bValid = (i >= nSkip);
+                    LayoutWin* w = mLayout.FindWindowByID(0x4c01bbe + i, 1);
+                    if (w)
+                    {
+                        RectF* r = (RectF*)w->GetRect();
+                        fWidth = r->mRight - r->mLeft;
+                        w->SetState(1, bValid);
+                    }
+                    if (bValid)
+                    {
+                        RcN sel2;
+                        PropMgr* pm2 = (PropMgr*)GetPropertyManager();
+                        sel2.reset();
+                        if (pm2->GetOrCreate(arr[i - nSkip].a, 0x449505af, &sel2))
+                        {
+                            Key k2;
+                            k2.instanceID = 0; k2.typeID = 0; k2.groupID = 0;
+                            if (GetPropertyAsKey(sel2.p, 0xd4d959e2, &k2))
+                                SelectItem(w, &k2);
+                            if (m7c.p)
+                                w->SetState(0x10, 0);
+                        }
                     }
                 }
                 {
-                    // final reposition of the selected-tool window
+                    // reposition the selected-tool window by how many slots are filled
                     LayoutWin* wa = mLayout.FindWindowByID(0x54f63a3e, 1);
-                    uint32_t kk = 0xd570ede2;
-                    if (mode == 2) kk = 0xd570ede1;
-                    else if (mode == 3) kk = 0xd570ede0;
-                    else if (mode != 1) goto done;
-                    LayoutWin* wb = mLayout.FindWindowByID((int)kk, 1);
-                    if (wb && wa)
+                    uint32_t kk = 0;
+                    switch ((int)count)
                     {
-                        float fScale = 1.0f;
-                        if (fScale > gS1485378)
-                        {
-                            RectF* r1 = (RectF*)wa->GetRect();
-                            float f34 = r1->mLeft, f38 = r1->mTop, f3c = r1->mRight, f40 = r1->mBottom;
-                            RectF* r2 = (RectF*)wb->GetRect();
-                            float width1 = f3c - f34;
-                            float width2 = r2->mRight - r2->mLeft;
-                            float vx = width2 - width1;
-                            vx = vx * gS1471064 - (float)(3 - (int)mode) * fScale;
-                            float vy = f38 + vx;
-                            Vector2 v(vx, vy);
-                            wa->Move(&v);
-                        }
+                        case 1: kk = 0xd570ede2; break;
+                        case 2: kk = 0xd570ede1; break;
+                        case 3: kk = 0xd570ede0; break;
                     }
-                done:;
-                }
-                // part 2: camera-facing update
-                if (c)
-                {
-                    if (m78.p)
+                    if (kk)
                     {
-                        if (m78.p->GetCam())
+                        LayoutWin* wb = mLayout.FindWindowByID((int)kk, 1);
+                        if (wb && wa)
                         {
-                            CamObj0* pCam = m78.p->GetCam();
-                            if (!mb98)
+                            if (fWidth > gS1485378)
                             {
-                                RectF rect;
-                                rect.mLeft = 0; rect.mTop = 0; rect.mRight = 0; rect.mBottom = 0;
-                                GetBoundingScreenRect(&rect, (void*)c);
-                                RectF* r = (RectF*)m78.p->GetRect2();
-                                float width = r->mRight - r->mLeft + gS1486110;
-                                float fx;
-                                if (rect.mTop >= width)
-                                    fx = rect.mTop - width;
-                                else
-                                    fx = rect.mRight + gS1486110;
-                                float fy = rect.mLeft + (rect.mBottom - rect.mTop) * gS1471064 - width;
-                                Vector2 vv(fx, fy);
-                                pCam->ShowVec(vv, &rect);
+                                RectF* r1p = (RectF*)wb->GetRect();
+                                RectF rc1 = *r1p;
+                                RectF* r2 = (RectF*)wa->GetRect();
+                                float width1 = rc1.mRight - rc1.mLeft;
+                                float width2 = r2->mRight - r2->mLeft;
+                                float vx = (width2 - width1) * gS1471064 - (float)(3 - (int)count) * fWidth;
+                                RectF nr;
+                                nr.mLeft = vx; nr.mTop = rc1.mTop;
+                                nr.mRight = width1 + vx; nr.mBottom = rc1.mBottom;
+                                wb->Move(&nr);
                             }
-                            else
-                            {
-                                DoScreenThing((void*)c, m78.p, 0);
-                            }
-                            Refresh();
-                            return 0;
                         }
                     }
                 }
             }
+            // part 2: camera-facing update
+            if (c && m78.p && m78.p->GetCam())
+            {
+                if (!mb98)
+                {
+                    RectF rect;
+                    GetBoundingScreenRect(&rect, (void*)c);
+                    RectF* r = (RectF*)m78.p->GetRect2();
+                    float width = r->mRight - r->mLeft + gS1486110;
+                    float fx;
+                    if (rect.mLeft >= width)
+                        fx = rect.mLeft - width;
+                    else
+                        fx = rect.mRight + gS1486110;
+                    float fy = rect.mTop + (rect.mBottom - rect.mTop) * gS1471064
+                               - (r->mBottom - r->mTop) * gS1471064;
+                    Vector2 vv(fx, fy);
+                    Vector2 pos;
+                    m78.p->GetCam()->ShowVec(vv, &pos);
+                    m78.p->SetView(pos.x, pos.y);
+                }
+                else
+                {
+                    DoScreenThing((void*)c, m78.p, 0);
+                }
+            }
+            Refresh();
         }
     }
-    return 0;
 }
 
 // @ 0x00677D90

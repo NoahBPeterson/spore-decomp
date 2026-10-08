@@ -1,2 +1,1 @@
 00708f40 1406 cLightingWorld::ApplyGlobalState: not reconstructed (1406-byte evaluator; skeleton only)
-007094c0 1916 cLightingWorld::UpdateSamples: not reconstructed (1916-byte evaluator; skeleton only)

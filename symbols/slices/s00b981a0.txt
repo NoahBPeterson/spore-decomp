@@ -1,0 +1,3 @@
+00b983b0 SP::cSpotGrid::FinishRegions  # fastcall this=grid; sorts the region list by area, grows rectangles over fully covered neighbours, recomputes border flags, drops dead regions (called by SetupPlanetSpots when bFillRegions)
+00b90730 RegionAreaGreater  # pass-by-pointer comparator: return b->area(+0xc) < a->area; pushed as the sort predicate
+00bbf6c0 SortRegions  # eastl::sort(first, last, pred): introsort(2*log2 n) then insertion sorts

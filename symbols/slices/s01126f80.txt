@@ -1,0 +1,1 @@
+01126f80 hkInertiaTensorComputer_computeShapeMassProperties  # recursive shape->mass props walker; vtbl +8 getType switch, calls compute*VolumeMassProperties + combineMassProperties

@@ -1,0 +1,1 @@
+00ad2ae0  1411  complete (all 11 switch cases, same ordered calls/vslots/constants; size 1824 vs real 1700 bytes before jump table, 65 vs 64 calls); /O2 /MD /Gy /TP /arch:SSE /fp:fast; register allocation (out in ebx not esi) and one un-merged shared tail differ

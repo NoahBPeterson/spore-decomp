@@ -1,0 +1,1 @@
+00f3f110  1892  flags /O2 /MD /Gy /EHsc /TP ; complete. rule-kind switch with the same 16 TryApply / 3 Compute / 5 helper-call sites in decision order; cl merges two identical ctx=10 tails and the flag slot reuse (byte store into arg slot) differs; size 2027 vs 2109

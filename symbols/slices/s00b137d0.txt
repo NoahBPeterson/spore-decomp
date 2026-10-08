@@ -1,0 +1,1 @@
+00b13c50 SP::cTerrainCameraController::UpdateCameraFrame  # name guessed; dt clamp, FOV tangents, anchor-above-terrain clamp, SetTransform/near/far on the camera object, 5-slot message 0x60e4e46e

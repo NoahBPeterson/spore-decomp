@@ -3,3 +3,4 @@
 00b16270  491  camera-interpolation reset; store order / x87-vs-SSE zeroing differs
 00b16450   57  vector add-list offsets: cl hoists the three list loads before the destination pointer
 00b16490   54  normalize+extend: component register assignment (xmm2/3/4) differs
+00b15b00  689  four Hermite splines (distance/pitch/direction/orientation); complete, call/vcall sequence identical; scheduling of SSE temps and 16-aligned quaternion frame slots differs

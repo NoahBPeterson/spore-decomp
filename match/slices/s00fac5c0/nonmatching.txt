@@ -1,0 +1,1 @@
+00fac5c0 1500 complete behavior (strand quad builder; AddQuad's EAX arg passed as first stack arg); register allocation, frame alignment and x87/SSE interleave differ; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

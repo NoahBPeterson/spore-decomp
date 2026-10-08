@@ -1,0 +1,1 @@
+010a5070 1300 complete; register allocation / block layout differ (cl keeps TlsGetValue ptr and island pointer in different regs), flags /vc71 /O2 /MD /Gy /TP (no EH)

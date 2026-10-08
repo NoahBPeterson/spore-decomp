@@ -1,0 +1,1 @@
+00caf650 Simulator::cFlyingLocomotion::ApplyFacing  # called at the end of cFlyingLocomotion::Update (s00cb02f0) with the steer direction and mDeltaTime

@@ -1,0 +1,2 @@
+00d8bd30 SP::CAN_EAT_FRUIT_Decide  # PDB candidate (caller-scored); cdecl float Decide(creature, p2, p3, flags): idle-anim fruit / held fruit / fruit lists / planet-surface fruit, claims via stimulus set
+00c034d0 ?Test@cPred@@QAE_NPAUcFruitRec1@@@Z  # fruit-record predicate functor (thiscall on empty functor, 1 arg)

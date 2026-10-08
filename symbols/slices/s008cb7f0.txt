@@ -1,0 +1,1 @@
+008cb7f0 BuildGlyphT2KS  # name guessed; recursive T2K compact-glyph builder (components, shifted/scaled components, contours, delta points, 4 phantom points, hinting/stroking at depth 0)

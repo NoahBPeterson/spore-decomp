@@ -1,0 +1,1 @@
+009ecac0  -  complete: IK per-bone finish pass (distance clamp, child recursion, constraint re-aim, pivot update); /O2 /MD /Gy /TP /arch:SSE /fp:fast; register allocation, frame layout and x87/SSE mix differ; callee 0x9ec360 (eax/esi register convention) modeled as leading args

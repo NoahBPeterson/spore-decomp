@@ -7,3 +7,4 @@
 006275d0 SP::cCreatureCameraBase::~cCreatureCameraBase  # PDB-resolved
 00627660 SP::cCreatureCameraBase::FUN_00627660
 00627ca0 SP::cCreatureCameraBase::Activate  # PDB candidate (caller-single)
+00627660 SP::cCreatureCameraBase::PushOutOfGround  # computes 4 ground-clearance samples around the near plane; if the camera is below, raises it and corrects pitch with acos

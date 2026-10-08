@@ -1,0 +1,1 @@
+00f8e6c0  1504  complete (ray vs terrain shell, march+bisect; min/max via reference select as orig); 1956 vs 1962 B, 5 vs 5 calls; equiv PASS; p=n*t+o computed in x87 here vs SSE+spill in orig, stack slot layout differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

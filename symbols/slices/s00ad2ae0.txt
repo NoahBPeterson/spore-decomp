@@ -1,0 +1,1 @@
+00ad2ae0 ComputeTargetPosition  # name used by slice s00ad4b60 for this callee (Claude-coined); switch over 11 placement modes returning a surface-snapped Vector3, cdecl (out, target, mode, id, kind, offset)

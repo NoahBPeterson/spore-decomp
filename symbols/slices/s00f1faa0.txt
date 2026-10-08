@@ -1,0 +1,1 @@
+00f1faa0 IntroSequenceController_Update  # thiscall(uint dtMs): state machine on +0x90 (1 fade, 3 countdown, 5/6 stopwatch-driven trigger posting); name is a guess

@@ -1,0 +1,2 @@
+00978df0 1370 complete WinGridView::SortRowsByColumn (collect column cells, merge_sort, erase+reinsert with new rows, remap selection, invalidate); regalloc/block layout differ; difftest UNSUPPORTED (0/400 valid inputs: needs a real matrix)
+00979440 1682 complete WinGridView::SortColumnsByRow (transposed); same; difftest UNSUPPORTED (0/1500 valid)

@@ -1,0 +1,3 @@
+010c9c70 hkCylinderShape::castRay  # vtable slot 5; TtrcCylinder timer, shrinks the axis by the convex radius, then capsule-style ray test + end caps
+010c2ad0 hkCapsuleShape::closestPointLineSeg  # cdecl(point, a, b, out) per havok_names; called with (ray from, A', B', closest)
+010c2890 hkCapsuleShape::closestInfLineSegInfLineSeg  # cdecl, 9 args (a, da, b, db, distSq&, t&, u&, closestA&, closestB&)

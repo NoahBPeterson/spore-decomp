@@ -1,0 +1,1 @@
+00fb0e00  2131  complete cTerrainSphereQuad::RebuildHeightVB (20/20 calls, 2 vcalls in order); register allocation and spill slots differ

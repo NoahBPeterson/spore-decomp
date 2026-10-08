@@ -1,0 +1,1 @@
+0115b910 rw::audio::core::HELPER_CMpegLayer3B::GetScaleFactors  # ISO III_get_scale_factors twin of 01159cc0 (slen tables 0x14cb344/354, side info +0x150, gr info +0x154, scalefac 0x7c at +0x1b4); byte-exact

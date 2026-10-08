@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00bfb020  1599  complete (65 direct calls + 4 vcalls in identical order); register allocation (this/iterators/locals) and frame 0x3c vs 0x30 differ, need-cost float multiply reassociated by /fp:fast; difftest WEAK (6.7% coverage, no mismatch)

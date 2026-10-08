@@ -1,0 +1,1 @@
+0105c9d0 1727 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same 13 calls in order, size 0.90x; register allocation and float temp scheduling differ (original uses xmm4-xmm7). equiv UNSUPPORTED (fake-arity: pointer-soup vcall/object inputs)

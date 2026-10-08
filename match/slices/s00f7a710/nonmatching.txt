@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00f7a710  1864  complete (all paths, 7 calls same order, 2180 vs 2228 B); stack-slot layout of buf/stride/Vector3 temps and x87/SSE scheduling of the dir normalise differ

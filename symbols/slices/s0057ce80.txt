@@ -1,1 +1,13 @@
-0057ce80 FUN_0057ce80  # no PDB name; constructor-like vtable/field initializer
+0057ce80 ??0cAppModeEditorBase@SP@@QAE@XZ  # SP::cAppModeEditorBase::cAppModeEditorBase (retail ctor, size 0x5fc); sets singleton 0x15e4ef0
+013f57f8 ??_7cAppModeEditorBase@SP@@6BcIAppMode@@@  # primary vtable (PDB ??_7cAppModeEditorBase@SP@@6BcIAppMode@1@@)
+013f57e4 ??_7cAppModeEditorBase@SP@@6BcILayer@@@  # vtable stored at +4
+013f57e0 ??_7cAppModeEditorBase@SP@@6BcIHintProcessor@@@  # vtable stored at +8
+013f57c8 ??_7cAppModeEditorBase@SP@@6BcISPEditorNameProvider@@@  # vtable stored at +0xc
+013f57b8 ??_7cAppModeEditorBase@SP@@6BIHandlerRC@@@  # vtable stored at +0x10
+013f57a8 ??_7cAppModeEditorBase@SP@@6BRefCountVTemplateInt@@@  # vtable stored at +0x14
+013f57a4 ??_7cAppModeEditorBase@SP@@6BcIUnknownBase7@@@  # vtable stored at +0x1c
+013f1ab0 ??_7cILayer@@6B@  # base-phase vtable stored at +4
+013ef63c ??_7cISPEditorNameProvider@@6B@  # base-phase vtable stored at +0xc
+013eb384 ??_7IHandlerRC@@6B@  # base-phase vtable stored at +0x10
+013ec458 ??_7RefCountVTemplateInt@@6B@  # base-phase RefCountVTemplate<int> vtable stored at +0x14
+0140b5a0 ??_7cIHintProcessor@@6B@  # base-phase vtable stored at +8 (shared image vtable)

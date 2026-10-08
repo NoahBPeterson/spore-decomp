@@ -1,0 +1,1 @@
+0103e8e0 SP::cSPSpaceTrading::CreateNPCInventory  # PDB name via card; refreshes/creates the NPC store for the visited planet and fills the spice-trade lists

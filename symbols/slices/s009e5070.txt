@@ -1,0 +1,14 @@
+009e5070 ?Load@Table@@QAEXPBUSrc@@@Z  # Anim gait table loader: builds Entry/Inner/Gait from the flat record stream
+009df630 ?reserve@?$Vec@UItem@@@@QAEXH@Z  # vector<Item>::reserve (12-byte items)
+009e04e0 ?realloc_insert@?$Vec@UItem@@@@QAEXPAUItem@@ABU2@@Z  # vector<Item> grow-and-insert
+009df400 ?reserve@?$Vec@UGaitA@@@@QAEXH@Z  # vector<GaitA>::reserve (0x44-byte elements)
+009df4c0 ?reserve@?$Vec@UGaitB@@@@QAEXH@Z  # vector<GaitB>::reserve (0x58-byte elements)
+009df570 ?reserve@?$Vec@UGaitC@@@@QAEXH@Z  # vector<GaitC>::reserve (0x1c-byte elements)
+009e4700 ?reserve@?$Vec@UEntry@@@@QAEXH@Z  # vector<Entry>::reserve (0xa4-byte elements)
+009e4a00 ?Insert@EntryArr@@QAEXPBUEntry@@@Z  # sorted-by-key insert-or-assign of an Entry
+009dbc60 ?Assign@Inner@@QAEXPBU1@@Z  # Inner scalar fields copy
+009e1370 ?AssignItems@Inner@@QAEXPBU1@@Z  # Inner items list copy
+009e22f0 ?AssignGaits@Inner@@QAEXPBU1@@Z  # Inner gait list copy
+009e1df0 ??0Inner@@QAE@XZ  # Inner default ctor
+009de770 ?destroy@?$Vec@UGait@@@@QAEXPAUGait@@0@Z  # destroy range of Gaits (frees their three key lists)
+009e1030 ??0Gait@@QAE@XZ  # Gait default ctor

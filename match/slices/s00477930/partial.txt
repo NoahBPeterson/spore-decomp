@@ -1,1 +1,0 @@
-00477930 - large (2350B) editor per-frame handle-update loop; model-instantiation/transform/bounding-box body omitted, skeleton only

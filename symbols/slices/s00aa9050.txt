@@ -1,0 +1,5 @@
+00aa9050 cCollider::Collide  # thiscall(cParticle*, float dt) -> bool; Swarm particle vs surface response by desc flags 14/15/16 (Claude-coined name)
+007cdee0 Xform::Transform  # thiscall ret 4 (Vec3*): rotate by m (flags bit1), scale, translate
+007cda70 Xform::InverseTransformPoint  # thiscall ret 4 (Vec3*): subtract t, divide by scale, inverse rotate
+00a78e90 Xform::InverseTransformDir  # thiscall ret 4 (Vec3*): divide by scale, inverse rotate
+00a7ca50 Xform::InverseRotate  # thiscall ret 4 (Vec3*): inverse rotate only

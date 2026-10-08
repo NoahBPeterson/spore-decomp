@@ -197,13 +197,85 @@ void cSPEditorVerbIconData::Init(uint32_t level) {
   (void)level;
 }
 
-// @ 0x005e4db0
-float GetLevelForType(uint32_t type, uint32_t index) {
-  (void)type;
-  (void)index;
-  return 0.0f;
-}
+// Reads one creature-capability stat out of the stats block (+0x590..+0x6ac), keyed by the
+// capability property id (FNV hash of "bite", "sprint", ...).  Counts are uint32 and converted to float.
+struct CreatureStats {
+  uint32_t w[0x6b0 / 4];
+  float F(unsigned off) const { return *(const float*)&w[off / 4]; }
+  float U(unsigned off) const { return (float)w[off / 4]; }
+  float I(unsigned off) const { return (float)(int)w[off / 4]; }
+};
 
+// @ 0x005e4db0
+float GetLevelForType(const CreatureStats* obj, int type) {
+  switch (type) {
+    case 0x93a8cfc8: return obj->F(0x640);
+    case 0x99f85c5b: return obj->U(0x6a4);
+    case 0x9e3f42cb: return obj->U(0x688);
+    case 0xa09e2868: return obj->U(0x670);
+    case 0xb0f439a4: return obj->U(0x61c);   // glide
+    case 0xad68447a: return obj->U(0x5f4);   // stealth
+    case 0xbe1409e9: return obj->U(0x638);
+    case 0xb3ed313f: return obj->U(0x68c);
+    case 0xc1e9f31c: return obj->U(0x634);
+    case 0xcfa9bdb5: return obj->U(0x690);
+    case 0xcaaf9176: return obj->U(0x65c);
+    case 0xc3d98d60: return obj->U(0x680);
+    case 0x2dfb4f9f: return -1.0f;
+    case 0x31ccd0d2: return -1.0f;
+    case 0x45a6f219: return -1.0f;
+    case 0x57a3bd5a: return -1.0f;
+    case 0x5f6fac4c: return -1.0f;
+    case 0x811328b0: return -1.0f;
+    case 0xa28a67e8: return -1.0f;
+    case 0xb39f7db3: return -1.0f;
+    case 0xb4074212: return -1.0f;
+    case 0xd89d2d9e: return -1.0f;
+    case 0xd9bcb9f0: return -1.0f;
+    case 0xdfa0d6bf: return -1.0f;
+    case 0x41a6ec56: return -1.0f;
+    default: return -1.0f;
+    case 0xdb2d51a3: return obj->U(0x604);   // health
+    case 0xdfb699f5: return obj->U(0x5fc);   // call
+    case 0xe480e089: return obj->U(0x610);   // jump
+    case 0xe2654048: return obj->F(0x644);
+    case 0xdfbb4a45: return obj->U(0x698);
+    case 0xee8347b0: return obj->U(0x5f8);
+    case 0xf2967c99: return obj->U(0x618);   // sense
+    case 0xf1cb44c4: return obj->U(0x660);
+    case 0xf01a9fc2: return obj->U(0x6ac);
+    case 0xf502dd07: return obj->U(0x5e0);   // strike
+    case 0x056b2e45: return obj->U(0x668);
+    case 0xff6bafa5: return obj->U(0x5d8);   // charge
+    case 0xfd3d2eda: return obj->F(0x590);   // grasp
+    case 0x0ac4aeed: return obj->U(0x628);   // attack
+    case 0x19e2694a: return obj->U(0x5ec);
+    case 0x1765233b: return obj->U(0x64c);
+    case 0x1c9ad396: return obj->U(0x684);
+    case 0x1f0deaf6: return obj->U(0x6a0);
+    case 0x2070fea8: return obj->U(0x664);
+    case 0x27785bd2: return obj->U(0x630);   // armor
+    case 0x26341ede: return obj->U(0x600);   // speed
+    case 0x21d4870e: return obj->U(0x654);
+    case 0x28ebaf02: return obj->F(0x66c);
+    case 0x30e7f354: return obj->U(0x674);
+    case 0x2ffeb19c: return obj->U(0x5e4);   // sing
+    case 0x310ffcdb: return obj->U(0x5dc);   // spit
+    case 0x39fc121d: return obj->U(0x650);
+    case 0x42d64108: return obj->U(0x6a8);
+    case 0x4d467cc1: return obj->U(0x614);   // sprint
+    case 0x5577a531: return obj->I(0x648);
+    case 0x5ec025c8: return obj->U(0x62c);   // social
+    case 0x597bcd8d: return obj->U(0x694);
+    case 0x66f29bd3: return obj->U(0x678);
+    case 0x620d5edf: return obj->U(0x5d4);   // bite
+    case 0x60e2831a: return obj->U(0x5f0);   // pose
+    case 0x72b9fc4e: return obj->U(0x5e8);   // dance
+    case 0x7c0badbe: return obj->U(0x69c);
+    case 0x795819d8: return obj->U(0x658);
+    case 0x752bd435: return obj->U(0x67c);
+  }
+}
 // @ 0x005e5950
 void cSPCreatureVerbIconData::Init(uint32_t type, cSPCreatureVerbIconData* data) {
   (void)type;

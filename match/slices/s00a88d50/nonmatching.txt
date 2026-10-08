@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00a88d50  1596  complete EA::Swarm::cDistributeEffect colour/alpha curves + random variation + colour-map pass over samples [first,last); same 6 calls in order (4x RandomDoubleUniform, vcall 0x18 Contains, vcall 0x2c Sample), size 1885 vs 1851 (1.02x); difftest PASS (295 valid, 75.6% cov); t=(n+0.5)*inv is kept in SSE with _ReadWriteBarrier (x87 gave 1-ulp differences) but cl still schedules the desc loads before it and spills the p-transform temporaries differently

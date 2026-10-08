@@ -1,6 +1,5 @@
 # va  diff-bytes  reason
 0097cea0  n/a  partial; WinGrid::SetCellWindow (465B) - SparseMatrix cell insert / copy path approximated
-0097d270  n/a  partial; ImageDrawable::CreateRenderables (1626B) - renderable build skeleton
 0097d8d0  n/a  partial; ImageDrawable helper (127B) skeleton
 0097dad0  n/a  partial; CursorWindow::CursorWindow ctor skeleton
 0097db30  n/a  partial; CursorWindow::OnRebuild skeleton

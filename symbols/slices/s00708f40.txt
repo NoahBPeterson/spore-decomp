@@ -1,0 +1,1 @@
+007094c0 SP::cLightingWorld::ApplyConfig  # re-derives ambient, dir-light/sun packs, light list and effect from the config at +0x10; called by SetLightingState (0070a560); invented name

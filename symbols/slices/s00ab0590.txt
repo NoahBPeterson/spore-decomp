@@ -1,0 +1,1 @@
+00ab0d90 EA::Swarm::cParticlesEffect::Update  # Claude-coined method name on the PDB class: same body as 00f60f00 (emit + age particles for dt); callees InitParticle 00aaeb90, DestroyParticle 00aaf670, UpdatePhysicsTimeStep 00aae900, update table 015655dc

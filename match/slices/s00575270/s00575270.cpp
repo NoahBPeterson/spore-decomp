@@ -65,6 +65,35 @@ void*           __cdecl EditorTuning();
 void*           __cdecl FXManager();
 bool  __cdecl SomeModeCheck();                    // 0x628930
 
+// --- TestCondition (0x575810) helpers ---
+struct IConfigManager {             // ConfigManager() 0x67dd30
+    PV8 PV4
+    virtual int Query(uint32_t id);               // +0x30
+};
+IConfigManager* __cdecl ConfigManager();
+
+struct cEffectsWorld {              // object at cAppModeEditorBase+0x90
+    char pad0[0x58];
+    int  mMode;                                   // +0x58 (current tool/mode id)
+};
+struct cSPPlayModeUI {              // object at *[self+0x74]+0xc
+    bool IsUIGroupEnabled(uint32_t group);        // 0x635890
+};
+struct cSPPlayMode {                // object at cAppModeEditorBase+0x74
+    char pad0[0xc];
+    cSPPlayModeUI* mpUI;                          // +0x0c
+};
+struct cSPPaletteUI {               // object at cAppModeEditorBase+0x3bc
+    bool IsPaintByNumber();                       // 0x5ca920
+};
+struct cDevFlags {                  // object at cAppModeEditorBase+0x4d0: one bool per debug/editor option
+    bool f[0x22];
+};
+struct IEditorEntries {             // object at cAppModeEditorBase+0x42c
+    PV
+    virtual int Query(int);                       // +0x04
+};
+
 // direct-call helpers on the parts palette
 struct cPartsPalette {
     void Reset(int, int);                         // 0x43cfc0
@@ -81,7 +110,7 @@ public:
     void  ResetEconomy();                         // 0x5754c0
     void  DoSomePaletteThing();                   // 0x575790
     void  StopSomething();                        // 0x5757b0
-    bool  TestCondition(int);                     // 0x575810
+    bool  TestCondition(uint32_t);                // 0x575810
     void  GetSomething1(int);                     // 0x575e20
     int   GetSomething2();                        // 0x575e50
     bool  SomeBool(char);                         // 0x575eb0
@@ -191,6 +220,125 @@ void cAppModeEditorBase::SetupCameraUI()
 // ---------------------------------------------------------------------------
 void cAppModeEditorBase::SetEconomyValue(int, int) {}
 void cAppModeEditorBase::ResetEconomy() {}
-bool cAppModeEditorBase::TestCondition(int) { return false; }
 void cAppModeEditorBase::ToggleCameraMode() {}
 void cAppModeEditorBase::UpdateSpineVertebra(float) {}
+
+// @ 0x00575810
+// Editor condition test: `id` is the FNV hash of a condition name.
+bool cAppModeEditorBase::TestCondition(uint32_t id)
+{
+    if (id == 0x29930bb7)
+        return true;
+    if (id == 0xb7b7acea)
+        return ConfigManager()->Query(0x4ea96cb) != 0;
+    cEffectsWorld* world = Field<cEffectsWorld>(this, 0x90);
+    int mode = -1;
+    if (world)
+        mode = world->mMode;
+    if (id == 0x32d61d9f)
+        return mode == 0xdfad9f51;
+    if (id == 0xaa9b2bd0)
+        return mode == 0x9ea3031a;
+    if (id == 0x7579b23b)
+        return mode == 0xdfad9f51 || mode == 0x9ea3031a;
+    if (id == 0xbb107abd) {
+        switch (mode) {
+        case 0x1a4e0708: case 0xbc1041e6: case 0x8f963dcb: case 0x98e03c0d: case 0x9ad7d4aa:
+        case 0xc0b74287: case 0xc15695da: case 0xf670aa43: case 0x441cd3e6: case 0x1f2a25b6:
+        case 0x2090a11b: case 0x2a5147a9: case 0x449c040f: case 0x7d433fad:
+            return true;
+        }
+        return false;
+    }
+    if (id == 0x5caf038c) {
+        switch (mode) {
+        case 0x1a4e0708: case 0xbc1041e6: case 0x99e92f05: case 0x8f963dcb: case 0x98e03c0d:
+        case 0x9ad7d4aa: case 0xc15695da: case 0xbdd15f3d: case 0xc0b74287: case 0xf670aa43:
+        case 0x449c040f: case 0x2a5147a9: case 0x1f2a25b6: case 0x2090a11b: case 0x441cd3e6:
+        case 0x72c49181: case 0x47c10953: case 0x4e3f7777: case 0x7d433fad:
+            return true;
+        }
+        return false;
+    }
+    if (id == 0xeef0ea70)
+        return Value<int>(this, 0x314) == 0;
+    if (id == 0x724eb5a)
+        return Value<int>(this, 0x314) == 1;
+    if (id == 0xe3e13884)
+        return Value<int>(this, 0x314) == 2;
+    if (id == 0xb801a2e9) {
+        int state = Value<int>(this, 0x314);
+        return state == 0 || state == 1;
+    }
+    if (id == 0x2ad85c42) {
+        if (Value<int>(this, 0x314) != 1)
+            return false;
+        return Field<cSPPaletteUI>(this, 0x3bc)->IsPaintByNumber();
+    }
+    if (id == 0x8c8e374f) {
+        cSPPlayMode* pm = Field<cSPPlayMode>(this, 0x74);
+        if (!pm || !pm->mpUI)
+            return false;
+        return pm->mpUI->IsUIGroupEnabled(0x3e831e4);
+    }
+    if (id == 0xbb8adf33) {
+        cSPPlayMode* pm = Field<cSPPlayMode>(this, 0x74);
+        if (!pm || !pm->mpUI)
+            return false;
+        return !pm->mpUI->IsUIGroupEnabled(0x3e831e4);
+    }
+    if (id == 0x1b31085a) {
+        cSPPlayMode* pm = Field<cSPPlayMode>(this, 0x74);
+        if (!pm || !pm->mpUI)
+            return false;
+        return pm->mpUI->IsUIGroupEnabled(0x445ea18);
+    }
+    if (id == 0x014d1e0f) return Field<cDevFlags>(this, 0x4d0)->f[0x00];
+    if (id == 0x161221ce) return Field<cDevFlags>(this, 0x4d0)->f[0x01];
+    if (id == 0x2430a336) return Field<cDevFlags>(this, 0x4d0)->f[0x02];
+    if (id == 0x6048fb3d) return Field<cDevFlags>(this, 0x4d0)->f[0x03];
+    if (id == 0x0b4ca6a9) return Field<cDevFlags>(this, 0x4d0)->f[0x04];
+    if (id == 0xf69266e2) return Field<cDevFlags>(this, 0x4d0)->f[0x05];
+    if (id == 0x9b2b681c) return Field<cDevFlags>(this, 0x4d0)->f[0x06];
+    if (id == 0x6d7524f9) return Field<cDevFlags>(this, 0x4d0)->f[0x07];
+    if (id == 0x7fed6bf3) return Field<cDevFlags>(this, 0x4d0)->f[0x08];
+    if (id == 0x7a0819fb) return Field<cDevFlags>(this, 0x4d0)->f[0x0a];
+    if (id == 0xfb1889ca) return Field<cDevFlags>(this, 0x4d0)->f[0x09];
+    if (id == 0x60a3fd04) return Field<cDevFlags>(this, 0x4d0)->f[0x0b];
+    if (id == 0x4ade2e01) return Field<cDevFlags>(this, 0x4d0)->f[0x0d];
+    if (id == 0xde0b3ea5) return Field<cDevFlags>(this, 0x4d0)->f[0x0e];
+    if (id == 0xb10dafec) return Field<cDevFlags>(this, 0x4d0)->f[0x0f];
+    if (id == 0x017d4661) return Field<cDevFlags>(this, 0x4d0)->f[0x10];
+    if (id == 0xd0092be3) return Field<cDevFlags>(this, 0x4d0)->f[0x11];
+    if (id == 0x1c06bc61) return Field<cDevFlags>(this, 0x4d0)->f[0x13];
+    if (id == 0xe433bdff) return Field<cDevFlags>(this, 0x4d0)->f[0x14];
+    if (id == 0xfd0e3743) return Field<cDevFlags>(this, 0x4d0)->f[0x15];
+    if (id == 0xf4e08da8) return Field<cDevFlags>(this, 0x4d0)->f[0x16];
+    if (id == 0xf15525c4) return Field<cDevFlags>(this, 0x4d0)->f[0x17];
+    if (id == 0xf7d20932) return Field<cDevFlags>(this, 0x4d0)->f[0x18];
+    if (id == 0x23f2b3a5) return Field<cDevFlags>(this, 0x4d0)->f[0x19];
+    if (id == 0xeca69bad) return Field<cDevFlags>(this, 0x4d0)->f[0x1a];
+    if (id == 0x7069b614) return Field<cDevFlags>(this, 0x4d0)->f[0x1b];
+    if (id == 0xf665cf0c) return Field<cDevFlags>(this, 0x4d0)->f[0x1c];
+    if (id == 0x33b98f05) return Field<cDevFlags>(this, 0x4d0)->f[0x1d];
+    if (id == 0x6e1efa9d) return Field<cDevFlags>(this, 0x4d0)->f[0x1e];
+    if (id == 0x51b1fcf8) return Field<cDevFlags>(this, 0x4d0)->f[0x1f];
+    if (id == 0x10378cc2) return Field<cDevFlags>(this, 0x4d0)->f[0x20];
+    if (id == 0xb6ce8f75) return Field<cDevFlags>(this, 0x4d0)->f[0x21];
+    if (id == 0x1fadf1ce) return Value<int>(this, 0x4e4) >= 2;
+    if (id == 0x3929810f) return Value<int>(this, 0x4e4) >= 3;
+    if (id == 0xe6bc4398) return Value<int>(this, 0x4e4) >= 4;
+    if (id == 0x0417cce9) return Value<int>(this, 0x4e4) >= 5;
+    if (id == 0x9040ba0a) return Value<int>(this, 0x4e4) >= 6;
+    if (id == 0x2546df79) {
+        cDevFlags* flags = Field<cDevFlags>(this, 0x4d0);
+        return flags->f[9] || flags->f[0xa] || flags->f[0xc];
+    }
+    if (id == 0x83bf2549) {
+        IEditorEntries* entries = Field<IEditorEntries>(this, 0x42c);
+        if (!entries)
+            return false;
+        return entries->Query(0) < 0;
+    }
+    return false;
+}

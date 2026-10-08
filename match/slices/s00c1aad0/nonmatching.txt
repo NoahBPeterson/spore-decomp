@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00c1b020  1442  creature leap-at-target step; complete (call/vcall sequence identical), register allocation and stack frame (0x11c vs 0x100) differ

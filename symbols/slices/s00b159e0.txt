@@ -3,3 +3,17 @@
 00b15a80  SP::cTerrainCameraController::OnMouseWheel   # forwards to cLocalInputState::OnMouseWheel (+0x31c)
 00b16490  FUN_00b16490  # normalize a cSPVector3 and extend by a scalar (fsqrt)
 00b16450  FUN_00b16450  # adds a list's +0x38 offset to a cSPVector3 when the list is non-empty
+00b15b00  SP::cTerrainCameraController::UpdateTargetSplines  # rebuilds the distance/pitch/direction/orientation Hermite splines (retail layout: SpVector = 0x14 B, spline = 0x3c B)
+0069d090  ?Clear@?$cHermiteSplineInterpolation@M@@QAEXXZ  # SP::cHermiteSplineInterpolation<float>::Clear
+0069a4c0  ?ComputeSlopes@?$cHermiteSplineInterpolation@M@@QAEXXZ  # CurveSlopes::ComputeSlopes (float)
+004afc80  ?resize@?$SpVector@M@@QAEXH@Z  # SpVector<float>::resize
+0069d100  ?Clear@?$cHermiteSplineInterpolation@UVector3@@@@QAEXXZ  # spline<Vector3>::Clear
+0069a750  ?ComputeSlopes@?$cHermiteSplineInterpolation@UVector3@@@@QAEXXZ  # spline<Vector3>::ComputeSlopes
+0069d150  ?Clear@?$cHermiteSplineInterpolation@UcSPQuaternion@@@@QAEXXZ  # spline<cSPQuaternion>::Clear
+0069ac00  ?ComputeSlopes@?$cHermiteSplineInterpolation@UcSPQuaternion@@@@QAEXXZ  # spline<cSPQuaternion>::ComputeSlopes
+00b15a20  ?resize@?$SpVector@UcSPQuaternion@@@@QAEXH@Z  # SpVector<cSPQuaternion>::resize (16-byte elements)
+00b137d0  ?GetTargetOrientation@cTerrainCameraController@@QAEXPAUcSPQuaternion@@@Z  # writes the camera target orientation quaternion
+00b0fd00  ?RotateTowards@@YAPAUVector3@@PAU1@PBU1@1M@Z  # slerp-like rotation of one direction towards another by t (returns out)
+00b12f90  ?SlerpOrientation@@YAXPAUcSPQuaternion@@PBUVector3@@1PBU1@2@Z  # builds the mid orientation from two direction points and two quaternions
+00f48aa0  ?GetActiveTerrainSphere@@YAPAUcTerrainSphere@@XZ  # returns the active terrain sphere (global 0x016c8ebc)
+00f987f0  ?GetRadius@cTerrainSphere@@QAEMXZ  # fld [p+0x3c]*[p+0x38]+[p+0x34] from [this+0x2c]

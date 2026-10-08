@@ -2,6 +2,11 @@
 // Optimized /O2 region (no frame pointer, ECX = this). Callees and globals are
 // masked relocations, so only the call shapes / offsets matter.
 #include "types.h"
+#include <xmmintrin.h>
+extern "C" double __cdecl cos(double);
+extern "C" double __cdecl sin(double);
+extern "C" double __cdecl acos(double);
+#pragma intrinsic(cos, sin, acos)
 
 // ------------------------------------------------------------------ oldanimation
 namespace rw { namespace oldanimation {
@@ -244,12 +249,148 @@ update:
 
 } // namespace SP
 
-// @ 0x0075b830
-// Partial: large x87+SSE rotational/translational spring blend helper. The aligned
-// prologue (and esp,-16; sub esp,0x144) and [ebp+8..0x1c] argument loads give a
-// __cdecl signature of 6 args returning float*. Reconstructing the 2099 bytes of SSE
-// math (rsqrtps Newton refinement, fcos/fsin slerp) is out of scope here; skeleton only.
-float* __cdecl cMultiBlender_Blend(float* out, float* src, int index, float t, int* ctx, int info)
+// Keyframe-pair (function at 0x0075b830) interpolation for rw::oldanimation: blends the rotation quaternion (nlerp for
+// nearly parallel keys, slerp otherwise) and/or the translation of two keyframes at fraction
+// (t - tA) / (tB - tA), appending the results to `out` (16-byte slots). `info` says whether the key
+// data is raw floats (info->compressed == 0) or must go through the per-component decoders.
+struct KeyInfo {
+    int compressed;                                   // +0x00
+    int vecStride;                                    // +0x04
+    int quatStride;                                   // +0x08
+    int pad0c[3];
+    void (__cdecl* decodeVec)(float* out, const void* in);    // +0x18
+    int pad1c;
+    void (__cdecl* decodeQuat)(float* out, const void* in);   // +0x20
+};
+
+struct KeyFlags {
+    int pad00[2];
+    unsigned int mask;                                // +0x08: bit 0-7 rotation, bit 8-15 translation
+    float offX, scaleX;                               // +0x0c, +0x10
+    float offY, scaleY;                               // +0x14, +0x18
+    float offZ, scaleZ;                               // +0x1c, +0x20
+};
+
+extern const float kSlerpAngle;                       // 0x01538360 (5 degrees in radians)
+
+#define SPLAT(v, i) _mm_shuffle_ps((v), (v), _MM_SHUFFLE(i, i, i, i))
+
+static __forceinline __m128 Dot4(__m128 a, __m128 b)
 {
-    return out;
+    __m128 d = _mm_add_ps(_mm_mul_ps(SPLAT(a, 0), SPLAT(b, 0)), _mm_mul_ps(SPLAT(a, 1), SPLAT(b, 1)));
+    d = _mm_add_ps(d, _mm_mul_ps(SPLAT(a, 2), SPLAT(b, 2)));
+    d = _mm_add_ps(d, _mm_mul_ps(SPLAT(a, 3), SPLAT(b, 3)));
+    return d;
+}
+
+// lane-0 transcendental helpers: spill the vector, run the x87 op on its first float, splat the result
+static __forceinline __m128 CosV(__m128 v)
+{
+    __declspec(align(16)) float f[4];
+    _mm_store_ps(f, v);
+    return _mm_set1_ps((float)cos(f[0]));
+}
+static __forceinline __m128 SinV(__m128 v)
+{
+    __declspec(align(16)) float f[4];
+    _mm_store_ps(f, v);
+    return _mm_set1_ps((float)sin(f[0]));
+}
+static __forceinline __m128 AcosV(__m128 v)
+{
+    __declspec(align(16)) float f[4];
+    _mm_store_ps(f, v);
+    return _mm_set1_ps((float)acos(f[0]));
+}
+
+static __forceinline __m128 BlendQuat(__m128 a, __m128 b, __m128 t)
+{
+    __m128 zero = _mm_set1_ps(0.0f);
+    __m128 dot = Dot4(a, b);
+    if (_mm_cvtss_f32(dot) < 0.0f) {
+        a = _mm_mul_ps(_mm_set1_ps(-1.0f), a);
+        dot = _mm_sub_ps(zero, dot);
+    }
+    __m128 cosLimit = CosV(_mm_set1_ps(kSlerpAngle));
+    if (_mm_cvtss_f32(dot) > _mm_cvtss_f32(cosLimit)) {
+        __m128 r;
+        if (_mm_cvtss_f32(Dot4(a, b)) > 0.0f)
+            r = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(b, a), t), a);
+        else
+            r = _mm_add_ps(_mm_mul_ps(_mm_add_ps(b, a), _mm_sub_ps(zero, t)), a);
+        __m128 sq = _mm_mul_ps(r, r);
+        __m128 s = _mm_add_ps(sq, _mm_shuffle_ps(sq, sq, 0xe));
+        s = SPLAT(_mm_add_ps(s, _mm_shuffle_ps(s, s, 1)), 0);
+        __m128 one = _mm_set1_ps(1.0f);
+        __m128 half = _mm_set1_ps(0.5f);
+        __m128 y = _mm_rsqrt_ps(s);
+        y = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(_mm_mul_ps(y, y), s)), _mm_mul_ps(y, half)), y);
+        y = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(one, _mm_mul_ps(_mm_mul_ps(y, y), s)), _mm_mul_ps(y, half)), y);
+        return _mm_mul_ps(y, r);
+    }
+    __m128 th = AcosV(dot);
+    __m128 one = _mm_set1_ps(1.0f);
+    __m128 s1 = SinV(_mm_mul_ps(_mm_sub_ps(one, t), th));
+    __m128 s2 = SinV(th);
+    __m128 s3 = SinV(_mm_mul_ps(th, t));
+    __m128 s4 = SinV(th);
+    __m128 wa = _mm_div_ps(s1, s2);
+    __m128 wb = _mm_div_ps(s3, s4);
+    return _mm_add_ps(_mm_mul_ps(wb, b), _mm_mul_ps(wa, a));
+}
+
+// @ 0x0075b830
+void __cdecl InterpolateKeyframes(float* out, char** keys, int timeOffset, float t, KeyInfo* info, KeyFlags* flags)
+{
+    unsigned int mask = flags->mask;
+    char* a = keys[0];
+    char* b = keys[1];
+    float tA = *(float*)(a + timeOffset);
+    float tB = *(float*)(b + timeOffset);
+    float frac = (t - tA) / (tB - tA);
+    __m128 f = _mm_set1_ps(frac);
+
+    if (info->compressed == 0) {
+        if ((unsigned char)mask) {
+            __m128 r = BlendQuat(_mm_load_ps((float*)a), _mm_load_ps((float*)b), f);
+            _mm_store_ps(out, r);
+            a += 16;
+            b += 16;
+            out += 4;
+        }
+        if ((unsigned char)(mask >> 8)) {
+            __m128 va = _mm_load_ps((float*)a);
+            __m128 vb = _mm_load_ps((float*)b);
+            __m128 r = _mm_add_ps(_mm_mul_ps(_mm_sub_ps(vb, va), f), va);
+            __declspec(align(16)) float tmp[4];
+            _mm_store_ps(tmp, r);
+            out[0] = tmp[0];
+            out[1] = tmp[1];
+            out[2] = tmp[2];
+        }
+    } else {
+        if ((unsigned char)mask) {
+            __declspec(align(16)) float qa[4];
+            __declspec(align(16)) float qb[4];
+            info->decodeQuat(qa, a);
+            info->decodeQuat(qb, b);
+            __m128 r = BlendQuat(_mm_load_ps(qa), _mm_load_ps(qb), f);
+            _mm_store_ps(out, r);
+            a += info->quatStride;
+            b += info->quatStride;
+            out += 4;
+        }
+        if ((unsigned char)(mask >> 8)) {
+            float ax, ay, az, bx, by, bz;
+            info->decodeVec(&ax, a);
+            info->decodeVec(&ay, a + info->vecStride);
+            info->decodeVec(&az, a + info->vecStride + info->vecStride);
+            info->decodeVec(&bx, b);
+            info->decodeVec(&by, b + info->vecStride);
+            info->decodeVec(&bz, b + info->vecStride + info->vecStride);
+            out[0] = flags->scaleX * ((bx - ax) * frac + ax) + flags->offX;
+            out[1] = flags->scaleY * ((by - ay) * frac + ay) + flags->offY;
+            out[2] = flags->scaleZ * ((bz - az) * frac + az) + flags->offZ;
+        }
+    }
 }

@@ -1,0 +1,9 @@
+00e9d300 cSPUFOGfx::Update  # per-frame UFO view sync (dev PDB name $E431), thiscall ret 8 (dt, unused)
+0041cb40 Matrix3::Assign  # thiscall ret 4, copies 9 floats
+00ba9370 cStarManager::GetEmpireByID  # PDB SP::cStarManager::GetEmpireByID
+00c32cd0 cEmpire::GetColor  # PDB SP::cEmpire::GetColor
+00e9a1f0 cSPUFOGfx::UpdateE9A1F0  # sibling of UpdateShieldEffect/UpdateCloakEffect, thiscall(ufo)
+00e9a6a0 cSPUFOGfx::UpdateE9A6A0  # thiscall(ufo)
+00e9a470 cSPUFOGfx::UpdateE9A470  # thiscall(ufo)
+00f67d90 cTerrainEditor::GetCurrentTerrainSphere  # PDB SP::cTerrainEditor::GetCurrentTerrainSphere (mov eax,[ecx+0x74])
+00c75650 cTerrainSphere::Check  # thiscall bool, tail-jmps 0xfeba90

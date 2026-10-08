@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)
+00da3b90  1755  SocialRespond::Activate: complete (flag-0x20 push-away path, already-targeted early return, 3 candidate stand points + sort + MoveToTarget + fallback walk, buffer delete); 22 calls/22, ordered call/vcall sequence identical, size 2026 vs 2157; x87/SSE scheduling and stack layout differ

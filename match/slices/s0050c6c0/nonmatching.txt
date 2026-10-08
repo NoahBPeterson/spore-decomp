@@ -2,3 +2,4 @@
 0050cfb0   37  2-component subtract: complete behaviour; /Od value-copy flavour differs
 0050d020   36  2-component scale: complete behaviour; /Od value-copy flavour differs
 0050d4e0  294  eastl::vector<float,sp_vector_allocator>::operator=: complete reimplementation; EASTL internals/schedule differ
+0050c6c0  1813  complete: Skin::Append (merge another skinning mesh; /Od /Ob1 /MD /Gy /TP); inline temporaries of the range-insert helpers and frame layout not reproduced (size 0.88x)

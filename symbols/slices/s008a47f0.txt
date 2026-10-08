@@ -1,0 +1,1 @@
+008a4a20 WeightedCovariance  # weighted 3D covariance (xx,xy,xz,yy,yz,zz) about the weighted mean; cdecl(float*,int,Vec3*,float*)

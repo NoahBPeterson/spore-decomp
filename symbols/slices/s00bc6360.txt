@@ -1,0 +1,1 @@
+00bc6690 CreatureSeqRegistry_Update  # per-frame update of the 0x940-byte sequence entries list at this+0x1c (see s00bc34c0 Reg)

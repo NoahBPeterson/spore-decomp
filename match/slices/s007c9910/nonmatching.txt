@@ -3,3 +3,4 @@
 007c9fa0  158 eastl vector DoAssignFromIterator: allocator-grow + relocate call schedule differs
 007ca060  211 eastl vector<pair> operator=: relocate/uninit-copy call schedule differs
 007ca150  91  GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
+007ca1c0  1474 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ

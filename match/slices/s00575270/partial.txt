@@ -1,5 +1,4 @@
 005754c0  90    ResetEconomy stub: reads property 0xb1b76a19 and forwards to 0x575270 (property conversion not translated)
 00575270  584   economy UI setup stub: 5 property lookups (FNV id hashes) + UI vtable slot 9 calls, not translated
 00575520  617   UpdateSpineVertebra stub: skin-manager queries + block iteration, not translated
-00575810  1548  TestCondition stub: large id-hash switch over editor conditions, not translated
 00575f70  454   camera-mode toggle stub: vtable calls + model offset updates, not translated

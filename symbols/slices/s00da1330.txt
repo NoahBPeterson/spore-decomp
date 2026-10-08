@@ -1,0 +1,1 @@
+00da1330 CommunityApproach::Start  # Claude-coined: retail class unnamed; thiscall ret 0x10 (community, obj2, entity, other); builds 5-point marker fan at +0xf4, starts effect +0x178, mode +0xec from RelationshipManager

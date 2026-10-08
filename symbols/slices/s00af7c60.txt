@@ -1,0 +1,1 @@
+00af7c60 SweepSphereVsTerrain  # name from slice s00c2b170 callers; returns bool (al), sweeps sphere vs object list from 0xb7a4a0, bounding sphere via 0xaf16f0, refine via SweepSphereVsMesh 0xaf5400

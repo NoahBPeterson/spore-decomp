@@ -1,0 +1,4 @@
+011f2480 rw::graphics::GlobalState::D3D9Initialize  # dev-PDB name; resets the D3D9 state mirror (render/texture-stage/sampler state, dirty+valid masks) then Dispatch + D3D9ClearDirtyFlags
+011f1c20 rw::graphics::GlobalState::Dispatch  # callee, pdb
+011f1b20 rw::graphics::GlobalState::D3D9ClearDirtyFlags  # callee: zeroes the dirty masks
+011f8af0 rw::graphics::DevCapsManager::GetD3DCAPS9  # returns the cached D3DCAPS9*

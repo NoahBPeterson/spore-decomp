@@ -1,0 +1,1 @@
+0091ccf0 1398 complete MapFileMSVC::Load (all 5 line kinds, 44 vs 47 calls, same callee order); flags /O2 /MD /Gy /TP /GS-; frame 0x1634 vs 0x163c, dtor inlining of the fixed strings and register allocation differ

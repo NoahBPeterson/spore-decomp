@@ -1,7 +1,2 @@
-007bd4c0 SP::cThumbnailManager::DilateWithoutAODone  # card annotation (PDB name)
-007bd500 SP::cThumbnailManager::cPaletteJobInfo::Shutdown  # card annotation (PDB name)
-007bd540 SP::cThumbnailManager::cPaletteThumbnailJob::Shutdown  # card annotation (PDB name)
-007bd5d0 SP::cThumbnailManager::cEditorJobInfo::Shutdown  # card annotation (PDB name)
-007bd640 SP::cThumbnailManager::cEditorThumbnailJob::Shutdown  # card annotation (PDB name)
-007bd6b0 SP::cThumbnailManager::cCSAThumbnailJob::Shutdown  # card annotation (PDB name)
-007bdd70 SP::cThumbnailManager::cGameThumbnailJob::Shutdown  # card annotation (PDB name)
+007bced0 SP::cThumbnailManager::DilateWithoutAOStart  # handles message 0x31e09b4 (s007c0780 dispatcher); posts BehaviorMessage 0x21d752f = DilateWithoutAODone; descriptive name
+007bd750 SP::cThumbnailManager::cCSAThumbnailJob::DrawLayer  # cILayer vtable slot 3 (0x140fe28); renders the CSA job's model worlds, optionally tiled 2x2; descriptive name

@@ -1,0 +1,1 @@
+007bb670 SP::cThumbnailManager::DilateSetup  # vtable-table handler (0x140ff64): builds cFilterChainJob with 7 cJobPostFilter (InitBlur 0xe7/0xd2/0xcc), RefBaseA22 callback 0x5221305, posts via IMgr+0x78

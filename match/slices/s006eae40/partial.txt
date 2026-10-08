@@ -1,3 +1,2 @@
-006eae40  2186  huge manager update; only the entry shape reproduced (body omitted)
 006eb8c0  115  EH copy-ctor; refcount/Matrix33-assign/EH-frame detail approximated
 006ec000  37  EH destructor; vector-dtor call and unwind funclet omitted

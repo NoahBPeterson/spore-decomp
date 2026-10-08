@@ -1,0 +1,1 @@
+011114b0 Simplex5::SelectVertexToDrop  # Havok hk4dGsk-area: picks the simplex vertex to drop from 5 (0x30-byte vertices); byte-exact with /vc71

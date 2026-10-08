@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00aaf700  1500  complete (all paths, 7 calls, same call order); original spills Vector3/matrix temps through the stack (movss->mov pairs) and keeps a dead cvtss2si, ours is leaner (1728 vs 2245 bytes); difftest WEAK (8.7% coverage, no mismatch)

@@ -1,2 +1,3 @@
 007026d0 SP::cHierGrid::FrustumQuery  # PDB candidate caller-single (dev 00e6c3d0)
 007028e0 eastl::hashtable<unsigned int,eastl::pair<unsigned int const,SP::cCellInfo>,...>::erase  # PDB gap-align (dev 00e6c7a0)
+00701e40 SP::cHierGrid::Query3  # descriptive: swept segment query, z/y/x slab traversal per level (ret 0xc, third arg unused)

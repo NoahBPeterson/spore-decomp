@@ -1,0 +1,1 @@
+00cc62c0  1153  COMPLETE DoTribeGrowthSim (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-). Same call/vcall-slot sequence (56 direct, 19 indirect), size 1574 vs 1603; diff is register allocation (best nearest-herd kept in ebp vs a stack slot in the original, ebx push placement) and local slot order.

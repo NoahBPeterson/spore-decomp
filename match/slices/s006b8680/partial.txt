@@ -1,2 +1,1 @@
-006b8680 1557 SP::GetSystemInfo - large system-info constructor, stubbed
 006b8f40 265 LCMapStringW case-mapping - EH-heavy, stubbed

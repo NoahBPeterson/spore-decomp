@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00d80a50  1710  MOVE_WITHIN_RANGE_Tick complete (all paths/calls, ordered vtable slots identical); frame/register allocation and block layout differ

@@ -1,1 +1,2 @@
 slices/s004a6690/s004a6690.cpp  ?FUN_4a6ca0@@YAXPAUcSPEditorModel@@H@Z  004a6ca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004a6690/s004a6690.cpp  ?AssignCollisionGroups@@YAXPAUcSPEditorBlock@@PAUBlockVector@@HH_N@Z  004a6690  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

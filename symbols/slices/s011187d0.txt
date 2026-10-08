@@ -1,0 +1,2 @@
+# va Name  # evidence
+011187d0 hkGeomConvexHullBuilder::markRedundantVertices  # name guessed (collinear/coplanar vertex flagging on a half-edge hull)

@@ -1,3 +1,4 @@
 005e5910  29  ReleaseData: refcount decrement compiles to sub ecx,1 + early reload instead of add ecx,-1 with the load kept in ecx
 005e5ba0  48  cSPCreatureVerbIconData scalar deleting dtor: reloads mData instead of caching it; refcount decrement shape differs
 005e5c80  105  GetIconName: eastl::wstring assign/WStr_Format argument scheduling differs
+005e4db0  1193  GetLevelForType complete (64-case capability-id switch); 22 bytes short: two dead "cmp" before fallthrough -1.0f blocks not reproduced; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

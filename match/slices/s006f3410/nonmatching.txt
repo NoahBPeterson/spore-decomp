@@ -10,3 +10,4 @@
 006f41e0  105  RenderRange: same loop shape as GetRange plus viewer calls; register allocation differs.
 006f4280  100  UpdateEffects: algorithm complete; x87 fild/fsubr and loop addressing differ.
 006f4330  105  cGraphicsHash::Resize: behavior complete; this/bytes/hash pointers are allocated to different registers (esi/ebx/edi).
+006f3410  1800  v0 (vertex expansion): complete, compiler unrolls by 4 like the original (45 mulss each); register allocation differs (remaining/src live in different places)

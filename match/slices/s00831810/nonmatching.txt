@@ -2,3 +2,4 @@
 00831ef0  153 ResetImages: 8x default-info refcount swap + descriptor re-apply schedule differs
 008320d0  113 cSPUIDebugConsole ctor: FixedBufferAllocator inline init schedule differs
 008321d0  40  CheckTimeout: virtual chain + Stopwatch x87 compare schedule differs
+00831810  1281 cSPUIStdDrawable::Draw: complete (6-pass layer draw + drop-shadow raster); needs /O2 /MD /Gy /TP /arch:SSE /fp:fast without /EHsc; pass-array/loop schedule differs

@@ -12,6 +12,14 @@ struct Vector3T {
     const float& operator[](int i) const { return (&x)[i]; }
 };
 struct Matrix33T { Vector3T xAxis, yAxis, zAxis; };
+struct RwVec3 : Vector3T {
+    RwVec3(const Vector3T& v);                                // @ 0x4098a0 (out-of-line copy ctor)
+};
+struct RwMat33 { Vector3T m[3];
+    RwMat33() {}
+    RwMat33(const RwMat33& o);                                // @ 0x41cb40 (out-of-line copy ctor)
+    Vector3T& operator[](int i) { return m[i]; }
+};
 struct cSPVector3 : Vector3T {
     cSPVector3() {}
     cSPVector3(const Vector3T& v) : Vector3T(v) {}
@@ -60,13 +68,21 @@ struct cSPEditorBlock {
     cSPVector3 mPosition;                       // +0x48
     char pad2[0x60 - 0x54];
     Matrix33T mOrientation;                     // +0x60
-    char pad3[0x33c - 0x84];
+    char pad3[0xa8 - 0x84];
+    RwMat33 mTorsoOrientation;                  // +0xa8
+    char pad3b[0x33c - 0xcc];
     cSPEditorBlock* mLink33c;                   // +0x33c
-    char pad4[0xc0c - 0x340];
+    char pad4[0x3f0 - 0x340];
+    struct LinkData { char pad[0xc]; cSPVector3 mPos; cSPVector3& GetPos() { return mPos; } }* mLinkData;  // +0x3f0
+    char pad4b[0xc0c - 0x3f4];
     vector<void*> mVec0c0c;                     // +0xc0c
     char pad5[0xdc8 - 0xc20];
     bitset<60> mFlags;                          // +0xdc8
 
+    cSPVector3& GetPosition() { return mPosition; }
+    RwMat33& GetTorsoOrientation() { return mTorsoOrientation; }
+    cSPEditorBlock* GetLink() { return mLink33c; }
+    LinkData* GetLinkData() { return mLinkData; }
     bool IsLimbPart();                          // @ 0x435c80
     int CalculateSymmetrySign();                // @ 0x44f240
 };
@@ -80,6 +96,7 @@ struct cSPEditorLimbJoint {
     cSPVector3 mPositionAtCreation;             // +0x34
 
     int Sign(bool recurse);                     // @ 0x4874c0
+    RwMat33 GetBasis(int mode);                 // @ 0x488600
     cSPEditorLimbJoint* FindFirstLimbLowerJoint();  // @ 0x487850
 };
 
@@ -107,6 +124,10 @@ struct cSPEditorLimbStructure {
 };
 
 // external helpers
+void RepinBlockToTorso(cSPEditorBlock* b, cSPVector3 pos, RwMat33 orient, int flag); // @ 0x49fbd0
+float FUN_00496760(cSPEditorBlock* b, float f, int flag);               // @ 0x496760
+RwMat33 FUN_004a25f0(RwMat33 m, int sign);                              // @ 0x4a25f0
+RwMat33 MatrixFromAxes2(const Vector3T& a, const Vector3T& b);          // @ 0x4a89e0
 cSPVector3 GetLimbOriginalPosition(cSPEditorLimbStructure* self);       // @ 0x48c610
 void FUN_0049d1f0(cSPEditorBlock* block, float x, int a, int b);        // @ 0x49d1f0
 void FUN_004961d0(cSPEditorBlock* block, cSPEditorLimbStructure* self); // @ 0x4961d0
@@ -246,19 +267,58 @@ void cSPEditorLimbStructure::FinalizeJoints(cSPEditorLimbJoint* joint, bool b)
 // @ 0x489cf0
 void cSPEditorLimbStructure::RepinJoint(cSPEditorLimbJoint* joint)
 {
-    // Best-effort reconstruction: handles the limb-part / non-limb-part repin cases.
-    if (!joint->mJointBlock->mVec0c0c.empty()) {
+    if (!joint->mLowerJoints.empty()) {
         cSPEditorLimbJoint* lower = joint->FindFirstLimbLowerJoint();
         if (lower) {
-            cSPVector3 pos = (joint->mUpperJoint == 0)
-                ? joint->mTargetPosition : joint->mJointBlock->mPosition;
-            cSPVector3 m = Mirror(pos);
-            joint->mTargetPosition = m;
+            const Vector3T* src = (joint->mUpperJoint == 0)
+                ? &joint->mTargetPosition : &joint->mJointBlock->GetPosition();
+            RwVec3 base(*src);
+            int mode = (joint->mUpperJoint != 0) ? 2 : 0;
+            RwMat33 basis = joint->GetBasis(mode);
+            cSPVector3 d = lower->mTargetPosition - base;
+            float len = VectorLength(d);
+            if (joint->Sign(false) == 0) base[0] = 0.0f;
+            RepinBlockToTorso(joint->mJointBlock, RwVec3(base), basis, 0);
+            FUN_00496760(joint->mJointBlock, len, 0);
+            FUN_004961d0(mBaseBlock, this);
         }
+    } else if (joint->mJointBlock->mFlags.test(0x2c)) {
+        RwVec3 pos(joint->mJointBlock->GetPosition());
+        RwVec3 pos2(pos);
+        if (joint->mJointBlock->GetLink()) {
+            cSPVector3 linkPos;
+            linkPos = joint->mJointBlock->GetLink()->GetLinkData()->GetPos();
+        }
+        RwMat33 basis = joint->GetBasis(2);
+        RwMat33 orient = FUN_004a25f0(basis, joint->Sign(false));
+        if (joint->Sign(false) == 0) pos[0] = 0.0f;
+        RepinBlockToTorso(joint->mJointBlock, pos, orient, 0);
     } else {
-        cSPVector3 pos = joint->mJointBlock->mPosition;
-        cSPVector3 m = Mirror(pos);
-        joint->mTargetPosition = m;
+        cSPVector3 pos(joint->mJointBlock->GetPosition());
+        RwMat33 orient(joint->mJointBlock->GetTorsoOrientation());
+        if (joint->Sign(false) == 0) pos[0] = 0.0f;
+        RepinBlockToTorso(joint->mJointBlock, pos, orient, 0);
+    }
+
+    int jointSign = joint->Sign(true);
+    int blockSign = joint->mJointBlock->CalculateSymmetrySign();
+    if (blockSign != jointSign) {
+        int unused = joint->mJointBlock->CalculateSymmetrySign();
+        if (jointSign == 0) {
+            RwMat33 m(joint->mJointBlock->GetTorsoOrientation());
+            cSPVector3 a(joint->mJointBlock->GetPosition());
+            cSPVector3 b(m[1]);
+            cSPVector3 c(m[2]);
+            a[0] = 0.0f;
+            b[0] = 0.0f;
+            c[0] = 0.0f;
+            b = normalized_safe(b);
+            c = normalized_safe(c);
+            cSPVector3 nb(-b);
+            m = MatrixFromAxes2(nb, c);
+            FUN_004961d0(mBaseBlock, this);
+            RepinBlockToTorso(joint->mJointBlock, a, m, 0);
+        }
     }
     for (int i = 0, n = joint->mLowerJoints.size(); i < n; i++)
         RepinJoint(joint->mLowerJoints[i]);

@@ -1,1 +1,2 @@
 00928ad0  13  global pool alloc; result-to-zero uses eax instead of the original edx copy
+00927be0  1684  complete pool malloc core (PPMalloc GeneralAllocator::MallocInternal); register allocation / block layout differ

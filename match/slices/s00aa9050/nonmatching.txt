@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00aa9050  1564  complete particle collider step (4 response modes); identical ordered 19 calls/vslots (v18 v20 v24 v28, Xform helpers, RandomDoubleUniform); frame 0x38 vs 0x24 (original keeps x87 spill temps in the dead arg home slots), rotation temp/copy and operand order of t+scale*p differ
+# difftest: 5/473 mismatches (alias run), all in the DirectionAt response paths whose output vector is filled only by the faked surface method (leftover stack bytes differ per side), same artifact as s00a9ddd0

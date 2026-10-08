@@ -1,1 +1,2 @@
-# va  diff-bytes  reason (none: every function below is byte-exact)
+# va  diff-bytes  reason
+0079c960  1843  complete sphere-vs-triangle-list clipper (modes 0/2/3); 1886 vs 2085 B; register allocation/spills and cross-jumped Edge calls differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,2 +1,3 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
 007bbde0  411  complete control-flow reconstruction of the cThumbnailManager message handler; the inlined refcounted-message constructor and the +0x16c/+0x170 refcount release vtable calls are modelled with stubs, so register/size differ
+007bb670  354  complete 7-filter dilate chain setup (same size 1895 B, 66 calls, identical vcall sequence); /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; local slot layout of the rect temps differs

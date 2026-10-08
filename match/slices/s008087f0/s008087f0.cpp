@@ -16,9 +16,9 @@ extern "C" void  VisitWindowTreeDepthFirst(IWin* w, void* cb, void* user);
 extern "C" void  WindowAreaCB(IWin* w, void* user);
 extern "C" Mat*  SetWindowSPShader(IWin* w, int shader, int zero);
 extern "C" void  UpdateRolloverFrame(IWin* w, float a, float b, float c, float d, int e, float f);
-extern "C" void  AnchorWindowToScreen(float* rect, IWin* child, IWin* parent);
-extern "C" void  AnchorWindowToWindow(IWin* parent, IWin* child, int flags, int zero);
-extern "C" void  GetMainWindowArea(float* out);
+extern "C" void  AnchorWindowToScreen(float* rect, IWin* child, int flags, IWin* parent);  // 0x008070d0
+extern "C" void  AnchorWindowToWindow(IWin* parent, IWin* child, int flags, int zero);  // 0x00807340
+extern "C" void  GetMainWindowArea(float* out);  // 0x00805ea0
 extern "C" IWin* FindWindowByID(void* layout, uint32_t id, int recurse);
 extern "C" void  DestroyRolloverFrame(IWin* w);
 
@@ -39,10 +39,35 @@ struct MatContainer {
 
 struct Pt { float x, y; };
 
+struct IWinOwner;
+struct cSPUILayout { IWin* FindWindowByID(uint32_t id, int recurse); };   // 0x008105b0 (thiscall)
+struct IUILayoutHolder {
+    virtual void AddRef(); virtual void Release();
+    int pad;
+    cSPUILayout layout;                            // +8
+};
+struct IWinOwner {
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual IUILayoutHolder* GetLayoutHolder(uint32_t id);   // +0x0c
+};
+template <class T> struct Ref {
+    T* p;
+    Ref() : p(0) {}
+    Ref(T* q) : p(q) { if (p) p->AddRef(); }
+    ~Ref() { if (p) p->Release(); }
+    Ref& operator=(T* q) {
+        if (q != p) { T* old = p; if (q) q->AddRef(); p = q; if (old) old->Release(); }
+        return *this;
+    }
+    T* operator->() const { return p; }
+    operator T*() const { return p; }
+};
+extern float gRolloverMinScale;                    // 0x01485378 (reads 0.0)
+
 // A generic UTFWin window / layout.  Only slots actually referenced below are typed; the rest
 // are placeholders so the vtable indices line up.
 struct IWin {
-    virtual void s00(); virtual void s01(); virtual void s02(); virtual void s03();
+    virtual void AddRef(); virtual void Release(); virtual void s02(); virtual void s03();
     virtual void* GetArea();                       // +0x10 (index 4)
     virtual void s05(); virtual void s06(); virtual void s07();
     virtual void s08(); virtual void s09(); virtual void s10(); virtual void s11();
@@ -62,7 +87,7 @@ struct IWin {
     virtual void s40(); virtual void s41();
     virtual void FnAc(bool a);                      // +0xac (index 43)
     virtual void s44(); virtual void s45();
-    virtual IWin* FnB4();                           // +0xb4 (index 45)
+    virtual IWinOwner* GetOwnerByID(uint32_t id);   // +0xb4 (index 45)
     virtual void FnB8(void* a, int b);              // +0xb8 (index 46)
     virtual void s47();
     virtual void FnC0(void* pt, Pt p);              // +0xc0 (index 48)
@@ -214,18 +239,99 @@ float* SPUIHelpers_GetBoundingScreenRect(float* out, IWin* w, char useChildren)
 
 // ------------------------------------------------------------------ 0x00808d40
 // Places the boxed rollover frame (9-slice) around a window; returns true when it was updated.
-// Large function; partial reconstruction of the placement loop.
-bool SPUIHelpers_UpdateRolloverFrame(IWin* w, float f2, float f3, float f4, float f5, int b7, float f8)
+struct RolloverSlot { int idx; int flags; float fx, fy; };
+
+static __forceinline void AnchorTo(IWin* parent, IWin* child, int f)
+{
+    AnchorWindowToWindow(parent, child, f, 0);
+}
+
+// @ 0x00808D40
+bool SPUIHelpers_UpdateRolloverFrame(IWin* w, float p2, float p3, float p4, float p5, bool showAll, float scale)
 {
     if (w == 0)
         return false;
-    IWin* frame = (IWin*)w->FnB4();
-    if (frame == 0)
+    IWinOwner* owner = w->GetOwnerByID(0x4a61af0);
+    IUILayoutHolder* h;
+    if (owner == 0 || (h = owner->GetLayoutHolder(0x4a61af0)) == 0)
         return false;
-    IWin* box = (IWin*)frame->Fn10C((void*)0x4a61af0);
-    if (box == 0)
-        return false;
-    (void)f2; (void)f3; (void)f4; (void)f5; (void)b7; (void)f8;
+    Ref<IUILayoutHolder> holder(h);
+    cSPUILayout* lay = &h->layout;
+
+    float rect[4];
+    rect[0] = p2 - 0.5f;
+    rect[2] = p2 + 0.5f;
+    rect[1] = p3 - 0.5f;
+    rect[3] = p3 + 0.5f;
+    Ref<IWin> win1(lay->FindWindowByID(0x4aa0748, 0));
+    win1->Fn68(1.0f, 1.0f);
+    AnchorWindowToScreen(rect, win1, 0x300, 0);
+    Ref<IWin> win2(lay->FindWindowByID(0x4a61af0, 1));
+    Ref<IWin> win3(lay->FindWindowByID(0x4a612b0, 1));
+
+    float A[4];
+    float* r2 = win2->GetRect();
+    A[0] = r2[0]; A[1] = r2[1]; A[2] = r2[2]; A[3] = r2[3];
+    float* r3 = win3->GetRect();
+    float b0 = r3[0], b1 = r3[1], b2 = r3[2], b3 = r3[3];
+    float dw = 0.0f, dh = 0.0f;
+    if (p4 > 0.0f) dw = p4 - (b2 - b0);
+    if (p5 > 0.0f) dh = p5 - (b3 - b1);
+    win2->Fn68((A[2] - A[0]) + dw, (A[3] - A[1]) + dh);
+
+    float M[4];
+    GetMainWindowArea(M);
+    win2->FnF0(1, 1)->SetVisible(true, false);
+    win2->FnF0(2, 1)->SetVisible(true, false);
+    win2->FnF0(3, 1)->SetVisible(true, false);
+    win2->FnF0(4, 1)->SetVisible(true, false);
+    win2->FnF0(5, 1)->SetVisible(true, false);
+    win2->FnF0(6, 1)->SetVisible(true, false);
+    win2->FnF0(7, 1)->SetVisible(true, false);
+    win2->FnF0(8, 1)->SetVisible(true, false);
+
+    RolloverSlot tbl[8] = {
+        { 7, 0x102, -1.0f, 0.0f },
+        { 8, 0x22, -0.707107f, 0.707107f },
+        { 6, 0x42, -0.707107f, -0.707107f },
+        { 1, 0x220, 0.0f, 1.0f },
+        { 5, 0x240, 0.0f, -1.0f },
+        { 3, 0x104, 1.0f, 0.0f },
+        { 2, 0x24, 0.707107f, 0.707107f },
+        { 4, 0x44, 0.707107f, -0.707107f },
+    };
+    Ref<IWin> cur;
+    for (int i = 0; i < 8; ++i) {
+        cur = win2->FnF0(tbl[i].idx, 1);
+        switch (tbl[i].idx) {
+        case 3: case 7:
+            AnchorTo(win2, cur, 0x900);
+            break;
+        case 1: case 5:
+            AnchorTo(win2, cur, 0x600);
+            break;
+        default:
+            break;
+        }
+        if (scale > gRolloverMinScale) {
+            float x = p4 - scale * tbl[i].fy;
+            float y = tbl[i].fx * scale + p5;
+            rect[0] = x - 0.5f;
+            rect[1] = y - 0.5f;
+            rect[2] = x + 0.5f;
+            rect[3] = y + 0.5f;
+        }
+        AnchorWindowToScreen(rect, cur, tbl[i].flags, win2);
+        FUN_008087f0(A, win2, 0);
+        float r0 = A[0] > M[0] ? M[0] : A[0];
+        float r1 = A[1] > M[1] ? M[1] : A[1];
+        float r2v = M[2] > A[2] ? M[2] : A[2];
+        float r3v = M[3] > A[3] ? M[3] : A[3];
+        if (r0 == M[0] && r1 == M[1] && r2v == M[2] && r3v == M[3])
+            break;
+    }
+    if (showAll)
+        cur->SetVisible(true, true);
     return true;
 }
 

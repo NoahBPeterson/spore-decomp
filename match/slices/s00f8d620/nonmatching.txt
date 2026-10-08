@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f8d620  1900  complete (switch cases checked vs Ghidra+asm, sibling s00f88650); 1972 vs 2120 B, 13 vs 12 calls; frame 0x68 vs 0x78, this/mFaceSize regalloc differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

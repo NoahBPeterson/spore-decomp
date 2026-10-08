@@ -1,0 +1,1 @@
+00d48010  1488  complete EvaluateEvent, same size 1754, same ordered calls (51 vs 50 only because cl tail-merges the Finish/free tails) and vtable slots 0xd8/0x58, same constants; equiv WEAK (no mismatch in 1480 valid inputs, 12% coverage, gates need avatar identity); diffs: no and esp,-8 frame, register allocation, block order; flags /O2 /MD /Gy /TP /arch:SSE

@@ -1,3 +1,4 @@
 00749bd0 535 cModelWorld::FindModelsInFrustum complete but register/schedule differs
 00749e50 472 cModelWorld::PickAgainstModel complete but register/schedule differs
 0074a070 464 model sphere/box filter complete but register/schedule differs
+00749370  1884  Complete cModelWorld closest-segment-hit query (flags /O2 /MD /Gy /TP /arch:SSE /GS-); inst1/inst2 Trace calls tail-merged, register allocation differs

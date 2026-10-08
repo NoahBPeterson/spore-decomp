@@ -1,2 +1,1 @@
 005fb430  -  cImportExport::UpdateExportThumb: only the signature / a false return are reconstructed; the image-update pipeline is not reproduced.
-005fbb00  -  cIDGenerator::CreateKey: only the signature / a zero return are reconstructed; the key-generation logic is not reproduced.

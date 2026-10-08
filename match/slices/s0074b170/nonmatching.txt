@@ -2,3 +2,4 @@
 0074b490  100  complete heap-swap loop; register/scheduling differs (original keeps loop bound in memory)
 0074b510  101  complete heap-swap loop (reversed comparator); same scheduling mismatch
 0074b690  125  complete SetInWorld intrusive-list move; list anchor/register layout differs
+0074b760  1321  complete UpdateFromPropList; frame/regalloc differs (original keeps 0x20000 flag const in edi, pl reloaded from stack; flags merged to 0x30000 here)

@@ -1,0 +1,1 @@
+00afc640 1342 flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; hex-ring point generator, complete (5 direct + 2 Release calls match); stack-slot assignment and spill/schedule of the setup math differ

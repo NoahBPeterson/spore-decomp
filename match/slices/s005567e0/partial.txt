@@ -1,2 +1,1 @@
-005567e0 1573 SP cVehicleModelSummarizer FunctionalMatch parameter setup; stub only (thiscall, ret 8)
 00556e30 662 SP cBuildingModelSummarizer parameter setup; stub only (thiscall, ret 8)

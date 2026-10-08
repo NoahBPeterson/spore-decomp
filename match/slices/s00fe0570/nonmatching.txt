@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00fe0570 349 InitSpaceMode: complete (105/105 call targets in order, 6/6 vcall slots, size 0.998x); frame 0x90 vs 0xa0 (locals pos/msg share slots, loop i/n slot order), shifts all esp offsets; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

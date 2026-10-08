@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00f52df0/s00f52df0.cpp  ?WriteSettings@@YAXPAUIStream@@PBUSettings@@@Z  00f52df0  /O2 /MD /Gy /EHsc /TP /arch:SSE

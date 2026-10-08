@@ -1,1 +1,2 @@
-# no byte-exact functions in this slice yet
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s007689a0/s007689a0.cpp  ?WriteResource@cGraphicsResourceFactory@SP@@QAE_NPAX000@Z  00769200  /O2 /MD /Gy /EHsc /TP /GS-

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00d10840 1556 SP::cCommunityEditor::UpdateObjectPlacement complete (60/60 calls, same vtable slots and order); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: frame 0x90 vs 0x6c (stack slot sharing of temps), operand order of x87/SSE temps
+00d10f90 1438 SP::cCommunityEditor::EndObjectPlacement complete (all branches; same vtable slots, 2 fewer calls only from cl cross-jumping two identical snap-slot sequences); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: zero kept in ebx in the original, spill layout

@@ -1,0 +1,1 @@
+0109b490 hkWorldOperationQueue::executeAllPending  # replays queued world operations (type byte jump table over 34 types, recursion when new ops were queued)

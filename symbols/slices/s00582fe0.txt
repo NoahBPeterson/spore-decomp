@@ -1,2 +1,2 @@
-00582fe0 FUN_00582fe0  # no PDB name
+00582fe0 SP::cAppModeEditorBase::RunSkinPaintOnEditorModel  # pdb_candidates (caller-single); this+0x150/0x154/0x360 offsets match s0057f6c0 class layout
 00583900 FUN_00583900  # no PDB name

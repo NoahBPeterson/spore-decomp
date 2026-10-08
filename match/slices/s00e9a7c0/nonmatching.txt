@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e9a940 1511 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast): 77/78 calls (original duplicates the string dtor), 1721 vs 1765 B; scheduling/register allocation differ

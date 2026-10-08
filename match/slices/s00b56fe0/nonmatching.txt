@@ -1,0 +1,1 @@
+00b56fe0 1409 complete; esi/edi register roles and vec-copy temp regs differ, otherwise same instruction stream (flags /O2 /arch:SSE /fp:fast)

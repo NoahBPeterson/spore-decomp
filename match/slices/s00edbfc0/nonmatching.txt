@@ -6,3 +6,4 @@
 00edcec0 40   index lookup: compare/return block layout differs
 00edcf30 35   id test: virtual-call chain returns full-width vs byte
 00edcf60 34   slider set: cvtsi2ss/cvttss2si rounding shape differs
+00edc0e0 1700 complete tab-strip layout; fp/scheduling and block layout differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

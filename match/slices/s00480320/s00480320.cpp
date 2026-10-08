@@ -45,13 +45,98 @@ void Ring_Rotate(char* self, float angle)
     (void)angle;
 }
 
-// @ 0x00480320 -- PARTIAL: large transform/basis builder; only the local-transform
-// and vector entry sequence is reproduced.
-void Ring_Build(char* self)
+// @ 0x00480320
+// Rotation ring Update: places the two attached handle objects (m14 and m18) at the ring
+// end point, orients them with the ring basis and queues their property updates.
+struct Vec3 {
+    float x, y, z;
+    Vec3() {}
+    Vec3(const Vec3& o) : x(o.x), y(o.y), z(o.z) {}
+    Vec3& operator=(const Vec3& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+struct Vec3POD { float x, y, z; };
+struct Mat33 { float m[9]; };
+Vec3 operator-(const Vec3& a, const Vec3& b);               // @ 0x0041db10
+Vec3 operator*(const Vec3& a, const float& s);              // @ 0x0041dca0
+
+struct XformBlock {
+    unsigned short flags;       // +0
+    unsigned short count;       // +2
+    Vec3POD pos;                // +4
+    char padc[4];
+    Mat33 basis;                // +0x14
+    void SetPos(const Vec3POD& v) { pos = v; flags |= 4; count++; }
+    void SetBasis(const Mat33& m) { basis = m; flags |= 2; count++; }
+};
+struct HandleObj {
+    char pad0[8];
+    XformBlock xf;              // +8
+    int mRefCount;              // +0x40
+    void AddRef() { mRefCount = mRefCount + 1; }
+};
+struct ObjRef {
+    HandleObj* mp;
+    ObjRef(const ObjRef& o) : mp(o.mp) { if (mp) mp->AddRef(); }
+    HandleObj* operator->() const { return mp; }
+    operator HandleObj*() const { return mp; }
+};
+struct MsgMgr {
+    virtual void s0();
+    virtual void s1();
+    virtual void s2();
+    virtual void s3();
+    virtual void s4();
+    virtual void s5();
+    virtual void Submit(ObjRef obj, int id, float a, float b, int c);   // vtable +0x18, ret 0x14
+};
+MsgMgr* GetMsgMgr();                                         // @ 0x00401060
+
+struct RingHandle {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13();
+    virtual float Param38(int a);                           // +0x38
+    virtual float Param3c(int a);                           // +0x3c
+    virtual void v16(); virtual void v17(); virtual void v18();
+    virtual void PointAt(Vec3* out, float t);               // +0x4c
+    char pad04[0x10];
+    ObjRef m14;                                             // +0x14
+    ObjRef m18;                                             // +0x18
+    char pad1c[0xc];
+    float mScale;                                           // +0x28
+
+    void GetOrientation(Mat33* out);                        // @ 0x004822d0
+    void Update();                                          // @ 0x00480320
+};
+
+void RingHandle::Update()
 {
-    Vector3 v0, v1, out;
-    VecSubtract(&out, (Vector3*)(self + 0x90), (Vector3*)(self + 0x9c));
-    VecNormalize(&v0, &out);
-    VecScale(&v1, (const float*)0x13eb1bc, &v0);
-    *(Vector3*)(self + 0xb8) = v1;
+    // slot order only (n31 = mgr, begin = along, p4 = basis, where = endpoint, p18 = side, mid = p0, p30 = p1)
+    MsgMgr* n31 = GetMsgMgr();
+    Vec3 mid, p30, begin, where, p18;
+    Mat33 p4;
+    PointAt(&mid, 0.0f);
+    PointAt(&p30, 1.0f);
+    begin = p30 - mid;
+    GetOrientation(&p4);
+    PointAt(&p18, -1.0f);
+    where = mid - begin * 0.1f;
+    if (m14) {
+        m14->xf.SetPos(*(Vec3POD*)&where);
+        m14->xf.SetBasis(p4);
+        n31->Submit(m14, 5, p18.x, mScale, 3);
+        n31->Submit(m14, 6, p18.y, mScale, 3);
+        n31->Submit(m14, 7, p18.z, mScale, 3);
+        n31->Submit(m14, 4, Param38(3), mScale, 1);
+    }
+    if (m18) {
+        m18->xf.SetPos(*(Vec3POD*)&where);
+        m18->xf.SetBasis(p4);
+        n31->Submit(m18, 5, p18.x, mScale, 3);
+        n31->Submit(m18, 6, p18.y, mScale, 3);
+        n31->Submit(m18, 7, p18.z, mScale, 3);
+        n31->Submit(m18, 4, Param3c(3), mScale, 1);
+    }
 }
+

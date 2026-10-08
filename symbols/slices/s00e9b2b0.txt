@@ -1,0 +1,1 @@
+00e9b2b0 SP::cSPUFOGfx::UpdateHitEffects  # PDB candidate name; erases stopped collision effects, places the rest on the UFO

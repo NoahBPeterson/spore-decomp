@@ -34,17 +34,51 @@ struct cSPEditorModel {
     cSPEditorBlock* GetBlock(int i); // 0x4accb0
 };
 
+struct BlockRef {
+    cSPEditorBlock* mpObject;
+    cSPEditorBlock* get() { return mpObject; }
+    cSPEditorBlock* operator->() { return mpObject; }
+};
+struct Alloc { Alloc() {} };                       // empty tag (temporary)
+struct SpAlloc { uint32_t mName; void Init(const Alloc&); };   // 0x429360 (ret 4)
+template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+struct BlockVec {
+    BlockRef* mpBegin;
+    BlockRef* mpEnd;
+    BlockRef* mpCapacity;
+    SpAlloc mAlloc;
+    uint32_t mPad;
+    BlockVec(const Alloc&);          // 0x540470
+    BlockVec(const Alloc& a, int) { mpBegin = 0; mpEnd = 0; mpCapacity = 0; mAlloc.Init(a); }
+    ~BlockVec();                     // 0x453eb0
+    BlockRef& operator[](int i) { return mpBegin[i]; }
+    int size() { return mpEnd - mpBegin; }
+    void* erase(BlockRef* first, BlockRef* last);   // 0x454280
+};
+
 struct cSPEditorBlock {
-    char pad0[0x28];
+    char pad0[0xc];
+    void* mPropList;                 // +0xc
+    char pad0b[0x28 - 0x10];
     cSPEditorModel* mEditorModel;    // +0x28
     char pad1[0x33c - 0x2c];
-    void* mSocketConnector;          // +0x33c
-    char pad2[0x3e0 - 0x340];
-    void* mField3e0;                 // +0x3e0
+    cSPEditorBlock* mSocketConnector; // +0x33c
+    cSPEditorBlock* GetParent2() { cSPEditorBlock* r = mSocketConnector; return r; }
+    BlockVec mChildren;              // +0x340
+    char pad2[0x3e0 - 0x354];
+    cSPEditorBlock* mLinked;         // +0x3e0
     char pad3[0xdc8 - 0x3e4];
     uint32_t mFlags[4];              // +0xdc8
 
     bool HasAnyBlockFlag();          // 0x435d40
+    int  CalculateSymmetrySign();    // 0x44f240
+    int  F44c050();
+    bool F44c030();
+    void F44ba20(int, int);
+    void F44bcf0(int, int);
+    cSPEditorBlock* GetLinked() { return mLinked; }
+    cSPEditorModel* GetModel() { return mEditorModel; }
+    void* GetPropList() { void* r = mPropList; return r; }
     bool IsFlagSet(unsigned int index)
     {
         bool result;
@@ -53,7 +87,7 @@ struct cSPEditorBlock {
         else { result = false; }
         return result;
     }
-    cSPEditorBlock* GetParent() { return (cSPEditorBlock*)mSocketConnector; }
+    cSPEditorBlock* GetParent() { return mSocketConnector; }
 };
 
 // @ 0x004a7c30
@@ -80,7 +114,7 @@ void GatherBlocks(cSPEditorBlock* param_1, UIntVector* param_2)
         if (!SameKey((ResKeySource*)blk, (ResKeySource*)param_1)) continue;
         param_2->push_back((uint32_t)blk);
         if (!model->FUN_004adc40()) continue;
-        uint32_t v = (uint32_t)blk->mField3e0;
+        uint32_t v = (uint32_t)blk->mLinked;
         if (v == 0) continue;
         uint32_t* it = param_2->mpBegin;
         uint32_t* end = param_2->mpEnd;
@@ -201,13 +235,82 @@ bool PostXformEffect(unsigned int id, char* src, void** out)
     return true;
 }
 
-// @ 0x004a7f30
-// Incomplete: the body is a large 2347-byte editor routine; only the entry
-// guards are represented. Listed in partial.txt.
-void SetSymmetricBlocksUIState(cSPEditorBlock* param_1, unsigned int param_2, unsigned char param_3)
-{
-    (void)param_1;
-    (void)param_2;
-    (void)param_3;
-}
+extern void FUN_0049dd20(cSPEditorBlock* b, BlockVec* out, int one);   // cdecl
+extern void GetBoolProperty(void* props, unsigned int id, bool* out);   // 0x407190 cdecl
 
+// @ 0x004a7f30
+void SetSymmetricBlocksUIState(cSPEditorBlock* b, unsigned int param_2, unsigned char p3)
+{
+    if (b->GetModel() != 0 && b->GetModel()->FUN_004adc40() && !b->IsFlagSet(0x39)) {
+        int item = b->CalculateSymmetrySign();
+        cSPEditorBlock* p13 = b->GetParent2();
+        if (b->IsFlagSet(0x23)) {
+            int tmp = b->F44c050();
+            bool t14 = false;
+            if (tmp == 0) { if (item == 0) t14 = true; }
+            else t14 = true;
+            if (t14) {
+                if (b->GetLinked() != 0 && b->GetLinked()->F44c030())
+                    b->GetLinked()->F44ba20(0, 0);
+            } else {
+                if (b->GetLinked() != 0 && !b->GetLinked()->F44c030() && !b->IsFlagSet(0x3a))
+                    b->GetLinked()->F44bcf0(0, 0);
+            }
+        } else if (!BlockBlocked(b)) {
+            if (b->GetLinked() != 0 && b->GetLinked()->F44c030())
+                b->GetLinked()->F44ba20(0, 0);
+            BlockVec v((Alloc()));
+            FUN_0049dd20(b, &v, 1);
+            for (int block = 0, mem = v.size(); block < mem; ++block) {
+                if (b->F44c030()) v[block]->F44bcf0(0, 0);
+                else v[block]->F44ba20(0, 0);
+            }
+            v.erase(v.mpBegin, v.mpEnd);
+            FUN_0049dd20(b->GetLinked(), &v, 1);
+            for (int block = 0, mem = v.size(); block < mem; ++block) {
+                if (b->GetLinked()->F44c030()) v[block]->F44bcf0(0, 0);
+                else v[block]->F44ba20(0, 0);
+            }
+            ScratchSlots<2>();
+        } else if (item == 0) {
+            if (b->GetLinked() != 0) {
+                bool h = b->IsFlagSet(0xb);
+                bool p33 = false;
+                void* elem = b->GetPropList();
+                GetBoolProperty(elem, 0x7bd0ca3e, &p33);
+                ScratchSlots<3>();
+                if (!p33 && (!h || !p3)) {
+                    if (b->F44c030()) {
+                        b->GetLinked()->F44ba20(0, 0);
+                        BlockVec w((Alloc()), 0);
+                        FUN_0049dd20(b->GetLinked(), &w, 1);
+                        for (int block = 0, mem = w.size(); block < mem; ++block) {
+                            if (w[block].get() != 0 && !w[block]->F44c030())
+                                w[block]->F44bcf0(0, 0);
+                        }
+                        ScratchSlots<2>();
+                    }
+                } else {
+                    if (b->F44c030() && !b->GetLinked()->F44c030() && !b->IsFlagSet(0x3a))
+                        b->GetLinked()->F44bcf0(0, 0);
+                }
+            }
+        } else {
+            if (b->GetLinked() != 0) {
+                if (b->F44c030()) {
+                    if (!b->GetLinked()->F44c030() && !b->IsFlagSet(0x3a)) {
+                        b->GetLinked()->F44bcf0(0, 0);
+                    } else {
+                        if (b->IsFlagSet(0x3a) && b->GetLinked()->F44c030())
+                            b->GetLinked()->F44ba20(0, 0);
+                    }
+                } else if (b->GetLinked()->F44c030()) {
+                    b->F44bcf0(0, 0);
+                }
+            }
+        }
+        BlockVec* t7 = &b->mChildren;
+        for (int block = 0, mem = t7->size(); block < mem; ++block)
+            SetSymmetricBlocksUIState((*t7)[block].get(), 0, p3);
+    }
+}

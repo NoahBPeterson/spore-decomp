@@ -1,0 +1,1 @@
+009e6040 checkerlib::LinearSolveInPlace  # 4x4 Gauss-Jordan solve in place, pivot threshold 1e-6, rhs = numRhs vector_4 columns

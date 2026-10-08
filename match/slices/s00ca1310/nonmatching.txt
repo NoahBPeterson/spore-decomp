@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)
+00ca1310  2169  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- : PathSolver::Solve complete (same-direction outer tangent, opposite-direction inner tangent with acos; 7 WrapAngle calls, 2 SignedAngle calls, 1 acos); module is LTCG so register/slot allocation and sqrt ordering differ

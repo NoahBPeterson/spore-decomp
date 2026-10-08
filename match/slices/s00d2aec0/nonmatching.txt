@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d2aec0  1166  complete cCreatureCamera::Update (/O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-); x87 vs SSE schedule of the camera-distance sqrt, RotateTowards/SlerpWrap result copies and block order differ

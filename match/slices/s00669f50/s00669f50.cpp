@@ -284,15 +284,298 @@ unsigned CmpAd::operator()(int a, int b) {
 
 typedef int (__thiscall *FnCmp2)(void*, void*, void*);
 
-// @ 0x00669f50
-// PARTIAL: SP::cSPUIFeedListItem::Init (1640 bytes). Skeleton only - the real
-// body does a long chain of property/key lookups plus eastl string setup.
-struct FeedItemInit {
-  int Init(int* a, int* b, unsigned c, void* d);
+// SP::cSPUIFeedListItem::Init stubs (retail layout; offsets from the disassembly)
+extern wchar_t g_EmptyW[2];                 // 0x01667bac (eastl shared empty string)
+void __cdecl operator_delete_array(void* p);  // 0x00f47380
+void* __cdecl operator_new_tag(unsigned size, const char* tag, int a, int b, int c, int d);  // 0x00f473a0
+
+struct FStr {                               // eastl::basic_string<wchar_t> (16 bytes)
+  wchar_t* mb;
+  wchar_t* me;
+  wchar_t* mc;
+  int mAlloc;
+  FStr() { mb = g_EmptyW; me = g_EmptyW; mc = g_EmptyW + 1; }
+  FStr(const FStr& o);                      // 0x0056e2d0
+  ~FStr() { Dealloc(); }
+  void Append(const wchar_t* p);            // 0x005c3d90
+  void AppendStr(const FStr* o);            // 0x00667c40
+  int FindA(const wchar_t* p, int pos);     // 0x00630630
+  int FindB(const wchar_t* p, int pos);     // 0x00608340
+  FStr* Substr(FStr* out, int pos, int n);  // 0x00453d20 (ret 0xc)
+  void MakeLower();                         // 0x005e8e80
+  void Dealloc();                           // 0x00933960
 };
-int FeedItemInit::Init(int* a, int* b, unsigned c, void* d) {
-  (void)a; (void)b; (void)c; (void)d;
-  return 1;
+struct CStr {                               // SP::cString (0x14 bytes)
+  char d[0x14];
+  CStr();                                   // 0x006b5060
+  ~CStr();                                  // 0x006b5240
+  wchar_t* GetText();                       // 0x006b55c0
+};
+struct Prop {
+  char pad[0x12];
+  unsigned short type;
+  bool* GetBool();                          // 0x0041e920
+  unsigned* GetUInt();                      // 0x0041ea00
+};
+struct NarrowStr {
+  void Assign(const void* o);               // 0x00579c60 basic_string<char>::operator=
+};
+struct Obj5467 {
+  int F5467e0();                            // 0x005467e0
+};
+
+bool __cdecl GetPropertyAsText(void* pl, unsigned key, CStr* out);        // 0x006a1360
+void __cdecl GetPropertyAsKeyInstance(void* pl, unsigned key, unsigned* out);  // 0x006a12a0
+void __cdecl GetPropertyAsKey(void* pl, unsigned key, unsigned* out);     // 0x006a1250
+void __cdecl GetPropertyAsUint32(void* pl, unsigned key, unsigned* out);  // 0x004af210
+void __cdecl GetBoolProp(void* pl, unsigned key, bool* out);              // 0x00407190
+void* PropertyManager();                    // 0x0067de30
+void* ConfigManager();                      // 0x0067dd30
+void* MessageServer();                      // 0x0067dcc0
+void* AuthManager();                        // 0x00607a60
+struct LayoutObj {
+  LayoutObj* Ctor();                        // 0x00810000 (cConnectionDialog ctor)
+  void Init(unsigned* key, int a, unsigned b);        // 0x008120d0
+  void SetParentWin(int win, int a, unsigned b);      // 0x008121b0
+  void SetReloadCallback(void* cb, void* self);       // 0x00810090
+};
+void __cdecl ReloadCallback(void* self, void* layout, int flag);   // 0x00669430
+extern unsigned g_1527824;                  // 0x01527824
+extern unsigned g_140041c;                  // 0x0140041c
+extern unsigned g_Keys24[24];               // 0x01400480
+extern unsigned g_MsgIds[2];                // 0x014003a0
+
+#define VTS(o, off) ((*(void***)(o))[(off) / 4])
+
+struct FeedItemInit {
+  char pad0[4];
+  char sub4[0x10];
+  bool b14;                 // +0x14
+  char pad15;
+  bool b16;                 // +0x16
+  char pad17;
+  FStr s18;                 // +0x18
+  FStr s28;                 // +0x28
+  unsigned u38, u3c;        // +0x38
+  FStr s40;                 // +0x40
+  NarrowStr s50;            // +0x50
+  char pad54[0x60 - 0x54];
+  int count60;              // +0x60
+  char pad64[0x78 - 0x64];
+  unsigned key78;           // +0x78
+  char pad7c[0x90 - 0x7c];
+  void* ref90;              // +0x90
+  void* layout94;           // +0x94
+  void* ref98;              // +0x98
+  void* ref9c;              // +0x9c
+  char pada0[0xc0 - 0xa0];
+  bool bc0;                 // +0xc0
+  char padc1[0x114 - 0xc1];
+  void* ahServer;           // +0x114
+  void* ahHandler;          // +0x118
+  void* ahIds;              // +0x11c
+  int ahCount;              // +0x120
+  int ahPrio;               // +0x124
+  unsigned u128, u12c;      // +0x128
+  int i130;                 // +0x130
+  int i134;                 // +0x134
+  unsigned u138;            // +0x138
+  int i13c;                 // +0x13c
+  bool b140;                // +0x140
+  bool b141;                // +0x141
+  char pad142[2];
+  unsigned u144, u148, u14c, u150, u154;   // +0x144
+  bool flags158[24];        // +0x158
+  unsigned u170;            // +0x170
+  char pad174[4];
+  unsigned typeKey;         // +0x178
+  unsigned propId;          // +0x17c
+  void* propList;           // +0x180
+  char pad184[4];
+  unsigned u188;            // +0x188
+  void* GetAssetList(void* vec);            // 0x00668d90 (ret 4)
+  bool Init(void* a1, void* a2, unsigned a3, void* a4, int a5);
+};
+
+struct AssetVec { char* b; char* e; char* c; };
+
+// @ 0x00669f50
+bool FeedItemInit::Init(void* a1, void* a2, unsigned a3, void* a4, int a5) {
+  (void)a5;
+  Prop* prop;
+  {   // AutoRefCount assignments
+    void* old = ref98;
+    if (a1 != old) {
+      if (a1) ((void(__thiscall*)(void*))VTS(a1, 0))(a1);
+      ref98 = a1;
+      if (old) ((void(__thiscall*)(void*))VTS(old, 4))(old);
+    }
+  }
+  {
+    void* old = ref9c;
+    if (a2 != old) {
+      if (a2) ((void(__thiscall*)(void*))VTS(a2, 0))(a2);
+      ref9c = a2;
+      if (old) ((void(__thiscall*)(void*))VTS(old, 4))(old);
+    }
+  }
+  propId = a3;
+  {
+    void* old = ref90;
+    if (a4 != old) {
+      if (a4) ((void(__thiscall*)(void*))VTS(a4, 8))(a4);
+      ref90 = a4;
+      if (old) ((void(__thiscall*)(void*))VTS(old, 0xc))(old);
+    }
+  }
+  b14 = true;
+  void* pm = PropertyManager();
+  if (propList != 0) {
+    void* old = propList;
+    propList = 0;
+    ((void(__thiscall*)(void*))VTS(old, 4))(old);
+  }
+  ((void(__thiscall*)(void*, unsigned, unsigned, void**))VTS(pm, 0x2c))(pm, propId, 0x4e5892eb, &propList);
+  if (propList != 0) {
+    void* cm = ConfigManager();
+    int cfg = ((int(__thiscall*)(void*, unsigned))VTS(cm, 0x30))(cm, 0x5de7b4a);
+    if (cfg == 1 && propList != 0 &&
+        ((bool(__thiscall*)(void*, unsigned, Prop**))VTS(propList, 0x24))(propList, 0x6397993, &prop) &&
+        prop->type == 1 && *prop->GetBool() == false)
+      return false;
+    if (propList != 0 &&
+        ((bool(__thiscall*)(void*, unsigned, Prop**))VTS(propList, 0x24))(propList, 0x6678df3, &prop) &&
+        prop->type == 10)
+      u188 = *prop->GetUInt();
+    GetPropertyAsKeyInstance(propList, 0x744717c3, &typeKey);
+    if (typeKey != 0xffffffff) {
+      CStr text1;
+      if (GetPropertyAsText(propList, 0x744717c5, &text1))
+        s18.Append(text1.GetText());
+      CStr text2;
+      if (GetPropertyAsText(propList, 0x5af1baf, &text2))
+        s40.Append(text2.GetText());
+      GetBoolProp(propList, 0x74b839b7, &b16);
+      GetBoolProp(propList, 0x744717c8, &bc0);
+      GetPropertyAsKey(propList, 0xf4906970, &key78);
+      GetBoolProp(propList, 0xb5135387, &b141);
+      GetPropertyAsKeyInstance(propList, 0x5e90865, &u150);
+      GetPropertyAsKeyInstance(propList, 0x5e9086c, &u154);
+      unsigned k = typeKey;
+      if (k == 0x11f44f6b || k == 0xe8104769 || k == 0x48a6f111) {
+        int i = 0;
+        do {
+          if (propList != 0 &&
+              ((bool(__thiscall*)(void*, unsigned, Prop**))VTS(propList, 0x24))(propList, g_Keys24[i], &prop) &&
+              prop->type == 1)
+            flags158[i] = *prop->GetBool();
+          i++;
+        } while (i < 0x18);
+        GetPropertyAsKeyInstance(propList, g_140041c, &u170);
+      }
+      switch (typeKey) {
+      case 0xe8104769:
+        GetPropertyAsKeyInstance(propList, 0x56b8d5e, &u144);
+        break;
+      case 0xaabe8769:
+        GetPropertyAsKeyInstance(propList, 0x144d7575, &u14c);
+        break;
+      case 0x984b7145:
+        GetPropertyAsKeyInstance(propList, 0x58b92cd, &u12c);
+        break;
+      case 0x11f44f6b: {
+        GetPropertyAsKeyInstance(propList, 0x744717c6, &u138);
+        int* b = (int*)a2;
+        if (b != 0) {
+          int v = b[0x10];
+          i130 = v & ((v < 0) - 1);
+          s28.Append((const wchar_t*)b[0]);
+          u38 = b[4];
+          u3c = b[5];
+          i13c = b[0x1a];
+          i134 = ((Obj5467*)b)->F5467e0();
+          s50.Assign(b + 0x15);
+          void* am = AuthManager();
+          long long id = ((long long(__thiscall*)(void*))VTS(am, 0x40))(am);
+          unsigned lo = (unsigned)id, hi = (unsigned)(id >> 32);
+          if ((unsigned)b[4] == lo && (unsigned)b[5] == hi)
+            b140 = 1;
+          else
+            b140 = 0;
+          int kind = b[0x1a];
+          if (kind == 2) {
+            s18.Append((const wchar_t*)b[0]);
+            {
+              FStr tmp(s18);
+              tmp.MakeLower();
+              if (tmp.FindB(L"maxis", 0) != -1)
+                key78 = 0xf29655f5;
+            }
+          } else if (kind == 3) {
+            FStr tmp;
+            tmp.Append((const wchar_t*)b[6]);
+            if (tmp.FindA(L"Assets tagged", 0) != -1) {
+              FStr sub;
+              s18.AppendStr(tmp.Substr(&sub, 0xf, (int)(tmp.me - tmp.mb) - 0x10));
+            }
+          } else {
+            s18.Append((const wchar_t*)b[6]);
+          }
+        }
+        break;
+      }
+      case 0x793a246b:
+        GetPropertyAsKeyInstance(propList, 0x744717c4, &u128);
+        break;
+      case 0x48a6f111:
+        GetPropertyAsUint32(propList, 0x71d9ed4, &u148);
+        break;
+      default:
+        break;
+      }
+    }
+  }
+  AssetVec av;
+  av.b = 0; av.e = 0; av.c = 0;
+  GetAssetList(&av);
+  int cnt = (int)(av.e - av.b) >> 4;
+  if (av.b != 0 && *(int*)(av.b - 4) != 0)
+    operator_delete_array(av.b);
+  count60 = cnt;
+  LayoutObj* lay;
+  void* mem = operator_new_tag(0x18, "Sporepedia", 0, 0, 0, 0);
+  if (mem != 0)
+    lay = ((LayoutObj*)mem)->Ctor();
+  else
+    lay = 0;
+  {
+    void* old = layout94;
+    if ((void*)lay != old) {
+      if (lay) ((void(__thiscall*)(void*))VTS(lay, 4))(lay);
+      layout94 = lay;
+      if (old) ((void(__thiscall*)(void*))VTS(old, 8))(old);
+    }
+  }
+  struct Key3 { unsigned a, b, c; } key3;
+  key3.c = g_1527824;
+  key3.a = 0xc1966e00;
+  key3.b = 0x510a95b;
+  ((LayoutObj*)layout94)->Init((unsigned*)&key3, 1, 0x5b598fa);
+  ((LayoutObj*)layout94)->SetParentWin((int)ref98, 1, 0x5b598fa);
+  ((LayoutObj*)layout94)->SetReloadCallback((void*)ReloadCallback, this);
+  ReloadCallback(this, layout94, 1);
+  void* handler = sub4;
+  void* srv = MessageServer();
+  ahServer = srv;
+  ahHandler = handler;
+  ahIds = g_MsgIds;
+  ahCount = 2;
+  ahPrio = 0;
+  if (srv != 0 && handler != 0) {
+    for (unsigned u = 0; u < 8; u += 4)
+      ((void(__thiscall*)(void*, void*, unsigned))VTS(srv, 0x24))(srv, handler, *(unsigned*)((char*)g_MsgIds + u));
+  }
+  return true;
 }
 
 // @ 0x0066a830

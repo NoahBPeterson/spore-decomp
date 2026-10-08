@@ -1,0 +1,1 @@
+008a5ba0 581 complete ClusterFit ctor; same instruction count, differs in /fp:fast dot-product association and xmm0/xmm1 operand roles in the weighting loop

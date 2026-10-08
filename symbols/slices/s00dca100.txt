@@ -1,0 +1,1 @@
+00dca100 SP::VehicleTree::EstablishTradeRouteOrder_Tick  # PDB/Ghidra name; trade-route behavior-tree tick (messages "(31)..(36) TR:")

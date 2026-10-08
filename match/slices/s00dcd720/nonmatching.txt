@@ -1,0 +1,1 @@
+00dcdac0 1515 complete (98 vs 94 calls, 2157 vs 2085 bytes); register allocation (eax/edx for vcall temps), loop-variable homes and stack slots differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; equiv: UNSUPPORTED (0/400 inputs valid: _decode_pointer import, read faults)

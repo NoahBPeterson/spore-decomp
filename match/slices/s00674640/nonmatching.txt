@@ -1,3 +1,4 @@
 00675260  189  cVar-list serialize: complete behaviour; writer vcall/WriteUint32 scheduling and cVarListSerializer construction differ
 006753a0  46  achievement-test teardown: complete behaviour; cl puts this in edi (original esi) and the null-check block order differs
 00675440  101  cVar-list deserialize: complete behaviour; read-vcall loop and shared epilogue layout differ
+00674640  742  cBuildXHTMLDetokenizer::TranslateToken (flags /O2 /MD /Gy /TP /arch:SSE /GS-): complete token translator (br/p/save_path/mac_save_append, arg-script parse into cVar list, text/value/lookup, ~token~ fallback); same 48 calls and size; differs in stack-slot layout of sibling-scope locals and a few register/schedule choices

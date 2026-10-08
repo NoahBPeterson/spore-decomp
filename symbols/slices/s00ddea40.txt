@@ -1,0 +1,1 @@
+00ddea40 cViewConfig::LoadDefaultsAndProperties  # descriptive: reads camera/view tuning floats from the property list at this+0x10

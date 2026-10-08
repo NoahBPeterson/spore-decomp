@@ -1,6 +1,5 @@
 # va  diff-bytes  short reason
 00ee2860  -    tooltip/string construction not reconstructed (skeleton only)
-00ee2960  -    1722-byte palette item-refresh handler not reconstructed
 00ee3020  -    palette-item loop not reconstructed (skeleton only)
 00ee3230  -    454-byte list rebuild not reconstructed
 00ee3430  -    260-byte tutorial/index handler not reconstructed

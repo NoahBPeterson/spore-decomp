@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dd8640  1838  complete cSPUIEventLog::PostFeedbackEvent (/O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); 2052 vs 1852 B, register allocation (this in ebp vs ebx, ev spilled) and local-variable placement differ

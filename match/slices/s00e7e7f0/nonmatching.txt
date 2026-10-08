@@ -1,0 +1,1 @@
+00e7e7f0 1500 flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast complete; all 21 collision-result types; LTCG register-convention callees (e791a0, e7b630, e72910, e725c0, e727e0, e7b470, e7e020, e528d0, e528f0) are called from single __asm call blocks; frame/regalloc differ

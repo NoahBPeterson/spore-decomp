@@ -1,0 +1,1 @@
+00d557f0 SetStarPattern  # PDB name; two 5-point rings (quaternion rotation of dir about unit pos) plus edge interpolation points into SpVector<Vector3>

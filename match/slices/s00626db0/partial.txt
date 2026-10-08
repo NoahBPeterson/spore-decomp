@@ -1,4 +1,3 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 006271f0  947  cCreatureCameraBase ctor: skeleton; the base-subobject construction, vtable stores and default field setup are omitted
 006275d0  107  ~cCreatureCameraBase: the release/RemoveHandler path is present but the three base-vptr stores are omitted
-00627660 1537  FUN_00627660: skeleton; the camera-collision / mode-selection body is omitted

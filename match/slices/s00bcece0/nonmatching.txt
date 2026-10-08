@@ -1,0 +1,1 @@
+00bcece0 1531 complete (93 calls vs 93 in the same order; size 1946 vs 1957); frame 0xac vs 0x98 and register assignment (this/owner/src/attacker rotate); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- (no EH)

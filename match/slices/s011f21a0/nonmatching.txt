@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+011f2480  540  rw::graphics::GlobalState::D3D9Initialize: complete; store order/register use differ (original hoists constants into registers, uses or-with-register)

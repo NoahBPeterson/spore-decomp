@@ -1,0 +1,1 @@
+00f3f110 Mgr::EvaluateRule  # Claude-coined: decision tree over hashed (rule kind, rule sub, handle kind/sub) pairs; calls 0xF3C870 and 0xF3EDE0 and stores a result code at ctx+0x230

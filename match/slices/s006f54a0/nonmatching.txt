@@ -5,3 +5,4 @@
 006f6180  238  color-state wrapper (3 rgb + mode 100): behavior complete; register allocation differs.
 006f6270  125  color-state wrapper (modes 0x6e/0x6f, two quads): behavior complete; register allocation differs.
 006f5ed0  138  state-struct constructor: behavior complete but the original carries an /EHsc EH frame; a plain int-array initializer does not generate it.
+006f54a0  1313  cState::F54a0 render-state/texture-slot binder (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete (kind 1 / 2-5 / 0x41 / hashtable-lookup paths, material state, shader const 2 size vec4, up to 4 extra texture slots, final Setup + viewer finish); register allocation and stack-slot layout differ (original spills the state-object pointer, mine keeps it in edi); equiv FAILs only on a callee reading uninitialised stack that holds a fake-call return address

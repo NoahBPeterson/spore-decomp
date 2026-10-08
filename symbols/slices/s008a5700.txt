@@ -1,0 +1,1 @@
+008a5ba0 ClusterFit::ClusterFit  # squish ClusterFit ctor: perceptual metric 0.2126/0.7152/0.0722, principal-axis ordering, xxsum

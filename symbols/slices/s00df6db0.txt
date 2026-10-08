@@ -1,0 +1,1 @@
+00df6db0 cGameUIData::SetUIState  # PDB name; switch on UI state 1..5 toggling windows by id, KillSetiEffects, planet/creature panel fill in state 1

@@ -1,0 +1,1 @@
+00e16090 SP::cMissionTracker::UpdateFromMission  # tentative: refreshes the tracker panel (status/count/title windows, image, relationship strip, progress-icon layout) from the IMission argument; PDB caller-scored label cFeedbackEvent::~cFeedbackEvent is a mislabel

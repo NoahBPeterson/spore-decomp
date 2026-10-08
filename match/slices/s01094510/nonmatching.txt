@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+01094510  1385  complete (built with /vc71 /O2 /MD /Gy /TP /fp:fast, see source Flags comment): all 27 calls in original order (5 hk1d* builders x9, 4 hkVector4/hkTransform members, 7 vcalls on the path curve +0xc..+0x24); same size 1666 B; x87 scheduling and the original's hkVector4 temp frame (0x164 vs 0x144) differ

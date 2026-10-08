@@ -1,0 +1,3 @@
+00729de0 FUN_00729de0  # centre partition of index list into child boxes (SAH kd split)
+0072a200 FUN_0072a200  # SAH split search
+0072a080 FUN_0072a080  # resets both child boxes of a split node to inverted-infinite

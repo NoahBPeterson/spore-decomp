@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+010dac90 1868 hkHeightFieldAgent::staticGetPenetrations complete (44/44 calls, same vtable slots and order); flags /O2 /MD /Gy /TP /GS-. Not exact: older-cl x87 scheduling (int-reg temp copies of the transform, vcall form, FP-stack residency of x)
+010db380 2136 hkHeightFieldAgent::staticGetClosestPoints complete (45/45 calls, same vtable slots and order); flags /O2 /MD /Gy /TP /GS-. Not exact: same older-cl x87 scheduling

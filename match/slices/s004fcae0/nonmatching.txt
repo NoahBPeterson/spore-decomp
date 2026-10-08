@@ -5,3 +5,4 @@
 004fd520 69 Dispose; /Od frame slots not reproduced
 004fd5e0 74 Vec16::push_back; cdecl/thiscall frame and slot order not reproduced
 004fd670 90 pod copy; /Od frame slots not reproduced
+004fcd00 527 complete Stepper::Run (9 stack args); flags /Od /Ob1 /Oi /MD /Gy /TP /arch:SSE /fp:fast ; instruction stream identical modulo /Od frame slot order (frame 0x164 vs 0x168)

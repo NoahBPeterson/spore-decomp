@@ -1,0 +1,1 @@
+00e8c120 SP::cCreatureView::HandleSimulationUpdate  # PDB name (symbols/pdb_names.json); vtable slot 1 of vtbl_Simulator::cCreatureView at 0x014863cc

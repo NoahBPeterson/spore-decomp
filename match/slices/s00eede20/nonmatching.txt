@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00eede20  46  noun-from-key factory complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; only the ResourceKey.typeID store is scheduled before the vcall setup instead of after

@@ -1,6 +1,6 @@
 // Slice s00667c80: SP::cSPUIFeedListItem - DoMessage (feed-item messages), SetName,
 // QueryNumItems (number/icon refresh) and Update (per-frame animation).
-// Flags: /O2 /MD /Gy /TP /arch:SSE /GS-.
+// Flags: /O2 /MD /Gy /TP /arch:SSE /GS- (Update, 0x668550, additionally needs /fp:fast for its x87 fabs/sin).
 #include "types.h"
 
 typedef void  (__thiscall *FnVoid)(void*);
@@ -38,11 +38,120 @@ struct cSPUILayout {
 };
 struct Sub54 { unsigned char FUN_0054eac0(int v); void FUN_0054ea20(int a, int b); };
 
+struct Vec4 {
+    float x, y, z, w;
+    Vec4() {}
+    Vec4(float a, float b, float c, float d) : x(a), y(b), z(c), w(d) {}
+    Vec4(const Vec4& o) : x(o.x), y(o.y), z(o.z), w(o.w) {}
+};
+inline Vec4 operator-(const Vec4& a, const Vec4& b) { return Vec4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
+inline Vec4 operator+(const Vec4& a, const Vec4& b) { return Vec4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+inline Vec4 operator*(const Vec4& a, float k) { return Vec4(a.x * k, a.y * k, a.z * k, a.w * k); }
+
+#pragma warning(disable: 4100)
+extern "C" double __cdecl sin(double);
+#pragma intrinsic(sin)
+extern "C" double __cdecl fabs(double);
+#pragma intrinsic(fabs)
+
+// Window with an area setter (vtable slot 27).
+struct AreaWin {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
+    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21(); virtual void s22(); virtual void s23(); virtual void s24();
+    virtual void s25(); virtual void s26();
+    virtual void SetArea(const Vec4* area);          // slot 27 (+0x6c)
+};
+// Interface obtained by Cast(0xf15f4bd); slot 10 (+0x28) sets the colour.
+struct ColorIface {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+    virtual void SetColor(unsigned rgba);            // slot 10 (+0x28)
+};
+struct CastWin {
+    virtual void s0(); virtual void s1(); virtual void s2();
+    virtual ColorIface* Cast(unsigned id);           // slot 3 (+0xc)
+};
+// Image-like window; slot 23 (+0x5c) sets the colour.
+struct ImageWin {
+    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
+    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
+    virtual void s10(); virtual void s11(); virtual void s12(); virtual void s13(); virtual void s14();
+    virtual void s15(); virtual void s16(); virtual void s17(); virtual void s18(); virtual void s19();
+    virtual void s20(); virtual void s21(); virtual void s22();
+    virtual void SetColor(unsigned rgba);            // slot 23 (+0x5c)
+};
+struct TailObj { void Tick(); };                     // 0x008297b0 (thiscall)
+struct AssetBrowserG { char pad[0x18]; void* mProps; };
+
+AssetBrowserG* __cdecl SP_AssetBrowserG();           // 0x00401030
+void  __cdecl GetWindowArea(Vec4* out, void* win);   // 0x00805ef0
+float __cdecl GetWindowAlpha(void* win);             // 0x00805040
+float __cdecl GetElapsedSeconds();                   // 0x00805080
+void  __cdecl SetWindowRotation(void* win, const Vec4* q);   // 0x00808230
+unsigned __cdecl ColorRGBAToU32(const Vec4* c);      // 0x004580c0
+Vec4* __cdecl GetPropertyColor(Vec4* out, void* props, unsigned key, Vec4 def);   // 0x00666b20
+float __cdecl GetPropertyFloat(void* props, unsigned key, float def);             // 0x004e1c70
+
+// maxss/minss clamp of the /arch:SSE module: max(0, x) then min(.., hi).
+__forceinline float ClampMax(float x, float hi)
+{
+    __asm {
+        xorps xmm0, xmm0
+        maxss xmm0, x
+        minss xmm0, hi
+        movss x, xmm0
+    }
+    return x;
+}
+
+// c += (t - c) * k, component-wise, in place.
+static inline void Lerp4(Vec4& c, const Vec4& t, float k)
+{
+    c.x = c.x + (t.x - c.x) * k;
+    c.y = (t.y - c.y) * k + c.y;
+    c.z = (t.z - c.z) * k + c.z;
+    c.w = (t.w - c.w) * k + c.w;
+}
+
+static inline ColorIface* CastColor(CastWin* p) { return p ? p->Cast(0xf15f4bd) : 0; }
+
 struct FeedItem {
+    char pad0[0x68];
+    Vec4 mTargetArea;           // 0x68
+    char pad1[0xc];
+    bool mActiveA;              // 0x84
+    bool mActiveB;              // 0x85
+    bool mRefreshNumbers;       // 0x86
+    char pad2;
+    float mTimerB;              // 0x88  (clears mActiveB when it expires)
+    float mTimerA;              // 0x8c  (clears mActiveA)
+    char pad3[0x10];
+    AreaWin* mAreaWin;          // 0xa0
+    CastWin* mWinC;             // 0xa4
+    CastWin* mWinD;             // 0xa8
+    ImageWin* mImage;           // 0xac
+    void* mSpinWin;             // 0xb0
+    char pad4[4];
+    CastWin* mWinE;             // 0xb8
+    CastWin* mWinF;             // 0xbc
+    char pad5[0x14];
+    Vec4 mTargetA;              // 0xd4
+    Vec4 mColorA;               // 0xe4
+    Vec4 mTargetB;              // 0xf4
+    Vec4 mColorB;               // 0x104
+    char pad6[0x2d];
+    bool mFlag141;              // 0x141
+    bool mFlag142;              // 0x142
+    char pad7[0x41];
+    TailObj* mTail;             // 0x184
+
     bool FUN_00667c80(void* a1, void* msg);
     void FUN_00668000(const wchar_t* s);
-    void FUN_00668070();
-    void FUN_00668550(int dt);
+    __declspec(noinline) void FUN_00668070();
+    void FUN_00668550(unsigned dt);
 };
 
 // -----------------------------------------------------------------------------
@@ -207,35 +316,94 @@ void FeedItem::FUN_00668070() {
 }
 
 // -----------------------------------------------------------------------------
-// @ 0x00668550  SP::cSPUIFeedListItem::Update  (PARTIAL - see partial.txt)
+// @ 0x00668550  SP::cSPUIFeedListItem::Update  (per-frame animation, dt in ms)
 // -----------------------------------------------------------------------------
-void FeedItem::FUN_00668550(int dt) {
-    if (*(uint8_t*)((char*)this + 0x86)) {
-        ((FeedItem*)this)->FUN_00668070();
-        *(uint8_t*)((char*)this + 0x86) = 0;
+void FeedItem::FUN_00668550(unsigned dt) {
+    if (mRefreshNumbers) {
+        FUN_00668070();
+        mRefreshNumbers = false;
     }
-    float f = (dt < 0) ? (float)dt + 4294967296.0f : (float)dt;
-    float a = f * 0.012f;
-    if (a < 0.0f) a = 0.0f;
-    if (a > 1.0f) a = 1.0f;
-    float b = f * 0.0065f;
-    if (b < 0.0f) b = 0.0f;
-    if (b > 1.0f) b = 1.0f;
-    (void)a; (void)b;
-    if (*(float*)((char*)this + 0x8c) > 0.0f) {
-        float v = *(float*)((char*)this + 0x8c) - f * 0.001f;
-        *(float*)((char*)this + 0x8c) = v;
+    float f = (float)dt;
+    float rectK = ClampMax(f * 0.012f, 1.0f);
+    float colorK = ClampMax(f * 0.0065f, 1.0f);
+    float step = f * 0.001f;
+
+    if (mTimerA > 0.0f) {
+        float v = mTimerA - step;
+        mTimerA = v;
         if (v <= 0.0f) {
-            *(float*)((char*)this + 0x8c) = 0.0f;
-            *(uint8_t*)((char*)this + 0x84) = 0;
+            mTimerA = 0.0f;
+            mActiveA = false;
         }
     }
-    if (*(float*)((char*)this + 0x88) > 0.0f) {
-        float v = *(float*)((char*)this + 0x88) - f * 0.001f;
-        *(float*)((char*)this + 0x88) = v;
+    if (mTimerB > 0.0f) {
+        float v = mTimerB - step;
+        mTimerB = v;
         if (v <= 0.0f) {
-            *(float*)((char*)this + 0x88) = 0.0f;
-            *(uint8_t*)((char*)this + 0x85) = 0;
+            mTimerB = 0.0f;
+            mActiveB = false;
         }
     }
+
+    // Slide the root window's area toward the target area.
+    if (mAreaWin) {
+        Vec4 cur;
+        GetWindowArea(&cur, mAreaWin);
+        if (cur.x != mTargetArea.x || cur.y != mTargetArea.y ||
+            cur.z != mTargetArea.z || cur.w != mTargetArea.w) {
+            cur.w = (mTargetArea.w - cur.w) * rectK + cur.w;
+            cur.y = (mTargetArea.y - cur.y) * rectK + cur.y;
+            cur.z = (mTargetArea.z - cur.z) * rectK + cur.z;
+            cur.x = (mTargetArea.x - cur.x) * rectK + cur.x;
+            if (fabs(cur.w - mTargetArea.w) < 1.5f && fabs(cur.y - mTargetArea.y) < 1.5f &&
+                fabs(cur.z - mTargetArea.z) < 1.5f && fabs(cur.x - mTargetArea.x) < 1.5f) {
+                cur.x = mTargetArea.x;
+                cur.y = mTargetArea.y;
+                cur.z = mTargetArea.z;
+                cur.w = mTargetArea.w;
+            }
+            mAreaWin->SetArea(&cur);
+        }
+    }
+
+    // Spinner (rotation about Z while its alpha is above zero).
+    if (mSpinWin) {
+        if (GetWindowAlpha(mSpinWin) > 0.0f) {
+            float ang = GetElapsedSeconds() * -2.0f;
+            Vec4 q;
+            q.x = 0.0f;
+            q.y = 0.0f;
+            q.z = 1.0f;
+            q.w = ang;
+            SetWindowRotation(mSpinWin, &q);
+        }
+    }
+
+    // Fade both colours toward their targets.
+    Lerp4(mColorA, mTargetA, colorK);
+    Lerp4(mColorB, mTargetB, colorK);
+
+    if (mWinC) CastColor(mWinC)->SetColor(ColorRGBAToU32(&mColorB));
+    if (mWinD) CastColor(mWinD)->SetColor(ColorRGBAToU32(&mColorB));
+    if (mWinE) CastColor(mWinE)->SetColor(ColorRGBAToU32(&mColorB));
+    if (mWinF) CastColor(mWinF)->SetColor(ColorRGBAToU32(&mColorB));
+
+    if (mImage) {
+        mImage->SetColor(ColorRGBAToU32(&mColorA));
+        if (!mActiveB && mFlag141 && mFlag142 && SP_AssetBrowserG() && SP_AssetBrowserG()->mProps) {
+            Vec4 pulse;
+            Vec4 white(1.0f, 1.0f, 1.0f, 0.0f);
+            GetPropertyColor(&pulse, SP_AssetBrowserG()->mProps, 0x94ab9c0f, white);
+            float speed = GetPropertyFloat(SP_AssetBrowserG()->mProps, 0x7cb53b5, 1.0f);
+            Vec4 base = mColorA;
+            float k = ((float)sin(GetElapsedSeconds() * speed) + 1.0f) * 0.5f;
+            Vec4 res;
+            res.x = (pulse.x - base.x) * k + base.x;
+            res.y = (pulse.y - base.y) * k + base.y;
+            res.z = (pulse.z - base.z) * k + base.z;
+            res.w = (pulse.w - base.w) * k + base.w;
+            mImage->SetColor(ColorRGBAToU32(&res));
+        }
+    }
+    if (mTail) mTail->Tick();
 }

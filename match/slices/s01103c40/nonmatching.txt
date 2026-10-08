@@ -1,0 +1,1 @@
+01103c40 1658 hkAgent1nMachine_Weld (Havok 3.1, /vc71 /O2): complete - add potentials/conflict detection, zombies, pairwise merge via hkCalcMultiPenetrationDepth, final commit/remove; not exact: frame layout (0x844 vs 0x854), x87 operand order in the compiler-unrolled min-search loop (y,z,x vs z,y,x), and register allocation differ

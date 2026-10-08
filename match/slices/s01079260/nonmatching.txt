@@ -1,0 +1,1 @@
+01079260 1310 complete; msg kept in a register (original spills it to its arg slot, frame 0x64 vs 0x54), switch tails cross-jumped; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

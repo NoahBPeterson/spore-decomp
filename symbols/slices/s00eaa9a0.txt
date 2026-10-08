@@ -1,0 +1,1 @@
+00eaa9a0 SP::Audio::cMixModeManager::Init  # PDB name; registers message handler + mix-mode factory, loads mix-mode records

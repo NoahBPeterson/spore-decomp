@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01121610  1373  hkConvexPenetrationUtil simplex evolve step: complete (all 5 callees, 5/5 calls, size 0.95x); frame/x87 schedule differs (stack slots, fucompp-vs-ftst against 0.0)

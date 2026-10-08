@@ -1,4 +1,4 @@
-005a1920 SP::cTerrainUI::Init  # PDB caller-scored
+005a1920 SP::cSPEditorBlockAbilities::LayoutAbilitiesCompact  # icon-only ability row layout; falls back to LayoutAbilities (0x5a0510) when count <= mMaxFullRows
 005a2010 cTerrainUI vector setter (Vec3 + bool)
 005a2080 cTerrainUI key handler -> cLocalInputState::OnKeyDown  # key switch 0x6b/0x6d/0xbb..0xbe
 005a2120 cTerrainUI key handler -> cLocalInputState::OnKeyUp

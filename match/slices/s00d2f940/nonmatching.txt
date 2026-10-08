@@ -1,0 +1,2 @@
+00d2f940 1415 complete (39/40 calls, size 0.97x); frame 0xd0 vs 0xf4 (original keeps one BBox temporary per case and duplicates the early-return effect release), constant-zero register (ebp) hoisted by cl
+00d2ffd0 1626 complete (89/90 calls, size 0.99x); case blocks emitted in a different order and head code duplicated differently by cl; every action code and callee checked against the asm

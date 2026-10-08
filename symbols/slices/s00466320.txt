@@ -1,0 +1,1 @@
+00466690 SP::EditorUtils::ExportBakedModelToXMF  # card/PDB name; writes <dir>/<name>.xmf via cExportHelper and the Diffuse/NormalMap/BakeInfoMap TGAs

@@ -1,0 +1,1 @@
+00a88d50 EA::Swarm::cDistributeEffect::ApplyColorAndAlpha  # Claude-coined: sample colour/alpha curves, random vary, colour map (this+0x160 vcalls 0x18/0x2c)

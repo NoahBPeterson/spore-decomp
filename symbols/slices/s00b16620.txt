@@ -1,0 +1,2 @@
+00b16620 TestShapeHitsObject  # cdecl(cQuery*, cSpatialObject*, Vec3* out) -> bool; sphere reject then ref point + 9 sample points vs object-local box, out = push-out vector (Claude-coined)
+00698880 RayBoxHit  # cdecl(origin*, dir*, box*, float* t) -> bool (slab test, see s00697c40)

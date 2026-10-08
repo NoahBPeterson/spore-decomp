@@ -2,3 +2,4 @@
 slices/s0077d800/s0077d800.cpp  ?FUN_0077d970@Vec8Thing@@QAEHI@Z  0077d970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0077d800/s0077d800.cpp  ?FUN_0077d9c0@Vec8Thing@@QAEXIPAX@Z  0077d9c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s0077d800/s0077d800.cpp  ?FUN_0077ef60@CamThing@@QAEXPAM@Z  0077ef60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s0077d800/s0077d800.cpp  ?FUN_0077e6d0@@YAXXZ  0077e6d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+01159cc0 rw::audio::core::HELPER_CEALayer3::GetScaleFactors  # ISO III_get_scale_factors (slen tables 0x14d9fd4/fe4, scfsi, gr_info 0x18B at +0x70, scalefac 0x7c at +0xd0); byte-exact

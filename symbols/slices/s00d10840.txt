@@ -1,0 +1,2 @@
+00d10840 SP::cCommunityEditor::UpdateObjectPlacement  # PDB anchor; drag update (ICameraManager::Pick -> planet surface -> closest snap point); ret 8 stdcall-like mouse handler
+00d10f90 SP::cCommunityEditor::EndObjectPlacement  # PDB anchor; drop: sell back / snap slot / plunk effects / kMsgSetCreation post

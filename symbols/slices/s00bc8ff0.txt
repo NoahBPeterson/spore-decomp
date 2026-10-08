@@ -1,0 +1,1 @@
+00bc8ff0 WalkTree  # iterative tree walk with per-depth 0xAC-byte frames in the caller's cursor (card: no PDB name); callbacks at node+0x70

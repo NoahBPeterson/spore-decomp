@@ -1,0 +1,1 @@
+004956b0 SettleBlock  # editor block drop/stacking: linearCast down from +0.2, getPenetrations per hit, recursion over hit blocks; byte-exact

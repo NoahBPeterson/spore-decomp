@@ -1,0 +1,2 @@
+01207630 SP::BuildBoxContactFeature  # cdecl(box frame, flip, normal, out): extreme face/edge/vertex of an oriented box along a direction; tables 0x015d0b28/48/68 are the box-volume corner data
+012016f0 SP::Segment::Segment  # thiscall ctor ret 8: pos=a, dir=(b-a)/|b-a|, length; returns this

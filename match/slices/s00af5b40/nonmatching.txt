@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00af5b40 1633 ProbeShape: complete (4 shape types + default; 11/11 calls in the same order, 1640 vs 1800 bytes; equiv PASS 2997 valid, 74.7% coverage); vector-copy/register scheduling and frame layout differ

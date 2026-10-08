@@ -1,0 +1,1 @@
+00e52060 cell part-table summary (counts per type, bounds, picks, tuned curve values)  # static fn, count in EAX / this in ESI; caller 0xe67a46 passes the map element at obj+0, parts at obj+4 (stride 0x48); curve lookups FUN_00e837c0

@@ -1,3 +1,4 @@
 004aba00  121  complete cSPEditorModel teardown; vtable stores / loop / string free order approximate
 004abaf0  152  complete RemoveBlock; iterator/element temp slots differ
 004ac480  180  complete nearest-flag7-block search; x87/SSE and slot shape differ
+004abc50  1293  flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete FindClosestBlockPoint in s004ab690_find.cpp; /Od frame slot order and Vector3 temp-copy flavours (inline vs 4098a0) differ

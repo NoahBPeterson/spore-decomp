@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c6d0f0  n/a  complete SP::cHerd::AddAvatarEggsInNest; 18/18 calls in the same order, size 1675 vs 1730; the original keeps the |size| sqrt and the quaternion math in x87 with different spills (SSE vs x87 scheduling, frame 0xc4 vs ~0xdc)

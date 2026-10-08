@@ -1,0 +1,1 @@
+00b64a60  1875  (flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast) complete CollectLayerGeometry; same size (2025) and identical ordered call sequence (31 calls: vtbl/TLS/hk helpers/mesh finders); frame 0xe4 vs 0xd4 and register assignment differ so bytes shift

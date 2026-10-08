@@ -1,0 +1,1 @@
+0109b490 1892 complete executeAllPending; zero constant hoisted into ebx and this kept in edi (orig: this in ebx, no hoist), case blocks laid out after the epilogue in the original; 2092 vs 2182 code bytes

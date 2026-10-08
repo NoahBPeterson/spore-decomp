@@ -1,0 +1,1 @@
+004b3e10  26  GenerateSkinPaintFromRegionPaint: complete; instruction stream identical, only 26 bytes of /Od temp-slot layout differ (sret temp of rwVec3 sub lands in the named-local zone)

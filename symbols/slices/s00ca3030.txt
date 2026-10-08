@@ -1,0 +1,1 @@
+00ca3770 cSurfaceSearcher::FindNearestSurfacePoint  # Claude-coined: spiral ring search around a ray for the nearest same-continent surface point to the camera (calls cPlanetModel 00b88590/00b7e840/00b81630)

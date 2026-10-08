@@ -1,3 +1,4 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
 00667c80  718  DoMessage: complete message-id switch (0x1b/0x1c/0x287259f6 sub-dispatch/6/9) and all KillSetiEffects/MessageServer calls; cl's case tree and register allocation differ
 00668000  60  SetName: complete assign + listener notify; the tail virtual call (slot 0x80) and register schedule differ
+00668550  1180  Update: complete (rect slide, spinner, colour fades, pulse via sin); needs /fp:fast; x87/SSE schedule and Vec4 lerp spelling differ

@@ -1,0 +1,1 @@
+00bd0510 Combatant::Hit  # TakeHit override: filters hit, plays hit effect, calls cCombatant::TakeHit, spawns debris on kill

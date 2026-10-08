@@ -1,4 +1,3 @@
 0072aaf0  285   PARTIAL: vector insert skeleton (EH).
 0072ac10  66    PARTIAL: span copy ctor skeleton.
 0072ac60  120   PARTIAL: refcounted ctor skeleton (EH/vtable).
-0072ace0  2173  PARTIAL: SP::StreamMeshToRw skeleton.

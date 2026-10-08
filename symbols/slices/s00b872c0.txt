@@ -1,0 +1,2 @@
+00b872c0 SP::BuildPathRibbon  # __stdcall(vector<Vec3>*, color): builds a miter-joined terrain ribbon (4 x 0x24-byte vertices per segment) in a fixed_vector<Vertex,128> and uploads it via cStaticBuffer::GetVertexBuffer/memcpy/FUN_007a4650
+00b86910 eastl::fixed_vector<RibbonVertex,128>::resize  # thiscall ret 4: grows via FUN_00b85710 or shrinks via FUN_00b85500 (0x24-byte elements)

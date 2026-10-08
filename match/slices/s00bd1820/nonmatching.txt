@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bd1cd0  1409  cAimController::Update (vehicle aim/facing, thiscall ret 4): complete (24/24 calls in the same order, same vcall slots 0xb8/0x5c/0x2c/0x54/0x8/0x58/0x30/0x3c, same constants; size 1720 vs 1589); residual: this/vehicle registers swapped (edi/ebx), the target/fallback-target branches are not merged into one tail, extra sret-to-local vector copies (frame 0xe8 vs 0xa8), difftest likely UNSUPPORTED

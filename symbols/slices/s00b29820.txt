@@ -1,0 +1,1 @@
+00b29820  SP::cSaveGameHandler::HandleMessage  # coined; messages 0x1cd20f0 (ui_global_save request), 0x685dbfa (timer tick -> save), 0x689c9b9 (quick save), 0x62d91c2; builds the save name from the home planet name + L".spo"

@@ -1,1 +1,2 @@
 00ee2860 SP::cScenarioEditModeBehaviorUI::SetTooltip  # reads cString/hint at +0x184
+00ee2960 f00ee2960  # palette item refresh (window, item, flag, flag); PDB candidate SP::cSPUISpace::SetToolTipForItem unverified

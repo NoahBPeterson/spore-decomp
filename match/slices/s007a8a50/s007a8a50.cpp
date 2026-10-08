@@ -377,7 +377,246 @@ void FUN_007a9280(int param_1, int param_2)
     }
 }
 
-// @ 0x007a8a50  (1569-byte glyph-run encoder; body omitted)
-void FUN_007a8a50_big()
+// @ 0x007a8a50  EA::Text::Render_RenderWare::DrawGlyphs (1569 bytes, __thiscall ret 0x10)
+//
+// Draws an array of glyph display entries.  Every glyph is looked up in the glyph cache (rendered
+// into a cache texture through the font on a miss); consecutive glyphs that share a cache texture
+// are batched, and each batch is written as quads (4 vertices of 24 bytes) into the RenderWare
+// dynamic vertex buffer.  Flags for this function: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+#include <new>
+#include <xmmintrin.h>
+
+void __cdecl operator delete[](void* p);                                   // 0x00f47380
+
+namespace DrawGlyphsImpl {
+
+struct TextureInfo {                         // EA::Text::TextureInfo
+    char pad[0x34];
+    unsigned int mTexture;                   // +0x34
+};
+
+struct GlyphTextureInfo {                    // EA::Text::GlyphTextureInfo (0x14)
+    TextureInfo* mpTextureInfo;
+    float mX1, mY1, mX2, mY2;
+};
+
+struct GlyphBitmap {                         // EA::Text::Font::GlyphBitmap
+    unsigned int mnWidth;                    // +0x00
+    unsigned int mnHeight;                   // +0x04
+    char pad08[0x14];
+    void* mpData;                            // +0x1c
+    unsigned int mBitmapFormat;              // +0x20
+    unsigned int mnStride;                   // +0x24
+};
+
+struct Font {                                // EA::Text::Font
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual bool RenderGlyphBitmap(const GlyphBitmap** ppBitmap, unsigned int glyphId,
+                                   unsigned int renderFlags, float fXFraction, float fYFraction);  // +0x50
+    virtual void DoneGlyphBitmap(const GlyphBitmap* pBitmap);                                        // +0x54
+};
+
+struct GlyphDisplayEntry {                   // EA::Text::GlyphDisplayEntry (0x28)
+    Font* mpFont;                            // +0x00
+    float mfPenX, mfPenY;                    // +0x04
+    float mfX1, mfY1, mfX2, mfY2;            // +0x0c
+    float mfAdvance;                         // +0x1c
+    unsigned int mGLA;                       // +0x20
+    unsigned short mGlyphId;                 // +0x24
+    unsigned short mPad26;
+};
+
+struct GlyphCache {                          // EA::Text::GlyphCache_RenderWare
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10();
+    virtual bool GetGlyphTextureInfo(Font* pFont, unsigned int glyphId, GlyphTextureInfo& info) const;  // +0x14
+    virtual void v18();
+    virtual bool AddGlyphTexture(Font* pFont, unsigned int glyphId, const void* pSourceData,
+                                 unsigned int nSourceSizeX, unsigned int nSourceSizeY,
+                                 unsigned int nSourceStride, unsigned int nSourceFormat,
+                                 GlyphTextureInfo& info);                                              // +0x1c
+    virtual void v20(); virtual void v24();
+    virtual TextureInfo* GetTextureInfo(unsigned int nTextureIndex);                                   // +0x28
+    virtual void v2c(); virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual bool BeginUpdate(TextureInfo* pTextureInfo);                                               // +0x40
+    virtual bool EndUpdate(TextureInfo* pTextureInfo);                                                 // +0x44
+};
+
+struct CompiledState { void Dispatch();  };                                // rw::graphics::CompiledState, 0x011ee580
+
+struct Vertex {                              // 24-byte dynamic vertex
+    float x, y, z;
+    unsigned int color;
+    float u, v;
+};
+
+struct VertexLock {                          // zero-initialised lock record (0x2c bytes)
+    float f[5];
+    unsigned int d[6];
+    VertexLock()
+    {
+        for (int i = 0; i < 5; ++i) f[i] = 0.0f;
+        for (int i = 0; i < 6; ++i) d[i] = 0;
+    }
+};
+
+// eastl::fixed_vector<GlyphTextureInfo, 256, true> (overflow allowed)
+struct GlyphVector {
+    GlyphTextureInfo* mpBegin;
+    GlyphTextureInfo* mpEnd;
+    GlyphTextureInfo* mpCapacity;
+    unsigned int mAllocator;
+    GlyphTextureInfo* mpPoolBegin;           // +0x10
+    unsigned int mPad14;
+    GlyphTextureInfo mBuffer[256];           // +0x18
+
+    GlyphVector() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + 256), mpPoolBegin(mBuffer) {}
+    ~GlyphVector() { if (mpBegin && mpBegin != mpPoolBegin) operator delete[](mpBegin); }
+    void DoInsertValue(GlyphTextureInfo* position, const GlyphTextureInfo& value);   // 0x007a8910
+    GlyphTextureInfo& push_back()
+    {
+        if (mpEnd < mpCapacity) {
+            ::new (mpEnd++) GlyphTextureInfo();
+        } else {
+            DoInsertValue(mpEnd, GlyphTextureInfo());
+        }
+        return *(mpEnd - 1);
+    }
+    __forceinline void erase_front(GlyphTextureInfo* last)
+    {
+        GlyphTextureInfo* first = mpBegin;
+        if (first != last) {
+            GlyphTextureInfo* dst = first;
+            for (GlyphTextureInfo* src = last; src != mpEnd; ++src, ++dst)
+                *dst = *src;
+            mpEnd -= (last - first);
+        }
+    }
+};
+
+struct AppPropertiesInner { char pad[0x110]; int mField110; };
+struct AppProperties { char pad[0x3c]; AppPropertiesInner* mpInner; };
+extern AppProperties* sAppProperties;                                      // 0x015fd918
+
+void SetTransform(const __m128* pRows, int nRows);                          // 0x005291f0 (cdecl)
+void SetTexture(int stage, unsigned int texture);                           // 0x011f1280 (cdecl)
+void SetPrimitive(int a, int b);                                            // 0x006ddde0 (cdecl)
+int  LockVertices(int nBytes, Vertex** ppVertices, int* pStride, VertexLock* pLock);   // 0x006dde90 (cdecl)
+void CommitVertices();                                                      // 0x006ddee0 (cdecl)
+void UnlockVertices(VertexLock* pLock);                                     // 0x006ddef0 (cdecl)
+extern unsigned int gRasterDelta;                                           // 0x016f8b00
+
+struct Render_RenderWare {
+    char pad000[0xa37c];
+    GlyphCache* mpGlyphCache;                // +0xa37c
+    CompiledState** mppCompiledState;        // +0xa380
+    int DrawGlyphs(const GlyphDisplayEntry* pGDEArray, unsigned int nGDECount, const unsigned int* pColorArray, bool bPerGlyphColor);   // 0x007a8a50
+};
+
+int Render_RenderWare::DrawGlyphs(const GlyphDisplayEntry* pGDEArray, unsigned int nGDECount, const unsigned int* pColorArray, bool bPerGlyphColor)
 {
+    if (nGDECount) {
+        GlyphVector glyphArray;
+        unsigned int color = pColorArray[0];
+        unsigned int nColorIndex = 0;
+        TextureInfo* pCurrentTexture = 0;
+        float fOffset = (sAppProperties->mpInner->mField110 != 0) ? 0.5f : 0.0f;
+
+        VertexLock lock;
+        __m128 rows[4];
+        rows[0] = _mm_set_ps(0.0f, 0.0f, 0.0f, 1.0f);
+        rows[1] = _mm_set_ps(0.0f, 0.0f, 1.0f, 0.0f);
+        rows[2] = _mm_set_ps(0.0f, 1.0f, 0.0f, 0.0f);
+        rows[3] = _mm_set_ps(0.0f, 0.0f, 0.0f, 0.0f);
+        SetTransform(rows, 4);
+
+        const GlyphDisplayEntry* pEnd = pGDEArray + nGDECount;
+        const GlyphDisplayEntry* pBatchBegin = pGDEArray;
+        for (const GlyphDisplayEntry* pGDE = pGDEArray; pGDE < pEnd; ++pGDE) {
+            const GlyphDisplayEntry* pNext = pGDE + 1;
+            GlyphTextureInfo* pInfo = &glyphArray.push_back();
+
+            if (!mpGlyphCache->GetGlyphTextureInfo(pGDE->mpFont, pGDE->mGlyphId, *pInfo)) {
+                const GlyphBitmap* pBitmap;
+                if (pGDE->mpFont->RenderGlyphBitmap(&pBitmap, pGDE->mGlyphId, 0, 0.0f, 0.0f)) {
+                    GlyphCache* pCache = mpGlyphCache;
+                    pCache->BeginUpdate(pCache->GetTextureInfo(0));
+                    mpGlyphCache->AddGlyphTexture(pGDE->mpFont, pGDE->mGlyphId, pBitmap->mpData,
+                                                  pBitmap->mnWidth, pBitmap->mnHeight, pBitmap->mnStride,
+                                                  pBitmap->mBitmapFormat, *pInfo);
+                    pCache = mpGlyphCache;
+                    pCache->EndUpdate(pCache->GetTextureInfo(0));
+                    pGDE->mpFont->DoneGlyphBitmap(pBitmap);
+                }
+            }
+
+            TextureInfo* pTexture = pInfo->mpTextureInfo;
+            bool bNewTexture = (pCurrentTexture != 0 && pCurrentTexture != pTexture);
+            const GlyphDisplayEntry* pBatchEnd = pGDE;
+            bool bLast = (pNext == pEnd);
+            if (bLast)
+                pBatchEnd = pNext;
+
+            if (bNewTexture || bLast) {
+                int nGlyphs = (int)(pBatchEnd - pBatchBegin);
+                pCurrentTexture = pTexture;
+                (*mppCompiledState)->Dispatch();
+                SetTexture(0, pTexture->mTexture);
+                gRasterDelta |= 1;
+                SetPrimitive(3, 2);
+
+                int nDone = 0;
+                const GlyphTextureInfo* pCached = glyphArray.mpBegin;
+                while (nDone < nGlyphs) {
+                    Vertex* pVertex;
+                    int nStride;
+                    int nVerts = LockVertices((nGlyphs - nDone) * 4, (Vertex**)&pVertex, &nStride, &lock);
+                    int nQuads = nVerts / 4;
+                    if (nQuads == 0 || nStride != 0x18)
+                        break;
+                    const GlyphDisplayEntry* pQuadEnd = pBatchBegin + nQuads;
+                    for (; pBatchBegin != pQuadEnd; ++pBatchBegin, ++pCached) {
+                        if (bPerGlyphColor)
+                            color = pColorArray[nColorIndex++];
+                        pVertex[0].x = (float)(int)pBatchBegin->mfX1 - fOffset;
+                        pVertex[0].y = (float)(int)pBatchBegin->mfY1 - fOffset;
+                        pVertex[0].z = 0.0f;
+                        pVertex[0].color = color;
+                        pVertex[0].u = pCached->mX1;
+                        pVertex[0].v = pCached->mY1;
+                        pVertex[1].x = (float)(int)pBatchBegin->mfX2 - fOffset;
+                        pVertex[1].y = (float)(int)pBatchBegin->mfY1 - fOffset;
+                        pVertex[1].z = 0.0f;
+                        pVertex[1].color = color;
+                        pVertex[1].u = pCached->mX2;
+                        pVertex[1].v = pCached->mY1;
+                        pVertex[2].x = (float)(int)pBatchBegin->mfX2 - fOffset;
+                        pVertex[2].y = (float)(int)pBatchBegin->mfY2 - fOffset;
+                        pVertex[2].z = 0.0f;
+                        pVertex[2].color = color;
+                        pVertex[2].u = pCached->mX2;
+                        pVertex[2].v = pCached->mY2;
+                        pVertex[3].x = (float)(int)pBatchBegin->mfX1 - fOffset;
+                        pVertex[3].y = (float)(int)pBatchBegin->mfY2 - fOffset;
+                        pVertex[3].z = 0.0f;
+                        pVertex[3].color = color;
+                        pVertex[3].u = pCached->mX1;
+                        pVertex[3].v = pCached->mY2;
+                        pVertex += 4;
+                    }
+                    CommitVertices();
+                    nDone += nQuads;
+                }
+                UnlockVertices(&lock);
+                glyphArray.erase_front(glyphArray.mpBegin + nDone);
+            }
+        }
+    }
+    return 0;
 }
+
+}  // namespace DrawGlyphsImpl

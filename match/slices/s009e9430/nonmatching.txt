@@ -1,0 +1,1 @@
+009e9af0 1930 IKSumDelegatedGoals complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); no calls; size 2102 vs 2162; equiv PASS 294 inputs 100% coverage; frame 0x90 vs 0xac, SSE scheduling of inlined quaternion math differs

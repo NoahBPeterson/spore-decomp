@@ -2,4 +2,4 @@
 0071aa20  SP::cMeshBuilder::BeginMesh  # caller-scored PDB candidate; writes ResourceKey hash 0x9f84a565 to +0x14c, mInMesh +0x150, counts +0x164..+0x184
 0071a650  SP::cMeshBuilder::ClearMeshInfo  # caller-scored PDB candidate; clears cMeshBuilder vertex-attribute vectors
 0071ab60  SP::cMeshBuilder transform helper  # builds 3x4 float matrix (1.0f diagonal) then calls 0x717820
-00719e10  SP::cMeshBuilder vertex-assembly  # calls vector<T140>::resize 0x719c60; dirty-mask + primitive emission
+00719e10  SP::cMeshBuilder::EndPrimitive  # Claude-coined name; flushes the current primitive (mPrim[] index lists) into its section, fan-triangulates polygons (type 9), opens a batch; calls vector<T140>::resize 0x719c60, SimpleVector<uint>::DoInsertValue 0x4558a0

@@ -1,0 +1,1 @@
+00870860  599  complete libpng 1.2.25 png_build_gamma_table (equiv PASS); same size 1734, 17/17 calls; only register/spill-slot allocation in the 16-bit table loops differs (orig keeps i in ebx and ig in memory in the gamma_16_to_1/from_1 loops)

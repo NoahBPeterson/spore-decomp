@@ -1,0 +1,1 @@
+00b99ed0 CreateCivCity  # (req*, pos*, rot*) cdecl: makes the civ-mode city, labels the player civ from the species profile, calls be8680 to place it; returns the city

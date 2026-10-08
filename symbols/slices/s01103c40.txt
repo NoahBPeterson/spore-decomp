@@ -1,0 +1,1 @@
+01103c40 hkAgent1nMachine_Weld  # Havok 3.1 hkAgent1nMachine.cpp: cdecl (hkAgent3Input&, hkShapeCollection*, hkProcessCollisionOutput&); TtConflicts timer, calls hkCalcMultiPenetrationDepth (0x01121f30); sibling of Create/Process

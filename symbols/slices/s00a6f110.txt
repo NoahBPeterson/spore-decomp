@@ -1,0 +1,1 @@
+00a6f110 EA::Swarm::cEffectsParser::ParseDescRecOptions  # PDB name; args cArguments*, DescRec*; ret 8

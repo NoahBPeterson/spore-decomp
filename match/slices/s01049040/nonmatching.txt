@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01049040 685 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast): SP::cCommandTerraform::Execute, all 20 flags/options; 99/99 calls in original order, size 2520 vs 2512; not exact: ufo-block SSE/x87 scheduling (extra movss spill), cubemap case 1 bool reg (bl vs al), shared ebx=0 constant in eradicate/freeze

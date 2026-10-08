@@ -229,6 +229,78 @@ void __fastcall FUN_0066b130(void* self) {
     (void)self;   // large layout/animation builder omitted
 }
 
-void __fastcall FUN_0066b480(void* self) {
-    (void)self;   // large layout/animation builder omitted
+// ---- 0x0066b480: create and register the 16 Sporepedia layout-handler objects ----
+void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
+                   int file, int line);   // 0x00f473a0 (EA allocator, 6 args)
+
+struct SpHandler {                          // refcounted handler: [vt][refcount](+field)
+    virtual void v0();
+    virtual void AddRef();                  // +0x04
+    virtual void Release();                 // +0x08
+    int mRefCount;                          // +0x04 in memory: vptr is at +0
+    SpHandler() : mRefCount(0) {}
+};
+template <int N> struct SpHandlerN : SpHandler {      // eight distinct 8-byte handler classes
+    virtual void Apply();
+};
+struct SpHandlerA : SpHandler {                        // vtable 0x01400600, 12 bytes
+    int mKind;
+    SpHandlerA(int k) : mKind(k) {}
+    virtual void Apply();
+};
+struct SpHandlerB : SpHandler {                        // vtable 0x014004e0, 12 bytes
+    int mKind;
+    SpHandlerB(int k) : mKind(k) {}
+    virtual void Apply();
+};
+
+struct SpHandlerVec {                       // global vector of refcounted handlers (0x015fb120)
+    SpHandler** mBegin;                     // +0x00
+    SpHandler** mEnd;                       // +0x04
+    SpHandler** mCap;                       // +0x08
+    void DoInsertValueEnd(SpHandler** pos, const struct SpRef& v);   // 0x005c8480 (thiscall, ret 8)
+};
+extern SpHandlerVec gSpHandlers;            // 0x015fb120
+
+struct SpRef {                              // AutoRefCount<SpHandler>
+    SpHandler* mp;
+    SpRef(SpHandler* q) { mp = q; if (q) q->AddRef(); }
+    ~SpRef() { if (mp) mp->Release(); }
+};
+
+#define REGISTER_HANDLER(EXPR) { \
+    SpHandler* raw = EXPR; \
+    SpRef r(raw); \
+    if (gSpHandlers.mEnd < gSpHandlers.mCap) { \
+        SpHandler** slot = gSpHandlers.mEnd; \
+        gSpHandlers.mEnd = slot + 1; \
+        if (slot) { \
+            *slot = r.mp; \
+            if (r.mp) r.mp->AddRef(); \
+        } \
+    } else { \
+        gSpHandlers.DoInsertValueEnd(gSpHandlers.mEnd, r); \
+    } \
+}
+
+#define NEW_SP(T, args) new ("Sporepedia", 0, 0, 0, 0) T args
+
+// @ 0x0066b480  register the 16 Sporepedia layout handlers
+void __cdecl FUN_0066b480() {
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<0>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<1>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<2>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<3>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<4>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<5>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<6>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerN<7>, ()))
+    REGISTER_HANDLER(NEW_SP(SpHandlerA, (0)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerA, (1)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerA, (2)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerB, (0)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerB, (1)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerB, (2)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerB, (3)))
+    REGISTER_HANDLER(NEW_SP(SpHandlerB, (4)))
 }

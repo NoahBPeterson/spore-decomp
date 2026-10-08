@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c97220/s00c97220.cpp  ?LoadTribeArchetypeData@@YA_NXZ  00c97220  /O2 /MD /Gy /TP /arch:SSE

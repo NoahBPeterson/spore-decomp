@@ -1,0 +1,1 @@
+00aba3f0 Trail::Update  # name coined: per-frame update of a point trail (head distance vs segment length, decay, field displacement); class name is a stand-in

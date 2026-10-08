@@ -1,0 +1,1 @@
+00e8ffa0 SP::cMineralView::HandleSimulationUpdate  # card name; geyser icon/effect + loyalty meters + mine-state effects; QI 0x403df5f = cCommodityNode

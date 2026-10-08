@@ -1,0 +1,1 @@
+00fa3c10 SP::cTerrainSphere::ApplyModelFootprint  # PDB name; thiscall ret 0x14 (xform, props, a3, faceBoxes, bDecal)

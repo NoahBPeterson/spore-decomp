@@ -1,0 +1,1 @@
+00a33600  1483  complete: all 34 member ctor calls, field stores and EH states reproduced; layout recovered from the ctor, member sub-objects are opaque stubs, EH state numbers and store scheduling differ flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

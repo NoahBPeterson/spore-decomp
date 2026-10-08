@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010743a0  1438  complete (all paths/calls/vtable slots compared in order with the original; same size 2054 B, 127 calls); only basic-block placement of the ctx==2 star lookup and the 0x65680f8 window case differs; flags /O2 /MD /Gy /EHsc /TP

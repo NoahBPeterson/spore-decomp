@@ -1,4 +1,3 @@
-005a51c0  0  cSPColorSwatch::Init: window-construction path abridged
 005a5960  0  cSPColorSwatch::MainColorSelected: message allocation path not implemented (external)
 005a5b10  0  cX scalar deleting destructor: modelled dtor not emitted as a stand-alone symbol
 005a5b70  0  cSPColorSwatch::DoMessage: message dispatch stubbed to return 0

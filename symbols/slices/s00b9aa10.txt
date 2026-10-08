@@ -1,0 +1,1 @@
+00b9aa10 PlaceArchetypeSubSpawns  # Claude-coined: for each species archetype id rolls count/chance, finds positions (FUN_00b97720), records them in the 16-byte-entry table at 0x168890c, places them (FUN_00b93f40), spawn definitions (PlaceSpawnDefinitionsOnPlanet) and recurses on the archetype's sub-item list; called from PlaceSpawnDefinitionsOnPlanet (0xbb64b481 keys)

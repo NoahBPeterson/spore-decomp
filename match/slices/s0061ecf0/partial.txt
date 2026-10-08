@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
-0061ecf0  1704  cEventDisplay::Show: all switch arms present, but the variant type-word source and the eastl-string emission helper are approximations
 0061f670   881  cFeedManager::Load: all control-flow paths present, but the file-marker scan is rewritten and the eastl vector<bool> insert path is not reproduced

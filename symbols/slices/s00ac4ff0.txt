@@ -1,0 +1,1 @@
+00ac5590 RelaxPath  # Claude-coined: smooths a 0x3c-byte-stride point path (fixed_vector<Vector3,256> x3, gNumPasses passes via closest-point-on-segment 00698e00, validity callback at +0xc, projects back via cPlanetModel 00b81630)

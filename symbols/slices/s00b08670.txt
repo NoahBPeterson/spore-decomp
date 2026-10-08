@@ -1,0 +1,1 @@
+00b08670 ItemManager::Update  # guessed name; per-frame update of the item vector at +0x1b905c (thiscall, uint dt, ret 4); items hold a cSpatialObject at +0x34 and a state machine at +0x16c

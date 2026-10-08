@@ -8,3 +8,4 @@
 007027e0  59  segment-query wrapper; copy-out loop register allocation differs
 00702860  98  3-argument query wrapper; copy-out loop register allocation differs
 007028e0  88  eastl hashtable erase; structurally complete, register allocation differs
+00701e40  n/a  complete cHierGrid::Query3 (z/y/x slab traversal of the segment p0->p1 per level, third arg unused as in the original); 0 calls, size 1853 vs 1724; the original keeps deltas in SSE and only fabs in x87 with an 8-aligned frame, mine computes the deltas in x87

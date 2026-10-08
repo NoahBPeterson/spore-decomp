@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00c810e0 1470 SP::cSimPlanetLowLOD::UpdateFloraAndFauna (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; 1794 vs 1790 bytes, 39/39 calls in identical order and identical hash-find/insert/rbtree/list shapes; differs in frame (cl emits ebp frame + and esp for the inlined list dtors, original is esp-based) and register allocation

@@ -1,0 +1,2 @@
+# byte-exact functions for slice s00ea8160
+slices/s00ea8160/s00ea8160.cpp  ?Setup@AudioSetup@@QAE_NXZ  00ea8160  /O2 /MD /Gy /TP /arch:SSE /GR-

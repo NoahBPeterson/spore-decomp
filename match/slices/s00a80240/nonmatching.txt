@@ -1,0 +1,1 @@
+00a80240 900 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); same Lock/Unlock vslots (0, 2), same constants, ToByte via _mm intrinsics gives the original's aligned ebp frame; 1534 vs 1758 bytes: frame 0xe4 vs 0xf4, register allocation (stream ptr spilled) and rotation-term scheduling differ

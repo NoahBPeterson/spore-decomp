@@ -1,3 +1,4 @@
 # va  diff-bytes  short reason
 00ee31d0  32   tail-call to the empty palette refresh changes scheduling (behavior complete)
 00ee3760  68   callee-saved register allocation around the callback install (behavior complete)
+00ee2960  941  (with /O2 /MD /Gy /TP /GS-, file s00ee2860b.cpp) stack-slot order (sret temp below cStrings) and ebx/ebp swap for window locals; complete palette item refresh

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01200010 1500 complete (flags /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast): key-pair track sampler (raw and quantised, slerp/nlerp/lerp); 10 calls in original order, 1626 vs 2027 B; register allocation and duplicated spills differ

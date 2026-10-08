@@ -1,0 +1,1 @@
+00fd0f10 Idct8x8_MMX  # hand-written MMX 8x8 inverse DCT (in, quant, out), table 0x016d91a0; Claude-coined name

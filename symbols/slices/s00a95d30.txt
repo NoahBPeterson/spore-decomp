@@ -1,0 +1,1 @@
+00a95d30 WriteParticleQuads  # particle list -> 4 vertices per particle; sink vtable[0]=Fetch(want,&base,&stride), vtable[2]=Flush

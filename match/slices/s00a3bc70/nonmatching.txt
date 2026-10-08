@@ -1,0 +1,1 @@
+00a3bc70 1188 complete; register allocation in the offset-add blocks and zero-test scheduling differ; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast; calls 25/25, size 1.005x, vcall slots equal; difftest WEAK (2.1% coverage: SP::App() global is null in the image so random runs return at once)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00d4f2e0  1209  TriggerEvent: complete (43 calls in the original order, same vtable slots); local temporaries, register allocation and x87/SSE operand scheduling differ

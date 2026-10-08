@@ -3,3 +3,4 @@
 0066b050  58   global-vector refcounted push: complete AddRef/inline-or-outline path; vector end/cap scheduling differs
 0066b0c0  47   layout-map reset/reindex: complete DoNukeSubtree + map[] loop; cl hoists the size/pointer reloads
 0066bd40  32   zero-init constructor: all fields/vtable/floats present; self stays in ecx instead of the original eax (zero in ecx)
+0066b480  1321  16 refcounted Sporepedia handler registrations: complete; cl keeps the new-result in a register differently (stack reloads)

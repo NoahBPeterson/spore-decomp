@@ -1,0 +1,2 @@
+# Slice s00d48010 names.
+00d48010 `anonymous namespace'::cCreatureCollectableItemsScenario::EvaluateEvent  # PDB candidate (caller-scored), symbols/pdb_candidates.json

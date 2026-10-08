@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+01135ba0  1666  Layer3Decoder::HuffmanDecode (dist10 III_huffman_decode): complete, 2230 vs 2234 bytes, 8/8 calls in the same order; register allocation differs (this/n swap esi/ebx, gain/-gain/0 kept in xmm regs in the original but reloaded from stack here). Flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

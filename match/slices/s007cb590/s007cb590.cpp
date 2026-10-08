@@ -35,7 +35,11 @@ struct string8 {
             EASTL_allocator_deallocate(mpBegin);
     }
     string8& assign(const char* first, const char* last);
-    string8& operator=(const string8& x);
+    string8& operator=(const string8& x) {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
 };
 
 typedef eastl::pair<uint64, EA::AutoRefCount<SP::cPropertyList> > PropPair;
@@ -146,6 +150,106 @@ template void MapFixVec::resize(MapFixVec::size_type);
 // @ 0x007cc580
 template eastl::fixed_vector<PropMap, 4, 1>::fixed_vector(const eastl::fixed_vector<PropMap, 4, 1>&);
 
+
+// ---------------------------------------------------------------- GatherInformation helpers
+// eastl::basic_string<wchar_t,eastl::allocator> (16 bytes) returned by EA::ConvertToString16.
+struct string16 {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; unsigned int mAllocator;
+    ~string16() {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+namespace EA {
+string16 ConvertToString16(const string8& s);                 // 0x0093c6d0
+string8  ConvertToString8(const wchar_t* p, int n = -1);      // 0x0093c440
+}
+void string8_sprintf(string8* s, const char* fmt, ...);        // 0x00472fe0 (cdecl, string is arg 0)
+
+// Out-of-line views of the two retail vectors (thiscall resize; the element types are plain).
+struct SpStringVecView
+{
+    string8* mpBegin; string8* mpEnd; string8* mpCapacity; unsigned int pad[2];
+    void resize(int n);   // 0x00553be0
+};
+struct SpFloatVecView
+{
+    float* mpBegin; float* mpEnd; float* mpCapacity; unsigned int pad[2];
+    void resize(int n);   // 0x004afc80
+};
+
+// SP::GetSystemInfo output (9 strings, then scalars); ctor/dtor are out of line.
+struct StrRaw { char* b; char* e; char* cap; unsigned int al; };
+struct CBig
+{
+    StrRaw s[9];            // +0x00
+    float  f90;             // +0x90
+    int    i94;             // +0x94
+    unsigned char b98, b99, b9a, b9b, b9c, pad9d[3];  // +0x98
+    float  fa0, fa4, fa8, fac;                        // +0xa0
+    CBig();      // 0x006b8460
+    ~CBig();     // 0x005f8910
+};
+void GetSystemInfo(CBig* out);                         // 0x006b8680 (cdecl)
+
+// Path object built from the system-info string (stack object, no destructor).
+struct PathObj
+{
+    unsigned int d[0x100];
+    PathObj(const wchar_t* s);   // 0x00930f60 (ret 4)
+    const wchar_t* GetFirst();   // 0x00930bf0
+    const wchar_t* GetSecond();  // 0x00572590
+};
+
+// rw::graphics cached D3D9 caps + adapter block (retail layout; D3DCAPS9 is the first 0x130 bytes).
+struct DevCaps {
+    unsigned int d00[0x98 / 4];
+    unsigned int maxSimultaneousTextures;              // +0x98
+    unsigned int d9c[(0xc4 - 0x9c) / 4];
+    unsigned char vsMinor, vsMajor; unsigned short padc6;      // +0xc4 VertexShaderVersion
+    unsigned int maxVertexShaderConst;                 // +0xc8
+    unsigned char psMinor, psMajor; unsigned short padce;      // +0xcc PixelShaderVersion
+    unsigned int dd0[(0xf0 - 0xd0) / 4];
+    unsigned int numSimultaneousRTs;                   // +0xf0
+    unsigned int df4[(0x110 - 0xf4) / 4];
+    unsigned int ps20NumTemps;                         // +0x110
+    unsigned int d114;
+    unsigned int ps20NumInstructionSlots;              // +0x118
+    unsigned int d11c[(0x128 - 0x11c) / 4];
+    unsigned int maxVS30Slots;                         // +0x128
+    unsigned int maxPS30Slots;                         // +0x12c
+    unsigned int d130;
+    unsigned int deviceId;                             // +0x134
+    unsigned int vendorId;                             // +0x138
+    unsigned int d13c;
+    unsigned int driverLow, driverHigh;                // +0x140
+    unsigned int d148[(0x1fc - 0x148) / 4];
+    char         description[0x200];                   // +0x1fc
+    unsigned int dispW, dispH;                         // +0x3fc
+};
+
+bool FUN_006b8250();                                   // 0x006b8250
+unsigned int FUN_006b8410();                           // 0x006b8410
+bool IsVistaKB940105Required();                        // 0x007c5f50
+extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent(void);
+inline void AssignRaw(string8& dst, const StrRaw& src) {
+    if ((const void*)&src != (const void*)&dst)
+        dst.assign(src.b, src.e);
+}
+struct AppProps
+{
+    unsigned char GetDescription(unsigned int id);   // 0x006a25a0 (thiscall, ret 4)
+};
+extern AppProps* g_sAppProperties;                                    // 0x015fd918
+struct IDev9 {
+    struct VT { void* f0; void* f1; void* f2; void* f3;
+                unsigned int (__stdcall *GetAvailableTextureMem)(IDev9*); } *vt;   // slot 4 (+0x10)
+};
+extern IDev9* g_pD3D9Device;                                          // 0x016f89d0
+struct DispMode { unsigned int width, height, refresh, format; };
+DispMode D3D9GetDesktopDisplayMode();                                 // 0x011f8270 (sret)
+DevCaps* GetD3DCAPS9();                                               // 0x011f8af0
+
 // ---------------------------------------------------------------- SP::cConfigScriptState / Manager
 namespace SP {
 
@@ -180,7 +284,7 @@ struct cConfigScriptState {
 
     cConfigScriptState();
     ~cConfigScriptState();
-    void GatherInformation() {}   // see partial.txt
+    void GatherInformation();
 };
 
 struct IConfigUnknown {
@@ -280,5 +384,98 @@ void SettingCommand::Execute(EA::ArgScript::cArguments* pArgs) {
     }
 }
 
+
+
+// @ 0x007cb590
+void cConfigScriptState::GatherInformation() {
+    SpStringVecView* sv = reinterpret_cast<SpStringVecView*>(&mConfigStrings);
+    SpFloatVecView*  nv = reinterpret_cast<SpFloatVecView*>(&mConfigNumbers);
+    sv->resize(0xe);
+    nv->resize(0x21);
+    DevCaps* caps = GetD3DCAPS9();
+    CBig big;
+    GetSystemInfo(&big);
+
+#define str sv->mpBegin
+#define num nv->mpBegin
+
+    str[2].assign("Spore", "Spore" + 5);
+    str[4].assign("1.0.0", "1.0.0" + 5);
+    str[13].assign("Unknown", "Unknown" + 7);
+    str[13].assign("Release", "Release" + 7);
+    AssignRaw(str[1], big.s[0]);
+    AssignRaw(str[0], big.s[1]);
+    AssignRaw(str[7], big.s[2]);
+    AssignRaw(str[5], big.s[3]);
+    AssignRaw(str[6], big.s[4]);
+    AssignRaw(str[8], big.s[5]);
+    AssignRaw(str[9], big.s[6]);
+    AssignRaw(str[4], big.s[7]);
+
+    PathObj path(EA::ConvertToString16(*(string8*)&big.s[8]).mpBegin);
+    str[2] = EA::ConvertToString8(path.GetFirst(), -1);
+    str[3] = EA::ConvertToString8(path.GetSecond(), -1);
+
+    num[0] = big.f90;
+    num[1] = (float)big.i94;
+    num[2] = (big.b9b && big.b9a) ? 1.0f : 0.0f;
+    num[3] = big.b9b ? 1.0f : 0.0f;
+    num[6] = big.fa8;
+    num[7] = big.fac;
+    num[8] = big.fa0;
+    num[9] = big.fa4;
+    num[0x1f] = !FUN_006b8250() ? 1.0f : 0.0f;
+    { float* p = &num[0x20]; *p = (float)FUN_006b8410(); }
+    ((unsigned short*)&caps->deviceId)[1] = 0;
+    if (!mOverrideCardIDs) {
+        mVendorID = caps->vendorId;
+        mCardID = caps->deviceId;
+    }
+    DispMode dm = D3D9GetDesktopDisplayMode();
+    num[10] = (float)dm.width;
+    num[11] = (float)dm.height;
+    num[13] = (float)dm.refresh;
+    { float* p = &num[14]; *p = (float)g_sAppProperties->GetDescription(0x38d0a09); }
+    num[15] = 0.0f;
+    num[16] = (float)caps->dispW / (float)caps->dispH;
+    { float* p = &num[17]; *p = (float)(g_pD3D9Device->vt->GetAvailableTextureMem(g_pD3D9Device) >> 20); }
+    num[18] = (float)caps->maxSimultaneousTextures;
+    string8_sprintf(&str[10], "0x%08x%08x", caps->driverHigh, caps->driverLow);
+    {
+        const char* d = caps->description;
+        const char* e = d;
+        while (*e++) {}
+        str[11].assign(d, d + (e - (d + 1)));
+    }
+    string8_sprintf(&str[12], "vendor:0x%04x, card:0x%04x", caps->vendorId, caps->deviceId);
+    unsigned int vsVer = (caps->vsMajor << 8) | caps->vsMinor;
+    unsigned int psVer = (caps->psMajor << 8) | caps->psMinor;
+    num[0x13] = (float)vsVer;
+    num[0x14] = (float)psVer;
+    num[0x15] = (float)caps->numSimultaneousRTs;
+    num[0x16] = (float)caps->maxVertexShaderConst;
+    num[0x17] = 8.0f;
+    num[0x18] = 256.0f;
+    num[0x19] = 96.0f;
+    num[0x1b] = 12.0f;
+    if (psVer >= 0x300) {
+        num[0x17] = 224.0f;
+        num[0x18] = (float)caps->maxVS30Slots;
+        num[0x19] = (float)caps->maxPS30Slots;
+        num[0x1b] = 32.0f;
+    } else if (psVer >= 0x200) {
+        num[0x17] = 32.0f;
+        num[0x19] = (float)(int)caps->ps20NumInstructionSlots;
+        num[0x1b] = (float)(int)caps->ps20NumTemps;
+    }
+    num[0x1c] = g_sAppProperties->GetDescription(0x668d4fa1) ? 1.0f : 0.0f;
+    num[0x1d] = big.b9c ? 1.0f : 0.0f;
+    num[0x1e] = IsVistaKB940105Required() ? 1.0f : 0.0f;
+    unsigned int drv = caps->driverLow;
+    num[4] = (float)((drv >> 16) * 10000 + (drv & 0xffff));
+    num[5] = IsDebuggerPresent() ? 1.0f : 0.0f;
+#undef str
+#undef num
+}
 
 }  // namespace SP

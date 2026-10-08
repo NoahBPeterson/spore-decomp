@@ -2,3 +2,4 @@
 007e66a0  10  PropWatcher::Check complete; only diff is the missing ecx=local argument load before FUN_004e41c0 (thiscall-vs-free mismatch)
 007e6720  60  PropWatcher::Read complete; type-tag selection compiled as setne instead of neg/sbb, plus ecx/eax register choice
 007e6470  235  cAppSystem::PreShutdown complete behavioural reconstruction (vtable teardown); virtual-call register/order schedule differs
+007e67a0  1595  cAppSystem::Init(CommandLine*) complete startup sequence (idgen, locale, cmd server, telemetry, prop mgr, sockets/SSL, save areas + preferences, pack mgr, input, canvas, graphics, app states, config mgr); frame 4 bytes larger (one extra stack local), state-var offsets shift; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE ; equiv: UNSUPPORTED (mktime64 import, writes)

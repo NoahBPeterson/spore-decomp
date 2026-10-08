@@ -1,5 +1,4 @@
 005b4170  451  not translated
-005b4340  1929  not translated
 005b4bf0  803  not translated
 005b4f20  69  x87 angle-wrap helper; not translated
 005b4fa0  253  not translated

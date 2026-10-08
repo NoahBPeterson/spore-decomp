@@ -1,0 +1,1 @@
+005e7830 SP::cSPEditorVerbIconTray::Init  # reads verb-tray property list, builds layout and windows; PDB name

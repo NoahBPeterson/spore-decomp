@@ -1,0 +1,1 @@
+010414c0 {anon}::RegisterShaderDataInfo  # rebuilds the 0x54-byte shader data info vector at mgr+0x18 from the shader property-list group

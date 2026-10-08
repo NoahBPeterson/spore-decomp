@@ -1,2 +1,1 @@
-# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-00661d10  1983  CreateFilterButtons reconstruction is a skeleton: the 1983-byte button-construction body is not reproduced
+# va  diff-bytes  reason

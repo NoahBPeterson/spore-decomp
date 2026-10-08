@@ -1,0 +1,1 @@
+009e8860 nSPCreatureAnim::IKFinishGoals  # called at the end of IKCreatureToGoals pass A (see s009f4660); averages delegated goals of the root's children and rotates child particles

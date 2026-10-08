@@ -1,3 +1,2 @@
 # va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
-00b15b00  1901  per-frame camera transform evaluation: only the opening stages reproduced
 00b16520   247  Gonzago ray/segment test: the 5-argument world vcall and result block are approximated

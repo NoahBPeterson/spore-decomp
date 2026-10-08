@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+00cffd50  1435  SP::cCivTokenTranslator::TranslateToken: complete (all 24 hash cases, FNV1 dispatch + base-class fallback; 47 calls vs 53 because cl merges the per-case GetName tails; size 1644 vs 1768); per-case civ/city locals are not overlapped (frame 0xb0 vs 0x90), (int)GetTradeValue() is a __ftol2_sse call instead of fstp+cvttss2si, and the planet-mode population call passes city where the original reads an uninitialised stack slot

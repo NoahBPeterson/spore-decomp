@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00dd4b20  1172  cSPUICommScreen::UpdateSpaceInfo: complete (icon/flags, planet image choice, empire colour, tooltips, two money read-outs, translator star, empire-name caption with localized fallback); 88 calls/88, ordered call/vcall sequence identical, size 1612 vs 1594; stack-slot reuse and register choices differ

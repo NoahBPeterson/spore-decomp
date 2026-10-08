@@ -1,0 +1,1 @@
+01035900  22  cSPSpaceGfx::InitForGame complete (/O2 /MD /Gy /TP /arch:SSE /fp:fast); size 2229 vs 2233, 91/91 vcalls, same slots/ids; diffs: original ends with tail jmp ModelManager (frame 0x10) and a different temp-slot order for the zero Vec3 copies; ours calls ModelManager normally (frame 0x14)

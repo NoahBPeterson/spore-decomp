@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f88650  1926  complete (all 9 switch cases checked against asm/Ghidra); 1928 vs 2136 B; this/mFaceSize register allocation and frame (0x68 vs 0x78) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00509f50/s00509f50.cpp  ?BuildFaces@SlotTable@@QAEXXZ  0050a0a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-

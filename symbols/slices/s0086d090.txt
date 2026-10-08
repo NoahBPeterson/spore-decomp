@@ -1,0 +1,1 @@
+00870860 png_build_gamma_table  # libpng 1.2.25 pngrtran.c; builds gamma tables (8-bit and 16-bit)

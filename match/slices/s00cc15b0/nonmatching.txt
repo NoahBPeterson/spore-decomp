@@ -1,0 +1,1 @@
+00cc1c30 1278 complete: 35/35 direct calls (same targets), 12 indirect calls, same constants/keys, 1724 vs 1674 B; frame 0xa4 vs 0xa0 and SSE register allocation/load order of the normalize sequences differ

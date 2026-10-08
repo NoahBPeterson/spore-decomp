@@ -1,0 +1,2 @@
+# va  diff  reason
+00466690 108 ExportBakedModelToXMF: complete, every instruction matches; /Od frame is 0x64 bytes smaller (a 4-dword and a 21-dword inline-callee hole between the temp blocks, plus one named instArg slot that is a temp in the original)

@@ -1,0 +1,1 @@
+00a9ce00 EA::Swarm::cParticlesEffect::BuildParticleTransform  # Claude-coined: per-particle model transform (align-to-velocity, orientation quaternion, 3 rotation curves, wiggle, offset); caller is StreamModelParticles 0xa9f170

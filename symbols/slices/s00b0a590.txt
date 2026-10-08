@@ -1,0 +1,1 @@
+00b0a6f0 BeamMgr2::UpdateBeams  # per-frame update of paired beam lights around aim target; sibling of 00b7a880; asm + Ghidra

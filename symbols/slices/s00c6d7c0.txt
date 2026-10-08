@@ -1,0 +1,1 @@
+00c6d7c0 SP::cHerd::Update  # PDB name; guard count, herd-mom pick, egg layer, respawn, egg update, feeding ground tick

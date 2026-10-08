@@ -99,6 +99,65 @@ void  __cdecl FUN_00625a90_proxy(cCreatureCameraBase* c);   // 0x625a90
 void  __cdecl FUN_00625bf0_proxy(cCreatureCameraBase* c);   // 0x625bf0
 void  __cdecl cCreatureCameraDepends_SetLocalExtents(void* d);  // 0x6252c0-ish
 
+
+// ---- 0x00627660: camera-collision push-out (retail-layout view of the camera object) -------------
+extern cVec3 gCamLocalPos;  // 0x15f65fc
+extern cVec3 gCamForward;   // 0x15f6774
+extern cVec3 gCamRight;     // 0x15f6720
+#include <math.h>
+struct cSPTransformR {
+  uint16_t mFlags;
+  uint16_t mModificationCount;
+  cVec3 mTranslation;
+  float mScale;
+  cVec3 xAxis, yAxis, zAxis;
+};
+
+  // 0x15f65fc
+
+__forceinline float Clamp(float x, float lo, float hi) {
+  __asm {
+    movss xmm0, x
+    maxss xmm0, lo
+    minss xmm0, hi
+    movss x, xmm0
+  }
+  return x;
+}
+
+static __forceinline void RotateDir(const cSPTransformR& t, float& x, float& y, float& z) {
+  if (t.mFlags & 2) {
+    float rx = (t.zAxis.x * z + t.yAxis.x * y) + t.xAxis.x * x;
+    float ry = (t.zAxis.y * z + t.yAxis.y * y) + t.xAxis.y * x;
+    float rz = (t.zAxis.z * z + t.yAxis.z * y) + t.xAxis.z * x;
+    x = rx; y = ry; z = rz;
+  }
+}
+
+struct CamView {
+  char  pad00[0xd4];
+  float currentPlayerPitch;     // +0xd4
+  char  padd8[0xe8 - 0xd8];
+  cVec3 desiredLookAt;          // +0xe8
+  char  padf4[0x130 - 0xf4];
+  float nonPenetratingPhi;      // +0x130
+  bool  bPenetrating;           // +0x134
+  char  pad135[0x170 - 0x135];
+  float mNearClip;              // +0x170
+  char  pad174[0x18c - 0x174];
+  float mFieldOfViewX;          // +0x18c
+  float mFieldOfViewY;          // +0x190
+  cSPTransformR mCameraToWorld;  // +0x194
+  char  pad1c[0x1f4 - 0x194 - sizeof(cSPTransformR)];
+  void* mpQueryFn;              // +0x1f4
+  void* mpQueryCtx;             // +0x1f8
+  float mLastQuery;             // +0x1fc
+
+  float QueryClearance(const cVec3* p);       // 0x625600
+  void CalculateCameraToWorldMatrix();        // 0x6268a0
+};
+
+
 // @ 0x00627000
 void cCreatureCameraBase::GetAudioAnchorPosition(float* out) {
   float f = mAvatarMinZ;
@@ -235,5 +294,76 @@ void cCreatureCameraBase::Activate() {
 // @ 0x006271f0  ctor (skeleton; see partial.txt)
 cCreatureCameraBase::cCreatureCameraBase() {}
 
-// @ 0x00627660  (skeleton; see partial.txt)
-void cCreatureCameraBase::FUN_00627660() {}
+// @ 0x00627660  camera-vs-ground push-out (see CamView::FUN_00627660 above)
+void cCreatureCameraBase::FUN_00627660() {
+  CamView* cv = (CamView*)this;
+  cSPTransformR& t = cv->mCameraToWorld;
+  float lx = gCamLocalPos.x, ly = gCamLocalPos.y, lz = gCamLocalPos.z;
+  RotateDir(t, lx, ly, lz);
+  float s = t.mScale;
+  cVec3 pos;
+  pos.x = s * lx + t.mTranslation.x;
+  pos.y = t.mTranslation.y + ly * s;
+  pos.z = t.mTranslation.z + lz * s;
+  float fovX = cv->mFieldOfViewX;
+  float fovY = cv->mFieldOfViewY;
+  float fx = gCamForward.x, fy = gCamForward.y, fz = gCamForward.z;
+  RotateDir(t, fx, fy, fz);
+  float s1 = t.mScale;
+  cVec3 fwd; fwd.x = s1 * fx; fwd.y = fy * s1; fwd.z = fz * s1;
+  float rx = gCamRight.x, ry = gCamRight.y, rz = gCamRight.z;
+  RotateDir(t, rx, ry, rz);
+  float s2 = t.mScale;
+  cVec3 rgt; rgt.x = s2 * rx; rgt.y = ry * s2; rgt.z = rz * s2;
+  float near_ = cv->mNearClip;
+  float halfW = (float)(tan(fovX) * near_);
+  cVec3 tgt;
+  tgt.x = near_ * fwd.x + pos.x;
+  tgt.y = fwd.y * near_ + pos.y;
+  tgt.z = fwd.z * near_ + pos.z;
+  cVec3 off;
+  off.x = rgt.x * halfW;
+  off.y = rgt.y * halfW;
+  off.z = rgt.z * halfW;
+  cVec3 c1, c2;
+  c1.x = off.x + tgt.x; c1.y = off.y + tgt.y; c1.z = off.z + tgt.z;
+  c2.x = tgt.x - off.x; c2.y = tgt.y - off.y; c2.z = tgt.z - off.z;
+  float r0 = cv->QueryClearance(&pos);
+  float r1 = cv->QueryClearance(&tgt);
+  if (r1 < 0.0f) r1 = 0.0f;
+  float r2 = cv->QueryClearance(&c1);
+  if (r2 < 0.0f) r2 = 0.0f;
+  float r3 = cv->QueryClearance(&c2);
+  if (r3 < 0.0f) r3 = 0.0f;
+  const float* pa = (r3 > r2) ? &r3 : &r2;
+  const float* pb = (r1 > r0) ? &r1 : &r0;
+  const float* pm = pb;
+  if (*pa > *pb) pm = pa;
+  float h2 = (float)(tan(fovY) * cv->mNearClip + *pm);
+  if (pos.z < h2) {
+    cv->bPenetrating = true;
+    t.mFlags |= 4;
+    t.mModificationCount += 1;
+    cVec3 np; np.x = pos.x; np.y = pos.y; np.z = h2;
+    t.mTranslation = np;
+    float oldPitch = cv->currentPlayerPitch;
+    float dx1 = cv->desiredLookAt.x - pos.x;
+    float dy1 = cv->desiredLookAt.y - pos.y;
+    float dz1 = cv->desiredLookAt.z - pos.z;
+    float inv1 = 1.0f / sqrtf(dx1 * dx1 + (dy1 * dy1 + dz1 * dz1));
+    float dz2 = cv->desiredLookAt.z - h2;
+    float dy2 = cv->desiredLookAt.y - pos.y;
+    float dx2 = cv->desiredLookAt.x - pos.x;
+    float inv2 = 1.0f / sqrtf(dx2 * dx2 + (dy2 * dy2 + dz2 * dz2));
+    float dot = (dz2 * inv2) * (dz1 * inv1) + (dy2 * inv2) * (dy1 * inv1) + (inv2 * dx2) * (inv1 * dx1);
+    dot = Clamp(dot, -1.0f, 1.0f);
+    float ang = (float)acos(dot) + cv->currentPlayerPitch;
+    cv->currentPlayerPitch = ang;
+    cv->nonPenetratingPhi = ang;
+    cv->CalculateCameraToWorldMatrix();
+    cv->currentPlayerPitch = oldPitch;
+    return;
+  }
+  cv->bPenetrating = false;
+}
+

@@ -2,5 +2,4 @@
 007c99e0  -   eastl vector<refptr> insert-one: reallocation/relocate path reduced to a skeleton
 007c9bc0  -   eastl vector<refptr> insert-N: reserve + UninitializedFill/CopyAssign paths omitted
 007c9dc0  -   eastl vector<AutoRef> insert-one: reallocation path reduced to a skeleton
-007ca1c0  -   cConfigManager::Initialize: parser wiring + per-option property build omitted (1.6 KB)
 007ca8e0  -   eastl vector<vector_map<u64,AutoRef>> destructor: element teardown omitted

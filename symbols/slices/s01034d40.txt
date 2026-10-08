@@ -1,0 +1,1 @@
+01035000 cSpaceRenderLayer::DrawLayer  # ILayer::DrawLayer (vtable +0xc; ModAPI Graphics::ILayer) override: copies viewers, forwards to IModelWorld::AsLayer (+0x13c) / layer table entries

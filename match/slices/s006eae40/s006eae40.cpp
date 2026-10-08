@@ -1,6 +1,10 @@
-// Slice s006eae40 -- effects camera manager, render-entity copy/sort/dtor helpers.
+// Slice s006eae40 -- effects camera manager, render-entity copy/sort/dtor helpers, and the
+// effects renderer's buffered-model flush (0x006eae40).
+// Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include <string.h>
 #include <intrin.h>
+#include <xmmintrin.h>
+#include <math.h>
 typedef unsigned int   uint;
 typedef unsigned short ushort;
 typedef unsigned char  uchar;
@@ -34,7 +38,6 @@ struct CEM7 {
 
 struct S7 {
     char m_unk[0x240];
-    void mae40();
     void m6eb8c0(void* src);
     S7*  m6ebb80(void* src);
     void mebf50();
@@ -43,12 +46,7 @@ struct S7 {
 };
 
 // ---------------------------------------------------------------------------
-// @ 0x006eae40
-void S7::mae40()
-{
-    // 2186-byte routine; only the entry shape is reproduced (partial).
-    (void)this;
-}
+// @ 0x006eae40  SP::cEffectsRenderer::ReleaseAndDrawModelBuffer (see the end of this file)
 
 // ---------------------------------------------------------------------------
 // @ 0x006eb6e0  SP::cEffectsCameraManager::UpdateCameraView
@@ -279,4 +277,317 @@ void S7::mec090()
     int i = *(int*)(p + 4);
     if ((int)((*(int*)(p + 0xc) - i) & 0xfffffffe) > 2 && i != 0 && i != *(int*)(p + 0x14))
         f_f47380((void*)i);
+}
+
+// ===========================================================================
+// SP::cEffectsRenderer::ReleaseAndDrawModelBuffer (0x006eae40)
+// ===========================================================================
+struct V3 {                                                         // 3 floats with a user copy ctor (movss copies)
+    float x, y, z;
+    V3() {}
+    V3(float ax, float ay, float az) : x(ax), y(ay), z(az) {}
+    V3(const V3& o) : x(o.x), y(o.y), z(o.z) {}
+};
+
+__declspec(align(16)) struct Vector4 {
+    union {
+        __m128 m;
+        struct { float x, y, z, w; };
+    };
+    Vector4() {}
+    Vector4(float ax, float ay, float az, float aw) { m = _mm_set_ps(aw, az, ay, ax); }
+    Vector4(const Vector4& o) : m(o.m) {}
+    Vector4& operator=(const Vector4& o) { m = o.m; return *this; }
+};
+
+// Direct3D 9 device: only SetStreamSourceFreq (vtable +0x198) is used here.
+struct IDirect3DDevice9 {
+    virtual void pv0(); virtual void pv1(); virtual void pv2(); virtual void pv3();
+    virtual void pv4(); virtual void pv5(); virtual void pv6(); virtual void pv7();
+    virtual void pv8(); virtual void pv9(); virtual void pv10(); virtual void pv11();
+    virtual void pv12(); virtual void pv13(); virtual void pv14(); virtual void pv15();
+    virtual void pv16(); virtual void pv17(); virtual void pv18(); virtual void pv19();
+    virtual void pv20(); virtual void pv21(); virtual void pv22(); virtual void pv23();
+    virtual void pv24(); virtual void pv25(); virtual void pv26(); virtual void pv27();
+    virtual void pv28(); virtual void pv29(); virtual void pv30(); virtual void pv31();
+    virtual void pv32(); virtual void pv33(); virtual void pv34(); virtual void pv35();
+    virtual void pv36(); virtual void pv37(); virtual void pv38(); virtual void pv39();
+    virtual void pv40(); virtual void pv41(); virtual void pv42(); virtual void pv43();
+    virtual void pv44(); virtual void pv45(); virtual void pv46(); virtual void pv47();
+    virtual void pv48(); virtual void pv49(); virtual void pv50(); virtual void pv51();
+    virtual void pv52(); virtual void pv53(); virtual void pv54(); virtual void pv55();
+    virtual void pv56(); virtual void pv57(); virtual void pv58(); virtual void pv59();
+    virtual void pv60(); virtual void pv61(); virtual void pv62(); virtual void pv63();
+    virtual void pv64(); virtual void pv65(); virtual void pv66(); virtual void pv67();
+    virtual void pv68(); virtual void pv69(); virtual void pv70(); virtual void pv71();
+    virtual void pv72(); virtual void pv73(); virtual void pv74(); virtual void pv75();
+    virtual void pv76(); virtual void pv77(); virtual void pv78(); virtual void pv79();
+    virtual void pv80(); virtual void pv81(); virtual void pv82(); virtual void pv83();
+    virtual void pv84(); virtual void pv85(); virtual void pv86(); virtual void pv87();
+    virtual void pv88(); virtual void pv89(); virtual void pv90(); virtual void pv91();
+    virtual void pv92(); virtual void pv93(); virtual void pv94(); virtual void pv95();
+    virtual void pv96(); virtual void pv97(); virtual void pv98(); virtual void pv99();
+    virtual void pv100(); virtual void pv101();
+    virtual long __stdcall SetStreamSourceFreq(uint stream, uint setting);   // +0x198
+};
+
+// One buffered model instance as queued by the effects system (0x50 bytes).
+struct ModelInstance {
+    Vector4 mRow[4];     // +0x00 transform; row 3 holds the translation
+    uint    mColor[4];   // +0x40 RGBA
+};
+
+struct VertexBuffer {
+    char pad00[8];
+    uint mStart;                                                    // +0x08
+    int  Lock(int type, void** ppData, int* pStart, int start, int count);   // 0x006dd250
+    void Unlock();                                                  // 0x011f36a0
+};
+
+struct RenderState {                                                // object at g+0x30d7c
+    char pad00[0x1c];
+    int  mField1c;
+    int  mField20;
+    void SetA(int v);                                               // 0x011f96e0
+    void SetB(int v);                                               // 0x011f96b0
+    void SetC(int a, int b);                                        // 0x011f9670
+    void Draw();                                                    // 0x011f9710
+};
+
+struct RenderCtx {                                                  // *0x01618d10
+    char pad00[0x10];
+    ModelInstance mInstances[1];                                    // +0x10, stride 0x50
+    char padRest[0x30d7c - 0x10 - 0x50];
+    RenderState*  mState;                                           // +0x30d7c
+    VertexBuffer* mVB;                                              // +0x30d80
+    uint          mUsed;                                            // +0x30d84
+};
+extern RenderCtx* g_pCtx;                                           // 0x01618d10
+
+struct ShaderDataItem { char pad[8]; void Push(); };                // 0x007789d0 (thiscall)
+struct EmbeddedState {
+    char pad00[4];
+    uint mState;                                                    // +0x04
+    uint mSoftStateDirty;                                           // +0x08
+    void D3D9SetTransform(const void* m, int slot, int flag);       // 0x011edc10
+    void Dispatch();                                                // 0x011ee580 (CompiledState::Dispatch)
+};
+
+struct DrawData {                                                   // per-dispatch draw description
+    char pad00[8];
+    int  mField08;                                                  // +0x08
+    char pad0c[0xc];
+    int  mField18;                                                  // +0x18
+    char pad1c[8];
+    struct { char pad[0xc]; int mField0c; }* mpField24;             // +0x24
+};
+struct StateHolder { char pad[4]; EmbeddedState* mpState; };        // +0x04
+struct DispatchPair {                                               // 12-byte dispatch entry
+    DrawData*       mpData;                                         // +0x00
+    StateHolder*    mpHolder;                                       // +0x04
+    ShaderDataItem* mpShader;                                       // +0x08
+};
+
+struct ModelBase {                                                  // SP::cEffectsModel
+    char pad00[8];
+    DispatchPair* mDispatchBegin;                                   // +0x08
+    DispatchPair* mDispatchEnd;                                     // +0x0c
+    char pad10[0x40];
+    Vec3 mBoxMin;                                                   // +0x50
+    Vec3 mBoxMax;                                                   // +0x5c
+    void DispatchWithAdditionalMaterial(int material);              // 0x006e7110
+    void DispatchList(void* list, int material);                    // 0x006e73d0
+};
+
+struct FrustumCull {
+    uint FrustumTestSphere(const V3* mn, const V3* mx, int flags);   // 0x00700120
+};
+
+struct AppConfig { char pad[0xe0]; float mMinAlpha; };
+struct AppProps { char pad[0x3c]; AppConfig* mConfig; };
+extern AppProps* sAppProperties;                                    // 0x015fd918
+
+struct ColorRGBA { uint r, g, b, a; };
+extern ColorRGBA g_whiteColor;                                      // 0x0140afc4
+extern ColorRGBA g_color;                                           // 0x016f96a8
+extern uint g_renderStateDirty;                                     // 0x016fa38c
+extern uint g_softStateDirty;                                       // 0x016f9528
+extern int  g_16f921c, g_16f9244, g_16f9240;
+
+void  __cdecl SetBlendMode(uint mode);                              // 0x011f1340
+uint  __cdecl ColorRGBAToU32(const void* rgba);                     // 0x004580c0
+void  __cdecl EffectsDispatch(const void* m, int mode);            // 0x005291f0
+bool  __cdecl PushShaderDataNull();                                 // 0x00777bf0
+void  __cdecl PopShaderData();                                      // 0x00777c10
+void  __cdecl SetShaderData(EmbeddedState* s);                      // 0x00777b50
+void  __cdecl SetVertexDescriptor(void* vdesc);                     // 0x007611a0
+void  __cdecl VertexDescriptorChange(void* vdesc);                  // 0x006dd2a0
+extern IDirect3DDevice9* g_d3dDevice;                               // 0x016f89d0
+extern const float kSignMask;                                       // 0x013eb8b0
+
+struct EffectsRenderer {
+    char pad000[0x14c];
+    void* mCurrentVDesc;                                            // +0x14c
+    char pad150;
+    bool  mCanUseInstancing;                                        // +0x151
+    char pad152[6];
+    int   mMinInstancingCount;                                      // +0x158
+    int   mBufferedCount;                                           // +0x15c
+    int   mFlag160;                                                 // +0x160
+    char pad164[0x1a8 - 0x164];
+    ModelBase* mModel;                                              // +0x1a8
+    void*      mList;                                               // +0x1ac
+    char pad1b0[0x258 - 0x1b0];
+    FrustumCull mFrustum;                                           // +0x258
+    char pad25c[0x364 - 0x259];
+    int   mMaterial;                                                // +0x364
+    char pad368[4];
+    int   mCounter36c;                                              // +0x36c
+    int   mCounter370;                                              // +0x370
+
+    int ReleaseAndDrawModelBuffer();                                // 0x006eae40
+};
+
+static inline Vector4 GetRow(const ModelInstance& m, int i) { return m.mRow[i]; }
+static inline const float& Max(const float& a, const float& b) { return (a < b) ? b : a; }
+
+struct Box3 { V3 mMin, mMax; };
+
+// @ 0x006eae40  SP::cEffectsRenderer::ReleaseAndDrawModelBuffer
+int EffectsRenderer::ReleaseAndDrawModelBuffer()
+{
+    if (mBufferedCount != 0) {
+        SetBlendMode(0x60005);
+        g_renderStateDirty |= 0x60100;
+        g_16f921c = 1;
+        g_16f9244 = 5;
+        g_16f9240 = 0;
+
+        if (mCurrentVDesc == 0 || mBufferedCount < mMinInstancingCount) {
+            // Not enough instances to be worth hardware instancing: cull and draw each one.
+            Box3 box = *(Box3*)&mModel->mBoxMin;
+            V3 neg(-box.mMin.x, -box.mMin.y, -box.mMin.z);
+            if (mList != 0) {
+                V3 ext(Max(neg.x, box.mMax.x), Max(neg.y, box.mMax.y), Max(neg.z, box.mMax.z));
+                float minAlpha = sAppProperties->mConfig->mMinAlpha;
+                for (int i = 0; i < mBufferedCount; i++) {
+                    RenderCtx* g = g_pCtx;
+                    const ModelInstance& inst = g->mInstances[i];
+                    if (*(float*)&inst.mColor[3] > minAlpha) {
+                        float r = sqrtf(inst.mRow[0].z * inst.mRow[0].z + inst.mRow[0].y * inst.mRow[0].y +
+                                        inst.mRow[0].x * inst.mRow[0].x);
+                        V3 t = *(V3*)&inst.mRow[3];
+                        V3 mn(t.x - ext.x * r, t.y - ext.y * r, t.z - ext.z * r);
+                        V3 mx(ext.x * r + t.x, ext.y * r + t.y, ext.z * r + t.z);
+                        if ((mFrustum.FrustumTestSphere(&mn, &mx, 0x200) & 0x40) == 0) {
+                            const ModelInstance& cur = g_pCtx->mInstances[i];
+                            EffectsDispatch(&cur, 2);
+                            g_softStateDirty |= 0x10;
+                            g_color = *(ColorRGBA*)&g_pCtx->mInstances[i].mColor;
+                            mModel->DispatchList(mList, mMaterial);
+                        }
+                    }
+                }
+            } else {
+                V3 ext(Max(neg.x, box.mMax.x), Max(neg.y, box.mMax.y), Max(neg.z, box.mMax.z));
+                float minAlpha = sAppProperties->mConfig->mMinAlpha;
+                for (int i = 0; i < mBufferedCount; i++) {
+                    RenderCtx* g = g_pCtx;
+                    const ModelInstance& inst = g->mInstances[i];
+                    if (*(float*)&inst.mColor[3] > minAlpha) {
+                        float r = sqrtf(inst.mRow[0].z * inst.mRow[0].z + inst.mRow[0].y * inst.mRow[0].y +
+                                        inst.mRow[0].x * inst.mRow[0].x);
+                        V3 t = *(V3*)&inst.mRow[3];
+                        V3 mn(t.x - ext.x * r, t.y - ext.y * r, t.z - ext.z * r);
+                        V3 mx(ext.x * r + t.x, ext.y * r + t.y, ext.z * r + t.z);
+                        if ((mFrustum.FrustumTestSphere(&mn, &mx, 0x200) & 0x40) == 0) {
+                            const ModelInstance& cur = g_pCtx->mInstances[i];
+                            EffectsDispatch(&cur, 2);
+                            g_softStateDirty |= 0x10;
+                            g_color = *(ColorRGBA*)&g_pCtx->mInstances[i].mColor;
+                            mModel->DispatchWithAdditionalMaterial(mMaterial);
+                        }
+                    }
+                }
+            }
+        } else {
+            // Hardware instancing: pack every queued transform into the instance vertex buffer
+            // and draw them with one call.
+            int i;
+            if (g_pCtx->mUsed + mBufferedCount > 0x9c4)
+                g_pCtx->mUsed = 0;
+            if (!mCanUseInstancing)
+                g_pCtx->mUsed = 0;
+            int start = g_pCtx->mUsed;
+            void* data;
+            int lockType = 6;
+            if (start != 0)
+                lockType = 10;
+            if (!g_pCtx->mVB->Lock(lockType, &data, &start, start, mBufferedCount))
+                return 0;
+            g_pCtx->mUsed += mBufferedCount;
+
+            float* dst = (float*)data;
+            for (i = 0; i < mBufferedCount; i++, dst += 13) {
+                const ModelInstance& m = g_pCtx->mInstances[i];
+                dst[0] = GetRow(m, 0).x;
+                dst[1] = GetRow(m, 1).x;
+                dst[2] = GetRow(m, 2).x;
+                dst[3] = GetRow(m, 3).x;
+                dst[4] = GetRow(m, 0).y;
+                dst[5] = GetRow(m, 1).y;
+                dst[6] = GetRow(m, 2).y;
+                dst[7] = GetRow(m, 3).y;
+                dst[8] = GetRow(m, 0).z;
+                dst[9] = GetRow(m, 1).z;
+                dst[10] = GetRow(m, 2).z;
+                dst[11] = GetRow(m, 3).z;
+                *(uint*)&dst[12] = ColorRGBAToU32(&m.mColor);
+            }
+            g_pCtx->mVB->Unlock();
+
+            DispatchPair* entry = mModel->mDispatchBegin;
+            if (entry != mModel->mDispatchEnd) {
+                PushShaderDataNull();
+                DrawData* draw = entry->mpData;
+                EmbeddedState* state = entry->mpHolder->mpState;
+                g_pCtx->mState->mField1c = 0;
+                g_pCtx->mState->mField20 = draw->mpField24->mField0c;
+                g_pCtx->mState->SetA(draw->mField08);
+                g_pCtx->mState->SetB(draw->mField18);
+                g_pCtx->mState->SetC(0, (int)draw->mpField24);
+
+                struct { Vector4 r[4]; } ident = {
+                    { Vector4(1.0f, 0.0f, 0.0f, 0.0f), Vector4(0.0f, 1.0f, 0.0f, 0.0f),
+                      Vector4(0.0f, 0.0f, 1.0f, 0.0f), Vector4(0.0f, 0.0f, 0.0f, 0.0f) } };
+                if (state->mSoftStateDirty & 1)
+                    state->D3D9SetTransform(&ident, 4, 1);
+                else
+                    EffectsDispatch(&ident, 4);
+                g_softStateDirty |= 0x10;
+                g_color = g_whiteColor;
+                SetVertexDescriptor(mCurrentVDesc);
+                SetShaderData(state);
+                state->Dispatch();
+                if (entry->mpShader)
+                    entry->mpShader->Push();
+                VertexDescriptorChange(mCurrentVDesc);
+                g_d3dDevice->SetStreamSourceFreq(0, mBufferedCount | 0x40000000);
+                g_d3dDevice->SetStreamSourceFreq(1, 0x80000001);
+                VertexBuffer* vb = g_pCtx->mVB;
+                vb->mStart = start;
+                g_pCtx->mState->Draw();
+                vb->mStart = 0;
+                g_d3dDevice->SetStreamSourceFreq(0, 1);
+                g_d3dDevice->SetStreamSourceFreq(1, 1);
+                PopShaderData();
+            }
+        }
+        mBufferedCount = 0;
+    }
+    if (mFlag160 == 0)
+        mCounter36c++;
+    else
+        mCounter370++;
+    return 0;
 }

@@ -1,0 +1,1 @@
+00f10bd0 cHudTargetController::Update  # Claude-coined: UTFWin::InteractiveWinProc subclass tick (ends with base OnWinProcAdd 010829f0); drives avatar HUD bars and the target-follow effect

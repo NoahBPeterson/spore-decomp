@@ -1,0 +1,1 @@
+010e2270 2156 complete hkBvTreeAgent::prepareCollisionPartners (aabb cache early-out, memory-limit check, both partner-update paths); x87 compare/register allocation differ; flags /O2 /MD /Gy /TP

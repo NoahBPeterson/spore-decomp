@@ -2,3 +2,4 @@
 00e130b0  82  cUICard message handler: complete (all branches/calls); cl assigns this->edi/msg->esi vs original this->esi/msg->edi and orders the compare tree differently
 00e13160  47  card comparison helper: complete; vtable-call pointer uses eax vs edx, and the float-compare branch polarity differs
 00e132c0  28  cUICard teardown: complete; first null test of the 0x20 member uses memory rather than a register load
+00e133b0  1415  SP::cUIMissionCard::InitForCreature: complete (all paths, calls, vslots; size 1939 vs 1906, 58/58 calls); stack-slot layout and x87/SSE interleave of the three rect computations differ

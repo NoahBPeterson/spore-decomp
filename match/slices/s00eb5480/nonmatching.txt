@@ -1,0 +1,2 @@
+00eb5480 1701 complete cGameCinematicsCameraController::UpdateInterpolation; SSE scheduling/register allocation differ; difftest PASS (337 valid, 100% cov)
+00eb5c00 1526 complete sCalculateOrientation; fp op scheduling differs; difftest PASS (400 valid, 93.5% cov)

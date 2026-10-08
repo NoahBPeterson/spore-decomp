@@ -1,0 +1,4 @@
+00a3bc70 SP::Audio::cListener::Update  # PDB candidate; recomputes listener position/orientation from the camera (or boom anchor) and posts message 0x20c089c + AudioSystem listener set
+00a1a1c0 EA::Audio::ResponseCurve::GetMinInput  # thiscall(float* out) -> bool; first key's x, false when the key array is empty
+00a1a1a0 EA::Audio::ResponseCurve::GetMaxInput  # thiscall(float* out) -> bool; last key's x (elem -0x14), false when empty
+0041ded0 Matrix33_Convert  # cdecl(out 3x3, in 3x3), /Od loops over 3x3 (transpose-style copy), used for the listener matrix

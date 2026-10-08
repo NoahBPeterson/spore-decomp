@@ -1,0 +1,1 @@
+00e74a20 CreateCell  # SP::sCreateCell-style factory: allocates a cCell from gspCellGame pool (+0x1c), fills pose/orientation/mass from the cell def

@@ -5,3 +5,4 @@
 00612f50  116  reg allocation (ppOut in ebp) and extra lea/cmp in original
 006130e0  84  destroy loop is a counted loop in original
 00613140  200  reg allocation (first in ebp, begin cached in ebx)
+00612270  1420  ProcessTransactionTick complete: iterator/AutoRef register allocation and block layout of the 3 queue loops differ

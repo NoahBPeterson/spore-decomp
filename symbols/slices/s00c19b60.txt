@@ -1,0 +1,1 @@
+00c1a3c0 Simulator::cCreatureBase::cCombatant::TakeDamage  # cCombatant vslot 0x18 override (this = cCombatant sub-object at +0x5a8), ret 0x14, calls cCombatant::TakeHit

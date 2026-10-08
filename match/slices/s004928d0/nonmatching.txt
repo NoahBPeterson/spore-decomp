@@ -1,1 +1,2 @@
 00492de0  76  complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset
+00492e70  1284  complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi

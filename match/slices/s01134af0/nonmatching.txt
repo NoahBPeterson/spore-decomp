@@ -1,0 +1,1 @@
+01134b70 315 MPEG layer III side-info reader (/O2 /EHsc): complete and structurally identical (27 GetBits call sites incl. inlined granule loop); block layout differs (false-return epilogue placed after LSF block) plus a few reordered shift/store instructions

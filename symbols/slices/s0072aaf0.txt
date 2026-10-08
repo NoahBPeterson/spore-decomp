@@ -1,2 +1,4 @@
 0072ace0  SP::StreamMeshToRw  # PDB name from card.py
 0072b560  SP::cTriToRegionMap::AddRegion  # PDB name from card.py
+006c1570 ?DoInsertValue@?$fixed_vector@H$0BA@@@QAEXPAHABH@Z  # int fixed_vector insert
+0072aaf0 ?DoInsertValue@?$fixed_vector@UElementRef@@$0BA@@@QAEXPAUElementRef@@ABU2@@Z  # ElementRef fixed_vector insert

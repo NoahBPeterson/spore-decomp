@@ -1,0 +1,1 @@
+00e29da0  662  cSPUINewProgressBar::Update: complete (caption/currency animation sequences, marker/fill/level windows, sound); same 62-call ordered sequence incl. 5 vcalls, size 1.006x; only stack-slot layout (frame 0x17c vs 0x174) and scheduling differ

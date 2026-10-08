@@ -1,0 +1,2 @@
+# complete (behaviorally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00be88d0  1667  complete; size and call sequence identical (2428 B, 119 calls, same vcall slots); frame/register allocation differs (oldCiv/newCiv home slots swapped, newCiv kept in ebx vs ebp for oldCiv), key-zeroing placement, add/[+4] vs [+0x40]; equiv.py UNSUPPORTED (singleton globals are null in the emulator)

@@ -1,0 +1,1 @@
+00d197a0 SP::cGameEditInputStrategy::HandleUIMessage  # card name DoMessage; IWinProc override (this = full+0x40, ret 8) reading Message type/control id at +8/+0xc, same class as s00d1afe0/s00d1a2b0

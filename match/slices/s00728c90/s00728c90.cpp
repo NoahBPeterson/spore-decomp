@@ -234,10 +234,230 @@ void FUN_00729760(int* dst, int* src, int* sel, int rows)
 // large functions (partial)
 // ---------------------------------------------------------------------------
 
-// @ 0x00728c90  SP::CreateUVsAndCharts  (PARTIAL)
-void FUN_00728c90(void* self, int a, int b, int c, int d)
+// ---------------------------------------------------------------------------
+// 0x00728c90  SP::CreateUVsAndCharts -- types (retail layouts; EASTL vectors are 0x14 bytes)
+// ---------------------------------------------------------------------------
+inline void* operator new(size_t, void* p) { return p; }
+inline void operator delete(void*, void*) {}
+void __cdecl operator_delete__(void* p);           // 0x00f47380
+
+namespace UV {
+
+struct Vec2 { float x, y; };                       // POD: copies go through integer registers
+extern Vec2 g_Vec2Zero;                            // 0x0162ae9c
+
+struct Vec2Vec {                                   // eastl::vector<cSPVector2, sp_vector_allocator> (0x14)
+    Vec2* mpBegin;
+    Vec2* mpEnd;
+    Vec2* mpCapacity;
+    int   alloc[2];
+    void Assign(const Vec2Vec& o);                                 // 0x00722ba0 (ret 4)
+    void DoInsertValues(Vec2* pos, unsigned n, const Vec2& v);     // 0x00479830 (ret 0xc)
+    inline void erase(Vec2* first, Vec2* last)
+    {
+        Vec2* dst = first;
+        for (Vec2* src = last; src != mpEnd; ++src, ++dst)
+            *dst = *src;
+        mpEnd -= (last - first);
+    }
+    inline void clear() { erase(mpBegin, mpEnd); }
+    inline void resize(unsigned n, const Vec2& v)
+    {
+        unsigned cur = (unsigned)(mpEnd - mpBegin);
+        if (n > cur) DoInsertValues(mpEnd, n - cur, v);
+        else         erase(mpBegin + n, mpEnd);
+    }
+};
+
+struct ClusterInfo {                               // 0x64
+    int   numFaces;                                // +0
+    float nx, ny, nz;                              // +4 +8 +0xc
+    float cx, cy, cz;                              // +0x10
+    float area;                                    // +0x1c
+    float projArea;                                // +0x20
+    float texArea;                                 // +0x24
+    Vec2  minUV;                                   // +0x28
+    Vec2  maxUV;                                   // +0x30
+    int   pad38[2];
+    int   indicesStart, indicesEnd;                // +0x40 +0x44
+    int   pad48[2];
+    Vec2Vec boundary;                              // +0x50
+};
+
+struct Chart {                                     // SP::cTextureChart, 0x68
+    int     meshIndex;                             // +0
+    float   texArea;                               // +4
+    float   primArea;                              // +8
+    int     texStart, texEnd;                      // +0xc +0x10
+    Vec2Vec boundaries;                            // +0x14
+    Vec2    texBound;                              // +0x28
+    char    flag;                                  // +0x30
+    char    pad31[3];
+    int     rest[13];                              // +0x34 horizons etc.
+};
+void __stdcall DestroyChartRange(Chart* first, Chart* last);       // 0x00721910
+
+struct ChartVec {
+    Chart* mpBegin; Chart* mpEnd; Chart* mpCapacity; int alloc[2];
+    ChartVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~ChartVec()
+    {
+        DestroyChartRange(mpBegin, mpEnd);
+        if (mpBegin && ((int*)mpBegin)[-1]) operator_delete__(mpBegin);
+    }
+    void reserve(unsigned n);                      // 0x00728270 (ret 4)
+    void push_back0();                             // 0x007289a0 (default-construct one at the end)
+};
+
+struct ChartRect {                                 // 0x34, element of the rect-pack list
+    int   a, b;
+    float prim;
+    int   mesh;
+    Vec2  minUV, maxUV;
+    float w, h;
+    float g0; int g1; float g2;                    // never written before the copy
+    ChartRect() {}
+    ChartRect(int ia, int ib, float p, int m, Vec2 mn, Vec2 mx, float ww, float hh)
+        : a(ia), b(ib), prim(p), mesh(m), minUV(mn), maxUV(mx), w(ww), h(hh) {}
+    ChartRect(const ChartRect& o)
+        : a(o.a), b(o.b), prim(o.prim), mesh(o.mesh), minUV(o.minUV), maxUV(o.maxUV),
+          w(o.w), h(o.h), g0(o.g0), g1(o.g1), g2(o.g2) {}
+};
+struct RectVec {
+    ChartRect* mpBegin; ChartRect* mpEnd; ChartRect* mpCapacity; int alloc[2];
+    RectVec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~RectVec() { if (mpBegin && ((int*)mpBegin)[-1]) operator_delete__(mpBegin); }
+    void DoInsertValue(ChartRect* pos, const ChartRect& v);        // 0x007222f0 (ret 8)
+    inline void push_back(const ChartRect& v)
+    {
+        if (mpEnd < mpCapacity) { ::new (mpEnd++) ChartRect(v); }
+        else DoInsertValue(mpEnd, v);
+    }
+};
+
+struct MeshClusterer {                             // 0x90 (retail)
+    MeshClusterer();                               // 0x00722010
+    virtual ~MeshClusterer();                      // 0x007220c0
+    int          rc;
+    void*        meshData;
+    ClusterInfo* cBegin;                           // +0xc
+    ClusterInfo* cEnd;                             // +0x10
+    ClusterInfo* cCap;
+    uint32_t     pad[30];
+    void Cluster(void* mesh, float f);             // 0x00728af0 (ret 8)
+    void AssignCharts(int a, int b, int c);        // 0x00725e40 (ret 0xc)
+};
+
+struct PtrVec { void** mpBegin; void** mpEnd; };
+
+struct ClusterMap {                                // 0x264
+    ClusterMap();                                  // 0x006dffc0
+    ~ClusterMap();                                 // 0x00724700
+    char pad[0x274];
+    void Build(PtrVec* meshes);                    // 0x006e0ea0 (ret 4)
+    void AddCluster(Chart* c);                     // 0x006dfc30 (ret 4)
+    void Pack(int mode);                           // 0x006e04d0 (ret 4)
+};
+
+struct MeshXform {                                 // per-mesh transform info, 0x38
+    unsigned flags;                                // +0
+    char  pad4[0xc];
+    float scale;                                   // +0x10
+    char  pad14[8];
+    float vx;                                      // +0x1c
+    char  pad20[8];
+    float vy;                                      // +0x28
+    char  pad2c[8];
+    float vz;                                      // +0x34
+};
+
+struct PropList { int GetIntProperty(unsigned id); };              // 0x006a2660 (ret 4)
+extern PropList* g_AppProps;                                       // 0x015fd918
+
+void __cdecl ThreadSleep(const unsigned& t);                       // 0x00921df0
+void __cdecl RectPackCharts(PtrVec* meshes, RectVec* rects, float total, int size);   // 0x006e09d0
+void __cdecl FinishMesh(void* mesh);                               // 0x00735a90
+
+} // namespace UV
+
+// @ 0x00728c90  SP::CreateUVsAndCharts
+void __cdecl FUN_00728c90(UV::PtrVec* meshes, float clusterParam, const float* scales, const UV::MeshXform* info)
 {
-    (void)self; (void)a; (void)b; (void)c; (void)d;
+    using namespace UV;
+    ChartVec charts;
+    RectVec  rects;
+    charts.reserve(0x20);
+    int prop = g_AppProps->GetIntProperty(0x04474195);
+    int nMeshes = (int)(meshes->mpEnd - meshes->mpBegin);
+    float totalTexArea = 0.0f;
+
+    for (int i = 0; i < nMeshes; ++i) {
+        MeshClusterer mc;
+        mc.Cluster(meshes->mpBegin[i], clusterParam);
+        ThreadSleep(0);
+        mc.AssignCharts(1, 1, 1);
+        ThreadSleep(0);
+        int nClusters = (int)(mc.cEnd - mc.cBegin);
+        for (int j = 0; j < nClusters; ++j) {
+            ClusterInfo& c = mc.cBegin[j];
+            if (info) {
+                float sc = info[i].scale;
+                float a = c.area * sc;
+                c.area = a * sc;
+            }
+            if (prop == 2) {
+                float tex = c.texArea;
+                ChartRect r(c.indicesStart, c.indicesEnd, c.area * tex, i, c.minUV, c.maxUV,
+                            c.maxUV.x - c.minUV.x, c.maxUV.y - c.minUV.y);
+                if (scales) r.prim = scales[i] * r.prim;
+                totalTexArea = tex + totalTexArea;
+                rects.push_back(r);
+            } else {
+                charts.push_back0();
+                Chart& ch = charts.mpEnd[-1];
+                ch.meshIndex = i;
+                ch.texArea = c.texArea;
+                ch.primArea = c.area;
+                ch.texStart = c.indicesStart;
+                ch.texEnd = c.indicesEnd;
+                ch.boundaries.Assign(c.boundary);
+                ch.texBound.x = c.maxUV.x - c.minUV.x;
+                ch.texBound.y = c.maxUV.y - c.minUV.y;
+                float dot = c.nz;
+                if (info && (info[i].flags & 2))
+                    dot = (info[i].vy * c.ny + info[i].vx * c.nx) + c.nz * info[i].vz;
+                if (dot < -0.95f && c.area > 30.0f) {
+                    ch.primArea = 1.0e-4f;
+                    ch.boundaries.clear();
+                    ch.boundaries.resize((unsigned)(c.boundary.mpEnd - c.boundary.mpBegin), g_Vec2Zero);
+                    ch.texBound.x = ch.texBound.x * 1.0e-5f;
+                    ch.texBound.y = ch.texBound.y * 1.0e-5f;
+                    ch.flag = 1;
+                }
+                if (scales)
+                    ch.primArea = scales[i] * ch.primArea;
+            }
+        }
+        ThreadSleep(0);
+    }
+
+    if (prop == 2) {
+        RectPackCharts(meshes, &rects, totalTexArea, 0x200);
+    } else {
+        ClusterMap cm;
+        cm.Build(meshes);
+        int nCharts = (int)(charts.mpEnd - charts.mpBegin);
+        for (int k = 0; k < nCharts; ++k)
+            cm.AddCluster(charts.mpBegin + k);
+        ThreadSleep(0);
+        cm.Pack(prop);
+    }
+
+    int n2 = (int)(meshes->mpEnd - meshes->mpBegin);
+    for (int k = 0; k < n2; ++k) {
+        FinishMesh(meshes->mpBegin[k]);
+        ThreadSleep(0);
+    }
 }
 
 // @ 0x00729290  (PARTIAL)

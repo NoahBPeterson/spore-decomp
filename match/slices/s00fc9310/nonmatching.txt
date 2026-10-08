@@ -1,0 +1,1 @@
+00fc9a60  918  COMPLETE WriteAVIHeaders (/O2 /MD /Gy /TP /GS-). Same size (1604), 121 calls, identical vtable-slot and push-imm sequences; remaining diff is audio-section register allocation/ordering (ebp/ebx swap, mAudioEncoder reload) shifting offsets.

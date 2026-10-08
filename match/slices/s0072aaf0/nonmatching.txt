@@ -1,1 +1,2 @@
 0072b560  157  Complete SP::cTriToRegionMap::AddRegion; register allocation of begin/end/loop counter differs.
+0072ace0  1692  Complete SP::StreamMeshToRw (flags /O2 /MD /Gy /EHsc /TP /GS-); frame/register allocation differs

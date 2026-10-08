@@ -1,0 +1,2 @@
+# va  name  # evidence
+0137ef90  Simulator::cCellSerialiazibleData::InitAttributes  # $E299 dynamic initializer of the 22-row Simulator::Attribute table at 0x015a7e38; member names/offsets match ModAPI cCellSerialiazibleData.h (mPlayerCreatureKey 0x10, mFirstEditorEntry 0xe2, mNanovirusActive 0xe8)

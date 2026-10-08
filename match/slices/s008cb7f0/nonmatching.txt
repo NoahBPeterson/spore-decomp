@@ -1,0 +1,1 @@
+008cb7f0 1765 complete; register allocation and statics' calling conventions (esi/ecx/eax) only partly reproduced; ApplyHintsToStrokeGlyph 5th arg (EAX in the original) passed on the stack; flags /O2 /MD /Gy /TP

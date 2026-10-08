@@ -1,3 +1,5 @@
 0072a080  194  Complete bounds reset; SSE stack-roundtrip form not reproduced.
 0072a130  77   Complete MakeIter; the inlined refcount temp (`[esp+8]=0`, `push ecx`) is missing.
 0072a1a0  66   Complete span ctor; n kept in eax instead of edi; caller-saved scheduling differs.
+0072a200  1396  Complete SAH split search (empty-space cuts, then 3-axis centre split via 00729de0/007298b0); frame and scheduling differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00729de0  636  Complete centre partition of idx[] into child boxes; scheduling differs; equiv FAILs only when node->axis is outside 0..2 (UB: original reads a stale stack slot); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

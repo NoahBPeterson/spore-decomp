@@ -1,0 +1,1 @@
+00d557f0 1866 complete; scheduling/spill differences in the inlined x87/SSE quaternion rotation (size 2208 vs 2176)

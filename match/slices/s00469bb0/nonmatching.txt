@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00469bb0  1351  complete (all 52 calls in order, same constants); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-; /Od temp-slot layout and register choice differ (frame 0xf1c vs 0xf9c)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00d626d0  n/a  complete SP::BABY_FLEE_Tick (states 0-2); 55/55 calls in the same order, same vtable slots, size 1682 vs 1725; stack frame and Vec3 temp slots / scheduling differ

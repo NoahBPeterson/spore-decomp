@@ -1,0 +1,1 @@
+004eb270 FUN_004eb270  # SP::EditorValidity::ReadKeysFromFile (pdb_names); collects validity key records from property lists

@@ -1,0 +1,1 @@
+00b88770 cPlanetModel::RayCast  # Claude-coined; casts a ray against the cube-map flag grid then marches to the surface (callers pass pos, maxDist, out)

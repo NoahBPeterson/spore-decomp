@@ -1,0 +1,1 @@
+00ecd0c0 1752 complete rollover info-line update (error branch 3 descriptors + 2 strings; creature-stance branch 3 descriptors + ints); stack slot order of the descriptor locals and store schedule differ; flags /O2 /MD /Gy /TP /arch:SSE

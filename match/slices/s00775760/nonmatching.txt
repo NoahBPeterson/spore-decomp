@@ -1,2 +1,3 @@
 007764c0 70 setBoneA: original copies the four floats through a 16-byte stack temporary before storing; not reproduced
 00776520 70 setBoneB: same temp-copy pattern not reproduced
+00775760 2045 complete model-instance mesh bake (EH frame, stub-class form); inline RefVec dtor/DestroyRange sites and register schedule differ

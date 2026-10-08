@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01035000  2151  complete cSpaceRenderLayer::DrawLayer (index 5/4/6/0xd paths, context 0/1, all 4 viewer copies, debug-flag draws, render-group save/restore); 66 call/tail-jmp sites vs 64+2, 2447 vs 2300 bytes; stack-slot layout (0x110 vs 0x104 frame), x87/SSE scheduling of the 3x3 matrix product and tail-jmp merging differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

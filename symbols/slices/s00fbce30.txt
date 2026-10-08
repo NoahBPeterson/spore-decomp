@@ -1,0 +1,1 @@
+00fbce30 RenderState::operator=  # implicit copy-assign: 14 image refs (GetImageResource 576650), 8 refptrs, scalars; byte-exact

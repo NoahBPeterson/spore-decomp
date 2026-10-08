@@ -4,3 +4,4 @@
 0083dd70  58   complete: EvalSignedRealNumber; x87 sign/register scheduling differs
 0083e140  11   complete: expr table clear; call scheduling differs
 0083e160  87   complete: EvalRealFactor; long-double pow call sequence differs
+0083d3d0  1243 complete: cExpression::EvalRealNumber (literal, parens, pi/e, 22 math builtins, user functions); EH frame/stack temps and inline string dtor placement differ; size 1801 vs 1942; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast

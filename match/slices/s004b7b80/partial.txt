@@ -1,4 +1,3 @@
-004b7b80  n/a  skin-paint generation: skeleton only; large inlined EASTL/RNG body omitted
 004b8180  n/a  region-skin paint application: skeleton only; large inlined body omitted
 004b89c0  62  node-root comparator: control flow present but several original args/paths omitted
 004b8a70  n/a  model-type comparator helper: signature/inlined wrapper not fully reproduced

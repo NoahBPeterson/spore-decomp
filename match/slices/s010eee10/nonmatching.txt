@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
+010eee10  1464  complete (built with /vc71 /O2 /MD /Gy /TP /fp:fast, see source Flags comment): keycode gate, A/B frames to world, friction or begin(+0x18), twist-limit row (atan2fApproximation), buildLimits, ball socket; same size 1657 B; x87 operand scheduling and the original's matrix-element stack copies differ

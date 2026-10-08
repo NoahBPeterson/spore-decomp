@@ -1,0 +1,1 @@
+00fde3e0  1262  complete TransitionFromPlanetToSolar, same size 1749, all 74 calls and 13 vtable slots in the same order, same constants; equiv UNSUPPORTED (0/400 valid inputs: singleton chains fault); diffs: frame 0x60 vs 0x58, register allocation, view-flag merge order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

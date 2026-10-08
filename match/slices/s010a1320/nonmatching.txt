@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010a1320  1176  complete (all 40 direct calls, vtable slots and constants compared in order with the original; size 2051 vs 2052 B); local-slot layout differs (uf/parents/oldTrack placement, frame 0x1c8 vs 0x1c4), so every esp offset differs; flags /vc71 /O2 /MD /Gy /TP

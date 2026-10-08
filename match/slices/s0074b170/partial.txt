@@ -1,6 +1,5 @@
 0074b170  -  partial: cLoadQueue reset/clear (307B, refcount/list walk) stubbed.
 0074b390  -  partial: eastl::partial_sort<cOccluder*> (254B template) stubbed.
-0074b760  -  partial: cModelWorld::UpdateFromPropList (1591B) stubbed.
 0074bda0  -  partial: slot-list find helper (152B) stubbed.
 0074be40  -  partial: slot-list erase-by-key (202B EH) stubbed.
 0074bf10  -  partial: vector::insert element 8B (262B) stubbed.

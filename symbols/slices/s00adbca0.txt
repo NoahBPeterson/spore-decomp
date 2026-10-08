@@ -1,0 +1,1 @@
+00adbca0 Placer::GetPose  # resolves pose (pos/quat/3 scales) of attached object from holder or config defaults; cfg at +0x16c

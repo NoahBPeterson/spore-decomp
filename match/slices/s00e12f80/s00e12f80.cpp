@@ -3,8 +3,54 @@
 // animation tick, message handling, destructor and the large InitForCreature.
 // Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
+#include <math.h>
 
 static inline void** Vt(void* p) { return *(void***)p; }
+
+struct Rect { float left, top, right, bottom; };
+// EA::UTFWin::IWindow (retail vtable; unused slots are placeholders)
+struct IWindow {
+  virtual void AddRef();                              // 0x00
+  virtual void Release();                             // 0x04
+  virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+  virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+  virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
+  virtual const Rect& GetArea();                      // 0x38
+  virtual const void* GetCaption();                   // 0x3c
+  virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+  virtual void v50(); virtual void v54(); virtual void v58(); virtual void v5c();
+  virtual void v60(); virtual void v64();
+  virtual void SetSize(float w, float h);             // 0x68
+  virtual void v6c();
+  virtual void SetLayoutLocation(float x, float y);   // 0x70
+  virtual void v74(); virtual void v78();
+  virtual void SetFlag(int flag, bool v);             // 0x7c
+  virtual void v80(); virtual void v84(); virtual void v88(); virtual void v8c();
+  virtual void v90(); virtual void v94(); virtual void v98(); virtual void v9c();
+  virtual void va0(); virtual void va4(); virtual void va8(); virtual void vac();
+  virtual void vb0(); virtual void vb4(); virtual void vb8(); virtual void vbc();
+  virtual void vc0(); virtual void vc4(); virtual void vc8(); virtual void vcc();
+  virtual void vd0(); virtual void vd4(); virtual void vd8(); virtual void vdc();
+  virtual void ve0(); virtual void ve4(); virtual void ve8(); virtual void vec();
+  virtual IWindow* FindWindowByID(uint32_t id, bool recursive);  // 0xf0
+};
+// interface obtained from an AutoRefCount<IWindow> (0x5e1fd0): slot 0x14 takes a bool
+struct IWinExt {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+  virtual void SetOption(bool v);                     // 0x14
+};
+// EA::UTFWinControls::IWinButton (0x5ca960): slot 0x28 takes (int, int)
+struct IWinButton {
+  virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
+  virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+  virtual int Command(int a, int b);                 // 0x28
+};
+struct cSPUIAnimator {
+  void CancelAll();                                   // 0x7f8f00
+  void AddAnimation(const struct AnimTmp& anim, IWindow* w, int flags);   // 0x7f8d10
+};
+struct AnimTmp { uint32_t d[0x1f]; ~AnimTmp(); };     // dtor body 0x59a1e0
+struct Vec2 { float x, y; Vec2(float a, float b) : x(a), y(b) {} };
 
 // ---- external callees (masked relocations) ----
 extern "C" float __cdecl SPUIHelpers_GetElapsedSeconds();     // 0x805080
@@ -34,21 +80,21 @@ struct cUICard {
   uint8_t  pad12[0x0a];
   void*    p1c;     // +0x1c cSPUILayout*
   void*    p20;     // +0x20
-  void*    p24;     // +0x24
-  void*    p28;     // +0x28 cSPUIAnimator*
-  void*    p2c;     // +0x2c
-  void*    p30;     // +0x30
-  void*    p34;     // +0x34
-  void*    p38;     // +0x38
-  void*    p3c;     // +0x3c
-  void*    p40;     // +0x40
-  void*    p44;     // +0x44
+  IWindow* p24;     // +0x24
+  cSPUIAnimator* p28;     // +0x28
+  IWindow* p2c;     // +0x2c
+  IWindow* p30;     // +0x30
+  IWindow* p34;     // +0x34
+  IWindow* p38;     // +0x38
+  IWindow* p3c;     // +0x3c
+  IWindow* p40;     // +0x40
+  IWindow* p44;     // +0x44
 
   void Toggle();                     // 0xe12fe0
   void Release2();                   // 0xe13210 (destructor)
   void Teardown();                   // 0xe132c0
   void SetVisible(int);              // 0xe13360
-  void DoVcallF0(int);               // 0xe13390
+  IWindow* DoVcallF0(int);               // 0xe13390
   bool HandleMessage(void* msg, int);  // 0xe130b0
 };
 
@@ -175,38 +221,141 @@ void cUICard::SetVisible(int v) {
 }
 
 // @ 0x00e13390
-void cUICard::DoVcallF0(int v) {
-  ((void(__thiscall*)(void*, int, int))Vt(p24)[0xf0 / 4])(p24, v, 1);
+IWindow* cUICard::DoVcallF0(int v) {
+  return p24->FindWindowByID(v, true);
 }
 
-// @ 0x00e133b0  SP::cUIMissionCard::InitForCreature -- partial (see partial.txt)
-struct cUIMissionCard {
-  void InitForCreature(int a, int b);
-  void Expand(int a);
+// @ 0x00e133b0  SP::cUIMissionCard::InitForCreature
+extern "C" void __cdecl AutoSizeWindowForText(IWindow* w, int a, int b);   // 0x806e40
+IWinExt*   __cdecl QueryWinExt(IWindow** ref);                              // 0x5e1fd0
+IWinButton* __cdecl CastWinButton(IWindow* w);                              // 0x5ca960
+AnimTmp __cdecl SPUICreateWindowAnimationTargetSize(IWindow* win, const Vec2& size,
+                                                    float duration, float from, int type);   // 0x7f8230
+
+struct cUIMissionCard : cUICard {
+  char  pad48[0x68 - 0x48];
+  float f68, f6c, f70, f74;     // +0x68 rect
+  float f78, f7c, f80, f84;     // +0x78 rect
+  float f88, f8c, f90, f94;     // +0x88 rect
+  __declspec(noinline) void InitForCreature(bool animate, int kind);
+  void Expand(bool a);
 };
 
-void cUIMissionCard::InitForCreature(int a, int b) {
-  char* self = (char*)this;
-  int r = ((int(__thiscall*)(void*))Vt(self)[0x38 / 4])(self);
-  void* card = ((void*(__thiscall*)(void*, int, int))Vt(*(void**)(self + 0x24))[0xf0 / 4])
-                   (*(void**)(self + 0x24), r, 1);
-  void* old = *(void**)(self + 0x40);
-  if (old && old != card) ((void(__thiscall*)(void*, int, int))Vt(old)[0x7c / 4])(old, 1, 0);
-  old = *(void**)(self + 0x40);
+static inline float Height(const Rect& r) { return r.bottom - r.top; }
+
+void cUIMissionCard::InitForCreature(bool animate, int kind) {
+  IWindow* card = DoVcallF0(((int(__thiscall*)(void*))Vt(this)[0x38 / 4])(this));
+  IWindow* old = p40;
+  if (old && old != card) old->SetFlag(1, false);
+  old = p40;
   if (card != old) {
-    if (card) ((void(__thiscall*)(void*))Vt(card)[0])(card);
-    *(void**)(self + 0x40) = card;
-    if (old) ((void(__thiscall*)(void*))Vt(old)[4 / 4])(old);
+    if (card) card->AddRef();
+    p40 = card;
+    if (old) old->Release();
   }
-  if (!*(void**)(self + 0x30) || !*(void**)(self + 0x38) || !*(void**)(self + 0x3c) ||
-      !*(void**)(self + 0x44) || !card)
-    return;
-  // remainder (layout/animation/text sizing) approximated; see partial.txt
-  (void)a; (void)b;
+  if (!p30 || !p38 || !p3c || !p44 || !card) return;
+  float t = SPUIHelpers_GetElapsedSeconds();
+  p28->CancelAll();
+  const Rect& compArea = p38->GetArea();
+  const Rect& area3c = p3c->GetArea();
+  const Rect& cardArea = card->GetArea();
+  const Rect& area44 = p44->GetArea();
+  AutoSizeWindowForText(p30, 0, 1);
+  const Rect& bgArea = p30->GetArea();
+  float top0 = bgArea.top;
+  float bottom0 = bgArea.bottom;
+  if (SP_GetCurrentGameMode() == (void*)0x1654c10) {
+    IWindow* a = DoVcallF0(0x7f453b8);
+    IWindow* b = DoVcallF0(0x7f5abd0);
+    b->GetArea();
+    float h1 = Height(p30->GetArea());
+    float h2 = Height(a->GetArea());
+    bool big = h1 > h2;
+    FUN_00e12f80(a, big);
+    FUN_00e12f80(p30, !big);
+    if (big) {
+      const Rect& r = a->GetArea();
+      top0 = r.top;
+      bottom0 = r.bottom;
+    }
+  }
+  float y = (bottom0 - top0) + top0;
+  if (p2c && p2c->GetCaption()) {
+    IWindow* dw = p2c;
+    dw->SetLayoutLocation(dw->GetArea().left, y);
+    QueryWinExt(&p2c)->SetOption(true);
+    const Rect& d = p2c->GetArea();
+    y = (d.bottom - d.top) + y;
+  }
+  IWindow* cw = p34;
+  cw->SetLayoutLocation(cw->GetArea().left, y);
+  bool notMode = SP_GetCurrentGameMode() != (void*)0x1654c10;
+  IWinExt* ext = QueryWinExt(&p34);
+  if (notMode) ext->SetOption(true);
+  const Rect& c = p34->GetArea();
+  float y2 = (c.bottom - c.top) + c.top;
+  card->SetLayoutLocation(cardArea.left, y2);
+  card->SetFlag(1, true);
+  float y3 = (cardArea.bottom - cardArea.top) + y2;
+  IWindow* w;
+  switch (kind) {
+  case 1: w = DoVcallF0(0x574efda); break;
+  case 2: w = DoVcallF0(0xf5a74bec); break;
+  default: goto skip;
+  }
+  if (w) {
+    const Rect& r = w->GetArea();
+    float hh = r.bottom - r.top;
+    float yy = y3 - top0;
+    if (hh > yy) y3 = (hh - yy) + y3;
+    w->SetLayoutLocation(r.left, (((y3 - top0) * 0.5f) + top0) - hh * 0.5f);
+  }
+skip:
+  Rect ra, rb, rc;
+  ra.left = f68;
+  ra.top = f6c;
+  ra.right = (f70 - f68) + f68;
+  ra.bottom = (f6c + (float)fabs(y3 - f6c)) + 8.0f;
+  rb.left = f78;
+  rb.top = f7c;
+  rb.right = (f80 - f78) + f78;
+  rb.bottom = (f7c + (float)fabs(y3 - f7c)) + 8.0f;
+  rc.left = f88;
+  rc.top = f8c;
+  rc.right = (f90 - f88) + f88;
+  rc.bottom = ((ra.bottom - f74) + (f94 - f8c)) + f8c;
+  IWindow* w35 = DoVcallF0(0x35b08191);
+  float wA = ra.bottom - ra.top;
+  if (animate) {
+    p28->AddAnimation(SPUICreateWindowAnimationTargetSize(p38, Vec2(ra.right - ra.left, wA), t,
+        (float)fabs(wA - Height(compArea)) * 0.002f, 1), p38, 0);
+    if (notMode) {
+      float wB = rb.bottom - rb.top;
+      p28->AddAnimation(SPUICreateWindowAnimationTargetSize(p3c, Vec2(rb.right - rb.left, wB), t,
+          (float)fabs(wB - Height(area3c)) * 0.002f, 1), p3c, 0);
+    }
+    float wC = rc.bottom - rc.top;
+    p28->AddAnimation(SPUICreateWindowAnimationTargetSize(p44, Vec2(rc.right - rc.left, wC), t,
+        (float)fabs(wC - Height(area44)) * 0.002f, 1), p44, 0);
+    if (w35) {
+      p28->AddAnimation(SPUICreateWindowAnimationTargetSize(w35, Vec2(rc.right - rc.left, wC), t,
+          (float)fabs(wC - Height(area44)) * 0.002f, 1), w35, 0);
+    }
+  } else {
+    p38->SetSize(ra.right - ra.left, wA);
+    if (notMode) p3c->SetSize(rb.right - rb.left, rb.bottom - rb.top);
+    p44->SetSize(rc.right - rc.left, rc.bottom - rc.top);
+    if (w35) w35->SetSize(rc.right - rc.left, rc.bottom - rc.top);
+  }
+  IWindow* bw = DoVcallF0(0x5397388);
+  if (bw) {
+    IWinButton* btn = CastWinButton(bw);
+    if (btn) btn->Command(4, 1);
+  }
 }
 
 // @ 0x00e13b30
-void cUIMissionCard::Expand(int a) {
+void cUIMissionCard::Expand(bool a) {
   InitForCreature(a, 0);
   ((void(__thiscall*)(void*))Vt(this)[0x30 / 4])(this);
 }

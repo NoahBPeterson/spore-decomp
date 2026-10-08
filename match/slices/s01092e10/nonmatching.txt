@@ -1,0 +1,1 @@
+01092e10 1876 complete (flags /vc71 /O2 /MD /Gy /TP; difftest needs --flags "/vc71 /O2 /MD /Gy /TP", PASS 395 inputs): same 12 call sites and vcall slot +8 in original order, 1878 vs 2110 B; older-cl x87 matrix preload/scheduling differs

@@ -1,0 +1,1 @@
+010dc300 1000 complete hkHeightFieldAgent::processCollision (33/33 calls, same TLS/vtable-slot sequence incl. block order, size 1.01x); flags /vc71 /O2 /MD /Gy /EHsc /TP. Not exact: the original keeps the 4x3 transform floats in a skip-w stack copy and schedules the unrolled x87 transform differently; TlsGetValue is cached in esi there (ebx/edi/inline calls here)

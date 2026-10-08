@@ -1,0 +1,2 @@
+# va  name  # evidence
+00f39580  Simulator::cCivTokenTranslator::TranslateToken  # FNV1 hash switch over token names writing into an eastl::string16; sibling ctor/dtor 00f391c0/00f39220 are cCivTokenTranslator; ITokenTranslator::TranslateToken(const char16_t*, string16&) in ModAPI

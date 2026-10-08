@@ -1,0 +1,1 @@
+00db0130 SP::TRIBE_NPC_GIFT_Activate  # PDB anchor name (symbols/pdb_names.json); table entry at 0x01593b04 next to the _Tick/_Deactivate pointers

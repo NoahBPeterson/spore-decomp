@@ -1,0 +1,1 @@
+01078120  74  complete cSPPropLayoutPanel::Init (60/60 calls, same vslots and property ids in order, size 1788 = 1788); only register choices differ (arg reg of CreateTextWindow push, sete cl vs dl, load of mMode scheduled earlier) plus relocated-address bytes

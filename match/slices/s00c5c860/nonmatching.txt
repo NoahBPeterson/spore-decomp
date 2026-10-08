@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c5c860  1355  complete (55/55 calls in order, size 1953 vs 1928); register allocation and /arch:SSE scheduling differ, frame 0x50 vs 0x54; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

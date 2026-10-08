@@ -1,0 +1,4 @@
+00bd1cd0 cAimController::Update  # vehicle (type 0x436f315) aim/facing: face target else wander, slerp orientation; PDB candidate name SP::cVehicle::UpdateHostiles is wrong
+00449c20 SP::normalized_safe  # cdecl sret(Vec3 out, const Vec3* in)
+00576b00 AxisAngleMatrix  # cdecl sret(Matrix33 out, const Vec3* axis, float angle)
+0059ab10 IsFinite  # cdecl bool(float): exponent field check

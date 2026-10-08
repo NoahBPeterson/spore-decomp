@@ -1,0 +1,2 @@
+01315a50 Simulator::InitCommEventAttributes  # $E240: 16-record cCommEvent serializer attribute table at 0x01566db0 (mEventType, mSource, ..., mElapsedTime); names/offsets match ModAPI cCommEvent.h; descriptive name
+01317720 Simulator::InitPlantAttributes  # $E419: 11-record attribute table (mTransform, mFruit, mSeqId, ..., mbRemoved) at 0x0167b578 with set-default statics and a "field_name" sentinel record; descriptive name

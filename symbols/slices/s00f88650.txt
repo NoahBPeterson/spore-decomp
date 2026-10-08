@@ -1,0 +1,1 @@
+00f88650 SP::cTerrainMap<unsigned int>::GetFloat  # PDB name; bilinear cube-map sample of the top byte of 32-bit texels, scaled by 1/255

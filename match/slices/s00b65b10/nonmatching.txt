@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b65b10  1979  complete; same size/call sequence, /O2 register allocation and spill layout differ (frame 0x134 vs 0xe4)

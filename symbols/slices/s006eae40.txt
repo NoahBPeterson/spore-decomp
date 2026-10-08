@@ -1,1 +1,2 @@
 006eb6e0 SP::cEffectsCameraManager::UpdateCameraView  # pdb_names.json + card.py header
+006eae40 SP::cEffectsRenderer::ReleaseAndDrawModelBuffer  # PDB candidate; flushes buffered model instances (instanced draw via SetStreamSourceFreq, or per-instance frustum-culled dispatch)

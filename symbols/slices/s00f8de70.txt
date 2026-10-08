@@ -1,0 +1,1 @@
+00f8de70  SP::cCubeImage::SampleBilinear  # Claude-coined name; bilinear sample of a cube-map face image (face,u,v), wraps neighbours via SP::WrapCubeFace 0x684ca0

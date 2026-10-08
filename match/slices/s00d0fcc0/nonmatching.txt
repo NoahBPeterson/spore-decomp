@@ -1,0 +1,1 @@
+00d100b0 100 CE::Deactivate: complete behaviour (all 92 calls, vtable slots and constants line up with the original); prologue shrink-wraps the community test and the q/fx stack slot differs; flags /O2 /MD /Gy /TP /arch:SSE

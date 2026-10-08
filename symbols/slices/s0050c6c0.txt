@@ -1,0 +1,1 @@
+0050c6c0 Skin::Append  # Claude-coined; appends another Skin mesh, rebasing indices (class from slice s00507670)

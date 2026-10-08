@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+00724100  1357  cMeshClusterer::Setup (per-triangle face clusters + dual-edge heap): complete; x87/SSE scheduling and register allocation differ

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c6d7c0  44  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete cHerd::Update (all 69 direct calls in original order); only spill-slot order of avatar/guardCandidate/x/y locals and eax/edx choice in two vcalls differ

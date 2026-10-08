@@ -1,0 +1,1 @@
+00a0ea10 ReadAnimTable  # Claude-coined: versioned (5..10) viewer animation table loader; merges Entry records into the global map 01551a68 via LocalGetNameFromKey 00a0e530

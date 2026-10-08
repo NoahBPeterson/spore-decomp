@@ -1,0 +1,2 @@
+00880910 EA::Locale::GetLocaleInfoString  # byte-exact; 30-way switch over locale info type; cards of 0x880750/0x880830 callers
+0087f350 EA::Locale::CanonicalLocale  # cdecl LocString(out, const LocString&): forwards in->mpBegin to 0x87f210; used by GetLocaleInfoString cases 2/26/27

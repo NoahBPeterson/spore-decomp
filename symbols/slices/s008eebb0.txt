@@ -1,0 +1,2 @@
+008eeee0 EA::XHTML::Layout::RenderingContext::DrawTextLine  # PDB name; draws span backgrounds, selection highlight, glyph runs and text decorations for one LineLayout
+008eee90 EA::Text::RectSet::RectSet  # out-of-line ctor of the fixed_set<Rectangle> (rbtree + fixed node pool, buffer at +0x2c); builds the temp fixed allocator then calls the rbtree ctor 0x008eed10

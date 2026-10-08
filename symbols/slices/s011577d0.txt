@@ -1,0 +1,1 @@
+011577d0 BitDecoder::ReadBlock  # reads one 0x7c-byte block of coefficient words with widths from the 0x14ceb10/0x14ceb20 tables via the embedded bit reader (0x11573b0); byte-exact

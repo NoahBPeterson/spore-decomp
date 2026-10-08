@@ -3,6 +3,7 @@
 #include "types.h"
 #include <new>
 #include <string.h>
+#include <float.h>
 
 struct Vec3 { float x, y, z; };
 struct cSPTransform {
@@ -22,7 +23,11 @@ int   FUN_00743fb0(const void* p, float r, const void* box);
 int   cModelInstance_IntersectsSphere(void* inst, const float* pos, const void* xf, bool b);
 int   cModelInstance_PickLine(void* inst, const float* pos, float r, const void* xf, bool b);
 void  Matrix3_Assign(void* dst, const void* src);
-extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f162ec38, g_f1485720;
+extern float g_f162eb0c;   // 0x0162eb0c
+extern float g_f162eb10;   // 0x0162eb10
+extern float g_f162eb14;   // 0x0162eb14
+extern float g_f162ec38;   // 0x0162ec38
+extern float g_f1485720;   // 0x01485720
 extern int g_appProps;
 
 // Model-cull argument object (retail offsets used by these queries).
@@ -205,33 +210,194 @@ int FUN_0074a070(float* pos, CMWModel* model, FilterArg* arg)
     return 0;
 }
 
-// @ 0x00749370 : cModelWorld ray/frustum model query (huge; see partial.txt)
-int* FUN_00749370(int self, float* a, float* b, float* c, float* d, float* e,
-                  FilterArg* arg, void* out1, void* out2)
+// @ 0x00749370 : SP::cModelWorld::FindClosestModelHit (thiscall, ret 0x20)
+// Finds the nearest model hit by the segment a->b; returns the model (node + 8) or 0.
+struct Matrix3 {
+    float m[9];
+    Matrix3(const Matrix3& src);                                  // 0x0041cb40 (thiscall, ret 4)
+};
+extern const Matrix3 kIdentityRot;                                // 0x0162ec4c
+struct ZeroVec3 : Vec3 {
+    ZeroVec3() { x = g_f162eb0c; y = g_f162eb10; z = g_f162eb14; }
+};
+struct Xf {                                                       // SP::cSPTransform (0x38 bytes)
+    uint16_t mFlags;
+    uint16_t mModCount;
+    ZeroVec3 mTranslation;
+    float    mScale;
+    Matrix3  mRotation;
+    Xf() : mFlags(0), mModCount(0), mScale(g_f1485720), mRotation(kIdentityRot) {}
+    Xf& operator=(const Xf& rhs);                                 // 0x00537dc0 (thiscall, ret 4)
+};
+
+struct CMWInstance {
+    char pad[0xcc];
+    void* mpField_cc;                                             // +0xcc
+    bool Trace(const float* a, const float* b, const Xf* xf, float* t,
+               float* point, float* dir, int* out1, int* out2);  // 0x0073e410 (thiscall, ret 0x20)
+};
+#pragma pack(push, 4)
+struct FilterArg64 {
+    uint64_t   mInclude;     // +0x00
+    uint64_t   mExclude;     // +0x08
+    bool (__cdecl* mCallback)(void*);   // +0x10
+    uint8_t    mLevel;       // +0x14
+    uint8_t    mFlags;       // +0x15
+};
+struct CMWNode {
+    CMWNode*   mpNext;       // +0x00
+    uint8_t    pad04[8];
+    uint32_t   mFlags;       // +0x0c
+    Xf         mWorld;       // +0x10
+    uint8_t    pad48[4];
+    uint64_t   mMask;        // +0x4c
+    uint8_t    pad54[0x11];
+    uint8_t    mLevel;       // +0x65
+    uint8_t    pad66[0xe];
+    float      mRadius;      // +0x74
+    float      mBoxMinX;     // +0x78
+    uint8_t    pad7c[8];
+    float      mBoxMaxX;     // +0x84
+    uint8_t    pad88[0x14];
+    CMWInstance* mInst1;     // +0x9c
+    uint8_t    pada0[0xc];
+    CMWInstance* mInst2;     // +0xac
+    uint8_t    padb0[0x34];
+    Xf         mXform2;      // +0xe4
+};
+#pragma pack(pop)
+struct SpatialIndex {
+    int Query(const float* a, const float* b, float r, int maxCount, CMWNode** out);   // 0x00702860 (thiscall, ret 0x14)
+};
+struct AppPropsInner { uint8_t pad[0x2c]; int mDetail; };
+struct AppPropsOuter { uint8_t pad[0x3c]; AppPropsInner* mpInner; };
+extern AppPropsOuter* g_pAppProps;                                // 0x015fd918
+void* __cdecl translateXform(void* out, const Xf* a, const Xf* b);   // 0x006271a0
+bool  __cdecl SegmentSphere(const float* a, const float* b, const float* center, float radius, float* t);   // 0x00700c80
+bool  __cdecl SegmentBox(const float* a, const float* b, const Xf* xf, const float* box, float* t);          // 0x00744050
+
+struct cModelWorld {
+    uint8_t pad000[0x118];
+    SpatialIndex mIndex;     // +0x118
+    uint8_t pad11c[0x20];
+    int     mField13c;       // +0x13c
+    int     mField140;       // +0x140
+    uint8_t pad144[0x58];
+    CMWNode* mListHead;      // +0x19c (circular list anchor)
+    CMWNode* FindClosestModelHit(const float* a, const float* b, float* outT, float* outPoint,
+                                 float* outNormal, FilterArg64* arg, int* out1, int* out2);
+};
+
+struct HitState {
+    float    bestT;
+    CMWNode* best;
+    int      bestOut1;
+    int      bestOut2;
+    float    point[3];
+    float    dir[3];
+};
+
+inline unsigned TestBit(uint32_t v, int bit) { return (v >> bit) & 1; }
+
+__forceinline void ConsiderNode(float& bestT, CMWNode*& best, int& bestOut1, int& bestOut2, float* bestPoint, float* bestDir, Xf& local, CMWNode* n, const float* a, const float* b, const FilterArg64* arg,
+                                int* out1, int* out2)
 {
-    unsigned char* base = (unsigned char*)self;
-    int* best = 0;
-    if (*(int*)(base + 0x13c) == *(int*)(base + 0x140) ||
-        *(int*)(*(int*)(g_appProps + 0x3c) + 0x2c) < 2) {
-        int* n = *(int**)(base + 0x19c);
-        int* anchor = (int*)(base + 0x19c);
-        if (n == anchor) return 0;
+    if (!(n->mFlags & 1)) return;
+    if (arg->mInclude != 0 && (n->mMask & arg->mInclude) == 0)
+        return;
+    if ((n->mMask & arg->mExclude) != 0)
+        return;
+    if (arg->mCallback != 0 && !arg->mCallback((char*)n + 8))
+        return;
+    unsigned level;
+    if ((arg->mFlags & 1) && TestBit(n->mFlags, 8))
+        level = n->mLevel;
+    else
+        level = arg->mLevel;
+
+    local = n->mWorld;
+    if (TestBit(n->mFlags, 7) || (arg->mFlags & 2)) {
+        local.mModCount++;
+        local.mScale = g_f1485720;
+    }
+    Vec3 pos = local.mTranslation;
+    float hitT;
+    if (!SegmentSphere(a, b, &pos.x, n->mRadius * local.mScale, &hitT))
+        return;
+
+    float point[3], dir[3];
+    char tmp[sizeof(Xf)];
+    if (level >= 3 && n->mInst1 && n->mInst1->mpField_cc) {
+        translateXform(tmp, &n->mXform2, &local);
+        if (!n->mInst1->Trace(a, b, (const Xf*)tmp, &hitT, point, dir, out1, out2))
+            return;
+    } else if (level >= 2 && n->mInst2 && n->mInst2->mpField_cc) {
+        translateXform(tmp, &n->mXform2, &local);
+        if (!n->mInst2->Trace(a, b, (const Xf*)tmp, &hitT, point, dir, out1, out2))
+            return;
+    } else {
+        if (level >= 1 && !(n->mBoxMinX > n->mBoxMaxX)) {
+            if (!SegmentBox(a, b, &local, &n->mBoxMinX, &hitT))
+                return;
+        }
+        dir[0] = b[0] - a[0];
+        dir[1] = b[1] - a[1];
+        dir[2] = b[2] - a[2];
+        point[0] = a[0] + dir[0] * hitT;
+        point[1] = a[1] + dir[1] * hitT;
+        point[2] = a[2] + dir[2] * hitT;
+    }
+
+    if (bestT > hitT) {
+        bestPoint[0] = point[0]; bestPoint[1] = point[1]; bestPoint[2] = point[2];
+        bestDir[0] = dir[0]; bestDir[1] = dir[1]; bestDir[2] = dir[2];
+        if (out1) bestOut1 = *out1;
+        bestT = hitT;
+        best = n;
+        if (out2) bestOut2 = *out2;
+    }
+}
+
+// @ 0x00749370
+CMWNode* cModelWorld::FindClosestModelHit(const float* a, const float* b, float* outT, float* outPoint,
+                                          float* outNormal, FilterArg64* arg, int* out1, int* out2)
+{
+    float bestT = FLT_MAX;
+    CMWNode* best = 0;
+    int bestOut1 = -1;
+    int bestOut2 = -1;
+    float bestPoint[3];
+    float bestDir[3];
+    Xf local;
+
+    if (mField13c != mField140 && g_pAppProps->mpInner->mDetail > 1) {
+        CMWNode* results[0x400];
+        int count = mIndex.Query(a, b, 0.0f, 0x400, results);
+        if (count <= 0)
+            return 0;
+        for (int i = 0; i < count; ++i)
+            ConsiderNode(bestT, best, bestOut1, bestOut2, bestPoint, bestDir, local, results[i], a, b, arg, out1, out2);
+    } else {
+        CMWNode* anchor = (CMWNode*)&mListHead;
+        CMWNode* n = mListHead;
+        if (n == anchor)
+            return 0;
         do {
-            CMWModel* m = (CMWModel*)n;
-            if (m->mFlags & 1) {
-                float* pos = c;
-                float r = 0.0f;
-                FUN_00700c80(a, b, pos, m->mRadius * 1.0f, out1);
-                if (m->mInst1 && *(int*)((char*)m->mInst1 + 0xcc) != 0) {
-                    char tmp[56];
-                    translateTransform(tmp, m->mTransform, 0);
-                    FUN_0073e410(a, b, tmp, out1, out2, 0, 0, 0);
-                    best = n;
-                }
-            }
-            n = (int*)n[0];
+            ConsiderNode(bestT, best, bestOut1, bestOut2, bestPoint, bestDir, local, n, a, b, arg, out1, out2);
+            n = n->mpNext;
         } while (n != anchor);
     }
-    (void)d; (void)e; (void)arg;
-    return best;
+
+    if (!best)
+        return 0;
+    if (outT) *outT = bestT;
+    if (outPoint) {
+        outPoint[0] = bestPoint[0]; outPoint[1] = bestPoint[1]; outPoint[2] = bestPoint[2];
+    }
+    if (outNormal) {
+        outNormal[0] = bestDir[0]; outNormal[1] = bestDir[1]; outNormal[2] = bestDir[2];
+    }
+    if (out1) *out1 = bestOut1;
+    if (out2) *out2 = bestOut2;
+    return (CMWNode*)((char*)best + 8);
 }

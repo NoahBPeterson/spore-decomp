@@ -1,0 +1,4 @@
+00c9afb0 SP::cTribe::SetupHotSpot  # PDB name; picks/refreshes a fishing hot spot around the view direction (cube-map cells, water test via planet model)
+00c9aa10 SP::HotSpotMap::operator[]  # Claude-coined; thiscall(ecx=0x157abb0 map, key*) returns the value slot (elem+8), inserting a default hot spot
+00c92d50 SP::HotSpotMap::lower_bound  # Claude-coined; 0x60-byte elements, key at +0
+00c95010 SP::cFishingHotSpot::operator=  # Claude-coined; copies pos/food/rate/cube index and AddRefs the effect refs

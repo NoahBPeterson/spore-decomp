@@ -1,0 +1,1 @@
+00469bb0  SP::EditorUtils::BuildEditorCreature  # dc: builds runtime creature + baby transform list, submits up to 3 model builds via 0x467a20

@@ -1,0 +1,2 @@
+00da3b90 SocialRespond::Activate  # three candidate stand points + 0xd9bee0 MoveToTarget; comparator 0xd9b2b0 orders by Cand.dist2
+00d9b2b0 SocialRespond::CandLess  # 11-byte comparator: a->dist2 < b->dist2 (Cand stride 0x20)

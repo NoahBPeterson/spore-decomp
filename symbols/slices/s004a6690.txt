@@ -1,1 +1,4 @@
 004a6ca0 FUN_4a6ca0  # saves model state, invalidates blocks, restores state
+004a6690 AssignCollisionGroups  # byte-exact; calls SetCollisionGroup (0x451e50) on model blocks, a block list, symmetric partners/piles, then physics world SetFloorFilter/UpdateCollisionFilters
+00451e50 cSPEditorBlock::SetCollisionGroup  # writes arg into the block's physics body +0x18c->+0x1c->+0x1c (thiscall ret 4)
+004ad450 cSPEditorModel::GetPhysicsWorld  # returns this+0x30

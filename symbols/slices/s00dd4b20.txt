@@ -1,0 +1,1 @@
+00dd4b20 SP::cSPUICommScreen::UpdateSpaceInfo  # PDB name; 8 stack args (ret 0x20)

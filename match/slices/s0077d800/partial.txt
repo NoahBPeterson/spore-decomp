@@ -4,4 +4,3 @@
 0077e260  -  skeleton only; EH constructor with inline 0x100-byte storage not reproduced
 0077e2c0  -  skeleton only; EH constructor with inline 0x40-byte storage not reproduced
 0077e4a0  -  skeleton only; inverse-transform + SP::*NormalizationConstants setup not reproduced
-0077e6d0  -  skeleton only; 2068-byte rw shader-constant registration table not reproduced

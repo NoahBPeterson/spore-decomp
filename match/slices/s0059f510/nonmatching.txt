@@ -2,3 +2,4 @@
 0059f950  -   UILayoutVector::resize: complete; temp cSPUILayout construction/erase schedule differs
 0059f9e0  79  cSPEditorVehicleAbilities ctor: complete-ish; base ctor (0x59f030) and vtable stores not reproduced
 0059faa0  76  AbilityVector::EraseRange: complete; FindAbilitySlot arg schedule + loop register allocation differ
+0059fc60  -  SP::BlockGetAbilities: complete; block layout (flag path vs fallback order), 4-byte frame shift, dtor inlined at 1 of 2 original sites

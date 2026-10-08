@@ -1,0 +1,4 @@
+# Slice s00fddba0 names.
+00fde3e0 SP::cAppModeSpace::TransitionFromPlanetToSolar  # guess: inverse of TransitionFromSolarToPlanet (0x00fdeac0); the PDB candidate cSPSimulatorWalkAround::UpdateBeaming is a single-caller guess
+00c3bfe0 ?SetDestination@cSPGameDataUFO@@QAEXPBUVector3@@@Z  # overload taking a position (slice s01003df0 uses it)
+00c3c190 ?SetDestination@cSPGameDataUFO@@QAEXPAVcPlanet@@@Z  # overload taking an object to follow (this slice, from the call sites)

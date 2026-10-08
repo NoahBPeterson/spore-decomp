@@ -1,0 +1,1 @@
+00866f00 lib_zlib::deflate  # deflate() of upstream zlib 1.2.3 (deflate.obj); byte-exact from upstream source with /O2 /arch:SSE /MD /Gy /TC

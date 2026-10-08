@@ -1,0 +1,1 @@
+010f1df0  1067  collideEntitiesBroadPhaseContinuous complete (timers, 4 stack allocs, AABB calc + sphere clamp + swept expansion, broadphase update, removeDuplicates/removePairs, OOM watchdog, addPairs, unlock, frees); not exact: same instruction stream except loop prologue/register choice and a few stack-slot offsets. flags /O2 /MD /Gy /TP /GS- /vc71

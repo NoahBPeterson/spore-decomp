@@ -370,9 +370,236 @@ void Drawable::Destroy()
 }
 
 // ---------------------------------------------------------------- 0x0082f9a0
-// ArgScript parser ("SetFromArgScript"): large state machine, translation incomplete.
-int FUN_0082f9a0(void * /*this*/, void * /*arg*/)
-{
-    return 1;
-}
+// SPUI shader proxy (PDB candidate cSPUIShaderProxy::SetMaterialName): parses "<material> -param value ..." with ArgScript.
+// Clears the param map, converts the argument string, splits it into words, looks up the material's property list
+// (falls back to the default material "ui_material_default"), records every property that is a float/bool/vector
+// shader parameter in a map (hash -> {offset, components, type}), then walks the "-name value" arguments and stores
+// the parsed values into the parameter block at this+0x188. Finally stores the material name (this+0x120) and its
+// hash (this+0x174, 0 for the default material). Always returns true.
 
+// ---- helpers (stubs of callees; bodies live elsewhere in the binary)
+extern "C" void __cdecl operator_delete__(void*);   // 0xf47380 (operator delete[])
+extern "C" uint32_t __cdecl FNV1_String8(const char*, uint32_t basis, int lower);    // 0x932e80
+extern "C" uint32_t __cdecl FNV1_String16(const wchar_t*, uint32_t basis, int lower); // 0x932f30
+
+struct Str8 { char* b; char* e; char* c; };       // eastl::string (8 bit), heap only
+struct Str16 { wchar_t* b; wchar_t* e; wchar_t* c; };
+extern "C" void __cdecl ConvertToString8(Str8* out, const wchar_t* src, int len);   // 0x93c440
+extern "C" Str16* __cdecl ConvertToString16(Str16* out, const char* src, int len);  // 0x93c5a0
+
+struct FixedStr16   // eastl::fixed string of 32 wchar_t (0x54 bytes)
+{
+    wchar_t* b; wchar_t* e; wchar_t* c; uint32_t alloc; wchar_t* pool; wchar_t buf[32];
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x672750
+    FixedStr16* AssignCStr(const wchar_t* s);                  // 0x8369e0
+};
+struct MemberStr16  // the string at this+0x120 (other fixed allocator instance)
+{
+    wchar_t* b; wchar_t* e; wchar_t* c;
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x678ee0
+};
+extern bool __cdecl StrEqual(const MemberStr16& a, const wchar_t* b);  // 0x6ab760
+
+struct cArguments
+{
+    char pad[0x64];
+    cArguments();                                  // 0x837ff0
+    ~cArguments();                                 // 0x837fa0
+    void SplitIntoArguments(const char* s);        // 0x8383c0
+    void GetArguments(int& count, char**& argv);   // 0x837f80
+    bool HasArgument(const char* name);            // 0x837ee0
+};
+struct Vec2 { float x, y; };
+struct Vec3 { float x, y, z; };
+struct Vec4 { float x, y, z, w; };
+struct cParser
+{
+    char pad[0x1b0];
+    cParser();    // 0x847490
+    ~cParser();   // 0x847200
+    bool ParseBool(const char* s);       // 0x8413e0
+    float ParseFloat(const char* s);     // 0x8413f0
+    Vec2* ParseVector2(Vec2& out, const char* s);   // 0x841540
+    Vec3* ParseVector3(Vec3& out, const char* s);   // 0x841590
+    Vec4* ParseRGBA(Vec4& out, const char* s);      // 0x841610
+    Vec4* ParseRGB(Vec4& out, const char* s);       // 0x8416b0
+};
+
+struct PropertyList
+{
+    virtual void v0();
+    virtual void Release();   // 1
+    virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16();
+    virtual void GetPropertyKeys(void* outVec);   // 0x11 (+0x44)
+};
+struct PropertyManager
+{
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void GetPropertyList(uint32_t id, PropertyList** out);   // 0xc (+0x30)
+};
+PropertyManager* __cdecl GetPropertyManager();   // 0x67de30  (SP::PropertyManager)
+extern bool __cdecl GetPropertyAsUint32Array(PropertyList* list, uint32_t id, uint32_t& count, uint32_t*& arr);   // 0x6a0840
+
+// automatic reference to a PropertyList: `&p` releases the old value
+struct PropertyListPtr
+{
+    PropertyList* p;
+    void reset() { PropertyList* o = p; if (o) { p = 0; o->Release(); } }
+};
+
+struct KeyVec { uint32_t* b; uint32_t* e; void resize(unsigned n); };   // 0x4cd3c0
+extern KeyVec g_keyVec;   // 0x164e9f8
+extern const wchar_t* g_defaultMaterialName;   // 0x1547250 (pointer to L"ui_material_default")
+
+struct MapEntry { uint32_t key, a, b, c; };
+struct ParamMap { MapEntry* b; MapEntry* e; };
+extern "C" MapEntry* __cdecl RunInfoCopy(MapEntry* first, MapEntry* last, MapEntry* result);   // 0x705250
+
+struct ShaderProxy
+{
+    char pad0[4];
+    MapEntry* mapBegin;      // +4
+    MapEntry* mapEnd;        // +8
+    char pad1[0x114];
+    MemberStr16 name;        // +0x120
+    char pad2[0x48];
+    uint32_t nameHash;       // +0x174 (index 0x174)
+    char pad3[0x10];
+    float params[16];        // +0x188
+
+    uint32_t* MapAt(const uint32_t& key);                              // 0x82f930 (returns value triple)
+    bool MapLookup(uint32_t hash, uint32_t& off, uint32_t& type, int* cnt);   // 0x82f5c0
+    void StoreParams(const float* v, uint32_t off, int n);             // 0x82e380
+    bool SetFromArgScript(const wchar_t* args);                        // 0x82f9a0
+};
+
+// @ 0x0082f9a0
+bool ShaderProxy::SetFromArgScript(const wchar_t* args)
+{
+    g_keyVec.resize(0);
+    {
+        MapEntry* f = mapBegin;
+        MapEntry* l = mapEnd;
+        RunInfoCopy(l, l, f);
+        mapEnd += -(l - f);
+    }
+    Str8 s8;
+    ConvertToString8(&s8, args, -1);
+
+    FixedStr16 fs;
+    fs.b = fs.buf; fs.e = fs.b; fs.pool = fs.buf; fs.c = fs.buf + 32; fs.buf[0] = 0;
+    {
+        const wchar_t* p = args;
+        while (*p) ++p;
+        fs.assign(args, args + (p - args));
+    }
+    {
+    cArguments a;
+    a.SplitIntoArguments(s8.b);
+    int count = 0;
+    char** argv = 0;
+    a.GetArguments(count, argv);
+    if (count > 0)
+    {
+        Str16 t;
+        fs.AssignCStr(ConvertToString16(&t, argv[0], -1)->b);
+        if ((((char*)t.c - (char*)t.b) & ~1) > 2 && t.b) operator_delete__(t.b);
+        if (count > 1)
+        {
+            PropertyListPtr list; list.p = 0;
+            PropertyManager* mgr = GetPropertyManager();
+            list.reset();
+            uint32_t h = FNV1_String8(argv[0], 0x811c9dc5, 1);
+            mgr->GetPropertyList(h, &list.p);
+            if (!list.p)
+            {
+                mgr = GetPropertyManager();
+                list.reset();
+                h = FNV1_String16(g_defaultMaterialName, 0x811c9dc5, 1);
+                mgr->GetPropertyList(h, &list.p);
+            }
+            if (list.p)
+            {
+                list.p->GetPropertyKeys(&g_keyVec);
+                while (g_keyVec.b != g_keyVec.e)
+                {
+                    uint32_t key = *--g_keyVec.e;
+                    uint32_t n = 0;
+                    uint32_t* arr = 0;
+                    if (GetPropertyAsUint32Array(list.p, key, n, arr) || n == 2)
+                    {
+                        int type = arr[1];
+                        int comps;
+                        switch (type)
+                        {
+                        case 0: case 1: comps = 1; break;
+                        case 2: comps = 2; break;
+                        case 3: case 5: comps = 3; break;
+                        case 4: case 6: comps = 4; break;
+                        default: continue;
+                        }
+                        uint32_t off = arr[0];
+                        if (off + comps <= 0x10)
+                        {
+                            uint32_t* v = MapAt(key);
+                            v[0] = off; v[1] = comps; v[2] = type;
+                        }
+                    }
+                }
+                cParser parser;
+                uint32_t off = 0x10;
+                uint32_t type = 0xffffffff;
+                for (int i = 1; i < count; ++i)
+                {
+                    const char* arg = argv[i];
+                    if (*arg == '-')
+                    {
+                        if (a.HasArgument(arg + 1))
+                        {
+                            uint32_t tmp = 0x10;
+                            off = 0x10;
+                            uint32_t h2 = FNV1_String8(arg + 1, 0x811c9dc5, 1);
+                            if (MapLookup(h2, tmp, type, 0)) off = tmp;
+                            continue;
+                        }
+                    }
+                    if (off < 0x10)
+                    {
+                        switch (type)
+                        {
+                        case 0: params[off] = parser.ParseFloat(arg); break;
+                        case 1: params[off] = parser.ParseBool(arg) ? 1.0f : 0.0f; break;
+                        case 2: { Vec2 tmp; const Vec2* r = parser.ParseVector2(tmp, arg);
+                                  float v[4] = { r->x, r->y, 0, 0 }; StoreParams(v, off, 2); break; }
+                        case 3: { Vec3 tmp; const Vec3* r = parser.ParseVector3(tmp, arg);
+                                  float v[4] = { r->x, r->y, r->z, 0 }; StoreParams(v, off, 3); break; }
+                        case 4: { Vec4 tmp; const Vec4* r = parser.ParseRGBA(tmp, arg);
+                                  float v[4] = { r->x, r->y, r->z, r->w }; StoreParams(v, off, 4); break; }
+                        case 5: { Vec3 tmp; const Vec3* r = parser.ParseVector3(tmp, arg);
+                                  float v[4] = { r->x, r->y, r->z, 0 }; StoreParams(v, off, 3); break; }
+                        case 6: { Vec4 tmp; const Vec4* r = parser.ParseRGB(tmp, arg);
+                                  float v[4] = { r->x, r->y, r->z, r->w }; StoreParams(v, off, 4); break; }
+                        }
+                    }
+                }
+            }
+            if (list.p) list.p->Release();
+        }
+    }
+    if (fs.e - fs.b) name.assign(fs.b, fs.e);
+    if (name.e - name.b == 0)
+    {
+        const wchar_t* p = g_defaultMaterialName;
+        while (*p) ++p;
+        name.assign(g_defaultMaterialName, g_defaultMaterialName + (p - g_defaultMaterialName));
+    }
+    if (StrEqual(name, g_defaultMaterialName)) nameHash = 0;
+    else nameHash = FNV1_String16(name.b, 0x811c9dc5, 1);
+    }
+    if ((((char*)fs.c - (char*)fs.b) & ~1) > 2 && fs.b && fs.b != fs.pool) operator_delete__(fs.b);
+    if (s8.c - s8.b > 1 && s8.b) operator_delete__(s8.b);
+    return true;
+}

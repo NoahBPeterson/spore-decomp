@@ -3,3 +3,4 @@
 0048bca0  43  /Od; complete. max (baseJoint->0x3c - joint->0x3c) over hands/feet; frame ~43 bytes off
 0048bdd0  135  /Od; complete. feet-target update loop + wrappers; frame/temp layout differs
 0048c050  8  /Od; complete. 0x451330 by-value arg copy uses one extra frame slot (near miss)
+0048b370 1664 /Od; complete UpdateLimbScaleRange (scale range from siblings, clamp, 4860b0 on parent/children, 43eb50 on blocks); 1704 vs 1896 bytes, local slot layout differs

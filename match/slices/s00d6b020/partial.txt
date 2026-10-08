@@ -1,1 +1,0 @@
-00d6b020  ~6500  oversized /O2 creature-behaviour function (~6703 B, 785 decompiled lines); entry guards + first state arms reconstructed, remaining movement/planet arms omitted

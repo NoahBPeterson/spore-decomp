@@ -1,0 +1,1 @@
+00e10580 1479 cSPUIMinimapWin::AddIcon: complete (flags/mode -> image id table, WinButton+ButtonDrawableRadio build, map insert, parent/minimap attach); call/vslot sequence identical, size 1680 = 1680; frame layout (0x64 vs 0x54) and register allocation differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

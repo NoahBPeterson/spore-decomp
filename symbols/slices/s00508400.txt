@@ -1,0 +1,1 @@
+005087b0 TangentBuilder::BuildTangents  # per-triangle tangent/bitangent frame from UV edge determinant, normal-cross fallback when det <= 1e-7

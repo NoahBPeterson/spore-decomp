@@ -1,0 +1,1 @@
+009bcc70 1195 UpdateBodyTransforms (Claude-coined) complete: blend branch (velocity=(blend-center)/dt, snap) and static placement (root copy*scale; child via inlined quaternion product + two QuaternionVectorTransform); SSE scheduling/register allocation differs. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

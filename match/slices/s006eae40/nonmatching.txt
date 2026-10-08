@@ -3,3 +3,4 @@
 006ebe50  62  complete; Hoare partition, loop rotation and operand order differ
 006ebea0  87  complete; sort helper, register assignment/loop shape differ
 006ebf50  146  complete; ctor pointer-init + Vector3 splat (stack-temp layout differs)
+006eae40 1232 SP::cEffectsRenderer::ReleaseAndDrawModelBuffer complete (same size 2193, same 27 calls in order); stack-slot layout (vector temps, loop/start/data slots) differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

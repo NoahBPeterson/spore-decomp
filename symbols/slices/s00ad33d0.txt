@@ -1,0 +1,5 @@
+00ad33d0 UpdateMoveAction  # cdecl(cAction*, bool arrive); casts action to 0x0446E38F, looks up cinematic target data+0x0C, drives the target's locomotion (0x0116DD1B) to ComputeTargetPosition result (Claude-coined name)
+00ae66f0 CastCreature  # cdecl null-safe obj->Cast(0xCE9F6639)
+00ad2a50 cNavigationGoal::InitToward  # thiscall ret 0x10 (pos*, dir*, float, float), 0x74-byte goal (Claude-coined)
+00ad29d0 cNavigationGoal::InitAt  # thiscall ret 0xC (pos*, float, float)
+00b7f250 cPlanetModel::BuildSurfaceOrientation2  # thiscall ret 0xC (sret quat, pos*, dir*)

@@ -230,13 +230,6 @@ void __cdecl f00ee2860(int p1, int p2, cString* p3)
     (void)p1; (void)p2; (void)p3;   // string/tooltip construction not reconstructed
 }
 
-// ============================================================ 0x00ee2960  (partial)
-// @ 0x00ee2960
-void __cdecl f00ee2960(int a)
-{
-    (void)a;   // 1722-byte item-refresh handler not reconstructed
-}
-
 // ============================================================ 0x00ee3230  (partial)
 // @ 0x00ee3230
 void Beh::F3230()
@@ -265,3 +258,8 @@ void Beh::F3630()
     (void)this;   // 213-byte handler not reconstructed
 }
 
+
+// ============================================================ 0x00ee2960
+// The palette item refresh lives in its own header (compiled here with the module's /EHsc flags,
+// which adds an EH frame; the best byte comparison was with /O2 /MD /Gy /TP /GS-).
+#include "s00ee2860_pal.h"

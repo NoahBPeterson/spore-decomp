@@ -1,0 +1,1 @@
+00beeb70 FUN_00beeb70  # Init-from-city: owner city at +0x264, locator +0x34, rotates 4 offset vectors by the city locator quaternion onto the planet surface

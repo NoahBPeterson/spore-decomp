@@ -1,0 +1,4 @@
+00dcf2e0 SP::cVehicleGroupOrder::FormationMoveToTargets  # PDB candidate; matches the +0x50 vehicle vector, the 0x178-byte formation vector at +0x7c and the two-pass body
+00dc6640 SP::IsFormationMember  # cdecl(formation, cVehicle**) -> bool: is the vehicle's locomotive (+0x34) in the formation's entity list
+00dc6680 SP::FindClosestVehicle  # cdecl(vector*, pos*, int) -> entry nearest to pos (min distSq starting at FLT_MAX)
+00dc6430 SP::FUN_00dc6430  # label-only code at 0xdc6430, stored as the third formation callback (+0x170)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010154f0  1912  complete cSimulatorUniverse::cSimulatorUniverse (base ctor, 9 event/action sub-objects registered in the event vector_map, 3 empty rb-maps, 19 tuning property reads incl. 2 x1000 fistp-qword conversions); same 59 calls, 2296 vs 2301 bytes; frame (0x14 locals, p/v/qword slot split), the rb-map anchor zero-store scheduling (via ecx/eax) and member store order differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

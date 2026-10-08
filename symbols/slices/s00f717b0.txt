@@ -1,0 +1,1 @@
+00f717b0 RegisterTerrainEffectMaps  # registers 22 Terrain/EffectMap/* maps via IEffectsManager::RegisterMap; byte-exact

@@ -1,3 +1,2 @@
-005fc330  -  cImportExport::ImportNewAsset: only the signature / a false return are reconstructed; the asset import logic is not reproduced.
 005fc9f0  -  cImportExport::ScanFolder: only the signature / a false return are reconstructed; the folder scan logic is not reproduced.
 005fd0a0  -  cImportExport::ScanForImports: only a zero-return skeleton is reconstructed; the bucket walk over the eight folder paths is not reproduced.

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c9afb0  1335  complete (all 25 calls in order, same loops/branches); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame layout, hoisted zero compares and some x87/SSE scheduling differ

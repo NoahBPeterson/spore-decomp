@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+00523900  1710  Ctx9::BuildHit complete (29 calls = original 29, all targets/order equal; size 1952 vs 2012): only /Od frame-slot/temp placement differs (orig frame 0x344 vs ours 0x198) and the 0-2/default switch folds to a table starting at 3; difftest WEAK (31% coverage, 0 mismatches) (compiled with /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast)

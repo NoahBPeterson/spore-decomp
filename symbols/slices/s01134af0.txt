@@ -1,0 +1,1 @@
+01134b70 rw::audio::core::MpegLayer3Owner::ReadSideInfo  # MPEG layer III III_get_side_info (main_data_begin, scfsi, 2x granule info; LSF path with one granule); bit reader at this+0x34 (GetBits 0x01134a60), sibling of s0115b540 layout

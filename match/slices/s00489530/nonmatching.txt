@@ -7,3 +7,4 @@
 00489ae0  113  /Od; complete. fix-joints loops; frame slot layout differs
 00489bc0  127  /Od; complete. limb-scale update; frame/temp layout differs
 00489c60  58  /Od; complete. finalize wrapper; frame slot layout differs
+00489cf0  1635  /Od; complete. repin branches (has-lower / bit0x2c leaf / other), symmetry-sign fixup, recursion; frame 0x214 vs 0x264 and by-value Vector3 arg copies differ

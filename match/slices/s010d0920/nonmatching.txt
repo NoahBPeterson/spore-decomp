@@ -1,0 +1,2 @@
+010d0920  2046  complete hkMultiSphereTriangleAgent::getClosestPoints; flags /O2 /MD /Gy /TP; diffs: x87 scheduling and transform-copy spelling, frame 0x174 vs 0x164; equiv FAIL 5/157 on inputs reading an unwritten stack result (frame layout), unverified
+010d1100  2126  complete hkMultiSphereTriangleAgent::staticGetClosestPoints; flags /O2 /MD /Gy /TP; same x87 scheduling difference; equiv FAIL 2/273 same cause

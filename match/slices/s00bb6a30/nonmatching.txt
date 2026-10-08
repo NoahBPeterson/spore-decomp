@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00bb6a30  1592  complete (size 2075 = original; identical ordered sequence of the 51 direct callees and 42 indirect calls with the same vtable slots/constants); the original keeps constant 0 in ebx from entry (push ebx, cmp r,ebx, this in edi), ours emits push 0 / test r,r with this in esi; cascading register-choice diffs

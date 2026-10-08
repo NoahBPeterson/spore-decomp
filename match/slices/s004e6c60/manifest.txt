@@ -1,2 +1,3 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s004e6c60/s004e6c60.cpp  ?ScaleColorForKind@@YAXHMMMPAM00@Z  004e7460  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s004e6c60/s004e6c60.cpp  ?NormalizePercents@@YAXPAUPctItem@@00@Z  004e6c60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast

@@ -146,30 +146,152 @@ int FUN_00748ad0(float* a, int b, unsigned short* src, int param_4, int param_5,
     return 0;
 }
 
-// @ 0x00748c30 : cModelWorld model-list query (best model in range)
-int* FUN_00748c30(int self, int param_2, int param_3, float* param_4, uint32_t* param_5)
+// 0x00748c30 : cModelWorld model query (closest model hit by a line/ray); see FindClosest below
+#pragma pack(push, 4)
+struct QueryArg {
+    unsigned __int64 incMask;            // 0x00 include mask
+    unsigned __int64 excMask;            // 0x08 exclude mask
+    bool (__cdecl* filter)(void*);       // 0x10
+    unsigned char lodDefault;            // 0x14
+    unsigned char qflags;                // 0x15
+};
+#pragma pack(pop)
+inline unsigned BitOf(uint32_t v, int n) { return (v >> n) & 1; }
+struct QModelInst {
+    unsigned char pad[0xcc];
+    int mHasData;                        // 0xcc
+    bool PickLineWithHit(int a, int b, void* xf, float* outDist);   // 0x0073e080
+};
+struct QXform {
+    unsigned short mFlags, mCount;
+    Vec3 mTranslation; float mScale; float mRot[9];
+    QXform();
+    QXform& operator=(const QXform&);     // 0x00537dc0
+};
+extern float g_f162eb0c;   // 0x0162eb0c
+extern float g_f162eb10;   // 0x0162eb10
+extern float g_f162eb14;   // 0x0162eb14
+extern float g_f1485720;   // 0x01485720
+extern int g_appProps;     // 0x015fd918
+extern float g_f162ec4c[9];   // 0x0162ec4c
+extern const float g_f140d674;   // 0x0140d674
+QXform::QXform()
 {
-    unsigned char* b = (unsigned char*)self;
-    int* best = 0;
-    if (*(int*)(b + 0x13c) == *(int*)(b + 0x140) ||
-        *(int*)(*(int*)(g_appProps + 0x3c) + 0x2c) < 2) {
-        int* n = *(int**)(b + 0x19c);
-        int* anchor = (int*)(b + 0x19c);
-        if (n == anchor) return 0;
-        float bestDist = 1.0e38f;
-        do {
-            // build the query transform and evaluate the node's filter
-            float local[64];
-            memset(local, 0, sizeof(local));
-            int r = FUN_00748ad0(param_4, param_3, (unsigned short*)n, 0, 0, (int)n, 0, 0, bestDist);
-            if (r && *(float*)(n + 0x134) < bestDist) {
-                bestDist = *(float*)(n + 0x134);
-                best = n;
-            }
-            n = (int*)n[0];
-        } while (n != anchor);
+    mFlags = 0; mCount = 0;
+    mTranslation.x = g_f162eb0c; mTranslation.y = g_f162eb10; mTranslation.z = g_f162eb14;
+    mScale = g_f1485720;
+    for (int i = 0; i < 9; ++i) mRot[i] = g_f162ec4c[i];
+}
+#pragma pack(push, 4)
+struct QNode {
+    QNode* mNext;                        // 0x00
+    unsigned char pad4[0x0c - 4];
+    uint32_t mFlags;                     // 0x0c
+    unsigned char pad10[0x4c - 0x10];
+    unsigned __int64 mMask;              // 0x4c
+    unsigned char pad54[0x65 - 0x54];
+    unsigned char mLod;                  // 0x65
+    unsigned char pad66[0x74 - 0x66];
+    float mRadius;                       // 0x74
+    float mBoxMin;                       // 0x78
+    unsigned char pad7c[0x84 - 0x7c];
+    float mBoxMax;                       // 0x84
+    unsigned char pad88[0x9c - 0x88];
+    QModelInst* mInst1;                  // 0x9c
+    unsigned char pada0[0xac - 0xa0];
+    QModelInst* mInst2;                  // 0xac
+    unsigned char padb0[0xe4 - 0xb0];
+    unsigned char mXf[0x38];             // 0xe4
+};
+#pragma pack(pop)
+struct QCollection {
+    int Query(int a, int b, float f, int cap, QNode** out);   // 0x00702860
+};
+bool FUN_00700c80(int a, int b, Vec3* pos, float radius, float* outDist);
+bool FUN_00744050(int a, int b, QXform* xf, float* box, float* outDist);
+
+// One candidate of the closest-hit search (inlined at both loops in the original).
+__forceinline void ConsiderModel(QNode* m, int a, int b, QueryArg* q, float& best, QNode*& bestM)
+{
+    QXform local;
+    if (!(m->mFlags & 1)) return;
+    if (!(q->incMask == 0 || (m->mMask & q->incMask) != 0)) return;
+    if ((m->mMask & q->excMask) != 0) return;
+    if (q->filter != 0 && !q->filter((char*)m + 8)) return;
+    int lod;
+    if ((q->qflags & 1) && BitOf(m->mFlags, 8))
+        lod = m->mLod;
+    else
+        lod = q->lodDefault;
+    local = *(QXform*)((char*)m + 0x10);
+    if (BitOf(m->mFlags, 7) || (q->qflags & 2)) {
+        local.mCount++;
+        local.mScale = g_f1485720;
     }
-    (void)param_2;
-    (void)param_5;
-    return best;
+    Vec3 pos;
+    pos.x = local.mTranslation.x;
+    pos.y = local.mTranslation.y;
+    pos.z = local.mTranslation.z;
+    float dist;
+    if (!FUN_00700c80(a, b, &pos, m->mRadius * local.mScale, &dist)) return;
+    bool ok;
+    if (lod >= 3 && m->mInst1 != 0 && m->mInst1->mHasData != 0) {
+        unsigned char tmp[56];
+        translateTransform(tmp, m->mXf, &local);
+        ok = m->mInst1->PickLineWithHit(a, b, tmp, &dist);
+    } else if (lod >= 2 && m->mInst2 != 0 && m->mInst2->mHasData != 0) {
+        unsigned char tmp[56];
+        translateTransform(tmp, m->mXf, &local);
+        ok = m->mInst2->PickLineWithHit(a, b, tmp, &dist);
+    } else if (lod >= 1 && !(m->mBoxMin > m->mBoxMax)) {
+        ok = FUN_00744050(a, b, &local, &m->mBoxMin, &dist);
+    } else {
+        ok = true;
+    }
+    if (!ok) return;
+    if (dist < best) {
+        best = dist;
+        bestM = m;
+    }
+}
+
+struct cModelWorld {
+    unsigned char pad0[0x118];
+    QCollection mTree;                   // 0x118
+    unsigned char pad119[0x13c - 0x119];
+    int mCountA;                         // 0x13c
+    int mCountB;                         // 0x140
+    unsigned char pad144[0x19c - 0x144];
+    QNode mList;                         // 0x19c (list anchor)
+
+    void* FindClosest(int a, int b, float* outDist, QueryArg* q);
+};
+
+// @ 0x00748c30
+void* cModelWorld::FindClosest(int a, int b, float* outDist, QueryArg* q)
+{
+    QNode* bestM = 0;
+    float best = g_f140d674;
+    if (mCountA == mCountB ||
+        *(int*)(*(int*)(g_appProps + 0x3c) + 0x2c) < 2) {
+        QNode* anchor = &mList;
+        QNode* n = mList.mNext;
+        if (n == anchor) return 0;
+        do {
+            ConsiderModel(n, a, b, q, best, bestM);
+            n = n->mNext;
+        } while (n != anchor);
+    } else {
+        QNode* list[0x400];
+        int cnt = mTree.Query(a, b, 0.0f, 0x400, list);
+        if (cnt < 1) return 0;
+        int i = 0;
+        do {
+            ConsiderModel(list[i], a, b, q, best, bestM);
+            ++i;
+        } while (i < cnt);
+    }
+    if (bestM == 0) return 0;
+    if (outDist) *outDist = best;
+    return (char*)bestM + 8;
 }

@@ -1,0 +1,1 @@
+00b0b3d0 SpawnerMgr::Update  # guessed name; per-frame update of the item vectors at +0x1b8e10/+0x1b8f40 against the entities gathered by 0xb09070; calls BeamMgr2::UpdateBeams (0xb0a6f0) and ItemManager::Update (0xb08670) on this-4

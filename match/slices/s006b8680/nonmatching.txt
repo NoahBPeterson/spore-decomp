@@ -4,3 +4,4 @@
 006b9230 116 complete; deserializer
 006b92d0 337 complete; basis normalization, x87 sum order
 006b9440 167 complete; basis-to-matrix build
+006b8680 793 complete; same 43-call sequence (OS/CPU/memory/version-info probe), frame 0x570 vs 0x568, register allocation differs

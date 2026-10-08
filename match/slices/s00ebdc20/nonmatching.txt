@@ -1,0 +1,2 @@
+00ebdc20  1600  complete (all paths, calls, vtable slots); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- ; diffs: x87/SSE scheduling, register allocation, loop pointer strength reduction ; equiv: UNSUPPORTED (generated inputs fault before the first branch)
+00ebe3e0  1777  complete (all paths and calls; per-entry state machine, flying/surface-snapped motion, orientation, erase-by-swap); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- ; diffs: x87/SSE scheduling, block order, dead identity-matrix copies ; equiv: WEAK 1707 valid inputs, 3.6% coverage, 0 mismatches

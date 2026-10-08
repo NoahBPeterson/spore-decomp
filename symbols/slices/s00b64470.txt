@@ -1,0 +1,1 @@
+00b64a60 CollectLayerGeometry  # flattens a layered mesh object's group (FUN_00b64870) into Vec16 vertex + Tri index hkArrays; uses hkLocalArray<int> offsets

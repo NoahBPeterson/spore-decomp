@@ -1,6 +1,6 @@
 0076cc00  (vector<0x28>::insert)  # 300-byte grow/shift insert over 0x28 elements
 0076cd30  SP::cRTTCapture-like update  # cJob continue + message release + scene-job append
-0076ce50  effects job processor  # 1904-byte job/vector loop
+0076ce50  TileCapture::Capture  # tile-by-tile render-to-texture capture of a viewer into one RGBA image, optional "<path>.png" save job; Claude-coined name
 0076d5c0  vector<0x28>::push_back  # builds a 0x28 element from 12 args
 0076d6e0  three-call push wrapper  # calls 0076d5c0 with formats 5/7/6
 0076d7d0  RectThing::SetSize  # stores 4 uint16 sizes + 0.0/1.0 floats

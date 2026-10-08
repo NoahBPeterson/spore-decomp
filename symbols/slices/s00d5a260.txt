@@ -1,0 +1,2 @@
+00d5a260 cFollowBehavior::Update  # locomotion steering: cLocomotionRequest waypoint consume, stop distances, walk/run gait, InterruptAnimation
+00d59b00 cFollowBehavior::Approach  # called from the steering update with (obj, target, dt, speed, turnRate), ret 0x14, returns float

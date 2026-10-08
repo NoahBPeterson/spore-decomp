@@ -5,3 +5,4 @@
 00686320  62   complete: SP::cPropertyList dtor; retail mModCount is a refcounted object, member order/scheduling differ
 00686380  65   complete: hash_map<unsigned,pair<Record*,int>>::operator[]; local layout/scheduling differs
 00686490  112  complete: SP::OpenRecordAsStream; global/vtable call shapes differ
+006866f0  1363  complete: load property-list record + Blessed/BlessID check; layout/EH-state/branch order differ, call and vtable-slot sequence identical

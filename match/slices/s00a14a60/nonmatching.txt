@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00a14a60  993  complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; Chorus::Process, register allocation and x87 log/ceil scheduling differ
+00a15220  1328  complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /fp:fast; MultiDelay::Process, register allocation and loop scheduling differ

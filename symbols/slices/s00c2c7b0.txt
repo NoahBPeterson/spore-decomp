@@ -1,0 +1,1 @@
+00c2cac0 UpdatePathAhead  # creature path-ahead trace + waypoint reconcile (twin of 0x00cb2770); flags at creature+0x330, locomotion at +0xc0; calls TracePlanetPath 0xaf6bf0 with cb 0xc2b170

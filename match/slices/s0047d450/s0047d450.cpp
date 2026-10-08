@@ -50,12 +50,24 @@ void pop_heap(FloatKeyPair* first, FloatKeyPair* last, FloatKeyLess compare)
 struct cPropertyList;
 struct cSPEditorBlock;
 
+// cIModelWorld, only the vtable slots Init uses: 3 = create model (0xc), 22 = register model (0x58),
+// 91 = release model (0x16c).  Filler virtuals pad the slots in between.
+template <int N, class B> struct VPad : VPad<N - 1, B> { virtual void vpad(VPad<N, B>*) {} };
+template <class B> struct VPad<0, B> : B {};
+struct cMWModel;
+struct IModelWorld0 { virtual void a0(); virtual void a1(); virtual void a2();
+    virtual cMWModel* CreateModel(uint32_t key, uint32_t group, int flag); };
+struct IModelWorld1 : VPad<18, IModelWorld0> { virtual void RegisterModel(cMWModel* m); };
+struct IModelWorld2 : VPad<68, IModelWorld1> { virtual void ReleaseModel(cMWModel* m, int flag); };
+typedef IModelWorld2 cIModelWorld;
+
 struct cMWModel {
-    void* mWorld;                 // +0x00  cIModelWorld* (its first dword is the vtable)
+    cIModelWorld* mWorld;         // +0x00
     uint32_t mFlags;              // +0x04
     char   pad_08[0x38];
     int    mRefCount;             // +0x40
-    void Release();
+    void Release();               // 0x40f360
+    void SetFlag(int v);          // 0x437f70 (thiscall, ret 4)
 };
 
 struct cPropertyList {
@@ -93,6 +105,7 @@ extern void* g_vtblB;
 extern void* g_vtblC;
 extern void* g_vtblD;
 extern void* g_vtblE;
+extern uint32_t g_modelGroup;                                       // 0x015d4308
 extern float g_ctorConst1;
 extern float g_ctorConst2;
 
@@ -158,7 +171,6 @@ void   GetPropertyAsKey(cPropertyList* pl, uint32_t key, void* out);        // @
 float* Property_GetFloat(void* property);                                   // @ 0x0041ea70
 bool*  Property_GetBool(void* property);                                    // @ 0x0041e920
 uint8_t* Property_GetKeyArray(void* property);                              // @ 0x0041e920
-void   Model_SetFlag(cMWModel* model, int flag);                            // @ 0x00437f70
 
 inline void* WorldSlot(cMWModel* p, int slot)
 {
@@ -220,78 +232,148 @@ void cSPEditorHandle::LoadProps()
     }
 }
 
-// @ 0x0047db30 -- complete main path (two model setups), shape only: the exact
-// inlined AutoRefCount / bitset sequence of the original is not reproduced.
+// @ 0x0047db30
+// The two model setups are expanded by hand in the original (/Od): drop the old models, then for
+// each default/overridden key create the model through the model world, attach the handle as
+// owner, set the flag bits, scale, color and highlight.  The AutoRefCount assignments are the
+// inlined EA::AutoRefCount operator= (its `if (pNew)` arm survives as dead code when pNew is 0).
+struct IUnknown32 {
+    virtual void AddRef();
+    virtual void Release();
+};
+
+template <class T> struct AutoRefCount {
+    T* mpObject;
+    AutoRefCount& operator=(T* pNew)
+    {
+        T* pTemp = mpObject;
+        if (pNew)
+            pNew->AddRef();
+        mpObject = pNew;
+        if (pTemp)
+            pTemp->Release();
+        return *this;
+    }
+};
+
+// cMWModel exposes the intrusive ref count used by AutoRefCount<cMWModel>.
+struct ModelRef {
+    cMWModel* mpObject;
+    cMWModel* get() const { return mpObject; }
+    ModelRef& operator=(cMWModel* pNew)
+    {
+        cMWModel* pTemp = mpObject;
+        if (pNew)
+            ++pNew->mRefCount;
+        mpObject = pNew;
+        if (pTemp)
+            pTemp->Release();
+        return *this;
+    }
+};
+
+// EASTL bitset<32>::set(i, value) as inlined in the original (out-of-range index is ignored).
+struct Bitset32 {
+    uint32_t mWord;
+    void set(unsigned i, bool value)
+    {
+        if (i < 0x20) {
+            if (value)
+                mWord |= (1u << (i % 0x20));
+            else
+                mWord &= ~(1u << (i % 0x20));
+        }
+    }
+};
+
+struct V3 { float x, y, z; };
+
+// vtable view of cSPEditorHandle (slots 0x34..0x48).
+struct HandleV : IUnknown32 {
+    virtual void s2(); virtual void s3(); virtual void s4(); virtual void s5(); virtual void s6();
+    virtual void s7(); virtual void s8(); virtual void s9(); virtual void s10(); virtual void s11();
+    virtual void s12(); virtual void s13();
+    virtual float GetHighlight(int state);                              // 0x38
+    virtual float GetOverdrawHighlight(int state);                      // 0x3c
+    virtual const V3* GetColor(V3* out, int state);         // 0x40
+    virtual const V3* GetOverdrawColor(V3* out, int state); // 0x44
+    virtual float GetScale();                                           // 0x48
+};
+
+// Drops the world's reference to the model and clears its owner (+0x64).
+#define MDL(F) (((ModelRef*)&this->F)->get())
+#define DROP_OWNER(M)                                                                    \
+    {                                                                                    \
+        cMWModel* p = (M);                                                               \
+        p->mWorld->ReleaseModel(p, 0);                                                   \
+        cMWModel* q = (M);                                                               \
+        AutoRefCount<IUnknown32>* slot = (AutoRefCount<IUnknown32>*)((char*)q + 0x64);   \
+        if (slot->mpObject)                                                              \
+            *slot = 0;                                                                   \
+    }
+
+#define SETUP_MODEL(FIELD, KEY, VSLOT_COLOR, VSLOT_HIGHLIGHT)                            \
+    {                                                                                    \
+        cMWModel* m = world->CreateModel(KEY, g_modelGroup, 0);                          \
+        ModelRef* ref = (ModelRef*)&this->FIELD;                                         \
+        if (m != ref->mpObject)                                                          \
+            *ref = m;                                                                    \
+        world->RegisterModel(MDL(FIELD));                                               \
+        {                                                                                \
+            AutoRefCount<IUnknown32>* slot = (AutoRefCount<IUnknown32>*)((char*)MDL(FIELD) + 0x64); \
+            if ((IUnknown32*)this != slot->mpObject)                                     \
+                *slot = (IUnknown32*)this;                                               \
+        }                                                                                \
+        MDL(FIELD)->SetFlag(0);                                                   \
+        ((Bitset32*)((char*)MDL(FIELD) + 4))->set(1, true);                             \
+        {                                                                                \
+            cMWModel* mdl = MDL(FIELD);                                                 \
+            float scale = ((HandleV*)this)->GetScale(); \
+            char* tf = (char*)mdl + 8;                                                   \
+            *(float*)(tf + 0x10) = scale;                                                \
+            ++*(uint16_t*)(tf + 2);                                                      \
+        }                                                                                \
+        {                                                                                \
+            cMWModel* mdl = MDL(FIELD);                                                 \
+            V3 tmp;                                                                      \
+            *(V3*)((char*)mdl + 0x4c) = *((HandleV*)this)->VSLOT_COLOR(&tmp, this->mCurrentState); \
+        }                                                                                \
+        {                                                                                \
+            cMWModel* mdl = MDL(FIELD);                                                 \
+            float h = ((HandleV*)this)->VSLOT_HIGHLIGHT(this->mCurrentState); \
+            *(float*)((char*)mdl + 0x58) = h;                                            \
+        }                                                                                \
+    }
+
 void cSPEditorHandle::Init(cSPEditorBlock* block, bool loadProps, uint32_t modelKey, uint32_t overdrawKey)
 {
     this->mCurrentState = 1;
     this->mBlock = block;
-    if (this->mModel) {
-        cMWModel* p = this->mModel;
-        ((void(__thiscall*)(void*, cMWModel*, int))WorldSlot(p, 0x16c / 4))(p->mWorld, p, 0);
-        // drop the model's modification-count ref
-        void** slot = (void**)((char*)p + 0x64);
-        if (*slot) {
-            void* t = *slot;
-            *slot = 0;
-            ((void(__thiscall*)(void*))t)(t);
-        }
+    if (MDL(mModel))
+        DROP_OWNER(MDL(mModel))
+    if (MDL(mOverdrawModel))
+        DROP_OWNER(MDL(mOverdrawModel))
+    {
+        ModelRef* ref = (ModelRef*)&this->mModel;
+        if (ref->mpObject)
+            *ref = 0;
     }
-    if (this->mOverdrawModel) {
-        cMWModel* p = this->mOverdrawModel;
-        ((void(__thiscall*)(void*, cMWModel*, int))WorldSlot(p, 0x16c / 4))(p->mWorld, p, 0);
-        void** slot = (void**)((char*)p + 0x64);
-        if (*slot) {
-            void* t = *slot;
-            *slot = 0;
-            ((void(__thiscall*)(void*))t)(t);
-        }
-    }
-    if (this->mModel) {
-        cMWModel* t = this->mModel;
-        this->mModel = 0;
-        if (t)
-            t->Release();
-    }
-    if (this->mOverdrawModel) {
-        cMWModel* t = this->mOverdrawModel;
-        this->mOverdrawModel = 0;
-        if (t)
-            t->Release();
+    {
+        ModelRef* ref = (ModelRef*)&this->mOverdrawModel;
+        if (ref->mpObject)
+            *ref = 0;
     }
     if (loadProps) {
         LoadProps();
-        void* world = block->mModelWorld;
+        cIModelWorld* world = (cIModelWorld*)this->mBlock->mModelWorld;
         if (modelKey == 0)
             modelKey = this->mDefaultModelKey[0];
-        if (modelKey) {
-            cMWModel* m = (cMWModel*)((void*(__thiscall*)(void*, uint32_t, void*, int))((void**)world)[3])(world, modelKey, (void*)0x015d4308, 0);
-            if (m != this->mModel) {
-                cMWModel* old = this->mModel;
-                if (m)
-                    ++m->mRefCount;
-                this->mModel = m;
-                if (old)
-                    old->Release();
-            }
-            ((void(__thiscall*)(void*, cMWModel*))((void**)world)[22])(world, this->mModel);
-            Model_SetFlag(this->mModel, 0);
-        }
+        if (modelKey)
+            SETUP_MODEL(mModel, modelKey, GetColor, GetHighlight)
         if (overdrawKey == 0 && this->mHasOverdraw)
             overdrawKey = this->mDefaultOverdrawKey[0];
-        if (overdrawKey && this->mHasOverdraw) {
-            cMWModel* m = (cMWModel*)((void*(__thiscall*)(void*, uint32_t, void*, int))((void**)world)[3])(world, overdrawKey, (void*)0x015d4308, 0);
-            if (m != this->mOverdrawModel) {
-                cMWModel* old = this->mOverdrawModel;
-                if (m)
-                    ++m->mRefCount;
-                this->mOverdrawModel = m;
-                if (old)
-                    old->Release();
-            }
-            ((void(__thiscall*)(void*, cMWModel*))((void**)world)[22])(world, this->mOverdrawModel);
-            Model_SetFlag(this->mOverdrawModel, 0);
-        }
+        if (overdrawKey && this->mHasOverdraw)
+            SETUP_MODEL(mOverdrawModel, overdrawKey, GetOverdrawColor, GetOverdrawHighlight)
     }
 }
 
@@ -305,7 +387,7 @@ void cSPEditorHandle::Shutdown()
         if (*slot) {
             void* t = *slot;
             *slot = 0;
-            ((void(__thiscall*)(void*))t)(t);
+            ((void(__thiscall*)(void*))((void**)*(void**)t)[1])(t);
         }
         if (this->mModel) {
             cMWModel* t = this->mModel;
@@ -321,7 +403,7 @@ void cSPEditorHandle::Shutdown()
         if (*slot) {
             void* t = *slot;
             *slot = 0;
-            ((void(__thiscall*)(void*))t)(t);
+            ((void(__thiscall*)(void*))((void**)*(void**)t)[1])(t);
         }
         if (this->mOverdrawModel) {
             cMWModel* t = this->mOverdrawModel;

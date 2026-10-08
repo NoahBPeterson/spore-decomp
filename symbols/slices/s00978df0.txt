@@ -1,0 +1,3 @@
+00978df0 ?SortRowsByColumn@WinGridView@@QAEXHH_NP6AHPBUCellData@@1@Z@Z  # sorts the rows by one column's cells (merge_sort of the row list, cells re-inserted, selection remapped); name ours
+00979440 ?SortColumnsByRow@WinGridView@@QAEXHH_NP6AHPBUCellData@@1@Z@Z  # transposed version; name ours
+00a80dd0 ?DoInsertValue@?$SimpleVector@PAUCellData@@@SP@@QAEXPAPAUCellData@@ABQAU3@@Z  # eastl::vector<T*, sp_vector_allocator>::DoInsertValue (shared pointer-vector instance)

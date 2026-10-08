@@ -5,3 +5,4 @@
 00ed8610 101  destructor: member release loop register/branch shape differs
 00ed8690 168  noun iteration + effect setters: loop and vtable call schedule differ
 00ed8780 421  effect grab/clear: unrolled effect-manager pattern differs (register use)
+00ed8a30 1280  complete noun-effect loop; whole-program arg reuse/inlining and register allocation differ

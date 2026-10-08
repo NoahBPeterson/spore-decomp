@@ -1,0 +1,1 @@
+00d28e60 SP_cCreatureCamera_ctor  # PDB cCreatureCamera; retail offsets = PDB-8 from +0x200, -0x10 from +0x2cc; equiv PASS

@@ -1,0 +1,1 @@
+0101c080 SP::cSPCameraControllerSolarSystem::Update  # PDB candidate (caller-single); (int ms, cViewer*) ret 8, builds the camera-to-world matrix and calls cViewer_SetCameraToWorld

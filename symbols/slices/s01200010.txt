@@ -1,0 +1,1 @@
+01200010 SP::SampleTrackKeys  # cdecl(out, {keyA,keyB}, timeOffset, t, KeyFormat*, TrackInfo*): slerp/lerp of one track between two keys, raw or quantised via callbacks

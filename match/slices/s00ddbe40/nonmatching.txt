@@ -1,0 +1,1 @@
+00ddbe40  1098  complete: all 28 calls in original order (size 1.0x), SplitKey/RandomOffset re-implemented as statics (orig dd9130/dd93d0 take outputs in esi/edi); register allocation, frame size and temp-slot layout differ

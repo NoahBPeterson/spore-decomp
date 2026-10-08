@@ -1,0 +1,2 @@
+# complete behaviorally-equivalent source, not byte-exact
+00ccdd70  1738  SP::cTribeDisplayStrategy::Activate: complete; this lives in ebx not ebp, register allocation/schedule differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

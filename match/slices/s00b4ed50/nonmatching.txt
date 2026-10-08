@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b4ed50  1384  radial rest-depth impulse step: complete (all paths, 26 calls, vtable slots 0x60/0x68/0x6c); x87/SSE mix, stack-slot reuse and register allocation differ

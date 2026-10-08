@@ -6,3 +6,4 @@
 00662a40  64   indexed element search; cl CSEs the recomputed vector size, original reloads mEnd each step
 00662b40  148  mouse-focus clamp; x87/SSE float schedule differs (behavior and calls match)
 00662c70  196  object-based clamp; float schedule and temp slots differ (behavior and calls match)
+00661d10  1698  CreateFilterButtons complete (all paths/calls); size 1883 vs 1983, x87 vs SSE for pos.x, duplicated epilogue releases, branch layout differs

@@ -1,0 +1,1 @@
+00fa3c10  1241  cTerrainSphere::ApplyModelFootprint: complete (34/34 calls and vcall slots in order, size 1627 vs 1740); stack slot assignment (frame 0xa4 vs 0xa0), this spilled to a different slot, and the null-image call-site duplication differ

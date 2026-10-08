@@ -1,0 +1,1 @@
+00694440 EA::Variant::Read  # Claude-coined: reads type id + flags then a scalar/array of the Variant from a stream (card label "cUnknownTypedValueToString::Write" is wrong)

@@ -1,0 +1,1 @@
+01092e10 hkPoweredHingeConstraintData::buildJacobian  # havok_names.txt; motor/friction row, 2 angular bilateral rows, ball-socket, optional angular limit

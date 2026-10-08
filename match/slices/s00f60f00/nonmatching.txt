@@ -1,0 +1,1 @@
+00f60f00 1466 complete (cParticlesEffect::Update: rate-curve stepping, particle spawn/update/link, retrigger; 8/9 calls, 1654 vs 1783 B); register allocation, loop rotation and tail merging differ

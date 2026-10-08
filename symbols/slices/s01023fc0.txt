@@ -1,0 +1,1 @@
+01023fc0 SP::nSpaceCheats::cCommandMission::Execute  # "mission" cheat command: create/complete/fulfill/abort/fail/list/debugdraw|dd/next/ui

@@ -5,4 +5,3 @@
 0080cc10   91  approximate: vector erase helper (0x80cab0) arity/shape unknown
 0080cc80  -   approximate: vector grow/insert path not reproduced (frame/cookie differs)
 0080ce20  129  approximate: temporary element construction + /GS frame differs
-0080cf80  -   approximate: DoMessage switch paths beyond id 0x11 stubbed

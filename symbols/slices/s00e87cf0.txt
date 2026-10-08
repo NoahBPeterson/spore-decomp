@@ -1,0 +1,1 @@
+00e87db0 SP::cCityTerritoryView::UpdateSelection  # PDB name; refreshes centre/state/radius and rebuilds the two territory ring effects (ids 0x243a1dc/0x243a1dd)

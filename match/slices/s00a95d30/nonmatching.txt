@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /Ob2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)
+00a95d30  1911  particle quad vertex writer: complete (list walk, Fetch/Flush loop, three curve samplers, optional matrix rotate, ARGB pack, 4 corner writes); 2 vcalls/2, size 2098 vs 2019; original has an aligned frame (and esp,-16) and different register/scheduling choices

@@ -1,0 +1,1 @@
+00c42710 SP::cLocomotiveObject::EvaluateForces  # PDB candidate (caller-scored); stdcall(Vec3* out, tSteeringData*) sums tForceData list

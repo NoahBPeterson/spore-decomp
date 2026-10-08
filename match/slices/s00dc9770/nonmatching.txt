@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00dc9770  2154  VehicleTree::AirAttack_Tick complete (3 states, 3 surface waypoints); scheduling/regalloc and stack layout differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; equiv: WEAK 320 valid inputs, 17.2% coverage, 0 mismatches

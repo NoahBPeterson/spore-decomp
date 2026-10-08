@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+01019090 1871 SP::cSPSpacePlanetCameraController::UpdateYaw complete (29/29 calls, same vtable slots and order; 2186 vs 2226 bytes; equiv PASS 247 valid, 93.7% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: frame 0x38 vs 0x44, register allocation and x87/SSE operand scheduling of the inlined vector math
+01019950 1486 SP::cSPSpacePlanetCameraController::UpdateCameraPitchRotation complete (13/13 calls, same vtable slots and order; 1595 vs 1525 bytes; equiv PASS 390 valid, 100% coverage); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast. Not exact: original pushes edi lazily inside the pitch-tracking branch, SSE/x87 operand scheduling of the inlined vector math

@@ -1,0 +1,2 @@
+# <va> <diff-bytes> <reason>
+0097f390 639 EA::UTFWinControls::WinMessageBox::Refresh (/O2 /MD /Gy /TP /arch:SSE /fp:fast): complete; 1892 vs 1956 bytes, 52/52 calls and identical ordered call/vslot/constant sequence; differs in scheduling of Rect temporaries (original builds 4 float temps then copies into the Rect after GetWindow), Message stack slot (+4) and loop-entry load order

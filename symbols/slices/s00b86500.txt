@@ -1,0 +1,1 @@
+00b86a10 BuildPathRibbonOnShell  # __stdcall(vector<Vec3>*, color) ret 8: same miter-quad ribbon as 0x00b872c0 but points are projected onto a constant-radius shell (PlanetModel()+0x24 terrain source params + 2.0), no per-point height lookup

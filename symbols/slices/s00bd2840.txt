@@ -1,0 +1,1 @@
+00bd2af0 SP::cPlacedModel::UpdateWorldGeometry  # Claude-coined: rotates hull points/normals by locomotive orientation (vcalls 0x2c/0x30/0x34 on this+0x34), snaps to planet surface, composes part transforms

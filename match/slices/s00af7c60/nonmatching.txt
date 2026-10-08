@@ -1,0 +1,1 @@
+00af7c60  1337  SweepSphereVsTerrain complete; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; register allocation and frame layout differ

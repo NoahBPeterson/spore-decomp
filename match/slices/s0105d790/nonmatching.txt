@@ -1,0 +1,1 @@
+0105dc60  1161  CollideWithObject: complete, 1589 vs 1569 B, 12/12 call/const events in order; stack-slot order (v/t/end/mid) and ufo/object register roles differ, x87 normalize order

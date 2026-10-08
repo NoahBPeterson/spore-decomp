@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bdca30 1528 complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-): 23/23 calls, 1758 vs 1772 B; register allocation / copy shapes differ

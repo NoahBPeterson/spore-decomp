@@ -1,0 +1,1 @@
+010180e0 ConeClip::Clip  # name is a guess (clips a point against a 4-plane wedge around a direction); no PDB candidate

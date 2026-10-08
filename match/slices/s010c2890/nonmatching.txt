@@ -1,0 +1,1 @@
+010c2e30  1304  complete hkCapsuleShape::castRay; same size 1746, same call/vtable sequence, equiv PASS (394 valid, 89.8% coverage); diffs: register allocation (this in ebx vs edi), frame 0xb4 vs 0x84, x87 sum association

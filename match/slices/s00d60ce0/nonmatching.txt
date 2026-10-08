@@ -1,0 +1,1 @@
+00d60f00  396  cCityVisualizer::SetCity: complete (teardown of the old city caches, intrusive city swap, re-arm for the new city), all 54 direct calls in order; register allocation (zero/city regs), a few instruction schedules and stage-loop base registers differ; default flags

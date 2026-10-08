@@ -1,0 +1,3 @@
+00c85a30 SP::cSolarSystem::InitComets  # PDB name; returns early if a type-2 body exists, else builds 3-6 random comets
+00c8b450 IsGasStarType  # type != 0 && 6 < type <= 12, cdecl bool
+00c8b550 cStar::GetType  # thiscall, tail-jumps to a getter of [this+0x48]

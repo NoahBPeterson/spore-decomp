@@ -1,0 +1,1 @@
+00fb1c10 SP::cTerrainSphereQuad::SamplePosition  # cube-face quad cell interpolation of terrain-height sphere positions (Claude-coined)

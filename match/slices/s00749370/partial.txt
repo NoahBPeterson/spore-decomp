@@ -1,1 +1,0 @@
-00749370 199 cModelWorld ray/frustum model query skeleton (huge function, logic not reconstructed)

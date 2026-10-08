@@ -1,0 +1,1 @@
+0135a630 Simulator::InitDefaultToolProjectileAttributes  # $E414 dynamic initializer of the cDefaultToolProjectile serializer attribute table (20 records at 0x0157d890)

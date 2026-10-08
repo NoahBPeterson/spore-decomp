@@ -1,0 +1,1 @@
+00e3dca0 cBigEditorObject::Dtor  # destructor body: vtbl stores 0x1481eb4.., releases ~60 refs, 19 string16, hashtable, then ~cGonzagoSubsystem and base vtbls

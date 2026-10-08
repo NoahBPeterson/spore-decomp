@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /vc71)
+0110dd70  577  complete (3 calls in order, size 1936 vs 1949); x87 term order of the 4x-unrolled setTransformedPos loop, hkTransform xyz copy schedule and diff-loop induction base differ

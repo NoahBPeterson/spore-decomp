@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
-00480320  1654  Ring_Build: large transform/basis builder; only the local-transform/vector entry reproduced
 004809c0  802   Ring_Rotate: bounding-box/basis rebuild; inner branchy vector math omitted
 00480cf0  415   Ring_Reset: full call sequence present but modelled cdecl with a /GS cookie; not byte-exact

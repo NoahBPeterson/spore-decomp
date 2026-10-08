@@ -1,1 +1,1 @@
-004e7460 ScaleColorForKind  # colour-variation multiplier
+004e6c60 NormalizePercents  # three amounts -> integer percents summing to 100 (largest-remainder), byte-exact

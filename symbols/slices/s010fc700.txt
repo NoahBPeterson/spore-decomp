@@ -1,0 +1,2 @@
+010fc700 hkAgentNnMachine_ProcessTrack  # Havok 3.1 name from index; stream cmds 2/4/6, TIM recompute via hkSweptTransformUtil::lerp2, "MinumTim" monitor value
+01209c50 hkSweptTransformUtil::lerp2  # (const hkSweptTransform&, float t, hkTransform& out) cdecl, called with motion+0x40 and the step start time

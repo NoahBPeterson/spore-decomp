@@ -1,0 +1,1 @@
+00cab550 SP::cVehicle::TakeDamage  # cCombatant vtable slot 0x18 override (ModAPI TakeDamage(float,uint,int,const Vector3&,cCombatant*)); ret 0x14, this = cVehicle+0x508

@@ -1,0 +1,1 @@
+00fd0f10 1777 complete (8x8 MMX IDCT written with MMX intrinsics: dequant multiply, column pass with 4x4 transposes, row pass with rounding and shift; 1542 vs 1777 B, 0 calls); hand-scheduled MMX register allocation cannot be matched by intrinsics

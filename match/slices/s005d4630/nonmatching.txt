@@ -1,3 +1,4 @@
 005d5120  23  CopyE20Range: cl assigns first->eax/dest->ecx (original first->ecx/dest->eax); otherwise identical
 005d5200  50  Curve2D::Lerp: /fp:fast contracts and reassociates, so cl keeps x0 live instead of reloading it after the delta multiplies
 005d5160  85  Curve2D::Arc: same contraction/reassociation keeps x0/y0 live; original reloads them and evaluates both delta terms first
+005d4970  1625  SpineHandle belt-of-circles builder: complete; cl re-loads circles.mpBegin/mpEnd after every call (original keeps them in ebp/ebx/esi across calls, since its callees were visible in the same TU), so register allocation and frame (0x78 vs 0x68) differ; two of the ~Vector element-destroy sites are out of line (0x733030) in the original and inline here

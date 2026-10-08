@@ -1,0 +1,1 @@
+00492e70  FUN_00492e70  # snap block p against its parent block: best snap distance (-1 none), snapped pos/rot, snap index

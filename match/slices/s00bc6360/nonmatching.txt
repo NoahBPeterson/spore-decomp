@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+00bc6690 1489 complete Reg::Update (state 0/1/2 sequence start, effect spawn, finish detect, reap); 1694 vs 1921 bytes: orig keeps dead Mat3 identity temp stores and larger frame, register allocation differs

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00aba3f0  1423  Trail::Update complete (head-moved check, new-point insert with bbox, decay fade, field displacement with transform, spacing clamp); not exact: stack frame/scheduling differences. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

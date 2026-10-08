@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0099f110 1720 CloneAnim: complete (all paths, 6 callee calls match); regalloc/loop shape differ from original, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

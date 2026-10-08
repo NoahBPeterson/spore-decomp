@@ -1,0 +1,1 @@
+009b6450  1700  RayCastParts: complete (loop over parts, quaternion-local ray, box test, hit/normal outputs); SSE scheduling and register allocation differ

@@ -1,0 +1,1 @@
+00ebd420 Effects::PreUpdate  # spawn pass of the area-effect manager; called first by Effects::Tick (0x00ebe3e0); float arg unused

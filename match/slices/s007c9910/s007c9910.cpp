@@ -1,6 +1,8 @@
 // Slice s007c9910 -- SP::cConfigManager option-list / eastl vector helpers.
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
+#include <string.h>
+#pragma intrinsic(strlen)
 
 // ---------------------------------------------------------------- masked externs
 void* __cdecl EA_New(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
@@ -75,13 +77,134 @@ struct MapVec {                                                // 0x007ca8e0
     void Destroy();
 };
 
+// ---------------------------------------------------------------- Initialize() support types
+struct ResourceKey { uint32_t instanceID, typeID, groupID; };
+
+struct Property {                                   // 0x14 bytes (ModAPI App::Property)
+    uint32_t d0, d1, d2, d3;
+    int16_t  flags;                                 // +0x10 (bit 2: owns data)
+    uint16_t type;                                  // +0x12
+    Property() : flags(0), type(0) {}
+    ~Property() { if (flags & 4) Clear(false); }
+    void Set(int type, int flags, const void* data, int itemSize, int count);   // 0x0093dd80
+    void Clear(bool b);                                                         // 0x0093db80
+    void SetKey(const ResourceKey& k) { d0 = k.instanceID; d1 = k.typeID; d2 = k.groupID; type = 0x20; }
+};
+
+struct PropList : RC {                              // App::PropertyList (Editor::cPropertyList)
+    virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void SetProperty(uint32_t id, const Property* p);                   // +0x14
+    char pad04[0x08 - 0x04];
+    ResourceKey mKey;                               // +0x08
+};
+struct cPropertyList : PropList {
+    char pad14[0x38 - 0x14];
+    cPropertyList();                                // 0x006a1c40
+};
+
+struct IParser : RC {
+    virtual void v2(); virtual void v3();
+    virtual void AddState(void* p);                 // +0x10
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual void Reset(int a, int b);               // +0x24
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
+    virtual void v15(); virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23(); virtual void v24();
+    virtual void v25(); virtual void v26(); virtual void v27(); virtual void v28(); virtual void v29();
+    virtual void v30(); virtual void v31(); virtual void v32(); virtual void v33(); virtual void v34();
+    virtual void v35(); virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+    virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43(); virtual void v44();
+    virtual void v45(); virtual void v46();
+    virtual void SetFlags(int v);                   // +0xbc
+};
+struct IFileParser : RC {
+    virtual void v2(); virtual void v3();
+    virtual void SetParser(IParser* p);             // +0x10
+    virtual void v5();
+    virtual void Begin();                           // +0x18
+    virtual void SetPath(const char* path, int mode);   // +0x1c
+    virtual bool Run();                             // +0x20
+};
+IFileParser* __cdecl CreateFileParser();            // 0x00840940
+IParser*     __cdecl CreateParser();                // 0x008408d0
+
+struct IResAreaMgr {                                // vtable +0x20 used to register a property list
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void Register(PropList* pl, int a, void* area, int b, int c);       // +0x20
+};
+struct ICheatSub { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                   virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+                   virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+                   virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15();
+                   virtual void v16(); virtual void v17(); virtual void v18(); virtual void v19();
+                   virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+                   virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+                   virtual void v28(); virtual void v29(); virtual void v30(); virtual void v31();
+                   virtual void v32(); virtual void v33(); virtual void v34(); virtual void v35();
+                   virtual void v36(); virtual void v37(); virtual void v38(); virtual void v39();
+                   virtual void v40(); virtual void v41(); virtual void v42(); virtual void v43();
+                   virtual void v44(); virtual void v45(); virtual void v46(); virtual void v47();
+                   virtual void v48();
+                   virtual int GetValue(); };                                     // +0xc4
+struct ICheat { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+                virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+                virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+                virtual void v12(); virtual void v13();
+                virtual ICheatSub* GetSub(); };                                   // +0x38
+ICheat*       __cdecl GetCheatManager();            // 0x0067de20
+IResAreaMgr*  __cdecl GetResMgr();                  // 0x0067dcd0
+void*         __cdecl GetSaveArea(uint32_t id);       // 0x006b1f90
+
+// eastl::basic_string<char, eastl::allocator> (12 bytes); only the pieces Initialize needs.
+extern char gEmptyString[2];                        // 0x01667bac
+struct EaString {
+    char* mpBegin; char* mpEnd; char* mpCap;
+    EaString() : mpBegin(gEmptyString), mpEnd(gEmptyString), mpCap(gEmptyString + 1) {}
+    ~EaString() { if (mpCap - mpBegin > 1 && mpBegin) EA_Free(mpBegin); }
+    void assign(const char* b, const char* e);       // 0x00454cb0
+    void append(const char* b, const char* e);       // 0x00455d60
+};
+
+// SP::SimpleVector<unsigned int> with the sp_vector_allocator
+struct SpUIntVec {
+    uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCap;
+    SpUIntVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
+    ~SpUIntVec() { if (mpBegin && ((int*)mpBegin)[-1] != 0) EA_Free(mpBegin); }
+    void DoInsertValue(uint32_t* pos, const uint32_t& v);                  // 0x004558a0
+    void push_back(const uint32_t& v) {
+        if (mpEnd < mpCap) {
+            uint32_t* p = mpEnd;
+            mpEnd = p + 1;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+
+struct MapElem {                                    // vector_map<u64, PropertyListPtr> element, 0x18 bytes
+    struct Entry { uint32_t a, b; PropList* pl; uint32_t pad; };
+    Entry* mpBegin; Entry* mpEnd;
+    char pad[0x10];
+};
+
 struct cOption {
     uint32_t id; uint32_t def; uint32_t cur;
-    uint8_t* resBegin; uint8_t* resEnd;
-    char pad[0xac - 0x14];
+    PropList** resBegin;                            // +0x0c fixed_vector<PropertyListPtr,4>
+    PropList** resEnd;                              // +0x10
+    char pad14[0x34 - 0x14];
+    MapElem* mapBegin;                              // +0x34 fixed_vector<vector_map<..>,4>
+    MapElem* mapEnd;                                // +0x38
+    char pad3c[0xac - 0x3c];
 };
 struct cConfigManager {
-    char pad00[0x64];
+    char pad00[0x0c];
+    IFileParser* mFileParser; // +0x0c
+    IParser* mParser;         // +0x10
+    char pad14[0x20 - 0x14];
+    char mState[0x44];        // +0x20
     cOption* mOptionsBegin;   // +0x64
     cOption* mOptionsEnd;     // +0x68
     char pad6c[0x80 - 0x6c];
@@ -89,7 +212,7 @@ struct cConfigManager {
     void* mStringsEnd;        // +0x84
 
     void GetOptionIDs(UIntVec* out);          // 0x007ca150
-    void Initialize();                        // 0x007ca1c0
+    void Initialize(const char* path);        // 0x007ca1c0
 };
 
 // @ 0x007c9910
@@ -260,9 +383,120 @@ void cConfigManager::GetOptionIDs(UIntVec* out)
 }
 
 // @ 0x007ca1c0
-void cConfigManager::Initialize()
+void cConfigManager::Initialize(const char* path)
 {
-    // parser/file-parser wiring + per-option property build (see partial.txt)
+    if (!mFileParser) {
+        IFileParser* fp = CreateFileParser();
+        IFileParser* oldFp = mFileParser;
+        if (fp != oldFp) {
+            if (fp)
+                fp->AddRef();
+            mFileParser = fp;
+            if (oldFp)
+                oldFp->Release();
+        }
+        mFileParser->v2();
+        IParser* pa = CreateParser();
+        IParser* oldPa = mParser;
+        if (pa != oldPa) {
+            if (pa)
+                pa->AddRef();
+            mParser = pa;
+            if (oldPa)
+                oldPa->Release();
+        }
+        mFileParser->SetParser(mParser);
+        mParser->Reset(0, 0);
+        mParser->AddState(mState);
+        mParser->SetFlags(GetCheatManager()->GetSub()->GetValue());
+        RegisterConfigScriptCommands(mParser);
+    }
+    mFileParser->Begin();
+
+    EaString str;
+    str.assign(path, path + strlen(path));
+    str.append("Options.txt", "Options.txt" + 11);
+    mFileParser->SetPath(str.mpBegin, 5);
+    if (!mFileParser->Run())
+        return;
+
+    IResAreaMgr* mgr = GetResMgr();
+    void* area = GetSaveArea(0x11ac19e);
+    SpUIntVec ids;
+    SpUIntVec firsts;
+    SpUIntVec counts;
+    int numOptions = (int)(mOptionsEnd - mOptionsBegin);
+    for (int oi = 0; oi != numOptions; oi++) {
+        cOption* o = &mOptionsBegin[oi];
+        if (o->id == 0x46170a2 || o->id == 0x46170a1)
+            continue;
+        int n = (int)(o->resEnd - o->resBegin);
+        int first = 0;
+        if (n > 0) {
+            PropList** pp = o->resBegin;
+            while (*pp == 0) {
+                first++;
+                pp++;
+                if (first >= n)
+                    break;
+            }
+        }
+        ids.push_back(o->id);
+        firsts.push_back((uint32_t)first);
+        counts.push_back((uint32_t)n);
+        uint32_t id = o->id;
+        for (int k = first; k < n; k++) {
+            PropList* pl = o->resBegin[k];
+            if (pl) {
+                pl->mKey.instanceID = id;
+                pl->mKey.typeID = 0xb1b104;
+                pl->mKey.groupID = (k & 0xff) | 0x40470100;
+                mgr->Register(o->resBegin[k], 0, area, 0, 0);
+            }
+            MapElem* me = &o->mapBegin[k];
+            if (me->mpBegin != me->mpEnd) {
+                int m = 1;
+                for (MapElem::Entry* e = me->mpBegin; e != me->mpEnd; e++) {
+                    ResourceKey key;
+                    key.instanceID = e->a;
+                    key.typeID = 0xb1b104;
+                    key.groupID = e->b;
+                    PropList* epl = e->pl;
+                    {
+                        Property p;
+                        p.SetKey(key);
+                        epl->SetProperty(0x5daaffe, &p);
+                    }
+                    epl->mKey.instanceID = id;
+                    epl->mKey.typeID = 0xb1b104;
+                    epl->mKey.groupID = ((((m & 0x1f) << 24) | 0x40470100) & 0xffffff00) | (k & 0xff);
+                    m++;
+                    mgr->Register(epl, 0, area, 0, 0);
+                }
+            }
+        }
+    }
+
+    cPropertyList* list = new ("App/ConfigManager", 0, 0, 0, 0) cPropertyList();
+    {
+        Property p;
+        p.Set(10, 0x98, ids.mpBegin, 4, (int)(ids.mpEnd - ids.mpBegin));
+        list->SetProperty(0x5daafff, &p);
+    }
+    {
+        Property p;
+        p.Set(10, 0x98, firsts.mpBegin, 4, (int)(firsts.mpEnd - firsts.mpBegin));
+        list->SetProperty(0x5dab000, &p);
+    }
+    {
+        Property p;
+        p.Set(10, 0x98, counts.mpBegin, 4, (int)(counts.mpEnd - counts.mpBegin));
+        list->SetProperty(0x5dab001, &p);
+    }
+    list->mKey.instanceID = 0;
+    list->mKey.typeID = 0xb1b104;
+    list->mKey.groupID = 0x40470000;
+    mgr->Register(list, 0, area, 0, 0);
 }
 
 // @ 0x007ca8e0

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f8de70  -1  cube-map bilinear sample (CubeImage::Sample): complete, all 16 corner-wrap paths; register allocation and stack-slot layout differ (compiled 1908 B vs 2128 B)

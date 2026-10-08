@@ -1,0 +1,1 @@
+0066b480 RegisterSporepediaHandlers  # 16 'Sporepedia'-tagged refcounted handlers pushed onto the global vector 0x015fb120

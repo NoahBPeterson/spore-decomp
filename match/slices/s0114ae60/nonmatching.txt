@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+0114b110  1945  complete MixerProcess: 16/16 calls in order (4 thiscall helpers + memcpy/memmove), all three state paths (1,2,other), crossfade loops unrolled by cl; frame layout/register allocation differ (sub esp 0x6c vs 0x64); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

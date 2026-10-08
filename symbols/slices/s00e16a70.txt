@@ -1,0 +1,1 @@
+00e16a70 cMissionPanel::FUN_00e16a70  # Claude-coined class: UI panel refreshing title, three objective rows (controls 0x795a200+i, 0x792dcc5+i) and the timer control 0x754f66e from the game's mission log (game state +0x78)

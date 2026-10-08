@@ -1,0 +1,1 @@
+00cb2770  1554  complete: creature path-ahead update (trace + waypoint reconcile); /O2 /Ob2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; register allocation/frame differ

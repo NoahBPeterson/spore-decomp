@@ -1,0 +1,1 @@
+00a9bf20 Emitter::Constrain  # Swarm particle collision/deflection against sampler (this+0x194); desc flag bits 14/15/16/17/18/20

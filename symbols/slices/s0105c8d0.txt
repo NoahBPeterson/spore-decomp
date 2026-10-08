@@ -1,0 +1,1 @@
+0105c9d0 SteeredObject_UpdateHeading  # Claude-coined: re-seats position on the anchor sphere, blends velocity toward heading, re-aims target

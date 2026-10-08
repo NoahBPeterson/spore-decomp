@@ -1,0 +1,1 @@
+00fabd60 1878 complete (ribbon quad builder: per-point miter offsets, AddRibbonQuad per segment, 6 face-quad hand-offs, list dtors; 4/4 calls in original order, 1925 vs 2133 B); scheduling/frame differ from the original's struct-temporary spills

@@ -1,1 +1,2 @@
 00730210  21   Complete trivial forwarder; argument-evaluation scheduling differs.
+0072f9b0  1254  Complete: same 23 calls/vcalls in order, 1539 vs 1592 B; stack layout of the two section vectors, the 12 matrix-row temps and EH states differ (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-)

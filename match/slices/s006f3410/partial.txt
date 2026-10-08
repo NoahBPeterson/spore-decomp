@@ -1,2 +1,1 @@
 # va  diff-bytes  reason
-006f3410  1883  SP::cModelInstanceSet::v0 (virtual slot 0): large vertex-buffer builder (1883 bytes). Source is a compiling skeleton only; the per-instance transform/RGBA expansion loop is not reproduced.

@@ -1,0 +1,3 @@
+00e5dba0 SP::sInitGfx  # PDB name; byte-exact; cell stage render-world set-up
+00e82730 SP::GetLayerCamera  # Claude-coined; cdecl(int layer) returns a camera, via 0x6eea10 + vcall 0x78
+0067cb20 SP::LayerManager  # Claude-coined; returns the global at 0x15fcc6c, vcall 0x20 = GetLayer(const wchar_t*)

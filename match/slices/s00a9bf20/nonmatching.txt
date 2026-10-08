@@ -1,0 +1,1 @@
+00a9bf20 1614 Emitter::Constrain; complete; 1984 vs 2024 bytes, same 21 calls/vtable slots in order and inline x87 sqrt/fpatan/fcos; differs in Vec3 temp/spill layout (frame 0x48 vs 0x34) and xmm allocation

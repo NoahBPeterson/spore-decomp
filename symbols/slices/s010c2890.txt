@@ -1,0 +1,2 @@
+# Slice s010c2890 names.
+010c2e30 ?castRay@hkCapsuleShape@@UBE?AVhkBool@@ABUhkShapeRayCastInput@@AAUhkShapeRayCastOutput@@@Z  # havok_names.txt

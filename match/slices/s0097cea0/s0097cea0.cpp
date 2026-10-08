@@ -114,8 +114,128 @@ bool ImageDrawable_GetNaturalSize(void* self, int* outW, int* outH) {
 // @ 0x0097D1A0 / 0x0097D270 / 0x0097D8D0  ImageDrawable helpers (approximated)
 // ---------------------------------------------------------------------------------------------
 int  ImageDrawable_GetWidth(void* self) { return self ? *(int*)((char*)self + 0x14) : 0; }
-bool ImageDrawable_CreateRenderables(void* self, void* a, void* b) { (void)self;(void)a;(void)b; return true; }
 void ImageDrawable_Destroy(void* self) { (void)self; }
+
+
+// ---------------------------------------------------------------------------------------------
+// @ 0x0097D270  EA::UTFWinControls::ImageDrawable::CreateRenderables  (draws the image + drop shadow)
+// ---------------------------------------------------------------------------------------------
+#include <math.h>
+
+namespace Cr {
+struct Image { char pad[0x1c]; int mW; int mH; };
+
+struct Target2D {                       // object returned by RenderContext::Begin2D
+    virtual void slot0();
+    virtual void SetColor(unsigned int argb);
+};
+
+struct RenderContext {
+    Target2D* Begin2D(int);             // 0x95bc10, thiscall ret 4
+};
+
+struct cDropShadowDescriptor {          // 0x28 bytes
+    unsigned int mSize, mStrength, mQuality;
+    float mOffsetX, mOffsetY, mSizeX, mSizeY, mSmoothness, mSaturation;
+    unsigned int mColor;
+    cDropShadowDescriptor()
+        : mSize(0), mStrength(2), mQuality(3), mOffsetX(0.0f), mOffsetY(0.0f), mSizeX(0.0f), mSizeY(0.0f), mColor(0)
+    { SetMode(2); }
+    void SetMode(int mode);             // 0x830150, thiscall ret 4 (sets +4, +0x1c, +0x20)
+    static void CopyWithQualityAdjustment(cDropShadowDescriptor* dst, const cDropShadowDescriptor* src, int q); // 0x96e3a0 cdecl
+};
+}
+
+extern "C" void DrawImageTiled(Cr::Target2D*, const float* rect, Cr::Image*, float sx, float sy, float ox, float oy); // 0x95c420 cdecl
+extern "C" void DrawImage9Slice(Cr::Target2D*, const float* dst, const float* uv, Cr::Image*, const float* inner, float sx, float sy); // 0x95ca40 cdecl
+extern "C" void DrawImageStretch(Cr::Target2D*, const float* dst, Cr::Image*, const float* src); // 0x95c0d0 cdecl
+
+namespace Cr {
+struct ImageDrawable {
+    char pad0[0x10];
+    float mfScale;                      // +0x10
+    unsigned int mnFlags;               // +0x14
+    unsigned int mnTiling;              // +0x18
+    unsigned int mnAlignmentH;          // +0x1c
+    unsigned int mnAlignmentV;          // +0x20
+    Cr::Image* mpImage;                 // +0x24
+    Cr::cDropShadowDescriptor mDropShadow; // +0x28
+    void CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused);
+};
+}
+
+static __forceinline void DrawTiling(Cr::ImageDrawable* d, Cr::Target2D* t, const float* dst, const float* expanded) {
+    if (d->mnTiling == 2) {
+        float inner[4]; float uv[4];
+        inner[0] = 1.0f / 3.0f; inner[1] = 1.0f / 3.0f; inner[2] = 2.0f / 3.0f; inner[3] = 2.0f / 3.0f;
+        uv[0] = 0.0f; uv[1] = 0.0f; uv[2] = 1.0f; uv[3] = 1.0f;
+        DrawImage9Slice(t, dst, uv, d->mpImage, inner, d->mfScale, d->mfScale);
+    } else if (d->mnTiling == 1) {
+        DrawImageTiled(t, dst, d->mpImage, d->mfScale, d->mfScale, 0.0f, 0.0f);
+    } else {
+        DrawImageStretch(t, dst, d->mpImage, expanded);
+    }
+}
+
+void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* rc, int unused) {
+    if (!mpImage) return;
+    Cr::Target2D* t = ctx->Begin2D(0);
+    t->SetColor(0xffffffff);
+    float r[4];
+    r[0] = rc[0]; r[1] = rc[1]; r[2] = rc[2]; r[3] = rc[3];
+    if (mnFlags & 1) {
+        float w = (float)mpImage->mW * mfScale;
+        switch (mnAlignmentH) {
+        case 1: break;
+        case 2: r[0] = r[2] - w; break;
+        case 3: r[0] = ((r[2] - r[0]) - w) * 0.5f + r[0]; break;
+        }
+        r[2] = r[0] + w;
+    }
+    if (mnFlags & 2) {
+        float h = (float)mpImage->mH * mfScale;
+        switch (mnAlignmentV) {
+        case 1: break;
+        case 2: r[1] = r[3] - h; break;
+        case 3: r[1] = ((r[3] - rc[1]) - h) * 0.5f + rc[1]; break;
+        }
+        r[3] = r[1] + h;
+    }
+    Cr::cDropShadowDescriptor sh;
+    Cr::cDropShadowDescriptor::CopyWithQualityAdjustment(&sh, &mDropShadow, 0);
+    float sx = sh.mSizeX, sy = sh.mSizeY;
+    float loY = -sy, loX = -sx;
+    float cy = (loY + sy) * 0.5f;
+    float cx = (loX + sx) * 0.5f;
+    float norm = ((sy - cy) * (sy - cy) + (sx - cx) * (sx - cx)) + 1.0f;
+    unsigned int rgb = sh.mColor & 0xffffff;
+    float R = sqrt(sy * sy + sx * sx) + 1.0f;
+    float ex[4];
+    ex[0] = (rc[0] - R) - sh.mOffsetX;
+    ex[1] = (rc[1] - R) - sh.mOffsetY;
+    ex[2] = (rc[2] + R) + sh.mOffsetX;
+    ex[3] = (rc[3] + R) + sh.mOffsetY;
+    for (float i = loX; sx >= i; i += 1.0f) {
+        if (sy >= loY) {
+            float dx = floor(i + sh.mOffsetX);
+            for (float j = loY; sy >= j; j += 1.0f) {
+                float dy = floor(j + sh.mOffsetY);
+                if (dx != 0.0f || dy != 0.0f) {
+                    float d[4];
+                    d[0] = rc[0] + dx; d[1] = rc[1] + dy; d[2] = rc[2] + dx; d[3] = rc[3] + dy;
+                    float a = (sh.mSaturation / R) * (1.0f - ((i - cx) * (i - cx) + (j - cy) * (j - cy)) / norm) + sh.mSmoothness;
+                    if (0.0f > a) a = 0.0f;
+                    else if (a > 1.0f) a = 1.0f;
+                    unsigned int ai = (unsigned int)(a * 255.0f);
+                    t->SetColor((ai << 24) + rgb);
+                    DrawTiling(this, t, d, ex);
+                }
+            }
+        }
+    }
+    t->SetColor(0xffffffff);
+    DrawTiling(this, t, r, ex);
+}
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x0097CEA0  EA::UTFWinControls::WinGrid::SetCellWindow  (465 bytes)

@@ -1,0 +1,1 @@
+00ac5590 1308 complete (RelaxPath: 3 fixed_vector<Vector3,256> copies, gNumPasses relaxation passes with closest-point-on-segment, cube-face key + callback, planet projection: 12 calls both, size 1.00x); register allocation and push_back reload shape differ; difftest PASS (--inputs 3000 --seed 12 --alias 0.8: 2809 valid, 79% cov) flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

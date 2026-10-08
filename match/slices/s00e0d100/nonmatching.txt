@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e0d2e0  400  complete; cSPUIMinimapWin camera arrow draw; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; second RemapX call tail-merged, x87 order differs

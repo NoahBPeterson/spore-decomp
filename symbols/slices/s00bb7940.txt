@@ -1,0 +1,1 @@
+00bb7940 PickRandomAsset  # PDB candidate SP::cGalaxyGameEntryUIStateMachine::PickRandomAsset (caller-scored); validates/picks a random object-template key

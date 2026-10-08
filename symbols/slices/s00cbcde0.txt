@@ -1,0 +1,2 @@
+# s00cbcde0 recovered names
+00cbcde0 BuildFlightArcPath  # cdecl(float x6, SpVector<Vector3>*): arcs A->B over the planet at radius+80, returns false when |A-B| < 300

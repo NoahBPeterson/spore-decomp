@@ -1,4 +1,3 @@
 0072f830  147   PARTIAL: materialisation helper skeleton (EH/vtable).
 0072f8d0  220   PARTIAL: mesh materialisation loop skeleton (EH/vtable).
-0072f9b0  1592  PARTIAL: SP::HasCPUBlendShape skeleton.
 0072fff0  544   PARTIAL: resource cache entry builder skeleton.

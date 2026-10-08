@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+009e7bb0  1412  complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; DelegateGoals, inlined quaternion math scheduled/spilled differently
+009e8210  1501  complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; IKComputeRootGoal, register allocation and operand order differ

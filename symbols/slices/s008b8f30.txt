@@ -1,0 +1,3 @@
+# VA Name  # evidence
+008b9400 New_T1kernSubTable0Data  # T2K t1 kern: parses "StartKernPairs" + KP/KPH/KPX/KPY records (card name)
+008b9390 FindString  # static helper, eax = start offset (always 0), returns pointer past the needle

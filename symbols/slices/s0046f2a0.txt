@@ -1,0 +1,3 @@
+0071e110 FindMeshStreams  # cdecl(model, meshIndex, count, semantics*, usageIndex*, formats*, outIdx*) -> bool; used by DumpZPR_M0 and ExportModelTriangles; descriptive name
+00422380 eastl::fixed_vector<int,16>::push_back  # thiscall(const int&) on the 0x58-byte fixed int vector (vertOffsets/primOffsets in DumpZPR); descriptive name
+00735470 SP::cMeshClusterer::CreateClustersAndEdges  # cdecl(model, 1) as called from DumpZPR_M0; name from Ghidra label

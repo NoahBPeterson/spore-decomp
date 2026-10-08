@@ -13,3 +13,4 @@
 007a9880  46  refptr clear (lock xadd release)
 007a98b0  90  cLoadQueue<...>::StallUntilLoaded deque scan
 007a9a80  90  DequeIterator::operator+=
+007a8a50  1429  EA::Text::Render_RenderWare::DrawGlyphs: complete (all paths and calls, 20/20 call/vcall/const events in order), 1583 vs 1569 B; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; matrix-row shuffles, ctor store order and prologue register choices differ

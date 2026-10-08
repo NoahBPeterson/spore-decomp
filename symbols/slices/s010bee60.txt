@@ -1,0 +1,1 @@
+010bee60 hkSimpleConstraintUtil_InitInfo  # havok_names; mC = (invMassA+invMassB) I + sum (r x R)^T Iinv (r x R), then 3x3 inverse

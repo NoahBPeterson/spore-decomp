@@ -1,2 +1,3 @@
 0075b520  18  complete; the original keeps `cmp [eax],0` then reloads `*r`, cl 15.00 CSEs the two loads (tried split ifs / volatile / pointer levels)
 0075b540  93  complete; original's 12-byte Vector3 temp (3 movss init + integer-reg copy, aligned frame sub esp,0xc) is constant-folded to movss splat, changing register allocation
+0075b830  1905  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; complete keyframe-pair nlerp/slerp + translation lerp; written with SSE intrinsics, instruction selection and register allocation differ

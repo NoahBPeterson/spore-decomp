@@ -1,0 +1,1 @@
+00fb43b0 RebuildIndices  # SP::cTerrainSphereQuad::RebuildIndices (PDB candidate), retail layout

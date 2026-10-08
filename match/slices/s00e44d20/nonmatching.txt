@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e44d20  1400  complete (same switch, round loop and key cleanup; 54 vs 61 calls, depth-1 call trace equal in equiv.py); flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; per-site inlining of ~ConstraintNode/push_back is emulated with ConstraintTemp, frame and register allocation differ

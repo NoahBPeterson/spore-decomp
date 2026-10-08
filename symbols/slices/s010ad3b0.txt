@@ -1,0 +1,4 @@
+010ad140 ??0hkMatrix6@@QAE@ABV0@@Z  # hkMatrix6 copy ctor (4 blocks x 0x30 bytes, loop), thiscall ret 4
+010ad1c0 _hkPoweredChain_ApplyMotorStatesToRows  # (motorInfo, notLastRow, a, b) cdecl: identity/zero rows for disabled motors
+014a23c4 _HK_REAL_EPSILON  # FLT_EPSILON 1.1920929e-07 (global float)
+010ad3b0 _hkPoweredChain_ComputeConstraintMatrixLuDecomposition_ForOneRow  # one LU step of the powered-chain block-tridiagonal solve

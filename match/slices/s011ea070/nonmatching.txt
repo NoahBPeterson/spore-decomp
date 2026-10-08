@@ -1,0 +1,1 @@
+011ea070  1588  Vsnprintf (rw::core::stdc printf engine): complete (verified against the original on ~4,500 crafted/fuzzed format+arg combos in the emulator); not byte-exact: original has a push ebp / and esp,-8 frame with params in [ebp+N] and ap tracked as ap-4/ap-8, cl emits an esp-based frame here and could not be made to align it

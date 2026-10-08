@@ -1,0 +1,1 @@
+00f7a710  EA::Swarm::cParticlesEffect::WriteParticleMatrices  # coined; same algorithm as 0x00aaf700 (acquire vertex stream, sample color/alpha/scale/spin curves, RotateZ + PostTransformBy, write 3x4 matrix + rgba)

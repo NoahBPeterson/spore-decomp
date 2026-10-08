@@ -1,0 +1,1 @@
+008b9400 2086 complete (T2K New_T1kernSubTable0Data); 13-call sequence identical (FindString takes eax=0 like the original, ATOI out of line once), size 2383 vs 2438; register allocation / frame (0xb0 vs 0xb4) / rotation of the inlined scanners differ flags /O2 /MD /Gy /TP /GS-

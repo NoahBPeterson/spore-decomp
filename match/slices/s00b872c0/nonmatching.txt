@@ -1,0 +1,1 @@
+00b872c0  2059  complete: path ribbon builder (miter quads on terrain, chunked upload); /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast; register allocation and ordering differ

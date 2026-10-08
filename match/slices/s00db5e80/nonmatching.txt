@@ -1,0 +1,1 @@
+00db65a0 1374 SP::IDLE_VIGNETTE_Decide complete (32/32 calls, same order and vtable slots +0x2c/+0x4c/+0x60/+0x90/+0xbc/+0x58; 1640 vs 1643 bytes; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-); not exact: register allocation (this/tribe in ebp vs edi, loop vars), frame 0x7c vs 0x80, operand load order of the crowd-distance sum

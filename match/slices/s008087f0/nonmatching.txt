@@ -1,2 +1,3 @@
 008087f0  302  bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ
 00808ce0  43  RolloverFrameLayout scalar deleting destructor: complete equivalent class dtor, ??_G body not inlined
+00808d40  300  complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ

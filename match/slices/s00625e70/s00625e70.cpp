@@ -11,6 +11,65 @@
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
+// ---- property lists (Property::GetFloat/GetInt are out-of-line thiscall members) ----------
+struct Property {
+  char pad00[0x12];
+  unsigned short mType;   // +0x12 (9 = int32, 13 = float)
+  float* GetFloat();      // 0x0041ea70
+  int* GetInt();          // 0x0041e990
+};
+namespace App {
+class PropertyList {
+ public:
+  virtual void AddRef();
+  virtual void Release();
+  virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5(); virtual void v6();
+  virtual void v7(); virtual void v8();
+  virtual bool GetProperty(uint32_t id, Property*& result);         // +0x24
+};
+class IPropertyManager {
+ public:
+  virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+  virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
+  virtual void v10();
+  virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList*& result);  // +0x2c
+};
+}  // namespace App
+App::IPropertyManager* PropertyManager();     // 0x0067de30
+extern uint32_t gCameraTuningGroup;           // 0x01521b5c
+extern const float kDegToRad;                 // 0x013fdec8 (0.017453292)
+extern float gTune_1521888, gTune_152188c, gTune_1521890, gTune_152187c, gTune_1521880,
+    gTune_1521884, gTune_1521894, gTune_1521898, gTune_152189c;
+
+struct PropListPtr {
+  App::PropertyList* mpObject;
+  PropListPtr() : mpObject(0) {}
+  App::PropertyList*& operator&() {
+    if (mpObject) {
+      App::PropertyList* p = mpObject;
+      mpObject = 0;
+      p->Release();
+    }
+    return mpObject;
+  }
+  ~PropListPtr() { if (mpObject) mpObject->Release(); }
+};
+
+static inline void ReadFloat(App::PropertyList* list, uint32_t id, float& dst) {
+  if (list) {
+    Property* p;
+    if (list->GetProperty(id, p) && p->mType == 13)
+      dst = *p->GetFloat();
+  }
+}
+static inline void ReadFloatDeg(App::PropertyList* list, uint32_t id, float& dst) {
+  if (list) {
+    Property* p;
+    if (list->GetProperty(id, p) && p->mType == 13)
+      dst = *p->GetFloat() * kDegToRad;
+  }
+}
+
 struct cVec3 { float x, y, z; };
 struct cQuat { float x, y, z, w; };
 struct cMat33 {
@@ -76,11 +135,16 @@ public:
   float mMaxCameraDistance;    // +0x16c
   float mNearClip;             // +0x170
   float mFarClip;              // +0x174
-  char padC[0x18c - 0x178];
+  float mTuning178;            // +0x178
+  float mTuning17c;            // +0x17c
+  float mTuning180;            // +0x180
+  float mTuning184;            // +0x184
+  float mTuning188;            // +0x188
   float mFieldOfViewX;         // +0x18c
   float mFieldOfViewY;         // +0x190
   char mCameraToWorld[0x38];   // +0x194
-  char padTail[0x1cc - 0x1cc];
+  char padTail[0x200 - 0x1cc];
+  App::PropertyList* mpTuningProps;  // +0x200
 
   void AimTowardsTarget(int unused);              // 00625e70
   void FUN_00625f70();                            // 00625f70
@@ -135,7 +199,45 @@ void cCreatureCameraBase::FUN_00625f70() {
 
 // @ 0x00626290
 void cCreatureCameraBase::ReloadTuning() {
-  // long sequence of tuning table reads (see partial.txt)
+  App::IPropertyManager* pm = PropertyManager();
+  PropListPtr list;
+  ReadFloat(mpTuningProps, 0x01102b20, mNearClip);
+  ReadFloat(mpTuningProps, 0x01102b2f, mFarClip);
+  ReadFloat(mpTuningProps, 0x00fe243b, mMinCameraPhi);
+  ReadFloat(mpTuningProps, 0x00fe243f, mMaxCameraPhi);
+  mMinCameraPhi *= kDegToRad;
+  mMaxCameraPhi *= kDegToRad;
+  ReadFloat(mpTuningProps, 0x303eb34d, mMinCameraDistance);
+  ReadFloat(mpTuningProps, 0x703eb357, mMaxCameraDistance);
+
+  if (pm->GetPropertyList(0xceadeb40, gCameraTuningGroup, &list)) {
+    App::PropertyList* l = list.mpObject;
+    if (l) {
+      Property* p;
+      if (l->GetProperty(0xb060e649, p) && p->mType == 9) {
+        unsigned mode = *(unsigned*)p->GetInt();
+        if (mode <= 0u)
+          mCameraMode = mode;
+      }
+    }
+    ReadFloatDeg(list.mpObject, 0xf06d1e9b, mMouseSensitivityX);
+    ReadFloatDeg(list.mpObject, 0x306d1e9e, mMouseSensitivityY);
+    ReadFloat(list.mpObject, 0x506d1ea0, mMouseSensitivityZ);
+    ReadFloat(list.mpObject, 0x126ecc27, gTune_1521888);
+    ReadFloat(list.mpObject, 0xe815bc27, gTune_152188c);
+    ReadFloat(list.mpObject, 0xb5f3ddd9, gTune_1521890);
+    ReadFloat(list.mpObject, 0x01a57b85, gTune_152187c);
+    ReadFloat(list.mpObject, 0x01a57b91, gTune_1521880);
+    ReadFloat(list.mpObject, 0x01a57b9b, gTune_1521884);
+    ReadFloat(list.mpObject, 0xd03ee49b, mTuning178);
+    ReadFloat(list.mpObject, 0x703ee4a1, mTuning17c);
+    ReadFloat(list.mpObject, 0x503ee4a2, mTuning180);
+    ReadFloat(list.mpObject, 0x303ee4a4, mTuning184);
+    ReadFloat(list.mpObject, 0xf03ee4a8, mTuning188);
+    ReadFloat(list.mpObject, 0xaac5a161, gTune_1521894);
+    ReadFloat(list.mpObject, 0x7932c8c4, gTune_1521898);
+    ReadFloat(list.mpObject, 0xf7e0935e, gTune_152189c);
+  }
 }
 
 // @ 0x006268a0

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+00f6bd70  1995  cTerrainEditor::UpdateCPUFromGPU: complete, 2161 vs 2190 bytes, same 7 direct calls and 5 vtable calls in order; cl CSEs the dirty-rect loads across the compare/subtract branches here (the original reloads each field from memory), so the six unrolled rect checks use more xmm registers. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

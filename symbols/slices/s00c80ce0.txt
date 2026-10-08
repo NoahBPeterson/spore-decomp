@@ -1,0 +1,1 @@
+00c810e0 SP::cSimPlanetLowLOD::UpdateFloraAndFauna  # existing name (card); body reconstructed: recounts flora/fauna species via cell callback, posts extinction events

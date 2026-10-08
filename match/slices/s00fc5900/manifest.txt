@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+# No byte-exact functions in slice s00fc5900 (see nonmatching.txt).

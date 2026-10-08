@@ -1,0 +1,2 @@
+00eb73f0 639 complete (25/25 calls in order, size 0.99x); frame 0x44 vs 0x34 and slot offsets differ, SSE load/store scheduling of the quaternion dots
+00eb7b30 1799 complete (13/13 calls in order, size 1.06x); frame 0xb0 vs 0x6c (cl does not share the q/matrix locals of the orientation cases), switch/branch layout

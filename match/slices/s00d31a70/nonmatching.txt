@@ -1,0 +1,1 @@
+00d31a70  1814  UpdateAvatarGoal complete (/O2 /MD /Gy /TP /arch:SSE /fp:fast); size 2227 vs 2236, 28/28 direct calls, 20/20 vcalls, same vslots/constants; branch layout differs

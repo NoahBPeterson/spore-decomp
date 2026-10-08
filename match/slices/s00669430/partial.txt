@@ -1,3 +1,2 @@
 # va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
-00669430  2000  ReloadCallback: only the !reload early-out and the layout FindWindow entry are reconstructed; the full feed rebuild is omitted
 00669c90  700  constraint callback: guard chain reconstructed; the hash-dispatch / FunctionalMatch::Constraint / ObjectTemplateDB body is omitted

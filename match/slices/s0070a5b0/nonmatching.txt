@@ -1,1 +1,2 @@
-0070ae70 82 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs
+0070ae70 82 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0070a5b0 1661 cLightingWorld::Update complete (SH lighting update; same call order and size 2189); Vec3 scale/loop register allocation and min() slot order differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-

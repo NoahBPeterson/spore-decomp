@@ -1,0 +1,5 @@
+00bf9820 cCivilization::ChooseUFOAndBuyVehicle  # AI civ: pick target UFO (type 0x403df5c), best city, buy vehicle; stores UFO at +0x468 with AddRef/Release
+00bd81d0 cCity::GetVehicleSpecialty  # mov eax,[ecx+0x540]; PDB-candidate name
+00fa0e00 cCity::GetPositionPtr  # lea eax,[ecx+0x32c]
+00bd8210 cCity::GetContinent  # PlanetModel()->GetContinent(this->vf58())
+00b25ca0 cGameNounManager::GetCivilizationList  # GetGameDataVector(type 0x18c816a) + 4

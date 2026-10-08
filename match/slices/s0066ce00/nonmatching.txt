@@ -1,0 +1,1 @@
+0066d430 1301 KeyPanel::HandleMessage (cSPUIMinimapWin::DoMessage candidate): complete (mouse-wheel/key-up/key-down '1'-'5' axis cycling/mouse enter+leave/component-activated); /O2 /MD /Gy /TP; frame 0x14 matches, size 1628/1720, 57/57 calls; switch-arm layout, set/reset sharing and register choice differ

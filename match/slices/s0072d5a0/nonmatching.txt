@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0072d6a0  1842  MergeIntoModels complete (vertex-element table, per-group sections/ranges, material list, output push; all direct calls in order); frame 0xc0 vs 0xcc, loop-pointer and VBView temp scheduling differ

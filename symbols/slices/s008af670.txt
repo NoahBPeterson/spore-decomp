@@ -1,0 +1,1 @@
+008af670 ReadDeltaXYValue  # T2K glyph delta (dx,dy) decoder; Ghidra name

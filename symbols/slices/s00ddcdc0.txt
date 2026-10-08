@@ -1,0 +1,1 @@
+00ddd1a0 cModelSetup::Setup  # Claude-coined; binds light + three preview models + layer, resets 7 global name tables, runs an OTDB query (Constraint 0x2dd90af==0x2b978c46, 0x54a32960==1)

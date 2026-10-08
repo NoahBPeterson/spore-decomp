@@ -1,0 +1,1 @@
+009c8a90 1319 cBlockBlockCommand::OnEndBlock complete (all paths/calls: 2 QVT calls, FUN_009fc220, inlined parent-frame quaternion rotations, FUN_009b53f0, hash/strtol); SSE scheduling and intermediate 0x330 store differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

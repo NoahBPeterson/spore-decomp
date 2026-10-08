@@ -1,6 +1,5 @@
 0076cc00  300  0x28-element vector insert: approximate EASTL relocate/construct call shapes, growth path not exact
 0076cd30  285  snapshot wrapper update: skeleton (job continue / message release / scene-job append omitted)
-0076ce50  1904 effects job/vector processing: skeleton
 0076d5c0  284  0x28 job push_back: simplified (argument-built 0x28 temporary not reproduced)
 0076d6e0  235  three-job push wrapper: skeleton
 0076d8e0  131  viewer creation: new(0x174)+ctor+rect stores approximated; EH frame differs

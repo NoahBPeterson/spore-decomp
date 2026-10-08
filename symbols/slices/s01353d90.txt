@@ -1,0 +1,1 @@
+01353d90 SP::InitSpatialObjectAttributes  # dynamic initializer $E220: fills 25 Simulator::Attribute records (globals 0x157a1f8..) for cSpatialObject (ModAPI member offsets); name Claude-coined

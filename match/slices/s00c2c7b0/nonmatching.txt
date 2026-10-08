@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00c2cac0 1500 complete creature path-ahead update (twin of slice s00cb2480); size 1903 vs 1887, 28/28 direct calls in order, same 0xad0 frame; diffs: ebx/ebp role swap (path vs locomotion), x87 vs SSE mix in the velocity normalize, loop pointer base, block layout; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

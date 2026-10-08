@@ -266,10 +266,263 @@ bool __stdcall OnCaptureMessage(int msgId, void* payload)
 }
 
 // ------------------------------------------------------------------ remaining large bodies
-// @ 0x0076ce50
-void __cdecl Effects_Process(int* self, void* arg)
+// @ 0x0076ce50  tile-by-tile render-to-texture capture of a viewer into one big RGBA image
+// (optionally saved as "<path>.png" through a Daf job).  Names are Claude-coined from behaviour.
+#define CAT2_(a, b) a##b
+#define CAT_(a, b) CAT2_(a, b)
+#define PV virtual void CAT_(_pv, __COUNTER__)();
+#define PV2 PV PV
+#define PV4 PV2 PV2
+#define PV8 PV4 PV4
+
+extern "C" long __cdecl _InterlockedExchange(long volatile* p, long v);
+#pragma intrinsic(_InterlockedExchange)
+
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);   // 0x00f473a0
+void  operator delete[](void* p);                                           // 0x00f47380
+void  operator delete(void* p);                                             // 0x00f47380
+inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
+{ return operator new[](size, pName, flags, debugFlags, file, line); }
+inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
+
+// message object posted to the message server (0x18 bytes)
+struct RefBaseA22 {
+    virtual ~RefBaseA22();
+    virtual void AddRef();
+    virtual void Release();
+    long mRefCount;
+    int  mField8;
+    int  mFieldC;
+    int  mField10;
+    int  mField14;
+    RefBaseA22() : mField10(0) { _InterlockedExchange(&mRefCount, 0); }
+};
+struct DrvBA22 : RefBaseA22 {
+    virtual ~DrvBA22();
+    DrvBA22() {}
+};
+
+template <class T> struct ARef {
+    T* mp;
+    ARef(T* p) : mp(p) { if (mp) mp->AddRef(); }
+    ~ARef() { if (mp) mp->Release(); }
+    T* operator->() const { return mp; }
+};
+
+struct CapViewer {
+    bool Copy(CapViewer* src, int a, int b);               // 0x007c50b0 (ret 0xc)
+    void SetRaster(const void* key, int n);                // 0x007c4be0 (ret 8)
+    void FUN_007c3c50(int n);                              // 0x007c3c50 (ret 4)
+    void GetSize(float* w, float* h);                      // 0x007c40c0 (ret 8)
+    void SetOffset(float x, float y);                      // 0x007c4ad0 (ret 8)
+};
+struct CapTarget { PV2 PV virtual void Process(int a, int b, void* s, uint32_t c); };   // +0x0c
+struct EffectsMgr { PV8 PV8 virtual void SetXY(float a, float b); };                     // +0x40
+EffectsMgr* __cdecl EffectsManager();                                                   // 0x0067ddd0
+struct MsgServer { PV4 PV virtual void Post(uint32_t id, void* msg, int flag); };       // +0x14
+MsgServer* __cdecl MessageServer();                                                     // 0x0067dcc0
+struct DevInfo {
+    PV8 PV8 PV8 PV8 PV8 PV8 PV2 PV                                                     // slots 0..50
+    virtual void GetPair(uint32_t* out);                                               // +0xcc
+};
+DevInfo* __cdecl GetDevInfo();                                                          // 0x0067dd40
+struct PixFormat { char pad[0x10]; uint8_t mBits; };
+struct RasterMgr {
+    PV4                                                                                 // slots 0..3
+    virtual uint32_t* Create(uint32_t* out, int w, int h, int fmt, int a, int b, int c);   // +0x10
+    virtual void Release(uint32_t lo, uint32_t hi);                                     // +0x14
+    virtual PixFormat* GetFormat(uint32_t lo, uint32_t hi);                             // +0x18
+    PV2
+    virtual void GetInfo(uint32_t lo, uint32_t hi, int* w2, int* h2, int* w, int* h);   // +0x24
+    PV2
+    virtual void Read(uint32_t lo, uint32_t hi, void* dst);                             // +0x30
+    PV4 PV
+    virtual void SetName(uint32_t lo, uint32_t hi, const char* name);                   // +0x48
+};
+RasterMgr* __cdecl GetRasterMgr();                                                      // 0x0067dda0
+struct ReadMgr {
+    PV8 PV8 PV4 PV2
+    virtual void Fill(uint32_t* a, uint32_t* b, uint32_t c, float d);                  // +0x58
+};
+ReadMgr* __cdecl GetReadMgr();                                                          // 0x0067ddb0
+
+struct JobRelease { void Release(); };                                                  // 0x00690120
+extern void __cdecl FUN_0075d870();                                                     // 0x0075d870
+struct JobObj {
+    void (__cdecl* mFn)();   // +0
+    int mF4;
+    char pad8[0x10];
+    int mF18;                // +0x18
+    void FUN_0068f9b0(void* daf);                                                       // 0x0068f9b0 (ret 4)
+    void FUN_006909b0();                                                                // 0x006909b0
+};
+struct JobSvc { PV4 virtual void Create(JobObj** out); };                               // +0x10
+JobSvc* __cdecl GetJobSvc();                                                            // 0x0068f4d0
+
+struct Daf {
+    virtual void AddRef();
+    virtual void Release();
+    uint32_t mVptr2;
+    long mAtomic;
+    char mName[0x104];
+    void* mFormat;       // +0x110
+    int mW;              // +0x114
+    int mH;              // +0x118
+    void* mPixels;       // +0x11c
+    char mFlag;          // +0x120
+    Daf() throw();       // 0x0076af50
+};
+extern float g_two;                                                                     // 0x01470f1c
+extern char g_emptyStr;                                                                 // 0x01667bac
+struct EStr {
+    char* b; char* e; char* c;
+    EStr() : b(&g_emptyStr), e(&g_emptyStr), c(&g_emptyStr + 1) {}
+    ~EStr() { if (c - b > 1 && b) operator delete(b); }
+    int sprintf(const char* fmt, ...);                                                  // 0x00472fe0
+};
+
+struct TileCapture {
+    char   pad00[0xc];
+    CapTarget* mTarget0;     // +0x0c
+    CapTarget* mTarget1;     // +0x10
+    CapTarget* mTarget2;     // +0x14
+    CapViewer* mViewer;      // +0x18
+    uint32_t   mRaster[2];   // +0x1c
+    bool       mSized;       // +0x24
+    uint32_t   mTiles;       // +0x28
+    int        mW;           // +0x2c
+    int        mH;           // +0x30
+    char       mPath[5];     // +0x34
+    char       pad39[0x139 - 0x39];
+    bool       mDirect;      // +0x139
+    char       pad13a[2];
+    JobObj*    mJob;         // +0x13c
+
+    void Capture(int a1, int a2, CapViewer** pViewer, uint32_t a4);
+};
+
+struct ViewState { CapViewer* viewer; int z0, z1, z2; };
+
+#define RENDER_PASS()                                                                 \
+    {                                                                                 \
+        ViewState vs;                                                                 \
+        vs.viewer = mViewer; vs.z0 = 0; vs.z1 = 0; vs.z2 = 0;                         \
+        EffectsManager()->SetXY(0.0f, 0.0f);                                          \
+        mTarget0->Process(a1, a2, &vs, a4);                                           \
+        MessageServer()->Post(0x12d74a2, rawMsg, 0);                                  \
+        mTarget1->Process(a1, a2, &vs, a4);                                           \
+        EffectsManager()->SetXY(0.0f, 0.0f);                                          \
+        mTarget2->Process(a1, a2, &vs, a4);                                           \
+    }
+
+void TileCapture::Capture(int a1, int a2, CapViewer** pViewer, uint32_t a4)
 {
-    (void)self; (void)arg;   // skeleton: 1904-byte job/vector processing (see partial.txt)
+    CapTarget* t0 = mTarget0;
+    if (t0 == 0)
+        return;
+    mViewer->Copy(*pViewer, 1, 0);
+    RefBaseA22* rawMsg = new("App", 0, 0, 0, 0) DrvBA22();
+    ARef<RefBaseA22> msg(rawMsg);
+    rawMsg->mField8 = (int)*pViewer;
+    if (mSized) {
+        uint32_t q[2] = { 0xffffffff, 0xffffffff };
+        GetDevInfo()->GetPair(q);
+        int u0, v0, wid, hei;
+        GetRasterMgr()->GetInfo(q[0], q[1], &u0, &v0, &wid, &hei);
+        PixFormat* fmt = GetRasterMgr()->GetFormat(q[0], q[1]);
+        uint32_t total = (fmt->mBits >> 3) * wid * hei;
+        mH = mTiles * hei;
+        mW = mTiles * wid;
+        uint8_t* big = new("Graphics", 0, 0, 0, 0) uint8_t[mTiles * mTiles * total];
+        uint8_t* tile = new("Graphics", 0, 0, 0, 0) uint8_t[total];
+        for (uint32_t j = 0; j < mTiles; j++) {
+            for (uint32_t i = 0; i < mTiles; i++) {
+                q[0] = 0xffffffff;
+                q[1] = 0xffffffff;
+                GetDevInfo()->GetPair(q);
+                int u1, v1, wid1, hei1;
+                GetRasterMgr()->GetInfo(q[0], q[1], &u1, &v1, &wid1, &hei1);
+                mViewer->SetRaster(q, 1);
+                float fw, fh;
+                mViewer->GetSize(&fw, &fh);
+                fw = fw * g_two;
+                fh = fh * g_two;
+                mViewer->SetOffset(-((fw * (float)j) / (float)(mTiles * wid1)),
+                                   (fh * (float)i) / (float)(mTiles * hei1));
+                mViewer->FUN_007c3c50(7);
+                RENDER_PASS()
+                if (mDirect) {
+                    uint32_t pr[2] = { 0xffffffff, 0xffffffff };
+                    RasterMgr* rm = GetRasterMgr();
+                    uint32_t tmp[2];
+                    uint32_t* r = rm->Create(tmp, 0x80, 0x80, 0x15, 0, -1, 0);
+                    pr[0] = r[0];
+                    pr[1] = r[1];
+                    rm->SetName(r[0], r[1], "ScreenshotThumbnailRTT");
+                    GetReadMgr()->Fill(q, pr, a4, 0.0f);
+                    rm->GetInfo(pr[0], pr[1], &u0, &v0, &wid, &hei);
+                    mH = mTiles * hei;
+                    mW = mTiles * wid;
+                    rm->Read(pr[0], pr[1], tile);
+                    rm->Release(pr[0], pr[1]);
+                } else {
+                    GetRasterMgr()->Read(q[0], q[1], tile);
+                }
+                int dst = (mW * i + j) * 4;
+                int src = 0;
+                for (int y = 0; y < hei; y++) {
+                    for (int x = 0; x < wid; x++) {
+                        big[dst] = tile[src];
+                        big[dst + 1] = tile[src + 1];
+                        big[dst + 2] = tile[src + 2];
+                        big[dst + 3] = tile[src + 3];
+                        dst += mTiles * 4;
+                        src += 4;
+                    }
+                    dst += (mTiles - 1) * mW * 4;
+                }
+            }
+        }
+        if (mPath[0] != 0) {
+            EStr str;
+            str.sprintf("%s.png", mPath);
+            Daf* rawDaf = new("Graphics", 0, 0, 0, 0) Daf();
+            ARef<Daf> daf(rawDaf);
+            {
+                char* s = str.b;
+                char* d = rawDaf->mName;
+                char c;
+                do {
+                    c = *s++;
+                    *d++ = c;
+                } while (c);
+            }
+            rawDaf->mFormat = fmt;
+            rawDaf->mW = mW;
+            rawDaf->mH = mH;
+            rawDaf->mPixels = big;
+            rawDaf->mFlag = 0;
+            JobSvc* svc = GetJobSvc();
+            if (mJob) {
+                JobObj* old = mJob;
+                mJob = 0;
+                ((JobRelease*)old)->Release();
+            }
+            svc->Create(&mJob);
+            mJob->mFn = FUN_0075d870;
+            mJob->mF4 = 0;
+            mJob->mF18 = 4;
+            mJob->FUN_0068f9b0(rawDaf);
+            mJob->FUN_006909b0();
+        } else {
+            operator delete(big);
+        }
+        operator delete(tile);
+    } else {
+        mViewer->SetRaster(mRaster, 1);
+        mViewer->FUN_007c3c50(7);
+        RENDER_PASS()
+    }
 }
 
 // @ 0x0076d6e0

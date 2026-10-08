@@ -1,0 +1,1 @@
+0103e8e0  945  complete cSPSpaceTrading::CreateNPCInventory (54/54 calls, same vslots and constants in order, size 1789 vs 1804); first loop (stale store drop) matches; remaining diffs are stack slot order of locals, register allocation, and the shared bool/loop-index slot

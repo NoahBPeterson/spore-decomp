@@ -2,3 +2,4 @@
 004b87c0  84  small ability ctor; inline-buffer vector init local layout differs
 004b8860  84  small ability ctor; inline-buffer vector init local layout differs
 004b8900  79  RNG range helper (x87); full logic present, x87/SSE float scheduling differs
+004b7b80  1124  COMPLETE two-colour paint ability builder (property-list floats, two Lerps, Color4 stores, owner vcall +0xa4); /Od local slot order and a few temp slots differ

@@ -1,0 +1,1 @@
+00e3f970  1445  EntryPanel::Refresh complete (list walk + entry creation, reverse layout loop with Interp::Run, current-entry/range update; 47 calls = original, size 1669 vs 1695); regalloc, frame 0x5c vs 0x54, x87 float copy (mFa0) vs movss; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

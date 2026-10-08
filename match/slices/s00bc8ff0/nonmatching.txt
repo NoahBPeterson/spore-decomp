@@ -1,0 +1,1 @@
+00bc8ff0 1609 WalkTree: complete (behaviour-tree cursor walk: leaf/group nodes, fnA/fnB/fnC callbacks, ResetFrames/EvalNode/ApplyEval/SelectChild helpers, rng init guard); /O2 /MD /Gy /TP /arch:SSE /GS-; frame 0x1b4, ctx/path/buffer offsets and flag spill slots match, size 1747/1698, 16/16 calls; register allocation (ebx/edi roles) differs

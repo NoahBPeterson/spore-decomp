@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s010554c0/s010554c0.cpp  ?RegisterStaticRegistrations@Simulator@@YAXXZ  01055890  /O2 /MD /Gy /TP

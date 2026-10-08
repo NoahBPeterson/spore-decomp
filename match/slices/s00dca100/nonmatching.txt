@@ -1,0 +1,1 @@
+00dca100  1253  EstablishTradeRouteOrder_Tick complete (states 0-1, 83 calls = original; size 1697 = original); regalloc (city/mem/loco registers swapped) and frame 0x20 vs 0x28; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

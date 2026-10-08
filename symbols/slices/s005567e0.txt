@@ -1,3 +1,3 @@
-005567e0 SP::cVehicleModelSummarizer parameter setup (FunctionalMatch::DeclareParam)  # PDB neighbours
+005567e0 SP::cVehicleModelSummarizer::ExtractParameters  # byte-exact; dev PDB local names (editorResource, stats, resourceBBox, width/height/depth, partTotalVolume, fTotalValue, currentValue)
 00556e10 SP::cBuildingModelSummarizer::GetResType  # byte-exact
-00556e30 SP::cBuildingModelSummarizer parameter setup  # PDB neighbours
+00556e30 SP::cBuildingModelSummarizer::ExtractParameters  # PDB neighbours

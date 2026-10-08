@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+0101c080 1327 cSPCameraControllerSolarSystem::Update: complete (30/30 calls and the 3 virtual slots in the same order, same immediates; 1701 vs 1781 bytes); x87/SSE scheduling, block order and frame layout (0xa0 vs 0xa8) differ; difftest FAIL only on viewer+0x40.. = uninitialized stack locals that callee 0x7c4940 copies (residue depends on our frame), all call args, this-pool and returns match

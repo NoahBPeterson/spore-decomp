@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d7f790  1514  complete (42/42 calls and vtable slots in order, size 1969 vs 1924); register choice (esi/edi swapped), local slot layout and SSE scheduling differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

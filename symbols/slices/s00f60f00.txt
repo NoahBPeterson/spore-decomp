@@ -1,0 +1,1 @@
+00f60f00 EA::Swarm::cParticlesEffect::Update  # Claude-coined method name on the PDB class: emit + age particles for dt (calls InitParticle 00f5ebf0, particle update table 015b0c00)

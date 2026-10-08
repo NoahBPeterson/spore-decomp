@@ -1,4 +1,3 @@
-00728c90  1529  PARTIAL: SP::CreateUVsAndCharts skeleton (EH, 1500B).
 00729290  111   PARTIAL: calls FUN_00722d00/SP::CreateUVsAndCharts; skeleton only.
 00729300  304   PARTIAL: vtable-driven factory; skeleton only.
 007298b0  224   PARTIAL: x87 float area/normal helper; skeleton only.

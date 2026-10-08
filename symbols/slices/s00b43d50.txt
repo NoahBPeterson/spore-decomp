@@ -1,0 +1,1 @@
+00b43d50 SweptSphereContact  # Claude-coined: moving sphere (segment A-B) vs collider contact, one manifold point

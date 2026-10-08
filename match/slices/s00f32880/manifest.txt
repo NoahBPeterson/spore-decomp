@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00f32880/s00f32880.cpp  ?Publish@cSphere@@  00f32d10  /O2 /MD /Gy /TP

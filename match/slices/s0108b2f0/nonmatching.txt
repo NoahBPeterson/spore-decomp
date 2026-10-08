@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0108b2f0 1700 complete (flags /O2 /MD /Gy /TP /fp:fast): all 7 calls in original order; 1509 vs 1763 B; older-cl x87 scheduling differs

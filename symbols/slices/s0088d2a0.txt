@@ -1,0 +1,1 @@
+0088d2a0 EA::Text::FontServer::GetFont  # retail GetFont: no duplicate test / score sort, +0x2fb0 CRITICAL_SECTION, virtual CreateNewFont(+0x14) and GetFontDescriptionScore(+0x3c); structure confirmed by call/vcall sequence

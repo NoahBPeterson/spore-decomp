@@ -1,5 +1,4 @@
 # va  reason (approximate/incomplete)
-00718820  large editor routine (2384 bytes): body not reconstructed, skeleton only
 00719170  FixedIdVector6::operator=: DoAssign helper argument roles guessed
 00719330  insert range with destructor loop over 0xd0-byte elements: skeleton only
 00719390  copy + erase range over 0x50-byte elements: skeleton only

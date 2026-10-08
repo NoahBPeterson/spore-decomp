@@ -1,0 +1,1 @@
+00a18d90 EA::Audio::FactoryConfiguration::AddLegacyPropertyTypes  # fills name-hash -> type-id map at this+0x40; byte-exact

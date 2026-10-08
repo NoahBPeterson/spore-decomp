@@ -132,6 +132,8 @@ class cSPPalette {
 
 class cSPPaletteItem : public EA::RefCountVTemplate<int>, public EA::COM::IUnknown32 {
  public:
+  using EA::RefCountVTemplate<int>::AddRef;
+  using EA::RefCountVTemplate<int>::Release;
   enum eItemType {
     kItemTypeUnknown = -1,
     kBlock = 0xa2e50993,
@@ -149,6 +151,13 @@ class cSPPaletteItem : public EA::RefCountVTemplate<int>, public EA::COM::IUnkno
   bool mbHidden;                          // +0x4c
   AutoRefCount<EA::COM::IUnknown32> mpData;  // +0x50
   void Shutdown();                        // 0x005c6710
+  // Out-of-line trivial accessors / checks called by cSPOLDPaletteItemUI::Init.
+  int GetPriority();                      // 0x00641770: return [this+0x28]
+  EA::ResourceMan::Key* GetPlanetKey();   // 0x00b7e380: return &[this+0x2c]
+  uint32_t GetSwatchColor();              // 0x00a1ad10: return [this+0x38]
+  EA::ResourceMan::Key* GetCities();      // 0x005c65e0: return &[this+0x3c]
+  bool IsHidden();                        // 0x005c6620: return mbHidden
+  bool CheckInfo(struct SwatchInfo* info);  // 0x005c65f0, ret 4
 };
 
 class cSPPalettePage : public EA::RefCountVTemplate<int>, public EA::COM::IUnknown32 {
@@ -345,26 +354,288 @@ cSPPalettePage::cSPPalettePage()
 cSPPalettePage::~cSPPalettePage() {}
 
 // ---------------------------------------------------------------------------------------------
-// Large UI functions: signatures preserved, bodies not reconstructed (partial).
+// cSPOLDPaletteItemUI::Init and the UI stubs it needs.
 class cSPSwatch : public EA::RefCountVTemplate<int>, public EA::COM::IUnknown32 {
  public:
+  using EA::RefCountVTemplate<int>::AddRef;
+  using EA::RefCountVTemplate<int>::Release;
   char pad0c[0x140 - 0x0c];
 };
+
+typedef EA::ResourceMan::Key ResKey;
+
+// Window object: only the vtable slots Init uses (slot 0 AddRef, 1 Release).
+struct Rect4 {
+  float x0, y0, x1, y1;
+};
+class UIWindow {
+ public:
+  void** vptr;
+  int AddRef() { return ((int(__thiscall*)(UIWindow*))vptr[0])(this); }
+  int Release() { return ((int(__thiscall*)(UIWindow*))vptr[1])(this); }
+  Rect4* GetArea() { return ((Rect4*(__thiscall*)(UIWindow*))vptr[0x38 / 4])(this); }
+  UIWindow* FindWindowByID(uint32_t id, bool recurse) {
+    return ((UIWindow*(__thiscall*)(UIWindow*, uint32_t, bool))vptr[0xf0 / 4])(this, id, recurse);
+  }
+  void SetField60(int v) { ((void(__thiscall*)(UIWindow*, int))vptr[0x60 / 4])(this, v); }
+  void SetFlag(int mask, bool on) {
+    ((void(__thiscall*)(UIWindow*, int, bool))vptr[0x7c / 4])(this, mask, on);
+  }
+  void AddChild(UIWindow* w) { ((void(__thiscall*)(UIWindow*, UIWindow*))vptr[0xd8 / 4])(this, w); }
+  void AddWinProc(void* proc) { ((void(__thiscall*)(UIWindow*, void*))vptr[0x104 / 4])(this, proc); }
+};
+
+// Out-of-line AutoRefCount assignment (0x00b5f950) is kept for some sites via SetOol.
+template <typename T>
+class WinRef {
+ public:
+  T* mpObject;
+  WinRef() : mpObject(0) {}
+  ~WinRef() { if (mpObject) mpObject->Release(); }
+  WinRef& operator=(T* p) {
+    if (p != mpObject) {
+      T* const pTemp = mpObject;
+      if (p)
+        p->AddRef();
+      mpObject = p;
+      if (pTemp)
+        pTemp->Release();
+    }
+    return *this;
+  }
+  void SetOol(T* p);  // 0x00b5f950: AutoRefCount<T>::operator=(T*), not inlined
+  operator T*() const { return mpObject; }
+  T* operator->() const { return mpObject; }
+};
+
+struct SwatchInfo {
+  bool Has(uint64_t key);  // 0x00595110, ret 8
+};
+class SwatchVerifier {
+ public:
+  virtual void v0();
+  virtual void v1();
+  virtual void v2();
+  virtual void v3();
+  virtual int Query(const ResKey* key, int arg);  // slot 4
+};
+// Retail layout of cSPSwatch as read by Init (the stub class above is only a size placeholder).
+struct SwatchView {
+  int pad0;
+  int pad4;
+  SwatchVerifier* mVerifier;  // +8
+  int pad0c;
+  SwatchInfo* mInfo;          // +0x10
+};
+
+class cSPUILayout {
+ public:
+  cSPUILayout();                                                // 0x00810000
+  ~cSPUILayout();                                               // 0x00811fe0
+  void Init(const ResKey* key, bool flag, uint32_t id);         // 0x008120d0
+  UIWindow* FindWindowByID(uint32_t id, bool recurse);          // 0x008105b0
+  int pad[3];
+};
+
+class cString {
+ public:
+  cString(uint32_t table, uint32_t instance, const wchar_t* def);  // 0x006b5770
+  ~cString();                                                       // 0x006b5240
+  const wchar_t* GetText();                                         // 0x006b55c0
+  int pad[7];
+};
+
+struct Vec2 {
+  float x, y;
+};
+
+class cSPUITooltipWinProc {
+ public:
+  cSPUITooltipWinProc(const wchar_t* name, uint32_t id, const wchar_t* text, const Vec2* pos,
+                      int a, const void* b, int c);  // 0x00835e30, ret 0x1c
+  static void* operator new(unsigned int size, unsigned int align, const char* name, void* alloc);  // 0x009512d0
+  virtual int AddRef();
+  virtual int Release();
+  int pad[0x68 / 4 - 1];
+};
+
+class DragAndBuy {
+ public:
+  DragAndBuy();  // 0x005f7380
+  virtual int AddRef();
+  virtual int Release();
+  void Init(const ResKey* key, UIWindow* win, UIWindow* parent, uint32_t msg, cSPPaletteItem* item,
+            cSPSwatch* swatch, bool flag);  // 0x005f4310, ret 0x1c
+  static void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
+  int pad[0x1c8 / 4 - 1];
+};
+// AutoRefCount ctor (stores the pointer and AddRefs), not inlined here.
+struct DragAndBuyRef {
+  DragAndBuy* mpObject;
+  DragAndBuyRef(DragAndBuy* p);  // 0x00572660
+};
+class cSPSwatchManager {
+ public:
+  DragAndBuy* CreateSwatch(DragAndBuy* existing);  // 0x005f0ca0, ret 4
+};
+
+cSPSwatchManager* GetSwatchManager();                                       // 0x00401020
+uint64_t MakeKey64(uint32_t hi, uint32_t lo);                                // 0x00593980
+void* GetUIAllocator();                                                     // 0x009512c0
+UIWindow* CreateWindowFor(UIWindow* parent);                                // 0x00806370
+UIWindow* CreateImageWindow(const ResKey* key, float x, float y, UIWindow* parent);  // 0x00807880
+void SetImageIcon(UIWindow* w, void* image, int a);                         // 0x00806aa0
+void CenterWindowInRect(UIWindow* w, Rect4* r);                             // 0x00806d10
+void* GetImageFromLayout(uint32_t id);                                      // 0x00458de0
+extern char* g_ptr15fd918;                                                  // 0x015fd918
+extern int g_data13f80fc;                                                   // 0x013f80fc
+
+inline bool EditorFlag() { return *(int*)(*(char**)(g_ptr15fd918 + 0x3c) + 0x118) != 0; }
 
 class cSPOLDPaletteItemUI : public EA::COM::IUnknown32, public EA::RefCountVTemplate<int> {
  public:
   AutoRefCount<cSPPaletteItem> mData;  // +0xc
   AutoRefCount<cSPSwatch> mSwatch;     // +0x10
-  void Init(cPlanetModel* model, int a, int b, cSPSwatch* swatch);
+  WinRef<DragAndBuy> mDragAndBuy;      // +0x14
+  AutoRefCount<UIWindow> mWindow;      // +0x18
+  void Init(cSPPaletteItem* item, UIWindow* parent, int arg3, cSPSwatch* swatch);
 };
 
 // @ 0x005C7500
-void cSPOLDPaletteItemUI::Init(cPlanetModel* model, int a, int b, cSPSwatch* swatch) {
-  // Partial: full body (1606 bytes) not reconstructed.
-  (void)model;
-  (void)a;
-  (void)b;
-  (void)swatch;
+void cSPOLDPaletteItemUI::Init(cSPPaletteItem* item, UIWindow* parent, int arg3, cSPSwatch* swatch) {
+  mData = item;
+  mSwatch = swatch;
+  bool isHidden = false;
+  bool checkResult = true;
+  bool hasImage = true;
+  bool flagged = false;
+  uint32_t type = mData->mItemType;
+  if (type == 0x81c74dbc || type == 0x8bfac054 || type == 0xe1e54b3b)
+    hasImage = false;
+  WinRef<UIWindow> win;
+  void* iconId = 0;
+  uint32_t iconValue = 0;
+
+  if (hasImage) {
+    if (EditorFlag() && item)
+      flagged = item->mIndex < 0;
+    if (swatch) {
+      SwatchInfo* info = ((SwatchView*)swatch)->mInfo;
+      if (info) {
+        uint64_t k = MakeKey64(item->mItemKey.mGroup, item->mItemKey.mInstance);
+        isHidden = !info->Has(k);
+        if (!isHidden && !flagged) {
+          int r = 1;
+          SwatchVerifier* v = ((SwatchView*)swatch)->mVerifier;
+          if (v)
+            r = v->Query(&item->mItemKey, 0);
+          isHidden = r == 7;
+        }
+      }
+    }
+    if (item)
+      checkResult = item->CheckInfo(((SwatchView*)swatch)->mInfo);
+
+    if (isHidden) {
+      ResKey key;
+      key.mInstance = 0;
+      key.mType = 0;
+      key.mGroup = 0;
+      if (!checkResult) {
+        iconValue = item->GetSwatchColor();
+        key = *item->GetCities();
+      } else {
+        iconValue = item->GetPriority();
+        key = *item->GetPlanetKey();
+      }
+      if (key.mInstance != 0) {
+        cSPUILayout layout;
+        layout.Init(&key, true, 0x5b598fa);
+        win.SetOol(layout.FindWindowByID(0x902d3163, true));
+      }
+      if (win && key.mInstance != 0) {
+        parent->AddChild(win);
+        Rect4 r = *win->GetArea();
+        r.x1 = r.x1 - r.x0;
+        r.y1 = r.y1 - r.y0;
+        r.x0 = 0.0f;
+        r.y0 = 0.0f;
+        CenterWindowInRect(win, &r);
+        UIWindow* child = win->FindWindowByID(0x4976e19, false);
+        if (child && iconValue) {
+          child->SetFlag(0x10, true);
+          SetImageIcon(child, GetImageFromLayout(iconValue), 0);
+        }
+      } else {
+        ResKey fallback(0x3cf13a01, 0x2f7d0004, 0x11c0bde);
+        win.SetOol(CreateImageWindow(&fallback, 0.0f, 0.0f, parent));
+      }
+    } else if (EditorFlag() && flagged) {
+      ResKey lockedKey(0x43c6e503, 0x2f7d0004, 0x11c0bde);
+      win.SetOol(CreateImageWindow(&lockedKey, 0.0f, 0.0f, parent));
+    } else {
+      win = CreateImageWindow(&mData->mThumbnailKey, 0.0f, 0.0f, parent);
+    }
+  } else {
+    win = CreateWindowFor(parent);
+  }
+
+  if (win) {
+    win->SetField60(arg3);
+    if (isHidden) {
+      if (item && item->IsHidden()) {
+        win->AddWinProc((char*)this + 8);
+        win->SetFlag(0x10, false);
+        win->SetFlag(2, true);
+      } else {
+        win->SetFlag(0x10, true);
+        win->SetFlag(2, false);
+      }
+    } else if (EditorFlag() && flagged) {
+      Vec2 pos;
+      pos.x = 5.0f;
+      pos.y = -15.0f;
+      cString text(0x496bfb26, 0x538602b, 0);
+      cSPUITooltipWinProc* tip = new (4, "UI/Tooltip", GetUIAllocator())
+          cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, text.GetText(), &pos, 0, &g_data13f80fc, 0);
+      if (tip)
+        tip->AddRef();
+      win->AddWinProc(tip);
+      if (tip)
+        tip->Release();
+    } else {
+      DragAndBuy* obj;
+      switch (mData->mItemType) {
+        case 0x4d863c8b:
+        case 0x0fcafd26:
+        case 0x2b885df4:
+        case 0xe73759f3:
+          if (!swatch)
+            goto done;
+          obj = GetSwatchManager()->CreateSwatch(new ("Editor", 0, 0, 0, 0) DragAndBuy());
+          if (obj)
+            obj->AddRef();
+          break;
+        case 0xa2e50993:
+        case 0xc9db779b: {
+          if (!swatch)
+            goto done;
+          DragAndBuyRef r(
+              GetSwatchManager()->CreateSwatch(new ("Editor", 0, 0, 0, 0) DragAndBuy()));
+          obj = r.mpObject;
+          break;
+        }
+        default:
+          goto done;
+      }
+      obj->Init(&mData->mItemKey, win, parent, 0xb2e18705, mData, swatch, true);
+      mDragAndBuy.SetOol(obj);
+      if (obj)
+        obj->Release();
+    }
+  }
+done:
+  mWindow = win;
 }
 
 // @ 0x005C7FF0

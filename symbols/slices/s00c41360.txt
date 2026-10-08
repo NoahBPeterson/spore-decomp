@@ -1,0 +1,3 @@
+00c41360 SP::cInterCityRoad::BuildPath  # name guessed; builds mPathData (+0x128) from a landAvoidCities curve between mpCity1/mpCity2 (+0x11c/+0x120)
+00c41190 ?insert@?$SpVector@UcCurvePoint@@@@QAEPAUcCurvePoint@@PAU2@ABU2@@Z  # SpVector<cCurvePoint>::insert(pos, value): ret 8, shifts via 0xac45e0
+00c410e0 ?push_back_default@?$SpVector@UcCurvePoint@@@@QAEXXZ  # appends a default cCurvePoint (pos=0x168e690, 1.0f at +0xc, 0 at +0x10, byte +0x38=0)

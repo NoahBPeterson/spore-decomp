@@ -29,8 +29,11 @@ template<class T> struct vector {
 
 template<int N> struct bitset {
     uint32_t mWord[(N + 31) / 32];
-    bool test(uint32_t i) const {
-        if (i < N) return (mWord[i >> 5] & (1u << (i % 32))) != 0;
+    __forceinline bool test(uint32_t n) const {
+        if (n < N) {
+            const uint32_t word = mWord[n >> 5];
+            return (word & (1u << (n % 32))) != 0;
+        }
         return false;
     }
 };
@@ -65,7 +68,10 @@ struct cSPEditorBlock {
     void F_451330(cSPVector3 v);                // @ 0x451330
     void F_448e90(cSPVector3* v, int i);        // @ 0x448e90
     void F_43eb50(float f);                     // @ 0x43eb50
-    void F_4860b0(float a, float b);            // @ 0x4860b0
+    float F_43eed0();                           // @ 0x43eed0 (scale getter)
+    float GetMinScale() const { return mMinScale; }
+    float GetMaxScale() const { return mMaxScale; }
+    void* GetField3ec() const { return mField3ec; }
     bool IsLimbPart();                          // @ 0x435c80
 };
 
@@ -78,6 +84,7 @@ struct cSPEditorLimbJoint {
     cSPVector3 mPositionAtCreation;             // +0x34
     float mField40;                             // +0x40
 
+    void F_4860b0(float a, float b);            // @ 0x4860b0
     void F_485b90(cSPVector3* out);             // @ 0x485b90
     float F_485eb0();                           // @ 0x485eb0
     bool UpdateLength(bool b);                  // @ 0x486910
@@ -94,6 +101,7 @@ struct cSPEditorLimbStructure {
     vector<cSPEditorLimbJoint*> mFeet;          // +0x2c
     vector<cSPEditorLimbJoint*> mHands;         // +0x40
 
+    cSPEditorLimbJoint* FindJoint(cSPEditorBlock* block);   // @ 0x48b2c0
     void F_48b370(cSPEditorBlock* block, float f);          // @ 0x48b370
     void SetFeetTargets(bool b);                            // @ 0x48bae0
     void SetHandsTargets(bool b);                           // @ 0x48bbb0
@@ -107,39 +115,90 @@ struct cSPEditorLimbStructure {
     void SetJointTarget(cSPEditorLimbJoint* joint, cSPVector3 pos);  // @ 0x48a650
 };
 
-cSPEditorLimbJoint* FindJoint(cSPEditorBlock* block);        // @ 0x48b2c0
 
-// @ 0x48b370
+extern float gScaleInitLo;   // 0x013ef45c (runtime-initialised float constant)
+extern float gScaleInitHi;   // 0x013ef460
+
+// SSE clamp helper of the editor module (maxss/minss against the memory params)
+__forceinline float Clamp(float value, float minValue, float maxValue)
+{
+    __asm {
+        movss xmm0, value
+        maxss xmm0, minValue
+        minss xmm0, maxValue
+        movss value, xmm0
+    }
+    return value;
+}
+template<class T> inline const T& Max(const T& a, const T& b) { return (b < a) ? a : b; }
+template<class T> inline const T& Min(const T& a, const T& b) { return (b < a) ? b : a; }
+
+// @ 0x48b370  (SP::cSPEditorLimbStructure::UpdateLimbScaleRange)
+// Rescales the block of a limb joint by f, clamped to the joint's (or its siblings') scale range,
+// and propagates the new ratio to the parent joint and the child joints.
 void cSPEditorLimbStructure::F_48b370(cSPEditorBlock* block, float f)
 {
-    // Best-effort reconstruction of the per-limb scale-range update.
     cSPEditorLimbJoint* joint = FindJoint(block);
     if (!joint) return;
-    float lo = 1.0e-20f;
-    float hi = 1.0e20f;
+    float upperMin = gScaleInitLo;
+    float lo = gScaleInitLo;
+    float upperMax = gScaleInitHi;
+    float hi = gScaleInitHi;
     bool flag = false;
     cSPEditorBlock* base = joint->mJointBlock;
-    if (joint->mUpperJoint == 0) {
-        lo = base->mMinScale;
-        hi = base->mMaxScale;
-    } else {
+    if (joint->mUpperJoint) {
         for (int i = 0, n = joint->mUpperJoint->mLowerJoints.size(); i < n; i++) {
             cSPEditorBlock* b = joint->mUpperJoint->mLowerJoints[i]->mJointBlock;
-            if (b->mField3ec) {
+            if (b->GetField3ec()) {
                 if (b->mFlags.test(0x2d) || b->mFlags.test(0x2c)) flag = true;
-                if (lo < b->mMinScale) lo = b->mMinScale;
-                if (b->mMaxScale < hi) hi = b->mMaxScale;
+                if (b->GetMinScale() > lo) lo = b->GetMinScale();
+                if (hi > b->GetMaxScale()) hi = b->GetMaxScale();
             }
         }
+        upperMin = joint->mUpperJoint->mJointBlock->GetMinScale();
+        upperMax = joint->mUpperJoint->mJointBlock->GetMaxScale();
+    } else {
+        lo = base->GetMinScale();
+        hi = base->GetMaxScale();
+        upperMin = base->GetMinScale();
+        upperMax = base->GetMaxScale();
     }
-    float a = lo;
-    float c = hi;
-    float scaled = a;
-    if (scaled < a) scaled = a;
-    if (c < scaled) scaled = c;
-    (void)flag;
-    base->F_4860b0(scaled, f);
-    base->F_43eb50(scaled);
+    float rangeLo = Max(upperMin, lo);
+    float rangeHi = Min(upperMax, hi);
+    float curScale = base->F_43eed0();
+    float newScale = base->F_43eed0() + f;
+    if (rangeLo > newScale) newScale = rangeLo;
+    if (newScale > rangeHi) newScale = rangeHi;
+    if (joint->mUpperJoint) {
+        cSPEditorLimbJoint* upper = joint->mUpperJoint;
+        float v = Clamp(newScale, upper->mJointBlock->mMinScale, upper->mJointBlock->mMaxScale);
+        upper->F_4860b0(upper->mJointBlock->F_43eed0(), v);
+        for (int i = 0, n = upper->mLowerJoints.size(); i < n; i++) {
+            cSPEditorLimbJoint* lj = upper->mLowerJoints[i];
+            if (!lj->mLowerJoints.empty()) {
+                float childScale = (*lj->mLowerJoints[0]).mJointBlock->F_43eed0();
+                if (upper->mLowerJoints[i]->mJointBlock->mFlags.test(0xa)) {
+                    float v2 = Clamp(newScale, lj->mJointBlock->mMinScale, upper->mJointBlock->mMaxScale);
+                    upper->mLowerJoints[i]->F_4860b0(childScale, v2);
+                }
+            }
+        }
+    } else if (!joint->mLowerJoints.empty()) {
+        if (joint->mJointBlock->mFlags.test(0xa)) {
+            float childScale = joint->mLowerJoints[0]->mJointBlock->F_43eed0();
+            float v = Clamp(newScale, joint->mJointBlock->mMinScale, joint->mJointBlock->mMaxScale);
+            joint->F_4860b0(childScale, v);
+        }
+    }
+    if (joint->mUpperJoint) {
+        for (int i = 0, n = joint->mUpperJoint->mLowerJoints.size(); i < n; i++) {
+            cSPEditorLimbJoint* lj = joint->mUpperJoint->mLowerJoints[i];
+            lj->mJointBlock->F_43eb50(newScale);
+        }
+    } else {
+        joint->mJointBlock->F_43eb50(newScale);
+    }
+    (void)flag; (void)curScale;
 }
 
 // @ 0x48bae0

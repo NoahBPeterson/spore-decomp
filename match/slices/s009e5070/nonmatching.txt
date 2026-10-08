@@ -1,0 +1,1 @@
+009e5070 915 complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; size 1587 vs 1577 (1.01x), 30 calls = 30 with the identical ordered call sequence; diff is cl hoisting the constant 0 into ebp (original rematerializes xor edx,edx per iteration and delays push ebp past the count==0 guard) so register names and stack offsets shift

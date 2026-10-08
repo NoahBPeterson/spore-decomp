@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00ddea40  1638  complete view-config loader (2240 B; the 2703 B card includes the next function 0x00ddf300): defaults + 40 property reads, calls 55/55, property-id/vtable sequence identical; frame layout (V temps / uninit locals) and ebp-vs-edi register choice differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

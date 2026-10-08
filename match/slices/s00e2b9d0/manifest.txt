@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00e2b9d0/s00e2b9d0.cpp  ?UpdateVehicleButtons@cSPUIRolloverCivCityHall@@QAEXXZ  00e2b9d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

@@ -1,0 +1,1 @@
+00f595e0 1901 complete (cParticlesEffect force-map step: world-space transform, velocity/add-velocity/repulse/surface-slide/bounce modes, position trail; 9/9 direct calls and 10/10 vtable calls, 2007 vs 2133 B); scheduling and temp copies differ

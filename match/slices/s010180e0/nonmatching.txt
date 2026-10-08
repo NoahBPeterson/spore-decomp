@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010180e0  1472 ConeClip::Clip (point vs four-plane wedge clip): complete; operand/scheduling order of the x87 sqrt sums and register allocation differ

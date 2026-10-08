@@ -1,0 +1,1 @@
+00e10580 cSPUIMinimapWin::AddIcon  # caller s00d425f0 names it AddIcon; Ghidra real name

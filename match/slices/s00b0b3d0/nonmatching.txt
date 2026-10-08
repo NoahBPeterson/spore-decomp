@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b0b3d0  1574  spawner manager per-frame update: complete (53/53 calls, size 1891 vs 1917); stack frame is 4 bytes smaller and slot numbering shifts, flag bits compile to test al,N instead of mov cl,al/and cl,1, three skip paths share one g++ tail

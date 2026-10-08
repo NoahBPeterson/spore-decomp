@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (complete, not byte-exact)
+00591690  1393  cAppModeEditorBase::HandlePaletteItemTriggerMessage complete (ids 0 / 0xeccc3657, all 6 sub-cases); zero-register hoisting (xor edi,edi) vs test, stack slot/regalloc order; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; equiv: WEAK 400 valid inputs, 3.7% coverage, 0 mismatches

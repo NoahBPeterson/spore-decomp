@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+00ca46c0  1632  complete (18 direct calls + 5 vcalls in identical order, 7 fmod); instruction scheduling/frame (0x9c vs 0x84) and Vector3 temps differ; difftest UNSUPPORTED (3-level object chain faults on every random input)

@@ -1,6 +1,7 @@
 // Slice s00701a00: SP::cHierGrid query wrappers and container helpers (retail build).
 // Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
+#include <math.h>
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
 inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
@@ -352,12 +353,169 @@ void __thiscall cHierGrid::QuerySegment(float* p0, float* p1)
     }
 }
 
-// @ 0x00701e40  (three-argument volume query)
-// PARTIAL: only the entry guard and per-level scan skeleton are reconstructed; the
-// per-cell slab intersection and morton accumulation are not yet reproduced.
+// float -> int rounding helpers (the module's cvtss2si + cmov asm helpers)
+__forceinline int FloorToInt(float f)
+{
+    __asm {
+        movss    xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov      ecx, eax
+        sub      ecx, 1
+        ucomiss  xmm0, xmm1
+        cmovb    eax, ecx
+    }
+}
+__forceinline int CeilToInt(float f)
+{
+    __asm {
+        movss    xmm0, f
+        cvtss2si eax, xmm0
+        cvtsi2ss xmm1, eax
+        mov      ecx, eax
+        add      ecx, 1
+        ucomiss  xmm1, xmm0
+        cmovb    eax, ecx
+    }
+}
+
+// cell index range [lo, hi) covering [a - m, b + m], clamped to [0, n]
+static __forceinline void CellRange(float a, float b, float m, float inv, int n, int& lo, int& hi)
+{
+    lo = FloorToInt((a - m) * inv);
+    hi = CeilToInt((b + m) * inv);
+    if (hi > 0) {
+        if (lo >= n) {
+            lo = n;
+            hi = n;
+        } else {
+            if (lo < 0) lo = 0;
+            if (hi >= n) hi = n;
+        }
+    } else {
+        hi = 0;
+        lo = 0;
+    }
+}
+
+// parametric interval [t0, t1] of the segment (start s, delta d on one axis) inside cell `idx`
+static __forceinline void SlabInterval(float d, int idx, float cs, float s, float& t0, float& t1)
+{
+    t0 = 0.0f;
+    t1 = 1.0f;
+    if (fabsf(d) > 0.0f) {
+        float inv = 1.0f / d;
+        float lo = (float)idx * cs;
+        float hi = lo + cs;
+        float ta = (lo - s) * inv;
+        float tb = (hi - s) * inv;
+        if (ta > tb) { float t = ta; ta = tb; tb = t; }
+        if (0.0f > tb) {
+            t1 = 0.0f;
+        } else if (ta > 1.0f) {
+            t0 = 1.0f;
+        } else {
+            if (ta > 0.0f) t0 = ta;
+            if (1.0f > tb) t1 = tb;
+        }
+    }
+}
+
+// narrow an existing interval [a0, a1] by the slab of cell `idx`
+static __forceinline void NarrowInterval(float d, int idx, float cs, float s, float a0, float a1, float& t0, float& t1)
+{
+    t0 = a0;
+    t1 = a1;
+    if (fabsf(d) > 0.0f) {
+        float inv = 1.0f / d;
+        float lo = (float)idx * cs;
+        float hi = lo + cs;
+        float ta = (lo - s) * inv;
+        float tb = (hi - s) * inv;
+        if (ta > tb) { float t = ta; ta = tb; tb = t; }
+        if (a0 > tb) {
+            t1 = a0;
+        } else if (ta > a1) {
+            t0 = a1;
+        } else {
+            if (ta > a0) t0 = ta;
+            if (a1 > tb) t1 = tb;
+        }
+    }
+}
+
+// @ 0x00701e40  (swept query: traverse the cells touched by the segment p0 -> p1, level by level)
+// The third argument is accepted (ret 0xc) but unused by the retail code; the per-cell margin
+// comes from the grid itself (2 * mHalfCellSize).
 void __thiscall cHierGrid::Query3(float* p0, float* p1, float r)
 {
-    if (mTopLevel > mLeafLevel)
+    float sx = p0[0] - mOriginX;
+    float sy = p0[1] - mOriginY;
+    float sz = p0[2] - mOriginZ;
+    float dx = (p1[0] - mOriginX) - sx;
+    float dy = (p1[1] - mOriginY) - sy;
+    float ez = p1[2] - mOriginZ;
+    float dz = ez - sz;
+    int level = mTopLevel;
+    if (level > mLeafLevel)
         return;
-    (void)p0; (void)p1; (void)r;
+    int off = level * 0x44;
+    do {
+        cGrid* grid = (cGrid*)((char*)mGridBegin + off);
+        if (*(int*)((char*)grid + 0x28) != 0 && grid->mMask != 0) {
+            float cs = grid->mCellSize;
+            float m = grid->mHalfCellSize * 2.0f;
+            float inv = grid->mInvCellSize;
+            int n = 1 << level;
+            unsigned any = 0;
+            float zlo = sz, zhi = ez;
+            if (sz > ez) { zlo = ez; zhi = sz; }
+            int z0, z1;
+            CellRange(zlo, zhi, m, inv, n, z0, z1);
+            if (z1 <= z0)
+                return;
+            for (int z = z0; z < z1; z++) {
+                float t0, t1;
+                SlabInterval(dz, z, cs, sz, t0, t1);
+                float ya = dy * t0 + sy;
+                float yb = dy * t1 + sy;
+                if (ya > yb) { float t = ya; ya = yb; yb = t; }
+                int y0, y1;
+                CellRange(ya, yb, m, inv, n, y0, y1);
+                for (int y = y0; y < y1; y++) {
+                    float u0, u1;
+                    NarrowInterval(dy, y, cs, sy, t0, t1, u0, u1);
+                    float xa = dx * u0 + sx;
+                    float xb = dx * u1 + sx;
+                    if (xa > xb) { float t = xa; xa = xb; xb = t; }
+                    int x0, x1;
+                    CellRange(xa, xb, m, inv, n, x0, x1);
+                    for (int x = x0; x < x1; x++) {
+                        unsigned cellID = BuildCellID((unsigned)x, (unsigned)y, (unsigned)z);
+                        unsigned h = cellID >> 3;
+                        unsigned bit = 1u << (cellID & 7);
+                        if ((grid->mMask[h] & bit) != 0) {
+                            HashTable* ht = (HashTable*)grid->mCells;
+                            unsigned key = ((unsigned)z << 10 | (unsigned)y) << 10 | (unsigned)x;
+                            CellNode* node = FindKey(ht, key);
+                            if (node != 0) {
+                                ObjListNode* a = &node->mInfo.mHead;
+                                for (ObjListNode* it = a->pNext; it != a; it = it->pNext) {
+                                    if (mQueryListIt == mQueryListEnd)
+                                        return;
+                                    *mQueryListIt = it->mObj;
+                                    mQueryListIt = mQueryListIt + 1;
+                                }
+                            }
+                        }
+                        any |= (unsigned char)grid->mChildMask[h] & bit;
+                    }
+                }
+            }
+            if (any == 0)
+                return;
+        }
+        level++;
+        off += 0x44;
+    } while (level <= mLeafLevel);
 }

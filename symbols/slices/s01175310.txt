@@ -1,0 +1,1 @@
+01175310 SpeechCodec::DecodeFrame  # RW/EATech LPC speech codec: reads 12 reflection deltas + 4 sub-frames, calls LpcSynthesize 4x (Claude-coined name)

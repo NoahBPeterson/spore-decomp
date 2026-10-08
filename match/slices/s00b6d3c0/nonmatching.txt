@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+00b6d3c0  1611  label-event dispatcher complete (17-way switch, all 75 calls/vtable slots in order, constants identical); frame 0x13c vs 0x27c (cl shares the 6 string temps), usercall helper 00b6a970 (EAX=event) approximated as stack arg 1

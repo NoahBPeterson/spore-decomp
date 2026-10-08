@@ -1,0 +1,1 @@
+00c678f0  1638  (flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast) complete Ctrl::Update (camera ring orientation); same size (2010), identical ordered call sequence (11 calls), same x87 sqrt/sin/cos/fabs usage; frame size matches (0x70) but local V3 slot offsets and xmm numbering differ

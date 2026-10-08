@@ -1,0 +1,1 @@
+00e8c120 10 complete SP::cCreatureView::HandleSimulationUpdate; instruction-identical except the load order of the three position subtractions (z,x,y in the original, z,y,x here: 10 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

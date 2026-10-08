@@ -1,0 +1,1 @@
+00afc640 cHexPointGenerator::Generate  # hex-ring point spiral into the 0x18-byte point vector at +0x50 (erase, then centre point and rings of 6*i points)

@@ -1,0 +1,1 @@
+00faa5c0 SP::cTerrainSphere::SaveModifications  # Ghidra PDB candidate (caller-single), unverified; packs the +0x798 and +0x770/+0x784 relevel lists into key/transform variants for the config sink and calls SetModels

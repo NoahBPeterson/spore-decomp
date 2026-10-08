@@ -1,0 +1,1 @@
+00a9ce00  1440  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast ; complete. Same 18 callees in order and the same branches/constants; frame is not 16-byte aligned (orig and esp,-16) and the matrix/quaternion temps are laid out differently; size 1820 vs 2109

@@ -1,0 +1,1 @@
+00f52df0 WriteSettings  # byte-exact; serializer of a large description object: IStream +0x38 Write, EA::IO::WriteUint32/16/64, WriteBool8, nested writers

@@ -1,2 +1,3 @@
 00646d10  83  map find instantiation: complete, comparator short-circuit codegen differs
 00646f40  111 hashtable find-or-insert: complete, frame/scheduling near-miss
+00646370  ~580  CloneModelAsset (stdcall, ResourceKey by value): complete, all 68 calls/vcalls in original order; remaining diff is stack-slot layout of the Key temporaries and register assignment; flags /O2 /MD /Gy /TP

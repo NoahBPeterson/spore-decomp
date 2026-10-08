@@ -1,1 +1,2 @@
 0076d9e0  59  cRTTManager::ReleasePage: bounds check + refcount release/dec complete; register schedule (this/index home regs) differs
+0076ce50  1288  tile-by-tile RTT capture into one RGBA image + optional PNG save job (TileCapture::Capture): complete (62/62 calls, size 1919 vs 1904, same 0x80 frame); flags /O2 /MD /Gy /EHsc /TP /GS-; stack-slot numbering and x87 operand order differ; equiv FAIL is a stale-stack read inside real callee 0x11f3d40 (holds our code's return address) not a logic difference

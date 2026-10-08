@@ -1,0 +1,1 @@
+009ec360 ApplyConstraintRotation  # nSPCreatureAnim IK: turn bone quat (+0x19c) toward target within limit (+0x23c); EAX=bone ESI=target; called from IkSolver::UpdateBone 0x9ecac0

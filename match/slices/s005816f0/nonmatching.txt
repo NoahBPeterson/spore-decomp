@@ -1,0 +1,1 @@
+005816f0 1644 complete (cAppModeEditorBase DrawLayer); 74-call/vtable-slot sequence identical, size 2483 vs 2475, frame 0x9c = original; local slot layout and SetTint float load order differ, so a callee's uninitialized-stack read can differ (equiv FAIL 5/3286 inputs, calls identical)

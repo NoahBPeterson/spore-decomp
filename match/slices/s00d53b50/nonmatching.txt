@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00d53b50 1552 cRingPlacer::Place (names Claude-coined): complete; 22/23 call sites in order (original duplicates the found->noun release tail), same vtable slots 0x2c/0x5c/0x74, size 0.99x; quaternion-rotate scheduling and register allocation differ

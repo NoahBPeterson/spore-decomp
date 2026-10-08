@@ -1,0 +1,1 @@
+00b40a20 CollideSphereShape_00b40a20  # centre/radius test, convex hull edge search (0x698b30 seg dist, 0x698e00 closest point, 0x69a050 point-in-polygon), contact struct: A pt +0, B pt +0xc0, count +0x180, normal +0x184

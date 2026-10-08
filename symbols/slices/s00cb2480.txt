@@ -1,0 +1,1 @@
+00cb2770 UpdatePathAhead  # Claude-coined; traces ahead with TracePlanetPath(SweepTick) and reconciles the creature waypoint path

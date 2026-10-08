@@ -1,0 +1,1 @@
+00c97220 SP::cTribe::LoadTribeArchetypeData  # PDB name; byte-exact

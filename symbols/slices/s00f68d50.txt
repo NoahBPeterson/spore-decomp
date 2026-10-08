@@ -1,0 +1,1 @@
+00f691d0 SP::cTerrainEditor::SynthesizeAboveTextureDecal  # PDB name; thiscall ret 0x24: (layer, DecalInfo*, raster pair, face, u0, v0, u1, v1, arg); quad vertices 0x70 bytes, shader const 0x242

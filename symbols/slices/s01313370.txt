@@ -1,0 +1,1 @@
+01313ff0 Simulator::InitCityAttributes  # $E231 dynamic initializer of the cCity serializer attribute table (16 records at 0x015665f0)

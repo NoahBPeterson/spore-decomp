@@ -193,8 +193,168 @@ int FUN_00832010(void * /*self*/, int /*a*/, int /*kind*/, void * /*val*/)
     return 0;
 }
 
+// ---------------------------------------------------------------- 0x00831810 cSPUIStdDrawable::Draw
+#include <math.h>
+
+struct Canvas { virtual void v0(); virtual void SetValue(int v); };   // Begin2D result, slot 1 = 0x4
+struct RefImage { virtual void AddRef(); virtual void Release(); };
+struct ARef {
+    RefImage *p;
+    ~ARef() { if (p) p->Release(); }
+};
+struct DropShadowDesc {
+    uint32_t mSize, mStrength, mQuality;
+    float mOffsetX, mOffsetY, mSizeX, mSizeY, mSmoothness, mSaturation;
+    uint32_t mColor;
+    void SetStrength(uint32_t s);   // 0x00830150 (other TU)
+};
+extern "C" void __cdecl CopyWithQualityAdjustment(DropShadowDesc *dst, const DropShadowDesc *src, int quality); // 0x96e3a0
+
+struct StdImageInfo {
+    void *vt0, *vt4;
+    int mRef;
+    ARef mpImage;          // +0x0c
+    ARef mpImageIcon;      // +0x10
+    uint32_t mImageColor, mImageIconColor, mIconDrawMode;   // +0x14..
+    uint32_t mShadowStrokeMode, mShadowHaloMode;            // +0x20, +0x24
+    float mBgScale[2], mBgOffset[2], mIconScale[2], mIconOffset[2];
+    DropShadowDesc mShadowStroke;   // +0x48
+    DropShadowDesc mShadowHalo;     // +0x70
+    StdImageInfo();                 // 0x00830810 (other TU)
+};
+
+inline int FloatToInt(float f)
+{
+    __declspec(align(8)) __int64 result;
+    __asm { fld f
+            fistp result }
+    return (int)result;
+}
+
+struct RenderContext { Canvas *Begin2D(int flag); };     // 0x95bc10
+struct DrawParams { uint32_t flags; uint32_t f4; uint32_t color; uint32_t fc; };
+struct RectF {
+    float l, t, r, b;
+    bool operator==(const RectF &o) const { return l == o.l && t == o.t && r == o.r && b == o.b; }
+    float Width() const { return r - l; }
+    float Height() const { return b - t; }
+    RectF &operator=(const RectF &o) { l = o.l; t = o.t; r = o.r; b = o.b; return *this; }
+};
+
+extern "C" void __cdecl DrawStdButton(Canvas *c, const RectF *r, uint32_t color, uint32_t state, float thickness); // 0x95d780
+extern "C" void __cdecl DrawFocusRect(Canvas *c, const RectF *r, uint32_t color, float w);   // 0x95da40
+
+struct DrawLayerPass {
+    StdImageInfo *info;
+    RefImage *image;
+    uint32_t color;
+    uint32_t isIcon;
+    DropShadowDesc *shadow;
+    bool enabled;
+};
+
+struct StdDrawable {
+    char pad0[0x50];
+    float mFocusWidth;          // +0x50
+    char pad54[0x138 - 0x54];
+    DrawParams mDrawParams;     // +0x138
+    RectF mDrawArea;            // +0x148
+    float mOOWidth, mOOHeight;  // +0x158
+    void FillInfo(uint32_t flags, StdImageInfo *out);                                     // 0x831410
+    void DrawLayer(Canvas *c, const RectF *r, StdImageInfo *info, uint32_t color, uint32_t isIcon); // 0x830d90
+    void Draw(RenderContext *ctx, const RectF *area, const DrawParams *params);
+};
+
+// cSPUIStdDrawable::Draw @ 0x00831810
+void StdDrawable::Draw(RenderContext *ctx, const RectF *area, const DrawParams *params)
+{
+    Canvas *canvas = ctx->Begin2D(0);
+    canvas->SetValue(-1);
+    mDrawParams = *params;
+    StdImageInfo info;
+    FillInfo(mDrawParams.flags, &info);
+    if (!(mDrawArea == *area)) {
+        mDrawArea = *area;
+        mOOWidth = 1.0f / mDrawArea.Width() + 1e-6f;
+        mOOHeight = 1.0f / mDrawArea.Height() + 1e-6f;
+    }
+    if (info.mpImage.p == 0 && info.mpImageIcon.p == 0) {
+        DrawStdButton(canvas, &mDrawArea, params->color, params->flags & 0xf, 3.0f);
+        if (params->flags & 0x10)
+            DrawFocusRect(canvas, &mDrawArea, -1, mFocusWidth);
+        return;
+    }
+    DrawLayerPass passes[6];
+    passes[0].info = &info; passes[0].image = info.mpImage.p; passes[0].color = info.mImageColor;
+    passes[0].isIcon = 0; passes[0].shadow = &info.mShadowHalo;
+    passes[0].enabled = false;
+    if (info.mShadowHaloMode == 1 || info.mShadowHaloMode == 2) passes[0].enabled = true;
+    passes[1].info = &info; passes[1].image = info.mpImage.p; passes[1].color = info.mImageColor;
+    passes[1].isIcon = 0; passes[1].shadow = &info.mShadowStroke;
+    passes[1].enabled = false;
+    if (info.mShadowStrokeMode == 1 || info.mShadowStrokeMode == 2) passes[1].enabled = true;
+    passes[2].info = &info; passes[2].image = info.mpImage.p; passes[2].color = info.mImageColor;
+    passes[2].isIcon = 0; passes[2].shadow = 0; passes[2].enabled = true;
+    passes[3].info = &info; passes[3].image = info.mpImageIcon.p; passes[3].color = info.mImageIconColor;
+    passes[3].isIcon = 1; passes[3].shadow = &info.mShadowHalo;
+    passes[3].enabled = false;
+    if (info.mShadowHaloMode == 1 || info.mShadowHaloMode == 3) passes[3].enabled = true;
+    passes[4].info = &info; passes[4].image = info.mpImageIcon.p; passes[4].color = info.mImageIconColor;
+    passes[4].isIcon = 1; passes[4].shadow = &info.mShadowStroke;
+    passes[4].enabled = false;
+    if (info.mShadowStrokeMode == 1 || info.mShadowStrokeMode == 3) passes[4].enabled = true;
+    passes[5].info = &info; passes[5].image = info.mpImageIcon.p; passes[5].color = info.mImageIconColor;
+    passes[5].isIcon = 1; passes[5].shadow = 0; passes[5].enabled = true;
+
+    for (int off = 0; off < 6 * (int)sizeof(DrawLayerPass); off += sizeof(DrawLayerPass)) {
+        DrawLayerPass &p = *(DrawLayerPass *)((char *)passes + off);
+        if (p.image == 0 || !p.enabled)
+            continue;
+        if (p.shadow == 0) {
+            DrawLayer(canvas, &mDrawArea, p.info, p.color, p.isIcon);
+            continue;
+        }
+        DropShadowDesc d;
+        d.mSize = 0; d.mStrength = 2; d.mQuality = 3;
+        d.mOffsetX = 0.0f; d.mOffsetY = 0.0f; d.mSizeX = 0.0f; d.mSizeY = 0.0f;
+        d.mColor = 0;
+        d.SetStrength(2);
+        CopyWithQualityAdjustment(&d, p.shadow, 1);
+        float offX = d.mOffsetX, offY = d.mOffsetY;
+        float negX = -d.mSizeX, negY = -d.mSizeY;
+        float cenX = (negX + d.mSizeX) * 0.5f;
+        float cenY = (negY + d.mSizeY) * 0.5f;
+        uint32_t rgb = d.mColor & 0xffffff;
+        float maxR2 = ((d.mSizeX - cenX) * (d.mSizeX - cenX) + (d.mSizeY - cenY) * (d.mSizeY - cenY)) + 1.0f;
+        float dist = (float)sqrt((double)(d.mSizeX * d.mSizeX + d.mSizeY * d.mSizeY)) + 1.0f;
+        for (float x = negX; x <= d.mSizeX; x += 1.0f) {
+            for (float y = negY; y <= d.mSizeY; y += 1.0f) {
+                float dx = (float)floor((double)(x + offX));
+                float dy = (float)floor((double)(y + offY));
+                if (dx != 0.0f || dy != 0.0f) {
+                    RectF r;
+                    r.l = mDrawArea.l + dx;
+                    r.t = mDrawArea.t + dy;
+                    r.r = mDrawArea.r + dx;
+                    r.b = mDrawArea.b + dy;
+                    float a = (d.mSaturation / dist) *
+                              (1.0f - ((x - cenX) * (x - cenX) + (y - cenY) * (y - cenY)) / maxR2) + d.mSmoothness;
+                    if (0.0f <= a) {
+                        if (1.0f < a)
+                            a = 1.0f;
+                    } else {
+                        a = 0.0f;
+                    }
+                    a = a * 255.0f;
+                    uint32_t alpha = FloatToInt(a);
+                    DrawLayer(canvas, &r, p.info, (alpha << 24) + rgb, p.isIcon);
+                }
+            }
+        }
+    }
+}
+
 // ---------------------------------------------------------------- unfinished big functions
-void FUN_00831810(void *) {}
 void FUN_00832230(void *) {}
 void FUN_008323d0(void *) {}
 void FUN_008324d0(void *) {}

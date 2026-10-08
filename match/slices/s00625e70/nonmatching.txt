@@ -2,3 +2,4 @@
 00625e70  173  AimTowardsTarget: complete; compiler coalesces the six transient stack slots and schedules the x87 rsqrt differently
 006268a0  569  CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
 00626b50  471  SetInitialCameraValues: complete; same cTransform/matrix transcription differences
+00626290   22  ReloadTuning: complete (all 24 tuning-property reads); only the SSE register choice of the two phi *= deg-to-rad multiplies differs (orig loads member into xmm1, const into xmm0)

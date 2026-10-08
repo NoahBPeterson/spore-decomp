@@ -1,0 +1,3 @@
+00d6b020 SP::FLEE_Tick  # existing PDB name; behaviour-tree flee tick (state machine 0-7 on FleeState)
+00d99a60 SP::DistanceBetweenBodies  # float(posA, radiusA, posB, radiusB, clamp0): |a-b| - (ra+rb), optionally clamped at 0 (maxss); used by FLEE_Tick with the two GetFootprintRadius results
+00c02600 SP::IsValidNeighbourEntry  # stdcall-ish (thiscall on an empty functor) predicate on a near-list entry: creature not dead/flagged, +0x135 set, +0x110 bit 4 clear; filter of FUN_00b41a40/00b3d850

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00b29820  61  complete (all 4 messages, 124/124 calls in the same order, 2264 vs 2260 B); only stack-temp slot assignment of the wstring temporaries (3 slots in the original) and the B-tail register caching of the substr buffer differ. The first (timer) site keeps operator=/dtor out of line (wstringO) as in the original

@@ -1,0 +1,2 @@
+010dac90 hkHeightFieldAgent::staticGetPenetrations  # timers LtHeightField/GetSpheres; shape A getCollisionSpheres, shape B (height field) collideSpheres slot 7, addCdBodyPair if any result.w<0
+010db380 hkHeightFieldAgent::staticGetClosestPoints  # same pipeline; addCdPoint for each sphere with distance <= tolerance

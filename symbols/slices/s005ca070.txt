@@ -1,6 +1,7 @@
-005ca880  ?SetGlobalProperty@@YAXHM@Z  # free fn: audio system virtual calls (ids 0x3cdd1a9/0x34753a7/0x34753aa)
-005ca920  ?IsPaintByNumber@cSPPaletteUI@@QAE_NXZ  # forward to mSelectedCategory @+0x64
-005ca980  ?UpdateCategories@cSPPaletteUI@@QAEXH@Z  # call cSPPaletteCategoryUI::Update on mCategories @+0x34
-005ca9c0  ?FindCategoryIndex@cSPPaletteUI@@QAEHXZ  # index of mSelectedCategory in mCategories, else -1
-005cadb0  ?SetVisibleChunk@cSPPaletteUI@@QAEXH@Z  # set chunk, ShowFlag two windows, UpdateNavigationVisiblity
-005ca9f0  ?UpdateNavigationVisiblity@cSPPaletteUI@@QAEXXZ  # navigation visibility (big)
+005ca070 SP::cSPPaletteSubCategoryUI::Init  # dev-build symbol; retail vectors at 0x30/0x44/0x58/0x6c/0x80 (0x14 stride)
+005ca880 SetGlobalProperty  # drives the audio system vtable (SetId/SetInt/SetFloat/Flush)
+005ca920 SP::cSPPaletteUI::IsPaintByNumber  # forwards to the selected category UI
+005ca980 SP::cSPPaletteUI::UpdateCategories  # calls Update(delta) on every category UI
+005ca9c0 SP::cSPPaletteUI::FindCategoryIndex  # index of mSelectedCategory in mCategories, else -1
+005ca9f0 SP::cSPPaletteUI::UpdateNavigationVisiblity  # dev-build symbol (spelling as in the PDB)
+005cadb0 SP::cSPPaletteUI::SetVisibleChunk  # dev-build symbol

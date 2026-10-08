@@ -1,4 +1,3 @@
-0083d3d0  1942 partial: cExpression::EvalRealNumber (number literal parser) kept as a stub, not reconstructed
 0083ddb0  229  partial: expr table lookup-or-create not reconstructed
 0083dea0  216  partial: hashtable<cExprFunction>::erase key logic not fully reconstructed
 0083df90  417  partial: `anonymous namespace'::cIfCommand::cIfCommand kept as a stub, not reconstructed

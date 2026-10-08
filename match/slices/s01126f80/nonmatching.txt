@@ -1,0 +1,1 @@
+01126f80 1384 computeShapeMassProperties: complete (recursive shape->mass-properties walker: 12 shape types, multi-sphere via stack hkSphereShape, hull via allocateStack, hkMassElement x2 + combineMassProperties); /vc71 /O2 /MD /Gy /TP; frame 0x394 and zero-init order match, local slot layout and VC7.1 instruction scheduling differ; size 1668/1780, 44/45 calls same order

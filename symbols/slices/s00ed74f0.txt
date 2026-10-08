@@ -1,0 +1,1 @@
+00ed7a10 PanelHandler::DoMessage  # scenario-editor toolbar UTFWin message handler (button click ids); thiscall on IWinProc subobject at +8

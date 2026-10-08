@@ -1,0 +1,1 @@
+01055890 RegisterStaticRegistrations  # 28 function-local cSimRegistration statics (same shape as cSimulatorSystem::Initialize)

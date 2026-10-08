@@ -1,0 +1,1 @@
+00db65a0 SP::IDLE_VIGNETTE_Decide  # PDB name; 32/32 calls, flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -32,6 +32,7 @@ void* FUN_00572590();
 void FUN_00540470(void* p);
 void FUN_00554020(void* out, void* val);
 void FUN_0055dce0(void* p);
+void FUN_004f6b70(void* first, void* last);   // eastl::sort<Key*>, cdecl
 void FUN_0055de60(int* p);
 void FUN_005699f0_copy();
 void RBTreeInsert(void* node, void* where, void* anchor, char flag);
@@ -158,10 +159,184 @@ unsigned char FUN_0055dfe0(void* this_) {
     return r;
 }
 
-// @ 0x0055e190  (large; serialisation driver)
-unsigned char FUN_0055e190(void* this_, char flag) {
-    // Full driver reserved; skeleton keeps the external call shape.
-    (void)this_; (void)flag;
+// ---- 0x0055e190 support types (stub layouts; member names carry the callee VA) ----
+struct Key3 { uint32_t a, b, c; };
+struct TreeIt {
+    uint32_t node;
+    TreeIt* sub_566c50(uint32_t n);          // ctor(node), ret 4
+    TreeIt* sub_5673e0(const TreeIt* o);     // copy ctor, ret 4
+    TreeIt* sub_422c50();                    // operator++
+    uint32_t* sub_564f50();                  // operator*  (&node->value, node+0x10)
+};
+struct VecSet32;
+struct InsertIt {                            // insert-iterator {container, position}
+    VecSet32* c; uint32_t* pos;
+    InsertIt* sub_565a80(const uint32_t* v); // ret 4
+};
+struct RangeU { uint32_t* lo; uint32_t* hi; };
+struct VecSet32 {                            // eastl::vector_set<uint32_t>, begin/end at +0/+4
+    uint32_t* b; uint32_t* e; uint32_t* cap;
+    bool sub_526430() const;
+    uint32_t* sub_566060(uint32_t* pos, const uint32_t* v);   // ret 8
+    void sub_555980(RangeU* out, const void* key);            // ret 8
+    void sub_4769b0(uint32_t* first, uint32_t* last);         // ret 8 (erase)
+};
+struct KVec3 {
+    Key3* b; Key3* e; Key3* cap;
+    KVec3* sub_540470(char* tag);            // ret 4
+    void sub_540520();
+};
+struct PSVec { uint32_t* b; uint32_t* e; uint32_t* cap; void sub_4e1bf0(); };
+struct PSys {
+    void** vptr; PSVec v; uint32_t pad;
+    PSys* sub_55eae0(uint32_t* first, uint32_t cnt);          // ret 8
+};
+struct KeySet {                              // eastl::rbtree<Key3>
+    uint32_t pad0; uint32_t aRight, aLeft, aParent; uint32_t color; uint32_t size;
+    KeySet* sub_4b5980(char* tag);           // ret 4
+    void sub_4290c0(uint32_t* out, const void* key, bool f);  // ret 0xc
+    void sub_4e8a30(uint32_t root);          // ret 4
+};
+struct HTab {
+    uint32_t pad0; uint32_t** buckets; uint32_t nBuckets; uint32_t pad3[5];
+    HTab* sub_5640f0(char* tag);             // ret 4
+    void sub_421a50(uint32_t* out, const uint32_t* kv, bool f); // ret 0xc
+    void sub_564140(uint32_t** it);          // begin(), ret 4
+    void sub_5534b0();
+};
+struct Tree7 { uint32_t anchor, left, rest[5]; };
+struct Owner {
+    void** vptr; uint32_t pad04[4];
+    uint32_t* vecBegin; uint32_t* vecEnd;
+    uint32_t pad1c[0x75];
+    Tree7 t1; Tree7 t2; VecSet32 vs;
+    unsigned char sub_55dfe0();
+    unsigned char sub_55e190(char forceAll, char skipRebuild);
+};
+void SP_WritePillRecord(uint32_t a, uint32_t b);              // 0x558d50, cdecl
+typedef void* (__thiscall *MgrQueryFn)(void* self, KVec3* out, PSys* ps, int z);
+typedef uint32_t (__thiscall *ObjGetFn)(void* self);
+typedef void (__thiscall *OwnerFn1)(void* self, const void* key);
+typedef void (__thiscall *OwnerFn2)(void* self, const void* key, int z);
+typedef void (__thiscall *AreaFn)(void* self);
+
+// @ 0x0055e190
+unsigned char Owner::sub_55e190(char forceAll, char skipRebuild) {
+    unsigned char r0 = sub_55dfe0();
+    if (r0 || forceAll) {
+        // mirror the member-set tables (t1, then t2) into the sorted id set
+        InsertIt out;
+        TreeIt itEnd, itBeg;
+        itEnd.sub_566c50((uint32_t)&t1.anchor);
+        itBeg.sub_566c50(t1.left);
+        out.c = &vs; out.pos = vs.b;
+        for (; itBeg.node != itEnd.node; itBeg.sub_422c50()) {
+            uint32_t* v = itBeg.sub_564f50();
+            out.sub_565a80(v);
+        }
+        InsertIt res1 = out;
+        uint32_t* pos = vs.b;
+        TreeIt jEnd, jBeg;
+        jEnd.sub_566c50((uint32_t)&t2.anchor);
+        jBeg.sub_566c50(t2.left);
+        for (; jBeg.node != jEnd.node; jBeg.sub_422c50()) {
+            uint32_t* v = jBeg.sub_564f50();
+            pos = vs.sub_566060(pos, v);
+            pos += 1;
+        }
+        InsertIt res2; res2.c = &vs; res2.pos = pos;
+    }
+    char tag;
+    KeySet keys;
+    keys.sub_4b5980(&tag);
+    if (!vs.sub_526430()) {
+        if (!skipRebuild) {
+            KVec3 tmp;
+            tmp.sub_540470(&tag);
+            uint32_t count = (uint32_t)(vs.e - vs.b);
+            PSys ps;
+            ps.sub_55eae0(vs.b, count);
+            void* mgr = GetManager();
+            ((MgrQueryFn)(*(void***)mgr)[0x38 / 4])(mgr, &tmp, &ps, 0);
+            FUN_004f6b70(tmp.b, tmp.e);
+            Key3 last = { 0, 0, 0 };
+            for (Key3* k = tmp.b; k != tmp.e; ++k) {
+                if (k->c != 0 && (k->c != last.c || k->a != last.a)) {
+                    last = *k;
+                    uint32_t t = k->c;
+                    last.b = SP_EditorEntityToResourceType((t >> 16) & 0xff, 1);
+                    uint32_t res[2];
+                    keys.sub_4290c0(res, &last, false);
+                }
+            }
+            ps.v.sub_4e1bf0();
+            ps.vptr = (void**)0x13eb394;
+            tmp.sub_540520();
+        }
+        for (uint32_t* e = vecBegin; e != vecEnd; e += 0x14) {
+            RangeU rg;
+            vs.sub_555980(&rg, e + 1);
+            uint32_t* p = (rg.lo != rg.hi) ? rg.lo : vs.e;
+            if (p != vs.e) {
+                uint32_t res[2];
+                keys.sub_4290c0(res, e, false);
+            }
+        }
+        vs.sub_4769b0(vs.b, vs.e);
+    }
+    if (keys.size != 0) {
+        TreeIt ka, kb;
+        ka.sub_566c50(keys.aLeft);
+        kb.sub_566c50((uint32_t)&keys.aRight);
+        for (; ka.node != kb.node; ka.sub_422c50()) {
+            uint32_t* kp0 = ka.sub_564f50();
+            uint32_t* kp = kp0;
+            ((OwnerFn2)vptr[0x74 / 4])(this, kp, 0);
+            ((OwnerFn1)vptr[0x70 / 4])(this, kp);
+        }
+        HTab ht;
+        ht.sub_5640f0(&tag);
+        TreeIt cb, ce, d, f;
+        cb.sub_566c50(t1.left);
+        d.sub_5673e0(&cb);
+        ce.sub_566c50((uint32_t)&t1.anchor);
+        f.sub_5673e0(&ce);
+        for (; d.node != f.node; d.sub_422c50()) {
+            void* obj = (void*)d.sub_564f50()[1];
+            uint32_t second = ((ObjGetFn)(*(void***)obj)[0x14 / 4])(obj);
+            uint32_t first = ((ObjGetFn)(*(void***)obj)[0x10 / 4])(obj);
+            uint32_t kv[2] = { first, second };
+            uint32_t res[3];
+            ht.sub_421a50(res, kv, false);
+        }
+        TreeIt gb, ge, h, i;
+        gb.sub_566c50(t2.left);
+        h.sub_5673e0(&gb);
+        ge.sub_566c50((uint32_t)&t2.anchor);
+        i.sub_5673e0(&ge);
+        for (; h.node != i.node; h.sub_422c50()) {
+            void* obj = (void*)h.sub_564f50()[1];
+            uint32_t second = ((ObjGetFn)(*(void***)obj)[0x14 / 4])(obj);
+            uint32_t first = ((ObjGetFn)(*(void***)obj)[0x10 / 4])(obj);
+            uint32_t kv[2] = { first, second };
+            uint32_t res[3];
+            ht.sub_421a50(res, kv, false);
+        }
+        // iterator = {node, bucket}; end = first node of the bucket past the last
+        struct { uint32_t* n; uint32_t** b; } cur;
+        ht.sub_564140((uint32_t**)&cur);
+        uint32_t** endB = ht.buckets + ht.nBuckets;
+        uint32_t* endN = (uint32_t*)*endB;
+        while ((uint32_t*)cur.n != endN) {
+            SP_WritePillRecord(cur.n[0], cur.n[1]);
+            cur.n = (uint32_t*)cur.n[2];
+            while (!cur.n) { ++cur.b; cur.n = (uint32_t*)*cur.b; }
+        }
+        void* area = GetSaveArea(0x11ac19c);
+        ((AreaFn)(*(void***)area)[0x24 / 4])(area);
+        ht.sub_5534b0();
+    }
+    keys.sub_4e8a30(keys.aParent);
     return 0;
 }
 

@@ -1,0 +1,1 @@
+00b40a20 1300 complete sphere-vs-shape contact (hull edge search + sphere fallback); SSE operand order/register allocation and branch layout differ (frame size now equals the original 0xa0); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

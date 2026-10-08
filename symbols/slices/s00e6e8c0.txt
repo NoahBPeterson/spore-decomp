@@ -1,0 +1,1 @@
+00e6eec0 StepCell  # static cell motion step (self in ESI): accumulates CellDelta, stops within 0.5 of target, scales by level, picks turn state, steers by flags 8/4/1/2 and calls CellMove

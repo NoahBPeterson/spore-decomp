@@ -1,0 +1,1 @@
+00b46660 1317 cSurfaceMover::Update (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast): complete, 37/37 calls in order; x87 vs SSE choice in the slide-step expression, frame 0xa0 vs 0xb4

@@ -1,0 +1,1 @@
+00d31a70 SP::cCreatureModeInputStrategy::UpdateAvatarGoal  # PDB name; keyboard/mouse goal for the creature avatar

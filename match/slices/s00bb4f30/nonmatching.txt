@@ -1,0 +1,1 @@
+00bb4f30  1519  cStarManager::TestIfAllStarsAreReachable: complete (size 1725 vs 1805, 47 vs 48 calls, identical ordered call/vslot/const sequence except the two reached/unreached push_back DoInsertValue tails are merged into one call site); register allocation differs (orig keeps the vectors' end pointers in edi/ebx); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

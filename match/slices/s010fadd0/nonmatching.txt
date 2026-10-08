@@ -1,0 +1,1 @@
+010fadd0 44 complete hk3AxisSweep::addObjectBatch (grow nodes+3 endpoint arrays, int-space conversion, per-axis quicksort + mergeBatch, marker shift, bitfield + queryBatchAabbSub); only frame slot order of newEndPoints/loop temps and one eax/ebx swap differ

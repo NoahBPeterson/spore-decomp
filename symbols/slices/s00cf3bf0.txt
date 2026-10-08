@@ -1,0 +1,1 @@
+00cf3bf0 SP::cCityInputStrategy::DoObjectInteraction  # casts clicked object to creature/vehicle interfaces, fills mSelected (+0xe8)

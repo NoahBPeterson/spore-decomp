@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0088d2a0 1246 FontServer::GetFont (retail RT layout): complete, not byte-exact (stack slot/register assignment differs); flags /O2 /MD /GS- /GR- /TP /arch:SSE /fp:fast

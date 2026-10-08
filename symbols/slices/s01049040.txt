@@ -1,0 +1,1 @@
+01049040 SP::cCommandTerraform::Execute  # thiscall ret 4 (cArguments*): terraform cheat command flags (abduct, biomecolors, atmosphere, temperature, water, cubemap, ufo, eradicate, freeze...)

@@ -1,0 +1,1 @@
+00831810 SP::cSPUIStdDrawable::Draw  # PDB candidate (CreateRenderables); layout = PDB cSPUIStdDrawable (mDrawParams +0x138, mDrawArea +0x148); draws 6 image/icon passes with drop shadows

@@ -1,1 +1,0 @@
-0048e590  2459  skeleton: builds a frame transform, scores horizontal gaps against candidates, writes the chosen position through out; full scoring/branch math omitted

@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-006f54a0  1766  large state dispatcher (render state + material raster + colour loops): skeleton only.
 006f5bc0  265  vector<ushort>::insert: skeleton only.
 006f5cd0  290  vector::operator= (0xc-byte elements): skeleton only.
 006f5e00  208  vector::operator= (8-byte elements): skeleton only.

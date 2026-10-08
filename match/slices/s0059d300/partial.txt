@@ -2,4 +2,3 @@
 0059d610  553  cSPEditorAnimatedCreatureManager::Update: skeleton
 0059db00  59  scalar deleting destructor: skeleton (vtable thunk not reconstructed)
 0059db40  298  cSPEditorAnimationManager::Init: skeleton (resource-list iteration omitted)
-0059dc70  1763  cSPEditorAnimationManager::GetAnimation: skeleton

@@ -1,4 +1,2 @@
 # va  reason
-0046e450 large /Od function (1666 bytes); only skeleton written
-0046eae0 large /Od function (1620 bytes); only skeleton written
 0046f1b0 ctor with a 0x20-byte frame of scratch holes and three sub-object ctors; frame layout not reproduced

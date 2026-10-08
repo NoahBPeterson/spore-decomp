@@ -1,0 +1,2 @@
+008456e0 EA::ArgScript::cParser::Init  # registers built-in commands (include..trace) and expression functions via vtable slot 5 / cExpression::AddFunction(0x83df90); PDB name
+0083df90 EA::ArgScript::cExpression::AddFunction  # thiscall(this=parser+0x4c, name, fn) ret 8

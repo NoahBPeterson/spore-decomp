@@ -22,8 +22,121 @@ int TableInsert(int self, int idx, uint32_t* key, int slot);   // 0x00509c80
 extern const signed char gCode3[3];                            // 0x013f18d0
 extern const signed char gOff3[3];                             // 0x013f18d8
 
+// ---- types of the big skin/mesh container (see slice s00507670 for the full layout) ----
+void* operator new(unsigned int size, const char* pName, int flags, unsigned int debugFlags,
+                   const char* pFile, int line);              // 0x00f473a0
+void operator delete(void* p);                                 // 0x00f47380
+
+struct Alloc { Alloc() {} };
+struct SpAlloc { char pad[8]; SpAlloc(const Alloc& a); };      // 0x00429360
+
+// 0x14-byte vector_set of (first, second) pairs: the work list of the face walk
+struct Pair2 {
+    unsigned int first, second;
+    Pair2() {}
+    Pair2(unsigned int a, unsigned int b) : first(a), second(b) {}
+};
+struct PairSet {
+    Pair2* mpBegin; Pair2* mpEnd; Pair2* mpCap; SpAlloc mAlloc;
+    PairSet(const Alloc& a = Alloc());                         // 0x00540470
+    ~PairSet();                                                // 0x004cddd0
+    unsigned int size() const;                                 // 0x00474050
+    Pair2& operator[](unsigned int i) { return mpBegin[i]; }
+    void push_back(const Pair2& v);                            // 0x005402c0
+    void erase(Pair2* first, Pair2* last);                     // 0x00530c80
+};
+
+// vector<unsigned> with out-of-line resize
+struct VecU {
+    unsigned int* mpBegin; unsigned int* mpEnd; unsigned int* mpCap; SpAlloc mAlloc;
+    unsigned int size() const { return mpEnd - mpBegin; }
+    unsigned int& operator[](unsigned int i) { return mpBegin[i]; }
+    unsigned int* erase(unsigned int* first, unsigned int* last);               // 0x004769b0
+    void insert(unsigned int* pos, unsigned int n, const unsigned int& value);  // 0x004cea40
+    void resize(unsigned int n)                                // 0x004cd3c0
+    {
+        if (n > size()) {
+            unsigned int value = 0;
+            unsigned int diff = n - size();
+            unsigned int* pos = mpEnd;
+            insert(pos, diff, value);
+        } else {
+            erase(mpBegin + n, mpEnd);
+        }
+    }
+};
+struct Vertex12 { float x, y, z; };
+struct VecV {
+    Vertex12* mpBegin; Vertex12* mpEnd; Vertex12* mpCap; SpAlloc mAlloc;
+    int size() const { return mpEnd - mpBegin; }
+};
+struct Entry { unsigned int a, b; };
+struct VecE {                                                  // 8-byte entries
+    Entry* mpBegin; Entry* mpEnd; Entry* mpCap; SpAlloc mAlloc;
+    Entry* begin() { return mpBegin; }
+    Entry* end() { return mpEnd; }
+    unsigned int size() const { return mpEnd - mpBegin; }
+    Entry* erase(Entry* first, Entry* last);                   // 0x00530c80
+    void insert(Entry* pos, unsigned int n, const Entry& value);   // 0x004cef00
+    void resize(unsigned int n)                                // 0x0050da10
+    {
+        if (n > size()) {
+            Entry value;
+            value.a = 0;
+            value.b = 0;
+            unsigned int diff = n - size();
+            Entry* pos = mpEnd;
+            insert(pos, diff, value);
+        } else {
+            erase(mpBegin + n, mpEnd);
+        }
+    }
+};
+
+struct SkinBuildData {                                         // 0x94-byte "Skinner" element
+    unsigned int mId;                                          // +0
+    unsigned int mGroup;                                       // +4
+    char pad08[0x58 - 8];
+    float mMinU, mMaxU, mMinV, mMaxV;                          // +0x58
+    int mZero;                                                 // +0x68
+    char pad6c[0x94 - 0x6c];
+    SkinBuildData();                                           // 0x004cbdf0
+    SkinBuildData(const SkinBuildData& o);                     // 0x00508320
+    ~SkinBuildData();                                          // 0x00507b30
+    SkinBuildData& operator=(const SkinBuildData& o);          // 0x0050a9e0
+};
+struct VecP {                                                  // vector of element pointers
+    SkinBuildData** mpBegin; SkinBuildData** mpEnd; SkinBuildData** mpCap; SpAlloc mAlloc;
+    unsigned int size() const { return mpEnd - mpBegin; }
+    void push_back(SkinBuildData* const& v);                   // 0x00454860
+};
+extern const float kFloatMax;                                  // 0x013f18c4
+
+// Unused stack words that stand in for the reserved frames of inline callees that cl declined
+// (see docs/matching.md, /Od frame layout).
+template <int N> inline void ScratchSlots() { unsigned int slots[N]; }
+
+inline void FillEntries(Entry* first, Entry* last, const Entry& value)
+{
+    for (; first != last; ++first)
+        *first = value;
+}
+
 struct SlotTable {
-    char pad[0x200];
+    char pad00[8];
+    VecV mVerts;            // +0x08
+    char pad1c[0x58 - 0x1c];
+    VecU mIndices;          // +0x58
+    char pad6c[0x80 - 0x6c];
+    VecU mEdgeSlots;        // +0x80
+    VecU mAdjacent;         // +0x94
+    char padA8[0xe4 - 0xa8];
+    VecP mGroups;           // +0xe4
+    char padf8[0x110 - 0xf8];
+    VecU mFaceMark;         // +0x110
+    char pad124[0x1b8 - 0x124];
+    VecE mSlots;            // +0x1b8
+    char pad1cc[0x200 - 0x1cc];
 
     // @ 0x00509f50
     void InsertEdge(int a, int b, uint32_t* key);
@@ -36,6 +149,15 @@ struct SlotTable {
 
     // @ 0x0050a9e0
     void* CopyRecord(void** src);
+
+    // @ 0x00509c80
+    int Insert(int idx, SkinBuildData* key, int slot);
+
+    // @ 0x0052e640
+    uint8_t Check(int face, int edge, SkinBuildData* group);
+
+    // @ 0x0050a0a0
+    void BuildFaces();
 };
 
 void SlotTable::InsertEdge(int a, int b, uint32_t* key)
@@ -102,5 +224,102 @@ void* SlotTable::CopyRecord(void** src)
     return this;
 }
 
-// @ 0x0050a0a0  (PARTIAL skeleton: 1.7 KB face-table builder)
-void __fastcall BuildFaces(int self) { (void)self; }
+// ---------------------------------------------------------------------------
+// @ 0x0050a0a0  face-table builder: groups the faces of the mesh into connected, coplanar-id
+// patches ("SkinBuildData" elements) by flood fill over the shared-edge adjacency table.
+// ---------------------------------------------------------------------------
+void SlotTable::BuildFaces()
+{
+    unsigned int nTris = mIndices.size() / 3;
+    mEdgeSlots.resize(mIndices.size());
+    mSlots.resize(mVerts.size());
+    Entry tmpl;
+    tmpl.a = 0xffffffff;
+    FillEntries(mSlots.begin(), mSlots.end(), tmpl);
+    ScratchSlots<2>();
+
+    SkinBuildData* region = new("Skinner", 0, 0, 0, 0) SkinBuildData();
+    const unsigned int none = 0x7fffffff;
+    unsigned int index = mGroups.size();
+    ScratchSlots<44>();
+    PairSet pending;
+    unsigned int qPos;
+    unsigned int resume = 0;
+    while (1) {
+        unsigned int f;
+        unsigned int grp;
+        int err;
+        f = resume;
+        if (mFaceMark[f] > index) {
+            for (f = 0; f < nTris; ++f) {
+                if (mFaceMark[f] <= index)
+                    break;
+            }
+        }
+        if (f == nTris)
+            break;
+        grp = FaceHelper(f);
+        *region = SkinBuildData();
+        region->mId = index;
+        region->mGroup = grp;
+        region->mMinU = kFloatMax;
+        region->mMaxU = -kFloatMax;
+        region->mMinV = kFloatMax;
+        region->mMaxV = -kFloatMax;
+        region->mZero = 0;
+        pending.erase(pending.mpBegin, pending.mpEnd);
+        qPos = 0;
+        err = Insert(f * 3, region, -1);
+        err = Insert(f * 3 + 1, region, -1);
+        InsertEdge(f, 0, (uint32_t*)region);
+        for (unsigned int i = 0; i < 3; ++i) {
+            unsigned int val;
+            unsigned int edgeIdx;
+            unsigned int otherFace;
+            unsigned int adjEdge;
+            edgeIdx = f * 3 + i;
+            val = mAdjacent[edgeIdx];
+            otherFace = val / 3;
+            adjEdge = val % 3;
+            if (mFaceMark[otherFace] <= index && FaceHelper(otherFace) == grp &&
+                Adjacent(f, i, otherFace, adjEdge) && !Check(otherFace, adjEdge, region)) {
+                mFaceMark[otherFace] = none;
+                pending.push_back(Pair2(otherFace, adjEdge));
+            }
+        }
+        while (qPos < pending.size()) {
+            unsigned int side;
+            Pair2 pair;
+            unsigned int a;
+            pair = pending[qPos++];
+            a = pair.first;
+            side = pair.second;
+            InsertEdge(a, side, (uint32_t*)region);
+            for (unsigned int m = 0; m < 3; ++m) {
+                if (m != side) {
+                    unsigned int nbr2;
+                    unsigned int offset2;
+                    unsigned int word2;
+                    unsigned int otherEdge2;
+                    offset2 = a * 3 + m;
+                    word2 = mAdjacent[offset2];
+                    nbr2 = word2 / 3;
+                    otherEdge2 = word2 % 3;
+                    if (mFaceMark[nbr2] <= index) {
+                        if (FaceHelper(nbr2) == grp && Adjacent(a, m, nbr2, otherEdge2) &&
+                            !Check(nbr2, otherEdge2, region)) {
+                            mFaceMark[nbr2] = none;
+                            pending.push_back(Pair2(nbr2, otherEdge2));
+                        } else {
+                            mFaceMark[nbr2] = index + 1;
+                            resume = nbr2;
+                        }
+                    }
+                }
+            }
+        }
+        mGroups.push_back(new("Skinner", 0, 0, 0, 0) SkinBuildData(*region));
+        index = index + 1;
+    }
+    delete region;
+}

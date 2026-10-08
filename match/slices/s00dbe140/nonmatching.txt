@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00dbe520  1001  MOVE_Activate complete; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- ; self/zero swap esi<->edi and out-of-line placement of the no-target block differ

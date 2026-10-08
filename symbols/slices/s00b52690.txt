@@ -1,0 +1,1 @@
+00b52690 PlaceObjectOnSurface  # Claude-coined: re-orient a spatial object on the planet, then linear-cast a phantom radially to drop its Havok body onto the terrain

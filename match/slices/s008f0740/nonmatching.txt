@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast)
+008f0740  1508  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : Table::LayoutRows complete; zero constant lives in xmm2 instead of xmm0 and stack slots shift (register allocation only)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
+00ef6700  1331  SetAsset: complete, size 1710 vs 1707; 77 calls / 34 direct, vtable-slot sequence and constants identical to the original; callee-saved assignment (zero constant in edi vs ebp), CSE of this-0x24, vtable-slot address hoists and bool-param slot reuse differ; equiv UNSUPPORTED (0/2055 inputs valid: deep object graph faults) flags /O2 /MD /Gy /TP

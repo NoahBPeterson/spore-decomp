@@ -1,0 +1,1 @@
+00e3f970 EntryPanel::Refresh  # Claude-coined: rebuilds the entry stack (Entry 0x10c bytes, Interp::Run keyframes at e3ee30)

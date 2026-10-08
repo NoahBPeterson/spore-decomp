@@ -1,0 +1,1 @@
+00ace5a0 NounVisibility::Update  # guessed class name; timer-throttled 3-pass update over cGameNounManager data vectors

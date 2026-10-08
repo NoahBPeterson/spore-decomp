@@ -1,0 +1,1 @@
+00bf9820  1105  COMPLETE cCivilization UFO/city target selection (/O2 /MD /Gy /TP /arch:SSE /GS-). Same size class (1647 vs 1614), 61 direct calls and the same vtable calls; diff is x87-vs-SSE choice for the Vec3 == compare and the budget add, plus register allocation.

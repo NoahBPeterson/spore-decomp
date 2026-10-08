@@ -1,0 +1,2 @@
+00e44d20 SP::cEditorValidity::AddCellUpgradeParts  # PDB candidate SP::EditorValidity::AddCellUpgradeParts (caller-scored); switch on 0x1654c00..05
+004e38d0 ??0?$vector@UConstraintNode@FunctionalMatch@SP@@@eastl@@QAE@ABV01@@Z  # eastl::vector<ConstraintNode> copy ctor (/Od instance, PDB name eastl::vector<SP::FunctionalMatch::Constraint>::vector(const vector&))

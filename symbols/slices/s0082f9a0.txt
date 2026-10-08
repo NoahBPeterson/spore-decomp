@@ -5,3 +5,4 @@
 00830150 cDropShadowDescriptor::SetMode2  # sets +4 and floats +0x1c/+0x20 by enum
 00830280 cDropShadowDescriptor::SetMode1  # sets +0 and floats +0x14/+0x18 by enum
 00830380 cDropShadowDescriptor::FillDefaults  # cdecl(dst,src) copy-if-sentinel
+0082f9a0 ShaderProxy::SetFromArgScript  # SPUI shader proxy material/arg parser (PDB candidate cSPUIShaderProxy::SetMaterialName)

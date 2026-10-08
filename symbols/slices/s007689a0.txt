@@ -1,3 +1,3 @@
 # s007689a0 recovered names
-007689a0 SP::cGraphicsResourceFactory::WriteResourceGameModel  # PDB candidate; material/BVH/model writer
-00769200 WriteResourceDispatch  # PDB candidate SP::cGraphicsResourceFactory::WriteResource; type switch
+007689a0 SP::cGraphicsResourceFactory::WriteResourceGameModel  # PDB candidate; thiscall(model, stream) ret 8, writes keys/index+vertex buffers/vertex descriptors/mesh refs/material flags
+00769200 SP::cGraphicsResourceFactory::WriteResource  # PDB candidate; thiscall(obj, src, u3, u4) ret 0x10; type switch over resource type ids (byte-exact)

@@ -1,0 +1,1 @@
+00fa8850 1590 GenerateImpostorUpdate: complete (pass/face chaining, level+lock/unlock, both planetImpostor/planetAtmoImpostor mesh jobs, 91 calls as original); frame 0x84 vs 0x6c, register allocation and key-struct layout differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

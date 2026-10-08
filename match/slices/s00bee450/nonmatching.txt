@@ -1,0 +1,1 @@
+00bee450  867  cCityWalls cSpatialObject::LoadModel override: complete (size 1832 vs 1811, 36 calls both, identical ordered call/vslot/const sequence); register allocation/scheduling differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

@@ -1,0 +1,2 @@
+# s00ace5a0 manifest
+slices/s00ace5a0/s00ace5a0.cpp  Update@NounVisibility  00ace5a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

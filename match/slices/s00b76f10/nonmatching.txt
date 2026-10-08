@@ -1,0 +1,1 @@
+00b76f10 1767 complete spawner method (existing-object refresh + create path); frame layout / register allocation differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /GS-)
+00598540  1174  EnsureBaseUnlocksForEditor: complete; register allocation/stack slots and inlined hashtable-find/ctz shapes differ

@@ -1,3 +1,2 @@
 # va  reason
-004e6c60 2045-byte /Od verb-icon builder skeleton
 004e7610 887-byte /Od verb-icon data builder skeleton

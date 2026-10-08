@@ -1,0 +1,1 @@
+0105aa50 StartTool  # SP::cSPDropCargoToolStrategy::StartTool (PDB candidate); stdcall(self,pos,arg)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00df6db0  1827  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete cGameUIData::SetUIState (all 5 states, 121 call sites in original order); frame 0x78 vs 0x80, rect-copy schedule and shared-epilogue layout differ

@@ -1,0 +1,1 @@
+00af6400 SweepSide  # Claude-coined: marches a point from start to end through a cast callback, hit shapes by type at +0x24; called by TracePlanetPath 0x00af6bf0

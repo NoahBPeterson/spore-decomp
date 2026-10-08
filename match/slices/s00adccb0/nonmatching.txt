@@ -1,0 +1,1 @@
+00add1a0  1800  complete (/O2 /MD /Gy /TP /arch:SSE /fp:fast); two inlined hash-table passes; size 1908 vs 2247, 12/12 direct calls, 18/18 vcalls, same slots; spills/schedule differ, diff count approximate (chk size filter hides the row)

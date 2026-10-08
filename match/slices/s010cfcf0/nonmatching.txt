@@ -1,0 +1,1 @@
+010d0130 1873 processCollision: complete (timer, vertex/sphere transform, closestPointTriangle per sphere, contact point append with contactMgr add/remove id, reversed id slot index); size 2017 = original; frame 0x154 vs 0x134, x87 scheduling/register allocation differ. Flags /vc71 /O2 /MD /Gy /EHsc /TP

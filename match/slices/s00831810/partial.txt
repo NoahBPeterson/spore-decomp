@@ -1,5 +1,4 @@
 # va  diff-bytes  reason
-00831810  1751 cSPUIDebugConsole big method: translation not completed
 00832010  187 cString property setter: cString alloc/copy path approximated
 00832160  78  cSPUIStringBinder dtor: FixedBufferAllocator Free/destroy_shared approximated
 00832230  320 cSPUIDebugConsole method: translation not completed

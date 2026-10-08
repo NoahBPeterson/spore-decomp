@@ -8,3 +8,4 @@
 00830910  34  SmallSet::Do: /Od frame layout (force /Od flags) differs
 00830950  152 cSPUIStdDrawable ctor: base ctor + 8 AutoRefCount stores schedule differs
 00830b30  124 cSPUIStdDrawable dtor: embedded image-info release loop differs
+0082f9a0  1285  SPUI shader proxy ArgScript parser: complete (46/46-equivalent call set, size 0.94x; 5 StoreParams sites tail-merged to 1); stack-slot/register allocation and loop layout differ. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

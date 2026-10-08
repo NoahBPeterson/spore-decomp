@@ -1,0 +1,1 @@
+01035900 SP::cSPSpaceGfx::InitForGame  # PDB name; creates effects worlds/renderers once (mInitedForGame flag)

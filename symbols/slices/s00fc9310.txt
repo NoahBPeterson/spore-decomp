@@ -1,0 +1,4 @@
+00fc9a60 rw::movie::MovieEncoder_Avi::WriteAVIHeaders  # writes RIFF/AVI hdrl, avih, strl/strh/strf (video + optional audio), JUNK pad, movi LIST; PDB name
+00fc8580 rw::movie::BufferedWriter::Write32  # appends a dword to the buffered writer (flush via 00fc83b0 when <4 bytes left)
+00fc8550 rw::movie::BufferedWriter::Write16  # appends a word (flush when <2 bytes left)
+00fc8500 rw::movie::BufferedWriter::WriteFill  # memset-style fill of n bytes through the buffer

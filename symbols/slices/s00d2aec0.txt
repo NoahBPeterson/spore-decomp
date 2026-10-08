@@ -1,0 +1,1 @@
+00d2aec0 SP::cCreatureCamera::Update  # per-frame camera update(ticks, ICameraHelper*): exp-decay interpolation of anchor/orientation, theta wrap, then CalculateCameraToWorldMatrix + helper setters

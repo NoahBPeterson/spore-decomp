@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d51c30 1032 inferred names (no PDB): herd finder/activator; complete, not byte-exact (register allocation and 8 bytes of stack frame differ); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

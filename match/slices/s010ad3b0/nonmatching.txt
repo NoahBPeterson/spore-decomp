@@ -1,0 +1,1 @@
+010ad3b0 1451 complete hkPoweredChain_ComputeConstraintMatrixLuDecomposition_ForOneRow: same 9 calls in order, frame/copies match; 48-dword struct-copy schedule and x87 epsilon clamp (original uses fcom [mem], cl hoists the constant) differ

@@ -1,0 +1,1 @@
+00beeb70  1716  cVehicleLike::Init (owner city, locator copy, 8 offset points, 4 rotated+projected corner points, memset): complete, call/vslot sequence matches; SSE register allocation and scheduling differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

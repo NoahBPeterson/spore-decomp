@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00ad33d0  1618  complete scripted move-action update (!arrive near-goal check, teleport path, navigation-goal path); same ordered calls/vslots; call count 58 vs 59 (target dtor tail not duplicated once), frame 0xf8 vs 0xec (ProjectToSurface/BuildSurfaceOrientation sret temps get their own slots; original reuses the dead offset slots), goal ctor variants called on one shared slot via NoInit tag

@@ -1,0 +1,1 @@
+00f10bd0 1733 complete: creature-stage target HUD controller update (avatar feed, bars/readouts, camera-selection target highlight, follow-effect transform, base OnWinProcAdd); 104/104 calls and vtable slots identical in order, 2265 vs 2249 B; equiv.py WEAK (no FAIL); remaining: register allocation (this in esi, avatar in ebp) and 4-byte stack frame difference

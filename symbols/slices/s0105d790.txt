@@ -1,0 +1,1 @@
+0105dc60 SP::cUFOLocomotion::CollideWithObject  # name from the caller (ResolvePlanetaryCollisions, s01060150); thiscall (cSpaceToolUFO*, cQueryObject*) ret 8; pushes the UFO out of a capsule-like query object

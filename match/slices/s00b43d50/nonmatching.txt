@@ -1,0 +1,1 @@
+00b43d50 1712 complete swept-sphere contact (20/20 calls, same vtable-free callee order); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; frame 0xdc vs 0xd0, scheduling and register allocation differ

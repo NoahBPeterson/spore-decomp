@@ -3,3 +3,4 @@
 0061f530  264  Pump: complete; prologue register allocation and the mpStream==0 block layout differ
 0061f9f0   73  StartJob: complete; original reloads the job pointer around the virtual get-job call
 0061fb50    7  HandleMessage: complete; epilogue orders pop esi before mov al,1
+0061ecf0  797  cEventDisplay::Show: complete (all 11 type arms, count/data variant accessors); needs /GS-; stack-slot layout (0x168 vs 0x184 frame) and loop-entry test differ

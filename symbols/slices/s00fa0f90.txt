@@ -1,0 +1,1 @@
+00fa0f90 SP::cTerrainSphere::Initialize  # creates decal mgr, viewer, state mgr, weather, quads, impostor job; PDB anchor names it GetConfig

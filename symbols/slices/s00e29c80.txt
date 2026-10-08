@@ -1,0 +1,1 @@
+00e29da0 SP::cSPUINewProgressBar::Update  # float progress, int amount (ret 8); PDB class cSPUINewProgressBar, caption 0xabcd1001, level windows 0x51b54c0+n

@@ -1,0 +1,1 @@
+00b47730 1303 complete; diff is stack-frame layout (0x70 vs 0x60) and scheduling of the bbox/extent float math

@@ -1,0 +1,1 @@
+00b5e9a0 1231 complete: 67/67 direct calls in identical order (same callees, 13 out-of-line op[] + 5 inlined find/insert sites), same constants, jump table and vtable slot; 1680 vs 1696 B; frame 0x178 vs 0x1c0 and stack-slot order of the inline temporaries (pair/iterator/insert result/lm spill) differ

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00cbea20 1532 cAttackTick::Update: complete (68/68 calls and all 37 indirect-call slots in the same order, same immediates; 1795 vs 1791 bytes); equiv WEAK (2205 valid, no mismatch, 15.9% coverage: deeper paths need valid game state); frame 0x84 vs 0x6c and callee-saved register assignment differ

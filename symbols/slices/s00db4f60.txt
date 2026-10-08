@@ -1,0 +1,1 @@
+00db5300 SP::TRIBE_TAKE_OUT_TOOL_Tick  # PDB candidate (caller-scored); behavior-tree tick (void*, double, uint, uint flags, memory_block*, memory_block*, float dt)

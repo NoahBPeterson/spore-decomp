@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00b87dc0  1533  cPlanetModel::ComputeContinents: complete (classify cells with MMX compares, union-find labelling, cube-seam merge, flatten, per-region area/above-water tables); MMX register allocation/spills and block layout differ (size 1678 vs 1618)

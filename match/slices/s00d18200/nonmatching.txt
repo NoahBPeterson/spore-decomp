@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d18200  1070  SP::cGameEditInputStrategy::Init: complete (19/19 direct calls in the same order, same 61 vcall slots, same constants, same 582 instructions; size 1630 = 1630); residual: (1) the scenario-name string / rect / name-string stack slots are in a different order (str1 lowest vs highest) so ~40 esp displacements differ, (2) `sar eax,1; je` becomes `test eax,0xfffffffe; je` (cl folds the string-size test) (shifts the following bytes); difftest UNSUPPORTED (layout init reaches iswctype/unmapped pages)

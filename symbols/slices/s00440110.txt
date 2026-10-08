@@ -1,0 +1,1 @@
+00440520 SP::cSPEditorBlock::SetUniformScale  # clamps mUniformScale (+0x1d8) to [+0x1e0,+0x1e4], drives vertebra anim/model scale; byte-exact

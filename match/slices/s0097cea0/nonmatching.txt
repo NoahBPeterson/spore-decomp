@@ -6,3 +6,4 @@
 0097db90  56  complete; ImageCursorProvider helper (hashtable/manager lookup)
 0097dc00  46  complete; ImageCursorProvider::UpdateMousePosition
 0097ddf0  47  complete; ImageCursorProvider::HasCursor (eastl hashtable find + setne)
+0097d270  334  complete; ImageDrawable::CreateRenderables (draw image + drop-shadow loop); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 1292B vs 1626B, original has ebp-aligned frame, x87/SSE mix differs

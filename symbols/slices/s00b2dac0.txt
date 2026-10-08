@@ -1,0 +1,1 @@
+00b2e010 SpawnMgr::Spawn  # (type,perRec,key64,recs[0x4c],n,scale) ret 0x1c; trees at +0x1b0 (active) and +0x1cc (pool)

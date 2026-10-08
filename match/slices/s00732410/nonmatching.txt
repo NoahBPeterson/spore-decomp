@@ -1,3 +1,4 @@
+# va  diff-bytes  reason
 00732a30   705  COMPLETE bounding-box accumulator (AddRef/Release + two max-update blocks); not byte-exact.
 00732cb0   345  COMPLETE 2D basis/determinant solver; x87/SSE scheduling differs.
 00732eb0   225  COMPLETE 3x4 -> 4x4 matrix builder; SSE register/shuffle choice differs.
@@ -7,3 +8,4 @@
 00733140    85  COMPLETE uninitialized_copy over 9-dword elements; float-via-xmm copy flavour differs.
 00733230    75  COMPLETE fill_n over 9-dword elements; float-via-xmm copy flavour differs.
 00733310    78  COMPLETE copy over 9-dword elements; float-via-xmm copy flavour differs.
+00732410  1419  COMPLETE weighted element-array accumulate (indexed and per-array weights); same size, base-pointer reloads/scheduling differ

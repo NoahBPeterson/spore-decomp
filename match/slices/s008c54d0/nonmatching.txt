@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008c54d0  3378  CreateBitMap: complete (all mode/depth branches; 38 calls and the same constant multiset as the original); register allocation and block layout differ (size 3748 vs 3784). equiv.py: UNSUPPORTED for the register ABI, WEAK with --ignore-abi (2.4% coverage).

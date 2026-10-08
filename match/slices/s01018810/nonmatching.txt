@@ -1,0 +1,1 @@
+01018810 2028 ConeTangentSolve complete (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); 2/2 calls (_CIacos, QuaternionRotate), equiv PASS 300 inputs 100% coverage; not exact: x87/SSE operand scheduling and frame of the inlined vector math

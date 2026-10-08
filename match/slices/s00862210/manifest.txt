@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00862210/s00862210.cpp  _jpeg_idct_4x4  00862210  /O2 /arch:SSE /MD /Gy /TC

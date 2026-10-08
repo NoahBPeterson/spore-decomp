@@ -1,0 +1,1 @@
+01317d30 833 complete: tree-spawner attribute table, not byte-exact (compiler scheduling and hoisted-constant register choice differ; guards/statics emulated by hand); flags /O2 /MD /Gy /EHsc /TP /arch:SSE2

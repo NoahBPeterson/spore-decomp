@@ -1,0 +1,1 @@
+00fc5f80 SP::cWeatherManager::UpdateEffects  # name guessed; per-frame weather effect update (ModAPI retail layout cWeatherManager, PDB field names)

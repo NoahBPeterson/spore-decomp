@@ -1,0 +1,2 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+00a954b0  1971  SSE register allocation/scheduling differs (hoisted 255.0f/0.0f, renderer reload, rotate temp copies); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

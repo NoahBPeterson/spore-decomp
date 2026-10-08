@@ -1,0 +1,2 @@
+# va  diff-bytes  reason   (flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast, no /EHsc)
+00eaa9a0  1468  complete cMixModeManager::Init: 59 map stores into 3 global maps, handler registration, factory registration, record-key load + hash insert loop; 77/77 calls, all constants equal; register allocation differs (orig hoists keys 0x1654c04/05/10 and zero into ebp/ebx/edi)

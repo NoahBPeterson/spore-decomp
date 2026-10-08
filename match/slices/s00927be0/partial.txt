@@ -1,3 +1,2 @@
-00927be0  990  pool malloc core (bins/segment split); dl malloc internals approximated
 009282e0  900  pool aligned-alloc core; alignment/segment handling approximated
 00928730  600  pool realloc core; shrink/grow paths approximated

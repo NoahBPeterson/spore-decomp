@@ -1,0 +1,1 @@
+00f918d0 CubeMapBuffer::SmoothEdges  # blurs the border texels of the 6 cube faces ((2a+b)/3 with SP::WrapCubeFace neighbours) via a temp byte vector

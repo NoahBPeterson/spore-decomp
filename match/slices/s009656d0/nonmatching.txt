@@ -1,0 +1,1 @@
+009656d0 4000 EA::UTFWinControls::ButtonDrawable::Paint: complete (image blit / BltEdgeStretch path and the three flat-quad bevel styles); same 64-call and vslot sequence as the original, size 4509 vs 5185 (0.87x); the original keeps an unshared Point2 temporary per quad (0x3f0 frame) and fills in a different order, so bytes differ widely (flags /O2 /MD /Gy /TP /arch:SSE)

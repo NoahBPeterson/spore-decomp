@@ -1,0 +1,2 @@
+00c6d0f0 SP::cHerd::AddAvatarEggsInNest  # PDB candidate (caller-single); spiral egg placement around the nest via AddEggInNest (0x00c6cf10)
+00c6cf10 SP::cHerd::AddEggInNest  # named by the PDB; called 5-arg thiscall (pos, orientation, isAvatar, 5, owner)

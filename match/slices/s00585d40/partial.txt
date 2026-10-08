@@ -1,4 +1,3 @@
-00585d40 - PARTIAL: ContinueSaveInProgress 1730B state machine skeleton; stage bodies omitted
 00586410 - PARTIAL: AddUndoState 625B; only vector reset modelled, EASTL/refcount traffic omitted
 00586700 244 PARTIAL: per-slot bit-vector reset; resize/memcpy insertion path omitted
 00586800 - PARTIAL: state serialization via cVarListSerializer stubbed; only vector normalisation modelled

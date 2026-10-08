@@ -1,2 +1,3 @@
 0063e770 SP::cSPPlayModeSubModePhoto::Activate  # PDB name
 0063e810 SP::cSPPlayModeSubModePhoto::Shutdown  # PDB candidate (caller-single)
+0063e100 SP::cSPPlayModeSubModeMovie::HandleButton  # PDB candidate, byte-exact

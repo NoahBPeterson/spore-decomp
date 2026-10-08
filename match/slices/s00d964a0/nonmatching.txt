@@ -1,0 +1,2 @@
+00d964a0  1544  complete CitizenTree::Policeman_Tick (anchor name); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs: SSE waypoint-array scheduling and redundant stack copies, register allocation ; equiv: WEAK 1796 valid inputs, 5.6% coverage, 0 mismatches
+00d96da0  1258  complete CitizenTree::SimFeedback_Activate (gap-align name, role: random route segment + path start); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; diffs: int-vs-float copy spelling of the segment locals, register allocation ; equiv: WEAK 149 valid inputs, 62.8% coverage, 0 mismatches

@@ -1,4 +1,3 @@
 # va  diff-bytes  reason
 00686520  460  record decode helper (RSA/SHA1 path): only the read preamble reconstructed; crypto body omitted
-006866f0  1688 property-list record reader: skeleton only; per-record property parsing omitted
 00686d90  692  property-list record reader variant: skeleton only; per-record property parsing omitted

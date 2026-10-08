@@ -1,0 +1,1 @@
+00be88d0 SP::cCity::ChangeCivilization  # retail cCity layout (this+0x29c city type, +0x33c player city, +0x590 civ); name guess from dev PDB ReallyChangeCivilization (different signature)

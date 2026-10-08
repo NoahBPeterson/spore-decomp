@@ -1,0 +1,3 @@
+00f6bd70 SP::cTerrainEditor::UpdateCPUFromGPU  # PDB name; retail layout: sphere +0x74, 6 dirty rects +0x80, min/max u16 pairs +0x140, upload vector +0x168
+00fa43e0 SP::cTerrainSphere::Relevel  # thiscall(float,int) ret 8
+00f99ac0 SP::cTerrainSphere::MarkFaceDirty  # thiscall(face, Rect*) ret 8, from UpdateCPUFromGPU

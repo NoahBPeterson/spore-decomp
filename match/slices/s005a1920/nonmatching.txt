@@ -1,3 +1,4 @@
 005a2200  3   Cam::ZoomBy: complete; (factor + 1.0f) operand order emitted reversed
 005a2260  21  Cam::ComputeView: complete; constant-load scheduling differs
 005a2580  30  Cam::OnMouseWheel: complete; float scheduling and wheel-helper arg order differ
+005a1920  883  SP::cSPEditorBlockAbilities::LayoutAbilitiesCompact: complete (same 50 calls and vtable-slot sequence); stack-slot/spill layout (frame 0x6cc vs 0x6d0), esi/ebp roles and block order differ; (int)level is cvttss2si in mine vs the original's inlined fnstcw/fistp

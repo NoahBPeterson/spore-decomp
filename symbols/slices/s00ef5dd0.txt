@@ -1,0 +1,1 @@
+00ef6700 Simulator::cSPScenarioModeSporepediaLargeAssetView::SetAsset  # name guessed; inverse of Reset 0x00ef6db0 (same fields +0x78/+0x7c/+0x80/+0x94/+0x9d)

@@ -1,0 +1,1 @@
+00e74a20 1244 complete (16 calls, same order); stack-slot sharing/spill order differs; callees e6d790/e868f0/e4f9d0 are static in the original (esi/edi/ecx/xmm0 register conventions) and declared cdecl here

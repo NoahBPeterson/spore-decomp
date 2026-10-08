@@ -1,0 +1,1 @@
+00e9d300 28 complete cSPUFOGfx::Update ($E431): all 74 calls/vcalls in order; only the then/else block layout of the alpha/flags if and the colour-copy register choice differ

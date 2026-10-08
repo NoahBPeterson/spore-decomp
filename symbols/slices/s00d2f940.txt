@@ -1,0 +1,2 @@
+00d2f940 SpawnAcknowledgementEffect  # PDB candidate name (anonymous namespace); stops the old effect, builds a transform at the clicked target and starts the ack effect
+00d2ffd0 ClassifyTarget  # click-target classifier: returns the creature-mode action code (0..0x1c); *pHandled=0 when the target type is not handled

@@ -1,0 +1,1 @@
+00b55020 1137 complete; all 30 calls and the shape switch present; early-return block layout, frame size (0x74 vs 0x54) and some register/slot choices differ

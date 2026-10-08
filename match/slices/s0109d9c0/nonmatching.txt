@@ -1,0 +1,1 @@
+0109d9c0  890  complete (build setting in the manifest note: /vc71 Havok toolchain); same calls/vslots/order as the original, near-identical x87 code; remaining diff is stack-slot layout and register allocation

@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
 0071a930  97   eastl::vector<T28,sp_vector_allocator>::resize(n): complete; original inlines the temporary's two-vector destructor without an EH state store, mine keeps a 7-byte EH state store and the temp lives 4 bytes lower in the frame
 0071aa20  283  SP::cMeshBuilder::BeginMesh(): complete; AutoRefCount::Release interlocked sequence and the count-store scheduling differ (mine uses cmp where the original does dec/jne, and the stores are interleaved differently)
+00719e10  -1  cMeshBuilder::EndPrimitive (flush current primitive into its section, fan-triangulate, open batch): complete; register allocation/spill layout differs (1811 B vs 2085 B)

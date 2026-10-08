@@ -5,3 +5,4 @@
 00816b20  100  cString local + GetPropertyAsText/FindWindowByID schedule not byte-exact
 00816b90  246  DoMessage switch/compare tree and result-code immediates not byte-exact
 00816cb0  88  CalloutMessageBox ctor MI vtable/secondary stores not byte-exact
+00815dd0  1177  cSPUIMainWin::Init complete (all calls/vcalls/constants in order); diff is register allocation (esi/edi/ebx roles) and frame size

@@ -1,1 +1,1 @@
-009656d0 EA::UTFWinControls::ButtonDrawable::CreateRenderables  # PDB caller-scored candidate for UTFWin::IDrawable::Paint
+009656d0 EA::UTFWinControls::ButtonDrawable::Paint  # Ghidra 'UTFWin::IDrawable::Paint'; PDB candidate CreateRenderables is the same VA

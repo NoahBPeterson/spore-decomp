@@ -1,0 +1,1 @@
+00fa9d20 SP::cTerrainSphere::SetDefinition  # PDB name on card

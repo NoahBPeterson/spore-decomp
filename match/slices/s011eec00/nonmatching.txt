@@ -1,0 +1,1 @@
+011eef30 1645 complete: CompiledState::D3D9Initialize; spill slots/loop register allocation and rep-movs expansion differ (uses __movsd/__movsb); size 1857 vs 1974; flags /O2 /MD /Gy /TP /arch:SSE /GS-

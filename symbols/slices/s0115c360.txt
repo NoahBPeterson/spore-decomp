@@ -1,0 +1,1 @@
+0115c360 rw::audio::core::HELPER_CMpegLayer3B::HuffmanDecode  # second copy of III_huffman_decode (granule info +0x154 as in GetScaleFactors 0115b910); calls 01143e70 pow43, 01134a60 GetBitsB

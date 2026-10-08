@@ -1,0 +1,1 @@
+00c9a100 SP::cTribe::Init  # dev-PDB name via caller-scored (pdb_candidates); ModAPI cTribe::SpawnTribe(position, numMembers, int, bool)

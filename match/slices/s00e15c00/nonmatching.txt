@@ -1,0 +1,2 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00e16090  946  mission-tracker refresh; complete (call/vcall sequence identical); SetSize argument scheduling (h vs ternary x evaluation order) shifts the rest

@@ -14,26 +14,96 @@ struct EltArray
 };
 
 int  FUN_0071ddc0(int, int, int, int, int);
-void FUN_0071fce0(int, int*, int);
 
-// @ 0x00732410  — skinning applier (large).  See partial.txt; top-level dispatch reconstructed.
-void FUN_00732410(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6,
-                  int param_7, int param_8)
+// Element array view (the 16-byte ref embedded at +0x10 of each 0x20-byte mesh element).
+struct EltRef
 {
-    // PARTIAL: the two affine-skinning inner loops (indexed and non-indexed) are not reproduced.
-    if (param_3 < 0)
+    int32_t  mCount;      // +0x00
+    char*    mpData;      // +0x04
+    uint16_t mType;       // +0x08
+    uint16_t mStride;     // +0x0a
+    void*    mpOwner;     // +0x0c
+};
+struct MeshElt            // 0x20 bytes
+{
+    int32_t mKey;         // +0x00
+    int32_t mPad[3];
+    EltRef  mRef;         // +0x10
+};
+struct MeshElts
+{
+    char     pad00[8];
+    MeshElt* mpBegin;     // +0x08
+    MeshElt* mpEnd;       // +0x0c
+    int count() const { return (int)(mpEnd - mpBegin); }
+};
+
+void __cdecl FUN_0071fce0(const EltRef* src, EltRef* dst, int zero);  // 0x0071fce0
+
+// @ 0x00732410  - accumulate weighted element arrays: dst += w * src for each weighted source
+// array (weights either per array, or looked up per vertex through an index array).
+void FUN_00732410(MeshElts* A, MeshElts* B, int dstElt, int idxElt, int srcElt, int key,
+                  const float* weights, int numWeights)
+{
+    if (dstElt < 0)
         return;
-    int* piVar1 = (int*)(*(int*)(param_2 + 8) + 0x10 + param_3 * 0x20);
-    if (param_5 < 0)
+    EltRef* dst = &B->mpBegin[dstElt].mRef;
+    if (srcElt < 0)
         return;
-    FUN_0071fce0(param_3 * 0x20 + 0x10 + *(int*)(param_1 + 8), piVar1, 0);
-    if (param_4 < 0)
+    FUN_0071fce0(&A->mpBegin[dstElt].mRef, dst, 0);
+    if (idxElt >= 0)
     {
-        // indexed blend
+        if (srcElt >= A->count())
+            return;
+        int j = 0;
+        for (;;)
+        {
+            MeshElt* src = &A->mpBegin[srcElt + j];
+            if (src->mKey != key)
+                return;
+            MeshElt* idx = &A->mpBegin[idxElt + j];
+            int n = dst->mCount;
+            for (int i = 0; i < n; ++i)
+            {
+                int wi = *(int*)(idx->mRef.mpData + idx->mRef.mStride * i);
+                if (wi >= 0 && wi < numWeights)
+                {
+                    float w = weights[wi];
+                    const float* s = (const float*)(src->mRef.mpData + src->mRef.mStride * i);
+                    float* d = (float*)(dst->mpData + dst->mStride * i);
+                    d[0] += w * s[0];
+                    d[1] += s[1] * w;
+                    d[2] += s[2] * w;
+                }
+            }
+            ++j;
+            if (srcElt + j >= A->count())
+                return;
+        }
     }
     else
     {
-        // direct blend
+        for (int j = 0; j < numWeights; ++j)
+        {
+            if (srcElt + j >= A->count())
+                return;
+            MeshElt* src = &A->mpBegin[srcElt + j];
+            if (src->mKey != key)
+                return;
+            float w = weights[j];
+            if (w != 0.0f)
+            {
+                int n = dst->mCount;
+                for (int i = 0; i < n; ++i)
+                {
+                    const float* s = (const float*)(src->mRef.mpData + src->mRef.mStride * i);
+                    float* d = (float*)(dst->mpData + dst->mStride * i);
+                    d[0] += w * s[0];
+                    d[1] += s[1] * w;
+                    d[2] += s[2] * w;
+                }
+            }
+        }
     }
 }
 

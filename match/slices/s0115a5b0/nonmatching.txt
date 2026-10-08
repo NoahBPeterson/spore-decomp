@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+0115a710 1941 DecodeHuffman: complete (big_values/linbits/count1/fixup); regalloc differs (n and idx kept in registers vs original stack slots), no ebp frame

@@ -3,3 +3,4 @@
 00518b00    92  cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
 00518bf0   165  cPaintCopyIdentityJob::Render: complete (buffer setup, material, vertex, BeginDraw); slots differ
 00518cf0   405  cPaintDifferentiateJob::Render: complete (property read, reciprocal scale, vertex, BeginDraw); slots differ
+005183c0  1468  nSPSkinner::cPaintDilateJob::Render: complete (stage 0 quad+mesh triangles, stage>0 multipass ping-pong); /Od frame/inline-temp slots differ

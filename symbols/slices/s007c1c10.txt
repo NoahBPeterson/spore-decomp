@@ -2,3 +2,5 @@
 007c2730 `anonymous namespace'::expand_2_32  # card annotation (PDB name)
 007c2790 SP::ColorReduce  # card annotation (PDB name)
 007c2880 SP::ConvertDXT1ToARGB8888  # card annotation (PDB name)
+007c1c10 SP::cThumbnailManager::SetupSplat  # 12-arg thiscall (ret 0x30): SetFlag(0/1), camera xform, three splat jobs +0x10e4/+0x10e8/+0x10ec, 4-pass blur filter chains, DrvBA22 callback + layer queue
+007c1b70 cSplatJob::Init  # thiscall ret 0x24: 9-arg setter, last arg optional filter chain

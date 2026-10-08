@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+010938e0  2109  complete (flags /O2 /MD /Gy /TP /fp:fast /GS-): same 14 call targets as the original, frame/regalloc and x87 scheduling differ (older cl)

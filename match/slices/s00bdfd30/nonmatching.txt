@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00be0020  1305  complete; register allocation (this/n/i), stack-slot layout and x87/SSE op scheduling in the normalize steps differ

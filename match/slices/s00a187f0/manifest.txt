@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+slices/s00a187f0/s00a187f0.cpp  ?AddLegacyPropertyTypes@FactoryConfiguration@Audio@EA@@  00a18d90

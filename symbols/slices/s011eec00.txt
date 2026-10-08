@@ -1,0 +1,1 @@
+011eef30 rw::graphics::CompiledState::D3D9Initialize  # PDB candidate; calls D3D9GetResourceDescriptor and GlobalState::D3D9InitializeBitShiftTable, builds the compiled state stream

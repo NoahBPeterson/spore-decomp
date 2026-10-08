@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008c2540  1787  T2K_TV_Effects: complete; register allocation/scheduling differ (dx*2,dy*2 hoisted by the original, loop-invariant spills), size 1787 vs 1852

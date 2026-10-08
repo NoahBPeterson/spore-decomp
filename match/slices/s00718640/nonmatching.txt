@@ -4,3 +4,4 @@
 00718740  45   addIndicesSlot: same plus element index addressing
 007187b0  45   addIndicesSlot6: same
 00719240  54   finish: callee/return layout and the pE8 store address selection differ
+00718820  2122  flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- : cMeshBuilderUV::CompactAttributeVertices: complete; and esp,-8 ebp frame, reg alloc, EH state layout differ (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-)

@@ -1,0 +1,1 @@
+00e13b50 SP::cUICard::ResizeToContent  # PDB-derived name interface_cast<cSPMission*> is a mislabel; resizes card text/background windows (animated or instant) and pokes the 0x5397388 button

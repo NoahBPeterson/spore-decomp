@@ -1,0 +1,1 @@
+00ae73e0 1900 complete combat manager update; x87/SSE scalar choice, stop-block layout and register allocation differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

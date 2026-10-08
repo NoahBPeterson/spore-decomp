@@ -1,0 +1,1 @@
+00f10030 CreatureHud::Init  # Claude-coined: builds UI/Posse "PosseBar", GlobalUI, cUISocialRainbow, UI/cScenarioPlayProgressBar, cScenarioRewardUI and two effects (0x36099acf, 0xaaa2ac3c); registers IWinProc (+0x38) and IMessageListener (+0x3c) subobjects; thiscall(bool) ret 4

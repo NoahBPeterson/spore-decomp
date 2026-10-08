@@ -1,5 +1,4 @@
 # va  diff-bytes  reason (incomplete / approximated source)
-007c1c10  0  skeleton: 2181-byte capture/composite routine; pipeline omitted
 007c2540  0  skeleton: 489-byte helper; job setup omitted
 007c2790  0  skeleton: 233-byte SP::ColorReduce (large stack frame / chkstk); file+remap pipeline omitted
 007c2880  0  skeleton: 553-byte SP::ConvertDXT1ToARGB8888; block decode omitted

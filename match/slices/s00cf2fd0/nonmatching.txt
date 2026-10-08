@@ -1,0 +1,1 @@
+00cf31f0 5 complete: switch on menu id (build slot, send vehicles, city-hall actions, comm events); not byte-exact: zero registers for the editor-launch case (ebx/ebp swapped, 5 bytes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

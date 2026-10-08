@@ -1,0 +1,1 @@
+00d11950 SP::cCommunityEditor::RefreshOrCreateBuildingLinkEffect  # PDB name; thiscall, 9 stack args (ret 0x28): map, 2 building ids, 2 Vec3, type

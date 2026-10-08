@@ -1,0 +1,1 @@
+00bcece0 Combatant::Hit  # cCombatant sub-object (at owner+0x120) TakeHit wrapper: filters hit, reports fought-enemy, hit effect, TakeHit, kill handling; sibling of 00bd0510

@@ -1,0 +1,1 @@
+00d73350 1298 PlaceSurfaceSamples complete (10/10 calls, same order; compiled size ~ original); not exact: SSE/x87 operand scheduling and register allocation of the inlined vector math, 0.5/128 constant folding

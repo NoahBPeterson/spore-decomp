@@ -1,0 +1,1 @@
+011675c0 NegateRows  # 8x9 cell table, negates floats +0x14/+0x1c per 0x20 cell

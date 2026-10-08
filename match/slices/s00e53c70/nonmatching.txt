@@ -4,3 +4,4 @@
 00e53f20   37  sOnButtonSaveClick: complete (telemetry flush, sound, message, flag); callback schedule differs
 00e53f70  150  allocate cell UI windows + init: complete; operator_new + vtable ownership dance differs
 00e54050   52  window-slot lookup + mark used: complete; global table indexing differs
+00e54270  214  initialize cell HUD state + window tree (cdecl, 1 byte arg): complete; only SSE constant-load scheduling and a delete-call register swap differ

@@ -1,1 +1,1 @@
-0048e590 SP::EditorUtils::GetLowAngleOffset  # builds frame transform, evaluates candidate placement gaps, returns chosen x/x+y offset (partial)
+0048e590 SP::EditorUtils::GetLowAngleOffset  # complete: frame transform, candidate snapping scores, low-angle Z offset

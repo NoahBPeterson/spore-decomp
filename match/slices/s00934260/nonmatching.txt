@@ -1,0 +1,1 @@
+009344b0 1538 complete: IniFile::WriteEntry (retail layout stubs); not byte-exact: register allocation (bl flag vs pKey in ebx), frame 0x90 vs 0x88, tail sharing

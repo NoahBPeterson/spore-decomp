@@ -1,1 +1,1 @@
-# (empty)
+007dd070  1643  complete, flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast : all 11 direct calls and 6 vtable slots in original order; remaining diff = local Vec3 copy kept on the stack, spill/register choices

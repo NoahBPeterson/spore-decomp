@@ -1,0 +1,1 @@
+00b3c1a0 VisMgr::UpdateVisible  # asm: refresh visible-object entries/selection set; Ghidra agrees

@@ -1,0 +1,1 @@
+00bfb020  SP::cSPSimulatorSpaceGame::UpdateCivAI  # sibling of FUN_00bfa660; uses this+0x188 cSPTimer, SpaceTelemetry_Add(this,2), 60000ms tick, buys type-2 vehicles via FUN_00bddda0

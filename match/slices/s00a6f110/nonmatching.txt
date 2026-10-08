@@ -1,0 +1,2 @@
+# complete behaviorally-equivalent source, not byte-exact
+00a6f110  1612  EA::Swarm::cEffectsParser::ParseDescRecOptions: complete (all options, LOD scale tables, flags); the _mm_cvtss_si32 rounding of "prob" makes cl align the frame (push ebp / and esp,-16) which the original does not have, shifting all offsets; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

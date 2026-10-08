@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a478b0/s00a478b0.cpp  ?pd_typedmess@Eapd@Audio@EA@@YAXPAPAUt_class@123@Ut_symbol@123@HPAUt_atom@123@@Z  00a48100  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

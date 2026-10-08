@@ -19,6 +19,7 @@ struct Bitset32 {
     bool test(int i) const { return (mWord[i / 32] & (1u << (i % 32))) != 0; }
 };
 
+struct Vector3 { float x, y, z; };
 struct cPropertyList;
 struct cSPEditorBlock;
 
@@ -37,8 +38,14 @@ struct cMWModel {
     void* mWorld;                 // +0x00
     Bitset32 mFlags;              // +0x04
     cSPTransform mTransform;      // +0x08
+    uint32_t pad1c[9];            // +0x1c
     int    mRefCount;             // +0x40
+    uint32_t pad44[2];            // +0x44
+    Vector3 mColor;               // +0x4c
+    float  mAlpha;                // +0x58
+    void AddRef() { mRefCount = mRefCount + 1; }
     void Release();
+    void SetFlag(bool b);         // @ 0x00437f70
 };
 
 struct cSPEditorHandle {
@@ -68,7 +75,9 @@ struct cSPEditorHandle {
     bool IsFlagSet();
     void SetStateFlags();
     void SetScale(float s);
-    void SetState(int state, bool immediate);
+    void SetState(int state, bool animate);
+    cMWModel* GetModel() { return mModel; }
+    cMWModel* GetOverdrawModel() { return mOverdrawModel; }
     void BaseConstruct();
     cSPEditorHandle* ConstructDerived();
 };
@@ -78,7 +87,6 @@ struct cSPEditorBlock {
     float mPosX, mPosY, mPosZ;    // +0x48
 };
 
-struct Vector3 { float x, y, z; };
 
 void  GetPropertyAsColorRGB(cPropertyList* pl, uint32_t key, void* out);   // @ 0x006a11b0
 float* Property_GetFloat(void* property);                                  // @ 0x0041ea70
@@ -251,15 +259,90 @@ cSPEditorHandle* cSPEditorHandle::ConstructDerived()
     return this;
 }
 
-// @ 0x0047ec40 -- PARTIAL: only the state-transition guard is reproduced; the
-// scale/colour/alpha transition bodies (many inlined AutoRefCount temps) are omitted.
-void cSPEditorHandle::SetState(int state, bool immediate)
+// By-value AutoRefCount<cMWModel> argument: copy constructs with AddRef.
+struct ModelRef {
+    cMWModel* p;
+    ModelRef(const ModelRef& r)
+    {
+        p = r.p;
+        if (p)
+            p->AddRef();
+    }
+};
+
+struct AnimMgr {
+    void** vptr;
+};
+
+void* GetAnimMgr();   // @ 0x00401060, returns the global at 0x015d0c18
+bool Vector3_NotEqual(const Vector3* a, const Vector3* b);   // @ 0x0041dd30, cdecl
+
+typedef void (__thiscall *AnimFn)(void*, ModelRef, int, float, float, int);
+#define ANIM(pAnimator, model, prop, value, time) \
+    ((AnimFn)(*(void***)(pAnimator))[6])((pAnimator), *(ModelRef*)&(model), (prop), (value), (time), 1)
+
+// @ 0x0047ec40
+void cSPEditorHandle::SetState(int state, bool animate)
 {
     if (state != this->mCurrentState && this->mCurrentState == 1) {
-        if (this->mModel)
-            this->mModel->mFlags.set(3, true);
-        if (this->mOverdrawModel)
-            this->mOverdrawModel->mFlags.set(3, true);
+        if (GetModel())
+            GetModel()->SetFlag(true);
+        if (GetOverdrawModel())
+            GetOverdrawModel()->SetFlag(true);
     }
-    (void)immediate;
+
+    float time;
+    void* pAnimator = 0;
+    if (animate)
+        pAnimator = GetAnimMgr();
+    time = (state == 1) ? this->mFadeOutTime : this->mFadeInTime;
+
+    if (GetModel()) {
+        float oldAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xe])(this, this->mCurrentState);
+        float newAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xe])(this, state);
+        if (oldAlpha != newAlpha) {
+            if (animate)
+                ANIM(pAnimator, this->mModel, 4, newAlpha, time);
+            else
+                GetModel()->mAlpha = newAlpha;
+        }
+        Vector3 oldColor, newColor;
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x10])(this, &oldColor, this->mCurrentState);
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x10])(this, &newColor, state);
+        if (Vector3_NotEqual(&oldColor, &newColor)) {
+            if (animate) {
+                ANIM(pAnimator, this->mModel, 1, newColor.x, time);
+                ANIM(pAnimator, this->mModel, 2, newColor.y, time);
+                ANIM(pAnimator, this->mModel, 3, newColor.z, time);
+            } else {
+                Vector3& dst = GetModel()->mColor;
+                dst = newColor;
+            }
+        }
+    }
+
+    if (GetOverdrawModel()) {
+        float oldAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xf])(this, this->mCurrentState);
+        float newAlpha = ((float(__thiscall*)(cSPEditorHandle*, int))this->vptr[0xf])(this, state);
+        if (oldAlpha != newAlpha) {
+            if (animate)
+                ANIM(pAnimator, this->mOverdrawModel, 4, newAlpha, time);
+            else
+                GetOverdrawModel()->mAlpha = newAlpha;
+        }
+        Vector3 oldColor, newColor;
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x11])(this, &oldColor, this->mCurrentState);
+        ((void*(__thiscall*)(cSPEditorHandle*, Vector3*, int))this->vptr[0x11])(this, &newColor, state);
+        if (Vector3_NotEqual(&oldColor, &newColor)) {
+            if (animate) {
+                ANIM(pAnimator, this->mOverdrawModel, 1, newColor.x, time);
+                ANIM(pAnimator, this->mOverdrawModel, 2, newColor.y, time);
+                ANIM(pAnimator, this->mOverdrawModel, 3, newColor.z, time);
+            } else {
+                Vector3& dst = GetOverdrawModel()->mColor;
+                dst = newColor;
+            }
+        }
+    }
+    this->mCurrentState = state;
 }

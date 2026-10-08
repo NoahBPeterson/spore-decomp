@@ -1,0 +1,2 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00f170c0 1626 cSPUIProgress::HandleUIMessage (level-progress panel; names Claude-coined): complete; all 21 distinct callees present, vtable slots 0x1c/0x28/0x7c/0xf0/0x10c as original; cl merges the two arms of each Show/Hide pair and the F12970 tail, original keeps them separate

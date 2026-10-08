@@ -1,0 +1,1 @@
+00cbcde0 1843 complete; same call sequence and math (equiv: ~99% of valid inputs identical, rest differ by <=8 ulp from x87/SSE spill choices); cl mixes x87 and SSE differently from the original (521 vs 548 insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

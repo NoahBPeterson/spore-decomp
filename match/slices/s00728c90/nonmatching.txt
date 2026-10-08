@@ -3,3 +3,4 @@
 00729760  194  Complete masked-row copy loop; not byte-exact.
 00729820  6    Complete ctor; only the store order of f8 vs the final fstp differs.
 00729ad0  65   Complete Find (thiscall); register allocation of begin/loop counter differs (mine 65B vs 70B).
+00728c90  985  Complete CreateUVsAndCharts (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-); stack-slot order of vecB/rect temp, dead erase-copy loops and mesh-info induction pointer differ

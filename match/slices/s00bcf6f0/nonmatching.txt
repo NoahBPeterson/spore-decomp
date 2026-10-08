@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00bcf6f0  -1  cBuilding cCombatant::TakeDamage override: complete; block layout and register allocation differ

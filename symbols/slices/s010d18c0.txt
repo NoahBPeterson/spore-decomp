@@ -1,0 +1,2 @@
+010d18c0 ?getPenetrations@hkMultiSphereTriangleAgent@@UAEXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  # Havok 3.1 mangled name from the binary; transforms triangle + spheres to world, closestPointTriangle per sphere
+010d1f40 ?staticGetPenetrations@hkMultiSphereTriangleAgent@@SAXABVhkCdBody@@0ABUhkCollisionInput@@AAVhkCdBodyPairCollector@@@Z  # same with the triangle cache built on the stack

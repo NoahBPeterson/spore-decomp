@@ -5,3 +5,4 @@
 0062cbc0   62  FUN_0062cbc0: complete; x87 fabs/compare schedule vs SSE; return-bool shape
 0062cd30   -   FUN_0062cd30: complete; ctor ref/release dead branches (fields zeroed then tested) not reproduced
 0062cdb0   52  FUN_0062cdb0: complete; vector dtor call + release order and delete-flag epilogue
+0062d0f0 1415 cSPPlayMode_Creature walk/dodge controller (PlayModeCreature::MoveTo, names Claude-coined): complete; 26/26 call sites in original order, size 1.0x; frame 0x48 vs 0x40 (original reuses dead argument home slots as spill slots); difftest WEAK (242 valid, no mismatch) and x87/SSE scheduling differ

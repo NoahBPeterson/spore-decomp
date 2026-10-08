@@ -1,0 +1,1 @@
+004efb20 CheckRequiredParts  # validity test: every model part id must be in the per-key allowed list (map at 0x015da884); sets validity bit 0x12

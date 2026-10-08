@@ -1,0 +1,4 @@
+01071d70 SP::cSPUISpace::UpdateTerraformingSlots  # PDB name; refreshes the 3 terraform slot rows (icons, lock/tool windows, per-slot SetSlot 0x01068d30)
+01068d30 SP::cSPUISpace::SetTerraformingSlot  # thiscall(id, locked, key*, scanned, flagA, same) ret 0x18; called 18 times by UpdateTerraformingSlots
+00bbc670 SP::TerraformingManager::F670  # thiscall(rec) ret 4; returns -1 to abort the refresh
+00bbe470 SP::TerraformingManager::GetUnlockedCount  # thiscall(rec) ret 4; second slot threshold compared against the row index

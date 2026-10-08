@@ -1,0 +1,1 @@
+00c1a3c0  1405  cCreatureBase cCombatant::TakeDamage override: complete (size 1793 = 1793, 55 calls both, identical ordered call/vslot/const sequence); the two death-effect Post blocks (types 0/1) are laid out in a different order, ObjRef temp register caching and frame (0x14 vs 0x18) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

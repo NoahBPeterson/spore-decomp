@@ -1,0 +1,1 @@
+013329c0 Simulator::InitCommodityNodeAttributes  # Claude-coined: dynamic initializer ($E225) of the cCommodityNode Simulator::Attribute table (15 records at 0x01570a60, member names mResourcePoints..mConstructingVehicle, offsets match ModAPI cCommodityNode)

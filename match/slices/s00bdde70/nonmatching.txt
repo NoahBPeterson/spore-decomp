@@ -1,0 +1,1 @@
+00bdde70  1168  cCity::UpdateCityHallRollover: complete (57/57 call/vcall/const events in identical order), 1527 vs 1575 B; flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast; register allocation (this/slot/count), inline wstring pointer math and color-arg pushes differ

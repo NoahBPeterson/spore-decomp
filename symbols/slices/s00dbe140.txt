@@ -1,0 +1,1 @@
+00dbe520 SP::MOVE_Activate  # PDB candidate (caller-scored); cdecl (creature, 3 unused, flags, result block, move params); creates the pooled move state and fills the result block

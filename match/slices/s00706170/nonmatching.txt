@@ -6,3 +6,4 @@
 00706c80   90  complete forward copy of 9-dword elements; register allocation differs
 00706d00   64  complete vector-of-0x10 allocator; parameter register allocation differs
 00706d60   96  complete array-of-0x144 destructor loop; register allocation differs
+00706170 1342 complete EnvLW::UpdateEnvLightSample (SSE/x87 mix, 10 calls, same call/vtable sequence); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- ; register allocation, frame size (0x7c4 vs 0x794) and clamp/dir-pointer scheduling differ

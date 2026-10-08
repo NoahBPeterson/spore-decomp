@@ -1,0 +1,1 @@
+00f7caf0 EA::Swarm::cParticlesEffectOld::ApplyEffect  # Claude-coined class name: older-layout twin of 00ab18d0 (ApplyEffect, s00ab1400) with the same callee order; this = cComponentBase subobject (+8)

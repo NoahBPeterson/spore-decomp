@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00dd3ed0/s00dd3ed0.cpp  ?Init@cSPUICommScreen@@QAEXPBX@Z  00dd4260  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

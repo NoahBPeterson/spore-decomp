@@ -1,0 +1,1 @@
+00f8e6c0 TerrainRayCast  # cube-map terrain heightfield ray cast (shell sphere intersect + 2.0 march + 20-step bisect); callees 0xf884a0 ray/sphere, 0xf8d620 cTerrainMap<ushort>::GetFloat

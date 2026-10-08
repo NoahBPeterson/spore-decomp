@@ -1,0 +1,1 @@
+008c0000 T2K_NewTransformation  # PDB candidate (caller-single); setjmp wrapper that concatenates the font matrix, derives ppem and fills the horizontal/vertical bitmap metrics

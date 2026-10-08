@@ -1,0 +1,1 @@
+00bf9e70 1477 Civ AI target-city picker; /O2 /MD /Gy /TP /arch:SSE /fp:fast; complete, 2018 vs 2030 bytes, same 100 calls and vtable slots in order; differs in loop-2 register allocation and spill slots

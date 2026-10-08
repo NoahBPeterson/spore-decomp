@@ -1,0 +1,2 @@
+00ca1310 PathSolver::Solve  # turn/straight/turn path solver: 2 SignedAngle (006994a0), acos, 7 WrapAngle
+00ca11c0 PathSolver::WrapAngle  # 2pi wrap, byte-exact thiscall

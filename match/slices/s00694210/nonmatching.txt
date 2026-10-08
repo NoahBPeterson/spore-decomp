@@ -4,3 +4,4 @@
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ
 00694e60  53  fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
 006950b0  86  introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs
+00694440 1369 EA::Variant::Read(stream, variant, endian): complete scalar (switch over 19 type ids) and counted-array paths, EH frame for the Variant temporary; the 1956-byte span also holds the tiny 0x694bd0 "**unsupported type**" assign (FUN_00694bd0 here). Mine 1920 B + tail vs 1956; 39/39 calls (38 + tail) in identical order; differs in tail-duplicated epilogues (original keeps the result in bl: mov bl,1 / mov al,bl, mine folds mov al,1) and the case block layout

@@ -1,0 +1,1 @@
+00f32d10 cSphere_PublishProperties  # pushes terrain/colour arrays to the property bus (vtbl slot 5/6) at this+0xc; byte-exact

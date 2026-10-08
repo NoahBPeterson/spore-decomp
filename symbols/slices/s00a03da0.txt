@@ -1,0 +1,1 @@
+00a03f50 DrawBodyBoxes_00a03f50  # lock/build box vertices/unlock per body entry (700-byte entries at +0x2e4), calls 0x00a02da0 BuildBoxVertices

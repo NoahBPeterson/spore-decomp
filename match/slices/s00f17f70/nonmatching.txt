@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f17f70 866 Update (level-progress UI): complete (32/32 call targets in order, 24/24 vcall slots, constants equal, size 1.001x, frame 0x88 equal); stack-slot assignment of float temps/rect copies differs (t/v1/r2/a offsets), zero-register (ebp) vs test reg; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

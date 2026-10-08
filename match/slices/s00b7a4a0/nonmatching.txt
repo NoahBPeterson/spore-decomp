@@ -1,0 +1,1 @@
+00b7a880 1582 complete; scheduling/stack layout of float vector math differs (n/perp temps, inlined Vector3 holes); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

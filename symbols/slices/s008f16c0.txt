@@ -1,0 +1,2 @@
+008f1c40 EA::XHTML::Layout::Table::MeasureContent  # PDB candidate; vtable slot +0x20, (SizingContext&, StyleState&) ret 8; folds cell min/max/percent widths into columns
+008f1960 EA::XHTML::Layout::Table::Build  # PDB candidate; thiscall no args, run once (mBuilt flag at +0x108)

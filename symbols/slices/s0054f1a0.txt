@@ -1,1 +1,1 @@
-0054f1a0  SP::Pollen::cAssetDirectory mapping persistence (save to GetSaveArea(0x11ac19d))  # dc: mutex-guarded stream writes
+0054f1a0  SP::Pollen::cAssetDirectory::Save  # dc: mutex-guarded save of 4 hash containers to save area 0x11ac19d

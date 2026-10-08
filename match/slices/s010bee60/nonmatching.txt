@@ -1,0 +1,1 @@
+010bee60 1770 complete hkSimpleConstraintUtil_InitInfo (effective-mass setup for 2 bodies + 3x3 inverse; equiv PASS 400/400, 100% coverage); x87 temp/frame layout (0x64 vs 0xe4) and operand orders differ

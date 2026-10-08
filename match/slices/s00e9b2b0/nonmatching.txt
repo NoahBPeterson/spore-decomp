@@ -1,0 +1,1 @@
+00e9b2b0  1077  Complete UpdateHitEffects: same 9 calls/vcalls in order, 1576 vs 1577 B, same frame size and loop head; only /arch:SSE float scheduling, spill slots and Transform temp layout differ (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast)

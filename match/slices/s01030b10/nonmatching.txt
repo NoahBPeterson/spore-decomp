@@ -1,0 +1,1 @@
+01030fd0 1078 complete; same call/vcall/immediate sequence as the original (75 calls, identical constants). Residual: /O2 bool stack-slot order (8 bool locals), SSE mulss normalize block (orig spills 1/len to memory, mine stays x87)

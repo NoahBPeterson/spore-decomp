@@ -1,0 +1,1 @@
+00dd8640 SP::cSPUIEventLog::PostFeedbackEvent  # PDB name; builds or reuses a cFeedbackEvent from a property list and returns mLastEventEntered

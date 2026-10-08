@@ -25,7 +25,7 @@ extern "C" void* __cdecl FUN_009309b0(void* dest, const wchar_t* src, int a3, in
 extern "C" wchar_t* eastl_search(const wchar_t* f1, const wchar_t* l1, const wchar_t* f2, const wchar_t* l2);  // 0x5e8ff0
 extern "C" int FUN_006abc90(unsigned root, const wchar_t* subkey, struct WStrVec* out);   // 0x6abc90
 extern "C" unsigned char FUN_006ab6c0(unsigned root, const wchar_t* path, const wchar_t* name, unsigned* out);  // 0x6ab6c0
-extern "C" unsigned char FUN_006ab840(unsigned root, int defValue, const wchar_t* name, struct WStr* out);      // 0x6ab840
+extern "C" unsigned char FUN_006ab840(unsigned root, const wchar_t* path, const wchar_t* name, struct WStr* out);      // 0x6ab840
 extern "C" void __cdecl WStr_Format(void* out, const wchar_t* fmt, ...);
 
 // ======================= wide string (16 bytes) =======================
@@ -45,6 +45,23 @@ struct WStr {
       : mpBegin(0), mpEnd(0), mpCapacity(0) {
     _ReadWriteBarrier();
     RangeInitialize(pBegin, pEnd);
+  }
+  struct InlineTag { InlineTag() {} };
+  // Same as the range ctor but with the allocation (EA operator new "App") expanded inline.
+  __forceinline WStr(const wchar_t* pBegin, const wchar_t* pEnd, const InlineTag&)
+      : mpBegin(0), mpEnd(0), mpCapacity(0) {
+    const int n = (int)(pEnd - pBegin);
+    const int cap = n + 1;
+    if (cap > 1) {
+      mpBegin = (wchar_t*)operator new(cap * 2, "App", 0, 0, g_allocFile, 0xd1);
+      mpCapacity = mpBegin + cap;
+    } else {
+      mpBegin = gEmptyWString;
+      mpCapacity = gEmptyWString + 1;
+    }
+    memcpy(mpBegin, pBegin, n * 2);
+    mpEnd = mpBegin + n;
+    *mpEnd = 0;
   }
   ~WStr() {
     if ((((char*)mpCapacity - (char*)mpBegin) & ~1) > 2 && mpBegin)
@@ -82,7 +99,7 @@ struct WStrVec {
   void* mAllocUnused;
   WStrVec() : mpBegin(0), mpEnd(0), mpCap(0) {}
   void push_back(const WStr& x);                // 0x553f10
-  ~WStrVec() {
+  __forceinline ~WStrVec() {
     for (WStr* p = mpBegin; p < mpEnd; ++p) {
       if ((((char*)p->mpCapacity - (char*)p->mpBegin) & ~1) > 2 && p->mpBegin)
         EASTL_allocator_deallocate(p->mpBegin);
@@ -119,7 +136,7 @@ struct EntryVec {                                // 0x15fea00
   void* mpCap;
   void Grow(int n);                              // 0x687ab0
 };
-extern EntryVec g_entryVec;
+extern EntryVec g_entryVec;                      // 0x15fea00
 
 // ======================= ArgScript =======================
 namespace EA { namespace ArgScript {
@@ -372,7 +389,7 @@ void ProfEnableAffinityMasks() {
     for (int c = nSub; c != 0; --c, ++it) {
       const wchar_t* sb = it->mpBegin;
       const wchar_t* se = it->mpEnd;
-      WStr sub(sb, se);
+      WStr sub(sb, se, WStr::InlineTag());
       int n = (int)((char*)se - (char*)sb) >> 1;
       for (wchar_t* q = sub.mpBegin; q < (wchar_t*)sub.mpEnd; ++q) {
         wchar_t w = *q;
@@ -444,41 +461,43 @@ void ProfEnableAffinityMasks() {
           }
           bool bIsBP1 = (cmpResult == 0);
           WStr_Format(&sPath, L"%ls\\%ls", g_regPath, sub.mpBegin);
-          bool bHave = FUN_006ab6c0(0x80000002, sPath.mpBegin, L"AddOnID", &id);
-          if (!bHave) {
+          unsigned id = bIsBP1;
+          bool bValid = FUN_006ab6c0(0x80000002, sPath.mpBegin, L"AddOnID", &id);
+          if (!bValid) {
             WStr tmp;
-            if (FUN_006ab840(0x80000002, !bIsBP1, L"AddOnID", &tmp)) {
+            if (FUN_006ab840(0x80000002, sPath.mpBegin, L"AddOnID", &tmp)) {
               id = wcstol(tmp.mpBegin, 0, 16);
               bValid = ((unsigned)(id - 1) <= 998);
             }
           }
-        }
-        if (bReq || bValid) {
-          int capped = (int)id;
-          if ((int)g_maxAddonID < (int)id) {
-            g_entryVec.Grow((int)id + 1);
-            g_maxAddonID = capped;
-          }
-          Entry40* eb = g_entryVec.mpBegin;
-          if (capped == 2 || capped >= (int)((char*)g_entryVec.mpEnd - (char*)eb) / (int)sizeof(Entry40))
-            capped = -1;
-          if (capped == (int)id)
-            eb[capped].b = 1;
-          unsigned packID = 0;
-          if (FUN_006ab6c0(0x80000002, sPath.mpBegin, L"PackID", &packID))
-            g_entryVec.mpBegin[id].a3 = (int)packID;
-          if (FUN_006ab840(0x80000002, !bValid, L"DataDir", &sDataDir)) {
-            if (capped == (int)id) {
-              WStr* dst = &g_entryVec.mpBegin[capped].name;
-              if (&sDataDir != dst)
-                dst->Assign((const wchar_t*)sDataDir.mpBegin, (const wchar_t*)sDataDir.mpEnd);
-            }
-          }
-          if (FUN_006ab840(0x80000002, !bValid, L"ProductKey", &sProductKey)) {
-            if (capped == (int)id) {
-              WStr* dst = &g_entryVec.mpBegin[capped].other;
-              if (&sProductKey != dst)
-                dst->Assign((const wchar_t*)sProductKey.mpBegin, (const wchar_t*)sProductKey.mpEnd);
+          if (bIsBP1 || bValid) {
+            if (id < 1000) {
+              int capped = (int)id;
+              int bad = -1;
+              if ((int)g_maxAddonID < (int)id) {
+                g_entryVec.Grow((int)id + 1);
+                g_maxAddonID = capped;
+              }
+              Entry40* eb = g_entryVec.mpBegin;
+              if (capped == 2 || capped >= (int)((char*)g_entryVec.mpEnd - (char*)eb) / (int)sizeof(Entry40))
+                capped = bad;
+              if (capped == (int)id)
+                eb[capped].b = 1;
+              unsigned packID = 0;
+              if (FUN_006ab6c0(0x80000002, sPath.mpBegin, L"PackID", &packID))
+                g_entryVec.mpBegin[id].a3 = (int)packID;
+              if (FUN_006ab840(0x80000002, sPath.mpBegin, L"DataDir", &sDataDir)) {
+                if (capped == (int)id) {
+                  WStr* dst = &g_entryVec.mpBegin[capped].name;
+                  if (&sDataDir != dst)
+                    dst->Assign((const wchar_t*)sDataDir.mpBegin, (const wchar_t*)sDataDir.mpEnd);
+                }
+              }
+              if (FUN_006ab840(0x80000002, sPath.mpBegin, L"ProductKey", &sProductKey)) {
+                WStr* dst = &g_entryVec.mpBegin[id].other;
+                if (&sProductKey != dst)
+                  dst->Assign((const wchar_t*)sProductKey.mpBegin, (const wchar_t*)sProductKey.mpEnd);
+              }
             }
           }
         }

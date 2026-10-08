@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00e6eec0  1417  complete: cell motion step; static with ESI self (cl also picks EAX for flags, original keeps all 5 args on the stack), x87/SSE mix and branch layout differ; call multiset (30 direct calls), constants and switch tables match

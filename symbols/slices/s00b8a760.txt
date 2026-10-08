@@ -1,0 +1,3 @@
+00b8a760 SP::cPlanetModel::RebuildPoliticalZones  # named by the caller comment in s00b8aea0; builds zone-border vertex tile map then cNatlBoundsBuilder::Build
+00b85ca0 TileMap::operator[]  # hash_map operator[] on this+0xf4 (key x,y,face; value 0x14 bytes)
+00b7f430 TileMap::DoFreeNodes  # hashtable clear helper (buckets, count)

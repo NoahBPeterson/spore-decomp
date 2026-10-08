@@ -1,0 +1,1 @@
+009344b0 EA::IO::IniFile::WriteEntry  # writes "[section]"/"key = value" lines with "\r\n", rbtree section maps at +0x444/+0x460

@@ -8,3 +8,4 @@
 0047ebe0  57   GetZeroVector: zero-init aggregate uses integer stores in original
 0047f290  286  IsFlagSet: bitset test and local slots differ
 0047f3e0  179  SetScale: reference-local product ordering and /Od slots differ
+0047ec40  643  SetState: complete (guard, alpha+colour transitions for model and overdraw model, animate vs direct); /Od local slot layout differs (holes after SetFlag pairs)

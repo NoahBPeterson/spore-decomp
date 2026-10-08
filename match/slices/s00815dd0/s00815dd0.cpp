@@ -6,6 +6,7 @@
 // Relocations (callees, globals, vtables) are masked by the checker, so the
 // external identities only need the right calling convention / arity.
 
+#include <intrin.h>
 typedef unsigned int      u32;
 typedef unsigned short    u16;
 typedef unsigned char     u8;
@@ -73,9 +74,7 @@ extern "C" void  UI_PropertyEditor_ctor(void*);
 extern "C" void  UI_cConnectionDialog_ctor(void*);
 extern "C" void  EA_Stopwatch_ctor(void*, int);
 extern "C" void  EA_LimitStopwatch_SetTimeLimit(void*, int, int);
-extern "C" void  FUN_00989650(int, int, int);
 extern "C" void  FUN_008129c0();
-extern "C" void  FUN_0080ff20();
 extern "C" void  FUN_00813760_p();
 extern "C" void  FUN_008137f0_p();
 extern "C" void  InitFonts_p();
@@ -352,15 +351,92 @@ void CalloutMessageBox::ctor816cb0(int cb) {
 }
 
 // ===========================================================================
-// cSPUIMainWin::Init  (large; behavioural transliteration, not byte-exact)
+// cSPUIMainWin::Init
 // ===========================================================================
+
+// Opaque heap objects. Every method here is a __thiscall member at the address in its name.
+struct RawObj {
+    void* Fn958cf0();            // 0x00958cf0 WindowMgr ctor (size 0x838)
+    void* Fn80edb0();            // 0x0080edb0 LayerManager ctor (0x98)
+    void* Fn8352d0();            // 0x008352d0 TooltipManager ctor (0x30)
+    void* Fn999520();            // 0x00999520 SerializationService ctor (0x34)
+    void* Fn833790();            // 0x00833790 (0xc)
+    void* Fn8320d0();            // 0x008320d0 cSPUIDebugConsole ctor (0x214)
+    void* Fn997b60();            // 0x00997b60 (0x20)
+    void* Fn998df0(void* wm);    // 0x00998df0 (0x98)
+    void  Fn811f20();            // 0x00811f20 cSPUILayoutManager ctor (0x44)
+    void* Fn8025e0();            // 0x008025e0 cSPUICursorManager ctor (0x5c)
+    void* Fn81e2b0();            // 0x0081e2b0 PropertyEditor ctor (0x14)
+    void* Fn803020();            // 0x00803020 cSPUIStringBinder ctor (0x50)
+    void* Fn810000();            // 0x00810000 cConnectionDialog ctor (0x18)
+    void* Fn817a40();            // 0x00817a40 (0x88)
+    void  Fn83c800();            // 0x0083c800 ArgScript command base ctor
+    void  Fn83a9f0(int);         // 0x0083a9f0 cArgumentSpec ctor
+    void  Fn80f530();            // 0x0080f530 LayerManager::Init
+    void  Fn835610();            // 0x00835610 TooltipManager::LoadProps
+    void  Fn802160();            // 0x00802160 cursor AddStandardCursors
+    void  Fn823a00();            // 0x00823a00 PropertyEditor::Init
+    void  Fn802cd0();            // 0x00802cd0 console Init
+    void  Fn802a20(int);         // 0x00802a20
+    void  Fn802a30(int);         // 0x00802a30 console Show
+    void  Fn812160(const wchar_t*, u32, int, u32); // 0x00812160 cSPUILayout::Init
+    void  Fn810590(int);         // 0x00810590 SetVisibility
+    void* Fn8105b0(u32, int);    // 0x008105b0 FindWindowByID
+    void  Fn8178b0(int);         // 0x008178b0
+    void  Fn8115a0();            // 0x008115a0 cSPUILayoutManager::InitMessaging
+    int   Fn92b300(const wchar_t*, int, int, int); // 0x0092b300 EA::CommandLine::FindSwitch
+};
+extern "C" void* FUN_00f473a0(unsigned int, const char*, int, int, int, int);  // operator new (heap)
+extern "C" void* FUN_00926020(unsigned int, const char*, int, int, int, int);  // ZoneObject::operator new
+
+extern "C" void  FUN_00813b20();       // cSPUITooltipManager::Init
+extern "C" void  FUN_00813120();
+extern "C" void  FUN_00956d90();
+extern "C" void  FUN_0096ef80();
+extern "C" void  FUN_008005f0();       // UTFWin::RegisterUIBehaviors
+extern "C" void  FUN_0082f760();
+extern "C" void  FUN_00957f40(void*);
+extern "C" void  FUN_0067cba0(void*);
+extern "C" void  FUN_0067cbd0(void*);
+extern "C" void  FUN_0067cbb0(void*);
+extern "C" void* FUN_0067dd50();
+extern "C" void* FUN_006895b0();
+extern "C" void* FUN_0067dcc0();       // SP::MessageServer
+extern "C" void* FUN_0067dcd0();       // GetManager
+extern "C" void* FUN_0067de20();       // SP::CheatManager
+extern "C" void* FUN_0067de40();
+extern "C" void* FUN_0067dce0();
+extern "C" void* FUN_0067caa0();       // SP::WindowManager
+extern "C" int   FUN_0067cab0();
+extern "C" void* FUN_0080fee0();
+extern "C" char  FUN_0080ff20();
+extern "C" void  FUN_0080a700();       // cSPUIImageAtlasMap::Init
+extern "C" void  FUN_008129c0();       // RegisterLayoutCheat
+extern "C" void  FUN_007f4850();
+extern "C" bool  FUN_006ab760(const void* str, const wchar_t* lit);
+extern "C" void  FUN_00989650(void (*)());
+extern "C" void  FUN_008085d0(void*, void*, int, int, void*);
+extern "C" void  FUN_006b5030(int);
+extern "C" void  FUN_00813c60();
+extern "C" void  FUN_00812c90();
+extern "C" void  FUN_00812d00();
+extern "C" void  FUN_0083bcd0(void* spec, ...);
+extern u32 g_01545188, g_01545198, g_0154519c;
+extern RawObj* g_015fd920;               // command-line object
+extern float g_015451e8, g_015451ec;     // mouse scale
+extern u8 g_0164d211;                    // zh-cn flag
+
 struct cSPUIMainWin {
-    char  pad_00[0x218];
+    char  pad_00[4];
+    u32   sub4_vt;
+    char  pad_08[0x214 - 8];
+    u32   listener;       // +0x214 (message-listener subobject)
     bool  mInitialized;   // +0x218
+    char  pad_219[3];
     u8    flags21c;       // +0x21c
     char  pad_21d[0x260 - 0x21d];
-    void* mpHints;        // +0x260
-    void* mpStatus;       // +0x264
+    void* mpWindowMgr;    // +0x260
+    void* mpSerial;       // +0x264
     char  pad_268[0x270 - 0x268];
     void* mpLayer;        // +0x270
     void* mpTooltip;      // +0x274
@@ -372,164 +448,245 @@ struct cSPUIMainWin {
     char  pad_2a8[0x2d0 - 0x2a8];
     void* mpPropEditor;   // +0x2d0
     bool  mPropEditorInit;// +0x2d4
+    char  pad_2d5[3];
     void* mpDebugConsole; // +0x2d8
 
     bool Init();
+    void InitFonts();             // 0x00815ce0
+    void InitHitMaskFactory();    // 0x00813760
+    void InitStringFactories();   // 0x008137f0
+    void UpdateMouseScale();      // 0x008131b0
+    void InitTitleScreen();       // 0x00813980
 };
+
+static inline void Vv3(void* p, int off, int a, int b, int c) {
+    ((void(__thiscall*)(void*, int, int, int))(*(void***)p)[off / 4])(p, a, b, c);
+}
+static __forceinline void AssignRef(void** slot, void* nv, int addIdx, int relIdx) {
+    void* old = *slot;
+    if (nv != old) {
+        if (nv) Vv0(nv, addIdx);
+        *slot = nv;
+        if (old) Vv0(old, relIdx);
+    }
+}
+
+// helper: operator new + out-of-line ctor, null-checked like the original
+#define NEWOBJ(var, size, name, ctorcall) \
+    do { void* _m = FUN_00f473a0(size, name, 0, 0, 0, 0); var = _m ? ((RawObj*)_m)->ctorcall : 0; } while (0)
 
 // @ 0x00815dd0
 bool cSPUIMainWin::Init() {
     if (mInitialized) return true;
     mInitialized = true;
 
-    cSPUITooltipManager_Init();
-    sInitDropShadowQuality();
+    FUN_00813b20();
+    FUN_00813120();
     FUN_00956d90();
     FUN_0096ef80();
-    UTFWin_RegisterUIBehaviors();
-    InitFonts_p();
-    FUN_00813760_p();
-    FUN_008137f0_p();
+    FUN_008005f0();
+    InitFonts();
+    InitHitMaskFactory();
+    InitStringFactories();
     FUN_0082f760();
 
-    void* wm = Alloc(0x838, "UI/WindowManager", 0, 0, 0, 0);
-    if (wm) UI_WindowManager_ctor(wm);
-    mpHints = wm;
-
-    Vv2(wm, 0x0c, 0, 0);            // SetSize
-    Vv0(wm, 0x24);
-    Vv1((void*)this, 0x50, -0x10);
-    Vv2(wm, 0x08, (int)this, 1);
-
-    UpdateMouseScale_p();
-    if (*(float*)0x15451e8 < 0.001f) *(float*)0x15451e8 = 1.0f;
-    if (*(float*)0x15451ec < 0.001f) *(float*)0x15451ec = 1.0f;
-    FUN_00957f40(wm);
-    FUN_0067cba0(wm);
-
-    void* lm = Alloc(0x98, "UI/LayerManager", 0, 0, 0, 0);
-    if (lm) UI_LayerManager_ctor(lm);
-    mpLayer = lm;
-    Vv0(lm, 0x00);
-    cSPUILayerManager_Init(lm);
-    FUN_0067cbd0(lm);
-
-    void* tm = Alloc(0x30, "UI/TooltipManager", 0, 0, 0, 0);
-    if (tm) { UI_TooltipManager_ctor(tm); Vv0(tm, 0x04); }
-    mpTooltip = tm;
-    FUN_00835610(mpTooltip);
-
-    void* ss = Alloc(0x34, "UI/SerializationService", 0, 0, 0, 0);
-    if (ss) UI_SerializationService_ctor(ss);
-    mpStatus = ss;
-
-    Vv1(mpStatus, 0x04, (int)Alloc(0x0c, (const char*)0x13f6b3c, 0, 0, 0, 0));
-    if (*(void**)((char*)this + 0x264)) {}
+    NEWOBJ(mpWindowMgr, 0x838, "UI/WindowManager", Fn958cf0());
     {
-        void* a = Alloc(0x0c, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) FUN_00833790(a);
-        Vv1(mpStatus, 0x04, (int)a);
+        void* disp = FUN_0067dd50();
+        struct R8 { int a[8]; };
+        R8 rect = *(R8*)Vcp0(disp, 0x1c);
+        ((void(__thiscall*)(void*, float, float))(*(void***)mpWindowMgr)[0x0c / 4])
+            (mpWindowMgr, (float)rect.a[2], (float)rect.a[1]);
     }
-    {
-        void* a = Alloc(0x214, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) cSPUIDebugConsole_ctor(a);
-        Vv1(mpStatus, 0x04, (int)a);
-    }
-    {
-        void* a = Alloc(0x20, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) FUN_00997b60(a);
-        Vv1(mpStatus, 0x04, (int)a);
-    }
-    {
-        void* a = Alloc(0x0c, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) FUN_0098b700(a);
-        Vv1(mpStatus, 0x04, (int)a);
-    }
-    {
-        void* a = Alloc(0x98, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) FUN_00998df0(a, mpHints);
-        Vv1(mpStatus, 0x04, (int)a);
-    }
+    Vv0(mpWindowMgr, 0x24);
+    ((void(__thiscall*)(void*, int))(*(void***)&sub4_vt)[0x50 / 4])(&sub4_vt, -0x10);
+    Vv2(mpWindowMgr, 0x08, (int)&sub4_vt, 1);
+    UpdateMouseScale();
+    if (g_015451e8 < 0.001) g_015451e8 = 1.0f;
+    if (g_015451ec < 0.001) g_015451ec = 1.0f;
+    FUN_00957f40(mpWindowMgr);
+    FUN_0067cba0(mpWindowMgr);
+
+    NEWOBJ(mpLayer, 0x98, "UI/LayerManager", Fn80edb0());
+    Vv0(mpLayer, 0x00);
+    ((RawObj*)mpLayer)->Fn80f530();
+    FUN_0067cbd0(mpLayer);
 
     {
-        void* ms = SP_MessageServer();
-        static const u32 ids[11] = { 0xf62def, 0x1ee1001, 0x1ee1003, 0x1ee100d,
-            0x1ee1006, 0x1ee1007, 0x1ee1010, 0x1ee1011, 0x1ee1008,
-            0x1ee1002, 0x546bbb8 };
-        for (int i = 0; i < 11; i++)
-            Vv2(ms, 0x20, ids[i], (int)(this + 0x214));
-        Vv2(ms, 0x20, 0x61205e6, (int)(this + 0x214));
+        void* tm;
+        NEWOBJ(tm, 0x30, "UI/TooltipManager", Fn8352d0());
+        AssignRef(&mpTooltip, tm, 4, 8);
+    }
+    ((RawObj*)mpTooltip)->Fn835610();
+
+    NEWOBJ(mpSerial, 0x34, "UI/SerializationService", Fn999520());
+    {
+        void* o;
+        NEWOBJ(o, 0x0c, "", Fn833790());
+        Vv1(mpSerial, 0x04, (int)o);
     }
     {
-        void* q = GetManager();
-        Vv1(q, 0x20, 0x1545188);
-        Vv2(SP_MessageServer(), 0x20, *(u32*)0x1545188, (int)(this + 0x214));
+        void* o;
+        NEWOBJ(o, 0x214, "", Fn8320d0());
+        Vv1(mpSerial, 0x04, (int)o);
+    }
+    {
+        void* o;
+        NEWOBJ(o, 0x20, "", Fn997b60());
+        Vv1(mpSerial, 0x04, (int)o);
+    }
+    {
+        // inline-constructed two-base ref-counted service: vptrs at +0 and +4, count at +8
+        u32* o = (u32*)FUN_00f473a0(0x0c, "", 0, 0, 0, 0);
+        if (o) {
+            ((volatile u32*)o)[1] = 0x13ef094;
+            ((volatile u32*)o)[2] = 0;
+            ((volatile u32*)o)[0] = 0x14188c4;
+            ((volatile u32*)o)[1] = 0x14188c0;
+        }
+        Vv1(mpSerial, 0x04, (int)o);
+    }
+    {
+        void* o = FUN_00f473a0(0x98, "", 0, 0, 0, 0);
+        if (o) o = ((RawObj*)o)->Fn998df0(mpWindowMgr);
+        Vv1(mpSerial, 0x04, (int)o);
     }
 
+    void* ms = FUN_0067dcc0();
+    void* lst = &listener;
+    Vv2(ms, 0x20, (int)lst, 0xf62def);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1001);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1003);
+    Vv2(ms, 0x20, (int)lst, 0x1ee100d);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1006);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1007);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1010);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1011);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1008);
+    Vv2(ms, 0x20, (int)lst, 0x1ee1002);
+    Vv2(ms, 0x20, (int)lst, 0x546bbb8);
+    Vv2(ms, 0x20, (int)lst, 0x61205e6);
+    Vv2(FUN_006895b0(), 0x20, (int)&g_01545188, 1);
+    Vv2(ms, 0x20, (int)lst, (int)g_01545188);
+
     {
-        void* a = Alloc(0x44, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (a) FUN_00811f20(a);
+        void* lm = FUN_00f473a0(0x44, "", 0, 0, 0, 0);
+        if (lm) ((RawObj*)lm)->Fn811f20();
     }
-    FactoryRegister();
-    FUN_0080ff20();
-    cSPUIImageAtlasMap_Init();
+    Vv0(FUN_0080fee0(), 0x08);
+    ((RawObj*)FUN_0080fee0())->Fn8115a0();
+    FUN_008129c0();
+
+    {
+        // UI/SPUILayoutResourceFactory: inline ctor (vptr, atomic-zero refcount, final vptr)
+        u32* res = (u32*)FUN_00926020(8, "UI/SPUILayoutResourceFactory", 0, 0, 0, 0);
+        if (res) {
+            ((volatile u32*)res)[0] = 0x13effa8;
+            _InterlockedExchange((volatile long*)&res[1], 0);
+            ((volatile u32*)res)[0] = 0x14186c4;
+        }
+        Vv3(FUN_0067dcd0(), 0x44, 1, (int)res, 0);
+    }
+    if (FUN_0080ff20()) FUN_0080a700();
+
+    {
+        void* cur = 0;
+        void* m = FUN_00926020(0x5c, "UI/WindowManager", 0, 0, 0, 0);
+        if (m) cur = ((RawObj*)m)->Fn8025e0();
+        AssignRef(&mpCursor, cur, 4, 8);
+        FUN_0067cbb0(mpCursor);
+        void* mgr = FUN_0067dcd0();
+        char ok = ((char(__thiscall*)(void*, int, int, int))(*(void***)mgr)[0x44 / 4])(mgr, 1, FUN_0067cab0(), 0);
+        ((RawObj*)mpCursor)->Fn802160();
+        if (ok) {
+            void* c = mpCursor;
+            Vv1(mpWindowMgr, 0x38, c ? (int)((char*)c + 8) : 0);
+        }
+    }
+    ((void(__thiscall*)(void*, int))(*(void***)&sub4_vt)[0x78 / 4])(&sub4_vt, 0x1002);
 
     if (!mPropEditorInit) {
         mPropEditorInit = true;
-        void* pe = Alloc(0x14, "UI/PropertyEditor", 0, 0, 0, 0);
-        if (pe) UI_PropertyEditor_ctor(pe);
-        mpPropEditor = pe;
-        cSPUIPropertyEditor_Init(pe);
+        void* pe;
+        NEWOBJ(pe, 0x14, "UI/PropertyEditor", Fn81e2b0());
+        AssignRef(&mpPropEditor, pe, 8, 12);
+        ((RawObj*)mpPropEditor)->Fn823a00();
     }
 
-    void* sb = Alloc(0x50, (const char*)0x13f6b3c, 0, 0, 0, 0);
-    if (sb) cSPUIStringBinder_ctor(sb);
-    mpDebugConsole = sb;
-    cSPUIDebugConsole_Init(sb);
-    FUN_00802a20(sb, 0xc350);
-    FUN_00802a30(sb, 0);
-    Vv1(SP_CheatManager(), 0x30, (int)sb);
+    {
+        void* sb;
+        NEWOBJ(sb, 0x50, "", Fn803020());
+        AssignRef(&mpDebugConsole, sb, 0, 4);
+        ((RawObj*)mpDebugConsole)->Fn802cd0();
+        ((RawObj*)mpDebugConsole)->Fn802a20(0xc350);
+        ((RawObj*)mpDebugConsole)->Fn802a30(0);
+        Vv1(FUN_0067de20(), 0x30, (int)mpDebugConsole);
+    }
 
-    if (CmdLineHasSwitch()) {
-        void* wmn = SP_WindowManager();
+    // ArgScript cheat commands (command object = base + vptr + cArgumentSpec at +0x10)
+    {
+        char* c = (char*)FUN_00f473a0(0xd8, "App", 0, 0, 0, 0);
+        if (c) {
+            ((RawObj*)c)->Fn83c800();
+            *(volatile u32*)c = 0x1418abc;
+            ((RawObj*)(c + 0x10))->Fn83a9f0(1);
+            FUN_0083bcd0(c + 0x10, "Show pause screen", "<bool>", &g_01545198, "show or hide", 0);
+        }
+    }
+    FUN_0067de20();
+    {
+        char* c = (char*)FUN_00f473a0(0xd8, "App", 0, 0, 0, 0);
+        if (c) {
+            ((RawObj*)c)->Fn83c800();
+            ((RawObj*)(c + 0x10))->Fn83a9f0(1);
+            *(volatile u32*)c = 0x14189e4;
+            FUN_0083bcd0(c + 0x10, "toggles UI for image capture", 0);
+        }
+        Vv3(FUN_0067de20(), 0x18, (int)g_0154519c, (int)c, 0);
+    }
+    {
+        char* c = (char*)FUN_00f473a0(0xdc, "App", 0, 0, 0, 0);
+        if (c) {
+            ((RawObj*)c)->Fn83c800();
+            ((RawObj*)(c + 0x10))->Fn83a9f0(1);
+            *(volatile u32*)c = 0x1418a80;
+            FUN_0083bcd0(c + 0x10, "Enable localized text colorize", "<bool>", c + 0xd8, "enable or disable", 0);
+        }
+    }
+    FUN_0067de20();
+
+    if (g_015fd920 && g_015fd920->Fn92b300(L"colorLocalized", 0, 0, 0) != -1) {
+        void* wmn = FUN_0067caa0();
         if (wmn) {
             Vv1(wmn, 0x90, 1);
-            cString_SetColorLocalized(1);
+            FUN_006b5030(1);
         }
     }
 
     if (flags21c & 1) {
-        InitTitleScreen_p();
-        Vv2(SP_MessageServer(), 0x20, 0x366b9aa, (int)(this + 0x214));
+        InitTitleScreen();
+        Vv2(ms, 0x20, (int)lst, 0x366b9aa);
     }
 
     {
-        void* cd = Alloc(0x18, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (cd) UI_cConnectionDialog_ctor(cd);
-        mpMsgBox = cd;
-        cSPUILayout_Init(mpMsgBox, 0xa01a43c8, 1, 0x40464100, L"GlobalUIPause");
-        cSPUILayout_SetVisibility(mpMsgBox, 0);
-        cSPUILayout_FindWindowByID(mpMsgBox, 0x3868d60, 1);
-        FUN_008085d0(0, 0, 0, 0, 0);
+        void* cd;
+        NEWOBJ(cd, 0x18, "", Fn810000());
+        AssignRef(&mpMsgBox, cd, 4, 8);
+        ((RawObj*)mpMsgBox)->Fn812160(L"GlobalUIPause", 0x40464100, 1, 0xa01a43c8);
+        ((RawObj*)mpMsgBox)->Fn810590(0);
+        void* w = ((RawObj*)mpMsgBox)->Fn8105b0(0x3868d60, 1);
+        FUN_008085d0(w, (void*)FUN_00812d00, 1, 0, this);
     }
-
-    FUN_008129c0();
-    {
-        void* loc = *(void**)0x15fd920 ? (void*)0 : (void*)0;
-        (void)loc;
-    }
-    FUN_00989650(0, 0, 0);
-    {
-        void* dm = (void*)0;
-        Vv1(dm, 0x2c, 7);
-    }
+    FUN_007f4850();
+    g_0164d211 = FUN_006ab760(Vcp0(FUN_0067de40(), 0x14), L"zh-cn");
+    FUN_00989650(FUN_00813c60);
+    Vv3(FUN_0067dce0(), 0x2c, 7, (int)FUN_00812c90, 0);
 
     if (flags21c & 2) {
-        void* st = Alloc(0x88, (const char*)0x13f6b3c, 0, 0, 0, 0);
-        if (st) FUN_00817a40(st);
-        mpStringMgr = st;
-        FUN_008178b0(st, 0);
+        void* st;
+        NEWOBJ(st, 0x88, "", Fn817a40());
+        AssignRef(&mpStringMgr, st, 0, 4);
+        ((RawObj*)mpStringMgr)->Fn8178b0(0);
     }
-
     return true;
 }

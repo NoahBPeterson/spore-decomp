@@ -1,0 +1,1 @@
+00b52690 1521 complete PlaceObjectOnSurface (32/32 calls, same vtable slots); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; frame 0x164 vs 0x154, scheduling and register allocation differ

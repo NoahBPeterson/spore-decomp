@@ -1,1 +1,2 @@
 00748800 579 `anonymous namespace'::FilterModelSphere complete but register/schedule differs
+00748c30 600 cModelWorld closest-model query: complete (list and spatial-query paths, inlined candidate test x2); register/schedule differs; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE

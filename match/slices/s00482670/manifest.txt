@@ -2,3 +2,4 @@
 slices/s00482670/s00482670.cpp  ?Construct@RotationBall@@QAEPAU1@XZ  00482f90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00482670/s00482670.cpp  ?Destroy@RotationBall@@QAEXXZ  00483040  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00482670/s00482670.cpp  ?GetTuningOffset@RotationBall@@QAEPAUVector3@@PAU2@@Z  00483490  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00482670/s00482670.cpp  ?Update@cSPEditorHandleDeform@SP@@QAEXXZ  00482670  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS-

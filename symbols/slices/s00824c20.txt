@@ -2,4 +2,4 @@
 00824e10 EA::UTFWinControls::WinText creation helper  # calls CreateDefault
 00824ff0 UI::Window/SubWindow creation helper  # "UI/UI/SubWindow"
 00825110 EA::UTFWinControls::WinButton creation helper  # calls CreateDefault
-008252b0 large UI helper (unlabeled)
+008252b0 SP::cPropertyUI::AddIntSpinnerRow  # same body as AddSpinnerRow (0x00825930) but sprintf("%d", int)

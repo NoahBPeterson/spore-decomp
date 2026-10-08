@@ -1,0 +1,2 @@
+01326120 Simulator::InitStarManagerAttributes  # $E506: cStarManager serializer attribute table (19 records, 0x0156c668) dynamic initializer; names/offsets agree with ModAPI cStarManager
+0156c668 Simulator::cStarManager::sAttributes  # 19 x 0x3c Attribute records written by 0x01326120

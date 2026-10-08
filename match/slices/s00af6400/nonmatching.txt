@@ -1,0 +1,1 @@
+00af6400 1676 complete behavioural source (all 4 shape-type paths); frame 0x2a4 vs 0x264 and scheduling differ; calls/arg sizes match the original

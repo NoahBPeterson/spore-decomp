@@ -1,0 +1,1 @@
+00c9c8a0 1100 complete; stub-class model, same call/vcall sequence (65 calls, 30 vcalls), size 1555 vs 1565; register allocation/scheduling differ

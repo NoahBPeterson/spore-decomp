@@ -1,0 +1,1 @@
+010743a0 SP::cSPUISpace::Update  # per-frame UI update; PDB name, retail layout

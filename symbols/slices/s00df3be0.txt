@@ -1,0 +1,1 @@
+00df3be0 SP::cGalaxyGameEntryUIStateMachine::HandleEvent  # PDB candidate (caller-scored); big event-ID switch ending in UpdateNavigationControls

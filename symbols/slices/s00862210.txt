@@ -1,0 +1,1 @@
+00862210 jpeg_idct_4x4  # libjpeg (IJG 6a) jidctred.c reduced 4x4 IDCT, byte-exact; retail jpeg_decompress_struct has sample_range_limit at +0x544

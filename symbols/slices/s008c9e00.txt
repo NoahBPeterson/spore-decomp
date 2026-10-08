@@ -1,0 +1,4 @@
+008c9e00 lineJoin  # dev-PDB name (pdb_candidates caller-single); T2K stroker corner join
+008c9b70 AddTwoPointsA  # Claude-coined: appends two (x,y,on) points to list A, stroker in esi
+008c9c40 StrokeDist  # Claude-coined: approximate vector length with two Newton steps, args in eax/ecx
+008c9ca0 IsIntersection  # name used by the Ghidra card; segment intersection, x1/y1 in ecx/edx

@@ -1,0 +1,1 @@
+00df3be0  145  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete HandleEvent switch; same size (2032), frame and registers identical; only the three Unk_de5d00 call sites differ (original takes &zeros before the zero stores and loads b0 into ecx before the this load)

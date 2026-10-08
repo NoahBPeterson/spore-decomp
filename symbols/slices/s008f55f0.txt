@@ -1,0 +1,1 @@
+01667b10 ??_B?1??NameScanStatics@Style@XHTML@EA@@YAXXZ@51  # init-guard bits 1,2,4 (0x01667b10) set by the inlined name scan in CSSParser::ParseSimpleSelector 0x008f5960

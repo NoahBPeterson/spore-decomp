@@ -1,0 +1,1 @@
+00e2b9d0 cSPUIRolloverCivCityHall::UpdateVehicleButtons  # thiscall no args; refreshes buy-vehicle buttons 0x62d6902/08/0f of the city-hall rollover (shares city at +0xa8 with s00e2adb0 DoMessage)

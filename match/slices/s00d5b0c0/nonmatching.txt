@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00d5b0c0 685  complete UpdateBackgroundNoise (all paths, 48 calls); stack-slot layout, shared-zero register and inlined sound-stop loop shape differ

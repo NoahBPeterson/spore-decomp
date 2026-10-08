@@ -1,0 +1,1 @@
+00d32fd0 1523 cCreatureModeInputStrategy object-command dispatcher complete, all 23 cases (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast); size 2228 vs 2256, 94/96 direct calls (cl merges identical SpawnAcknowledgementEffect tails), same vtable slots; frame/reg alloc and case order differ
