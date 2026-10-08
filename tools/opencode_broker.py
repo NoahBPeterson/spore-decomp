@@ -30,7 +30,7 @@ PY_TOOLS = re.compile(r"^\.venv/bin/python3? (?:tools/matching/(?:slice_info|car
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
                       r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
-                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|nm|objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
+                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|nm|(?:[A-Za-z0-9_]+-w64-mingw32-)?objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
 DENY_CMD = re.compile(r"^(?:sudo|git|curl|wget|pip3?|uv|brew|npm|npx|ssh|scp|rsync|ghidra|pyghidra|analyzeHeadless|"
                       r"kill|pkill|killall|open|osascript|chmod|chown|ln|dd|truncate|shutdown|launchctl|crontab)(?:\s|$)")
 
@@ -187,10 +187,12 @@ def decide(r):
                 return "reject", "bare python; use .venv/bin/python <script>"
             if s == "perl" or s.startswith("perl "):
                 return "reject", "no perl; use the edit/write tools or .venv/bin/python"
-            if s.startswith("tools/matching/cl.sh "):  # compiler; object output must stay in work/match
+            if re.search(r"(?:^|[/\s])tools/matching/cl71?\.sh\s", s):  # compiler; object output must stay in work/match
                 if "/Fo" in s and not re.search(r"/Fo[^\s]*?work[\\/]+match", s):
                     return "reject", "compiler output outside work/match: %s" % s[:120]
                 continue
+            if "/tmp/" in s or re.search(r"(?:^|\s)/(?:private/)?tmp(?:/|\s|$)", s):
+                return "reject", "no /tmp; keep scratch under work/match/: %s" % s[:120]
             if not (PY_TOOLS.match(s) or SAFE_CMD.match(s)):
                 return "hold", "unrecognized command: %s" % s[:120]
             if "system(" in s or (s.startswith("awk") and re.search(r"print[^;}]*>|getline", s)) or (s.startswith("find") and re.search(r"-(?:exec|execdir|delete|ok|fprint)", s)):
