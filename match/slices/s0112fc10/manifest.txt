@@ -1,0 +1,5 @@
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_start@core@audio@rw@@YAHPAUAiffPlayer@123@@Z  01130270  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_getState@core@audio@rw@@YAHPAUAiffPlayer@123@PAH@Z  01130380  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_getProgress@core@audio@rw@@YAHPAUAiffPlayer@123@PAM@Z  01130390  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_getPosition@core@audio@rw@@YAHPAUAiffPlayer@123@PAM@Z  011303c0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0112fc10/s0112fc10.cpp  ?AiffPlayer_checkChunkID@core@audio@rw@@YAHI@Z  01130be0  /vc71 /O2 /MD /Gy /TP /arch:SSE

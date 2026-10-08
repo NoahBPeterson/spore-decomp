@@ -1,0 +1,20 @@
+# s01140b70: complete, behavior-equivalent source that is not byte-exact.
+# All built with VC .NET 2003 (/vc71) + /GL /LTCG, so register/schedule differences are expected.
+# Each reason names the flags and the difftest verdict.
+01140b70  274  voice patch setup: loops sub-voices through MIX_playinit/stop/highpass; complete; difftest WEAK 39.3% cov (object-heavy, needs live voice table). flags /vc71 /O2 /MD /Gy /TP
+01140cb0  581  SNDVOICEI_alloc: voice-slot allocation + sort over the 0x84-byte voice table; complete; difftest PASS 96.0% cov. flags /vc71 /O2 /MD /Gy /TP
+01141020  234  SNDVOICEI_free: leaf; unlink/clear voice slot and its partner; complete; difftest WEAK 50.0% cov (random inputs rarely satisfy partner conditions). flags /vc71 /O2 /MD /Gy /TP
+01141150   34  voice-handle validation leaf; complete; difftest WEAK 58.8% cov. flags /vc71 /O2 /MD /Gy /TP
+011411a0   16  intrusive list push-front leaf; complete; difftest PASS 100% cov; only the else-branch count increment schedules as load/inc/store instead of inc [mem] (/LTCG codegen). flags /vc71 /O2 /MD /Gy /TP
+011411d0   16  intrusive list push-back leaf; complete; difftest PASS 100% cov; same /LTCG count-increment schedule difference. flags /vc71 /O2 /MD /Gy /TP
+01141200   31  intrusive list pop-front leaf; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP
+01141230   47  intrusive list unlink leaf; complete; difftest PASS 84.6% cov. flags /vc71 /O2 /MD /Gy /TP
+01141270   40  find object by handle and walk its +0x114 list; complete; difftest WEAK 53.8% cov. flags /vc71 /O2 /MD /Gy /TP
+011412b0  183  SNDI_patchtohdr: parse the SNDI tag stream into header/buffers/timestretch arrays; complete; difftest PASS 86.8% cov. flags /vc71 /O2 /MD /Gy /TP
+01141690   11  register callback leaf; complete; difftest PASS 100% cov; index-then-increment schedules differently under /LTCG. flags /vc71 /O2 /MD /Gy /TP
+011416b0   48  unregister callback leaf; complete; difftest WEAK 21.4% cov. flags /vc71 /O2 /MD /Gy /TP
+01141710   18  invoke registered callbacks leaf; complete; difftest WEAK 21.4% cov. flags /vc71 /O2 /MD /Gy /TP
+01141740   2   enable-check + handle lookup then thiscall dispatch; complete; difftest WEAK 22.2% cov; single global byte test lowers as mov/test instead of cmp [mem],0 (/LTCG). flags /vc71 /O2 /MD /Gy /TP
+01141780  372  decode-filter pull: fill output from decoder rings, memcpy/codec read, ring wrap; complete; difftest PASS 75.0% cov. flags /vc71 /O2 /MD /Gy /TP
+01141920   57  decode-filter release: refcount, free codec and decoder; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP
+01141990  141  SFILTER_unpackealayer3pinit: allocate/shared decoder node + install filter fns; complete; difftest UNSUPPORTED 0 valid inputs (object-heavy: needs live System singleton + decoder). flags /vc71 /O2 /MD /Gy /TP

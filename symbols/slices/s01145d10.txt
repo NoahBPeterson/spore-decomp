@@ -1,0 +1,7 @@
+01145d10 rw::audio::core::CMpegLayer3Base::Reorder  # ISO III_reorder for short/mixed blocks; granule +0x154, sfreq +0x3c, widths 0x14cba10 / short bands 0x14cb50e; called from 0x1136776 and 0x115cea1
+01146200 rw::audio::core::CMpegLayer3Base::Antialias  # ISO III_antialias; cs 0x14cb788, ca 0x14cb7a8; called from 0x113679d and 0x115cec1
+011464a0 rw::audio::core::HELPER_Imdct12X4  # PDB name; 4-lane 12-point IMDCT accumulating into zeroed out; scalar fallback calls Imdct12X1 (0x11661b0); coeffs 0x14cbab0
+011467f0 rw::audio::core::HELPER_Imdct36X4  # PDB name; calls Imdct36X1 0x116e4f0, Imdct12X1 0x11661b0, Imdct12X4 0x11464a0, Imdct36X4Impl 0x116efb0, OverlapAddX4 0x116f960
+01146940 rw::audio::core::HELPER_SignFlip  # multiply 8 blocks x 9 groups by [1,-1,1,-1]; called from 0x115cf11
+01146a10 rw::audio::core::HELPER_GatherHistories  # gather 8 hybrid planes; called from 0x115cf1c
+01146a90 rw::audio::core::CMpegLayer3Base::InitHuffTables  # fills mHuffTables[0..31] at +0x50; called by ctor 0x1146ca0

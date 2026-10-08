@@ -1,0 +1,13 @@
+# <va>  <diff-bytes>  <reason>
+0113cea0  23   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (282 valid, 42.9% cov < 60%): the mix path needs a live System/Dac setup random inputs rarely build
+0113cf20  50   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (377 valid, 100% cov); /LTCG register allocation around the three COM Release calls
+0113cf70  67   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/5 valid inputs (a timer/sample field differs: the original's timeGetTime value is not reproduced by the emulated import)
+0113cff0  519  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (241 valid, 76.5% cov); /LTCG scheduling + the SSE gain-ramp loop
+0113d200  326  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/171 valid inputs (a spread/limit float field is written on a differently-scheduled branch)
+0113d3a0  507  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: the DirectSound buffer vtable is a generated fake -> fake-arity/fault)
+0113d710  17   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (393 valid, 96.2% cov); cl hoists the state load/test before the prologue moves
+0113d7b0  226  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: fake DirectSound enumerator vtable)
+0113d930  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved DirectSound/user32 imports)
+0113d9f0  169  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: import:ord9 discarded)
+0113dae0  71   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 82.8% cov); /LTCG scheduling
+0113db70  76   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 18.9% cov < 60%): the state==2 branch is rarely reached from random state

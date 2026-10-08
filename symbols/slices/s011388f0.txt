@@ -1,0 +1,9 @@
+# va        Name  # evidence
+01138af0  rw::audio::core::SndPlayer1::CreateInstance  # PDB anchor
+01138d00  rw::audio::core::Snd9Service::ReleaseEvent  # PDB candidate
+01138d40  rw::audio::core::Snd9Service::UpdateSnd9SampleRate  # PDB candidate
+01138d90  rw::audio::core::Snd9Service::RwacTimerClient  # PDB anchor
+01138ec0  rw::audio::core::Snd9Service::CreateInstance  # PDB anchor
+01138f90  rw::audio::core::SinePlayer::PlayHandler  # PDB
+01138fb0  rw::audio::core::SinePlayer::StopHandler  # PDB
+01139500  rw::audio::core::SampleCapture::StartHandler  # PDB anchor

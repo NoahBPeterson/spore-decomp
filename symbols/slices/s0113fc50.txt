@@ -1,0 +1,33 @@
+0113fc50 F_0113fc50  # dc: per-voice format init from table 0x14cafd2
+0113fca0 F_0113fca0  # dc: decoder object init
+0113fd00 F_0113fd00  # dc: set per-voice format byte across a play
+0113fdd0 F_0113fdd0  # dc: set per-voice channel volume
+0113fec0 F_0113fec0  # dc: recompute voice gains (8-bit /127)
+0113ff00 F_0113ff00  # dc: set per-voice pitch
+01140030 F_01140030  # dc: apply lowpass to a play
+011400a0 F_011400a0  # dc: apply highpass to a play
+01140110 F_01140110  # dc: scan buffer for a 4-byte tag ("data" special)
+01140190 F_01140190  # dc: SND 10-byte extended float -> double
+01140290 F_01140290  # dc: wrapper that leaves the extended float in st0
+011402f0 SndDecoder::DecodeS16  # dc: 8-bit signed -> 16-bit
+01140380 Snd::CSign8IntDecS16::SetState  # PDB
+011403b0 SndDecoder::DecodeRaw  # dc: 16-bit big-endian -> host
+01140460 SndDecoder::DecodeSwap  # dc: 16-bit byte swap
+011404f0 SndDecoder::Dtor  # dc: scalar deleting destructor (vtable 0x14cafa0)
+01140530 SndDecoder::Setup  # dc: bind source buffer / count
+01140560 SndDecoder::DecodeMul  # dc: 8-bit unsigned -> 16-bit
+011405e0 SNDCTRL_filteradd  # PDB candidate
+01140650 F_01140650  # dc: apply per-channel mix gains
+011406e0 F_011406e0  # dc: reset or alternate the voice gain table
+01140760 F_01140760  # dc: platform init (0x16e7bfc=1)
+01140780 F_01140780  # dc: apply global state to the renderer
+01140810 SNDPLATFORM_init  # PDB anchor
+01140870 SNDPLATFORM_restore  # PDB
+01140890 SNDPLATFORM_setpitch  # PDB candidate
+01140930 SNDPLATFORM_lowpass  # PDB candidate
+011409b0 SNDPLATFORM_highpass  # PDB
+01140a00 F_01140a00  # dc: follow voice link
+01140a20 F_01140a20  # dc: find voice index within a 6-slot group
+01140a70 F_01140a70  # dc: set one channel gain
+01140ab0 SNDPLATFORM_stop  # PDB
+01140b20 SNDPLATFORM_filteradd  # PDB candidate

@@ -1,0 +1,13 @@
+0112ebf0 WAVE decode-buffer / timer setup  # allocates 0x4000 decode buffers, wires the stream timer
+0112eeb0 WAVE packet submit  # gain table + sound player submit (timer callback)
+0112f080 WAVE set parameter (indexed)  # decoder -> FUN_0113fdd0
+0112f0c0 WAVE start playback  # decoder reset, state=1 (byte-exact)
+0112f0f0 WAVE stop playback  # decoder gain, state=0
+0112f130 WAVE player shutdown/release  # frees decoder, chunks and buffers
+0112f230 WAVE set parameter (float)  # decoder -> FUN_0113ff00
+0112f2d0 WAVE playback progress  # looped/total samples or -1
+0112f340 WAVE buffer-fill protocol  # returns 1/2/0
+0112f3c0 WAVE init from in-memory file image
+0112f550 WAVE player Create  # allocates + parses fmt/data chunks
+0112fa50 WAVE packet submit (variant)
+0112fb50 WAVE chunk pump

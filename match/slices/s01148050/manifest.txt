@@ -1,0 +1,6 @@
+slices/s01148050/s01148050.cpp  ?SetBuffer@CMpegBase@core@audio@rw@@QAEXPAE@Z  01148a00  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ?ResetLoadedHistory@CMpegBase@core@audio@rw@@QAEXXZ  01148a20  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ?ResetBits@CMpegBase@core@audio@rw@@QAEXXZ  01148cb0  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ?Close@CMpegBase@core@audio@rw@@QAEHXZ  01148cc0  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ??0CMpegBase@core@audio@rw@@QAE@XZ  01148cd0  /vc71 /O2 /MD /Gy /TP /arch:SSE2
+slices/s01148050/s01148050.cpp  ??1CMpegBase@core@audio@rw@@UAE@XZ  01148d40  /vc71 /O2 /MD /Gy /TP /arch:SSE2

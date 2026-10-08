@@ -1,0 +1,15 @@
+01131b70 rw::audio::core::SndStream_parseHeader  # tag interpreter: frame len / ID3 skip / RIFF scan / sync (calls 01130c50, 01130d90)
+01131e00 rw::audio::core::SndStream_init  # initialise a stream-state record from args and parse the first header
+01131f00 rw::audio::core::SndStream_unlinkAll  # unlink the six equalizer nodes if their gain != 0
+01132090 rw::audio::core::SndStream_startStream  # SNDSTRMI_startstream: create packet player and copy per-channel gains
+01132280 rw::audio::core::SndStream_bitrateToFrames  # bitrate-index * channels -> frame length
+01132300 rw::audio::core::SndStream_getState  # table lookup 0x16e61e0[index]
+01132320 rw::audio::core::SndStream_removeLine  # remove a line from both FIFOs
+01132370 rw::audio::core::SndStream_releaseCallback  # SNDSTRMI_releasecallback: release chunk at p-8 via stream
+011323a0 rw::audio::core::SndStream_releaseLine  # advance line accounting and release finished lines
+01132450 rw::audio::core::SndStream_parseHeaderAndStart  # SNDSTRMI_parseheader
+011325d0 rw::audio::core::SndStream_isHeld  # SNDSTRMI_isheld
+01132660 rw::audio::core::SndStream_purge  # SNDSTRM_purge
+01132770 rw::audio::core::SndStream_parseData  # SNDSTRMI_parsedata
+011328c0 rw::audio::core::SndStream_parseChunk  # SNDSTRMI_parsechunk
+01132a10 rw::audio::core::SndStream_destroy  # SNDSTRM_destroy

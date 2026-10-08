@@ -1,0 +1,7 @@
+# byte-exact functions for slice s01141a90
+slices/s01141a90/s01141a90.cpp  FUN_01141f10  01141f10  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01141a90/s01141a90.cpp  FUN_01142100  01142100  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01141a90/s01141a90.cpp  FUN_01142270  01142270  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01141a90/s01141a90.cpp  FUN_01142650  01142650  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01141a90/s01141a90.cpp  FUN_01142670  01142670  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01141a90/s01141a90.cpp  FUN_01142730  01142730  /vc71 /O2 /MD /Gy /TP /arch:SSE

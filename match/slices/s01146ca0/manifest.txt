@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# No byte-exact functions: the two destructors are only 4 bytes off (the /LTCG original schedules
+# the vtable store before the null test, our single-object compile after it).  All four functions
+# are recorded in nonmatching.txt.

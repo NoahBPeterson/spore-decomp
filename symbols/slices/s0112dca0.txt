@@ -1,0 +1,20 @@
+0112dca0 rw::audio::core::System built-in decoder registration  # registers ~40 descriptor getters into a registry (0x0112cd60)
+0112df80 ?GetInstance@StreamPool@core@audio@rw@@SAPAU123@I@Z  # PDB-adjacent; walks g_pStreamPoolList (0x016e61ac)
+0112dfa0 ?AcquireStream@StreamPool@core@audio@rw@@...  # rwaudio StreamPool acquire (reuse/free/evict)
+0112e1e0 ?ReleaseStream@StreamPool@core@audio@rw@@...  # 16-bit refcount release
+0112e210 StreamPool::ReleaseHandler  # clears streams and frees the pool
+0112e290 StreamPool::Create  # allocates pool + stream descriptors
+0112e410 StreamPool::QueueRelease  # queues the deferred release command (byte-exact)
+0112e440 Voice::GetDecayProgress  # mDecaySamples / System->mSampleRate
+0112e450 Voice::StartDecay  # state 1, latch decay countdown
+0112e470 System::AddActiveVoice  # insert voice into mpVoiceListNodes sorted by stage
+0112e5a0 Voice::RemoveFromActive  # remove self from the active voice array
+0112e600 Voice::Release  # disconnect plug-ins and free the voice
+0112e690 Voice::Stop  # mark stopped and expel from the active list
+0112e700 Voice release command  # release *(arg+4), return 8 (byte-exact)
+0112e720 Voice::Voice (ctor)  # allocate and initialise a voice + plug-ins
+0112e950 Voice::QueueRelease  # queue the release command (byte-exact)
+0112e980 System::Alloc singleton wrapper  # byte-exact
+0112e9b0 sound-packet submit  # build gain table and submit to the sound player
+0112eab0 stream chunk pump  # pull chunks from the filesys stream and submit
+0112eb70 chunk release/pump  # release a chunk slot and pump the stream

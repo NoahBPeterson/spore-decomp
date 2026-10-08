@@ -1,0 +1,6 @@
+01140cb0 SNDVOICEI_alloc  # 2008 dev-build PDB name (symbols/pdb_names.json)
+01141020 SNDVOICEI_free   # 2008 dev-build PDB name
+011412b0 SNDI_patchtohdr  # 2008 dev-build PDB name
+01141990 SFILTER_unpackealayer3pinit  # 2008 dev-build PDB name
+01142740 MIX_playinit     # 2008 dev-build PDB name (callee)
+01156a60 MIX_sethighpass  # 2008 dev-build PDB name (callee)

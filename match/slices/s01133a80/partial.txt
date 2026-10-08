@@ -1,0 +1,2 @@
+011343b0 709 Xas1 decoder block-fill: complete reconstruction (block header walk, per-channel Xas1 predictor with the 0x14a7e88/0x14a7ea8 tables, 6 half-blocks per channel) but equiv FAIL (memory pool: fixed-point/x87 schedule off); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; not verified equivalent.
+01134740 220 Pcm16Big big-endian 16-bit -> float: complete reconstruction but equiv FAIL (ours faults where the original returned, on pointery inputs; sign-extend/convert sequence differs); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; not verified equivalent.

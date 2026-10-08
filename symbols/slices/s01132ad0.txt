@@ -1,0 +1,22 @@
+01132ad0 SNDSTRMI_parsedata  # QueueFile/QueueMem parse callback: hdr size checks, *out=hdr[1], return (hdr[0]==key)+1
+01132b50 SNDSTRMI_destroyall  # loop SNDSTRMI_Destroy over g_numStreams
+01132b80 SNDSTRMI_create  # create stream state (SNDMEMI_alloc, track lists, QueueFile open)
+01132e70 SNDSTRMI_queue  # PDB candidate SNDSTRMI_queue; QueueFile/QueueMem/raw selection
+01132f90 FUN_01132f90  # tail call SNDSTRMI_queue(a,b,0,c,2)
+01132fb0 FUN_01132fb0  # tail call SNDSTRMI_create(...,1,0)
+01132fe0 FUN_01132fe0  # init stream header bytes
+01133020 FUN_01133020  # size = g_numChannels + (a*5+0x41)*2 scaled, + FUN_0113f1c0(b)
+01133050 rw::audio::core::Voice::CreateInstance  # PDB name; switch on voice error code
+011330e0 FUN_011330e0  # return g_sysInit==1
+011330f0 FUN_011330f0  # lock, Voice::Release(g_voice), unlock
+01133120 Snd9::System::Init  # PDB name; full Snd9 service init
+01133250 FUN_01133250  # install SFILTER unpack functions + sizes
+01133290 FUN_01133290  # walk g_voiceList calling callbacks
+011332c0 FUN_011332c0  # per-frame track update
+01133470 FUN_01133470  # stream position/duration query
+011335a0 FUN_011335a0  # stream byte-length query
+01133660 FUN_01133660  # Channel::Set volume + unlink
+011336b0 FUN_011336b0  # channel/track volume propagation
+011339d0 FUN_011339d0  # set byte-length cap
+01133a20 FUN_01133a20  # set short at +0x20
+01133a60 FUN_01133a60  # detach + clear node

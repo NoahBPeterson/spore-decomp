@@ -1,0 +1,5 @@
+slices/s01132ad0/s01132ad0.cpp  ?FUN_01132f90@@YAXHHH@Z  01132f90  /vc71 /O2 /MD /Gy /TP
+slices/s01132ad0/s01132ad0.cpp  ?FUN_01132fb0@@YAHHHHHHH@Z  01132fb0  /vc71 /O2 /MD /Gy /TP
+slices/s01132ad0/s01132ad0.cpp  ?Voice_CreateInstance@@YAHH@Z  01133050  /vc71 /O2 /MD /Gy /TP
+slices/s01132ad0/s01132ad0.cpp  ?FUN_011330f0@@YAHXZ  011330f0  /vc71 /O2 /MD /Gy /TP
+slices/s01132ad0/s01132ad0.cpp  ?FUN_01133250@@YAXXZ  01133250  /vc71 /O2 /MD /Gy /TP

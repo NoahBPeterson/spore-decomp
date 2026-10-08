@@ -1,0 +1,5 @@
+# <va>  <diff-bytes>  <reason>
+01146ca0 54 complete: CMpegLayer3Base::CMpegLayer3Base - base ctor 0x1148cd0, vtable 0x14cc180, mpTwoToNegativeQuarterPower 0x14cbd80/size 0x400, InitHuffTables 0x1146a90; difftest PASS (400 valid, 100% coverage); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01146cf0 4 complete: CMpegLayer3Base::~CMpegLayer3Base - vtable store, System::Free(mpPrevBlockX4), base dtor 0x1148d40; difftest PASS (390 valid, 100% coverage); only diff is the /LTCG store/test scheduling (vtable store before the null test); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01146d20 8 complete: CMpegLayer3Base::AllocateHybrid - System::Alloc(n*0x900,"MP3HybridHistory",0x10,0) then memset; returns -1 on failure; difftest WEAK (186 valid, 100% coverage); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01146d70 4 complete: CMpegLayer3Base scalar deleting dtor - vtable store, System::Free, base dtor, optional operator delete; difftest PASS (304 valid, 100% coverage); only diff is the /LTCG store/test scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE

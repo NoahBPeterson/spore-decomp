@@ -1,0 +1,20 @@
+01133a80 65 complete Collection::FUN_01133a80: unlink a used node, prepend to the free list, mSize--; /GL register allocation differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 92.9% cov.
+01133ad0 124 complete Collection::AddCapacity: Alloc a node block (count*0xc+8), link it, seed `count` free nodes, mCapacity += count; object-heavy, no valid inputs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
+01133b60 3 complete FUN_01133b60: return *(int*)(this+0x10) or 0; VC7.1 folds the double memory read; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
+01133b70 44 complete FUN_01133b70: free every node block via System::Free, zero all fields; /GL scheduling differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 234/400 valid 41.5% cov.
+01133bd0 78 complete Collection::FUN_01133bd0: take a node from the free list (AddCapacity if empty) and push it on the used list; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 344/400 81.8% cov.
+01133c30 61 complete Collection::FUN_01133c30: release the node behind a pointer slot to the free list; /GL differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 393/400 93.5% cov.
+01133c90 262 complete FUN_01133c90: shrink - release fully-used node blocks back to the allocator; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 360/400 valid 15.5% cov.
+01133e30 74 complete FUN_01133e30: move every used node back to the free list; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 293/400 89.4% cov.
+01133ed0 32 complete HeadList::FUN_01133ed0: walk the singly-linked list for the node whose +0x14 field equals key; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 367/400 100% cov.
+01133f00 61 complete HeadList::FUN_01133f00: find-or-prepend entry (key entry[5]), returns the node base; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 362/400 100% cov.
+01133f80 19 complete FUN_01133f80: Alloc(0x10,0,0x10,0), zero three dwords, store the owner; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).
+01133fc0 481 complete DecoderRegistry::DecoderFactory: query size, spacing, Alloc, init vtable + callbacks, optional block storage; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)) - object/vtable heavy.
+011341c0 28 complete FUN_011341c0: ctor - zero +0x10/+0x5c, init subobject at +0x60, reset the 0x16e6270 singleton, store its address; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
+01134200 178 complete FUN_01134200: dst[0..15]=src[0..15]*scale chunked 16-wide do/while; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 164/400 valid 100% cov.
+01134260 103 complete FUN_01134260: aligned -> FUN_01134200 else scalar; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 312/400 100% cov (needs a non-tail call barrier so the depth-1 call trace matches).
+011342c0 294 complete FUN_011342c0: aligned -> dst += src*scale chunked 16-wide else scalar; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 324/400 100% cov.
+01134880 447 complete FUN_01134880: unrolled 8-wide big-endian 16-bit -> float then tail FUN_01134740; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 365/400 100% cov.
+011349a0 190 complete FUN_011349a0: Pcm16Big block fill (block header walk, per-channel FUN_01134880); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 297/400 97.2% cov.
+01134a60 107 complete BitReader::FUN_01134a60: refill buffer with whole bytes then extract n bits; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 350/400 100% cov.
+01134ae0 10 complete FUN_01134ae0: call the virtual at vtable+4 with 0; /GL differs; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED 0/400 valid (fault(fetch)).

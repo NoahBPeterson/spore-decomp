@@ -1,0 +1,2 @@
+# s01142a20 partial: incomplete function(s)
+01143460  375  FUN_01143460 MMX/SSE 16-byte->64-coefficient filter decode: only the first scalar stage is reconstructed; the 15-iteration nibble-matrix second stage (MMX punpck/cvtpi2ps) is not. Source compiles. flags /vc71 /O2 /MD /Gy /TP /arch:SSE

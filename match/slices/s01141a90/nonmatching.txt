@@ -1,0 +1,14 @@
+# s01141a90: complete, behavior-equivalent source that is not byte-exact.
+# Built with VC .NET 2003 (/vc71) + /GL /LTCG and /arch:SSE; call-bearing functions
+# cannot be byte-exact from a single object.  Each reason names the flags and difftest verdict.
+01141a90  274  looped-decode filter pull (mode 0/2/3, memcpy/codec paths); complete; difftest PASS 61.0% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01141bc0   58  looped-decode filter release (int refcount at decoder+0x10); complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01141c30  223  SFILTER_unpackealayer3linit (looped mono/stereo decoder init via g_16e8064); complete; difftest WEAK 22.1% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01141dd0  269  mono/stereo-decode filter pull; complete; difftest PASS 82.9% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01141f20   57  mono/stereo-decode filter release (byte refcount at decoder+0x19); complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01141f90  229  SFILTER_unpackealayer3init (mono/stereo decoder init via g_16e8068); complete; difftest WEAK 28.3% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142470  279  mixer instance tick: codec pull + per-channel/per-bus ramp mixing; complete; difftest WEAK 58.3% cov (object-heavy, 398/399 inputs need fake calls). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142690    2  mixer subsystem shutdown (frees voice array + busses); complete; difftest WEAK 45.0% cov; the single global byte test lowers as mov/test instead of cmp [mem],0 (/LTCG). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142740  278  MIX_playinit: allocate + init decoder/time-stretch mixer instance chain; complete; difftest WEAK 55.9% cov (object-heavy). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142900   78  voice reset/advance leaf; complete; difftest PASS 75.8% cov; the module's float copies use x87 fld/fstp here (the rest of the unit is /arch:SSE), so byte-exactness is lost on 2 copy loops. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01142960   98  MIX_stop: accumulate voice into mix buses + free instance chain; complete; difftest PASS 78.8% cov. flags /vc71 /O2 /MD /Gy /TP /arch:SSE

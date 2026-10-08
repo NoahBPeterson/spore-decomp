@@ -1,0 +1,10 @@
+0112fc10 43 complete; LTCG cross-call allocation (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (137/400 valid, 90.6% coverage, no mismatch)
+0112fc90 628 complete; LTCG (decoder/format field scheduling); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (193/400 valid, 89.9% coverage, no mismatch)
+0112ff40 172 complete; LTCG (references live across Stop/Release calls); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (385/400 valid, 75.0% coverage)
+01130060 381 complete; LTCG + inlined decoder virtual calls; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (269/400 valid, 29.7% coverage, no mismatch) -- the per-channel pointer loop is unbounded (writes blockAlign pointers) so random blockAlign values overrun the frame in both builds; only small blockAlign inputs stay valid
+01130230 35 complete; LTCG register scheduling around FUN_0113fdd0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (378/400 valid, 100% coverage)
+011302a0 48 complete; LTCG register scheduling around FUN_0113fba0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400 valid, 100% coverage)
+011302e0 53 complete; LTCG register scheduling around FUN_0113ff00; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400 valid, 100% coverage)
+01130430 87 complete; LTCG branch layout (cmova/epilogue placement); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (364/400 valid, 100% coverage)
+011304b0 345 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest UNSUPPORTED (0 valid: 319 fault(read), 81 budget) -- needs a valid COMM/SSND block
+01130680 1274 complete; LTCG + inlined decoder virtual calls and allocator; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest UNSUPPORTED (0 valid: 308 fault(write), 75 fault(read), 17 budget)

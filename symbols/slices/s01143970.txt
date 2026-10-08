@@ -1,0 +1,6 @@
+01143970 rw::audio::core::Unpack24LE  # packed 24-bit LE -> float; descriptor entry in the .data table at 0x15ba708 ("0L2P"/24PCM), chunk walker at sample-state +0x24/+0x30..0x38; difftest PASS
+01143b40 rw::audio::core::Unpack24BE  # 24-bit BE twin of 01143970; descriptor at 0x15ba728; difftest PASS
+01143d10 rw::audio::core::Unpack16    # packed 16-bit -> float; descriptor at 0x15ba748; returns n; difftest PASS
+01143e70 rw::audio::core::HELPER_CMpegLayer3B::ComputePow43  # x^(4/3) piecewise cubic, bsr-selected segment, coeff table 0x014cb3d0; called by HuffmanDecode 0115c360; difftest PASS
+01144020 rw::audio::core::CMpegLayer3Base::Dequantize  # PDB name (dev 0x014c414b); calls ScaleSamples 0x01148da0; difftest WEAK
+01144270 rw::audio::core::Butterfly576  # MS-stereo butterfly over 576 floats; called from 0x1145cf6; EAX pointer (LTCG ABI)

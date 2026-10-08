@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+0112ebf0  525  WAVE decode-buffer/timer setup: complete; /LTCG register/inline scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid; original faults on garbage buffers)
+0112f130  142  WAVE player shutdown/release: complete; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (375 valid, 81.3% cov)
+0112f340  80  buffer-fill protocol: complete; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (359 valid, 100% cov)
+0112f3c0  298  WAVE init-from-header: complete; object-heavy header parsing; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid; original faults/budget)
+0112f550  669  WAVE player Create: complete; object-heavy; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (0/400 valid)
+0112fa50  157  WAVE packet submit (variant): complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (unresolved SNDPKTPLAY_submit)
+0112fb50  141  WAVE chunk pump: complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (86 valid < 200; 51.5% cov)

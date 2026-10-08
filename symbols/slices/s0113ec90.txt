@@ -1,0 +1,20 @@
+0113ec90 SNDMEMI_alloc  # PDB
+0113eda0 F_0113eda0  # dc: initialise and copy the SND global state (7 dwords at 0x16e7bf0)
+0113ee40 F_0113ee40  # dc: apply a SND global-state record
+0113ef00 SNDSYS_restore  # PDB
+0113ef90 SNDSYSI_chanpubinit  # PDB
+0113f060 SNDSYSI_init  # PDB
+0113f1c0 F_0113f1c0  # dc: packet size helper (n*0x20 + 0x98)
+0113f1d0 F_0113f1d0  # dc: register a play slot in 0x16e7fcc[]
+0113f250 SNDPKTPLAY_start  # PDB candidate (caller-scored)
+0113f5c0 SNDPKTPLAY_submit  # PDB
+0113f6c0 F_0113f6c0  # dc: free packet slots (max index scan)
+0113f720 F_0113f720  # dc: played-sample count
+0113f750 F_0113f750  # dc: release a play slot
+0113f780 F_0113f780  # dc: advance a packet slot and post a callback
+0113f8f0 F_0113f8f0  # dc: adjust play cursor and post a callback
+0113f940 F_0113f940  # dc: run deferred play callbacks (0x16e7ccc queue)
+0113f9b0 F_0113f9b0  # dc: stop a play and free its voices
+0113fa70 PktCursor::Decode3  # dc: packed 3-byte sample decode
+0113fb20 PktCursor2::Decode2  # dc: packed 2-byte sample decode
+0113fba0 F_0113fba0  # dc: apply a sample-rate change across voices

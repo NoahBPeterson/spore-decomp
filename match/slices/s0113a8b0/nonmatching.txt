@@ -1,0 +1,21 @@
+# <va>  <diff-bytes>  <reason>
+0113a8b0  333  complete; flags /vc71 /O2 /MD /Gy /TP; difftest UNSUPPORTED (0/400 valid: the ReverbIR1 handler is reached only through a job-record function pointer -> fake-arity/fault)
+0113aa50  51  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (325 valid, 100% cov); /LTCG keeps the command-write cursor live in a different register than a single-object compile
+0113aaf0  66  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); /LTCG register choice + SSE constant stores differ
+0113abb0  1  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); the original materialises the address in eax then stores, we emit a single memory-immediate store
+0113abd0  69  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); float compare/convert use SSE in the original (ucomiss/cvttss2si), single-object /O2 emits x87 fucompp + a helper call
+0113ac60  68  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (312 valid, 100% cov); /LTCG register allocation
+0113ad10  22  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne) instead of the original's sub/jns
+0113ae50  10  complete; flags /vc71 /O2 /MD /Gy /TP; difftest FAIL on 5/16 valid inputs: float->int saturation differs (orig cvtss2si yields INT_MIN, ours a finite value) - an extended-precision/conversion ABI artifact, not a wrong path
+0113aeb0  54  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (201 valid, 100% cov); /LTCG register allocation around AddTimer
+0113af90  23  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (393 valid, 100% cov); cl loads the member into eax then tests instead of cmp [mem],0
+0113afc0  23  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); float->int is a helper call instead of the original's inlined fnstcw/fldcw/fistp
+0113b000  50  complete; flags /vc71 /O2 /MD /Gy /TP; difftest WEAK (170 valid < 200, 52.2% cov < 60%): the memcpy destination needs a heap setup random inputs rarely build
+0113b060  364  complete; flags /vc71 /O2 /MD /Gy /TP; difftest UNSUPPORTED (0/400 valid: faults on the required System/Alloc setup; import:memset discards)
+0113b290  51  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (329 valid, 100% cov); /LTCG register allocation
+0113b330  450  complete; flags /vc71 /O2 /MD /Gy /TP; difftest FAIL on 5/6 valid inputs, kind float-rounding: the original keeps 1/(...) intermediates in x87 extended precision; our /fp:precise canonicalizes the matrix products (1-ulp)
+0113b5b0  224  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 97.6% cov); /LTCG register/constant-store differences
+0113b750  110  complete; flags /vc71 /O2 /MD /Gy /TP; difftest FAIL on 5/6 valid inputs, kind float-rounding: 1-ulp from x87 extended-precision intermediates vs our stored float32 trig results
+0113b810  108  complete; flags /vc71 /O2 /MD /Gy /TP; difftest FAIL on 5/6 valid inputs, kind float-rounding: 1-ulp from the x87 cos/pi intermediates
+0113b910  71  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113b9d0  29  complete; flags /vc71 /O2 /MD /Gy /TP; difftest PASS (351 valid, 100% cov); cl tests the bool via mov al/test instead of cmp [mem],0

@@ -1,0 +1,15 @@
+0112fc10 rw::audio::core::AiffPlayer_releaseBuffer  # decode-completion slot release (Stream::ReleaseChunk); callback registered by AiffPlayer_reset
+0112fc90 rw::audio::core::AiffPlayer_reset  # reset + alloc decode buffers + register completion timer + install decoder
+0112ff40 rw::audio::core::AiffPlayer_destroy  # stop decoder, stop timer, free buffers and self
+01130060 rw::audio::core::AiffPlayer_processBuffer  # timer callback: decode one block and submit to packet player
+01130230 rw::audio::core::AiffPlayer_setTableGain  # FUN_0113fdd0(start,index,round(fmt->p3[index]*127))
+01130270 rw::audio::core::AiffPlayer_start  # FUN_0113fba0(start,0); state=1
+011302a0 rw::audio::core::AiffPlayer_setStart  # FUN_0113fba0(start,(int)(fmt[1]*4096)); state=0
+011302e0 rw::audio::core::AiffPlayer_setChannel  # FUN_0113ff00(start,(int)(fmt[0]*127))
+01130380 rw::audio::core::AiffPlayer_getState  # *out=self+0xc; return 0
+01130390 rw::audio::core::AiffPlayer_getProgress  # (float)(self+8)/(float)(ushort)(self+0x8c)
+011303c0 rw::audio::core::AiffPlayer_getPosition  # -1 or (float)(self+0xb0)/(self+0xb4)
+01130430 rw::audio::core::AiffPlayer_acquireSampleBlock  # returns 1/2 when enough samples buffered
+011304b0 rw::audio::core::AiffPlayer_setupFromBlock  # parse COMM/SSND, fill decoder fields, return self
+01130680 rw::audio::core::AiffPlayer_create  # allocate from "AIFF Player Instance", register timer, prime 4 packets
+01130be0 rw::audio::core::AiffPlayer_checkChunkID  # TAG/ID3/RIFF/MPEG-sync classification

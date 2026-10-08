@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0112eeb0  289  WAVE packet submit (main): approximate (gain table / submit path); equiv FAIL (memory pool); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0112f080  25  set plug-in parameter from scaled float: approximate; equiv FAIL (callee call trace); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0112f0f0  30  stop playback with current gain: approximate; equiv FAIL (callee call trace); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0112f230  23  set plug-in parameter from float: approximate; equiv FAIL (callee call trace); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0112f2d0  58  playback progress: approximate; equiv FAIL (memory pool); flags /vc71 /O2 /MD /Gy /TP /arch:SSE

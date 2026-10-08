@@ -1,0 +1,27 @@
+# <va>  <diff-bytes>  <reason>
+0113baf0  37   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (207 valid, 100% cov); cl reloads the list head instead of cmp [mem],0
+0113bb30  59   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (391 valid, 89.7% cov); /LTCG register allocation in the slot loop
+0113bb90  240  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/43 valid inputs (memory written by the Decoder::SubFeed call differs: a feed-slot field); /LTCG scheduling + the out-of-line decoder call
+0113bc60  65   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: the System lock path faults / waits on imports the emulator discards)
+0113bcf0  89   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (368 valid, 95.5% cov); /LTCG register allocation
+0113bd60  124  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (303 valid, 62.7% cov); /LTCG scheduling
+0113be10  162  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (322 valid, 100% cov); /LTCG register allocation + SSE constant stores
+0113bf10  240  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (385 valid, 100% cov); /LTCG register allocation
+0113c060  8    complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 93.3% cov); only the `cmp cl,2` is scheduled before the `lea`/store (LTCG)
+0113c130  74   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation in the byte/float fill loops
+0113c1d0  86   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113c290  22   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown (dec/jne vs sub/jns)
+0113c380  34   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113c480  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (388 valid, 100% cov); /LTCG register allocation
+0113c550  31   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113c620  22   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); cl folds the 6-iteration do/while into a countdown
+0113c710  68   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113c7a0  34   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG register allocation
+0113c870  91   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (384 valid, 100% cov); /LTCG register allocation
+0113c950  81   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); /LTCG float compare/copy scheduling
+0113c9d0  18   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% cov); SSE constant-store ordering
+0113ca00  64   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 3/387 valid inputs: float->int of an out-of-range value differs (orig cvttss2si yields INT_MIN, cl's helper yields 0) - a conversion ABI artifact
+0113cb20  15   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (357 valid, 100% cov); cl tests the bool via mov al/test instead of cmp [mem],0
+0113cb50  17   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (387 valid, 100% cov); /LTCG register allocation
+0113cbf0  109  complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL on 5/8 valid inputs: the DelayLine::Init sample count is converted with cl's float->int helper instead of the original's inlined SSE cvttss2si (differs only for out-of-range products)
+0113ce00  69   complete; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (321 valid, 100% cov); /LTCG register allocation

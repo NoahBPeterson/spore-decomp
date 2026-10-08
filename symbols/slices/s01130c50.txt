@@ -1,0 +1,17 @@
+01130c50 rw::audio::core::Mp3Player_parseHeader  # read MPEG frame header: bitrate/samplerate/framesize tables 0x15ba5b8/59a/57c; calls checkChunkID 0x1130be0
+01130d90 rw::audio::core::Mp3Player_findSync  # scan for TAG/ID3/RIFF/MPEG sync word
+01130e50 rw::audio::core::Mp3Player_processFrame  # timer callback: parse current frame and submit one packet
+01130f40 rw::audio::core::Mp3Player_submitChunk  # build gain table / lazily create packet player, submit chunk
+01131040 rw::audio::core::Mp3Player_fill  # pull stream chunks (max 10 pending) and submit them
+01131110 rw::audio::core::Mp3Player_releaseChunk  # release the chunk matching the completed packet
+011311b0 rw::audio::core::Mp3Player_tick  # on-tick: initialise (lazy) or refill
+011312f0 rw::audio::core::Mp3Player_link  # register on-free callback and link into global shutdown list 0x16e6268
+011313b0 rw::audio::core::Mp3Player_setTableGain  # FUN_0113fdd0(start,index,round(fmt->p3[index]*127))
+011313f0 rw::audio::core::Mp3Player_start  # FUN_0113fba0(start,0); state=1
+01131420 rw::audio::core::Mp3Player_setStart  # FUN_0113fba0(start,(int)(fmt[1]*4096)); state=0
+01131460 rw::audio::core::Mp3Player_destroy  # stop handles, release chunks, unlink, free
+01131540 rw::audio::core::Mp3Player_setChannel  # FUN_0113ff00(start,(int)(fmt[0]*127))
+011315e0 rw::audio::core::Mp3Player_getState  # *out=self+8; return 0
+011315f0 rw::audio::core::Mp3Player_getProgress  # (float)bytes/(float)samplerate
+01131630 rw::audio::core::Mp3Player_getPosition  # -4/-1 or (samples/rate)*k
+01131730 rw::audio::core::Mp3Player_create  # allocate "MP3 Player Instance", parse RIFF/ID3, prime 10 packets

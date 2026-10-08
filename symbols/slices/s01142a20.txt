@@ -1,0 +1,5 @@
+01142a80 MIX_create   # 2008 dev-build PDB name
+01143310 iSNDdetunetolinear  # 2008 dev-build PDB name
+011433b0 iSNDcalcpitch  # PDB candidate (caller-single)
+011431a0 MIX_audioslice  # PDB candidate (caller-single)
+011432a0 SNDstop  # PDB candidate (caller-single)

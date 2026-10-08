@@ -1,0 +1,5 @@
+# va        Name  # evidence
+01139fe0  rw::audio::core::ReverbModel1_timer  # timer callback installed by CreateInstance
+0113a5c0  rw::audio::core::ReverbModel1::CreateInstance  # PDB anchor
+0113a770  rw::audio::core::ReverbIR1::StopReverbHandler  # PDB candidate (caller-single)
+0113a7a0  rw::audio::core::ReverbIR1::Configure  # PDB candidate (caller-single)

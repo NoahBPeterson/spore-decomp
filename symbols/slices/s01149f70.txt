@@ -1,0 +1,13 @@
+01149f70 rw::audio::core::EALayer3Core::EALayer3Core  # PDB callee-single name (ctor)
+01149fd0 rw::audio::core::EALayer3Core::SetMode  # coefficient-set mode switch on +0x21
+0114a160 rw::audio::core::EALayer3Core::AnalyzeStatistics  # packed SSE per-channel statistics
+0114a470 rw::audio::core::EALayer3Core::OnInterface  # AnalyzeStatistics + SetMode + mark +0x14c
+0114a4a0 rw::audio::core::EALayer3Core::ResetSlot  # zeroes two accumulators for a slot
+0114a4c0 rw::audio::core::EALayer3Core::Interpolate  # fractional resampler blend
+0114a680 rw::audio::core::EALayer3Core::AdjustOffset  # closer-offset selection (x87 fabs)
+0114a750 rw::audio::core::EALayer3Core::AppendSamples  # slot append/copy
+0114a8b0 rw::audio::core::DotProduct  # SSE dot product; __stdcall
+0114a970 rw::audio::core::EALayer3Core::UpdateCorrelation  # window correlation accumulate
+0114aa40 rw::audio::core::EALayer3Core::AddToOutput  # output-slot accumulate
+0114ad10 rw::audio::core::EALayer3Core::ResetSlots  # zero per-slot accumulators
+0114ad50 rw::audio::core::EALayer3Core::SelectPath  # path selection / sample count

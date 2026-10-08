@@ -1,0 +1,12 @@
+0114cb60 Send::Process  # descriptor record guid 'Sen0' (0x53656E30): Process slot; layout mfGain@+0x28 mSubMixConnector@+0x30 mDeClickValue@+0x44 mfCurrentGain@+0x5C mbNeedReset@+0x60
+0114cd30 LinearInterpolate  # 16.16 two-tap kernel, scale 0x377FFC9C (1.5258e-05) == Resample's flt_821565B0; shared by Scp0::Process and Resample::Process
+0114ceb0 Scp0::Process  # descriptor record guid 'Scp0' (0x53637030): Process slot
+0114d350 Route::Process  # descriptor record guid 'Rou0' (0x526F7530): Process slot; mSubMixConnector@+0x24 maChannelGain@+0x38 mau8Gain@+0x50
+0114d3e0 ReverbModel1::Process  # descriptor record guid 'RM10' (0x524D3130): Process slot; mComb@+0x1DC mCombDelay@+0x2B4 mAllPass@+0x40 mbAllPassCount@+0x439
+0114d730 DelayLine::DelayLine  # clears the 0x39-byte record
+0114d770 DelayLine::Release  # System::Free(mpBuffer); clears mpLocalBuffer/mpFilter/miMaxDelaySamples
+0114d7b0 DelayLine::Init  # PDB name (dev 014d0d85)
+0114d840 DelayLine::Resize  # PDB candidate (dev 014d0e4c)
+0114d9d0 DelayLine::Reset  # available=capacity, writePhase=guard, clean=0, readPosition=arg
+0114d9f0 DelayLine::CalcChannelPointers  # fills {start,end,loopEnd,cursor}
+0114da40 DelayLine::WrapCursor  # cursor-backOffset with ring-body wrap

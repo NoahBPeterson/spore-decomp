@@ -1,0 +1,4 @@
+0113aeb0 rw::audio::core::Pause::CreateInstance  # PDB anchor
+0113b060 rw::audio::core::Pan3D::CreateInstance  # PDB anchor
+0113ae50 rw::audio::core::Pause::RwacTimerClient  # timer callback installed by Pause::CreateInstance
+0113b000 rw::audio::core::Pan3D::...  # Pan3D job handler (sets mChanged + DSPSettings copy)

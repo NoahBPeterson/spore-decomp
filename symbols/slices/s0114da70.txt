@@ -1,0 +1,19 @@
+0114da70 CombFilterFunc  # 4-lane SSE feedback-comb recurrence (denormal-flush 1e-18)
+0114dc20 CombFilter::CombFilterApplyFunc  # dispatch: memset on crossfade else CombFilterFunc, latch mfState
+0114dca0 CombFilter::CombFilterResetFunc  # clears mfState@+0x20, returns self
+0114dcb0 CombFilter::SetGains  # stores gain1..4 @+0x10..+0x1C
+0114dce0 CombFilter::CombFilter  # ctor: apply/reset=0, channels=1, readLength=2, gains/state=0
+0114dd20 AllPassFilterFunc  # 4-lane SSE all-pass recurrence (denormal-flush 1e-18)
+0114e1b0 AllPassFilter::AllPassFilterApplyFunc  # dispatch: memset on crossfade else AllPassFilterFunc
+0114e230 AllPassFilter::AllPassFilter  # ctor: apply/reset=0, channels=1, readLength=1, gains=0
+0114e260 ReverbIR1::Process  # impulse-response reverb Process (FastFirEngine @+0x50, state @+0xE8)
+0114e300 FastFirEngine::FastFirEngine  # ctor (running-state slots)
+0114e340 FastFirEngine::~FastFirEngine  # PDB candidate (dev 014d15c4)
+0114e370 FastFirEngine::SetChannels  # stores in/out channel counts @+0x74/+0x78, returns 1
+0114e390 FastFirEngine::EstimateLoad  # x87 partition-load estimate (log2 form)
+0114e400 FastFirEngine::LoadDistributionCalc  # fills the per-pass LoadRecord table
+0114e580 FastFirEngine::Reset  # PDB name (dev 014d1800)
+0114e5e0 FastFirEngine::Configure  # PDB name (dev 014d185a)
+0114e780 InterpRamp  # fixed-point ramp/fill helper (position in EAX, dest in EDX)
+0114e860 Resample::SetResampleIncrement  # descriptor 'Rsp0' PreProcess helper
+0114e8f0 Resample::PreProcess  # descriptor record guid 'Rsp0' (0x52737030): PreProcess slot

@@ -1,0 +1,5 @@
+01141c30 SFILTER_unpackealayer3linit  # 2008 dev-build PDB name
+01141f90 SFILTER_unpackealayer3init   # 2008 dev-build PDB name
+01142740 MIX_playinit                 # 2008 dev-build PDB name
+01142960 MIX_stop                     # 2008 dev-build PDB name
+0116bda0 FUN_0116bda0                 # stored into patch+0x24 by the looped layer3 init

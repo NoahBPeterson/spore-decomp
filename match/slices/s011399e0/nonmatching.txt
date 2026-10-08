@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+011399e0  592 complete ReverbModel1 EQ-table configure; LTCG SSE blend over two 0x48-stride tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01139d60  145 complete ReverbModel1 damping-vector; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01139e10  83 complete ReverbModel1 ctor; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01139eb0  50 complete ReverbModel1 dtor; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01139f20  170 complete ReverbModel1 gain update (x87 log2 math); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01139fe0  969 complete ReverbModel1 timer configure; LTCG (delay-line/FIR marshalling); flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0113a4c0  209 complete ReverbModel1 timer callback; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0113a5c0  269 complete ReverbModel1::CreateInstance; LTCG DelayLine::Init/AddTimer; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0113a7a0  131 complete ReverbIR1::Configure; LTCG FastFirEngine::Configure; flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0113a840  0 complete ReverbIR1 deleting destructor; defined but no same-size symbol found by chk (inline/COMDAT split); flags /vc71 /O2 /MD /Gy /TP /arch:SSE

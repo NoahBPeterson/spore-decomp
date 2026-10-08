@@ -1,0 +1,19 @@
+0113dc00 Dac::Thread  # dc: winmm-timed device loop, System Lock/ExecuteCommands, DirectSound buffer Lock/Unlock
+0113def0 Dac_ThreadEntry  # dc: thread entry wrapper around Dac::Thread
+0113df10 Dac::CreateInstance  # PDB anchor; allocates mixer (0x30080) and thread
+0113e110 Dac_CmdA  # dc: command handler; rate select via table 0x15bf51c
+0113e200 Dac_CmdB  # dc: command handler; rate select via 0x16e6320
+0113e280 Dac_CmdStart  # dc: command handler; start device
+0113e300 Dac_CmdStop  # dc: command handler; stop device
+0113e340 Dac::PostCmd  # dc: build command in System command buffer
+0113e4e0 Plugin_InitA  # dc: plug-in attribute defaults
+0113e5d0 Plugin_InitB  # dc: Fir64 plug-in init
+0113e670 Plugin_SizeA  # dc: GetSize@Fir64 + 0xd0
+0113e690 Plugin_InitC  # dc: Fir64 plug-in init
+0113e770 rw::audio::core::AiffWriter::IntToExtended  # PDB
+0113e7f0 AiffWriter_Timer  # dc: timer callback flushing mpBuf
+0113e840 rw::audio::core::AiffWriter::CreateInstance  # PDB anchor
+0113e890 rw::audio::core::AiffWriter::StartHandler  # PDB anchor
+0113e940 rw::audio::core::AiffWriter::StopHandler  # PDB anchor
+0113ebb0 rw::audio::core::AiffWriter::ReleaseEvent  # PDB candidate (caller-single)
+0113ebe0 AiffWriter::PostCommand  # dc: command queue entry for start/stop

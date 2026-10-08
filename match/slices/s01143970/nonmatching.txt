@@ -1,0 +1,7 @@
+# <va>  <diff-bytes>  <reason>
+01143970 408 complete: unpack interleaved/chunked 24-bit LE samples to float (Unpack24LE); difftest PASS (229 valid, 98.6% coverage); register allocation differs (LTCG); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01143b40 421 complete: unpack 24-bit BE samples to float (Unpack24BE, byte order reversed vs 01143970); difftest PASS (253 valid, 98.6% coverage); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01143d10 395 complete: unpack 16-bit signed samples to float (Unpack16), returns n; difftest PASS (307 valid, 98.2% coverage); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01143e70 299 complete: x^(4/3) piecewise-cubic approximation (HELPER_CMpegLayer3B::ComputePow43, 9 segments x 4 coeffs at 0x014cb3d0, segment from bsr); difftest PASS (371 valid, 100% coverage); compiler chose 4-wide SSE blocks, we emit scalar-equivalent; flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01144020 478 complete: CMpegLayer3Base::Dequantize (ISO 11172-3 III_dequantize_sample; long/mixed/short bands, pretab, sub-block gains, calls ScaleSamples 0x01148da0); difftest WEAK (170 valid < 200, 46.6% coverage - random granule state rarely satisfies the guards); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+01144270 420 complete: in-place MS-stereo butterfly over two 576-float blocks, (a+b)/sqrt2 and (a-b)/sqrt2; difftest UNSUPPORTED (original receives the float* in EAX - LTCG register ABI our cdecl declaration cannot reproduce); flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE

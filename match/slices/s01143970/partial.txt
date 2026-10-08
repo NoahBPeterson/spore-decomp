@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+# (empty: every function in this slice has a complete source implementation)

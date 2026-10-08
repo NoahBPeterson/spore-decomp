@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# No byte-exact functions in this slice: the rw0 RenderWare-audio code was linked with
+# /GL + /LTCG, so register allocation depends on callee bodies we cannot reproduce in a
+# single-object compile.  All six functions are recorded in nonmatching.txt.

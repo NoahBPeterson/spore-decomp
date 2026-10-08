@@ -1,0 +1,5 @@
+0114e400  n/a  FastFirEngine::LoadDistributionCalc: complete (leaf; per-pass FFT/MAC/IFFT work distribution). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (292 valid, 93.2% coverage).
+0114e340  36  FastFirEngine::~FastFirEngine: complete (frees the scratch block via System::Free and the FFT context via FFT_Free, no null stores - matching the asm). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (286 valid, 82.4% coverage).
+0114e580  66  FastFirEngine::Reset: complete (frees + nulls the buffer and FFT handle, clears the running state). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (270 valid, 87.9% coverage).
+0114e860  92  Resample::SetResampleIncrement: complete (leaf; clamp ratio to [0,4], cvtss2si round-to-nearest increment, voice-latency min(1/ratio,10000) foldback). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (400 valid, 100% coverage).
+0114dd20  1099  AllPassFilterFunc: scalar form of the 4-lane SSE recurrence (identical arithmetic per lane, denormal-flush bias). Flags /vc71 /O2 /MD /Gy /TP /arch:SSE. difftest PASS (338 valid, 100% coverage).

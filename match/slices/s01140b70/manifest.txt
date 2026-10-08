@@ -1,0 +1,2 @@
+# byte-exact functions for slice s01140b70
+slices/s01140b70/s01140b70.cpp  FUN_01141190  01141190  /vc71 /O2 /MD /Gy /TP

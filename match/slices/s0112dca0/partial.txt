@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+0112dca0  148  built-in decoder/registry registration list: approximate; equiv FAIL (execution); flags /vc71 /O2 /MD /Gy /TP
+0112dfa0  620  StreamPool::AcquireStream: approximate (eviction scan / block structure); equiv FAIL (memory pool); flags /vc71 /O2 /MD /Gy /TP
+0112e210  85  StreamPool::ReleaseHandler: approximate (stream-method calls); equiv FAIL (execution); flags /vc71 /O2 /MD /Gy /TP
+0112e290  191  StreamPool::Create: approximate (descriptor chunk setup); equiv FAIL (memory pool); flags /vc71 /O2 /MD /Gy /TP
+0112e470  241  System::AddActiveVoice: approximate (voice-list grow/insert); equiv FAIL (import call trace); flags /vc71 /O2 /MD /Gy /TP
+0112eab0  145  stream chunk pump: approximate; equiv FAIL (execution); flags /vc71 /O2 /MD /Gy /TP

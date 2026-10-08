@@ -1,0 +1,6 @@
+# va  diff-bytes  reason   (flags: /vc71 /O2 /MD /Gy /TP /arch:SSE)
+01149f70  30  complete EALayer3Core::EALayer3Core (install vtable 0x14ce590, InitCoeffs, inherited CMpegBase::AllocateSynth). Not byte-exact (/GL, base-ctor sequence). difftest UNSUPPORTED: the AllocateSynth callee is declared as an unresolved free symbol. flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+01149fd0  272  complete EALayer3Core::SetMode (switch on mode byte at +0x21 copying coefficient sets between field groups). Not byte-exact: x87 fld/fstp straight-line vs our float-field C. difftest WEAK 400 valid, 53.7% coverage (no mismatch). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0114a4c0  384  complete EALayer3Core::Interpolate (fractional-resampler blend of two sample buffers). Not byte-exact. difftest WEAK 185 valid, 100% coverage (no mismatch). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0114aa40  711  complete EALayer3Core::AddToOutput (append/accumulate decoded samples into the output slot buffers). Not byte-exact (inlined memcpy vs CRT thunk, /GL). difftest WEAK 222 valid, 11.3% coverage (no mismatch; low coverage from object state). flags /vc71 /O2 /MD /Gy /TP /arch:SSE
+0114ad10  48  complete EALayer3Core::ResetSlots (zero the per-slot accumulators). Not byte-exact (register allocation). difftest PASS 292 valid, 100% coverage. flags /vc71 /O2 /MD /Gy /TP /arch:SSE

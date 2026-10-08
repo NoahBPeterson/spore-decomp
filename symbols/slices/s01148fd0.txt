@@ -1,0 +1,8 @@
+01148fd0 rw::audio::core::HELPER_CEALayer3DecF::~HELPER_CEALayer3DecF  # PDB gap-align name
+01149020 rw::audio::core::HELPER_CEALayer3DecF::DecodeGranules  # PDB anchor name
+01149490 rw::audio::core::HELPER_CEALayer3DecF::Decode  # PDB caller-single name
+011495b0 rw::audio::core::EaLayer3DecBase::SkipBlocks  # PDB callee-scored name
+01149760 rw::audio::core::ConvertSamples  # 16-bit big-endian -> float de-interleave; __stdcall
+01149a00 rw::audio::core::DecodeRawSamples  # raw int16 sample expansion; __stdcall
+01149ac0 rw::audio::core::Decoder::GetCurrentRequestDesc  # PDB callee-single name
+01149d60 rw::audio::core::EaLayer3DecBase::DecodeEvent  # PDB caller-single name

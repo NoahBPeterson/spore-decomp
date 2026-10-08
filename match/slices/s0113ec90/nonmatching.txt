@@ -1,0 +1,20 @@
+# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+0113ec90  253  SNDMEMI_alloc (aligned zero-fill, x87 idiom) complete, leaf. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (379 valid, 88.3% coverage). x87 20-byte store schedule differs.
+0113eda0  62  SND global-state init/copy complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
+0113ee40  82  SND global-state apply complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (257 valid, 95.5% coverage)
+0113ef00  35  SNDSYS_restore complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 12.2% coverage)
+0113ef90  131  SNDSYSI_chanpubinit complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (398 valid, 56.6% coverage)
+0113f060  188  SNDSYSI_init complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv UNSUPPORTED (callee imports GetVersionExA, no handler)
+0113f1d0  88  F_0113f1d0 (play-slot registration) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 11.1% coverage)
+0113f250  850  SNDPKTPLAY_start (build voice graph, submit packet) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 3.4% coverage)
+0113f5c0  226  SNDPKTPLAY_submit complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 4.5% coverage)
+0113f6c0  66  F_0113f6c0 (free packet slots) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 18.9% coverage)
+0113f720  7  F_0113f720 (played-sample count) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 28.6% coverage). Only the final add folds a memory operand.
+0113f750  2  F_0113f750 (release play slot) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 40.0% coverage). Only the global byte test is mov/test vs cmp.
+0113f780  269  F_0113f780 (advance packet, emit callback) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (341 valid, 10.3% coverage)
+0113f8f0  65  F_0113f8f0 (update play cursor) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (350 valid, 40.9% coverage)
+0113f940  68  F_0113f940 (drain deferred callbacks) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 17.9% coverage)
+0113f9b0  79  F_0113f9b0 (stop play, free voices) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 8.7% coverage)
+0113fa70  114  PktCursor::Decode3 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (380 valid, 100% coverage)
+0113fb20  115  PktCursor2::Decode2 complete, thiscall. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS (372 valid, 100% coverage)
+0113fba0  113  F_0113fba0 (apply sample-rate change) complete. flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK (400 valid, 10.9% coverage)

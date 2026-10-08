@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0114da70/s0114da70.cpp  ?CombFilterReset@core@audio@rw@@YAPAUCombFilter@123@PAU4123@@Z  0114dca0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0114da70/s0114da70.cpp  ?SetGains@CombFilter@core@audio@rw@@QAEXMMMM@Z  0114dcb0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0114da70/s0114da70.cpp  ??0CombFilter@core@audio@rw@@QAE@XZ  0114dce0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0114da70/s0114da70.cpp  ??0AllPassFilter@core@audio@rw@@QAE@XZ  0114e230  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0114da70/s0114da70.cpp  ??0FastFirEngine@core@audio@rw@@QAE@XZ  0114e300  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0114da70/s0114da70.cpp  ?SetChannels@FastFirEngine@core@audio@rw@@QAEHHH@Z  0114e370  /vc71 /O2 /MD /Gy /TP /arch:SSE

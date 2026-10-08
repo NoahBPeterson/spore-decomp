@@ -1,0 +1,7 @@
+0113bc60 rw::audio::core::PacketPlayer::StartPlaying  # PDB candidate (caller-single)
+0113bcf0 rw::audio::core::PacketPlayer::PlayHandler  # PDB candidate (caller-single)
+0113bd60 rw::audio::core::PacketPlayer::RwacTimerClient  # PDB gap-align
+0113be10 rw::audio::core::PacketPlayer::CreateInstance  # PDB anchor
+0113cbf0 rw::audio::core::Delay::CreateInstance  # PDB anchor
+0113ce00 rw::audio::core::Dac::Mix  # PDB candidate (caller-single)
+0113cb50 rw::audio::core::Delay::RwacTimerClient  # timer callback installed by Delay::CreateInstance

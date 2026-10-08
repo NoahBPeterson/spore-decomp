@@ -1,0 +1,14 @@
+# va        Name  # evidence
+01137aa0  rw::audio::core::SndPlayer1::FreeRequest  # frees decoder + feed slots + stream for one request
+01137bc0  rw::audio::core::SndPlayer1::FreeFinishedRequests  # advances mNextRequestToFree over state==4 requests
+01137c30  rw::audio::core::FreeAllRequests  # cdecl helper, called by Shutdown
+01137c90  rw::audio::core::SndPlayer1::Shutdown  # frees requests, removes timer, frees request handle array
+01137cd0  rw::audio::core::SndPlayer1::ResetCommand  # ring callback (record+4 = this); returns 8
+01137d60  rw::audio::core::SndPlayer1_ChunkHeaderCallback  # QueueFile callback: BE length + optional byte swap
+01137de0  rw::audio::core::SndPlayer1::PlayHandler  # PDB name; ring callback, record+4 = this
+01138050  rw::audio::core::SndPlayer1::FeedChunk  # stores chunk into feed slot, calls decoder
+01138130  rw::audio::core::SndPlayer1::SendCommand  # command ring dispatcher (cmd 0..5)
+011384b0  rw::audio::core::SndPlayer1::StreamNextChunk  # PDB name
+01138570  rw::audio::core::SndPlayer1::HandleLoopStart  # PDB candidate (caller-single)
+01138640  rw::audio::core::SndPlayer1::HandleSampleEnd  # PDB name
+011387b0  rw::audio::core::SndPlayer1::StartRequest  # PDB name

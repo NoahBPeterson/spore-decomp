@@ -1,0 +1,2 @@
+# <va>  <diff-bytes>  <reason>
+# (none: every function in this slice is complete and behaviour-equivalent)

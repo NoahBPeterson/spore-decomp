@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+01137aa0  146  complete FreeRequest; LTCG register allocation across System::Free/Lock calls; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (144 valid, 97.8% coverage, no mismatch)
+01137bc0  83  complete FreeFinishedRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 37.9% coverage, no mismatch)
+01137c30  68  complete FreeAllRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (293 valid, 100% coverage)
+01137c90  40  complete Shutdown; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (302 valid, 80% coverage)
+01137cd0  22  complete ResetCommand; LTCG + loop/unroll layout; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (297 valid, 100% coverage)
+01137d60  106 complete leaf ChunkHeader parser; cl13 codegen for the big-endian byte swap (union/byte-store shape) differs structurally; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
+01137de0  516 complete PlayHandler (ring callback); LTCG inlining across StreamPool/Stream calls; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (339 valid, 55.0% coverage, no mismatch)
+01138050  188 complete FeedChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (168 valid, 100% coverage, no mismatch)
+01138130  880 complete SendCommand dispatcher; LTCG ring writes + command bodies; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (374 valid, 83.0% coverage)
+011384b0  189 complete StreamNextChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (150 valid, 84.9% coverage, no mismatch)
+01138570  184 complete HandleLoopStart; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (98 valid, 88.6% coverage, no mismatch)
+01138640  293 complete HandleSampleEnd; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (5/13 valid) on a single aliased pool dword (this+0x104): with a degenerate random mRequestInternalOffset (0) the per-request samplesFed field aliases FeedDesc[10].chunkSamplesPlayed, and the two sides diverge there; not proven to be uninitialised-frame noise
+011387b0  257 complete StartRequest; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: every input faults in the random Stream/Decoder object graph)

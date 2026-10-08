@@ -1,0 +1,2 @@
+slices/s01130c50/s01130c50.cpp  ?Mp3Player_start@core@audio@rw@@YAHPAUMp3Player@123@@Z  011313f0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01130c50/s01130c50.cpp  ?Mp3Player_getState@core@audio@rw@@YAHPAUMp3Player@123@PAH@Z  011315e0  /vc71 /O2 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,4 @@
+01146ca0 rw::audio::core::CMpegLayer3Base::CMpegLayer3Base  # PDB name (gap-align 0x014c8364); ctor calls base ctor 0x1148cd0 and InitHuffTables 0x1146a90; vtable 0x14cc180
+01146cf0 rw::audio::core::CMpegLayer3Base::~CMpegLayer3Base  # PDB name (gap-align 0x014c83a4); frees mpPrevBlockX4 via System::Free 0x112c850, base dtor 0x1148d40
+01146d20 rw::audio::core::CMpegLayer3Base::AllocateHybrid  # PDB name (0x014c83cd); System::Alloc 0x112c820 then memset 0x11e073e; thiscall ret 4
+01146d70 rw::audio::core::CMpegLayer3Base::ScalarDeletingDtor  # scalar deleting dtor ?_G; frees + base dtor + optional operator delete 0xf47380; thiscall ret 4

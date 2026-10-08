@@ -1,0 +1,9 @@
+01148050 rw::audio::core::CMpegBase::PolySynth  # PDB candidate region; matches rw::audio::core X360 CMpegBase::PolySynth (phase rotate + Dct32 + 32-tap window)
+01148340 rw::audio::core::SynthesisMatrix  # 32-point matrixing DCT (pre-twiddle into 0x16e8280, cosine matrices 0x15c2f00/0x15c3300); called only by 0x1148710
+01148710 rw::audio::core::CMpegBase::PolySynth2  # second poly-synth variant (4-way window/bank switch on iCol&3)
+01148a40 rw::audio::core::CMpegBase::ParseHeader  # decodes the 32-bit MPEG header into the CMpegBase fields
+01148c00 rw::audio::core::CMpegBase::ReadHeader  # reads a big-endian frame header and advances mBufPtr/mBufPtrNext
+01148c60 rw::audio::core::CMpegBase::PeekHeader  # ParseHeader on the current buffer without advancing
+01148cf0 rw::audio::core::CMpegBase::AllocateSynth  # PDB caller-scored name; System::Alloc("PolySynthHistoryF")
+01148da0 rw::audio::core::ScaleSamples  # PDB callee-single name
+01148eb0 rw::audio::core::HELPER_CEALayer3DecF::Feed  # PDB anchor name

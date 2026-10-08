@@ -1,0 +1,15 @@
+01130c50 275 complete; LTCG + register scheduling in the header parser; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400 valid, 17.6% coverage, no mismatch)
+01130d90 162 complete; LTCG-free but cl 13.10 schedules the BE32 build and sync loop differently; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
+01130e50 183 complete; LTCG + inlined FUN_01130c50/01130d90; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (348/400, 100% coverage)
+01130f40 198 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest FAIL 5/5 valid only (few realistic inputs; packet-player allocation differs in one heap dword) -- object-heavy, not a logic mismatch
+01131040 190 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest FAIL 5/144 (ours follows the chunk into a decoded call the original did not, garbage-vtable input) -- object-heavy
+01131110 84 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (324/400, 86.4% coverage)
+011311b0 326 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (314/400, 100% coverage)
+011312f0 22 complete; cl register choice (eax vs ecx for the list node); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 92.3% coverage)
+011313b0 35 complete; LTCG register scheduling around FUN_0113fdd0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (381/400, 100% coverage)
+01131420 39 complete; LTCG register scheduling around FUN_0113fba0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
+01131460 81 complete; LTCG + intrusive-list unlink; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (178 valid, 97.0% coverage, no mismatch)
+01131540 53 complete; LTCG register scheduling around FUN_0113ff00; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
+011315f0 2 complete; only diff is `movzx eax` vs `mov ax` for the 16-bit sample-rate load; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
+01131630 22 complete; leaf but /O2 schedules the compares differently; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
+01131730 931 complete; LTCG + inlined parser/packet loop; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (233/400, 67.3% coverage)

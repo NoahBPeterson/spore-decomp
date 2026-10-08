@@ -1,0 +1,26 @@
+0112ce20 ReChannelGainWrite1x2  # rwaudio MixKernels; 2 CopyWithGain at gain*0.707 (RenderWare/BurnoutDecomp)
+0112ce70 ReChannelGainWrite1x4  # rwaudio MixKernels; mono->quad, 2 CopyWithGain + 2 memset
+0112cee0 ?ReChannelGainWrite1x6@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch; matches symbols/lib_names.txt
+0112cf50 ReChannelGainWrite2x1  # rwaudio MixKernels; CopyWithGain + MixWithGain
+0112cfa0 ReChannelGainWrite2x2  # rwaudio MixKernels; two CopyWithGain
+0112cff0 ?ReChannelGainWrite2x4@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d050 ?ReChannelGainWrite2x6@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d0d0 ?ReChannelGainWrite4x1@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d140 ?ReChannelGainWrite4x2@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d1c0 ?ReChannelGainWrite4x4@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d240 ?ReChannelGainWrite4x6@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d2e0 ?ReChannelGainWrite6x1@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d370 ReChannelGainWrite6x2  # rwaudio MixKernels; centre fold at gain*0.707
+0112d420 ReChannelGainWrite6x4  # rwaudio MixKernels; centre fold at gain*0.707
+0112d4e0 ?ReChannelGainWrite6x6@core@audio@rw@@YAXPAPAM0MH@Z  # PDB/xmatch
+0112d590 ?ReChannelGainWrite@core@audio@rw@@YAXPAPAM0MIIH@Z  # rwaudio MixKernels dispatcher
+0112d8e0 ?AddTimer@TimerManager@core@audio@rw@@QAEHPAUTimerHandle@234@PAX1PBDHE@Z  # PDB name (real)
+0112d940 TimerManager::RemoveTimer  # rwaudio; deferred self-remove path
+0112d9b0 TimerManager::ExecuteTimers  # rwaudio; walks Collection used list
+0112da30 TimerManager::Defragment  # rwaudio; 2x Collection::Defragment
+0112da60 TimerManager::Release  # rwaudio; 2x Collection Clear+Release
+0112da90 TimerManager::TimerManager (ctor)  # rwaudio; zeroes 2 Collections, mfCallbackTime=-1
+0112dae0 PlugInDescFixup  # rwaudio; wires PlugInDescRunTime parameter/event tool-side pointers
+0112dbb0 ?Initialize@?$PlugIn@VSndPlayer1@@core@audio@rw@@...  # PDB: PlugIn::Initialize<SndPlayer1>
+0112dbd0 PlugInRegistry::RegisterBuiltInPlugIns  # rwaudio; registers 13 built-in descriptors (byte-exact)
+0112dc80 System::GetDecoderRegistry  # rwaudio; lazy System+0x2c DecoderRegistry

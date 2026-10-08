@@ -1,0 +1,2 @@
+slices/s01131b70/s01131b70.cpp  ?SndStream_getState@core@audio@rw@@YAHH@Z  01132300  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s01131b70/s01131b70.cpp  ?SndStream_releaseCallback@core@audio@rw@@YAXH@Z  01132370  /vc71 /O2 /MD /Gy /TP /arch:SSE

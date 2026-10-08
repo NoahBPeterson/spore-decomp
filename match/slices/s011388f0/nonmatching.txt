@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+011388f0  502 complete SndPlayer1 timer client; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (request-state pump diverges; marshalling stubs declared cdecl instead of thiscall)
+01138af0  351 complete SndPlayer1::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01138d00  25 complete Snd9Service::ReleaseEvent; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01138d40  46 complete Snd9Service::UpdateSnd9SampleRate; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (2 unresolved cfg globals)
+01138d90  256 complete Snd9Service timer client mix loop; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (127 valid, 100% coverage, no mismatch)
+01138ec0  123 complete Snd9Service::CreateInstance; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01138f70  1 complete plugin-description installer; one byte off; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+01139000  59 complete SinePlayer command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+011390b0  200 complete SinePlayer process; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+011391a0  101 complete SinePlayer record handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01139230  20 complete SinePlayer record handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01139260  58 complete init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (130 valid, 100%)
+011392c0  103 complete command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (306 valid, 100%)
+01139390  41 complete stop handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
+011393d0  21 complete timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (312 valid, 100%)
+01139450  69 complete ctor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+011394b0  56 complete dtor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (334 valid, 100%)
+01139500  295 complete SampleCapture::StartHandler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (streams fault on the random object graph)
+01139660  93 complete SampleCapture command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01139730  40 complete process (clear); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01139770  93 complete record handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+011398b0  65 complete dtor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL
+01139920  71 complete frequency/table converter; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL

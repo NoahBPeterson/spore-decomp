@@ -1,0 +1,34 @@
+011369e0 rw::audio::core::EaLayer3DecBase::DecodeGranule  # PDB candidate
+01136b10 FUN_01136b10  # setup aligned buffer + engine
+01136b40 FUN_01136b40  # destructor thunk
+01136b50 rw::audio::core::EaLayer3Dec::DecodeEvent  # PDB candidate
+01136c60 FUN_01136c60  # destroy cores + free array
+01136ca0 FUN_01136ca0  # instance size helper
+01136cc0 rw::audio::core::EaLayer3DecBase::CreateInstance  # PDB name
+01136de0 FUN_01136de0  # CreateInstance(this,2)
+01136e10 FUN_01136e10  # zero filter state
+01136ec0 FUN_01136ec0  # remove VuMeter timer
+01136ee0 FUN_01136ee0  # VuMeter timer tick
+01136f80 FUN_01136f80  # timer callback
+01136fa0 FUN_01136fa0  # VuMeter/TimeStretch ctor
+01137060 FUN_01137060  # register timer callback
+011370d0 FUN_011370d0  # plug-in ctor stub
+011370f0 FUN_011370f0  # UserMusicArbiter plug-in factory
+01137130 FUN_01137130  # free sample buffer
+01137150 FUN_01137150  # instance size helper
+01137170 rw::audio::core::TimeStretch::CreateInstance  # PDB name
+011373c0 FUN_011373c0  # pop timer list head
+011373e0 FUN_011373e0  # push timer list node
+01137420 rw::audio::core::SubMix::FUN_01137420  # link a mix input
+01137450 rw::audio::core::SubMix::FUN_01137450  # unlink/accumulate a mix input
+011374e0 FUN_011374e0  # refcount++ and return base
+011374f0 FUN_011374f0  # SubMix teardown
+01137590 rw::audio::core::SubMix::CreateInstance  # PDB name
+011376a0 FUN_011376a0  # format predicate
+011376d0 FUN_011376d0  # parse compression block
+011377f0 FUN_011377f0  # parse mix block
+011378a0 rw::audio::core::SubMix::FUN_011378a0  # remaining bytes
+01137910 FUN_01137910  # per-slot size
+01137950 FUN_01137950  # retire slot entries
+011379f0 FUN_011379f0  # allocate slot from ring
+01137a30 FUN_01137a30  # find/update slot by float

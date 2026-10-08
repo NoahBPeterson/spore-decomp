@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0113dc00/s0113dc00.cpp  Dac_ThreadEntry  0113def0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0113dc00/s0113dc00.cpp  Plugin_InitB  0113e5d0  /vc71 /O2 /MD /Gy /TP /arch:SSE
+slices/s0113dc00/s0113dc00.cpp  Plugin_SizeA  0113e670  /vc71 /O2 /MD /Gy /TP /arch:SSE

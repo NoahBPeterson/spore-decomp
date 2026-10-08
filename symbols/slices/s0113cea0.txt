@@ -1,0 +1,8 @@
+0113cea0 rw::audio::core::Dac::Process  # Dac tick: lock, mix, unlock (calls Dac::Mix 0x113ce00)
+0113d3a0 rw::audio::core::Dac::CreateBuffer  # creates the DirectSound buffer + WAVEFORMATEXTENSIBLE
+0113d7b0 rw::audio::core::Dac::EnumerateDevices  # enumerates DirectSound devices/rates
+0113d930 rw::audio::core::Dac::InitDirectSound  # DirectSoundCreate/SetCooperativeLevel
+0113d9f0 rw::audio::core::Dac::Start  # allocates and locks the primary buffer
+0113dae0 rw::audio::core::Dac::SetMode  # mode 0 = start, 1 = prime
+0113db70 rw::audio::core::Dac::Restart  # release then re-init in the previous mode
+0113d770 rw::audio::core::Dac::StopHandler  # job handler: release the Dac pipeline

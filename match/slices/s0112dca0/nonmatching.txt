@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+0112df80  29  StreamPool::GetInstance: complete; /LTCG registry-walk register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (400 valid, 41.7% cov)
+0112e1e0  16  StreamPool::ReleaseStream: complete; 16-bit decrement test (movzx eax,word/test ax,ax vs reuse of dec flags); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (398 valid, 100% cov)
+0112e440  4  Voice::GetDecayProgress: complete; x87 load scheduling (System load before fld); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (396 valid, 100% cov)
+0112e450  17  Voice::StartDecay: complete; `cmp byte [m],0` vs cached byte, and fld/fstp float copy; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
+0112e5a0  65  Voice::RemoveFromActive: complete; /LTCG register/scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (395 valid, 44.4% cov)
+0112e600  116  Voice::Release: complete; virt-interface-call + register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (299 valid, 96.5% cov)
+0112e690  92  Voice::Stop: complete; register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (345 valid, 100% cov)
+0112e720  470  Voice::Voice (ctor): complete; /LTCG register allocation and inline choices across System::Alloc/plugin sizing; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (206 valid, 49.2% cov)
+0112e9b0  177  sound-packet submit: complete; object-heavy (sound player vtable); flags /vc71 /O2 /MD /Gy /TP; equiv UNSUPPORTED (0/400 valid; original reaches import WaitForSingleObject)
+0112eb70  52  chunk release/pump: complete; object-heavy; flags /vc71 /O2 /MD /Gy /TP; equiv UNSUPPORTED (0/400 valid; original faults reading garbage stream)
