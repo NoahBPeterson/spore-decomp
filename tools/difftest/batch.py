@@ -85,7 +85,18 @@ def main():
     rest = [a for a in argv if a not in spec]
     opts = equiv.parse_args(["x"] + rest)
     results = []
-    tl = targets(spec)
+    done = set()
+    if out and os.path.exists(out):      # resume: skip functions already in the output file
+        try:
+            for r in json.load(open(out)):
+                if isinstance(r, dict) and "slice" in r and "va" in r:
+                    results.append(r)
+                    done.add((r["slice"], r["va"]))
+        except Exception:
+            pass
+    tl = [t for t in targets(spec) if (t[0], "%08x" % t[1]) not in done]
+    if done:
+        print("resuming: %d already done, %d to go" % (len(done), len(tl)), flush=True)
     for k, (sid, va) in enumerate(tl):
         print("[%d/%d] %s %08x" % (k + 1, len(tl), sid, va), flush=True)
         t0 = time.time()
@@ -105,7 +116,12 @@ def main():
         equiv.print_result(r)
         if out:
             os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
-            json.dump(results, open(out, "w"), indent=1)
+            tmp = out + ".tmp"          # atomic: a kill never leaves a truncated results file
+            with open(tmp, "w") as fh:
+                json.dump(results, fh, indent=1)
+                fh.flush()
+                os.fsync(fh.fileno())
+            os.replace(tmp, out)
     text = summary(results)
     print(text)
     if out:
