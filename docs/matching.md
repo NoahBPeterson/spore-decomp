@@ -52,6 +52,9 @@ Evidence and rules of thumb are below.
   where /LTCG has nothing to cross-optimise and they can still match. Havok shows no sign of LTCG
   (its functions match single-object once the compiler version is right). `equiv.py` reports
   register-only leftovers here, and ABI mismatches like a clobbered `ebx`.
+  **Policy: RenderWare 4 core is equivalence-only until the whole binary has compilable source** —
+  do not chase byte-exactness for its callers; record them as complete + equivalence-checked
+  (`symbols/renderware4_core.txt` lists the ranges). Leaf functions may still match.
 
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.

@@ -1,0 +1,11 @@
+# RenderWare 4 core -- built with VC .NET 2003 (cl 13.10) AND link-time code generation (/GL + /LTCG).
+#
+# POLICY: equivalence-only until the whole binary has compilable source. Do NOT chase byte-exactness
+# for functions here that make calls: a per-file compile cannot reproduce /LTCG cross-call register
+# allocation (see docs/matching.md, "Toolchain provenance"). Leaf functions that make no calls may
+# still match under /vc71 and may stay in manifests. Record the rest as complete + equivalence-checked.
+#
+# Address ranges below are the RenderWare component from symbols/components.json. Non-RenderWare code
+# interleaved in the same range (e.g. NegateRows, LpcSynthesize) is VS2008 -- not RW4 core.
+0112c500 01176a90
+011e2000 0120bc50
