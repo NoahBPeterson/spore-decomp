@@ -1,7 +1,7 @@
 // Slice s010297e0: SP::cSPSpaceCombatTuning loot/DPS getters plus space mission/UFO helpers.
 // Flags: /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
-#include <math.h>
+extern "C" float sqrtf(float);
 
 typedef unsigned int uint;
 
@@ -9,17 +9,21 @@ typedef unsigned int uint;
 // minimal class stubs (real names from the 2008 PDB where known)
 // ---------------------------------------------------------------------------
 struct cPropertyList;
-struct Prop { char pad[0x12]; unsigned short type; float* GetFloat(); };   // GetFloat @0x0041ea70
-
-struct cPropertyList {
-    virtual void p00(); virtual void p01(); virtual void p02(); virtual void p03();
-    virtual void p04(); virtual void p05(); virtual void p06(); virtual void p07();
-    virtual void p08();
-    virtual bool GetProperty(uint id, void** out);       // +0x24
-};
-
 struct IUnk { virtual int AddRef(); virtual int Release(); };   // +4 = Release
 
+struct GetsFloat {
+    virtual void q0(); virtual void q1(); virtual void q2(); virtual void q3();
+    virtual void q4(); virtual void q5(); virtual void q6(); virtual void q7();
+    virtual void q8();
+    virtual bool GetProperty(uint id, void** out);       // +0x24
+};
+struct Prop {
+    char pad[0x12];
+    unsigned short type;
+    float* GetFloat();   // 0x0041ea70
+};
+struct cPropertyList : GetsFloat {
+};
 struct PropertyMgr {
     virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
     virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
@@ -118,16 +122,22 @@ void* GetMissionManager();                                  // 0x00feb9f0
 void* GetPlayerEmpire();                                    // 0x01021300
 void* GetPlayerHomePlanet();                                // 0x01021370
 void* GetUniverseContext();                                 // 0x01021080
-int   IsArchived();                                         // 0x01021240
-void* GetAvatar();                                          // 0x00b1fdb0
+void* IsArchived();                                         // 0x01021240
+struct GameNounMgr {
+    void* GetAvatar();                                      // 0x00b1fdb0
+};
 void  GetPropertyAsFloatArray(cPropertyList* list, uint id, int* count, float** out);  // 0x006a08b0
 void  GetPropertyAsVector3(cPropertyList* list, uint id, void* out);                    // 0x006a1110
 float* PropertyGetFloat(Prop* p);                           // 0x0041ea70
 void  CreateMinimapIcon(void* ufo, void* param);            // 0x01042080
 void  BuildSurfaceOrientationFwd(void* out, void* in);      // 0x00b81720
 
-struct TerrainSphere { float Clamp(unsigned id); };         // 0x00c75c30 method
-struct NounMgrObj { TerrainSphere* GetCurrentTerrainSphere(); };  // 0x00f67d90 method
+struct TerrainSphere {
+    float Clamp(unsigned id);   // 0x00c75c30
+};
+struct NounMgrObj {
+    TerrainSphere* GetCurrentTerrainSphere();   // 0x00f67d90
+};
 
 extern float g_100;        // 0x013ec4d0
 extern float g_0;          // 0x01485378
@@ -184,7 +194,9 @@ struct cRelationshipManager {
 };
 struct cEmpire { bool IsHostileToPlayer(); };   // 0x00c309e0
 struct Inventory;
-struct SpaceGame { Inventory* GetPlayerInventory(); };   // 0x00a1ad60
+struct SpaceGame {
+    Inventory* GetPlayerInventory();   // 0x00a1ad60
+};
 
 struct Planet {
     Obj4c base;                              // vptr @0
@@ -200,17 +212,7 @@ struct Planet {
     float f748;                              // +0x748
 };
 
-bool FUN_01029950(Planet* p) {
-    Obj4c* emp = ((cStarManager*)StarManager())->GetEmpireByID(p->base.v4c());
-    Obj4c* player = (Obj4c*)GetPlayerEmpire();
-    if (emp != player && p->f748 < 100.0f) {
-        if (p->f220 > 0.0f)
-            return true;
-        if (emp)
-            return ((cRelationshipManager*)RelationshipManager())->RecordEvent(emp, player);
-    }
-    return false;
-}
+bool FUN_01029950(Planet* p);
 
 // ===========================================================================
 // @ 0x010299c0
@@ -233,7 +235,7 @@ bool FUN_01029a10(int empireId, int planetId) {
         if (empireId == -1) return false;
         if (empireId == ((cStarManager*)StarManager())->m_885c90()) return false;
         if (((cStarManager*)StarManager())->GetEmpireByID(empireId) == 0) return false;
-        if (planetId == (int)(uintptr_t)GetPlayerHomePlanet()) return false;
+        if (planetId == (int)GetPlayerHomePlanet()) return false;
     }
     return true;
 }
@@ -241,7 +243,9 @@ bool FUN_01029a10(int empireId, int planetId) {
 // ===========================================================================
 // @ 0x01029a60
 // ===========================================================================
-struct CreatureBase { int PlayIdleAnimation(int a, int b); };   // 0x00bc96a0
+struct CreatureBase {
+    int PlayIdleAnimation(int a, int b);   // 0x00bc96a0
+};
 struct Creature { char pad[8]; CreatureBase base; };
 struct UFOInv { char pad[0x508]; Obj10 f508; };
 bool FUN_01029a60(Planet* p, bool b) {
@@ -255,7 +259,7 @@ bool FUN_01029a60(Planet* p, bool b) {
     }
     UFOInv* inv = (UFOInv*)((SpaceGame*)GetUFOSimulator())->GetPlayerInventory();
     if (r == 0) {
-        int cur = (int)(uintptr_t)p->f544;
+        int cur = (int)p->f544;
         if (cur == inv->f508.v10()) r = 1;
     }
     Creature* c = p->f6c8;
@@ -274,7 +278,7 @@ int cSPSpaceCombatTuning::GetAirRaidSirenTimeMS() {
         if (pl->GetProperty(0x289453d, (void**)&p) && p->type == 0xd)
             v = *p->GetFloat();
     }
-    return (int)(g_13ec5b4 * v);
+    return (int)(v * g_13ec5b4);
 }
 
 // ===========================================================================
@@ -507,20 +511,56 @@ float cSPSpaceCombatTuning::LootChanceB(int type) {
 // ===========================================================================
 // @ 0x0102aa50
 // ===========================================================================
-struct GameObj {
-    char pad0[0x220];
-    char pad1[0x544 - 0x220];
-    void* f544;
-    char pad2[0x6c8 - 0x548];
-    Creature* f6c8;
-    char pad3[0x714 - 0x6cc];
-    int f714;
-    Obj4c base;
-    bool pred() { return ((IUnk*)this)->AddRef() != 0; }   // placeholder
+struct Obj2c {   // vtable slot +0x2c: bool()
+    virtual void z0(); virtual void z1(); virtual void z2(); virtual void z3();
+    virtual void z4(); virtual void z5(); virtual void z6(); virtual void z7();
+    virtual void z8(); virtual void z9(); virtual void z10();
+    virtual bool pred();
 };
-bool FUN_0102aa50(GameObj* a, GameObj* b, char c) {
-    (void)a; (void)b; (void)c;
-    return false;
+bool FUN_01029a60(Planet* p, bool b);
+bool FUN_0102aa50(Planet* a, Planet* b, bool c) {
+    if (a && ((Obj2c*)a)->pred()) return false;
+    if (b && ((Obj2c*)b)->pred()) return false;
+    int bType = b->f714;
+    int aType = a->f714;
+    int bId = b->base.v4c();
+    int aId = a->base.v4c();
+    switch (bType) {
+    case 0: case 3:
+        if (aType == 0) return false;
+        if (aType == 3) return false;
+        if (FUN_01029a60(a, c)) return true;
+        if (aType != 8) return false;
+        if (GetUniverseContext() != 0) return false;
+        if (((GameNounMgr*)IsArchived())->GetAvatar() != (void*)a->base.v4c()) return false;
+        return c != 0;
+    case 1:
+        if (aType != 2 && aType != 4 && aType != 5 && aType != 8) return false;
+        if (a->f6c8 == 0) return true;
+        if (a->f6c8->base.PlayIdleAnimation(8, 0) != 0) return false;
+        return true;
+    case 2: case 4: case 5:
+        if (b->f6c8->base.PlayIdleAnimation(0x10, 0) == 0 &&
+            (aType == 0 || aType == 3) && FUN_01029a60(b, c))
+            return true;
+        if (aType != 6) return false;
+        return bId != aId;
+    case 6:
+        if ((aType == 2 || aType == 4 || aType == 5) && bId != aId) {
+            if (a->f6c8 == 0) return true;
+            if (a->f6c8->base.PlayIdleAnimation(8, 0) == 0) return true;
+        }
+        if (aType != 0 && aType != 3) return false;
+        return FUN_01029a60(b, c);
+    case 8:
+        if (aType != 0 && aType != 3) return false;
+        return FUN_01029a60(b, c);
+    case 11:
+        if (aType == 0 || aType == 3) return true;
+        return false;
+    default:
+        return false;
+    }
 }
 
 // ===========================================================================
@@ -628,8 +668,6 @@ bool FUN_0102ae60(Obj4c* planet) {
 }
 
 // ===========================================================================
-// @ 0x0102aec0
-// ===========================================================================
 struct DistObj {
     char pad[0x148];
     float f148;
@@ -637,6 +675,7 @@ struct DistObj {
     float f1cc;
     float Dist() { return f1cc * f148; }   // 0x0104be30
 };
+// @ 0x0102aec0
 bool FUN_0102aec0(DistObj* self, Vec3* a, Vec3* b) {
     float d = self->Dist();
     if (d == g_13eb1bc) d = g_140f7ac;

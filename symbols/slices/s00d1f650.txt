@@ -1,0 +1,13 @@
+00d1f650 SP::CanUseAbility  # PDB candidate (card)
+00d1fa20 SP::IsAbilityAvailable  # Claude-coined; tool-type switch
+00d1fb30 SP::ValidateAbilityTarget  # Claude-coined
+00d1fe00 SP::ActivateAbilityTarget  # Claude-coined
+00d200a0 SP::ScoreAbilityRange  # Claude-coined
+00d201f0 SP::cTribeGameBehaviorFish::Score  # PDB candidate (card)
+00d203d0 SP::cCreatureCamera::Init  # PDB name (card)
+00d203e0 SP::cCreatureCamera::Deactivate  # PDB name (card)
+00d20430 SP::cCreatureCamera::SetCameraUI  # Claude-coined
+00d204c0 SP::cCreatureCamera::OnKeyDown  # card
+00d204e0 SP::cCreatureCamera::OnKeyUp  # PDB name (card)
+00d20500 SP::cCreatureCamera::OnMouseUp  # PDB name (card)
+00d20530 SP::cCreatureCamera::OnMouseWheel  # PDB name (card)

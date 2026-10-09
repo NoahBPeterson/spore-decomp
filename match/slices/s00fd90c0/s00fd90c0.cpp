@@ -49,10 +49,11 @@ void* __cdecl  FUN_00b3d250();                       // SP::GameInputManager
 void* __cdecl  FUN_00b3d2c0();                       // SP::RelationshipManager
 void* __cdecl  FUN_00b3d4a0();                       // CommManager
 void* __stdcall FUN_00b3d3f0(int);                   // 0x00b3d3f0 -> void*
-void* __cdecl  FUN_00b3d470(void*);                  // 0x00b3d470 -> void*
+void* __stdcall FUN_00b3d470(void*);                 // 0x00b3d470 -> void*
 void* __cdecl  FUN_00b5b800();                       // SP::GetCurrentGameMode
 void* __cdecl  FUN_010212a0();                       // GetActivePlanetRecord
-int   __cdecl  FUN_01021230(int);                    // 0x01021230
+int   __stdcall FUN_01021230(int);                   // 0x01021230
+int   __stdcall FUN_01021230_0();                    // 0x01021230 (no-arg call site)
 void  __cdecl  FUN_010213b0(int);                    // 0x010213b0
 int   __cdecl  FUN_01021080();                       // GetUniverseContext
 void* __cdecl  FUN_01021240();                       // SP::cSPMission::IsArchived
@@ -86,8 +87,9 @@ struct Ext {
     void  FUN_00d00a10(void*, int);           // returns float
     void* FUN_01040820();                     // returns float
     void* FUN_00c8b770();                     // cStar::GetSolarSystem
-    void  FUN_00c86c70(int);                  // cSolarSystem::ActivateGraphics
+    void  FUN_00c86c70();                     // cSolarSystem::ActivateGraphics
     void  FUN_01034b90();                     // 0x01034b90
+    void  FUN_00d06400();                     // 0x00d06400
     char  FUN_00d09660();                     // 0x00d09660 -> char
     void* FUN_01065e20();                     // 0x01065e20 -> char
     void  FUN_01067b60();                     // 0x01067b60
@@ -190,9 +192,9 @@ struct Vid {
     void  f9460(void* p);
     u8    f9480(int param_2);
     void  f9610(int param_2);
-    void  f9680();
-    void  f96d0();
-    void  f9750(int, int, int);
+    Vid*  f9680();
+    void  f96d0();    void  f9750(int, int, int);
+    void  f97c0(void* param_2);
     void  f9b70(int, int, int, int, u32);
 };
 // @ 0x00fd9460
@@ -283,8 +285,8 @@ void Vid::f9610(int param_2) {
 }
 
 // @ 0x00fd9680
-void Vid_f9680(void* p) {
-    char* a = (char*)p;
+Vid* Vid::f9680() {
+    char* a = (char*)this;
     *(void**)a = &DAT_01493d80;
     *(int*)(a + 4) = 0;
     *(int*)(a + 8) = 0;
@@ -301,11 +303,12 @@ void Vid_f9680(void* p) {
     *(int*)(a + 0x30) = 0;
     *(int*)(a + 0x34) = 0;
     *(int*)(a + 0x38) = 0;
+    return this;
 }
 
 // @ 0x00fd96d0
-void Vid_f96d0(void* p) {
-    char* a = (char*)p;
+void Vid::f96d0() {
+    char* a = (char*)this;
     *(void**)a = &DAT_01493d80;
     volatile int* r1 = *(volatile int**)(a + 8);
     if (r1) {
@@ -319,9 +322,9 @@ void Vid_f96d0(void* p) {
 }
 
 // @ 0x00fd9750
-void Vid_f9750(Vid* self, int param_2, int param_3, int param_4) {
+void Vid::f9750(int param_2, int param_3, int param_4) {
     (void)param_2;
-    char* s = (char*)self;
+    char* s = (char*)this;
     *(int*)(s + 0x2c) = param_3;
     *(int*)(s + 0x30) = param_4;
     void* mm = FUN_0067dd60();
@@ -336,9 +339,76 @@ void Vid_f9750(Vid* self, int param_2, int param_3, int param_4) {
     *(void**)(s + 4) = r;
 }
 
+// @ 0x00fd97c0
+void Vid::f97c0(void* param_2) {
+    char* s = (char*)this;
+    float* p = (float*)param_2;
+    char c = (char)f9480((int)param_2);
+    if (*(void**)(s + 0x10)) {
+        ((void(__cdecl*)(void*, void*))*(void**)(s + 0x10))(param_2, *(void**)(s + 0x14));
+    }
+    void* pv = param_2;
+    void* local_38[4];
+    char c3 = FUN_006ddcc0(1, 4, &pv, local_38);
+    if (c3 == 0) return;
+
+    float fStack_24 = (float)(int)p[10];
+    float fVar4 = (float)((int)*(float*)(s + 0x18) & 0xffff);
+    float fVar5 = (float)((int)*(float*)(s + 0x1c) & 0xffff);
+    float fStack_10 = (float)((int)((float)*(int*)(s + 0x30) * *(float*)(s + 0x28) + *(float*)(s + 0x1c)) & 0xffff);
+    float fStack_c = (float)((int)((float)*(int*)(s + 0x2c) * *(float*)(s + 0x24) + *(float*)(s + 0x18)) & 0xffff);
+    if ((int)p[10] < 0) fStack_24 = fStack_24 + 4294967296.0f;
+    fStack_24 = fStack_24 / (float)*(int*)(s + 0x34);
+    float fStack_28 = (float)(int)p[0xb];
+    if ((int)p[0xb] < 0) fStack_28 = fStack_28 + 4294967296.0f;
+    fStack_28 = fStack_28 / (float)*(int*)(s + 0x38);
+
+    float fVar6 = fVar5 + DAT_016077c8;
+    if (c == 0) {
+        p[0] = fVar4 + DAT_016077c4;
+        p[1] = fVar6;
+        p[2] = 0.0f; p[3] = 0.0f; p[4] = 0.0f;
+        fVar6 = fStack_10 + DAT_016077c8;
+        p[5] = fVar4 + DAT_016077c4;
+        p[6] = fVar6;
+        p[7] = 0.0f; p[8] = 0.0f; p[9] = fStack_28;
+        fVar5 = fVar5 + DAT_016077c8;
+        p[10] = fStack_c + DAT_016077c4;
+        p[0xb] = fVar5;
+        p[0xc] = 0.0f; p[0xd] = fStack_24; p[0xe] = 0.0f;
+        fStack_c = fStack_c + DAT_016077c4;
+        float fStack_8 = fStack_10 + DAT_016077c8;
+        p[0xf] = fStack_c;
+        p[0x10] = fStack_8;
+        p[0x11] = 0.0f;
+        fVar4 = fStack_28;
+    } else {
+        p[0] = fVar4 + DAT_016077c4;
+        p[1] = fVar6;
+        p[2] = 0.0f; p[3] = 0.0f; p[4] = fStack_28;
+        fVar6 = fStack_10 + DAT_016077c8;
+        p[5] = fVar4 + DAT_016077c4;
+        p[6] = fVar6;
+        p[7] = 0.0f; p[8] = 0.0f; p[9] = 0.0f;
+        fVar5 = fVar5 + DAT_016077c8;
+        p[10] = fStack_c + DAT_016077c4;
+        p[0xb] = fVar5;
+        p[0xc] = 0.0f; p[0xd] = fStack_24; p[0xe] = fStack_28;
+        fStack_c = fStack_c + DAT_016077c4;
+        float fStack_8 = fStack_10 + DAT_016077c8;
+        p[0xf] = fStack_c;
+        p[0x10] = fStack_8;
+        p[0x11] = 0.0f;
+        fVar4 = 0.0f;
+    }
+    p[0x12] = fStack_24;
+    p[0x13] = fVar4;
+    FUN_006ddd80(4, *(void**)(s + 4), *(void**)(s + 8), *(void**)(s + 0xc));
+}
+
 // @ 0x00fd9b70
-void Vid_f9b70(Vid* self, int param_2, int param_3, int param_4, int param_5, u32 param_6) {
-    char* s = (char*)self;
+void Vid::f9b70(int param_2, int param_3, int param_4, int param_5, u32 param_6) {
+    char* s = (char*)this;
     *(u32*)(param_2 + 0x38) = param_6;
     u32 stack[8];
     FUN_00fcdf40(param_3, param_4, param_5, param_6, stack);
@@ -377,7 +447,7 @@ struct AppMode {
     void f9de0();
     void f9ea0(int key, int param3);
 };
-int f9e80(int a, int* p);   // free callback
+char f9e80(int a, int* p);   // free callback
 
 // @ 0x00fd9c90
 void AppMode::f9c90(int a) {
@@ -389,16 +459,16 @@ void AppMode::f9c90(int a) {
     char c2 = (char)(int)FUN_00805180();
     if (c2 && !c && !flag) return;
     void* gi = FUN_00b3d250();
-    ((void(__thiscall*)(void*))VTP(gi)[0x48 / 4])(gi);
+    ((void(__thiscall*)(void*, int))VTP(gi)[0x48 / 4])(gi, a);
 }
 
 // @ 0x00fd9ce0
 char AppMode::f9ce0(int a, int b) {
     (void)a; (void)b;
-    int u = FUN_01021080();
-    if (u <= 2) {
+    unsigned u = (unsigned)FUN_01021080();
+    if (u <= 2u) {
         void* gi = FUN_00b3d250();
-        return (char)((int(__thiscall*)(void*))VTP(gi)[0x50 / 4])(gi);
+        return ((char(__thiscall*)(void*, int, int))VTP(gi)[0x50 / 4])(gi, a, b);
     }
     return 0;
 }
@@ -422,15 +492,15 @@ void AppMode::f9d30() {
     if (u == 1) {
         void* star = (void*)FUN_01021230(0);
         void* ss = (void*)E(star)->FUN_00c8b770();
-        E(ss)->FUN_00c86c70(0);
+        E(ss)->FUN_00c86c70();
         void* rm = FUN_00b3d2c0();
-        FUN_00d06400();
+        E(rm)->FUN_00d06400();
         return;
     }
     u = FUN_01021080();
     if (u == 2) FUN_010213b0(-1);
     void* rm = FUN_00b3d2c0();
-    FUN_00d06400();
+    E(rm)->FUN_00d06400();
 }
 
 // @ 0x00fd9d90
@@ -441,8 +511,8 @@ void AppMode::f9d90() {
     if (u == 1) {
         void* star = (void*)FUN_01021230(1);
         void* ss = (void*)E(star)->FUN_00c8b770();
-        E(ss)->FUN_00c86c70(1);
-        void* x = (void*)FUN_01021230(1);
+        E(ss)->FUN_00c86c70();
+        void* x = (void*)FUN_01021230_0();
         void* y = FUN_00b3d470(x);
         E(y)->FUN_01034b90();
         return;
@@ -468,7 +538,7 @@ void AppMode::f9de0() {
 }
 
 // @ 0x00fd9e80
-int f9e80(int a, int* p) {
+char f9e80(int a, int* p) {
     if (*p != 0) {
         void* q = (void*)*p;
         ((void(__thiscall*)(void*, int))VTP((char*)q + 8)[0x1c / 4])((char*)q + 8, a);

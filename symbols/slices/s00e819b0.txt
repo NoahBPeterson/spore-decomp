@@ -1,0 +1,28 @@
+00e82130 FUN_00e82130  # Release() on intrusive resource (dec refcount at [*it+0xc])
+00e82140 SP::sCellResourceLoadFailure
+00e821d0 FUN_00e821d0  # load resource by id (returns bool)
+00e82280 FUN_00e82280  # Release every node ref in the global list
+00e822c0 SP::LoadResource
+00e82340 FUN_00e82340  # allocate list node (0x18) and copy key
+00e823a0 SP::ResourceGetFromHandle
+00e82420 FUN_00e82420  # find-or-insert key in intrusive list, return value ptr
+00e82490 FUN_00e82490  # init list sentinel
+00e824d0 FUN_00e824d0  # destroy list + sentinel
+00e82500 FUN_00e82500  # thiscall wrapper: 0x28,arg
+00e82520 FUN_00e82520  # pack 3 normalized floats to RGB (custom xmm ABI)
+00e82620 SP::PatchSoundStart
+00e82690 FUN_00e82690  # SetGlobalProperty wrapper
+00e826b0 FUN_00e826b0  # PlayEditorSound wrapper
+00e826e0 FUN_00e826e0  # FUN_00572020 wrapper
+00e82700 FUN_00e82700  # FUN_009fbc50 wrapper (Vector3)
+00e82730 FUN_00e82730  # FUN_006eea10 + virtual slot 0x78
+00e82760 FUN_00e82760  # FUN_0067dd00 + virtual slot 0x54 (tail)
+00e82770 FUN_00e82770  # pick a resource-type id by testing 11 hashes
+00e828c0 FUN_00e828c0  # FUN_00b3d320(&0x1654c01) -> FUN_00b1e410
+00e82900 FUN_00e82900  # GameInputManager vtable call slot 0x44
+00e82920 FUN_00e82920  # terrain sphere position (3 floats)
+00e82970 FUN_00e82970  # terrain sphere active -> FUN_00c75420
+00e829a0 FUN_00e829a0  # FUN_00401090 -> SetAvatarSpecies
+00e81ba0 SP::cCellMode::Shutdown
+00e81f30 SP::cCellMode::Init
+00e81cf0 SP::cCellMode::StaticInit

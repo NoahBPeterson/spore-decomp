@@ -1,0 +1,9 @@
+00e777a0 SP::sPoke_Start  # poke a cell into a leak attachment, then update animation/sound
+00e778b0 FUN_00e778b0  # create the poke target object (effect pool), stores handle in gspCellState+0xe0
+00e77930 FUN_00e77930  # spawn 0xaaaa effect object for a cell
+00e77ac0 SP::sDropPieces  # scatter dropped piece impulses and register them in a map
+00e77d50 FUN_00e77d50  # spawn 16 ring-arranged cells (orientation from gOrientA)
+00e780a0 FUN_00e780a0  # despawn/cleanup a cell (kill effects, obstacle, drop loot)
+00e78230 FUN_00e78230  # create cell + 10x inner attachment ring
+00e783d0 SP::sCreatePlant_Type1
+00e78570 SP::sCreatePlant_Type2

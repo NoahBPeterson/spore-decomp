@@ -1,0 +1,20 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+01021200    2  game-mode redirect: complete, equivalence WEAK (400 valid, no
+               mismatch, 58.3% coverage); the singleton vtable slot 0xc is
+               loaded into eax instead of the original's edx. flags /O2 /MD /Gy /TP /arch:SSE
+010213b0   27  universe-mode 2 hook: complete, equivalence PASSes (400 valid,
+               76.2% coverage); the FUN_00c8b360 result is fetched/released
+               through a different temp schedule. flags /O2 /MD /Gy /TP /arch:SSE
+01020fc0   66  camera ctor tail: complete; the MessageServer registration block
+               and the +4 subobject setup differ. flags /O2 /MD /Gy /TP /arch:SSE
+01021020   70  camera property init: complete; the PropertyManager vtable 0x2c
+               call and the AutoRefCount release schedule differ.
+               flags /O2 /MD /Gy /TP /arch:SSE
+01021180   64  median-of-three comparator: complete; the comparison call order
+               and register reselection differ. flags /O2 /MD /Gy /TP /arch:SSE
+01021370   27  GetPlayerHomePlanet: complete; the repeated GetPlayerEmpire calls
+               and tail-jump schedule differ. flags /O2 /MD /Gy /TP /arch:SSE
+01021960   66  set-universe-context hook: complete; the cached-context compare
+               and the FUN_00c8b360 tail differ. flags /O2 /MD /Gy /TP /arch:SSE
+01021d40   40  background-sim singleton ctor: complete; operator_new zero/sentinel
+               stores schedule differently. flags /O2 /MD /Gy /TP /arch:SSE

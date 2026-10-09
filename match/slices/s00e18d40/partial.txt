@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP)
+00e18dd0  336  panel Activate; complete best-effort body but difftest FAIL (ours faults at 0xe18b72 where original returns) -- vtable-call/state approximation
+00e19230   15  SPSkinPaintClear Execute; complete, but compiler tail-calls ours (mov [esp+4],0; jmp) where original pushes 0 + call + ret 4; difftest FAIL (call arg mismatch on tail-call frame)
+00e19680  151  cPanel constructor; complete best-effort MI ctor but difftest FAIL (memory pool 0x4001003c differs 2 vs 0)

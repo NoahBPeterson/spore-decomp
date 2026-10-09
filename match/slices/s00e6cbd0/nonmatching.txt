@@ -1,0 +1,6 @@
+00e6d180  20  complete; only the float-return temp round-trip (`fstp [esp+0xc]` then `movss`) is not reproduced - cl forwards st0 straight into the destination. difftest PASS. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e6d200  35  complete; arg3 lives in EDI in the original but EBX here (and local_c/local_8 swap EBX/EDX <-> EDI/ECX); control flow matches. difftest WEAK (no mismatch, 12% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e6d560  59  complete; GetChecked call-site register choice (handle in ECX vs EDX) and the 0-store differ; logic matches. difftest UNSUPPORTED (0/400 valid: original faults on generated inputs). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e6d600  9  complete; GetChecked call-site register choice (handle in ECX vs EDX) and out-pointer register differ; logic matches. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e6d790  282  complete; original is a static Cell-TU helper with custom esi(cell)/edi(center) register convention and a stack radius output; declared as a normal cdecl free function here. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e6dae0  105  complete; original takes the cell in EAX (custom static-TU convention); declared cdecl here. difftest UNSUPPORTED (original reads eax at entry). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

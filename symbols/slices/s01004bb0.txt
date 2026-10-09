@@ -1,0 +1,14 @@
+# va  symbol  # evidence
+01004bb0 ?f4bb0@SimGame@@QAEPAXH@Z   # cSPSimulatorSpaceGame find noun by key
+01004c00 ?f4c00@SimGame@@QAEHXZ      # count nouns in state 8
+01004c30 ?f4c30@SimGame@@QAEDXZ      # player-inventory noun present test
+01004c80 ?f4c80@SimGame@@QAEXPAM@Z   # PDB candidate SP::cSPSimulatorSpaceGame::FaceCameraTowards
+01004e50 ?f4e50@@YAXXZ               # PDB SP::BlowUpPlanet (caller-single)
+01004fc0 ?f4fc0@@YGXPAH@Z            # embassy/species lookup
+010050d0 ?f50d0@@YGXH@Z              # broadcast to all player civ zones
+01005130 ?f5130@SimGame@@QAEXXZ      # minimap refresh
+01005180 ?f5180@SimGame@@QAEPAXH@Z   # create HUD info object
+010052d0 ?f52d0@SimGame@@QAEDH@Z     # id-in-vector test
+01005320 ?f5320@SimGame@@QAEXXZ      # destroy vector<0x14> contents
+010053a0 ?f53a0@@YA_NXZ              # wormhole key test on the singleton
+010053c0 ?f53c0@SimGame@@QAE_NHPAH@Z # PDB candidate SP::cSPSimulatorSpaceGame::HandleInputControllerMessage

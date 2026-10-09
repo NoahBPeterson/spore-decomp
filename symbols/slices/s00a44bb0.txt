@@ -1,0 +1,12 @@
+00a44bb0 SP::Audio::cSystem::HandleMessage  # PDB candidate (caller-single); cSystem vtable 0x01453418
+00a45780 SP::Audio::cSystem::DoCommandMainThread  # PDB candidate (caller-scored)
+00a426f0 SP::Audio::cSystem::SetCurrentContext  # pdb_names anchor
+00a43580 SP::Audio::cSystem::AddSymbolList  # pdb_names caller-scored
+00a31170 SP::Audio::cSystem::InitAT  # pdb_names anchor
+00a43d30 SP::Audio::cSystem::Init  # pdb_names anchor
+00a34dc0 SP::Audio::cEapdMessage::Init  # pdb_names caller-scored
+00a3a180 SP::Audio::cEventModifier::Init  # pdb_names anchor
+00a67c60 EA::Audio::Eapd::ISystem::GetSingletonPtr  # pdb_names callee-single
+00a420d0 SP::Audio::`anonymous namespace'::ConstructcEmitterSndPlayer  # pdb_candidates caller-single
+00a42190 SP::Audio::`anonymous namespace'::ConstructcEmitterModelSound  # pdb_candidates gap-align
+00a42200 SP::Audio::StaticConvertSymbolToId  # pdb_candidates gap-align

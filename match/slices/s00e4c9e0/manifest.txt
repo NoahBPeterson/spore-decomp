@@ -1,0 +1,10 @@
+# source  symbol  va
+# flags: /O2 /MD /Gy /TP /arch:SSE
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4cc10@@YGXPAF@Z               00e4cc10
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4cce0@@YAPAXH@Z               00e4cce0
+slices/s00e4c9e0/s00e4c9e0.cpp  ?SP_sIsLayerDataPacked@@YA_NXZ        00e4ccf0
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4cde0@@YAXXZ                  00e4cde0
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce20@@YAXXZ                  00e4ce20
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce40@@YAXPAX@Z               00e4ce40
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce60@@YAXPAX@Z               00e4ce60
+slices/s00e4c9e0/s00e4c9e0.cpp  ?FUN_00e4ce80@cLightObj@@QAEPAXI@Z     00e4ce80

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00ac7f80  67   complete; noun-vtable dispatch (CreateNoun + slot calls), register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (348 valid, 16.7% cov)
+00ac7fe0  8    complete; scalar deleting dtor, [this+0x1c] load hoisted above the two vtable stores; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac88f0  13   complete; float writer, f stack-store scheduled before the vtable-slot load; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (100% cov)

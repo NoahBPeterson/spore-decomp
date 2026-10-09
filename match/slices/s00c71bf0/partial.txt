@@ -1,0 +1,15 @@
+00c71bf0  cPlanet::GetPtolemaicPosition: partial (matrix/transform math reduced; only the active-planet shortcut and matrix copy are faithful).
+00c71d30  cPlanet::GetScale3: partial (the negative-branch vcall chain via FUN_00f48a80 is not reproduced; returns default).
+00c71f00  spice production formula: partial (tuning-multiplier chain stubbed; returns 0).
+00c72030  spice production wrapper: partial (GetActivePlanet + archetype switch only; call args to c71f00 stubbed).
+00c72190  cPlanet::UpdatePlanetSpiceProduction: stub.
+00c723d0  release/refcount teardown: partial; difftest FAIL (execution).
+00c72450  release wrapper: partial; difftest FAIL (execution).
+00c72470  cVisiblePlanet virtual dtor: partial (dtor chain approximated); difftest FAIL (execution).
+00c72540  EASTL lower_bound: partial (not reconstructed).
+00c725a0  Simulator::cPlanet::cPlanet: partial (base ctors + first stores only; full field init omitted).
+00c72770  cPlanet::UpdateOrbit quaternion math: partial (not reconstructed).
+00c729b0  hashtable find wrapper: partial.
+00c72a10  cPlanet::SetName: partial; difftest FAIL (memory pool).
+00c72a70  vector insert: partial (not reconstructed).
+00c72b80  SP::cPlanet::Read: partial (serializer path omitted).

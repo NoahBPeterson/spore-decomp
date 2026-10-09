@@ -1,0 +1,13 @@
+# complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b4fd80  -  read 5 attribute properties into globals: complete (Variant type/flags decode,
+          per-property defaults); difftest FAIL (5/5 valid, .data 01569ae8 differs — the host vtable
+          call is a pointer-soup fake whose result differs on the two sides); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00b4ffb0  221  ObjFFB0 ctor: complete (field init, child fetch, two RC assignments, dimension copy);
+          difftest UNSUPPORTED (0/400 valid: needs a live object graph); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00b500e0  118  per-frame hkVector4 setTransformedPos pair: complete; original has an and esp,-16 aligned
+          frame and an extra ebx save; difftest UNSUPPORTED (unresolved HkObj::setTransformedPos);
+          flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00b50170   41  invoke with zeroed Variant temp: complete; difftest UNSUPPORTED (0/400 valid, fake-arity);
+          Variant by-value packing differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00b507d0   65  invoke with {vtbl,flag,float} temp: complete; difftest UNSUPPORTED (0/400 valid, fake-arity);
+          temp construction/ordering differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

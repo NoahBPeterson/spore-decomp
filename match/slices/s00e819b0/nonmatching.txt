@@ -1,0 +1,6 @@
+00e81ba0  128  complete; MessageServer()/EffectsManager()/ModelManager() thunk addresses not resolvable by the checker (annotation-implausible). difftest UNSUPPORTED (3 unresolved references). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e82280  25  complete linked-list clear loop; instruction scheduling of the load/test differs. difftest WEAK (no mismatch, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e822c0  50  complete SP::LoadResource; vtable-call argument/register shapes differ. difftest WEAK (no mismatch, 49% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e824d0  15  complete list teardown; operator_delete__ call shape differs. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e82620  56  complete SP::PatchSoundStart; RefCountTemplate::Release + Audio system vtable shapes differ. difftest PASS. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e82900  14  complete; method returns bool directly vs the original's char-return normalisation (`test al,al; setne al`). difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

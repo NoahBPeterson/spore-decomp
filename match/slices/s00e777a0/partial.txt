@@ -1,0 +1,4 @@
+00e777a0  212  PARTIAL: structure reproduced but difftest FAILs (allocator-pool counter 8 vs 9) - the reused-arg-slot iterator temp and the leak-attachment argument/stack shape are not right yet.
+00e77930  243  PARTIAL: original is a static Cell-TU helper reading its object in ESI; the object/field layout and the FUN_00e51... side effects are approximate.
+00e77ac0  643  PARTIAL: SP::sDropPieces. Original uses EAX (cell) and EDI (map) register conventions; the drop list + map insertion (FUN_005701b0/FUN_00d59f00) is approximated to the impulse math only.
+00e77d50  839  PARTIAL: original reads the cell in ESI and spawns 16 cells via a custom-reg convention; only the orientation math and spawn loop are reconstructed.

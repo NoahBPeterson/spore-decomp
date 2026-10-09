@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0103a480/s0103a480.cpp  ?dtor@VecDtor@@QAEXXZ  0103b0c0  /O2 /MD /Gy /TP /arch:SSE

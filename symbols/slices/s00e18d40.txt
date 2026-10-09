@@ -1,0 +1,21 @@
+# slice s00e18d40 names (evidence)
+00e18d40  cFeedbackTree::FUN_00e18d40        # rbtree insert-or-assign (map<unsigned,AutoRefCount<cFeedbackEvent>> at panel+0x3c)
+00e18dd0  cPanel::FUN_00e18dd0               # panel Activate; gated on trigger-mgr state and game mode
+00e19010  cPanel::FUN_00e19010               # panel Deactivate (EndModal + KillSetiEffects + DecPauseGate)
+00e190c0  cPanel::FUN_00e190c0               # Toggle; per-mode gates then Activate
+00e19230  cSkinPaintClear::FUN_00e19230      # command Execute; toggles panel via 0xb3d3f0 singleton
+00e19250  cMissionLog::FUN_00e19250          # push_back on intrusive list at this+0x34
+00e192a0  cPanel::FUN_00e192a0               # HandleMessage (vtable 0x1480160 slot 6)
+00e19350  cPanel::FUN_00e19350               # feedback-event dispatch + pending-list add
+00e193f0  cPanel::~cPanel                    # destructor, 5 MI vtables + teardown
+00e19590  cPanel::FUN_00e19590               # feedback-event insert (map insert + window notifications)
+00e19630  cPanel::FUN_00e19630               # clear feedback-event tree
+00e19680  cPanel::cPanel                     # constructor, registers IMsgHandler 0x65ff54a
+00e19780  cPanel::FUN_00e19780               # Shutdown (cheat 'missionlog', releases, cSPUILayout::Shutdown)
+00e19820  cPanel::FUN_00e19820               # adjustor thunk  sub ecx,4 -> FUN_00e19780
+00e19830  cPanel::FUN_00e19830               # PreGameModeTransition override
+00e19850  cPanel::FUN_00e19850               # SetGameMode switch (creates per-mode window layouts)
+00e19c40  cPanel::FUN_00e19c40               # PostGameModeTransition override
+00e19c70  cMissionLog::FUN_00e19c70          # game-mode -> hash constant
+00e19d10  cMissionLog::FUN_00e19d10          # tail-call 0x663350 when layout visible
+00e19d30  SP::SortMissionsByAssignmentOrder::operator()

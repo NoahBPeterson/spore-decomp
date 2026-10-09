@@ -1,0 +1,3 @@
+00e6cbd0  1456  PARTIAL: first-loop entry matching and the weighted random pick are reconstructed, but the second (8-at-a-time) and third sweep of the spawn table are omitted; not behaviourally complete.
+00e6d4a0  133  PARTIAL: the fast path (gspCellGame->mByte4121==1) is exact; the else path's 0x1290-byte scratch buffer field offsets and the custom-convention FUN_00e83e30/FUN_00e52060 calls are approximated.
+00e6d8f0  275  PARTIAL: control flow reconstructed; the nested container iteration (FUN_00e823a0) and the FUN_00e5cb60 append (mAnimData list) are guessed, so not behaviourally complete.

@@ -1,0 +1,8 @@
+# <va> <diff-bytes> <reason>
+0103a630 217 incomplete FUN_0103a630 (vec3/hash compare via vtable +0xc/+0x18, then CreateToolFromToolID + recursive call); only the head (null check + vtable +0xc lookup) is faithful, the middle is stubbed; flags /O2 /MD /Gy /TP /arch:SSE
+0103a7d0 265 incomplete SP::cSPSpaceTrading::HandleMessage; the 0x4445d43..0x4445d44 message-range and player-empire selection are present, the swap-and-erase loop body is stubbed; flags /O2 /MD /Gy /TP /arch:SSE
+0103aa00 999 incomplete SP::cSPSpaceTrading::AddRareCommodity; guards and rare-list scan written, the random-chance roll and artifact spawn are approximated; flags /O2 /MD /Gy /TP /arch:SSE
+0103ad50 999 incomplete SP::cSPSpaceTrading::AddCitySpicePile; guards + world-position and commodity-creation call shapes present, pile placement stubbed; flags /O2 /MD /Gy /TP /arch:SSE
+0103b100 119 incomplete rbtree serialization; writes the count then iterates, but the tail call / loop shape differs; flags /O2 /MD /Gy /TP /arch:SSE
+0103b1b0 197 incomplete eastl heap adjust (AutoRefCount<vector>); the sift-down skeleton is present, comparator/slot details approximated; flags /O2 /MD /Gy /TP /arch:SSE
+0103b290 150 incomplete eastl heap pop (adjust_heap wrapper); approximated; flags /O2 /MD /Gy /TP /arch:SSE

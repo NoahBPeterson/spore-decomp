@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00a44bb0  615  complete; HandleMessage message dispatch, stack message + object stubs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (393 valid, 33% cov)
+00a44f70  4    complete; hashtable find + iterator erase(it) (sret), frame 0x10 vs 0x8; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00a450c0  48   complete; fixed-string SSO ctor (128-byte buffer), EH frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (100% cov)
+00a458b0  259  complete; socket send path (strchr/atol/IPAddress::LookupName/0x1c send), register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (19.5% cov)

@@ -1,0 +1,12 @@
+# source  symbol  va
+# flags: /O2 /MD /Gy /EHsc /TP
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19010@cPanel@@QAEXXZ          00e19010
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e190c0@cPanel@@QAEXPAX@Z       00e190c0
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19250@cMissionLog@@QAEXH@Z    00e19250
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19780@cPanel@@QAEXXZ          00e19780
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19820@cPanel@@QAEXXZ          00e19820
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19830@cPanel@@QAEXHH@Z        00e19830
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19c40@cPanel@@QAEXHH@Z        00e19c40
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19c70@cMissionLog@@QAEIH@Z    00e19c70
+slices/s00e18d40/s00e18d40.cpp  ?FUN_00e19d10@cMissionLog@@QAEXH@Z    00e19d10
+slices/s00e18d40/s00e18d40.cpp  ??RcSortMissions@@QAE_NPAH0@Z         00e19d30

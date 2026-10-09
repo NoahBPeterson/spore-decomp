@@ -1,0 +1,5 @@
+# <va> <diff-bytes> <reason>
+0102acb0 256 approximate SP::CreateUFO; overall structure of the noun creation / Init / SetDesiredModel /
+        terrain-orientation / minimap path is present, but the cPlanetModel::BuildSurfaceOrientation output
+        buffer and the FUN_00c3aa40 argument shape were approximated from the decompile; flags
+        /O2 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,19 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00fd9480  282  ConvertRenderableToRaster: incomplete. The mode-0 path is
+               complete; the mode-3 memmove loop is a placeholder and
+               FUN_011ef750 is declared stdcall instead of thiscall (difftest
+               shows ecx=STK vs the original's object). flags /O2 /MD /Gy /TP /arch:SSE
+00fd96d0  n/a  released-object destructor: incomplete. The intrusive RefCount
+               interlocked decrement/`lock xadd` sequence is stubbed.
+               flags /O2 /MD /Gy /TP /arch:SSE
+00fd9b70  167  VideoRenderableOperations::Prepare: approximate. GetDataBufSizes
+               and the per-buffer allocator call are present but the allocator
+               vtable slot/argument setup is wrong; difftest FAILs on written
+               memory (0xcccccccc vs 0). flags /O2 /MD /Gy /TP /arch:SSE
+00fd9de0  116  first-alliance test: incomplete. The mission/avatar checks are
+               present but the GetSpaceRelationshipTuning / tuning-threshold /
+               FUN_01041c50 tail is missing. flags /O2 /MD /Gy /TP /arch:SSE
+00fd9ea0  128  key dispatch: incomplete. The 0x4c/0x52/0x59 branches and the
+               CommManager path are present but FUN_00d00a10 and the
+               GameInputManager 0x34 dispatch differ; difftest FAILs (fake-arity).
+               flags /O2 /MD /Gy /TP /arch:SSE

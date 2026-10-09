@@ -1,0 +1,23 @@
+00c709d0 37  cPlanet::GetScale (mB0, default 0.5): complete. cl uses fld/fstp for the float return where the original used movss+fld (different float return lowering). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 400/100%.
+00c70a20 37  cPlanet::GetScale2 (mB4, default 0.5): complete; same float-return lowering difference. difftest PASS 400/100%.
+00c70aa0 89  cPlanet::SetScale (clamp to [min,max] from FUN_00fc20e0): complete. Same clamp logic/coverage; codegen differs. difftest PASS 400/100%.
+00c70c10 89  SP::cPlanet::GetRandomAnimalSpecies: complete (RNG index, dedup key check, GetProfile). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 370/84.6%.
+00c70c90 89  SP::cPlanet::GetRandomPlantSpecies: complete (RNG index, dedup key check, GetSpeciesFromID). difftest PASS 372/84.6%.
+00c70b20 12  cPlanet::func (null-guard + FUN_00c70150): complete. Register assignment differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 400/100%.
+00c70b50 49  cPlanet::IsHomePlanet: complete (GetAvatar/StarManager/GetEmpireByID/GetHomePlanet). difftest WEAK 389 valid / 51.9% coverage.
+00c70d70 96  cPlanet::PlantSpeciesToTypeIndex: complete. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 348/100%.
+00c70e20 313  cPlanet::DistanceToAvatar: complete (3 sqrt modes + release). x87 sqrt schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest FAIL (st0; needs x87 transcription).
+00c70fb0 4  cPlanet::RefreshTerraforming: complete (global TerraformingManager + F670 call). Only a jmp-vs-call tail difference. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest UNSUPPORTED (F670 unmapped).
+00c71040 99  cPlanet::FindByAccessFlags: complete (scan b8dec0 objects, compare GetAccessFlags). difftest PASS 362/100%.
+00c710c0 10  vector count (mp160-mp15C>>2): complete. Original keeps an extra `add ecx,0x15c`. difftest PASS 400/100%.
+00c71120 10  vector count (mp174-mp170>>2): complete. Same extra-lea difference. difftest PASS 400/100%.
+00c71160 85  SP::RemoveArtifact: complete (linear scan + rep movsd compaction). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 353/100%.
+00c711e0 281  cPlanet::RemoveCity: complete (EraseCity, singleton create, tech-level update). Large register/frame differences. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest WEAK 343/21%.
+00c71370 48  cPlanet::RemoveEntity: complete (scan + b8dfe0). difftest WEAK 358/40%.
+00c71400 23  cPlanet::IsFlagSet(i<5): complete. Original emits `mov edx,1; shl edx,cl; test [mem],edx; setne al`; ours folds. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 400/100%.
+00c71430 6  cPlanet::SetFlag(i<5): complete. Original hardcodes 0x1f mask; ours uses (i&0x1f) which folds differently. difftest PASS 400/100%.
+00c71470 94  cPlanet::GetSomething: complete (naC vcall chains). Register/spill differences. difftest FAIL (eax).
+00c71570 48  Simulator::cVisiblePlanet::cVisiblePlanet: complete (cSpatialObject/cGameData ctors + 3 vptr stores + 2 field zeroes). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest FAIL (execution; vtable/ctor).
+00c71750 333  cVisiblePlanet::SetPlanet: complete (refcount swap, comm-context, mode switch, property read). Complex vcalls; difftest UNSUPPORTED (no valid inputs).
+00c71910 183  cVisiblePlanet::RefreshProps: complete (PropertyManager GetByKey + read 0x58cbb75). difftest FAIL (execution; complex inline).
+00c719d0 428  cPlanet::SetPlanetVisibility: complete (visibility mode transitions + NounManager). Large; difftest WEAK 211/31%.

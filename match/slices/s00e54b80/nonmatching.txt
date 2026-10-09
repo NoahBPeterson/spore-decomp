@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
+00e54b80  157  cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
+00e54c70   12  layer Apply sweep; complete. difftest: UNSUPPORTED (0/400 valid)
+00e54d10    8  layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
+00e552f0  114  cCellMode::Activate; complete. difftest: UNSUPPORTED (reads ecx at entry)

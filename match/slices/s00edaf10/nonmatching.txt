@@ -1,0 +1,12 @@
+00edaf10  113  class-A constructor body; vtable/field store order differs. flags /O2 /MD /Gy /TP; difftest PASS
+00edb120  849  acts-bar entry refresh; abridged UI reconstruction. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00edb4c0  420  acts-bar init/popup menu build; abridged cString/menu loop. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00edb6c0  66  class-A teardown; erase call shape differs. flags /O2 /MD /Gy /TP; difftest FAIL (ours faults on a mismatched external call)
+00edb750  478  message handler switch; abridged. flags /O2 /MD /Gy /TP; difftest FAIL
+00edb9b0  167  expand/collapse; abridged loop/tail. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00edbac0  398  UI init; approximated. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (original reads ecx at entry)
+00edbcb0  110  class-B teardown; tail-jmp not reproduced. flags /O2 /MD /Gy /TP; difftest FAIL
+00edbd30  131  register/unregister message handler; abridged. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry)
+00edbe00  44  cScenarioEditModeScriptActsBarUI ctor; vtable store order differs. flags /O2 /MD /Gy /TP; difftest PASS
+00edbe60  93  cScenarioEditModeScriptActsBarUI dtor; written as a free helper, not thiscall. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry)
+00edbef0  141  message handler; approximated. flags /O2 /MD /Gy /TP; difftest FAIL

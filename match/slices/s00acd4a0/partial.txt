@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00acd920  116  approximate; vector<0xc-pair> grow path (Pair temp ctor layout guessed); difftest FAIL
+00acda30  900  approximate; deserialize vector of 0x68-stride records; record body omitted; difftest FAIL
+00ace170  289  approximate; set find-or-insert with four 0xc-pair sub-vectors; difftest FAIL
+00ace320  245  approximate; cGonzagoSubsystem scalar deleting dtor (eastl hashtable teardown); difftest FAIL
+00ace4e0  116  approximate; city setup via GetGameDataVector + SetCity; difftest UNSUPPORTED (0/400 valid)

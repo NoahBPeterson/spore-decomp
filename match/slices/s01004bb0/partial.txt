@@ -1,0 +1,21 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+01004c80  456  FaceCameraTowards: approximate. The direction vector and the
+               not-normalised 1/len path are reconstructed but the
+               rsqrt(len2+eps) normalisation and the FUN_01042480 basis call
+               are simplified. flags /O2 /MD /Gy /TP /arch:SSE
+01004e50  341  BlowUpPlanet: approximate. The achievement/tech-level calls are
+               present but the BioProtectorSort, cStar record loop and the
+               CommContext/local-cleanup tail are collapsed.
+               flags /O2 /MD /Gy /TP /arch:SSE
+01004fc0  270  embassy/species lookup: approximate. The eastl::find guard and the
+               record loop are sketched; the 0x504/0x508/0x50c walk is present
+               but the active-planet tail is not faithful.
+               flags /O2 /MD /Gy /TP /arch:SSE
+01005180  295  CreateHUDInfo: approximate. The tool/HUD setup is partly present
+               but the GameTimeManager aulldiv, empire colour and missile-cities
+               tail are omitted. flags /O2 /MD /Gy /TP /arch:SSE
+010053c0  1082 HandleInputControllerMessage: approximate. The controller
+               extraction, GameTimeManager guard and the 8-way message switch
+               are sketched; the per-message action bodies and the COM
+               interface_cast/SetPlanetDestination tail are collapsed.
+               flags /O2 /MD /Gy /TP /arch:SSE

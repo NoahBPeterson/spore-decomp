@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00c899a0  -  func7Ch: partial; screen-space projection/visibility test; the projection tail (SP::App()->cViewer projection matrix multiply, GetMainWindowArea screen mapping and the 0.0<=dot guard) is stubbed to `return false`. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

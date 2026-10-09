@@ -1,0 +1,25 @@
+# slice s00e4c9e0 names (evidence)
+00e4c9e0  CellAppDataShutdownForApp     # app-data teardown (g_pCellAppData 0x16ad060)
+00e4cad0  AdvectMap_CatalogLoad          # hash + DataDir build of layer catalog entry
+00e4cc10  AdvectMap_HashName             # FNV1 of a name unless already hashed (stdcall)
+00e4cc50  SP::LoadAdvectMap              # resource-manager load with fallback key
+00e4cce0  LayerCatalog_GetEntry          # (&g_15a758c)[idx*4]
+00e4ccf0  SP::sIsLayerDataPacked
+00e4cd50  SP::CellDataShutdownForApp
+00e4cde0  LayerCatalogBuild               # CellGame/ catalog + per-entry resource
+00e4ce20  LayerCategoryTeardown           # FUN_00e4b910 + FUN_00e82280
+00e4ce40  LayerCatalog_ApplyA             # FUN_00e823a0 on g_15a758c[0]
+00e4ce60  LayerCatalog_ApplyB             # FUN_00e823a0 on g_15a774c[0]
+00e4ce80  cLightObj destructor (scalar deleting)  # vtable 0x1482de8
+00e4ced0  SP::PreloadAdvectMap
+00e4cf80  SP::cCellFactoryBinary::ReadResource
+00e4cfc0  SP::cCellFactoryBinary::GetSupportedTypes   # key types 0x5c74d18b, 0x4805684
+00e4d000  SP::cCellFactoryBinary::ReadResourceFromStream
+00e4d0d0  EA::ResourceMan::FactoryBinary::WriteResource
+00e4d120  cProcObj::FUN_00e4d120        # builds 0x20 property-list object and reads into it
+00e4d1d0  LayerAabb_Transform            # 6 floats -> 0x18-float quad AABB table
+00e4d2b0  LayerAabb_Recurse              # quad-tree subdivision / node emission
+00e4d550  LayerAabb_Init                 # initialises 0x2c-stride grid from bbox
+00e4d600  LayerAabb_EmitLeaves           # recursive leaf emit
+00e4d6c0  LayerGrid_Build                 # builds 4 sub-grids
+00e4d840  SP::LayerLoaderInit             # CellGame/Layers/ DatabaseDirectoryFiles

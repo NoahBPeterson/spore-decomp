@@ -1,0 +1,10 @@
+00c70c10 SP::cPlanet::GetRandomAnimalSpecies  # PDB candidate
+00c70c90 SP::cPlanet::GetRandomPlantSpecies  # PDB candidate
+00c70d10 SP::cPlanet::HasAnimalSpecies  # PDB candidate
+00c70d40 SP::cPlanet::HasPlantSpecies  # PDB candidate
+00c70d70 SP::cPlanet::PlantSpeciesToTypeIndex  # PDB candidate
+00c70fb0 SP::TerraformingManager::F670 wrapper  # call target 0x00bbc670 SP::TerraformingManager::F670
+00c71160 SP::RemoveArtifact  # PDB candidate
+00c71570 Simulator::cVisiblePlanet::cVisiblePlanet  # vtable/PDB
+00c71680 Simulator::cSpatialObject::Reset  # PDB candidate
+00c719d0 SP::cPlanet::SetPlanetVisibility  # PDB candidate (caller-single)

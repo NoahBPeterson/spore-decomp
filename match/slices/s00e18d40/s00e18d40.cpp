@@ -99,7 +99,7 @@ struct cPanel {
     void FUN_00e18cb0(int id);                                      // 0x00e18cb0
     void FUN_00e18dd0(void* p, int a);                              // 0x00e18dd0
     void FUN_00e19010();                                            // 0x00e19010
-    bool FUN_00e190c0(void* p);                                     // 0x00e190c0
+    void FUN_00e190c0(void* p);                                     // 0x00e190c0
     bool FUN_00e192a0(int, void* msg);                              // 0x00e192a0
     void FUN_00e19350(unsigned key, int arg);                       // 0x00e19350
     void FUN_00e19590(int id, void* obj);                           // 0x00e19590
@@ -131,7 +131,7 @@ struct cSkinPaintClear {
     void* mpVtbl;        // +0x00
     int   mField4;       // +0x04
     int   mField8;       // +0x08
-    bool FUN_00e19230(int);                                         // 0x00e19230
+    void FUN_00e19230(int);                                         // 0x00e19230
 };
 
 // ---------------------------------------------------------------- callees
@@ -387,24 +387,23 @@ void cPanel::FUN_00e19010()
 // =====================================================================
 // @ 0x00e190c0
 // =====================================================================
-bool cPanel::FUN_00e190c0(void* p)
+void cPanel::FUN_00e190c0(void* p)
 {
     if (mLayout && mLayout->IsVisible() && (p == 0 || FUN_00e18b10(p) == mScrollRoot)) {
         FUN_00e19010();
-        return true;
+        return;
     }
     if (SP_GetCurrentGameMode() == (int)0x1654c04) {
-        if (*(char*)((char*)GET_CivModeStrategy() + 0x148)) return true;
+        if (*(char*)((char*)GET_CivModeStrategy() + 0x148)) return;
     }
     if (SP_GetCurrentGameMode() == (int)0x1654c02) {
         cTribeStrategy* t = (cTribeStrategy*)SP_TribeModeStrategy_Instance();
-        if (t->FUN_00cd44a0()) return true;
+        if (t->FUN_00cd44a0()) return;
     }
     if (SP_GetCurrentGameMode() == (int)0x1654c05) {
-        if (((cSporepediaObj*)FUN_010666a0())->FUN_01065e20()) return true;
+        if (((cSporepediaObj*)FUN_010666a0())->FUN_01065e20()) return;
     }
     FUN_00e18dd0(p, 0);
-    return true;
 }
 
 // =====================================================================
@@ -490,10 +489,10 @@ void cPanel::FUN_00e18dd0(void* p, int)
 // =====================================================================
 // @ 0x00e19230
 // =====================================================================
-bool cSkinPaintClear::FUN_00e19230(int)
+void cSkinPaintClear::FUN_00e19230(int)
 {
     cPanel* p = (cPanel*)FUN_00b3d3f0();
-    return p->FUN_00e190c0(0);
+    p->FUN_00e190c0(0);
 }
 
 // =====================================================================

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00ac7ab0  573  approximate; citizen order/spawn loop, control flow + vcall schedule differ (size 593); difftest FAIL
+00ac7d10  170  approximate; recursive float order fill; difftest FAIL
+00ac7de0  169  approximate; order attach, stack/cc mismatch; difftest FAIL (esp)
+00ac7eb0  39   approximate; wrapper calling the two helpers; difftest UNSUPPORTED (0/400 valid)
+00ac7ef0  115  approximate; predicate, sub-object vcalls; difftest FAIL
+00ac8050  76   approximate; IObj string/type probe + string free; difftest FAIL
+00ac8130  461  approximate; simulator distance-config builder (0x34/0x10 objects), schedule differs (size 917); difftest UNSUPPORTED (0/400 valid)
+00ac8550  115  approximate; cVarListSerializer wrapper; difftest UNSUPPORTED (original reads ecx at entry)
+00ac8a30  19   approximate; reverse range assign, out-register schedule differs; difftest UNSUPPORTED
+00ac8a80  195  approximate; behavior-flag setup, cc/schedule differ; difftest FAIL (esp)
+00ac8b60  209  approximate; tribe order roulette, float-compare schedule differs (size 367); difftest FAIL

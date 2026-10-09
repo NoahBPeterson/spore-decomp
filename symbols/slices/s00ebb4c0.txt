@@ -1,0 +1,16 @@
+00ebb4c0 FUN_00ebb4c0  # advance one waypoint sample (radius/water/surface clamp)
+00ebb720 FUN_00ebb720  # update the current path handle / node
+00ebb820 FUN_00ebb820  # destroy a run of 0x50-byte waypoint records
+00ebb860 FUN_00ebb860  # destroy+relocate a range of waypoint records
+00ebb8b0 FUN_00ebb8b0  # bool: terraforming/world setup allowed
+00ebb980 FUN_00ebb980  # current position + target direction (game-mode dependent)
+00ebbb10 FUN_00ebbb10  # pop one waypoint record
+00ebbb40 FUN_00ebbb40  # random 2D unit vector (rejection sampling)
+00ebbc10 FUN_00ebbc10  # waypoint record copy-assign
+00ebbcd0 FUN_00ebbcd0  # waypoint record copy-construct
+00ebbd70 FUN_00ebbd70  # rbtree insert of a waypoint
+00ebbf00 FUN_00ebbf00  # rbtree + array destructor
+00ebbf60 FUN_00ebbf60  # rbtree clear
+00ebbfb0 FUN_00ebbfb0  # cull/update all cached waypoints
+00ebc120 FUN_00ebc120  # waypoint manager ctor
+00ebc1a0 FUN_00ebc1a0  # growable waypoint array insert

@@ -1,0 +1,18 @@
+00c7e1c0  cube-face entry copy + WrapCubeFace: partial (callee arg shape approximated).
+00c7e280  cCubeSim timer/message setup: partial.
+00c7e2f0  cCubeSim enable/timer: partial.
+00c7e370  species/resource match: partial (ResourceKey comparisons approximated).
+00c7e490  resource-key slot clear: complete-ish; not byte-exact.
+00c7e5d0  cube neighbour callback walk: partial.
+00c7e780  cube face/side callback sweep: partial.
+00c7e8f0  cCubeSim write-64: partial.
+00c7e950  cCubeSim read-64: partial.
+00c7e9b0  message handler: complete-ish; not byte-exact.
+00c7e9f0  ReadInt32 helper: complete-ish; not byte-exact.
+00c7ea30  trivial 4-dword copy: complete; not byte-exact (register allocation).
+00c7ea70  SP::cCubeSim::cCubeSim: partial (vector constructors approximated).
+00c7eaf0  cube-face-from-direction: complete-ish; not byte-exact (float schedule).
+00c7ecb0  remove handler/release: complete-ish; not byte-exact.
+00c7ed00  face helper wrapper: partial.
+00c7ed50  per-face key remap: partial.
+00c7ee50  terraform bullseye check: partial (x87 geometry).

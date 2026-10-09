@@ -1,0 +1,4 @@
+00eb2440  16  complete AsInterface; only the condition codegen differs (`lea eax,[ecx-4]` vs `mov/sub`). difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00eb25d0  5   complete Shutdown; only the AutoRefCount release pointer register (ECX vs EAX) differs. difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00eb28e0  143 complete constructor body; the ordering of the initial vtable/float stores differs (ours 115 vs 143 bytes). difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00eb23d0  73  complete HandleSimulationUpdate; the original rounds via `cvtss2si` through a stack temp and uses thiscall for the manager call. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

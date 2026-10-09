@@ -1,0 +1,11 @@
+# va  symbol  # evidence
+00f373a0 ?f373a0@SPObj@@QAEXHHPAIHHH@Z  # thiscall scenario-template add; class = planet/cScenarioTerraform UI panel
+00f374a0 ?f374a0@SPObj@@QAEXPAX@Z       # thiscall; forwards a ResourceKey range to FUN_00f31f20
+00f374f0 ?f374f0@SPObj@@QAEXXZ          # thiscall SetModel/planet refresh
+00f37690 ?f37690@SPObj@@QAEXPAX@Z       # thiscall scenario init (property list + planet model)
+00f37a40 ?f37a40@SPObj@@QAEXPAXD@Z      # thiscall find/create model by key
+00f37b20 ?f37b20@SPObj@@QAEXXZ          # thiscall @planet+templates_artDirected! helper
+00f37b60 ?f37b60@SPObj@@QAEXXZ          # thiscall scenario refresh
+00f37be0 ?f37be0@SPObj@@QAEDXZ          # thiscall (PDB candidate SP::cSkinObject::BuildSkeleton, unlikely)
+00f37f20 ?f37f20@SPObj@@QAEXH@Z         # thiscall cScenarioTerraformEconomy creator
+00f38150 ?f38150@SPObj@@QAEXPAX@Z       # thiscall noun removal

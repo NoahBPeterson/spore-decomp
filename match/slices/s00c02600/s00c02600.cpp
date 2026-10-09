@@ -1,5 +1,5 @@
 // Slice s00c02600: Simulator::cCreatureBase helpers / near-list predicates (retail).
-// Module flags: /O2 /MD /Gy /EHsc /TP (SSE2 default; MinF/MaxF/round helpers are __asm).
+// Module flags: /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast (SSE scalar moves; MinF/MaxF/round helpers are __asm).
 // Retail layout differs from the 2008 PDB; offsets below come from the disassembly.
 #include "types.h"
 #include <math.h>
@@ -106,6 +106,7 @@ struct BehaviorManager_t {
     virtual void b38(void*);   // +0x38
 };
 struct MgrB { void f_00b453a0(void*); };
+struct TriggerMgr { int f_00ba3f90(uint32_t* key, CreatureBase* a, CreatureBase* b); };
 struct T1624 { void f_00bc9de0(int); };
 struct ToolMgr_t { bool f_00acd410(CreatureBase* c); };
 struct PosseSim { void f_00d52e90(int a, int b); };
@@ -123,13 +124,12 @@ NounManager_t*     NounManager_00b3d300();
 SpeciesManager*    GetSetting9_00401090();
 void*              f_00b3d310();
 LocationProvider*  f_00b3d320();
-CreatureBase*      f_00b3d4c0();
+TriggerMgr*        f_00b3d4c0();
 void*              f_00b3d4d0();
 ToolMgr_t*         f_00b3d480();
 BehaviorManager_t* BehaviorManager_00b3d260();
 Strategy_t*        cCreatureModeStrategy_Instance_00d38840();
 PosseSim*          f_00d539d0();
-int __cdecl          f_00ba3f90(uint32_t* key, CreatureBase* a, CreatureBase* b);
 void __cdecl         f_00ba5df0(uint32_t* key, uint32_t* out);
 char __cdecl         SP_GetPropertyAsFloatArray_006a08b0(void* list, uint32_t id, int* count, float** arr);
 int  __cdecl         FUN_00c028b0(int* profile, char b);
@@ -312,7 +312,7 @@ CreatureBase* CreatureBase::Cast_00c027d0(int type)
     case (int)0xd0036e08:
         return this;
     case 0x23a6cc8:
-        return (((unsigned char)(mGeneralFlags >> 9)) & 1) ? this : 0;
+        return ((mGeneralFlags >> 9) & 1) ? this : 0;
     case 0x23a6ccd: {
         CreatureBase* r = 0;
         CreatureBase* a = NounManager_00b3d300()->GetAvatar_00b1fdb0();
@@ -391,7 +391,7 @@ char CreatureBase::FUN_00c029e0(ObjA* target, int a, int b)
     if (r != 0 && t != 0) {
         bool fire = mSpatial.s58();
         if (!fire) {
-            if (f_00b3d4c0() != 0 && f_00ba3f90(mKey0B28, 0, 0) == 6) {
+            if (f_00b3d4c0()->f_00ba3f90(mKey0B28, 0, 0) == 6) {
                 cSPTimer* timer = (cSPTimer*)((char*)t + 0xfe0);
                 if (timer->IsRunning_00feba90()) {
                     float secs = (float)timer->GetElapsedTime_00bc3190() * 0.001f;
@@ -532,24 +532,26 @@ bool CreatureBase::FUN_00c02eb0(CreatureBase* other)
                 return false;
         }
     }
-    if (f_00b3d4c0() != 0)
-        return f_00ba3f90(mKey0B28, other, this) == 1;
+    TriggerMgr* m = f_00b3d4c0();
+    if (m != 0)
+        return m->f_00ba3f90(mKey0B28, other, this) == 1;
     return mpSpeciesProfile != other->mpSpeciesProfile;
 }
 
 // @ 0x00c03010
 char CreatureBase::FUN_00c03010()
 {
-    if (mKey0B28[0] != 0 && GetSetting9_00401090()->GetProfile_004df550(mKey0B28) == 0) {
+    uint32_t* key = mKey0B28;
+    if (key[0] != 0 && GetSetting9_00401090()->GetProfile_004df550(key) == 0) {
         void* p = mpFieldE84;
         uint32_t loc[3];
         loc[0] = 0; loc[1] = 0; loc[2] = 0;
         char r;
-        if (p == 0) r = GetSetting9_00401090()->f_004df7d0(mKey0B28, 0xdada0591, loc);
-        else        r = GetSetting9_00401090()->f_004df830(mKey0B28, p, loc);
+        if (p == 0) r = GetSetting9_00401090()->f_004df7d0(key, 0xdada0591, loc);
+        else        r = GetSetting9_00401090()->f_004df830(key, p, loc);
         if (r != 0) {
-            f_00ba5df0(mKey0B28, loc);
-            mKey0B28[0] = loc[0]; mKey0B28[1] = loc[1]; mKey0B28[2] = loc[2];
+            f_00ba5df0(key, loc);
+            key[0] = loc[0]; key[1] = loc[1]; key[2] = loc[2];
         }
         return r;
     }
@@ -572,7 +574,7 @@ void CreatureBase::FUN_00c03120(char b)
 uint32_t CreatureBase::FUN_00c03190(int a, int b, float c, int d, int e, int f, int g)
 {
     uint32_t r = f_00c0bf10(a, b, 0x2788b9, 0x40049000, c, 0x100000, 0, d, e, f, g);
-    if ((a & 0x70411) || (b & 0x40010)) {
+    if ((a & 0x70411) | (b & 0x40010)) {
         f_00d539d0()->f_00d52e90(a, b);
     }
     return r;
@@ -632,13 +634,15 @@ void __cdecl FUN_00c03350(float** first, float** last)
 float __cdecl FUN_00c033d0(char* obj)
 {
     float result = 0.1f;
-    if (obj != 0 && *(void**)(obj + 0x43c) != 0) {
-        Property* prop = 0;
-        if (((PropList*)*(void**)(obj + 0x43c))->GetProperty_00c033d0(0xe6f2fce8, prop) &&
-            prop->mType == 0xd) {
-            float v = *prop->GetFloat_0041ea70();
-            result = v;
-            if (v < 0.0f) result = 0.1f;
+    if (obj != 0) {
+        PropList* list = (PropList*)*(void**)(obj + 0x43c);
+        if (list != 0) {
+            Property* prop;
+            if (list->GetProperty_00c033d0(0xe6f2fce8, prop) && prop->mType == 0xd) {
+                float v = *prop->GetFloat_0041ea70();
+                result = v;
+                if (v < 0.0f) result = 0.1f;
+            }
         }
     }
     return result;
@@ -678,8 +682,10 @@ int __stdcall FUN_00c03520(ObjB* obj)
 {
     void* p = obj->field_10;
     void* t;
-    if (p == 0) t = 0;
-    else t = ((void* (__thiscall*)(void*, int)) (*(void***)p)[0x0c / 4])(p, 0x1186577);
+    if (p != 0)
+        t = ((void* (__thiscall*)(void*, int)) (*(void***)p)[0x0c / 4])(p, 0x1186577);
+    else
+        t = 0;
     if (((bool (__thiscall*)(void*)) (*(void***)obj->field_10)[0x2c / 4])(obj->field_10)
         || ((char*)t)[0x75] == 0
         || (((uint8_t*)t)[0x50] & 0x10))

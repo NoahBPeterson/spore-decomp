@@ -1,0 +1,15 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+01004bb0    2  find-noun-by-key: complete, equivalence PASSes (208 valid,
+               100% coverage); the vtable slot 0x4c is loaded into eax instead
+               of the original's edx. flags /O2 /MD /Gy /TP /arch:SSE
+01004c30    2  contains-inventory-noun: complete, equivalence PASSes (217 valid,
+               100% coverage); same vtable-slot register choice. flags /O2 /MD /Gy /TP /arch:SSE
+01005130   16  minimap refresh: complete; difftest UNSUPPORTED (0 valid inputs,
+               object-heavy); the two [esi+0x14] reloads and the NounManager
+               tail-call schedule differ. flags /O2 /MD /Gy /TP /arch:SSE
+010052d0   45  id-in-vector test: complete, equivalence PASSes (333 valid, 100%
+               coverage); the /0x14 magic division and loop reloads differ.
+               flags /O2 /MD /Gy /TP /arch:SSE
+010053a0   17  wormhole-key test: complete, equivalence PASSes (398 valid, 100%
+               coverage); `setne al` vs the original's direct setne (a bool
+               temp). flags /O2 /MD /Gy /TP /arch:SSE

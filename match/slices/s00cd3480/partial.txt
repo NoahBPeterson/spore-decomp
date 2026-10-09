@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00cd3480  -  cSPTribeMissionManager::Write: partial; cVarListSerializer ctor/Serialize calls modelled but the uint32 header + nested Serialize path not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3530  -  cSPTribeMissionManager::Read: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd36f0  -  partial; intrusive hashtable walk calling vtable+0x1c per node not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3760  -  partial; eastl hashtable find_internal not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd37b0  -  ReadSTLMapT<hash_map>: partial; hashtable DoFreeNodes + per-element ReadInt32/insert loop not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3920  -  partial; std::map serialise with wstring key conversion not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3ab0  -  partial destructor. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3b60  -  partial constructor. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3bf0  -  partial; mission-card panel refresh not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd3ff0  -  partial; switch emits the right ids but the cActionTarget ctor/PostAction tail is stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd4280  -  partial; trigger/action posting not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00cd43e0  -  partial; RegisterCityHallAndStartCinematic not reproduced. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

@@ -1,0 +1,24 @@
+00dfa5c0 Simulator::cEditorModeUI::LaunchAssetBrowser  # Claude-coined
+00dfa710 Simulator::cEditorModeUI::TogglePodPanel1  # Claude-coined
+00dfa790 Simulator::cEditorModeUI::TogglePodPanel2  # Claude-coined
+00dfa810 Simulator::cEditorModeUI::ShowGalaxy  # Claude-coined
+00dfa930 Simulator::cEditorModeUI::SaveEditorProperty  # Claude-coined
+00dfaaf0 eastl::pod_array<nested,0x44>::~  # Claude-coined
+00dfab20 Simulator::cEditorModeUI::SetModeEnabled  # Claude-coined
+00dfaca0 Simulator::cEditorModeUI::EnterMode8  # Claude-coined
+00dfad50 Simulator::cEditorModeUI::EnterMode9  # Claude-coined
+00dfae00 SP::cString::operator= (slice)  # Claude-coined
+00dfae50 Simulator::cEditorModeUI::EnterMode10  # Claude-coined
+00dfae90 Simulator::cEditorModeUI::EnterMode11  # Claude-coined
+00dfaf80 Simulator::cEditorModeUI::SetCreatureName  # Claude-coined
+00dfb040 Simulator::cEditorModeUI::OnEscape  # Claude-coined
+00dfb0d0 Simulator::cEditorModeUI::Update  # Claude-coined
+00dfb130 eastl::pod_array copy ctor  # Claude-coined
+00dfb1b0 operator new[] for pod array  # Claude-coined
+00dfb240 eastl::pod_array<nested,0x24>::~  # Claude-coined
+00dfb280 pod copy ctor (2 wstrings)  # Claude-coined
+00dfb380 eastl::vector<0x44>::~  # Claude-coined
+00dfb3c0 pod assignment  # Claude-coined
+00dfb430 Simulator::cEditorModeUI::Hide  # Claude-coined
+00dfb450 Simulator::cEditorModeUI::Hide2  # Claude-coined
+00dfb470 Simulator::cEditorModeUI::EnterMode  # Claude-coined

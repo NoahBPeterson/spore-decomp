@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+00dfa5c0  -  editor asset-browser launch: partial; cSPUIAssetBrowser::AdvancedLaunch prep (cString/operator_new/panel ids) stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfa810  -  ShowGalaxy + FindWindowByID loop: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfa930  -  property save/UI toggle: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfab20  -  tooltip/panel enable: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfaca0  -  mode 8 setup: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfad50  -  mode 9 setup: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfae50  -  reset to mode 10: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfae90  -  hide windows + mode 11: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfaf80  -  set name + window text: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb040  -  escape-key handler: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb0d0  -  asset-browser update: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb130  -  pod copy ctor (wstring): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb1b0  -  operator_new array + ctor: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb280  -  pod copy ctor (2 wstrings): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb3c0  -  pod assignment: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfb470  -  ShowGalaxy + mode dispatch: partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

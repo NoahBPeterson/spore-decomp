@@ -1,0 +1,5 @@
+00ac7fe0 SP::cGonzagoSubsystem::`scalar deleting destructor'  # dtor calls 0xb5b9a0 cGonzagoSubsystem::~cGonzagoSubsystem; vtables 0x1459fc8/0x1459fc0
+00ac84f0 SP::cCityVisualizer  # calls 0xd58b10 cCityVisualizer::CitizenNeedsRemoval on [this+0xa4]
+00ac8550 SP::cVarListSerializer  # constructs cVarListSerializer at 0x692f90 and Serialize at 0x692900
+00ac8750 EA::IO  # WriteBool/ReadBool adapters 0x93ac80/0x93a9a0/0x93aa70
+00ac8930 SP  # 0xc-stride range of polymorphic objects, slot0(v=0)

@@ -1,0 +1,17 @@
+# <va> <diff-bytes> <reason>
+01065c30 999 incomplete ShowCameraControls; the 8 FindWindowByID/vtable+0x7c call shapes are present; flags /O2 /MD /Gy /TP /arch:SSE
+01065f00 145 incomplete GetDominantSpeciesThumbnailKey; the type dispatch and species-profile path are written, empire lookup approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01065fe0 999 incomplete UpdateGlobal; inventory ratio + SetNumberString approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01066180 82 incomplete vtable +0x10/+0x14/+0x74/+0x38 float routine; only the vtable accesses are reproduced; flags /O2 /MD /Gy /TP /arch:SSE
+01066230 101 incomplete starmap-filter enable predicate; guards present, vtable tail approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01066390 999 incomplete camera distance/bearing; x87 math approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01066480 120 incomplete cCommandDeleteCargoButtonState::OnState1; refcount swap + CalloutMessageBox present, state tail approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01066520 63 incomplete OnState2; guard + vtable +0x78 + FindWindowByID present; flags /O2 /MD /Gy /TP /arch:SSE
+01066570 55 incomplete Run state loop; flags /O2 /MD /Gy /TP /arch:SSE
+010665c0 25 incomplete cCommandDeleteCargoButtonState ctor; vtable/fields set; flags /O2 /MD /Gy /TP /arch:SSE
+01066630 59 incomplete polar-coordinate helper; sqrt/atan2 approximated; flags /O2 /MD /Gy /TP /arch:SSE
+010666b0 45 incomplete 6-slot toggle loop; flags /O2 /MD /Gy /TP /arch:SSE
+01066720 71 incomplete SetWindowImage helper; flags /O2 /MD /Gy /TP /arch:SSE
+01066780 207 incomplete text-zoom mouse handler; approximated; flags /O2 /MD /Gy /TP /arch:SSE
+01066880 195 incomplete ctor (operator_new + Layout::Init + window setup); approximated; flags /O2 /MD /Gy /TP /arch:SSE
+010669a0 75 incomplete dtor (FindWindowByID + Shutdown + release); approximated; flags /O2 /MD /Gy /TP /arch:SSE

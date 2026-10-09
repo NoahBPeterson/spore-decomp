@@ -1,0 +1,26 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+0101aea0  589  cDefaultCameraController::UpdateMouseWheel: incomplete. The
+               stopwatch/zoom-accumulator prologue and the +0x5c state stores
+               are present but the 8-byte sample-vector prune loop and the
+               exponential-zoom (f2xm1/fscale) block are stubbed.
+               flags /O2 /MD /Gy /TP /arch:SSE
+0101b0f0   70  stopwatch restart: complete but difftest FAILs (our FUN_00d018d0
+               call faults) - the begin/end argument pair is wrong.
+               flags /O2 /MD /Gy /TP /arch:SSE
+0101b160  853  cUFOLocomotion::Execute: incomplete. The context-dependent
+               thresholds are read but the whole threshold comparison state
+               machine and FUN_01017790 ramp are stubbed.
+               flags /O2 /MD /Gy /TP /arch:SSE
+0101b670  878  camera-distance locomotion: incomplete. The guards are present
+               but the GetUFOPosition / FUN_00c375d0 / KeyboardRamp
+               interpolation block is stubbed. flags /O2 /MD /Gy /TP /arch:SSE
+0101bad0   55  mouse-wheel delta wrapper: incomplete; cl folded the pointer
+               select into a single value, losing the original's local slot
+               (difftest FAIL). flags /O2 /MD /Gy /TP /arch:SSE
+0101bb10  123  push camera sample: complete but difftest FAILs - the overloaded
+               bb10 (four args) result differs. flags /O2 /MD /Gy /TP /arch:SSE
+0101bb90  373  camera initialize/target: incomplete. The active-planet and
+               inventory prologue plus the +0x88/+0xb4 state stores are present
+               but the FUN_01042480 basis, FUN_0105c3d0 offset and the
+               FUN_00b3d470 reference-release tail are stubbed.
+               flags /O2 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,9 @@
+# <va> <diff-bytes> <reason>
+01065d20 129 complete state-machine toggle (ConfigManager lookup + switch over +0x618); flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (memory-pool observable mismatch)
+01065e40 66 complete reset of all four toggles to 8; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, faults)
+01066120 24 complete find-window + payload; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (274 valid, 100% coverage)
+01066150 12 complete id remap; __stdcall, branch order differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL before __stdcall fix (esp)
+01066310 3 complete allocator new of 0x18 and 5-dword copy; __stdcall; only a relocation/constant differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL before __stdcall fix (esp)
+010665f0 13 complete IncPauseGate(0x4bf38a9); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, faults)
+01066610 17 complete DecPauseGate + field store; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid, faults)
+01066a10 13 complete hide layout (SetVisibility(0)); flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (execution)

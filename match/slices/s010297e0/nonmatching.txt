@@ -1,0 +1,7 @@
+# <va> <diff-bytes> <reason>
+01029a60 1 complete; only a 1-byte short-jump displacement differs (compiler jumps past a redundant `mov bl,1` after `test bl,bl`); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (only 15/400 valid inputs, faults read)
+01029af0 1 complete; only the x87 operand order of the final `fmul` differs (orig `fld v; fmul [g]`, ours `fld [g]; fmul v`); flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (303 valid, 75% coverage)
+0102a360 123 complete GetWeaponLevel; sum-of-squares x87 scheduling and frame (esi spill) differ; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (_sqrtf unresolved)
+0102a630 213 complete GetUFOHealth; stack-built key table / switch-tail scheduling differ; flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (315 valid, 45.8% coverage)
+0102aa50 289 complete comm-vs-comm predicate (large switch over both objects' f714 type); object-heavy, register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (297 valid, 17.1% coverage)
+0102aec0 103 complete proximity predicate; x87 compare order / frame differ; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (_sqrtf unresolved)

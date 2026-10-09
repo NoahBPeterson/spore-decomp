@@ -1,0 +1,8 @@
+# <va> <diff-bytes> <reason>
+010f1350 999 incomplete hkLs_toiActivateEntitiesAndCheckConstraints; signature + shape only; flags /O2 /MD /Gy /TP /arch:SSE
+010f1690 999 incomplete hkLs_areConstraintsSatisfied; stub; flags /O2 /MD /Gy /TP /arch:SSE
+010f17f0 999 incomplete hkLs_backstepAndFreezeEntireIsland; stub; flags /O2 /MD /Gy /TP /arch:SSE
+010f18d0 999 incomplete hkLs_restoreTransformOnBodiesWithUpdatedTransform; stub; flags /O2 /MD /Gy /TP /arch:SSE
+010f1a90 999 incomplete hkContinuousSimulation::collideIslandNarrowPhaseContinuous; stub; flags /O2 /MD /Gy /TP /arch:SSE
+010f1cc0 999 incomplete hkContinuousSimulation::processAgentCollideContinuous; stub; flags /O2 /MD /Gy /TP /arch:SSE
+010f1d80 999 incomplete hkContinuousSimulation scalar deleting dtor; body approximated; flags /O2 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00dfd5b0  -  big editor setup (748B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfd8a0  -  panel rebuild (417B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfda50  -  mission-fields query (510B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfdc50  -  editor setup (575B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfdfe0  -  pod copy ctor (389B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfe220  -  SP::cSPUIMissions::UpdateMissionFieldsSpace (562B): partial. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

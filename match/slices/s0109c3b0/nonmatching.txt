@@ -1,0 +1,6 @@
+# <va> <diff-bytes> <reason>
+0109c6d0 40 complete hkMultiThreadedSimulation::prepareMultithreadStep (enter CS, ++counter, ==1 -> 0, set flags -1, leave CS, return 1); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0109c730 156 complete hkMtThreadStructure ctor (world/sim/type fields, 0xb-dword copy from world+0x78, scalar field copies, two x87 products); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0109c7d0 160 complete MtEntityEntityBroadPhaseListener::addCollisionPair (agent-entity chain walk, no-collision path, array reserve + 8-byte pair append); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0109c890 157 complete removeCollisionPair (same guards + append; else removeAgent); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0109cab0 116 complete hkMultiThreadedSimulation dtor (delete 3 CS, hkJobQueue dtor, deallocateChunk twice, reset 3 vtables, chain to hkContinuousSimulation dtor); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved DeleteCriticalSection/TlsGetValue)

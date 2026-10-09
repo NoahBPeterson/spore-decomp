@@ -1,0 +1,15 @@
+# incomplete / approximate source: <va> <diff-bytes> <reason>
+00b63510   -   option-id dispatch (868-byte switch over ~12 message ids, camera reload, transitions):
+           not reconstructed (stub); partial
+00b63a20   -   property-driven window move (PropertyManager, FNV1_String16, MoveWindow): not
+           reconstructed (stub); partial
+00b63c70   -   create map button (hashtable find, ConvertToString16, CreateWindowExW, SetWindowPos):
+           not reconstructed (stub); partial
+00b63d50   -   create resource button (same shape with 0x50000003 flag): not reconstructed (stub); partial
+00b63e30   -   Havok hkBoxShape builder (hkMemory alloc + hkVector4 scale + hkBoxShape ctor): not
+           reconstructed (stub); partial
+00b63fb0   -   Havok class-registry lookup (isSuperClass walk): not reconstructed (stub); partial
+00b64040   -   Havok hkSimpleMeshShape builder (vertex/primitive array copy + scale): not
+           reconstructed (stub); partial
+00b64390   -   primitive Qty counter (FindPrimitives + per-primitive formula): not reconstructed
+           (stub); partial

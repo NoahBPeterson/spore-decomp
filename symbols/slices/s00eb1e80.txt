@@ -1,0 +1,13 @@
+00eb2370 SP::cGameCinematicsAppMode::OnKeyDown  # 'M' toggles something, ESC exits
+00eb2440 SP::cGameCinematicsAppMode::AsInterface
+00eb25d0 SP::cGameCinematicsAppMode::Shutdown
+00eb28e0 SP::cGameCinematicsAppMode::cGameCinematicsAppMode (ctor body)
+00eb23d0 SP::cGameCinematicsAppMode::HandleSimulationUpdate
+00eb2470 SP::cGameCinematicsAppMode::~cGameCinematicsAppMode
+00eb2520 SP::cGameCinematicsAppMode::Init
+00eb2600 SP::cGameCinematicsAppMode::HandleMessage
+00eb2990 SP::cGameCinematicsAppMode::Activate
+00eb2c70 SP::cGameCinematicsAppMode::Deactivate
+00eb20d0 SP::Audio::cFactoryCityMusic::ReadResource
+00eb1e80 FUN_00eb1e80  # vector insert (eastl vector<bool>)
+00eb2070 FUN_00eb2070  # vector resize

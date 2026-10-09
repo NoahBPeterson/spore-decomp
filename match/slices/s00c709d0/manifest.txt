@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70a00@VPlanet@@QAEXM@Z  00c70a00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70a50@VPlanet@@QAEXM@Z  00c70a50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70a70@VPlanet@@QAEHXZ  00c70a70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70bc0@VPlanet@@QAEXH@Z  00c70bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70d10@VPlanet@@QAE_NPAI@Z  00c70d10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70d40@VPlanet@@QAE_NPAI@Z  00c70d40  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70e00@VPlanet@@QAEHXZ  00c70e00  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c70fd0@VPlanet@@QAEHH@Z  00c70fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c713c0@VPlanet@@QAEXH@Z  00c713c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c713f0@VPlanet@@QAEXXZ  00c713f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c71560@VPlanet@@QAEXI@Z  00c71560  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c709d0/s00c709d0.cpp  ?FUN_00c71680@VPlanet@@QAEXXZ  00c71680  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

@@ -1,0 +1,12 @@
+00e6d680 FUN_00e6d680  # cell has a live effect info object ([cell+0xfc] key -> [info+0x1214] > 0)
+00e6d6d0 FUN_00e6d6d0  # per-cell effect delay from stage (FUN_00e516c0)
+00e6d200 FUN_00e6d200  # cell animation/sound update (calls 00e6d180, e4f330)
+00e6d340 SP::CellUpdateAnimation  # PDB name; updates cell animation timer and triggers 00e6d200
+00e6d180 FUN_00e6d180  # resolve animation index then query effect object (00e4f040)
+00e6d790 FUN_00e6d790  # GetCellBounds(cell, center, radius)
+00e6d8f0 FUN_00e6d8f0  # cell effect-group selection / spawn
+00e6d560 FUN_00e6d560  # push level info + selected cell key (variant 1)
+00e6d600 FUN_00e6d600  # push level info + selected cell key (variant 5)
+00e6d4a0 FUN_00e6d4a0  # level info from cell (fast path vs scratch buffer)
+00e6dae0 FUN_00e6dae0  # update obstacle AABB from cell bounds
+00e6cbd0 FUN_00e6cbd0  # weighted spawn-table pick

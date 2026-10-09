@@ -1,0 +1,4 @@
+00e778b0  30  complete; only the shared outgoing-arg area (the original reuses the 8 push for the nested FUN_00e4cce0 call: `add esp,4` after it) and bool return differ. difftest WEAK (no mismatch, 36% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e780a0  204  complete; full logic reconstructed (kill/cleanup/drop-loot); register allocation and the static-TU helper calling conventions differ. difftest WEAK (no mismatch, 10% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e783d0  4  complete; only the two reloads after the inner loop are swapped (`mov ebp,[esp+0x20]`/`mov esi,[esp+0x4c]`). difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00e78570  149  complete; random-angle clamp is spelled as fadd/fld1/fsub here vs the original's st(1) form and frame is 0x18 vs 0x14; logic matches. difftest UNSUPPORTED (0/400 valid). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

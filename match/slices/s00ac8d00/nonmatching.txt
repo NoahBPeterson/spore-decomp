@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00ac8d00  40   complete; city civilization lookup + g->FUN_00d57a60, register schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (62.5% cov)
+00ac8d80  92   complete; SSE sphere-list point test, unrolled/hoist schedule differs (171 vs 111 bytes); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac8df0  92   complete; SSE sphere-list point test (<= radius at +0xc), schedule differs (171 vs 111); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac93c0  180  complete; EASTL heap sift-up-by-key, control-flow/schedule differs (183 vs 192); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (164 valid, 39.5% cov)
+00ac9510  7    complete; 0xc-pair assign loop, [d+8] load hoisted above the byte store; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (83 valid, 17.1% cov)
+00ac9560  26   complete; 0xc-pair fill loop, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac95f0  53   complete; refcounted-pointer copy loop, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (107 valid, 41.7% cov)
+00ac9630  52   complete; refcounted-pointer range assign, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (74 valid, 20.7% cov)
+00ac96b0  113  complete; 0x2c-struct forward copy, x87 float copies sched differs (107 vs 137); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (69 valid, 19.2% cov)
+00ac9850  36   complete; cLocomotionRequest ctor (global float fields), store order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)
+00ac9d90  40   complete; vector<ptr> release + pool free, schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (71.4% cov)

@@ -1,0 +1,14 @@
+00c7c0c0  eastl vector insert into a 20-byte-stride vector: partial (growth/relocate path omitted).
+00c7c220  Simulator::cGameData::RemoveOwner: partial (releases + 10 MessageServer broadcasts reconstructed; eastl vector<bool> trims omitted).
+00c7c4a0  vector resize: partial.
+00c7c530  load object list: partial.
+00c7c6d0  Simulator::cGameData::SetGameDataOwner: partial (ctor-path allocation and exact PropertyManager args approximated).
+00c7c7c0  Simulator::ISimulatorSerializable::Read: partial.
+00c7c9b0  load PlayerPlanetData list: partial.
+00c7cce0  cInteractableObject::InitFromDefinition wrapper: complete-ish; not byte-exact (callee signature/register differences).
+00c7cde0  Simulator::cRock::cRock: complete-ish; not byte-exact (base ctor/register differences).
+00c7ce70  cRock update: partial.
+00c7cf50  cGameData feedback wrapper: partial.
+00c7cfc0  cRock Read wrapper: partial.
+00c7d020  SetLocalExtents wrapper: complete-ish; not byte-exact (thiscall/arg order).
+00c7d090  cRock compare switch: complete; not byte-exact (callee signature differences).

@@ -1,0 +1,4 @@
+00acd790 SP::cSPCreatureBase  # PDB candidate caller-scored; active-planet animal respawn
+00ace320 SP::cGonzagoSubsystem::scalar deleting destructor  # calls 0xb5b9a0 ~cGonzagoSubsystem; vtables 0x145a1c8/0x145a1c4/0x145a1bc
+00ace4e0 SP::cCityVisualizer  # uses [this+0xa4]->0xaf0 city + 0xd60f00 SetCity
+00acd6c0 cVarList  # reads/writes via cVarListSerializer 0x692f90/0x693e10

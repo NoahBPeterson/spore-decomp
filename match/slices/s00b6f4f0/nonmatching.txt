@@ -1,0 +1,5 @@
+# complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b6f800   17  mission-tracked test (p == m68 || p == m6c): complete; our side zero-extends the
+          bool via dl before `mov al,dl`; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b6f820    2  clear mission card (panel RemoveMissionCard + release): complete; only the scratch
+          register chosen for the pushed card differs (eax vs ecx); flags /O2 /MD /Gy /EHsc /TP /arch:SSE

@@ -1,0 +1,9 @@
+# <va> <diff-bytes> <reason>
+0103a480 159 complete SP::cSPSpaceTrading::CreateCommodityFromID (new + ctor, PropertyManager unregister, vtable SetType, item type/count/cost, SetPropertyList, AddRef); register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (ours faults in the ctor call)
+0103a540 201 complete commodity-scan (vector at +0x34, PropertyManager unregister, rare-property test); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0103a760 93 complete index-of-key in the 0x24-stride table; magic-division register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest PASS (249 valid, 100% coverage)
+0103a930 172 complete sListHasRare (scan 0xc-stride list, GetPropertyAsKey, compare 0x7ecbe6f5); flags /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (249 valid, 35.8% coverage)
+0103ac40 46 complete rbtree find + payload at +0x1c; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0103ac70 191 complete IsRareGroupComplete (group table scan, rbtree find, inventory presence check); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0103af90 207 complete pair-placement: two random ints, compare world positions, else AddCitySpicePile twice; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+0103b320 149 complete has-rare-commodity; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)

@@ -1,0 +1,11 @@
+00ec7d00  361  vector<Big>::insert(position,count,value); big reallocation/insert path, cl schedules the grow branch and calls differently. flags /O2 /MD /Gy /TP; difftest WEAK (low coverage)
+00ec7e90  122  tutorial scan loop; GetWorld()/scenario-pointer reload shape differs. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec7f40  58  eastl rbtree Insert; cl keeps parent in eax and picks different callee-saved regs than the original (esi=this). flags /O2 /MD /Gy /TP; difftest PASS
+00ec8110  39  push 9 (3,id) pairs; only load scheduling differs (original loads mpEnd before arr[i]). flags /O2 /MD /Gy /TP; difftest PASS
+00ec81b0  140  command pair builder; cl caches WorldMgr and splits push_back differently. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec8270  204  command pair builder; same as 00ec81b0 plus an extra initial pair. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec8370  293  acts-bar list builder; WorldMgr caching + FUN_00ec6d70 call temp slot differ. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec8510  293  acts-bar list builder (FUN_00ec7640); same shape as 00ec8370. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec86b0  132  push (8,-1) then (2,id); cl caches the world list. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec8780  192  acts-bar list builder; flag loop push_back outlined differently. flags /O2 /MD /Gy /TP; difftest WEAK
+00ec8970  750  command dispatch issuing int vectors; original outlines push_back to c072f0 at most sites but inlines it for the common group. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (unresolved DoPushBack)

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   [flags + difftest verdict]
+00cd3670  3   complete; AddRef/Release-style refcount drop, register assignment (eax/edx swap) differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (400/400, 65% cov).
+00cd4070  30  complete; AsInterface id->subobject switch; cl folds the null check to a branchless and/setne (this treated as non-null). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (400/400, 100% cov).
+00cd40f0  87  complete; selection/terrain-cursor forwarding; virtual call scheduling differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (0/400 valid: generated vtable faults).
+00cd4180  63  complete; mouse-down forwarding (4 args, two float). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: our fake-method arity differs, faults at 0x3000000a).
+00cd41d0  53  complete; mouse-wheel forwarding (float arg via x87). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: fake-method arity).
+00cd4220  63  complete; mouse-up forwarding (4 args, two float). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: fake-method arity).
+00cd43c0  9   complete; virtual call scheduling differs (arg load hoisted before vtable load). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (0/400 valid).
+00cd44a0  35  complete; terrain key test; x87/inline scheduling. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest PASS (277 valid, 73% cov).
+00cd44e0  32  complete; hashtable<string> writer; WriteUint32 stream call schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (0/400 valid).

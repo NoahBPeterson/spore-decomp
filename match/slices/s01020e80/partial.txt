@@ -1,0 +1,32 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+01020eb0  size  camera mouse-wheel: approximate; the /100 clamp and GameTimeManager
+               gating are sketched, the switch body is stubbed.
+010210a0   29  cSPLivingUniverse::Write: approximate; the cVarListSerializer
+               ctor/serialize call pair is present but the buffer local is unused.
+010210e0   24  FloodFillPlants: complete but difftest FAILs (our FUN_00c82f00
+               receiver is resolved wrongly). flags /O2 /MD /Gy /TP /arch:SSE
+01021110   89  planet float-order comparator: approximate; the two FUN_00c70f90
+               calls are written as int casts rather than x87 floats.
+01021260  size  GetActivePlanet: approximate; the AutoRefCount cleanup block the
+               original emits (dead) is omitted.
+010212a0   63  GetActivePlanetRecord: approximate; same dropped AutoRefCount
+               cleanup block. flags /O2 /MD /Gy /TP /arch:SSE
+01021300   77  GetPlayerEmpire: approximate; the StarManager vtable call is
+               written as a slot-0 call rather than GetEmpireByID.
+01021420   15  insertion-heap sort: approximate (difftest timed out); the
+               refcount addref/release helpers match but the loop schedule does not.
+01021500  193  insertion-heap sort variant: approximate; same.
+010215e0  167  sift-up: approximate; the parent walk and addref/release order differ.
+010216a0   86  swap two AutoRefCounts: approximate; the temporary addref schedule
+               differs. flags /O2 /MD /Gy /TP /arch:SSE
+01021740  size  model/hologram update: approximate; only the guard is implemented.
+010219b0  231  activate-planet + background records: approximate.
+01021ab0  174  RemovePlayerColony: approximate; the vector scan is present but the
+               release/achievement tail differs. flags /O2 /MD /Gy /TP /arch:SSE
+01021b70    9  message handler: complete but difftest FAILs the return value.
+               flags /O2 /MD /Gy /TP /arch:SSE
+01021bb0  213  sift-down: approximate.
+01021ca0  113  heap erase: approximate.
+01021da0   71  background-sim deleting dtor: approximate; the 4 releases are
+               present but the vector dtor call shape differs.
+01021e00   59  heapify: approximate.

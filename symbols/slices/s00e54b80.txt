@@ -1,0 +1,10 @@
+# slice s00e54b80 names (evidence)
+00e54b80  CellGfx_SetupRaster
+00e54c70  CellGfx_ApplyLayers
+00e54d10  CellGfx_ApplyTail
+00e54d30  CellLayer_EdgeIntersect
+00e55080  Cell_QueryPosition
+00e55120  SP::sActivateGfx
+00e552f0  SP::cCellMode::Activate
+00e553a0  CellGeometry_Accumulate
+00e55770  CellDir_DotClamped

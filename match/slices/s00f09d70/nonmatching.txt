@@ -1,0 +1,15 @@
+00f09d70  27  copy n elements (src constant); cl register allocation differs. flags /O2 /MD /Gy /TP; difftest WEAK
+00f09e00  400  random scenario pick; approximate. flags /O2 /MD /Gy /TP; difftest FAIL (call ecx differs)
+00f09fc0  500  best-scenario selection; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (symbol size >5x off / 0 valid)
+00f0a1e0  590  per-scenario UI refresh; approximate. flags /O2 /MD /Gy /TP; difftest FAIL (x87 depth)
+00f0a440  340  progress UI update; approximate. flags /O2 /MD /Gy /TP; difftest FAIL (callee faults)
+00f0a5a0  118  tutorial slot advance; control flow reproduced. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f0a640  59   tutorial time check; codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL (call ecx differs)
+00f0a690  15   bool OR helper; only bool materialisation differs. flags /O2 /MD /Gy /TP; difftest PASS
+00f0a6c0  109  set current tutorial; approximate. flags /O2 /MD /Gy /TP; difftest FAIL (callee faults)
+00f0a750  95   tutorial activate; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f0a7e0  173  compare tutorial records; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry)
+00f0a8b0  114  any tutorial matches; loop shape differs. flags /O2 /MD /Gy /TP; difftest FAIL
+00f0a950  228  fill tutorial records; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f0aa80  151  refresh tutorials; approximate. flags /O2 /MD /Gy /TP; difftest FAIL (callee faults)
+00f0ab50  148  select tutorial page; approximate. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)

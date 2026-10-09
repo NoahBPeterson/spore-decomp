@@ -1,0 +1,8 @@
+00eb1e80  494  PARTIAL: EASTL vector<bool/fixed_vector_allocator> insert(pos,n,val) reallocation path; only the non-reallocating tail is reconstructed.
+00eb2070  93   PARTIAL: vector resize; shrink path simplified (no eastl copy + pointer fix-ups).
+00eb20d0  657  PARTIAL: SP::Audio::cFactoryCityMusic::ReadResource; the IO::ReadInt32 stream reads and the PMCP chunk walk are approximated.
+00eb2470  108  PARTIAL: cGameCinematicsAppMode destructor; MI vptr restores and the three AutoRefCount releases are omitted.
+00eb2520  167  PARTIAL: Init; only the message registration is present, model/lighting world creation is stubbed.
+00eb2600  704  PARTIAL: HandleMessage; the nine message ids and their terrain/water/temperature/property logic are stubbed out.
+00eb2990  725  PARTIAL: Activate; world setup and the nine RegisterHandler calls are omitted.
+00eb2c70  500  PARTIAL: Deactivate; the nine UnregisterHandler calls and world teardown are omitted.

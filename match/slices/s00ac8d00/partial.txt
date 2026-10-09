@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+00ac8f00  95   approximate; property->vector resolve with tag-type dispatch; difftest FAIL (mem pool)
+00ac8fa0  49   approximate; property->int resolve; difftest FAIL (eax)
+00ac9040  186  approximate; serialize vector of 0x20-stride records via cVarListSerializer; difftest UNSUPPORTED (0/400 valid)
+00ac9150  77   approximate; serialize vector of 0xc records; difftest UNSUPPORTED (0/400 valid)
+00ac94c0  70   approximate; construct 0xc-pair range from template element; difftest UNSUPPORTED (0/400 valid)
+00ac95a0  59   approximate; copy 0xc-pair range; difftest UNSUPPORTED (0/400 valid)
+00ac9680  32   approximate; refcounted fill loop arg order; difftest FAIL
+00ac9740  79   approximate; 0xc-pair range assign w/ AddRef/Release; difftest UNSUPPORTED (0/400 valid)
+00ac97a0  59   approximate; reverse refcounted-pointer range assign; difftest UNSUPPORTED (0/400 valid)
+00ac97f0  78   approximate; reverse 0xc-pair range assign; difftest UNSUPPORTED (0/400 valid)
+00ac98e0  855  approximate; locomotion tuning loader (~20 property reads + global stores); difftest FAIL (esp)
+00ac9dd0  24   approximate; wrapper to FUN_00ac9310 with bool arg (arg materialisation differs); difftest FAIL (call trace)
+00ac9df0  205  approximate; serialize map/set of 0x6c-stride nodes via cVarListSerializer; difftest UNSUPPORTED (0/400 valid)

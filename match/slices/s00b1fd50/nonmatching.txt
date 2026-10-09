@@ -1,31 +1,16 @@
 # complete (behaviourally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
-00b1ff30  152  String::append(n,c): complete; register allocation/frame and the capacity-growth
-          arithmetic differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b201a0  108  cGameData::MarkFeedback: complete (rbtree find + flag walk, RBTreeIncrement);
-          byte diff from RBFind call shape and register roles; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20230   11  intrusive-list foreach calling vtable+0x1c: complete; only ebx/edi register
-          allocation swapped (arg vs sentinel); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b203e0  115  cGameData::RemoveVecItem: complete (find, clear flag 0x100, swap-erase pop);
-          codegen/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20470   65  cGameData::CountList: complete (walk intrusive list, count vcall+0x20 matches);
-          register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b204d0   79  cGameData::FindList: complete (walk list, compare field +0x24); codegen differs;
-          flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20610   55  ByteString::resize: complete; shrink/grow branch encoding and register roles differ;
-          flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b206d0   68  manager Flush: complete (free rbtree payloads, nuke subtree, reset anchor);
-          DoNuke/delete call-shape and frame differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20790   70  FeedbackMgr::ClassifyById: complete (rbtree find then ClassifyB, else empire test);
-          register allocation around RBFind differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b207f0   71  HashTable::Find: complete (bucket index, chain walk on 8-byte key, miss bucket);
-          local-iterator shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20930  109  map<string,int>::find: complete (Compare + operator< lower_bound walk);
-          comparator/iterator codegen differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b209f0   67  string ctor from (alloc,string): complete; register/frame differs;
-          flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20aa0  193  string append-format (Vsnprintf8 growth loop): complete; built as cdecl (varargs
-          cannot be thiscall) so the this/frame shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20b90   66  string ctor from string: complete; register/frame differs;
-          flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20c00   52  string ctor with allocator copy: complete; register/frame differs;
-          flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b1ff30  152  String::append(n,c): complete; difftest WEAK (186 valid, no mismatch, 96.9% cov); frame/growth arithmetic differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b201a0  108  cGameData::MarkFeedback: complete; difftest WEAK (78 valid, no mismatch, 20.4% cov); RBFind call shape/register roles differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20230   11  intrusive-list foreach calling vtable+0x1c: complete; difftest UNSUPPORTED (0/400 valid, random input cannot build a live list); only ebx/edi register allocation swapped; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b203e0  115  cGameData::RemoveVecItem: complete; difftest PASS (347 valid, 94.9% cov); codegen/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20470   65  cGameData::CountList: complete; difftest UNSUPPORTED (0/400 valid); register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b204d0   79  cGameData::FindList: complete; difftest WEAK (73 valid, no mismatch, 85.2% cov); codegen differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20610   55  ByteString::resize: complete; difftest WEAK (76 valid, no mismatch, 37.8% cov); branch encoding/register roles differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b206d0   68  manager Flush: complete; difftest UNSUPPORTED (0/400 valid, needs a live rbtree); DoNuke/delete call-shape and frame differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20790   70  FeedbackMgr::ClassifyById: complete; difftest WEAK (63 valid, no mismatch, 70.3% cov); register allocation around RBFind differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b207f0   71  HashTable::Find: complete; difftest PASS (232 valid, 100% cov); local-iterator shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20930  109  map<string,int>::find: complete source; difftest FAIL (5/131 valid mismatched: our side faults on an adversarial key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b209f0   67  string ctor from (alloc,string): complete; difftest PASS (207 valid, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20aa0  193  string append-format (Vsnprintf8 growth loop): complete; difftest UNSUPPORTED (original reads ecx at entry; varargs cannot be __thiscall, built cdecl); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20b90   66  string ctor from string: complete; difftest WEAK (163 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20c00   52  string ctor with allocator copy: complete; difftest WEAK (180 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE

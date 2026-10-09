@@ -1,0 +1,11 @@
+00f2a490  119  copy_backward of 0x34-byte elements; struct shape not recovered. flags /O2 /MD /Gy /TP; difftest WEAK
+00f2a510  340  property lookup; abridged string/iterator path. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2a6a0  945  tutorial command-list builder; record sequence reproduced. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry)
+00f2aac0  324  command-list builder; approximated. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (ecx at entry)
+00f2ada0  76   vector<BuildData>::resize(0x38); codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2ae60  208  load building-data list; external call shape differs. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f2af60  47   push-if-match helper; cl register allocation differs. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2afc0  137  ordered insert; reproduced, codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2b040  503  collect matching building data; three-pass scan reproduced. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2b270  151  any-match scan; reproduced. flags /O2 /MD /Gy /TP; difftest FAIL
+00f2b340  128  check collected entries; reproduced. flags /O2 /MD /Gy /TP; difftest FAIL

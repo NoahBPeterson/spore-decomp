@@ -1,0 +1,5 @@
+# incomplete / approximate source: <va> <diff-bytes> <reason>
+00b501d0   -   terrain height/face sampling (multi-branch cube-face selection, GetFloat/FUN_00b82060/
+           FUN_00b82110 calls, GetNormalAt): not reconstructed (stub); partial
+00b50820   -   projectile/segment hit test (normalise, dot products, host vtable +0x24 invoke):
+           not reconstructed (stub); partial

@@ -1,0 +1,5 @@
+# source  symbol  va  [cl flags]
+slices/s00e4e8d0/s00e4e8d0.cpp  ?FUN_00e4ee30@@YAHH@Z       00e4ee30  /O2 /MD /Gy /TP /arch:SSE
+slices/s00e4e8d0/s00e4e8d0.cpp  ?SP_sDestroyCell@@YAHH@Z    00e4ef60  /O2 /MD /Gy /TP /arch:SSE
+slices/s00e4e8d0/s00e4e8d0.cpp  ?FUN_00e4f550@@YAXXZ        00e4f550  /O2 /MD /Gy /TP /arch:SSE
+slices/s00e4e8d0/s00e4e8d0.cpp  ?FUN_00e4f660@@YAXH@Z       00e4f660  /O2 /MD /Gy /TP /arch:SSE

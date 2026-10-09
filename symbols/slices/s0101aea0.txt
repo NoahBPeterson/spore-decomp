@@ -1,0 +1,12 @@
+# va  symbol  # evidence
+0101aea0 ?aea0@UFO@@QAEXM@Z       # PDB candidate SP::cDefaultCameraController::UpdateMouseWheel
+0101b0f0 ?b0f0@UFO@@QAEXXZ        # stopwatch restart (SetUnits + QPC)
+0101b160 ?b160@UFO@@QAEXMM@Z      # PDB candidate SP::cUFOLocomotion::Execute
+0101b4c0 ?b4c0@UFO@@QAEXM@Z       # set camera distance
+0101b530 ?b530@UFO@@QAEXD@Z       # snap distance to keyframe table
+0101b670 ?b670@UFO@@QAEXM@Z       # camera-distance locomotion
+0101b9e0 ?b9e0@UFO@@QAEXXZ        # clear locomotion flags
+0101ba10 ?ba10@UFO@@QAEXD@Z       # camera fly-in/out
+0101bad0 ?bad0@UFO@@QAEXHH@Z      # mouse-wheel delta wrapper
+0101bb10 ?bb10@UFO@@QAEDHHHH@Z    # push camera sample
+0101bb90 ?bb90@UFO@@QAEXHD@Z      # camera initialize/target

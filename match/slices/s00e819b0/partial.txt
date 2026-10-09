@@ -1,0 +1,16 @@
+00e819b0  309  PARTIAL: SP init; the MessageServer handler registration and effect/model assign thunks are reproduced but vtable/arg shapes and difftest FAIL (execution).
+00e81c90  55  PARTIAL: message handler; the bool branch on the message id (param_2+8) and the FUN_00e819b0/FUN_00e81ba0 calls were dropped.
+00e81cf0  564  PARTIAL: cCellMode::StaticInit; COM factory registration, the three operator_new object creations and the FINAL property-key reads are approximated.
+00e81f30  305  PARTIAL: cCellMode::Init/Shutdown; the eastl vector DoDestroyValues/DoInsertValue and operator_delete forms are approximated.
+00e82140  81  PARTIAL: SP::sCellResourceLoadFailure; resource-manager key struct and callback call shapes approximate (difftest FAIL eax&0xff).
+00e821d0  95  PARTIAL: resource load by id; manager vtable slots and callback shape approximate (difftest FAIL eax&0xff).
+00e82340  62  PARTIAL: node allocator; operator_new mechanism and vtable-refcount call shapes differ (difftest FAIL call #0).
+00e823a0  35  PARTIAL: SP::ResourceGetFromHandle; difftest FAIL (execution).
+00e82420  55  PARTIAL: intrusive list find-or-insert; the else/tail handling and node ctor argument packing differ (difftest FAIL execution).
+00e82490  18  PARTIAL: sentinel list init; operator_new with the EASTL source string argument differs (difftest FAIL call #0).
+00e82520  183  PARTIAL: RGB packing from 4 custom xmm-register float args (custom register ABI); body is a stub.
+00e82770  298  PARTIAL: type id dispatch (11 hash comparisons + return codes); the FUN_00401010 vtable call and return-code packing differ (difftest FAIL execution).
+00e828c0  8  PARTIAL: single FUN_00b3d320/FUN_00b1e410 call pair; calling conventions approximated (difftest FAIL execution).
+00e82920  66  PARTIAL: terrain sphere position; NounManager/GetCurrentTerrainSphere call shapes differ (difftest FAIL memory).
+00e82970  23  PARTIAL: terrain sphere active check; call shapes differ (difftest FAIL eax).
+00e829a0  9  PARTIAL: avatar species setter; FUN_00401090 argument/return shape approximated (difftest UNSUPPORTED).

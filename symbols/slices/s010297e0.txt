@@ -1,0 +1,27 @@
+# <va> <Name>  # evidence
+010297e0 C010297e0::f  # thiscall dtor/thunk releasing mProp and calling PropertyManager()->Unregister
+01029950 SP::IsPlanetAttackableByPlayer  # empire != player && distance/priority checks
+010299c0 SP::PlayerHasAnyAutoblaster  # inventory HasItem on the three autoblaster keys
+01029a10 SP::IsValidSpaceCommTarget  # game-mode + star/empire/planet checks
+01029a60 SP::ShouldShowSpaceCommOption  # f714 type + hostile + inventory + idle-animation checks
+01029af0 SP::cSPSpaceCombatTuning::GetAirRaidSirenTimeMS  # PDB
+01029cc0 SP::cSPSpaceCombatTuning::GetBackgroundFighterDPS  # PDB
+01029d50 SP::cSPSpaceCombatTuning::GetBackgroundBomberDPS  # PDB
+01029de0 SP::cSPSpaceCombatTuning::GetBackgroundTurretDPS  # PDB
+01029f60 SP::cSPSpaceCombatTuning::GetLootMinMoneyDrop  # PDB
+01029fd0 SP::cSPSpaceCombatTuning::GetLootMaxMoneyDrop  # PDB
+0102a1d0 SP::cSPSpaceCombatTuning::GetLootUFOMoneyChance  # PDB candidate
+0102a230 SP::cSPSpaceCombatTuning::GetLootCityMinMoneyDrop  # PDB
+0102a2a0 SP::cSPSpaceCombatTuning::GetLootCityMaxMoneyDrop  # PDB
+0102a360 SP::cSPSpaceCombatTuning::GetWeaponLevel  # PDB
+0102a3e0 SP::cSPSpaceCombatTuning::GetModelOffset  # static Vector3 initialised from three 1.0f globals
+0102a630 SP::cSPSpaceCombatTuning::GetUFOHealth  # PDB
+0102a780 SP::cSPSpaceCombatTuning::GetTurretHealth  # PDB
+0102a840 SP::cSPSpaceCombatTuning::GetLootRaiderMoneyChance  # type-keyed property float
+0102a8f0 SP::cSPSpaceCombatTuning::GetLootMoneyChance2  # type-keyed property float
+0102aa50 SP::cSPSpaceCommCanTarget  # two-object f714 type matrix
+0102ac50 SP::CreateUFOForSolarOrGalaxy  # PDB
+0102acb0 SP::CreateUFO  # PDB
+0102adf0 SP::IsMissionActiveAtPlanet  # mission list scan by target planet + type
+0102ae60 SP::IsMissionOfTypeActiveAtPlanet  # mission list scan
+0102aec0 SP::IsNearbyObject  # object distance vs configured radius

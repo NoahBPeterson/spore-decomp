@@ -1,0 +1,9 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+0101b530  253  snap camera distance to a keyframe table: complete, equivalence
+               PASSes (399 valid, 61.8% coverage); the forward/backward scans
+               and the two global table loads schedule differently.
+               flags /O2 /MD /Gy /TP /arch:SSE
+0101ba10  size  camera fly-in/fly-out: complete, equivalence WEAK (288 valid,
+          209/181 44.6% coverage). Compiled 209 B vs the original's 181 B - the
+               two GetRadiusAt/PlanetModel branches were not CSE'd the same way.
+               flags /O2 /MD /Gy /TP /arch:SSE

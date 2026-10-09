@@ -1,0 +1,6 @@
+00c71bf0 SP::cPlanet::GetPtolemaicPosition  # PDB candidate
+00c71e70 SP::cPlanet::PlanetSimActivate  # PDB candidate
+00c72190 SP::cPlanet::UpdatePlanetSpiceProduction  # PDB candidate
+00c72470 Simulator::cSpatialObject::_virtual_dtor  # vtable/PDB
+00c725a0 Simulator::cPlanet::cPlanet  # vtable/PDB
+00c72b80 SP::cPlanet::Read  # Ghidra previous name

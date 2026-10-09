@@ -1,0 +1,29 @@
+00b1fd50 cGameNounManager::SetAvatar  # dc: ARC assign + flag 0x200 at obj+0xb58, member +0x54 (PDB mAvatar)
+00b1fe40 ClassifyA  # dc: 4 resource-key predicates via vtable+0xc, returns 0..3/-1
+00b1feb0 ClassifyB  # dc: key predicates, returns 4/2/1/0
+00b1ff30 eastl::string::append  # dc: memset(end+1,c,n-1), *end=c, end+=n, *end=0 with capacity growth
+00b1ffd0 eastl::string::allocate  # dc: n>1 -> operator new, else shared empty 0x1667bac
+00b20120 SP::cArtilleryProjectile::~cArtilleryProjectile  # dc: release +0x524/0x534/0x53c, vptr +0x504, tail jmp cGameData dtor 0xb184c0
+00b201a0 cGameData::MarkFeedback  # dc: rbtree find + flag walk over eastl rbtree at +0x98
+00b20230 cGameNounManager foreach  # dc: intrusive list walk, vtable+0x1c
+00b20280 cGameData::Write  # dc: count list, WriteUint32, per-node serialize, compact vector, cVarListSerializer
+00b203e0 cGameData::RemoveFromVector  # dc: find ptr, clear flag 0x100, swap-erase at +0x5c/+0x60
+00b20470 cGameData::CountInList  # dc: list walk, vtable+0x20 == arg
+00b204d0 cGameData::FindInList  # dc: list walk, field +0x24 == key, next +0xc
+00b205a0 cGameData::CopySmall  # dc: 0x20 alloc, copy 0x14 bytes + AutoRefCount AddRef
+00b20610 eastl::string::resize  # dc: shrink memmove/set end, grow via append
+00b20660 SP::cArtilleryProjectile::Create  # dc: operator new 0x540 "Simulator/cSpear", ctor 0xcb6ed0, 5 vtables
+00b206d0 cGameNounManager::Flush  # dc: free rbtree payloads + nuke subtree, reset anchor
+00b20750 cGameNounManager::GetFeedback  # dc: eastl rbtree find at +0xd0
+00b20790 cGameNounManager::ClassifyFeedback  # dc: rbtree find then ClassifyB else empire
+00b207f0 eastl::hashtable::find  # dc: bucket = key % count, chain walk +0x18
+00b20930 eastl::map<string,int>::find  # dc: Compare 0x5f7870 + operator< 0x812210
+00b209f0 string ctor (alloc,string)  # dc: RangeInitialize 0x475ab0 + memcpy
+00b20a50 eastl::hashtable::freeBuckets  # dc: free each bucket chain (dtor +8, delete)
+00b20aa0 eastl::string::append_sprintf  # dc: Vsnprintf8 0x938400 growth loop
+00b20b90 string ctor (string)  # dc: RangeInitialize + memcpy
+00b20c00 string ctor (alloc)  # dc: allocate + memcpy, copies field +0x10
+00b20c60 SP::cGameNounManager::CreateNoun  # PDB
+00b20d30 cGameNounManager::PostRemove  # dc: message 0x1a0219e, unlink node
+00b20e40 cGameNounManager::CreateDebugNoun  # dc: CreateNoun(0x52aa6122), PlanetModel helpers
+00b20ee0 SP::UpdateDebugUI  # PDB; switch enum -> string assign

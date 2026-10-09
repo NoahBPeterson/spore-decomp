@@ -1,0 +1,9 @@
+00f06d40  1352  large message dispatcher; only top-level arms reproduced. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (our symbol size >5x off)
+00f072b0  1191  large message dispatcher; same. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (our symbol size >5x off)
+00f077c0  99  table lookup + kind switch; jump table differs. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f078b0  123  float->bucket; clamping/branch shape differs. flags /O2 /MD /Gy /TP; difftest FAIL (eax differs on some inputs)
+00f07960  77  x87 blend helper; x87 operand order differs. flags /O2 /MD /Gy /TP; difftest FAIL (st0 rounding)
+00f079e0  94  insertion sort; cl register allocation differs. flags /O2 /MD /Gy /TP; difftest WEAK
+00f07a60  115  insertion sort (forward shift); codegen differs. flags /O2 /MD /Gy /TP; difftest UNSUPPORTED (0 valid inputs)
+00f07ae0  215  choose-min-of-three; codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL (return value)
+00f07c10  118  sift-up; codegen differs. flags /O2 /MD /Gy /TP; difftest FAIL (memory)

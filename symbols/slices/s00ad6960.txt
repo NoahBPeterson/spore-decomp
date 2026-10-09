@@ -1,0 +1,7 @@
+00ad6f10 SP::BehaviorRule::`scalar deleting destructor'  # PDB-exact name
+00ad6f40 SP::Simulator  # registers the simulator ArgScript trigger commands via GetTriggerMgr (0xb3d4d0)
+00ad6960 SP::Simulator  # addObject command Execute -> cAppStateManager::AddMessage (0x7e4190)
+00ad6bc0 SP::Simulator  # addActor command Execute -> cAppStateManager::AddMessage
+00ad6b00 EA::ArgScript  # cCommand spec ("Adds a referencable object") 0x83bcd0/0x83c800
+00ad7940 SP::cActionTarget::cActionTarget  # globals 0x167a548/4c/50, ones/zeros
+00ad7900 SP  # SPUIHelpers::BeginModal/EndModal 0x8099a0/0x809c50

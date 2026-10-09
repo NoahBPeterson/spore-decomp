@@ -117,7 +117,7 @@ struct ByteString {
 
     void  __thiscall allocate(unsigned n);            // 0xb1ffd0
     void  __thiscall changeCapacity(unsigned n);      // 0xb230b0
-    ByteString& __thiscall append(unsigned n, char c);     // 0xb1ff30
+    ByteString& __thiscall append(unsigned n, unsigned char c);     // 0xb1ff30
     void  __thiscall resize(unsigned n);              // 0xb20610
     void  Assign(const char* s);                      // 0x006a4380
     void  Assign(const char* b, const char* e);       // 0x00454cb0
@@ -155,7 +155,7 @@ void __thiscall ByteString::changeCapacity(unsigned n)
 }
 
 // @ 0x00b1ff30
-ByteString& __thiscall ByteString::append(unsigned n, char c)
+ByteString& __thiscall ByteString::append(unsigned n, unsigned char c)
 {
     unsigned size = (unsigned)(mpEnd - mpBegin);
     unsigned cap  = (unsigned)(mpCapacity - mpBegin);
@@ -290,20 +290,23 @@ void __thiscall GameDataBig::Write(ISerializer* ser)
 void __thiscall GameDataBig::RemoveVecItem(cGameData* p)
 {
     if (!p) return;
-    int n = (int)(mVecEnd - mVecBegin);
+    cGameData** vecBegin = *(cGameData***)((char*)this + 0x5c);
+    cGameData** vecEnd = *(cGameData***)((char*)this + 0x60);
+    int n = (int)(vecEnd - vecBegin);
     if (n <= 0) return;
     for (int i = 0; i < n; i++) {
-        if (mVecBegin[i] == p) {
+        if (vecBegin[i] == p) {
             p->mFlags &= 0xfffffeff;
-            cGameData* old = mVecBegin[i];
-            cGameData* src = mVecEnd[-1];
+            cGameData* old = vecBegin[i];
+            cGameData* src = vecEnd[-1];
             if (src != old) {
                 if (src) src->AddRef();
-                mVecBegin[i] = src;
+                vecBegin[i] = src;
                 if (old) old->Release();
             }
-            mVecEnd--;
-            if (*mVecEnd) (*mVecEnd)->Release();
+            vecEnd--;
+            *(cGameData***)((char*)this + 0x60) = vecEnd;
+            if (*vecEnd) (*vecEnd)->Release();
             return;
         }
     }
@@ -313,12 +316,13 @@ void __thiscall GameDataBig::RemoveVecItem(cGameData* p)
 int __thiscall GameDataBig::CountList(cGameData* p)
 {
     int n = 0;
-    RBNode* it = mList.mpNodeRight ? (RBNode*)((char*)mList.mpNodeRight - 0xc) : (RBNode*)0;
-    RBNode* last = (RBNode*)((char*)&mList - 0xc);
+    char* head = *(char**)((char*)this + 0x78);
+    RBNode* it = head ? (RBNode*)(head - 0xc) : (RBNode*)0;
+    RBNode* last = (RBNode*)((char*)this + 0x6c);
     while (it != last) {
-        if ((cGameData*)it->mpNodeRight /*placeholder*/ && false) {}
         if ((cGameData*)((cGameData*)it)->gv20() == p) n++;
-        it = it->mpNodeRight ? (RBNode*)((char*)it->mpNodeRight - 0xc) : (RBNode*)0;
+        char* nx = *(char**)((char*)it + 0xc);
+        it = nx ? (RBNode*)(nx - 0xc) : (RBNode*)0;
     }
     return n;
 }
@@ -326,12 +330,13 @@ int __thiscall GameDataBig::CountList(cGameData* p)
 // @ 0x00b204d0
 cGameData* __thiscall GameDataBig::FindList(unsigned key)
 {
-    cGameData* it = mList2.mpNodeRight ? (cGameData*)((char*)mList2.mpNodeRight - 0xc)
-                                       : (cGameData*)0;
-    cGameData* last = (cGameData*)((char*)&mList2 - 0xc);
+    char* head = *(char**)((char*)this + 0x78);
+    char* it = head ? head - 0xc : 0;
+    char* last = (char*)this + 0x6c;
     while (it != last) {
-        if (*(unsigned*)((char*)it + 0x24) == key) return it;
-        it = it->gv1c() ? (cGameData*)((char*)it->gv1c() - 0xc) : (cGameData*)0;
+        if (*(unsigned*)(it + 0x24) == key) return (cGameData*)it;
+        char* nx = *(char**)(it + 0xc);
+        it = nx ? nx - 0xc : 0;
     }
     return 0;
 }
@@ -346,8 +351,8 @@ void __thiscall GameDataBig::MarkFeedback(cGameData* p)
     if (node != (RBNode*)&mFeedback.mAnchor) {
         *(char*)(*(int*)((char*)node + 0x14)) = 1;
     }
-    RBNode* it = mFeedback2.mAnchor.mpNodeParent;
-    RBNode* end = (RBNode*)&mFeedback2.mAnchor;
+    RBNode* it = mFeedback.mAnchor.mpNodeLeft;
+    RBNode* end = (RBNode*)&mFeedback.mAnchor;
     while (it != end) {
         char* flag = *(char**)((char*)it + 0x14);
         if (*flag == 0) {
@@ -567,10 +572,10 @@ void __thiscall MapStrFind::Find(void** out, void* key)
         const char* nb = *(const char**)(node + 0x10);
         int nLen = (int)(*(char**)(node + 0x14) - nb);
         int minLen = nLen < kLen ? nLen : kLen;
-        int r = eastlCompare(kb, nb, (unsigned)minLen);
+        int r = eastlCompare(nb, kb, (unsigned)minLen);
         if (!r) {
-            if (kLen < nLen) r = -1;
-            else r = kLen > nLen ? 1 : 0;
+            if (nLen < kLen) r = -1;
+            else r = nLen > kLen ? 1 : 0;
         }
         if (r < 0) {
             node = *(char**)node;

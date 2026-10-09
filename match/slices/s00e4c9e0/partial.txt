@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
+00e4ced0  105  PreloadAdvectMap; body simplified (locals/AutoRefCount release path not fully reproduced)
+00e4d2b0  604  quad-tree recursion; body approximate (float AABB tests/emission not fully reproduced)
+00e4d6c0  351  layer-grid span builder; body approximate (recursion args/loop not fully reproduced)
+00e4cd50   85  CellDataShutdownForApp; complete attempt but difftest FAIL (memory .data 0x16ad1f0 differs)
+00e4d000  173  cCellFactoryBinary::ReadResourceFromStream; complete attempt but difftest FAIL (execution)
+00e4d1d0  327  layer-AABB transform; complete attempt but difftest FAIL (1/400 memory-pool diff)
+00e4d550  146  layer-grid init; complete attempt but difftest FAIL (memory pool 0x40020018 differs)

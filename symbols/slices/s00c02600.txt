@@ -1,0 +1,15 @@
+00c02600 SP::IsValidNeighbourEntry  # PDB/vtable; predicate: !v2c, !(flags>>9&1), +0x135 set, !(+0x110 & 0x10)
+00c02900 Simulator::cCreatureBase::GetCurrentBrainLevel  # vtable_names.txt
+00c02950 Simulator::cCreatureBase::SetCurrentBrainLevel  # vtable_names.txt
+00c029e0 Simulator::cCreatureBase::funcB8h  # vtable_names.txt
+00c02b10 Simulator::cCreatureBase::func94h  # vtable_names.txt
+00c02ba0 Simulator::cCreatureBase::func90h  # vtable_names.txt
+00c02c80 Simulator::cCreatureBase::func64h  # vtable_names.txt
+00c02c90 Simulator::cCreatureBase::funcBCh  # vtable_names.txt
+00c02cb0 Simulator::cCreatureBase::UpdateHunger  # vtable_names.txt
+00c02df0 Simulator::cCreatureBase::UpdateMotiveState  # vtable_names.txt
+00c03010 Simulator::cGameData::cGameData_func40h  # vtable_names.txt
+00c03120 Simulator::cCreatureBase::funcC8h  # vtable_names.txt
+00c03210 Simulator::cCreatureBase::SetIdentityColor  # vtable_names.txt
+00c027d0 Object::Cast  # vtable_names.txt
+00c034d0 ?Test@cPred@@QAE_NPAUcFruitRec1@@@Z  # real mangled name (fruit-record predicate functor)

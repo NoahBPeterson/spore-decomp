@@ -1,0 +1,4 @@
+# va  diff-bytes  reason   [flags + difftest verdict]
+00dfde90  113  pod-slot reset loop; complete; frame/local schedule + thiscall FUN_d8a0. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: our FUN_d8a0 call faults).
+00dfdf70  75  pod-array<0x27e0> destructor; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest UNSUPPORTED (unresolved helper symbols F28::M / Obj4::F_bba0).
+00dfe170  138  variant-tagged object assignment; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/6: fake-arity / call layout).

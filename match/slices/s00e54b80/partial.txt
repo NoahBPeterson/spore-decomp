@@ -1,0 +1,6 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE)
+00e54d30  -    layer edge intersection; approximate (edge scan/slerp simplified)
+00e55080  130  cell position query; complete attempt but difftest FAIL (memory pool differs)
+00e55120  293  sActivateGfx; complete attempt (loop) but difftest FAIL (execution)
+00e553a0  -    cell geometry accumulate; approximate
+00e55770  -    direction vs vector dot/lerp; approximate (custom eax ABI)

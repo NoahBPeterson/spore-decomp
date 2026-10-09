@@ -1,0 +1,8 @@
+00ebb820  10  complete element-run destructor; the two intrusive-pointer Release sites keep the pointer in EAX vs the original ECX. difftest WEAK (no mismatch, 33% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebb860  42  complete copy/relocate destructor loop; loop preamble and pointer registers differ. difftest WEAK (no mismatch, 29% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebbb10  10  complete one-element pop; pointer register ECX vs EAX only. difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebbb40  177 complete random 2D unit vector; x87 clamp/comparison scheduling differs. difftest UNSUPPORTED (gMathRandom unresolved). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebbc10  164 complete 0x50-byte node copy-assign; original is __thiscall (dst in ECX), declared cdecl free fn here. difftest UNSUPPORTED (original reads ecx at entry). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebbcd0  142 complete node copy-construct; same __thiscall (ECX dst) issue. difftest UNSUPPORTED. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebbf60  42  complete rbtree clear; RBTreeIncrement/DoNukeSubtree call shapes differ. difftest UNSUPPORTED (RBTreeIncrement unresolved). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00ebc120  44  complete structure init; vtable/store ordering differs. difftest PASS (100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

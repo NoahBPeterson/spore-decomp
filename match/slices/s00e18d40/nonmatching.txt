@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (all compiled with /O2 /MD /Gy /EHsc /TP)
+00e18d40  117  rbtree insert-or-assign helper; register/scheduling leftover, EASTL inline shape not reproduced. difftest: PASS (323 valid, 100% cov)
+00e192a0  145  HandleMessage for feedback panel; large dispatch body, slots not fitted. difftest: WEAK (400 valid, 28.8% cov)
+00e19350  171  feedback-event remove path (rbtree find + pending-list scan); locals not fitted. difftest: PASS (379 valid, 89.7% cov)
+00e193f0  129  cPanel destructor (MI 5 vtables + member teardown); vtable order/EH not reproduced. difftest: UNSUPPORTED (0/400 valid: fault read/write + VirtualFree)
+00e19590  140  feedback-event insert helper (make_pair + AutoRefCount); slots not fitted. difftest: UNSUPPORTED (0/400 valid: fault read/write + fake-arity)
+00e19630   39  tree clear loop; ours keeps this in edi where original uses ebx (callee-saved swap), reset order differs. difftest: UNSUPPORTED (0/400 valid: fault read)
+00e19850  661  game-mode setup switch (many heap objects + cUIFlashWindowManager); switch tail duplication not reproduced. difftest: UNSUPPORTED (0/400 valid: fault read + fake-arity)

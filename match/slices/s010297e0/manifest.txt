@@ -1,0 +1,20 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s010297e0/s010297e0.cpp  ?f@C010297e0@@QAEXXZ  010297e0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0fp.cpp  ?FUN_01029950@@YA_NPAUPlanet@@@Z  01029950  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s010297e0/s010297e0.cpp  ?FUN_010299c0@@YAHXZ  010299c0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?FUN_01029a10@@YA_NHH@Z  01029a10  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetBackgroundFighterDPS@cSPSpaceCombatTuning@@QAEMH@Z  01029cc0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetBackgroundBomberDPS@cSPSpaceCombatTuning@@QAEMH@Z  01029d50  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetBackgroundTurretDPS@cSPSpaceCombatTuning@@QAEMH@Z  01029de0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetLootMinMoneyDrop@cSPSpaceCombatTuning@@QAEMH@Z  01029f60  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetLootMaxMoneyDrop@cSPSpaceCombatTuning@@QAEMH@Z  01029fd0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetLootUFOMoneyChance@cSPSpaceCombatTuning@@QAEMH@Z  0102a1d0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetLootCityMinMoneyDrop@cSPSpaceCombatTuning@@QAEMH@Z  0102a230  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetLootCityMaxMoneyDrop@cSPSpaceCombatTuning@@QAEMH@Z  0102a2a0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?f@Vec3Holder@@QAEPAUVec3@@XZ  0102a3e0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?GetTurretHealth@cSPSpaceCombatTuning@@QAEMH@Z  0102a780  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?LootChanceA@cSPSpaceCombatTuning@@QAEMH@Z  0102a840  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?LootChanceB@cSPSpaceCombatTuning@@QAEMH@Z  0102a8f0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?SP_CreateUFOForSolarOrGalaxy@@YAPAXHH@Z  0102ac50  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?FUN_0102adf0@@YA_NPAUObj4c@@@Z  0102adf0  /O2 /MD /Gy /TP /arch:SSE
+slices/s010297e0/s010297e0.cpp  ?FUN_0102ae60@@YA_NPAUObj4c@@@Z  0102ae60  /O2 /MD /Gy /TP /arch:SSE

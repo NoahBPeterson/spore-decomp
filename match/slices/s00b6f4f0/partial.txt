@@ -1,0 +1,22 @@
+# incomplete / approximate source: <va> <diff-bytes> <reason>
+00b6f570   -   cSPMissionManagerBase::Write (serialize signature 0x54361546 + cVarListSerializer):
+           not reconstructed (stub); partial
+00b6f650   -   mission-card panel RefreshAll (scan objects, best time, swap card, notify): not
+           reconstructed (stub); partial
+00b6f760   -   refresh tracked cards (SimTicker + HasMissionCard + add): not reconstructed (stub); partial
+00b6fa60   -   map<unsigned,AutoRefCount> lookup by key: not reconstructed (stub); partial
+00b6faa0   -   hashtable erase-by-key (chain unlink + release + delete): not reconstructed (stub); partial
+00b6fb20   -   read mission-strategy map from stream (ReadInt32/ReadObject/write into map): not
+           reconstructed (stub); partial
+00b6fc90   -   write mission-strategy map to stream (WriteUint32 + vtable +0x2c): not reconstructed
+           (stub); partial
+00b6fd80   -   notify all strategies in hashtable: not reconstructed (stub); partial
+00b6ff20   -   map find + insert on miss: not reconstructed (stub); partial
+00b6ffa0   -   hashtable helper: not reconstructed (stub); partial
+00b70070   -   hashtable helper: not reconstructed (stub); partial
+00b700f0   -   hashtable helper: not reconstructed (stub); partial
+00b70290   -   mission manager update: not reconstructed (stub); partial
+00b70410   -   mission manager update: not reconstructed (stub); partial
+00b705a0   -   mission manager helper: not reconstructed (stub); partial
+00b706a0   -   mission manager helper: not reconstructed (stub); partial
+00b707a0   -   mission manager helper: not reconstructed (stub); partial

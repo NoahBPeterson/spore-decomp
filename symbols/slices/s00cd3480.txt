@@ -1,0 +1,33 @@
+00cd3480 SP::cSPTribeMissionManager::Write  # PDB name (card)
+00cd3530 SP::cSPTribeMissionManager::Read  # PDB name (card, guessed pair)
+00cd35c0 Simulator::cTribeModeStrategy::cTribeModeStrategy_func??  # on-leave hook
+00cd3610 Simulator::cTribeModeStrategy::RefreshMissionCard  # Claude-coined
+00cd3650 Simulator::cTribeModeStrategy::ClearMissionCard  # Claude-coined
+00cd3670 Simulator::cTribeModeStrategy::SetMissionCard  # Claude-coined
+00cd36f0 SP::cTribeModeStrategy::ForEachStructure  # intrusive hashtable walk
+00cd3760 Simulator::cTribeModeStrategy::func??  # eastl hashtable find
+00cd37b0 SP::ReadSTLMapT  # PDB candidate
+00cd3920 SP::WriteSTLMapT  # Claude-coined
+00cd3ab0 Simulator::cTribeModeStrategy::~  # destructor
+00cd3b60 Simulator::cTribeModeStrategy::  # constructor
+00cd3bf0 Simulator::cTribeModeStrategy::SetMission  # Claude-coined
+00cd3e60 SP::GetCamRotateTrigger  # Claude-coined; FNV hash of "TRG-CamRotate*"
+00cd3f20 SP::SetTerrainSphereParam  # Claude-coined
+00cd3fb0 SP::SetTerrainTool  # Claude-coined
+00cd3fd0 SP::SetTerrainTool2  # Claude-coined
+00cd3ff0 SP::PostTerrainAction  # Claude-coined; switch -> trigger ids
+00cd4070 SP::cTribeModeStrategy::AsInterface  # PDB name (card)
+00cd40c0 SP::IsNonEmptyNPCTribe  # PDB name (card)
+00cd40f0 SP::cTribeModeStrategy::SetSelectedCreature  # PDB name (card)
+00cd4160 SP::cTribeModeStrategy::IsSelected  # PDB name (card)
+00cd4180 SP::cTribeModeStrategy::OnMouseDown  # Claude-coined
+00cd41d0 SP::cTribeModeStrategy::OnMouseWheel  # PDB name (card)
+00cd4220 SP::cTribeModeStrategy::OnMouseUp  # Claude-coined
+00cd4280 SP::cTribeModeStrategy::StartTribe  # Claude-coined; trigger/action posting
+00cd43c0 Simulator::cTribeModeStrategy::func??  # vcall 0x6c then FUN_00cc9630
+00cd43e0 SP::cTribeModeStrategy::RegisterCityHallAndStartCinematic  # PDB name (card)
+00cd4460 SP::TerrainHasKey  # Claude-coined
+00cd4490 SP::IsTribeStateReady  # Claude-coined
+00cd44a0 SP::TerrainNotHasKey  # Claude-coined
+00cd44e0 SP::WriteTerrainKey  # Claude-coined
+00cd4580 Simulator::cThemeMusicManager::cThemeMusicManager  # PDB name (card)

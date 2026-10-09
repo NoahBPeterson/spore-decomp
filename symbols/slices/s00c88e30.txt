@@ -1,0 +1,11 @@
+00c88e30 SP::cSpatialObject::funcE30  # PDB name (card); ray/sphere visibility test
+00c89020 SP::cSpatialObject::func78h  # PDB name (card); transform key by owner rotation
+00c890c0 SP::cSpatialObject::GetCommunityName  # PDB name (card)
+00c89160 SP::cSpatialObject::SetLocalExtents  # PDB name (callee-single)
+00c893b0 SP::cSpatialObject::func9Ch  # PDB name (card)
+00c893f0 SP::cSpatialObject::func93F0  # PDB name (card); scale-to-fit
+00c89630 SP::cSpatialObject::cSpatialObject  # PDB name (callee-single)
+00c897e0 SP::cSpatialObject::LocalToWorldTransform  # PDB name (callee-single)
+00c89890 SP::cSpatialObject::SetModel  # PDB name (card)
+00c898f0 SP::cSpatialObject::funcA4h  # PDB name (card); release model refs
+00c899a0 SP::cSpatialObject::func7Ch  # PDB name (card); screen-space projection test

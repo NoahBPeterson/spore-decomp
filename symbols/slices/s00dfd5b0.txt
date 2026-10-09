@@ -1,0 +1,10 @@
+00dfd5b0 Simulator::cEditorModeUI::Setup  # Claude-coined
+00dfd8a0 Simulator::cEditorModeUI::RebuildPanel  # Claude-coined
+00dfda50 Simulator::cEditorModeUI::QueryMissionFields  # Claude-coined
+00dfdc50 Simulator::cEditorModeUI::Setup2  # Claude-coined
+00dfde90 Simulator::cEditorModeUI::ResetPodSlots  # Claude-coined
+00dfdf10 eastl::pod_array<0x534>::~  # Claude-coined
+00dfdf70 eastl::pod_array<0x27e0>::~  # Claude-coined
+00dfdfe0 pod copy ctor (389B)  # Claude-coined
+00dfe170 variant-tagged object assignment  # Claude-coined
+00dfe220 SP::cSPUIMissions::UpdateMissionFieldsSpace  # PDB candidate (card)

@@ -1,0 +1,4 @@
+00c71da0 122  cPlanet::SetScale guarded by (b8 >= 0): complete clamp via FUN_00fc20e0 + MaxF/MinF. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 400/100%.
+00c71e30 24  cPlanet::GetEmpire: complete (b8dab0==5 -> d4 slot 0x4c -> StarManager -> GetEmpireByID). difftest WEAK 397/52%.
+00c71e70 101  cPlanet::PlanetSimActivate: complete (CreateNoun 0x3572e72 -> cast 0x3572e6c -> refcount swap -> c7e280/c82f00). difftest WEAK 326/15%.
+00c72370 45  cPlanet::IsPlayerEmpire: complete. difftest WEAK 212/50%.

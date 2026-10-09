@@ -1,0 +1,13 @@
+# source  symbol  original VA  [flags override]
+slices/s00cd3480/s00cd3480.cpp  ?F_cd35c0@TM@@QAEXHH@Z  00cd35c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3610@TM@@QAEXXZ  00cd3610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3650@TM@@QAEXXZ  00cd3650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3e60@TM@@QAEXXZ  00cd3e60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd40c0@@YAIPAX@Z  00cd40c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd4160@TM@@QAEEPAX@Z  00cd4160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd4460@TM@@QAEIH@Z  00cd4460  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd4490@TM@@QAE_NXZ  00cd4490  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3f20@@YAXI@Z  00cd3f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3fb0@@YAXH@Z  00cd3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ?F_cd3fd0@@YAXH@Z  00cd3fd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00cd3480/s00cd3480.cpp  ??0ThemeMgr@@QAE@XZ  00cd4580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

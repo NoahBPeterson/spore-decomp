@@ -1,0 +1,26 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00c02600/s00c02600.cpp  ?SP_IsValidNeighbourEntry@@YGHPAX@Z  00c02600  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02650@@YGHPAX@Z  00c02650  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02710@@YAHM@Z  00c02710  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02790@@YAHPAX@Z  00c02790  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c028b0@@YAHPAHD@Z  00c028b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?GetCurrentBrainLevel_00c02900@CreatureBase@@QAEHXZ  00c02900  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?SetCurrentBrainLevel_00c02950@CreatureBase@@QAEXH@Z  00c02950  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02970@CreatureBase@@QAEXH@Z  00c02970  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c029b0@CreatureBase@@QAEHXZ  00c029b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02c20@CreatureBase@@QAEXH@Z  00c02c20  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02c80@CreatureBase@@QAEXM@Z  00c02c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02c90@CreatureBase@@QAEXXZ  00c02c90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?UpdateHunger_00c02cb0@CreatureBase@@QAEXM@Z  00c02cb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?UpdateMotiveState_00c02df0@CreatureBase@@QAEXXZ  00c02df0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02e90@CreatureBase@@QAE_NXZ  00c02e90  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c02eb0@CreatureBase@@QAE_NPAU1@@Z  00c02eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c03120@CreatureBase@@QAEXD@Z  00c03120  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?SetIdentityColor_00c03210@CreatureBase@@QAEXPAUVec3@@@Z  00c03210  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c032c0@@YAPAHPAH00P6ADH@Z@Z  00c032c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c03300@@YAXPAPAM0@Z  00c03300  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c033d0@@YAMPAD@Z  00c033d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?Test_00c034d0@cPred@@QAEHPAUFruitRec@@@Z  00c034d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c03520@@YGHPAUObjB@@@Z  00c03520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c03570@CreatureBase@@QAEPAUVec3v@@PAU2@PAD@Z  00c03570  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast
+slices/s00c02600/s00c02600.cpp  ?FUN_00c035b0@CreatureBase@@QAEXH@Z  00c035b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast

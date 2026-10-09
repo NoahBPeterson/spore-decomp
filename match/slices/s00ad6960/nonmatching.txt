@@ -1,0 +1,7 @@
+# va  diff-bytes  reason
+00ad7170  58   complete; 4-float NaN/Inf predicate (abs-mask < 0x7f800001), compare order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (93.1% cov)
+00ad7200  86   complete; FNV1 string-hash -> enum switch (build-type ids), tree order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (63.6% cov)
+00ad73a0  70   complete; refcounted-pointer range assign (sub-object +8 AddRef/Release); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (18.4% cov)
+00ad7400  20   complete; reverse refcounted-pointer range assign; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (18.4% cov)
+00ad75c0  50   complete; UI layout Shutdown + subtitle clear; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (23.1% cov)
+00ad7940  36   complete; cActionTarget ctor (global float triples + ones/zeros), store order differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest PASS (100% cov)

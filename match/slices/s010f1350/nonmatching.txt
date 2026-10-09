@@ -1,0 +1,4 @@
+# <va> <diff-bytes> <reason>
+010f19b0 58 complete hkContinuousSimulation ctor helper (vtables, ring/array fields, hkMemory alloc vtable+0x10 of 0xc/0x12, hkDefaultToiResourceMgr ctor); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (unresolved hkMemoryAlloc)
+010f1a10 55 complete hkContinuousSimulation dtor (vtable, resource-manager release slot 0, deallocateChunk for the 0x20 array, reset vtable); flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (ecx ABI - thiscall)
+010f1a60 17 complete hkContinuousSimulation::resetCollisionInformationForEntities (FUN_01099cb0(a,b,c) + thiscall f0bb0(a,b), ret 0xc); calling-convention/register allocation differs; flags /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid)

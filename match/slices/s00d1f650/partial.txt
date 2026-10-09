@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+00d1f650  -  SP::CanUseAbility: partial; the 962-byte ability dispatch switch (cases 0x11..0x56) is stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00d1fb30  -  ability validity scan: partial; switch + eastl::vector<cSpatialObject*> terrain scan stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00d1fe00  -  ability activation: partial; switch + per-object tool checks stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00d200a0  -  ability range scoring: partial; terrain-object scan loop stubbed. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00d201f0  -  SP::cTribeGameBehaviorFish::Score: partial; tool-type dispatch modelled, terrain-object match loop omitted. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.

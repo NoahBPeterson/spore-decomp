@@ -1,0 +1,8 @@
+00ebb4c0  598  PARTIAL: waypoint advance; the radius/water/planet-surface clamping blocks are stubbed (only the copy-forward and the FUN_00eba860/FUN_00eba7f0 tails are present).
+00ebb720  254  PARTIAL: path update; the spline/segment setup and the two final virtual callbacks are stubbed.
+00ebb8b0  199  PARTIAL: game-mode/terraforming gate; the space-game and planet-record branches are stubbed.
+00ebb980  385  PARTIAL: current position/target direction query; body stubbed.
+00ebbd70  121  PARTIAL: rbtree insert; operator_new/node init approximated, uVar2 condition may be inverted.
+00ebbf00  90   PARTIAL: rbtree destructor; DoNukeSubtree and vtable restoration approximated.
+00ebbfb0  360  PARTIAL: waypoint cull/update walk; body stubbed.
+00ebc1a0  321  PARTIAL: growable array push_back with 0x50-byte element move (FUN_00ebbdf0/FUN_00ebbe30 calls approximated).

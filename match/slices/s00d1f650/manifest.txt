@@ -1,0 +1,6 @@
+# source  symbol  original VA  [flags override]
+slices/s00d1f650/s00d1f650.cpp  ?Init@Cam@@QAEEH@Z  00d203d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d1f650/s00d1f650.cpp  ?Deactivate@Cam@@QAEXXZ  00d203e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d1f650/s00d1f650.cpp  ?OnKeyDown@Cam@@QAEEHH@Z  00d204c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d1f650/s00d1f650.cpp  ?OnKeyUp@Cam@@QAEEHH@Z  00d204e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00d1f650/s00d1f650.cpp  ?OnMouseUp@Cam@@QAEEHMMH@Z  00d20500  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

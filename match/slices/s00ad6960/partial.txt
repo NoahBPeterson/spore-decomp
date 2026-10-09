@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00ad6960  900  approximate; addObject command Execute (constructs refcounted spec + BehaviorMessage); mostly stubbed; difftest UNSUPPORTED (symbol not found)
+00ad6b00  130  approximate; AddReferencableObject ctor (ArgScript spec registration, many args omitted); difftest UNSUPPORTED (ecx)
+00ad6bc0  900  approximate; addActor command Execute; mostly stubbed; difftest UNSUPPORTED (symbol not found)
+00ad6ec0  28   approximate; cCommand dtor (free [this+0xdc], spec/base dtors); difftest FAIL
+00ad6f10  28   approximate; BehaviorRule scalar deleting dtor; difftest FAIL
+00ad6f40  316  approximate; simulator command registrar (7 trigger commands); difftest UNSUPPORTED (0/400 valid)
+00ad7470  200  approximate; UI/Gonzago resource dtor (17 refcounted members + eastl); loop shape differs; difftest FAIL
+00ad7610  8    approximate; tail-call to widget vtable+0x80 after 0x685520(2); arg/stack shape differs; difftest FAIL (esp)
+00ad7670  30   approximate; subtitle set widget show + cSPUISubtitles::Set; difftest UNSUPPORTED (0/400 valid)
+00ad76c0  30   approximate; hide widget + subtitle Set(0,1,0,1,0); difftest UNSUPPORTED (0/400 valid)

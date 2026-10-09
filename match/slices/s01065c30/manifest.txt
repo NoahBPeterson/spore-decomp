@@ -1,0 +1,6 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01065c30/s01065c30.cpp  ?isStateSpecial@T5d20@@QAE_NXZ  01065e20  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?ShowToolChargeBar@SPUISpace@@QAEXXZ  01065ea0  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?HideToolChargeBar@SPUISpace@@QAEXXZ  01065ed0  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?ToggleStarmapFilters@SPUISpace@@QAEXH@Z  01066200  /O2 /MD /Gy /TP /arch:SSE
+slices/s01065c30/s01065c30.cpp  ?FUN_010666a0@@YAPAXXZ  010666a0  /O2 /MD /Gy /TP /arch:SSE

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00acd4a0  400  complete; creature-record vector clearing (nouns removed + eastl copy_impl compact), control flow/schedule differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (240 valid, 10.6% cov)
+00acd6c0  154  complete; msg dispatch (0x1a0219e / 0x6130eb9) + packed-record handling; flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (399 valid, 42.4% cov)
+00acd790  296  complete; cSPCreatureBase active-planet animal respawn (tree clump data, 5 in sandbox mode); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; difftest WEAK (308 valid, 22.4% cov)

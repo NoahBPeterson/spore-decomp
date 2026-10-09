@@ -1,0 +1,5 @@
+00c7c220 Simulator::cGameData::RemoveOwner  # PDB
+00c7c6d0 Simulator::cGameData::SetGameDataOwner  # PDB
+00c7c7c0 Simulator::ISimulatorSerializable::Read  # PDB
+00c7cde0 Simulator::cRock::cRock  # vtable/PDB
+00c7d090 Simulator::cRock compare  # vtable candidate
