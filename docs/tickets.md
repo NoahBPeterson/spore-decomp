@@ -9,7 +9,7 @@ Counts are from all `work/difftest/*.json` result files (snapshot 2026-10-09).
 
 | # | cause | count | status | fix idea |
 |---|---|---:|---|---|
-| 1 | unresolved references (our calls/globals have no `// 0x<VA>`) | 774 fns / 368 slices | **in progress** (subagent adding annotations) | add the real address on the declaration's own line; sources: `symbols/lib_names.txt`, `symbols/slices/*`, `tools/pdb_symbols.py`, sibling slices |
+| 1 | unresolved references (our calls/globals have no `// 0x<VA>`) | 774 fns / 368 slices | **470 fixed** (268 slices, `29f93a0f`); 304 remain | done via slice-local `// 0x<VA>` decl annotations + `__equiv_ann` dummy structs for out-of-slice classes. Remaining: 28 × `__except_list` (SEH `mov eax,fs:[0]` — not a pointer at VA 0, so a VA-range relaxation alone won't emulate it; needs fs:[0]/SEH modelling), ~276 with no address anywhere in corpus/dev-PDB |
 | 2 | inputs discarded — `fault(read)` | 672 | todo | random inputs can't build a valid object graph (manager/object deref). Add a **seed corpus of real objects** / pointer-soup seeding for pointer-to-object args |
 | 3 | our symbol not found | 669 | todo | checker can't find our emitted symbol: fix mangling/`thiscall` signature mismatches, force emission (avoid it being inlined away), accept a `sym=` hint in the marker |
 | 4 | original reads `ecx`/`eax` at entry, our decl passes nothing | 259 | needs analysis | custom/LTCG **register ABI** or a guessed signature. Model the register argument, or fix the signature |
