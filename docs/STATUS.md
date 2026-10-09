@@ -12,18 +12,18 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 | Functions, byte-exact | 8407 | 9.52% | 0.51 MB | 3.56% | free (non-member) functions |
 | Classes, templates, byte-exact | 13429 | 15.21% | 1.08 MB | 7.54% | member functions and template instantiations |
 | Globals, other code, byte-exact | 31084 | 35.21% | 1.21 MB | 8.49% | static initializers/destructors of globals, compiler stubs; 16626 of these written as a plain function rather than `T g = ...;` (shape-only) |
-| Functions, equivalent but not exact | 2596 | 2.94% | 1.60 MB | 11.25% |  |
-| Classes, templates, equivalent | 5601 | 6.34% | 2.92 MB | 20.46% |  |
+| Functions, equivalent but not exact | 2599 | 2.94% | 1.60 MB | 11.26% |  |
+| Classes, templates, equivalent | 5603 | 6.35% | 2.92 MB | 20.47% |  |
 | Globals, other code, equivalent | 43 | 0.05% | 0.04 MB | 0.30% |  |
-| Other: partial source | 4105 | 4.65% | 1.63 MB | 11.46% | incomplete or approximate source, not counted as decompiled |
+| Other: partial source | 4100 | 4.64% | 1.63 MB | 11.44% | incomplete or approximate source, not counted as decompiled |
 | Other: no source yet | 23028 | 26.08% | 5.26 MB | 36.94% | Ghidra pseudocode only (readable, not compilable) |
-| **Total with compilable source** | 61160 | 69.27% | 7.35 MB | 51.60% |  |
+| **Total with compilable source** | 61165 | 69.28% | 7.36 MB | 51.62% |  |
 | Game functions (denominator) | 88293 | 100.00% | 14.25 MB | 100.00% |  |
 
 | Component | Functions | Byte-exact | Byte-exact (by size) | With compilable source | Code size | With source (by size) |
 |---|---:|---:|---:|---:|---:|---:|
 | Havok 3.1.0 | 2118 | 564 (26.63%) | 3.67% | 1169 (55.19%) | 0.66 MB | 51.04% |
-| RenderWare | 1944 | 412 (21.19%) | 4.50% | 941 (48.41%) | 0.43 MB | 46.12% |
+| RenderWare | 1944 | 412 (21.19%) | 4.50% | 946 (48.66%) | 0.43 MB | 46.80% |
 | EA framework (UTFSpore) | 6382 | 1988 (31.15%) | 11.71% | 2831 (44.36%) | 1.22 MB | 36.87% |
 | Spore game code (everything else) | 77849 | 49956 (64.17%) | 21.83% | 56219 (72.22%) | 11.95 MB | 53.33% |
 
