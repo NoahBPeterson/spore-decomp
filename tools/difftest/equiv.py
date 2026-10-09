@@ -1539,9 +1539,29 @@ def cpu_slot():
 def test_function(sid, va, opts, log=print):
     fd = cpu_slot()
     try:
-        return _test_function(sid, va, opts, log)
+        r = _test_function(sid, va, opts, log)
     finally:
-        os.close(fd)          # releases the flock
+        os.close(fd)
+    _ledger(r)
+    return r
+
+
+def _ledger(r):
+    """Append one line per function result to work/opencode/attempts.jsonl (never in git).
+    Model attribution comes from $OPENCODE_LEDGER_MODEL (set by the wave runners); empty if unset."""
+    try:
+        rec = {"t": int(time.time()), "slice": r.get("slice"), "va": r.get("va"),
+               "verdict": r.get("verdict"), "seconds": r.get("seconds"),
+               "coverage": (r.get("coverage") or {}).get("pct"), "all": (r.get("coverage") or {}).get("all"),
+               "valid": r.get("valid"), "inputs": r.get("inputs"), "orig_size": r.get("orig_size"),
+               "wave": os.environ.get("OPENCODE_LEDGER_WAVE", ""),
+               "model": os.environ.get("OPENCODE_LEDGER_MODEL", "")}
+        p = os.path.join(S.ROOT, "work", "opencode", "attempts.jsonl")
+        os.makedirs(os.path.dirname(p), exist_ok=True)
+        with open(p, "a") as f:
+            f.write(json.dumps(rec) + "\n")
+    except Exception:
+        pass          # releases the flock
 
 
 def _test_function(sid, va, opts, log=print):
