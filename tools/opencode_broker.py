@@ -76,7 +76,7 @@ def ok_path(p):
 import ast
 SAFE_MODULES = {"json", "re", "struct", "collections", "math", "itertools", "bisect", "glob", "csv", "pefile", "capstone",
                 "functools", "string", "textwrap", "pprint", "binascii", "hashlib", "operator", "sys", "os", "cmpobj", "card", "difflib",
-                "unicorn", "equiv", "shlex", "slice", "coff", "machine", "resolve", "sig", "emu", "smoke", "batch", "smoke"}
+                "unicorn", "equiv", "shlex", "pickle", "slice", "coff", "machine", "resolve", "sig", "emu", "smoke", "batch", "smoke"}
 BAD_NAMES = {"exec", "eval", "compile", "__import__", "input", "breakpoint", "globals", "locals", "setattr", "delattr"}
 BAD_ATTRS = {"write", "writelines", "remove", "unlink", "rename", "replace", "rmdir", "rmtree", "mkdir", "makedirs",
              "system", "popen", "run", "call", "check_call", "check_output", "Popen", "spawn", "kill", "chmod", "chown",
@@ -84,25 +84,38 @@ BAD_ATTRS = {"write", "writelines", "remove", "unlink", "rename", "replace", "rm
 
 
 def safe_python(code):
-    """True if the inline Python only reads: whitelisted imports, open() in read mode, no write/exec/process calls."""
+    """True if the inline Python only reads: whitelisted imports, open() in read mode, no write/exec/process calls.
+    pickle is a code-execution sink: when it is imported, pickle.loads is rejected and every open() must name a
+    literal path under work/difftest/ (the checker's own trusted test data, which workers cannot write).
+    """
     try:
         tree = ast.parse(code)
     except SyntaxError:
         return False
+    pickle_imp = False
     for n in ast.walk(tree):
         if isinstance(n, (ast.Import, ast.ImportFrom)):
             mods = [a.name for a in n.names] if isinstance(n, ast.Import) else [n.module or ""]
             if any(m.split(".")[0] not in SAFE_MODULES for m in mods):
                 return False
+            if any(m.split(".")[0] == "pickle" for m in mods):
+                pickle_imp = True
         elif isinstance(n, ast.Name) and n.id in BAD_NAMES:
             return False
         elif isinstance(n, ast.Attribute) and n.attr in BAD_ATTRS:
             return False
+        elif (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr == "loads"
+              and isinstance(n.func.value, ast.Name) and n.func.value.id == "pickle"):
+            return False  # unpickling bytes that are not a repo-local file
         elif isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == "open":
             mode = n.args[1] if len(n.args) > 1 else next((k.value for k in n.keywords if k.arg == "mode"), None)
             if mode is not None and not (isinstance(mode, ast.Constant) and isinstance(mode.value, str)
                                          and set(mode.value) <= set("rbt")):
                 return False
+            if pickle_imp:
+                a0 = n.args[0] if n.args else None
+                if not (isinstance(a0, ast.Constant) and isinstance(a0.value, str) and "work/difftest/" in a0.value):
+                    return False  # only unpickle files the checker wrote
     return True
 
 
