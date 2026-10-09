@@ -19,6 +19,15 @@ static inline int RwFloat2Int(float f)
     return r;
 }
 
+// Truncating variant (cvttss2si), used where the original truncates (e.g. mFrameSamples).
+static inline int RwFloat2IntTrunc(float f)
+{
+    int r;
+    __asm { cvttss2si eax, f }
+    __asm { mov r, eax }
+    return r;
+}
+
 // ---------------------------------------------------------------- filesys Stream (PDB candidates)
 struct Stream {
     void* GetChunk();                 // 0x011e6b50
@@ -184,7 +193,7 @@ void AiffPlayer_reset(AiffPlayer* self)
     self->mHandle = FUN_0113f1d0(&AiffPlayer_releaseBuffer, 0, self, &self->mEvent, size);
 
     AiffFormat* fmt = self->mpFormat;
-    self->mFrameSamples = (int16_t)(float)self->mFrameRate;   // cvttss2si [self+0xb4]
+    self->mFrameSamples = (int16_t)RwFloat2IntTrunc(self->mFrameRate);   // cvttss2si [self+0xb4]
     self->mBits = 8;
     self->mChannels = (uint8_t)self->mBlockAlign;             // byte at +0xb8
     self->mPuller.b5 = 0x7f;
@@ -540,7 +549,7 @@ AiffPlayer* AiffPlayer_create(void* fmt, void* data, int len)
         self->mCodecType = 4;
 
     AiffFormat* f = self->mpFormat;
-    self->mFrameSamples = (int16_t)(float)self->mFrameRate;
+    self->mFrameSamples = (int16_t)RwFloat2IntTrunc(self->mFrameRate);
     self->mBits = 8;
     self->mChannels = (uint8_t)self->mBlockAlign;
     self->mPuller.b5 = 0x7f;

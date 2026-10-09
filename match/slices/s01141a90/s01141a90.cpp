@@ -148,6 +148,9 @@ extern "C" void FUN_01142270(float, float, float*, float*);  // 0x1142270
 
 typedef int (__cdecl *MixDecodeFn)(void*, void*);
 typedef int (__cdecl *MixCodecFn)(void*, int, void*, void*, int);
+// Function (not pointer) type: calling through a plain function-type pointer makes
+// MSVC materialise the target in a register, matching the original's mov/call pair.
+typedef int MixCodecFnT(void*, int, void*, void*, int);
 typedef int (__cdecl *StretchFn)(int, float, float*, float*);
 
 // ===========================================================================
@@ -494,34 +497,33 @@ extern "C" void FUN_01142270(float a, float b, float* c, float* d)
 // @ 0x01142470
 extern "C" int FUN_01142470(MixVoice* v)
 {
-    int r = (*(MixCodecFn*)v->p40)(v->p40, 0x10, g_16e8120, g_16e8124, 0);
+    int r = (*(MixCodecFnT**)(*(void**)((char*)v + 0x40)))(
+        *(void**)((char*)v + 0x40), 0x10, g_16e8120, g_16e8124, 0);
     if (r > 0) {
         v->f3c = g_16e8124[15];
         for (int i = 0; i < g_numChannels; i++) {
             if (g_16e8084[i] != 0) {
                 float f1 = v->p38[i];
                 float f2 = v->p34[i];
-                if (f2 == f1) {
-                    if (f1 != 0.0f)
-                        ((StretchFn)g_16e8178)(0x10, f1, g_16e8124,
-                                               (float*)(size_t)g_16f16fc[i]);
-                } else {
+                if (f2 != f1) {
                     FUN_01142270(f2, f1, g_16e8124, (float*)(size_t)g_16f16fc[i]);
                     v->p34[i] = v->p38[i];
+                } else if (f1 != 0.0f) {
+                    ((StretchFn)g_16e8178)(0x10, f1, g_16e8124,
+                                           (float*)(size_t)g_16f16fc[i]);
                 }
             }
         }
         for (int i = 0; i < (int)g_numOutputs; i++) {
             float f1 = *(float*)((char*)v + 0x1c + i * 4);
             float lo = *(float*)((char*)v + 0x04 + i * 4);
-            if (lo == f1) {
-                if (f1 != 0.0f)
-                    ((StretchFn)g_16e8178)(0x10, f1, g_16e8124,
-                                           (float*)(size_t)g_16e8140[i]);
-            } else {
+            if (lo != f1) {
                 FUN_01142270(lo, f1, g_16e8124,
                              (float*)(size_t)g_16e8140[i]);
                 *(float*)((char*)v + 0x04 + i * 4) = *(float*)((char*)v + 0x1c + i * 4);
+            } else if (f1 != 0.0f) {
+                ((StretchFn)g_16e8178)(0x10, f1, g_16e8124,
+                                       (float*)(size_t)g_16e8140[i]);
             }
         }
         return 0x10;

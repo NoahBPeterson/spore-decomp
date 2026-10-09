@@ -101,7 +101,38 @@ public:
     bool mNewFeed;                            // +0x55
 
     void SkipBlocks();
-    int DecodeEvent(char* param_2);
+
+    // The decode callback the base Decoder invokes.  It reaches its two
+    // operands (the instance and the caller's sample-buffer descriptor) from
+    // the stack -- the binary does NOT read `this` from ecx -- so it is a
+    // static member, i.e. an ordinary __cdecl function.
+    static int DecodeEvent(EaLayer3DecBase* self, char* param_2);
+};
+
+// Per-core EALayer3 decoder object, reached through
+// EaLayer3DecBase::mpLoadedEALayer3Core.  These three helpers are what the
+// request-descriptor parser drives; each pops its own stack arguments
+// (ret 4 / ret 8), so they must be real __thiscall member functions.
+class EALayer3DecCore {
+public:
+    void Feed(unsigned char* p, int flag);   // 0x0115cc60
+    void SetBuffer(unsigned char* p);         // 0x01148a00
+    int  Decode(int* outPtrs);                // 0x0115ccb0
+};
+
+// Stack frame header filled by the two EALayer3 header helpers.
+struct EALayer3FrameHdr {
+    int field00;      // +0x00
+    int headerSize;   // +0x04  bytes of header to skip (2 or 6)
+    int field08;      // +0x08
+    int field0C;      // +0x0c
+    int field10;      // +0x10
+    int field14;      // +0x14
+    int field18;      // +0x18
+    int field1C;      // +0x1c  framing mode
+
+    unsigned int Parse(const unsigned char* p);  // 0x0115b470
+    int CalcSize();                              // 0x0115b440
 };
 
 class HELPER_CEALayer3DecF {
@@ -466,16 +497,224 @@ int Decoder::GetCurrentRequestDesc(char* param_2, int* param_3, int param_4,
                                    unsigned int* param_5, unsigned int* param_6,
                                    unsigned int* param_7, int param_8)
 {
-    (void)param_2; (void)param_3; (void)param_4;
-    (void)param_5; (void)param_6; (void)param_7; (void)param_8;
-    return 0;
+    EALayer3FrameHdr hdr;
+    unsigned int out[4];
+    int nChans = param_8;
+    int local_30 = 0;
+    int tail;
+    int i;
+    char* pcVar2 = 0;
+    EALayer3DecCore* core = (EALayer3DecCore*)param_4;
+    EaLayer3DecBase* self = (EaLayer3DecBase*)this;  // called on the derived instance
+
+    out[0] = 0;
+    if (self->mVersion == 0) {
+        // v1 header is not framed: a leading 0xEE marks raw-sample payload.
+        if (*(unsigned char*)param_2 == 0xEE)
+            out[0] = 1;
+        param_8 = 1;
+        pcVar2 = param_2 + 1;
+    } else {
+        param_8 = (int)hdr.Parse((const unsigned char*)param_2);
+        if (hdr.headerSize == 0)
+            goto LAB;
+        pcVar2 = param_2 + hdr.headerSize;
+    }
+    if (pcVar2 != 0) {
+        if (self->mNewFeed != 0)
+            core->Feed((unsigned char*)pcVar2, 0);
+        else
+            core->SetBuffer((unsigned char*)pcVar2);
+        if (core->Decode(param_3) < 0) {
+            i = 0;
+            if (nChans > 0) {
+                do {
+                    memset((void*)param_3[i], 0,
+                           (unsigned int)*(unsigned short*)((char*)param_4 + 0x14) * 4);
+                    ++i;
+                } while (i < nChans);
+            }
+        }
+    }
+LAB:
+    out[2] = 0;
+    if (self->mVersion == 0) {
+        *param_5 = 0x240;
+        *param_6 = 0;
+        if (self->mLatency > 0) {
+            unsigned int cur = *param_5;
+            if (self->mLatency < (int)cur) {
+                *param_6 = (unsigned int)self->mLatency;
+                *param_5 = cur - (unsigned int)self->mLatency;
+                local_30 = self->mLatency;
+            } else {
+                *param_6 = cur;
+                *param_5 = 0;
+            }
+        }
+    } else {
+        *param_5 = (unsigned int)hdr.CalcSize();
+        if (hdr.field1C == 0)
+            local_30 = hdr.field18;
+        else if (hdr.field1C == 2)
+            out[2] = (unsigned int)hdr.field18;
+    }
+    if (self->mSkipSamples > 0) {
+        unsigned int cur = *param_5;
+        if (self->mSkipSamples < (int)cur) {
+            *param_7 = (unsigned int)self->mSkipSamples;
+            *param_5 = cur - (unsigned int)self->mSkipSamples;
+            local_30 += self->mSkipSamples;
+        } else {
+            *param_7 = cur;
+            *param_5 = 0;
+        }
+    }
+    if (self->mVersion == 0) {
+        param_8 += *(int*)((char*)param_4 + 0x10);
+        if (out[0] != 0) {
+            i = 0;
+            if (nChans > 0) {
+                do {
+                    out[i] = (unsigned int)param_3[i] + *param_6 * 4;
+                    ++i;
+                } while (i < nChans);
+            }
+            param_8 += DecodeRawSamples((unsigned char*)(param_2 + param_8),
+                                        (int)out, param_4);
+        }
+    } else {
+        if (hdr.field10 > 0) {
+            i = 0;
+            if (nChans > 0) {
+                do {
+                    out[i] = (unsigned int)param_3[i] + (unsigned int)hdr.field18 * 4;
+                    ++i;
+                } while (i < nChans);
+            }
+            ConvertSamples((int*)out, (unsigned char*)(param_2 + hdr.field0C),
+                           nChans, (unsigned int)hdr.field10);
+        }
+    }
+    if ((int)*param_5 > 0 && local_30 > 0) {
+        i = 0;
+        if (nChans > 0) {
+            do {
+                char* dst = (char*)param_3[i];
+                memmove(dst, dst + local_30 * 4, (unsigned int)*param_5 * 4);
+                ++i;
+            } while (i < nChans);
+        }
+    }
+    tail = (int)out[2] - local_30;
+    if (tail > 0) {
+        i = 0;
+        if (nChans > 0) {
+            do {
+                memset((void*)param_3[i], 0, (unsigned int)tail * 4);
+                ++i;
+            } while (i < nChans);
+        }
+    }
+    return param_8;
 }
 
 // @ 0x01149d60
-int EaLayer3DecBase::DecodeEvent(char* param_2)
+int EaLayer3DecBase::DecodeEvent(EaLayer3DecBase* self, char* param_2)
 {
-    (void)param_2;
-    return -1;
+    unsigned int local_18 = 0;    // latency samples consumed
+    unsigned int local_14 = 0;    // skip samples consumed
+    int produced = 0;             // samples the request parser produced
+    int local_8[2];
+    unsigned char* local_c;
+    int coreIdx;
+    int chanOff;
+    int i;
+
+    // No request descriptor loaded?  Pull the next one off the inline ring.
+    if (self->mRemainingSamples < 1) {
+        unsigned char* desc = (unsigned char*)self + self->mRequestDescOffset
+                              + (unsigned int)self->mPrepareSlot * 0x14;
+        if (*(int*)(desc + 0xc) == 0) {
+            desc = 0;
+        } else {
+            self->mPrepareSlot++;
+            if (self->mPrepareSlot >= self->mMaxSlots)
+                self->mPrepareSlot = 0;
+        }
+        if (*(unsigned char*)(desc + 0x10) == 0) {
+            self->mNewFeed = true;
+            self->mLatency = 0x451;
+            self->mSkipSamples = 0;
+        }
+        self->mpEncodedSample = *(unsigned char**)(desc + 0x00);
+        self->mSkipSamples = *(int*)(desc + 0x08);
+        self->mRemainingSamples = *(int*)(desc + 0x0c) - *(int*)(desc + 0x08);
+        if (self->mSkipSamples > 0)
+            self->SkipBlocks();
+    }
+
+    local_18 = 0;
+    local_14 = 0;
+    produced = 0;
+    do {
+        local_c = self->mpEncodedSample;
+        coreIdx = 0;
+        chanOff = 0;
+        if (self->mNumEaLayer3CoreInstances > 0) {
+            do {
+                self->mpLoadedEALayer3Core = self->mppEaLayer3Core[coreIdx];
+                int count = (coreIdx != self->mTotalChannels / 2) + 1;
+                unsigned short stride = *(unsigned short*)(param_2 + 0xe);
+                int stride4 = (int)stride * 4;
+                {
+                    unsigned char* base = (unsigned char*)
+                        (*(int*)(param_2 + 4) + chanOff * (int)stride * 4);
+                    int* outp = local_8;
+                    for (i = 0; i < count; ++i) {
+                        *outp = (int)base;
+                        base += stride4;
+                        ++outp;
+                    }
+                }
+                int r = self->GetCurrentRequestDesc((char*)self->mpEncodedSample,
+                            local_8, (int)self->mpLoadedEALayer3Core,
+                            (unsigned int*)&produced, &local_18, &local_14, count);
+                if (r < 0) {
+                    for (i = 0; i < (int)(unsigned int)self->mNumChannels; ++i)
+                        memset((void*)(*(int*)(param_2 + 4) +
+                                       (int)*(unsigned short*)(param_2 + 0xe) * i * 4),
+                               0, 0x900);
+                    self->mpEncodedSample = local_c;
+                    return -1;
+                }
+                self->mpEncodedSample += r;
+                ++coreIdx;
+                chanOff += 2;
+            } while (coreIdx < self->mNumEaLayer3CoreInstances);
+        }
+        if (self->mNewFeed)
+            self->mNewFeed = false;
+        if (self->mLatency > 0)
+            self->mLatency -= (int)local_18;
+        if (self->mSkipSamples > 0)
+            self->mSkipSamples -= (int)local_14;
+        i = 0;
+        if (self->mNumChannels != 0) {
+            do {
+                unsigned short stride = *(unsigned short*)(param_2 + 0xe);
+                ScaleSamples((float*)(*(int*)(param_2 + 4) + (int)stride * i * 4),
+                             3.0517578125e-05f, produced);
+                ++i;
+            } while (i < (int)(unsigned int)self->mNumChannels);
+        }
+    } while (produced < 1);
+
+    if (self->mRemainingSamples < produced)
+        produced = self->mRemainingSamples;
+    if (self->mRemainingSamples >= 0)
+        self->mRemainingSamples -= produced;
+    return produced;
 }
 
 }}} // namespace rw::audio::core

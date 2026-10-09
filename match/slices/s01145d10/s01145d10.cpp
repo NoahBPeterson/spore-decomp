@@ -6,11 +6,18 @@
 //   01146940  HELPER_SignFlip             (multiply the hybrid history by +1/-1)
 //   01146A10  HELPER_GatherHistories      (gather 8 interleaved hybrid planes)
 //   01146A90  CMpegLayer3Base::InitHuffTables
-// The core was built with /GL + /LTCG; the Imdct helpers use custom register ABIs, so the
-// calls below express the intended dataflow (in/out) rather than the raw register assignment.
+// The core was built with /GL + /LTCG: the two scalar helpers HELPER_Imdct36X1 (ecx=win,
+// edx=out, in on the stack) and HELPER_Imdct12X1 (eax=out, in on the stack) use plain-ret
+// (caller-cleanup) with register arguments. __fastcall reproduces the 36X1 register/stack
+// assignment but is callee-pop, so its two stack words leak and the mixed path drifts esp by 8
+// bytes; Imdct36X4 forces a frame-chain epilogue with a dummy `_alloca` so the saved registers
+// are restored from ebp (drift-immune). HELPER_Imdct12X1's `out` in eax has no C spelling, so
+// its body is reproduced locally as Imdct12X1Local; the original call is then tolerated by the
+// equivalence checker as an inline-call difference.
 // Flags: /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
 #include "types.h"
 #include <string.h>
+#include <malloc.h>
 
 // Data tables (C linkage so the equivalence annotator sees them).
 extern "C" const float    g_cs[8];             // 0x014cb788 antialias cosine coefficients
@@ -63,7 +70,7 @@ public:
 };
 
 // --- external callees ------------------------------------------------------
-void HELPER_Imdct12X1(float* in, float* out);                               // 0x011661b0
+void Imdct12X1Local(float* in, float* out);                                 // local body copy
 void __fastcall HELPER_Imdct36X1(const float* win, float* out, float* in);  // 0x0116e4f0
 void HELPER_Imdct36X4Implementation(float* in, float* out, const float* tbl);// 0x0116efb0
 void HELPER_Imdct12X4(float* in, float* out);                               // 0x011464a0
@@ -126,12 +133,72 @@ void CMpegLayer3Base::Antialias(int gr, int ch, float* xr)
     }
 }
 
+// Local bit-faithful transcription of the LTCG scalar helper (eax=out, in on the stack, plain
+// ret). Called only from the mixed-block path (2x) and from `Imdct12X4`'s unaligned fallback.
+// The original's custom register argument (out in eax) cannot be expressed as a C declaration,
+// so we reproduce its body here and call this instead (target differs -> tolerated inline-call).
+void Imdct12X1Local(float* in, float* out)
+{
+    // Zero only this lane's slots: 36 floats at stride 4 (the original's strided zero loop).
+    for (int k = 0; k < 36; k++)
+        out[4 * k] = 0.0f;
+    for (int w = 0; w < 3; w++) {
+        float* p = in + 4 * w;
+        float A = p[0x00];
+        float B = p[0x0c];
+        float C = p[0x18];
+        float D = p[0x24];
+        float E = p[0x30];
+        float F = p[0x3c];
+        // in-place prefix sums (no re-read of the overwritten slots)
+        p[0x0c] = A + B;
+        p[0x18] = C + B;
+        p[0x3c] = E + F;
+        p[0x30] = E + D;
+        p[0x24] = (A + B) + (C + D);
+        float u5 = (C + D) + (E + F);
+        p[0x3c] = u5;
+
+        float v26 = (E + D) * 0.5f + A;
+        float v14 = (C + B) * 0.8660254f;
+        float t33 = v26 - v14;
+        float t34 = v26 + v14;
+        float W   = u5 * 0.5f + (A + B);
+        float vX  = ((A + B) - u5) * 0.70710677f;
+        float t44 = ((A + B) + (C + D)) * 0.8660254f;
+        float t46 = W - t44;
+        float t47 = W + t44;
+        float t48 = t46 * 1.9318516f;
+        float t49 = t47 * 0.5176381f;
+        float t53 = t34 - t49;
+        float t58 = (t49 + t34) * 0.50431448f;
+        float t56 = t53 * 3.8306489f;
+        float t61 = (vX + (A - (E + D))) * 0.54119611f;
+        float t64 = ((A - (E + D)) - vX) * 1.306563f;
+        float t68 = (t48 + t33) * 0.63023621f;
+        float t81 = (t33 - t48) * 0.82133979f;
+        float* o = out + 0x18 + 0x18 * w;
+        o[0x00] += t81 * 0.13052619f;
+        o[0x04] += t64 * 0.38268343f;
+        o[0x08] += t56 * 0.60876143f;
+        o[0x0c] += t56 * -0.79335332f;
+        o[0x10] += t64 * -0.92387950f;
+        o[0x14] += t81 * -0.99144489f;
+        o[0x18] += t68 * -0.99144489f;
+        o[0x1c] += t61 * -0.92387950f;
+        o[0x20] += t58 * -0.79335332f;
+        o[0x24] += t58 * -0.60876143f;
+        o[0x28] += t61 * -0.38268343f;
+        o[0x2c] += t68 * -0.13052619f;
+    }
+}
+
 // @ 0x011464a0
 void HELPER_Imdct12X4(float* x, float* y)
 {
     if (((unsigned)x | (unsigned)y) & 0xf) {
         for (int i = 0; i < 4; i++)
-            HELPER_Imdct12X1(x + i, y);
+            Imdct12X1Local(x + i, y);
         return;
     }
     memset(y, 0, 0x240);
@@ -190,14 +257,16 @@ void CMpegLayer3Base::Imdct36X4(int gr, int ch, float* xr)
     GranuleInfo* gi = &mGranuleInfo[gr][ch];
     float* hybrid = (float*)((uint8_t*)mpLoadedPrevBlockX4 + gr * 0x900);
     __declspec(align(16)) float tmp[0x240 / 4];
+    _alloca(8);   // make the frame dynamic so the epilogue restores the saved regs from ebp
+                  // instead of popping them off an esp the __fastcall cleanup left 8 bytes low
     int flag = 0;
     if (gi->windowSwitchingFlag && gi->mixedBlockFlag) {
         uint8_t* t = (uint8_t*)tmp;
         uint8_t* in = (uint8_t*)xr;           // the sub-block inputs are 4 bytes apart
         HELPER_Imdct36X1(g_imdct36Win, (float*)(t + 0), (float*)(in + 0));
         HELPER_Imdct36X1(g_imdct36Win, (float*)(t + 4), (float*)(in + 4));
-        HELPER_Imdct12X1((float*)(in + 8), (float*)(t + 8));
-        HELPER_Imdct12X1((float*)(in + 0xc), (float*)(t + 0xc));
+        Imdct12X1Local((float*)(in + 8), (float*)(t + 8));
+        Imdct12X1Local((float*)(in + 0xc), (float*)(t + 0xc));
         HELPER_OverlapAddX4(xr, tmp, hybrid);
         flag = 1;
     }

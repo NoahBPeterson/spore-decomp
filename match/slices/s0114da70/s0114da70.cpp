@@ -263,6 +263,7 @@ struct FastFirEngine {
     FastFirEngine();                                        // 0x0114e300
     ~FastFirEngine();                                       // 0x0114e340
     int  SetChannels(s32 inputChannels, s32 outputChannels);// 0x0114e370
+    void* Filter(AudioChannelBuffer* in, void* out, s32 a4, s32 a5); // 0x0115de20
     void Reset();                                           // 0x0114e580
     int  Configure(s32 channels, s32 blockSize, s32 a4, s32 a5, s32 a6, s32 impulseSamples,
                    s16* pImpulse);                          // 0x0114e5e0
@@ -273,7 +274,6 @@ struct FastFirEngine {
 void FFT_Alloc(s32 sizeLog2, char flag, void** outHandle);
 void FFT_Init(void* handle);
 void* FFT_Free(void** handle); // 0x0115e3c0
-void* FastFirFilter(FastFirEngine* self, void* in, void* out, s32 a4, s32 a5); // 0x0115de20
 
 // 0x0114e300 -- ctor (store order from the asm)
 // @ 0x0114e300
@@ -510,14 +510,19 @@ int ReverbIR1::Process(ReverbIR1* self, AudioProcessContext* ctx)
 {
     AudioChannelBuffer* src = ctx->mpSrcBuffer;
 
-    if (self->miState == 0) {
+    switch (self->miState) {
+    case 0:
         for (u32 ch = 0; ch < self->mbChannelCount; ++ch)
             memset(src->mpSamples + src->muStride * ch, 0, 0x400);
-    } else if (self->miState == 1) {
-        FastFirFilter(&self->mEngine, src, ctx->mpDstBuffer, self->miField04, self->miFieldE4);
-        AudioChannelBuffer* a = ctx->mpSrcBuffer;
-        ctx->mpSrcBuffer = ctx->mpDstBuffer;
-        ctx->mpDstBuffer = a;
+        break;
+    case 1:
+        self->mEngine.Filter(src, ctx->mpDstBuffer, self->miField04, self->miFieldE4);
+        {
+            AudioChannelBuffer* a = ctx->mpSrcBuffer;
+            ctx->mpSrcBuffer = ctx->mpDstBuffer;
+            ctx->mpDstBuffer = a;
+        }
+        break;
     }
     return 1;
 }

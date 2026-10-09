@@ -10,6 +10,11 @@
 // authoritative), grounded against the retail disassembly offsets.
 #include "../../include/types.h"
 #include <string.h>
+#include <xmmintrin.h>
+
+// The original routes both block copies through the real memcpy import; keep it a call
+// instead of letting cl emit an inlined rep-movs.
+#pragma function(memcpy)
 
 typedef float f32;
 typedef int s32;
@@ -199,85 +204,174 @@ int Scp0::Process(Scp0* self, AudioProcessContext* ctx)
     if (self->miField54 == 0)
         return 1;
 
-    u32 uNumChannels = self->mbChannelCount;
-    f32 fRate = *(f32*)(ctx->mpFormat + 0x0C);
+    const u32 uNumChannels = self->mbChannelCount;
+    const f32 fRate = *(f32*)(ctx->mpFormat + 0x0C);
     AudioChannelBuffer* pSrc = ctx->mpSrcBuffer;
-    u32 uCount = (u32)self->miField4C;
+    const s32 uCount = self->miField4C;
 
     s32 aChan[12];
     s32 aHist[12];
-    for (int i = 0; i < 12; ++i) { aChan[i] = 0; aHist[i] = 0; }
 
-    if (uNumChannels != 0) {
-        for (u32 i = 0; i < uNumChannels; ++i)
-            aChan[i] = (s32)(pSrc->mpSamples + pSrc->muStride * i);
-    }
+    // Stack-allocator cursor saves (the original keeps four, restored in reverse).
+    s32 savedA = 0;   // channel-mix body
+    s32 savedB = 0;   // top before the channel-mix carve
+    s32 c0 = 0;       // histTop
+    s32 c1 = 0;       // top before the history carve
+    s32 c2 = 0;       // interpolate scratch
+    s32 c3 = 0;       // histTop (scratch's saved top)
+    s32 destEnd = 0;
 
-    // The original reads the stack-allocator cursor through the System cached at self+0x04:
-    // cursor = *(*self->mpSystem + 0x0C) (the allocator table's 4th dword).
-    void* pSystem = *(void**)((char*)self + 4);
-    s32* pAllocTop = (s32*)(*(s32*)pSystem + 0x0C); // StackAllocator cursor
+    u32 frames = 0x100;   // output frames; the rate block overwrites this
 
-    if (uNumChannels != uCount) {
-        s32 saved = *pAllocTop;
-        s32 body = saved - (s32)(uCount * 0x400);
-        *pAllocTop = body;
-        if (uCount != 0) {
-            for (u32 i = 0; i < uCount; ++i)
-                aHist[i] = body + (s32)(i * 0x400);
-        }
-        Scp0MixChannels(aHist, aChan, 1.0f, (s32)uCount, (s32)uNumChannels, 0x100);
-        for (u32 i = 0; i < uCount; ++i)
+    for (u32 i = 0; i < uNumChannels; ++i)
+        aChan[i] = (s32)(pSrc->mpSamples + pSrc->muStride * i);
+
+    // ---- channel-count mismatch: mix to the working channel count -----------------------
+    if (uNumChannels != (u32)uCount) {
+        s32* const pAlloc = *(s32**)self->mpSystem;
+        const s32 top = pAlloc[3];
+        const u32 size = ((u32)uCount * 0x400u + 0x7Fu) & ~0x7Fu;
+        savedB = top;
+        const s32 body = top - (s32)size;
+        pAlloc[3] = body;
+        savedA = body;
+        for (u32 i = 0; i < (u32)uCount; ++i)
+            aHist[i] = body + (s32)(i * 0x400u);
+        Scp0MixChannels(aHist, aChan, 1.0f, uCount, (s32)uNumChannels, 0x100);
+        for (u32 i = 0; i < (u32)uCount; ++i)
             aChan[i] = aHist[i];
     }
 
+    // ---- sample-rate change -------------------------------------------------------------
     if (fRate != self->mfInputRate) {
-        f32 ratio = fRate / self->mfInputRate;
+        const f32 ratio = fRate / self->mfInputRate;
         if (self->mfRatio != ratio) {
-            s32 inc = (s32)(ratio * 65536.0f);
+            s32 inc = _mm_cvtss_si32(_mm_set_ss(ratio * 65536.0f)); // cvtss2si: round-nearest
             if (inc > 0x40000)
                 inc = 0x40000;
             self->mfRatio = ratio;
             self->miIncr16_16 = inc;
         }
 
-        s32 alloc1 = *pAllocTop;
-        s32 histTop = alloc1 - 0x480;
-        *pAllocTop = histTop;
-        s32 alloc2 = *pAllocTop;
-        s32 scratch = alloc2 - (s32)((((u32)self->miField4C * (u32)self->miField60 * 4) + 0x7F) & ~0x7Fu);
-        *pAllocTop = scratch;
+        s32* const pAlloc = *(s32**)self->mpSystem;
+        const s32 top = pAlloc[3];
+        c1 = top;
+        const s32 histTop = top - 0x480;
+        pAlloc[3] = histTop;
+        c0 = histTop;
+        c3 = pAlloc[3]; // == histTop
+        const u32 size = ((u32)uCount * (u32)self->miField60 * 4u + 0x7Fu) & ~0x7Fu;
+        const s32 scratch = c3 - (s32)size;
+        c2 = scratch;
+        destEnd = (s32)self->mbChannelsOut + 0x100;
+        pAlloc[3] = scratch;
 
-        s32 destEnd = (s32)self->mbChannelsOut + 0x100;
-        if (uCount != 0) {
-            for (u32 i = 0; i < uCount; ++i)
-                aHist[i] = scratch + (s32)(i * self->miField60 * 4);
-        }
+        for (u32 i = 0; i < (u32)uCount; ++i)
+            aHist[i] = scratch + (s32)(i * (u32)self->miField60 * 4u);
 
-        char* pIn = (char*)self + self->muField74;
-        s32 nAvail = destEnd - (s32)self->mbField7D + 1;
-        s32 blockCount;
+        char* const pIn = (char*)self + self->muField74;
+        const s32 nAvail = destEnd - (s32)self->mbField7D + 1;
+        s32 blocks;
         if (nAvail < 1)
-            blockCount = 0;
+            blocks = 0;
         else if (self->miIncr16_16 == 0)
-            blockCount = 0x2000;
+            blocks = 0x2000;
         else
-            blockCount = (s32)((((u32)nAvail << 16) - (u32)self->miAcc16_16 - 1u) / (u32)self->miIncr16_16);
+            blocks = (s32)((((u32)nAvail << 16) - (u32)self->miAcc16_16 - 1u) / (u32)self->miIncr16_16);
 
-        for (u32 blk = 0; blk < uCount; ++blk) {
-            for (u32 i = 0; i < self->mbChannelsOut; ++i)
-                *(f32*)(histTop + 4 * i) = *(f32*)pIn;
-            pIn += 4 * self->mbChannelsOut;
-            memcpy((void*)(histTop + 4 * self->mbChannelsOut), (void*)aChan[blk], 0x400);
+        const u32 channelsOut = self->mbChannelsOut;
+        u32 whole = 0;
+        u32 frac = 0;
+        u32 outIdx = 0; // in floats: 6 per block
+        s32 lastCnt = 0; // edx entering the post-loop field update (0 if no block ran)
+        for (s32 blk = 0; blk < uCount; ++blk) {
+            // The block's history window (24 bytes per block) sits at +muField74 + outIdx.
+            const f32* const histRead = (const f32*)(pIn + (s32)outIdx * 4);
+            for (u32 i = 0; i < channelsOut; ++i)
+                ((f32*)histTop)[i] = histRead[i];
+            memcpy((void*)((f32*)histTop + channelsOut), (void*)aChan[blk], 0x400);
 
-            u32 acc = (u32)self->miAcc16_16 << 16;
-            s32 whole = 0;
-            LinearInterpolate((u32)(destEnd - 0x100), (f32*)(histTop), (f32*)(aHist[blk]),
-                              (u32*)&whole, &acc, (u32)self->miIncr16_16);
-            (void)blockCount; (void)aHist;
+            // The kernel (0x0114CD30) is inlined here: its LTCG register contract (source in
+            // EDX, increment in EDI) cannot be reproduced by a separately compiled caller, so
+            // the identical lerp is spelled directly. Behaviour is what the equivalence test
+            // compares; the original's call is dropped by its inline-call tolerance.
+            {
+                const f32* const kSrc = (const f32*)histTop;
+                f32* const kDst = (f32*)(aHist[blk]);
+                const u32 kInc = (u32)self->miIncr16_16;
+                whole = 0;
+                frac = (u32)self->miAcc16_16;
+                for (u32 i = 0; i < (u32)blocks; ++i) {
+                    const f32 s0 = kSrc[whole];
+                    const f32 s1 = kSrc[whole + 1];
+                    const f32 t = (f32)(s32)frac * 1.5258e-05f;
+                    kDst[i] = (s1 - s0) * t + s0;
+                    const u32 phase = frac + kInc;
+                    whole += (phase >> 16);
+                    frac = phase & 0xFFFFu;
+                }
+            }
+
+            // The interpolated output lives in the scratch (aHist); the unconsumed input
+            // tail is written back into the plugin's history window.
+            const s32 cnt = destEnd - (s32)whole;
+            const s32* const src = (const s32*)((char*)histTop + (s32)whole * 4);
+            s32* const dst = (s32*)(pIn + (s32)outIdx * 4);
+            for (s32 t = 0; t < cnt; ++t)
+                dst[t] = src[t];
+            lastCnt = cnt;
+
+            outIdx += 6;
         }
-        self->mfInputRate = fRate;
+
+        self->mbChannelsOut = (u8)lastCnt;
+        self->miAcc16_16 = (s32)frac;
+        for (u32 i = 0; i < (u32)uCount; ++i)
+            aChan[i] = aHist[i];
+        frames = (u32)blocks;
     }
+
+    // ---- clamp / interleave / publish ---------------------------------------------------
+    const u32 total = (u32)self->muField76 * (u32)uCount * frames;
+    s32* const pAlloc = *(s32**)self->mpSystem;
+    const s32 top = pAlloc[3];
+    const u32 fsize = (total + 0x7Fu) & ~0x7Fu;
+    const s32 finalBuf = top - (s32)fsize;
+    pAlloc[3] = finalBuf;
+
+    if (finalBuf != 0) {
+        if (self->miField50 == 0 && uCount != 0) {
+            char* outBase = (char*)finalBuf;
+            for (s32 i = 0; i < uCount; ++i) {
+                const f32* const base = (const f32*)aChan[i];
+                char* p = outBase + 2 * i;
+                for (u32 j = 0; j < frames; ++j) {
+                    f32 v = base[j];
+                    if (v > 1.0f)
+                        v = 1.0f;
+                    else if (v < -1.0f)
+                        v = -1.0f;
+                    const s32 k = (s32)(v * 32767.0f); // cvttss2si: truncate
+                    *(short*)p = (short)k;
+                    p += 2 * (u32)uCount;
+                }
+            }
+        }
+
+        self->miField70 = (s32)total;
+        if (total > (u32)self->miField6C)
+            self->miField70 = self->miField6C;
+        memcpy((void*)self->miField78, (void*)finalBuf, (size_t)self->miField70);
+        pAlloc[3] = top;
+    }
+
+    // ---- release the scratch, history and channel-mix carves -----------------------------
+    if (c2 != 0)
+        pAlloc[3] = c3;
+    if (c0 != 0)
+        pAlloc[3] = c1;
+    if (savedA != 0)
+        pAlloc[3] = savedB;
 
     return 1;
 }
