@@ -9,7 +9,7 @@ Counts are from all `work/difftest/*.json` result files (snapshot 2026-10-09).
 
 | # | cause | count | status | fix idea |
 |---|---|---:|---|---|
-| 1 | unresolved references (our calls/globals have no `// 0x<VA>`) | 774 fns / 368 slices | **470 fixed** (268 slices, `29f93a0f`); 304 remain | done via slice-local `// 0x<VA>` decl annotations + `__equiv_ann` dummy structs for out-of-slice classes. Remaining: 28 × `__except_list` (SEH `mov eax,fs:[0]` — not a pointer at VA 0, so a VA-range relaxation alone won't emulate it; needs fs:[0]/SEH modelling), ~276 with no address anywhere in corpus/dev-PDB |
+| 1 | unresolved references (our calls/globals have no `// 0x<VA>`) | 774 fns / 368 slices | **631 testable** (470 exact-name `29f93a0f` + 161 alignment `ccacc2d7`); 143 remain | Remaining 143: 6 structural (inline `rdtsc`/ctype), 14 wrong decls (thiscall declared as free `cdecl`, e.g. `WAssign`), ~105 alignment-failure/no-signal (source structurally unlike original), rest mechanism limits; 0 SEH (fixed in checker). Names are agent-invented, so more symbol data won't help. See `docs/resolve-leftover-results.md`; tool `tools/matching/resolve_leftover.py`; per-fn table `work/claude/resolve_leftover/report.md` |
 | 2 | inputs discarded — `fault(read)` | 672 | todo | random inputs can't build a valid object graph (manager/object deref). Add a **seed corpus of real objects** / pointer-soup seeding for pointer-to-object args |
 | 3 | our symbol not found | 669 | todo | checker can't find our emitted symbol: fix mangling/`thiscall` signature mismatches, force emission (avoid it being inlined away), accept a `sym=` hint in the marker |
 | 4 | original reads `ecx`/`eax` at entry, our decl passes nothing | 259 | needs analysis | custom/LTCG **register ABI** or a guessed signature. Model the register argument, or fix the signature |
@@ -25,5 +25,13 @@ Notes:
   **fixed** — confirmed by re-running; those now produce real verdicts.
 - `unsup1` earlier made ~530 functions testable by exactly this kind of annotation work — that is the
   proven playbook for #1 and #3.
-- Effort order: **#1 (done next) → #3 → #2 → #4 → #8 → rest**. #1 and #3 are tooling/annotation and
-  cheap; #2 and #6 need harness work (seed corpora); #4 is diagnosis.
+- #1's tail (143) needs **source fixes, not symbol data**: the leftover names (`Callee::f`, `g_vtblA`,
+  `CPlayerInventory::f5cae30`, `EAVec<I>::DoInsertValue`) are invented by the decompiler; only the original
+  *function's* call/data alignment identifies them (that is how the 161 were freed). 14 are the same
+  `thiscall`-declared-as-free-`cdecl` defect as bucket M; the 161's **38 FAILs + 13 "reads ecx"** are now
+  concrete work items for the decompiling agents.
+- Checker gained 4 small fixes (`ccacc2d7`): `__except_list`→0 (SEH chain head), `extern "C"` annotation ignores
+  enclosing namespace, template ctor/dtor ident keying, and sibling-slice headers included by relative path are
+  scanned for annotations (129 slices include a sibling header — re-baseline equiv verdicts if annotations there change).
+- Effort order: **#1 (largely done — tail needs source fixes) → #3 → #2 → #4 → #8 → rest**. #1 and #3 are
+  tooling/annotation and cheap; #2 and #6 need harness work (seed corpora); #4 is diagnosis.
