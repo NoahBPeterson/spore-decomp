@@ -246,6 +246,20 @@ def model_table():
                      per(ex), per(eq), per(comp),
                      "%.2f" % (inp / ex / 1e6) if ex else "-",
                      ("%.0f%%" % (100 * g["cr"] / inp)) if inp else "-"))
+    # Claude models: NOMINAL API-rate cost from a cached transcript scan (subscription => $0 marginal).
+    try:
+        cr_json = json.load(open(W("work/claude/model_efficiency.json")))
+    except (OSError, ValueError):
+        cr_json = {}
+    for key, g in cr_json.items():
+        ex, eq = g.get("exact", 0), g.get("equiv", 0); comp = ex + eq
+        inp = g.get("inp", 0) + g.get("cr", 0)
+        per = lambda d: ("$%.4f" % (g["cost"] / d)) if d else "-"
+        rows.append((key + " (API-rate est.)", g.get("batches", 0), human(ex), human(eq), "$%.2f" % g.get("cost", 0),
+                     per(ex), per(eq), per(comp),
+                     "%.2f" % (inp / ex / 1e6) if ex else "-",
+                     ("%.0f%%" % (100 * g.get("cr", 0) / inp)) if inp else "-"))
+    rows.sort(key=lambda r: -float(r[4].lstrip("$") or 0))     # most expensive first
     if not rows:
         return "(no spore-* sessions found)"
     return table(["Model (provider/id)", "Batches", "Exact fns", "Equiv fns", "Cost",
@@ -253,9 +267,10 @@ def model_table():
                  rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">", ">", ">"])
 
 print()
-print("Per-model efficiency (costs are opencode estimates, not billed; $/exact and $/equiv each "
-      "divide the model's whole cost, so they are not additive - use $/compilable for all-in)"
-      )
+print("Per-model efficiency (opencode rows: opencode cost estimates, not billed. Claude rows marked "
+      "API-rate est.: NOMINAL list-price estimate from a cached transcript scan — a subscription makes "
+      "their marginal cost $0. $/exact and $/equiv each divide the model's WHOLE cost, so they are not "
+      "additive - use $/compilable for all-in)")
 print(model_table())
 
 # ---- live wave groups (optional) ----
