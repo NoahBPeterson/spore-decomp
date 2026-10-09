@@ -30,7 +30,7 @@ PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:tools/matching/(?:slice_i
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
                       r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
-                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|(?:llvm-)?nm|(?:[A-Za-z0-9_]+-w64-mingw32-)?objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
+                      r"c\+\+filt|diff|cmp|basename|dirname|seq|grep|sed|nl|column|date|which|ps|pgrep|pidof|awk|stat|du|find|strings|hexdump|md5|shasum|realpath|readlink|(?:llvm-)?nm|(?:[A-Za-z0-9_]+-w64-mingw32-)?objdump|lsof|sleep|set|export|read|shift|cd|:|local|break|continue)(?:\s|$)")
 DENY_CMD = re.compile(r"^(?:sudo|git|curl|wget|pip3?|uv|brew|npm|npx|ssh|scp|rsync|ghidra|pyghidra|analyzeHeadless|"
                       r"kill|pkill|killall|open|osascript|chmod|chown|ln|dd|truncate|shutdown|launchctl|crontab)(?:\s|$)")
 
