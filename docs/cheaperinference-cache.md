@@ -57,6 +57,32 @@ spread 10 concurrent large contexts across backends rather than pinning them to 
 it needs a small OpenCode **plugin** that sets `x-ci-prompt-cache-session` per session
 via the session HTTP hook.
 
+## Verification status
+
+The provider echoes diagnostic headers on every completion response, which we used to
+test the header directly (a small `deepseek-v4.1-flash` probe, 334-token prompt):
+
+| probe | request | `x-ci-prompt-cache-affinity` | `cached_tokens` |
+|---|---|---|---|
+| 1 | cold, `x-ci-prompt-cache-session: probe-1` | `new` | 0 |
+| 2 | same session header | **`hit`** | 256 |
+| 3 | no header | `new` | 256 |
+
+Conclusions:
+- The `x-ci-prompt-cache` / `x-ci-prompt-cache-session` headers are **honored** — a stable
+  session token yields `affinity: hit`; and opencode sends them (verified in `/api/config`).
+- **But this does not yet prove the gold0 symptom is gone.** The probe shows content-based
+  caching works even without the header (`run 3` still cached 256), and the gold0 failure
+  was a *large-context / concurrency* effect (contexts to ~600k, 10 sessions). A 3-request
+  probe cannot reproduce that.
+- **The decisive test is the next wave**: run it with the headers, then check
+  `/v1/usage/daily` `cache_hit_pct` (target ≥ 97 on the wave day). If it stays ~87, the
+  cause is capacity/size, not routing, and the remedy is bounded context + more, shorter
+  sessions (plus possibly the per-session plugin).
+- Useful extra signal: response header `x-ci-prompt-cache-affinity` (`new`/`hit`) and
+  `x-ci-tokens-saved` if we ever want per-request visibility (opencode does not surface
+  response headers today).
+
 ## exact-cache (provider option)
 The provider offers an "exact-cache" that skips upstream generation on eligible hits.
 Assessment: low risk for this workload (deterministic codegen; opencode already retries
