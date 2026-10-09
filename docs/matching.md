@@ -7,6 +7,22 @@
 - RTM vs SP1 is still open. The Rich header was destroyed by SteamStub, and the manifest's
   9.0.21022.8 CRT binding is SP1's default too. So far every function matches with SP1.
   If residual mismatches appear, test them with a VS2008 RTM cl (15.00.21022.08).
+
+### Toolchain provenance — what built which code
+The exe links several prebuilt middleware libraries, each built by its own compiler. This is the
+single most important thing to know before chasing a near-miss: a few bytes off is often the
+*compiler*, not the source.
+
+| Code | Compiler | How we compile it |
+|---|---|---|
+| Spore game code + EA framework (UTFSpore) | VS2008 SP1, cl 15.00.30729.01 | default (`cl.sh`) |
+| **Havok 3.1.0** (all 469 objects) | **VC .NET 2003, cl 13.10.3077** | `/vc71` (we match with 13.10.3052) |
+| **RenderWare 4 core libraries** | **VC .NET 2003, cl 13.10** | `/vc71` |
+| Other code inside the RenderWare address range (NegateRows, LpcSynthesize, …) | VS2008 SP1 | default |
+| RenderWare 4 core **additionally** | **/GL + /LTCG** (link-time codegen) | not reproducible single-object |
+
+Evidence and rules of thumb are below.
+
 - **Havok was built with VC .NET 2003, not VS2008.** The dev PDB's S_COMPILE records give
   cl 13.10.3077 for all 469 Havok objects. Integer code often matches with VS2008, but x87 code
   never does (instruction selection differs, e.g. `fld st(i); fmul [m]` vs `fld [m]; fmul st(i)`).
@@ -22,12 +38,20 @@
   exact with VS2008 vs 82 with 7.1) are VS2008. When a function in a prebuilt library is
   complete but a few bytes off (`dec [m]` vs `sub [m],1`, x87 operand order), try `/vc71`.
 - **RenderWare 4's core was also built with link-time code generation (`/GL` + `/LTCG`).**
-  Evidence: `Raster::Initialize` (0x011efeb0) keeps `edx = 0` live across a call to
-  `FormatGetDepth`, which is only legal when the compiler knows the callee leaves `edx` alone.
-  A `/GL` compile linked with the 2003 `link.exe /LTCG` reproduces that, but register choices
-  then depend on the callees' real bodies, so a single-object compile cannot match these
-  functions byte for byte. Record them as complete (equivalence-checked) unless a function
-  makes no calls. Havok shows no sign of LTCG.
+  With `/GL` the compiler emits a low-level intermediate form and defers real codegen to
+  `link.exe /LTCG`, which then sees *every* callee's body and optimises across call boundaries:
+  it keeps a value in a register it can prove the callee does not touch, inlines across TUs, and
+  allocates registers globally. Evidence: `Raster::Initialize` (0x011efeb0) sets `edx = 0`, calls
+  `FormatGetDepth`, and keeps using `edx == 0` afterwards — legal only when the compiler knows
+  `FormatGetDepth` leaves `edx` alone. We reproduced it by compiling that one function with `/GL`
+  and linking with the 2003 `link.exe /LTCG`.
+  Consequence: a **single-object compile cannot match these functions byte-for-byte**, because its
+  register choices are made without the callees; matching would require every callee in the call
+  tree compiled faithfully and linked as one unit. Record such functions as complete
+  (equivalence-checked) instead of chasing bytes — *except* leaf functions that make no calls,
+  where /LTCG has nothing to cross-optimise and they can still match. Havok shows no sign of LTCG
+  (its functions match single-object once the compiler version is right). `equiv.py` reports
+  register-only leftovers here, and ABI mismatches like a clobbered `ebx`.
 
 ## Workflow
 1. `tools/matching/disasm.py work/SporeApp.analysis.bin <va>` prints the original instructions.
