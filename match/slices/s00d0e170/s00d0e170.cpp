@@ -1014,3 +1014,9 @@ void SP::cCommunityEditor::Activate(cCommunity* community, bool bSpaceGame)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct I {
+    void DoInsertValue();   // 0x004558a0 (equiv t2)
+};
+}

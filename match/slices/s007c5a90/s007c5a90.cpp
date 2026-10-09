@@ -50,7 +50,7 @@ extern "C" FILE* fopen(const char*, const char*);
 extern "C" int   fclose(FILE*);
 extern "C" unsigned int fwrite(const void*, unsigned int, unsigned int, FILE*);
 
-extern "C" void  SPKeyFromName(void* out, void* name, int, int);
+extern "C" void  SPKeyFromName(void* out, void* name, int, int);   // 0x0068d840 (equiv t2)
 extern "C" int   FUN_007c5820(void);
 extern "C" int   FUN_007c5920(void);
 extern "C" int   IsType1Or9(int); // 0x007c57e0
@@ -65,9 +65,9 @@ extern "C" int   VerQueryValueW(void*, const wchar_t*, void**, unsigned int*);
 extern "C" void  operator_delete(void*);
 extern "C" void* operator_new(unsigned int);
 
-extern void* vtbl_Simulator_cCreatureAbility;
-extern void* vtbl_Skinner_PaintSystem;
-extern void* vtbl_Editor_cEditorResource;
+extern void* vtbl_Simulator_cCreatureAbility;   // 0x013ef094 (equiv t2)
+extern void* vtbl_Skinner_PaintSystem;   // 0x013eb394 (equiv t2)
+extern void* vtbl_Editor_cEditorResource;   // 0x013eb938 (equiv t2)
 
 static const int kGroupTypeCameraConfig = 0;
 

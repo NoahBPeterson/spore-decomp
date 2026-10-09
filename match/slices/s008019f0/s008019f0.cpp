@@ -298,7 +298,10 @@ bool __stdcall Sub_8026e0(void* info) {
 // ---------------------------------------------------------------------------
 // @ 0x00801fd0  destructor of the cursor-manager base
 // ---------------------------------------------------------------------------
-extern char dc_a[], dc_b[], dc_c[], dc_d[];
+extern char dc_a[];   // 0x01416fe8 (equiv t3)
+extern char dc_b[];   // 0x01416fd4 (equiv t3)
+extern char dc_c[];   // 0x013eb938 (equiv t3)
+extern char dc_d[];   // 0x013effb8 (equiv t3)
 void __fastcall Sub_801fd0(void* self) {
   *(void**)self = (void*)dc_a;
   *(void**)((char*)self + 8) = (void*)dc_b;

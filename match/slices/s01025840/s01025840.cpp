@@ -1069,3 +1069,20 @@ void cCommandSpace::Execute(cArguments* args)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct H {
+    void erase();   // 0x01024f70 (equiv t2)
+    void reserve();   // 0x004e0880 (equiv t2)
+};
+struct VcStarRecord {
+    void push_back();   // 0x00e1c7f0 (equiv t3)
+};
+}
+
+namespace __equiv_ann2 {   // address annotations for the equivalence checker; never referenced
+struct H {
+    void clear();   // 0x005810a0 (equiv t3)
+    void resize();   // 0x01025750 (equiv t3)
+};
+}

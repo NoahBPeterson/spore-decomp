@@ -199,7 +199,7 @@ struct cMDFormatEntry {
 
 // fixed_vector<cIndexArrayRef,3>: destructor is out of line (0x0041f9b0).
 struct IndexArrayFixedVector : fixed_vector_base<cIndexArrayRef, 3> {
-    ~IndexArrayFixedVector();
+    ~IndexArrayFixedVector();   // 0x0041f9b0 (equiv t3)
 };
 // fixed_vector<cMDFormatEntry,6>: trivially destructible elements.
 struct FormatFixedVector : fixed_vector_base<cMDFormatEntry, 6> {
@@ -468,4 +468,19 @@ void cMeshBuilder::CreateMeshData()
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct UcEltArrayRef {
+    void DoInsertValue();   // 0x006d9660 (equiv t2)
+};
+struct UcMDElementArray {
+    void DoInsertValue();   // 0x00424cf0 (equiv t2)
+};
+struct UcMDFormatEntry {
+    void DoInsertValue();   // 0x00476fe0 (equiv t3)
+};
+struct UcMDSection {
+    void DoInsertValue();   // 0x00477460 (equiv t3)
+};
 }

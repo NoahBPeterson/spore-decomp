@@ -172,10 +172,10 @@ void cSPUIFeedFilter_dtor(cSPUIFeedFilter* s) {
 // The 0x34-element vector algorithms below mirror the annotated decompile; helper
 // calls are relocations so only the control flow matters.
 extern "C" void  DoCopyKeys(void* first, void* last, void* dest);
-extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);
-extern "C" void* Fun0066_0b30(void* a, void* b, void* c);
-extern "C" void  Fun0066_0510(void* a, void* b, void* c);
-extern "C" void* Fun0066_0d70(void* a, void* b, void* c);
+extern "C" void  Fun0066_0ad0(void* a, void* b, void* c, void* d, void* e);   // 0x00660ad0 (equiv t1)
+extern "C" void* Fun0066_0b30(void* a, void* b, void* c);   // 0x00660b30 (equiv t1)
+extern "C" void  Fun0066_0510(void* a, void* b, void* c);   // 0x00660510 (equiv t1)
+extern "C" void* Fun0066_0d70(void* a, void* b, void* c);   // 0x00660d70 (equiv t1)
 extern "C" void* Fun0066_0fc0(unsigned n, void* a, void* b);
 struct Key3 { uint32_t a, b, c; };
 extern "C" void* FUN_006603d0(void* key, void* out);
@@ -341,4 +341,10 @@ char FUN_00661c00(void* self, void* a, void* b) { (void)self; (void)a; (void)b; 
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Blob14 {
+    void Assign();   // 0x006606a0 (equiv t3)
+};
 }

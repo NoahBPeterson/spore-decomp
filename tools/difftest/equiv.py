@@ -105,7 +105,7 @@ def prepare(sid, va, flags_override=None, log=print, src=None):
     t.sym, t.sym_how = sym, how
     fsym = coff.by_name[sym]
     t.fsym = fsym
-    annots = R.source_annotations([src] + glob.glob(os.path.join(S.slice_dir(sid), "*.h")))
+    annots = R.source_annotations([src] + glob.glob(os.path.join(S.slice_dir(sid), "*.h")) + S.sibling_headers(src))
     res = ctx["res"].resolve(coff, fsym, va, annots)
     t.res = res
     t.unresolved, t.eh_unresolved, t.conflicts = res.unresolved, res.eh_unresolved, res.conflicts

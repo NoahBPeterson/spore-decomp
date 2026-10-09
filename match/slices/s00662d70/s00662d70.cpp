@@ -18,7 +18,7 @@ extern "C" void* CopyImpl(void* first, void* last, void* dest);
 extern "C" void  FUN_00646d70(void* first, void* last);
 extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e); // 0x00571db0
 extern "C" void* SP_AssetBrowser(); // 0x00401030
-extern "C" float GetPropertyT_f(int obj, int key, float def);
+extern "C" float GetPropertyT_f(int obj, int key, float def);   // 0x00401030 (equiv t3)
 extern "C" void  SPUIHelpers_UpdateScrollFrameVertical(void* w);
 extern "C" int   cTribeTool_GetTutorialToolPrice(int obj, int key, int def); // 0x004e1c30
 extern "C" void* SP_PropertyManager();
@@ -28,11 +28,16 @@ extern "C" void  cSPUILayout_Init(void* self, const void* key, int a, int id);
 extern "C" void  cSPUILayout_SetParentWin(void* self, void* parent, int a, int id);
 extern "C" void  cSPUILayout_SetReloadCallback(void* self, void* fn, void* ctx);
 extern "C" void  SPUIHelpers_SetWindowAreaToParent(void* w);
-extern "C" void  SPUIHelpers_UpdateMouseFocus(int v);
+extern "C" void  SPUIHelpers_UpdateMouseFocus(int v);   // 0x00804f50 (equiv t2)
 extern "C" void  cSPUIFeedListCategory_Shutdown(void* c);
 
-extern int gVtA, gVtB, gVtC, gVtD, gVtE;
-extern int gVtF, gVtG;
+extern int gVtA;   // 0x013eb384 (equiv t3)
+extern int gVtB;   // 0x013ec458 (equiv t2)
+extern int gVtC;   // 0x0140016c (equiv t2)
+extern int gVtD;   // 0x0140015c (equiv t2)
+extern int gVtE;   // 0x0140014c (equiv t2)
+extern int gVtF;   // 0x013eb394 (equiv t3)
+extern int gVtG;   // 0x013eb938 (equiv t3)
 extern "C" void  FUN_00662b40(void* p);
 extern "C" void  FUN_00662c70(void* p);
 extern "C" void* FUN_00662c10(void* v);

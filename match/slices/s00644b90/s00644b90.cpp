@@ -517,3 +517,15 @@ void Browser::SetCallToActionMessage(const short* msg) {
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct SubA {
+    void Fn_e720();   // 0x0065e720 (equiv t1)
+    void Fn_ef30();   // 0x0065ef30 (equiv t1)
+    void Set();   // 0x0065d9f0 (equiv t3)
+};
+struct WebBrowser {
+    void Navigate();   // 0x0065c3c0 (equiv t3)
+    void SetActive();   // 0x0065b2a0 (equiv t2)
+};
+}

@@ -283,7 +283,7 @@ extern "C" void VolumeSliceSpacingCommand(int* self, EA::ArgScript::cArguments* 
 // @ 0x007EE7B0  "material" command (resource id)
 extern "C" void VolumeMaterialCommand(int* self, EA::ArgScript::cArguments* args) {
   void** p = EA::ArgScript::MainArguments(args, 1);
-  extern uint32_t HashName(const char*, uint32_t, int);
+  extern uint32_t HashName(const char*, uint32_t, int);   // 0x00932e80 (equiv t3)
   void* arg = *p;
   uint32_t h = HashName((const char*)arg, 0x811c9dc5, 1);
   int dst = *(int*)((char*)self + 0xc);

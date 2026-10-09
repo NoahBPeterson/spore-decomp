@@ -158,7 +158,7 @@ void RegisterSmall(void* param) {
 // ===========================================================================
 struct ArgScript { void* vt; int pad[3]; int arg10; int arg14; };
 struct ArgSpec {
-    ArgSpec(int);
+    ArgSpec(int);   // 0x0083a9f0 (equiv t3)
     void ConstructSpec(const char*, const char*, int, const char*,
                        const char*, int, const char*, int);
 };

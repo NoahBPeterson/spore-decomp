@@ -25,7 +25,7 @@ namespace IO {
 struct CoreAllocator;
 extern CoreAllocator* gpCoreAllocator;                                // 0x016c8b44
 struct CoreAllocator {
-    void* Alloc(size_type size, int a, int b, int c, int d, int e);
+    void* Alloc(size_type size, int a, int b, int c, int d, int e);   // 0x009289f0 (equiv t2)
     void* Realloc(void* p, size_type size);
     void  Free(void* p);
 };

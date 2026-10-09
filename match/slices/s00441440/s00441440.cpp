@@ -1493,3 +1493,13 @@ struct SP {
     void erase(void*, void*); // 0x00530c80
 };
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct UResourceKey {
+    void erase();   // 0x0050f740 (equiv t2)
+    void resize();   // 0x004548d0 (equiv t3)
+};
+struct VcSPEditorHandleDeform {
+    void resize();   // 0x00421bf0 (equiv t2)
+};
+}

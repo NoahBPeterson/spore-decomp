@@ -356,3 +356,10 @@ void FUN_00e52d80(float dt) {
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct cCellSub54 {
+    void Add();   // 0x00b72210 (equiv t2)
+    void Get();   // 0x00b72160 (equiv t2)
+};
+}

@@ -1208,3 +1208,18 @@ void cCollectableItems::BuildSetSummary(SummaryMap& summary, int maxLevel, const
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct _KE {
+    void DoFreeNodes();   // 0x005941f0 (equiv t3)
+};
+struct _KH {
+    void DoFreeNodes();   // 0x007611f0 (equiv t2)
+};
+}
+
+namespace __equiv_ann2 {   // address annotations for the equivalence checker; never referenced
+struct _KUcStaticItemInfo {
+    void DoFreeNodes();   // 0x007611f0 (equiv t2)
+};
+}

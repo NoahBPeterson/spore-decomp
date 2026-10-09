@@ -53,7 +53,7 @@ extern int   g_softStateDirty;
 extern uint32_t g_globalColorBits[4];
 extern unsigned int g_samplerDirty[64];
 extern unsigned int g_samplerState[1024];
-extern float g_fillValue;
+extern float g_fillValue;   // 0x01533c74 (equiv t3)
 
 // ===========================================================================
 // Bodies

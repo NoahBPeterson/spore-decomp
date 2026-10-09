@@ -341,3 +341,23 @@ void MeshBuilder::copyFrom2b0(const MeshBuilder& src)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct I {
+    void DoInsertValue();   // 0x004558a0 (equiv t2)
+};
+struct M {
+    void DoInsertValue();   // 0x00455660 (equiv t2)
+    void reserve();   // 0x004e0880 (equiv t2)
+};
+struct UVec3 {
+    void DoInsertValue();   // 0x004b5ad0 (equiv t2)
+    void reserve();   // 0x00473890 (equiv t2)
+};
+}
+
+namespace __equiv_ann2 {   // address annotations for the equivalence checker; never referenced
+struct I {
+    void reserve();   // 0x00714cd0 (equiv t2)
+};
+}

@@ -17,7 +17,7 @@ struct ModelManagerIface {
 
 struct cSPEditorHandle;
 
-extern ModelManagerIface* ModelManager();
+extern ModelManagerIface* ModelManager();   // 0x0067dd80 (equiv t2)
 extern void* EditorTuning();                       // tuning struct, Vec3 members at +0x6c.. +0x90
 extern void  cSPEditorHandle_Shutdown(cSPEditorHandle*);   // SP::cSPEditorHandle::Shutdown
 extern void  cSPEditorHandle_BaseDtor(cSPEditorHandle*);   // FUN_0047d870

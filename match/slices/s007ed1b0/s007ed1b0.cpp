@@ -218,7 +218,7 @@ extern "C" void ReadEffect(void* reader, void* unused, char* dst) {
   EA::IO::ReadInt32(reader, &n, 1, 0);
   extern void WStringResize(void*, uint32_t);
   WStringResize(dst, n);
-  extern void ReadRaw(void*, void*, uint32_t, int);
+  extern void ReadRaw(void*, void*, uint32_t, int);   // 0x0093a700 (equiv t3)
   ReadRaw(reader, *(void**)(dst + 0xc), n, 0);
   EA::IO::ReadTriple(reader, dst + 0x20, 1, 0);
   EA::IO::ReadInt32(reader, dst + 0x28, 1, 0);
@@ -227,7 +227,7 @@ extern "C" void ReadEffect(void* reader, void* unused, char* dst) {
   ((F0)VSLOT(reader, 0x30))(reader, dst + 0x38, 8);
   EA::IO::ReadInt32(reader, dst + 0x40, 1, 0);
   ReadVec3Vec(reader, (Vec3Vec*)(dst + 0x44));
-  extern void ReadPlaneVec(void*, void*);
+  extern void ReadPlaneVec(void*, void*);   // 0x007d27d0 (equiv t3)
   ReadPlaneVec(reader, dst + 0x58);
   ReadPlaneVec(reader, dst + 0x6c);
 }

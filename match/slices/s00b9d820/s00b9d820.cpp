@@ -948,3 +948,9 @@ void FUN_00b9d820(void)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct PAVcGameData {
+    void DoInsertValue();   // 0x00b96600 (equiv t3)
+};
+}

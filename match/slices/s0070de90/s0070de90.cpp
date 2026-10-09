@@ -750,3 +750,17 @@ void ReloadLightingStates(void* self)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct LConfig {
+    ~LConfig();   // 0x00f47380 (equiv t3)
+};
+struct RC3b {
+    void AddRef();   // 0x006e54c0 (equiv t3)
+    void Release();   // 0x006fd300 (equiv t2)
+};
+struct RC3c {
+    void AddRef();   // 0x006e54c0 (equiv t3)
+    void Release();   // 0x006e57a0 (equiv t3)
+};
+}

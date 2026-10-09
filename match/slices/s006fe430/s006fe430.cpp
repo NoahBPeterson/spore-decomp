@@ -13,8 +13,8 @@ void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 // EA::IO helpers
 void __cdecl EA_WriteUint32(void* stream, const void* p, int n, int flag);
-void __cdecl EA_WriteUint16(void* stream, const void* p, int n, int flag);
-void __cdecl EA_operator_shl(void* stream, const void* p, int n);
+void __cdecl EA_WriteUint16(void* stream, const void* p, int n, int flag);   // 0x0093a9d0 (equiv t2)
+void __cdecl EA_operator_shl(void* stream, const void* p, int n);   // 0x0093a9a0 (equiv t3)
 void __cdecl FUN_0093adb0(void* stream, const void* p, unsigned n, int flag);
 
 // slice-26 callees (declared, not defined here)

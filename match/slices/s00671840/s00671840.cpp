@@ -32,7 +32,7 @@ struct cSPUILayout {
   void SetParentWin(void* w, int a, unsigned key);
   void SetReloadCallback(void* cb, void* self);
   void* FindWindowByID(unsigned id, int rec);
-  void Dtor();
+  void Dtor();   // 0x00811fe0 (equiv t3)
 };
 void* WindowManager();
 void* AssetBrowser(); // 0x00401030
@@ -42,7 +42,7 @@ void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
 unsigned short* Window_GetText(void* w);
 struct EString {
-  void Assign(unsigned short* s);
+  void Assign(unsigned short* s);   // 0x005c3d90 (equiv t3)
   void Assign(unsigned short* a, unsigned short* b);
   void Detok8f40();
   long long Find(unsigned short* sub, int pos);
@@ -54,7 +54,7 @@ void QualifyNameWithGroup(void* s);
 void FUN_00996280(int a, int b, int c, int d);
 bool FUN_009979f0(void* a, unsigned key);
 struct FrameSet { void Ctor(int a); void Dtor(); void* GetFrame(void* key); void Clear(); void Release(); };
-void CenterWindowInRect(void* obj);
+void CenterWindowInRect(void* obj);   // 0x00810000 (equiv t2)
 void* operator_new(size_t n, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void operator_delete_(void* p);
 void SetScrollbarDrawable(void* frame, int a, void* drawable);
@@ -555,5 +555,17 @@ struct cSPUILayout {
 };
 struct Stopwatch {
     void Restart(); // 0x00571e80
+};
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct DetokBase {
+    void BaseDtor();   // 0x005725a0 (equiv t3)
+};
+struct Stopwatch {
+    void GetElapsedTime();   // 0x0093a5e0 (equiv t2)
+};
+struct VecHolder {
+    void Dtor();   // 0x005c7f10 (equiv t3)
 };
 }

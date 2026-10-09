@@ -483,3 +483,9 @@ void FUN_00f3b9e0() {}
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct cChecklist {
+    void ToggleHint();   // 0x00efbbe0 (equiv t2)
+};
+}

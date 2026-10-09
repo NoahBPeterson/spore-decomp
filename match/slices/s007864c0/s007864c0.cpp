@@ -33,9 +33,9 @@ struct __declspec(align(16)) Vector4 { float x, y, z, w; };
 using rw::math::vpu::Vector4;
 
 // 0x782c90: (row[1]*v[1] + row[0]*v[0]) + row[2]*v[2]  (one band-1 row applied to 3 vectors)
-Vector4 MulRow3(const Vector4* v, const float* row);
+Vector4 MulRow3(const Vector4* v, const float* row);   // 0x00782c90 (equiv t3)
 // 0x782ce0: sum_{j<n} w[j] * v[j]
-Vector4 WeightedSum(int n, const Vector4* v, const float* w);
+Vector4 WeightedSum(int n, const Vector4* v, const float* w);   // 0x00782ce0 (equiv t2)
 
 extern float k_1634054;
 extern float k_163405c;

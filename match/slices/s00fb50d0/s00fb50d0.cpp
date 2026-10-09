@@ -150,7 +150,7 @@ struct RibbonGridPoint                          // 0x28 bytes
 extern cSPVector3 gRibbonNormalBias;            // 0x015b1550 (1,1,1)
 
 // bilinear interpolation of the polygon's patch at a face position (0x00fafb50)
-cRibbonFaceVertex InterpolateRibbonPoly(const cRibbonFacePoly& poly, const cSPVector2& facePos);
+cRibbonFaceVertex InterpolateRibbonPoly(const cRibbonFacePoly& poly, const cSPVector2& facePos);   // 0x00fafb50 (equiv t2)
 
 static inline int FloatToInt(float f) { return _mm_cvtss_si32(_mm_set_ss(f)); }
 static inline int FloorToInt(float f)

@@ -605,3 +605,9 @@ CMessageCommandDispatcher::CMessageCommandDispatcher()
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct NewObj {
+    NewObj();   // 0x006bbc90 (equiv t2)
+};
+}

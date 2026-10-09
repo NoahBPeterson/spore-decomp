@@ -39,7 +39,7 @@ struct cCameraManager {
     cCameraManager();               // 0x7c75e0
 };
 
-extern "C" void  operator_delete(void*);
+extern "C" void  operator_delete(void*);   // 0x00f47380 (equiv t2)
 extern "C" void* operator_new(unsigned int, const char*, int, int, int, int);
 extern "C" int   FUN_007e9350(void**);
 extern "C" void  FUN_007c3990(void*, void*, void*);

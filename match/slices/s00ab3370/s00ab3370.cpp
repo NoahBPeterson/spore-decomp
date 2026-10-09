@@ -140,7 +140,7 @@ public:
     // returns the buffer advanced by 4 * stride.
     char* AddQuad(char* buffer, int segment, int stride, float v,
                   Vector3 p1, Vector3 p0, Vector3 p2, Vector3 p3,
-                  uint32_t c1, uint32_t c0, uint32_t c2, uint32_t c3);
+                  uint32_t c1, uint32_t c0, uint32_t c2, uint32_t c3);   // 0x00ab3100 (equiv t2)
 };
 
 typedef char check_desc[(sizeof(cRibbonDescription) == 0xf0) ? 1 : -1];
@@ -594,4 +594,10 @@ void cRibbonEffect_StreamQuads(cRibbonEffect* fx, cIRibbonStream* stream)
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Swarm {
+    void Normalize();   // 0x006e6df0 (equiv t2)
+};
 }

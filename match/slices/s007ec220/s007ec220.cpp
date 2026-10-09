@@ -399,7 +399,7 @@ extern "C" void SphereSurfaceParseExtraOptions(SphereSurface* self,
                                                EA::ArgScript::cArguments* args) {
   void** p = EA::ArgScript::MainArguments(args, 1);
   if (p) {
-    extern void WStringAssign(void* dst, void* arg);
+    extern void WStringAssign(void* dst, void* arg);   // 0x0041e050 (equiv t3)
     WStringAssign((char*)self + 0x14, *p);
   }
   p = EA::ArgScript::OptionArguments(args, "radius", 1);

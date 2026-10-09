@@ -495,3 +495,18 @@ void cSPEditorSpeciesManager::ReloadTuning()
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct H {
+    void kDefault();   // 0x015d1160 (equiv t3)
+};
+struct I {
+    void kDefault();   // 0x015d1164 (equiv t3)
+};
+struct M {
+    void kDefault();   // 0x015d1168 (equiv t3)
+};
+struct _N {
+    void kDefault();   // 0x015d115d (equiv t3)
+};
+}

@@ -101,9 +101,9 @@ inline void GetFloatProperty(cPropertyList* pl, uint32_t key, float* out)
     }
 }
 
-extern float g_const_zero;
+extern float g_const_zero;   // 0x015d4578 (equiv t3)
 extern float g_const_one;
-extern Vector3 g_defaultHandleColor;
+extern Vector3 g_defaultHandleColor;   // 0x015d443c (equiv t2)
 
 // @ 0x0047e4b0
 void cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)

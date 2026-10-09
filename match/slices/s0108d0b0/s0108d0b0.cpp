@@ -221,13 +221,13 @@ struct hkContactProcessEvent {                      // 0x410 bytes
 
 // @ 0x0109f040 / 0x0109e7c0 hkWorldCallbackUtil::fireContactPointAdded / hkEntityCallbackUtil::fireContactPointAddedInternal
 extern void __cdecl hkWorldCallbackUtil_fireContactPointAdded(hkWorld*, hkContactPointAddedEvent&);
-extern void __cdecl hkEntityCallbackUtil_fireContactPointAddedInternal(hkEntity*, hkContactPointAddedEvent&);
+extern void __cdecl hkEntityCallbackUtil_fireContactPointAddedInternal(hkEntity*, hkContactPointAddedEvent&);   // 0x0109e7c0 (equiv t2)
 // @ 0x0109f160 / 0x0109e8e0
 extern void __cdecl hkWorldCallbackUtil_fireContactPointRemoved(hkWorld*, hkContactPointRemovedEvent&);
-extern void __cdecl hkEntityCallbackUtil_fireContactPointRemovedInternal(hkEntity*, hkContactPointRemovedEvent&);
+extern void __cdecl hkEntityCallbackUtil_fireContactPointRemovedInternal(hkEntity*, hkContactPointRemovedEvent&);   // 0x0109e8e0 (equiv t2)
 // @ 0x0109f1f0 / 0x0109e970
 extern void __cdecl hkWorldCallbackUtil_fireContactProcess(hkWorld*, hkContactProcessEvent&);
-extern void __cdecl hkEntityCallbackUtil_fireContactProcessInternal(hkEntity*, hkContactProcessEvent&);
+extern void __cdecl hkEntityCallbackUtil_fireContactProcessInternal(hkEntity*, hkContactProcessEvent&);   // 0x0109e970 (equiv t2)
 // @ 0x0109f930 / 0x0109fa10: add / remove the constraint instance to / from the world's
 // critical-locked island bookkeeping (role inferred from the call sites).
 extern void __cdecl hkWorld_addConstraintCritical(hkWorld*, void* constraintInstance, int);

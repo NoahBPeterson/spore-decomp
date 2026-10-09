@@ -41,12 +41,12 @@ extern void* PTR_FUN_0140a92c;
 extern void* PTR_FUN_0140a9a8;
 
 extern "C" {
-void* SP_CheatManager();
+void* SP_CheatManager();   // 0x0067de20 (equiv t2)
 void  FUN_006e0f90();
 void  FUN_006e0fd0();
-void  cCommandBase_ctor(cCommandBase* p);
-void* __stdcall galloc(unsigned n);
-void  __stdcall gfree(void* p);
+void  cCommandBase_ctor(cCommandBase* p);   // 0x0083c800 (equiv t2)
+void* __stdcall galloc(unsigned n);   // 0x0087d4a0 (equiv t2)
+void  __stdcall gfree(void* p);   // 0x0087d4c0 (equiv t2)
 void  zero_mem(void* dst, int val, unsigned n);   // misnamed operator_new in the decompile
 void* operator_new__(void* dst, int val, unsigned n);
 }

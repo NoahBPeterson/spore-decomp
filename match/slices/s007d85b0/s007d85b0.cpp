@@ -21,7 +21,7 @@ void ea_free(void* p); // 0x00f47380
 
 void* GetMessageServer();
 void* GetServer883860();
-void* CheatManager();
+void* CheatManager();   // 0x0067de20 (equiv t2)
 void  SlotMessageDestruct(void* msg);
 void  ErrorNoSuchMode(const char* fmt);                  // cError ctor/throw site
 

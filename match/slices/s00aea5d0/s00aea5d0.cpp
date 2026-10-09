@@ -14,7 +14,7 @@ typedef unsigned int u32;
 typedef unsigned char u8;
 
 extern "C" void* op_new(u32 size, const char* name, int a, int b, const char* file, int line);
-extern "C" void op_del(void* p);
+extern "C" void op_del(void* p);   // 0x00f47380 (equiv t3)
 
 // ---- generic virtual dispatch helpers (masked targets) --------------------
 typedef void* (__thiscall *tc0_t)(void*);

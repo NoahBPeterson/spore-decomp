@@ -680,3 +680,12 @@ void FUN_00746910(void* self, void* newObj, int idx, bool flag)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct ObjD8 {
+    void G();   // 0x0041d8b0 (equiv t3)
+};
+struct SlotObj {
+    void F();   // 0x00743150 (equiv t3)
+};
+}

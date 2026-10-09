@@ -204,6 +204,21 @@ def source_path(sid):
     return os.path.join(slice_dir(sid), sid + ".cpp")
 
 
+def sibling_headers(src):
+    """Headers the slice source includes from another slice's directory by relative path
+    ('#include "../s00908c00/s00908c00.h"'): their declarations and annotations count too."""
+    out = []
+    try:
+        text = open(src, encoding="utf-8", errors="replace").read()
+    except OSError:
+        return out
+    for m in re.finditer(r'^\s*#\s*include\s+"(\.\.?/[^"]+)"', text, re.M):
+        p = os.path.normpath(os.path.join(os.path.dirname(src), m.group(1)))
+        if os.path.exists(p) and p not in out:
+            out.append(p)
+    return out
+
+
 def resolve_include_flags(flags):
     """Relative /I paths in manifests are relative to work/match (see run_all.resolve_flags); cl would
     resolve them against cwd. Try work/match, then the repo root; absolute and Z: paths are kept."""

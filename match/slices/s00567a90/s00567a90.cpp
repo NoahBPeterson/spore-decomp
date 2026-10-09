@@ -17,7 +17,7 @@ void FUN_004e1780(void* p);
 void FUN_00564470(void* p);
 void FUN_00553fb0(void* p);
 void FUN_005156b0(void* p);
-void RBTreeInsert(void* node, void* where, void* anchor, char flag);
+void RBTreeInsert(void* node, void* where, void* anchor, char flag);   // 0x009216a0 (equiv t2)
 void RBTreeErase(void* node, void* anchor);
 
 // @ 0x00567a90  (large vector DoInsertValue helper)

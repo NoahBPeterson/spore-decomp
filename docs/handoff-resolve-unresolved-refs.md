@@ -282,3 +282,12 @@ less work/opencode/unsup_leftover_symbols.txt
 3. A number: "X of the 304 recovered; Y remain, of which Z are structural (SEH) and W are
    absent from our data." That number decides whether we invest in SEH modelling, new
    symbol extraction, or declare the remainder out-of-scope.
+
+---
+
+## 10. Outcome (2026-10-09)
+
+Done: 161 of the 304 recovered (27 via the SEH fix in the checker, 134 via alignment-derived annotations);
+143 remain, bucketed per function. Tool: `tools/matching/resolve_leftover.py`. Full write-up, numbers and the
+reasons for every leftover: `docs/resolve-leftover-results.md`; per-function table:
+`work/claude/resolve_leftover/report.md`.

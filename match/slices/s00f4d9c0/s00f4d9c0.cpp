@@ -480,3 +480,16 @@ void SP::cTerrainBrushEffect::BuildRibbonBrush()
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct EA {
+    void BuildPath();   // 0x00a7ab40 (equiv t3)
+};
+struct UVector3 {
+    void DoInsertValue();   // 0x007ed1b0 (equiv t3)
+};
+struct UcRibbonBrushPoly {
+    void DoInsertValue();   // 0x00f4c180 (equiv t2)
+    void reserve();   // 0x00f4c0a0 (equiv t3)
+};
+}

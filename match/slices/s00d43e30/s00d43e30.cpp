@@ -1333,3 +1333,9 @@ void SP::cCreatureModeStrategy::ContinueLoading(IHandlerRC* handler)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Editor {
+    void Launch();   // 0x005a9200 (equiv t2)
+};
+}

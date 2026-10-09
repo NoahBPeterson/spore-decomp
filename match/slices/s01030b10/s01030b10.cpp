@@ -383,3 +383,15 @@ struct EventLogT {
     void PostFeedbackEvent(unsigned int, unsigned int, int, int, int, int); // 0x00dd8640
 };
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Blob {
+    void Flush();   // 0x00c0b780 (equiv t3)
+};
+struct Mgr2 {
+    void Done();   // 0x00aca360 (equiv t3)
+};
+struct SlowDeath {
+    void SetDeathType();   // 0x01034260 (equiv t2)
+};
+}

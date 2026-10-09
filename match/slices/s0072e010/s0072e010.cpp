@@ -484,3 +484,24 @@ struct URemapEntry {
     void DoInsertValues(void*, unsigned int, int&); // 0x004cea40
 };
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct I {
+    void DoInsertValue();   // 0x004558a0 (equiv t2)
+};
+struct UMesh {
+    void DoInsertValue();   // 0x00424430 (equiv t2)
+};
+struct UPrimRange {
+    void DoInsertValue();   // 0x00428900 (equiv t2)
+};
+struct UStreamElem {
+    void DoInsertValue();   // 0x00424cf0 (equiv t2)
+};
+}
+
+namespace __equiv_ann2 {   // address annotations for the equivalence checker; never referenced
+struct UIndexData {
+    void resize();   // 0x0071f7e0 (equiv t3)
+};
+}

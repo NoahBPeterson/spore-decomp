@@ -464,3 +464,9 @@ BakeSprites::~BakeSprites() {}
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct VecReserve {
+    void Reserve();   // 0x004e0880 (equiv t2)
+};
+}

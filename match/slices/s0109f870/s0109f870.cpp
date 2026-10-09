@@ -836,3 +836,9 @@ hkSimulationIsland* hkWorldOperationUtil::internalMergeTwoIslands(hkWorld* world
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct hkFixedRigidMotion {
+    void construct();   // 0x01088270 (equiv t3)
+};
+}

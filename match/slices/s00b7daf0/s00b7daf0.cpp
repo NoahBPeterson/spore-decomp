@@ -344,7 +344,10 @@ void SP_RandomDirection3(float* out) {
 // =======================================================================
 // game-mode class (MI: IHandlerRC + cGonzagoSubsystem) and helpers
 // =======================================================================
-extern void* gVt_a; extern void* gVt_b; extern void* gVt_c; extern void* gVt_d;
+extern void* gVt_a;
+extern void* gVt_b;   // 0x01465320 (equiv t2)
+extern void* gVt_c;   // 0x014652d0 (equiv t2)
+extern void* gVt_d;   // 0x014652c8 (equiv t2)
 struct CGZSub {
   void __thiscall CGZSubInit();
   void __thiscall CGZSubDtor();

@@ -204,7 +204,7 @@ struct hkGskBaseAgent : hkCollisionAgent {
     virtual void warpTime(hkTime oldTime, hkTime newTime, hkCollisionInput& input);
     static void staticGetPenetrations(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkCdBodyPairCollector& c);
     static void staticGetClosestPoints(const hkCdBody& a, const hkCdBody& b, const hkCollisionInput& input, hkCdPointCollector& c);
-    static void staticLinearCast(const hkCdBody& a, const hkCdBody& b, const hkLinearCastCollisionInput& input, hkCdPointCollector& c, hkCdPointCollector* start);
+    static void staticLinearCast(const hkCdBody& a, const hkCdBody& b, const hkLinearCastCollisionInput& input, hkCdPointCollector& c, hkCdPointCollector* start);   // 0x010ebc80 (equiv t2)
 };
 struct hkGskfAgent : hkGskBaseAgent {
     hkGskManifold m_manifold;                  // +0x30

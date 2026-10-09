@@ -219,7 +219,7 @@ public:
 
 extern "C" void* gpSharedLibraryRegistry;   // 0x01669948
 extern "C" const char kDefaultSharedLibraryVersionInfo[];   // 0x0143e990
-extern "C" void FreeMem(void*);
+extern "C" void FreeMem(void*);   // 0x00f47380 (equiv t2)
 extern "C" {
 __declspec(dllimport) void* __stdcall LoadLibraryW(const wchar_t*);
 __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
@@ -316,8 +316,8 @@ struct ObjectVector {
     void* mpBegin;   // +0x00
     void* mpEnd;     // +0x04
     void* mpCap;     // +0x08
-    void erase(void* first, void* last);
-    void Destruct();
+    void erase(void* first, void* last);   // 0x00d018d0 (equiv t2)
+    void Destruct();   // 0x005c7f10 (equiv t3)
     void push_back_impl(void* value);
 };
 

@@ -172,8 +172,8 @@ void atom_getsymbol(Sym2* out, Atom* in)
     }
 }
 
-extern "C" int __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);
-extern "C" void __cdecl gensym(Sym2* out, const char* name);
+extern "C" int __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
+extern "C" void __cdecl gensym(Sym2* out, const char* name);   // 0x00a675f0 (equiv t2)
 
 // @ 0xa467c0
 Sym2* atom_gensym(Sym2* out, Atom* in)

@@ -320,7 +320,7 @@ struct hkSimpleCollisionResponse
 void hkSimpleContactConstraintData_buildJacobianPass(hkContactPoint* points, int numPoints, hkContactPointProperties* props,
                                                      hkUint8* flags, const hkConstraintQueryIn* in, hkConstraintQueryOut* out);
 // 0x010B48B0 (name unknown): cdecl, five args.
-void hkConstraintSolverSetup_zeroFromSchemas(void* solverInfo, char* a, void* b, void* c, void* d);
+void hkConstraintSolverSetup_zeroFromSchemas(void* solverInfo, char* a, void* b, void* c, void* d);   // 0x010b48b0 (equiv t3)
 
 // ===========================================================================================================================
 

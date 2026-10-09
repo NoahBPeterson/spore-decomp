@@ -227,3 +227,33 @@ void Ctl::Ctor()
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct H0 {
+    H0();   // 0x00dea500 (equiv t3)
+};
+struct H11 {
+    H11();   // 0x00de3370 (equiv t3)
+};
+struct H12 {
+    H12();   // 0x00deb670 (equiv t3)
+};
+struct H13 {
+    H13();   // 0x00dfb9c0 (equiv t3)
+};
+struct H2 {
+    H2();   // 0x00e008e0 (equiv t3)
+};
+struct H3 {
+    H3();   // 0x00de2d00 (equiv t3)
+};
+struct H4 {
+    H4();   // 0x00dee320 (equiv t3)
+};
+struct HMap {
+    void Slot();   // 0x00de7630 (equiv t3)
+};
+struct HandlerBase {
+    HandlerBase();   // 0x00e00630 (equiv t3)
+};
+}

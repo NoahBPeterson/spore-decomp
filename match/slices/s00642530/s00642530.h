@@ -54,12 +54,12 @@ struct EvNode : RBNode { uint32_t key; RCRef val; };
 struct EvTree {
     uint32_t first; RBNode anchor; uint32_t size; uint32_t alloc;
     Iter find(const uint32_t& k);
-    void DoNukeSubtree(RBNode* n);
+    void DoNukeSubtree(RBNode* n);   // 0x009a9600 (equiv t2)
 };
 struct KNode : RBNode { Key3 key; RCRef val; };
 struct KTree {
     uint32_t first; RBNode anchor; uint32_t size; uint32_t alloc;
-    Iter find(const Key3& k);
+    Iter find(const Key3& k);   // 0x00a21dc0 (equiv t2)
     void erase(Iter* out, KNode* n);
     void DoNuke(KNode* n);
 };

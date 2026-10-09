@@ -1089,3 +1089,9 @@ endPlanner:
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct cTribeHUD {
+    void ShowMessage();   // 0x00af1450 (equiv t3)
+};
+}

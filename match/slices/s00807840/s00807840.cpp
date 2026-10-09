@@ -23,8 +23,8 @@ extern "C" void  FUN_0095f5c0(void*, float);
 extern "C" void  FUN_0095ea30(void*);
 extern "C" void  FUN_0095e890(void*);
 extern "C" void* SP_PropertyManager();                       // 0x00?????? // 0x0067de30
-extern "C" char  SP_GetPropertyAsUint32Array(void*, int, int*, int*);
-extern "C" int   SP_OpenRecordAsStream(void*, void*);
+extern "C" char  SP_GetPropertyAsUint32Array(void*, int, int*, int*);   // 0x006a0840 (equiv t2)
+extern "C" int   SP_OpenRecordAsStream(void*, void*);   // 0x00686490 (equiv t2)
 
 struct WindowHelper {
     void* UI_Window_Window();

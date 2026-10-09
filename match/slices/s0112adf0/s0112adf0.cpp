@@ -53,10 +53,10 @@ struct hkArray {
 // hkPointerMapBase<unsigned long>: keys then values in one allocation
 struct hkPointerMapBase {
     hkUlong32* m_elem; int m_numElems; int m_hashMod;
-    hkPointerMapBase();
-    ~hkPointerMapBase();
-    hkUlong32 getWithDefault(hkUlong32 key, hkUlong32 def) const;
-    void insert(hkUlong32 key, hkUlong32 value);
+    hkPointerMapBase();   // 0x0107de00 (equiv t2)
+    ~hkPointerMapBase();   // 0x0107de50 (equiv t2)
+    hkUlong32 getWithDefault(hkUlong32 key, hkUlong32 def) const;   // 0x0107e540 (equiv t2)
+    void insert(hkUlong32 key, hkUlong32 value);   // 0x0107de70 (equiv t2)
 };
 struct hkStringMapBase {
     hkStringMapBase();

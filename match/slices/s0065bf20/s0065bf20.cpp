@@ -36,7 +36,7 @@ void* GetElapsedSeconds(); // 0x00805080
 void SetWindowImage(void* w, uint32_t* key, int flags);
 void* FUN_0067de40();
 void* MessageServer();
-void MessageServer_Unsub(void* h, uint32_t id, int y);
+void MessageServer_Unsub(void* h, uint32_t id, int y);   // 0x0067dcc0 (equiv t2)
 void MessageServer_Post(uint32_t id, void* p, int n);
 void FUN_005ff180(void* p);
 void FUN_0065b440(void* v);

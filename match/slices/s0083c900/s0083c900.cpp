@@ -22,7 +22,7 @@ extern char gEmptyString[];
 extern float gAppPropsMin;
 extern float gAppPropsMax;
 extern void* gAppPropsBuckets[];
-extern void* vtbl_AppProps;
+extern void* vtbl_AppProps;   // 0x0141b5e4 (equiv t3)
 
 namespace eastl {
 struct allocator { unsigned char pad[4]; };

@@ -75,8 +75,8 @@ struct SPUILayout {
     char  IsVisible();
 };
 struct GUIRootObj {
-    void  resetA();
-    void  resetB();
+    void  resetA();   // 0x0093a2e0 (equiv t3)
+    void  resetB();   // 0x0093a2e0 (equiv t3)
 };
 struct GlobalUI {
     void* pad0;

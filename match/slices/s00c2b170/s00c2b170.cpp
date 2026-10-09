@@ -773,3 +773,15 @@ done:
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Transform {
+    Transform();   // 0x00409930 (equiv t2)
+};
+struct cBuilding {
+    void GetCollisionMeshes();   // 0x00bd6180 (equiv t3)
+};
+struct cNest {
+    void GetTribe();   // 0x00c6aa30 (equiv t3)
+};
+}

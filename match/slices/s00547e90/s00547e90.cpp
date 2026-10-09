@@ -22,7 +22,7 @@ int   FUN_00549500(int a);                         // @ 0x549500 ctor 0x70
 void  FUN_005496a0(int a);                         // @ 0x5496a0 move 0x70
 void  FUN_00547840();                              // @ 0x547840 dtor 0x70
 void* DoInsertBool(void* vec, void* pos, int n);   // @ 0x11e0744
-void  WStringAssign(void* self, const wchar_t* s); // eastl basic_string<wchar_t>::assign
+void  WStringAssign(void* self, const wchar_t* s); // eastl basic_string<wchar_t>::assign   // 0x00549e40 (equiv t3)
 void  WStringAppend(void* self, const wchar_t* a, const wchar_t* b);
 
 static int Cmp16(const unsigned short* a, const unsigned short* b)

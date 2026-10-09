@@ -44,7 +44,7 @@ extern "C" int  SP_GetPropertyAsFloatArray(void*, int, void*, void*);
 extern "C" void SPUIHelpers_RemoveWindowCallback(void*, void*);
 extern "C" void SPUIHelpers_CreateCallbackWinProc(void*, void*, int, int, void*);
 extern "C" void SPUIHelpers_SetDrawableImage(void*, int, int, int);
-extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);
+extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);   // 0x0080fee0 (equiv t2)
 extern "C" void  FUN_00b3d320();
 extern "C" void* FUN_00b1de80();
 extern "C" void  FUN_00ed39a0(int);
@@ -511,4 +511,10 @@ void __cdecl f00edf830(void* a, int b, int c, void* d)
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Win {
+    void FindWindowByID();   // 0x008105b0 (equiv t2)
+};
 }

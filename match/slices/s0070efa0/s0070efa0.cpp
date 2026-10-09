@@ -430,3 +430,9 @@ void __stdcall HashChainDtorB(void** buckets, unsigned n)
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct Mutex {
+    void Unlock();   // 0x00922270 (equiv t2)
+};
+}

@@ -605,7 +605,7 @@ class Resolver:
             ident_cands = {op[0]}
             scopes = set(op[1])
         else:
-            ident = base_ident(name)
+            ident = base_ident(name).lstrip("?$")      # '??1?$vector@I@@..' -> '~vector'
             if name.startswith("??0"):
                 ident_cands = {ident}
             elif name.startswith("??1"):
@@ -618,10 +618,11 @@ class Resolver:
             if name.startswith(("??0", "??1")):
                 scopes.add(ident)
         hits = []
+        c_name = not name.startswith("?")          # extern "C": a namespace around the declaration is irrelevant
         for a_ident, a_scopes, va, loc, ptext in annots:
             if a_ident not in ident_cands:
                 continue
-            real = [x for x in a_scopes if x != "<anon>"]
+            real = [] if c_name else [x for x in a_scopes if x != "<anon>"]
             if real:
                 if real[-1] not in scopes:
                     continue
@@ -689,6 +690,10 @@ class Resolver:
             if name.startswith("__imp_"):
                 va = self.by_import(name)
                 return (va, "import") if va else (None, None)
+            if name == "__except_list":
+                # MSVC's name for the SEH chain head: an absolute symbol equal to 0 in the CRT
+                # (exsup.inc), read/written as fs:[0]; the machine maps FS to an emulated TEB.
+                return 0, "seh-chain"
             va = self.by_crt(name)
             if va:
                 return va, "crt"

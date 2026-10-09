@@ -531,3 +531,13 @@ struct KVMap {
     void operator_idx(void*); // 0x00643ac0
 };
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct HubC {
+    void Clear();   // 0x00643940 (equiv t3)
+};
+struct UEntry {
+    void DoInsertValue();   // 0x006431b0 (equiv t3)
+    void Reserve();   // 0x00642c70 (equiv t3)
+};
+}

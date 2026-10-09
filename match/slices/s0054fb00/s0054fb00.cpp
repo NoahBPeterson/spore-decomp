@@ -34,8 +34,8 @@ int64_t FUN_005418c0(int a);
 int*  ObjectTemplateDB();
 int*  ObjectError(int a);                             // 0x8de1a0
 
-extern void* vtbl_cAssetMetadata[];
-extern void* vtbl_cPropertyList[];
+extern void* vtbl_cAssetMetadata[];   // 0x013f3d8c (equiv t2)
+extern void* vtbl_cPropertyList[];   // 0x013ebcdc (equiv t2)
 extern void* vtbl_cEditorResource[]; // 0x013eb938
 extern char  DAT_013ec47c[];
 extern char  DAT_01667bac[];
@@ -44,7 +44,7 @@ extern char  DAT_013f3cb0;
 
 struct Mtx {
     int Lock(const void* p);
-    int Unlock();
+    int Unlock();   // 0x00922270 (equiv t2)
 };
 
 // ---- objects ---------------------------------------------------------------

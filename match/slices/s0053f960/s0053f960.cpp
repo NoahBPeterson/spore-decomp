@@ -16,7 +16,7 @@ uint32_t FUN_0050ea00(int key);                       // @ 0x50ea00 hash
 uint32_t FUN_0050e850(int a, int b);                  // @ 0x50e850 hash
 char     FUN_00509850(int a, int b);                  // @ 0x509850 equal
 void*    FUN_0042dee0(void* alloc, int size, int align, int flags); // @ 0x42dee0
-void     DefaultRefCounted_Release(void* p);          // DefaultRefCounted::Release
+void     DefaultRefCounted_Release(void* p);          // DefaultRefCounted::Release   // 0x00453540 (equiv t2)
 void     FUN_0053e580();                              // @ 0x53e580
 void     FUN_0053eca0();                              // @ 0x53eca0
 char     FUN_0053e690();                              // @ 0x53e690
@@ -277,7 +277,7 @@ unsigned int Obj::FUN_0053fe30(int entry, unsigned char mask)
             char* a = (char*)(gPaintVarModNormal + gFe30TableC[local_14]);
             char* b = (char*)(gPaintVarModNormal + bVar1);
             // FUN_0053eaa0(out, x, y)
-            extern char* VecAdd(char*, const char*, const char*);
+            extern char* VecAdd(char*, const char*, const char*);   // 0x0053eaa0 (equiv t2)
             VecAdd((char*)&local_28, (char*)&entry, a);
             VecAdd((char*)&local_2c, (char*)&entry, b);
             int local_24;

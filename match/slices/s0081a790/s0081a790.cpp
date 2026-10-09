@@ -413,7 +413,7 @@ extern void cSPUILayout_Ctor(void*);
 extern char cSPUILayout_Init(void*, int, int, int);
 extern void* cSPUILayout_FindWindowByID(void*, int, int);
 extern void cSPUILayout_Shutdown(void*, int); // 0x00811ad0
-extern void cSPUILayout_Dtor(void*);
+extern void cSPUILayout_Dtor(void*);   // 0x00811fe0 (equiv t3)
 struct cSPUIPopupMenuWin2 {
   char pad00[0x8a8];
   void* AddMenuItem3(int id, int styleId, int parent, bool attach);

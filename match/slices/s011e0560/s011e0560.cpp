@@ -14,7 +14,7 @@ extern void  CRYPTO_free(void* p);
 extern void  ERR_put_error(int lib, int func, int reason, const char* file, int line);
 extern char  PTR_FUN_0140a578;
 extern void* FUN_0140a57c;
-extern int   ArenaSectionManifest_Types(void* manifest);
+extern int   ArenaSectionManifest_Types(void* manifest);   // 0x011e4600 (equiv t2)
 extern void* ArenaSectionManifest_ExternalArenas(void* manifest);
 extern void* rw_ArenaTypeRegistry_Find(void* reg, int type);
 extern void* rw_ArenaTypeRegistry_Add(void* reg, int type);

@@ -739,3 +739,10 @@ END:
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct hkVector4M {
+    void setRotatedDir();   // 0x010814a0 (equiv t2)
+    void setTransformedPos();   // 0x01081360 (equiv t2)
+};
+}

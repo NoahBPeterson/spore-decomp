@@ -447,7 +447,7 @@ void __fastcall f00edd6b0(C* self)
 
 // ============================================================ 0x00edd810
 extern "C" void* SP_WindowManager(); // 0x0067caa0
-extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);
+extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);   // 0x0080fee0 (equiv t2)
 struct LitMgr { char pad[4]; void* GetWorldMainWindow(); };
 // @ 0x00edd810
 void __fastcall f00edd810(C* self)
@@ -538,7 +538,7 @@ void C::f00edda20()
 extern "C" void* EA_Audio_GetSystemAT(); // 0x00a206f0
 extern "C" void* SP_AudioSystem();
 extern "C" void FUN_00657240(int, int, float*);
-extern "C" void SP_EditorUtils_PlayEditorSound(int, int, int, float);
+extern "C" void SP_EditorUtils_PlayEditorSound(int, int, int, float);   // 0x00435f40 (equiv t2)
 extern "C" void FUN_006572b0(int);
 // @ 0x00eddb00
 void C::f00eddb00()

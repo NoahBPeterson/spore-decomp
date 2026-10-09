@@ -599,3 +599,29 @@ bool ExportToXMFAndBlocks(EditorModel* model, EditorCreatureData* data, const wc
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct H {
+    void resize();   // 0x004cd3c0 (equiv t3)
+};
+struct I {
+    void push_back();   // 0x00454860 (equiv t2)
+};
+struct UBoneIdx4 {
+    void push_back();   // 0x00474260 (equiv t3)
+};
+struct UMatrix4 {
+    void erase();   // 0x00476a40 (equiv t3)
+    void reserve();   // 0x00474740 (equiv t3)
+};
+struct UVector2 {
+    void push_back();   // 0x00473f30 (equiv t3)
+};
+struct UVector3 {
+    void push_back();   // 0x004739d0 (equiv t3)
+    void resize();   // 0x00473810 (equiv t2)
+};
+struct UVector4f {
+    void push_back();   // 0x00474600 (equiv t3)
+};
+}

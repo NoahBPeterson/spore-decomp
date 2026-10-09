@@ -26,7 +26,7 @@ float __cdecl SPUIHelpers_GetElapsedSeconds();
 
 // stub for declared-only callees; overloads give the right stack cleanup
 struct Callee {
-    void  f();
+    void  f();   // 0x0095bb20 (equiv t3)
     void  f(int);
     void  f(void*);
     void  f(void*, int);
@@ -36,17 +36,17 @@ struct Callee {
     void  f(float);
     void  f(float, float);
     void  f(float, float, float);
-    void  f6(float, float, float, float, float, float);
+    void  f6(float, float, float, float, float, float);   // 0x007fd650 (equiv t3)
     void  resize(int);
-    void* ctor();
-    void* ctor2(int, int);
+    void* ctor();   // 0x00804e20 (equiv t3)
+    void* ctor2(int, int);   // 0x0093a560 (equiv t3)
     void* ctorff(float, float);
-    void* ctorf(float);
+    void* ctorf(float);   // 0x007fd610 (equiv t3)
     bool  b();
     bool  b(void*);
     void* p();
-    void* p(int);
-    int64_t i64();
+    void* p(int);   // 0x0095bc10 (equiv t3)
+    int64_t i64();   // 0x0093a3a0 (equiv t3)
 };
 struct WT { bool Initialize(); bool Dispose(); void Shutdown(); };
 struct CastStub { void* Cast(int); };
@@ -65,8 +65,8 @@ extern void* g_vt_01415338;
 extern void* g_vt_013fa72c;
 extern const float g_c1000;
 extern const float g_c001;
-extern const float g_c200;
-extern const float g_c10;
+extern const float g_c200;   // 0x01477fbc (equiv t3)
+extern const float g_c10;   // 0x01473c70 (equiv t3)
 extern const float g_c100;
 extern const float g_c001p;
 extern const float g_c01;
@@ -713,4 +713,10 @@ void AnimatorS::Update()
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct VecCallee {
+    void resize();   // 0x004c0410 (equiv t2)
+};
 }

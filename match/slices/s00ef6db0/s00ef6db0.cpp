@@ -55,7 +55,7 @@ struct CPlayerInventory {
     void f5cb180(int);
     void f5ca910();
     CPlayerInventory* f5cae30();
-    CPlayerInventory* f5cae30(int);
+    CPlayerInventory* f5cae30(int);   // 0x005cae30 (equiv t3)
     CPlayerInventory* f5c2e50();
     CPlayerInventory* GetPlayerInventory();
     CPlayerInventory* GetPlayerInventory3(int, int, int);
@@ -70,7 +70,7 @@ struct CSpaceGame {
 };
 
 struct CResource {
-    void* GetAllocator();
+    void* GetAllocator();   // 0x007f54d0 (equiv t2)
 };
 
 struct Simulator {
@@ -98,8 +98,8 @@ struct CString {
     void* mpEnd;
     void* mpCapacity;
     int   mAllocator;
-    CString(unsigned, void*, int);
-    ~CString();
+    CString(unsigned, void*, int);   // 0x006b5770 (equiv t2)
+    ~CString();   // 0x006b5240 (equiv t2)
     const char* GetText(int, int);
 };
 
@@ -173,7 +173,7 @@ struct CVec {
     void* end;          // +0x04
     void f_ef6f00(void*, void*);
     void clear();
-    bool RemoveKey(void*);
+    bool RemoveKey(void*);   // 0x00ef6ea0 (equiv t2)
 };
 
 // @ 0x00ef6db0

@@ -235,7 +235,7 @@ SharedPointer::SharedPointer(void* pData, void* alloc, unsigned char freeData)
 extern void* g_vtbl_bgloading;
 extern void* g_vtbl_bgloading_a;
 extern void* g_vtbl_bgloading_b;
-extern void* g_vtbl_gfar;
+extern void* g_vtbl_gfar;   // 0x013f3a68 (equiv t3)
 
 // @ 0x0093bca0
 void* FUN_0093bca0(void* self, void* pData, size_type nSize, void* a)

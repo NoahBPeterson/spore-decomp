@@ -60,7 +60,7 @@ struct Svr {
     virtual void v12();
 };
 
-extern float g_f164b620;
+extern float g_f164b620;   // 0x0164b620 (equiv t3)
 float FUN_007facf0(void* self);
 void  FUN_007fa6d0(int, void*);
 void* FUN_007fa690(void* self, int i);
@@ -72,7 +72,7 @@ void  FUN_007fb250(void* out);
 void  FUN_0095ea30(void* p);
 void  FUN_007fb480(void* self, int v);
 void  FUN_007fb320(void* self);
-void* EA_Messaging_GetServer();
+void* EA_Messaging_GetServer();   // 0x00883860 (equiv t2)
 void  SList_SetAllocator(void* p, void* a);
 void  FUN_007fba00(void*);
 void  FUN_007fbb20(void*);

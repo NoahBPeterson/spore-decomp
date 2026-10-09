@@ -879,3 +879,48 @@ bool cSkinObject::UpdateBlocks(EditorRigblock** blocks, int count, vector<Editor
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
 }
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct E {
+    void erase();   // 0x00514750 (equiv t2)
+    void resize();   // 0x004c0410 (equiv t2)
+};
+struct I {
+    void erase();   // 0x004769b0 (equiv t2)
+};
+struct M {
+    void erase();   // 0x004769b0 (equiv t2)
+};
+struct PAUEditorRigblock {
+    void resize();   // 0x004cd3c0 (equiv t3)
+};
+struct UBonePair {
+    void erase();   // 0x00530c80 (equiv t2)
+};
+struct UBoneTransform {
+    void erase();   // 0x004238c0 (equiv t3)
+};
+struct UNodeEntry {
+    void erase();   // 0x004ce110 (equiv t3)
+};
+struct URectF {
+    void erase();   // 0x004ce200 (equiv t3)
+    void resize();   // 0x004cd710 (equiv t3)
+};
+struct UVertexWeights {
+    void erase();   // 0x00455ae0 (equiv t2)
+};
+struct UcRuntimeBlockTransform {
+    void erase();   // 0x004c0730 (equiv t3)
+};
+struct UcRuntimeCreatureBlock {
+    void erase();   // 0x004c0680 (equiv t3)
+    void resize();   // 0x004c0350 (equiv t3)
+};
+struct VcPropertyList {
+    void resize();   // 0x00421bf0 (equiv t2)
+};
+struct fixed_vector {
+    void push_back();   // 0x004cd810 (equiv t3)
+};
+}

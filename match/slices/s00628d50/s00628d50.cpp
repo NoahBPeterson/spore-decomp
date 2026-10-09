@@ -57,7 +57,7 @@ struct Creature {
   virtual void F(uint32_t* a, uint32_t* b, uint32_t* c, int d);  // +0x58
   virtual void v23();
   virtual float E(uint32_t h);                // +0x60
-  bool IsOrientIdleAnim(uint32_t anim);
+  bool IsOrientIdleAnim(uint32_t anim);   // 0x00a027a0 (equiv t2)
 };
 
 struct CreatureStruct {
@@ -98,10 +98,10 @@ struct BabyVec {
 struct Flagged { uint32_t pad; uint32_t flags; };
 
 struct CreatureMgr {
-  Creature* GetCreature(uint32_t id);
-  void GetCreaturePosition(uint32_t id, V3* out);
+  Creature* GetCreature(uint32_t id);   // 0x0059ca70 (equiv t2)
+  void GetCreaturePosition(uint32_t id, V3* out);   // 0x0059d110 (equiv t2)
   CreatureStruct* GetCreatureStructure(uint32_t id);
-  bool IsPlayingAnimation(uint32_t id);
+  bool IsPlayingAnimation(uint32_t id);   // 0x0059cd20 (equiv t2)
 };
 
 struct Editor {
@@ -510,5 +510,11 @@ struct CreatureMgr {
 struct RandomLinearCongruential {
     void RandomUint32Uniform(unsigned int); // 0x00a68fb0
     void SetSeed(unsigned int); // 0x00936090
+};
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct DanceSub {
+    void IsDancingAnim();   // 0x0063b570 (equiv t2)
 };
 }

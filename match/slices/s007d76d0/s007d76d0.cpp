@@ -32,18 +32,18 @@ int   Sub_79ab90(int a, void* b, void* c, int d);
 void* Sub_7df780(void* p);
 void  Sub_4e3260(void* pos, void* value);  // vector<AutoRefCount>::DoInsertValue
 void  Sub_4e0e80(void* vec, void* value);  // vector<AutoRefCount>::push_back
-void* RBTreeIncrement(void* node);         // eastl::RBTreeIncrement
+void* RBTreeIncrement(void* node);         // eastl::RBTreeIncrement   // 0x00921580 (equiv t2)
 void  Sub_538000(void* out, const void* src); // cSPTransform copy ctor
 void  Sub_5387f40();
 void  Sub_537f40(void* dst);
 void  Matrix3_Assign(void* dst, const void* src);
 void* ModelManager();
-void* GetMessageServer();
-void* CheatManager();
-void* CreateCameraManager();
+void* GetMessageServer();   // 0x0067dcc0 (equiv t2)
+void* CheatManager();   // 0x0067de20 (equiv t2)
+void* CreateCameraManager();   // 0x007c7700 (equiv t2)
 int   Sub_a826c0(int n, void** outPtr, int* outCount);
 void* GetServer883860();
-void  SlotMessageDestruct(void* msg);
+void  SlotMessageDestruct(void* msg);   // 0x00421cf0 (equiv t2)
 void  AddSplitInstanceRaw(void* mgr, void* xform, int id, int flag); // 0x007d7640 (slice s007d67e0)
 void* Sub_67de00();                        // 0x0067de00
 

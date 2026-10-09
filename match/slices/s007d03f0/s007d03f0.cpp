@@ -34,8 +34,8 @@ extern const float g_1636ef4, g_1636ef8, g_1636efc;
 static void* s_vt_1411f04[1];
 static void* s_vt_13ef094[1];
 static void* s_vt_1411f48[1];
-extern char g_empty1[];
-extern char g_empty2[];
+extern char g_empty1[];   // 0x01667bac (equiv t3)
+extern char g_empty2[];   // 0x01667bad (equiv t3)
 
 struct SVec {
     float* b; float* e; float* c; char alloc[4];
@@ -630,4 +630,10 @@ void FUN_007d1970(int self, cArguments* args)
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct AppProps {
+    AppProps();   // 0x0083cdd0 (equiv t2)
+};
 }

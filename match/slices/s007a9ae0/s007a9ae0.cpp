@@ -106,8 +106,8 @@ void FUN_007a9d70(int** out, int* end, int* first, int** map, int* mfirst, int* 
 
 // @ 0x007a9e10  Editor::cPropertyList-like ctor
 extern "C" char VT_PropertyListA[];
-extern "C" char VT_PropertyListB[];
-extern "C" char VT_PropertyListC[];
+extern "C" char VT_PropertyListB[];   // 0x013ebcb8 (equiv t3)
+extern "C" char VT_PropertyListC[];   // 0x0140fef4 (equiv t3)
 void* FUN_007a9e10(void* self, int w, int h)
 {
     *(void**)self = (void*)VT_PropertyListA;

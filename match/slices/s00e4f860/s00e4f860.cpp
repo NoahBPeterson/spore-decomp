@@ -10,7 +10,7 @@ struct cGuard16 { void* p; cGuard16(); ~cGuard16(); };
 extern "C" {
   void*     __cdecl FUN_00e4ce40(void* out);
   void*     __cdecl FUN_00e823a0(int handle, void* out);   // thunk @0xe4cc40
-  unsigned  __cdecl FNV1_String8(const char* s, unsigned basis, int len);
+  unsigned  __cdecl FNV1_String8(const char* s, unsigned basis, int len);   // 0x00932e80 (equiv t2)
   int       __cdecl FUN_00e4cce0(int id);
   void      __cdecl FUN_00e83430(int id);
   void      __cdecl FUN_00c2fd20(unsigned key);
@@ -501,4 +501,10 @@ void FUN_00e50400(void* self, char flag) {
 
 // --- equivalence checker address annotations (dummy declarations) ---
 namespace __equiv_ann {
+}
+
+namespace __equiv_ann1 {   // address annotations for the equivalence checker; never referenced
+struct cGuard16 {
+    ~cGuard16();   // 0x00e82130 (equiv t3)
+};
 }

@@ -318,7 +318,7 @@ struct cImageWriter : public RefCounted1 {      // new("Simulator") 0x30 bytes, 
         ResourceKey mKey;                       // +0x08
     } mResource;
     uint32_t pad1c[5];
-    cImageWriter();
+    cImageWriter();   // 0x009986e0 (equiv t3)
 };
 struct cSpeciesProfile : public RefCounted1 {
     const ResourceKey& GetKey();                // 0x00C0BC00
