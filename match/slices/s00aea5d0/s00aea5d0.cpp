@@ -615,3 +615,8 @@ void* SpaceTool::CreateEntry(void* obj, void* a2, int a3, int a4, int a5, int a6
   }
   return e;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

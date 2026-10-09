@@ -217,7 +217,7 @@ void EntryFindFinish(EntryFindData* data) {
         if (h && h != INVALID_HANDLE_VALUE)
             FindClose(h);
         if (data->mOwned)
-            operator delete[](data);
+            operator delete[](data); // 0x00f47380
     }
 }
 
@@ -503,4 +503,14 @@ done:
         list->mItBegin.mpCurrent->mName.append(kDotDot);
     }
     return n;
+}
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct DateTime {
+    void GetParameter(int); // 0x0092df80
+    void SetDate(int, int, int, int, int, int); // 0x0092e200
+};
 }

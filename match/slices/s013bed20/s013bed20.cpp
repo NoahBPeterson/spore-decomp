@@ -441,3 +441,9 @@ void f_013c3020() {
     int d = g_156c5c4 - g_156c5bc;
     if (((d & ~1) > 2) && g_156c5bc && g_156c5bc != g_156c5cc) cdecl_free((void*)g_156c5bc);
 }
+// --- equivalence checker address annotations
+    void cdecl_free(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

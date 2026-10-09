@@ -698,3 +698,9 @@ void cThumbnailManager::CapturePaletteImageThumbnail(cCaptureCtx* ctx, cPaletteI
     void* handle = job->Queue(0, &ev);
     GetManager2()->Dispatch(handle);
 }
+// --- equivalence checker address annotations
+    extern float g_fVecY; // 0x01635644
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

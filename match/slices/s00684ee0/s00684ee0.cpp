@@ -7,7 +7,7 @@
 
 // ---------------------------------------------------------------- externals
 void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, int line);
-void  EAFree(void* p);
+void  EAFree(void* p); // 0x00f47380
 void* ZoneNew(unsigned size, const char* area, int a, int b, int c, int d);
 extern "C" void* GetManager();                       // 0x0067dcd0
 extern "C" int   EA_IO_IsSubdirectory(void*, int, int);  // 0x00930ab0
@@ -520,3 +520,9 @@ void __fastcall FUN_00685f90(char* pThis, void* pOut, unsigned* pKey) {
 }
 
 // @ 0x00684ee0 covered above; missing markers below for other VAs handled in bookkeeping
+// --- equivalence checker address annotations
+    void EAFree(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

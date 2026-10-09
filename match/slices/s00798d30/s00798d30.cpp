@@ -603,3 +603,11 @@ void VCtor::c4(int *param_2)
     param_1[0] = (int)&V_140f578;
     return;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Mat3 {
+    void Assign(void*); // 0x0041cb40
+};
+}

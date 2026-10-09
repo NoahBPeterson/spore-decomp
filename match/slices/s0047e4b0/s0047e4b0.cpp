@@ -346,3 +346,8 @@ void cSPEditorHandle::SetState(int state, bool animate)
     }
     this->mCurrentState = state;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -449,3 +449,8 @@ void __cdecl FUN_00761cf0(int n)
     g_16f8c98 = g_16f8c0c * f + g_16f8c98;
     g_16f8c9c = g_16f8c1c * f + g_16f8c9c;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -1,0 +1,7 @@
+# incomplete / approximate source: <va> <diff-bytes> <reason>
+00b20280  307  cGameData serialize (intrusive list count + WriteUint32 + per-node write + vector
+          compact + cVarListSerializer): incomplete approximation of the list traversal; partial
+00b20c60   90  cGameNounManager::CreateNoun: create-through-manager + 0xc node + id/refcount wiring;
+          list-node linkage approximated; partial
+00b20d30   -   cGameNounManager::PostRemove: not reconstructed (stub); partial
+00b20e40  151  cGameNounManager::CreateDebugNoun: not reconstructed (stub); partial

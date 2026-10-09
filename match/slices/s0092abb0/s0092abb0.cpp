@@ -41,7 +41,7 @@ extern "C" __declspec(dllimport) long __stdcall DefWindowProcA(HWND, UINT, unsig
 extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 extern "C" __declspec(dllimport) wchar_t* __cdecl wcsstr(const wchar_t*, const wchar_t*);
 
-void* operator_new(uint32_t n, const char* name, int a, int b, int c, int d);
+void* operator_new(uint32_t n, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void  operator_delete__(void* p);
 inline void* operator new(unsigned int, void* p) { return p; }
 void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
@@ -545,4 +545,10 @@ void FUN_0092b4d0(WString* cmdline, WString* args) {
         if (i + 1 < count)
             WStr_PushBack(cmdline, L' ');
     }
+}
+// --- equivalence checker address annotations
+    void operator_new(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

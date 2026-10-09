@@ -530,3 +530,9 @@ void __cdecl ExportSubMeshRemap(MeshData* mesh) {
     if (pv.mVerts.mpBegin && ((int*)pv.mVerts.mpBegin)[-1] != 0) operator_delete__(pv.mVerts.mpBegin);
     if (pv.mpBegin && ((int*)pv.mpBegin)[-1] != 0) operator_delete__(pv.mpBegin);
 }
+// --- equivalence checker address annotations
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

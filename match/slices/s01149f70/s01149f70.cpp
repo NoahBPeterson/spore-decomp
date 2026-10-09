@@ -486,3 +486,8 @@ int EALayer3Core::SelectPath(EALayer3Core* self, int param_2, int param_3, int p
 }
 
 }}} // namespace rw::audio::core
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

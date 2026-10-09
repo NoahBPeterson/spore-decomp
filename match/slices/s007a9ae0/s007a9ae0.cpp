@@ -3,8 +3,8 @@
 #include "types.h"
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
-                                          unsigned debugFlags, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+                                          unsigned debugFlags, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" long  _InterlockedExchangeAdd(volatile long* addend, long value);
 #pragma intrinsic(_InterlockedExchangeAdd)
 extern "C" void  memmove(void*, const void*, unsigned int);
@@ -263,3 +263,8 @@ int FUN_007aaa00(int* self) { (void)self; return 0; }
 int FUN_007aa0d0(int* self) { (void)self; return 0; }
 // @ 0x007aa200  SP::cTextureManager::ReloadTexture (partial skeleton)
 int FUN_007aa200(int* self) { (void)self; return 0; }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

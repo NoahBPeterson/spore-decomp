@@ -151,3 +151,11 @@ void __stdcall BuildGaits(Table* t)
         for (int j = 0; j < n; j++) en->ib[j].idx = j;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Gait {
+    Gait(); // 0x009e1030
+};
+}

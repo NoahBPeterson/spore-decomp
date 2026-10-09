@@ -13,7 +13,7 @@ extern "C" long __cdecl _InterlockedDecrement(long volatile* target);
 
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int align,
                                        const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 extern float g_Zero;   // 0x01485378
 

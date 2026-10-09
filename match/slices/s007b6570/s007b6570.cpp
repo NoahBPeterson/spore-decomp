@@ -849,3 +849,10 @@ void FitJob::Run7270(SphereVec* v, cViewer* vw, int target, const float* c, floa
     } while ((float)i < g_140f7ac);
     vw->SetViewAngleY(fov);
 }
+// --- equivalence checker address annotations
+    extern float g_defaultPosY; // 0x0163564c
+    extern float g_defaultPosZ; // 0x01635650
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -2,7 +2,7 @@
 #pragma once
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, unsigned debugFlags,
                                           const char* file, int line);
 extern "C" long __cdecl _InterlockedExchangeAdd(long volatile*, long);
@@ -12,7 +12,7 @@ extern "C" unsigned int __cdecl strlen(const char*);
 #pragma intrinsic(strlen)
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned int);
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file,
-                   int line);
+                   int line); // 0x00f473a0
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
 
 extern char gEmptyString[];  // 0x01667bac (shared "" for char strings)

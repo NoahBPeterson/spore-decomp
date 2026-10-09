@@ -1396,3 +1396,9 @@ bool cCinematicManager::HandleMessage(uint32_t messageID, void* pMessage)
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+    void RemoveActions(...); // 0x00ad9470
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

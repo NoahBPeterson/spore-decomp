@@ -569,3 +569,14 @@ void WinSpinner::Refresh()
     void* sub = self + 4;
     (*(void(__thiscall**)(void*))((char*)*(void**)sub + 0x90))(sub);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct IWinSub {
+    void SetFlag(unsigned int, unsigned char); // 0x00961760
+};
+struct Sw {
+    void SetUnits(int); // 0x0093a1a0
+};
+}

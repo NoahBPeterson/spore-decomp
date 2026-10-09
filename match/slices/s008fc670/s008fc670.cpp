@@ -867,4 +867,23 @@ bool FileHandler::ProcessRequest(FileReq* req, int unused)
     mpProvider->Complete(req, 3);
     return false;
 }
+// --- equivalence checker address annotations
+    void operator_new(...); // 0x00f473a0
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EStr16 {
+    void RangeInit(unsigned int); // 0x00475ab0
+};
+struct XmlParser {
+    ~XmlParser(); // 0x008e5ca0
+    void Parse(void*); // 0x008e60a0
+    XmlParser(void*); // 0x008e5ea0
+};
+struct HClient {
+    HClient(); // 0x00943f60
+};
+struct DomDoc {
+    DomDoc(int); // 0x008e2dd0
+};
+}

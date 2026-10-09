@@ -5,7 +5,7 @@
 #include <new>
 
 void operator delete(void* p);                      // 0x00f47380 (EASTL/EA allocator free)
-void* memcpy(void*, const void*, unsigned int);
+void* memcpy(void*, const void*, unsigned int); // 0x011e0744
 
 struct Vec2 { float x, y; };
 inline float Length(const Vec2& v) { return sqrtf(v.x * v.x + v.y * v.y); }
@@ -357,4 +357,10 @@ bool cSPCasual_Path::FindPath(float sx, float sy, float gx, float gy) {
     }
   }
   return true;
+}
+// --- equivalence checker address annotations
+    void memcpy(...); // 0x011e0744
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -895,3 +895,8 @@ hkBool hkConstraintSolverSetup::internalIsMemoryOkForNewAccumulators(hkConstrain
 	}
 	return hkBool(true);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

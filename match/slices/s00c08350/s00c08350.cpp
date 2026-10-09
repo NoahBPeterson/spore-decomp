@@ -572,3 +572,14 @@ void Body::Update()
     calm = 1;
     mode = 0;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct NounMgr {
+    void GetAvatar(); // 0x00b1fdb0
+};
+struct Vec32 {
+    void AddUnique(unsigned int*); // 0x00c072f0
+};
+}

@@ -218,3 +218,13 @@ cSmoothCameraController* __cdecl CreateSmoothCameraController(cPropertyList* con
 {
     return new ("App", 0, 0, 0, 0) cSmoothCameraController(config);
 }
+// --- equivalence checker address annotations
+    void EA_Alloc(...); // 0x00f473a0
+    void EA_Free(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct FloatVec {
+    void DoInsertValue(float*, float&); // 0x00455660
+};
+}

@@ -226,7 +226,7 @@ __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
 __declspec(dllimport) int   __stdcall FreeLibrary(void*);
 }
 int __cdecl wcscmp_lib(const wchar_t*, const wchar_t*);
-void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
+void* __cdecl operator new(unsigned int, const char*, int, int, int, int); // 0x00f473a0
 void* __cdecl operator_new_args(unsigned int);
 
 namespace EA {
@@ -741,4 +741,14 @@ bool EA::SharedLibraryRegistry::AddLibraryRef(SharedLibrary* lib) {
     }
     mMutex.Unlock();
     return true;
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void Construct(int, int); // 0x009222a0
+    void Destroy(); // 0x00922130
+};
 }

@@ -310,3 +310,15 @@ void cDecalBuilder::Project(const Mesh& mesh, const DecalParams& params)
     else
         mBatches.back().mCount = remaining;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct E {
+    void resize(unsigned int, unsigned char&); // 0x00473810
+    void erase(unsigned char*, unsigned char*); // 0x0050f740
+};
+struct UFillEntry {
+    void erase(int*, int*); // 0x0050f740
+};
+}

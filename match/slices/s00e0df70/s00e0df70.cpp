@@ -930,3 +930,14 @@ L_refresh:
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ResObj {
+    void GetAllocator(); // 0x007f54d0
+};
+struct IconTree {
+    void Find(void**, unsigned int*); // 0x00e5c780
+};
+}

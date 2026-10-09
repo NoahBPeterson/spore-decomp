@@ -512,3 +512,12 @@ void cCreatureBase::func6Ch(int deltaTime)
 }
 
 }  // namespace Simulator
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Swarm {
+    void erase(int); // 0x00d2c9f0
+    void begin(); // 0x00594410
+};
+}

@@ -5,7 +5,7 @@
 01137c90  40  complete Shutdown; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (302 valid, 80% coverage)
 01137cd0  22  complete ResetCommand; LTCG + loop/unroll layout; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (297 valid, 100% coverage)
 01137d60  106 complete leaf ChunkHeader parser; cl13 codegen for the big-endian byte swap (union/byte-store shape) differs structurally; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
-01137de0  516 complete PlayHandler (ring callback); LTCG inlining across StreamPool/Stream calls; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (339 valid, 55.0% coverage, no mismatch)
+01137de0  510 complete PlayHandler (ring callback); LTCG inlining across StreamPool/Stream calls (not byte-exact); x87 conversion of the float*double sample count fixed: the original uses `fistp dword` (round-nearest per FPCW 0x027F, 0x80000000 on overflow) but cl emits `__ftol2` (truncate + low 32 bits of an int64), so use `_mm_cvtsd_si32`; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (no mismatch, seeds 2-7 @2000-2500 inputs); seed1/2000 WEAK at 55.0% coverage (no mismatch; coverage is original-side input coverage)
 01138050  188 complete FeedChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (168 valid, 100% coverage, no mismatch)
 01138130  880 complete SendCommand dispatcher; LTCG ring writes + command bodies; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (374 valid, 83.0% coverage)
 011384b0  189 complete StreamNextChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (150 valid, 84.9% coverage, no mismatch)

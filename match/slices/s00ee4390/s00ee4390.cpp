@@ -749,3 +749,8 @@ bool cScenarioEditModeBehaviorUI::HandleUIMessage(IWindow* window, const Message
     }
     return false;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -573,3 +573,9 @@ cPropertyUI::~cPropertyUI() {
   if (mPropToTextEditMap.count) mPropToTextEditMap.clear();
   if (mPropToToggleButtonMap.count) mPropToToggleButtonMap.clear();
 }
+// --- equivalence checker address annotations
+    void CreateDefaultButton(...); // 0x009671c0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

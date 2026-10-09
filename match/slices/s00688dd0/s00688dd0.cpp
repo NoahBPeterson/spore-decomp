@@ -335,7 +335,7 @@ bool ParamWalker::Walk(char* node, uint32 flags, void* sink)
 void* operator new(unsigned size, const char* area, int a, int b, int c, int d);
 struct NewObj { NewObj(int param); };
 struct MsgSrv { void* vtbl; };
-MsgSrv* SP_MessageServer();
+MsgSrv* SP_MessageServer(); // 0x0067dcc0
 
 void PostMsgA(int param)
 {
@@ -598,4 +598,10 @@ CMessageCommandDispatcher::CMessageCommandDispatcher()
     m38 = 0;
     m3c = 0;
     m40 = 0;
+}
+// --- equivalence checker address annotations
+    void SP_MessageServer(...); // 0x0067dcc0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

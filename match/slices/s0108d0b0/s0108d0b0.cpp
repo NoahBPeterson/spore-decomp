@@ -847,4 +847,8 @@ hkAabbPhantom::hkAabbPhantom(const hkAabb& aabb, uint32_t collisionFilterInfo) :
     m_aabb = aabb;
     ((uint32_t*)this)[0x0e] = collisionFilterInfo;      // +0x38 collidable collision filter info
 }
+// --- equivalence checker address annotations
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

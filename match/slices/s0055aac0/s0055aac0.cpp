@@ -411,3 +411,17 @@ void cFunctionalTestCheat::Execute(EA::ArgScript::cArguments& args) {
 }
 
 }
+// --- equivalence checker address annotations
+    void SPKeyFromName(...); // 0x0068d5a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void HasArgument(char*); // 0x00837ee0
+    void OptionArguments(char*, int); // 0x00838330
+    void StrtoU64(char*, char**, int); // 0x0092d6f0
+};
+struct SP {
+    void GetPollenManager(); // 0x0067cb30
+};
+}

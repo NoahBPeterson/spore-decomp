@@ -534,3 +534,17 @@ struct Big {
 // @ 0x00bc4630
 Big::Big() {}
 typedef char chk_s_off[(sizeof(Big) >= 0x78c) ? 1 : -1];
+// --- equivalence checker address annotations
+    void App(...); // 0x0067dd10
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Cam {
+    void f7c4d00(void*); // 0x007c4d00
+    void f7c4ba0(float); // 0x007c4ba0
+    void f7c4bc0(float); // 0x007c4bc0
+};
+struct PosHelper {
+    PosHelper(void*); // 0x00b16dc0
+};
+}

@@ -928,3 +928,8 @@ int FixedMemoryStream::Read(void* pData, size_t nSize)
 
 } // namespace IO
 } // namespace EA
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

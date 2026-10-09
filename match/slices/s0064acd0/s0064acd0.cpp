@@ -704,3 +704,11 @@ finish:
     esi->Release();
     FreeStr(tmpStr);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct FeedCategory {
+    void Expand(int); // 0x00664480
+};
+}

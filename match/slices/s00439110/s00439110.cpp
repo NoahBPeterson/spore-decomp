@@ -491,3 +491,18 @@ void cSPEditorBlock::SetModelBasedOnSymmetrySign(int symmetrySign, bool flipThis
 }
 
 } // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SP {
+    void erase(float*, float*); // 0x00530c80
+    void DoInsertValue(unsigned int*, unsigned int&); // 0x004aa3c0
+};
+struct I {
+    void erase(unsigned int*, unsigned int*); // 0x00530c80
+};
+struct M {
+    void DoInsertValue(float*, float&); // 0x004aa3c0
+};
+}

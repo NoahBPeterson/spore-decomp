@@ -396,3 +396,8 @@ void cPaintVarEvalList::Apply(float* const values, float age, const cSPVector3& 
 }
 
 }  // namespace nSPSkinner
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

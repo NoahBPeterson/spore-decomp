@@ -575,3 +575,8 @@ int CreateResource(void* self, int a2, int* a3, void* req)
     (void)self; (void)a2; (void)a3; (void)req;
     return 3;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

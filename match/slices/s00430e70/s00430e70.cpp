@@ -38,7 +38,7 @@ void* GetCompositor();                                          // 0x67ddb0
 void* GetPropertyService();                                     // 0x67dcd0
 void* GetMessageService();                                      // 0x67dcc0
 float Vector3_MaxComponent(float* v);                           // 0x41bf30
-void* EASTL_allocator_allocate(uint32_t sz, const char* name, int a, int b, int c, int d);
+void* EASTL_allocator_allocate(uint32_t sz, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void* NewSpriteTexture(int w, int h);                           // 0x4328d0
 void* NewBakeSprites();                                         // Graphics::BakeSprites::BakeSprites
 void SetSpriteParam(void* tex, float v, int z);                 // 0x11f0440

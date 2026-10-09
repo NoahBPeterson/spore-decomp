@@ -7,7 +7,7 @@
 
 void  WString_Assign(const wchar_t* first, const wchar_t* last);   // 0x00423650 (basic_string<wchar_t>::assign)
 void  EASTL_allocator_deallocate(void* p);                          // 0x00f47380
-void* EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line);
+void* EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
 
 // ===========================================================================
 // eastl::basic_string<wchar_t>

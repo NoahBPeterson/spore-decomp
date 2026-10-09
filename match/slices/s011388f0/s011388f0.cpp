@@ -639,3 +639,8 @@ int __stdcall FUN_01139920(float* src, int* out, float f)
 }
 
 } } } // namespace rw::audio::core
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

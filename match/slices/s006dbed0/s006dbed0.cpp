@@ -726,3 +726,8 @@ void BakeMeshTexCoords(Mesh* pMesh, int param, uint32_t usage)
 
     FinishMesh(pMesh);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

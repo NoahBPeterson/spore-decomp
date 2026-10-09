@@ -344,3 +344,9 @@ bool __cdecl GenerateMeshTangents(Mesh* mesh) {
   }
   return true;
 }
+// --- equivalence checker address annotations
+    void ComputeTriangleTangent(...); // 0x00732cb0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

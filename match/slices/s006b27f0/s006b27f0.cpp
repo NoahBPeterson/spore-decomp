@@ -296,3 +296,9 @@ RefPair5& SaveMap5::Index(const uint32_t& key) {
 void __cdecl SP_RegisterSaveArea(uint32_t key, void* a, void* b) {
   g_m5.Index(key) = RefPair5(a, b);
 }
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

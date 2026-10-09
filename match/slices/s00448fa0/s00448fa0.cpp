@@ -294,3 +294,14 @@ cSPMatrix3 cSPEditorBlock::A494b0(Vector3 dir)
     }
     return q;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cSPEditorModel {
+    void IsSymmetryEnabled(); // 0x004adc40
+};
+struct cSPMatrix3 {
+    cSPMatrix3(); // 0x00402ab0
+};
+}

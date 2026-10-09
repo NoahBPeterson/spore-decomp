@@ -589,3 +589,17 @@ void cUIHints::SetFlag(char a, int b) {
         UpdateHints(0, (char)b);
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cString {
+    void GetText(); // 0x006b55c0
+};
+struct Layout0 {
+    void Shutdown(int); // 0x00811ad0
+};
+struct Vec20 {
+    void Insert(int*, int*); // 0x00a693f0
+};
+}

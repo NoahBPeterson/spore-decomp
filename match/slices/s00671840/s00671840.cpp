@@ -35,10 +35,10 @@ struct cSPUILayout {
   void Dtor();
 };
 void* WindowManager();
-void* AssetBrowser();
+void* AssetBrowser(); // 0x00401030
 struct Stopwatch { void Init(int a, int b); long long GetElapsedTime(); void Restart(); };
-int GetTutorialToolPrice(void* a, unsigned key, int def);
-void* MessageServer();
+int GetTutorialToolPrice(void* a, unsigned key, int def); // 0x004e1c30
+void* MessageServer(); // 0x0067dcc0
 void RemoveHandler(void* server, void* handler, void* ids, int count, int prio);
 unsigned short* Window_GetText(void* w);
 struct EString {
@@ -55,11 +55,11 @@ void FUN_00996280(int a, int b, int c, int d);
 bool FUN_009979f0(void* a, unsigned key);
 struct FrameSet { void Ctor(int a); void Dtor(); void* GetFrame(void* key); void Clear(); void Release(); };
 void CenterWindowInRect(void* obj);
-void* operator_new(size_t n, const char* name, int a, int b, int c, int d);
+void* operator_new(size_t n, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void operator_delete_(void* p);
 void SetScrollbarDrawable(void* frame, int a, void* drawable);
 void FUN_00992dc0(int a, int b);
-void* interface_cast(void* p);
+void* interface_cast(void* p); // 0x0081d780
 void FUN_00997140(void* a);
 struct DetokBase { void BaseDtor(); };
 struct VecHolder { void Dtor(); };
@@ -536,4 +536,24 @@ void Detokenizer::token_action_copy(void* a, unsigned short* b) {
   ((EString*)*(void**)((char*)this + 0x94))->Assign((unsigned short*)local[0], e);
   if ((((unsigned)((char*)local[2] - (char*)local[0]) & 0xfffffffe) > 2) && local[0])
     operator_delete_(local[0]);
+}
+// --- equivalence checker address annotations
+    void AssetBrowser(...); // 0x00401030
+    void GetTutorialToolPrice(...); // 0x004e1c30
+    void MessageServer(...); // 0x0067dcc0
+    void interface_cast(...); // 0x0081d780
+    void operator_delete_(...); // 0x00f47380
+    void operator_new(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct FrameSet {
+    void GetFrame(void*); // 0x00996d40
+};
+struct cSPUILayout {
+    void Init(void*, int, unsigned int); // 0x008120d0
+};
+struct Stopwatch {
+    void Restart(); // 0x00571e80
+};
 }

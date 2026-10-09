@@ -429,3 +429,8 @@ bool cTextureTag::DescribeTraits(Creature* c, float** weights, cFeatureVector* f
     }
     return p30;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

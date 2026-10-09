@@ -4,7 +4,7 @@
 #include "types.h"
 #include <xmmintrin.h>
 
-extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line);
+extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
 
 // ------------------------------------------------------------------ the 0xa8 job record (float flavour)

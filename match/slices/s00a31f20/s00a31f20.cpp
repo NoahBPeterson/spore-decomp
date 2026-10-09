@@ -476,3 +476,41 @@ void SystemProps::SetOutputProperty(uint32_t id, uint32_t prop, float value)
     char out[12];
     ((InnerInsert*)m)->Insert((uint32_t*)out, kv, prop);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ListB {
+    void Push(unsigned int*); // 0x00a21d30
+};
+struct OuterIdx {
+    void Index(unsigned int*); // 0x00a323e0
+};
+struct InnerFind {
+    void Find(unsigned int*, unsigned int*); // 0x00645ed0
+};
+struct OMFind {
+    void Find(unsigned int*, unsigned int*); // 0x00a23b00
+};
+struct SimpleA {
+    void mutexDtor(); // 0x00922130
+    void f922e10(); // 0x00922e10
+    void f921e40(); // 0x00921e40
+    void f11e64d0(); // 0x011e64d0
+};
+struct InnerInsert {
+    void Insert(unsigned int*, unsigned int*, unsigned int); // 0x00a26ce0
+};
+struct OMInsert {
+    void Insert(unsigned int*, void*, unsigned int); // 0x00a30f80
+};
+struct OMNodeCtor {
+    void Ctor(void*); // 0x00a2e2f0
+};
+struct OMNodeDtor {
+    void Dtor(); // 0x00a2aa70
+};
+struct OMTmp {
+    void Make(char*, char*); // 0x00a1e320
+};
+}

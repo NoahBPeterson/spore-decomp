@@ -531,3 +531,11 @@ BidiClass GetBidiClass(wchar_t c)
     return (BidiClass)((((ch != 0xeb1) - 1) & 5) + 1);
 }
 }}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void resize(unsigned int); // 0x0089bd50
+};
+}

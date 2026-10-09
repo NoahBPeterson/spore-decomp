@@ -53,8 +53,8 @@ extern "C" unsigned int fwrite(const void*, unsigned int, unsigned int, FILE*);
 extern "C" void  SPKeyFromName(void* out, void* name, int, int);
 extern "C" int   FUN_007c5820(void);
 extern "C" int   FUN_007c5920(void);
-extern "C" int   IsType1Or9(int);
-extern "C" int   IsType9to11(int);
+extern "C" int   IsType1Or9(int); // 0x007c57e0
+extern "C" int   IsType9to11(int); // 0x007c5800
 extern "C" int   CtrlIDMapFind(int* id);
 
 extern "C" int   GetVersionExW(void*);
@@ -354,4 +354,9 @@ void* cCameraManager::Controller(int id) {
     int found = CtrlIDMapFind(&id);
     if (found != 0) return mControllersBegin[found];
     return 0;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

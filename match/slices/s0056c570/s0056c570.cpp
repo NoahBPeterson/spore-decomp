@@ -7,7 +7,7 @@ template <int N> inline void ScratchSlots() { uint32_t s[N]; }
 
 extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned dbg,
                                           const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);
 
 struct Feature { uint32_t field0; uint32_t field1; void* ptr; };

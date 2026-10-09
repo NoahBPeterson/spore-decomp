@@ -380,3 +380,12 @@ hkBool hkGeomConvexHullBuilder::buildPlaneEquations(const hkGeomConvexHullTolera
 	sortAndWeld(tolerances, planeEquations, numWelded);
 	return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkGeomConvexHullBuilder {
+    void sharesEdgePair(void*, void*, void*, void*, void*, int&, int&); // 0x01115730
+    void addPlanesForOpposingFace(int&, int&, int&, int&, int&); // 0x01116f90
+};
+}

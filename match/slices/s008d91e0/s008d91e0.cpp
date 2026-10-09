@@ -96,7 +96,7 @@ struct RbNode {
 RbNode* __cdecl RBTreeIncrement(RbNode*);
 void __cdecl RBTreeErase(RbNode*, RbNode* anchor);
 void __cdecl RBTreeInsert(RbNode* node, RbNode* parent, RbNode* anchor, int side);
-extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
+extern "C" void* __cdecl memcpy(void*, const void*, unsigned); // 0x011e0744
 
 struct RbIter {
     RbNode* p;
@@ -768,4 +768,10 @@ DatabasePackedFile::DatabasePackedFile(const wchar_t* path, IAlloc* alloc)
     mFile.AddRef();
     if (path)
         SetLocation(path);
+}
+// --- equivalence checker address annotations
+    void memcpy(...); // 0x011e0744
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

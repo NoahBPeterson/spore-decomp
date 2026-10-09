@@ -13,8 +13,8 @@ typedef int(__thiscall* FnRetI)(void*);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void  SPUIHelpers_SetWindowAreaToParent(void* win);
 extern "C" char  FUN_009979f0(void* win, uint32_t id);
 extern "C" void* CopyImpl(void* first, void* last, void* dest);

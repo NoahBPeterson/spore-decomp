@@ -6,7 +6,7 @@
 typedef unsigned int size_t;
 
 // ---------------------------------------------------------------- externals
-unsigned int FNV1_String16(const wchar_t* s, unsigned int hash, int b);
+unsigned int FNV1_String16(const wchar_t* s, unsigned int hash, int b); // 0x00932f30
 short* FUN_00547900(const void* table, int a, int b);
 short* FUN_00547970(const void* table, int a, int b);
 void   FUN_004228e0(int a, unsigned int b);
@@ -273,4 +273,10 @@ void Obj42::FUN_00546b70()
 int* Obj42::FUN_00546c20()
 {
     return (int*)this;
+}
+// --- equivalence checker address annotations
+    void FNV1_String16(...); // 0x00932f30
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

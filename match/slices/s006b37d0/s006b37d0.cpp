@@ -306,3 +306,33 @@ tail:
   c->Done(0);
   return ok;
 }
+// --- equivalence checker address annotations
+    void CreateDirectorySave(...); // 0x006b2620
+    void GetResMgr6(...); // 0x0067dcd0
+    void RegisterSaveArea(...); // 0x006b3760
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct WStr6 {
+    void rfind(wchar_t, int); // 0x0041dfc0
+    void Init(wchar_t*); // 0x00579a90
+    void push_back(wchar_t); // 0x004f6510
+    void append(wchar_t*); // 0x00599bb0
+};
+struct SvcA6 {
+    void Pack(void*, unsigned int, unsigned int*, unsigned int*, unsigned short*); // 0x008d9850
+    void Check(void*, unsigned int); // 0x008d8570
+};
+struct SvcB6 {
+    void Pack(void*, unsigned int, unsigned int*, unsigned int*, unsigned short*); // 0x006bd580
+    void Check(void*, unsigned int); // 0x006bc3e0
+};
+struct cString6 {
+    void GetText(); // 0x006b55c0
+    void Load(unsigned int, unsigned int, wchar_t*); // 0x006b54b0
+    cString6(); // 0x006b5060
+};
+struct Stream6 {
+    void GetData(); // 0x0093ba70
+};
+}

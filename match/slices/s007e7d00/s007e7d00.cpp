@@ -264,7 +264,7 @@ bool cAppSystem::LoadPlugins() {
                 mPluginLibraries.Load(full.mpBegin, 1);
             }
         } while (EntryFindNext(name, 0));
-        EntryFindFinish(name);
+        EntryFindFinish(name); // 0x0092e9b0
     }
     return true;
 }
@@ -315,4 +315,13 @@ void RCVec::DoInsertValue(RCObj** position, RCObj* const* value) {
     mpEnd = newEnd;
     mpBegin = p;
     mpCapacity = p + newCap;
+}
+// --- equivalence checker address annotations
+    void EntryFindFinish(...); // 0x0092e9b0
+    void EntryFindFirst(...); // 0x0092e730
+    void EntryFindNext(...); // 0x0092e8e0
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

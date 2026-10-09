@@ -327,3 +327,10 @@ next:
         *outLen = total;
     return n;
 }
+// --- equivalence checker address annotations
+    void ProbeHit(...); // 0x00af5b40
+    void SweepSide(...); // 0x00af6400
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

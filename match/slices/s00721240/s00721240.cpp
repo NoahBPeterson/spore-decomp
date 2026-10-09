@@ -1,7 +1,7 @@
 // cTextureChart hash containers and chart helpers (retail offsets from disasm).
 #include "types.h"
 
-extern "C" void  __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
                                                   const char* file, int line);
 extern "C" void  __cdecl op_new_array(void* dst, int zero, uint32_t size);

@@ -545,3 +545,8 @@ void Ctx::FUN_0113db70()
         g_16e7b9c = state;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -304,3 +304,17 @@ void __stdcall cAppModeSpace_LoadStateMachine(int mode)
     ((NodeTree*)&f[0x44 / 4])->Destroy(f[0x50 / 4]);
     ((BuilderCleanup*)&f[0x28 / 4])->Destroy(f[0x34 / 4]);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct CommandBase {
+    void Destroy(); // 0x0083c750
+};
+struct NodeTree {
+    void Destroy(unsigned int); // 0x00e4b990
+};
+struct BuilderCleanup {
+    void Destroy(unsigned int); // 0x00b1b830
+};
+}

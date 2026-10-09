@@ -119,7 +119,7 @@ struct M5a0 {
     char c;
     M5a0() {}
     M5a0(const M5a0& x);                    // 0x00680a50
-    ~M5a0();
+    ~M5a0(); // 0x00680730
 };
 
 // value object copied by 0x00680c30 / 0x00680fc0's map nodes
@@ -596,4 +596,12 @@ ObjA* CopyBackwardA(ObjA* srcFirst, ObjA* srcLast, ObjA* dstLast) {
         return d;
     }
     return dstLast;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct M5a0 {
+    ~M5a0(); // 0x00680730
+};
 }

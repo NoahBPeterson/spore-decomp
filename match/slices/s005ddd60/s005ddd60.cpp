@@ -546,3 +546,19 @@ EditorUI* EditorUI::Construct()
     fb8 = this;
     return this;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EditorUI {
+    void UpdateSaveButtons(); // 0x005dc800
+    void SetMode(int); // 0x005dda30
+    void UpdateUIBasedOnModelSaveability(); // 0x005dd7a0
+};
+struct TooltipProc {
+    void Ctor(); // 0x00835cc0
+};
+struct AppMode {
+    void NewModel(int); // 0x0058d1c0
+};
+}

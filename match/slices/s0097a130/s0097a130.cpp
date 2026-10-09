@@ -499,3 +499,16 @@ bool WinGrid::OnRebuild(RenderContext* rc) {
     }
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct WinGrid {
+    void GetColumnWidthInternal(int); // 0x00979db0
+    void GetRowHeightInternal(int); // 0x00979f10
+    void DrawCellBackground(void*); // 0x00971490
+};
+struct RenderContext {
+    void Begin2D(int); // 0x0095bc10
+};
+}

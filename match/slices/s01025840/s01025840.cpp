@@ -1064,3 +1064,8 @@ void cCommandSpace::Execute(cArguments* args)
 
 } // namespace nSpaceCheats
 } // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

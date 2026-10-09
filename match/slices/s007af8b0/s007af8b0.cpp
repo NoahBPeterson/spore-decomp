@@ -459,3 +459,8 @@ BakeSprites::BakeSprites() : mVec()
     _InterlockedExchange((volatile long*)&mRef, 0);
 }
 BakeSprites::~BakeSprites() {}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -425,7 +425,7 @@ int  __cdecl WriteUint32Stub(void* s, void* d, int n, int f); // 0x0093aa70
 void __cdecl FreeStreamStub(void* s);                        // 0x006fe430
 void __cdecl FragDeclStub(void* s);                          // 0x006fa480
 void __cdecl _eh_vector_constructor_iterator_(void* ptr, unsigned size, unsigned count, void* ctor, void* dtor);
-extern void* g_device;
+extern void* g_device; // 0x016f89d0
 char __cdecl props_get(void* propList, unsigned id, void* out);
 extern unsigned char g_dbg[8];
 extern unsigned g_dbg2;
@@ -744,4 +744,9 @@ void ReloadLightingStates(void* self)
     }
     if (local[0] != 0)
         EFree2((void*)local[0]);
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

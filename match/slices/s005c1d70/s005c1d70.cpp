@@ -4,7 +4,7 @@
 #include <string.h>
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_memmove(void* dst, const void* src, unsigned int n);  // 0x011e0744 (static memmove)
 
 #define PV(n) virtual void pv##n();

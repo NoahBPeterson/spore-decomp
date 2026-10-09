@@ -573,3 +573,9 @@ hkBool hkSampledHeightFieldShape::castRay(const hkShapeRayCastInput& input, hkSh
 	castRayWithCollector(input, *(const hkCdBody*)0, collector);   // cdBody argument is a null reference in the binary
 	return hkBool(collector.m_hit != 0);
 }
+// --- equivalence checker address annotations
+    extern unsigned long g_hkMonitorStreamCurrentTls; // 0x016e42a4
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

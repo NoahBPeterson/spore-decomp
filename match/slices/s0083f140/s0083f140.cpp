@@ -8,8 +8,8 @@ typedef int            int32;
 typedef unsigned long  ulong32;
 
 extern "C" {
-void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line); // 0x00f473a0
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 __declspec(dllimport) int __cdecl isspace(int);
 __declspec(dllimport) int __cdecl isalpha(int);
 __declspec(dllimport) int __cdecl isalnum(int);
@@ -24,7 +24,7 @@ static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 static const char g_allocName[] = "ArgScript";
 
-extern char gEmptyString[];
+extern char gEmptyString[]; // 0x01667bac
 extern void* gEmptyBucketArray[];
 
 struct cError {
@@ -55,7 +55,7 @@ struct string8 {
     }
     void RangeInitialize(unsigned n);
     void assign(const string8& x);
-    ~string8();
+    ~string8(); // 0x00530670
 };
 bool operator==(const string8& s, const char* lit);   // 0x00555020
 }  // namespace eastl
@@ -581,4 +581,15 @@ void* __fastcall VectorSpecInsert(int* self, int, void* pos, void* val) {
     self[0] = (int)buf;
     self[2] = (int)(buf + cap * 0x14);
     return pos;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct eastl {
+    void RangeInitialize(unsigned int); // 0x00475ab0
+};
+struct string8 {
+    ~string8(); // 0x00530670
+};
 }

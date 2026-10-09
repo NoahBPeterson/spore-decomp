@@ -585,3 +585,11 @@ done:
 }
 
 } // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SP {
+    void GetPropertyT_float(int, unsigned int, float); // 0x004e1c70
+};
+}

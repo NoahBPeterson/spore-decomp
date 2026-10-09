@@ -290,3 +290,13 @@ void SP::cGameEditInputStrategy::DoSaveSelectedFile(eastl::string16* pName)
     }
     pStream->Close();
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct eastl {
+    void append(char*, char*); // 0x00455d60
+    void sprintf(char*); // 0x00472fe0
+    void append_sprintf(char*); // 0x005f9450
+};
+}

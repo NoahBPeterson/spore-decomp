@@ -7,7 +7,7 @@ extern char gEmptyString[];   // 0x01667bac (re-declared here so the checker can
 
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 inline void* operator new(unsigned, void* p) { return p; }
 
@@ -534,3 +534,14 @@ cFeedStateTransaction::cFeedStateTransaction()
     : m40(0), m44(0), m48(0xffffffff), m4c(0), mV60(0), mV64(0), mV68(0), m74(0) {}
 }  // namespace Pollen
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct FeedDescription {
+    ~FeedDescription(); // 0x00547840
+};
+struct SP {
+    void gEmptyWide(...); // 0x01667bac
+};
+}

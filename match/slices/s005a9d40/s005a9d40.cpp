@@ -555,3 +555,18 @@ cCellPinning::cCellPinning() {
     m140 = 0.0f;
     m144 = 0.0f;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cBlockInfo {
+    void F4adc40(); // 0x004adc40
+};
+struct cPosHolder {
+    void F4ac610(); // 0x004ac610
+    void F4ac710(); // 0x004ac710
+};
+struct cViewerStub {
+    void GetWorldRayFromScreenCoords(float, float, void*, void*); // 0x007c4730
+};
+}

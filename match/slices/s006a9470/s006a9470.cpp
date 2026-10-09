@@ -8,7 +8,7 @@
 #include <intrin.h>
 
 // ---------------------------------------------------------------- allocation / EH helpers
-void* operator new(size_t size, const char* name, int a, int b, const char* file, int line);
+void* operator new(size_t size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 void  operator delete[](void* p);   // 0x00f47380
 
 // eastl::string (char, default allocator).  The empty string lives in a shared static buffer.
@@ -652,4 +652,20 @@ bool BoolVecOwner::Append(int arg1, BoolVec* v)
     BoolVec_DoInsertValue(dst, src, 0);
     v->mpEnd = (char*)v->mpEnd - (((char*)src - (char*)dst) >> 2) * 4;
     return v->mpBegin != v->mpEnd;
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cCommandBase {
+    cCommandBase(); // 0x0083c800
+};
+struct HashHolder {
+    void Finish(); // 0x0083df90
+};
+struct cCommandBase2 {
+    cCommandBase2(); // 0x0083c840
+};
 }

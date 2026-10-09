@@ -11,8 +11,8 @@ struct RC3c { void AddRef(); void Release(); };  // refcount at +0x3c
 struct RC3b { void AddRef(); void Release(); };  // refcount at +0x3c (second family)
 
 // assign forward: *dst = *src with AddRef/Release (matches AssignCopyA in slice 45)
-void** AssignCopyA(void** first, void** last, void** dst);
-void** AssignCopyB(void** first, void** last, void** dst);
+void** AssignCopyA(void** first, void** last, void** dst); // 0x0070e340
+void** AssignCopyB(void** first, void** last, void** dst); // 0x0070e390
 
 struct VecBase {
     void** mpBegin; void** mpEnd; void** mpCap;
@@ -422,4 +422,11 @@ void __stdcall HashChainDtorB(void** buckets, unsigned n)
         }
         buckets[i] = 0;
     }
+}
+// --- equivalence checker address annotations
+    void AssignCopyA(...); // 0x0070e340
+    void AssignCopyB(...); // 0x0070e390
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

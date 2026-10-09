@@ -344,3 +344,8 @@ void cUVAtlas::PackCharts(float padding)
         y += row->mHeight + row->mOffset;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

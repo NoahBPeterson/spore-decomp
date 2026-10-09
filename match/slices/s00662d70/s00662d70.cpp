@@ -12,15 +12,15 @@ typedef int(__thiscall* FnRetI)(void*);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* CopyImpl(void* first, void* last, void* dest);
 extern "C" void  FUN_00646d70(void* first, void* last);
-extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);
-extern "C" void* SP_AssetBrowser();
+extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e); // 0x00571db0
+extern "C" void* SP_AssetBrowser(); // 0x00401030
 extern "C" float GetPropertyT_f(int obj, int key, float def);
 extern "C" void  SPUIHelpers_UpdateScrollFrameVertical(void* w);
-extern "C" int   cTribeTool_GetTutorialToolPrice(int obj, int key, int def);
+extern "C" int   cTribeTool_GetTutorialToolPrice(int obj, int key, int def); // 0x004e1c30
 extern "C" void* SP_PropertyManager();
 extern "C" void* SP_MessageServer();
 extern "C" int   __cdecl _wcsicmp(const wchar_t* a, const wchar_t* b);
@@ -378,4 +378,9 @@ char FUN_00663b80(int a, int b) {
         if (_wcsicmp(sa, sb) < 0) return 1;
     }
     return 0;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

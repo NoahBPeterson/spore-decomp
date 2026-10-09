@@ -341,3 +341,8 @@ void Cache::Shutdown() {
     s->Release();
   }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

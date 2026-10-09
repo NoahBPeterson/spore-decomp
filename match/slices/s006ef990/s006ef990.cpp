@@ -4,7 +4,7 @@
 #include <intrin.h>
 
 extern "C" void FUN_00762a60(void* p);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct Dispatch3 { void* p0; void* p1; void* p2; };   // 0xc
 

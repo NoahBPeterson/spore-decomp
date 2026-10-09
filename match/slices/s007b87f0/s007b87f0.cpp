@@ -579,3 +579,9 @@ void cCSAThumbnailJob::RenderLargeTiledImage(int a0, int a1, int* a2, int a3)
     operator delete[](big);
     img->Release();
 }
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

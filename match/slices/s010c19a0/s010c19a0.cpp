@@ -92,7 +92,7 @@ struct hkStatisticsCollector
 
 struct hkReferencedObject
 {
-    virtual ~hkReferencedObject();
+    virtual ~hkReferencedObject(); // 0x013ef094
     virtual void calcStatistics(hkStatisticsCollector* c) const;
     hkInt16 m_memSizeAndFlags;   // +4
     hkInt16 m_referenceCount;    // +6
@@ -530,4 +530,12 @@ const hkSphere* hkCapsuleShape::getCollisionSpheres(hkSphere* buffer) const
     buffer[0].m_pos = m_vertexA;
     buffer[1].m_pos = m_vertexB;
     return buffer;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkReferencedObject {
+    ~hkReferencedObject(); // 0x013ef094
+};
 }

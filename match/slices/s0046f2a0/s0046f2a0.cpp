@@ -274,3 +274,8 @@ void DumpZPR_M0(FILE* f, RefVector meshesIn, int& numPrimTris, IntVector& vertOf
     }
     (void)kZPRFF;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

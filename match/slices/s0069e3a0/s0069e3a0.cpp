@@ -6,8 +6,8 @@
 
 typedef void* VP;
 
-extern "C" void* EASTL_allocator_allocate(unsigned size, const char* name, int, int, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned size, const char* name, int, int, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* operator_new6(unsigned size, const char* name, int, int, int, int);
 extern "C" void  FUN_00920090();
 extern "C" void  FUN_0093a780(void* io, void* p, int n, int f);

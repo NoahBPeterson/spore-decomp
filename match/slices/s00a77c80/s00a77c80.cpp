@@ -543,3 +543,21 @@ float FastSine(float x)
     float a = kSineTable[idx], b = kSineTable[idx + 1];
     return a + (b - a * r * 0.5f) * r;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct MapInfoD0 {
+    void Init75810(void*, int, int, bool, void*, bool); // 0x00a75810
+    void Init758b0(void*, int, int, bool, void*, int, bool); // 0x00a758b0
+};
+struct MapInfoD2 {
+    void Init76070(void*, int, int, bool, void*, bool); // 0x00a76070
+};
+struct MapInfoD6 {
+    void Init76070(void*, int, int, bool, void*, bool); // 0x00a76070
+};
+struct MapInfoD3 {
+    void Init76420(void*, int, int, bool, void*, bool); // 0x00a76420
+};
+}

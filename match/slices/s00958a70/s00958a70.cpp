@@ -404,3 +404,14 @@ bool __thiscall WM::SendMsgFull(IWin* src, IWin* win, Msg* m, bool a4, bool a5)
     f688 = saved;
     return r;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Mutex {
+    Mutex(int, int); // 0x009222a0
+};
+struct Typesetter {
+    Typesetter(int); // 0x0089d820
+};
+}

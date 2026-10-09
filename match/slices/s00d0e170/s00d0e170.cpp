@@ -1009,3 +1009,8 @@ void SP::cCommunityEditor::Activate(cCommunity* community, bool bSpaceGame)
         MessageServer()->PostMSG(msg->mMessageID, msg.get(), 0);
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

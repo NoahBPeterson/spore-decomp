@@ -487,3 +487,9 @@ void QuantizeVertices(cMeshData* meshData, float granularity, tQuantizeType quan
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

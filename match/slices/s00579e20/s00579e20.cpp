@@ -576,3 +576,20 @@ void cAppModeEditorBase::BuildPartMask(Bits128* out, void* p3, void* p4, int)
     out->w[2] = res.w[2];
     out->w[3] = res.w[3];
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_d44; // 0x015daa44
+    extern unsigned int g_d48; // 0x015daa48
+    extern unsigned int g_d4c; // 0x015daa4c
+    extern unsigned int g_mf0; // 0x015da7f0
+    extern unsigned int g_mf4; // 0x015da7f4
+    extern unsigned int g_mf8; // 0x015da7f8
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct XformStub {
+    void Assign(void*); // 0x00537dc0
+};
+struct SceneObjA {
+    void GetSceneObject(int); // 0x004c45d0
+};
+}

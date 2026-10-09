@@ -583,3 +583,8 @@ void cSPSkinPaintDistributeEffect::ApplyEffect(float a, float b, cComponentStats
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -5,8 +5,8 @@
 #include "types.h"
 
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p);
-void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int debugFlags, const char* file, int line);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
+void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
 
 namespace rw { namespace math { namespace fpu {
 template <typename T, int N>

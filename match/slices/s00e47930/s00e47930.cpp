@@ -655,3 +655,19 @@ void cEditorVerbIconPanel::RefreshUI()
         if (out.p) out.p->Release();
     }
 }
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ResObj {
+    void Fn4e10(); // 0x00414e10
+    void Fn0880(); // 0x00550880
+};
+struct AssetDataRef {
+    void Assign(void*); // 0x006428c0
+};
+struct DataHelper {
+    void Fn5950(void*, void*, int); // 0x005e5950
+};
+}

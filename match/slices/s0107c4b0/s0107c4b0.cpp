@@ -142,3 +142,11 @@ void cWalkAroundInputStrategy::Init()
     if (vec.b && ((int*)vec.b)[-1] != 0) operator delete[](vec.b);
     if (b.field && b.field[-1] != 0) operator delete[](b.field);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct StateBuilder {
+    ~StateBuilder(); // 0x0083c750
+};
+}

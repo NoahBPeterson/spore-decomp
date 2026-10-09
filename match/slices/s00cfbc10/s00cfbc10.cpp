@@ -1237,3 +1237,11 @@ void cCivModeStrategy::ContinueLoading(int param)
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cGameNounManager {
+    void GetGameDataVector(int, int, int, int, unsigned int); // 0x00b21340
+};
+}

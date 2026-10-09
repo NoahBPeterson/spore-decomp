@@ -500,3 +500,15 @@ float cSPPlayMode::FUN_00629bd0(CreatureStruct* s) {
   }
   return gOne;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct CreatureMgr {
+    void GetCreatureStructure(unsigned int); // 0x0059cac0
+};
+struct RandomLinearCongruential {
+    void RandomUint32Uniform(unsigned int); // 0x00a68fb0
+    void SetSeed(unsigned int); // 0x00936090
+};
+}

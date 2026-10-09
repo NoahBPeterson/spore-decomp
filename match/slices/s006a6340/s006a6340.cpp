@@ -118,7 +118,7 @@ struct string16 {  // eastl::basic_string<wchar_t>, 16 bytes
 
 namespace EA { string16 ConvertToString16(const char* p, int len = -1); }  // 0x0093c5a0
 
-void operator delete[](void* p);
+void operator delete[](void* p); // 0x00f47380
 
 // eastl::vector<T, sp_vector_allocator>: (n, allocator) ctor out of line; for POD element
 // types the dtor is inline and the sp allocator frees only blocks with a non-zero header.
@@ -492,3 +492,12 @@ bool ParseVariantValue(uint32_t type, cFormatParser* parser, int count, const ch
 
 // Keeps the anonymous-namespace function emitted in this TU.
 bool (*g_pParseVariantValue)(uint32_t, cFormatParser*, int, const char**, Variant*) = &ParseVariantValue;
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void ConvertToString16(char*, int); // 0x0093c5a0
+};
+}

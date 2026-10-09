@@ -10,7 +10,7 @@ void* __cdecl FUN_0067dd40();          // +0x74/0x78/0x7c dispatcher
 void  __cdecl FUN_0070f520(void* b, void* e);
 void  __cdecl Hashtable_DoFreeNodes1(void* b, void* e);
 void  __cdecl Hashtable_DoFreeNodes2(void* b, void* e);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void  __cdecl operator_delete_(void* p);
 void  __cdecl FUN_007c40f0(void* p);
 void  __cdecl FUN_006ddcc0();

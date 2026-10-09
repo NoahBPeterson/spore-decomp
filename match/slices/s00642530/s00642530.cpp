@@ -484,3 +484,12 @@ RCRef* KVMap::operator_idx(const Key3* k) {
     }
     return &((KNode*)it.n)->val;
 }
+// --- equivalence checker address annotations
+    void EASTL_allocator_allocate(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct fixed_pool_base {
+    void init(void*, unsigned int, unsigned int, unsigned int, unsigned int); // 0x00921260
+};
+}

@@ -548,3 +548,10 @@ void cSPPaletteCategoryUI::SetCategory(cSPPaletteCategory* cat, int a2) {
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

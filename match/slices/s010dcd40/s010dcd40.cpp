@@ -434,3 +434,8 @@ void __stdcall hkSymmetricAgent_hkConvexListAgent_staticGetClosestPoints(const h
     hkSymmetricAgentFlipCollector flip(collector);
     hkConvexListAgent::staticGetClosestPoints(bodyB, bodyA, input, flip);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -549,3 +549,12 @@ keep:
     }
     return true;
 }
+// --- equivalence checker address annotations
+    void InterfaceCastArtifact(...); // 0x01030e40
+    void MessageServer(...); // 0x0067dcc0
+    void PlanetModel(...); // 0x00b3d350
+    void operator_new(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

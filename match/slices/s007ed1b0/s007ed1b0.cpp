@@ -5,10 +5,10 @@
 #include "types.h"
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
-                     const char* file, int line);
+                     const char* file, int line); // 0x00f473a0
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line);
-void operator delete(void* p);
+void operator delete(void* p); // 0x00f47380
 void operator delete[](void* p);
 inline void* operator new(size_t, void* p) throw() { return p; }
 extern "C" void* memcpy(void* d, const void* s, unsigned int n);
@@ -411,4 +411,11 @@ extern "C" uint32_t EffectHandler(int self, int msg, int* obj) {
     }
   }
   return eax & 0xffffff00;
+}
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

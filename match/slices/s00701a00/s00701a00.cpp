@@ -519,3 +519,8 @@ void __thiscall cHierGrid::Query3(float* p0, float* p1, float r)
         off += 0x44;
     } while (level <= mLeafLevel);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -605,3 +605,14 @@ bool cStarManager::LoadStarDatabase()
 }
 
 #pragma pack(pop)
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct NameRegistry {
+    void Assign(void*); // 0x00b21da0
+};
+struct WStringSet {
+    void clear(); // 0x005ea010
+};
+}

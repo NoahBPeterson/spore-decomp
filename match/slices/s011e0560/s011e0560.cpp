@@ -464,3 +464,8 @@ void rw_AddResourceToArena_stub(void* a, void* b, int c, int* d)
 {
     (void)a; (void)b; (void)c; (void)d;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

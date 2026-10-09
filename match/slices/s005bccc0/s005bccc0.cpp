@@ -583,3 +583,11 @@ Vec3* cSPEditorManipulationTranslateCreature::PickPlaneOfSymmetry(Vec3* out, flo
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cViewer {
+    void GetWorldRayFromScreenCoords(float, float, void*, void*); // 0x007c4730
+};
+}

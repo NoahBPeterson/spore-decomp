@@ -6,7 +6,7 @@ void* operator new[](size_t size, const char* pName, int flags, unsigned debugFl
 inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
 { return operator new[](size, pName, flags, debugFlags, file, line); }
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
-void  operator delete(void* p);
+void  operator delete(void* p); // 0x00f47380
 inline void* operator new(size_t, void* p) { return p; }
 
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -401,4 +401,13 @@ bool __cdecl Image_WriteV2(void* stream, ImageData* d)
 bool __cdecl Image_WriteV0(void* stream, ImageData* d)
 {
     return Image_Write(stream, d, (unsigned)(d->mHeight * d->mWidth));
+}
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cGrid {
+    void Destroy(); // 0x00702ff0
+};
 }

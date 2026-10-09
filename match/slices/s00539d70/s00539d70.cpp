@@ -36,7 +36,7 @@ bool ReadInt32(EA::IO::IStream*, int32_t*, size_t, int);          // @ 0x93a780
 bool ReadUInt8(EA::IO::IStream*, uint8_t*, size_t);               // @ 0x93a6c0
 bool ReadUInt16(EA::IO::IStream*, uint16_t*, size_t, int);        // @ 0x93a700
 bool WriteUInt32(EA::IO::IStream*, const uint32_t*, size_t, int); // @ 0x93aa70
-void WriteUInt8(EA::IO::IStream*, const uint8_t*, size_t);        // operator<<
+void WriteUInt8(EA::IO::IStream*, const uint8_t*, size_t);        // operator<< // 0x0093a9a0
 bool WriteUInt16(EA::IO::IStream*, const uint16_t*, size_t, int);
 
 // ---------------------------------------------------------------- ArgScript
@@ -419,4 +419,10 @@ EA::IO::IStream* WriteEvalList(EA::IO::IStream* stream, EvalList* e)
         WriteUInt32(stream, &v, 1, 0);
     }
     return stream;
+}
+// --- equivalence checker address annotations
+    void WriteUInt8(...); // 0x0093a9a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

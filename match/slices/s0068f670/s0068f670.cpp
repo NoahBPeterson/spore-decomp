@@ -40,7 +40,7 @@ public:
 class Semaphore {
 public:
     char mData[0x10];
-    Semaphore(int initial);
+    Semaphore(int initial); // 0x00922880
     void Post(int count);
     void Post();
 };
@@ -694,3 +694,15 @@ void cJobManager::slot4() {}
 cJobThread* cJobManager::CreateThread(unsigned int, int, int) { return 0; }
 void cJobManager::RemoveThread(cJobThread*) {}
 bool cJobManager::EndThread(cJobThread*, int, int) { return false; }
+// --- equivalence checker address annotations
+    void EAAllocate(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void Post(); // 0x00922740
+};
+struct Semaphore {
+    Semaphore(int); // 0x00922880
+};
+}

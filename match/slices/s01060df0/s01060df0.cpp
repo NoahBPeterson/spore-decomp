@@ -643,3 +643,8 @@ void SP::cUFOLocomotion::UpdatePlanetLocomotion(cLocomotionContext* pContext, un
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

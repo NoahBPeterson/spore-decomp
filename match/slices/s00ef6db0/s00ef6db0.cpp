@@ -840,3 +840,8 @@ void __cdecl FUN_00ef7d00()
     if (((uint8_t*)&v)[8] & 4)
         EA_Variant_Destruct(&v, 0);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

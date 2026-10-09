@@ -360,3 +360,13 @@ HK_LAYOUT_CHECK(multiSphereShape, sizeof(hkMultiSphereShapeView) == 0x90 && size
 HK_LAYOUT_CHECK(collector, offsetof(hkSimpleClosestContactCollector, m_contact) == 0x10 && sizeof(hkSimpleClosestContactCollector) == 0x30);
 HK_LAYOUT_CHECK(output, offsetof(hkProcessCollisionOutput, m_toiTime) == 0x3034 && offsetof(hkProcessCollisionOutput, m_contactPoints) == 0x30);
 #endif
+// --- equivalence checker address annotations
+    extern unsigned long g_hkMonitorStreamCurrentTls; // 0x016e42a4
+    extern unsigned long g_hkMonitorStreamEndTls; // 0x016e42a8
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkSphereShape {
+    hkSphereShape(float); // 0x010c3770
+};
+}

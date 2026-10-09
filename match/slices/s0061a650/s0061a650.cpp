@@ -110,7 +110,7 @@ cEditFeedTransaction::cEditFeedTransaction(int opType)
 // ---------------------------------------------------------------------------------------------
 extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags,
                                           unsigned debugFlags, const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 bool CreateHTTPGetRequest(const char* url, void* body, void** out);  // 0x00944450
 
 class cUserMatchTransaction : public cITransaction {

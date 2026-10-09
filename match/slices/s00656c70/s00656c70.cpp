@@ -50,7 +50,7 @@ Game* GetGame();
 bool FUN_004bbe20(uint32_t type, int);
 int FUN_00432f10(int);
 void FUN_00806bf0(int);
-void EASTL_allocator_deallocate(void* p);
+void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern uint32_t g_ControlIDs[6];
 
 struct Panel {

@@ -19,7 +19,7 @@ typedef unsigned int uint32_t;
 
 struct Alloc { int unused; };
 void* __cdecl AllocatorAllocate(Alloc* a, unsigned size, unsigned align, unsigned off);
-void __cdecl EASTL_allocator_deallocate(void* p);
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct tag { tag() {} };
 

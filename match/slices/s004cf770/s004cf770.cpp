@@ -452,3 +452,11 @@ void* allocate_memory(FixedHashtableAllocator& a, uint32_t n, uint32_t alignment
 } // namespace eastl
 
 #pragma pack(pop)
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct X87Vec4 {
+    X87Vec4(int&); // 0x00501290
+};
+}

@@ -2,7 +2,7 @@
 // methods and one sibling window.  Layouts follow the binary, not the 2008 PDB.
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, int c,
                                           int d);
 extern "C" unsigned int __cdecl strlen(const char* p);

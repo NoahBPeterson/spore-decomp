@@ -222,3 +222,8 @@ void Ctl::Ctor()
     SP_LayerManager()->Set(0x5807346, 0);
     SP_LayerManager()->Set(0x5807345, 0);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

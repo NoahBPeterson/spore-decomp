@@ -16,7 +16,7 @@ extern void  FUN_004ae250(void* a);
 extern void* FUN_0042dee0(void* a, int n, int sz, int z);
 extern void* FUN_00533740(void* a, void* b);
 extern void* FUN_005701b0(void* a, void* b, void* c, unsigned char d);
-extern void* EASTL_allocator_deallocate(void* p, int n);
+extern void* EASTL_allocator_deallocate(void* p, int n); // 0x00f47380
 extern float FUN_004565f0(int s);
 extern void  FUN_00456650(void* out, int s, float f);
 extern void* FUN_11e0744_alloc(unsigned int n);
@@ -258,4 +258,10 @@ void* VectorPushBack3(int* self, Vec3* value) {
 void* VectorInsertU32(int* self, void* position, unsigned int value) {
     (void)self; (void)position; (void)value;
     return 0;
+}
+// --- equivalence checker address annotations
+    void EASTL_allocator_deallocate(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

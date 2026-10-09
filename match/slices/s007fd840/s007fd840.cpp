@@ -756,3 +756,8 @@ void* WinEventDtor(void* self, unsigned char flags) {
     (void)flags;
     return self;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

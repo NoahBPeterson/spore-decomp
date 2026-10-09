@@ -8,7 +8,7 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 
-extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b, int c, int d);
+extern "C" void* __cdecl operator_new(int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 
 // ---------------------------------------------------------------------------
 // One tEffectInfo entry (0x3c bytes).
@@ -445,3 +445,8 @@ void __fastcall EffectVec_push_back(cSpatialObjectView* v) { (void)v; }
 void __cdecl c8aa60() {}
 // @ 0x00c8b3e0
 bool __cdecl c8b3e0_Read(void* self, int param) { (void)self; (void)param; return false; }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -32,7 +32,7 @@ public:
   static void* operator new(unsigned int n, const char* pName, int flags = 0,
                             unsigned int debugFlags = 0, const char* pFile = 0,
                             int line = 0);
-  static void operator delete(void* p);
+  static void operator delete(void* p); // 0x00f47380
 };
 }  // namespace Allocator
 namespace Thread {
@@ -70,9 +70,9 @@ struct Variant {
 };
 }  // namespace EA
 
-void Memset32(void* dest, int value, int count);
+void Memset32(void* dest, int value, int count); // 0x0092cb00
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
-                     const char* file, int line);
+                     const char* file, int line); // 0x00f473a0
 
 struct VariantPair {
   unsigned int first;

@@ -70,7 +70,7 @@ struct hkFixedRigidMotion { static hkMotion* construct(void* mem, const hkVector
 struct hkKeyframedRigidMotion { static hkMotion* construct(void* mem, const hkVector4& position, const hkQuaternion& rotation); };    // ctor @ 0x01095B60
 // 0x01087290 (name unknown): builds a new motion of the requested MotionType from the old one's data.
 hkMotion* hkRigidBody_createMotion(int motionType, const hkVector4& position, const hkQuaternion& rotation, float mass, const hkMatrix3& inertiaLocal,
-                          const hkVector4& centerOfMassLocal, float linearDamping, float angularDamping);
+                          const hkVector4& centerOfMassLocal, float linearDamping, float angularDamping); // 0x01087290
 
 // ---- world objects ---------------------------------------------------------------------------------------------------
 struct hkWorld;
@@ -829,4 +829,10 @@ hkSimulationIsland* hkWorldOperationUtil::internalMergeTwoIslands(hkWorld* world
 	HK_TIMER_END();
 	hkWorld_leaveCritical(world);
 	return big;
+}
+// --- equivalence checker address annotations
+    void hkRigidBody_createMotion(...); // 0x01087290
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

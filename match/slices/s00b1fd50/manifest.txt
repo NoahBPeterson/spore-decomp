@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b1fd50/s00b1fd50.cpp  ?SetAvatar@NounMgr@@QAEXPAUcGameData@@@Z  00b1fd50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?ClassifyA@@YAHPAUIRefObject@@@Z  00b1fe40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?ClassifyB@@YGHPAUIRefObject@@@Z  00b1feb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?allocate@ByteString@@QAEXI@Z  00b1ffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?Dtor@ArtilleryBase@@QAEXXZ  00b20120  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?AllocSmallObj@@YGPAUSmallObj@@PAU1@@Z  00b205a0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?Create@cArtilleryProjectile@@SAPAU1@XZ  00b20660  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?GetFeedback@FeedbackMgr@@QAEPAXI@Z  00b20750  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?FreeBucketNodes@@YGXPAPAXI@Z  00b20a50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b1fd50/s00b1fd50.cpp  ?UpdateDebugUI@@YGPAUByteString@@PAU1@I@Z  00b20ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE

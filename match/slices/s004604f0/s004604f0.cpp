@@ -469,3 +469,16 @@ void BuildCreatureMaterialInfo(PtrVector* out, unsigned id, int tex0, int tex1, 
         out->PushBack(new ("Editor", 0, 0, 0, 0) C4726d0());
     }
 }
+// --- equivalence checker address annotations
+    extern float g_f13ec480; // 0x013ec480
+    extern float g_f13eecd8; // 0x013eecd8
+    extern float g_f1471064; // 0x01471064
+    extern float g_f1485720; // 0x01485720
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EditorPropList {
+    void SetParent(int); // 0x006a1710
+    EditorPropList(); // 0x006a1c40
+};
+}

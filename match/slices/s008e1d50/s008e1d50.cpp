@@ -902,3 +902,11 @@ void* Holder::CreateElement(const wchar_t* name, const AttrSrc* attrs, unsigned 
     }
     return e;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct BaseV {
+    void ForceRelease(); // 0x008e2300
+};
+}

@@ -573,7 +573,7 @@ extern float g_SimSpeed[4];          // 0x01582e38..0x01582e44
 extern float g_HatchAgeLimit;        // 0x0147aaac
 extern float kHabitatSize[2];        // 0x013ec4d0 / 0x014763b8
 
-void* operator new(unsigned int size, const char* name, int a, int b, int c, int d);
+void* operator new(unsigned int size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void* operator new[](unsigned int size, const char* name, int a, int b, int c, int d);
 
 // Local list of part references (RefCountTemplate elements, released inline).
@@ -1326,4 +1326,10 @@ void SP::cCreatureModeStrategy::ContinueLoading(IHandlerRC* handler)
     }
 
     GameModeManager()->Update(handler);
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

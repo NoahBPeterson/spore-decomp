@@ -354,7 +354,7 @@ extern void* VT_13eb938;
 extern void* VT_13ec458;
 extern "C" void FUN_00e0a390(void*);
 extern "C" void FUN_00e0a400(void*);
-extern "C" void* SP_MessageServer();
+extern "C" void* SP_MessageServer(); // 0x0067dcc0
 // @ 0x00edd580
 void* __fastcall f00edd580(C* self)
 {
@@ -446,7 +446,7 @@ void __fastcall f00edd6b0(C* self)
 }
 
 // ============================================================ 0x00edd810
-extern "C" void* SP_WindowManager();
+extern "C" void* SP_WindowManager(); // 0x0067caa0
 extern "C" void* EA_UTFWin_MultiHeapObject_operator_new(int);
 struct LitMgr { char pad[4]; void* GetWorldMainWindow(); };
 // @ 0x00edd810
@@ -535,7 +535,7 @@ void C::f00edda20()
 }
 
 // ============================================================ 0x00eddb00
-extern "C" void* EA_Audio_GetSystemAT();
+extern "C" void* EA_Audio_GetSystemAT(); // 0x00a206f0
 extern "C" void* SP_AudioSystem();
 extern "C" void FUN_00657240(int, int, float*);
 extern "C" void SP_EditorUtils_PlayEditorSound(int, int, int, float);
@@ -716,4 +716,12 @@ bool __cdecl f00eddf30(int param_1, int param_2, int param_3, int param_4)
     if (param_4 == 0x742bdc0) return o->F25330();
     if (param_4 == 0x742bdd0) return o->F25490();
     return result;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cString {
+    void Load(int, int, int); // 0x006b54b0
+};
 }

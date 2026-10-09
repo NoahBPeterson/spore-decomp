@@ -2,8 +2,8 @@
 #include <string.h>
 #include <new>
 
-extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int x, const char* file, int line);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int n, const char* name, int flags, int x, const char* file, int line); // 0x00f473a0
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 namespace eastl {
 

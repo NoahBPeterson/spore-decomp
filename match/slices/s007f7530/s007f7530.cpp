@@ -511,7 +511,7 @@ void MissionCardAnimator::v1() {}
 // ===========================================================================
 extern "C" void __cdecl FUN_007f5f70(AInfo8c* first, AInfo8c* last);
 extern "C" void* __cdecl FUN_007f79d0(int n, AInfo8c* first, AInfo8c* last);
-extern "C" void __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 Vec8c* vector_cAnimInfo_assign(Vec8c* this_, Vec8c* src) {
     if (src != this_) {

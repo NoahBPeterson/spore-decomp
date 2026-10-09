@@ -63,7 +63,7 @@ struct cSPEditorBlock;
 struct Bounds;
 
 struct cPropertyList;
-extern void SP_GetPropertyAsKey(cPropertyList* list, unsigned int id, unsigned int* keyOut);
+extern void SP_GetPropertyAsKey(cPropertyList* list, unsigned int id, unsigned int* keyOut); // 0x006a1250
 extern bool PropertyGetBool(void* prop);            // 0x0041e920
 extern int  FUN_0044a7e60(cSPEditorBlock* self);    // 0x004a7e60
 
@@ -78,7 +78,7 @@ struct cPropertyList {
 struct Bounds {
     unsigned int mData[8];
     Bounds();
-    ~Bounds();
+    ~Bounds(); // 0x004ae250
     void Set(const void* src);      // 0x0044d960: this = dst, arg = src
 };
 
@@ -348,4 +348,14 @@ int cSPEditorBlock::CalculateSymmetrySign()
             result = -1;
     }
     return result;
+}
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+    void SP_GetPropertyAsKey(...); // 0x006a1250
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Bounds {
+    ~Bounds(); // 0x004ae250
+};
 }

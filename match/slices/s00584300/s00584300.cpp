@@ -557,3 +557,11 @@ bool cAppModeEditorBase::Init(cIApp* app)
     CheatManager()->AddCheat("colladaexport", new ("Editor", 0, 0, 0, 0) cColladaExportCheat(this), true);
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cZoneObject {
+    cZoneObject(); // 0x00998820
+};
+}

@@ -387,3 +387,8 @@ void CamCtl_PresetReset() {
     g_cc8 = *(float*)0x147da94;
     g_16a10c8 = (void*)0x15a30b4;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

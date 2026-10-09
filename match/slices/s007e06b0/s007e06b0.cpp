@@ -10,7 +10,7 @@
 #include "types.h"
 
 // ---------------------------------------------------------------- allocators
-void* operator new(size_t size, const char* name, int a, int b, const char* file, int line);
+void* operator new(size_t size, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 void  operator delete(void* p);
 void  operator delete[](void* p);
 void  __cdecl EFree(void* p);                       // 0x00f47380 EASTL_allocator_deallocate
@@ -741,4 +741,9 @@ void cForwarder::Forward(int a, int b) {
     p15c->v6(a, b);
     p160->v6(a, b);
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

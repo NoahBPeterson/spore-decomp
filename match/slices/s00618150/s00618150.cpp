@@ -76,7 +76,7 @@ struct MultipartBody : HttpRequestBody {  // 0x48 bytes, ctor 0x00946dc0
 };
 struct AsyncRequest {  // Graphics::GraphicsFactoryAsyncRequest, 0x24 bytes
   uint32_t pad[9];
-  AsyncRequest(int a, int b, const char* typeName);
+  AsyncRequest(int a, int b, const char* typeName); // 0x0093c270
   void SetPriority(int mode, float f);  // 0x0093bb40
 };
 template <typename T>
@@ -690,3 +690,12 @@ bool cFeedEntryAssetTransaction::ConstructRequest(void** ppRequest) {
 }
 }  // namespace Pollen
 }  // namespace SP
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct AsyncRequest {
+    AsyncRequest(int, int, char*); // 0x0093c270
+};
+}

@@ -60,7 +60,7 @@ Entry48* __cdecl Entry48_FillN(Entry48* dest, uint32_t n, const Entry48* value, 
 Entry48* __cdecl Entry48_MoveBackward(Entry48* first, Entry48* last, Entry48* destEnd); // FUN_0042df50
 Entry48* __cdecl Entry48_Uninit(Entry48* first, Entry48* last, Entry48* dest); // FUN_0042dff0
 void* __cdecl AllocateRaw(void* alloc, uint32_t size, uint32_t align, uint32_t offset); // FUN_0042dee0
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct Entry48Vector {
     Entry48* mpBegin;

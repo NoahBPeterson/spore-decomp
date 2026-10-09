@@ -22,7 +22,7 @@ extern "C" void  FUN_0095ed60(int);
 extern "C" void  FUN_0095f5c0(void*, float);
 extern "C" void  FUN_0095ea30(void*);
 extern "C" void  FUN_0095e890(void*);
-extern "C" void* SP_PropertyManager();                       // 0x00??????
+extern "C" void* SP_PropertyManager();                       // 0x00?????? // 0x0067de30
 extern "C" char  SP_GetPropertyAsUint32Array(void*, int, int*, int*);
 extern "C" int   SP_OpenRecordAsStream(void*, void*);
 
@@ -472,4 +472,9 @@ float* FUN_00808370(float* out, W* w, void* flag) {
         (void)end;
     }
     return out;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

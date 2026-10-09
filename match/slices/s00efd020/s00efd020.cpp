@@ -469,3 +469,11 @@ void CtlQ::Update() {
   if (!obj)
     ((Sys14*)g_G2b->f14)->F4e90();
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Picker {
+    void F35bf0(); // 0x00b35bf0
+};
+}

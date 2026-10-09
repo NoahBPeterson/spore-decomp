@@ -795,3 +795,14 @@ void EltVector::PushBack()
     Elt tmp;
     Insert(mpEnd, &tmp);
 }
+// --- equivalence checker address annotations
+    void EaDelete(...); // 0x00f47380
+    extern int g_s1; // 0x016f9fdc
+    extern int g_s2; // 0x016f9fe4
+    extern int g_s3; // 0x016fa018
+    extern int g_s4; // 0x016fa014
+    extern int g_s5; // 0x016fa01c
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

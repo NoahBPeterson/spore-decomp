@@ -548,3 +548,22 @@ bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)
     }
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cModelWorldX {
+    void ShutdownModel(void*); // 0x00746b90
+    void ScheduleForLoad(void*, void*, unsigned int, unsigned int); // 0x0074c910
+};
+struct LoadQueue {
+    void Push(void*); // 0x0074bda0
+    void Remove(unsigned int*); // 0x0074be40
+};
+struct cModelWorld {
+    void Load74a920(void*, void*, int); // 0x0074a920
+};
+struct cJobW {
+    void GetStatus(); // 0x00690120
+};
+}

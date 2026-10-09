@@ -11,9 +11,9 @@
 // ---------------------------------------------------------------------------
 void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
 void  __cdecl operator_delete(void* p);
-extern "C" void __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 unsigned __cdecl RBTreeIncrement(void* node);
-void  __cdecl RBTreeErase(void* node, void* anchor);
+void  __cdecl RBTreeErase(void* node, void* anchor); // 0x00921880
 
 void*  __cdecl SP_PropertyManager();
 float* __cdecl SP_GetPropertyAsFloat();
@@ -578,4 +578,11 @@ void __cdecl DebugConsole_Clear(void* self) {
 // ---------------------------------------------------------------------------
 void __cdecl DebugConsole_Output(void* self, char* a, char* b) {
   (void)self; (void)a; (void)b;
+}
+// --- equivalence checker address annotations
+    void RBTreeErase(...); // 0x00921880
+    void operator_delete(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

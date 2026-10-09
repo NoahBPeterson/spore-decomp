@@ -5,7 +5,7 @@
 #include <new>
 
 extern "C" void FUN_00a7bca0(int, int);
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct IVt {
     virtual void v0();

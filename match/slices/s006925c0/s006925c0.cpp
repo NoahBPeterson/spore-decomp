@@ -22,7 +22,7 @@ public:
 };
 }} // namespace EA::Thread
 
-extern unsigned int g_MutexFlags;
+extern unsigned int g_MutexFlags; // 0x01403750
 
 struct MutexScopedLock {
     EA::Thread::Mutex* mpMutex;
@@ -470,4 +470,9 @@ void ParseColorRGB(const char** src, unsigned int* out) {
 // ===========================================================================
 // out-of-line definitions for the earlier declarations
 // ===========================================================================
+// --- equivalence checker address annotations
+    extern unsigned int g_MutexFlags; // 0x01403750
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

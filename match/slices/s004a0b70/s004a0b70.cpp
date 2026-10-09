@@ -346,3 +346,8 @@ bool FUN_4a18b0(cSPEditorBlock* a, cSPEditorBlock* b, float f)
     }
     return false;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

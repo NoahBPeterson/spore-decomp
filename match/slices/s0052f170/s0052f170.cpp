@@ -4,7 +4,7 @@
 
 inline void* operator new(unsigned int, void* p) { return p; }
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags,
-                   const char* file, int line);
+                   const char* file, int line); // 0x00f473a0
 void  operator delete(void* p);
 
 // ---------------------------------------------------------------- ArgScript
@@ -24,7 +24,7 @@ using EA::ArgScript::cBlockCommandBase;
 void  ErrorString(void* out, const char* fmt, ...);           // 0x0052df30
 void  CxxThrowException(void*, void*);                        // _CxxThrowException
 extern void* g_TI_cError;                                     // ThrowInfo
-void  EastlStringAssign(void* str, const char* first, const char* last);
+void  EastlStringAssign(void* str, const char* first, const char* last); // 0x00454cb0
 void  FUN_0047d390(void* first, void* last);
 void* FUN_0052ea60();
 void  FUN_0052eb40();
@@ -320,4 +320,11 @@ void DistributeInline_Execute(int param_1, cArguments* args)
     } else {
         AddDescription(*(void**)(param_1 + 0xc), args, *p, 0x23, 0);
     }
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+    void EastlStringAssign(...); // 0x00454cb0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

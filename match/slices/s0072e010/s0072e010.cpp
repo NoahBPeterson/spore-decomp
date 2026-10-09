@@ -476,3 +476,11 @@ void FUN_0072e010(RWResource& resource, vector< intrusive_ptr<Mesh> >& outMeshes
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct URemapEntry {
+    void DoInsertValues(void*, unsigned int, int&); // 0x004cea40
+};
+}

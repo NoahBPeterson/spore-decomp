@@ -295,3 +295,15 @@ void SP::CaptureCubeMap(int* pOut, float* pPosition, float* pRotation,
         pQueue->Submit(cmd.p, 0, &item);
     }
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct CaptureCommand {
+    CaptureCommand(); // 0x0076b660
+};
+struct EffectsCollection {
+    EffectsCollection(); // 0x00760c00
+};
+}

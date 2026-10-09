@@ -797,3 +797,9 @@ hkResult hkBinaryPackfileReader::loadSectionHeadersNoSeek(hkStreamReader* reader
     m_sectionData.m_size = numSections;
     return HK_SUCCESS;
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_hkThreadMemoryTls; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

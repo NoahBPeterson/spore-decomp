@@ -2,7 +2,7 @@
 // and the PaintSystem block. Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "../s0055ce80/s0055ce80.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 typedef void (__thiscall *Vfn8)(void*, void*, void**, int, int, int, int, int);
 typedef void (__thiscall *Vfn2)(void*, int);
 namespace EA { namespace XHTML { namespace DOM { struct Node { static int Type(void* p); }; } } }

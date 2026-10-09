@@ -7,7 +7,7 @@ typedef int            int32;
 
 extern "C" {
 void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 int   __cdecl isspace(int);
 double __cdecl ceil(double);
 }
@@ -351,4 +351,9 @@ void EvalRealParentheses4(void* self, const char** p, float* a, float* b) {
     EvalExpectCharThrow(p, ',');
     *b = EvalRealExpression(self, p);
     EvalExpectCharThrow(p, ')');
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

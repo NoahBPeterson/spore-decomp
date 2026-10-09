@@ -7,7 +7,7 @@ void* operator new[](size_t size, const char* pName, int flags, unsigned debugFl
                      const char* file, int line);
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line);
-void operator delete(void* p);
+void operator delete(void* p); // 0x00f47380
 void operator delete[](void* p);
 
 namespace EA {
@@ -145,7 +145,7 @@ extern "C" int TelemetryRead(SP::cTelemetryReader* self, void* iface) {
           pNode->mList.mpNext = pNew;
           ++pNode->mList.mnSize;
           if (item.mDataBegin && *(uint32_t*)((char*)item.mDataBegin - 4))
-            operator delete(item.mDataBegin);
+            operator delete(item.mDataBegin); // 0x00f47380
           SP::TItemListNode* pItem = pNode->mList.mpNext;
           EA::IO::ReadInt32(TelemetryReader(iface), (char*)pItem + 0x10, 1, 0);
           int64_t time = 0;
@@ -420,4 +420,13 @@ extern "C" void SphereSurfaceParseExtraOptions(SphereSurface* self,
     *(float*)((char*)self + 0x40) = tmp.x;
     *(float*)((char*)self + 0x44) = tmp.y;
   }
+}
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void MainArguments(void*, int); // 0x00838020
+};
 }

@@ -221,8 +221,8 @@ void cSPSpaceToolData::UpdateTuning()
     UpdateFlag(0x5931133, 0x8000, false);
     UpdateFlag(0x6157363, 0x10000, false);
     UpdateFlag(0x69423b2, 0x80000, false);
-    UpdateColorTuning(mName.mpLocalString, &mTerrainColorID);
-    GetPropertyAsText(mName.mpLocalString, 0x5e62e33, &mWaterColorID);
+    UpdateColorTuning(mName.mpLocalString, &mTerrainColorID); // 0x0104c120
+    GetPropertyAsText(mName.mpLocalString, 0x5e62e33, &mWaterColorID); // 0x006a1360
     ReadFloat(0x30fd84d, &mField26c);
     ReadFloat(0x30fd85a, &mField270);
     ReadFloat(0x30fd85d, &mField274);
@@ -236,4 +236,11 @@ void cSPSpaceToolData::UpdateTuning()
     ReadFloat(0x30fe485, &mField294);
     ReadFloat(0x30fe488, &mField298);
     }
+}
+// --- equivalence checker address annotations
+    void GetPropertyAsText(...); // 0x006a1360
+    void UpdateColorTuning(...); // 0x0104c120
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -322,3 +322,8 @@ void cSPEditorBlock::CalculateSnapAxes()
     mModel->mTransform = savedTransform;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

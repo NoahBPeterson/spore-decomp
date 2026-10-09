@@ -339,3 +339,8 @@ storeAtts(XML_Parser parser, const ENCODING *enc,
   tagNamePtr->str = binding->uri;
   return XML_ERROR_NONE;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -874,3 +874,8 @@ bool cSkinObject::UpdateBlocks(EditorRigblock** blocks, int count, vector<Editor
 }
 
 #pragma pack(pop)
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

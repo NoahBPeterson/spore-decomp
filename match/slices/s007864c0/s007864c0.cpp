@@ -2677,3 +2677,8 @@ void RotateSH<Vector4>(const float* m, int order, const Vector4* in, Vector4* ou
 }
 
 } // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -617,3 +617,20 @@ void cAppModeEditorBase::Redo() {
         ((EditorUI*)M(void*, 0x78))->EnableRedoButton(M(int, 0x188) != cnt);
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct UndoListVec {
+    void Resize(int); // 0x005e77e0
+};
+struct LocalStateVec {
+    void Resize(int); // 0x00584160
+};
+struct PropList {
+    void GetDescription(unsigned int); // 0x006a25a0
+};
+struct PaintTheme {
+    void ReadFromAsset(void*); // 0x004b2800
+};
+}

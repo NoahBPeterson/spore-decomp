@@ -521,3 +521,8 @@ const hkSphere* hkBoxShape::getCollisionSpheres(hkSphere* sphereBuffer) const
     s[7].x = nx; s[7].y = ny; s[7].z = nz; s[7].w = r;
     return sphereBuffer;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -662,3 +662,11 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
         v->ApplyXForm(&xf);
     }
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    extern float g_defaultPosY; // 0x0163564c
+    extern float g_defaultPosZ; // 0x01635650
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

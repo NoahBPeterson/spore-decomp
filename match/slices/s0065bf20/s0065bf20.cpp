@@ -4,7 +4,7 @@
 #include "types.h"
 #include <intrin.h>
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" unsigned int __cdecl strlen(const char* p);
 extern "C" int wcsncmp(const wchar_t*, const wchar_t*, unsigned int);
 extern "C" wchar_t* wcsstr(const wchar_t*, const wchar_t*);
@@ -32,7 +32,7 @@ struct cXHTMLFrameSet {
 };
 
 // ---- external callees / globals ----
-void* GetElapsedSeconds();
+void* GetElapsedSeconds(); // 0x00805080
 void SetWindowImage(void* w, uint32_t* key, int flags);
 void* FUN_0067de40();
 void* MessageServer();
@@ -47,7 +47,7 @@ void FUN_006108a0();
 void FUN_005feea0();
 void* FUN_005feff0();
 void FUN_00809db0(int a, void* b);
-void GetURL(int a, void* b);
+void GetURL(int a, void* b); // 0x006214c0
 void FormatI64(void* out, const wchar_t* fmt, int a, int b);
 unsigned long long StrtoU64(const void* p, int a, int b);
 void QualifyNameWithGroup();
@@ -465,7 +465,17 @@ bool cSPUIFeedEdit::FUN_0065c3c0(int a, int b) {
   fs->HandleLocationChange(win, g_blank, 0, 0);
   uint32_t tmp[3];
   tmp[0] = 0x1667bac; tmp[1] = 0x1667bac; tmp[2] = 0x1667bae;
-  GetURL(0x62ec46a, tmp);
+  GetURL(0x62ec46a, tmp); // 0x006214c0
   FormatI64(tmp, L"%lld", a, b);
   return fs->HandleLocationChange(win, (const wchar_t*)tmp[0], 0, 0);
+}
+// --- equivalence checker address annotations
+    void GetElapsedSeconds(...); // 0x00805080
+    void GetURL(...); // 0x006214c0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cXHTMLFrameSet {
+    void HandleLocationChange(void*, wchar_t*, void*, int); // 0x00997730
+};
 }

@@ -812,3 +812,8 @@ PFRecordWrite::PFRecordWrite(u32 a, u32 b, u32 size, u32* key, DatabasePackedFil
 // helper: fetch the allocator through the parent's vtable slot +0x48
 // (defined out of line here only as a stub body; callers pass through)
 // ---------------------------------------------------------------------------
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

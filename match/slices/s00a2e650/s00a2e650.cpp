@@ -619,3 +619,8 @@ HNodeV* NodePool::Alloc(const SrcPair* src)
     n->m1e4 = 0;
     return n;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

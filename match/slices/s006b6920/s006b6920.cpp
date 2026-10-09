@@ -640,3 +640,10 @@ fail:
 end:
     return ok;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

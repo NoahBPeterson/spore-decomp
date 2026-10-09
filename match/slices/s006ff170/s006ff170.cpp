@@ -7,7 +7,7 @@ void __cdecl FUN_0047d240(void* p, int a);
 void __cdecl FUN_006fc540(void* p, int a);
 void __cdecl FUN_00777720(void* p, unsigned a, int b);
 unsigned __cdecl FUN_00777740(void* p);
-void __cdecl EASTL_allocator_deallocate(void* p);
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 // ---- globals ----------------------------------------------------------------------------
 extern unsigned char g_1628c38;    // 0x1628c38 clip-disable flag

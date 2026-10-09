@@ -347,7 +347,7 @@ void LayoutPass::Run(LayoutContainer* c)
                 InsertionSort(first, last, IntervalLess);
             } else {
                 InsertionSort(first, first + 0x1c, IntervalLess);
-                UnguardedInsertion(first + 0x1c, last, IntervalLess);
+                UnguardedInsertion(first + 0x1c, last, IntervalLess); // 0x00ba7880
             }
         }
         float lastEnd = -1.0f;
@@ -422,3 +422,10 @@ void LayoutPass::Run(LayoutContainer* c)
 }
 
 #pragma pack(pop)
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+    void UnguardedInsertion(...); // 0x00ba7880
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

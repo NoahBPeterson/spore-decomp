@@ -412,7 +412,7 @@ void PopupWinDetach::OnDetach() {
 extern void cSPUILayout_Ctor(void*);
 extern char cSPUILayout_Init(void*, int, int, int);
 extern void* cSPUILayout_FindWindowByID(void*, int, int);
-extern void cSPUILayout_Shutdown(void*, int);
+extern void cSPUILayout_Shutdown(void*, int); // 0x00811ad0
 extern void cSPUILayout_Dtor(void*);
 struct cSPUIPopupMenuWin2 {
   char pad00[0x8a8];
@@ -425,7 +425,7 @@ void* cSPUIPopupMenuWin2::AddMenuItem3(int id, int styleId, int parent, bool att
   if (cSPUILayout_Init(local, id, 0, 0x5b598fa) != 0) {
     void* w = cSPUILayout_FindWindowByID(local, styleId, 1);
     if (w) ((void (__thiscall*)(void*))VTSLOT(w, 0))(w);
-    cSPUILayout_Shutdown(local, 1);
+    cSPUILayout_Shutdown(local, 1); // 0x00811ad0
     if (w) {
       void* item = ((void* (__thiscall*)(void*, int))VTSLOT(w, 0xc))(w, 0x4c058cf);
       result = item;
@@ -443,3 +443,12 @@ void* cSPUIPopupMenuWin2::AddMenuItem3(int id, int styleId, int parent, bool att
 
 // @ 0x0081B240  cSPUIPopupMenuWin::MeasureItemHeight  (incomplete -- see partial.txt)
 // @ 0x0081A790  cSPUIPieMenu::get_unused_item        (incomplete -- see partial.txt)
+// --- equivalence checker address annotations
+    void cSPUILayout_Shutdown(...); // 0x00811ad0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct LimitStopwatch {
+    void SetTimeLimit(int, int); // 0x0093a480
+};
+}

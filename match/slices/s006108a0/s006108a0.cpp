@@ -10,7 +10,7 @@ inline void operator delete(void*, void*) {}
 
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line);
-void __cdecl EASTL_allocator_deallocate(void* p);
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 namespace eastl { struct allocator {
     void* allocate(size_t n) { return EASTL_allocator_allocate((uint32_t)n, "Editor", 0, 0, EASTL_ALLOCATOR_FILE, 0xd1); }
     void deallocate(void* p) { EASTL_allocator_deallocate(p); }

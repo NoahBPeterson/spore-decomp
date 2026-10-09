@@ -765,3 +765,9 @@ void hkBoxMotion::getInertiaLocal(hkMatrix3& out) const
     out.m_col[1].y = iy;
     out.m_col[2].z = iz;
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_hkThreadMemoryTls; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

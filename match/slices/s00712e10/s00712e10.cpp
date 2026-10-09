@@ -715,3 +715,14 @@ bool __cdecl CompileVertexAndPixelShaders()
     }
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Stopwatch {
+    void Construct(int, int); // 0x0093a560
+};
+struct Mutex {
+    void Construct(int, int); // 0x009222a0
+};
+}

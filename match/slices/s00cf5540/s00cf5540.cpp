@@ -1022,3 +1022,8 @@ bool cCityInputStrategy::HandleMessage(uint32_t messageID, IMessage* pMessage)
     pResults->SetParameter(0, Variant(result));
     return false;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

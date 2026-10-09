@@ -11,8 +11,8 @@ typedef int(__thiscall* FnRetI)(void*);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* CopyImpl(void* first, void* last, void* dest);
 extern "C" void  FUN_00646d70(void* first, void* last);
 extern "C" void  EA_Messaging_RemoveHandler(void* a, void* b, void* c, void* d, void* e);

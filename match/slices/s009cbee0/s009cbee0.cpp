@@ -407,3 +407,12 @@ char InitCreatureStaticDataFromResource(creature_static_data* sdp, void* res)
 }
 
 }  // namespace nSPCreatureAnim
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct nSPCreatureAnim {
+    void resize(unsigned int); // 0x009cb840
+    void Clear(); // 0x009b3180
+};
+}

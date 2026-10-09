@@ -566,3 +566,11 @@ void FUN_0112fb50(int p)
 
 
 }}} // namespace rw::audio::core
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct rw {
+    void SNDPKTPLAY_submit(int, void*); // 0x0113f5c0
+};
+}

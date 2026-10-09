@@ -375,3 +375,11 @@ after_hit:
     if (trigger) return true;
     return hitTarget;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EventLogT {
+    void PostFeedbackEvent(unsigned int, unsigned int, int, int, int, int); // 0x00dd8640
+};
+}

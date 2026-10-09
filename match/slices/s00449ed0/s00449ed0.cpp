@@ -365,3 +365,11 @@ void BBox::Scale(float s)
     mMin = c + (mMin - c) * s;
     mMax = c + (mMax - c) * s;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EditorModelStub {
+    void GetScale(); // 0x004adaa0
+};
+}

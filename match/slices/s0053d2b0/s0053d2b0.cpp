@@ -172,3 +172,15 @@ cSPSkinPaintParticle::cSPSkinPaintParticle(float rate)
         g_edgeMaskTable[k] = acc;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Alloc2 {
+    Alloc2(int&); // 0x00540470
+};
+struct A0x162002d1 {
+    void Set(unsigned char, unsigned char, unsigned char, unsigned char); // 0x0053e190
+    void Init(unsigned char, unsigned int*, unsigned int*, unsigned int*, unsigned int*, unsigned int*); // 0x0053e1d0
+};
+}

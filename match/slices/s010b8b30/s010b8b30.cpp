@@ -227,11 +227,11 @@ extern hkVector4 g_hkKeyframedGravity;                   // 0x016e42d0 (hkVector
 char hkSolverCheckKeycode(int unused);                   // 0x010bfbe0
 // Chain solvers (cdecl, 5 args): 0x010b22a0 / 0x010b2890 / 0x010b3b20.
 void hkSolveStiffSpringChain(const hkSolverInfo& info, hkVelocityAccumulator* accums,
-                             const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp);
+                             const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp); // 0x010b22a0
 void hkSolveBallSocketChain(const hkSolverInfo& info, hkVelocityAccumulator* accums,
-                            const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp);
+                            const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp); // 0x010b2890
 void hkSolvePoweredChain(const hkSolverInfo& info, hkVelocityAccumulator* accums,
-                         const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp);
+                         const hkJacobianSchema* schema, hkJacobianElement* jac, hkSolverElemTemp* temp); // 0x010b3b20
 
 // =====================================================================================
 // Inline solver helpers
@@ -932,7 +932,7 @@ hkBool32 hkSolveConstraints(hkSolverInfo& info, const hkJacobianSchema* schemas,
 
 			case 0x17:          // stiff-spring chain
 			{
-				hkSolveStiffSpringChain(info, accumulators, schema, jac, tmp);
+				hkSolveStiffSpringChain(info, accumulators, schema, jac, tmp); // 0x010b22a0
 				hkJacobianStiffSpringChainSchema* s = (hkJacobianStiffSpringChainSchema*)schema;
 				tmp += s->m_numConstraints;
 				jac = s->getEnd(jac);
@@ -942,7 +942,7 @@ hkBool32 hkSolveConstraints(hkSolverInfo& info, const hkJacobianSchema* schemas,
 
 			case 0x18:          // ball-socket chain
 			{
-				hkSolveBallSocketChain(info, accumulators, schema, jac, tmp);
+				hkSolveBallSocketChain(info, accumulators, schema, jac, tmp); // 0x010b2890
 				hkJacobianBallSocketChainSchema* s = (hkJacobianBallSocketChainSchema*)schema;
 				tmp += s->m_numConstraints * 3;
 				jac = s->getEnd(jac);
@@ -952,7 +952,7 @@ hkBool32 hkSolveConstraints(hkSolverInfo& info, const hkJacobianSchema* schemas,
 
 			case 0x19:          // powered chain
 			{
-				hkSolvePoweredChain(info, accumulators, schema, jac, tmp);
+				hkSolvePoweredChain(info, accumulators, schema, jac, tmp); // 0x010b3b20
 				hkJacobianPoweredChainSchema* s = (hkJacobianPoweredChainSchema*)schema;
 				tmp += s->m_numConstraints * 6;
 				jac = s->getEnd(jac);
@@ -991,4 +991,12 @@ hkBool32 hkSolveConstraints(hkSolverInfo& info, const hkJacobianSchema* schemas,
 	} while (step < info.m_numSteps);
 
 	return 1;
+}
+// --- equivalence checker address annotations
+    void hkSolveBallSocketChain(...); // 0x010b2890
+    void hkSolvePoweredChain(...); // 0x010b3b20
+    void hkSolveStiffSpringChain(...); // 0x010b22a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

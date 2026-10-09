@@ -270,3 +270,8 @@ extern "C" int __cdecl Placeholder_46160() { return 0; }
 extern "C" int __cdecl Placeholder_465b0() { return 0; }
 extern "C" int __cdecl Placeholder_46620() { return 0; }
 extern "C" int __cdecl Placeholder_466d0() { return 0; }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

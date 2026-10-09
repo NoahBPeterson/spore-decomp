@@ -11,11 +11,11 @@ typedef int(__thiscall* FnRetI)(void*);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void  FUN_00d0c930(void* p);
 extern "C" void  FUN_00646d70(void* first, void* last);
-extern "C" void* SP_PropertyManager();
+extern "C" void* SP_PropertyManager(); // 0x0067de30
 extern "C" void* SP_ObjectTemplateDB();
 extern "C" void  FUN_0066a5e0(void* self, int a, int b);
 extern "C" void* FUN_00660720(void* a, void* b);
@@ -337,3 +337,8 @@ char FUN_00661b10(void* self, int param) { (void)self; (void)param; return 0; }
 
 // @ 0x00661c00
 char FUN_00661c00(void* self, void* a, void* b) { (void)self; (void)a; (void)b; return 0; }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

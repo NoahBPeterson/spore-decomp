@@ -265,7 +265,7 @@ void DoSpaceCommAction(int* msg, int arg, Obj* mission) {
         GiveGift(arg, 1);
         return;
     case (int)0xd95019bd:
-        TryBreakAlliance(arg);
+        TryBreakAlliance(arg); // 0x0102cd90
         return;
     case (int)0xd91dba31: {
         if (!mission) return;
@@ -522,4 +522,14 @@ void DoSpaceCommAction(int* msg, int arg, Obj* mission) {
         Fn_0102d820();
         return;
     }
+}
+// --- equivalence checker address annotations
+    void GetActivePlanet(...); // 0x01021260
+    void GetSystemAT(...); // 0x00a206f0
+    void GiveGift(...); // 0x0102cae0
+    void TryBreakAlliance(...); // 0x0102cd90
+    void TryPeaceOffer(...); // 0x0102cf10
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -364,3 +364,18 @@ void B::Setup()
     e1->Release();
     w->Release();
 }
+// --- equivalence checker address annotations
+    void operator_new(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cCommandBase {
+    cCommandBase(); // 0x0083c800
+};
+struct cSPEditorPhysicsWorld {
+    void Init(int); // 0x007c4dd0
+};
+struct InitArea {
+    void Init(int); // 0x00c77b60
+};
+}

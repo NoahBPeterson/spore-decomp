@@ -10,7 +10,7 @@ typedef int            int32;
 
 extern "C" {
 void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* __cdecl memcpy(void* dst, const void* src, unsigned n);
 long  __cdecl atol(const char*);
 __declspec(dllimport) int   __cdecl isalpha(int);

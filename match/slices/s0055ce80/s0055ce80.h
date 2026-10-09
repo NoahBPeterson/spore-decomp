@@ -17,7 +17,7 @@ namespace eastl {
 
 struct allocator { allocator() {} };
 struct sp_vector_allocator;
-void EASTL_allocator_deallocate(void* p);
+void EASTL_allocator_deallocate(void* p); // 0x00f47380
 inline void EASTLFree(void* p) { EASTL_allocator_deallocate(p); }
 struct sp_vector_allocator : public allocator {
     sp_vector_allocator() {}

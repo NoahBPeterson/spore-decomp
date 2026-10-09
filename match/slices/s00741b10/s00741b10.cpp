@@ -412,3 +412,14 @@ void cModelInstance::AddAnimationsFromArena(ArenaOwner* src, int param_3, uint16
 }
 
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SP {
+    void g_f0162e894(...); // 0x0162e894
+    void g_f01485720(...); // 0x01485720
+    void g_f0162e890(...); // 0x0162e890
+    void g_f0162e88c(...); // 0x0162e88c
+};
+}

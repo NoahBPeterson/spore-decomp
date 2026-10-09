@@ -581,3 +581,8 @@ void SP_SHFromCubeMap(CubeFace* tex, int size, char dump, const char* name, int 
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

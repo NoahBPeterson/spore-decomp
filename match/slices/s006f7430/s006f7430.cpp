@@ -351,3 +351,9 @@ bool cFilterChain2::Resolve(ResKey key) {
     }
     return true;
 }
+// --- equivalence checker address annotations
+    void Hashtable_DoFreeNodes(...); // 0x004554f0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

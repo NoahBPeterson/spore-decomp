@@ -6,7 +6,7 @@
 #include <math.h>
 #include "types.h"
 
-extern "C" void __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct IRefCount {
     virtual int AddRef();

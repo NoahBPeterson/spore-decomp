@@ -675,3 +675,15 @@ void RegList::Add(cResourceBase* obj)
         }
     }
 }
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct InnerAlloc {
+    ~InnerAlloc(); // 0x00926640
+};
+struct Mutex {
+    ~Mutex(); // 0x00922130
+};
+}

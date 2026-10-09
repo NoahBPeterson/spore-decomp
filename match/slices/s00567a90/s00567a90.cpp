@@ -2,7 +2,7 @@
 // OTDB module. Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "../s0055ce80/s0055ce80.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* FUN_0042dee0(void* a, int size, int align, int flags);
 void FUN_00511f70(void* first, void* last, void* dst);
 void* FUN_00569980();
@@ -186,4 +186,9 @@ void FUN_005687d0(void* this_, void** pArr, unsigned n) {
 // @ 0x00568840
 void FUN_00568840(void* this_) {
     (void)this_;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -61,7 +61,7 @@ struct Pool;
 struct Node { uint32_t a, b; Pool* pool; inline Pool* GetPool() const { return pool; } void Destroy(); };
 struct Pool { void Free(char* tag, Node* n); };
 struct Owner { bool Check(); };   // FUN_004adc40
-void EASTL_allocator_deallocate(void*);
+void EASTL_allocator_deallocate(void*); // 0x00f47380
 
 // 60-bit flag set stored as two words
 struct BitSet60 {

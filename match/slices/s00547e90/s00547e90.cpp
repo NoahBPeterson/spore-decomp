@@ -7,7 +7,7 @@ typedef unsigned int size_t;
 
 // ---------------------------------------------------------------- externals
 void* operator new[](size_t, const char*, int, unsigned, const char*, int);
-void  operator_delete__(void*);
+void  operator_delete__(void*); // 0x00f47380
 void* FUN_0042dee0(void* alloc, int size, int align, int flags); // @ 0x42dee0
 void  FUN_00423820(int a, int b);
 void* FUN_00549e40(int a, int b, int c);           // @ 0x549e40 relocate
@@ -293,4 +293,10 @@ void Obj43::FUN_00548b10(int param_2, int param_3)
         FUN_005496a0(src);
         v[1] = v[1] + 0x70;
     }
+}
+// --- equivalence checker address annotations
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

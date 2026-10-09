@@ -23,7 +23,7 @@ struct Vector3 {
 // Vector3 flavour with an out-of-line copy ctor (0x004098a0)
 struct Vec3O {
     float v[3];
-    Vec3O(const Vec3O& o);
+    Vec3O(const Vec3O& o); // 0x004098a0
     float& operator[](int i) { return v[i]; }
 };
 
@@ -305,4 +305,12 @@ bool FUN_00497f20(Vector3 v, Vec3O* out, float step) {
         if (dlen < best) best = dlen;
     }
     return false;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Vec3O {
+    Vec3O(int&); // 0x004098a0
+};
 }

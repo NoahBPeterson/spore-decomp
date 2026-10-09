@@ -619,3 +619,15 @@ bool ReportWriter::WriteDisassembly(void* start, unsigned n, void* eip) {
     }
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ExceptionHandler {
+    void NotifyClients(int); // 0x0091e3b0
+};
+struct ExceptionHandlerWin32 {
+    void WriteMiniDump(); // 0x0091e190
+    void WriteExceptionReport(); // 0x0091e5c0
+};
+}

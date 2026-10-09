@@ -336,3 +336,8 @@ void MeshBuilder::copyFrom2b0(const MeshBuilder& src)
     v1c.v.mpEnd = 0;
     v1c.v.mpCapacity = 0;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

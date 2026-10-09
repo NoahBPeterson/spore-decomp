@@ -591,3 +591,8 @@ cObjectDatabase::cObjectDatabase(Database* database)
     mpCOMSerializer.Assign(ser ? (IUnk*)&ser->mI : 0);
     mpDatabase.Assign((char*)database);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

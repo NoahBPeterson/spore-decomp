@@ -4,9 +4,9 @@
 #include <new>
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* operator new(unsigned int n, const char* name, int flags, unsigned int debugFlags,
-                   const char* file, int line);
+                   const char* file, int line); // 0x00f473a0
 
 #define PV(n) virtual void pv##n();
 
@@ -412,4 +412,10 @@ void cSPPaletteSubCategoryUI::Shutdown() {}
 void cPaletteBig(void* a, void* b) {
   (void)a;
   (void)b;
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

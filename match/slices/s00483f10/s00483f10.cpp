@@ -454,4 +454,8 @@ Vector3* RotationRing::GetPropListKey(Vector3* out)
     *(Vector3*)out = *(Vector3*)(t + 0xa8);
     return out;
 }
+// --- equivalence checker address annotations
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

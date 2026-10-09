@@ -55,7 +55,7 @@ void __cdecl FUN_011f3990();
 void __cdecl FUN_011eff60();
 void __cdecl FUN_011f7d00(int* p);
 int  __cdecl FUN_011f7b20(void* s);
-int  __cdecl DevCapsManager_GetD3DCAPS9();
+int  __cdecl DevCapsManager_GetD3DCAPS9(); // 0x011f8af0
 void __cdecl DocMessage_Send(void* a, int b, const char* fmt, ...);
 
 extern "C" __declspec(dllimport) int __stdcall GetVersionExA(void*);
@@ -467,4 +467,10 @@ void* __cdecl FUN_011f88c0(void** p, int n)
 {
     (void)p; (void)n;
     return 0;
+}
+// --- equivalence checker address annotations
+    void DevCapsManager_GetD3DCAPS9(...); // 0x011f8af0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

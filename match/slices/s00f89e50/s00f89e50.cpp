@@ -197,3 +197,8 @@ void cTerrainMap<unsigned int>::GetVector4(Vector4* result, const FaceUV* uv)
 }  // namespace SP
 
 void Instantiate(SP::cTerrainMap<unsigned int>* m, Vector4* r, const FaceUV* uv) { m->GetVector4(r, uv); }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

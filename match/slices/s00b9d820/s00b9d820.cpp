@@ -942,3 +942,9 @@ void FUN_00b9d820(void)
     if (FUN_00b3d280())
         FUN_00b3d280()->FUN_00b13bb0(&capitalPos, 0);
 }
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

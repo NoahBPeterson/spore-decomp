@@ -10,8 +10,8 @@ typedef int           int32;
 typedef unsigned long ulong32;
 
 extern "C" {
-void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void* __cdecl EASTL_allocator_allocate(unsigned n, const char* name, int, int, const char* file, int line); // 0x00f473a0
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 __declspec(dllimport) int   __cdecl isspace(int);
 __declspec(dllimport) int   __cdecl isdigit(int);
 __declspec(dllimport) int   __cdecl isalpha(int);
@@ -32,7 +32,7 @@ static const char g_allocFile[] =
     "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h";
 static const char g_allocName[] = "ArgScript";
 
-extern char gEmptyString[];
+extern char gEmptyString[]; // 0x01667bac
 extern void* gEmptyBucketArray[];       // 0x0154df28
 extern float gOne;                      // 0x01485720
 extern float gTwo;                      // 0x01470f1c
@@ -56,7 +56,7 @@ struct string8 {
         mpEnd = mpBegin + (last - first);
         *mpEnd = 0;
     }
-    ~string8();
+    ~string8(); // 0x00530670
 };
 bool operator==(const string8& s, const char* lit);   // 0x00555020
 }  // namespace eastl
@@ -486,4 +486,12 @@ unsigned cExpression::EvalBoolFactor(const char** p) {
         *p = start;
     }
     return EvalRelExpression(p);
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct string8 {
+    ~string8(); // 0x00530670
+};
 }

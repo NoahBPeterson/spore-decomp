@@ -12,7 +12,7 @@ struct Rectangle {
 };
 }  // namespace Math
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line);
 

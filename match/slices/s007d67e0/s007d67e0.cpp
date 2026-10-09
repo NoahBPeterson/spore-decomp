@@ -14,7 +14,7 @@ typedef int ptrdiff_t;
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 #define ALLOC_NAME "App"
 
-void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
 inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
 { return operator new[](size, pName, flags, debugFlags, file, line); }
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
@@ -287,7 +287,7 @@ void ListVector::DoInsertValues(cSplitInstanceList* position, size_type n, const
         if (nNewSize > nNewCapacity)
             nNewCapacity = nNewSize;
         cSplitInstanceList* pNewData = (cSplitInstanceList*)
-            operator new[](nNewCapacity * sizeof(cSplitInstanceList), ALLOC_NAME, 0, 0, ALLOC_FILE, 0xd1);
+            operator new[](nNewCapacity * sizeof(cSplitInstanceList), ALLOC_NAME, 0, 0, ALLOC_FILE, 0xd1); // 0x00f473a0
         cSplitInstanceList* pNewEnd = CopyConstructRange(mpBegin, position, pNewData);
         FillConstructN(pNewEnd, n, &value);
         cSplitInstanceList* pNewEnd2 = CopyConstructRange(position, mpEnd, pNewEnd + n);
@@ -510,4 +510,10 @@ void cSwarmThis::Sub_7d6c10(int arg) {
         *(float*)((char*)this + 0x78) = mF44;
         *(float*)((char*)this + 0x7c) = mF48;
     }
+}
+// --- equivalence checker address annotations
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

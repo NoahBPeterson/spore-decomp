@@ -579,3 +579,22 @@ float cSec3::FUN_00f3dce0(int* v) {
     float x = (float)cnt * 0.0009765625f;
     return x > avg ? x : avg;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void ConvertToString8(...); // 0x0093c570
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cPlanet {
+    void GetName(); // 0x00c707e0
+};
+struct EStrHolder {
+    void assign(char*, char*); // 0x00454cb0
+};
+struct BObj {
+    BObj(); // 0x00760c00
+};
+struct Obj30 {
+    Obj30(); // 0x009986e0
+};
+}

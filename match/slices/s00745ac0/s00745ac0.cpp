@@ -63,7 +63,7 @@ struct FloatKeyGreater { bool operator()(const FloatKeyPair& a, const FloatKeyPa
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int align,
                                        const char* file, int line);   // 0x00f473a0
 void  __cdecl EASTL_allocator_deallocate(void* p);                    // 0x00f47380
-extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f162ec38, g_f1485720;
+extern float g_f162eb0c, g_f162eb10, g_f162eb14, g_f162ec38, g_f1485720; // 0x0162eb0c
 extern float g_f1537ab0, g_f1537ab4, g_f1537ab8, g_f13eb1bc, g_f140d674;
 
 void Matrix3_Assign(void* dst, const void* src);                      // 0x0041cb40
@@ -668,4 +668,15 @@ void FUN_00746910(void* self, void* newObj, int idx, bool flag)
     s->mFlag = flag;
     if (s->mCount < 0)
         s->mCount = 0;
+}
+// --- equivalence checker address annotations
+    extern float g_f140d674; // 0x0140d674
+    extern float g_f1485720; // 0x01485720
+    extern float g_f162eb0c; // 0x0162eb0c
+    extern float g_f162eb10; // 0x0162eb10
+    extern float g_f162eb14; // 0x0162eb14
+    extern float g_f162ec38; // 0x0162ec38
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

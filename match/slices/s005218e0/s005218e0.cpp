@@ -325,3 +325,17 @@ void TickState::HandleUpdateMessage(int dt)
         GetMessageServer()->Post(0x46d485d, 0, 0);
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct RandomLC {
+    void SetSeed(unsigned int); // 0x00936090
+};
+struct MeshAORender {
+    void Rebuild(); // 0x00516eb0
+};
+struct JobMgr {
+    void ContinueJob(); // 0x0068f970
+};
+}

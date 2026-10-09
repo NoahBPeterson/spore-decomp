@@ -66,6 +66,9 @@ void       SortHeapA(GridEntry* first, GridEntry* last);                        
 void       PartialSortB(GridEntry* first, GridEntry* middle, GridEntry* last);         // 0x653230
 GridEntry  MedianA(GridEntry a, GridEntry b, GridEntry c);                             // 0x6515a0
 void       DoInsertValuesEx(GridEntry* position, unsigned n, const GridEntry& value);  // 0x652c90
+void __fastcall FUN_0064f4e0(void* self, int, unsigned n, void* alloc);               // 0x0064f4e0 (this=out)
+GridEntry** FUN_0064f730(GridEntry** pOut, GridEntry* first, GridEntry* last,
+                         GridEntry* initial, unsigned count);                           // 0x0064f730
 
 // ---- eastl::vector<GridEntry, sp_vector_allocator> ------------------------
 struct GridVec {
@@ -439,4 +442,8 @@ char GridHandleMessage(void* self, int wparam, unsigned lparam) {
     (void)self; (void)wparam; (void)lparam;
     return 0;
 }
+// --- equivalence checker address annotations
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

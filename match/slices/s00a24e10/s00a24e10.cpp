@@ -237,7 +237,7 @@ void RcMap::Release(unsigned key)
             mTree.size += -1;
             RBTreeIncrement(node);
             RBTreeErase(node, (char*)&mTree + 4);
-            operator_delete__(node);
+            operator_delete__(node); // 0x00f47380
         }
     }
 }
@@ -339,7 +339,7 @@ struct Namer {
 void Namer::Convert(const char* s, int a, int b, double c)
 {
     StrOut out = { 0, 0, 0 };
-    g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0);
+    g_pfnString(&out, (int)ConvertToString16(s, -1).b, 0, 0, 0, 0); // 0x0154c464
     Dispatch((wchar_t*)out.a, a, b, c);
 }
 
@@ -683,4 +683,10 @@ bool System::Init()
         g_pSystem = 0;
     }
     return ok;
+}
+// --- equivalence checker address annotations
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -635,3 +635,11 @@ bool WinTreeView::Init()
 }
 
 }} // namespace
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void UpperBoundY(void*, void*, float&, int); // 0x0098b650
+};
+}

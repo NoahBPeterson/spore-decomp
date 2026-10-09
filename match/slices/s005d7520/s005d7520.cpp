@@ -886,3 +886,12 @@ bool cEditorSystem::Init(EA::AppCommandLine& cmdLine)
     return true;
 }
 }  // namespace SP
+// --- equivalence checker address annotations
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SP {
+    void kEditorSystemMessages(...); // 0x013f8d78
+};
+}

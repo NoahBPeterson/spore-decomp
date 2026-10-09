@@ -461,3 +461,8 @@ bool FUN_00b5cde0(int p)
 
 // @ 0x00b5ce70
 void FUN_00b5ce70(void*, int) { /* cGonzagoSimulator update; incomplete */ }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

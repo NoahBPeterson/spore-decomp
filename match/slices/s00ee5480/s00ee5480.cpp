@@ -772,3 +772,12 @@ bool cScenarioEditModeScriptUI::HandleUIMessage(IWindow* window, const Message& 
     return false;
 }
 }  // namespace UI
+// --- equivalence checker address annotations
+    void CenterWindow(...); // 0x00806ca0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cScenarioEditHistory {
+    void Undo7a80(); // 0x00ef7a80
+};
+}

@@ -667,3 +667,18 @@ doDrop:
     st->mState = 6;
     return true;
 }
+// --- equivalence checker address annotations
+    void GetPropertyFloat(...); // 0x004e1c70
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct CombatantPart {
+    void PartialRepair(float); // 0x00bfd1a0
+};
+struct UIntMap {
+    void operator_idx(unsigned int&); // 0x00643a40
+};
+struct RefPtr {
+    void Assign(void*); // 0x00b5f950
+};
+}

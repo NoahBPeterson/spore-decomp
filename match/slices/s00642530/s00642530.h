@@ -3,8 +3,8 @@
 #include "types.h"
 typedef unsigned int size_t;
 
-void* EASTL_allocator_allocate(size_t, const char*, int, int, const char*, int);
-void EASTL_allocator_deallocate(void*);
+void* EASTL_allocator_allocate(size_t, const char*, int, int, const char*, int); // 0x00f473a0
+void EASTL_allocator_deallocate(void*); // 0x00f47380
 inline void* operator new(size_t, void* p) { return p; }
 inline void operator delete(void*, void*) {}
 

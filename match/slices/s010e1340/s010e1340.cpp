@@ -357,3 +357,11 @@ HK_LAYOUT_CHECK(flipCollector, sizeof(hkSymmetricAgentFlipCastCollector) == 0x30
 HK_LAYOUT_CHECK(castInput, sizeof(hkLinearCastCollisionInput) == 0x30 && sizeof(hkMoppAabbCastInput) == 0x40);
 HK_LAYOUT_CHECK(funcs, sizeof(hkAgentFuncs) == 0x14 && offsetof(hkCollisionDispatcher, m_agent2Func) == 0x990);
 #endif
+// --- equivalence checker address annotations
+    extern unsigned long g_hkMonitorStreamCurrentTls; // 0x016e42a4
+    extern unsigned long g_hkThreadMemoryTls; // 0x016e4174
+    void hkNullAgent_getNullAgent(...); // 0x010cd8d0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

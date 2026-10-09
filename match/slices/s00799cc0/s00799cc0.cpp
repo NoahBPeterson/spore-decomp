@@ -536,3 +536,8 @@ void __fastcall FUN_0079af80(int *param_1, unsigned int param_2)
     }
     return;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

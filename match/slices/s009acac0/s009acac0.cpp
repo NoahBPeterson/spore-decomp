@@ -300,3 +300,13 @@ void baked_animation::Evaluate(float time, anim_pose_accum* pose, anim_prev_stat
 }
 
 }  // namespace nSPCreatureAnim
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct nSPCreatureAnim {
+    void Normalize(); // 0x0099ce40
+    void QuatAccumulate(int&, int&); // 0x0099cba0
+    void QuatRotate(int&, int&); // 0x0099c310
+};
+}

@@ -763,3 +763,9 @@ hkContactPointId hkContactPointConfirmedEvent::getContactPointId() const
 	}
 	return (hkContactPointId)i;
 }
+// --- equivalence checker address annotations
+    extern unsigned long g_hkThreadMemoryTlsIndex; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

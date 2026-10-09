@@ -622,3 +622,14 @@ render_step:
     if (M(uint8_t, 0x20e)) PlayEditorSound(0x1d6253c0, 0xbd5385c8, (float)*pMode, 0);
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Flagged {
+    void SetFlag(); // 0x0059aea0
+};
+struct PlayMode {
+    void Stop(); // 0x0062c340
+};
+}

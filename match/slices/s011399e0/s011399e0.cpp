@@ -377,3 +377,8 @@ RevObj* RevObj::F_840(u8 flags)
 }
 
 } } } // namespace rw::audio::core
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

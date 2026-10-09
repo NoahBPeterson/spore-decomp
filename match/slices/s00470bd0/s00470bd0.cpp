@@ -406,3 +406,11 @@ void FUN_00471830(Editor* self, IPropList* pl)
     for (char* p = (char*)boxes.mpBegin; p < (char*)boxes.mpEnd; p += 0x18) {}
     boxes.Free();
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Vec3C {
+    Vec3C(int&); // 0x004098a0
+};
+}

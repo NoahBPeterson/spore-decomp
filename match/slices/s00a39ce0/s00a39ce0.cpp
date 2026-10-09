@@ -606,3 +606,20 @@ bool cEventModifier::Init() {
 }
 
 }}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void GetFloat(unsigned int, float*); // 0x00a0fa70
+    void RBTreeIncrement(void*); // 0x00921580
+    void ConvertToString8(void*, unsigned int*); // 0x0093c570
+    void DoNukeSubtree(void*); // 0x009a9600
+    void assign(char*, char*); // 0x00454cb0
+};
+struct SP {
+    void gMouthTable(...); // 0x0154df28
+};
+}

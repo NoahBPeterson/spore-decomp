@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00c88e30/s00c88e30.cpp  ?func78h@cSO@@QAEXPAUcSPVector3@@@Z  00c89020  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c88e30/s00c88e30.cpp  ?GetCommunityName@cSO@@QAEXPAUcSPVector3@@@Z  00c890c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00c88e30/s00c88e30.cpp  ?SetModel@cSO@@QAEXHPAX@Z  00c89890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

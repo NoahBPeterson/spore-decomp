@@ -17,7 +17,7 @@ inline void* operator new(size_t size, const char* pName, int flags, unsigned de
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
 void operator delete(void* p);
 inline void* operator new(size_t, void* p) { return p; }
-void ea_free(void* p);
+void ea_free(void* p); // 0x00f47380
 
 void* GetMessageServer();
 void* GetServer883860();
@@ -447,4 +447,10 @@ void SomeBaseDestructor(void* self) {
     *(void**)((char*)self + 8) = (void*)0x013ef094;
     *(void**)((char*)self + 4) = (void*)0x013eb394;
     *(void**)self = (void*)0x013eb938;
+}
+// --- equivalence checker address annotations
+    void ea_free(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

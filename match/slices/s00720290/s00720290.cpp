@@ -2,9 +2,9 @@
 #include "types.h"
 
 // ---- external helpers (callees are masked relocations) ----
-extern "C" void  __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
-                                                  const char* file, int line);
+                                                  const char* file, int line); // 0x00f473a0
 extern "C" void* __cdecl operator_new(uint32_t size, const char* name, int a, int b,
                                       const char* file, int line);
 extern "C" void  __cdecl op_new_array(void* dst, int zero, uint32_t size);
@@ -610,4 +610,9 @@ void cMeshClusterer::MergeEdgeLists(int param_2, int param_3)
         }
     }
     *plink = -1;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -1,0 +1,24 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+00f373a0  189  planet-template add: complete; the identity-matrix ctor, Vector3
+               copy and the 9-float Mat3 assignment come out as movsd/scalar
+               moves instead of the original's fld/fstp memcpy-like sequence.
+               difftest: UNSUPPORTED (no valid inputs; pointer-soup pool-limit).
+               flags /O2 /MD /Gy /TP
+00f374f0  290  set-planet-model: complete; the two virtual-object paths and the
+               +0x444/+0x448 float schedule differ (many register swaps).
+               difftest: WEAK (81 valid, no mismatch, 34.9% coverage).
+               flags /O2 /MD /Gy /TP
+00f37690  742  scenario init: complete but large; the two Variant temporaries,
+               the eastl vector reserve and the long tag-list gating are written
+               with the right calls but differ in scheduling.
+               difftest: UNSUPPORTED (no valid inputs; object-heavy).
+               flags /O2 /MD /Gy /TP
+00f37f20  449  cScenarioTerraformEconomy creator: complete; operator-new,
+               cPropertyList and the IDGenerator range call are present but the
+               AutoRefCount/Manager tail is scheduled differently.
+               difftest: UNSUPPORTED (no valid inputs; object-heavy).
+               flags /O2 /MD /Gy /TP
+00f38150  362  noun removal: complete; the six vector erasures and the tail
+               release are present but scheduled differently.
+               difftest: WEAK (397 valid, no mismatch, 8.2% coverage).
+               flags /O2 /MD /Gy /TP

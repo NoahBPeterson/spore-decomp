@@ -800,3 +800,25 @@ bool CmdQueue::Reset(u32 n)
     mWrite = mBegin;
     return true;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void GetMaterialManager(...); // 0x0067dd70
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct AnimHandler {
+    void Do08ba0(); // 0x00a08ba0
+};
+struct SomeObj {
+    void Prep(); // 0x009a9920
+};
+struct MemPool {
+    void LockedAligned(int, int, int, int, int, char*, int, int); // 0x00928a30
+};
+struct SomeObj2 {
+    void Fn(void*, int); // 0x009ab540
+};
+struct AnimMgr {
+    void ReadAnimList(int); // 0x00a0f080
+};
+}

@@ -1138,3 +1138,8 @@ bool cSPSimulatorSpaceGame::HandleMessage(uint32_t messageID, void* pMessage)
     return false;
 }
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

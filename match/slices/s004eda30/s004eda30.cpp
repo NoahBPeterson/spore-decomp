@@ -231,3 +231,11 @@ bool FUN_004ee560(char* res, Flags128* flags)
     if (flags) flags->set(7, false);
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct PropVal {
+    void GetFloat(); // 0x0041ea70
+};
+}

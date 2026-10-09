@@ -440,3 +440,10 @@ void Viz::Update(u64 t) {
     F<void*>(this, 0x38c) = 0;
     if (old) VC0<void>(old, 48);
 }
+// --- equivalence checker address annotations
+    extern float g_PosY; // 0x0169ec2c
+    extern float g_PosZ; // 0x0169ec30
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -681,3 +681,15 @@ bool Sound::ConfigureSound()
     ((void (__thiscall*)(void*))(vt[0xb0 / 4]))(this);
     return true;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Mutex {
+    void Lock(void*); // 0x009221b0
+};
+struct Sub264 {
+    void F(void*); // 0x00a0fee0
+};
+}

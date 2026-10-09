@@ -169,3 +169,8 @@ void BitLengthInit(int self, int value, u32 mask) {
     *(u32*)(self + 0x14) = v;
     *(int*)(self + 0x18) = (1 << ((char)bits + 1 & 0x1f)) + -1;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -475,3 +475,8 @@ void SP::cTerrainBrushEffect::BuildRibbonBrush()
     params.mGradientCondN2 = desc->mGradientCondN2 + vary;
     ImprintRibbonPolys(1.0f, numPolys, polys.begin(), &params);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

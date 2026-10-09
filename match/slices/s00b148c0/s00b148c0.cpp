@@ -549,3 +549,13 @@ void cTerrainCameraController::MoveCamera(float yawDelta, float pitchDelta, floa
     g_bbf0 = 0;
     g_bbf4 = 0;
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_bbf4; // 0x0167bbf4
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SlotMessage {
+    SlotMessage(int); // 0x00421c80
+    ~SlotMessage(); // 0x00421cf0
+};
+}

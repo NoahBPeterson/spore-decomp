@@ -710,3 +710,9 @@ void* F6DF0(void* dst, void* src);
 void  F6EE0(void* first, void* last, void* dst);
 void* F6F80(void* first, void* last, char* dst);
 void* F6FF0(void* self, void* src);
+// --- equivalence checker address annotations
+    void Color_Lerp(...); // 0x007f5eb0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

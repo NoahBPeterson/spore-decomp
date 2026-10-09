@@ -1484,3 +1484,12 @@ bool SP::cSPEditorBlock::BuildBlock(uint32_t instanceID, uint32_t groupID, IMode
 
     return result;
 }
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SP {
+    void erase(void*, void*); // 0x00530c80
+};
+}

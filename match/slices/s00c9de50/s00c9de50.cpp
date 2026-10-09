@@ -95,7 +95,7 @@ struct IPropManager {
     virtual bool GetPropertyListIDs(uint32_t groupID, UIntVector& result);                      // +0x48
 };
 
-void __cdecl EASTL_allocator_deallocate(void* p);   // 00f47380
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380   // 00f47380
 
 struct UIntVector {
     uint32_t* mpBegin;

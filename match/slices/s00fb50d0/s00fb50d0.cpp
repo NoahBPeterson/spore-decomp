@@ -500,3 +500,9 @@ void cTerrainSphereQuad::BuildRibbonVerts(const SPVector<cRibbonFacePoly>& polys
 }
 
 } // namespace SP
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -6,7 +6,7 @@
 
 extern EA::Variant g_sNullVariant;  // 0x016027d0
 void* PropertyManager();            // 0x0067de30
-void* Property_GetBool(void* prop);
+void* Property_GetBool(void* prop); // 0x0041e920
 void* Property_GetInt(void* prop);
 void* Property_GetFloat(void* prop);
 bool WriteVariant(EA::IO::IStream* stream, EA::Variant* value, int flags);
@@ -236,7 +236,7 @@ void SP::cDirectPropertyList::Copy(cPropertyList* src) {
 
 // @ 0x006A2B20
 void SP::cDirectPropertyList::Clear() {
-  Memset32(mDirectProps, 0, mNumDirectProps);
+  Memset32(mDirectProps, 0, mNumDirectProps); // 0x0092cb00
   PairsDestroy(mPropertyMap.mpBegin, mPropertyMap.mpEnd);
   mPropertyMap.mpEnd = mPropertyMap.mpBegin;
 }
@@ -423,4 +423,21 @@ bool SP::cPropertyList::Read(EA::IO::IStream* stream) {
     if (bResult) bResult = WriteVariant(stream, &it->second, 0) != 0;
   }
   return bResult;
+}
+// --- equivalence checker address annotations
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+    void Memset32(...); // 0x0092cb00
+    void Property_GetBool(...); // 0x0041e920
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct eastl {
+    void lower_bound(void*, void*, unsigned int*, unsigned char); // 0x00555a20
+};
+struct EA {
+    void operator=(int&); // 0x00542b80
+};
+struct SP {
+    void SetBoolProperty(unsigned int, bool); // 0x006a17e0
+};
 }

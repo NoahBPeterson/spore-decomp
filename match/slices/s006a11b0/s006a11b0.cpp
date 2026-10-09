@@ -17,7 +17,7 @@ public:
   static void* operator new(unsigned int n, const char* pName, int flags = 0,
                             unsigned int debugFlags = 0, const char* pFile = 0,
                             int line = 0);
-  static void operator delete(void* p);
+  static void operator delete(void* p); // 0x00f47380
 };
 }  // namespace Allocator
 }  // namespace EA
@@ -528,7 +528,7 @@ void SP::cDirectPropertyList::SetFloatProperty(unsigned int index, float value) 
 
 // @ 0x006A1BD0
 SP::cDirectPropertyList::~cDirectPropertyList() {
-  EA::Allocator::ZoneObject::operator delete(mDirectProps);
+  EA::Allocator::ZoneObject::operator delete(mDirectProps); // 0x00f47380
 }
 
 // ---------------------------------------------------------------------------
@@ -633,4 +633,11 @@ void eastl::pvector::DoInsertValues(VariantPair* position, unsigned int n,
   mpBegin = p;
   mpEnd = p + cur + n;
   mpCapacity = p + newCap;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+};
 }

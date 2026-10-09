@@ -37,7 +37,7 @@ extern "C" int FUN_00f078a0();
 extern "C" int FUN_00f3e8a0(int, int);
 extern "C" int FUN_00f26440(void*, int);
 extern "C" int FUN_00f28c10(void*, int);
-extern "C" void* SP_WindowManager();
+extern "C" void* SP_WindowManager(); // 0x0067caa0
 extern "C" void* SP_MessageServer();
 extern "C" void* SP_PropertyManager();
 extern "C" int  SP_GetPropertyAsFloatArray(void*, int, void*, void*);
@@ -506,4 +506,9 @@ void __cdecl f00edf830(void* a, int b, int c, void* d)
 {
     (void)a; (void)b; (void)c; (void)d;
     // Large grid/string formatting handler not reconstructed (see partial.txt).
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

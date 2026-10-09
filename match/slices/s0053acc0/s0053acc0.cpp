@@ -11,7 +11,7 @@ namespace EA { namespace IO { struct IStream {}; } }
 bool ReadInt32(EA::IO::IStream*, int32_t*, size_t, int);           // @ 0x93a780
 bool ReadUInt8(EA::IO::IStream*, uint8_t*, size_t);                // @ 0x93a6c0
 bool WriteUInt32(EA::IO::IStream*, const uint32_t*, size_t, int);  // @ 0x93aa70
-void WriteUInt8(EA::IO::IStream*, const uint8_t*, size_t);
+void WriteUInt8(EA::IO::IStream*, const uint8_t*, size_t); // 0x0093a9a0
 void ReadEvalList(EA::IO::IStream*, char*);                        // @ 0x53a6d0 (slice 31)
 void WriteEvalList(EA::IO::IStream*, char*);                       // @ 0x53a930 (slice 31)
 void ReadDescBase(EA::IO::IStream*, char*);                        // @ 0x53bc90
@@ -190,4 +190,10 @@ BlobVec* Vector20Assign(BlobVec* v, const BlobVec* o)
 void Vector20Resize(BlobVec* v, unsigned n)
 {
     BlobResize<0x14>(v, n);
+}
+// --- equivalence checker address annotations
+    void WriteUInt8(...); // 0x0093a9a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -511,3 +511,9 @@ void Browser::SetCallToActionMessage(const short* msg) {
         s.c_str();
     }
 }
+// --- equivalence checker address annotations
+    void MessageServer(...); // 0x0067dcc0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -331,3 +331,8 @@ extern "C" void FUN_00695960() { /* cVarListSerializer::GetFields: summarised */
 
 // @ 0x00695b40
 extern "C" void FUN_00695b40() { /* serializer helper: summarised */ }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

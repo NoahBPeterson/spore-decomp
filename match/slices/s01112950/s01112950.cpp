@@ -734,3 +734,8 @@ END:
         gsk.checkForChangesAndUpdateCache(cache);
     HK_TIMER_CMD(g_hkTimerEndTag0);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

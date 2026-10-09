@@ -541,3 +541,13 @@ MapNode** U16Map::insert(MapNode** ret, MapIter position, const MapValueType* v,
     *ret = r.node;
     return ret;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, char*, int); // 0x00f473a0
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct RandomLCG {
+    void Uniform(unsigned int); // 0x00a68fb0
+};
+}

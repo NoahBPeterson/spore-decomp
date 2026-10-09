@@ -562,3 +562,11 @@ void Spine::FUN_005d35c0()
     vt8 = vtbl_cEditorResource;
     vt0 = vtbl_cContentValidationSummarizer;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkThreadMem {
+    void deallocateChunk(void*, int, int); // 0x0107db10
+};
+}

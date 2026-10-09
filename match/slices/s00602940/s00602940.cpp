@@ -511,3 +511,11 @@ void cGraphicsTab::init_profile_data()
     if (props) props->Release();
   }
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    extern float gF1485720; // 0x01485720
+    extern float gF151d728; // 0x0151d728
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

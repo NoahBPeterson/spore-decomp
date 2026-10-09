@@ -300,3 +300,8 @@ Vec3* __fastcall Deform_GetTuningVec(char* self, int /*edx*/, Vec3* out)
     else                      *out = AT(Vec3, t, 0x6c);
     return out;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

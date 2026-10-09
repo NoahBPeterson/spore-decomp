@@ -282,3 +282,8 @@ cSPMatrix3 FUN_49e880(cSPEditorBlock* block, cSPMatrix3 m)
     }
     return cSPMatrix3(g_DefaultMatrix);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

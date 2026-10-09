@@ -345,3 +345,9 @@ void __thiscall cSPUIAssetBrowser::SetLargeCardVisibililty(bool visible, const f
     }
     MessageServer()->PostMessage(0x5c81b25, 0, 0);
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, void*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

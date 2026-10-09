@@ -4,7 +4,7 @@
 #include "types.h"
 
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct V32 { uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity; };
 

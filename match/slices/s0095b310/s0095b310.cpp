@@ -564,3 +564,19 @@ void __cdecl DrawClippedRect(IRenderer* obj, const RectF* a, const RectF* c, con
     uv.y1 = (R.y1 - a->y0) * sy;
     obj->DrawRect(&R, c, &uv);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct WM {
+    void UpdateRenderState(void*, int, int); // 0x0095a140
+    void RenderWindow(void*, void*); // 0x0095a510
+    void ComputeClip(void*, void*); // 0x00958150
+};
+struct Builder {
+    Builder(); // 0x00952aa0
+};
+struct Base2D {
+    Base2D(void*); // 0x009520a0
+};
+}

@@ -475,3 +475,8 @@ void Stream_Quad_V4F_N4F_C4B_T2F_Old(cParticlesEffect* effect, cITextureParticle
 }
 
 } // namespace
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

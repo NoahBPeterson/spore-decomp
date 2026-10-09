@@ -4,6 +4,7 @@
 // Flags: /vc71 /O2 /MD /Gy /TP /arch:SSE
 #include "types.h"
 #include <xmmintrin.h>
+#include <emmintrin.h>
 
 extern "C" void* memcpy(void*, const void*, unsigned int);
 
@@ -366,7 +367,13 @@ unsigned int __cdecl FUN_01137de0(void* recv)
 
     self->FUN_011376d0(self->mNextFreeRequest, rec->f24);
 
-    int n = (int)((double)ri->f10 * rec->f18);
+    // The original converts the x87 float*double product with `fistp dword`, which rounds to
+    // nearest (FPCW 0x027F) and yields 0x80000000 on overflow/NaN. A plain (int) cast uses
+    // __ftol2, which truncates and returns the low 32 bits of an int64 (differing in
+    // [2^31, 2^63)). `cvtsd2si` (round-nearest per MXCSR, integer-indefinite on overflow)
+    // reproduces the original exactly; the product must round to double first, so pass it
+    // through _mm_set_sd rather than letting it stay in an extended-precision x87 register.
+    int n = _mm_cvtsd_si32(_mm_set_sd((double)ri->f10 * rec->f18));
     if (n <= 0)
         n = 0;
     if (n != 0) {

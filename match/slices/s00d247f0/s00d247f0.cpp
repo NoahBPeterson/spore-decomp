@@ -262,3 +262,8 @@ void cCreatureCamera::ReloadTuning()
     if (p) p->Release();
 }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

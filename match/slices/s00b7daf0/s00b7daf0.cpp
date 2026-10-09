@@ -509,3 +509,8 @@ void __thiscall cPlanetModel::FUN_00b7daf0() {
     }
   }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

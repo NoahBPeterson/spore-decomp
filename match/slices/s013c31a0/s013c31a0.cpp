@@ -7,7 +7,7 @@
 #include "types.h"
 
 extern "C" __declspec(dllimport) int __stdcall TlsFree(unsigned long);
-extern void __cdecl cdecl_free(void*);          // operator delete
+extern void __cdecl cdecl_free(void*);          // operator delete // 0x00f47380
 extern void __cdecl cdecl_shutdown_shared();    // EA::Allocator::ShutdownSharedAllocator
 extern void __cdecl RemoveHandler(int, int, int, int, int);
 
@@ -455,3 +455,9 @@ void f_013cab50() {
 
 // @ 0x013CB250
 void f_013cb250() { TlsFree(g_16e4174); }
+// --- equivalence checker address annotations
+    void cdecl_free(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

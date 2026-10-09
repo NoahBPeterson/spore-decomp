@@ -333,3 +333,10 @@ void SortSkeletonNodes(const SkelNode* nodes, int count, eastl::vector<int>* pOr
     if (pEnd4)
         *pEnd4 = v20 + t31 + p32 + t16;
 }
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+    void ReorderChildren(...); // 0x00460a80
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

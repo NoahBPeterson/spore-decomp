@@ -477,3 +477,12 @@ bool cModelUploadTransaction::ConstructRequest(EA::Internet::HTTPRequest** ppReq
 }
 }  // namespace Pollen
 }  // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ResourceReadRequest {
+    ~ResourceReadRequest(); // 0x008e2350
+    ResourceReadRequest(int, void*, void*, bool, bool); // 0x008e2380
+};
+}

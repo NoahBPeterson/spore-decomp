@@ -517,3 +517,11 @@ void __fastcall DoErase(void* p) {
     } while (n != 0);
     *(void**)p = &PTR_FUN_01403934;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Layout {
+    void Shutdown(int); // 0x00811ad0
+};
+}

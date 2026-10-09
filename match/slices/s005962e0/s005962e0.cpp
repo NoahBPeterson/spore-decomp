@@ -4,8 +4,8 @@
 #include <string.h>
 
 // EA allocator entry points (0x00F473A0 / 0x00F47380)
-void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
-void  operator delete[](void* p);
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
+void  operator delete[](void* p); // 0x00f47380
 inline void* operator new(size_t, void* p) { return p; }
 
 #define EASTL_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
@@ -1081,3 +1081,13 @@ template void SP::sp_vector<void*>::push_back(void* const&);
 // PARTIAL 0x005965e0: fixed_hash_map copy constructor not reconstructed (base ctor + range insert); stub only
 // @ 0x005965e0 ?CopyConstructStub
 void CopyConstructStub() {}
+// --- equivalence checker address annotations
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct eastl {
+    void RangeInitialize(wchar_t*); // 0x00579a90
+};
+}

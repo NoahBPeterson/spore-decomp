@@ -372,3 +372,17 @@ void cSPUIRolloverCivRelationship::ShowRelationshipRollover(IWindow* anchor, int
     }
     target->SetVisible(1, 1);
 }
+// --- equivalence checker address annotations
+    void StarManager(...); // 0x00b3d2a0
+    extern char kGameModeB; // 0x01654c04
+    extern char kGameModeC; // 0x01654c05
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cStarManager {
+    void GetEmpireByID(int); // 0x00ba9370
+};
+struct cGameNounManager {
+    void GetPlayerCivilization(); // 0x00b25fb0
+};
+}

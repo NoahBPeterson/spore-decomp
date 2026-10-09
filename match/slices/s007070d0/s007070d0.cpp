@@ -6,7 +6,7 @@
 void* __cdecl EastlAlloc8(uint32_t n, uint32_t align, int a, const char* name, int b, int c,
                           const char* file, int line);
 void* __cdecl EastlAlloc6(uint32_t n, const char* name, int a, int b, const char* file, int line);
-void  __cdecl EastlFree(void* p);
+void  __cdecl EastlFree(void* p); // 0x00f47380
 
 struct Vector4 { float f[4]; };
 struct cSPVector3 { float x, y, z; };
@@ -651,4 +651,10 @@ Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
     for (; first != last; ++first, ++p)
         *(__m128*)p = *(const __m128*)first;
     return p;
+}
+// --- equivalence checker address annotations
+    void EastlFree(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

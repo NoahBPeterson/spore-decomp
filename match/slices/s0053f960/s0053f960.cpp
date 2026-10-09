@@ -10,7 +10,7 @@ struct cSPVector3 { float x, y, z; cSPVector3(){} };
 
 // ---------------------------------------------------------------- externals
 void* operator new[](size_t, const char*, int, unsigned, const char*, int);
-void  operator_delete__(void*);
+void  operator_delete__(void*); // 0x00f47380
 
 uint32_t FUN_0050ea00(int key);                       // @ 0x50ea00 hash
 uint32_t FUN_0050e850(int a, int b);                  // @ 0x50e850 hash
@@ -189,7 +189,7 @@ void Obj::FUN_00540560(int* pos, int* value)
             newBuf[(i + 1) * 2 + 1] = old[i * 2 + 1];
         }
         if (old != 0 && *(int*)((char*)old - 4) != 0)
-            operator_delete__(old);
+            operator_delete__(old); // 0x00f47380
         *v = (int)newBuf;
         v[1] = (int)(newBuf + (oldCount + 1) * 2);
         v[2] = (int)(newBuf + newCap * 2);
@@ -402,4 +402,10 @@ LAB:
         *(int*)(base + 8 + (local_8 & 0x7fff) * 0xc) = idx;
     }
     return 1;
+}
+// --- equivalence checker address annotations
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

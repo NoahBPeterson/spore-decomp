@@ -510,3 +510,14 @@ void cPlantSpawner::Update(uint32_t dt, uint32_t dtAlt)
     g_ForceRefresh = 0;
     Tail(dt, dtAlt ? dtAlt : dt);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SpeciesManager {
+    void GetProfile(); // 0x004df550
+};
+struct IRefVec {
+    void Append(void**, unsigned int, void**); // 0x00babb70
+};
+}

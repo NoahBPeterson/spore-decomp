@@ -6,7 +6,7 @@
 
 // Allocator / helper externs (callees are masked relocations).
 void* EASTL_Allocate(void* alloc, uint32_t size, uint32_t align, uint32_t flags); // FUN_0042dee0
-void  EASTL_Free(void* p);                                                         // operator delete[]
+void  EASTL_Free(void* p);                                                         // operator delete[] // 0x00f47380
 
 // 28-byte payload that follows the 4-byte key in a 0x20 element.
 struct SubObj {
@@ -355,4 +355,10 @@ static Elem32* uninitialized_copy_Elem32(Elem32* first, Elem32* last, Elem32* ds
         ++d;
     }
     return d;
+}
+// --- equivalence checker address annotations
+    void EASTL_Free(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

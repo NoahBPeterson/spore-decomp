@@ -8,7 +8,7 @@
 
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 void operator delete(void* p);  // EASTL_allocator_deallocate
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* memmove(void* dst, const void* src, unsigned int n);  // 0x011e0744 (static)
 
 #define PV(n) virtual void pv##n();

@@ -777,3 +777,8 @@ show_attack:
     ShowAttackIcon(attackWin, attackIt, attackID, attackColor, 0x5e51b8c, 10.0f, 2.0f);
     return false;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

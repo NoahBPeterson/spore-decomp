@@ -657,3 +657,9 @@ hkMotionState& hkMotionState::operator=(const hkMotionState& o)
     m_deactivationCounter = o.m_deactivationCounter;
     return *this;
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_hkThreadMemoryTls; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

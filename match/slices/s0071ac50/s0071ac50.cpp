@@ -464,3 +464,8 @@ void cMeshBuilder::CreateMeshData()
     MeshData_ResolveArrays(mMeshData.mp);
     ClearMeshInfo();
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

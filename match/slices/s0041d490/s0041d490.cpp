@@ -18,7 +18,7 @@ struct AbilityBlockCopy {              // FUN_0041d7b0 body (copy two Vec4 rows)
 };
 
 extern void* vtbl_cCreatureAbility[];
-void __cdecl EASTL_allocator_deallocate(void* p);
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct cCreatureAbility {
     void*          vptr;      // 0

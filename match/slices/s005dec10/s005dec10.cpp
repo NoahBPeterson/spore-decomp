@@ -578,7 +578,7 @@ bool EUI::FUN_005df8f0(Key12 key)
                 if (res) { res->Release(); }
                 return false;
             }
-            RemapTypeId(er->mType);
+            RemapTypeId(er->mType); // 0x00432f10
             if (!app->FUN_00573070(er)) {
                 md0 = 0;
             } else if (!app->FUN_00573050()) {
@@ -597,4 +597,20 @@ bool EUI::FUN_005df8f0(Key12 key)
     app->FUN_005721b0(z, z);
     if (res) res->Release();
     return false;
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void CalloutMessageBox(...); // 0x00809db0
+    void GetSystemAT(...); // 0x00a206f0
+    void RemapTypeId(...); // 0x00432f10
+    void interface_cast_EditorRes(...); // 0x00421eb0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Layout {
+    void FindWindowByID(int, int); // 0x008105b0
+};
+struct AppBase {
+    void SetCurrentConfig(unsigned int, int); // 0x00579720
+};
 }

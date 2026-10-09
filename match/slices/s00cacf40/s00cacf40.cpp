@@ -357,3 +357,8 @@ void Agent34::Update()
     }
     R()->FinalStep();
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

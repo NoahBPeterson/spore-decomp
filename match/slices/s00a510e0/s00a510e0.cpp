@@ -384,3 +384,11 @@ double mtof(float f)
 }
 
 }}}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void gpTextClass(...); // 0x016754f0
+};
+}

@@ -13,8 +13,8 @@ typedef void(__cdecl* FnC)(...);
 
 static inline void* Vslot(void* o, int off) { return ((void**)(*(void**)o))[off / 4]; }
 
-extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line);
-extern "C" void  EASTL_allocator_deallocate(void* p);
+extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, const char* file, int line); // 0x00f473a0
+extern "C" void  EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* operator_new_ea(unsigned int size, const char* tag, int, int, int, int);
 extern "C" void  SPUIHelpers_SetWindowAreaToParent(void* win);
 extern "C" void* SP_MessageServer();

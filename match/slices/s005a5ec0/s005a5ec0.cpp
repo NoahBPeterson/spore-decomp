@@ -588,3 +588,11 @@ void cSPEditorColorPicker::Update(int deltaTime) {
 float FUN_005a6e00(float x) {
     return Minf(Maxf(0.0f, x), 1.0f);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct BoundingBoxLite {
+    void Renderer(); // 0x0080d710
+};
+}

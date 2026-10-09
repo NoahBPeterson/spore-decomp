@@ -406,3 +406,8 @@ void hkSymmetricAgent_hkTransformAgent::processCollision(const hkCdBody& bodyA, 
         result.m_toiContact.m_separatingNormal.z = -result.m_toiContact.m_separatingNormal.z;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

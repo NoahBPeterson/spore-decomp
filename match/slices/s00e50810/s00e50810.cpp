@@ -448,3 +448,8 @@ void __stdcall FUN_00e517e0(float* out) {
   out[4] = gBox_16b3c98;
   out[5] = gBox_16b3c9c;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

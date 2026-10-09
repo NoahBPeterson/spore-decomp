@@ -1,7 +1,7 @@
 // eastl::vector<SP::cTextureChart, ...> helpers (retail offsets from disasm).
 #include "types.h"
 
-extern "C" void  __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int a, int b,
                                                   const char* file, int line);
 extern "C" void __stdcall VectorAppend8(void* dstEnd, void* val);      // 00722410

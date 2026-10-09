@@ -7,7 +7,7 @@
 
 // ---------------------------------------------------------------- externals
 void* EAAlloc(unsigned size, const char* area, int a, int b, const char* file, int line);
-void  EAFree(void* p);
+void  EAFree(void* p); // 0x00f47380
 extern "C" void  StreamOpShift(void* stream, const void* data, int count);   // 0x0093a9a0
 extern "C" void  WriteUint32(void* pStream, const void* pData, int n, int);  // 0x0093aa70
 extern "C" double ValidateDouble(double v);                                  // 0x011e0906
@@ -509,4 +509,10 @@ void FUN_0067ff30(float r, float g, float b, float* ph, float* ps, float* pl) {
   *ph = hue;
   *ps = delta / maxv;
   *pl = maxv;
+}
+// --- equivalence checker address annotations
+    void EAFree(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

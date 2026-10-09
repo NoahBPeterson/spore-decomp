@@ -5,7 +5,7 @@
 
 #define PV(n) virtual void pv##n();
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* __cdecl memmove(void*, const void*, unsigned int);
 extern "C" unsigned int __cdecl strlen(const char*);
 #pragma intrinsic(strlen)

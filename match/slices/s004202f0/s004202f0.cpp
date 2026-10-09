@@ -4,7 +4,7 @@
 #include <intrin.h>
 #include <new>
 
-void EASTL_allocator_deallocate(void* p);
+void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct AtomicRefCounted {
     void* vtable;

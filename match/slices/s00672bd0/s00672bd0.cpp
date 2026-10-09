@@ -8,8 +8,8 @@ typedef unsigned int uint32;
 
 // EASTL allocation hooks.  The exact call target is a masked relocation; only the call shape
 // (six pushed dwords) matters.
-void* EAAllocate(unsigned int n, const char* name, int flags, int align, const char* file, int line);
-void  EAFree(void* p);
+void* EAAllocate(unsigned int n, const char* name, int flags, int align, const char* file, int line); // 0x00f473a0
+void  EAFree(void* p); // 0x00f47380
 inline void* operator new(unsigned int, void* p) { return p; }
 
 namespace std {
@@ -551,4 +551,11 @@ void force_detok()
 {
     cBuildXHTMLDetokenizer d;
     (void)d;
+}
+// --- equivalence checker address annotations
+    void EAAllocate(...); // 0x00f473a0
+    void EAFree(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

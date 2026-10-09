@@ -10,7 +10,7 @@ typedef int ptrdiff_t;
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
 #define ALLOC_NAME "App"
 
-void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line); // 0x00f473a0
 inline void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line)
 { return operator new[](size, pName, flags, debugFlags, file, line); }
 inline void operator delete(void*, const char*, int, unsigned, const char*, int) {}
@@ -634,4 +634,10 @@ void cGameModelEffect::Init(int a, void* desc, int value) {
         mUnkC4 = ((void*(__thiscall*)(void*))(*(void***)mm)[0x20 / 4])(mm);
     else
         mUnkC4 = ((void*(__thiscall*)(void*, int))(*(void***)mm)[0x1c / 4])(mm, m);
+}
+// --- equivalence checker address annotations
+    void* operator new[](unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

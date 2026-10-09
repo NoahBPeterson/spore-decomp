@@ -686,3 +686,26 @@ uint32_t __stdcall XmlDeserializerRead(IStreamX* stream, void* arg2, SerCollecti
   }
   return result;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct S928cd0 {
+    void init(int, int, int, int, int); // 0x00928cd0
+};
+struct S928b00 {
+    void init(int, int, int, int, int); // 0x00928b00
+};
+struct HFind {
+    void find(void**, unsigned int*); // 0x00645ed0
+};
+struct CollMapAssign {
+    void f(unsigned int, void*); // 0x0099b5a0
+};
+struct ObjectMapAlloc {
+    void f(void*, unsigned int); // 0x00693230
+};
+struct HMapOps {
+    void op(unsigned int*); // 0x00975d40
+};
+}

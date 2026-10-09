@@ -26,7 +26,7 @@ struct cArguments {
     char HasFlag(const void* flag);
 };
 
-extern "C" void* operator_new(unsigned n, const char* name, int a, int b, const char* file, int line);
+extern "C" void* operator_new(unsigned n, const char* name, int a, int b, const char* file, int line); // 0x00f473a0
 extern "C" void  operator_delete__(void* p);
 
 // ---------------------------------------------------------------------------
@@ -493,4 +493,9 @@ int WU_read(int ctx, int desc, int pixels, int stride) {
     d->data = pixels;
     Hist3d(d, d->wt, d->mr, d->mg, d->mb, (float*)d->weights);
     return 1;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

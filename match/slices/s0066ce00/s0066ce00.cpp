@@ -10,7 +10,7 @@ typedef void* (__thiscall *FnPtrV)(void*);
 void* __cdecl SP_PropertyManager();               // 0x0067de30
 void* __cdecl SP_GetPropertyAsKey(void* p, unsigned key, void* out); // 0x006a1250
 void  __cdecl SPUIHelpers_SetWindowImage(void* w, void* key, int a); // 0x00807bb0
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* __cdecl cSPUILayout_FindWindow(void* self, unsigned id, int flag);
 
 // ---- types used by the message handler at 0x0066d430 ----

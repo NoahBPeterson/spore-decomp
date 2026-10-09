@@ -774,3 +774,11 @@ bool VariantDefaultTypeProc(int op, Variant* pThis, Variant** ppArgs, int nArgs,
 }
 
 } // namespace EA
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void operator=(int&); // 0x00542b80
+};
+}

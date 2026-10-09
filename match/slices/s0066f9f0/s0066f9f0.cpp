@@ -8,7 +8,7 @@ void  __cdecl FUN_00550800(void* a);                // 0x00550800
 void  __cdecl FUN_00550820(void* a);                // 0x00550820
 void  __cdecl FUN_004786e0(void* a, void* b);       // 0x004786e0
 void  __cdecl FUN_00610460(void* a);                // 0x00610460
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 extern int gVt700_0, gVt700_1, gVt700_2, gVt700_3, gVt700_4, gVt700_5;
 extern int gStr700A, gStr700B;

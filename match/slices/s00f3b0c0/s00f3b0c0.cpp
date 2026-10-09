@@ -478,3 +478,8 @@ void FUN_00f3b800() {}
 
 // @ 0x00f3b9e0
 void FUN_00f3b9e0() {}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

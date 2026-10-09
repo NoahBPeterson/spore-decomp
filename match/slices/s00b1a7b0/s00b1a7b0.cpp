@@ -660,3 +660,19 @@ bool cInputHandler::HandleMessage(unsigned msgID, IMessage* msg) {
   }
   return true;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cGameNounManager {
+    void GetGameDataVector(int, int, int, int, int); // 0x00b21340
+};
+struct cTerrainCameraController {
+    void GetAnchorDirection1(); // 0x00b10260
+};
+struct cTribeInputStrategy {
+    void Init(); // 0x00cd0aa0
+};
+}

@@ -517,7 +517,7 @@ struct hk1dLinearBilateralConstraintInfo {
 struct hkConstraintQueryIn; struct hkConstraintQueryOut;
 // cdecl in the binary (caller cleans the three pushed arguments)
 void hk1dLinearBilateralConstraintBuildJacobian(const hk1dLinearBilateralConstraintInfo* info,
-                                                const hkConstraintQueryIn* in, hkConstraintQueryOut* out);
+                                                const hkConstraintQueryIn* in, hkConstraintQueryOut* out); // 0x010aa890
 struct hkGenericConstraintParameters {
     uint32_t m_vec[4 * 2];           // +0x00: pivotA, pivotB (two hkVector4); further hkVector4 entries follow
     uint32_t m_more[0xb8 / 4 - 8];
@@ -580,4 +580,10 @@ float hkGenericConstraint_calcAngle(int axis, const hkVector4* rows)
     float d1 = (float)((((hkX87Real)v1.z * w.z) + ((hkX87Real)v1.y * w.y)) + ((hkX87Real)v1.x * w.x));
     float d2 = (float)((((hkX87Real)v2.z * w.z) + ((hkX87Real)v2.y * w.y)) + ((hkX87Real)v2.x * w.x));
     return hkMath::atan2fApproximation(d1, d2);
+}
+// --- equivalence checker address annotations
+    void hk1dLinearBilateralConstraintBuildJacobian(...); // 0x010aa890
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

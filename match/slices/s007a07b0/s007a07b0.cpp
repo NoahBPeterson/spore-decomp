@@ -597,3 +597,18 @@ ModelDst* GeomBuilder::Build(ModelSrc* src)
     }
     return mDst;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct FixedIdVec6 {
+    void Assign(void*); // 0x00719170
+};
+struct ElemVec {
+    void Resize(int); // 0x00475320
+    void Grow(); // 0x0079fe20
+};
+struct StreamIdVec {
+    void Resize(int); // 0x0071f7e0
+};
+}

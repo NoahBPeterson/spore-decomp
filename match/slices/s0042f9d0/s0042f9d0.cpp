@@ -9,7 +9,7 @@ extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
 // ---------------------------------------------------------------- externals
 void* __cdecl EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int align,
                                        const char* file, int line);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* __cdecl memcpy(void* dst, const void* src, unsigned int n);
 
 // ---------------------------------------------------------------- wide string buffer

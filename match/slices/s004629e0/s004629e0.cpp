@@ -594,3 +594,8 @@ bool ExportToXMFAndBlocks(EditorModel* model, EditorCreatureData* data, const wc
 }
 
 } }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

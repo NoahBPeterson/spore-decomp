@@ -505,3 +505,11 @@ void hkMoppAabbCastVirtualMachine::cast(const hkMoppXform* xf, const uint8_t* pc
         }
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkMoppXform {
+    void assign(int&); // 0x01114310
+};
+}

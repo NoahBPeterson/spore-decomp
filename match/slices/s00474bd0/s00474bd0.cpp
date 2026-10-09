@@ -7,7 +7,7 @@ typedef unsigned short ushort;
 typedef unsigned char uchar;
 
 struct DefaultRefCounted { void Release(); };
-void operator_delete_array(void* p);                       // operator delete[]
+void operator_delete_array(void* p);                       // operator delete[] // 0x00f47380
 void operator_delete_alloc(void* p, void* a, void* alloc, uint n);
 
 struct Allocator;
@@ -300,7 +300,7 @@ struct VecBits {
     char mAllocator[4];
     void reserve(uint n);
 };
-void* DoInsertValue(void* dst, void* src, int bytes);  // vector<bool,fixed_vector_allocator<1,16,1,0,1>>::DoInsertValue
+void* DoInsertValue(void* dst, void* src, int bytes);  // vector<bool,fixed_vector_allocator<1,16,1,0,1>>::DoInsertValue // 0x011e0744
 
 // @ 0x004756f0
 void VecBits::reserve(uint n)
@@ -309,7 +309,7 @@ void VecBits::reserve(uint n)
         void* pNew = n ? Alloc(mAllocator, n << 3, 8, 0) : 0;
         DoInsertValue(pNew, mpBegin, (int)(mpEnd - mpBegin));
         if (mpBegin && *(int*)(mpBegin - 4) != 0)
-            operator_delete_array(mpBegin);
+            operator_delete_array(mpBegin); // 0x00f47380
         char* old = mpBegin;
         mpBegin = (char*)pNew;
         mpEnd = (char*)pNew + ((mpEnd - old) >> 3) * 8;
@@ -400,4 +400,14 @@ int InsertBits(void* first, int last, void* vec)
 {
     void* r = DoInsertValue(vec, first, last - (int)first);
     return (int)r + (last - (int)first);
+}
+// --- equivalence checker address annotations
+    void DoInsertValue(...); // 0x011e0744
+    void operator_delete_array(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct DefaultRefCounted {
+    void Release(); // 0x00453540
+};
 }

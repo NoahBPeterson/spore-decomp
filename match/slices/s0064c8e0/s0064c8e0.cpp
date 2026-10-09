@@ -800,3 +800,11 @@ bool cSPUIAssetBrowser::HandleMessage(uint32_t messageID, void* pMessage) {
     }
     return true;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct AssetList {
+    ~AssetList(); // 0x007a41a0
+};
+}

@@ -3,7 +3,7 @@
 // disassembly.  Class names/offsets cross-checked against the 2008 dev PDB.
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 extern "C" void* EASTL_allocator_allocate(unsigned int size, const char* tag, int a, int b, int c,
                                           int d);
 extern "C" void* operator_new_ea(unsigned int size, const char* tag, int, int, int, int);

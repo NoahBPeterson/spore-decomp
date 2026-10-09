@@ -22,9 +22,9 @@ struct hkMemory {
     virtual void* allocateObject(int nbytes, int memClass);         // slot 4 (+0x10)
     virtual void  deallocateObject(void* p, int nbytes, int memClass); // slot 5 (+0x14)
 };
-extern hkMemory* g_hkMemory;            // hkMemory::s_instance
+extern hkMemory* g_hkMemory;            // hkMemory::s_instance // 0x016e4178
 struct hkThreadMemory { void deallocateChunk(void* p, int nbytes, int memClass); };
-extern unsigned long g_hkThreadMemoryTlsIndex;
+extern unsigned long g_hkThreadMemoryTlsIndex; // 0x016e4174
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 static inline hkThreadMemory* getThreadMemory() { return (hkThreadMemory*)TlsGetValue(g_hkThreadMemoryTlsIndex); }
 
@@ -696,4 +696,11 @@ hkDefaultBuiltinTypeRegistry* hkDefaultBuiltinTypeRegistry_create()
 void* hkBinaryPackfileReader_getContents(hkBinaryPackfileReader* self, const char* className)
 {
     return self->getContentsWithRegistry(className, hkBuiltinTypeRegistry::s_instance->getLoadedObjectRegistry());
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int); // 0x006abeb0
+    extern unsigned long g_hkThreadMemoryTlsIndex; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

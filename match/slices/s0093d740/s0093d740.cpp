@@ -4,7 +4,7 @@
 #include "types.h"
 
 extern void* g_fn154eb48;                       // Variant value destructor/callback
-extern "C" void* __cdecl ea_new(unsigned, const char*, int, int, const char*, int);
+extern "C" void* __cdecl ea_new(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
 extern "C" void  __cdecl ea_delete(void*);
 extern "C" void* __cdecl memmove_f(void*, const void*, unsigned);
 extern "C" void  FUN_004228e0(void*, unsigned);
@@ -248,4 +248,9 @@ bool Variant_Assign(int* self, short type, unsigned flags, void* src, int width,
     f |= 8;
 convert:
     return false;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

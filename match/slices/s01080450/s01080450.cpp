@@ -636,3 +636,11 @@ void hkVector4::setTransformedPos(const hkTransform& t, const hkVector4& p)
 	z = ((c * t.m[10] + b * t.m[6]) + a * t.m[2]) + t.m[14];
 	w = 0.0f;
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_hkMonitorTlsAC; // 0x016e42ac
+    extern unsigned int g_hkMonitorTlsCurrent; // 0x016e42a4
+    extern unsigned int g_hkMonitorTlsEnd; // 0x016e42a8
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

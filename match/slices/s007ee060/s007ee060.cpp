@@ -7,7 +7,7 @@
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line);
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
-                   const char* file, int line);
+                   const char* file, int line); // 0x00f473a0
 void operator delete(void* p);
 void operator delete[](void* p);
 inline void* operator new(size_t, void* p) throw() { return p; }
@@ -356,4 +356,13 @@ extern "C" void RegisterVolumeDescription(int self, char flag) {
     extern void FUN_00a6f9c0(int, int, void*);
     FUN_00a6f9c0(*(int*)(self + 0x130), 0x28, v);
   }
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct EA {
+    void MainArguments(void*, int); // 0x00838020
+};
 }

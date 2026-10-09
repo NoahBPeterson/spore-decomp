@@ -678,3 +678,8 @@ void SP::Havok::CreateHavokEntityForObject(cGameData* pGameData, cSpatialObject*
             FUN_00b54000(pObject, pAabbPhantom);
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

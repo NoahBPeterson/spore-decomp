@@ -319,3 +319,8 @@ void cExportHelper::ExportMeshEnd()
     fclose(f);
     export_mesh_FILE = 0;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

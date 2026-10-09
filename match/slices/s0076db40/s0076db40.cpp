@@ -2,7 +2,7 @@
 // SP::cRTTManager page-table accessors plus render-target record helpers. Default flags + SSE2.
 #include "types.h"
 
-extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line);
+extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line); // 0x00f473a0
 extern "C" void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
 
 // ------------------------------------------------------------------ page records

@@ -279,3 +279,20 @@ void cSPModelGraph::ComputeTree() {
         ed->mLocal = *FUN_004ff660(&tmp, &ed->mXform, (Vec3f*)&mNodes[a]);
     }
 }
+// --- equivalence checker address annotations
+    void GetResourceTypeFromModelType(...); // 0x00526430
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct UIntDeque {
+    void empty(); // 0x00425430
+    void push_back(unsigned int*); // 0x00501e40
+    UIntDeque(char*); // 0x004aa100
+};
+struct UIntVec {
+    UIntVec(unsigned int); // 0x005012d0
+};
+struct cSPModelGraph {
+    void NameAssign(wchar_t*, wchar_t*); // 0x00423650
+};
+}

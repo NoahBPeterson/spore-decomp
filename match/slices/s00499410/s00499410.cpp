@@ -283,3 +283,11 @@ Vector3* FUN_0049a0c0(Vector3* ret, DirOwner* o)
     ret->z = g_15d64d8.z;
     return ret;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct SkinMgr {
+    void PickSkin(int, int, int, void*, void*, float*, int); // 0x004c4a30
+};
+}

@@ -12,9 +12,9 @@
 #include "types.h"
 
 // ---------------------------------------------------------------- properties
-extern const bool     kDefaultBoolValue;
-extern const int      kDefaultInt32Value;
-extern const uint32_t kDefaultUInt32Value;
+extern const bool     kDefaultBoolValue; // 0x015d115d
+extern const int      kDefaultInt32Value; // 0x015d1160
+extern const uint32_t kDefaultUInt32Value; // 0x015d1164
 extern const float    kDefaultFloatValue;   // 0x015d1168
 
 struct Property {
@@ -498,3 +498,8 @@ void LoadCreatureGameplayTuning(uint32_t groupID, uint32_t instanceID)
 }
 
 } // namespace SP
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

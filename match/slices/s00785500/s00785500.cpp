@@ -207,3 +207,13 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
         }
     }
 }
+// --- equivalence checker address annotations
+    extern float k078; // 0x01634078
+    extern float k0cc; // 0x016340cc
+    extern float k0dc; // 0x016340dc
+    extern float k104; // 0x01634104
+    extern float k150; // 0x01634150
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

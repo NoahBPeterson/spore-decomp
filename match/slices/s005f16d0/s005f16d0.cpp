@@ -845,3 +845,21 @@ void SizeViewportToWindowAndRemainOnScreen(cUIViewport* viewport, IWindow* windo
 }
 
 }  // namespace SW
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cSPUILayout {
+    cSPUILayout(); // 0x00810000
+};
+struct cSPMessage {
+    ~cSPMessage(); // 0x005c12c0
+};
+struct SW {
+    void FindWindowByID(unsigned int, bool); // 0x008105b0
+    void Init(void*, bool, unsigned int); // 0x008120d0
+    void MessageServer(); // 0x0067dcc0
+    void SetParentWin(void*, bool, unsigned int); // 0x008121b0
+};
+}

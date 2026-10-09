@@ -2,7 +2,7 @@
 // Module flags: /O2 /MD /Gy /EHsc /TP
 #include "types.h"
 
-void* EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line);
+void* EASTL_allocator_allocate(uint32_t size, const char* name, int flags, int debugFlags, const char* file, int line); // 0x00f473a0
 void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
 
 #define APP_ALLOCATOR_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"

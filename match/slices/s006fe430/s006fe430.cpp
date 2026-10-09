@@ -9,7 +9,7 @@
 void* __cdecl FUN_011e073e(void* p, int a, unsigned size);   // operator_new[]
 void* __cdecl FUN_011e0744(void* a, void* b, unsigned c);    // vector DoInsertValue
 void  __cdecl FUN_00928dc0();
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 // EA::IO helpers
 void __cdecl EA_WriteUint32(void* stream, const void* p, int n, int flag);
@@ -362,4 +362,10 @@ void Vec130::Resize(unsigned n) {
     } else {
         Destroy(begin + n * 0x130, end);
     }
+}
+// --- equivalence checker address annotations
+    void EASTL_allocator_deallocate(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

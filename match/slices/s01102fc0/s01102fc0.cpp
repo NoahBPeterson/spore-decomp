@@ -635,3 +635,8 @@ void __cdecl hkAgent1nMachine_Create(hkAgent1nTrack& track)
     *(uint32_t*)(base + 0x18) = 0xffffffff;
     sector->m_bytesAllocated = 0x10;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

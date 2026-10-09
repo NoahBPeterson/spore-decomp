@@ -626,3 +626,8 @@ void FUN_007d1970(int self, cArguments* args)
     V3 v = obj->Get(*a);
     *(V3*)(*(int*)(self + 0xc) + 0x18) = v;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

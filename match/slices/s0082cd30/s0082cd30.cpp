@@ -697,3 +697,11 @@ uint32_t cSPUIDeserializer::Read(IStream* stream, int a1, void* output, int a3, 
     stream->SetPosition(pos, 0);
     return XmlDeserializer::Read(stream, a1, output, a3, a4, a5);
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct PAUSerObject {
+    void DoInsertValue(void**, int*&); // 0x006ec4a0
+};
+}

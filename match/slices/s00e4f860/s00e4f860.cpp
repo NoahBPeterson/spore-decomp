@@ -19,7 +19,7 @@ extern "C" {
   void      __cdecl FUN_00809db0(void*, void*);
   void*     __cdecl SP_ConfigManager();
   void*     __cdecl SP_App();
-  void*     __cdecl SP_MessageServer();
+  void*     __cdecl SP_MessageServer(); // 0x0067dcc0
   void*     __cdecl SP_CheatManager();
   void*     __cdecl FUN_0067dd20();
   void*     __cdecl FUN_0067de90(int);
@@ -497,4 +497,8 @@ void FUN_00e50400(void* self, char flag) {
   if (flag) (*(void(__thiscall**)(void*, int))((char*)Vt(self) + 0xc))(self, 1);
   (*(void(__thiscall**)(void*))((char*)Vt(self) + 4))(self);
 }
+// --- equivalence checker address annotations
 
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

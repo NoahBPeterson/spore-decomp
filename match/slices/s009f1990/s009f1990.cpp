@@ -375,3 +375,11 @@ children:
         p->dirty = 1;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Quat {
+    void FromAxisSC(void*, float, float, int); // 0x009edcf0
+};
+}

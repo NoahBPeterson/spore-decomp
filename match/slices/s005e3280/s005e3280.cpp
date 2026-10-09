@@ -466,3 +466,10 @@ void VerbIcon::Disappear()
             win10->SetVisibleFlags(1, 0);
     }
 }
+// --- equivalence checker address annotations
+    void GetSystemAT(...); // 0x00a206f0
+    void KillSetiEffects(...); // 0x00435ed0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

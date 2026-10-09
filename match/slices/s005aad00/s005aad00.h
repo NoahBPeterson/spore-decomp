@@ -5,7 +5,7 @@
 #define SP_EDITOR_MANIP_SCAFFOLD_H
 #include "types.h"
 
-extern "C" void EASTL_allocator_deallocate(void* p);
+extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* operator new(unsigned int size, const char* name, int flags, unsigned debugFlags, const char* file, int line);
 
 namespace rw { namespace math { namespace fpu {

@@ -4,7 +4,7 @@
 // the Havok 6.x headers (hkpBvTreeAgent etc.), used for naming only.
 #include "../s010869e0/hk31_world.h"
 
-extern const char hkMonitorTimerEndTag[];
+extern const char hkMonitorTimerEndTag[]; // 0x0149cc34
 #define HK_REAL_MAX_BITS 0x7f7fffeeu
 static inline float hkRealMax()      // 3.40282e+38f in this build: bit pattern 0x7f7fffee
 {
@@ -340,4 +340,4 @@ struct hkMoppAabbCastVirtualMachine           // 0x30 bytes on the stack, never 
 };
 
 // the null agent singleton (0x010CD8D0)
-hkCollisionAgent* hkNullAgent_getNullAgent();
+hkCollisionAgent* hkNullAgent_getNullAgent(); // 0x010cd8d0

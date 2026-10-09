@@ -13,7 +13,7 @@
 void* __cdecl operator_new(unsigned size, const char* name, int a, int b, const char* f, int l);
 void  __cdecl operator_delete(void* p);
 extern "C" void* __cdecl EASTL_allocator_allocate(unsigned n, int align, int a, int b, const char* f, int l);
-extern "C" void  __cdecl EASTL_allocator_deallocate(void* p);
+extern "C" void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 void* __cdecl SP_WindowManager();
 void* __cdecl EA_UTFWin_GetManager();

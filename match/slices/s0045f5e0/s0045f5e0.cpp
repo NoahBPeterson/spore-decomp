@@ -177,7 +177,7 @@ bool FUN_004600f0(MeshDesc* mesh, Vec8T* positions, Vec16T* colors, int base)
 bool FUN_0045f5e0(MeshDesc* mesh, MeshOut* out, Xform* xf)
 {
     FUN_00733ed0(mesh);
-    CreateClustersAndEdges(mesh, 1);
+    CreateClustersAndEdges(mesh, 1); // 0x00735470
     unsigned nClusters0 = (unsigned)(mesh->clusters.mpEnd - mesh->clusters.mpBegin);
     for (unsigned c = 0; c < nClusters0; c++) {
         Cluster* cl = &mesh->clusters.mpBegin[c];
@@ -274,4 +274,23 @@ bool FUN_0045f5e0(MeshDesc* mesh, MeshOut* out, Xform* xf)
         }
     }
     return true;
+}
+// --- equivalence checker address annotations
+    void CreateClustersAndEdges(...); // 0x00735470
+    void normalized_safe(...); // 0x00449c20
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Mat33 {
+    void Assign(void*); // 0x0041cb40
+};
+struct Vec16T {
+    void resize(unsigned int, int&); // 0x00474450
+};
+struct Vec8T {
+    void resize(unsigned int, int&); // 0x004740f0
+};
+struct VecV3 {
+    void Resize(unsigned int); // 0x00473810
+};
 }

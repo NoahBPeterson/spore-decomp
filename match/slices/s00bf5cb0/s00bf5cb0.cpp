@@ -522,3 +522,11 @@ void TribeAI::Update()
         }
     }
 }
+// --- equivalence checker address annotations
+    void FnB(...); // 0x00acdff0
+    void FnC(...); // 0x00d3d420
+    void FnD(...); // 0x00cd7d10
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

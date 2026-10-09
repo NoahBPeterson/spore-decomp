@@ -44,7 +44,7 @@ VariantCtor13::VariantCtor13(int v) {
 #include <string.h>
 void* __cdecl EASTL_allocator_allocate(size_t n, const char* name, int flags, int a, const char* file, int line);
 #define ALLOC_FILE "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h"
-void __cdecl EASTL_allocator_deallocate(void* p);
+void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 struct PtrVec {
   void** mpBegin;
@@ -420,3 +420,9 @@ void cPropertyUI::ModifyRGBA(IWindow* window, bool bArray) {
   ReloadPropResource();
 }
 }  // namespace SP
+// --- equivalence checker address annotations
+    void operator delete(void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -739,3 +739,14 @@ InsertOut* TblB::DoInsertKey(InsertOut* out, const u32* key, int tag)
     out->bucket = b;
     return out;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct TerrainMapF {
+    void GetFloat(void*); // 0x00f8d620
+};
+struct TerrainMapV {
+    void GetVector4(void*, void*); // 0x00f89e50
+};
+}

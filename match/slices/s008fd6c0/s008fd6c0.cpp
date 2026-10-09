@@ -783,3 +783,15 @@ bool IMsgSub::HandleMessage(unsigned id, JobMsg* msg)
     }
     return true;
 }
+// --- equivalence checker address annotations
+    void EncodingFromName(...); // 0x008fd0a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ResourceRequest {
+    void SetEncoding(unsigned int, int); // 0x009002f0
+};
+struct EStr {
+    void assign(char*, char*); // 0x00454cb0
+};
+}

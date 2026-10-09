@@ -7,7 +7,7 @@ void* __cdecl FUN_011e073e(void* p, int a, unsigned size);
 void  __cdecl FUN_006ec4a0(void* pos, const void* v);
 void  __cdecl FUN_00f47410(int a);
 void  __cdecl FUN_00762a00(int a);
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
 // ---- globals ----------------------------------------------------------------------------
 extern unsigned short g_cellTable[];   // 0x15352a8, 32 ushort entries

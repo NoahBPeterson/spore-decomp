@@ -462,3 +462,19 @@ void __cdecl MeshBuildSort(PartList* parts, OutMesh* out)
         }
     }
 }
+// --- equivalence checker address annotations
+    void SporeNew(...); // 0x00f473a0
+    void operator_delete__(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct OutRangeVec {
+    void DoInsertValue(void*, void*); // 0x00428900
+};
+struct OutStreamVec {
+    void Insert(void*, void*); // 0x00736660
+};
+struct OutBatchVec {
+    void PushBack(void*); // 0x004754e0
+};
+}

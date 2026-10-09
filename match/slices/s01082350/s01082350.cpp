@@ -59,7 +59,7 @@ struct hkMemory {
     int m_pad2[3];
     int m_stat28;   // +0x28
 };
-extern hkMemory* g_hkMemory;
+extern hkMemory* g_hkMemory; // 0x016e4178
 
 #define HK_CLASS_ALLOC(MEMCLASS) \
     static void* operator new(size_t sz) { void* p = g_hkMemory->allocateObject((int)sz, MEMCLASS); \
@@ -785,4 +785,12 @@ hkPhantom* hkWorld::addPhantom(hkPhantom* phantom)
     if (m_lockCount == 0 && m_pendingOperationsCount != 0 && m_blockExecutingPendingOperations == 0)
         executePendingOperations();
     return phantom;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct hkCollisionDispatcher {
+    void registerContactMgrFactory(void*, int); // 0x010ccbd0
+};
 }

@@ -1,7 +1,7 @@
 // Editor resource hub, part 2 (0x00643b50..0x00644b8f). Flags: /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
 #include "../s00642530/s00642530.h"
 
-void RemoveHandler(void* obj, uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // EA::Messaging::RemoveHandler
+void RemoveHandler(void* obj, uint32_t a, uint32_t b, uint32_t c, uint32_t d);   // EA::Messaging::RemoveHandler // 0x00571db0
 Entry* UMoveEntries(Entry* first, Entry* last, Entry* dest);                      // FUN_00c7ea30
 void UMoveExtra(Entry** out, Entry* first, Entry* last, Entry* dest, uint32_t extra);// FUN_007f1890
 Entry* CopyEntries(Entry* first, Entry* last, Entry* dest);                       // FUN_00705250
@@ -509,4 +509,25 @@ void TwoRef::Release2() {
     if (x) x->v2();
     RCBase* y = a;
     if (y) y->v2();
+}
+// --- equivalence checker address annotations
+    void EASTL_allocator_allocate(...); // 0x00f473a0
+    void EASTL_allocator_deallocate(...); // 0x00f47380
+    void MessageServer(...); // 0x0067dcc0
+    void RemoveHandler(...); // 0x00571db0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct PoolList {
+    void clearList(); // 0x00642da0
+};
+struct KTree {
+    void DoNuke(void*); // 0x00642d00
+};
+struct RCRef {
+    void Assign2(int&); // 0x00642930
+};
+struct KVMap {
+    void operator_idx(void*); // 0x00643ac0
+};
 }

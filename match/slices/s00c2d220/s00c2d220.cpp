@@ -255,7 +255,7 @@ void __stdcall F00c2d220(Ctx* ctx)
 
     if (!flagA) {
         if (!flagB) {
-            F2a190(ctx, c);
+            F2a190(ctx, c); // 0x00c2a190
             return;
         }
         if (TestBit(F(unsigned, c, 0xb58), 9) && st->mode == 0 && !g_169e381) {
@@ -606,4 +606,16 @@ L9d9:
         ctx->out.y = scale * ctx->out.y;
         ctx->out.z = ctx->out.z * scale;
     }
+}
+// --- equivalence checker address annotations
+    void F0b532b0(...); // 0x00b532b0
+    void F2a190(...); // 0x00c2a190
+    void GetCurrentGameMode(...); // 0x00b5b800
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Loco {
+    void IsNearGoal(); // 0x00c42e20
+    void GetVelocity(); // 0x00d20610
+};
 }

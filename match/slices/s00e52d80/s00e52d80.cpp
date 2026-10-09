@@ -351,3 +351,8 @@ void FUN_00e53c20() {
 void FUN_00e52d80(float dt) {
   (void)dt;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

@@ -15,7 +15,7 @@ void  __cdecl FUN_006ec390(void* p, void* v);
 void  __cdecl FUN_00426730(void* p, void* v);
 void  __cdecl FUN_006ec4a0(void* p, void* v);
 void  __cdecl operator_delete_(void* p) throw();
-void  __cdecl EASTL_allocator_deallocate(void* p);
+void  __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 void* __cdecl operator_new(unsigned sz, const char* name, int a, int b, int c, int d);
 void* __cdecl FUN_0067dda0();
 void* __cdecl FUN_0067dd40();

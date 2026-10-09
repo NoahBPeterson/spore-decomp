@@ -639,3 +639,9 @@ const hkClassMember* hkClass::getMemberByName(const char* name) const
 		i++;
 	}
 }
+// --- equivalence checker address annotations
+    extern unsigned int g_hkThreadMemoryTls; // 0x016e4174
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

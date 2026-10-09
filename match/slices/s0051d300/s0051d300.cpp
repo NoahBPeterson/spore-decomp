@@ -403,3 +403,17 @@ int RefHolder::AddRef()
     r.mCount = r.mCount + 1;
     return n;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct BBox {
+    void Reset(); // 0x00409c00
+};
+struct Sub94 {
+    Sub94(); // 0x0041cfe0
+};
+struct AllocFixed {
+    AllocFixed(int&); // 0x00429360
+};
+}

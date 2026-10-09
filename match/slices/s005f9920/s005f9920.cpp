@@ -588,3 +588,23 @@ bool SP::Thumbnail::cImportExport::RestoreImportTable() {
     stream->Release();
   return ok;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct ValueKW {
+    ValueKW(int&); // 0x005f8390
+};
+struct MapKK {
+    void Insert(void*, int&, bool); // 0x005f8170
+};
+struct MapKW {
+    void Insert(void*, int&, bool); // 0x005f95a0
+};
+struct MapWK {
+    void Insert(void*, int&, bool); // 0x005f9470
+};
+struct ValueWK {
+    ValueWK(int&); // 0x005f8320
+};
+}

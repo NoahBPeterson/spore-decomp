@@ -432,3 +432,14 @@ float __cdecl SweepTick(Ctx* ctx, const Vec3* origin, const Vec3* dir, float t, 
     }
     return t;
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct MeshRef {
+    void GetMesh(); // 0x00b7c360
+};
+struct Flag10c {
+    void Check(); // 0x00c90460
+};
+}

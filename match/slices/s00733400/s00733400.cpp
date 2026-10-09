@@ -156,9 +156,9 @@ void FUN_00733ed0(int param_1)
 // --- EH/unwind constructors (vtable + cookie).  Vtable addresses are relocations; the EH
 //     prolog is approximated with a plain prolog, so these are not byte-exact. --------------
 extern void* g_vtblEditor;
-extern void* g_vtblCreatureAbility;
-extern void* g_vtblA;
-extern void* g_vtblB;
+extern void* g_vtblCreatureAbility; // 0x013ef094
+extern void* g_vtblA; // 0x013ebcc8
+extern void* g_vtblB; // 0x013ef8d4
 
 struct CtorObj
 {
@@ -247,4 +247,9 @@ __declspec(noinline) void FUN_00733f20(void* p)
 {
     // PARTIAL: 0x00733f20 is a ~1.1 KB destructor walk; skeleton only.
     *(volatile int*)p = *(volatile int*)p;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

@@ -231,7 +231,7 @@ void FUN_4a02b0(cSPEditorBlock* block, cSPVector3 p, cSPVector3 q)
     float len2 = VectorLength((Vector3T*)&v2);
     PodVec v3 = *(PodVec*)FUN_41db10(&tmp3, &p, &c);
     Vector3T n;
-    Vector3_Normalize(&n, (Vector3T*)&v3);
+    Vector3_Normalize(&n, (Vector3T*)&v3); // 0x00436ce0
     LimbVec<cSPEditorBlock*>* kids = &block->mChildren;
     int i = 0;
     int cnt = kids->e - kids->b;
@@ -319,4 +319,22 @@ bool FUN_4a0900(cSPEditorBlock* block, void* p2, cSPVector3 a, cSPVector3 b, Vec
         }
     }
     return result;
+}
+// --- equivalence checker address annotations
+    void Vector3_Normalize(...); // 0x00436ce0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Mat3Id {
+    Mat3Id(); // 0x00402ab0
+};
+struct cSPVector3 {
+    cSPVector3(int&); // 0x004098a0
+};
+struct cSPEditorLimbStructure {
+    ~cSPEditorLimbStructure(); // 0x00488900
+};
+struct PAUcSPEditorBlock {
+    void Free(); // 0x00425990
+};
 }

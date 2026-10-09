@@ -488,3 +488,9 @@ void ReadShaderCache(IO::IStream* s) {
     ReadInt32(s, &e->mFlags, 1, 0);
   }
 }
+// --- equivalence checker address annotations
+    void operator delete[](void*); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

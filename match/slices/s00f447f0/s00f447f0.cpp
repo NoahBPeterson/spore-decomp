@@ -676,3 +676,40 @@ char ScenarioObj8::f44fe0()
     }
     return ok;
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+    void GetSingA(...); // 0x00b3d3c0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct Vec4e0 {
+    void Copy(char*, char*); // 0x00f43880
+};
+struct Vec34 {
+    void Copy(char*, char*); // 0x00f42dc0
+    void set_capacity(int); // 0x00f2bb10
+};
+struct CamObj {
+    void GetDistance(); // 0x00c37540
+    void GetAnchorDirection(); // 0x00b10260
+    void GetRotation(); // 0x00644a70
+};
+struct G15ad328 {
+    void Init(); // 0x00f03290
+};
+struct LogVec {
+    void erase(void*, void*); // 0x00e25bd0
+};
+struct ScenarioResource {
+    void CopyFrom(int&); // 0x00dffa30
+    ScenarioResource(); // 0x00f2e7d0
+    ~ScenarioResource(); // 0x00dfef70
+    void GatherObjects(void*, unsigned int, int); // 0x00f2b040
+};
+struct G534 {
+    void Call(unsigned int, unsigned int); // 0x00ddddf0
+};
+struct SingA {
+    void m781d0(); // 0x00b781d0
+};
+}

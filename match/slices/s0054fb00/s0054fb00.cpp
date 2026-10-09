@@ -36,7 +36,7 @@ int*  ObjectError(int a);                             // 0x8de1a0
 
 extern void* vtbl_cAssetMetadata[];
 extern void* vtbl_cPropertyList[];
-extern void* vtbl_cEditorResource[];
+extern void* vtbl_cEditorResource[]; // 0x013eb938
 extern char  DAT_013ec47c[];
 extern char  DAT_01667bac[];
 extern char  DAT_015e3294;
@@ -356,4 +356,9 @@ void CD::PurgePendingAssets()
     }
     DoFreeNodes(*(void**)(self + 0x80), *(void**)(self + 0x84));
     *(int*)(self + 0x88) = 0;
+}
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

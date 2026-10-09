@@ -351,3 +351,9 @@ void FUN_00accd70(int arr, uint n) {
         *(int*)(arr + i * 4) = 0;
     }
 }
+// --- equivalence checker address annotations
+    void operator_delete(...); // 0x00f47380
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

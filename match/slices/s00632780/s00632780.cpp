@@ -11,7 +11,7 @@ typedef unsigned short uint16_t;
 typedef unsigned int size_t;
 
 extern "C" void* memcpy(void*, const void*, size_t);
-void* operator new(size_t, const char*, int, int, int, int);
+void* operator new(size_t, const char*, int, int, int, int); // 0x00f473a0
 void operator delete(void*, const char*, int, int, int, int);
 inline void* operator new(size_t, void* p) { return p; }
 inline void operator delete(void*, void*) {}
@@ -708,4 +708,24 @@ void cSPPlayModePhotoBrowser::CapturePixels(int idx, void* stream, uint32_t arg3
             }
         }
     }
+}
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, int, int, int); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct cSPPlayModeUI {
+    void SetEditorUIGroupVisible(unsigned int, bool); // 0x00635790
+    void SetEditorUIEnabled(unsigned int, bool); // 0x00634f20
+    void SetUIGroupVisible(unsigned int, bool); // 0x00635760
+};
+struct cSPPlayModePhotoBrowser {
+    void SelectAll(bool); // 0x00630090
+    void ExitMoveMode(); // 0x00630280
+    void FindPhotoByGuid(unsigned int); // 0x00630360
+    void ExitDeleteMode(); // 0x006301a0
+};
+struct cJob {
+    void Release(); // 0x00690120
+};
 }

@@ -583,3 +583,10 @@ void __thiscall VecFE::InsertN(FilterElem* pos, unsigned int n, const FilterElem
     mCap = mem + newCap;
   }
 }
+// --- equivalence checker address annotations
+    void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
+    void vb_memmove(...); // 0x011e0744
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

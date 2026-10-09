@@ -583,3 +583,12 @@ int Sound::TickInternal(int unused, float dt, bool force)
     }
     return 0;
 }
+// --- equivalence checker address annotations
+    void GetSystemAT(...); // 0x00a206f0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct BasicString {
+    void assign(void*); // 0x006a4380
+};
+}

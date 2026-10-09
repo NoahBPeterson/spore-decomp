@@ -219,7 +219,7 @@ void            FUN_007c3c50(void* thisp, int);      // 0x007c3c50
 void            Font_SetUserData(void* thisp, void* user); // 0x00fd9450
 void            FileStream_ctor(void* p, int);       // 0x00931da0
 void            FileStream_dtor(void* p);            // 0x00931e70
-void*           operator_new(unsigned int size, const char* group, int, int, int, int);
+void*           operator_new(unsigned int size, const char* group, int, int, int, int); // 0x00f473a0
 void            operator_delete(void* p);
 void            FillSpriteTexture(void* a, int b, int c); // 0x011f0440
 
@@ -667,4 +667,11 @@ bool cMovieSystem::EndRecording()
     EAMutex_Lock(mx, g_pMutexTag);
     EAMutex_Unlock(mx);
     return true;
+}
+// --- equivalence checker address annotations
+    void operator_delete(...); // 0x00f47380
+    void operator_new(...); // 0x00f473a0
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
 }

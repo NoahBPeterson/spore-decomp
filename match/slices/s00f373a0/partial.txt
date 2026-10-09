@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+00f37be0  795  BuildSkeleton-like refresh: approximate. The main loop detects the
+               first non-null handle correctly, but the six eastl vector
+               erasures (bool vectors at +0x50/+0x64/+0x3c/+0x8c, the transform
+               vector at +0x28 and the string vector at +0x78) use wrong helper
+               shapes, so equivalence FAILs on the return value.
+               flags /O2 /MD /Gy /TP

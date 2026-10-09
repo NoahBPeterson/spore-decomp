@@ -337,3 +337,21 @@ void Builder::F23c0(Arg23c0* arg) {
     } while (--n != 0);
   }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+struct B {
+    ~B(); // 0x0079aeb0
+};
+struct SrcVec {
+    void Fill(void*); // 0x007a0b90
+};
+struct Arg23c0 {
+    void Resize(unsigned int); // 0x007a1100
+};
+struct OutVec {
+    void Resize(unsigned int); // 0x0079af80
+    void Grow(void*, int&); // 0x0079f4e0
+};
+}

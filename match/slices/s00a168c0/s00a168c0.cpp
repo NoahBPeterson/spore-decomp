@@ -883,3 +883,9 @@ PRespC::PRespC(int arg)
     m388 = arg;
     mCurve.SetResponseCurveData(g_prData2, 2);
 }
+// --- equivalence checker address annotations
+    void AddCore(...); // 0x00926650
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

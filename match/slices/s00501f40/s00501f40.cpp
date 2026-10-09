@@ -274,3 +274,8 @@ void VecEd216::DoInsertValues(Ed216* position, unsigned n, const Ed216& value)
         mpCapacity = pNewData + nNewSize;
     }
 }
+// --- equivalence checker address annotations
+
+// --- equivalence checker address annotations (dummy declarations) ---
+namespace __equiv_ann {
+}

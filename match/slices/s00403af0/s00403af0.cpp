@@ -14,7 +14,7 @@ void* operator new[](unsigned int size, const char* pName, int flags, unsigned i
                      const char* pFile, int line);
 void* operator new(unsigned int size, const char* pName, int flags, unsigned int debugFlags,
                    const char* pFile, int line);
-void EASTL_allocator_deallocate(void* p);
+void EASTL_allocator_deallocate(void* p); // 0x00f47380
 unsigned int FNVHash(const char* s, unsigned int seed, int lowercase);
 inline unsigned int HashString(const char* s) { return FNVHash(s, 0x811c9dc5, 1); }
 
