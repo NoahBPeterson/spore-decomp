@@ -1808,6 +1808,9 @@ def print_result(r):
     if fm:
         print("    first mismatch (input %d, %s, %s): %s\n      orig: %s\n      ours: %s\n      %s" % (
             fm["input"], fm["profile"], fm.get("kind", "?"), fm["observable"], fm["orig"], fm["ours"], fm["detail"]))
+        if fm.get("input_file"):
+            print("    replay: .venv/bin/python tools/difftest/equiv.py %s %s --replay %s -v" % (
+                r.get("slice", "?"), r.get("va", "?"), fm["input_file"]))
     if r.get("resolution_conflicts"):
         print("    resolution conflicts: %s" % r["resolution_conflicts"][:3])
 
