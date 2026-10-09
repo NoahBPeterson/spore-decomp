@@ -284,6 +284,15 @@ def groups_table():
             if isinstance(d, dict): active = set(d.keys())
         except Exception:
             pass
+    sess_time = {}
+    try:
+        import sqlite3
+        db = subprocess.run(["opencode", "debug", "paths", "db"], capture_output=True, text=True, timeout=10).stdout.strip()
+        con = sqlite3.connect(db)
+        for sid, tc in con.execute("select id, time_created from session_v2"):
+            sess_time[sid] = tc or 0
+    except Exception:
+        pass
     def nlines(p):
         return sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#")) if os.path.exists(p) else 0
     rows = []
@@ -314,7 +323,8 @@ def groups_table():
             exact, account = BATCH_FROZEN[g["batch"]][0], BATCH_FROZEN[g["batch"]][2]
         model = g.get("model", "?")
         model = model.split("/")[-1] if isinstance(model, str) else "?"
-        rows.append((name, model, "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "$%.2f" % cost, str(act), "%d/%d" % (launched, nranges)))
+        ts = min([sess_time[sid] for sid in g.get("sessions", {}).values() if sid in sess_time], default=0) or int(os.path.getmtime(gf) * 1000)
+        rows.append((ts, (name, model, "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "$%.2f" % cost, str(act), "%d/%d" % (launched, nranges))))
         tot["account"] += account; tot["tot"] += tot_funcs; tot["exact"] += exact; tot["equiv"] += equiv
         tot["cost"] += cost; tot["active"] += act
     # Claude-only workflow groups (work/claude/groups.json), in launch order. Counted per assigned VA,
@@ -356,10 +366,16 @@ def groups_table():
         except (OSError, ValueError):
             pass
         act = len(started - done)
-        rows.append((g["name"], g["model"].split("/")[-1], "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "-", str(act), "%d/%d" % (len(started), g.get("units", 0))))
+        try:
+            jts = int(os.path.getmtime(g["journal"]) * 1000)
+        except OSError:
+            jts = 0
+        rows.append((jts, (g["name"], g["model"].split("/")[-1], "%d/%d" % (account, tot_funcs), str(exact), str(equiv), "-", str(act), "%d/%d" % (len(started), g.get("units", 0)))))
         tot["account"] += account; tot["tot"] += tot_funcs; tot["exact"] += exact; tot["equiv"] += equiv; tot["active"] += act
     if not rows:
         return None
+    rows.sort(key=lambda x: x[0])          # chronological by launch/creation time
+    rows = [r for _, r in rows]
     rows.append(("TOTAL", "", "%d/%d" % (tot["account"], tot["tot"]), str(tot["exact"]), str(tot["equiv"]), "$%.2f" % tot["cost"], str(tot["active"]), ""))
     return table(["Group", "Model", "Accounted", "Exact", "Equiv", "Cost", "Active", "Launched"], rows,
                  aligns=["<", "<", ">", ">", ">", ">", ">", ">"])
