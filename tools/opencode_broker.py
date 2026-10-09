@@ -179,6 +179,7 @@ def decide(r):
             s = re.sub(r"^(?:[A-Za-z_][A-Za-z0-9_]*=\S*\s+)+", "", s)  # leading VAR=value
             s = re.sub(r"^(?:timeout|gtimeout)\s+(?:-\S+\s+)*\d+[smh]?\s+", "", s)  # `timeout N cmd` wrapper
             s = re.sub(r"^(?:time|/usr/bin/time)\s+", "", s)  # `time cmd` wrapper
+            s = re.sub(r"^(?:nohup|setsid)\s+", "", s)       # `nohup cmd` wrapper
             if DENY_CMD.match(s):
                 return "reject", "denied command: %s" % s[:80]
             for p in paths_in(s):
