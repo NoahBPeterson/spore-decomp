@@ -1,0 +1,15 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2e940  00b2e940  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2ec10  00b2ec10  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2ec80  00b2ec80  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2ed10  00b2ed10  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2ede0  00b2ede0  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f140  00b2f140  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f210  00b2f210  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f340  00b2f340  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f350  00b2f350  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f680  00b2f680  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f710  00b2f710  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f740  00b2f740  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f7b0  00b2f7b0  /O2 /MD /Gy /EHsc /TP
+slices/s00b2e940/s00b2e940.cpp  FUN_00b2f7e0  00b2f7e0  /O2 /MD /Gy /EHsc /TP

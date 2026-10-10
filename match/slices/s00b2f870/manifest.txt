@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fa00  00b2fa00  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fa80  00b2fa80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fbe0  00b2fbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fd90  00b2fd90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fdd0  00b2fdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fe10  00b2fe10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2fe90  00b2fe90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2ff10  00b2ff10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2ff20  00b2ff20  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b2ffb0  00b2ffb0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b301c0  00b301c0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b2f870/s00b2f870.cpp  FUN_00b30360  00b30360  /O2 /MD /Gy /EHsc /TP /arch:SSE

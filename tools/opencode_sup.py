@@ -204,6 +204,7 @@ elif cmd == "nudge":
     sid = args[0]
     assert sid in SESS.values(), "not a session of this group"
     k = next(kk for kk, s in SESS.items() if s == sid)
+    api("POST", "/api/session/%s/model" % sid, {"model": model(int(k))})  # prompt's "model" field doesn't change it
     api("POST", "/api/session/%s/prompt" % sid, {"text": "Continue your task: check the files already written in your "
         "slices and finish the remaining slices, then give the final one-line-per-slice summary.",
         "model": model(int(k))})

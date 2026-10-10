@@ -1,0 +1,5 @@
+00b2ec10 31 tick: glitch timer + advance cursor; reconstructed faithfully, float dt conversion differs (original keeps the int->float in x87: fild/fadd dword/fmul dword, ours uses a double intermediate with qword constants) and the g_167e09c store is scheduled after the [this+0x38] load
+00b2ed10 128 teardown of cursor maps; faithful reconstruction (e830 + rbtree walk + node delete + anchor reset + FUN_00b2d7c0 + terrain-sphere vtbl[0x24]) but register allocation differs (original keeps this in ebx / node in esi / anchor in ebp, ours this in esi)
+00b2f140 147 destroy cursor entries then tail-call e830; faithful reconstruction of the tree walk, but loop form gives a different register assignment (original holds the tree node in edi, ours in ebx)
+00b2f210 173 Deactivate: RemoveHandler + map teardown + vector clear + FUN_00b2d7c0 + EffectsManager vtbl[0x88]; faithful, zero-register / register allocation differ
+00b2f740 48 query current game mode; logically faithful but the switch lowering and block ordering differ (original materialises SpaceGameGet()+0x20 and places the space case before the shared false return)
