@@ -69,6 +69,10 @@ def paths_in(seg):
 
 def ok_path(p):
     p = p.strip("'\"")
+    if "$" in p:  # a shell variable (e.g. a loop's $id) in the path: judge by the literal prefix before it
+        pre = p.split("$", 1)[0]
+        return (pre.startswith(("match/slices/", "work/match/", "symbols/slices/"))
+                or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match)/?$" % re.escape(ROOT), pre)))
     return (bool(ALLOWED_PATH.match(p)) or bool(re.match(r"^(?:%s/)?match/slices/%s/?$" % (re.escape(ROOT), IDS), p))
             or bool(re.match(r"^(?:%s/)?(?:match/slices|symbols/slices|work/match)/?$" % re.escape(ROOT), p)))  # existing parent dirs (mkdir -p)
 
@@ -180,6 +184,7 @@ def decide(r):
             s = re.sub(r"^(?:timeout|gtimeout)\s+(?:-\S+\s+)*\d+[smh]?\s+", "", s)  # `timeout N cmd` wrapper
             s = re.sub(r"^(?:time|/usr/bin/time)\s+", "", s)  # `time cmd` wrapper
             s = re.sub(r"^(?:nohup|setsid)\s+", "", s)       # `nohup cmd` wrapper
+            s = re.sub(r"^(?:xargs(?:\s+-\S+)*\s+)", "", s)  # `xargs cmd` wrapper: judge the wrapped cmd
             if DENY_CMD.match(s):
                 return "reject", "denied command: %s" % s[:80]
             for p in paths_in(s):
@@ -224,35 +229,68 @@ def decide(r):
 
 
 held = set()
-while True:
-    try:
-        reqs = call("GET", "/api/permission/request").get("data", [])
-    except Exception as e:  # service restart etc.
-        print("ERROR polling: %s" % e, flush=True); time.sleep(5); continue
+
+
+def _mine():
     if "--sessions" in sys.argv:
         try:
-            mine = set(open(sys.argv[sys.argv.index("--sessions") + 1]).read().split())
+            return set(open(sys.argv[sys.argv.index("--sessions") + 1]).read().split())
         except OSError:
-            mine = set()
-        reqs = [r for r in reqs if r["sessionID"] in mine]
-    for r in reqs:
-        if r["id"] in held:
-            continue
-        verdict, why = decide_manual(r) if "--manual" in sys.argv else decide(r)
-        rec = {"t": time.strftime("%H:%M:%S"), "session": r["sessionID"], "action": r.get("action"),
-               "resources": r.get("resources"), "verdict": verdict, "why": why}
-        open(LOG, "a").write(json.dumps(rec) + "\n")
-        if verdict == "hold":
-            held.add(r["id"])
-            print("HOLD %s %s %s :: %s" % (r["id"], r["sessionID"], why, json.dumps(r.get("resources"))[:300]), flush=True)
-            continue
-        msg = None if verdict == "once" else "Rejected by orchestrator policy: %s. Stay inside your slice paths and use the repo tools." % why
-        try:
-            call("POST", "/api/session/%s/permission/%s/reply" % (r["sessionID"], r["id"]), {"decision": verdict, "message": msg})
-            if verdict == "reject":
-                print("REJECT %s %s" % (r["sessionID"], why), flush=True)
-        except Exception as e:
-            print("ERROR replying %s: %s" % (r["id"], e), flush=True)
-    if "--once" in sys.argv:
-        break
-    time.sleep(1.5)
+            return set()
+    return None
+
+
+def _process(r):
+    if r.get("id") in held:
+        return
+    verdict, why = decide_manual(r) if "--manual" in sys.argv else decide(r)
+    rec = {"t": time.strftime("%H:%M:%S"), "session": r.get("sessionID"), "action": r.get("action"),
+           "resources": r.get("resources"), "verdict": verdict, "why": why}
+    open(LOG, "a").write(json.dumps(rec) + "\n")
+    if verdict == "hold" and "--manual" not in sys.argv:
+        # Autonomous mode must never leave a request unanswered: a pending request times out and aborts the
+        # tool, stalling the session. Reject with the reason so the agent can adapt (and surface it to us).
+        verdict, why = "reject", why + " (autonomous broker: rejected to avoid stalling; treat as a nudge to use an approved command/tool)"
+    if verdict == "hold":
+        held.add(r.get("id"))
+        print("HOLD %s %s %s :: %s" % (r.get("id"), r.get("sessionID"), why, json.dumps(r.get("resources"))[:300]), flush=True)
+        return
+    msg = None if verdict == "once" else "Rejected by orchestrator policy: %s. Stay inside your slice paths and use the repo tools." % why
+    try:
+        call("POST", "/api/session/%s/permission/%s/reply" % (r.get("sessionID"), r.get("id")), {"decision": verdict, "message": msg})
+        print("%s %s %s %s" % (verdict.upper(), str(r.get("sessionID"))[-6:], str(r.get("action"))[:12], json.dumps(r.get("resources"))[:80]), flush=True)
+    except Exception as e:
+        print("ERROR replying %s: %s" % (r.get("id"), e), flush=True)
+
+
+def _stream():
+    # The list endpoint /api/permission/request 400s on this build when a pending request's
+    # metadata lacks 'include', so consume the SSE event stream instead and reply by request id.
+    req = urllib.request.Request(URL + "/api/event", headers={"Authorization": AUTH, "Accept": "text/event-stream"})
+    with urllib.request.urlopen(req, timeout=300) as r:
+        for raw in r:
+            line = raw.decode("utf-8", "replace").strip()
+            if not line.startswith("data:"):
+                continue
+            try:
+                ev = json.loads(line[5:].strip())
+            except Exception:
+                continue
+            if ev.get("type") == "permission.asked" and ev.get("data"):
+                yield ev["data"]
+
+
+while True:
+    try:
+        for r in _stream():
+            mine = _mine()
+            if mine is not None and r.get("sessionID") not in mine:
+                continue
+            _process(r)
+            if "--once" in sys.argv:
+                raise SystemExit(0)
+    except SystemExit:
+        raise
+    except Exception as e:  # stream drop / service restart
+        print("ERROR streaming: %s" % e, flush=True)
+        time.sleep(2)
