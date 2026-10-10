@@ -85,6 +85,7 @@ while True:
                 for f in groups:
                     g = json.load(open(f))
                     g.update(TARGET)
+                    g.pop("cache_ns", None)  # cheaperinference-only aliases don't exist on OpenRouter
                     json.dump(g, open(f, "w"), indent=1)
                     name = os.path.basename(f)[:-5]
                     out = subprocess.run([sys.executable, W("tools/opencode_sup.py"), name, "switch"],

@@ -48,40 +48,63 @@ The intent is **routing affinity**: keep every turn of a conversation on the bac
 that already holds its prefix, so the cache stays warm instead of missing on a cold
 node.
 
-### Open item: the session token is currently project-wide, not per-conversation
-OpenCode provider `headers` are static strings — it exposes no per-session variable
-(no `OPENCODE_SESSION_ID`; config `{env:...}` is process-wide), so we cannot put the
-conversation id in the header from config alone. `spore-decomp` is therefore stable but
-**shared** across all concurrent sessions. If a per-conversation value is required (to
-spread 10 concurrent large contexts across backends rather than pinning them to one),
-it needs a small OpenCode **plugin** that sets `x-ci-prompt-cache-session` per session
-via the session HTTP hook.
+### Resolved: per-session cache namespaces (2026-10-10)
+The `x-ci-prompt-cache-session` value is the prompt cache's **namespace key**, not a node
+affinity hint (opencode's automatic `x-session-affinity` header was tested and has **no**
+effect: 5 hit/3 miss with it unchanged, identically 5/3 with it changed). With one fixed
+value every concurrent worker shares one namespace; at a wave-sized working set the large
+contexts evict each other, which is the observed ~7% of requests that re-read the whole
+context.
 
-## Verification status
+Reproduced directly against the API at the real working set (30 prompts x ~70k tokens,
+~2.1M total), priming each then re-probing:
 
-The provider echoes diagnostic headers on every completion response, which we used to
-test the header directly (a small `deepseek-v4.1-flash` probe, 334-token prompt):
+| trial | session header | prefixes retained |
+|---|---|---|
+| 30 contexts, **one shared** header | `spore-shared` | **0 / 7** |
+| 30 contexts, **distinct** header per context | `spore-node-*` | **7 / 7** |
+| alternating repeats (fresh tags) | distinct vs shared | distinct 11/16 vs shared 3/16 |
 
-| probe | request | `x-ci-prompt-cache-affinity` | `cached_tokens` |
-|---|---|---|---|
-| 1 | cold, `x-ci-prompt-cache-session: probe-1` | `new` | 0 |
-| 2 | same session header | **`hit`** | 256 |
-| 3 | no header | `new` | 256 |
+opencode cannot interpolate a session id into a static config header, and **provider-level
+headers override per-model ones** (a model-level `x-ci-prompt-cache: off` probe did not
+disable caching while the provider set `on`), so the session header must live *per model*
+and not at provider level.
 
-Conclusions:
-- The `x-ci-prompt-cache` / `x-ci-prompt-cache-session` headers are **honored** — a stable
-  session token yields `affinity: hit`; and opencode sends them (verified in `/api/config`).
-- **But this does not yet prove the gold0 symptom is gone.** The probe shows content-based
-  caching works even without the header (`run 3` still cached 256), and the gold0 failure
-  was a *large-context / concurrency* effect (contexts to ~600k, 10 sessions). A 3-request
-  probe cannot reproduce that.
-- **The decisive test is the next wave**: run it with the headers, then check
-  `/v1/usage/daily` `cache_hit_pct` (target ≥ 97 on the wave day). If it stays ~87, the
-  cause is capacity/size, not routing, and the remedy is bounded context + more, shorter
-  sessions (plus possibly the per-session plugin).
-- Useful extra signal: response header `x-ci-prompt-cache-affinity` (`new`/`hit`) and
-  `x-ci-tokens-saved` if we ever want per-request visibility (opencode does not surface
-  response headers today).
+### Fix implemented
+- `tools/opencode_cache_ns.py [N]` (default 32) rewrites `.opencode/opencode.json` to expose
+  N model aliases (`deepseek-v4.1-flash-c00..c31`) under `cheaperinference`. Each alias has
+  `"id": "deepseek-v4.1-flash"` (maps back to the real API model) and its own per-model
+  `x-ci-prompt-cache-session: spore-decomp-cNN`. Provider-level headers keep only
+  `x-ci-prompt-cache: on`.
+- `tools/opencode_sup.py`: with a group's `"cache_ns": N`, range k runs on alias `k % N`
+  (all prompts, `unhang`, `nudge`, `switch`). `opencode_sup.py <group> ns [N]` sets it.
+- `work/opencode/new_group.py` defaults new cheaperinference groups to `cache_ns=32`.
+- `tools/opencode_fallback.py` clears `cache_ns` when it moves a group to OpenRouter
+  (the cheaperinference-only aliases do not exist there).
+
+### Verification (end-to-end through opencode)
+First request of a fresh session, one completion each:
+
+| model | first-req input | cache_read | cached |
+|---|--:|--:|--:|
+| base `deepseek-v4.1-flash` | 141 | 8,320 | **98%** (warm shared ns) |
+| alias `deepseek-v4.1-flash-c07` | 8,346 | 128 | **2%** (cold, own ns) |
+| alias `deepseek-v4.1-flash-c08` | 8,346 | 128 | **2%** (cold, own ns) |
+
+The aliases are cold while the base is warm → the per-model `x-ci-prompt-cache-session`
+header **is delivered**, so each session now gets a disjoint namespace.
+
+### Expected cost
+The one-off cost is a cold first request per session (the shared system prompt is no longer
+cross-session shared): ~8k tokens x N sessions (~$0.02 for 30). That trades against the
+mid-epoch full re-reads, which were the dominant miss cost (~$4.4 of gold1's $10.4).
+
+### Still to confirm
+Run a full wave on aliases, then check `/v1/usage/daily` `cache_hit_pct` (target ≥ 97 on
+the wave day) and per-group cost from `tools/progress.py --groups`. The provider's cache is
+noisy (an ~8% stochastic full-miss rate persisted even in a tight sequential loop with a
+stable header), so expect improvement, not perfection. Keep per-session context bounded
+(~120–150k): miss *cost* scales with context size even when the rate is fixed.
 
 ## exact-cache (provider option)
 The provider offers an "exact-cache" that skips upstream generation on eligible hits.

@@ -10,7 +10,10 @@ usage: opencode_sup.py <group> <command> [args]
   unhang [SECS]           interrupt + re-prompt sessions whose current model call has run > SECS (default 600)
   nudge <sid>             re-prompt one idle, unfinished session to continue
   switch                  interrupt every launched session and re-prompt it on the group's current provider/model
-Group file: work/opencode/groups/<group>.json = {"batch", "provider", "model", "ranges": [[a, b], ...], "sessions": {}}
+  ns [N]                  set per-session cache namespaces: range k uses model "<model>-c<k%N:02d>" (0 disables;
+                          aliases are created by tools/opencode_cache_ns.py). Re-prompt to apply to live sessions.
+Group file: work/opencode/groups/<group>.json = {"batch", "provider", "model", "ranges": [[a, b], ...],
+            "sessions": {}, "cache_ns": N (optional, per-session prompt-cache namespace count)}
 The broker for the group reads work/opencode/sessions_<group>.txt (kept in sync here).
 """
 import base64, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
@@ -51,8 +54,13 @@ def save():
     open(W("work/opencode", "sessions_%s.txt" % group), "w").write("".join(s + "\n" for s in SESS.values()))
 
 
-def model():
-    return {"providerID": G["provider"], "id": G["model"]}
+def model(k=None):
+    """Range k's model. With "cache_ns": N set, range k uses the alias "<model>-c<k%N:02d>", which maps to the
+    same real model but a distinct cheaperinference prompt-cache namespace (see tools/opencode_cache_ns.py)."""
+    mid = G["model"]
+    if k is not None and G.get("cache_ns") and G.get("provider") == "cheaperinference":
+        mid = "%s-c%02d" % (mid, int(k) % int(G["cache_ns"]))
+    return {"providerID": G["provider"], "id": mid}
 
 
 PROMPT = open(W("work/opencode", G.get("prompt") or "wave_prompt.txt")).read()
@@ -161,11 +169,11 @@ elif cmd == "launch":
         if str(k) in SESS:
             continue
         s = api("POST", "/api/session", {"title": "spore-%s-%d" % (group, k), "location": {"directory": ROOT},
-                                         "model": model()})
+                                         "model": model(k)})
         sid = s.get("id") or s.get("data", {}).get("id")
         SESS[str(k)] = sid
         save()  # broker must know the session before its first request
-        api("POST", "/api/session/%s/prompt" % sid, {"text": prompt_for(k), "model": model()})
+        api("POST", "/api/session/%s/prompt" % sid, {"text": prompt_for(k), "model": model(k)})
         print("launched r%d %s" % (k, sid))
         n -= 1
     save()
@@ -180,23 +188,30 @@ elif cmd == "unhang":
         if a and not a[0].get("time", {}).get("completed") and time.time() - a[0]["time"]["created"] / 1000 > lim:
             api("POST", "/api/session/%s/interrupt" % sid, {})
             api("POST", "/api/session/%s/prompt" % sid, {"text": "Your previous model call hung and was interrupted. "
-                "Continue your task from the files already written in your slices.", "model": model()})
+                "Continue your task from the files already written in your slices.", "model": model(int(k))})
             print("unhung r%s %s" % (k, sid))
 
-elif cmd == "switch":  # move every launched session to the group's current provider/model
+elif cmd == "switch":  # move every launched session to the group's current provider/model (and cache namespace)
     for k, sid in SESS.items():
-        api("POST", "/api/session/%s/model" % sid, {"model": model()})  # the prompt's "model" field does not change it
+        api("POST", "/api/session/%s/model" % sid, {"model": model(int(k))})  # prompt's "model" field doesn't change it
         api("POST", "/api/session/%s/interrupt" % sid, {})
         r = api("POST", "/api/session/%s/prompt" % sid, {"text": "You were interrupted to switch model provider. "
             "Continue your task exactly where you left off: check the files already written in your slices, then keep "
-            "going.", "model": model()})
+            "going.", "model": model(int(k))})
         print("switched r%s %s %s" % (k, sid, "ERR %s" % r if "error" in r else "ok"))
 
 elif cmd == "nudge":
     sid = args[0]
     assert sid in SESS.values(), "not a session of this group"
+    k = next(kk for kk, s in SESS.items() if s == sid)
     api("POST", "/api/session/%s/prompt" % sid, {"text": "Continue your task: check the files already written in your "
-        "slices and finish the remaining slices, then give the final one-line-per-slice summary.", "model": model()})
+        "slices and finish the remaining slices, then give the final one-line-per-slice summary.",
+        "model": model(int(k))})
     print("nudged", sid)
+
+elif cmd == "ns":  # set (or clear) the per-session cache-namespace count for this group
+    G["cache_ns"] = int(args[0]) if args else 32
+    save()
+    print("cache_ns =", G["cache_ns"], "(re-prompt sessions or launch new ones to apply)")
 else:
     sys.exit(__doc__)
