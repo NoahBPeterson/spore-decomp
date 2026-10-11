@@ -1,0 +1,21 @@
+# Slice s008f9220 (gold1 44) -- functions that are complete + equivalence-verified
+# but not byte-exact.  Format: <VA> <diff-bytes> <reason>
+# Flags for every entry: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+# (no /EHsc: original has no C++ unwind frame in the Stylesheet ctor/deleting dtor;
+#  /GS-: Clear's 0x560-byte stack scratch has no /GS cookie in the original.)
+#
+# diff-bytes are from `run_all.py` with the exact mangled symbol bound to each VA.
+
+008f9220  646  EA::XHTML::Style::CSSParser::Parse -- large (913-byte) tokenizing state machine; the reader/token-helper externs (SkipSpace 0x8f4290, TokenValue 0x8f2f80, ParseSelectorList 0x8f61f0, ParsePropertyCollection 0x8f8e00, ...) are not in this slice, so layout/ordering of the many branches cannot be recovered.  Semantics reconstructed from the decompile.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (281 valid inputs, 19.1% coverage).
+
+008f9660   60  Length::ToPixelsNonNeg -- body is right (fldz / fcompi st(1) / fstp) but cl lowers the `f < 0 ? 0 : f` select as a branch + xorps/movss, while the original uses the lea-based floating-point select (lea eax,[esp] / lea eax,[esp+0xc] / fld [eax]).  Not reproducible from C++ source at this /O2 level.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (400 valid inputs, 100% coverage).
+
+008f9b00  138  PseudoSelector::Match -- switch over the pseudo-class token recomputed; jump table reproduced but case bodies and the >0x22 immediate lowerings differ.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (399 valid inputs, 67.1% coverage).
+
+008f9c20  116  Stylesheet::AddRule2 -- behaviour is correct (RuleNode modelled as 0x10 bytes so the placement-new size matches) but cl swaps the this/pDecl registers (ebx<->edi) and reorders the two inlined allocation checks; not reachable from source.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (229 valid inputs, 97.1% coverage).
+
+008f9db0   43  Stylesheet::Stylesheet -- all instructions present with the correct store order, but cl schedules the mpFirst/mpLast zero-stores in the middle of the Init argument pushes instead of right after the allocator ctor.  Scheduler coin-flip, not expressible in source.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (271 valid inputs, 100% coverage).
+
+008f9ed0    7  Stylesheet::Clear -- only 7 differing bytes (masked): cl allocates the Slot2() result `v` in a different stack slot (esp+0x1c vs the original esp+0x14) and the tag byte at esp+0x14 vs esp+0x1c, plus a 0x20-byte frame-size difference.  Behaviour identical.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (284 valid inputs, 100% coverage).
+
+008f9fd0   30  CreateNameListPropertyFunc -- inlined NameListProp ctor: mField4=0/vptr stores are scheduled in the middle of the four argument stores instead of first.  Scheduler coin-flip.  flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest PASS (243 valid inputs, 97.4% coverage).

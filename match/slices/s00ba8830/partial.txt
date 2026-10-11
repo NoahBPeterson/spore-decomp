@@ -1,0 +1,3 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE, no /EHsc)
+00ba8830  approx  cStarManager::GenerateStarField: creates the five star records with the original type/subtype/flag table and refcount handling, but the pooled temporary-wstring dance and the first record's extra setup are simplified -> not behaviour-complete
+00ba8c40  approx  cStarManager::BuildPlanet: only the leading feature-amount RNG split is transcribed; the quaternion/euler construction, matrix multiplies, FUN_0059aed0 transforms and the mass/radius tail are not reproduced -> incomplete

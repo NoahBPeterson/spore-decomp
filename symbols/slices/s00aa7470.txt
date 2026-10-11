@@ -1,0 +1,32 @@
+00454cb0 _FUN_00454cb0  # eastl::basic_string::assign (thiscall: dst, begin, end)
+0050d4e0 _FUN_0050d4e0  # eastl::vector<float,sp_vector_allocator>::operator= (thiscall: dst, src)
+006f5cd0 _FUN_006f5cd0  # vector operator= (assign variant, thiscall: dst, src)
+007d27d0 _FUN_007d27d0  # EA::IO read int-vector (cdecl: stream, dst)
+007ed920 _FUN_007ed920  # IO read helper (cdecl: stream, dst)
+0093a6c0 _FUN_0093a6c0  # EA::IO::WriteExact (cdecl: stream, dst, n)
+0093a700 _FUN_0093a700  # EA::IO::ReadUInt16 (cdecl: stream, dst, n, pad)
+0093a780 _FUN_0093a780  # EA::IO::ReadInt32 (cdecl: stream, dst, n, pad)
+0093a800 _FUN_0093a800  # EA::IO::ReadUInt64 (cdecl: stream, dst, n, pad)
+00a6f090 _FUN_00a6f090  # cEffectsParser::GetInheritedDescription (thiscall: args, count, extra)
+00a7b9a0 _FUN_00a7b9a0  # IO read helper (cdecl: stream, dst)
+00a7ba10 _FUN_00a7ba10  # IO read helper (cdecl: stream, dst)
+00a7d280 _FUN_00a7d280  # cEffectsParser::ParseSurfaceOptions (cdecl: id, args, opts, field)
+00a85b00 _FUN_00a85b00  # IO read helper (cdecl: stream, dst)
+00a87280 _FUN_00a87280  # eastl vector element construct-at-end (thiscall: elem, src)
+00a87300 _FUN_00a87300  # eastl vector fill helper (thiscall: this, a, b)
+00a87470 _FUN_00a87470  # eastl vector helper (cdecl: a, b, c)
+00a87b90 _FUN_00a87b90  # nested object operator= (thiscall: dst, src)
+00a87d20 _FUN_00a87d20  # eastl vector grow/insert (thiscall: vec, end, src)
+00a87f50 _FUN_00a87f50  # IO read helper (cdecl: stream, dst)
+00a9a3d0 _FUN_00a9a3d0  # nested object operator= (thiscall: dst, src)
+00a9a500 _FUN_00a9a500  # nested object operator= (thiscall: dst, src)
+00a9a870 _FUN_00a9a870  # IO read helper (cdecl: stream, dst)
+00a9a8d0 _FUN_00a9a8d0  # IO read helper (cdecl: stream, dst)
+00aa32f0 _FUN_00aa32f0  # cParticlesDescription destructor (thiscall)
+00aa3460 _FUN_00aa3460  # cParticleEffectCommand constructor (thiscall, returns this)
+00f47380 _FUN_00f47380  # operator delete
+014119cc _DAT_014119cc  # "reset" string literal
+01457d54 _DAT_01457d54  # float constant
+01485720 _DAT_01485720  # 1.0f constant
+015655dc _DAT_015655dc  # dword table written by FUN_00aa7fa0
+016793a0 _DAT_016793a0  # function-pointer dispatch table indexed by [this+0x23c]

@@ -1,0 +1,8 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0094fb80/s0094fb80.cpp  ?SSLManager_Shutdown@@YIDPAX@Z  0094fcc0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?Fn00950060@@YAHH@Z  00950060  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?QueryInterface@Sock@@QAEPAXI@Z  00950200  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?SetConnectState@Sock@@QAEDH@Z  00950330  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?Fn00950350@@YIXPAX@Z  00950350  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?Fn00950610@@YIHPAH@Z  00950610  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094fb80/s0094fb80.cpp  ?GetSessionName@Sock@@QAEDPAX@Z  00950920  /O2 /MD /Gy /EHsc /TP /GS-

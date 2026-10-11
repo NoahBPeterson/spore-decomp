@@ -1,0 +1,7 @@
+00b30d70  SP::GetGameTerrainCursor  # PDB name on the card
+00b30e80  Simulator::cGameTerrainCursor::func9Ch_  # PDB name on the card
+00b30f10  Simulator::cGameTerrainCursor::func60h_  # PDB name on the card
+00b30fb0  Simulator::cGameTerrainCursor::func5Ch_  # PDB name on the card
+00b31030  Simulator::cGameTerrainCursor::func7Ch_  # PDB name on the card
+00b31330  Simulator::cGameTerrainCursor::copy-assign  # this-returning fieldwise copy
+00b313b0  Simulator::cGameTerrainCursor::funcA0h  # PDB name on the card

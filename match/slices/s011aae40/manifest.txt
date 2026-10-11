@@ -1,0 +1,8 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011aae40/s011aae40.cpp  _BN_mod_exp_mont_consttime  011aae40  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _BN_mod_exp_mont_word       011ab260  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _BN_mod_exp_mont            011ab5e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _RSA_padding_add_none       011ac160  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _RSA_padding_check_none    011ac1c0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _RSA_padding_add_SSLv23    011ac220  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc
+slices/s011aae40/s011aae40.cpp  _RSA_padding_check_SSLv23  011ac2d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011aae40_inc

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+# Nine functions are complete (compile cleanly) but not byte-exact. difftest verdicts noted per line.
+00884a20   50  constructor member-init scheduling: MSVC hoists `push edi; xor edi,edi` above the vftable store and interleaves the two `movss xmm0,[g]` float loads differently than the original; behavior identical. equiv PASS 309 valid 100% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884ae0  297  frame layout / register allocation in Shutdown (`sub esp,0x18` vs orig 0x28, different callee-saved set); map-erase + refcount-release + queue-drain transcribed. equiv WEAK 155 valid 23.7% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884c80  184  hashtable find + HandlerInfo list build/insert scheduling (264B). equiv WEAK 193 valid 89.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00884d90  199  register allocation in the deque grow-insert: pos/val swapped between ebx/edi and the 6-int shift is load-ahead scheduled; condition and stores identical. equiv WEAK 56 valid 39.0% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00885010  932  large deque DoInsertValue (881B) fully transcribed but the harness cannot drive it: 0/400 inputs valid, all faults are fault(read) (needs a self-consistent deque/Message graph). equiv UNSUPPORTED (harness fault(read)); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+008853b0  550  MessageSend handler iteration/dispatch (604B); frame 0xa2c vs 0xa24 plus register allocation and call scheduling. equiv WEAK 390 valid 40.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00885610  184  deque::insert rebalance/insert path (246B); register/schedule differences. equiv WEAK 187 valid 52.8% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00885710  301  MessageQueue::InsertMessage deque push (384B); register/schedule differences. equiv WEAK 265 valid 41.7% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+00885a60    1  single instruction: original emits `mov edx,[fs]` (vtbl load) before `mov [gpFontServer],eax`, MSVC sinks the vtbl load below the store; proven not fixable by source ordering. equiv WEAK 70 valid 16.2% cov; flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast

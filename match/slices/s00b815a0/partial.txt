@@ -1,0 +1,14 @@
+# slice s00b815a0 partial functions (semantics NOT fully reconstructed)
+# format: <va>  <reason>
+00b81c80  cPlanetModel::FUN_00b81c80 arc position between two directions. The two normalisations,
+          the cross product, the signed arc length (s/r scaled by +-0.5) and the final
+          GetRadiusAt re-normalisation are reconstructed, but the rotation applied by
+          FUN_0059aed0(&out, va, axis) -- the role of its first pointer argument (a quaternion
+          {sn*axis, cs} vs a 3-float axis) and hence the sign/order of the rotated result -- is
+          not fully resolved (our body 672 vs the original 770).
+00b82310  cPlanetModel::FUN_00b82310 subdivided surface radius. The early-out on
+          FUN_00b3d310()+0x20, the DirectionToSurfacePosition call, the |p| and the
+          mpISphere->+0x34 / 500.0f alternate are reconstructed, but the FUN_00b65b10 probe
+          argument struct (direction copy, fStack_50 = 2*f5 - |p|, zeroed flags and the 4-int
+          output array at local_40) and the final result selection are uncertain
+          (our body 331 vs the original 352).

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00959780/s00959780.cpp  ?a0b0@W@@QAEXHPAH@Z  0095a0b0  /O2 /MD /Gy /EHsc /TP /GS-

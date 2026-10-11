@@ -1,0 +1,11 @@
+# va  name  # evidence
+011b7070  compute_key              # crypto/dh/dh_key.c DH_METHOD::compute_key; BN_num_bits(dh->p)>10000
+011b7330  add_cert_dir             # crypto/x509/by_dir.c; ".\crypto\x509\by_dir.c"
+011b7520  get_cert_by_subject      # crypto/x509/by_dir.c; X509_NAME_hash + BIO_snprintf "%s%c%08lx.%s%d"
+011b77a0  dir_ctrl                 # crypto/x509/by_dir.c X509_L_ADD_DIR
+011b7820  X509_load_cert_file      # crypto/x509/by_file.c
+011b7980  X509_load_crl_file       # crypto/x509/by_file.c
+011b7ae0  X509_load_cert_crl_file  # crypto/x509/by_file.c
+011b7c90  EVP_PBE_alg_add          # crypto/evp/evp_pbe.c; ".\crypto\evp\evp_pbe.c"
+011b8300  ASN1_mbstring_ncopy      # crypto/asn1/a_mbstr.c; UTF8_getc, "minsize="
+011b8720  ENGINE_get_digest        # crypto/engine/tb_digest.c; ENGINE_F_ENGINE_GET_DIGEST

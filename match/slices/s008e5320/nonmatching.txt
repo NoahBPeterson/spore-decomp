@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+008e53a0  52  eastl::lower_bound; register allocation differs (equiv PASS)
+008e5410  91  eastl::upper_bound; register allocation differs (equiv PASS)
+008e5580  35  LookupStandardHTMLEntity; local frame/arg arrange differ (equiv PASS)
+008e5600  82  XmlParser::Fn8e5600 buffer walk; codegen differs (equiv PASS)
+008e59a0  89  XmlParser::FlushText; codegen differs (equiv WEAK)
+008e5a20  61  XmlParser::Parse(uint8*); codegen+XML_Parse stub differ (equiv FAIL: eax/env)
+008e5c50  11  EndElementHandler; tail-call/virtual dispatch differ (equiv UNSUPPORTED: unresolved externs)
+008e5e50  84  SkippedEntityHandler; inlined entity lookup/arg arrange differ (equiv PASS)

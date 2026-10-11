@@ -1,0 +1,18 @@
+# s00ad79d0 manifest
+slices/s00ad79d0/s00ad79d0.cpp  ?getSpan@CamInfo@@QAEMXZ             00ad7af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?getV1@CamInfo@@QAEMXZ               00ad7b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?getV0@CamInfo@@QAEMXZ               00ad7b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?getPtr@CamInfo@@QAEPAXXZ            00ad7b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?ctor@EditorRes@@QAEPAU1@XZ          00ad7c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?release16c@Sim@@QAEXXZ              00ad7d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?stopCinematic@Sim@@QAEXXZ           00ad7d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?goStop@Sim@@QAEXXZ                  00ad7dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?goExit@Sim@@QAEXXZ                  00ad7df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?isModal@Screen@@QAEHXZ              00ad7e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?setModal@Screen@@QAEXH@Z            00ad7e40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?setX@Screen@@QAEXH@Z                00ad7e90  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?assign@PtrField@@QAEPAPAXPAPAX@Z    00ad7ec0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?assign@CamInfo@@QAEPAU1@PAU1@@Z     00ad7f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?ctor@Screen@@QAEPAU1@XZ             00ad8280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?show@Screen@@QAEXD@Z                00ad87d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?dtor@Sim@@QAEPAXE@Z                 00ad8960  /O2 /MD /Gy /TP /arch:SSE /fp:fast

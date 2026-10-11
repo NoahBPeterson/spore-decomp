@@ -1,0 +1,5 @@
+01675ebc ?gTblB@@3PAHA  # EA::Swarm dispatch table B (stride 0x20; fp/min/max)
+01675a08 ?gTblA@@3PAHA  # EA::Swarm dispatch table A (stride 0x24)
+007611f0 _ht_DoFreeNodes  # eastl::hashtable DoFreeNodes helper
+0045dca0 ?Ctor@Matrix44@@QAEXPBX@Z  # rw::math::fpu::Matrix44Template<float,0> ctor (used by cGlobalParams)
+0041cb40 ?Assign@Matrix33@@QAEXPBX@Z  # rw::math::fpu::Matrix33Template<float> Assign (used by cGlobalParams)

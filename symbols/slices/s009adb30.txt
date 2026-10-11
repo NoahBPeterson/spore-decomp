@@ -1,0 +1,9 @@
+009adb30 FUN_009adb30  # blended skeletal sample -> 3-vector + quaternion (esi/edi register args)
+009add80 FUN_009add80  # quaternion/vector transform composition (ecx/eax/esi/edi register args)
+009adfd0 FUN_009adfd0  # accumulate weighted orientation into state (ecx/eax/esi register args)
+009ae1c0 FUN_009ae1c0  # refcount release / delete
+009ae240 FUN_009ae240  # recursive bone-frame packing tree walk
+009ae350 FUN_009ae350  # build bone frame header then pack
+009ae450 FUN_009ae450  # emit one frame if bone bit set (eax register arg)
+009ae4b0 FUN_009ae4b0  # recursive pack + orientation accumulation
+009ae590 FUN_009ae590  # recompute transform subtree and recurse

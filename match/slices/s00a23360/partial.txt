@@ -1,0 +1,13 @@
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a23360  -   System::GetPosDist approximated (difftest FAIL: x87 st0 differs); distance formula order/precision not reproduced
+00a233b0  -   System::MuteAll approximated (difftest FAIL: execution); submix mute/unmute flow not reproduced
+00a24210  -   RBTree::Assign stub (difftest UNSUPPORTED: symbol not found); body not implemented
+00a243e0  130 EraseNode: approximated bucket splicing; difftest FAIL
+00a24480  120 resource-device free-list release approximated; difftest FAIL (memory pool divergence)
+00a245e0  50  RB_AllocNode approximated; difftest FAIL (esp/stack divergence)
+00a24970  229 RDD::FindById approximated; difftest FAIL (execution)
+00a24a90  -   RDD::FindAndCall1 approximated; difftest FAIL (execution)
+00a24b40  -   RDD::FindAndCall2 approximated; difftest FAIL (execution)
+00a24bf0  -   RDD::FindAndCall3 approximated; difftest FAIL (execution)
+00a24cb0  -   RDD::FindAndCall4 approximated; difftest FAIL (execution)
+00a24d60  -   RDD::FindAndCall5 approximated; difftest FAIL (execution)

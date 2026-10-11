@@ -1,0 +1,13 @@
+# va  reason  (incomplete / approximate source)
+00fd8190  SP::cMovieSystem::RecordMovie: in-progress.  Lock/encoder/AviEncoder/audio/AVI
+          call skeleton and the aspect-ratio clamp are present, but the wide-string path
+          build, the FFeedback frame-target query (v10 out-params) and the eastl_string
+          append are approximated, so behavioural equivalence is not guaranteed.
+          difftest: UNSUPPORTED (unresolved GetDefaultAllocator fake)
+00fd86f0  FUN_00fd86f0: behaviourally close (mutex guard, recorder Submit(struct),
+          intrusive-list push at +0x31c/0x320, pool free on the else arm) but difftest
+          FAILs 5/5 valid inputs (register allocation + the frame-list write differ).
+00fd87c0  SP::cMovieSystem::PlayMovie: in-progress.  Resource lookup, type dispatch,
+          MoviePlayer alloc/open/prepare and the fade-rect maths are stubbed; the
+          sprintf path construction and player vtable slots are approximated.
+          difftest: UNSUPPORTED (unresolved GetDefaultAllocator fake)

@@ -1,0 +1,16 @@
+00962ff0 FUN_00962ff0 # unnamed GetResourceDescriptor + index-buffer factory helper
+00963060 EA::UTFWin::CreateIndexBuffer<EA::UTFWin::cMallocAlloc> # card name
+009630e0 FUN_009630e0 # unnamed index-buffer append/copy path
+009634c0 EA::UTFWinControls::BiStateEffect::GetEventMask # card prev-name IWinProc::GetEventFlags
+009634f0 FUN_009634f0 # unnamed easing curve
+009635e0 FUN_009635e0 # unnamed fade on/off toggle
+00963630 FUN_00963630 # unnamed only-when-visible toggle
+009636f0 FUN_009636f0 # unnamed alpha clamp/normalise
+00963780 EA::UTFWin::IWinProc::HandleUIMessage # card name
+00963db0 EA::UTFWinControls::FadeEffect::FadeEffect # card name
+00963f60 FUN_00963f60 # unnamed effect-flag getter
+00963f70 FUN_00963f70 # unnamed effect-flag set/clear
+00963fd0 FUN_00963fd0 # unnamed button slot setter
+00964000 FUN_00964000 # unnamed caption-colour accessor
+00964020 FUN_00964020 # unnamed button slot getter
+00964040 EA::UTFWinControls::WinButton::SelectCaptionColor # card name

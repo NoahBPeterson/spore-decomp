@@ -1,0 +1,6 @@
+slices/s00b05980/s00b05980.cpp  ?F05980@BitRec@@QAEIXZ  00b05980  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b05980/s00b05980.cpp  ?F05b40@RefVec@@QAEPAPAXPAPAX0@Z  00b05b40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b05980/s00b05980.cpp  ?F05d50@EffectVec@@QAEPAUEffectRec@@PAU2@@Z  00b05d50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b05980/s00b05980.cpp  ?FUN_00b06500@@YAPAUGlyphElem@@PAU1@00@Z  00b06500  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b05980/s00b05980.cpp  ?FUN_00b06550@@YAPAUGlyphElem@@PAU1@00@Z  00b06550  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b05980/s00b05980.cpp  ?F06d90@RefVec@@QAEXI@Z  00b06d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

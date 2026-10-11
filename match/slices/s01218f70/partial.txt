@@ -1,0 +1,36 @@
+# va  size  reason
+01218f70 716 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219280 712 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219620 49 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219660 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219770 107 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+012197e0 93 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219860 141 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219910 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219950 148 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219b00 41 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219b50 30 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219bf0 54 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219c70 47 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219cf0 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219d10 44 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219d80 24 unwind funclet (and dword [0x166f3a8],~2; ret) merged by the analysis with the following __ehhandler stub; not a standalone function
+01219e00 28 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219f10 104 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+01219fa0 186 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a090 61 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a180 40 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a210 30 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a290 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a2d0 30 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a310 54 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a350 21 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a390 59 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a3d0 27 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a450 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a470 27 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a4b0 58 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a520 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a600 26 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a620 90 compiler-generated EH cleanup funclet; enclosing source is outside the slice
+0121a680 147 compiler-generated EH cleanup funclet; enclosing source is outside the slice

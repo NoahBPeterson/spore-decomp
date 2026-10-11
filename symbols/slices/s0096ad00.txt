@@ -1,0 +1,28 @@
+# va  name  # evidence
+0096ad00  EA::UTFWinControls::ConsoleWindow::OnRebuild  # PDB candidate; renders the console background/border via RenderContext; complex, not reconstructed (partial)
+0096b0b0  EA::UTFWinControls::ConsoleWindow::ConsoleWindow  # ctor; calls Window::Window 0x962a10, sets vtables 0x1441c18/0x1441af8, builds Typesetter+LineLayout (partial)
+0096b2d0  EA::UTFWinControls::BasicFactory_ConsoleWindow::CreateInstance  # allocates 0x870 bytes and runs the ctor; byte-exact
+0096b380  EA::UTFWinControls::WinDialog::SerUpdateHook  # UpdateLayout(1) then tail Window::SerUpdate 0x9614a0; byte-exact
+0096b3a0  EA::UTFWinControls::WinDialog::Init  # Window::Initialize then UpdateLayout(1); byte-exact
+0096b400  EA::UTFWinControls::WinDialog::SetFlags  # store (+0x214) then tail UpdateLayout(1); byte-exact
+0096b460  EA::UTFWinControls::WinDialog::OnMouseDown  # hit-test/selection handling on WM_LBUTTONDOWN; complex, not reconstructed (partial)
+0096b600  EA::UTFWinControls::WinDialog::OnMouseUp  # release capture + clear selection + Invalidate; equivalent (8-byte codegen diff)
+0096b660  EA::UTFWinControls::WinDialog::OnTick  # primary-vtable slot +0x8c then return 1; byte-exact
+0096b680  EA::UTFWinControls::WinDialog::InvalidateLayoutHook  # UpdateLayout(1) then tail Window::InvalidateLayout 0x9609b0; byte-exact
+0096b6a0  EA::UTFWinControls::WinDialog::SetRefreshFlag  # store mbRefresh (+0x210) and IWindow::SetFlag(8,v); byte-exact
+0096b710  EA::UTFWinControls::WinDialog::SetLocalBorder  # 4 floats (+0xd4..+0xe0) then UpdateLayout(1); byte-exact
+0096b770  EA::UTFWinControls::WinDialog::SetTitleTextStyle  # store (+0x118) then UpdateLayout(1); byte-exact
+0096b7b0  EA::UTFWinControls::WinDialog::SetTitleBorder  # 4 floats (+0xe4..+0xf0) then UpdateLayout(1); byte-exact
+0096b850  EA::UTFWinControls::WinDialog::SetCloseBorder  # 4 floats (+0xf4..+0x100) then UpdateLayout(1); byte-exact
+0096b900  EA::UTFWinControls::WinDialog::SetTitleTextColor  # store (+0x114) then UpdateLayout(1); byte-exact
+0096b930  EA::UTFWinControls::WinDialog::SetMinSize  # 2 floats (+0x10c/+0x110) then UpdateLayout(1); byte-exact
+0096b990  EA::UTFWinControls::WinDialog::SetMaxSize  # 2 floats (+0x104/+0x108) then UpdateLayout(1); byte-exact
+0096ba00  EA::UTFWinControls::DialogDrawable::AsInterface  # query-interface for 0x6f0c6ff6 (this) / 0xeec58382 (this+4); byte-exact
+0096ba30  EA::UTFWinControls::DialogDrawable::GetNaturalSize  # component dimensions switch on index 0..9; byte-exact
+0096bb10  EA::UTFWinControls::DialogDrawable::SetImage  # refcounted store into element array (+0xc + idx*4), idx<10; byte-exact
+0096bb50  EA::UTFWinControls::DialogDrawable::GetBackground  # *out = +0x04; byte-exact
+0096bb60  EA::UTFWinControls::DialogDrawable::SetBlitMode  # store +0x08 if mode<=3; byte-exact
+0096bb70  EA::UTFWinControls::DialogDrawable::GetBlitMode  # *out = +0x08; byte-exact
+0096bd00  EA::UTFWinControls::WinDialog::Shutdown  # release the three AutoRefCount members (+0x224/+0x228/+0x22c) then Window::Shutdown; byte-exact
+0096bd60  EA::UTFWinControls::WinDialog::SetValue  # refcounted store (+0x18) then hook->v60(+0x18); byte-exact
+0096bdb0  EA::UTFWinControls::WinDialog::GetValue  # hook->v64() or +0x18; byte-exact

@@ -1,0 +1,4 @@
+008f3790  16  eastl::equal_range<StaticDefinition>; stubbed
+008f3a80  3   CSSTokenReader::MatchEscape; stubbed
+008f3c40  4   CSSTokenReader::MatchIdent; stubbed
+008f3d90  3   CSSParser::Advance; stubbed

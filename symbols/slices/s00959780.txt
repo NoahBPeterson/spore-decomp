@@ -1,0 +1,8 @@
+00959780 W::Fn00959780  # EA::UTFWin::WindowMgr message dispatcher: switch on event id (1..0x1a, 0x4ecd5687, 0x74d2e9)
+00959b70 W::b70  # set/clear active window slot (this+0x68c+idx*0x28); walk window tree, notify vtable 0x4c
+00959cf0 W::cf0  # slot change notify (vtable slot 0x4c) + GameViewManager event
+00959e00 W::DetachWindow  # EA::UTFWin::WindowMgr::DetachWindow: recurse children, unlink focus/render/display lists
+00959fe0 W::fe0  # copy bounds 0x98..0xa4 -> 0x88..0x94, GV event 0x10, floor the 4 copied bounds
+0095a0b0 W::a0b0  # build 7-int event from p3, resolve p2/child pointers, call vtable slot 0xc
+0095a140 W::UpdateRenderState  # EA::UTFWin::WindowMgr::UpdateRenderState: update window render transform
+0095a510 W::RenderWindow  # EA::UTFWin::WindowMgr::RenderWindow: render-context setup, GV event 0xd, End2D

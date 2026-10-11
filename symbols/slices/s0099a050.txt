@@ -1,0 +1,12 @@
+# va  name  # evidence
+0099a050  EA::StringMan::FactoryStringTableXml::ReadResource  # 811-byte XML resource reader (guard on 0xcf6c21b8); partial
+0099a380  EA::UTFWinTools::UTFWinToolsInternal::FUN_0099a380  # sorted wide-string name table binary search (table 0x15503d0, 23 entries); nonmatching (7 diff)
+0099a3f0  EA::UTFWinTools::UTFWinToolsInternal::FUN_0099a3f0  # kind predicate, operands in ECX+EAX; partial
+0099a470  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReportResult  # stores this+0x58 then invokes the +0x4c callback via obj(+0x94); partial
+0099a4c0  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadObjectArray  # XML object-array walker; partial
+0099a7c0  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadStructArray  # XML struct-array walker; partial
+0099a920  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::Allocate  # this+0x28 StackAllocator::MallocAligned(a,b,0,1); byte-exact
+0099a940  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::StrDup  # allocator-backed wide-string duplicate; nonmatching (70 diff)
+0099a9d0  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::Splice  # intrusive doubly-linked list node splice; byte-exact
+0099aa20  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ParsePropertyValue  # typed property-value parser; partial
+0099ac80  EA::UTFWinTools::UTFWinToolsInternal::XmlReaderState::ReadPropertyValueArray  # property-value-array reader; partial

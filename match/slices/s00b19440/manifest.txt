@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b19440/s00b19440.cpp  ?F19890@cInput@@QAEXHH@Z  00b19890  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?Init@cArgCommandCtor@@QAEPAXH@Z  00b198d0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?DoAllocate@Elem38Vector@@QAEPAU1@IPAX@Z  00b199f0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?FUN_00b19a50@@YAHPBUstring8@@@Z  00b19a50  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?FUN_00b19a90@@YAHPBUstring8@@@Z  00b19a90  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?FUN_00b19ad0@@YAHPBUstring8@@@Z  00b19ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?FUN_00b19b10@@YAHPAXPBD@Z  00b19b10  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?SetInt@Variant@@QAEPAU1@H@Z  00b19c80  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ??4Elem38@@QAEAAU0@ABU0@@Z  00b19d40  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?Elem38_Copy@@YAPAUElem38@@PAU1@00@Z  00b19df0  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?Elem38_CopyBackward@@YAPAUElem38@@PAU1@00@Z  00b19e70  /O2 /MD /Gy /EHsc /TP /arch:SSE
+slices/s00b19440/s00b19440.cpp  ?DoCreateNodeCopy@IntStringMap@@QAEPAUIntStringNode@@PBU2@PAU2@@Z  00b1a5a0  /O2 /MD /Gy /EHsc /TP /arch:SSE

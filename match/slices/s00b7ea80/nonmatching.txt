@@ -1,0 +1,47 @@
+# slice s00b7ea80 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00b7ea80  341  cPlanetModel::FUN_ea80 cube-face cell lookup. Semantics complete (fabs x/y/z, compare
+                magnitudes, divide the two smaller components to get cell indices, face select from
+                the sign of the largest component). Original evaluates the three fabs with an
+                interleaved x87 sequence (fld / fst [esp] / fabs / fstp per component) and compares
+                with fcompi; our build keeps the components on the FP stack and inserts an extra
+                fxch before fcompi, and the tail is denser (374 vs 443 bytes).
+                | difftest: PASS - 280 valid inputs, 98.1% coverage (101/103), 0 mismatches
+00b7ef70   48  cPlanetModel::GetRadiusAt. Semantics complete (sphere path -> GetHeightAt; else map
+                path -> vtable slot +0xc twice then field +0x34; else 500.0f). Sole diffs: the
+                original materialises each float return via `movss xmm0,[mem]; movss [esp+8],xmm0;
+                fld [esp+8]` while our build emits a direct `fld [mem]`/`fld [const]`, and the push
+                order of the coords vs the vtable load differs (82 vs 106 bytes).
+                | difftest: PASS - 259 valid inputs, 72.2% coverage (26/36), 0 mismatches
+00b7f510  129  cPlanetModel::FUN_f510 rehash. Bucket index h=(node[2]*0xfd + node[0]*0x25 +
+                node[1]) % n and the allocator slab/handle checks at this+0x1c/0x24/0x28/0x30 are
+                reproduced; codegen/register layout differs.
+                | difftest: WEAK - 100 valid inputs (need 200), 95.7% coverage (66/69), 0 mismatches
+00b7f5c0  101  uninitialized_copy<S18>. Round-trip memberwise copy through an output iterator;
+                S18 has 2 implicit padding bytes at +0x12 that the original does NOT copy, so the
+                copy is written memberwise. Original keeps first/last in esi/edi and uses an interior
+                (biased) destination/source pair; ours uses first/last in ecx/edx.
+                | difftest: UNSUPPORTED - 0/400 inputs valid (harness: fault(pool-limit))
+00b7f630  104  copy<S18>. Same memberwise member copy (padding at +0x12 left untouched), first/last
+                in esi/edi vs our ecx/edx.
+                | difftest: UNSUPPORTED - only 3/400 inputs valid (harness: fault(pool-limit))
+00b7f710   99  copy<S24a>. Same memberwise member copy of the 0x24-byte element; original uses an
+                interior biased pointer pair (dst+0x14 / first+0x14) plus ebx scratch; ours uses the
+                flat base pointers.
+                | difftest: UNSUPPORTED - only 13/400 inputs valid (harness: fault(pool-limit))
+00b7f780  108  uninitialized_copy<S24b>. Same memberwise member copy with the `if (dst)` guard;
+                interior-biased register form differs.
+                | difftest: UNSUPPORTED - 0/400 inputs valid (harness: fault(pool-limit))
+00b7f800   73  fill_n<S24b>. Same memberwise fill; original keeps a biased destination pointer
+                (eax=dst+0x14) and re-tests a separate pointer each iteration, ours uses the base
+                pointer.
+                | difftest: PASS - 310 valid inputs, 100.0% coverage (34/34), 0 mismatches
+00b7f860   64  fill_n<S18>. Same memberwise fill; S18's +0x12 padding is not copied (matching the
+                original), and the loop uses the interior-biased pointer form. NB: with the padding
+                modelled as an explicit member this function FAILED difftest (the original leaves the
+                padding bytes untouched).
+                | difftest: PASS - 297 valid inputs, 100.0% coverage (30/30), 0 mismatches
+00b7f8b0   97  copy<S24b>. Same memberwise member copy, first/last in esi/edi and interior-biased
+                pointer pair in the original; ours uses first/last in ecx/edx.
+                | difftest: WEAK - 87 valid inputs (need 200), 24.4% coverage (10/41), 0 mismatches

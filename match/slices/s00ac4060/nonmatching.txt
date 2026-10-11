@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00ac4190  150  complete; cAStar_ctor (segmented-container constructor, cap = max(count>>3 + 1 + 2, 8)); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (233 valid, 100% cov)
+00ac4390  12  complete; D4060::push_back over 8 x 0x14 blocks; only an eb reload / pop-edi scheduling tie-break differs; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS
+00ac4060  255  complete; D4060::f grow routine (block index math + EASTL alloc); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (158 valid, 65.5% cov)
+00ac44a0  173  complete; GlyphVec assign (allocCopy/do_copy/copy5), renamed assignVec so the resolver finds it; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK
+00ac4570  101  complete; SpVec3c erase (0x3c-byte elements, returns first); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (115 valid, 71.1% cov)
+00ac4e10  13  complete; V4e10 assign (alloc 0xd59410 / copy 0xb84c80 / dealloc 0x951740, grow stores reordered b,e,c by compiler); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK
+00ac4c20  57  complete; cAStar constructor (cGonzagoSubsystem base + 3 vtables + mempool + FixedAllocatorBase); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (88 valid, 93.8% cov)

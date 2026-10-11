@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b7ea80/s00b7ea80.cpp  ?FUN_ec50@cPlanetModel@@QAEMXZ                            0x00b7ec50  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?FUN_efe0@cPlanetModel@@QAEMM@Z                            0x00b7efe0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?BuildSurfaceOrientation@cPlanetModel@@QAEPAUQuat@@PAU2@PBUVec3@@@Z   0x00b7f190  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?BuildSurfaceOrientation_2@cPlanetModel@@QAEPAUQuat@@PAU2@PBUVec3@@1@Z  0x00b7f1f0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?BuildSurfaceOrientation2@cPlanetModel@@QAEPAUQuat@@PAU2@PBUVec3@@1@Z   0x00b7f250  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?BuildPitchedSurfaceOrientation@cPlanetModel@@QAEPAUQuat@@PAU2@PBUVec3@@1M@Z  0x00b7f2b0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?BuildSurfaceNormalOrientation@cPlanetModel@@QAEPAUQuat@@PAU2@PBUVec3@@1M@Z 0x00b7f320  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7ea80/s00b7ea80.cpp  ?FUN_f390@cPlanetModel@@QAEXH@Z                             0x00b7f390  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

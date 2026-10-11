@@ -1,0 +1,32 @@
+# va  reason  (incomplete / approximate source)
+01085a80  hkWorld::removeEntityBatch: control flow, the HK_TIMER_BEGIN/END telemetry
+          (LtRemEntities/StBroadPhase/StDelAgents/StRemoveCb), the two hkThreadMemory
+          stack arrays, the broadphase batch call (+0x64 vtable +0x14), the removal
+          callback loop (FUN_0109ec50/FUN_0109ea00/FUN_010a03c0 + vtbl+0x10 destructor)
+          and the +0x8c lock / +0x88 pending / +0x94 unwind guard are all present, but the
+          HK_TIMER and hkArray/hkThreadMemory macros are modelled as helpers, so the frame
+          and register schedule differ (compiled 402B vs 987B). difftest: UNSUPPORTED.
+          flags /vc71
+01085e60  hkWorld::addEntityBatch: entry-collidable refcount bump, +0x8c lock, the
+          callback list rebuild into a thread-memory array, per-entity contact-list slot
+          insert (hkArray at +0xc0/+0xc4, FUN_0107f530 reserve), collidable ptr collect,
+          FUN_010a24b0/FUN_010a1170 dispatch and the tail FUN_0109eaa0. Telemetry/array
+          macros approximated. difftest: UNSUPPORTED. flags /vc71
+01086030  hkWorld::removeActionImmediately: refcount bump, FUN_0109eb30, per-entity
+          contact-list slot clear, FUN_010a20b0, refcount decrement + vtbl(1) destroy,
+          world-action-array reinsert at +0x1c (+0x50/+0x54 hkArray) and the lock/unwind
+          guard. Macro traffic approximated. difftest: UNSUPPORTED. flags /vc71
+010861c0  hkWorld::addPhantomBatch: guard on +0x90/+0x8c, phantom broadcast-config
+          setup (piVar2[9] lazy vtbl+0xc), two thread arrays (4B and 0x20B elements),
+          contact-array push at +0xcc, FUN_01082590/FUN_0109ed70/FUN_0108e370 per phantom,
+          broadphase addBatch (+0x64 vtable +0xc), FUN_010cc410 and the free sequence.
+          difftest: UNSUPPORTED. flags /vc71
+01086500  hkWorld::removePhantomBatch: guard, thread array of collidable ptrs, per-phantom
+          FUN_0109ee00/FUN_0108e300, broadphase removeBatch, FUN_010cc480, +0xcc contact
+          array compact-remove, vtbl+0x2c on refcount 0, lock/unwind guard. difftest:
+          UNSUPPORTED. flags /vc71
+010867a0  hkWorld::getPenetrations: LthkWorld::getPenetrations/Stnarrowphase telemetry,
+          shape AABB query (args+8 vtable +0xc, minus half the world tolerance), broadphase
+          query at +0x64 vtable +0x2c, the narrowphase pair loop, the filter callback and the
+          0x994+index*0x14 penetration dispatch, then the free. difftest: UNSUPPORTED.
+          flags /vc71

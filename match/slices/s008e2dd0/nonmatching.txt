@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008e3850  74  vector<AutoRefCount<Document>>::push_back; register/codegen differs (equiv FAIL: synthetic memory pool)
+008e3a70  69  basic_string<wchar_t>::erase; register allocation differs (equiv UNSUPPORTED: original thiscall ABI)

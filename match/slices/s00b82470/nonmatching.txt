@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00b82470   350  cPlanetModel::ProjectRay: complete; proj-ray struct build + x87 distance scheduling differ (SSE/x87 mix)
+00b82620   753  cPlanetModel::ProjectOpt: complete; snap/tail handling and water-probe branch scheduling differ
+00b82970   404  cPlanetModel::SnapB: complete; radial-ray struct build and length expression scheduling differ
+00b82b40   530  cPlanetModel::SnapA: complete; radial-ray + water clamp branch layout differ
+00b82e80   272  cPlanetModel::SurfaceDistance: complete; x87 normalise/sqrt scheduling differs
+00b82fc0   197  cPlanetModel::ClassifyPoint: complete; water-height compare (SSE vs x87) and constant materialisation differ
+00b830b0   430  cPlanetModel::SampleTerrainHeight: complete; cube-face select + index clamp register allocation differs

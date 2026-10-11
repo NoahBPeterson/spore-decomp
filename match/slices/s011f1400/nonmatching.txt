@@ -1,0 +1,37 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+# RenderWare 4 core (rw::graphics::GlobalState D3D9 dispatch): the retail object was built with
+# /GL + /LTCG (whole-program), so a single-object /vc71 compile cannot reproduce the cross-call
+# register allocation / scheduling.  The device writes go through IDirect3DDevice9 vtbl slots
+# (0xe4 SetRenderState, 0x10c SetTextureStageState, 0x114 SetSamplerState, 0x11c SetPaletteEntries,
+# 0x124 SetCurrentTexturePalette); the software mirror lives in rw::graphics::ActiveState.
+011f1400  550  D3D9SoftStateDispatch (copies the requested soft-state subsets -- transform /
+               colour / ambient / lights / UV mapping / fog -- into the ActiveState mirror and sets
+               the m_softStateUpdated bits): complete; difftest PASS (200/200 valid, no mismatch,
+               82.5% coverage).  /vc71 emits x87 float compares where the original uses SSE
+               (the original module is /arch:SSE), so most bytes differ.
+011f1810   96  D3D9RenderStateDispatch (walk the rwg_D3D9RenderStateToUpdate bitmasks with the
+               rwgD3D9BitShiftTable, compare m_renderState[] against m_renderStateShadow[] and
+               SetRenderState on differences): complete; difftest WEAK (200/200 valid, no
+               mismatch, 47.9% coverage).  Loop/register schedule differs.
+011f18b0    2  D3D9RasterDispatch (per stage up to D3D9GetMaxSamplerStage, SetTexture for the
+               stages set in rwg_D3D9RasterToUpdate): complete; difftest WEAK (200/200 valid, no
+               mismatch, 57.7% coverage).  Only the loop entry / register choice differs (2 bytes).
+011f1900   39  D3D9PaletteDispatch (SetPaletteEntries/SetCurrentTexturePalette when m_palette
+               differs from m_paletteShadow): complete; difftest WEAK (200/200 valid, no mismatch,
+               25.0% coverage).  vtbl-call form and register schedule differ.
+011f1950   95  D3D9TextureStageStateDispatch (walk each stage's texture-stage-state bitmask and
+               SetTextureStageState on differences): complete; difftest WEAK (200/200 valid, no
+               mismatch, 31.7% coverage).  Bit-scan loop / schedule differs.
+011f1a10  150  D3D9SamplerStateDispatch (walk each stage's sampler-state bitmask, including the
+               anisotropic-filter fixup when DAT_016fa3bd is set, and SetSamplerState on
+               differences): complete; difftest WEAK (200/200 valid, no mismatch, 28.8% coverage).
+               Bit-scan loop / schedule differs.
+011f1c20   99  Dispatch (flush soft state, raster, palette, render state, texture-stage state and
+               sampler state, then clear the dirty flags): complete; difftest PASS (200/200 valid,
+               no mismatch, 86.2% coverage).  Register/spill schedule differs.
+011f1d70  280  D3D9Reset (FUN_011f2bf0 + FUN_011f9560, snapshot the dirty masks, mark the whole
+               default state dirty, Dispatch + D3D9ClearDirtyFlags, then restore the snapshotted
+               masks; per-stage sampler/texture-stage defaults and the D3DCAPS9 const-edge
+               fixup): complete; difftest UNSUPPORTED (0/200 valid; the device-reset call tree
+               reaches faked IDirect3DDevice9 vtbl calls whose inferred arity differs).  Register
+               schedule differs.

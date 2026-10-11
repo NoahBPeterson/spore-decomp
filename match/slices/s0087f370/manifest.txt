@@ -1,0 +1,3 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0087f370/s0087f370.cpp  ?FUN_0087f550@?$Loc@$0BA@@@QAEPAXPBU1@@Z              0087f550  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0087f370/s0087f370.cpp  ?Clear@LocaleTree@@QAEXPAURbtNode@@@Z               0087fe10  /O2 /MD /Gy /EHsc /TP /GS-

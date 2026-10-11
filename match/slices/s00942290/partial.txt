@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+009428b0  -  HTTPClient::ReadChunkedResponseData: partial; only the hex-size / CRLF-scan / nested-trailer loop reconstructed (341B of original 641B); difftest UNSUPPORTED (unresolved _isxdigit, ?ParseInt64@@YA_JPBDHH@Z)

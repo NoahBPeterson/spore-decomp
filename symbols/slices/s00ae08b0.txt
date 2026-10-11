@@ -1,0 +1,7 @@
+# slice s00ae08b0 - names inferred from call sites and vtable/dtor patterns
+00ae08b0  Simulator::cObjectContext::~cObjectContext  # resets vtables at this+0/+8, destroys Bkt container at +0x10 (frees buffer, __fastcall dtor over array of 0xc-stride nodes), destroys vector at +0x30
+00ae0930  cTriggerMgr::PostTrigger  # (int,int,int,int,uint*,int,int) - builds trigger record, calls FUN_00ae08b0 alloc/reset, deque push
+00ae09b0  cTriggerMgr::PostAction  # (int,int,int) - deque-head resolution [this+0x118]/[this+0x128], FUN_00adb250 lookup, cObjectContext alloc+ctor, FUN_00adc890 insert, cActionTarget calls
+00ae0a80  cTriggerMgr::PushAction  # (int,int) - same head resolution, alloc/ctor/insert, Query, AutoRefCount addref, intrusive vector push at list+0x30, FUN_00aea5d0 grow
+00ae0b80  FUN_00ae0b80(bool) -> bool  # SP::EventLog singleton -> cSPUIEventLog::GetEventData(out x5), PropertyManager->GetPropertyAsUint32, cActionTarget + GetTriggerMgr/PostAction, GetPropertyAsString8 compare -> PostTrigger, RemoveEvent gate
+00ae0e00  NounMgrWrapper::FUN_00ae0e00(int) -> int  # wrapper accessor

@@ -1,0 +1,26 @@
+00c0ce80 Simulator::cCreatureBase::GetAnimWeight / anim weight selector
+00c0cf50 init animation weight table
+00c0cfa0 get animation weight by index
+00c0cff0 set animation id + weight
+00c0d050 pick animation index by threshold
+00c0d0c0 set/clear animation flag bits
+00c0d1e0 forward event to animated creature (param,1)
+00c0d200 forward event to other creature
+00c0d240 SP::cSPCreatureBase::IsAnimationQueuedOrCurrent
+00c0d310 copy orientation vector
+00c0d340 apply transform and replace list entry
+00c0d3a0 time-scaled terrain callback
+00c0d440 Simulator::cCreatureBase::UpdateHunger
+00c0d560 proximity check (distance vs threshold)
+00c0d660 compute target position (between/offset)
+00c0d860 compute forward-offset position
+00c0d950 set identity/skin flag byte
+00c0d970 Simulator::cCreatureBase::SetIdentityColor
+00c0d9b0 apply stride/leg vector
+00c0dac0 pick action id (0x25/0x54/0x4d chain)
+00c0db10 pick action id (0x1e/0x3e/0x4a chain)
+00c0db60 get active portal/creature id
+00c0db80 scale from terrain properties
+00c0dcb0 size from terrain property
+00c0dd40 Simulator::cCommunity::func54h wrapper + set bubble center
+00c0dd70 set creature heading + pitch

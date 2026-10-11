@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00b12f90  1075  SP::SlerpOrientation: full reconstruction but the quaternion component mapping in the rare
+               (anti-parallel) and mid branches is not yet behaviourally signed off.
+00b134a0   422  camera-to-world transform build: transform-composition block approximated; not behaviourally
+               signed off.

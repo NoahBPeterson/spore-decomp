@@ -1,0 +1,15 @@
+00b51b00  171  FUN_00b51b00 hashtable/resource-pool ctor; complete behavior (fixed_pool init, empty-table sentinel at 0x154df28, arena alloc via 0x921360/0xc763d0); equiv=PASS 211/211
+00b51bb0  104  FUN_00b51bb0 find(key); complete behavior (bucket walk, end-bucket fallback); equiv=PASS 251/251
+00b51c20  159  FUN_00b51c20 erase-all-by-key; complete behavior (matched loop + sentinel/pool free-list recycling); equiv=PASS 205/205 (93.8% cov)
+00b51cc0  137  FUN_00b51cc0 erase-one->iterator; complete behavior (bucket/prev-chain unlink + recycle); equiv=UNSUPPORTED (0/400 synthetic inputs valid: this-object deref faults for both)
+00b51d50  150  FUN_00b51d50 tick/expire over embedded table at +0x1858; complete behavior (dt decrement + erase<=0); equiv=PASS 241/241
+00b51df0  51  FUN_00b51df0 erase-range (lo/hi swap then erase key pair); complete behavior; equiv=WEAK 187 valid, 100% cov (input budget)
+00b51e30  76  FUN_00b51e30 iterator build (lookup + copy 6 dwords); complete behavior; equiv=PASS 400/400
+00b51e80  85  FUN_00b51e80 registry set-float (lookup then setter, both cdecl here); complete behavior; equiv=PASS 400/400
+00b51ee0  313  FUN_00b51ee0 intrusive-ptr release; complete behavior (refcount==1 gate, recursive +0x70 release, conditional map unlink via 0xb51e30/0xb4f8a0); equiv=WEAK 353 valid, 50.4% cov
+00b52020  120  FUN_00b52020 map erase-by-key; complete behavior (find, release value, erase); equiv=PASS 400/400 (68.6% cov)
+00b520a0  115  FUN_00b520a0 free-all-nodes; complete behavior (walk buckets, release each, DoFreeNodes 0x7611f0, clear count); equiv=PASS 400/400 (60.5% cov)
+00b52120  207  FUN_00b52120 insert; complete behavior (mod-hash, rehash policy 0x921440, node alloc 0xb576d0, bucket splice); equiv=PASS 222/222 (90.2% cov)
+00b521f0  64  FUN_00b521f0 text-style lookup; complete behavior (hashtable 0x16852e8 find); equiv=UNSUPPORTED (global table unmapped in harness, 0/400 valid)
+00b52230  430  FUN_00b52230 apply rigid-body transform to style object; complete behavior; equiv=UNSUPPORTED (virtual target faults under synthetic input, 0/400 valid)
+00b523e0  679  FUN_00b523e0 sync body position/rotation quaternion; complete behavior (0.001 epsilon compare + setPosition/setRotation + condition-gated AABB update); equiv=UNSUPPORTED (virtual target faults under synthetic input, 0/400 valid)

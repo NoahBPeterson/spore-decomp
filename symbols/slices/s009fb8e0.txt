@@ -1,0 +1,30 @@
+009fb8e0 ResetBodyRenderState  # per-body (stride 700) reset of gait/render fields
+009fbb80 AdvanceTimer  # dt accumulator with period wrap; emits FUN_009fb830 + ResetBodyRenderState sub-steps
+009fbc50 AudioSetListener3  # EA::Audio::GetSystemAT virtual 0x38/0x40/0x3c*3/0x58
+009fbcd0 AudioSetEvent9  # vtbl 0x40(9,v,1)
+009fbcf0 AudioSetEvent10  # vtbl 0x44(10,&v,1)
+009fbd10 AudioSetFlag  # vtbl 0xc(v==0), char param
+009fbd30 AudioSetEvent5  # vtbl 0x40(5,v,1)
+009fbd50 AudioSetEvent1  # vtbl 0x44(1,&v,1)
+009fbd70 AudioSetListener2  # GetSystemAT virtual 0x38/0x40/0x40/0x58
+009fbdd0 AudioQueryA  # GetSystemAT virtual 0x28(x), returns char
+009fbe00 AudioQueryB  # GetSystemAT virtual 0x2c(x)
+009fbe20 AudioQueryC  # SP::AudioSystem virtual 0x44(x) returning float
+009fbe50 AudioSetListener3v  # unpack 3-float vector -> AudioSetListener3
+009fbe80 EffectsEmitEvent  # build 0x60 descriptor, virtual 0x20/0x18
+009fbfc0 EffectsSpawn  # EffectsManager virtual slot 8 / emit event
+009fc050 EffectsSpawnThunk  # forwarder
+009fc090 PackFourCC  # pack up to 4 chars little-endian
+009fc0f0 FeedbackLookupName  # FNV1 + rbtree lookup g_166c074
+009fc140 BehaviorTableExpand  # expand ids from rbtree g_166c080
+009fc220 BehaviorTableDedup  # dedup + compact behaviour ids
+009fc310 BehaviorLookup  # id triple -> rbtree g_166c078
+009fc3e0 cCommandBase_InitDeform  # store +0x30, operator new(0x10) ctor, virtual 0x18
+009fc440 ElemCtor  # Elem14 string triple ctors
+009fc4a0 RBTreeInsertIdx  # rbtree node insert
+009fc5b0 ElemConstructRange  # copy-construct element range
+009fc680 ElemAssignFrom  # assign each element from a source element
+009fc6c0 ElemFill  # copy-construct n elements
+009fc8b0 ElemCopyRange  # copy-construct element range
+009fc970 ElemMove  # move/assign element range
+009fc9c0 ElemHeapSiftUp  # binary-heap sift-up for Elem14

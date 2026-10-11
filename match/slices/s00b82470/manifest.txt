@@ -1,0 +1,3 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00b82470/s00b82470.cpp  ?SnapDispatch@cPlanetModel@@QAEPAUVec3@@PAU2@PBU2@D@Z  00b82dc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b82470/s00b82470.cpp  ?ProjectToSurface@cPlanetModel@@QAEPAUVec3@@PAU2@PBU2@DDDD@Z  00b82df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

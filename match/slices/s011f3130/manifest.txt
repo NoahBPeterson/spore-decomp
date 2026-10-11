@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core: the retail object was built with VC .NET 2003 (/vc71) + /GL /LTCG.
+# Byte-exactness is not the goal for this slice; the byte-exact functions are listed here,
+# the rest in nonmatching.txt / partial.txt.
+slices/s011f3130/s011f3130.cpp  ?FUN_011f3130@@YIXPAX@Z                            011f3130  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3130/s011f3130.cpp  ?Unlock@VertexBuffer@graphics@rw@@QAEPAU123@XZ     011f36a0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3130/s011f3130.cpp  ?FUN_011f38e0@@YAIXZ                              011f38e0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3130/s011f3130.cpp  ?FUN_011f38f0@VBi@@QAEXHI@Z                       011f38f0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f3130/s011f3130.cpp  ?FUN_011f3990@@YAXXZ                              011f3990  /vc71 /O2 /MD /Gy /EHsc /TP

@@ -1,0 +1,16 @@
+# source  symbol  original VA  [cl flags override]
+slices/s009579f0/s009579f0.cpp  ?Image@UIImage@@QAEPAU1@PAXHHMMMMH@Z  009579f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00957aa0@@YIPAUUIImage@@PAU1@@Z  00957aa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00957ac0@@YGPAXHH@Z  00957ac0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00957c20@@YAXHH@Z  00957c20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?d90@W@@QAEXPAX@Z  00957d90  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?db0@W@@QAEPADH@Z  00957db0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?e70@W@@QAEPADH@Z  00957e70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?ed0@W@@QAEXID@Z  00957ed0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00957f50@@YIPAXPAX@Z  00957f50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00957fa0@@YIXPAX@Z  00957fa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?ff0@W@@QAEXPAX@Z  00957ff0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?x0b0@W@@QAEXPAX@Z  009580b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?Fn00958110@@YIXPAX@Z  00958110  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?x500@W@@QAEDPAXH@Z  00958500  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2
+slices/s009579f0/s009579f0.cpp  ?m820@W@@QAEXPAD@Z  00958820  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2

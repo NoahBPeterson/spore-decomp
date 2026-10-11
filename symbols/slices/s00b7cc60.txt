@@ -1,0 +1,19 @@
+00b7cc60 FUN_00b7cc60  # rebuild the pie menu
+00b7cf10 destroy_range  # WVec::destroy_range, thiscall ret 8
+00b7cf50 FUN_00b7cf50  # destroy a range, return advanced cursor
+00b7cfa0 copy  # WStr::copy copy-ctor
+00b7d000 FUN_00b7d000  # WStr uninitialized_copy with SSO
+00b7d0d0 FUN_00b7d0d0  # copy a range of WStr
+00b7d120 FUN_00b7d120  # copy_backward a range of WStr
+00b7d170 FUN_00b7d170  # clear 3 fields of a ScheduleLocation
+00b7d180 FUN_00b7d180  # vector::insert one WStr
+00b7d2e0 FUN_00b7d2e0  # cCityInputStrategy::PrepareCommodityNodeMenu
+00b7d390 FUN_00b7d390  # destroy WStr vector, reset end
+00b7d3e0 FUN_00b7d3e0  # pie-menu state change to message server
+00b7d420 OnPieMsg  # ServerObj::OnPieMsg msg handler
+00b7d440 FUN_00b7d440  # stamp id/flags into UI rect descriptors
+00b7d4f0 FUN_00b7d4f0  # property manager flag probe
+00b7d580 FUN_00b7d580  # property manager round trip
+00b7d750 FUN_00b7d750  # prepend node to linked list
+00b7d7b0 FUN_00b7d7b0  # unlink and delete a list node
+00b7d810 FUN_00b7d810  # pie-menu terrain-editor state machine

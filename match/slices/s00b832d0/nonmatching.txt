@@ -1,0 +1,8 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00b832d0   649  cPlanetModel::FUN_00b832d0: complete; spiral rotation sin/cos + signed-vs-packed xmm scheduling differ
+00b836b0   367  FUN_00b836b0: complete; x87 extended-precision distance/return (float10) vs float arithmetic differ
+00b83870   403  cPlanetModel::FUN_00b83870: property-list scan; two-array (stride 0xc / 0x38) traversal reconstructed approximately
+00b83af0   139  HashTableA::Find: complete; source uses a returned pair copied through a stack temp (128B vs 98B)
+00b83b70     2  HashTableB::Insert: complete; node-size loaded into ecx (this) by original vs eax by ours (2 bytes)
+00b83c40   n/a  cPlanetModel::FUN_00b83c40: complete; cube-face march + bitmap marking, 1177B vs 1362B (loop/helper shape differs)
+00b841a0   180  eastl::vector<cSPColorRGB>::DoInsertValue: complete; MessageBasicRC<5> ctor/dtor and event dispatch scheduling differ

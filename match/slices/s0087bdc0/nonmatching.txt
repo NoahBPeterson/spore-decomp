@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+# All seven are complete (compile cleanly) but not byte-exact. difftest verdicts:
+#   PASS = behaviourally equivalent on default inputs; UNSUPPORTED = register ABI mismatch.
+0087bdc0  1015  register-ABI (deflate_state arrives in EAX, no stack arg); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087c470   94   register-ABI (max_code arrives in EDX); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087c6f0  166   register-ABI (deflate_state arrives in EAX); equiv UNSUPPORTED; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d0b0  134   register-allocation difference (this=ebx/found=ebp/best=edi vs swapping this<->best); equiv PASS 399/399; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d1c0   88   register-allocation difference (this=edi/ptr=esi vs this=esi); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d360   88   register-allocation difference (this=edi/ptr=esi vs this=esi); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087d620   67   register-allocation difference (pointer=eax/char=ecx vs pointer=ecx/char=eax); equiv PASS 378/378; flags /O2 /MD /Gy /EHsc /TP /GS-

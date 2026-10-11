@@ -1,0 +1,4 @@
+# source  symbol  original VA  [flags override]
+slices/s00969e30/s00969e30.cpp  ?ResetLayout@CW@@  00969ed0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00969e30/s00969e30.cpp  ?Clear@CW@@  0096ab30    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00969e30/s00969e30.cpp  ?SetRegion@CW@@  0096acd0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

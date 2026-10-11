@@ -1,0 +1,9 @@
+008e2dd0  3    CSSParser constructor; vtable/StackAllocator init not reconstructed (stub)
+008e2f30  113  EASTL vector insert/erase helper; template temporaries approximated
+008e3100  3    Document::LoadResource; large resource-marshal path not reconstructed (stub)
+008e3380  9    Document::FetchResources recursion; element dispatch not reconstructed (stub)
+008e3660  1    Document::GetStylesheets; style/link traversal not reconstructed (stub)
+008e37e0  14   Document::Stylesheets; change notification partially reconstructed
+008e3a10  66   path-trim helper; original uses custom EBX register ABI; approximated
+008e3b90  24   ConvertURLToFilePath; parsing branches approximated
+008e3fa0  15   ResolveRelativeURL; URL assembly approximated

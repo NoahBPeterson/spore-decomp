@@ -1,0 +1,9 @@
+0084ebe0 TGAreadline     # decode one TGA scanline (depth 8/15/16/24/32, RLE + raw) into BGRA; custom register ABI
+0084f170 TGAflipline     # reverse a scanline in place (32bpp dword or byte); custom register ABI
+0084f1c0 TGA_about       # build the 0x100-byte TGA format descriptor; byte-exact
+0084f300 TGA_is          # validate an 0x12-byte TGA header; returns 0 / 0x3c / 100; complete nonmatching
+0084f3f0 TGA_open        # allocate + init a 0x18-byte TGA handle; complete nonmatching
+0084f440 TGA_info        # probe a TGA -> GIMEX descriptor (w/h/format/palette/origins); complete nonmatching
+0084f900 TGA_read        # read a TGA into a GIMEX pixel buffer; forwards to TGAreadline/TGAflipline; complete nonmatching
+0084fa40 TGA_free        # gfree wrapper; byte-exact
+0084fa60 FUN_0084fa60    # compare first N elements of two pixel runs (1/2/3/4-byte elems); custom register ABI

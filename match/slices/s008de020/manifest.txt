@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008de020/s008de020.cpp  Fn8de1b0  008de1b0
+slices/s008de020/s008de020.cpp  ??RChangeNotificationInfoCompare@ResourceMan@EA  008de1e0
+slices/s008de020/s008de020.cpp  ?Init@FileChangeNotification@IO@EA  008de220
+slices/s008de020/s008de020.cpp  ?Fn8de230@Manager@ResourceMan@EA  008de230
+slices/s008de020/s008de020.cpp  ?Fn8de400@Manager@ResourceMan@EA  008de400
+slices/s008de020/s008de020.cpp  DoFreeNodes@ChangeSet@eastl_shim  008de4f0

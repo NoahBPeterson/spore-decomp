@@ -1,0 +1,9 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00b96180/s00b96180.cpp  ?fn@S965d0@@QAEIII@Z            00b965d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?FUN_00b96900@@YAPAIPAI00@Z     00b96900  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?FUN_00b96940@@YAHHHH@Z        00b96940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?FUN_00b96f40@@YAXHH@Z         00b96f40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?fn@S970c0@@QAEHI@Z            00b970c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?FUN_00b970f0@@YGXII@Z         00b970f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?fn@S97140@@QAEHPAI0@Z         00b97140  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s00b96180/s00b96180.cpp  ?fn@S97240@@QAEPAIPAI@Z        00b97240  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

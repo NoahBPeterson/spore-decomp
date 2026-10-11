@@ -1,0 +1,17 @@
+00a099e0 SL71::v099e0  # eastl::vector<Vector3>::insert(pos,count,val)
+00a09cf0 SL71::v09cf0  # rbtree node insert (key at +0x10)
+00a09e70 SL71::v09e70  # ctor animation-resource object
+00a09f90 SL71::v09f90  # dtor animation-resource object
+00a0a020 SL71::v0a020  # dtor animation-resource holder
+00a0a0b0 SL71::v0a0b0  # queue-blend insert
+00a0a120 f0a120  # (free) cResourceCheat::Execute
+00a0a360 SL71::v0a360  # pointer-vector insert
+00a0a520 SL71::v0a520  # vector-of-vectors append
+00a0a580 f0a580  # (free) destroy range of 0x18-byte structs
+00a0a600 SL71::v0a600  # teardown reporter/job lists
+00a0a6d0 SL71::v0a6d0  # release cAnimatingCreature
+00a0a930 SL71::v0a930  # advance animation feedback events
+00a0aa20 SL71::v0aa20  # cancel queued feedback job by key
+00a0aaa0 SL71::v0aaa0  # dtor editor resource subsystem
+00a0ab90 SL71::v0ab90  # rbtree insert (extract element)
+00a0ac10 SL71::v0ac10  # vector<Vector3> resize/erase

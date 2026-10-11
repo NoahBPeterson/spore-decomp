@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00ac6c90  41  approximate; range copy of 0x3c-byte cSPTransform implemented as an element blob copy, so it is far smaller than the original's unrolled 271-byte SSE sequence and the equivalence size heuristic cannot bind the symbol; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (our symbol not found)
+00ac6e80  315  approximate; vector<cSPTransform>::DoInsertValue grow path; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest UNSUPPORTED (0/400 valid inputs)
+00ac7120  650  approximate; cPathBuffer::buildMesh (1369-byte trail/ribbon mesh builder; the exact per-point SSE corner ordering and the [esp+0xc] vertex-pointer alias could not be recovered); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest FAIL

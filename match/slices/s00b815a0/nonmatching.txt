@@ -1,0 +1,39 @@
+# slice s00b815a0 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00b815a0   83  cPlanetModel::DirectionToSurfacePosition. Semantics complete (radius = GetRadiusAt,
+                inv = 1/sqrt(x^2 + y^2 + z^2 + 1e-8), out = (dir*inv)*radius). Original spills the
+                radius and takes the SSE path for all three output multiplies with x in xmm0 and
+                y,z read as memory operands of mulss; our build hoists dir->y/dir->z into xmm1/xmm2
+                before the x87 sum and then multiplies all three by inv and by the radius (same
+                values, different register schedule).
+                | difftest: PASS - 239 valid inputs, 100.0% coverage (40/40), 0 mismatches
+00b81630   88  cPlanetModel::FUN_00b81630 clamped surface position. Semantics complete (height from the
+                mpISphere vtable +0xc probe, clamp radius to >= height, then the same
+                DirectionToSurfacePosition maths). The clamp matches; the diffs are register
+                allocation (x in xmm1 vs xmm0, z hoisted vs loaded as a mulss operand) plus an early
+                pop edi. NB: writing the output as `dir->comp * inv * r` let /fp:fast reassociate to
+                (inv*r)*comp and changed the result by 1 ulp (difftest FAIL); forcing the
+                (comp*inv)*r grouping through temporaries makes difftest PASS.
+                | difftest: PASS - 212 valid inputs, 100.0% coverage (56/56), 0 mismatches
+00b81780  548  cPlanetModel::MakeRandomWorldPosition. Semantics complete: the parameter/range branch,
+                the cos/sin offset direction, QuaternionFromDirections, the BuildSurfaceOrientation
+                vs DAT_0156b614 constant quat, the 3x3 matrix quaternion product (verified term by
+                term against the decompiler's expression) and the final normalisation are all
+                reproduced. The 0x50-byte frame, the x87/SSE schedule and the helper call expansion
+                differ (our body 777 vs the original 691).
+                | difftest: PASS - 247 valid inputs, 100.0% coverage (175/175), 0 mismatches
+00b81a40  538  cPlanetModel::FUN_00b81a40. Same body as MakeRandomWorldPosition without the
+                (0 < param_5) branch: always cos(param_5)*param_4 / sin(param_5)*param_4. Semantics
+                complete; the 0x50 frame and schedule differ (our body 623 vs the original 575).
+                | difftest: PASS - 254 valid inputs, 100.0% coverage (145/145), 0 mismatches
+00b81f90  161  cPlanetModel::IsPositionBelowSurface. Semantics complete: returns 1 iff
+                |dir|^2 < |(normalize(dir)*radius)|^2 where inv = 1/sqrt((y^2+z^2)+x^2+1e-8). The
+                original keeps x/y/z in xmm0/xmm3/xmm5 and squares them in place; ours reloads them
+                and shuffles the register file more.
+                | difftest: PASS - 217 valid inputs, 100.0% coverage (59/59), 0 mismatches
+00b82110  348  cPlanetModel::FUN_00b82110 projected-position pick. Semantics complete: probe via
+                FUN_00b82060, radius from the mpISphere vtable +0xc probe, the
+                r^2 <= |pa|^2 guard, FUN_005a9c40 projection and the nearest-of-two selection.
+                The local frame layout and the FUN_005a9c40 result plumbing differ.
+                | difftest: PASS - 266 valid inputs, 71.1% coverage (96/135), 0 mismatches

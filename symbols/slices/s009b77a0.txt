@@ -1,0 +1,9 @@
+009b77a0 FUN_009b77a0  # clamp a point onto a bone-centred circle (cdecl, 5 args)
+009b78c0 nSPCreatureAnim::creature_instance_data::LoadGaitRecord  # resolve+load a gait file
+009b7b10 FUN_009b7b10  # iterate all gait groups, calling LoadGaitRecord
+009b7b70 nSPCreatureAnim::creature_instance_data::SetStyleWeightForAllGroups  # set per-group style weights (byte-exact)
+009b7c00 FUN_009b7c00  # blend target velocity into accumulated displacement (exp decay)
+009b7da0 FUN_009b7da0  # compute accumulated root displacement / heading
+009b8250 FUN_009b8250  # propagate a style weight to all bone-instance speed limits (byte-exact)
+009b83b0 FUN_009b83b0  # average per-group weights and apply decayed weight
+009b8650 FUN_009b8650  # set a shared speed limit across all gait records

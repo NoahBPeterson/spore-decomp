@@ -1,0 +1,12 @@
+00942290 EA::Internet::HTTPClient::ReadRawBody  # dc: raw body read into caller buffer
+009423d0 EA::Internet::HTTPClient::ReadResponseLine  # dc: CRLF line reader (called by chunked path)
+00942530 EA::Internet::HTTPClient::DoJobUpdate  # pdb gap-align
+00942630 Cookie40::~Cookie40  # dc: release +0x24 then +0x1c refcounts
+00942690 EA::Internet::HTTPClient::ReadResponseData  # pdb caller-single
+009428b0 EA::Internet::HTTPClient::ReadChunkedResponseData  # pdb caller-single
+00942b40 EA::Internet::HTTPClient::ReadResponseBody  # pdb anchor
+00942ce0 Cookie40::Cookie40(const Cookie40&)  # dc: copy ctor
+00942d70 Cookie40::operator=(const Cookie40&)  # dc: copy assignment
+00942e50 eastl::StrStub::assignRange  # dc: string assign(first,last)
+00942f70 UrlHolder::SetURL  # dc: URL_SetURL + copy accessor string
+00942fb0 EA::Internet::HTTPClient::SetUserAgent  # pdb callee-single

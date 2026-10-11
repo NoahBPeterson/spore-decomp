@@ -1,0 +1,24 @@
+# va  diff-bytes  equiv-verdict  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c0ddb0  105  PASS         Community::func58h wrapper + set bubble extents; complete
+00c0de30   11  UNSUPPORTED  grasped-state query; complete; unresolved stubs F_a02bd0/F_64
+00c0de60   57  UNSUPPORTED  SetGraspedEffectOffsets; complete; unresolved stub F_b3050
+00c0dee0  161  FAIL         find entry in +0x8c array (optional erase); complete; equiv eax&0xffff mismatch
+00c0dfb0   11  FAIL         find by id -> +0x17c lookup; complete; equiv execution fault (stub callee)
+00c0dfd0   27  FAIL         find by id -> +0x8c; complete; equiv execution fault (stub callee)
+00c0e000   49  FAIL         set animation slot +8; complete; equiv execution fault (stub callee)
+00c0e040   34  FAIL         GetCurrentAnimationGUID; complete; equiv execution fault (vtable callee)
+00c0e070   49  FAIL         animation guid valid-motion query; complete; equiv eax&0xffff mismatch
+00c0e0c0   74  FAIL         current animation guid compare; complete; equiv call-depth fault (vtable callee)
+00c0e120    8  UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
+00c0e170   -   UNSUPPORTED  motion-state gate; complete; 5 unresolved stub callees
+00c0e2c0  144  UNSUPPORTED  motion-state gate (by guid); complete; 4 unresolved stub callees
+00c0e370   34  FAIL         GetCurrentAnimationGUID (alt); complete; equiv execution fault (vtable callee)
+00c0e3a0   22  FAIL         get current time/float slot via vtable; complete; equiv execution fault
+00c0e3d0   50  FAIL         animation flag via guid; complete; equiv execution fault
+00c0e420   43  FAIL         animation-check via guid; complete; equiv execution fault
+00c0e480   71  UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
+00c0e4f0   27  WEAK         creature radius/scale lookup; complete
+00c0e580   12  UNSUPPORTED  forward vector or entity position; complete; unresolved stub F_a048a0
+00c0e660   10  PASS         vector size (+0x6d4); complete
+00c0e6a0  476  UNSUPPORTED  cSPCreatureBase::GetSocialGoal; complete; unresolved stub F_d00a70
+00c0e8d0  431  UNSUPPORTED  relation/can-attack predicate; complete; 2 unresolved stub callees

@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc
+#
+# Slice s008d7220 partial: functions where the reconstruction is incomplete (stubbed / only the
+# observable skeleton of a large routine) or where the equivalence gate reported a real
+# divergence.  Not byte-exact.  difftest verdicts from tools/difftest/equiv.py (DEFAULT inputs).
+#
+008d7570  104  reconstruction (DatabaseDirectoryFiles::~DatabaseDirectoryFiles); flags as above; difftest FAIL (ours faults at 008d6dc2 = retail rbtree::DoNukeSubtree; reconstructed dtor reaches the nuke where the original returns earlier) -- not proven equivalent
+008d77a0  309  partial reconstruction (AddFileRecord = the UpdateRecordData file-record helper); flags as above; stubbed body (only the early DDFMap/DDFList guard + record-map lookup reproduced); difftest UNSUPPORTED (6 unresolved refs: FilePath_*, __wcsicmp, GetExtensionToType)
+008d7960  115  stub (DatabaseDirectoryFiles::UpdateAllRecordData); flags as above; directory-walk body not reproduced; difftest UNSUPPORTED (4 unresolved refs: DirectoryIterator_*)
+008d7a70   98  stub (DatabaseDirectoryFiles::UpdateRecordData); flags as above; 543-byte body not reproduced (only mutex + record-map lookup); difftest UNSUPPORTED (3 unresolved refs: FilePath_Init, __wcsicmp, RBTreeFindNode)
+008d7cb0  278  partial reconstruction (DatabaseDirectoryFiles::OpenRecord); flags as above; the 1254-byte body is only reproduced down to the found-record/GetSize path (open-mode handling omitted); difftest FAIL (ours faults at 00a21dd6 = retail rbtree::find; reconstructed guard path diverges) -- not proven equivalent

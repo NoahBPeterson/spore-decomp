@@ -1,0 +1,30 @@
+0094ea80 RefCount_AddRef_M4  # MI adjustor: InterlockedIncrement refcount at this-4
+0094ea90 RefCount_Release_M8  # MI adjustor: InterlockedExchangeAdd refcount at this-4; at 0 -> xchg 1 + virtual Destroy(1) on object base this-8
+0094eae0 ResObj94::Destroy   # destructor: rewrites vtables at +0/+8/+0x80, frees subobjects
+0094eb50 Fn0094eb50  # mutex init (flag&1 -> Lock(&arg) else Unlock)
+0094eb70 tmp_dh_callback  # lazily load dh512.pem/dh1024.pem; bits==0x200 selects 512
+0094ec00 NetSSLVerifyConnection  # X509 SAN DNS match then subject CN fallback; SSL_get_verify_result
+0094ee30 Fn0094ee30  # 4-byte helper (returns eax)
+0094ee70 Fn0094ee70  # shutdown inner stream via slots 0x18/0x08, clear fields
+0094eec0 Fn0094eec0  # BIO write: obj->i30(buf,len), -1 -> ERR_put_error
+0094ef10 Fn0094ef10  # BIO write(str,len): obj->i38(str,len) then return len/0
+0094ef50 ReadLine94  # custom register-ABI line reader (maxLen in eax, stream in ebx)
+0094efb0 Fn0094efb0  # read one line into buf then return strlen
+0094efe0 Fn0094efe0  # strlen then obj->i38(str,len); return len/0
+0094f030 SSLManager::CreateStreamSSLSocket  # operator_new 0xd8 + StreamSSLSocket ctor, set manager slot 0x30
+0094f080 SSLManager::SetFileSystem  # store fs flag and object
+0094f0b0 SSLContext::LoadVerifyLocations  # SSL_CTX_load_verify_locations wrapper
+0094f0e0 SetSSLManagerGlobal  # get/set g_spSSLManager
+0094f120 Fn0094f120  # MutexNew: alloc 8-byte mutex, ctor/dtor adaptors
+0094f160 SSL_Malloc  # OpenSSL alloc: AllocA(size+8), header stores size+8, returns +8
+0094f1a0 SSL_Free  # OpenSSL free: Free(ptr-8)
+0094f1c0 SSL_Realloc  # OpenSSL realloc: AllocB(size+8), copy min(old,size), Free old
+0094f260 Fn0094f260  # SSL stream refcount release helper
+0094f2a0 BIO_new_file_override  # open file by mode string -> BIO file method
+0094f4d0 file_ctrl  # BIO ctrl: handles cmd 1/2/3/8/9/0xb/0xc/0x6a/0x6b/0x6c
+0094f720 FileSystemDefault::OpenFile  # alloc 0x230 FileStream, set vtable+manager, open
+0094f850 Fn0094f850  # 6-arg mutex init wrapper
+0094f870 SessionOwner::FindAndRelease  # rbtree find on FNV-1 hash, optional erase + DoNukeSubtree
+0094f910 SSLManager::GetSession  # lock, hash name, rbtree find, refcount inc or create+insert
+0094f990 SSLManager::RemoveSession  # lock, walk rbtree freeing sessions, reset anchor
+0094fa60 Fn0094fa60  # SSL_CTX temp params callback

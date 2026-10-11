@@ -1,0 +1,7 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011a81e0/s011a81e0.cpp  _ASN1_TYPE_get_octetstring  011a9e70  /O2 /arch:SSE /MD /Gy /TP
+slices/s011a81e0/s011a81e0.cpp  _engine_free_util           011a9db0  /O2 /arch:SSE /MD /Gy /TP
+slices/s011a81e0/s011a81e0.cpp  ?rc2_magic_to_meth@@YAHH@Z  011a9590  /O2 /arch:SSE /MD /Gy /TP
+slices/s011a81e0/s011a81e0.cpp  _OpenSSL_add_all_digests    011a8ae0  /O2 /arch:SSE /MD /Gy /TP
+slices/s011a81e0/s011a81e0.cpp  _OpenSSL_add_all_ciphers    011a8c30  /O2 /arch:SSE /MD /Gy /TP
+slices/s011a81e0/ssl3_accept.cpp  _ssl3_accept  011a81e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011a81e0_inc

@@ -1,0 +1,9 @@
+slices/s00a40cd0/s00a40cd0.cpp  ?GetSpeakerMode@cAudioPreferences@Audio@SP@@SAHXZ  00a41200  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?GetSoundQuality@cAudioPreferences@Audio@SP@@SAHXZ  00a41240  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?IsMuted@cAudioPreferences@Audio@SP@@SAEXZ  00a41280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?FUN_00a416e0@@YGHPAHI@Z  00a416e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?Init@cSound@Audio@SP@@QAE_NXZ  00a419a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?Start@cSound@Audio@SP@@QAE_NN@Z  00a419c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?StopThunk@cSound@Audio@SP@@QAEXHD@Z  00a41a00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?SetPropertyInternal@cSound@Audio@SP@@QAEXHMH@Z  00a41a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a40cd0/s00a40cd0.cpp  ?ConfigureSound@cSound@Audio@SP@@QAEEXZ  00a41b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

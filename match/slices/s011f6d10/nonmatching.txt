@@ -1,0 +1,35 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+# RenderWare 4 core: the retail object was built with /GL + /LTCG (whole-program), so a
+# single-object compile cannot reproduce the cross-call register allocation / scheduling.
+011f6d10  180  rwg_D3D9GetGeneratedPixelShader (binary-find the pixel-shader def, else
+               generate + insert/evict): complete; the BinaryFind call uses the LTCG
+               register ABI and the count/memmove schedule differs. difftest UNSUPPORTED
+               (image pointer reads fault + D3DXCompileShader/sprintf imports, 0/400 valid).
+011f6e80  114  D3D9PixelShaderDescriptor::DefaultLoadAndSelect (compare current descriptor
+               with the default key, else regenerate, then SetPixelShader vtbl+0x1ac):
+               complete; the inlined strcmp/memcmp byte loop schedules differently.
+               difftest UNSUPPORTED (default-descriptor image reads fault, 0/400 valid).
+011f6f20   37  attribute-offset generator (fills p+0x20 with register offsets from byte
+               table 0x171be38): complete; cl keeps the running offset in esi/ecx instead
+               of the original edi/dl. difftest PASS (400/400 valid, no mismatch).
+011f7650  266  rwg_D3D9BinaryFindVertexShader (stride-0x30 table, inlined strcmp):
+               complete; the function takes the entry count in EAX and the table in ECX
+               (custom LTCG ABI), which a C declaration cannot express. difftest
+               UNSUPPORTED (original reads eax at entry; register ABI).
+011f7800   15  restore saved vertex shader (device SetVertexShader vtbl+0x170 when the
+               saved shader differs): complete; cl allocates the saved pointer to esi in
+               the prologue where the original keeps it in eax and spills later. difftest
+               WEAK (400/400 valid, no mismatch, 26.7% coverage).
+011f78b0    9  rebuild attribute offsets then remap (FUN_011f6f20 + FUN_011fce20):
+               complete; FUN_011f6f20 is called with the table in EDX and no ECX, an LTCG
+               register convention a C call cannot reproduce (extra xor ecx,ecx). difftest
+               PASS (400/400 valid, no mismatch).
+011f78d0  482  rwg_D3D9GenerateVertexShader (walk effect defs, build VS_IN/VS_CURRENT/
+               VS_OUT HLSL, dump per effect, pick vs_x_y, call D3DXCompileShader and
+               install the shader): complete; the effect-def table walk and 10-arg compile
+               call schedule differ. difftest UNSUPPORTED (image pointer reads fault +
+               D3DXCompileShader import, 0/400 valid).
+011f7b20  175  rwg_D3D9GetGeneratedVertexShader (binary-find the vertex-shader def, else
+               generate + insert/evict): complete; the BinaryFind call uses the LTCG
+               register ABI and the count/memmove schedule differs. difftest UNSUPPORTED
+               (D3DXCompileShader import reachable on every path, 0/400 valid).

@@ -1,0 +1,9 @@
+009c1f60 nSPCreatureAnim::creature_static_data::creature_static_data  # ctor: zeros the 3 skin_colors, Bodies/mUnk398/mWiggles/mUnk3cc/inv_bone_rest_xforms vectors, aabb origin/extent, RefCount=0, then Clear(1)
+009c2050 nSPCreatureAnim::creature_static_data::~creature_static_data  # dtor: Clear(0) then operator delete[] the five vectors (0x3f8/0x3cc/0x3b4/0x398/0x384)
+009c20e0 nSPCreatureAnim::creature_instance_data::BuildBodyList  # cBuilding::func8Ch() container; resize to mUnk3cc count; per entry fill 0x30-byte body_entry (rest_center*scale, rest_orientation_q, identity), joint insert when cap_flags&0x10
+009c2300 nSPCreatureAnim::creature_static_data::FilterAndAddWiggle  # thiscall(wiggle*, keep, sym), ret 0xc: scan mWiggles for same cap_a/cap_b, channel/caps compare, mark, overwrite best slot else AddWiggle
+009c2520 eastl::vector<nSPCreatureAnim::bone_xform,eastl::sp_vector_allocator>::resize  # bone_xform_vec::resize(n): grow DoInsertValues 0x9c11e0 with identity 0x30-byte value, shrink 0x9b4550
+009c25f0 eastl::vector<nSPCreatureAnim::creature_body_wiggle_instance_data,eastl::sp_vector_allocator>::resize  # wiggle_instance_vec::resize(n): grow DoInsertValues 0x9c13a0 with zeroed 0x2c-byte value, shrink 0x9b4a20
+009c26a0 nSPCreatureAnim::creature_static_data::Release  # refcount release: dec RefCount, clamp 0, on <1 run dtor + operator delete[](this)
+009c26f0 nSPCreatureAnim::creature_static_data::InitWiggles  # clear mWiggles; per body CreateWiggle/FilterAndAddWiggle; symmetric-pair elimination (eastl fixed_pool/rbtree); symmetry pass gated by 0x01550c2d
+009c2c20 nSPCreatureAnim::creature_instance_data::InitWiggles  # resize instance mWiggles; per static wiggle link + local(rest_center*scale) rotated by orientation quat + position; tail builds desc_a/desc_b and flag/descriptor pointers

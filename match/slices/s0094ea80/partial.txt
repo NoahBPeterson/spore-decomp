@@ -1,0 +1,5 @@
+# va  diff-bytes  reason (incomplete)
+0094ef50  60  ReadLine94: incomplete - custom/LTCG register ABI (reads maxLen in eax, stream in ebx at entry), not expressible as cdecl C; behavior reconstructed; difftest UNSUPPORTED
+0094efb0  35  Fn0094efb0: incomplete - reads a line into buf (inlined reader) then returns strlen; residual memory-pool write differs under replay; difftest FAIL (5/26 valid)
+0094f720  70  FileSystemDefault::OpenFile: incomplete - allocates 0x230 FileStream, sets vtable + SSLManager, opens; path needs MultiByteToWideChar/CreateFileW imports unavailable under difftest; difftest UNSUPPORTED (0/400 valid)
+0094f990  43  SSLManager::RemoveSession: incomplete - mutex lock + rbtree walk freeing SSL_SESSION via SSL_SESSION_free, resets anchor at +0x48; exercises WaitForSingleObject import, all inputs discarded; difftest UNSUPPORTED (0/400 valid)

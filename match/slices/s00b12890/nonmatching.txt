@@ -1,0 +1,5 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00b12890  844  SP::cTerrainCameraController ctor: all field initialisers present; cl hoists/orders the float-constant
+               loads and the three vptr stores differently than the original schedule.
+00b12dd0  305  camera-anchor update: x87 vector length/normalise scheduling, stack-local frame size and the
+               fcomp/lahf/test/jnp changed-test encoding differ; call/vcall sequence identical.

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [flags override]
+slices/s0095d000/s0095d000.cpp  ?FindProp@SerItem@@  0095dd00    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

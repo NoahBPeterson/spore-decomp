@@ -1,0 +1,5 @@
+# va  size  reason
+008dd250 470 incomplete: CopyDatabaseRecord; only a first-branch skeleton (type-check call) written; not a real reconstruction
+008dd430 213 incomplete: CopyDatabaseRecords; stub (returns 0); not implemented
+008dd8f0 519 incomplete: FUN_008dd8f0; stub (returns 0); not implemented
+008ddc80 340 incomplete: DefaultCreateNameFromKey; empty stub; not implemented

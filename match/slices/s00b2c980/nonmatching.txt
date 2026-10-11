@@ -1,0 +1,6 @@
+00b2c980 122 intrusive-list push_front of a refcounted object (eastl::list node alloc + sentinel splice); reconstructed but register allocation / order of AddRef differs
+00b2ca30 44 vector::resize(n) over 4-byte elements; original keeps n in eax and begin in edx, ours assigns n->edx begin->edi (register allocation only)
+00b2ca80 126 rbtree::erase(first,last) with clear-all fast path; reconstructed via DoNuke/RBTreeIncrement/RBTreeErase; register allocation + block order differ
+00b2d0f0 38 remove-all-nouns map walk then reset anchor; only the tail (anchor reset) block differs in register allocation / store order
+00b2d160 76 vector::pop_back(pos) destroying the tail element twice; register allocation: original keeps this in esi and reloads mEnd, ours keeps this in edi
+00b2d870 232 drop vector entries near a position within radius; float distance test reconstructed, register allocation / FP scheduling differ

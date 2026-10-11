@@ -1,0 +1,7 @@
+00b2cc40 194 big object destructor (250 B); sub-object destruction ordering reconstructed from the disasm (two rbtree DoNuke, string-tree nuke, vector dtor, handler removal, refcount releases, cGonzagoSubsystem dtor) but the complete member set / vtables are not verified
+00b2cd90 547 rebuild world-layout vector<0x24-byte Elem> from a property batch (851 B); the property-manager virtual calls and 5 property keys are reconstructed, but exact flags/type codes and the batch element layout are approximate
+00b2d250 322 vector::insert(pos,value) with reallocation (0x18-byte elements); grow path reimplemented from the decompile, allocation size and move helpers approximate
+00b2d480 377 big object constructor (441 B); field-zeroing + sub-object ctors taken from the decompile, but a few unlisted fields and the trailing array allocation are approximate
+00b2d660 183 create sub-systems / activate; object allocations and vtables present but the EffectsManager()/manager call in the middle was not resolved and is stubbed
+00b2d7c0 170 erase keyed range from map then optional noun clear; range lookup helper (0xb02430) usage and the pair packing are approximate
+00b2da50 77 register message-handler table then activate; the 5-entry handler loop and tail-call to FUN_00b2d660 are reconstructed but the handler struct layout is approximate

@@ -1,0 +1,4 @@
+# s00ac4060 manifest
+slices/s00ac4060/s00ac4060.cpp  ?reserve@Vec8@@QAEXI@Z  00ac4280  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4060/s00ac4060.cpp  ?do_copy_4440@@YAPAUGlyphInfo@@PAU1@00@Z  00ac4440  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac4060/s00ac4060.cpp  ?release@CAStar@@QAE_NPAX@Z  00ac4ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

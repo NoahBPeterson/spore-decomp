@@ -1,0 +1,3 @@
+008da140  503  DatabasePackedFile::CompactDatabaseInternal - body reconstructed (hole-set merge, vtable dispatch, temp-file copy path) but not faithful; difftest UNSUPPORTED (unresolved synthetic externs); not verified equivalent
+008da3d0  896  DatabasePackedFile::OpenRecord - real prototype (key,access,reqFlags,mode,arg5,out) ret 0x18; only an approximate branch skeleton, difftest FAIL (5/5 valid mismatched, 12.4% coverage); incomplete
+008da920  546  DatabasePackedFile::FUN_008da920 (rbtree find + record rewrite) - approximate body; difftest UNSUPPORTED (unresolved synthetic extern _ReadRecordRaw); not verified equivalent

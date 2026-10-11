@@ -1,0 +1,11 @@
+slices/s00a3cbb0/s00a3cbb0.cpp  ?Enable@MixEnableCtx@@QAEXH@Z  00a3cdf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?Disable@MixEnableCtx@@QAEXH@Z  00a3ce10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3cea0@@YAXXZ  00a3cea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3ced0@@YAXHHH@Z  00a3ced0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3d120@@YAXHHHHH@Z  00a3d120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3d360@@YAXH@Z  00a3d360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FindByIndex@Mixer@Audio@EA@@QAEHH@Z  00a3d430  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FindByName@Mixer@Audio@EA@@QAEHH@Z  00a3d480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?Dtor@TrackVec@@QAEXXZ  00a3d690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3d8a0@@YAHPAI0H@Z  00a3d8a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a3cbb0/s00a3cbb0.cpp  ?FUN_00a3da70@@YGXPAI0@Z  00a3da70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -1,0 +1,5 @@
+# s00ad20e0 manifest
+slices/s00ad20e0/s00ad20e0.cpp  ?f_2560@cMain@@QAEXH@Z      00ad2560  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad20e0/s00ad20e0.cpp  ?f_25e0@cMain@@QAEXPAX0@Z   00ad25e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad20e0/s00ad20e0.cpp  ?FUN_00ad2650@@YA_NPAX0@Z   00ad2650  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad20e0/s00ad20e0.cpp  ?FUN_00ad2750@@YIPAXPAX@Z   00ad2750  /O2 /MD /Gy /TP /arch:SSE /fp:fast

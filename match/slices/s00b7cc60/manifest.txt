@@ -1,0 +1,10 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00b7cc60/s00b7cc60.cpp  ?destroy_range@WVec@@QAEXPAH0@Z        0x00b7cf10  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7cf50@@YAHPAH0H@Z             0x00b7cf50  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d0d0@@YAPAHPAH00@Z           0x00b7d0d0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d120@@YAPAHPAH00@Z           0x00b7d120  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d170@@YIPAHPAH@Z             0x00b7d170  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d390@@YIXPAH@Z              0x00b7d390  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d3e0@@YIXH@Z                0x00b7d3e0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d750@@YGXHPAPAX@Z           0x00b7d750  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+slices/s00b7cc60/s00b7cc60.cpp  ?FUN_00b7d7b0@@YIXPAPAUListNode@@@Z   0x00b7d7b0  /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast

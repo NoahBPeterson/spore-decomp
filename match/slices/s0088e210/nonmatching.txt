@@ -1,0 +1,57 @@
+# va  diff-bytes  reason
+# Build flags (all rows): /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Iscratch_s0088e210_inc
+#
+# Slice s0088e210 = EA::Text::FontServer TU (FontServer methods interleaved with the EASTL
+# fixed_list / fixed_hash_map / hashtable COMDATs the header instantiates).  Source is the
+# real upstream EAWebKit EATextFontServer.cpp, #included verbatim (EATEXT_THREAD_SAFETY_ENABLED=1
+# like retail).  Byte-exact: 0/21.  Two independent causes:
+#   (A) EASTL fixed_pool layout -- retail's fixed_pool_base carries mpPoolBegin inline
+#       (mpHead,mpNext,mpPoolBegin,mpCapacity,mnNodeSize = 0x14) with no overflow-allocator
+#       member, so retail FaceSource = 0xe0 and FontServer = 0x2fd4; the vendored EAWebKit
+#       fixed_pool_base is 0x10 + fixed_pool_with_overflow adds mOverflowAllocator+mpPoolBegin,
+#       giving our FaceSource = 0xe8/FontServer = 0x3134.  Every fixed-container offset is +8/+0x160.
+#   (B) source revision -- retail does not inline list::DoCreateNode/DoInsert, and retail
+#       EnumerateFonts copies the whole FaceSource by value each iteration (our build does not).
+# Neither is fixable without rewriting the vendored EASTL headers (out of scope).
+
+0088e210 n/a eastl::fixed_list<EA::Text::Font*,4,true>::fixed_list(const fixed_list&) (FontList copy ctor): complete; our build inlines it (no standalone COMDAT), retail emits 139 B. Cause (A) shifts the pool/buffer copies. difftest verdict UNSUPPORTED (our symbol not found: no object symbol for the inlined copy ctor).
+
+0088e2a0 85 eastl::list<EA::Text::FontServer::FaceSource, eastl::fixed_node_allocator<224,4,4,0,1,eastl::allocator> >::erase(const_iterator,const_iterator): complete; cause (A) moves the node pool/bounds and the FaceSource destructor body. difftest verdict UNSUPPORTED (2 unresolved refs: ??_V operator delete, EA::Text::FaceData::Release).
+
+0088e350 229 EA::Text::FontServer::EnumerateFonts: complete; cause (B) -- retail copies the whole FaceSource per iteration and lays out the loop differently, our vendored source assigns only mFontDescription; cause (A) also shifts mMutex/mFaceMap. difftest verdict FAIL (5/5 valid inputs, 28% coverage) -- structural, not a decomp bug: retail FontServer is 0x160 smaller, so the harness's receiver (this=0x40010000, sized for the retail object) is read past its end by our larger offsets and faults (first mismatch: execution, ours faults reading at eip=30000024). Replay confirms the original only reads mMutex at this+0x2fb0.
+
+0088e510 105 eastl::fixed_list<EA::Text::FontServer::FaceSource,4,true>::fixed_list() (FaceSourceList default ctor): complete; cause (A) shifts the fixed_pool_base fields and the C++ exception frame. difftest verdict UNSUPPORTED (our symbol not found: template-class-ctor name does not resolve).
+
+0088e5a0 56 eastl::list<FaceSource,...>::DoCreateNode(const FaceSource&): complete; cause (B) -- retail is an out-of-line 114 B node builder, our vendored DoCreateNode is 80 B; cause (A) shifts the node pool free-list offset. difftest verdict UNSUPPORTED (4 unresolved refs: ??_U operator new, FaceData::AddRef, FaceData::Release, ??_V operator delete).
+
+0088e620 62 eastl::list<FaceSource,...>::DoInsert<ListIterator<FaceSource,...> >(...): complete (PDB). difftest verdict WEAK (192/400 valid, 28% coverage) -- but the tool's symbol selector picked the COMDAT sibling list<Font*>::DoInsert by closest size, so the WEAK value is not a faithful test of this instantiation. Cause (A)/(B) register allocation.
+
+0088e670 152 eastl::fixed_hash_map<string16,string16,4,5,1,...>::fixed_hash_map(const fixed_hash_map&) (FamilySubstitutionMap copy ctor): complete; cause (A) shifts the pooled bucket/node layout. difftest verdict UNSUPPORTED (our symbol not found: template-class-ctor name does not resolve).
+
+0088e740 91 eastl::list<FaceSource,...>::DoAssign<ListIterator<FaceSource,...> >(...): complete; cause (B) -- retail is out-of-line 187 B, our DoAssign is inlined-smaller (112 B). difftest verdict UNSUPPORTED (4 unresolved refs: ??_U, FaceData::AddRef, FaceData::Release, ??_V).
+
+0088e800 3 eastl::hashtable<string16,pair<const string16,Face>,fixed_hashtable_allocator<...> >::DoFreeNode(hash_node*): complete; only cause (A) -- 3 differing bytes are the hash bucket / node-pool offsets (retail [x+0x4cc] vs ours [x+0x4f8]). difftest verdict UNSUPPORTED (2 unresolved refs: ??_V, FaceData::Release).
+
+0088e860 125 eastl::hashtable<string16,pair<const string16,Face>,...>::DoFreeNodes(hash_node**,uint): complete; cause (A) (retail 139 B, ours 244 B: our DoClear/DoFreeNode path not folded the same). difftest verdict UNSUPPORTED (1 unresolved ref: ??_V).
+
+0088e8f0 6 eastl::hashtable<string16,pair<const string16,Face>,...>::erase(iterator): complete; only cause (A) -- 6 differing bytes, all hash bucket / node-pool offsets. difftest verdict UNSUPPORTED (2 unresolved refs: ??_V, FaceData::Release).
+
+0088e980 123 eastl::fixed_list<FaceSource,4,true>::fixed_list(const fixed_list&) (FaceSourceList copy ctor): complete; cause (A) shifts the pool base and the FaceSource element copies. difftest verdict UNSUPPORTED (our symbol not found: template-class-ctor name does not resolve).
+
+0088ea20 94 EA::Text::FontServer::Shutdown: complete; cause (A)/(B) -- retail 576 B vs ours 116 B (retail does not fold the FaceSource/map teardown the same way). difftest verdict UNSUPPORTED (2 unresolved refs: ??_V, FaceData::Release).
+
+0088ec60 159 EA::Text::FontServer::RemoveFace(const char16_t*): complete; cause (A)/(B) -- loop/erase scheduling and Stricmp. difftest verdict UNSUPPORTED (3 unresolved refs: EA::Text::Stricmp, ??_V, FaceData::Release).
+
+0088ed20 36 EA::Text::FontServer::Face::Face (map value / pair<const string16,Face> ctor): complete; our Face copy ctor is 40 B vs retail 112 B (cause (B): retail emits the out-of-line node-value builder). difftest verdict UNSUPPORTED (4 unresolved refs: ??_U, FaceData::AddRef, FaceData::Release, ??_V).
+
+0088ed90 77 eastl::hashtable<string16,pair<const string16,Face>,...>::DoAllocateNode(...): complete; cause (A) node-pool offsets. difftest verdict UNSUPPORTED (2 unresolved refs: ??_U, eastl::gEmptyString).
+
+0088ee00 n/a eastl::hashtable<string16,pair<const string16,Face>,...>::DoCreateNode(...): complete; our build inlines DoCreateNode into DoInsertValue (no standalone COMDAT); retail emits 80 B. difftest verdict UNSUPPORTED (our symbol not found: no object symbol for the inlined DoCreateNode).
+
+0088ee50 114 EA::Text::FontServer::~FontServer: complete; cause (A)/(B) -- retail 213 B vs ours 261 B. difftest verdict UNSUPPORTED (2 unresolved refs: ??_V, FaceData::Release).
+
+0088ef30 156 eastl::fixed_hash_map<string16,Face,8,9,1,...>::fixed_hash_map(const fixed_hash_map&) (mFaceMap copy ctor): complete; cause (A) pooled bucket/node layout. difftest verdict UNSUPPORTED (our symbol not found: template-class-ctor name does not resolve).
+
+0088f000 1 eastl::hashtable<string16,pair<const string16,Face>,...>::DoInsertValue(...): complete; only cause (A) -- 1 differing byte, the hash bucket offset (retail [ebx+0x4cc] vs ours [ebx+0x4f8]). difftest verdict UNSUPPORTED (6 unresolved refs: prime_rehash_policy::GetRehashRequired, ??_V, ??_U, FaceData::AddRef, FaceData::Release).
+
+0088f0f0 95 EA::Text::FontServer::FontServer(EA::Allocator::ICoreAllocator*): complete; cause (A)/(B) -- member init order/offsets (retail 149 B, ours 176 B). difftest verdict UNSUPPORTED (5 unresolved refs: prime_rehash_policy::GetPrevBucketCountOnly/GetBucketCount/GetNextBucketCount, ??_V, eastl::gpEmptyBucketArray).

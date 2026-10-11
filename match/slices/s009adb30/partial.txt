@@ -1,0 +1,1 @@
+# No partial functions in slice s009adb30.

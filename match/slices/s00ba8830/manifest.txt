@@ -1,0 +1,5 @@
+# source  symbol  original VA  [flags override]
+slices/s00ba8830/s00ba8830.cpp  ?GetEmpireByID@cStarManager@@QAEHI@Z      00ba9370  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ba8830/s00ba8830.cpp  ?GetByFieldID@cStarManager@@QAEPAXXZ      00ba93b0  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ba8830/s00ba8830.cpp  ?FUN_00ba9400@@YAXPAX@Z                   00ba9400  /O2 /MD /Gy /TP /arch:SSE
+slices/s00ba8830/s00ba8830.cpp  ?FUN_00ba9470@@YAXPAX@Z                   00ba9470  /O2 /MD /Gy /TP /arch:SSE

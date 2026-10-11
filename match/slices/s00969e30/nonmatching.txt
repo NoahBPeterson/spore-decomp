@@ -1,0 +1,3 @@
+00969e30 120 faithful ConsoleWindow scroll/extent refresh; register allocation/scheduling differ (equiv WEAK 274 valid, 29.8% cov)
+00969f00 44  faithful ConsoleWindow::DoMessage override; call-result accumulation scheduling differs (equiv WEAK 398 valid, 20.5% cov)
+00969f80 200 faithful ConsoleWindow scroll-by; extended-precision float conversion differs (equiv UNSUPPORTED: 4-arg thiscall ABI)

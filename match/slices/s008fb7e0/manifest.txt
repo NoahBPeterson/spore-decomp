@@ -1,0 +1,5 @@
+slices/s008fb7e0/s008fb7e0.cpp  ?SetFontSizeKeyword@StyleState@Style@@QAEXI@Z  008fb8a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008fb7e0/s008fb7e0.cpp  ?FUN_008fb9c0@StyleState@Style@@QAEXXZ  008fb9c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008fb7e0/s008fb7e0.cpp  ?FUN_008fb9e0@StyleState@Style@@QAE_NXZ  008fb9e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008fb7e0/s008fb7e0.cpp  ?FUN_008fba80@StyleState@Style@@QAE_NXZ  008fba80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008fb7e0/s008fb7e0.cpp  ?ClearCounterReset@StyleState@Style@@QAEXXZ  008fbbc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

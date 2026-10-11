@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011b4660/s011b4660.cpp  _ec_GF2m_simple_point2oct  011b4660  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _ec_GF2m_simple_oct2point   011b48d0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _check_policy               011b5c50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_get_pubkey_parameters 011b5dc0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_STORE_CTX_init        011b67e0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_verify_cert           011b6990  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_verify                011b6df0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_CRL_verify            011b6e20  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _d2i_X509_bio               011b6e50  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _d2i_X509_CRL_bio           011b6e70  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _X509_digest                011b6e90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc
+slices/s011b4660/s011b4660.cpp  _generate_key               011b6ef0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b4660_inc

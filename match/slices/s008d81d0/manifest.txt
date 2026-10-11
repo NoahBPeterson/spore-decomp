@@ -1,0 +1,22 @@
+# source  symbol  va  flags
+slices/s008d81d0/s008d81d0.cpp  ?Lock@DatabasePackedFile@@QAEX_N@Z  008d81d0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?CreateRecordWrite@DatabasePackedFile@@QAEPAXHHHH@Z  008d8200  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?CreateRecordWriteData@DatabasePackedFile@@QAEPAXHHHH@Z  008d8250  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?CreateRecordReadCopy@DatabasePackedFile@@QAEPAXHHH@Z  008d82a0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?CreateRecordReadCopy@DatabasePackedFile@@QAEPAXHHH@Z  008d82e0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?ReadHeaders@DatabasePackedFile@@QAE_NXZ  008d8320  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?CreateIndex@DatabasePackedFile@@QAEPAXH@Z  008d8360  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?DestroyIndex@DatabasePackedFile@@QAEXPAUIndex@@@Z  008d8390  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?AllocSpace@DatabasePackedFile@@QAE_NPAHH@Z  008d84a0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?SetHoleTable@DatabasePackedFile@@QAE_NHM@Z  008d8530  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?ShouldCompress@DatabasePackedFile@@QAEHHI@Z  008d8570  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?GetKeyList@DatabasePackedFile@@QAEHHH@Z  008d8710  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?GetKeyListSortedByPosition@DatabasePackedFile@@QAEHH@Z  008d8770  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?Decompress@DatabasePackedFile@@QAE_NHPBXHHPAX@Z  008d8820  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?SetPosition@DatabasePackedFile@@QAE_NH@Z  008d8890  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?GetSize@DatabasePackedFile@@QAEHXZ  008d8930  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?Reset@DatabasePackedFile@@QAE_NXZ  008d8950  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?Sync@DatabasePackedFile@@QAE_NXZ  008d8b30  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?DeleteRecord@DatabasePackedFile@@QAE_NPBUKey@@@Z  008d8b70  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?VerifyIndexRecordIntegrity@DatabasePackedFile@@QAE_NXZ  008d9000  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008d81d0/s008d81d0.cpp  ?ReadAt@DatabasePackedFile@@QAE_NPAXHH@Z  008d9050  /O2 /MD /Gy /TP /GS- /arch:SSE

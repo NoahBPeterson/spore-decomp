@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+00957a60  25  Fn00957a60: complete (lazy-init global table 0x154edf0, guard flag 0x166b138); guard test/RMW uses immediate vs eax; difftest PASS (400 valid, 100.0% coverage)
+00957d40  3  WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); 3 bytes differ (frame/arg-pointer off by 8); difftest PASS (345 valid, 100.0% coverage)
+00957dd0  118  Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
+00957e90  41  Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
+00958070  53  Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
+009580e0  12  Fn009580e0: complete (insert node into intrusive list at this+0x18); 12 bytes differ (base computed via lea vs add); difftest PASS (400 valid, 100.0% coverage)
+00958640  98  DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
+00958780  31  WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
+009587d0  30  Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
+00958860  1  Fn00958860: complete (guard flags&0x40, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
+009588c0  1  Fn009588c0: complete (guard flags&0x20, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00c06630   86  eastl partial_sort(first,middle,last,comp): complete; equiv WEAK (56.2% coverage); heap/extract fully translated, register allocation differs
+00c066a0   153 pool node emplace (refcounted first field): complete; equiv UNSUPPORTED (unresolved pool allocator call)
+00c06750   158 pool node emplace (ptr +8, refcount +0x10): complete; equiv UNSUPPORTED (unresolved pool allocator call)
+00c06800   615 Simulator::cCreatureAnimal::cCreatureAnimal: complete; equiv UNSUPPORTED (unresolved SPTimer::Restart); vtable/store schedule differs
+00c06c30   247 eastl vector insert w/ grow (32-byte elements): complete; equiv WEAK (41.1%); grow path and allocator call shape differ
+00c06d60   215 eastl depth-limited quicksort (median-of-three): complete; equiv WEAK (31.1%); pivot/partition code shape differs
+00c06e50   190 Simulator::cCreatureBase::funcC4h: complete; equiv UNSUPPORTED (unresolved helper callee)
+00c06f70   701 Simulator::cCreatureBase::Tick (tribe destroy tool): complete; equiv UNSUPPORTED (5 unresolved callees)
+00c073a0   57  set id at +0xe8c + clear vector +0xe98: complete; equiv WEAK (26.7%); memmove(end,end) folded to 0 by cl
+00c07400   69  Simulator::cCreatureBase::funcCCh: complete; equiv UNSUPPORTED (3 unresolved callees); memmove(end,end) folded

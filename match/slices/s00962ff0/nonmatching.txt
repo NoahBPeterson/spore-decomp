@@ -1,0 +1,6 @@
+00962ff0 96  faithful GetResourceDescriptor+factory helper; argument/register layout differs
+00963060 92  faithful CreateIndexBuffer<cMallocAlloc>; argument/register layout differs
+009634f0 202 faithful easing curve (mode 0/1/2); x87/SSE mix and constant pooling differ
+00963630 25  faithful OnlyWhenVisible; outgoing message-frame store scheduling differs
+00963f70 24  faithful flag set/clear; vtable-load scheduling differs
+00963db0 101 faithful FadeEffect constructor; field-store ordering differs

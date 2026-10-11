@@ -1,0 +1,5 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00bd7160 48  FUN_00bd7160: incomplete (approximate loop over a message-noun chain; control flow reconstructed only partially, no byte match).
+00bd7400 3   FUN_00bd7400: incomplete (complex create+pose of a civ "cheat" noun, 487 bytes, object passed in EAX via a non-standard convention; stubbed `return 0`).
+00bd7ad0 171 FUN_00bd7ad0: incomplete (Simulator::ISimulatorSerializable::Write - long serialization sequence; direct-call sequence transcribed but field layout / call order not verified).
+00bd7b90 195 FUN_00bd7b90 (Sim::FUN_00bd7b90): incomplete (simulator Write variant; complex, not verified).

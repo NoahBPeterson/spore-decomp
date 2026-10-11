@@ -1,0 +1,4 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00c06630/s00c06630.cpp  ?erase@VErase@@QAEPAPAXPAPAX0@Z  00c06bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c06630/s00c06630.cpp  ?push_back@V32B@@QAEXPAUE32@@@Z  00c072b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00c06630/s00c06630.cpp  ?push_back@V4@@QAEXPAPAX@Z  00c072f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

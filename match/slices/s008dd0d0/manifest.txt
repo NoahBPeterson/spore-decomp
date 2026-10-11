@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+slices/s008dd0d0/s008dd0d0.cpp  FUN_008dd8d0  008dd8d0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dd0d0/s008dd0d0.cpp  FUN_008ddde0  008ddde0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dd0d0/s008dd0d0.cpp  ?dtor@EditorResource@@  008dde10  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dd0d0/s008dd0d0.cpp  FUN_008ddf70  008ddf70  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008dd0d0/s008dd0d0.cpp  deleting_dtor@EditorResource  008ddfb0  /O2 /MD /Gy /TP /GS- /arch:SSE

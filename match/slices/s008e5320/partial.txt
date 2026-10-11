@@ -1,0 +1,10 @@
+008e5320  41   GUI metric reader; singleton/vtable access approximated
+008e5480  22   eastl::equal_range; stubbed
+008e5670  8    large XmlParser helper; stubbed
+008e5730  13   XmlParser::Fn8e5730 error/entity walk; stubbed
+008e5a70  7    expat callback; stubbed
+008e5b90  7    expat callback; stubbed
+008e5ea0  7    XmlParser constructor; vtable/allocator init not reconstructed (stub)
+008e5fb0  11   XmlParser::ReInitParser; callback re-registration not reconstructed (stub)
+008e60a0  13   XmlParser::Parse(buffer); stubbed
+008e61b0  1    GUI scatter; approximated

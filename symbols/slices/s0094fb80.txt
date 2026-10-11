@@ -1,0 +1,29 @@
+0094fb80 THREAD_cleanup  # clear 5 CRYPTO callbacks; destroy+free each mutex in g manager; vector-clear; return 1
+0094fc40 SSLManager::SSLManager  # ctor: set vtable, fields, Mutex+fixed_map, reset pool; claim global if unset
+0094fcc0 SSLManager::Shutdown  # if inited: RemoveSession, SSL_CTX_free, THREAD_cleanup, free default fs
+0094fd20 SSLManager::RestoreClientSession  # lock, GetSession, CRYPTO_add_lock, FNV hash name, map insert; unlock
+0094fdc0 THREAD_setup  # allocate one Mutex per CRYPTO_num_locks; register 5 lock callbacks
+0094fe70 SSLManager::~SSLManager  # scalar deleting destructor: Shutdown, free pool, nuke map, Mutex dtor
+0094fed0 SSLManager::Init  # register SSL mem funcs, THREAD_setup, RAND seed, build SSL_CTX, set ciphers/verify
+00950060 Fn00950060  # BIO reset: flags=1/clear fields, return 1
+00950080 SSLSocketBIOShutdown  # BIO shutdown: notify socket, clear flags/obj
+009500c0 SSLSocketBIOControl  # BIO ctrl: cmd 1/8/9/0xb/0xc/0x68/0x69
+00950200 Sock::QueryInterface  # return inner IID iface pointer (+0x80) or delegate AsInterface
+00950280 StreamSSLSocket::InitConnection  # reset state, create SSL+BIO, SSL_set_bio, ctrl 0x21
+00950330 Sock::SetConnectState  # one-shot set of connect state at +0xcc
+00950350 StreamSSLSocket::ReleaseConnection  # shutdown/free SSL, clear BIO, reset base
+009503c0 StreamSSLSocket::Accept  # e650 accept, SSL_accept, verify; on fail teardown
+00950450 StreamSSLSocket::Read  # SSL_read, on error map SSL_get_error+curve flag to state
+009504d0 StreamSSLSocket::Write  # SSL_write, on error map SSL_get_error+curve flag to state
+00950540 SSLSocketBIO::Write  # b!=0 -> inner e3a0(b,c,0), clear BIO flags
+00950580 SSLSocketBIO::Read  # b!=0 -> inner e3f0(b,c,0), clear BIO flags
+009505c0 SSLSocketBIO::Puts  # strlen then inner e3f0(str,len,0), clear BIO flags
+00950610 StreamSSLSocket::ReleaseRef  # refcount dec; at 1 call slot0x30 + vdtor(1)
+00950650 fixed_string::sprintf  # Vsnprintf8 grow-on-demand into fixed_string buffer
+00950740 StreamSSLSocket::~StreamSSLSocket  # reset 4 vtables, free name buffer, base dtor
+00950870 UTFSSL::StreamSSLSocket::StreamSSLSocket  # ctor: base, 4 vtables, fields, inline name buffer
+00950920 UTFSSL::StreamSSLSocket::GetSessionName  # "host:port" from peer name vcall + be16 port
+00950970 UTFSSL::StreamSSLSocket::Connect  # if session: get name, RestoreClientSession, free session
+00950a20 UTFSSL::StreamSSLSocket::SaveClientSession  # if session: find+release stored session, SSL_set_session
+00950ad0 fixed_string::assign  # if begin!=str: reset then copy [str,str+len) via 0x45f430
+00950b10 UTFSSL::StreamSSLSocket::DoPostConnectionCheck  # save session, SSL_connect, verify; teardown on fail

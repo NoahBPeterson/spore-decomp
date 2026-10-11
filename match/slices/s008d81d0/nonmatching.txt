@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+008d83b0 41 complete: MakeIndexModifiable (void); matches CreateIndex(3)/serialize/destroy/InitializeHoleTable flow; register + scheduling differences; difftest WEAK (211 valid, 26.8% coverage, mutex path mostly untestable)
+008d84d0 18 complete: FreeSpace; original keeps HoleA as fallthrough and the argument pushes inside each block; ours sinks the shared pushes and toggles the branch sense
+008d85a0 100 complete: Attach; manager/self virtual dispatch and old-stream save/restore scheduling differ (return semantics verified PASS)
+008d8650 4 complete: Dispose; original loads mpStream only after clearing mpIndex, we hoist the load
+008d86c0 16 complete: SetStream; false-return block placed at the end in the original, ours inverts the branch
+008d87c0 45 complete: Verify; original keeps the mutex in edi and the divisor in ebp with SSE divss, ours swaps regs and (default flags) uses x87
+008d88d0 2 complete: ReadBytes; only the commutative add destination differs (add ecx,edx vs add edx,ecx)
+008d8980 192 complete: Open; large function, many scheduling/vtable-dispatch differences; difftest WEAK (50.9% coverage)
+008d8c50 233 complete: ReadHeaderRecord; header field copy order / vf74(header) call scheduling differ (return semantics verified PASS)
+008d8ee0 91 complete: WriteHeaderRecord; 0x60-byte DBPF header field packing order differs (return semantics verified PASS)
+008d90e0 30 complete: ReadRecordRaw; branch layout for the memory-mode false return is inverted
+008d9170 26 complete: ReadRecordSpan; register assignment of size / e->size swapped

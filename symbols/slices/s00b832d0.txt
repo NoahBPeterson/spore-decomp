@@ -1,0 +1,8 @@
+00b832d0 SP::cPlanetModel::FUN_00b832d0  # descriptive; (float* dir, float step) thiscall ret 0xc; spiral scan for below-water point -> 0/1
+00b83620 SP::cPlanetModel::FUN_00b83620  # descriptive; (int, float) thiscall ret 0xc; fraction of 100 random points below water
+00b836b0 FUN_00b836b0  # descriptive; (uint cellA, uint cellB) cdecl; continent-height based distance * water factor
+00b83870 SP::cPlanetModel::FUN_00b83870  # descriptive; (int) thiscall ret 4; scans two property arrays, compares max prop value^2 to squared distance
+00b83af0 HashMap::Find  # descriptive; (out, key) thiscall ret 8; hash = x*0x25+z*0xfd+y, chain at node+0x20
+00b83b70 HashMap::Insert  # descriptive; (const Node*) thiscall ret 4; free list at +0x1c, node size at +0x2c
+00b83c40 SP::cPlanetModel::FUN_00b83c40  # descriptive; (float* dir, float r, uint flags, cb) thiscall ret 0x14; cube-face march marking bitmap cells
+00b841a0 eastl::vector<cSPColorRGB,eastl::sp_vector_allocator>::DoInsertValue  # PDB name on card

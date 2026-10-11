@@ -1,0 +1,6 @@
+slices/s00b308f0/s00b308f0.cpp  func60h_@cGameTerrainCursor  00b30f10  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00b308f0/s00b308f0.cpp  func5Ch_@cGameTerrainCursor  00b30fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00b308f0/s00b308f0.cpp  Assign@cGameTerrainCursor  00b31330  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00b308f0/s00b308f0.cpp  GetFlagsQ@cGameTerrainCursor  00b316c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00b308f0/s00b308f0.cpp  SetFour@cGameTerrainCursor  00b316d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2
+slices/s00b308f0/s00b308f0.cpp  FUN_00b31780@  00b31780  /O2 /MD /Gy /EHsc /TP /arch:SSE2

@@ -1,0 +1,9 @@
+00b82470 SP::cPlanetModel::ProjectRay  # descriptive; (out, from, dir, float maxT) thiscall ret 0x10; RayCast+radial cast
+00b82620 SP::cPlanetModel::ProjectOpt  # descriptive; (out, from, dir, SnapOpt*) thiscall ret 0x10; used by s00f015b0 editor drag
+00b82970 SP::cPlanetModel::SnapB  # descriptive; (out, in, char flag) thiscall ret 0xc
+00b82b40 SP::cPlanetModel::SnapA  # descriptive; (out, in, char flag) thiscall ret 0xc; radial cast + water clamp
+00b82dc0 SP::cPlanetModel::SnapDispatch  # descriptive; [this+0xf0] selects SnapA/SnapB; byte-exact
+00b82df0 SP::cPlanetModel::ProjectToSurface  # descriptive; (out, in, a,b,c,d) thiscall ret 0x18; byte-exact
+00b82e80 SP::cPlanetModel::SurfaceDistance  # descriptive; (p, dir) thiscall ret 8; GetRadiusAt-based distance
+00b82fc0 SP::cPlanetModel::ClassifyPoint  # descriptive; (dir) thiscall ret 4; 0/1/2/3 water/land class
+00b830b0 SP::cPlanetModel::SampleTerrainHeight  # descriptive; (dir) thiscall ret 4; cube-map height sample

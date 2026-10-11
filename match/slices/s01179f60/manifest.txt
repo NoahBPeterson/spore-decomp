@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01179f60/s01179f60.cpp  ?FUN_0117a9d0@@YAPAXXZ  0117a9d0  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b100@@YAPAXH@Z  0117b100  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b1e0@@YAXHHHH@Z  0117b1e0  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b210@@YAXHHHH@Z  0117b210  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b410@@YAHH@Z  0117b410  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b460@@YAHH@Z  0117b460  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b4a0@@YAHH@Z  0117b4a0  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117b780@@YAHPAHH@Z  0117b780  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117c040@@YAHHH@Z  0117c040  /O2 /MD /Gy /EHsc /TP
+slices/s01179f60/s01179f60.cpp  ?FUN_0117c300@@YAHHH@Z  0117c300  /O2 /MD /Gy /EHsc /TP

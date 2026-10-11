@@ -1,0 +1,19 @@
+# slice s00b05980 - names inferred from call sites, vtables, member layout and call behaviour
+00b05980  BitRec::F05980() -> unsigned  # popcount of the value at node+0x48 of the bucket selected by [this+0x54]/[this+0x50]/[this+0x4c] via manager 0xb3d440
+00b05a00  XformObj::F05a00(Vec3* out, unsigned index) -> Vec3*  # writes default Vec3 @0x167af5c..64, else copies element #index (stride 0x38, base this+0xa4) through FUN_006271a0(...,this+0x58) after Count() @0xb058f0
+00b05b40  RefVec::F05b40(void** pos, void** value) -> void**  # vector<AutoRef>::insert: fast in-place branch or insertSlow @0xaea5d0
+00b05c60  EffectVec::operator=(const EffectVec&) -> EffectVec*  # eastl vector assign of 0x20-byte EffectRec (destroy + allocate + copy), returns this
+00b05d50  EffectVec::F05d50(EffectRec* pos) -> EffectRec*  # erase one 0x20-byte element: copy_impl tail shift, shrink, destruct last
+00b05d80  RefVec::F05d80(void* pos) -> void*  # erase one AutoRef element: copy_impl shift when pos+4<end, shrink, release-or-decrement (two-level vtbl [*(*v)+0x170])
+00b05fa0  FUN_00b05fa0(int* src, int* tree)  # cdecl: reset Tree to self-cyclic node, read count/records off stream via FUN_0093a780/00b0093a800, Attach/Detach temp, t->add() each
+00b06190  EffectVec::F06190(EffectRec* pos, EffectRec* value) -> void  # eastl vector insert(pos,value): in-place tail-move branch or grow (single operator new 0xf473a0, copy-construct halves via 0xb027b0/0xb01470)
+00b06500  FUN_00b06500(GlyphElem* first, GlyphElem* last, GlyphElem* dst) -> GlyphElem*  # cdecl forward copy of 0x24-byte records (byte + vector<GlyphInfo>::operator= @0xac44a0 + two dwords)
+00b06550  FUN_00b06550(GlyphElem* first, GlyphElem* last, GlyphElem* dst) -> GlyphElem*  # cdecl backward copy of 0x24-byte records
+00b065c0  FUN_00b065c0(RefVec* out, RefVec* src)  # resize src to out element count (>>7), then rebuild each out element into a fresh 0x80 cTreeData (ctor 0xb01770, FUN_00537dc0 copy, AutoRef @+0x68)
+00b06740  Interactable::F06740(void*,void*,void*) -> bool  # cInteractableObject init wrapper: InitFromDefinition @0xc3fc80, vtbl 0x5c/0x94(&0x156741c), add self to AutoRef list @+0x1b905c
+00b06810  EffectOwner::F06810(unsigned key) -> bool  # locate+erase the EffectRec (+0x10==key) from the vector at this+0x160e8, clear its AutoRefCounts
+00b068c0  RangeScan::F068c0(void* range, unsigned a, unsigned b)  # R-tree range walk: Tree::lowerBound @0xb02430 (args (outPair,key=&a)), RBTreeIncrement @0x921580, push to list @+0x1b9174 (limit 0x15673b8) or NounManager::RemoveNoun, Tree::addRange @0xb04ed0
+00b06a40  TearDown::F06a40(void** slot, int flag) -> void**  # detach/reset object (vtbl 0, sentinels, state=6, default transform, +0x34 calls/release), optional requeue @+0x1b8f44, swap-remove from list @+0x1b905c
+00b06bd0  Proximity::F06bd0(Vec3* point, float radius, RefVec* out)  # clear out; scan list @+0x1b905c, keep objects with |p-point|^2 < radius^2
+00b06cd0  ModelList::F06cd0()  # walk list @+0x16504: release +0x64, clear bit0 of +4, two-level vtbl release [vtable+0x16c], then erase the slot
+00b06d90  RefVec::F06d90(unsigned n)  # eastl vector resize(n) of 4-byte AutoRef elements: grow with a zero element (growAt @0xbabb70) or erase tail

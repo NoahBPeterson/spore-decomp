@@ -1,0 +1,18 @@
+# va  name  # evidence
+009a3c80  nSPCreatureAnim::AnimTree::FUN_009a3c80  # recursive intrusive free-list delete (node[0]=child, node[4]=next, node[0x18]/node[0x10]=owned objects); byte-exact
+009a3da0  nSPCreatureAnim::AnimTree::FUN_009a3da0  # EASTL RB-tree insert (returns node payload at +0x14); partial
+009a3ef0  nSPCreatureAnim::FUN_009a3ef0  # clears global anim-cache trees @0x166c058 (via FUN_009a3c40) and @0x166c05c (via FUN_009a3c80); nonmatching (60 diff, equiv WEAK)
+009a3f50  nSPCreatureAnim::AnimTree::FUN_009a3f50  # EASTL tree erase-by-key-range; partial
+009a4020  nSPCreatureAnim::AnimTree::FUN_009a4020  # EASTL erase-loop over two trees, global guard DAT_0166c084; partial
+009a4190  nSPCreatureAnim::AnimTree::FUN_009a4190  # EASTL tree bulk walk; partial
+009a4310  nSPCreatureAnim::AnimTree::FUN_009a4310  # EASTL lower_bound + insert (FUN_009a3cd0); partial
+009a4390  nSPCreatureAnim::AnimTree::FUN_009a4390  # EASTL find/insert companion to FUN_009a4310; partial
+009a4430  nSPCreatureAnim::FUN_009a4430  # anim-name hash lookup; partial
+009a4550  nSPCreatureAnim::FUN_009a4550  # anim-cache node lookup / operator new(0x38) ("Anim/abd/struct"); partial
+009a4660  FUN_009a4660  # Morton-style bit interleave (bit-deposit of param_1 into param_2's set-bit positions); byte-exact
+009a46a0  FUN_009a46a0  # quaternion -> 3x3 row-major rotation matrix; nonmatching (220 diff, equiv PASS)
+009a47e0  nSPCreatureAnim::CheckEventLocationType  # packed location-field predicates (bits 0xc00000/0xc000000/0x3000000 vs +0x2d6/+0x2d4/+0x2d5); nonmatching (101 diff, equiv PASS)
+009a4890  nSPCreatureAnim::ContextFilterEventLocationData  # switch on (param_1 & 0x70) filtering event locations by index array + windows; byte-exact
+009a49b0  LengthSqVec3  # |v|^2 for a float[3] (x87); byte-exact
+009a49d0  NormalizeVec3  # normalise a float[3], optionally returning the length; nonmatching (128 diff, equiv PASS)
+009a4a70  PerpPair  # orthonormal perpendicular pair from a float[3] normal; nonmatching (207 diff, equiv PASS)

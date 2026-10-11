@@ -1,0 +1,12 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f5ee0@@YAXXZ  011f5ee0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6080@@YAXPAX@Z  011f6080  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f60c0@@YAXXZ  011f60c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6110@@YAXXZ  011f6110  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f64c0@@YAPADPADI@Z  011f64c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6550@@YAPADPADI@Z  011f6550  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f65e0@@YAPADPADI@Z  011f65e0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f68c0@@YAXXZ  011f68c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6920@@YAXXZ  011f6920  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6940@@YAXXZ  011f6940  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f5db0/s011f5db0.cpp  ?FUN_011f6980@@YAXXZ  011f6980  /vc71 /O2 /MD /Gy /EHsc /TP

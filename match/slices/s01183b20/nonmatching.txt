@@ -1,0 +1,27 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+01183b20  792  RC4: complete canonical OpenSSL rc4_enc implementation -- x/y reload from
+               the RC4_KEY header (+0/+4), data[] S-box at +8, the 8x-unrolled RC4_STEP
+               main loop, the tail step loop, and the x/y write-back. Byte layout differs
+               (cl scheduled the unrolled body differently) but difftest PASSes 348 valid
+               inputs at 94% coverage. flags /O2 /MD /Gy /TP
+01183f70   36  ex_data_get_item: complete (lazy ex_data_check, CRYPTO_lock(9), lh_retrieve,
+               CRYPTO_malloc of the {index, sk_new_null, 0} item, lh_insert, lock(10),
+               ERR_put_error on failure). The original receives its hash key in EBX (a
+               custom register convention cl cannot express for a cdecl function), so the
+               key local is 0 here and the frame differs. difftest: UNSUPPORTED (unresolved
+               ex_data_check/CRYPTO_lock/lh_*). flags /O2 /MD /Gy /TP
+01184040  117  ex_data_new_index: complete (CRYPTO_malloc of the 5-word index record, the
+               sk_push grow-until-slot loop with ERR_put_error + free on failure, sk_set,
+               CRYPTO_lock/unlock). The original takes the impl record in EDI (custom
+               register convention), modelled here as the first cdecl argument, so the
+               prologue/register schedule differ. difftest: UNSUPPORTED. flags /O2 /MD /Gy /TP
+011847f0  131  BUF_MEM_grow: complete (realloc-vs-malloc selection, 4/3 growth rounding,
+               operator_new__ zero-fill of the new region, *param_1 write-back). cl chose a
+               different basic-block order (in-place grow block placed before the realloc
+               path) than the original; conditions are identical. difftest: UNSUPPORTED
+               (unresolved CRYPTO_malloc/CRYPTO_realloc/ERR_put_error/operator_new__).
+               flags /O2 /MD /Gy /TP
+011848a0   62  BUF_MEM_grow_clean: complete (shrink zero-fill, in-place grow zero-fill,
+               CRYPTO_realloc_clean realloc path, growth rounding, write-back). Same
+               block-order / EDI-vs-ESI register difference as FUN_011847f0. difftest:
+               UNSUPPORTED (unresolved CRYPTO_*/operator_new__). flags /O2 /MD /Gy /TP

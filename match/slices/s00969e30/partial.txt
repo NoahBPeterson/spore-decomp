@@ -1,0 +1,8 @@
+0096a620 78  faithful hashtable DoFindNode; inlined byte-compare loop shape differs (equiv FAIL: stack/abi)
+0096ab90 113 faithful hashtable::find; node/bucket result packing differs (equiv FAIL: write fault)
+0096a0a0 1404 approximate; ConsoleWindow text/line measure path not reproduced
+0096a670 280  approximate; Init scrollbar setup not reproduced (returns 0)
+0096a790 194  approximate; LayoutLines not reproduced
+0096a860 332  approximate; Append(string) path not reproduced
+0096a9b0 369  approximate; Append second overload not reproduced
+0096ac10 170  approximate; ConsoleWindow destructor; sub-object teardown offsets not fully reproduced

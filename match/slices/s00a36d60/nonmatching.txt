@@ -1,0 +1,13 @@
+00a36d60  131  PAggX::PAggX ctor: complete; original has EH-guarded ctor shape, ours is a flat ctor (no EH frame). difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a36e10  19  PAggX::UpdatePrimitives: complete; iterator/element register allocation esi<->edi differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a36e80  80  AggSub::PushBack: complete; original wraps the arg in an EH-guarded AutoRefCount temp, ours is the flat AddRef/push/Release form (no EH frame). difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a370d0  73  PRespX::~PRespX: complete; original has a base-with-destructor EH prolog, ours is flat. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37160  135  PRespX::PRespX ctor: complete; original EH ctor shape and vtable-store scheduling differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37320  95  SoundEffect::SetFloatParams: complete; audio-system call scheduling/register use differs. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37420  64  SoundEffect::Stop: complete; call/register scheduling differs. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37480  441  SoundEffect::ApplyEffect: complete; large multi-call body, scheduling and register allocation differ. difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a376f0  71  SoundEffect::SetLocation: complete; local transform build order and FP load/store form (movss vs integer mov) differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37a10  7  EmitterSub::SetPropertyEx: complete; MSVC merged the two equal return epilogues into one (original keeps two). difftest WEAK. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37b90  15  EmitterSub::Shutdown: complete; MSVC hoists the mpPatch load above the two field clears (original does not). difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37c40  79  cEmitterEAPD::~cEmitterEAPD: complete; original has a base-with-destructor EH prolog, ours is flat. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+00a37cc0  200  cEmitterEAPD::Load: complete; large body, call scheduling and register allocation differ. difftest PASS. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

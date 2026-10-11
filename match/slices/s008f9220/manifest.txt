@@ -1,0 +1,22 @@
+# Slice s008f9220 (gold1 44) byte-exact functions.
+# Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-   (no /EHsc: the original has no
+#   C++-unwind frame in the Stylesheet ctor / deleting dtor; adding /EHsc emits
+#   an _eh vector-unwind prologue there that the original lacks.  /GS-: Clear's
+#   0x560-byte stack scratch has no /GS cookie in the original.)
+slices/s008f9220/s008f9220.cpp  ?ToPixels@Length@Style@XHTML@EA@@QBEMMPBULengthContext@234@@Z  008f95c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?wmemcmp@Style@XHTML@EA@@YAHPB_W0I@Z  008f96a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@Selector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f96e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?StringContains@Style@XHTML@EA@@YA_NPB_W0I_W@Z  008f9710  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@TagSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@ClassSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f97d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@IdSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9830  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@DescendantSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f98a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@ChildSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9910  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@AttrExistsSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@AttrEqualsSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f99c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@AttrIncludesSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9a40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Match@AttrDashSelector@Style@XHTML@EA@@UAE_NPAVNode@DOM@34@_N@Z  008f9aa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?AppendNode@Stylesheet@Style@XHTML@EA@@QAEXPAX@Z  008f9bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?AddRule@Stylesheet@Style@XHTML@EA@@QAEXPB_WPAX@Z  008f9cd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ?Append@Selector@Style@XHTML@EA@@QAEXPAV1234@@Z  008f9fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
+slices/s008f9220/s008f9220.cpp  ??_GStylesheet@Style@XHTML@EA@@UAEPAXI@Z  008f9e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

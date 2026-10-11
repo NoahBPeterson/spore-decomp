@@ -1,0 +1,8 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00e6c780  197  pick-object-under-cursor: full translation; ~O2 register/frame scheduling and the array address
+               arithmetic emit different but equivalent sequences. equiv=UNSUPPORTED (0/400 valid: the
+               function dereferences engine globals that are unmapped in the harness).
+00e6c860  289  mouse-down dispatch: full translation (viewer ray, hit test, drag-button state); SSE helper
+               scheduling differs. equiv=UNSUPPORTED (unresolved engine references).
+00e6c9f0   74  SP::sUpdateUI: complete call sequence; int subtraction / float pass-through schedule
+               differently. equiv=UNSUPPORTED (0/400 valid: reads engine globals).

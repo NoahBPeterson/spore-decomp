@@ -1,0 +1,3 @@
+009630e0 944  approximate; index-buffer append/copy path not fully reproduced
+00963780 1536 approximate; IWinProc message dispatch skeleton only
+00964040 227  approximate; WinButton caption colour selection stub

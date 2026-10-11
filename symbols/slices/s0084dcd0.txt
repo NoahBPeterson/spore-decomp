@@ -1,0 +1,13 @@
+0084dcd0 PNG_read_gimex    # libpng glue: read rows into GIMEX BGRA/RGB buffer; calls png_read_image
+0084de50 PNGREAD_free      # png free_fn wrapper -> gfree; byte-exact
+0084de60 PNG_about         # build the 0x100-byte PNG format descriptor; byte-exact
+0084df40 PNG_check_sig     # read 8-byte signature, png_check_sig(8)/png_check_sig(4); equiv PASS
+0084dfa0 PNG_ropen         # open a PNG read handle (create read struct + info, setjmp); equiv UNSUPPORTED(setjmp3)
+0084e0d0 PNG_read         # probe info -> GIMEX descriptor (width/height/format/palette/dpi/comment); equiv PASS
+0084e3c0 PNG_read_rgba     # full read entry: create read struct, set transforms, PNG_read_gimex; byte-exact
+0084e4e0 PNG_rclose        # close a PNG read handle; byte-exact
+0084e520 PNGREAD_write_data # png write callback -> gwrite, png_error on short write; byte-exact
+0084e560 PNG_write_gimex    # pack GIMEX pixels into rows and png_write_image; equiv UNSUPPORTED(setjmp3)
+0084e790 PNGREAD_malloc     # png malloc_fn wrapper -> galloc; byte-exact
+0084e7a0 PNG_wopen          # open a PNG write handle; equiv PASS (byte-diff = regalloc only)
+0084e7e0 PNG_write          # write a GIMEX image as PNG (build info/text/pHYs, PNG_write_gimex); equiv WEAK

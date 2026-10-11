@@ -1,0 +1,19 @@
+00b96180 S96180::fn  # descriptive; (int* out, int* keypair) thiscall; EASTL rbtree insert (allow-dup)
+00b96220 FUN_00b96220  # descriptive; (int* out, int lo, int hi, uint* key, uint byte) cdecl; lower_bound on 0x10-stride records
+00b96360 S96360::fn  # descriptive; (int pos, int first, int last) thiscall; vector<0x3c> insert-fill
+00b965d0 S965d0::fn  # descriptive; (uint lo, uint hi) thiscall; lower_bound wrapper returning hi
+00b96600 S96600::fn  # descriptive; (uint* pos, uint* val) thiscall; vector<int> insert (memmove + grow)
+00b96710 S96710::fn  # descriptive; (uint* pos, uint* val) thiscall; vector<0x10> insert (copy + grow)
+00b96820 S96820::fn  # descriptive; (uint* out, int hint, uint* key, char allow) thiscall; rbtree node-pool insert
+00b96900 FUN_00b96900  # descriptive; (void* beg, void* end, void* dst) cdecl; uninitialized_copy of 0x18 elems
+00b96940 FUN_00b96940  # descriptive; (int beg, int end, int out) cdecl; destroy range, return advanced out
+00b969e0 FUN_00b969e0  # descriptive; () cdecl; load planet-sim params into globals
+00b96aa0 FUN_00b96aa0  # descriptive; (int) cdecl; spawn num_tribes cTribeData
+00b96b80 FUN_00b96b80  # descriptive; (int) cdecl; spawn num_cities cCivData/cCityData
+00b96d40 FUN_00b96d40  # descriptive; (uint) cdecl; spawn colony/home-planet cities
+00b96f40 FUN_00b96f40  # descriptive; (int obj, int kind) cdecl; dispatch setup by kind (switch 2/4/5) then notify
+00b96fa0 FUN_00b96fa0  # descriptive; () cdecl; spawn harvesters/offensive vehicles
+00b970c0 S970c0::fn  # descriptive; (uint key) thiscall; count lower_bound matches (distance>>4)
+00b970f0 FUN_00b970f0  # descriptive; (uint lo, uint hi) stdcall; destroy range of 0x34 elems (rbtree nodes)
+00b97140 S97140::fn  # descriptive; (uint* pos, uint* val) thiscall; append-or-insert 0x10 elem
+00b97240 S97240::fn  # descriptive; (uint* src) thiscall; copy-construct 0x18 elem (Vec4 + byte + int + tree)

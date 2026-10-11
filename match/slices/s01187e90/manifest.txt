@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s01187e90/s01187e90.cpp  _BN_mod_inverse  01187e90  /O2 /arch:SSE /MD /Gy /TP
+slices/s01187e90/s01187e90.cpp  _BN_usub         011892f0  /O2 /arch:SSE /MD /Gy /TP
+slices/s01187e90/s01187e90.cpp  ?fmtint@@YAXPAPAD0PAI1JHHHH@Z  011897e0  /O2 /arch:SSE /MD /Gy /TP
+slices/s01187e90/s01187e90.cpp  ?fmtfp@@YAXPAPAD0PAI1NHHH@Z    01189a30  /O2 /arch:SSE /MD /Gy /TP

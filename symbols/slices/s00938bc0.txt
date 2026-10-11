@@ -1,0 +1,6 @@
+00938bc0 WriteInteger64_16  # 2008 dev-build EAStdC EASprintf TU-static helper (name not in PDB)
+00938e60 WriteDouble16      # 2008 dev-build EAStdC EASprintf TU-static helper (name not in PDB)
+00939320 VprintfCore16      # 2008 dev-build PDB (module: EAStdC EASprintf; caller-single)
+00939950 Vsnprintf16        # 2008 dev-build PDB (module: EAStdC EASprintf)
+009399c0 Sprintf16          # 2008 dev-build PDB (module: EAStdC EASprintf)
+00939a30 Snprintf16         # 2008 dev-build PDB (module: EAStdC EASprintf)

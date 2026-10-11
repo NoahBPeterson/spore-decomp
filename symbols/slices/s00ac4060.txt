@@ -1,0 +1,16 @@
+00ac4060 D4060::f  # eastl deque/segmented-container block-pointer-array grow (0xa0-byte blocks, 8 pointers each); front/back reallocation helper
+00ac4190 D4060::ctor  # segmented-container ctor(count): allocates ceil(count/8)+1 blocks of 0xa0, sets begin/end/cur pointers
+00ac4280 Vec8::reserve  # eastl::vector<8-byte>::reserve via copy_99efa0 + EASTL allocator
+00ac4390 D4060::push_back  # segmented-container push_back of a 0x14-byte element; grows when full then allocates the new back block
+00ac4440 eastl::do_copy<Text::GlyphInfo*>  # trivial 8-byte element copy loop (first,last,dst)
+00ac44a0 eastl::vector<Text::GlyphInfo>::operator=(const vector&)  # reallocate-if-needed, else copy-prefix + copy_backward
+00ac4570 eastl::vector<cCurvePoint>::erase(first,last)  # shift tail left (0x3c-byte elements), shrink end
+00ac45e0 eastl::vector<cCurvePoint>::DoInsertValue(position,value)  # insert one 0x3c-byte element (user copy ctor) at position
+00ac4720 eastl::vector<Vector3>::DoAssignValues(position,value)  # fill/insert 0xc-byte Vector3 elements
+00ac4850 eastl::vector<u32>::DoAssignValues(position,value)  # fill/insert 4-byte elements with pool-aware deallocation
+00ac4970 eastl::reverse<cCurvePoint*>  # reverse 0x3c-byte elements in place via stack temp
+00ac4a60 eastl::vector<Text::GlyphInfo>::insert(position,n,value)  # insert n copies; grow path uses fill_n + uninitialized_copy
+00ac4c20 cAStar::cAStar  # A* subsystem ctor: vtables, cGonzagoSubsystem base, two LockedAligned pools, FixedAllocatorBase free list
+00ac4e10 eastl::vector<Text::AnalysisInfo>::assign(first,last)  # range assign with do_copy + uninitialized_copy overflow path
+00ac4ef0 cAStar::release  # return a request node to the free-list; unlink it and clear the vector at +0x28 when it is the head
+00ac4f50 cAStar::drain  # pop all queued cAStar requests: clear vector + unlink node + push onto free list at +0x3c

@@ -1,0 +1,2 @@
+# source  symbol  original VA  [cl flags override]
+slices/s00b832d0/s00b832d0.cpp  ?FUN_00b83620@cPlanetModel@@QAEMHM@Z  00b83620  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-

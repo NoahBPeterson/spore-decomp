@@ -1,0 +1,25 @@
+00c0ddb0 Simulator::cCommunity::func58h wrapper + set bubble extents
+00c0de30 cCommunity grasped-state query
+00c0de60 SP::cSPCreatureCitizen::SetGraspedEffectOffsets
+00c0dee0 find entry in creature list at +0x8c (optional erase)
+00c0dfb0 find creature by id -> +0x17c lookup
+00c0dfd0 find creature by id -> +0x8c result
+00c0e000 set creature animation slot +8
+00c0e040 SP::cSPCreatureBase::GetCurrentAnimationGUID
+00c0e070 animation guid valid-motion query
+00c0e0c0 current animation guid compare
+00c0e120 creature slot array membership (+0xf4c)
+00c0e170 animation motion-state gate (current)
+00c0e2c0 animation motion-state gate (by guid)
+00c0e370 GetCurrentAnimationGUID (alt)
+00c0e3a0 get current animation float slot via vtable
+00c0e3d0 animation flag via guid
+00c0e420 animation-check via guid
+00c0e480 SP::cSPCreatureBase::GetTime
+00c0e4f0 creature radius/scale lookup
+00c0e580 forward vector or entity position
+00c0e640 set creature +0x170 field
+00c0e660 creature vector size (+0x6d4)
+00c0e680 creature vector element (+0x6d4)
+00c0e6a0 SP::cSPCreatureBase::GetSocialGoal
+00c0e8d0 relation/can-attack predicate

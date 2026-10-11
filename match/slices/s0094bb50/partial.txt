@@ -1,0 +1,2 @@
+# va  reason
+0094bb50  Not byte-reproducible: 1492-byte URL setup/parse helper (int this, char* a, char* b) that is almost entirely inlined eastl::basic_string / fixed_vector_allocator template code. Reconstructed as a structural body (six embedded SSO-string clears plus the three input branches with operator_new/DAT_01667bac SSO builds and the URL/helper-call chain); it compiles but is neither byte-exact nor equivalence-tested.

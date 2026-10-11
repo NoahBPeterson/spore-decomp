@@ -1,0 +1,30 @@
+# slice s00b7cc60 nonmatching functions (complete semantics, not byte-exact)
+# format: <va>  <diff-bytes>  <reason>  | difftest: <verdict>
+# cl flags: /O2 /MD /Gy /TP /arch:SSE /GS- /fp:fast
+00b7cfa0  76   WStr copy-ctor. Same three-field clear + AllocateSelf + DoInsertValue sequence as the
+                original, but register roles differ: original keeps src in edi, count in ebx, begin
+                in ebp and loads mpEnd before mpBegin; ours puts src in ebx and count in edi.
+                | difftest: WEAK - 110 valid inputs (needs 200), 100% coverage (41/41), 0 mismatches
+00b7d000  159  WStr uninitialized_copy with SSO. Same semantics (sentinel 0x1667bac when n<2, else
+                operator_new of n*2 with the allocator.h site, then memcpy + terminator + f10/f14).
+                Only the branch/register layout of the two SSO paths differs.
+                | difftest: UNSUPPORTED - 0/142 inputs valid (harness faulted on writes/reads/memcpy)
+00b7d420  16   ServerObj::OnPieMsg. Complete. Sole diff is the placement of `mov al,1`: the original
+                materialises the true return at the shared epilogue, MSVC hoists ours before the
+                first branch.
+                | difftest: PASS - 400 valid inputs, 85.7% coverage (6/7), 0 mismatches
+00b7d440  55   Five-descriptor stamp. Complete. Register allocator puts the stored id in edx and the
+                zero in esi, while the original keeps the id in esi and the zero in edx (hence
+                `test ecx,ecx` in the original vs `cmp ecx,esi` in ours).
+                | difftest: PASS - 400 valid inputs, 100% coverage (52/52), 0 mismatches
+00b7d4f0  138/94 complete semantics; the original carries dead spills (a loaded-but-unused p[1] and
+                duplicated mask spills) that our denser codegen omits.
+                | difftest: PASS - 400 valid inputs, 100% coverage (55/55), 0 mismatches
+00b7d580  387/277 property-manager round trip. The vtable slot sequence and the temporary handle
+                destroys are reproduced but our codegen is far denser than the original's spill form.
+                | difftest: FAIL - 5/5 valid inputs mismatched; ours faults reading at 0x00c713e0
+                  (harness cannot emulate that external), coverage 35.8% (49/137)
+00b7d2e0  120  cCityInputStrategy::PrepareCommodityNodeMenu. The assign/sentinel/copy-ctor sequence
+                matches, but receiver field offsets and branch layout differ.
+                | difftest: FAIL - 5/5 valid inputs mismatched; ours faults writing in imported
+                  memcpy, coverage 83.6% (46/55)

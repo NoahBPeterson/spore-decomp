@@ -1,0 +1,3 @@
+0095db50 92  faithful SerPropertyInfo property walk; loop-shape and register allocation differ
+0095dbd0 266 faithful SerPropertyInfo::Build; register allocation and instruction ordering differ
+0095dda0 435 faithful SerPropertyInfo::Commit; complete but codegen differs

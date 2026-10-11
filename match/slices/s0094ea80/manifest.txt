@@ -1,0 +1,16 @@
+# source  symbol  original VA  [cl flags override]
+slices/s0094ea80/s0094ea80.cpp  ?RefCount_AddRef_M4@@YIHPAH@Z  0094ea80  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094eb50@@YAHHPAUMutex94@@@Z  0094eb50  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?tmp_dh_callback@@YAPAXHHH@Z  0094eb70  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094ee30@@YAPAXPAX0@Z  0094ee30  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094eec0@@YAHPAUBIO94@@HH@Z  0094eec0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094ef10@@YAIPAUBIO94@@PADI@Z  0094ef10  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?CreateStreamSSLSocket@SSLManager@@QAEPAXXZ  0094f030  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?SetFileSystem@SSLManager@@QAEXH_N@Z  0094f080  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?LoadVerifyLocations@SSLContext@@QAE_NPBD@Z  0094f0b0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094f120@@YAPAUMutexNew94@@XZ  0094f120  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?EA_SSL_SSL_Malloc@@YAPAXH@Z  0094f160  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?EA_SSL_SSL_Free@@YAXPAX@Z  0094f1a0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?EA_SSL_SSL_Realloc@@YAPAXPAXI@Z  0094f1c0  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094f260@@YIHPAUStreamRef94@@@Z  0094f260  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0094ea80/s0094ea80.cpp  ?Fn0094f850@@YAXPAUMutexNew94@@@Z  0094f850  /O2 /MD /Gy /EHsc /TP /GS-

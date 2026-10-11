@@ -1,0 +1,24 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s0096ad00/s0096ad00.cpp  ?Factory_ConsoleWindow_CreateInstance@@YGPAXHPAX@Z  0096b2d0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?Sub_b380@@YIXPAUWinDialog@@@Z  0096b380  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?WinDialog_Init@@YI_NPAUWinDialog@@@Z  0096b3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetFlags@DlgSub20c@@QAEXH@Z  0096b400  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?WinDialog_OnTick@@YI_NPAUWinDialog@@@Z  0096b660  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?InvalidateAndLayout@DlgSub4@@QAEXXZ  0096b680  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetRefreshFlag@WinDialog@@QAEXI@Z  0096b6a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetLocalBorder@DlgSub20c@@QAEXMMMM@Z  0096b710  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetTitleTextStyle@DlgSub20c@@QAEXH@Z  0096b770  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetTitleBorder@DlgSub20c@@QAEXMMMM@Z  0096b7b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetCloseBorder@DlgSub20c@@QAEXMMMM@Z  0096b850  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetTitleTextColor@DlgSub20c@@QAEXH@Z  0096b900  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetMinSize@DlgSub20c@@QAEXMM@Z  0096b930  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetMaxSize@DlgSub20c@@QAEXMM@Z  0096b990  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?AsInterface@DialogDrawable@@QAEPAXI@Z  0096ba00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?GetNaturalSize@DialogDrawable@@QAE_NPAUVec2@EA@@HH@Z  0096ba30  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetImage@ImageTable@@QAEXIPAX@Z  0096bb10  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?GetBackground@ImageTable@@QAEXPAPAX@Z  0096bb50  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetBlitMode@ImageTable@@QAEXI@Z  0096bb60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?GetBlitMode@ImageTable@@QAEXPAPAX@Z  0096bb70  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?WinDialog_Shutdown@@YIXPAUWinDialog@@@Z  0096bd00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?SetValue@DialogState@@QAEXPAX@Z  0096bd60  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s0096ad00/s0096ad00.cpp  ?GetValue@DialogState@@QAEPAXXZ  0096bdb0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

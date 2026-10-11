@@ -1,0 +1,5 @@
+00b1b980 180 rbtree<string,int>::insert(const_iterator hint, const value_type& value); source is a faithful EASTL-style insert but register allocation / iterator out-slot differ
+00b1ba90 265 rbtree<int,string>::operator[]; original has no EH frame and builds the default pair inline; ours keeps a real string8 local (EH + register allocation differ)
+00b1c150 145 rbtree<int,vector<Elem38>>::operator[]; original lower_bound + inline default-vector construct; register allocation and temporary lifetime differ
+00b1c220 128 rbtree<string,int>::operator[]; original lower-bounds via helper 0xb19cb0 then inserts; ours does an explicit lower_bound loop (register allocation differs)
+00b1c580 168 global map<string,int> setter; string built inline then operator[] 0xb1c220; register allocation differs

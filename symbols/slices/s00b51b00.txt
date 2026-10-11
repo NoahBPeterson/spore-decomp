@@ -1,0 +1,15 @@
+00b51b00 FUN_00b51b00  # hashtable/resource-pool ctor (this=table; buckets+4, count+8, size+0xc, fixed_pool+0x1c)
+00b51bb0 FUN_00b51bb0  # find(key) -> (node,slot)
+00b51c20 FUN_00b51c20  # erase-all-by-key -> removed count
+00b51cc0 FUN_00b51cc0  # erase-one(node,slot) -> iterator
+00b51d50 FUN_00b51d50  # expire embedded table at +0x1858 by dt
+00b51df0 FUN_00b51df0  # erase range [a,b) on embedded table
+00b51e30 FUN_00b51e30  # iterator build for registry (0x1569c98)
+00b51e80 FUN_00b51e80  # registry set-float (0x1569c98)
+00b51ee0 FUN_00b51ee0  # intrusive smart-pointer release
+00b52020 FUN_00b52020  # global map (0x1569cb8/0x1569cbc) erase-by-key
+00b520a0 FUN_00b520a0  # global map free-all-nodes
+00b52120 FUN_00b52120  # insert(key) with rehash
+00b521f0 FUN_00b521f0  # TextStyleEx lookup in table 0x16852e8
+00b52230 FUN_00b52230  # apply rigid-body transform (0x16801a8 registry)
+00b523e0 FUN_00b523e0  # sync body position + rotation quaternion

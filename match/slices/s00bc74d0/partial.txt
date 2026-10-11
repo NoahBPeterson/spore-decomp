@@ -1,0 +1,8 @@
+# va  diff-bytes  reason   (compile with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
+00bc74d0 84  WE::FUN_00bc74d0: incomplete (grow the 0x7b4-byte civ array if needed). difftest FAIL: ours faults at 00bc711d where the original succeeded - the call into FUN_00bc7110 is not set up correctly.
+00bc7570 39  FUN_00bc7570: incomplete (complex - load a civ list through the PropertyManager; approximate). difftest FAIL: memory pool mismatch.
+00bc7610 3   FUN_00bc7610: incomplete (complex - hashtable lookup of a resource factory list; approximate). Declared __cdecl but the original is `ret 8` (2 stack args + ecx). Equiv UNSUPPORTED (symbol not found).
+00bc7ac0 1   FUN_00bc7ac0: incomplete (complex - age records / expire the world events; approximate). Declared __fastcall but the original is `ret 4` (1 stack arg + ecx). Equiv UNSUPPORTED (symbol not found).
+00bc7e80 171 WE::FUN_00bc7e80: incomplete (pop the record at the free cursor and reinitialise it; grow/shrink + copy-construct). difftest FAIL: memory pool mismatch.
+00bc8080 1   FUN_00bc8080: incomplete (complex - spatial query; approximate, 384 bytes, `ret 0x10`). Declared __cdecl but the original is thiscall/__stdcall with 4 stack args. Equiv UNSUPPORTED (symbol not found).
+00bc8200 271 FUN_00bc8200: incomplete (complex - re-init the embedded hier grid; approximate; uses DAT_0168ab70/74/78). Equiv UNSUPPORTED (unresolved cHierGrid_Shutdown/Init).

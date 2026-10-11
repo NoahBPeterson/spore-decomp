@@ -1,0 +1,11 @@
+# va  diff-bytes  reason  (incomplete / approximate: not counted as decompiled)
+00f21850   79  property-driven scale/orientation setter: Ghidra could not recover two indirect jumps, so only
+               the prologue and the property fetch are reconstructed.
+00f21bb0  187  property fetch returning a 3-dword handle: the unaff_ESI object and the FUN_00f20be0 /
+               FUN_00f20c60 branches are approximated.
+00f21d30   24  effects-manager position spawn: only the property fetch and the fixed target template are
+               reconstructed; the matrix copy and spawn call are not recovered.
+00f21e60  315  held-object spawn: vtable transform reads transcribed; the FUN_00eede20 spawn paths are
+               approximated (variadic signature unknown).
+00f22070  304  SP::UpdateHeldObject: held-transform extraction and candidate-world query approximated; the
+               candidate iteration loop over the eastl vector is not fully recovered.

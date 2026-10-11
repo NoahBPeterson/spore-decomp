@@ -1,0 +1,4 @@
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a30460  -   EA::Audio::System::SetProperty approximated; complete body but references an undefined SysMap::insert stub; difftest UNSUPPORTED (unresolved ?insert@SysMap@@QAEXIM@Z)
+00a30e10  -   eastl::fixed_hash_map ctor approximated: base fixed_pool/hash ctor arg order not reproduced; difftest FAIL (5/5, wild memset write)
+00a31040  -   fixed_vector<uint32,1000> ctor approximated: original inlines an SEH-guarded resize(0) whose frame we do not reproduce; difftest FAIL (resize not run identically, storage[1000] diverges)

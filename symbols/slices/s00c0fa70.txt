@@ -1,0 +1,18 @@
+00c0fa70 find animation entry by mask bit (0x24-stride table at +0xe40)
+00c0fae0 clear animation binding and release (0x24-byte object)
+00c0fb40 release animation binding handle (+0x1c)
+00c0fb80 notify animated creature (state 1)
+00c0fba0 serialize vector of animation bindings via IO stream
+00c0fc10 dispatch element callback to object at +0x20
+00c0fc40 uniquify pointer array (release duplicates)
+00c0fcf0 read animation bit array (0x58 bits) from IO stream
+00c0fda0 write animation bit array (0x58 bits) to IO stream
+00c0fe30 copy animation binding (addref/release +0x20)
+00c0fea0 swap two animation bindings
+00c0ffc0 reverse-copy array of 0x24-byte bindings
+00c10050 play animation by id/name predicate
+00c10210 play-resolved wrapper (flag 1)
+00c10230 play-resolved wrapper (flag 0)
+00c10250 resolve + apply animation remap ids
+00c10330 pack byte array -> remap id and apply
+00c103f0 build cAnimationRemapping singleton

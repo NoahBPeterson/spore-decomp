@@ -1,0 +1,10 @@
+# va        symbol
+011f1400    ?D3D9SoftStateDispatch@GlobalState@graphics@rw@@SAXI@Z
+011f1810    ?D3D9RenderStateDispatch@GlobalState@graphics@rw@@SAXXZ
+011f18b0    ?D3D9RasterDispatch@GlobalState@graphics@rw@@SAXXZ
+011f1900    ?D3D9PaletteDispatch@GlobalState@graphics@rw@@SAXXZ
+011f1950    ?D3D9TextureStageStateDispatch@GlobalState@graphics@rw@@SAXXZ
+011f1a10    ?D3D9SamplerStateDispatch@GlobalState@graphics@rw@@SAXXZ
+011f1b20    ?D3D9ClearDirtyFlags@GlobalState@graphics@rw@@SAXXZ
+011f1c20    ?Dispatch@GlobalState@graphics@rw@@SAXXZ
+011f1d70    ?D3D9Reset@GlobalState@graphics@rw@@SAXXZ

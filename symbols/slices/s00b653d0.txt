@@ -1,0 +1,8 @@
+00b653d0 FUN_00b653d0  # hk geometry build/transform helper
+00b655f0 m655f0@C103  # geometry shallow/deep copy (thiscall, ret 4)
+00b65660 FUN_00b65660  # pick larger of two geometries by sum-of-squares
+00b65710 FUN_00b65710  # normalize 4-vector (out, in)
+00b65820 FUN_00b65820  # enable/activate style object
+00b658c0 FUN_00b658c0  # read orientation quaternion
+00b65950 FUN_00b65950  # read position vector
+00b659f0 C103::FUN_00b659f0  # select geometry vs plane (register ABI)

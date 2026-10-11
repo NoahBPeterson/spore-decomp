@@ -1,0 +1,7 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00f21a90  152  power-up effect id selection: complete chain (tree lookup + name refcounts + id remap);
+               cl allocates the key/index registers differently. equiv=UNSUPPORTED (unresolved refcount /
+               id-lookup references).
+00f21cd0   92  eastl::multimap::equal_range: identical lower_bound/upper_bound tree walk; cl picks a
+               different callee-saved register set (ebp vs ebx) and a shorter prologue. equiv=PASS
+               (381 valid inputs, 100% instruction coverage).

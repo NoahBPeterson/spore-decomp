@@ -1,0 +1,17 @@
+011f6d10 FUN_011f6d10  # rw::graphics::(anonymous)::rwg_D3D9GetGeneratedPixelShader (find/generate+insert pixel-shader def) # no (UNSUPPORTED)
+011f6e80 FUN_011f6e80  # rw::graphics::D3D9PixelShaderDescriptor::DefaultLoadAndSelect (match default key else regenerate, SetPixelShader) # no (UNSUPPORTED)
+011f6f20 FUN_011f6f20  # attribute-offset generator (fills p+0x20 from byte table 0x171be38; edx = table) # no (PASS)
+011f6f60 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateInputStruct  # byte-exact
+011f7100 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateCurrentStruct  # byte-exact
+011f72a0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateOutputStruct  # byte-exact
+011f73c0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateDumpCurrent  # byte-exact
+011f7550 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateDumpOutput  # byte-exact
+011f7650 rw::graphics::`anonymous namespace'::rwg_D3D9BinaryFindVertexShader  # no (UNSUPPORTED, in-EAX count ABI)
+011f77d0 FUN_011f77d0  # save current vertex shader and clear it (device SetVertexShader 0) # byte-exact
+011f7800 FUN_011f7800  # restore saved vertex shader if changed # no (WEAK)
+011f7830 rw::graphics::D3D9VertexShaderChange  # record active shader + flags; mark soft state dirty # byte-exact
+011f7850 FUN_011f7850  # reset vertex-shader attribute state tables # byte-exact
+011f7870 FUN_011f7870  # copy attribute names/values (tables 0x170ee48/0x170ee68 -> 0x1711f00/0x1711f20) # byte-exact
+011f78b0 FUN_011f78b0  # rebuild attribute offsets (FUN_011f6f20) then remap (FUN_011fce20) # no (PASS)
+011f78d0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateVertexShader  # build/compile/install HLSL vertex shader # no (UNSUPPORTED)
+011f7b20 FUN_011f7b20  # rw::graphics::(anonymous)::rwg_D3D9GetGeneratedVertexShader (find/generate+insert vertex-shader def) # no (UNSUPPORTED)

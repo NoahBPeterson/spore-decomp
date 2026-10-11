@@ -1,0 +1,26 @@
+# va  diff-bytes  reason
+008de020  89  swizzle of 64-bit value; shift/pack instruction schedule differs
+008de0c0  172 EA::ResourceMan::ReadKey; wcstoul/StrtoU6416 parse branch layout differs
+008de280  18  Manager::GetLoadedResource compressor-vector scan; register allocation differs (equiv PASS)
+008de2d0  4   Manager::IsDatabaseRegistered database-list scan; register allocation differs (equiv PASS)
+008de310  68  Manager::FindDatabase database scan + virtual call; codegen differs (equiv WEAK)
+008de360  60  Manager::Fn8de360 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
+008de3b0  50  Manager::Fn8de3b0 compressor scan loop; loop shape/regalloc differs (equiv WEAK)
+008de450  187 ChangeSet::LowerBound rbtree lower_bound; codegen differs (equiv PASS)
+008de530  86  HashBase::DoRehash1; memset/allocation sequence codegen differs
+008de5e0  86  HashBase::DoRehash2; memset/allocation sequence codegen differs
+008de690  85  HashBase::DoRehash3; memset/allocation sequence codegen differs
+008de7f0  14  HashBase::DoFreeNodes; register allocation differs (equiv WEAK)
+008de840  64  AutoRefCount range-assign helper; register allocation differs
+008de890  63  AutoRefCount range-copy helper; register allocation differs
+008de8e0  129 InternalDatabaseList constructor; allocator-ctor codegen differs
+008de940  120 InternalDatabaseList::Add; lock/xchg list-insert codegen differs
+008debf0  95  Manager::DoDatabaseChanged tree walk; codegen differs (equiv WEAK)
+008decb0  53  AutoRefCount vector destructor; register allocation differs (equiv PASS)
+008ded00  196 hash-map insert; rehash-policy template codegen differs
+008dede0  30  AutoRefCount range release; interlocked sequence codegen differs (equiv WEAK)
+008dee30  31  AutoRefObj::operator=; interlocked sequence codegen differs (equiv PASS)
+008dee90  90  rbtree DoInsertValueImpl; payload copy/insert codegen differs (equiv PASS)
+008def20  79  AutoRefCount vector constructor; register allocation differs (equiv WEAK)
+008def80  66  AutoRefCount range release; interlocked sequence codegen differs
+008defe0  101 AutoRefCount range-assign; interlocked sequence codegen differs

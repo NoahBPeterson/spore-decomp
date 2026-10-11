@@ -1,0 +1,1 @@
+# Every function in slice s011b4660 is byte-exact (see manifest.txt).

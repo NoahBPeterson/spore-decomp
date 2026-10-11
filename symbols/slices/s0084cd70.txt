@@ -1,0 +1,17 @@
+0084cd70 GIF_read
+0084cde0 GifPutNetscapeBlock
+0084ce40 EGifPutExtension
+0084ceb0 EGifCloseFile
+0084cf20 EGifUpdateLSD
+0084cf90 GIF_wclose
+0084cfd0 _InitHashTable
+0084d000 _InsertHashTable
+0084d060 EGifOpenFileHandle
+0084d140 EGifPutScreenDesc
+0084d2a0 EGifCompressOutput
+0084d430 GIF_wopen
+0084d4c0 EGifSetupCompress
+0084d570 EGifCompressLine
+0084d6e0 EGifPutImageDesc
+0084d8d0 GIF_write
+0084dc90 PNG_read_data

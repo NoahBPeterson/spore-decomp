@@ -1,0 +1,9 @@
+# address  name  # evidence
+00849d20 SetStyle     # Canvas::SetStyle; /O2
+00849da0 ScalarDtor   # Canvas scalar deleting destructor
+00849df0 SetCaption   # Canvas::SetCaption
+008491a0 OnInput      # Canvas message handler (event dispatch 0x1ee1003)
+00849a40 Canvas       # Canvas::Canvas constructor (vftable 0x141ca70)
+00849230 WindowProc2  # Canvas::WindowProc (msg switch)
+00849b10 InitCanvas   # Canvas::Init
+00849e30 VecMsgInsert # eastl::vector<tagMSG>::insert

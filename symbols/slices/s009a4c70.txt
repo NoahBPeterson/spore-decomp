@@ -1,0 +1,8 @@
+009a4c70 EA::RectT<float>::RotA  # plane (x,w)/(y,z) rotation of 4 floats; called with (0.0f,1.0f)
+009a4d60 EA::RectT<float>::RotB  # plane (x,z)/(y,w) rotation
+009a4e40 EA::RectT<float>::RotC  # plane (x,y)/(z,w) rotation
+009a4f10 checkerlib::matrix_to_quaternion  # 3x3 -> quaternion (trace / largest diagonal)
+009a5090 nSPCreatureAnim::PlaySound  # PDB; event name -> EA::Audio::GetSystemAT() vtable calls
+009a5650 nSPCreatureAnim::ComputeEventLocationData  # event flags&0xf -> target location data
+009a5860 nSPCreatureAnim::GetEventDataAs32Bits  # event kind -> masks / bone pose lookup
+009a59a0 nSPCreatureAnim::GetEventDataAsFloat  # forwards to GetEventDataAs32Bits

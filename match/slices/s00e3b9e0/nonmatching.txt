@@ -1,0 +1,4 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00e3c000   96  UI manager rebind: full translation (operator new + create-effect + attach); call/vcall
+               layout matches, register scheduling and temp-object lifetime differ. equiv=WEAK
+               (278 valid inputs, coverage limited by early faults while walking engine pointers).

@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+008491a0  116  EA::App::Canvas::OnInput (/O2 /MD /Gy /TP): event dispatch reconstructed; the stack CanvasEvent frame layout (vtable-result buffer at +0x10 and its self-pointer at +0x08) is not byte-exact. difftest equiv: PASS (265 valid inputs, 100.0% coverage)
+00849a40  71   EA::App::Canvas::Canvas (/O2 /MD /Gy /TP): identical length and instruction set; MSVC scheduled the empty-WString constant stores (mpBegin/mpEnd = 0x1667bac) above the vtable/first-member stores instead of after m20. difftest equiv: UNSUPPORTED (our code stores its own vftable address; original stores image address 0x141ca70)

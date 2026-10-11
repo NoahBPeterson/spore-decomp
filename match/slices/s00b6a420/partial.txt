@@ -1,0 +1,14 @@
+# va  size (ours/orig)  reason
+00b6a420  263/264  full drawing-dispatch switch is byte-identical except the FUN_00b69cf0 call, which uses
+                   an EA register convention (object in EAX, args in ECX/EDX); a normal C++ call pushes the
+                   object, so 26 bytes differ.
+00b6a720  589/585  called with the label in EDI, a float pair in EAX and further operands read out of the
+                   caller's stack; not expressible in C++.  Stand-in passes the pair as arg2; widget/tooltip
+                   sequence reconstructed, not byte-exact.
+00b6a970  86/89    label arrives in EAX and is forwarded to FUN_00b69010 in ESI; stand-in takes it as arg1.
+00b6a9d0  219/269  label in EAX, FUN_00b69010 in ESI; stand-in takes it as arg1.
+00b6aae0  167/217  label in EAX, FUN_00b69010 in ESI; stand-in takes it as arg1.
+00b6abc0  512/552  label in EAX, FUN_00b69010 in ESI; stand-in takes it as arg1.
+00b6adf0  574/687  label in EAX, FUN_00b69010 in ESI; the tooltip cTribe/eastl-string/cString sequence is
+                   modelled with opaque calls; not byte-exact.
+00b6b0a0  214/253  label in EAX, FUN_00b69010 in ESI; stand-in takes it as arg1.

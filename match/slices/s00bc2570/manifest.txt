@@ -1,0 +1,17 @@
+# source  symbol  original VA  [flags override]
+slices/s00bc2570/s00bc2570.cpp  ?SetDayLength@cTimeOfDay@@QAEXM@Z        00bc2830  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc28c0@cTimeOfDay@@QAEXM@Z       00bc28c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2b30@cTimeOfDay@@QAEMPAX@Z     00bc2b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2b60@cTimeOfDay@@QAEMPAX@Z     00bc2b60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2b80@cTimeOfDay@@QAEHPAX@Z     00bc2b80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2c00@@YG_NPAX@Z                00bc2c00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?Destroy@cEditorRes@@QAEPAXD@Z          00bc2ea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2f00@cTimeOfDay@@QAEXMPAX@Z    00bc2f00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc2f70@cTimeOfDay@@QAEXHPAX@Z    00bc2f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?Start@cSPTimer@@QAEXXZ                 00bc30f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?Stop@cSPTimer@@QAEXXZ                  00bc3110  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?Restart@cSPTimer@@QAEXXZ               00bc3130  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc3150@cSPTimer@@QAEX_K@Z        00bc3150  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc3170@cSPTimer@@QAEXXZ          00bc3170  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?GetElapsedTime@cSPTimer@@QAE_KXZ       00bc3190  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bc2570/s00bc2570.cpp  ?FUN_00bc31c0@cSPTimer@@QAEPAU1@P6A_KXZ@Z  00bc31c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

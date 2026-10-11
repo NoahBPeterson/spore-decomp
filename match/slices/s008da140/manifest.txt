@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+slices/s008da140/s008da140.cpp  ?CompactDatabase@DatabasePackedFile@@QAE_NXZ  008da8b0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?Flush@DatabasePackedFile@@QAE_NXZ  008daba0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?DoFreeNodes@BmpGlyphHash@@QAEXPAPAXI@Z  008dac90  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?FUN_008dace0@@YAXPAPAUSortNode@@0@Z  008dace0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?FUN_008dadd0@@YAXPAPAUSortNode@@HHHPAU1@H@Z  008dadd0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?GetTotalSize@HoleSet@@QAEHXZ  008dae40  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008da140/s008da140.cpp  ?Erase@HoleSet@@QAEXPAPAXPAX@Z  008dae70  /O2 /MD /Gy /TP /GS- /arch:SSE

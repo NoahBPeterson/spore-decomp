@@ -1,0 +1,2 @@
+00b30d70  159  SP::GetGameTerrainCursor; complete behavior, but extern-global references carry no reloc in the object and the new-object field stores are not dead-store-eliminated like the original
+00b30e80  109  cGameTerrainCursor::func9Ch_; complete behavior (equiv=WEAK); loop-bound reload is CSE'd where the original reloads mpEnd-mpBegin every iteration

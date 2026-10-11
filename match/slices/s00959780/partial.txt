@@ -1,0 +1,7 @@
+# va  diff-bytes  reason (incomplete / not equivalence-testable)
+00959780  1095  Fn00959780 (window message dispatcher): complete logic but difftest FAIL (5/13 valid inputs mismatched; first eax&0xffff 0xb00 vs 0); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2; regalloc/switch layout differ
+00959b70  290  b70: complete logic but difftest FAIL (5/6 valid inputs mismatched; first eax 0x801 vs 0x1, upper-bits/regalloc); regalloc differ
+00959e00  402  DetachWindow: complete logic but difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers); regalloc/order differ
+00959fe0  162  fe0: complete logic but difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4); ebx-vs-edx argv reg + folded null test differ
+0095a140  852  UpdateRenderState: complete logic but difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 (ours 1200B vs orig 973B)
+0095a510  5  RenderWindow: complete logic; 5 bytes differ (lea reg choice for &ev and win+4); difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179)

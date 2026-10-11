@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+#
+# Byte-exact: none.  Slice s008d7220 is EA::ResourceMan::DatabaseDirectoryFiles (Spore
+# ResourceMan) plus the eastl::rbtree<Key,pair<const Key,DDFRecordListData>> member functions
+# it embeds.  No ResourceMan source ships in the ModAPI/EAWebKit drops used elsewhere in this
+# repo, so match/slices/s008d7220/s008d7220.cpp is a hand reconstruction from the image
+# (class layout + observable algorithms).  All 11 addresses are recorded in nonmatching.txt /
+# partial.txt (0 matched / 6 nonmatching / 5 partial); see symbols/slices/s008d7220.txt.
+#
+# Build flags (all rows): /O2 /MD /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc

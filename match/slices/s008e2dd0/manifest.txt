@@ -1,0 +1,9 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e2ed0  008e2ed0
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e3600  008e3600
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e38b0  008e38b0
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e3900  008e3900
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e3960  008e3960
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e42c0  008e42c0
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e42d0  008e42d0
+slices/s008e2dd0/s008e2dd0.cpp  Fn8e42e0  008e42e0

@@ -1,0 +1,34 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+# RenderWare 4 vertex/index-buffer pool manager, built with /vc71 + /GL /LTCG in the retail
+# object, so a single-object /vc71 compile cannot reproduce the cross-call register allocation
+# and scheduling.  difftest = tools/difftest/equiv.py verdict (default inputs).
+011f4f20  113  IndexBuffer::Lock (ECX + 2 stack args, ret 8): complete; difftest PASS (399 valid,
+               100% cov). Lock flags / offset-size derivation identical; register schedule differs.
+011f5010   83  IndexBuffer::Initialize (6 cdecl args): complete; difftest UNSUPPORTED (the harness
+               discards every input because the allocation path reaches VirtualAlloc).
+011f50d0  251  IndexBuffer::Fixup (Arena read callback): complete; difftest WEAK (204 valid, 34.7%).
+               The arena-id fixup, D3D Lock/Unlock and the byte/word copy loop all match; our
+               frame is 53 bytes larger (register spill layout), so chk cannot size-match it.
+011f51d0   72  IndexBuffer::GetResourceDescriptor: complete; difftest PASS (400, 100%). Builds the
+               8-dword descriptor temp and copies it (rep movsd) exactly; push order differs.
+011f5270   66  Destroy vertex-buffer pool: complete; difftest WEAK (400, 16.1%). Both list walks and
+               the three allocator teardowns match; global reload schedule differs.
+011f5330  312  Vertex-buffer pool range allocate: complete; difftest UNSUPPORTED (VirtualAlloc path).
+               Keyed entry list, size-class search, CreateVertexBuffer + list insert all mirrored.
+011f5500  252  Vertex-buffer pool range free (coalesce): complete; difftest WEAK (400, 5.3%).
+               Adjacent-range coalescing loop reconstructed from the disassembly.
+011f5630   45  Reset vertex-buffer pool state: complete; difftest PASS (400, 64.7%). Slot zeroing and
+               buffer Release walk match; the slot-zero stores are scheduled before the head load.
+011f56b0  144  Get/create vertex buffer of a given size: complete; difftest UNSUPPORTED (VirtualAlloc).
+               Free-list reuse, CreateVertexBuffer and the out-pointer store all reconstructed.
+011f57a0  296  Allocate within the current vertex-slot: complete; difftest WEAK (400, 8.8%).
+               Slot search / grow / Lock(offset,size) reconstruction; register-heavy, unverifiable
+               byte-exactly against the /LTCG copy.
+011f5950   13  Advance the current vertex-slot: complete; difftest PASS (400, 91.7%). Instruction
+               sequence is identical; only the counter/zero registers are swapped (ECX<->EAX).
+011f5a40   35  Create the vertex-slot pool: complete; difftest UNSUPPORTED (VirtualAlloc). Entry loop,
+               pool-size store and failure returns all reconstructed.
+011f5b10   66  Destroy index-buffer pool: complete; difftest WEAK (400, 16.1%). Both sub-list walks
+               and the three allocator teardowns match the /LTCG original structurally.
+011f5bd0  323  Index-buffer pool range allocate: complete; difftest UNSUPPORTED (VirtualAlloc path).
+               Keyed entry list, size-class search, CreateIndexBuffer + list insert all mirrored.

@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00a196f0  1640  complete; large EA::Variant array read switch (scalar + array cases, 0x34728492 object tag); ghidra-driven reconstruction, not byte-exact
+00a19d60  121  complete; EA::Audio::FactoryConfiguration constructor (EH frame, xchg-based member reset, Mutex + intrusive list init); no exact source form for the SEH/register shape
+00a19e00  110  complete; EA::Audio::FactoryConfiguration destructor (EH frame, vector delete + rbtree nuke + Mutex dtor); EH prologue not reproduced
+00a19e90  256  complete; EA::Audio::ResourceConfiguration::Read (property map resize + per-entry ReadVariant loop; negative-size child path)
+00a19fb0  364  complete; EA::Audio::ResourceConfiguration::SetParent (EH frame, vtable-dispatched read + debug object error path)
+00a1a110  66  complete; EA::Audio::ResponseCurve::GetOutputValue binary search; cl folds the `lo <= 0` fallthrough into an early return so the cold-path layout differs
+00a1a1e0  266  complete; eastl::vector<float>::insert (reallocating insert); original uses a different insertion idiom (DoInsertValue + memmove) than the reconstructed form
+00a1a2f0  391  complete; eastl::vector<ResponseCurveData>::insert(pos,n,value); in-place branch reproduced, realloc branch needs the original container builtins
+00a1a500  107  complete; eastl::vector<ResponseCurveData>::resize; branch/loop layout differs (the original arithmetic shape is not reproducible in plain C++ here)

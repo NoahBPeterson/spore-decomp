@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+slices/s008daff0/s008daff0.cpp  Reset@HoleSet  008db3a0  /O2 /MD /Gy /TP /GS- /arch:SSE
+slices/s008daff0/s008daff0.cpp  GetFileInfo@PFIndexModifiable  008db810  /O2 /MD /Gy /TP /GS- /arch:SSE

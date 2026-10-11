@@ -1,0 +1,3 @@
+00b308f0  -  IsCursorPointInRect-style bounding-box/projection routine; math reconstructed from the decompile but call dataflow and scale/clamp roles not fully verified
+00b31030  -  cGameTerrainCursor::func7Ch_ drag-select; projection call and per-object filter branch roles guessed
+00b313b0  -  cGameTerrainCursor::funcA0h_ selection-commit; cArithmeticaProgram temporary copy emulated through Assign, several call arguments approximate

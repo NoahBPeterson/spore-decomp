@@ -1,0 +1,7 @@
+009c4a30 nSPCreatureAnim::FinalizeCreature  # ComputeHierarchy + FUN_009b6b10 AABB + rebuild (FUN_009c1d30/b54a0/b5580/b5930/bfa20, InitWiggles, FUN_009b5360, FUN_009b5ce0); returns body-count<0x100
+009c4b90 nSPCreatureAnim::dynamics_walking::~dynamics_walking  # delete[] vert(0x38)/feet(0x24), groups.DoDestroyValues(0x9c3240)+delete[] groups.begin(0x10)
+009c4bf0 nSPCreatureAnim::creature_instance_data::~creature_instance_data  # hashtable DoFreeNodes(0x17a0), free node block(0x17a4), delete[] mWiggles(0x1694)/Bodies(0x2e4)/[0x24c], ~dynamics_walking(0x15b8), FUN_009b59c0(0x2f8), Release [0x294], static_data->Release
+009c4cc0 nSPCreatureAnim::creature_instance_data::Release  # refcount at [this+0x14]; on 0 run dtor + operator delete[](this)
+009c4d10 creature_instance_data::UnlinkStaticData  # release [0x294], FUN_009cb4f0, clear [0xc]
+009c4d40 nSPCreatureAnim::creature_instance_data::Clear  # flag-gated static_data release; bodies/wiggle vectors cleared; ~200 stores resetting the gait/rig state; FUN_0099ce40; FUN_009e3f70(6,4); two new[] buffers
+009c52a0 nSPCreatureAnim::InitCreatureInstance  # cdecl(static,inst,7 floats,int): body-count guard, Clear, static_data ref, requested pos/rot, per-body init, BuildBodyList/FUN_009b6360, gait setup, InitWiggles

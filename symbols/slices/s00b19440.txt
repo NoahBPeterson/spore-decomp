@@ -1,0 +1,30 @@
+# slice s00b19440 - names inferred from call sites, vtables, member layout and call behaviour
+# (no PDB names were available for these VAs)
+00b19440  cInput::F19440(unsigned type, unsigned id) -> bool        # event handler: GetRoot()->Get34() returns an IObj (vtable slot +0x34); GetRoot()->Get3c(buf,0) fills the payload buffer (slot +0x3c); e->GetObjId(id) @0xb18e70; then virtual Fn30(type,id,e,buf,flag) at vtable+0x30; returns false
+00b194d0  cInput::F194d0(unsigned type, unsigned id, unsigned x, unsigned flag) -> bool  # stopwatch repeat detection: reads g_sw @0x167c280 via GetElapsedTime @0x93a3a0 and compares against g_13eb8a0 before Fn30 dispatch; type 1/2 branch
+00b195f0  cInput::F195f0(unsigned type, unsigned id, unsigned x, unsigned flag) -> bool   # e->Query(0x17f243b) then Fn30(type=3, id=arg2, .., lookup arg4)
+00b196a0  cInput::F196a0(float x, float y, unsigned key, unsigned flag) -> bool           # type 6/7; coords arg1/arg2, key arg3, repeat threshold at this+0x70
+00b197b0  cInput::F197b0(unsigned a, unsigned b, unsigned id, unsigned flag) -> bool      # type 8; id=arg2, lookup arg4
+00b19810  cInput::F19810(unsigned a, double b) -> bool                                    # type 9; when b!=0 GetRoot()->Get64(0x703d8d99) (vtable +0x64)
+00b19890  cInput::F19890(unsigned a, unsigned b)  # reset this+0xdc buffer (write 0, end=begin), then virtual Fn20(a,b,b) at vtable+0x20
+00b198d0  cArgCommandCtor::Init(int a) -> void*   # EA::ArgScript command object ctor/init: base ctor @0x83c800, store arg at +0x10, install vtable @0x145d210; returns this (matches the ArgScript cCommandBase-family ctor shape); modelled as a returning Init because the original ends mov eax,esi/ret 4
+00b198f0  FUN_00b198f0(const char* lit, const string8* s) -> bool  # literal vs string8: strlen(lit), compare size, then byte/dword memcmp against s->mpBegin
+00b199f0  Elem38Vector::DoAllocate(unsigned n, void* tag) -> Elem38Vector*  # allocate n 0x38-byte elements via SPORE_ALLOC (0xf473a0); begin=end=block, cap=block+n; returns this
+00b19a50  FUN_00b19a50(const string8* s) -> int   # {name,value} table lookup @0x15681c0 (9 entries) via StringEqLit @0x555020
+00b19a90  FUN_00b19a90(const string8* s) -> int   # table lookup @0x1568208 (11 entries)
+00b19ad0  FUN_00b19ad0(const string8* s) -> int   # table lookup @0x1568260 (10 entries)
+00b19b10  FUN_00b19b10(void* container, const char* lit) -> int  # walk an intrusive red-black map (leftmost at container+8, anchor at container+4) comparing each node's string8 key at +0x14; returns the int at +0x10
+00b19b60  cSPEditorPaintTheme::GetMostFrequentPaintFromMapList() -> bool  # tally paint usage across a map list and pick the most frequent
+00b19c80  Variant::SetInt(int arg) -> Variant*    # zero +0x10/+0x12 then Set(0x11,0x29,arg,4,1) @0x93dd80; returns this
+00b19cb0  StrTree::LowerBound(RBNode** out, const string8* key)  # RB lower_bound using FUN_005f7870(nodeBegin,keyBegin,minLen) over keys at node+0x10/+0x14; root at this+0xc
+00b19d40  Elem38::operator=(const Elem38& o) -> Elem38&  # string8 assign @0x454cb0 of o.name then copy fields +0x10..+0x34 (the dword at +0xc is not copied)
+00b19df0  Elem38_Copy(Elem38* first, Elem38* last, Elem38* dest) -> Elem38*  # forward copy of 0x38-byte records
+00b19e70  Elem38_CopyBackward(Elem38* first, Elem38* last, Elem38* dest) -> Elem38*  # backward copy of 0x38-byte records
+00b19ef0  FUN_00b19ef0(const string8* s) -> int   # {name,value} table @0x15680e8 (0x1b entries); on miss sscanf("%x") @0x14129c4 when s contains 0x14365d8, else sign-extend the last char
+00b19f70  cInput::LoadResource(const char* name, void* owner, char flag) -> bool  # resource load: mgr @0x67dcd0, ConvertToString16 @0x93c5a0, mgr vtbl+0x78, OpenRecordAsStream @0x686490, stream read, FUN_008d5c50(...,"Windows"@0x141c920), 7-dword record into this+0x74, then this->vtable[0x28](owner)
+00b1a0f0  Elem38::Elem38(const Elem38& o)  # copy ctor: string8 range-copy of o.name then fields +0x10..+0x34
+00b1a250  FUN_00b1a250(const string8* s) -> int  # map/string find @0x15680cc (Find @0xb20930, anchor 0x15680d0) returning the value at node+0x20, else atol(s->mpBegin)
+00b1a290  FUN_00b1a290(const string8* s) -> int  # compare against "TerrainObject" @0x145d228; else build a 1-char "c" (g_1414a90) string8, Eastl operator+ @0x618890 with s, then FUN_00b214e0(result)
+00b1a350  Elem38Vector::Elem38Vector(const Elem38Vector& o)  # copy ctor: DoAllocate then Elem38_UninitCopy5 @0xb1a1d0
+00b1a540  Elem38Vector::DoAllocateAndCopy(unsigned n, Elem38* first, Elem38* last) -> Elem38*  # allocate n 0x38-byte elements then Elem38_UninitCopy5 @0xb1a1d0; returns the new block
+00b1a5a0  IntStringMap::DoCreateNodeCopy(const IntStringNode* src, IntStringNode* parent) -> IntStringNode*  # allocate 0x24, copy the IntStrPair via CopyFrom @0xb20b90, link parent, copy colour

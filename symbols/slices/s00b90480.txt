@@ -1,0 +1,23 @@
+00b90480 SP::`anonymous namespace'::GetRandomPlants  # PDB candidate on card; (this) fastcall
+00b90560 FUN_00b90560  # descriptive; (int key, vector<int>* out, int n) cdecl; mission plant-profile list
+00b906a0 FUN_00b906a0  # descriptive; (float a, float b) cdecl; clamped random in [a,b]
+00b906f0 FUN_00b906f0  # descriptive; (uint face,int,int,int) cdecl; WrapCubeFace normalize loop
+00b90720 FUN_00b90720  # descriptive; (char* p) fastcall; *p=0, returns p
+00b90730 FUN_00b90730  # descriptive; (int,int) cdecl; +0xc greater-than
+00b90750 FUN_00b90750  # descriptive; (int,int,int,int) cdecl; cell -> record pointer stride 0xc
+00b907a0 FUN_00b907a0  # descriptive; (int,int,int,int) cdecl; cell -> flags dword at +4
+00b907f0 FUN_00b907f0  # descriptive; (int,int,int,int,int) cdecl; cell visibility classify
+00b908a0 FUN_00b908a0  # descriptive; (int,int) cdecl; +0x11c compare
+00b908c0 FUN_00b908c0  # descriptive; () cdecl; clear bits 0x70 in all cells
+00b90900 VtThing::CallABB  # descriptive; (int a,int b) thiscall; vt[0x10](a,b,b)
+00b90920 VtThing::CallAAA  # descriptive; (int a) thiscall; vt[0x10](a,a,a)
+00b90960 FUN_00b90960  # descriptive; find first element whose hash==key
+00b909a0 FUN_00b909a0  # descriptive; copy_if elements whose hash==key
+00b909f0 FUN_00b909f0  # descriptive; insertion sort (element type int)
+00b90a40 FUN_00b90a40  # descriptive; insertion sort with refcounted pointers
+00b90b10 FUN_00b90b10  # descriptive; heap sift-up with comparator
+00b90bd0 FUN_00b90bd0  # descriptive; median-of-three comparator
+00b90c50 FUN_00b90c50  # descriptive; clear terrain bit + notify
+00b90cb0 FUN_00b90cb0  # descriptive; (float* p,float r) cdecl; sphere-list distance < r
+00b90d70 FUN_00b90d70  # descriptive; (int* cell,int dim,float angle) cdecl; cube-face angle test
+00b90ea0 FUN_00b90ea0  # descriptive; (int* model,float* dir,float r1,float r2,float r3) cdecl; 3-radius march

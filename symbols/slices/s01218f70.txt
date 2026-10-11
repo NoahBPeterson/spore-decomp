@@ -1,0 +1,5 @@
+# address  name  # evidence
+01225310 FUN_01225310  # dynamic initializer of singleton 0x15d2c60 (ctor + atexit); /Od
+01225340 FUN_01225340  # dynamic initializer of singleton 0x15d29c8 (ctor + atexit); /Od
+01225370 FUN_01225370  # dynamic initializer of singleton 0x15d2964 (ctor + atexit); /Od
+01226f30 FUN_01226f30  # zero-init of smart-pointer global 0x15d2dbc + atexit; /Od

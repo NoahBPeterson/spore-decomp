@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+00ac6b90  47  complete; cGroundLayer ctor (cGonzagoSubsystem base + three vtables + floats + empty embedded vector); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
+00ac6e20  2  complete; cGroundLayer scalar deleting destructor (vtable-store vs load scheduling tie-break); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (265 valid, 100% cov)
+00ac7680  167  complete; addInterpolated (sqrtf distance + two alpha ramps + push_back/operator=); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (393 valid, 98.4% cov)
+00ac79d0  7  complete; getContainer (ternary codegen tie-break: jne/ret vs je/xor/ret); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
+00ac7910  59  complete; ensureContainer (EASTL alloc 0x60/"Simulator" + cGameBundleGroundContainer ctor + vtable swap + vt[10](0)); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (381 valid, 89.1% cov)
+00ac7080  62  complete; clearVec (erase-all; reproduces the divide-by-0x3c negative-count magic); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
+00ac70c0  87  complete; reset (zero +0x24, inline erase-all, FUN_0067dd50()->vt[20](0xb)); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (398 valid, 100% cov)
+00ac7980  23  complete; destroyContainer (thiscall vt[1] via VObj dispatcher); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (275 valid, 27.3% cov)
+00ac79a0  35  complete; removeNoun (cGameNounManager::RemoveNoun then vt[1]); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (278 valid, 36.8% cov)
+00ac7790  53  complete; createNoun_7790 (noun construction via NounMgr + attach through vt[2]); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (241 valid, 26.5% cov)
+00ac79e0  2  complete; cleanup_79e0 (noun teardown via vt[6]/vt[3]/vt[7]); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (151 valid, 15.8% cov)
+00ac7a40  2  complete; drainNouns_7a40 (noun pop loop); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (331 valid, 22.2% cov)

@@ -1,0 +1,20 @@
+00ac6b90 cGroundLayer::cGroundLayer  # ground-layer ctor: cGonzagoSubsystem base + vtables 0x1459f50/0x1459f4c/0x1459f3c, floats at +0x28..+0x40, empty point vector at +0x44
+00ac6c40 cSPTransform::cSPTransform  # copy ctor: two words, four floats at +4..+0x14, Matrix3::Assign (0x41cb40) on +0x14, float at +0x38
+00ac6c90 eastl::do_copy<cSPTransform*>  # raw 0x3c-byte element copy (first,last,dst), returns advanced dst
+00ac6da0 eastl::do_assign<cSPTransform*>  # element copy through operator= (0x537dc0) plus the +0x38 float tail
+00ac6de0 eastl::copy_backward<cSPTransform*>  # backward element copy via operator= + float tail
+00ac6e20 cGroundLayer::scalar_deleting_dtor  # reset vtables, free the point vector at +0x44, destroy the cGonzagoSubsystem base
+00ac6e80 eastl::vector<cSPTransform>::DoInsertValue  # insert one 0x3c-byte element (user copy ctor 0xac6c40) at position, grow path reallocs
+00ac6fa0 eastl::vector<cSPTransform>::push_back  # append a default transform (identity matrix from 0x167a2cc/d0/d4 and 0x167a2dc)
+00ac7080 cGroundLayer::clear  # clear the point vector at +0x44 (erase-all)
+00ac70c0 cGroundLayer::reset  # zero +0x24, clear the point vector, notify the subsystem via virtual +0x50(0xb)
+00ac7120 cPathBuffer::buildMesh  # build a trail/ribbon mesh from the point vector (viewer matrix at +0x1c, debug-render scope 0x6dde30, 0x18-byte vertex stream via 0x6dde90)
+00ac7680 cGroundLayer::addInterpolated  # append a transform interpolated between two distance limits (float +0x28..+0x40)
+00ac7790 createNoun  # create a ground noun via NounManager (0xb3d300) and attach it
+00ac78a0 cGroundEditorRes::cGroundEditorRes  # editor-resource ctor: cGonzagoSubsystem base + vtables 0x1459fc8/0x1459fc0, +0x1c = 0
+00ac7910 cGroundEditorRes::ensureContainer  # lazily (re)create the cGameBundleGroundContainer at +0x1c and reset it via virtual +0x28(0)
+00ac7980 cGroundEditorRes::destroyContainer  # destroy the container at +0x1c
+00ac79a0 cGroundEditorRes::removeNoun  # RemoveNoun the container then destroy it
+00ac79d0 cGroundEditorRes::getContainer  # return container +0x34 or 0
+00ac79e0 cleanup  # remove/destroy the noun registered at +0x128
+00ac7a40 drainNouns  # pop the noun vector until empty, releasing each noun

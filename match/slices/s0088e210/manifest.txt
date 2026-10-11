@@ -1,0 +1,6 @@
+# source  symbol  va  flags
+#
+# Byte-exact: none.  All 21 addresses of slice s0088e210 are recorded in nonmatching.txt
+# (0 matched / 21 nonmatching / 0 partial); see symbols/slices/s0088e210.txt for identities.
+#
+# flags: /O2 /MT /GS- /GR- /TP /arch:SSE /Iscratch_s00880170_inc /Iscratch_s0088e210_inc

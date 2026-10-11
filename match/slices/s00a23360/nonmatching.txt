@@ -1,0 +1,10 @@
+# va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+00a23830  19  ?DoInsertKey@EHTable@@QAEPAUEInsertRes@@PAU2@PBHI@Z: difftest UNSUPPORTED (unresolved RehashRequired + operator new); table-slot insert structurally reproduced
+00a23920  93  ?Destroy@RefVec@@QAEXXZ-style resource release: difftest PASS (264 valid inputs, 77.5% coverage); frame/temp slots differ
+00a23db0  119 RDD::FindById: difftest UNSUPPORTED (0/400 valid, read faults on random inputs); complete implementation
+00a24530  -   RDD pool clone node: difftest UNSUPPORTED (unresolved operator new ??2@YAPAXIPBDHH0H@Z); complete implementation
+00a24750  144 PHTable::EraseNode variant: difftest UNSUPPORTED (0/400 valid, write faults); complete implementation
+00a247f0  65  EA::Audio::ResourceDeviceDriver::ResourceDeviceDriver: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact codegen
+00a24850  35  ParseResman: difftest UNSUPPORTED (0/400 valid, read faults); complete implementation
+00a248a0  40  ProfileTimer::ProfileTimer(void*): difftest PASS (400 valid inputs, 85.2% coverage); equivalent, non-exact
+00a24900  19  ProfileTimer::Accumulate: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact

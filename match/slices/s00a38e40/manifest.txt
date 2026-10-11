@@ -1,0 +1,6 @@
+slices/s00a38e40/s00a38e40.cpp  ?CreateVoice@cEmitterSndPlayer@Audio@SP@@QAE_NXZ  00a38ea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a38e40/s00a38e40.cpp  ?Reset@cEmitterSndPlayer@Audio@SP@@QAEXXZ  00a38ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a38e40/s00a38e40.cpp  ?SetCommandComplete@cEmitterSndPlayer@Audio@SP@@QAEXM@Z  00a38ee0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a38e40/s00a38e40.cpp  ?ConvertStringToMaskBit@cEventModifier@Audio@SP@@QAEIPBD@Z  00a390d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a38e40/s00a38e40.cpp  ?ReleasePrimitives@cEventModifier@Audio@SP@@QAEXXZ  00a39310  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s00a38e40/s00a38e40.cpp  ??0cEventModifier@Audio@SP@@QAE@XZ  00a398d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

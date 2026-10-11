@@ -1,0 +1,25 @@
+00ad79d0 CamInfo::init  # copy pos (3 floats) + orientation (4 floats), fill +0x1c..+0x28 with 1.0f, clear owner +0x2c
+00ad7a30 CamInfo::initDefault  # default basis floats (0x167a548/54c/550), zero orientation quad via 16-byte stack temp, link owner +0x2c, notify vt[0xbc]
+00ad7af0 CamInfo::getSpan  # p2c? vt[0x68] result[5]-result[2] : v3(+0x28)
+00ad7b10 CamInfo::getV1  # p2c? vt[0x70] : v1(+0x20)
+00ad7b30 CamInfo::getV0  # p2c? vt[0x74] : v0(+0x1c)
+00ad7b50 CamInfo::forwardC  # p2c? tail-forward to vt[0x2c]
+00ad7b70 CamInfo::getPtr  # p2c? vt[0x30] : &w0(+0xc)
+00ad7b90 CamInfo::getLocation  # mode==0x1654c01&&p2c ? C0d660::call(vt[0xb8](0xce9f6639), out) : p2c? copy vt[0x2c] pos : copy x/y/z
+00ad7c30 EditorRes::ctor  # vtables 0x13eb938/0x145b2f8/0x145b2ec, +4=0, +0xc=0
+00ad7ca0 EditorRes::copyCtor  # base vtables then member-wise copy (6 floats +0x10, 7 bytes +0x28, ref-count +0x30)
+00ad7d40 Sim::release16c  # release/decrement the object at +0x16c
+00ad7d60 Sim::stopCinematic  # post message id 0x5b07be5 via MessageServer, clear mode 0xb5b800
+00ad7dc0 Sim::goStop  # forward to helpers 0xad7740/0xad76f0 with "stopCurrent"(0x145b338)
+00ad7df0 Sim::goExit  # forward to helpers 0xad7740/0xad76f0 with "switchExit"(0x145b004)
+00ad7e20 Screen::isModal  # win[12]->+0x34 vt[0x28] & 1
+00ad7e40 Screen::setModal  # if win[12]->+0x34 vt[0x28]&1 != flag, set vt[0x7c] on +0x30 and +0x34 sub-widgets
+00ad7e90 Screen::setX  # win[12]->+0x48 vt[0x7c](1,x)
+00ad7ec0 PtrField::assign  # refcount-aware pointer swap of the +0x8 sub-object
+00ad7f00 CamInfo::assign  # copy-construct from another CamInfo, re-link owner +0x2c via vt[0xbc]
+00ad81b0 remove_copy_if  # list compactor (pred + vt[0]/vt[4] on each +0x8 sub-object)
+00ad8280 Screen::ctor  # dead base-vtable stores 0x14426a0/0x13ec458 then vtables 0x145b328/0x145b30c/0x145b2fc, zero layout/windows/subtitles
+00ad8300 Screen::init  # build cSPUILayout (spore_new+"Simulator"), Init(buf), bind 15 window ids, subtitles 0x832900, show
+00ad87d0 Screen::show  # toggle visibility of the layout/window scroll region and subtitles
+00ad8960 Sim::dtor  # destructor: swap vtables 0x145b38c/0x145b380 -> 0x13eb938/0x13ef094, release +0x6c, free when (flags&1)
+00ad89b0 Sim::sendXform  # build Matrix33 from +0x14, QuaternionFromMatrix33, forward pos/quat payloads through vt[4]

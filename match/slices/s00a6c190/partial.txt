@@ -1,0 +1,2 @@
+# va  reason
+00a6c190  Ctx2::Read: best-effort reconstruction of a 1459-byte byte-stream deserializer (two dispatch tables gTblB/gTblA, tag-word loop, u16 flag words). Source is complete and compiles, but it is not a faithful reproduction: chk diff 1195 bytes and the equivalence gate FAILs (5/6 valid inputs mismatched on eax; original coverage only 4.4%, 22/502 insns). Recompling byte-for-byte or behaviourally from the decompiled shape was not achievable in budget; left here rather than claimed as equivalent. flags /O2 /MD /Gy /EHsc /TP /arch:SSE

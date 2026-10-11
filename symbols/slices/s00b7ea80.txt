@@ -1,0 +1,21 @@
+00b7ea80 FUN_ea80  # cPlanetModel::FUN_ea80 cube-face cell lookup
+00b7ec50 FUN_ec50  # cPlanetModel::closest surface radius (cached)
+00b7ecc0 FUN_ecc0  # cPlanetModel::closest surface point query
+00b7ee70 FUN_ee70  # cPlanetModel::tangent frame construction
+00b7ef70 GetRadiusAt  # cPlanetModel::GetRadiusAt(coords)
+00b7efe0 FUN_efe0  # cPlanetModel::radius at position
+00b7f060 FUN_f060  # cPlanetModel::interpolate surface normal/height
+00b7f190 BuildSurfaceOrientation  # cPlanetModel::BuildSurfaceOrientation
+00b7f1f0 BuildSurfaceOrientation_2  # cPlanetModel::BuildSurfaceOrientation_2
+00b7f250 BuildSurfaceOrientation2  # cPlanetModel::BuildSurfaceOrientation2 (anon)
+00b7f2b0 BuildPitchedSurfaceOrientation  # cPlanetModel::BuildPitchedSurfaceOrientation
+00b7f320 BuildSurfaceNormalOrientation  # cPlanetModel::BuildSurfaceNormalOrientation
+00b7f390 FUN_f390  # cPlanetModel::FUN_f390 switch
+00b7f510 FUN_f510  # cPlanetModel::FUN_f510 rehash
+00b7f5c0 FUN_00b7f5c0  # uninitialized_copy S18
+00b7f630 FUN_00b7f630  # copy S18
+00b7f710 FUN_00b7f710  # copy S24a
+00b7f780 FUN_00b7f780  # uninitialized_copy S24b
+00b7f800 FUN_00b7f800  # fill_n S24b
+00b7f860 FUN_00b7f860  # fill_n S18
+00b7f8b0 FUN_00b7f8b0  # copy S24b

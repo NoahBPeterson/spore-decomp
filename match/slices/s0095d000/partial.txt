@@ -1,0 +1,4 @@
+0095d000 1332 approximate nine-slice blit; per-edge draw conditions and order not reproduced
+0095d540 571  approximate two-colour gradient ring; quad vertex/colour math not reproduced
+0095d780 692  approximate std-button frame; relies on approximate GradientBox
+0095da40 264  approximate bevel frame; relies on approximate GradientBox

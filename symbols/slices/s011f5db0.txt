@@ -1,0 +1,20 @@
+011f5db0 FUN_011f5db0  # indexed-triangle free-list: find/merge RangeItem ranges in the keyed tree # byte-exact? no (WEAK)
+011f5ee0 FUN_011f5ee0  # DynamicIndexBufferManager teardown: zero records, release both node lists, shutdown pools # byte-exact
+011f5fa0 FUN_011f5fa0  # DynamicIndexBufferManager Acquire: best-fit free IB node, else CreateIndexBuffer # no (UNSUPPORTED)
+011f6080 FUN_011f6080  # mark IB node invalid for a released resource # byte-exact
+011f60c0 rw::graphics::DynamicIndexBufferManager::ForceDiscard  # byte-exact
+011f6110 FUN_011f6110  # release every IB node resource; clear mFieldC/valid # byte-exact
+011f6180 FUN_011f6180  # DynamicIndexBufferManager Initialize: pool init + acquire 4 records # no (UNSUPPORTED)
+011f6270 FUN_011f6270  # re-create index buffers on device reset, re-acquire records # no (diff 4, UNSUPPORTED)
+011f6370 FUN_011f6370  # HLSL attribute-offset generator (byte table 0x1719c08) # no (WEAK)
+011f63b0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateInputStruct  # no (PASS)
+011f64c0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateCurrentStruct  # byte-exact
+011f6550 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateOutputStruct  # byte-exact
+011f65e0 rw::graphics::`anonymous namespace'::rwg_D3D9GenerateDumpOutput  # byte-exact
+011f6660 rw::graphics::`anonymous namespace'::rwg_D3D9BinaryFindPixelShader  # no (WEAK)
+011f68c0 FUN_011f68c0  # save current pixel shader and clear it (device SetPixelShader 0) # byte-exact
+011f68f0 FUN_011f68f0  # restore saved pixel shader if changed # no (WEAK)
+011f6920 FUN_011f6920  # reset pixel-shader state tables # byte-exact
+011f6940 FUN_011f6940  # copy pixel-shader state byte/dword tables # byte-exact
+011f6980 FUN_011f6980  # rebuild attribute offsets then remap (FUN_011f6370 + FUN_011fcd10) # byte-exact
+011f69a0 rw::graphics::`anonymous namespace'::rwg_D3D9GeneratePixelShader  # build/compile/install HLSL pixel shader # no (UNSUPPORTED)

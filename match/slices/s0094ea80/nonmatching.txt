@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0094ea90  35  RefCount_Release_M8: complete (adjustor thunk, add ecx,-8; refcount at this-4; vcall slot0 with arg 1); register allocation differs; difftest PASS (389 valid, 100% coverage)
+0094eae0  62  ResObj94::Destroy: complete (rewrites three vtables at +0/+8/+0x80, frees subobjects); register allocation/order differ; difftest PASS (288 valid, 91.7% coverage)
+0094ec00  401  NetSSLVerifyConnection: complete (SAN extension walk, DNS comparison, subject CN fallback, SSL_get_verify_result); large OpenSSL control flow; code layout/regalloc differ; difftest WEAK (282 valid, 40.3% coverage)
+0094ee70  56  Fn0094ee70: complete (shutdown inner stream via slots 0x18/0x08, clear f10/f0c/obj/f14); regalloc differs; difftest PASS (396 valid, 100% coverage)
+0094efe0  63  Fn0094efe0: complete (strlen then inner i38 write, return len or 0); strlen idiom and regalloc differ; difftest PASS (396 valid, 100% coverage)
+0094f0e0  34  SetSSLManagerGlobal: complete (12-byte get/set of g_spSSLManager); target span 57 bytes merges the following mutex lock helper not present in the slice VA list; difftest PASS (400 valid, 100% coverage)
+0094f2a0  67  BIO_new_file_override: complete (mode string -> (type,flags) map via inline strcmp chain, fs->OpenFile, BIO_ctrl 0x6a, st slots 0x18/0x08); regalloc differs; difftest WEAK (243 valid, 55.5% coverage)
+0094f4d0  328  file_ctrl: complete (switch cmd 1/2/3/8/9/0xb/0xc/0x6a/0x6b/0x6c, 0x80/0x85 aliases, mode-string open path); large jump table, block layout/regalloc differ; difftest WEAK (398 valid, 43.9% coverage)
+0094f870  87  SessionOwner::FindAndRelease: complete (rbtree find on FNV hash key, optional erase, calls DoNukeSubtree); rbtree walk/regalloc differ; difftest WEAK (375 valid, 51.6% coverage)
+0094f910  114  SSLManager::GetSession: complete (mutex lock, FNV-1 hash of name, rbtree find, refcount inc / SSL_SESSION_new+insert, unlock); regalloc differs; difftest PASS (264 valid, 85.1% coverage)
+0094fa60  71  Fn0094fa60: complete (temporary SSL_CTX params callback: builds callback args, calls fn ptr, frees list); regalloc differs; difftest PASS (339 valid, 100% coverage)

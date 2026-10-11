@@ -1,0 +1,30 @@
+00894440 ?ComputeStyleHash@Text@EA@@YGIPBX@Z  # retail-only style-key FNV-1 hash (reconstruction)
+008945a0 ??0TextStyle@Text@EA@@QAE@ABU012@@Z  # TextStyle copy ctor (vendored EATextStyle.h, different revision layout)
+00894670 ?GetStyle@StyleManager@Text@EA@@QBEPBUTextStyle@23@IPAU423@@Z  # StyleManager::GetStyle (vendored; StyleMap layout differs)
+00894700 ?StyleManagerRemoveStyle@Text@EA@@YAXPAXI@Z  # StyleManager::RemoveStyle (retail-only; reconstruction)
+00894810 ?StyleMapIteratorNext@Text@EA@@YAPAEPAE@Z  # StyleMap hashtable iterator++ (retail-only; reconstruction)
+00894890 ??1StyleManager@Text@EA@@UAE@XZ  # StyleManager::~StyleManager (vendored; StyleMap layout differs)
+00894970 ?StyleManagerAddStyle@Text@EA@@YA_NPAXABUTextStyle@12@PAI@Z  # StyleManager::AddStyle (retail-only; reconstruction)
+00894b10 ??0?$fixed_hash_map@IPAUTextStyleEx@StyleManager@Text@EA@@$07$08$00U?$hash@I@eastl@@U?$equal_to@I@6@$0A@Vallocator@6@@eastl@@QAE@ABU?$hash@I@1@ABU?$equal_to@I@1@@Z  # eastl::fixed_hash_map<uint32,TextStyleEx*,8> ctor (vendored; fixed_pool layout differs)
+00894be0 ??0StyleManager@Text@EA@@QAE@PAVICoreAllocator@Allocator@2@@Z  # StyleManager::StyleManager (vendored; StyleMap layout differs)
+00894c50 ?TextStyleReaderBeginToken@Text@EA@@YAXPAXPBX@Z  # TextStyleReader token-begin callback (retail-only; reconstruction)
+00894ca0 ?TextStyleReaderEndToken@Text@EA@@YAXPAXPBX@Z  # TextStyleReader token-end callback (retail-only; reconstruction)
+00894ce0 ??MLexer@Text@EA@@YA_NABU?$IStaticDefinition@DW4Effect@Text@EA@@@012@PBD@Z  # EA::Text::Lexer::operator< (sd, name), byte-exact
+00894d30 ??MLexer@Text@EA@@YA_NPBDABU?$IStaticDefinition@DW4Effect@Text@EA@@@012@@Z  # EA::Text::Lexer::operator< (name, sd), byte-exact
+00894d80 ?Read@?$CharStream@D@Lexer@Text@EA@@QAEDXZ  # Lexer::CharStream<char>::Read, byte-exact
+00894da0 ?Skip@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NI@Z  # Lexer::TokenReader::Skip(uint32), byte-exact
+00894e30 ??$Skip@D@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NPAD@Z  # Lexer::TokenReader::Skip<char>(char*), byte-exact
+00894e80 ?NameStringMapDoFindNode@Text@EA@@YA_NPBH0@Z  # TextStyleReader::NameStringMap::DoFindNode (retail-only; reconstruction)
+00894ef0 ??$lower_bound@PBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBD@eastl@@YAPBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBU1234@0ABQBD@Z  # eastl::lower_bound<IStaticDefinition<char,Effect> const*,char const*>, byte-exact
+00894f40 ??$upper_bound@PBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBD@eastl@@YAPBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBU1234@0ABQBD@Z  # eastl::upper_bound<IStaticDefinition<char,Effect> const*,char const*>, byte-exact
+00895040 ?TextStyleReaderSkipCommand@Text@EA@@YAIPAH@Z  # TextStyleReader block scanner (retail-only; reconstruction)
+008950b0 ?SkipToEoL@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAEXXZ  # Lexer::TokenReader::SkipToEoL, byte-exact
+008950f0 ?NameStringMapDoRehash@Text@EA@@YAXPAXI@Z  # TextStyleReader::NameStringMap::DoRehash (retail-only; reconstruction)
+008951c0 ??$SkipUntil@$$CBD@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NPBD@Z  # Lexer::TokenReader::SkipUntil<char const*>, byte-exact
+00895250 ??$equal_range@PBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBD@eastl@@YA?AU?$pair@PBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@PBU1234@@0@PBU?$IStaticDefinition@DW4Effect@Text@EA@@@Lexer@Text@EA@@0ABQBD@Z  # eastl::equal_range<IStaticDefinition<char,Effect> const*,char const*>, byte-exact
+008952f0 ?SkipWS@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NXZ  # Lexer::TokenReader::SkipWS (vendored; whitespace predicate differs)
+00895370 ?FixedStringAssign@Text@EA@@YAPAXPAXPBD@Z  # eastl::fixed_string<char,12,1> copy/assign (retail-only; reconstruction)
+00895450 ?NameStringMapDoCreateNode@Text@EA@@YAPAXPAXPAI@Z  # TextStyleReader::NameStringMap::DoCreateNode (retail-only; reconstruction)
+008954c0 ?NameStringMapDoInsertValue@Text@EA@@YAXPAX0PAI@Z  # TextStyleReader::NameStringMap::DoInsertValue (retail-only; reconstruction)
+008955c0 ?Match@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NI@Z  # Lexer::TokenReader::Match(uint32), byte-exact
+008955f0 ??$Match@U?$Alternative@U?$Alternative@U?$Range@$0GB@$0HK@@Lexer@Text@EA@@U?$Range@$0EB@$0FK@@234@@Lexer@Text@EA@@U?$Character@$0FP@@234@@Lexer@Text@EA@@@?$TokenReader@DV?$CharStream@D@Lexer@Text@EA@@@Lexer@Text@EA@@QAE_NABU?$MatchExpression@U?$Alternative@U?$Alternative@U?$Range@$0GB@$0HK@@Lexer@Text@EA@@U?$Range@$0EB@$0FK@@234@@Lexer@Text@EA@@U?$Character@$0FP@@234@@Lexer@Text@EA@@@123@@Z  # Lexer::TokenReader::Match<identifier expr>, byte-exact

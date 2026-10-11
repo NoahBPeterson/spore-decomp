@@ -1,0 +1,21 @@
+0088e210 eastl::fixed_list::fixed_list  # fixed_list<EA::Text::Font*,4,true> copy ctor
+0088e2a0 eastl::list::erase  # list<FaceSource, fixed_node_allocator<224,4,4,0,1>>::erase(first,last)
+0088e350 EA::Text::FontServer::EnumerateFonts
+0088e510 eastl::fixed_list::fixed_list  # fixed_list<FaceSource,4,true> default ctor
+0088e5a0 eastl::list::DoCreateNode  # list<FaceSource,...>::DoCreateNode(const FaceSource&)
+0088e620 eastl::list::DoInsert  # list<FaceSource,...>::DoInsert<ListIterator<FaceSource,...>>
+0088e670 eastl::fixed_hash_map::fixed_hash_map  # fixed_hash_map<string16,string16,4> (FamilySubstitutionMap)
+0088e740 eastl::list::DoAssign  # list<FaceSource,...>::DoAssign<ListIterator<FaceSource,...>>
+0088e800 eastl::hashtable::DoFreeNode  # hashtable<string16,pair<const string16,Face>> mFaceMap
+0088e860 eastl::hashtable::DoFreeNodes
+0088e8f0 eastl::hashtable::erase  # hashtable<string16,pair<const string16,Face>>::erase(iterator)
+0088e980 eastl::fixed_list::fixed_list  # fixed_list<FaceSource,4,true> copy ctor
+0088ea20 EA::Text::FontServer::Shutdown
+0088ec60 EA::Text::FontServer::RemoveFace
+0088ed20 EA::Text::FontServer::Face::Face  # map value (pair<const string16,Face>) ctor
+0088ed90 eastl::hashtable::DoAllocateNode
+0088ee00 eastl::hashtable::DoCreateNode
+0088ee50 EA::Text::FontServer::~FontServer
+0088ef30 eastl::fixed_hash_map::fixed_hash_map  # fixed_hash_map<string16,Face,8> (mFaceMap)
+0088f000 eastl::hashtable::DoInsertValue
+0088f0f0 EA::Text::FontServer::FontServer  # FontServer(EA::Allocator::ICoreAllocator*)

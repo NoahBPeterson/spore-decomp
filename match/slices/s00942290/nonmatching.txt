@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+00942290  334  HTTPClient::ReadRawBody: complete; register/loop schedule differs; difftest FAIL (3/363 valid inputs, 70.4% coverage)
+009423d0  385  HTTPClient::ReadResponseLine: complete; line-scan register schedule differs; difftest PASS (237 valid inputs, 60.3% coverage)
+00942530  241  HTTPClient::DoJobUpdate: complete; timeout/notify branch layout differs; difftest FAIL (5/22 valid inputs, 20.9% coverage)
+00942630   56  Cookie40::~Cookie40: complete; one redundant null-check/test around the second refcount release differs
+00942690  495  HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
+00942b40  333  HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
+00942e50  244  eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)

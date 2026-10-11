@@ -1,0 +1,12 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
+00b96180    20  S96180::fn (rbtree insert-with-dup): complete; ecx(*this) allocated to ebx vs edi register-colour swap
+00b96220    75  FUN_00b96220 (lower_bound on 0x10-stride records): complete; register allocation + branch scaffolding differ
+00b96360   319  S96360::fn (vector<0x3c>::insert fill): complete; memmove/alloc refcount path scheduling differs
+00b96600   192  S96600::fn (vector<int>::insert): complete; relocation-fixup memmove path register allocation differs
+00b96710   152  S96710::fn (vector<0x10>::insert): complete; relocation-fixup copy path register allocation differs
+00b96820    74  S96820::fn (rbtree node-pool insert): complete; comparison operand order + freelist branch layout differ
+00b969e0    89  FUN_00b969e0 (load planet sim params): complete; x87 float10 promotion through Arithmetica params differs
+00b96aa0   122  FUN_00b96aa0 (spawn tribes): complete; cTribeData ctor inline + float10 param reads differ
+00b96b80   329  FUN_00b96b80 (spawn cities): complete; RNG + cCivData/cCityData ctor inline glue scheduling differs
+00b96d40   314  FUN_00b96d40 (spawn colony/home cities): complete; deep inline glue + x87 + video-encoder fields differ
+00b96fa0   235  FUN_00b96fa0 (spawn vehicles): complete; manager iterator + cVehicleData ctor inline glue differs

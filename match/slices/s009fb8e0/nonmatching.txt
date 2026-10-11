@@ -1,0 +1,10 @@
+# nonmatching: compiles and is behaviourally equivalent to the original (difftest PASS/WEAK)
+# but is not byte-exact.
+# fields: <va> <diff-bytes> <flags> <difftest> <reason>
+009fbc50 89 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK AudioSetListener3: EA::Audio::GetSystemAT() then virtual slots 0x38(0x3475373), 0x40(0x3475385,x), 0x3c(0x3475391,y), 0x3c(0x3475395,z), 0x3c(0x3475398,p4), 0x58(). 400 valid inputs, 14.6% coverage (floats passed on the stack); the original keeps x/y/z in x87 and each `fstp [esp]` pair differs from our direct push.
+009fbd70 61 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK AudioSetListener2: GetSystemAT(); virtual 0x38(0x347536b), 0x40(0x3475385), 0x40(0x34753a0), 0x58(). 400 valid inputs, 21.2% coverage.
+009fbe20 38 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK AudioQueryC: SP::AudioSystem() probed twice; virtual slot 0x44(x) returning float. 400 valid inputs, 50% coverage. Original returns the value in st(0) (float10 / __thiscall) whereas we return it in xmm0.
+009fbfc0 122 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK EffectsSpawn: default out slot, SP::EffectsManager() guard, virtual slot 8(param3,0,out); on success EffectsEmitEvent(*out, a, 0, 0) and slot 8(0). 400 valid inputs, 25.9% coverage. The effective-manager fallback (slot 0x5c) and param2 semantics are not reproduced exactly.
+009fc050 49 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS EffectsSpawnThunk: thin forwarder to EffectsSpawn. 400 valid inputs, 100% coverage (non-exact due to frame/argument shuffling).
+009fc090 84 /O2 /MD /Gy /TP /arch:SSE /fp:fast PASS PackFourCC: copies up to 4 non-NUL bytes of the name into a zeroed buffer and packs them little-endian into a uint32. 400 valid inputs, 100% coverage (buffer-materialisation differs).
+009fc5b0 163 /O2 /MD /Gy /TP /arch:SSE /fp:fast WEAK ElemConstructRange: copy-constructs each 0x14-byte element in [begin,end) to the destination, returning the advanced pointer. 79 valid inputs, 15.7% coverage. Our elements use operator new per element vs the original's RangeInitialize/DoInsertValue sequence.

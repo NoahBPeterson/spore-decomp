@@ -1,0 +1,11 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s011b7070/s011b7070.cpp  _compute_key              011b7070  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _add_cert_dir             011b7330  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _get_cert_by_subject      011b7520  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _dir_ctrl                 011b77a0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _X509_load_cert_file      011b7820  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _X509_load_crl_file       011b7980  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _X509_load_cert_crl_file  011b7ae0  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _EVP_PBE_alg_add          011b7c90  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _ASN1_mbstring_ncopy      011b8300  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc
+slices/s011b7070/s011b7070.cpp  _ENGINE_get_digest        011b8720  /O2 /arch:SSE /MD /Gy /TC /Iscratch_s011b7070_inc

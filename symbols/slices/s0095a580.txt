@@ -1,0 +1,13 @@
+0095a580 EA::UTFWin::WindowMgr::BuildDisplayList  # card PDB candidate (RebuildDisplayList), recursive display-list rebuild
+0095a980 EA::UTFWin::WindowMgr::SendMsg  # card name
+0095a9a0 EA::UTFWin::WindowMgr::PostMsg  # card name
+0095aa80 EA::UTFWin::WindowMgr::ProcessMessages  # card name
+0095add0 EA::UTFWin::WindowMgr::AttachWindow  # card name
+0095afd0 eastl::ListNodeBase::swap  # card name
+0095b080 EA::UTFWin::WindowMgr::SetMainWindow  # card name
+0095b290 EA::UTFWin::WindowMgr::FlushMessageQueue  # card name
+0095a820 EA::UTFWin::WindowMgr::FocusList::InsertFront  # derived: allocs 0x10 node, stores 8-byte value, links at front of focusList
+0095a870 EA::UTFWin::WindowMgr::MsgList::AssignFrom  # derived: eastl list assign/copy; called by ListNodeBase::swap
+0095a8e0 EA::UTFWin::WindowMgr::SetViewportSize  # derived: posts msg id 0x4ecd5687 carrying two floats
+0095af00 EA::UTFWin::WindowMgr::UpdateWindowCachedTransforms  # derived: recomputes cached window transform
+0095af20 EA::UTFWin::WindowMgr::SetFocusWindow  # derived: pushes old cur on focusList, sets cur/curCb

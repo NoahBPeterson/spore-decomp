@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+008dd0d0 167 complete: PFRecordWrite ctor; field/vtable init sequence close but differs
+008dd1c0 31 complete: EA::SharedLibrary::Release; interlocked refcount + virtual destroy; register/scheduling differs
+008dd1f0 34 complete: PFRecordWrite::_virtual_dtor; vtable store order differs
+008dd510 298 complete: Resource::FindEmbeddedPackageHeader; parse/scan flow reconstructed; buffer handling differs
+008dd7d0 31 complete: FNV-1a hash over wide string (towlower); loop uses --count scheduling differs (imul/xor order)
+008dd820 99 complete: FUN_008dd820; body/register allocation differs
+008ddb00 122 complete: FUN_008ddb00; body/register allocation differs
+008ddb90 29 complete: FUN_008ddb90; vtable fn load vs io-zero scheduling differs
+008ddc10 68 complete: GetNameFromDatabaseKey; single-vs-early epilogue layout + buffer offset differ
+008dde50 231 complete: FUN_008dde50; body/register allocation differs
+008ddff0 29 complete: Editor::cPropertyList ctor; base reg ecx vs retail eax (register coin-flip)

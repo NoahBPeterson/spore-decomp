@@ -1,0 +1,10 @@
+# va  diff-bytes  reason  (incomplete / approximate source; not counted as decompiled)
+011f34a0  126  VertexDescriptor::Build: the full header-zeroing, the 0x18-strided element records and
+               the record/raster helpers are reconstructed and the difftest call trace is byte-for-byte
+               identical (100% coverage), but difftest still reports 5/48 pool mismatches on a single
+               pointer-sized dword (looks like an uninitialised-input/fake-allocation artifact on
+               `floaty` inputs with 50/103 inputs discarded). Kept approximate pending a clean run.
+011f39b0  186  Push render targets + depth-stencil (ECX): complete source, but difftest faults in our
+               run (`Invalid memory read at eip=30000093`, inside a faked render-target vtbl object)
+               where the original succeeds; the faked-call count differs (orig 2, ours 1). Kept
+               approximate pending a harness that can emulate the D3D9 raster objects.

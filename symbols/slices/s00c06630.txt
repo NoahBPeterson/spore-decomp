@@ -1,0 +1,13 @@
+00c06630 FUN_00c06630 eastl partial_sort helper
+00c066a0 pool node emplace helper 1
+00c06750 pool node emplace helper 2
+00c06800 Simulator::cCreatureAnimal::cCreatureAnimal
+00c06bf0 vector<double-ptr>::erase
+00c06c30 eastl vector insert (0x20-byte elements)
+00c06d60 eastl quicksort (median-of-three, depth-limited)
+00c06e50 Simulator::cCreatureBase::funcC4h
+00c06f70 Simulator::cCreatureBase::Tick (tribe destroy tool)
+00c072b0 vector<0x20-byte>::push_back
+00c072f0 vector<ptr>::push_back
+00c073a0 set creature id + clear vector
+00c07400 Simulator::cCreatureBase::funcCCh

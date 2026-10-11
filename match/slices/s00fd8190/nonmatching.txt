@@ -1,0 +1,13 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+00fd8c40  175  `anonymous_namespace'::cMovieCheat::cMovieCheat: complete; the cCommandBase
+               base ctor, the derived vtable store, the cArgumentSpec sub-object ctor and
+               the full ConstructSpec argument list (all option pointers/flags/strings)
+               are present in original order; remaining diff is register allocation and
+               4-byte frame slack. difftest: UNSUPPORTED (0/400 inputs valid; object-heavy).
+               flags /O2 /MD /Gy /TP /arch:SSE
+00fd8d80  768  `anonymous_namespace'::cMovieCheat::Execute: complete; all property lookups
+               (float/uint/bool by name), ParseThrowing, the flag-bit dispatch arms
+               (0x1<<0..2, v30/v34/v38, v14/v20, name registration via SPKeyFromName),
+               the ConvertToString16 + movie-system registration arm and the EString
+               release are reproduced. difftest: UNSUPPORTED (unresolved fake callees).
+               flags /O2 /MD /Gy /TP /arch:SSE

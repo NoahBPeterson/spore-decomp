@@ -1,0 +1,30 @@
+# va  diff-bytes  reason  (complete behaviorally-equivalent source, not byte-exact)
+# RenderWare 4 core: the retail object was built with /GL + /LTCG (whole-program), so a
+# single-object compile cannot reproduce the cross-call register allocation / scheduling.
+011f5db0  214  indexed-triangle tree/range merge (RangeItem alloc via pool): complete;
+               cl13 schedules the find/merge linked-list walk differently. difftest WEAK
+               (400/400 valid, no mismatch, 5.3% coverage - most paths need the pool).
+011f5fa0  119  DynamicIndexBufferManager::Acquire (best-fit over the IB node lists,
+               CreateIndexBuffer at device vtbl+0x6c): complete; register schedule differs.
+               difftest UNSUPPORTED (image allocator calls VirtualAlloc, 0/400 valid).
+011f6180  148  DynamicIndexBufferManager::Initialize (pool Init + acquire the 4 index-buffer
+               records): complete; register schedule differs. difftest UNSUPPORTED
+               (VirtualAlloc in the image, 0/400 valid).
+011f6270    4  DynamicIndexBufferManager::OnDeviceLost re-relink (CreateIndexBuffer for every
+               node + re-acquire records): complete; only the lea/mov base constant for the
+               g_rec mValid iterator differs. difftest UNSUPPORTED (VirtualAlloc, 0/400).
+011f6370   41  HLSL attribute-offset generator (walks base+0x11 writing ints at base+0x34 via
+               byte table 0x1719c08): complete; byte kept in dl vs the original al. The
+               function is void; difftest WEAK (124/124 valid, no mismatch).
+011f63b0   62  rwg_D3D9GenerateInputStruct: complete; per-string D3D9TextCopy call schedule
+               differs (inlined strcpy loop register usage). difftest PASS (253/253).
+011f6660  565  rwg_D3D9BinaryFindPixelShader (stride-0x44 table, 0x11-byte prefix memcmp):
+               complete; the repeated inlined strcmp/memcmp scans schedule differently.
+               difftest WEAK (191/191 valid, no mismatch, 77.7% coverage).
+011f68f0   15  Restore pixel shader (device SetPixelShader vtbl+0x1ac when the saved shader
+               differs): complete; cl sinks the esi prologue past the early returns, the
+               original pushes later. difftest WEAK (400/400 valid, no mismatch).
+011f69a0  668  rwg_D3D9GeneratePixelShader (builds the HLSL source, picks ps_x_y, calls
+               D3DXCompileShader and installs the shader): complete; the effect-def table
+               walk and 10-arg compile call schedule differ. difftest UNSUPPORTED
+               (image pointer reads fault + D3DXCompileShader/sprintf imports, 0/400 valid).

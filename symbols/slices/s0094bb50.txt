@@ -1,0 +1,18 @@
+0094bb50 FUN_0094bb50  # dc: URL setup/parse helper (int this, char* a, char* b) [partial: inlined EASTL]
+0094c130 FUN_0094c130  # dc: numeric-or-dotted address parser (Sockets_ParseAddress)
+0094c190 FUN_0094c190  # dc: inet_addr validity test (Sockets_IPIsValid)
+0094c1b0 EA::Sockets::IPAddress::LookupName  # dc: gethostbyname wrapper (Sockets_LookupName)
+0094c1d0 EA::Sockets::IPAddress::GetCurrentMachineAddress  # dc: SIO_GET_INTERFACE_LIST wrapper
+0094c260 EA::Sockets::Manager::Manager  # dc: ctor (WSA layout + rasapi32 GetProcAddress table)
+0094c380 EA::Sockets::Manager::GetMaxSockets  # dc: return mWSAData.iMaxSockets
+0094c3c0 EA::Sockets::Manager::Init  # dc: WSAStartup version negotiation
+0094c420 EA::Sockets::Manager::Shutdown  # dc: WSACleanup
+0094c450 EA::Sockets::Manager::IsNetworkConnected  # dc: driver check + name lookup
+0094c490 EA::Sockets::Manager::CreateSocket  # dc: operator_new datagram/stream socket + vtbl[0]
+0094c510 EA::Sockets::Manager::GetAutoDialEnabled  # dc: RegQueryValueExA EnableAutodial
+0094c580 EA::Sockets::Manager::SetAutoDialEnabled  # dc: RegSetValueExA EnableAutodial
+0094c620 EA::Sockets::Manager::GetManualDialupNameAndPassword  # dc: RasGetEntryDialParamsA
+0094c730 EA::Sockets::RasDialFunc  # dc: RasDialA callback (state/result messages)
+0094c7a0 EA::Sockets::Manager::DoManualDialup  # dc: RasGetEntryDialParams + RasDial
+0094c9d0 EA::Sockets::Manager::CancelManualDialup  # dc: _time64 poll + RasHangUp-ish teardown
+0094ca60 EA::Sockets::Manager::SetManualDialupResult  # dc: fire callback then clear state

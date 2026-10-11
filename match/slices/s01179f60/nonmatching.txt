@@ -1,0 +1,27 @@
+# va  diff-bytes  reason  (complete behaviourally-equivalent source, not byte-exact)
+01179f60  408  RSA_sign: complete translation of the RSA_sign fast-path/der-encode/private-encrypt
+               flow (method override at meth+0x2c, NID 0x72 MD5 shortcut, FUN_011895b0 digest-info
+               encode, CRYPTO_malloc, RSA_private_encrypt PKCS1, OPENSSL_cleanse+free). diff is
+               register allocation / block layout of the 6-arg frame. difftest: UNSUPPORTED
+               (unresolved RSA_private_encrypt / OPENSSL_cleanse). flags /O2 /MD /Gy /EHsc /TP
+0117a150  413  RSA_verify: complete (method override at meth+0x30, malloc, RSA_public_decrypt, MD5
+               0x24 compare, ASN1_TYPE_get / OBJ_obj2nid / signature pad strip / fprintf warn path,
+               cleanse+free). diff is register allocation. difftest: UNSUPPORTED (unresolved callees).
+0117a3c0  292  BN_bn2dec: complete (BN_num_bits sizing, CRYPTO_malloc, BN_dup, BN_div_word by 1e9,
+               BIO_snprintf base-1e9 emit with %09lu continuations, cleanup). diff is register
+               allocation. difftest: UNSUPPORTED (unresolved BN_*/BIO_snprintf/ERR_put_error).
+0117aa10  197  bn_expand: complete, but the size argument arrives in EAX (custom register
+               convention, cl only emits ecx/edx __fastcall); modelled here as the 2nd stack arg,
+               so the frame/register schedule cannot be reproduced. difftest: UNSUPPORTED.
+0117ac80  243  BN_bin2bn: complete (local BN_new init, zero-length shortcut, bn_expand2, byte loop
+               assembling words little-endian-endian, top truncation). diff is the zero-constant
+               register (orig ebx, cl chose edi) and local_4 spill. difftest: UNSUPPORTED.
+0117b840  198  ssl_cert_add chain build: complete (callback mask count at meth+0x4c, modulo check,
+               sk_zero/sk_new, per-element meth+0x48 push, sk_free on failure). diff is register
+               allocation + one branch layout. difftest: UNSUPPORTED (unresolved sk_*).
+0117bf80  140  ssl_cert_* select: complete (ssl_set_cert_masks then the 0x40/0x4000/0x2/0x4/0x200/
+               0x100/0x2000 mask cascade over cert+0x94). diff is block ordering of the mask arms;
+               best byte match lands on sibling symbol FUN_0117c300. difftest: UNSUPPORTED.
+0117c440  159  SSL_clear: complete (bad-session free, reset of ssl fields, method re-dispatch via
+               meth+0xc / meth+0x4 / meth+0x8 and the switch-method guard). diff is register
+               allocation / block layout. difftest: UNSUPPORTED (unresolved ssl_clear_*).

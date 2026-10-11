@@ -1,0 +1,5 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00884a20/s00884a20.cpp  ?dtor_impl@Server@@QAEXXZ                     00884fb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+slices/s00884a20/s00884a20.cpp  ?MessagePost@Server@@QAEXHPAXH0@Z              00885890  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+slices/s00884a20/s00884a20.cpp  ?MessagePostFunction@Server@@QAEXHPAXH00@Z    00885930  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast
+slices/s00884a20/s00884a20.cpp  ?FUN_008859f0@@YAHPBM0@Z                      008859f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast

@@ -1,0 +1,4 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core: built with VC .NET 2003 (/vc71) + /GL /LTCG.  Byte-exactness is not the
+# goal for this slice; the one byte-exact function is listed here, the rest in nonmatching.txt.
+slices/s011f1400/s011f1400.cpp  ?D3D9ClearDirtyFlags@GlobalState@graphics@rw@@SAXXZ  011f1b20  /vc71 /O2 /MD /Gy /EHsc /TP

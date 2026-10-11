@@ -1,0 +1,6 @@
+# s00ac6b90 manifest
+slices/s00ac6b90/s00ac6b90.cpp  ??0cSPTransform@@QAE@ABU0@@Z  00ac6c40  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?do_assign_6da0@@YAPAUcSPTransform@@PBU1@0PAU1@@Z  00ac6da0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?do_copyBack_6de0@@YAPAUcSPTransform@@PBU1@0PAU1@@Z  00ac6de0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?push_back@VecT@@QAEXXZ  00ac6fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ac6b90/s00ac6b90.cpp  ?cGroundEditorRes_ctor@@YIPAUcGroundEditorRes@@PAU1@@Z  00ac78a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast

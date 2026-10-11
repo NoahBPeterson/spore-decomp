@@ -1,0 +1,2 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+slices/s00a30460/s00a30460.cpp  ?eraseKey@NodeMap@@QAEHPAI@Z  00a30f10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast

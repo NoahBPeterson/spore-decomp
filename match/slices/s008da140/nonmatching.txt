@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+008daf40 68 complete: PFIndexModifiable::GetDataEnd (bucket-array iteration); register allocation differs (pBucket kept in edi instead of esi); difftest PASS (236 valid, 100% coverage)
+008dafa0 50 complete: PFIndexModifiable::GetTotalDiskSize (bucket-array iteration); peeled-scan/register-allocation differences; difftest PASS (261 valid, 100% coverage)
+008dad30 15 complete: FUN_008dad30 unguarded insertion sort; body/shape identical, only register naming of (prev,j,k) differs; difftest UNSUPPORTED (0/400 valid - pool reads fault)
+008dad80 63 complete: FUN_008dad80 promote-heap; register allocation of (array,top,value,parent) differs from retail; difftest PASS (372 valid, 100% coverage)
+008da750 332 complete: DatabasePackedFile::ReadIndexRecord; VecBuf/read/index-serialize flow reconstructed; buffer alloc-header handling and register allocation differ; difftest PASS (351 valid, 88.5% coverage)

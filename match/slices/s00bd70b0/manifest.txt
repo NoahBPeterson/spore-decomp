@@ -1,0 +1,11 @@
+# source  symbol  original VA  [flags override]
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd78e0  00bd78e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7a80  00bd7a80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7c60  00bd7c60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7c80  00bd7c80  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7d60  00bd7d60  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7df0  00bd7df0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7e20  00bd7e20  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7ed0  00bd7ed0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7ef0  00bd7ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00bd70b0/s00bd70b0.cpp  FUN_00bd7f70  00bd7f70  /O2 /MD /Gy /TP /arch:SSE /fp:fast

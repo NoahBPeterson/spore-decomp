@@ -1,0 +1,13 @@
+# source (relative to match/)   symbol   original VA   [cl flags override]
+# RenderWare 4 core: the retail object was built with VC .NET 2003 (/vc71) + /GL /LTCG.
+# Byte-exactness is not the goal for this slice; the byte-exact functions are listed here,
+# the rest in nonmatching.txt / partial.txt.
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f4e90@@YIXPAI@Z                    011f4e90  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f4fb0@@YIHPAI@Z                    011f4fb0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f4fd0@IBufB@@QAEPAXPAPAX@Z         011f4fd0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f5220@@YAIXZ                      011f5220  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f5770@@YAXH@Z                     011f5770  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f5940@@YAXPAX@Z                   011f5940  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f5980@@YAXXZ                      011f5980  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f59c0@@YAXXZ                      011f59c0  /vc71 /O2 /MD /Gy /EHsc /TP
+slices/s011f4e90/s011f4e90.cpp  ?FUN_011f5ac0@@YAIXZ                      011f5ac0  /vc71 /O2 /MD /Gy /EHsc /TP

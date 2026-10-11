@@ -1,0 +1,13 @@
+# va  reason  (incomplete / approximate source)
+011843b0  CRYPTO_new_ex_data: callback-array walk is present (lock, per-index sk_value
+          snapshot, CRYPTO_malloc, first-appearance callback dispatch with the
+          param_3-dependent sk lookup), but it depends on FUN_01183f70 whose hash key is
+          supplied in EBX and is 0 in this translation, so the ex-data item identity differs;
+          difftest FAILs 5/5 valid inputs. flags /O2 /MD /Gy /TP
+011844e0  CRYPTO_free_ex_data: same structure (min(sk_num) bound, snapshot, free-callback
+          dispatch at item[4], FUN_01184320 re-set of the value); behaviour not guaranteed
+          for the same FUN_01183f70 EBX-key reason; difftest FAILs 5/6.
+          flags /O2 /MD /Gy /TP
+01184640  CRYPTO_free_ex_data cleanup: same structure (free callback at item[3], then
+          sk_free + *param_3=0); behaviour not guaranteed for the same FUN_01183f70
+          EBX-key reason; difftest FAILs 5/5. flags /O2 /MD /Gy /TP

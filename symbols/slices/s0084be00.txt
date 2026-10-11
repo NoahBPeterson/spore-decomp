@@ -1,0 +1,12 @@
+0084be00 GIF_about
+0084bf30 GIF_is
+0084bfa0 DGifGetScreenDesc
+0084c0a0 DGifGetImageDesc
+0084c1f0 DGifDecompressInput
+0084c2b0 DGifOpenFileHandle
+0084c400 DGifDecompressLine
+0084c680 DGifGetLine
+0084c710 LoadImage
+0084c7d0 GIFgetinfo
+0084cad0 GIF_open
+0084cb50 GIF_info

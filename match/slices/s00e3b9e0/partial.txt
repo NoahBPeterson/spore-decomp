@@ -1,0 +1,12 @@
+# va  diff-bytes  reason  (incomplete / approximate, or equiv did not confirm: not counted as decompiled)
+00e3b9e0  594  hint state machine: all seven states transcribed, but the per-mode message object built via
+               FUN_0067caf0/FUN_0067aaf0 is approximated (thiscall finaliser convention not pinned down).
+00e3be20  192  11-argument effect-position updater: the float-quad argument mapping and the FUN_00e37840 tail
+               are reconstructed from the disassembly and are not behaviourally signed off.
+00e3c100   58  angle-wrap helper: logic/constants identical, but equiv=FAIL (5/186 inputs, st0 x87 rounding:
+               ours 2.83283007144928 vs orig 2.8328299522399902); cl contracts the branch arithmetic into
+               fld/fsub instead of the original's addss/subss.
+00e3c1a0 1150  screen-space path builder: large translation, but FUN_00e3a000/FUN_00e3a570 helper signatures
+               and the resulting stack frame are approximated.
+00e3c6f0  118  PostMessage of a MessageBasicRC<5>: the exact stack object layout (vftable/AtomicInt/Data[5])
+               is approximated.

@@ -1,0 +1,14 @@
+00969e30 FUN_00969e30 # unnamed ConsoleWindow scroll/extent refresh helper
+00969ed0 FUN_00969ed0 # PDB candidate ConsoleWindow::InvalidateLayout (calls FUN_00969d40/FUN_00969e30)
+00969f00 EA::UTFWinControls::ConsoleWindow::DoMessage # card name
+00969f80 FUN_00969f80 # unnamed ConsoleWindow scroll-by helper
+0096a0a0 FUN_0096a0a0 # unnamed ConsoleWindow text/line measure
+0096a620 eastl::hashtable<char const*,...>::DoFindNode # card name (mangled template)
+0096a670 EA::UTFWinControls::ConsoleWindow::Init # card name
+0096a790 EA::UTFWinControls::ConsoleWindow::LayoutLines # card name
+0096a860 EA::UTFWinControls::ConsoleWindow::Append # card name
+0096a9b0 EA::UTFWinControls::ConsoleWindow::Append # card name (2nd overload)
+0096ab30 FUN_0096ab30 # unnamed ConsoleWindow reset helper
+0096ab90 eastl::hashtable<char const*,...>::find # card name (mangled template)
+0096ac10 FUN_0096ac10 # PDB candidate ConsoleWindow::~ConsoleWindow
+0096acd0 FUN_0096acd0 # unnamed ConsoleWindow set-region helper

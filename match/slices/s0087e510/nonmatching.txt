@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+# All six are complete (compile cleanly) but not byte-exact. difftest verdicts noted per line.
+0087e510  950  register schedule in the 0x112c-byte ctor (original hoists `this` into eax and uses a distinct load/lea/store order); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ed70   46  register-allocation difference (original begin/end in ecx/eax, this in eax; mine swaps); equiv UNSUPPORTED (external AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087edd0   53  register-allocation difference; equiv UNSUPPORTED (external AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087ee50  429  size/register mismatch (541B vs 681B) - eastl rbtree find + prefix search loop; equiv UNSUPPORTED (4 unresolved externals); flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f100  248  register-allocation difference (this in eax vs ecx); equiv PASS 400/400; flags /O2 /MD /Gy /EHsc /TP /GS-
+0087f210  198  register-allocation difference; equiv UNSUPPORTED (iswctype/wcsncpy/_wcslwr/AppendElement unresolved); flags /O2 /MD /Gy /EHsc /TP /GS-

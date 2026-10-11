@@ -1,0 +1,28 @@
+# slice s00af9aa0 - names inferred from call sites, vtables, member layout and call behaviour
+00af9aa0  SP::cListenerHolder::Detach(int)  # calls m_pListener->Attach(0,0,0) where m_pListener is at this+0x4
+00af9ac0  SP::cEntityListener::AddId(unsigned)  # hkArray<uint>::push_back on the array at this+0x9c
+00af9b00  SP::cEntityListener::RemoveId(unsigned)  # linear find + swap-remove on the hkArray at this+0x9c
+00af9b50  SP::cEntityListener::cEntityListener()  # installs vtable 0x145c428 at +0x60, inits hkArray empty, orientation from cos(pi/3), reserves 16
+00af9ca0  SP::cEntityListener::Destroy()  # Attach(0,0,0) then deallocates the hkArray chunk via hkThreadMemory::deallocateChunk(TlsGetValue), then vtable 0x145c414 at +0x60
+00af9cf0  SP::cActionCircle::SetAtCenter(center,radius,facing,altitude)  # mbRelative=0, orientation=identity quat @0x156737c, center/radius/facing/altitude
+00af9d60  SP::cActionCircle::SetRelative(center,orient,radius)  # mbRelative=1, orientation=orient, center, radius, facing=default facing @0x167af08, altitude=0
+00af9dd0  FUN_00af9dd0(float,int)->long double  # FFU accum loop; fld return (x87)
+00af9e20  FUN_00af9e20(float,int)->long double  # FFU accum loop (step 1); fld return (x87)
+00af9ee0  SP::cActionCircle::IsNonDefault() const -> int  # 0 iff mCenter==default center @0x167aec4 and !mbRelative
+00af9f30  SP::cActionCircle::FindFreeSlot() -> tSlot*  # first slot with mOccupied==0 in mSlots vector at +0x50, else 0
+00af9f60  SP::cActionCircle::CountFreeSlots() -> int  # length of mSlots via 0x2aaaaaab magic /0x18 elem
+00af9fa0  SP::cActionCircle::CountOccupiedSlots() -> int  # size() - free count (magic-divide repeated)
+00af9ff0  SP::cActionCircle::SlotAt(unsigned) -> tSlot*  # bounds-checked operator[] (stride 0x18), 0 if OOR
+00afa030  SP::cActionCircle::tSlot::Reserve(cGameData*)  # mOccupied=1 + AutoRefCount assign
+00afa070  SP::cActionCircle::tSlot::ReserveId(unsigned)  # mOccupied=1, id, release prior noun
+00afa0a0  SP::cActionCircle::tSlot::Clear()  # mOccupied=0, id=0, release noun
+00afa0c0  FUN_00afa0c0(cSPVector3*,const cSPVector3*,const cSPVector3*,const cSPVector3*)  # out[0]=c,out[1]=a,out[2]=b
+00afa110  SP::cActionCircle::tSlot::CopyConstruct(const tSlot*) -> tSlot*  # copy + AddRef noun, returns this
+00afa230  SP::cActionCircle::tSlot::Assign(const tSlot*) -> tSlot*  # AutoRefCount assign + copy, returns this
+00afa290  FUN_00afa290(AutoRefCount<cInteractionAgent>*,AutoRefCount<cInteractionAgent>*,eastl::AgentDistanceCompare)  # intrusive insertion sort; comparator 0xac0730
+00afa380  FUN_00afa380(tSlot*,tSlot*,tSlot*) -> tSlot*  # forward range copy-construct
+00afa430  FUN_00afa430(tSlot*,tSlot*,tSlot*) -> tSlot*  # forward range assign
+00afa4a0  FUN_00afa4a0(tSlot*,tSlot*,tSlot*) -> tSlot*  # backward range assign (copy_backward)
+00afa510  FUN_00afa510(float* out,const float* dir,float radius)  # surface point: SP_PlanetModel(0xb3d350)+SP::cPlanetModel::DirectionToSurfacePosition(0xb815a0, __thiscall ecx=model)(out,dir)+normalized*radius
+00afa5d0  SP::cActionCircle::FindClosestFreeSlot(const cSPVector3*) -> int  # nearest free slot, FLT_MAX @0x145c45c sentinel, 4-way unrolled
+00afa7c0  SP::cActionCircle::FindClosestFreeSlotWeighted(const cSPVector3* p,const cSPVector3* q,float) -> int  # two-point weighted variant (dist=(py^2+px^2+pz^2)*w+qz^2+qy^2+qx^2 over p,q vs slot), 4-way unrolled + tail

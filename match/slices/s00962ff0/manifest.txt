@@ -1,0 +1,8 @@
+# source  symbol  original VA  [flags override]
+slices/s00962ff0/s00962ff0.cpp  ?GetEventMask@Btn@@  009634c0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?SetFade@Btn@@  009635e0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?SetAlphaClamp@Btn@@  009636f0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?GetEffectFlag@FlexFlag@@  00963f60    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?SetSlot@WinButtonX@@  00963fd0    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?GetCaptionColor@WinButtonX@@  00964000    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
+slices/s00962ff0/s00962ff0.cpp  ?GetSlot@WinButtonX@@  00964020    /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast
