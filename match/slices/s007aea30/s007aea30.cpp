@@ -123,9 +123,15 @@ struct Rgb565 {
 #define MIN(a, b)      ((a) < (b) ? (a) : (b))
 #define MAX(a, b)      ((a) > (b) ? (a) : (b))
 
-extern "C" uint32_t findendpoints(const uint32_t* colors, const uint32_t* pixels, uint32_t* out0,
-                                  uint32_t* out1, int alpha, int quality)
+struct EndpointColors {
+    uint32_t v[2];
+    uint32_t findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality);
+};
+
+uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1,
+                                       int alpha, int quality)
 {
+    const uint32_t* colors = v;
     DxtColor c0, c1;
     uint32_t map[257];
     c0.u = colors[0];

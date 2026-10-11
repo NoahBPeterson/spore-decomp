@@ -56,7 +56,9 @@ float __cdecl EvalRealExpression(void* self, const char** p);              // 0x
 // 0x0083c900  hashtable<...cICommand...>::insert(key)
 // ===========================================================================
 // @ 0x0083c900
-void* HashFindInsertCommand(void* self, void* outIt, const void** keyPtr) {
+struct HashCmdTable { void* Insert(void* outIt, const void** keyPtr); };
+void* HashCmdTable::Insert(void* outIt, const void** keyPtr) {
+    void* self = this;
     const unsigned char* p = (const unsigned char*)*keyPtr;
     uint32 h = 0x811c9dc5;
     unsigned char c = *p;
@@ -255,7 +257,9 @@ void ReleaseRefCount(int** p) {
 // 0x0083cef0  pair<string, AutoRefCount>::pair(const string&, const AutoRefCount&)
 // ===========================================================================
 // @ 0x0083cef0
-void __cdecl PairStringRefCtor_A(void* self, const eastl::string8* s, int** ref) {
+struct PairCtorStub { void CtorA(const eastl::string8* s, int** ref); void CtorB(const void* src); };
+void PairCtorStub::CtorA(const eastl::string8* s, int** ref) {
+    void* self = this;
     eastl::string8* str = (eastl::string8*)self;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
     int len = (int)(s->mpEnd - s->mpBegin);
@@ -272,7 +276,8 @@ void __cdecl PairStringRefCtor_A(void* self, const eastl::string8* s, int** ref)
 // 0x0083d020  pair<string, AutoRefCount>::pair(const pair&)
 // ===========================================================================
 // @ 0x0083d020
-void __cdecl PairStringRefCtor_B(void* self, const void* src) {
+void PairCtorStub::CtorB(const void* src) {
+    void* self = this;
     eastl::string8* str = (eastl::string8*)self;
     const eastl::string8* s = (const eastl::string8*)src;
     str->mpBegin = 0; str->mpEnd = 0; str->mpCapacity = 0;
@@ -306,7 +311,7 @@ void __cdecl PairStringExprDtor(void* self) {
 // ===========================================================================
 // @ 0x0083d140
 void* HashInsertExprValue(void* self, void* outIt, const void** keyPtr) {
-    return HashFindInsertCommand(self, outIt, keyPtr);
+    return ((HashCmdTable*)self)->Insert(outIt, keyPtr);
 }
 
 // ===========================================================================
@@ -345,7 +350,9 @@ unsigned char EvalContinueChar(const char** p, char c) {
 // 0x0083d2f0  EvalRealParentheses(self, p, out1, out2)
 // ===========================================================================
 // @ 0x0083d2f0
-void EvalRealParentheses4(void* self, const char** p, float* a, float* b) {
+struct ExprStub { void EvalRealParentheses4(const char** p, float* a, float* b); };
+void ExprStub::EvalRealParentheses4(const char** p, float* a, float* b) {
+    void* self = this;
     EvalExpectCharThrow(p, '(');
     *a = EvalRealExpression(self, p);
     EvalExpectCharThrow(p, ',');

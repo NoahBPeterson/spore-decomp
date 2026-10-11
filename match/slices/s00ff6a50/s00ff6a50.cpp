@@ -397,6 +397,7 @@ struct cPlanetSimHost {
     uint32_t mTribeData;                 // +504
 };
 
+// @ 0x00ff6a50
 void cPlanetSimHost::LoadCivilization(cCivData* civ, cPlanetSimHost* host)
 {
     cGameNounManager* nounManager = NounManager();

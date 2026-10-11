@@ -399,7 +399,6 @@ inline T* uninitialized_copy_impl(T* first, T* last, T* dest)
     return currentDest;
 }
 
-// @ 0x00501a10
 template <int kSlots>
 inline void destruct_wrap(Ed8* first, Ed8* last, Ed8* dest)
 {
@@ -408,6 +407,7 @@ inline void destruct_wrap(Ed8* first, Ed8* last, Ed8* dest)
     destruct_range(first, last, dest);
 }
 
+// @ 0x00501a10
 Ed8* uninitialized_move_ptr(Ed8* first, Ed8* last, Ed8* dest)
 {
     ScratchSlots<1>();

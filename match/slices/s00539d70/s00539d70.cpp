@@ -1,6 +1,6 @@
 // Swarm skin-paint "particle" effect block: ctor/dtor, registration, the brush
 // description init/copy and the eval-list serialization.
-// Unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast.
+// Unoptimized module. Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /EHsc
 #include "types.h"
 
 typedef unsigned int size_t;
@@ -18,12 +18,17 @@ extern char gEmptyString[];                                       // @ 0x1667bac
 struct Vector16 { void* a; void* b; void* c; void* d; };
 Vector16& VectorAssign(Vector16& dst, const Vector16& src);       // @ 0x50d4e0
 
+void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
+
 namespace eastl {
-struct allocator { void deallocate(void* p, size_t) { delete[] (char*)p; } };
+struct allocator { void deallocate(void* p, size_t) { EASTL_allocator_deallocate(p); } };
 struct basic_string {
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator mAllocator;
     basic_string() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-    ~basic_string() {}
+    ~basic_string() {
+        if ((int)(mpCapacity - mpBegin) > 1)
+            mAllocator.deallocate(mpBegin, (size_t)(mpCapacity - mpBegin));
+    }
     basic_string& assign(const char* first, const char* last);    // @ 0x454cb0
 };
 }  // namespace eastl
@@ -95,13 +100,17 @@ struct EvalList {
     char m1[0x14];                                                // +0x14
     Vector16 m2;                                                  // +0x28
     char pad[4];
-    EvalList& operator=(const EvalList& o) {
-        EvalCopyA_(this, &o);
-        EvalCopyB_((char*)this + 0x14, (const char*)&o + 0x14);
-        m2 = o.m2;
-        return *this;
-    }
+    EvalList& operator=(const EvalList& o);                       // 0x53a420
 };
+
+// @ 0x0053a420
+__declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
+{
+    EvalCopyA_(this, &o);
+    EvalCopyB_((char*)this + 0x14, (const char*)&o + 0x14);
+    m2 = o.m2;
+    return *this;
+}
 
 struct BrushDesc {
     char pad0[4];
@@ -130,7 +139,8 @@ struct BrushDesc {
     int mRuntimeComponentId;      // +0xac
 
     void Init();                                                  // @ 0x53a530
-    BrushDesc& operator=(const BrushDesc& o);                     // @ 0x53a2b0
+    BrushDesc& operator=(const BrushDesc& o);                     // 0x53a2b0
+    struct cSPSkinPaintParticleDescription* GetRuntimeDesc();     // 0x53a4a0
 };
 
 struct DescriptionBase { virtual void d0(); virtual void d1(); int mnRefCount; };
@@ -151,8 +161,8 @@ public:
     int mCurrentModifier;                                         // +0x4c
     EvalList* mpEvalList;                                         // +0x50
 
-    cSPSkinPaintParticleEffectBlockCommand();                     // @ 0x539f90
-    ~cSPSkinPaintParticleEffectBlockCommand();                    // @ 0x53a220
+    cSPSkinPaintParticleEffectBlockCommand();                     // 0x539f90
+    ~cSPSkinPaintParticleEffectBlockCommand();                    // 0x53a220
     void Parse(EA::ArgScript::cArguments& args);                  // @ 0x53a030
     void SetChild(int b);                                         // @ 0x53a1a0
 };
@@ -172,11 +182,18 @@ extern const char* kParticleKeyword;                              // 0x13f2ec8
 
 // ================================================================ functions
 
+// Stub receiver: the "inherit" command object arrives in ECX; its cState pointer is at +0xc.
+struct cSPSkinPaintParticleinheritCommand {
+    char pad[0xc];
+    void* mpState;
+    void Execute(EA::ArgScript::cArguments& args);
+};
+
 // @ 0x00539d70
-void cSPSkinPaintParticleinheritCommand_Execute(void* self, EA::ArgScript::cArguments& args)
+void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments& args)
 {
     cSPSkinPaintParticleEffectBlockCommand* state =
-        (cSPSkinPaintParticleEffectBlockCommand*)(*(void**)((char*)self + 0xc));
+        (cSPSkinPaintParticleEffectBlockCommand*)mpState;
     cSPSkinPaintParticleDescription* A;
     cSPSkinPaintParticleDescription* pDesc;
     pDesc = A;
@@ -270,7 +287,6 @@ cSPSkinPaintParticleEffectBlockCommand::~cSPSkinPaintParticleEffectBlockCommand(
         void** vt = *(void***)mpDesc.mpObject;
         ((void(__thiscall*)(char*))vt[2])((char*)mpDesc.mpObject + 8);
     }
-    mName.~basic_string();
 }
 
 // @ 0x0053a2b0
@@ -300,23 +316,32 @@ BrushDesc& BrushDesc::operator=(const BrushDesc& o)
     return *this;
 }
 
+// Stub receiver: the AddDesc command object arrives in ECX; its parser pointer is at +0xc.
+struct cSPSkinPaintParticleAddDescCommand {
+    char pad[0xc];
+    EA::Swarm::cEffectsParser* mpParser;
+    void AddDesc(EA::ArgScript::cArguments& args);
+};
+
 // @ 0x0053a460
-void cSPSkinPaintParticleEffectBlockCommand_AddDesc(void* self, EA::ArgScript::cArguments& args)
+void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments& args)
 {
     const char** argv = args.MainArguments(1);
-    EA::Swarm::cEffectsParser* parser = (EA::Swarm::cEffectsParser*)(*(void**)((char*)self + 0xc));
+    EA::Swarm::cEffectsParser* parser = mpParser;
     parser->AddDescription(args, argv[0], 0x26, 0);
 }
 
 // @ 0x0053a4a0
-cSPSkinPaintParticleDescription* FUN_0053a4a0(cSPSkinPaintParticleDescription* d)
+// The original receives the BrushDesc (chain id at +0x18, runtime component id at +0xac) in ECX.
+cSPSkinPaintParticleDescription* BrushDesc::GetRuntimeDesc()
 {
+    BrushDesc* b = this;
     void** mgr = (void**)SP_EffectsManager();
-    if (!mgr || d->mBrush.mChainId < 0 || d->mBrush.mRuntimeComponentId < 0)
+    if (!mgr || b->mChainId < 0 || b->mRuntimeComponentId < 0)
         return 0;
     char* res = (char*)(*(void*(__thiscall**)(int, int, int))((*(void***)mgr)[0x70 / 4]))(
-        0x26, d->mBrush.mChainId, d->mBrush.mRuntimeComponentId);
-    *(int*)(res + 0xb4) = d->mBrush.mRuntimeComponentId;
+        0x26, b->mChainId, b->mRuntimeComponentId);
+    *(int*)(res + 0xb4) = b->mRuntimeComponentId;
     return (cSPSkinPaintParticleDescription*)(res ? res + 8 : 0);
 }
 

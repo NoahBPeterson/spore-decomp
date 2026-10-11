@@ -110,6 +110,9 @@ struct cScenarioEditModeScriptActsBarUI {
     void ctor();
     void dtor();
     void FUN_00edbdd0(int a);
+    int  FUN_00edbac0(void* parent);
+    void FUN_00edbd30(int on);
+    void FUN_00edbe60();
 };
 
 // ---------------------------------------------------------------------------
@@ -412,9 +415,9 @@ RunInfo* do_copy(RunInfo* first, RunInfo* last, RunInfo* result)
 // 0x00edbac0  UI init
 // ---------------------------------------------------------------------------
 // @ 0x00edbac0
-int FUN_00edbac0(void* self, void* parent)
+int cScenarioEditModeScriptActsBarUI::FUN_00edbac0(void* parent)
 {
-    char* s = (char*)self;
+    char* s = (char*)this;
     char* dlg = 0;
     void* buf = operator_new(0x18, (const char*)0x013f6b3c, 0, 0, 0, 0);
     if (buf)
@@ -506,9 +509,9 @@ void cScenarioEditModeScriptActsBarUI::dtor()
 // 0x00edbd30  register/unregister message handler
 // ---------------------------------------------------------------------------
 // @ 0x00edbd30
-void FUN_00edbd30(void* self, int on)
+void cScenarioEditModeScriptActsBarUI::FUN_00edbd30(int on)
 {
-    char* s = (char*)self;
+    char* s = (char*)this;
     if (on) {
         char* h = (char*)EA_Messaging_MessageServer();
         char* sub = s ? s + 8 : 0;
@@ -572,8 +575,9 @@ void cScenarioEditModeScriptActsBarUI::ctor()
 // 0x00edbe60  cScenarioEditModeScriptActsBarUI dtor
 // ---------------------------------------------------------------------------
 // @ 0x00edbe60
-void cScenarioEditModeScriptActsBarUI_dtor_body(char* s)
+void cScenarioEditModeScriptActsBarUI::FUN_00edbe60()
 {
+    char* s = (char*)this;
     *(void**)(s + 0) = (void*)0x148a478;
     *(void**)(s + 8) = (void*)0x148a470;
     char* c = *(char**)(s + 0x4c);

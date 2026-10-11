@@ -31,6 +31,10 @@ void  FUN_00b85090(int, int, int);
 void  FUN_00b7f6a0(int, int, void*);
 void* FUN_006782c0(void*, void*, void*);
 void  FUN_00733920(void*, void*);
+struct Vec3Vec { int m[5];
+    int Emplace(int param_2, int* param_3);
+    Vec3Vec* AssignInts(Vec3Vec* param_2);
+    Vec3Vec* AssignRefs(Vec3Vec* param_2); };
 void  FUN_00733a50(void*);
 void  FUN_00733f20(void*);
 
@@ -51,8 +55,9 @@ void FUN_007345c0(int param_1)
 }
 
 // @ 0x00734660
-int FUN_00734660(int* param_1, int param_2, int* param_3)
+int Vec3Vec::Emplace(int param_2, int* param_3)
 {
+    int* param_1 = (int*)this;
     int* puVar1 = (int*)param_1[1];
     int iVar2 = (param_2 - *param_1) / 0xc;
     if ((param_2 == (int)puVar1) && (puVar1 != (int*)param_1[2]))
@@ -81,8 +86,9 @@ void FUN_007346d0(int* param_1, int param_2, uint32_t param_3, int param_4)
 }
 
 // @ 0x007348a0
-int* FUN_007348a0(int* param_1, int* param_2)
+Vec3Vec* Vec3Vec::AssignInts(Vec3Vec* p2)
 {
+    int* param_1 = (int*)this; int* param_2 = (int*)p2;
     if (param_2 != param_1)
     {
         int pvVar1 = *param_2;
@@ -98,7 +104,7 @@ int* FUN_007348a0(int* param_1, int* param_2)
             *param_1 = iVar3;
             param_1[2] = iVar3 + uVar5 * 4;
             param_1[1] = iVar3 + uVar5 * 4;
-            return param_1;
+            return (Vec3Vec*)param_1;
         }
         uint32_t uVar4 = (uint32_t)(param_1[1] - _Dst) >> 2;
         if (uVar4 < uVar5)
@@ -107,12 +113,12 @@ int* FUN_007348a0(int* param_1, int* param_2)
             int src = *param_2 + ((param_1[1] - *param_1) >> 2) * 4;
             memcpy((void*)param_1[1], (void*)src, param_2[1] - src);
             param_1[1] = *param_1 + uVar5 * 4;
-            return param_1;
+            return (Vec3Vec*)param_1;
         }
         memcpy((void*)_Dst, (void*)pvVar1, iVar2 - pvVar1);
         param_1[1] = *param_1 + uVar5 * 4;
     }
-    return param_1;
+    return (Vec3Vec*)param_1;
 }
 
 // @ 0x00734970
@@ -128,8 +134,9 @@ void FUN_00734d00(void)
 }
 
 // @ 0x00735260
-int* FUN_00735260(int* param_1, int* param_2)
+Vec3Vec* Vec3Vec::AssignRefs(Vec3Vec* p2)
 {
+    int* param_1 = (int*)this; int* param_2 = (int*)p2;
     if (param_2 != param_1)
     {
         int iVar1 = *param_2;
@@ -146,7 +153,7 @@ int* FUN_00735260(int* param_1, int* param_2)
             param_1[2] = nv + uVar7 * 4;
             param_1[1] = nv + uVar7 * 4;
             *param_1 = nv;
-            return param_1;
+            return (Vec3Vec*)param_1;
         }
         uint32_t uVar6 = (uint32_t)(param_1[1] - iVar4) >> 2;
         if (uVar6 < uVar7)
@@ -155,11 +162,11 @@ int* FUN_00735260(int* param_1, int* param_2)
             FUN_007b0040(&param_2, *param_2 + ((param_1[1] - *param_1) >> 2) * 4, param_2[1],
                          param_1[1], (int)param_2);
             param_1[1] = *param_1 + uVar7 * 4;
-            return param_1;
+            return (Vec3Vec*)param_1;
         }
         int p = (int)FUN_006782c0((void*)iVar1, (void*)iVar2, (void*)iVar4);
         FUN_00b007f0(p, param_1[1]);
         param_1[1] = *param_1 + uVar7 * 4;
     }
-    return param_1;
+    return (Vec3Vec*)param_1;
 }

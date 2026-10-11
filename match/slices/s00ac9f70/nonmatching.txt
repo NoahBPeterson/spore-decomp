@@ -3,6 +3,6 @@
 00aca2f0  81   complete; 0x20-stride range destroy, register schedule differs
 00aca730  27   complete; vector serialize, vcall/length schedule differs
 00aca7b0  22   complete; 0x20-stride range destroy, counter/shift shape differs
-00aca970  81   complete; vector copy helper, call schedule differs
+00aca970  81   complete; vector copy helper, call schedule differs; equiv FAIL (now a thiscall member of VecCopyStub; ours faults in 0xb93c60 where original returns)
 00acaab0  149  complete; 0x18-stride range copy, NEW ordering differs
-00acb150  51   complete; 4-vector destructor, call order/registers differ
+00acb150  51   complete; 4-vector destructor, call order/registers differ; equiv PASS (now a thiscall member of FourVecDtorStub)

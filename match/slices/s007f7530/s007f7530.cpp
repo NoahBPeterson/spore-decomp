@@ -471,9 +471,11 @@ AnimRaw* SPUICreateWindowAnimationTargetShadeW(AnimRaw* p, void* win, uint32_t t
 extern "C" void* __cdecl EASTL_allocator_allocate(int n, void* a, int b, int c, const char* file, int line);
 extern "C" void* __cdecl FUN_007f6e60(AInfo8c** srcOut, AInfo8c* first, AInfo8c* last, AInfo8c* dst, AInfo8c** srcIn);
 
-struct Vec8c { AInfo8c* mpBegin; AInfo8c* mpEnd; AInfo8c* mpCapacity; void* mAlloc; };
+struct Vec8c { AInfo8c* mpBegin; AInfo8c* mpEnd; AInfo8c* mpCapacity; void* mAlloc;
+    Vec8c* ctor_copy(Vec8c* src); Vec8c* assign(Vec8c* src); };
 
-Vec8c* vector_cAnimInfo_ctor(Vec8c* this_, Vec8c* src) {
+Vec8c* Vec8c::ctor_copy(Vec8c* src) {
+    Vec8c* this_ = this;
     int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) / 0x8c;
     AInfo8c* mem = 0;
     if (n != 0) {
@@ -513,7 +515,8 @@ extern "C" void __cdecl FUN_007f5f70(AInfo8c* first, AInfo8c* last);
 extern "C" void* __cdecl FUN_007f79d0(int n, AInfo8c* first, AInfo8c* last);
 extern "C" void __cdecl EASTL_allocator_deallocate(void* p); // 0x00f47380
 
-Vec8c* vector_cAnimInfo_assign(Vec8c* this_, Vec8c* src) {
+Vec8c* Vec8c::assign(Vec8c* src) {
+    Vec8c* this_ = this;
     if (src != this_) {
         int n = (int)((char*)src->mpEnd - (char*)src->mpBegin) / 0x8c;
         int cap = (int)((char*)this_->mpCapacity - (char*)this_->mpBegin) / 0x8c;

@@ -435,9 +435,14 @@ def find_symbol(coff, sid, va, src, orig_size=None):
         _sec, a, b = coff.func_extent(funcs[f])
         return orig_size / 5 <= (b - a) <= orig_size * 5
 
+    # Size only breaks ties between same-name candidates: a unique name match is accepted at any size
+    # (a thin wrapper around a non-inlined shared helper is complete source, just much smaller).
     allc = []
     for nm in names:
-        cands = [f for f in funcs if _name_matches(f, nm) and plausible(f)]
+        named = [f for f in funcs if _name_matches(f, nm)]
+        if len(named) == 1:
+            return named[0], "name %s" % nm
+        cands = [f for f in named if plausible(f)]
         if len(cands) == 1:
             return cands[0], "name %s" % nm
         for c in cands:

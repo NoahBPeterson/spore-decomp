@@ -53,6 +53,7 @@ struct cSmoothCameraController {
 };
 
 // A quaternion multiply helper sitting between the camera methods.
+// @ 0x007dcb00
 void FUN_007dcb00(float* out, const float* a, const float* b)
 {
     float b1 = b[1], b2 = b[2], a1 = a[1], a2 = a[2];

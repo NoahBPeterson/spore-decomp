@@ -624,7 +624,7 @@ int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out
     return 1;
 }
 
-// @ 0x00746910 : cModelWorld model-group assignment.
+// cModelWorld model-group assignment.
 struct ListNode { ListNode* pNext; ListNode* pPrev; };
 struct GroupRef {
     void* p;
@@ -646,10 +646,13 @@ struct GroupWorld {
     ListNode mGroupList;         // +0x19c
     unsigned char pad1a4[0x1cc - 0x1a4];
     void* mSlotObj;              // +0x1cc
+    void AssignGroup(void* newObj, int idx, bool flag);
 };
-void FUN_00746910(void* self, void* newObj, int idx, bool flag)
+// @ 0x00746910
+void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
 {
-    GroupWorld* w = (GroupWorld*)self;
+    GroupWorld* w = this;
+    void* self = this;
     if (idx == 0) {
         for (ListNode* n = w->mGroupList.pNext; n != (ListNode*)&w->mGroupList; n = n->pNext) {
             GroupInternal* g = (GroupInternal*)n;

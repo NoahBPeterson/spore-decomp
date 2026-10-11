@@ -86,13 +86,16 @@ ImageDrawable* ImageDrawable::DestroyScalar(unsigned char flags) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x0097D080  EA::UTFWinControls::WinGrid::Refresh  (adjustor thunk into FUN_0097bc80)
 // ---------------------------------------------------------------------------------------------
-extern "C" void FUN_0097bc80(void*);
-void WinGrid_Refresh(void* self) { FUN_0097bc80((char*)self - 0x20c); }
+struct WinGridBase { void RefreshImpl(); };   // 0x97bc80, thiscall
+struct WinGridRefreshThunk { void Refresh(); };
+void WinGridRefreshThunk::Refresh() { ((WinGridBase*)((char*)this - 0x20c))->RefreshImpl(); }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x0097D100  intrusive pointer field setter
 // ---------------------------------------------------------------------------------------------
-void SetIntrusive18(void* self, void* p) {
+struct IntrusiveHolder { void SetIntrusive18(void* p); };
+void IntrusiveHolder::SetIntrusive18(void* p) {
+    void* self = this;
     if (*(void**)((char*)self + 0x18) != p) {
         if (p) ((void(__thiscall*)(void*))((void**)*(void**)p)[0])(p);
         void* old = *(void**)((char*)self + 0x18);
@@ -104,7 +107,9 @@ void SetIntrusive18(void* self, void* p) {
 // ---------------------------------------------------------------------------------------------
 // @ 0x0097D170  EA::UTFWinControls::ImageDrawable::GetNaturalSize
 // ---------------------------------------------------------------------------------------------
-bool ImageDrawable_GetNaturalSize(void* self, int* outW, int* outH) {
+struct NaturalSizeHolder { bool GetNaturalSize(int* outW, int* outH, int unused); };
+bool NaturalSizeHolder::GetNaturalSize(int* outW, int* outH, int unused) {
+    void* self = this; (void)unused;
     if (*(void**)((char*)self + 0x24) == 0) return false;
     (void)outW; (void)outH;
     return true;   // approximated

@@ -103,8 +103,9 @@ struct IntStrMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
-  __declspec(noinline) string8* operator[](const int& key);               // 0x00b1ba90
-  __declspec(noinline) void DoInsert(Iter* out, IntStrNode* hint, IntStrPair* value, bool forceLeft);  // 0x00b1ad00
+  __declspec(noinline) string8* Index(const int& key);                    // 0x00b1ba90
+  string8* operator[](const int& key) { return Index(key); }
+  void DoInsert(Iter* out, IntStrNode* hint, IntStrPair* value, bool forceLeft);  // 0x00b1ad00
 };
 void __cdecl MakeIntStrPair(IntStrPair* out, const int* key, const string8* def);  // 0x00b209f0
 
@@ -115,9 +116,10 @@ struct StrIntMap {
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
   __declspec(noinline) Iter* insert(Iter* out, RBNodeBase* hint, const void* value);  // 0x00b1b980
-  __declspec(noinline) int* operator[](const string8& key);                           // 0x00b1c220
-  __declspec(noinline) void DoInsertValueImpl(Iter* out, RBNodeBase* parent, const void* value, bool forceLeft);  // 0x00b1a600
-  __declspec(noinline) InsertResult insertSimple(const void* value, int unused);                       // 0x00b1aba0
+  __declspec(noinline) int* Index(const string8& key);                                // 0x00b1c220
+  int* operator[](const string8& key) { return Index(key); }
+  void DoInsertValueImpl(Iter* out, RBNodeBase* parent, const void* value, bool forceLeft);  // 0x00b1a600
+  InsertResult insertSimple(const void* value, int unused);                       // 0x00b1aba0
 };
 
 // ---- map<int, vector<Elem38>>
@@ -126,12 +128,13 @@ struct IntVecMap {
   char pad[4];
   RBNodeBase mAnchor;  // +4
   unsigned mnSize;     // +0x14
-  __declspec(noinline) Elem38Vector* operator[](const int& key);                        // 0x00b1c150
-  __declspec(noinline) void DoInsert(Iter* out, RBNodeBase* hint, IntVecPair* value, bool forceLeft);  // 0x00b1b8b0
+  __declspec(noinline) Elem38Vector* Index(const int& key);                             // 0x00b1c150
+  Elem38Vector* operator[](const int& key) { return Index(key); }
+  void DoInsert(Iter* out, RBNodeBase* hint, IntVecPair* value, bool forceLeft);  // 0x00b1b8b0
 };
 
 // @ 0x00b1ba90
-string8* IntStrMap::operator[](const int& key) {
+string8* IntStrMap::Index(const int& key) {
   IntStrNode* pCurrent = (IntStrNode*)mAnchor.mpNodeParent;
   RBNodeBase* pLowerBound = &mAnchor;
   if (pCurrent) {
@@ -179,7 +182,7 @@ Iter* StrIntMap::insert(Iter* out, RBNodeBase* hint, const void* value) {
 }
 
 // @ 0x00b1c220
-int* StrIntMap::operator[](const string8& key) {
+int* StrIntMap::Index(const string8& key) {
   StrIntNode* pCurrent = (StrIntNode*)mAnchor.mpNodeParent;
   RBNodeBase* pLowerBound = &mAnchor;
   if (pCurrent) {
@@ -200,7 +203,7 @@ int* StrIntMap::operator[](const string8& key) {
 }
 
 // @ 0x00b1c150
-Elem38Vector* IntVecMap::operator[](const int& key) {
+Elem38Vector* IntVecMap::Index(const int& key) {
   IntVecNode* pCurrent = (IntVecNode*)mAnchor.mpNodeParent;
   RBNodeBase* pLowerBound = &mAnchor;
   if (pCurrent) {

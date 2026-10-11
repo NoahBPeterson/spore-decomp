@@ -105,6 +105,7 @@ struct hkFinishLoadedObjectRegistry : hkReferencedObject {
     virtual void registerTypeInfo(const hkTypeInfo* info);                              // 2
     virtual void finishLoadedObject(void* obj, const char* className) const;           // 3
     virtual void merge(const hkFinishLoadedObjectRegistry& from);                       // 4
+    void deletingDtor(unsigned flags);   // 0x0112bc30, this in ECX
 };
 
 struct hkVtableClassRegistry : hkReferencedObject {
@@ -113,6 +114,7 @@ struct hkVtableClassRegistry : hkReferencedObject {
     virtual const hkClass* getClassFromVirtualInstance(const void* obj) const;          // 3
     virtual void merge(const hkVtableClassRegistry& from);                              // 4
     void registerList(const hkTypeInfo* const* infos, const hkClass* const* classes);
+    void deletingDtor(unsigned flags);   // 0x0112bbf0, this in ECX
 };
 
 struct hkBuiltinTypeRegistry : hkReferencedObject {
@@ -165,6 +167,7 @@ struct hkPointerMapItem { void** pointer; int next; };
 struct hkPointerMultiMap {
     hkArray<hkPointerMapItem> m_items;   // +0
     hkPointerMapBase          m_map;     // +0xc
+    void destruct();   // 0x0112b050, this in ECX
     ~hkPointerMultiMap() { m_map.~hkPointerMapBase(); m_items.quickFree(0x14); }
     void insert(hkUlong32 key, void** const& value) {
         hkUlong32 head = m_map.getWithDefault(key, 0xffffffff);
@@ -338,12 +341,12 @@ hkResult hkBinaryPackfileReader::finishLoadedObjects(const hkFinishLoadedObjectR
 
 // @ 0x0112b050
 // hkPointerMultiMap<void*,void*> destructor (inlined in the tracker destructor)
-static void hkPointerMultiMap_destruct(hkPointerMultiMap* self)
+void hkPointerMultiMap::destruct()
 {
-    self->m_map.~hkPointerMapBase();
-    if (self->m_items.m_capacityAndFlags >= 0)
-        getThreadMemory()->deallocateChunk(self->m_items.m_data,
-            (self->m_items.m_capacityAndFlags & HK_ARRAY_FLAG_MASK) << 3, 0x14);
+    m_map.~hkPointerMapBase();
+    if (m_items.m_capacityAndFlags >= 0)
+        getThreadMemory()->deallocateChunk(m_items.m_data,
+            (m_items.m_capacityAndFlags & HK_ARRAY_FLAG_MASK) << 3, 0x14);
 }
 
 // @ 0x0112b090
@@ -506,7 +509,7 @@ void hkPointerMultiMap_insert(hkPointerMultiMap* self, void* key, void** const& 
 hkPackfileObjectUpdateTracker::~hkPackfileObjectUpdateTracker()
 {
     m_finish.~hkPointerMapBase();
-    hkPointerMultiMap_destruct(&m_pointersTo);
+    m_pointersTo.destruct();
 }
 
 // @ 0x0112b6c0
@@ -647,16 +650,16 @@ const hkClass* hkVtableClassRegistry::getClassFromVirtualInstance(const void* ob
 
 // @ 0x0112bbf0
 // scalar deleting destructor of hkVtableClassRegistry
-void hkVtableClassRegistry_deletingDtor(hkVtableClassRegistry* self, unsigned flags)
+void hkVtableClassRegistry::deletingDtor(unsigned flags)
 {
-    delete self;
+    delete this;
 }
 
 // @ 0x0112bc30
 // scalar deleting destructor of hkFinishLoadedObjectRegistry / hkClassNameRegistry
-void hkFinishLoadedObjectRegistry_deletingDtor(hkFinishLoadedObjectRegistry* self, unsigned flags)
+void hkFinishLoadedObjectRegistry::deletingDtor(unsigned flags)
 {
-    delete self;
+    delete this;
 }
 
 // @ 0x0112bc70
@@ -693,9 +696,9 @@ hkDefaultBuiltinTypeRegistry* hkDefaultBuiltinTypeRegistry_create()
 }
 
 // @ 0x0112be10
-void* hkBinaryPackfileReader_getContents(hkBinaryPackfileReader* self, const char* className)
+void* hkBinaryPackfileReader::getContents(const char* className)
 {
-    return self->getContentsWithRegistry(className, hkBuiltinTypeRegistry::s_instance->getLoadedObjectRegistry());
+    return getContentsWithRegistry(className, hkBuiltinTypeRegistry::s_instance->getLoadedObjectRegistry());
 }
 // --- equivalence checker address annotations
     void* operator new(unsigned int); // 0x006abeb0

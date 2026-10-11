@@ -81,6 +81,13 @@ struct WString {
     long find(const wchar_t* s, int start) { return (long)WStr_Find(this, s, start); }
 };
 
+struct WStringVector {
+    int pad0;
+    WString* mpEnd;
+    WString* mpCap;
+    WString* Erase(WString* pos);
+};
+
 // ---------------------------------------------------------------- Clipboard
 struct Mutex { char pad[0x14]; void Lock(void* name) { Mutex_Lock(this, name); } void Unlock() { Mutex_Unlock(this); } };
 struct DataInfo { unsigned mnType; void* mpData; };
@@ -105,6 +112,10 @@ struct Clipboard {
     char pad14d[3];
     void Clear(unsigned type);                    // 0x92a940 (other slice)
     bool SetClipboardData(IData* pData, bool b);  // @ 0092abb0
+    void DestroyPlatform();                       // @ 0092ad10
+    bool Clipboard_EnablePlatform();              // @ 0092b0b0
+    void FUN_0092b0f0(int v);                     // @ 0092b0f0
+    bool FUN_0092b140();                          // @ 0092b140
 };
 
 struct Win32Clipboard {
@@ -118,7 +129,6 @@ struct Win32Clipboard {
     DWORD mnLocale;      // +0x18
     Win32Clipboard(Clipboard* owner);   // @ 0092afb0
     bool WindowProcedure(WString* text); // @ 0092adb0
-    void Destroy();                       // @ 0092ad10
 };
 
 // global AutoOSGlobalPtr-like object with the Clipboard at +0x10
@@ -155,17 +165,8 @@ void* FUN_0092ac90(void* v) {
 }
 
 // @ 0x0092ad10
-void Win32Clipboard::Destroy() {
-    if (mpPrimary != 0) {
-        Win32Clipboard* w = 0;
-        (void)w;
-    }
-    // actual object is this->mpPrimary? see note: this routine uses +8 of the owning Clipboard
-}
-
-// @ 0x0092ad10  (as written on the Clipboard's platform object)
-void DestroyPlatformClipboard(void* owner) {
-    char* o = (char*)owner;
+void Clipboard::DestroyPlatform() {
+    char* o = (char*)this;
     char* p = *(char**)(o + 8);
     if (p != 0) {
         if (*(void**)(p + 0x10) != 0) {
@@ -309,7 +310,8 @@ bool SetClipboardText(Clipboard* clipboard, const wchar_t* s, int len) {
 }
 
 // @ 0x0092b0b0
-bool Clipboard_EnablePlatform(void* self) {
+bool Clipboard::Clipboard_EnablePlatform() {
+    void* self = this;
     char* s = (char*)self;
     if (s[0x14c] != 0 && *(void**)(s + 8) == 0 && *(int*)(s + 4) == 1) {
         void* mem = FUN_006abeb0(0x1c);
@@ -323,23 +325,25 @@ bool Clipboard_EnablePlatform(void* self) {
 }
 
 // @ 0x0092b0f0
-void FUN_0092b0f0(char* self, int v) {
+void Clipboard::FUN_0092b0f0(int v) {
+    char* self = (char*)this;
     Mutex* m = (Mutex*)(self + 0x118);
     m->Lock((void*)0x143e3a0);
     *(int*)(self + 4) = v;
     if (*self != 0) {
         if (v == 1) {
-            Clipboard_EnablePlatform(self);
+            Clipboard_EnablePlatform();
             m->Unlock();
             return;
         }
-        DestroyPlatformClipboard(self);
+        DestroyPlatform();
     }
     m->Unlock();
 }
 
 // @ 0x0092b140
-bool FUN_0092b140(char* self) {
+bool Clipboard::FUN_0092b140() {
+    char* self = (char*)this;
     Mutex* m = (Mutex*)(self + 0x118);
     m->Lock((void*)0x143e3a0);
     if (*self == 0) {
@@ -393,8 +397,8 @@ CommandLineB::CommandLineB() {
 }
 
 // @ 0x0092b700
-WString* VectorEraseWString(void* vec, WString* pos) {
-    char* v = (char*)vec;
+WString* WStringVector::Erase(WString* pos) {
+    char* v = (char*)this;
     if ((char*)pos + 0x10 < *(char**)(v + 4))
         CopyWStrings((char*)pos + 0x10, *(void**)(v + 4), pos);
     *(int*)(v + 4) -= 0x10;

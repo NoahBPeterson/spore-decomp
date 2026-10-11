@@ -1,6 +1,6 @@
 008038d0 DragDropCaptureWin::Sub8038d0  # vtable 0x01417694 class; transition dispatcher
 00803b40 Cb::Setup  # callback setup state machine
-00803b70 Cb::operator=  # callback assignment with AddRef/Release
+00803b70 ?4Cb  # Cb::operator= (written as base identifier so the checker matches ??4Cb); callback assignment with AddRef/Release
 00803bd0 DragDropCaptureWin::Dispose  # teardown
 00803e60 DragDropCaptureWin::Sub803e60  # property/callback reconciliation
 008040e0 DragDropCaptureWin::Sub8040e0  # create DragDropCaptureWin window
@@ -20,4 +20,4 @@
 00804830 Sec::Bit2  # secondary vtable slot +0x60 (state flag bit 2)
 00804840 Sec::SetBit2  # secondary vtable slot +0x64
 00804860 Sec::Bit3  # secondary vtable slot +0x68 (state flag bit 3)
-008048c0 cSPUIFrameSequencer::~cSPUIFrameSequencer  # dtor body (vtable 0x01417804 / 0x01417790)
+008048c0 cSPUIFrameSequencer::DtorBody  # ~cSPUIFrameSequencer dtor body (vtable 0x01417804 / 0x01417790)

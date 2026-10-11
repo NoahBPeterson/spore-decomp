@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 0093b9e0  65   complete: App::memorystream append, capacity/size schedule differs
-0093ba40  25   complete: memorystream ctor, field-store order differs
+0093ba40  25   complete: memorystream ctor, field-store order differs; equiv FAIL after ecx fix (this-ptr member Init; class lacks vptr so field offsets +4.. are shifted vs original)
 0093bab0  120  complete: GetProperty switch/float materialisation differs
 0093bb40  117  complete: SetProperty switch/float materialisation differs
 0093bbf0  45   complete: MemoryStream reads via shared data pointer, schedule differs

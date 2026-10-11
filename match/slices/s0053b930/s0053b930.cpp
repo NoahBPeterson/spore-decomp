@@ -205,10 +205,13 @@ float Dot3(const float* a, const float* b)
     return a[2] * b[2] + (a[1] * b[1] + a[0] * b[0]);
 }
 
+// Receiver (ECX) of the thiscall `ret 4` command; the stack argument is unused.
+struct PaintResetModifierCmd { void PaintResetModifier(void* unused); };
+
 // @ 0x0053c4e0
-void PaintResetModifier(void* self)
+void PaintResetModifierCmd::PaintResetModifier(void*)
 {
-    *(int*)(*(int*)((char*)self + 0x30) + 0x4c) = 0xff;
+    *(int*)(*(int*)((char*)this + 0x30) + 0x4c) = 0xff;
 }
 
 // @ 0x0053c500

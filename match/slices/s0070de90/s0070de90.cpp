@@ -155,9 +155,14 @@ void LConfigVec_Resize(LConfigVec* self, unsigned n)
     }
 }
 
+struct MsgRegOwner { char MsgRegister(); };
+struct RebuildOwner { void Rebuild(); };
+struct MatMgrW { char WriteMaterials(void* stream); };
+
 // @ 0x0070e280
-char cMaterialMsgRegister(void* self)
+char MsgRegOwner::MsgRegister()
 {
+    void* self = this;
     ReloadLightingStates(self);
     void* ms = MessageServer();
     if (ms != 0)
@@ -444,8 +449,9 @@ void* MakeFixedArray(void* ret, const void* src)
 }
 
 // @ 0x0070e4e0  (rebuild per-instance graphics resources)
-void RebuildResources1(int self)
+void RebuildOwner::Rebuild()
 {
+    int self = (int)this;
     D3D_FlushSomeStates();
     int n = (*(int*)(self + 0x9c) - *(int*)(self + 0x98)) >> 2;
     for (int i = 0; i < n; i++)
@@ -644,8 +650,9 @@ void make_the_buffer(void* self, unsigned flags)
 }
 
 // @ 0x0070eea0  (SP::cMaterialManager::WriteMaterials)
-char cMaterialManager_WriteMaterials(int self, void* stream)
+char MatMgrW::WriteMaterials(void* stream)
 {
+    int self = (int)this;
     int local[3];
     local[0] = *(int*)(self + 0x200);
     local[1] = 0x469a3f7;

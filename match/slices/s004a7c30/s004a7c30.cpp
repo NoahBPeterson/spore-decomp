@@ -192,7 +192,6 @@ void KillSeti(int arg)
     KillSetiEffects(arg, GetRecorderState());
 }
 
-// @ 0x004a88f0
 struct Vec3 { float x, y, z; };
 struct Mat3 { float m[9]; };
 struct XformMsg {
@@ -202,16 +201,17 @@ struct XformMsg {
     uint32_t mUnk10;     // +0x10
     Mat3     mMat;       // +0x14
     char pad[0x38 - 0x38];
-    XformMsg();
+    XformMsg();                                                          // 0x00434040
 };
 struct EffectsManager {
     void* vtable;
 };
-extern EffectsManager* GetEffectsManager();
+extern EffectsManager* GetEffectsManager();                              // 0x0067ddd0
 
 // virtual-slot helper
 static void* VSlot(void* obj, int off) { return *(void**)(*(char**)obj + off); }
 
+// @ 0x004a88f0
 bool PostXformEffect(unsigned int id, char* src, void** out)
 {
     void* handle = 0;

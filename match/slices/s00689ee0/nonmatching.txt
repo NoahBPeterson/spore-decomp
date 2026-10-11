@@ -1,5 +1,5 @@
 00689ee0  178  cCommandInfo copy ctor: member init order right, but cl homes source/dest in different regs and uses push ecx instead of sub esp,8
-0068a040  140  find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ
+0068a040  140  find-by-name loop: begin iteration + case-insensitive compare correct, but loop/compare scheduling and register use differ; equiv: FAIL (5/15 valid inputs mismatched at import call #0 tolower)
 0068a250  95   map node allocator: new-expression body correct, original keeps an EH frame + cleanup around operator new/Variant assign
 0068a320  148  command-string fixup: control flow reproduced with gotos, but cl folds the length>>1 to test and lays blocks out differently
 0068a720  78   ~cCommandParameterSet: vtable stores + DoNukeSubtree correct, EH state table from real base-class dtors not reproduced

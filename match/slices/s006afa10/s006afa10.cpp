@@ -73,6 +73,7 @@ struct CAfa90 {
     void* Query(int iid);
 };
 
+// @ 0x006afa90
 void* CAfa90::Query(int iid)
 {
     if (iid == 0x498d9c1)
@@ -110,6 +111,7 @@ struct CAfe40 {
     void f(LN* node);
 };
 
+// @ 0x006afe40
 void CAfe40::f(LN* node)
 {
     LN* first = node->flink;
@@ -129,6 +131,7 @@ void CAfe40::f(LN* node)
 // ---------------------------------------------------------------------------
 // 006b0530  void* __stdcall FUN_006b0530(void* src)
 // ---------------------------------------------------------------------------
+// @ 0x006b0530
 void* __stdcall FUN_006b0530(void* src)
 {
     char* p = (char*)ea_alloc_raw(0x20, (void*)"App", 0, 0, 0, 0);
@@ -157,6 +160,7 @@ void* __stdcall FUN_006b0530(void* src)
 // ---------------------------------------------------------------------------
 // 006b08a0  void* __stdcall FUN_006b08a0(void* a, void* b)
 // ---------------------------------------------------------------------------
+// @ 0x006b08a0
 void* __stdcall FUN_006b08a0(void* a, void* b)
 {
     char* p = (char*)ea_alloc_raw(0x128, (void*)"App/Resource/LRUCache", 0, 0, 0, 0);

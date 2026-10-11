@@ -1,4 +1,4 @@
-0083c900 eastl::hashtable<string,pair<const string,AutoRefCount<cICommand>>>::insert  # inferred
+0083c900 ?Insert@HashCmdTable string,AutoRefCount<cICommand>>>::insert  # inferred
 0083ca00 eastl::hashtable<string,pair<const string,AutoRefCount<cExprFunction>>>::find  # inferred
 0083cad0 eastl::hashtable<string,...cICommand...>::DoFreeNodes  # PDB
 0083cb70 eastl::hash_map<string,AutoRefCount<cICommand>>::operator[]  # PDB
@@ -8,4 +8,4 @@
 0083d080 eastl::pair<const string,AutoRefCount<cExprFunction>>::~pair  # PDB
 0083d240 EA::ArgScript::cExpression::EvalBoolParentheses  # PDB candidate
 0083d290 EA::ArgScript::cExpression::EvalContinueChar  # PDB
-0083d2f0 EA::ArgScript::cExpression::EvalRealParentheses  # PDB candidate
+0083d2f0 ?EvalRealParentheses4@ExprStub  # PDB candidate

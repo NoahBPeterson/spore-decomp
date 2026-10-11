@@ -437,7 +437,9 @@ void AppDestructor(cApp* self) {
 }
 
 // @ 0x007d93a0
-void SomeBaseDestructor(void* self) {
+struct BaseObj { void SomeBaseDestructor(); };
+void BaseObj::SomeBaseDestructor() {
+    void* self = this;
     *(void**)self = (void*)0x014128a8;
     *(void**)((char*)self + 4) = (void*)0x01412894;
     *(void**)((char*)self + 8) = (void*)0x01412890;

@@ -9,4 +9,5 @@
 00960650  -  WindowListMarshaller::Read: marshaller body not reconstructed
 009608c0  -  Window::SetPhysicalArea: body not reconstructed
 009609b0  -  Window::InvalidateLayout: body not reconstructed
+00960ae0  -  FUN_00960ae0: stub only (returns 0); vtable dispatch body not reconstructed
 00960b40  -  FUN_00960b40: body not reconstructed

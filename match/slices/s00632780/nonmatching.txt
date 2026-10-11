@@ -5,6 +5,6 @@
 00632c60 16 DeleteOne: complete; scheduling of a dead mov ecx,esi vs the selected-flag store
 00632ce0 16 MoveOne: complete; same as DeleteOne
 00632e40 63 ResetPhotoMap: complete; original keeps 0 in ebx across the tree reset and returns via cl/al
-00632e90 103 PhotoTypeMap::operator[] (find-or-insert): complete; original passes iterator and value_type by value to DoInsertKey
+00632e90 103 PhotoTypeMap::operator[] (find-or-insert): complete; original passes iterator and value_type by value to DoInsertKey; equiv FAIL (ours faults reading unmapped memory where original returns); marker/symbol now resolves
 00633230 125 MarkPhotoTypeForGuid: complete; find() out-param shape and operator[] call shape differ
 00633440 193 CapturePixels: complete; same entry-address folding as CopyPixelsToRaster

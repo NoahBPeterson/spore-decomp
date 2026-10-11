@@ -2,4 +2,16 @@
 0041cc20 VirtualRefPtr::VirtualRefPtr  # stores ptr, virtual slot 0 AddRef
 0041cc60 TargetPtr::Assign  # refcount at +4, DefaultRefCounted::Release call
 0041ccc0 TargetPtr::Init
-0041cd60 HashMap_Key8_VirtualRefPtr::operator[]  # find / end / insert pattern
+0041cd60 ?A?$HashMap  # find / end / insert pattern
+0041ce60 ?A?$HashMap  # HashMap<Key8,int>::operator[]
+0041d1f0 ?A?$HashMap  # HashMap<ThreadedPtr,int>::operator[]
+0041d2c0 ?A?$HashMap  # HashMap<uint32,float>::operator[]
+0041fb20 ?find@?$HashMap@UKey8@@UVirtualRefPtr@@@@QAE?AUIterator@1@ABUKey8@@@Z  # callee annotation
+0041fc40 ?DoInsert@?$HashMap@UKey8@@UVirtualRefPtr@@@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
+0041fb20 ?find@?$HashMap@UKey8@@H@@QAE?AUIterator@1@ABUKey8@@@Z
+0041fe00 ?DoInsert@?$HashMap@UKey8@@H@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
+00420b50 ?find@?$HashMap@UThreadedPtr@@H@@QAE?AUIterator@1@ABUThreadedPtr@@@Z
+00420c70 ?DoInsert@?$HashMap@UThreadedPtr@@H@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z
+00404f90 ?Release@ThreadedObject@@QAEXXZ
+00421950 ?find@?$HashMap@IM@@QAE?AUIterator@1@ABI@Z
+00421a50 ?DoInsert@?$HashMap@IM@@QAE?AUInsertResult@1@ABUvalue_type@1@UInsertTag@@@Z

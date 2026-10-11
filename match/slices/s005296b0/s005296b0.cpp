@@ -5,13 +5,18 @@ template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
 template <> inline void ScratchSlots<0>() {}
 
 // ---------------------------------------------------------------- external helpers
-void EmitVertex4(uint32_t* a, uint32_t* b, uint32_t* c, uint32_t d);   // 0x005295b0
 void RwTeardown();                                                     // 0x00529690
-uint32_t FUN_00529520(int);                                            // 0x00529520
 void SetRenderState(int state, uint32_t value);                        // 0x00529350
 void ActiveStateSetTexture(int n, void* tex);                          // rw::graphics::ActiveState::SetTexture
 void FUN_011f38e0();                                                   // 0x011f38e0
 float* Vector3Scale(float* out, float* a, float* b);                   // 0x0041de40
+
+struct V2 { uint32_t x, y; };
+struct cQuadWriter {
+    void EmitVertex4(uint32_t* a, uint32_t* b, uint32_t* c, uint32_t d);   // 0x005295b0
+    uint32_t FUN_00529520(int);                                            // 0x00529520
+    void WriteQuadVerts(V2* a, V2* b, uint32_t param_3);                   // 0x005296b0
+};
 
 struct RwDevice {
     char pad[0x208];
@@ -30,8 +35,7 @@ extern uint32_t g_renderStateDirty;   // 0x016fa388
 extern uint32_t g_rasterDelta;        // 0x016f921c
 
 // @ 0x005296b0
-struct V2 { uint32_t x, y; };
-void WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
+void cQuadWriter::WriteQuadVerts(V2* a, V2* b, uint32_t param_3)
 {
     FUN_00529520(2);
     uint32_t l10 = 0, lc = 0, l8 = 0;

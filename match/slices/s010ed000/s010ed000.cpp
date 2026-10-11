@@ -138,10 +138,12 @@ void hkSimpleClosestContactCollector::addCdPoint(const hkCdPoint& p)
     }
 }
 
-// @ 0x010ed2a0  (hkGskCache builder using two bodies)
-void FUN_010ed2a0(void* self, hkCdBody* a, hkCdBody* b, int flags)
+struct hkGskBuilder { void build(hkCdBody* a, hkCdBody* b, int flags); };
+
+// @ 0x010ed2a0  hkGskBuilder::build (hkGskCache builder using two bodies)
+void hkGskBuilder::build(hkCdBody* a, hkCdBody* b, int flags)
 {
-    char* p = (char*)self;
+    char* p = (char*)this;
     *(int*)(p + 8) = flags;
     *(unsigned short*)(p + 6) = 1;
     *(void**)p = (void*)0x14a531c;

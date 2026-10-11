@@ -92,9 +92,12 @@ extern int  FUN_00ec6e70(int);     // 0x00ec6e70
 extern int  FUN_00c072b0(int*);    // 0x00c072b0
 extern int  ScenarioTutorials_GetActive();
 
+struct TutCmds { void Build_00f2a6a0(); void Build_00f2aac0(); };
+
 // @ 0x00f2a6a0
-void FUN_00f2a6a0(char* self)
+void TutCmds::Build_00f2a6a0()
 {
+    char* self = (char*)this;
     int rec[8];
     int v = *(int*)(self + 0x4ac);
     if (v == 1 || v == 2 || v == 3) {
@@ -165,8 +168,9 @@ tail:
 extern int FUN_00f08850(int, int);
 
 // @ 0x00f2aac0
-void FUN_00f2aac0(char* self)
+void TutCmds::Build_00f2aac0()
 {
+    char* self = (char*)this;
     int rec[8];
     rec[0] = 0; rec[1] = -1; rec[2] = -1;
     if (*(int*)(self + 0x4ac) == 4) {

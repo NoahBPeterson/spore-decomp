@@ -311,13 +311,13 @@ void LocaleMsg2::Dtor() {
     vt0 = 0x13eb918;
 }
 
-// @ 0x645010
 struct ResourceKey {
     uint32_t inst, type, group;
     ResourceKey(uint32_t i, uint32_t t, uint32_t g) : inst(i), type(t), group(g) {}
 };
 struct TexturePreload { TexturePreload* ctor(int n); void PreloadTextureList(const ResourceKey* k); };
 void* Alloc6b(size_t, const char*, int, int, int, int);
+// @ 0x645010
 void Browser::PreloadTextures() {
     static ResourceKey keys[8] = {
         ResourceKey(0x7c6511a1, 0x510a95b, 0x851d4139), ResourceKey(0x0ab75403, 0x510a95b, 0x851d4139),

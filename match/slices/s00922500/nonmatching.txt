@@ -1,4 +1,3 @@
-00922500  83   Semaphore ctor (name/intra): complete; reg/stack schedule differs (Mutex + 2 lock ctors inlined)
 00922570  52   EASemaphoreData::UpdateCancelCount: complete; CAS loop schedule differs
 00922620  66   Semaphore::Init: complete; CreateSemaphoreA arg/register schedule differs
 00922690  117  Semaphore::Wait: complete; intra-process fast path schedule differs
@@ -10,7 +9,7 @@
 00922ab0  101  SetThreadPriority retry loop: complete; loop/branch inversion differs
 00922b30  119  Thread::SetName: complete EH function; /EHsc frame + RaiseException arg layout differ
 00922c20  18   SmartPtr copy+AddRef: complete; register assignment (this in eax vs ecx) differs
-00922c40  0    SetThreadIdealProcessor: complete; processor-count atomic/div schedule differs
+00922c40  0    SetThreadIdealProcessor: complete; now member (ecx); equiv WEAK (737 valid, 12.7% coverage, GetSystemInfo import discards); processor-count atomic/div schedule differs
 00922d10  12   QueueUserAPC wrapper: complete; cl materializes the handle before the null test
 00922da0  62   thread-data release/free: complete; range check + atomic clear schedule differs
 00922e10  17   release helper (_InterlockedExchangeAdd flags): complete; cl emits `cmp` instead of reusing xadd ZF

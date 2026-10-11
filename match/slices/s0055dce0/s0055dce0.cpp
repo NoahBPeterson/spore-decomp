@@ -6,6 +6,13 @@
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 extern "C" void EASTL_allocator_deallocate(void* p); // 0x00f47380
 
+struct PaintStub {
+    unsigned char FUN_0055dfe0();
+    void* FUN_0055eae0(int* first, int count);
+    char FUN_0055eb70(int* p);
+    void* FUN_0055ec10(unsigned flags);
+};
+
 struct V32 { uint32_t* mpBegin; uint32_t* mpEnd; uint32_t* mpCapacity; };
 
 namespace eastl { struct allocator { allocator() {} }; }
@@ -117,7 +124,8 @@ void FUN_0055de60(int* pList) {
 }
 
 // @ 0x0055dfe0
-unsigned char FUN_0055dfe0(void* this_) {
+unsigned char PaintStub::FUN_0055dfe0() {
+    void* this_ = this;
     FUN_0067dea0();
     int* list = (int*)FUN_00572590();
     int count = (int)(list[1] - *list) >> 2;
@@ -341,7 +349,8 @@ unsigned char Owner::sub_55e190(char forceAll, char skipRebuild) {
 }
 
 // @ 0x0055eae0
-void* FUN_0055eae0(void* this_, int* first, int count) {
+void* PaintStub::FUN_0055eae0(int* first, int count) {
+    void* this_ = this;
     *(void**)this_ = (void*)0x13eb394;
     *(void**)this_ = (void*)0x13f4af0;
     ((int*)this_)[1] = 0;
@@ -354,7 +363,8 @@ void* FUN_0055eae0(void* this_, int* first, int count) {
 }
 
 // @ 0x0055eb70
-char FUN_0055eb70(void* this_, int* p) {
+char PaintStub::FUN_0055eb70(int* p) {
+    void* this_ = this;
     int key = p[1];
     if (key == 0x1a99b06b)
         key = (int)SP_EditorEntityToResourceType((uint32_t)p[2] >> 16 & 0xff, 1);
@@ -365,7 +375,8 @@ char FUN_0055eb70(void* this_, int* p) {
 }
 
 // @ 0x0055ec10
-void* FUN_0055ec10(void* this_, unsigned flags) {
+void* PaintStub::FUN_0055ec10(unsigned flags) {
+    void* this_ = this;
     uint32_t* v = (uint32_t*)((char*)this_ + 4);
     for (uint32_t* p = (uint32_t*)v[0]; p < (uint32_t*)v[1]; ++p) {
     }

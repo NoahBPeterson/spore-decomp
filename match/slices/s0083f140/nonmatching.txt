@@ -1,6 +1,6 @@
 0083f140  325  complete: EvalBoolTerm; string build + EH frame + loop shape differ
 0083f2e0  325  complete: EvalBoolExpression; string build + EH frame + loop shape differ
-0083f480  86   complete: EvalChar; throw temp frame/register reuse differ
+0083f480  86   complete: EvalChar; throw temp frame/register reuse differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
 0083f510  66   complete: ParseBool; throw frame differs
 0083f580  26   complete: FileMessageCallback; messaging vtable call shape differs
 0083f630  28   complete: cFileParser::Init; base-subobject adjust and call shape differ

@@ -68,6 +68,7 @@ struct cSPEditorHandle {
 
     void SetModelFlags(bool flag, uint8_t highlight);
     void* GetPosition(void* out);
+    void* GetZeroVector(void* out);
     float GetHandleAlphaForState(int state);
     float GetOverdrawHandleAlphaForState(int state);
     void* GetHandleColorForState(void* out, int state);
@@ -206,7 +207,7 @@ void* cSPEditorHandle::GetOverdrawHandleColorForState(void* out, int state)
 }
 
 // @ 0x0047ebe0
-void* GetZeroVector(void* out)
+void* cSPEditorHandle::GetZeroVector(void* out)
 {
     Vector3 v = { 0.0f, 0.0f, 0.0f };
     ((float*)out)[0] = v.x;

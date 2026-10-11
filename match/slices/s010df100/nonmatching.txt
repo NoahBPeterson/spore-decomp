@@ -4,7 +4,7 @@
 010df3d0 76 havok-equivalent
 010df440 198 havok-equivalent
 010df500 43 havok-equivalent
-010df5d0 175 havok-equivalent
+010df5d0 175 havok-equivalent; difftest PASS (1200 inputs, 100% cov)
 010df6b0 164 havok-equivalent
 010df7a0 451 havok-equivalent
 010df9e0 151 havok-equivalent

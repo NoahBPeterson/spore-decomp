@@ -16,7 +16,14 @@ void  EASTL_allocator_deallocate(void* p);                     // 0x00f47380
 
 void FUN_009223a0(int a, void* b);      // 0x9223a0 lock
 void FUN_00922480();                    // 0x922480 unlock
-void FUN_00921440(void* out, unsigned a, unsigned b, int c);  // 0x921440
+struct RangeMapper {   // receiver arrives in ECX
+    float scale;        // +0
+    float growth;       // +4
+    int   limit;        // +8
+    int   Round1(unsigned key);                                    // 0x921360
+    int   Round2(int key);                                         // 0x9213c0
+    void  Map(unsigned char* out, int a, int b, int c);            // 0x921440
+};
 void FUN_00920340(unsigned a);          // 0x920340
 void FUN_00920560(void* out, void* key);  // 0x920560
 void FUN_00920490(void* out, void* a, void* b); // 0x920490
@@ -57,8 +64,8 @@ void NormalizeSeparators(Range* r) {
     }
 }
 
-// @ 0x00920ee0
 wchar_t* FindExtension(wchar_t* first, wchar_t* last);
+// @ 0x00920ee0
 void NormalizeSeparators2(Range* r) {
     FindExtension(r->begin, r->end);
 }
@@ -274,7 +281,9 @@ int FUN_00921340(unsigned key) {
 }
 
 // @ 0x00921360
-int FUN_00921360(float* p, unsigned key) {
+int RangeMapper::Round1(unsigned key) {
+    RangeMapper* p0 = this;
+    float* p = (float*)p0;
     unsigned* r = LowerBound(g_boundLo, g_boundHi, &key);
     int v = (int)*r;
     float f = (float)v;
@@ -284,12 +293,13 @@ int FUN_00921360(float* p, unsigned key) {
     int i = (int)x;
     if ((float)i < x)
         ++i;
-    p[2] = (float)i;
+    limit = i;
     return v;
 }
 
 // @ 0x009213c0
-int FUN_009213c0(float* p, int key) {
+int RangeMapper::Round2(int key) {
+    float* p = (float*)this;
     float f = (float)key;
     if (key < 0)
         f += g_mathConst;
@@ -303,15 +313,16 @@ int FUN_009213c0(float* p, int key) {
     int i = (int)x;
     if ((float)i < x)
         ++i;
-    p[2] = (float)i;
+    limit = i;
     return v;
 }
 
 // @ 0x00921380/0x14.. use shared rounding: reproduce 00921360/13c0 tails above.
 // @ 0x00921440
-void FUN_00921440(float* p, unsigned char* out, int a, float b, float c) {
-    unsigned n = (unsigned)(int)((int)c + (int)b);
-    if ((unsigned)(int)p[2] < n) {
+void RangeMapper::Map(unsigned char* out, int a, int b, int c) {
+    float* p = (float*)this;
+    unsigned n = (unsigned)(c + b);
+    if ((unsigned)limit < n) {
         if (a == 1)
             a = 0;
         float f = (float)(int)n;
@@ -336,7 +347,7 @@ void FUN_00921440(float* p, unsigned char* out, int a, float b, float c) {
             int i = (int)x;
             if ((float)i < x)
                 ++i;
-            p[2] = (float)i;
+            limit = i;
             out[0] = 1;
             *(int*)(out + 4) = v;
             return;
@@ -345,7 +356,7 @@ void FUN_00921440(float* p, unsigned char* out, int a, float b, float c) {
         int i = (int)x;
         if ((float)i < x)
             ++i;
-        p[2] = (float)i;
+        limit = i;
     }
     *(int*)(out + 4) = 0;
     out[0] = 0;
@@ -402,7 +413,7 @@ extern HashNode* FUN_00685f30_find(void* ht, unsigned key); // 0x685f30
 // @ 0x009205e0
 void* HashTable::insert(void* out, HashNode* src) {
     bool bDummy;
-    FUN_00921440(&bDummy, mnBucketCount, mnSize, 1);
+    ((RangeMapper*)((char*)this + 0x10))->Map((unsigned char*)&bDummy, mnBucketCount, mnSize, 1);
     if (bDummy)
         FUN_00920340(mnSize);
     const unsigned char* s = (const unsigned char*)(size_t)src->mKey;

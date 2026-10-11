@@ -13,7 +13,7 @@ struct cSPEditorBlock {
         return result;
     }
 };
-struct cSPEditorModel;
+struct cSPEditorModel { void RemoveBlock(cSPEditorBlock* block); };
 
 extern void* g_vtbl_model_a;
 extern void* g_vtbl_model_b;
@@ -51,8 +51,9 @@ extern void FUN_00435be0(cSPEditorBlock* b);
 extern void FUN_00449ed0();
 extern void FUN_004541f0(void** p);
 extern void FUN_004adfc0(int v);
-void RemoveBlock(cSPEditorModel* self, cSPEditorBlock* block)
+void cSPEditorModel::RemoveBlock(cSPEditorBlock* block)
 {
+    cSPEditorModel* self = this;
     if (block != 0) {
         cSPEditorBlock** begin = *(cSPEditorBlock***)((char*)self + 0x18);
         cSPEditorBlock** end = *(cSPEditorBlock***)((char*)self + 0x1c);

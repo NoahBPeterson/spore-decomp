@@ -2,7 +2,7 @@
 0059c5f0 SP::cSPEditorAnimatedCreatureManager::~cSPEditorAnimatedCreatureManager  # releases +0x40/+0x3c/+0x38, vector dtor, map nuke; byte-exact
 0059c640 SP::cSPEditorAnimatedCreatureManager::Shutdown  # removes all creatures from anim world, clears map, drops world/manager
 0059c6e0 SP::cSPEditorAnimatedCreatureManager::RemoveCreature  # find(id) + erase
-0059c740 eastl::map<uint,AutoRefCount<SP::cSPEditorAnimatedCreatureData>>::operator[]  # lower_bound + DoInsertValue(0x59c520)
+0059c740 ?A?$map  # lower_bound + DoInsertValue(0x59c520)
 0059c7c0 SP::cSPEditorAnimatedCreatureManager::cSPEditorAnimatedCreatureManager  # mCurrentID=1; byte-exact
 0059c9c0 SP::cSPEditorAnimatedCreatureManager::AddCreature  # (key) creates via anim world slot 12; byte-exact
 0059cb10 SP::cSPEditorAnimatedCreatureManager::PlayAnimation  # creature vslot1 + SetLastAnimationPlayed

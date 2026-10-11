@@ -478,6 +478,7 @@ void __fastcall f00edd810(C* self)
 
 // ============================================================ 0x00edd8f0
 struct Base { char pad[4]; int F26360(); };
+// @ 0x00edd8f0
 void __stdcall f00edd8f0(void* p)
 {
     if (p != 0)

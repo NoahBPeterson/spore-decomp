@@ -1,4 +1,4 @@
-// @ 0x458f60  SP::CapabilityManager::InitNonDeformAnimations
+// 0x458f60  SP::CapabilityManager::InitNonDeformAnimations
 // /Od editor module.  Walks the 0x5f-entry capability-key table, looks each up in the
 // property list, and pushes per-vertex animation data through the model interface.
 #include "types.h"
@@ -65,6 +65,7 @@ static void ReleaseList(PropertyList*& p)
     }
 }
 
+// @ 0x458f60
 void InitNonDeformAnimations(int model, IModelIface* iface, uint32_t propGroup,
                              uint32_t unused, uint32_t propName, char flag)
 {

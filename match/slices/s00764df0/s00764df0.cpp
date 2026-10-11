@@ -82,7 +82,7 @@ D765ac0::~D765ac0() {
 }
 
 // ===========================================================================
-// @ 0x00765f10  ctor (partial: EH frame / member model not reproduced)
+// ctor (partial: EH frame / member model not reproduced)
 struct IUnknown32 { virtual void u0(); virtual void u1(); virtual void u2(); };
 struct AtomicInt { int v; int operator=(int x) { return _InterlockedExchange((volatile long*)&v, x); } };
 struct Resource : IUnknown32 {
@@ -95,6 +95,7 @@ struct D765f10 : cResourceBase {
     void* f1c;
     D765f10(void* arg);
 };
+// @ 0x00765f10
 D765f10::D765f10(void* arg) {
     f18 = 0;
     f1c = arg;

@@ -102,6 +102,9 @@ public:
     int pad_2c[3];                     // +0x2c..0x37
     int pad_38;
     void removeSlot(RefObj* p);
+    void* Dtor(unsigned int flags);
+    void Shutdown();
+    PosseSim* Init();
 };
 // @ 0x00d53330
 void PosseSim::removeSlot(RefObj* p) {
@@ -128,7 +131,8 @@ void RemovePosseMember(void* self, int member, char arg3, char arg4) {
 //  0x00d536d0  SP::cPosseSimulator::`scalar deleting destructor'
 // ===========================================================================
 // @ 0x00d536d0
-void* PosseSim_dtor(PosseSim* self, unsigned int flags) {
+void* PosseSim::Dtor(unsigned int flags) {
+    PosseSim* self = this;
     *(void**)self = (void*)0x147b810;
     *(void**)((char*)self + 8) = (void*)0x147b7ec;
     *(void**)0x169e5b8 = 0;
@@ -148,7 +152,8 @@ void* PosseSim_dtor(PosseSim* self, unsigned int flags) {
 //  0x00d53730  SP::cPosseSimulator::Shutdown
 // ===========================================================================
 // @ 0x00d53730
-void PosseSim_Shutdown(PosseSim* self) {
+void PosseSim::Shutdown() {
+    PosseSim* self = this;
     SP_NounManager();
     FUN_00b234c0();
     Slot** e = *(Slot***)((char*)self + 0x24);
@@ -198,7 +203,8 @@ void** partition(void** first, void** last, int pivot, char (__cdecl* pred)(int,
 //  0x00d538f0  Simulator::cPosseSimulator::cPosseSimulator
 // ===========================================================================
 // @ 0x00d538f0
-PosseSim* PosseSim_ctor(PosseSim* self) {
+PosseSim* PosseSim::Init() {
+    PosseSim* self = this;
     SP_NounManager();  // placeholder; real base ctor 0xb5b6c0
     *(void**)((char*)self + 0x18) = 0;
     *(void**)((char*)self + 0x1c) = 0;
@@ -245,7 +251,7 @@ void* PosseSim_Instance() {
     if (inst == 0) {
         Inst* raw = (Inst*)EA_Allocate(0x58, "Simulator/cPosseSimulator", 0, 0, 0, 0);
         if (raw != 0) {
-            PosseSim_ctor((PosseSim*)raw);
+            ((PosseSim*)raw)->Init();
             inst = (void*)raw;
             *(void**)0x169e5b8 = inst;
             ((Inst*)inst)->slot();

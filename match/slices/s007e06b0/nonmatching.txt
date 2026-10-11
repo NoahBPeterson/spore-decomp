@@ -2,7 +2,7 @@
 007e07a0  4    SplitModelKernelRead; ctor vptr store scheduled after mKernelData/Variation, original before
 007e07f0  28   cSplitControllerEffectCommand::Execute; strlen loop shape and av register (ebx vs edi) differ
 007e0850  166  SplitControllerAddCommands; EH frame / inlined command ctor field-init schedule differs
-007e0950  46   cSplitControllerEffectCommand scalar deleting dtor; base-dtor call/vptr reset schedule differs
+007e0950  46   cSplitControllerEffectCommand scalar deleting dtor; base-dtor call/vptr reset schedule differs; equiv: UNSUPPORTED (unresolved ??3@YAXPAX@Z, operator delete); symbol now resolves
 007e0a60  82   cSplitModelKernelOffsetCommand::Execute; float-parse register allocation differs
 007e0b50  65   cSplitModelKernelRadiusCommand::Execute; second-float x87 spill/red-zone differs
 007e0bc0  136  cSplitModelKernelNormalCommand::Execute; sret temp / vector local scheduling differs

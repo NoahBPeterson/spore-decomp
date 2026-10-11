@@ -389,9 +389,11 @@ struct JobHolder {
     uint32_t mField0;
     QueuedPtr mpMessage;                               // +4
     EA::AutoRefCount<EA::RefCounted> mpResponse;       // +8
-    void Destroy() { this->~JobHolder(); }
+    void Destroy();
     ~JobHolder() {}
 };
+// @ 0x0060e5b0
+void JobHolder::Destroy() { this->~JobHolder(); }
 
 // ---------------------------------------------------------------------------------------------
 // @ 0x0060e540: posts a UI::BehaviorMessage carrying a float.

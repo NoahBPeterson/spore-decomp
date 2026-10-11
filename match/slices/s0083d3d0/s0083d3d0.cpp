@@ -92,6 +92,10 @@ struct cExpression {
     float EvalRealParentheses2(const char** p);                 // 0x0083e560
     void  EvalRealParentheses(const char** p, float* a, float* b);  // 0x0083d2f0
     float EvalRealNumber(const char** p);                       // 0x0083d3d0
+    int   EvalIntParentheses(const char** p);                   // 0x0083db70
+    void  EvalString(const char** p, eastl::string8* out);      // 0x0083dc00
+    long double EvalSignedRealNumber(const char** p);           // 0x0083dd70
+    long double EvalRealFactor(const char** p);                 // 0x0083e160
 };
 }}
 namespace eastl { bool operator==(const string8& a, const char* b); }   // 0x00555020
@@ -156,14 +160,14 @@ float EA::ArgScript::cExpression::EvalRealNumber(const char** p) {
 // 0x0083db70  EA::ArgScript::cExpression::EvalIntParentheses
 // ===========================================================================
 // @ 0x0083db70
-int __cdecl EvalIntParentheses(void* self, const char** p) {
+int EA::ArgScript::cExpression::EvalIntParentheses(const char** p) {
     DiscardWhiteSpace(p);
     if (**p != '(') {
         char buf[16];
         ThrowCError(buf, "Expected '%c'", 0x28);
     }
     ++*p;
-    int v = EvalIntExpression(self, p);
+    int v = EvalIntExpression(this, p);
     DiscardWhiteSpace(p);
     if (**p != ')') {
         char buf[16];
@@ -177,12 +181,12 @@ int __cdecl EvalIntParentheses(void* self, const char** p) {
 // 0x0083dc00  EA::ArgScript::cExpression::EvalString
 // ===========================================================================
 // @ 0x0083dc00
-void EvalString(void* self, const char** p, eastl::string8* out) {
+void EA::ArgScript::cExpression::EvalString(const char** p, eastl::string8* out) {
     DiscardWhiteSpace(p);
     DiscardWhiteSpace(p);
     if (**p == '(') {
         ++*p;
-        EvalString(self, p, out);
+        EvalString(p, out);
         DiscardWhiteSpace(p);
         if (**p != ')') {
             char buf[16];
@@ -237,7 +241,7 @@ void __cdecl DoFreeNodesExpr(void* bucketArray, int bucketCount) {
 // 0x0083dd70  EA::ArgScript::cExpression::EvalSignedRealNumber
 // ===========================================================================
 // @ 0x0083dd70
-long double __cdecl EvalSignedRealNumber(void* self, const char** p) {
+long double EA::ArgScript::cExpression::EvalSignedRealNumber(const char** p) {
     char c;
     for (;;) {
         DiscardWhiteSpace(p);
@@ -246,9 +250,9 @@ long double __cdecl EvalSignedRealNumber(void* self, const char** p) {
         *p = *p + 1;
     }
     if (c != '-')
-        return (long double)((EA::ArgScript::cExpression*)self)->EvalRealNumber(p);
+        return (long double)EvalRealNumber(p);
     ++*p;
-    long double v = EvalSignedRealNumber(self, p);
+    long double v = EvalSignedRealNumber(p);
     return -v;
 }
 
@@ -316,12 +320,12 @@ void __fastcall ExprTableClear(void* self) {
 // 0x0083e160  EA::ArgScript::cExpression::EvalRealFactor
 // ===========================================================================
 // @ 0x0083e160
-long double __cdecl EvalRealFactor(void* self, const char** p) {
-    long double base = EvalSignedRealNumber(self, p);
+long double EA::ArgScript::cExpression::EvalRealFactor(const char** p) {
+    long double base = EvalSignedRealNumber(p);
     DiscardWhiteSpace(p);
     if (**p == '^') {
         ++*p;
-        long double exp = EvalRealFactor(self, p);
+        long double exp = EvalRealFactor(p);
         return CIpow();
     }
     (void)base;

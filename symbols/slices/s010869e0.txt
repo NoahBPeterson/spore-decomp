@@ -3,7 +3,7 @@
 01086f40 hkWorld::removeAction  # queued op 0xb, else removeActionImmediately (0x01086030)
 01087010 hkSphereMotion::hkSphereMotion  # hkRigidMotion ctor then vtable 0x0149DF10 (hkSphereMotion methods)
 01087030 hkStabilizedSphereMotion::hkStabilizedSphereMotion  # hkRigidMotion ctor then vtable 0x0149DF90
-01087050 hkRigidBody_calcExtentsAndObjectRadius  # shape->getAabb(identity), writes motion state objectRadius (+0xb0 of the motion)
+01087050 hkShapeExtentsStub::calcExtentsAndObjectRadius  # shape->getAabb(identity), writes motion state objectRadius (+0xb0 of the motion)
 01087240 hkRigidBody_calcAllowedPenetrationDepth  # 0.2 * min extent if < 0.5 else 0.1, stored at collidable +0x20
 01087290 hkRigidBody_createMotion  # switch on motion type 1..8 building the hkMotion subclasses, then setInertiaLocal/CoM/mass
 01087520 hkRigidBody::setMotionType  # queues op 4 when the world is locked else hkWorldOperationUtil::setRigidBodyMotionType

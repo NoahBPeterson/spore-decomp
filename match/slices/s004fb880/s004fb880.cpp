@@ -179,12 +179,19 @@ struct FieldGrid {
     char pad44[0x0c];
     void* mField50;
     void* mField54;
+    int MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut);
+    void Reset(char clear);
+};
+
+// Stub receiver for the ray bisection (this arrives in ECX; layout accessed by offset).
+struct RayField {
+    Vector3* Bisect(Vector3* pOut, const Vector3* pFrom, const Vector3* pTo, float* pT);
 };
 
 Vector3* BuildOBB(FieldGrid* self, const Vector3* a, const Vector3* b, float* pMat, uint32_t* pFlags, float* pCorner); // 0x004fa6c0
 
 // @ 0x004fbcc0
-int MarchToSurface(FieldGrid* self, float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut)
+int FieldGrid::MarchToSurface(float radius, Vector3* pPoint, Vector3* pStart, Matrix33* pOut)
 {
     const float kEps = 1e-10f;
     Vector3 cur = pStart ? *pStart : *pPoint;
@@ -193,7 +200,7 @@ int MarchToSurface(FieldGrid* self, float radius, Vector3* pPoint, Vector3* pSta
     for (int iter = 0; iter < 0x28; ++iter) {
         Vector3 delta;
         float mat[9];
-        BuildOBB(self, pPoint, &cur, mat, (uint32_t*)&delta, (float*)pOut);
+        BuildOBB(this, pPoint, &cur, mat, (uint32_t*)&delta, (float*)pOut);
         if (delta.x * delta.x + delta.y * delta.y + delta.z * delta.z < kEps)
             return 1;
         float d = Determinant(mat);
@@ -215,13 +222,13 @@ int MarchToSurface(FieldGrid* self, float radius, Vector3* pPoint, Vector3* pSta
 }
 
 // @ 0x004fc100
-Vector3* RayBisect(void* self, Vector3* pOut, const Vector3* pFrom, const Vector3* pTo, float* pT)
+Vector3* RayField::Bisect(Vector3* pOut, const Vector3* pFrom, const Vector3* pTo, float* pT)
 {
     Vector3 base = *pFrom;
     Vector3 dir;
     SubV(&dir, pTo, pFrom);
-    float limit = *(float*)((char*)self + 0x0c) * 0.1f;
-    float* pBound = (float*)((char*)self + 0x44);
+    float limit = *(float*)((char*)this + 0x0c) * 0.1f;
+    float* pBound = (float*)((char*)this + 0x44);
     float bound = (limit < *pBound || limit == *pBound) ? limit : *pBound;
     float lo = 0.0f;
     float hi = 1.0f;
@@ -238,7 +245,7 @@ Vector3* RayBisect(void* self, Vector3* pOut, const Vector3* pFrom, const Vector
         pos = p;
         value = 0.0f;
         typedef void (*Fn)(const Vector3*, float*);
-        Fn fn = *(Fn*)((char*)self + 8);
+        Fn fn = *(Fn*)((char*)this + 8);
         fn(&pos, &value);
         if (value < 0.0f)
             hi = t;
@@ -252,23 +259,23 @@ Vector3* RayBisect(void* self, Vector3* pOut, const Vector3* pFrom, const Vector
 }
 
 // @ 0x004fc320
-void FieldGridReset(FieldGrid* self, char clear)
+void FieldGrid::Reset(char clear)
 {
-    for (int i = 0; i < self->mField18; ++i)
-        ((SphereFields*)((char*)(int)self->mField1c + i * 0x80))->Clear(-1);
-    self->mField14 = 0;
-    self->mV20.x = 3.402823466e+38f;
-    self->mV20.y = 3.402823466e+38f;
-    self->mV20.z = 3.402823466e+38f;
-    self->mV2c.x = -3.402823466e+38f;
-    self->mV2c.y = -3.402823466e+38f;
-    self->mV2c.z = -3.402823466e+38f;
-    self->m38 = 0.0f;
-    self->m3c = 0.0f;
-    self->m40 = 0.0f;
+    for (int i = 0; i < this->mField18; ++i)
+        ((SphereFields*)((char*)(int)this->mField1c + i * 0x80))->Clear(-1);
+    this->mField14 = 0;
+    this->mV20.x = 3.402823466e+38f;
+    this->mV20.y = 3.402823466e+38f;
+    this->mV20.z = 3.402823466e+38f;
+    this->mV2c.x = -3.402823466e+38f;
+    this->mV2c.y = -3.402823466e+38f;
+    this->mV2c.z = -3.402823466e+38f;
+    this->m38 = 0.0f;
+    this->m3c = 0.0f;
+    this->m40 = 0.0f;
     if (clear) {
         FUN_004f89a0();
-        operator_new__(self->mField54, 0, 0x800);
+        operator_new__(this->mField54, 0, 0x800);
     }
 }
 

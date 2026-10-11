@@ -236,6 +236,8 @@ struct cRenderer {
 
     void SetViewer(int idx, void* viewer);   // @ 0x0075daa0
     void* GetRenderStats(int idx);           // @ 0x0075dad0
+    void NumLayers(int* out);                // @ 0x0075db70
+    void LayerAtIndex(int v);                // @ 0x0075dbb0
 };
 
 // @ 0x0075daa0
@@ -263,8 +265,9 @@ void __stdcall GetDisplayName(int param_1)
 }
 
 // @ 0x0075db70  (cRenderer::NumLayers)
-void cRenderer_NumLayers(cRenderer* self, int* out)
+void cRenderer::NumLayers(int* out)
 {
+    cRenderer* self = this;
     self->mMutex.Lock((const void*)0x140dca0);
     for (int i = 0; i != 0xb; i++)
         out[i] = self->mStats[i];
@@ -272,17 +275,24 @@ void cRenderer_NumLayers(cRenderer* self, int* out)
 }
 
 // @ 0x0075dbb0  (cRenderer::LayerAtIndex)
-void cRenderer_LayerAtIndex(cRenderer* self, int v)
+void cRenderer::LayerAtIndex(int v)
 {
+    cRenderer* self = this;
     self->mMutex.Lock((const void*)0x140dca0);
     self->mRenderJobBudget = v;
     self->mMutex.Unlock();
 }
 
-// @ 0x0075dbe0
 extern int GetDeviceReady();   // @ 0x011f8160
-bool CheckDeviceReady(int param_1)
+struct DevLatch {
+    bool CheckDeviceReady();
+    void MaybeReleaseDevice();
+};
+
+// @ 0x0075dbe0
+bool DevLatch::CheckDeviceReady()
 {
+    int param_1 = (int)this;
     bool r = true;
     if (*(char*)(param_1 + 0x1b) == 0) {
         r = GetDeviceReady() != 0;
@@ -292,10 +302,12 @@ bool CheckDeviceReady(int param_1)
     return r;
 }
 
-// @ 0x0075dc10
 extern void ReleaseDevice();   // @ 0x011f81d0
-void MaybeReleaseDevice(int param_1)
+
+// @ 0x0075dc10
+void DevLatch::MaybeReleaseDevice()
 {
+    int param_1 = (int)this;
     if (*(char*)(param_1 + 0x1b) == 0)
         ReleaseDevice();
 }

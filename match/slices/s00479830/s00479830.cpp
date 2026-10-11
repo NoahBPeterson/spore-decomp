@@ -8,6 +8,8 @@ void* EASTL_Allocate(void* alloc, uint bytes, uint align, uint flags);   // @ 0x
 struct P8  { uint a, b; };
 struct P16 { uint a, b, c, d; };
 
+struct V8 { P8* mpBegin; P8* mpEnd; P8* mpCapacity; void Insert8(P8* position, uint n, const P8& value); };
+
 // out-of-line helpers
 void  Construct8 (void* dst, uint n, const void* v);          // @ 0x0047ca70
 void* Copy8Range (const void* first, const void* last, void* dest);  // @ 0x00476290
@@ -28,7 +30,7 @@ void Shift8Out(P8** out, P8* first, P8* last, P8* dest)
 }
 
 // @ 0x00479830
-void Insert8(P8*& mpBegin, P8*& mpEnd, P8*& mpCapacity, P8* position, uint n, const P8& value)
+void V8::Insert8(P8* position, uint n, const P8& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 8 < n) {
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 8;

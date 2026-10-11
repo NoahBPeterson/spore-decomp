@@ -103,13 +103,14 @@ __declspec(noinline) PropPair* UninitializedCopy(const PropPair* first, const Pr
     return dest;
 }
 
-// @ 0x00612e00: same through a generic_iterator returned by hidden pointer.
+// same through a generic_iterator returned by hidden pointer (0x00612e00).
 struct CGenIter {
     const PropPair* mIterator;
     CGenIter() {}
     CGenIter(const PropPair* p) : mIterator(p) {}
     CGenIter(const CGenIter& x) : mIterator(x.mIterator) {}
 };
+// @ 0x00612e00
 GenIter UninitializedCopyIter(CGenIter first, CGenIter last, GenIter dest) {
     GenIter result(dest);
     for (; first.mIterator != last.mIterator; ++first.mIterator) {
@@ -193,7 +194,7 @@ void eastl::PropVector::assign(const PropPair* first, const PropPair* last, int 
     }
 }
 
-// @ 0x006130e0: vector<Elem16>::erase(first, last)
+// vector<Elem16>::erase(first, last) (0x006130e0)
 struct Elem16Vector {
     Elem16* mpBegin;
     Elem16* mpEnd;
@@ -203,6 +204,7 @@ Elem16* __cdecl CopyElem16(Elem16* first, Elem16* last, Elem16* dest);  // 0x007
 inline void DestructElem16(Elem16* first, Elem16* last) {
     for (; first < last; ++first) first->~Elem16();
 }
+// @ 0x006130e0
 Elem16* Elem16Vector::erase(Elem16* first, Elem16* last) {
     Elem16* const pNewEnd = CopyElem16(last, mpEnd, first);
     DestructElem16(pNewEnd, mpEnd);

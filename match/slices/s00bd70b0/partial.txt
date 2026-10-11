@@ -3,3 +3,4 @@
 00bd7400 3   FUN_00bd7400: incomplete (complex create+pose of a civ "cheat" noun, 487 bytes, object passed in EAX via a non-standard convention; stubbed `return 0`).
 00bd7ad0 171 FUN_00bd7ad0: incomplete (Simulator::ISimulatorSerializable::Write - long serialization sequence; direct-call sequence transcribed but field layout / call order not verified).
 00bd7b90 195 FUN_00bd7b90 (Sim::FUN_00bd7b90): incomplete (simulator Write variant; complex, not verified).
+00bd7760 40  Sim::FUN_00bd7760: incomplete (cheat command handler; ~370-byte original, ours is a ~14-byte stub of one message check; more than 5x smaller so difftest UNSUPPORTED: symbol lookup rejects size ratio). Marker added.

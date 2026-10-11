@@ -1,4 +1,4 @@
-0073f320 SP::cModelInstance::cSkinBinding::operator=  # PDB name (symbols/pdb_names.json)
+0073f320 ?4cSkinBinding
 0073f4b0 SP::cModelInstance::SetAnimationGroupTransform  # PDB name (symbols/pdb_names.json)
 0073f540 SP::cModelInstance::PickLine  # PDB name (symbols/pdb_names.json)
 0073f910 SP::cModelInstance::IntersectsSphere  # PDB name (symbols/pdb_names.json)

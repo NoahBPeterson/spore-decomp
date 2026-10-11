@@ -230,6 +230,7 @@ public:
     void BuildPoliticalZoneMap();
 };
 
+// @ 0x00b8aea0
 void cPlanetModel::BuildPoliticalZoneMap()
 {
     g_PoliticalZoneUpdateCount++;

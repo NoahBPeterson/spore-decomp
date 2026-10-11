@@ -230,6 +230,7 @@ public:
     void Ctor(int a, int b, int c, Vec4a* p4, Vec4a* p5);
 };
 
+// @ 0x0073a6e0
 void BigObj::Ctor(int a, int b, int c, Vec4a* p4, Vec4a* p5)
 {
     f00 = a; f04 = b; f08 = c; f0c = 0;

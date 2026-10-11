@@ -1,4 +1,4 @@
-0065df30 304 vector<AssetInfo>::insert (DoInsertValue) - complete, EASTL internals not byte-exact
+0065df30 304 vector<AssetInfo>::insert (DoInsertValue) - complete, EASTL internals not byte-exact; equiv FAIL (eax mismatch, 5 valid)
 0065e110 775 Populate - complete, vector creation + float placement scheduling not byte-exact
 0065e570 285 RemoveAsset - complete, hashset find/erase path not byte-exact
 0065e720 321 ResetPanel - complete, hashset/window path not byte-exact

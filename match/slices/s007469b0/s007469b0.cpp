@@ -274,10 +274,11 @@ void FUN_00746fc0(void* self)
     FUN_00745340();
 }
 
+struct Stub007470c0 { void F(); };
 // @ 0x007470c0 : partial destructor of referenced members
-void FUN_007470c0(void* self)
+void Stub007470c0::F()
 {
-    unsigned char* b = (unsigned char*)self;
+    unsigned char* b = (unsigned char*)this;
     *(int*)(b + 0x138) = 0x8000000;
     RCObj* p = (RCObj*)*(void**)(b + 0x98);
     if (p) { *(void**)(b + 0x98) = 0; (*(void(__thiscall**)(RCObj*, int))(((char*)(*(void**)p) + 4)))(p, 1); }
@@ -296,9 +297,11 @@ void FUN_007470c0(void* self)
     }
 }
 
+struct Stub00747190 { void* F(int* src); };
 // @ 0x00747190 : copy-assign of an entry (ptr + 6 dwords)
-void* FUN_00747190(int* dst, int* src)
+void* Stub00747190::F(int* src)
 {
+    int* dst = (int*)this;
     *dst = *src;
     int* old = (int*)dst[1];
     int* nw = (int*)src[1];
@@ -329,10 +332,11 @@ void FUN_007471f0(void* self)
     *(int*)(b + 0x30) = 0;
 }
 
+struct Stub00747270 { void F(); };
 // @ 0x00747270 : SP::cModelWorld::cLoadingModel::~cLoadingModel
-void FUN_00747270(void* self)
+void Stub00747270::F()
 {
-    unsigned char* b = (unsigned char*)self;
+    unsigned char* b = (unsigned char*)this;
     for (int i = 0; i < 6; ++i) {
         RCObj* r = (RCObj*)*(void**)(b + 0x9c + i * 4);
         if (r && --r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }

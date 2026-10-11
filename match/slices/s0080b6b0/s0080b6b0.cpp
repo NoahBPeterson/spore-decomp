@@ -74,6 +74,7 @@ struct ObjB {
     int f1, f2, f3, f4, f5, f6, f7;
 };
 extern char ObjB_vtable[];
+// @ 0x0080ba10
 ObjB* __fastcall ObjBCtor(ObjB* o)
 {
     o->vtbl = (void*)ObjB_vtable;

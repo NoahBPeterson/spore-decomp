@@ -40,7 +40,7 @@ void VecWriterLines(int out, int n)
 }
 
 // =====================================================================
-// @ 0x45daf0 / 0x45db40  vector deallocation helpers
+// vector deallocation helpers (0x45daf0, 0x45db40)
 // =====================================================================
 struct RawVec8 {
     char* begin;
@@ -49,6 +49,7 @@ struct RawVec8 {
     void dealloc();
 };
 
+// @ 0x45daf0
 void RawVec8::dealloc()
 {
     if (begin != 0) {
@@ -69,6 +70,7 @@ struct RawVec64 {
     void dealloc();
 };
 
+// @ 0x45db40
 void RawVec64::dealloc()
 {
     if (begin != 0) {

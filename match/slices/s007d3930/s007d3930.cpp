@@ -265,9 +265,11 @@ void cEffectParams::UnknownStore(int idx, IUnknown32* p) {
     }
 }
 
+struct cEffectNode { void Tick(void* arg); char HandleParam(int kind, float* value, void* extra); };
+
 // @ 0x007d4670
-void EffectTick(void* self, void* arg) {
-    char* s = (char*)self;
+void cEffectNode::Tick(void* arg) {
+    char* s = (char*)this;
     if (s[0x14]) {
         s[0x14] = 0;
         unsigned n = (unsigned)((*(int*)(s + 0xb0) - *(int*)(s + 0xac)) >> 6);
@@ -282,8 +284,8 @@ void EffectTick(void* self, void* arg) {
 }
 
 // @ 0x007d4730
-char HandleEffectParam(void* self, int kind, float* value, void* extra) {
-    char* s = (char*)self;
+char cEffectNode::HandleParam(int kind, float* value, void* extra) {
+    char* s = (char*)this;
     char any = 0;
     switch (kind) {
         case 4:

@@ -67,6 +67,8 @@ struct Vec4 {
 struct Sound74 {
     unsigned char m[0xd40];
 
+    void* ctor_00a1e320();
+    void* ctor_00a1e420();
     void AddCell(void* p);
     void ReleaseAllCells();
     void UpdateCells(int a, float* b);
@@ -79,7 +81,8 @@ struct Sound74 {
 // 0x00A1E320  factory ctor (fixed hashtable + pool). EH frame; reconstruction.
 // =======================================================================================
 // @ 0x00A1E320
-void* ctor_00a1e320(Sound74* self) {
+void* Sound74::ctor_00a1e320() {
+    Sound74* self = this;
     unsigned char* t = self->m;
     unsigned tmp = 0;
     f_00921260(t + 0x8c, 0xf0, 0xc, 4, 0);
@@ -97,7 +100,8 @@ void* ctor_00a1e320(Sound74* self) {
 // 0x00A1E420  factory ctor (larger fixed hashtable + pool). EH frame; reconstruction.
 // =======================================================================================
 // @ 0x00A1E420
-void* ctor_00a1e420(Sound74* self) {
+void* Sound74::ctor_00a1e420() {
+    Sound74* self = this;
     unsigned char* t = self->m;
     unsigned tmp = 0;
     f_00921260(t + 0xdc, 0x1e0, 0xc, 4, 0);

@@ -1,5 +1,5 @@
 # s00681f10 recovered names (invented stub names; no PDB names for these VAs)
-00681f10 WriteMap1700  # member: write rbtree map<int,Obj1700>; per node 0x681700 copy + string + two 0x680390 vector writes
+00681f10 SerCtx::WriteMap1700  # member: write rbtree map<int,Obj1700>; per node 0x681700 copy + string + two 0x680390 vector writes
 00682060 Cls60::~Cls60  # dtor: MapC2 free (0x681480) then guarded buffer free; layout {Buf mVec; MapC2 mMap;} at +0/+0x10
 006820c0 WriteVec1800   # write vector<Obj1800> (stride 0xc4); 4x 0x680500 bitset saves + 0x6805c0 + four u32 vectors
 006823f0 WriteVecA      # write vector<ObjA> (stride 0x60); 0x681a10 copy + 4x 0x680500
@@ -9,7 +9,7 @@
 006828a0 Map2::InsertHint  # rbtree insert with hint; canInsert = !flag && hint!=anchor && hint->key<=*key
 00682900 Map2::InsertUnique # eastl insert_unique with hint -> pair<iter,bool>
 00682a10 Obj2A10::Obj2A10  # value copy ctor: S8 + 5 bytes + 4 dwords + M5a0(0x680a50) + vector<Obj1800>(0x682740)
-00682af0 Map1::operator[]  # find-or-insert, returns &value at node+0x14
+00682af0 ?AMap1  # find-or-insert, returns &value at node+0x14
 00682be0 Map2::Clone     # eastl rbtree copy ctor helper (CreateNode2 0x6826c0)
-00682ca0 WriteMap2A10    # member: write rbtree map<int,Obj2A10>; per node 0x682a10 copy + fields + 0x6805c0 + vector
-00682e90 LoadMap1        # member: read map<int,ObjC30>: operator[] + string resize + 0x6812c0 LoadEntries
+00682ca0 SerCtx::WriteMap2A10    # member: write rbtree map<int,Obj2A10>; per node 0x682a10 copy + fields + 0x6805c0 + vector
+00682e90 SerCtx::LoadMap1        # member: read map<int,ObjC30>: operator[] + string resize + 0x6812c0 LoadEntries

@@ -200,13 +200,14 @@ struct RangeOwner {
     char* mpBegin;   // +0x14
     char* mpEnd;     // +0x18
     void  Destroy(); // FUN_0045daf0 called on (this+0x14)
+    void* DeletingDtor(uint32_t flags);
 };
-void* RangeOwner_DeletingDtor(RangeOwner* self, uint32_t flags);
-extern void RangeOwner_DtorBody(void* sub);      // FUN_0045daf0, thiscall on this+0x14
-void* RangeOwner_DeletingDtor(RangeOwner* self, uint32_t flags)
+struct RangeSub { char* mpBegin; char* mpEnd; void Body(); };   // FUN_0045daf0, thiscall on this+0x14
+void* RangeOwner::DeletingDtor(uint32_t flags)
 {
+    RangeOwner* self = this;
     for (char* p = self->mpBegin; p < self->mpEnd; p += 8) {}
-    RangeOwner_DtorBody(&self->mpBegin);
+    ((RangeSub*)&self->mpBegin)->Body();
     if (flags & 1)
         EASTL_Free(self);
     return self;

@@ -85,6 +85,7 @@ void __fastcall FUN_00ed2600(void* self, int a, int b, int c) { (void)self; (voi
 void __fastcall FUN_00ed3120(void* self, void* a, char b) { (void)self; (void)a; (void)b; }
 
 // ---------------------------------------------------------------- 0x00ed3350
+// @ 0x00ed3350
 void Pal::f_ed3350(int a)
 {
     if (a == -2)
@@ -100,6 +101,7 @@ void Pal::f_ed3350(int a)
 }
 
 // ---------------------------------------------------------------- 0x00ed33a0
+// @ 0x00ed33a0
 void Pal::f_ed33a0(int a)
 {
     void* r = (void*)FUN_00ed1f00((char*)this + 0x70, a);
@@ -116,6 +118,7 @@ void Pal::f_ed33a0(int a)
 void __fastcall FUN_00ed33f0(void* self, int a, int b) { (void)self; (void)a; (void)b; }
 
 // ---------------------------------------------------------------- 0x00ed34a0 (partial)
+// @ 0x00ed34a0
 int __cdecl FUN_00ed34a0(int a, int b, int c)
 {
     if (a != b) {

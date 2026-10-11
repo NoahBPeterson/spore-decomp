@@ -95,12 +95,14 @@ void cModelWorld_FinishBackgroundLoad(void* self) {
 // @ 0x00751b30  SP::cModelWorld::UpdateHighlightProps (461 bytes)
 void cModelWorld_UpdateHighlightProps(void* self) { (void)self; }
 
+struct MWGroupDtorStub { void F(); };
 // @ 0x00751d00  SP::cMWGroupInternal::~cMWGroupInternal (210 bytes)
 //
 // Destroys every element of the fixed_vector of cModelInfo, releasing each
 // referenced cMWObject (decrement refcount, or call its vtable+0x170 release
 // thunk when the count drops below 2), then resets the vector.
-void cMWGroupInternal_Dtor(cMWGroupInternal* self) {
+void MWGroupDtorStub::F() {
+  cMWGroupInternal* self = (cMWGroupInternal*)this;
   int bytes = (int)((char*)self->mGroup.mObjectsEnd - (char*)self->mGroup.mObjectsBegin);
   int count = bytes / 0x3c;
   for (int i = 0; i < count; ++i) {

@@ -1,15 +1,15 @@
 # va  diff-bytes  reason
-007c4be0  15  virtual v18/v20 calls + camera raster store; register allocation near-miss (3 rounds)
-007c4c40  173  SIMD 3x3 transpose with sign flip; scalar C++ does not reproduce unpcklps schedule
-007c4d20  135  builds affine 4x4 into locals then calls 4c40; SIMD local layout differs
-007c4dd0  390  cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced
-007c4fd0  201  cViewer::Update; x87 aspect compare + shader-state compare schedule differs
+007c4be0  15  virtual v18/v20 calls + camera raster store; register allocation near-miss (3 rounds) [equiv: PASS 1165 valid, 100% cov]
+007c4c40  173  SIMD 3x3 transpose with sign flip; scalar C++ does not reproduce unpcklps schedule [equiv: PASS 913 valid, 100% cov]
+007c4d20  135  builds affine 4x4 into locals then calls 4c40; SIMD local layout differs [equiv: PASS 1200 valid, 100% cov]
+007c4dd0  390  cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan, ours calls tanf)]
+007c4fd0  201  cViewer::Update; x87 aspect compare + shader-state compare schedule differs [equiv: WEAK 15.2% cov (D3DXMatrixMultiply import)]
 007c50b0  0  cViewer::Copy; emitted size differs from original range (no similar-size symbol)
-007c5240  185  cViewer::CopyFrom; SIMD 4x4 copy + reciprocal schedule differs
-007c5350  91  SetViewAngle; fptan-based fov path differs
-007c53d0  77  SetViewAngleY; fptan-based fov path differs
-007c5440  77  SetViewWindow; SSE reciprocal ordering differs
-007c5490  18  operator new[] wrapper; calling convention/arg shape near-miss
+007c5240  185  cViewer::CopyFrom; SIMD 4x4 copy + reciprocal schedule differs [equiv: PASS 1200 valid, 100% cov]
+007c5350  91  SetViewAngle; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
+007c53d0  77  SetViewAngleY; fptan-based fov path differs [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan)]
+007c5440  77  SetViewWindow; SSE reciprocal ordering differs [equiv: PASS 1200 valid, 100% cov]
+007c5490  18  operator new[] wrapper; calling convention/arg shape near-miss [equiv: PASS 824 valid, 100% cov (now SerializedArray::Alloc member)]
 007c54b0  42  rw resolve ObjectToId; arena pointer chain codegen differs
 007c54f0  33  rw resolve IdToObject; arena pointer chain codegen differs
 007c5520  38  rw resolve IdToObject (returns 1); differs

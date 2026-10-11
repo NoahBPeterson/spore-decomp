@@ -228,8 +228,10 @@ void __thiscall Obj63BD0::Init()
 }
 
 // @ 0x00b63b60  (dtor body)
-void __cdecl FUN_00b63b60(void* self)
+struct Obj63B60 { void F(); };
+void Obj63B60::F()
 {
+    void* self = this;
     *(void**)self = &gVtbl63BD0;
     MapU32* a = (MapU32*)((char*)self + 0x1138);
     a->DoAllocateBuckets(*(uint*)((char*)self + 0x113c), *(uint*)((char*)self + 0x1140));

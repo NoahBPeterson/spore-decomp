@@ -2,4 +2,4 @@
 00e54b80  157  cell raster setup; complete. difftest: UNSUPPORTED (0/400 valid)
 00e54c70   12  layer Apply sweep; complete. difftest: UNSUPPORTED (0/400 valid)
 00e54d10    8  layer tail-jump; complete. difftest: UNSUPPORTED (0/400 valid)
-00e552f0  114  cCellMode::Activate; complete. difftest: UNSUPPORTED (reads ecx at entry)
+00e552f0  114  cCellMode::Activate; complete (now a SP::cCellMode member, this in ecx). difftest: UNSUPPORTED (only 0/712 inputs valid: fault(read) 686)

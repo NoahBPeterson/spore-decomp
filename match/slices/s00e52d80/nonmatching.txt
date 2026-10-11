@@ -1,8 +1,8 @@
 # va  diff-bytes  reason (compiled with /O2 /MD /Gy /TP /arch:SSE /fp:fast)
 00e530e0   38  count collectable slots not in {1,2}: complete; table byte arg/loop schedule differs
 00e53130   84  update collectable HUD sound/state: complete; global reload schedule differs
-00e531c0   38  current-slot valid predicate: complete (this in ECX); calling convention differs
-00e53210   37  slot count (1 -> 6 - count): complete (this in ECX); calling convention differs
+00e531c0   38  current-slot valid predicate: complete (this in ECX); calling convention differs [equiv: FAIL 5/5 valid mismatched (execution), this in ECX now]
+00e53210   37  slot count (1 -> 6 - count): complete (this in ECX); calling convention differs [equiv: FAIL 5/5 valid mismatched (execution), this in ECX now]
 00e53250   28  reset one 0x10 slot: complete (index in EAX); register-convention differs
 00e53280   42  should-show predicate: complete; SP::sGetSourceLevel arg convention differs
 00e532e0   40  mark creature + hint: complete; FUN_00b721d0 schedule differs

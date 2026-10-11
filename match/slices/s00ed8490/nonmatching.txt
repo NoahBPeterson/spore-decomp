@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
-00ed8490 116  array scan: cl hoists the span computation; original recomputes per iteration
-00ed8500 116  array scan (variant 2): same hoisting / register allocation difference
-00ed8570 116  array scan (variant 3): same hoisting / register allocation difference
-00ed8610 101  destructor: member release loop register/branch shape differs
-00ed8690 168  noun iteration + effect setters: loop and vtable call schedule differ
-00ed8780 421  effect grab/clear: unrolled effect-manager pattern differs (register use)
+00ed8490 116  array scan: cl hoists the span computation; original recomputes per iteration [equiv: PASS equiv]
+00ed8500 116  array scan (variant 2): same hoisting / register allocation difference [equiv: PASS equiv]
+00ed8570 116  array scan (variant 3): same hoisting / register allocation difference [equiv: PASS equiv]
+00ed8610 101  destructor: member release loop register/branch shape differs [equiv: WEAK 93.9% cov]
+00ed8690 168  noun iteration + effect setters: loop and vtable call schedule differ [equiv: UNSUPPORTED 0 valid inputs (read faults)]
+00ed8780 421  effect grab/clear: unrolled effect-manager pattern differs (register use) [equiv: FAIL execution 2/235]
 00ed8a30 1280  complete noun-effect loop; whole-program arg reuse/inlining and register allocation differ

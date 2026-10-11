@@ -1,24 +1,24 @@
 # va  diff-bytes  reason
-00a21170  74  complete; EA::Audio voice-registry insert; thiscall reconstruction, cl register allocation differs; equiv UNSUPPORTED (decl not thiscall so ecx unmodelled)
+00a21170  74  complete; EA::Audio voice-registry insert; thiscall reconstruction, cl register allocation differs; equiv PASS; now a thiscall stub-class member
 00a21260  10  complete; AutoRefCount::Release; cl emits `sub eax,1` (orig `add eax,-1`) and hoists the vptr load above the refcount store; equiv PASS
 00a21290  19  complete; intrusive-list head reset to prev(-0x10)/null; cl keeps receiver in ecx while orig moves it to eax; equiv PASS
 00a212b0  76  complete; eastl list splice (relink nodes); register/clone-layout differences; equiv FAIL
 00a21310  96  complete; eastl list erase; register/layout differences; equiv FAIL
-00a21390  76  complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv UNSUPPORTED
-00a21410  119 complete; voice connect (thiscall + EH frame); equiv UNSUPPORTED
-00a214b0  171 complete; voice connect variant (4 stack args, thiscall + EH frame); equiv UNSUPPORTED
+00a21390  76  complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
+00a21410  119 complete; voice connect (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
+00a214b0  171 complete; voice connect variant (4 stack args, thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
 00a21590  103 complete; EA::Audio::VoiceContainer::Disconnect (SEH frame + import calls); equiv FAIL
-00a21630  71  complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED
+00a21630  71  complete; voice message handler (thiscall + EH frame, vtable factory); equiv UNSUPPORTED (fake-arity: 0/1200 valid inputs); now a thiscall stub-class member
 00a21710  789 complete; EA::Audio::System::HandleMessage (large vtable dispatch + EH + message-hash constants); equiv FAIL
 00a21a80  81  complete; find voice by id; differing internal layout/registers; equiv FAIL
 00a21b20  86  complete; voice command forwarder (calls connect); equiv FAIL
 00a21b90  45  complete; 4-arg voice command forwarder (calls connect4); equiv FAIL
-00a21c00  77  complete; eastl vector<T>::~vector; equiv UNSUPPORTED
+00a21c00  77  complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
 00a21c70  11  complete; list-node -> payload; cl assigns value->eax where orig uses value->ecx; equiv PASS
 00a21c90  20  complete; list-node -> payload; cl does not hoist the out-pointer load above the this test; equiv PASS
 00a21cb0  63  complete; eastl list insert helper; register/layout differences; equiv FAIL
-00a21dc0  87  complete; eastl rbtree find; equiv UNSUPPORTED
-00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); equiv UNSUPPORTED
+00a21dc0  87  complete; eastl rbtree find; equiv FAIL; now a thiscall stub-class member
+00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); equiv FAIL; now a thiscall stub-class member
 00a21f60  73  complete; ref-counted allocation; reconstruction calls a faulting callee on synthetic inputs; equiv FAIL
-00a22060  135 complete; voice hash-bucket rehash (node next at +0x1e4); equiv UNSUPPORTED
-00a22110  130 complete; hash-bucket rehash (node next at +0x24); equiv UNSUPPORTED
+00a22060  135 complete; voice hash-bucket rehash (node next at +0x1e4); equiv WEAK (46.9% coverage); now a thiscall stub-class member
+00a22110  130 complete; hash-bucket rehash (node next at +0x24); equiv FAIL; now a thiscall stub-class member

@@ -341,7 +341,6 @@ void SortDefault(int* first, int* last)
 // ---------------------------------------------------------------------------
 // vector<T24>::DoInsertValues  (0x18-byte elements with Vector3 members)
 // ---------------------------------------------------------------------------
-// @ 0x0050f290
 struct Vec24Full {
     T24* mpBegin;
     T24* mpEnd;
@@ -380,6 +379,7 @@ void Fill24(T24* first, T24* last, const T24& value)
         *first = value;
 }
 
+// @ 0x0050f290
 void Vec24Full::DoInsertValues(T24* position, uint32_t n, const T24& value)
 {
     if ((uint32_t)(mpCapacity - mpEnd) < n) {

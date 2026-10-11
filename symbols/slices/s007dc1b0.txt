@@ -7,5 +7,5 @@
 007dc630  SP::cSmoothCameraController::~cSmoothCameraController  # PDB name
 007dc7b0  SP::cSmoothCameraController::ViewerOrientationFromPositionAndLookAt  # PDB name
 007dca30  SP::cSmoothCameraController::OnUpdateTargetSet  # PDB name
-007dcb00  quaternion multiply helper
+007dcb00  FUN_007dcb00  # quaternion multiply helper
 007dcc30  SP::cSmoothCameraController::ViewerPositionAndOrientationFromDistanceAlongCurve  # PDB name

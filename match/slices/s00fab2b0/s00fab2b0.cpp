@@ -137,6 +137,7 @@ static __forceinline cSPVector3 Normalized(const cSPVector3& v)
     return cSPVector3(inv * x, v.y * inv, inv * v.z);
 }
 
+// @ 0x00fab2b0
 static void AddRibbonQuad(cRibbonPolyList* lists, const cSPVector3* pos, const cSPTexCoord* tc,
                           const float* alpha, const cRibbonPolyInfo* info)
 {

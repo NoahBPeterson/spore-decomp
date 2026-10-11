@@ -3,3 +3,4 @@
 00618b90 SP::Pollen::cMsgString8::scalar_deleting_destructor  # name guessed from SetMessageString8's allocation
 00618bd0 SP::Pollen::SetMessageString8  # PDB name
 00618c70 SP::Pollen::FillFeedInfo  # guessed: copies a feed source record into feed info, hashes the URI with FNV and derives the feed type
+006188f0 eastl::basic_string::append_sprintf_va_list  # eastl string8::append_sprintf_va_list

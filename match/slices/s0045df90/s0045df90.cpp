@@ -26,7 +26,7 @@ void DStr::resize(unsigned int n)
 }
 
 // =====================================================================
-// @ 0x45eac0  build a Matrix44 from four 16-byte rows of an object
+// 0x45eac0  build a Matrix44 from four 16-byte rows of an object
 // =====================================================================
 struct V4 {
     int a;
@@ -50,6 +50,7 @@ __forceinline void* operator new(unsigned int, void* p) { return p; }
 
 V4* FUN_0045edf0(V4* out, const void* src, void* arg);   // 0x45edf0
 
+// @ 0x45eac0
 Matrix44* BuildMatrix(Matrix44* out, int obj, void* arg)
 {
     V4 r3;

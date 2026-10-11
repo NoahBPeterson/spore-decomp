@@ -54,8 +54,11 @@ void FUN_00eceab0(int param_1, int param_2)
 }
 
 // ============================================================ 0x00ecefc0
-void FUN_00ecefc0(int param_1, int param_2)
+struct SwatchRecvUI { void M_00ecefc0(int); void M_00ecf910(int); };
+// @ 0x00ecefc0
+void SwatchRecvUI::M_00ecefc0(int param_2)
 {
+    int param_1 = (int)this;
     if (*(int**)(param_1 + 0x4c) != 0) {
         C1(*(int**)(param_1 + 0x4c), 0x24, param_2);
         int v = *(int*)(param_1 + 0x4c);
@@ -65,6 +68,7 @@ void FUN_00ecefc0(int param_1, int param_2)
 }
 
 // ============================================================ 0x00ecf000
+// @ 0x00ecf000
 void __fastcall FUN_00ecf000_fn(int param_1)
 {
     int v = *(int*)(param_1 + 0x4c);
@@ -101,6 +105,7 @@ void __fastcall FUN_00ecf000_fn(int param_1)
 }
 
 // ============================================================ 0x00ecf0f0
+// @ 0x00ecf0f0
 int FUN_00ecf0f0(int param_1, int param_2, int param_3)
 {
     if (param_2 != 0x72304d0)
@@ -137,6 +142,7 @@ int* __fastcall FUN_00ecf150(int* param_1)
 }
 
 // ============================================================ 0x00ecf320 (ReloadCallback)
+// @ 0x00ecf320
 void FUN_00ecf320(int param_1, int param_2, int param_3, int param_4, int param_5)
 {
     FUN_00eceab0(param_2, param_3);
@@ -236,6 +242,7 @@ unsigned FUN_00ecf6d0(int param_1, int* param_2)
 }
 
 // ============================================================ 0x00ecf800
+// @ 0x00ecf800
 unsigned FUN_00ecf800(int param_1, int* param_2)
 {
     int iVar1 = K0(param_2, 0x1c);
@@ -273,8 +280,10 @@ unsigned FUN_00ecf800(int param_1, int* param_2)
 }
 
 // ============================================================ 0x00ecf910
-void FUN_00ecf910(int param_1, int param_2)
+// @ 0x00ecf910
+void SwatchRecvUI::M_00ecf910(int param_2)
 {
+    int param_1 = (int)this;
     if (*(char*)(param_1 + 0x79) == 0) {
         int* w = (int*)cSPUILayout_FindWindowByID3(*(void**)(param_1 + 0x50), param_2);
         if (w)
@@ -283,6 +292,7 @@ void FUN_00ecf910(int param_1, int param_2)
 }
 
 // ============================================================ 0x00ecf940
+// @ 0x00ecf940
 void __fastcall FUN_00ecf940_fn(int param_1)
 {
     bool b = *(int*)(param_1 + 0x10) == -1;

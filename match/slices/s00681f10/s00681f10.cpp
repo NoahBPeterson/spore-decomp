@@ -251,10 +251,18 @@ struct Cls60 {
     ~Cls60();
 };
 
+// stub receiver class: the original passes the serializer `this` in ECX
+struct SerCtx {
+    void __thiscall WriteMap1700(Map2* map, IWrt* w);
+    void __thiscall WriteMap2A10(Map3* map, IWrt* w);
+    void __thiscall LoadMap1(Map1* map, IRd* r);
+};
+
 // =====================================================================
 // @ 0x00681f10  write map<int, Obj1700>
 // =====================================================================
-void WriteMap1700(Map2* map, IWrt* w, void* self) {
+void SerCtx::WriteMap1700(Map2* map, IWrt* w) {
+    void* self = this;
     int n = (int)map->mnSize;
     w->Write(&n, 4);
     Node2* anchor = (Node2*)&map->mpAnchor;
@@ -497,7 +505,8 @@ Node2* Map2::Clone(Node2* src, Node2* parent) {
 // =====================================================================
 // @ 0x00682ca0  write Map3<int, Obj2A10>
 // =====================================================================
-void WriteMap2A10(Map3* map, IWrt* w, void* self) {
+void SerCtx::WriteMap2A10(Map3* map, IWrt* w) {
+    void* self = this;
     int n = (int)map->mnSize;
     w->Write(&n, 4);
     Node3* anchor = (Node3*)&map->mpAnchor;
@@ -525,7 +534,8 @@ void WriteMap2A10(Map3* map, IWrt* w, void* self) {
 // =====================================================================
 // @ 0x00682e90  load Map1<int, ObjC30>
 // =====================================================================
-void LoadMap1(Map1* map, IRd* r, void* self) {
+void SerCtx::LoadMap1(Map1* map, IRd* r) {
+    void* self = this;
     int count;
     r->Read(&count, 4);
     for (int i = 0; i < count; ++i) {

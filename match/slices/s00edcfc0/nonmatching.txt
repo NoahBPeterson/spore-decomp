@@ -7,7 +7,7 @@
 00edd580  148  MI base-vtable store order (behavior complete)
 00edd6b0  129  MI base-vtable store order (behavior complete)
 00edd810  158  virtual-call expansion differs (behavior complete)
-00edd8f0  227  vcall/argument scheduling (behavior complete)
+00edd8f0  227  vcall/argument scheduling (behavior complete); equiv: FAIL (ours faults reading unmapped 0x30000027 where original returns)
 00edda20  164  virtual-call expansion differs (behavior complete)
 00eddb00  118  x87/SSE float-constant and call layout (behavior complete)
 00edde30  27   arg-materialisation order in loop (behavior complete)

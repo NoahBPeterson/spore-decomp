@@ -45,6 +45,7 @@ struct C1 {
   unsigned int mFieldC;        // +0xc
   bool Method(int* arg);
 };
+// @ 0x0081bce0
 bool C1::Method(int* arg) {
   bool ok = ((bool (__thiscall*)(int*, int, int**))VTSLOT(arg, 0x24))(arg, mField4, &arg);
   if (!ok) return false;
@@ -71,6 +72,7 @@ struct C2 {
   void* mFieldC;              // +0xc
   bool Method2(int unused, Evt* e);
 };
+// @ 0x0081bd50
 bool C2::Method2(int unused, Evt* e) {
   int t = e->type;
   if (t == 1) {

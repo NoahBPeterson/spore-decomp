@@ -8,7 +8,7 @@
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
 void  operator delete[](void* p);
-void  operator delete(void* p);
+void  operator delete(void* p); // 0x00f47380
 inline void* operator new(size_t, void* p) throw() { return p; }
 
 namespace EA {
@@ -99,7 +99,7 @@ class basic_string {
 
 typedef basic_string<wchar_t> string16;
 
-bool operator==(const basic_string<wchar_t>& a, const basic_string<wchar_t>& b);
+bool operator==(const basic_string<wchar_t>& a, const basic_string<wchar_t>& b); // 0x0087d9a0
 
 // FNV-1 hash over a wide string (inlined into hashtable::erase)
 struct hash {

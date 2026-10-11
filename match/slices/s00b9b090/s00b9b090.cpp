@@ -204,6 +204,7 @@ bool FUN_00b94090(const Vector3& pos, const Quaternion& orientation, uint32_t ty
                   uint32_t instanceID, int unused, uint32_t extra);
 void FUN_00b9aa10(const Vector3& center, void* items, int count, uint32_t instanceID);
 
+// @ 0x00b9b090
 int FUN_00b9b090(const void* context, uint32_t* ids, uint32_t count, uint32_t instanceOverride,
                  uint32_t extra)
 {

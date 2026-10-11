@@ -16,13 +16,19 @@ void FUN_00565560(void* self);
 void FUN_00554020(void* out, void* val);
 void FUN_0055c2e0(void* a, void* b);
 
+struct CandidateDBStub {
+    void AssignCandidates(void* out, void* pRange);
+    bool TryFilterCandidates(void* a, void* b, void* pRange);
+};
+
 // @ 0x005628d0  (large reassignment driver)
 void FUN_005628d0(void* this_, void* pList) {
     (void)this_; (void)pList;
 }
 
 // @ 0x00562b80
-void FUN_00562b80(void* this_, void* out, void* pRange) {
+void CandidateDBStub::AssignCandidates(void* out, void* pRange) {
+    void* this_ = this;
     FUN_004769b0(*(void**)((char*)this_ + 0x12c), *(void**)((char*)this_ + 0x130));
     int* r = (int*)pRange;
     FUN_00565500((char*)this_ + 0x12c, (void*)*r, (r[1] - *r) / 0x24);
@@ -36,7 +42,8 @@ bool FUN_00562c00(void* this_, void* out) {
 }
 
 // @ 0x00562ca0
-bool FUN_00562ca0(void* this_, void* a, void* b, void* pRange) {
+bool CandidateDBStub::TryFilterCandidates(void* a, void* b, void* pRange) {
+    void* this_ = this;
     FUN_004769b0(*(void**)((char*)this_ + 0x12c), *(void**)((char*)this_ + 0x130));
     int* r = (int*)pRange;
     FUN_00565500((char*)this_ + 0x12c, (void*)*r, (r[1] - *r) / 0x24);

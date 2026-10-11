@@ -42,8 +42,10 @@ struct IWriter {
     virtual bool WriteBytes(const void* p, int n);  // vtable slot 14 (0x38)
 };
 
+struct Stub0054b7b0 { bool FUN_0054b7b0(int param_1, IObj* param_2, int* param_3, int param_4); };
+
 // @ 0x0054b7b0
-bool FUN_0054b7b0(int param_1, IObj* param_2, int* param_3, int param_4)
+bool Stub0054b7b0::FUN_0054b7b0(int param_1, IObj* param_2, int* param_3, int param_4)
 {
     bool ok;
     if (param_4 != 0x30bdee3) return false;

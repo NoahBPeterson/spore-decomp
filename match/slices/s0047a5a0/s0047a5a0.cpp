@@ -11,6 +11,8 @@ struct Matrix44 {
     Matrix44(const Matrix44& o) { for (int i = 0; i < 16; ++i) m[i] = o.m[i]; }
 };
 struct P16 { uint a, b, c, d; };
+struct VM44 { Matrix44* mpBegin; Matrix44* mpEnd; Matrix44* mpCapacity; void Insert(Matrix44* position, uint n, const Matrix44& value); };
+struct V16 { P16* mpBegin; P16* mpEnd; P16* mpCapacity; void Insert(P16* position, uint n, const P16& value); };
 
 // out-of-line helpers (relocations masked)
 void  ConstructM44(void* dst, uint n, const void* v);          // @ 0x0047cbe0
@@ -33,8 +35,7 @@ Matrix44* CopyM44Range(Matrix44* first, Matrix44* last, Matrix44* dest)
 }
 
 // @ 0x0047a5a0
-void InsertM44(Matrix44*& mpBegin, Matrix44*& mpEnd, Matrix44*& mpCapacity,
-               Matrix44* position, uint n, const Matrix44& value)
+void VM44::Insert(Matrix44* position, uint n, const Matrix44& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x40 < n) {
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0x40;
@@ -68,8 +69,7 @@ void InsertM44(Matrix44*& mpBegin, Matrix44*& mpEnd, Matrix44*& mpCapacity,
 }
 
 // @ 0x0047aa40
-void Insert16(P16*& mpBegin, P16*& mpEnd, P16*& mpCapacity,
-              P16* position, uint n, const P16& value)
+void V16::Insert(P16* position, uint n, const P16& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x10 < n) {
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0x10;
@@ -102,15 +102,13 @@ void Insert16(P16*& mpBegin, P16*& mpEnd, P16*& mpCapacity,
 }
 
 // @ 0x0047ae60
-void Insert16b(P16*& mpBegin, P16*& mpEnd, P16*& mpCapacity,
-               P16* position, uint n, const P16& value)
+void Insert16b(V16& v, P16* position, uint n, const P16& value)
 {
-    Insert16(mpBegin, mpEnd, mpCapacity, position, n, value);
+    v.Insert(position, n, value);
 }
 
 // @ 0x0047b3d0
-void InsertM44b(Matrix44*& mpBegin, Matrix44*& mpEnd, Matrix44*& mpCapacity,
-                Matrix44* position, uint n, const Matrix44& value)
+void InsertM44b(VM44& v, Matrix44* position, uint n, const Matrix44& value)
 {
-    InsertM44(mpBegin, mpEnd, mpCapacity, position, n, value);
+    v.Insert(position, n, value);
 }

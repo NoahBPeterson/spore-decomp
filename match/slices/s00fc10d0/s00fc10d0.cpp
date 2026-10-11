@@ -66,6 +66,7 @@ void __fastcall FUN_00fc18c0(int* p) {
 // ===========================================================================
 // 0x00fc1780 -- destructor of the fixed-vector holder
 // ===========================================================================
+// @ 0x00fc1780
 int __fastcall FUN_00fc1780(int p, char del) {
     int* q = (int*)p;
     int v = q[0xb];
@@ -101,6 +102,7 @@ float __stdcall FUN_00fc1ad0(int a, int b, int c, int d, int e) {
 // ===========================================================================
 // 0x00fc1ae0 -- cTerrainSystem destructor
 // ===========================================================================
+// @ 0x00fc1ae0
 void __fastcall FUN_00fc1ae0(int* p) {
     if (p[7]) (*(void(__cdecl**)(void*))(*(void**)((char*)*(void**)p[7] + 4)))((void*)p[7]);
     if (p[5]) (*(void(__cdecl**)(void*))(*(void**)((char*)*(void**)p[5] + 4)))((void*)p[5]);
@@ -116,6 +118,7 @@ void __fastcall FUN_00fc1ae0(int* p) {
 // ===========================================================================
 // 0x00fc1b60 -- zero a vector field (__stdcall, 5 args)
 // ===========================================================================
+// @ 0x00fc1b60
 void __stdcall FUN_00fc1b60(float* out, int a, int b, int c, int d) {
     (void)a; (void)b; (void)c; (void)d;
     out[0] = 0.0f; out[1] = 0.0f; out[2] = 0.0f;
@@ -124,6 +127,7 @@ void __stdcall FUN_00fc1b60(float* out, int a, int b, int c, int d) {
 // ===========================================================================
 // 0x00fc1ba0 -- release the terrain model
 // ===========================================================================
+// @ 0x00fc1ba0
 void __fastcall FUN_00fc1ba0(int self) {
     if (FUN_0075e620_dummy()) {
         if (SP_ModelManager()) {
@@ -138,6 +142,7 @@ void __fastcall FUN_00fc1ba0(int self) {
 // ===========================================================================
 // 0x00fc1c00 -- cTerrainSystem constructor
 // ===========================================================================
+// @ 0x00fc1c00
 int* __fastcall FUN_00fc1c00(int* p) {
     p[3] = 0; p[4] = 0; p[5] = 0;
     p[6] = 0; p[7] = 0; p[8] = 0x26b7d69; p[9] = 0;
@@ -175,6 +180,7 @@ float __cdecl FUN_00fc1fa0(int level) {
 // ===========================================================================
 // 0x00fc1fd0 -- SP::GetTerraformPlanetType
 // ===========================================================================
+// @ 0x00fc1fd0
 int __cdecl FUN_00fc1fd0(float f) {
     if (f < 0.1f) return 2;
     if (f >= 0.1f && f < 0.4f) return 3;
@@ -186,6 +192,7 @@ int __cdecl FUN_00fc1fd0(float f) {
 // ===========================================================================
 // 0x00fc2040 -- radial falloff factor
 // ===========================================================================
+// @ 0x00fc2040
 float __cdecl FUN_00fc2040(float x, float y) {
     float f = 1.0f - sqrtf((y - 0.5f) * (y - 0.5f) + (x - 0.5f) * (x - 0.5f)) * 1.4142135f;
     float r = 0.0f;

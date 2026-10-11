@@ -8,7 +8,10 @@ void  EASTL_allocator_deallocate(void* p);                               // @ 0x
 void  memmove(void* dst, const void* src, uint n);
 #pragma intrinsic(memmove)
 
-struct Variant { uint32_t mFlags; };
+struct Variant {
+    uint32_t mFlags;
+    Variant* Ctor(uint32_t arg);
+};
 namespace EA { struct V { void Destruct(Variant*, int); }; }
 void VariantDestruct(Variant* v, int n);                 // @ 0x00f... (EA::Variant::Destruct)
 void VariantInit(int a, int b, void* c, int d, int e);   // @ 0x0093dd80
@@ -260,8 +263,9 @@ void EditorHandles::Update(HandleState* st)
 }
 
 // @ 0x00478300
-Variant* Variant_Ctor(Variant* v, uint32_t arg)
+Variant* Variant::Ctor(uint32_t arg)
 {
+    Variant* v = this;
     if ((v->mFlags & 4) != 0) {
         VariantDestruct(v, 1);
     }
@@ -310,8 +314,13 @@ void IntrosortRange(char* first, char* last, char pred)
     }
 }
 
+struct VecP8Fixed {
+    P8* mpBegin; P8* mpEnd; P8* mpCapacity;
+    P8* InsertP8Fixed(P8* position, const P8& value);
+};
+
 // @ 0x004786e0
-P8* InsertP8Fixed(P8* mpBegin, P8*& mpEnd, P8*& mpCapacity, P8* position, const P8& value)
+P8* VecP8Fixed::InsertP8Fixed(P8* position, const P8& value)
 {
     if (mpEnd != mpCapacity) {
         const P8* v = &value;

@@ -208,14 +208,21 @@ char cTextureManager::WriteTexture(int tex, char async)
     return ok;
 }
 
+struct RefPtrSlot {
+    int* mPtr;
+    void Assign(int* value);   // 007a97e0
+    void Clear();              // 007a9880
+};
+
 // @ 0x007a97e0  refptr assignment
-void FUN_007a97e0(int** self, int* value)
+void RefPtrSlot::Assign(int* value)
 {
-    int* old = *self;
+    RefPtrSlot* self = this;
+    int* old = self->mPtr;
     if (value != old) {
         if (value)
             _InterlockedExchangeAdd((volatile long*)((char*)value + 0x10), 1);
-        *self = value;
+        self->mPtr = value;
         if (old) {
             volatile long* rc = (volatile long*)((char*)old + 0x10);
             _InterlockedExchangeAdd(rc, -1);
@@ -229,10 +236,10 @@ void FUN_007a97e0(int** self, int* value)
 }
 
 // @ 0x007a9880  refptr clear
-void FUN_007a9880(int** self)
+void RefPtrSlot::Clear()
 {
-    if (*self) {
-        volatile long* rc = (volatile long*)((char*)*self + 0x10);
+    if (mPtr) {
+        volatile long* rc = (volatile long*)((char*)mPtr + 0x10);
         _InterlockedExchangeAdd(rc, -1);
         long cur = _InterlockedExchangeAdd(rc, 0);
         if (cur < 1)
@@ -242,9 +249,15 @@ void FUN_007a9880(int** self)
     }
 }
 
+struct DequeOwner {
+    char pad[0x4c];
+    void RemoveMatching(int* value);   // 007a9840
+};
+
 // @ 0x007a9840  remove-first-matching in deque
-void FUN_007a9840(int param_1, int* value)
+void DequeOwner::RemoveMatching(int* value)
 {
+    int param_1 = (int)this;
     int* cur = *(int**)(param_1 + 0x4c);
     int* chunk = *(int**)(param_1 + 0x58);
     int* last = *(int**)(param_1 + 0x54);
@@ -286,13 +299,17 @@ void StallUntilLoaded(int** out, int* begin, int* first, int* end, int** map, in
 }
 
 // @ 0x007a9a80  DequeIterator::operator+=
-struct DequeIter2 { int* cur; int* first; int* last; int** map; };
-DequeIter2* FUN_007a9a80(DequeIter2* it, int n)
+struct DequeIter2 {
+    int* cur; int* first; int* last; int** map;
+    DequeIter2& operator+=(int n);   // 007a9a80
+};
+DequeIter2& DequeIter2::operator+=(int n)
 {
-    unsigned int off = (unsigned int)((it->cur - it->first) >> 2) + n;
+    DequeIter2* it = this;
+    unsigned int off = (unsigned int)(it->cur - it->first) + n;
     if (off < 0x40) {
         it->cur = it->cur + n;
-        return it;
+        return *it;
     }
     int chunkIndex = (int)((off + 0x1000000 + ((int)(off + 0x1000000) >> 0x1f & 0x3f)) >> 6) - 0x40000;
     int** slot = (int**)((char*)it->map + chunkIndex * 4);
@@ -301,7 +318,7 @@ DequeIter2* FUN_007a9a80(DequeIter2* it, int n)
     it->first = base;
     it->last = base + 0x40;
     it->cur = it->first + (off + chunkIndex * -0x40);
-    return it;
+    return *it;
 }
 
 // @ 0x007a9080  (draw glyph run)

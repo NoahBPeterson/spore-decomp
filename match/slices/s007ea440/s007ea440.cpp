@@ -43,7 +43,9 @@ void FUN_007eb060(int first, int last, int* dst) {
 }
 
 // @ 0x007EB090  (rbtree node count)
-int FUN_007eb090(int self) {
+struct ObjB0 { int FUN_007eb090(); };
+int ObjB0::FUN_007eb090() {
+    int self = (int)this;
     int* bucket = *(int**)(self + 0x10);
     int node = *bucket;
     int count = 0;

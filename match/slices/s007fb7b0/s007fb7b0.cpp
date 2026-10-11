@@ -385,7 +385,9 @@ unsigned f_7fc4b0(void* self, int* msg, void* arg) {
 }
 
 // @ 0x007fc600
-unsigned f_7fc600(void* self, int a, int b) {
+struct Obj7fc600 { unsigned f_7fc600(int a, int b); };
+unsigned Obj7fc600::f_7fc600(int a, int b) {
+  void* self = this;
   char buf[0x50];
   f_7fc2a0_ctor(buf);
   void* r = f_7fa4f0(buf, (void*)a, (void*)b);

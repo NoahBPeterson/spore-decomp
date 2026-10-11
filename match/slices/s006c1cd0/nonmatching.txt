@@ -1,4 +1,4 @@
-006c2060  47   create four render objects from 2-word descriptors; schedule differs
+006c2060  47   create four render objects from 2-word descriptors; schedule differs; equiv UNSUPPORTED (ecx): entry ecx read is only the alignment nop lea ecx,[ecx]; original is cdecl (plain ret), so left as is
 006c2120  59   Editor::cEditorResource cleanup; EH frame not reproduced
 006c2170  139  Editor::cEditorResource dtor body; member dtor order/EH differ
 006c2240  96   Editor::cPropertyList ctor; EH frame (AddRef) not reproduced

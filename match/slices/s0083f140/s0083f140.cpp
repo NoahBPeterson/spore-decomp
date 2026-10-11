@@ -121,11 +121,15 @@ int __cdecl EvalBoolExpression(const char** p) {
     return result;
 }
 
+namespace EA { namespace ArgScript {
+struct cExpression { int EvalChar(const char** p); };   // 0x0083f480 (stub receiver)
+}}
+
 // ===========================================================================
 // 0x0083f480  EA::ArgScript::cExpression::EvalChar
 // ===========================================================================
 // @ 0x0083f480
-int __cdecl EvalChar(const char** p) {
+int EA::ArgScript::cExpression::EvalChar(const char** p) {
     DiscardWhiteSpace(p);
     if (**p != '(')
         throw cError("Expected '%c'", '(');

@@ -1,7 +1,7 @@
 00689ee0  SP::cCommandServer::cCommandInfo::cCommandInfo(const cCommandInfo&)  # compiler-generated copy ctor, two eastl::basic_string<wchar_t> members
 00689fc0  SP::cCommandParameterSet::GetNextParameterID  # PDB vtable-slot + map find/RBTreeIncrement shape
 0068a000  SP::cCommandServer::cCommandInfo::~cCommandInfo  # reverse-order WStr destructors; PDB layout mnID/msName/msParameterTypeInfo
-0068a040  (anonymous)::FindCommandInfoByName  # iterates cCommandServer::mCommandInfoMap begin..end, compares msName via 0x572930
+0068a040  SP::cCommandServer::FindCommandInfoByName  # iterates cCommandServer::mCommandInfoMap begin..end, compares msName via 0x572930
 0068a0f0  eastl::rbtree<unsigned int,EA::Variant,...>::DoNukeSubtree  # PDB callee-single name; node+0x24 flags, node+0x14 Variant
 0068a250  eastl::rbtree<unsigned int,EA::Variant,...>::create_node  # allocates 0x28-byte node, stores key + Variant
 0068a2e0  (anonymous)::GetEmptyCommandString  # static-local WStr with atexit dtor, guard bit

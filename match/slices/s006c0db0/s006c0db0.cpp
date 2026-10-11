@@ -245,8 +245,16 @@ void RegisterArenaReadCallbacks()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006c12e0 / 006c1320 / 006c1350  vector iterator helpers
+// vector iterator helpers (0x6c12e0 / 0x6c1320 / 0x6c1350)
 // ---------------------------------------------------------------------------
+struct Vec38 {
+    int m[5];
+    u32 CtorCopy(u32 src);
+    void DtorRange2(u32 first, u32 last);
+    void Clear();
+};
+
+// @ 0x006c12e0
 u32 VecDtorRange(u32 first, u32 last, u32 out)
 {
     if (first == last)
@@ -259,15 +267,18 @@ u32 VecDtorRange(u32 first, u32 last, u32 out)
     return out;
 }
 
-u32 VecCtorCopy(u32 dst, u32 src)
+// @ 0x006c1320
+u32 Vec38::CtorCopy(u32 src)
 {
+    u32 dst = (u32)this;
     sub_11e0b85((void*)dst, 8, 4, (void*)0x6c0fa0, (void*)0xc2e4e0);
     *(u32*)dst = *(u32*)src;
     *(u32*)(dst + 4) = *(u32*)(src + 4);
     return dst;
 }
 
-void VecDtorRange2(u32 first, u32 last)
+// @ 0x006c1350
+void Vec38::DtorRange2(u32 first, u32 last)
 {
     while (first < last) {
         sub_11e0b22((void*)(first + 0x18), 8, 4, (void*)0xc2e4e0);
@@ -278,9 +289,10 @@ void VecDtorRange2(u32 first, u32 last)
 // ---------------------------------------------------------------------------
 // @ 0x006c1380  eastl vector<0x38> clear/destroy
 // ---------------------------------------------------------------------------
-void VecClear38(int* v)
+void Vec38::Clear()
 {
-    VecDtorRange2(v[0], v[1]);
+    int* v = m;
+    DtorRange2(v[0], v[1]);
     int p = v[0];
     if (p != 0 && p != v[4])
         sub_f47380((void*)p);

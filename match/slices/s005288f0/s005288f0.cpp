@@ -64,6 +64,8 @@ struct cRTTBuffer {                     // size 0x64
 
     cRTTBuffer(uint32_t w, uint32_t h);         // 0x005288f0
     void* PrepareState();                        // 0x005293a0
+    void Destroy();                              // 0x00528e20
+    uint32_t ClampAndStream(uint32_t requested); // 0x00529520
 };
 
 // @ 0x005288f0
@@ -124,8 +126,9 @@ cRTTBuffer::cRTTBuffer(uint32_t w, uint32_t h)
 }
 
 // @ 0x00528e20  (real shape: device->vtbl[5](mRTTRect fields), free(mCamera))
-void cRTTBufferDestroy(cRTTBuffer* self)
+void cRTTBuffer::Destroy()
 {
+    cRTTBuffer* self = this;
     int* d = (int*)GetDevice();
     (*(void(__thiscall*)(int*, int, int))(*(int*)d + 0x14))(d, self->mRTTRect.mPageID, self->mRTTRect.mAllocID);
     FreeObj(self->mCamera);
@@ -173,8 +176,9 @@ void DrawCtx::Draw(float* v, float w)
 }
 
 // @ 0x00529520
-uint32_t ClampAndStream(cRTTBuffer* self, uint32_t requested)
+uint32_t cRTTBuffer::ClampAndStream(uint32_t requested)
 {
+    cRTTBuffer* self = this;
     int st = (int)self->PrepareState();
     uint32_t n = (uint32_t)RwStreamX((uint32_t)st);
     n = n / 3;

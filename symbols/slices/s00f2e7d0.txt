@@ -3,5 +3,5 @@
 00f2ec10  set_capacity<E0x27e8>  # (cap-begin)/0x27e8 < n; matches
 00f2ecd0  clear<E0x238>          # move/destroy tail + sentinel writes +0x14/+0x18
 00f2ef10  set_capacity<E0x534>   # refcount-checked delete; matches
-00f2f2e0  erase<E0x27e0>         # eastl vector erase
-00f2f340  erase<E0x27e8>         # eastl vector erase
+00f2f2e0  Erase27e0              # eastl vector erase
+00f2f340  Erase27e8              # eastl vector erase

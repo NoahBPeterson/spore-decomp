@@ -107,9 +107,11 @@ extern "C" unsigned g_SerTypeTable[];                               // 0x154eea0
 
 // ---------------------------------------------------------------- 00960be0 (geometry)
 // @ 0x00960be0
-bool FUN_00960be0(void* self, float* out)
+struct GeomObj { bool Geom(float* out); };
+struct ListCopy { unsigned* Copy(unsigned* src); };
+bool GeomObj::Geom(float* out)
 {
-    char* p = (char*)self;
+    char* p = (char*)this;
     unsigned uVar4 = *(unsigned*)(p + 0x2c) & 0x400;
     if (uVar4 == 0 && (*(unsigned char*)(p + 0x30) & 2) == 0)
         return false;
@@ -221,7 +223,7 @@ bool Win::TestHit(float x, float y)
     if (fVar1 < dx || local_30 < dy)
         return false;
     float rect[4];
-    bool cVar2 = FUN_00960be0((char*)this - 4, rect);
+    bool cVar2 = ((GeomObj*)((char*)this - 4))->Geom(rect);
     if (cVar2) {
         float b[4];
         b[0] = 0.0f;
@@ -714,8 +716,9 @@ bool Win::SerUpdateTrue(int unused)
 
 // ---------------------------------------------------------------- 00961b40 (vector-of-lists copy)
 // @ 0x00961b40
-unsigned* FUN_00961b40(unsigned* dst, unsigned* src)
+unsigned* ListCopy::Copy(unsigned* src)
 {
+    unsigned* dst = (unsigned*)this;
     dst[0] = src[0];
     dst[2] = src[2];
     dst[3] = src[3];

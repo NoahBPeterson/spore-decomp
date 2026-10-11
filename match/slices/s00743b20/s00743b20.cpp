@@ -352,7 +352,7 @@ void SortDescGuarded(Pair8* first, Pair8* last) {
     } while (iSorted != last);
 }
 
-// 0x00743c50 -- eastl::Internal::insertion_sort_simple (descending key)
+// @ 0x00743c50 -- eastl::Internal::insertion_sort_simple (descending key)
 void SortDescUnguarded(Pair8* first, Pair8* last) {
     for (Pair8* current = first; current != last; ++current) {
         Pair8* end = current;
@@ -390,7 +390,7 @@ void SortAscGuarded(Pair8* first, Pair8* last) {
     } while (iSorted != last);
 }
 
-// 0x00743d20 -- eastl::Internal::insertion_sort_simple (ascending key)
+// @ 0x00743d20 -- eastl::Internal::insertion_sort_simple (ascending key)
 void SortAscUnguarded(Pair8* first, Pair8* last) {
     for (Pair8* current = first; current != last; ++current) {
         Pair8* end = current;
@@ -442,6 +442,7 @@ void PromoteCocc(cOccluder6* first, int top, int pos, cOccluder6 value,
 
 // 0x00743d90 -- eastl uninitialized_copy of Elem28 (placement new)
 inline void* operator new(unsigned int, void* p) { return p; }
+// @ 0x00743d90
 Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst) {
     for (; first != last; ++first, ++dst)
         new (dst) Elem28(*first);
@@ -472,7 +473,7 @@ void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int a
 }
 
 // ---------------------------------------------------------------- transforms
-// 0x00744050
+// @ 0x00744050
 void TransformTwo(const cSPVector3* p1, const cSPVector3* p2, const cSPTransform* t, int a, int b) {
     cSPVector3 r1, r2;
     {
@@ -570,7 +571,7 @@ void TransformTwoOffset(const cSPVector3* p1, const cSPVector3* p2, const cSPTra
 struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
 struct ResHolder { ResInfo* Get(); };
 
-// 0x007446e0
+// @ 0x007446e0
 void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_t* pGroup) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     uint32_t inst = 0, group = 0;

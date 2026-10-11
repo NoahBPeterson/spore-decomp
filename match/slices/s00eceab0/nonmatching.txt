@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
-00ecefc0   38  complete; double set-field call scheduling differs
-00ecf000  188  complete; flag test + window update scheduling differs
-00ecf0f0   76  complete; message guard + vcall schedule differs
-00ecf320  160  complete; reload callback call/refcount scheduling differs
-00ecf800  224  complete; manager query + window toggles differ
-00ecf910   38  complete; window toggle (arg forwarded through tail call) differs
-00ecf940  376  complete; multi-window toggle ladder scheduling differs
+00ecefc0   38  complete; double set-field call scheduling differs; equiv FAIL: 5/5 valid inputs mismatched; first: esp
+00ecf000  188  complete; flag test + window update scheduling differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecf0f0   76  complete; message guard + vcall schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: esp
+00ecf320  160  complete; reload callback call/refcount scheduling differs; equiv UNSUPPORTED: 5 unresolved reference(s): ?SP_PropertyManager@@YAHXZ, ?SPUIHelpers_VisitWindowTreeDepthFirst@@YAXHPAXH@Z, ??2@YAPAXI@Z, ?UI_TextZoomName_ctor@@YAPAXXZ, ?cSPUILayout_FindWindowByID3@@YAPAHPAXH@Z
+00ecf800  224  complete; manager query + window toggles differ; equiv UNSUPPORTED: 1 unresolved reference(s): ?cSPUILayout_FindWindowByID3@@YAPAHPAXH@Z
+00ecf910   38  complete; window toggle (arg forwarded through tail call) differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecf940  376  complete; multi-window toggle ladder scheduling differs; equiv UNSUPPORTED: 1 unresolved reference(s): ?cSPUILayout_FindWindowByID3@@YAPAHPAXH@Z

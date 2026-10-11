@@ -270,6 +270,7 @@ public:
     bool InitParticle(cParticle* particle);             // 0x00f5ebf0 (name guessed)
 };
 
+// @ 0x00f5ebf0
 bool cParticlesEffect::InitParticle(cParticle* particle)
 {
     particle->mBase.mAge = 0.0f;

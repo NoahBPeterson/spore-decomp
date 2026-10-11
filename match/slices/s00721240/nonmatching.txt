@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00721240  228  SortFloatsByDist: complete; min-scan unroll and qsort call schedule differ
-007217c0  0  MakeChartRef: complete; source shape differs (compiler inlined/removed; no same-size symbol)
+007217c0  0  MakeChartRef: complete; source shape differs (compiler inlined/removed; no same-size symbol); equiv: UNSUPPORTED (only 0/1200 valid inputs, fake-arity discards) after ecx member fix
 00721850  97  ChartHash::GrowF: complete; allocation/placement-new and loop shape differ
 007219f0  0  ChartHash::FindF: complete; float-key compare sequence differs
 00721a80  0  ChartHash::InsertF: complete; grow/alloc sequence differs

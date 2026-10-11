@@ -1,0 +1,6 @@
+00595320 WriteTypedValue@_N::WriteTypedValue  # explicit instantiation; name keyed on the mangled template argument
+005954f0 WriteTypedValue@_J::WriteTypedValue  # explicit instantiation
+00595870 fixed_vector_base@_K::DoInsertValue  # explicit instantiation
+00595d40 index@UcStaticItemInfo::index  # explicit instantiation
+00595eb0 index@E::index  # explicit instantiation
+00595ff0 index@_K::index  # explicit instantiation

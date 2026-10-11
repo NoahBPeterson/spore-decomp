@@ -55,7 +55,13 @@ bool X_755520::FUN_00755520(cJob_755520* job) {
 }
 
 // @ 0x00755570  (92 bytes) vector fill/insert
-void FUN_00755570(int* param_1, unsigned int param_2, int param_3) {
+struct V_755570 {
+  int* mBegin;
+  int* mEnd;
+  void FUN_00755570(unsigned int param_2, int param_3);
+};
+void V_755570::FUN_00755570(unsigned int param_2, int param_3) {
+  int* param_1 = (int*)this;
   int iVar2 = param_1[1];
   unsigned int uVar3 = (unsigned int)(iVar2 - *param_1) >> 2;
   if (uVar3 < param_2) {

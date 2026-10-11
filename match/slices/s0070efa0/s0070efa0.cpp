@@ -174,9 +174,12 @@ void __cdecl WriteBlock(void*, void*, int);                       // 0x0093a9a0
 
 // @ 0x0070ff50 already defined above
 
+struct MatMgrR { char ReadShaders(void* stream); };
+
 // @ 0x0070efa0  (SP::cMaterialManager::ReadShaders)
-char cMaterialManager_ReadShaders(void* self, void* stream)
+char MatMgrR::ReadShaders(void* stream)
 {
+    void* self = this;
     int local[3];
     local[0] = *(int*)((char*)self + 0x200);
     local[2] = *(int*)0x01535f68;

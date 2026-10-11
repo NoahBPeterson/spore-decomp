@@ -3,3 +3,7 @@
 005d8cc0 SP::cSPEditorTactileTransform::cSPEditorTactileTransform  # two inline cSPTransform ctors (+0x38, +0x70)
 005d96d0 SP::cSPEditorTactilityManager::cSPEditorTactilityManager  # vtable 0x13F9120 + five eastl::map ctors at PDB offsets
 005d9770 SP::cSPEditorTactilityManager::`scalar deleting destructor'  # destroys the five maps in reverse member order
+005d9560 ?$pair::?$pair  # pair<const AutoRefCount<cSPEditorBlock>, ComponentList> copy ctor
+005d95c0 ?$pair::?$pair  # pair<const AutoRefCount<cMWModel>, ComponentList> copy ctor
+005d9620 ?$pair::?$pair  # pair<const AutoRefCount<IWindow>, ComponentList> copy ctor
+005d9800 map@U?$AutoRefCount@UcMWModel@SP@@@EA@@U?$AutoRefCount@UcIModelWorld::?A?$map  # map<AutoRefCount<cMWModel>, AutoRefCount<cIModelWorld>>::operator[] (class part disambiguates the four map instances)

@@ -68,6 +68,7 @@ struct cGameModelDescription {
     Vec<cSplitController> mSplitControllers; // +0x58
     Vec<float> mGroups;                      // +0x6c
     uint32_t mFlagsToSet; uint8_t mPickLevel, mOverrideSet, pad86[2]; uint32_t field88;
+    cGameModelDescription* Assign(cGameModelDescription* src);
 };
 
 // --------------------------------------------------------------- helpers
@@ -263,7 +264,8 @@ void SplitVecInsert(Vec<cSplitController>* v, cSplitController* pos, cSplitContr
 }
 
 // @ 0x007d35b0  SP::cGameModelDescription::operator=
-cGameModelDescription* DescriptionAssign(cGameModelDescription* self, cGameModelDescription* src) {
+cGameModelDescription* cGameModelDescription::Assign(cGameModelDescription* src) {
+    cGameModelDescription* self = this;
     self->mStateID = src ? src->mStateID : 0;
     self->mFlags = src->mFlags;
     self->mSize = src->mSize;

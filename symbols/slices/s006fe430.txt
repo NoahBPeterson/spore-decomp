@@ -11,4 +11,4 @@
 006fefa0  FUN_006fefa0  # destroys the 0x1628c20 vector, reserves 0x15345b0/0x200, clears 0x1624568
 006fefe0  FUN_006fefe0  # releases every +0x20 shader object in 0x1628c20 vector
 006ff060  `anonymous namespace'::cVertexFragmentInfo  # actually vector<0x130>::resize
-006ff100  `anonymous namespace'::cVertexFragmentInfo::operator=  # string/vector member-wise assignment
+006ff100  ?4cVertexFragmentInfo  # operator= (string/vector member-wise assignment)

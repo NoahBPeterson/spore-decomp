@@ -30,6 +30,7 @@ struct Variant {
     Variant* SetU32(const unsigned int* p);
     Variant* SetDouble(const double* p);
     Variant* SetPtr(const unsigned short* p);
+    Variant* SetVariant8(const unsigned short* p);
 };
 
 void Variant::Assign(int, int, const void*, int, int) {}
@@ -94,7 +95,8 @@ Variant* Variant::SetDouble(const double* p) {
 }
 
 // @ 0x0093DBC0  (8-size value / string header copy)
-Variant* SetVariant8(Variant* v, const unsigned short* p) {
+Variant* Variant::SetVariant8(const unsigned short* p) {
+    Variant* v = this;
     if (v->mFlags & 4) {
         ((void(__cdecl*)(int, Variant*, int, int, int, int))g_fn154eb48)(1, v, 0, 0, 0, 0);
         if ((v->mFlags & 2) == 0) { v->mTypeId = 0; v->mFlags = 0; }

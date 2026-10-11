@@ -217,7 +217,6 @@ void __cdecl FUN_006fe8f0(int a, int b) {
 
 namespace {
 
-// @ 0x006ff100
 struct EString {
     char* begin;   // +0x00
     char* end;     // +0x04
@@ -243,6 +242,7 @@ struct cVertexFragmentInfo {
     cVertexFragmentInfo& operator=(const cVertexFragmentInfo& o);
 };
 
+// @ 0x006ff100
 cVertexFragmentInfo& cVertexFragmentInfo::operator=(const cVertexFragmentInfo& o) {
     const cVertexFragmentInfo* s = &o;
     f00 = s->f00;

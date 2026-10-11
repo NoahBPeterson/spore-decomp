@@ -39,7 +39,8 @@ struct E34 {
     char     pad1d[3];
     Blob14   e;          // 0x20
 };
-struct Vec34 { E34* begin; E34* end; E34* cap; };
+struct Vec34 { E34* begin; E34* end; E34* cap; void FUN_00661670(); void FUN_00661700(); };
+struct MapRoot34 { void* FUN_006612b0(void* key); };
 struct SubD8 { void FUN_0065f9e0(); };
 
 // @ 0x00660dd0  eastl::copy_backward over 0x34-byte elements.
@@ -98,11 +99,13 @@ struct cSPUIFeedFilter {
     char  mb108;                       // 0x108
     char  pad109[3];
     char  mb10c;                       // 0x10c
+    void* ctor();
+    void dtor();
 };
 
 // @ 0x00661020
-void* cSPUIFeedFilter_ctor(cSPUIFeedFilter* s) {
-    char* p = (char*)s;
+void* cSPUIFeedFilter::ctor() {
+    char* p = (char*)this;
     *(void**)(p + 4) = (void*)0x13eb384;
     *(void**)(p + 8) = (void*)0x13ec458;
     *(void**)(p + 0xc) = 0;
@@ -134,12 +137,12 @@ void* cSPUIFeedFilter_ctor(cSPUIFeedFilter* s) {
     *(void**)(p + 0xec) = 0; *(void**)(p + 0xf0) = 0; *(void**)(p + 0xf4) = 0;
     *(void**)(p + 0xf8) = 0; *(void**)(p + 0xfc) = 0;
     *(char*)(p + 0x10c) = 0;
-    return s;
+    return this;
 }
 
 // @ 0x00660e30
-void cSPUIFeedFilter_dtor(cSPUIFeedFilter* s) {
-    char* p = (char*)s;
+void cSPUIFeedFilter::dtor() {
+    char* p = (char*)this;
     *(void**)(p + 0) = (void*)0x14000e0;
     *(void**)(p + 4) = (void*)0x14000d0;
     *(void**)(p + 8) = (void*)0x14000c0;
@@ -199,8 +202,8 @@ char FUN_00661180(void* vec, void* key) {
 }
 
 // @ 0x006612b0  eastl::map<unsigned,E34>::find-or-insert
-void* FUN_006612b0(void* self, void* key) {
-    char* p = (char*)self;
+void* MapRoot34::FUN_006612b0(void* key) {
+    char* p = (char*)this;
     uint32_t k = *(uint32_t*)key;
     E34* node = *(E34**)(p + 0xc);
     E34* found = (E34*)(p + 4);
@@ -283,8 +286,8 @@ void* FUN_006614d0(void* self, void* pos, void* value) {
 }
 
 // @ 0x00661670  vector<E34>::push_back() (default)
-void FUN_00661670(void* self) {
-    Vec34* v = (Vec34*)self;
+void Vec34::FUN_00661670() {
+    Vec34* v = this; void* self = this;
     E34* e = v->end;
     if (e < v->cap) {
         v->end = e + 1;
@@ -301,8 +304,8 @@ void FUN_00661670(void* self) {
 }
 
 // @ 0x00661700  vector<E34>::pop_back()
-void FUN_00661700(void* self) {
-    Vec34* v = (Vec34*)self;
+void Vec34::FUN_00661700() {
+    Vec34* v = this;
     E34* begin = v->begin;
     E34* end = v->end;
     Fun0066_0d70(end, end, begin);

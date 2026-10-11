@@ -73,17 +73,20 @@ void FUN_00925c20(unsigned a1, int a2) {
     ((void (__thiscall*)(void*, unsigned, int))vt[3])(obj, a1, 0);
 }
 // @ 0x00925DA0
-void FUN_00925da0(void* self, unsigned a2, unsigned a3, unsigned a4) {
-    ((void (__thiscall*)(void*, unsigned, unsigned, unsigned, int, int))(*(void***)self)[1])(
-        self, a2, a3, a4, 0, 0);
+struct C25da0 { void F(unsigned a2, unsigned a3, unsigned a4); };
+void C25da0::F(unsigned a2, unsigned a3, unsigned a4) {
+    ((void (__thiscall*)(void*, unsigned, unsigned, unsigned, int, int))(*(void***)this)[1])(
+        this, a2, a3, a4, 0, 0);
 }
 
 // @ 0x00925E40
-void FUN_00925e40(int* self, int* p) {
-    int old = self[2];
-    self[2] = (int)p;
+struct C25e40 { int w[5]; void F(int* p, int unused); };
+void C25e40::F(int* p, int unused) {
+    (void)unused;
+    int old = w[2];
+    w[2] = (int)p;
     *p = old;
-    --self[4];
+    --w[4];
 }
 // @ 0x00925E60
 extern void FUN_00925d60();
@@ -118,7 +121,9 @@ int FUN_00926140(void* p) {
 void FUN_00926340(void* p) { DeleteCriticalSection((CRITICAL_SECTION*)p); }
 
 // @ 0x00925F30
-void FUN_00925f30(int* p, int a2, int a3, int a4) {
+struct C25f30 { void F(int a2, int a3, int a4); };
+void C25f30::F(int a2, int a3, int a4) {
+    int* p = (int*)this;
     p[1] = a2;
     p[5] = a4;
     p[2] = 0; p[3] = 0; p[4] = 0;

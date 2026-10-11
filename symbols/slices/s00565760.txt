@@ -1,0 +1,1 @@
+00565f50 eastl::vector2<uint32_t>::reserve  # explicit instantiation reserve

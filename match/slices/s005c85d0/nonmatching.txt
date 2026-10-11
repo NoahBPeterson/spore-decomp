@@ -1,3 +1,3 @@
 # va  diff-bytes  reason
 005c9010  46  cSPPalettePageUI ctor: g_one load scheduling + derived/base vptr store order differ
-005c9070  79  cSPPalettePageUI deleting dtor: MSVC emits an out-of-line ~ (??1) that ??_G tail-calls instead of inlining it
+005c9070  79  cSPPalettePageUI deleting dtor: MSVC emits an out-of-line ~ (??1) that ??_G tail-calls instead of inlining it; equiv: FAIL (ours faults reading 0x3000003c where original returns normally)

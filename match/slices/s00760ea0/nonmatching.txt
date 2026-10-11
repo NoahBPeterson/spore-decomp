@@ -1,5 +1,5 @@
 00760ea0  138  Vec3::insert fast path: EH state + construct shape differ from the original vector::insert
-00760f50   74  destructor: base vtable stores / vector teardown sequence differ
+00760f50   74  destructor: base vtable stores / vector teardown sequence differ; equiv FAIL: ours faults reading 0x781b2f where original returns normally (FUN_00781b10 callee call differs)
 00760fd0  204  setByKey: search + temp AutoRefCount assign shape
 00761240   43  V1240::set: local temp register allocation (esi vs edx lifetime)
 00761380  109  descriptor wrapper: EH frame not emitted in one TU (builder is same-TU)

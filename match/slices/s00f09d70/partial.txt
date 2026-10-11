@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00f09fc0  500  best-scenario selection; only the early-out path reconstructed (~40 of 500 bytes); equiv UNSUPPORTED: our function is under 1/5 of the original size, so it is not a complete definition

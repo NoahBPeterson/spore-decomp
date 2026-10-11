@@ -1,1 +1,1 @@
-00755570  77  complete behaviourally (vector fill/relocate via FUN_00429e00/FUN_006df700/FUN_0059c410); inlined helper scheduling differs
+00755570  77  complete behaviourally (vector fill/relocate via FUN_00429e00/FUN_006df700/FUN_0059c410); inlined helper scheduling differs; equiv FAIL (ours faults at 00429e1c where original returns normally)

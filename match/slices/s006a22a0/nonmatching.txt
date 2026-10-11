@@ -2,8 +2,6 @@
 006a2470  40   SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps
 006a24d0  40   SP::cPropertyList::GetPropertyValue - complete; same fold difference
 006a2530  57   SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference
-006a2660  137  SP::cDirectPropertyList::GetIntProperty - complete; reads Variant value directly
-006a2710  159  SP::cDirectPropertyList::GetFloatProperty - complete
 006a27d0  27   SP::cDirectPropertyList::HasProperty - complete
 006a2800  158  SP::cDirectPropertyList::GetPropertyValue - complete
 006a28f0  70   SP::cPropertyList::ClearMapOnly - complete; _Destroy helper schedule differs

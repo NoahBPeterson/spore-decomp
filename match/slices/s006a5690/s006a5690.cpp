@@ -339,6 +339,7 @@ struct Vec10s {
     Vec10s* Init(unsigned n, const void* value);
     void Alloc(unsigned n, const void* value);   // 0x007c7a40
 };
+// @ 0x006a5e10
 Vec10s* Vec10s::Init(unsigned n, const void* value)
 {
     Alloc(n, value);
@@ -360,6 +361,7 @@ struct Vec38b {
     Vec38b* Init(unsigned n, const void* value);
     void Alloc(unsigned n, const void* value);   // 0x006a4130
 };
+// @ 0x006a5ea0
 Vec38b* Vec38b::Init(unsigned n, const void* value)
 {
     Alloc(n, value);

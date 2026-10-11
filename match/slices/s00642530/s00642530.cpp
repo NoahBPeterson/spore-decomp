@@ -214,7 +214,8 @@ Entry* UCopy(Entry* first, Entry* last, Entry* dest);
 Entry* CopyRange(Entry* first, Entry* last, Entry* dest);   // eastl copy_impl<RunInfo*>
 
 // @ 0x642ec0
-template <> void VecT<Entry>::DoInsertValues(Entry* pos, uint32_t n, const Entry& value) {
+template <>
+void VecT<Entry>::DoInsertValues(Entry* pos, uint32_t n, const Entry& value) {
     if (n <= (uint32_t)(mpCap - mpEnd)) {
         if (n > 0) {
             const Entry temp = value;

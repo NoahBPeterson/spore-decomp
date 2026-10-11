@@ -133,9 +133,12 @@ bool cSPUIMainWin_InitFonts() {
 // ---------------------------------------------------------------------------
 void __cdecl EastlDealloc(void*);          // 0xf47380
 
+struct HashtableStub { void DoFreeNodes(void** buckets, unsigned n); };
+struct TextStyleReaderStub { void Dtor(); };
+
 // @ 0x00815aa0
-void HashtableDoFreeNodes(void* self, void** buckets, unsigned n) {
-    char* s = (char*)self;
+void HashtableStub::DoFreeNodes(void** buckets, unsigned n) {
+    char* s = (char*)this;
     for (unsigned i = 0; i < n; ++i) {
         char* node = (char*)buckets[i];
         while (node) {
@@ -156,8 +159,9 @@ void HashtableDoFreeNodes(void* self, void** buckets, unsigned n) {
 }
 
 // @ 0x00815b50
-void TextStyleReader_Dtor(char* t) {
-    HashtableDoFreeNodes(t + 0x44, *(void***)(t + 0x48), *(unsigned*)(t + 0x4c));
+void TextStyleReaderStub::Dtor() {
+    char* t = (char*)this;
+    ((HashtableStub*)(t + 0x44))->DoFreeNodes(*(void***)(t + 0x48), *(unsigned*)(t + 0x4c));
     void* b = *(void**)(t + 0x48);
     *(int*)(t + 0x50) = 0;
     if (*(int*)(t + 0x4c) > 1 && b && b != *(void**)(t + 0x60))

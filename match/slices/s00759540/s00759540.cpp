@@ -97,6 +97,7 @@ struct C59e80 {
     bool CopyTo(RCArray* out);
     void Iterate();
     void* F59ff0(void* a, void* b);
+    bool Bounds(unsigned* bounds, unsigned* flag);
 };
 int C59e80::Sum() {
     int n = (int)(mEnd - mBegin);
@@ -198,7 +199,8 @@ void __fastcall FUN_0075a260(C59e80* self) { (void)self; }
 // ---------------------------------------------------------------------------
 // @ 0x0075a420
 // ---------------------------------------------------------------------------
-void __cdecl FUN_0075a420(C59e80* self, unsigned* bounds, unsigned* flag) {
+bool C59e80::Bounds(unsigned* bounds, unsigned* flag) {
+    C59e80* self = this;
     if (bounds) {
         bounds[0] = 0x7f7fffff; bounds[1] = 0x7f7fffff; bounds[2] = 0x7f7fffff;
         bounds[3] = 0xff7fffff; bounds[4] = 0xff7fffff; bounds[5] = 0xff7fffff;
@@ -208,4 +210,5 @@ void __cdecl FUN_0075a420(C59e80* self, unsigned* bounds, unsigned* flag) {
     int n = (int)(self->mEnd - self->mBegin);
     for (int i = 0; i < n; ++i)
         FUN_00729c60((void*)self->mBegin[i], bounds, flag);
+    return true;
 }

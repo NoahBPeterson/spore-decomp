@@ -4,7 +4,7 @@
 009512d0  40  complete; aligned pool alloc with allocator-vtable fallback
 009513d0  45  complete; vertex-elem array init stride 8 (count via vtable +0x18, alloc +0x28)
 009514d0  30  complete; vtable forwarder (this = [a+4], call slot +0x24 with two args)
-009514f0  45  complete; vertex-elem array init stride 0xc
+009514f0  45  complete; vertex-elem array init stride 0xc; equiv: UNSUPPORTED (0/1200 valid inputs, fake-arity/faults)
 00951d60  69  complete; MemPool::Alloc - local cur pointer vs direct field decrement
 00951dc0  41  complete; IterCopy::Set - src[5]/src[6] register assignment differs
-00952160  n/a  complete; Bounds::UnionBounds min/max merge tree differs
+00952160  n/a  complete; Bounds::UnionBounds min/max merge tree differs; equiv: PASS (1200 inputs, 100% coverage)

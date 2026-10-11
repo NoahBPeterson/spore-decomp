@@ -555,7 +555,7 @@ struct AutoRefObj {
     void* mpObject;     // +0x00
     int mField;         // +0x04
 
-    AutoRefObj& operator=(const AutoRefObj& src);   // @ 0x008dee30
+    AutoRefObj& operator=(const AutoRefObj& src);   // 0x008dee30
 };
 struct RefCountedBase {
     void** vftable;     // +0x00

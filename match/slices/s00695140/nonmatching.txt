@@ -5,5 +5,5 @@
 00695dc0  17  intrusive-list destroy: per-node vtbl+4 release and manager free present; this/cur register assignment swapped
 00695e00  112  list-node allocate/construct: allocator vcall and refcount hook present; EH prolog missing so frame differs
 00695e80  92  summarizer destructor: vtable stores, two list clears, buffer free condition present; EH frame differs
-00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ
-00695fa0  271  pooled sub-vector teardown: all walks/frees present; EH frame and register allocation differ
+00695f00  139  intrusive-list destroy with object probe: full path present; EH frame and register allocation differ; equiv UNSUPPORTED: only 0/1200 inputs valid (faults on pointer-chasing list walk)
+00695fa0  271  pooled sub-vector teardown: all walks/frees present; EH frame and register allocation differ; equiv WEAK: 796 valid inputs, 35.7% coverage

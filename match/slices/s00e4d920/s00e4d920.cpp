@@ -95,6 +95,7 @@ void __cdecl FUN_00e4db10(void)
 }
 
 // ---------------------------------------------------------------- 0x00e4dbc0
+// @ 0x00e4dbc0
 int __cdecl FUN_00e4dbc0(void* selfv, int* pa, int* pb, int a4, int a5)
 {
     char* self = (char*)selfv;
@@ -136,6 +137,7 @@ static int floor_f(float x)
 }
 
 // PARTIAL: parameter lives in ESI in the original (static register convention).
+// @ 0x00e4dc90
 int __fastcall SP_sPositionToCellIndex(float* p)
 {
     int x = floor_f((p[0] - g_cellX) * g_15a7b9c);
@@ -146,6 +148,7 @@ int __fastcall SP_sPositionToCellIndex(float* p)
 }
 
 // ---------------------------------------------------------------- 0x00e4dd20
+// @ 0x00e4dd20
 void __fastcall FUN_00e4dd20(float* in, float* out)
 {
     out[0] = (in[0] - g_cellX) * g_15a7b9c;
@@ -175,6 +178,7 @@ void __fastcall FUN_00e4def0(void* a, void* b, void* c)
 }
 
 // ---------------------------------------------------------------- 0x00e4e170
+// @ 0x00e4e170
 void __cdecl FUN_00e4e170(float param_1, int param_2, int param_3, int* param_4,
                           float* param_5, float* param_6, int* param_7)
 {

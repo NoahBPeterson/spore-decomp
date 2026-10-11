@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-006d7b50 694  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, acos-len tail); /O2 frame + scheduling differ
-006d7e70 734  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, acos-len tail); /O2 frame + scheduling differ
-006d81c0 783  bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
-006d8540 730  bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ
+006d7b50 694  bake evaluator (uv2x16/colour2f/pos3f, core FUN_006c3b90, acos-len tail); /O2 frame + scheduling differ; equiv now FAIL: 5/47 valid inputs mismatched; first: memory pool @40020000
+006d7e70 734  bake evaluator (uv4x16/colour2f/pos3f, core FUN_006c3b90, acos-len tail); /O2 frame + scheduling differ; equiv now FAIL: 5/12 valid inputs mismatched; first: import call #0
+006d81c0 783  bake evaluator (uv4x8/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: memory pool @40020000
+006d8540 730  bake evaluator (uv2x16/colour4x8/pos3f, core FUN_006c4200, acos-len tail); /O2 frame + scheduling differ; equiv now FAIL: 5/5 valid inputs mismatched; first: import call #0

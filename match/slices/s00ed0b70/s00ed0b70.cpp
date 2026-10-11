@@ -38,7 +38,9 @@ typedef void* (__thiscall *FV_i)(void*, int);
 typedef int   (__thiscall *FV_ii)(void*, int, int);
 typedef void  (__thiscall *FV_v)(void*);
 typedef bool  (__thiscall *FB_i)(void*, int, void*);
-struct ILayout { void* FindWindowByID(unsigned, int); };
+struct ILayout {
+    void* FindWindowByID(unsigned, int);   // 0x008105b0
+};
 
 // ---------------------------------------------------------------- 0x00ed0c30
 struct ObjC30 { void f(int, int); };
@@ -55,6 +57,7 @@ void ObjC30::f(int a, int b)
 
 // ---------------------------------------------------------------- 0x00ed0c60
 struct ObjC60 { unsigned f(unsigned, int*); };
+// @ 0x00ed0c60
 unsigned ObjC60::f(unsigned a, int* b)
 {
     if (a == 0x30c11c7) {
@@ -138,6 +141,7 @@ void Obj14C0::f(int* param)
 }
 
 // ---------------------------------------------------------------- 0x00ed1460
+// @ 0x00ed1460
 void FUN_00ed1460(void)
 {
     char* p = (char*)EA_New(0x1c8, "Editor", 0, 0, 0, 0);
@@ -155,6 +159,7 @@ void FUN_00ed1460(void)
 }
 
 // ---------------------------------------------------------------- 0x00ed1380
+// @ 0x00ed1380
 bool __fastcall FUN_00ed1380(void* self)
 {
     if (FUN_005f3060() == 0)
@@ -170,6 +175,7 @@ bool __fastcall FUN_00ed1380(void* self)
 }
 
 // ---------------------------------------------------------------- 0x00ed13e0
+// @ 0x00ed13e0
 bool __fastcall FUN_00ed13e0(void* self, int param)
 {
     char* w = (char*)((ILayout*)*(void**)((char*)self + 0x50))->FindWindowByID(param, 1);

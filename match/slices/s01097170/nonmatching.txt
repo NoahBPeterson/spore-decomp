@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 01097170 0 havok-equivalent
 010971f0 0 havok-equivalent
-01097340 0 havok-equivalent
+01097340 0 havok-equivalent; equiv.py WEAK (880 valid, 44.8% cov)
 010973e0 0 havok-equivalent
 01097690 0 havok-equivalent
 01097700 0 havok-equivalent

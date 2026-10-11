@@ -11,12 +11,12 @@ Vector3* VMul(Vector3* out, const Vector3* a, const Vector3* b);   // @ 0x0041da
 void     TransformPoint(void* xform, Vector3* p);                  // @ 0x0044d4f0 (ecx=xform)
 Vector3* Interp(Vector3* out, const Vector3* a, const Vector3* b, float t); // @ 0x00413cc0
 
-// @ 0x00481f00
 inline bool IsNaNF(float f)
 {
     return (*(uint32_t*)&f & 0x7fffffff) > 0x7f800000u;
 }
 
+// @ 0x00481f00
 bool IsNAN(const float* v)
 {
     int n35;

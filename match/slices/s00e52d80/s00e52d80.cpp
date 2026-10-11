@@ -3,6 +3,7 @@
 // /O2 /MD /Gy /TP /arch:SSE /fp:fast.  Recurring scope guard = 0x743b50/0xe82130.
 #include "types.h"
 
+struct cSlotOwner17 { int pad[0x24]; int state; bool F_00e531c0(); int F_00e53210(); };
 struct cGuard17 { void* p; cGuard17(); ~cGuard17(); };
 
 extern "C" {
@@ -96,14 +97,14 @@ void FUN_00e53130() {
 }
 
 // @ 0x00e531c0
-bool FUN_00e531c0(int* self) {
+bool cSlotOwner17::F_00e531c0() { int* self = (int*)this;
   if (self[0x24] == 4 || self[0x24] == 5) self[0x24] = 0;
   int v = *(int*)((self[0x24] + 8) * 0x10 + *(int*)(g_16b3c04 + 0x5190));
   return v == 2 || v == 3;
 }
 
 // @ 0x00e53210
-int FUN_00e53210(int* self) {
+int cSlotOwner17::F_00e53210() { int* self = (int*)this;
   int v = self[0x24];
   if (v == 1) return 6 - FUN_00e530e0();
   if (v > 3 && v <= 5) v = 0;

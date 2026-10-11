@@ -35,6 +35,7 @@ void FixedBufferAllocatorStub::Free(void* p) {
 }
 
 // 004bfc10
+// @ 0x004bfc10
 void FUN_004bfc10(void* p) {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
     fba->Malloc(p, 4);
@@ -44,6 +45,7 @@ extern void* FUN_00928a80(void* p, uint32_t size, int zero);   // 0x928a80
 extern void* memcpy_impl(void* dst, const void* src, uint32_t n);  // 0x11e0744
 
 // 004c0020  `anonymous namespace'::LocalExpatRealloc
+// @ 0x004c0020
 void* FUN_004c0020(void* p, uint32_t size) {
     FixedBufferAllocatorStub* fba = (FixedBufferAllocatorStub*)g_tls_current;
     if (p >= (void*)(fba->mpBufferInfo + 1) &&
@@ -85,6 +87,7 @@ struct StreamWriter {
 };
 extern bool FUN_004bf0a0(StreamWriter* w, int addr, int n);   // 0x4bf0a0
 
+// @ 0x004bfb20
 bool FUN_004bfb20(StreamWriter* w, int data) {
     int buf = WriteBinaryEditorModel(data);
     if (buf != 0) {
@@ -116,6 +119,7 @@ struct StreamReader {
 };
 extern bool FUN_004bf2a0(StreamReader* r, int addr, int n);      // 0x4bf2a0
 
+// @ 0x004bf9f0
 bool FUN_004bf9f0(StreamReader* r, int data) {
     int buf = WriteBinaryEditorModel(data);
     if (buf == 0)
@@ -146,7 +150,11 @@ extern void* FUN_0042dee0(void* alloc, int n, int align, int zero);  // 0x42dee0
 extern void FUN_004b03f0(void* first, void* last, void* dst);          // 0x4b03f0
 extern void FUN_004c0bd0(void* dst, int n, void* out);                 // 0x4c0bd0
 extern void FUN_004c0680(void* dst, void* srcEnd);                     // 0x4c0680
-void FUN_004c0250(int* self, uint32_t count) {
+struct Vec1d8 { int m[4]; void FUN_004c0250(uint32_t count); };
+struct Vec8c { int m[4]; void FUN_004c0350(uint32_t count); };
+// @ 0x004c0250
+void Vec1d8::FUN_004c0250(uint32_t count) {
+    int* self = (int*)this;
     if ((uint32_t)((self[2] - self[0]) / 0x1d8) >= count)
         return;
     int* p = count ? (int*)FUN_0042dee0(self + 3, count * 0x1d8, 4, 0) : 0;
@@ -157,7 +165,9 @@ void FUN_004c0250(int* self, uint32_t count) {
     self[2] = count * 0x1d8 + self[0];
 }
 
-void FUN_004c0350(int* self, uint32_t count) {
+// @ 0x004c0350
+void Vec8c::FUN_004c0350(uint32_t count) {
+    int* self = (int*)this;
     if ((uint32_t)((self[1] - self[0]) / 0x8c) >= count)
         return;
     char local_90[140];

@@ -7,4 +7,4 @@
 00745f90 181 0x94-byte render/cull record ctor shape differs
 007460b0 352 FilterModelFrustum register allocation differs
 00746250  69 cModelWorld::SetMaterialInfo register/arg shape differs
-00746910 120 model-group assignment shape differs
+00746910 120 model-group assignment shape differs; now a GroupWorld member (ECX this); difftest FAIL (5/5 valid mismatched, 68.5% cov)

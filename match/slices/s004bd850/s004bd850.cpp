@@ -26,6 +26,7 @@ union PackedKeyUnion {
     PackedKey f;
 };
 
+// @ 0x004bd850
 uint32_t FUN_004bd850(uint32_t key) {
     switch (key) {
     case 0x6fd7d545: {
@@ -109,6 +110,7 @@ FBAStub* FBAStub::Create(void* pBuffer, uint32_t size, uint8_t bShared) {
 void FBAStub::destroy_shared() {
 }
 
+// @ 0x004bdae0
 void cEditorModelParser::FUN_004bdae0() {
     if (mpXMLParser != 0) {
         g_pCurrentParser = this;

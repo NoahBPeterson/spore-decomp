@@ -13,7 +13,7 @@
 00454b80 97 vector resize
 00454c00 148 cross product
 00454dc0 178 erase range of 32-byte elements
-00454e90 50 release range
+00454e90 50 release range [equiv WEAK after ecx member fix: 33% coverage]
 004551e0 75 uninitialized copy of intrusive ptrs
 00455290 37 free storage unless fixed buffer
 004552e0 129 rbtree insert with hint

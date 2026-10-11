@@ -4,3 +4,5 @@
 007aa430  241  stub: body not reconstructed
 007aa530  239  stub: body not reconstructed
 007aaa00  429  stub: body not reconstructed
+007aa660  165  PARTIAL stub: only releases one member, original is a 165 B EH dtor (not reconstructed)
+007aa710  226  PARTIAL stub: only releases one member, original is a 226 B function (not reconstructed)

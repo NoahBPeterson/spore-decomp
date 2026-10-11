@@ -1,0 +1,9 @@
+00476000 vecE8a4::DoInsertValue  # vec<E8,4>::DoInsertValue (template stamped per instantiation by DEFINE_VEC so the name matcher, which ignores template args, can tell them apart)
+00476440 vecE8a2::DoInsertValue  # vec<E8,2>::DoInsertValue
+00476680 vecE16::DoInsertValue  # vec<E16,4>::DoInsertValue
+00476ae0 vec::DoInsertValue  # vec<E64,4>::DoInsertValue
+00476a40 vec::erase  # vec<E64,4>::erase
+004763a0 ?Copy@?$vecE8a4@UE8@@$03@@SAPAUE8@@PAU2@00@Z  # range copy called by vec<E8,4>::DoInsertValue (same function as UninitCopy8Destruct)
+004554f0 ?Copy@?$vecE8a2@UE8@@$01@@SAPAUE8@@PAU2@00@Z  # range copy called by vec<E8,2>::DoInsertValue
+00476950 ?Copy@?$vecE16@UE16@@$03@@SAPAUE16@@PAU2@00@Z  # range copy called by vec<E16,4>::DoInsertValue (same function as CopyAndDestruct16)
+0047a9a0 ?Copy@?$vec@UE64@@$03@@SAPAUE64@@PAU2@00@Z  # range copy called by vec<E64,4>::DoInsertValue

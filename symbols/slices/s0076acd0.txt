@@ -1,7 +1,7 @@
 # s0076acd0 recovered names
 0076acd0 RegisterListener  # registers 9 graphics-resource message tags + allocates physics worlds
 0076af50 Daf::Daf  # 2-vtable ctor (0x13f1ab0/0x13ef094 -> 0x140e234/0x140e230), atomic +8, flags +0x120
-0076afb0 Daf deleting dtor  # frees +0x11c
+0076afb0 ?_GDaf  # frees +0x11c
 0076b000 TeardownViewer  # drops message tags and frees 6+6 physics objects
 0076b1f0 E28::operator=  # 0x28-byte element assignment (movss/int/float mix)
 0076b240 RefreshCubeMap  # raster + 6 faces, SHFromCubeMap, message

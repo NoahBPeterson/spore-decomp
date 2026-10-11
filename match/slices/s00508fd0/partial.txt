@@ -1,2 +1,3 @@
 00508fd0  1142  table builder A: skeleton only, 1.1 KB exceeds the per-function budget
 00509450  1017  table builder B: skeleton only, 1.0 KB exceeds the per-function budget
+005098a0   639  lookup-vector rebuild: incomplete reconstruction (original 639 bytes, ours ~93-byte skeleton loop); symbol lookup rejects size, not equiv-testable

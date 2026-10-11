@@ -85,9 +85,13 @@ void FUN_0109c5e0(void* a, int* b, int* c, int d) {
     (void)a; (void)b; (void)c; (void)d;
 }
 
+struct hkMultiThreadedSimulation { int prepareMultithreadStep(); };
+struct hkMtThreadStructure { void* ctor(char* world, int sim, int type); };
+struct MtEntityEntityBroadPhaseListener { void addCollisionPair(int* pair); void removeCollisionPair(int* pair); };
+
 // @ 0x0109c6d0  hkMultiThreadedSimulation::prepareMultithreadStep
-int FUN_0109c6d0(void* self) {
-    char* s = (char*)self;
+int hkMultiThreadedSimulation::prepareMultithreadStep() {
+    char* s = (char*)this;
     FUN_0107f820(s + 0x100);
     int v = *(int*)(s + 0xc0) + 1;
     *(int*)(s + 0xc0) = v;
@@ -99,8 +103,8 @@ int FUN_0109c6d0(void* self) {
 }
 
 // @ 0x0109c730  hkMtThreadStructure ctor
-void* FUN_0109c730(void* self, char* world, int sim, int type) {
-    char* s = (char*)self;
+void* hkMtThreadStructure::ctor(char* world, int sim, int type) {
+    char* s = (char*)this;
     *(int*)(s + 0x58) = 0;
     *(int*)(s + 0x5c) = 0;
     *(int*)(s + 4) = sim;
@@ -119,12 +123,12 @@ void* FUN_0109c730(void* self, char* world, int sim, int type) {
     *(float*)(s + 0x4c) = *(float*)(world + 0x1d4) * *(float*)(world + 0x2a8);
     *(int*)(s + 0x50) = *(int*)(world + 0x188);
     *(float*)(s + 0x54) = *(float*)(world + 0x1dc) * *(float*)(world + 0x2a8);
-    return self;
+    return this;
 }
 
 // @ 0x0109c7d0
-void FUN_0109c7d0(void* self, int* pair) {
-    char* s = (char*)self;
+void MtEntityEntityBroadPhaseListener::addCollisionPair(int* pair) {
+    char* s = (char*)this;
     int* listener = *(int**)(s + 8);
     char* e1 = (char*)(*pair + *(char*)(*pair + 5));
     char* e2 = (char*)(pair[1] + *(char*)(pair[1] + 5));
@@ -145,8 +149,8 @@ void FUN_0109c7d0(void* self, int* pair) {
 }
 
 // @ 0x0109c890
-void FUN_0109c890(void* self, int* pair) {
-    char* s = (char*)self;
+void MtEntityEntityBroadPhaseListener::removeCollisionPair(int* pair) {
+    char* s = (char*)this;
     int* listener = *(int**)(s + 8);
     char* e1 = (char*)(*pair + *(char*)(*pair + 5));
     char* e2 = (char*)(pair[1] + *(char*)(pair[1] + 5));

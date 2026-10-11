@@ -151,6 +151,7 @@ struct HashMap {
     int* findOut(int* out, const int* key) { HashFind(out, key); return out; }
     int* operator[](const int* key);
 };
+// @ 0x00686380
 int* HashMap::operator[](const int* key) {
     int local_18[6];
     HashFind(local_18, key);

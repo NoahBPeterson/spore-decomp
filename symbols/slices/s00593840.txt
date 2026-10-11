@@ -1,0 +1,4 @@
+005948d0 hashtable@UcStaticItemInfo::DoAllocateNode  # explicit instantiation; name keyed on the mangled template argument so equiv.py picks this instance
+00594920 hashtable@UcItemSetRow::DoAllocateNode  # explicit instantiation
+00594980 hashtable@UcItemSmall::DoAllocateNode  # explicit instantiation
+00594b60 hashtable@UcItemPair::DoInsertValue  # explicit instantiation

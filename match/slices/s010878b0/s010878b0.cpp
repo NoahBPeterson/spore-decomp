@@ -512,16 +512,39 @@ void hkRigidMotion::applyLinearImpulse(const hkVector4& imp)
 
 // @ 0x01088410
 // hkTransform::operator= compiled out of line: 16 dword copies.
-hkTransform* hkTransform_assign(hkTransform* self, const hkTransform& o)
+struct hkTransform_ { hkTransform* assign(const hkTransform& o); };   // stub receiver so `this` arrives in ECX
+hkTransform* hkTransform_::assign(const hkTransform& o)
 {
-    memcpy(self, &o, sizeof(hkTransform));
-    return self;
+    memcpy(this, &o, sizeof(hkTransform));
+    return reinterpret_cast<hkTransform*>(this);
 }
 
 // @ 0x01088480
 hkSweptTransform& hkSweptTransform::operator=(const hkSweptTransform& o)
 {
-    memcpy(this, &o, 0x50);                      // 20 dword copies
+    // 20 dword copies (unrolled: a 0x50-byte memcpy would compile to rep movsd, 6x smaller than the original)
+    uint32_t* d = reinterpret_cast<uint32_t*>(this);
+    const uint32_t* r = reinterpret_cast<const uint32_t*>(&o);
+    d[0] = r[0];
+    d[1] = r[1];
+    d[2] = r[2];
+    d[3] = r[3];
+    d[4] = r[4];
+    d[5] = r[5];
+    d[6] = r[6];
+    d[7] = r[7];
+    d[8] = r[8];
+    d[9] = r[9];
+    d[10] = r[10];
+    d[11] = r[11];
+    d[12] = r[12];
+    d[13] = r[13];
+    d[14] = r[14];
+    d[15] = r[15];
+    d[16] = r[16];
+    d[17] = r[17];
+    d[18] = r[18];
+    d[19] = r[19];
     return *this;
 }
 
@@ -649,7 +672,7 @@ void hkRigidMotion::step(const hkStepInfo& stepInfo)
 // @ 0x010888c0
 hkMotionState& hkMotionState::operator=(const hkMotionState& o)
 {
-    hkTransform_assign(&m_transform, o.m_transform);
+    reinterpret_cast<hkTransform_*>(&m_transform)->assign(o.m_transform);
     m_sweptTransform = o.m_sweptTransform;
     memcpy(&m_deltaAngle, &o.m_deltaAngle, sizeof(hkVector4));           // dword copies +0x90..+0x9c
     memcpy(&m_objectRadius, &o.m_objectRadius, 3 * sizeof(float));       // +0xa0, +0xa4, +0xa8

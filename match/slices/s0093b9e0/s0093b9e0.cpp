@@ -119,6 +119,7 @@ public:
 class memorystream {
 public:
     int   WriteBuffer(const void* pData, size_type nSize);
+    memorystream* Init(char* pData, size_type nSize);
     char* mpData;         // +04
     int   mnField08;      // +08
     size_type mnSize;     // +0c
@@ -146,8 +147,9 @@ int __thiscall memorystream::WriteBuffer(const void* pData, size_type nSize)
 }
 
 // @ 0x0093ba40
-memorystream* memorystream_Ctor(memorystream* self, char* pData, size_type nSize)
+memorystream* memorystream::Init(char* pData, size_type nSize)
 {
+    memorystream* self = this;
     self->mpData = pData;
     *(void**)self = (void*)&g_vtbl_memorystream;
     self->mnField08 = 0;

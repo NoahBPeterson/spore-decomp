@@ -4,5 +4,5 @@
 00efbce0  153  checklist refresh: cSPUILayout vcall argument schedule / x87 float args differ
 00efbe40  128  category select: static table scan and window/tree updates not scheduled the same
 00efbf00  -    hint update: chk/card treat 0x00efbf00 as 537 bytes (0x00efbf60 is not a known
-               function boundary), so the size-based match window can never hit this function
+               function boundary), so the size-based match window can never hit this function; difftest UNSUPPORTED (symbol found but orig extent 537 bytes vs real 96, size gate rejects ours)
 00efc120  322  window id switch: FUN_00985e40/vcall layout and register allocation differ

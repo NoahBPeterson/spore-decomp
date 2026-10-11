@@ -264,6 +264,7 @@ bool cModelWorld::GetRuntimeMeshes(Model* model, int a, int b, int c, int d) {
 }
 
 // 0x00745010
+// @ 0x00745010
 bool cModelWorld::CheckFlag(Model* model, int a) {
     this->StallUntilLoaded(model);
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
@@ -276,6 +277,7 @@ bool cModelWorld::CheckFlag(Model* model, int a) {
 }
 
 // 0x00745050
+// @ 0x00745050
 bool cModelWorld::SelectMesh(Model* model, int a, int b, char c) {
     this->StallUntilLoaded(model);
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
@@ -329,6 +331,7 @@ struct Prop {
 struct PropHolder {
     virtual bool Find(int id, void** out);   // slot 9 (0x24)
 };
+// @ 0x00744cf0
 void cModelWorld::SetSomeFloat(Model* model, float v) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     if (0.0f <= v) {
@@ -349,6 +352,7 @@ void cModelWorld::SetSomeFloat(Model* model, float v) {
 
 // 0x00745520
 struct SlotVec { int* mp; int next(int idx); };
+// @ 0x00745520
 int SlotVec::next(int idx) {
     uint32_t* p = (uint32_t*)(mp + idx * 5);
     uint32_t v = *p;
@@ -363,6 +367,7 @@ int SlotVec::next(int idx) {
 }
 
 // 0x00745660
+// @ 0x00745660
 int SlotCount(uint32_t* first, uint32_t* last) {
     int n = 0;
     do {
@@ -385,6 +390,7 @@ int SlotCount(uint32_t* first, uint32_t* last) {
 
 // ---------------------------------------------------------------- effect iteration
 // 0x00744d80
+// @ 0x00744d80
 void cModelWorld::SetEffectEnabled(Model* model, char a, char b, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
@@ -406,6 +412,7 @@ void cModelWorld::SetEffectEnabled(Model* model, char a, char b, int id) {
 }
 
 // 0x00744e10
+// @ 0x00744e10
 char cModelWorld::ForEachEffectA(Model* model, int a, int b, int c, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
@@ -425,6 +432,7 @@ char cModelWorld::ForEachEffectA(Model* model, int a, int b, int c, int id) {
 }
 
 // 0x00744e90
+// @ 0x00744e90
 char cModelWorld::ForEachEffectB(Model* model, int a, int b, int c, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
@@ -444,6 +452,7 @@ char cModelWorld::ForEachEffectB(Model* model, int a, int b, int c, int id) {
 }
 
 // 0x00744f10
+// @ 0x00744f10
 char cModelWorld::ForEachEffectC(Model* model, int a, int b, int id) {
     cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
     EffectEntry* e = *(EffectEntry**)((char*)m + 0xdc);
@@ -463,7 +472,10 @@ char cModelWorld::ForEachEffectC(Model* model, int a, int b, int id) {
 }
 
 // 0x007456a0
-void SlotAssign(int* dst, int* src) {
+// @ 0x007456a0
+struct SlotCell { int v[5]; void Assign(int* src); };
+void SlotCell::Assign(int* src) {
+    int* dst = (int*)this;
     if (((-1 < *src) || (*dst < 0)) && (-1 < *src)) {
         if (*dst < 0) {
             if (dst + 1 != 0) {
@@ -503,6 +515,7 @@ void __fastcall DequeDoPopFront(int* self) {
 
 // 0x007455e0
 struct ChunkObj { virtual int AddRef(); virtual int Release(); };
+// @ 0x007455e0
 void __fastcall DestroyChunk(int param_1) {
     ChunkObj* p = *(ChunkObj**)(*(int*)(param_1 + 8) + 4);
     if (p)
@@ -518,6 +531,7 @@ void __fastcall DestroyChunk(int param_1) {
 }
 
 // 0x00745560
+// @ 0x00745560
 void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key) {
     while (cur != end && *cur != key) {
         cur += 7;
@@ -535,7 +549,10 @@ void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key
 }
 
 // 0x00745710
-int* DequeAdvance(int* self, int n) {
+// @ 0x00745710
+struct DequeIter { int v[4]; int* Advance(int n); };
+int* DequeIter::Advance(int n) {
+    int* self = (int*)this;
     int d = (self[0] - self[1]) / 0x1c + n;
     if (d < 8) {
         self[0] = self[0] + n * 0x1c;
@@ -553,6 +570,7 @@ int* DequeAdvance(int* self, int n) {
 
 // 0x007458d0
 int g_allocLine = 0xd1;
+// @ 0x007458d0
 void DequeInit(int* self, unsigned count) {
     int i6 = (count >> 3) + 1;
     unsigned a = (count >> 3) + 3;
@@ -647,6 +665,7 @@ bool __cdecl FactoryNew(void** out, void* arg2, unsigned flags) {
 }
 
 // 0x007459c0
+// @ 0x007459c0
 void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const void*)) {
     if (first == last)
         return;
@@ -671,6 +690,7 @@ void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const 
 
 // 0x007459c0
 // 0x00745140
+// @ 0x00745140
 void cModelWorld::FillColor(int* out) {
     float x, y, z, w;
     switch (*out) {
@@ -716,6 +736,7 @@ void* Small7::Init() {
 // 0x007454f0
 struct RefObj { virtual void v0(int); int mRef; };
 struct AutoRef { RefObj* mp; AutoRef* Release(); };
+// @ 0x007454f0
 AutoRef* AutoRef::Release() {
     RefObj* p = mp;
     if (p) {

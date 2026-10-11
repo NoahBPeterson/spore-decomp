@@ -281,11 +281,11 @@ void HelpFF(float a, float b) {
 void UpdateMouseFocus(int v) {
     WMObj()->Hc0(v);
 }
-// 0x00804f80
+// @ 0x00804f80
 void Help2(void* a, float f, float g, void* b) {
     WMObj()->H40(a, f, g, b);
 }
-// 0x00804fc0
+// @ 0x00804fc0
 void SetWindowAlpha(void* w, float a) {
     if (w == 0) return;
     IWnd* p = (IWnd*)w;
@@ -297,18 +297,18 @@ void SetWindowAlpha(void* w, float a) {
         (*(void(__thiscall**)(void*))VSlot(w, 0x90))(w);
     }
 }
-// 0x00805040
+// @ 0x00805040
 float GetAlpha(int* p) {
     if (p == 0) return 1.0f;
     unsigned v = (*(unsigned(__thiscall**)(void*))VSlot(p, 0x30))(p);
     return (float)(v >> 0x18) * 0.0039215689f;
 }
-// 0x00805080
 struct IWin2 {
     virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3();
     virtual void s4(); virtual void s5(); virtual void s6();
     virtual int  s7();   // +0x1c
 };
+// @ 0x00805080
 float GetElapsedSeconds() {
     WMgr* wm = (WMgr*)SP_WindowManager();
     void* r = wm->s1();
@@ -318,7 +318,7 @@ float GetElapsedSeconds() {
     }
     return 0.0f;
 }
-// 0x008050b0
+// @ 0x008050b0
 int WalkAll(int* p) {
     if (p != 0) {
         for (;;) {
@@ -330,7 +330,7 @@ int WalkAll(int* p) {
     }
     return 0;
 }
-// 0x008050f0
+// @ 0x008050f0
 int* WalkFind(int* p) {
     if (p == 0) return 0;
     do {
@@ -343,7 +343,7 @@ int* WalkFind(int* p) {
     } while (p != 0);
     return 0;
 }
-// 0x00805150
+// @ 0x00805150
 bool Contains(int* a, int* b) {
     if (a == 0) return false;
     while (b != 0) {
@@ -356,7 +356,7 @@ bool Contains(int* a, int* b) {
 void WinB0() {
     WMObj()->Hb0();
 }
-// 0x008051b0  (self in edi in the original)
+// @ 0x008051b0  (self in edi in the original)
 int* FindByKey(int* self, int key) {
     int* n = (int*)((void*(__thiscall*)(void*, int))VFn(self, 0x10c))(self, 0);
     while (n != 0) {
@@ -365,7 +365,7 @@ int* FindByKey(int* self, int key) {
     }
     return 0;
 }
-// 0x00805200
+// @ 0x00805200
 float AttrF14(int* p) {
     if (p != 0) {
         int* q = FindByKey(p, 0x3ec2e62);
@@ -373,7 +373,7 @@ float AttrF14(int* p) {
     }
     return 1.0f;
 }
-// 0x00805230
+// @ 0x00805230
 float AttrF18(int* p) {
     if (p != 0) {
         int* q = FindByKey(p, 0x3ec2e62);
@@ -381,7 +381,7 @@ float AttrF18(int* p) {
     }
     return 1.0f;
 }
-// 0x00805260
+// @ 0x00805260
 void* AttrP1c(int* p) {
     if (p != 0) {
         int* q = FindByKey(p, 0x3ec2e62);
@@ -389,7 +389,7 @@ void* AttrP1c(int* p) {
     }
     return (void*)0x1544384;
 }
-// 0x00805290
+// @ 0x00805290
 float AttrF0c(int* p) {
     if (p != 0) {
         int* q = FindByKey(p, 0x3ec2e62);
@@ -397,7 +397,7 @@ float AttrF0c(int* p) {
     }
     return 0.0f;
 }
-// 0x008052c0
+// @ 0x008052c0
 float AttrF10(int* p) {
     if (p != 0) {
         int* q = FindByKey(p, 0x3ec2e62);
@@ -405,7 +405,7 @@ float AttrF10(int* p) {
     }
     return 0.0f;
 }
-// 0x00805310
+// @ 0x00805310
 bool CreditsTabInit(int param1, int param2, void** out) {
     char layout[0x18];
     extern void LayoutCtor(char*);
@@ -445,7 +445,7 @@ int IsSomething() {
 void* AllocCoreBlock(int size) {
     return AllocEAL(size, "UI/FixedAllocationBin/CoreBlock", 0, 0, 0, 0);
 }
-// 0x00805400
+// @ 0x00805400
 void FreeCoreBlock(void* p) { DeallocEAL(p); _ReadWriteBarrier(); }
 // 0x00805410
 static void* g_allocGPtr;
@@ -470,11 +470,12 @@ void* FixedAlloc(char* self, int size, int a3, int a4) {
     *out = idx;
     return out + 1;
 }
-// 0x00805490
-void CallVt8(int* self, int a, int b, int c) {
-    (*(void(__thiscall**)(void*, int, int, int))VSlot(self, 8))(self, a, b, c);
+// @ 0x00805490
+struct VThunk8 { void CallVt8(int a, int b, int c, int d, int e); };
+void VThunk8::CallVt8(int a, int b, int c, int d, int e) {
+    (*(void(__thiscall**)(void*, int, int, int))VSlot(this, 8))(this, a, b, c);
 }
-// 0x008054b0
+// @ 0x008054b0
 void FixedFree(int* self, void* p) {
     int* base = (int*)((char*)p - 4);
     int idx = *base;
@@ -486,8 +487,8 @@ void FixedFree(int* self, void* p) {
     }
     (*(void(__thiscall**)(void*, int*, int))VSlot(*(void**)0x164c4b8, 0xc))(*(void**)0x164c4b8, base, 0);
 }
-// 0x008054f0
 void* g_alloc;
+// @ 0x008054f0
 void InitAlloc() {
     g_alloc = GetDefaultAllocator();
     *(void**)0x164c4b8 = g_alloc;

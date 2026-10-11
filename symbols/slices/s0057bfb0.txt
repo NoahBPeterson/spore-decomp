@@ -1,0 +1,2 @@
+0057c770 WriteTypedValue@_K::WriteTypedValue  # SP::WriteTypedValue<unsigned __int64> explicit instantiation (qualifier selects ??$WriteTypedValue@_K)
+0057c940 WriteTypedValue@M::WriteTypedValue  # SP::WriteTypedValue<float> explicit instantiation (qualifier selects ??$WriteTypedValue@M)

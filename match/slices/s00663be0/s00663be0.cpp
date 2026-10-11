@@ -5,7 +5,7 @@
 
 struct IWindow;
 
-extern "C" int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
+extern "C" __declspec(dllimport) int __cdecl _wcsicmp(const wchar_t*, const wchar_t*);
 
 // =============================================================================
 // SP::cSPUIFeedListItem
@@ -74,6 +74,7 @@ struct AlphabeticalFeedSort {
 // =============================================================================
 // EASTL heap primitives (out-of-line so adjust_heap emits a real call)
 // =============================================================================
+// @ 0x00664960
 template <typename T, typename Compare>
 __declspec(noinline) void promote_heap(T* first, int topPosition, int position, const T& value) {
     Compare compare;
@@ -86,6 +87,7 @@ __declspec(noinline) void promote_heap(T* first, int topPosition, int position, 
     first[position] = value;
 }
 
+// @ 0x00664ad0
 template <typename T, typename Compare>
 void adjust_heap(T* first, int topPosition, int heapSize, int position, const T& value) {
     Compare compare;
@@ -518,6 +520,7 @@ FeedItem* cSPUIFeedListCategory::FUN_00664640(int id) {
     return 0;
 }
 
+// @ 0x00664680
 FeedItem* cSPUIFeedListCategory::FUN_00664680(int id) {
     int n = (int)(m8c - m88);
     int i = 0;
@@ -532,6 +535,7 @@ FeedItem* cSPUIFeedListCategory::FUN_00664680(int id) {
     return 0;
 }
 
+// @ 0x006646c0
 FeedItem* cSPUIFeedListCategory::FUN_006646c0(int id) {
     int n = (int)(m8c - m88);
     int i = 0;

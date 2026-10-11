@@ -4,11 +4,15 @@
 
 struct Vector2 { float x, y; };
 
-void FUN_00425990(void* p);                       // 0x00425990
-void FUN_004feb50();                              // 0x004feb50
-void FUN_00442365(void* s, const wchar_t* first, const wchar_t* last); // 0x00423650 (assign)
-void thunk_009265b0(void* p);                     // 0x00926640
-char AddCore(void* a, int b, int c);              // 0x00926650
+struct Vec10 { void FUN_00425990(); };            // 0x00425990
+struct Sub24 { void thunk_00926640(); };          // 0x00926640
+struct Alloc { void* PopChunk(); char AddCore(int b, int c); };
+struct WStr {
+    void FUN_004feb50();                          // 0x004feb50
+    void FUN_00442365(const wchar_t* first, const wchar_t* last); // 0x00423650 (assign)
+    void Assign(const wchar_t* s);
+};
+struct Owner { void Destroy(); };
 
 // @ 0x004fddb0
 int MaxIndex(const float* p)
@@ -25,15 +29,16 @@ int MaxIndex(const float* p)
 }
 
 // @ 0x004fde40
-void* PopChunk(void* alloc)
+void* Alloc::PopChunk()
 {
+    Alloc* alloc = this;
     for (;;) {
         if (*(void**)((char*)alloc + 0x10)) {
             void* c = *(void**)((char*)alloc + 0x10);
             *(void**)((char*)alloc + 0x10) = *(void**)c;
             return c;
         }
-        if (!AddCore(alloc, 0, 0))
+        if (!AddCore(0, 0))
             return 0;
     }
 }
@@ -50,23 +55,25 @@ Vector2* AddVec2(Vector2* out, const Vector2* a, const Vector2* b)
 }
 
 // @ 0x004fdd60
-void FUN_004fdd60(void* self)
+void Owner::Destroy()
 {
-    thunk_009265b0((char*)self + 0x24);
+    void* self = this;
+    ((Sub24*)((char*)self + 0x24))->thunk_00926640();
     for (uint32_t i = *(uint32_t*)((char*)self + 0x10); i < *(uint32_t*)((char*)self + 0x14); i += 4) {
     }
-    FUN_00425990((char*)self + 0x10);
+    ((Vec10*)((char*)self + 0x10))->FUN_00425990();
 }
 
 // @ 0x004fe860
-void FUN_004fe860(void* self, const wchar_t* s)
+void WStr::Assign(const wchar_t* s)
 {
+    void* self = this;
     FUN_004feb50();
     *(char*)((char*)self + 0x3c) = 0;
     const wchar_t* end = s;
     while (*end)
         ++end;
-    FUN_00442365(self, s, end);
+    FUN_00442365(s, end);
 }
 
 // ---------------------------------------------------------------------------

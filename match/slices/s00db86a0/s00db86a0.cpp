@@ -191,6 +191,7 @@ struct cGroupFollower {
     void Update(float dt);
 };
 
+// @ 0x00db86a0
 void cGroupFollower::Update(float dt) {
     if (!((mRepathTimer -= dt) < 0.0f || mbRepath))
         return;

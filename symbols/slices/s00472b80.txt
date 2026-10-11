@@ -1,0 +1,3 @@
+00473500 ?4?$vector  # vector<Pod12,4>::operator= (mangled ??4?$vector@UPod12@@$03@@...; base identifier so the name matcher finds it; size picks between the Pod12/Pair8 instantiations)
+00473890 vector::reserve  # vector<Pod12,4>::reserve (explicit instantiation)
+00473b00 ?4?$vector  # vector<Pair8,4>::operator= (see 00473500)

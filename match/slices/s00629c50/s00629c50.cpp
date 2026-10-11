@@ -6,7 +6,12 @@
 static inline void** Vt(void* p) { return *(void***)p; }
 static inline void Release2(void* p) { if (p) ((void(__thiscall*)(void*))Vt(p)[2])(p); }
 
-struct cSPPlayMode { char pad[0x3620]; };
+struct cSPPlayMode {
+  char pad[0x3620];
+  bool HasActivePath(int creatureID);
+  uint8_t OnMouseDown(void* a, void* b, void* c, void* d);
+  void SetAllBabySitState();
+};
 
 // external callees
 void* __cdecl FUN_0062cb20(const float* p, float a, int b, float c);   // 0x62cb20
@@ -40,7 +45,8 @@ void __stdcall FUN_00629d90(int arg1, int arg2) {
 }
 
 // @ 0x0062ab80
-void SetAllBabySitState(cSPPlayMode* m) {
+void cSPPlayMode::SetAllBabySitState() {
+  cSPPlayMode* m = this;
   char* cm = *(char**)((char*)m + 0x3610);
   int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
   for (int i = 0; i < n; ++i) SetBabySitState(m, (uint32_t)i);
@@ -75,7 +81,8 @@ void SetBabySitState(cSPPlayMode* m, uint32_t index) {
 }
 
 // @ 0x0062a360
-bool HasActivePath(cSPPlayMode* m, int creatureID) {
+bool cSPPlayMode::HasActivePath(int creatureID) {
+  cSPPlayMode* m = this;
   char* cm = *(char**)((char*)m + 0x3610);
   int n = (*(int*)(cm + 0x370) - *(int*)(cm + 0x36c)) / 0x30;
   char* begin = *(char**)(cm + 0x36c);
@@ -119,7 +126,8 @@ void WakeupCreature(cSPPlayMode* m) {
 }
 
 // @ 0x0062a7f0
-uint8_t OnMouseDown(cSPPlayMode* m, void* a, void* b, void* c, void* d) {
+uint8_t cSPPlayMode::OnMouseDown(void* a, void* b, void* c, void* d) {
+  cSPPlayMode* m = this;
   WakeupCreature(m);
   *(uint8_t*)((char*)m + 0x1f) = 0;
   *(uint8_t*)((char*)m + 0x20) = 0;

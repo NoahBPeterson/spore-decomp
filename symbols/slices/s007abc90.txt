@@ -1,4 +1,4 @@
-007ac080 eastl::hash_map<EA::ResourceMan::Key,SP::cTextureInstanceInternal *,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,eastl::allocator,0>::operator[]  # PDB card name
+007ac080 ?ATextureInstanceMap  # PDB card name
 007ac0f0 SP::cLoadQueue<SP::cTextureManager,SP::cTextureAsyncQueueEntry,SP::cTextureAsyncInfo,SP::cTextureInstanceInternal *,4>::cLoadQueue  # PDB card name
 007ac1e0 SP::cTextureManager::cTextureManager  # PDB card name
 007ac2f0 SP::cTextureManager::CreateInstance  # PDB candidate (caller-single)

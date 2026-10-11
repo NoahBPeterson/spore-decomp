@@ -42,6 +42,7 @@ void*__cdecl cSPUILayout_FindWindowByID(void* layout, int id, int b);
 void __cdecl DoNukeSubtree(int node);
 
 // ------------------------------------------------------------------ 0x00ec8d20
+// @ 0x00ec8d20
 void FUN_00ec8d20(int param_1)
 {
     int local_8 = 7;
@@ -60,6 +61,7 @@ void FUN_00ec8d20(int param_1)
 }
 
 // ------------------------------------------------------------------ 0x00ec8d80
+// @ 0x00ec8d80
 void FUN_00ec8d80(int param_1)
 {
     int arr[8];
@@ -106,8 +108,12 @@ void FUN_00ec8e50(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec8ed0
-void FUN_00ec8ed0(int* v, unsigned n)
+struct Vec32 { int first; int last; void Resize(unsigned n); };
+
+// @ 0x00ec8ed0
+void Vec32::Resize(unsigned n)
 {
+    int* v = (int*)this;
     int base = *v;
     if ((unsigned)(v[1] - base) >> 5 < n) {
         char tmp[0x20];
@@ -150,6 +156,7 @@ void FUN_00ec8f40(int* p)
 }
 
 // ------------------------------------------------------------------ 0x00ec90c0
+// @ 0x00ec90c0
 void __fastcall FUN_00ec90c0(char* p)
 {
     *(int*)(p + 4) = 0; *(int*)(p + 8) = 0; *(int*)(p + 0xc) = 0;
@@ -171,8 +178,12 @@ void __fastcall FUN_00ec90c0(char* p)
 }
 
 // ------------------------------------------------------------------ 0x00ec9140
-void FUN_00ec9140(int param_1, int* param_2, int param_3, int* param_4, char param_5)
+struct RbTree { void Insert(int* param_2, int param_3, int* param_4, char param_5); };
+
+// @ 0x00ec9140
+void RbTree::Insert(int* param_2, int param_3, int* param_4, char param_5)
 {
+    int param_1 = (int)this;
     unsigned dir;
     if (param_5 == 0 && param_3 != param_1 + 4 && *(int*)(param_3 + 0x10) <= *param_4)
         dir = 1;
@@ -187,6 +198,7 @@ void FUN_00ec9140(int param_1, int* param_2, int param_3, int* param_4, char par
 }
 
 // ------------------------------------------------------------------ 0x00ec9250
+// @ 0x00ec9250
 void FUN_00ec9250(void)
 {
     int* r = g_16c757c;
@@ -243,6 +255,7 @@ void FUN_00ec92b0(void)
 }
 
 // ------------------------------------------------------------------ 0x00ec94d0
+// @ 0x00ec94d0
 void FUN_00ec94d0(void)
 {
     FUN_00ec9250();
@@ -288,6 +301,7 @@ int* FUN_00ec9530(int param_1, int* param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec95f0 / 0x00ec9640
+// @ 0x00ec95f0
 long long FUN_00ec95f0(int param_1, int param_2)
 {
     if (param_2 != -1) {
@@ -304,12 +318,14 @@ long long FUN_00ec95f0(int param_1, int param_2)
     return -1;
 }
 
+// @ 0x00ec9640
 long long FUN_00ec9640(int param_1, int param_2)
 {
     return FUN_00ec95f0(param_1, param_2);
 }
 
 // ------------------------------------------------------------------ 0x00ec9690 / 0x00ec96f0
+// @ 0x00ec9690
 void FUN_00ec9690(int param_1, int param_2)
 {
     int x = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);
@@ -324,6 +340,7 @@ void FUN_00ec9690(int param_1, int param_2)
     }
 }
 
+// @ 0x00ec96f0
 void FUN_00ec96f0(int param_1, int param_2)
 {
     FUN_00ec9690(param_1, param_2);
@@ -392,6 +409,7 @@ void FUN_00ec9a80(int param_1, int param_2)
 }
 
 // ------------------------------------------------------------------ 0x00ec9ae0
+// @ 0x00ec9ae0
 int FUN_00ec9ae0(int param_1, int param_2)
 {
     int id = *(int*)(*(int*)(g_16c757c + 4) + param_1 * 4);

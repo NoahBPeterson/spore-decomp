@@ -8,3 +8,5 @@
 00f2f4f0  231  incomplete: V534 deserialize loop (cVarListSerializer + insert)
 00f2f5e0  212  incomplete: 0x27e0 container deserialize stub
 00f2f6c0  357  incomplete: 0x27e8 container deserialize stub
+00f2f2e0  77  eastl::vector<E27e0>::erase; stub body (empty), real logic not recovered; equiv UNSUPPORTED: our function is under 1/5 of the original size, so it is not a complete definition
+00f2f340  77  eastl::vector<E27e8>::erase; stub body (empty), real logic not recovered; equiv UNSUPPORTED: our function is under 1/5 of the original size, so it is not a complete definition

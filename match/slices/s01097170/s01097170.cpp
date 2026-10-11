@@ -331,7 +331,7 @@ public:
 
 // Copy-assign of a pointer array as the binary does it (reserve exactly when too small, then copy dwords).
 template <typename T>
-static void hkArrayCopyAssign(hkArrayRaw<T>& dst, const hkArrayRaw<T>& src)
+static __forceinline void hkArrayCopyAssign(hkArrayRaw<T>& dst, const hkArrayRaw<T>& src)
 {
     if ((dst.m_capacityAndFlags & 0x3fffffff) < src.m_size)
     {

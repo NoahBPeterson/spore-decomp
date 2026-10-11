@@ -1,3 +1,4 @@
 # va  diff-bytes  reason
 # 0x7c65a0 is a compiler-generated lazy static (GetTPTR): behaviorally complete but not byte-exact.
-# (nothing partial: every function has a complete source version in s007c5a90.cpp)
+0x7c6480  82  ControllerIDByIndex; incomplete stub (single CtrlIDMapFind call), EASTL hashtable scan not reproduced; equiv UNSUPPORTED (symbol >5x smaller than original)
+0x7c64e0  172  ControllerIDByName; incomplete stub (returns 0), localized-name search not reproduced; equiv UNSUPPORTED (symbol >5x smaller than original)

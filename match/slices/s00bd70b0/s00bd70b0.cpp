@@ -237,8 +237,9 @@ void __cdecl FUN_00bd7640(int param_1, int param_2)
 }
 
 // ===========================================================================
-// @ 0x00bd7760 — (complex) cheat command handler; approximate.
+// (complex) cheat command handler; approximate.
 // ===========================================================================
+// @ 0x00bd7760
 int Sim::FUN_00bd7760(int param_2, int* param_3)
 {
     if (param_2 == 0x1a0219e) {

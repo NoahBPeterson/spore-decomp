@@ -43,7 +43,6 @@ extern void*  g_shaderFns[];             // 0x16fa604
 // ---- small helpers ----------------------------------------------------------------------
 static inline void** Vt(void* p) { return *(void***)p; }
 
-// @ 0x006fd520
 struct Vec1c {
     char* begin;   // +0x00
     char* end;     // +0x04
@@ -65,6 +64,7 @@ struct Elem1c {
     Elem1c() : a(0), b(0), c(0), d(0), e(0), f(0), g(0), h(0), i(0) {}
 };
 
+// @ 0x006fd520
 void Vec1c::Resize(unsigned n) {
     if ((unsigned)Size() < n) {
         Elem1c temp;

@@ -7,7 +7,6 @@
 0107f820 115 havok-equivalent
 0107f910 679 havok-equivalent
 0107fbe0 483 havok-equivalent
-0107fdd0 366 havok-equivalent
 0107ff60 86 havok-equivalent
 0107fff0 52 havok-equivalent
 01080040 86 havok-equivalent
@@ -17,3 +16,4 @@
 01080330 18 havok-equivalent
 01080350 51 havok-equivalent
 010803c0 106 havok-equivalent
+0107fdd0 366 havok-equivalent

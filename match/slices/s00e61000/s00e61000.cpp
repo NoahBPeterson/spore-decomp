@@ -236,6 +236,7 @@ void FUN_00e611b0(void);
 void FUN_00e61b90(int, int, int, int);
 
 // ================================================================ 0x00e61140
+// @ 0x00e61140
 void FUN_00e61140(void)
 {
     int a = gspCellGame->field_5190->field_1c->Call();
@@ -247,6 +248,7 @@ void FUN_00e61140(void)
 }
 
 // ================================================================ 0x00e61320
+// @ 0x00e61320
 bool FUN_00e61320(int param)
 {
     cCellGame* g = gspCellGame;
@@ -379,6 +381,7 @@ void FUN_00e61050(int p1, IEffect** p2, int p3, int p4, int p5, char flag)
 // ================================================================ 0x00e611b0
 struct Pool { void* Find(int); };
 
+// @ 0x00e611b0
 void FUN_00e611b0(void)
 {
     char h[8];
@@ -413,6 +416,7 @@ void FUN_00e611b0(void)
 }
 
 // ================================================================ 0x00e61370
+// @ 0x00e61370
 void FUN_00e61370(float* out, cSPTransform* p, float s)
 {
     Matrix33 tmp;
@@ -452,7 +456,7 @@ struct CellAbility : B1, B2 {
     int  f_e4;
     char b_e8, b_e9;
     char pad_ea[0xec - 0xea];
-    CellAbility()
+    __forceinline CellAbility()
     {
         f10 = 0;
         f7c = 1;
@@ -476,7 +480,7 @@ struct CellAbility : B1, B2 {
     }
 };
 
-CellAbility* FUN_00e61550()
+__declspec(noinline) CellAbility* FUN_00e61550()
 {
     return new ("Simulator", 0, 0, 0, 0) CellAbility();
 }
@@ -494,12 +498,14 @@ struct SaveGameObj : B1, B2 {
 };
 
 // 0x00e61a50
+// @ 0x00e61a50
 void* __stdcall CreateInstance_SaveGame(void*, void*)
 {
     return new ("SP_Simulator/CellSaveGame/COM", 0, 0, 0, 0) SaveGameObj();
 }
 
 // ================================================================ 0x00e61630
+// @ 0x00e61630
 CellAbility* FUN_00e61630()
 {
     CellAbility* a = FUN_00e61550();
@@ -543,6 +549,7 @@ struct BigMode {
     ~BigMode();
 };
 
+// @ 0x00e61aa0
 BigMode::BigMode()
 {
     f697960(this);
@@ -557,6 +564,7 @@ BigMode::BigMode()
     ((CStrObj*)str920)->Init();
 }
 
+// @ 0x00e61b00
 BigMode::~BigMode()
 {
     ((CStrObj*)str920)->Destroy();

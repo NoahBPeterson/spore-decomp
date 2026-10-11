@@ -67,6 +67,7 @@ static inline void  vcv3(void* o, int off, int a, int b, int c) { ((void(__cdecl
 // ===========================================================================
 // 0x00f40ea0 -- is a timer below one second?
 // ===========================================================================
+// @ 0x00f40ea0
 int __fastcall FUN_00f40ea0(void* self, int dummy, int* arg) {
     (void)dummy;
     vc0(arg, 0x20);
@@ -78,6 +79,7 @@ int __fastcall FUN_00f40ea0(void* self, int dummy, int* arg) {
 // ===========================================================================
 // 0x00f410f0 -- recycle a surface-node record slot
 // ===========================================================================
+// @ 0x00f410f0
 void __fastcall FUN_00f410f0(int* p, int dummy, int idx) {
     (void)dummy;
     int* e = (int*)(idx * 0x238 + *p);
@@ -94,6 +96,7 @@ void __fastcall FUN_00f410f0(int* p, int dummy, int idx) {
 // ===========================================================================
 // 0x00f41270 -- classify the current scenario state
 // ===========================================================================
+// @ 0x00f41270
 int __fastcall FUN_00f41270(int self, int dummy, int* out) {
     (void)dummy;
     int v = 0;
@@ -117,6 +120,7 @@ int __fastcall FUN_00f41270(int self, int dummy, int* out) {
 // ===========================================================================
 // 0x00f41420 -- validate the node against the active scenario
 // ===========================================================================
+// @ 0x00f41420
 int __fastcall FUN_00f41420(int self, int dummy, int a, int b, int c) {
     (void)dummy;
     int r = FUN_00eeca30(self);
@@ -134,6 +138,7 @@ int __fastcall FUN_00f41420(int self, int dummy, int a, int b, int c) {
 // ===========================================================================
 // 0x00f41820 -- release one surface-node record
 // ===========================================================================
+// @ 0x00f41820
 void __fastcall FUN_00f41820(int self, int dummy, int* node) {
     (void)dummy;
     int id = *node;
@@ -153,6 +158,7 @@ void __fastcall FUN_00f41820(int self, int dummy, int* node) {
 // ===========================================================================
 // 0x00f41a10 -- destroy every surface-node record for a noun
 // ===========================================================================
+// @ 0x00f41a10
 void __fastcall FUN_00f41a10(int self, int dummy, int id) {
     (void)dummy;
     if (!FUN_00f3e8a0(id)) return;
@@ -176,6 +182,7 @@ void __fastcall FUN_00f41a10(int self, int dummy, int id) {
 // ===========================================================================
 // 0x00f41aa0 -- ordered-map find-or-insert (returns value slot)
 // ===========================================================================
+// @ 0x00f41aa0
 int* __fastcall FUN_00f41aa0(int* p, int dummy, int* key) {
     (void)dummy;
     int* b = (int*)*p;

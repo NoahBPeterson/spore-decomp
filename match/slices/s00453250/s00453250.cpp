@@ -295,7 +295,7 @@ struct BlockVector : BlockVectorBase {
 };
 // @ 0x00453eb0
 BlockVector::~BlockVector() { destruct(mpBegin, mpEnd); ScratchSlots<3>(); }
-// @ 0x00453f20 sym=??4BlockVector@eastl@@QAEAAU01@ABU01@@Z
+// @ 0x00453f20
 BlockVector& BlockVector::operator=(const BlockVector& x)
 {
     if (&x != this) {

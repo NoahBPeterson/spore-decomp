@@ -356,11 +356,13 @@ hkConvexVerticesShape::~hkConvexVerticesShape()
     *(void**)this = (void*)0x13ef094;
 }
 
+struct hkConvexVerticesShapeAssign { void assign(const void* src_); };
+
 // @ 0x010c2230  hkConvexVerticesShape assignment from an hkGeometry-like source
-void FUN_010c2230(void* self, const void* src_)
+void hkConvexVerticesShapeAssign::assign(const void* src_)
 {
     const hkUint32* src = (const hkUint32*)src_;
-    char* s = (char*)self;
+    char* s = (char*)this;
     if (*(void**)(s + 0x30) == 0 || *(const float*)((const char*)src + 0x1c) < *(float*)(s + 0x2c))
     {
         *(hkUint32*)(s + 0x10) = src[0];

@@ -61,9 +61,12 @@ void __fastcall BallConnector_Dtor(cSPEditorHandle* self)
     cSPEditorHandle_BaseDtor(self);
 }
 
+struct BallConnectorIface { void* QueryInterface(u32 id); };
+
 // @ 0x47f550  (QueryInterface-style: returns this for 3 known interface IDs)
-void* __stdcall BallConnector_QueryInterface(void* self, u32 id)
+void* BallConnectorIface::QueryInterface(u32 id)
 {
+    void* self = this;
     switch (id) {
     case 0xee3f516e: return self;
     case 0x050a1fe5: return self;
@@ -192,9 +195,12 @@ void __fastcall cSPEditorHandleDeform_Shutdown(cSPEditorHandle* self)
     TrianglePinningInfo_Dtor((char*)self + 0x188);
 }
 
+struct DeformIface { void* QueryInterface(u32 id); };
+
 // @ 0x47fce0
-void* __stdcall Deform_QueryInterface(void* self, u32 id)
+void* DeformIface::QueryInterface(u32 id)
 {
+    void* self = this;
     switch (id) {
     case 0xee3f516e: return self;
     case 0x050a1fe5: return self;

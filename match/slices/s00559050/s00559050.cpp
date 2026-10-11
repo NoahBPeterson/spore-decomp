@@ -4,13 +4,14 @@
 
 namespace Editor {
 
-// @ 0x00559500  element refcount-style increment (field at this+0x10)
+// element refcount-style increment (field at this+0x10)
 class cCounterHolder {
 public:
     uint32_t pad[3];
     uint32_t mCount;
     int Increment();
 };
+// @ 0x00559500
 int cCounterHolder::Increment() {
     uint32_t* v33 = (uint32_t*)((char*)this + 0xc);
     int len = (int)v33[1] + 1;

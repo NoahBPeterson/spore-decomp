@@ -63,8 +63,9 @@ unsigned char __cdecl FUN_006d9de0(void*, int, ElemTable*, BakeEntry*, StreamDes
 
 // ---------------------------------------------------------------------------
 // 0x006da360: projection acos using component 0 as the weight, (1,2) as radius.
+// @ 0x006da360
 unsigned char FUN_006da360(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006da360
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d97f0(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;
@@ -106,8 +107,9 @@ fallback:
 
 // ---------------------------------------------------------------------------
 // 0x006da690: projection acos using component 1 as the weight, (2,0) as radius.
+// @ 0x006da690
 unsigned char FUN_006da690(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006da690
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d9980(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;
@@ -149,8 +151,9 @@ fallback:
 
 // ---------------------------------------------------------------------------
 // 0x006da9c0: projection acos using component 2 as the weight, (0,1) as radius.
+// @ 0x006da9c0
 unsigned char FUN_006da9c0(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006da9c0
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d9b10(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;
@@ -192,8 +195,9 @@ fallback:
 
 // ---------------------------------------------------------------------------
 // 0x006dacf0: projection dot tail, unrolled 4x by the original.
+// @ 0x006dacf0
 unsigned char FUN_006dacf0(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006dacf0
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d9ca0(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;

@@ -341,6 +341,7 @@ struct VecHM {
     int* cap;
 };
 
+// @ 0x0067b2f0
 void cHintManager::dtor()
 {
     vt0 = g_HM_1401510;

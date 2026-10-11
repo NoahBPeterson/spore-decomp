@@ -1,6 +1,6 @@
 0047b7b0 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
 0047b890 - complete source; insertion sort over 8-byte float pairs, NOT byte-exact
-0047bb70 - complete source; 0x2c-byte element copy ctor, NOT byte-exact
+0047bb70 - complete source; 0x2c-byte element copy ctor, NOT byte-exact; equiv FAIL (5/5; original calls sub-object copy ctor at +0x14)
 0047bf30 - complete source; basic_string<char>::resize, NOT byte-exact
 0047c010 - complete source; refcounted-pointer range copy (AddRef), NOT byte-exact
 0047c0d0 - complete source; refcounted-pointer range assign, NOT byte-exact

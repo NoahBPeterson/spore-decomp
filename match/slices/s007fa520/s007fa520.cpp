@@ -478,7 +478,9 @@ void* f_7fa750(void* p);
 void* f_65c480(int n);
 
 // @ 0x007fb480   (complete; not byte-exact — multiple-inheritance sub-object method)
-bool f_7fb480(char* self, unsigned char b) {
+struct Sub7fb480 { bool f_7fb480(unsigned char b); };
+bool Sub7fb480::f_7fb480(unsigned char b) {
+  char* self = (char*)this;
   char* base = self - 0x18;
   char prev = self[0x44];
   bool active;

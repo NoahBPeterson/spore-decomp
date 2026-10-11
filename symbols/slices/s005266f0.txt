@@ -2,3 +2,5 @@
 00527110 eastl::deque<0x48>::DoPopFront  # card decompile; frees node + map, resets mItBegin.mpCurrent
 00527150 eastl::vector<0x40-byte>::vector(const&)  # card decompile; allocate + uninitialized_copy
 00527440 Elem38::Elem38(const&)  # card decompile; typed float subobjects (fld/fstp) + ObjPtr/PoolPtr AddRef
+00526b30 ?4VectorElem1c  # 0x1c-byte vector operator=
+00526e70 ?4VectorElem18  # 0x18-byte vector operator=

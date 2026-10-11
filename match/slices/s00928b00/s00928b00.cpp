@@ -44,7 +44,15 @@ public:
 
 extern "C" void* SP_Pool_AllocGlobal(uint32 size, uint32* pActual, void* ctx); // 0x00928ad0
 extern "C" void  operator_delete__f47410(void* p, void* ctx);                  // 0x00f47410
-void FUN_00928e20(void* self);                                                 // 0x00928e20
+struct BigFile {
+    char mData[0x448];
+    void FUN_00928e20();   // 0x00928e20
+    int  FUN_00929220(const wchar_t* name);
+    char FUN_00929290();
+    void FUN_00929450();
+    void FUN_00928f80(const wchar_t* name);
+    char FUN_009290c0();
+};
 void EA_Text_ConvertEncoding(const wchar_t* src, int enc, int dstEnc, void* dst, uint32* pLen,
                              int a6);                                          // 0x0093c950
 
@@ -178,8 +186,9 @@ void StackAllocator::Reset(void* p)
 }
 
 // @ 0x00929220
-int FUN_00929220(void* self, const wchar_t* name)
+int BigFile::FUN_00929220(const wchar_t* name)
 {
+    void* self = this;
     char* p = (char*)self;
     *(int*)(p + 0) = 0;
     *(int*)(p + 4) = 0;
@@ -194,14 +203,15 @@ int FUN_00929220(void* self, const wchar_t* name)
         uint32 n = 0x104;
         EA_Text_ConvertEncoding(name, -1, 8, (char*)self + 0x1c, &n, 0x10);
         *(unsigned short*)(p + 0x222) = 0;
-        FUN_00928e20(self);
+        FUN_00928e20();
     }
     return (int)self;
 }
 
 // @ 0x00929290
-char FUN_00929290(void* self)
+char BigFile::FUN_00929290()
 {
+    void* self = this;
     char* p = (char*)self;
     char** begin = (char**)p;
     char** end = (char**)(p + 4);
@@ -225,10 +235,10 @@ char FUN_00929290(void* self)
 }
 
 // @ 0x00929450
-void FUN_00929450(void* self)
+void BigFile::FUN_00929450()
 {
-    FUN_00929290(self);
-    char* p = *(char**)self;
+    FUN_00929290();
+    char* p = *(char**)this;
     if (p != 0 && *(int*)(p - 4) != 0)
         operator_delete__f47410(p, 0);
 }
@@ -259,19 +269,21 @@ uint32 FUN_00928df0()
 }
 
 // @ 0x00928f80
-void FUN_00928f80(void* self, const wchar_t* name)
+void BigFile::FUN_00928f80(const wchar_t* name)
 {
+    void* self = this;
     char* p = (char*)self;
     if (*(int*)p == *(int*)(p + 4) && name != 0) {
         wcsncpy((wchar_t*)(p + 0x1c), name, 0x104);
         *(unsigned short*)(p + 0x222) = 0;
-        FUN_00928e20(self);
+        FUN_00928e20();
     }
 }
 
 // @ 0x009290c0
-char FUN_009290c0(void* self)
+char BigFile::FUN_009290c0()
 {
+    void* self = this;
     int** begin = (int**)self;
     int** end = (int**)((char*)self + 4);
     char r = 0;
@@ -296,7 +308,7 @@ char FUN_009290c0(void* self)
 // ===========================================================================
 // big functions: behaviourally-shaped skeletons (partial)
 // ===========================================================================
-void FUN_00928e20(void* self) { (void)self; }
+void BigFile::FUN_00928e20() { }
 void FUN_00928f00(wchar_t* dst, unsigned n, int idx) { (void)dst; (void)n; (void)idx; }
 int  FUN_00928fc0(void* self) { (void)self; return -1; }
 int  FUN_00929000(void* self) { (void)self; return 0; }

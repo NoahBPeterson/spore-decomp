@@ -62,8 +62,13 @@ int  __fastcall GetPartInfo(int part, void* tmp);                          // 0x
 void __cdecl    PostPart();                                                // 0x4237d0
 void __fastcall WrapKey(void* p);                                          // 0x427fd0
 
-extern int g_KeyA, g_KeyB, g_KeyC, g_KeyD, g_KeyE;  // 0x13eb2cc, 2d0, 2d4, 2c4, 2c8
+extern int g_KeyA;  // 0x13eb2cc
+extern int g_KeyB;  // 0x13eb2d0
+extern int g_KeyC;  // 0x13eb2d4
+extern int g_KeyD;  // 0x13eb2c4
+extern int g_KeyE;  // 0x13eb2c8
 
+// @ 0x0040d2d0
 void __fastcall RefreshProperties(char* self)
 {
     int*  model = *(int**)(self + 0x334);

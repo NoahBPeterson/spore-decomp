@@ -351,9 +351,10 @@ void C22c20::Copy(void** src)
 }
 
 // @ 0x00922c40
-void FUN_00922c40(void** p, int proc)
+struct C22c40 { void* h; void SetIdeal(int proc); };
+void C22c40::SetIdeal(int proc)
 {
-    if (*p != 0) {
+    if (h != 0) {
         if ((_InterlockedCompareExchange((volatile long*)0x0166892c, 1, 0)) != 0) { }
         if (_InterlockedExchangeAdd((volatile long*)0x01668928, 0) == 0) {
             SYSTEM_INFO si;
@@ -361,13 +362,13 @@ void FUN_00922c40(void** p, int proc)
             _InterlockedExchange((volatile long*)0x01668928, si.dwNumberOfProcessors);
         }
         if (proc < 0) {
-            SetThreadIdealProcessor((HANDLE)*p, 0x20);
+            SetThreadIdealProcessor((HANDLE)h, 0x20);
             return;
         }
         int n = _InterlockedExchangeAdd((volatile long*)0x01668928, 0);
         if (n <= proc)
             proc = proc % n;
-        SetThreadIdealProcessor((HANDLE)*p, proc);
+        SetThreadIdealProcessor((HANDLE)h, proc);
     }
 }
 

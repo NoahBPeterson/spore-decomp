@@ -1,8 +1,8 @@
 # va  diff-bytes  reason
-00ecb010 89   row-find then 5-dword copy: p register (esi vs eax) and copy order differ
-00ecb150 115  row-find + reset + copy: register schedule differs
-00ecb6b0 73   window guard: byte reload and virtual slot schedule differ
-00ecb730 25   tail-call vs ret placement after virtual test
-00ecb7a0 97   slider clamp: needs __asm Min/Max helper shape (not reproduced)
-00ecb830 97   slider clamp: needs __asm Min/Max helper shape (not reproduced)
-00ecb8c0 54   palette-item dtor: vtable store order / virtual releases differ
+00ecb010 89   row-find then 5-dword copy: p register (esi vs eax) and copy order differ; equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
+00ecb150 115  row-find + reset + copy: register schedule differs; equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
+00ecb6b0 73   window guard: byte reload and virtual slot schedule differ; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecb730 25   tail-call vs ret placement after virtual test; equiv FAIL: 5/5 valid inputs mismatched; first: execution
+00ecb7a0 97   slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 5/433 valid inputs mismatched; first: st0
+00ecb830 97   slider clamp: needs __asm Min/Max helper shape (not reproduced); equiv FAIL: 3/1200 valid inputs mismatched; first: st0
+00ecb8c0 54   palette-item dtor: vtable store order / virtual releases differ; equiv FAIL: 5/5 valid inputs mismatched; first: execution

@@ -81,7 +81,7 @@ __forceinline cGridCell* GetGridCell(const Vector3& p)
 
 __forceinline void MarkCell(const Vector3& p) { GetGridCell(p)->mFlags |= 0xf0; }
 
-// 0x00b922c0
+// @ 0x00b922c0
 void FUN_00b922c0(eastl::vector<Vector3>* path, float width)
 {
     Vector3* it = path->mpBegin;

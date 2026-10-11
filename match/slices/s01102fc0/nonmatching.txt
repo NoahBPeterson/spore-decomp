@@ -2,8 +2,8 @@
 01103140 281 havok-equivalent
 01103330 25 havok-equivalent
 01103360 9 havok-equivalent
-01103370 197 havok-equivalent
-01103470 194 havok-equivalent
+01103370 197 havok-equivalent; difftest FAIL 5/787 valid mismatched (helper now __forceinline so symbol size is plausible)
+01103470 194 havok-equivalent; difftest FAIL 3/822 valid mismatched (helper now __forceinline so symbol size is plausible)
 01103560 20 havok-equivalent
 01103590 31 havok-equivalent
 011035c0 33 havok-equivalent

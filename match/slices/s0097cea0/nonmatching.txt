@@ -1,9 +1,6 @@
 # va  diff-bytes  reason
-0097d080  7  complete; WinGrid::Refresh adjustor thunk; cl emits `sub ecx,0x20c` while original `add ecx,-0x20c`
-0097d100  42  complete; intrusive pointer field setter (AddRef/Release at +0x18)
-0097d170  47  complete; ImageDrawable::GetNaturalSize - image-object vtable branch approximated but all paths present
+0097d080  7  complete; WinGrid::Refresh adjustor thunk; cl emits `sub ecx,0x20c` while original `add ecx,-0x20c`; equiv: UNSUPPORTED (now member WinGridRefreshThunk::Refresh, ecx fixed; callee faults, 0 valid inputs)
+0097d100  42  complete; intrusive pointer field setter (AddRef/Release at +0x18); equiv: PASS
+0097d170  47  complete; ImageDrawable::GetNaturalSize - image-object vtable branch approximated but all paths present; equiv: FAIL (member fixed; body still approximated, does not write out sizes)
 0097d1a0  49  complete; ImageDrawable size/flag accessor
-0097db90  56  complete; ImageCursorProvider helper (hashtable/manager lookup)
-0097dc00  46  complete; ImageCursorProvider::UpdateMousePosition
-0097ddf0  47  complete; ImageCursorProvider::HasCursor (eastl hashtable find + setne)
 0097d270  334  complete; ImageDrawable::CreateRenderables (draw image + drop-shadow loop); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; 1292B vs 1626B, original has ebp-aligned frame, x87/SSE mix differs

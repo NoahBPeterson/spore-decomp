@@ -1,6 +1,5 @@
-00528e20 47 cRTTBuffer teardown; complete but call/register scheduling differs
+00528e20 47 cRTTBuffer teardown; complete but call/register scheduling differs; equiv PASS (959 valid, 100% coverage)
 005291f0 85 cEffectsModel::Dispatch; complete; original uses aligned SSE (and esp,-16) 4xmovaps copy
 005292d0 104 thiscall draw helper; complete but /Od layout differs
-005293a0 120 cRTTBuffer::PrepareState; complete but byte layout differs
-00529520 102 RTT buffer size clamp; complete but byte layout differs
+00529520 102 RTT buffer size clamp; complete but byte layout differs; equiv PASS (465 valid, 100% coverage)
 00529690 12 wrapper; only the ecx reload before the first call differs

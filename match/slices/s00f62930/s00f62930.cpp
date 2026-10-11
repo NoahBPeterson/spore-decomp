@@ -64,6 +64,7 @@ void __fastcall FUN_00f62930(int self, int dummy, int a, int b) {
 // ===========================================================================
 // 0x00f62b70 -- cTerrainDistributeInfo default constructor
 // ===========================================================================
+// @ 0x00f62b70
 void __fastcall FUN_00f62b70(int* p) {
     ((float*)p)[1] = 0.1f;
     ((float*)p)[2] = kFXMaxFloat;
@@ -77,6 +78,7 @@ void __fastcall FUN_00f62b70(int* p) {
 // ===========================================================================
 // 0x00f62bc0 -- serialize a description (operator<<)
 // ===========================================================================
+// @ 0x00f62bc0
 void __cdecl FUN_00f62bc0(int writer, int* d) {
     int v;
     v = d[0]; EA_IO_WriteUint32((void*)writer, &v, 1, 0);
@@ -101,6 +103,7 @@ void __cdecl FUN_00f62bc0(int writer, int* d) {
 // ===========================================================================
 // 0x00f62d80 -- cTerrainDistributeEffectCommand constructor
 // ===========================================================================
+// @ 0x00f62d80
 void __fastcall FUN_00f62d80(int* p) {
     float fmax = kFXMaxFloat;
     p[1] = 0;
@@ -178,6 +181,7 @@ void __fastcall FUN_00f63190(int* p) {
 // ===========================================================================
 // 0x00f631e0 -- store a value then call a base init
 // ===========================================================================
+// @ 0x00f631e0
 void __fastcall FUN_00f631e0(int self, int dummy, int v, int w) {
     (void)dummy; (void)w;
     *(int*)(self + 0x30) = v;
@@ -187,6 +191,7 @@ void __fastcall FUN_00f631e0(int self, int dummy, int v, int w) {
 // ===========================================================================
 // 0x00f631f0 -- cTDDebugCommand::Execute
 // ===========================================================================
+// @ 0x00f631f0
 void __fastcall FUN_00f631f0(int self, int dummy, cArguments* args) {
     (void)dummy;
     args->MainArguments(0);
@@ -204,6 +209,7 @@ void __fastcall FUN_00f631f0(int self, int dummy, cArguments* args) {
 // ===========================================================================
 // 0x00f63280 -- cTDLevelCommand::Execute (approximate)
 // ===========================================================================
+// @ 0x00f63280
 void __fastcall FUN_00f63280(int self, int dummy, cArguments* args) {
     (void)dummy;
     int* a = (int*)args->MainArguments(1);
@@ -220,6 +226,7 @@ void __fastcall FUN_00f63280(int self, int dummy, cArguments* args) {
 // ===========================================================================
 // 0x00f632f0 -- cTDDistanceCommand::Execute
 // ===========================================================================
+// @ 0x00f632f0
 void __fastcall FUN_00f632f0(int self, int dummy, cArguments* args) {
     (void)dummy;
     int a = args->MainArguments(1);
@@ -237,6 +244,7 @@ void __fastcall FUN_00f632f0(int self, int dummy, cArguments* args) {
 // ===========================================================================
 // 0x00f63360 -- cTDFacingCommand::Execute
 // ===========================================================================
+// @ 0x00f63360
 void __fastcall FUN_00f63360(int self, int dummy, cArguments* args) {
     (void)dummy;
     int a = args->MainArguments(1);
@@ -255,6 +263,7 @@ void __fastcall FUN_00f633a0(int self, int dummy, int a, int b) {
 // ===========================================================================
 // 0x00f63650 -- SWARM_TerrainDistributeAddCommands
 // ===========================================================================
+// @ 0x00f63650
 void __cdecl FUN_00f63650(int cmds, int* b) {
     (void)b;
     void* obj = operator_new(0x124, "ArgScript/TerrainDistributeEffect", 0, 0, 0, 0);

@@ -4,7 +4,7 @@
 #include "types.h"
 #include <intrin.h>
 
-__declspec(noinline) void FUN_0072b630(void* mesh, void* a, void* b, void* c, void* d, void* e, void* f, void* g, void* h);
+void FUN_0072b630(void* mesh, void* a, void* b, void* c, void* d, void* e, void* f, void* g, void* h);
 extern "C" {
     void FUN_00729c60(void* p, float* a, float* b);
     void FUN_004c6560(void* dst, void* src, void* n);
@@ -36,7 +36,7 @@ void FUN_0072c100(int* vec, int base, void* p3, void* p4)
         FUN_00729c60((void*)((int*)vec[0])[i], (float*)(b + 0x11c), (float*)(b + 0x134));
 }
 
-// @ 0x0072b630  SP::CompileToRwMeshes
+// SP::CompileToRwMeshes
 // Converts one source mesh (vertex elements, sub-meshes, primitive groups) into
 // RenderWare vertex descriptors, vertex buffers, index buffers and meshes, plus the
 // per-primitive materials and textures.
@@ -311,8 +311,8 @@ inline VertexBuffer* LockVertexBuffer(VertexBuffer* vb, VertexBufferLock& lock)
     return vb;
 }
 
-__declspec(noinline)
-void FUN_0072b630(void* pMesh, void* pTextures, void* pMeshes, void* pMaterials, void* pTexturesOut,
+// @ 0x0072b630
+void __declspec(noinline) FUN_0072b630(void* pMesh, void* pTextures, void* pMeshes, void* pMaterials, void* pTexturesOut,
                   void* pVertexBuffers, void* pVertexDescs, void* pIndexBuffers, void* pSemanticIndex)
 {
     SourceMesh* mesh = (SourceMesh*)pMesh;

@@ -2,7 +2,7 @@
 010c19a0  539  complete hkConvexVerticesShape::copyVertexData (FourVectors pack + AABB); cl loop unroll/register shape differs
 010c1f40  95   complete hkConvexVerticesShape::calcStatistics; vtable-call argument scheduling differs
 010c21c0  87   complete hkConvexVerticesShape destructor (hkThreadMemory dealloc); TlsGetValue/global load scheduling differs
-010c2230  142  complete hkGeometry->shape assignment; field scheduling differs
+010c2230  142  complete hkGeometry->shape assignment; field scheduling differs; difftest PASS (1200 inputs, member/thiscall fixed)
 010c2310  140  complete hkAllCdPointCollector::addCdPoint; hkArray pushBack inlining / chain walk differs
 010c23c0  269  complete hkAlgorithm::quickSortRecursive<hkRootCdPoint>; swap block register allocation differs
 010c2570  24   complete hkAllCdPointCollector::sortPoints; tag temporary / loop entry differs

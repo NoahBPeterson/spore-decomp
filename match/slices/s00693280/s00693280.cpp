@@ -162,6 +162,7 @@ Str16::Str16(const Str16& src)
     *end = 0;
 }
 
+// @ 0x006940d0
 Obj::Obj(const Obj& src) : h(src.h), x(src.x), s1(src.s1), s2(src.s2)
 {
 }

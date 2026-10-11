@@ -142,6 +142,7 @@ Variant& Variant::SetVec32(const void* p)
 // ---------------------------------------------------------------------------
 // 006a39a0  int cPropertyManager::Count()
 // ---------------------------------------------------------------------------
+// @ 0x006a39a0
 int cPropertyManager::Count()
 {
     if (mVecBegin != mVecEnd)
@@ -152,6 +153,7 @@ int cPropertyManager::Count()
 // ---------------------------------------------------------------------------
 // 006a39d0  bool cPropertyManager::GetAt(int idx, uint32_t* out)
 // ---------------------------------------------------------------------------
+// @ 0x006a39d0
 bool cPropertyManager::GetAt(int idx, uint32_t* out)
 {
     if (mVecBegin != mVecEnd && idx < (int)((mVecEnd - mVecBegin) >> 2)) {
@@ -194,6 +196,7 @@ const char* __stdcall FUN_006a3980(int index)
 // ---------------------------------------------------------------------------
 // 006a4100  void CopyVec12(void* dst, int n, const void* src)
 // ---------------------------------------------------------------------------
+// @ 0x006a4100
 void CopyVec12(void* dst, unsigned n, const void* src)
 {
     while (n--) {
@@ -236,6 +239,7 @@ struct String {
     String& assign(const char* pBegin, const char* pEnd);
 };
 
+// @ 0x006a4380
 String& String::assign(const char* p)
 {
     const char* q = p;
@@ -299,6 +303,7 @@ struct cCommandStateA {
     void OnRegister(void* parser, int b);
 };
 
+// @ 0x006a38c0
 void cCommandStateA::OnRegister(void* parser, int b)
 {
     if (b) {
@@ -324,6 +329,7 @@ struct cCommandStateB {
     void OnRegister2(void* parser, int b);  // 0x0083c780 (external)
 };
 
+// @ 0x006a38f0
 void cCommandStateB::OnRegister(void* parser, int b)
 {
     if (b) {
@@ -340,6 +346,7 @@ void cCommandStateB::OnRegister(void* parser, int b)
 // ---------------------------------------------------------------------------
 extern "C" float atan2f_(float, float);
 
+// @ 0x006a3430
 float* EulerFromMatrix(float* out, const float* m)
 {
     float len = sqrtf(m[0] * m[0] + m[1] * m[1]);
@@ -572,6 +579,7 @@ Vec38* Vec38::Init(int n, const void* alloc)
 
 // 006a44d0  element 0x208, filled with {-1,0,...}
 struct E208 { uint32_t a; uint32_t b; uint32_t rest[0x80]; };
+// @ 0x006a44d0
 Vec208* Vec208::Init(unsigned n, const void* alloc)
 {
     (void)alloc;
@@ -597,6 +605,7 @@ Vec208* Vec208::Init(unsigned n, const void* alloc)
 
 // 006a4580  element 0xc, zero-filled
 struct E12 { uint32_t x, y, z; };
+// @ 0x006a4580
 VecC* VecC::Init(unsigned n, const void* alloc)
 {
     (void)alloc;
@@ -620,6 +629,7 @@ VecC* VecC::Init(unsigned n, const void* alloc)
 }
 
 // 006a46a0  element 0xc, filled with a 3-float value
+// @ 0x006a46a0
 VecC* VecC::InitValue(unsigned n, const float* value, const void* alloc)
 {
     (void)alloc;
@@ -636,6 +646,7 @@ VecC* VecC::InitValue(unsigned n, const float* value, const void* alloc)
 }
 
 // 006a4600  element 8, filled with a 2-float value
+// @ 0x006a4600
 Vec8* Vec8::Init(unsigned n, const float* value)
 {
     Alloc(n, value);
@@ -669,6 +680,7 @@ struct Vec10b {
     void Alloc(int n, const void* value);   // 0x007c7a40 (external)
 };
 
+// @ 0x006a4660
 Vec10* Vec10::Init(int n, const void* value)
 {
     Alloc(n, value);
@@ -678,6 +690,7 @@ Vec10* Vec10::Init(int n, const void* value)
     return this;
 }
 
+// @ 0x006a4730
 Vec10b* Vec10b::Init(int n, const void* value)
 {
     Alloc(n, value);

@@ -52,6 +52,7 @@ struct DebugConsole {
     void    *mpText;        // +0x210
 
     void  ResetImages();      // 0x00831ef0
+    DebugConsole *Ctor();           // 0x008320d0
     void  Dtor();             // 0x00832160
     bool  CheckTimeout();     // 0x008321d0
     bool  StateCheck();       // 0x00832370
@@ -61,6 +62,7 @@ struct DebugConsole {
 };
 
 // ---------------------------------------------------------------- 0x00831ef0
+// @ 0x00831ef0
 void DebugConsole::ResetImages()
 {
     FUN_00987900();
@@ -99,8 +101,10 @@ void DebugConsole::ResetImages()
 }
 
 // ---------------------------------------------------------------- 0x008320d0
-void DebugConsole_Ctor(DebugConsole *self)
+// @ 0x008320d0
+DebugConsole *DebugConsole::Ctor()
 {
+    DebugConsole *self = this;
     self->vptr4 = (void *)0x13ef094;
     self->r8 = 0;
     void *p = (char *)self + 0x10;
@@ -126,6 +130,7 @@ void DebugConsole_Ctor(DebugConsole *self)
         self->mpAlloc = 0;
     }
     self->mpText = 0;
+    return self;
 }
 
 // ---------------------------------------------------------------- 0x00832160
@@ -140,6 +145,7 @@ void DebugConsole::Dtor()
 }
 
 // ---------------------------------------------------------------- 0x008321d0
+// @ 0x008321d0
 bool DebugConsole::CheckTimeout()
 {
     void *pi = (void *)((int (__thiscall *)(void *))(*(void ***)f64)[0x10 / 4])(f64);

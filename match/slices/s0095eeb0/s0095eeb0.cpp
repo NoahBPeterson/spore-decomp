@@ -31,6 +31,7 @@ struct CM {
     void  SetRotationAtLeast2(float* axis, float angle);
     void  Invert();
     void  Multiply(const float* o);
+    CM*   SetAxes(float* a, float* b, float* c);
 };
 
 // @ 0x0095EEB0
@@ -50,11 +51,12 @@ void CM::TransformPoint3B(float* out, const float* v) {
 }
 
 // @ 0x0095F090
-void* CM_SetAxes(void* self, float* a, float* b, float* c) {
+CM* CM::SetAxes(float* a, float* b, float* c) {
+    void* self = this;
     ((float*)self)[0] = a[0]; ((float*)self)[1] = a[1]; ((float*)self)[2] = a[2]; ((float*)self)[3] = a[3];
     ((float*)self)[4] = b[0]; ((float*)self)[5] = b[1]; ((float*)self)[6] = b[2]; ((float*)self)[7] = b[3];
     ((float*)self)[8] = c[0]; ((float*)self)[9] = c[1]; ((float*)self)[10] = c[2]; ((float*)self)[11] = c[3];
-    return self;
+    return this;
 }
 
 // @ 0x0095F0F0
@@ -138,7 +140,7 @@ void CM::Invert() {
         m[15] = 1.0f;
     } else if (type == 2) {
         float axes[12];
-        CM_SetAxes(axes, m + 8, m + 4, m);
+        ((CM*)axes)->SetAxes(m + 8, m + 4, m);
         float inv[12];
         float det;
         Inv3(inv, axes, &det);

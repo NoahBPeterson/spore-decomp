@@ -246,6 +246,7 @@ struct cCommandServer {
     u32 csAlloc;             // +0x44
     bool mbAutoBasic;        // +0x48
 
+    u32 FindCommandInfoByName(const wch* name);
     bool GetCommandInfo(u32 id, WStr* name, WStr* param);
     bool RegisterCommandParameterInfo(u32 id, const wch* param);
     u32  GetCommandIDFromCommandString(WStr* str, int len);
@@ -271,9 +272,9 @@ cCommandInfo::~cCommandInfo() {}
 // 0x0068a040  find command-info node by parameter-name string
 // =====================================================================
 // @ 0x0068a040
-extern "C" u32 FUN_0068a040(cCommandServer* self, const wch* name) {
-    CInfoNode* p = self->cmLeft;
-    CInfoNode* endNode = (CInfoNode*)&self->cmRight;
+u32 cCommandServer::FindCommandInfoByName(const wch* name) {
+    CInfoNode* p = cmLeft;
+    CInfoNode* endNode = (CInfoNode*)&cmRight;
     while (p != endNode) {
         const wch* nrl = p->mValue.msName.mpBegin;
         unsigned nlen = (unsigned)(p->mValue.msName.mpEnd - nrl);

@@ -1,4 +1,4 @@
-007cc5f0 SP::cOption::operator=  # dev-PDB name
+007cc5f0 ?4cOption  # dev-PDB name
 007cc6f0 SP::cOption::cOption  # dev-PDB name (copy ctor; calls fixed_vector copy ctors 007cb3e0/007cc580)
 007cc7f0 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::DoInsertValue  # grow path uses uninitialized_move start/commit (007cc760/007cb480) + cOption copy ctor
 007cc9a0 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back  # dev-PDB name

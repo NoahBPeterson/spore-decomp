@@ -4,8 +4,17 @@
 // Flags: /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
 #include "types.h"
 
-void Job_AllocBegin();                                   // 0x00513ec0
-void* Job_AllocGet();                                    // 0x00513e90
+struct RenderCfg;
+struct JobAlloc {
+    void Begin();      // 0x00513ec0
+    void* Get();       // 0x00513e90
+};
+struct RenderJobSink {
+    uint8_t pad[0x28];
+    JobAlloc alloc;    // +0x28
+    void InitRenderJob(RenderCfg* cfg, uint32_t* pBones, uint32_t id, float* pos, float* color,
+                       uint32_t a6, uint32_t a7);
+};
 void BuildMatrix(float* p5, uint32_t p6, uint32_t p7, int mode, float* out0, float* out1, int z);  // 0x004fe510
 
 // ---------------------------------------------------------------------------
@@ -50,12 +59,12 @@ inline float Saturate(float x)
 inline int RoundInt(float x) { return (int)(x + 0.5f); }
 
 // @ 0x00512400
-void InitRenderJob(RenderCfg* cfg, uint32_t* pBones, uint32_t id, float* pos, float* color,
+void RenderJobSink::InitRenderJob(RenderCfg* cfg, uint32_t* pBones, uint32_t id, float* pos, float* color,
                    uint32_t a6, uint32_t a7)
 {
     if (cfg->f10 > 0.0f && cfg->f40 > 0.0f) {
-        Job_AllocBegin();
-        uint32_t* job = (uint32_t*)Job_AllocGet();
+        alloc.Begin();
+        uint32_t* job = (uint32_t*)alloc.Get();
         job[0] = id;
         job[1] = *(uint32_t*)&color[0];
         job[2] = *(uint32_t*)&color[1];

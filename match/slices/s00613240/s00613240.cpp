@@ -641,7 +641,7 @@ fail:
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x006138b0: SP::cPollinator lookup by resource key (resolves the server id through the asset directory).
+// SP::cPollinator lookup by resource key (resolves the server id through the asset directory).
 struct ResourceKey {
     uint32_t instanceID, typeID, groupID;
 };
@@ -662,6 +662,7 @@ struct MetaRef {
         if (mpObject) mpObject->Release();
     }
 };
+// @ 0x006138b0
 bool cPollinatorLookup::LookupByKey(const ResourceKey* pKey, IRefObj** ppOut, bool bTouch) {
     MetaRef metadata;
     if (GetAssetMetadata(*pKey, &metadata.mpObject)) {

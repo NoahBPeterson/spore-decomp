@@ -97,7 +97,7 @@ struct cSPUIBehaviorTimeFunctionDampedPeriodic : cSPUIBehaviorTimeFunction {
     void  SetParams(float duration, float pre, float post, float freq, float damping, int periodicType);
     virtual void  v12(bool param);          // @ 0x007fd6b0
     virtual bool  v15();                    // @ 0x007fd700
-    virtual float v22(float t);             // @ 0x007fd790
+    virtual float v22(float t);             // 0x007fd790
 };
 
 // @ 0x007fd460

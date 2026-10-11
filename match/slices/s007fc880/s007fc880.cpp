@@ -202,13 +202,15 @@ bool WriteSerItem(SerBuffer* p, C53* self, SerItem14* item, void* alloc) {
 // ---------------------------------------------------------------------------
 // EASTL vector<{int,int}> insert helpers.
 // ---------------------------------------------------------------------------
-// @ 0x007fcca0
-void* Vec8Insert(void** self, void* pos, void* value);
-// @ 0x007fcf40
-void* Vec8Emplace(void** self, void* pos, void* value);
+struct Vec8 {
+    void* b; void* e; void* c; void* alloc;
+    void* Insert(void* pos, void* value);
+    void* Emplace(void* pos, void* value);
+};
 
 // @ 0x007fcf40
-void* Vec8Emplace(void** self, void* pos, void* value) {
+void* Vec8::Emplace(void* pos, void* value) {
+    void** self = (void**)this;
     void* begin = *self;
     int idx = ((char*)pos - (char*)begin) >> 3;
     if (pos == self[1] && self[1] != self[2]) {
@@ -220,13 +222,14 @@ void* Vec8Emplace(void** self, void* pos, void* value) {
             *((void**)m + 1) = *((void**)value + 1);
         }
     } else {
-        Vec8Insert(self, pos, value);
+        Insert(pos, value);
     }
     return (char*)*self + idx * 8;
 }
 
 // @ 0x007fcca0
-void* Vec8Insert(void** self, void* pos, void* value) {
+void* Vec8::Insert(void* pos, void* value) {
+    void** self = (void**)this;
     if (self[1] == self[2]) {
         int cap = (int)(((char*)self[1] - (char*)*self) >> 3);
         int ncap = cap > 0 ? cap << 1 : 1;
@@ -274,7 +277,7 @@ void* Vec8Insert(void** self, void* pos, void* value) {
 void** MapFindInsert(void** self, void** out, unsigned* key) {
     unsigned* found = (unsigned*)f_5701b0(*self, self[1], key, *(unsigned char*)(self + 5));
     if (found == (unsigned*)self[1] || *key < *found) {
-        *out = Vec8Emplace((void**)0, found, key);
+        *out = ((Vec8*)0)->Emplace(found, key);
         *((unsigned char*)out + 4) = 1;
     } else {
         *out = found;

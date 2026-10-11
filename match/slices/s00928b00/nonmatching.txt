@@ -3,8 +3,8 @@
 00928cd0  80   StackAllocator ctor: complete; default alloc/free setup + conditional Init differs
 00928d40  98   StackAllocator::MallocAligned: complete; alignment arithmetic schedule differs
 00928dc0  14   StackAllocator::Reset thunk: complete; cl did not reproduce the `push 0; call Reset; ret` tail shape
-00928f80  39   set base name: complete; wcsncpy/normalize schedule differs
-009290c0  34   "all valid" loop: complete; cl restructured the boolean accumulation
-00929220  91   big-file header ctor: complete; ConvertEncoding arg/register schedule differs
-00929290  110  big-file close loop: complete; vcall/vector clear schedule differs
-00929450  37   big-file teardown: complete; inlined Reset + operator_delete schedule differs
+00928f80  39   set base name: complete; wcsncpy/normalize schedule differs; difftest WEAK (1104 valid, 50.0% coverage)
+009290c0  34   "all valid" loop: complete; cl restructured the boolean accumulation; difftest FAIL (5/32 mismatched: execution)
+00929220  91   big-file header ctor: complete; ConvertEncoding arg/register schedule differs; difftest FAIL (5/20 mismatched: memory pool)
+00929290  110  big-file close loop: complete; vcall/vector clear schedule differs; difftest FAIL (5/601 mismatched: eax&0xffff)
+00929450  37   big-file teardown: complete; inlined Reset + operator_delete schedule differs; difftest WEAK (637 valid, 61.5% coverage)

@@ -54,7 +54,7 @@ static inline void ReleaseRef(IRefCounted* p) {
         p->Release();
 }
 
-// 004bafc0
+// @ 0x004bafc0
 bool FUN_004bafc0(int* param_1, int* param_2) {
     IResourceManager* manager = (IResourceManager*)GetManager();
     ResourceKey key;

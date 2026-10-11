@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00642ec0 341 vector<Entry16>::DoInsertValues: complete EASTL-shaped; original keeps nExtra/n in different regs and copies temp first
+00642ec0 341 vector<Entry16>::DoInsertValues: complete EASTL-shaped; original keeps nExtra/n in different regs and copies temp first; equiv UNSUPPORTED (5 unresolved callee refs: MoveUninit/CopyBackward/FillRange/FillN/UCopy); symbol now resolves
 006433a0 277 rbtree DoInsertValueHint for map<Key3,AutoRef>: complete; sret/tag-temp slot sharing and reg allocation differ
 00643500 183 HubB::OnMessage(0x4249453) erase by key: complete; key kept in reg ebp in original, stack in mine
 006435e0 282 Hub::Remove(Key3): complete; this kept in ebp + shorter spill sequence in original

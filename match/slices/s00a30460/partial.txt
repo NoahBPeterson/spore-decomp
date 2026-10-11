@@ -2,3 +2,5 @@
 00a30460  -   EA::Audio::System::SetProperty approximated; complete body but references an undefined SysMap::insert stub; difftest UNSUPPORTED (unresolved ?insert@SysMap@@QAEXIM@Z)
 00a30e10  -   eastl::fixed_hash_map ctor approximated: base fixed_pool/hash ctor arg order not reproduced; difftest FAIL (5/5, wild memset write)
 00a31040  -   fixed_vector<uint32,1000> ctor approximated: original inlines an SEH-guarded resize(0) whose frame we do not reproduce; difftest FAIL (resize not run identically, storage[1000] diverges)
+00a30790  -   audio-config construction helper: incomplete stub (14 B vs ~427 B original: only the ObjectError vcall, none of the enumeration body); difftest UNSUPPORTED (our symbol >5x smaller than original, rejected by lookup)
+00a30940  -   EA::Audio::System::PreloadConfigurations: incomplete stub (23 B vs >1 KB original, no fixed_map enumeration); difftest UNSUPPORTED (our symbol >5x smaller than original, rejected by lookup)

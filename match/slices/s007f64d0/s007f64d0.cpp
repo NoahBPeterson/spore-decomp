@@ -361,9 +361,14 @@ bool F6D20(void* self, int a2, int a3, int phase)
     return true;
 }
 
+struct TargetElem {
+    void* CopyFrom(void* src);
+};
+
 // @ 0x007F6D90  (copy constructor for the target element)
-void* F6D90(void* dst, void* src)
+void* TargetElem::CopyFrom(void* src)
 {
+    void* dst = this;
     void* p = *(void**)src;
     *(void**)dst = p;
     if (p)
@@ -381,9 +386,14 @@ void* F6D90(void* dst, void* src)
     return dst;
 }
 
+struct WindowAnimTarget {
+    void* CopyFrom(void* src);
+};
+
 // @ 0x007F6DF0  (copy constructor for the window-animation target)
-void* F6DF0(void* dst, void* src)
+void* WindowAnimTarget::CopyFrom(void* src)
 {
+    void* dst = this;
     *(void**)((char*)dst + 0) = &g_vt_014153bc;
     *(void**)((char*)dst + 4) = &g_vt_013f6400;
     *(void**)((char*)dst + 8) = *(void**)((char*)src + 8);
@@ -447,9 +457,14 @@ void* F6F80(void* first, void* last, char* dst)
     return dst;
 }
 
+struct TargetAssign {
+    void* Assign(void* src);
+};
+
 // @ 0x007F6FF0  (assignment operator)
-void* F6FF0(void* self, void* src)
+void* TargetAssign::Assign(void* src)
 {
+    void* self = this;
     *(void**)((char*)self + 4) = *(void**)((char*)src + 4);
     void* old = *(void**)((char*)self + 0xc);
     void* q = *(void**)((char*)src + 0xc);
@@ -705,11 +720,8 @@ void* __cdecl F7480(void* out, void* target, float* v, void* anim)
 // cross-references
 // --------------------------------------------------------------------------
 uint32_t Color_Lerp(uint32_t c1, uint32_t c2, float t);
-void* F6D90(void* dst, void* src);
-void* F6DF0(void* dst, void* src);
 void  F6EE0(void* first, void* last, void* dst);
 void* F6F80(void* first, void* last, char* dst);
-void* F6FF0(void* self, void* src);
 // --- equivalence checker address annotations
     void Color_Lerp(...); // 0x007f5eb0
 

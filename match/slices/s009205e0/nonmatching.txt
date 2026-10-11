@@ -6,13 +6,12 @@
 00920d00  99   SkipComponentBack: backward component loop schedule differs
 00920da0  32   ComponentAt: index loop shape / register allocation differs
 00920e30  149  FindExtension: dot/extension scan schedule differs
-00920ee0  8    NormalizeSeparators2: tail-calls FindExtension instead of call+ret
 00920f00  10   NormalizeSeparators: register allocation (p/c) differs
 00921150  -    FUN_00921150: size/shape differs (no comparable symbol)
 009212c0  -    UpperBound: 50 bytes vs 63 (loop/register form differs)
 00921300  -    LowerBound: 50 bytes vs 63 (loop/register form differs)
 00921340  13   FUN_00921340: caller wrapper schedule differs
-00921360  70   FUN_00921360: x87/SSE rounding sequence schedule differs
-009213c0  107  FUN_009213c0: x87/SSE rounding sequence schedule differs
-00921440  301  FUN_00921440: range mapper arithmetic/compare schedule differs
+00921360  70   FUN_00921360: x87/SSE rounding sequence schedule differs; equiv FAIL (limit field 80000001 vs 90000001 in memory pool, input 4) after RangeMapper::Round1 member fix
+009213c0  107  FUN_009213c0: x87/SSE rounding sequence schedule differs; equiv FAIL (return value mismatch, eax 823f12d9 vs 00000002) after RangeMapper::Round2 member fix
+00921440  301  FUN_00921440: range mapper arithmetic/compare schedule differs; equiv FAIL (memory pool +4 823f12d9 vs 00000002, 78% cov) after RangeMapper::Map member fix
 00921580  34   RBTreeIncrement: parameter register (eax vs ecx) and loop layout differ

@@ -136,10 +136,16 @@ void SP_sActivateGfx()
 // =====================================================================
 // @ 0x00e552f0  SP::cCellMode::Activate
 // =====================================================================
-int FUN_00e552f0(int param_1)
+namespace SP {
+struct cCellMode {
+    char pad0[9];
+    char f9, fa;
+    int Activate();
+};
+int cCellMode::Activate()
 {
-    *(char*)(param_1 + 9) = 0;
-    *(char*)(param_1 + 10) = 0;
+    f9 = 0;
+    fa = 0;
     *(char*)((char*)g_16b3c04 + 0x5169) = 0;
     *(char*)((char*)g_16b3c0c + 0x937) = 0;
     cLocalInputState_Reset(g_16b3c0c);
@@ -160,6 +166,7 @@ int FUN_00e552f0(int param_1)
     (void)lm;
     return 1;
 }
+} // namespace SP
 
 // =====================================================================
 // @ 0x00e553a0

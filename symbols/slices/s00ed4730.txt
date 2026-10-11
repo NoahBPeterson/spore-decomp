@@ -1,2 +1,2 @@
-00ed5220 Simulator::cScenarioEditModeDisplayStrategy::cScenarioEditModeDisplayStrategy  # vtable_names.txt vt
-00ed49a0 Simulator::cScenarioEditModeDisplayStrategy::~cScenarioEditModeDisplayStrategy  # vtable reset + member release
+00ed5220 Obj5220::f  # was Simulator::cScenarioEditModeDisplayStrategy ctor; our object defines Obj5220::f
+00ed49a0 Obj49a0::f  # was Simulator::cScenarioEditModeDisplayStrategy dtor; our object defines Obj49a0::f

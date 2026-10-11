@@ -88,7 +88,7 @@ static inline void AddRef2(int* p) {
 // 0x01020e80
 // ===========================================================================
 // @ 0x01020e80
-struct Cam { char f20e80(int msg, int* p); };
+struct Cam { char f20e80(int msg, int* p); void f20fc0(); void f21020(); };
 char Cam::f20e80(int msg, int* p) {
     if (msg == 0xf62def && *(int*)((char*)p + 0x18) == 0x521d0174) {
         E((char*)this - 4)->FUN_0101fb40();
@@ -113,8 +113,8 @@ void FUN_01020eb0(void* self, int param_2, int param_3) {
 // 0x01020fc0
 // ===========================================================================
 // @ 0x01020fc0
-void FUN_01020fc0(void* self) {
-    char* s = (char*)self;
+void Cam::f20fc0() {
+    char* s = (char*)this;
     E(s)->FUN_0101fb40();
     void* edi = (s == 0) ? 0 : (s + 4);
     void* ms = FUN_0067dcc0();
@@ -131,9 +131,9 @@ void FUN_01020fc0(void* self) {
 // 0x01021020
 // ===========================================================================
 // @ 0x01021020
-void FUN_01021020(void* self) {
-    char* s = (char*)self;
-    FUN_01020fc0(self);
+void Cam::f21020() {
+    char* s = (char*)this;
+    f20fc0();
     int* p = (int*)(s + 0x84);
     if (*p == 0) {
         void* pman = FUN_0067de30();

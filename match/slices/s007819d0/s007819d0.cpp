@@ -157,6 +157,7 @@ Vec12* Vec12::Assign(const Vec12& src)
 // ---------------------------------------------------------------------------
 // 0x00781B80 : copy E36 range into uninitialised storage
 // ---------------------------------------------------------------------------
+// @ 0x00781B80
 E36* Func_00781B80(E36* first, E36* last, E36* dst)
 {
     while (first != last) {
@@ -203,7 +204,8 @@ E36* Func_00781CB0(E36* first, E36* last, E36* dst)
 // ---------------------------------------------------------------------------
 // 0x00781CF0 : E36 vector destroy
 // ---------------------------------------------------------------------------
-void Func_00781CF0(char* v)
+// @ 0x00781CF0
+void __fastcall Func_00781CF0(char* v)
 {
     char* begin = *(char**)v;
     char* end = *(char**)(v + 4);
@@ -422,10 +424,13 @@ struct ShadowSub {
     int  mUnk10;                    // +0x10
     char pad_14[0x1bc - 0x14];
     bool mUnk1bc;                   // +0x1bc
+    void TryApply(int other);
 };
 
-void Func_007819D0(ShadowSub* self, int other)
+// @ 0x007819D0
+void ShadowSub::TryApply(int other)
 {
+    ShadowSub* self = this;
     if (self->mUnk8 != 0)
         return;
     if (self->mUnk10 != 0 && other == self->mUnk10 && self->mUnk5 && self->mUnk4 && self->mUnk6) {

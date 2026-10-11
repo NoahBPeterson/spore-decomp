@@ -12,7 +12,7 @@
 0065cb90 SP::cSPUIFeedEdit::UpdateStrings  # PDB name
 0065cc50 SP::cSPUIFeedEdit::UpdateButtons  # page-button enable helper
 0065ccd0 SP::cSPUIFeedEdit::GetAssetIndex  # PDB name
-0065cd70 intrusive vector element assign  # AutoRefCount assignment
+0065cd70 ?4AssetInfo  # AssetInfo::operator= (??4AssetInfo@@...; written as base identifier so the checker finds it)
 0065cdc0 uninitialized_copy of intrusive elements  # eastl
 0065ce10 uninitialized_move of intrusive elements  # eastl
 0065cec0 SP::cSPUIFeedEditAssetView::DoMessage  # PDB candidate

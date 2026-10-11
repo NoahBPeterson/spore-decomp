@@ -530,7 +530,7 @@ void cSPUIFrameSequencer::SetFrameRange(int p2, int p3, char p4) {
     vis(fs, sec.mpVisitor, buf, last, cur);
 }
 
-// 0x008048c0
+// @ 0x008048c0
 void cSPUIFrameSequencer::DtorBody() {
     vtable = (void**)0x1417804;
     sec.vtable = (void**)0x1417790;

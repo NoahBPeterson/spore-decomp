@@ -361,9 +361,16 @@ struct rwArray { char pad[0x14]; int m_count; float* Get(int i); };
 extern "C" void* ArenaTypeRegGetType(int type);   // 0x11e22c0
 extern "C" void* OpNewArray(void* p, int a, int b); // 0x11e073e
 
+struct SerializedArray {
+    char pad[8];
+    void* mData;   // +8
+    int   mCount;  // +0xc
+    void* Alloc();
+};
+
 // @ 0x007c5490
-void* AllocArray(void* self) {
-    return OpNewArray(*(void**)((char*)self + 8), 0, *(int*)((char*)self + 0xc) * 4);
+void* SerializedArray::Alloc() {
+    return OpNewArray(mData, 0, mCount * 4);
 }
 
 // @ 0x007c54b0

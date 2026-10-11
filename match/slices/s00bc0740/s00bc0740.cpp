@@ -381,6 +381,7 @@ public:
     void Update(bool reset);
 };
 
+// @ 0x00bc08d0
 void cPlanetCoverage::Update(bool reset)
 {
     if (SP::GetCurrentGameMode() == 0x1654c10)

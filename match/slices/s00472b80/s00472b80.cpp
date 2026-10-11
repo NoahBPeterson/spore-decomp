@@ -135,6 +135,7 @@ struct CharVec {
     char* mpBegin; char* mpEnd; char* mpCapacity; void* mAllocator;
     CharVec(const CharVec& x);
 };
+// @ 0x00473140
 CharVec::CharVec(const CharVec& x)
 {
     const uint32_t n = (uint32_t)(x.mpEnd - x.mpBegin);
@@ -153,6 +154,7 @@ struct Vec29 {
     ~Vec29();
     void resize(uint32_t n);
 };
+// @ 0x00473300
 Vec29::~Vec29()
 {
     ScratchSlots<5>();
@@ -161,6 +163,7 @@ Vec29::~Vec29()
         it->~Elem29c();
     DoFreeSelf();
 }
+// @ 0x00473370
 void Vec29::resize(uint32_t n)
 {
     if (n > (uint32_t)(mpEnd - mpBegin)) {
@@ -173,6 +176,7 @@ void Vec29::resize(uint32_t n)
 // ---- rw::math::fpu::QuaternionFromMatrix33<float,0> -------------------------------------------
 struct Matrix33 { float m[12]; };
 struct Quaternion { float x, y, z, w; };
+// @ 0x00472b80
 Quaternion* QuaternionFromMatrix33(Quaternion* out, const Matrix33* mat, float epsilon)
 {
     const float trace = mat->m[0] + mat->m[4] + mat->m[8];
@@ -215,6 +219,7 @@ struct Str8 {
     void append_sprintf_va_list(const char* fmt, void* args);     // @ 0x00475930
     Str8(int unused, const char* p, ...);
 };
+// @ 0x00472f50
 Str8::Str8(int unused, const char* p, ...)
 {
     mpBegin = 0; mpEnd = 0; mpCapacity = 0;
@@ -244,8 +249,7 @@ StrW::StrW(int unused, const wchar_t* p, ...)
 }
 
 // ============================== explicit instantiations ========================================
-// @ 0x00473140
-// (CharVec copy ctor above)
+// (CharVec copy ctor above: marker at its definition)
 // @ 0x00473270
 template void vector<AutoRefCount, 4>::resize(uint32_t);
 // @ 0x00473500

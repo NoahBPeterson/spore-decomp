@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-0093dbc0  132  complete; Variant 8-byte/string-header setter; register assignment (ax vs dx) differs
+0093dbc0  132  complete; Variant 8-byte/string-header setter; register assignment (ax vs dx) differs; equiv FAIL after ecx fix (Variant member)
 0093dcc0  137  complete; EASTL hashtable bucket rebuild (rehash); node re-linking schedule differs
 0093df20  104  complete; Variant::SetBool (type 2); cl shares ebx=2 for mask+type in the original
 0093dfa0  132  complete; Variant::SetUInt16 (type 3); flags-mask local kept in ax vs dx

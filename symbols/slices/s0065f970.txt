@@ -1,3 +1,4 @@
 0065faa0 SP::cSPUIFeedFilter::ReloadCallback  # PDB anchor
 0065fd30 SP::cSPUIEventLog::DoMessage  # PDB caller-scored
 006600c0 SP::cSPUIFeedFilter::GetSupportedFilterTypes  # PDB caller-scored
+006609a0 ?4KeyVec  # KeyVec::operator=

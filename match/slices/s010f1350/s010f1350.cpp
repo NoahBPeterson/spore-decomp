@@ -34,9 +34,18 @@ void* FUN_010f19b0(void* self, int owner) {
     return self;
 }
 
-// @ 0x010f1a10  hkContinuousSimulation dtor
-void FUN_010f1a10(void* self) {
-    char* s = (char*)self;
+struct ContinuousSim {
+    void resetEntities(int a, int b, int c);
+    void collideIsland(int* island, void* input);
+    void processAgentCollide(void* entry, void* input, void* output);
+    void* scalarDelete(unsigned int flags);
+    void destroy();             // 0x010f1a10
+    void f0bb0(int a, int b);   // 0x010f0bb0
+};
+
+// @ 0x010f1a10  ContinuousSim::destroy (hkContinuousSimulation dtor)
+void ContinuousSim::destroy() {
+    char* s = (char*)this;
     *(int*)(s) = 0x14a59d0;
     int r = *(int*)(s + 0x24);
     if (r) {
@@ -52,13 +61,6 @@ void FUN_010f1a10(void* self) {
 }
 
 // @ 0x010f1a60  hkContinuousSimulation::resetCollisionInformationForEntities
-struct ContinuousSim {
-    void resetEntities(int a, int b, int c);
-    void collideIsland(int* island, void* input);
-    void processAgentCollide(void* entry, void* input, void* output);
-    void* scalarDelete(unsigned int flags);
-    void f0bb0(int a, int b);   // 0x010f0bb0
-};
 void ContinuousSim::resetEntities(int a, int b, int c) {
     FUN_01099cb0(a, b, c);
     f0bb0(a, b);
@@ -97,7 +99,7 @@ void ContinuousSim::processAgentCollide(void* entry, void* input, void* output) 
 
 // @ 0x010f1d80  hkContinuousSimulation scalar deleting dtor
 void* ContinuousSim::scalarDelete(unsigned int flags) {
-    FUN_010f1a10(this);
+    destroy();
     if (flags & 1) {
         // operator delete(this)
     }

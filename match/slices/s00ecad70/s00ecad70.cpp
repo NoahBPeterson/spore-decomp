@@ -95,6 +95,7 @@ found:
 }
 
 // ---------------------------------------------------------------- 0x00ecb010
+// @ 0x00ecb010
 void FUN_00ecb010(int param_1, int param_2)
 {
     int i = 0;
@@ -119,6 +120,7 @@ found:
 }
 
 // ---------------------------------------------------------------- 0x00ecb150
+// @ 0x00ecb150
 void FUN_00ecb150(int param_1, int param_2)
 {
     char* g = (char*)g_16c7584;
@@ -157,6 +159,7 @@ void FUN_00ecb690(float f)
 }
 
 // ---------------------------------------------------------------- 0x00ecb730
+// @ 0x00ecb730
 void FUN_00ecb730(void)
 {
     char* w = (char*)((ILayout*)g_16c7584)->FindWindowByID(0x8de6958, 1);
@@ -165,6 +168,7 @@ void FUN_00ecb730(void)
 }
 
 // ---------------------------------------------------------------- 0x00ecb6b0
+// @ 0x00ecb6b0
 unsigned char FUN_00ecb6b0(int param_1)
 {
     int idx = (int)FUN_00efc520();
@@ -199,6 +203,7 @@ struct CItem {
     float FUN_B(float);
 };
 
+// @ 0x00ecb7a0
 float CItem::FUN_A(float param)
 {
     float f = f58;
@@ -209,6 +214,7 @@ float CItem::FUN_A(float param)
     return 0.5f;
 }
 
+// @ 0x00ecb830
 float CItem::FUN_B(float param)
 {
     float f = f60;
@@ -229,6 +235,7 @@ struct PaletteItem {
     void* p2c;      // +0x2c
     void dtor();
 };
+// @ 0x00ecb8c0
 void PaletteItem::dtor()
 {
     vt0 = (void*)0x1489350;

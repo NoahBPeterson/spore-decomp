@@ -225,7 +225,7 @@ void cMultiBlender::F980(void* a, unsigned char* b, int c, int d) {
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0075a550 / 0x0075a620   neighbouring class (vtable 0x140dab0)
+// neighbouring class (vtable 0x140dab0): dtor @ 0x0075a550, New70 @ 0x0075a620
 // ---------------------------------------------------------------------------
 struct RawVec { void* mBegin; void* mEnd; void* mCap; };
 struct ClassX {
@@ -243,6 +243,7 @@ struct ClassX {
     void* New70();
 };
 extern int g_vt140dab0[], g_vt140daac[], g_vt13ef094[];
+// @ 0x0075a550
 void ClassX::Dtor() {
     vt0 = (void*)g_vt140dab0;
     vt1 = (void*)g_vt140daac;
@@ -254,6 +255,7 @@ void ClassX::Dtor() {
     FUN_0041eb80(&vec0);
     vt1 = (void*)g_vt13ef094;
 }
+// @ 0x0075a620
 void* ClassX::New70() {
     void* p = operator_new_graph(0x70);
     if (p) FUN_00759c80(p);

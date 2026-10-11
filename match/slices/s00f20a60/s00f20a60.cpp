@@ -124,6 +124,7 @@ struct Vb8P { virtual void p0(); virtual void p1(); virtual void p2(); virtual v
 // ===========================================================================
 struct Model { float GetRadiusAt(); };        // 0x00b7ef70 ecx-receiver
 
+// @ 0x00f20a60
 void __cdecl FUN_00f20a60(float* out, float* in) {
     Model* pm = (Model*)sub_planetmodel(in);
     float radius = pm->GetRadiusAt();
@@ -153,6 +154,7 @@ struct PropData {
     uint8_t flag1;                   // +0xe61
 };
 
+// @ 0x00f20b20
 void __cdecl FUN_00f20b20(int* self) {
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
@@ -166,6 +168,7 @@ void __cdecl FUN_00f20b20(int* self) {
     }
 }
 
+// @ 0x00f20b60
 void __cdecl FUN_00f20b60(int* self) {
     V2cC* p = (V2cC*)self[1];
     if (p->q() != 1) {
@@ -209,6 +212,7 @@ struct Property {
     short   type;                    // +0x12
 };
 
+// @ 0x00f20be0
 void* __cdecl FUN_00f20be0(void* out, V24* prop, int key,
                            void* d4, void* d5, void* d6) {
     if (prop) {
@@ -236,6 +240,7 @@ void* __cdecl FUN_00f20be0(void* out, V24* prop, int key,
 }
 
 // 0x00f20c60
+// @ 0x00f20c60
 void* __cdecl FUN_00f20c60(void* out, int* self, int key) {
     FUN_00f20be0(out, (V24*)self, key, 0, 0, 0);
     return out;
@@ -249,6 +254,7 @@ int __cdecl FUN_00f20c90(int a, int b) {
 // ===========================================================================
 // 0x00f20cb0 -- replace the AutoRefCount payload of a matching key.
 // ===========================================================================
+// @ 0x00f20cb0
 void __cdecl FUN_00f20cb0(int key, void* p) {
     TreeHeader* g = g_pEventLog;
     TreeNode* node = (TreeNode*)g->mpRoot;
@@ -272,6 +278,7 @@ void __cdecl FUN_00f20cb0(int key, void* p) {
 // ===========================================================================
 // 0x00f20d20 -- find the event payload for key.
 // ===========================================================================
+// @ 0x00f20d20
 void* __cdecl FUN_00f20d20(void* p) {
     void* keep = p;
     void* found;
@@ -288,6 +295,7 @@ void* __cdecl FUN_00f20d20(void* p) {
 // ===========================================================================
 struct IdObj { char pad0[4]; int m4(); };
 
+// @ 0x00f20d80
 void __cdecl FUN_00f20d80(IdObj* self) {
     TreeHeader* g = g_pEventLog;
     TreeNode* node = (TreeNode*)g->mpRoot;
@@ -344,6 +352,7 @@ void* __cdecl FUN_00f20de0(float* out, V4* self) {
 struct SpatialView {
     void* GetEffectAt(int);          // not used directly
 };
+// @ 0x00f20ef0
 void __cdecl FUN_00f20ef0(V4* self) {
     Ctx*    c  = (Ctx*)self->q();
     Node48* n  = (Node48*)c->getNode();
@@ -364,6 +373,7 @@ void __cdecl FUN_00f20ef0(V4* self) {
 // ===========================================================================
 // 0x00f20fe0 / 0x00f21040
 // ===========================================================================
+// @ 0x00f20fe0
 void __cdecl FUN_00f20fe0(void) {
     void* p = sub_new(0x1c, "Simulator", 0, 0, 0, 0);
     if (p) {
@@ -389,6 +399,7 @@ void __cdecl FUN_00f21040(void) {
 // ===========================================================================
 // 0x00f21080 -- falloff-scaled per-element callback.
 // ===========================================================================
+// @ 0x00f21080
 void __cdecl FUN_00f21080(V0c* self, void** vec, void* arg3, float r, float scale) {
     void* v = 0;
     if (self) v = self->q(0x01186577);
@@ -415,6 +426,7 @@ void __cdecl FUN_00f21080(V0c* self, void** vec, void* arg3, float r, float scal
 // ===========================================================================
 // 0x00f211f0 -- refresh the event-log marker.
 // ===========================================================================
+// @ 0x00f211f0
 void __cdecl FUN_00f211f0(int* self) {
     V2cC* r = (V2cC*)((V4*)self)->q();
     if (r->q() != 0) return;
@@ -437,6 +449,7 @@ void __cdecl FUN_00f211f0(int* self) {
 // ===========================================================================
 // 0x00f212c0 -- distance exceeds (r+1)*3?
 // ===========================================================================
+// @ 0x00f212c0
 int __cdecl FUN_00f212c0(float* a, float r, float* b) {
     if ((r + 1.0f) * 3.0f <
         sqrtf((a[1]-b[1])*(a[1]-b[1]) + (a[2]-b[2])*(a[2]-b[2]) + (a[0]-b[0])*(a[0]-b[0])))
@@ -447,6 +460,7 @@ int __cdecl FUN_00f212c0(float* a, float r, float* b) {
 // ===========================================================================
 // 0x00f21310 -- get marker placement / info.
 // ===========================================================================
+// @ 0x00f21310
 char __cdecl FUN_00f21310(int* self, float* out, float* info) {
     float tmp[3];
     float* p = (float*)FUN_00f20de0(tmp, (V4*)self);
@@ -477,6 +491,7 @@ void __cdecl FUN_00f213f0(int* self, int* data, int arg3) {
 // ===========================================================================
 // 0x00f21760 -- if noun type 0x3a25119 & sub==0xa, tail-call refresh.
 // ===========================================================================
+// @ 0x00f21760
 void __cdecl FUN_00f21760(V0c* self, int arg2) {
     if (self) {
         Noun* n = (Noun*)self->q(0x3a25119);
@@ -491,6 +506,7 @@ void __cdecl FUN_00f21760(V0c* self, int arg2) {
 // ===========================================================================
 // 0x00f217a0 -- reset one event entry's property.
 // ===========================================================================
+// @ 0x00f217a0
 void __cdecl FUN_00f217a0(int* self) {
     sub_ac8fa0((void*)self[6], 0x016c83cc, 0);
 }
@@ -498,6 +514,7 @@ void __cdecl FUN_00f217a0(int* self) {
 // ===========================================================================
 // 0x00f217c0 -- find the event marker whose property matches self.
 // ===========================================================================
+// @ 0x00f217c0
 int __cdecl FUN_00f217c0(int* self) {
     if (!self) return 0;
     int h = (int)((V0c*)self)->q(0xce9f6639);

@@ -408,7 +408,7 @@ bool SP::cTelemetry::Shutdown() {
 
 // @ 0x007EBFD0  TItemMap::operator[]
 SP::TItemList* SP::TItemMap::operator[](const uint32_t& key) {
-  extern void MapFind(TItemList** out, const uint32_t* key, TItemMap* self);
+  extern void MapFind(TItemList** out, const uint32_t* key, TItemMap* self);  // 0x00DB4780
   TItemList* pFound;
   MapFind(&pFound, &key, this);
   if ((void*)pFound != (void*)mpBucketArray[mnBucketCount]) return pFound;

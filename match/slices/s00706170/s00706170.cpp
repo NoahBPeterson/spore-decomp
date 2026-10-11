@@ -37,12 +37,13 @@ int W6890::get(unsigned idx)
 }
 
 // ==========================================================================
-// @ 0x00706920 / 00706980 / 007069e0  slot-vector "next" scan
+// slot-vector "next" scan (0x00706920 / 0x00706980 / 0x007069e0)
 // ==========================================================================
 struct W6920 {
     int** m0;
     unsigned next(unsigned idx);
 };
+// @ 0x00706920
 unsigned W6920::next(unsigned idx)
 {
     unsigned v = *(unsigned*)((idx & 0x7f) * 0xc4 + (char*)m0[idx >> 7]);
@@ -59,6 +60,7 @@ struct W6980 {
     int** m0;
     unsigned next(unsigned idx);
 };
+// @ 0x00706980
 unsigned W6980::next(unsigned idx)
 {
     unsigned v = *(unsigned*)((idx & 0x7f) * 0x1f0 + (char*)m0[idx >> 7]);
@@ -75,6 +77,7 @@ struct W69e0 {
     int** m0;
     unsigned next(unsigned idx);
 };
+// @ 0x007069e0
 unsigned W69e0::next(unsigned idx)
 {
     unsigned v = *(unsigned*)((idx & 0x7f) * 0x1e0 + (char*)m0[idx >> 7]);

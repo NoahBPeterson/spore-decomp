@@ -13,11 +13,13 @@ struct Elem {          // 0x14 bytes
     int    c;          // +0x08
     int    d;          // +0x0c
     float  f;          // +0x10
+    Elem* Copy(Elem* src);
 };
 
 // @ 0x0075ee90
-Elem* CopyElem(Elem* dst, Elem* src)
+Elem* Elem::Copy(Elem* src)
 {
+    Elem* dst = this;
     RNode* p = src->p;
     dst->p = p;
     if (p != 0)
@@ -98,6 +100,12 @@ void* AllocElemArray(unsigned count, void* dst, void* src)
     return mem;
 }
 
+struct cRenderer {
+    char pad[0x324];
+    bool RemovePostRenderJob(float id);
+    bool RemovePreRenderJob(float id);
+};
+
 struct RenderJob {
     RenderJob* next;   // +0x00
     RenderJob* prev;   // +0x04
@@ -107,8 +115,9 @@ struct RenderJob {
 };
 
 // @ 0x0075f8a0  (SP::cRenderer::RemovePostRenderJob)
-bool RemovePostRenderJob(void* self, float id)
+bool cRenderer::RemovePostRenderJob(float id)
 {
+    void* self = this;
     char* sentinel = (char*)self + 0x324;
     RenderJob* n = *(RenderJob**)((char*)self + 0x324);
     if (n == (RenderJob*)sentinel)
@@ -127,8 +136,9 @@ bool RemovePostRenderJob(void* self, float id)
 }
 
 // @ 0x0075f900  (SP::cRenderer::RemovePreRenderJob)
-bool RemovePreRenderJob(void* self, float id)
+bool cRenderer::RemovePreRenderJob(float id)
 {
+    void* self = this;
     char* sentinel = (char*)self + 0x330;
     RenderJob* n = *(RenderJob**)((char*)self + 0x330);
     if (n == (RenderJob*)sentinel)

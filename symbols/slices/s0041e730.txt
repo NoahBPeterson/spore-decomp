@@ -7,6 +7,6 @@
 0041ea70 Property::GetFloat  # type 13
 0041eae0 RefVector::RefVector  # copy ctor, vector of ThreadedObject refs
 0041eb80 RefVector::~RefVector  # calls Resource::ThreadedObject::Release per element
-0041ebe0 RefVector::operator=  # EASTL vector assignment
+0041ebe0 ?4RefVector  # EASTL vector assignment
 0041ee90 RefVector::resize  # insert null refs or erase
 0041ef20 RefVector::push_back  # AddRef via lock xadd

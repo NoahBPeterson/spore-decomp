@@ -8,5 +8,5 @@
 00744f80 SP::cModelWorld::GetDeformationHandles  # PDB candidate (caller-single)
 00744fc0 SP::cModelWorld::GetRuntimeMeshes  # dev PDB
 00745110 SP::cModelWorld::HACK_GetArenaResource  # dev PDB vtable slot 0xbc
-00745520 spstl::slot_vector_base<SP::cModelWorld::cOccluderInfo,eastl::vector<spstl::slot_vector_entry<SP::cModelWorld::cOccluderInfo>,eastl::allocator> >::next  # dev PDB
+00745520 SlotVec::next  # was dev PDB spstl::slot_vector_base<...>::next; our object defines SlotVec::next
 00745630 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::DoPopFront  # dev PDB

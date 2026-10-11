@@ -66,6 +66,7 @@ struct Ent {                 // 0x20 bytes
     bool   field18;          // +0x18
     char   pad[3];
     int    field1c;          // +0x1c
+    Ent* CopyFrom(const Ent* src);
 };
 
 struct Ent2 {                // 0x18 bytes
@@ -80,7 +81,8 @@ struct Vec2 {
 };
 
 // @ 0x00838ab0
-Ent* CopyEnt(Ent* dst, const Ent* src) {
+Ent* Ent::CopyFrom(const Ent* src) {
+    Ent* dst = this;
     dst->field0 = src->field0;
     dst->name.mpBegin = 0;
     dst->name.mpEnd = 0;

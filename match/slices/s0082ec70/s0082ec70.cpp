@@ -362,6 +362,7 @@ void SPUIShader2D::Process(void *itemv, uint32_t arg)
 }
 
 // ---------------------------------------------------------------- 0x0082f410
+// @ 0x0082f410
 cSPUIShaderProxy *cSPUIShaderProxy::Construct()
 {
     char *t = (char *)this;
@@ -425,6 +426,7 @@ cSPUIShaderProxy::~cSPUIShaderProxy()
 }
 
 // ---------------------------------------------------------------- 0x0082f5c0
+// @ 0x0082f5c0
 bool cSPUIShaderProxy::GetParam(uint32_t key, uint32_t *out4, uint32_t *outc, uint32_t *out8)
 {
     uint32_t *end = *(uint32_t **)((char *)this + 8);
@@ -441,6 +443,7 @@ bool cSPUIShaderProxy::GetParam(uint32_t key, uint32_t *out4, uint32_t *outc, ui
 }
 
 // ---------------------------------------------------------------- 0x0082f170
+// @ 0x0082f170
 void u32vector::insert(uint32_t *pos, const uint32_t &val)
 {
     uint32_t *end = mpEnd;
@@ -489,6 +492,7 @@ haveBuffer:
 }
 
 // ---------------------------------------------------------------- 0x0082f280
+// @ 0x0082f280
 void Vec4vector::insert(Vec4 *pos, const Vec4 &val)
 {
     Vec4 *end = mpEnd;
@@ -552,6 +556,7 @@ Vec4 *Vec4vector::emplace(Vec4 *pos, const Vec4 &val)
 }
 
 // ---------------------------------------------------------------- 0x0082f630
+// @ 0x0082f630
 void *AcquireShaderProxy()
 {
     void *a = g_pAllocCore;
@@ -598,6 +603,7 @@ void *GetShaderProxy()
 }
 
 // ---------------------------------------------------------------- 0x0082f760
+// @ 0x0082f760
 bool Init2DSystem()
 {
     if (g_bShaderInited)
@@ -656,6 +662,7 @@ done:
 }
 
 // ---------------------------------------------------------------- 0x0082f8a0
+// @ 0x0082f8a0
 void Shutdown2DSystem()
 {
     if (!g_bShaderInited)
@@ -678,6 +685,7 @@ void Shutdown2DSystem()
 }
 
 // ---------------------------------------------------------------- 0x0082f930
+// @ 0x0082f930
 uint32_t *ParamMap::findInsert(uint32_t *key)
 {
     uint32_t *end = mpEnd;

@@ -1,5 +1,5 @@
-007101f0 eastl::hash_map<uint32_t,SP::cTextureInstance>::operator[]  # hashtable find + insert, refcount dtor at end
-007102b0 eastl::hash_map<uint32_t,SP::cMaterialInternal>::operator[]  # identical shape, different dtor callee
+007101f0 ?AMapA  # hashtable find + insert, refcount dtor at end
+007102b0 ?AMapB  # identical shape, different dtor callee
 007103e0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::fixed_vector_allocator<4,4,4,0,1> >::DoInsertValue  # PDB name confirmed by byte-exact match
 00710510 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::DoInsertValues  # position,n,value shuffle with realloc
 007106d0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::assign  # range assign/DoRealloc

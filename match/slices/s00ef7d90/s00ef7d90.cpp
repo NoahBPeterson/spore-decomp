@@ -66,6 +66,11 @@ struct VObj {  // polymorphic subobject (vtable slot access)
     virtual void* s27(unsigned);
 };
 
+struct CEditor {  // receiver (ECX) carrier for the hashtable/step helpers
+    bool FUN_00ef8820(int);
+    void FUN_00ef8860();
+};
+
 extern "C" void* FUN_0041e920(void* p);  // Property::GetBool
 
 // ---------------------------------------------------------------------------
@@ -191,14 +196,16 @@ void* FUN_00ef8770(int param_1, unsigned param_2, int* param_3) {
 }
 
 // @ 0x00ef8820
-bool FUN_00ef8820(int param_1, int param_2) {
+bool CEditor::FUN_00ef8820(int param_2) {
+    int param_1 = (int)this;
     int local_8[2];
     ((Stub*)((char*)param_1 + 0x5c))->FUN_00a23ef0(local_8, &param_2);
     return local_8[0] != *(int*)(*(int*)(param_1 + 0x60) + *(int*)(param_1 + 0x64) * 4);
 }
 
 // @ 0x00ef8860
-void FUN_00ef8860(int param_1) {
+void CEditor::FUN_00ef8860() {
+    int param_1 = (int)this;
     int iVar3 = *(int*)(param_1 + 0x30);
     if (iVar3 == -1)
         return;

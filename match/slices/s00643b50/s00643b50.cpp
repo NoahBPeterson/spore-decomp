@@ -16,7 +16,8 @@ struct KVMap { RCRef* operator_idx(const Key3* k); };
 struct HubC { void Clear(); };
 
 // @ 0x643b50
-template <> void VecT<Entry>::set_capacity_impl(uint32_t n) {
+template <>
+void VecT<Entry>::set_capacity_impl(uint32_t n) {
     if (n != 0xffffffff && n > (uint32_t)(mpEnd - mpBegin)) {
         Entry* pNew = n ? (Entry*)NodeAlloc(n * 16) : 0;
         UMoveEntries(mpBegin, mpEnd, pNew);

@@ -203,8 +203,8 @@ struct AutoRefCountIUnknown {
     }
 };
 
-struct FloatVec { float* mpBegin; float* mpEnd; float* mpCapacity; int mAlloc; FloatVec& operator=(const FloatVec&); };
-struct IntVec   { int*   mpBegin; int*   mpEnd; int*   mpCapacity; int mAlloc; IntVec& operator=(const IntVec&); };
+struct FloatVec { float* mpBegin; float* mpEnd; float* mpCapacity; int mAlloc; FloatVec& operator=(const FloatVec&); };  // 0x0050d4e0
+struct IntVec   { int*   mpBegin; int*   mpEnd; int*   mpCapacity; int mAlloc; IntVec& operator=(const IntVec&); };  // 0x0050d4e0
 
 struct cEffectParams {                    // retail size 0xd8 (dev PDB 0xcc)
     cParamRec mFloatParams[25];           // +0x00

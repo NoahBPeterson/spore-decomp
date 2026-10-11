@@ -171,7 +171,9 @@ void __stdcall FUN_00aca820(int* p, int* end) {
 }
 
 // @ 0x00aca970
-int* FUN_00aca970(int* obj, int* src) {
+struct VecCopyStub { int* FUN_00aca970(int* src); };
+int* VecCopyStub::FUN_00aca970(int* src) {
+    int* obj = (int*)this;
     void* o = *(void**)src;
     *obj = (int)o;
     if (o) ((void (__thiscall*)(void*))vc(o, 0))(o);
@@ -245,7 +247,9 @@ char FUN_00acaf80(int* obj, int p2, int p3, int p4) {
 }
 
 // @ 0x00acb150
-void* FUN_00acb150(void* self, uchar flags) {
+struct FourVecDtorStub { void* FUN_00acb150(uchar flags); };
+void* FourVecDtorStub::FUN_00acb150(uchar flags) {
+    void* self = this;
     *(void**)self = (void*)0x145a184;
     FUN_00ae6970((uchar*)self + 0x50);
     FUN_00ae6970((uchar*)self + 0x3c);

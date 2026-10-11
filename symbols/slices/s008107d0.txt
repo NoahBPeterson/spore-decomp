@@ -6,7 +6,7 @@
 00810e30 eastl::vector<...>::insert  # vector<bool,...>::DoInsertValue call at 0x11e0744
 00810fd0 cSPUILayoutManager::CreateLayoutObjects  # operator_new 0x9c "UI/LayoutObjects", ctor 0x8100d0
 00811110 cSPUILayoutManager::FindWorldById  # rbtree find + CreateWindow
-00811260 eastl::vector<EA::COM::IUnknown32*,eastl::sp_vector_allocator>::operator=  # card name
+00811260 ?4PtrVec  # PtrVec::operator=
 00811330 cSPUILayoutManager::Method11330  # 604-byte body (not reconstructed)
 008115a0 cSPUILayoutManager::InitMessaging  # registers 0x22568e7 / 0xf62ade handlers
 008116e0 cSPUILayoutManager::ShutdownMessaging  # unregisters the same handlers

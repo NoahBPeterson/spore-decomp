@@ -226,7 +226,7 @@ extern "C" void __fastcall FUN_00695e80(void* self)
 // =====================================================================
 // @ 0x00695f00  destroy the object's intrusive list + reset
 // =====================================================================
-extern "C" void FUN_00695f00(void* self)
+extern "C" void __fastcall FUN_00695f00(void* self)
 {
     char* head = (char*)self + 0x60;
     while (*(void**)head != head)
@@ -262,7 +262,7 @@ extern "C" void FUN_00695f00(void* self)
 }
 
 // =====================================================================
-// @ 0x00695fa0  destroy all pooled sub-vectors
+// destroy all pooled sub-vectors (see FUN_00695fa0 below)
 // =====================================================================
 static void destroy30(char* p, char* end)
 {
@@ -275,6 +275,7 @@ static void destroy30(char* p, char* end)
     }
 }
 
+// @ 0x00695fa0
 extern "C" void __fastcall FUN_00695fa0(void* self)
 {
     char* b = (char*)self;

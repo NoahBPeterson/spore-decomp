@@ -7,3 +7,4 @@
 007fe3f0 668 PARTIAL: ActionWinState::Activate; switch arms and COM interface casts approximated
 007fe8c0 74 PARTIAL: BoolStateEvent::Activate; predicate/allocator paths approximated
 007feb70 120 PARTIAL: cSPUIBehaviorWinEventBase::SerUpdate; messaging paths approximated
+007fe690 48 PARTIAL: SerItem vector load (variant) pushes a type id to the element vcall; ours is only a forwarder to SerLoadVector

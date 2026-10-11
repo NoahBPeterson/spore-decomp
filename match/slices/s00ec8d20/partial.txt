@@ -7,3 +7,4 @@
 00ec9a80   48  approximate: nested map lookup argument flow not reproduced
 00ec9b30  237  approximate: reference struct builder partially reconstructed
 00ec9c70  423  approximate: compare/update path only partially reconstructed
+00ec96f0  65  approximate: our body is a forwarder to FUN_00ec9690 (5x smaller than original; original is an inlined copy); equiv symbol lookup rejects it

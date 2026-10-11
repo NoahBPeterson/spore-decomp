@@ -39,6 +39,8 @@ struct IHost {
     virtual void s7();
     virtual void s8();
     virtual bool Make(void* a, void* b, int c, int d);  // vtable slot 9
+    // The factory method receives the host as `this` (ECX); 4 stack args (ret 0x10).
+    bool cAssetMetadataFactory_Create(struct IObj10* param2, struct IMeta** out, int param4, int param5);
 };
 struct IMeta {
     char pad0[8];
@@ -172,7 +174,7 @@ char* FUN_0054b630(char* first, char* last, char* result)
 }
 
 // @ 0x0054b6f0
-bool cAssetMetadataFactory_Create(IHost* self, IObj10* param2, IMeta** out, int param4, int param5)
+bool IHost::cAssetMetadataFactory_Create(IObj10* param2, IMeta** out, int param4, int param5)
 {
     IMeta* meta = (IMeta*)operator_new_meta(0xd8, "Pollinator/cAssetMetadata", 0, 0, 0, 0);
     if (meta == 0) {
@@ -185,7 +187,7 @@ bool cAssetMetadataFactory_Create(IHost* self, IObj10* param2, IMeta** out, int 
     meta->f2 = p[0];
     meta->f3 = p[1];
     meta->f4 = p[2];
-    bool ok = self->Make(param2, meta, param4, param5);
+    bool ok = this->Make(param2, meta, param4, param5);
     if (!ok) {
         meta->Delete();
     } else {

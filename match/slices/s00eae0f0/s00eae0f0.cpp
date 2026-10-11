@@ -67,6 +67,7 @@ static int* VecGrowN(int* v, int* pos, unsigned n, int val)
     return pos;
 }
 
+// @ 0x00eae430
 // 0x00eae430  vector<int>::insert(pos, val)  (slot 0x11e0744 thunk)
 void FUN_00eae430(int* v, int* pos, int* val)
 {
@@ -104,6 +105,7 @@ void FUN_00eae430(int* v, int* pos, int* val)
     v[2] = (int)(dst + newCap);
 }
 
+// @ 0x00eae540
 // 0x00eae540  eastl::vector<float,SP_STL_Sound>::operator=
 int* FUN_00eae540(int* v, int* other)
 {
@@ -137,6 +139,7 @@ int* FUN_00eae540(int* v, int* other)
     return v;
 }
 
+// @ 0x00eaeef0
 // 0x00eaeef0  eastl::vector<float,SP_STL_Sound>::assign(first,last)
 void FUN_00eaeef0(int* v, float* first, float* last)
 {
@@ -165,6 +168,7 @@ void FUN_00eaeef0(int* v, float* first, float* last)
     v[1] = (int)q2;
 }
 
+// @ 0x00eaeb60
 // 0x00eaeb60  vector<int>::insert_n(pos, n, val)
 void FUN_00eaeb60(int* v, int* pos, unsigned n, int* val)
 {

@@ -255,7 +255,6 @@ void RefPtrVec::DoInsertValues(RefPtr* pos, uint32_t n, const RefPtr& value)
 // ---------------------------------------------------------------------------------------------
 // Introsort over 12-byte records keyed by the first word (behavioral only)
 // ---------------------------------------------------------------------------------------------
-// @ 0x0042b2d0
 struct Elem12 { uint32_t key, b, c; };
 struct Less { char c; };
 inline bool LessCmp(const Elem12& a, const Elem12& b) { return a.key < b.key; }
@@ -284,6 +283,7 @@ inline Elem12* Partition(Elem12* first, Elem12* last, Elem12 pivot, Less cmp)
     }
 }
 void __cdecl IntroSortLoop(Elem12* first, Elem12* last, int depthLimit, Less cmp);
+// @ 0x0042b2d0
 void __cdecl IntroSortLoop(Elem12* first, Elem12* last, int depthLimit, Less cmp)
 {
     while (((last - first) > 28) && (depthLimit > 0))

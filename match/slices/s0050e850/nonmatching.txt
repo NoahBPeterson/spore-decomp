@@ -9,6 +9,6 @@
 0050ed90   659  Vec100::DoInsertValue: complete insert-at-position (grow and in-place paths); frame slots differ
 0050f070     6  VectorBase::~VectorBase: complete; three locals in different /Od hash slots
 0050f0d0   145  SortDefault: complete sort driver; callee slots differ
-0050f210    67  Elem100::operator=: complete; inlined FixedVec::operator= frame layout differs
-0050f290  1186  Vec24Full::DoInsertValues: complete insert-n path (grow and in-place); frame slots differ
+0050f210    67  Elem100::operator=: complete; inlined FixedVec::operator= frame layout differs; equiv FAIL (5/5 mismatched, execution) after symbol fix
+0050f290  1186  Vec24Full::DoInsertValues: complete insert-n path (grow and in-place); frame slots differ; equiv UNSUPPORTED (unresolved ref ??0Vector3 copy ctor) after marker fix
 0050f7f0   156  UninitCopy20: complete uninitialized_copy with out-param; frame slots differ

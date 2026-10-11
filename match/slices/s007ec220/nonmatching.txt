@@ -4,7 +4,7 @@
 007ec5e0 92 Swarm effect ctor - field/vtable store schedule differs
 007ec660 72 Swarm effect dtor - inlined vector dtor differs
 007ec6d0 129 Swarm effect serialize - field layout/read helper shape differs
-007ec7f0 460 eastl::vector<Vector3>::DoInsertValues - codegen differs (no similar-size symbol)
+007ec7f0 460 eastl::vector<Vector3>::DoInsertValues - codegen differs (no similar-size symbol); equiv: FAIL (member this-in-ecx, operator new[] 0xf473a0 annotated)
 007ecb50 87 cScreenFilterTextureCommand::Execute - float-conv vcall convention differs
 007ecbb0 79 cScreenLengthCommand::Execute - float-conv vcall convention differs
 007ecc30 105 vector<Vector3> scale - loop + float codegen differs

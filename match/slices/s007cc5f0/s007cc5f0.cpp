@@ -125,9 +125,11 @@ SP::cOption::cOption(const cOption& x)
     : mID(x.mID), mDefaultSetting(x.mDefaultSetting), mCurrentSetting(x.mCurrentSetting),
       mPropertySettings(x.mPropertySettings), mExternalSettings(x.mExternalSettings) {}
 
+struct cConfigScriptState { void Reset(); };
+
 // @ 0x007ccc30
-void cConfigScriptStateReset(void* pThis) {
-    char* p = (char*)pThis;
+void cConfigScriptState::Reset() {
+    char* p = (char*)this;
     *(int*)(p + 0x58) = -1;
     *(int*)(p + 0x5c) = -1;
     SP::cOptionVec* pOptions = (SP::cOptionVec*)(p + 0x44);

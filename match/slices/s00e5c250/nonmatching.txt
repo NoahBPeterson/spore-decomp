@@ -13,6 +13,5 @@
 00e5c8e0  146  spawn marker for a creature: complete; local struct/arg slots approximated
 00e5c9d0  108  pick message id from source level vs thresholds: complete; x87 schedule differs
 00e5cae0  106  normalize a random direction: complete; x87 sqrt schedule differs
-00e5cb60  369  fluid ray/AABB cast: complete branch (identity + oriented); box matrix offsets approximated
 00e5cd00  144  distance-to-box vs radius test: complete; SSE branch schedule differs
 00e5cde0  134  cell-visibility predicate: complete; float schedule and helper-arg slots differ

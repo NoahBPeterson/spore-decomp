@@ -1,7 +1,7 @@
 # complete behaviourally-equivalent source, not byte-exact (yet)
-006aebd0   -  dtor: EH prologue + vtable stores not reproduced
-006aedc0   -  ctor: EH prologue + lock xchg + Mutex ctor not reproduced
-006af5d0 148  comparison/assignment operator: vtable-slot shape and scheduling differ
-006af670 137  record serializer: register/loop scheduling differs
-006af8a0   -  dtor: EH prologue not reproduced
-006af960   -  ctor: EH prologue + vtable chain not reproduced
+006aebd0   -  dtor: EH prologue + vtable stores not reproduced; equiv UNSUPPORTED: unresolved refs XRBTree::DoNukeSubtree, Mutex2::dtor
+006aedc0   -  ctor: EH prologue + lock xchg + Mutex ctor not reproduced; equiv UNSUPPORTED: unresolved ref Mutex2::dtor
+006af5d0 148  comparison/assignment operator: vtable-slot shape and scheduling differ; equiv FAIL 5/12 mismatched
+006af670 137  record serializer: register/loop scheduling differs; equiv FAIL 5/5 mismatched
+006af8a0   -  dtor: EH prologue not reproduced; equiv FAIL 5/7 mismatched
+006af960   -  ctor: EH prologue + vtable chain not reproduced; equiv FAIL 5/5 mismatched

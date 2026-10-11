@@ -134,6 +134,8 @@ struct cOptionsSpec {
 
     cOptionsSpec& operator=(const cOptionsSpec& x);
 };
+// Receiver stub: the original copy ctor takes the new object in ECX.
+struct cOptionsSpecInit { void CopyCtor(const cOptionsSpec* x); };
 typedef eastl::vec<cOptionsSpec> VecOptionsSpec;
 
 // ---- cArguments (0x38) ----
@@ -328,7 +330,8 @@ void V16::push_back(const E16& v) {
 // 0x00839e00  EA::ArgScript::cOptionsSpec copy constructor
 // ===========================================================================
 // @ 0x00839e00
-void __cdecl cOptionsSpec_CopyCtor(cOptionsSpec* self, const cOptionsSpec* x) {
+void cOptionsSpecInit::CopyCtor(const cOptionsSpec* x) {
+    cOptionsSpec* self = (cOptionsSpec*)this;
     self->mName.mpBegin = 0;
     self->mName.mpEnd = 0;
     self->mName.mpCapacity = 0;

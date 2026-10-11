@@ -51,6 +51,7 @@ void __cdecl FUN_00e77930(int);
 struct CellStub { int b721d0(int); };
 struct ObjStub  { void ad7e40(); };
 
+// @ 0x00e78de0
 void __cdecl FUN_00e78de0(void)
 {
     void* o = (void*)FUN_00b3d4d0(0);
@@ -65,6 +66,7 @@ void __cdecl FUN_00e78de0(void)
 
 // ---------------------------------------------------------------- 0x00e78e40
 void __cdecl FUN_00e53580(void);
+// @ 0x00e78e40
 void __cdecl FUN_00e78e40(void)
 {
     FUN_00e53580();
@@ -74,6 +76,7 @@ void __cdecl FUN_00e78e40(void)
 }
 
 // ---------------------------------------------------------------- 0x00e78e70
+// @ 0x00e78e70
 bool __stdcall FUN_00e78e70(int unused, int* msg)
 {
     if (msg[2] == (int)0x287259f6) {

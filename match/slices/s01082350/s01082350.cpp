@@ -17,7 +17,7 @@ typedef float hkReal;
 // ------------------------------------------------------------ base types
 struct hkVector4 { float x, y, z, w; };
 struct hkQuaternion { float m_vec[4]; void set(const struct hkRotation& r); };    // x y z w
-struct hkRotation { float m_el[12]; void set(const hkQuaternion& q); };          // 3 columns of 4 floats (col*4+row)
+struct hkRotation { float m_el[12]; void set(const hkQuaternion& q); void toQuat(hkQuaternion* out) const; };          // 3 columns of 4 floats (col*4+row)
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
 extern "C" __declspec(dllimport) int __stdcall TlsSetValue(unsigned long, void*);
@@ -85,9 +85,9 @@ struct hkReferencedObject {
 // @ 0x01082350
 // Original uses a private register convention (rotation in ECX, output quaternion on the stack,
 // caller cleans). Largest-diagonal / trace method; every temporary stays in 80-bit x87 registers.
-static void hkQuaternion_setFromRotation(const hkRotation* rot, hkQuaternion* out)
+void hkRotation::toQuat(hkQuaternion* out) const
 {
-    const float* m = rot->m_el;
+    const float* m = m_el;
     float q[4];
     // X87-PRECISION: trace sum, sqrt and 0.5/root are kept unrounded on the FPU stack.
     hkX87Real trace = ((hkX87Real)m[5] + m[0]) + m[10];
@@ -122,7 +122,7 @@ static void hkQuaternion_setFromRotation(const hkRotation* rot, hkQuaternion* ou
 // @ 0x01082490
 void hkQuaternion::set(const hkRotation& r)
 {
-    hkQuaternion_setFromRotation(&r, this);
+    r.toQuat(this);
 }
 
 // @ 0x010824a0
@@ -599,6 +599,7 @@ struct hkNullContactMgrFactory : hkContactMgrFactory {
     HK_CLASS_ALLOC(4)
     virtual hkNullContactMgr* createContactMgr(int a, int b, int c);   // 0x01082ce0 returns this+8
     virtual ~hkNullContactMgrFactory() {}
+    void deletingDtor(unsigned flags);                      // 0x01082cf0 (scalar deleting destructor body)
 };
 // @ 0x01082ce0
 hkNullContactMgr* hkNullContactMgrFactory::createContactMgr(int, int, int)
@@ -607,9 +608,12 @@ hkNullContactMgr* hkNullContactMgrFactory::createContactMgr(int, int, int)
 }
 
 // @ 0x01082cf0
-void hkNullContactMgrFactory_deletingDtor(hkNullContactMgrFactory* self, unsigned flags)
+void hkNullContactMgrFactory::deletingDtor(unsigned flags)
 {
-    delete self;
+    if (flags & 1)
+        delete this;
+    else
+        this->hkNullContactMgrFactory::~hkNullContactMgrFactory();
 }
 
 // @ 0x01082d20

@@ -110,7 +110,7 @@ int FUN_004badd0(void* self, int* a, void* b)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x004ba150  (thiscall on a cEditorResource, ret 4)
+// 0x004ba150  (thiscall on a cEditorResource, ret 4)
 // PDB caller-scored candidate: SP::EditorValidity::AddCellUpgradeForBlockPropList.
 // For a cell-stage resource (model type 0xdfad9f51) it makes a copy, retypes it
 // (0x9ea3031a), drops every block onto z = 0 using the part bounding boxes, re-orients
@@ -276,6 +276,7 @@ struct intrusive_ptr {
     T* detach() { T* const temp = mpObject; mpObject = 0; return temp; }
 };
 
+// @ 0x004ba150
 bool cEditorResource::CreateCellUpgradeCopy(cEditorResource** ppOut)
 {
     bool result = false;

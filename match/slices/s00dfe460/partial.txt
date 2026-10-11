@@ -2,3 +2,4 @@
 00dfe460  -  large SP::cSPUISpace message handler switch stubbed
 00dff330  -  large inlined UI update body stubbed
 00dff650  -  large inlined UI update body stubbed
+00dfef70  -  large SP::cSPUISpace destructor teardown stubbed (ours ~15 bytes vs 313 diff-bytes); difftest UNSUPPORTED (symbol size rejected: incomplete reconstruction)

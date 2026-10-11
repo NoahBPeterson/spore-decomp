@@ -203,8 +203,10 @@ struct cSerializerStatus {
     char mPad00[0x24];
     int mCount;     // +0x24
     int mReady;     // +0x28
-    bool IsReady() const { return mCount != 0 && mReady != 0; }
+    bool IsReady() const;
 };
+// @ 0x00692800
+bool cSerializerStatus::IsReady() const { return mCount != 0 && mReady != 0; }
 
 // ===========================================================================
 // @ 0x00692820  serializer callback dispatch
@@ -214,14 +216,16 @@ struct cSerializerDispatcher {
     void* mpGetContext;     // +0x20
     char mPad24[0x14];
     void* mpCallback;       // +0x38
-    unsigned int Dispatch(void* a, void* b) {
-        if (mpCallback != 0 && mpGetContext != 0) {
-            void* ctx = ((void*(*)(void*))mpGetContext)(this);
-            return ((unsigned int(*)(void*,void*,void*))mpCallback)(a, b, ctx);
-        }
-        return 0;
-    }
+    unsigned int Dispatch(void* a, void* b);
 };
+// @ 0x00692820
+unsigned int cSerializerDispatcher::Dispatch(void* a, void* b) {
+    if (mpCallback != 0 && mpGetContext != 0) {
+        void* ctx = ((void*(*)(void*))mpGetContext)(this);
+        return ((unsigned int(*)(void*,void*,void*))mpCallback)(a, b, ctx);
+    }
+    return 0;
+}
 
 // ===========================================================================
 // @ 0x00692850  lazy serializer lookup
@@ -230,18 +234,20 @@ struct cSerializerLazy {
     char mPad00[8];
     void* mpContext;        // +0x08
     bool mbDone;            // +0x0c
-    bool Resolve() {
-        if (!mbDone) {
-            void* p = (void*)FUN_00920090();
-            if (p) {
-                void* q = (void*)FUN_00920090();
-                bool r = ((bool(*)(cSerializerLazy*, void*))(((void**)q)[1]))(this, mpContext);
-                mbDone = r;
-            }
-        }
-        return mbDone;
-    }
+    bool Resolve();
 };
+// @ 0x00692850
+bool cSerializerLazy::Resolve() {
+    if (!mbDone) {
+        void* p = (void*)FUN_00920090();
+        if (p) {
+            void* q = (void*)FUN_00920090();
+            bool r = ((bool(*)(cSerializerLazy*, void*))(((void**)q)[1]))(this, mpContext);
+            mbDone = r;
+        }
+    }
+    return mbDone;
+}
 
 // ===========================================================================
 // @ 0x00692880  SP::cVarListSerializer::Init
@@ -327,6 +333,7 @@ unsigned char WriteBlob32(void* writer, BlobRange* range) {
     if (size != 0) return (unsigned char)EA_IO_WriteBytes(writer, range->mpBegin, size);
     return 1;
 }
+// @ 0x00692e50
 unsigned char WriteBlob16(void* writer, BlobRange* range) {
     int size = (int)((char*)range->mpEnd - (char*)range->mpBegin) >> 1;
     int tmp = size;
@@ -338,7 +345,7 @@ unsigned char WriteBlob16(void* writer, BlobRange* range) {
 // ===========================================================================
 // @ 0x00692ee0 / 0x00692f20  global registration-list walks
 // ===========================================================================
-struct cRegNode { void* mpVtbl; cRegNode* mpNext; void* mpData; char mState; };
+struct cRegNode { void* mpVtbl; cRegNode* mpNext; void* mpData; char mState; cRegNode* Construct(void* data); };
 extern cRegNode* g_pRegList;   // 0x01600c58
 
 void RegList_Resolve() {
@@ -353,6 +360,7 @@ void RegList_Resolve() {
         }
     }
 }
+// @ 0x00692f20
 void RegList_Release() {
     for (cRegNode* p = g_pRegList; p != 0; p = p->mpNext) {
         if (p->mState) {
@@ -370,13 +378,15 @@ void RegList_Release() {
 // @ 0x00692f60  registration node constructor
 // ===========================================================================
 extern void* g_RegVtbl;
-void RegNode_Construct(cRegNode* self, void* data) {
-    self->mpVtbl = (void*)&g_RegVtbl;
-    self->mpNext = 0;
-    self->mpData = data;
-    self->mState = 0;
-    if (g_pRegList != 0) self->mpNext = g_pRegList;
-    g_pRegList = self;
+// @ 0x00692f60
+cRegNode* cRegNode::Construct(void* data) {
+    mpVtbl = (void*)&g_RegVtbl;
+    mpNext = 0;
+    mpData = data;
+    mState = 0;
+    if (g_pRegList != 0) mpNext = g_pRegList;
+    g_pRegList = this;
+    return this;
 }
 
 // ===========================================================================

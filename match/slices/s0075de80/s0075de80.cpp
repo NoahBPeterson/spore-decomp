@@ -19,6 +19,8 @@ struct cRenderer {
     unsigned SetInfoFlags(unsigned id, unsigned f);   // @ 0x0075e130
     unsigned ClearInfoFlags(unsigned id, unsigned f); // @ 0x0075e1e0
     unsigned GetInfoFlags(unsigned id);               // @ 0x0075e290
+    void RenderSettings(char useProps); // @ 0x0075de80
+    void ResizeFromCanvas();            // @ 0x0075df60
     void SubRender(int a, int lo, int hi, void* extra, char flag, unsigned orbits); // @ 0x0075dff0
 };
 
@@ -172,8 +174,9 @@ extern bool  Property_GetBool();     // @ 0x0041e920
 extern float ScreenAspectRatio(int); // @ 0x0075d9e0
 
 // @ 0x0075de80
-void RenderSettings(cRenderer* self, char useProps)
+void cRenderer::RenderSettings(char useProps)
 {
+    cRenderer* self = this;
     int* props = g_sAppProperties;
     if (useProps) {
         if (props != 0) {
@@ -211,8 +214,9 @@ extern void Canvas_GetRect(int*, int*);   // @ 0x008d2f30
 extern int* SP_Canvas();                  // @ 0x0067dcf0
 extern int g_screenW;   // @ 0x0171244c
 extern int g_screenH;   // @ 0x01712450
-void ResizeFromCanvas(int param_1)
+void cRenderer::ResizeFromCanvas()
 {
+    int param_1 = (int)this;
     int a = 0;
     int b = 0;
     Canvas_GetRect(&a, &b);

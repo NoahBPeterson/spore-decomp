@@ -40,9 +40,13 @@ int* MoveIntsBack(int* first, int* last, int* dst);            // @ 0x0047c010
 void FillInts(int* dst, uint n, const int& v);                 // @ 0x0047c0d0
 int  VectorIntDoInsert(void* dst, const void* src, int n);     // @ 0x0047c700 (shared helper)
 
+struct IntVec {
+    int* mpBegin; int* mpEnd; int* mpCapacity;
+    void IntVectorInsert(int* position, uint n, const int& value);
+};
+
 // @ 0x00478990
-void IntVectorInsert(int* mpBegin, int*& mpEnd, int*& mpCapacity,
-                     int* position, uint n, const int& value)
+void IntVec::IntVectorInsert(int* position, uint n, const int& value)
 {
     if ((uint)(mpCapacity - mpEnd) < n) {
         uint oldSize = (uint)(mpEnd - mpBegin);
@@ -103,9 +107,13 @@ void Construct29Range(Elem29c* dst, uint n, const Elem29c& v);      // @ 0x0047c
 void Shift29(Elem29c* first, Elem29c* last);                        // @ 0x0047c8a0
 void Fill29(Elem29c* dst, uint n, const Elem29c& v);                // @ 0x0047bbf0
 
+struct Vec29c {
+    Elem29c* mpBegin; Elem29c* mpEnd; Elem29c* mpCapacity;
+    void Elem29Insert(Elem29c* position, uint n, const Elem29c& value);
+};
+
 // @ 0x00478e00
-void Elem29Insert(Elem29c*& mpBegin, Elem29c*& mpEnd, Elem29c*& mpCapacity,
-                  Elem29c* position, uint n, const Elem29c& value)
+void Vec29c::Elem29Insert(Elem29c* position, uint n, const Elem29c& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0x29c < n) {
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0x29c;
@@ -156,9 +164,13 @@ void Shift12Out(E12** out, E12* first, E12* last, E12* dest)
     *out = d;
 }
 
+struct Vec12 {
+    E12* mpBegin; E12* mpEnd; E12* mpCapacity;
+    void Elem12Insert(E12* position, uint n, const E12& value);
+};
+
 // @ 0x00479330
-void Elem12Insert(E12*& mpBegin, E12*& mpEnd, E12*& mpCapacity,
-                  E12* position, uint n, const E12& value)
+void Vec12::Elem12Insert(E12* position, uint n, const E12& value)
 {
     if ((uint)((char*)mpCapacity - (char*)mpEnd) / 0xc < n) {
         uint oldSize = (uint)((char*)mpEnd - (char*)mpBegin) / 0xc;

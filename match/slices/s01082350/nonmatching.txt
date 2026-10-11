@@ -1,4 +1,4 @@
-01082350 229 havok-equivalent
+01082350 229 havok-equivalent; equiv FAIL: only esp after return differs (original caller-cleans, ours ret 4; custom ABI), ECX receiver fixed
 01082490 6 havok-equivalent
 010824a0 181 havok-equivalent
 010825a0 83 havok-equivalent
@@ -13,7 +13,7 @@
 01082a90 149 havok-equivalent
 01082b90 59 havok-equivalent
 01082bf0 99 havok-equivalent
-01082cf0 22 havok-equivalent
+01082cf0 22 havok-equivalent; equiv FAIL: ours faults at input 0 where the original returns (deleting-dtor path differs)
 01082df0 182 havok-equivalent
 01082ee0 0 havok-equivalent
 01083110 0 havok-equivalent

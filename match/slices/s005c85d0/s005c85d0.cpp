@@ -45,7 +45,7 @@ class sp_vector {
   T* mpCapacity;
   int mAllocator[2];
   sp_vector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
-  ~sp_vector();
+  ~sp_vector();  // 0x005c7f10
   T* begin() { return mpBegin; }
   T* end() { return mpEnd; }
 };
@@ -128,6 +128,7 @@ class cSPPalettePageUI : public cUIVtblA, public cUIVtblB {
  public:
   cSPPalettePageUI();
   virtual ~cSPPalettePageUI() {}
+  static void operator delete(void* p) { EASTL_allocator_deallocate(p); }
   virtual cRefObj* GetRef(int a, int b, int c, int d);  // +0x20
 
   int mField8;                            // +0x8
@@ -197,8 +198,7 @@ cSPPalettePageUI::cSPPalettePageUI()
     : mField8(0), mLayout(0), mSwatch(0), mField14(0), mFloat18(g_one), mFloat1c(g_one),
       mNodes20(), mRefs34() {}
 
-// @ 0x005C9070
-// (deleting destructor ??_G is generated from the inline ~cSPPalettePageUI)
+// Deleting destructor (0x005C9070, ??_G) is generated from the inline ~cSPPalettePageUI.
 
 // ---------------------------------------------------------------------------------------------
 // Large functions: signature-only stubs (partial).

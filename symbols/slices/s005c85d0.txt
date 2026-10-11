@@ -5,4 +5,6 @@
 005c8d30  ?Accept@cSPPalettePageUI@@QAEXH@Z  # call vtable+0x18 on each element of vector @+0x34
 005c8fd0  ??1cRefVector@@QAE@XZ  # release each element (via +0xc), then EASTL_free
 005c9010  ??0cSPPalettePageUI@@QAE@XZ  # page-UI ctor (two vptrs, vectors @+0x20/+0x34)
-005c9070  ??_GcSPPalettePageUI@@UAEPAXI@Z  # page-UI scalar deleting dtor
+005c9070  ?_GcSPPalettePageUI  # page-UI scalar deleting dtor (??_G; base identifier form)
+013eb938  ??_7cUIVtblA@@6B@  # base vtable stored by the deleting dtor 005c9070
+013ec458  ??_7cUIVtblB@@6B@  # base vtable stored at +4 by 005c9070

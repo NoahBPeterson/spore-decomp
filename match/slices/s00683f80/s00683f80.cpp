@@ -120,8 +120,14 @@ void write_6841a0(int self, int* stream)
 // ===========================================================================
 // @ 0x006842C0  serialize app object (complete-ish)
 // ===========================================================================
-int ser_6842c0(int* a, int* b)
+// stub receiver: the original gets the factory `this` in ECX; ret 0x10 = 4 stack args (last two unused)
+struct FactSer {
+    int __thiscall ser_6842c0(int* a, int* b, int c, int d);
+};
+
+int FactSer::ser_6842c0(int* a, int* b, int c, int d)
 {
+    (void)c; (void)d;
     int i = a ? ((int (__thiscall*)(void*, int))VT(a)[0xc / 4])(a, 0x355d6f5) : 0;
     void* u = ((void* (__thiscall*)(void*))VT(b)[0x18 / 4])(b);
     FUN_006841a0((void*)(i + 0x50), u);

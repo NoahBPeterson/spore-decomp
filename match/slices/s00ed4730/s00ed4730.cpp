@@ -73,6 +73,7 @@ typedef void  (__thiscall *FV_ff)(void*, float, float);
 
 // ================================================================ 0x00ed4730
 struct Obj4730 { char pad[0x38]; int f(int* list); };
+// @ 0x00ed4730
 int Obj4730::f(int* list)
 {
     ((S_ef72b0*)*(int*)(g_16c7aa4 + 0xd4))->f();
@@ -108,6 +109,7 @@ int Obj4840::f()
 }
 
 // ================================================================ 0x00ed48a0
+// @ 0x00ed48a0
 char __cdecl FUN_00ed48a0(void* a, int* c)
 {
     (void)a;
@@ -150,6 +152,7 @@ char __cdecl FUN_00ed4970(void* a, int* msg)
 
 // ================================================================ 0x00ed49a0
 struct Obj49a0 { void f(); };
+// @ 0x00ed49a0
 void Obj49a0::f()
 {
     char* s = (char*)this;
@@ -194,6 +197,7 @@ void Obj49a0::f()
 
 // ================================================================ 0x00ed4b70
 struct Obj4b70 { void f(); };
+// @ 0x00ed4b70
 void Obj4b70::f()
 {
     char* s = (char*)this;
@@ -232,6 +236,7 @@ void Obj4b70::f()
 
 // ================================================================ 0x00ed4c70
 struct Obj4c70 { void f(int flag); };
+// @ 0x00ed4c70
 void Obj4c70::f(int flag)
 {
     int* mgr = (int*)FUN_00957f30();
@@ -293,6 +298,7 @@ void Obj4c70::f(int flag)
 
 // ================================================================ 0x00ed4e30
 struct Obj4e30 { char pad[0x84]; int f(); };
+// @ 0x00ed4e30
 int Obj4e30::f()
 {
     char* s = (char*)this;
@@ -345,6 +351,7 @@ void Obj4f00::f(int v)
 
 // ================================================================ 0x00ed4f90
 struct Obj4f90 { int f(int a, int b); };
+// @ 0x00ed4f90
 int Obj4f90::f(int a, int b)
 {
     (void)a;
@@ -387,6 +394,7 @@ int Obj5020::f(void* a1, void* a2, void* a3, void* a4, void* a5)
 
 // ================================================================ 0x00ed5190
 struct Obj5190 { int f(int w); };
+// @ 0x00ed5190
 int Obj5190::f(int w)
 {
     char* s = (char*)this;
@@ -405,6 +413,7 @@ int Obj5190::f(int w)
 
 // ================================================================ 0x00ed5220
 struct Obj5220 { void* f(); };
+// @ 0x00ed5220
 void* Obj5220::f()
 {
     char* s = (char*)this;
@@ -434,6 +443,7 @@ void* Obj5220::f()
 
 // ================================================================ 0x00ed5330
 struct Obj5330 { int f(int a); };
+// @ 0x00ed5330
 int Obj5330::f(int a)
 {
     (void)a;
@@ -464,6 +474,7 @@ int Obj5330::f(int a)
 
 // ================================================================ 0x00ed5400
 struct Obj5400 { void f(int a); };
+// @ 0x00ed5400
 void Obj5400::f(int a)
 {
     (void)a;
@@ -491,6 +502,7 @@ void Obj5400::f(int a)
 
 // ================================================================ 0x00ed54b0
 struct Obj54b0 { void f(int a); };
+// @ 0x00ed54b0
 void Obj54b0::f(int a)
 {
     char* s = (char*)this;
@@ -526,6 +538,7 @@ bool __stdcall FUN_00ed5580(void* a, void* b, void* c)
 
 // ================================================================ 0x00ed5640
 struct Obj5640 { void f(); };
+// @ 0x00ed5640
 void Obj5640::f()
 {
     char* s = (char*)this;

@@ -1,0 +1,1 @@
+006693c0 FUN_006693c0  # asset-count wrapper; __declspec(noinline) on the definition defeats the marker parser

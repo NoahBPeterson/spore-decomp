@@ -184,7 +184,7 @@ float C101::M_cf00()
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x00B3CF40  read 12 named float properties into this[0..0x2c]
+// 0x00B3CF40 helper: read one float property
 // ---------------------------------------------------------------------------
 static void ReadFloatProp(PropGroup* pg, unsigned id, float* dst)
 {
@@ -195,6 +195,7 @@ static void ReadFloatProp(PropGroup* pg, unsigned id, float* dst)
     }
 }
 
+// @ 0x00B3CF40  read 12 named float properties into this[0..0x2c]
 void C101::M_cf40()
 {
     PropGroup* pg = 0;

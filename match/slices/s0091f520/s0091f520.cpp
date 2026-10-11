@@ -419,9 +419,10 @@ struct HTable {
     uint32_t bucketCount;   // +8
     uint32_t count;         // +0xc
     uint32_t pad10;         // +0x10
+    void EraseKey(HTNode*);   // 0x00920290
+    HTNode* Insert(HTNode** out, uint32_t* key, int unused);
 };
-extern "C" void __cdecl HT_PreRehash(void*, uint32_t, uint32_t, int); // 0x00921440
-extern "C" void __cdecl HT_EraseKey(HTNode*);                          // 0x00920290
+struct HTPre { void PreRehash(void*, uint32_t, uint32_t, int); }; // 0x00921440 (ecx = table+0x10)
 extern "C" void __cdecl EastlHashDoFreeNodes(void*, void*);            // 0x007611f0
 extern "C" void __cdecl Sub_93dc70(void*, void*);                      // 0x0093dc70
 extern "C" void __cdecl Sub_922310(void*);                             // 0x00922310
@@ -442,12 +443,13 @@ void __fastcall HT_Destroy(HTNode** self)
 }
 
 // @ 0x00920490
-HTNode* HT_Insert(HTable* self, HTNode** out, uint32_t* key)
+HTNode* HTable::Insert(HTNode** out, uint32_t* key, int unused)
 {
+    HTable* self = this;
     uint8_t rehash[8];
-    HT_PreRehash(rehash, self->bucketCount, self->count, 1);
+    ((HTPre*)&self->pad10)->PreRehash(rehash, self->bucketCount, self->count, 1);
     if (rehash[0] != 0)
-        HT_EraseKey((HTNode*)*(uint32_t*)&rehash[4]);
+        self->EraseKey((HTNode*)*(uint32_t*)&rehash[4]);
     uint32_t first = key[0];
     HTNode* node = (HTNode*)op_new(0x10, "EASTL", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",

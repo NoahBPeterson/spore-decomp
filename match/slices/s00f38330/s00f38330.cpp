@@ -148,6 +148,7 @@ int __fastcall FUN_00f38600(int p) { return p; }
 // ===========================================================================
 // 0x00f38610 -- destruct the seti panel object
 // ===========================================================================
+// @ 0x00f38610
 void __fastcall FUN_00f38610(int* p) {
     if (*(int**)((char*)p + 0x28)) vc0(*(void**)((char*)p + 0x28), 8);
     if (*(int**)((char*)p + 0x18)) vc0(*(void**)((char*)p + 0x18), 4);
@@ -205,6 +206,7 @@ int __fastcall FUN_00f38680(int self, int* win, int count) {
 // ===========================================================================
 // 0x00f38850 -- shutdown the seti panel
 // ===========================================================================
+// @ 0x00f38850
 void __fastcall FUN_00f38850(int* p) {
     vcv1(p, 0x28, 0);
     int* q = (int*)p[3];
@@ -333,6 +335,7 @@ void SpaceObj::f38b90(int v) {
 // ===========================================================================
 // 0x00f38bc0 -- set a hh:mm clock from a second count
 // ===========================================================================
+// @ 0x00f38bc0
 void SpaceObj::f38bc0(int v) {
     int self = (int)this;
     if (((*(int*)(self + 0x30) - *(int*)(self + 0x2c)) & 0xfffffffc) == 0x10) {
@@ -361,6 +364,7 @@ int __fastcall FUN_00f38cd0(int p) { return p; }
 // ===========================================================================
 // 0x00f38ce0 -- destruct the large-asset-view object
 // ===========================================================================
+// @ 0x00f38ce0
 void __fastcall FUN_00f38ce0(int* p) {
     if (p[0x10]) vc0((void*)p[0x10], 4);
     if (p[6]) { int h = p[6]; p[6] = 0; EA_Messaging_RemoveHandler(h, p[7], p[8], p[9], p[10]); }
@@ -444,6 +448,7 @@ int SpaceObj::f38e80(int* win) {
 // ===========================================================================
 // 0x00f39080 -- shutdown the large-asset-view UI
 // ===========================================================================
+// @ 0x00f39080
 void __fastcall FUN_00f39080(int* p) {
     vcv1(p, 0x1c, 0);
     int* w = (int*)p[0xb];
@@ -469,6 +474,7 @@ CString* __cdecl FUN_00f39110(CString* out) {
 // ===========================================================================
 // 0x00f39130 -- read a value out of a property
 // ===========================================================================
+// @ 0x00f39130
 unsigned char __cdecl FUN_00f39130(int prop) {
     void* a = 0;
     unsigned char r = 0;
@@ -490,6 +496,7 @@ unsigned char __cdecl FUN_00f39130(int prop) {
 // ===========================================================================
 extern wchar_t* DAT_01667bac;
 extern wchar_t* DAT_01667bae;
+// @ 0x00f391c0
 void* __fastcall FUN_00f391c0(void* p) {
     FUN_00b32470();
     *(int*)((char*)p + 0xc) = 0;
@@ -516,6 +523,7 @@ void* __fastcall FUN_00f391c0(void* p) {
 // ===========================================================================
 // 0x00f39220 -- destruct a cCivTokenTranslator
 // ===========================================================================
+// @ 0x00f39220
 void __fastcall FUN_00f39220(int* p) {
     int* b;
     b = (int*)p[0x15]; if (((char*)p[0x17] - (char*)b) && (((char*)p[0x17] - (char*)b) & 0xfffffffe) > 2 && b) operator_del(b);

@@ -66,7 +66,7 @@ int __fastcall FUN_00e51900(char* self) {
 }
 
 // @ 0x00e51930
-static void FUN_00e51930(char* self) {
+void FUN_00e51930(char* self) {
   int id = *(int*)(self + 0x248);
   if (id != 0 && *(int*)(self + 0xfc) != 0) {
     char* g = (char*)gCellGfx_16b3c08 + 0x168;

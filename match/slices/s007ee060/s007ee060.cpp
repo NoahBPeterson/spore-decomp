@@ -254,15 +254,23 @@ extern "C" void CopySix(void* dst, void* src) {
   ((SixFloats*)dst)->Assign((const SixFloats*)src);
 }
 
+struct VolumeCmd {
+  void Alpha(EA::ArgScript::cArguments* args);
+  void Color(EA::ArgScript::cArguments* args);
+  void SliceSpacing(EA::ArgScript::cArguments* args);
+};
+
 // @ 0x007EE700  "alpha" command
-extern "C" void VolumeAlphaCommand(int* self, EA::ArgScript::cArguments* args) {
+void VolumeCmd::Alpha(EA::ArgScript::cArguments* args) {
+  int* self = (int*)this;
   void** p = EA::ArgScript::MainArguments(args, 1);
   int iface = **(int**)((char*)self + 4);
   *(float*)(*(char**)((char*)self + 0xc) + 0x2c) = ArgToFloat((void*)iface, *p);
 }
 
 // @ 0x007EE730  "color" command
-extern "C" void VolumeColorCommand(int* self, EA::ArgScript::cArguments* args) {
+void VolumeCmd::Color(EA::ArgScript::cArguments* args) {
+  int* self = (int*)this;
   void** p = EA::ArgScript::MainArguments(args, 1);
   int iface = **(int**)((char*)self + 4);
   Vec3f tmp;
@@ -274,7 +282,8 @@ extern "C" void VolumeColorCommand(int* self, EA::ArgScript::cArguments* args) {
 }
 
 // @ 0x007EE780  "slicespacing" command
-extern "C" void VolumeSliceSpacingCommand(int* self, EA::ArgScript::cArguments* args) {
+void VolumeCmd::SliceSpacing(EA::ArgScript::cArguments* args) {
+  int* self = (int*)this;
   void** p = EA::ArgScript::MainArguments(args, 1);
   int iface = **(int**)((char*)self + 4);
   *(float*)(*(char**)((char*)self + 0xc) + 0x1c) = ArgToFloat((void*)iface, *p);
@@ -311,8 +320,10 @@ struct MapDescription {
   uint32_t f28;
   uint32_t f2c;
   VolumeCorner corners[8];
+  void* Copy(int src);
 };
-extern "C" void* MapDescriptionCopy(MapDescription* self, int src) {
+void* MapDescription::Copy(int src) {
+  MapDescription* self = this;
   self->refcount = 0;
   self->f08 = *(uint32_t*)(src + 8);
   self->f0c = *(uint32_t*)(src + 0xc);
@@ -348,11 +359,15 @@ extern "C" void VolumeEffectOnRegister(char* font, void* arg, int param3) {
   }
 }
 
+struct VolumeRegistrar {
+  void Register(char flag);
+};
 // @ 0x007EEC80  register a cVolumeDescription on the manager (if newly created)
-extern "C" void RegisterVolumeDescription(int self, char flag) {
+void VolumeRegistrar::Register(char flag) {
+  int self = (int)(size_t)this;
   if (flag == 0) {
     char* p = (char*)operator new(0xf0, "Swarm", 0, 0, 0, 0);
-    void* v = p ? MapDescriptionCopy((MapDescription*)p, self + 0x40) : 0;
+    void* v = p ? ((MapDescription*)p)->Copy(self + 0x40) : 0;
     extern void FUN_00a6f9c0(int, int, void*);
     FUN_00a6f9c0(*(int*)(self + 0x130), 0x28, v);
   }

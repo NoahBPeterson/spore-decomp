@@ -1,1 +1,15 @@
 # no confident real names recovered for this slice (PDB has none)
+009a2c90 FUN_009a2c90
+009a2cc0 S9a2cc0::f
+009a2f80 S9a2f80::f
+009a34a0 S9a34a0::f
+009a3630 S9a3630::f
+009a36a0 FUN_009a36a0
+009a3760 S9a3760::f
+009a37a0 FUN_009a37a0
+009a37e0 FUN_009a37e0
+009a3820 S9a3820::f
+009a3890 S9a3890::f
+009a38f0 S9a38f0::f
+009a3980 S9a3980::f
+009a3a10 S9a3a10::f

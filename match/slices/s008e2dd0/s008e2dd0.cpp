@@ -189,9 +189,12 @@ char Fn8e3a10(int* strObj, int idx)
 // ===========================================================================
 // 0x008e3a70  basic_string::erase(pos, count)
 // ===========================================================================
+struct WStrErase { int* Fn8e3a70(uint32 pos, uint32 count); };   // 0x008e3a70 (thiscall)
+
 // @ 0x008e3a70
-int* Fn8e3a70(int* pThis, uint32 pos, uint32 count)
+int* WStrErase::Fn8e3a70(uint32 pos, uint32 count)
 {
+    int* pThis = (int*)this;
     char* begin = (char*)pThis[0];
     char* end   = (char*)pThis[1];
     uint32 avail = (uint32)((end - begin) >> 1) - pos;
@@ -202,7 +205,7 @@ int* Fn8e3a70(int* pThis, uint32 pos, uint32 count)
         memmove(dst, src, ((end - src) >> 1) * 2 + 2);
         pThis[1] = (int)(pThis[1] + (((src - dst) >> 1) * -2));
     }
-    return pThis;
+    return (int*)this;
 }
 
 // ===========================================================================

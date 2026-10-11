@@ -1,10 +1,10 @@
 # va  diff-bytes  reason
-00e61140 5    global reload/register choice differs (o kept in ecx vs eax)
-00e611b0 250  nanites update; random-range and Handle temp layout guessed
-00e61320 37   switch register allocation differs (gsp kept in eax vs ecx)
-00e61370 32   matrix->vector math operand order/scheduling differs
-00e61550 160  CellAbility ctor: MI vtable store and field-init order differ
-00e61630 117  ctor wrapper: temp Handle slot and case schedule differ
-00e61a50 11   factory new-expression: vtable/field store order differs
-00e61aa0 7    base-ctor + lea scheduling differs
-00e61b00 82   dtor: refcount/EH sequence approximate
+00e61140 5    global reload/register choice differs (o kept in ecx vs eax); equiv UNSUPPORTED: 0/1200 valid inputs (fault(read), _vsnprintf import)
+00e611b0 250  nanites update; random-range and Handle temp layout guessed; equiv UNSUPPORTED: unresolved reference Pool::Find (stub, undefined)
+00e61320 37   switch register allocation differs (gsp kept in eax vs ecx); equiv PASS: 1155 valid inputs, 100% coverage
+00e61370 32   matrix->vector math operand order/scheduling differs; equiv FAIL: 1 ulp float difference in output
+00e61550 160  CellAbility ctor: MI vtable store and field-init order differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults); ctor forceinlined for symbol size
+00e61630 117  ctor wrapper: temp Handle slot and case schedule differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults)
+00e61a50 11   factory new-expression: vtable/field store order differs; equiv FAIL: vtable pointer stored differs from original (orig 01485598 vs ours)
+00e61aa0 7    base-ctor + lea scheduling differs; equiv UNSUPPORTED: unresolved references Obj9c::Init, CStrObj::Init (stubs)
+00e61b00 82   dtor: refcount/EH sequence approximate; equiv WEAK: 726 valid inputs, 93% coverage

@@ -39,9 +39,9 @@ struct XmlParser {
     // +0x438 flag
 
     void  Fn8e5600(short* p, int n);                 // @ 0x008e5600
-    int   Fn8e5a20(const char* s, int len, int fin); // @ 0x008e5a20
+    int   Fn8e5a20(const char* s, int len, int fin); // 0x008e5a20
     void  Fn8e5730(void* parser, void* uri);         // @ 0x008e5730
-    void  Fn8e59a0(char param2);                     // @ 0x008e59a0
+    void  Fn8e59a0(char param2);                     // 0x008e59a0
     void  Fn8e5ca0();                                // @ 0x008e5ca0
     void  Fn8e5da0(wchar16* data, int count);        // @ 0x008e5da0
     void  Fn8e5fb0();                                // @ 0x008e5fb0

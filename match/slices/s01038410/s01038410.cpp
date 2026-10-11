@@ -241,6 +241,7 @@ static __forceinline void OrientTowardDestination(cSPGameDataUFO* ufo)
     ufo->mOrientation = QuaternionFromFacingAndUp(dir, kZAxis);
 }
 
+// @ 0x01038410
 void cSpaceTradeRouteManager::Update(uint32_t deltaMS)
 {
     bool starChanged = false;

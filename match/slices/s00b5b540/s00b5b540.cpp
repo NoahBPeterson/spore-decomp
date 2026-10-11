@@ -312,9 +312,11 @@ void FUN_00b5b730(void) { /* eastl::vector<bool> insert/move; incomplete */ }
 // @ 0x00b5ba30
 void FUN_00b5ba30(int) { /* large universe/species setup; incomplete */ }
 
+struct S5be10 { void f(void* stream); };
 // @ 0x00b5be10
-void FUN_00b5be10(void* self, void* stream)
+void S5be10::f(void* stream)
 {
+    void* self = this;
     FUN_00b5ba30(1);
     char buf[0xa14];
     FUN_00692f90(buf, self, "cmp", 0x1a80d26);
@@ -332,9 +334,11 @@ bool FUN_00b5be60(void* self, void* stream)
     return ok != 0;
 }
 
+struct S5bf30 { bool f(); };
 // @ 0x00b5bf30
-bool FUN_00b5bf30(void* self, void*)
+bool S5bf30::f()
 {
+    void* self = this;
     void* ms = SP_MessageServer_67dcc0();
     *(void**)((char*)self + 0x48) = ms;
     *(void**)((char*)self + 0x4c) = self;
@@ -426,10 +430,11 @@ void FUN_00b5cc80()
     FUN_00b323f0(gt);
 }
 
+struct S5cd90 { void f(int); };
 // @ 0x00b5cd90
-void FUN_00b5cd90(void* self_, int param)
+void S5cd90::f(int param)
 {
-    char* self = (char*)self_;
+    char* self = (char*)this;
     unsigned n = (unsigned)((*(char**)(self + 0x60) - *(char**)(self + 0x5c)) >> 2);
     for (unsigned i = 0; i < n; ++i)
     {

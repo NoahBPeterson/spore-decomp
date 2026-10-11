@@ -1,7 +1,7 @@
-0055f7a0  214  complete group-record restore/query path; /Od temp schedule differs
-0055f8e0  226  complete asset timestamp restore path; /Od frame differs
-0055f9e0   56  complete conditional object release; /Od local layout differs
-0055fa20  212  complete asset activate/deactivate path; /Od frame differs
-0055fb30  101  complete asset-membership query; /Od frame differs
-0055fbb0   90  complete asset timestamp setter; /Od frame differs
+0055f7a0  214  complete group-record restore/query path; /Od temp schedule differs; equiv FAIL (ecx receiver fixed)
+0055f8e0  226  complete asset timestamp restore path; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055f9e0   56  complete conditional object release; /Od local layout differs; equiv FAIL (ecx receiver fixed)
+0055fa20  212  complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fb30  101  complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fbb0   90  complete asset timestamp setter; /Od frame differs; equiv FAIL (ecx receiver fixed)
 0055ec70  2185  complete index-rebuild driver (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast) (all 55 calls in order); /Od frame slots differ, 2 out-of-line key_vector ctor/dtor instances inlined

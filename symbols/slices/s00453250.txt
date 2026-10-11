@@ -1,0 +1,1 @@
+00453f20 ?4BlockVector  # eastl::BlockVector::operator= (??4BlockVector@eastl@@QAEAAU01@ABU01@@Z; base identifier so the matcher finds it)

@@ -50,6 +50,7 @@ struct Submix {
 };
 struct SysLike { void* vftable; bool ConnectSubmixTree(); };
 
+// @ 0x00a2a020
 bool SysLike::ConnectSubmixTree()
 {
     Submix* first = vc<Submix*>(this, 0x17c, (u32)0xf1cc1687);
@@ -96,6 +97,7 @@ struct SmallStubs {
     int* VecIntInsert(int* param_2, int* param_3);
 };
 
+// @ 0x00a2a150
 int SmallStubs::GetOrInsert(int* key)
 {
     int local_20;
@@ -185,6 +187,7 @@ struct Vec12 {
     void DoInsertValue(E12* pos, void* val);   // 0x00a27910
 };
 
+// @ 0x00a2ab40
 void Vec12::pushEmpty()
 {
     E12* e = mpEnd;
@@ -256,6 +259,7 @@ void ZoneVec::push_back(const Zone* v)
 // ---------------------------------------------------------------------------
 // 0x00a2ac20  eastl::vector<int>::insert
 // ---------------------------------------------------------------------------
+// @ 0x00a2ac20
 int* SmallStubs::VecIntInsert(int* param_2, int* param_3)
 {
     int* self = (int*)this;
@@ -312,6 +316,7 @@ int* SmallStubs::VecIntInsert(int* param_2, int* param_3)
 // ---------------------------------------------------------------------------
 struct RBTreeStub { void DoNukeSubtree(void*); };   // 0x009a9600
 
+// @ 0x00a2add0
 void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
 {
     for (u32 i = 0; i < param_3; i++) {
@@ -345,6 +350,7 @@ void SmallStubs::DestroyBuckets(int param_2, u32 param_3)
 // ---------------------------------------------------------------------------
 struct ArrOwner { void* FindInsertPos(void*, void*, void*); };  // 0x00a22730
 
+// @ 0x00a2ae90
 int SmallStubs::EraseRange(int param_2, int param_3)
 {
     u32 u = (u32)(size_t)((ArrOwner*)this)->FindInsertPos((void*)param_3,

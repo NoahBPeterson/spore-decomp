@@ -104,7 +104,7 @@ void __cdecl FUN_00c64ad0(float* out, float* in) {
   out[3] = inv * w;
 }
 
-// @ 0x00c653e0 / 0x00c65540  dtors
+// @ 0x00c653e0 dtor
 void __fastcall FUN_00c653e0(void* self) {
   *(void**)self = (void*)0x1471288;
   *(void**)((char*)self + 4) = (void*)0x1471274;
@@ -119,6 +119,7 @@ void __fastcall FUN_00c653e0(void* self) {
   FUN_00c8a420();
   FUN_00b184c0();
 }
+// @ 0x00c65540 dtor
 void __fastcall FUN_00c65540(void* self) {
   *(void**)self = (void*)0x14713c8;
   *(void**)((char*)self + 4) = (void*)0x14713b4;

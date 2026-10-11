@@ -10,6 +10,16 @@ unsigned DateTime_Set(int a);
 
 namespace SP {
 
+struct EcxStub70 {
+    unsigned char FUN_0055f7a0();
+    unsigned char FUN_0055f8e0();
+    void FUN_0055f9e0();
+    unsigned char FUN_0055fa20(void* key, char flag);
+    unsigned char FUN_0055fb30(void* key);
+    unsigned char FUN_0055fbb0(void* key);
+};
+
+
 // Helpers (call targets are relocated, so signatures only fix the stack shape).
 void FUN_00563e10(void* self);
 void FUN_00561850(int index);
@@ -31,7 +41,8 @@ void RBTreeErase(void* node, void* anchor);
 
 
 // @ 0x0055f7a0
-unsigned char FUN_0055f7a0(void* this_) {
+unsigned char EcxStub70::FUN_0055f7a0() {
+    void* this_ = this;
     if (*(int*)((char*)this_ + 0x5c) == 0) {
         FUN_00563e10(this_);
         *(unsigned char*)((char*)this_ + 0x40) = 1;
@@ -67,7 +78,8 @@ unsigned char FUN_0055f7a0(void* this_) {
 }
 
 // @ 0x0055f8e0
-unsigned char FUN_0055f8e0(void* this_) {
+unsigned char EcxStub70::FUN_0055f8e0() {
+    void* this_ = this;
     if (*(int*)((char*)this_ + 0x5c) == 0) {
         FUN_00563e10(this_);
         *(unsigned char*)((char*)this_ + 0x40) = 1;
@@ -89,7 +101,8 @@ unsigned char FUN_0055f8e0(void* this_) {
 }
 
 // @ 0x0055f9e0
-void FUN_0055f9e0(void* this_) {
+void EcxStub70::FUN_0055f9e0() {
+    void* this_ = this;
     if (*(char*)((char*)this_ + 0x40) == 0) {
         void* obj = *(void**)((char*)this_ + 0x44);
         if (obj != 0)
@@ -98,7 +111,8 @@ void FUN_0055f9e0(void* this_) {
 }
 
 // @ 0x0055fa20
-unsigned char FUN_0055fa20(void* this_, void* key, char flag) {
+unsigned char EcxStub70::FUN_0055fa20(void* key, char flag) {
+    void* this_ = this;
     int index = 0;
     FUN_005631e0(this_, &index);
     ((int*)this_)[0] = 0;   // placeholder to keep `index` live
@@ -128,7 +142,8 @@ unsigned char FUN_0055fa20(void* this_, void* key, char flag) {
 }
 
 // @ 0x0055fb30
-unsigned char FUN_0055fb30(void* this_, void* key) {
+unsigned char EcxStub70::FUN_0055fb30(void* key) {
+    void* this_ = this;
     int index = 0;
     FUN_005631e0(this_, &index);
     if (index != -1) {
@@ -142,7 +157,8 @@ unsigned char FUN_0055fb30(void* this_, void* key) {
 }
 
 // @ 0x0055fbb0
-unsigned char FUN_0055fbb0(void* this_, void* key) {
+unsigned char EcxStub70::FUN_0055fbb0(void* key) {
+    void* this_ = this;
     int index = 0;
     FUN_005631e0(this_, &index);
     if (index == -1)

@@ -22,13 +22,13 @@
 0107ed00 hkBaseSystem::quit  # havok 3.1 base lib
 0107edb0 _hkErrorMessage  # havok 3.1 base lib
 0107ee10 hkOstream::operator<<  # havok 3.1 base lib
-0107ee30 hkOstream::operator<<  # havok 3.1 base lib
+0107ee30 ?6hkOstream  # hkOstream::operator<<(const char*) (mangled ??6hkOstream@@...; written as its base identifier so the checker's name matcher finds it; overloads resolve by closest size)
 0107ee80 hkOstream::operator<<(int)  # havok 3.1 base lib
 0107eed0 hkOstream::operator<<(uint)  # havok 3.1 base lib
 0107ef20 hkOstream::printf  # havok 3.1 base lib
 0107ef80 hkOstream::hkOstream  # havok 3.1 base lib
 0107efd0 hkOstream::~hkOstream  # havok 3.1 base lib
-0107f000 hkOstream::scalar_deleting_dtor  # havok 3.1 base lib
+0107f000 ?_GhkOstream  # hkOstream scalar deleting dtor (mangled ??_GhkOstream@@UAEPAXI@Z; base identifier form)
 0107f050 hkStackTracer::~hkStackTracer  # havok 3.1 base lib
 0107f0c0 hkStackTracer::dumpStackTrace  # havok 3.1 base lib
 0107f250 hkStackTracer::hkStackTracer  # havok 3.1 base lib

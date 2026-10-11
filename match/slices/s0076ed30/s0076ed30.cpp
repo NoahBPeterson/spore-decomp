@@ -28,6 +28,7 @@ struct __declspec(align(16)) JobRecordI {
     char c; int a, b, d; __m128 v[8]; int x, y, z, w, p, q;
     JobRecordI(const JobRecordI& o);
 };
+// @ 0x0076f580
 JobRecordI::JobRecordI(const JobRecordI& o)
 {
     c = o.c; a = o.a; b = o.b; d = o.d;

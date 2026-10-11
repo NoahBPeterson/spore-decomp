@@ -55,6 +55,7 @@ struct IVec3Provider {
     virtual void Sub(float* out, float* v);    // slot 10 (0x28)
 };
 
+// @ 0x007ce500
 int GroundCoverCirclePhysics(char* self, float dt, char* p3, char* p4)
 {
     float acc = dt + *(float*)(self + 8);
@@ -284,6 +285,7 @@ struct DerivedPaint : PaintSystemBase {
     char padC[0x1c - 0xc];
     int m1c;            // +0x1c
 };
+// @ 0x007ced20
 DerivedPaint::~DerivedPaint()
 {
     if (mb4) {
@@ -418,6 +420,7 @@ struct VVec {
     VPair* mpEndCap;  // +8
     ~VVec();
 };
+// @ 0x007cef60
 VVec::~VVec()
 {
     for (VPair* p = mpBegin; p < mpEnd; p = (VPair*)((char*)p + 0x10))

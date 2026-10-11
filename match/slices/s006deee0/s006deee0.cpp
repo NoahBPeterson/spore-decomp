@@ -119,6 +119,7 @@ struct RefCountObj {
 
 struct RefPtr {
     RefCountObj* mpObject;              // +0x0
+    RefPtr& AssignRefPtr(const RefPtr* x);
     RefPtr& operator=(const RefPtr& x) {
         RefCountObj* src = x.mpObject;
         RefCountObj* old = mpObject;
@@ -209,8 +210,8 @@ void MakeHeapCR(SP::cClusterRect* first, SP::cClusterRect* last, const cRectArea
 // ---------------------------------------------------------------------------
 // @ 0x006df280  Intrusive RefPtr::operator= (4-byte pointer, refcount at +4)
 // ---------------------------------------------------------------------------
-RefPtr& AssignRefPtr(RefPtr* self, const RefPtr* x) {
-    return (*self = *x), *self;
+RefPtr& RefPtr::AssignRefPtr(const RefPtr* x) {
+    return (*this = *x), *this;
 }
 
 // ---------------------------------------------------------------------------
@@ -251,6 +252,8 @@ struct Elem16Vector {
     void*   mpPad;      // +0x0c
     void*   mpInline;   // +0x10
     void Destroy();
+    int Elem16VecEraseRange(int dest, int from);
+    void Elem16VecInsert(int position, uint n, Elem16* value);
 };
 
 void Elem16Vector::Destroy() {
@@ -492,7 +495,9 @@ void QuickSortImplCR(SP::cClusterRect* first, SP::cClusterRect* last, int kRecur
 // ---------------------------------------------------------------------------
 // @ 0x006dfc30  class method: register a cluster and accumulate its area
 // ---------------------------------------------------------------------------
-void ClusterMapAdd(int* self, int* rect) {
+struct ClusterMapAdder { void AddCluster(int* rect); };
+void ClusterMapAdder::AddCluster(int* rect) {
+    int* self = (int*)this;
     void* model = *(void**)(self + 6);                       // self+0x18
     if (*(void**)((char*)model + *rect * 0x10 + 4) != 0) {
         int** pEnd = (int**)((char*)self + 0x238);
@@ -512,7 +517,8 @@ void ClusterMapAdd(int* self, int* rect) {
 // ---------------------------------------------------------------------------
 // @ 0x006dfca0  erase a range from an Elem16 vector (returns the insert point)
 // ---------------------------------------------------------------------------
-int Elem16VecEraseRange(int* self, int dest, int from) {
+int Elem16Vector::Elem16VecEraseRange(int dest, int from) {
+    int* self = (int*)this;
     Elem16* newEnd = CopyElem16((Elem16*)from, *(Elem16**)(self + 1), (Elem16*)dest);
     uint count = ((uint)*(self + 1) - (uint)newEnd) >> 4;
     if (newEnd < *(Elem16**)(self + 1)) {
@@ -550,7 +556,8 @@ void QuickSortCR(SP::cClusterRect* first, SP::cClusterRect* last, const cRectAre
 // ---------------------------------------------------------------------------
 // @ 0x006dfd90  Elem16 vector DoInsertValues (one value, with growth)
 // ---------------------------------------------------------------------------
-void Elem16VecInsert(int* self, int position, uint n, Elem16* value) {
+void Elem16Vector::Elem16VecInsert(int position, uint n, Elem16* value) {
+    int* self = (int*)this;
     uint space = (uint)((*(Elem16**)(self + 2) - *(Elem16**)(self + 1)) >> 4);
     if (space < n) {
         int size = (*(int*)(self + 1) - *self) >> 4;

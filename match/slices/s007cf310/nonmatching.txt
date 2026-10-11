@@ -1,5 +1,5 @@
 007d01d0  32    W2::f wrapper; original is call+ret 8, mine tail-jumps (cl TCO) or schedules differently
-007d01f0  82    serialization Ser1F0; writes values through temporaries in the outgoing arg area, not reproduced
-007d0250  81    serialization Ser250; float vector writer, prologue/register schedule differs
-007d02b0  49    serialization Ser2B0; pair writer, by-value byte temps passed directly instead of via stack copy
-007d0360  114   serialization Ser360; register schedule differs
+007d01f0  82    serialization Ser1F0; writes values through temporaries in the outgoing arg area, not reproduced; equiv: FAIL (WriteUint16 call arg: stack temp vs direct pointer)
+007d0250  81    serialization Ser250; float vector writer, prologue/register schedule differs; equiv: WEAK (99 valid, 66.7% coverage)
+007d02b0  49    serialization Ser2B0; pair writer, by-value byte temps passed directly instead of via stack copy; equiv: WEAK (520 valid, 48.3% coverage)
+007d0360  114   serialization Ser360; register schedule differs; equiv: UNSUPPORTED (only 0/235 inputs valid: fault(fetch), fake-arity)

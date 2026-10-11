@@ -72,10 +72,10 @@ struct cMouseCameraController {           // size 0x124
     float  mNearClip;                     // +0x11c
     float  mFarClip;                      // +0x120
 
-    void ConfigUpdated();                                 // @ 0x007d9460
-    bool SetConfigValue(unsigned id, const void* value);  // @ 0x007d9c40
-    bool Begin(int unused, float anchorX, float anchorY, int unused2); // @ 0x007d9bd0
-    cMouseCameraController(cPropertyList* config);          // @ 0x007d9fb0
+    void ConfigUpdated();                                 // 0x007d9460
+    bool SetConfigValue(unsigned id, const void* value);  // 0x007d9c40
+    bool Begin(int unused, float anchorX, float anchorY, int unused2); // 0x007d9bd0
+    cMouseCameraController(cPropertyList* config);          // 0x007d9fb0
 };
 
 // @ 0x007d9a50  quaternion (x,y,z,w) -> 3x3 matrix, then Sub_6a3430(out, matrix)

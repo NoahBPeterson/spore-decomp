@@ -1,4 +1,4 @@
-0070efa0  250   SP::cMaterialManager::ReadShaders; io/vtable shape differs
+0070efa0  250   SP::cMaterialManager::ReadShaders; io/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
 0070f320  90    vector<AutoRefCount> teardown; EH frame missing
 0070f390  90    vector<AutoRefCount> teardown; EH frame missing
 0070f520  64    atomic weak-release range; deferred-release sequence differs

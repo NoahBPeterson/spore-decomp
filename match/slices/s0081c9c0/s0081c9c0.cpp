@@ -88,6 +88,7 @@ struct Variant {
   Variant* Reset(int v);
   Variant* Set20(int v);
 };
+// @ 0x0081d7a0
 Variant* Variant::Reset(int v) {
   if (flags & 4) Destruct(1);
   unsigned short f = flags & 2;
@@ -96,6 +97,7 @@ Variant* Variant::Reset(int v) {
   f0 = v; f4 = 1; f8 = 1;
   return this;
 }
+// @ 0x0081da30
 Variant* Variant::Set20(int v) {
   if (flags & 4) Destruct(1);
   unsigned short f = flags & 2;
@@ -117,6 +119,7 @@ struct MB {
   void Do030();
   void Reset();
 };
+// @ 0x0081cce0
 void MB::Reset() {
   int* h = (int*)((char*)this + 0x3c);
   if (*(int**)((char*)this + 0x40) != h) {
@@ -143,7 +146,9 @@ struct D3 {
   D3* Init(int arg);
   D3* Init2(int arg);
 };
+// @ 0x0081ddd0
 D3* D3::Init(int arg) { w10 = 2; w12 = 0x33; Call5(0x33, 0, arg, 0x10, 1); return this; }
+// @ 0x0081de30
 D3* D3::Init2(int arg) { w10 = 2; w12 = 0x34; Call5(0x34, 0, arg, 0x10, 1); return this; }
 
 // ===========================================================================

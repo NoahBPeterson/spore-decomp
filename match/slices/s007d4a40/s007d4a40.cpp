@@ -41,8 +41,10 @@ struct Matrix3 { float m[9]; void Assign(const Matrix3& o); };     // 0x41cb40
 struct ElemPart { void Init(void* a); };                           // 0x537f40
 void ElemCtor(void* self, const void* src);                       // 0x79a0d0
 
+struct TransformInit { void* Init(const void* src, void* a, char flag); };
 // @ 0x007d4a40
-void* InitTransform(void* self, const void* src, void* a, char flag) {
+void* TransformInit::Init(const void* src, void* a, char flag) {
+    void* self = this;
     char* s = (char*)self; const char* o = (const char*)src;
     s[0] = flag;
     *(uint16_t*)(s + 4) = *(const uint16_t*)(o);
@@ -144,9 +146,12 @@ void cEffectParams::Tick(void* arg) {
     (void)s; (void)arg;
 }
 
+struct TransformBig { void* Init(int a, unsigned pair, float f1, float f2, float f3, float f4,
+                       const Matrix3* m, Obj* obj); };
 // @ 0x007d5240
-void* InitTransformBig(void* self, int a, unsigned pair, float f1, float f2, float f3, float f4,
+void* TransformBig::Init(int a, unsigned pair, float f1, float f2, float f3, float f4,
                        const Matrix3* m, Obj* obj) {
+    void* self = this;
     char* s = (char*)self;
     *(uint16_t*)(s) = (uint16_t)pair;
     *(uint16_t*)(s + 2) = (uint16_t)(pair >> 16);

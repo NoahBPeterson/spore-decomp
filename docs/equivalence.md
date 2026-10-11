@@ -63,7 +63,8 @@ Only `/O2`-vs-`/Od` and `/fp:` change behavior in practice.
 
 1. **Our function**: compile, then find our symbol for the VA: the manifest row, else the name in
    `symbols/slices/<id>.txt` or after the `// @ 0x<va>` marker, matched against the object's
-   symbols (an implausible size, more than 5x off, is rejected). A file-local `static inline`
+   symbols. Size (more than 5x off) only breaks ties between several same-name candidates; a unique
+   name match is accepted at any size, since a thin wrapper around a non-inlined helper is complete source. A file-local `static inline`
    helper defined between the marker and the free function it labels is skipped.
 2. **Relocations** (`tools/difftest/resolve.py`): every symbol our function, its local helpers and
    its data reference is mapped to the ORIGINAL address, so both sides call the same real callees

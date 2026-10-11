@@ -26,6 +26,7 @@ int __cdecl FUN_00eca0f0(int a) { (void)a; return 1; }
 void __cdecl FUN_00eca1d0(void) {}
 
 // ---------------------------------------------------------------- 0x00eca2f0
+// @ 0x00eca2f0
 void __cdecl FUN_00eca2f0(void)
 {
     void* layout = *(void**)g_16c7584;

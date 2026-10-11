@@ -44,7 +44,9 @@ int   __cdecl FUN_00f25720(void*);                      // 0x00f25720
 void* __cdecl FUN_00f3e8a0(void*);                      // 0x00f3e8a0
 void  __cdecl cSPBoundingBox_AddBoundingBox(void*, int, int);  // 0x0067cad0
 void  __cdecl SPUIHelpers_Renderer(void*, void*, void*);       // 0x0080d710
-struct ILayout { void* FindWindowByID(unsigned, int); };   // 0x008105b0 (thiscall: this=[g])
+struct ILayout {
+    void* FindWindowByID(unsigned, int);   // 0x008105b0 (thiscall: this=[g])
+};
 void  __cdecl FUN_0081b650(void*, int, int);             // 0x0081b650
 void  __cdecl FUN_00f25190(void*, void*);                // 0x00f25190
 void  __cdecl FUN_00f28b80(void*);                       // 0x00f28b80
@@ -62,6 +64,7 @@ typedef int   (__thiscall *FB_i)(void*, int);
 typedef bool  (__thiscall *FBb_i)(void*, int);
 
 // ---------------------------------------------------------------- 0x00ec6e00
+// @ 0x00ec6e00
 void FUN_00ec6e00(void)
 {
     *(int*)g_16c7574 = 0;
@@ -91,6 +94,7 @@ unsigned char FUN_00ec6e70(int i)
 }
 
 // ---------------------------------------------------------------- 0x00ec6ea0
+// @ 0x00ec6ea0
 int FUN_00ec6ea0(int** param_1, int* param_2)
 {
     int* piVar3 = (int*)param_1[0];
@@ -111,6 +115,7 @@ int FUN_00ec6ea0(int** param_1, int* param_2)
 
 // ---------------------------------------------------------------- 0x00ec6ee0
 struct UIWnd { void* vtbl; };
+// @ 0x00ec6ee0
 void FUN_00ec6ee0(int* param_1, int* param_2, char param_3)
 {
     char* a = (char*)((FV_i)(*(void***)param_1)[0xa8 / 4])(param_1, 0);
@@ -133,6 +138,7 @@ void FUN_00ec6ee0(int* param_1, int* param_2, char param_3)
 }
 
 // ---------------------------------------------------------------- 0x00ec6fc0
+// @ 0x00ec6fc0
 void FUN_00ec6fc0(int param_1, int param_2, int* param_3)
 {
     char* piVar3 = param_3 ? (char*)((FV_i)(*(void***)param_3)[0xc / 4])(param_3, 0xf15f4bd) : 0;
@@ -153,6 +159,7 @@ void FUN_00ec70a0(int param)
 
 // ---------------------------------------------------------------- 0x00ec70d0
 struct Row { char used; char pad[3]; int a4; char pad2[0x18]; int a20; };
+// @ 0x00ec70d0
 void FUN_00ec70d0(int param_1, int param_2, int* param_3)
 {
     int v0, v1;
@@ -173,6 +180,7 @@ void FUN_00ec70d0(int param_1, int param_2, int* param_3)
 }
 
 // ---------------------------------------------------------------- 0x00ec7320
+// @ 0x00ec7320
 void FUN_00ec7320(int* param_1)
 {
     char* p1 = (char*)((FV_1)(*(void***)param_1)[0x10 / 4])(param_1);
@@ -185,6 +193,7 @@ void FUN_00ec7320(int* param_1)
 }
 
 // ---------------------------------------------------------------- 0x00ec73c0
+// @ 0x00ec73c0
 bool FUN_00ec73c0(int param_1)
 {
     char* g = (char*)*g_16c7584;
@@ -203,6 +212,7 @@ bool FUN_00ec73c0(int param_1)
 }
 
 // ---------------------------------------------------------------- 0x00ec7490
+// @ 0x00ec7490
 bool FUN_00ec7490(int* param_1, int param_2, char param_3)
 {
     if (param_1 == 0)
@@ -219,6 +229,7 @@ bool FUN_00ec7490(int* param_1, int param_2, char param_3)
 }
 
 // ---------------------------------------------------------------- 0x00ec74e0
+// @ 0x00ec74e0
 bool FUN_00ec74e0(void)
 {
     char* iVar1 = *(char**)(*(char**)((char*)g_16c7aa4 + 0x14) + 0x18);
@@ -277,6 +288,7 @@ void FUN_00ec7770(int a, int b, int c, int d, int e)
 }
 
 // ---------------------------------------------------------------- 0x00ec78e0
+// @ 0x00ec78e0
 void FUN_00ec78e0(int param_1, int param_2)
 {
     char* w = (char*)((ILayout*)*g_16c7584)->FindWindowByID(param_2, 1);
@@ -305,6 +317,7 @@ void FUN_00ec7a80(void)
 }
 
 // ---------------------------------------------------------------- 0x00ec7b90
+// @ 0x00ec7b90
 void FUN_00ec7b90(int param_1, int* param_2)
 {
     (void)param_1; (void)param_2;

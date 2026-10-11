@@ -46,6 +46,7 @@ void SP::FlushCache(int x)
 // ---------------------------------------------------------------------------
 // 006ad800  void FUN_006ad800(int n)
 // ---------------------------------------------------------------------------
+// @ 0x006ad800
 void FUN_006ad800(int n)
 {
     int c = n;
@@ -132,6 +133,7 @@ struct JobManager {
     int ContinueJob();   // 0x68f970
 };
 
+// @ 0x006ae280
 bool __fastcall FUN_006ae280(int self)
 {
     JobManager* j = *(JobManager**)(self + 0xc);
@@ -218,6 +220,7 @@ unsigned char __fastcall FUN_006ae0f0(void** self)
 // ---------------------------------------------------------------------------
 // 006ae2f0  bool FUN_006ae2f0(char* p1, void* p2)
 // ---------------------------------------------------------------------------
+// @ 0x006ae2f0
 bool FUN_006ae2f0(char* p1, void* p2)
 {
     void (*oldFn)(void*);
@@ -253,6 +256,7 @@ struct Self {
     bool Get(void** out);
 };
 
+// @ 0x006ae4c0
 bool Self::Get(void** out)
 {
     ObjX* p = *(ObjX**)((char*)this + 0xc);
@@ -326,6 +330,7 @@ struct Sub26b0{ void fn(); };               // FUN_006926b0
 // ---------------------------------------------------------------------------
 // 006ad890  ctor
 // ---------------------------------------------------------------------------
+// @ 0x006ad890
 void __fastcall FUN_006ad890(void* self, void* a)
 {
     *(int*)((char*)self + 8) = 0;
@@ -343,6 +348,7 @@ void __fastcall FUN_006ad890(void* self, void* a)
 // ---------------------------------------------------------------------------
 // 006adbf0  scalar deleting dtor of the KRMap singleton
 // ---------------------------------------------------------------------------
+// @ 0x006adbf0
 void __fastcall FUN_006adbf0(void* self, unsigned char flag)
 {
     *(void**)self = &vtbl_14093cc;
@@ -397,6 +403,7 @@ void* __fastcall FUN_006adda0(void* a)
 // ---------------------------------------------------------------------------
 // 006ae120  dtor (vtable reset + two releases)
 // ---------------------------------------------------------------------------
+// @ 0x006ae120
 void __fastcall FUN_006ae120(void* self)
 {
     void* p = *(void**)((char*)self + 0x10);
@@ -412,6 +419,7 @@ void __fastcall FUN_006ae120(void* self)
 // ---------------------------------------------------------------------------
 // 006ae190  dtor
 // ---------------------------------------------------------------------------
+// @ 0x006ae190
 void __fastcall FUN_006ae190(void* self)
 {
     void* p = *(void**)((char*)self + 0xc);
@@ -426,6 +434,7 @@ void __fastcall FUN_006ae190(void* self)
 // ---------------------------------------------------------------------------
 // 006ae210  rbtree_node dtor
 // ---------------------------------------------------------------------------
+// @ 0x006ae210
 void __fastcall FUN_006ae210(void* self)
 {
     *(void**)self = &vtbl_14094b4;
@@ -440,6 +449,7 @@ void __fastcall FUN_006ae210(void* self)
 // ---------------------------------------------------------------------------
 // 006ae2a0  AutoRefCount::operator=
 // ---------------------------------------------------------------------------
+// @ 0x006ae2a0
 void* __fastcall FUN_006ae2a0(void* self, void* p)
 {
     int* old = *(int**)self;
@@ -464,6 +474,7 @@ void* __fastcall FUN_006ae2a0(void* self, void* p)
 // ---------------------------------------------------------------------------
 // 006ae510  Resource::Async ctor
 // ---------------------------------------------------------------------------
+// @ 0x006ae510
 void* __fastcall FUN_006ae510(void* self, void* arg)
 {
     *(void**)self = &vtbl_13fa72c;

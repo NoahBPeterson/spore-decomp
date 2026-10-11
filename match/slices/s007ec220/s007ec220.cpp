@@ -4,7 +4,7 @@
 #include "types.h"
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
-                     const char* file, int line);
+                     const char* file, int line); // 0x00f473a0
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags,
                    const char* file, int line);
 void operator delete(void* p); // 0x00f47380
@@ -274,20 +274,23 @@ extern "C" void WriteSwarmEffect(void* writer, char* e) {
   WritePlane(writer, e + 0x6c);
 }
 
-// @ 0x007EC7F0  eastl::vector<Vector3>::DoInsertValues
+// eastl::vector<Vector3>::DoInsertValues (0x007EC7F0)
 struct Vec3VecFull {
   Vec3* mpBegin;  // +0x0
   Vec3* mpEnd;    // +0x4
   Vec3* mpCapacity;  // +0x8
   const char* mpName;  // +0xc
   uint32_t mFlags;     // +0x10
+  void Vec3Insert(Vec3* position, uint32_t n, Vec3* value);
 };
 void Vec3Copy(Vec3* dst, Vec3* src) {
   dst->x = src->x;
   dst->y = src->y;
   dst->z = src->z;
 }
-extern "C" void Vec3Insert(Vec3VecFull* v, Vec3* position, uint32_t n, Vec3* value) {
+// @ 0x007EC7F0
+void Vec3VecFull::Vec3Insert(Vec3* position, uint32_t n, Vec3* value) {
+  Vec3VecFull* v = this;
   uint32_t nPosition = (uint32_t)((char*)position - (char*)v->mpBegin) / 0xc;
   uint32_t nCount = (uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc;
   if ((uint32_t)((char*)v->mpCapacity - (char*)v->mpEnd) / 0xc < n) {
@@ -296,7 +299,7 @@ extern "C" void Vec3Insert(Vec3VecFull* v, Vec3* position, uint32_t n, Vec3* val
     if (nOldCap == 0) nNewCap = 1;
     uint32_t nNeed = nOldCap + n;
     if (nNeed < nNewCap) nNeed = nNewCap;
-    Vec3* data = nNeed ? (Vec3*)operator new[](nNeed * 0xc, "App", 0, 0, "allocator.h", 0xd1) : 0;
+    Vec3* data = nNeed ? (Vec3*)operator new[](nNeed * 0xc, "App", 0, 0, "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
     Vec3* d = data;
     for (Vec3* p = v->mpBegin; p != position; ++p, ++d) Vec3Copy(d, p);
     for (uint32_t i = 0; i < n; ++i, ++d) Vec3Copy(d, value);

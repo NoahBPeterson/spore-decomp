@@ -250,7 +250,6 @@ int f94a0(int p1, int p2, int p3)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006e9530
 struct Vec3 { float x, y, z; };
 static inline Vec3 MakeV3(float c)
 {
@@ -258,6 +257,7 @@ static inline Vec3 MakeV3(float c)
     v.x = c; v.y = c; v.z = c;
     return v;
 }
+// @ 0x006e9530
 void S5::m9530()
 {
     float c = g1533c74;

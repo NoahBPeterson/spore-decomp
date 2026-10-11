@@ -135,6 +135,7 @@ struct StdBase { void ctor(); void dtor(); };
 // ---------------------------------------------------------------- 0x00830080
 struct VisitCtx { uint8_t b; char pad[3]; uint32_t v; };
 
+// @ 0x00830080
 void FUN_00830080(int *param_1)
 {
     int *obj;
@@ -163,6 +164,7 @@ struct W20 {
     bool  SetThing(void *p);   // 0x008300e0
 };
 
+// @ 0x008300e0
 bool W20::SetThing(void *p)
 {
     void *old = f20;
@@ -189,6 +191,7 @@ struct FactoryRegistry {
     int *CreateInstance(int **out, int a1, int a2, int a3);   // 0x008304c0
 };
 
+// @ 0x008304c0
 int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
 {
     int *p = (int *)((int (__thiscall *)(void *, int, int, int, int))(*(void ***)this)[0x20 / 4])
@@ -207,6 +210,7 @@ int *FactoryRegistry::CreateInstance(int **out, int a1, int a2, int a3)
 }
 
 // ---------------------------------------------------------------- 0x008306e0
+// @ 0x008306e0
 float *FUN_008306e0(float *dst, float *a, float *b, float *c)
 {
     float f1 = a[0], f2 = a[1], f3 = a[2], f4 = a[3];
@@ -241,6 +245,7 @@ struct ImageInfo {
 
 extern char g_vtblContentValidation;   // 0x13ec458
 
+// @ 0x00830810
 ImageInfo *ImageInfo::Construct()
 {
     vptr4 = &g_vtblContentValidation;
@@ -273,6 +278,7 @@ struct SmallSet {
     void  Do(int param_2);   // 0x00830910
 };
 
+// @ 0x00830910
 void SmallSet::Do(int param_2)
 {
     FUN_008304a0((void *)param_2, (char *)this - 4);
@@ -294,6 +300,7 @@ struct Drawable {
     void Destroy();                // 0x00830b30
 };
 
+// @ 0x00830950
 Drawable *Drawable::Construct()
 {
     ((StdBase *)this)->ctor();
@@ -332,6 +339,7 @@ Drawable *Drawable::Construct()
 }
 
 // ---------------------------------------------------------------- 0x00830b30
+// @ 0x00830b30
 void Drawable::Destroy()
 {
     *(void **)this = &g_vtblDrawable;

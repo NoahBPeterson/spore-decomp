@@ -3,11 +3,11 @@
 00707370 283 cLightingWorld::UpdateLocalLightSample: complete reconstruction; copy loop and shader-data cache addressing diverge
 00707540 7 SlotVec28::Release: complete; accumulator register for slot state word differs (edi vs edx)
 00707590 7 SlotVec28::ReleaseDestroy: complete; same slot-state accumulator register difference
-007077f0 179 Vec4::operator=(DoAssignFromIterator): complete; register allocation of this/x/locals differs
+007077f0 179 Vec4::operator=(DoAssignFromIterator): complete; register allocation of this/x/locals differs; equiv WEAK (462 valid, 41.8% cov)
 00707a00 60 Vec4::DoInsertValues(position,source): complete; cursor vs parameter register allocation and frame slot differ
 00707a50 259 Vec32::DoInsertValue: complete eastl DoInsertValue; 32-byte element copy/realloc schedule diverges
 00707b70 374 Vec4::InsertValuesAt: complete eastl DoInsertValues(position,n,value); fill/copy scheduling diverges
 00707d10 377 Vec8::DoInsertValues: complete reconstruction; helper split and register schedule diverge
 00707ed0 4 SlotVecC4::DestroyEntry: complete; two independent loads scheduled in opposite order
 00707f40 1 Deque38::PopDestroy: complete; signed `>>31 & 1` emits sar where original emits shr
-00707fd0 290 VecSHO::operator=: complete eastl DoAssignFromIterator; 0x24-stride divide and helper args diverge
+00707fd0 290 VecSHO::operator=: complete eastl DoAssignFromIterator; 0x24-stride divide and helper args diverge; equiv WEAK (526 valid, 44.3% cov)

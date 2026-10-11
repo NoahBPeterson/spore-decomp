@@ -10,7 +10,7 @@
 0108c790 0 havok-equivalent
 0108c7e0 0 havok-equivalent
 0108c950 0 havok-equivalent
-0108c9d0 0 havok-equivalent
+0108c9d0 0 havok-equivalent; equiv.py WEAK (449 valid, 62.5% cov)
 0108ca40 0 havok-equivalent
 0108cb20 0 havok-equivalent
 0108cbe0 0 havok-equivalent

@@ -155,9 +155,19 @@ cCameraManager::cCameraManager() {
 
 // ===========================================================================
 // @ 0x007c7770
-void BitLengthInit(int self, int value, u32 mask) {
-    *(int*)(self + 4) = value;
-    *(u32*)(self + 8) = mask;
+struct cBitLength {
+    int pad0;
+    int mValue;      // +0x04
+    u32 mMask;       // +0x08
+    int pad0c;
+    u32 mTableA;     // +0x10
+    u32 mTableB;     // +0x14
+    int mLimit;      // +0x18
+    void BitLengthInit(int value, u32 mask);
+};
+void cBitLength::BitLengthInit(int value, u32 mask) {
+    mValue = value;
+    mMask = mask;
     int bits = 0;
     if (mask & 0xffff0000) { bits = 0x10; mask >>= 16; }
     if (mask & 0xff00)     { bits += 8;  mask >>= 8; }
@@ -165,9 +175,9 @@ void BitLengthInit(int self, int value, u32 mask) {
     if (mask & 0xc)        { bits += 2; }
     if (mask & 2)          { bits += 1; }
     u32 v = *(u32*)(UNK_01410e24 + bits * 4);
-    *(u32*)(self + 0x10) = v;
-    *(u32*)(self + 0x14) = v;
-    *(int*)(self + 0x18) = (1 << ((char)bits + 1 & 0x1f)) + -1;
+    mTableA = v;
+    mTableB = v;
+    mLimit = (1 << ((char)bits + 1 & 0x1f)) + -1;
 }
 // --- equivalence checker address annotations
 

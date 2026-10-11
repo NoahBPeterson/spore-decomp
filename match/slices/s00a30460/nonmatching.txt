@@ -1,4 +1,2 @@
 # va  diff-bytes  reason   flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
-00a30790  -   audio-config construction helper: complete implementation; difftest UNSUPPORTED (no object symbol matched the Ghidra/PDB name; names tried ['audio','FUN_00a30790'])
-00a30940  -   EA::Audio::System::PreloadConfigurations: complete implementation; difftest UNSUPPORTED (our symbol not mapped to PDB name)
 00a310b0  103 FixedVec11b::ctor (fixed_vector<uint32,250> ctor): equivalent; difftest WEAK (168 valid inputs, 100.0% coverage); MSVC emits an SEH frame in the original that we do not reproduce

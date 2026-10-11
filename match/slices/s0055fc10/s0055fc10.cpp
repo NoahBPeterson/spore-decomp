@@ -4,6 +4,13 @@
 
 namespace SP {
 
+struct EcxStubFc {
+    void FUN_0055fed0();
+    bool FUN_00560880(void* key, unsigned* out);
+    bool FUN_005608d0(uint32_t* key, void* c);
+};
+
+
 void FUN_00540470(void* p);
 void FUN_00547240(void* key);
 void FUN_00565040(void* out, void* val);
@@ -70,7 +77,8 @@ void FUN_0055fe60(void* this_, unsigned key, unsigned value) {
 }
 
 // @ 0x0055fed0
-void FUN_0055fed0(void* this_) {
+void EcxStubFc::FUN_0055fed0() {
+    void* this_ = this;
     FUN_004769b0(*(void**)((char*)this_ + 0x64), *(void**)((char*)this_ + 0x68));
     FUN_00561cc0(this_);
 }
@@ -88,7 +96,8 @@ bool FUN_00560470(void* this_, void* key, int flags) {
 }
 
 // @ 0x00560880
-bool FUN_00560880(void* this_, void* key, unsigned* out) {
+bool EcxStubFc::FUN_00560880(void* key, unsigned* out) {
+    void* this_ = this;
     int index = 0;
     FUN_005631e0(this_, &index);
     if (index == -1)
@@ -99,7 +108,8 @@ bool FUN_00560880(void* this_, void* key, unsigned* out) {
 }
 
 // @ 0x005608d0
-bool FUN_005608d0(void* this_, uint32_t* key, void* c) {
+bool EcxStubFc::FUN_005608d0(uint32_t* key, void* c) {
+    void* this_ = this;
     FUN_004769b0(*(void**)((char*)this_ + 0x144), *(void**)((char*)this_ + 0x148));
     FUN_00562280((char*)this_ + 0x144, c);
     uint32_t* it = *(uint32_t**)((char*)this_ + 0x144);

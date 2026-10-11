@@ -1,18 +1,18 @@
-00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs
-00804fc0  111 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm)
-00805040  26  GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply
-00805080  16  GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup)
-008050b0  39  WalkAll linked-interface walk; register/loop shape differs
-008050f0  66  WalkFind; same linked-interface walk shape differs
-00805150  26  Contains; vtable access via VSlot address form vs direct slot load
-008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention)
-00805200  19  AttrF14 getter; wrong calling convention of the FindByKey helper
-00805230  19  AttrF18 getter; wrong calling convention of the FindByKey helper
-00805260  21  AttrP1c getter; wrong calling convention of the FindByKey helper
-00805290  19  AttrF0c getter; wrong calling convention of the FindByKey helper
-008052c0  19  AttrF10 getter; wrong calling convention of the FindByKey helper
-00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling
-00805400  6   FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4
-00805490  13  CallVt8 thunk; vtable-slot load shape
-008054b0  37  FixedFree; chunk-head list update scheduling
-008054f0  10  InitAlloc; global store/arg order
+00804f80  17  Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns)
+00804fc0  111 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm); equiv UNSUPPORTED: 2 unresolved reference(s): ?H5c@IWnd@@QAEXH@Z, ?H90@IWnd@@QAEXXZ
+00805040  26  GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply; equiv WEAK: 1199 valid inputs (need 200), 93.8% coverage (need 100%% (all insns))
+00805080  16  GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup); equiv FAIL: 5/5 valid inputs mismatched
+008050b0  39  WalkAll linked-interface walk; register/loop shape differs; equiv FAIL: 5/13 valid inputs mismatched
+008050f0  66  WalkFind; same linked-interface walk shape differs; equiv FAIL: 5/75 valid inputs mismatched
+00805150  26  Contains; vtable access via VSlot address form vs direct slot load; equiv PASS: 771 valid inputs, 100.0% coverage (all insns)
+008051b0  52  FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
+00805200  19  AttrF14 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 318 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805230  19  AttrF18 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 319 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805260  21  AttrP1c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 275 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805290  19  AttrF0c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 292 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+008052c0  19  AttrF10 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 293 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805310  148 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
+00805400  6   FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
+00805490  13  CallVt8 thunk; vtable-slot load shape; equiv PASS: 1198 valid inputs, 100.0% coverage (all insns)
+008054b0  37  FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
+008054f0  10  InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina

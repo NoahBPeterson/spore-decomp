@@ -44,6 +44,7 @@ struct Vec3Vec {
   Vec3* mpBegin;     // +0x0
   Vec3* mpEnd;       // +0x4
   Vec3* mpCapacity;  // +0x8
+  void PushBack(Vec3* value);
 };
 
 // @ 0x007ED1B0  EA::Swarm::ScaleCurve
@@ -101,7 +102,8 @@ extern "C" void RegisterTextEffect(void* reg, void* parser) {
 }
 
 // @ 0x007ED3E0  vector<Vec3>::push_back
-extern "C" void Vec3PushBack(Vec3Vec* v, Vec3* value) {
+void Vec3Vec::PushBack(Vec3* value) {
+  Vec3Vec* v = this;
   Vec3* p = v->mpEnd;
   if (p < v->mpCapacity) {
     v->mpEnd = p + 1;
@@ -125,7 +127,7 @@ extern "C" void ColorCommand(int* self, EA::ArgScript::cArguments* args) {
   for (int i = 0; i < count; ++i) {
     Vec3 tmp;
     ArgToVec3(*(void**)((char*)self + 4), &tmp, 0);
-    Vec3PushBack(v, &tmp);
+    v->PushBack(&tmp);
   }
   (void)args;
 }
@@ -259,8 +261,31 @@ void FlagHolder::SetFlag(uint32_t v) {
   if (f14 != 0) f10->Recv(f18, v);
 }
 
+struct EffectObject {
+  void* vt;  // +0x0
+  void* vt2;
+  uint32_t f08;
+  uint32_t f0c;
+  uint32_t f10;
+  uint8_t f14;
+  uint8_t f15;
+  int32_t f18;
+  float f1c;
+  uint32_t f20;
+  uint32_t f24;
+  uint32_t f28;
+  uint32_t f2c;
+  char cString[0x14];  // +0x30
+  uint32_t f44;
+  EffectObject* Init(void* p);
+  void Destroy();
+  void Update();
+  uint32_t Handler(int msg, int* obj);
+};
+
 // @ 0x007EDC90  destructor
-extern "C" void EffectDtor(void** self) {
+void EffectObject::Destroy() {
+  void** self = (void**)this;
   if (self[0x11]) {
     typedef void(__thiscall * F0)(void*);
     ((F0)VSLOT(self[0x11], 4))(self[0x11]);
@@ -304,7 +329,8 @@ void ActiveObject::Deactivate(int unused) {
 }
 
 // @ 0x007EDD80  update
-extern "C" void EffectUpdate(int self) {
+void EffectObject::Update() {
+  int self = (int)(size_t)this;
   int p = *(int*)(self + 0x44);
   uint16_t val;
   if (p == 0) {
@@ -325,25 +351,8 @@ extern "C" void EffectUpdate(int self) {
 }
 
 // @ 0x007EDDE0  constructor
-struct EffectObject {
-  void* vt;  // +0x0
-  void* vt2;
-  uint32_t f08;
-  uint32_t f0c;
-  uint32_t f10;
-  uint8_t f14;
-  uint8_t f15;
-  int32_t f18;
-  float f1c;
-  uint32_t f20;
-  uint32_t f24;
-  uint32_t f28;
-  uint32_t f2c;
-  char cString[0x14];  // +0x30
-  uint32_t f44;
-  EffectObject(void* p);
-};
-extern "C" EffectObject* EffectObjectCtor(EffectObject* self, void* p) {
+EffectObject* EffectObject::Init(void* p) {
+  EffectObject* self = this;
   self->f08 = 0;
   self->f1c = 1.0f;
   self->f0c = (uint32_t)(size_t)p;
@@ -360,7 +369,11 @@ extern "C" EffectObject* EffectObjectCtor(EffectObject* self, void* p) {
 }
 
 // @ 0x007EDEB0  transform update
-extern "C" void TransformUpdate(char* self, char* src, uint8_t* params) {
+struct TransformObj {
+  void Update(char* src, uint8_t* params);
+};
+void TransformObj::Update(char* src, uint8_t* params) {
+  char* self = (char*)this;
   *(uint32_t*)(self + 0x20) = *(uint32_t*)(src + 4);
   *(uint32_t*)(self + 0x24) = *(uint32_t*)(src + 8);
   *(uint32_t*)(self + 0x28) = *(uint32_t*)(src + 0xc);
@@ -390,7 +403,8 @@ extern "C" void TransformUpdate(char* self, char* src, uint8_t* params) {
 }
 
 // @ 0x007EDFF0  message handler
-extern "C" uint32_t EffectHandler(int self, int msg, int* obj) {
+uint32_t EffectObject::Handler(int msg, int* obj) {
+  int self = (int)(size_t)this;
   uint32_t eax = 0;
   if (msg == 8) {
     typedef int*(__thiscall * F0)(void*);
@@ -406,7 +420,7 @@ extern "C" uint32_t EffectHandler(int self, int msg, int* obj) {
       extern void FUN_006ee940(int);
       FUN_006ee940(eax);
       *(int*)(self + 0x18) = -1;
-      EffectUpdate(self);
+      Update();
       eax = *(uint32_t*)(self + 0x18);
     }
   }

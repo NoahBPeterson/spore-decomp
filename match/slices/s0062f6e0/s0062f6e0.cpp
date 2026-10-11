@@ -804,7 +804,6 @@ int wstring16::compare(uint32_t pos, uint32_t n, const wchar_t* p) const
     return CompareW(mpBegin + pos, mpBegin + pos + min_alt(len, n), p, p + CharStrlen(p));
 }
 
-// @ 0x006306f0
 struct LocaleMsgBase {
     virtual ~LocaleMsgBase() {}
 };
@@ -812,6 +811,7 @@ struct LocaleMsg : LocaleMsgBase {
     uint32_t mSlots[0x2c / 4 - 1 + 1];   // placeholder up to +0x30 (slots are 8 bytes apiece from +8)
     ~LocaleMsg();
 };
+// @ 0x006306f0
 LocaleMsg::~LocaleMsg()
 {
     uint32_t mask = 1;

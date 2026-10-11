@@ -5,3 +5,4 @@
 00813b20  -  partial: cSPUITooltipManager::Init - property/hash + dictionary loop summarised
 00813e70  -  partial: cSPUIMainWin::DoMessage - message dispatch / MessageBasicRC envelope summarised
 008141b0  -  partial: cSPUIMainWin constructor - only vtable stores + field zeroing
+00814090  -  partial: cSPUIMainWin::KeyHandler - no function defined in source (only symbol-map entry); not testable until written

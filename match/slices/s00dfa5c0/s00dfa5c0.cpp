@@ -126,8 +126,10 @@ void __stdcall F_dfb240(unsigned int a, unsigned int b)
 }
 
 // @ 0x00dfb380
-void F_dfb380(unsigned int* v)
+struct Vec44 { unsigned int b, e; void Dtor(); };
+void Vec44::Dtor()
 {
+    unsigned int* v = (unsigned int*)this;
     unsigned int end = v[1];
     for (unsigned int p = *v; p < end; p += 0x44)
         ((F28*)(p + 4))->M();

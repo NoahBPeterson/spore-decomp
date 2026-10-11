@@ -1,0 +1,1 @@
+00478620  0  introsort range helper: only the depth computation is reconstructed (no sort/insertion calls; original is 0xBC bytes); equiv UNSUPPORTED: our symbol is far smaller than the original, not a complete definition

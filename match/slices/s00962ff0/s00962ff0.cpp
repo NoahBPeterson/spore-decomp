@@ -30,6 +30,7 @@ int __cdecl FUN_00962ff0(int p2, int p3, int p4, int p5)
 }
 
 // ------------------------------------------------------------------ 0x963060
+// @ 0x00963060
 int __cdecl FUN_00963060(int p1, int p2, int p3, int p4, int p5, int p6)
 {
     ResDesc desc;

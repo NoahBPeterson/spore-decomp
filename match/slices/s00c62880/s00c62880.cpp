@@ -145,19 +145,21 @@ uint32_t __fastcall M_GetTagString(void* self, int _e, int key, void* out) {
 // @ 0x00c63a10
 void FUN_00c63a10() { FUN_00ebb720(0, 0); }
 
-// @ 0x00c639d0 / 0x00c63a20 / 0x00c639a0 interface adjustors
+// @ 0x00c639d0 interface adjustor
 void* __fastcall M_C639d0(void* self, int _e, void* id) {
   if (id == (void*)0x76c67df) return self;
   if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
   if (id == (void*)0x7a309fb) return self;
   return (void*)FUN_00b18460();
 }
+// @ 0x00c63a20 interface adjustor
 void* __fastcall M_C63a20(void* self, int _e, void* id) {
   if (id == (void*)0x771ad6a) return self;
   if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
   if (id == (void*)0x7a309fb) return self;
   return (void*)FUN_00b18460();
 }
+// @ 0x00c639a0 interface adjustor
 void* __fastcall M_C639a0(void* self, int _e, void* id) {
   if (id == (void*)0x1186577) return self ? (char*)self + 0x34 : 0;
   if (id != (void*)0x7a309fb) return (void*)FUN_00b18460();

@@ -7,5 +7,5 @@
 006a1b00  59   eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
 006a1bd0  41   SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs
 006a1de0  57   SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps
-006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes)
+006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes); equiv FAIL (fake-arity: no call site before 460e0000; ours failed where original succeeded)
 006a2010  411  eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes)

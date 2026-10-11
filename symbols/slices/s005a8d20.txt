@@ -5,5 +5,5 @@
 005a9200 SP::Editor::Launch  # (cEditorLaunchData*) PDB name on card
 005a94d0 SP::Editor::Launch  # (config, key, callerID, callerData, validation bitset, canSwitch) builds cEditorLaunchData, calls Launch(data); dev-build has two Launch overloads
 005a97a0 eastl::rbtree<uint,pair<uint const,vector<AutoRefCount<SP::cPropertyList>>>>::DoNukeSubtree  # map at 0x0151102C
-005a9930 eastl::map<uint,vector<AutoRefCount<SP::cPropertyList>>>::operator[]
+005a9930 ?A?$map  # eastl::map<uint,vector<AutoRefCount<SP::cPropertyList>>>::operator[] (base identifier form so the name matcher finds it)
 005a9c40 IntersectRaySphere  # origin/dir/center/radius/out distance; byte-exact (name descriptive)

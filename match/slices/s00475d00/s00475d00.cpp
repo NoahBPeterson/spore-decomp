@@ -28,54 +28,68 @@ struct E64 { uint q[16]; };                       // 64-byte trivially-copyable 
 // range helpers (out of line, relocations masked)
 void* MoveRefs(void* first, void* last, void* dest);         // @ 0x0047c780
 void  MoveElem29(Elem29c* dst, Elem29c* src);                // @ 0x0047cf00
-template<class T> T* UninitCopyRange(T* first, T* last, T* dest);   // out of line
 
-template<class T, int A>
-struct vec {
-    T* mpBegin; T* mpEnd; T* mpCapacity; void* mAllocator;
-    T* DoAllocate(uint n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), A, 0) : 0; }
-    void DoFree(T* p) { if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p); }
-    void DoInsertValue(T* position, const T& value);
-    T* erase(T* first, T* last);
-};
-
-template<class T, int A>
-void vec<T,A>::DoInsertValue(T* position, const T& value)
-{
-    if (mpEnd != mpCapacity) {
-        const T& v = value;                       // handle self-insert (see disasm)
-        T* pEnd = mpEnd;
-        if (pEnd) *pEnd = *(pEnd - 1);
-        T* p = pEnd;
-        T* q = pEnd - 1;
-        while (q != position) { p[-1] = q[-1]; --p; --q; }
-        *position = v;
-        ++mpEnd;
-    } else {
-        const uint oldSize = (uint)(mpEnd - mpBegin);
-        uint newSize = oldSize ? oldSize * 2 : 1;
-        T* pNewData = DoAllocate(newSize);
-        T* p = UninitCopyRange(mpBegin, position, pNewData);
-        if (p) *p = value;
-        T* pNewEnd = UninitCopyRange(position, mpEnd, p + 1);
-        DoFree(mpBegin);
-        mpBegin = pNewData;
-        mpEnd = pNewEnd;
-        mpCapacity = pNewData + newSize;
-    }
+// The eastl::vector instantiations are told apart by name (the checker's symbol lookup ignores
+// template arguments), so the template is stamped out once per instantiated element/alignment.
+#define DEFINE_VEC(NAME) \
+template<class T, int A> \
+struct NAME { \
+    T* mpBegin; T* mpEnd; T* mpCapacity; void* mAllocator; \
+    T* DoAllocate(uint n) { return n ? (T*)EASTL_Allocate(&mAllocator, n * sizeof(T), A, 0) : 0; } \
+    void DoFree(T* p) { if (p && ((int*)p)[-1]) EASTL_allocator_deallocate(p); } \
+    void DoInsertValue(T* position, const T& value); \
+    T* erase(T* first, T* last); \
+    static T* Copy(T* first, T* last, T* dest);   /* out of line; address per instantiation below */ \
+}; \
+ \
+template<class T, int A> \
+void NAME<T,A>::DoInsertValue(T* position, const T& value) \
+{ \
+    if (mpEnd != mpCapacity) { \
+        const T& v = value; \
+        T* pEnd = mpEnd; \
+        if (pEnd) *pEnd = *(pEnd - 1); \
+        T* p = pEnd; \
+        T* q = pEnd - 1; \
+        while (q != position) { p[-1] = q[-1]; --p; --q; } \
+        *position = v; \
+        ++mpEnd; \
+    } else { \
+        const uint oldSize = (uint)(mpEnd - mpBegin); \
+        uint newSize = oldSize ? oldSize * 2 : 1; \
+        T* pNewData = DoAllocate(newSize); \
+        T* p = Copy(mpBegin, position, pNewData); \
+        if (p) *p = value; \
+        T* pNewEnd = Copy(position, mpEnd, p + 1); \
+        DoFree(mpBegin); \
+        mpBegin = pNewData; \
+        mpEnd = pNewEnd; \
+        mpCapacity = pNewData + newSize; \
+    } \
+} \
+ \
+template<class T, int A> \
+T* NAME<T,A>::erase(T* first, T* last) \
+{ \
+    T* newEnd = first; \
+    for (T* q = last; q != mpEnd; ++q, ++newEnd) \
+        *newEnd = *q; \
+    for (T* r = newEnd; r < mpEnd; ++r) \
+        r->~T(); \
+    mpEnd -= (uint)(last - first); \
+    return first; \
 }
 
-template<class T, int A>
-T* vec<T,A>::erase(T* first, T* last)
-{
-    T* newEnd = first;
-    for (T* q = last; q != mpEnd; ++q, ++newEnd)
-        *newEnd = *q;
-    for (T* r = newEnd; r < mpEnd; ++r)
-        r->~T();
-    mpEnd -= (uint)(last - first);
-    return first;
-}
+DEFINE_VEC(vec)      // E64,4
+DEFINE_VEC(vecE8a4)  // E8,4
+DEFINE_VEC(vecE8a2)  // E8,2
+DEFINE_VEC(vecE16)   // E16,4
+
+// the out-of-line range copy each instantiation calls (a different original function per instantiation)
+template<> E8*  vecE8a4<E8, 4>::Copy(E8* first, E8* last, E8* dest);       // 0x004763a0
+template<> E8*  vecE8a2<E8, 2>::Copy(E8* first, E8* last, E8* dest);       // 0x004554f0
+template<> E16* vecE16<E16, 4>::Copy(E16* first, E16* last, E16* dest);    // 0x00476950
+template<> E64* vec<E64, 4>::Copy(E64* first, E64* last, E64* dest);       // 0x0047a9a0
 
 // ---- 4-byte refcounted vector erase ----------------------------------------------------
 struct RefVec4 {
@@ -168,11 +182,11 @@ uint* Vec4::erase(uint* first, uint* last)
 
 // ------------------------------ explicit instantiations ---------------------------------
 // @ 0x00476000
-template void vec<E8, 4>::DoInsertValue(E8*, const E8&);
+template void vecE8a4<E8, 4>::DoInsertValue(E8*, const E8&);
 // @ 0x00476440
-template void vec<E8, 2>::DoInsertValue(E8*, const E8&);
+template void vecE8a2<E8, 2>::DoInsertValue(E8*, const E8&);
 // @ 0x00476680
-template void vec<E16, 4>::DoInsertValue(E16*, const E16&);
+template void vecE16<E16, 4>::DoInsertValue(E16*, const E16&);
 // @ 0x00476ae0
 template void vec<E64, 4>::DoInsertValue(E64*, const E64&);
 // @ 0x00476a40

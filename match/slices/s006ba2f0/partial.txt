@@ -2,3 +2,5 @@
 006baba0 229 LogManager-ish ctor - skeleton
 006bac90 223 unknown - skeleton
 006badd0 124 LogManager ctor - simplified (vcall omitted)
+006baa70 255 XForm2::PreRotateY - stub (count++ only), too small vs original for symbol lookup; equiv UNSUPPORTED
+006baec0 246 SP::FindDirectoryUp - empty stub, too small vs original for symbol lookup; equiv UNSUPPORTED

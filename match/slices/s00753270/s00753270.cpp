@@ -140,11 +140,17 @@ void FUN_007541b0(int param_1, int param_2, int param_3) {
 }
 
 // @ 0x00754250  (94 bytes) two-short init + thunk ctor (EH)
-int FUN_00754250(int param_1, int param_2) {
-  *(uint16_t*)(param_1 + 0x10) = 2;
-  *(uint16_t*)(param_1 + 0x12) = 0x39;
+struct S_754250 {
+  char pad_0[0x10];
+  uint16_t m10;
+  uint16_t m12;
+  S_754250* FUN_00754250(int param_2);
+};
+S_754250* S_754250::FUN_00754250(int param_2) {
+  m10 = 2;
+  m12 = 0x39;
   FUN_0093dd80_754250(0x39, 0, param_2, 0x18, 1);
-  return param_1;
+  return this;
 }
 
 // @ 0x007542b0  (79 bytes)

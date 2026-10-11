@@ -106,6 +106,7 @@ void Loader::Wrap670(int) {
     if (ok)
         b334 = 1;
 }
+// @ 0x007646a0
 void Loader::Wrap6a0(int) {
     ((Ctx63620*)pC)->Load(p2c, p28, p14);
 }

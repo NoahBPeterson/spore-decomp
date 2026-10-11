@@ -73,6 +73,7 @@ void __cdecl SP_cSPPaletteItemUI_ctor(void* self);
 void __cdecl FUN_005f7380();
 
 // ============================================================ 0x00ecda80
+// @ 0x00ecda80
 void FUN_00ecda80_fn(int param_1)
 {
     int u = 0;
@@ -97,6 +98,7 @@ void FUN_00ecda80_fn(int param_1)
 }
 
 // ============================================================ 0x00ecdb30
+// @ 0x00ecdb30
 void __fastcall FUN_00ecdb30(int* p)
 {
     int a = 0, b = 0, c = 0;
@@ -105,6 +107,7 @@ void __fastcall FUN_00ecdb30(int* p)
 }
 
 // ============================================================ 0x00ecdb50
+// @ 0x00ecdb50
 void FUN_00ecdb50(int* p, int param_2)
 {
     if (param_2 == -1) {
@@ -123,6 +126,7 @@ bool __fastcall FUN_00ecdb80(int p)
 }
 
 // ============================================================ 0x00ecdb90
+// @ 0x00ecdb90
 void __fastcall FUN_00ecdb90(int* p)
 {
     if (p[4] != -1)
@@ -130,6 +134,7 @@ void __fastcall FUN_00ecdb90(int* p)
 }
 
 // ============================================================ 0x00ecdbb0
+// @ 0x00ecdbb0
 void __fastcall FUN_00ecdbb0(int p)
 {
     if (*(int*)(p + 0x14) == (int)0x867a9ee9)
@@ -137,16 +142,22 @@ void __fastcall FUN_00ecdbb0(int p)
 }
 
 // ============================================================ 0x00ecdc20
-void FUN_00ecdc20(int* p, int param_2)
+struct Obj_ecdc20 { void FUN_00ecdc20(int param_2); };
+// @ 0x00ecdc20
+void Obj_ecdc20::FUN_00ecdc20(int param_2)
 {
+    int* p = (int*)this;
     p[5] = *(int*)(param_2 + 0x14);
     p[3] = *(int*)(param_2 + 0xc);
     C1(p, 0x1c, *(int*)(param_2 + 0x10));
 }
 
 // ============================================================ 0x00ecdc70
-int FUN_00ecdc70(int param_1)
+struct Obj_ecdc70 { int FUN_00ecdc70(); };
+// @ 0x00ecdc70
+int Obj_ecdc70::FUN_00ecdc70()
 {
+    int param_1 = (int)this;
     char c = FUN_005f3060();
     if (c) {
         char buf[8];
@@ -161,6 +172,7 @@ int FUN_00ecdc70(int param_1)
 }
 
 // ============================================================ 0x00ecdcc0
+// @ 0x00ecdcc0
 void __fastcall FUN_00ecdcc0(int param_1)
 {
     FUN_005f4750();
@@ -179,6 +191,7 @@ void __fastcall FUN_00ecdcc0(int param_1)
 }
 
 // ============================================================ 0x00ecdd70
+// @ 0x00ecdd70
 void __fastcall FUN_00ecdd70(int* p)
 {
     if ((int*)p[0x18]) C1((int*)p[0x18], 4, 0);
@@ -221,6 +234,7 @@ int FUN_00ecde00(int param_1, int param_2)
 }
 
 // ============================================================ 0x00ecde60
+// @ 0x00ecde60
 void __fastcall FUN_00ecde60_fn(int param_1)
 {
     SP_cSPPaletteItemUI_Shutdown();
@@ -254,6 +268,7 @@ void __fastcall FUN_00ecde60_fn(int param_1)
 }
 
 // ============================================================ 0x00ecdf60
+// @ 0x00ecdf60
 void FUN_00ecdf60_fn(void)
 {
     int* p = (int*)operator new(0x1c8);
@@ -271,6 +286,7 @@ void FUN_00ecdf60_fn(void)
 }
 
 // ============================================================ 0x00ecdfc0
+// @ 0x00ecdfc0
 void __fastcall FUN_00ecdfc0(int param_1)
 {
     if (*(int*)(param_1 + 0x4c) != 0) {
@@ -322,6 +338,7 @@ tail:
 }
 
 // ============================================================ 0x00ece110
+// @ 0x00ece110
 void __fastcall FUN_00ece110(int param_1)
 {
     if (*(int**)(param_1 + 0x50) != 0) {
@@ -364,6 +381,7 @@ void FUN_00ece200(int* param_1, int* param_2, int param_3)
 }
 
 // ============================================================ 0x00ece270
+// @ 0x00ece270
 void __fastcall FUN_00ece270(int* p)
 {
     int local[3] = {0, 0, 0};
@@ -378,6 +396,7 @@ void __fastcall FUN_00ece270(int* p)
 }
 
 // ============================================================ 0x00ece300
+// @ 0x00ece300
 void __fastcall FUN_00ece300(int param_1)
 {
     int v = *(int*)(param_1 + 0x4c);
@@ -386,6 +405,7 @@ void __fastcall FUN_00ece300(int param_1)
 }
 
 // ============================================================ 0x00ece320
+// @ 0x00ece320
 void __fastcall FUN_00ece320(int param_1)
 {
     if (*(int*)(param_1 + 0x58) != 0) {
@@ -401,6 +421,7 @@ void __fastcall FUN_00ece320(int param_1)
 }
 
 // ============================================================ 0x00ece370
+// @ 0x00ece370
 int FUN_00ece370(int param_1, int param_2)
 {
     if (param_2 == 0x722de63)
@@ -414,6 +435,7 @@ int FUN_00ece370(int param_1, int param_2)
 }
 
 // ============================================================ 0x00ece3b0
+// @ 0x00ece3b0
 int FUN_00ece3b0(int* param_1)
 {
     if (param_1 != 0) {
@@ -482,9 +504,12 @@ int FUN_00ece4d0(int param_1, int param_2, int* param_3)
 }
 
 // ============================================================ 0x00ece730
-int FUN_00ece730(int param_1, int* param_2, int param_3, int param_4, int param_5)
+struct Obj_ece730 { bool FUN_00ece730(int* param_2, int param_3, int param_4, int param_5, int param_6); };
+// @ 0x00ece730
+bool Obj_ece730::FUN_00ece730(int* param_2, int param_3, int param_4, int param_5, int param_6)
 {
-    (void)param_3; (void)param_4;
+    int param_1 = (int)this;
+    (void)param_3; (void)param_4; (void)param_6;
     int i = K0(param_2, 0x1c);
     if (i == 0x4a1cb6e && param_5 == 1000) {
         if (*(int*)(param_1 + 0x14) != 0 || *(int*)(param_1 + 0x18) != 0) {
@@ -499,6 +524,7 @@ int FUN_00ece730(int param_1, int* param_2, int param_3, int param_4, int param_
 }
 
 // ============================================================ 0x00ece790
+// @ 0x00ece790
 void __fastcall FUN_00ece790(int* p)
 {
     if (p[4] != -1 && p[0x17] != 0) {
@@ -514,6 +540,7 @@ void __fastcall FUN_00ece790(int* p)
 }
 
 // ============================================================ 0x00ece7f0
+// @ 0x00ece7f0
 int __fastcall FUN_00ece7f0(int param_1)
 {
     int i = FUN_00f3e8a0(*(int*)(param_1 + 0x10));
@@ -525,6 +552,7 @@ int __fastcall FUN_00ece7f0(int param_1)
 }
 
 // ============================================================ 0x00ece870
+// @ 0x00ece870
 int* FUN_00ece870(int* param_1, int param_2)
 {
     param_1[1] = 0;
@@ -541,6 +569,7 @@ int* FUN_00ece870(int* param_1, int param_2)
 }
 
 // ============================================================ 0x00ece8c0
+// @ 0x00ece8c0
 void __fastcall FUN_00ece8c0(int* p)
 {
     if (p[4] != -1) {
@@ -550,6 +579,7 @@ void __fastcall FUN_00ece8c0(int* p)
 }
 
 // ============================================================ 0x00ece8f0
+// @ 0x00ece8f0
 int __fastcall FUN_00ece8f0(int param_1)
 {
     if (*(int*)(param_1 + 0x10) != -1) {
@@ -561,6 +591,7 @@ int __fastcall FUN_00ece8f0(int param_1)
 }
 
 // ============================================================ 0x00ece920
+// @ 0x00ece920
 void FUN_00ece920(void)
 {
     FUN_00b3d320();
@@ -578,6 +609,7 @@ void FUN_00ece920(void)
 }
 
 // ============================================================ 0x00ece990
+// @ 0x00ece990
 int* __fastcall FUN_00ece990(int* param_1)
 {
     param_1[1] = 0;

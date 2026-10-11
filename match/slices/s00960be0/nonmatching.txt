@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-00960be0  622  geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes)
+00960be0  622  geometry rect accumulation: frame size and SSE schedule differ (706 vs 830 bytes); equiv: FAIL (now testable via member Geom; output rect differs)
 00960f20  184  SetUserData: vcall/IID schedule and bit clear order differ
 00960fe0  321  TestHit: float compare and event-block layout differ (misassigned to SerUpdate slot)
 00961150  213  ScreenToWindow: manager scan / transform schedule differs
@@ -17,4 +17,4 @@
 00961990  116  DestroyProc: winproc list walk and free schedule differ
 00961a50  106  ClearProcs: list purge loop schedule differs
 00961ae0  62   PurgeProcs: list walk and free schedule differ
-00961b40  292  vector-of-lists copy: allocation and node clone schedule differ
+00961b40  292  vector-of-lists copy: allocation and node clone schedule differ; equiv: WEAK (member Copy, 28.7% coverage)

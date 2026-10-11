@@ -4,6 +4,6 @@
 0062de30  18  GetNextPathPoint: complete; load/add order of x,y differs
 0062df10  253  ExpandNode: complete; orig loop pointer lives in the param slot, constant 1 held in ebx
 0062e010  545  FindPath: complete; inlined grid lookup uses reciprocal multiply with negative stride, plus ExpandNode-style regalloc
-0062e2e0  20  StartNewAnimation: complete; prologue/regalloc of arg loads
-0062e4b0  5  GetAnimCount: complete; orig re-reads panel vector begin for the loop bound
-0062e4f0  179  GetExpansionAnimInfo: complete; orig is less optimised (hoists page*3-3 to a stack slot, reloads button id)
+0062e2e0  20  StartNewAnimation: complete; prologue/regalloc of arg loads; equiv: UNSUPPORTED (unresolved refs AnimMgr::GetCreatureStructure, AnimatingCreature::IsMoveIdleAnim; needs --src s0062da00_ui.cpp)
+0062e4b0  5  GetAnimCount: complete; orig re-reads panel vector begin for the loop bound; equiv: WEAK (35.7% coverage; needs --src s0062da00_ui.cpp)
+0062e4f0  179  GetExpansionAnimInfo: complete; orig is less optimised (hoists page*3-3 to a stack slot, reloads button id); equiv: WEAK (63.6% coverage; needs --src s0062da00_ui.cpp)

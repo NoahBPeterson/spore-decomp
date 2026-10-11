@@ -41,11 +41,8 @@ extern "C" {
     void  GetPropertyAsIntArray(PropObj* list, uint32_t id, void* a, void* b);
     void  FUN_004b3e10(int a);
     void  FUN_004b5980(void* tag);
-    void* FUN_004b5080(void* a, void* b);
-    void  FUN_004b4fa0(void* a);
     void  FUN_00441d10(void* a);
     void  FUN_004b5xxx_push(void* value);
-    int   FUN_004b3b20(int self, int key, int* outCount, int* outPtr);
 }
 
 namespace SP {
@@ -53,8 +50,9 @@ struct PaintVector {
     void* mpBegin; void* mpEnd; void* mpCap;
     char  mInline[0x110];
     void* Insert(void* value);
+    void FUN_004b4fa0(void* a);   // 0x004b4fa0
 };
-struct ModelTree { char _[0x1c]; };
+struct ModelTree { char _[0x1c]; void* FUN_004b5080(void* a, void* b = 0); };   // 0x004b5080
 class cSPEditorPaintTheme {
 public:
     void* mpVtbl0; void* mpVtbl1; int mRefCount;
@@ -72,6 +70,10 @@ public:
     cSPColorRGB mSkinColors[3];
     void InitClosestRegions(int a, int b);
     void SetRegionColor(int a, int b, int c, int d);
+    char FUN_004b3910(int* out, int key, int arg3);
+    char FUN_004b3a50(int out, int key, int arg3);
+    char FUN_004b3b20(int key, int* outCount, int* outPtr);
+    void FUN_004b3c20(int model);
 };
 }
 using namespace SP;
@@ -131,26 +133,26 @@ void cSPEditorPaintTheme::InitClosestRegions(int a, int b)
 }
 
 // @ 0x004b3910
-int FUN_004b3910(int self, int* out, int key)
+char cSPEditorPaintTheme::FUN_004b3910(int* out, int key, int arg3)
 {
     if (out == 0)
         return 0;
-    FUN_00566c50((void*)(self + 300));
+    FUN_00566c50((void*)((int)this + 300));
     int local_c = 0;
-    void* found = (void*)FUN_004b5210(&local_c, &key);
+    void* found = (void*)FUN_004b5210(&local_c, &arg3);
     if (found != 0) {
-        void* r = FUN_004b5080((void*)&key, 0);
+        void* r = mModelTheme.FUN_004b5080((void*)&arg3);
         int iVar2 = FUN_004b33e0(out, (int*)r, key);
         if (iVar2 != 0)
             return 1;
     }
-    char cVar1 = (char)FUN_004b3660(self, out, key);
+    char cVar1 = (char)FUN_004b3660((int)this, out, key);
     if (cVar1 != '\0')
         return 1;
     int a = 0, b = 0;
     FUN_004553b0(&a, &key);
-    int node = (a == b) ? *(int*)(self + 0x10) : a;
-    if (node != *(int*)(self + 0x10)) {
+    int node = (a == b) ? *(int*)((int)this + 0x10) : a;
+    if (node != *(int*)((int)this + 0x10)) {
         int* src = (int*)FUN_00454420(&key);
         for (int k = 0; k < 7; k++)
             out[k] = src[k];
@@ -160,24 +162,24 @@ int FUN_004b3910(int self, int* out, int key)
 }
 
 // @ 0x004b3a50
-int FUN_004b3a50(int out, int key, int arg3)
+char cSPEditorPaintTheme::FUN_004b3a50(int out, int key, int arg3)
 {
     int local_8 = 0;
     int local_10 = 0;
-    char c = (char)FUN_004b3b20(0, key, &local_8, &local_10);
+    char c = FUN_004b3b20(key, &local_8, &local_10);
     if (c == '\0') {
-        if (FUN_004b3910(out, (int*)key, arg3) != 0)
+        if (FUN_004b3910((int*)out, key, arg3) != 0)
             return 1;
     } else {
         for (int i = 0; i < local_8; i++) {
-            if (FUN_004b3910(out, *(int**)(local_10 + i * 4), arg3) != 0)
+            if (FUN_004b3910((int*)out, *(int*)(local_10 + i * 4), arg3) != 0)
                 return 1;
         }
     }
     int limit = 0x22;
     int i = 0;
     while (i < limit) {
-        if (FUN_004b3910(out, (int*)i, arg3) != 0)
+        if (FUN_004b3910((int*)out, i, arg3) != 0)
             return 1;
         i++;
     }
@@ -185,8 +187,9 @@ int FUN_004b3a50(int out, int key, int arg3)
 }
 
 // @ 0x004b3b20
-int FUN_004b3b20(int self, int key, int* outCount, int* outPtr)
+char cSPEditorPaintTheme::FUN_004b3b20(int key, int* outCount, int* outPtr)
 {
+    int self = (int)this;
     if (outCount == 0 || outPtr == 0 || key < 0)
         return 0;
     *outCount = 0;
@@ -213,15 +216,15 @@ int FUN_004b3b20(int self, int key, int* outCount, int* outPtr)
 }
 
 // @ 0x004b3c20
-void FUN_004b3c20(int model)
+void cSPEditorPaintTheme::FUN_004b3c20(int model)
 {
     if (model != 0) {
         int local = *(int*)(model + 0x1c);
         int local2 = local;
         int addr = model + 0x4c8;
         (void)addr;
-        FUN_004b5080(&local2, &addr);
-        FUN_004b4fa0(&local2);
+        void* r = mModelTheme.FUN_004b5080(&local2, &addr);
+        ((PaintVector*)r)->FUN_004b4fa0(&local2);
     }
 }
 

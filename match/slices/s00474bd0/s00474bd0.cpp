@@ -55,33 +55,41 @@ RefVec& RefVec::assign(const RefVec& x)
 
 // ---- vector<T(0x48)> and vector<T(0xd8)> destructors ---------------------------------------
 struct Vec3Ptr { uint mpBegin, mpEnd; };
-void DestroyElem();                                   // 0x4c0b80 (fastcall, element in ecx)
-void FreeVec48(void* v);                              // 0x476e60
-void FreeVecD8(void* v);                              // 0x476f20
+struct ElemRange {
+    void Destroy();   // 0x4c0b80 (thiscall, range member in ecx)
+};
 
-struct Vec48 { char* mpBegin; char* mpEnd; ~Vec48(); };
-struct VecD8 { char* mpBegin; char* mpEnd; ~VecD8(); };
+struct Vec48 {
+    char* mpBegin; char* mpEnd;
+    ~Vec48();
+    void Free();   // 0x476e60
+};
+struct VecD8 {
+    char* mpBegin; char* mpEnd;
+    ~VecD8();
+    void Free();   // 0x476f20
+};
 
 // @ 0x00474f30
-void Vec48_dtor(Vec48* v)
+Vec48::~Vec48()
 {
-    char* end = v->mpEnd;
-    for (char* e = v->mpBegin; e < end; e += 0x48) {
+    char* end = mpEnd;
+    for (char* e = mpBegin; e < end; e += 0x48) {
         for (char* q = *(char**)(e + 0xc); q < *(char**)(e + 0x10); q += 4) {}
-        DestroyElem();
+        ((ElemRange*)(e + 0xc))->Destroy();
     }
-    FreeVec48(v);
+    Free();
 }
 
 // @ 0x00474fb0
-void VecD8_dtor(VecD8* v)
+VecD8::~VecD8()
 {
-    char* end = v->mpEnd;
-    for (char* e = v->mpBegin; e < end; e += 0xd8) {
+    char* end = mpEnd;
+    for (char* e = mpBegin; e < end; e += 0xd8) {
         for (char* q = *(char**)(e + 0x10); q < *(char**)(e + 0x14); q += 4) {}
-        DestroyElem();
+        ((ElemRange*)(e + 0x10))->Destroy();
     }
-    FreeVecD8(v);
+    Free();
 }
 
 // ---- fixed_vector<int> reserve / push_back --------------------------------------------------
@@ -148,20 +156,21 @@ void Vec16::resize(uint n)
     }
 }
 
-// @ 0x00475240
-int Vec32_size(Vec48* v) { return (v->mpEnd - v->mpBegin) >> 5; }
-
 // ---- vector<T(0x20)>::resize / reserve ------------------------------------------------------
 struct Vec32 {
     char* mpBegin; char* mpEnd; char* mpCapacity;
     char mAllocator[4];
     void resize(uint n);
     void reserve(uint n);
+    int size() const;
 };
 void Init32Tmp();                                      // 0x46f1f0
 void Fill32(char* pos, uint count, void* tmp);         // 0x47ae60
 void Erase32(char* first, char* last);                 // 0x477380
 void Move32(char* first, char* last, char* dst);       // 0x42a730
+
+// @ 0x00475240
+int Vec32::size() const { return (mpEnd - mpBegin) >> 5; }
 
 // @ 0x00475260
 void Vec32::resize(uint n)

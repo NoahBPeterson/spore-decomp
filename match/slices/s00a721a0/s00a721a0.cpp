@@ -164,6 +164,7 @@ static inline void BendLight(ViewLight& l, const Vector3& base, const Vector3& p
     l.mDir = base + d * inv * l.mBend;
 }
 
+// @ 0x00a721a0
 void cEffectsWorld::Update(float t1, float t2, int* count) {
     if (mState == 5 || mState == 3 || mState == 2)
         return;

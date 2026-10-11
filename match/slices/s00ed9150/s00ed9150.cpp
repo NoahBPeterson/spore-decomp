@@ -40,6 +40,7 @@ void __cdecl FUN_00ed9150_v(void* a, void* b, void* c, float d)
 }
 
 // ================================================================ 0x00ed9560
+// @ 0x00ed9560
 void FUN_00ed9560(int* out, void* p2, int p3)
 {
     int* obj = (int*)FUN_00ed9040(p3, (float*)p2);

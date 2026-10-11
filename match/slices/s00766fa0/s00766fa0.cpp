@@ -115,22 +115,30 @@ bool __stdcall ReadPaintStuff(PaintObj* obj, void* stream, void* p3) {
 }
 
 // ===========================================================================
-// @ 0x00767170  read chunks into a stack temp and copy a triplet out
+// read chunks into a stack temp and copy a triplet out
 // ===========================================================================
-void __cdecl FUN_00767170(char* stackObj, int a, int b, int c) {
+struct PaintHolder {
+    char pad[0x20];
+    bool FUN_00767170(void* a, void* b, void* c);
+};
+// @ 0x00767170
+bool PaintHolder::FUN_00767170(void* a, void* b, void* c) {
+    char* stackObj = (char*)this;
     char tmp[0xd0];
     (void)tmp;
-    if (ReadPaintStuff((PaintObj*)stackObj, (void*)a, (void*)b)) {
-        if (FUN_00764320(stackObj, (void*)a, (void*)b)) {
+    if (ReadPaintStuff((PaintObj*)stackObj, a, b)) {
+        if (FUN_00764320(stackObj, a, b)) {
             uint32_t* s = (uint32_t*)c;
-            *(uint32_t*)(stackObj + 8) = s[0];
-            *(uint32_t*)(stackObj + 0xc) = s[1];
-            *(uint32_t*)(stackObj + 0x10) = s[2];
+            char* d = (char*)b;
+            *(uint32_t*)(d + 8) = s[0];
+            *(uint32_t*)(d + 0xc) = s[1];
+            *(uint32_t*)(d + 0x10) = s[2];
             FUN_00765ac0(stackObj);
-            return;
+            return true;
         }
     }
     FUN_00765ac0(stackObj);
+    return false;
 }
 
 // ===========================================================================
@@ -212,10 +220,15 @@ void V7c::Insert(int, char* pos, uint32_t n, char* value) {
 }
 
 // ===========================================================================
-// @ 0x00767590  build and enqueue a job object
+// build and enqueue a job object
 // ===========================================================================
 extern "C" void* __cdecl FUN_007640c0(void* p);      // 0x7640c0
-bool __stdcall BuildJob(int* a, int* b, unsigned char c) {
+struct JobOwner {
+    char pad[4];
+    bool BuildJob(int* a, int* b, unsigned char c);
+};
+// @ 0x00767590
+bool JobOwner::BuildJob(int* a, int* b, unsigned char c) {
     int* h = (int*)Alloc6(0x1c, "Graphics", 0, 0, 0, 0);
     if (h)
         h = (int*)FUN_007640c0(h);

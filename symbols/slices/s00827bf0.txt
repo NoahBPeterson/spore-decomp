@@ -5,3 +5,4 @@
 00828080 cSPUIPropertyLayout::DoMessage  # PDB (stopwatch timed)
 00828100 cSPUIPropertyLayout::GetRootWindow  # PDB
 008283a0 cSPUIPropertyLayout::SetPositionAndOffset  # PDB
+008284a0 ?4Elem  # Elem::operator= (base identifier so the matcher finds it)

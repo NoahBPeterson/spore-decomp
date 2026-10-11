@@ -260,6 +260,7 @@ public:
     bool mbFlag18D;                                     // +0x18d
 };
 
+// @ 0x00f368b0
 void cTemplateF368B0::ReadParameters()
 {
     mKeys.clear();

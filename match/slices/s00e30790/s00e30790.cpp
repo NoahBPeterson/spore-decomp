@@ -129,6 +129,7 @@ void Vec1c::insert_(Elem1c* pos, const Elem1c* val)
 }
 
 // ---------------------------------------------------------------- 0x00e308d0
+// @ 0x00e308d0
 void NodeList::destroy(void** a, unsigned n)
 {
     for (unsigned i = 0; i < n; ++i) {
@@ -205,6 +206,7 @@ void MgrVec::update(int dt)
 }
 
 // ---------------------------------------------------------------- 0x00e30a60
+// @ 0x00e30a60
 void Vec1c::remove_head(uint32_t key)
 {
     if (begin == end) return;
@@ -221,6 +223,7 @@ void Vec1c::remove_head(uint32_t key)
 }
 
 // ---------------------------------------------------------------- 0x00e30ae0
+// @ 0x00e30ae0
 void Vec1c::remove_off8(uint32_t key)
 {
     if (begin == end) return;
@@ -248,6 +251,7 @@ void* HT::find_or_add(void* key)
 }
 
 // ---------------------------------------------------------------- 0x00e30c00
+// @ 0x00e30c00
 void Vec1c::push_back_default()
 {
     Elem1c* p = end;
@@ -266,6 +270,7 @@ void Vec1c::push_back_default()
 }
 
 // ---------------------------------------------------------------- 0x00e30c60
+// @ 0x00e30c60
 MgrA* __fastcall MgrA_ctor(MgrA* self)
 {
     ((TC*)self)->f_b5b960();
@@ -330,6 +335,7 @@ struct Card {
     void*  p18;
 };
 
+// @ 0x00e30d20
 void MgrCard::Add(void** out, int p)
 {
     Card* c = (Card*)operator_new(0x1c, "UI/AssetDiscoveryCard", 0, 0, 0, 0);
@@ -357,6 +363,7 @@ void MgrCard::Add(void** out, int p)
 }
 
 // ---------------------------------------------------------------- 0x00e30dc0
+// @ 0x00e30dc0
 void MgrCard::Destroy()
 {
     ((TC*)((char*)this + 0x10))->f_d73090(*(void**)((char*)this + 0x10), *(void**)((char*)this + 0x14));
@@ -641,6 +648,7 @@ CardView* __fastcall CardView_ctor(CardView* self)
 }
 
 // ---------------------------------------------------------------- 0x00e313c0
+// @ 0x00e313c0
 void CardView::update(float dt)
 {
     if (b7c) {
@@ -692,6 +700,7 @@ void CardView::update(float dt)
 }
 
 // ---------------------------------------------------------------- 0x00e31550
+// @ 0x00e31550
 void CardView::hide()
 {
     ((void(__thiscall*)(void*, int, int))(*(void***)a84)[0x7c / 4])(a84, 1, 1);
@@ -709,6 +718,7 @@ void CardView::hide()
 }
 
 // ---------------------------------------------------------------- 0x00e315f0
+// @ 0x00e315f0
 void CardView::add(uint32_t a, uint32_t b)
 {
     uint32_t local[2];

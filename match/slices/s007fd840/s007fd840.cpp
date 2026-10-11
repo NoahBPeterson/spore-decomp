@@ -221,6 +221,7 @@ struct Interp {
     Stopwatch mStopwatch;   // +0x3c
     char  pad4c[0x14];
     Interp();
+    void* DeletingDtor(unsigned char flags);
     bool HandleMessage(int msg, void* arg);   // @ 0x007fdbc0
     char SetEnabled(int v);                   // @ 0x007fdd10
     void SetTimeFunction(IObj* p);            // @ 0x007fdb60
@@ -344,6 +345,7 @@ struct State {
     void* mpSlot;        // +0x3c
     char pad40[0x10];
     State();
+    void* DeletingDtor(unsigned char flags);
     int Refresh();                       // @ 0x007fe130
     bool Activate(int v);                // @ 0x007fe3f0
     void SetWindow(IObj* p);             // @ 0x007fe0e0
@@ -481,7 +483,8 @@ struct WinEvent {
     unsigned mMessageWinId;          // +0x84
     char mbBroadcastMode;            // +0x88
     char mbOrigialVisibility;        // +0x89
-    bool IsWinState(unsigned v);     // @ 0x007fead0
+    bool IsWinState(unsigned v);     // 0x007fead0
+    void* DeletingDtor(unsigned char flags);
     bool IsThisType();               // @ 0x007fe7a0
     void SetWinMessageType(unsigned t);
     void SetMessageWinId(unsigned id);
@@ -689,8 +692,13 @@ bool CopyThing(void* self) {
     return true;
 }
 
+struct BoolEvent {
+    bool Pred(char a, char b);
+};
+
 // @ 0x007fe7d0
-bool BoolPred(void* self, char a, char b) {
+bool BoolEvent::Pred(char a, char b) {
+    void* self = this;
     bool result = false;
     int counter = -1;
     if (FUN_007fa520((char*)self + 0x1c, 4, &counter)) {
@@ -724,7 +732,8 @@ done:
 }
 
 // @ 0x007fe330
-void* InterpDtor(void* self, unsigned char flags) {
+void* Interp::DeletingDtor(unsigned char flags) {
+    void* self = this;
     if (*(void**)((char*)self + 0x3c)) {
         VCallV(*(void**)((char*)self + 0x3c), 4);
         *(void**)((char*)self + 0x3c) = 0;
@@ -739,7 +748,8 @@ void* InterpDtor(void* self, unsigned char flags) {
 }
 
 // @ 0x007fe390
-void* StateDtor(void* self, unsigned char flags) {
+void* State::DeletingDtor(unsigned char flags) {
+    void* self = this;
     if (*(void**)((char*)self + 0x40)) {
         void* p = *(void**)((char*)self + 0x40);
         *(void**)((char*)self + 0x40) = 0;
@@ -751,7 +761,8 @@ void* StateDtor(void* self, unsigned char flags) {
 }
 
 // @ 0x007fea90
-void* WinEventDtor(void* self, unsigned char flags) {
+void* WinEvent::DeletingDtor(unsigned char flags) {
+    void* self = this;
     FUN_007fc200(self);
     (void)flags;
     return self;

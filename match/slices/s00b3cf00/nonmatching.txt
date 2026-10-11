@@ -1,4 +1,4 @@
-00b3cf40  664  FUN_00b3cf40 property load; complete behavior (12 named float props via PropMgr/GetGroup/GetProp), reimplemented through a helper instead of 12 inlined expansions; equiv=UNSUPPORTED (external virtual PropMgr calls, no symbol-name match)
+00b3cf40  664  FUN_00b3cf40 property load; complete behavior (12 named float props via PropMgr/GetGroup/GetProp), reimplemented through a helper instead of 12 inlined expansions; equiv=UNSUPPORTED (symbol now resolves via marker; unresolved external ?GetFloat@PropObjF@@QAEPAMXZ)
 00b3d2c0  51  SP::RelationshipManager; complete behavior, original tail-jumps (jmp FUN_010212f0 / jmp FUN_00c4f030) where ours emits call+ret; equiv=UNSUPPORTED (unresolved C4F::f virtual target)
 00b3d550  163  FUN_00b3d550 fixup-vector validity test; complete behavior; equiv=PASS 400/400
 00b3d5f0  49  FUN_00b3d5f0 mode predicate; complete behavior (dispatch uses goto-shared body); equiv=PASS 400/400

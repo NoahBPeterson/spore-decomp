@@ -252,6 +252,7 @@ void SP::cMouseCameraController::BuildTransform(cTransform* out)
 void* EAllocApp(int size, const char* name, int a, int b, int c, int d);  // 0x00f473a0
 SP::cMouseCameraController* ConstructController(SP::cMouseCameraController*, void*);  // 0x007d9fb0
 
+// @ 0x007da790
 void* SP_CreateMouseCameraController(void* arg)
 {
     SP::cMouseCameraController* p =

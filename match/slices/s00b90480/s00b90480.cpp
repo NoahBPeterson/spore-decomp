@@ -30,9 +30,11 @@ extern int   DAT_016888ec;          // list begin
 extern int   DAT_016888f0;          // list end
 extern const unsigned char kCellBasis[];   // 0x01465948 byte table
 
+struct Obj90480 { void F(); };
 // @ 0x00b90480
-void FUN_00b90480(int param_1)
+void Obj90480::F()
 {
+    int param_1 = (int)this;
     if (*(char*)(param_1 + 0x38) == '\0') {
         *(char*)(param_1 + 0x38) = 1;
         void* local_428 = FUN_00401090();
@@ -139,9 +141,11 @@ bool FUN_00b90730(int param_1, int param_2)
     return *(int*)(param_1 + 0xc) > *(int*)(param_2 + 0xc);
 }
 
+struct Cell90750 { int F(int param_2, int param_3, int param_4); };
 // @ 0x00b90750
-int FUN_00b90750(int param_1, int param_2, int param_3, int param_4)
+int Cell90750::F(int param_2, int param_3, int param_4)
 {
+    int param_1 = (int)this;
     unsigned uVar1 = *(unsigned*)(param_1 + 0x24);
     int iVar2;
     do {
@@ -151,9 +155,11 @@ int FUN_00b90750(int param_1, int param_2, int param_3, int param_4)
            ((*(int*)(param_1 + 0x24) * param_2 + param_4) * *(int*)(param_1 + 0x24) + param_3) * 0xc;
 }
 
+struct Cell907A0 { unsigned F(int param_2, int param_3, int param_4); };
 // @ 0x00b907a0
-unsigned FUN_00b907a0(int param_1, int param_2, int param_3, int param_4)
+unsigned Cell907A0::F(int param_2, int param_3, int param_4)
 {
+    int param_1 = (int)this;
     unsigned uVar1 = *(unsigned*)(param_1 + 0x24);
     int iVar2;
     do {
@@ -163,9 +169,11 @@ unsigned FUN_00b907a0(int param_1, int param_2, int param_3, int param_4)
         ((*(int*)(param_1 + 0x24) * param_2 + param_4) * *(int*)(param_1 + 0x24) + param_3) * 0xc);
 }
 
+struct Cell907F0 { bool F(int param_2, int param_3, int param_4, int param_5); };
 // @ 0x00b907f0
-bool FUN_00b907f0(int param_1, int param_2, int param_3, int param_4, int param_5)
+bool Cell907F0::F(int param_2, int param_3, int param_4, int param_5)
 {
+    int param_1 = (int)this;
     uint* puVar1 = (uint*)(*(int*)(param_1 + 0x34) + 4 + param_2 * 0xc);
     uint uVar2 = *puVar1;
     if ((uVar2 & 8) != 0)
@@ -416,9 +424,11 @@ int FUN_00b90d70(int* param_1, int param_2, float param_3)
     return 1;
 }
 
+struct Model90EA0 { void F(float* param_2, float param_3, float param_4, float param_5); };
 // @ 0x00b90ea0
-void FUN_00b90ea0(int param_1, float* param_2, float param_3, float param_4, float param_5)
+void Model90EA0::F(float* param_2, float param_3, float param_4, float param_5)
 {
+    int param_1 = (int)this;
     float local_b0 = param_2[0];
     float local_ac = param_2[1];
     float local_a8 = param_2[2];

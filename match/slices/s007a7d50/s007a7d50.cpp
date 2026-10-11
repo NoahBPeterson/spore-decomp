@@ -42,6 +42,7 @@ struct Layout; struct TextStyle; struct TextRenderWare;
 // 0xa384-byte render backend; members used at +0xa000 (Layout), +0xa37c, +0xa380.
 struct TextRenderWare {
     char pad000[0xa384];
+    void* ScalarDelete(unsigned char flags); // 007a88b0
 };
 
 extern "C" char VT_TextRenderWareObject[];
@@ -71,6 +72,7 @@ struct cTextRenderer {
     char  mCriticalSection[24];// +0x168
 
     void Init();               // 007a84d0
+    void CtorBody();           // 007a8390
     void Release();            // 007a8530
     void EnsureBuffers();      // 007a8310
     void SetStyle(int style);  // 007a82a0
@@ -86,10 +88,8 @@ struct cTextRenderer {
 
 extern "C" void cTextRenderer_ctor(cTextRenderer*);      // 007a7210-ish init
 extern "C" void FUN_007a7d50(cTextRenderer*);
-extern "C" void FUN_007a8390(cTextRenderer*);
 extern "C" void FUN_007a8360();
 extern "C" void FUN_007a8810();
-extern "C" void* FUN_007a88b0(TextRenderWare*, unsigned char);
 
 // @ 0x007a82a0
 void cTextRenderer::SetStyle(int style)
@@ -129,8 +129,9 @@ void FUN_007a8360()
 }
 
 // @ 0x007a8390  SP::cTextRenderer::cTextRenderer
-extern "C" void FUN_007a8390(cTextRenderer* self)
+void cTextRenderer::CtorBody()
 {
+    cTextRenderer* self = this;
     self->mInitialized = false;
     void* impl = EASTL_allocator_allocate(0xa384, "Graphics", 0, 0, 0, 0);
     if (impl)
@@ -290,8 +291,9 @@ void FUN_007a8810()
 }
 
 // @ 0x007a88b0  scalar deleting destructor of the 0x1a8-byte render object
-extern "C" void* FUN_007a88b0(TextRenderWare* self, unsigned char flags)
+void* TextRenderWare::ScalarDelete(unsigned char flags)
 {
+    TextRenderWare* self = this;
     FUN_0070f520(*(void**)((char*)self + 0x190), *(void**)((char*)self + 0x194));
     void* p = *(void**)((char*)self + 0x190);
     if (p && *(int*)((char*)p - 4) != 0)

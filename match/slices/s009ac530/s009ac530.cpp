@@ -48,9 +48,9 @@ using namespace nSPCreatureAnim;
 
 // ---------------------------------------------------------------- color / normal byte packing
 
-// @ 0x009AC530
 inline uint8_t PackByte(float f) { return (uint8_t)(int)f; }
 
+// @ 0x009AC530
 void __cdecl PackSignedNormal(const float* v, uint8_t* out) {
     if (v[3] >= gAnimZero) {
         float one = gAnimOne;

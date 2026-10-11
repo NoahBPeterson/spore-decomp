@@ -120,6 +120,7 @@ VP C6::asInterface(int iid)
 // ---------------------------------------------------------------------------
 struct C7 { int Release(); };
 
+// @ 0x0069d3c0
 int C7::Release()
 {
     long* p = (long*)((char*)this + 4);
@@ -180,6 +181,7 @@ bool Holder::valid()
     return p0c != 0 && p10 != 0;
 }
 
+// @ 0x0069d4f0
 void Holder::conditional(int a, int b)
 {
     void* o = p10;
@@ -342,6 +344,7 @@ char Cded0::flush()
 // ---------------------------------------------------------------------------
 struct Cdf90 { char pad[0x14]; void* p14; void* p18; bool ok(); };
 
+// @ 0x0069df90
 bool Cdf90::ok()
 {
     bool c1 = ((char(__thiscall*)(void*))(*(void***)p18)[0x14 / 4])(p18) != 0;
@@ -482,6 +485,7 @@ struct Cdf20 {
     bool begin(char flag);
 };
 
+// @ 0x0069df20
 bool Cdf20::begin(char flag)
 {
     f20 = 0.0f;
@@ -504,6 +508,7 @@ struct cObjectDatabase {
     void dtor();
 };
 
+// @ 0x0069dca0
 void cObjectDatabase::dtor()
 {
     vt0 = g_vtbl_14086e8;

@@ -3,7 +3,7 @@
 // nuke/clone/insert helpers, and EA::IO serialization.
 #include "types.h"
 
-extern "C" void* __cdecl EAlloc(uint32_t, const char*, int, int, const char*, int);
+void* __cdecl EAlloc(uint32_t, const char*, int, int, const char*, int);   // 0x00f473a0
 extern "C" void  __cdecl EFree(void*);
 inline void* operator new(unsigned int, void* p) { return p; }
 
@@ -63,7 +63,7 @@ void SerTree(void* stream, char* tree)
 }
 
 // ===========================================================================
-// 0x007d0450  response list serialization
+// @ 0x007d0450  response list serialization
 // ===========================================================================
 void* SerResp(void* stream, int* vec)
 {
@@ -81,7 +81,7 @@ void* SerResp(void* stream, int* vec)
 }
 
 // ===========================================================================
-// 0x007d04b0  dialog-list serialization
+// @ 0x007d04b0  dialog-list serialization
 // ===========================================================================
 void SerDlg(void* stream, int* vec)
 {
@@ -110,7 +110,7 @@ void SerDlg(void* stream, int* vec)
 }
 
 // ===========================================================================
-// 0x007d05b0  RBTreeInsert wrapper
+// @ 0x007d05b0  RBTreeInsert wrapper
 // ===========================================================================
 struct RBTreeW {
     void* Insert(void* out, void* parent, int* value, char flag);
@@ -171,7 +171,7 @@ LayoutWorld::LayoutWorld()
 }
 
 // ===========================================================================
-// 0x007d06f0  dialog-list serialization (top level)
+// @ 0x007d06f0  dialog-list serialization (top level)
 // ===========================================================================
 void Ser6F0(void* stream, char* p)
 {
@@ -193,10 +193,11 @@ void Ser6F0(void* stream, char* p)
     v = 0; WU32(stream, &v, 1, 0);
 }
 
+struct CloneTreeOwner { void* CloneTree(int* src, void* parent); };
 // ===========================================================================
-// 0x007d0920  clone tree
+// @ 0x007d0920  clone tree
 // ===========================================================================
-void* CloneTree(int* src, void* parent)
+void* CloneTreeOwner::CloneTree(int* src, void* parent)
 {
     int* n = (int*)EAlloc(0x14, "App", 0, 0,
         "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
@@ -207,7 +208,7 @@ void* CloneTree(int* src, void* parent)
     n[2] = (int)parent;
     *((char*)n + 0xc) = (char)src[3];
     if (*src != 0) {
-        void* r = CloneTree((int*)*src, n);
+        void* r = this->CloneTree((int*)*src, n);
         n[0] = (int)r;
     }
     void* cur = n;
@@ -222,7 +223,7 @@ void* CloneTree(int* src, void* parent)
         *((char*)m + 0xc) = (char)c[3];
         *((void**)cur + 1) = m;
         if (*c != 0) {
-            void* r = CloneTree((int*)*c, m);
+            void* r = this->CloneTree((int*)*c, m);
             m[0] = (int)r;
         }
         cur = m;
@@ -403,7 +404,7 @@ void ReadVec(void* stream, int* vec)
 }
 
 // ===========================================================================
-// 0x007d1140  copy ctor (partial)
+// @ 0x007d1140  copy ctor (partial)
 // ===========================================================================
 struct S1140 {
     float f0, f4;
@@ -601,7 +602,7 @@ void FUN_007d1910(int self, void* args)
 }
 
 // ===========================================================================
-// 0x007d1970  command Execute
+// @ 0x007d1970  command Execute
 // ===========================================================================
 struct V3 { int a, b, c; };
 struct cArguments { void** MainArguments(int); };   // 0x00838320 thiscall
@@ -619,8 +620,10 @@ struct ObjV {
     virtual void s40(); virtual void s41(); virtual void s42(); virtual void s43();
     virtual V3 Get(const void* in);   // slot 44
 };
-void FUN_007d1970(int self, cArguments* args)
+struct CmdBase { void Execute(cArguments* args); };
+void CmdBase::Execute(cArguments* args)
 {
+    int self = (int)this;
     ObjV* obj = *(ObjV**)(self + 4);
     void** a = args->MainArguments(1);
     V3 v = obj->Get(*a);

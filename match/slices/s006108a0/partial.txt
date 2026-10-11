@@ -6,3 +6,7 @@
 00611550  -  feed-description vector erase (48 B): outline port.
 00611580  -  (314 B): skeleton.
 006116c0  -  SP::cPollinator::~cPollinator (322 B): skeleton.
+00610cb0  -  (139 B): empty stub body; incomplete reconstruction (poster not ported).
+00610d40  -  (133 B): empty stub body; incomplete reconstruction (poster not ported).
+00610df0  -  (157 B): empty stub body; incomplete reconstruction (poster not ported).
+00610e90  -  (150 B): empty stub body; incomplete reconstruction (poster not ported).

@@ -10,27 +10,22 @@ typedef unsigned int u32;
 // ---------------------------------------------------------------------------------------
 // External callees (address-labelled).
 // ---------------------------------------------------------------------------------------
-extern void* f_0112ce00(void* p);
-extern void  f_0112dca0(void* p);
 extern void* f_00a158d0(void);
-extern void  f_0112cd60(void* self, void* v);
 extern void* f_00a151c0(void);
 extern void* f_00a149a0(void);
 extern void* f_00a161b0(void);
 extern void* f_00a15d30(void);
 extern void* f_00a14800(void);
-extern void* f_0112dc80(void* p);
-extern void  f_0112dbd0(void* p);
-extern void  f_0112c600(void* m);
-extern void* f_00a34230(void* self, unsigned tag);
 extern void  f_0112ccc0(void* self, int a, int b, void* c);
-extern void  f_00a34890(void* self);
-extern void  f_0112c620(void* m);
 extern void  f_00f47380(void* p);
 extern void* f_00f473a0(void* a, void* b, unsigned size, void* file, unsigned line, const char* cat);
-extern void* f_00894dc0(void* self, unsigned n);
-extern void* f_00a21e40(void* self, unsigned n);
-extern void* f_00a21ff0(void* self, unsigned n);
+
+// Thiscall callees (receiver in ECX), modeled as members of stub classes.
+struct Callee_Th {
+    void* m_0112ce00(); void m_0112dca0(); void m_0112cd60(void* v); void* m_0112dc80(); void m_0112dbd0();
+    void* m_00a34230(unsigned tag); void m_00a34890(); void m_0112c600(); void m_0112c620();
+};
+#define TH(p) ((Callee_Th*)(p))
 
 // ---------------------------------------------------------------------------------------
 // Dispatch helper: VPTR(ret, obj, slot, argtypes...)(obj, args...)
@@ -52,6 +47,17 @@ struct PropSink {
     // ... payload ...
 };
 
+// Stub receiver classes: the originals take `this` in ECX (thiscall members).
+struct AudioSystem_00a21170 { void RegisterBuiltInModules(); };
+struct Submix_00a21390 { bool DisconnectFromSubmix(); };
+struct VoiceContainer { bool Connect(int a1, int a2); bool Connect4(int a1, int a2, int a3, int a4); };
+struct MsgTarget_00a21630 { bool Handle(int a1, int a2); };
+struct VoiceVec_00a21c00 { void Destroy(); };
+struct RbTree_00a21dc0 { void* Find(void* key, void** out); };
+struct HashA_00a21eb0 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct HashB_00a22060 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+struct HashC_00a22110 { void Rehash(unsigned a); void* Alloc(unsigned n); };
+
 // ---------------------------------------------------------------------------------------
 // 0x00A21130  EA::Audio message predicate (41-plot / voice tags)
 // ---------------------------------------------------------------------------------------
@@ -70,20 +76,21 @@ int __stdcall isVoiceShareMsg_00a21130(void* msg) {
 // 0x00A21170  EA::Audio::System::RegisterBuiltInModules
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21170
-void register_00a21170(void* self) {
-    void* sys = f_0112ce00(*(void**)((char*)self + 0xa4));
+void AudioSystem_00a21170::RegisterBuiltInModules() {
+    void* self = this;
+    void* sys = TH(*(void**)((char*)self + 0xa4))->m_0112ce00();
     if (sys != 0) {
-        f_0112dca0(sys);
-        f_0112cd60(sys, (void*)f_00a158d0());
-        f_0112cd60(sys, (void*)f_00a151c0());
-        f_0112cd60(sys, (void*)f_00a149a0());
-        f_0112cd60(sys, (void*)f_00a161b0());
-        f_0112cd60(sys, (void*)f_00a15d30());
-        f_0112cd60(sys, (void*)f_00a14800());
+        TH(sys)->m_0112dca0();
+        TH(sys)->m_0112cd60((void*)f_00a158d0());
+        TH(sys)->m_0112cd60((void*)f_00a151c0());
+        TH(sys)->m_0112cd60((void*)f_00a149a0());
+        TH(sys)->m_0112cd60((void*)f_00a161b0());
+        TH(sys)->m_0112cd60((void*)f_00a15d30());
+        TH(sys)->m_0112cd60((void*)f_00a14800());
     }
-    void* reg = f_0112dc80(*(void**)((char*)self + 0xa4));
+    void* reg = TH(*(void**)((char*)self + 0xa4))->m_0112dc80();
     if (reg != 0)
-        f_0112dbd0(reg);
+        TH(reg)->m_0112dbd0();
 }
 
 // ---------------------------------------------------------------------------------------
@@ -198,16 +205,17 @@ void erase_00a21310(void* a1, void* holder, void* target) {
 // 0x00A21390  EA::Audio::Submix::DisconnectFromSubmix
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21390
-bool Submix_DisconnectFromSubmix(void* self) {
+bool Submix_00a21390::DisconnectFromSubmix() {
+    void* self = this;
     void* m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c600(m);
+    if (m != 0) TH(m)->m_0112c600();
     void* esi = (char*)self + 0x10;
-    void* p = f_00a34230(esi, 0x41695730);
+    void* p = TH(esi)->m_00a34230(0x41695730);
     if (p != 0)
         f_0112ccc0(p, 1, 0, 0);
-    f_00a34890(esi);
+    TH(esi)->m_00a34890();
     m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c620(m);
+    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -215,17 +223,18 @@ bool Submix_DisconnectFromSubmix(void* self) {
 // 0x00A21410  EA::Audio::VoiceContainer::Connect
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21410
-bool connect_00a21410(char* self, int a1, int a2) {
-    void* p = f_00a34230(self + 0x10, 0x53747030);
+bool VoiceContainer::Connect(int a1, int a2) {
+    char* self = (char*)this;
+    void* p = TH(self + 0x10)->m_00a34230(0x53747030);
     if (p == 0) return false;
     void* m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c600(m);
+    if (m != 0) TH(m)->m_0112c600();
     char buf[8];
     *(int*)(buf + 0) = a1;
     *(int*)(buf + 4) = a2;
     f_0112ccc0(p, 2, 0, buf);
     m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c620(m);
+    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -233,13 +242,14 @@ bool connect_00a21410(char* self, int a1, int a2) {
 // 0x00A214B0  EA::Audio::VoiceContainer::Connect4
 // ---------------------------------------------------------------------------------------
 // @ 0x00A214B0
-bool connect4_00a214b0(char* self, int a1, int a2, int a3, int a4) {
+bool VoiceContainer::Connect4(int a1, int a2, int a3, int a4) {
+    char* self = (char*)this;
     char cached = (*(int*)(self + 0x15f4) != 0);
     if (!cached)
-        *(void**)(self + 0x15f4) = f_00a34230(self + 0x10, 0x53747030);
+        *(void**)(self + 0x15f4) = TH(self + 0x10)->m_00a34230(0x53747030);
     if (*(int*)(self + 0x15f4) == 0) return false;
     void* m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c600(m);
+    if (m != 0) TH(m)->m_0112c600();
     if (!cached) {
         char buf[16];
         *(int*)(buf + 0)  = a1;
@@ -249,7 +259,7 @@ bool connect4_00a214b0(char* self, int a1, int a2, int a3, int a4) {
         f_0112ccc0(*(void**)(self + 0x15f4), 0, 0, buf);
     }
     m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c620(m);
+    if (m != 0) TH(m)->m_0112c620();
     return true;
 }
 
@@ -261,18 +271,19 @@ __declspec(noinline) void __fastcall disconnect_00a21590(char* self);
 void __fastcall disconnect_00a21590(char* self) {
     if (*(int*)(self + 0x15f4) == 0) return;
     void* m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c600(m);
+    if (m != 0) TH(m)->m_0112c600();
     f_0112ccc0(*(void**)(self + 0x15f4), 1, 0, 0);
     *(void**)(self + 0x15f4) = 0;
     m = *(void**)0x16e61a8;
-    if (m != 0) f_0112c620(m);
+    if (m != 0) TH(m)->m_0112c620();
 }
 
 // ---------------------------------------------------------------------------------------
 // 0x00A21630  EA::Audio message handler (vtable factory + dispatch)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21630
-bool handle_00a21630(void* self, int a1, int a2) {
+bool MsgTarget_00a21630::Handle(int a1, int a2) {
+    void* self = this;
     void* eax = *(void**)((char*)*(void**)self + 0x1d4);
     void* p = ((void* (__thiscall*)(void*, int))eax)(self, a1);
     void* esi = p;
@@ -426,7 +437,7 @@ bool command_00a21b20(char* self, int a, int n, void* extra) {
     if (a == 0 || n == 0) return false;
     void* p = VPTR(void*, self, 0x17c, int)(self, a);
     if (p != 0) {
-        if (connect_00a21410((char*)p, n, (int)extra)) {
+        if (((VoiceContainer*)p)->Connect(n, (int)extra)) {
             return true;
         }
     }
@@ -449,7 +460,7 @@ bool command4_00a21b90(char* self, int a, int b, int c, int d) {
     if (d == 0) return false;
     void* p = VPTR(void*, self, 0x17c, int)(self, a);
     if (p == 0) return false;
-    return connect4_00a214b0((char*)p, b, c, d, d);
+    return ((VoiceContainer*)p)->Connect4(b, c, d, d);
 }
 
 // ---------------------------------------------------------------------------------------
@@ -466,7 +477,8 @@ void __fastcall command_00a21bd0(void* self, void* dummy, int a) {
 // 0x00A21C00  eastl::vector<EA::AutoRefCount<...>>::~vector
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21C00
-void vector_dtor_00a21c00(int* self) {
+void VoiceVec_00a21c00::Destroy() {
+    int* self = (int*)this;
     int* end = (int*)self[1];
     int* it  = (int*)self[0];
     while (it < end) {
@@ -569,7 +581,8 @@ void* __fastcall copyRef2_00a21d90(char* self, void* dummy, unsigned** a, unsign
 // 0x00A21DC0  eastl::rbtree<Key,...>::find
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21DC0
-void* rbtree_find_00a21dc0(char* self, void* key, void** out) {
+void* RbTree_00a21dc0::Find(void* key, void** out) {
+    char* self = (char*)this;
     unsigned node = *(unsigned*)(self + 0xc);
     char* root = self + 4;
     char* it = root;
@@ -624,8 +637,10 @@ void* rbtree_find_00a21dc0(char* self, void* key, void** out) {
 // 0x00A21EB0  EA::Audio::System::RemoveVoice (hash-bucket unlink)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21EB0
-void removeVoice_00a21eb0(char* self, unsigned a, int count) {
-    void* newTable = f_00a21e40(self, a);
+void HashA_00a21eb0::Rehash(unsigned a) {
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashA_00a21eb0*)self)->Alloc(a);
     int i = 0;
     for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
         int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);
@@ -675,8 +690,10 @@ void* allocRef_00a21f60(void* src) {
 // 0x00A22060  EA::Audio hash-bucket rehash (stride +0x1e4)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A22060
-void rehash_00a22060(char* self, unsigned a, int count) {
-    void* newTable = f_00a21ff0(self, a);
+void HashB_00a22060::Rehash(unsigned a) {
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashB_00a22060*)self)->Alloc(a);
     int i = 0;
     for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
         int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);
@@ -707,8 +724,10 @@ void rehash_00a22060(char* self, unsigned a, int count) {
 // 0x00A22110  EA::Audio hash-bucket rehash (stride +0x24)
 // ---------------------------------------------------------------------------------------
 // @ 0x00A22110
-void rehash_00a22110(char* self, unsigned a, int count) {
-    void* newTable = f_00894dc0(self, a);
+void HashC_00a22110::Rehash(unsigned a) {
+    char* self = (char*)this;
+    int count = (int)a;
+    void* newTable = ((HashC_00a22110*)self)->Alloc(a);
     int i = 0;
     for (i = 0; (unsigned)i < *(unsigned*)(self + 8); ++i) {
         int* node = *(int**)((char*)*(void**)(self + 4) + i * 4);

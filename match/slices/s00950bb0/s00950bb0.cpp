@@ -141,7 +141,7 @@ IterCopy* IterCopy::Set(int* src) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x00952100 / 0x00952130 / 0x00952160  bounds value
+// 0x00952100 / 0x00952130 / 0x00952160  bounds value
 // ---------------------------------------------------------------------------------------------
 struct Bounds {
     char pad0[0x10];
@@ -157,6 +157,7 @@ struct Bounds {
     void UnionBounds(const float* r);
 };
 
+// @ 0x00952100
 char Bounds::GetBounds(float* out) {
     out[0] = mMinX;
     out[1] = mMinY;
@@ -165,6 +166,7 @@ char Bounds::GetBounds(float* out) {
     return mValid;
 }
 
+// @ 0x00952130
 void Bounds::SetBounds(char valid, const float* r) {
     mValid = valid;
     if (valid) {
@@ -172,6 +174,7 @@ void Bounds::SetBounds(char valid, const float* r) {
     }
 }
 
+// @ 0x00952160
 void Bounds::UnionBounds(const float* r) {
     if (mValid == 0) {
         mValid = 1;
@@ -198,8 +201,9 @@ bool ForwardCall514d0(int* a, int* b) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x009513D0 / 0x009514F0  vertex-elem array init (stride 8 / 0xc)
+// vertex-elem array init (stride 8 / 0xc)
 // ---------------------------------------------------------------------------------------------
+// @ 0x009513D0
 bool InitArray8(int* out, int src, int, int* allocator) {
     int* obj = *(int**)(src + 4);
     int count = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);
@@ -214,6 +218,7 @@ bool InitArray8(int* out, int src, int, int* allocator) {
     return true;
 }
 
+// @ 0x009514F0
 bool InitArray12(int* out, int src, int, int* allocator) {
     int* obj = *(int**)(src + 4);
     int count = ((int(__thiscall*)(void*))((void**)*(void**)obj)[0x18 / 4])(obj);

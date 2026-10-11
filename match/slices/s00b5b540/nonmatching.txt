@@ -6,8 +6,8 @@
 00b5b6f0   19  free-list push_back; capacity check schedule differs
 00b5b840   22  CheckGonzagoSubsystemInitState; virtual call schedule differs
 00b5b960   23  cGonzagoSubsystem ctor; base-ctor vtable store order differs
-00b5be10   49  serializer wrapper; cVarListSerializer arg schedule differs
-00b5bf30   48  message-server registration; vcall arg/order differs
+00b5be10   49  serializer wrapper; cVarListSerializer arg schedule differs; equiv=UNSUPPORTED (now member S5be10::f, ecx fixed; 0/1200 inputs valid, fault(read))
+00b5bf30   48  message-server registration; vcall arg/order differs; equiv=UNSUPPORTED (now member S5bf30::f, ecx fixed, no stack arg; 0/1067 inputs valid, write faults)
 00b5bf80   71  multi-message registration loop; loop body schedule differs
 00b5c9d0   74  game-mode id remap compare tree; compare ordering differs
 00b5ca60    8  IsSomething: cdecl/fastcall mangling and compare form differ
@@ -16,5 +16,5 @@
 00b5cba0   11  subobject vcall thunk (+8 subobject); lea/arg schedule differs
 00b5cbc0   11  subobject vcall thunk (+8 subobject, slot 0x10); schedule differs
 00b5cc80   76  GameTimeManager cinematic registrations; vcall/arg schedule differs
-00b5cd90   25  iterate +0x5c vector and forward to slot 0x30; loop shape differs
+00b5cd90   25  iterate +0x5c vector and forward to slot 0x30; loop shape differs; equiv=WEAK (now member S5cd90::f, ecx fixed; 650 valid, 51.9% coverage)
 00b5cde0   85  App->mode vcall chain; call schedule differs

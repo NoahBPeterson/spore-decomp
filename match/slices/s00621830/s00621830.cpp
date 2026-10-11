@@ -212,8 +212,17 @@ cXHTMLControlAppearance::~cXHTMLControlAppearance() {
   if (mpBegin) EA_Free(mpBegin);
 }
 
+namespace eastl {
+struct vector {   // stub for vector<ControlDrawable>; receiver arrives in ECX
+  ControlDrawable* mpBegin; ControlDrawable* mpEnd; ControlDrawable* mpCap;
+  ControlDrawable* erase(ControlDrawable* first, ControlDrawable* last);
+  void DoInsertValue(ControlDrawable* position, const ControlDrawable& value);
+};
+}
+
 // @ 0x00621f50  vector<ControlDrawable>::erase(first,last) -- this = &vector
-ControlDrawable* VectorErase(void* self, ControlDrawable* first, ControlDrawable* last) {
+ControlDrawable* eastl::vector::erase(ControlDrawable* first, ControlDrawable* last) {
+  void* self = this;
   ControlDrawable** pEnd = (ControlDrawable**)((char*)self + 4);
   uint32_t r = FUN_00a35070(last, *pEnd, first);
   if (r < (uint32_t)*pEnd) {
@@ -230,7 +239,8 @@ ControlDrawable* VectorErase(void* self, ControlDrawable* first, ControlDrawable
 }
 
 // @ 0x00621fc0  vector<ControlDrawable>::DoInsertValue(position, value) -- this = &vector
-void VectorInsert(void* self, ControlDrawable* position, const ControlDrawable& value) {
+void eastl::vector::DoInsertValue(ControlDrawable* position, const ControlDrawable& value) {
+  void* self = this;
   ControlDrawable** pBegin = (ControlDrawable**)self;
   ControlDrawable** pEnd = (ControlDrawable**)((char*)self + 4);
   ControlDrawable** pCap = (ControlDrawable**)((char*)self + 8);

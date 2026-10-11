@@ -28,10 +28,17 @@ void  EastlStringAssign(void* str, const char* first, const char* last); // 0x00
 void  FUN_0047d390(void* first, void* last);
 void* FUN_0052ea60();
 void  FUN_0052eb40();
-void  FUN_0052fb20(int);
 void  FUN_0052fc10b();
 void  FUN_0052fd80b();
-void* FUN_0052fc10(void* self, int src);                      // 0x0052fc10
+struct cSwarmEffect {
+    int*  CopyParams(int src);    // 0x0052fb20
+    void* Ctor(int src);          // 0x0052fc10
+};
+struct cDistributeCmd {
+    void SpacingExecute(cArguments* args);   // 0x0052f330
+    void LimitExecute(cArguments* args);     // 0x0052f3a0
+    void AddEffect(char param_2);            // 0x0052f9f0
+};
 void  FUN_00530870(void*);
 void  FUN_00530770(void*);
 void  FUN_00a6f9c0(void*, int, void*);
@@ -85,8 +92,9 @@ void DistributeParticles_OnEndParse(int param_1)
 }
 
 // @ 0x0052f330  cSPSkinPaintDistributeSpacingCommand::Execute
-void DistributeSpacing_Execute(int param_1, cArguments* args)
+void cDistributeCmd::SpacingExecute(cArguments* args)
 {
+    int param_1 = (int)this;
     void** p = (void**)cArguments::MainArguments(args, 1);
     VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x98);
     float v = (float)fn((void*)*(int*)(param_1 + 4), *p);
@@ -96,8 +104,9 @@ void DistributeSpacing_Execute(int param_1, cArguments* args)
 }
 
 // @ 0x0052f3a0  distribute <limit> command
-void DistributeLimit_Execute(int param_1, cArguments* args)
+void cDistributeCmd::LimitExecute(cArguments* args)
 {
+    int param_1 = (int)this;
     void** p = (void**)cArguments::MainArguments(args, 1);
     VFnI fn = *(VFnI*)(*(int*)(param_1 + 4) + 0x9c);
     int v = fn((void*)*(int*)(param_1 + 4), *p);
@@ -196,17 +205,18 @@ void DistributeBlock_Parse(int param_1, cArguments* args)
     *(unsigned char*)(param_1 + 0x88) = 0;
     if (1 < n) {
         int d = GetInheritedDescription(*(void**)(param_1 + 0x30), p, n, 0x23);
-        if (d) FUN_0052fb20(d);
+        if (d) ((cSwarmEffect*)(param_1 + 0x38))->CopyParams(d);
     }
     (*(void(__thiscall**)(int, int))(*(int*)(*(int*)(param_1 + 4)) + 0x8c))(*(int*)(param_1 + 4), param_1);
 }
 
 // @ 0x0052f9f0  add named/anonymous effect to swarm description
-void Distribute_AddEffect(int param_1, char param_2)
+void cDistributeCmd::AddEffect(char param_2)
 {
+    int param_1 = (int)this;
     if (param_2 == 0) {
         int obj = (int)operator new(0x54, "Swarm/SkinPaint", 0, 0, 0, 0);
-        void* made = obj ? FUN_0052fc10((void*)0, param_1 + 0x38) : 0;
+        void* made = obj ? ((cSwarmEffect*)obj)->Ctor(param_1 + 0x38) : 0;
         FUN_00a6f9c0(*(void**)(param_1 + 0x8c), 0x23, made);
     }
     int* str = (int*)(param_1 + 0x8c);
@@ -223,8 +233,9 @@ void __fastcall BlockCmdBaseDerivedDtor(cBlockCommandBase* p)
 }
 
 // @ 0x0052fb20  copy effect params
-int Distribute_CopyParams(int param_1, int param_2)
+int* cSwarmEffect::CopyParams(int param_2)
 {
+    int param_1 = (int)this;
     if ((void*)(param_2 + 8) != (void*)(param_1 + 8))
         EastlStringAssign(*(void**)(param_2 + 8), *(const char**)(param_2 + 8), *(const char**)(param_2 + 0xc));
     *(uint32_t*)(param_1 + 0x18) = *(uint32_t*)(param_2 + 0x18);
@@ -241,12 +252,13 @@ int Distribute_CopyParams(int param_1, int param_2)
     *(unsigned char*)(param_1 + 0x3b) = *(unsigned char*)(param_2 + 0x3b);
     FUN_00530870((void*)(param_2 + 0x3c));
     *(unsigned char*)(param_1 + 0x50) = *(unsigned char*)(param_2 + 0x50);
-    return param_1;
+    return (int*)param_1;
 }
 
 // @ 0x0052fc10  skin-paint swarm effect (copy) ctor
-void* Distribute_EffectCtor(void* self, int src)
+void* cSwarmEffect::Ctor(int src)
 {
+    void* self = this;
     *(void**)self = (void*)0x013f22dc;
     *(uint32_t*)((char*)self + 4) = 0;
     *(uint32_t*)((char*)self + 8) = 0;

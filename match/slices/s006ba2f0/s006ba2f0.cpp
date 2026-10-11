@@ -99,6 +99,8 @@ struct XForm2 {
     float    m10;
     Matrix3  rot;   // 0x14
     void Apply(const float* other);
+    void PreRotateX(float angle);
+    void PreRotateY(float angle);
 };
 void XForm2::Apply(const float* other)
 {
@@ -131,17 +133,19 @@ void __cdecl FUN_006ba620(Matrix3* dst, const float* other)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x006ba940 / @ 0x006baa70  pre-rotate wrappers
+// pre-rotate wrappers
 // ---------------------------------------------------------------------------
 void __cdecl PreRotateX(cTransform*, float);
 void __cdecl PreRotateY(cTransform*, float);
-void __cdecl FUN_006ba940(XForm2* p, float angle)
+// @ 0x006ba940
+void XForm2::PreRotateX(float angle)
 {
+    XForm2* p = this;
     cTransform t;
     t.tx = 0; t.ty = 0; t.tz = 0;
     t.flags = 0; t.modCount = 0; t.scale = 1.0f;
     t.rot.Assign((void*)0x16063f8);
-    PreRotateX(&t, angle);
+    ::PreRotateX(&t, angle);
     if ((p->flags & 2) == 0) {
         for (int i = 0; i < 9; ++i) ((float*)&p->rot)[i] = ((float*)&t.rot)[i];
         p->flags |= 2;
@@ -154,8 +158,10 @@ void __cdecl FUN_006ba940(XForm2* p, float angle)
     p->mc = a * t.rot.m[2] + b * t.rot.m[5] + c * t.rot.m[8];
     p->count = (uint16_t)(p->count + 1);
 }
-void __cdecl FUN_006baa70(XForm2* p, float angle)
+// @ 0x006baa70
+void XForm2::PreRotateY(float angle)
 {
+    XForm2* p = this;
     (void)angle;
     p->count = (uint16_t)(p->count + 1);
 }

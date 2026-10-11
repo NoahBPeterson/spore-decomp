@@ -85,6 +85,7 @@ struct D_760f50 {
     void* vfirst; void* vlast;   // +0xc / +0x10
     ~D_760f50();
 };
+// @ 0x760f50
 D_760f50::~D_760f50()
 {
     p0 = g_vt140ddf4;

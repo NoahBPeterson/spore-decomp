@@ -10,14 +10,12 @@ extern "C" {
     void  FUN_00425990(void* vec);
     void  FUN_00455290(void* vec);
     void  FUN_0042dee0();
-    void  FUN_004b62a0();
     void  FUN_004b6340();
     void  FUN_004b69d0();
     void  FUN_004b6450();
     void  FUN_004b64b0();
     void  FUN_004b66b0();
     void  FUN_004b6bf0();
-    void  FUN_004b5690();
     void  FUN_004b5a60(void* node);
     void  operator_delete_(void* p);
 }
@@ -124,18 +122,28 @@ void Vec20::PushBack(const Blk20& v)
     }
 }
 
+struct Rec11c {
+    char pad[0x118]; char f118;
+    void FUN_004b62a0(Rec11c* src);   // 0x004b62a0
+};
+struct RecVec11c {
+    Rec11c* mpBegin; Rec11c* mpEnd; Rec11c* mpCap;
+    void FUN_004b4fa0(Rec11c* a);
+    void FUN_004b5690(Rec11c* pos, Rec11c* a);   // 0x004b5690
+};
+
 // @ 0x4b4fa0
-void FUN_004b4fa0(int* p, int a)
+void RecVec11c::FUN_004b4fa0(Rec11c* a)
 {
-    if ((uint32_t)p[1] < (uint32_t)p[2]) {
-        int old = p[1];
-        p[1] = p[1] + 0x11c;
+    if (mpEnd < mpCap) {
+        Rec11c* old = mpEnd;
+        mpEnd = (Rec11c*)((char*)mpEnd + 0x11c);
         if (old != 0) {
-            FUN_004b62a0();
-            *(char*)(old + 0x118) = *(char*)(a + 0x118);
+            old->FUN_004b62a0(a);
+            old->f118 = a->f118;
         }
     } else {
-        FUN_004b5690();
+        FUN_004b5690(mpEnd, a);
     }
 }
 
@@ -151,9 +159,15 @@ void __fastcall FUN_004b5610(int* p)
     FUN_004b6450();
 }
 
+struct Float3Cmp {
+    float x, y, z;
+    bool FUN_004b52b0(float* b);
+};
+
 // @ 0x4b52b0
-int FUN_004b52b0(float* a, float* b)
+bool Float3Cmp::FUN_004b52b0(float* b)
 {
+    float* a = &x;
     bool c;
     if (*a == *b) {
         if (a[1] == b[1]) {

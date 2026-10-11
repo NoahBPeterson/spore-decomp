@@ -1,15 +1,16 @@
 # VA Name  # evidence
-007c4be0 cViewer_SetRaster  # cViewer uses [ecx+0x170]=mCamera, vtable singleton +0x18/+0x20
-007c4c40 cViewer_SetCameraToWorld  # copies 4x4 into +0, camera transform, calls 0x7c4940
-007c4dd0 cViewer_Init  # mCamera/mShaderDataRT/mTileRender + default raster setup
-007c4fd0 cViewer_Update  # aspect check + BuildTransforms + shader select
+007c4be0 cViewer::SetRaster  # cViewer uses [ecx+0x170]=mCamera, vtable singleton +0x18/+0x20
+007c4c40 cViewer::SetCameraToWorld  # copies 4x4 into +0, camera transform, calls 0x7c4940
+007c4d20 cViewer::SetCameraToWorldFromBasis  # basis build + camera transform
+007c4dd0 cViewer::Init  # mCamera/mShaderDataRT/mTileRender + default raster setup
+007c4fd0 cViewer::Update  # aspect check + BuildTransforms + shader select
 007c50b0 SP::cViewer::Copy  # PDB callee-scored
-007c5240 cViewer_CopyFrom  # per-member copy, same callers as Copy
-007c5310 cViewer_SetViewportRect  # builds rect and calls 0x7c4a60
-007c5350 cViewer_SetViewAngle  # projectionType=1, fptan fov
-007c53d0 cViewer_SetViewAngleY  # projectionType=1, fptan fov (vert)
-007c5440 cViewer_SetViewWindow  # projectionType=2, vw + reciprocals
-007c5490 rw_AllocSerialized  # operator new[] with allocator context
+007c5240 cViewer::CopyFrom  # per-member copy, same callers as Copy
+007c5310 cViewer::SetViewportRectArgs  # builds rect and calls 0x7c4a60
+007c5350 cViewer::SetViewAngle  # projectionType=1, fptan fov
+007c53d0 cViewer::SetViewAngleY  # projectionType=1, fptan fov (vert)
+007c5440 cViewer::SetViewWindow  # projectionType=2, vw + reciprocals
+007c5490 SerializedArray::Alloc  # operator new[] with allocator context
 007c54b0 rw_ResolveObjectToId  # Arena::ObjectToId, -1 sentinel
 007c54f0 rw_ResolveIdToObject  # Arena::IdToObject, -1 sentinel
 007c5520 rw_ResolveAllIdToObject  # Arena::IdToObject, returns 1

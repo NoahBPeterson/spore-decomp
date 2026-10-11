@@ -398,7 +398,7 @@ void** VecAssign(void** self, void** other)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x007b0130 / 0x007b0160 / 0x007b03e0 / 0x007b02f0 / 0x007b07e0
+// 0x007b0130 / 0x007b0160 / 0x007b03e0 / 0x007b02f0 / 0x007b07e0 (one @ marker per definition below)
 // (ref-counted holders with an eastl vector at +0xc; near-miss vtable store order)
 // ---------------------------------------------------------------------------
 class C0130 : public IEditorResource, public IRefCounted {
@@ -406,6 +406,7 @@ public:
     AutoVec mVec;
     virtual ~C0130();
 };
+// @ 0x007b0130
 C0130::~C0130() {}
 
 struct DObj { virtual int AddRef(); virtual int Release(); };
@@ -416,6 +417,7 @@ public:
     DObj*   mObj;
     virtual ~C0160();
 };
+// @ 0x007b0160
 C0160::~C0160() { if (mObj) mObj->Release(); }
 
 class C03e0 : public IEditorResource, public IRefCounted {
@@ -423,6 +425,7 @@ public:
     AutoVec mVec;
     virtual ~C03e0();
 };
+// @ 0x007b03e0
 C03e0::~C03e0() {}
 
 class cTexturePreload : public IEditorResource, public IRefCounted {
@@ -433,6 +436,7 @@ public:
     cTexturePreload(int n);
     virtual ~cTexturePreload();
 };
+// @ 0x007b07e0
 cTexturePreload::cTexturePreload(int n)
 {
     if (n >= 0) {
@@ -440,6 +444,7 @@ cTexturePreload::cTexturePreload(int n)
         ((VecReserve*)&mInProgress)->Reserve(n);
     }
 }
+// @ 0x007b02f0
 cTexturePreload::~cTexturePreload() {}
 
 // ---------------------------------------------------------------------------

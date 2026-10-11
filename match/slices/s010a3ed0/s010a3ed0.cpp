@@ -742,7 +742,7 @@ void hkConstraintSolverSetup_resetSolverBuffers(hkConstraintSolverResources& res
 }
 
 // @ 0x010a4a70   (name inferred; cdecl; the third argument is unused)
-void hkConstraintSolverSetup_layoutBuffer(const hkSolverInfo* info, uintptr_t base, void* /*unused*/, hkSolverBufferLayout* out)
+__declspec(noinline) void hkConstraintSolverSetup_layoutBuffer(const hkSolverInfo* info, uintptr_t base, void* /*unused*/, hkSolverBufferLayout* out)
 {
 	out->m_buffer = base;
 	out->m_accumulators = base;

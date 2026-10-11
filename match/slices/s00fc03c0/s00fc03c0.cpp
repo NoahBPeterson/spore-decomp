@@ -252,6 +252,7 @@ struct cTerrainStateMgr {
     void Reset(bool updateNow);
 };
 
+// @ 0x00fc04b0
 void cTerrainStateMgr::Reset(bool updateNow)
 {
     m010 = 0.0f;

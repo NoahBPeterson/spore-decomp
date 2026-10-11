@@ -30,9 +30,11 @@ void* V3NormalizeSafe(void* out, void* in);                        // SP::normal
 int   FUN_00467980(int);
 void  FUN_004cd3c0(int);
 void  FUN_00533680(void*, void*, char);
-void  FUN_0052b060Impl(void*, void*, float);
-void  FUN_0052b170Impl(void*, float);
-void  FUN_0052b220Impl(void*, void*);
+struct BoneWeightList {
+    void Accum(int param_2, float param_3);     // 0x0052b060
+    void Normalize(float param_2);              // 0x0052b170
+    void CopyTop(int param_2);                  // 0x0052b220
+};
 void  FUN_0052ae30(uint32_t, const void*);
 bool  SP_GetResourceTypeFromModelType();               // 0x00526430
 
@@ -235,18 +237,19 @@ void SkinBoneWeights(int out1, int out2, int param_3, int param_4, float param_5
             float* pfVar6 = (float*)(iVar4 * 0xc + *(int*)(param_4 + 0x1c));
             float dp = pfVar6[0] * pfVar7[0] + pfVar6[1] * pfVar7[1] + pfVar6[2] * pfVar7[2];
             if (_DAT_0150cb00 < dp)
-                FUN_0052b060Impl((void*)(iVar4 * 0x14 + out1), (void*)iVar4, dp * dp);
+                ((BoneWeightList*)(iVar4 * 0x14 + out1))->Accum(iVar4, dp * dp);
             local_10 = *(uint32_t*)(*(int*)(param_4 + 0x94) + uVar5 * 4);
         } while (local_10 != uVar5 && local_10 != uVar3);
-        FUN_0052b170Impl((void*)(b * 0x14 + out1), param_5);
-        FUN_0052b060Impl((void*)(b * 0x14 + out1), (void*)b, 1.0f - param_5);
-        FUN_0052b220Impl((void*)(b * 0x14 + out2), (void*)b);
+        ((BoneWeightList*)(b * 0x14 + out1))->Normalize(param_5);
+        ((BoneWeightList*)(b * 0x14 + out1))->Accum(b, 1.0f - param_5);
+        ((BoneWeightList*)(b * 0x14 + out2))->CopyTop(b);
     }
 }
 
 // @ 0x0052b060
-void AccumBoneWeight(int* this_, int param_2, float param_3)
+void BoneWeightList::Accum(int param_2, float param_3)
 {
+    int* this_ = (int*)this;
     for (int i = 0; i < 4 && 0.0f < *(float*)(param_2 + 4 + i * 4); i++) {
         int j = 0;
         while (j < this_[5] && *(char*)(*this_ + j * 8) != *(char*)(param_2 + i))
@@ -263,8 +266,9 @@ void AccumBoneWeight(int* this_, int param_2, float param_3)
 }
 
 // @ 0x0052b170
-void NormalizeBoneWeights(int* this_, float param_2)
+void BoneWeightList::Normalize(float param_2)
 {
+    int* this_ = (int*)this;
     float total = 0.0f;
     for (int i = 0; i < this_[5]; i++)
         total = total + *(float*)(*this_ + 4 + i * 8);
@@ -277,8 +281,9 @@ void NormalizeBoneWeights(int* this_, float param_2)
 }
 
 // @ 0x0052b220
-void CopyTopBoneWeights(int* this_, int param_2)
+void BoneWeightList::CopyTop(int param_2)
 {
+    int* this_ = (int*)this;
     char tmp;
     FUN_00533680((void*)*this_, (void*)this_[1], tmp);
     float total = 0.0f;

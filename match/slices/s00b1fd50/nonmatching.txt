@@ -11,6 +11,6 @@
 00b207f0   71  HashTable::Find: complete; difftest PASS (232 valid, 100% cov); local-iterator shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20930  109  map<string,int>::find: complete source; difftest FAIL (5/131 valid mismatched: our side faults on an adversarial key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b209f0   67  string ctor from (alloc,string): complete; difftest PASS (207 valid, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
-00b20aa0  193  string append-format (Vsnprintf8 growth loop): complete; difftest UNSUPPORTED (original reads ecx at entry; varargs cannot be __thiscall, built cdecl); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20aa0  193  string append-format (Vsnprintf8 growth loop): complete; difftest UNSUPPORTED (re-verified: original reads ecx at entry; varargs member cannot be __thiscall in MSVC, custom ABI, left as is); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20b90   66  string ctor from string: complete; difftest WEAK (163 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
 00b20c00   52  string ctor with allocator copy: complete; difftest WEAK (180 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE

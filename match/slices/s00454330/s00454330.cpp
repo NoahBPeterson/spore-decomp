@@ -326,7 +326,8 @@ char* __fastcall Block32_erase(BlockVec* self, int, char* first, char* last)
 }
 
 // @ 0x00454e90  (release every pointer in [first,last))
-void __stdcall PtrRange_Release(void* allocator, cRefCounted** first, cRefCounted** last)
+struct PtrRangeOwner { void ReleaseRange(cRefCounted** first, cRefCounted** last); };
+void PtrRangeOwner::ReleaseRange(cRefCounted** first, cRefCounted** last)
 {
     for (; first < last; ++first) {
         if (*first) (*first)->Release();

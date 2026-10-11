@@ -43,11 +43,11 @@ static inline void RelObj(RCObj* o)
 }
 
 // ===========================================================================
+struct Stub00747920 { void F(); };
 // @ 0x00747920 : deque< cLoadQueueEntry >::pop_back
-void FUN_00747920(int self);
-void FUN_00747920(int self)
+void Stub00747920::F()
 {
-    unsigned char* b = (unsigned char*)self;
+    unsigned char* b = (unsigned char*)this;
     int beg = *(int*)(b + 0x18);
     int end = *(int*)(b + 0x1c);
     if (beg == end) {
@@ -100,14 +100,17 @@ void FUN_00747980(int* d, int* entry)
     RelObj(o);
 }
 
-// @ 0x00747ac0 : copy of a 0x38-byte record (dwords + Matrix3 copy ctor)
+// copy of a 0x38-byte record (0x00747ac0) (dwords + Matrix3 copy ctor)
 struct Mat3 { float m[9]; Mat3() {} Mat3(const Mat3& o) { for (int i = 0; i < 9; ++i) m[i] = o.m[i]; } };
 struct Rec38 {
     int a; short b, c; int d, e, f, g;
     Mat3 rot;   // +0x18
 };
-Rec38* FUN_00747ac0(Rec38* dst, Rec38* src)
+struct Rec38Stub { Rec38* F(Rec38* src); };
+// @ 0x00747ac0
+Rec38* Rec38Stub::F(Rec38* src)
 {
+    Rec38* dst = (Rec38*)this;
     dst->a = src->a;
     dst->b = src->b;
     dst->c = src->c;
@@ -210,10 +213,11 @@ void SortHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
         PopHeapOccluder(first, last, compare);
 }
 
-// @ 0x00748010 / 0x00748060 : make_heap / sort_heap for the 8-byte pair (greater)
+// make_heap (0x00748010) / sort_heap (0x00748060) for the 8-byte pair (greater)
 struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
+// @ 0x00748010
 void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
 {
     int heapSize = (int)(last - first);
@@ -226,6 +230,7 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
         } while (parentPosition != 0);
     }
 }
+// @ 0x00748060
 void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
 {
     for (; (last - first) > 1; --last) {
@@ -234,7 +239,8 @@ void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
         FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
-// @ 0x007480c0 / 0x00748110 : make_heap / sort_heap for the 8-byte pair (less)
+// make_heap (0x007480c0) / sort_heap (0x00748110) for the 8-byte pair (less)
+// @ 0x007480c0
 void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
 {
     int heapSize = (int)(last - first);
@@ -247,6 +253,7 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
         } while (parentPosition != 0);
     }
 }
+// @ 0x00748110
 void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
 {
     for (; (last - first) > 1; --last) {

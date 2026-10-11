@@ -356,15 +356,22 @@ void EncodeFormURL(const char* s, void* out) {
 // HTTPClient helpers
 // ===========================================================================
 
+struct HTTPClient {
+    bool AllocBuffer();
+    bool FindHeader(char* name, void* out, int index);
+    void SetNotificationTarget(void* target, void* ctx);
+};
+
 // @ 0x00941F20
-void* HTTPClientAllocBuffer(int self) {
+bool HTTPClient::AllocBuffer() {
+    int self = (int)this;
     if (*(char*)(self + 0xc) == 0) {
         void* p = operator_new_6(*(uint32_t*)(self + 0x144),
                                  "UTFInternet/char8_t", 0, 0, 0, 0);
         *(void**)(self + 0x140) = p;
         *(char*)(self + 0xc) = 1;
     }
-    return (void*)1;
+    return true;
 }
 
 // @ 0x00941F90
@@ -415,7 +422,8 @@ bool HTTPClientCheckTimeout(int self, int* timeout) {
 }
 
 // @ 0x00942050
-bool HTTPClientFindHeader(int* self, char* name, void* out, int index) {
+bool HTTPClient::FindHeader(char* name, void* out, int index) {
+    int* self = (int*)this;
     int count = (self[1] - *self) / 0xa8;
     int found = 0;
     for (int i = 0; i < count; i++) {
@@ -455,7 +463,8 @@ void HTTPClientSendCallback(int self, const char* data, int len) {
 }
 
 // @ 0x00942150
-void HTTPClientSetNotificationTarget(int self, void* target, void* ctx) {
+void HTTPClient::SetNotificationTarget(void* target, void* ctx) {
+    int self = (int)this;
     void* old = *(void**)(self + 0x24);
     if (old == target) {
         *(void**)(self + 0x28) = ctx;

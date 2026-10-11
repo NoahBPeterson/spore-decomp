@@ -1,2 +1,10 @@
 00edeb20 Simulator::cScenarioEditModeBehaviorUI::cScenarioEditModeBehaviorUI  # vtable_names.txt vt
-00edebb0 Simulator::cScenarioEditModeBehaviorUI::~cScenarioEditModeBehaviorUI  # vtable reset + member release
+00edebb0 ObjEBB0::f  # vtable reset + member release
+
+00ede400 FUN_00ede400  # DEF_SETTER macro
+00ede530 FUN_00ede530  # DEF_SETTER macro
+00ede660 FUN_00ede660  # DEF_SETTER macro
+00ede790 FUN_00ede790  # DEF_SETTER macro
+00ede8c0 FUN_00ede8c0  # DEF_SETTER macro
+00ede9f0 FUN_00ede9f0  # DEF_SETTER macro
+00ede2b0 FUN_00ede2b0

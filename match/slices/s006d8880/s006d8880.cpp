@@ -3,13 +3,13 @@
 #include "../s006ccf50/s006ccf50.h"
 
 // uv4u16 / colour4u8 / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8880, 0, 4, 1, 0, 2)   // @ 0x006d8880
+DEFINE_BAKE(Bake_6d8880, 0, 4, 1, 0, 2)
 // uv4u8  / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8c00, 0, 4, 0, 1, 2)   // @ 0x006d8c00
+DEFINE_BAKE(Bake_6d8c00, 0, 4, 0, 1, 2)
 // uv2u16 / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d8f60, 0, 2, 1, 1, 2)   // @ 0x006d8f60
+DEFINE_BAKE(Bake_6d8f60, 0, 2, 1, 1, 2)
 // uv4u16 / colour4f  / core FUN_006c4200 / acos weight (axis.y * len)
-DEFINE_BAKE(Bake_6d9280, 0, 4, 1, 1, 2)   // @ 0x006d9280
+DEFINE_BAKE(Bake_6d9280, 0, 4, 1, 1, 2)
 
 // ---------------------------------------------------------------------------
 // 0x006d95e0: eastl::rbtree lookup, inserting the key when absent.
@@ -34,7 +34,8 @@ struct RBTree
 // tree insert helper (real name unknown; 0x006c4b50)
 void __cdecl FUN_006c4b50(void* self, void** out, RBNode* lower, const void* value, int flag);
 
-void* RBTree::FindOrInsert(const int* pKey)   // @ 0x006d95e0
+// @ 0x006d95e0
+void* RBTree::FindOrInsert(const int* pKey)
 {
     RBNode* endNode = &this->anchor;
     RBNode* lower = endNode;
@@ -77,8 +78,16 @@ void __cdecl eastl_allocator_deallocate(void* p);
 void* __cdecl eastl_allocator_allocate(uint32_t size, const char* tag, int a, int b,
                                        const char* file, int line);
 
-void FUN_006d9660(uint32_t* self, uint32_t position, uint32_t value)   // @ 0x006d9660
+struct HandleVec
 {
+    uint32_t mWords[5];
+    void Insert(uint32_t position, uint32_t value);
+};
+
+// @ 0x006d9660
+void HandleVec::Insert(uint32_t position, uint32_t value)
+{
+    uint32_t* self = mWords;
     uint32_t end = self[1];
     if (end != self[2])
     {

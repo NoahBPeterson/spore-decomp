@@ -29,7 +29,8 @@ int DAT_01532b94 = 0;
 
 // ---------------------------------------------------------------------------
 // 0x006de020: draw an image quad / NDC quad.
-void FUN_006de020(int param_1, int param_2, int param_3)   // @ 0x006de020
+// @ 0x006de020
+void FUN_006de020(int param_1, int param_2, int param_3)
 {
     int uVar1 = DAT_016f9200;
     DAT_016f9200 = 3;
@@ -162,7 +163,8 @@ void FUN_006de3a0(int* param_1, int* param_2)   // @ 0x006de3a0
 }
 
 // 0x006de3f0: binary insertion sort variant.
-void FUN_006de3f0(int* param_1, int* param_2)   // @ 0x006de3f0
+// @ 0x006de3f0
+void FUN_006de3f0(int* param_1, int* param_2)
 {
     for (; param_1 != param_2; param_1 = param_1 + 1)
     {
@@ -205,7 +207,8 @@ void FUN_006de440(int* param_1, int* param_2)   // @ 0x006de440
 }
 
 // 0x006de490: binary insertion sort variant (opposite comparison).
-void FUN_006de490(int* param_1, int* param_2)   // @ 0x006de490
+// @ 0x006de490
+void FUN_006de490(int* param_1, int* param_2)
 {
     for (; param_1 != param_2; param_1 = param_1 + 1)
     {
@@ -228,7 +231,8 @@ void FUN_006de490(int* param_1, int* param_2)   // @ 0x006de490
 }
 
 // 0x006de4e0: heap sift-up (unsigned compare).
-void FUN_006de4e0(int param_1, int param_2, int param_3, int param_4)   // @ 0x006de4e0
+// @ 0x006de4e0
+void FUN_006de4e0(int param_1, int param_2, int param_3, int param_4)
 {
     if (param_3 <= param_2)
     {
@@ -249,7 +253,8 @@ void FUN_006de4e0(int param_1, int param_2, int param_3, int param_4)   // @ 0x0
 }
 
 // 0x006de530: heap sift-up (signed compare).
-void FUN_006de530(int param_1, int param_2, int param_3, int param_4)   // @ 0x006de530
+// @ 0x006de530
+void FUN_006de530(int param_1, int param_2, int param_3, int param_4)
 {
     if (param_3 <= param_2)
     {
@@ -270,7 +275,8 @@ void FUN_006de530(int param_1, int param_2, int param_3, int param_4)   // @ 0x0
 }
 
 // 0x006de580: heap sift-up for 0x34-byte elements.
-void FUN_006de580(int param_1, int param_2, int param_3, uint32_t param_4, ...)   // @ 0x006de580
+// @ 0x006de580
+void FUN_006de580(int param_1, int param_2, int param_3, uint32_t param_4, ...)
 {
     uint32_t* args = &param_4;
     while (param_2 < param_3)
@@ -300,7 +306,8 @@ struct ImagePacker
     void BestFit2(int param_2);  // 0x006de710
 };
 
-void ImagePacker::BestFit(int param_2)   // @ 0x006de5e0
+// @ 0x006de5e0
+void ImagePacker::BestFit(int param_2)
 {
     int local_20, local_1c, local_18, local_14, local_10;
     local_18 = -1;
@@ -365,7 +372,8 @@ void ImagePacker::BestFit(int param_2)   // @ 0x006de5e0
     }
 }
 
-void ImagePacker::BestFit2(int param_2)   // @ 0x006de710
+// @ 0x006de710
+void ImagePacker::BestFit2(int param_2)
 {
     int iVar7 = (*(int*)(param_2 + 0x4c) - *(int*)(param_2 + 0x48)) >> 2;
     int local_10 = DAT_01532b94;
@@ -457,7 +465,8 @@ struct Elem16
     RefObject* mpRef;   // +0xc
 };
 
-int* FUN_006de850(int* param_1, uint32_t* param_2, uint32_t* param_3, int param_4)   // @ 0x006de850
+// @ 0x006de850
+int* FUN_006de850(int* param_1, uint32_t* param_2, uint32_t* param_3, int param_4)
 {
     *param_1 = param_4;
     for (; param_2 != param_3; param_2 += 4)
@@ -479,7 +488,8 @@ int* FUN_006de850(int* param_1, uint32_t* param_2, uint32_t* param_3, int param_
 }
 
 // 0x006de8f0: fill a run of 0x10-byte ref-counted elements from one source.
-void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)   // @ 0x006de8f0
+// @ 0x006de8f0
+void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)
 {
     for (; param_2 != 0; --param_2)
     {
@@ -500,7 +510,8 @@ void FUN_006de8f0(uint32_t* param_1, int param_2, uint32_t* param_3)   // @ 0x00
 
 // ---------------------------------------------------------------------------
 // 0x006de980: heap sift-down -> sift-up (unsigned).
-void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)   // @ 0x006de980
+// @ 0x006de980
+void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
     while (true)
@@ -524,7 +535,8 @@ void FUN_006de980(int param_1, int param_2, int param_3, int param_4, int param_
 }
 
 // 0x006de9f0: heap sift-down -> sift-up (signed).
-void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)   // @ 0x006de9f0
+// @ 0x006de9f0
+void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_5, int param_6)
 {
     int iVar1, iVar2;
     while (true)
@@ -548,7 +560,8 @@ void FUN_006de9f0(int param_1, int param_2, int param_3, int param_4, int param_
 }
 
 // 0x006dea60: heap sift-down for 0x34-byte elements.
-void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, ...)   // @ 0x006dea60
+// @ 0x006dea60
+void FUN_006dea60(int param_1, int param_2, int param_3, int param_4, ...)
 {
     int iVar1, iVar2;
     while (true)
@@ -587,7 +600,8 @@ void FUN_006deb70(uint32_t* param_1, int param_2, uint32_t param_3)   // @ 0x006
 
 // ---------------------------------------------------------------------------
 // 0x006dec60: scale a mesh's position/uv data by sqrt(scale).
-void FUN_006dec60(int param_1, int* param_2, float param_3)   // @ 0x006dec60
+// @ 0x006dec60
+void FUN_006dec60(int param_1, int* param_2, float param_3)
 {
     if ((char)param_2[0xc] == '\0')
     {
@@ -640,7 +654,8 @@ void FUN_006dec60(int param_1, int* param_2, float param_3)   // @ 0x006dec60
 }
 
 // 0x006dede0: insertion sort of 13-dword records by dword[+4].
-void FUN_006dede0(uint32_t* param_1, uint32_t* param_2)   // @ 0x006dede0
+// @ 0x006dede0
+void FUN_006dede0(uint32_t* param_1, uint32_t* param_2)
 {
     if (param_1 != param_2)
     {

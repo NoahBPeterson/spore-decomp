@@ -7,6 +7,7 @@ extern int DAT_01634380;
 extern int FUN_011fda50(...);
 
 
+// @ 0x00797a20
 int
 FUN_00797a20(int *param_1,int *param_2,int param_3,int *param_4,float *param_5,float *param_6,
             int param_7)

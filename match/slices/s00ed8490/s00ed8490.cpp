@@ -6,6 +6,7 @@ typedef void  (__thiscall *FV_v)(void*);
 typedef void* (__thiscall *FV_p)(void*);
 
 // ================================================================ 0x00ed8490
+// @ 0x00ed8490
 int __cdecl FUN_00ed8490(int p)
 {
     if (*(char*)(p + 0x4c8) == 1) {
@@ -27,6 +28,7 @@ int __cdecl FUN_00ed8490(int p)
 }
 
 // ================================================================ 0x00ed8500
+// @ 0x00ed8500
 int __cdecl FUN_00ed8500(int p)
 {
     if (*(char*)(p + 0x4c8) == 1) {
@@ -48,6 +50,7 @@ int __cdecl FUN_00ed8500(int p)
 }
 
 // ================================================================ 0x00ed8570
+// @ 0x00ed8570
 int __cdecl FUN_00ed8570(int p)
 {
     if (*(char*)(p + 0x4c8) == 1) {
@@ -88,6 +91,7 @@ void* Obj85e0::f()
 
 // ================================================================ 0x00ed8610
 struct Obj8610 { void f(); };
+// @ 0x00ed8610
 void Obj8610::f()
 {
     char* s = (char*)this;
@@ -130,12 +134,15 @@ typedef void  (__thiscall *FVf_ii)(void*, int, int);
 typedef void  (__thiscall *FVf_iip)(void*, int, int, void*);
 typedef void  (__thiscall *FVf_if)(void*, int, float);
 
-struct S_c8ad30 { void f(int, int); };
+struct S_c8ad30 {
+    void f(int, int);   // 0x00c8ad30
+};
 struct S_c8b210 { void f(int); };
 struct S_c88a00 { void f(int, float); };
 struct S_c8a200 { void f(int, float); };
 
 // ================================================================ 0x00ed8690
+// @ 0x00ed8690
 void FUN_00ed8690(void)
 {
     void* nm = FUN_00b3d300();
@@ -184,6 +191,7 @@ static void clear2(int* field)
         }
     }
 }
+// @ 0x00ed8780
 void Obj8780::f(int b)
 {
     char* s = (char*)this;

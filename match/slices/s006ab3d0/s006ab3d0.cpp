@@ -69,11 +69,13 @@ bool __fastcall FUN_006abee0(char* self)
 // ===========================================================================
 struct FixedAlloc {
     bool AddCore(int, int);   // 0x00926650
+    void* AllocateChunk(uint32_t size, int flags);
 };
 
 // @ 0x006abe50
-void* FUN_006abe50(FixedAlloc* self, uint32_t size, int flags)
+void* FixedAlloc::AllocateChunk(uint32_t size, int flags)
 {
+    FixedAlloc* self = this;
     if (size > 0x14)
         return EASTL_allocator_allocate(size, "App", flags, 0, ALLOC_FILE, 0xd1);
     for (;;) {

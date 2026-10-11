@@ -16,19 +16,41 @@ extern "C" void  __cdecl FUN_00dfdf10(void*, void*);
 extern "C" void* __cdecl FUN_00dfd250(void*, void*, void*);
 extern "C" void* __cdecl FUN_00dfd2c0(void*, void*, void*);
 extern "C" void  __cdecl FUN_00dfd4e0(void*, void*, void*, void*, void*);
-extern "C" void  __cdecl FUN_00dfc600(void*, void*);
-extern "C" void  __cdecl FUN_00dfc660(void*, void*);
-extern "C" void* __cdecl FUN_00dfe9e0(uint32_t, void*, void*, void*);
-extern "C" void* __cdecl FUN_00dfea40(uint32_t, void*, void*, void*);
-extern "C" void  __cdecl FUN_00dfb280(void*);
+// thiscall stub classes (receiver in ECX)
+struct V188 {
+    void* b; void* e; void* cap;
+    V188* Assign(V188* other);                       // 0x00dfeb00 ret 4
+    void* Alloc(uint32_t n, void* f, void* l);       // 0x00dfe9e0 ret 0xc
+    void  Destroy(void* f, void* l);                 // 0x00dfc600 ret 8
+};
+struct V4e0 {
+    void* b; void* e; void* cap;
+    V4e0* Assign(V4e0* other);                       // 0x00dfec50 ret 4
+    V4e0* AssignWrap(V4e0* other);                   // 0x00dfed90 ret 4
+    void* Alloc(uint32_t n, void* f, void* l);       // 0x00dfea40 ret 0xc
+    void  Destroy(void* f, void* l);                 // 0x00dfc660 ret 8
+};
+struct CStr {
+    void Assign(void* o);                            // 0x006b5430 thiscall ret 4
+};
+struct ElemA {                                       // 0x2788-class
+    void* CopyAssign(void* o);                       // 0x00dfedb0 ret 4
+    void* CopyCtor(void* o);                         // 0x00dff1a0 ret 4
+};
+struct ElemB {                                       // 0x27e8-class
+    void* CopyCtor(void* o);                         // 0x00dfee80 ret 4
+    void* Init(void* o);                             // 0x00dff130 ret 4
+};
+struct Buf3c {
+    void Copy(void* o);                              // 0x00dfb280 thiscall ret 4
+};
+extern "C" void __stdcall WStr_Assign(void*, void*); // 0x00423650 ret 8
 extern "C" void  __cdecl FUN_00df9990();
 extern "C" void  __cdecl FUN_00df9ef0();
 extern "C" void  __cdecl FUN_00df9e60();
 extern "C" void  __cdecl FUN_00dfae50();
 extern "C" void  __cdecl FUN_00dfab20();
 extern "C" void  __cdecl FUN_00dfa460();
-extern "C" void  __cdecl FUN_006b5430();        // cString::operator=
-extern "C" void  __cdecl FUN_00423650(void*, void*);  // WString_Assign
 extern "C" void  __cdecl FUN_00685a30(void*, void*);
 extern "C" void* __cdecl FUN_00435e90();        // GetRecorderState
 extern "C" void  __cdecl FUN_00435ed0();
@@ -92,16 +114,17 @@ void** UninitCopy238(void** dstp, int* first, int* last, int val) {
 //  0x00dfeb00  vector assign, stride 0x188
 // ===========================================================================
 // @ 0x00dfeb00
-void** VectorAssign188(void** self, int* other) {
+V188* V188::Assign(V188* other_) {
+    void** self = (void**)this; int* other = (int*)other_;
     if (other == (int*)self) {
-        return self;
+        return this;
     }
     int iVar1 = *other;
     uint32_t uVar2 = (uint32_t)((other[1] - iVar1) / 0x188);
     int iVar5 = (int)*self;
     if ((uint32_t)(((int*)self)[2] - iVar5) / 0x188 < uVar2) {
-        iVar5 = (int)FUN_00dfe9e0(uVar2, (void*)iVar1, (void*)other[1], 0);
-        FUN_00dfc600(*self, (void*)((int*)self)[1]);
+        iVar5 = (int)Alloc(uVar2, (void*)iVar1, (void*)other[1]);
+        Destroy(*self, (void*)((int*)self)[1]);
         int p = (int)*self;
         if (p != 0 && *(int*)(p - 4) != 0) {
             EA_Free((void*)p);
@@ -109,7 +132,7 @@ void** VectorAssign188(void** self, int* other) {
         ((int*)self)[1] = uVar2 * 0x188 + iVar5;
         *self = (void*)iVar5;
         ((int*)self)[2] = uVar2 * 0x188 + iVar5;
-        return self;
+        return this;
     }
     uint32_t uVar3 = (uint32_t)(((int*)self)[1] - iVar5) / 0x188;
     if (uVar3 < uVar2) {
@@ -118,28 +141,29 @@ void** VectorAssign188(void** self, int* other) {
         FUN_00dfd4e0(&other, (void*)((((int*)self)[1] - (int)*self) / 0x188 * 0x188 + *other),
                      other, (void*)((int*)self)[1], other);
         ((int*)self)[1] = uVar2 * 0x188 + (int)*self;
-        return self;
+        return this;
     }
     void* uVar6 = FUN_00dfd250((void*)iVar1, (void*)other[1], (void*)iVar5);
-    FUN_00dfc600(uVar6, (void*)((int*)self)[1]);
+    Destroy(uVar6, (void*)((int*)self)[1]);
     ((int*)self)[1] = uVar2 * 0x188 + (int)*self;
-    return self;
+    return this;
 }
 
 // ===========================================================================
 //  0x00dfec50  vector resize/assign, stride 0x4e0
 // ===========================================================================
 // @ 0x00dfec50
-void** VectorAssign4e0(void** self, int* other) {
+V4e0* V4e0::Assign(V4e0* other_) {
+    void** self = (void**)this; int* other = (int*)other_;
     if (other == (int*)self) {
-        return self;
+        return this;
     }
     int iVar1 = *other;
     uint32_t uVar2 = (uint32_t)((other[1] - iVar1) / 0x4e0);
     int ebp0 = (int)*self;
     if ((uint32_t)(((int*)self)[2] - ebp0) / 0x4e0 < uVar2) {
-        int iVar5 = (int)FUN_00dfea40(uVar2, (void*)iVar1, (void*)other[1], 0);
-        FUN_00dfc660(*self, (void*)((int*)self)[1]);
+        int iVar5 = (int)Alloc(uVar2, (void*)iVar1, (void*)other[1]);
+        Destroy(*self, (void*)((int*)self)[1]);
         int p = (int)*self;
         if (p != 0 && *(int*)(p - 4) != 0) {
             EA_Free((void*)p);
@@ -147,7 +171,7 @@ void** VectorAssign4e0(void** self, int* other) {
         *self = (void*)iVar5;
         ((int*)self)[2] = uVar2 * 0x4e0 + iVar5;
         ((int*)self)[1] = uVar2 * 0x4e0 + iVar5;
-        return self;
+        return this;
     }
     uint32_t uVar3 = (uint32_t)(((int*)self)[1] - ebp0) / 0x4e0;
     if (uVar3 < uVar2) {
@@ -156,48 +180,48 @@ void** VectorAssign4e0(void** self, int* other) {
         FUN_00dfd4e0(&other, (void*)((((int*)self)[1] - (int)*self) / 0x4e0 * 0x4e0 + *other),
                      other, (void*)((int*)self)[1], other);
         ((int*)self)[1] = uVar2 * 0x4e0 + (int)*self;
-        return self;
+        return this;
     }
     void* uVar6 = FUN_00dfd2c0((void*)iVar1, (void*)other[1], (void*)ebp0);
-    FUN_00dfc660(uVar6, (void*)((int*)self)[1]);
+    Destroy(uVar6, (void*)((int*)self)[1]);
     ((int*)self)[1] = uVar2 * 0x4e0 + (int)*self;
-    return self;
+    return this;
 }
 
 // @ 0x00dfed90  wrapper calling 00dfec50
-void** VectorAssign4e0_wrap(void** self, void* other) {
-    *self = (void*)self;   // placeholder; real body delegates
-    VectorAssign4e0(self, (int*)other);
-    return self;
+V4e0* V4e0::AssignWrap(V4e0* other) {
+    Assign(other);
+    return this;
 }
 
 // ===========================================================================
 //  0x00dfedb0  copy-assign for the 0x2788 element class
 // ===========================================================================
 // @ 0x00dfedb0
-void* ElemCopyAssign(void* s, void* o) {
-    FUN_006b5430();
+void* ElemA::CopyAssign(void* o) {
+    void* s = this;
+    ((CStr*)s)->Assign(o);
     if ((void*)((char*)o + 0x14) != (void*)((char*)s + 0x14)) {
-        FUN_00423650(*(void**)((char*)o + 0x14), *(void**)((char*)o + 0x18));
+        WStr_Assign(*(void**)((char*)o + 0x14), *(void**)((char*)o + 0x18));
     }
     *(uint32_t*)((char*)s + 0x24) = *(uint32_t*)((char*)o + 0x24);
     *(uint32_t*)((char*)s + 0x28) = *(uint32_t*)((char*)o + 0x28);
     if ((void*)((char*)o + 0x2c) != (void*)((char*)s + 0x2c)) {
-        FUN_00423650(*(void**)((char*)o + 0x2c), *(void**)((char*)o + 0x30));
+        WStr_Assign(*(void**)((char*)o + 0x2c), *(void**)((char*)o + 0x30));
     }
-    FUN_006b5430();
+    ((CStr*)((char*)s + 0x3c))->Assign((char*)o + 0x3c);
     if ((void*)((char*)o + 0x50) != (void*)((char*)s + 0x50)) {
-        FUN_00423650(*(void**)((char*)o + 0x50), *(void**)((char*)o + 0x54));
+        WStr_Assign(*(void**)((char*)o + 0x50), *(void**)((char*)o + 0x54));
     }
     *(uint32_t*)((char*)s + 0x60) = *(uint32_t*)((char*)o + 0x60);
     *(uint32_t*)((char*)s + 0x64) = *(uint32_t*)((char*)o + 0x64);
     if ((void*)((char*)o + 0x68) != (void*)((char*)s + 0x68)) {
-        FUN_00423650(*(void**)((char*)o + 0x68), *(void**)((char*)o + 0x6c));
+        WStr_Assign(*(void**)((char*)o + 0x68), *(void**)((char*)o + 0x6c));
     }
     *(uint32_t*)((char*)s + 0x78) = *(uint32_t*)((char*)o + 0x78);
     *(uint8_t*)((char*)s + 0x7c) = *(uint8_t*)((char*)o + 0x7c);
     *(uint32_t*)((char*)s + 0x80) = *(uint32_t*)((char*)o + 0x80);
-    VectorAssign188((void**)((char*)s + 0x84), (int*)((char*)o + 0x84));
+    ((V188*)((char*)s + 0x84))->Assign((V188*)((char*)o + 0x84));
     return s;
 }
 
@@ -205,22 +229,23 @@ void* ElemCopyAssign(void* s, void* o) {
 //  0x00dfee80  copy-ctor for the 0x27e8 element class
 // ===========================================================================
 // @ 0x00dfee80
-void* ElemCopyCtor27e8(void* s, void* o) {
+void* ElemB::CopyCtor(void* o) {
+    void* s = this;
     for (int i = 0; i < 8; ++i) ((uint32_t*)s)[i] = ((uint32_t*)o)[i];
     *(uint8_t*)((char*)s + 0x20) = *(uint8_t*)((char*)o + 0x20);
     *(uint32_t*)((char*)s + 0x24) = *(uint32_t*)((char*)o + 0x24);
     for (int i = 0; i < 8; ++i) ((uint32_t*)((char*)s + 0x28))[i] = ((uint32_t*)((char*)o + 0x28))[i];
     *(uint32_t*)((char*)s + 0x48) = *(uint32_t*)((char*)o + 0x48);
     for (int i = 0; i < 8; ++i) ((uint32_t*)((char*)s + 0x50))[i] = ((uint32_t*)((char*)o + 0x50))[i];
-    VectorAssign4e0((void**)((char*)s + 0x70), (int*)((char*)o + 0x70));
-    FUN_006b5430();
+    ((V4e0*)((char*)s + 0x70))->Assign((V4e0*)((char*)o + 0x70));
+    ((CStr*)((char*)s + 0x2788))->Assign((char*)o + 0x2788);
     if ((void*)((char*)o + 0x2788 + 0x14) != (void*)((char*)s + 0x2788 + 0x14)) {
-        FUN_00423650(*(void**)((char*)o + 0x2788 + 0x14), *(void**)((char*)o + 0x2788 + 0x18));
+        WStr_Assign(*(void**)((char*)o + 0x2788 + 0x14), *(void**)((char*)o + 0x2788 + 0x18));
     }
     *(uint32_t*)((char*)s + 0x27c4) = *(uint32_t*)((char*)o + 0x27c4);
     *(uint32_t*)((char*)s + 0x27c8) = *(uint32_t*)((char*)o + 0x27c8);
     if ((void*)((char*)o + 0x27d0) != (void*)((char*)s + 0x27d0)) {
-        FUN_00423650(*(void**)((char*)o + 0x27d0), *(void**)((char*)o + 0x27d4));
+        WStr_Assign(*(void**)((char*)o + 0x27d0), *(void**)((char*)o + 0x27d4));
     }
     *(uint32_t*)((char*)s + 0x27e0) = *(uint32_t*)((char*)o + 0x27e0);
     *(uint32_t*)((char*)s + 0x27e4) = *(uint32_t*)((char*)o + 0x27e4);
@@ -241,9 +266,10 @@ void UISpace_Dtor(void* s) {
 //  0x00dff130  element-wise assign for the 0x27e8 class (from a fresh object)
 // ===========================================================================
 // @ 0x00dff130
-void* ElemInit27e8(void* s, void* o) {
-    FUN_00dfb280(o);
-    FUN_00dfb280((char*)o + 0x3c);
+void* ElemB::Init(void* o) {
+    void* s = this;
+    ((Buf3c*)s)->Copy(o);
+    ((Buf3c*)((char*)s + 0x3c))->Copy((char*)o + 0x3c);
     *(uint32_t*)((char*)s + 0x78) = *(uint32_t*)((char*)o + 0x78);
     *(uint8_t*)((char*)s + 0x7c) = *(uint8_t*)((char*)o + 0x7c);
     *(uint32_t*)((char*)s + 0x80) = *(uint32_t*)((char*)o + 0x80);
@@ -251,7 +277,7 @@ void* ElemInit27e8(void* s, void* o) {
     *(void**)((char*)s + 0x88) = (char*)s + 0x9c;
     *(void**)((char*)s + 0x98) = 0;
     *(void**)((char*)s + 0x8c) = (char*)s + 0x534;
-    VectorAssign188((void**)((char*)s + 0x84), (int*)((char*)o + 0x84));
+    ((V188*)((char*)s + 0x84))->Assign((V188*)((char*)o + 0x84));
     return s;
 }
 
@@ -259,7 +285,8 @@ void* ElemInit27e8(void* s, void* o) {
 //  0x00dff1a0  copy-ctor for the 0x2788 element class
 // ===========================================================================
 // @ 0x00dff1a0
-void* ElemCopyCtor2788(void* s, void* o) {
+void* ElemA::CopyCtor(void* o) {
+    void* s = this;
     for (int i = 0; i < 8; ++i) ((uint32_t*)s)[i] = ((uint32_t*)o)[i];
     *(uint8_t*)((char*)s + 0x20) = *(uint8_t*)((char*)o + 0x20);
     *(uint32_t*)((char*)s + 0x24) = *(uint32_t*)((char*)o + 0x24);
@@ -270,8 +297,8 @@ void* ElemCopyCtor2788(void* s, void* o) {
     *(void**)((char*)s + 0x74) = (char*)s + 0x88;
     *(void**)((char*)s + 0x78) = (char*)s + 0x2788;
     *(void**)((char*)s + 0x84) = 0;
-    VectorAssign4e0((void**)((char*)s + 0x70), (int*)((char*)o + 0x70));
-    FUN_00dfb280((char*)o + 0x2788);
+    ((V4e0*)((char*)s + 0x70))->Assign((V4e0*)((char*)o + 0x70));
+    ((Buf3c*)((char*)s + 0x2788))->Copy((char*)o + 0x2788);
     *(uint32_t*)((char*)s + 0x27c4) = *(uint32_t*)((char*)o + 0x27c4);
     *(uint32_t*)((char*)s + 0x27c8) = *(uint32_t*)((char*)o + 0x27c8);
     *(uint32_t*)((char*)s + 0x27cc) = *(uint32_t*)((char*)o + 0x27cc);
@@ -299,7 +326,7 @@ void** UninitCopy27e8(void** dstp, int* first, int* last, int val) {
         char* d = (char*)*dstp;
         if (d != 0) {
             *(int*)d = *first;
-            ElemCopyCtor2788(d + 8, first + 2);
+            ((ElemA*)(d + 8))->CopyCtor(first + 2);
         }
         *dstp = (char*)*dstp + 0x27e8;
         first = (int*)((char*)first + 0x27e8);

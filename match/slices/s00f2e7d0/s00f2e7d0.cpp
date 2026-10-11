@@ -257,5 +257,7 @@ void Serialize27e8(V27e8* v, void* owner) { (void)v; (void)owner; }   // @ 0x00F
 void Serialize27e0_vec(void* v, void* owner) { (void)v; (void)owner; } // @ 0x00F2F5E0
 void Serialize238(V238* v, void* owner) { (void)v; (void)owner; }      // @ 0x00F2F1B0
 void Serialize534(V534* v, void* owner) { (void)v; (void)owner; }      // @ 0x00F2F4F0
-void Erase27e0(void* first, void* last) { (void)first; (void)last; }   // @ 0x00F2F2E0
-void Erase27e8(void* first, void* last) { (void)first; (void)last; }   // @ 0x00F2F340
+// @ 0x00F2F2E0
+void Erase27e0(void* first, void* last) { (void)first; (void)last; }
+// @ 0x00F2F340
+void Erase27e8(void* first, void* last) { (void)first; (void)last; }

@@ -1,8 +1,8 @@
-00472b80 737 complete source; sqrt in x87 but result temps / branch store order differ (x87-optimized RW math)
-00472f50 84 complete source; inlined strlen intrinsic loop shape / local order differ
-00473140 96 complete source; char copy-ctor inline uninitialized_copy scratch-slot frame differs
-00473300 11 complete source; vector<Elem29c> dtor, only /Od frame holes differ
-00473370 177 complete source; vector<Elem29c>::resize, extra /Od frame holes from inlined temp dtor
-00473500 27 complete source; vector<Pod12>::operator=, branch-2 CopyRef local slot layout differs
-00473890 213 complete source; vector<Pod12>::reserve, uninitialized_relocate inline wrapper not reproduced
-00473b00 27 complete source; vector<Pair8>::operator=, branch-2 CopyRef local slot layout differs
+00472b80 737 complete source; sqrt in x87 but result temps / branch store order differ (x87-optimized RW math); FAIL (first mismatch import call #0: ours inlines sqrt, orig calls _CIsqrt)
+00472f50 84 complete source; inlined strlen intrinsic loop shape / local order differ; equiv PASS (1115 inputs)
+00473140 96 complete source; char copy-ctor inline uninitialized_copy scratch-slot frame differs; equiv WEAK (456 valid, 78% cov)
+00473300 11 complete source; vector<Elem29c> dtor, only /Od frame holes differ; equiv WEAK (771 valid, 49% cov)
+00473370 177 complete source; vector<Elem29c>::resize, extra /Od frame holes from inlined temp dtor; equiv WEAK (793 valid, 95% cov)
+00473500 27 complete source; vector<Pod12>::operator=, branch-2 CopyRef local slot layout differs; equiv WEAK (339 valid, 37% cov)
+00473890 213 complete source; vector<Pod12>::reserve, uninitialized_relocate inline wrapper not reproduced; equiv WEAK (1039 valid, 84% cov)
+00473b00 27 complete source; vector<Pair8>::operator=, branch-2 CopyRef local slot layout differs; equiv WEAK (264 valid, 43% cov)

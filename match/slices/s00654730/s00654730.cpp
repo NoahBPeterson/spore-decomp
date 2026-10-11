@@ -105,8 +105,13 @@ void FUN_00654d00(void* self) {
         (*(void(__thiscall**)(void*))((char*)*(void**)item + 8))(item);
 }
 
+struct cSPUIAssetGrid {
+    void ScrollTo(void* item);
+};
+
 // @ 0x00654e20  SP::cSPUIAssetGrid::ScrollTo(item)
-void FUN_00654e20(void* self, void* item) {
+void cSPUIAssetGrid::ScrollTo(void* item) {
+    void* self = this;
     char* s = (char*)self;
     if (!item)
         return;

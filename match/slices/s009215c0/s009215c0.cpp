@@ -66,6 +66,7 @@ rbtree_node_base* RBTreeRotateRight(rbtree_node_base* pNode, rbtree_node_base* p
 	/// Insert a node into the tree and rebalance the tree as a result of the 
 	/// disturbance the node introduced.
 	///
+	// @ 0x009216A0
 	EASTL_API void RBTreeInsert(rbtree_node_base* pNode,
 								rbtree_node_base* pNodeParent, 
 								rbtree_node_base* pNodeAnchor,
@@ -170,6 +171,7 @@ rbtree_node_base* RBTreeRotateRight(rbtree_node_base* pNode, rbtree_node_base* p
 	/// RBTreeErase
 	/// Erase a node from the tree.
 	///
+	// @ 0x00921880
 	EASTL_API void RBTreeErase(rbtree_node_base* pNode, rbtree_node_base* pNodeAnchor)
 	{
 		rbtree_node_base*& pNodeRootRef      = pNodeAnchor->mpNodeParent;
@@ -560,7 +562,12 @@ HANDLE GetThreadId() {
 }
 
 // @ 0x00921E00  (name setter: first byte flag, then a 15-char string)
-char* SetThreadName(char* dst, const char* src) {
+struct ThreadName {
+    char mData[0x11];
+    char* Set(const char* src);
+};
+char* ThreadName::Set(const char* src) {
+    char* dst = mData;
     dst[0] = 0;
     if (src) { strncpy(dst + 1, src, 0xf); dst[0x10] = 0; return dst; }
     dst[1] = 0;
@@ -569,7 +576,7 @@ char* SetThreadName(char* dst, const char* src) {
 
 }} // namespace EA::Thread
 
-// @ 0x00922310
+// (00922310 is ThreadBlob::Dtor22310 below)
 void FUN_00922310();   // declared to keep ordering; bodies below.
 
 // ---- remaining EA::Thread internals (best-effort source; declared after use above)
@@ -664,9 +671,9 @@ extern "C" int g_condTimeoutPlaceholder;
 namespace EA { namespace Thread {
 void FUN_009225d0(int, char, char*);
 void FUN_00922820(int, int);
-int  SemaphoreInitBlob(void* self, void* pName);
+struct SemInit { int Init(void* pName); };  // 0x00922620 (Semaphore::Init, thiscall)
 
-struct OutOfLineDtor { ~OutOfLineDtor(); };
+struct OutOfLineDtor { ~OutOfLineDtor(); };  // ~OutOfLineDtor 0x00922610
 struct ThreadBlob {
     char data[0x200];
     void Dtor21e40();
@@ -682,18 +689,20 @@ void ThreadBlob::Dtor21e40() {
     ((OutOfLineDtor*)(data + 0x1c))->~OutOfLineDtor();
     ((OutOfLineDtor*)(data + 0x0c))->~OutOfLineDtor();
 }
+// @ 0x00921E60
 int ThreadBlob::Init21e60(char* p) {
     if (!p) return 0;
     char* name = (p[1] != 0) ? (p + 1) : 0;
     char first = *p;
     FUN_009225d0(0, first, name);
     FUN_009225d0(1, first, name);
-    SetThreadName(data, name);
-    if (!SemaphoreInitBlob(data + 0x0c, 0)) return 0;
-    if (!SemaphoreInitBlob(data + 0x1c, 0)) return 0;
+    ((ThreadName*)data)->Set(name);
+    if (!((SemInit*)(data + 0x0c))->Init(0)) return 0;
+    if (!((SemInit*)(data + 0x1c))->Init(0)) return 0;
     if (!((Mutex*)(data + 0x30))->Init(0)) return 0;
     return 1;
 }
+// @ 0x00921F00
 ThreadBlob* ThreadBlob::Ctor21f00(int p, char c) {
     *(volatile int*)data = 0;
     *(int*)(data + 4) = 0;
@@ -705,20 +714,23 @@ ThreadBlob* ThreadBlob::Ctor21f00(int p, char c) {
     Init21e60((char*)p);
     return this;
 }
+// @ 0x00922310
 void ThreadBlob::Dtor22310() {
     Dtor21e40();
     Dtor21e40();
     ((Mutex*)(data + 0x10))->~Mutex();
 }
+// @ 0x00922330
 int ThreadBlob::Init22330(char* p) {
     if (!p) return 0;
-    SetThreadName(0, 0);
+    ((ThreadName*)0)->Set(0);
     ((Mutex*)(data + 0x10))->Init(0);
-    SetThreadName(0, 0);
+    ((ThreadName*)0)->Set(0);
     Init21e60(0);
     Init21e60(0);
     return 1;
 }
+// @ 0x009223A0
 int ThreadBlob::Lock223a0(int mode, unsigned timeout) {
     Mutex* m = (Mutex*)(data + 0x10);
     int r = 0;
@@ -748,6 +760,7 @@ int ThreadBlob::Lock223a0(int mode, unsigned timeout) {
     m->Unlock();
     return r;
 }
+// @ 0x00922480
 int ThreadBlob::Unlock22480() {
     Mutex* m = (Mutex*)(data + 0x10);
     int r;

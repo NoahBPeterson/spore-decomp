@@ -1,0 +1,3 @@
+# va  -  reason
+00f06d40  -  partial: large message dispatcher, only top-level arms reproduced; our symbol is >5x smaller than original so difftest UNSUPPORTED (size gate)
+00f072b0  -  partial: large message dispatcher, only top-level arms reproduced; our symbol is >5x smaller than original so difftest UNSUPPORTED (size gate)

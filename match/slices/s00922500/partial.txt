@@ -5,3 +5,4 @@
 00922f30  364  partial: thread suspend/resume skeleton
 009230a0  251  partial: thread wait/join skeleton
 009231a0  364  partial: thread terminate skeleton
+00922500  -  Semaphore ctor (name/intra): empty stub (source body is a no-op; original 83 bytes)

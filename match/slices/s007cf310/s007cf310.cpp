@@ -399,6 +399,7 @@ struct IStream {
     virtual void s12(); virtual void s13();
     virtual void Write(void*, int);   // slot 14 (0x38)
 };
+// @ 0x007d01f0
 void* Ser1F0(IStream* s, char* p)
 {
     WriteUint16(s, (uint16_t)*(uint16_t*)p, 1, 0);
@@ -411,6 +412,7 @@ void* Ser1F0(IStream* s, char* p)
 // ===========================================================================
 // 0x007d0250  serialize float vector
 // ===========================================================================
+// @ 0x007d0250
 void* Ser250(IStream* s, int* vec)
 {
     int n = (vec[1] - vec[0]) >> 2;
@@ -423,6 +425,7 @@ void* Ser250(IStream* s, int* vec)
 // ===========================================================================
 // 0x007d02b0  serialize pair vector
 // ===========================================================================
+// @ 0x007d02b0
 void* Ser2B0(IStream* s, int* vec)
 {
     int n = (vec[1] - vec[0]) >> 3;
@@ -439,6 +442,7 @@ void* Ser2B0(IStream* s, int* vec)
 // ===========================================================================
 // 0x007d0360  serialize object
 // ===========================================================================
+// @ 0x007d0360
 void Ser360(IStream* s, char* p)
 {
     s->Write(p, 8);

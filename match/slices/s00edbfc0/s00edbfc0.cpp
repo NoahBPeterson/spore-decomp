@@ -98,6 +98,7 @@ void __fastcall FUN_00edcc80(char* self)
 
 // ---------------------------------------------------------------- 0x00edcc90
 struct ObjCC90 { void f(int); };
+// @ 0x00edcc90
 void ObjCC90::f(int param)
 {
     char* base = (char*)this + 0x4c;
@@ -110,6 +111,7 @@ void ObjCC90::f(int param)
 }
 
 // ---------------------------------------------------------------- 0x00edcce0
+// @ 0x00edcce0
 int FUN_00edcce0(int* p)
 {
     for (;;) {
@@ -139,6 +141,7 @@ struct ObjCE20 {
     int   p20;      // +0x20
     void f(int);
 };
+// @ 0x00edce20
 void ObjCE20::f(int arg)
 {
     if (p14 != 0) {
@@ -151,6 +154,7 @@ void ObjCE20::f(int arg)
 }
 
 // ---------------------------------------------------------------- 0x00edcec0
+// @ 0x00edcec0
 int FUN_00edcec0(int* p, int* arr, unsigned* count)
 {
     unsigned n = *count;
@@ -179,6 +183,7 @@ void* ObjCF10::f(char param)
 }
 
 // ---------------------------------------------------------------- 0x00edcf30
+// @ 0x00edcf30
 int FUN_00edcf30(int* p)
 {
     if (p == 0)
@@ -191,6 +196,7 @@ int FUN_00edcf30(int* p)
 }
 
 // ---------------------------------------------------------------- 0x00edcf60
+// @ 0x00edcf60
 void FUN_00edcf60(int* p, float f)
 {
     if (p == 0)
@@ -205,6 +211,7 @@ void FUN_00edcf60(int* p, float f)
 }
 
 // ---------------------------------------------------------------- 0x00edcbc0
+// @ 0x00edcbc0
 int FUN_00edcbc0(int a, int* p)
 {
     (void)a;

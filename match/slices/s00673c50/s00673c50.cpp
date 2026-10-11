@@ -69,7 +69,9 @@ int FindRange(int* p, unsigned short* key) {
 
 // ---- 0x00674230 : vector fill-insert --------------------------------
 // @ 0x00674230
-unsigned* FillInsert(unsigned* p, unsigned count, unsigned value) {
+struct FillVec { unsigned* FillInsert(unsigned count, unsigned value); };
+unsigned* FillVec::FillInsert(unsigned count, unsigned value) {
+    unsigned* p = (unsigned*)this;
     unsigned* begin = (unsigned*)p[0];
     unsigned have = (p[1] - (unsigned)begin) >> 1;
     if (have < count) {

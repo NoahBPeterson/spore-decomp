@@ -6,10 +6,10 @@
 00664550  38   predicate; return-value materialisation (setcc vs shared xor eax,eax / mov eax,1)
 00664610  34   element-at; original loads the index into edx first, cl hoists the header loads
 00664640  54   find-by-0x17c; cl assigns esi=begin/edx=index, original esi=index/ecx=begin
-00664680  54   find-by-0x134; same register-assignment divergence
-006646c0  54   find-by-0x188; same register-assignment divergence
+00664680  54   find-by-0x134; same register-assignment divergence; equiv: PASS (100% coverage)
+006646c0  54   find-by-0x188; same register-assignment divergence; equiv: PASS (100% coverage)
 00664700  231  intrusive insertion-sort primitive; allocation/compare schedule differs
 00664800  195  intrusive insertion-sort primitive; allocation/compare schedule differs
-00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; comparator inlining/register order differs
+00664960  32   eastl::promote_heap<AutoRefCount,AlphabeticalFeedSort>; comparator inlining/register order differs; equiv: FAIL (5/5 valid inputs mismatched)
 00664a60  36   HandleMessage; branch inversion and find-loop tail schedule differ
-00664ad0  32   eastl::adjust_heap<AutoRefCount,AlphabeticalFeedSort>; comparator/heap schedule differs
+00664ad0  32   eastl::adjust_heap<AutoRefCount,AlphabeticalFeedSort>; comparator/heap schedule differs; equiv: FAIL (5/5 valid inputs mismatched)

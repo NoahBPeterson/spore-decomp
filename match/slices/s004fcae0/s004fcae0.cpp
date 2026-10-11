@@ -128,9 +128,12 @@ void Vec16::push_back(const void* val)
     }
 }
 
+struct Pod24 { void Copy(const void* src); };
+
 // @ 0x004fd670
-void CopyPod24(void* dst, const void* src)
+void Pod24::Copy(const void* src)
 {
+    void* dst = this;
     *(float*)((char*)dst + 0x00) = *(const float*)((char*)src + 0x00);
     *(float*)((char*)dst + 0x04) = *(const float*)((char*)src + 0x04);
     *(float*)((char*)dst + 0x08) = *(const float*)((char*)src + 0x08);

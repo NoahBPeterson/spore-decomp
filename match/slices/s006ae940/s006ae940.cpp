@@ -54,6 +54,7 @@ struct Mutex2 { void dtor(); };   // EA::Thread::Mutex::~Mutex (0x922130)
 // ---------------------------------------------------------------------------
 // 006aebd0  SP::cAsyncResourceManager::~cAsyncResourceManager
 // ---------------------------------------------------------------------------
+// @ 0x006aebd0
 void __fastcall FUN_006aebd0(void* self)
 {
     *(void**)self = &vtbl_14094d0;
@@ -68,6 +69,7 @@ void __fastcall FUN_006aebd0(void* self)
 // ---------------------------------------------------------------------------
 // 006aedc0  SP::cAsyncResourceManager::cAsyncResourceManager
 // ---------------------------------------------------------------------------
+// @ 0x006aedc0
 void __fastcall FUN_006aedc0(void* self)
 {
     *(void**)self = &vtbl_13fa72c;
@@ -81,6 +83,7 @@ void __fastcall FUN_006aedc0(void* self)
 // ---------------------------------------------------------------------------
 // 006af8a0  dtor
 // ---------------------------------------------------------------------------
+// @ 0x006af8a0
 void __fastcall FUN_006af8a0(void* self)
 {
     *(void**)self = &vtbl_14095f4;
@@ -98,6 +101,7 @@ void __fastcall FUN_006af8a0(void* self)
 // ---------------------------------------------------------------------------
 // 006af960  ResourceBundle-ish ctor
 // ---------------------------------------------------------------------------
+// @ 0x006af960
 void* __fastcall FUN_006af960(void* self, void* a, void* b)
 {
     *(void**)((char*)self + 4) = &vtbl_13f1ab0;
@@ -121,6 +125,7 @@ void* __fastcall FUN_006af960(void* self, void* a, void* b)
 // ---------------------------------------------------------------------------
 // 006af670  serialize a vector of 0x10-byte records  (complete)
 // ---------------------------------------------------------------------------
+// @ 0x006af670
 void __fastcall FUN_006af670(void* self, void* stream)
 {
     int a = *(int*)((char*)self + 8);
@@ -149,6 +154,7 @@ struct V5d0 {
     bool f(bool a, void* b, bool c);
 };
 
+// @ 0x006af5d0
 bool V5d0::f(bool a, void* b, bool c)
 {
     bool result = false;

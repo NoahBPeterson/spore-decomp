@@ -203,6 +203,7 @@ struct BindObj {
   uint      mDiv;          // +0xd10
   int       mDefault;      // +0xd14
   uint8_t   mHasName;      // +0xd18
+  void AddBindRecord(uint x, int index, uint8_t kind, int typeKey, uint lo, uint hi, uint c);
 };
 
 extern "C" uint FUN_0099c670(void* rec, void* ctxEntry, uint c);
@@ -234,8 +235,9 @@ static void AddRecordCountedS(BindObj* b, BindRec* r) {
 // ===========================================================================
 // @ 0x009a0f10  compute and append the bind record(s) for one (channel, variant)
 // ===========================================================================
-static void __stdcall AddBindRecordS(BindObj* self, uint x, int index, uint8_t kind, int typeKey,
+void BindObj::AddBindRecord(uint x, int index, uint8_t kind, int typeKey,
                            uint lo, uint hi, uint c) {
+  BindObj* self = this;
   AnimRec2* cur = self->mpCur;
   int iVar7 = (int)FUN_0099c670(cur, (char*)self->mpCtx->mpEntries + index * 0x468, c);
   uint hiKey = (uint)typeKey << 24;
@@ -414,7 +416,7 @@ static void __stdcall EmitVariantS(Gen* g, void* p3) {
                       ++i;
                     } while (i < g->mEndIdx);
                   }
-                  AddBindRecordS(g->mpBind, arg, (int)v, (uint8_t)r, (int)typeKey,
+                  g->mpBind->AddBindRecord(arg, (int)v, (uint8_t)r, (int)typeKey,
                                 (uint)mask, (uint)(mask >> 32), (uint)(unsigned)(size_t)p3);
                   ++k;
                 } while (k < outCount);

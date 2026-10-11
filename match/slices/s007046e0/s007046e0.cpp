@@ -470,24 +470,28 @@ bool FUN_00704dc0(void** out, int type, int param_3)
 // ==========================================================================
 // @ 0x00704f60  construct + register a property bitmap through a virtual
 // ==========================================================================
-int FUN_00704f60(char* self, IVt* param_2, void** param_3, int param_4, int param_5)
+struct W4f60 {
+    bool F(IVt* param_2, void** param_3, int param_4, int param_5);
+};
+bool W4f60::F(IVt* param_2, void** param_3, int param_4, int param_5)
 {
+    char* self = (char*)this;
     void* local = 0;
     int* q = (int*)param_2->v4();
     FUN_00704dc0(&local, param_5, q[1]);
     if (local != 0) {
-        int (*fn)(char*, IVt*, void*, int, int) =
-            (int (*)(char*, IVt*, void*, int, int))(*(void***)self)[9];
-        if ((*fn)(self, param_2, local, param_4, param_5)) {
+        bool (__thiscall *fn)(char*, IVt*, void*, int, int) =
+            (bool (__thiscall *)(char*, IVt*, void*, int, int))(*(void***)self)[9];
+        if (fn(self, param_2, local, param_4, param_5)) {
             *param_3 = local;
             ((void(__thiscall*)(void*))(*(void***)local)[0])(local);
             ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
-            return 1;
+            return true;
         }
     }
     if (local != 0)
         ((void(__thiscall*)(void*))(*(void***)local)[1])(local);
-    return 0;
+    return false;
 }
 
 // ==========================================================================

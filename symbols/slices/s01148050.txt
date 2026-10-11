@@ -7,3 +7,4 @@
 01148cf0 rw::audio::core::CMpegBase::AllocateSynth  # PDB caller-scored name; System::Alloc("PolySynthHistoryF")
 01148da0 rw::audio::core::ScaleSamples  # PDB callee-single name
 01148eb0 rw::audio::core::HELPER_CEALayer3DecF::Feed  # PDB anchor name
+01148d60 ?_GCMpegBase  # scalar deleting destructor of CMpegBase (compiler-generated ??_GCMpegBase@core@audio@rw@@UAEPAXI@Z)

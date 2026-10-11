@@ -10,7 +10,7 @@
 010a48f0 0 havok-equivalent
 010a49e0 0 havok-equivalent
 010a4a70 0 havok-equivalent
-010a4b30 0 havok-equivalent
+010a4b30 0 havok-equivalent; difftest PASS (1200 inputs; layoutBuffer made noinline so ours is not empty)
 010a4b50 0 havok-equivalent
 010a4bb0 0 havok-equivalent
 010a4c60 0 havok-equivalent

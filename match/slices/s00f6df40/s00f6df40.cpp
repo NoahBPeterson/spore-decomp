@@ -121,6 +121,7 @@ struct BrushCubeSplitter {
                                const cRibbonBrushPoly* polys, int extra);
 };
 
+// @ 0x00f6e120
 void BrushCubeSplitter::SplitPolysToCubeFaces(int arg, BrushTarget* target, int numPolys,
                                               const cRibbonBrushPoly* polys, int extra) {
     target->mWidth = 0x200;

@@ -1,3 +1,8 @@
 0060da40 eastl::DequeIterator<SP::cTextureAsyncQueueEntry,SP::cTextureAsyncQueueEntry *,SP::cTextureAsyncQueueEntry &,64>::operator+  # copy + operator+=
 0060da90 eastl::DequeIterator<SP::cTextureAsyncQueueEntry,SP::cTextureAsyncQueueEntry *,SP::cTextureAsyncQueueEntry &,64>::operator-  # copy + operator+=(-n)
 0060dfb0 SP::cPollinatorCheat::Execute  # PDB-named; 'pollen' console cheat (get/getBatch/serverID/queryID/flood/floodstop)
+0060d9f0 QueueEntry::QueueEntry
+0060df50 ?_GcJobResultMessage
+0060e5b0 JobHolder::~JobHolder
+0060e6e0 UCancelByIdPred::remove_if
+0060e800 UCancelCancelledPred::remove_if

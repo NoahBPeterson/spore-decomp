@@ -95,8 +95,12 @@ char  FUN_006de5e0(int obj);
 void  FUN_006e0030(Cluster* c);
 void  FUN_006dfa00();
 void  FUN_006dfa80(void* a, void* b, int c);
-void  FUN_006dfd90(void* self, int position, int n, void* value);
-void  FUN_006dfca0(void* self, int position, int end);
+struct ChartSet { int RectPackCharts(int flag); void FillVertices(int* list); };
+struct Elem16VecMem {
+    void Insert(int position, int n, void* value);   // 0x006dfd90
+    void Erase(int position, int end);               // 0x006dfca0
+    void Resize(uint n);
+};
 void  VecBoolDoInsertValue(void* a, void* b, int c);
 void  ThreadSleep(void* p);
 void  operator_delete__(void* p);
@@ -231,7 +235,8 @@ int ChartBuildSpans(Cluster* self) {
 // ---------------------------------------------------------------------------
 // @ 0x006e04d0
 // ---------------------------------------------------------------------------
-int RectPackCharts(int* self, int flag) {
+int ChartSet::RectPackCharts(int flag) {
+    int* self = (int*)this;
     float fVar12 = 0.0f, fVar13 = 0.0f, fVar15 = 0.0f;
     float fVar14 = 1.0f / *(float*)((char*)self + 0x230);
     int n = (*(int*)((char*)self + 0x238) - *(int*)((char*)self + 0x234)) >> 2;
@@ -539,25 +544,27 @@ struct Elem16 {
     uint32_t f0; uint32_t f4; uint16_t f8; uint16_t fa; void* ref;
 };
 
-void Elem16VecResize(int* self, uint n) {
+void Elem16VecMem::Resize(uint n) {
+    int* self = (int*)this;
     int begin = *self;
     if ((uint)(self[1] - begin >> 4) < n) {
         Elem16 proto;
         proto.f0 = 0; proto.f4 = 0; proto.f8 = 8; proto.fa = 8; proto.ref = 0;
-        FUN_006dfd90(self, self[1], n - (self[1] - begin >> 4), (void*)&proto);
+        Insert(self[1], n - (self[1] - begin >> 4), (void*)&proto);
         return;
     }
-    FUN_006dfca0(self, (int)(n * 0x10 + begin), self[1]);
+    Erase((int)(n * 0x10 + begin), self[1]);
 }
 
 // ---------------------------------------------------------------------------
 // @ 0x006e0ea0
 // ---------------------------------------------------------------------------
-void FillVertices(int* self, int* list) {
+void ChartSet::FillVertices(int* list) {
+    int* self = (int*)this;
     *(char*)self = 1;
     *(int*)((char*)self + 0x230) = 0;
     FUN_0041ebe0(list);
-    Elem16VecResize(list, (list[1] - *list) >> 2);
+    ((Elem16VecMem*)list)->Resize((list[1] - *list) >> 2);
     int i = 0;
     int n = list[1] - *list >> 2;
     if (0 < n) {

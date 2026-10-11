@@ -1,1 +1,1 @@
-004b5690  410  vector<Record11c>::DoInsertValue: complete; cl inlines the Record11c copy ctor / operator= differently than the original (frame and copy_backward loop differ)
+004b5690  410  vector<Record11c>::DoInsertValue: complete; cl inlines the Record11c copy ctor / operator= differently than the original (frame and copy_backward loop differ) [equiv: equiv UNSUPPORTED: symbol lookup ambiguous, template names are stripped so it picks the Vec3f DoInsertValue; no unique marker/name possible without renaming]

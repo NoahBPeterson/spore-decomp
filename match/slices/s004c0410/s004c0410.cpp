@@ -6,7 +6,10 @@
 extern void FUN_004c10e0(void* dst, int n, void* def);   // 0x4c10e0
 extern void FUN_00514750(void* first, void* last);       // 0x514750
 
-void FUN_004c0410(int* self, uint32_t n) {
+struct VecPtr { int m[4]; void FUN_004c0410(uint32_t n); };
+// @ 0x004c0410
+void VecPtr::FUN_004c0410(uint32_t n) {
+    int* self = (int*)this;
     if ((uint32_t)(self[1] - self[0]) < n) {
         char local_5 = 0;
         FUN_004c10e0((void*)self[1], n - (self[1] - self[0]), &local_5);
@@ -27,6 +30,7 @@ struct Container {
     Elem38* FUN_004c0730(Elem38* first, Elem38* last);
 };
 
+// @ 0x004c0680
 Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -44,6 +48,7 @@ Elem8c* Container::FUN_004c0680(Elem8c* first, Elem8c* last) {
     return first;
 }
 
+// @ 0x004c0730
 Elem38* Container::FUN_004c0730(Elem38* first, Elem38* last) {
     bool bOutputIsPointer;
     bool bInputIsPointer;
@@ -75,6 +80,7 @@ struct StrWriter {
     void Free();                         // 004c0b80
 };
 
+// @ 0x004c0570
 int* StrWriter::Init(uint32_t a, uint32_t b) {
     int* local_8 = (int*)this + 6;
     mBegin = 0;
@@ -92,6 +98,7 @@ int* StrWriter::Init(uint32_t a, uint32_t b) {
 }
 
 // 004c0b80  free a vector's heap storage unless it uses the inline buffer.
+// @ 0x004c0b80
 void StrWriter::Free() {
     if (mBegin != 0) {
         int n40 = (int)((char*)mCapacity - (char*)mBegin) >> 2 << 2;
@@ -128,6 +135,7 @@ void FUN_004c0bd0(void* dst, int n, void* out) {
     (void)dst; (void)n; (void)out;
 }
 
+// @ 0x004c0600
 uint32_t* FUN_004c0600(uint32_t* begin, uint32_t* end, uint32_t* key) {
     int n = (int)((char*)end - (char*)begin) / 0x18;
     while (n > 0) {

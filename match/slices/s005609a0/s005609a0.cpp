@@ -5,6 +5,14 @@
 
 namespace SP {
 
+struct EcxStub9a {
+    int FUN_00560c30(void* pKey);
+    bool FUN_00560d20(void* other);
+    void* FUN_00561090_();
+    void FUN_005611b0();
+};
+
+
 void FUN_0048c720(void* p);
 void FUN_00564820(void* p);
 void FUN_00571680(void* p);
@@ -37,7 +45,8 @@ bool FUN_005609a0(void* this_, void* a, char b) {
 }
 
 // @ 0x00560c30
-int FUN_00560c30(void* this_, void* pKey) {
+int EcxStub9a::FUN_00560c30(void* pKey) {
+    void* this_ = this;
     int index = -1;
     if (!((DBSub*)((char*)this_ + 0x28))->GetResType()) {
         index = **(int**)((char*)this_ + 0x28);
@@ -58,7 +67,8 @@ int FUN_00560c30(void* this_, void* pKey) {
 }
 
 // @ 0x00560d20
-bool FUN_00560d20(void* this_, void* other) {
+bool EcxStub9a::FUN_00560d20(void* other) {
+    void* this_ = this;
     if (*(uint32_t*)this_ != *(uint32_t*)other)
         return false;
     if (*(uint32_t*)((char*)this_ + 8) != *(uint32_t*)((char*)other + 8))
@@ -80,7 +90,8 @@ void FUN_00560f20(void* param1, void* param2, unsigned char param3) {
 namespace Editor { struct cEditorResource { }; }
 
 // @ 0x00561090
-void* FUN_00561090_(void* this_) {
+void* EcxStub9a::FUN_00561090_() {
+    void* this_ = this;
     *(void**)this_ = (void*)0x13eb938;
     *(void**)this_ = (void*)0x13f1ab0;
     *(void**)((char*)this_ + 4) = (void*)0x140b5a0;
@@ -108,7 +119,8 @@ int CEditorResourceThunk::f(void* p) {
 }
 
 // @ 0x005611b0
-void FUN_005611b0(void* this_) {
+void EcxStub9a::FUN_005611b0() {
+    void* this_ = this;
     *(void**)this_ = (void*)0x13f4b00;
     *(void**)((char*)this_ + 4) = (void*)0x13f4afc;
     *(void**)((char*)this_ + 8) = (void*)0x13f4af8;

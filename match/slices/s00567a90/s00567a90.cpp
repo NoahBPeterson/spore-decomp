@@ -20,6 +20,11 @@ void FUN_005156b0(void* p);
 void RBTreeInsert(void* node, void* where, void* anchor, char flag);   // 0x009216a0 (equiv t2)
 void RBTreeErase(void* node, void* anchor);
 
+struct RBTreeIntStub { int CopyCtor(void* src); };
+struct RBTreeFloatStub { int CopyCtor(void* src); int InsertFloat(int retval, void* pos, float* key, char flag); };
+struct HashFreeStub { void DoFreeNodes(void** pArr, unsigned n); };
+struct VecRangeStub { void RangeCtor(int* first, int* last, int flag); };
+
 // @ 0x00567a90  (large vector DoInsertValue helper)
 void* FUN_00567a90(void* this_, void* pos, int n, void* value) {
     (void)this_; (void)pos; (void)n; (void)value;
@@ -44,7 +49,8 @@ int FUN_005680a0(int first, int last, int out) {
 }
 
 // @ 0x00568110
-int FUN_00568110(void* this_, void* src) {
+int RBTreeIntStub::CopyCtor(void* src) {
+    void* this_ = this;
     *(int*)((char*)this_ + 4) = 0;
     *(int*)((char*)this_ + 8) = 0;
     *(int*)((char*)this_ + 0xc) = 0;
@@ -86,7 +92,8 @@ int FUN_005681f0(void* this_, int retval, void* pos, int* key, char flag) {
 }
 
 // @ 0x00568320
-int FUN_00568320(void* this_, void* src) {
+int RBTreeFloatStub::CopyCtor(void* src) {
+    void* this_ = this;
     *(int*)((char*)this_ + 4) = 0;
     *(int*)((char*)this_ + 8) = 0;
     *(int*)((char*)this_ + 0xc) = 0;
@@ -114,7 +121,8 @@ int FUN_00568320(void* this_, void* src) {
 }
 
 // @ 0x00568400
-int FUN_00568400(void* this_, int retval, void* pos, float* key, char flag) {
+int RBTreeFloatStub::InsertFloat(int retval, void* pos, float* key, char flag) {
+    void* this_ = this;
     int local;
     if (flag == 0 && pos != (char*)this_ + 4 && *key < *(float*)((char*)pos + 0x10))
         local = 1;
@@ -156,7 +164,8 @@ int FUN_00568680(int first, int last, int out) {
 }
 
 // @ 0x00568740
-void FUN_00568740(int* dst, int* first, int* last, int flag) {
+void VecRangeStub::RangeCtor(int* first, int* last, int flag) {
+    int* dst = (int*)this;
     (void)flag;
     int n = (int)(last - first) >> 2;
     int* mem;
@@ -171,8 +180,7 @@ void FUN_00568740(int* dst, int* first, int* last, int flag) {
 }
 
 // @ 0x005687d0
-void FUN_005687d0(void* this_, void** pArr, unsigned n) {
-    (void)this_;
+void HashFreeStub::DoFreeNodes(void** pArr, unsigned n) {
     for (unsigned i = 0; i < n; ++i) {
         void* node = pArr[i];
         while (node) {

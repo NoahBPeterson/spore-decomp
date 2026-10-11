@@ -25,7 +25,7 @@ void adjust_heap(Elem18* first, int topIndex, int size, int valueIndex, Elem18 v
 void partial_sort(Elem18* first, Elem18* middle, Elem18* last, Compare18 compare);
 
 // ---------------------------------------------------------------------------
-// @ 0x004c1920  eastl::Internal::quick_sort_impl<It,Size,Compare>
+// 0x004c1920  eastl::Internal::quick_sort_impl<It,Size,Compare> (helpers below, then the function)
 // ---------------------------------------------------------------------------
 inline const Elem18& median(const Elem18& a, const Elem18& b, const Elem18& c, Compare18 compare)
 {
@@ -60,6 +60,7 @@ inline Elem18* get_partition(Elem18* first, Elem18* last, const Elem18& pivotVal
     }
 }
 
+// @ 0x004c1920
 void quick_sort_impl(Elem18* first, Elem18* last, int kRecursionCount, Compare18 compare)
 {
     while (((last - first) > 28) && (kRecursionCount > 0)) {

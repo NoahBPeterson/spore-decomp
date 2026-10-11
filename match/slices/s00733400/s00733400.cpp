@@ -13,6 +13,13 @@ struct EltArray
 };
 extern uint32_t g_masks[];
 
+struct VecHolder
+{
+    int* mBegin; int* mEnd; int* mCap;
+    int* ZeroFill(int param_2, int param_3);
+    void Insert(void* param_2, void* param_3);
+};
+
 // external callees (masked relocations)
 void  FUN_006fa770(int, int);
 void  FUN_00733070(int, void*);
@@ -27,8 +34,9 @@ void  FUN_00733a50(void*);
 void  FUN_00733f20(void*);
 
 // @ 0x00733400
-int* FUN_00733400(int* p1, int param_2, int param_3)
+int* VecHolder::ZeroFill(int param_2, int param_3)
 {
+    int* p1 = (int*)this;
     FUN_006fa770(param_2, param_3);
     int zeros[7] = { 0, 0, 0, 0, 0, 0, 0 };
     int* dst = (int*)*p1;
@@ -74,8 +82,9 @@ void* FUN_00733510(int* param_1, int* param_2, int* param_3, int* param_4, int* 
 }
 
 // @ 0x00733920
-void FUN_00733920(int* param_1, void* param_2, void* param_3)
+void VecHolder::Insert(void* param_2, void* param_3)
 {
+    int* param_1 = (int*)this;
     int* puVar3 = (int*)param_1[1];
     if (puVar3 != (int*)param_1[2])
     {

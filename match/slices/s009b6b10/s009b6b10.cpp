@@ -84,6 +84,7 @@ struct cPartOwner {
 
 static const float kMaxFloat = 3.402823466e+38F;
 
+// @ 0x009b6b10
 void FUN_009b6b10(Vector3* pMin, Vector3* pMax, const cPartOwner* pOwner)
 {
     *pMin = Vector3(kMaxFloat, kMaxFloat, kMaxFloat);

@@ -80,7 +80,7 @@ void ArrayHolder::SetArray(DynArray* p)
 }
 
 // ---------------------------------------------------------------------------
-// @ 0x0073f320  SP::cModelInstance::cSkinBinding::operator=
+// 0x0073f320  SP::cModelInstance::cSkinBinding::operator=
 // ---------------------------------------------------------------------------
 struct cSPTransformS {
     uint16_t mFlags;

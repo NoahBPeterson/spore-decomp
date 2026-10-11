@@ -23,7 +23,7 @@ extern "C" void  __cdecl FUN_00de76b0();
 extern "C" void  __cdecl FUN_00ddfec0();
 extern "C" void  __cdecl FUN_0083bcd0();
 extern "C" void  __cdecl FUN_0083c800();
-extern "C" void  __cdecl FUN_0083b9d0_(void*, void*);
+struct ArgSub { void Parse(void* arg, void* x); };   // 0x0083b9d0 thiscall
 extern "C" void  __cdecl FUN_00f2dde0_();
 extern "C" void  __cdecl FUN_0083a9f0();
 extern "C" void  __cdecl FUN_00423650();                          // WString_Assign
@@ -177,10 +177,12 @@ ArgScript* MakeLevelCheats(ArgScript* self, int arg) {
 // ===========================================================================
 //  0x00dddf90  ArgScript command parse
 // ===========================================================================
-struct ArgCmd { void* vt; int f04; char pad[0x7c]; uint32_t flags84; };
+struct ArgCmd { void* vt; int f04; char pad[0x7c]; uint32_t flags84;
+    void Parse(void* arg); };
 // @ 0x00dddf90
-void ArgCmd_Parse(ArgCmd* self, void* arg) {
-    FUN_0083b9d0_(arg, *(void**)((char*)self + 4));
+void ArgCmd::Parse(void* arg) {
+    ArgCmd* self = this;
+    ((ArgSub*)((char*)self + 0x14))->Parse(arg, *(void**)((char*)self + 4));
     if (*(uint8_t*)((char*)self + 0x84) & 1) {
         *(uint8_t*)((char*)g_16a1344 + 0x1f5) = 1;
     }
@@ -207,6 +209,7 @@ char GalaxyGameEntry_Init(void* self, void* mode) {
 //  0x00dde2b0  camera-controller field initialiser
 // ===========================================================================
 struct CamCtl {
+    int pad00;
     int f04, f08, f0c;
     float f10, f14, f18, f1c;
     float f20, f24, f28, f2c;
@@ -214,6 +217,10 @@ struct CamCtl {
     float f40, f44, f48, f4c;
     float f50, f54, f58, f5c, f60, f64, f68;
     void init(void* arg2, const Vec3* v);
+    void Update(int dt, int unused);
+    char Set2(int a, float v1, float v2, int unused);
+    char Reset2(int a, int b, int c, int d);
+    char Zoom(int n, int b, int c, int d);
 };
 // @ 0x00dde2b0
 void CamCtl::init(void* arg2, const Vec3* v) {
@@ -235,7 +242,8 @@ void CamCtl::init(void* arg2, const Vec3* v) {
 //  0x00dde350  camera-controller update
 // ===========================================================================
 // @ 0x00dde350
-void CamCtl_Update(CamCtl* self, int dt) {
+void CamCtl::Update(int dt, int unused) {
+    CamCtl* self = this; (void)unused;
     *(int*)&self->f08 += dt;
     double q = (double)(unsigned int)self->f08 / (double)(unsigned int)self->f04;
     if (1.0 < q) {
@@ -274,17 +282,20 @@ char __stdcall CamCtl_ResetPitch(int, int) {
 }
 
 // @ 0x00dde4c0
-void CamCtl_Set2(CamCtl* self, int a, float v1, float v2) {
+char CamCtl::Set2(int a, float v1, float v2, int unused) {
+    CamCtl* self = this; (void)unused;
     self->f20 = v1;
     self->f24 = v2;
     g_16a10c0 = v1;
     g_16a10bc = v2;
     *(uint8_t*)((char*)self + 0x40) = 1;
     (void)a;
+    return 1;
 }
 
 // @ 0x00dde4f0
-char CamCtl_Reset2(CamCtl* self) {
+char CamCtl::Reset2(int a, int b, int c, int d) {
+    CamCtl* self = this; (void)a; (void)b; (void)c; (void)d;
     *(uint8_t*)((char*)self + 0x40) = 0;
     g_camera_pitch = 0.0f;
     g_15a30ac = 0.0f;
@@ -299,7 +310,8 @@ char __stdcall CamCtl_SetGlobals(float v1, float v2, int) {
 }
 
 // @ 0x00dde540
-char CamCtl_Zoom(CamCtl* self, int n) {
+char CamCtl::Zoom(int n, int b, int c, int d) {
+    CamCtl* self = this; (void)b; (void)c; (void)d;
     g_camera_roll = -(((float)n * self->f14) * *(float*)0x13eb8a0 * self->f18);
     return 0;
 }

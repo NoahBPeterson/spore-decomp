@@ -1,4 +1,4 @@
-01082350 hkQuaternion_setFromRotation  # fsqrt largest-diagonal rotation->quaternion, called by hkQuaternion::set
+01082350 hkRotation::toQuat  # fsqrt largest-diagonal rotation->quaternion, called by hkQuaternion::set
 01082590 hkReferencedObject::addReference  # if memSize!=0 ++refcount (word at +6)
 010825a0 hkWorldObject::addProperty  # +0x4c property array, 0x10-byte entries
 01082660 hkWorldObject::calcStatistics  # "Shape" "CollAgtPtr" "Properties"

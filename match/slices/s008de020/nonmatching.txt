@@ -19,7 +19,7 @@
 008decb0  53  AutoRefCount vector destructor; register allocation differs (equiv PASS)
 008ded00  196 hash-map insert; rehash-policy template codegen differs
 008dede0  30  AutoRefCount range release; interlocked sequence codegen differs (equiv WEAK)
-008dee30  31  AutoRefObj::operator=; interlocked sequence codegen differs (equiv PASS)
+008dee30  31  AutoRefObj::operator=; interlocked sequence codegen differs (equiv WEAK: 83% coverage)
 008dee90  90  rbtree DoInsertValueImpl; payload copy/insert codegen differs (equiv PASS)
 008def20  79  AutoRefCount vector constructor; register allocation differs (equiv WEAK)
 008def80  66  AutoRefCount range release; interlocked sequence codegen differs

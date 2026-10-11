@@ -47,7 +47,7 @@ int __cdecl FUN_00efc520()
     return 0;
 }
 
-// 0x00efc530
+// @ 0x00efc530
 bool __cdecl FUN_00efc530(int* p)
 {
     if (p != 0) {
@@ -58,7 +58,7 @@ bool __cdecl FUN_00efc530(int* p)
     return false;
 }
 
-// 0x00efc6c0
+// @ 0x00efc6c0
 void __fastcall FUN_00efc6c0(char* p, int v)
 {
     int* q = *(int**)(p + 0xc);
@@ -66,7 +66,7 @@ void __fastcall FUN_00efc6c0(char* p, int v)
         *q = -1;
 }
 
-// 0x00efc850
+// @ 0x00efc850
 void __cdecl FUN_00efc850()
 {
     char* sim = (char*)gSimulator;
@@ -95,7 +95,7 @@ void __cdecl FUN_00efc890()
     }
 }
 
-// 0x00efc8c0
+// @ 0x00efc8c0
 void __cdecl FUN_00efc8c0(int v)
 {
     int* g = (int*)g_016c7b88;
@@ -105,7 +105,7 @@ void __cdecl FUN_00efc8c0(int v)
         FUN_00f46410((void*)1, (void*)old, (void*)v);
 }
 
-// 0x00efc8f0
+// @ 0x00efc8f0
 int __cdecl FUN_00efc8f0()
 {
     int r = 0;
@@ -123,7 +123,7 @@ int __cdecl FUN_00efc910()
     return r;
 }
 
-// 0x00efc7a0
+// @ 0x00efc7a0
 bool __fastcall FUN_00efc7a0(char* p)
 {
     if (*(char*)(p + 5) != 0) {
@@ -134,7 +134,7 @@ bool __fastcall FUN_00efc7a0(char* p)
     return true;
 }
 
-// 0x00efc660
+// @ 0x00efc660
 bool __fastcall FUN_00efc660(char* p, int pad, int a)
 {
     if (a == 0)
@@ -150,7 +150,7 @@ bool __fastcall FUN_00efc660(char* p, int pad, int a)
     return r != 0;
 }
 
-// 0x00efc7d0
+// @ 0x00efc7d0
 bool __fastcall FUN_00efc7d0(char* p, int pad, int a, int b)
 {
     char* o = (char*)FUN_00b18e00((void*)a);
@@ -164,7 +164,7 @@ bool __fastcall FUN_00efc7d0(char* p, int pad, int a, int b)
     return r != 0;
 }
 
-// 0x00efcd90
+// @ 0x00efcd90
 int __cdecl FUN_00efcd90()
 {
     int app = SP_App();
@@ -178,7 +178,7 @@ int __cdecl FUN_00efcd90()
     return 0;
 }
 
-// 0x00efcae0
+// @ 0x00efcae0
 void __cdecl FUN_00efcae0()
 {
     int app = SP_App();
@@ -199,7 +199,7 @@ void __cdecl FUN_00efcae0()
     }
 }
 
-// 0x00efcde0
+// @ 0x00efcde0
 void __fastcall FUN_00efcde0(void* p)
 {
     int r;
@@ -218,7 +218,7 @@ void __fastcall FUN_00efcde0(void* p)
     }
 }
 
-// 0x00efce30
+// @ 0x00efce30
 void __fastcall FUN_00efce30(void* p)
 {
     int r;

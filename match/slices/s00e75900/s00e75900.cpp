@@ -222,6 +222,7 @@ int   __cdecl    f_e51ee0(int a, float f, int b, int c, int d, int e,
                           int p4, int p5, int p6, int p2, int z, int p11); // 0x00e51ee0
 
 // ------------------------------------------------------------------ 0x00e75b80
+// @ 0x00e75b80
 void FUN_00e75b80(void)
 {
     cSPUILayout* layout = (cSPUILayout*)g_16b3c0c->field_90;
@@ -250,6 +251,7 @@ bool FUN_00e75c20(void)
 }
 
 // ------------------------------------------------------------------ 0x00e75c30
+// @ 0x00e75c30
 bool FUN_00e75c30(int param_1)
 {
     Cell* a = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Find(gspCellGame->field_51d4);
@@ -292,6 +294,7 @@ bool FUN_00e75c30(int param_1)
 }
 
 // ------------------------------------------------------------------ 0x00e75ea0
+// @ 0x00e75ea0
 void FUN_00e75ea0(void)
 {
     Cell* a = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Find(gspCellGame->field_51d4);
@@ -340,6 +343,7 @@ void FUN_00e75ea0(void)
 }
 
 // ------------------------------------------------------------------ 0x00e760f0
+// @ 0x00e760f0
 void FUN_00e760f0(void)
 {
     Cell* e = (Cell*)((Pool*)((char*)gspCellGame + 0x1c))->Find(gspCellGame->field_51d4);
@@ -392,6 +396,7 @@ void FUN_00e76320(void)
 }
 
 // ------------------------------------------------------------------ 0x00e76360
+// @ 0x00e76360
 bool FUN_00e76360(int* state, int param_2, int param_3, int param_4, int param_5,
                   float* param_6, int param_7, int param_8, float param_9,
                   float param_10, int param_11, float param_12)
@@ -422,6 +427,7 @@ bool FUN_00e76360(int* state, int param_2, int param_3, int param_4, int param_5
 }
 
 // ------------------------------------------------------------------ 0x00e76480
+// @ 0x00e76480
 int FUN_00e76480(int param_1, int param_2, int param_3, int param_4, int param_5,
                  int param_6, int param_7, int param_8, float param_9, float param_10,
                  int param_11)
@@ -436,6 +442,7 @@ int FUN_00e76480(int param_1, int param_2, int param_3, int param_4, int param_5
 }
 
 // ------------------------------------------------------------------ 0x00e76540
+// @ 0x00e76540
 int FUN_00e76540(Cell* cell, int param_2, int param_3, float* param_4, float param_5,
                  int param_6, int param_7)
 {
@@ -467,6 +474,7 @@ int FUN_00e76540(Cell* cell, int param_2, int param_3, float* param_4, float par
 }
 
 // ------------------------------------------------------------------ 0x00e76660
+// @ 0x00e76660
 void FUN_00e76660(int* param_1, int param_2, int param_3)
 {
     int u1 = f4cce0_8(3, 0, 0, 0, 0, 0, 0, 0);

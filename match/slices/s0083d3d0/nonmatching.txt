@@ -1,7 +1,7 @@
-0083db70  139  complete: EvalIntParentheses; calling convention/throw frame differ
-0083dc00  241  complete: EvalString; thiscall ABI and string assign scheduling differ
+0083db70  139  complete: EvalIntParentheses; calling convention/throw frame differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
+0083dc00  241  complete: EvalString; thiscall ABI and string assign scheduling differ; difftest WEAK (450 valid, 44.4% coverage) after ECX member fix
 0083dd00  53   complete: hashtable<cExprFunction>::DoFreeNodes; node free scheduling differs
-0083dd70  58   complete: EvalSignedRealNumber; x87 sign/register scheduling differs
+0083dd70  58   complete: EvalSignedRealNumber; x87 sign/register scheduling differs; difftest WEAK (361 valid, 67.9% coverage) after ECX member fix
 0083e140  11   complete: expr table clear; call scheduling differs
-0083e160  87   complete: EvalRealFactor; long-double pow call sequence differs
+0083e160  87   complete: EvalRealFactor; long-double pow call sequence differs; difftest WEAK (358 valid, 57.6% coverage) after ECX member fix
 0083d3d0  1243 complete: cExpression::EvalRealNumber (literal, parens, pi/e, 22 math builtins, user functions); EH frame/stack temps and inline string dtor placement differ; size 1801 vs 1942; flags /O2 /MD /Gy /EHsc /TP /GS- /fp:fast

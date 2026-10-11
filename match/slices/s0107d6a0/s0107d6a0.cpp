@@ -207,7 +207,7 @@ found:
 template class hkPointerMapBase<unsigned long>;
 template class hkPointerMapBase<unsigned __int64>;
 
-// @ 0x0107e5b0 / 0x0107e5d0: grow-to helper (tail-calls resizeTable).
+// @ 0x0107e5b0: grow-to helper (tail-calls resizeTable).
 void FUN_0107e5b0(hkPointerMapBase<unsigned long>* self, int n)
 {
     int s = 4;
@@ -216,6 +216,7 @@ void FUN_0107e5b0(hkPointerMapBase<unsigned long>* self, int n)
     }
     self->resizeTable(s);
 }
+// @ 0x0107e5d0: grow-to helper, _K variant.
 void FUN_0107e5d0(hkPointerMapBase<unsigned __int64>* self, int n)
 {
     int s = 4;
@@ -251,6 +252,9 @@ template<class T> void hkSingleton<T>::replaceInstance(T* p)
     }
     ms_instance = p;
 }
+
+class hkStreambufFactory;
+template class hkSingleton<hkStreambufFactory>;
 
 // @ 0x0107e640
 void FUN_0107e640()
@@ -455,8 +459,10 @@ void* hkThreadMemory::onStackOverflow(int size)
 }
 
 // @ 0x0107dc90 (hkThreadMemory-like vtable init, separate small object)
-void FUN_0107dc90(void* self)
+struct hkSmallObj { void FUN_0107dc90(); };
+void hkSmallObj::FUN_0107dc90()
 {
+    void* self = this;
     char* p = (char*)self;
     *(void**)p = (void*)0x149c85c;
     *(int*)(p + 0xc) = 1;

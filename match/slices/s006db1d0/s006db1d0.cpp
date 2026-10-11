@@ -46,8 +46,9 @@ unsigned char __cdecl FUN_006da290(void*, int, ElemTable*, BakeEntry*, StreamDes
 
 // ---------------------------------------------------------------------------
 // 0x006db1d0: dot projection, out0 uses component 0, weight uses component 2.
+// @ 0x006db1d0
 unsigned char FUN_006db1d0(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006db1d0
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d9e30(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;
@@ -85,8 +86,9 @@ fallback:
 
 // ---------------------------------------------------------------------------
 // 0x006db6b0: dot projection, out0 uses component 1, weight uses component 2.
+// @ 0x006db6b0
 unsigned char FUN_006db6b0(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006db6b0
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006d9fc0(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;
@@ -124,8 +126,9 @@ fallback:
 
 // ---------------------------------------------------------------------------
 // 0x006dbba0: acos-len projection (weight = axis.y * radius), components (0,1).
+// @ 0x006dbba0
 unsigned char FUN_006dbba0(float* out, int count, ElemTable* table, BakeEntry* entries,
-                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)   // @ 0x006dbba0
+                           StreamDesc* pos, float* axis, ScaleInfo* scaleInfo)
 {
     DISPATCH_PROLOGUE(table)
         case 1: _r = FUN_006da150(out, count, table, entries, pos, axis, scaleInfo, idxPos, idxCol, &hA); goto done;

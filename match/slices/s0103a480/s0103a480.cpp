@@ -332,7 +332,9 @@ void* TAC40::find(int* key) {
 // ---------------------------------------------------------------------------
 // @ 0x0103ac70  SP::cSPSpaceTrading::IsRareGroupComplete
 // ---------------------------------------------------------------------------
-bool FUN_0103ac70(void* self, int group, bool needInventory) {
+struct TSx { bool f_ac70(int group, bool needInventory); void f_af90(void* p1, void* p2); bool f_b320(int* prop); };
+bool TSx::f_ac70(int group, bool needInventory) {
+    void* self = this;
     int base = *(int*)((char*)self + 0xbc) + group * 0x24;
     int n = (*(int*)(base + 0x14) - *(int*)(base + 0x10)) / 0xc;
     if (n == 0) return true;
@@ -381,7 +383,7 @@ void FUN_0103ad50(void* self, int* p2, int a3, int a4) {
 // ---------------------------------------------------------------------------
 // @ 0x0103af90
 // ---------------------------------------------------------------------------
-void FUN_0103af90(void* p1, void* p2) {
+void TSx::f_af90(void* p1, void* p2) {
     int a = (int)RandomUint32Uniform(g_rand, 4) + 1;
     int b = (int)RandomUint32Uniform(g_rand, 4) + 1;
     int* v1 = (int*)FUN_00b8dad0(p1, 0);
@@ -406,8 +408,8 @@ void FUN_0103af90(void* p1, void* p2) {
             }
         }
     } else {
-        FUN_0103ad50(p1, (int*)FUN_00b8dad0(p1, 0), a, 0);
-        FUN_0103ad50(p2, (int*)FUN_00b8dad0(p2, 0), b, 0);
+        FUN_0103ad50(this, (int*)FUN_00b8dad0(p1, 0), a, 0);
+        FUN_0103ad50(this, (int*)FUN_00b8dad0(p2, 0), b, 0);
     }
 }
 
@@ -505,7 +507,8 @@ void FUN_0103b290(int* a, int b, int c) {
 }
 
 // @ 0x0103b320
-bool FUN_0103b320(void* self, int* prop) {
+bool TSx::f_b320(int* prop) {
+    void* self = this;
     int key[3];
     key[0] = key[1] = key[2] = 0;
     GetPropertyAsKey(prop, 0x35d5cb4, key);

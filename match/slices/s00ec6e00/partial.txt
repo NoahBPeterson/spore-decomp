@@ -7,3 +7,5 @@
 00ec79f0 intrusive-list search: iterator/virtual protocol guessed, incomplete
 00ec7a80 credits-tab float layout: not reconstructed
 00ec7ca0 eastl vector copy-ctor: not reconstructed
+00ec70d0  incomplete reconstruction: our symbol rejected by equiv size check (>5x off) [equiv UNSUPPORTED]
+00ec7b90  empty stub body, resource-image menu builder not reconstructed [equiv UNSUPPORTED: size >5x off]

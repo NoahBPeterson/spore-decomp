@@ -4,7 +4,9 @@
 #include "types.h"
 
 typedef unsigned int size_t;
-void* operator new[](size_t); void operator delete[](void*); void operator delete[](void*, size_t);
+void* operator new[](size_t);
+void operator delete[](void*);  // 0x00f47380
+void operator delete[](void*, size_t);
 extern "C" void* __cdecl memcpy(void*, const void*, size_t);
 
 namespace EA { namespace IO { struct IStream {}; } }
@@ -28,10 +30,17 @@ struct IStreamV {
 };
 
 // Basic eastl-style vector over a compile-time stride.
-struct BlobVec { char* mpBegin; char* mpEnd; char* mpCapacity; char* mpAlloc; };
+struct BlobVec {
+    char* mpBegin; char* mpEnd; char* mpCapacity; char* mpAlloc;
+    // thiscall members: the originals take the vector in ECX (ret 4).
+    BlobVec* Vector16Assign(const BlobVec* o);
+    void Vector16Resize(unsigned n);
+    BlobVec* Vector20Assign(const BlobVec* o);
+    void Vector20Resize(unsigned n);
+};
 
 template <int Stride>
-void BlobResize(BlobVec* v, unsigned n)
+__forceinline void BlobResize(BlobVec* v, unsigned n)
 {
     unsigned have = (unsigned)((v->mpEnd - v->mpBegin) / Stride);
     if (have < n) {
@@ -57,7 +66,7 @@ void BlobResize(BlobVec* v, unsigned n)
 }
 
 template <int Stride>
-BlobVec* BlobAssign(BlobVec* v, const BlobVec* o)
+__forceinline BlobVec* BlobAssign(BlobVec* v, const BlobVec* o)
 {
     if (o == v)
         return v;
@@ -139,61 +148,65 @@ void WriteParticleDescription(EA::IO::IStream* s, char* d)
     WriteUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
 
+// Receiver for AutoRefCount<T>::operator=(T*): `this` (ECX) is the slot holding the pointer.
+struct AutoRefSlot {
+    void* mp;
+    AutoRefSlot* AutoRefCountAssign(void* p);
+};
+
 // @ 0x0053b160  AutoRefCount<T>::operator=(T*)
-void** AutoRefCountAssign(void** slot, void* p)
+AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
 {
-    if (p != *slot) {
-        void* old = *slot;
+    if (p != mp) {
+        void* old = mp;
         if (p)
             ((void(__thiscall*)(char*))(*(void***)((char*)p + 8))[0])((char*)p + 8);
-        *slot = p;
+        mp = p;
         if (old)
             ((void(__thiscall*)(char*))(*(void***)((char*)old + 8))[1])((char*)old + 8);
     }
-    return slot;
+    return this;
 }
 
+// Stub receivers: the constructors take `this` in ECX.
+struct PaintCompatA { PaintCompatA* Ctor1b0(); };
+struct PaintCompatB { PaintCompatB* Ctor1f0(); };
+
 // @ 0x0053b1c0
-EA::ArgScript::cCommandBase* FUN_0053b1c0(EA::ArgScript::cCommandBase* p)
+PaintCompatA* PaintCompatA::Ctor1b0()
 {
-    *(void**)p = (void*)0x13f4b30;
-    *(void**)p = (void*)0x13f4b30;
-    return p;
+    *(void**)this = (void*)0x13f4b30;
+    *(void**)this = (void*)0x13f4b30;
+    return this;
 }
 
 // @ 0x0053b1f0
-EA::ArgScript::cCommandBase* FUN_0053b1f0(EA::ArgScript::cCommandBase* p)
+PaintCompatB* PaintCompatB::Ctor1f0()
 {
-    *(void**)p = (void*)0x13f4b30;
-    return p;
-}
-
-// @ 0x0053b210  eastl::vector<Entry16>::operator=
-BlobVec* Vector16Assign(BlobVec* v, const BlobVec* o)
-{
-    return BlobAssign<0x10>(v, o);
+    *(void**)this = (void*)0x13f4b30;
+    return this;
 }
 
 // @ 0x0053b520  eastl::vector<Entry16>::resize
-void Vector16Resize(BlobVec* v, unsigned n)
+void BlobVec::Vector16Resize(unsigned n)
 {
-    BlobResize<0x10>(v, n);
+    BlobResize<0x10>(this, n);
 }
 
-// @ 0x0053b5a0  eastl::vector<Entry20>::operator=
-BlobVec* Vector20Assign(BlobVec* v, const BlobVec* o)
+// @ 0x0053b210  eastl::vector<Entry16>::operator=
+BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
-    return BlobAssign<0x14>(v, o);
+    return BlobAssign<0x10>(this, o);
 }
 
 // @ 0x0053b8a0  eastl::vector<Entry20>::resize
-void Vector20Resize(BlobVec* v, unsigned n)
+void BlobVec::Vector20Resize(unsigned n)
 {
-    BlobResize<0x14>(v, n);
+    BlobResize<0x14>(this, n);
 }
-// --- equivalence checker address annotations
-    void WriteUInt8(...); // 0x0093a9a0
 
-// --- equivalence checker address annotations (dummy declarations) ---
-namespace __equiv_ann {
+// @ 0x0053b5a0  eastl::vector<Entry20>::operator=
+BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
+{
+    return BlobAssign<0x14>(this, o);
 }

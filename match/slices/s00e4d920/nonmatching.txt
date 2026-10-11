@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-00e4dbc0  90   free-list slot alloc: self enregistered in ecx instead of edx (register role swap)
-00e4dc90  88   position->cell index: parameter passed in ESI by the original static fn; floor intrinsic frame
-00e4dd20  109  clamp-to-cell: original uses register pair (ECX in, EAX out) and min/max stack temps
-00e4e170  132  fractional-cell split: cvtss2si (round-nearest) + cmovb needed; SSE temp forced a frame
+00e4dbc0  90   free-list slot alloc: self enregistered in ecx instead of edx (register role swap) [equiv: PASS 1200 inputs, 100% cov]
+00e4dc90  88   position->cell index: parameter passed in ESI by the original static fn; floor intrinsic frame [equiv: UNSUPPORTED 0/1200 valid, fault(read): arg in ESI (custom reg ABI)]
+00e4dd20  109  clamp-to-cell: original uses register pair (ECX in, EAX out) and min/max stack temps [equiv: UNSUPPORTED original reads eax at entry (custom reg ABI)]
+00e4e170  132  fractional-cell split: cvtss2si (round-nearest) + cmovb needed; SSE temp forced a frame [equiv: PASS 1200 inputs, 100% cov]

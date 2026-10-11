@@ -38,7 +38,8 @@ struct Chart68 {
 
 struct TwoVtbl { void* vt0; void* vt1; char pad[4]; void* p0c; };
 
-struct ChartVec { char pad[0xc]; void** begin; void** end; };
+struct ChartRef;
+struct ChartVec { char pad[0xc]; void** begin; void** end; ChartRef* MakeChartRef(ChartRef* out); };
 struct ChartRef {
     int  mNumElts;             // +0x00
     void* mData;               // +0x04
@@ -111,8 +112,9 @@ void __cdecl ChartSolve(int n, int stride, int* a, int* b, float* out)
 }
 
 // @ 0x007217c0
-ChartRef* __cdecl MakeChartRef(ChartVec* this_, ChartRef* out)
+ChartRef* ChartVec::MakeChartRef(ChartRef* out)
 {
+    ChartVec* this_ = this;
     void** begin = this_->begin;
     out->mNumElts = (int)((char*)this_->end - (char*)begin) / 0xc;
     out->mEltStride = 0xc;

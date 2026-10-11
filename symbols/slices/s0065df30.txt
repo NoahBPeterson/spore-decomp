@@ -1,2 +1,3 @@
 0065e8d0 SP::cSPUIFeedEdit::LoadLayout  # PDB anchor (dev 00d85b20)
 0065e0a0 SP::cSPUIFeedEdit::UnloadLayout  # inverse of LoadLayout (mIsLoaded guard, layout teardown)
+0065df30 AssetVec::DoInsertValue  # __declspec(noinline) on the definition defeats the marker parser

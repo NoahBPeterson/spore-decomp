@@ -386,10 +386,14 @@ int cAppStateManagerX::StateIDFromName(const char* name) {
 }
 
 // =============================================================== 0x007e30a0
-void FUN_007e2ce0(void* thisp, int idx);   // 0x007e2ce0
+struct cTransitionMgr {
+    void FUN_007e2ce0(int idx);   // 0x007e2ce0
+    void FUN_007e30a0(int a, int b);
+};
 void hashfind2(void* out, void* table, void* key); // 0x007e2960
 // @ 0x007e30a0
-void FUN_007e30a0(void* self, int a, int b) {
+void cTransitionMgr::FUN_007e30a0(int a, int b) {
+    cTransitionMgr* self = this;
     int key[2];
     key[0] = a;
     key[1] = b;
@@ -397,7 +401,7 @@ void FUN_007e30a0(void* self, int a, int b) {
     char* tbl = (char*)self + 0xd8;
     hashfind2(it, tbl, key);
     if (it[0] != *(int*)(tbl + 4 + *(int*)(tbl + 8) * 4))
-        FUN_007e2ce0(self, *(int*)((char*)it[0] + 8));
+        self->FUN_007e2ce0(*(int*)((char*)it[0] + 8));
 }
 
 // =============================================================== 0x007e2ae0
@@ -429,7 +433,8 @@ void* MessageServer();                             // 0x0067dcc0
 void* EffectsManager();                            // 0x0067ddd0
 void SetMessageString8(void* msg, int a, void* s); // 0x00618bd0
 // @ 0x007e2ce0
-void FUN_007e2ce0(void* self, int idx) {
+void cTransitionMgr::FUN_007e2ce0(int idx) {
+    cTransitionMgr* self = this;
     char* piVar5 = (char*)(*(int*)((char*)self + 0xa4) + idx * 0x50);
     MessageServer();
     unsigned n = (*(int*)(piVar5 + 4) - *(int*)piVar5) >> 3;
@@ -492,11 +497,13 @@ struct AVec {
     AutoRef* mpBegin;
     AutoRef* mpEnd;
     AutoRef* mpCapacity;
+    AutoRef* assign(const AVec* o);
 };
 extern "C" void* FUN_007e25a0(unsigned n, void* a, void* b); // 0x007e25a0
 extern "C" void  FUN_007e1a50(void* a, void* b);             // 0x007e1a50
 // @ 0x007e3160
-AutoRef* AVec_assign(AVec* self, const AVec* o) {
+AutoRef* AVec::assign(const AVec* o) {
+    AVec* self = this;
     if (o == self)
         return self->mpBegin;
     unsigned n = (unsigned)((o->mpEnd - o->mpBegin));

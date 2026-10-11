@@ -279,8 +279,17 @@ void* Filter16Copy(int* p, int* end, int* out, int* keysBegin, int* keysEnd, cha
     return out;
 }
 
+// Stub receiver class so `this` arrives in ECX.
+struct cSPUIAssetGrid {
+    int GridScanFwd();
+    int GridScanRev();
+    void GridClear();
+    void GridShutdown();
+};
+
 // @ 0x00653b80  forward index scan
-int GridScanFwd(void* self) {
+int cSPUIAssetGrid::GridScanFwd() {
+    void* self = this;
     AssetBrowser();
     int* info = (int*)FUN_00644a70(0);
     int* b = (int*)info[0];
@@ -306,7 +315,8 @@ int GridScanFwd(void* self) {
 }
 
 // @ 0x00653c40  reverse index scan
-int GridScanRev(void* self) {
+int cSPUIAssetGrid::GridScanRev() {
+    void* self = this;
     AssetBrowser();
     int* info = (int*)FUN_00644a70(0);
     int* b = (int*)info[0];
@@ -332,7 +342,8 @@ int GridScanRev(void* self) {
 }
 
 // @ 0x006543a0  cSPUIAssetGrid::Clear()
-void GridClear(void* self) {
+void cSPUIAssetGrid::GridClear() {
+    void* self = this;
     char* s = (char*)self;
     void* p = *(void**)(s + 0xfc);
     if (p) {
@@ -362,14 +373,15 @@ void GridClear(void* self) {
 }
 
 // @ 0x00654650  cSPUIAssetGrid::Shutdown()
-void GridShutdown(void* self) {
+void cSPUIAssetGrid::GridShutdown() {
+    void* self = this;
     char* s = (char*)self;
     if (s[0x10c]) {
         void* app = AppSystem();
         (*(void(__thiscall**)(void*, int))((char*)*(void**)app + 0x40))(app, 0);
         s[0x10c] = 0;
     }
-    GridClear(self);
+    GridClear();
     FUN_0065aeb0();
     void* layout = *(void**)(s + 0x18);
     if (layout) {

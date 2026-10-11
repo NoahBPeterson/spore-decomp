@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+007d8740  -  cAppModeInfo copy-constructor: declared only (Sub_7d8740), no definition in the source, so there is no compiled function to test

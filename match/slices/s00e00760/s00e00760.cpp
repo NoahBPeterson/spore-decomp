@@ -69,6 +69,11 @@ void* g_15a4878;
 int g_15a4848, g_15a483c;
 uint8_t g_16a0c80;
 
+struct MgrObj { void* Ctor(); void Dtor(); };
+struct OptObj { void* Ctor(); void Dtor(); void* DelDtor(unsigned int flags); };
+struct WinObj { void* Ctor(void* arg); void Dtor(); };
+struct PodObj { void* Copy(void* o); };
+struct NetObj { void* Ctor(); void* DelDtor(unsigned int flags); };
 struct SPUILayout {
     void* FindWindowByID(void* id, int a);
     void  SetVisibility(void* v);
@@ -107,7 +112,8 @@ void ShowContextSporepedia(void* self, void* info) {
 //  0x00e008e0  some manager ctor
 // ===========================================================================
 // @ 0x00e008e0
-void* MgrCtor(void* self) {
+void* MgrObj::Ctor() {
+    void* self = this;
     *(uint8_t*)((char*)self + 4) = 0;
     *(void**)self = (void*)0x147f000;
     *(void**)((char*)self + 8) = 0;
@@ -130,7 +136,8 @@ void* MgrCtor(void* self) {
 }
 
 // @ 0x00e00970
-void MgrDtor(void* self) {
+void MgrObj::Dtor() {
+    void* self = this;
     FUN_004b5440();
     void* p = *(void**)((char*)self + 0x54);
     if (p != 0 && *((int*)p - 1) != 0) {
@@ -244,7 +251,8 @@ void FUN_00e00e90_impl(void* self) { (void)self; }
 //  0x00e00ec0  UI::cSPUIGlobalOptions ctor
 // ===========================================================================
 // @ 0x00e00ec0
-void* GlobalOptionsCtor(void* self) {
+void* OptObj::Ctor() {
+    void* self = this;
     *(void**)((char*)self + 4) = (void*)0x13ec458;
     *(void**)((char*)self + 8) = 0;
     *(void**)self = (void*)0x147f17c;
@@ -263,7 +271,8 @@ void* GlobalOptionsCtor(void* self) {
 }
 
 // @ 0x00e00f40
-void GlobalOptionsDtor(void* self) {
+void OptObj::Dtor() {
+    void* self = this;
     *(void**)self = (void*)0x147f17c;
     *(void**)((char*)self + 4) = (void*)0x147f16c;
     FUN_006b5240();
@@ -276,7 +285,8 @@ void GlobalOptionsDtor(void* self) {
 void GlobalOptionsReset(void* self) { (void)self; }
 
 // @ 0x00e01090
-void* DtorF1(void* self, unsigned int flags) {
+void* OptObj::DelDtor(unsigned int flags) {
+    void* self = this;
     *(void**)self = (void*)0x147f198;
     *(void**)((char*)self + 4) = 0;
     if (flags & 1) {
@@ -289,7 +299,8 @@ void* DtorF1(void* self, unsigned int flags) {
 //  0x00e010c0  cSPUIGlobalUIRootWinProc ctor
 // ===========================================================================
 // @ 0x00e010c0
-void* WinProcCtor(void* self, void* arg) {
+void* WinObj::Ctor(void* arg) {
+    void* self = this;
     *(void**)((char*)self + 4) = (void*)0x13eb384;
     *(void**)((char*)self + 8) = (void*)0x13ec458;
     *(void**)((char*)self + 0xc) = 0;
@@ -322,7 +333,8 @@ void* WinProcCtor(void* self, void* arg) {
 }
 
 // @ 0x00e011a0
-void WinProcDtor(void* self) {
+void WinObj::Dtor() {
+    void* self = this;
     *(void**)self = (void*)0x147f1c8;
     *(void**)((char*)self + 4) = (void*)0x147f1b8;
     *(void**)((char*)self + 8) = (void*)0x147f1a8;
@@ -412,7 +424,8 @@ char FUN_00e014a0_impl() { return 0; }
 //  0x00e01570  small POD copy with refcounted members
 // ===========================================================================
 // @ 0x00e01570
-void* PodCopy(void* s, void* o) {
+void* PodObj::Copy(void* o) {
+    void* s = this;
     *(uint32_t*)s = *(uint32_t*)o;
     *((uint32_t*)s + 1) = *((uint32_t*)o + 1);
     *((uint32_t*)s + 2) = *((uint32_t*)o + 2);
@@ -459,7 +472,8 @@ void FUN_00e01620_impl(uint8_t pause) {
 //  0x00e01690  UI::NetworkActivityProc ctor
 // ===========================================================================
 // @ 0x00e01690
-void* NetworkActivityCtor(void* self) {
+void* NetObj::Ctor() {
+    void* self = this;
     *(void**)((char*)self + 4) = (void*)0x13ec458;
     *(void**)((char*)self + 8) = 0;
     *(void**)((char*)self + 0xc) = (void*)0x13eb384;
@@ -479,7 +493,8 @@ void* NetworkActivityCtor(void* self) {
 }
 
 // @ 0x00e016f0
-void* NetworkActivityDtor(void* self, unsigned int flags) {
+void* NetObj::DelDtor(unsigned int flags) {
+    void* self = this;
     *(void**)self = (void*)0x147f0dc;
     *(void**)((char*)self + 4) = (void*)0x147f0cc;
     *(void**)((char*)self + 0xc) = (void*)0x147f0bc;

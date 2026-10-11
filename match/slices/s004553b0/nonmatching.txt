@@ -1,8 +1,8 @@
-004553b0  98   HT_Find: inlined hashtable bucket_index/find and /Od frame not reproduced
+004553b0  98   HT_Find: inlined hashtable bucket_index/find and /Od frame not reproduced [equiv PASS]
 004554a0  28   FreeTree: recursive node teardown; inlined allocator deallocate signature/frame not exact
 004554f0  102  DoFreeNodes: uninitialized_copy + destroy loop shape not reproduced
-00455590  133  HT_Insert: inlined hashtable insert (FUN_005701b0/FUN_00533740) not reproduced
-00455ae0  169  Move14: eastl 0x14-stride move-down loop and trailing erase not reproduced
+00455590  133  HT_Insert: inlined hashtable insert (FUN_005701b0/FUN_00533740) not reproduced [equiv FAIL: callee FUN_005701b0 last arg differs; original reads HT+0x98 not +0x118]
+00455ae0  169  Move14: eastl 0x14-stride move-down loop and trailing erase not reproduced [equiv WEAK: 62 valid inputs, 65% coverage]
 00455c00  75   ParseVec3: string parse helpers (FUN_004565f0/FUN_00456650) not reproduced
 00455c50  36   ClampDot: extra jmp per arm from the nested if/else layout not reproduced
 00455cf0  87   InitFixed: fixed-vector init; /Od locals and this-relative stores not exact

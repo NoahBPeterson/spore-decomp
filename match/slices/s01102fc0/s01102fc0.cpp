@@ -130,7 +130,7 @@ struct hkProjectionHelper {
 
 // min = -getMaximumProjection(-dir), max = getMaximumProjection(dir) per child (a missing child counts as 0/0);
 // returns the overall min / max.  The two binary copies differ only in the write back of min/max into the entries.
-static inline void hkCalcMinMaxProjections(const hkShapeContainer* container, const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut, bool writeBack)
+static __forceinline void hkCalcMinMaxProjections(const hkShapeContainer* container, const hkVector4& dir, uint32_t* entries, int n, float* minOut, float* maxOut, bool writeBack)
 {
     *minOut = 3.40282e+38f;      // 0x7f7fffee
     *maxOut = -3.40282e+38f;     // 0xff7fffee

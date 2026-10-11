@@ -10,7 +10,7 @@ extern "C" long __cdecl _InterlockedExchange(long volatile* target, long value);
 
 // EA allocator entry points (0x00F473A0 / 0x00F47380)
 void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
-void  operator delete[](void* p);
+void  operator delete[](void* p);  // 0x00f47380
 inline void* operator new(size_t, void* p) { return p; }
 
 struct ResourceKey {

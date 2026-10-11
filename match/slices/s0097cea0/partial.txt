@@ -9,3 +9,6 @@
 0097e030  n/a  partial; eastl hashtable<...>::DoFreeNodes skeleton
 0097e0b0  n/a  partial; hash_map<...>::operator[] skeleton (find+insert+rehash)
 0097e140  n/a  partial; anonymous CursorListMarshaller::Read (170B) skeleton
+0097db90  n/a  partial; ImageCursorProvider helper (56B orig) skeleton: our body is an empty/constant stub, symbol rejected as >5x smaller than original; equiv UNSUPPORTED
+0097dc00  n/a  partial; ImageCursorProvider::UpdateMousePosition (46B orig) skeleton: our body is an empty/constant stub, symbol rejected as >5x smaller than original; equiv UNSUPPORTED
+0097ddf0  n/a  partial; ImageCursorProvider::HasCursor (47B orig) skeleton: our body is an empty/constant stub, symbol rejected as >5x smaller than original; equiv UNSUPPORTED

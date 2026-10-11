@@ -214,9 +214,15 @@ struct OpaqueVector {
     OpaqueVector() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
     ~OpaqueVector();
 };
-struct OpaqueVectorA : OpaqueVector { ~OpaqueVectorA(); };   // 0x0041f760
-struct OpaqueVectorB : OpaqueVector { ~OpaqueVectorB(); };   // 0x0041f8e0
-struct OpaqueVectorC : OpaqueVector { ~OpaqueVectorC(); };   // 0x004b5440
+struct OpaqueVectorA : OpaqueVector {
+    ~OpaqueVectorA();   // 0x0041f760
+};
+struct OpaqueVectorB : OpaqueVector {
+    ~OpaqueVectorB();   // 0x0041f8e0
+};
+struct OpaqueVectorC : OpaqueVector {
+    ~OpaqueVectorC();   // 0x004b5440
+};
 
 struct Entry20 { uint32_t data[5]; };
 

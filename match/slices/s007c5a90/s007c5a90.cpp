@@ -36,6 +36,7 @@ struct cCameraManager {
     void SetActiveController(void* name);        // 0x7c6110
     void ActiveControllerID();                   // 0x7c6150
     void* ActiveController();                    // 0x7c61a0
+    void UpdateFromControllerProperties();       // 0x7c6200
     void Update(int dt);                         // 0x7c63a0
     void SetActiveControllerByIndex(int idx);    // 0x7c6420
     int  ControllerIDByIndex(int idx);           // 0x7c6480
@@ -233,7 +234,8 @@ void* cCameraManager::ActiveController() {
 
 // ===========================================================================
 // @ 0x007c6200
-void UpdateFromControllerProperties(cCameraManager* m) {
+void cCameraManager::UpdateFromControllerProperties() {
+    cCameraManager* m = this;
     float local[4] = {12300.0f, 12300.0f, 12300.0f, 12300.0f};
     void* ctrl = m->mControllersBegin[m->mIndexA8];
     void* vt = *(void**)ctrl;
@@ -272,7 +274,7 @@ void cCameraManager::Update(int dt) {
     void* vt = *(void**)ctrl;
     void* p = (void*)((int(__thiscall*)(void*))((void**)vt)[0x4c / 4])(ctrl);
     if (p != 0) {
-        UpdateFromControllerProperties(this);
+        this->UpdateFromControllerProperties();
         ((void(__thiscall*)(void*, int, void*))((void**)vt)[0x20 / 4])(ctrl, dt, 0);
     }
 }
@@ -285,7 +287,7 @@ void cCameraManager::SetActiveControllerByIndex(int idx) {
     void* old = mControllersBegin[mIndexA8];
     ((void(__thiscall*)(void*))((void**)*(void**)old)[0x1c / 4])(old);
     mIndexA8 = idx;
-    UpdateFromControllerProperties(this);
+    this->UpdateFromControllerProperties();
     void* nw = mControllersBegin[mIndexA8];
     ((void(__thiscall*)(void*))((void**)*(void**)nw)[0x18 / 4])(nw);
 }

@@ -1,4 +1,4 @@
 007345c0    30  COMPLETE two-call wrapper (0.5f args); x87 constant reload and param register differ.
-00734660    98  COMPLETE vector emplace (fast-path + insert fallback); /0xc magic and copy shape differ.
-007348a0   172  COMPLETE vector assign-from-vector; EASTL branch order and copy/memcpy tails differ.
-00735260   183  COMPLETE vector operator= for refcounted pointers; helper call shapes differ.
+00734660    98  COMPLETE vector emplace (fast-path + insert fallback); /0xc magic and copy shape differ. [equiv: WEAK 218 valid, 60% cov, after ecx/member fix]
+007348a0   172  COMPLETE vector assign-from-vector; EASTL branch order and copy/memcpy tails differ. [equiv: WEAK 521 valid, 42% cov, after ecx/member fix]
+00735260   183  COMPLETE vector operator= for refcounted pointers; helper call shapes differ. [equiv: FAIL fake-arity no call site, after ecx/member fix]

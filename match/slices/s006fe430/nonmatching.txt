@@ -7,4 +7,4 @@
 006feee0  80   SP::LoadAndSelectVS: complete; cl does not keep the name pointer in edi across the strcmp (original does), shifting the whole register map.
 006fefe0  46   vector<0x130> release-all: complete; cl swaps the loop offset/count registers (edi/ebp).
 006ff060  90   vector<0x130>::resize: complete logic but the call to the stubbed Insert is not equivalent and cl drops the saved `this` register.
-006ff100  32   cVertexFragmentInfo::operator=: complete; cl keeps `this` in edi and the source in esi (original the opposite).
+006ff100  32   cVertexFragmentInfo::operator=: complete; cl keeps `this` in edi and the source in esi (original the opposite). [equiv: UNSUPPORTED, 2 unresolved refs (EString::assign, VecStub24::CopyFrom)]

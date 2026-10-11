@@ -9,5 +9,5 @@
 007eb9e0 145 eastl hashtable::erase - inlined list dtor/loop differs
 007ebe70 95 SP::cTelemetry::~cTelemetry - EH frame + vtable store schedule differs
 007ebf20 12 RefCountTemplate Release - `add r,-N` vs `sub r,N` encoding + load/store order
-007ebfd0 189 eastl hashtable operator[] - find/insert inlining differs
+007ebfd0 189 eastl hashtable operator[] - find/insert inlining differs; equiv: FAIL (5/5 valid mismatched; symbol via ?ATItemMap, MapFind annotated)
 007ec0a0 105 SP::cTelemetry::cTelemetry - base vtable/EH schedule differs

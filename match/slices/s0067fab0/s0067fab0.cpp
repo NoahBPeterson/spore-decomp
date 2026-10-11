@@ -309,7 +309,10 @@ void __stdcall FUN_00680390(unsigned** pVec, IOStream* pStream) {
 
 // @ 0x006805c0
 extern "C" void FUN_006b56f0(cString14*, const cString14*);
-void FUN_006805c0(char* pBegin, char* pEnd, IOStream* pStream) {
+struct Ser68 { void FUN_006805c0(char** pVec, IOStream* pStream); };
+void Ser68::FUN_006805c0(char** pVec, IOStream* pStream) {
+  char* pBegin = pVec[0];
+  char* pEnd = pVec[1];
   int count = (int)(pEnd - pBegin) / 0x48;
   pStream->Write(&count, 4);
   for (char* it = pBegin; it != pEnd; it += 0x48) {

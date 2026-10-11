@@ -2,4 +2,4 @@
 009b0120  80  complete; dot-product quaternion test; SSE scheduling differs
 009b01e0  113 complete; smoothstep/blend; x87 fabs and constant scheduling differ
 009b0280  127 complete; MirrorSagittalContextTarget; register allocation (src/dst in esi/edx) differs
-009b0320   1  complete; AddUnique static helper; register convention (edx/esi/edi) differs
+009b0320   1  complete; AddUnique static helper; register convention (edx/esi/edi) differs; equiv UNSUPPORTED (original reads edx at entry: custom register ABI; symbol now found)

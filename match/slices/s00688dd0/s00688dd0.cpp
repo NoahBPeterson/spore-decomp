@@ -407,6 +407,7 @@ void JobCommitFile(const void* a, const void* b)
 // ===========================================================================
 // @ 0x006894D0 / 510 / 560 / 590  x87 control-word helpers
 // ===========================================================================
+// @ 0x006894D0
 void FPUSetPrecision(int mode)
 {
     unsigned cw = 0;
@@ -419,6 +420,7 @@ void FPUSetPrecision(int mode)
     __asm { fldcw word ptr cw }
 }
 
+// @ 0x00689510
 void FPUSetRounding(int mode)
 {
     unsigned cw = 0;
@@ -438,6 +440,7 @@ void FPUSetRounding(int mode)
     __asm { fldcw word ptr cw }
 }
 
+// @ 0x00689560
 void FPUMaskFlags(unsigned mask)
 {
     unsigned cw = 0;
@@ -446,6 +449,7 @@ void FPUMaskFlags(unsigned mask)
     __asm { fldcw word ptr cw }
 }
 
+// @ 0x00689590
 unsigned FPUGetFlags()
 {
     unsigned cw = 0;
@@ -501,6 +505,7 @@ struct EditorResDerived : EditorResBase {
     ~EditorResDerived();
 };
 
+// @ 0x00689810
 EditorResDerived::~EditorResDerived()
 {
     if (m24 != 0)

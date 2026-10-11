@@ -48,6 +48,7 @@ struct Vec8 {
 struct VecAutoRef4 {
     void* begin; void* end; void* cap;
     void erase(void* first, void* last);
+    void FUN_006650c0(void* pos, void* value);
 };
 
 // @ 0x00665330
@@ -206,8 +207,8 @@ int* PartitionByFeed(int* first, int* last, int* key) {
 }
 
 // @ 0x006650c0  vector<AutoRefCount4>::insert(position, value)
-void FUN_006650c0(void* self, void* pos, void* value) {
-    char* p = (char*)self;
+void VecAutoRef4::FUN_006650c0(void* pos, void* value) {
+    char* p = (char*)this;
     char* end = *(char**)(p + 4);
     if (end != *(char**)(p + 8)) {
         char* val = (char*)value;

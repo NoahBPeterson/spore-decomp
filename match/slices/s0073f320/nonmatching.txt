@@ -1,4 +1,4 @@
-0073f320  88  complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% coverage) after annotating cSPTransformS::operator= with 0x537dc0 (the checker had mapped it to 0x73f320 itself); the checker cannot find operator= symbols, so it was run on a scratch copy with the method renamed Assign
+0073f320  88  complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (1200 valid, 100% coverage) via symbols/slices/s0073f320.txt entry ?4cSkinBinding (cSPTransformS::operator= annotated 0x537dc0)
 0073fe50  16  complete eastl::copy_backward<8-byte POD*>; only the last/result register assignment differs
 0073f440  10  complete copy_backward for refcounted pairs; only the load of result->p is scheduled before the pointer decrements
 0073f4b0  107  complete SetAnimationGroupTransform; branch layout (translate block first) and hoisted lea differ

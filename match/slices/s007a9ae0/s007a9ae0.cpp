@@ -151,9 +151,15 @@ int FUN_007a9f30(int* self)
     return 1;
 }
 
+struct JobSlots {
+    void Clear();      // 007aa320
+    int  Transfer(int param_2);   // 007aa3a0
+};
+
 // @ 0x007aa320
-void FUN_007aa320(int* self)
+void JobSlots::Clear()
 {
+    int* self = (int*)this;
     if (self[1]) { void* old = (void*)self[1]; self[1] = 0; FUN_00690_120_GetStatus(old); }
     if (self[0]) {
         volatile long* rc = (volatile long*)((char*)self[0] + 0x10);
@@ -167,8 +173,9 @@ void FUN_007aa320(int* self)
 }
 
 // @ 0x007aa3a0
-int FUN_007aa3a0(int self, int param_2)
+int JobSlots::Transfer(int param_2)
 {
+    int self = (int)this;
     int* a = *(int**)(self + 0xc);
     if (a && *(int*)(self + 8) == 0) {
         int* b = *(int**)(self + 8);
@@ -195,9 +202,10 @@ int FUN_007aa430(int self, int a2, int a3, int a4, int a5) { (void)self;a2;a3;a4
 int FUN_007aa530(int self, int a2, int a3, int a4, int a5) { (void)self;a2;a3;a4;a5; return 0; }
 
 // @ 0x007aa620
-struct Empty16 { int a, b, c, d; };
-void FUN_007aa620(Empty16* self)
+struct Empty16 { int a, b, c, d; Empty16(); };
+Empty16::Empty16()
 {
+    Empty16* self = this;
     self->a = 0; self->b = 0; self->c = 0; self->d = 0;
 }
 
@@ -238,8 +246,9 @@ Chunk* cNodeAllocator::Create()
 }
 
 // @ 0x007aa850  deque push_back with block allocation
-void FUN_007aa850(int* self, int* value)
+void DequeMap::PushBack(int* value)
 {
+    int* self = (int*)this;
     int v = *value;
     if (self[1] <= ((self[9] - *self) >> 2) + 1)
         ((DequeMap*)self)->InsertAt(1, 1);

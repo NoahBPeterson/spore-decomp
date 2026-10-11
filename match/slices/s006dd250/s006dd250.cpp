@@ -177,8 +177,9 @@ void __fastcall FUN_006dd4d0(void* self)   // @ 0x006dd4d0
 
 // 0x006dd540: SP::cBufferDrawImpl::IssueDraw
 // 0x006dd540: SP::cBufferDrawImpl::IssueDraw
-struct CBufferDraw { void IssueDraw(int param_2); int Lock(int count, void* out, uint32_t* stride, int flag); };
-void CBufferDraw::IssueDraw(int param_2)   // @ 0x006dd540
+struct CBufferDraw { void IssueDraw(int param_2); int Lock(int count, void* out, uint32_t* stride, int flag); uint32_t FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7); };
+// @ 0x006dd540
+void CBufferDraw::IssueDraw(int param_2)
 {
     char* p = (char*)this;
     int* dev = (int*)g_d3d9Device;
@@ -301,7 +302,8 @@ deflt:
 }
 
 // 0x006dd8b0: flush/unlock the current channel if it is open
-void __fastcall FUN_006dd8b0(void* self)   // @ 0x006dd8b0
+// @ 0x006dd8b0
+void __fastcall FUN_006dd8b0(void* self)
 {
     char* p = (char*)self;
     if (*(char*)(p + 400) != '\0')
@@ -339,7 +341,8 @@ void __fastcall FUN_006dd8b0(void* self)   // @ 0x006dd8b0
 }
 
 // 0x006dd9b0: lock the current channel's buffer for writing
-int CBufferDraw::Lock(int param_2, void* param_3, uint32_t* param_4, int param_5)   // @ 0x006dd9b0
+// @ 0x006dd9b0
+int CBufferDraw::Lock(int param_2, void* param_3, uint32_t* param_4, int param_5)
 {
     char* p = (char*)this;
     bool bVar2;
@@ -396,9 +399,11 @@ int CBufferDraw::Lock(int param_2, void* param_3, uint32_t* param_4, int param_5
 }
 
 // 0x006ddb40: lock a rectangle of the index/vertex buffer
-uint32_t FUN_006ddb40(void* self, int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7)   // @ 0x006ddb40
+// @ 0x006ddb40
+uint32_t CBufferDraw::FUN_006ddb40(int param_2, void* param_3, uint32_t* param_4, int param_5, int* param_6, int param_7)
 {
-    char* p = (char*)self;
+    void* self = this;
+    char* p = (char*)this;
     int iVar3 = param_5;
     int iVar2 = param_2;
     if (param_2 < 0x1ff9 && param_5 < 0xbfd1)
@@ -536,7 +541,8 @@ void FUN_006ddef0(int param_1)   // @ 0x006ddef0
 }
 
 // 0x006ddf80: install the singleton and vertex declarations
-void FUN_006ddf80(void)   // @ 0x006ddf80
+// @ 0x006ddf80
+void FUN_006ddf80(void)
 {
     int iVar1 = (int)operator_new(0x1b4, "Graphics/BufferDraw", 0, 0, 0, 0);
     if (iVar1 == 0)

@@ -10,8 +10,8 @@
 01088200 0 havok-equivalent
 01088270 0 havok-equivalent
 010883c0 0 havok-equivalent
-01088410 0 havok-equivalent
-01088480 0 havok-equivalent
+01088410 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)
+01088480 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)
 01088500 0 havok-equivalent
 01088570 0 havok-equivalent
-010888c0 0 havok-equivalent
+010888c0 0 havok-equivalent; equiv.py PASS (1200 inputs, 100% cov)

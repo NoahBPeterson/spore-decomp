@@ -327,9 +327,16 @@ template float hkMath::min2<float>(float a, float b);
 // extents output in ESI (custom register convention), the body on the stack; it is a normal function.
 extern const hkTransform g_hkTransformIdentity;     // 0x015B9B20 (rows (1,0,0,0) ...)
 
-// @ 0x01087050
-static void hkRigidBody_calcExtentsAndObjectRadius(const hkShape* shape, hkVector4* extents, hkEntity* body)
+// Stub receiver class so the shape arrives in ECX (thiscall).
+struct hkShapeExtentsStub : hkShape
 {
+	void calcExtentsAndObjectRadius(hkVector4* extents, hkEntity* body) const;
+};
+
+// @ 0x01087050
+void hkShapeExtentsStub::calcExtentsAndObjectRadius(hkVector4* extents, hkEntity* body) const
+{
+	const hkShape* shape = this;
 	hkAabb aabb;
 	shape->getAabb(g_hkTransformIdentity, 0.0f, aabb);
 
@@ -507,7 +514,7 @@ hkWorldOperation::Result hkRigidBody::setShape(const hkShape* shape)
 	const_cast<hkShape*>(shape)->addReference();
 
 	hkVector4 extents;
-	hkRigidBody_calcExtentsAndObjectRadius(shape, &extents, this);
+	static_cast<const hkShapeExtentsStub*>(shape)->calcExtentsAndObjectRadius(&extents, this);
 
 	if (hadShape)
 	{

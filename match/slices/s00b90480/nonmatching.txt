@@ -1,11 +1,11 @@
 # va  diff-bytes  reason (compiled /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-)
-00b90480   203  FUN_00b90480 (GetRandomPlants): complete; editor species manager/EASTL vector glue scheduling differs
+00b90480   203  FUN_00b90480 (GetRandomPlants): complete; editor species manager/EASTL vector glue scheduling differs; equiv: FAIL (ours faults in memcpy import where original returns)
 00b90560   254  FUN_00b90560: complete; mission plant-profile list build; inlined stack-string and vector growth differ
 00b906a0    77  FUN_00b906a0: complete; clamped random in [a,b]; x87 double promotion scheduling differs
 00b906f0    38  FUN_00b906f0: complete; WrapCubeFace normalization loop; register/flag shape differs
-00b90750    75  FUN_00b90750: complete; cell->pointer (stride 0xc); address arithmetic register choice differs
-00b907a0    74  FUN_00b907a0: complete; cell->flags dword; address arithmetic register choice differs
-00b907f0   150  FUN_00b907f0: complete; cell visibility classify; SSE/x87 compare + bitfield RMW scheduling differs
+00b90750    75  FUN_00b90750: complete; cell->pointer (stride 0xc); address arithmetic register choice differs; equiv: PASS (394 valid, 100% cov)
+00b907a0    74  FUN_00b907a0: complete; cell->flags dword; address arithmetic register choice differs; equiv: PASS (477 valid, 100% cov)
+00b907f0   150  FUN_00b907f0: complete; cell visibility classify; SSE/x87 compare + bitfield RMW scheduling differs; equiv: PASS (603 valid, 100% cov)
 00b908c0     8  FUN_00b908c0: complete; clear cell bits; count computed in eax vs ecx (loop-scaffold allocation)
 00b90960    47  FUN_00b90960: complete; find-by-hash-slot; vtable probe result handling differs
 00b909a0    64  FUN_00b909a0: complete; copy_if by hash-slot; vtable probe + store scheduling differs
@@ -14,4 +14,4 @@
 00b90bd0    54  FUN_00b90bd0: complete; median-of-three comparator; branch layout differs
 00b90cb0    34  FUN_00b90cb0: complete; sphere-list distance test; SSE load order + x87 fsub order differ
 00b90d70   195  FUN_00b90d70: complete; cube-face cell angle test; x87/sse mix scheduling differs
-00b90ea0   n/a  FUN_00b90ea0: complete; three-radius cube march marking flags 0x10/0x20/0x40; 1141B vs 1141B shape differs
+00b90ea0   n/a  FUN_00b90ea0: complete; three-radius cube march marking flags 0x10/0x20/0x40; 1141B vs 1141B shape differs; equiv: FAIL (ours faults at eip=00684f84 reading unmapped)

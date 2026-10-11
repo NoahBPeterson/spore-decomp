@@ -4,3 +4,4 @@
 007ebce0 SP::cTelemetry::Flush  # inferred from stream-swap body
 007ebe70 SP::cTelemetry::~cTelemetry  # PDB-derived layout
 007ec0a0 SP::cTelemetry::cTelemetry  # writes cTelemetry vtables + mStats/mSession
+007ebfd0 ?ATItemMap  # SP::TItemMap::operator[]

@@ -4,10 +4,10 @@
 00653780  98   copy_if over 0x10-byte records: filter + lower_bound complete; scheduling differs
 00653820  196  eastl::quick_sort_impl<GridEntry*,int,TypeGridEntrySort>: median/get_partition/partial_sort loop complete; inlined median shape differs
 00653960  484  eastl::partial_sort<GridEntry*,CompareA>: make_heap/adjust_heap/sort_heap shape complete; by-value comparator copies differ
-00653b80  169  cSPUIAssetGrid forward index scan: full loop + comparison implemented
-00653c40  134  cSPUIAssetGrid reverse index scan: full loop + comparison implemented
+00653b80  169  cSPUIAssetGrid forward index scan: full loop + comparison implemented; equiv: UNSUPPORTED (0/1200 inputs valid, fault(read); ECX fixed)
+00653c40  134  cSPUIAssetGrid reverse index scan: full loop + comparison implemented; equiv: UNSUPPORTED (0/1200 inputs valid, fault(read); ECX fixed)
 00653e40  137  eastl::vector<GridEntry>::resize: grow/shrink paths complete; helper schedule differs
 00653f50  206  eastl::quick_sort_impl<GridEntry*,int,CompareA>: loop complete; median A call shape differs
-006543a0  195  cSPUIAssetGrid::Clear: all releases/field resets complete
+006543a0  195  cSPUIAssetGrid::Clear: all releases/field resets complete; equiv: FAIL (5/5 valid mismatched; memory pool @400100ec)
 00654490  248  eastl::vector<GridEntry>::reserve: grow path complete; shrink/swap fallback approximated
-00654650  190  cSPUIAssetGrid::Shutdown: all release paths complete
+00654650  190  cSPUIAssetGrid::Shutdown: all release paths complete; equiv: FAIL (5/23 valid mismatched; execution)

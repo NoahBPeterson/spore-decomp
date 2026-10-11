@@ -115,13 +115,16 @@ struct cAppState {
     char pad4c[0x34];
     uint8_t field80;         // +0x80
     uint8_t field81;         // +0x81
+    void* AddAction(EA::ArgScript::cArguments* args, RefObj* msg);
+    void AddMessage(EA::ArgScript::cArguments* args, RefObj* msg, char c);
 };
 
 void AMVecFull_push_back(AMVecFull* v, const cActionMessage* m);  // 0x007e3d90
 void FUN_007e32c0(AMVecFull* v, cActionMessage* pos, const cActionMessage* m); // 0x007e32c0
 
 // @ 0x007e40d0
-void* cAppState_AddAction(cAppState* self, EA::ArgScript::cArguments* args, RefObj* msg) {
+void* cAppState::AddAction(EA::ArgScript::cArguments* args, RefObj* msg) {
+    cAppState* self = this;
     int flag;
     if (args && args->HasFlag("onExit"))
         flag = 0;
@@ -142,7 +145,8 @@ void* cAppState_AddAction(cAppState* self, EA::ArgScript::cArguments* args, RefO
 }
 
 // @ 0x007e4190
-void FUN_007e4190(cAppState* self, EA::ArgScript::cArguments* args, RefObj* msg, char c) {
+void cAppState::AddMessage(EA::ArgScript::cArguments* args, RefObj* msg, char c) {
+    cAppState* self = this;
     int flag;
     if (args && args->HasFlag("onExit"))
         flag = 0;

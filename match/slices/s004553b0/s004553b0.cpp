@@ -78,17 +78,21 @@ int* FixedC::InitFixed(void* p) {
 // EASTL helpers (approximations; not byte-exact)
 // ---------------------------------------------------------------------------
 
+struct Iter;
 struct HT {
     int* mpBegin;              // +0
     int* mpEnd;                // +4
     char pad8[0x118 - 8];
     unsigned char mField118;   // +0x118
+    Iter* Find(Iter* out, int* key);
+    int* Insert(int* pos, int* value);
 };
 
 struct Iter { int* first; int* second; };
 
 // @ 0x004553b0
-Iter* HT_Find(HT* self, Iter* out, int* key) {
+Iter* HT::Find(Iter* out, int* key) {
+    HT* self = this;
     int* node = (int*)FUN_00456410((int)self->mpBegin, (int)self->mpEnd, key, self->mField118);
     if (node == self->mpEnd || *key < *node) {
         out->first = node;
@@ -132,7 +136,8 @@ void* DoFreeNodes(void* first, void* last, void* dest) {
 }
 
 // @ 0x00455590
-int* HT_Insert(HT* self, int* pos, int* value) {
+int* HT::Insert(int* pos, int* value) {
+    HT* self = this;
     int* node;
     if (pos == self->mpEnd || *pos <= *value)
         node = (int*)FUN_005701b0(pos, self->mpEnd, value, self->mField118);
@@ -144,7 +149,9 @@ int* HT_Insert(HT* self, int* pos, int* value) {
 }
 
 // @ 0x00455ae0 -- move 0x14-stride elements down over [param2,param3)
-void* Move14(int* self, void* param2, void* param3) {
+struct Vec14 { int* self_[2]; void* Move14(void* param2, void* param3); };
+void* Vec14::Move14(void* param2, void* param3) {
+    int* self = (int*)this;
     char* dst = (char*)param2;
     char* end = (char*)self[1];
     for (char* src = (char*)param3; src != end; src += 0x14, dst += 0x14) {

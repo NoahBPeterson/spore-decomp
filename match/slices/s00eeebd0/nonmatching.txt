@@ -1,4 +1,4 @@
 # va  diff-bytes  reason
 00eeee80  8   ?DoInsertValue@?$Vector@UKey_@@UKeyAllocator@@: complete EASTL reimplementation; realloc-path register allocation differs (mpBegin/mpEnd in edx vs original eax/ecx)
-00eeefb0  19  ?DoInsertValue@?$Vector@UEntry32@@USPVectorAllocator@@: complete; Entry32 copy-ctor fld/fstp schedule (mov interleave) and mpEnd load position differ
+00eeefb0  19  ?DoInsertValue@?$Vector@UEntry32@@USPVectorAllocator@@: complete; Entry32 copy-ctor fld/fstp schedule (mov interleave) and mpEnd load position differ; equiv: UNSUPPORTED (only 1/216 inputs valid, pool-limit/read faults)
 00eef110  5   ?push_back@?$Vector@UEntry32@@USPVectorAllocator@@: complete; Entry32 copy-ctor fld/fstp schedule differs (mov not interleaved)

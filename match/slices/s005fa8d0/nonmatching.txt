@@ -1,1 +1,1 @@
-005face0  113  hashtable::erase(string16): behaviourally complete; the node/key register allocation across the equal() calls differs, so the byte image does not converge.
+005face0  113  hashtable::erase(string16): behaviourally complete; the node/key register allocation across the equal() calls differs, so the byte image does not converge. [equiv: WEAK, 786 valid inputs, 63.2% coverage]

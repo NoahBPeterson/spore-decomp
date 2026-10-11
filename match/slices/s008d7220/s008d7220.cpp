@@ -210,9 +210,9 @@ public:
     struct RecordMapOps
     {
         static RBNode* DoInsertValue(RBTree* pTree, RBNode** ppOutNode, const Key* pKey); // 0x008d7220
-        static RBNode* DoCreateNode(RBTree* pTree, const Key* pKey, const wchar_t* pName,
-                                    uint32_t nHighTime, uint32_t nLowTime,
-                                    ListAnchor* pList);                                // 0x008d7610
+        RBNode* DoCreateNode(const Key* pKey, const wchar_t* pName,
+                             uint32_t nHighTime, uint32_t nLowTime,
+                             ListAnchor* pList);                                // 0x008d7610
     };
 
 private:
@@ -450,12 +450,12 @@ DatabaseDirectoryFiles::~DatabaseDirectoryFiles()
 // RecordMapOps::DoCreateNode
 // =====================================================================================
 // @ 0x008d7610  eastl::rbtree<EA::ResourceMan::Key,eastl::pair<const Key,DDFRecordListData>,...>::DoCreateNode
-RBNode* DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(RBTree* pTree, const Key* pKey,
+RBNode* DatabaseDirectoryFiles::RecordMapOps::DoCreateNode(const Key* pKey,
                                                            const wchar_t* pName, uint32_t nHighTime,
                                                            uint32_t nLowTime, ListAnchor* pList)
 {
-    // Mark the key's type id as known (0x008d7610 opens with this).
-    (void)pTree;
+    // The tree arrives in ECX (this).
+    RBTree* pTree = reinterpret_cast<RBTree*>(this);
 
     DDFRecordListData value;
     value.mnUnknown00    = 0;
@@ -555,7 +555,7 @@ bool DatabaseDirectoryFiles::AddFileRecord(const Key& key, const wchar_t* pFileN
     bool bChanged = false;
     if (pFound == pEnd)
     {
-        RecordMapOps::DoCreateNode(&mRecordDataMap, &mapKey, 0, 0, 0, 0);
+        reinterpret_cast<RecordMapOps*>(&mRecordDataMap)->DoCreateNode(&mapKey, 0, 0, 0, 0);
         if (mpManager != 0)
         {
             typedef void (*NotifyFn)(void*, const Key*);

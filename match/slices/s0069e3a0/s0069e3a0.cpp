@@ -45,6 +45,7 @@ struct RBNode {
     // value area starts at +0x10
 };
 
+struct P550; struct P_ecc0;
 struct Tree {
     void* pad0;             // +0
     RBNode* mpNodeLeft;     // +4   (anchor)
@@ -54,14 +55,20 @@ struct Tree {
     char pad1[3];
     unsigned int mnSize;    // +0x14
     int pad2;               // +0x18
+    // rbtree member functions (receive the tree in ECX)
+    RBNode* AllocA(P550* src);
+    RBNode* CopyA(RBNode* pNode, RBNode* pParent);
+    RBNode* AllocB(P_ecc0* src);
+    RBNode* CopyB(RBNode* pNode, RBNode* pParent);
+    void Nuke(RBNode* pNode);
 };
 
 // ---------------------------------------------------------------------------
 // 0x0069e550  allocate an 8-byte-value node (pair<key,AutoRefCount>)
 // ---------------------------------------------------------------------------
 struct P550 { int key; void* obj; };
-RBNode* FUN_0069e550(P550* src);
-RBNode* FUN_0069e550(P550* src)
+// @ 0x0069e550
+RBNode* Tree::AllocA(P550* src)
 {
     RBNode* n = (RBNode*)EASTL_allocator_allocate(0x18, "App", 0, 0, kEastlAllocH, 0xd1);
     *(int*)((char*)n + 0x10) = src->key;
@@ -75,26 +82,26 @@ RBNode* FUN_0069e550(P550* src)
 // ---------------------------------------------------------------------------
 // 0x0069e6c0  rbtree<...cFeedbackEvent...>::DoCopySubtree
 // ---------------------------------------------------------------------------
-RBNode* FUN_0069e6c0(RBNode* pNode, RBNode* pParent);
-RBNode* FUN_0069e6c0(RBNode* pNode, RBNode* pParent)
+// @ 0x0069e6c0
+RBNode* Tree::CopyA(RBNode* pNode, RBNode* pParent)
 {
-    RBNode* pNew = FUN_0069e550((P550*)((char*)pNode + 0x10));
+    RBNode* pNew = AllocA((P550*)((char*)pNode + 0x10));
     pNew->mpNodeLeft = 0;
     pNew->mpNodeRight = 0;
     pNew->mpNodeParent = pParent;
     pNew->mColor = pNode->mColor;
     if (pNode->mpNodeLeft)
-        pNew->mpNodeLeft = FUN_0069e6c0(pNode->mpNodeLeft, pNew);
+        pNew->mpNodeLeft = CopyA(pNode->mpNodeLeft, pNew);
     RBNode* pPrev = pNew;
     for (RBNode* p = pNode->mpNodeRight; p; p = p->mpNodeRight) {
-        RBNode* pNodeNew = FUN_0069e550((P550*)((char*)p + 0x10));
+        RBNode* pNodeNew = AllocA((P550*)((char*)p + 0x10));
         pNodeNew->mpNodeLeft = 0;
         pNodeNew->mpNodeRight = 0;
         pNodeNew->mpNodeParent = pPrev;
         pNodeNew->mColor = p->mColor;
         pPrev->mpNodeRight = pNodeNew;
         if (p->mpNodeLeft)
-            pNodeNew->mpNodeLeft = FUN_0069e6c0(p->mpNodeLeft, pNodeNew);
+            pNodeNew->mpNodeLeft = CopyA(p->mpNodeLeft, pNodeNew);
         pPrev = pNodeNew;
     }
     return pNew;
@@ -104,8 +111,8 @@ RBNode* FUN_0069e6c0(RBNode* pNode, RBNode* pParent)
 // 0x0069ecc0  allocate a 0x38-byte cClassInfo node
 // ---------------------------------------------------------------------------
 struct P_ecc0 { int a; int b; int c; char rest[0x28]; };
-RBNode* FUN_0069ecc0(P_ecc0* src);
-RBNode* FUN_0069ecc0(P_ecc0* src)
+// @ 0x0069ecc0
+RBNode* Tree::AllocB(P_ecc0* src)
 {
     RBNode* n = (RBNode*)EASTL_allocator_allocate(0x38, "App", 0, 0, kEastlAllocH, 0xd1);
     *(int*)((char*)n + 0x10) = src->a;
@@ -118,26 +125,26 @@ RBNode* FUN_0069ecc0(P_ecc0* src)
 // ---------------------------------------------------------------------------
 // 0x0069edb0  rbtree<...cClassInfo...>::DoCopySubtree
 // ---------------------------------------------------------------------------
-RBNode* FUN_0069edb0(RBNode* pNode, RBNode* pParent);
-RBNode* FUN_0069edb0(RBNode* pNode, RBNode* pParent)
+// @ 0x0069edb0
+RBNode* Tree::CopyB(RBNode* pNode, RBNode* pParent)
 {
-    RBNode* pNew = FUN_0069ecc0((P_ecc0*)((char*)pNode + 0x10));
+    RBNode* pNew = AllocB((P_ecc0*)((char*)pNode + 0x10));
     pNew->mpNodeLeft = 0;
     pNew->mpNodeRight = 0;
     pNew->mpNodeParent = pParent;
     pNew->mColor = pNode->mColor;
     if (pNode->mpNodeLeft)
-        pNew->mpNodeLeft = FUN_0069edb0(pNode->mpNodeLeft, pNew);
+        pNew->mpNodeLeft = CopyB(pNode->mpNodeLeft, pNew);
     RBNode* pPrev = pNew;
     for (RBNode* p = pNode->mpNodeRight; p; p = p->mpNodeRight) {
-        RBNode* pNodeNew = FUN_0069ecc0((P_ecc0*)((char*)p + 0x10));
+        RBNode* pNodeNew = AllocB((P_ecc0*)((char*)p + 0x10));
         pNodeNew->mpNodeLeft = 0;
         pNodeNew->mpNodeRight = 0;
         pNodeNew->mpNodeParent = pPrev;
         pNodeNew->mColor = p->mColor;
         pPrev->mpNodeRight = pNodeNew;
         if (p->mpNodeLeft)
-            pNodeNew->mpNodeLeft = FUN_0069edb0(p->mpNodeLeft, pNodeNew);
+            pNodeNew->mpNodeLeft = CopyB(p->mpNodeLeft, pNodeNew);
         pPrev = pNodeNew;
     }
     return pNew;
@@ -147,11 +154,11 @@ RBNode* FUN_0069edb0(RBNode* pNode, RBNode* pParent)
 // 0x0069ee60  rbtree<...cClassInfo...>::DoNukeSubtree
 // ---------------------------------------------------------------------------
 extern "C" void FUN_d0c930(void* value, void* arg);
-void FUN_0069ee60(RBNode* pNode);
-void FUN_0069ee60(RBNode* pNode)
+// @ 0x0069ee60
+void Tree::Nuke(RBNode* pNode)
 {
     while (pNode) {
-        FUN_0069ee60(pNode->mpNodeLeft);
+        Nuke(pNode->mpNodeLeft);
         RBNode* pRight = pNode->mpNodeRight;
         FUN_d0c930((char*)pNode + 0x1c, *(void**)((char*)pNode + 0x28));
         EASTL_allocator_deallocate(pNode);
@@ -182,6 +189,7 @@ struct CComSer {
     void reset();
 };
 
+// @ 0x0069f0b0
 void CComSer::dtor()
 {
     vt0 = g_vtbl_1408750;
@@ -191,8 +199,8 @@ void CComSer::dtor()
         EASTL_allocator_deallocate(a);
     if (p50)
         ((void(__thiscall*)(void*))(*(void***)p50)[4 / 4])(p50);
-    FUN_0069ee60(mTree2.mpNodeParent);
-    FUN_0069ee60(mTree1.mpNodeParent);
+    mTree2.Nuke(mTree2.mpNodeParent);
+    mTree1.Nuke(mTree1.mpNodeParent);
     vt8 = g_vtbl_13eb938;
     vt0 = g_vtbl_13ec458;
 }
@@ -200,16 +208,17 @@ void CComSer::dtor()
 // ---------------------------------------------------------------------------
 // 0x0069f160  cCOMSerializer::reset
 // ---------------------------------------------------------------------------
+// @ 0x0069f160
 void CComSer::reset()
 {
     flag_c = 0;
-    FUN_0069ee60(mTree1.mpNodeParent);
+    mTree1.Nuke(mTree1.mpNodeParent);
     mTree1.mpNodeLeft = (RBNode*)&mTree1.mpNodeLeft;
     mTree1.mpNodeRight = (RBNode*)&mTree1.mpNodeLeft;
     mTree1.mpNodeParent = 0;
     mTree1.mColor = 0;
     mTree1.mnSize = 0;
-    FUN_0069ee60(mTree2.mpNodeParent);
+    mTree2.Nuke(mTree2.mpNodeParent);
     mTree2.mpNodeLeft = (RBNode*)&mTree2.mpNodeLeft;
     mTree2.mpNodeRight = (RBNode*)&mTree2.mpNodeLeft;
     mTree2.mpNodeParent = 0;
@@ -322,6 +331,7 @@ int F_eb60::f(int* key)
 
 // 0x0069ec20  load one class object blob (behaviour)
 struct F_ec20 { bool f(int* io, unsigned index); };
+// @ 0x0069ec20
 bool F_ec20::f(int* io, unsigned index)
 {
     if (index > 0xf4240)

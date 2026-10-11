@@ -13,11 +13,11 @@
 0107ec20 103 havok-equivalent
 0107ed00 88 havok-equivalent
 0107edb0 40 havok-equivalent
-0107ee30 40 havok-equivalent
-0107ee80 56 havok-equivalent
-0107eed0 56 havok-equivalent
+0107ee30 40 havok-equivalent ; equiv PASS (1182 valid inputs, symbol via ?6hkOstream in symbols file)
+0107ee80 56 havok-equivalent ; equiv UNSUPPORTED: symbol not found (operator<< overloads int/uint have identical size and base identifier; lookup cannot tell them apart)
+0107eed0 56 havok-equivalent ; equiv UNSUPPORTED: symbol not found (operator<< overloads int/uint have identical size and base identifier; lookup cannot tell them apart)
 0107ef20 60 havok-equivalent
-0107f000 44 havok-equivalent
+0107f000 44 havok-equivalent ; equiv FAIL: vtable pointer store differs (orig 013ef094 vs ours 30001000); symbol via ?_GhkOstream in symbols file
 0107f050 10 havok-equivalent
 0107f0c0 341 havok-equivalent
 0107f250 40 havok-equivalent

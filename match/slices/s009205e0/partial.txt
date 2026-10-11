@@ -2,3 +2,4 @@
 00920780  0  EapdSymbolTable::LoadSymbols: stream-reading loop is a skeleton (no real deserialization).
 00920b30  0  EapdSymbolTable::LoadGroups: skeleton, group-insert pass omitted.
 00920f30  0  FUN_00920f30 path canonicalizer: "." / ".." and separator-collapse logic approximated.
+00920ee0  0  NormalizeSeparators2: our reconstruction compiles to a bare ret (call to FindExtension result dropped, 1 byte vs 20); not checkable by equiv.py (size filter)

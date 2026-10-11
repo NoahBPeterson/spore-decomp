@@ -5,6 +5,7 @@
 01087fd0 ?setSolverType@hkWorldCinfo@@QAEXW4SolverType@1@@Z  # switch 1..9 -> tau/damp/iterations at +0x6c/+0x70/+0x74
 01088200 finishLoadedObject_hkWorldCinfo  # vtbl 0x13ef7fc, fixes contactRestingVelocity==0
 01088350 ?setDeactivationClass@hkRigidMotion@@QAEXG@Z  # writes motionState.m_deactivationClass (+0xbc); called from hkRigidBody ctor with cinfo.solverDeactivation
-01088410 hkTransform_assign  # 16 dword copy used by hkMotionState::operator=
+01088410 hkTransform_::assign  # 16 dword copy used by hkMotionState::operator=
+01088480 ?4hkSweptTransform  # 20 dword copy (hkSweptTransform::operator=)
 01088500 ??0hkRigidMotion@@QAE@ABVhkVector4@@ABVhkQuaternion@@@Z  # vtbl 0x149e070 (hkRigidMotion), initMotionState(pos,rot), velocities/damping 0
-010888c0 ??4hkMotionState@@QAEAAV0@ABV0@@Z  # transform + swept transform + deltaAngle + radius/maxvel + deactivation words
+010888c0 ?4hkMotionState  # transform + swept transform + deltaAngle + radius/maxvel + deactivation words

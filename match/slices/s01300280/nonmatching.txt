@@ -9,6 +9,6 @@
 013107d0  4  init_1679394: complete; constant folded
 01310bc0  4  init_1679564: complete; constant folded
 01310be0  4  init_167946c: complete; constant folded
-01300e00  21  init_154fe1c: complete; /Od 0x14+0x584 folds (needs runtime add)
-01300e90  127  init_154ff0c: complete; /Od offset arithmetic folds
-01301110  21  init_15501e4: complete; /Od 0x14+0xa890 folds
+01300e00  21  init_154fe1c: complete; /Od 0x14+0x584 folds (needs runtime add); equiv PASS (1200 inputs, 100% coverage) only via --src s01300280_od.cpp --flags "/Od /Ob1 /MD /Gy /TP /arch:SSE" (default run compiles s01300280.cpp only, which lacks these)
+01300e90  127  init_154ff0c: complete; /Od offset arithmetic folds; equiv PASS (1200 inputs, 100% coverage) only via --src s01300280_od.cpp --flags "/Od /Ob1 /MD /Gy /TP /arch:SSE" (default run compiles s01300280.cpp only, which lacks these)
+01301110  21  init_15501e4: complete; /Od 0x14+0xa890 folds; equiv PASS (1200 inputs, 100% coverage) only via --src s01300280_od.cpp --flags "/Od /Ob1 /MD /Gy /TP /arch:SSE" (default run compiles s01300280.cpp only, which lacks these)

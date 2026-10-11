@@ -1,17 +1,17 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00f38610   77  seti-panel destructor: complete; the chain of +4/+8 virtual Releases is
+00f38610   77  seti-panel destructor: complete; the chain of +4/+8 virtual Releases is; equiv FAIL (5/5 mismatched, memory pool)
                emitted through generic helpers so the receiver convention differs
-00f38850   33  seti-panel shutdown: complete; the +0x28 vcall and the AutoRefCount
+00f38850   33  seti-panel shutdown: complete; the +0x28 vcall and the AutoRefCount; equiv UNSUPPORTED (0/1200 valid, fake-arity)
                release schedule differ
-00f38bc0  137  clock digit decomposition: complete; the /60 and %60 magic-division
+00f38bc0  137  clock digit decomposition: complete; the /60 and %60 magic-division; equiv WEAK (14.3% coverage)
                sequence is scheduled differently
-00f38ce0   92  large-asset-view destructor: complete; vector dtor, RemoveHandler and
+00f38ce0   92  large-asset-view destructor: complete; vector dtor, RemoveHandler and; equiv UNSUPPORTED (unresolved EA_Messaging_RemoveHandler)
                the +4/+8 Releases schedule differ
-00f39080  114  large-asset-view shutdown: complete; vector erase and the child-widget
+00f39080  114  large-asset-view shutdown: complete; vector erase and the child-widget; equiv UNSUPPORTED (unresolved RemoveHandler/cSPUILayout_Shutdown)
                vcall/erase order differ
-00f39130  112  read a property value: complete; the local AutoRefCount slots and the
+00f39130  112  read a property value: complete; the local AutoRefCount slots and the; equiv WEAK (44.7% coverage)
                two-stage find schedule differ
-00f391c0   48  cCivTokenTranslator constructor: complete; the sentinel string stores
+00f391c0   48  cCivTokenTranslator constructor: complete; the sentinel string stores; equiv FAIL (5/5 mismatched, memory pool)
                are CSE'd differently from the original's repeated register loads
-00f39220   86  cCivTokenTranslator destructor: complete; the four inline-string
+00f39220   86  cCivTokenTranslator destructor: complete; the four inline-string; equiv UNSUPPORTED (unresolved operator_del)
                free checks are scheduled differently

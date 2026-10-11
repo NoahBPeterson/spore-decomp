@@ -50,6 +50,7 @@ extern "C" void  FUN_0082a450();
 
 // ---------------------------------------------------------------------------
 struct cSPUIFeedList {
+    void FUN_00663350(int param);
     char  vt[0xc];                     // 0x00
     bool  mIsVisible;                  // 0x10
     bool  mWheel;                      // 0x11
@@ -254,7 +255,8 @@ void cSPUIFeedList_UpdateScrolling(cSPUIFeedList* s, unsigned dt) {
 }
 
 // @ 0x00663350
-void FUN_00663350(char* p, int param) {
+void cSPUIFeedList::FUN_00663350(int param) {
+    char* p = (char*)this;
     if (!*(void**)(p + 0x30)) return;
     float* r = (*(float*(__thiscall*)(void*))Vslot(*(void**)(p + 0x30), 0x38))(*(void**)(p + 0x30));
     float w = r[2] - r[0];

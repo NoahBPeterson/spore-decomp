@@ -1,6 +1,6 @@
 00706920   74  complete slot-vector next scan (stride 0xc4); register/evaluation order differs
-00706980   74  complete slot-vector next scan (stride 0x1f0); register/evaluation order differs
-007069e0   74  complete slot-vector next scan (stride 0x1e0); register/evaluation order differs
+00706980   74  complete slot-vector next scan (stride 0x1f0); register/evaluation order differs [equiv: PASS 681 valid, 100% cov]
+007069e0   74  complete slot-vector next scan (stride 0x1e0); register/evaluation order differs [equiv: PASS 752 valid, 100% cov]
 00706ab0   35  complete forward copy of 16-byte elements; offset folded away by cl
 00706af0   64  complete vector-of-0x20 allocator; parameter register allocation differs
 00706c80   90  complete forward copy of 9-dword elements; register allocation differs

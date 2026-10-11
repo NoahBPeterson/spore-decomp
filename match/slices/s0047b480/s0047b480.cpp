@@ -10,7 +10,7 @@ struct Counted { char pad[0x40]; int mRefCount; void Release(); };
 struct E16 { float a, b, c, d; };
 struct E29 { char pad[0x294]; Counted* m298; };
 struct M33 { float m[12]; };
-struct Big { uint a, b, c, d, e; M33 mat; };
+struct Big { uint a, b, c, d, e; M33 mat; Big* CopyBig(const Big* src); };
 
 // out-of-line helpers
 void  MoveBig(void* dst, void* src);                     // @ 0x0047bbf0
@@ -80,8 +80,9 @@ void* Copy16Ctor(void* first, void* last, void* dest)
 }
 
 // @ 0x0047bb70
-Big* CopyBig(Big* dst, const Big* src)
+Big* Big::CopyBig(const Big* src)
 {
+    Big* dst = this;
     dst->a = src->a; dst->b = src->b; dst->c = src->c; dst->d = src->d; dst->e = src->e;
     for (int i = 0; i < 12; ++i) dst->mat.m[i] = src->mat.m[i];
     return dst;

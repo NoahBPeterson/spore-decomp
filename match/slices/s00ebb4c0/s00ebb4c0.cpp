@@ -120,8 +120,10 @@ void FUN_00ebbb40(float* param_1)
 }
 
 // @ 0x00ebbc10
-int* FUN_00ebbc10(int* p1, int* p2)
+struct WpStub { int* asg(int* p2); int* cpy(int* p2); };
+int* WpStub::asg(int* p1x)
 {
+    int* p1 = (int*)this; int* p2 = p1x;
     p1[0]=p2[0]; p1[1]=p2[1]; p1[2]=p2[2]; p1[3]=p2[3];
     p1[4]=p2[4]; p1[5]=p2[5]; p1[6]=p2[6]; p1[7]=p2[7]; p1[8]=p2[8];
     p1[0xc]=p2[0xc]; p1[0xd]=p2[0xd]; p1[0xe]=p2[0xe]; p1[0xf]=p2[0xf];
@@ -137,8 +139,9 @@ int* FUN_00ebbc10(int* p1, int* p2)
 }
 
 // @ 0x00ebbcd0
-int* FUN_00ebbcd0(int* p1, int* p2)
+int* WpStub::cpy(int* p2)
 {
+    int* p1 = (int*)this;
     p1[0]=p2[0]; p1[1]=p2[1]; p1[2]=p2[2]; p1[3]=p2[3];
     p1[4]=p2[4]; p1[5]=p2[5]; p1[6]=p2[6]; p1[7]=p2[7]; p1[8]=p2[8];
     p1[10]=0x1465d54;

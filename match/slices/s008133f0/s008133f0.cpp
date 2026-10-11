@@ -113,6 +113,7 @@ struct MainWin {
     void DoMessage(int* msg);      // 0x813e70
     bool KeyRouted(int a, int b, int c, int d);   // 0x8133f0
     bool FocusInput(int a, int b, int c, int d);  // 0x813550
+    void Dtor();                   // 0x813ca0
 };
 
 // @ 0x00813740
@@ -319,8 +320,8 @@ static void ReleaseSlot(void* p, int slot) {
 }
 
 // @ 0x00813ca0  (partial: vtable stores + reference releases)
-void MainWin_Dtor(MainWin* self) {
-    char* t = (char*)self;
+void MainWin::Dtor() {
+    char* t = (char*)this;
     *(uint32_t*)(t + 0x0) = 0x1418838;
     *(uint32_t*)(t + 0x4) = 0x1418718;
     *(uint32_t*)(t + 0x20c) = 0x1418708;

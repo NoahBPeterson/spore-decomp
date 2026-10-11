@@ -68,7 +68,7 @@ bool __stdcall FUN_006f4500(unsigned int id, void* unused, cImageHost* host) {
     return false;
 }
 
-// @ 0x006f43e0  (intrusive_ptr copy + release)
+// intrusive_ptr copy + release helpers
 static void AddRef(void* p) { _InterlockedExchangeAdd((volatile long*)((char*)p + 8), 1); }
 static void Release(void* p) {
     volatile long* rc = (volatile long*)((char*)p + 8);
@@ -76,6 +76,7 @@ static void Release(void* p) {
     long c = _InterlockedExchangeAdd(rc, 0);
     if (c < 1) _InterlockedExchangeAdd(rc, 1);
 }
+// @ 0x006f43e0
 void FUN_006f43e0(void** first, void** last, void** dest) {
     for (; first != last; ++first, ++dest) {
         void* s = *first;

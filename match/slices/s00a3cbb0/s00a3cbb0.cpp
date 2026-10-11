@@ -40,7 +40,10 @@ int  FUN_00a17090(int n);
 int  FUN_00a17100(int self);
 void FUN_00a136f0(void* out, int* src, unsigned flags);
 void FUN_00a24480(int a, int b);
-void FUN_00a3d4c0(int count, void* p);
+struct TrackCopy {
+    void Reserve(int count, void* p);   // 0x00a3d4c0 (thiscall: this in ECX)
+    int* CopyCtor(int* src);            // 0x00a3db50
+};
 void FUN_00a3d5b0(void* p);
 int* FUN_00a11310(int* a, int* b, int* c);
 void FUN_0057cc10(int a);
@@ -453,7 +456,8 @@ void TrackVec::Dtor() {
 }
 
 // @ 0x00a3d6e0
-void FUN_00a3d6e0(int* v, int* pos, int* value) {
+void TrackVec::DoInsertValue(int* pos, int* value) {
+    int* v = (int*)this;
     int* end = (int*)v[1];
     if (end != (int*)v[2]) {
         if (pos <= value && value < end) value += 3;
@@ -588,8 +592,9 @@ void __stdcall FUN_00a3da70(unsigned* first, unsigned* last) {
 }
 
 // @ 0x00a3db50
-int* FUN_00a3db50(int* out, int* src) {
-    FUN_00a3d4c0((src[1] - *src) >> 5, src + 3);
+int* TrackCopy::CopyCtor(int* src) {
+    int* out = (int*)this;
+    Reserve((src[1] - *src) >> 5, src + 3);
     int tmp;
     FUN_00a3d810(&tmp, (int*)*src, (int*)src[1], *out);
     out[1] = (int)src;

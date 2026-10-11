@@ -106,6 +106,7 @@ struct IWin {
 // Computes the bounding screen rectangle of a window.  If useChildren, the union of the
 // window's children (via the depth-first visitor) is used, otherwise the two opposite corners
 // are obtained by mapping (0,0) and (area width,height) through the window.
+// @ 0x008087f0
 void FUN_008087f0(float* out, IWin* w, char useChildren)
 {
     if (useChildren != 0) {
@@ -225,6 +226,7 @@ struct RolloverFrameLayout : EditorResourceBase {
     virtual ~RolloverFrameLayout();
 };
 
+// @ 0x00808ce0
 RolloverFrameLayout::~RolloverFrameLayout()
 {
     mLayout.Shutdown(true);

@@ -115,7 +115,7 @@ void __cdecl nSPCreatureAnim::MirrorSagittalContextTarget(uint32_t* src, uint32_
 }
 
 // @ 0x009B0320  (static helper: append `value` to array[0..*count) if not already present)
-static void AddUnique(int* array, uint32_t* count, int value) {
+void AddUnique(int* array, uint32_t* count, int value) {
   uint32_t n = *count;
   for (uint32_t i = 0; i < n; i++) {
     if (array[i] == value)

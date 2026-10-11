@@ -7,6 +7,6 @@
 0065cae0  123  enabled-state helper: complete; bool folding differs
 0065cc50  114  page-button enable helper: complete; register allocation differs
 0065ccd0  81  GetAssetIndex: complete; loop register allocation differs
-0065cd70  54  intrusive vector element assign: complete; refcount register schedule
+0065cd70  54  intrusive vector element assign: complete; refcount register schedule; equiv PASS (1164 valid, 100% cov)
 0065cec0  97  DoMessage: complete; vcall arg packing differs
 0065cf30  282  SetAsset: complete; vcall/refcount schedule differs

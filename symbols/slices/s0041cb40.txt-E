@@ -1,0 +1,8 @@
+0041cb40 Matrix3::Assign  # three Vector3 rows copied via Vector3 copy ctor
+0041cc20 VirtualRefPtr::VirtualRefPtr  # stores ptr, virtual slot 0 AddRef
+0041cc60 TargetPtr::Assign  # refcount at +4, DefaultRefCounted::Release call
+0041ccc0 TargetPtr::Init
+0041cd60 ??A?$HashMap@UKey8@@UVirtualRefPtr@@@@QAEAAUVirtualRefPtr@@ABUKey8@@@Z  # find / end / insert pattern
+0041ce60 ??A?$HashMap@UKey8@@H@@QAEAAHABUKey8@@@Z  # HashMap<Key8,int>::operator[]
+0041d1f0 ??A?$HashMap@UThreadedPtr@@H@@QAEAAHABUThreadedPtr@@@Z  # HashMap<ThreadedPtr,int>::operator[]
+0041d2c0 ??A?$HashMap@IM@@QAEAAMABI@Z  # HashMap<uint32,float>::operator[]

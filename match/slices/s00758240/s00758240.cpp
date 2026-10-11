@@ -95,6 +95,7 @@ Holder841* Holder841::Ctor(int* src) {
     p18 = src;
     return this;
 }
+// @ 0x00758540
 void Holder841::Dtor() {
     FUN_0041eb80(&vec);
     vt1 = 0;
@@ -241,6 +242,7 @@ Elem50* __cdecl FUN_00758e20(Elem50* first, Elem50* last, Elem50* out) {
     }
     return out;
 }
+// @ 0x00758e80
 Elem50* __cdecl FUN_00758e80(Elem50* first, Elem50* last, Elem50* out) {
     while (last != first) {
         last = (Elem50*)((char*)last - 0x50);
@@ -252,6 +254,7 @@ Elem50* __cdecl FUN_00758e80(Elem50* first, Elem50* last, Elem50* out) {
     }
     return out;
 }
+// @ 0x00758f70
 void __cdecl FUN_00758f70(Elem50* first, Elem50* last, Elem50* out) {
     for (; first != last; first = (Elem50*)((char*)first + 0x50)) {
         out->a.OpAssign(&first->a);

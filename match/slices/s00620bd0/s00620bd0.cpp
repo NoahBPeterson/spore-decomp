@@ -23,7 +23,6 @@ void  __cdecl FUN_008e4f00(void* cb, void* ctx);                                
 void* __cdecl FUN_009512c0();                                                       // 0x9512c0
 void* __cdecl FUN_009512d0(unsigned size, int align, const char* name, void* alloc); // 0x9512d0
 void* __cdecl FUN_00607a60();                                                       // 0x607a60
-void  __cdecl FUN_006205f0();                                                       // 0x6205f0 ConfirmLogin
 void  __cdecl FUN_00620380();                                                       // 0x620380 End
 void  __cdecl FUN_00620110(int b);                                                  // 0x620110
 void  __cdecl FUN_00620050(int b);                                                  // 0x620050
@@ -31,7 +30,6 @@ void  __cdecl FUN_00620020(void* cb);                                           
 int   __cdecl FUN_00620270();                                                       // 0x620270
 int   __cdecl FUN_00620690(void* p);                                                // 0x620690
 bool  __cdecl FUN_00809db0(void* a, const void* b);                                 // 0x809db0
-void  __cdecl FUN_00620e50_stub();                                                  // 0x620e50
 uint32_t* __cdecl eastl_lower_bound(uint32_t* first, uint32_t* last,
                                     const uint32_t* key, int comp);                 // 0x549dc0
 void* __cdecl String8_CtorSprintf(void* self, int tag, const char* fmt, ...);       // 0x472f50
@@ -137,6 +135,8 @@ struct cRegDialog {
   int   mState;                    // +0x68
   char  mbKey64;                   // +0x64
   void SubmitRegistrationForm();   // 0x620bd0
+  void ConfirmLogin();             // 0x6205f0
+  void DialogUiNotify();           // 0x620e50
 };
 void FormParamCallback();
 struct DialogSub {                 // this = cRegDialog + 8
@@ -144,6 +144,7 @@ struct DialogSub {                 // this = cRegDialog + 8
   cSPUILayout* mpLayout;           // +0xc
   char pad10[0x50];
   int  mState;                     // +0x60
+  void OnModalEnd(void* pWindow, int id);  // 0x620dc0
 };
 
 static inline unsigned WndFlags28(void* w) { return ((unsigned(__thiscall*)(void*))Vt(w)[10])(w); }  // +0x28
@@ -162,10 +163,11 @@ void cRegDialog::SubmitRegistrationForm() {
 }
 
 // @ 0x00620dc0
-void OnModalEnd(DialogSub* self, void* pWindow, int id) {
+void DialogSub::OnModalEnd(void* pWindow, int id) {
+  DialogSub* self = this;
   if (self->mState == 1) {
     if (id == -0xf) {
-      FUN_006205f0();                       // ConfirmLogin
+      ((cRegDialog*)((char*)self - 8))->ConfirmLogin();
       self->mState = 0;
       return;
     }
@@ -186,7 +188,8 @@ void OnModalEnd(DialogSub* self, void* pWindow, int id) {
 }
 
 // @ 0x00620e50
-void DialogUiNotify(cRegDialog* self) {
+void cRegDialog::DialogUiNotify() {
+  cRegDialog* self = this;
   void* w = self->mLayout.FindWindowByID(0x519d9b8, true);
   if (w == 0) return;
   if ((WndFlags28(w) & 2) == 0) return;
@@ -214,11 +217,11 @@ int TOSDialog_DoMessage(int param_1, void* param_2, int* msg) {
     if (code == -0xe) {
       int sub = ((int(__thiscall*)(int))Vt((void*)*msg)[8])(*msg);  // +0x20
       (void)sub;
-      FUN_006205f0();
+      ((cRegDialog*)param_1)->ConfirmLogin();
       return 1;
     }
     if (code == 0x519d9b8) {
-      FUN_00620e50_stub();
+      ((cRegDialog*)param_1)->DialogUiNotify();
       return 1;
     }
     if (code == 0x519e168) {

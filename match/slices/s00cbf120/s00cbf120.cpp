@@ -1,4 +1,4 @@
-// @ 0x00cbf120  SP::FindProjectilePath   (PDB candidate, caller-scored)
+// 0x00cbf120  SP::FindProjectilePath   (PDB candidate, caller-scored)
 //
 // Reconstruction of the retail function at 0x00cbf120 (5597 bytes, /O2 /MD /TP,
 // mixed SSE/x87).  This is a large trajectory-sampling routine: given a launch
@@ -92,6 +92,7 @@ static inline void AppendPoint(VecList* v, const Vec3& p)
     }
 }
 
+// @ 0x00cbf120
 void __cdecl FindProjectilePath(IObj* param_1, IObj* param_2, VecList* param_3,
                                 float param_4, float param_5, float param_6,
                                 int param_7, float param_8)

@@ -22,3 +22,4 @@
 006a1ca0 SP::cDirectPropertyList::cDirectPropertyList  # ctor(count); allocates mDirectProps
 006a1de0 SP::cPropertyList::GetProperty  # PDB ?GetProperty@cPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z (non-const)
 006a1e50 SP::cDirectPropertyList::GetProperty  # PDB ?GetProperty@cDirectPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z (non-const)
+006a1e80 ?4pvector  # eastl::vector<pair<unsigned int,EA::Variant> >::operator=

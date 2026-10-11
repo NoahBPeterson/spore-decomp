@@ -1,0 +1,2 @@
+008e5580 Fn8e5580  # marker line is followed by __declspec(noinline), which the name parser misreads
+008e59a0 XmlParser::Fn8e59a0  # same

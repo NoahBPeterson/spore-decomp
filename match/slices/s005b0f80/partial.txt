@@ -4,3 +4,6 @@
 005b15e0  655  not translated
 005b1870  977  not translated
 005b1cd0  344  not translated
+005b0fd0  64  stub only, much smaller than original (incomplete reconstruction): cSPEditorManipulationObject::OnMouseDown: virtual dispatch at vtable slot 6 not reproduced (needs the exact base vtable order)
+005b1010  102  stub only, much smaller than original (incomplete reconstruction): cSPEditorManipulationObject::OnMouseMove: dead-zone x87 distance + virtual dispatch at slot 8
+005b1c80  75  stub only, much smaller than original (incomplete reconstruction): vector compare helper; not reproduced

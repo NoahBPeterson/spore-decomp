@@ -55,6 +55,7 @@ struct ImageInfo2 {
 };
 
 // ---------------------------------------------------------------- 0x00830c00
+// @ 0x00830c00
 void *Drawable::GetImageInfo(int index)
 {
     void *def = mInfo;
@@ -88,16 +89,19 @@ struct DSub {
     void SetImage(int index, void *img);    // 0x008316b0
 };
 
+// @ 0x00830c60
 int DSub::GetFieldC(int index)
 {
     return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0xc);
 }
 
+// @ 0x00830c80
 int DSub::GetField14(int index)
 {
     return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x14);
 }
 
+// @ 0x00830c90
 void DSub::GetPair28(float *out, int index)
 {
     char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
@@ -105,6 +109,7 @@ void DSub::GetPair28(float *out, int index)
     out[1] = *(float *)(p + 0x2c);
 }
 
+// @ 0x00830cc0
 void DSub::GetPair30(float *out, int index)
 {
     char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
@@ -112,21 +117,25 @@ void DSub::GetPair30(float *out, int index)
     out[1] = *(float *)(p + 0x34);
 }
 
+// @ 0x00830cf0
 int DSub::GetField10(int index)
 {
     return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x10);
 }
 
+// @ 0x00830d10
 int DSub::GetField18(int index)
 {
     return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x18);
 }
 
+// @ 0x00830d20
 int DSub::GetField20(int index)
 {
     return *(int *)((char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index) + 0x20);
 }
 
+// @ 0x00830d30
 void DSub::GetPair38(float *out, int index)
 {
     char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
@@ -134,6 +143,7 @@ void DSub::GetPair38(float *out, int index)
     out[1] = *(float *)(p + 0x3c);
 }
 
+// @ 0x00830d60
 void DSub::GetPair40(float *out, int index)
 {
     char *p = (char *)((Drawable *)((char *)this - 0xc))->GetImageInfo(index);
@@ -158,6 +168,7 @@ void *ImageInfo2::ScalarDtor(unsigned flags)
 }
 
 // ---------------------------------------------------------------- 0x008310a0
+// @ 0x008310a0
 void ImageInfo2::CopyFrom(const ImageInfo2 *src)
 {
     if (src->mpImage != mpImage) {
@@ -276,6 +287,7 @@ void Drawable::SetPair40At(int index, float *v)
 }
 
 // ---------------------------------------------------------------- 0x00831410
+// @ 0x00831410
 void *Drawable::PickImageInfo(int flags, void *dst)
 {
     void *info = (char *)this + 0x7c;
@@ -318,6 +330,7 @@ void *Drawable::PickImageInfo(int flags, void *dst)
 }
 
 // ---------------------------------------------------------------- 0x00831650
+// @ 0x00831650
 void Drawable::EnsureImageInfo0()
 {
     if (mbHasUserDefaults != 0)
@@ -337,6 +350,7 @@ void Drawable::EnsureImageInfo0()
 }
 
 // ---------------------------------------------------------------- 0x008316b0
+// @ 0x008316b0
 void DSub::SetImage(int index, void *img)
 {
     Drawable *self = (Drawable *)((char *)this - 0xc);
@@ -363,6 +377,7 @@ void DSub::SetImage(int index, void *img)
 }
 
 // ---------------------------------------------------------------- 0x00831760
+// @ 0x00831760
 void Drawable::SetImageIcon(int index, void *img)
 {
     char *info = (char *)GetImageInfo(index);

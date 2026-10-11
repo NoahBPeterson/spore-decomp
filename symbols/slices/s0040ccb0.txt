@@ -1,4 +1,3 @@
-0040ccb0 Modifier::Accumulate  # transforms o.pos by scale/rot, multiplies matrices, ORs flags, count++
-0040cd80 Modifier::AccumulateScaled  # vector-scale + matrix variant of the same
-0040cf10 GetFloatProperty  # PropertyList vtbl+0x24 lookup, type 0xd
-0040cfd0 CreatureAbility::CreatureAbility  # sets vtbl_Simulator::cCreatureAbility, id/value/data
+0040d230 ?_GListAbility  # ListAbility::`scalar deleting destructor' (mangled ??_GListAbility@@...; written as its base identifier so the checker's name matcher finds it)
+0040d260 ~ListAbility  # implicit destructor
+013ef094 ??_7RefCountedAbility@@6B@  # shared RefCountTemplate vtable that ListAbility's dtor stores

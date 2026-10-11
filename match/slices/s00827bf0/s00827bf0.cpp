@@ -141,6 +141,7 @@ struct Elem {
 };
 
 // 00828450 pair element copy-ctor
+// @ 0x00828450
 Elem::Elem(const Elem& o) : first(o.first), mpObject(o.mpObject) {
   if (mpObject) ((IRefThing*)mpObject)->AddRef();
   mVariant = o.mVariant;
@@ -163,6 +164,7 @@ Elem& Elem::operator=(const Elem& o) {
 }
 
 // 00828410 vector::DoDestroyValues
+// @ 0x00828410
 void __stdcall ElemDoDestroyValues(Elem* first, Elem* last) {
   for (; first < last; ++first) {
     Variant* v = &first->mVariant;
@@ -173,6 +175,7 @@ void __stdcall ElemDoDestroyValues(Elem* first, Elem* last) {
 }
 
 // 00828350 destroy-source / advance-dest range helper
+// @ 0x00828350
 Elem* ElemDestroyRange(Elem* first, Elem* last, Elem* dst) {
   while (first != last) {
     Variant* v = &first->mVariant;

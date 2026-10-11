@@ -1,1 +1,1 @@
-0045eac0  -  complete behaviorally-equivalent row->Matrix44 builder; /Od temp copy/scheduling differs
+0045eac0  -  complete behaviorally-equivalent row->Matrix44 builder; /Od temp copy/scheduling differs; equiv PASS (1200 inputs, 100% cov)
