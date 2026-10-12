@@ -1,0 +1,47 @@
+{
+ "EA::ResourceMan::DatabasePackedFile": {
+  "insert": [
+   {
+    "after": "mnUserVersionMinor",
+    "name": "mbEnableCompression",
+    "type": "bool",
+    "size": 4
+   }
+  ],
+  "evidence": "retail has one extra word between mnUserVersionMinor (+0x2dc) and mfMinRatioToUseCompression (+0x2e4); byte-exact slice s008d81d0 reads a bool at +0x2e0 (tools/migrate/leafsizes.py structural_deltas_not_leaf, 2026-10-12)"
+ },
+ "EA::ResourceMan::PFDatabaseHeader": {
+  "append": [
+   {
+    "name": "mUnknown20",
+    "size": 8
+   }
+  ],
+  "evidence": "retail header block is 0x28 (slices: PFHeader {uint32_t f[10]} in 2 byte-exact slices); DatabasePackedFile::mbHeaderHasChanged moves 0x328 -> 0x330 (leafsizes.py structural_deltas_not_leaf)"
+ },
+ "EA::ResourceMan::PFIndexModifiable": {
+  "insert": [
+   {
+    "after": "mpAllocator",
+    "name": "mPoolAllocator",
+    "size": 32
+   }
+  ],
+  "evidence": "retail embeds a 0x20-byte pool allocator at +0x8 before the hash_map (mItemsMap at +0x28; FUN_008db730 calls FUN_00925f30(this+8, 0x80, 0x20) and sets mAllocator.mpCoreAllocator = &this->mPoolAllocator); byte-exact CreateIndex allocates 0x4c (leafsizes.py)"
+ },
+ "SP::cPropertyList": {
+  "remove": [
+   "mDescriptions"
+  ],
+  "evidence": "retail cPropertyList is 0x38: the dev-only mDescriptions hash_map is gone (leafsizes.py structural_deltas_not_leaf; cPropertyList ctors byte-exact in s006a11b0 put mParent at +0x30, mModificationCount at +0x34)"
+ },
+ "EA::ResourceMan::PFRecordRead": {
+  "append": [
+   {
+    "name": "mUnknown68",
+    "size": 8
+   }
+  ],
+  "evidence": "retail PFRecordRead is 0x70 (dev 0x68); the +8 is unexplained (leafsizes.py); placed at the end pending a byte-exact user"
+ }
+}

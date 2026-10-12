@@ -138,7 +138,7 @@ members at their exact offsets (explicit padding where the PDB has holes), bases
 (`sizeof` checks via a template trick; VC9 has no `static_assert`).
 
 Dev ≠ retail. The 2008 PDB is not the shipped build: `SP::cString` is 0x14 in retail vs 0x1c dev.
-Resolution order for a layout: (1) `work/migrate/layout_overrides.json` (hand-confirmed retail
+Resolution order for a layout: (1) `tools/migrate/layout_overrides.json` (hand-confirmed retail
 deltas, starting with the ones in Papercuts); (2) census bodies that are *byte-exact in retail*:
 if a slice compiled byte-exact with a given view of the struct, that view is retail-correct for
 the members it names; (3) the dev PDB. Where (2) and (3) disagree, the tool prints the conflict
@@ -162,7 +162,7 @@ classes are skipped: they belong to shared headers). Inputs: `work/devbuild/type
 (retail addresses), `work/migrate/retail_leaf_sizes.json` (retail sizes of library leaf types,
 measured by `tools/migrate/leafsizes.py`, Sonnet agent, from byte-exact slices and disassembly),
 `work/migrate/sliceviews.json` (every slice struct view with computed offsets and its byte-exact
-users, `tools/migrate/sliceviews.py`, Sonnet agent) and `work/migrate/layout_overrides.json`
+users, `tools/migrate/sliceviews.py`, Sonnet agent) and `tools/migrate/layout_overrides.json`
 (hand-confirmed structural deltas).
 
 How a header is produced:
@@ -180,7 +180,7 @@ How a header is produced:
    `fixed_vector` with overflow); strings, lists, hash tables and trees on `eastl::allocator` are
    unchanged; `EA::IO::FileStream` gained a cached size word (0x228 → 0x22c); `SP::cString` lost
    two members (0x1c → 0x14). Only the vector rule is a family rule; the rest are exact names.
-3. **Structural deltas** that no leaf explains go in `layout_overrides.json` as `insert` /
+3. **Structural deltas** that no leaf explains go in `tools/migrate/layout_overrides.json` as `insert` /
    `remove` / `append` on the dev member list, with an evidence string that is printed in the
    header: DatabasePackedFile's extra word at +0x2e0, `PFDatabaseHeader` 0x20 → 0x28,
    `PFIndexModifiable`'s embedded 0x20-byte pool allocator at +8, `cPropertyList` without the
