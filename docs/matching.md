@@ -174,6 +174,27 @@ once per element type; a bare qualified name in a declaration is ambiguous, and 
 from the call site on the declaration (`// 0x00612db0`) as for any other callee; the resolver now rejects a
 name-only match that the original function does not actually call.
 
+**Declare the return the original has, not the one the signature suggests.** If the original writes eax
+right before every `ret` (a hidden return pointer handed back, `return this`, the popped node, the copy's
+end pointer), the function returns that value and LTCG callers use it, whatever the dev PDB or the pseudocode
+says. Seven hybrid defects were `void` declarations of such functions (2026-10-12). The harness now compares
+eax in that case (`void_hides_eax` in the result, "declared void but the original writes eax" in the notes):
+return the value.
+
+**Virtual and callback arguments in the original's push order.** The arguments of a call through a vtable
+or a function pointer are now compared (`fake call #k arg i` / `fake call #k this`). Read the pushes at the
+call site: the last push is the first argument, `ecx` at the call is `this` — not "register allocation".
+`cViewer::SetRaster` passed `(&rect, a, b)` for `(a, b, &rect)` (no galaxy), `FUN_00753fc0` called vtable
+slot 0 with no `this` (crash), `SharedRelease` passed the vptr value as `this` (crash): all PASSed before.
+
+**Do not write a register the original never writes.** An LTCG caller may keep a live value in a register
+its callee is known not to touch (per call site). `InterpRamp` 0x114e780 wrote xmm3 where the original uses
+xmm0-2 and xmm7: crackling audio, no crash. The harness now reports `xmm3 (untouched by the original)` and
+`tools/hybrid/build.py` refuses such hooks (169 of 1,730 PASS functions). The compiler owns register
+allocation, so the fixes are indirect: fewer live temporaries (recompute instead of caching), the original's
+expression order, `/arch:SSE` vs x87 as the original, or declaring the function as needing an asm shim
+(record `custom register ABI` in the row). The register sets are in the result (`orig_untouched_regs`).
+
 ### Lessons from the pilot (12 agents)
 - **Module flags vary**; check the disassembly first:
   - `/Od /Ob1`: `push ebp; mov ebp,esp`, ecx spilled to `[ebp-N]`, every local in memory, but small

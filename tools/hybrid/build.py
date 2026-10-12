@@ -25,6 +25,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(ROOT, "tools", "difftest"))
 import pefile                                   # noqa: E402
 from coff import REL_DIR32, REL_DIR32NB, REL_REL32   # noqa: E402
+import regfacts as RF                                  # noqa: E402
 
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
 BASE = 0x400000
@@ -80,7 +81,8 @@ def pass_targets():
     """(slice, va) of every function whose latest strict verdict is PASS."""
     latest = {}
     files = sorted(glob.glob(os.path.join(ROOT, "work", "difftest", "backlog_shard*.json")))
-    files += sorted(glob.glob(os.path.join(ROOT, "work", "difftest", "refix_shard*.json")))  # newer: wins
+    files += sorted(glob.glob(os.path.join(ROOT, "work", "difftest", "refix_shard*.json")))    # newer: wins
+    files += sorted(glob.glob(os.path.join(ROOT, "work", "difftest", "recheck_shard*.json")))  # newest (2026-10-12 harness)
     for f in files:
         rows = json.load(open(f))
         rows = rows if isinstance(rows, list) else list(rows.values())
@@ -130,69 +132,8 @@ class Splicer:
         self.skipped.setdefault(why, []).append("%s:%s" % (sid, va))
 
     def orig_returns_eax(self, lo, hi):
-        """True if every `ret` of the original is preceded (ignoring pops / esp adds) by an
-        instruction that writes eax other than a call: the function returns a value."""
-        import capstone
-        EAX = {capstone.x86.X86_REG_EAX, capstone.x86.X86_REG_AX, capstone.x86.X86_REG_AL, capstone.x86.X86_REG_AH}
-        ins = list(self.md.disasm(self.img.read(lo, hi - lo), lo))
-        rets = [k for k, i in enumerate(ins) if i.mnemonic == "ret"]
-        if not rets:
-            return False
-        # (d) a call-free function whose first write to eax loads an argument (stack or ecx) returns
-        # a pointer derived from it (lower_bound -> position, copy -> destination end, init ->
-        # this). All four instances found in the hybrid had this shape.
-        if not any(i.mnemonic == "call" for i in ins):
-            writers = []
-            for k, i in enumerate(ins):
-                try:
-                    _r, w = i.regs_access()
-                except Exception:
-                    return False
-                if any(r in EAX for r in w) and i.mnemonic not in ("push", "pop"):
-                    writers.append(k)
-            if writers:
-                first = ins[writers[0]]
-                loads = first.mnemonic == "mov" and first.op_str.startswith("eax, dword ptr [")
-                # the first eax value is an argument or a load, and nothing rewrites eax afterwards:
-                # the function hands that value back (pop-front leaf 0x1141200 returned the node)
-                if (loads or first.op_str == "eax, ecx") and len(writers) == 1:
-                    return True
-                if first.mnemonic == "mov" and (first.op_str.startswith(("eax, dword ptr [esp", "eax, dword ptr [ebp"))
-                                                or first.op_str == "eax, ecx"):
-                    return True
-        for k in rets:
-            # Walk back from the ret to the last instruction that writes eax (linear order: an
-            # approximation of the path). A call means eax is a callee's leftover: not a return
-            # value. Then accept only the patterns seen to bite, to keep false positives down:
-            #   (a) the writer sits right before the ret (ignoring pops / add esp): explicit result;
-            #   (b) `mov eax, [esp+N]` followed by a store through [eax]: hidden return pointer;
-            #   (c) `mov eax, ecx` (this) kept to the ret: `return *this`-style.
-            j = k - 1
-            writer = None
-            while j >= 0:
-                i = ins[j]
-                if i.mnemonic == "call":
-                    break
-                try:
-                    _r, w = i.regs_access()
-                except Exception:
-                    break
-                if any(r in EAX for r in w) and i.mnemonic not in ("push", "pop"):
-                    writer = j
-                    break
-                j -= 1
-            if writer is None:
-                return False
-            between = ins[writer + 1:k]
-            trailing = all(x.mnemonic in ("pop", "leave") or (x.mnemonic == "add" and x.op_str.startswith("esp"))
-                           for x in between)
-            w = ins[writer]
-            retptr = w.mnemonic == "mov" and w.op_str.startswith("eax, dword ptr [esp") and \
-                any(x.op_str.startswith("dword ptr [eax") for x in between if x.mnemonic == "mov")
-            this_ret = w.mnemonic == "mov" and w.op_str == "eax, ecx"
-            if not (trailing or retptr or this_ret):
-                return False
-        return True
+        """True if the original returns a value in eax (regfacts.returns_eax; shared with equiv.py)."""
+        return RF.returns_eax(list(self.md.disasm(self.img.read(lo, hi - lo), lo)))
 
     def rets(self, code, va):
         """The set of `ret N` immediates in a code blob (0 for a plain ret)."""
@@ -221,27 +162,8 @@ class Splicer:
         return False
 
     def regs_written(self, code, va):
-        """Registers a function writes (full GPR names, xmmN, 'st'), minus those it restores with
-        pop; esp/eflags/segments ignored. All paths of the straight-line disassembly together."""
-        from capstone import x86
-        full = {}
-        for grp, names in {"eax": ("al", "ah", "ax", "eax"), "ebx": ("bl", "bh", "bx", "ebx"),
-                           "ecx": ("cl", "ch", "cx", "ecx"), "edx": ("dl", "dh", "dx", "edx"),
-                           "esi": ("sil", "si", "esi"), "edi": ("dil", "di", "edi"), "ebp": ("bp", "ebp")}.items():
-            for n in names:
-                full[n] = grp
-        ignore = {"esp", "eflags", "eip", "fpsw", "fs", "gs", "ds", "es", "ss", "cs"}
-        w, saved = set(), set()
-        for i in self.md.disasm(code, va):
-            _r, ws = i.regs_access()
-            if i.mnemonic == "pop" and i.operands and i.operands[0].type == x86.X86_OP_REG:
-                n = i.reg_name(i.operands[0].reg)
-                saved.add(full.get(n, n))
-            for r in ws:
-                n = i.reg_name(r)
-                if n not in ignore:
-                    w.add(full.get(n, n))
-        return {("st" if r.startswith("st") else r) for r in w} - saved
+        """Registers a function writes, minus those it restores with pop (regfacts.regs_written)."""
+        return RF.regs_written(list(self.md.disasm(code, va)))
 
     def atomics(self, code, va):
         """Number of implicitly or explicitly locked memory operations in a code blob."""

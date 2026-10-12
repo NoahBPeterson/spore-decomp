@@ -137,3 +137,56 @@ def test_flag_order():
     # an explicit 'flags ...' note in the reason wins over loose tokens and comments
     f, how = S.choose_flags("s004604f0", 0x00460bf0)
     assert how == "reason" and "/Od" in f and "/fp:fast" in f
+
+
+# ---------------------------------------------------------------------- hybrid-found blind spots (2026-10-12)
+
+def test_untouched_register_clobber_fails():
+    # InterpRamp: instruction-for-instruction equivalent but writes xmm3, which the original never
+    # touches; its LTCG caller kept a live value there (crackling audio in the hybrid).
+    r = equiv.test_function("s0114da70", 0x0114e780, opts())
+    assert r["verdict"] == "FAIL", r
+    assert r["first_mismatch"]["observable"].startswith("xmm3"), r
+
+
+def test_fake_call_argument_order_fails():
+    # cViewer::SetRaster: the renderer virtual takes (handle0, handle1, &rect); the old source
+    # passed (&rect, handle0, handle1) and PASSed because fake-call arguments were not compared.
+    src = os.path.join(ROOT, "match", "slices", "s007c4be0", "s007c4be0.cpp")
+    text = open(src).read()
+    old = "r2->v20(handle[0], handle[1], rect);"
+    assert old in text
+    text = text.replace(old, "r2->v20(rect, handle[0], handle[1]);")
+    text = text.replace("virtual void v20(int a, int b, int* out);", "virtual void v20(int* out, int a, int b);")
+    os.makedirs(MUT_DIR, exist_ok=True)
+    path = os.path.join(MUT_DIR, "s007c4be0_argorder.cpp")
+    open(path, "w").write(text)
+    r = equiv.test_function("s007c4be0", 0x007c4be0, opts("--src", path))
+    assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"].startswith("fake call"), r
+    r = equiv.test_function("s007c4be0", 0x007c4be0, opts())
+    assert r["verdict"] in ("PASS", "WEAK") and not r["mismatches"], r
+
+
+def test_void_declaration_hiding_eax_return_fails():
+    # rw::audio pop-front leaf: returns the popped node in eax; declared void it handed callers the
+    # list pointer (black window in the hybrid). The harness now compares eax when the original
+    # writes it before every ret, whatever the declaration says.
+    import re
+    src = os.path.join(ROOT, "match", "slices", "s01140b70", "s01140b70.cpp")
+    text = open(src).read()
+    s = text.index('extern "C" int* FUN_01141200(int* list)')
+    e = text.index("\n}\n", s) + 3
+    body = re.sub(r"return [^;]+;", "return;", text[s:e].replace("int* FUN_01141200", "void FUN_01141200"))
+    text = (text[:s] + body + text[e:]).replace('extern "C" int* FUN_01141200(int* list);', 'extern "C" void FUN_01141200(int* list);')
+    os.makedirs(MUT_DIR, exist_ok=True)
+    path = os.path.join(MUT_DIR, "s01140b70_void.cpp")
+    open(path, "w").write(text)
+    r = equiv.test_function("s01140b70", 0x01141200, opts("--src", path))
+    assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"] == "eax", r
+    assert r["void_hides_eax"] is True, r
+
+
+def test_ret_n_mismatch_fails():
+    # `ret` vs the original's `ret 4` unbalances the caller's stack; the esp observable catches it.
+    r = equiv.test_function("s0056fb90", 0x0056fe60, opts())
+    assert r["verdict"] == "FAIL" and r["first_mismatch"]["observable"] in ("esp", "eax"), r

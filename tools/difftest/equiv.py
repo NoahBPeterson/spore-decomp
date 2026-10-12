@@ -29,7 +29,8 @@ from unicorn import UC_HOOK_CODE, UC_HOOK_BLOCK, UC_HOOK_MEM_READ    # noqa: E40
 from unicorn.x86_const import *                    # noqa: E402,F401,F403
 
 import slice as S                                  # noqa: E402
-import resolve as R                                # noqa: E402
+import resolve as R
+import regfacts as RF                                # noqa: E402
 import sig as SIG                                  # noqa: E402
 import machine as M                                # noqa: E402
 from coff import Coff                              # noqa: E402
@@ -191,6 +192,9 @@ def analyse_original(t):
                     consts.add(v)
     t.callee_pop = max(pops) if pops else 0
     t.pop_variants = sorted(pops)
+    ordered = [insns[a] for a in sorted(insns)]
+    t.orig_regs_written = RF.regs_written(ordered)   # registers the original never writes are compared
+    t.orig_returns_eax = RF.returns_eax(ordered)     # a void declaration may hide an eax return
     t.dict = sorted(consts | {(c + 1) & 0xFFFFFFFF for c in consts if c < 0x10000} |
                     {(c - 1) & 0xFFFFFFFF for c in consts if 0 < c < 0x10000})[:4096]
     t.entry_reads = entry_reads(insns, t.va)
@@ -293,6 +297,14 @@ def build_layout(t):
             if sg is not None and sg.params is not None:
                 t.abi_mismatch = "original reads %s at entry but our declaration passes nothing there " \
                                  "(custom/LTCG register ABI?)" % r
+    t.void_hides_eax = False
+    if t.ret_kind == "void" and getattr(t, "orig_returns_eax", False):
+        # Seven hybrid defects (2026-10-12) were `void` declarations of functions whose original
+        # hands a value back in eax (hidden return pointer, `return this`, popped node, copy end);
+        # LTCG callers use it. Compare eax as an unknown-kind return and say why.
+        t.ret_kind = "unknown"
+        t.void_hides_eax = True
+        notes.append("declared void but the original writes eax before every ret: eax compared (callers may use it)")
     t.stack_kinds = kinds
     t.reg_kinds = regk
     t.layout_notes = notes
@@ -941,7 +953,7 @@ class Runner:
         h = zlib.crc32(repr((target, ecx, args)).encode())
         k = h % 4
         eax = (0, 1, h % 9, M.POOL_BASE + M.SLOT * (HOT_SLOTS + (h >> 8) % (NSLOTS - HOT_SLOTS)))[k]
-        self.fakes.append((target, n))
+        self.fakes.append((target, n, ecx, tuple(args)))
         uc.reg_write(UC_X86_REG_EAX, eax)
         uc.reg_write(UC_X86_REG_EDX, 0)
         new_esp = esp + 4 + (4 * n if pops else 0)
@@ -1102,6 +1114,9 @@ class Runner:
             regs[REGS[r]] = v
         m.reset_cpu(regs, inp.xmm)
         uc.reg_write(UC_X86_REG_ESP, self.esp_entry)
+        entry = {r: uc.reg_read(REGS[r]) for r in RF.GPR_SCRATCH}
+        for k in range(8):
+            entry["xmm%d" % k] = uc.reg_read(UC_X86_REG_XMM0 + k)
         m.trace_imports = []
         m.fake_handler = (getattr(self, "fake_override", None) or self.fake_call) if self.opts.fake_calls else None
         self.fakes = []
@@ -1117,6 +1132,10 @@ class Runner:
         o = {"status": status, "time": time.time() - t0, "fault": m.last_fault}
         o["eax"] = uc.reg_read(UC_X86_REG_EAX)
         o["edx"] = uc.reg_read(UC_X86_REG_EDX)
+        o["ecx"] = uc.reg_read(UC_X86_REG_ECX)
+        o["entry"] = entry
+        for k in range(1, 8):
+            o["xmm%d" % k] = uc.reg_read(UC_X86_REG_XMM0 + k)
         for nm, r in M.CALLEE_SAVED:
             o[nm] = uc.reg_read(r)
         o["esp"] = (uc.reg_read(UC_X86_REG_ESP) - self.esp_entry) & 0xFFFFFFFF
@@ -1240,6 +1259,21 @@ class Comparer:
         for nm, _r in M.CALLEE_SAVED:
             if a[nm] != b[nm]:
                 return (nm, "%08x" % a[nm], "%08x" % b[nm], "callee-saved register not preserved identically")
+        # Registers the original never writes (statically) and left untouched on this run: ours
+        # must leave them too. An LTCG caller may keep a live value in a register its callee is
+        # known not to touch (InterpRamp 0x114e780 wrote xmm3: crackling audio, 2026-10-12).
+        written = getattr(t, "orig_regs_written", None)
+        if written is not None and "entry" in a and "entry" in b:
+            cand = [r for r in RF.GPR_SCRATCH + RF.XMM if r not in written]
+            if rk != "void":
+                cand = [r for r in cand if r != "eax" and not (rk == "i64" and r == "edx")]
+            if rk == "m128":
+                cand = [r for r in cand if r != "xmm0"]
+            for r in cand:
+                if a[r] == a["entry"][r] and b[r] != b["entry"][r]:
+                    self.last_kind = "clobber"
+                    return (r + " (untouched by the original)", "%x" % a["entry"][r], "%x" % b[r],
+                            "ours writes a register the original never writes; an LTCG caller may keep a live value there")
         if a["esp"] != b["esp"]:
             return ("esp", "+%#x" % a["esp"], "+%#x" % b["esp"], "esp after return (relative to entry)")
         if a["fpu_depth"] != b["fpu_depth"]:
@@ -1267,7 +1301,27 @@ class Comparer:
         d = self.compare_imports(a["imports"], b["imports"])
         if d:
             return d
-        return self.compare_calls(a["calls"], b["calls"])
+        d = self.compare_calls(a["calls"], b["calls"])
+        if d:
+            return d
+        return self.compare_fakes(a["fakes"], b["fakes"])
+
+    def compare_fakes(self, fa, fb):
+        """Calls through generated pointers (fake methods): same `this` and the same stack
+        arguments, in order. cViewer::SetRaster 0x7c4be0 passed (rect, a, b) for (a, b, rect) and
+        RegisterGameTexture (a, b, 0, 0) for (key0, key2, a, b); both PASSed before this."""
+        for k in range(min(len(fa), len(fb))):
+            ta, na, ea, aa = fa[k]
+            tb, nb, eb, ab = fb[k]
+            if ta != tb:
+                return ("fake call #%d" % k, "%08x" % ta, "%08x" % tb, "different generated callee")
+            if not self.veq(ea, eb):
+                return ("fake call #%d this" % k, fmt_val(ea), fmt_val(eb), "ecx at a call through a generated pointer")
+            for i in range(min(na, nb)):
+                if not self.veq(aa[i], ab[i]):
+                    return ("fake call #%d arg %d" % (k, i), fmt_val(aa[i]), fmt_val(ab[i]),
+                            "stack argument of a call through a generated pointer (normalised)")
+        return None
 
     def compare_mem(self, a, b):
         ma, mb = a["mem"], b["mem"]
@@ -1498,6 +1552,14 @@ def fmt_x87(v):
     return "%s (%04x:%016x)" % (repr(x87_to_float(v)), v[1], v[0]) if v else "-"
 
 
+def fmt_val(v):
+    if isinstance(v, int):
+        return "%08x" % v
+    if isinstance(v, tuple) and v and v[0] == "RO":
+        return "RO:" + repr(v[1][:24])
+    return str(v)
+
+
 def fmt_call(x):
     if x is None:
         return "(none)"
@@ -1578,7 +1640,9 @@ def _test_function(sid, va, opts, log=print):
         return out
     out.update(signature=str(t.sig) if t.sig else "unparsed (%s)" % getattr(t, "sig_error", "?"),
                stack_args=len(t.stack_kinds), reg_args=t.reg_kinds, callee_pop=t.callee_pop,
-               ret_kind=t.ret_kind, layout_notes=t.layout_notes, orig_size=t.orig_hi - t.orig_lo)
+               ret_kind=t.ret_kind, layout_notes=t.layout_notes, orig_size=t.orig_hi - t.orig_lo,
+               void_hides_eax=t.void_hides_eax, orig_untouched_regs=sorted(r for r in RF.GPR_SCRATCH + RF.XMM
+                                                                          if r not in t.orig_regs_written))
     if t.abi_mismatch and not opts.ignore_abi:
         out.update(verdict="UNSUPPORTED", reason=t.abi_mismatch, seconds=round(time.time() - t0, 1))
         return out
@@ -1653,9 +1717,9 @@ def _test_function(sid, va, opts, log=print):
                 continue
             if a["fakes"] or b["fakes"]:
                 fa, fb = {}, {}
-                for tg, n in a["fakes"]:
+                for tg, n, _e, _a in a["fakes"]:
                     fa.setdefault(tg, set()).add(n)
-                for tg, n in b["fakes"]:
+                for tg, n, _e, _a in b["fakes"]:
                     fb.setdefault(tg, set()).add(n)
                 if any(len(v) > 1 for v in list(fa.values()) + list(fb.values())) or \
                         any(fa[k] != fb[k] for k in set(fa) & set(fb)):
