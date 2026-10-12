@@ -81,7 +81,7 @@ struct VariantPair {
 
 namespace eastl {
 VariantPair* lower_bound(VariantPair* first, VariantPair* last,
-                         const unsigned int* key, unsigned char comp);
+                         const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
 }
 
 namespace SP {

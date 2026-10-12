@@ -514,6 +514,7 @@ class Resolver:
         self.img = image
         self.db = symdb
         self._crt = None
+        self._orig_calls = None   # call targets of the function being resolved (set per resolve())
 
     # --- single-symbol methods -------------------------------------------------
     def crt_helpers(self):
@@ -584,8 +585,30 @@ class Resolver:
             if vas and len(vas) == 1:
                 va = next(iter(vas))
                 if self.plausible(va, want_func):
+                    # A qualified name is weak evidence: template instantiations (eastl::lower_bound
+                    # for every element type) and overloads share it. For a callee, the original
+                    # function's own call operands are the ground truth: accept only an address it
+                    # calls (directly or through a jmp thunk). Found with the hybrid build, where
+                    # cPropertyList::GetProperty's lower_bound went to another instantiation.
+                    if want_func and self._orig_calls is not None and va not in self._orig_calls:
+                        return None, None
                     return va, "symbols(qualified %s)" % q
         return None, None
+
+    def call_targets(self, va):
+        """Direct call/jmp targets of the original function at va, plus what its jmp thunks reach."""
+        import capstone
+        md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
+        lo, hi = self.img.func_extent(va)
+        out = set()
+        for i in md.disasm(self.img.read(lo, hi - lo), lo):
+            if i.mnemonic in ("call", "jmp") and i.op_str.startswith("0x"):
+                t = int(i.op_str, 16)
+                out.add(t)
+                b = self.img.read(t, 5)
+                if b[:1] == b"\xe9":
+                    out.add((t + 5 + struct.unpack("<i", b[1:5])[0]) & 0xFFFFFFFF)
+        return out
 
     def by_hex_name(self, name, want_func):
         ident = base_ident(name)
@@ -661,6 +684,10 @@ class Resolver:
     # --- whole-object resolution --------------------------------------------------
     def resolve(self, coff, func_sym, orig_va, annots):
         r = Resolution()
+        try:
+            self._orig_calls = self.call_targets(orig_va)
+        except Exception:   # no extent for this VA: fall back to the unchecked behaviour
+            self._orig_calls = None
         syms = coff.syms
         our_quals = defaultdict(int)
         seen_q = set()

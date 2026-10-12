@@ -204,8 +204,11 @@ int FUN_00e5c6e0(void* stream, int a) {
 }
 
 // @ 0x00e5c780
-struct RbTreeFind { void Find(int* out, const uint32_t* key); };
-void RbTreeFind::Find(int* out, const uint32_t* key) {
+// rbtree::find returning an iterator through a hidden return pointer: the original returns that
+// pointer in eax on both paths and callers read through eax. Declared void, our not-found path
+// returned with eax = 0 (hybrid crash at 0x68ab32, 2026-10-11).
+struct RbTreeFind { int* Find(int* out, const uint32_t* key); };
+int* RbTreeFind::Find(int* out, const uint32_t* key) {
   char* self = (char*)this;
   char* anchor = self + 4;
   char* n = *(char**)(self + 0xc);
@@ -216,6 +219,7 @@ void RbTreeFind::Find(int* out, const uint32_t* key) {
   }
   if (lower != anchor && *key >= *(uint32_t*)(lower + 0x10)) *out = (int)lower;
   else *out = (int)anchor;
+  return out;
 }
 
 // @ 0x00e5c7d0

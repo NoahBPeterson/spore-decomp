@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00957a60  25  Fn00957a60: complete (lazy-init global table 0x154edf0, guard flag 0x166b138); guard test/RMW uses immediate vs eax; difftest PASS (400 valid, 100.0% coverage)
-00957d40  3  WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); 3 bytes differ (frame/arg-pointer off by 8); difftest PASS (345 valid, 100.0% coverage)
+00957d40  3  WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); fixed 2026-10-12: tag at +8 of the record (was +0x10; the "off by 8" was the bug, hybrid crash 0x959bd7); difftest PASS
 00957dd0  118  Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
 00957e90  41  Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
 00958070  53  Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)

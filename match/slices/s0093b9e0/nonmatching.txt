@@ -10,7 +10,7 @@
 0093c0c0  99   complete: MemoryStream position arithmetic, branch layout differs
 0093c150  149  complete: MemoryStream resize-on-write, float path scheduling differs
 0093c210  62   complete: scalar deleting dtor, refcount schedule differs
-0093c320  55   complete: MemoryStream clear, refcount schedule differs
+0093c320  55   complete: MemoryStream clear, refcount schedule differs; fixed 2026-10-12: SharedRelease passes this = p+4 (second base subobject), was the vptr value (hybrid crash 0x93bd97)
 0093c370  61   complete: MemoryStream SetSize, branch layout differs
 0093c420  3    complete: trivial 'return b' thunk, 3 bytes of frame differ
 0093c6f0  12   complete: fputs-to-stderr wrapper, call setup differs

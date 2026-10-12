@@ -108,7 +108,9 @@ struct ImageTable {
 };
 
 // ---- WindowMgr / window plumbing (thiscall + stack args) ----
-struct APCData { char lead[0x10]; int tag; int p2; void* p3; };
+// tag at +8 (the original writes [esp+0x10] and passes esp+8): lead[0x10] put it at +0x10 and the
+// APC handler read garbage (hybrid crash at 0x959bd7, 2026-10-12)
+struct APCData { char lead[8]; int tag; int p2; void* p3; };
 
 struct W {
     void     PostAPC(int a, void* b);            // 0x00957D40

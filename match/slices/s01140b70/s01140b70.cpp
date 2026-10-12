@@ -476,7 +476,10 @@ extern "C" void FUN_011411d0(int* list, int* node)
 //  FUN_01141200   (pop head)
 // ===========================================================================
 // @ 0x01141200
-extern "C" void FUN_01141200(int* list)
+// Returns the popped head (0 when empty): the original keeps it in eax to the ret and callers
+// (voice allocation) use it. Declared void, ours returned the list pointer as the "node" and the
+// audio core never got going: the hybrid booted to a black window (2026-10-12).
+extern "C" int* FUN_01141200(int* list)
 {
     int* head = (int*)list[0];
     if (head) {
@@ -485,11 +488,12 @@ extern "C" void FUN_01141200(int* list)
         if (!next) {
             list[1] = 0;
             list[2]--;
-            return;
+            return head;
         }
         next[1] = 0;
         list[2]--;
     }
+    return head;
 }
 
 // ===========================================================================

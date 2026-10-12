@@ -7,7 +7,7 @@
 01141150   34  voice-handle validation leaf; complete; difftest WEAK 58.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011411a0   16  intrusive list push-front leaf; complete; difftest PASS 100% cov; only the else-branch count increment schedules as load/inc/store instead of inc [mem] (/LTCG codegen). flags /vc71 /O2 /MD /Gy /TP
 011411d0   16  intrusive list push-back leaf; complete; difftest PASS 100% cov; same /LTCG count-increment schedule difference. flags /vc71 /O2 /MD /Gy /TP
-01141200   31  intrusive list pop-front leaf; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP
+01141200   31  intrusive list pop-front leaf; complete; difftest PASS 100% cov. flags /vc71 /O2 /MD /Gy /TP; fixed 2026-10-12: returns the popped node in eax as the original does (void gave callers the list pointer: hybrid black screen)
 01141230   47  intrusive list unlink leaf; complete; difftest PASS 84.6% cov. flags /vc71 /O2 /MD /Gy /TP
 01141270   40  find object by handle and walk its +0x114 list; complete; difftest WEAK 53.8% cov. flags /vc71 /O2 /MD /Gy /TP
 011412b0  183  SNDI_patchtohdr: parse the SNDI tag stream into header/buffers/timestretch arrays; complete; difftest PASS 86.8% cov. flags /vc71 /O2 /MD /Gy /TP

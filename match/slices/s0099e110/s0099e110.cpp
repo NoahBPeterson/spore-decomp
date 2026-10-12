@@ -406,7 +406,10 @@ int FUN_0099ed90() { return 0; }
 // ---------------------------------------------------------------------------
 // @ 0x0099efa0  uninitialized_copy of 8-byte pairs
 // ---------------------------------------------------------------------------
-void FUN_0099efa0(char* first, char* last, char* dst) {
+// Returns the destination end (eax), as eastl::uninitialized_copy does: callers store it as the
+// vector's new end. Declared void it passed equivalence (eax is not compared then) and the hybrid
+// crashed on empty ranges, where eax was never written.
+char* FUN_0099efa0(char* first, char* last, char* dst) {
   if (first != last) {
     int off = (int)(first - dst);
     do {
@@ -417,6 +420,7 @@ void FUN_0099efa0(char* first, char* last, char* dst) {
       dst += 8;
     } while (dst + off != last);
   }
+  return dst;
 }
 
 // ---------------------------------------------------------------------------

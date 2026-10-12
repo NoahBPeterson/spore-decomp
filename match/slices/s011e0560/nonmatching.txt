@@ -20,4 +20,4 @@
 011e2670  n/a  copyBlob: complete; rep-movsd block size diff
 011e2690  n/a  rw_cleanup_2690: complete
 011e26f0  n/a  UpdateSubreferencesData: complete
-011e29c0  n/a  initRange: complete; unrolled store diff
+011e29c0  n/a  initRange: complete; unrolled store diff; equiv: PASS (now returns this in eax as the original does; void clobbered eax: hybrid div-by-zero 2026-10-12)

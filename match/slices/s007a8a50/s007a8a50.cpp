@@ -104,7 +104,9 @@ void cTextureManager::CreateTexture()
 {
     int buf[3] = { 0, 0, 0 };
     void* gen = FUN_0067de60_IDGenerator();
-    ((void(__thiscall*)(void*, int*, unsigned int, int, int, int, int))((void**)gen)[1])
+    // virtual slot 1 through the generator's vtable (the original does mov edx,[eax]; mov edx,[edx+4]);
+    // ((void**)gen)[1] read the object's second field, an incrementing ID, and the hybrid called it
+    ((void(__thiscall*)(void*, int*, unsigned int, int, int, int, int))(*(void***)gen)[1])
         (gen, buf, 0x2f4e681c, 0, 0, 0x22, 0);
     ((void(__thiscall*)(void*, int, int, int, int, int, int, int, int))((void**)this->vtbl)[0x3c / 4])
         (this, 0x2f4e681c, 0, 0, 0, buf[0], buf[1], buf[2], 0);
@@ -126,10 +128,15 @@ void cTextureManager::RegisterGameTexture(int a, int b)
 {
     int buf[3] = { 0, 0, 0 };
     void* gen = FUN_0067de60_IDGenerator();
-    ((void(__thiscall*)(void*, int*, unsigned int, int, int, int, int))((void**)gen)[1])
+    // virtual slot 1 through the generator's vtable (the original does mov edx,[eax]; mov edx,[edx+4]);
+    // ((void**)gen)[1] read the object's second field, an incrementing ID, and the hybrid called it
+    ((void(__thiscall*)(void*, int*, unsigned int, int, int, int, int))(*(void***)gen)[1])
         (gen, buf, 0x2f4e681c, 0, 0, 0x22, 0);
+    // forwards the generated key (buf[0], buf[2]) then a, b: the original pushes b, a, buf[2],
+    // buf[0]. Passing (a, b, 0, 0) registered textures under the wrong key and the hybrid later
+    // called through the ID as if it were a pointer (2026-10-12).
     ((void(__thiscall*)(void*, int, int, int, int))((void**)this->vtbl)[0x4c / 4])
-        (this, a, b, 0, 0);
+        (this, buf[0], buf[2], a, b);
 }
 
 // @ 0x007a95b0

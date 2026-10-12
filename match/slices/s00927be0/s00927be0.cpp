@@ -123,11 +123,15 @@ void* cLocalLightInfo::LockedRealloc(int a1, int a2, int a3)
 }
 
 // @ 0x00928ad0
-void __cdecl Pool_AllocGlobal(unsigned size, unsigned* out)
+// Returns the block (eax from LockedAlloc, kept to ret in the original; the size-or-zero goes to
+// *out via edx). This is StackAllocator's allocation callback; declared void, ours clobbered eax
+// with the size and AllocateNewBlock wrote through it (hybrid crash at 0x928be9, 2026-10-12).
+void* __cdecl Pool_AllocGlobal(unsigned size, unsigned* out)
 {
-    unsigned r = (unsigned)g_pool->LockedAlloc((int)size, 0, 0, 0, 0, 0);
+    void* r = (void*)g_pool->LockedAlloc((int)size, 0, 0, 0, 0, 0);
     if (out != 0)
         *out = r ? size : 0;
+    return r;
 }
 
 // ---------------------------------------------------------------- approximate cores

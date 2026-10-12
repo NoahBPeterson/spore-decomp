@@ -367,7 +367,7 @@ struct ArenaSelf {
     void grow(int n);                              // 0x011e2470
     void alignTo(uint32_t a);                      // 0x011e24b0
     void copyBlob(Blob32* out);                    // 0x011e2670
-    void initRange(int* data, int n);              // 0x011e29c0
+    ArenaSelf* initRange(int* data, int n);        // 0x011e29c0 (returns this; see definition)
     void writeDictionary(void* p2);                // 0x011e2760 PARTIAL
     int getExportedObjectByIndex(unsigned index, void* out); // 0x011e28e0 PARTIAL
 };
@@ -437,7 +437,10 @@ void ArenaSelf::copyBlob(Blob32* out)
 }
 
 // @ 0x011e29c0
-void ArenaSelf::initRange(int* data, int n)
+// Returns `this`: the original sets eax = ecx on entry and preserves it to ret, and its callers
+// (LTCG) use eax as the object afterwards. Declared void, our version clobbered eax and the next
+// lookup divided by a count read from a garbage object (hybrid crash at 0x11e2b4c, 2026-10-12).
+ArenaSelf* ArenaSelf::initRange(int* data, int n)
 {
     *(int*)((char*)this + 4) = n;
     *(int**)this = data;
@@ -447,6 +450,7 @@ void ArenaSelf::initRange(int* data, int n)
             p[1] = 0;
         }
     }
+    return this;
 }
 
 // @ 0x011e2760  Arena::WriteDictionary.  PARTIAL.

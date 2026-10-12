@@ -161,6 +161,19 @@ generated from the disassembly by a script is not decompiled and never counts as
 partial.txt. Only a few `__asm` statements inside C++ where the original used an asm helper (fnstcw/fldcw,
 cvtss2si) are allowed. `tools/matching/asm_audit.py` lists offending manifest entries; run it before integrating.
 
+**Atomics are semantics, not shape.** Where the original has `lock xadd`, `lock cmpxchg`, `lock inc/dec` or
+`xchg mem,reg`, write the `_Interlocked*` intrinsic (`_InterlockedExchangeAdd`, `_InterlockedCompareExchange`,
+`_InterlockedExchange`, ...), never `++*(volatile long*)p`. The equivalence harness is single-threaded and
+passes the plain version; the game then races on refcounts and crashes nondeterministically (found with the
+hybrid build, 2026-10-11). `tools/hybrid/build.py` refuses to hook a function whose locked-instruction count
+differs from the original.
+
+**Annotate template helpers by address.** `eastl::lower_bound`, `find`, `sort`, hash and copy helpers exist
+once per element type; a bare qualified name in a declaration is ambiguous, and the resolver once sent a
+`GetProperty` to another `lower_bound` instantiation (hybrid crash, 2026-10-11). Put the callee's address
+from the call site on the declaration (`// 0x00612db0`) as for any other callee; the resolver now rejects a
+name-only match that the original function does not actually call.
+
 ### Lessons from the pilot (12 agents)
 - **Module flags vary**; check the disassembly first:
   - `/Od /Ob1`: `push ebp; mov ebp,esp`, ecx spilled to `[ebp-N]`, every local in memory, but small

@@ -441,7 +441,10 @@ void AutoRefVec::Destroy()
 }
 
 // @ 0x007c8160
-void LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
+// lower_bound over 16-byte (key pair) elements: returns the position, as the original does in
+// eax (eax = first on entry, advanced in the loop). Declared void, callers read garbage from eax
+// (hybrid crash at 0x7cac5d, 2026-10-12).
+uint32_t* LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
 {
     int n = (int)((char*)last - (char*)first) >> 4;
     while (n > 0) {
@@ -454,6 +457,7 @@ void LowerBoundPair(uint32_t* first, uint32_t* last, uint32_t* key)
             n = half;
         }
     }
+    return first;
 }
 
 // @ 0x007c7e70

@@ -1,0 +1,9 @@
+# Hooks build.py leaves out by default: functions whose PASS verdict the hybrid disproved and
+# whose fix is not yet in the source. One "<slice> <va>" per line; keep the reason.
+# Remove a line once its function is fixed and re-verified (strict equiv + a clean hybrid boot).
+
+# Sound::UpdatePropertiesFromPrimitives: alone, crashes 0x645edd at 10 s. Compiled code mirrors the
+# original except for the frame (0xc vs 0x10) and the stack slot passed as the key to SetPropValue
+# (original reads [esp+0x1c] where ours reads [esp+0x18] after the float push). Needs a human look
+# at which slot holds the key in the original; the bookkeeping note "one extra 4-byte local" hid it.
+s00a1c460 00a1cf60

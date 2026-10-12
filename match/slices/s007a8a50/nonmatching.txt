@@ -2,8 +2,8 @@
 007a93b0  9    wrapper: register choice + tail-call vs call
 007a9420  14  GetKeyFromTexture: base pointer register/lea shape differs
 007a9450  5    GetResourceForTexture: null path folds to absolute [0x24]
-007a9470  109  CreateTexture: IDGenerator + vtable forwarding schedule
-007a9540  52  RegisterGameTexture: IDGenerator schedule
+007a9470  109  CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
+007a9540  52  RegisterGameTexture: IDGenerator schedule; equiv: PASS (virtual call now forwards buf[0], buf[2], a, b; was a, b, 0, 0: hybrid crash 2026-10-12); generator call now through vtable slot 1
 007a95b0  11  set/clear flag bit: epilogue merge differs
 007a9620  77  CleanupJob: EH frame + virtual-release shape
 007a9680  146  deque range copy loop

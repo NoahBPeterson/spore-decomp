@@ -118,7 +118,7 @@ struct VariantPair {  // size 0x18
 // eastl::vector<eastl::pair<unsigned int,EA::Variant>,eastl::allocator>
 namespace eastl {
 VariantPair* lower_bound(VariantPair* first, VariantPair* last,
-                         const unsigned int* key, unsigned char comp);
+                         const unsigned int* key, unsigned char comp);  // 0x00612db0 (0x18-stride instance)
 }
 
 // ---------------------------------------------------------------------------

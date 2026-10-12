@@ -33,6 +33,24 @@ Target: `SporeBin/SporeApp.exe` (Steam, PE timestamp 2024-09-30, PDB `SporeEP1_R
    platform abstractions (SDL3 + a GL/Vulkan or bgfx renderer) behind the same
    interfaces. The tests from stage 1 gate every change.
 
+### Course change (2026-10-11): hybrid binary, then modules
+
+Per-function matching (stage 2) reached 61% byte-exact by count but 20% by size, and its output
+is 2,558 isolated slices with private stub types and `FUN_xxxxxxxx` prototypes: proofs, not a
+program. Merging them later is a rewrite that grows with every slice. So:
+
+- **Global matching waves stop.** Byte-exactness stays the per-function gate (`run_all.py`) but is
+  pursued inside the module being migrated, not binary-wide. LTCG custom-ABI functions and giant
+  /O2 bodies are accepted as equivalent.
+- **Hybrid binary** (`docs/hybrid.md`, `tools/hybrid/`): the decrypted original with our compiled
+  functions spliced in, run under CrossOver. It boots to the main menu. Equivalent functions are
+  hooked in with a `jmp`; "the game runs with it" is the acceptance test for non-byte-exact code,
+  replacing the emulator's synthetic inputs.
+- **Module migration**: a real tree (`src/<module>/`, shared headers) built one module at a time,
+  with file boundaries from the 2008 dev PDB (`tools/pdb_modules.py`) and class layouts from
+  ModAPI (`work/ext/Spore-ModAPI`). Each migrated module must keep its byte-exact functions exact
+  and boot in the hybrid. Pilot: the resource/DBPF module (milestone 1 already has real source).
+
 ## Milestones
 
 | # | Subsystem | Status |

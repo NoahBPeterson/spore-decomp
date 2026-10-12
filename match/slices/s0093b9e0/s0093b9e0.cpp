@@ -39,8 +39,11 @@ inline void SharedRelease(SharedPointer* p)
         if (_InterlockedDecrement(&p->mnRefCount) == 0) {
             _InterlockedExchange(&p->mnRefCount, 1);
             if (p->vtable2 != 0) {
+                // +4 is the second base's vptr (multiple inheritance): the original calls slot 0
+                // of that vtable with this = p + 4 (the base subobject), not with the vptr value
+                // (hybrid crash at 0x93bd97, 2026-10-12: a dtor ran on the vtable as `this`).
                 typedef void (__thiscall *Fn)(void*, int);
-                (*(Fn*)p->vtable2)(p->vtable2, 1);
+                (*(Fn*)p->vtable2)((char*)p + 4, 1);
             }
         }
     }

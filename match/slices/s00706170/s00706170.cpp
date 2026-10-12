@@ -136,7 +136,9 @@ W68c0* W68c0::copyFrom(const W68c0* s)
 // ==========================================================================
 // @ 0x00706ab0  forward copy of 16-byte elements keeping a pointer offset
 // ==========================================================================
-void FUN_00706ab0(__m128* first, __m128* last, __m128* out)
+// Returns the destination end in eax as the original does (callers continue writing there);
+// declared void, the hybrid's caller took garbage from eax (movaps fault at 0x707cbe, 2026-10-12).
+__m128* FUN_00706ab0(__m128* first, __m128* last, __m128* out)
 {
     if (first != last) {
         int offset = (int)((char*)first - (char*)out);
@@ -146,6 +148,7 @@ void FUN_00706ab0(__m128* first, __m128* last, __m128* out)
             out = (__m128*)((char*)out + 16);
         } while ((__m128*)((char*)out + offset) != last);
     }
+    return out;
 }
 
 // ==========================================================================
