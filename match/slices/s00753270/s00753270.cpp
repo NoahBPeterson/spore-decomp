@@ -96,9 +96,11 @@ void FUN_00753fc0(RC_00753fc0* param_1) {
   int n = (param_1->n += -1);
   if (n == 0) {
     param_1->n = 1;
-    typedef void(__stdcall *Fn)(int);
+    // vtable slot 0 (deleting dtor) called thiscall on the record itself: the original's `ecx`
+    // at the call is `this`, not a register-allocation choice (hybrid 2026-10-12).
+    typedef void(__thiscall *Fn)(RC_00753fc0*, int);
     Fn fn = *(Fn*)param_1->p;
-    fn(1);
+    fn(param_1, 1);
   }
 }
 
