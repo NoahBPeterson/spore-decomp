@@ -104,6 +104,8 @@ gated by "the game still runs".
 
 ### Phase B — the migration pipeline, then a pilot
 
+Design, measurements and pilot inventory: `docs/migration.md` (2026-10-12).
+
 5. **Canonical types.** One header per class under `src/<module>/`, seeded from ModAPI
    (`work/ext/Spore-ModAPI`), the dev-PDB TPI (`work/devbuild/types.json`) and the census; the
    2,306 conflicting names are the work list, resolved per module (a slice's partial view either
