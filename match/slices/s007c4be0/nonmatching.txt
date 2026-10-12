@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-007c4be0  15  virtual v18/v20 calls + camera raster store; register allocation near-miss (3 rounds) [equiv: PASS 1165 valid, 100% cov]
+007c4be0  15  virtual v18/v20 calls + camera raster store; register allocation near-miss (3 rounds) [equiv: PASS 1165 valid, 100% cov]; fixed 2026-10-12: renderer v20 was declared (out, a, b) but takes (a, b, &rect) — the hybrid rendered no galaxy (cViewer::SetRaster gave the raster handle as the rect pointer); equiv still PASS 392 valid, 100% cov; harness compares no fake-call args
 007c4c40  173  SIMD 3x3 transpose with sign flip; scalar C++ does not reproduce unpcklps schedule [equiv: PASS 913 valid, 100% cov]
 007c4d20  135  builds affine 4x4 into locals then calls 4c40; SIMD local layout differs [equiv: PASS 1200 valid, 100% cov]
 007c4dd0  390  cViewer::Init; identity-matrix SIMD + x87 fov block not reproduced [equiv: UNSUPPORTED unresolved _tanf (original inlines fptan, ours calls tanf)]

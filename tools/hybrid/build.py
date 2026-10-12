@@ -111,6 +111,8 @@ class Splicer:
         self.pending_d = []         # (x_offset_of_reloc, d_offset, kind) fixups once .hybd's address is known
         self.log = log
         self.skipped = {}
+        self.cov = None             # Coverage, when building a coverage image
+        self.last_place = {}
         import capstone
         self.md = capstone.Cs(capstone.CS_ARCH_X86, capstone.CS_MODE_32)
         self.md.detail = True   # for instruction prefixes
@@ -218,6 +220,29 @@ class Splicer:
                 return True
         return False
 
+    def regs_written(self, code, va):
+        """Registers a function writes (full GPR names, xmmN, 'st'), minus those it restores with
+        pop; esp/eflags/segments ignored. All paths of the straight-line disassembly together."""
+        from capstone import x86
+        full = {}
+        for grp, names in {"eax": ("al", "ah", "ax", "eax"), "ebx": ("bl", "bh", "bx", "ebx"),
+                           "ecx": ("cl", "ch", "cx", "ecx"), "edx": ("dl", "dh", "dx", "edx"),
+                           "esi": ("sil", "si", "esi"), "edi": ("dil", "di", "edi"), "ebp": ("bp", "ebp")}.items():
+            for n in names:
+                full[n] = grp
+        ignore = {"esp", "eflags", "eip", "fpsw", "fs", "gs", "ds", "es", "ss", "cs"}
+        w, saved = set(), set()
+        for i in self.md.disasm(code, va):
+            _r, ws = i.regs_access()
+            if i.mnemonic == "pop" and i.operands and i.operands[0].type == x86.X86_OP_REG:
+                n = i.reg_name(i.operands[0].reg)
+                saved.add(full.get(n, n))
+            for r in ws:
+                n = i.reg_name(r)
+                if n not in ignore:
+                    w.add(full.get(n, n))
+        return {("st" if r.startswith("st") else r) for r in w} - saved
+
     def atomics(self, code, va):
         """Number of implicitly or explicitly locked memory operations in a code blob."""
         n = 0
@@ -249,6 +274,15 @@ class Splicer:
         a_ours = self.atomics(fsec.data[f_lo:f_hi], 0x10000000)
         if a_orig != a_ours:
             return self.skip("atomicity mismatch (locked ops original vs ours)", t.sid, "%08x(%d/%d)" % (t.va, a_orig, a_ours))
+        # Register footprint: an LTCG caller may keep live values in registers its callee provably
+        # never touches (a custom convention per call site). Ours must not write anything the
+        # original does not. InterpRamp 0x114e780 wrote xmm3 (original: xmm0-2, xmm7) and the audio
+        # resampler's caller lost a live value: severe crackling, no crash (2026-10-12).
+        extra = self.regs_written(fsec.data[f_lo:f_hi], 0x10000000) - self.regs_written(
+            self.img.read(t.orig_lo, t.orig_hi - t.orig_lo), t.orig_lo)
+        if extra:
+            return self.skip("register footprint: writes %s the original does not" % ",".join(sorted(extra)),
+                             t.sid, "%08x" % t.va)
         # A function declared void whose original writes eax right before every ret returns a value
         # we do not (hidden return pointer, `return *this`, ...): callers read garbage from eax.
         # Constructors are exempt (thiscall ctors return `this` in eax on both sides). Two hybrid
@@ -268,6 +302,18 @@ class Splicer:
         secs = sorted(res.local_sections)
         if (fsym.secno - 1) not in secs:
             secs.append(fsym.secno - 1)
+        entry = self.place(coff, secs, res.addr, fsym)
+        if not isinstance(entry, int):
+            return self.skip(entry, t.sid, "%08x" % t.va)
+        self.hooks.append((t.va, entry, t.sid, t.orig_hi - t.orig_lo, f_hi - f_lo))
+        return True
+
+    def place(self, coff, secs, addr, fsym):
+        """Lay out coff sections `secs` (indices) into .hybx/.hybd with relocations applied; `addr`
+        maps symbol index -> absolute address for everything not in `secs`. Returns fsym's absolute
+        address, or a string reason when a symbol cannot be placed. Records the section placement
+        in self.last_place as {section index: ("x"|"d", offset)}."""
+        res_addr = addr
         # placement: x-group at known addresses now; d-group at offsets, addresses fixed later
         place = {}
         xs, ds = [], []
@@ -289,8 +335,8 @@ class Splicer:
 
         def sym_addr(si):
             """(absolute address or None, d_offset or None)"""
-            if si in res.addr:
-                a = res.addr[si]
+            if si in res_addr:
+                a = res_addr[si]
                 return self.builtin.get(a, a), None
             s = coff.syms[si]
             if s.defined and (s.secno - 1) in place:
@@ -312,7 +358,7 @@ class Splicer:
             for (roff, si, typ) in s.relocs:
                 tgt, dref = sym_addr(si)
                 if tgt is None and dref is None:
-                    return self.skip("symbol not placed: " + coff.syms[si].name[:40], t.sid, "%08x" % t.va)
+                    return "symbol not placed: " + coff.syms[si].name[:40]
                 p = (self.x_va + off + roff) if g == "x" else None   # own address, known only for x
                 if typ == REL_DIR32:
                     if dref is not None:
@@ -336,10 +382,9 @@ class Splicer:
         self.x += xbuf
         self.d += dbuf
         self.pending_d += fixups
+        self.last_place = place
         g, off = place[fsym.secno - 1]
-        entry = self.x_va + off + fsym.value
-        self.hooks.append((t.va, entry, t.sid, t.orig_hi - t.orig_lo))
-        return True
+        return self.x_va + off + fsym.value
 
     def finish(self, d_rva):
         """Resolve fixups that needed .hybd's address; return (x_bytes, d_bytes)."""
@@ -384,13 +429,8 @@ def add_section(pe, name, rva, data, flags):
     return sec
 
 
-def splice(pe, targets, verbose, limit=None):
+def splice(pe, sp, targets, verbose, limit=None):
     import equiv as E
-    ctx = E.context()
-    img = ctx["img"]
-    sa = pe.OPTIONAL_HEADER.SectionAlignment
-    x_rva = align(pe.OPTIONAL_HEADER.SizeOfImage, sa)
-    sp = Splicer(img, x_rva, print)
     quiet = lambda *a, **k: None
     n = 0
     for sid, va in targets[:limit] if limit else targets:
@@ -407,17 +447,137 @@ def splice(pe, targets, verbose, limit=None):
             n += 1
             if verbose:
                 print("hook %08x -> %08x  %s  (%d local bytes)" % (vai, sp.hooks[-1][1], sid, len(sp.x)))
-    d_rva = align(x_rva + max(len(sp.x), 1), sa)
-    xb, db = sp.finish(d_rva)
-    add_section(pe, ".hybx", x_rva, xb, 0x60000020)      # code | execute | read
-    add_section(pe, ".hybd", d_rva, db, 0xC0000040)      # idata | read | write
-    for va, entry, sid, _n in sp.hooks:
-        off = pe.get_offset_from_rva(va - BASE)
-        pe.set_bytes_at_offset(off, bytes([JMP]) + struct.pack("<i", entry - (va + 5)))
-    print("hooked %d functions; .hybx %d bytes, .hybd %d bytes" % (n, len(xb), len(db)))
+    print("hooked %d functions" % n)
     for why, lst in sorted(sp.skipped.items(), key=lambda kv: -len(kv[1])):
         print("  skipped %4d  %s%s" % (len(lst), why, ("  e.g. " + " ".join(lst[:3])) if verbose else ""))
     return sp
+
+
+def new_splicer(pe):
+    import equiv as E
+    sa = pe.OPTIONAL_HEADER.SectionAlignment
+    return Splicer(E.context()["img"], align(pe.OPTIONAL_HEADER.SizeOfImage, sa), print)
+
+
+def emit(pe, sp):
+    """Add .hybx/.hybd to the PE and write the jmp hooks."""
+    sa = pe.OPTIONAL_HEADER.SectionAlignment
+    x_rva = sp.x_va - BASE
+    d_rva = align(x_rva + max(len(sp.x), 1), sa)
+    if sp.cov:
+        sp.cov.poke(BASE + d_rva)
+    xb, db = sp.finish(d_rva)
+    add_section(pe, ".hybx", x_rva, xb, 0x60000020)      # code | execute | read
+    add_section(pe, ".hybd", d_rva, db, 0xC0000040)      # idata | read | write
+    for va, entry, sid, _n, _m in sp.hooks:
+        off = pe.get_offset_from_rva(va - BASE)
+        pe.set_bytes_at_offset(off, bytes([JMP]) + struct.pack("<i", entry - (va + 5)))
+    print(".hybx %d bytes, .hybd %d bytes" % (len(xb), len(db)))
+    if sp.cov:
+        sp.cov.arm(pe)
+
+
+# ---------------------------------------------------------------- coverage
+
+class Coverage:
+    """One-shot int3 at every function entry (tools/hybrid/cov.c handles them). Tables live in
+    .hybd; the runtime's own object is placed through the splicer; the PE entry point becomes
+    cov_entry and the code sections are made writable so the handler can restore bytes."""
+
+    def __init__(self, sp, pe, out_name, period_ms):
+        import csv
+        import slice as S
+        from coff import Coff
+        self.sp = sp
+        hooked = {va: entry for va, entry, _s, _n, _m in sp.hooks}
+        inside = set()
+        for va in hooked:
+            inside.update(range(va + 1, va + 5))
+        funcs = {}
+        for f in sorted(glob.glob(os.path.join(ROOT, "work", "decomp_all", "index_*.csv"))):
+            for addr, name, size, status, lines in csv.reader(open(f)):
+                funcs[int(addr, 16)] = name
+        text = next(s for s in pe.sections if s.Name.rstrip(b"\0") == b".text")
+        lo, hi = BASE + text.VirtualAddress, BASE + text.VirtualAddress + text.Misc_VirtualSize
+        self.rows = []      # (bp address, original va, name)
+        skipped = 0
+        for va in sorted(funcs):
+            if not lo <= va < hi or va in inside:
+                skipped += 1
+                continue
+            self.rows.append((hooked.get(va, va), va, funcs[va]))
+        self.rows.sort()
+        n = len(self.rows)
+        # tables in .hybd: bp[n] u32 sorted, orig[n] u8 (filled in arm()), tick[n] u32
+        d = sp.d
+        d += b"\0" * (-len(d) % 16)
+        self.off_bp = len(d)
+        d += struct.pack("<%dI" % n, *[r[0] for r in self.rows])
+        self.off_orig = len(d)
+        d += b"\0" * n
+        d += b"\0" * (-len(d) % 16)
+        self.off_tick = len(d)
+        d += b"\0" * (4 * n)
+        # the runtime
+        src = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cov.c")
+        obj, log = S.compile_obj(src, ["/O1", "/GS-", "/Gy-", "/Zl", "/Oi-", "/W3"])
+        if obj is None:
+            raise SystemExit("cov.c failed to compile:\n" + log)
+        coff = Coff(obj)
+        secs = [i for i, s in enumerate(coff.sections) if not s.discard and (s.data or s.size)]
+        ext = [s.name for s in coff.syms.values() if not s.defined and s.cls == 2 and s.name not in coff.functions()]
+        ext = [e for e in ext if coff.by_name[e].secno == 0]
+        if ext:
+            raise SystemExit("cov.c references external symbols (no CRT allowed): %s" % ext)
+        entry = sp.place(coff, secs, {}, coff.by_name["_cov_entry"])
+        if not isinstance(entry, int):
+            raise SystemExit("cov.c: " + entry)
+        g = coff.by_name["_g_cov"]
+        grp, off = sp.last_place[g.secno - 1]
+        assert grp == "d", "g_cov must be writable"
+        self.off_g = off + g.value
+        self.entry = entry
+        self.n = n
+        self.out_name = out_name
+        self.period_ms = period_ms
+        print("coverage: %d breakpoints (%d hooked entries, %d functions skipped), runtime at %08x" %
+              (n, sum(1 for r in self.rows if r[0] != r[1]), skipped, entry))
+
+    def poke(self, d_va):
+        """Fill g_cov once .hybd's address is known (before finish())."""
+        hdr = struct.pack("<4sIII", b"SCOV", self.n, 0, 0)
+        hdr += struct.pack("<IIIII", d_va + self.off_bp, d_va + self.off_orig, d_va + self.off_tick, OEP, self.period_ms)
+        hdr += self.out_name.encode().ljust(64, b"\0")
+        d = self.sp.d
+        d[self.off_g:self.off_g + len(hdr)] = hdr
+
+    def arm(self, pe):
+        """After the sections exist: save original bytes, plant the int3s, redirect the entry point,
+        make code writable."""
+        d_sec = next(s for s in pe.sections if s.Name.rstrip(b"\0") == b".hybd")
+        d_off = d_sec.PointerToRawData
+        # pefile's get_offset_from_rva does not know the sections add_section() appended
+        spans = [(s.VirtualAddress, s.VirtualAddress + max(s.Misc_VirtualSize, s.SizeOfRawData), s.PointerToRawData)
+                 for s in pe.sections]
+
+        def file_off(rva):
+            for lo, hi, ptr in spans:
+                if lo <= rva < hi:
+                    return ptr + rva - lo
+            raise KeyError(hex(rva))
+
+        for i, (bp, va, name) in enumerate(self.rows):
+            off = file_off(bp - BASE)
+            pe.__data__[d_off + self.off_orig + i] = pe.__data__[off]
+            pe.__data__[off] = 0xCC
+        pe.OPTIONAL_HEADER.AddressOfEntryPoint = self.entry - BASE
+        for s in pe.sections:
+            if s.Name.rstrip(b"\0") in (b".text", b".hybx"):
+                s.Characteristics |= 0x80000000      # IMAGE_SCN_MEM_WRITE
+
+    def sidecar(self, path):
+        json.dump({"n": self.n, "out_name": self.out_name,
+                   "rows": [[bp, va, name] for bp, va, name in self.rows]}, open(path, "w"))
 
 
 def verify_exact(n, verbose):
@@ -461,7 +621,7 @@ def verify_exact(n, verbose):
         sp = Splicer(img, 0x2000000 + shift, print)
         sp.add(t)
         xb, _db = sp.finish(0x2100000 + shift)
-        _va, entry, _sid, size = sp.hooks[0]
+        _va, entry, _sid, size, _m = sp.hooks[0]
         assert entry == vai
         mine = xb[entry - sp.x_va: entry - sp.x_va + size]
         theirs = img.read(vai, size)
@@ -506,6 +666,9 @@ def main():
     ap.add_argument("--limit", type=int)
     ap.add_argument("--exclude", default="", help="comma-separated slice ids / VAs, or @FILE with one per line")
     ap.add_argument("--verify-exact", type=int, metavar="N")
+    ap.add_argument("--coverage", action="store_true",
+                    help="one-shot int3 at every function entry; the game writes spore_cov.bin to its cwd")
+    ap.add_argument("--cov-period", type=int, default=2000, help="coverage flush interval, ms")
     ap.add_argument("-v", action="store_true")
     a = ap.parse_args()
     if a.verify_exact:
@@ -514,7 +677,7 @@ def main():
     pe = pefile.PE(IMAGE)
     pe.__data__ = bytearray(pe.__data__)
     make_runnable(pe, patches=not a.no_patches)
-    sp = None
+    sp = new_splicer(pe) if (a.hook != "none" or a.coverage) else None
     if a.hook != "none":
         targets = pass_targets() if a.hook == "pass" else file_targets(a.hook)
         # tools/hybrid/known_bad.txt: hooks the hybrid disproved whose fix is not in the source yet
@@ -527,12 +690,19 @@ def main():
         if before != len(targets):
             print("excluded %d (known_bad.txt / --exclude)" % (before - len(targets)))
         print("%d candidate functions" % len(targets))
-        sp = splice(pe, targets, a.v, a.limit)
+        splice(pe, sp, targets, a.v, a.limit)
+    if a.coverage:
+        sp.cov = Coverage(sp, pe, "spore_cov.bin", a.cov_period)
+    if sp is not None:
+        emit(pe, sp)
     pe.OPTIONAL_HEADER.CheckSum = pe.generate_checksum()
     pe.write(a.out)
     if sp is not None:
-        json.dump({"hooks": [{"va": "%08x" % va, "entry": "%08x" % e, "slice": s, "orig_size": n} for va, e, s, n in sp.hooks],
+        json.dump({"hooks": [{"va": "%08x" % va, "entry": "%08x" % e, "slice": s, "orig_size": n, "our_size": m}
+                             for va, e, s, n, m in sp.hooks],
                    "skipped": sp.skipped}, open(a.out + ".hooks.json", "w"), indent=1)
+        if sp.cov:
+            sp.cov.sidecar(a.out + ".cov.json")
     print("wrote", a.out)
 
 

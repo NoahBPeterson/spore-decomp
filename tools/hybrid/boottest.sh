@@ -25,8 +25,8 @@ cp "$exe" "$S/SporeBin/SporeApp_hybrid.exe" || exit 2
 cleanup() { pkill -f "SporeApp_hybrid.exe" 2>/dev/null; pkill -f "winedbg --auto" 2>/dev/null; pkill -f "conhost.exe" 2>/dev/null; }
 cleanup; sleep 1
 "$W" --bottle Steam reg add 'HKCU\Software\Wine\Debug' /v RelayInclude /t REG_SZ /d 'user32.MessageBoxA' /f >/dev/null 2>&1
-rm -f "$L"
-( cd "$S/SporeBin" && CX_DEBUGMSG="-all,+relay,+seh" "$W" --bottle Steam --cx-app "$EXE" </dev/null >"$L" 2>&1; echo "exit=$?" >>"$L" ) &
+rm -f "$L" "$S/SporeBin/spore_cov.bin"
+( cd "$S/SporeBin" && CX_DEBUGMSG="${CXDBG:--all,+relay,+seh}" "$W" --bottle Steam --cx-app "$EXE" </dev/null >"$L" 2>&1; echo "exit=$?" >>"$L" ) &
 first_av() { grep -o "dispatch_exception code=c0[0-9a-f]* ([A-Z_]*) flags=[0-9] addr=[0-9A-Fa-f]*" "$L" 2>/dev/null | grep -v 406d1388 | head -1; }
 t=0; verdict=""
 while [ $t -lt "$secs" ]; do
@@ -48,11 +48,17 @@ if [ -z "$verdict" ]; then
   cpu=$(ps -o %cpu= -p "$pid" 2>/dev/null | tr -d ' ')
   hint=""; [ -n "$cpu" ] && [ "${cpu%.*}" -lt 3 ] && hint=": hung?"
   # window content: the game renders a black window when a hooked function breaks rendering
-  shot=$("$root/.venv/bin/python" "$root/tools/hybrid/winshot.py" "$root/work/hybrid/$tag.win.png" 2>/dev/null); rc=$?
+  # (and a black 3D scene behind a working 2D menu when one breaks the renderer: baseline scene~21, broken ~2)
+  shot=$("$root/.venv/bin/python" "$root/tools/hybrid/winshot.py" "$root/work/hybrid/$tag.win.png" --scene-min ${SCENE_MIN:-6} 2>/dev/null); rc=$?
   [ $rc -eq 2 ] && hint="$hint: black screen"
+  [ $rc -eq 3 ] && hint="$hint: no scene"
   verdict="ALIVE at ${t}s (cpu ${cpu:-?}%${hint}; window ${shot:-?})"
 fi
 screencapture -x "$root/work/hybrid/$tag.png" 2>/dev/null
 "$W" --bottle Steam reg delete 'HKCU\Software\Wine\Debug' /v RelayInclude /f >/dev/null 2>&1
 cleanup
+# a --coverage build writes its first-hit table next to the exe; keep it with the run's tag
+if [ -f "$S/SporeBin/spore_cov.bin" ]; then
+  mv "$S/SporeBin/spore_cov.bin" "$root/work/hybrid/$tag.cov.bin" && verdict="$verdict; coverage work/hybrid/$tag.cov.bin"
+fi
 echo "$verdict"

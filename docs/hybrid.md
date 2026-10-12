@@ -83,9 +83,10 @@ hooked by a replacement with the same ABI, which our C++ cannot express; they st
 
 ## Status (2026-10-12)
 
-**Milestone:** `build.py --hook pass` hooks 1,730 PASS-verdict functions (357 KB of our code) and
-the game boots to its UI every time: 3/3 boots to 120 s and a 300 s session, no exception, a
-rendered window (window brightness and CPU share equal to the no-hook baseline). Getting there took twelve
+**Milestone:** `build.py --hook pass` hooks 1,561 PASS-verdict functions and the game boots to its
+UI every time: 3/3 boots to 120 s and a 300 s session, no exception, the galaxy renders behind the
+menu and the audio is clean (the 1,730-hook build of the morning booted too, but with a black 3D
+scene and crackling audio: two more defects, below, found with coverage + bisects in the afternoon). Getting there took twelve
 source-level defects found and fixed in "PASS" functions, plus three builder rules and one
 resolver fix, all listed below. The remaining PASS functions are held back by the builder's
 static rules (271 "void but the original returns in eax", 16 "clobbers the callee's eax", 13
@@ -154,6 +155,31 @@ History of the campaign:
   the game's own window through the window server (works when other windows cover it) and
   measures it; `boottest.sh` now appends "black screen" to ALIVE verdicts, and `hookbisect.py`
   treats that as bad in a plain bisect.
+- Windowed mode (2026-10-12): `OptionFullScreen 0` / `OptionScreenSize 6` in the bottle's
+  `users/crossover/AppData/Roaming/SPORE/Preferences/Preferences.prop` (plain text; the game rewrites
+  it on exit). The window is 1168x758 and `winshot.py` captures it fine.
+- Oracle lesson (2026-10-12): the first "galaxy renders" metric measured the centre of the window,
+  and the registration dialog that pops up over a *black* scene in some runs read brighter than the
+  real galaxy. A whole bisect ran on it and "found" a pair effect that did not exist, while the user
+  reported "no universe" on every boot. Rule: before a bisect trusts a new detector, check its value
+  on one run the user has judged by eye, in both the good and the bad state; and prefer a region no
+  UI can cover (`scene` now reads the left-edge strip below the menu).
+- No galaxy (2026-10-12 afternoon, windowed mode; the user noticed, no detector had): bisected in
+  16 unattended boots over the 542 hooks that coverage showed executing on the boot path, with a
+  window-edge brightness oracle. `cViewer::SetRaster` 0x7c4be0 (s007c4be0) declared the renderer
+  virtual `v20(int* out, int a, int b)` where the original pushes `(handle[0], handle[1], &rect)`:
+  the raster handle went in as the output pointer. Fixed in source; PASS before and after (fake-call
+  arguments are not compared).
+- Crackling audio (same day): no Wine-side signal (DirectSound underruns identical to the baseline),
+  so the bisect ran with the user as the oracle (`hookbisect.py --ask`: the game stays up until the
+  answer file appears). 15 steps narrowed it to `InterpRamp` 0x114e780 (s0114da70) + the release
+  thunk 0x94ea90, with each alone judged clean on a short listen. The static finding is on
+  InterpRamp: it writes **xmm3**, which the original never touches (xmm0-2, xmm7); an LTCG caller
+  keeps a live value there. Semantically the two are identical instruction for instruction. New
+  rule, `regfootprint.py` and `build.py` "register footprint": ours must not write any register the
+  original does not (callee-saved pops excluded); it holds back 169 of the 1,730 hooks (50 ecx, 43
+  edx, 38 xmm, 15 x87, ...). Those need codegen the C source cannot force; they stay original until
+  module migration, or get a per-function asm shim.
 - Black screen bisected to one hook: the rw::audio list pop-front leaf 0x1141200 (s01140b70)
   returned nothing where the original returns the popped node in eax; voice allocation got the
   list pointer and the audio core never started. Fixed. Along the way the bisect exposed
@@ -161,5 +187,44 @@ History of the campaign:
   `tools/hybrid/known_bad.txt` pending a frame-slot review.
 
 Tools: `boottest.sh <exe> [secs] [tag]` boots one exe and prints `ALIVE (cpu P%)|CRASH|DIALOG|GONE`
-with the first exception; `hookbisect.py [--fault <hexprefix>|wild] [--cands F] [--always F]
-[--exclude @F]` bisects unattended (fault-targeted, pair search with one half pinned).
+with the first exception, plus `: black screen` / `: no scene` from `winshot.py` (`SCENE_MIN`,
+default 6; `CXDBG` overrides the trace channels); `hookbisect.py [--fault <hexprefix>|wild]
+[--cands F] [--always F] [--exclude @F] [--skip-full] [--ask]` bisects unattended (fault-targeted,
+pair search with one half pinned) or, with `--ask`, with a human oracle: the game stays up until
+`work/hybrid/<tag>.answer` holds `good` or `bad`; `regfootprint.py <exe> [--all] [va..]` reports
+hooks that write registers the original does not; `covread.py` decodes coverage dumps (below).
+
+## Coverage: which functions the game runs
+
+`build.py --coverage [--hook pass]` plants a one-shot `int3` at the entry of every function in the
+Ghidra table (90,467; hooked functions get theirs at the start of our copy), keeps the original
+bytes in `.hybd`, makes `.text`/`.hybx` writable, and points the PE entry at `tools/hybrid/cov.c`:
+a CRT-free TU (every API through the image's own IAT slots) that installs a vectored exception
+handler — restore the byte, record `GetTickCount()` as the first-hit time, resume at the same
+address — plus a thread that writes the table to `spore_cov.bin` in the game's cwd every 2 s.
+`boottest.sh` moves that file to `work/hybrid/<tag>.cov.bin`; `covread.py <dump> [--sidecar
+X.exe.cov.json] [--hooks X.exe.hooks.json] [--tiers] [--missing OUT] [--timeline] [--top N] [--json
+OUT]` decodes it (`--tiers` imports `tools/status.py` for the byte-exact/equivalent/partial/none
+sets). Cost: one exception per function, ~6 s of extra start-up; a `+seh` trace of such a run is
+~115 MB.
+
+First results (2026-10-12, boot to the galaxy menu, 90 s, idle):
+
+| | functions | code |
+|---|---:|---:|
+| executed | 44,690 of 90,467 | |
+| of which byte-exact | 36,086 | 1.68 MB |
+| equivalent (not exact) | 2,645 | 1.07 MB |
+| partial | 1,274 | 0.45 MB |
+| no source | 3,835 | 0.90 MB |
+| library | 850 | 0.18 MB |
+
+So the boot path's source gap is 5,109 functions / 1.35 MB (`work/hybrid/cov0_missing.txt`, in
+first-hit order: 4,723 game, 323 RenderWare, 63 Havok; the largest are `cCityGameTuning::Init`,
+`WinTextEdit::OnRebuild`, `Audio::System::System`, `cPollinator::Init`). Static initialisers are
+the burst at 0–7 s (~30,000 functions), the main menu is reached by ~17 s, the news feed at 44 s.
+With the 1,730 PASS hooks in (`cov1`), **542 hooks (31%) executed**; 426 of the 731 hooked slices
+had no hook run at all. "Boots with N hooks" therefore vouches for about a third of them; the
+scenario suite (load a save, editors, stages) is what makes the rest count. The hooked and
+unhooked runs executed the same code apart from 363/23 functions of network timing (XHTML/OpenSSL
+news feed).

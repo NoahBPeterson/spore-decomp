@@ -20,6 +20,8 @@ import build as B  # noqa: E402
 BOOTS = 3
 ALWAYS = []    # hooks included in every build (--always)
 FAULT = None   # --fault: only a crash at this address counts as bad (other crashes are other bugs)
+ASK = False    # --ask: a human judges each boot that passed the automatic checks (e.g. audio crackle)
+ASK_WAIT = 75  # seconds to wait for the human's answer before repeating the boot
 PY = os.path.join(ROOT, ".venv", "bin", "python")
 
 
@@ -27,7 +29,7 @@ def is_good(verdict):
     if verdict.startswith("ALIVE"):
         # "hung?" = alive but ~0% CPU (black screen). That is a failure of its own: bad in a plain
         # bisect, "not the bug being bisected" when --fault targets a specific crash.
-        return not (("hung?" in verdict or "black screen" in verdict) and not FAULT)
+        return not (("hung?" in verdict or "black screen" in verdict or "no scene" in verdict) and not FAULT)
     if FAULT and verdict.startswith(("GONE", "CRASH")) and ("addr=" in verdict):
         a = int(verdict.rsplit("addr=", 1)[1].split()[0], 16)
         if FAULT == "wild":
@@ -40,7 +42,7 @@ def is_good(verdict):
     return False
 
 
-def test(subset, tag, n, secs, log):
+def test(subset, tag, n, secs, log, k0=0):
     lst = os.path.join(ROOT, "work", "hybrid", "%s_%d.txt" % (tag, n))
     exe = os.path.join(ROOT, "work", "hybrid", "%s_%d.exe" % (tag, n))
     with open(lst, "w") as f:
@@ -54,8 +56,10 @@ def test(subset, tag, n, secs, log):
     # the crash is nondeterministic: "good" needs every one of --boots boots clean, "bad" one crash
     # The user may close the game window by hand once it has been up for a while (boottest.sh
     # reports "ALIVE ... (closed by hand)"); a close before that is INCONCLUSIVE and is redone.
+    if ASK:
+        return ask_test(subset, tag, n, exe, log, t0)
     verdicts = []
-    k = 0
+    k = k0
     while len(verdicts) < BOOTS:
         v = subprocess.run([os.path.join(HERE, "boottest.sh"), exe, str(secs), "%s_%d_%d" % (tag, n, k)],
                            capture_output=True, text=True).stdout.strip().splitlines()
@@ -68,8 +72,59 @@ def test(subset, tag, n, secs, log):
         if not is_good(verdict):
             break
     good = all(is_good(v) for v in verdicts)
+    if good and ASK:
+        # the symptom needs a human (crackling audio): wait for work/hybrid/<tag>.answer = good|bad
+        ans = os.path.join(ROOT, "work", "hybrid", tag + ".answer")
+        log("step %d: %d hooks -> %s; waiting %ds for %s (good|bad)" % (n, len(subset), verdicts[-1][:40], ASK_WAIT, os.path.relpath(ans, ROOT)))
+        t1 = time.time()
+        while not os.path.exists(ans) and time.time() - t1 < ASK_WAIT:
+            time.sleep(3)
+        if not os.path.exists(ans):
+            # no answer = the human did not catch that boot: boot the same subset again
+            log("  (no answer, booting step %d again)" % n)
+            return test(subset, tag, n, secs, log, k)
+        a = open(ans).read().strip().lower()
+        os.remove(ans)
+        good = a.startswith("good")
+        verdicts.append("human: " + a)
     log("step %d: %d hooks -> %s  (%ds)" % (n, len(subset), " | ".join(verdicts), time.time() - t0))
     return good
+
+
+def ask_test(subset, tag, n, exe, log, t0):
+    """Human-judged boot: the game stays up until work/hybrid/<tag>.answer appears (good|bad); the
+    answer closes it. If the game ends by itself first (crash, dialog, closed by hand), a crash is
+    bad, otherwise the answer is still awaited for ASK_WAIT seconds and the step repeated without one."""
+    ans = os.path.join(ROOT, "work", "hybrid", tag + ".answer")
+    if os.path.exists(ans):
+        os.remove(ans)
+    k = 0
+    while True:
+        log("step %d: %d hooks -> booting (%s_%d_%d); answer with good|bad in %s" % (n, len(subset), tag, n, k, os.path.relpath(ans, ROOT)))
+        proc = subprocess.Popen([os.path.join(HERE, "boottest.sh"), exe, "900", "%s_%d_%d" % (tag, n, k)],
+                                stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True)
+        while proc.poll() is None and not os.path.exists(ans):
+            time.sleep(3)
+        if os.path.exists(ans):
+            subprocess.run(["pkill", "-f", "SporeApp_hybrid.exe"])
+        else:
+            t1 = time.time()
+            while not os.path.exists(ans) and time.time() - t1 < ASK_WAIT:
+                time.sleep(3)
+        out = proc.communicate()[0].strip().splitlines()
+        verdict = out[-1] if out else "no output"
+        if not os.path.exists(ans):
+            if verdict.startswith(("CRASH", "DIALOG")):
+                log("step %d: %d hooks -> %s  (%ds)" % (n, len(subset), verdict, time.time() - t0))
+                return False
+            log("  (no answer, booting step %d again)" % n)
+            k += 1
+            continue
+        a = open(ans).read().strip().lower()
+        os.remove(ans)
+        good = a.startswith("good") and not verdict.startswith("CRASH")
+        log("step %d: %d hooks -> %s | human: %s  (%ds)" % (n, len(subset), verdict[:60], a, time.time() - t0))
+        return good
 
 
 def main():
@@ -82,9 +137,12 @@ def main():
     ap.add_argument("--cands", help="FILE of '<slice> <va>' lines to bisect instead of every PASS function")
     ap.add_argument("--always", help="FILE of hooks included in every build (pair search: bisect one half "
                                      "with the other half pinned, then swap)")
+    ap.add_argument("--ask", action="store_true", help="a human judges every boot the automatic checks pass (answer file)")
+    ap.add_argument("--skip-full", action="store_true", help="do not test the full candidate set first (known bad)")
     a = ap.parse_args()
-    global BOOTS, FAULT, ALWAYS
+    global BOOTS, FAULT, ALWAYS, ASK
     BOOTS = a.boots
+    ASK = a.ask
     # hex prefix ('28f63' matches 28f632ca..), or 'wild' for any crash outside the image
     FAULT = None if not a.fault else ("wild" if a.fault == "wild" else "%x" % int(a.fault, 16))
     ALWAYS = B.file_targets(a.always) if a.always else []
@@ -103,7 +161,7 @@ def main():
     log("bisect over %d candidates" % len(cands))
     n = 0
     cur = cands
-    if not test(cur, a.tag, n, a.secs, log):
+    if a.skip_full or not test(cur, a.tag, n, a.secs, log):
         while len(cur) > 1:
             n += 1
             half = cur[:len(cur) // 2]

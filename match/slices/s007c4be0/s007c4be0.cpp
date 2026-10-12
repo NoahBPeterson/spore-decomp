@@ -71,7 +71,7 @@ struct Renderer {
     virtual void v10(); virtual void v14();
     virtual int  v18(int a, int b);
     virtual void v1c();
-    virtual void v20(int* out, int a, int b);
+    virtual void v20(int a, int b, int* out);   // (handle[0], handle[1], &rect): the original pushes rect first
 };
 extern Renderer* GetRenderer();          // 0x67dda0
 
@@ -104,7 +104,7 @@ __declspec(noinline) void cViewer::SetRaster(int* handle, bool setViewport) {
     if (setViewport) {
         int rect[4];
         Renderer* r2 = GetRenderer();
-        r2->v20(rect, handle[0], handle[1]);
+        r2->v20(handle[0], handle[1], rect);
         SetViewportRect((u16*)rect);
     }
 }

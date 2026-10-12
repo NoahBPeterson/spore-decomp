@@ -188,5 +188,6 @@ out = ["# Status", "",
        "Kind totals: functions %d, classes/templates %d, globals/other %d." % (len(KF), len(KC), len(KG)),
        "", "Named (recovered real names, incl. high-confidence dev-PDB matches): %d (%s). This is orthogonal to the tiers." % (len(named & game), pct(len(named & game), G)),
        "", "Excluded third-party library functions: %d (%s)" % (len(lib_in_funcs), ", ".join("%s %d" % kv for kv in sorted(by_lib.items()))), ""]
-open(W("docs/STATUS.md"), "w").write("\n".join(out))
-print("\n".join(out))
+if __name__ == "__main__":      # importable for the tier sets (tools/hybrid/covread.py --tiers)
+    open(W("docs/STATUS.md"), "w").write("\n".join(out))
+    print("\n".join(out))
