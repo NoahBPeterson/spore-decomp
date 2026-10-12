@@ -2,7 +2,9 @@
 
 Design (2026-10-12) for Phase B of `docs/PLAN.md` "Roadmap to completion". Status: step 1
 (`modmap.py`) and step 2 (`headers.py`) implemented and measured on the pilot, see "modmap: what
-was built" and "headers: what was built"; steps 3–4 not started.
+was built" and "headers: what was built"; steps 3–4 (`rewrite.py`, the 33 pilot slices, `gate.py`)
+are specified step by step in **`docs/migration-runbook.md`** for Sonnet agents and run by the saved
+workflow `.claude/workflows/migration-pilot.js`.
 
 ## What we are turning into what
 
@@ -211,9 +213,16 @@ members, 8 conflicts: the Factory subobject and embedded list moved) still need 
 Across all of UTFSpore_Win32 (272 classes, 2.3 s): 23 fully exact-backed, 36 partly, 213 re-laid
 only, 95 member conflicts to look at.
 
-Not done yet: the shared headers for the leaf types (EASTL containers with the retail allocator
-slot, `EA::Variant`, `cString`), `globals.h`, enum emission, the `src/game/types.h` the generated
-headers include, and the two pilot overrides above.
+Later the same day: headers moved to one include root `src/game/include/<Ns>/<Class>.h` (a TU of
+one module includes classes of many); the closure of a module's classes (bases, by-value members,
+pointees one hop) is emitted too; nested classes are defined inside their owner; namespace-level
+enums get their own headers; the template library types are hand-written in
+`src/game/include/eastl/*.h` and `EA/*.h` with the measured retail layouts; each generated class is
+wrapped in `#pragma pack(push, 4|8)` from the packing the engine inferred (without it VC9 re-aligned
+8-byte members). `tools/migrate/sizeprobe_pilot.cpp` checks the result under VC9: DatabasePackedFile
+0x388 with `mpStream` 0x260, `mMutex` 0x270, `mOpenRecordMultiMap` 0x2e8, `mHeader` 0x308,
+`mActiveHoleTable` 0x33c, `mpManager` 0x380; PFRecordRead 0x70; cPropertyList 0x38; the record
+multimap 0x20. Still open: `cDirectPropertyList` and `cPropertyManager` overrides, `globals.h`.
 
 ### 3. `rewrite.py` — slice TUs → module TUs
 

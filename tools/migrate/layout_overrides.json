@@ -11,13 +11,19 @@
   "evidence": "retail has one extra word between mnUserVersionMinor (+0x2dc) and mfMinRatioToUseCompression (+0x2e4); byte-exact slice s008d81d0 reads a bool at +0x2e0 (tools/migrate/leafsizes.py structural_deltas_not_leaf, 2026-10-12)"
  },
  "EA::ResourceMan::PFDatabaseHeader": {
-  "append": [
+  "retype": [
    {
-    "name": "mUnknown20",
+    "name": "mnCreationTime",
+    "type": "prim:longlong",
+    "size": 8
+   },
+   {
+    "name": "mnUpdatedTime",
+    "type": "prim:longlong",
     "size": 8
    }
   ],
-  "evidence": "retail header block is 0x28 (slices: PFHeader {uint32_t f[10]} in 2 byte-exact slices); DatabasePackedFile::mbHeaderHasChanged moves 0x328 -> 0x330 (leafsizes.py structural_deltas_not_leaf)"
+  "evidence": "retail header block is 0x28: the byte-exact ReadHeaderRecord/WriteHeaderRecord (s008d81d0) store the created/modified times as a low word followed by a zero word (f[2]=created, f[3]=0, f[4]=modified, f[5]=0), i.e. 64-bit times; index type/position/count/size follow at +0x18..+0x24"
  },
  "EA::ResourceMan::PFIndexModifiable": {
   "insert": [
@@ -43,5 +49,15 @@
    }
   ],
   "evidence": "retail PFRecordRead is 0x70 (dev 0x68); the +8 is unexplained (leafsizes.py); placed at the end pending a byte-exact user"
+ },
+ "EA::IO::FileStream": {
+  "append": [
+   {
+    "name": "mnSize",
+    "type": "int",
+    "size": 4
+   }
+  ],
+  "evidence": "retail FileStream is 0x22c: a cached size word at +0x228 (-1 unknown, -2 lazy); DatabasePackedFile::mpStream at 0x260 and mMutex at 0x270 follow from it (tools/migrate/leafsizes.py validation, byte-exact s008d81d0)"
  }
 }

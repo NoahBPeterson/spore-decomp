@@ -24,9 +24,14 @@ the module per work/migrate/modmap.json) plus the bases and embedded types they 
 Metric: classes emitted; classes whose retail layout is confirmed / re-laid only; members whose
 evidence disagrees with the re-laid PDB; classes with no PDB type (slice stub only).
 
-usage: headers.py --module SUBSTR [--out work/migrate/headers] [--class NAME ...] [--selftest]
+usage: headers.py --module SUBSTR [--out src/game/include] [--class NAME ...] [--no-closure] [--selftest]
   --selftest   re-lay every dev struct with DEV leaf sizes and report the ones that do not
                reproduce the PDB offsets (validates the layout engine; nothing written)
+Headers go to one include root mirroring the namespaces (src/game/include/EA/ResourceMan/
+DatabasePackedFile.h), not per module: a TU of one module includes classes of many.  Library
+templates (eastl containers, EA::AutoRefCount, AtomicInt) are hand-written there with the
+measured retail layouts; the generator includes them by family (FAMILY_HEADERS).  By default the
+closure of a module's classes (bases, by-value members, pointees one hop) is emitted too.
 """
 import argparse, collections, json, os, re, subprocess, sys
 
@@ -87,6 +92,7 @@ class Types:
         t = json.load(open(W("work/devbuild/types.json")))
         self.structs = t["structs"]
         self.enums = t["enums"]
+        KNOWN_STRUCTS.update(self.structs)
         self.leaf = leaf or {}            # exact dev type name -> {"retail_size", "align", "members"?}
         self.overrides = overrides or {}  # class name -> {"size", "members": [[name, offset, size]], ...}
         self._cache = {}
@@ -134,13 +140,20 @@ class Types:
             L = dict(size=o["size"], align=o.get("align", 4), bases=[], vptr=False, source="override",
                      members=[dict(name=m[0], offset=m[1], size=m[2], type=(m[3] if len(m) > 3 else None), union=False)
                               for m in o.get("members", [])])
-        elif mode == "retail" and name in self.leaf and self.leaf[name].get("retail_size") is not None:
+        elif mode == "retail" and name in self.leaf and name not in self.overrides and \
+                self.leaf[name].get("retail_size") is not None and name not in self.structs:
+            # leaf entries describe library types the PDB lacks or hand-written headers model;
+            # a type the PDB has is re-laid from its members (overrides carry the structural deltas)
             o = self.leaf[name]
             L = dict(size=o["retail_size"], align=o.get("align") or 4, bases=[], vptr=False, source="leaf",
                      members=[dict(name=m[0], offset=m[1], size=m[2], type=(m[3] if len(m) > 3 else None), union=False)
                               for m in o.get("members", [])])
         elif s is None:
-            L = None
+            if mode == "retail" and name in self.leaf and self.leaf[name].get("retail_size") is not None:
+                o = self.leaf[name]
+                L = dict(size=o["retail_size"], align=o.get("align") or 4, bases=[], vptr=False, source="leaf", members=[])
+            else:
+                L = None
         else:
             L = self._relayout(name, s, mode)
         self._cache[key] = L
@@ -239,7 +252,7 @@ class Types:
                 dev_tail = orig["size"] - ((orig_end + align - 1) // align * align)
                 if dev_tail > 0:
                     size += dev_tail
-        return dict(size=size, align=align, members=members, bases=bases, vptr=vptr, source="pdb", kind=s["kind"])
+        return dict(size=size, align=align, members=members, bases=bases, vptr=vptr, source="pdb", kind=s["kind"], pack8=pack8)
 
     def _apply_overrides(self, name, s):
         """Structural retail deltas from tools/migrate/layout_overrides.json, applied to a copy of the
@@ -262,6 +275,14 @@ class Types:
             return dict(s, members=mem) if mem != s["members"] else s
         for r in o.get("remove", []):
             mem = [m for m in mem if m[0] != r]
+        for rt in o.get("retype", []):           # {"name", "type": typedesc, "size"}: widen/narrow a member in place
+            for i, m in enumerate(mem):
+                if m[0] == rt["name"]:
+                    delta = rt["size"] - (m[5] or 0)
+                    mem[i] = [m[0], m[1], rt["type"], m[3], m[4], rt["size"]]
+                    for m2 in mem[i + 1:]:
+                        m2[1] += delta
+                    break
         for ins in o.get("insert", []):
             k = 0
             if ins.get("after"):
@@ -277,9 +298,11 @@ class Types:
             mem.append([ap["name"], last[1] + (last[5] or 4), "blob:%d:%s" % (ap["size"], ap.get("type", "")),
                         None, None, ap["size"]])
         s2 = dict(s, members=mem)
-        if o.get("append") or o.get("insert") or o.get("remove"):
+        if o.get("append") or o.get("insert") or o.get("remove") or o.get("retype"):
+            orig_sizes = {m[0]: (m[5] or 0) for m in s["members"]}
             s2["size"] = max(s["size"] + sum(a["size"] for a in o.get("append", [])) +
-                             sum(i["size"] for i in o.get("insert", [])) -
+                             sum(i["size"] for i in o.get("insert", [])) +
+                             sum(rt["size"] - orig_sizes.get(rt["name"], 0) for rt in o.get("retype", [])) -
                              sum(m[5] for m in s["members"] if m[0] in o.get("remove", [])), 1)
         return s2
 
@@ -344,7 +367,11 @@ def parse_decl(dm):
     'public: virtual bool __thiscall SP::cPropertyList::GetProperty(unsigned int, class EA::Variant const *&) const'"""
     if dm is None or "(" not in dm or "`vftable'" in dm:
         return None
-    d = dict(access=None, virtual=False, static=False, const=False)
+    d = dict(access=None, virtual=False, static=False, const=False, thunk=False)
+    if dm.startswith("[thunk]:"):           # adjustor thunk of a secondary vtable: the same method
+        d["thunk"] = True
+        dm = dm[len("[thunk]:"):].strip()
+        dm = re.sub(r"`adjustor\{\d+\}'", "", dm)
     m = re.match(r"^(public|protected|private): ", dm)
     if m:
         d["access"] = m.group(1)
@@ -420,6 +447,35 @@ class Data:
         p = W("tools/migrate/layout_overrides.json")   # hand-curated evidence: lives in the repo
         self.overrides = json.load(open(p)) if os.path.exists(p) else {}
         self.types = Types(self.leaf, self.overrides)
+        self.unknown_names = collections.Counter()   # scoped names in signatures the PDB types do not define
+        self.planned = set()                          # classes that get a header in this run (own + closure)
+
+    def implementer_slot(self, cls, k, qual=""):
+        """Declaration for slot k of an abstract class from the first class deriving from it whose
+        dev vtable with the same `{for X}` qualifier resolves that slot (interfaces have _purecall
+        in every slot; a secondary vtable keeps its qualifier down the hierarchy)."""
+        if not hasattr(self, "_derived"):
+            self._derived = collections.defaultdict(list)
+            for n, st in self.types.structs.items():
+                for b in st["bases"]:
+                    self._derived[b[0].split(":", 1)[1]].append(n)
+        seen, todo = set(), list(self._derived.get(cls, []))
+        while todo:
+            d = todo.pop(0)
+            if d in seen:
+                continue
+            seen.add(d)
+            for dva, dm in self._dev_vt_names.items():
+                if dm and dm.startswith("const " + d + "::`vftable'") and dm.split("`vftable'")[1] == qual:
+                    slots = self.dev_vt[dva]["slots"]
+                    if k < len(slots):
+                        mn = self.pub.get(self.dev_target(slots[k]))
+                        decl = parse_decl(self.und.many([mn])[mn]) if mn else None
+                        if decl and not decl["name"].startswith("`"):
+                            decl["from_impl"] = d
+                            return decl
+            todo += self._derived.get(d, [])
+        return None
 
     def dev_target(self, hexva):
         va = int(hexva, 16)
@@ -500,9 +556,73 @@ def flat(name):
     return re.sub(r"[^A-Za-z0-9_]+", "_", name).strip("_")
 
 
-def header_path(out, module, cls):
+def header_path(out, cls):
+    """src/game/include/<Ns>/<Class>.h; nested classes flatten to Outer_Inner.h in the namespace dir."""
     parts = re.split(r"::", re.sub(r"<.*>", "", cls))
-    return os.path.join(out, module.replace(".obj", ""), *parts[:-1], parts[-1] + ".h")
+    return os.path.join(out, *parts[:-1], parts[-1] + ".h") if "<" not in cls else None
+
+
+def include_path(cls):
+    parts = re.split(r"::", cls)
+    return "/".join(parts) + ".h"
+
+
+FAMILY_HEADERS = [
+    (r"^eastl::(vector|VectorBase)<", "eastl/vector.h"), (r"^eastl::fixed_vector<", "eastl/fixed_vector.h"),
+    (r"^eastl::basic_string<", "eastl/string.h"), (r"^eastl::(map|multimap|rbtree|rb_base)<", "eastl/map.h"),
+    (r"^eastl::(set|multiset)<", "eastl/set.h"), (r"^eastl::(hash_map|hash_multimap|hash_set|hashtable)<", "eastl/hash_map.h"),
+    (r"^eastl::list<", "eastl/list.h"), (r"^eastl::vector_map<", "eastl/vector_map.h"),
+    (r"^eastl::(allocator|sp_vector_allocator)$", "eastl/allocator.h"),
+    (r"^EA::Allocator::EASTLCoreAllocator$", "eastl/allocator.h"),
+    (r"^EA::AutoRefCount<", "EA/AutoRefCount.h"), (r"^EA::COM::AutoRefCount<", "EA/COM/AutoRefCount.h"),
+    (r"^EA::Thread::AtomicInt<", "EA/Thread/AtomicInt.h"), (r"^EA::RefCounted<", "EA/RefCounted.h"),
+    (r"^EA::IntrusivePtr<", "EA/IntrusivePtr.h"),
+]
+
+
+def family_header(name):
+    for pat, h in FAMILY_HEADERS:
+        if re.match(pat, name):
+            return h
+    return None
+
+
+SCOPED = re.compile(r"\b((?:[A-Za-z_]\w*::)+[A-Za-z_]\w*)")
+
+
+def sig_refs(text):
+    """Scoped names in a demangled signature ('EA::IO::PositionType', 'eastl::vector<...>'): the
+    template-id prefix for templates (up to the '<'), plus the scoped names inside the arguments."""
+    out = set()
+    t = text or ""
+    for m in SCOPED.finditer(t):
+        tail = t[m.end():m.end() + 2].lstrip()
+        if tail.startswith("<"):
+            out.add(m.group(1) + "<")      # template id: the family header declares it
+        else:
+            out.add(m.group(1))
+    return out
+
+
+KNOWN_STRUCTS = set()   # filled by Types(): template argument tokens are kept only if they name a PDB class
+
+
+def class_refs(desc):
+    """Struct names referenced by a typedesc: the type itself and the PDB classes named inside
+    template arguments (EA::COM::AutoRefCount<EA::IO::IStream> refers to IStream too; the
+    template names themselves, eastl::less and the like, come from the family headers)."""
+    out = set()
+    d = desc or ""
+    while d.startswith(("ptr:", "arr:")):
+        d = d.split(":", 1)[1] if d.startswith("ptr:") else d.split(":", 3)[3]
+    if d.startswith("struct:"):
+        name = d[7:]
+        out.add(name)
+        if "<" in name:
+            for tok in re.findall(r"[A-Za-z_][\w:]*", name[name.index("<"):]):
+                if "::" in tok and (not KNOWN_STRUCTS or tok in KNOWN_STRUCTS):
+                    out.add(tok)
+    return out
 
 
 def evidence_for(data, cls, relaid):
@@ -645,6 +765,9 @@ def merge_layout(relaid, ev):
             x["prov"] = "relaid"
         out.append(x)
     occupied = [(m["offset"], m["offset"] + (m["size"] or 0)) for m in out]
+    occupied += [(b["offset"], b["offset"] + (b["size"] or 0)) for b in relaid["bases"]]
+    if relaid.get("vptr"):
+        occupied.append((0, 4))          # a view's "vftable"/"vt" member is the vptr, not data
     for x in extra:
         if id(x) in used:
             continue
@@ -660,76 +783,15 @@ def merge_layout(relaid, ev):
     return out
 
 
-def emit_class(data, module, cls, retail_fns, report, out_dir):
+def build_declarations(data, cls, short, retail_fns, sig_names):
+    """Lines declaring the class's virtuals (per vtable, in slot order) and its other methods, and
+    the dev VAs of the virtual slot functions.  Each virtual is declared once: the secondary
+    vtables of a multiple-inheritance class repeat the destructor and the shared interface
+    slots, and those repeats become comments."""
     T = data.types
-    L = T.layout(cls, "retail")
-    D = T.layout(cls, "dev")
-    s = T.structs.get(cls)
     lines = []
-    guard = "GAME_%s_H" % flat(cls).upper()
-    lines += ["// %s -- generated by tools/migrate/headers.py from the dev PDB, re-laid to retail sizes." % cls,
-              "// Module: %s.  Do not hand-edit members; fix tools/migrate/layout_overrides.json or the leaf table." % module,
-              "#ifndef %s" % guard, "#define %s" % guard, '#include "game/types.h"', ""]
-    if s is None:
-        lines += ["// No type record in the dev PDB for %s: slice stub only (TODO)." % cls]
-        report["no_pdb"] += 1
-        lines += ["#endif", ""]
-        return lines
-    ev, notes = evidence_for(data, cls, L)
-    merged = merge_layout(L, ev)
-    mconf = merge_layout.conflicts
-    added = [m for m in merged if m["prov"].startswith("retail-only")]
-    unverified = [m for m in merged if m["prov"].startswith("relaid")]
-    override = cls in data.overrides
-    confirmed = bool(ev) and not unverified and not added
-    report["classes"] += 1
-    report["confirmed" if confirmed else ("evidence" if ev else "relaid")] += 1
-    report["conflicts"] += len(mconf)
-    report["added"] += len(added)
-    report["overridden"] += override
-    retail_size = L["size"]
-    for c in mconf:
-        notes.append("conflict: %s re-laid 0x%x, view has 0x%x" % (c[0], c[1], c[2]) if c[1] is not None else
-                     "conflict: view member %s at 0x%x overlaps a re-laid member" % (c[0], c[2]))
-    if override:
-        notes.append("override applied: " + (data.overrides[cls].get("evidence") or "(no evidence string)"))
-
-    # namespaces
-    ns = cls.split("::")[:-1]
-    short = cls.split("::")[-1]
-    ns_open = [p for p in ns if "<" not in p]
-    for p in ns_open:
-        lines.append("namespace %s {" % p)
-    lines.append("")
-    # forward declarations of referenced class types
-    refs = set()
-    for m in L["members"]:
-        d = m["type"] or ""
-        while d.startswith(("ptr:", "arr:")):
-            d = d.split(":", 1)[1] if d.startswith("ptr:") else d.split(":", 3)[3]
-        if d.startswith("struct:"):
-            refs.add(d[7:])
-    for b in L["bases"]:
-        refs.add(b["name"])
-    lines.append("// Types used (defined elsewhere): " + ", ".join(sorted(refs)) if refs else "// No type references.")
-    lines.append("")
-    # class head
-    bases = ", ".join("public %s /* +0x%x */" % (b["name"], b["offset"]) for b in L["bases"])
-    kind = s["kind"] if s["kind"] in ("struct", "class", "union") else "class"
-    lines.append("// dev size 0x%x -> retail size 0x%x (%s)" % (
-        s["size"], retail_size, "override" if override else
-        ("all %d members exact-backed" % len(merged) if confirmed else
-         ("%d members exact-backed, %d conflicts, %d retail-only, %d unverified" % (
-             sum(1 for m in merged if m["prov"].startswith("exact")), len(mconf), len(added), len(unverified)) if ev
-          else "re-laid from the PDB, unverified in retail"))))
-    for n in notes:
-        lines.append("// evidence: " + n)
-    lines.append("%s %s%s {" % (kind, short, (" : " + bases) if bases else ""))
-    lines.append(" public:")
-    # vtable
-    vts = data.retail_vtables_for(cls)
+    vts = data.retail_vtables_for(cls)      # also builds data._dev_vt_names / _dev2ret
     virtuals = []
-    # demangle every slot's public name in one llvm-undname call
     slot_names = []
     for _rva, dva, _mangled, _dm in vts:
         for hs in data.dev_vt.get(dva, {}).get("slots", []):
@@ -737,13 +799,21 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
             if mn:
                 slot_names.append(mn)
     data.und.many(slot_names)
+    declared = set()
+    base_off = {b["name"]: b["offset"] for b in (T.layout(cls, "retail") or {"bases": []})["bases"]}
+
+    def vt_order(v):
+        q = v[3].split("`vftable'")[1].split(" (")[0]
+        m = re.search(r"\{for `([^']+)'\}", q)
+        return base_off.get(m.group(1), 1 << 20) if m else 0
+    vts.sort(key=vt_order)
     for rva, dva, mangled, dm in vts:
         rslots = data.ret_vt.get(rva, []) if rva else []
         dslots = data.dev_vt.get(dva, {}).get("slots", [])
         if not rslots:   # retail addresses of the slot functions from the name map, where known
             rslots = [data._dev2ret.get(data.dev_target(hs)) for hs in dslots]
         lines.append("  // vtable %s (%s): %d retail slots, %d dev slots" % (
-            ("0x" + rva) if rva else "retail address unknown", dm.split("`vftable'")[1] or "primary", len(rslots), len(dslots)))
+            ("0x" + rva) if rva else "retail address unknown", dm.split("`vftable'")[1].strip() or "primary", len(rslots), len(dslots)))
         n = max(len(rslots), len(dslots))
         for k in range(n):
             r = rslots[k] if k < len(rslots) else None
@@ -751,24 +821,34 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
             mangled_m = data.pub.get(dt) if dt else None
             dm_m = data.und.many([mangled_m])[mangled_m] if mangled_m else None
             decl = parse_decl(dm_m)
-            if decl and decl["cls"] != cls:
-                inherited = decl["cls"]
-            else:
-                inherited = None
+            if decl is None:
+                decl = data.implementer_slot(cls, k, dm.split("`vftable'")[1].split(" (")[0])   # pure slot: name from an implementer
+            inherited = decl["cls"] if decl and decl["cls"] != cls and not decl.get("from_impl") else None
             txt = None
+            key = None
             if decl:
                 nm = decl["name"]
+                sig_names.update(sig_refs(decl["ret"]))
+                sig_names.update(sig_refs(decl["params"]))
                 if nm.startswith("`scalar deleting dtor'") or nm.startswith("`vector deleting dtor'"):
                     txt = "virtual ~%s();" % short
+                    key = ("~",)
                 else:
                     txt = "virtual %s %s(%s)%s;" % (decl["ret"], nm, decl["params"], " const" if decl["const"] else "")
+                    key = (nm, decl["params"], decl["const"])
             rname = data.pdb_names.get(r, {}).get("name") if r else None
             note = "// slot %d%s%s" % (k, (", 0x%s" % r) if r else ", (no retail slot)",
                                        (", inherited from " + inherited) if inherited else "")
+            if decl and decl.get("from_impl"):
+                note += ", pure (name from %s)" % decl["from_impl"]
             if txt is None:
-                txt = "// virtual ? slot_%d();  %s" % (k, ("retail " + rname) if rname else "unnamed")
-                lines.append("  %s  %s" % (txt, note))
+                txt = "virtual void slot_%d();" % k
+                key = ("slot", k, dva)
+                note += ", UNNAMED%s" % ((" retail " + rname) if rname else "")
+            if key in declared:
+                lines.append("  // %-68s %s (declared above)" % (txt, note))
             else:
+                declared.add(key)
                 lines.append("  %-70s %s" % (txt, note))
             virtuals.append((k, r, dt))
         lines.append("")
@@ -793,21 +873,32 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
         if not decl or dva in vslots:
             continue
         nm = decl["name"]
-        if nm.startswith("`"):
-            continue
-        if nm == "~" + short and any(l.startswith("  virtual ~") for l in lines):
+        if nm.startswith("`") or "<" in nm:
+            continue          # compiler-generated, or a member template instantiation (declared by its template)
+        if nm == "~" + short and ("~",) in declared:
             r = retail_by_dev.get(dva)
             for i, l in enumerate(lines):
                 if l.startswith("  virtual ~"):
                     lines[i] = l + (", dtor body 0x%08x" % r[0] if r else ", dtor body dev only")
+                    break
             continue
+        sig_names.update(sig_refs(decl["ret"]))
+        sig_names.update(sig_refs(decl["params"]))
+        if "(" in decl["ret"]:
+            continue          # returns a function pointer: the demangler's split is ambiguous; declared by hand if needed
         if nm == short or nm.startswith(short + "<"):
             txt = "%s(%s);" % (short, decl["params"])
         elif nm == "~" + short:
             txt = "~%s();" % short
+        elif nm.startswith("operator ") and re.sub(r"\s+", "", nm[9:]) == re.sub(r"\s+", "", decl["ret"]):
+            txt = "%s()%s;" % (nm, " const" if decl["const"] else "")      # conversion operator
         else:
             txt = "%s%s %s(%s)%s;" % ("static " if decl["static"] else ("virtual " if decl["virtual"] else ""),
                                      decl["ret"], nm, decl["params"], " const" if decl["const"] else "")
+        key = (nm, decl["params"], decl["const"])
+        if key in declared:
+            continue
+        declared.add(key)
         r = retail_by_dev.get(dva)
         rows.append((r[0] if r else None, txt, decl["access"], f["name"]))
     rows.sort(key=lambda x: (x[0] is None, x[0] or 0))
@@ -815,15 +906,122 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
         lines.append("  %-70s // %s%s" % (txt, ("0x%08x" % r) if r else "dev only", (", " + access) if access and access != "public" else ""))
     if rows:
         lines.append("")
+    return lines, virtuals
+
+
+def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
+    """Lines of the class definition (enums, nested classes, declarations, members, size check).
+    Collects what the header must declare into ctx: need_include, fwd, enums, sig_names, notes."""
+    T = data.types
+    L = T.layout(cls, "retail")
+    s = T.structs[cls]
+    short = cls.split("::")[-1]
+    lines = []
+    ev, notes = evidence_for(data, cls, L)
+    merged = merge_layout(L, ev)
+    mconf = merge_layout.conflicts
+    added = [m for m in merged if m["prov"].startswith("retail-only")]
+    unverified = [m for m in merged if m["prov"].startswith("relaid")]
+    override = cls in data.overrides
+    confirmed = bool(ev) and not unverified and not added
+    report["classes"] += 1
+    report["confirmed" if confirmed else ("evidence" if ev else "relaid")] += 1
+    report["conflicts"] += len(mconf)
+    report["added"] += len(added)
+    report["overridden"] += override
+    retail_size = L["size"]
+    for c in mconf:
+        notes.append("conflict: %s re-laid 0x%x, view has 0x%x" % (c[0], c[1], c[2]) if c[1] is not None else
+                     "conflict: view member %s at 0x%x overlaps a re-laid member" % (c[0], c[2]))
+    if override:
+        notes.append("override applied: " + (data.overrides[cls].get("evidence") or "(no evidence string)"))
+    # references
+    for b in L["bases"]:
+        ctx["need_include"].add(b["name"])
+    enums = set()
+    for m in L["members"]:
+        d = m["type"] or ""
+        if d.startswith("enum:"):
+            enums.add(d[5:])
+        by_value = not d.startswith("ptr:")
+        for r in class_refs(d):
+            if by_value and (r == (d[7:] if d.startswith("struct:") else None) or
+                             (d.startswith("arr:") and r in class_refs(d.split(":", 3)[3]))):
+                ctx["need_include"].add(r)
+            else:
+                ctx["fwd"].add(r)
+    sig_names = set()
+    decl_lines, _virtuals = build_declarations(data, cls, short, retail_fns, sig_names)
+    subst = {}      # nested types of classes outside this header: declared as int/void in signatures
+    for r in sig_names:
+        if r.endswith("<"):
+            h = family_header(r + "x>")
+            if h:
+                ctx["includes"].add(h)
+            continue
+        owner = "::".join(r.split("::")[:-1])
+        if r in T.enums and r not in T.structs:
+            if owner == cls or owner in ctx.get("nested_chain", ()):
+                enums.add(r)
+            elif owner in T.structs:
+                subst[r] = "int /* %s */" % r
+            else:
+                ctx["enums"].add(r)
+        elif r in T.structs:
+            if owner in T.structs and owner != cls and owner not in data.planned:
+                subst[r] = "void /* %s */" % r
+            else:
+                ctx["fwd"].add(r)
+        elif r.split("::")[0] in ("eastl", "std"):
+            pass
+        else:
+            data.unknown_names[r] += 1
+    if subst:
+        pat = re.compile("|".join(re.escape(k) for k in sorted(subst, key=len, reverse=True)))
+        decl_lines = [pat.sub(lambda m: subst[m.group(0)], l) if not l.lstrip().startswith("//") else l for l in decl_lines]
+    nested_enums = sorted(e for e in enums if e.startswith(cls + "::") and e.split("::")[:-1] == cls.split("::"))
+    for e in enums:
+        if e not in nested_enums:
+            ctx["enums"].add(e)
+    # nested classes: every one-level nested PDB class of this class is defined inside it
+    nested = sorted(n for n in T.structs if n.startswith(cls + "::") and "<" not in n[len(cls) + 2:]
+                    and "::" not in n[len(cls) + 2:] and n != cls)
+    ctx["nested_defined"].update(nested)
+    bases = ", ".join("public %s /* +0x%x */" % (b["name"], b["offset"]) for b in L["bases"])
+    kind = s["kind"] if s["kind"] in ("struct", "class", "union") else "class"
+    lines.append(indent + "// dev size 0x%x -> retail size 0x%x (%s)" % (
+        s["size"], retail_size, "override" if override else
+        ("all %d members exact-backed" % len(merged) if confirmed else
+         ("%d members exact-backed, %d conflicts, %d retail-only, %d unverified" % (
+             sum(1 for m in merged if m["prov"].startswith("exact")), len(mconf), len(added), len(unverified)) if ev
+          else "re-laid from the PDB, unverified in retail"))))
+    for n in notes:
+        lines.append(indent + "// evidence: " + n)
+    # the engine infers the packing from the dev offsets; the compiler must be told the same
+    pack = 8 if L.get("pack8") else 4
+    if not indent:
+        lines.append("#pragma pack(push, %d)" % pack)
+    lines.append(indent + "%s %s%s {" % (kind, short, (" : " + bases) if bases else ""))
+    lines.append(indent + " public:")
+    for e in nested_enums:
+        ev2 = T.enums.get(e)
+        if ev2:
+            lines.append(indent + "  enum %s {" % e.split("::")[-1])
+            lines += [indent + "    %s = %d," % tuple(v) for v in ev2["values"]]
+            lines.append(indent + "  };")
+    for n in nested:
+        lines += class_def(data, n, [], report, out_dir, ctx, indent + "  ")
+        lines.append("")
+    lines += [indent + l if l else l for l in decl_lines]
     # data members
-    lines.append(" public:  // data (retail offsets)")
+    lines.append(indent + " public:  // data (retail offsets)")
     in_union = False
     for m in merged:
         if m["union"] and not in_union:
-            lines.append("  union {")
+            lines.append(indent + "  union {")
             in_union = True
         if not m["union"] and in_union:
-            lines.append("  };")
+            lines.append(indent + "  };")
             in_union = False
         if m["type"]:
             decl = cpp_type(m["type"], m["name"])
@@ -837,14 +1035,100 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
         if m.get("dev_offset") is not None and m["offset"] != m["dev_offset"]:
             note += " (dev 0x%03x)" % m["dev_offset"]
         note += " " + m["prov"]
-        lines.append("  %s%-60s %s" % ("  " if in_union else "", decl + ";", note))
+        lines.append(indent + "  %s%-60s %s" % ("  " if in_union else "", decl + ";", note))
     if in_union:
-        lines.append("  };")
-    lines.append("};")
+        lines.append(indent + "  };")
+    lines.append(indent + "};")
+    if not indent:
+        lines.append("#pragma pack(pop)")
     if confirmed:
-        lines.append("typedef char sizeof_check_%s[(sizeof(%s) == 0x%x) ? 1 : -1];" % (flat(cls), short, retail_size))
+        lines.append(indent + "typedef char sizeof_check_%s[(sizeof(%s) == 0x%x) ? 1 : -1];" % (flat(cls), short, retail_size))
     else:
-        lines.append("// sizeof(%s) expected 0x%x (unverified)" % (short, retail_size))
+        lines.append(indent + "// sizeof(%s) expected 0x%x (unverified)" % (short, retail_size))
+    return lines
+
+
+def emit_class(data, module, cls, retail_fns, report, out_dir):
+    T = data.types
+    s = T.structs.get(cls)
+    guard = "GAME_%s_H" % flat(cls).upper()
+    head = ["// %s -- generated by tools/migrate/headers.py from the dev PDB, re-laid to retail sizes." % cls,
+            "// Module: %s.  Do not hand-edit members; fix tools/migrate/layout_overrides.json or the leaf table." % module,
+            "#ifndef %s" % guard, "#define %s" % guard, '#include "game/types.h"', '#include "game/typedefs.h"']
+    if s is None:
+        report["no_pdb"] += 1
+        return head + ["", "// No type record in the dev PDB for %s: slice stub only (TODO)." % cls, "#endif", ""]
+    ctx = dict(need_include=set(), fwd=set(), enums=set(), includes=set(), nested_defined=set())
+    body = class_def(data, cls, retail_fns, report, out_dir, ctx)
+    ns = cls.split("::")[:-1]
+    ns_open = [p for p in ns if "<" not in p]
+    includes = set(ctx["includes"])
+    fwd = set(ctx["fwd"]) - ctx["nested_defined"] - {cls}
+    for r in ctx["need_include"]:
+        if r in ctx["nested_defined"] or r == cls:
+            continue
+        h = family_header(r)
+        if h:
+            includes.add(h)
+            for tok in class_refs("struct:" + r):
+                if tok != r:
+                    fwd.add(tok)
+        elif "<" not in r and r in T.structs:
+            owner = "::".join(r.split("::")[:-1])
+            includes.add(include_path(owner if owner in T.structs else r))
+            fwd.discard(r)
+    for r in sorted(fwd):
+        h = family_header(r)
+        if h:
+            includes.add(h)
+    # enums of other scopes: nested in a class -> that class's header; namespace-level -> own header
+    for e in sorted(ctx["enums"]):
+        if e not in T.enums:
+            continue
+        owner = "::".join(e.split("::")[:-1])
+        if owner in T.structs:
+            if owner != cls:
+                includes.add(include_path(owner))
+            continue
+        path = header_path(out_dir, e)
+        if path and not os.path.exists(path):
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            g = "GAME_%s_H" % flat(e).upper()
+            el = ["// enum %s -- generated by tools/migrate/headers.py from the dev PDB." % e, "#ifndef %s" % g, "#define %s" % g, ""]
+            for pfx in e.split("::")[:-1]:
+                el.append("namespace %s {" % pfx)
+            el.append("enum %s {" % e.split("::")[-1])
+            el += ["  %s = %d," % tuple(v) for v in T.enums[e]["values"]]
+            el.append("};")
+            for pfx in reversed(e.split("::")[:-1]):
+                el.append("}  // namespace %s" % pfx)
+            el += ["", "#endif", ""]
+            open(path, "w").write("\n".join(el))
+        if path:
+            includes.add(include_path(e))
+    lines = list(head) + ['#include "%s"' % h for h in sorted(includes) if h != include_path(cls)]
+    fwd_decls = collections.defaultdict(set)
+    for r in sorted(fwd):
+        if "<" in r or r in ctx["need_include"] or r in T.enums or family_header(r):
+            continue
+        parts = r.split("::")
+        if len(parts) >= 2 and "::".join(parts[:-1]) in T.structs:
+            if "::".join(parts[:-1]) not in (cls,) and "::".join(parts[:-1]) not in ctx["nested_defined"]:
+                lines.append('#include "%s"' % include_path("::".join(parts[:-1])))   # nested: include the owner
+            continue
+        kind = T.structs.get(r, {}).get("kind", "class")
+        fwd_decls[tuple(parts[:-1])].add((kind if kind in ("struct", "class", "union") else "class", parts[-1]))
+    if fwd_decls:
+        lines.append("")
+        for nsp, items in sorted(fwd_decls.items()):
+            pre = "".join("namespace %s { " % p for p in nsp)
+            post = " }" * len(nsp)
+            lines.append(pre + " ".join("%s %s;" % kv for kv in sorted(items)) + post)
+    lines.append("")
+    for p in ns_open:
+        lines.append("namespace %s {" % p)
+    lines.append("")
+    lines += body
     lines.append("")
     for p in reversed(ns_open):
         lines.append("}  // namespace %s" % p)
@@ -856,7 +1140,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--module", help="module key substring, e.g. DatabasePackedFile or SPProperty")
     ap.add_argument("--class", dest="classes", action="append", help="emit only these classes")
-    ap.add_argument("--out", default=W("work/migrate/headers"))
+    ap.add_argument("--out", default=W("src/game/include"))
+    ap.add_argument("--no-closure", action="store_true", help="emit only the module's own classes, not their bases/member types")
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--show", help="print the retail layout of one class and exit")
     a = ap.parse_args()
@@ -883,6 +1168,36 @@ def main():
         len(data.leaf), "yes" if data.views else "none", len(data.overrides)))
     mods = data.module_functions(a.module)
     report = collections.Counter()
+    emitted = set()
+
+    def closure(classes):
+        """Bases, by-value member types and pointed-to classes of the given classes, transitively
+        through bases and by-value members (one hop through pointers), excluding library templates."""
+        out, todo = set(), list(classes)
+        while todo:
+            c = todo.pop()
+            if c in out or c not in T.structs or "<" in c or c.split("::")[0] in LIBRARY_NS:
+                continue
+            owner = "::".join(c.split("::")[:-1])
+            if owner in T.structs:          # nested class: its owner's header defines it
+                todo.append(owner)
+                continue
+            out.add(c)
+            st = T.structs[c]
+            for b in st["bases"]:
+                todo.append(b[0].split(":", 1)[1])
+            for m in st["members"]:
+                for r in class_refs(m[2]):
+                    if m[2].startswith("ptr:"):
+                        if r in T.structs and "<" not in r and r.split("::")[0] not in LIBRARY_NS and r not in out:
+                            out.add(r)              # one hop: the pointee's own header, no recursion
+                            todo_ptr = T.structs[r]
+                            for b in todo_ptr["bases"]:
+                                todo.append(b[0].split(":", 1)[1])
+                    else:
+                        todo.append(r)
+        return out
+
     for module, fns in sorted(mods.items()):
         classes = collections.defaultdict(list)
         for va, e in fns:
@@ -895,16 +1210,31 @@ def main():
                 elif c:
                     report["name_without_type"] += 1
         want = [c for c in classes if not a.classes or c in a.classes]
-        print("== %s: %d functions, %d classes with a PDB type" % (module, len(fns), len(want)))
-        for cls in sorted(want):
-            lines = emit_class(data, module, cls, classes[cls], report, a.out)
-            path = header_path(a.out, module, cls)
+        extra = sorted(closure(want) - set(want)) if not a.no_closure else []
+        data.planned.update(want)
+        data.planned.update(extra)
+        data.planned.update(n for n in T.structs if "::".join(n.split("::")[:-1]) in data.planned)   # their nested classes
+        print("== %s: %d functions, %d classes with a PDB type, %d more in their closure" % (
+            module, len(fns), len(want), len(extra)))
+        for cls in sorted(want) + extra:
+            if cls in emitted or "::".join(cls.split("::")[:-1]) in T.structs:
+                continue
+            emitted.add(cls)
+            lines = emit_class(data, module if cls in classes else module + " (closure)", cls, classes.get(cls, []),
+                               report, a.out)
+            path = header_path(a.out, cls)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w") as f:
                 f.write("\n".join(lines))
             L = T.layout(cls, "retail")
-            print("   %-55s %3d fns  retail 0x%-4x  -> %s" % (cls, len(classes[cls]), L["size"] if L else 0,
-                                                              os.path.relpath(path, ROOT)))
+            if cls in classes:
+                print("   %-55s %3d fns  retail 0x%-4x  -> %s" % (cls, len(classes[cls]), L["size"] if L else 0,
+                                                                  os.path.relpath(path, ROOT)))
+        if extra:
+            print("   closure: " + ", ".join(extra))
+    if data.unknown_names:
+        print("scoped names in signatures with no PDB type (add to src/game/include/game/typedefs.h): " +
+              ", ".join("%s (%d)" % kv for kv in data.unknown_names.most_common(40)))
     print("classes %d: fully exact-backed %d, partly %d, re-laid only %d, with overrides %d; member conflicts %d, "
           "retail-only %d; no PDB type %d, names without type %d, template instantiations skipped %d" % (
               report["classes"], report["confirmed"], report["evidence"], report["relaid"], report["overridden"],
