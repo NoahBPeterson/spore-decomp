@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?CloseCurrentElement@XmlTextWriter@XML@EA@@QAE_NXZ  00901630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?BeginProcessingInstruction@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  00901690  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?EndProcessingInstruction@XmlTextWriter@XML@EA@@UAE_NXZ  00901700  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?AppendAttribute@XmlTextWriter@XML@EA@@UAE_NPB_W0@Z  00901740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?WriteCDATA@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  009018d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ??0XmlTextWriter@XML@EA@@QAE@_NW4OutputEncoding@012@@Z  00901a10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ??1XmlTextWriter@XML@EA@@UAE@XZ  00901a50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?BeginElement@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  00901b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?EndElement@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  00901b90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?SetOutputStream@XmlTextWriter@XML@EA@@QAEXPAVIStream@IO@3@_N@Z  00901d30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/XmlTextWriter.cpp  ?WriteText@XmlTextWriter@XML@EA@@UAE_NPB_WI@Z  00901d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

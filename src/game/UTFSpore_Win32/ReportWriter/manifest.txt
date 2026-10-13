@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetFileNameExtension@ReportWriter@Debug@EA@@UAEXPADI@Z  0091e990  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?Open@ReportWriter@@QAE_NPBD@Z  0091e9c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?CloseReport@ReportWriter@Debug@EA@@UAE_NXZ  0091ea20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?BeginSection@ReportWriter@Debug@EA@@UAE_NPBD@Z  0091ea50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteBlankLine@ReportWriter@Debug@EA@@UAE_NXZ  0091ebf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?Write@ReportWriter@Debug@EA@@UAE_NPBDI@Z  0091ec00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?Tell@ReportWriter@@QAEJXZ  0091ec60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?SetPosition@ReportWriter@Debug@EA@@UAEXI@Z  0091ec80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetTimeString@ReportWriter@@QAEHPADIPAX@Z  0091eca0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetDateString@ReportWriter@@QAEHPADIPAX@Z  0091ecf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?GetComputerNameHelper@@YGHPADI@Z  0091ed40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteRegisterValues@ReportWriter@Debug@EA@@QAE_NPBX@Z  0091fa10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ReportWriter.cpp  ?WriteRegisterMemoryView@ReportWriter@Debug@EA@@QAE_NPBX@Z  0091fbd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
