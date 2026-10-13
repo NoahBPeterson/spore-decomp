@@ -4,12 +4,14 @@
 
 #include "game/types.h"
 #include "EA/XML/XmlTextWriter.h"
+#include <stdarg.h>
 
-// unnamed retail callees and globals (address in the comment)
+// unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" size_t wcslen(const wchar_t*);
 extern "C" bool  __cdecl IO_WriteEncoded(void* pStream, const void* p, unsigned int n,
                                          unsigned int enc);                    // 0x93b820
-#include "EA/XML/XmlTextWriter.h"
+extern "C" int   __cdecl Vsnprintf16(wchar_t* buf, unsigned int count,
+                                     const wchar_t* fmt, va_list ap);          // 0x939950
 
 // @ 0x009014c0
 bool EA::XML::XmlTextWriter::WriteEscapedString(wchar_t const * str)
@@ -116,6 +118,35 @@ bool EA::XML::XmlTextWriter::AppendAttribute(wchar_t const * name, wchar_t const
          && WriteText(L"\"", 1)) ? 1 : 0;
 }
 
+// @ 0x009017d0
+bool __cdecl EA::XML::XmlTextWriter::AppendAttributeF(wchar_t const * name, wchar_t const * fmt, ...)
+{
+    if (this->mnState != 1 && this->mnState != 2)
+        return false;
+    wchar_t buf[256];
+    va_list ap;
+    va_start(ap, fmt);
+    int n = Vsnprintf16(buf, 0x100, fmt, ap);
+    va_end(ap);
+    if (n >= 0x100)
+        return false;
+    return (this->WriteText(L" ", 1)
+         && this->WriteName(name)
+         && this->WriteText(L"=\"", 2)
+         && this->WriteEscapedString(buf)
+         && this->WriteText(L"\"", 1)) ? 1 : 0;
+}
+
+// @ 0x009018a0
+int EA::XML::XmlTextWriter::WriteCharData(wchar_t const * s)
+{
+    if (CloseCurrentElement()) {
+        if (WriteEscapedString(s))
+            return 1;
+    }
+    return 0;
+}
+
 // @ 0x009018d0
 bool EA::XML::XmlTextWriter::WriteCDATA(wchar_t const * s)
 {
@@ -126,6 +157,13 @@ bool EA::XML::XmlTextWriter::WriteCDATA(wchar_t const * s)
             return false;
         mnState = kStateCDATA;
     }
+    int n = (int)wcslen(s);
+    return WriteText(s, n);
+}
+
+// @ 0x00901930
+bool EA::XML::XmlTextWriter::WriteName(wchar_t const * s)
+{
     int n = (int)wcslen(s);
     return WriteText(s, n);
 }

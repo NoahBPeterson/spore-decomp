@@ -3,7 +3,10 @@
 00901690 ?BeginProcessingInstruction@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  # EA::XML::XmlTextWriter::BeginProcessingInstruction migrated from s009013e0
 00901700 ?EndProcessingInstruction@XmlTextWriter@XML@EA@@UAE_NXZ  # EA::XML::XmlTextWriter::EndProcessingInstruction migrated from s009013e0
 00901740 ?AppendAttribute@XmlTextWriter@XML@EA@@UAE_NPB_W0@Z  # EA::XML::XmlTextWriter::AppendAttribute migrated from s009013e0
+009017d0 ?AppendAttributeF@XmlTextWriter@XML@EA@@UAA_NPB_W0ZZ  # EA::XML::XmlTextWriter::AppendAttributeF migrated from s009013e0
+009018a0 ?WriteCharData@XmlTextWriter@XML@EA@@UAEHPB_W@Z  # EA::XML::XmlTextWriter::WriteCharData migrated from s009013e0
 009018d0 ?WriteCDATA@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  # EA::XML::XmlTextWriter::WriteCDATA migrated from s009013e0
+00901930 ?WriteName@XmlTextWriter@XML@EA@@UAE_NPB_W@Z  # EA::XML::XmlTextWriter::WriteName migrated from s009013e0
 00901960 ?WriteXmlHeader@XmlTextWriter@XML@EA@@UAE_NXZ  # EA::XML::XmlTextWriter::WriteXmlHeader migrated from s009013e0
 00901a10 ??0XmlTextWriter@XML@EA@@QAE@_NW4OutputEncoding@012@@Z  # EA::XML::XmlTextWriter::XmlTextWriter migrated from s009013e0
 00901a50 ??1XmlTextWriter@XML@EA@@UAE@XZ  # EA::XML::XmlTextWriter::~XmlTextWriter migrated from s009013e0

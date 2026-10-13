@@ -10,6 +10,7 @@
 #include "EA/Compression.h"
 #include "EA/ResourceMan/Cache.h"
 #include "EA/ResourceMan/CompressionPolicy.h"
+#include "EA/ResourceMan/Database.h"
 #include "EA/ResourceMan/Factory.h"
 #include "EA/ResourceMan/Key.h"
 #include "EA/ResourceMan/KeyHash.h"
@@ -18,6 +19,7 @@
 #include "eastl/allocator.h"
 #include "eastl/hash_map.h"
 #include "eastl/list.h"
+#include "eastl/map.h"
 #include "eastl/set.h"
 #include "eastl/string.h"
 #include "eastl/vector.h"
@@ -38,6 +40,10 @@ namespace ResourceMan {
 #pragma pack(push, 8)
 class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
  public:
+  enum Compressor {
+    kCompressorArraySize = 8,
+    kCompressorIndexMax = 7,
+  };
   struct ChangeNotificationInfo;
   struct ChangeNotificationInfoCompare;
   class InternalDatabaseList;
@@ -56,7 +62,7 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   // dev size 0x1 -> retail size 0x1 (re-laid from the PDB, unverified in retail)
   struct ChangeNotificationInfoCompare {
    public:
-    bool operator();                                                       // dev only
+    bool operator()(EA::ResourceMan::Manager::ChangeNotificationInfo const &, EA::ResourceMan::Manager::ChangeNotificationInfo const &) const; // dev only
 
    public:  // data (retail offsets)
   };
@@ -111,7 +117,7 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   // sizeof(InternalDatabaseList) expected 0x78 (unverified)
 
   // vtable 0x01436ae8 (primary): 38 retail slots, 41 dev slots
-  virtual ~Manager();                                                    // slot 0, 0x008e22a0, dtor body dev only
+  virtual ~Manager();                                                    // slot 0, 0x008e22a0, dtor body 0x008e1f10
   virtual bool Init();                                                   // slot 1, 0x008de220
   virtual bool Shutdown();                                               // slot 2, 0x008e1700
   virtual bool GetResource(EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, void *, EA::ResourceMan::Database *, EA::ResourceMan::Factory *, EA::ResourceMan::Key const *); // slot 3, 0x008df430
@@ -156,9 +162,9 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   virtual bool SetTypename(unsigned int, wchar_t const *);               // slot 42, (no retail slot)
   virtual bool ResetTypename(unsigned int);                              // slot 43, (no retail slot)
 
-  bool CheckCacheInternal(EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, EA::ResourceMan::IAsyncRequest **, bool); // dev only, protected
+  bool CheckCacheInternal(EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, EA::ResourceMan::IAsyncRequest **, bool); // 0x008de9d0, protected
+  Manager(EA::Allocator::ICoreAllocator *);                              // 0x008e20c0
   bool GetResourceInternal(bool, EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, void *, EA::ResourceMan::Database *, EA::ResourceMan::Factory *, EA::ResourceMan::Key const *); // dev only, protected
-  Manager(EA::Allocator::ICoreAllocator *);                              // dev only
 
  public:  // data (retail offsets)
   bool mbInitialized;                                          // 0x004 exact:s008de020

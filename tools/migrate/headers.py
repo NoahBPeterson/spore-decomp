@@ -393,7 +393,10 @@ def parse_decl(dm):
     k = dm.find(cc + " ")
     ret = dm[:k].strip()
     rest = dm[k + len(cc) + 1:]
-    p = rest.find("(")
+    # the call operator's own parentheses are part of the name (`EA::SharedLibrary::find_pred::operator()(...)`: the first
+    # '(' made the name `operator` and the declaration `bool operator();`)
+    oc = rest.find("operator()")
+    p = rest.find("(", oc + len("operator()")) if oc >= 0 else rest.find("(")
     qual = rest[:p]
     tail = rest[p:]
     # params up to the matching paren
@@ -633,9 +636,49 @@ FAMILY_HEADERS = [
     (r"^EA::Allocator::EASTLCoreAllocator$", "eastl/allocator.h"),
     (r"^EA::AutoRefCount<", "EA/AutoRefCount.h"), (r"^EA::COM::AutoRefCount<", "EA/COM/AutoRefCount.h"),
     (r"^EA::Thread::AtomicInt<", "EA/Thread/AtomicInt.h"), (r"^EA::RefCounted<", "EA/RefCounted.h"),
-    (r"^EA::IntrusivePtr<", "EA/IntrusivePtr.h"), (r"^EA::Allocator::FixedAllocator<", "EA/Allocator/FixedAllocator.h"),
+    (r"^EA::IntrusivePtr<", "EA/IntrusivePtr.h"), (r"^EA::RefCountVTemplate<", "EA/RefCountVTemplate.h"),
+    # eastl::pair outside a map (SharedLibrary's mCommandHandlers vector, find_pred): map.h is the pair's home in the hand headers
+    (r"^eastl::pair<", "eastl/map.h"),
+    # hand templates for round 3 (each header says what dev type it reproduces)
+    (r"^EA::RefCountTemplate<", "EA/RefCountTemplate.h"), (r"^EA::COM::RefCountTemplate<", "EA/COM/RefCountTemplate.h"),
+    (r"^eastl::intrusive_list_node$", "eastl/list.h"), (r"^eastl::deque<", "eastl/deque.h"),
+    (r"^EA::ArgScript::cCommandStateT<", "EA/ArgScript/cCommandStateT.h"),
+    (r"^EA::Messaging::MessageBasic<", "EA/Messaging/MessageBasic.h"), (r"^EA::RectT<", "EA/RectT.h"),
+    (r"^SP::cRwResource<", "SP/cRwResource.h"), (r"^EA::Allocator::FixedAllocator<", "EA/Allocator/FixedAllocator.h"),
     (r"^rw::math::fpu::(Vector[234]|Matrix33)Template<", "rw/math/fpu/VectorTemplates.h"),
 ]
+
+
+_KNOWN_TEMPLATES = None
+
+
+def known_templates():
+    """Short names of the class templates the hand-maintained headers define (eastl/*.h, EA/*.h "Hand-maintained"):
+    a template-id outside this set has no definition anywhere in the include tree (the generator skips instantiations)."""
+    global _KNOWN_TEMPLATES
+    if _KNOWN_TEMPLATES is None:
+        _KNOWN_TEMPLATES = set()
+        for d, _s, fs in os.walk(W("src/game/include")):
+            for f in fs:
+                if not f.endswith(".h"):
+                    continue
+                t = open(os.path.join(d, f), encoding="utf-8", errors="replace").read()
+                if "Hand-maintained" not in t[:2000]:
+                    continue
+                _KNOWN_TEMPLATES |= set(re.findall(r"template\s*<[^{;]*?>\s*(?:class|struct)\s+(\w+)", t))
+    return _KNOWN_TEMPLATES
+
+
+def unknown_templates(text):
+    """Template-ids in a declaration that no header defines (eastl::fixed_map<, EA::RefCountTemplate<, ...)."""
+    out = []
+    for m in re.finditer(r"([A-Za-z_]\w*(?:::[A-Za-z_]\w*)*)\s*<", text):
+        n = m.group(1)
+        if n.split("::")[-1] in ("operator", "static_cast", "reinterpret_cast", "const_cast", "template") or n.endswith("operator"):
+            continue
+        if n.split("::")[-1] not in known_templates():
+            out.append(n)
+    return out
 
 
 def family_header(name):
@@ -843,6 +886,37 @@ def merge_layout(relaid, ev):
     out.sort(key=lambda x: (x["offset"], 0 if x["prov"].startswith("exact") else 1))
     merge_layout.conflicts = conflicts
     return out
+
+
+def undeclarable(line):
+    """A method declaration the include tree cannot express is kept as text: a virtual becomes a placeholder of the same
+    slot (`virtual void slot_N_Name();`, the vtable order must not move), any other method a comment.  Cases: a
+    signature naming a file-local type (`anonymous namespace'::cLabelAutoMutex, SP/JobCondition.h), a reference to a
+    nested type of a class outside the header (`void /* Outer::Inner */ &`, SP/cJob.h), a template no header defines
+    (eastl::hashtable_iterator<..> FindLRUItem, EA/Internet/INetFileCache.h)."""
+    st = line.lstrip()
+    if not st or st.startswith("//"):
+        return line
+    code, _sep, cmt = line.partition("//")
+    why = None
+    if "`" in code:
+        why = "names a file-local type"
+    elif re.search(r"\bvoid /\*[^*]*\*/\s*&", code):
+        why = "reference to a nested type of a class outside this header"
+    else:
+        ut = unknown_templates(re.sub(r"\boperator\s*(<<=?|<=?)", "operator", code))
+        if ut:
+            why = "names %s, which no header defines" % ut[0]
+    if not why:
+        return line
+    ind = line[:len(line) - len(st)]
+    mslot = re.search(r"slot (\d+)", cmt)
+    if code.lstrip().startswith("virtual ") and mslot:
+        mn = re.search(r"(~?\w+)\s*\(", code)
+        nm = (mn.group(1) if mn else "fn").lstrip("~")
+        return "%s%-70s // %s; UNDECLARABLE (%s): %s" % (ind, "virtual void slot_%s_%s();" % (mslot.group(1), nm), cmt.strip(), why,
+                                                       code.strip())
+    return "%s// UNDECLARABLE (%s): %s // %s" % (ind, why, code.strip(), cmt.strip())
 
 
 def inline_override(data, cls, txt):
@@ -1091,7 +1165,11 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
             else:
                 ctx["enums"].add(r)
         elif r in T.structs:
-            if owner in T.structs and owner != cls and owner not in data.planned:
+            # a nested class of another class: always a placeholder (a reference becomes UNDECLARABLE).  Including the
+            # owner's header when this run happened to plan it made a header depend on which module wrote it last
+            # (SP/cJob.h pulled SP/cGraphicsResourceFactory.h and the rw headers in only when SPGraphicsResourceFactory
+            # was generated in the same run)
+            if owner in T.structs and owner != cls and not cls.startswith(owner + "::"):
                 subst[r] = "void /* %s */" % r
             else:
                 ctx["fwd"].add(r)
@@ -1102,6 +1180,11 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
     if subst:
         pat = re.compile("|".join(re.escape(k) for k in sorted(subst, key=len, reverse=True)))
         decl_lines = [pat.sub(lambda m: subst[m.group(0)], l) if not l.lstrip().startswith("//") else l for l in decl_lines]
+    decl_lines = [undeclarable(l) for l in decl_lines]
+    # every enum nested in the class is defined in it, used by the class's own members or not: a nested class's member
+    # (HTTPClient::Job::mResult is a HTTPClient::JobResult) or another header (cImageDataRaw::mFormat is a
+    # cIImageData::tFormatType) names it through the owner
+    enums |= {e for e in T.enums if e.split("::")[:-1] == cls.split("::")}
     nested_enums = sorted(e for e in enums if e.startswith(cls + "::") and e.split("::")[:-1] == cls.split("::"))
     for e in enums:
         if e not in nested_enums:
@@ -1129,7 +1212,9 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
     for e in nested_enums:
         ev2 = T.enums.get(e)
         if ev2:
-            lines.append(indent + "  enum %s {" % e.split("::")[-1])
+            en = e.split("::")[-1]
+            # the PDB's name for an anonymous enum (`__unnamed`, `<unnamed-tag>`) is no identifier: emit it anonymous
+            lines.append(indent + ("  enum {" if en.startswith(("__unnamed", "<")) else "  enum %s {" % en))
             lines += [indent + "    %s = %d," % tuple(v) for v in ev2["values"]]
             lines.append(indent + "  };")
     for n in nested:       # siblings may refer to each other (Iterator -> Node): declare them all first
@@ -1151,6 +1236,15 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
             in_union = False
         if m["type"]:
             decl = cpp_type(m["type"], m["name"])
+            # a member whose type names a template no header defines (the generator skips instantiations: eastl::fixed_map,
+            # fixed_string, deque, ...) keeps its retail size and offset as an opaque byte array (a pointer as void*), with
+            # the type in the comment, so the class compiles and stays laid out; a function that touches the member needs
+            # the hand template first (SSL/SSLManager.h mNameToSessionMap, SP/cJobProfZone.h mName)
+            ut = unknown_templates(decl)
+            if ut and m["type"].startswith("ptr:"):
+                decl = "void* %s /* %s */" % (m["name"], decl.replace("*/", "* /"))
+            elif ut and m["size"]:
+                decl = "unsigned char %s[0x%x] /* %s: no hand template for %s */" % (m["name"], m["size"], cpp_type(m["type"]), ut[0])
         elif m.get("type_text"):
             decl = "%s %s" % (m["type_text"], m["name"])
         else:
@@ -1318,8 +1412,22 @@ def main():
         header of their own, which includes its bases and by-value members but does not follow its
         own pointers.  Excludes library templates."""
         out, todo = set(), [(c, False) for c in classes]
+        seen_tmpl = set()
         while todo:
             c, hop = todo.pop()
+            if c in T.structs and "<" in c and c not in seen_tmpl and c.split("::")[0] not in LIBRARY_NS:
+                # a template instantiation has no generated header (a hand template defines it), but the hand template
+                # derives from the instantiation's PDB bases, which need headers of their own (SP::cRwResource<..> is a
+                # SP::cGraphicsResource, EA::ArgScript::cCommandStateT<S, cCommandBase> a cCommandBase)
+                seen_tmpl.add(c)
+                for b in T.structs[c]["bases"]:
+                    todo.append((b[0].split(":", 1)[1], hop))
+                # the generated header that uses the instantiation includes the headers of the PDB classes among its
+                # arguments (cCommandStateT<EA::ArgScript::cNullState, ..>): one hop, like a pointee
+                for r in class_refs("struct:" + c):
+                    if r != c and "<" not in r:
+                        todo.append((r, True))
+                continue
             if c in out or c not in T.structs or "<" in c or c.split("::")[0] in LIBRARY_NS:
                 continue
             owner = "::".join(c.split("::")[:-1])
@@ -1383,8 +1491,22 @@ def main():
             if family_header(cls):      # hand-written template-library type (EASTLCoreAllocator in eastl/allocator.h)
                 continue
             emitted.add(cls)
-            lines = emit_class(data, module if cls in classes else module + " (closure)", cls, classes.get(cls, []),
-                               report, a.out)
+            # a closure class gets the retail functions its owner module gives it: the header must not depend on which
+            # module's run wrote it last (SP::cPropertyList written as SPPropertyHelpers' closure lost the retail
+            # addresses its owner SPPropertyList gives it: `cPropertyList(char const *) // dev only` vs `// 0x006a1b90`,
+            # and rewrite.py maps methods by those addresses)
+            if cls in classes:
+                own = classes[cls]
+            else:
+                if not hasattr(data, "_fns_by_class"):
+                    data._fns_by_class = collections.defaultdict(list)
+                    for va2, e2 in data.modmap["functions"].items():
+                        if e2.get("name"):
+                            c2 = data.class_of_name(e2["name"])
+                            if c2:
+                                data._fns_by_class[c2].append((int(va2, 16), e2))
+                own = sorted(data._fns_by_class.get(cls, []), key=lambda x: x[0])
+            lines = emit_class(data, module if cls in classes else module + " (closure)", cls, own, report, a.out)
             path = header_path(a.out, cls)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w") as f:

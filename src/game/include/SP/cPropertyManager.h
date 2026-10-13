@@ -37,6 +37,9 @@ namespace SP {
 #pragma pack(push, 4)
 class cPropertyManager : public SP::cIPropertyManager /* +0x0 */, public EA::ResourceMan::Factory /* +0x4 */, public EA::Messaging::IHandlerRC /* +0xc */, public EA::ArgScript::cState /* +0x10 */ {
  public:
+  enum {
+    kStateID = 11368386,
+  };
   // vtable retail address unknown ({for `SP::cIPropertyManager'} (retail vtable not located)): 17 retail slots, 17 dev slots
   virtual int AddRef();                                                  // slot 0, (no retail slot)
   virtual int Release();                                                 // slot 1, (no retail slot)

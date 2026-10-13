@@ -27,6 +27,9 @@ class MemoryStream : public EA::IO::IStream /* +0x0 */ {
     kOptionResizeFactor = 4,
     kOptionResizeIncrement = 8,
   };
+  enum {
+    kTypeMemoryStream = 879895506,
+  };
   // vtable retail address unknown ((retail vtable not located)): 15 retail slots, 15 dev slots
   virtual ~MemoryStream();                                               // slot 0, (no retail slot), dtor body dev only
   virtual int AddRef();                                                  // slot 1, (no retail slot)
@@ -44,6 +47,8 @@ class MemoryStream : public EA::IO::IStream /* +0x0 */ {
   virtual bool Flush();                                                  // slot 13, (no retail slot)
   virtual bool Write(void const *, unsigned int);                        // slot 14, (no retail slot)
 
+  bool SetData(void *, unsigned int, bool, bool, EA::Allocator::ICoreAllocator *); // 0x0093be30
+  MemoryStream(void *, unsigned int, bool, bool, EA::Allocator::ICoreAllocator *); // 0x0093c2c0
   void * GetData() const;                                                // dev only
   MemoryStream(EA::IO::MemoryStream const &);                            // dev only
   EA::IO::MemoryStream & operator=(EA::IO::MemoryStream const &);        // dev only
@@ -53,8 +58,6 @@ class MemoryStream : public EA::IO::IStream /* +0x0 */ {
   bool Realloc(unsigned int);                                            // dev only, protected
   bool SetCapacity(unsigned int);                                        // dev only
   MemoryStream(EA::IO::SharedPointer *, unsigned int);                   // dev only
-  bool SetData(void *, unsigned int, bool, bool, EA::Allocator::ICoreAllocator *); // dev only
-  MemoryStream(void *, unsigned int, bool, bool, EA::Allocator::ICoreAllocator *); // dev only
   EA::IO::SharedPointer * GetSharedPointer() const;                      // dev only
 
  public:  // data (retail offsets)

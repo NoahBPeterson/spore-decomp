@@ -1,7 +1,6 @@
 # va  diff-bytes  reason
-0091ea80 10 EndSection: tail-call to r12() instead of call+ret
 0091ea90 31 WriteSubstr: branch block layout differs
-0091ead0 53 WriteFormattedV: va_list slot / comparison shape differs
+0091ead0 2 WriteFormattedV: va_list slot / comparison shape differs
 0091eb20 75 WritePair: r13 arg schedule / block layout differs
 0091eba0 22 WriteFormatted: comparison block layout (ja vs jbe) differs
 0091ee80 121 GetAddressLocationString: buffer/slot layout differs

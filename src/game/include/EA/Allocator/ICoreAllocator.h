@@ -18,8 +18,8 @@ class ICoreAllocator {
   virtual void * Alloc(unsigned int, char const *, unsigned int, unsigned int, unsigned int); // slot 1, (no retail slot), pure (name from EA::Audio::Allocator)
   virtual void Free(void *, unsigned int);                               // slot 3, (no retail slot), pure (name from EA::Audio::Allocator)
 
+  static EA::Allocator::ICoreAllocator * GetDefaultAllocator();          // 0x00925cb0
   ICoreAllocator();                                                      // dev only
-  static EA::Allocator::ICoreAllocator * GetDefaultAllocator();          // dev only
 
  public:  // data (retail offsets)
 };

@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "EA/Debug/ReportWriter.h"
 #include <stdarg.h>
+#include "EA/Dasm/DisassemblerX86.h"
 
 // ---- items of slice s0091e650 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef void* HMODULE;
@@ -30,33 +31,9 @@ struct MEMORYSTATUSEX {
     unsigned __int64 ullTotalPageFile; unsigned __int64 ullAvailPageFile;
     unsigned __int64 ullTotalVirtual; unsigned __int64 ullAvailVirtual; unsigned __int64 ullAvailExtendedVirtual;
 };
-extern "C" __declspec(dllimport) char* __cdecl strncpy(char*, const char*, size_t);
 extern "C" __declspec(dllimport) size_t __cdecl strlen(const char*);
-extern "C" __declspec(dllimport) FILEP __cdecl fopen(const char*, const char*);
-extern "C" __declspec(dllimport) int __cdecl fclose(FILEP);
-extern "C" __declspec(dllimport) size_t __cdecl fwrite(const void*, size_t, size_t, FILEP);
-extern "C" __declspec(dllimport) int __cdecl fflush(FILEP);
-extern "C" __declspec(dllimport) long __cdecl ftell(FILEP);
-extern "C" __declspec(dllimport) int __cdecl fseek(FILEP, long, int);
-extern "C" __declspec(dllimport) int __cdecl _vsnprintf(char*, size_t, const char*, va_list);
 extern "C" __declspec(dllimport) int __cdecl _snprintf(char*, size_t, const char*, ...);
-extern "C" __declspec(dllimport) int __cdecl sprintf(char*, const char*, ...);
-extern "C" __declspec(dllimport) size_t __cdecl strftime(char*, size_t, const char*, const void*);
-extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
-extern "C" __declspec(dllimport) void* __cdecl _localtime64(const __int64*);
 extern "C" __declspec(dllimport) DWORD __stdcall GetComputerNameA(char*, DWORD*);
-extern "C" __declspec(dllimport) BOOL __stdcall GetUserNameA(char*, DWORD*);
-extern "C" __declspec(dllimport) BOOL __stdcall GetComputerNameExA(int, char*, DWORD*);
-extern "C" __declspec(dllimport) BOOL __stdcall GetVersionExA(OSVERSIONINFOA*);
-extern "C" __declspec(dllimport) void __stdcall GetSystemInfo(SYSTEM_INFO*);
-extern "C" __declspec(dllimport) BOOL __stdcall IsDebuggerPresent();
-extern "C" __declspec(dllimport) BOOL __stdcall GlobalMemoryStatusEx(MEMORYSTATUSEX*);
-extern "C" __declspec(dllimport) DWORD __stdcall GetModuleFileNameA(HMODULE, char*, DWORD);
-extern "C" __declspec(dllimport) HLOCAL __stdcall LocalAlloc(UINT, SIZE_T);
-extern "C" __declspec(dllimport) HLOCAL __stdcall LocalFree(HLOCAL);
-extern "C" __declspec(dllimport) DWORD __stdcall GetFileVersionInfoSizeA(LPCSTR, DWORD*);
-extern "C" __declspec(dllimport) BOOL __stdcall GetFileVersionInfoA(LPCSTR, DWORD, DWORD, void*);
-extern "C" __declspec(dllimport) BOOL __stdcall VerQueryValueA(const void*, LPCSTR, void**, UINT*);
 struct DisassemblerX86 {
     DisassemblerX86();                                          // 0x0091b5d0
     ~DisassemblerX86();                                         // 0x0091b6b0
@@ -106,32 +83,36 @@ struct ReportWriter {
     char mBuffer[1024];   // +0x108
     int mnSectionDepth;   // +0x508
 };
+extern "C" __declspec(dllimport) char* __cdecl strncpy(char*, const char*, size_t);
+extern "C" __declspec(dllimport) FILEP __cdecl fopen(const char*, const char*);
+extern "C" __declspec(dllimport) int __cdecl fclose(FILEP);
+extern "C" __declspec(dllimport) size_t __cdecl fwrite(const void*, size_t, size_t, FILEP);
+extern "C" __declspec(dllimport) int __cdecl fflush(FILEP);
+extern "C" __declspec(dllimport) long __cdecl ftell(FILEP);
+extern "C" __declspec(dllimport) int __cdecl fseek(FILEP, long, int);
+extern "C" __declspec(dllimport) int __cdecl _vsnprintf(char*, size_t, const char*, va_list);
+extern "C" __declspec(dllimport) int __cdecl sprintf(char*, const char*, ...);
+extern "C" __declspec(dllimport) size_t __cdecl strftime(char*, size_t, const char*, const void*);
+extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
+extern "C" __declspec(dllimport) void* __cdecl _localtime64(const __int64*);
+extern "C" __declspec(dllimport) BOOL __stdcall GetUserNameA(char*, DWORD*);
+extern "C" __declspec(dllimport) BOOL __stdcall GetComputerNameExA(int, char*, DWORD*);
+extern "C" __declspec(dllimport) BOOL __stdcall GetVersionExA(OSVERSIONINFOA*);
+extern "C" __declspec(dllimport) void __stdcall GetSystemInfo(SYSTEM_INFO*);
+extern "C" __declspec(dllimport) BOOL __stdcall IsDebuggerPresent();
+extern "C" __declspec(dllimport) BOOL __stdcall GlobalMemoryStatusEx(MEMORYSTATUSEX*);
+extern "C" __declspec(dllimport) DWORD __stdcall GetModuleFileNameA(HMODULE, char*, DWORD);
+extern "C" __declspec(dllimport) HLOCAL __stdcall LocalAlloc(UINT, SIZE_T);
+extern "C" __declspec(dllimport) HLOCAL __stdcall LocalFree(HLOCAL);
+extern "C" __declspec(dllimport) DWORD __stdcall GetFileVersionInfoSizeA(LPCSTR, DWORD*);
+extern "C" __declspec(dllimport) BOOL __stdcall GetFileVersionInfoA(LPCSTR, DWORD, DWORD, void*);
+extern "C" __declspec(dllimport) BOOL __stdcall VerQueryValueA(const void*, LPCSTR, void**, UINT*);
 // ---- items of slice s0091e650 end
 
-// ---- items of slice s0091f520 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#pragma intrinsic(__readfsdword)
-unsigned long __cdecl __readfsdword(unsigned);
-struct ReportWriter_s0091_f520 {
-    virtual void v00();                              // 0x00
-    virtual void v04();                              // 0x04
-    virtual int  v08(int, int);                      // 0x08
-    virtual int  v0c(int);                           // 0x0c
-    virtual int  v10(int, int*);                     // 0x10
-    virtual int  v14(int);                           // 0x14
-    virtual void v18(const char*);                   // 0x18
-    virtual void v1c(const char*);                   // 0x1c
-    virtual void v20(const char*, int);              // 0x20
-    virtual void v24(const char*, ...);              // 0x24 (variadic -> cdecl, this first)
-    virtual void v28(const char*, const char*);      // 0x28
-    virtual void v2c();                              // 0x2c
-    virtual int  v30();                              // 0x30
-    virtual void v34(const char*, int);              // 0x34
 
-    bool WriteMemoryView(uint8_t* base, int len, uint8_t* mark, const char* label); // 0x0091f520
-    bool WriteStackMemoryView(unsigned lo, int len);                                 // 0x0091fe60
-    bool WriteRegisterMemoryView(int* ctx);                                          // 0x0091fbd0
-    bool WriteRegisterValues(int* ctx);                                              // 0x0091fa10
-};
+
+// ---- items of slice s0091f520 begin (TODO(rewrite): local stubs, replace by canonical classes)
+unsigned long __cdecl __readfsdword(unsigned);
 // ---- items of slice s0091f520 end
 
 // @ 0x0091e990
@@ -141,21 +122,19 @@ void EA::Debug::ReportWriter::GetFileNameExtension(char * dst, unsigned int n)
     dst[n - 1] = 0;
 }
 
-
 // @ 0x0091e9c0
-bool ReportWriter::Open(const char* path)
+bool EA::Debug::ReportWriter::OpenReport(char const * path)
 {
     if (mpFile == 0) {
         if (path != 0) {
             strncpy(mPath, path, 0x100);
             mPath[0xff] = 0;
         }
-        mpFile = fopen(mPath, "wb");
+        mpFile = (_iobuf*)fopen(mPath, "wb");
         return mpFile != 0;
     }
     return false;
 }
-
 
 // @ 0x0091ea20
 bool EA::Debug::ReportWriter::CloseReport()
@@ -164,7 +143,6 @@ bool EA::Debug::ReportWriter::CloseReport()
         fclose((FILEP)mpFile);
     return mpFile != 0;
 }
-
 
 // @ 0x0091ea50
 bool EA::Debug::ReportWriter::BeginSection(char const * name)
@@ -175,14 +153,12 @@ bool EA::Debug::ReportWriter::BeginSection(char const * name)
     return false;
 }
 
-
 // @ 0x0091ea80
-void ReportWriter::EndSection()
+bool EA::Debug::ReportWriter::EndSection(char const * a1)
 {
     --mnSectionDepth;
-    r12();
+    return WriteBlankLine();
 }
-
 
 // @ 0x0091ea90
 bool EA::Debug::ReportWriter::WriteText(char const * data, bool flag)
@@ -194,16 +170,16 @@ bool EA::Debug::ReportWriter::WriteText(char const * data, bool flag)
     return true;
 }
 
-
 // @ 0x0091ead0
-bool ReportWriter::WriteFormattedV(const char* fmt, va_list ap)
+bool EA::Debug::ReportWriter::WriteFormatted(char const * fmt, ...)
 {
+    va_list ap;
+    va_start(ap, fmt);
     int n = _vsnprintf(mBuffer, 0x400, fmt, ap);
     if ((unsigned)(n - 1) < 0x3ff)
-        return r13(mBuffer, n);
+        return Write(mBuffer, n);
     return false;
 }
-
 
 // @ 0x0091eb20
 bool EA::Debug::ReportWriter::WriteKeyValue(char const * a, char const * b)
@@ -219,9 +195,8 @@ bool EA::Debug::ReportWriter::WriteKeyValue(char const * a, char const * b)
     return true;
 }
 
-
 // @ 0x0091eba0
-bool ReportWriter::WriteFormatted(const char* name, const char* fmt, ...)
+bool EA::Debug::ReportWriter::WriteKeyValueFormatted(char const * name, char const * fmt, ...)
 {
     va_list ap;
     va_start(ap, fmt);
@@ -230,16 +205,14 @@ bool ReportWriter::WriteFormatted(const char* name, const char* fmt, ...)
     unsigned x = (unsigned)(n - 1);
     if (x > 0x3fe)
         return false;
-    return r10(name, mBuffer);
+    return WriteKeyValue(name, mBuffer);
 }
-
 
 // @ 0x0091ebf0
 bool EA::Debug::ReportWriter::WriteBlankLine()
 {
     return Write("\r\n", 2);
 }
-
 
 // @ 0x0091ec00
 bool EA::Debug::ReportWriter::Write(char const * data, unsigned int n)
@@ -254,15 +227,13 @@ bool EA::Debug::ReportWriter::Write(char const * data, unsigned int n)
     return false;
 }
 
-
 // @ 0x0091ec60
-long ReportWriter::Tell()
+unsigned int EA::Debug::ReportWriter::GetPosition()
 {
     if (mpFile != 0)
         return ftell((FILEP)mpFile);
     return 0;
 }
-
 
 // @ 0x0091ec80
 void EA::Debug::ReportWriter::SetPosition(unsigned int off)
@@ -271,28 +242,25 @@ void EA::Debug::ReportWriter::SetPosition(unsigned int off)
         fseek((FILEP)mpFile, off, 0);
 }
 
-
 // @ 0x0091eca0
-int ReportWriter::GetTimeString(char* buf, unsigned n, void* tm)
+unsigned int EA::Debug::ReportWriter::GetTimeString(char * buf, unsigned int n, tm const * tm) const
 {
     if (tm == 0) {
         __int64 t = _time64(0);
-        tm = _localtime64(&t);
+        tm = (struct tm const *)_localtime64(&t);
     }
     return (int)strftime(buf, n, "%H.%M.%S", tm);
 }
 
-
 // @ 0x0091ecf0
-int ReportWriter::GetDateString(char* buf, unsigned n, void* tm)
+unsigned int EA::Debug::ReportWriter::GetDateString(char * buf, unsigned int n, tm const * tm) const
 {
     if (tm == 0) {
         __int64 t = _time64(0);
-        tm = _localtime64(&t);
+        tm = (struct tm const *)_localtime64(&t);
     }
     return (int)strftime(buf, n, "%m-%d-%y", tm);
 }
-
 
 // @ 0x0091ed40
 int __stdcall GetComputerNameHelper(char* buf, unsigned n)
@@ -303,7 +271,6 @@ int __stdcall GetComputerNameHelper(char* buf, unsigned n)
         *buf = 0;
     return (int)strlen(buf);
 }
-
 
 // @ 0x0091ee80
 unsigned int EA::Debug::ReportWriter::GetAddressLocationString(void const * addr, char * buf, unsigned int n)
@@ -317,7 +284,6 @@ unsigned int EA::Debug::ReportWriter::GetAddressLocationString(void const * addr
     _snprintf(buf, n, "0x%08x <unknown module>", (unsigned)addr);
     return 1;
 }
-
 
 // @ 0x0091ef30
 bool EA::Debug::ReportWriter::WriteSystemInfo()
@@ -384,7 +350,6 @@ bool EA::Debug::ReportWriter::WriteSystemInfo()
     return true;
 }
 
-
 // @ 0x0091f300
 bool EA::Debug::ReportWriter::WriteApplicationInfo()
 {
@@ -413,7 +378,6 @@ bool EA::Debug::ReportWriter::WriteApplicationInfo()
     }
     return false;
 }
-
 
 // @ 0x0091f400
 bool ReportWriter::WriteDisassembly(void* start, unsigned n, void* eip)
@@ -457,6 +421,8 @@ bool EA::Debug::ReportWriter::WriteRegisterValues(void const * ctx)
     return true;
 }
 
+
+
 // @ 0x0091fbd0
 bool EA::Debug::ReportWriter::WriteRegisterMemoryView(void const * ctx)
 {
@@ -478,21 +444,24 @@ bool EA::Debug::ReportWriter::WriteRegisterMemoryView(void const * ctx)
     return true;
 }
 
+
+
 // @ 0x0091fe60
-bool ReportWriter_s0091_f520::WriteStackMemoryView(unsigned lo, int len)
+bool EA::Debug::ReportWriter::WriteStackMemoryView(unsigned char const * lo, unsigned int len)
 {
+    unsigned lo_v = (unsigned)lo;
     unsigned stackLo = __readfsdword(4);
     unsigned stackHi = __readfsdword(8);
-    unsigned a = lo - len;
+    unsigned a = lo_v - len;
     unsigned start = (a <= stackHi) ? stackHi : a;
-    unsigned b = lo + len;
+    unsigned b = lo_v + len;
     unsigned end = (stackLo <= b) ? stackLo : b;
     start &= 0xfffffff0;
     end = (end + 0xf) & 0xfffffff0;
-    if (stackHi <= lo && lo < stackLo && start < end) {
-        WriteMemoryView((uint8_t*)start, (int)(end - start), (uint8_t*)lo, 0);
+    if (stackHi <= lo_v && lo_v < stackLo && start < end) {
+        WriteMemoryView((uint8_t*)start, (end - start), (uint8_t*)lo_v, 0);
         return true;
     }
-    v20("Stack pointer appears to point to invalid memory.\r\n", 0);
+    WriteText("Stack pointer appears to point to invalid memory.\r\n", 0);
     return true;
 }

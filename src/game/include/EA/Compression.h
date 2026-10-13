@@ -14,6 +14,11 @@ namespace EA {
 #pragma pack(push, 4)
 class Compression {
  public:
+  enum Hints {
+    kHintNone = 0,
+    kHintOptimizeSpeed = 1,
+    kHintOptimizeSize = 2,
+  };
   // vtable retail address unknown ((retail vtable not located)): 5 retail slots, 5 dev slots
   virtual ~Compression() {}                                              // slot 0, (no retail slot), dtor body dev only
   virtual unsigned int CompressData(void const *, unsigned int, void *, unsigned int, int); // slot 1, (no retail slot), pure (name from EA::CompressionRefpack)

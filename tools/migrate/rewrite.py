@@ -49,6 +49,28 @@ import headers as H  # noqa: E402
 import rewrite_stubs as RS  # noqa: E402
 
 W = lambda *p: os.path.join(ROOT, *p)
+
+
+def row_va(tok):
+    """The VA of a bookkeeping row's VA column, or None when the token is not one (a wrapped reason line)."""
+    m = re.fullmatch(r"(?:0x)?([0-9a-fA-F]{6,8})", tok or "")
+    return int(m.group(1), 16) if m else None
+
+
+def read_rows(path):
+    """Rows of a nonmatching.txt/partial.txt/manifest.txt: comment and blank lines skipped; a physical line whose first
+    token is not a VA continues the reason of the row above (slice s0091e650's partial.txt wraps one) and is joined to it."""
+    rows = []
+    for line in open(path):
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        t = line.split()
+        if row_va(t[0]) is None and not (len(t) >= 3 and row_va(t[2]) is not None):
+            if rows:
+                rows[-1] += " " + " ".join(t)
+            continue
+        rows.append(line.rstrip("\n"))
+    return rows
 INC = W("src", "game", "include")
 SLICES = W("match", "slices")
 SCALARS = {"int", "unsigned", "unsigned int", "short", "unsigned short", "char", "unsigned char", "signed char", "long",
@@ -496,6 +518,27 @@ def parse_preamble(pre):
             j += 1
         text = "\n".join(buf)
         kind = "typedef" if s.startswith("typedef") else ("extern" if s.startswith("extern") else "other")
+        if re.match(r'^extern\s+"C"\s*\{', s) and kind == "extern":
+            # a linkage block `extern "C" { decl; decl; ... }` is one declaration per item (`extern "C" decl;`), so each
+            # callee is keyed, kept or dropped on its own (s0091f520: the block was keyed by its first name and emitted whole,
+            # and its `GetSystemInfo(void*)` clashed with s0091e650's `GetSystemInfo(SYSTEM_INFO*)` in the module TU)
+            mt = mask(text)
+            ob = mt.index("{")
+            cb = match_close(mt, ob)
+            acc = []
+            for ln in text[ob + 1:cb].split("\n"):
+                code = mask(ln).split("//")[0].strip()
+                if not acc and not code:
+                    continue
+                acc.append(ln.strip())
+                joined = mask("\n".join(acc))
+                if code.endswith(";") and joined.count("(") == joined.count(")"):
+                    items.append(("extern", 'extern "C" ' + "\n".join(acc)))
+                    acc = []
+            if acc:
+                items.append(("extern", 'extern "C" ' + "\n".join(acc)))
+            i = j + 1
+            continue
         items.append((kind, text))
         i = j + 1
     return structs, items
@@ -690,6 +733,7 @@ class Rewrite:
         if os.path.exists(self.renames_path):
             self.manual = json.load(open(self.renames_path)).get("manual", {})
         self.notes = []          # (kind, text) for the report
+        self.explicit_this_methods()
         self.class_map = {}      # slice struct -> canonical class
         self.why = {}            # slice struct -> evidence string
         self.method_map = collections.defaultdict(dict)   # slice struct -> {slice method: (canon decl or None)}
@@ -703,6 +747,42 @@ class Rewrite:
         self.used = set()      # canonical classes whose complete type a body needs (receivers of virtual calls, new-expressions)
 
     # ---- 1. split by module/class ------------------------------------------------------------
+    def explicit_this_methods(self):
+        """A free `__cdecl` function whose first parameter is `Cls* pThis` and whose dev function is a non-static
+        `__cdecl` method of Cls (a variadic member: VC9 passes `this` as the first stack argument) is that method: the
+        definition is rewritten to `Ret Cls::Name(rest...)` with `pThis` -> `this`, and the method map names it.
+        Slice s009013e0: `bool __cdecl FUN_009017d0(XmlTextWriter* pThis, const wchar_t* name, const wchar_t* fmt, ...)` is
+        `virtual bool __cdecl EA::XML::XmlTextWriter::AppendAttributeF(wchar_t const *, wchar_t const *, ...)` (dev UAA)."""
+        mm = self.data.modmap["functions"]
+        for i, c in enumerate(self.chunks):
+            if not c.free or not c.params:
+                continue
+            e = mm.get("%08x" % c.va)
+            dev = e.get("dev") if e else None
+            mangled = self.data.pub.get(int(dev, 16)) if dev else None
+            if not mangled:
+                continue
+            d = H.parse_decl(self.data.und.many([mangled]).get(mangled))
+            if not d or d["static"] or d["cc"] != "__cdecl" or d["cls"] not in self.data.types.structs:
+                continue
+            p0 = re.match(r"^\s*([\w:]+)\s*\*\s*(\w+)\s*$", c.params[0])
+            short = d["cls"].split("::")[-1]
+            if not p0 or p0.group(1).split("::")[-1] != short:
+                continue
+            pname = p0.group(2)
+            ms = re.search(r"(?:__cdecl\s+)?\b%s\s*\(\s*%s\s*\*\s*%s\s*,?\s*" % (re.escape(c.name), re.escape(p0.group(1)), re.escape(pname)),
+                           c.sig_text)
+            if not ms:
+                continue
+            sig = c.sig_text[:ms.start()] + "%s::%s(" % (short, c.name) + c.sig_text[ms.end():]
+            body = re.sub(r"(?<![\w.>])%s\b" % re.escape(pname), "this", c.body)
+            nc = Chunk(c.va, sig + body + "\n")
+            if not nc.ok:
+                continue
+            self.chunks[i] = nc
+            self.notes.append(("explicit-this", "0x%08x %s: free __cdecl function with explicit %s* %s is the __cdecl method %s::%s" % (
+                c.va, c.name, p0.group(1), pname, d["cls"], d["name"])))
+
     def assign_chunks(self, module_filter=None):
         self.module_filter = module_filter
         mm = self.data.modmap["functions"]
@@ -1338,6 +1418,12 @@ class Rewrite:
             if k and k in man:
                 want = man[k]
                 hit = [d for d in decls if d.name == want and len(d.params) == len(sparams)]
+                if not hit:
+                    # the slice stub left out trailing parameters the canonical method has (s0091e650 EndSection 0x91ea80:
+                    # slice `void EndSection()`, retail `ret 4`, canonical `bool EndSection(char const *)`): the manual name
+                    # wins when exactly one overload has more parameters; they are named a<n>..
+                    more = [d for d in decls if d.name == want and len(d.params) > len(sparams)]
+                    hit = more if len(more) == 1 else []
                 if hit:
                     return hit[0], "manual: %s" % self.manual.get("why", {}).get(k, "renames file")
         if va:
@@ -1634,6 +1720,75 @@ class Rewrite:
             out.append(body[last:])
             body = "".join(out)
             self.stats["pointer_returns_to_reference"] += 1
+        # 6c. the slice declared a variadic method with an explicit `va_list ap` last parameter where the canonical method takes
+        # `...` (s0091e650 0x91ead0: retail is `lea eax,[esp+0x14] / push eax`, i.e. va_start on the stack arguments, not a
+        # va_list argument): the definition gets the ellipsis and the body starts with `va_list ap; va_start(ap, <last>);`
+        if c.decl is not None and len(c.params) >= 2 and len(c.params) == len(c.decl.params) and \
+                c.decl.params[-1].strip() == "..." and re.match(r"^\s*va_list\s+\w+\s*$", c.params[-1]):
+            ap = c.params[-1].split()[-1]
+            last = self.pname(c.params[-2], len(c.params) - 2)
+            k = body.find("{")
+            if k >= 0 and not re.search(r"\bva_start\s*\(", body):
+                body = body[:k + 1] + "\n    va_list %s;\n    va_start(%s, %s);" % (ap, ap, last) + body[k + 1:]
+                notes.append("va_list parameter %s -> ellipsis + va_start(%s, %s)" % (ap, ap, last))
+                self.stats["va_list_to_ellipsis"] += 1
+        # 6d. a parameter the slice typed `void *` (or a typedef of it) that the canonical declaration types `T *`: assignments
+        # to it from the slice's untyped callees get the cast (s0091e650 GetTimeString/GetDateString: `tm = _localtime64(&t);`
+        # where the slice's _localtime64 returns void* and the parameter is `tm const *`)
+        if c.decl is not None:
+            for i, (sp, cp) in enumerate(zip(c.params, c.decl.params)):
+                st = self.ptype(sp).replace(" ", "")
+                if st not in ("void*", "constvoid*") and not self.is_void_ptr_typedef(st):
+                    continue
+                ct = cp.strip()
+                if not ct.endswith("*") or re.match(r"^(const\s+)?void\s*\*$|^void\s+const\s*\*$", ct):
+                    continue
+                nm = self.pname(sp, i)
+                # a parameter named like its own type (`tm const * tm`) hides the type name: elaborate it
+                cast = ct
+                b0 = re.match(r"^(?:const\s+)?(\w+)", ct)
+                if b0 and b0.group(1) == nm:
+                    cast = "struct " + ct
+                body, na = re.subn(r"(?<![\w.>])(%s\s*=\s*)(?!=)([^;]+);" % re.escape(nm), lambda mm: "%s(%s)%s;" % (mm.group(1), cast, mm.group(2).strip()), body)
+                if na:
+                    notes.append("parameter %s: void* slice type, canonical %s: %d assignment(s) cast" % (nm, ct, na))
+                    self.stats["void_ptr_param_casts"] += na
+        # 6d'. a parameter the slice typed as an integer that the canonical declaration types `T *` (s0091f520
+        # WriteStackMemoryView(unsigned lo, int len) is `(unsigned char const *, unsigned int)`): the body keeps its integer
+        # arithmetic on a local copy `unsigned lo_v = (unsigned)lo;`
+        if c.decl is not None:
+            for i, (sp, cp) in enumerate(zip(c.params, c.decl.params)):
+                st = re.sub(r"\s+", " ", self.ptype(sp)).strip()
+                if st not in ("unsigned", "unsigned int", "int", "uint32_t", "int32_t", "long", "unsigned long", "DWORD", "uint32") or \
+                        not cp.strip().endswith("*"):
+                    continue
+                nm = self.pname(sp, i)
+                k = body.find("{")
+                if k < 0 or not re.search(r"(?<![\w.>])%s\b" % re.escape(nm), body[k:]):
+                    continue
+                inner = re.sub(r"(?<![\w.>:])%s\b" % re.escape(nm), nm + "_v", body[k + 1:])
+                body = body[:k + 1] + "\n    %s %s_v = (%s)%s;" % (st, nm, st, nm) + inner
+                notes.append("parameter %s: integer %s in the slice, canonical %s: the body uses a local copy %s_v" % (nm, st, cp.strip(), nm))
+                self.stats["int_param_local_copies"] += 1
+        # 6e. the same for a data member of the function's class: the slice typed it `void *` (`void* mpFile;`), the canonical
+        # member is `T *` (`_iobuf* mpFile;`): `mpFile = fopen(..)` (the slice's fopen returns its FILEP = void*) gets the cast
+        # (s0091e650 OpenReport 0x91e9c0)
+        st_ = self.structs.get(S) if S else None
+        if c.decl is not None and st_ is not None and not c.free and c.va in self.fn_class:
+            canon_c = Canon.get(self.fn_class[c.va])
+            for m in st_.members:
+                mt = m["type"].replace(" ", "")
+                if m.get("array") or (mt not in ("void*",) and not self.is_void_ptr_typedef(mt)):
+                    continue
+                cm = canon_c.member(m["name"]) if canon_c.exists else None
+                ct = (cm or {}).get("type", "").strip()
+                if not ct.endswith("*") or ct.replace(" ", "") in ("void*", "constvoid*") or (cm or {}).get("array"):
+                    continue
+                body, na = re.subn(r"(?<![\w.>])((?:this\s*->\s*)?%s\s*=\s*)(?!=)(?!0\s*;)([^;]+);" % re.escape(m["name"]),
+                                   lambda mm: "%s(%s)%s;" % (mm.group(1), ct, mm.group(2).strip()), body)
+                if na:
+                    notes.append("member %s: void* in the slice, canonical %s: %d assignment(s) cast" % (m["name"], ct, na))
+                    self.stats["void_ptr_member_casts"] += na
         # 7. manual edits
         for e in self.manual.get("edits", []):
             if int(e["va"], 16) == c.va:
@@ -1644,6 +1799,13 @@ class Rewrite:
                     self.stats["manual_edits_applied"] += 1
         c.out_body = body
         c.notes = notes
+
+    def is_void_ptr_typedef(self, t):
+        """True when t is a slice typedef of void* (`typedef void* FILEP;`)."""
+        for kind, text in self.items:
+            if kind == "typedef" and re.match(r"^\s*typedef\s+void\s*\*\s*%s\s*;" % re.escape(t), text):
+                return True
+        return False
 
     def convert_init_list(self, c, body, notes):
         """`: SP::cResourceBase(name), mParent.mpObject(0), mCount(0) {` of a constructor, after member and type conversion.
@@ -2309,7 +2471,11 @@ class Rewrite:
             if kind not in ("extern", "other"):
                 continue
             code = text.split("//")[0]
-            mm = re.search(r"(\w+)\s*(\(|\[|;)", code)
+            # the declared name: the first identifier followed by ( [ ; that is not a keyword or attribute
+            # (`extern "C" __declspec(dllimport) BOOL __stdcall VerQueryValueA(...)` is VerQueryValueA, not __declspec:
+            # report_s0091e650.md, every dllimport of the slice collapsed onto one key "__declspec")
+            code = re.sub(r"__declspec\s*\([^()]*\)", " ", code)
+            mm = next((x for x in re.finditer(r"(\w+)\s*(\(|\[|;)", code) if x.group(1) not in RS.KEYWORDS), None)
             if not mm:
                 continue
             name = mm.group(1)
@@ -2367,6 +2533,9 @@ class Rewrite:
         ret = d.ret
         parts = []
         for i, cp in enumerate(d.params):
+            if cp.strip() == "...":
+                parts.append("...")             # the ellipsis of a variadic method takes no name
+                continue
             nm = self.pname(c.params[i], i) if i < len(c.params) else "a%d" % (i + 1)     # a1.. for parameters an incomplete slice stub did not declare
             m = re.match(r"^(.*?)(\s*\[[^\]]*\])$", cp)
             parts.append("%s %s" % (cp, nm) if not m else "%s %s%s" % (m.group(1), nm, m.group(2)))
@@ -2494,6 +2663,7 @@ class Rewrite:
                 ns, _sep, nm = q.rpartition("::")
                 lines.append("%s class %s; %s" % (" ".join("namespace %s {" % n for n in ns.split("::")), nm, " ".join("}" for _n in ns.split("::"))))
         ext = []
+        ext_name = {}
         # the local stub types' own inline bodies use globals too (DBase's constructor stores `vtbl_AppDPF0`): an extern is
         # declared when the functions or the stubs the functions need mention it
         stub_text = "\n".join(self.render_local_items(fns, []))
@@ -2502,20 +2672,35 @@ class Rewrite:
                 continue
             if e.get("decl"):
                 ext.append(e["decl"])
-        # local stub types first: the extern declarations may name them (`extern const Vector3 kDefaultVector3;`); the
-        # ones that name none go before them, so that the stubs' inline bodies can use them
+                ext_name[e["decl"]] = e["call"].split("::")[-1]
+        # local stub types first: the extern declarations may name them (`extern const Vector3 kDefaultVector3;`, or a
+        # slice typedef: `BOOL __stdcall VerQueryValueA(const void*, LPCSTR, ...)` before `typedef int BOOL;` failed in
+        # s0091e650); only an extern that the stubs' inline bodies use and that names no local struct, typedef or macro
+        # goes before them.  Everything else (also `va_list` users, whose <stdarg.h> include is a slice item) goes after.
         local_names = set()
         for kind, t in self.items:
-            if kind == "struct":
+            if kind in ("struct", "typedef", "define"):
                 local_names |= set(RS.item_names(kind, t))
-        ext_early = [d for d in ext if not (set(RS.IDENT.findall(RS.mask(d))) & local_names)]
+        local_names.add("va_list")
+        stub_ids = set(RS.IDENT.findall(RS.mask(stub_text)))
+        ext_early = [d for d in ext if not (set(RS.IDENT.findall(RS.mask(d))) & local_names)
+                     and ext_name.get(d) in stub_ids]
         ext_late = [d for d in ext if d not in ext_early]
         if ext_early:
             lines += ["", "// unnamed retail callees and globals (address in the comment)"] + ext_early
         lines += self.render_local_items(fns, ext)
         if ext_late:
             lines += ["", "// unnamed retail callees and globals that name local stubs (address in the comment)"] + ext_late
-        return "\n".join(lines) + "\n"
+        # one #include per header (the canonical includes and the local items' header for a replaced stub repeated
+        # "EA/XML/XmlTextWriter.h" in s009013e0)
+        out, seen_inc = [], set()
+        for l in "\n".join(lines).split("\n"):
+            if re.match(r"^\s*#\s*include\b", l):
+                if l.strip() in seen_inc:
+                    continue
+                seen_inc.add(l.strip())
+            out.append(l)
+        return "\n".join(out) + "\n"
 
     canon_hdrs = []
 
@@ -2543,13 +2728,16 @@ class Rewrite:
         """The slice's own system includes and the local stub types/typedefs/statics/helpers the emitted functions use."""
         out = []
         verb = [c for c in fns if getattr(c, "verbatim", False)]
-        if verb:
+        texts = [c.defline + "\n" + c.out_body for c in fns] + list(ext)
+        # a converted variadic body (va_list / va_start) needs the slice's <stdarg.h> too (s009013e0 AppendAttributeF 0x9017d0)
+        varargs = any(re.search(r"\bva_(?:list|start|arg|end)\b", t) for t in texts)
+        if verb or varargs:
             seen = set()
             for kind, text in self.items:
-                if kind in ("include", "pragma") and text.strip() not in seen and not re.search(r'#\s*include\s+"', text):
+                if kind in ("include", "pragma") and text.strip() not in seen and not re.search(r'#\s*include\s+"', text) and \
+                        (verb or "stdarg" in text):
                     seen.add(text.strip())
                     out.append(text)
-        texts = [c.defline + "\n" + c.out_body for c in fns] + list(ext)
         skip = {k for k, (kind, text) in enumerate(self.items) if kind == "extern" and any(
             n in self.externs for n in RS.item_names(kind, text))}
         # the slice's prototype of a namespace function this TU defines (`namespace SP { bool GetPropertyAsKey(const
@@ -2834,8 +3022,8 @@ class Rewrite:
         rows = []
         for line in open(os.path.join(sdir, "manifest.txt")):
             p = line.split("#", 1)[0].split()
-            if len(p) >= 3 and int(p[2], 16) in vas:
-                rows.append((int(p[2], 16), p[3:]))
+            if len(p) >= 3 and row_va(p[2]) in vas:
+                rows.append((row_va(p[2]), p[3:]))
         mf = []
         # the flags the slice's functions were verified with (rows of one slice share them); nonmatching rows have no
         # flags column of their own, so they are measured and promoted with these
@@ -2857,28 +3045,45 @@ class Rewrite:
             p = os.path.join(sdir, fname)
             if not os.path.exists(p):
                 continue
-            rows2 = []
-            for line in open(p):
-                if line.strip() and not line.lstrip().startswith("#") and int(line.split()[0], 16) in vas:
-                    rows2.append(line.rstrip("\n"))
+            rows2 = [l for l in read_rows(p) if row_va(l.split()[0]) in vas]
             head = next((l.rstrip("\n") for l in open(p) if l.startswith("#")), "# va  diff-bytes  reason")
             self.merge_rows(os.path.join(outdir, fname), head, rows2, key=lambda l: int(l.split()[0], 16))
-        # rows of this slice's functions that an earlier run moved and this one holds back
-        stale = {c.va for c in self.chunks} - vas
-        for fname, col in (("manifest.txt", 2), ("nonmatching.txt", 0), ("partial.txt", 0)):
+        self.prune_rows(d, stem)
+
+    def prune_rows(self, d, stem):
+        """Drop every row of the module's manifest/nonmatching/partial whose function has no '// @ 0xVA' marker in the
+        module TU: rows of this slice's functions that an earlier run moved and this one holds back, and functions a
+        session left in the slice (manual leave_in_slice / exclude, a header request).  The slice keeps those rows; the
+        module files describe only what the TU defines (report_s009013e0.md: three hand-added partial rows for functions
+        held back with a header request)."""
+        tu = W("src", "game", d, stem + ".cpp")
+        if not os.path.exists(tu):
+            return
+        marks = {int(m, 16) for m in re.findall(r"^// @ 0x([0-9a-fA-F]+)", open(tu).read(), re.M)}
+        outdir = W("src", "game", d, stem)
+        # a function has one row: byte-exact (manifest) wins over equivalent (nonmatching) over partial
+        exact = set()
+        mp = os.path.join(outdir, "manifest.txt")
+        if os.path.exists(mp):
+            exact = {row_va(l.split()[2]) for l in read_rows(mp) if len(l.split()) > 2}
+        equiv = set()
+        np_ = os.path.join(outdir, "nonmatching.txt")
+        if os.path.exists(np_):
+            equiv = {row_va(l.split()[0]) for l in read_rows(np_)}
+        for fname, col, better in (("manifest.txt", 2, set()), ("nonmatching.txt", 0, exact), ("partial.txt", 0, exact | equiv)):
             p = os.path.join(outdir, fname)
-            if not os.path.exists(p) or not stale:
+            if not os.path.exists(p):
                 continue
             kept, dropped = [], 0
             for l in open(p).read().split("\n"):
                 f = l.split("#", 1)[0].split()
-                if f and len(f) > col and not l.lstrip().startswith("#") and int(f[col], 16) in stale:
+                if f and len(f) > col and not l.lstrip().startswith("#") and (row_va(f[col]) not in marks or row_va(f[col]) in better):
                     dropped += 1
                     continue
                 kept.append(l)
             if dropped:
                 open(p, "w").write("\n".join(kept))
-                self.notes.append(("pruned", "%d row(s) of slice %s removed from %s/%s" % (dropped, self.sid, stem, fname)))
+                self.notes.append(("pruned", "%d row(s) without a function in %s.cpp (or with a better row) removed from %s/%s" % (dropped, stem, stem, fname)))
 
     def row_flags(self, va):
         """Flags of a nonmatching/partial row of this slice as the difftest harness picks them (explicit note in the
@@ -2954,9 +3159,8 @@ class Rewrite:
     def merge_rows(path, head, rows, key):
         have = {}
         if os.path.exists(path):
-            for l in open(path):
-                if l.strip() and not l.startswith("#"):
-                    have[key(l)] = l.rstrip("\n")
+            for l in read_rows(path):
+                have[key(l)] = l
         for r in rows:
             have[key(r)] = r
         open(path, "w").write(head + "\n" + "\n".join(have[k] for k in sorted(have)) + ("\n" if have else ""))
@@ -3213,7 +3417,9 @@ class Rewrite:
         n = 0
         for module in sorted({c.module for c in self.fns}):
             d, obj = os.path.split(module)
-            errs = [(ln, msg) for f, ln, msg in allerrs if f.replace("\\", "/").endswith("/" + obj[:-4] + ".cpp")]     # not the headers' lines
+            # not the headers' lines; VC9 prints the path in either case (lowercased in some runs: report_s009013e0.md), so compare
+            # case-insensitively
+            errs = [(ln, msg) for f, ln, msg in allerrs if f.replace("\\", "/").lower().endswith("/" + obj[:-4].lower() + ".cpp")]
             lines = open(W("src", "game", d, obj[:-4] + ".cpp")).read().split("\n")
             block_of = []              # line index -> va of the enclosing function block, None in the preamble
             cur = None
@@ -3352,10 +3558,13 @@ def main():
     ap.add_argument("slice")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--module")
-    ap.add_argument("--scratch", default="/private/tmp/claude-501/-Users-noahpeterson-Documents-Projects-spore-decomp/migration-pilot/rewrite-%d" % os.getpid(),
-                    help="scratch directory (probe sources, objects); per process by default so concurrent runs do not overwrite each other's probe files")
+    ap.add_argument("--scratch", default=None,
+                    help="scratch directory (probe sources, objects); default work/migrate/scratch_<slice>, one per slice so "
+                         "concurrent runs of different slices do not overwrite each other's probe files")
     ap.add_argument("--quiet", action="store_true")
     a = ap.parse_args()
+    if not a.scratch:
+        a.scratch = W("work", "migrate", "scratch_%s" % a.slice)
     rw = Rewrite(a.slice, a.scratch)
     rw.assign_chunks(a.module)
     rw.map_structs()

@@ -4,7 +4,7 @@
 0091fbd0 ?WriteRegisterMemoryView@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteRegisterMemoryView migrated from s0091f520
 0091fca0 EA::Debug::ReportWriter::WriteCallStack  # PDB name
 0091fe40 EA::Debug::FileReportWriter::~FileReportWriter  # vtable store + fclose
-0091fe60 ?WriteStackMemoryView@ReportWriter_s0091_f520@@QAE_NIH@Z  # ReportWriter_s0091_f520::WriteStackMemoryView migrated from s0091f520 (verbatim, slice spelling)
+0091fe60 ?WriteStackMemoryView@ReportWriter@Debug@EA@@QAE_NPBEI@Z  # EA::Debug::ReportWriter::WriteStackMemoryView migrated from s0091f520
 0091ff10 EA::Debug::FileReportWriter::ScalarDeletingDtor  # vtable store + fclose + delete
 0091ff50 EA::Debug::GetUptime  # _mktime64(1970)/_time64 delta
 0091ffd0 EA::Debug::GetTickCount100ns  # GetSystemTime/SystemTimeToFileTime delta

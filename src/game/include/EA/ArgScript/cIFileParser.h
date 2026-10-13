@@ -12,6 +12,12 @@ namespace ArgScript {
 #pragma pack(push, 4)
 class cIFileParser {
  public:
+  enum tInputFileFlags {
+    kFlagOptionalFile = 0,
+    kFlagRequiredFile = 1,
+    kFlagWatchFileAlways = 2,
+    kFlagWatchFile = 4,
+  };
   // vtable retail address unknown ((retail vtable not located)): 12 retail slots, 12 dev slots
   virtual void slot_0();                                                 // slot 0, (no retail slot), UNNAMED
   virtual void slot_1();                                                 // slot 1, (no retail slot), UNNAMED

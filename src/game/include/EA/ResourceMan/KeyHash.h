@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 
+namespace EA { namespace ResourceMan { class Key; } }
+
 namespace EA {
 namespace ResourceMan {
 
@@ -12,7 +14,12 @@ namespace ResourceMan {
 #pragma pack(push, 4)
 struct KeyHash {
  public:
-  bool operator();                                                       // dev only
+  enum {
+    bucket_size = 4,
+    min_buckets = 8,
+  };
+  bool operator()(EA::ResourceMan::Key const &, EA::ResourceMan::Key const &) const; // dev only
+  unsigned int operator()(EA::ResourceMan::Key const &) const;           // dev only
 
  public:  // data (retail offsets)
 };

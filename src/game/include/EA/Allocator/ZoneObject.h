@@ -17,14 +17,14 @@ class ZoneObject {
   // vtable retail address unknown ((retail vtable not located)): 1 retail slots, 1 dev slots
   virtual ~ZoneObject();                                                 // slot 0, (no retail slot), dtor body dev only
 
+  static void * operator new(unsigned int, EA::Allocator::ICoreAllocator *, char const *); // 0x00925fe0
+  static void * operator new(unsigned int, char const *, int, int, char const *, int); // 0x00926020
+  static void operator delete(void *);                                   // 0x00926060
   ZoneObject();                                                          // dev only
   static void * DoInternalAllocate(unsigned int, EA::Allocator::ICoreAllocator *, char const *, unsigned int); // dev only, protected
   static void DoInternalDeallocate(void *);                              // dev only, protected
   static void * operator new(unsigned int);                              // dev only
   static void * operator new(unsigned int, EA::Allocator::ICoreAllocator *); // dev only
-  static void * operator new(unsigned int, EA::Allocator::ICoreAllocator *, char const *); // dev only
-  static void * operator new(unsigned int, char const *, int, int, char const *, int); // dev only
-  static void operator delete(void *);                                   // dev only
   static void operator delete(void *, EA::Allocator::ICoreAllocator *);  // dev only
   static void operator delete(void *, EA::Allocator::ICoreAllocator *, char const *); // dev only
   static void operator delete(void *, char const *, int, int, char const *, int); // dev only

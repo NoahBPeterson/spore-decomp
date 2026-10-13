@@ -338,5 +338,20 @@
    }
   ],
   "evidence": "retail SP::cPropertyManager has the Factory subobject at +4 and its data from +0x14 (slice s006a9470, Init 0x6a9b60 and WriteResource 0x6aa130, written with retail offsets, docs/Papercuts.md s005e3280): mInitialized 0x14, a second bool at 0x15, mResourceManager 0x18, a bool at 0x1c (mParsing) and, from 0x20, an rbtree<unsigned, pair<const unsigned, Variant>> (compare word 0x20, anchor 0x24.., size 0x34, allocator 0x38; the s006aa3f0 partials ~rbtree/insert are its instantiations) filling 0x20..0x3c, then the embedded SP::cPropertyList at 0x3c; the exact-backed maps of s006aa3f0 (mPropertyNameToIDMap 0x94 ... mLCName 0x168) and the slice's AutoRef<IFileParser> at 0x178 are the re-laid offsets +0x20, and AutoRef<IParser> sits at 0x17c; with those four insertions (1 + 1 + 0x1c + 4 bytes, the bools padded to words) mInAppProperties lands at 0x1e8, where the byte-exact cAppPropsCommand::Execute (0x6a3ce0, s006a32a0) stores 1 through [mManager+0x1e8]; the bool and the tree are one 32-byte blob (mParsingAndTree) because a blob is a byte array (alignment 1) and the tree must start on the word at 0x20"
+ },
+ "EA::XML::XmlTextWriter": {
+  "evidence": "retail signatures of three XmlTextWriter virtuals differ from the dev PDB (landing report work/migrate/report_s009013e0.md, slice s009013e0)",
+  "decl_overrides": [
+   {
+    "decl": "virtual bool AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
+    "replace": "virtual bool __cdecl AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
+    "evidence": "dev symbol ?AppendAttributeF@XmlTextWriter@XML@EA@@UAA_NPB_W0ZZ is 'virtual bool __cdecl' (UAA); retail 0x9017d0 reads this from the first stack argument (sub esp,0x200 / push esi / mov esi,[esp+0x208]) and returns with a plain ret (slice s009013e0 FUN_009017d0, byte-exact). VC9 makes a variadic member __cdecl anyway; the explicit keyword records the dev signature"
+   },
+   {
+    "decl": "virtual bool WriteCharData(wchar_t const *)",
+    "replace": "virtual int WriteCharData(wchar_t const *)",
+    "evidence": "retail 0x9018a0 returns a full int: 0x9018bc mov eax,1 / 0x9018c5 xor eax,eax where a bool return gives mov al,1 / xor al,al; the slice s009013e0 int declaration is byte-exact, the bool body DIFFs 13 bytes"
+   }
+  ]
  }
 }

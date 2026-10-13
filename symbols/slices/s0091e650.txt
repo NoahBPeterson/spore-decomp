@@ -1,19 +1,19 @@
 0091e970 EA::Debug::ReportWriter::ReportWriter  # ctor, sets vtable/path/file/depth
 0091e990 ?GetFileNameExtension@ReportWriter@Debug@EA@@UAEXPADI@Z  # EA::Debug::ReportWriter::GetFileNameExtension migrated from s0091e650
-0091e9c0 ?Open@ReportWriter@@QAE_NPBD@Z  # ReportWriter::Open migrated from s0091e650 (verbatim, slice spelling)
+0091e9c0 ?OpenReport@ReportWriter@Debug@EA@@UAE_NPBD@Z  # EA::Debug::ReportWriter::OpenReport migrated from s0091e650
 0091ea20 ?CloseReport@ReportWriter@Debug@EA@@UAE_NXZ  # EA::Debug::ReportWriter::CloseReport migrated from s0091e650
 0091ea50 ?BeginSection@ReportWriter@Debug@EA@@UAE_NPBD@Z  # EA::Debug::ReportWriter::BeginSection migrated from s0091e650
-0091ea80 ?EndSection@ReportWriter@@QAEXXZ  # ReportWriter::EndSection migrated from s0091e650 (verbatim, slice spelling)
+0091ea80 ?EndSection@ReportWriter@Debug@EA@@UAE_NPBD@Z  # EA::Debug::ReportWriter::EndSection migrated from s0091e650
 0091ea90 ?WriteText@ReportWriter@Debug@EA@@UAE_NPBD_N@Z  # EA::Debug::ReportWriter::WriteText migrated from s0091e650
-0091ead0 ?WriteFormattedV@ReportWriter@@QAE_NPBDPAD@Z  # ReportWriter::WriteFormattedV migrated from s0091e650 (verbatim, slice spelling)
+0091ead0 ?WriteFormatted@ReportWriter@Debug@EA@@UAA_NPBDZZ  # EA::Debug::ReportWriter::WriteFormatted migrated from s0091e650
 0091eb20 ?WriteKeyValue@ReportWriter@Debug@EA@@UAE_NPBD0@Z  # EA::Debug::ReportWriter::WriteKeyValue migrated from s0091e650
-0091eba0 ?WriteFormatted@ReportWriter@@QAA_NPBD0ZZ  # ReportWriter::WriteFormatted migrated from s0091e650 (verbatim, slice spelling)
+0091eba0 ?WriteKeyValueFormatted@ReportWriter@Debug@EA@@UAA_NPBD0ZZ  # EA::Debug::ReportWriter::WriteKeyValueFormatted migrated from s0091e650
 0091ebf0 ?WriteBlankLine@ReportWriter@Debug@EA@@UAE_NXZ  # EA::Debug::ReportWriter::WriteBlankLine migrated from s0091e650
 0091ec00 ?Write@ReportWriter@Debug@EA@@UAE_NPBDI@Z  # EA::Debug::ReportWriter::Write migrated from s0091e650
-0091ec60 ?Tell@ReportWriter@@QAEJXZ  # ReportWriter::Tell migrated from s0091e650 (verbatim, slice spelling)
+0091ec60 ?GetPosition@ReportWriter@Debug@EA@@UAEIXZ  # EA::Debug::ReportWriter::GetPosition migrated from s0091e650
 0091ec80 ?SetPosition@ReportWriter@Debug@EA@@UAEXI@Z  # EA::Debug::ReportWriter::SetPosition migrated from s0091e650
-0091eca0 ?GetTimeString@ReportWriter@@QAEHPADIPAX@Z  # ReportWriter::GetTimeString migrated from s0091e650 (verbatim, slice spelling)
-0091ecf0 ?GetDateString@ReportWriter@@QAEHPADIPAX@Z  # ReportWriter::GetDateString migrated from s0091e650 (verbatim, slice spelling)
+0091eca0 ?GetTimeString@ReportWriter@Debug@EA@@QBEIPADIPBUtm@@@Z  # EA::Debug::ReportWriter::GetTimeString migrated from s0091e650
+0091ecf0 ?GetDateString@ReportWriter@Debug@EA@@QBEIPADIPBUtm@@@Z  # EA::Debug::ReportWriter::GetDateString migrated from s0091e650
 0091ed40 ?GetComputerNameHelper@@YGHPADI@Z  # GetComputerNameHelper migrated from s0091e650 (verbatim, slice spelling)
 0091ed80 EA::Debug::ReportWriter::GetAddressLocation  # pdb_names
 0091ee80 ?GetAddressLocationString@ReportWriter@Debug@EA@@QAEIPBXPADI@Z  # EA::Debug::ReportWriter::GetAddressLocationString migrated from s0091e650

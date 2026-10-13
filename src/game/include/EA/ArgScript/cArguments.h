@@ -28,22 +28,22 @@ class cArguments {
   };
   typedef char sizeof_check_EA_ArgScript_cArguments_cOptionArgInfo[(sizeof(cOptionArgInfo) == 0x10) ? 1 : -1];
 
+  char const * operator[](int) const;                                    // 0x00837f20
+  int NumArguments() const;                                              // 0x00837f30
+  ~cArguments();                                                         // 0x00837fa0
+  cArguments();                                                          // 0x00837ff0
+  char const *const * MainArguments(int *, int, int) const;              // 0x00838020
+  bool HasFlag(char const *);                                            // 0x008380b0
+  char const *const * OptionArguments(char const *, int *, int, int);    // 0x00838130
+  char const *const * MainArguments(int) const;                          // 0x00838320
+  char const *const * OptionArguments(char const *, int);                // 0x00838330
+  void SplitIntoArguments(char const *);                                 // 0x008383c0
+  cArguments(char const *);                                              // 0x008386d0
   void Chomp();                                                          // dev only
   bool HasOption(char const *) const;                                    // dev only
-  char const * operator[](int) const;                                    // dev only
-  int NumArguments() const;                                              // dev only
   void MarkAllOptionsHandled();                                          // dev only
   void AsArgV(int *, char const ***) const;                              // dev only
-  ~cArguments();                                                         // dev only
-  cArguments();                                                          // dev only
-  char const *const * MainArguments(int *, int, int) const;              // dev only
-  bool HasFlag(char const *);                                            // dev only
-  char const *const * OptionArguments(char const *, int *, int, int);    // dev only
-  char const *const * MainArguments(int) const;                          // dev only
-  char const *const * OptionArguments(char const *, int);                // dev only
-  void SplitIntoArguments(char const *);                                 // dev only
   void UnhandledOptions(eastl::vector<char const *, eastl::sp_vector_allocator> *) const; // dev only
-  cArguments(char const *);                                              // dev only
   void CheckForUnhandledOptions() const;                                 // dev only
 
  public:  // data (retail offsets)

@@ -1,8 +1,1 @@
 # va  diff-bytes  reason
-# Functions left in the slice (not landed in this TU): the retail signature differs from the generated
-# header, so a canonical member definition cannot be byte-exact. Rows are added by hand here because
-# rewrite.py's write_bookkeeping() drops leave_in_slice functions from the module bookkeeping entirely
-# (report: "left-in-slice rows not written" tool request). A re-apply after the header is fixed prunes them.
-009017d0  -  AppendAttributeF: left in the slice; retail is __cdecl (header dropped __cdecl on the slot-7 virtual, so the canonical declaration is __thiscall). HEADER REQUEST.
-009018a0  -  WriteCharData: left in the slice; retail returns int (mov eax,1 / xor eax,eax), header declares bool. HEADER REQUEST.
-00901930  -  WriteName: left in the slice; retail returns void (no return-value write, plain call), header declares bool. HEADER REQUEST.

@@ -41,6 +41,9 @@ namespace ResourceMan {
 #pragma pack(push, 8)
 class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
  public:
+  enum {
+    kTypeDatabasePackedFile = 709082436,
+  };
   // vtable 0x014367b0 ({for `EA::Allocator::ZoneObject'}): 37 retail slots, 37 dev slots
   virtual ~DatabasePackedFile();                                         // slot 0, 0x008d9990, dtor body 0x008d93e0
   virtual bool Init();                                                   // slot 1, 0x006bbdd0
@@ -86,9 +89,6 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   // virtual ~DatabasePackedFile();                                       // slot 2, 0x008d9490 (declared above)
   virtual void * AsInterface(EA::COM::InterfaceId);                      // slot 3, 0x008d81a0
 
-  bool ReadFileSpan(void *, long, unsigned int);                         // 0x006bca90, protected
-  bool DecompressData(unsigned short, unsigned char const *, unsigned int, unsigned int, unsigned char *); // 0x006bcc10, protected
-  bool DecompressRecord(unsigned short, unsigned int, unsigned int, unsigned int, unsigned char *); // 0x006bccb0, protected
   unsigned int GetKeyListSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *); // 0x008d8770
   bool Verify();                                                         // 0x008d87c0
   bool InternalSetPosition(long);                                        // 0x008d88d0, protected
@@ -121,6 +121,7 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   bool SetModificationTime(long, long);                                  // dev only
   bool IsRecordCompressed(EA::ResourceMan::Key const &);                 // dev only
   bool ShouldCompactDatabase();                                          // dev only, protected
+  bool DecompressData(unsigned short, unsigned char const *, unsigned int, unsigned int, unsigned char *); // dev only, protected
   unsigned int InternalRead(void *, unsigned int);                       // dev only, protected
   bool InternalWrite(void const *, unsigned int);                        // dev only, protected
   unsigned int InternalGetSize();                                        // dev only, protected
@@ -129,8 +130,10 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   bool InternalFlush();                                                  // dev only, protected
   int InternalGetState();                                                // dev only, protected
   bool CloseOpenRecords();                                               // dev only, protected
+  bool ReadFileSpan(void *, long, unsigned int);                         // dev only, protected
   bool WriteRecordRaw(EA::ResourceMan::Key const &, void const *, unsigned int, unsigned int, unsigned short); // dev only
   bool CompressData(void const *, unsigned int, void *&, unsigned int &, unsigned short &); // dev only, protected
+  bool DecompressRecord(unsigned short, unsigned int, unsigned int, unsigned int, unsigned char *); // dev only, protected
   bool RevertChanges();                                                  // dev only
   bool ShouldRecordBeCompressed(unsigned char *, unsigned int, void *&, unsigned int &, unsigned short &); // dev only, protected
   bool CompactDatabase();                                                // dev only

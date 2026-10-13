@@ -18,12 +18,12 @@ class SharedPointer : public EA::Allocator::ZoneObject /* +0x0 */ {
   // vtable retail address unknown ((retail vtable not located)): 1 retail slots, 1 dev slots
   virtual ~SharedPointer();                                              // slot 0, (no retail slot)
 
+  int Release();                                                         // 0x0093bc40
   void * GetPointer();                                                   // dev only
   int AddRef();                                                          // dev only
   EA::Allocator::ICoreAllocator * GetAllocator() const;                  // dev only
   SharedPointer(unsigned int);                                           // dev only
   SharedPointer(unsigned int, EA::Allocator::ICoreAllocator *);          // dev only
-  int Release();                                                         // dev only
   SharedPointer(void *, bool, EA::Allocator::ICoreAllocator *);          // dev only
 
  public:  // data (retail offsets)

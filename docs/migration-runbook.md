@@ -534,3 +534,31 @@ What a landing agent must NOT do: edit `rewrite.py`, `headers.py`, `layout_overr
   compile standalone: they use `eastl::pair` outside a map and the generator's include closure only brings
   `eastl/map.h` in for map/multimap members. Fix in `headers.py` (a `pair` family include), then
   `EASharedLibrary.obj` (26 functions, 3 slices) is landable.
+
+### 8c. Fix pass after round 2 (2026-10-13): what changed for landing agents
+
+- `rewrite.py --scratch` defaults to `work/migrate/scratch_<slice>`. The module's three bookkeeping files only ever hold
+  rows of functions the module TU defines, one row per function (manifest > nonmatching > partial): a function left in
+  the slice (`leave_in_slice`, `exclude`, a DIFF held back) gets **no** row; do not add one by hand. `opencode_drain.py`
+  counts the VAs of the renames file's `leave_in_slice`/`exclude` as settled.
+- New tool rules (each tested on the slice named in the code): `extern "C" { ... }` blocks are split per declaration;
+  the callee name skips `__declspec(...)` and keywords; an extern goes before the slice's typedefs only when a stub's
+  inline body needs it and it names no slice struct/typedef/macro (`va_list` users go after `<stdarg.h>`); a converted
+  variadic body gets the slice's `<stdarg.h>`; `va_list ap` last parameter vs canonical `...` -> `va_start` in the body;
+  a `void *` slice parameter/member with a typed canonical pointer gets a cast on assignment; an integer slice parameter
+  with a canonical pointer type gets a local integer copy; a free `__cdecl` function with an explicit `Cls* pThis` whose dev
+  function is a `__cdecl` method becomes that method; manual `methods` accepts a canonical method with more parameters
+  than the slice stub (named `a<n>`); duplicate `#include`s are dropped; compiler errors are attributed case-insensitively.
+- A retail function that ends `call [vtbl+N] / pop / ret` with no `al` write after the call is not `void`: the callee's
+  bool passes through in `al` (XmlTextWriter::WriteName 0x901930: the header keeps `bool`, the body `return WriteText(..)`).
+  Check the callers (`test al,al` after the call) before asking for a `void` override.
+- Headers: a member whose type is a template no hand header defines is emitted as an opaque byte array of its retail size
+  (a pointer as `void*`) with the type in a comment; a method whose signature cannot be declared (file-local type, a
+  reference to another class's nested type, an undefined template) is a comment, or `virtual void slot_N_Name();` for a
+  virtual (slot order kept). New hand templates: `EA/RefCountVTemplate.h`, `EA/RefCountTemplate.h`,
+  `EA/COM/RefCountTemplate.h`, `eastl/deque.h`, `EA/ArgScript/cCommandStateT.h`, `EA/Messaging/MessageBasic.h`,
+  `EA/RectT.h`, `SP/cRwResource.h` (all unverified in retail: the first byte-exact user confirms them); `eastl::pair`
+  comes from `eastl/map.h`. Every nested enum of a class is emitted; anonymous PDB enums are emitted unnamed; a closure
+  class gets its owner module's retail addresses (headers no longer depend on which module's run wrote them last).
+- Round 3 objects whose headers compile standalone: `work/claude/round3_ready.json` (11); not ready (rw templates):
+  `work/claude/round3_not_ready.json`.

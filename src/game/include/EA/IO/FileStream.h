@@ -16,8 +16,22 @@ namespace IO {
 #pragma pack(push, 8)
 class FileStream : public EA::IO::IStream /* +0x0 */ {
  public:
+  enum Share {
+    kShareNone = 0,
+    kShareRead = 1,
+    kShareWrite = 2,
+    kShareDelete = 4,
+  };
+  enum UsageHints {
+    kUsageHintNone = 0,
+    kUsageHintSequential = 1,
+    kUsageHintRandom = 2,
+  };
+  enum {
+    kTypeFileStream = 879895296,
+  };
   // vtable 0x0143fe78 ((6 of 20 slots agree)): 20 retail slots, 20 dev slots
-  virtual ~FileStream();                                                 // slot 0, 0x0094f7c0, dtor body dev only
+  virtual ~FileStream();                                                 // slot 0, 0x0094f7c0, dtor body 0x00931e70
   virtual int AddRef();                                                  // slot 1, 0x009317b0
   virtual int Release();                                                 // slot 2, 0x0094f260
   virtual unsigned int GetType() const;                                  // slot 3, 0x008d5f50
@@ -38,9 +52,9 @@ class FileStream : public EA::IO::IStream /* +0x0 */ {
   virtual unsigned int GetPath(wchar_t *, unsigned int);                 // slot 17, 0x009318a0
   virtual bool Open(int, int, int, int);                                 // slot 19, 0x009318f0
 
+  FileStream(char const *);                                              // 0x00931da0
+  FileStream(wchar_t const *);                                           // 0x00931e10
   EA::IO::FileStream & operator=(EA::IO::FileStream const &);            // dev only
-  FileStream(char const *);                                              // dev only
-  FileStream(wchar_t const *);                                           // dev only
   FileStream(EA::IO::FileStream const &);                                // dev only
 
  public:  // data (retail offsets)

@@ -83,6 +83,17 @@ def progress(k):
         if BATCH[i].get("module"):
             # migration entry (docs/migration-runbook.md s8a): this entry's VAs in the module's bookkeeping
             want = {v.lower() for v in BATCH[i]["vas"]}
+            # a function the session deliberately left in the slice (renames manual leave_in_slice / exclude, with a why) is
+            # settled too: rewrite.py keeps the module bookkeeping to the functions its TU defines, so it has no row there
+            rp = W("work/migrate", "renames_%s.json" % sid)
+            if os.path.exists(rp):
+                try:
+                    man = json.load(open(rp)).get("manual", {})
+                except ValueError:
+                    man = {}
+                left = {v.lower() for k in ("leave_in_slice", "exclude") for v in man.get(k, {})} & want
+                done += len(left)
+                want -= left
             for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
                 p = W("src/game", BATCH[i]["module"], f)
                 if not os.path.exists(p):

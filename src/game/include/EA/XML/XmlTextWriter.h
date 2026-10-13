@@ -12,8 +12,11 @@ namespace EA { namespace IO { class IStream; } }
 namespace EA {
 namespace XML {
 
-// dev size 0x20 -> retail size 0x20 (all 8 members exact-backed)
+// dev size 0x20 -> retail size 0x20 (override)
 // evidence: view s009013e0 is the evidence: 7 of 7 shared members agree with the re-laid offsets, 14 byte-exact users, shifts [0], declared size 0x20
+// evidence: override applied: retail signatures of three XmlTextWriter virtuals differ from the dev PDB (landing report work/migrate/report_s009013e0.md, slice s009013e0)
+// evidence: declaration virtual bool AppendAttributeF(wchar_t const *, wchar_t const *, ...) -> virtual bool __cdecl AppendAttributeF(wchar_t const *, wchar_t const *, ...): dev symbol ?AppendAttributeF@XmlTextWriter@XML@EA@@UAA_NPB_W0ZZ is 'virtual bool __cdecl' (UAA); retail 0x9017d0 reads this from the first stack argument (sub esp,0x200 / push esi / mov esi,[esp+0x208]) and returns with a plain ret (slice s009013e0 FUN_009017d0, byte-exact). VC9 makes a variadic member __cdecl anyway; the explicit keyword records the dev signature
+// evidence: declaration virtual bool WriteCharData(wchar_t const *) -> virtual int WriteCharData(wchar_t const *): retail 0x9018a0 returns a full int: 0x9018bc mov eax,1 / 0x9018c5 xor eax,eax where a bool return gives mov al,1 / xor al,al; the slice s009013e0 int declaration is byte-exact, the bool body DIFFs 13 bytes
 #pragma pack(push, 8)
 class XmlTextWriter {
  public:
@@ -42,8 +45,8 @@ class XmlTextWriter {
   virtual bool BeginProcessingInstruction(wchar_t const *);              // slot 4, 0x00901690
   virtual bool EndProcessingInstruction();                               // slot 5, 0x00901700
   virtual bool AppendAttribute(wchar_t const *, wchar_t const *);        // slot 6, 0x00901740
-  virtual bool AppendAttributeF(wchar_t const *, wchar_t const *, ...);  // slot 7, 0x009017d0
-  virtual bool WriteCharData(wchar_t const *);                           // slot 8, 0x009018a0
+  virtual bool __cdecl AppendAttributeF(wchar_t const *, wchar_t const *, ...); // slot 7, 0x009017d0
+  virtual int WriteCharData(wchar_t const *);                            // slot 8, 0x009018a0
   virtual bool WriteCDATA(wchar_t const *);                              // slot 9, 0x009018d0
   virtual bool WriteComment(wchar_t const *, bool);                      // slot 10, 0x00901c60
   virtual bool WriteName(wchar_t const *);                               // slot 11, 0x00901930
