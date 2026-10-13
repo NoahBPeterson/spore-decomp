@@ -1,12 +1,15 @@
-0065d050 SP::cSPUIFeedEditAssetView::ClearAsset  # PDB name + real member offsets
-0065d110 SP::cSPUIFeedEditAssetView::ReloadCallback  # card PDB name; free __cdecl(self,layout,bool)
-0065d260 SP::cSPUIFeedEdit::UpdateGrid  # PDB candidate name
-0065d410 SP::cSPUIFeedEdit::AssetRequestCallBack  # PDB candidate name
-0065d4e0 SP::cSPUIFeedEdit::SetPage  # PDB name
-0065d570 SP::cSPUIFeedEdit::ShowAsset  # PDB name
-0065d720 SP::cSPUIFeedEditAssetView::Init  # PDB name
-0065d810 SP::cSPUIFeedEditAssetView::Shutdown  # PDB name
-0065d9f0 SP::cSPUIFeedEdit::SetActive  # PDB candidate name
-0065daa0 SP::cSPUIFeedEdit::cSPUIFeedEdit  # PDB name
-0065dc60 SP::cSPUIFeedEdit::TranslateToken  # PDB name
+0065d050 ?ClearAsset@cSPUIFeedEditAssetView@SP@@QAEXXZ  # SP::cSPUIFeedEditAssetView::ClearAsset migrated from s0065d050
+0065d110 ?ReloadCallback@@YAXPAUcSPUIFeedEditAssetView_s0065_d050@@PAX_N@Z  # ReloadCallback migrated from s0065d050 (verbatim, slice spelling)
+0065d260 ?UpdateGrid@cSPUIFeedEdit_s0065_d050@@QAEXXZ  # cSPUIFeedEdit_s0065_d050::UpdateGrid migrated from s0065d050 (verbatim, slice spelling)
+0065d410 ?AssetRequestCallBack@@YAXPAH@Z  # AssetRequestCallBack migrated from s0065d050 (verbatim, slice spelling)
+0065d490 ?FUN_0065d490@cSPUIFeedEdit_s0065_d050@@QAEXXZ  # cSPUIFeedEdit_s0065_d050::FUN_0065d490 migrated from s0065d050 (verbatim, slice spelling)
+0065d4e0 ?SetPage@cSPUIFeedEdit_s0065_d050@@QAE_NI@Z  # cSPUIFeedEdit_s0065_d050::SetPage migrated from s0065d050 (verbatim, slice spelling)
+0065d570 ?ShowAsset@cSPUIFeedEdit_s0065_d050@@QAEXHH@Z  # cSPUIFeedEdit_s0065_d050::ShowAsset migrated from s0065d050 (verbatim, slice spelling)
+0065d6a0 ?erase@HashtableU64@@QAEPAHPAH00@Z  # HashtableU64::erase migrated from s0065d050 (verbatim, slice spelling)
+0065d720 ?Init@cSPUIFeedEditAssetView_s0065_d050@@QAE_NPAXI@Z  # cSPUIFeedEditAssetView_s0065_d050::Init migrated from s0065d050 (verbatim, slice spelling)
+0065d810 ?Shutdown@cSPUIFeedEditAssetView@SP@@UAEXXZ  # SP::cSPUIFeedEditAssetView::Shutdown migrated from s0065d050
 0065d860 SP::cSPUIFeedEdit::~cSPUIFeedEdit  # PDB name
+0065d9f0 ?SetActive@cSPUIFeedEdit_s0065_d050@@QAEX_N@Z  # cSPUIFeedEdit_s0065_d050::SetActive migrated from s0065d050 (verbatim, slice spelling)
+0065daa0 SP::cSPUIFeedEdit::cSPUIFeedEdit  # PDB name
+0065dc60 ?TranslateToken@cSPUIFeedEdit_s0065_d050@@QAE_NPB_WPAX@Z  # cSPUIFeedEdit_s0065_d050::TranslateToken migrated from s0065d050 (verbatim, slice spelling)
+0065ded0 ?erase@VecUFO@@QAEPAUUFOCollisionEffectInfo@@PAU2@0@Z  # VecUFO::erase migrated from s0065d050 (verbatim, slice spelling)

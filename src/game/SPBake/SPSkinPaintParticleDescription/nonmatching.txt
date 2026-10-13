@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+00539d70 237 cSPSkinPaintParticleinheritCommand::Execute complete; per-arg _stricmp loop + inherit-bit table; /Od slot order differs; equiv: UNSUPPORTED (0/1200 valid: original throws via _CxxThrowException on soup args)
+00539ed0 126 SWARM_SPSkinPaintParticleAddCommands complete; registration (alloc block/command, vtable stores); codegen of explicit vtable stores not reproduced
+00539f90 132 cSPSkinPaintParticleEffectBlockCommand::ctor complete; object/AppProps base init + 3 vtable stores differ; equiv: UNSUPPORTED (vtable stores need mapping)
+0053a030 245 cSPSkinPaintParticleEffectBlockCommand::Parse complete; name assign + Skinner description alloc + inherited copy
+0053a1a0 48 cSPSkinPaintParticleEffectBlockCommand::SetChild complete
+0053a220 142 cSPSkinPaintParticleEffectBlockCommand::dtor complete; equiv: FAIL (5/5 valid mismatched, execution)
+0053a2b0 341 BrushDesc::operator= complete (fieldwise copy); equiv: FAIL (5/5 valid mismatched, execution)
+0053a420 63 EvalList::operator= complete; equiv: FAIL (5/5 valid mismatched, eax)
+0053a460 36 cSPSkinPaintParticleEffectBlockCommand::AddDesc complete; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException)
+0053a4a0 127 FUN_0053a4a0 runtime-description lookup complete; equiv: WEAK (1200 valid, 29.5% cov)
+0053a530 258 BrushDesc::Init complete (default values)
+0053a6d0 512 ReadEvalList complete; three array reads via ReadInt32/ReadUInt8/ReadUInt16
+0053a930 574 WriteEvalList complete; three array writes
+0053acc0 238 ReadParticleDescription complete; field-by-field IStream read (vtable ReadBytes +0x30)
+0053aea0 302 WriteParticleDescription complete; symmetric write (vtable WriteBytes +0x38)
+0053b1c0 16 PaintCompat ctor variant complete (base ctor + vtable stores); explicit vtable stores differ; equiv FAIL vtable constant 13f4b30 vs orig 13f2424 and base ctor call 83c800 missing (now thiscall member); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0053b1f0 11 PaintCompat::PaintCompat ctor complete; equiv FAIL vtable constant 13f4b30 vs orig 13f2424 and base ctor call 83c800 missing (now thiscall member); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0053b210 404 eastl::vector<Entry16>::operator= complete; implemented as byte-stride assign (POD elements); equiv UNSUPPORTED unresolved operator new[](size_t) (orig uses 6-arg EA new[] 0xf473a0; ours a different impl); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0053b520 254 eastl::vector<Entry16>::resize complete; equiv UNSUPPORTED unresolved operator new[](size_t); orig is a thin wrapper over insert/erase; now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0053b5a0 390 eastl::vector<Entry20>::operator= complete; equiv UNSUPPORTED unresolved operator new[](size_t); now thiscall member; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+0053b930 210 RegisterPaintEvalCommands<...> complete; 0x13 PaintVariable objects + modifier + compareNormal/comparePosition

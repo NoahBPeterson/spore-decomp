@@ -1,1 +1,1 @@
-009a9600 eastl::rbtree<unsigned int,eastl::pair<unsigned int const,cSPUILayoutManager::cWorld>,eastl::less<unsigned int>,eastl::allocator,eastl::use_first<eastl::pair<unsigned int const,cSPUILayoutManager::cWorld> >,1,1>::DoNukeSubtree  # PDB pdb_names.json
+009a9600 ?f@S9a9600@@QAEXPAX@Z  # S9a9600::f migrated from s009a9600 (verbatim, slice spelling)

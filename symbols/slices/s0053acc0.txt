@@ -1,3 +1,11 @@
+0053acc0 ?ReadParticleDescription@@YAXPAUIStream_s0053_acc0@IO@EA@@PAD@Z  # ReadParticleDescription migrated from s0053acc0 (verbatim, slice spelling)
+0053aea0 ?WriteParticleDescription@@YAXPAUIStream_s0053_acc0@IO@EA@@PAD@Z  # WriteParticleDescription migrated from s0053acc0 (verbatim, slice spelling)
+0053b160 ?AutoRefCountAssign@AutoRefSlot@@QAEPAU1@PAX@Z  # AutoRefSlot::AutoRefCountAssign migrated from s0053acc0 (verbatim, slice spelling)
+0053b1c0 ?Ctor1b0@PaintCompatA@@QAEPAU1@XZ  # PaintCompatA::Ctor1b0 migrated from s0053acc0 (verbatim, slice spelling)
+0053b1f0 ?Ctor1f0@PaintCompatB@@QAEPAU1@XZ  # PaintCompatB::Ctor1f0 migrated from s0053acc0 (verbatim, slice spelling)
+0053b210 ?Vector16Assign@BlobVec@@QAEPAU1@PBU1@@Z  # BlobVec::Vector16Assign migrated from s0053acc0 (verbatim, slice spelling)
+0053b520 ?Vector16Resize@BlobVec@@QAEXI@Z  # BlobVec::Vector16Resize migrated from s0053acc0 (verbatim, slice spelling)
+0053b5a0 ?Vector20Assign@BlobVec@@QAEPAU1@PBU1@@Z  # BlobVec::Vector20Assign migrated from s0053acc0 (verbatim, slice spelling)
 0x0053acc0 nSPSkinner::cSPSkinPaintParticleDescription::Read  # IStream read: +0x20/+0x24, 12-byte blocks, eval list +0x74
 0x0053aea0 nSPSkinner::cSPSkinPaintParticleDescription::Write  # symmetric writer
 0x0053b160 ?AutoRefCountAssign@AutoRefSlot@@QAEPAU1@PAX@Z

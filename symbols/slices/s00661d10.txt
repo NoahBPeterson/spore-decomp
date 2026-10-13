@@ -1,0 +1,3 @@
+00661d10 ?CreateFilterButtons@FeedList@@QAEXHHHPAH@Z  # FeedList::CreateFilterButtons migrated from s00661d10 (verbatim, slice spelling)
+006627d0 ?FUN_006627d0@FeedList@@QAE_NPAXPAH@Z  # FeedList::FUN_006627d0 migrated from s00661d10 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00661d10, named from the dev publics; slice address comment)

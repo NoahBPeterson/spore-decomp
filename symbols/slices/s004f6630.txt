@@ -1,6 +1,7 @@
 004f6630 eastl::vector<Elem16>::reserve  # EASTL reserve shape (DoAllocate/uninitialized_copy_ptr/DoFree), byte-exact
-004f6720 eastl::map<uint32_t,vector<Elem16>>::operator[]  # lower_bound/end/insert(value_type(key,T())), byte-exact
+004f6720 ??AUIntMap@@QAEAAUElem16Vector@@ABI@Z  # UIntMap::operator[] migrated from s004f6630 (verbatim, slice spelling)
 004f6830 eastl::unique<ResourceMan::Key*>  # calls adjacent_find 0x4f6c30, byte-exact
+004f68f0 ?FindLowestPriority@@YAHPAUPriorityEntry@@0II@Z  # FindLowestPriority migrated from s004f6630 (verbatim, slice spelling)
 004f6ab0 eastl::basic_string<wchar_t>::find(wchar_t,size_t)  # byte-exact
 004f6b70 eastl::sort<ResourceMan::Key*>  # quick_sort_impl + insertion_sort(28), byte-exact
 004f6c30 eastl::adjacent_find<ResourceMan::Key*>  # byte-exact

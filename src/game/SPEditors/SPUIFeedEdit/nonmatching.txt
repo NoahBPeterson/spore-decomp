@@ -1,0 +1,28 @@
+# va  diff-bytes  reason
+0065c490 483 GetThumbnailBackdrop: complete; switch lowered as if/else compare tree
+0065c790 23 ctor: complete; dead base-vtable store and register choice differ
+0065c840 282 SetMode: complete; vcall scheduling/register allocation differs
+0065c9a0 184 OnTick: complete; float x87 compare and vcall schedule differ
+0065ca10 92 cSPUIFeedEdit::Shutdown: complete; IHandlerRC/MessageServer schedule differs
+0065cae0 117 enabled-state helper: complete; bool folding differs
+0065cc50 86 page-button enable helper: complete; register allocation differs
+0065ccd0 50 GetAssetIndex: complete; loop register allocation differs
+0065cd70 8 intrusive vector element assign: complete; refcount register schedule; equiv PASS (1164 valid, 100% cov)
+0065cec0 80 DoMessage: complete; vcall arg packing differs
+0065cf30 132 SetAsset: complete; vcall/refcount schedule differs
+0065d260 361 cSPUIFeedEdit::UpdateGrid: complete; loop/register schedule differs
+0065d410 96 cSPUIFeedEdit::AssetRequestCallBack: complete; vcall/refcount register schedule differs
+0065d570 77 cSPUIFeedEdit::ShowAsset: complete; vcall/register schedule differs
+0065d6a0 102 hashtable<uint64>::erase: complete; node-unlink register schedule differs
+0065d720 163 cSPUIFeedEditAssetView::Init: complete; ctor/operator-new schedule differs
+0065d9f0 77 cSPUIFeedEdit::SetActive: complete; wstring temp + vcall schedule differs
+0065dc60 174 cSPUIFeedEdit::TranslateToken: complete; wide-string assign/dtor schedule differs
+0065ded0 27 vector<UFOCollisionEffectInfo>::erase: complete; prologue/refcount register allocation differs
+0065df30 287 vector<AssetInfo>::insert (DoInsertValue) - complete, EASTL internals not byte-exact; equiv FAIL (eax mismatch, 5 valid)
+0065e110 775 Populate - complete, vector creation + float placement scheduling not byte-exact
+0065e570 254 RemoveAsset - complete, hashset find/erase path not byte-exact
+0065e720 317 ResetPanel - complete, hashset/window path not byte-exact
+0065e8d0 15 LoadLayout - complete, only vtable-call register order / arg register differs
+0065ea00 604 DoMessage - complete message dispatch, many branches/scheduling not byte-exact
+0065f390 211 AddAsset - complete, hashset find/insert path not byte-exact
+0065f4d0 57 InitLayout - complete, key-store scheduling and tail-call differ

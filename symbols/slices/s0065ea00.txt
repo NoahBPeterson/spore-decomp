@@ -1,2 +1,5 @@
-0065ea00 SP::cSPUIFeedEdit::DoMessage  # PDB anchor (dev 00d85c40)
-0065f700 SP::cSPUIFeedEdit::Init  # PDB name (dev 00d86420)
+0065ea00 ?DoMessage@cSPUIFeedEdit_s0065_ea00@@QAEXHPAX@Z  # cSPUIFeedEdit_s0065_ea00::DoMessage migrated from s0065ea00 (verbatim, slice spelling)
+0065ef10 ?Handler@CallbackObj@@QAEXHH@Z  # CallbackObj::Handler migrated from s0065ea00 (verbatim, slice spelling)
+0065f390 ?AddAsset@cSPUIFeedEdit_s0065_ea00@@QAEDHHHPAX@Z  # cSPUIFeedEdit_s0065_ea00::AddAsset migrated from s0065ea00 (verbatim, slice spelling)
+0065f4d0 ?InitLayout@cSPUIFeedEdit_s0065_ea00@@QAEXXZ  # cSPUIFeedEdit_s0065_ea00::InitLayout migrated from s0065ea00 (verbatim, slice spelling)
+0065f700 ?Init@cSPUIFeedEdit@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  # SP::cSPUIFeedEdit::Init migrated from s0065ea00

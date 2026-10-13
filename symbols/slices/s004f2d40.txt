@@ -1,0 +1,2 @@
+004f3b40 ?FUN_004f3b40@@YAHUBits128@@0@Z  # FUN_004f3b40 migrated from s004f2d40 (verbatim, slice spelling)
+004f3c40 ?FUN_004f3c40@@YAHH@Z  # FUN_004f3c40 migrated from s004f2d40 (verbatim, slice spelling)

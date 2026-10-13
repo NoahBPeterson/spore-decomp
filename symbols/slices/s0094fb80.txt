@@ -1,10 +1,10 @@
 0094fb80 THREAD_cleanup  # clear 5 CRYPTO callbacks; destroy+free each mutex in g manager; vector-clear; return 1
-0094fc40 SSLManager::SSLManager  # ctor: set vtable, fields, Mutex+fixed_map, reset pool; claim global if unset
-0094fcc0 SSLManager::Shutdown  # if inited: RemoveSession, SSL_CTX_free, THREAD_cleanup, free default fs
+0094fc40 ?Ctor@SSLManager_s0094_fb80@@QAEPAU1@PAUICoreAllocator@@@Z  # SSLManager_s0094_fb80::Ctor migrated from s0094fb80 (verbatim, slice spelling)
+0094fcc0 ?SSLManager_Shutdown@@YIDPAX@Z  # SSLManager_Shutdown migrated from s0094fb80 (verbatim, slice spelling)
 0094fd20 SSLManager::RestoreClientSession  # lock, GetSession, CRYPTO_add_lock, FNV hash name, map insert; unlock
-0094fdc0 THREAD_setup  # allocate one Mutex per CRYPTO_num_locks; register 5 lock callbacks
+0094fdc0 ?THREAD_setup@@YAHXZ  # THREAD_setup migrated from s0094fb80 (verbatim, slice spelling)
 0094fe70 SSLManager::~SSLManager  # scalar deleting destructor: Shutdown, free pool, nuke map, Mutex dtor
-0094fed0 SSLManager::Init  # register SSL mem funcs, THREAD_setup, RAND seed, build SSL_CTX, set ciphers/verify
+0094fed0 ?SSLManager_Init@@YIDPAX@Z  # SSLManager_Init migrated from s0094fb80 (verbatim, slice spelling)
 00950060 Fn00950060  # BIO reset: flags=1/clear fields, return 1
 00950080 SSLSocketBIOShutdown  # BIO shutdown: notify socket, clear flags/obj
 009500c0 SSLSocketBIOControl  # BIO ctrl: cmd 1/8/9/0xb/0xc/0x68/0x69

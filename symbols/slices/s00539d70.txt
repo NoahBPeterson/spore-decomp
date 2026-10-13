@@ -1,3 +1,16 @@
+00539d70 ?Execute@cSPSkinPaintParticleinheritCommand@@QAEXAAUcArguments_s0053_9d70@ArgScript@EA@@@Z  # cSPSkinPaintParticleinheritCommand::Execute migrated from s00539d70 (verbatim, slice spelling)
+00539ed0 ?SWARM_SPSkinPaintParticleAddCommands@@YAXPAUIRegB@@PAUIRegA@@@Z  # SWARM_SPSkinPaintParticleAddCommands migrated from s00539d70 (verbatim, slice spelling)
+00539f90 ??0cSPSkinPaintParticleEffectBlockCommand@@QAE@XZ  # cSPSkinPaintParticleEffectBlockCommand::cSPSkinPaintParticleEffectBlockCommand migrated from s00539d70 (verbatim, slice spelling)
+0053a030 ?Parse@cSPSkinPaintParticleEffectBlockCommand@@QAEXAAUcArguments_s0053_9d70@ArgScript@EA@@@Z  # cSPSkinPaintParticleEffectBlockCommand::Parse migrated from s00539d70 (verbatim, slice spelling)
+0053a1a0 ?SetChild@cSPSkinPaintParticleEffectBlockCommand@@QAEXH@Z  # cSPSkinPaintParticleEffectBlockCommand::SetChild migrated from s00539d70 (verbatim, slice spelling)
+0053a220 ??1cSPSkinPaintParticleEffectBlockCommand@@QAE@XZ  # cSPSkinPaintParticleEffectBlockCommand::~cSPSkinPaintParticleEffectBlockCommand migrated from s00539d70 (verbatim, slice spelling)
+0053a2b0 ??4BrushDesc@@QAEAAU0@ABU0@@Z  # BrushDesc::operator= migrated from s00539d70 (verbatim, slice spelling)
+0053a420 ??4EvalList@@QAEAAU0@ABU0@@Z  # EvalList::operator= migrated from s00539d70 (verbatim, slice spelling)
+0053a460 ?AddDesc@cSPSkinPaintParticleAddDescCommand@@QAEXAAUcArguments_s0053_9d70@ArgScript@EA@@@Z  # cSPSkinPaintParticleAddDescCommand::AddDesc migrated from s00539d70 (verbatim, slice spelling)
+0053a4a0 ?GetRuntimeDesc@BrushDesc@@QAEPAUcSPSkinPaintParticleDescription_s0053_9d70@@XZ  # BrushDesc::GetRuntimeDesc migrated from s00539d70 (verbatim, slice spelling)
+0053a530 ?Init@BrushDesc@@QAEXXZ  # BrushDesc::Init migrated from s00539d70 (verbatim, slice spelling)
+0053a6d0 ?ReadEvalList@@YAPAUIStream_s0053_9d70@IO@EA@@PAU123@PAUEvalList@@@Z  # ReadEvalList migrated from s00539d70 (verbatim, slice spelling)
+0053a930 ?WriteEvalList@@YAPAUIStream_s0053_9d70@IO@EA@@PAU123@PAUEvalList@@@Z  # WriteEvalList migrated from s00539d70 (verbatim, slice spelling)
 0x00539d70 cSPSkinPaintParticleinheritCommand::Execute  # MainArguments(1,0x32); "diffuseColor" + 19-entry inherit-bit table -> mInheritMask +0x68
 0x00539ed0 SWARM_SPSkinPaintParticleAddCommands  # registers "spSkinPaintParticle" block+command
 0x00539f90 `anonymous namespace'::cSPSkinPaintParticleEffectBlockCommand::ctor  # 0x54 block ctor

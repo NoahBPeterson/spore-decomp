@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?GetVersionInfo@SharedLibrary@EA@@UBEPBUVersionInfo@12@XZ  009363b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?GetMainLibrary@SharedLibraryRegistry@EA@@UAEPAVSharedLibrary@2@XZ  009365d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EASharedLibrary.cpp  ?ExecuteCommand@SharedLibrary@EA@@UBE_NPBDPAX111@Z  00936710  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1,1 +1,1 @@
-004f3de0 SP::cSPEditorModelValidity::CalculateValidity  # dev PDB caller-single (dev 0x00c09620); byte-exact source
+004f3de0 ?CalculateValidity@cSPEditorModelValidity_s004f_3de0@SP@@SA?AU?$bitset@$0IA@@@PAUcEditorModel_s004f_3de0@2@U3@_N@Z  # cSPEditorModelValidity_s004f_3de0::CalculateValidity migrated from s004f3de0 (verbatim, slice spelling)

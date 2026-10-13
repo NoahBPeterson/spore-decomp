@@ -1,0 +1,2 @@
+004ee9b0 ?TestLimbs@@YA_NPAUModel@@PAUValidityBits_s004e_e9b0@@@Z  # TestLimbs migrated from s004ee9b0 (verbatim, slice spelling)
+004ef190 ?TestBounds@@YA_NPAUModel@@PAUValidityBits_s004e_e9b0@@@Z  # TestBounds migrated from s004ee9b0 (verbatim, slice spelling)

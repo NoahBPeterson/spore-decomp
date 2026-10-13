@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorValidity.cpp  ?AddPaintKeys@@YAXUDeclareParam@@PAUVec@@@Z  004e9b40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?UpgradeParts@@YAXUDeclareParam@@PAUVec@@@Z  004e9c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004ea720@@YA?AUFlagWord@@HH@Z  004ea720  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004ea920@@YAXHHH@Z  004ea920  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004eb930@@YA_NABUDeclareParam@@0@Z  004eb930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004eb980@@YAXXZ  004eb980  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?InitializeValidityData@EditorValidity@SP@@YAXXZ  004ebe20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004edeb0@@YA_NHPAUFlags128@@@Z  004edeb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004edf40@@YA_NPB_WPAUFlags128@@@Z  004edf40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004ee3b0@@YA_NPADPAUFlags128@@@Z  004ee3b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004ee930@@YAHIH@Z  004ee930  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?CheckRequiredParts@@YA_NPAUcEditorModel@@IPAUValidityBits_s004e_f880@@@Z  004efb20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?TestComplexity@@YA_NPAUcEditorModel_s004f_1350@@PAUValidityBits_s004f_1350@@@Z  004f1350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004f3c40@@YAHH@Z  004f3c40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004f3d60@@YA_NUBits128@@0@Z  004f3d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?CalculateValidity@cSPEditorModelValidity_s004f_3de0@SP@@SA?AU?$bitset@$0IA@@@PAUcEditorModel_s004f_3de0@2@U3@_N@Z  004f3de0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?FUN_004f56f0@@YA_N_W@Z  004f56f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?Compare@Obj@@QAE_NPBUKey@@@Z  004f64d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ?push_back@wstring@@QAEX_W@Z  004f6510  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorValidity.cpp  ??AUIntMap@@QAEAAUElem16Vector@@ABI@Z  004f6720  /Od /Ob1 /MD /Gy /TP /Isrc/game/include

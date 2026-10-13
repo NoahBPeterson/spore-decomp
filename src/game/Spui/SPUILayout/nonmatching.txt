@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00810090 39 complete; mpCollection temp/register schedule differs
+00810140 4 complete; vcall target loaded into eax instead of edx (2 sites)
+00810200 39 complete; vcall target register choice + loop reload differ
+00810310 90 complete; visibility compare/object re-load schedule differs
+008103a0 60 complete; clamped-visibility arithmetic + vcall schedule differ
+00811260 158 complete; vector operator= grow/copy branch schedule differs; equiv: FAIL (ours faults on read where original returns) after symbol fix
+00811b30 2 complete; QI vcall target loaded into eax instead of edx
+008120d0 74 complete; InitB acquire/store schedule + tail call differs
+00812210 60 complete; comparison operand load order / register allocation differs
+00812310 64 complete; eraseSys RBTreeIncrement/Erase schedule differs

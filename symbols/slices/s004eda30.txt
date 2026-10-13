@@ -1,0 +1,6 @@
+004eda30 ?FUN_004eda30@@YA_NPADHPAUFlags128@@@Z  # FUN_004eda30 migrated from s004eda30 (verbatim, slice spelling)
+004edeb0 ?FUN_004edeb0@@YA_NHPAUFlags128@@@Z  # FUN_004edeb0 migrated from s004eda30 (verbatim, slice spelling)
+004edf40 ?FUN_004edf40@@YA_NPB_WPAUFlags128@@@Z  # FUN_004edf40 migrated from s004eda30 (verbatim, slice spelling)
+004ee3b0 ?FUN_004ee3b0@@YA_NPADPAUFlags128@@@Z  # FUN_004ee3b0 migrated from s004eda30 (verbatim, slice spelling)
+004ee560 ?FUN_004ee560@@YA_NPADPAUFlags128@@@Z  # FUN_004ee560 migrated from s004eda30 (verbatim, slice spelling)
+004ee930 ?FUN_004ee930@@YAHIH@Z  # FUN_004ee930 migrated from s004eda30 (verbatim, slice spelling)

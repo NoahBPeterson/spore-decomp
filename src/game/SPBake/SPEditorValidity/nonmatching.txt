@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+004e9950 360 complete; recursive child-property walk not byte-exact
+004e9fc0 326 complete; palette build/dispatch loop not byte-exact
+004ea190 143 complete; frame size differs (bitfield-flag construction not reproduced)
+004ea780 118 complete; switch-remap + smart-pointer release not byte-exact
+004eda30 392 complete; /Od frame: 16-byte hole between inline-return temp and switch temp not reproduced (entry local ends up 8 bytes lower)
+004ee560 47 complete; /Od slot order: GetMgr401010 result must sit at ebp-0x34 (below the nested pv slots), name search found no spelling; difftest WEAK (301 valid, 55% coverage, no mismatch) after splitting PropVal so the GetFloat // 0x41ea70 annotation is read
+004ee9b0 1613 complete (SP::cSPEditorModelValidity::TestLimbs); /Od frame-slot layout (name-hash order of 5+ scoped locals, inline temp holes) not reproduced
+004ef190 1503 complete (SP::cSPEditorModelValidity::TestBounds); /Od frame-slot layout not reproduced
+004f01f0 895 complete (SP::cSPEditorModelValidity::TestSize: all 35 calls in order); /Od frame layout: function-scope name-hash slot order, a 0x90-byte reserved hole before the fabs slots and one extra fabs float temp not reproduced
+004f21e0 14 complete; float compare uses double-width comisd not comiss
+004f3b40 209 complete; bitset-test /Od expansion and signedness differ
+004f5720 1100 complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ
+004f5c60 1791 complete: /Od frame-slot order (hash of local names) and some inline-arg temps differ; 2113 vs 2156 bytes
+004f65d0 7 complete; original keeps a dead w[3]&=0 block (size differs)
+004f68f0 11 slot order: the find() value temporary lands above the inlined find's first-param slot (orig below)
+00f3b2c0 33 complete reconstruction; cl branch-folds the return-0 paths (setne) vs original branches

@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?GetEventMask@cSPUIFeedEditAssetView@SP@@UBEIXZ  0065c6f0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_0065cdc0@@YAPAUAssetInfo@@PAU1@00@Z  0065cdc0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_0065ce10@@YAPAUAssetInfo@@PAU1@00@Z  0065ce10  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?ClearAsset@cSPUIFeedEditAssetView@SP@@QAEXXZ  0065d050  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?ReloadCallback@@YAXPAUcSPUIFeedEditAssetView_s0065_d050@@PAX_N@Z  0065d110  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?FUN_0065d490@cSPUIFeedEdit_s0065_d050@@QAEXXZ  0065d490  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?SetPage@cSPUIFeedEdit_s0065_d050@@QAE_NI@Z  0065d4e0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Shutdown@cSPUIFeedEditAssetView@SP@@UAEXXZ  0065d810  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?UnloadLayout@cSPUIFeedEdit@SP@@QAEXXZ  0065e0a0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?push_back@AssetVec@@QAEXXZ  0065e6d0  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Handler@CallbackObj@@QAEXHH@Z  0065ef10  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEditors/SPUIFeedEdit.cpp  ?Init@cSPUIFeedEdit@SP@@QAEXPAVIWindow@UTFWin@EA@@@Z  0065f700  /O2 /MD /Gy /TP /arch:SSE2 /Isrc/game/include

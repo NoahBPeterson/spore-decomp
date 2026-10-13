@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinPaintParticleDescription.cpp  ?AutoRefCountAssign@AutoRefSlot@@QAEPAU1@PAX@Z  0053b160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

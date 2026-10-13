@@ -1,1 +1,1 @@
-004efb20 CheckRequiredParts  # validity test: every model part id must be in the per-key allowed list (map at 0x015da884); sets validity bit 0x12
+004efb20 ?CheckRequiredParts@@YA_NPAUcEditorModel@@IPAUValidityBits_s004e_f880@@@Z  # CheckRequiredParts migrated from s004ef880 (verbatim, slice spelling)

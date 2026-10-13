@@ -1,0 +1,6 @@
+004f56f0 ?FUN_004f56f0@@YA_N_W@Z  # FUN_004f56f0 migrated from s004f56f0 (verbatim, slice spelling)
+004f5720 ?FUN_004f5720@@YA_NPAUModel_s004f_56f0@@PAUUIntVec@@@Z  # FUN_004f5720 migrated from s004f56f0 (verbatim, slice spelling)
+004f5c60 ?GetListOfUnknownPartsAndPaints@@YA_NPBUKey@@PAUKeyVec@@1@Z  # GetListOfUnknownPartsAndPaints migrated from s004f56f0 (verbatim, slice spelling)
+004f64d0 ?Compare@Obj@@QAE_NPBUKey@@@Z  # Obj::Compare migrated from s004f56f0 (verbatim, slice spelling)
+004f6510 ?push_back@wstring@@QAEX_W@Z  # wstring::push_back migrated from s004f56f0 (verbatim, slice spelling)
+004f65d0 ?Flip@Bits@@QAEPAU1@XZ  # Bits::Flip migrated from s004f56f0 (verbatim, slice spelling)

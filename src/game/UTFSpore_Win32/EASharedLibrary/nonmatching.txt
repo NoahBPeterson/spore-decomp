@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+008dd1c0 31 complete: EA::SharedLibrary::Release; interlocked refcount + virtual destroy; register/scheduling differs
+00936330 5 SharedLibrary::CanUnload: complete; branch layout around the IsLoaded/ExecuteCommand short-circuit differs
+00936380 19 SharedLibrary::Reload: complete; tail merge of the false path differs
+00936440 88 SharedLibrary::generic_command_function: complete; inlined strcmp differs from cl's byte-pair compare loop
+009364f0 61 SharedLibraryRegistry::RemoveAllLibraries: complete; eastl vector erase/locking schedule differs
+00936550 21 SharedLibraryRegistry::ExecuteCommandAll: complete; loop counter and vtable arg reload schedule differ
+009365e0 159 SharedLibrary::Load: complete; registry vtable call, startup callback and command-dispatch sequence differ

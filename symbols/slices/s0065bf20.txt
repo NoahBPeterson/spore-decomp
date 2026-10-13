@@ -1,19 +1,19 @@
 0065bf20 SP::cSPUIFeedEdit::HandleMessage  # PDB candidate (large wcsncmp/wcsstr handler)
 0065c3c0 SP::cSPUIFeedEdit::LoadPage  # card PDB name
 0065c480 SP::cSPUIFeedEditAssetView::FUN_0065c480  # unknown; sets field +8
-0065c490 SP::cSPUIFeedEditAssetView::GetThumbnailBackdrop  # card PDB name
-0065c6f0 SP::cSPUIFeedEditAssetView::GetEventMask  # card PDB name
+0065c490 ?GetThumbnailBackdrop@cSPUIFeedEditAssetView@@QBEXPAII@Z  # cSPUIFeedEditAssetView::GetThumbnailBackdrop migrated from s0065bf20 (verbatim, slice spelling)
+0065c6f0 ?GetEventMask@cSPUIFeedEditAssetView@SP@@UBEIXZ  # SP::cSPUIFeedEditAssetView::GetEventMask migrated from s0065bf20
 0065c730 FindChar  # card name; wstring find helper
-0065c790 SP::cSPUIFeedEditAssetView::cSPUIFeedEditAssetView  # vtable ctor pattern
-0065c840 SP::cSPUIFeedEditAssetView::SetMode  # PDB name
-0065c9a0 SP::cSPUIFeedEditAssetView::OnTick  # tick/blink helper
-0065ca10 SP::cSPUIFeedEdit::Shutdown  # PDB candidate
-0065cae0 SP::cSPUIFeedEdit::UpdateEnabledState  # enabled-state helper
+0065c790 ?FUN_0065c790@CtorObj@@QAEXPAX00@Z  # CtorObj::FUN_0065c790 migrated from s0065bf20 (verbatim, slice spelling)
+0065c840 ?SetMode@cSPUIFeedEditAssetView@SP@@QAEXW4Mode@12@@Z  # SP::cSPUIFeedEditAssetView::SetMode migrated from s0065bf20
+0065c9a0 ?OnTick@cSPUIFeedEditAssetView@SP@@QAE_NPAVIWindow@UTFWin@EA@@@Z  # SP::cSPUIFeedEditAssetView::OnTick migrated from s0065bf20
+0065ca10 ?Shutdown@cSPUIFeedEdit@SP@@QAEXXZ  # SP::cSPUIFeedEdit::Shutdown migrated from s0065bf20
+0065cae0 ?FUN_0065cae0@cSPUIFeedEdit@@QAEXXZ  # cSPUIFeedEdit::FUN_0065cae0 migrated from s0065bf20 (verbatim, slice spelling)
 0065cb90 SP::cSPUIFeedEdit::UpdateStrings  # PDB name
-0065cc50 SP::cSPUIFeedEdit::UpdateButtons  # page-button enable helper
-0065ccd0 SP::cSPUIFeedEdit::GetAssetIndex  # PDB name
-0065cd70 ?4AssetInfo  # AssetInfo::operator= (??4AssetInfo@@...; written as base identifier so the checker finds it)
-0065cdc0 uninitialized_copy of intrusive elements  # eastl
-0065ce10 uninitialized_move of intrusive elements  # eastl
-0065cec0 SP::cSPUIFeedEditAssetView::DoMessage  # PDB candidate
-0065cf30 SP::cSPUIFeedEditAssetView::SetAsset  # PDB name
+0065cc50 ?FUN_0065cc50@cSPUIFeedEdit@@QAEXXZ  # cSPUIFeedEdit::FUN_0065cc50 migrated from s0065bf20 (verbatim, slice spelling)
+0065ccd0 ?GetAssetIndex@cSPUIFeedEdit@@QAEHHH@Z  # cSPUIFeedEdit::GetAssetIndex migrated from s0065bf20 (verbatim, slice spelling)
+0065cd70 ??4AssetInfo@@QAEAAU0@ABU0@@Z  # AssetInfo::operator= migrated from s0065bf20 (verbatim, slice spelling)
+0065cdc0 ?FUN_0065cdc0@@YAPAUAssetInfo@@PAU1@00@Z  # __declspec migrated from s0065bf20 (verbatim, slice spelling)
+0065ce10 ?FUN_0065ce10@@YAPAUAssetInfo@@PAU1@00@Z  # __declspec migrated from s0065bf20 (verbatim, slice spelling)
+0065cec0 ?FUN_0065cec0@cSPUIFeedEditAssetView@@QAEHPAX0@Z  # cSPUIFeedEditAssetView::FUN_0065cec0 migrated from s0065bf20 (verbatim, slice spelling)
+0065cf30 ?FUN_0065cf30@cSPUIFeedEditAssetView@@QAEXHHHPAH@Z  # cSPUIFeedEditAssetView::FUN_0065cf30 migrated from s0065bf20 (verbatim, slice spelling)

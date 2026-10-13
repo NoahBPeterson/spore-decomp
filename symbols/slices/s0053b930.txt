@@ -1,3 +1,4 @@
+0053b930 ?RegisterPaintEvalCommands@@YAXPAUcCommandBase_s0053_b930@ArgScript@EA@@@Z  # RegisterPaintEvalCommands migrated from s0053b930 (verbatim, slice spelling)
 0x0053b930 `anonymous namespace'::RegisterPaintEvalCommands<...cSPSkinPaintParticleEffectBlockCommand>  # PDB name
 0x0053bc90 nSPSkinner::cPaintVarEvalList::ReadIntVector  # vector<int> IStream read
 0x0053bd00 nSPSkinner::cPaintVarEvalList::WriteIntVector

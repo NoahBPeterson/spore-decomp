@@ -1,3 +1,7 @@
-0065e8d0 SP::cSPUIFeedEdit::LoadLayout  # PDB anchor (dev 00d85b20)
-0065e0a0 SP::cSPUIFeedEdit::UnloadLayout  # inverse of LoadLayout (mIsLoaded guard, layout teardown)
-0065df30 AssetVec::DoInsertValue  # __declspec(noinline) on the definition defeats the marker parser
+0065df30 ?DoInsertValue@AssetVec@@QAEPAUAssetInfo_s0065_df30@@PAU2@0@Z  # AssetVec::DoInsertValue migrated from s0065df30 (verbatim, slice spelling)
+0065e0a0 ?UnloadLayout@cSPUIFeedEdit@SP@@QAEXXZ  # SP::cSPUIFeedEdit::UnloadLayout migrated from s0065df30
+0065e110 ?Populate@cSPUIFeedEdit_s0065_df30@@QAE_NXZ  # cSPUIFeedEdit_s0065_df30::Populate migrated from s0065df30 (verbatim, slice spelling)
+0065e570 ?RemoveAsset@cSPUIFeedEdit_s0065_df30@@QAE_NHH@Z  # cSPUIFeedEdit_s0065_df30::RemoveAsset migrated from s0065df30 (verbatim, slice spelling)
+0065e6d0 ?push_back@AssetVec@@QAEXXZ  # AssetVec::push_back migrated from s0065df30 (verbatim, slice spelling)
+0065e720 ?ResetPanel@cSPUIFeedEdit_s0065_df30@@QAEXXZ  # cSPUIFeedEdit_s0065_df30::ResetPanel migrated from s0065df30 (verbatim, slice spelling)
+0065e8d0 ?LoadLayout@cSPUIFeedEdit_s0065_df30@@QAEXXZ  # cSPUIFeedEdit_s0065_df30::LoadLayout migrated from s0065df30 (verbatim, slice spelling)

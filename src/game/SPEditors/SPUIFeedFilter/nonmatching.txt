@@ -1,0 +1,18 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0065f820 14 WindowSet4::Set - complete, one pParent load scheduled before the two stores
+0065f970 84 four-window visibility update; cl picks this=ebp/n=ebx and materialises the bool args with setle instead of the original branch pushes
+00660430 101 eastl lower_bound; register assignment (first=ebp vs ebx) and a spill differ
+00660650 50 KeyContains; comparison materialised with setcc per step instead of once at the join
+00660880 271 FeedEntry predicate; loop keeps a cached count/base instead of recomputing from the vector header
+006609a0 203 eastl vector<Key>::operator=; param held in eax instead of ebx, whole schedule differs; equiv FAIL (5/87 inputs mismatched; ours faults on unmapped read at 0x00b84c91 where original returns)
+00660ad0 84 vector range construct; out/first/last register assignment differs
+00660b90 92 map clear; keeps w in a register and uses ebx, original reloads and uses ebp for the end anchor
+00660e30 143 cSPUIFeedFilter destructor - complete, EA cleanup scheduling differs; equiv FAIL (5/5 inputs mismatched; ours hits fake-arity for an unresolved callee, now testable after member conversion)
+00661020 224 cSPUIFeedFilter constructor - complete, many field stores not byte-exact; equiv FAIL (5/5 inputs mismatched; ours hits fake-arity for an unresolved callee, now testable after member conversion)
+00661180 107 GetArcheTypeAssetKeys - complete, constraint/template path differs
+006612b0 83 map find-or-insert - complete, rbtree shape not byte-exact; equiv FAIL (5/5 inputs mismatched; ours faults reading unmapped at 0x006603e0, now member, ecx fixed)
+00661390 243 vector<E34>::operator= - complete, three-branch assign not byte-exact
+006614d0 232 vector<E34>::insert - complete, reallocation path not byte-exact
+00661670 102 vector<E34>::push_back default - complete, temp cleanup inlining differs; equiv FAIL (5/38 inputs mismatched; ours faults at 0x00660b47 in callee; now member, ecx fixed)
+00661700 14 vector<E34>::pop_back - complete, helper call order differs; equiv FAIL (5/5 inputs mismatched; ours hits fake-arity for a callee; now member, ecx fixed)
+00661d10 1611 CreateFilterButtons complete (all paths/calls); size 1883 vs 1983, x87 vs SSE for pos.x, duplicated epilogue releases, branch layout differs

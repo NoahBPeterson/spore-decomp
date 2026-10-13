@@ -1,1 +1,1 @@
-004f1350 SP::cSPEditorModelValidity::TestComplexity  # card/PDB name (caller-scored); declared as TestComplexity in CalculateValidity (s004f3de0); sets kValidityTooComplex (bit 0)
+004f1350 ?TestComplexity@@YA_NPAUcEditorModel_s004f_1350@@PAUValidityBits_s004f_1350@@@Z  # TestComplexity migrated from s004f1350 (verbatim, slice spelling)

@@ -1,4 +1,6 @@
-004e9b40 SP::EditorValidity::AddPaintKeys  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
-004e9c40 SP::cEditorResource::UpgradeParts  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
+004e9950 ?Collect9950@@YAXUDeclareParam@@PAUVec@@@Z  # Collect9950 migrated from s004e95e0 (verbatim, slice spelling)
+004e9b40 ?AddPaintKeys@@YAXUDeclareParam@@PAUVec@@@Z  # AddPaintKeys migrated from s004e95e0 (verbatim, slice spelling)
+004e9c40 ?UpgradeParts@@YAXUDeclareParam@@PAUVec@@@Z  # UpgradeParts migrated from s004e95e0 (verbatim, slice spelling)
 004e9ca0 SP::EditorValidity::GetPalettesForType  # dev-PDB caller-scored candidate (symbols/pdb_candidates.json; card header)
-004e9fc0 SP::EditorValidity::AddSpecialPaints  # plausible: same palette walk + AddPaintKeys/Climb dispatch
+004e9fc0 ?FUN_004e9fc0@@YAXHPAUVec@@H@Z  # FUN_004e9fc0 migrated from s004e95e0 (verbatim, slice spelling)
+004ea190 ?FUN_004ea190@@YAXHPAUVec@@H@Z  # FUN_004ea190 migrated from s004e95e0 (verbatim, slice spelling)
