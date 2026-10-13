@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPJobManager.cpp  ?GetHighestBitPowerOf2@EA@@YAHI@Z  0068f450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Reset@ClsF4A0@@QAEXXZ  0068f4a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Acquire@ClsF540@@QAEXXZ  0068f540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Release@ClsF540@@QAEXXZ  0068f560  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Set@ClsF5B0@@QAEXPAUVObj@@@Z  0068f5b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddRef@cJob@@QAEHXZ  0068f950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

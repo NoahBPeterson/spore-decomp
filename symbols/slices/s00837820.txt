@@ -16,6 +16,6 @@
 008383c0  cArguments::SplitIntoArguments  # tokenises a command line into arguments
 008386d0  cArguments::cArguments(text)  # ctor -> SplitIntoArguments(text)
 00838740  helper(int)  # forwards to FUN_0092dc50 with a local
-00838760  StrEqualI  # _stricmp(a,b)==0
-00838780  StrNEqualI  # _strnicmp(a,b,n)==0
-008387a0  StrEqualI2  # _stricmp(*p,b)==0
+00838760 ?StrEqualI@@YA_NPBD0@Z  # StrEqualI migrated from s00837820 (verbatim, slice spelling)
+00838780 ?StrNEqualI@@YA_NPBD0I@Z  # StrNEqualI migrated from s00837820 (verbatim, slice spelling)
+008387a0 ?StrEqualI2@@YA_NPAPBDPBD@Z  # StrEqualI2 migrated from s00837820 (verbatim, slice spelling)

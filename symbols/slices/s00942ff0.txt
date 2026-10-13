@@ -1,19 +1,19 @@
 00942ff0 EA::Report::...  # dc: request formatting (string + vector<bool>) [partial]
-00943420 EA::Internet::HTTPClient::Job::~Job  # dc: destroy Job range (first,last)
-00943480 CookieNode list destroy  # dc: release refcounts + free nodes (head)
-00943500 UninitializedCopyJobDst  # dc: copy-construct Job range into dst, return dst
-00943570 eastl::StrStub::assign(const char*)  # dc: string assign from C string
-009435b0 CookieList::insertAtNext(const Cookie40&)  # dc: allocate node, link before at
-00943600 CookieNode::insertBeforeSelf(const Cookie40&)  # dc: allocate node, link before this
-00943650 Job::Job(const Job&)  # dc: copy ctor
-009436b0 Job::operator=(const Job&)  # dc: copy assignment
+00943420 ?JobDestroyRange@@YGXPAUJob@@0@Z  # JobDestroyRange migrated from s00942ff0 (verbatim, slice spelling)
+00943480 ?ListDestroy@@YIXPAUCookieNode@@@Z  # ListDestroy migrated from s00942ff0 (verbatim, slice spelling)
+00943500 ?JobDestroyRangeDst@@YAPAUJob@@PAU1@00@Z  # JobDestroyRangeDst migrated from s00942ff0 (verbatim, slice spelling)
+00943570 ?assign@StrStub_s0094_2ff0@eastl@@QAEPAU12@PBD@Z  # StrStub_s0094_2ff0::assign migrated from s00942ff0 (verbatim, slice spelling)
+009435b0 ?insertAtNext@CookieList@@QAEXABUCookie40@@@Z  # CookieList::insertAtNext migrated from s00942ff0 (verbatim, slice spelling)
+00943600 ?insertBeforeSelf@CookieNode@@QAEXABUCookie40@@@Z  # CookieNode::insertBeforeSelf migrated from s00942ff0 (verbatim, slice spelling)
+00943650 ??0Job@@QAE@ABU0@@Z  # Job::Job migrated from s00942ff0 (verbatim, slice spelling)
+009436b0 ??4Job@@QAEAAU0@ABU0@@Z  # None migrated from s00942ff0 (verbatim, slice spelling)
 00943710 UninitializedCopyJob  # dc: copy-construct Job range (first,last,dst)
-009437a0 CopyJob  # dc: copy-assign Job range (first,last,dst)
-00943830 CopyBackwardJob  # dc: backward copy-assign Job range
+009437a0 ?CopyJob@@YAPAUJob@@PAU1@00@Z  # CopyJob migrated from s00942ff0 (verbatim, slice spelling)
+00943830 ?CopyBackwardJob@@YAPAUJob@@PAU1@00@Z  # CopyBackwardJob migrated from s00942ff0 (verbatim, slice spelling)
 009438c0 EA::Internet::HTTPRequest::SetMethod  # pdb caller-single
 00943910 EA::Report::HandleHTTPResponse  # pdb caller-scored
 00943a30 EA::Report::...  # dc: cancel/abort state machine [partial]
 00943bd0 EA::Internet::HTTPClient::ParseResponseStatus  # dc: parse HTTP status line into request
-00943d70 CellHolder::AddCell  # dc: find-or-append CellData* and bump refcount
+00943d70 ?AddCell@CellHolder@@QAE_NPAUCellData@@@Z  # CellHolder::AddCell migrated from s00942ff0 (verbatim, slice spelling)
 00943de0 EA::Internet::HTTPRequest::HTTPRequest  # dc: ctor (SSO blobs)
 00943ea0 EA::Internet::HTTPRequest::~HTTPRequest  # dc: dtor (SSO blobs + Job range)

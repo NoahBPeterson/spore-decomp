@@ -1,3 +1,8 @@
+007b0a70 ?grow@C20@@QAEXPAUT20@@ABU2@@Z  # C20::grow migrated from s007b0a70 (verbatim, slice spelling)
+007b0da0 ?assign@C4@@QAEXPAPAX0@Z  # C4::assign migrated from s007b0a70 (verbatim, slice spelling)
+007b0f40 ?push_back@C20@@QAEXABUT20@@@Z  # C20::push_back migrated from s007b0a70 (verbatim, slice spelling)
+007b1040 ?resize@C20@@QAEXH@Z  # C20::resize migrated from s007b0a70 (verbatim, slice spelling)
+007b10a0 ?Alloc@C20@@QAEHXZ  # C20::Alloc migrated from s007b0a70 (verbatim, slice spelling)
 007b10d0 SP::RegisterImagesAsTexture  # PDB name
 007b1710 SP::DXTCompress  # PDB name
 007b1950 SP::cTexturePreload::PreloadTextureList  # PDB-adjacent (two-vector clear)

@@ -1,5 +1,5 @@
-00948de0 eastl::hashtable<eastl::basic_string<char,eastl::allocator>,eastl::pair<eastl::basic_string<char,eastl::allocator> const,EA::Internet::INetFileCache::Info>,...>::DoFreeNodes  # card (real PDB name)
-00948e80 eastl::hashtable<...INetFileCache::Info...>::erase  # card (real PDB name)
+00948de0 ?DoFreeNodes@HT@@QAEXPAPAUNode@@I@Z  # HT::DoFreeNodes migrated from s00948de0 (verbatim, slice spelling)
+00948e80 ?erase@HT@@QAE?AUIter@@UConstIter@@@Z  # HT::erase migrated from s00948de0 (verbatim, slice spelling)
 00948f00 EA::Internet::INetFileCache::ClearCacheMap  # card (real PDB name), byte-exact
 00948f80 EA::Internet::INetFileCache::IniFileCallbackFunction  # PDB candidate; "url,file,mime,size,timeout,created,lastUsed,timeTimeout" parser
 009492e0 EA::Internet::INetFileCache::DoPeriodicCacheMaintenance  # card

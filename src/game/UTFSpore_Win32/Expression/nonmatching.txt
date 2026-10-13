@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+0083ce90 25 complete: DiscardWhiteSpace; isspace loop register allocation differs
+0083ced0 21 complete: AutoRefCount release; branch layout differs
+0083cef0 93 complete: pair<string,AutoRefCount> ctor; string copy loop scheduling differs; equiv: FAIL (import call #0 mismatch)
+0083d020 89 complete: pair<string,AutoRefCount> copy ctor; scheduling differs; equiv: FAIL (import call #0 mismatch)
+0083d080 43 complete: pair<string,cExprFunction> dtor; branch layout differs
+0083d240 81 complete: EvalBoolParentheses (expect char + throw)
+0083d290 96 complete: EvalContinueChar (expect char + throw)
+0083d2f0 39 complete: EvalRealParentheses; float returns and throw frames differ; equiv: UNSUPPORTED (0/1200 valid: _CxxThrowException discards)
+0083db70 127 complete: EvalIntParentheses; calling convention/throw frame differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
+0083dd00 51 complete: hashtable<cExprFunction>::DoFreeNodes; node free scheduling differs
+0083e140 10 complete: expr table clear; call scheduling differs
+0083e1c0 456 complete: EvalRealTerm; x87 pow/fmod and SSE accumulation scheduling differ
+0083e430 14 complete: cExpression ctor; zero-init xor scheduling differs
+0083e4f0 49 complete: ParseReal; throw/float-return frame differs
+0083e560 83 complete: EvalRealParentheses2; throw temp frame and register reuse differ
+0083ea10 57 complete: EvalIntFactor; callee-saved register assignment (this/base/result) differs
+0083edc0 49 complete: ParseInt; throw frame and ecx preservation differ
+0083ee30 196 complete: EvalRelExpression; case-body layout and compare tree differ
+0083f480 76 complete: EvalChar; throw temp frame/register reuse differ; difftest UNSUPPORTED (0/1200 valid inputs; all throw/fault) after ECX member fix
+0083f510 65 complete: ParseBool; throw frame differs

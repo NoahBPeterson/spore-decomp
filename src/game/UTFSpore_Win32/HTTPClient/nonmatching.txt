@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00942010 65 HTTPClientCheckTimeout: complete; branch layout differs
+00942050 108 HTTPClientFindHeader: complete; stride division and loop register schedule differ; equiv WEAK (44.6% coverage, 776 valid inputs)
+00942110 36 HTTPClientSendCallback: complete; length/strlen and callback reload differ
+00942150 67 HTTPClientSetNotificationTarget: complete; notification callback layout differs; equiv PASS
+00942630 48 Cookie40::~Cookie40: complete; AutoRefCount::Release's redundant inner `if (p)` null-test is folded away, retail keeps it; equiv PASS (304 valid inputs, 61.9% coverage)
+00942e50 213 eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
+00943480 91 CookieNode list destroy: complete; refcount release emits redundant test + push ecx prologue, and n/next register roles differ; difftest UNSUPPORTED (0/400 valid inputs, 0% coverage)
+00943650 69 Job::Job copy ctor: complete; compiler CSEs mBuffer+0x40 with &second; register/schedule differs; difftest WEAK (152 valid inputs, 100% coverage)
+00943d70 85 CellHolder::AddCell: complete; vector pointer caching + register roles differ; difftest WEAK (174 valid inputs, 95% coverage)

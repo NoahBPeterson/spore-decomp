@@ -7,6 +7,6 @@
 00942b40 EA::Internet::HTTPClient::ReadResponseBody  # pdb anchor
 00942ce0 Cookie40::Cookie40(const Cookie40&)  # dc: copy ctor
 00942d70 Cookie40::operator=(const Cookie40&)  # dc: copy assignment
-00942e50 eastl::StrStub::assignRange  # dc: string assign(first,last)
-00942f70 UrlHolder::SetURL  # dc: URL_SetURL + copy accessor string
+00942e50 ?assignRange@StrStub@eastl@@QAEXPBD0@Z  # StrStub::assignRange migrated from s00942290 (verbatim, slice spelling)
+00942f70 ?SetURL@UrlHolder@@QAEXPBD@Z  # UrlHolder::SetURL migrated from s00942290 (verbatim, slice spelling)
 00942fb0 EA::Internet::HTTPClient::SetUserAgent  # pdb callee-single

@@ -4,8 +4,11 @@
 0083cb70 eastl::hash_map<string,AutoRefCount<cICommand>>::operator[]  # PDB
 0083cd90 EA::ArgScript::cBlockCommandBase::~cBlockCommandBase  # PDB
 0083cdd0 ArgScript::AppProps::AppProps  # PDB
-0083ce90 `anonymous namespace'::DiscardWhiteSpace  # PDB
-0083d080 eastl::pair<const string,AutoRefCount<cExprFunction>>::~pair  # PDB
-0083d240 EA::ArgScript::cExpression::EvalBoolParentheses  # PDB candidate
-0083d290 EA::ArgScript::cExpression::EvalContinueChar  # PDB
-0083d2f0 ?EvalRealParentheses4@ExprStub  # PDB candidate
+0083ce90 ?DiscardWhiteSpace@@YAXPAPBD@Z  # DiscardWhiteSpace migrated from s0083c900 (verbatim, slice spelling)
+0083ced0 ?ReleaseRefCount@@YAXPAPAH@Z  # ReleaseRefCount migrated from s0083c900 (verbatim, slice spelling)
+0083cef0 ?CtorA@PairCtorStub@@QAEXPBUstring8@eastl@@PAPAH@Z  # PairCtorStub::CtorA migrated from s0083c900 (verbatim, slice spelling)
+0083d020 ?CtorB@PairCtorStub@@QAEXPBX@Z  # PairCtorStub::CtorB migrated from s0083c900 (verbatim, slice spelling)
+0083d080 ?PairStringExprDtor@@YAXPAX@Z  # PairStringExprDtor migrated from s0083c900 (verbatim, slice spelling)
+0083d240 ?EvalExpectCharThrow@@YAXPAPBDD@Z  # EvalExpectCharThrow migrated from s0083c900 (verbatim, slice spelling)
+0083d290 ?EvalContinueChar@@YAEPAPBDD@Z  # EvalContinueChar migrated from s0083c900 (verbatim, slice spelling)
+0083d2f0 ?EvalRealParentheses4@ExprStub@@QAEXPAPBDPAM1@Z  # ExprStub::EvalRealParentheses4 migrated from s0083c900 (verbatim, slice spelling)

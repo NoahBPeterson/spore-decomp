@@ -1,4 +1,6 @@
+007b1da0 ?f@W1da0@@QAEXPAUS3@@@Z  # W1da0::f migrated from s007b19c0 (verbatim, slice spelling)
 007b1de0 SP::cTexturePreload::PreloadTextureList  # PDB name
+007b1e70 ?f@W1e70@@QAEXPAX0@Z  # W1e70::f migrated from s007b19c0 (verbatim, slice spelling)
 007b1e90 SP::cTexturePreload::PreloadTextureList  # PDB name (retail copy)
 007b2680 SP::cThumbnailManager::GetThumbRectID  # PDB name
 007b26a0 SP::cThumbnailManager::SetupThumbnailRTTs  # PDB name

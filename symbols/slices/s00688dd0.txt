@@ -1,17 +1,21 @@
 00688fa0  EA::Internet::FTPClient::Job::~Job  # Ghidra PDB symbol
 006891f0  EA::Internet::FTPClient::Job::CommitFile  # Ghidra PDB candidate
-006895f0  SP::cCommandParameterSet::ValidateParameter  # Ghidra PDB symbol
-006896a0  SP::cCommandServer::RegisterCommands  # Ghidra PDB symbol
-006896f0  SP::cCommandServer::UnregisterCommands  # Ghidra PDB symbol
-00689730  SP::cStringCommandGenerator::Shutdown  # Ghidra PDB symbol
+006895f0 ?ValidateParameter@cCommandParameterSet@SP@@UAE_NII@Z  # SP::cCommandParameterSet::ValidateParameter migrated from s00688dd0
+006896a0 ?RegisterCommands@CommandServer@@QAE_NPAUCmdEntry@@H@Z  # CommandServer::RegisterCommands migrated from s00688dd0 (verbatim, slice spelling)
+006896f0 ?UnregisterCommands@CommandServer@@QAE_NPAIH@Z  # CommandServer::UnregisterCommands migrated from s00688dd0 (verbatim, slice spelling)
+00689730 ?Shutdown@cStringCommandGenerator@SP@@UAE_NXZ  # SP::cStringCommandGenerator::Shutdown migrated from s00688dd0
 00689750  SP::cStringCommandGenerator::ExecuteCommand  # Ghidra PDB symbol
+00689810 ??1EditorResDerived@@UAE@XZ  # EditorResDerived::~EditorResDerived migrated from s00688dd0 (verbatim, slice spelling)
+00689920 ?Shutdown@DispShutdown@@QAE_NXZ  # DispShutdown::Shutdown migrated from s00688dd0 (verbatim, slice spelling)
+00689980 ?Teardown@DispTeardown@@QAE_NXZ  # DispTeardown::Teardown migrated from s00688dd0 (verbatim, slice spelling)
 006899d0  SP::cMessageCommandDispatcher::ExecuteCommand  # Ghidra PDB candidate
-00689b00  SP::cCommandServer::SetCommandDispatcher  # Ghidra PDB symbol
-00689b40  SP::cCommandServer::ExecuteCommand  # Ghidra PDB symbol
-00689b60  SP::cCommandServer::ExecuteCommand  # Ghidra PDB symbol
-00689be0  SP::cCommandParameterSet::operator[]  # Ghidra PDB symbol
-00689c20  SP::cCommandParameterSet::GetParameter  # Ghidra PDB symbol
-00689c50  SP::cCommandParameterSet::AppendParameter  # Ghidra PDB symbol
+00689b00 ?SetCommandDispatcher@cCommandServer@SP@@UAE_NPAVcICommandDispatcher@2@@Z  # SP::cCommandServer::SetCommandDispatcher migrated from s00688dd0
+00689b40 ?ExecuteCommand@cCommandServer@SP@@UAEHIPAVcICommandParameterSet@2@0@Z  # SP::cCommandServer::ExecuteCommand migrated from s00688dd0
+00689b60 ?ExecuteCommand@cCommandServer@SP@@UAEHPBV?$basic_string@_WVallocator@eastl@@@eastl@@PAVcICommandParameterSet@2@@Z  # SP::cCommandServer::ExecuteCommand migrated from s00688dd0
+00689be0 ??AParamSet@@QAEPAXI@Z  # None migrated from s00688dd0 (verbatim, slice spelling)
+00689c20 ?GetParameter@ParamSet@@QAEPAXI@Z  # ParamSet::GetParameter migrated from s00688dd0 (verbatim, slice spelling)
+00689c50 ?AppendParameter@ParamSet@@QAEXI@Z  # ParamSet::AppendParameter migrated from s00688dd0 (verbatim, slice spelling)
 00689c80  SP::cCommandParameterSet::SetStatusParameterValue  # Ghidra PDB candidate
-00689d00  SP::cCommandParameterSet::GetFirstParameterID  # Ghidra PDB symbol
+00689d00 ?GetFirstParameterID@cCommandParameterSet@SP@@UBEIXZ  # SP::cCommandParameterSet::GetFirstParameterID migrated from s00688dd0
 00689d40  App::cMessageCommandDispatcher::cMessageCommandDispatcher  # Ghidra PDB symbol
+00689dc0 ?Walk@ParamWalker@@QAE_NPADIPAX@Z  # ParamWalker::Walk migrated from s00688dd0 (verbatim, slice spelling)

@@ -1,16 +1,16 @@
-00839c00 EA::ArgScript::cArgumentSpec::AddArgDocs  # PDB anchor
-00839f90 EA::ArgScript::cArgumentSpec::CreateHelpString  # PDB anchor
-0083a2f0 EA::ArgScript::cArgumentSpec::HelpString  # PDB candidate (caller-single)
+00839950 ??0VecArgInfo@@QAE@ABU0@@Z  # VecArgInfo::VecArgInfo migrated from s00839950 (verbatim, slice spelling)
+008399d0 ?DoInsertValue@V8@@QAEXPAUE8@@ABU2@@Z  # V8::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
+00839ae0 ?DoInsertValue@V16@@QAEXPAUE16@@ABU2@@Z  # V16::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
+00839c00 ?AddArgDocs@cArgumentSpec@@QAEXPAUstring8_s0083_9950@eastl@@PAUVecArgInfo@@H@Z  # cArgumentSpec::AddArgDocs migrated from s00839950 (verbatim, slice spelling)
+00839d80 ?push_back@V8@@QAEXABUE8@@@Z  # V8::push_back migrated from s00839950 (verbatim, slice spelling)
+00839dc0 ?push_back@V16@@QAEXABUE16@@@Z  # V16::push_back migrated from s00839950 (verbatim, slice spelling)
+00839e00 ?CopyCtor@cOptionsSpecInit  # inferred (copy ctor)
+00839f90 ?CreateHelpString@cArgumentSpec@@QAEXPBDPAUstring8_s0083_9950@eastl@@H@Z  # cArgumentSpec::CreateHelpString migrated from s00839950 (verbatim, slice spelling)
+0083a2f0 ?HelpString@cArgumentSpec@@QAEPBDPBDH@Z  # cArgumentSpec::HelpString migrated from s00839950 (verbatim, slice spelling)
+0083a310 ?DestroyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # DestroyOptionsRange migrated from s00839950 (verbatim, slice spelling)
+0083a3c0 ?DoInsertValue@VecArgInfo@@QAEXPAUcArgInfo@@ABU2@@Z  # VecArgInfo::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
+0083a580 ?DoInsertValue@VecEnumSpec@@QAEXPAUcEnumSpec@@ABU2@@Z  # VecEnumSpec::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
 0083a740 ?4VecArgInfo  # PDB candidate
 0083a8b0 ?4cOptionsSpec  # PDB candidate (caller-single)
-0083a900 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::ArgScript::cOptionsSpec *,EA::ArgScript::cOptionsSpec *>  # PDB
-0083a970 eastl::copy_backward_impl<0,std::random_access_iterator_tag>::do_copy<EA::ArgScript::cOptionsSpec *,EA::ArgScript::cOptionsSpec *>  # PDB
-00839950 eastl::vector<EA::ArgScript::cArgInfo,eastl::sp_vector_allocator>::vector(const vector&)  # inferred
-008399d0 eastl::vector<8-byte,sp_vector_allocator>::DoInsertValue  # inferred
-00839ae0 eastl::vector<16-byte,sp_vector_allocator>::DoInsertValue  # inferred
-00839d80 eastl::vector<8-byte,sp_vector_allocator>::push_back  # inferred
-00839dc0 eastl::vector<16-byte,sp_vector_allocator>::push_back  # inferred
-00839e00 ?CopyCtor@cOptionsSpecInit  # inferred (copy ctor)
-0083a310 destroy_range<EA::ArgScript::cOptionsSpec>  # inferred
-0083a3c0 eastl::vector<EA::ArgScript::cArgInfo,eastl::sp_vector_allocator>::DoInsertValue  # inferred
-0083a580 eastl::vector<EA::ArgScript::cEnumSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred
+0083a900 ?CopyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyOptionsRange migrated from s00839950 (verbatim, slice spelling)
+0083a970 ?CopyBackwardOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyBackwardOptionsRange migrated from s00839950 (verbatim, slice spelling)

@@ -1,6 +1,6 @@
 0083b810 EA::ArgScript::cArgumentSpec::Parse  # PDB anchor
-0083b9d0 EA::ArgScript::cArgumentSpec::Parse (throwing overload)  # PDB candidate
-0083ba40 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::erase  # PDB
+0083b9d0 ?ParseThrowing@cArgumentSpec_s0083_b810@@QAEXHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_b810::ParseThrowing migrated from s0083b810 (verbatim, slice spelling)
+0083ba40 ?erase@VecOptions@@QAEPAUcOptionsSpec_s0083_b810@@PAU2@0@Z  # VecOptions::erase migrated from s0083b810 (verbatim, slice spelling)
 0083baa0 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred
 0083bcd0 EA::ArgScript::cArgumentSpec::ConstructSpec  # PDB candidate
 0083c760 EA::ArgScript::cCommandBase::Release  # vtable-slot

@@ -1,4 +1,3 @@
-# s0068e670 recovered names (PDB names where shown by card.py; else invented stubs)
 0068e670 FUN_0068e670  # Simulator job/event processor
 0068e8a0 vec_fill       # vector<bool>-style range fill (DoInsertValues 0x4c10e0 / memcpy 0x11e0744)
 0068e8f0 bitmap_init    # bitmap size/alloc/init
@@ -14,13 +13,13 @@
 0068f1d0 JobLock::JobLock    # job-lock ctor
 0068f2b0 JobLock::~JobLock   # job-lock dtor (refcount release + job release)
 0068f350 TryLockJobs         # try-lock two jobs, create a JobLock
-0068f450 EA::GetHighestBitPowerOf2  # bit-scan (binary search on masks)
-0068f4a0 ClsF4A0::Reset      # zero words + close handle at +8
+0068f450 ?GetHighestBitPowerOf2@EA@@YAHI@Z  # None migrated from s0068e670 (verbatim, slice spelling)
+0068f4a0 ?Reset@ClsF4A0@@QAEXXZ  # ClsF4A0::Reset migrated from s0068e670 (verbatim, slice spelling)
 0068f4e0 mutex_ctor_helper   # mutex/semaphore member ctor helper
-0068f540 ClsF540::Acquire    # lock Mutex @+8, ++count @+0x38
-0068f560 ClsF540::Release    # --count, unlock Mutex @+8
+0068f540 ?Acquire@ClsF540@@QAEXXZ  # ClsF540::Acquire migrated from s0068e670 (verbatim, slice spelling)
+0068f560 ?Release@ClsF540@@QAEXXZ  # ClsF540::Release migrated from s0068e670 (verbatim, slice spelling)
 0068f570 FUN_0068f570        # notify callback + virtual teardown call at inner+0x1c
 0068f5a0 FUN_0068f5a0        # indirect call through vtable slot 0 of *b
-0068f5b0 ClsF5B0::Set        # replace pointer, release old via slot 1
+0068f5b0 ?Set@ClsF5B0@@QAEXPAUVObj@@@Z  # ClsF5B0::Set migrated from s0068e670 (verbatim, slice spelling)
 0068f5d0 list_drain          # drain list, post semaphore per node
 0068f600 sem_list_ctor       # semaphore-list container ctor

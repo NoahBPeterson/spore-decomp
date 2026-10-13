@@ -13,11 +13,11 @@
 00941bc0 EA::Internet::HTTPMethodToString  # pdb anchor
 00941c40 EA::Internet::HeaderFieldToFieldString  # pdb anchor
 00941e80 EA::Internet::EncodeFormURL  # pdb anchor
-00941f20 EA::Internet::HTTPClient::AllocBuffer  # dc: operator new char8_t buffer
+00941f20 ?AllocBuffer@HTTPClient@@QAE_NXZ  # HTTPClient::AllocBuffer migrated from s009413d0 (verbatim, slice spelling)
 00941f90 EA::Internet::HTTPClient::AllocateSocket  # pdb candidate caller-single
-00942010 EA::Internet::HTTPClient::CheckTimeout  # dc: _time64 compare
-00942050 EA::Internet::HTTPClient::FindHeader  # dc: _stricmp over 0xa8-stride table
+00942010 ?HTTPClientCheckTimeout@@YA_NHPAH@Z  # HTTPClientCheckTimeout migrated from s009413d0 (verbatim, slice spelling)
+00942050 ?FindHeader@HTTPClient@@QAE_NPADPAXH@Z  # HTTPClient::FindHeader migrated from s009413d0 (verbatim, slice spelling)
 009420e0 EA::Internet::HTTPClient::FindHeaderByField  # dc: HeaderFieldToFieldString + FindHeader
-00942110 EA::Internet::HTTPClient::SendToCallback  # dc: vtable+0x38 callback
-00942150 EA::Internet::HTTPClient::SetNotificationTarget  # pdb callee-scored
+00942110 ?HTTPClientSendCallback@@YAXHPBDH@Z  # HTTPClientSendCallback migrated from s009413d0 (verbatim, slice spelling)
+00942150 ?SetNotificationTarget@HTTPClient@@QAEXPAX0@Z  # HTTPClient::SetNotificationTarget migrated from s009413d0 (verbatim, slice spelling)
 009421b0 EA::Internet::HTTPClient::Pump  # dc: stream read loop

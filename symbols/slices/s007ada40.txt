@@ -1,12 +1,12 @@
-007ae920 SP::cDXTBlock::Init  # inferred: span descriptor initialiser (this+0x1c flag byte)
-007ae960 SP::cDXTBlock::IsSet  # inferred: returns byte field +0x1c
-007ae9f0 SP::cDXTBlock::cDXTBlock  # inferred: 2-vptr base + interlocked refcount ctor
-007ada40 mapblock  # card name
+007ada40 ?mapblock@@YAXPBIPAEIIH@Z  # mapblock migrated from s007ada40 (verbatim, slice spelling)
 007adcf0 adxtMapBlock  # inferred
-007ade70 rtrymapblock  # card name
-007ae0b0 rbtrymapblock  # card name
-007ae2a0 RefineMinMaxColors  # card name
-007ae5b0 adxtAlphaBlock  # inferred
+007ade70 ?rtrymapblock@@YAIPBIII@Z  # rtrymapblock migrated from s007ada40 (verbatim, slice spelling)
+007ae0b0 ?rbtrymapblock@@YAIPBIII@Z  # rbtrymapblock migrated from s007ada40 (verbatim, slice spelling)
+007ae2a0 ?RefineMinMaxColors@@YAIPBIPAI@Z  # RefineMinMaxColors migrated from s007ada40 (verbatim, slice spelling)
+007ae5b0 ?FUN_007ae5b0@@YAXPBEPAEH@Z  # FUN_007ae5b0 migrated from s007ada40 (verbatim, slice spelling)
 007ae660 InterpolatedAlphaBlock  # card name
-007ae840 adxtMinMaxBlock  # inferred
+007ae840 ?FUN_007ae840@@YAXPBEHPAT__m64@@PAI@Z  # FUN_007ae840 migrated from s007ada40 (verbatim, slice spelling)
+007ae920 ?Init@Span@@QAEXHHHHH@Z  # Span::Init migrated from s007ada40 (verbatim, slice spelling)
+007ae960 ?IsSet@FlagHolder@@QAEEXZ  # FlagHolder::IsSet migrated from s007ada40 (verbatim, slice spelling)
 007ae980 SP::cDXTBlock::~cDXTBlock  # inferred
+007ae9f0 SP::cDXTBlock::cDXTBlock  # inferred: 2-vptr base + interlocked refcount ctor

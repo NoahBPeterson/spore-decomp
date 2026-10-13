@@ -1,7 +1,7 @@
 0083f140 EA::ArgScript::cExpression::EvalBoolTerm  # dev 0x10c0a60 ("and")
 0083f2e0 EA::ArgScript::cExpression::EvalBoolExpression  # dev 0x10c0c20 ("or")
-0083f480 EA::ArgScript::cExpression::EvalChar  # PDB
-0083f510 EA::ArgScript::cExpression::ParseBool  # PDB anchor
+0083f480 ?EvalChar@cExpression_s0083_f140@ArgScript@EA@@QAEHPAPBD@Z  # cExpression_s0083_f140::EvalChar migrated from s0083f140 (verbatim, slice spelling)
+0083f510 ?ParseBool@@YA_NPBD@Z  # ParseBool migrated from s0083f140 (verbatim, slice spelling)
 0083f580 `anonymous namespace'::FileMessageCallback  # PDB candidate
 0083f5e0 EA::ArgScript::cFileParser::Release  # PDB
 0083f600 EA::ArgScript::cFileParser::HandleMessage  # PDB

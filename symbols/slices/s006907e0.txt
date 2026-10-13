@@ -1,3 +1,4 @@
+0068f950 ?AddRef@cJob@@QAEHXZ  # cJob::AddRef migrated from s006907e0 (verbatim, slice spelling)
 006908a0  SP::cJobManager::PromoteJobPriorityUnderLock  # PDB (dev 00e90a40)
 00690da0  SP::cJobManager::CreateJobThread  # PDB (dev 00e91d80)
 00690f60  SP::cJobManager::FailJob  # PDB (dev 00e91e30)

@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGameCommand.cpp  ?ValidateParameter@cCommandParameterSet@SP@@UAE_NII@Z  006895f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?RegisterCommands@CommandServer@@QAE_NPAUCmdEntry@@H@Z  006896a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?UnregisterCommands@CommandServer@@QAE_NPAIH@Z  006896f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?Shutdown@cStringCommandGenerator@SP@@UAE_NXZ  00689730  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?Shutdown@DispShutdown@@QAE_NXZ  00689920  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?Teardown@DispTeardown@@QAE_NXZ  00689980  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?ExecuteCommand@cCommandServer@SP@@UAEHIPAVcICommandParameterSet@2@0@Z  00689b40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?ExecuteCommand@cCommandServer@SP@@UAEHPBV?$basic_string@_WVallocator@eastl@@@eastl@@PAVcICommandParameterSet@2@@Z  00689b60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ??AParamSet@@QAEPAXI@Z  00689be0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?GetParameter@ParamSet@@QAEPAXI@Z  00689c20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?AppendParameter@ParamSet@@QAEXI@Z  00689c50  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?GetFirstParameterID@cCommandParameterSet@SP@@UBEIXZ  00689d00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?GetNextParameterID@cCommandParameterSet@@QAEII@Z  00689fc0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ??1cCommandInfo@@QAE@XZ  0068a000  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  _FUN_0068a2e0  0068a2e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGameCommand.cpp  ?GetCommandInfo@cCommandServer@@QAE_NIPAUWStr@@0@Z  0068a3f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1,0 +1,5 @@
+0093ba70 ?GetData@MemoryStream@IO@EA@@QBEPAXXZ  # EA::IO::MemoryStream::GetData (callee of s00947d50, named from the dev publics; slice address comment)
+0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s00947d50, named from the dev publics; slice address comment)
+00947de0 ?RemoveCachedFile@INetFileCache@Internet@EA@@QAE_NABV?$basic_string@_WVallocator@eastl@@@eastl@@@Z  # EA::Internet::INetFileCache::RemoveCachedFile migrated from s00947d50
+00947e30 ?WriteDataToFile@INetFileCache@Internet@EA@@QAE_NPB_WPAEI@Z  # EA::Internet::INetFileCache::WriteDataToFile migrated from s00947d50
+00947ec0 ?ReadDataFromFile@INetFileCache@Internet@EA@@QAE_NPB_WPAEI@Z  # EA::Internet::INetFileCache::ReadDataFromFile migrated from s00947d50

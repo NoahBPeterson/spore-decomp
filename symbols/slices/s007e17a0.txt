@@ -1,16 +1,16 @@
-007e17a0 eastl uninitialized_copy<eastl::pair<...,EA::AutoRefCount<...> > >  # pair<ref> copy
-007e1830 eastl uninitialized_copy/move<AutoRef>  # destination-last form
-007e1910 `anonymous namespace'::state-flag-off command Execute  # sets state+0x80=0
-007e1930 `anonymous namespace'::state-flag-on command Execute  # sets state+0x80=1
-007e1950 eastl::hashtable::rehash  # bucket rehash, uses 0x11e073e
-007e1a10 `anonymous namespace'::reset-state command Execute  # sets state+0x7c=-1
-007e1a80 description destructor (two strings + vector + refcount)  # frees +0x0/+0x10, releases +0x20
-007e1b00 eastl::copy<AutoRef>  # copy-assign with AddRef/Release
+007e17a0 ?FUN_007e17a0@@YAPAUAutoRef@@PAU1@PBU1@1@Z  # FUN_007e17a0 migrated from s007e17a0 (verbatim, slice spelling)
+007e1830 ?FUN_007e1830@@YAPAUAutoRef@@PBU1@0PAU1@@Z  # FUN_007e1830 migrated from s007e17a0 (verbatim, slice spelling)
+007e1910 ?Execute@cStateFlagCommand@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  # cStateFlagCommand::Execute migrated from s007e17a0 (verbatim, slice spelling)
+007e1930 ?Execute@cStateFlag2Command@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  # cStateFlag2Command::Execute migrated from s007e17a0 (verbatim, slice spelling)
+007e1950 ?rehash@HashTable@@QAEXH@Z  # HashTable::rehash migrated from s007e17a0 (verbatim, slice spelling)
+007e1a10 ?Execute@cSetStateCommand@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  # cSetStateCommand::Execute migrated from s007e17a0 (verbatim, slice spelling)
+007e1a80 ??1SomeDesc@@QAE@XZ  # SomeDesc::~SomeDesc migrated from s007e17a0 (verbatim, slice spelling)
+007e1b00 ?FUN_007e1b00@@YAPAUAutoRef@@PAU1@00@Z  # FUN_007e1b00 migrated from s007e17a0 (verbatim, slice spelling)
 007e1b60 `anonymous namespace'::cTransitionCommand::OnRegister  # PDB name
 007e29d0 eastl::hashtable::DoInsertValue/insert  # hashes key, buckets at +4
 007e2ae0 cAppStateManager/description copy constructor  # copies strings/vectors
-007e2ce0 cTransitionCommand instance dispatch / message broadcast  # SP::MessageServer/EffectsManager
-007e2fb0 cTransitionListCommand::Execute  # adds pair to vector at state+0x54
-007e3030 SP::cAppStateManager::StateIDFromName  # PDB name
-007e30a0 hash lookup then FUN_007e2ce0  # map at +0xd8
-007e3160 eastl::vector<SP::cAppStateManager::cActionMessage>::operator=  # PDB name
+007e2ce0 ?FUN_007e2ce0@cTransitionMgr@@QAEXH@Z  # cTransitionMgr::FUN_007e2ce0 migrated from s007e17a0 (verbatim, slice spelling)
+007e2fb0 ?Execute@cTransitionListCommand@@QAEXAAVcArguments_s007e_17a0@ArgScript@EA@@@Z  # cTransitionListCommand::Execute migrated from s007e17a0 (verbatim, slice spelling)
+007e3030 ?StateIDFromName@cAppStateManagerX@@QAEHPBD@Z  # cAppStateManagerX::StateIDFromName migrated from s007e17a0 (verbatim, slice spelling)
+007e30a0 ?FUN_007e30a0@cTransitionMgr@@QAEXHH@Z  # cTransitionMgr::FUN_007e30a0 migrated from s007e17a0 (verbatim, slice spelling)
+007e3160 ?assign@AVec@@QAEPAUAutoRef@@PBU1@@Z  # AVec::assign migrated from s007e17a0 (verbatim, slice spelling)
