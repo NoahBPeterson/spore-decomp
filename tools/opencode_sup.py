@@ -69,7 +69,11 @@ PROMPT = open(W("work/opencode", G.get("prompt") or "wave_prompt.txt")).read()
 def prompt_for(k):
     a, b = G["ranges"][k]
     n = sum(len(BATCH[i]["vas"]) for i in range(a, b + 1))
-    return PROMPT.replace("{BATCH}", G["batch"]).replace("{A}", str(a)).replace("{B}", str(b)).replace("{N}", str(n))
+    # Migration batches (docs/migration-runbook.md s8a): entries carry "module" = "<dir>/<obj stem>";
+    # a range holds entries of one module.
+    module = BATCH[a].get("module", "")
+    return (PROMPT.replace("{BATCH}", G["batch"]).replace("{A}", str(a)).replace("{B}", str(b)).replace("{N}", str(n))
+            .replace("{MODULE}", module).replace("{OBJ}", module.rsplit("/", 1)[-1]))
 
 
 def progress(k):
@@ -78,6 +82,22 @@ def progress(k):
     for i in range(a, b + 1):
         sid = BATCH[i]["id"]
         tot += len(BATCH[i]["vas"])
+        if BATCH[i].get("module"):
+            # migration entry: count this entry's VAs in the module's bookkeeping files
+            want = {v.lower().lstrip("0x") for v in BATCH[i]["vas"]}
+            for f, isok in (("manifest.txt", 1), ("nonmatching.txt", 0), ("partial.txt", 0)):
+                p = W("src/game", BATCH[i]["module"], f)
+                if not os.path.exists(p):
+                    continue
+                for l in open(p):
+                    parts = l.split("#", 1)[0].split()
+                    if not parts:
+                        continue
+                    va = (parts[2] if isok and len(parts) > 2 else parts[0]).lower().lstrip("0x")
+                    if va in want:
+                        done += 1
+                        ok += isok
+            continue
         for f, isok in (("manifest.txt", 1), ("nonmatching.txt", 0), ("partial.txt", 0)):
             p = W("match/slices", sid, f)
             if os.path.exists(p):

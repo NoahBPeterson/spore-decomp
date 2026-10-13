@@ -66,8 +66,12 @@ def confirm():
 
 while True:
     try:
+        # --groups a,b restricts the watch (and the switch) to those groups; without it every cheaperinference
+        # group is watched, including finished waves, and a switch would re-prompt their old sessions.
+        only = sys.argv[sys.argv.index("--groups") + 1].split(",") if "--groups" in sys.argv else None
         groups = [f for f in glob.glob(W("work/opencode/groups/*.json"))
-                  if json.load(open(f)).get("provider") == "cheaperinference"]
+                  if json.load(open(f)).get("provider") == "cheaperinference"
+                  and (only is None or os.path.basename(f)[:-5] in only)]
         if not groups:
             log("no cheaperinference groups left; exiting")
             break

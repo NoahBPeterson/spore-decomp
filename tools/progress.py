@@ -274,6 +274,19 @@ def model_table():
                     b_ex, b_eq = CLAUDE_BASELINE[rec["id"]]
                     ex += b_ex; eq += b_eq
                     continue
+                if rec.get("module"):
+                    # migration batch: credit the entry's VAs found in the module's bookkeeping, not the slice's
+                    want = {v.lower() for v in rec["vas"]}
+                    for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
+                        p = W("src/game", rec["module"], fname)
+                        if os.path.exists(p):
+                            for l in open(p):
+                                parts = l.split("#", 1)[0].split()
+                                va = (parts[2] if is_exact and len(parts) > 2 else parts[0] if parts else "").lower()
+                                if va in want:
+                                    if is_exact: ex += 1
+                                    else: eq += 1
+                    continue
                 for fname, is_exact in (("manifest.txt", True), ("nonmatching.txt", False)):
                     p = W("match/slices", rec["id"], fname)
                     if os.path.exists(p):

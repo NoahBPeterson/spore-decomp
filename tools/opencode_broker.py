@@ -22,11 +22,24 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG = os.path.join(ROOT, "work/opencode/decisions.jsonl")
 
 batch = sys.argv[1]
-ids = [s["id"] for s in json.load(open(os.path.join(ROOT, "work/batches", batch + ".json")))]
+_recs = json.load(open(os.path.join(ROOT, "work/batches", batch + ".json")))
+ids = [s["id"] for s in _recs]
 IDS = "(?:" + "|".join(map(re.escape, ids)) + ")"
-ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
-                          % (re.escape(ROOT), IDS, IDS))
-PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
+# Migration batches (docs/migration-runbook.md s8a): entries carry "module" = "<dir>/<obj stem>". Sessions may
+# then write the module TU and its bookkeeping, the renames/report files of their slices and a scratch dir, and
+# run tools/migrate/rewrite.py; slices and generated headers stay read-only (the slice paths are NOT allowed).
+MODULES = sorted({s["module"] for s in _recs if s.get("module")})
+if MODULES:
+    MODS = "(?:" + "|".join(map(re.escape, MODULES)) + ")"
+    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:src/game/%s(?:\.cpp|/[^/]+)|symbols/slices/%s\.txt|work/match/.*|"
+                              r"work/migrate/(?:renames_%s\.json|rewrite_%s[^/]*\.json|report_%s\.md|scratch_%s(?:/.*)?))$"
+                              % (re.escape(ROOT), MODS, IDS, IDS, IDS, IDS, IDS))
+    MIGRATE_TOOL = r"tools/migrate/rewrite\.py|"
+else:
+    ALLOWED_PATH = re.compile(r"^(?:%s/)?(?:match/slices/%s/[^/]+|symbols/slices/%s\.txt|work/match/.*)$"
+                              % (re.escape(ROOT), IDS, IDS))
+    MIGRATE_TOOL = ""
+PY_TOOLS = re.compile(r"^(?:\.venv/bin/python3?\s+)?(?:" + MIGRATE_TOOL + r"tools/matching/(?:slice_info|card|chk|cmpdis|try_variants|run_all|od_names|"
                       r"disasm|pattern_info|cmpobj|patterns|libmatch|asm_audit)\.py|tools/pdb_type\.py|"
                       r"tools/difftest/(?:equiv|batch|slice)\.py)(?:\s|$)")
 SAFE_CMD = re.compile(r"^(?:rg|ls|cat|head|tail|wc|sort|uniq|cut|tr|echo|printf|true|false|test|\[|pwd|file|xxd|od|"
@@ -69,6 +82,12 @@ def paths_in(seg):
 
 def ok_path(p):
     p = p.strip("'\"")
+    if MODULES:
+        if "$" in p:
+            pre = p.split("$", 1)[0]
+            return pre.startswith(("work/match/", "symbols/slices/", "work/migrate/scratch_"))
+        return (bool(ALLOWED_PATH.match(p))
+                or bool(re.match(r"^(?:%s/)?(?:src/game/%s|work/migrate|symbols/slices|work/match)/?$" % (re.escape(ROOT), MODS), p)))
     if "$" in p:  # a shell variable (e.g. a loop's $id) in the path: judge by the literal prefix before it
         pre = p.split("$", 1)[0]
         return (pre.startswith(("match/slices/", "work/match/", "symbols/slices/"))

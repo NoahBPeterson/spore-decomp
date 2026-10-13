@@ -530,3 +530,7 @@ What a landing agent must NOT do: edit `rewrite.py`, `headers.py`, `layout_overr
 - `SP::cDirectPropertyList` (0x40 vs 0x54) and `SP::cPropertyManager` overrides (§6) are still open.
 - Virtual slot signatures in `DatabasePackedFile_v2.h` are `void()` placeholders; each migrated caller fixes
   the slot it calls (evidence: the call's argument pushes).
+- `EA/SharedLibrary.h` and `EA/SharedLibraryRegistry.h` (generated 2026-10-12 for a round-2 candidate) do not
+  compile standalone: they use `eastl::pair` outside a map and the generator's include closure only brings
+  `eastl/map.h` in for map/multimap members. Fix in `headers.py` (a `pair` family include), then
+  `EASharedLibrary.obj` (26 functions, 3 slices) is landable.

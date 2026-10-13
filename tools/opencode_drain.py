@@ -80,6 +80,18 @@ def progress(k):
     for i in range(lo, hi + 1):
         sid = BATCH[i]["id"]
         tot += len(BATCH[i]["vas"])
+        if BATCH[i].get("module"):
+            # migration entry (docs/migration-runbook.md s8a): this entry's VAs in the module's bookkeeping
+            want = {v.lower() for v in BATCH[i]["vas"]}
+            for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
+                p = W("src/game", BATCH[i]["module"], f)
+                if not os.path.exists(p):
+                    continue
+                for l in open(p):
+                    parts = l.split("#", 1)[0].split()
+                    va = (parts[2] if f == "manifest.txt" and len(parts) > 2 else parts[0] if parts else "").lower()
+                    done += va in want
+            continue
         for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
             p = W("match/slices", sid, f)
             if not os.path.exists(p):
