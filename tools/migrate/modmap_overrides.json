@@ -1,0 +1,15 @@
+{
+  "_doc": "Hand-curated corrections applied after modmap's signals (tools/migrate/modmap.py apply_overrides). Each entry carries its evidence.",
+  "rename_in_range": [
+    {
+      "lo": "006bb800", "hi": "006c1200",
+      "module": "UTFSpore_Win32/DatabasePackedFile.obj", "to": "UTFSpore_Win32/DatabasePackedFile_v2.obj",
+      "evidence": "Retail has a second DatabasePackedFile family here that the dev PDB does not: slice view (s006bc1b0, 9 byte-exact users) is 0x5a8 with FileStream 0x434 at +0x30, mutexes at 0x478/0x4a8, mpIndex 0x4d8, 64-bit hole tables of 0x28; retail vtable 0x140a154 has 28 slots vs 0x14367b0's 37; own AsInterface id 0x6492c5f vs 0x226a25b. The 0x8d8000 family matches the PDB (0x388, 37 slots). Migration pilot round 1, DatabasePackedFile agent report, 2026-10-12."
+    },
+    {
+      "lo": "006bb800", "hi": "006c1200",
+      "module": "UTFSpore_Win32/DatabasePackedFileIndex.obj", "to": "UTFSpore_Win32/DatabasePackedFileIndex_v2.obj",
+      "evidence": "Same family: the PFIndexModifiable these functions use is the 0x6b copy (vtable 0x140a200) with a 64-bit hole table (0x6bf5a0 stores -1 in two words at +0, set at +8; PopulateHoleTable 0x6c0120 takes lo/hi pairs); the PDB PFHoleTable has long mExtent at +0 and the set at +4, and the 0x8d copy (s008daff0) matches the PDB. DatabasePackedFileIndex agent report, 2026-10-12."
+    }
+  ]
+}

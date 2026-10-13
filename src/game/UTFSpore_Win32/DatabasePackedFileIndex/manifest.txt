@@ -1,2 +1,0 @@
-# source  symbol  va  flags
-../src/game/UTFSpore_Win32/DatabasePackedFileIndex.cpp  ?DoFreeNodes@HT@@QAEXPAII@Z  006be640  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

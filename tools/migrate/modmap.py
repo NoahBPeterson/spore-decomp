@@ -164,7 +164,7 @@ class Ctx:
             r["hi"] = va
             r["n"] += 1
             r["size"] += self.retail[va]
-            r["anchors"] += e["how"] == "anchor"
+            r["anchors"] += e["how"] in ("anchor", "anchor+override")
             prev_idx = idx
         return runs
 
@@ -280,7 +280,31 @@ def build(quiet=False, holdout=0.0, seed=1, signals=None):
     if names[0] != "anchor":
         names.insert(0, "anchor")
     run_signals(ctx, names, quiet)
+    apply_overrides(ctx, quiet)
     return ctx, summarize(ctx)
+
+
+OVERRIDES = W("tools", "migrate", "modmap_overrides.json")
+
+
+def apply_overrides(ctx, quiet=False):
+    """Hand-curated corrections after the signals (tools/migrate/modmap_overrides.json), each with
+    evidence. `rename_in_range`: functions in [lo, hi] assigned to a module matching `module`
+    (prefix) are re-labelled `to` (a retail-only object the dev PDB does not have, e.g. the second
+    DatabasePackedFile family near 0x6bb000). The `how` keeps its signal plus "+override"."""
+    if not os.path.exists(OVERRIDES):
+        return
+    ov = json.load(open(OVERRIDES))
+    for e in ov.get("rename_in_range", []):
+        lo, hi, n = int(e["lo"], 16), int(e["hi"], 16), 0
+        for va, a in ctx.assign.items():
+            if lo <= va <= hi and a["module"].startswith(e["module"]):
+                a["module"] = e["to"]
+                if not a["how"].endswith("+override"):
+                    a["how"] += "+override"
+                n += 1
+        if not quiet:
+            print("override: %s -> %s in %08x-%08x: %d functions" % (e["module"], e["to"], lo, hi, n))
 
 
 def summarize(ctx):
@@ -297,7 +321,7 @@ def summarize(ctx):
         m = modules[e["module"]]
         m["n"] += 1
         m["size"] += retail[va]
-        m["anchors"] += e["how"] == "anchor"
+        m["anchors"] += e["how"] in ("anchor", "anchor+override")
         dirs[e["module"].split("/")[0]] += retail[va]
     for r in runs:
         modules[r["module"]]["runs"] += 1

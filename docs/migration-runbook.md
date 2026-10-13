@@ -468,3 +468,65 @@ destructor needs the member destructors of the hand-written headers: DIFF 18 byt
 0x8d9f20 insert), and all of s008daff0 (PFIndexModifiable 0x8db.. copy, HoleSet/rbtree/hash instantiations, sort helpers: no canonical class for the 0x8d copy of
 PFIndexModifiable; the Index module's class is keyed on the 0x6b copy). Converted from these slices: CompressData 0x8d91e0, DecompressRecord 0x8d9320, CloseInternal 0x8d94a0, ShouldRecordBeCompressed(5) 0x8d9850,
 SetLocation 0x8d99c0, ReadIndexRecord 0x8da750, CompactDatabase 0x8da8b0, AsInterface 0x8d81a0, Init 0x6bbdd0 (43 converted, 55 verbatim in the TU).
+
+## 8. Round structure from round 2 on (2026-10-12, after round 1)
+
+Round 1 ran six module agents at once and it worked, but three things were shared by writers: `rewrite.py`
+(one agent edited it while five ran it), the header tree (a layout override ripples into every TU), and
+`run_all` (fixed: it now waits for its lock). A round is therefore:
+
+1. **Freeze.** `tools/migrate/rewrite.py`, `headers.py`, `layout_overrides.json` and every file under
+   `src/game/include/` are read-only for the landing agents. Nothing in the fan-out edits them.
+2. **Fan out, one agent per object file**, slices of the object in VA order. Per slice the mechanical
+   protocol is §8a. A landing agent may write only: the object's TU and bookkeeping files under
+   `src/game/<dir>/<obj>/`, `work/migrate/renames_<slice>.json` (`manual` section), `symbols/slices/<slice>.txt`,
+   its scratchpad, and its report. Anything else it needs becomes a **request** in the report (rule for the
+   tool, header evidence, modmap correction), never an edit.
+3. **Verify in the foreground.** `run_all --manifest` then `equiv.py` on the nonmatching rows, as normal
+   commands with a timeout (a module's equiv batch takes 3-4 minutes; the Bash limit is 10). Do not start
+   them in the background and poll: a workflow agent cannot idle until a background task finishes, so the
+   polling burns its turns.
+4. **Fix pass (one agent, or me):** apply the requests: rules into `rewrite.py` (with the slice that needed
+   them as the test), overrides into `layout_overrides.json` with evidence, regenerate headers, re-run every
+   touched manifest, re-run the slices whose plan changed (`rewrite.py <slice> --apply` is idempotent for a
+   TU that only holds that slice's functions; otherwise merge in VA order).
+5. **Gate:** `tools/hybrid/build.py --hook-manifest` on the PASS rows (and only PASS rows until ticket M1 in
+   `docs/tickets.md` is fixed), two boots, `SCENE_MIN=6`, no game window left open.
+
+### 8a. Landing a slice: the mechanical protocol (written so a smaller model can follow it)
+
+Inputs: `<slice>`, `<module>` (e.g. `UTFSpore_Win32/DatabasePackedFile`), the module's manifest dir
+`src/game/<module>/`. Interpreter: `.venv/bin/python` for `run_all`, `equiv`, `cmpdis`; `python3` is fine for
+`rewrite.py`.
+
+1. `python3 tools/migrate/rewrite.py <slice> --module <ObjStem>` (plan). Read the printed plan and
+   `work/migrate/renames_<slice>.json` `auto`: every function with `unmapped`/`demoted` notes needs either a
+   `manual` entry (`methods`, `method_names`, `members`, `class_map`, `exclude`, `edits`, each with a `why`) or
+   is left verbatim. Do not touch `auto`.
+2. `python3 tools/migrate/rewrite.py <slice> --module <ObjStem> --apply`.
+3. `.venv/bin/python tools/matching/run_all.py --manifest src/game/<module>/manifest.txt -v`. Every row must
+   print MATCH. A DIFF: run `.venv/bin/python tools/matching/cmpdis.py` on that VA (docs/matching.md), write
+   the first differing instruction and the member/slot it touches into the report as a header request, and
+   revert the slice (`git checkout -- src/game/<module>/` if the TU only had this slice's functions; else
+   add the DIFF rows to `manual` `leave_in_slice` {va: why} in the renames file and re-apply). Never edit a header; never
+   change a function body's logic to make bytes match.
+4. `.venv/bin/python tools/difftest/equiv.py <slice> <va...> --src src/game/<module>.cpp --flags "<slice flags> /Isrc/game/include"`
+   for every row in the module's `nonmatching.txt` and `partial.txt` that came from this slice. Verdict class
+   must not get worse (PASS > WEAK > FAIL > UNSUPPORTED); a regression means a `manual` `leave_in_slice` {va: why} entry for that row (re-apply) and a
+   report line with both verdicts.
+5. Report (per slice): rows MATCH/DIFF, verdict before -> after per nonmatching row, functions left in the
+   slice and why, manual entries added, requests (tool rule / header evidence / modmap) with the evidence.
+
+What a landing agent must NOT do: edit `rewrite.py`, `headers.py`, `layout_overrides.json`, anything under
+`src/game/include/` or `match/slices/`; commit; run anything in the background; kill a compile.
+
+### 8b. Open header-owner items for round 2
+
+- `PFIndexModifiable_v2` and `PFHoleTable_v2` for the second family: two slice views disagree
+  (`s006bc1b0` says 0x4c with 6 members, `s006bfda0` says 0x34); the byte-exact users decide. Generate with
+  `tools/migrate/retail_class_header.py` once the view is chosen.
+- Move the ten 0x6b-family functions out of `DatabasePackedFile.cpp` into `DatabasePackedFile_v2.cpp`
+  (`rewrite.py s006bb1c0 --module DatabasePackedFile_v2 --apply` after the class_map points at the `_v2` header).
+- `SP::cDirectPropertyList` (0x40 vs 0x54) and `SP::cPropertyManager` overrides (§6) are still open.
+- Virtual slot signatures in `DatabasePackedFile_v2.h` are `void()` placeholders; each migrated caller fixes
+  the slot it calls (evidence: the call's argument pushes).

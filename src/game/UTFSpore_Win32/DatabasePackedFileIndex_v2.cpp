@@ -1,5 +1,5 @@
-// src/game/UTFSpore_Win32/DatabasePackedFileIndex.cpp -- migrated from slice(s) s006bfda0, s006bede0, s006bde30 by tools/migrate/rewrite.py
-// Object file: UTFSpore_Win32/DatabasePackedFileIndex.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
+// src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp -- migrated from slice(s) s006bfda0, s006bede0, s006bde30 by tools/migrate/rewrite.py
+// Object file: UTFSpore_Win32/DatabasePackedFileIndex_v2.obj (retail-only second family, tools/migrate/modmap_overrides.json).  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"

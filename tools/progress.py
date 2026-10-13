@@ -75,6 +75,7 @@ byte_exact = ns["byte_exact"]; equiv = ns["equiv"]; part = ns["part"]; nosrc = n
 KF, KC, KG = ns["KF"], ns["KC"], ns["KG"]
 pct = ns["pct"]
 migrated = ns["mig_comp"]; mig_exact = ns["mig_exact"]; mig_equiv = ns["mig_equiv"]; mig_part = ns["mig_part"]
+mig_verbatim = ns["mig_verbatim"]
 closed = ns["closed"]; objects = ns["objects"]; intervals = ns["intervals"]; module_of = ns["module_of"]
 
 def mb(items):
@@ -121,8 +122,9 @@ def migration_table():
     print()
     print("Moving source out of match/slices into one .cpp per object file (src/game, Phase B)")
     print()
-    print("  Migrated so far: %s functions with compilable source = %s of all game functions (%s by size)." % (
+    print("  Migrated so far: %s functions with compilable source = %s of all game functions (%s by size);" % (
         human(len(migrated)), pct(len(migrated), G), pct(mb(migrated), GB_MB)))
+    print("  of those, %s are verbatim slice text (compile and match, not yet on the canonical classes)." % human(len(mig_verbatim)))
     print("  Finished objects: %s functions sit in retail code ranges that are completely migrated (%s by size)." % (
         human(len(closed)), pct(mb(closed), GB_MB)))
     if not objects:
@@ -134,27 +136,34 @@ def migration_table():
     rows = []
     tot = collections.Counter()
     for obj, o in sorted(objects.items()):
-        in_tu = set(a for a, m in module_of.items() if m == obj) & game
+        all_tu = set(a for a, m in module_of.items() if m == obj) & game
+        in_tu = all_tu & o["members"] if o["intervals"] else all_tu
+        misfiled = len(all_tu - in_tu)          # in this .cpp but inside another object's ranges
         ex, eq, pa = len(in_tu & mig_exact), len(in_tu & mig_equiv), len(in_tu & mig_part)
         done = ex + eq
+        vb = len(in_tu & mig_verbatim)
         n = o["in_interval"]
-        rows.append((obj + ".cpp", human(n), "+%d" % (o["upper"] - n), human(done), "%d / %d" % (ex, eq), human(pa),
-                     human(o["holes"]), pct(done, n) if n else "-", "%d of %d" % (o["closed"], o["intervals"])))
+        rows.append((obj + ".cpp", human(n), "+%d" % (o["upper"] - n), human(done), "%d / %d" % (ex, eq), human(vb), human(pa),
+                     human(o["holes"]), pct(done, n) if n else "-", "%d of %d" % (o["closed"], o["intervals"]),
+                     human(misfiled) if misfiled else ""))
         for k in ("intervals", "in_interval", "upper", "holes", "closed"):
             tot[k] += o[k]
-        tot["ex"] += ex; tot["eq"] += eq; tot["pa"] += pa
+        tot["ex"] += ex; tot["eq"] += eq; tot["pa"] += pa; tot["vb"] += vb; tot["mf"] += misfiled
     n = tot["in_interval"]; done = tot["ex"] + tot["eq"]
-    rows.append(("TOTAL", human(n), "+%d" % (tot["upper"] - n), human(done), "%d / %d" % (tot["ex"], tot["eq"]), human(tot["pa"]),
-                 human(tot["holes"]), pct(done, n) if n else "-", "%d of %d" % (tot["closed"], tot["intervals"])))
-    print(table(["Object file", "Size (functions)", "maybe more", "Migrated", "exact / equiv", "Partial", "Remaining", "Done", "Ranges finished"],
-                rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">", ">"]))
+    rows.append(("TOTAL", human(n), "+%d" % (tot["upper"] - n), human(done), "%d / %d" % (tot["ex"], tot["eq"]), human(tot["vb"]),
+                 human(tot["pa"]), human(tot["holes"]), pct(done, n) if n else "-", "%d of %d" % (tot["closed"], tot["intervals"]),
+                 human(tot["mf"]) if tot["mf"] else ""))
+    print(table(["Object file", "Size (functions)", "maybe more", "Migrated", "exact / equiv", "of which verbatim", "Partial", "Remaining", "Done", "Ranges finished", "Misfiled"],
+                rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">", ">", ">", ">"]))
     print()
     print("  Size = retail functions in the address ranges that belong to this object (dev order is kept in retail, so an")
     print("  object is one contiguous range, or two or three when retail split it). 'maybe more' = unassigned functions next")
     print("  to those ranges that could also be the object's: its true size is between Size and Size + maybe more.")
-    print("  Migrated = functions now in the .cpp with byte-exact or equivalent source; Partial = in the .cpp but incomplete,")
-    print("  not counted. Remaining = functions in the ranges still without compilable source in the .cpp.")
+    print("  Migrated = functions now in the .cpp with byte-exact or equivalent source; 'of which verbatim' = still the")
+    print("  slice's text with renamed stubs, not on the canonical classes. Partial = in the .cpp but incomplete, not")
+    print("  counted. Remaining = functions in the ranges still without compilable source in the .cpp.")
     print("  Ranges finished = address ranges with nothing remaining; a finished object is the linkable unit.")
+    print("  Misfiled = functions in this .cpp whose address lies in another object's ranges (not counted above).")
 
 migration_table()
 

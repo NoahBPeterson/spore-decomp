@@ -328,3 +328,15 @@ headers) replace address windows as the units of agent work (`docs/PLAN.md` Phas
 - **Size**: 978k lines through a parser that is "the census extractor plus regexes". It will be
   good enough for the pilot; a real C++ front end (libclang on the VC9-dialect sources) is the
   fallback if the regexes crack on the UI code.
+
+**Round 1 result and the second family (2026-10-12).** Six module TUs, 85/85 byte-exact, hybrid booted twice
+with 27 PASS hooks (commit abbcdb84). Retail has a *second* `DatabasePackedFile` / `PFIndexModifiable` /
+`PFHoleTable` family near 0x6bb000 (0x5a8 layout, 28-slot vtable 0x140a154, 64-bit hole tables) that the dev
+PDB does not have and that xmatch names after the single dev class. Decision (user, Option A): it is its own
+object. `tools/migrate/modmap_overrides.json` re-labels its functions `UTFSpore_Win32/DatabasePackedFile_v2.obj`
+and `DatabasePackedFileIndex_v2.obj` (applied by `modmap.py apply_overrides`, with evidence), the Index TU is
+`src/game/UTFSpore_Win32/DatabasePackedFileIndex_v2.cpp`, and `tools/migrate/retail_class_header.py` promotes
+the best byte-exact slice view to a header for a class the PDB lacks (`EA/ResourceMan/DatabasePackedFile_v2.h`:
+43 members, 28 slots, sizeof and 34 offsets verified under VC9). Progress counts "migrated" and "of which
+verbatim" separately (`tools/progress.py`), and "misfiled" = functions in a TU whose address lies in another
+object's ranges (the ten 0x6b functions still in `DatabasePackedFile.cpp`).

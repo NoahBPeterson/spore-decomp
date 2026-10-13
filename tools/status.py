@@ -174,6 +174,19 @@ mig_equiv = migrated & equiv
 mig_part = migrated & part
 mig_comp = mig_exact | mig_equiv
 unmigrated_comp = (byte_exact | equiv) - migrated
+# Verbatim = landed in the TU as the slice's text with renamed local stubs (compiles and matches,
+# but not yet on the canonical classes). rewrite.py records them per slice in
+# work/migrate/rewrite_<slice>[_<module>].json "functions_verbatim"; the union is the current
+# state because a re-run of a slice rewrites its report.
+verbatim = set()
+for f in glob.glob(W("work/migrate/rewrite_*.json")):
+    try:
+        for va in _json.load(open(f)).get("functions_verbatim", []):
+            verbatim.add(int(va, 16))
+    except (OSError, ValueError, TypeError):
+        continue
+mig_verbatim = mig_comp & verbatim
+mig_canonical = mig_comp - verbatim
 intervals = None
 closed = set()          # VAs inside closed intervals
 objects = {}            # "<dir>/<obj>" -> dict(intervals, in_interval, closed_intervals, ...)
@@ -189,13 +202,14 @@ if intervals is not None:
     _allva = sorted(funcs)
     for obj in sorted(set(module_of.values())):
         ivs = intervals.get(obj + ".obj", [])
-        rec = dict(intervals=len(ivs), in_interval=0, upper=0, closed=0, holes=0, present=0)
+        rec = dict(intervals=len(ivs), in_interval=0, upper=0, closed=0, holes=0, present=0, members=set())
         for iv in ivs:
             i, j = _bisect.bisect_left(_allva, iv["lo"]), _bisect.bisect_right(_allva, iv["hi"])
             inside = [a for a in _allva[i:j] if a in game]
             have = [a for a in inside if a in mig_comp]
             rec["in_interval"] += len(inside); rec["upper"] += len(inside) + iv["gap_before"] + iv["gap_after"]
             rec["present"] += len(have); rec["holes"] += len(inside) - len(have)
+            rec["members"].update(inside)
             if inside and len(have) == len(inside):
                 rec["closed"] += 1; closed.update(inside)
         objects[obj] = rec
@@ -252,6 +266,8 @@ out = ["# Status", "",
        r("**Migrated: total with compilable source in src/game**", mig_comp,
          "%d object files with a TU, %d closed of %d intervals" % (len(objects), sum(o["closed"] for o in objects.values()),
                                                                      sum(o["intervals"] for o in objects.values())) if objects else ""),
+       r("Migrated: verbatim slice text, not yet on canonical classes", mig_verbatim, "subset of the total above"),
+       r("Migrated: converted to canonical classes", mig_canonical, "subset of the total above"),
        r("Migrated: inside closed object intervals", closed & game,
          "" if intervals is not None else "work/migrate/modmap.json missing: intervals not computed"),
        r("Compilable source still only in match/slices", unmigrated_comp),
