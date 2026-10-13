@@ -27,6 +27,19 @@ Equivalent = complete compilable source with the same behavior, not (yet) byte-i
 | EA framework (UTFSpore) | 6382 | 2296 (35.98%) | 13.72% | 3462 (54.25%) | 1.22 MB | 44.68% |
 | Spore game code (everything else) | 77849 | 50483 (64.85%) | 22.10% | 57444 (73.79%) | 11.95 MB | 54.70% |
 
+Migration into `src/game/` module TUs (Phase B, docs/migration.md). Same denominator. A closed interval is a
+retail address interval of one object file (tools/migrate/intervals.py) in which every function has compilable
+source in a module TU: contiguous retail code reproduced in object order, the linkable share.
+
+| Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |
+|---|---:|---:|---:|---:|---|
+| Migrated: in src/game, byte-exact | 21 | 0.02% | 0.00 MB | 0.01% |  |
+| Migrated: in src/game, equivalent | 12 | 0.01% | 0.00 MB | 0.01% |  |
+| Migrated: in src/game, partial | 1 | 0.00% | 0.00 MB | 0.00% | not counted as migrated |
+| **Migrated: total with compilable source in src/game** | 33 | 0.04% | 0.00 MB | 0.02% | 1 object files with a TU, 0 closed of 3 intervals |
+| Migrated: inside closed object intervals | 0 | 0.00% | 0.00 MB | 0.00% |  |
+| Compilable source still only in match/slices | 63079 | 71.44% | 7.63 MB | 53.54% |  |
+
 Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling
 convention (reads ECX = `this` before writing it).
 Checked against PDB-named functions, that heuristic labels 79% of member functions as class code and 88% of

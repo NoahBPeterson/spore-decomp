@@ -1,4 +1,4 @@
-006a7e40 SP::cPropertyManager::PreloadPropertyLists  # PDB anchor 0157bde0
+006a7e40 ?PreloadPropertyLists@cPropertyManager@SP@@QAEXXZ  # SP::cPropertyManager::PreloadPropertyLists migrated from s006a7e40
 006a8340 eastl::hash_map<eastl::basic_string<char>,EA::AutoRefCount<EA::ArgScript::cExprFunction>>::operator[]  # find callee 0x7e2ea0
 006a8410 eastl::hash_map<unsigned int,eastl::basic_string<wchar_t>>::operator[]  # find callee 0xa3b2c0
 006a84f0 eastl::vector<element(0x18)>::reserve  # alloc n*0x18 + relocate + free old

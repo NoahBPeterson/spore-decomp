@@ -1,0 +1,1 @@
+006c0120 ?func24h@PFIndexModifiable@@QAE_NPAUHoleTable@@IIII@Z  # PFIndexModifiable::func24h migrated from s006bfda0 (verbatim, slice spelling)

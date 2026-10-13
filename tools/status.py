@@ -65,6 +65,30 @@ for line in [l for m in [W("match/manifest.txt")] + glob.glob(W("match/slices/*/
     p = line.split("#", 1)[0].split()
     if len(p) >= 3:
         exact.add(int(p[2], 16))
+# Module TUs under src/game/<dir>/<obj>.cpp (docs/migration.md): their bookkeeping files have the
+# slice row formats. A function is counted once whichever files list it (sets by VA); migrated
+# functions keep their slice rows until the slice is retired, so coverage never double counts and
+# never drops when slices go. module_of[va] = "<dir>/<obj>" is the migration axis.
+module_of = {}
+for f in glob.glob(W("src/game/**/manifest.txt"), recursive=True) + glob.glob(W("src/game/**/nonmatching.txt"), recursive=True) \
+        + glob.glob(W("src/game/**/partial.txt"), recursive=True):
+    obj = os.path.relpath(os.path.dirname(f), W("src/game"))
+    kind = os.path.basename(f)
+    for line in open(f):
+        p = line.split("#", 1)[0].split()
+        if not p:
+            continue
+        try:
+            va = int(p[2], 16) if kind == "manifest.txt" else int(p[0], 16)
+        except (ValueError, IndexError):
+            continue
+        module_of[va] = obj
+        if kind == "manifest.txt":
+            exact.add(va)
+        elif kind == "partial.txt" or _PARTIAL.search(line):
+            partial.add(va)
+        else:
+            nonmatching.add(va)
 
 named = set()
 for line in (l for f in glob.glob(W("symbols/*.txt")) for l in open(f)):
@@ -138,6 +162,43 @@ nosrc = game - byte_exact - equiv - part
 K = lambda k: set(a for a in game if kinds.get(a) == k)
 KF, KC, KG = K("func"), K("class"), K("global")
 shape = (synth_shape - synth_orig - exact - clones) & game
+
+# ---- migration into src/game (Phase B): true denominators only ----
+# migrated = compilable functions living in a module TU; the denominator is G, as above.
+# Closed intervals: an object's retail address intervals (tools/migrate/intervals.py) in which every
+# retail function has compilable source in a module TU. Bytes inside closed intervals are the
+# "linkable" share: contiguous retail code reproduced in object order.
+migrated = set(module_of) & game
+mig_exact = migrated & byte_exact
+mig_equiv = migrated & equiv
+mig_part = migrated & part
+mig_comp = mig_exact | mig_equiv
+unmigrated_comp = (byte_exact | equiv) - migrated
+intervals = None
+closed = set()          # VAs inside closed intervals
+objects = {}            # "<dir>/<obj>" -> dict(intervals, in_interval, closed_intervals, ...)
+try:
+    import sys as _sys
+    _sys.path.insert(0, W("tools", "migrate"))
+    import intervals as _iv
+    intervals = _iv.compute(_json.load(open(W("work/migrate/modmap.json"))), {a: v["size"] for a, v in funcs.items()})
+except Exception:
+    intervals = None
+if intervals is not None:
+    import bisect as _bisect
+    _allva = sorted(funcs)
+    for obj in sorted(set(module_of.values())):
+        ivs = intervals.get(obj + ".obj", [])
+        rec = dict(intervals=len(ivs), in_interval=0, upper=0, closed=0, holes=0, present=0)
+        for iv in ivs:
+            i, j = _bisect.bisect_left(_allva, iv["lo"]), _bisect.bisect_right(_allva, iv["hi"])
+            inside = [a for a in _allva[i:j] if a in game]
+            have = [a for a in inside if a in mig_comp]
+            rec["in_interval"] += len(inside); rec["upper"] += len(inside) + iv["gap_before"] + iv["gap_after"]
+            rec["present"] += len(have); rec["holes"] += len(inside) - len(have)
+            if inside and len(have) == len(inside):
+                rec["closed"] += 1; closed.update(inside)
+        objects[obj] = rec
 GB = sum(funcs[a]["size"] for a in game)
 def comp_rows():
     rows, rest = [], set(game)
@@ -181,6 +242,19 @@ out = ["# Status", "",
        r("**Total with compilable source**", byte_exact | equiv),
        r("Game functions (denominator)", game),
        "", "| Component | Functions | Byte-exact | Byte-exact (by size) | With compilable source | Code size | With source (by size) |", "|---|---:|---:|---:|---:|---:|---:|"] + comp_rows() + [
+       "", "Migration into `src/game/` module TUs (Phase B, docs/migration.md). Same denominator. A closed interval is a",
+       "retail address interval of one object file (tools/migrate/intervals.py) in which every function has compilable",
+       "source in a module TU: contiguous retail code reproduced in object order, the linkable share.", "",
+       "| Tier | Functions | Share (by count) | Code size | Share (by size) | Notes |", "|---|---:|---:|---:|---:|---|",
+       r("Migrated: in src/game, byte-exact", mig_exact),
+       r("Migrated: in src/game, equivalent", mig_equiv),
+       r("Migrated: in src/game, partial", mig_part, "not counted as migrated"),
+       r("**Migrated: total with compilable source in src/game**", mig_comp,
+         "%d object files with a TU, %d closed of %d intervals" % (len(objects), sum(o["closed"] for o in objects.values()),
+                                                                     sum(o["intervals"] for o in objects.values())) if objects else ""),
+       r("Migrated: inside closed object intervals", closed & game,
+         "" if intervals is not None else "work/migrate/modmap.json missing: intervals not computed"),
+       r("Compilable source still only in match/slices", unmigrated_comp),
        "", "Kind is from the name (template arguments, recovered class) or, for unnamed functions, from the calling",
        "convention (reads ECX = `this` before writing it).",
        "Checked against PDB-named functions, that heuristic labels 79% of member functions as class code and 88% of",

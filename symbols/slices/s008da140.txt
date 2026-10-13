@@ -1,0 +1,15 @@
+008da140 ?CompactDatabaseInternal@DatabasePackedFile_s008d_a140@@QAE_NXZ  # DatabasePackedFile_s008d_a140::CompactDatabaseInternal migrated from s008da140 (verbatim, slice spelling)
+008da3d0 ?OpenRecord@DatabasePackedFile_s008d_a140@@QAE_NPAXIII00@Z  # DatabasePackedFile_s008d_a140::OpenRecord migrated from s008da140 (verbatim, slice spelling)
+008da750 ?ReadIndexRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::ReadIndexRecord migrated from s008da140
+008da8b0 ?CompactDatabase@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  # EA::ResourceMan::DatabasePackedFile::CompactDatabase migrated from s008da140
+008da920 ?FUN_008da920@DatabasePackedFile_s008d_a140@@QAEDPAX@Z  # DatabasePackedFile_s008d_a140::FUN_008da920 migrated from s008da140 (verbatim, slice spelling)
+008daba0 ?Flush@DatabasePackedFile_s008d_a140@@QAE_NXZ  # DatabasePackedFile_s008d_a140::Flush migrated from s008da140 (verbatim, slice spelling)
+008dac90 ?DoFreeNodes@BmpGlyphHash@@QAEXPAPAXI@Z  # BmpGlyphHash::DoFreeNodes migrated from s008da140 (verbatim, slice spelling)
+008dace0 ?FUN_008dace0@@YAXPAPAUSortNode@@0@Z  # FUN_008dace0 migrated from s008da140 (verbatim, slice spelling)
+008dad30 ?FUN_008dad30@@YAXPAPAUSortNode@@0@Z  # FUN_008dad30 migrated from s008da140 (verbatim, slice spelling)
+008dad80 ?FUN_008dad80@@YAXPAPAUSortNode@@HHPAU1@H@Z  # FUN_008dad80 migrated from s008da140 (verbatim, slice spelling)
+008dadd0 ?FUN_008dadd0@@YAXPAPAUSortNode@@HHHPAU1@H@Z  # FUN_008dadd0 migrated from s008da140 (verbatim, slice spelling)
+008dae40 ?GetTotalSize@HoleSet_s008d_a140@@QAEHXZ  # HoleSet_s008d_a140::GetTotalSize migrated from s008da140 (verbatim, slice spelling)
+008dae70 ?Erase@HoleSet_s008d_a140@@QAEXPAPAXPAX@Z  # HoleSet_s008d_a140::Erase migrated from s008da140 (verbatim, slice spelling)
+008daf40 ?GetDataEnd@PFIndexModifiable@@QAEHXZ  # PFIndexModifiable::GetDataEnd migrated from s008da140 (verbatim, slice spelling)
+008dafa0 ?GetTotalDiskSize@PFIndexModifiable@@QAEHXZ  # PFIndexModifiable::GetTotalDiskSize migrated from s008da140 (verbatim, slice spelling)

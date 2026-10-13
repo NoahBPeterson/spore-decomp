@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+006a1540 134 SP::cPropertyList::Write - complete; recomputed count + per-element WriteUint32/WriteVariant loop present, schedule differs
+006a1a70 73 eastl pair uninitialized-move-start helper - complete loop; EH frame and argument spill differ
+006a1b00 62 eastl fill_n helper - complete loop (71 vs 130 bytes; original carries an EH frame)
+006a1bd0 36 SP::cDirectPropertyList::~cDirectPropertyList - complete; EH state numbering differs
+006a1de0 51 SP::cPropertyList::GetPropertyA - complete; cl folds it=end then if(it!=end) that the original keeps; equiv: PASS (lower_bound annotated 0x612db0, 2026-10-11)
+006a1e80  67   eastl::vector<pair<unsigned int,EA::Variant> >::operator= - complete reimplementation (383 vs 316 bytes); equiv FAIL (fake-arity: no call site before 460e0000; ours failed where original succeeded)
+006a2010 197 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValues - complete reimplementation (235 vs 646 bytes)
+006a22a0 271 eastl::vector<pair<unsigned int,EA::Variant> >::DoInsertValue - complete reimplementation, size differs
+006a2470 36 SP::cPropertyList::HasProperty - complete; cl folds it=end/if(it!=end) that the original keeps
+006a24d0 34 SP::cPropertyList::GetPropertyValue - complete; same fold difference
+006a2530 51 SP::cPropertyList::GetProperty (const, bool) - complete; same fold difference; equiv: PASS (lower_bound annotated 0x612db0 after the hybrid crashed on a wrong instantiation, 2026-10-11)
+006a27d0 26 SP::cDirectPropertyList::HasProperty - complete
+006a2800 23 SP::cDirectPropertyList::GetPropertyValue - complete
+006a28f0 51 SP::cPropertyList::ClearMapOnly - complete; _Destroy helper schedule differs
+006a2940 41 eastl::vector<pair>::insert(iterator,value) - complete; DoInsertValue call schedule differs
+006a2a80 47 SP::cPropertyList::Clear - complete; _Destroy helper schedule differs
+006a2ad0 27 SP::cDirectPropertyList::Copy - complete
+006a2b20 58 SP::cDirectPropertyList::Clear - complete
+006a2c50 70 eastl::vector_map::insert(value) - complete
+006a2cb0 82 eastl::vector_map::erase(key) - complete
+006a3070  62   SP::cPropertyList::GetPropertyIDs - complete
+006a3180 81 SP::cDirectPropertyList::GetPropertyIDs - complete

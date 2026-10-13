@@ -369,3 +369,102 @@ wrong xmatch anchor: manual `exclude`). Rules this module added to `rewrite.py` 
   accessors (`GetVector2/3/4`, `GetColorRGB/RGBA`, `GetKey`, `GetText`, `GetString8/16`, retail 0x6a0f70, 0xcce910, 0x6a0fa0, 0x6a0fd0,
   0x6a1000, 0x6a1030, 0x6a1090, 0x60ebf0, 0x68a4f0) as `extra_methods`.
 Kept as a slice-local item: `cStringSet(const void*, cString*)` (retail 0x6b56d0, unnamed).
+
+## 8. SPEngine/SPPropertyList.obj (s00612270, s006a11b0, s006a22a0, s006a7e40): what it added to the tool
+
+Rules (all in `rewrite.py` / `rewrite_stubs.py` / `headers.py`; evidence in the code):
+- `parse_preamble` descends into `namespace X { ... }` blocks: every inner declaration becomes its own item wrapped in its namespaces and every class gets `.ns`, so classes inside namespaces are slice structs (member maps, slot maps) and each declaration can be kept or dropped alone. `needed_items` matches qualified spellings (`EA::IO::WriteUint32`); an item defining a class/template with a canonical header (`EA::Variant`, `SP::cPropertyList`, `EA::Thread::AtomicInt`) is not emitted, the header is included, also for verbatim functions when a header the TU includes already defines the class.
+- Member map: `sliceviews.json` offsets can be null (template members, unknown bases): the slice's `// +0xNN` comments and the distance to the next member give them. A slice scalar over a canonical 1-byte struct (`unsigned char mCompare` over `less<unsigned>`) becomes a typed view `(*(unsigned char *)&mPropertyMap.mCompare)`; `norm_type` treats `int*` and `int *` alike.
+- Methods: virtual slot comments `// 12 (0x30)`; declared-only methods of classes the slice also defines methods of (`Clear`, `v12`, `GetPropertyValue`) are mapped by slot; calls are looked up through the slice's base classes; qualified base calls (`cPropertyList::GetPropertyA(..)`) are renamed; overloads that differ in constness are told apart by the slice definition's constness. Pointer-vs-reference: a slice method returning `T*` where the canonical one returns `T const &` -> calls become `((T *)&Call())`, `return &x;` -> `return x;`, `return p;` -> `return *(p);`; `&it->second` -> `it->second` for reference parameters.
+- Constructors: the member-initialiser list is part of the body (not the signature); a base initialiser the canonical base constructors do not take is called with its default constructor; `a.b(0)` on a by-value pointer wrapper (AutoRefCount) becomes `a()`.
+- `compile_symbols` binds overloads by parameter list + constness. Library template instantiations (`eastl::lower_bound<..>`) are never made into namespace functions.
+- `headers.py`: VC9 reverses the slot order of an overload set (see Papercuts); the generator emits each contiguous same-name run of new virtuals in descending slot order.
+- Debug aid: `RW_KEEP_DIFF=<va,...>` keeps a byte-inexact function in the TU/manifest so `run_all` + `cmpdis.py` can show the diff.
+Header overrides: inline bodies for `Key()`, `Resource()`, `cResourceBase()`, `IUnknown32()`, `IRefCount()`, `Variant()`, `~Variant()`, the copy constructor of `Variant` (layout_overrides.json, each with evidence); hand templates: `AtomicInt` constructor (`xchg`), `vector_map` constructor (zeroes begin/end/capacity only) and `erase` (0x6a2cb0).
+
+## 9. SPEngine/SPPropertyManager.obj (s006a32a0 .. s006aa3f0, nine slices): what it added to the tool
+
+The module's slices are mostly *not* class methods: free functions, library instantiations, functions of module-local classes
+(`cAppPropsCommand`, `cListPropsCheat`, the `Vec*` constructors) and stubs, written against slice-private stubs of `Variant`,
+`eastl::string`, `cPropertyManager`, ... Result: 19 byte-exact rows (all MATCH, two flag sets; 0x6a39a0 was an equivalent row in the slice and is exact now), 23 nonmatching rows
+with the same equiv verdict class as in the slice, 30 partial rows carried over; 72 functions in `src/game/SPEngine/SPPropertyManager.cpp`
+of which 5 are converted to canonical `SP::cPropertyManager` methods (`GetSupportedTypes`, `GetPropertyGroupCount`, `GetPropertyGroupID`,
+`PreloadPropertyLists`, `Shutdown`) and 67 keep the slice's text ("verbatim").
+Rules (`rewrite.py` / `rewrite_stubs.py`; `rewrite.py <slice> --module SPPropertyManager --scratch <dir> [--apply]`, slices in VA order):
+- **Unmarked functions get a marker**: `insert_missing_markers` finds every top-level function definition without `// @ 0xVA` and takes the
+  VA from `FUN_<8 hex>` in the name, else from the slice manifest's decorated symbol (class, name), else from a `// 006a3400 ...` banner
+  above it (only VAs the slice has rows for). The slice's own `sNNNN.h` is expanded in place; its `types.h` includes are dropped.
+- **Whatever follows a function is preamble**: the text after a closing brace (structs, typedefs, statics, macros with `\` continuations
+  - kind `define`, function-pointer globals) goes to the slice preamble; `needed_items` emits the items the emitted functions use,
+  transitively, in slice order, inside `// ---- items of slice X begin/end` blocks (a re-run of the slice replaces its own block).
+  A retail address comment after a wrapped namespace declaration stays on the declaration (difftest binds callees by it).
+- **Verbatim fallback**: a function with no canonical declaration (no class, a namespace function in an anonymous namespace, an
+  unmatched method) keeps signature and body; its local stub types are emitted. Nothing is "unmapped": `skipped` is only for other
+  modules.
+- **Checked apply** (`apply_checked`): write the TU, compile, read the decorated symbols, write the bookkeeping, run `run_all` on this
+  slice's rows (waits for `work/run_all.lock`, never kills). Compiler errors are attributed to functions by line: a converted body that
+  fails is demoted to verbatim, a verbatim one that fails (or a converted/verbatim function that was byte-exact in the slice and DIFFs now)
+  is dropped and stays in the slice; a redefinition error in the preamble renames the stub instead. The TU and the bookkeeping files are
+  restored when nothing works, so a failing slice never leaves a TU that does not compile.
+- **Stub name conflicts**: slices invent different bodies for the same stub name; a stub the module TU already defines differently, one a
+  header the TU includes defines (`SP::cString` with the slice's `GetText()`, `EA::ArgScript::cArguments` with `const char**`), or one the
+  compiler reports as redefined is renamed `Name_sNNNN_NNNN` (the slice's id split in two: a 6-8 hex digit run in a symbol is read by the difftest
+  resolver as an address) in that slice only; converted functions keep the canonical class.
+- Flags: manifest rows without a flags column compile with run_all's defaults (`/O2 /MD /Gy /EHsc /TP`), the migrated rows spell
+  them; nonmatching rows are measured and promoted with `slice.choose_flags` (what equiv uses). A nonmatching row that is byte-exact in
+  the module TU moves to `manifest.txt` (0x6a39a0 `GetPropertyGroupCount`).
+- `item_names`: function-pointer globals (`bool (*g_pParse)(..) = &Parse;`, a link-time reference the slice keeps) are named by the
+  pointer, so they are not emitted unless used; `canonical_item_header` only claims a header that declares the class (`eastl/string.h`
+  exists but has no `eastl::string`).
+- `layout_overrides.json` `SP::cPropertyManager`: four insertions (retail 0x1ec, see Papercuts); the generated header now agrees with
+  every exact-backed view and the VC9 probe (mPropertyNameToIDMap 0x94 ... mLCName 0x168, mFileParser 0x178, mInAppProperties 0x1e8).
+Left in the slices (other modules or none): 0x6a32a0 `cExprFunction::EvalBool` (SPAppStateManager), 0x6a32c0 FNV helper (no module),
+0x6a8340 / 0x6a8410 `hash_map::operator[]` instantiations (no module), 0x6a84f0 (SPPropertyList), 0x6a85b0 (SPAppStateManager), 0x6aae30
+`~rbtree` (no module). Not converted (header work): `RegisterPropertyName/Local` need `hash_map::operator[]` and an inline
+`basic_string::assign(const T*)` in the hand-written eastl headers; `Init`/`WriteResource` need the retail rbtree member typed and
+`Record`/`Resource` complete in the TU; `CreateResource` is a stub body.
+
+## 8. `UTFSpore_Win32/DatabasePackedFile.obj`, slices 2-8 (2026-10-12)
+
+Order run: s006bb1c0, s006bc1b0, s006bd150, s006bde30, s008d7220, s008d91e0, s008da140, s008daff0 (`rewrite.py <slice> --module
+DatabasePackedFile.obj --apply`; the substring `DatabasePackedFile.obj` keeps `DatabasePackedFileIndex.obj` out). Module result:
+`.venv/bin/python tools/matching/run_all.py --manifest src/game/UTFSpore_Win32/DatabasePackedFile/manifest.txt` = 40/40 MATCH
+(21 of s008d81d0 plus 19 new rows), 98 functions in the TU. Equiv verdicts of every nonmatching/partial row of s008d81d0/s008d91e0/s008da140/s008daff0
+re-measured against the slice's own: none worse except the partial row 0x8da920 (UNSUPPORTED -> FAIL: the unresolved `_ReadRecordRaw` now
+resolves, so the approximate body is finally executed); 0x8d85a0 Attach FAIL -> PASS, 0x6bbe20 and 0x8d81a0 AsInterface PASS -> byte-exact.
+
+**Two copies of the packed-file code (read Papercuts "DatabasePackedFile.obj migration").** 0x6bb1c0..0x6bf4xx is a sibling class (64-bit
+variant, FileStream 0x434 at +0x30, mutexes 0x478/0x4a8, 28-slot vtable 0x140a154), not `EA::ResourceMan::DatabasePackedFile` (0x388, vtable
+0x14367b0, secondary 0x143679c). s006bc1b0, s006bd150 and the DatabasePackedFile functions of s006bde30 (0x6bde30 OpenRecord, 0x6be1d0) are that class:
+they stay in their slices (23 + 7 + 2 functions, listed in `rewrite_<slice>_DatabasePackedFileobj.json` `functions_left_in_slice`). `0x6bbe20` AsInterface (id 0x6492c5f) also stays; the class's own AsInterface is 0x8d81a0 (it lands from s008d7220,
+where the slice calls it `DatabaseDirectoryFiles::Cast`). 0x6bbdd0 `Init` is shared by both vtables and landed.
+
+**Rules added to `rewrite.py` / `rewrite_stubs.py` / `headers.py` (evidence is in the code comments):**
+- slice parsing: marker lines with a description (`// @ 0x006bb820  release stg medium member`), declarations between a marker and its function
+  hoisted to the preamble, a marker over declarations only, markers above banner comments are not re-inserted, a sibling slice's header
+  (`#include "../s006bc1b0/s006bc1b0.h"`), function-pointer typedefs with the calling convention first (`item_names`), `~Cls` after `::` is not a
+  use of the slice's stub `Cls`, the text after a function stops at the next banner / `remaining functions`.
+- class evidence: `refuse_foreign_layouts` (a function-name mapping whose slice view puts same-named members > 0x10 from the canonical offsets
+  is dropped, and the functions of that class stay in the slice, `build`); a chunk the module map gives no dev function is owned by the class whose
+  generated header declares its VA (`header_owners`, 0x8d81a0); a slice method address unnamed in pdb_names resolves through the headers
+  (`Refpack::CompressData` 0x92c9f0 -> `EA::CompressionRefpack`); callee names from functions already in the module TUs (`tu_methods`:
+  `Sync` 0x8d8b30 is `CloseOpenRecords`); an address contradiction (same name, the header puts the method at another VA) holds the function back.
+- bodies: `secondary_this` (virtual of a secondary base: `(char*)this - K` -> `this`, subobject `this` / null-masked upcast ->
+  `static_cast<Base*>(this)`), one-line struct accessors inlined (`HoleA()` -> `mActive.mHoles`, then mapped), function-local `typedef ... (__thiscall *Fn)`
+  thunks, constructor/destructor `vtN = vtbl_X;` stores dropped, `void *` arguments cast to typed pointer parameters, prototypes without `extern`
+  whose address is a static method of a canonical class (`GetDefaultAllocator` 0x925cb0 -> `EA::Allocator::ICoreAllocator::GetDefaultAllocator`).
+- output: externs used by local stubs' inline bodies are declared (before the stubs), a verbatim function keeps the slice's extern spelling,
+  stub methods get the `// 0xVA` of their definition in this slice (the resolver binds calls from verbatim functions), the collision rename is
+  `Name_sNNNN_NNNN`, constructors of a renamed stub are renamed too, overload binding by parameter count, stale blocks/rows/names lines of functions a
+  rerun no longer emits are pruned (the symbol-names line falls back to git's), nonmatching rows that match are promoted to the manifest.
+- headers: `retail_vtable` accepts a list with `"for": "<base class>"` (DatabasePackedFile secondary vtable 0x143679c: AddRef 0x8dd1b0, Release 0x69d3c0,
+  dtor adjustor 0x8d9490, AsInterface 0x8d81a0), `mutable` member list (DatabasePackedFile::mMutex), `EA::COM::AutoRefCount::operator=`.
+
+**Landed as verbatim stubs (not converted, slice spelling kept, TODO(rewrite) stubs in the TU):** 0x8d93e0 `~DatabasePackedFile` (the canonical
+destructor needs the member destructors of the hand-written headers: DIFF 18 bytes), 0x8d9560 GetOpenCount and 0x8d9a10 CloseRecord (multimap
+`find` iterator idiom + `RBTreeIncrement`), 0x8d95f0 WriteIndexRecord, 0x8d9770 InitializeHoleTable (`PFHoleTable::Insert`/`FUN_008dc120` names), 0x8d9f80 constructor
+(member-initialiser list with `FileStream(0)` ambiguous between the char/wchar_t constructors, `HoleTable(0x13, ratio)` = two members + `mActiveHoleTable`),
+0x8da140 CompactDatabaseInternal, 0x8da3d0 OpenRecord, 0x8daba0 Flush (`HoleSet::FUN_008dc120`), the three RecMap instantiations (0x8d93a0 erase, 0x8d98f0 DoInsertValue,
+0x8d9f20 insert), and all of s008daff0 (PFIndexModifiable 0x8db.. copy, HoleSet/rbtree/hash instantiations, sort helpers: no canonical class for the 0x8d copy of
+PFIndexModifiable; the Index module's class is keyed on the 0x6b copy). Converted from these slices: CompressData 0x8d91e0, DecompressRecord 0x8d9320, CloseInternal 0x8d94a0, ShouldRecordBeCompressed(5) 0x8d9850,
+SetLocation 0x8d99c0, ReadIndexRecord 0x8da750, CompactDatabase 0x8da8b0, AsInterface 0x8d81a0, Init 0x6bbdd0 (43 converted, 55 verbatim in the TU).

@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/ArgScript/cArguments.h"
+#include "EA/ArgScript/cIFileParser.h"
 #include "EA/ArgScript/cState.h"
 #include "EA/AutoRefCount.h"
 #include "EA/Messaging/IHandlerRC.h"
@@ -22,16 +23,17 @@ namespace EA { namespace ResourceMan { class IAsyncRequest; class Key; class Man
 
 namespace SP {
 
-// dev size 0x1d4 -> retail size 0x1c8 (0 members exact-backed, 8 conflicts, 0 retail-only, 18 unverified)
-// evidence: view s006aa3f0 is the evidence: 0 of 5 shared members agree with the re-laid offsets, 2 byte-exact users, shifts [32], declared size 0x178
-// evidence: conflict: mPropertyNameToIDMap re-laid 0x74, view has 0x94
-// evidence: conflict: mPropertyIDToNameMap re-laid 0x94, view has 0xb4
-// evidence: conflict: mLocalPropertyNameToIDMap re-laid 0x108, view has 0x128
-// evidence: conflict: mLocalPropertyIDToNameMap re-laid 0x128, view has 0x148
-// evidence: conflict: mLCName re-laid 0x148, view has 0x168
+// dev size 0x1d4 -> retail size 0x1ec (override)
+// evidence: view s006aa3f0 is the evidence: 0 of 5 shared members agree with the re-laid offsets, 2 byte-exact users, shifts [-1], declared size 0x178
+// evidence: conflict: mPropertyNameToIDMap re-laid 0x95, view has 0x94
+// evidence: conflict: mPropertyIDToNameMap re-laid 0xb5, view has 0xb4
+// evidence: conflict: mLocalPropertyNameToIDMap re-laid 0x129, view has 0x128
+// evidence: conflict: mLocalPropertyIDToNameMap re-laid 0x149, view has 0x148
+// evidence: conflict: mLCName re-laid 0x169, view has 0x168
 // evidence: conflict: view member mGroupNameToIDMap at 0xd4 overlaps a re-laid member
 // evidence: conflict: view member mGroupIDToNameMap at 0xf4 overlaps a re-laid member
 // evidence: conflict: view member mGroupIDs at 0x114 overlaps a re-laid member
+// evidence: override applied: retail SP::cPropertyManager has the Factory subobject at +4 and its data from +0x14 (slice s006a9470, Init 0x6a9b60 and WriteResource 0x6aa130, written with retail offsets, docs/Papercuts.md s005e3280): mInitialized 0x14, a second bool at 0x15, mResourceManager 0x18, a bool at 0x1c (mParsing) and, from 0x20, an rbtree<unsigned, pair<const unsigned, Variant>> (compare word 0x20, anchor 0x24.., size 0x34, allocator 0x38; the s006aa3f0 partials ~rbtree/insert are its instantiations) filling 0x20..0x3c, then the embedded SP::cPropertyList at 0x3c; the exact-backed maps of s006aa3f0 (mPropertyNameToIDMap 0x94 ... mLCName 0x168) and the slice's AutoRef<IFileParser> at 0x178 are the re-laid offsets +0x20, and AutoRef<IParser> sits at 0x17c; with those four insertions (1 + 1 + 0x1c + 4 bytes, the bools padded to words) mInAppProperties lands at 0x1e8, where the byte-exact cAppPropsCommand::Execute (0x6a3ce0, s006a32a0) stores 1 through [mManager+0x1e8]; the bool and the tree are one 32-byte blob (mParsingAndTree) because a blob is a byte array (alignment 1) and the tree must start on the word at 0x20
 #pragma pack(push, 4)
 class cPropertyManager : public SP::cIPropertyManager /* +0x0 */, public EA::ResourceMan::Factory /* +0x4 */, public EA::Messaging::IHandlerRC /* +0xc */, public EA::ArgScript::cState /* +0x10 */ {
  public:
@@ -45,8 +47,8 @@ class cPropertyManager : public SP::cIPropertyManager /* +0x0 */, public EA::Res
   virtual bool GetGroupIDFromName(char const *, unsigned int *);         // slot 6, (no retail slot)
   virtual char const * GetGroupNameFromID(unsigned int);                 // slot 7, (no retail slot)
   virtual bool HasPropertyList(unsigned int, unsigned int);              // slot 8, (no retail slot)
-  virtual bool GetPropertyList(unsigned int, unsigned int, SP::cPropertyList **); // slot 9, (no retail slot)
   virtual bool GetPropertyList(unsigned int, SP::cPropertyList **);      // slot 10, (no retail slot)
+  virtual bool GetPropertyList(unsigned int, unsigned int, SP::cPropertyList **); // slot 9, (no retail slot)
   virtual void AddPropertyList(SP::cPropertyList *, unsigned int, unsigned int); // slot 11, (no retail slot)
   virtual void RemovePropertyList(SP::cPropertyList *);                  // slot 12, (no retail slot)
   virtual bool GetPropertyListIDs(unsigned int, eastl::vector<unsigned int, eastl::sp_vector_allocator> *); // slot 13, (no retail slot)
@@ -90,26 +92,29 @@ class cPropertyManager : public SP::cIPropertyManager /* +0x0 */, public EA::Res
 
  public:  // data (retail offsets)
   bool mInitialized;                                           // 0x014 relaid
-  EA::ResourceMan::Manager* mResourceManager;                  // 0x018 relaid
-  SP::cPropertyList mBasePropertyList;                         // 0x01c relaid
-  eastl::hash_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::hash<unsigned __int64>,eastl::equal_to<unsigned __int64>,eastl::allocator,0> mPropertyLists; // 0x054 (dev 0x070) relaid
-  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mPropertyNameToIDMap; // 0x074 (dev 0x090) relaid!view:s006aa3f0 has 0x94
-  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mPropertyIDToNameMap; // 0x094 (dev 0x0b0) relaid!view:s006aa3f0 has 0xb4
-  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mPropertyGroupNameToIDMap; // 0x0b4 (dev 0x0d0) relaid
-  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mPropertyGroupIDToNameMap; // 0x0d4 (dev 0x0f0) relaid
-  eastl::vector<unsigned int,eastl::sp_vector_allocator> mPropertyGroupIDs; // 0x0f4 (dev 0x110) relaid
-  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mLocalPropertyNameToIDMap; // 0x108 (dev 0x120) relaid!view:s006aa3f0 has 0x128
-  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mLocalPropertyIDToNameMap; // 0x128 (dev 0x140) relaid!view:s006aa3f0 has 0x148
-  eastl::basic_string<char,eastl::allocator> mLCName;          // 0x148 (dev 0x160) relaid!view:s006aa3f0 has 0x168
-  EA::AutoRefCount<EA::ArgScript::cIFileParser> mFileParser;   // 0x158 (dev 0x170) relaid
-  eastl::basic_string<char,eastl::allocator> mLine;            // 0x15c (dev 0x174) relaid
-  EA::ArgScript::cArguments mArguments;                        // 0x16c (dev 0x184) relaid
-  int mBlockCommentDepth;                                      // 0x1b0 (dev 0x1bc) relaid
-  eastl::basic_string<char,eastl::allocator> mArrayName;       // 0x1b4 (dev 0x1c0) relaid
-  bool mInAppProperties;                                       // 0x1c4 (dev 0x1d0) relaid
+  bool mbUseFileParser;                                        // 0x015 relaid
+  EA::ResourceMan::Manager* mResourceManager;                  // 0x019 relaid
+  unsigned char mParsingAndTree[32];                           // 0x01d relaid
+  SP::cPropertyList mBasePropertyList;                         // 0x03d relaid
+  eastl::hash_map<unsigned __int64,EA::AutoRefCount<SP::cPropertyList>,eastl::hash<unsigned __int64>,eastl::equal_to<unsigned __int64>,eastl::allocator,0> mPropertyLists; // 0x075 (dev 0x091) relaid
+  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mPropertyNameToIDMap; // 0x095 (dev 0x0b1) relaid!view:s006aa3f0 has 0x94
+  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mPropertyIDToNameMap; // 0x0b5 (dev 0x0d1) relaid!view:s006aa3f0 has 0xb4
+  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mPropertyGroupNameToIDMap; // 0x0d5 (dev 0x0f1) relaid
+  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mPropertyGroupIDToNameMap; // 0x0f5 (dev 0x111) relaid
+  eastl::vector<unsigned int,eastl::sp_vector_allocator> mPropertyGroupIDs; // 0x115 (dev 0x131) relaid
+  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,unsigned int,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mLocalPropertyNameToIDMap; // 0x129 (dev 0x141) relaid!view:s006aa3f0 has 0x128
+  eastl::hash_map<unsigned int,eastl::basic_string<char,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mLocalPropertyIDToNameMap; // 0x149 (dev 0x161) relaid!view:s006aa3f0 has 0x148
+  eastl::basic_string<char,eastl::allocator> mLCName;          // 0x169 (dev 0x181) relaid!view:s006aa3f0 has 0x168
+  EA::AutoRefCount<EA::ArgScript::cIFileParser> mFileParser;   // 0x179 (dev 0x191) relaid
+  unsigned char mParser[4];                                    // 0x17d (dev 0x195) relaid
+  eastl::basic_string<char,eastl::allocator> mLine;            // 0x181 (dev 0x199) relaid
+  EA::ArgScript::cArguments mArguments;                        // 0x191 (dev 0x1a9) relaid
+  int mBlockCommentDepth;                                      // 0x1d5 (dev 0x1e1) relaid
+  eastl::basic_string<char,eastl::allocator> mArrayName;       // 0x1d9 (dev 0x1e5) relaid
+  bool mInAppProperties;                                       // 0x1e9 (dev 0x1f5) relaid
 };
 #pragma pack(pop)
-// sizeof(cPropertyManager) expected 0x1c8 (unverified)
+// sizeof(cPropertyManager) expected 0x1ec (unverified)
 
 }  // namespace SP
 

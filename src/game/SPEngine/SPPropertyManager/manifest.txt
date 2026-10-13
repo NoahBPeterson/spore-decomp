@@ -1,0 +1,20 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPPropertyManager.cpp  ?Forward@cCommandStub@@QAEXHH@Z  006a3310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?GetSupportedTypes@cPropertyManager@SP@@UAEIPAII@Z  006a3400  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?SetVec21@Variant@@QAEAAU1@PBX@Z  006a34a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?SetVec30@Variant@@QAEAAU1@PBX@Z  006a3510  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?SetVec31@Variant@@QAEAAU1@PBX@Z  006a3570  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?SetVec32@Variant@@QAEAAU1@PBX@Z  006a3610  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a3920@@YAPAUFloat3@@PAU1@PBM@Z  006a3920  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?FUN_006a3980@@YGPBDH@Z  006a3980  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?GetPropertyGroupCount@cPropertyManager@SP@@UAEHXZ  006a39a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Execute@cAppPropsCommand@@QAEXPAX@Z  006a3ce0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?OnEndParse@cAppPropsCommand@@QAEXH@Z  006a3d10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Init@Vec38@@QAEPAU1@HPBX@Z  006a4130  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Release@cDealloc@@QAEXXZ  006a4360  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?SetDefaultVariantValue@@YA_NIPAUVariant_s006a_4990@@@Z  006a4990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?GetVariantTypeDescription@@YAXABUVariant_s006a_5690@@AAUString_s006a_5690@@@Z  006a5690  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Init@VecU32@@QAEPAU1@IPBX@Z  006a6310  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?RegisterPropertyName@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  006aa3f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?RegisterPropertyNameLocal@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  006aa5e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPPropertyManager.cpp  ?Parse@cPropertyCommand@@QAE_NPAPAX@Z  006aadb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

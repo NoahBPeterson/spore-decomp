@@ -1,0 +1,16 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsVector2Array@SP@@YA_NPBVcPropertyList@1@IPAHPAPAUcSPVector2@@@Z  006a0920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsVector2@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector2@@@Z  006a10c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsVector3@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector3@@@Z  006a1110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsVector4@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector4@@@Z  006a1160  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsColorRGB@SP@@YA_NPBVcPropertyList@1@IPAUcSPColorRGB@@@Z  006a11b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsColorRGBA@SP@@YA_NPBVcPropertyList@1@IPAUcSPColorRGBA@@@Z  006a1200  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsKey@SP@@YA_NPBVcPropertyList@1@IPAVKey@ResourceMan@EA@@@Z  006a1250  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsKeyInstance@SP@@YA_NPBVcPropertyList@1@IPAI@Z  006a12a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsKeyGroup@SP@@YA_NPBVcPropertyList@1@IPAI@Z  006a12e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsKeyType@SP@@YA_NPBVcPropertyList@1@IPAI@Z  006a1320  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsText@SP@@YA_NPBVcPropertyList@1@IPAVcString@1@@Z  006a1360  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsString8@SP@@YA_NPBVcPropertyList@1@IPAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  006a13b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsString16@SP@@YA_NPBVcPropertyList@1@IPAV?$basic_string@_WVallocator@eastl@@@eastl@@@Z  006a1400  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsChar8Ptr@SP@@YA_NPBVcPropertyList@1@IPAPBD@Z  006a1450  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyHelpers.cpp  ?GetPropertyAsChar16Ptr@SP@@YA_NPBVcPropertyList@1@IPAPB_W@Z  006a1490  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

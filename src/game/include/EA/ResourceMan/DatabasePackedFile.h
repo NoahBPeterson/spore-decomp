@@ -7,9 +7,12 @@
 #include "EA/COM/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/IO/FileStream.h"
+#include "EA/IO/IStream.h"
 #include "EA/ResourceMan/Database.h"
+#include "EA/ResourceMan/Key.h"
 #include "EA/ResourceMan/PFDatabaseHeader.h"
 #include "EA/ResourceMan/PFHoleTable.h"
+#include "EA/ResourceMan/PFRecordBase.h"
 #include "EA/Thread/Mutex.h"
 #include "eastl/allocator.h"
 #include "eastl/map.h"
@@ -25,22 +28,16 @@ namespace ResourceMan {
 
 // dev size 0x380 -> retail size 0x388 (override)
 // evidence: view s006bc1b0 (size 0x5a8, 9 shared members) rejected: shifts [0, 520]
-// evidence: view s008d81d0 is the evidence: 17 of 23 shared members agree with the re-laid offsets, 21 byte-exact users, shifts [-4, 0], declared size 0x384
+// evidence: view s008d81d0 is the evidence: 20 of 23 shared members agree with the re-laid offsets, 21 byte-exact users, shifts [-4, 0], declared size 0x384
 // evidence: view s008da140 agrees (23 shared)
 // evidence: view s008d91e0 agrees (24 shared); disagrees on mnMemorySize 0x264
 // evidence: conflict: mnFileStartingOffset re-laid 0x25c, view has 0x258
 // evidence: conflict: mpStream re-laid 0x260, view has 0x25c
 // evidence: conflict: mpMemoryLocation re-laid 0x264, view has 0x260
-// evidence: conflict: mbHolesHaveChanged re-laid 0x380, view has 0x37c
-// evidence: conflict: mbBusyCompacting re-laid 0x381, view has 0x37d
-// evidence: conflict: mpManager re-laid 0x384, view has 0x380
 // evidence: conflict: view member mpMemoryBase at 0x264 overlaps a re-laid member
-// evidence: conflict: view member mMap at 0x2e8 overlaps a re-laid member
-// evidence: conflict: view member mHeaderBlock at 0x308 overlaps a re-laid member
-// evidence: conflict: view member mbFlag330 at 0x330 overlaps a re-laid member
 // evidence: conflict: view member mActive at 0x334 overlaps a re-laid member
-// evidence: conflict: view member mHoleB at 0x35c overlaps a re-laid member
 // evidence: override applied: retail has one extra word between mnUserVersionMinor (+0x2dc) and mfMinRatioToUseCompression (+0x2e4); byte-exact slice s008d81d0 reads a bool at +0x2e0 (tools/migrate/leafsizes.py structural_deltas_not_leaf, 2026-10-12)
+// evidence: declaration bool ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int) -> int ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int): the byte-exact-neighbour 0x8d8570 (s008d81d0 ShouldCompress, equivalent row) returns a full int: `mov eax,1` / `xor eax,eax` where a bool return gives `mov al,1` / `xor al,al` (retail signature is int; the dev PDB says bool)
 #pragma pack(push, 8)
 class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
  public:
@@ -66,10 +63,10 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   virtual EA::Allocator::ICoreAllocator * GetAllocator() const;          // slot 18, 0x007f54d0
   virtual EA::IO::IStream * GetStream() const;                           // slot 19, 0x008d86b0
   virtual bool SetStream(EA::IO::IStream *);                             // slot 20, 0x008d86c0
-  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, EA::ResourceMan::PFRecordInfo &, EA::ResourceMan::Key const &); // slot 21, 0x008d82e0
-  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, EA::ResourceMan::PFRecordRead &, EA::ResourceMan::Key const &); // slot 22, 0x008d82a0
-  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, void *, unsigned int, EA::ResourceMan::Key const &); // slot 23, 0x008d8250
   virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, unsigned int, unsigned int, EA::ResourceMan::Key const &); // slot 24, 0x008d8200
+  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, void *, unsigned int, EA::ResourceMan::Key const &); // slot 23, 0x008d8250
+  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, EA::ResourceMan::PFRecordRead &, EA::ResourceMan::Key const &); // slot 22, 0x008d82a0
+  virtual EA::ResourceMan::PFRecordBase * CreateRecord(int, EA::ResourceMan::PFRecordInfo &, EA::ResourceMan::Key const &); // slot 21, 0x008d82e0
   virtual bool ReadHeaders();                                            // slot 25, 0x008d8320
   virtual bool ReadHeaderRecord();                                       // slot 26, 0x008d8c50
   virtual bool WriteEmptyHeaderRecord();                                 // slot 27, 0x008d8e20
@@ -83,11 +80,11 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   virtual void MakeIndexModifiable();                                    // slot 35, 0x008d83b0
   virtual void InitializeHoleTable();                                    // slot 36, 0x008d9770
 
-  // vtable retail address unknown ({for `EA::COM::IUnknown32'} (retail vtable not located)): 4 retail slots, 4 dev slots
-  virtual int AddRef();                                                  // slot 0, (no retail slot), inherited from EA::ResourceMan::Database
-  virtual int Release();                                                 // slot 1, (no retail slot), inherited from EA::ResourceMan::Database
-  // virtual ~DatabasePackedFile();                                       // slot 2, (no retail slot) (declared above)
-  virtual void * AsInterface(EA::COM::InterfaceId);                      // slot 3, 0x006bbe20
+  // vtable 0x0143679c ({for `EA::COM::IUnknown32'} (layout_overrides retail_vtable)): 4 retail slots, 4 dev slots
+  virtual int AddRef();                                                  // slot 0, 0x008dd1b0, inherited from EA::ResourceMan::Database
+  virtual int Release();                                                 // slot 1, 0x0069d3c0, inherited from EA::ResourceMan::Database
+  // virtual ~DatabasePackedFile();                                       // slot 2, 0x008d9490 (declared above)
+  virtual void * AsInterface(EA::COM::InterfaceId);                      // slot 3, 0x008d81a0
 
   bool ReadFileSpan(void *, long, unsigned int);                         // 0x006bca90, protected
   bool DecompressData(unsigned short, unsigned char const *, unsigned int, unsigned int, unsigned char *); // 0x006bcc10, protected
@@ -114,7 +111,7 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   bool SetHoleUse(int, float);                                           // dev only
   void SetCompressionThreshold(float);                                   // dev only
   bool IsRecordCommitted(EA::ResourceMan::Key const &);                  // dev only
-  bool ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int); // dev only, protected
+  int ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int); // dev only, protected
   bool IsReadyForRead();                                                 // dev only, protected
   bool IsReadyForWrite();                                                // dev only, protected
   bool SetLocationMemory(void *, unsigned int);                          // dev only
@@ -152,7 +149,7 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   void* mpMemoryLocation;                                      // 0x264 (dev 0x260) relaid!view:s008d81d0 has 0x260
   unsigned int mnMemorySize;                                   // 0x268 (dev 0x264) exact:s008d81d0
   long mnMemoryOffset;                                         // 0x26c (dev 0x268) exact-renamed:s008d81d0 (slice: mnMemoryPosition)
-  EA::Thread::Mutex mMutex;                                    // 0x270 exact:s008d81d0
+  mutable EA::Thread::Mutex mMutex;                            // 0x270 exact:s008d81d0
   EA::Thread::Mutex mFileMutex;                                // 0x2a0 exact:s008d81d0
   EA::ResourceMan::PFIndex* mpIndex;                           // 0x2d0 exact:s008d81d0
   bool mbIndexHasChanged;                                      // 0x2d4 exact:s008d81d0
@@ -160,16 +157,16 @@ class DatabasePackedFile : public EA::ResourceMan::Database /* +0x0 */ {
   unsigned int mnUserVersionMinor;                             // 0x2dc exact:s008d81d0
   bool mbEnableCompression;                                    // 0x2e0 exact:s008d81d0
   float mfMinRatioToUseCompression;                            // 0x2e4 exact:s008d81d0
-  eastl::multimap<EA::ResourceMan::Key,EA::ResourceMan::PFRecordBase *,eastl::less<EA::ResourceMan::Key>,EA::Allocator::EASTLCoreAllocator> mOpenRecordMultiMap; // 0x2e8 relaid
-  EA::ResourceMan::PFDatabaseHeader mHeader;                   // 0x30c relaid
-  bool mbHeaderHasChanged;                                     // 0x334 (dev 0x32c) relaid
-  int mnHoleUsageFlags;                                        // 0x338 (dev 0x330) relaid
-  float mfHoleCompactionMinimumRatio;                          // 0x33c (dev 0x334) relaid
-  EA::ResourceMan::PFHoleTable mActiveHoleTable;               // 0x340 (dev 0x338) relaid
-  EA::ResourceMan::PFHoleTable mDelayedHoleTable;              // 0x360 (dev 0x358) relaid
-  bool mbHolesHaveChanged;                                     // 0x380 (dev 0x378) relaid!view:s008d81d0 has 0x37c
-  bool mbBusyCompacting;                                       // 0x381 (dev 0x379) relaid!view:s008d81d0 has 0x37d
-  EA::ResourceMan::Manager* mpManager;                         // 0x384 (dev 0x37c) relaid!view:s008d81d0 has 0x380
+  eastl::multimap<EA::ResourceMan::Key,EA::ResourceMan::PFRecordBase *,eastl::less<EA::ResourceMan::Key>,EA::Allocator::EASTLCoreAllocator> mOpenRecordMultiMap; // 0x2e8 exact-renamed:s008d81d0 (slice: mMap)
+  EA::ResourceMan::PFDatabaseHeader mHeader;                   // 0x308 (dev 0x30c) exact-renamed:s008d81d0 (slice: mHeaderBlock)
+  bool mbHeaderHasChanged;                                     // 0x330 (dev 0x32c) exact-renamed:s008d81d0 (slice: mbFlag330)
+  int mnHoleUsageFlags;                                        // 0x334 (dev 0x330) relaid
+  float mfHoleCompactionMinimumRatio;                          // 0x338 (dev 0x334) relaid
+  EA::ResourceMan::PFHoleTable mActiveHoleTable;               // 0x33c (dev 0x338) relaid
+  EA::ResourceMan::PFHoleTable mDelayedHoleTable;              // 0x35c (dev 0x358) exact-renamed:s008d81d0 (slice: mHoleB)
+  bool mbHolesHaveChanged;                                     // 0x37c (dev 0x378) exact:s008d81d0
+  bool mbBusyCompacting;                                       // 0x37d (dev 0x379) exact:s008d81d0
+  EA::ResourceMan::Manager* mpManager;                         // 0x380 (dev 0x37c) exact:s008d81d0
 };
 #pragma pack(pop)
 // sizeof(DatabasePackedFile) expected 0x388 (unverified)

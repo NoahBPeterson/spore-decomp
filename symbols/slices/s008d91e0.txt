@@ -1,9 +1,17 @@
-008d91e0 EA::ResourceMan::DatabasePackedFile::CompressRecordData  # calls CompressionRefpack::CompressData, allocs "Resource/PackedRecord"
-008d9320 EA::ResourceMan::DatabasePackedFile::ReadCompressed  # alloc "Resource/Raw", ReadAt, Decompress
-008d9560 EA::ResourceMan::DatabasePackedFile::GetOpenCount  # PDB name via card
-008d95f0 EA::ResourceMan::DatabasePackedFile::WriteIndexRecord  # PDB name via card
-008d9770 EA::ResourceMan::DatabasePackedFile::InitializeHoleTable  # PDB name via card
-008d9850 EA::ResourceMan::DatabasePackedFile::TryCompress  # compress and keep only if ratio < mfMinRatioToUseCompression
-008d99c0 EA::ResourceMan::DatabasePackedFile::SetLocation  # PDB name via card
-008d9a10 EA::ResourceMan::DatabasePackedFile::CloseRecord  # PDB candidate name
-008d9f80 EA::ResourceMan::DatabasePackedFile::DatabasePackedFile  # ctor, PDB name via card
+008d91e0 ?CompressData@DatabasePackedFile@ResourceMan@EA@@QAE_NPBXIAAPAXAAIAAG@Z  # EA::ResourceMan::DatabasePackedFile::CompressData migrated from s008d91e0
+008d9320 ?DecompressRecord@DatabasePackedFile@ResourceMan@EA@@QAE_NGIIIPAE@Z  # EA::ResourceMan::DatabasePackedFile::DecompressRecord migrated from s008d91e0
+008d93a0 ?erase@RecMap@@QAE?AURbIter@@U2@@Z  # RecMap::erase migrated from s008d91e0 (verbatim, slice spelling)
+008d93e0 ??1DatabasePackedFile@@QAE@XZ  # DatabasePackedFile::~DatabasePackedFile migrated from s008d91e0 (verbatim, slice spelling)
+008d94a0 ?CloseInternal@DatabasePackedFile@ResourceMan@EA@@QAE_N_N@Z  # EA::ResourceMan::DatabasePackedFile::CloseInternal migrated from s008d91e0
+008d9560 ?GetOpenCount@DatabasePackedFile@@QAEHPBUKey@@@Z  # DatabasePackedFile::GetOpenCount migrated from s008d91e0 (verbatim, slice spelling)
+008d95f0 ?WriteIndexRecord@DatabasePackedFile@@QAE_NXZ  # DatabasePackedFile::WriteIndexRecord migrated from s008d91e0 (verbatim, slice spelling)
+008d9770 ?InitializeHoleTable@DatabasePackedFile@@QAEXXZ  # DatabasePackedFile::InitializeHoleTable migrated from s008d91e0 (verbatim, slice spelling)
+008d9850 ?ShouldRecordBeCompressed@DatabasePackedFile@ResourceMan@EA@@QAE_NPAEIAAPAXAAIAAG@Z  # EA::ResourceMan::DatabasePackedFile::ShouldRecordBeCompressed migrated from s008d91e0
+008d98f0 ?DoInsertValue@RecMap@@QAEXPAPAURbNode@@PAU2@PBUPFPair@@_N@Z  # RecMap::DoInsertValue migrated from s008d91e0 (verbatim, slice spelling)
+008d99c0 ?SetLocation@DatabasePackedFile@ResourceMan@EA@@UAE_NPB_W@Z  # EA::ResourceMan::DatabasePackedFile::SetLocation migrated from s008d91e0
+008d9a10 ?CloseRecord@DatabasePackedFile@@QAE_NPAURecord@@@Z  # DatabasePackedFile::CloseRecord migrated from s008d91e0 (verbatim, slice spelling)
+008d9f20 ?insert@RecMap@@QAEPAPAURbNode@@PAPAU2@PBUPFPair@@H@Z  # RecMap::insert migrated from s008d91e0 (verbatim, slice spelling)
+008d9f80 ??0DatabasePackedFile@@QAE@PB_WPAUIAlloc@@@Z  # DatabasePackedFile::DatabasePackedFile migrated from s008d91e0 (verbatim, slice spelling)
+008db3a0 ?Reset@PFHoleTable@ResourceMan@EA@@QAEXI@Z  # EA::ResourceMan::PFHoleTable::Reset (callee of s008d91e0, named from the dev publics; slice address comment)
+008dbf20 ?Allocate@PFHoleTable@ResourceMan@EA@@QAEJI@Z  # EA::ResourceMan::PFHoleTable::Allocate (callee of s008d91e0, named from the dev publics; slice address comment)
+0092c9f0 ?CompressData@CompressionRefpack@EA@@UAEIPBXIPAXIH@Z  # EA::CompressionRefpack::CompressData (callee of s008d91e0, named from the dev publics; slice address comment)

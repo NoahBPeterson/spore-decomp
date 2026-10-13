@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+006be690 66 complete; insertion sort over index nodes; register allocation differs
+006be6e0 27 complete; insertion sort over index nodes; register allocation differs
+006be730 10 complete; median-of-three key selection; branch orientation differs
+006be7c0 93 complete; heap sift-up; branch/register layout differs
+006bea90 88 complete; hashtable walk computing max data end (64-bit)
+006beb00 70 complete; hashtable walk summing on-disk size (64-bit)
+006bed90 70 complete; hashtable walk setting isSaved flag
+006bf5a0 39 complete; PFHoleTable field init; register copy (eax=this) differs
+006c0120 159 PFIndexModifiable::func24h hash-map hole scan; control flow differs

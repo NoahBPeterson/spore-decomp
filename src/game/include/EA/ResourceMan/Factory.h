@@ -4,9 +4,10 @@
 #define GAME_EA_RESOURCEMAN_FACTORY_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "EA/Allocator/ZoneObject.h"
 #include "EA/RefCounted.h"
+#include "EA/Thread/AtomicInt.h"
 
-namespace EA { namespace Allocator { class ZoneObject; } }
 namespace EA { namespace ResourceMan { class IAsyncRequest; class Key; class Record; class Resource; } }
 
 namespace EA {

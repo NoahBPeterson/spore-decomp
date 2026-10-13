@@ -8,4 +8,4 @@
 008d7960 ?UpdateAllRecordData@DatabaseDirectoryFiles@ResourceMan@EA@@QAEHH@Z  # DatabaseDirectoryFiles::UpdateAllRecordData (reconstruction)
 008d7a70 ?UpdateRecordData@DatabaseDirectoryFiles@ResourceMan@EA@@QAEHABUKey@23@HH@Z  # DatabaseDirectoryFiles::UpdateRecordData (reconstruction)
 008d7cb0 ?OpenRecord@DatabaseDirectoryFiles@ResourceMan@EA@@QAE_NABUKey@23@HIHPAPAXH@Z  # DatabaseDirectoryFiles::OpenRecord (reconstruction)
-008d81a0 ?Cast@DatabaseDirectoryFiles@ResourceMan@EA@@QAEPAXI@Z  # DatabaseDirectoryFiles::Cast (reconstruction)
+008d81a0 ?AsInterface@DatabasePackedFile@ResourceMan@EA@@UAEPAXW4InterfaceId@COM@3@@Z  # EA::ResourceMan::DatabasePackedFile::AsInterface migrated from s008d7220

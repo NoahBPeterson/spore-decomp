@@ -1,0 +1,2 @@
+008dd250 ?CopyDatabaseRecord@ResourceMan@EA@@YA_NPAVDatabase@12@0ABVKey@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecord migrated from s008dd0d0
+008dd430 ?CopyDatabaseRecords@ResourceMan@EA@@YAIPAVDatabase@12@0PAVKeyFilter@12@_N@Z  # EA::ResourceMan::CopyDatabaseRecords migrated from s008dd0d0

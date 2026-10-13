@@ -1,10 +1,17 @@
 006bb690 DebugMessage::~DebugMessage  # PDB callee-scored
-006bb830 SP::cFileDropWin32::QueryInterface  # PDB anchor
-006bbdd0 EA::ResourceMan::DatabasePackedFile::Init  # PDB vtable-slot
-006bbe20 EA::ResourceMan::DatabasePackedFile::AsInterface  # PDB gap-align
-006bc130 EA::ResourceMan::DatabasePackedFile::CreateIndex  # PDB candidate
 006bb820 FUN_006bb820  # ReleaseStgMedium member (+0x1c)
+006bb830 SP::cFileDropWin32::QueryInterface  # PDB anchor
 006bb890 FUN_006bb890  # InterlockedIncrement thunk (+4)
 006bb8b0 FUN_006bb8b0  # InterlockedDecrement + virtual release
 006bba40 FUN_006bba40  # ReleaseStgMedium + helper
-006bbe50 FUN_006bbe50  # Mutex lock/unlock (+0x478)
+006bbdd0 ?Init@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::Init migrated from s006bb1c0
+006bbde0 ?FUN_006bbde0@@YAXPAX@Z  # FUN_006bbde0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbe20 EA::ResourceMan::DatabasePackedFile::AsInterface  # PDB gap-align
+006bbe50 ?LockOrUnlock@MutexOwner@@QAEX_N@Z  # MutexOwner::LockOrUnlock migrated from s006bb1c0 (verbatim, slice spelling)
+006bbe80 ?FUN_006bbe80@@YAXPAX@Z  # FUN_006bbe80 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbf10 ?FUN_006bbf10@@YAXPAX@Z  # FUN_006bbf10 migrated from s006bb1c0 (verbatim, slice spelling)
+006bbfa0 ?FUN_006bbfa0@@YAXPAX@Z  # FUN_006bbfa0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bc020 ?FUN_006bc020@@YAXPAX@Z  # FUN_006bc020 migrated from s006bb1c0 (verbatim, slice spelling)
+006bc0a0 ?FUN_006bc0a0@@YAXPAX@Z  # FUN_006bc0a0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bc0f0 ?FUN_006bc0f0@@YAXPAX@Z  # FUN_006bc0f0 migrated from s006bb1c0 (verbatim, slice spelling)
+006bc130 ?FUN_006bc130@@YAXPAX@Z  # FUN_006bc130 migrated from s006bb1c0 (verbatim, slice spelling)

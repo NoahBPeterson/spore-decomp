@@ -14,8 +14,8 @@ class ICoreAllocator {
  public:
   // vtable retail address unknown ((retail vtable not located)): 4 retail slots, 4 dev slots
   virtual ~ICoreAllocator();                                             // slot 0, (no retail slot), dtor body dev only
-  virtual void * Alloc(unsigned int, char const *, unsigned int, unsigned int, unsigned int); // slot 1, (no retail slot), pure (name from EA::Audio::Allocator)
   virtual void * Alloc(unsigned int, char const *, unsigned int);        // slot 2, (no retail slot), pure (name from EA::Audio::Allocator)
+  virtual void * Alloc(unsigned int, char const *, unsigned int, unsigned int, unsigned int); // slot 1, (no retail slot), pure (name from EA::Audio::Allocator)
   virtual void Free(void *, unsigned int);                               // slot 3, (no retail slot), pure (name from EA::Audio::Allocator)
 
   ICoreAllocator();                                                      // dev only

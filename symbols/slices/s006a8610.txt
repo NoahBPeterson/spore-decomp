@@ -1,1 +1,1 @@
-006a8610 `anonymous namespace'::GetVariantValueDescription  # PDB anchor 0157c3a0
+006a8610 ?GetVariantValueDescription@@YAXPAVProperty@@PAVstring@eastl@@@Z  # GetVariantValueDescription migrated from s006a8610 (verbatim, slice spelling)

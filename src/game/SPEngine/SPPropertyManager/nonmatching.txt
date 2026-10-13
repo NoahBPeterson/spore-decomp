@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+006a3430 162 Euler-from-matrix: original uses x87 fpatan/fsqrt chains; C atan2f/sqrtf cannot reproduce the exact fpu sequence; equiv: UNSUPPORTED (unresolved ref _atan2f_)
+006a38c0 20 OnRegister: cl threads both branches to one shared tail call; original duplicates the tail jmp; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
+006a38f0 20 OnRegister: same shared-tail shape as 006a38c0; equiv: UNSUPPORTED (orig-abi-broken, 0/1200 valid)
+006a39d0 26 GetAt: same CSE/register-assignment difference as Count; equiv: PASS
+006a4100 32 CopyVec12: loop idiom (dec/ja vs sub/jne) and zero-register assignment differ; equiv: PASS
+006a4380 15 basic_string::assign(const char*): inlined strlen loop shape differs; equiv: FAIL (execution mismatch; ours resolved to assign(p,p+n) callee conflict)
+006a44d0 75 vector<0x208> ctor: cl peels/vectorises the rep-movsd fill loop; equiv: FAIL (fill differs)
+006a4580 8 vector<0xc> ctor: only dec/ja vs sub/jne encoding of the fill loop differs; equiv: PASS
+006a4600 75 vector<8> ctor: cl vectorises the 2-float fill loop; equiv: FAIL (fill differs)
+006a4660 52 vector<0x10> ctor: helper call/return shape differs; equiv: PASS
+006a46a0 208 vector<0xc> ctor: original reads the value from stack locals; register schedule not reproduced; equiv: FAIL (esp after return differs)
+006a4730 52 vector<0x10> ctor (2nd helper): helper call/return shape differs; equiv: PASS
+006a4770 80 vector<0x18> ctor: value-local construction order/frame differs (cl uses x87 vs SSE constant-pool moves); /arch:SSE still not identical
+006a5e10 67 vector<basic_string> ctor: helper call/frame schedule differs; equiv PASS (887 valid inputs, 100% coverage)
+006a5ea0 65 vector<0x38> ctor: matrix/value construction frame differs; equiv FAIL (ours faulted: invalid memory write at eip=0041cb75 where original succeeded)
+006a6340 4808 complete (all 16 scalar + 15 array tags, EH cleanup); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE; frame 0x510 vs 0x6a0 (cl shares temporaries), EH state numbering and a few inline/out-of-line EASTL dtor splits differ
+006a8610 1933 complete; register assignment (esi/edi swapped), switch lowering and tail merging differ; flags: /O2 /MD /Gy /EHsc /TP /GS-
+006a9470 621 cListPropsCheat::Execute complete; frame is 0x18 bytes bigger in the original (an extra dead eastl::string slot whose stores survive) and the original re-reads some registers
+006a9790 731 cPropCheat::Execute complete; EH-state/message-temp layout and register choices differ
+006a9b60 950 cPropertyManager::Init complete; all calls/stores present, register allocation and EH-frame layout differ; difftest WEAK (313 valid, 3.5% coverage, no mismatch)
+006aa0d0 40 bool-vector append: all calls present; 3rd DoInsertValue arg emitted as mov/sub of end-end and the setne result register is edx vs ecx
+006aa130 465 cPropertyManager Factory::WriteResource complete; register allocation / string-slot layout differ
+006aa450 71 group-name register: all calls present; this/name register roles and the inlined strlen prologue differ (this=edi/name=esi vs this=esi/name=edi)

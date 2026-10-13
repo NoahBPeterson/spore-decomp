@@ -4,7 +4,10 @@
 #define GAME_EA_RESOURCEMAN_PFINDEXMODIFIABLE_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "EA/ResourceMan/Key.h"
+#include "EA/ResourceMan/KeyHash.h"
 #include "EA/ResourceMan/PFIndex.h"
+#include "EA/ResourceMan/PFRecordInfo.h"
 #include "eastl/allocator.h"
 #include "eastl/hash_map.h"
 #include "eastl/vector.h"
@@ -15,11 +18,15 @@ namespace EA { namespace ResourceMan { class Key; class KeyFilter; class PFHoleT
 namespace EA {
 namespace ResourceMan {
 
-// dev size 0x30 -> retail size 0x50 (override)
+// dev size 0x30 -> retail size 0x4c (override)
 // evidence: override applied: retail embeds a 0x20-byte pool allocator at +0x8 before the hash_map (mItemsMap at +0x28; FUN_008db730 calls FUN_00925f30(this+8, 0x80, 0x20) and sets mAllocator.mpCoreAllocator = &this->mPoolAllocator); byte-exact CreateIndex allocates 0x4c (leafsizes.py)
+// evidence: declaration virtual unsigned int GetAllocatedBytes() const -> virtual unsigned __int64 GetAllocatedBytes() const: retail 0x6beb00 (vtable slot 5) walks the record nodes summing [node+0x18] into edx:eax (add eax,ebx / adc edx,0) and returns the 64-bit sum; the dev PDB declares unsigned int
+// evidence: declaration virtual unsigned int GetFarthestFileExtent() const -> virtual unsigned __int64 GetFarthestFileExtent() const: retail 0x6bea90 (vtable slot 6) keeps the 64-bit maximum of ([node+0x10]:[node+0x14]) + [node+0x18] in edx:eax (add/adc/cmp/ja/jb) and returns it; the dev PDB declares unsigned int
+// evidence: declaration virtual void slot_15() -> virtual void SetIsSaved(): retail-only virtual 0x6bed90: walks every record node of the hash map and stores 1 at [node+0x22]; the name is the slice's (s006bde30), semantics unverified
 #pragma pack(push, 8)
 class PFIndexModifiable : public EA::ResourceMan::PFIndex /* +0x0 */ {
  public:
+  struct IndexPairSortByPosition;
   // dev size 0x1 -> retail size 0x1 (re-laid from the PDB, unverified in retail)
   struct IndexPairSortByPosition {
    public:
@@ -29,24 +36,25 @@ class PFIndexModifiable : public EA::ResourceMan::PFIndex /* +0x0 */ {
   };
   // sizeof(IndexPairSortByPosition) expected 0x1 (unverified)
 
-  // vtable retail address unknown ((retail vtable not located)): 17 retail slots, 17 dev slots
+  // vtable 0x0140a200 ((layout_overrides retail_vtable)): 18 retail slots, 17 dev slots
   virtual ~PFIndexModifiable();                                          // slot 0, 0x006bf4c0
-  virtual bool IsModifiable() const;                                     // slot 1, (no retail slot)
-  virtual bool IsEmpty() const;                                          // slot 2, (no retail slot)
-  virtual unsigned int GetSize() const;                                  // slot 3, (no retail slot)
-  virtual bool Clear();                                                  // slot 4, (no retail slot)
-  virtual unsigned int GetAllocatedBytes() const;                        // slot 5, (no retail slot)
-  virtual unsigned int GetFarthestFileExtent() const;                    // slot 6, (no retail slot)
+  virtual bool IsModifiable() const;                                     // slot 1, 0x00b1fbf0
+  virtual bool IsEmpty() const;                                          // slot 2, 0x006bf400
+  virtual unsigned int GetSize() const;                                  // slot 3, 0x008e7f80
+  virtual bool Clear();                                                  // slot 4, 0x006bf410
+  virtual unsigned __int64 GetAllocatedBytes() const;                    // slot 5, 0x006beb00
+  virtual unsigned __int64 GetFarthestFileExtent() const;                // slot 6, 0x006bea90
   virtual unsigned int GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *, EA::ResourceMan::KeyFilter *) const; // slot 7, 0x006bfa00
-  virtual unsigned int GetKeysSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *) const; // slot 8, (no retail slot)
-  virtual bool PopulateHoleTable(EA::ResourceMan::PFHoleTable &, long, long); // slot 9, (no retail slot)
-  virtual EA::ResourceMan::PFRecordInfo * FindRecord(EA::ResourceMan::Key const &); // slot 10, (no retail slot)
-  virtual void AddRecord(EA::ResourceMan::Key const &, EA::ResourceMan::PFRecordInfo const &); // slot 11, (no retail slot)
-  virtual bool DeleteRecord(EA::ResourceMan::Key const &, EA::ResourceMan::PFRecordInfo &); // slot 12, (no retail slot)
-  virtual bool ReadFromMemory(void const *, unsigned int, unsigned int, bool); // slot 13, (no retail slot)
+  virtual unsigned int GetKeysSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *) const; // slot 8, 0x006bfac0
+  virtual bool PopulateHoleTable(EA::ResourceMan::PFHoleTable &, long, long); // slot 9, 0x006c0120
+  virtual EA::ResourceMan::PFRecordInfo * FindRecord(EA::ResourceMan::Key const &); // slot 10, 0x006bf4e0
+  virtual void AddRecord(EA::ResourceMan::Key const &, EA::ResourceMan::PFRecordInfo const &); // slot 11, 0x006bfbc0
+  virtual bool DeleteRecord(EA::ResourceMan::Key const &, EA::ResourceMan::PFRecordInfo &); // slot 12, 0x006bf520
+  virtual bool ReadFromMemory(void const *, unsigned int, unsigned int, bool); // slot 13, 0x006bf660
   virtual bool WriteToMemory(void *&, unsigned int &, unsigned int, bool); // slot 14, 0x006beb60
-  virtual bool Validate(unsigned int, unsigned int) const;               // slot 15, (no retail slot)
-  virtual bool ValidateFreeSpace(unsigned int, unsigned int) const;      // slot 16, (no retail slot)
+  virtual void SetIsSaved();                                             // slot 15, 0x006bed90, UNNAMED, retail-only slot (layout_overrides vtable_insert)
+  virtual bool Validate(unsigned int, unsigned int) const;               // slot 16, 0x006bede0
+  virtual bool ValidateFreeSpace(unsigned int, unsigned int) const;      // slot 17, 0x006beeb0
 
   PFIndexModifiable(EA::Allocator::ICoreAllocator *);                    // 0x006bf370
 
@@ -56,7 +64,7 @@ class PFIndexModifiable : public EA::ResourceMan::PFIndex /* +0x0 */ {
   eastl::hash_map<EA::ResourceMan::Key,EA::ResourceMan::PFRecordInfo,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,EA::Allocator::EASTLCoreAllocator,0> mIndex; // 0x028 relaid
 };
 #pragma pack(pop)
-// sizeof(PFIndexModifiable) expected 0x50 (unverified)
+// sizeof(PFIndexModifiable) expected 0x4c (unverified)
 
 }  // namespace ResourceMan
 }  // namespace EA

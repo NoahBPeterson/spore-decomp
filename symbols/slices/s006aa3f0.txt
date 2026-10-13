@@ -1,10 +1,12 @@
-006aa3f0 SP::cPropertyManager::RegisterPropertyName  # PDB anchor 0157e230
-006aa450 `anonymous namespace'::cPropertyManager::RegisterPropertyGroupName  # callers 006aa780; group id->name map +0xf4, vector +0x114
-006aa4c0 eastl::rbtree<unsigned int,eastl::pair<unsigned int const,EA::Variant>>::insert  # PDB candidate
-006aa5e0 SP::cPropertyManager::RegisterPropertyNameLocal  # PDB anchor 0157e290
-006aa640 `anonymous namespace'::cPropertyCommand::Execute  # PDB anchor 0157e2f0
-006aa7c0 SP::cPropertyManager::Shutdown  # PDB name
-006aaa10 SP::cPropertyManager::ParseAndAddProperty  # PDB name
-006aadb0 `anonymous namespace'::cPropertyListCommand::Parse  # PDB candidate caller-single
+006aa3f0 ?RegisterPropertyName@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  # cPropertyManager_s006a_a3f0::RegisterPropertyName migrated from s006aa3f0 (verbatim, slice spelling)
+006aa450 ?Fun_006aa450@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  # cPropertyManager_s006a_a3f0::Fun_006aa450 migrated from s006aa3f0 (verbatim, slice spelling)
+006aa4c0 ?FUN_006aa4c0@@YAXPAXIH@Z  # FUN_006aa4c0 migrated from s006aa3f0 (verbatim, slice spelling)
+006aa5e0 ?RegisterPropertyNameLocal@cPropertyManager_s006a_a3f0@@QAEXPBDI@Z  # cPropertyManager_s006a_a3f0::RegisterPropertyNameLocal migrated from s006aa3f0 (verbatim, slice spelling)
+006aa640 ?Execute@cPropertyCommandExec@@QAEXPAX@Z  # cPropertyCommandExec::Execute migrated from s006aa3f0 (verbatim, slice spelling)
+006aa780 ?FUN_006aa780@@YAXPAX0@Z  # FUN_006aa780 migrated from s006aa3f0 (verbatim, slice spelling)
+006aa7c0 ?Shutdown@cPropertyManager@SP@@UAE_NXZ  # SP::cPropertyManager::Shutdown migrated from s006aa3f0
+006aa910 ?FUN_006aa910@@YAEPAXIPAH@Z  # FUN_006aa910 migrated from s006aa3f0 (verbatim, slice spelling)
+006aaa10 ?FUN_006aaa10@@YAXPAXIII@Z  # FUN_006aaa10 migrated from s006aa3f0 (verbatim, slice spelling)
+006aadb0 ?Parse@cPropertyCommand@@QAE_NPAPAX@Z  # cPropertyCommand::Parse migrated from s006aa3f0 (verbatim, slice spelling)
 006aae30 eastl::rbtree<unsigned int,eastl::pair<unsigned int const,EA::Variant>>::~rbtree  # PDB candidate
-006ab120 SP::cPropertyManager::ReadResource  # PDB candidate caller-scored
+006ab120 ?FUN_006ab120@@YADPAXPAH1@Z  # FUN_006ab120 migrated from s006aa3f0 (verbatim, slice spelling)

@@ -1,0 +1,41 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Init@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  006bbdd0  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?LockOrUnlock@MutexOwner@@QAEX_N@Z  006bbe50  /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?AsInterface@DatabasePackedFile@ResourceMan@EA@@UAEPAXW4InterfaceId@COM@3@@Z  008d81a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Lock@DatabasePackedFile@ResourceMan@EA@@UAEX_N@Z  008d81d0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HIIABVKey@23@@Z  008d8200  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HPAXIABVKey@23@@Z  008d8250  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HAAVPFRecordRead@23@ABVKey@23@@Z  008d82a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HAAUPFRecordInfo@23@ABVKey@23@@Z  008d82e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?ReadHeaders@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  008d8320  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CreateIndex@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFIndex@23@H@Z  008d8360  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DestroyIndex@DatabasePackedFile@ResourceMan@EA@@UAEXPAVPFIndex@23@@Z  008d8390  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?AllocateSpace@DatabasePackedFile@ResourceMan@EA@@QAE_NAAJI@Z  008d84a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetHoleUse@DatabasePackedFile@ResourceMan@EA@@QAE_NHM@Z  008d8530  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?ShouldRecordBeCompressed@DatabasePackedFile@ResourceMan@EA@@QAEHABVKey@23@I@Z  008d8570  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyList@DatabasePackedFile@ResourceMan@EA@@UAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@PAVKeyFilter@23@@Z  008d8710  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetKeyListSortedByPosition@DatabasePackedFile@ResourceMan@EA@@QAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@@Z  008d8770  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DecompressData@DatabasePackedFile@ResourceMan@EA@@QAE_NGPBEIIPAE@Z  008d8820  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalSetPosition@DatabasePackedFile@ResourceMan@EA@@QAE_NJ@Z  008d8890  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalGetSize@DatabasePackedFile@ResourceMan@EA@@QAEIXZ  008d8930  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InternalClose@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  008d8950  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CloseOpenRecords@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  008d8b30  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DeleteRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NABVKey@23@@Z  008d8b70  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?VerifyIndexRecordIntegrity@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  008d9000  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?ReadFileSpan@DatabasePackedFile@ResourceMan@EA@@QAE_NPAXJI@Z  008d9050  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DecompressRecord@DatabasePackedFile@ResourceMan@EA@@QAE_NGIIIPAE@Z  008d9320  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?erase@RecMap@@QAE?AURbIter@@U2@@Z  008d93a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ??1DatabasePackedFile@@QAE@XZ  008d93e0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetOpenCount@DatabasePackedFile@@QAEHPBUKey@@@Z  008d9560  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?InitializeHoleTable@DatabasePackedFile@@QAEXXZ  008d9770  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?SetLocation@DatabasePackedFile@ResourceMan@EA@@UAE_NPB_W@Z  008d99c0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?insert@RecMap@@QAEPAPAURbNode@@PAPAU2@PBUPFPair@@H@Z  008d9f20  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?CompactDatabase@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  008da8b0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Flush@DatabasePackedFile_s008d_a140@@QAE_NXZ  008daba0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?DoFreeNodes@BmpGlyphHash@@QAEXPAPAXI@Z  008dac90  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?FUN_008dace0@@YAXPAPAUSortNode@@0@Z  008dace0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?FUN_008dadd0@@YAXPAPAUSortNode@@HHHPAU1@H@Z  008dadd0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetTotalSize@HoleSet_s008d_a140@@QAEHXZ  008dae40  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Erase@HoleSet_s008d_a140@@QAEXPAPAXPAX@Z  008dae70  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?Reset@HoleSet_s008d_aff0@@QAEXH@Z  008db3a0  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/DatabasePackedFile.cpp  ?GetFileInfo@PFIndexModifiable_s008d_aff0@@QAEPAXPBX@Z  008db810  /O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include

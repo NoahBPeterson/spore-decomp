@@ -1,8 +1,38 @@
 006a32a0 EA::ArgScript::cExprFunction::EvalBool  # pdb vtable-slot
-006a3330 SP::cPropertyManager::CreateResource  # pdb anchor
-006a3400 SP::cPropertyManager::GetSupportedTypes  # pdb vtable-slot
-006a38c0 EA::ArgScript::cCommandStateT<SP::cPropertyManager,EA::ArgScript::cMetaCommandBase>::OnRegister  # pdb vtable-slot
-006a3ac0 `anonymous namespace'::cPropertyListCommand::Execute  # pdb anchor
-006a3c30 `anonymous namespace'::cPropertyListCommand::OnEndParse  # pdb vtable-slot
-006a3ce0 `anonymous namespace'::cAppPropsCommand::Execute  # pdb gap-align
-006a4380 eastl::basic_string<char,eastl::allocator>::assign  # pdb callee-single
+006a3310 ?Forward@cCommandStub@@QAEXHH@Z  # cCommandStub::Forward migrated from s006a32a0 (verbatim, slice spelling)
+006a3330 ?CreateResource@cPropertyManager2@@QAE_NPAHHH0@Z  # cPropertyManager2::CreateResource migrated from s006a32a0 (verbatim, slice spelling)
+006a3400 ?GetSupportedTypes@cPropertyManager@SP@@UAEIPAII@Z  # SP::cPropertyManager::GetSupportedTypes migrated from s006a32a0
+006a3430 ?EulerFromMatrix@@YAPAMPAMPBM@Z  # EulerFromMatrix migrated from s006a32a0 (verbatim, slice spelling)
+006a34a0 ?SetVec21@Variant@@QAEAAU1@PBX@Z  # Variant::SetVec21 migrated from s006a32a0 (verbatim, slice spelling)
+006a3510 ?SetVec30@Variant@@QAEAAU1@PBX@Z  # Variant::SetVec30 migrated from s006a32a0 (verbatim, slice spelling)
+006a3570 ?SetVec31@Variant@@QAEAAU1@PBX@Z  # Variant::SetVec31 migrated from s006a32a0 (verbatim, slice spelling)
+006a3610 ?SetVec32@Variant@@QAEAAU1@PBX@Z  # Variant::SetVec32 migrated from s006a32a0 (verbatim, slice spelling)
+006a38c0 ?OnRegister@cCommandStateA@@QAEXPAXH@Z  # cCommandStateA::OnRegister migrated from s006a32a0 (verbatim, slice spelling)
+006a38f0 ?OnRegister@cCommandStateB@@QAEXPAXH@Z  # cCommandStateB::OnRegister migrated from s006a32a0 (verbatim, slice spelling)
+006a3920 ?FUN_006a3920@@YAPAUFloat3@@PAU1@PBM@Z  # FUN_006a3920 migrated from s006a32a0 (verbatim, slice spelling)
+006a3980 ?FUN_006a3980@@YGPBDH@Z  # FUN_006a3980 migrated from s006a32a0 (verbatim, slice spelling)
+006a39a0 ?GetPropertyGroupCount@cPropertyManager@SP@@UAEHXZ  # SP::cPropertyManager::GetPropertyGroupCount migrated from s006a32a0
+006a39d0 ?GetPropertyGroupID@cPropertyManager@SP@@UAE_NHPAI@Z  # SP::cPropertyManager::GetPropertyGroupID migrated from s006a32a0
+006a3ac0 ?FUN_006a3ac0@@YAXPAX@Z  # FUN_006a3ac0 migrated from s006a32a0 (verbatim, slice spelling)
+006a3c30 ?FUN_006a3c30@@YAXH@Z  # FUN_006a3c30 migrated from s006a32a0 (verbatim, slice spelling)
+006a3ce0 ?Execute@cAppPropsCommand@@QAEXPAX@Z  # cAppPropsCommand::Execute migrated from s006a32a0 (verbatim, slice spelling)
+006a3d10 ?OnEndParse@cAppPropsCommand@@QAEXH@Z  # cAppPropsCommand::OnEndParse migrated from s006a32a0 (verbatim, slice spelling)
+006a3d50 ?FUN_006a3d50@@YAPAXPAUFeedbackCmd@@@Z  # FUN_006a3d50 migrated from s006a32a0 (verbatim, slice spelling)
+006a3dd0 ?FUN_006a3dd0@@YAXPAH@Z  # FUN_006a3dd0 migrated from s006a32a0 (verbatim, slice spelling)
+006a3f00 ?FUN_006a3f00@@YA_NPAUFeedbackCmd@@@Z  # FUN_006a3f00 migrated from s006a32a0 (verbatim, slice spelling)
+006a3f40 ?FUN_006a3f40@@YAXPAUString@@PAPBDPBX@Z  # FUN_006a3f40 migrated from s006a32a0 (verbatim, slice spelling)
+006a4100 ?CopyVec12@@YAXPAXIPBX@Z  # CopyVec12 migrated from s006a32a0 (verbatim, slice spelling)
+006a4130 ?Init@Vec38@@QAEPAU1@HPBX@Z  # Vec38::Init migrated from s006a32a0 (verbatim, slice spelling)
+006a4190 ?FUN_006a4190@@YAIPAX@Z  # FUN_006a4190 migrated from s006a32a0 (verbatim, slice spelling)
+006a4240 ?FUN_006a4240@@YA_NPAUcPropertyManager@@HH@Z  # FUN_006a4240 migrated from s006a32a0 (verbatim, slice spelling)
+006a42d0 ?FUN_006a42d0@@YA_NPAUcPropertyManager@@HPBX@Z  # FUN_006a42d0 migrated from s006a32a0 (verbatim, slice spelling)
+006a4360 ?Release@cDealloc@@QAEXXZ  # cDealloc::Release migrated from s006a32a0 (verbatim, slice spelling)
+006a4380 ?assign@String@@QAEAAU1@PBD@Z  # String::assign migrated from s006a32a0 (verbatim, slice spelling)
+006a43b0 ?FUN_006a43b0@@YAHPADPBI@Z  # FUN_006a43b0 migrated from s006a32a0 (verbatim, slice spelling)
+006a4450 ?FUN_006a4450@@YAPAXPADPAPAXH1@Z  # FUN_006a4450 migrated from s006a32a0 (verbatim, slice spelling)
+006a44d0 ?Init@Vec208@@QAEPAU1@IPBX@Z  # Vec208::Init migrated from s006a32a0 (verbatim, slice spelling)
+006a4580 ?Init@VecC@@QAEPAU1@IPBX@Z  # VecC::Init migrated from s006a32a0 (verbatim, slice spelling)
+006a4600 ?Init@Vec8@@QAEPAU1@IPBM@Z  # Vec8::Init migrated from s006a32a0 (verbatim, slice spelling)
+006a4660 ?Init@Vec10@@QAEPAU1@HPBX@Z  # Vec10::Init migrated from s006a32a0 (verbatim, slice spelling)
+006a46a0 ?InitValue@VecC@@QAEPAU1@IPBMPBX@Z  # VecC::InitValue migrated from s006a32a0 (verbatim, slice spelling)
+006a4730 ?Init@Vec10b@@QAEPAU1@HPBX@Z  # Vec10b::Init migrated from s006a32a0 (verbatim, slice spelling)

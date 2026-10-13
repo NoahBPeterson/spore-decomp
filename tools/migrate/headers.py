@@ -83,6 +83,8 @@ def cpp_type(d, name=None):
         t = "void ()"
     else:
         t = "int /* ? */"
+    if name and t.endswith("(*)()"):          # function pointer member: the name goes inside the declarator
+        return t[:-len("(*)()")] + "(*" + name + ")()"
     return (t + " " + name) if name else t
 
 
@@ -488,6 +490,41 @@ class Data:
                 out[e["module"]].append((int(va, 16), e))
         return out
 
+    def dev_classes_of(self, module):
+        """Non-library classes with a function in the dev object file(s) of a modmap module key
+        ('UTFSpore_Win32/DatabasePackedFile.obj'): the dev symbols name the object by its build path."""
+        if not hasattr(self, "_dev_mod_classes"):
+            self._dev_mod_classes = collections.defaultdict(set)
+            for f in self.dev_fn.values():
+                nm = f.get("name") or ""
+                c = split_qual(nm)[0]
+                if not c or "<" in c or c.split("::")[0] in LIBRARY_NS or c in ("eastl", "std"):
+                    continue
+                mod = (f.get("module") or "").replace("\\", "/").lower()
+                self._dev_mod_classes[mod].add(c)
+        key = "/" + module.lower()
+        out = set()
+        for mod, cs in self._dev_mod_classes.items():
+            if mod.endswith(key):
+                out |= cs
+        return sorted(out)
+
+    def free_decls_of(self, module):
+        """Parsed dev declarations of the namespace functions (no class owner) that the dev object file(s) of a modmap
+        module key define: the signatures of a module's free functions name classes (cSPVector2 *, cPropertyList const *)
+        whose headers the module's TU needs even though no method of those classes lives in the module."""
+        key = "/" + module.lower()
+        fns = [f for f in self.dev_fn.values() if (f.get("module") or "").replace("\\", "/").lower().endswith(key)]
+        names = {f["va"]: self.pub.get(f["va"]) for f in fns}
+        dm = self.und.many([m for m in names.values() if m])
+        out = []
+        for va, mangled in sorted(names.items()):
+            d = parse_decl(dm.get(mangled)) if mangled else None
+            if d and d["cls"] not in self.types.structs and "<" not in d["name"] and not d["name"].startswith(("`", "operator")):
+                d["mangled"], d["demangled"], d["dev_va"] = mangled, dm.get(mangled), va
+                out.append(d)
+        return out
+
     def class_of_name(self, name):
         cls, _m = split_qual(name)
         return cls
@@ -533,6 +570,26 @@ class Data:
                     for vt, kk in self._slot_index.get(r, []):
                         if kk == k:
                             votes[vt] += 1
+            # layout_overrides.json "retail_vtable": {"va": "0140a200", "extend": ["0140a210"], "evidence": ...}: the
+            # retail vtable is known (its constructor stores the address) but tables.json cut it into pieces
+            # ("extend" lists the contiguous tables that continue it); the slots are the concatenation
+            # (a list of such entries, each with "for": "EA::COM::IUnknown32", names the vtable of one base: the dev
+            # vtable whose qualifier is {for `EA::COM::IUnknown32'} - DatabasePackedFile's secondary vtable 0x143679c)
+            ov = self.overrides.get(cls, {}).get("retail_vtable")
+            if isinstance(ov, list):
+                ov = next((o for o in ov if o.get("for") and ("{for `%s'}" % o["for"]) in dm), None)
+            if ov:
+                rv = ov["va"]
+                if not hasattr(self, "_vt_merged"):
+                    self._vt_merged = set()
+                if rv not in self._vt_merged:
+                    for x in ov.get("extend", []):
+                        self.ret_vt[rv] = list(self.ret_vt[rv]) + list(self.ret_vt[x])
+                    self._vt_merged.add(rv)
+                    for k, f in enumerate(self.ret_vt[rv]):
+                        self._slot_index[f].append((rv, k))
+                out.append((rv, dva, self.dev_vt[dva]["name"], dm + " (layout_overrides retail_vtable)"))
+                continue
             # candidates: retail vtables not already paired with another class, with the dev
             # slot count (a derived class's vtable shares the inherited slots and would win a
             # plain vote), ranked by agreeing slots; symbols/vtable_names.txt (vtbl_<Class> lines
@@ -576,7 +633,8 @@ FAMILY_HEADERS = [
     (r"^EA::Allocator::EASTLCoreAllocator$", "eastl/allocator.h"),
     (r"^EA::AutoRefCount<", "EA/AutoRefCount.h"), (r"^EA::COM::AutoRefCount<", "EA/COM/AutoRefCount.h"),
     (r"^EA::Thread::AtomicInt<", "EA/Thread/AtomicInt.h"), (r"^EA::RefCounted<", "EA/RefCounted.h"),
-    (r"^EA::IntrusivePtr<", "EA/IntrusivePtr.h"),
+    (r"^EA::IntrusivePtr<", "EA/IntrusivePtr.h"), (r"^EA::Allocator::FixedAllocator<", "EA/Allocator/FixedAllocator.h"),
+    (r"^rw::math::fpu::(Vector[234]|Matrix33)Template<", "rw/math/fpu/VectorTemplates.h"),
 ]
 
 
@@ -600,6 +658,10 @@ def sig_refs(text):
         if tail.startswith("<"):
             out.add(m.group(1) + "<")      # template id: the family header declares it
         else:
+            out.add(m.group(1))
+    # global-namespace PDB classes (cSPVector2, cSPColorRGB) have no `::`: forward-declared like the scoped ones
+    for m in re.finditer(r"(?<![\w:])([A-Za-z_]\w*)(?![\w:<])", t):
+        if m.group(1) in KNOWN_STRUCTS:
             out.add(m.group(1))
     return out
 
@@ -783,6 +845,18 @@ def merge_layout(relaid, ev):
     return out
 
 
+def inline_override(data, cls, txt):
+    """layout_overrides.json "decl_overrides": [{"decl": "<declaration text without ;>", "replace": "<replacement text>",
+    "evidence": ...}] swaps one emitted method declaration for another: an inline definition for a constructor or
+    destructor the retail build inlined (the dev PDB lists it as a function, the retail image has none), or a
+    different return type where a byte-exact slice proves the retail signature differs from the dev one."""
+    for e in data.overrides.get(cls, {}).get("decl_overrides", []):
+        if re.sub(r"\s+", " ", txt.rstrip().rstrip(";")) == re.sub(r"\s+", " ", e["decl"]):
+            r = e["replace"].rstrip()
+            return r if r.endswith(("}", ";")) else r + ";"
+    return txt
+
+
 def build_declarations(data, cls, short, retail_fns, sig_names):
     """Lines declaring the class's virtuals (per vtable, in slot order) and its other methods, and
     the dev VAs of the virtual slot functions.  Each virtual is declared once: the secondary
@@ -814,15 +888,36 @@ def build_declarations(data, cls, short, retail_fns, sig_names):
             rslots = [data._dev2ret.get(data.dev_target(hs)) for hs in dslots]
         lines.append("  // vtable %s (%s): %d retail slots, %d dev slots" % (
             ("0x" + rva) if rva else "retail address unknown", dm.split("`vftable'")[1].strip() or "primary", len(rslots), len(dslots)))
-        n = max(len(rslots), len(dslots))
-        for k in range(n):
+        # retail slot k pairs with dev slot k unless layout_overrides.json says the retail vtable has
+        # extra slots in front of a dev slot ("vtable_insert": [{"before_dev_slot", "count", "evidence"}]):
+        # the compiler numbers virtuals by declaration order, so a wrong pairing moves every later call
+        inserts = {i["before_dev_slot"]: i["count"] for i in data.overrides.get(cls, {}).get("vtable_insert", [])}
+        if inserts and not rva and not data.overrides[cls].get("vtable_insert_unlocated"):
+            inserts = {}          # without a located retail vtable an insert needs its explicit opt-in (interfaces with no vtable)
+        if inserts:
+            pairs, kr = [], 0
+            for kd in range(len(dslots)):
+                for _ in range(inserts.get(kd, 0)):
+                    pairs.append((kr, None))
+                    kr += 1
+                pairs.append((kr, kd))
+                kr += 1
+            while kr < len(rslots):
+                pairs.append((kr, None))
+                kr += 1
+        else:
+            pairs = [(k, k if k < len(dslots) else None) for k in range(max(len(rslots), len(dslots)))]
+        blk = []          # (line index, name, inherited) of the real virtual declarations of this vtable
+        for k, kd in pairs:
             r = rslots[k] if k < len(rslots) else None
-            dt = data.dev_target(dslots[k]) if k < len(dslots) else None
+            if inserts and not rva:
+                r = None          # the slots are in dev order here; the retail index is shifted by the insert
+            dt = data.dev_target(dslots[kd]) if kd is not None else None
             mangled_m = data.pub.get(dt) if dt else None
             dm_m = data.und.many([mangled_m])[mangled_m] if mangled_m else None
             decl = parse_decl(dm_m)
-            if decl is None:
-                decl = data.implementer_slot(cls, k, dm.split("`vftable'")[1].split(" (")[0])   # pure slot: name from an implementer
+            if decl is None and kd is not None:
+                decl = data.implementer_slot(cls, kd, dm.split("`vftable'")[1].split(" (")[0])   # pure slot: name from an implementer
             inherited = decl["cls"] if decl and decl["cls"] != cls and not decl.get("from_impl") else None
             txt = None
             key = None
@@ -844,13 +939,31 @@ def build_declarations(data, cls, short, retail_fns, sig_names):
             if txt is None:
                 txt = "virtual void slot_%d();" % k
                 key = ("slot", k, dva)
-                note += ", UNNAMED%s" % ((" retail " + rname) if rname else "")
+                note += ", UNNAMED%s%s" % ((" retail " + rname) if rname else "",
+                                           ", retail-only slot (layout_overrides vtable_insert)" if inserts and kd is None else "")
             if key in declared:
                 lines.append("  // %-68s %s (declared above)" % (txt, note))
             else:
                 declared.add(key)
-                lines.append("  %-70s %s" % (txt, note))
+                blk.append((len(lines), key[0] if decl and key and key[0] not in ("~", "slot") else None, inherited))
+                lines.append("  %-70s %s" % (inline_override(data, cls, txt), note))
             virtuals.append((k, r, dt))
+        # VC9 lays the new virtuals of one name (an overload set) out contiguously and in REVERSE declaration order, at the
+        # position of the first one declared (measured: `virtual f(int); virtual g(); virtual f(char);` gives f(char)=0, f(int)=1,
+        # g=2).  The dev and retail vtables are the compiler's result, so the declarations of a contiguous run of one name are
+        # emitted in descending slot order for the header to reproduce the slots.
+        i = 0
+        while i < len(blk):
+            j = i
+            while j + 1 < len(blk) and blk[j + 1][1] and blk[j + 1][1] == blk[i][1] and blk[j + 1][0] == blk[j][0] + 1 \
+                    and not blk[j + 1][2] and not blk[i][2]:
+                j += 1
+            if j > i and blk[i][1]:
+                idx = [b[0] for b in blk[i:j + 1]]
+                run = [lines[x] for x in idx]
+                for x, l in zip(idx, reversed(run)):
+                    lines[x] = l
+            i = j + 1
         lines.append("")
     # methods: dev publics of this class with retail addresses from the module map
     if not hasattr(data, "_methods_by_class"):
@@ -901,9 +1014,15 @@ def build_declarations(data, cls, short, retail_fns, sig_names):
         declared.add(key)
         r = retail_by_dev.get(dva)
         rows.append((r[0] if r else None, txt, decl["access"], f["name"]))
+    # layout_overrides.json "extra_methods": [{"decl": "bool Foo(int)", "va": "006bc2d0", "evidence": ...}]: retail
+    # functions of the class that the dev PDB has no method for (dev inlined it, or it was added after 2008)
+    for e in data.overrides.get(cls, {}).get("extra_methods", []):
+        sig_names.update(sig_refs(e["decl"]))
+        rows.append((int(e["va"], 16) if e.get("va") else None, e["decl"].rstrip(";") + ";", e.get("access", "public"), cls))
     rows.sort(key=lambda x: (x[0] is None, x[0] or 0))
     for r, txt, access, dname in rows:
-        lines.append("  %-70s // %s%s" % (txt, ("0x%08x" % r) if r else "dev only", (", " + access) if access and access != "public" else ""))
+        lines.append("  %-70s // %s%s" % (inline_override(data, cls, txt), ("0x%08x" % r) if r else "dev only",
+                                         (", " + access) if access and access != "public" else ""))
     if rows:
         lines.append("")
     return lines, virtuals
@@ -935,6 +1054,10 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
                      "conflict: view member %s at 0x%x overlaps a re-laid member" % (c[0], c[2]))
     if override:
         notes.append("override applied: " + (data.overrides[cls].get("evidence") or "(no evidence string)"))
+        for e in data.overrides[cls].get("extra_methods", []):
+            notes.append("extra method %s: %s" % (e["decl"], e.get("evidence", "")))
+        for e in data.overrides[cls].get("decl_overrides", []):
+            notes.append("declaration %s -> %s: %s" % (e["decl"], e["replace"], e.get("evidence", "")))
     # references
     for b in L["bases"]:
         ctx["need_include"].add(b["name"])
@@ -1009,6 +1132,9 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
             lines.append(indent + "  enum %s {" % e.split("::")[-1])
             lines += [indent + "    %s = %d," % tuple(v) for v in ev2["values"]]
             lines.append(indent + "  };")
+    for n in nested:       # siblings may refer to each other (Iterator -> Node): declare them all first
+        lines.append(indent + "  %s %s;" % (T.structs[n]["kind"] if T.structs[n]["kind"] in ("struct", "class", "union") else "class",
+                                              n.split("::")[-1]))
     for n in nested:
         lines += class_def(data, n, [], report, out_dir, ctx, indent + "  ")
         lines.append("")
@@ -1031,6 +1157,10 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
             decl = "unsigned char %s[0x%x]" % (m["name"], m["size"] or 0)
         if m.get("bitlen"):
             decl += " : %d" % m["bitlen"]
+        # layout_overrides.json "mutable": [{"name": "mMutex", "evidence": ...}]: members a const method locks/changes
+        # (the dev PDB keeps no `mutable`, the retail code of the const method writes through the member)
+        if m["name"] in {e["name"] for e in data.overrides.get(cls, {}).get("mutable", [])}:
+            decl = "mutable " + decl
         note = "// 0x%03x" % m["offset"]
         if m.get("dev_offset") is not None and m["offset"] != m["dev_offset"]:
             note += " (dev 0x%03x)" % m["dev_offset"]
@@ -1070,9 +1200,21 @@ def emit_class(data, module, cls, retail_fns, report, out_dir):
         h = family_header(r)
         if h:
             includes.add(h)
+            # a template used by value or as a base needs its arguments complete: the PDB classes among
+            # them get their own header (RefCounted<ZoneObject, ...> derives from its first argument),
+            # and so do the template ids inside (AtomicInt<int>)
             for tok in class_refs("struct:" + r):
                 if tok != r:
-                    fwd.add(tok)
+                    if family_header(tok):
+                        includes.add(family_header(tok))
+                    elif "<" not in tok and tok in T.structs and "::".join(tok.split("::")[:-1]) not in T.structs:
+                        includes.add(include_path(tok))
+                    else:
+                        fwd.add(tok)
+            for tid in re.findall(r"[A-Za-z_][\w:]*<", r[1:]):
+                h2 = family_header(tid + "x>")
+                if h2:
+                    includes.add(h2)
         elif "<" not in r and r in T.structs:
             owner = "::".join(r.split("::")[:-1])
             includes.add(include_path(owner if owner in T.structs else r))
@@ -1171,31 +1313,32 @@ def main():
     emitted = set()
 
     def closure(classes):
-        """Bases, by-value member types and pointed-to classes of the given classes, transitively
-        through bases and by-value members (one hop through pointers), excluding library templates."""
-        out, todo = set(), list(classes)
+        """Bases and by-value member types of the given classes, transitively (nested classes count as
+        part of their owner), plus the classes their pointer members point at, one hop: those get a
+        header of their own, which includes its bases and by-value members but does not follow its
+        own pointers.  Excludes library templates."""
+        out, todo = set(), [(c, False) for c in classes]
         while todo:
-            c = todo.pop()
+            c, hop = todo.pop()
             if c in out or c not in T.structs or "<" in c or c.split("::")[0] in LIBRARY_NS:
                 continue
             owner = "::".join(c.split("::")[:-1])
             if owner in T.structs:          # nested class: its owner's header defines it
-                todo.append(owner)
+                todo.append((owner, hop))
                 continue
             out.add(c)
-            st = T.structs[c]
-            for b in st["bases"]:
-                todo.append(b[0].split(":", 1)[1])
-            for m in st["members"]:
-                for r in class_refs(m[2]):
-                    if m[2].startswith("ptr:"):
-                        if r in T.structs and "<" not in r and r.split("::")[0] not in LIBRARY_NS and r not in out:
-                            out.add(r)              # one hop: the pointee's own header, no recursion
-                            todo_ptr = T.structs[r]
-                            for b in todo_ptr["bases"]:
-                                todo.append(b[0].split(":", 1)[1])
-                    else:
-                        todo.append(r)
+            group = [c] + [n for n in T.structs if n.startswith(c + "::") and "<" not in n[len(c) + 2:]]
+            for g in group:
+                st = T.structs[g]
+                for b in st["bases"]:
+                    todo.append((b[0].split(":", 1)[1], hop))
+                for m in st["members"]:
+                    for r in class_refs(m[2]):
+                        if m[2].startswith("ptr:"):
+                            if not hop:
+                                todo.append((r, True))
+                        else:
+                            todo.append((r, hop))
         return out
 
     for module, fns in sorted(mods.items()):
@@ -1209,8 +1352,26 @@ def main():
                     classes[c].append((va, e))
                 elif c:
                     report["name_without_type"] += 1
+        # classes that the dev build defines in this object file but whose retail functions carry no
+        # name (PFRecordWrite: 28 dev functions in DatabasePackedFileRecord.obj, none named in
+        # pdb_names): the module still owns them, and a TU that constructs one needs the header
+        for c in data.dev_classes_of(module):
+            if c in T.structs and c not in classes:
+                classes[c] = []
+                report["dev_only_classes"] += 1
         want = [c for c in classes if not a.classes or c in a.classes]
         extra = sorted(closure(want) - set(want)) if not a.no_closure else []
+        # classes named by the signatures of the module's namespace functions get a header too (none is overwritten:
+        # a class that already has one is left to the run that owns it, unless --class names it)
+        sigcls = set()
+        for d in data.free_decls_of(module):
+            for tok in re.findall(r"[A-Za-z_][\w:]*", d["ret"] + " " + d["params"]):
+                if tok in T.structs and "<" not in tok and tok.split("::")[0] not in LIBRARY_NS:
+                    sigcls.add(tok)
+        for c in sorted(closure(sorted(sigcls)) - set(want) - set(extra)):
+            if (a.classes and c in a.classes) or not os.path.exists(header_path(a.out, c) or ""):
+                extra.append(c)
+                report["signature_classes"] += 1
         data.planned.update(want)
         data.planned.update(extra)
         data.planned.update(n for n in T.structs if "::".join(n.split("::")[:-1]) in data.planned)   # their nested classes
@@ -1218,6 +1379,8 @@ def main():
             module, len(fns), len(want), len(extra)))
         for cls in sorted(want) + extra:
             if cls in emitted or "::".join(cls.split("::")[:-1]) in T.structs:
+                continue
+            if family_header(cls):      # hand-written template-library type (EASTLCoreAllocator in eastl/allocator.h)
                 continue
             emitted.add(cls)
             lines = emit_class(data, module if cls in classes else module + " (closure)", cls, classes.get(cls, []),

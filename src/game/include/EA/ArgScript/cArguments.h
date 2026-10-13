@@ -14,6 +14,7 @@ namespace ArgScript {
 #pragma pack(push, 8)
 class cArguments {
  public:
+  struct cOptionArgInfo;
   // dev size 0x10 -> retail size 0x10 (all 4 members exact-backed)
   // evidence: view s00837820 is the evidence: 4 of 4 shared members agree with the re-laid offsets, 3 byte-exact users, shifts [0], declared size 0x10
   // evidence: view s00839950 agrees (4 shared)

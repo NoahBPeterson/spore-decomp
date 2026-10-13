@@ -4,9 +4,15 @@
 #define GAME_EA_RESOURCEMAN_MANAGER_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "EA/Allocator/FixedAllocator.h"
 #include "EA/Allocator/ZoneObject.h"
+#include "EA/COM/AutoRefCount.h"
 #include "EA/Compression.h"
+#include "EA/ResourceMan/Cache.h"
 #include "EA/ResourceMan/CompressionPolicy.h"
+#include "EA/ResourceMan/Factory.h"
+#include "EA/ResourceMan/Key.h"
+#include "EA/ResourceMan/KeyHash.h"
 #include "EA/Thread/AtomicPointer.h"
 #include "EA/Thread/Mutex.h"
 #include "eastl/allocator.h"
@@ -22,22 +28,25 @@ namespace EA { namespace ResourceMan { class Cache; class Database; class Factor
 namespace EA {
 namespace ResourceMan {
 
-// dev size 0x188 -> retail size 0x180 (2 members exact-backed, 5 conflicts, 0 retail-only, 13 unverified)
-// evidence: view s008de020 is the evidence: 2 of 3 shared members agree with the re-laid offsets, 4 byte-exact users, shifts [0, 40], declared size 0x178
-// evidence: conflict: mNameMutex re-laid 0x120, view has 0x148
+// dev size 0x188 -> retail size 0x170 (override)
+// evidence: view s008de020 is the evidence: 2 of 3 shared members agree with the re-laid offsets, 4 byte-exact users, shifts [0, 56], declared size 0x178
+// evidence: conflict: mNameMutex re-laid 0x110, view has 0x148
 // evidence: conflict: view member vftable at 0x0 overlaps a re-laid member
-// evidence: conflict: view member mDatabaseList at 0x2c overlaps a re-laid member
 // evidence: conflict: view member mCompressorBegin at 0x9c overlaps a re-laid member
 // evidence: conflict: view member mCompressorEnd at 0xa0 overlaps a re-laid member
+// evidence: override applied: vtable only: dev slots 13.. are +3 in retail (see vtable_insert); data layout is the dev layout re-laid, unverified
 #pragma pack(push, 8)
 class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
  public:
+  struct ChangeNotificationInfo;
+  struct ChangeNotificationInfoCompare;
+  class InternalDatabaseList;
   // dev size 0x10 -> retail size 0x10 (all 4 members exact-backed)
   // evidence: view s008de020 is the evidence: 4 of 4 shared members agree with the re-laid offsets, 1 byte-exact users, shifts [0], declared size 0x10
   struct ChangeNotificationInfo {
    public:
    public:  // data (retail offsets)
-    void (*)() mpFunction;                                       // 0x000 exact:s008de020
+    void (*mpFunction)();                                        // 0x000 exact:s008de020
     void* mpContext;                                             // 0x004 exact:s008de020
     EA::ResourceMan::KeyFilter* mpKeyFilter;                     // 0x008 exact:s008de020
     int mnPriority;                                              // 0x00c exact:s008de020
@@ -56,6 +65,8 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   // dev size 0x78 -> retail size 0x78 (re-laid from the PDB, unverified in retail)
   class InternalDatabaseList {
    public:
+    struct Iterator;
+    struct Node;
     // dev size 0x4 -> retail size 0x4 (re-laid from the PDB, unverified in retail)
     struct Iterator {
      public:
@@ -113,34 +124,37 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   virtual unsigned int GetTypeMapping(eastl::vector<unsigned int, eastl::sp_vector_allocator> *, unsigned int); // slot 10, 0x008e08c0
   virtual EA::ResourceMan::Database * FindRecord(EA::ResourceMan::Key const &, EA::ResourceMan::Key *, EA::ResourceMan::Database *); // slot 11, 0x008df970
   virtual unsigned int GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *, EA::ResourceMan::KeyFilter *, bool); // slot 12, 0x008df9b0
-  virtual bool RegisterChangeNotification(bool, void (__cdecl *)(EA::ResourceMan::Database *, EA::ResourceMan::Key const &, void *), void *, EA::ResourceMan::KeyFilter *, int); // slot 13, 0x008e0950
-  virtual bool RegisterFactory(bool, EA::ResourceMan::Factory *, int);   // slot 14, 0x008e0a30
-  virtual EA::ResourceMan::Factory * FindFactory(unsigned int, unsigned int); // slot 15, 0x008e0c10
-  virtual unsigned int GetFactoryList(eastl::list<EA::ResourceMan::Factory *, eastl::allocator> *, unsigned int); // slot 16, 0x008e04a0
-  virtual bool RegisterDatabase(bool, EA::ResourceMan::Database *, int); // slot 17, 0x008e1a50
-  virtual bool IsDatabaseRegistered(EA::ResourceMan::Database *) const;  // slot 18, 0x008dfb20
-  virtual EA::ResourceMan::Database * FindDatabase(EA::ResourceMan::Key const &); // slot 19, 0x008dff30
-  virtual unsigned int GetDatabaseList(eastl::list<EA::ResourceMan::Database *, EA::Allocator::EASTLCoreAllocator> *, EA::ResourceMan::Key const *); // slot 20, 0x008e0d30
-  virtual void DoDatabaseChanged(EA::ResourceMan::Database *, eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *); // slot 21, 0x008de2d0
-  virtual bool RegisterCache(bool, EA::ResourceMan::Cache *, int);       // slot 22, 0x008de310
-  virtual EA::ResourceMan::Cache * FindCache(EA::ResourceMan::Key const &); // slot 23, 0x008e00b0
-  virtual bool CacheResource(EA::ResourceMan::Resource *, bool);         // slot 24, 0x008debf0
-  virtual void FlushCache(EA::ResourceMan::Cache *, EA::ResourceMan::KeyFilter *); // slot 25, 0x008e1d50
-  virtual unsigned int GetCacheList(eastl::list<EA::ResourceMan::Cache *, eastl::allocator> *); // slot 26, 0x008de360
-  virtual bool RegisterCompressor(bool, EA::Compression *, unsigned short); // slot 27, 0x008de3b0
-  virtual EA::Compression * FindCompressor(unsigned short);              // slot 28, 0x008de400
-  virtual EA::ResourceMan::CompressionPolicy GetCompressionPolicy(float *); // slot 29, 0x008e0140
-  virtual void SetCompressionPolicy(EA::ResourceMan::CompressionPolicy, float); // slot 30, 0x008de230
-  virtual EA::Compression ** GetCompressorList();                        // slot 31, 0x008e01c0
-  virtual unsigned short * GetCompressionTypeList();                     // slot 32, 0x008e1480
-  virtual bool GetKeyFromName(EA::ResourceMan::Key &, wchar_t const *, unsigned int, unsigned int); // slot 33, 0x008e14e0
-  virtual void GetNameFromKey(EA::ResourceMan::Key const &, eastl::basic_string<wchar_t, eastl::allocator> &); // slot 34, 0x008dfba0
-  virtual bool SetKeyName(EA::ResourceMan::Key const &, wchar_t const *); // slot 35, 0x008dfc60
-  virtual bool ForgetKeyName(EA::ResourceMan::Key const &);              // slot 36, 0x008e1560
-  virtual unsigned int GetTypeFromTypename(wchar_t const *) const;       // slot 37, 0x008e1610
-  virtual wchar_t const * GetTypenameFromType(unsigned int) const;       // slot 38, (no retail slot)
-  virtual bool SetTypename(unsigned int, wchar_t const *);               // slot 39, (no retail slot)
-  virtual bool ResetTypename(unsigned int);                              // slot 40, (no retail slot)
+  virtual void slot_13();                                                // slot 13, 0x008e0950, UNNAMED, retail-only slot (layout_overrides vtable_insert)
+  virtual void slot_14();                                                // slot 14, 0x008e0a30, UNNAMED, retail-only slot (layout_overrides vtable_insert)
+  virtual void slot_15();                                                // slot 15, 0x008e0c10, UNNAMED, retail-only slot (layout_overrides vtable_insert)
+  virtual bool RegisterChangeNotification(bool, void (__cdecl *)(EA::ResourceMan::Database *, EA::ResourceMan::Key const &, void *), void *, EA::ResourceMan::KeyFilter *, int); // slot 16, 0x008e04a0
+  virtual bool RegisterFactory(bool, EA::ResourceMan::Factory *, int);   // slot 17, 0x008e1a50
+  virtual EA::ResourceMan::Factory * FindFactory(unsigned int, unsigned int); // slot 18, 0x008dfb20
+  virtual unsigned int GetFactoryList(eastl::list<EA::ResourceMan::Factory *, eastl::allocator> *, unsigned int); // slot 19, 0x008dff30
+  virtual bool RegisterDatabase(bool, EA::ResourceMan::Database *, int); // slot 20, 0x008e0d30
+  virtual bool IsDatabaseRegistered(EA::ResourceMan::Database *) const;  // slot 21, 0x008de2d0
+  virtual EA::ResourceMan::Database * FindDatabase(EA::ResourceMan::Key const &); // slot 22, 0x008de310
+  virtual unsigned int GetDatabaseList(eastl::list<EA::ResourceMan::Database *, EA::Allocator::EASTLCoreAllocator> *, EA::ResourceMan::Key const *); // slot 23, 0x008e00b0
+  virtual void DoDatabaseChanged(EA::ResourceMan::Database *, eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *); // slot 24, 0x008debf0
+  virtual bool RegisterCache(bool, EA::ResourceMan::Cache *, int);       // slot 25, 0x008e1d50
+  virtual EA::ResourceMan::Cache * FindCache(EA::ResourceMan::Key const &); // slot 26, 0x008de360
+  virtual bool CacheResource(EA::ResourceMan::Resource *, bool);         // slot 27, 0x008de3b0
+  virtual void FlushCache(EA::ResourceMan::Cache *, EA::ResourceMan::KeyFilter *); // slot 28, 0x008de400
+  virtual unsigned int GetCacheList(eastl::list<EA::ResourceMan::Cache *, eastl::allocator> *); // slot 29, 0x008e0140
+  virtual bool RegisterCompressor(bool, EA::Compression *, unsigned short); // slot 30, 0x008de230
+  virtual EA::Compression * FindCompressor(unsigned short);              // slot 31, 0x008e01c0
+  virtual EA::ResourceMan::CompressionPolicy GetCompressionPolicy(float *); // slot 32, 0x008e1480
+  virtual void SetCompressionPolicy(EA::ResourceMan::CompressionPolicy, float); // slot 33, 0x008e14e0
+  virtual EA::Compression ** GetCompressorList();                        // slot 34, 0x008dfba0
+  virtual unsigned short * GetCompressionTypeList();                     // slot 35, 0x008dfc60
+  virtual bool GetKeyFromName(EA::ResourceMan::Key &, wchar_t const *, unsigned int, unsigned int); // slot 36, 0x008e1560
+  virtual void GetNameFromKey(EA::ResourceMan::Key const &, eastl::basic_string<wchar_t, eastl::allocator> &); // slot 37, 0x008e1610
+  virtual bool SetKeyName(EA::ResourceMan::Key const &, wchar_t const *); // slot 38, (no retail slot)
+  virtual bool ForgetKeyName(EA::ResourceMan::Key const &);              // slot 39, (no retail slot)
+  virtual unsigned int GetTypeFromTypename(wchar_t const *) const;       // slot 40, (no retail slot)
+  virtual wchar_t const * GetTypenameFromType(unsigned int) const;       // slot 41, (no retail slot)
+  virtual bool SetTypename(unsigned int, wchar_t const *);               // slot 42, (no retail slot)
+  virtual bool ResetTypename(unsigned int);                              // slot 43, (no retail slot)
 
   bool CheckCacheInternal(EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, EA::ResourceMan::IAsyncRequest **, bool); // dev only, protected
   bool GetResourceInternal(bool, EA::ResourceMan::Key const &, EA::ResourceMan::Resource **, void *, EA::ResourceMan::Database *, EA::ResourceMan::Factory *, EA::ResourceMan::Key const *); // dev only, protected
@@ -150,21 +164,21 @@ class Manager : public EA::Allocator::ZoneObject /* +0x0 */ {
   bool mbInitialized;                                          // 0x004 exact:s008de020
   EA::Allocator::ICoreAllocator* mpAllocator;                  // 0x008 exact:s008de020
   eastl::set<EA::ResourceMan::Manager::ChangeNotificationInfo,EA::ResourceMan::Manager::ChangeNotificationInfoCompare,EA::Allocator::EASTLCoreAllocator> mFunctionInfoSet; // 0x00c relaid
-  EA::ResourceMan::Manager::InternalDatabaseList* mDatabaseArray; // 0x030 relaid
-  eastl::hash_map<unsigned int,eastl::vector<eastl::pair<EA::COM::AutoRefCount<EA::ResourceMan::Factory>,int>,EA::Allocator::EASTLCoreAllocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mTypeToFactoryArrayMap; // 0x034 relaid
-  eastl::hash_map<unsigned int,eastl::vector<unsigned int,EA::Allocator::EASTLCoreAllocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mResourceToRecordTypeMap; // 0x05c relaid
-  eastl::vector<eastl::pair<EA::COM::AutoRefCount<EA::ResourceMan::Cache>,int>,EA::Allocator::EASTLCoreAllocator> mCacheArray; // 0x084 relaid
-  EA::Compression* mpCompressorArray[8];                       // 0x098 (dev 0x09c) relaid
-  unsigned short mCompressionTypeArray[8];                     // 0x0b8 (dev 0x0bc) relaid
-  EA::ResourceMan::CompressionPolicy mCompressionPolicy;       // 0x0c8 (dev 0x0cc) relaid
-  float mCompressionPolicyValue;                               // 0x0cc (dev 0x0d0) relaid
-  eastl::hash_map<unsigned int,eastl::basic_string<wchar_t,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mTypeNameMap; // 0x0d0 (dev 0x0d4) relaid
-  eastl::hash_map<EA::ResourceMan::Key,eastl::basic_string<wchar_t,eastl::allocator>,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,EA::Allocator::EASTLCoreAllocator,0> mOverflowKeyNameMap; // 0x0f8 (dev 0x0fc) relaid
-  EA::Thread::Mutex mNameMutex;                                // 0x120 (dev 0x128) relaid!view:s008de020 has 0x148
-  EA::Thread::Mutex mMutex;                                    // 0x150 (dev 0x158) relaid
+  EA::ResourceMan::Manager::InternalDatabaseList* mDatabaseArray; // 0x02c (dev 0x030) exact-renamed:s008de020 (slice: mDatabaseList)
+  eastl::hash_map<unsigned int,eastl::vector<eastl::pair<EA::COM::AutoRefCount<EA::ResourceMan::Factory>,int>,EA::Allocator::EASTLCoreAllocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mTypeToFactoryArrayMap; // 0x030 (dev 0x034) relaid
+  eastl::hash_map<unsigned int,eastl::vector<unsigned int,EA::Allocator::EASTLCoreAllocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mResourceToRecordTypeMap; // 0x054 (dev 0x05c) relaid
+  eastl::vector<eastl::pair<EA::COM::AutoRefCount<EA::ResourceMan::Cache>,int>,EA::Allocator::EASTLCoreAllocator> mCacheArray; // 0x078 (dev 0x084) relaid
+  EA::Compression* mpCompressorArray[8];                       // 0x08c (dev 0x09c) relaid
+  unsigned short mCompressionTypeArray[8];                     // 0x0ac (dev 0x0bc) relaid
+  EA::ResourceMan::CompressionPolicy mCompressionPolicy;       // 0x0bc (dev 0x0cc) relaid
+  float mCompressionPolicyValue;                               // 0x0c0 (dev 0x0d0) relaid
+  eastl::hash_map<unsigned int,eastl::basic_string<wchar_t,eastl::allocator>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,EA::Allocator::EASTLCoreAllocator,0> mTypeNameMap; // 0x0c4 (dev 0x0d4) relaid
+  eastl::hash_map<EA::ResourceMan::Key,eastl::basic_string<wchar_t,eastl::allocator>,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,EA::Allocator::EASTLCoreAllocator,0> mOverflowKeyNameMap; // 0x0e8 (dev 0x0fc) relaid
+  EA::Thread::Mutex mNameMutex;                                // 0x110 (dev 0x128) relaid!view:s008de020 has 0x148
+  EA::Thread::Mutex mMutex;                                    // 0x140 (dev 0x158) relaid
 };
 #pragma pack(pop)
-// sizeof(Manager) expected 0x180 (unverified)
+// sizeof(Manager) expected 0x170 (unverified)
 
 }  // namespace ResourceMan
 }  // namespace EA

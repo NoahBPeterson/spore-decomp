@@ -13,7 +13,11 @@ namespace EA { namespace ResourceMan { class Key; class KeyFilter; class PFHoleT
 namespace EA {
 namespace ResourceMan {
 
-// dev size 0x4 -> retail size 0x4 (re-laid from the PDB, unverified in retail)
+// dev size 0x4 -> retail size 0x4 (override)
+// evidence: override applied: vtable and declaration overrides only; layout is the PDB layout
+// evidence: declaration virtual unsigned int GetAllocatedBytes() const -> virtual unsigned __int64 GetAllocatedBytes() const: see PFIndexModifiable: the retail implementation returns edx:eax
+// evidence: declaration virtual unsigned int GetFarthestFileExtent() const -> virtual unsigned __int64 GetFarthestFileExtent() const: see PFIndexModifiable: the retail implementation returns edx:eax
+// evidence: declaration virtual void slot_15() -> virtual void SetIsSaved(): see PFIndexModifiable
 #pragma pack(push, 4)
 class PFIndex : public EA::Allocator::ZoneObject /* +0x0 */ {
  public:
@@ -23,8 +27,8 @@ class PFIndex : public EA::Allocator::ZoneObject /* +0x0 */ {
   virtual bool IsEmpty() const;                                          // slot 2, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual unsigned int GetSize() const;                                  // slot 3, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual bool Clear();                                                  // slot 4, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
-  virtual unsigned int GetAllocatedBytes() const;                        // slot 5, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
-  virtual unsigned int GetFarthestFileExtent() const;                    // slot 6, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
+  virtual unsigned __int64 GetAllocatedBytes() const;                    // slot 5, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
+  virtual unsigned __int64 GetFarthestFileExtent() const;                // slot 6, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual unsigned int GetKeyList(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *, EA::ResourceMan::KeyFilter *) const; // slot 7, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual unsigned int GetKeysSortedByPosition(eastl::vector<EA::ResourceMan::Key, eastl::sp_vector_allocator> *) const; // slot 8, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual bool PopulateHoleTable(EA::ResourceMan::PFHoleTable &, long, long); // slot 9, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
@@ -33,8 +37,9 @@ class PFIndex : public EA::Allocator::ZoneObject /* +0x0 */ {
   virtual bool DeleteRecord(EA::ResourceMan::Key const &, EA::ResourceMan::PFRecordInfo &); // slot 12, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual bool ReadFromMemory(void const *, unsigned int, unsigned int, bool); // slot 13, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
   virtual bool WriteToMemory(void *&, unsigned int &, unsigned int, bool); // slot 14, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
-  virtual bool Validate(unsigned int, unsigned int) const;               // slot 15, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
-  virtual bool ValidateFreeSpace(unsigned int, unsigned int) const;      // slot 16, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
+  virtual void SetIsSaved();                                             // slot 15, (no retail slot), UNNAMED, retail-only slot (layout_overrides vtable_insert)
+  virtual bool Validate(unsigned int, unsigned int) const;               // slot 16, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
+  virtual bool ValidateFreeSpace(unsigned int, unsigned int) const;      // slot 17, (no retail slot), pure (name from EA::ResourceMan::PFIndexModifiable)
 
   PFIndex();                                                             // dev only
 

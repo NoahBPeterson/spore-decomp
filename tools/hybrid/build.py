@@ -18,6 +18,15 @@ the original to prove the relocation arithmetic.
 
 --hook pass selects every function whose latest strict equivalence verdict is PASS
 (work/difftest/*_shard*.json); a FILE holds one "<slice> <va>" per line.
+
+--hook-manifest MANIFEST... (docs/migration-runbook.md section 4 step 4) hooks the functions of
+migrated module TUs under src/game/ instead: MANIFEST is a module's nonmatching.txt
+(src/game/<dir>/<Stem>/nonmatching.txt -> TU src/game/<dir>/<Stem>.cpp; rows "va diff reason") or
+a file of "va source symbol" rows (source relative to the repo root or to match/, as in
+manifest.txt). The slice that a function came from (needed for flags, symbols/slices/<id>.txt and
+the resolver's annotations) is read from work/migrate/rewrite_<id>*.json "functions_moved". The
+TU is compiled with the slice's flags plus /Isrc/game/include and goes through the same
+equiv.prepare / Splicer path as every other hook. Combine with --hook to add the pass set.
 """
 import argparse, glob, json, os, struct, sys
 
@@ -90,6 +99,60 @@ def pass_targets():
             if isinstance(r, dict) and "verdict" in r:
                 latest[(r["slice"], r["va"].lower())] = r["verdict"]
     return sorted(k for k, v in latest.items() if v == "PASS")
+
+
+# (slice id, va) -> (TU path, flags) for --hook-manifest targets; splice() hands them to equiv.prepare
+HOOK_SRC = {}
+SRC_INC = "/Isrc/game/include"
+
+
+def migrated_sids():
+    """va -> [(slice id, rewrite file stem)] from work/migrate/rewrite_<id>*.json functions_moved."""
+    out = {}
+    for f in sorted(glob.glob(os.path.join(ROOT, "work", "migrate", "rewrite_s*.json"))):
+        stem = os.path.basename(f)[len("rewrite_"):-len(".json")]
+        d = json.load(open(f))
+        for va in d.get("functions_moved", []):
+            out.setdefault(va.lower().replace("0x", "").zfill(8), []).append((d["slice"], stem))
+    return out
+
+
+def manifest_targets(paths):
+    """Targets from module nonmatching.txt files or 'va source symbol' rows (see the module docstring)."""
+    import slice as S
+    moved = migrated_sids()
+    out = []
+    for path in paths:
+        path = os.path.abspath(path)
+        base = os.path.join(os.path.dirname(os.path.dirname(path)), os.path.basename(os.path.dirname(path)) + ".cpp")
+        for line in open(path):
+            p = line.split("#")[0].split()
+            if not p:
+                continue
+            try:
+                va = int(p[0], 16)
+            except ValueError:
+                continue
+            src, sym = base, None
+            if len(p) >= 3 and p[1].endswith((".cpp", ".cc")):
+                src, sym = p[1], p[2]
+                src = src if os.path.isabs(src) else next(
+                    (c for c in (os.path.join(ROOT, src), os.path.join(ROOT, "match", src)) if os.path.exists(c)), src)
+            src = os.path.normpath(src)
+            vs = "%08x" % va
+            cands = moved.get(vs, [])
+            tu = os.path.basename(src).rsplit(".", 1)[0]
+            pick = [c for c in cands if tu.lower() in c[1].lower().replace("_", "") or tu.lower() in c[1].lower()] or cands
+            if not pick:
+                print("  no rewrite_*.json moved %s into %s; skipped" % (vs, os.path.relpath(src, ROOT)))
+                continue
+            sid = pick[0][0]
+            flags, _how = S.choose_flags(sid, va)
+            if SRC_INC not in flags:
+                flags = flags + [SRC_INC]
+            HOOK_SRC[(sid, vs)] = (src, flags, sym)
+            out.append((sid, vs))
+    return out
 
 
 def file_targets(path):
@@ -358,7 +421,11 @@ def splice(pe, sp, targets, verbose, limit=None):
     for sid, va in targets[:limit] if limit else targets:
         vai = int(va, 16)
         try:
-            t = E.prepare(sid, vai, log=quiet)
+            if (sid, va) in HOOK_SRC:
+                _src, _fl, _sym = HOOK_SRC[(sid, va)]
+                t = E.prepare(sid, vai, flags_override=" ".join(_fl), src=_src, log=quiet)
+            else:
+                t = E.prepare(sid, vai, log=quiet)
         except Exception as e:  # a slice the harness cannot handle must not stop the build
             sp.skip("prepare raised " + type(e).__name__, sid, va)
             continue
@@ -585,6 +652,13 @@ def main():
     ap.add_argument("--out", default=os.path.join(ROOT, "work", "hybrid", "SporeApp.hybrid.exe"))
     ap.add_argument("--no-patches", action="store_true")
     ap.add_argument("--hook", default="none", help="pass | none | FILE of '<slice> <va>' lines")
+    ap.add_argument("--hook-manifest", nargs="+", metavar="NONMATCHING",
+                    help="hook the functions of migrated module TUs (src/game/<dir>/<Stem>/nonmatching.txt)")
+    ap.add_argument("--manifest-verdicts", choices=("pass", "all"), default="pass",
+                    help="--hook-manifest rows to hook: 'pass' (default) = those whose latest strict equiv verdict in "
+                         "work/difftest/*_shard*.json is PASS, the rule of --hook pass; 'all' = every row. Rows whose "
+                         "equivalence was never established (WEAK/FAIL/UNSUPPORTED slice-era verdicts) carried source "
+                         "defects the harness cannot see (callee arguments): 0x8db730 and 0x8db7b0 crashed the boot")
     ap.add_argument("--limit", type=int)
     ap.add_argument("--exclude", default="", help="comma-separated slice ids / VAs, or @FILE with one per line")
     ap.add_argument("--verify-exact", type=int, metavar="N")
@@ -599,9 +673,18 @@ def main():
     pe = pefile.PE(IMAGE)
     pe.__data__ = bytearray(pe.__data__)
     make_runnable(pe, patches=not a.no_patches)
-    sp = new_splicer(pe) if (a.hook != "none" or a.coverage) else None
-    if a.hook != "none":
-        targets = pass_targets() if a.hook == "pass" else file_targets(a.hook)
+    sp = new_splicer(pe) if (a.hook != "none" or a.hook_manifest or a.coverage) else None
+    if a.hook != "none" or a.hook_manifest:
+        targets = [] if a.hook == "none" else pass_targets() if a.hook == "pass" else file_targets(a.hook)
+        if a.hook_manifest:
+            mt = manifest_targets(a.hook_manifest)
+            print("%d manifest targets from %d file(s)" % (len(mt), len(a.hook_manifest)))
+            if a.manifest_verdicts == "pass":
+                pass_vas = {v for _s, v in pass_targets()}
+                dropped = [t for t in mt if t[1] not in pass_vas]
+                mt = [t for t in mt if t[1] in pass_vas]
+                print("%d rows without a PASS verdict left out (--manifest-verdicts all to hook them)" % len(dropped))
+            targets = [t for t in targets if t not in set(mt)] + mt
         # tools/hybrid/known_bad.txt: hooks the hybrid disproved whose fix is not in the source yet
         ex = {v for _s, v in file_targets(os.path.join(os.path.dirname(os.path.abspath(__file__)), "known_bad.txt"))}
         if a.exclude:

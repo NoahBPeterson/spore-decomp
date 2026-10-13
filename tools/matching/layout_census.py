@@ -47,11 +47,18 @@ def normalize(body):
 
 
 def main():
+    global OUT
+    files = None
+    if "--include-root" in sys.argv:   # census a header tree (e.g. src/game/include) instead of match/slices
+        root = os.path.abspath(sys.argv[sys.argv.index("--include-root") + 1])
+        files = glob.glob(os.path.join(root, "**", "*.h"), recursive=True)
+        OUT = os.path.join(ROOT, "work", "claude", "layouts_include")
     os.makedirs(OUT, exist_ok=True)
     by = collections.defaultdict(dict)   # name -> body hash -> {"members": [...], "slices": [...]}
-    files = glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.cpp")) + glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.h"))
+    if files is None:
+        files = glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.cpp")) + glob.glob(os.path.join(ROOT, "match", "slices", "*", "*.h"))
     for f in sorted(files):
-        sid = os.path.basename(os.path.dirname(f))
+        sid = os.path.relpath(f, ROOT) if "--include-root" in sys.argv else os.path.basename(os.path.dirname(f))
         text = strip_comments(open(f, encoding="utf-8", errors="replace").read())
         for kind, name, body in bodies(text):
             mem = normalize(body)

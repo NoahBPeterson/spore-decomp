@@ -72,6 +72,16 @@ local. The local sections go into two new PE sections, `.hybx` (code + read-only
 bytes of the original function become `jmp ours`. Functions with unresolved references, or
 shorter than five bytes, are skipped and listed.
 
+`--hook-manifest src/game/<dir>/<Stem>/nonmatching.txt ...` (migration gate, runbook section 4 step 4) hooks the
+functions of migrated module TUs instead: the TU is `src/game/<dir>/<Stem>.cpp`, the originating slice comes from
+`work/migrate/rewrite_*.json` `functions_moved`, flags are the slice's plus `/Isrc/game/include`, and everything after
+`equiv.prepare` is the normal path. By default only rows whose latest strict verdict is PASS are hooked
+(`--manifest-verdicts all` hooks every row). The 2026-10-12 pilot gate hooked all 72 buildable rows first and crashed
+at once: `PFIndexModifiable` ctor 0x8db730 called the embedded pool constructor 0x925f30 with no `this`/arguments (jump to
+eip=3 from the tail-jump in CreateIndex) and its destructor 0x8db7b0 called `DoFreeNodes` 0x8dac90 as a cdecl with ecx unset
+(fault at 0x8dacb3); neither row had a PASS verdict, the harness does not compare callee arguments. With the PASS rule: 27
+hooks, 2/2 boots ALIVE at 120 s, scene 21.0 and 9.5.
+
 Byte-exact functions are not spliced (same bytes). `--verify-exact N` lays N of them out *at
 their original address* through the same path and diffs them: 109 of 111 identical in the first
 run; the two others are callees the resolver tied to a different address than the binary used

@@ -74,6 +74,8 @@ funcs = ns["funcs"]; game = ns["game"]; G = ns["G"]; GB = ns["GB"]
 byte_exact = ns["byte_exact"]; equiv = ns["equiv"]; part = ns["part"]; nosrc = ns["nosrc"]
 KF, KC, KG = ns["KF"], ns["KC"], ns["KG"]
 pct = ns["pct"]
+migrated = ns["mig_comp"]; mig_exact = ns["mig_exact"]; mig_equiv = ns["mig_equiv"]; mig_part = ns["mig_part"]
+closed = ns["closed"]; objects = ns["objects"]; intervals = ns["intervals"]; module_of = ns["module_of"]
 
 def mb(items):
     return sum(funcs[a]["size"] for a in items) / 2**20
@@ -109,6 +111,52 @@ for line in comp:
 print()
 print(table(["Component", "Byte-exact", "(by size)", "With compilable source", "(by size)", "Code size"],
             crows, aligns=["<", ">", ">", ">", ">", ">"]))
+
+# ---- migration into src/game (Phase B): per object file, denominators are retail address intervals ----
+def migration_table():
+    """One row per object file with a module TU. 'In interval' counts every retail game function in
+    the object's address intervals (tools/migrate/intervals.py), not modmap labels; 'upper' adds the
+    unassigned functions in the bounding gaps (where the object may really end). An interval is
+    closed when every function in it has compilable source in a module TU."""
+    print()
+    print("Moving source out of match/slices into one .cpp per object file (src/game, Phase B)")
+    print()
+    print("  Migrated so far: %s functions with compilable source = %s of all game functions (%s by size)." % (
+        human(len(migrated)), pct(len(migrated), G), pct(mb(migrated), GB_MB)))
+    print("  Finished objects: %s functions sit in retail code ranges that are completely migrated (%s by size)." % (
+        human(len(closed)), pct(mb(closed), GB_MB)))
+    if not objects:
+        print("  (no .cpp under src/game yet)")
+        return
+    if intervals is None:
+        print("  (work/migrate/modmap.json missing: per-object sizes not computed)")
+    print()
+    rows = []
+    tot = collections.Counter()
+    for obj, o in sorted(objects.items()):
+        in_tu = set(a for a, m in module_of.items() if m == obj) & game
+        ex, eq, pa = len(in_tu & mig_exact), len(in_tu & mig_equiv), len(in_tu & mig_part)
+        done = ex + eq
+        n = o["in_interval"]
+        rows.append((obj + ".cpp", human(n), "+%d" % (o["upper"] - n), human(done), "%d / %d" % (ex, eq), human(pa),
+                     human(o["holes"]), pct(done, n) if n else "-", "%d of %d" % (o["closed"], o["intervals"])))
+        for k in ("intervals", "in_interval", "upper", "holes", "closed"):
+            tot[k] += o[k]
+        tot["ex"] += ex; tot["eq"] += eq; tot["pa"] += pa
+    n = tot["in_interval"]; done = tot["ex"] + tot["eq"]
+    rows.append(("TOTAL", human(n), "+%d" % (tot["upper"] - n), human(done), "%d / %d" % (tot["ex"], tot["eq"]), human(tot["pa"]),
+                 human(tot["holes"]), pct(done, n) if n else "-", "%d of %d" % (tot["closed"], tot["intervals"])))
+    print(table(["Object file", "Size (functions)", "maybe more", "Migrated", "exact / equiv", "Partial", "Remaining", "Done", "Ranges finished"],
+                rows, aligns=["<", ">", ">", ">", ">", ">", ">", ">", ">"]))
+    print()
+    print("  Size = retail functions in the address ranges that belong to this object (dev order is kept in retail, so an")
+    print("  object is one contiguous range, or two or three when retail split it). 'maybe more' = unassigned functions next")
+    print("  to those ranges that could also be the object's: its true size is between Size and Size + maybe more.")
+    print("  Migrated = functions now in the .cpp with byte-exact or equivalent source; Partial = in the .cpp but incomplete,")
+    print("  not counted. Remaining = functions in the ranges still without compilable source in the .cpp.")
+    print("  Ranges finished = address ranges with nothing remaining; a finished object is the linkable unit.")
+
+migration_table()
 
 # ---- breadth-first coverage from the program entry point ----
 def bfs_table():
@@ -415,12 +463,19 @@ def parse_status_md(md):
     num = lambda s: float(re.sub(r"[^0-9.]", "", s.split("(")[0]) or "nan")
     denom = exact = comp = None
     exact_sz = comp_sz = None
+    mig = mig_sz = None
     eq = 0
     for r in rows[1:]:
         lab = r[0].lower()
         if len(r) < 2 or not re.match(r"^[\d,]+$", r[1].replace(" ", "")):
             continue
         n = num(r[1])
+        if lab.startswith("migrated") or "still only in match/slices" in lab:
+            # Phase B rows (status.py): only the total counts; its sub-rows repeat the tier words.
+            if "total with compilable source" in lab:
+                mig = n
+                if size_col is not None: mig_sz = num(r[size_col])
+            continue
         if "denominator" in lab or lab.startswith("total functions"):
             denom = n
         elif "total with compilable source" in lab:
@@ -435,7 +490,8 @@ def parse_status_md(md):
         return None
     if comp is None:
         comp = exact + eq
-    return {"exact": 100.0 * exact / denom, "comp": 100.0 * comp / denom, "exact_sz": exact_sz, "comp_sz": comp_sz}
+    return {"exact": 100.0 * exact / denom, "comp": 100.0 * comp / denom, "exact_sz": exact_sz, "comp_sz": comp_sz,
+            "mig": (100.0 * mig / denom) if mig is not None else None, "mig_sz": mig_sz}
 
 
 def plot_history(path):
@@ -458,16 +514,18 @@ def plot_history(path):
             pts.append((datetime.datetime.fromisoformat(when), p))
     now = datetime.datetime.now().astimezone()
     pts.append((now, {"exact": 100.0 * len(byte_exact) / G, "comp": 100.0 * len(exact_total) / G,
-                      "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total)}))
+                      "exact_sz": pctb_f(byte_exact), "comp_sz": pctb_f(exact_total),
+                      "mig": 100.0 * len(migrated) / G, "mig_sz": pctb_f(migrated)}))
     pts.sort(key=lambda t: t[0])
 
-    BLUE, ORANGE = "#2a78d6", "#eb6834"          # dataviz reference palette, slots 1-2 (validated)
+    BLUE, ORANGE, GREEN = "#2a78d6", "#eb6834", "#2e9e5b"   # dataviz reference palette, slots 1-3
     INK, MUTED, GRID = "#1f2328", "#59636e", "#e6e8eb"
     fig, axes = plt.subplots(1, 2, figsize=(12, 4.6), dpi=150, sharey=True, sharex=True)
     fig.patch.set_facecolor("white")
-    panels = (("Share of functions", "exact", "comp"), ("Share of code size", "exact_sz", "comp_sz"))
-    for ax, (title, ke, kc) in zip(axes, panels):
-        for key, color, label in ((kc, ORANGE, "Compilable (byte-exact + equivalent)"), (ke, BLUE, "Byte-exact")):
+    panels = (("Share of functions", "exact", "comp", "mig"), ("Share of code size", "exact_sz", "comp_sz", "mig_sz"))
+    for ax, (title, ke, kc, km) in zip(axes, panels):
+        for key, color, label in ((kc, ORANGE, "Compilable (byte-exact + equivalent)"), (ke, BLUE, "Byte-exact"),
+                                  (km, GREEN, "Migrated into src/game module TUs")):
             xs = [t for t, p in pts if p.get(key) is not None]
             ys = [p[key] for t, p in pts if p.get(key) is not None]
             if not xs:
@@ -491,7 +549,8 @@ def plot_history(path):
     fig.suptitle("Spore decompilation progress (game functions; third-party libraries excluded)",
                  x=0.01, ha="left", fontsize=12, color=INK)
     fig.text(0.01, 0.01, "One point per committed docs/STATUS.md, plus now. Equivalent = complete compilable source, "
-             "not yet byte-identical. Size shares only exist in later snapshots.", fontsize=8, color=MUTED)
+             "not yet byte-identical. Size shares only exist in later snapshots; the migrated line starts with Phase B "
+             "(Oct 2026).", fontsize=8, color=MUTED)
     fig.tight_layout(rect=(0, 0.04, 1, 0.95))
     fig.savefig(path)
     print("wrote %s (%d snapshots)" % (os.path.relpath(path, ROOT), len(pts)))
@@ -501,11 +560,6 @@ def pctb_f(items):
     return 100.0 * sum(funcs[a]["size"] for a in items) / GB
 
 
-if "--plot" in sys.argv:
-    i = sys.argv.index("--plot")
-    out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "progress.png")
-    plot_history(out)
-
 if "--groups" in sys.argv:
     t = groups_table()
     print()
@@ -514,3 +568,9 @@ if "--groups" in sys.argv:
 
 print()
 print("Generated by tools/progress.py (coverage logic shared with tools/status.py).")
+
+# Last on purpose: the plot path is the final line of output, whatever other flags are given.
+if "--plot" in sys.argv:
+    i = sys.argv.index("--plot")
+    out = sys.argv[i + 1] if i + 1 < len(sys.argv) and not sys.argv[i + 1].startswith("--") else W("work", "progress.png")
+    plot_history(out)

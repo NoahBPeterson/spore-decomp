@@ -260,6 +260,15 @@ exercises. No human in the loop: a module that fails the gate is debugged with t
 first (`docs/hybrid.md`, "read the fault address first; bisect second"), and only its own hooks
 are candidates.
 
+#### rewrite: what was built (2026-10-12)
+
+`tools/migrate/rewrite.py` is implemented and landed the first pilot slice: `s008d81d0` -> `src/game/UTFSpore_Win32/DatabasePackedFile.cpp`,
+21/21 byte-exact, the 13 equivalent rows at the same or a better difftest verdict class. Procedure, rules, the manual
+escape hatches (`work/migrate/renames_<slice>.json` `manual`) and the facts learned are in `docs/migration-runbook.md` section 7.
+Everything the slice needed beyond the automatic rules: 6 method names, 2 callee method names, 1 class, 2 text edits, 6 new
+header override entries (`tools/migrate/layout_overrides.json`: Manager `vtable_insert`, `decl_overrides` on Compression,
+CompressionRefpack, PFRecordInfo and DatabasePackedFile, EASTLCoreAllocator `remove`) and 8 generator changes (list in the runbook).
+
 ## Pilot: DBPF + property lists
 
 Object files: `UTFSpore_Win32/DatabasePackedFile.obj`, `DatabasePackedFileIndex.obj`,

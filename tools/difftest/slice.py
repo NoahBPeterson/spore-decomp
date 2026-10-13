@@ -244,6 +244,13 @@ def compile_obj(src, flags):
         if hdr.endswith((".h", ".hpp", ".inl")):
             h.update(open(os.path.join(os.path.dirname(src), hdr), "rb").read())
     h.update(" ".join(flags).encode())
+    if os.path.abspath(src).startswith(os.path.join(ROOT, "src", "game") + os.sep):
+        # module TUs include the generated class headers under src/game/include: a header edit must
+        # invalidate the cached object (the slice-era key only covered headers next to the source)
+        for d, _sub, files in sorted(os.walk(os.path.join(ROOT, "src", "game", "include"))):
+            for f in sorted(files):
+                if f.endswith((".h", ".hpp", ".inl")):
+                    h.update(open(os.path.join(d, f), "rb").read())
     obj = os.path.join(OBJDIR, "%s_%s.obj" % (os.path.basename(src).rsplit(".", 1)[0], h.hexdigest()[:12]))
     if os.path.exists(obj):
         return obj, ""
@@ -426,6 +433,11 @@ def find_symbol(coff, sid, va, src, orig_size=None):
                 return c[0], "manifest"
     names = marker_names(src, va)
     sn = slice_symbol_name(sid, va)
+    if sn and sn in funcs:
+        # symbols/slices/<sid>.txt holds the exact decorated name (rewrite.py writes it from the compiled module TU): an
+        # overload set (GetProperty(key) const / GetProperty(key, Variant const **) const / ...) must not fall back to the
+        # loose name match below
+        return sn, "symbols/slices/%s.txt" % sid
     if sn:
         names.insert(0, sn)
 

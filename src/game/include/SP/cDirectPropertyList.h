@@ -27,9 +27,9 @@ class cDirectPropertyList : public SP::cPropertyList /* +0x0 */ {
   virtual void SetProperty(unsigned int, EA::Variant const &);           // slot 5, 0x006a30c0
   virtual void RemoveProperty(unsigned int);                             // slot 6, 0x006a2ef0, inherited from SP::cPropertyList
   virtual bool HasProperty(unsigned int) const;                          // slot 7, 0x006a27d0
-  virtual bool GetProperty(unsigned int, EA::Variant **);                // slot 8, 0x006a1e50
-  virtual bool GetProperty(unsigned int, EA::Variant const **) const;    // slot 9, 0x006a28c0
   virtual EA::Variant const & GetProperty(unsigned int) const;           // slot 10, 0x006a2800
+  virtual bool GetProperty(unsigned int, EA::Variant const **) const;    // slot 9, 0x006a28c0
+  virtual bool GetProperty(unsigned int, EA::Variant **);                // slot 8, 0x006a1e50
   virtual void Copy(SP::cPropertyList *);                                // slot 11, 0x006a2ad0
   virtual void Add(SP::cPropertyList *);                                 // slot 12, 0x006a1600
   virtual void DeepCopy(SP::cPropertyList *);                            // slot 13, 0x006a14d0, inherited from SP::cPropertyList

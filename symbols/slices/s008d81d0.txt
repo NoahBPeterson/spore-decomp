@@ -1,0 +1,43 @@
+008db3a0 ?Reset@PFHoleTable@ResourceMan@EA@@QAEXI@Z  # EA::ResourceMan::PFHoleTable::Reset (callee of s008d81d0, named from the dev publics; slice address comment)
+008dc000 ?Free@PFHoleTable@ResourceMan@EA@@QAEXJI@Z  # EA::ResourceMan::PFHoleTable::Free (callee of s008d81d0, named from the dev publics; slice address comment)
+008dbf20 ?Allocate@PFHoleTable@ResourceMan@EA@@QAEJI@Z  # EA::ResourceMan::PFHoleTable::Allocate (callee of s008d81d0, named from the dev publics; slice address comment)
+008dae40 ?GetBytesFree@PFHoleTable@ResourceMan@EA@@QBEJXZ  # EA::ResourceMan::PFHoleTable::GetBytesFree (callee of s008d81d0, named from the dev publics; slice address comment)
+008db730 ??0PFIndexModifiable@ResourceMan@EA@@QAE@PAVICoreAllocator@Allocator@2@@Z  # EA::ResourceMan::PFIndexModifiable::PFIndexModifiable (callee of s008d81d0, named from the dev publics; slice address comment)
+008dcc80 ??0PFRecordRead@ResourceMan@EA@@QAE@ABV012@ABVKey@12@PAVDatabasePackedFile@12@@Z  # EA::ResourceMan::PFRecordRead::PFRecordRead (callee of s008d81d0, named from the dev publics; slice address comment)
+008dcdc0 ??0PFRecordRead@ResourceMan@EA@@QAE@ABUPFRecordInfo@12@ABVKey@12@PAVDatabasePackedFile@12@@Z  # EA::ResourceMan::PFRecordRead::PFRecordRead (callee of s008d81d0, named from the dev publics; slice address comment)
+008dcea0 ??0PFRecordWrite@ResourceMan@EA@@QAE@IIABVKey@12@PAVDatabasePackedFile@12@@Z  # EA::ResourceMan::PFRecordWrite::PFRecordWrite (callee of s008d81d0, named from the dev publics; slice address comment)
+008dd0d0 ??0PFRecordWrite@ResourceMan@EA@@QAE@PAEI_NABVKey@12@PAVDatabasePackedFile@12@@Z  # EA::ResourceMan::PFRecordWrite::PFRecordWrite (callee of s008d81d0, named from the dev publics; slice address comment)
+008d81d0 ?Lock@DatabasePackedFile@ResourceMan@EA@@UAEX_N@Z  # EA::ResourceMan::DatabasePackedFile::Lock migrated from s008d81d0
+008d8200 ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HIIABVKey@23@@Z  # EA::ResourceMan::DatabasePackedFile::CreateRecord migrated from s008d81d0
+008d8250 ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HPAXIABVKey@23@@Z  # EA::ResourceMan::DatabasePackedFile::CreateRecord migrated from s008d81d0
+008d82a0 ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HAAVPFRecordRead@23@ABVKey@23@@Z  # EA::ResourceMan::DatabasePackedFile::CreateRecord migrated from s008d81d0
+008d82e0 ?CreateRecord@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFRecordBase@23@HAAUPFRecordInfo@23@ABVKey@23@@Z  # EA::ResourceMan::DatabasePackedFile::CreateRecord migrated from s008d81d0
+008d8320 ?ReadHeaders@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::ReadHeaders migrated from s008d81d0
+008d8360 ?CreateIndex@DatabasePackedFile@ResourceMan@EA@@UAEPAVPFIndex@23@H@Z  # EA::ResourceMan::DatabasePackedFile::CreateIndex migrated from s008d81d0
+008d8390 ?DestroyIndex@DatabasePackedFile@ResourceMan@EA@@UAEXPAVPFIndex@23@@Z  # EA::ResourceMan::DatabasePackedFile::DestroyIndex migrated from s008d81d0
+008d83b0 ?MakeIndexModifiable@DatabasePackedFile@ResourceMan@EA@@UAEXXZ  # EA::ResourceMan::DatabasePackedFile::MakeIndexModifiable migrated from s008d81d0
+008d84a0 ?AllocateSpace@DatabasePackedFile@ResourceMan@EA@@QAE_NAAJI@Z  # EA::ResourceMan::DatabasePackedFile::AllocateSpace migrated from s008d81d0
+008d84d0 ?FreeSpace@DatabasePackedFile@ResourceMan@EA@@QAE_NJI_N@Z  # EA::ResourceMan::DatabasePackedFile::FreeSpace migrated from s008d81d0
+008d8530 ?SetHoleUse@DatabasePackedFile@ResourceMan@EA@@QAE_NHM@Z  # EA::ResourceMan::DatabasePackedFile::SetHoleUse migrated from s008d81d0
+008d8570 ?ShouldRecordBeCompressed@DatabasePackedFile@ResourceMan@EA@@QAEHABVKey@23@I@Z  # EA::ResourceMan::DatabasePackedFile::ShouldRecordBeCompressed migrated from s008d81d0
+008d85a0 ?Attach@DatabasePackedFile@ResourceMan@EA@@UAE_N_NPAVManager@23@0@Z  # EA::ResourceMan::DatabasePackedFile::Attach migrated from s008d81d0
+008d8650 ?Shutdown@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::Shutdown migrated from s008d81d0
+008d86c0 ?SetStream@DatabasePackedFile@ResourceMan@EA@@UAE_NPAVIStream@IO@3@@Z  # EA::ResourceMan::DatabasePackedFile::SetStream migrated from s008d81d0
+008d8710 ?GetKeyList@DatabasePackedFile@ResourceMan@EA@@UAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@PAVKeyFilter@23@@Z  # EA::ResourceMan::DatabasePackedFile::GetKeyList migrated from s008d81d0
+008d8770 ?GetKeyListSortedByPosition@DatabasePackedFile@ResourceMan@EA@@QAEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@@Z  # EA::ResourceMan::DatabasePackedFile::GetKeyListSortedByPosition migrated from s008d81d0
+008d87c0 ?Verify@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  # EA::ResourceMan::DatabasePackedFile::Verify migrated from s008d81d0
+008d8820 ?DecompressData@DatabasePackedFile@ResourceMan@EA@@QAE_NGPBEIIPAE@Z  # EA::ResourceMan::DatabasePackedFile::DecompressData migrated from s008d81d0
+008d8890 ?InternalSetPosition@DatabasePackedFile@ResourceMan@EA@@QAE_NJ@Z  # EA::ResourceMan::DatabasePackedFile::InternalSetPosition migrated from s008d81d0
+008d88d0 ?InternalRead@DatabasePackedFile@ResourceMan@EA@@QAEIPAXI@Z  # EA::ResourceMan::DatabasePackedFile::InternalRead migrated from s008d81d0
+008d8930 ?InternalGetSize@DatabasePackedFile@ResourceMan@EA@@QAEIXZ  # EA::ResourceMan::DatabasePackedFile::InternalGetSize migrated from s008d81d0
+008d8950 ?InternalClose@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  # EA::ResourceMan::DatabasePackedFile::InternalClose migrated from s008d81d0
+008d8980 ?Open@DatabasePackedFile@ResourceMan@EA@@UAE_NHH_N@Z  # EA::ResourceMan::DatabasePackedFile::Open migrated from s008d81d0
+008d8b30 ?CloseOpenRecords@DatabasePackedFile@ResourceMan@EA@@QAE_NXZ  # EA::ResourceMan::DatabasePackedFile::CloseOpenRecords migrated from s008d81d0
+008d8b70 ?DeleteRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NABVKey@23@@Z  # EA::ResourceMan::DatabasePackedFile::DeleteRecord migrated from s008d81d0
+008d8c50 ?ReadHeaderRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::ReadHeaderRecord migrated from s008d81d0
+008d8e20 ?WriteEmptyHeaderRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::WriteEmptyHeaderRecord migrated from s008d81d0
+008d8ee0 ?WriteHeaderRecord@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::WriteHeaderRecord migrated from s008d81d0
+008d9000 ?VerifyIndexRecordIntegrity@DatabasePackedFile@ResourceMan@EA@@UAE_NXZ  # EA::ResourceMan::DatabasePackedFile::VerifyIndexRecordIntegrity migrated from s008d81d0
+008d9050 ?ReadFileSpan@DatabasePackedFile@ResourceMan@EA@@QAE_NPAXJI@Z  # EA::ResourceMan::DatabasePackedFile::ReadFileSpan migrated from s008d81d0
+008d90e0 ?WriteFileSpan@DatabasePackedFile@ResourceMan@EA@@QAE_NPBXJI@Z  # EA::ResourceMan::DatabasePackedFile::WriteFileSpan migrated from s008d81d0
+008d9170 ?ReadRecordRaw@DatabasePackedFile@ResourceMan@EA@@QAE_NABVKey@23@PAXI@Z  # EA::ResourceMan::DatabasePackedFile::ReadRecordRaw migrated from s008d81d0

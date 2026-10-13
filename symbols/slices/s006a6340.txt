@@ -1,2 +1,2 @@
-006a6340 `anonymous namespace'::ParseVariantValue  # PDB anchor 0157a300
-0093dd80 EA::Variant::Set  # (type, flags 0x18, data, elemSize, count) as ModAPI App::Property::Set; called by ParseVariantValue
+006a6340 ?ParseVariantValue@@YA_NIPAVcFormatParser@ArgScript@EA@@HPAPBDPAUVariant_s006a_6340@@@Z  # ParseVariantValue migrated from s006a6340 (verbatim, slice spelling)
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s006a6340, named from the dev publics; slice address comment)

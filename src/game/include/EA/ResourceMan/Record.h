@@ -4,9 +4,10 @@
 #define GAME_EA_RESOURCEMAN_RECORD_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "EA/Allocator/ZoneObject.h"
 #include "EA/RefCounted.h"
+#include "EA/Thread/AtomicInt.h"
 
-namespace EA { namespace Allocator { class ZoneObject; } }
 namespace EA { namespace IO { class IStream; } }
 namespace EA { namespace ResourceMan { class Database; class Key; } }
 

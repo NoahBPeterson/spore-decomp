@@ -16,6 +16,9 @@ class basic_string {
   A mAllocator;
   const T* c_str() const { return mpBegin; }
   uint32_t length() const { return (uint32_t)(mpEnd - mpBegin); }
+  // library instantiations, defined elsewhere in the image (not here): assign(pBegin, pEnd) is 0x00454cb0 for char and
+  // 0x00423650 for wchar_t (the byte-exact SP::GetPropertyAsString8/16 call them)
+  void assign(const T* pBegin, const T* pEnd);
 };
 
 typedef basic_string<char> string8;

@@ -5,5 +5,7 @@
 006a0360 SP::cCOMSerializer::loadSingleObject  # PDB candidate (caller-scored)
 006a05f0 SP::cCOMSerializer::WriteSerializableObject  # PDB candidate (caller-single)
 006a06a0 SP::cCOMSerializer::ReadSerializableObject  # PDB candidate (caller-single)
-006a10c0 SP::GetPropertyAsVector2  # PDB name
-006a1110 SP::GetPropertyAsVector3  # PDB name
+006a0920 ?GetPropertyAsVector2Array@SP@@YA_NPBVcPropertyList@1@IPAHPAPAUcSPVector2@@@Z  # SP::GetPropertyAsVector2Array migrated from s0069f950
+006a10c0 ?GetPropertyAsVector2@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector2@@@Z  # SP::GetPropertyAsVector2 migrated from s0069f950
+006a1110 ?GetPropertyAsVector3@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector3@@@Z  # SP::GetPropertyAsVector3 migrated from s0069f950
+006a1160 ?GetPropertyAsVector4@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector4@@@Z  # SP::GetPropertyAsVector4 migrated from s0069f950

@@ -1,0 +1,47 @@
+# va  diff-bytes  reason
+008d83b0 170 complete: MakeIndexModifiable (void); matches CreateIndex(3)/serialize/destroy/InitializeHoleTable flow; register + scheduling differences; difftest WEAK (211 valid, 26.8% coverage, mutex path mostly untestable)
+008d84d0 38 complete: FreeSpace; original keeps HoleA as fallthrough and the argument pushes inside each block; ours sinks the shared pushes and toggles the branch sense
+008d85a0 155 complete: Attach; manager/self virtual dispatch and old-stream save/restore scheduling differ (return semantics verified PASS)
+008d8650 11 complete: Dispose; original loads mpStream only after clearing mpIndex, we hoist the load
+008d86c0 60 complete: SetStream; false-return block placed at the end in the original, ours inverts the branch
+008d87c0 88 complete: Verify; original keeps the mutex in edi and the divisor in ebp with SSE divss, ours swaps regs and (default flags) uses x87
+008d88d0 2 complete: ReadBytes; only the commutative add destination differs (add ecx,edx vs add edx,ecx)
+008d8980 350 complete: Open; large function, many scheduling/vtable-dispatch differences; difftest WEAK (50.9% coverage)
+008d8c50 232 complete: ReadHeaderRecord; header field copy order / vf74(header) call scheduling differ (return semantics verified PASS)
+008d8ee0 239 complete: WriteHeaderRecord; 0x60-byte DBPF header field packing order differs (return semantics verified PASS)
+008d90e0 38 complete: ReadRecordRaw; branch layout for the memory-mode false return is inverted
+008d9170 11 complete: ReadRecordSpan; register assignment of size / e->size swapped
+008d91e0 258 CompressRecordData: complete; cl hoists the Refpack vtable store/0xffff constant differently and orders flag stores differently; difftest PASS (after annotating kStrPackedRecord and declaring memcpy extern "C")
+008d94a0 162 CloseInternal: complete; structure matches but cl spills the result bool to the stack and keeps zero in ebx instead of bl/edi
+008d95f0 343 WriteIndexRecord: complete; original has a partial prologue (ebx pushed only inside the dirty-index branch, mov al,1 hoisted)
+008d9850 87 TryCompress: complete; register assignment size/pOutSize (ebx/ebp) swapped vs original
+008d98f0 8 RecMap::DoInsertValue: complete; original loads *out before ++mnSize
+008d9a10 979 CloseRecord: complete; large function, many scheduling and register differences; difftest FAIL is a checker artifact: the original reuses its own incoming 'rec' arg slot as the rbtree::find result iterator while ours uses a frame local, and the checker normalises only pointers below esp at entry as STK; all 5 mismatches are this find argument, and with the arg slots normalised too (scratch copy of the checker) it reports no mismatch (WEAK, 296 valid, 14% coverage)
+008d9f80 227 DatabasePackedFile ctor: complete; dead stores (anchor zeros at 2f0..2f8) and string-empty constant schedule differ
+008da750 323 complete: DatabasePackedFile::ReadIndexRecord; VecBuf/read/index-serialize flow reconstructed; buffer alloc-header handling and register allocation differ; difftest PASS (351 valid, 88.5% coverage)
+008dad30 15 complete: FUN_008dad30 unguarded insertion sort; body/shape identical, only register naming of (prev,j,k) differs; difftest UNSUPPORTED (0/400 valid - pool reads fault)
+008dad80 74 complete: FUN_008dad80 promote-heap; register allocation of (array,top,value,parent) differs from retail; difftest PASS (372 valid, 100% coverage)
+008daf40 42 complete: PFIndexModifiable::GetDataEnd (bucket-array iteration); register allocation differs (pBucket kept in edi instead of esi); difftest PASS (236 valid, 100% coverage)
+008dafa0 49 complete: PFIndexModifiable::GetTotalDiskSize (bucket-array iteration); peeled-scan/register-allocation differences; difftest PASS (261 valid, 100% coverage)
+008daff0 479 complete: PFIndexModifiable::Write (record/stream writer); full body reconstructed; buffer-building path differs
+008db230 73 complete: PFIndexModifiable::SetIsSaved (hashtable bucket walk); register allocation of (bucketArray,bucketCount) swapped vs retail
+008db280 104 complete: PFIndexModifiable::CheckFilesInRange (bucket-array scan); loop/register allocation differs
+008db310 94 complete: PFIndexModifiable::CheckFilesInSizeRange (bucket-array scan); loop/register allocation differs
+008db450 220 complete: HT::InsertUnique (hash-map insert w/ growth); bucket split/rehash reconstruction differs
+008db560 96 complete: RBTree::insertUnique (rbtree insert + alloc); register allocation (this/node in edi/esi) swapped vs retail
+008db5e0 72 complete: FUN_008db5e0 median/partition helper; register allocation differs
+008db630 80 complete: FUN_008db630 final sort pass; body shape differs
+008db730 54 complete: PFIndexModifiable ctor; vtable/alloc sequence close but differs
+008db7b0 92 complete: PFIndexModifiable::_virtual_dtor; vtable store order / allocator call differs
+008db850 99 complete: PFIndexModifiable::RemoveFile; hashtable erase iterator passed via struct-return/this-thunk; call shape differs
+008db8c0 11 complete: HoleSet ctor; body identical, only `mov [eax],-1` scheduled after `xor edx,edx`/`lea ecx` (1 instruction order)
+008db8f0 120 complete: FUN_008db8f0 quicksort helper; body shape differs
+008db9b0 266 complete: PFIndexModifiable::Read (index-record parser); stream/alloc flow reconstructed; buffer handling differs
+008dbb10 73 complete: HT::GetFileInfoRef; hash lookup + insert-on-miss; InsertUnique val construction differs
+008dbcf0 159 complete: PFIndexModifiable::GetFiles (enumerate into vector); iteration/alloc differs
+008dbdb0 213 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); register allocation/iteration differs
+008dbeb0 23 complete: PFIndexModifiable::PutFileInfo; field load/register assignment differs
+008dbef0 24 complete: FUN_008dbef0 thunk -> FUN_008dbc20; bool flag materialisation differs (push 0 vs stack byte temp)
+008dbf20 152 complete: HoleSet::AllocAt (rbtree insert + split); register allocation/insert path differs
+008dc000 201 complete: HoleSet::Release (rbtree erase + merge); register allocation/erase path differs
+008dc120 62 complete: HoleSet::MergeFrom (rbtree merge); register allocation differs

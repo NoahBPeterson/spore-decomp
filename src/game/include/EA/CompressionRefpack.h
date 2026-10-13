@@ -8,18 +8,21 @@
 
 namespace EA {
 
-// dev size 0x4 -> retail size 0x4 (re-laid from the PDB, unverified in retail)
+// dev size 0x4 -> retail size 0x4 (override)
+// evidence: override applied: declaration overrides only; layout is the PDB layout (vptr)
+// evidence: declaration CompressionRefpack() -> CompressionRefpack() {}: Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)
+// evidence: declaration virtual ~CompressionRefpack() -> virtual ~CompressionRefpack() {}: Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)
 #pragma pack(push, 4)
 class CompressionRefpack : public EA::Compression /* +0x0 */ {
  public:
   // vtable 0x0140a0e8 (primary): 5 retail slots, 5 dev slots
-  virtual ~CompressionRefpack();                                         // slot 0, 0x0059ecc0
+  virtual ~CompressionRefpack() {}                                       // slot 0, 0x0059ecc0
   virtual unsigned int CompressData(void const *, unsigned int, void *, unsigned int, int); // slot 1, 0x0092c9f0
   virtual unsigned int DecompressData(void const *, unsigned int, void *, unsigned int, int); // slot 2, 0x0092ca60
   virtual bool ValidateCompressedData(void const *, unsigned int);       // slot 3, 0x0092cad0
   virtual char const * GetVersionString() const;                         // slot 4, 0x0092c330
 
-  CompressionRefpack();                                                  // dev only
+  CompressionRefpack() {}                                                // dev only
 
  public:  // data (retail offsets)
 };

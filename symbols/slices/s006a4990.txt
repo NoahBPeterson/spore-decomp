@@ -1,0 +1,2 @@
+006a4990 ?SetDefaultVariantValue@@YA_NIPAUVariant_s006a_4990@@@Z  # SetDefaultVariantValue migrated from s006a4990 (verbatim, slice spelling)
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s006a4990, named from the dev publics; slice address comment)

@@ -1,0 +1,14 @@
+006be640 ?DoFreeNodes@HT@@QAEXPAII@Z  # HT::DoFreeNodes migrated from s006bde30 (verbatim, slice spelling)
+006be690 ?FUN_006be690@@YAXPAI0@Z  # FUN_006be690 migrated from s006bde30 (verbatim, slice spelling)
+006be6e0 ?FUN_006be6e0@@YAXPAI0@Z  # FUN_006be6e0 migrated from s006bde30 (verbatim, slice spelling)
+006be730 ?FUN_006be730@@YAPAXPAPAI00@Z  # FUN_006be730 migrated from s006bde30 (verbatim, slice spelling)
+006be7c0 ?FUN_006be7c0@@YAXPAIHHI@Z  # FUN_006be7c0 migrated from s006bde30 (verbatim, slice spelling)
+006be820 ?eraseNode@HT@@QAEPAIPAII0@Z  # HT::eraseNode migrated from s006bde30 (verbatim, slice spelling)
+006be890 ?lowerBound@HT@@QAEXPAI0@Z  # HT::lowerBound migrated from s006bde30 (verbatim, slice spelling)
+006be8d0 ?rehash@HT@@QAEXI@Z  # HT::rehash migrated from s006bde30 (verbatim, slice spelling)
+006be980 ?heapSiftDown@HT@@QAEXHHHH@Z  # HT::heapSiftDown migrated from s006bde30 (verbatim, slice spelling)
+006bea90 ?GetFarthestFileExtent@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetFarthestFileExtent migrated from s006bde30
+006beb00 ?GetAllocatedBytes@PFIndexModifiable@ResourceMan@EA@@UBE_KXZ  # EA::ResourceMan::PFIndexModifiable::GetAllocatedBytes migrated from s006bde30
+006beb60 ?WriteToMemory@PFIndexModifiable@ResourceMan@EA@@UAE_NAAPAXAAII_N@Z  # EA::ResourceMan::PFIndexModifiable::WriteToMemory migrated from s006bde30
+006bed90 ?SetIsSaved@PFIndexModifiable@ResourceMan@EA@@UAEXXZ  # EA::ResourceMan::PFIndexModifiable::SetIsSaved migrated from s006bde30
+0092c9f0 ?CompressData@CompressionRefpack@EA@@UAEIPBXIPAXIH@Z  # EA::CompressionRefpack::CompressData (callee of s006bde30, named from the dev publics; slice address comment)

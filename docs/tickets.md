@@ -35,3 +35,12 @@ Notes:
   scanned for annotations (129 slices include a sibling header — re-baseline equiv verdicts if annotations there change).
 - Effort order: **#1 (largely done — tail needs source fixes) → #3 → #2 → #4 → #8 → rest**. #1 and #3 are
   tooling/annotation and cheap; #2 and #6 need harness work (seed corpora); #4 is diagnosis.
+
+# Project-wide tickets
+
+Policy and release items that are not equivalence work. Numbered P1, P2, ... so they never collide with
+the backlog table above.
+
+| # | ticket | status | detail |
+|---|---|---|---|
+| P1 | **Ownership check and distribution policy** (added 2026-10-12) | standing rule | SteamStub (Valve's DRM wrapper on the Steam exe) cannot be re-applied by this project: only the publisher can wrap a build through the Steamworks backend. What *can* be preserved is the game's own ownership check, which lives in the game code, not the stub: `SteamAPI_Init` and `SteamApps()->BIsSubscribedApp` through `steam_api.dll` (the hybrid already needs a running Steam client that owns app 17390, see `docs/hybrid.md`). Rules: (1) every migrated module keeps the Steam ownership calls verbatim; no slice, module or portable build may stub, skip or short-circuit them, and a boot without a logged-in owning Steam account must still fail the same way the retail exe does; (2) the project never ships binaries, the decrypted analysis image, the hybrid exe, or game data; it ships source and tools, and a user produces every binary-derived artifact locally from their own Steam copy (`work/` stays git-ignored, `README.md`, `THIRD_PARTY.md`); (3) the portable build (stage 3) reads `Data/` from the user's own Steam install and keeps rule (1) through `steam_api.dll`. Check before any release: `rg -n "SteamAPI_Init|BIsSubscribedApp" src/ match/` must show the calls present and un-bypassed. |

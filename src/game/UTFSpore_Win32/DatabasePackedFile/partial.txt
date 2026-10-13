@@ -1,0 +1,13 @@
+# va  size  reason
+006bbde0 59 DatabasePackedFile shutdown - skeleton
+006bbe80 140 PFRecordWrite alloc+ctor - skeleton
+006bbf10 137 unknown - skeleton
+006bbfa0 122 unknown - skeleton
+006bc020 122 unknown - skeleton
+006bc0a0 68 drive-mount state machine - skeleton
+006bc0f0 60 drive-mount helper - skeleton
+006bc130 115 CreateIndex alloc+ctor - skeleton
+008d8e20  191  WriteEmptyHeaderRecord - complete; difftest UNSUPPORTED (0/400 valid: fake-arity, checker cannot synthesize the call-site arity for the indirect vf70/SetSize calls)
+008da140  503  DatabasePackedFile::CompactDatabaseInternal - body reconstructed (hole-set merge, vtable dispatch, temp-file copy path) but not faithful; difftest UNSUPPORTED (unresolved synthetic externs); not verified equivalent
+008da3d0  896  DatabasePackedFile::OpenRecord - real prototype (key,access,reqFlags,mode,arg5,out) ret 0x18; only an approximate branch skeleton, difftest FAIL (5/5 valid mismatched, 12.4% coverage); incomplete
+008da920  546  DatabasePackedFile::FUN_008da920 (rbtree find + record rewrite) - approximate body; difftest UNSUPPORTED (unresolved synthetic extern _ReadRecordRaw); not verified equivalent

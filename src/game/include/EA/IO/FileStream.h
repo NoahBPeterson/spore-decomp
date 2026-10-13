@@ -32,10 +32,10 @@ class FileStream : public EA::IO::IStream /* +0x0 */ {
   virtual unsigned int Read(void *, unsigned int);                       // slot 12, 0x00931ce0
   virtual bool Flush();                                                  // slot 13, 0x00931d70
   virtual bool Write(void const *, unsigned int);                        // slot 14, 0x00931d30
-  virtual void SetPath(wchar_t const *);                                 // slot 15, 0x00931810
   virtual void SetPath(char const *);                                    // slot 16, 0x009317e0
-  virtual unsigned int GetPath(wchar_t *, unsigned int);                 // slot 17, 0x009318a0
+  virtual void SetPath(wchar_t const *);                                 // slot 15, 0x00931810
   virtual unsigned int GetPath(char *, unsigned int);                    // slot 18, 0x00931840
+  virtual unsigned int GetPath(wchar_t *, unsigned int);                 // slot 17, 0x009318a0
   virtual bool Open(int, int, int, int);                                 // slot 19, 0x009318f0
 
   EA::IO::FileStream & operator=(EA::IO::FileStream const &);            // dev only

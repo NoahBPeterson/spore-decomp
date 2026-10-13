@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPPropertyList.cpp  ??1Elem16VectorD@@QAE@XZ  00612d10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?DeepCopy@cPropertyList@SP@@UAEXPAV12@@Z  006a14d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?DeepAdd@cPropertyList@SP@@UAEXPAV12@@Z  006a1510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?Add@cDirectPropertyList@SP@@UAEXPAVcPropertyList@2@@Z  006a1600  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ??0cPropertyList@SP@@QAE@PBD@Z  006a1b90  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ??0cPropertyList@SP@@QAE@XZ  006a1c40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ??0cDirectPropertyList@SP@@QAE@H@Z  006a1ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?GetProperty@cDirectPropertyList@SP@@UAE_NIPAPAUVariant@EA@@@Z  006a1e50  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?GetProperty@cDirectPropertyList@SP@@UBE_NIPAPBUVariant@EA@@@Z  006a28c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPPropertyList.cpp  ?RemoveProperty@cPropertyList@SP@@UAEXI@Z  006a2ef0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

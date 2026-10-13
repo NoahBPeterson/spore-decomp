@@ -1,0 +1,31 @@
+# va  diff-bytes  reason
+006a3330  163  CreateResource: stub of the EH operator-new path and vtable calls; wrong receiver/indices
+006a3ac0  270  cPropertyListCommand::Execute: stubbed body
+006a3c30  147  cPropertyListCommand::OnEndParse: stubbed body
+006a3d50  83  feedback-event find: stub (rbtree/atexit path omitted)
+006a3dd0  -  property apply helper: stubbed body
+006a3f00  48  feedback-event test: stub (rbtree path omitted)
+006a3f40  73  string-range ctor: approximate (RangeInitialize/DoInsertValue call shapes wrong)
+006a4190  142  EvalString+FNV hash helper: stub
+006a4240  111  hashtable lookup: stub returning false
+006a42d0  113  hashtable lookup: stub returning false
+006a43b0  119  hashtable erase-by-key: approximate node walk
+006a4450  107  rbtree erase-node: stub
+006a58a0  182  message handler: server/vtable calls stubbed
+006a59f0  135  message handler: stubbed body
+006a5a90  204  batch message handler: approximate
+006a5b80  178  batch message handler: approximate
+006a5c50  206  hashtable DoInsertValue: stubbed body
+006a5f70  80  name lookup: approximate (raw offsets, call shapes wrong)
+006a5fd0  180  name lookup with temp string: approximate
+006a60b0  227  property lookup/apply: approximate
+006a61c0  87  map insert: approximate
+006a6240  168  name/id lookup: approximate
+006a7e40  1274  PreloadPropertyLists: resource-walk/preload pipeline stubbed
+006aa4c0  286  rbtree<unsigned,pair<const unsigned,Variant>>::insert stubbed
+006aa640  315  cPropertyCommand::Execute stubbed
+006aa780  59   group-name command handler stubbed
+006aa7c0  329  cPropertyManager::Shutdown stubbed
+006aa910  247  bool-vector range append stubbed
+006aaa10  921  cPropertyManager::ParseAndAddProperty stubbed
+006ab120  677  cPropertyManager::ReadResource stubbed

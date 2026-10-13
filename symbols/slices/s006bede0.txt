@@ -1,0 +1,22 @@
+006bede0 ?Validate@PFIndexModifiable@ResourceMan@EA@@UBE_NII@Z  # EA::ResourceMan::PFIndexModifiable::Validate migrated from s006bede0
+006beeb0 ?ValidateFreeSpace@PFIndexModifiable@ResourceMan@EA@@UBE_NII@Z  # EA::ResourceMan::PFIndexModifiable::ValidateFreeSpace migrated from s006bede0
+006bef70 ?FUN_006bef70@PFHoleTable@@QAEXII@Z  # PFHoleTable::FUN_006bef70 migrated from s006bede0 (verbatim, slice spelling)
+006bf030 ?FUN_006bf030@@YAXPAX0@Z  # FUN_006bf030 migrated from s006bede0 (verbatim, slice spelling)
+006bf140 ?FUN_006bf140@@YAXPAX0@Z  # FUN_006bf140 migrated from s006bede0 (verbatim, slice spelling)
+006bf1e0 ?FUN_006bf1e0@@YAXPAX@Z  # FUN_006bf1e0 migrated from s006bede0 (verbatim, slice spelling)
+006bf240 ?FUN_006bf240@@YAXPAX0@Z  # FUN_006bf240 migrated from s006bede0 (verbatim, slice spelling)
+006bf2c0 ?FUN_006bf2c0@@YAXPAX00@Z  # FUN_006bf2c0 migrated from s006bede0 (verbatim, slice spelling)
+006bf370 ??0PFIndexModifiable@ResourceMan@EA@@QAE@PAVICoreAllocator@Allocator@2@@Z  # EA::ResourceMan::PFIndexModifiable::PFIndexModifiable migrated from s006bede0
+006bf430 ?FUN_006bf430@@YAXPAX@Z  # FUN_006bf430 migrated from s006bede0 (verbatim, slice spelling)
+006bf4e0 ?FindRecord@PFIndexModifiable@ResourceMan@EA@@UAEPAUPFRecordInfo@23@ABVKey@23@@Z  # EA::ResourceMan::PFIndexModifiable::FindRecord migrated from s006bede0
+006bf520 ?DeleteRecord@PFIndexModifiable@ResourceMan@EA@@UAE_NABVKey@23@AAUPFRecordInfo@23@@Z  # EA::ResourceMan::PFIndexModifiable::DeleteRecord migrated from s006bede0
+006bf5a0 ?FUN_006bf5a0@PFHoleTable@@QAEXXZ  # PFHoleTable::FUN_006bf5a0 migrated from s006bede0 (verbatim, slice spelling)
+006bf5d0 ?FUN_006bf5d0@@YAXPAX000@Z  # FUN_006bf5d0 migrated from s006bede0 (verbatim, slice spelling)
+006bf660 ?ReadFromMemory@PFIndexModifiable@ResourceMan@EA@@UAE_NPBXII_N@Z  # EA::ResourceMan::PFIndexModifiable::ReadFromMemory migrated from s006bede0
+006bf7d0 ?FUN_006bf7d0@@YAPAXPAX0@Z  # FUN_006bf7d0 migrated from s006bede0 (verbatim, slice spelling)
+006bf8f0 ?FUN_006bf8f0@@YAXPAX000@Z  # FUN_006bf8f0 migrated from s006bede0 (verbatim, slice spelling)
+006bfa00 ?GetKeyList@PFIndexModifiable@ResourceMan@EA@@UBEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@PAVKeyFilter@23@@Z  # EA::ResourceMan::PFIndexModifiable::GetKeyList migrated from s006bede0
+006bfac0 ?GetKeysSortedByPosition@PFIndexModifiable@ResourceMan@EA@@UBEIPAV?$vector@VKey@ResourceMan@EA@@Vsp_vector_allocator@eastl@@@eastl@@@Z  # EA::ResourceMan::PFIndexModifiable::GetKeysSortedByPosition migrated from s006bede0
+006bfbc0 ?AddRecord@PFIndexModifiable@ResourceMan@EA@@UAEXABVKey@23@ABUPFRecordInfo@23@@Z  # EA::ResourceMan::PFIndexModifiable::AddRecord migrated from s006bede0
+006bfc20 ?FUN_006bfc20@@YAPAXPAX00@Z  # FUN_006bfc20 migrated from s006bede0 (verbatim, slice spelling)
+0092c9f0 ?CompressData@CompressionRefpack@EA@@UAEIPBXIPAXIH@Z  # EA::CompressionRefpack::CompressData (callee of s006bede0, named from the dev publics; slice address comment)
