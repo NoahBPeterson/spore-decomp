@@ -4,15 +4,17 @@ Written 2026-10-12 for Sonnet 5.5 agents running in a workflow (`.claude/workflo
 Everything here was verified in the session that wrote it; where a fact is a guess it says so.
 Read `docs/migration.md` first for the design and the measurements, then this file for the exact
 procedure. Steps 1 and 2 of the pipeline (module map, headers) are done; this runbook is step 3
-(`rewrite.py` + the pilot slices) and step 4 (`gate.py`).
+(`rewrite.py` + the pilot slices) and step 4 (the hybrid gate, §4). §3 is the design `rewrite.py`
+was built to; §7 is the tool as built and what the first slices taught, and wins where they differ.
 
 ## 0. Ground rules for every agent
 
 - Repo: `/Users/noahpeterson/Documents/Projects/spore-decomp`, branch `main`. Never commit. Never
   run anything in the background. Search with `rg`. Scratch files go under the scratchpad directory
   named in your prompt, never in `work/batches/`.
-- The machine is shared with a DeepSeek worker: no multi-process fan-out, one compile loop at a time.
-  `run_all.py` takes a lock (`work/run_all.lock`); if it is held, wait, do not kill anything.
+- Several agents share the machine. `run_all.py` serialises itself on `work/run_all.lock`: when
+  another run holds it, it prints "waiting for another run_all.py" and waits (module manifests take
+  2-17 s). Never kill a compile or a `run_all` you did not start. One compile loop per agent.
 - Do not modify `match/slices/**` in this phase. The slices are the source of truth until a module's
   functions have landed in `src/game/` **and** verified; deleting slices is a later, separate step.
 - `tools/migrate/headers.py` output under `src/game/include/` is generated: never hand-edit a
@@ -70,7 +72,10 @@ members and its remaining "conflicts" are the slice's own names being one slot o
 - Size/offset probe: `tools/migrate/sizeprobe_pilot.cpp` uses `char (*name)[sizeof(T)] = 1;`
   so the error message prints the number: run it with the command above and read the
   `cannot convert from 'int' to 'char (*)[N]'` lines in order. Add a line per class you touch.
-- Byte-exact verification: `python3 tools/matching/run_all.py --manifest <file> -v`. Manifest rows
+- Interpreter: `run_all.py`, `cmpdis.py` and `tools/difftest/*.py` import `pefile`/`capstone`/`unicorn`, which exist only in
+  the repo venv: run them as `.venv/bin/python tools/...` (plain `python3` is Homebrew's and lacks them; `headers.py`
+  and `rewrite.py` are stdlib-only and run under either).
+- Byte-exact verification: `.venv/bin/python tools/matching/run_all.py --manifest <file> -v`. Manifest rows
   are `source symbol va flags` where **`source` is relative to `match/`**, so a TU under `src/game/`
   is written `../src/game/UTFSpore_Win32/DatabasePackedFile.cpp`. Flags are the slice's flags plus
   `/Isrc/game/include` (relative `/I` paths are resolved against the repo root by `resolve_flags`).
@@ -81,9 +86,9 @@ members and its remaining "conflicts" are the slice's own names being one slot o
   previous verdict, e.g. "difftest WEAK (211 valid...)" or "PASS 400/400"). The acceptance rule is
   verdict class not worse than before; `UNSUPPORTED` after `PASS` is a regression to fix.
 
-## 3. `tools/migrate/rewrite.py`: what to build
+## 3. `tools/migrate/rewrite.py`: the design it implements
 
-Usage to implement: `rewrite.py <slice-id> [--apply] [--module SUBSTR]`. Without `--apply` it prints
+Usage: `rewrite.py <slice-id> [--apply] [--module SUBSTR] [--quiet]`. Without `--apply` it prints
 the plan and writes `work/migrate/renames_<slice>.json`; with `--apply` it writes the module TU(s)
 and manifests. Reuse `tools/migrate/headers.py` as a library (`from headers import Data, Types,
 split_qual, parse_decl`): `Data()` loads the modmap, dev symbols/publics, vtables, the demangler
@@ -174,14 +179,14 @@ Slice name → canonical (derived in the session; use it as the acceptance test 
 | `mbFlag330` | `mbHeaderHasChanged` | |
 | `mActive.mExtent`, `mActive.mRatio`, `mActive.mHoles` | `mnHoleUsageFlags`, `mfHoleCompactionMinimumRatio`, `mActiveHoleTable` | |
 | `mHoleB` | `mDelayedHoleTable` | |
-| `HoleSet::{Reset, AddHole, Alloc, GetTotalSize, mField0}` | `PFHoleTable::{Reset(uint), Free(long,uint), Allocate(uint), GetBytesFree(), mExtent}` | retail 0x8db3a0 / 0x8dc000 / 0x8dbf20 / 0x8dae40 are unnamed in pdb_names: name them in the TU comments |
+| `HoleSet::{Reset, AddHole, Alloc, GetTotalSize, mField0}` | `PFHoleTable::{Reset(uint), Free(long,uint), Allocate(uint), GetBytesFree(), mExtent}` | retail 0x8db3a0 / 0x8dc000 / 0x8dbf20 / 0x8dae40 are unnamed in pdb_names; the tool writes their decorated names to `symbols/slices/<slice>.txt` so the difftest resolver binds them |
 | `mpManager` (uint32) | `mpManager` (`Manager*`) | the `(void*)mgr` casts go away |
 | `Index` | `EA::ResourceMan::PFIndex` | slots 1 IsModifiable, 3 GetSize, 7 GetKeyList, 8 GetKeysSortedByPosition, 10 FindRecord, 12 DeleteRecord(key, info&) ("GetEntry"), 13 ReadFromMemory ("Op34"), 14 WriteToMemory ("Serialize"), 16 ValidateFreeSpace ("VerifyRange"); slot 4 (`Op10`) is `Clear` |
 | `IStream` | `EA::IO::IStream` | slots per `src/game/include/EA/IO/IStream.h` (named from FileStream) |
 | `IAlloc` | `EA::Allocator::ICoreAllocator` | slots 2 Alloc, 3 Free |
 | `Refpack` | `EA::CompressionRefpack` | `IsValidHeader` = `ValidateCompressedData` (0x92cad0), `DecompressData` (0x92ca60) |
 | `Mutex::Lock/Unlock` | `EA::Thread::Mutex::Lock(const ThreadTime&)`/`Unlock()` | 0x9221b0 / 0x922270; `kTimeoutNone` (0x1436788) is the `EA::Thread::kTimeoutNone` constant, unnamed in pdb_globals |
-| `ICoreAllocator_Alloc_Named(size, alloc, name)` + `p->Init(...)` | `EA::Allocator::ZoneObject::operator new(size, alloc, name)` (0x925fe0) then the constructor | keep the explicit two-step form for byte-exactness: `void* mem = ZoneObject::operator new(0x27c, mpAllocator, "Resource/PFRecordWrite"); if (mem) return new (mem) PFRecordWrite(a, b, c, this);` with a placement `operator new(size_t, void*)` declared in `game/types.h`; `PFRecordWrite::Init` (0x8dcea0) and `InitData` (0x8dd0d0) are the two constructors, `PFRecordRead::Init/Init2` (0x8dcc80/0x8dcdc0) likewise, `PFIndexModifiable::Init` (0x8db730) its constructor |
+| `ICoreAllocator_Alloc_Named(size, alloc, name)` + `p->Init(...)` | `EA::Allocator::ZoneObject::operator new(size, alloc, name)` (0x925fe0) then the constructor | the tool emits `return new (mpAllocator, "Resource/PFRecordWrite") PFRecordWrite(a, b, c, this);` (byte-exact in s008d81d0; the two-step form the design proposed was not needed); `PFRecordWrite::Init` (0x8dcea0) and `InitData` (0x8dd0d0) are the two constructors, `PFRecordRead::Init/Init2` (0x8dcc80/0x8dcdc0) likewise, `PFIndexModifiable::Init` (0x8db730) its constructor |
 | `DBase/DBase1` | `EA::ResourceMan::Database` | two vptrs + `mRefCount` (`AtomicInt<int>`) |
 
 `this` virtual-call slots used by the slice, all in the generated `DatabasePackedFile.h` vtable:
@@ -203,7 +208,7 @@ where the slice had a call. Check in that order.
 
 ## 4. Order of work and acceptance per phase
 
-1. **Tool + first slice.** Build `rewrite.py` (§3) against `s008d81d0`; iterate until
+1. **Tool + first slice** (done 2026-10-12, §7). Build `rewrite.py` (§3) against `s008d81d0`; iterate until
    `run_all --manifest src/game/UTFSpore_Win32/DatabasePackedFile/manifest.txt` reports **21/21
    MATCH** and the 12 nonmatching rows keep their verdict class. Deliverables: the tool, the TU, the
    manifests, `work/migrate/renames_s008d81d0.json`, `rewrite_s008d81d0.json`, and a list of every
@@ -219,8 +224,9 @@ where the slice had a call. Check in that order.
 4. **Gate.** `tools/hybrid/build.py` gets `--hook-manifest <nonmatching.txt>` (rows: va, source,
    symbol; the splicer already accepts any COFF via `equiv.prepare`); build the hybrid with the
    module's equivalent functions, `tools/hybrid/boottest.sh` twice with the scene metric
-   (`SCENE_MIN=6`), optionally `--coverage` once. Only one hybrid build/boot at a time on this
-   machine; never leave the game window open. A failing boot is debugged from the fault address
+   (`SCENE_MIN=6`), optionally `--coverage` once. One hybrid build/boot at a time (the build shares
+   one compile cache and `boottest.sh` reads one game window); never leave the game window open.
+   A failing boot is debugged from the fault address
    (`docs/hybrid.md`), with only the module's hooks as suspects.
 5. **Report**: per module, functions moved / byte-exact before and after / verdicts before and
    after / structs replaced / renames applied / stubs kept, plus the rules added to the tool.
@@ -262,8 +268,104 @@ where the slice had a call. Check in that order.
   hash maps at 0x94 and 0xb4).
 - `EA::ResourceMan::PFRecordRead`: the +8 (0x68 → 0x70) is appended as `mUnknown68`; the byte-exact
   record functions in `DatabasePackedFileRecord.obj` will say where it really is.
-- `PFHoleTable`'s four retail methods are unnamed in `pdb_names.json`; after the first slice lands,
-  add them to `symbols/slices/s008d81d0.txt`-style name files so the difftest resolver binds them.
 - `EA::Thread::kTimeoutNone` (0x1436788) and the Refpack vtable (0x140a0e8) are unnamed globals;
-  `globals.h` generation (design §2) is not written yet; keep the slice's `extern` lines with
-  addresses until it is.
+  `globals.h` generation (design §2) is not written yet; `rewrite.py` keeps such externs
+  (`KNOWN_EXTERNS` and anything with an address comment) until it is.
+
+## 7. `rewrite.py` as built, and what the first slice taught (2026-10-12, s008d81d0)
+
+`python3 tools/migrate/rewrite.py <slice-id> [--apply] [--module SUBSTR] [--quiet]` (stdlib only; `--apply` runs
+`run_all` through the venv for the byte-diff counts). Result on `s008d81d0`: 34 functions to
+`src/game/UTFSpore_Win32/DatabasePackedFile.cpp`, **21/21 MATCH** with
+`.venv/bin/python tools/matching/run_all.py --manifest src/game/UTFSpore_Win32/DatabasePackedFile/manifest.txt -v`, the 13
+equivalent rows (12 nonmatching + the partial) at the same or better equiv verdict class (Attach FAIL -> PASS):
+
+    .venv/bin/python tools/difftest/equiv.py s008d81d0 <vas> --src src/game/UTFSpore_Win32/DatabasePackedFile.cpp \
+        --flags "/O2 /MD /Gy /TP /GS- /arch:SSE /Isrc/game/include"
+
+**Artifacts.** `work/migrate/renames_<slice>.json` = `auto` (recomputed every run: class map with the evidence for each
+struct, member path map, method map, per-function decisions, notes) + `manual` (read back, wins over `auto`; edit this).
+`work/migrate/rewrite_<slice>.json` = the report (functions moved/left, structs replaced, counters, notes).
+`symbols/slices/<slice>.txt` = retail VA -> decorated name, for the migrated functions and for callees the slice
+addresses but pdb_names does not name (PFHoleTable::Free 0x8dc000, the PFRecordWrite/PFIndexModifiable constructors, the
+PFRecordRead constructor overloads): exact mangled names, so the difftest resolver binds overloads. The module TU is rebuilt
+from scratch when it only holds this slice's functions, merged (VA order, preamble union) when it holds others.
+
+**`manual` keys.** `class_map` {slice struct: canonical class}; `methods` {va or "Slice::name": canonical method name} for
+slice functions whose canonical method evidence cannot settle; `method_names` {"Struct::method": canonical name} for
+callee methods of other mapped structs; `members` {struct: {slice path: canonical path}}; `externs` {name: {decl, call,
+why}}; `edits` [{va, find, replace, why}] exact text replacement on the rewritten body, for constructs no rule covers.
+Every entry carries a `why` (in the `why` map or inline). The pilot slice needed: 6 method names (below), 2 callee
+method names (`HoleSet::AddHole` = `PFHoleTable::Free`, `GetTotalSize` = `GetBytesFree`), 1 class (`RbNode`), 2 edits.
+
+**Rules the tool applies** (all in `rewrite.py`; evidence strings are in the code): the class map of section 3 plus slot
+signatures (`IdxEntry*` <-> `PFRecordInfo&` through the `Index` slot 12) and a size check on pointer-propagated
+mappings; member pairing by (offset, size) against **VC9-probed** canonical offsets (`probe_classes`: one `char
+(*p)[offset*65536+size+1] = 1;` per node, 90 per `cl` run because cl stops at 100 errors), with same-name-at-same-offset
+as fallback, array-of-words over a canonical struct (`mHeaderBlock.f[i]` -> `((uint32_t *)&mHeader)[i]`), and a word
+view for half of an int64 (`f[3]` -> `((unsigned int *)&mHeader.mnCreationTime)[1]`, adjacent `[0] = e; [1] = 0;` pairs
+collapse to `mnCreationTime = e;`); method map (manual > retail address when the arity agrees > unique same name > shape
++ name similarity); thunks -> calls with `(int)`-cast arguments restored to the canonical parameter types, `&x` out
+arguments -> references (the local is retyped when its type differs), literal ints -> enum casts, slot-0 delete thunks ->
+`delete p`; allocation idiom -> `return new (alloc, "name") T(args);` (constructor chosen by arity, pointer arguments
+cast to the constructor's parameter types); stub-vptr stores dropped with the declaration moved to the store (the
+canonical constructor sets the vptr); locals the slice typed as integers but initialised from a pointer member are
+retyped; externs: `KNOWN_EXTERNS` (kTimeoutNone, FindEmbeddedPackageHeader) and anything with an address comment kept.
+
+**Facts learned (each one cost a DIFF or a compile error).**
+- `pdb_names.json` is shifted by one for the three functions at 0x8d9050/0x8d90e0/0x8d9170: they are `ReadFileSpan`,
+  `WriteFileSpan`, `ReadRecordRaw` (dev order, and the bodies), not `WriteFileSpan`/`ReadRecordRaw`/unnamed; `ReadFileSpan` at
+  0x6bca90 and `DecompressData` at 0x6bcc10 are other functions. The method map rejects an address whose arity differs from
+  the slice's (0x8d88d0 is named `InternalSetPosition(long)` but takes two arguments: it is `InternalRead`).
+- Some retail signatures differ from the dev PDB: `ShouldRecordBeCompressed` returns an int in retail (`mov eax,1` /
+  `xor eax,eax`; bool gives `mov al,1`); override in `layout_overrides.json` `decl_overrides`.
+- The retail `ReadIndexRecord` call result is converted to bool by `test al,al / setne al`; `return Call();` of a bool
+  is a tail call. `return Call() ? true : false;` compiles to the retail code (tried `(char)`, `!= 0`, `!!`, `!= false`).
+- A local compressor with an inline constructor/destructor (`Decompress` 0x8d8820) needs both inline and empty in the
+  headers (`decl_overrides` on `Compression` and `CompressionRefpack`), and the object is constructed where the slice
+  stored its vptr (after `bool r = false;`): declaration order changes the instruction order.
+- `PFRecordInfo e;` followed by five zero stores is the inline constructor `PFRecordInfo e(0,0,0,0,false)`.
+- The record map's `find` result must be compared as a temporary (`find(key) == end()`); a named iterator variable makes VC9
+  compare through the stack slot instead of `[eax]`.
+- `Manager`'s retail vtable has three slots in front of dev slot 13 (`RegisterDatabase` is slot 20, not 17): `vtable_insert`
+  in `layout_overrides.json`. The pairing of retail and dev vtable slots by index is only valid when the counts agree.
+- Generator bugs found and fixed: `EASTLCoreAllocator` was laid out at 0xc (leaf-table sizes are ignored for types the PDB
+  has) so every generated offset comment after a container was a word high; classes with dev functions in the object but
+  no retail-named function (`PFRecordWrite`) were skipped; the closure did not follow nested classes or the members of
+  one-hop pointees (`Manager`, `AtomicPointer`, `Cache`); template bases did not pull in their argument headers; function
+  pointer members were declared as `void (*)() name;`; nested sibling classes were not forward-declared; `FixedAllocator`
+  has a hand template now (`EA/Allocator/FixedAllocator.h`, 0x20 bytes, unverified in retail).
+- `run_all.py` object names broke on `/` inside a flag (`/Isrc/game/include`): fixed.
+
+**Not done by the tool (next agents):** constructors/destructors with real bodies (they are matched by arity but the
+member-initialiser rewrite is manual), functions of rbtree/hashtable instantiations (`RecMap::erase`, `insert`: library
+templates, stay in the slice), functions without a dev method (add them to the class with `extra_methods` in
+`layout_overrides.json`: `{"decl": "bool Foo(int)", "va": "006bc2d0", "evidence": "..."}`, regenerate, then `methods`
+{va: "Foo"}), slices whose struct views use other struct names for the same member (add `members` / `class_map`).
+
+
+### 7a. SPEngine/SPPropertyHelpers.obj (s0041e730, s0069f950, s006a11b0): namespace-function slices
+
+Result: 15/15 byte-exact in `src/game/SPEngine/SPPropertyHelpers.cpp` (s0069f950: 0x6a0920, 0x6a10c0, 0x6a1110, 0x6a1160; s006a11b0:
+0x6a11b0..0x6a1490, eleven `SP::GetPropertyAs*`); s0041e730 contributes nothing (its only SPPropertyHelpers function, 0x41e920, is a
+wrong xmatch anchor: manual `exclude`). Rules this module added to `rewrite.py` / the header generator:
+- a definition qualified by a namespace (`bool SP::GetPropertyAsKey(...)`, no struct of that name in the slice or the dev types) is a
+  namespace function like an unqualified one; its declaration is the dev public. A function without a modmap `dev` link takes the one
+  same-named namespace function of the dev object file, or the manual `methods` entry `{va: "SP::Name"}` (`Data.free_decls_of`).
+- manual `exclude` `{va: why}`: the function stays in the slice (modmap's module assignment is contradicted by the slice).
+- struct mapping from namespace-function signatures (`map_from_function_signatures`: `cSPColorRGB* out` <-> the dev public's
+  `cSPColorRGB *`), tolerant of the slice spelling a struct with its namespace (`EA::Variant`, `eastl::basic_string8`), of the
+  demangler's `basic_string<char, eastl::allocator>` spacing, and of locals typed with a qualified name (`base_type` drops the qualifier
+  of a name the slice itself defines; `convert_types` replaces the qualified spelling).
+- union members: several canonical nodes at one (offset, size) are told apart by leaf-name similarity plus whether the canonical
+  parent struct holds the slice's other members (`mpData/mnItemSize/mnItemCount` -> `mPointer.*`, not `mInt32`); `Canon` now reads the
+  members of anonymous unions.
+- an out-parameter `&p` for a canonical `T const **` parameter retypes the local to `T const *` (the const `GetProperty` overload).
+- the slice's prototypes of the namespace functions the TU defines are dropped; `merge_preamble` compared `#include` lines after
+  `mask()` blanked their file names, so no include of a later slice was ever added (fixed: includes compare by text).
+- headers: classes named by a module's namespace-function signatures get headers (`signature_classes`), unscoped PDB classes are
+  forward-declared in signatures, `rw::math::fpu::Vector{2,3,4}Template`/`Matrix33Template` are a hand header
+  (`rw/math/fpu/VectorTemplates.h`), `SP::cString` is 0x14 in retail (override `remove`), and `EA::Variant` has nine retail-only typed
+  accessors (`GetVector2/3/4`, `GetColorRGB/RGBA`, `GetKey`, `GetText`, `GetString8/16`, retail 0x6a0f70, 0xcce910, 0x6a0fa0, 0x6a0fd0,
+  0x6a1000, 0x6a1030, 0x6a1090, 0x60ebf0, 0x68a4f0) as `extra_methods`.
+Kept as a slice-local item: `cStringSet(const void*, cString*)` (retail 0x6b56d0, unnamed).

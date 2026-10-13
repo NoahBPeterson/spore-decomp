@@ -48,7 +48,7 @@ def resolve_flags(flags):
 
 def obj_path(src, flags):
     return os.path.join(OUT, src.replace("/", "_").rsplit(".", 1)[0] + "_" +
-                        "".join(f.strip("/") for f in flags).replace(":", "") + ".obj")
+                        "".join(f.strip("/") for f in flags).replace(":", "").replace("/", "_") + ".obj")
 
 
 def manifests(only=None):
@@ -114,11 +114,15 @@ def main():
     ap.add_argument("--manifest"); ap.add_argument("--jobs", type=int, default=6)
     a = ap.parse_args()
     os.makedirs(OUT, exist_ok=True)
+    # One run_all at a time: the lock serialises the shared object directory and
+    # work/verify_results.json. Wait for it (module manifests take seconds), say so first
+    # so a caller can tell a queue from a slow compile.
     lock = open(os.path.join(ROOT, "work", "run_all.lock"), "w")
     try:
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     except BlockingIOError:
-        sys.exit("another run_all.py is already running (work/run_all.lock)")
+        print("waiting for another run_all.py to finish (work/run_all.lock)", flush=True)
+        fcntl.flock(lock, fcntl.LOCK_EX)
 
     rows = read_rows(manifests(a.manifest), a.filter)
     keys = sorted(set((r[0], r[3]) for r in rows))
