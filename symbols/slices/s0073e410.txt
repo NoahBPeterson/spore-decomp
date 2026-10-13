@@ -1,3 +1,9 @@
-0073eb90 SP::cModelInstance::GetMeshes  # PDB name (symbols/pdb_names.json)
+0040efa0 ?Invert@cSPTransform@@QAEXXZ  # cSPTransform::Invert (callee of s0073e410, named from the dev publics; slice address comment)
+0073e410 ?RayCast@cModelInstance@@QAE_NPBUV3@@0PAUcSPTransform_s0073_e410@@PAMPAU2@3PAH4@Z  # cModelInstance::RayCast migrated from s0073e410 (verbatim, slice spelling)
+0073eb90 ?GetMeshes@cModelInstance@@QAE_NPAX@Z  # cModelInstance::GetMeshes migrated from s0073e410 (verbatim, slice spelling)
 0073eca0 cModelInstance::SetDrawTransform  # slice source name (draw-matrix setup)
-0073ede0 cModelInstance::DispatchMesh  # slice source name
+0073ede0 ?DispatchMesh@cModelInstance@@QAEXPAUMeshDrawObj@@IHPAUMeshCtx@@@Z  # cModelInstance::DispatchMesh migrated from s0073e410 (verbatim, slice spelling)
+0073f000 ??0PartTransform@@QAE@HPAURCObj@@PBUcSPTransform_s0073_e410@@1@Z  # PartTransform::PartTransform migrated from s0073e410 (verbatim, slice spelling)
+0073f110 ?Test@BBoxTest@@QAE_NPBUAABB@@@Z  # BBoxTest::Test migrated from s0073e410 (verbatim, slice spelling)
+0073f1c0 ??0PartTransform@@QAE@ABU0@@Z  # PartTransform::PartTransform migrated from s0073e410 (verbatim, slice spelling)
+0073f2e0 ?ReleaseRange@@YGXPAURCItem@@0@Z  # ReleaseRange migrated from s0073e410 (verbatim, slice spelling)

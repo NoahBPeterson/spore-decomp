@@ -1,0 +1,1 @@
+009b6b10 ?FUN_009b6b10@@YAXPAUVector3@@0PBUcPartOwner@@@Z  # FUN_009b6b10 migrated from s009b6b10 (verbatim, slice spelling)

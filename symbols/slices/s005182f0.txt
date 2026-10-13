@@ -1,0 +1,3 @@
+005182f0 ?Render@cPaintRenderJob_s0051_82f0@nSPSkinner@@QAE_NXZ  # cPaintRenderJob_s0051_82f0::Render migrated from s005182f0 (verbatim, slice spelling)
+00518b00 ?SwapWith@cFieldSwap@nSPSkinner@@QAEXPAV12@@Z  # cFieldSwap::SwapWith migrated from s005182f0 (verbatim, slice spelling)
+00529520 ?Shader@cRTTBuffer@nSPSkinner@@QAEXI@Z  # nSPSkinner::cRTTBuffer::Shader (callee of s005182f0, named from the dev publics; slice address comment)

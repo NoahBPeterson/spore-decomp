@@ -1,0 +1,8 @@
+# <va>  <diff-bytes>  <reason>
+00425a80 629 RefPtrVec::DoInsertValue (vector<intrusive_ptr<AtomicRefCounted>>): logic, inline layers, lock xadd and tag bytes right, but original keeps (last-first)>>2 in ESI across the memcpy call (push esi, frame 0x84) while every spelling tried evaluates it after the call; dead stack slots before the copy_backward args and tag-byte order also unresolved, so all frame offsets shift
+005182f0 133 cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
+00518b00 92 cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
+00518f10 944 /Od aligned frame (and esp,-16) + inline SSE clamp/round helpers differ; complete Render() reconstruction
+0051a8a0 51 /Od member-address temp locals differ; complete ctor reconstruction
+0051a930 89 /Od member-address temps + thiscall helpers; complete dtor reconstruction
+0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction

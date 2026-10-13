@@ -1,2 +1,4 @@
 00741210 SP::cModelInstance::AddGeometryFromArena  # PDB name (symbols/pdb_names.json)
 00741710 SP::cLoadQueue<SP::cModelWorld,SP::cModelWorld::cLoadQueueEntry,SP::cModelWorld::cLoadingModel,SP::cMWModel *,8>::StallUntilLoaded  # PDB name
+00741a40 ?ConstructFromArenaResource@cMI_Construct@@QAE_NPAUResBase@@@Z  # cMI_Construct::ConstructFromArenaResource migrated from s00741210 (verbatim, slice spelling)
+00741aa0 ?insert@Vec8@@QAEPAURefPair8@@PAU2@PBU2@@Z  # Vec8::insert migrated from s00741210 (verbatim, slice spelling)

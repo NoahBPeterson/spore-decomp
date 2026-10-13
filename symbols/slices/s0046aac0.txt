@@ -1,0 +1,4 @@
+0046aac0 ?BuildRuntimeCreature@@YAXPAUEditor@@PAUMakeOutput@@_NPAPAUThreadedObject@@@Z  # BuildRuntimeCreature migrated from s0046aac0 (verbatim, slice spelling)
+0046b460 ?ReplaceModelsWithCopies@@YAXPAUModelListObj@@@Z  # ReplaceModelsWithCopies migrated from s0046aac0 (verbatim, slice spelling)
+0046b7b0 ?BlockOrAncestorHasFlag@@YA_NPAUBlock@@@Z  # BlockOrAncestorHasFlag migrated from s0046aac0 (verbatim, slice spelling)
+006a1710 ?SetParent@cPropertyList@SP@@QAEXPAV12@@Z  # SP::cPropertyList::SetParent (callee of s0046aac0, named from the dev publics; slice address comment)

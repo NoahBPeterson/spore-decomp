@@ -1,1 +1,1 @@
-00464bb0 (anonymous namespace)::cBlockGeometryExporter::Export  # dev PDB SPEditorExportUtilities.obj ?Export@cBlockGeometryExporter@?A0x0560a4a0@@QAEXAAVcExportHelper@nSPSkinner@@PAVcSPEditorBlock@SP@@AAV?$RectT@M@EA@@I_N@Z; calls BuildBoundingBoxGeometry + ExportMeshAdd
+00464bb0 ?Export@cBlockGeometryExporter@?A0xc0b312ee@@QAEXAAVcExportHelper_s0046_4bb0@nSPSkinner@@PAVcSPEditorBlock_s0046_4bb0@SP@@AAU?$RectT_s0046_4bb0@M@EA@@I_N@Z  # Export migrated from s00464bb0 (verbatim, slice spelling)

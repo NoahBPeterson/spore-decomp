@@ -1,0 +1,11 @@
+00624fb0 ?OnMouseUp@cCreatureCameraBase@SP@@UAE_NIMMI@Z  # SP::cCreatureCameraBase::OnMouseUp migrated from s00624fb0
+00625010 ?OnMouseMove@cCreatureCameraBase@SP@@UAE_NMMI@Z  # SP::cCreatureCameraBase::OnMouseMove migrated from s00624fb0
+006251f0 ?OnMouseWheel@cCreatureCameraBase@SP@@UAE_NHMMI@Z  # SP::cCreatureCameraBase::OnMouseWheel migrated from s00624fb0
+00625270 ?Zoom@cCreatureCameraBase@SP@@QAEXM@Z  # SP::cCreatureCameraBase::Zoom migrated from s00624fb0
+006252a0 ?RotateLeftRight@cCreatureCameraBase@SP@@QAEXM@Z  # SP::cCreatureCameraBase::RotateLeftRight migrated from s00624fb0
+006252c0 ?NormalizeTheta@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::NormalizeTheta migrated from s00624fb0
+006254f0 ?OnMouseDown@cCreatureCameraBase@SP@@UAE_NIMMI@Z  # SP::cCreatureCameraBase::OnMouseDown migrated from s00624fb0
+006256a0 ?InitAvatarData@cCreatureCameraDepends_s0062_4fb0@SP@@QAEXXZ  # cCreatureCameraDepends_s0062_4fb0::InitAvatarData migrated from s00624fb0 (verbatim, slice spelling)
+00625830 ?InitCameraData@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::InitCameraData migrated from s00624fb0
+00625a90 ?UpdateDesiredLookAt@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::UpdateDesiredLookAt migrated from s00624fb0
+00625bf0 ?EndPositionUpdate@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::EndPositionUpdate migrated from s00624fb0

@@ -1,0 +1,15 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FastMemCopy@@YAXPAXPBXI@Z  00516ac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ??0cMeshAORender_s0051_69d0@nSPSkinner@@QAE@XZ  00516ba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ??1cMeshAORender_s0051_69d0@nSPSkinner@@UAE@XZ  00516c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Load@cMeshAORender_s0051_69d0@nSPSkinner@@QAEXII@Z  00516ca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Unload@cMeshAORender_s0051_69d0@nSPSkinner@@QAEXXZ  00516d30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Dispatch@cMeshAORender_s0051_69d0@nSPSkinner@@UAEXIIPAX@Z  00516da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?GetBoundingBox@cMeshAORender_s0051_69d0@nSPSkinner@@UAE_NAAUBoundingBox@@AAM@Z  00516e10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Rebuild@cMeshAORender_s0051_69d0@nSPSkinner@@QAEXXZ  00516eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Run@cJobBase@@UAEXHHHH@Z  00517160  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Schedule@cJobBase@@QAEXXZ  005172c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ??0cJobBase@@QAE@XZ  005173a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?ExecutePipeline@cSkinPainterPipeline@Skinner@@QAEXXZ  0051afd0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?AddRef@RefCounted@@QAEHXZ  0051c620  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPSkinnerPaintRender.cpp  ?deleting_dtor@EditorResource@@QAEPAXI@Z  0051d090  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

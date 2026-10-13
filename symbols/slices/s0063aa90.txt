@@ -1,5 +1,19 @@
+00435480 ?Start@Stopwatch@EA@@QAEXXZ  # EA::Stopwatch::Start (callee of s0063aa90, named from the dev publics; slice address comment)
+005ff1a0 ?GetElapsedTimeFloat@Stopwatch@EA@@QBEMXZ  # EA::Stopwatch::GetElapsedTimeFloat (callee of s0063aa90, named from the dev publics; slice address comment)
 0063b210 SP::cSPPlayModeSubModeAction::cSPPlayModeSubModeAction  # stores vtbl, zeroes effect ptrs, Stopwatch(5,0)
 0063b5a0 SP::cSPPlayModeSubModeDance::cSPPlayModeSubModeDance  # stores vtbl, zeroes 4 fields
 0063b5c0 SP::cConnectingDialog::Init  # CardLayout init with key 834b03af/510a95b/40464100 then AddWinProc
-0063b760 SP::cSPPlayModeSubModeMovie::ToggleRecordUIGroups  # swaps visibility of groups 3f434ac / 3fc1740
-0063b890 SP::cSPPlayModeSubModeMovie::GetYTPrompt  # name from PDB
+0063b640 ?SetDialogText@cConnectingDialog@?A0x879eca64@@QAEXH@Z  # SetDialogText migrated from s0063aa90 (verbatim, slice spelling)
+0063b730 ?OnKeyDown@cSPPlayModeSubModeMovie@@QAE_NHH@Z  # cSPPlayModeSubModeMovie::OnKeyDown migrated from s0063aa90 (verbatim, slice spelling)
+0063b760 ?FUN_0063b760@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::FUN_0063b760 migrated from s0063aa90 (verbatim, slice spelling)
+0063b7b0 ?SetState2@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState2 migrated from s0063aa90 (verbatim, slice spelling)
+0063b7f0 ?SetState4@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState4 migrated from s0063aa90 (verbatim, slice spelling)
+0063b820 ?SetState5@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState5 migrated from s0063aa90 (verbatim, slice spelling)
+0063b860 ?SetState6@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState6 migrated from s0063aa90 (verbatim, slice spelling)
+0063b890 ?GetYTPrompt@cSPPlayModeSubModeMovie@SP@@QAE_NXZ  # SP::cSPPlayModeSubModeMovie::GetYTPrompt migrated from s0063aa90
+0063b8b0 ?CheckServer@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::CheckServer migrated from s0063aa90 (verbatim, slice spelling)
+0063b910 ?SetStateB@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetStateB migrated from s0063aa90 (verbatim, slice spelling)
+0063b950 ?FUN_0063b950@@YAXXZ  # FUN_0063b950 migrated from s0063aa90 (verbatim, slice spelling)
+0063b9a0 ?FUN_0063b9a0@@YAXXZ  # FUN_0063b9a0 migrated from s0063aa90 (verbatim, slice spelling)
+0063b9f0 ?FUN_0063b9f0@cSPPlayModeSubModeMovie@@QAEX_N@Z  # cSPPlayModeSubModeMovie::FUN_0063b9f0 migrated from s0063aa90 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0063aa90, named from the dev publics; slice address comment)

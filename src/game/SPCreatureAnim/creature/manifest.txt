@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/creature.cpp  ?Set@TargetFrame@nSPCreatureAnim@@QAEXPBM0@Z  009b3920  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ??4CopyBlock@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3ab0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?FUN_009b3bc0@nSPCreatureAnim@@YAXH@Z  009b3bc0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ??4Transform30@nSPCreatureAnim@@QAEAAU01@ABU01@@Z  009b3c80  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?FUN_009b8250@@YIXHHM@Z  009b8250  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ??1creature_static_data_s009c_1f60@nSPCreatureAnim@@QAE@XZ  009c2050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPCreatureAnim/creature.cpp  ?FUN_009c4d10@creature_instance_data_s009c_4a30@nSPCreatureAnim@@QAEXXZ  009c4d10  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

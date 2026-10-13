@@ -1,0 +1,4 @@
+007650d0 ?WrapA50@Loader29@@QAEXH@Z  # Loader29::WrapA50 migrated from s00764df0 (verbatim, slice spelling)
+00765150 ?WrapDf0@Loader29@@QAEXH@Z  # Loader29::WrapDf0 migrated from s00764df0 (verbatim, slice spelling)
+00765ac0 ??1D765ac0@@QAE@XZ  # D765ac0::~D765ac0 migrated from s00764df0 (verbatim, slice spelling)
+00765f10 ??0D765f10@@QAE@PAX@Z  # D765f10::D765f10 migrated from s00764df0 (verbatim, slice spelling)

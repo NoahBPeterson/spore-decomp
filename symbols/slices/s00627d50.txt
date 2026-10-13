@@ -1,0 +1,4 @@
+006252c0 ?NormalizeTheta@cCreatureCameraBase@SP@@AAEXXZ  # SP::cCreatureCameraBase::NormalizeTheta (callee of s00627d50, named from the dev publics; slice address comment)
+00627d50 ?UpdateCamera@cCreatureCameraBase_s0062_7d50@SP@@QAEXM@Z  # cCreatureCameraBase_s0062_7d50::UpdateCamera migrated from s00627d50 (verbatim, slice spelling)
+00627eb0 ?Update@cCreatureCameraBase_s0062_7d50@SP@@QAEXIPAUICameraHelper@2@@Z  # cCreatureCameraBase_s0062_7d50::Update migrated from s00627d50 (verbatim, slice spelling)
+006280d0 ?SetTargetOffset@cCreatureCameraDepends_s0062_7d50@SP@@QAEXUVector3Copy@@_N@Z  # cCreatureCameraDepends_s0062_7d50::SetTargetOffset migrated from s00627d50 (verbatim, slice spelling)

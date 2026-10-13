@@ -1,0 +1,13 @@
+# va  diff-bytes  reason
+0075d990 46 complete; two d3d9 device calls through [vtbl+0x1d8] + MessageServer vcall, argument/reg layout differs
+0075d9e0 131 complete; monitor/aspect helper (GetMonitorInfoA/CreateDCA/GetDeviceCaps/DeleteDC via dllimport), size/frame differs
+0075da90 3 complete; cdecl callee cleanup emitted as `pop ecx` where the original used `add esp,4`
+0075dc20 133 complete; palette table build (pow loop + d3d9 SetPalette via [vtbl+0x54]), frame/reg layout differs; equiv: UNSUPPORTED (ecx read is only a nop lea ecx,[ecx] pad; fn is stdcall ret 4, left as is)
+0075de80 173 complete; render-settings property lookup (sAppProperties) + ScreenAspectRatio fallback, property/EH layout differs; equiv: FAIL (ours faults at eip=3000008e) after making it cRenderer member
+0075df60 109 complete; canvas-rect based window sizing, register/frame layout differs; equiv: UNSUPPORTED (import GetCursorPos, 0/1200 valid inputs) after cRenderer member fix
+0075dff0 139 complete; cRenderer::SubRender layer walk + virtual draw, argument/register layout differs
+0075f430 101 complete; EASTL copy_backward with release/AddRef on element 0, layout differs
+0075f4a0 86 complete; EASTL copy_impl<0,random_access_iterator_tag>::do_copy<...>, scheduling differs
+0075f770 35 complete; allocate count*0x14 Graphics array + range construct, arg layout differs
+0075f8a0 93 complete; SP::cRenderer::RemovePostRenderJob intrusive-list erase, layout differs; equiv: FAIL (5/5 mismatched) after cRenderer member fix
+0075f900 89 complete; SP::cRenderer::RemovePreRenderJob intrusive-list erase, layout differs; equiv: FAIL (5/5 mismatched) after cRenderer member fix

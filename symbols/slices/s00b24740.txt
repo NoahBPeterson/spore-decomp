@@ -1,2 +1,3 @@
-0x00b24740 Simulator::NounCreateMap::RegisterNounClasses  # Claude-coined; 109x RegisterNounType + classMap[noun]=Create (ModAPI NounClassFactories.h)
+00b24740 ?RegisterNounClasses@NounCreateMap@Simulator@@QAEXXZ  # NounCreateMap::RegisterNounClasses migrated from s00b24740 (verbatim, slice spelling)
 0x00b23e60 Simulator::RegisterNounType  # ModAPI RegisterNounType(nounID,typeID,name), 2017 addr 0xB23E40
+0x00b24740 Simulator::NounCreateMap::RegisterNounClasses  # Claude-coined; 109x RegisterNounType + classMap[noun]=Create (ModAPI NounClassFactories.h)

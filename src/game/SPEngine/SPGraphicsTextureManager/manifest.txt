@@ -1,0 +1,8 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?GetTexture@cTextureManager@@QAEXHHH@Z  007a93c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?HasTexture@cTextureManager@@QAEXHH@Z  007a93f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?CreateTextureEx@cTextureManager@@QAEXHHHHHIHH@Z  007a94f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?RegisterGameTexture@cTextureManager@@QAEXHH@Z  007a9540  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?ReloadTexture@cTextureManager@@QAEXHH@Z  007a95e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?UnregisterArena@cTextureManager_s007a_abb0@@QAEXPAX@Z  007aaf90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureManager.cpp  ?ClearEntries@cLoadQueue@@QAEXXZ  007ab090  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

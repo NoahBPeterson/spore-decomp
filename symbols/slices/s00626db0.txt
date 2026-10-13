@@ -1,10 +1,9 @@
-00626db0 SP::cCreatureCameraBase::GetCurrentCameraPosition  # PDB-resolved
-00626ee0 SP::cCreatureCameraBase::UpdateCamera_StandardControl  # PDB-resolved
-00627000 SP::cCreatureCameraBase::GetAudioAnchorPosition  # PDB-resolved
-00627060 SP::cCreatureCameraBase::InitCreatureData  # PDB candidate (caller-single)
-006271a0 `anonymous namespace'::translateTransform
+00626db0 ?GetCurrentCameraPosition@cCreatureCameraBase_s0062_6db0@@QAEXPAM@Z  # cCreatureCameraBase_s0062_6db0::GetCurrentCameraPosition migrated from s00626db0 (verbatim, slice spelling)
+00626ee0 ?UpdateCamera_StandardControl@cCreatureCameraBase_s0062_6db0@@QAEXM@Z  # cCreatureCameraBase_s0062_6db0::UpdateCamera_StandardControl migrated from s00626db0 (verbatim, slice spelling)
+00627000 ?GetAudioAnchorPosition@cCreatureCameraBase_s0062_6db0@@QAEXPAM@Z  # cCreatureCameraBase_s0062_6db0::GetAudioAnchorPosition migrated from s00626db0 (verbatim, slice spelling)
+00627060 ?InitCreatureData@cCreatureCameraBase@SP@@QAEXPAUcAnimatingCreature@2@@Z  # SP::cCreatureCameraBase::InitCreatureData migrated from s00626db0
+006271a0 ?translateTransform@@YAPAXPAX00@Z  # translateTransform migrated from s00626db0 (verbatim, slice spelling)
 006271f0 SP::cCreatureCameraBase::cCreatureCameraBase  # PDB-resolved
 006275d0 SP::cCreatureCameraBase::~cCreatureCameraBase  # PDB-resolved
-00627660 SP::cCreatureCameraBase::FUN_00627660
-00627ca0 SP::cCreatureCameraBase::Activate  # PDB candidate (caller-single)
-00627660 SP::cCreatureCameraBase::PushOutOfGround  # computes 4 ground-clearance samples around the near plane; if the camera is below, raises it and corrects pitch with acos
+00627660 ?FUN_00627660@cCreatureCameraBase_s0062_6db0@@QAEXXZ  # cCreatureCameraBase_s0062_6db0::FUN_00627660 migrated from s00626db0 (verbatim, slice spelling)
+00627ca0 ?Activate@cCreatureCameraBase_s0062_6db0@@QAEXXZ  # cCreatureCameraBase_s0062_6db0::Activate migrated from s00626db0 (verbatim, slice spelling)

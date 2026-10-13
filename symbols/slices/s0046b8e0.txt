@@ -1,1 +1,4 @@
 0046b8e0 ComputeEditorModelOffset  # volume-weighted center of flagged editor blocks / lowest-z offset; writes Vector3 to out
+0046bfd0 ?FUN_0046bfd0@@YAHHH@Z  # FUN_0046bfd0 migrated from s0046b8e0 (verbatim, slice spelling)
+004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s0046b8e0, named from the dev publics; slice address comment)
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s0046b8e0, named from the dev publics; slice address comment)

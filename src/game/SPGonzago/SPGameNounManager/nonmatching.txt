@@ -1,0 +1,21 @@
+# complete (behaviorally equivalent) but not byte-exact: <va> <diff-bytes> <reason>
+00b201a0 30 cGameData::MarkFeedback: complete; difftest WEAK (78 valid, no mismatch, 20.4% cov); RBFind call shape/register roles differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20230 11 intrusive-list foreach calling vtable+0x1c: complete; difftest UNSUPPORTED (0/400 valid, random input cannot build a live list); only ebx/edi register allocation swapped; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b203e0 160 cGameData::RemoveVecItem: complete; difftest PASS (347 valid, 94.9% cov); codegen/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20470 72 cGameData::CountList: complete; difftest UNSUPPORTED (0/400 valid); register allocation differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b204d0 54 cGameData::FindList: complete; difftest WEAK (73 valid, no mismatch, 85.2% cov); codegen differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20610 50 ByteString::resize: complete; difftest WEAK (76 valid, no mismatch, 37.8% cov); branch encoding/register roles differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b206d0 59 manager Flush: complete; difftest UNSUPPORTED (0/400 valid, needs a live rbtree); DoNuke/delete call-shape and frame differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20790 62 FeedbackMgr::ClassifyById: complete; difftest WEAK (63 valid, no mismatch, 70.3% cov); register allocation around RBFind differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20930 150 map<string,int>::find: complete source; difftest FAIL (5/131 valid mismatched: our side faults on an adversarial key); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b209f0 66 string ctor from (alloc,string): complete; difftest PASS (207 valid, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20aa0 181 string append-format (Vsnprintf8 growth loop): complete; difftest UNSUPPORTED (re-verified: original reads ecx at entry; varargs member cannot be __thiscall in MSVC, custom ABI, left as is); flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20b90 59 string ctor from string: complete; difftest WEAK (163 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b20c00 42 string ctor with allocator copy: complete; difftest WEAK (180 valid, no mismatch, 100% cov); register/frame differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE
+00b225d0 107 complete; codegen differs (see source)
+00b22650 224 complete; codegen differs (see source)
+00b227c0 224 complete; codegen differs (see source)
+00b22960 526 complete; codegen differs (see source)
+00b22bc0 196 complete; codegen differs (see source)
+00b22cc0 216 complete; codegen differs (see source)
+00b22ea0 110 complete; codegen differs (see source)

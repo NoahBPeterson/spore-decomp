@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+007a93b0 6 wrapper: register choice + tail-call vs call
+007a9420 14 GetKeyFromTexture: base pointer register/lea shape differs
+007a9450 20 GetResourceForTexture: null path folds to absolute [0x24]
+007a9470 34 CreateTexture: IDGenerator + vtable forwarding schedule; fixed 2026-10-12: generator call now goes through its vtable slot 1 (was the object field at +4)
+007a95b0 7 set/clear flag bit: epilogue merge differs
+007a9620 27 CleanupJob: EH frame + virtual-release shape
+007a9680 83 deque range copy loop
+007a9730 94 WriteTexture: async/sync path + key packing
+007a9840 44 remove-first-matching in deque; equiv: WEAK 43 valid inputs, 32% coverage (member of DequeOwner, ECX fixed)
+007a9880 34 refptr clear (lock xadd release); equiv: PASS (fixed ECX receiver: member of RefPtrSlot)
+007a98b0 68 cLoadQueue<...>::StallUntilLoaded deque scan
+007a9a80 89 DequeIterator::operator+=; equiv: FAIL 5/100 mismatched, memory pool (member operator+=, ECX fixed, symbol entry ?YDequeIter2)
+007a9d70 99 deque reverse range copy: iterator register schedule differs
+007a9eb0 34 hashtable DoFreeNodes: EH frame + refcount schedule
+007aa3a0 101 job-info transfer: virtual call/register schedule; equiv: FAIL 5/23 mismatched, eax (member of JobSlots, ECX fixed)
+007aa800 69 cNodeAllocator::Create: loop rotation differs
+007aa850 21 deque push_back with block alloc: map-growth schedule; equiv: PASS (now DequeMap::PushBack, ECX fixed)
+007ab0d0 194 COMPLETE hash_map DoInsertValue; frame 0xc vs 0x8 (original reuses the value param home slot for the bucket index) and the rehash/allocate scheduling differs.
+007ab5f0 108 COMPLETE HasTexture; no /EHsc prologue (the original keeps unwind state around the mutex) and the find argument/stack layout differs.
+007ab6c0 54 COMPLETE ReloadTexture; the return-0 block is laid out inline instead of cold and the vtable loads are hoisted out of the pInstance test.
+007ac080 74 COMPLETE eastl::hash_map::operator[] (find + DoInsertValue on miss); frame 0x24 vs 0x1c and this/key register assignment swapped, so the whole schedule differs.; equiv: PASS (symbol entry ?ATextureInstanceMap)

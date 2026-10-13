@@ -1,8 +1,18 @@
-005c2d30 SP::cSPPaletteCategoryUI::GetSelectedPaint  # returns tSPEditorPaint {mSelectedItemID, colors}, recurses to parent UI
-005c2e00 SP::cSPPaletteCategoryUI::GetSkinPaintIndex  # dev-build symbol (67 bytes); reads mData->mSkinPaintIndex
-005c2e80 SP::cSPPaletteCategoryUI::IsColor1Default  # returns mIsColor1Default of the root UI
-005c3000 SP::cSPPaletteCategoryUI::SetWindowPositions  # PDB candidate; lays out EP holder / color pickers / palette page
-005c31c0 SP::cSPPaletteCategoryUI::UpdatePreviewSwatch  # dev-build symbol; updates pickers and swatch material
-005c34e0 SP::cSPPaletteCategoryUI::SetSelectedPaint  # dev-build symbol
-005c36f0 SP::cSPPaletteCategoryUI::HandleMessage  # dev-build symbol; handles 0xb2e18705 (item selected) / 0x90e08f60 (picker)
-005c3c20 SP::cSPPaletteCategoryUI::CyclePage  # real name in card
+005c2aa0 ?GetNumPages@cSPPaletteCategoryUI@SP@@QAEHXZ  # SP::cSPPaletteCategoryUI::GetNumPages (callee of s005c2d30, named from the dev publics; slice address comment)
+005c2d30 ?GetSelectedPaint@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE?AUtSPEditorPaint_s005c_2d30@2@XZ  # cSPPaletteCategoryUI_s005c_2d30::GetSelectedPaint migrated from s005c2d30 (verbatim, slice spelling)
+005c2e00 ?GetSkinPaintIndex@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEIXZ  # cSPPaletteCategoryUI_s005c_2d30::GetSkinPaintIndex migrated from s005c2d30 (verbatim, slice spelling)
+005c2e80 ?IsColor1Default@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NXZ  # cSPPaletteCategoryUI_s005c_2d30::IsColor1Default migrated from s005c2d30 (verbatim, slice spelling)
+005c2ec0 ?SetPackPaneVisible@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEX_N@Z  # cSPPaletteCategoryUI_s005c_2d30::SetPackPaneVisible migrated from s005c2d30 (verbatim, slice spelling)
+005c2ef0 ?uninitialized_copy_ptr@SP@@YAPAUPageUIEntry_s005c_2d30@1@PAU21@00@Z  # uninitialized_copy_ptr migrated from s005c2d30 (verbatim, slice spelling)
+005c2f40 ?copy@SP@@YAPAV?$AutoRefPtr@VcSPEditorPaintLikeThis_s005c_2d30@SP@@@EA@@PAV23@00@Z  # copy migrated from s005c2d30 (verbatim, slice spelling)
+005c2fa0 ?copy_backward@SP@@YAPAV?$AutoRefPtr@VcSPEditorPaintLikeThis_s005c_2d30@SP@@@EA@@PAV23@00@Z  # copy_backward migrated from s005c2d30 (verbatim, slice spelling)
+005c3000 ?SetWindowPositions@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEXXZ  # cSPPaletteCategoryUI_s005c_2d30::SetWindowPositions migrated from s005c2d30 (verbatim, slice spelling)
+005c31c0 ?UpdatePreviewSwatch@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEXXZ  # cSPPaletteCategoryUI_s005c_2d30::UpdatePreviewSwatch migrated from s005c2d30 (verbatim, slice spelling)
+005c34e0 ?SetSelectedPaint@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEXABUtSPEditorPaint_s005c_2d30@2@@Z  # cSPPaletteCategoryUI_s005c_2d30::SetSelectedPaint migrated from s005c2d30 (verbatim, slice spelling)
+005c35c0 ??4PageUIEntryAssign@SP@@QAEAAU01@ABU01@@Z  # PageUIEntryAssign::operator= migrated from s005c2d30 (verbatim, slice spelling)
+005c3610 ?copy@SP@@YAPAUPageUIEntry_s005c_2d30@1@PAU21@00@Z  # copy migrated from s005c2d30 (verbatim, slice spelling)
+005c3680 ?copy_backward@SP@@YAPAUPageUIEntry_s005c_2d30@1@PAU21@00@Z  # copy_backward migrated from s005c2d30 (verbatim, slice spelling)
+005c36f0 ?HandleMessage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NIPAX@Z  # cSPPaletteCategoryUI_s005c_2d30::HandleMessage migrated from s005c2d30 (verbatim, slice spelling)
+005c3a50 ?OnPageChanged@cSPPaletteCategoryUI_s005c_2d30@SP@@QAEXHH@Z  # cSPPaletteCategoryUI_s005c_2d30::OnPageChanged migrated from s005c2d30 (verbatim, slice spelling)
+005c3bd0 ?SetPageIndex@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  # cSPPaletteCategoryUI_s005c_2d30::SetPageIndex migrated from s005c2d30 (verbatim, slice spelling)
+005c3c20 ?CyclePage@cSPPaletteCategoryUI_s005c_2d30@SP@@QAE_NH@Z  # cSPPaletteCategoryUI_s005c_2d30::CyclePage migrated from s005c2d30 (verbatim, slice spelling)

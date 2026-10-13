@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+004655e0 1939 (anon)::cBlockGeometryExporter::BuildBoundingBoxGeometry (/Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast): complete reconstruction (bbox corners, transform, 24 UVs, 6 faces of positions/normals/indices), identical 120-call sequence incl. the 7 out-of-line Vector3 copy ctors; not exact: /Od stack-slot layout (frame 0x330 vs 0x464), and the 5 inlined copy-ctor expansions are spelled as an explicit inline helper
+00466690 108 ExportBakedModelToXMF: complete, every instruction matches; /Od frame is 0x64 bytes smaller (a 4-dword and a 21-dword inline-callee hole between the temp blocks, plus one named instArg slot that is a temp in the original)
+00466e20 1948 complete (call sequence identical, 63/63); /Od frame differs: original frame 0x1e0 vs 0x168 (holes of inline callees cl declined: size/at/get/push_back called out of line) and name-hash slot order; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00469bb0 1351 complete (all 52 calls in order, same constants); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /GS-; /Od temp-slot layout and register choice differ (frame 0xf1c vs 0xf9c)
+0046aac0 1941 complete (all paths and calls); /Od temp slots from inline accessors differ (original frame 0x828, mine ~0x740)
+0046b8e0 816 complete /Od source; pointer-API temps for Vector3 helpers (named t1..t4) instead of compiler sret temps, shifts frame (0x10c vs 0x138)
+0046ff00 2532 complete: /Od frame differs (original has ~35 more inline-temp slots, 0x198 vs 0x140 frame); ordered call sequence identical; flags /Od /Ob1 /arch:SSE /MD /Gy /TP
+00470bd0 725 complete; second loop's Vec4 ctor temps need own frame slots (loops are separate inlines); name-hash slot order not fitted

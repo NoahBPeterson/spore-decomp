@@ -1,5 +1,5 @@
-00625e70 SP::cCreatureCameraBase::AimTowardsTarget  # PDB-resolved
+00625e70 ?AimTowardsTarget@cCreatureCameraBase@SP@@QAEX_N@Z  # SP::cCreatureCameraBase::AimTowardsTarget migrated from s00625e70
 00625f70 SP::cCreatureCameraBase::FUN_00625f70  # orbit/walk damping toward target
-00626290 SP::cCreatureCameraBase::ReloadTuning  # PDB-resolved
-006268a0 SP::cCreatureCameraBase::CalculateCameraToWorldMatrix  # PDB-resolved
+00626290 ?ReloadTuning@cCreatureCameraBase@@QAEXXZ  # cCreatureCameraBase::ReloadTuning migrated from s00625e70 (verbatim, slice spelling)
+006268a0 ?CalculateCameraToWorldMatrix@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::CalculateCameraToWorldMatrix migrated from s00625e70
 00626b50 SP::cCreatureCameraBase::SetInitialCameraValues  # PDB-resolved

@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+0073b800 2 cModelInstance::SetBoneTable: complete; only the scratch register for arg2 differs
+0073b840 90 cModelInstance::SetBoneCallback: complete; arg-load/register schedule differs
+0073d160 86 complete; result register (edi) lifetime differs from original (compiler folds the always-zero fall-through), otherwise identical control flow/calls
+0073e410 1241 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
+0073eb90 162 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies)
+0073ede0 313 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies); difftest WEAK (no mismatch, 167 valid inputs) after fixing the checker symbol pick (it tested GetMeshes; added DispatchMesh to symbols/slices/s0073e410.txt) and the ShaderDataObj::Push 0x7789d0 annotation
+0073f000 195 complete: all paths/calls reconstructed; not byte-exact (register allocation/EH layout/x87-vs-SSE copies); difftest PASS after moving the @ marker onto the definition (it was picked up by the inline PTBase ctor)
+0073f110 70 complete AABB overlap test; original materializes the 16-byte Vector3 locals with movaps (SSE) while cl here forward-substitutes scalar component loads
+0073f320 83 complete cSkinBinding::operator=; refcount temp/register scheduling and out-of-line cSPTransform::operator= call encoding differ; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS (1200 valid, 100% coverage) via symbols/slices/s0073f320.txt entry ?4cSkinBinding (cSPTransformS::operator= annotated 0x537dc0)
+0073f440 10 complete copy_backward for refcounted pairs; only the load of result->p is scheduled before the pointer decrements

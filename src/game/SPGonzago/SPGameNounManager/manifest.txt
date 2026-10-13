@@ -1,0 +1,17 @@
+# source  symbol  va  flags
+../src/game/SPGonzago/SPGameNounManager.cpp  ?GetPlayerEmpireOrMinus1@@YAHXZ  00b1f9d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?Initialize@Window@UTFWin@@QAE_NXZ  00b1fbf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?New_cMissionHappinessEvent@@YAPAXXZ  00b1fc30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?SetAvatar@NounMgr@@QAEXPAUcGameData@@@Z  00b1fd50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?ClassifyA@@YAHPAUIRefObject@@@Z  00b1fe40  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?ClassifyB@@YGHPAUIRefObject@@@Z  00b1feb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?allocate@ByteString@@QAEXI@Z  00b1ffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?Dtor@ArtilleryBase@@QAEXXZ  00b20120  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?AllocSmallObj@@YGPAUSmallObj@@PAU1@@Z  00b205a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?Create@cArtilleryProjectile@@SAPAU1@XZ  00b20660  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?GetFeedback@FeedbackMgr@@QAEPAXI@Z  00b20750  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?FreeBucketNodes@@YGXPAPAXI@Z  00b20a50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?Dummy225b0@cGameNounManager@@QAEXXZ  00b225b0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?RemoveHerd@cGameNounManager@@QAEXPAUcNoun@@@Z  00b22930  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?ClearHolderVec@@YAXPAUVecHolder@@@Z  00b22e80  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPGonzago/SPGameNounManager.cpp  ?RegisterNounClasses@NounCreateMap@Simulator@@QAEXXZ  00b24740  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

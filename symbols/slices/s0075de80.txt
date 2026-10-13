@@ -1,10 +1,10 @@
-0075e370 SP::cRenderer::LayerInfoAt  # PDB (card)
-0075e3b0 SP::cRenderer::LayerInfoAtIndex  # PDB (card)
-0075e330 SP::cRenderer::NumLayers  # PDB candidate (card)
+0075de80 ?RenderSettings@cRenderer_s0075_de80@@QAEXD@Z  # cRenderer_s0075_de80::RenderSettings migrated from s0075de80 (verbatim, slice spelling)
+0075df60 ?Render@cRenderer@SP@@UAEXE@Z  # SP::cRenderer::Render migrated from s0075de80
+0075dff0 ?SubRender@cRenderer_s0075_de80@@QAEXHHHPAXDI@Z  # cRenderer_s0075_de80::SubRender migrated from s0075de80 (verbatim, slice spelling)
 0075e090 SP::cRenderer::Layer  # PDB (card)
 0075e130 SP::cRenderer::SetInfoFlags  # PDB (card)
 0075e1e0 SP::cRenderer::ClearInfoFlags  # PDB (card)
 0075e290 SP::cRenderer::GetInfoFlags  # PDB (card)
-0075dff0 SP::cRenderer::SubRender  # PDB (card)
-0075de80 render settings update (sAppProperties)  # inferred from asm
-0075df60 window size from canvas rect  # inferred from asm
+0075e330 SP::cRenderer::NumLayers  # PDB candidate (card)
+0075e370 ?LayerInfoAt@cRenderer_s0075_de80@@QAEPAXH@Z  # cRenderer_s0075_de80::LayerInfoAt migrated from s0075de80 (verbatim, slice spelling)
+0075e3b0 SP::cRenderer::LayerInfoAtIndex  # PDB (card)

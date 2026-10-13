@@ -1,1 +1,14 @@
+005c1ce0 ?GetPage@cSPPaletteCategory@SP@@QAEPAVcSPPalettePage@2@H@Z  # SP::cSPPaletteCategory::GetPage (callee of s005c4500, named from the dev publics; slice address comment)
+005c2aa0 ?GetNumPages@cSPPaletteCategoryUI@SP@@QAEHXZ  # SP::cSPPaletteCategoryUI::GetNumPages (callee of s005c4500, named from the dev publics; slice address comment)
+005c2bc0 ?SetVisibleChunk@cSPPaletteCategoryUI@SP@@AAEXH@Z  # SP::cSPPaletteCategoryUI::SetVisibleChunk (callee of s005c4500, named from the dev publics; slice address comment)
+005c3000 ?SetWindowPositions@cSPPaletteCategoryUI@SP@@AAEXXZ  # SP::cSPPaletteCategoryUI::SetWindowPositions (callee of s005c4500, named from the dev publics; slice address comment)
+005c4500 ?PopulateExpansionPackPane@cSPPaletteCategoryUI_s005c_4500@SP@@QAEXPAVcSPPaletteCategory_s005c_4500@2@@Z  # cSPPaletteCategoryUI_s005c_4500::PopulateExpansionPackPane migrated from s005c4500 (verbatim, slice spelling)
+005c4df0 ?ClearPalettes@cSPPaletteCategoryUI_s005c_4500@SP@@QAEXXZ  # cSPPaletteCategoryUI_s005c_4500::ClearPalettes migrated from s005c4500 (verbatim, slice spelling)
+005c4e40 ?Shutdown@cSPPaletteCategoryUI_s005c_4500@SP@@QAEXXZ  # cSPPaletteCategoryUI_s005c_4500::Shutdown migrated from s005c4500 (verbatim, slice spelling)
+005c50b0 ?SelectPalette@cSPPaletteCategoryUI_s005c_4500@SP@@QAE_NH@Z  # cSPPaletteCategoryUI_s005c_4500::SelectPalette migrated from s005c4500 (verbatim, slice spelling)
+005c51e0 ?SetCategory@cSPPaletteCategoryUI_s005c_4500@SP@@QAEXPAVcSPPaletteCategory_s005c_4500@2@H@Z  # cSPPaletteCategoryUI_s005c_4500::SetCategory migrated from s005c4500 (verbatim, slice spelling)
+005c8cc0 ?Shutdown@cSPPalettePageUI@SP@@QAEXXZ  # SP::cSPPalettePageUI::Shutdown (callee of s005c4500, named from the dev publics; slice address comment)
+005c9230 ?Init@cSPPalettePageUI@SP@@QAEXPAVcSPPalettePage@2@PAVIWindow@UTFWin@EA@@PAUcSPPaletteInfo@2@H_N@Z  # SP::cSPPalettePageUI::Init (callee of s005c4500, named from the dev publics; slice address comment)
 00810000 ??0cSPUILayout@@QAE@XZ  # cSPUILayout ctor as called by PopulateExpansionPackPane (original calls 0x810000 there); pdb_names 00dd1ca0 is a different stub
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005c4500, named from the dev publics; slice address comment)
+00f47380 ??_V@YAXPAX@Z  # operator delete[] (retail 0x00f47380 is delete[]/delete; docs/handoff-resolve-unresolved-refs.md §7, Papercuts s0064c8e0). PopulateExpansionPackPane's emitted stub dtor calls delete[]; without this mapping resolve.py reports it unresolved -> UNSUPPORTED.

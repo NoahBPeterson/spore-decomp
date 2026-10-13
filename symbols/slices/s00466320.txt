@@ -1,1 +1,2 @@
-00466690 SP::EditorUtils::ExportBakedModelToXMF  # card/PDB name; writes <dir>/<name>.xmf via cExportHelper and the Diffuse/NormalMap/BakeInfoMap TGAs
+00466690 ?ExportBakedModelToXMF@EditorUtils@SP@@YAXPAUEditorModel@@PB_WPAUResourceKey@@@Z  # ExportBakedModelToXMF migrated from s00466320 (verbatim, slice spelling)
+004fe860 ?InitStaticMesh@cExportHelper@nSPSkinner@@QAEXPB_W@Z  # nSPSkinner::cExportHelper::InitStaticMesh (callee of s00466320, named from the dev publics; slice address comment)

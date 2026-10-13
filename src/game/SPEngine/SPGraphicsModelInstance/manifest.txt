@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?GetNumBones@cModelInstance_s0073_afb0@SP@@QAEHXZ  0073b7e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetDynamicDraw@cModelInstance_s0073_afb0@SP@@QAEXPAX_N@Z  0073b8e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??0PartTransform@@QAE@ABU0@@Z  0073f1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?ReleaseRange@@YGXPAURCItem@@0@Z  0073f2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?Dispatch@ModelInstanceDispatch@@QAEHHH@Z  0073fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1BindingContainer@@QAE@XZ  007402e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetArray@ArrayHolder@@QAEXPAUDynArray@@@Z  00740370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?push_back@Vec12Vector@@QAEXABUVec12@@@Z  007411b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?ConstructFromArenaResource@cMI_Construct@@QAE_NPAUResBase@@@Z  00741a40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?insert@Vec8@@QAEPAURefPair8@@PAU2@PBU2@@Z  00741aa0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

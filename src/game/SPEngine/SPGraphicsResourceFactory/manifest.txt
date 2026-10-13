@@ -1,0 +1,19 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?AddRef@RefCounted@@QAEHXZ  00683f10  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??0CEditorRes@@QAE@XZ  00763100  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Shutdown@cGraphicsResourceFactory@SP@@UAE_NXZ  00763520  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?GetSupportedTypes@cGraphicsResourceFactory@SP@@UAEIPAII@Z  00763550  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?IsRegType@@YG_NIH@Z  00763580  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?ReadTriplets@@YG_NPAXHHH@Z  007638a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Init@cGraphicsResourceFactory@SP@@UAE_NXZ  007641c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??1D7642c0@@QAE@XZ  007642c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Wrap670@Loader@@QAEXH@Z  00764670  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?WrapDf0@Loader29@@QAEXH@Z  00765150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??1D765ac0@@QAE@XZ  00765ac0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?AsInterfaceFC@@YIPAXPAXHH@Z  00766030  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Method66070@ResB@@QAEXHH@Z  00766070  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?Method660b0@ResB@@QAEXXZ  007660b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ??0ResE@@QAE@XZ  00766220  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?UnionDestroy@@YAXPAXH@Z  007668c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?push_back@VPtr@@QAEXABI@Z  00766910  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsResourceFactory.cpp  ?WriteResource@cGraphicsResourceFactory_s0076_89a0@SP@@QAE_NPAX000@Z  00769200  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

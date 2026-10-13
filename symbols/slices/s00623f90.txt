@@ -1,0 +1,6 @@
+00624eb0 ?Shutdown@cCreatureCameraBase@SP@@UAE_NXZ  # SP::cCreatureCameraBase::Shutdown migrated from s00623f90
+00624ec0 ?Deactivate@cCreatureCameraBase@SP@@UAEXXZ  # SP::cCreatureCameraBase::Deactivate migrated from s00623f90
+00624f20 ?OnKeyDown@cCreatureCameraBase@SP@@UAE_NII@Z  # SP::cCreatureCameraBase::OnKeyDown migrated from s00623f90
+00624f70 ?OnKeyUp@cCreatureCameraBase@SP@@UAE_NII@Z  # SP::cCreatureCameraBase::OnKeyUp migrated from s00623f90
+00624f90 ?OnFocusChange@cCreatureCameraBase@SP@@UAEX_N@Z  # SP::cCreatureCameraBase::OnFocusChange migrated from s00623f90
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00623f90, named from the dev publics; slice address comment)

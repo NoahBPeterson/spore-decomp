@@ -1,0 +1,17 @@
+# va  diff-bytes  reason
+00624ec0 8 cCreatureCameraBase::Deactivate; complete; pServer load is hoisted above the three bool stores in mine
+006252c0 46 NormalizeTheta; complete, register allocation differs (c/K/t in different xmm regs)
+00625830 182 InitCameraData; complete, original schedules Vector3 ops differently (stores y,z,x; base edi reuse)
+00625a90 199 camera look-at lerp; complete, original uses Vector3 operator temps (different register scheduling)
+00625bf0 549 platform velocity integrator; complete, x87/SSE mix and temp scheduling differ
+00625e70 98 AimTowardsTarget: complete; compiler coalesces the six transient stack slots and schedules the x87 rsqrt differently
+00626290 22 ReloadTuning: complete (all 24 tuning-property reads); only the SSE register choice of the two phi *= deg-to-rad multiplies differs (orig loads member into xmm1, const into xmm0)
+006268a0 485 CalculateCameraToWorldMatrix: complete; cTransform field offsets/matrix expression order (x87 vs SSE) differ
+00626db0 236 GetCurrentCameraPosition: complete; cTransform member offsets/matrix expression schedule differ
+00626ee0 252 UpdateCamera_StandardControl: complete; the field-copy (newPlatformVelocity/quaternion) schedule differs
+00627000 32 GetAudioAnchorPosition: complete; the compiler reorders the three up*f products and reloads the up globals
+00627060 144 InitCreatureData: complete; clamp/desired-value expression order and depends offsets differ
+006271a0 44 translateTransform: complete; Matrix3::Assign/Accumulate thiscall shape differs
+00627660 1281 FUN_00627660: complete (camera ground push-out: 4 clearance queries, two tan(), acos pitch fix, CalculateCameraToWorldMatrix; 10 calls in the original order); not exact: x87/SSE operand scheduling and spill slots differ, `test byte,al` flag test not reproduced
+00627d50 6 cCreatureCameraBase::UpdateCamera; complete, zoom constants multiply order (dt*K1)*K2 differs
+00627eb0 343 cCreatureCameraBase::Update; complete, original lerps pre-translate through Vector3 operator temps (different schedule)

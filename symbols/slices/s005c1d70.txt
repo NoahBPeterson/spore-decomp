@@ -3,9 +3,16 @@
 005c20b0 SP::cSPPaletteCategory::~cSPPaletteCategory  # destroys mCategoryName/vectors
 005c2230 SP::cSPPaletteCategory::Shutdown  # dev-build symbol exists; clears pages/packs/subcategories
 005c2390 SP::cSPPaletteCategory::AddPage  # dev-build symbol; inserts by mSequenceNumber
-005c2590 SP::cSPPaletteCategoryUI::SetVisibleChunk  # dev-build symbol
-005c28b0 SP::cSPPaletteCategoryUI::Update  # PDB candidate (caller-single)
-005c2960 SP::cSPPaletteCategoryUI::SetVisibility  # dev-build symbol
-005c29e0 SP::cSPPaletteCategoryUI::GetPageIndexForPackID  # dev-build symbol
-005c2cd0 SP::cSPPaletteCategoryUI::IsPaintByNumber  # dev-build symbol (14 bytes)
-005c2ce0 SP::cSPPaletteCategoryUI::GetRegionFilterID  # dev-build symbol
+005c2590 ?SetVisibleChunk@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEXH@Z  # cSPPaletteCategoryUI_s005c_1d70::SetVisibleChunk migrated from s005c1d70 (verbatim, slice spelling)
+005c2660 ?SetButtonPositions@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEXXZ  # cSPPaletteCategoryUI_s005c_1d70::SetButtonPositions migrated from s005c1d70 (verbatim, slice spelling)
+005c28b0 ?Update@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEXH@Z  # cSPPaletteCategoryUI_s005c_1d70::Update migrated from s005c1d70 (verbatim, slice spelling)
+005c2940 ?IsVisible@cSPPaletteCategoryUI_s005c_1d70@SP@@QAE_NXZ  # cSPPaletteCategoryUI_s005c_1d70::IsVisible migrated from s005c1d70 (verbatim, slice spelling)
+005c2960 ?SetVisibility@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEX_N@Z  # cSPPaletteCategoryUI_s005c_1d70::SetVisibility migrated from s005c1d70 (verbatim, slice spelling)
+005c29a0 ?SetPageVisible@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEXH_N@Z  # cSPPaletteCategoryUI_s005c_1d70::SetPageVisible migrated from s005c1d70 (verbatim, slice spelling)
+005c29c0 ?IsPageVisible@cSPPaletteCategoryUI_s005c_1d70@SP@@QAE_NH@Z  # cSPPaletteCategoryUI_s005c_1d70::IsPageVisible migrated from s005c1d70 (verbatim, slice spelling)
+005c29e0 ?GetPageIndexForPackID@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEHI@Z  # cSPPaletteCategoryUI_s005c_1d70::GetPageIndexForPackID migrated from s005c1d70 (verbatim, slice spelling)
+005c2a30 ?GetChunkIndexForPackID@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEHI@Z  # cSPPaletteCategoryUI_s005c_1d70::GetChunkIndexForPackID migrated from s005c1d70 (verbatim, slice spelling)
+005c2aa0 ?GetNumPages@cSPPaletteCategoryUI@SP@@QAEHXZ  # SP::cSPPaletteCategoryUI::GetNumPages migrated from s005c1d70
+005c2bc0 ?IsPackUnique@cSPPaletteCategoryUI_s005c_1d70@SP@@QAE_NH@Z  # cSPPaletteCategoryUI_s005c_1d70::IsPackUnique migrated from s005c1d70 (verbatim, slice spelling)
+005c2cd0 ?IsPaintByNumber@cSPPaletteCategoryUI@SP@@QAE_NXZ  # SP::cSPPaletteCategoryUI::IsPaintByNumber migrated from s005c1d70
+005c2ce0 ?GetRegionFilterID@cSPPaletteCategoryUI_s005c_1d70@SP@@QAEIXZ  # cSPPaletteCategoryUI_s005c_1d70::GetRegionFilterID migrated from s005c1d70 (verbatim, slice spelling)

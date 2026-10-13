@@ -1,0 +1,4 @@
+0046eae0 ?DumpEditorModelZPR@EditorUtils@SP@@YAXPAUEditorModelSource@@PB_W@Z  # None migrated from s0046e450 (verbatim, slice spelling)
+0046f140 ?init@Desc@@QAEPAU1@HHPAUBaseDesc@@H@Z  # Desc::init migrated from s0046e450 (verbatim, slice spelling)
+0046f1f0 ?init0@Desc@@QAEPAU1@XZ  # Desc::init0 migrated from s0046e450 (verbatim, slice spelling)
+0046f260 ?FUN_0046f260@@YIHPAUSf260@@@Z  # FUN_0046f260 migrated from s0046e450 (verbatim, slice spelling)

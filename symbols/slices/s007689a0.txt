@@ -1,3 +1,5 @@
-# s007689a0 recovered names
 007689a0 SP::cGraphicsResourceFactory::WriteResourceGameModel  # PDB candidate; thiscall(model, stream) ret 8, writes keys/index+vertex buffers/vertex descriptors/mesh refs/material flags
-00769200 SP::cGraphicsResourceFactory::WriteResource  # PDB candidate; thiscall(obj, src, u3, u4) ret 0x10; type switch over resource type ids (byte-exact)
+00769200 ?WriteResource@cGraphicsResourceFactory_s0076_89a0@SP@@QAE_NPAX000@Z  # WriteResource migrated from s007689a0 (verbatim, slice spelling)
+011f3620 ?D3D9Lock@VertexBuffer@graphics@rw@@QAEPAXIII@Z  # rw::graphics::VertexBuffer::D3D9Lock (callee of s007689a0, named from the dev publics; slice address comment)
+011f4f20 ?Lock@IndexBuffer@graphics@rw@@QAEPAV123@IAAULocked@123@@Z  # rw::graphics::IndexBuffer::Lock (callee of s007689a0, named from the dev publics; slice address comment)
+011f4fd0 ?Unlock@IndexBuffer@graphics@rw@@QAEPAV123@AAULocked@123@@Z  # rw::graphics::IndexBuffer::Unlock (callee of s007689a0, named from the dev publics; slice address comment)

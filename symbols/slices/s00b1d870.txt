@@ -22,8 +22,8 @@
 00b1f640 New_cSolarSystem  # operator new 0x54 "Simulator/cSolarSystem"
 00b1f790 New_cTribePlanner  # operator new 0x7c "Simulator/cTribePlanner"
 00b1f960 FUN_00b1f960  # layout/effect toggle
-00b1f9d0 GetPlayerEmpireOrMinus1  # switch over GetCurrentGameMode
+00b1f9d0 ?GetPlayerEmpireOrMinus1@@YAHXZ  # GetPlayerEmpireOrMinus1 migrated from s00b1d870 (verbatim, slice spelling)
 00b1fbb0 FUN_00b1fbb0  # subsystem init-state query
-00b1fbf0 UTFWin::Window::Initialize  # PDB name; returns true
-00b1fc30 New_cMissionHappinessEvent  # operator new 0x1f0 "Simulator/cMissionHappinessEvent"
+00b1fbf0 ?Initialize@Window@UTFWin@@QAE_NXZ  # Window::Initialize migrated from s00b1d870 (verbatim, slice spelling)
+00b1fc30 ?New_cMissionHappinessEvent@@YAPAXXZ  # New_cMissionHappinessEvent migrated from s00b1d870 (verbatim, slice spelling)
 00b1fc80 FUN_00b1fc80  # cVarListSerializer round-trip

@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0059ace0 28 complete ctor; float-global load/store scheduling differs from original
+0059c060 130 manager::Init: complete; callee-saved register assignment swapped (param in ebp vs original ebx) and AutoRefCount operator= scheduling
+0059c190 313 Matrix3FromQuaternion: complete; original fills the stack temp with a different float-op schedule / register allocation [equiv: PASS 1200/1200, 100% cov]

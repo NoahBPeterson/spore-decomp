@@ -1,0 +1,3 @@
+00469500 ??0S45a@@QAE@HHHHH@Z  # S45a::S45a migrated from s00469500 (verbatim, slice spelling)
+00469550 ?init@S45b@@QAEPAU1@HHHHH@Z  # S45b::init migrated from s00469500 (verbatim, slice spelling)
+004696d0 ??4S45c@@QAEAAU0@ABU0@@Z  # S45c::operator= migrated from s00469500 (verbatim, slice spelling)

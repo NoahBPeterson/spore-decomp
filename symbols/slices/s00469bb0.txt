@@ -1,1 +1,3 @@
-00469bb0  SP::EditorUtils::BuildEditorCreature  # dc: builds runtime creature + baby transform list, submits up to 3 model builds via 0x467a20
+0040efa0 ?Invert@cSPTransform@@QAEXXZ  # cSPTransform::Invert (callee of s00469bb0, named from the dev publics; slice address comment)
+00469bb0 ?BuildEditorCreature@@YAXPAUEdCtx@@PAUKeyArg@@HIIPAUCJob@@@Z  # BuildEditorCreature migrated from s00469bb0 (verbatim, slice spelling)
+0046a630 ??0S630@@QAE@ABU0@@Z  # S630::S630 migrated from s00469bb0 (verbatim, slice spelling)

@@ -1,13 +1,14 @@
-# s00765f80 recovered names
-00766030 ?AsInterfaceFC  # vtable 0x140e118 slot 3; type -> this / this+0x1c / base::AsInterface
-00766070 ResB::Method66070  # secondary vtable 0x140e0f8 slot 4; releases Arena at this-4
-007660b0 ResB::Method660b0  # secondary vtable 0x140e0f8 slot 5; forwards to container helper at this+4
-00765fe0 ResB::ResB  # ctor: vtables 0x13ebcdc -> 0x140e118 and 0x140e054 -> 0x140e0f8, AtomicInt refcount +4
-00766220 ResE::ResE  # ctor: vtables 0x13ebcdc -> 0x140e12c, AtomicInt refcount +4
+00765f80 ??1IResEd@@UAE@XZ  # IResEd::~IResEd migrated from s00765f80 (verbatim, slice spelling)
+00765fe0 ??0ResB@@QAE@XZ  # ResB::ResB migrated from s00765f80 (verbatim, slice spelling)
+00766030 ?AsInterfaceFC@@YIPAXPAXHH@Z  # AsInterfaceFC migrated from s00765f80 (verbatim, slice spelling)
+00766070 ?Method66070@ResB@@QAEXHH@Z  # ResB::Method66070 migrated from s00765f80 (verbatim, slice spelling)
+007660b0 ?Method660b0@ResB@@QAEXXZ  # ResB::Method660b0 migrated from s00765f80 (verbatim, slice spelling)
+00766100 ?MoveOut@ResB@@QAEXPAX@Z  # ResB::MoveOut migrated from s00765f80 (verbatim, slice spelling)
+00766220 ??0ResE@@QAE@XZ  # ResE::ResE migrated from s00765f80 (verbatim, slice spelling)
 00766250 ResE::~ResE  # dtor: releases +0x18 (cLocalLightInfo) via 0x11eff60/0x9276c0
 007662d0 VBig::_insert  # vector (stride 0xa0) insert(pos,n,value)
-007668c0 UnionDestroy  # cUnionType Destroy: switch(4,3,2,1) with tailcalls 0x765ac0/0x7643d0
-00766910 VPtr::push_back  # vector<uint32_t> push_back
-00766950 V4::insert  # vector<uint32_t> insert(pos,n,value)
+007668c0 ?UnionDestroy@@YAXPAXH@Z  # UnionDestroy migrated from s00765f80 (verbatim, slice spelling)
+00766910 ?push_back@VPtr@@QAEXABI@Z  # VPtr::push_back migrated from s00765f80 (verbatim, slice spelling)
+00766950 ?insert@V4@@QAEXPAIIABI@Z  # V4::insert migrated from s00765f80 (verbatim, slice spelling)
 00766e10 ReadDecalBlock  # painter decal reader; stream vcall at +0x28 slot 0xc
-00766ed0 Factory::CreateResource  # SP::cGraphicsResourceFactory::CreateResource
+00766ed0 ?CreateResource@Factory@@QAE_NPAHPAPAXHH@Z  # Factory::CreateResource migrated from s00765f80 (verbatim, slice spelling)

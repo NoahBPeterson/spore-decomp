@@ -1,0 +1,4 @@
+007641c0 ?Init@cGraphicsResourceFactory@SP@@UAE_NXZ  # SP::cGraphicsResourceFactory::Init migrated from s00763cb0
+007642c0 ??1D7642c0@@QAE@XZ  # D7642c0::~D7642c0 migrated from s00763cb0 (verbatim, slice spelling)
+00764670 ?Wrap670@Loader@@QAEXH@Z  # Loader::Wrap670 migrated from s00763cb0 (verbatim, slice spelling)
+007646a0 ?Wrap6a0@Loader@@QAEXH@Z  # Loader::Wrap6a0 migrated from s00763cb0 (verbatim, slice spelling)

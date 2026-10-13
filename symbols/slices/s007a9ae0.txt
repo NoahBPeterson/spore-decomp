@@ -1,4 +1,7 @@
-007a9eb0 eastl::hashtable<SP::cArenaResource *,SP::cArenaResource *,eastl::allocator,eastl::use_self<SP::cArenaResource *>,eastl::equal_to<SP::cArenaResource *>,eastl::hash<SP::cArenaResource *>,eastl::mod_range_hashing,eastl::default_ranged_hash,eastl::prime_rehash_policy,0,0,1>::DoFreeNodes  # pdb_names.json
+007a9d70 ?FUN_007a9d70@@YAXPAPAHPAH10110@Z  # FUN_007a9d70 migrated from s007a9ae0 (verbatim, slice spelling)
+007a9eb0 ?FUN_007a9eb0@@YAXPAH@Z  # FUN_007a9eb0 migrated from s007a9ae0 (verbatim, slice spelling)
 007aa0d0 SP::cTextureManager::AddTextureLoadDependency  # pdb_names.json
 007aa200 SP::cTextureManager::ReloadTexture  # pdb_names.json
-007aa800 SP::cNodeAllocator<SP::cTextureInstanceInternal>::Create  # pdb_names.json
+007aa3a0 ?Transfer@JobSlots@@QAEHH@Z  # JobSlots::Transfer migrated from s007a9ae0 (verbatim, slice spelling)
+007aa800 ?Create@cNodeAllocator@@QAEPAUChunk@@XZ  # cNodeAllocator::Create migrated from s007a9ae0 (verbatim, slice spelling)
+007aa850 ?PushBack@DequeMap@@QAEXPAH@Z  # DequeMap::PushBack migrated from s007a9ae0 (verbatim, slice spelling)

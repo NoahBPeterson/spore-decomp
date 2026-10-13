@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?Shutdown@cCreatureCameraBase@SP@@UAE_NXZ  00624eb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnKeyDown@cCreatureCameraBase@SP@@UAE_NII@Z  00624f20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnKeyUp@cCreatureCameraBase@SP@@UAE_NII@Z  00624f70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnFocusChange@cCreatureCameraBase@SP@@UAEX_N@Z  00624f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnMouseUp@cCreatureCameraBase@SP@@UAE_NIMMI@Z  00624fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnMouseMove@cCreatureCameraBase@SP@@UAE_NMMI@Z  00625010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnMouseWheel@cCreatureCameraBase@SP@@UAE_NHMMI@Z  006251f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?Zoom@cCreatureCameraBase@SP@@QAEXM@Z  00625270  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?RotateLeftRight@cCreatureCameraBase@SP@@QAEXM@Z  006252a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?OnMouseDown@cCreatureCameraBase@SP@@UAE_NIMMI@Z  006254f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?InitAvatarData@cCreatureCameraDepends_s0062_4fb0@SP@@QAEXXZ  006256a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?Activate@cCreatureCameraBase_s0062_6db0@@QAEXXZ  00627ca0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPCreatureCameraBase.cpp  ?SetTargetOffset@cCreatureCameraDepends_s0062_7d50@SP@@QAEXUVector3Copy@@_N@Z  006280d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

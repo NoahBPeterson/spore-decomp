@@ -1,0 +1,4 @@
+0043f050 ?AddPoint@cSPBoundingBox@@QAEXABUcSPVector3@@@Z  # cSPBoundingBox::AddPoint (callee of s00470bd0, named from the dev publics; slice address comment)
+00470bd0 ?FUN_00470bd0@@YAPAUVec2_s0047_0bd0@@PAU1@PAUBox@@H1HM@Z  # FUN_00470bd0 migrated from s00470bd0 (verbatim, slice spelling)
+00470f20 ?FUN_00470f20@@YAMPAUVec4@@@Z  # FUN_00470f20 migrated from s00470bd0 (verbatim, slice spelling)
+00478300 ??4Variant@EA@@QAEAAU01@ABU01@@Z  # EA::Variant::operator= (callee of s00470bd0, named from the dev publics; slice address comment)

@@ -1,1 +1,1 @@
-00518f10 ?Render@cPaintAmbOccJob@nSPSkinner@@UAE_NXZ  # PDB candidate name from card
+00518f10 ?Render@cPaintAmbOccJob_s0051_8f10@nSPSkinner@@UAE_NXZ  # cPaintAmbOccJob_s0051_8f10::Render migrated from s00518f10 (verbatim, slice spelling)

@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?DeviceRelease@@YAXXZ  0075d950  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?SetViewer@cRenderer@@QAEXHPAX@Z  0075daa0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?GetRenderStats@cRenderer@@QAEPAXH@Z  0075dad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?LayerAtIndex@cRenderer@@QAEXH@Z  0075dbb0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?CheckDeviceReady@DevLatch@@QAE_NXZ  0075dbe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?slot_35@cRenderer@SP@@UAEXXZ  0075dc10  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?LayerInfoAt@cRenderer_s0075_de80@@QAEPAXH@Z  0075e370  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsRenderer.cpp  ?Copy@Elem@@QAEPAU1@PAU1@@Z  0075ee90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

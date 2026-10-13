@@ -1,0 +1,9 @@
+# va  diff-bytes  reason
+005c2a30 53 GetChunkIndexForPackID: register allocation (orig keeps index on stack, this in ebp; reloads packs[i] via address)
+005c31c0 158 UpdatePreviewSwatch: orig defers the AddBoundingBox arg pop into the final add esp,0x28 and uses or [mem],8; mine pops immediately (8-byte shift)
+005c3a50 2 OnPageChanged: message mID store scheduled after the base vptr store (orig stores the id first)
+005c4500 652 PopulateExpansionPackPane: complete (hide/show pane, pack buttons, tooltips); button creation split into a helper and the two near-identical loops merged; difftest WEAK (10% coverage: the pane is only built when image singletons such as 0x15fd918 allow it; after mapping operator new/delete to 0xf473a0/0xf47380 and cSPUILayout::cSPUILayout to 0x810000 via symbols/slices/s005c4500.txt, overriding a PDB-guess name at 0xdd1ca0)
+005c4e40 485 Shutdown: complete; register allocation and inline erase scheduling differ; difftest WEAK after fixing the this pointers of two calls (FUN_005c41b0 is called on the vector at +0xe8, FUN_005ca7b0 on mSubCategoryUI, both were called on this)
+005c50b0 215 SelectPalette: complete; register allocation differs; difftest FAIL is a checker artifact: an in-class '// @ 0x005c50b0' marker made it test ClearPalettes (the next out-of-class definition) instead of SelectPalette; markers removed from the class body, now PASS
+005c51e0 381 SetCategory: complete; register allocation / spill slots differ
+005c53c0 882 cSPPaletteCategoryUI::Init: complete; vcall register choice (eax/edx swap), 4-byte frame difference
