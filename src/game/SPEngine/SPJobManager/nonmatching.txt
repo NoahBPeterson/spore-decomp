@@ -1,4 +1,32 @@
 # va  diff-bytes  reason
 0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs
 0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ
+0068f670 117 complete; ready-list bit-scan register/scheduling near-miss
+0068f700 133 complete; GetFreeWaitNode list pop + alloc near-miss
+0068f970 23 complete; extra mov eax,edi after the base-to-derived cast
+0068f9f0 55 complete; register allocation near-miss on the mutex-guarded store
+0068fd40 50 complete; PreShutdown loop shape near-miss
+0068fed0 111 complete; IsAffinityInUse scan ordering near-miss
+0068ffb0 21 complete; cmov max-priority near-miss
+0068fff0 49 complete; priority-insert loop register allocation near-miss
+00690050 78 complete; head-pop list idiom near-miss
+006900b0 28 complete; wrapper call shape near-miss (FreeJobUnderLock args)
+00690120 17 complete; Release refcount decrement shape differs
+00690540 181 complete; ScheduleJob signalling shape near-miss
+006907e0 102 complete; QueueJobUnderLock EH/register near-miss
+006908a0 104 complete; PromoteJobPriorityUnderLock register near-miss
+00690930 83 complete; SetJobPriorityUnderLock register near-miss
+006909b0 14 complete; Queue two-step manager load near-miss
+00690b50 62 complete; CheckDependentPriority near-miss
+00691260 149 complete; AddJobDependency (deps/dependents list splice) near-miss
+00691380 27 complete; AddDependency wrapper shape near-miss
+006913c0 28 complete; AddWeakDependency wrapper shape near-miss
+00691680 1337 complete CircularRef (bidirectional job-dependency search, fixed hash sets + stacks); frame slot offsets shifted 4, EH/dtor layout differs
+00691d30 417 complete RunJob; list-unlink/relink scheduling and edi/ebp register choice differ
+00691f60 163 complete RunUnderLock; register allocation (ebx/esi order) and ran flag spill differ
+00692080 71 complete; AddWaitingJob scoped-lock register swap (esi/edi)
+006920f0 63 complete; FlushWaiting scoped-lock register swap (esi/edi)
+00692150 223 complete WaitForJobUnderLock; only ebx/ebp register swap (this vs job)
+00692330 116 complete CancelJob; mutex pointer kept in ebp in original, reloaded from the lock object here
+00692430 272 complete DestroyJobThread; register allocation (ebx/ebp) and zeroing order differ
 006925c0 62 complete; Run scoped-lock/helper near-miss

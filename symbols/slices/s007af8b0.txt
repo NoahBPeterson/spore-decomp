@@ -2,7 +2,7 @@
 007afae0 ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  # cRowJobData::StepDown migrated from s007af8b0 (verbatim, slice spelling)
 007afb70 ?DXTCompressRow@cDXTCompressJobData@@QAEHH@Z  # cDXTCompressJobData::DXTCompressRow migrated from s007af8b0 (verbatim, slice spelling)
 007afe10 ?RunJob@cDXTCompressJobData@@QAE_NPAUCJob@@@Z  # cDXTCompressJobData::RunJob migrated from s007af8b0 (verbatim, slice spelling)
-007aff00 SP::WriteImageDataAsTexture  # PDB name
+007aff00 ?WriteImageDataAsTexture@@YA_NPAXHHPAPAX@Z  # WriteImageDataAsTexture migrated from s007af8b0 (verbatim, slice spelling)
 007b00f0 Graphics::BakeSprites::BakeSprites  # vtable_names.txt vt
-007b07e0 SP::cTexturePreload::cTexturePreload  # PDB name
+007b07e0 ??0cTexturePreload@SP@@QAE@H@Z  # SP::cTexturePreload::cTexturePreload migrated from s007af8b0
 007b0980 ?VecAssign@@YAPAPAXPAPAX0@Z  # VecAssign migrated from s007af8b0 (verbatim, slice spelling)

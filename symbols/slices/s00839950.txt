@@ -10,7 +10,7 @@
 0083a310 ?DestroyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # DestroyOptionsRange migrated from s00839950 (verbatim, slice spelling)
 0083a3c0 ?DoInsertValue@VecArgInfo@@QAEXPAUcArgInfo@@ABU2@@Z  # VecArgInfo::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
 0083a580 ?DoInsertValue@VecEnumSpec@@QAEXPAUcEnumSpec@@ABU2@@Z  # VecEnumSpec::DoInsertValue migrated from s00839950 (verbatim, slice spelling)
-0083a740 ?4VecArgInfo  # PDB candidate
-0083a8b0 ?4cOptionsSpec  # PDB candidate (caller-single)
+0083a740 ??4VecArgInfo@@QAEAAU0@ABU0@@Z  # VecArgInfo::operator= migrated from s00839950 (verbatim, slice spelling)
+0083a8b0 ??4cOptionsSpec@@QAEAAU0@ABU0@@Z  # cOptionsSpec::operator= migrated from s00839950 (verbatim, slice spelling)
 0083a900 ?CopyOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyOptionsRange migrated from s00839950 (verbatim, slice spelling)
 0083a970 ?CopyBackwardOptionsRange@@YAPAUcOptionsSpec@@PAU1@00@Z  # CopyBackwardOptionsRange migrated from s00839950 (verbatim, slice spelling)

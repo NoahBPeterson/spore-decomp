@@ -25,6 +25,8 @@ class IPAddress : public EA::Sockets::Address /* +0x0 */ {
     kDefaultAddressAnyPort = 0,
     kDefaultAddressAnyAddress = 0,
   };
+  static unsigned int LookupName(char const *, unsigned int);            // 0x0094c1b0
+  static bool GetCurrentMachineAddress(EA::Sockets::IPAddress &, unsigned int); // 0x0094c1d0
   static unsigned short ConvertToLocalOrder(unsigned short);             // dev only
   void SetAddress(unsigned int);                                         // dev only
   void SetAddress(char const *);                                         // dev only
@@ -38,9 +40,7 @@ class IPAddress : public EA::Sockets::Address /* +0x0 */ {
   static unsigned int ConvertNumericAddressToNumber(char const *);       // dev only
   static unsigned int ConvertAddressToNumericString(unsigned int, char *, bool); // dev only
   static bool IsAddressNumeric(char const *);                            // dev only
-  static unsigned int LookupName(char const *, unsigned int);            // dev only
   static bool GetCurrentMachineName(char *, unsigned int);               // dev only
-  static bool GetCurrentMachineAddress(EA::Sockets::IPAddress &, unsigned int); // dev only
   static EA::Sockets::IPAddress::Class GetClass(unsigned int);           // dev only
   EA::Sockets::IPAddress::Class GetClass() const;                        // dev only
   IPAddress(char const *, unsigned short);                               // dev only

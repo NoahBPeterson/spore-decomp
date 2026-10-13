@@ -1,15 +1,20 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
 007ada40 369 COMPLETE mapblock (DXT1 index mapper); original uses custom register convention for mappixel and different loop scheduling; difftest FAIL is a checker artifact: the callee mappixel (0x007ad2e0) takes pix in ecx and pal in eax (usercall); our __fastcall stand-in passes pal in edx, so the call into the real original callee reads a garbage eax and faults
+007adcf0 433 COMPLETE MMX nearest-endpoint mapper via intrinsics; cl adds ebp frame/spills the original does not have
 007ade70 285 COMPLETE rtrymapblock (byte-channel error sum); palette build scheduling differs
 007ae0b0 210 COMPLETE rbtrymapblock; rbmappixel uses edx/esi register convention in original; difftest FAIL is a checker artifact: the callee rbmappixel (0x007ad760) takes pix in edx and pal in esi (usercall); our cdecl stand-in passes them on the stack, so the call into the real original callee reads a garbage esi and faults
 007ae2a0 648 COMPLETE RefineMinMaxColors; original takes pixel ptr in esi (usercall)
 007ae5b0 177 COMPLETE alpha nibble interleave; original takes src in eax, dst in esi, stride in edi (usercall)
+007ae660 183 COMPLETE InterpolatedAlphaBlock; original usercall (eax/ecx/edi regs), loop fully unrolled
 007ae840 197 COMPLETE MMX 4x4 min/max reduction via intrinsics; cl emits ebp frame and spills, original is frameless
 007ae920 46 COMPLETE span/scanline descriptor init; store sequence is identical but `this` lives in eax in the original and in ecx here, so every operand register differs.
+007aeab0 2281 COMPLETE findendpoints (equiv now FAIL: 5/5 mismatched, ours faults at 0x7ad81e in trymapblock; made EndpointColors member so colors arrive in ECX) (DXT 565 endpoint search, all quality tiers/early-outs/skip heuristics). Not byte-exact: the original's same-TU helpers use compiler-chosen register conventions (colors in ecx; trymapblock c0/c1 in ecx/eax) that need trymapblock's body (slice s007acbb0) in this TU; here cdecl with the same argument values.
 007af5d0 34 COMPLETE conditional copy/fill loop over 0x20-byte endpoints; loop-carried `first`/`dest` land in the opposite registers (ecx/eax swapped), so every operand byte differs.
 007af6d0 33 COMPLETE backward copy over 0x20-byte endpoints; loop-carried `last`/`dest` land in the opposite registers.
 007afb70 564 SP::cDXTCompressJobData::DXTCompressRow: full row/block copy + eadxt calls, loop/register shape differs
 007afe10 130 SP::cDXTCompressJobData::RunJob: full row loop + completion, scheduling differs
+007aff00 191 SP::WriteImageDataAsTexture: full texture upload + per-mip sizing, register/loop shape differs
+007b07e0 73 SP::cTexturePreload ctor: EH state + burn/final vptr ordering differs
 007b0980 164 eastl vector assignment: helper call arg order/scheduling differs
 007b0a70 315 eastl::vector<T20>::grow/DoInsertValue: allocation + move helpers, scheduling differs
 007b0da0 100 eastl::vector<Ref4>::assign: copy/destroy call ordering differs

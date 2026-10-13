@@ -19,5 +19,5 @@
 00942050 ?FindHeader@HTTPClient@@QAE_NPADPAXH@Z  # HTTPClient::FindHeader migrated from s009413d0 (verbatim, slice spelling)
 009420e0 EA::Internet::HTTPClient::FindHeaderByField  # dc: HeaderFieldToFieldString + FindHeader
 00942110 ?HTTPClientSendCallback@@YAXHPBDH@Z  # HTTPClientSendCallback migrated from s009413d0 (verbatim, slice spelling)
-00942150 ?SetNotificationTarget@HTTPClient@@QAEXPAX0@Z  # HTTPClient::SetNotificationTarget migrated from s009413d0 (verbatim, slice spelling)
+00942150 ?SetNotificationTarget@HTTPClient@Internet@EA@@QAEXP6AXPAXPAV123@IPAUJob@123@PAUJobUpdate@123@@Z0@Z  # EA::Internet::HTTPClient::SetNotificationTarget migrated from s009413d0
 009421b0 EA::Internet::HTTPClient::Pump  # dc: stream read loop

@@ -12,7 +12,7 @@
 00689b00 ?SetCommandDispatcher@cCommandServer@SP@@UAE_NPAVcICommandDispatcher@2@@Z  # SP::cCommandServer::SetCommandDispatcher migrated from s00688dd0
 00689b40 ?ExecuteCommand@cCommandServer@SP@@UAEHIPAVcICommandParameterSet@2@0@Z  # SP::cCommandServer::ExecuteCommand migrated from s00688dd0
 00689b60 ?ExecuteCommand@cCommandServer@SP@@UAEHPBV?$basic_string@_WVallocator@eastl@@@eastl@@PAVcICommandParameterSet@2@@Z  # SP::cCommandServer::ExecuteCommand migrated from s00688dd0
-00689be0 ??AParamSet@@QAEPAXI@Z  # None migrated from s00688dd0 (verbatim, slice spelling)
+00689be0 ??AParamSet@@QAEPAXI@Z  # ParamSet::operator[] migrated from s00688dd0 (verbatim, slice spelling)
 00689c20 ?GetParameter@ParamSet@@QAEPAXI@Z  # ParamSet::GetParameter migrated from s00688dd0 (verbatim, slice spelling)
 00689c50 ?AppendParameter@ParamSet@@QAEXI@Z  # ParamSet::AppendParameter migrated from s00688dd0 (verbatim, slice spelling)
 00689c80  SP::cCommandParameterSet::SetStatusParameterValue  # Ghidra PDB candidate

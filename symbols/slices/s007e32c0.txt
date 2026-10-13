@@ -1,5 +1,5 @@
 007e32c0 eastl::vector<SP::cAppStateManager::cActionMessage>::DoInsertValue  # vector grow/insert
-007e34a0 ??4cActions@@QAEAAU0@ABU0@@Z  # None migrated from s007e32c0 (verbatim, slice spelling)
+007e34a0 ??4cActions@@QAEAAU0@ABU0@@Z  # cActions::operator= migrated from s007e32c0 (verbatim, slice spelling)
 007e34f0 `anonymous namespace'::cTransitionCommand::Execute  # PDB name
 007e3610 SP::cAppStateManager::HandleMessage  # PDB name
 007e3b40 FUN_007e3b40  # large dispatch helper

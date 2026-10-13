@@ -26,7 +26,7 @@ class cPropertyList : public SP::cResourceBase /* +0x0 */ {
   // vtable retail address unknown ((retail vtable not located)): 19 retail slots, 19 dev slots
   virtual int AddRef();                                                  // slot 0, 0x00432be0, inherited from SP::cResourceBase
   virtual int Release();                                                 // slot 1, 0x00432b50, inherited from SP::cResourceBase
-  virtual ~cPropertyList();                                              // slot 2, (no retail slot), dtor body dev only
+  virtual ~cPropertyList();                                              // slot 2, (no retail slot), dtor body 0x00686320
   virtual void * AsInterface(EA::COM::InterfaceId);                      // slot 3, 0x006abe20, inherited from SP::cResourceBase
   virtual int GetRefCount();                                             // slot 4, (no retail slot), inherited from SP::cResourceBase
   virtual void SetProperty(unsigned int, EA::Variant const &);           // slot 5, 0x006a2e20
@@ -44,9 +44,9 @@ class cPropertyList : public SP::cResourceBase /* +0x0 */ {
   virtual void GetPropertyIDs(eastl::vector<unsigned int, eastl::sp_vector_allocator> *); // slot 17, (no retail slot)
   virtual void ClearProperties();                                        // slot 18, (no retail slot)
 
+  unsigned int GetModificationCount() const;                             // 0x006237a0
   cPropertyList(char const *);                                           // 0x006a1b90
   char const * GetDescription(unsigned int) const;                       // 0x006a25a0
-  unsigned int GetModificationCount() const;                             // dev only
   SP::cPropertyList * GetParent() const;                                 // dev only
   void SetDescription(unsigned int, char const *);                       // dev only
   void SetParent(SP::cPropertyList *);                                   // dev only

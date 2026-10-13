@@ -4,4 +4,4 @@
 0083afc0 ?ParseArgument@cArgumentSpec_s0083_a9f0@@QAEHPAUcArgInfo_s0083_a9f0@@PBD@Z  # cArgumentSpec_s0083_a9f0::ParseArgument migrated from s0083a9f0 (verbatim, slice spelling)
 0083b1d0 ?ParseArgumentEx@cArgumentSpec_s0083_a9f0@@QAEHPAUcArgInfo_s0083_a9f0@@PBDPAUArgParser@@@Z  # cArgumentSpec_s0083_a9f0::ParseArgumentEx migrated from s0083a9f0 (verbatim, slice spelling)
 0083b580 ?ParseOptionArgs@cArgumentSpec_s0083_a9f0@@QAEHPAUcOptionsSpec_s0083_a9f0@@PAPAHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_a9f0::ParseOptionArgs migrated from s0083a9f0 (verbatim, slice spelling)
-0083b6d0 EA::ArgScript::cArgumentSpec::ParseOption  # PDB anchor
+0083b6d0 ?ParseOption@cArgumentSpec_s0083_a9f0@@QAEHPAPAHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_a9f0::ParseOption migrated from s0083a9f0 (verbatim, slice spelling)

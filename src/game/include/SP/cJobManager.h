@@ -16,18 +16,9 @@ namespace SP { class JobWaitNode; class cJob; class cJobThread; struct JobDepend
 
 namespace SP {
 
-// dev size 0x1b8 -> retail size 0x1b8 (1 members exact-backed, 10 conflicts, 0 retail-only, 10 unverified)
-// evidence: view s0068f670 is the evidence: 1 of 11 shared members agree with the re-laid offsets, 1 byte-exact users, shifts [0, 4, 48], declared size 0x1e4
-// evidence: conflict: mJobReadyCondition re-laid 0x38, view has 0x3c
-// evidence: conflict: mJobReadyOrSyncCondition re-laid 0x40, view has 0x44
-// evidence: conflict: mJobs re-laid 0x48, view has 0x4c
-// evidence: conflict: mReadyList re-laid 0x90, view has 0x94
-// evidence: conflict: mValidAffinities re-laid 0x190, view has 0x194
-// evidence: conflict: mThreads re-laid 0x194, view has 0x198
-// evidence: conflict: mpSyncThread re-laid 0x19c, view has 0x1cc
-// evidence: conflict: mFreeLinks re-laid 0x1a0, view has 0x1d0
-// evidence: conflict: mFreeWaitNodes re-laid 0x1a8, view has 0x1d8
-// evidence: conflict: mInitThreadFunc re-laid 0x1b0, view has 0x1e0
+// dev size 0x1b8 -> retail size 0x1e8 (override)
+// evidence: view s0068f670 is the evidence: 11 of 11 shared members agree with the re-laid offsets, 1 byte-exact users, shifts [0], declared size 0x1e4
+// evidence: override applied: retail cJobManager is 0x1e4 (dev 0x1b8): 0x68f540 locks mMutex [esi+8] then `inc dword ptr [esi+0x38]` (a lock-depth int the dev PDB lacks; the s00691680 view calls it mLockCount, 'recursive lock depth, saved across waits'), so mJobReadyCondition is 0x3c and mReadyList 0x94 (GetRunnableJob 0x68f6cb `lea ecx,[ebx+ecx*8+0x94]`); Init 0x690330 uses mValidAffinities [+0x194], mThreads [+0x198], mpSyncThread [+0x1cc] and mInitThreadFunc [+0x1e0], GetFreeLink 0x690050 mFreeLinks [+0x1d0]: 0x2c retail-only bytes after mThreads, which the views s006907e0/s00691680 spell int mActiveJobCount +0x1a0, a 0x14-byte eastl vector mWaitingThreads +0x1a4 and mWaitingPriorities +0x1b8 (element types not established: opaque blobs) (fix pass 2, 2026-10-13)
 #pragma pack(push, 8)
 class cJobManager : public SP::cIJobManager /* +0x0 */ {
  public:
@@ -85,19 +76,23 @@ class cJobManager : public SP::cIJobManager /* +0x0 */ {
 
  public:  // data (retail offsets)
   EA::Thread::Mutex mMutex;                                    // 0x008 exact:s0068f670
-  SP::JobCondition mJobReadyCondition;                         // 0x038 relaid!view:s0068f670 has 0x3c
-  SP::JobCondition mJobReadyOrSyncCondition;                   // 0x040 relaid!view:s0068f670 has 0x44
-  unsigned char mJobs[0x48] /* eastl::intrusive_list<SP::cJobData>[9]: no hand template for eastl::intrusive_list */; // 0x048 relaid!view:s0068f670 has 0x4c
-  unsigned char mReadyList[0x100] /* eastl::intrusive_list<SP::cJobData>[32]: no hand template for eastl::intrusive_list */; // 0x090 relaid!view:s0068f670 has 0x94
-  unsigned int mValidAffinities;                               // 0x190 relaid!view:s0068f670 has 0x194
-  unsigned char mThreads[0x8] /* eastl::intrusive_list<SP::JobThreadNode>: no hand template for eastl::intrusive_list */; // 0x194 relaid!view:s0068f670 has 0x198
-  SP::cJobThread* mpSyncThread;                                // 0x19c relaid!view:s0068f670 has 0x1cc
-  unsigned char mFreeLinks[0x8] /* eastl::intrusive_list<SP::JobDependencyNode>: no hand template for eastl::intrusive_list */; // 0x1a0 relaid!view:s0068f670 has 0x1d0
-  unsigned char mFreeWaitNodes[0x8] /* eastl::intrusive_list<SP::JobWaitNode>: no hand template for eastl::intrusive_list */; // 0x1a8 relaid!view:s0068f670 has 0x1d8
-  void (*mInitThreadFunc)();                                   // 0x1b0 relaid!view:s0068f670 has 0x1e0
+  int mnLockCount;                                             // 0x038 relaid
+  SP::JobCondition mJobReadyCondition;                         // 0x03c exact:s0068f670
+  SP::JobCondition mJobReadyOrSyncCondition;                   // 0x044 exact:s0068f670
+  unsigned char mJobs[0x48] /* eastl::intrusive_list<SP::cJobData>[9]: no hand template for eastl::intrusive_list */; // 0x04c exact:s0068f670
+  unsigned char mReadyList[0x100] /* eastl::intrusive_list<SP::cJobData>[32]: no hand template for eastl::intrusive_list */; // 0x094 exact:s0068f670
+  unsigned int mValidAffinities;                               // 0x194 exact:s0068f670
+  unsigned char mThreads[0x8] /* eastl::intrusive_list<SP::JobThreadNode>: no hand template for eastl::intrusive_list */; // 0x198 exact:s0068f670
+  int mnActiveJobCount;                                        // 0x1a0 relaid
+  unsigned char mWaitingThreads[20];                           // 0x1a4 relaid
+  unsigned char mWaitingPriorities[20];                        // 0x1b8 relaid
+  SP::cJobThread* mpSyncThread;                                // 0x1cc exact:s0068f670
+  unsigned char mFreeLinks[0x8] /* eastl::intrusive_list<SP::JobDependencyNode>: no hand template for eastl::intrusive_list */; // 0x1d0 exact:s0068f670
+  unsigned char mFreeWaitNodes[0x8] /* eastl::intrusive_list<SP::JobWaitNode>: no hand template for eastl::intrusive_list */; // 0x1d8 exact:s0068f670
+  void (*mInitThreadFunc)();                                   // 0x1e0 exact:s0068f670
 };
 #pragma pack(pop)
-// sizeof(cJobManager) expected 0x1b8 (unverified)
+// sizeof(cJobManager) expected 0x1e8 (unverified)
 
 }  // namespace SP
 

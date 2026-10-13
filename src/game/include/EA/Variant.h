@@ -94,6 +94,7 @@ struct Variant {
   };
   // sizeof(Pointer) expected 0xc (unverified)
 
+  EA::Variant & operator=(EA::Variant const &);                          // 0x00542b80
   eastl::basic_string<char,eastl::allocator> * GetString8() const;       // 0x0060ebf0
   eastl::basic_string<wchar_t,eastl::allocator> * GetString16() const;   // 0x0068a4f0
   cSPVector2 * GetVector2() const;                                       // 0x006a0f70
@@ -102,12 +103,12 @@ struct Variant {
   cSPColorRGBA * GetColorRGBA() const;                                   // 0x006a1000
   EA::ResourceMan::Key * GetKey() const;                                 // 0x006a1030
   SP::cString * GetText() const;                                         // 0x006a1090
+  void Destruct(bool);                                                   // 0x0093db80, protected
   cSPVector3 * GetVector3() const;                                       // 0x00cce910
   void * GetElements() const;                                            // dev only
   Variant() : mFlags(0), mTypeId(0) {}                                   // dev only
   ~Variant() { if (mFlags & 4) Destruct(0); }                            // dev only
   bool Construct(EA::Variant const &, unsigned short);                   // dev only, protected
-  EA::Variant & operator=(EA::Variant const &);                          // dev only
   unsigned int GetElementCount() const;                                  // dev only
   Variant(void const *, unsigned int, unsigned int, bool, unsigned short); // dev only
   Variant(unsigned short, unsigned short, void const *, unsigned int, unsigned int, bool); // dev only
@@ -115,7 +116,6 @@ struct Variant {
   operator void *();                                                     // dev only
   unsigned int GetElementSize() const;                                   // dev only
   static bool ExecuteOp(EA::Variant::eOperationId, EA::Variant *, EA::Variant const **, int, EA::Variant **, int); // dev only
-  void Destruct(bool);                                                   // dev only, protected
   bool Construct(unsigned short, unsigned short, void const *, unsigned int, unsigned int); // dev only, protected
   Variant(EA::Variant const & x) : mFlags(0), mTypeId(0) { *this = x; }; // dev only
 

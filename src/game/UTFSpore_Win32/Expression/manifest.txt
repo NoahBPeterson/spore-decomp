@@ -1,4 +1,7 @@
 # source  symbol  va  flags
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalRealExpression@cExpression@ArgScript@EA@@QAEMAAPBD@Z  0083e470  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?ParseReal@cExpression@ArgScript@EA@@QAEMPBD@Z  0083e4f0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?EvalSignedIntNumber@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083e9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntTerm@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083ea70  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Expression.cpp  ?EvalIntExpression@cExpression@ArgScript@EA@@QAEHAAPBD@Z  0083eb00  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Expression.cpp  ?ParseInt@cExpression@ArgScript@EA@@QAEHPBD@Z  0083edc0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

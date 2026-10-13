@@ -4,4 +4,5 @@
 ../src/game/SPEngine/SPJobManager.cpp  ?Acquire@ClsF540@@QAEXXZ  0068f540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Release@ClsF540@@QAEXXZ  0068f560  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPJobManager.cpp  ?Set@ClsF5B0@@QAEXPAUVObj@@@Z  0068f5b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
-../src/game/SPEngine/SPJobManager.cpp  ?AddRef@cJob@@QAEHXZ  0068f950  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?AddRef@cJob_s0069_07e0@@QAEHXZ  0068f950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPJobManager.cpp  ?Init@cJobManager@@QAE_NIH@Z  00690330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

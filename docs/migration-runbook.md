@@ -562,3 +562,47 @@ What a landing agent must NOT do: edit `rewrite.py`, `headers.py`, `layout_overr
   class gets its owner module's retail addresses (headers no longer depend on which module's run wrote them last).
 - Round 3 objects whose headers compile standalone: `work/claude/round3_ready.json` (11); not ready (rw templates):
   `work/claude/round3_not_ready.json`.
+
+### 8d. Fix pass 2 (2026-10-13, after the round-2 landings): what changed for landing agents
+
+All eight round-2 objects were re-landed from scratch with the rules below (`rewrite.py <slice> --module <ObjStem> --apply`,
+slices in batch order, module TU and bookkeeping deleted first): 268 of the 271 batch functions are in the TUs (round 2: 181),
+every manifest row MATCH, byte-exact rows per module at least the slices' count except INetFileCache (18 of 19: the library
+instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_slice` with the reason).
+
+- **Run with `--batch mig2`** (or the round's batch): functions of the slice that the batch does not list for the module stay in
+  the slice without hand-written `leave_in_slice` rows (manual entries still win).
+- Slice parsing: a legend of consecutive `// @ 0x` lines is one boundary (s00688dd0); every leading declaration between a marker
+  and its function is hoisted (several lines, `static const` tables, class/union/template-class definitions, `#define`s;
+  s007ada40, s007aea30); a leading `#pragma` stays with its function; a class with several bases is a struct item named after
+  itself (s007ada40 DxtSurface); a function template in a namespace is not a class item (s004e01d0); an explicit instantiation
+  under the marker of its template (`template void eastl::vector<..>::reserve(uint32_t);`, s004e01d0 0x4e0880) is emitted after
+  the definition; `Job& Job::operator=(...)` is a method named `operator=` (s00942ff0 0x9436b0).
+- Verbatim functions keep their scope: one the slice defined inside `namespace X {` is emitted inside it (s00947d50), a method of a
+  namespaced stub defined at global scope gets the qualifier (s00942290; `using namespace` items are no longer emitted), and the
+  class may carry the `_sNNNN_NNNN` rename. Renamed stub constructors/destructors keep matching names after a demotion.
+- Stubs of a class that has ANY canonical header (also a typedef such as `eastl::string8` in `eastl/string.h`) are renamed for the
+  verbatim functions, so a later slice may include the header (Expression: round 2 hand-edited the TU for this).
+- Prototypes: one function declared twice with different linkage (`extern "C"` vs C++), `dllimport`, parameter names or return
+  type is emitted once (the module TU's declaration; a `dllimport` spelling replaces a plain one); a `throw()` difference keeps
+  both (codegen depends on it, see Papercuts). Intrinsics (`_Interlocked*`) declared by the slice are dropped when `<intrin.h>` is
+  in the TU. A stub's inline body that calls a free function of the slice gets that function's prototype (s00942ff0 JobVecBlob).
+  Free operators used through operator syntax (`name == "pi"`, s0083d3d0/e1c0/f140) and the `operator new` a kept stub's body
+  uses (s007e4260) are emitted.
+- Converted bodies: compile-error repairs before demotion: an int returned/assigned where the canonical type is an enum gets the
+  enum cast (s0083a9f0 tArgError, s00942290 JobResult); a pointer argument where the callee takes a pointer to it (or the
+  reverse) after a slice `T**` parameter became `T*&` gets `&`/`*` (s0083e1c0 DiscardWhiteSpace). Function-pointer parameters
+  are named inside the declarator (s0068f670 ContinueJob, s009413d0 SetNotificationTarget). A slice struct mapped to a canonical
+  class without a generated header keeps its stub (s00947d50 IniFile).
+- Implicit special members the slice lists as `// @ 0xVA  S copy constructor (implicit)` (copy assignment, destructor) get a
+  forcing function under `#pragma auto_inline(off)` (s00942290 Cookie40: 0x942ce0/0x942d70 byte-exact); rows bind to the
+  member's own name. A function without a row in its slice's bookkeeping takes the row another slice has (s006907e0 0x68f950);
+  a C-linkage manifest symbol (`_FUN_0068a2e0`) binds. A run that emits nothing prunes its old blocks (s004e01d0).
+- New `manual` keys: `edits` entries with `"verbatim": true` apply to the slice text of a verbatim function (s00948de0 0x949620);
+  `pragmas` {va: {lead, after, why}} puts preprocessor lines around one function (s0083e1c0 0x83e9d0 `#pragma inline_depth(0)`).
+- Headers (`layout_overrides.json`, each with its evidence): `EA::Internet::HTTPClient` without msUserName/msUserPassword (0x168),
+  `SP::cJobManager` with the lock-depth int at 0x38 and the 0x2c-byte retail block after mThreads (0x1e4), `EA::Internet::INetFileCache`
+  with the open-stream list at 0x28 (mDataMap 0x34). A `remove` now moves the later members up. `eastl/string.h` declares
+  `append(p, e)`, `assign(p)`, `sprintf`; `eastl/map.h` has `unary_function`/`binary_function`. A class's header lists the
+  retail functions of every module (not only the writing run's), except functions moved to a synthetic object (`_v2`).
+- Round 4 objects whose headers compile standalone: `work/claude/round4_ready.json` (8); not ready: `work/claude/round4_not_ready.json`.

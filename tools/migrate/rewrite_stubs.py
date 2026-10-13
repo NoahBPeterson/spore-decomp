@@ -285,7 +285,10 @@ def item_names(kind, text):
         _ns, inner = unwrap_namespaces(text)
         if inner != text:                       # one wrapped declaration: classes, templates, function declarations
             mi = mask(inner).lstrip()
-            return item_names("struct" if mi.startswith(("struct", "class", "union", "template", "enum")) else "other", inner)
+            # a function template (`template <class T> inline T* uninitialized_copy_ptr(..) {..}`, s004e01d0) is not a class
+            is_cls = mi.startswith(("struct", "class", "union", "enum")) or \
+                bool(re.match(r"template\s*<[^>]*>\s*(?:struct|class|union)\b", mi))
+            return item_names("struct" if is_cls else "other", inner)
         return re.findall(r"\b(?:struct|class|union|enum)\s+(\w+)\s*(?::[^{;]*)?\{", m)
     if kind == "define":
         mm = re.match(r"\s*#\s*define\s+(\w+)", m)
@@ -301,9 +304,16 @@ def item_names(kind, text):
         mm = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", m.strip())
         return [mm.group(1)] if mm else []
     if kind in ("extern", "other"):
+        mc = re.match(r"\s*(?:template\s*<[^>]*>\s*)?(?:struct|class|union)\s+(\w+)[^;{()]*\{", m)
+        if mc:                                  # a class definition the struct parser did not take (several bases, template)
+            return [mc.group(1)]
         mo = re.search(r"\boperator\s*(new|delete)\b(\s*\[\s*\])?\s*\(", m.split("{")[0])
         if mo:                                  # `void* operator new[](size_t, const char*, ...)`: used by every new-expression
             return ["operator " + mo.group(1)]
+        mo = re.search(r"\boperator\s*(==|!=|<=|>=|<|>|\+=|-=|\+|-|\*|/|%|\[\s*\]|\(\s*\)|!|&&|\|\||=)\s*\(", m.split("{")[0])
+        if mo and not re.match(r"\s*(?:struct|class|union)\b", m):
+            # a free operator (`namespace eastl { bool operator==(const string8&, const char*); }`): used through operator syntax
+            return ["operator" + re.sub(r"\s+", "", mo.group(1))]
         mp = re.match(r"\s*(?:static\s+|extern\s+|const\s+)*[\w:<>\s\*&]+?\(\s*\*\s*(?:__\w+\s+)?(\w+)\s*\)\s*\(", m)
         if mp:                                  # a function-pointer variable: `bool (*g_pParse)(int) = &Parse;`
             return [mp.group(1)]
@@ -324,8 +334,9 @@ def item_uses(kind, text):
     m = mask(text)
     # a name after `::`, `.` or `->` is qualified or a member access: it cannot name a global-scope local stub
     # (`EA::ResourceMan::PFIndexModifiable::Foo` does not use the slice's own `struct PFIndexModifiable`)
+    # (a leading `::` is the global scope, a use: s00948de0's `::MIMEStringToMIMETypes(...)`)
     return {mm.group(0) for mm in IDENT.finditer(m)
-            if mm.group(0) not in KEYWORDS and not re.search(r"(::|\.|->)\s*~?\s*$", m[max(0, mm.start() - 6):mm.start()])}
+            if mm.group(0) not in KEYWORDS and not re.search(r"([\w>)]\s*::|\.|->)\s*~?\s*$", m[max(0, mm.start() - 8):mm.start()])}
 
 
 def needed_items(items, fn_texts, skip=()):
@@ -359,6 +370,23 @@ def needed_items(items, fn_texts, skip=()):
 
     def qused(k):
         return any(ch == q or ch.startswith(q + "::") for q in qual.get(k, []) for ch in chains)
+    # operator symbols the function texts use (`name == "pi"`): a free operator item is used when its symbol appears and one of
+    # the types it takes is used (s0083d3d0/s0083e1c0/s0083f140: the verbatim bodies compare the slice's eastl::string8 with a
+    # literal through the slice's `bool operator==(const string8&, const char*)`, which was never emitted: C2678)
+    optexts = [mask(t) for t in fn_texts]
+
+    def op_used(k, text, names):
+        for n in names:
+            if not n.startswith("operator") or n in ("operator new", "operator delete"):
+                continue
+            sym = n[len("operator"):]
+            if not any(sym in t.replace(" ", "") for t in optexts):
+                continue
+            mt = mask(text)
+            params = mt[mt.find("(", mt.find("operator")) + 1:]
+            if any(i in used for i in IDENT.findall(params) if i not in KEYWORDS):
+                return True
+        return False
     keep = set()
     changed = True
     while changed:
@@ -366,9 +394,17 @@ def needed_items(items, fn_texts, skip=()):
         for k, kind, text, names in decl:
             if k in keep or not names:
                 continue
-            if any(n in used for n in names) or qused(k):
+            if any(n in used for n in names) or qused(k) or op_used(k, text, names):
                 keep.add(k)
                 used |= item_uses(kind, text)
+                # a kept item's own new/delete-expressions need the slice's operator new/delete declarations (s007e4260: the
+                # inline helper NewBehaviorMessage uses the 6-argument placement new; only function texts were scanned: C2660)
+                mk = mask(text)
+                if re.search(r"\bnew\b", mk) and not re.search(r"\boperator\s*new\b", mk):
+                    used.add("operator new")
+                if re.search(r"\bdelete\b", mk) and not re.search(r"\boperator\s*delete\b", mk):
+                    used.add("operator delete")
+                optexts.append(mk)
                 for mm in re.finditer(r"[A-Za-z_]\w*(?:\s*::\s*~?[A-Za-z_]\w*)+", mask(text)):
                     chains.add(re.sub(r"\s+", "", mm.group(0)))
                 changed = True
@@ -388,6 +424,12 @@ def rename_word(text, old, new, ns=()):
     out, last = [], 0
     for mm in pat.finditer(m):
         # `->old` / `.old`: member access keeps its name
+        # a namespace of the same name is not the class (s00691680 renames the stub class EA::Thread::Thread: `namespace Thread {`
+        # and the qualifier in `Thread::Mutex` are the namespace EA::Thread, renaming them hid the slice's Mutex stub)
+        if re.search(r"\bnamespace\s+$", m[max(0, mm.start() - 20):mm.start()]):
+            continue
+        if old in ns and re.match(r"\s*::", m[mm.end():mm.end() + 4]) and mm.group(0) == old:
+            continue
         out.append(text[last:mm.start()])
         out.append(mm.group(0)[:len(mm.group(0)) - len(old)] + new)
         last = mm.end()

@@ -8,6 +8,11 @@
 namespace eastl {
 
 template <typename T> struct less { bool operator()(const T& a, const T& b) const { return a < b; } };
+// empty functor bases (EASTL functional.h; no data, so no layout to verify)
+template <typename A, typename R> struct unary_function { typedef A argument_type; typedef R result_type; };
+template <typename A1, typename A2, typename R> struct binary_function {
+  typedef A1 first_argument_type; typedef A2 second_argument_type; typedef R result_type;
+};
 template <typename T> struct use_self {};
 template <typename T> struct use_first {};
 

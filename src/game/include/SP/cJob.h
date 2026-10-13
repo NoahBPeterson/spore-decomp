@@ -20,6 +20,8 @@ namespace SP {
 #pragma pack(push, 8)
 class cJob {
  public:
+  bool Continuation(bool (__cdecl *)(SP::cJob &, void *), void *);       // 0x0068f9f0
+  SP::tJobStatus GetStatus() const;                                      // 0x00690120
   void SetReturnValue(void (__cdecl *)(void *), void *);                 // dev only
   int GetSlot() const;                                                   // dev only
   void SetCallback(bool (__cdecl *)(SP::cJob &, void *), void *);        // dev only
@@ -44,9 +46,7 @@ class cJob {
   SP::cIJobManager * GetJobManager() const;                              // dev only
   cJob();                                                                // dev only, protected
   ~cJob();                                                               // dev only
-  SP::tJobStatus GetStatus() const;                                      // dev only
   void SetUnknown(EA::COM::IUnknown32 *);                                // dev only
-  bool Continuation(bool (__cdecl *)(SP::cJob &, void *), void *);       // dev only
   int AddRef();                                                          // dev only
   int Release();                                                         // dev only
   void Resume();                                                         // dev only

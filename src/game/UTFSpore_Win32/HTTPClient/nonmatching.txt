@@ -3,8 +3,17 @@
 00942050 108 HTTPClientFindHeader: complete; stride division and loop register schedule differ; equiv WEAK (44.6% coverage, 776 valid inputs)
 00942110 36 HTTPClientSendCallback: complete; length/strlen and callback reload differ
 00942150 67 HTTPClientSetNotificationTarget: complete; notification callback layout differs; equiv PASS
-00942630 48 Cookie40::~Cookie40: complete; AutoRefCount::Release's redundant inner `if (p)` null-test is folded away, retail keeps it; equiv PASS (304 valid inputs, 61.9% coverage)
+00942290 334 HTTPClient::ReadRawBody: complete; register/loop schedule differs; difftest FAIL (3/363 valid inputs, 70.4% coverage)
+009423d0 358 HTTPClient::ReadResponseLine: complete; line-scan register schedule differs; difftest PASS (237 valid inputs, 60.3% coverage)
+00942530 212 HTTPClient::DoJobUpdate: complete; timeout/notify branch layout differs; difftest FAIL (5/22 valid inputs, 20.9% coverage)
+00942630 48 Cookie40::~Cookie40: complete; one redundant null-check/test around the second refcount release differs
+00942690 479 HTTPClient::ReadResponseData: complete; 64-bit accumulation + buffer growth call sequence differs; difftest FAIL (1/325 valid, 38.0% coverage)
+00942b40 304 HTTPClient::ReadResponseBody: complete; content-length/chunked dispatch schedule differs; difftest FAIL (5/5 valid, 50.6% coverage)
 00942e50 213 eastl::StrStub::assignRange: complete; growth/memmove sequence differs; difftest UNSUPPORTED (0/400 valid inputs, all faulted)
 00943480 91 CookieNode list destroy: complete; refcount release emits redundant test + push ecx prologue, and n/next register roles differ; difftest UNSUPPORTED (0/400 valid inputs, 0% coverage)
 00943650 69 Job::Job copy ctor: complete; compiler CSEs mBuffer+0x40 with &second; register/schedule differs; difftest WEAK (152 valid inputs, 100% coverage)
+00943bd0 285 HTTPClient::ParseResponseStatus: complete; param/job caching and line-scan register schedule differ; difftest UNSUPPORTED (unresolved __imp_strncmp/__imp_atol)
 00943d70 85 CellHolder::AddCell: complete; vector pointer caching + register roles differ; difftest WEAK (174 valid inputs, 95% coverage)
+00943de0 124 HTTPRequest ctor: complete; SSO blob capacity folded from base + scheduling order differs; difftest PASS (400 valid inputs, 100% coverage)
+00943ea0 120 HTTPRequest dtor: complete; missing thiscall ecx setup before range destroy + inline free schedule differs; difftest UNSUPPORTED (unresolved _operator_delete__)
+00945ed0 1294 WorkerThreadFunction: complete (all paths/calls); register allocation/spills differ (orig keeps this and mutex ptr on stack); difftest WEAK (callees Sprintf8 0x938470, fixed_string append 0x60a150, operator_delete__ 0xf47380 annotated; 86/400 valid, 12% coverage: thread loop waits on SleepEx/WaitForSingleObject imports)

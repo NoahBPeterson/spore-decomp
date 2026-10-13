@@ -1,18 +1,387 @@
-// src/game/SPEngine/SPGraphicsTextureUtilities.cpp -- migrated from slice(s) s007b19c0, s007b0a70, s007af8b0, s007aea30, s007ada40 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsTextureUtilities.cpp -- migrated from slice(s) s007b19c0, s007b0a70, s007af8b0, s007aea30, s007ada40, s004e01d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsTextureUtilities.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+
+// unnamed retail callees and globals (address in the comment)
+extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
+#pragma pack(push, 4)
+#pragma intrinsic(memcpy)
+#include "EA/AutoRefCount.h"
+#include "eastl/vector.h"
+#include "SP/cTextureInstance.h"
 #include "EA/IO/FileStream.h"
 #include <intrin.h>
 #include <xmmintrin.h>
+#include "SP/cTexturePreload.h"
 #include "EA/ArgScript/cIParser.h"
 #include "SP/cJob.h"
 #include "SP/cDXTCompressJobData.h"
 #include "SP/cImageDataRaw.h"
-#pragma auto_inline(on)
+
+// ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <int N> inline void ScratchSlots() { uint32_t s[N]; }
+void EASTLFree(void* p);                                                         // 0x00F47380
+void* EASTLAlloc(void* allocator_s004e_01d0, uint32_t n, uint32_t align, uint32_t offset);  // 0x0042DEE0
+extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
+namespace EA {
+template <class T> class AutoRefCount_s004e_01d0 {
+public:
+    AutoRefCount_s004e_01d0(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s004e_01d0(const AutoRefCount_s004e_01d0& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s004e_01d0() { if (mpObject) mpObject->Release(); }
+    T* mpObject;
+};
+}
+namespace EA {
+namespace ResourceMan {
+struct Key_s004e_01d0 {
+    uint32_t mInstance;
+    uint32_t mType;
+    uint32_t mGroup;
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+inline bool operator==(const Key_s004e_01d0& a, const Key_s004e_01d0& b) { return a.mInstance == b.mInstance && a.mType == b.mType && a.mGroup == b.mGroup; }
+}
+}
+namespace EA {
+namespace ResourceMan {
+struct KeyHash_s004e_01d0 { uint32_t operator()(const Key_s004e_01d0& k) const { return k.mInstance ^ k.mGroup; } };
+}
+}
+using EA::ResourceMan::Key_s004e_01d0;
+namespace eastl {
+struct sp_vector_allocator_s004e_01d0 {
+    const char* mpName;
+    uint32_t mFlags;
+};
+}
+namespace eastl {
+template <class T> inline void destruct(T*, T*) {}   // trivial destructor: nothing to do
+}
+namespace eastl {
+template <class T> inline T* copy_memcpy(T* first, T* last, T* result)
+{
+    return (T*)((last - first) * sizeof(T) + (char*)memcpy(result, first, (char*)last - (char*)first));
+}
+}
+namespace eastl {
+template <class T> inline T* uninitialized_copy_ptr(T* first, T* last, T* result)
+{
+    const bool bA = true;
+    T* p = copy_memcpy(first, last, result);
+    const bool bB = true;
+    return p;
+}
+}
+namespace eastl {
+template <class T> struct vector_s004e_01d0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator_s004e_01d0 mAllocator;
+
+    T* DoAllocate(uint32_t n) { return n ? (T*)EASTLAlloc(&mAllocator, n * sizeof(T), 4, 0) : 0; }
+    void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
+    static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
+    static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
+    void DoInsertValue(T* position, const T& value);
+    void reserve(uint32_t n);
+    void push_back(const T& value);
+};
+}
+namespace eastl {
+template <class T> struct equal_to_s004e_01d0 { bool operator()(const T& a, const T& b) const { return a == b; } };
+}
+namespace eastl {
+template <class T> struct hash_s004e_01d0 { uint32_t operator()(T val) const { return (uint32_t)val; } };
+}
+namespace eastl {
+struct mod_range_hashing { uint32_t operator()(uint32_t r, uint32_t n) const { return r % n; } };
+}
+namespace eastl {
+struct default_ranged_hash {};
+}
+namespace eastl {
+template <class P> struct use_first_s004e_01d0 {};
+}
+namespace eastl {
+struct true_type {};
+}
+namespace eastl {
+struct prime_rehash_policy_s004e_01d0 {
+    float mfMaxLoadFactor;
+    float mfGrowthFactor;
+    uint32_t mnNextResize;
+    prime_rehash_policy_s004e_01d0(float fMaxLoadFactor = 1.f) : mfMaxLoadFactor(fMaxLoadFactor), mfGrowthFactor(2.f), mnNextResize(0) {}
+    static uint32_t GetPrevBucketCountOnly(uint32_t nBucketCountHint);   // 0x00921340
+    uint32_t GetNextBucketCount(uint32_t nBucketCountHint) const;        // 0x00921360
+    uint32_t GetBucketCount(uint32_t nElementCount) const;               // 0x009213C0
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_iterator_base {
+    Node* mpNode;
+    Node** mpBucket;
+    hashtable_iterator_base(Node* pNode, Node** pBucket) : mpNode(pNode), mpBucket(pBucket) {}
+    void increment() {
+        mpNode = mpNode->mpNext;
+        while (mpNode == 0)
+            mpNode = *++mpBucket;
+    }
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_iterator : public hashtable_iterator_base<Node> {
+    hashtable_iterator(Node* pNode = 0, Node** pBucket = 0) : hashtable_iterator_base<Node>(pNode, pBucket) {}
+    hashtable_iterator(Node** pBucket) : hashtable_iterator_base<Node>(*pBucket, pBucket) {}
+    hashtable_iterator(const hashtable_iterator& x) : hashtable_iterator_base<Node>(x.mpNode, x.mpBucket) {}
+    hashtable_iterator& operator++() { this->increment(); return *this; }
+};
+}
+namespace eastl {
+template <class Node> struct hashtable_const_iterator : public hashtable_iterator_base<Node> {
+    hashtable_const_iterator(Node* pNode = 0, Node** pBucket = 0) : hashtable_iterator_base<Node>(pNode, pBucket) {}
+    hashtable_const_iterator(Node** pBucket) : hashtable_iterator_base<Node>(*pBucket, pBucket) {}
+};
+}
+namespace eastl {
+template <class Node> inline bool operator!=(const hashtable_iterator_base<Node>& a, const hashtable_iterator_base<Node>& b) { return a.mpNode != b.mpNode; }
+}
+namespace eastl {
+template <class Node> struct insert_return_type {
+    hashtable_iterator<Node> first;
+    bool second;
+};
+}
+namespace eastl {
+struct allocator_s004e_01d0 {
+    void deallocate(void* p, uint32_t) { void* const pMemory = p; EASTLFree(pMemory); }
+};
+}
+namespace eastl {
+extern void* gpEmptyBucketArray[2];                  // 0x0154DF28
+}
+namespace eastl {
+template <class K, class V> struct pair_s004e_01d0 {
+    K first;
+    V second;
+    pair_s004e_01d0(const K& x, const V& y) : first(x), second(y) {}
+};
+}
+namespace eastl {
+template <class K, class V> struct hash_node_s004e_01d0 {
+    pair_s004e_01d0<K, V> mValue;
+    hash_node_s004e_01d0* mpNext;
+};
+}
+namespace eastl {
+template <class K, class V, class H, class A> class hashtable_s004e_01d0 {
+public:
+    typedef hash_node_s004e_01d0<K, V> node_type;
+    typedef hashtable_iterator<node_type> iterator;
+    typedef hashtable_const_iterator<node_type> const_iterator;
+    typedef pair_s004e_01d0<K, V> value_type;
+
+    hashtable_s004e_01d0(uint32_t nBucketCount, const H& h1, const mod_range_hashing& h2, const default_ranged_hash& h,
+              const equal_to_s004e_01d0<K>& eq, const use_first_s004e_01d0<value_type>& ek, const A& allocator_s004e_01d0);
+    ~hashtable_s004e_01d0();
+
+    iterator end() { return iterator(mpBucketArray + mnBucketCount); }
+    iterator find(const K& k);
+    const_iterator find_const(const K& k);
+    insert_return_type<node_type> DoInsertValue(const value_type& value, true_type);
+    insert_return_type<node_type> insert(const value_type& value) { return DoInsertValue(value, true_type()); }
+    uint32_t erase(const K& k);
+    iterator erase(iterator i);
+    void set_max_load_factor(float fMaxLoadFactor);
+    void rehash_policy(const prime_rehash_policy_s004e_01d0& rehashPolicy) {
+        mRehashPolicy = rehashPolicy;
+        const uint32_t nBuckets = rehashPolicy.GetBucketCount((uint32_t)mnElementCount);
+        if (nBuckets > mnBucketCount)
+            DoRehash(nBuckets);
+    }
+    void reset() {
+        ScratchSlots<1>();
+        mnBucketCount = 1;
+        mpBucketArray = (node_type**)&gpEmptyBucketArray[0];
+        mnElementCount = 0;
+        mRehashPolicy.mnNextResize = 0;
+    }
+    void clear() {
+        DoFreeNodes(mpBucketArray, mnBucketCount);
+        mnElementCount = 0;
+    }
+    void DoFreeBuckets(node_type** pBucketArray, uint32_t n) {
+        if (n > 1)
+            mAllocator.deallocate(pBucketArray, (n + 1) * sizeof(node_type*));
+    }
+    void DoFreeNode(node_type* pNode) { mAllocator.deallocate(pNode, sizeof(node_type)); }
+    void DoFreeNodes(node_type** pBucketArray, uint32_t n);
+    node_type** DoAllocateBuckets(uint32_t n);
+    void DoRehash(uint32_t nBucketCount);
+    uint32_t get_hash_code(const K& key) const { return (uint32_t)m_h1(key); }
+    uint32_t bucket_index(const K&, uint32_t c, uint32_t n) const { return (uint32_t)m_h2(c, n); }
+    bool compare(const K& k, uint32_t, node_type* pNode) const { return m_equal(k, pNode->mValue.first); }
+    node_type* DoFindNode(node_type* pNode, const K& k, uint32_t c) const {
+        for (; pNode; pNode = pNode->mpNext) {
+            if (compare(k, c, pNode))
+                return pNode;
+        }
+        return 0;
+    }
+
+    use_first_s004e_01d0<value_type> m_extract;   // 0x00
+    equal_to_s004e_01d0<K> m_equal;               // 0x01
+    H m_h1;                            // 0x02
+    mod_range_hashing m_h2;            // 0x03
+    node_type** mpBucketArray;         // 0x04
+    uint32_t mnBucketCount;            // 0x08
+    uint32_t mnElementCount;           // 0x0C
+    prime_rehash_policy_s004e_01d0 mRehashPolicy; // 0x10
+    A mAllocator;                      // 0x1C
+};
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+typename hashtable_s004e_01d0<K, V, H, A>::iterator hashtable_s004e_01d0<K, V, H, A>::find(const K& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    node_type* const pNode = DoFindNode(mpBucketArray[n], k, c);
+    return pNode ? iterator(pNode, mpBucketArray + n) : iterator(mpBucketArray + mnBucketCount);
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+typename hashtable_s004e_01d0<K, V, H, A>::const_iterator hashtable_s004e_01d0<K, V, H, A>::find_const(const K& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    node_type* const pNode = DoFindNode(mpBucketArray[n], k, c);
+    return pNode ? const_iterator(pNode, mpBucketArray + n) : const_iterator(mpBucketArray + mnBucketCount);
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+uint32_t hashtable_s004e_01d0<K, V, H, A>::erase(const K& k)
+{
+    const uint32_t c = get_hash_code(k);
+    const uint32_t n = (uint32_t)bucket_index(k, c, (uint32_t)mnBucketCount);
+    const uint32_t nElementCountSaved = mnElementCount;
+    node_type** pBucketArray = mpBucketArray + n;
+    while (*pBucketArray && !compare(k, c, *pBucketArray))
+        pBucketArray = &(*pBucketArray)->mpNext;
+    while (*pBucketArray && compare(k, c, *pBucketArray)) {
+        node_type* const pNode = *pBucketArray;
+        *pBucketArray = pNode->mpNext;
+        DoFreeNode(pNode);
+        --mnElementCount;
+    }
+    return nElementCountSaved - mnElementCount;
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+typename hashtable_s004e_01d0<K, V, H, A>::iterator hashtable_s004e_01d0<K, V, H, A>::erase(iterator i)
+{
+    iterator iNext(i);
+    ++iNext;
+    node_type* pNode = i.mpNode;
+    node_type* pNodeCurrent = *i.mpBucket;
+    if (pNodeCurrent == pNode)
+        *i.mpBucket = pNodeCurrent->mpNext;
+    else {
+        node_type* pNodeNext = pNodeCurrent->mpNext;
+        while (pNodeNext != pNode) {
+            pNodeCurrent = pNodeNext;
+            pNodeNext = pNodeCurrent->mpNext;
+        }
+        pNodeCurrent->mpNext = pNodeNext->mpNext;
+    }
+    DoFreeNode(pNode);
+    --mnElementCount;
+    return iNext;
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+hashtable_s004e_01d0<K, V, H, A>::~hashtable_s004e_01d0()
+{
+    clear();
+    DoFreeBuckets(mpBucketArray, mnBucketCount);
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+void hashtable_s004e_01d0<K, V, H, A>::set_max_load_factor(float fMaxLoadFactor)
+{
+    hashtable_s004e_01d0* const pThis = this;
+    pThis->rehash_policy(prime_rehash_policy_s004e_01d0(fMaxLoadFactor));
+}
+}
+namespace eastl {
+template <class K, class V, class H, class A> class hash_map_s004e_01d0 : public hashtable_s004e_01d0<K, V, H, A> {
+public:
+    typedef hashtable_s004e_01d0<K, V, H, A> base_type;
+    typedef typename base_type::iterator iterator;
+    typedef typename base_type::value_type value_type;
+    hash_map_s004e_01d0(uint32_t nBucketCount, const H& hashFunction, const equal_to_s004e_01d0<K>& predicate, const A& allocator_s004e_01d0)
+        : base_type(nBucketCount, hashFunction, mod_range_hashing(), default_ranged_hash(), predicate,
+                    use_first_s004e_01d0<value_type>(), allocator_s004e_01d0) {}
+    V& operator[](const K& key);
+};
+}
+namespace eastl {
+template <class V> struct OperatorIndexSlots { enum { N = 13 }; };
+}
+namespace eastl {
+template <class V> struct OperatorIndexSlots<V*> { enum { N = 12 }; };
+}
+namespace eastl {
+template <class K, class V, class H, class A>
+V& hash_map_s004e_01d0<K, V, H, A>::operator[](const K& key)
+{
+    ScratchSlots<OperatorIndexSlots<V>::N>();
+    iterator it = base_type::find(key);
+    if (it != base_type::end())
+        return (*it.mpNode).mValue.second;
+    return (*base_type::insert(value_type(key, V())).first.mpNode).mValue.second;
+}
+}
+namespace SP {
+class cSpeciesProfile;
+}
+namespace SP {
+class cSpeciesArchetype {
+public:
+    cSpeciesArchetype();                               // 0x004DA440
+    cSpeciesArchetype(const cSpeciesArchetype& x);     // 0x004E1CB0
+    ~cSpeciesArchetype();                              // 0x004DB1B0
+    uint32_t mData[0x110];
+};
+}
+namespace SP {
+class cTextureInstance_s004e_01d0;
+}
+namespace eastl {
+template class hash_map_s004e_01d0<Key_s004e_01d0, SP::cSpeciesProfile*, EA::ResourceMan::KeyHash_s004e_01d0, allocator_s004e_01d0>;
+}
+namespace eastl {
+template class hashtable_s004e_01d0<Key_s004e_01d0, SP::cSpeciesProfile*, EA::ResourceMan::KeyHash_s004e_01d0, allocator_s004e_01d0>;
+}
+namespace eastl {
+template class hash_map_s004e_01d0<uint32_t, SP::cSpeciesArchetype, hash_s004e_01d0<uint32_t>, allocator_s004e_01d0>;
+}
+// ---- items of slice s004e01d0 end
 
 // ---- items of slice s007ada40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const uint32_t g_alphaIndexTable[8];   // 0x153bcec
+#pragma auto_inline(on)
 class Span {
 public:
     void Init(int x, int y, int dx, int dy, int extra);
@@ -34,6 +403,32 @@ class FlagHolder {
 public:
     uint8_t IsSet();
     InnerData* mpData;  // +0x00
+};
+class DxtBase1 { public: virtual void v1(); virtual ~DxtBase1() {} };
+class DxtBase2 { public: virtual void v2(); virtual ~DxtBase2() {} };
+class DxtRefCount {
+public:
+    long mCount;
+    DxtRefCount() { _InterlockedExchange((volatile long*)&mCount, 0); }
+};
+struct IRel1 { virtual void v0(); virtual void Release(); };            // Release at slot 1 (+4)
+struct IRel2 { virtual void v0(); virtual void v1(); virtual void Release(); };  // Release at slot 2 (+8)
+template<class T> struct RelPtr {
+    T* mp;
+    RelPtr() {}
+    RelPtr(int) : mp(0) {}
+    ~RelPtr() { if (mp) mp->Release(); }
+};
+class DxtSurface : public DxtBase1, public DxtBase2, public DxtRefCount {
+public:
+    RelPtr<IRel1> mC;   // +0x0c
+    int m10;            // +0x10
+    RelPtr<IRel2> m14;  // +0x14
+    int m18;            // +0x18
+    int m1c;            // +0x1c
+    int m20;            // +0x20
+    int m24;            // +0x24
+    DxtSurface();
 };
 static inline uint32_t Expand565(uint32_t c)
 {
@@ -77,12 +472,33 @@ void mappixeltransparent(uint32_t pix, int* idx, const uint32_t* pal);   // @ 0x
 void __fastcall mappixel(uint32_t pix, const uint32_t* pal, int* idx);    // @ 0x007ad2e0 (pal in eax in the original)
 uint32_t rbmappixel(uint32_t pix, const uint32_t* pal);                  // @ 0x007ad760 (pal in esi, pix in edx)
 uint32_t trymapblockfast(const uint32_t* px, uint32_t c0, uint32_t c1, uint32_t limit);  // @ 0x007ad950
+static const unsigned __int64 kMaskRGB = 0x0000000000ffffffULL;    // 0x140fbd0
+static const unsigned __int64 kThird = 0x5555555555555555ULL;      // 0x140fbc8
 // ---- items of slice s007ada40 end
 
 // ---- items of slice s007aea30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" uint32_t trymapblock(uint32_t c0, uint32_t c1, uint32_t* map,
+                                const uint32_t* pixels, uint32_t best);       // 0x7ad810
 struct Endpoint {
     int      v[7];   // +0x00
     uint8_t  c;      // +0x1c
+};
+uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1);  // 0x7ade70
+uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1); // 0x7ae0b0
+union DxtColor {
+    uint32_t u;
+    struct { uint8_t b, g, r, a; } c;
+};
+struct Rgb565 {
+    uint8_t b, g, r, pad;
+};
+#define RGB888TO565(x) (((((x) >> 3) & 0x1f0000 | (x) & 0xfc00) >> 2 | (x) & 0xf8) >> 3)
+#define CLAMP0(x)      ((x) < 0 ? 0 : (x))
+#define MIN(a, b)      ((a) < (b) ? (a) : (b))
+#define MAX(a, b)      ((a) > (b) ? (a) : (b))
+struct EndpointColors {
+    uint32_t v[2];
+    uint32_t findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality);
 };
 // ---- items of slice s007aea30 end
 
@@ -93,6 +509,7 @@ void  __cdecl FUN_007ad0c0(void* a, void* b);                    // 0x007AD0C0
 bool  __cdecl FUN_007ae910();                                    // 0x007AE910
 bool  __cdecl FUN_007b0030();                                    // 0x007B0030
 void* __cdecl FUN_0067dcc0();                                    // 0x0067DCC0  MessageServer()
+void* __cdecl FUN_0067dd60();                                    // 0x0067DD60
 struct CJob {
     int pad0[7];
     int   mSlot;              // +0x1c
@@ -101,8 +518,17 @@ struct CJob {
     bool Continuation(void* fn, void* arg);   // 0x0068F9F0 __thiscall
 };
 struct VecCore  { void DestroyRange(void* b, void* e); };        // 0x0070F520 __thiscall
+struct VecReserve { void Reserve(int n); };                      // 0x004E0880 __thiscall
 struct VecAssignOp { void Assign(void*, void*, void*, void*, void*); }; // 0x004E8EE0
 struct VecGrow  { void* Grow(int n, void* a, void* b); };        // 0x007B0370 __thiscall
+struct RasterOps{ void GetMipSize(void* p, int mip); };          // 0x011F0270 __thiscall
+struct IFac { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+              virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+              virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+              virtual void v12(); virtual void v13(void*);      // +0x34
+              virtual void v14();
+              virtual void* v15(int,int,int,int,int,int,int,int); // +0x3C
+              virtual void v16(); };
 struct IMsg { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
               virtual void v4(); virtual void v5(); virtual void v6(void*,void*,int,int); };
 struct Elem { char pad[0x28]; unsigned char* data; };           // pixel element at +0x28
@@ -135,6 +561,11 @@ struct cRowJobData {
     bool StepDown(CJob* job);
     bool StepUp(CJob* job);
 };
+namespace __equiv_ann1 {
+struct VecReserve {
+    void Reserve();   // 0x004e0880 (equiv t2)
+};
+}
 // ---- items of slice s007af8b0 end
 
 // ---- items of slice s007b0a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -168,9 +599,8 @@ struct C4 {
 // ---- items of slice s007b0a70 end
 
 // ---- items of slice s007b19c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* __cdecl FUN_0067dd60();                       // 0x0067DD60 (RTT manager / factory)
 struct S3 { int a, b, c; };
-struct IFac {
+struct IFac_s007b_19c0 {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
     virtual void* v7(S3 s, int z);                  // +0x1C
@@ -185,6 +615,26 @@ struct W1da0 {
     void f(S3* p);
 };
 // ---- items of slice s007b19c0 end
+
+// @ 0x004e0880
+template <class T> void eastl::vector_s004e_01d0<T>::reserve(uint32_t n)
+{
+    if (n > (uint32_t)(mpCapacity - mpBegin)) {
+        T* const pNewData = DoAllocate(n);
+        uninitialized_copy_ptr(mpBegin, mpEnd, pNewData);
+        destruct(mpBegin, mpEnd);
+        DoFree(mpBegin, (uint32_t)(mpCapacity - mpBegin));
+        const int nPrevSize = mpEnd - mpBegin;
+        mpBegin = pNewData;
+        mpEnd = pNewData + nPrevSize;
+        mpCapacity = mpBegin + n;
+    }
+}
+template void eastl::vector_s004e_01d0<EA::AutoRefCount_s004e_01d0<SP::cTextureInstance_s004e_01d0> >::reserve(uint32_t);
+
+
+
+
 
 // @ 0x007ada40
 void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int mode)
@@ -226,6 +676,52 @@ void mapblock(const uint32_t* src, uint8_t* dst, uint32_t c0, uint32_t c1, int m
 
 
 
+// @ 0x007adcf0
+void FUN_007adcf0(const uint32_t* src, uint8_t* dst, uint32_t cB, uint32_t cA)
+{
+    uint32_t a565 = ((cA >> 8) & 0xf800) | ((cA >> 5) & 0x7e0) | ((cA >> 3) & 0x1f);
+    uint32_t b565 = ((cB >> 8) & 0xf800) | ((cB >> 5) & 0x7e0) | ((cB >> 3) & 0x1f);
+    *(uint16_t*)(dst + 0) = (uint16_t)a565;
+    *(uint16_t*)(dst + 2) = (uint16_t)b565;
+    if ((uint16_t)a565 <= (uint16_t)b565) {
+        *(uint32_t*)(dst + 4) = 0;
+        return;
+    }
+    __m64 mask = *(const __m64*)&kMaskRGB;
+    __m64 m0 = _mm_and_si64(_mm_cvtsi32_si64((int)cA), mask);
+    __m64 m1 = _mm_and_si64(_mm_cvtsi32_si64((int)cB), mask);
+    __m64 zero = _mm_setzero_si64();
+    m0 = _mm_unpacklo_pi8(m0, zero);
+    m1 = _mm_unpacklo_pi8(m1, zero);
+    __m64 m2 = _mm_shuffle_pi16(m0, 0xe4);
+    __m64 m3 = _mm_shuffle_pi16(m1, 0xe4);
+    m2 = _mm_add_pi16(m2, m0);
+    m3 = _mm_add_pi16(m3, m0);
+    m2 = _mm_add_pi16(m2, m1);
+    m3 = _mm_add_pi16(m3, m1);
+    __m64 third = *(const __m64*)&kThird;
+    m2 = _mm_mulhi_pi16(m2, third);
+    m3 = _mm_mulhi_pi16(m3, third);
+    uint32_t result = 0;
+    for (int off = 0x3c; off >= 0; off -= 4) {
+        __m64 p = _mm_unpacklo_pi8(_mm_and_si64(_mm_cvtsi32_si64(*(const int*)((const uint8_t*)src + off)), mask), zero);
+        __m64 d0 = _mm_madd_pi16(_mm_sub_pi16(p, m0), _mm_sub_pi16(p, m0));
+        __m64 d1 = _mm_madd_pi16(_mm_sub_pi16(p, m1), _mm_sub_pi16(p, m1));
+        uint32_t best = (((uint32_t)_mm_cvtsi64_si32(d0) + (uint32_t)_mm_cvtsi64_si32(_mm_unpackhi_pi32(d0, d0))) * 4);
+        uint32_t e1 = (((uint32_t)_mm_cvtsi64_si32(d1) + (uint32_t)_mm_cvtsi64_si32(_mm_unpackhi_pi32(d1, d1))) * 4) | 1;
+        if (e1 < best) best = e1;
+        __m64 d2 = _mm_madd_pi16(_mm_sub_pi16(p, m2), _mm_sub_pi16(p, m2));
+        uint32_t e2 = (((uint32_t)_mm_cvtsi64_si32(d2) + (uint32_t)_mm_cvtsi64_si32(_mm_unpackhi_pi32(d2, d2))) * 4) | 2;
+        if (e2 < best) best = e2;
+        __m64 d3 = _mm_madd_pi16(_mm_sub_pi16(p, m3), _mm_sub_pi16(p, m3));
+        uint32_t e3 = (((uint32_t)_mm_cvtsi64_si32(d3) + (uint32_t)_mm_cvtsi64_si32(_mm_unpackhi_pi32(d3, d3))) * 4) | 3;
+        if (e3 < best) best = e3;
+        result = (result << 2) | (best & 3);
+    }
+    *(uint32_t*)(dst + 4) = result;
+}
+
+
 
 
 
@@ -257,9 +753,6 @@ uint32_t rtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
 
 
 
-
-
-
 // @ 0x007ae0b0
 uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
 {
@@ -272,9 +765,6 @@ uint32_t rbtrymapblock(const uint32_t* src, uint32_t raw0, uint32_t raw1)
         total += rbmappixel(src[i], pal);
     return total;
 }
-
-
-
 
 
 
@@ -317,9 +807,6 @@ uint32_t RefineMinMaxColors(const uint32_t* px, uint32_t* out)
 
 
 
-
-
-
 // @ 0x007ae5b0
 void FUN_007ae5b0(const uint8_t* src, uint8_t* dst, int stride)
 {
@@ -333,6 +820,38 @@ void FUN_007ae5b0(const uint8_t* src, uint8_t* dst, int stride)
 
 
 
+
+
+// @ 0x007ae660
+void InterpolatedAlphaBlock(int hi, int lo, const uint8_t* src, uint8_t* dst)
+{
+    dst[0] = (uint8_t)hi;
+    dst[1] = (uint8_t)lo;
+    if (hi - lo == 0) {
+        *(uint32_t*)(dst + 2) = 0;
+        *(uint16_t*)(dst + 6) = 0;
+        return;
+    }
+    uint32_t scale = 0x7ffffffu / (uint32_t)(hi - lo);
+    uint32_t rows[4];
+    for (int r = 0; r < 4; r++) {
+        uint32_t v = 0;
+        for (int c = 3; c >= 0; c--) {
+            uint32_t a = src[r * 16 + c * 4 + 3];
+            uint32_t t = g_alphaIndexTable[((a - (uint32_t)lo) * scale) >> 24];
+            v = (v << 3) | t;
+        }
+        rows[r] = v;
+    }
+    uint32_t lo24 = rows[0] | (rows[1] << 12);
+    dst[2] = (uint8_t)lo24;
+    dst[3] = (uint8_t)(lo24 >> 8);
+    dst[4] = (uint8_t)(lo24 >> 16);
+    uint32_t hi24 = rows[2] | (rows[3] << 12);
+    dst[5] = (uint8_t)hi24;
+    dst[6] = (uint8_t)(hi24 >> 8);
+    dst[7] = (uint8_t)(hi24 >> 16);
+}
 
 
 
@@ -374,9 +893,6 @@ void FUN_007ae840(const uint8_t* src, int stride, __m64* copy, uint32_t* out)
 
 
 
-
-
-
 // @ 0x007ae920
 void Span::Init(int x, int y, int dx, int dy, int extra)
 {
@@ -395,9 +911,6 @@ void Span::Init(int x, int y, int dx, int dy, int extra)
 
 
 
-
-
-
 // @ 0x007ae960
 uint8_t FlagHolder::IsSet()
 {
@@ -406,6 +919,253 @@ uint8_t FlagHolder::IsSet()
 
 
 
+
+
+// @ 0x007ae980
+#pragma auto_inline(off)
+void DestroyDxtSurface(DxtSurface* p)
+{
+    p->~DxtSurface();
+}
+
+
+
+
+
+// @ 0x007ae9f0
+DxtSurface::DxtSurface()
+: mC(0), m10(0), m24(0)
+{
+}
+
+
+
+
+// @ 0x007aeab0
+uint32_t EndpointColors::findendpoints(const uint32_t* pixels, uint32_t* out0, uint32_t* out1, int alpha, int quality)
+{
+    const uint32_t* colors = v;
+    DxtColor c0, c1;
+    uint32_t map[257];
+    c0.u = colors[0];
+    c1.u = colors[1];
+    map[0] = 0;
+
+    uint32_t thresh = 4;
+    if (quality >= 40) thresh = 3;
+    if (quality >= 60) thresh = 1;
+    if (quality >= 70) thresh = 0;
+
+    uint32_t e0 = RGB888TO565(c1.u);
+    uint32_t e1 = RGB888TO565(c0.u);
+    uint32_t best = 0x7fffffff;
+
+    if (quality >= 5)
+    {
+        best = trymapblock(e0, e1, map, pixels, best);
+        if (best > thresh)
+        {
+            if (quality < 10)
+            {
+                uint32_t err = trymapblock(e1, e0, map, pixels, best);
+                if (err < best)
+                {
+                    uint32_t t = e0;
+                    best = err;
+                    e0 = e1;
+                    e1 = t;
+                }
+            }
+            else
+            {
+                for (int i = 0; i < 16; ++i)
+                {
+                    uint32_t a = RGB888TO565(pixels[i]);
+                    for (int j = 0; j < 16; ++j)
+                    {
+                        uint32_t b = RGB888TO565(pixels[j]);
+                        if (a > b)
+                        {
+                            uint32_t err = trymapblock(a, b, map, pixels, best);
+                            if (err < best)
+                            {
+                                best = err;
+                                e0 = a;
+                                e1 = b;
+                                if (err <= thresh)
+                                    goto done;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    for (int pass = 0; pass < 1; ++pass)
+    {
+        if (quality > 10)
+        {
+            // Extrapolated 888 box: lo = 2*c0 - c1, hi = 2*c1 - c0.
+            uint8_t lo8r = (uint8_t)CLAMP0((int)c0.c.r * 2 - (int)c1.c.r);
+            uint8_t lo8g = (uint8_t)CLAMP0((int)c0.c.g * 2 - (int)c1.c.g);
+            uint8_t lo8b = (uint8_t)CLAMP0((int)c0.c.b * 2 - (int)c1.c.b);
+            int x;
+            uint8_t hi8r, hi8g, hi8b;
+            x = (int)c1.c.r * 2 - (int)c0.c.r;  hi8r = x > 0xff ? 0xff : (uint8_t)x;
+            x = (int)c1.c.g * 2 - (int)c0.c.g;  hi8g = x > 0xff ? 0xff : (uint8_t)x;
+            x = (int)c1.c.b * 2 - (int)c0.c.b;  hi8b = x > 0xff ? 0xff : (uint8_t)x;
+
+            Rgb565 lo, hi;
+            lo.r = (uint8_t)CLAMP0((int)(lo8r >> 3) - 1);
+            lo.g = (uint8_t)CLAMP0((int)(lo8g >> 2) - 1);
+            lo.b = (uint8_t)CLAMP0((int)(lo8b >> 3) - 1);
+            x = (hi8r >> 3) + 2;  hi.r = x > 0x1f ? 0x1f : (uint8_t)x;
+            x = (hi8g >> 2) + 2;  hi.g = x > 0x3f ? 0x3f : (uint8_t)x;
+            x = (hi8b >> 3) + 2;  hi.b = x > 0x1f ? 0x1f : (uint8_t)x;
+
+            // Search boxes around e0 (lo0..hi0) and e1 (lo1..hi1).
+            Rgb565 lo0, hi0, lo1, hi1;
+            if (quality >= 100)
+            {
+                lo0 = lo;
+                lo1 = lo;
+                hi0 = hi;
+                hi1 = hi;
+            }
+            else
+            {
+                uint32_t dn = quality / 50;
+                uint32_t up = quality / 40 + 1;
+                uint32_t r, g, b;
+
+                r = (e0 >> 11) & 0x1f;  g = (e0 >> 5) & 0x3f;  b = e0 & 0x1f;
+                lo0.r = (uint8_t)MAX((uint32_t)lo.r, r - dn);
+                lo0.g = (uint8_t)MAX((uint32_t)lo.g, g - dn);
+                lo0.b = (uint8_t)MAX((uint32_t)lo.b, b - dn);
+                hi0.r = (uint8_t)MIN(MIN((uint32_t)hi.r, r + up), 0x1fu);
+                hi0.g = (uint8_t)MIN(MIN((uint32_t)hi.g, g + up), 0x3fu);
+                hi0.b = (uint8_t)MIN(MIN((uint32_t)hi.b, b + up), 0x1fu);
+
+                r = (e1 >> 11) & 0x1f;  g = (e1 >> 5) & 0x3f;  b = e1 & 0x1f;
+                lo1.r = (uint8_t)MAX((uint32_t)lo.r, r - dn);
+                lo1.g = (uint8_t)MAX((uint32_t)lo.g, g - dn);
+                lo1.b = (uint8_t)MAX((uint32_t)lo.b, b - dn);
+                hi1.r = (uint8_t)MIN(MIN((uint32_t)hi.r, r + up), 0x1fu);
+                hi1.g = (uint8_t)MIN(MIN((uint32_t)hi.g, g + up), 0x3fu);
+                hi1.b = (uint8_t)MIN(MIN((uint32_t)hi.b, b + up), 0x1fu);
+            }
+
+            // Vary e0 with e1 fixed.
+            if (quality >= 20)
+            {
+                for (uint32_t r = lo0.r; r <= hi0.r; ++r)
+                    for (uint32_t b = lo0.b; b <= hi0.b; ++b)
+                        for (uint32_t g = lo0.g; g <= hi0.g; ++g)
+                        {
+                            uint32_t c = ((r << 6 | g) << 5) | b;
+                            if (c > e1)
+                            {
+                                uint32_t err = trymapblock(c, e1, map, pixels, best);
+                                if (err < best)
+                                {
+                                    best = err;
+                                    e0 = c;
+                                    if (err <= thresh)
+                                        goto done;
+                                }
+                            }
+                        }
+            }
+
+            // Vary e1 with e0 fixed.
+            if (quality >= 25)
+            {
+                for (uint32_t r = lo1.r; r <= hi1.r; ++r)
+                    for (uint32_t b = lo1.b; b <= hi1.b; ++b)
+                        for (uint32_t g = lo1.g; g <= hi1.g; ++g)
+                        {
+                            uint32_t c = ((r << 6 | g) << 5) | b;
+                            if (e0 > c)
+                            {
+                                uint32_t err = trymapblock(e0, c, map, pixels, best);
+                                if (err < best)
+                                {
+                                    best = err;
+                                    e1 = c;
+                                    if (err <= thresh)
+                                        goto done;
+                                }
+                            }
+                        }
+            }
+
+            // Vary both: red pairs, then red/blue pairs, pre-screened by the
+            // partial-channel error bounds.
+            if (quality >= 30)
+            {
+                for (uint32_t r0 = lo0.r; r0 <= hi0.r; ++r0)
+                    for (uint32_t r1 = lo1.r; r1 <= hi1.r; ++r1)
+                    {
+                        if (!(r0 > r1 || quality >= 50))
+                            continue;
+                        if (rtrymapblock(pixels, r0, r1) >= best)
+                            continue;
+                        for (uint32_t b0 = lo0.b; b0 <= hi0.b; ++b0)
+                            for (uint32_t b1 = lo1.b; b1 <= hi1.b; ++b1)
+                            {
+                                uint32_t err = rbtrymapblock(pixels, b0 | r0 << 11, r1 << 11 | b1);
+                                if (err < best)
+                                {
+                                    for (uint32_t g0 = lo0.g; g0 <= hi0.g; ++g0)
+                                    {
+                                        uint32_t ca = ((r0 << 6 | g0) << 5) | b0;
+                                        for (uint32_t g1 = lo1.g; g1 <= hi1.g; ++g1)
+                                        {
+                                            uint32_t cb = ((r1 << 6 | g1) << 5) | b1;
+                                            if (ca > cb || quality >= 60)
+                                            {
+                                                uint32_t e = trymapblock(ca, cb, map, pixels, best);
+                                                if (e < best)
+                                                {
+                                                    best = e;
+                                                    e0 = ca;
+                                                    e1 = cb;
+                                                    if (e <= thresh)
+                                                        goto done;
+                                                }
+                                                else if (e - best > 16)
+                                                {
+                                                    ++g1;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (err - best > 0x1000)
+                                {
+                                    ++b1;
+                                }
+                            }
+                    }
+            }
+
+            if (quality == 100)
+                break;
+        }
+    }
+
+done:
+    if (!alpha && c0.c.a < 0x80 && e0 > e1)
+    {
+        uint32_t t = e0;
+        e0 = e1;
+        e1 = t;
+    }
+    *out0 = e0;
+    *out1 = e1;
+    return best;
+}
 
 
 
@@ -431,8 +1191,6 @@ void FUN_007af5d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 
 
 
-
-
 // @ 0x007af620
 void FUN_007af620(Endpoint* first, Endpoint* last, const Endpoint* src)
 {
@@ -447,8 +1205,6 @@ void FUN_007af620(Endpoint* first, Endpoint* last, const Endpoint* src)
         first->c    = src->c;
     }
 }
-
-
 
 
 
@@ -476,8 +1232,6 @@ void FUN_007af670(Endpoint* dest, uint32_t n, const Endpoint* src)
 
 
 
-
-
 // @ 0x007af6d0
 void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
 {
@@ -494,8 +1248,6 @@ void FUN_007af6d0(Endpoint* first, Endpoint* last, Endpoint* dest)
         dest->c    = last->c;
     }
 }
-
-
 
 
 
@@ -625,6 +1377,48 @@ bool cDXTCompressJobData::RunJob(CJob* job)
     } while (work < (int)limit);
     job->mSlot = row;
     return job->Continuation((void*)&FUN_007b0030, this);
+}
+
+
+
+// @ 0x007aff00
+bool WriteImageDataAsTexture(void* ppData, int a, int b, void** out)
+{
+    cImageDataRaw* img = *(cImageDataRaw**)(*(void**)ppData);
+    unsigned fmt = img->mFormat;
+    unsigned dxt;
+    if (fmt == 2)        dxt = 0x15;
+    else if (fmt == 4)   dxt = 0x31545844;
+    else if (fmt == 5)   dxt = 0x33545844;
+    else if (fmt == 6)   dxt = 0x35545844;
+    else                 return false;
+    IFac* fac = (IFac*)FUN_0067dd60();
+    void* tex = fac->v15(a, b, img->mWidth, img->mHeight,
+                         ((int*)ppData)[1] - *(int*)ppData >> 2, 8, dxt, 0);
+    if (tex)
+        _InterlockedExchange((volatile long*)((char*)tex + 8), 1 + *(long*)((char*)tex + 8));
+    if (!tex)
+        return false;
+    if ((*((unsigned char*)tex + 4) & 1) == 0) {
+        IFac* f2 = (IFac*)FUN_0067dd60();
+        f2->v13(tex);
+    }
+    int n = ((int*)ppData)[1] - *(int*)ppData >> 2;
+    for (int i = 0; i < n; ++i)
+        ((RasterOps*)*(void**)tex)->GetMipSize(*(void**)(*(int*)(*(int*)ppData + i*4) + 0x28), i);
+    *out = tex;
+    return true;
+}
+
+
+
+// @ 0x007b07e0
+SP::cTexturePreload::cTexturePreload(int n)
+{
+    if (n >= 0) {
+        ((VecReserve*)&mComplete)->Reserve(n);
+        ((VecReserve*)&mInProgress)->Reserve(n);
+    }
 }
 
 
@@ -763,7 +1557,7 @@ int C20::Alloc()
 // @ 0x007b1da0
 void W1da0::f(S3* p)
 {
-    IFac* fac = (IFac*)FUN_0067dd60();
+    IFac_s007b_19c0* fac = (IFac_s007b_19c0*)FUN_0067dd60();
     Handler(fac->v7(*p, 0));
 }
 

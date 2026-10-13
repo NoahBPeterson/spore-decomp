@@ -31,8 +31,9 @@ namespace EA { namespace Sockets { class IStreamSocket; } }
 namespace EA {
 namespace Internet {
 
-// dev size 0x180 -> retail size 0x188 (re-laid from the PDB, unverified in retail)
-// evidence: view s00942290 (size 0x150, 10 shared members) rejected: shifts [-32]
+// dev size 0x180 -> retail size 0x168 (override)
+// evidence: view s00942290 is the evidence: 10 of 10 shared members agree with the re-laid offsets, 1 byte-exact users, shifts [0], declared size 0x150
+// evidence: override applied: retail HTTPClient has no user-name/password strings (dev PDB +0x2c/+0x3c, 0x10 each): AddNewJob 0x946680 does `inc dword ptr [esi+0x2c]` (mnLastJobId, dev +0x4c) right after mpNotificationTargetContext +0x28, locks the mutex at [esi+0x60] (dev 0x80) and inserts into the job list at [esi+0x94] (dev 0xb4); byte-exact AllocBuffer 0x941f20 (s009413d0) reads mnReadBufferSize +0x144 and stores mpReadBuffer +0x140 (dev 0x164/0x160); ReadResponseData 0x942690 tests mnLoggingEnabled [esi+0x30], reads mpReadLogStream [esi+0x54], adds to mnBytesReceived [esi+0x138]; slice view s00942290 puts all ten shared members 0x20 below the dev layout (fix pass 2, 2026-10-13)
 #pragma pack(push, 8)
 class HTTPClient : public EA::COM::IUnknown32RefCount /* +0x0 */, public EA::COM::RefCountTemplate<EA::Thread::AtomicInt<int> > /* +0x4 */ {
  public:
@@ -204,34 +205,32 @@ class HTTPClient : public EA::COM::IUnknown32RefCount /* +0x0 */, public EA::COM
   bool mbInitialized;                                          // 0x00c relaid
   void* mpCustomData;                                          // 0x010 relaid
   eastl::basic_string<char,eastl::allocator> msUserAgent;      // 0x014 relaid
-  void (*mpNotificationTarget)();                              // 0x024 relaid
-  void* mpNotificationTargetContext;                           // 0x028 relaid
-  eastl::basic_string<char,eastl::allocator> msUserName;       // 0x02c relaid
-  eastl::basic_string<char,eastl::allocator> msUserPassword;   // 0x03c relaid
-  unsigned int mnLastJobId;                                    // 0x04c relaid
-  int mnLoggingEnabled;                                        // 0x050 relaid
-  eastl::basic_string<wchar_t,eastl::allocator> msReadLogPath; // 0x054 relaid
-  eastl::basic_string<wchar_t,eastl::allocator> msWriteLogPath; // 0x064 relaid
-  EA::COM::AutoRefCount<EA::IO::IStream> mpReadLogStream;      // 0x074 relaid
-  EA::COM::AutoRefCount<EA::IO::IStream> mpWriteLogStream;     // 0x078 relaid
-  EA::Thread::Mutex mMutex;                                    // 0x080 relaid
-  EA::Internet::HTTPClient::WorkerThreadInfo* mpWorkerThreadInfo; // 0x0b0 relaid
-  eastl::list<EA::Internet::HTTPClient::Job,eastl::allocator> mJobList; // 0x0b4 relaid
-  EA::Sockets::NameLookup mNameLookup;                         // 0x0c0 relaid
-  EA::Sockets::IPAddress mProxyServerAddress;                  // 0x118 relaid
-  eastl::basic_string<char,eastl::allocator> msProxyServerAddress; // 0x134 relaid
-  unsigned short mnProxyServerPort;                            // 0x144 relaid
-  int mnTimeoutSeconds;                                        // 0x148 relaid
-  unsigned __int64 mnBytesSent;                                // 0x150 relaid
-  unsigned __int64 mnBytesReceived;                            // 0x158 relaid
-  char* mpReadBuffer;                                          // 0x160 relaid
-  unsigned int mnReadBufferSize;                               // 0x164 relaid
-  char* mpWriteBuffer;                                         // 0x168 relaid
-  unsigned int mnWriteBufferSize;                              // 0x16c relaid
-  eastl::vector<EA::Internet::IRequestResponseFilter *,eastl::sp_vector_allocator> mFilters; // 0x170 relaid
+  void (*mpNotificationTarget)();                              // 0x024 exact-renamed:s00942290 (slice: mpNotify)
+  void* mpNotificationTargetContext;                           // 0x028 exact-renamed:s00942290 (slice: mpNotifyCtx)
+  unsigned int mnLastJobId;                                    // 0x02c relaid
+  int mnLoggingEnabled;                                        // 0x030 exact:s00942290
+  eastl::basic_string<wchar_t,eastl::allocator> msReadLogPath; // 0x034 relaid
+  eastl::basic_string<wchar_t,eastl::allocator> msWriteLogPath; // 0x044 relaid
+  EA::COM::AutoRefCount<EA::IO::IStream> mpReadLogStream;      // 0x054 exact:s00942290
+  EA::COM::AutoRefCount<EA::IO::IStream> mpWriteLogStream;     // 0x058 exact:s00942290
+  EA::Thread::Mutex mMutex;                                    // 0x060 relaid
+  EA::Internet::HTTPClient::WorkerThreadInfo* mpWorkerThreadInfo; // 0x090 exact:s00942290
+  eastl::list<EA::Internet::HTTPClient::Job,eastl::allocator> mJobList; // 0x094 relaid
+  EA::Sockets::NameLookup mNameLookup;                         // 0x0a0 relaid
+  EA::Sockets::IPAddress mProxyServerAddress;                  // 0x0f8 relaid
+  eastl::basic_string<char,eastl::allocator> msProxyServerAddress; // 0x114 relaid
+  unsigned short mnProxyServerPort;                            // 0x124 relaid
+  int mnTimeoutSeconds;                                        // 0x128 relaid
+  unsigned __int64 mnBytesSent;                                // 0x130 exact:s00942290
+  unsigned __int64 mnBytesReceived;                            // 0x138 exact:s00942290
+  char* mpReadBuffer;                                          // 0x140 exact:s00942290
+  unsigned int mnReadBufferSize;                               // 0x144 exact:s00942290
+  char* mpWriteBuffer;                                         // 0x148 exact:s00942290
+  unsigned int mnWriteBufferSize;                              // 0x14c exact:s00942290
+  eastl::vector<EA::Internet::IRequestResponseFilter *,eastl::sp_vector_allocator> mFilters; // 0x150 relaid
 };
 #pragma pack(pop)
-// sizeof(HTTPClient) expected 0x188 (unverified)
+// sizeof(HTTPClient) expected 0x168 (unverified)
 
 }  // namespace Internet
 }  // namespace EA

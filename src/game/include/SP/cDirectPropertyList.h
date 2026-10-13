@@ -44,10 +44,10 @@ class cDirectPropertyList : public SP::cPropertyList /* +0x0 */ {
   int GetIntProperty(unsigned int) const;                                // 0x006a2660
   float GetFloatProperty(unsigned int) const;                            // 0x006a2710
   bool GetBoolProperty(unsigned int) const;                              // 0x006a84f0
+  void SetBoolProperty(unsigned int, bool);                              // 0x0093a2e0
   bool BoolProp(unsigned int) const;                                     // dev only
   int IntProp(unsigned int) const;                                       // dev only
   float FloatProp(unsigned int) const;                                   // dev only
-  void SetBoolProperty(unsigned int, bool);                              // dev only
   cDirectPropertyList(int);                                              // dev only
 
  public:  // data (retail offsets)

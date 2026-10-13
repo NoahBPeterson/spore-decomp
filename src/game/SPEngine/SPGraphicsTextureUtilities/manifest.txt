@@ -1,5 +1,8 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?reserve@?$vector_s004e_01d0@V?$AutoRefCount_s004e_01d0@VcTextureInstance_s004e_01d0@SP@@@EA@@@eastl@@QAEXI@Z  004e0880  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?IsSet@FlagHolder@@QAEEXZ  007ae960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??1DxtSurface@@UAE@XZ  007ae980  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ??0DxtSurface@@QAE@XZ  007ae9f0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af620@@YAXPAUEndpoint@@0PBU1@@Z  007af620  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?FUN_007af670@@YAXPAUEndpoint@@IPBU1@@Z  007af670  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsTextureUtilities.cpp  ?StepDown@cRowJobData@@QAE_NPAUCJob@@@Z  007afae0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

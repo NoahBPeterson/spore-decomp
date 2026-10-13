@@ -122,8 +122,9 @@ def migration_table():
     print()
     print("Moving source out of match/slices into one .cpp per object file (src/game, Phase B)")
     print()
-    print("  Migrated so far: %s functions with compilable source = %s of all game functions (%s by size);" % (
+    print("  Migrated so far: %s functions with compilable source = %s of all game functions (%s by size), misfiled ones" % (
         human(len(migrated)), pct(len(migrated), G), pct(mb(migrated), GB_MB)))
+    print("  included (the table's TOTAL counts only functions inside their object's ranges);")
     print("  of those, %s are verbatim slice text (compile and match, not yet on the canonical classes)." % human(len(mig_verbatim)))
     print("  Finished objects: %s functions sit in retail code ranges that are completely migrated (%s by size)." % (
         human(len(closed)), pct(mb(closed), GB_MB)))

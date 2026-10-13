@@ -7,14 +7,10 @@
 #include "SP/cAppStateManager.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cCommandBase.h"
+#include "EA/Swarm/cDescription.h"
+#include "EA/ArgScript/cError.h"
 #include "EA/ArgScript/cIParser.h"
 #include "EA/ArgScript/cICommand.h"
-
-// Retail slice s007e4260 uses the over-parametered placement `operator new` that the game's allocator plumbing
-// provides; the module TU's placed new-expressions (`new ("App", 0, 0, 0, 0) T()`, inside the slice's inline
-// `NewBehaviorMessage`) need it.  rewrite.py does not emit this slice-local declaration (rewrite_stubs.needed_items
-// scans only the emitted function bodies for `new`, not the inline helpers they call): added by hand, see report.
-void* operator new(unsigned int size, const char* name, int a, int b, const char* file, int line);
 
 // ---- items of slice s006a7e40 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  EASTL_allocator_deallocate(void* p);   // 0x00f47380
@@ -312,9 +308,9 @@ namespace EA {
 namespace ArgScript {
 class cArguments_s007e_32c0 {
 public:
-    const char** MainArguments(int n);
-    const char** MainArguments(int* pCount, int min, int max);
-    const char** OptionArguments(const char* name, int n);
+    const char** MainArguments(int n);  // 0x00838320 (EA::ArgScript::cArguments::MainArguments)
+    const char** MainArguments(int* pCount, int min, int max);  // 0x00838020 (EA::ArgScript::cArguments::MainArguments)
+    const char** OptionArguments(const char* name, int n);  // 0x00838330 (EA::ArgScript::cArguments::OptionArguments)
     bool HasFlag(const char* name);                     // 0x008380b0
 };
 }
@@ -366,15 +362,17 @@ void FUN_007e32c0(AMVecFull* v, cActionMessage* pos, const cActionMessage* m); /
 // ---- items of slice s007e32c0 end
 
 // ---- items of slice s007e4260 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new(size_t size, const char* name, int a, int b, const char* file, int line);
+void* operator new[](size_t size);
 long  _InterlockedExchange(volatile long* target, long value);
 namespace EA {
 namespace ArgScript {
 class cArguments_s007e_4260 {
 public:
-    const char** MainArguments(int n);
-    const char** MainArguments(int* pCount, int min, int max);
-    const char** OptionArguments(const char* name, int n);
-    bool HasFlag(const char* name);
+    const char** MainArguments(int n);  // 0x00838320 (EA::ArgScript::cArguments::MainArguments)
+    const char** MainArguments(int* pCount, int min, int max);  // 0x00838020 (EA::ArgScript::cArguments::MainArguments)
+    const char** OptionArguments(const char* name, int n);  // 0x00838330 (EA::ArgScript::cArguments::OptionArguments)
+    bool HasFlag(const char* name);  // 0x008380b0 (EA::ArgScript::cArguments::HasFlag)
 };
 }
 }

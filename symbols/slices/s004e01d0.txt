@@ -2,7 +2,7 @@
 004e0600 eastl::hash_map<uint32_t,SP::cSpeciesArchetype>::operator[]  # same shape, cSpeciesArchetype ctor/copy/dtor calls
 004e0700 eastl::hash_map<uint32_t,T,hash,fixed_hashtable_allocator>::hash_map  # forwards to hashtable ctor with tag temps
 004e0750 eastl::rehash_base::set_max_load_factor  # prime_rehash_policy(f) then GetBucketCount/DoRehash
-004e0880 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::sp_vector_allocator>::reserve  # PDB name
+004e0880 ?reserve@?$vector_s004e_01d0@V?$AutoRefCount_s004e_01d0@VcTextureInstance_s004e_01d0@SP@@@EA@@@eastl@@QAEXI@Z  # reserve migrated from s004e01d0 (verbatim, slice spelling)
 004e0990 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::hashtable  # reset()/GetNextBucketCount/DoAllocateBuckets
 004e0a60 eastl::hashtable<uint32_t,...,fixed_hashtable_allocator>::~hashtable  # clear + DoFreeBuckets (fixed pool deallocate)
 004e0be0 eastl::hashtable<uint32_t,...>::find  # DoFindNode inline, iterator copy ctor on return

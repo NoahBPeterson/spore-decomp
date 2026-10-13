@@ -19,6 +19,12 @@ class basic_string {
   // library instantiations, defined elsewhere in the image (not here): assign(pBegin, pEnd) is 0x00454cb0 for char and
   // 0x00423650 for wchar_t (the byte-exact SP::GetPropertyAsString8/16 call them)
   void assign(const T* pBegin, const T* pEnd);
+  // append(pBegin, pEnd) is 0x00455d60 for char and 0x00429580 for wchar_t, sprintf(fmt, ...) 0x00472fe0 / 0x0041e050
+  // (symbols/pdb_names.json, callee-single; ArgumentSpec AddArgDocs 0x839c00 and INetFileCache Init 0x949cc0 call append)
+  basic_string& append(const T* pBegin, const T* pEnd);
+  // assign(p) (NUL-terminated) is 0x006a4380 for char (pdb_names callee-single; slice s0083c900 declares it there)
+  basic_string& assign(const T* p);
+  int sprintf(const T* pFormat, ...);
 };
 
 typedef basic_string<char> string8;

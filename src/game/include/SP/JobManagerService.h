@@ -10,7 +10,7 @@ namespace SP { class cJobThread; }
 
 namespace SP {
 
-// dev size 0x1c0 -> retail size 0x1c0 (re-laid from the PDB, unverified in retail)
+// dev size 0x1c0 -> retail size 0x1f0 (re-laid from the PDB, unverified in retail)
 #pragma pack(push, 8)
 class JobManagerService {
  public:
@@ -23,10 +23,10 @@ class JobManagerService {
 
  public:  // data (retail offsets)
   SP::cJobManager mJobManager;                                 // 0x000 relaid
-  SP::cJobThread* mpBaseThread;                                // 0x1b8 relaid
+  SP::cJobThread* mpBaseThread;                                // 0x1e8 (dev 0x1b8) relaid
 };
 #pragma pack(pop)
-// sizeof(JobManagerService) expected 0x1c0 (unverified)
+// sizeof(JobManagerService) expected 0x1f0 (unverified)
 
 }  // namespace SP
 

@@ -11,6 +11,7 @@
 #include "EA/ArgScript/cEnumSpec.h"
 #include "EA/ArgScript/cOptionsSpec.h"
 #include "EA/ArgScript/cCommandBase.h"
+#include "EA/ArgScript/cError.h"
 
 // ---- items of slice s00837820 begin (TODO(rewrite): local stubs, replace by canonical classes)
 __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
@@ -202,7 +203,7 @@ void      __cdecl UninitDestroyArg(cArgInfo* first, cArgInfo* last, cArgInfo* de
 
 // ---- items of slice s0083a9f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long  __cdecl atol(const char*);
-extern "C" int   __cdecl isalpha(int);
+extern "C" __declspec(dllimport) int   __cdecl isalpha(int);
 extern char gEmptyString[];
 typedef unsigned int   uint32;
 namespace eastl {
@@ -338,6 +339,9 @@ namespace eastl {
 struct sp_vector_allocator_s0083_b810 : allocator_s0083_b810 {};
 }
 namespace eastl {
+template <typename T> inline const T& min_alt_s0083_b810(const T& a, const T& b) { return b < a ? b : a; }
+}
+namespace eastl {
 struct string8_s0083_b810 {
     enum { npos = 0xffffffff };
     char* mpBegin; char* mpEnd; char* mpCapacity; allocator_s0083_b810 mAllocator;
@@ -348,7 +352,7 @@ struct string8_s0083_b810 {
     void assign(const char* first, const char* last);   // 0x00454cb0
     void assign(const char* p);                         // 0x006a4380
     void assign(const string8_s0083_b810& x, unsigned position, unsigned n) {
-        assign(x.mpBegin + position, x.mpBegin + position + min_alt(n, x.size() - position));
+        assign(x.mpBegin + position, x.mpBegin + position + min_alt_s0083_b810(n, x.size() - position));
     }
     void append(const char* first, const char* last);   // 0x00455d60
     string8_s0083_b810& operator=(const string8_s0083_b810& x) { if (&x != this) assign(x.mpBegin, x.mpEnd); return *this; }
@@ -368,7 +372,7 @@ struct string8_s0083_b810 {
         return pBegin;
     }
     __forceinline string8_s0083_b810& erase(unsigned position, unsigned n) {
-        n = min_alt(n, size() - position);
+        n = min_alt_s0083_b810(n, size() - position);
         erase(mpBegin + position, mpBegin + position + n);
         return *this;
     }
@@ -396,6 +400,9 @@ struct string8_s0083_b810 {
         *mpEnd = 0;
     }
 };
+}
+namespace eastl {
+template <typename T> T* CopyRange(T* first, T* last, T* dest);
 }
 namespace eastl {
 template <typename T>
@@ -486,15 +493,16 @@ struct cArgumentSpec_s0083_b810 {
     int  Parse(int argc, const char** argv, ArgParser* p);                 // 0x0083b810
     int  ParseVectorArgument(cArgInfo_s0083_b810* ai, const char* str);
     int  ParseVectorArgument(cArgInfo_s0083_b810* ai, const char* str, ArgParser* p);
-    int  ParseArgument(cArgInfo_s0083_b810* ai, const char* str);
-    int  ParseArgumentEx(cArgInfo_s0083_b810* ai, const char* str, ArgParser* p);
-    int  ParseOptionArgs(cOptionsSpec_s0083_b810* opt, int** ppArgs, const char** ppEnd, ArgParser* p);
-    int  ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p);
+    int  ParseArgument(cArgInfo_s0083_b810* ai, const char* str);  // 0x0083afc0 (cArgumentSpec::ParseArgument)
+    int  ParseArgumentEx(cArgInfo_s0083_b810* ai, const char* str, ArgParser* p);  // 0x0083b1d0 (cArgumentSpec::ParseArgumentEx)
+    int  ParseOptionArgs(cOptionsSpec_s0083_b810* opt, int** ppArgs, const char** ppEnd, ArgParser* p);  // 0x0083b580 (cArgumentSpec::ParseOptionArgs)
+    int  ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p);  // 0x0083b6d0 (cArgumentSpec::ParseOption)
     void CreateHelpString(const char* name, eastl::string8_s0083_b810* out, int style);  // 0x00839f90
     void FindNameAndTypeFromOption(const eastl::string8_s0083_b810& word, int& type, eastl::string8_s0083_b810& name);  // 0x00839540
     int  ConstructSpec(const char* name, const char* spec, ...);           // 0x0083bcd0
     void ParseThrowing(int argc, const char** argv, ArgParser* p);         // 0x0083b9d0
 };
+void __cdecl Sprintf(eastl::string8_s0083_b810* out, const char* fmt, ...);   // 0x00840c20
 void __cdecl FUN_00837f80(int* out, const void* p);                // 0x00837f80
 void __cdecl FUN_00837f60();                                       // 0x00837f60
 cOptionsSpec_s0083_b810* __cdecl CopyOptionsRange(cOptionsSpec_s0083_b810* first, cOptionsSpec_s0083_b810* last, cOptionsSpec_s0083_b810* result);     // 0x0083a900
@@ -512,10 +520,6 @@ bool StrEqualI(const char* a, const char* b)
 
 
 
-
-
-
-
 // @ 0x00838780
 bool StrNEqualI(const char* a, const char* b, unsigned int n)
 {
@@ -526,19 +530,11 @@ bool StrNEqualI(const char* a, const char* b, unsigned int n)
 
 
 
-
-
-
-
 // @ 0x008387a0
 bool StrEqualI2(const char** p, const char* b)
 {
     return _stricmp(*p, b) == 0;
 }
-
-
-
-
 
 
 
@@ -564,10 +560,6 @@ RawStr::RawStr(const RawStr& s, uint32_t pos, uint32_t n)
 
 
 
-
-
-
-
 // @ 0x00838a60
 int RawStr::Find(const char* p, uint32_t pos)
 {
@@ -581,10 +573,6 @@ int RawStr::Find(const char* p, uint32_t pos)
     }
     return -1;
 }
-
-
-
-
 
 
 
@@ -612,10 +600,6 @@ Ent* Ent::CopyFrom(const Ent* src)
 
 
 
-
-
-
-
 // @ 0x00838b90
 Vec2* CopyVec2(Vec2* first, Vec2* last, Vec2* dst)
 {
@@ -632,10 +616,6 @@ Vec2* CopyVec2(Vec2* first, Vec2* last, Vec2* dst)
 
 
 
-
-
-
-
 // @ 0x00838de0
 void FUN_00838de0(RawStr* p, uint32_t pos, uint32_t n)
 {
@@ -644,10 +624,6 @@ void FUN_00838de0(RawStr* p, uint32_t pos, uint32_t n)
     const uint32_t& cnt = min_alt(rem, n);
     p->Assign(begin + pos, begin + pos + cnt);
 }
-
-
-
-
 
 
 
@@ -665,10 +641,6 @@ Ent* DestroyEnts(Ent* first, Ent* last, Ent* dst)
     }
     return dst;
 }
-
-
-
-
 
 
 
@@ -693,10 +665,6 @@ Ent* CopyEntsFwd(Ent* first, Ent* last, Ent* dst)
 
 
 
-
-
-
-
 // @ 0x00838f80
 Ent* CopyEntsBwd(Ent* first, Ent* last, Ent* dst)
 {
@@ -713,10 +681,6 @@ Ent* CopyEntsBwd(Ent* first, Ent* last, Ent* dst)
     }
     return dst;
 }
-
-
-
-
 
 
 
@@ -739,10 +703,6 @@ Ent2* CopyEnts2Fwd(Ent2* first, Ent2* last, Ent2* dst)
 
 
 
-
-
-
-
 // @ 0x00839040
 Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
 {
@@ -760,10 +720,6 @@ Ent2* CopyEnts2Bwd(Ent2* first, Ent2* last, Ent2* dst)
 
 
 
-
-
-
-
 // @ 0x00839950
 VecArgInfo::VecArgInfo(const VecArgInfo& x)
 {
@@ -772,10 +728,6 @@ VecArgInfo::VecArgInfo(const VecArgInfo& x)
     UninitCopyArgEH(&pEnd, x.mpBegin, x.mpEnd, mpBegin, &x);
     mpEnd = pEnd;
 }
-
-
-
-
 
 
 
@@ -805,10 +757,6 @@ void V8::DoInsertValue(E8* pos, const E8& v)
 
 
 
-
-
-
-
 // @ 0x00839ae0
 void V16::DoInsertValue(E16* pos, const E16& v)
 {
@@ -833,10 +781,6 @@ void V16::DoInsertValue(E16* pos, const E16& v)
         mpBegin = nb; mpEnd = np; mpCapacity = nb + n;
     }
 }
-
-
-
-
 
 
 
@@ -879,10 +823,6 @@ void cArgumentSpec::AddArgDocs(eastl::string8_s0083_9950* out, VecArgInfo* args,
 
 
 
-
-
-
-
 // @ 0x00839d80
 void V8::push_back(const E8& v)
 {
@@ -895,10 +835,6 @@ void V8::push_back(const E8& v)
 
 
 
-
-
-
-
 // @ 0x00839dc0
 void V16::push_back(const E16& v)
 {
@@ -908,10 +844,6 @@ void V16::push_back(const E16& v)
         DoInsertValue(mpEnd, v);
     }
 }
-
-
-
-
 
 
 
@@ -970,20 +902,12 @@ void cArgumentSpec::CreateHelpString(const char* name, eastl::string8_s0083_9950
 
 
 
-
-
-
-
 // @ 0x0083a2f0
 const char* cArgumentSpec::HelpString(const char* name, int style)
 {
     CreateHelpString(name, &mErrorString, style);
     return mErrorString.mpBegin;
 }
-
-
-
-
 
 
 
@@ -1013,10 +937,6 @@ cOptionsSpec* __cdecl DestroyOptionsRange(cOptionsSpec* first, cOptionsSpec* las
 
 
 
-
-
-
-
 // @ 0x0083a3c0
 void VecArgInfo::DoInsertValue(cArgInfo* pos, const cArgInfo& v)
 {
@@ -1040,10 +960,6 @@ void VecArgInfo::DoInsertValue(cArgInfo* pos, const cArgInfo& v)
         mpBegin = nb; mpEnd = ne; mpCapacity = nb + n;
     }
 }
-
-
-
-
 
 
 
@@ -1075,10 +991,6 @@ void VecEnumSpec::DoInsertValue(cEnumSpec* pos, const cEnumSpec& v)
 
 
 
-
-
-
-
 // @ 0x0083a740
 VecArgInfo& VecArgInfo::operator=(const VecArgInfo& x)
 {
@@ -1106,10 +1018,6 @@ VecArgInfo& VecArgInfo::operator=(const VecArgInfo& x)
 
 
 
-
-
-
-
 // @ 0x0083a8b0
 cOptionsSpec& cOptionsSpec::operator=(const cOptionsSpec& x)
 {
@@ -1121,10 +1029,6 @@ cOptionsSpec& cOptionsSpec::operator=(const cOptionsSpec& x)
     mFlagToSet = x.mFlagToSet;
     return *this;
 }
-
-
-
-
 
 
 
@@ -1148,10 +1052,6 @@ cOptionsSpec* __cdecl CopyOptionsRange(cOptionsSpec* first, cOptionsSpec* last, 
 
 
 
-
-
-
-
 // @ 0x0083a970
 cOptionsSpec* __cdecl CopyBackwardOptionsRange(cOptionsSpec* first, cOptionsSpec* last, cOptionsSpec* resultEnd)
 {
@@ -1172,17 +1072,11 @@ cOptionsSpec* __cdecl CopyBackwardOptionsRange(cOptionsSpec* first, cOptionsSpec
 }
 
 
-
-
-
-
 // @ 0x0083a9f0
 EA::ArgScript::cArgumentSpec::cArgumentSpec(bool respectHelp)
 
 : mCommandName(), mBriefDescription(), mFullDescription(), mDefaultArguments(), mOptions(), mEnumSpecs(), mRespectHelp(respectHelp), mFlags(0), mVectorArgs(), mErrorString() {
 }
-
-
 
 
 // @ 0x0083aaa0
@@ -1228,8 +1122,6 @@ int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const
     Sprintf(&mErrorString, "Unknown vector arg type %d", ai->mType);
     return 4;
 }
-
-
 
 
 // @ 0x0083ac80
@@ -1313,8 +1205,6 @@ int cArgumentSpec_s0083_a9f0::ParseVectorArgument(cArgInfo_s0083_a9f0* ai, const
 }
 
 
-
-
 // @ 0x0083afc0
 int cArgumentSpec_s0083_a9f0::ParseArgument(cArgInfo_s0083_a9f0* ai, const char* str)
 {
@@ -1365,8 +1255,6 @@ int cArgumentSpec_s0083_a9f0::ParseArgument(cArgInfo_s0083_a9f0* ai, const char*
     Sprintf(&mErrorString, "Unknown arg type %d", type);
     return 4;
 }
-
-
 
 
 // @ 0x0083b1d0
@@ -1468,8 +1356,6 @@ int cArgumentSpec_s0083_a9f0::ParseArgumentEx(cArgInfo_s0083_a9f0* ai, const cha
 }
 
 
-
-
 // @ 0x0083b580
 int cArgumentSpec_s0083_a9f0::ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int** ppArgs, const char** ppEnd, ArgParser* p)
 {
@@ -1503,6 +1389,82 @@ int cArgumentSpec_s0083_a9f0::ParseOptionArgs(cOptionsSpec_s0083_a9f0* opt, int*
 }
 
 
+// @ 0x0083b6d0
+int cArgumentSpec_s0083_a9f0::ParseOption(int** ppArgs, const char** ppEnd, ArgParser* p)
+{
+    const char* name = *(char**)*ppArgs;
+    ++name;
+    *ppArgs = *ppArgs + 1;
+    if (mRespectHelp) {
+        if (_stricmp(name, "help") == 0 || _stricmp(name, "h") == 0)
+            return 1;
+    }
+    int count = (int)((mOptions.mpEnd - mOptions.mpBegin));
+    for (int i = 0; i < count; ++i) {
+        if (_stricmp(mOptions.mpBegin[i].mName.mpBegin, name) == 0) {
+            int flag = mOptions.mpBegin[i].mFlagToSet;
+            if (flag >= 0)
+                mFlags |= 1 << flag;
+            int r = ParseOptionArgs(&mOptions.mpBegin[i], ppArgs, ppEnd, p);
+            if (r != 0) {
+                mErrorString.append(" in -", " in -" + 5);
+                const char* q = name;
+                while (*q) ++q;
+                mErrorString.append(name, q);
+            }
+            return r;
+        }
+    }
+    Sprintf(&mErrorString, "Unknown option '%s'", name);
+    return 5;
+}
+
+// @ 0x0083b810
+int cArgumentSpec_s0083_b810::Parse(int argc, const char** argv, ArgParser* p)
+{
+    mErrorString.assign("no error", "");
+    const char* prog = argv[0];
+    const char** end = argv + argc;
+    mFlags = 0;
+    const char** cur = argv + 1;
+    int nDefaults = (int)(mDefaultArguments.mpEnd - mDefaultArguments.mpBegin);
+    int nUsed = 0, i = 0;
+    while (cur < end) {
+        const char* s = *cur;
+        if (s[0] == '-' && isalpha((unsigned char)s[1])) {
+            int r = ParseOption((int**)&cur, end, p);
+            if (r != 0) {
+                if (r == 1)
+                    CreateHelpString(prog, &mErrorString, 1);
+                return r;
+            }
+        } else {
+            if (nUsed >= nDefaults) {
+                Sprintf(&mErrorString, "Too many default arguments (expecting at most %d)\n", nDefaults);
+                return 3;
+            }
+            cArgInfo_s0083_b810* ai = &mDefaultArguments.mpBegin[i];
+            int r;
+            if (nUsed == nDefaults - 1 && (ai->mType & 0x8000)) {
+                r = p ? ParseVectorArgument(ai, s, p) : ParseVectorArgument(ai, s);
+            } else {
+                r = p ? ParseArgumentEx(ai, s, p) : ParseArgument(ai, s);
+                ++nUsed; ++i;
+            }
+            if (r != 0)
+                return r;
+            ++cur;
+        }
+    }
+    if (nUsed < nDefaults) {
+        cArgInfo_s0083_b810* ai = &mDefaultArguments.mpBegin[nUsed];
+        if (ai->mIsDependent && (ai->mType & 0x8000) == 0) {
+            mErrorString.assign("Not enough arguments");
+            return 2;
+        }
+    }
+    return 0;
+}
 
 // @ 0x0083b9d0
 void cArgumentSpec_s0083_b810::ParseThrowing(int argc, const char** argv, ArgParser* p)

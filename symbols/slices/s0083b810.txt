@@ -1,4 +1,4 @@
-0083b810 EA::ArgScript::cArgumentSpec::Parse  # PDB anchor
+0083b810 ?Parse@cArgumentSpec_s0083_b810@@QAEHHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_b810::Parse migrated from s0083b810 (verbatim, slice spelling)
 0083b9d0 ?ParseThrowing@cArgumentSpec_s0083_b810@@QAEXHPAPBDPAUArgParser@@@Z  # cArgumentSpec_s0083_b810::ParseThrowing migrated from s0083b810 (verbatim, slice spelling)
 0083ba40 ?erase@VecOptions@@QAEPAUcOptionsSpec_s0083_b810@@PAU2@0@Z  # VecOptions::erase migrated from s0083b810 (verbatim, slice spelling)
 0083baa0 eastl::vector<EA::ArgScript::cOptionsSpec,eastl::sp_vector_allocator>::DoInsertValue  # inferred

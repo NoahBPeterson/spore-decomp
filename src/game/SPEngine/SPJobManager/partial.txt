@@ -1,1 +1,5 @@
 # va  diff-bytes  reason
+0068f7c0  386  partial; FreeJobUnderLock rewritten behaviourally but not verified
+0068fda0  292  partial; GetFreeJob approximated
+006903c0  373  partial; Shutdown approximated
+00690630  420  partial; FailJobDependents approximated

@@ -1,9 +1,9 @@
 0083d2f0 ?EvalRealParentheses2@cExpression@ArgScript@EA@@QAEXAAPBDAAM1@Z  # EA::ArgScript::cExpression::EvalRealParentheses2 (callee of s0083d3d0, named from the dev publics; slice address comment)
-0083d3d0 EA::ArgScript::cExpression::EvalRealNumber  # PDB anchor
+0083d3d0 ?EvalRealNumber@cExpression_s0083_d3d0@ArgScript@EA@@QAEMPAPBD@Z  # cExpression_s0083_d3d0::EvalRealNumber migrated from s0083d3d0 (verbatim, slice spelling)
 0083db70 ?EvalIntParentheses@cExpression_s0083_d3d0@ArgScript@EA@@QAEHPAPBD@Z  # cExpression_s0083_d3d0::EvalIntParentheses migrated from s0083d3d0 (verbatim, slice spelling)
-0083dc00 EA::ArgScript::cExpression::EvalString  # PDB
+0083dc00 ?EvalString@cExpression@ArgScript@EA@@QAEXAAPBDPAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # EA::ArgScript::cExpression::EvalString migrated from s0083d3d0
 0083dd00 ?DoFreeNodesExpr@@YAXPAXH@Z  # DoFreeNodesExpr migrated from s0083d3d0 (verbatim, slice spelling)
-0083dd70 EA::ArgScript::cExpression::EvalSignedRealNumber  # PDB candidate
+0083dd70 ?EvalSignedRealNumber@cExpression@ArgScript@EA@@QAEMAAPBD@Z  # EA::ArgScript::cExpression::EvalSignedRealNumber migrated from s0083d3d0
 0083df90 `anonymous namespace'::cIfCommand::cIfCommand  # PDB
 0083e140 ?ExprTableClear@@YIXPAX@Z  # ExprTableClear migrated from s0083d3d0 (verbatim, slice spelling)
-0083e160 EA::ArgScript::cExpression::EvalRealFactor  # PDB candidate
+0083e160 ?EvalRealFactor@cExpression@ArgScript@EA@@QAEMAAPBD@Z  # EA::ArgScript::cExpression::EvalRealFactor migrated from s0083d3d0

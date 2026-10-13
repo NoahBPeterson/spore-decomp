@@ -3,11 +3,13 @@
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ??0Cookie40@@QAE@ABU0@@Z  00942ce0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ??4Cookie40@@QAEAAU0@ABU0@@Z  00942d70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?SetURL@UrlHolder@@QAEXPBD@Z  00942f70  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?SetUserAgent@HTTPClient@Internet@EA@@QAEXPBD@Z  00942fb0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?JobDestroyRange@@YGXPAUJob@@0@Z  00943420  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?JobDestroyRangeDst@@YAPAUJob@@PAU1@00@Z  00943500  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?assign@StrStub_s0094_2ff0@eastl@@QAEPAU12@PBD@Z  00943570  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/HTTPClient.cpp  ?insertAtNext@CookieList@@QAEXABUCookie40@@@Z  009435b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
-../src/game/UTFSpore_Win32/HTTPClient.cpp  ?insertBeforeSelf@CookieNode@@QAEXABUCookie40@@@Z  00943600  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?insertAtNext@CookieList@@QAEXABUCookie40_s0094_2ff0@@@Z  009435b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?insertBeforeSelf@CookieNode@@QAEXABUCookie40_s0094_2ff0@@@Z  00943600  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ??4Job@@QAEAAU0@ABU0@@Z  009436b0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?CopyJob@@YAPAUJob@@PAU1@00@Z  009437a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?CopyBackwardJob@@YAPAUJob@@PAU1@00@Z  00943830  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?SetMethod@HTTPRequest@@QAEXH@Z  009438c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include

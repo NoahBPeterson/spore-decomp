@@ -4,7 +4,7 @@
 0068a040 ?FindCommandInfoByName@cCommandServer@@QAEIPB_W@Z  # cCommandServer::FindCommandInfoByName migrated from s00689ee0 (verbatim, slice spelling)
 0068a0f0  eastl::rbtree<unsigned int,EA::Variant,...>::DoNukeSubtree  # PDB callee-single name; node+0x24 flags, node+0x14 Variant
 0068a250  eastl::rbtree<unsigned int,EA::Variant,...>::create_node  # allocates 0x28-byte node, stores key + Variant
-0068a2e0  (anonymous)::GetEmptyCommandString  # static-local WStr with atexit dtor, guard bit
+0068a2e0 _FUN_0068a2e0  # FUN_0068a2e0 migrated from s00689ee0 (verbatim, slice spelling)
 0068a320  (anonymous)::FixupCommandString  # assign + char1/char9 scan + insert/append literal at 0x1403308
 0068a3f0 ?GetCommandInfo@cCommandServer@@QAE_NIPAUWStr@@0@Z  # cCommandServer::GetCommandInfo migrated from s00689ee0 (verbatim, slice spelling)
 0068a460  eastl::vector<16-byte>::insert  # 0x555c40/0x7c7a40 calls with 16-byte stride

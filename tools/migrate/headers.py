@@ -276,7 +276,16 @@ class Types:
         if not o or "size" in o and "members" in o:
             return dict(s, members=mem) if mem != s["members"] else s
         for r in o.get("remove", []):
-            mem = [m for m in mem if m[0] != r]
+            # the members after a removed one move up by its size (EA::Internet::HTTPClient's msUserName/msUserPassword sit in the
+            # middle: without the shift the re-layout kept the dev offsets and left a 0x20 hole); every earlier remove was a
+            # tail member, where the shift changes nothing
+            k = next((i for i, m in enumerate(mem) if m[0] == r), None)
+            if k is None:
+                continue
+            gone = mem[k]
+            nxt = mem[k + 1][1] if k + 1 < len(mem) else None
+            delta = (nxt - gone[1]) if nxt is not None and nxt > gone[1] else (gone[5] or 0)
+            mem = mem[:k] + [[m[0], m[1] - delta] + list(m[2:]) for m in mem[k + 1:]]
         for rt in o.get("retype", []):           # {"name", "type": typedesc, "size"}: widen/narrow a member in place
             for i, m in enumerate(mem):
                 if m[0] == rt["name"]:
@@ -646,6 +655,8 @@ FAMILY_HEADERS = [
     (r"^EA::Messaging::MessageBasic<", "EA/Messaging/MessageBasic.h"), (r"^EA::RectT<", "EA/RectT.h"),
     (r"^SP::cRwResource<", "SP/cRwResource.h"), (r"^EA::Allocator::FixedAllocator<", "EA/Allocator/FixedAllocator.h"),
     (r"^rw::math::fpu::(Vector[234]|Matrix33)Template<", "rw/math/fpu/VectorTemplates.h"),
+    # empty functor bases (SP/cCollectableItems.h derives a comparator from eastl::binary_function: C2039), next to eastl::less
+    (r"^eastl::(binary|unary)_function<", "eastl/map.h"),
 ]
 
 
@@ -665,8 +676,32 @@ def known_templates():
                 t = open(os.path.join(d, f), encoding="utf-8", errors="replace").read()
                 if "Hand-maintained" not in t[:2000]:
                     continue
-                _KNOWN_TEMPLATES |= set(re.findall(r"template\s*<[^{;]*?>\s*(?:class|struct)\s+(\w+)", t))
+                for mm in re.finditer(r"template\s*<([^{;]*?)>\s*(?:class|struct)\s+(\w+)", t):
+                    _KNOWN_TEMPLATES.add(mm.group(2))
+                    n = len([x for x in mm.group(1).split(",") if x.strip()])
+                    _TEMPLATE_ARITY[mm.group(2)] = max(_TEMPLATE_ARITY.get(mm.group(2), 0), n)
     return _KNOWN_TEMPLATES
+
+
+_TEMPLATE_ARITY = {}      # hand template short name -> number of template parameters (known_templates fills it)
+
+
+def _top_args(text, i):
+    """Number of top-level template arguments of the `<` at text[i]."""
+    d, n, any_ = 0, 1, False
+    for j in range(i, len(text)):
+        ch = text[j]
+        if ch in "<(":
+            d += 1
+        elif ch in ">)":
+            d -= 1
+            if d == 0:
+                return n if any_ else 0
+        elif ch == "," and d == 1:
+            n += 1
+        elif d >= 1 and not ch.isspace():
+            any_ = True
+    return n
 
 
 def unknown_templates(text):
@@ -678,6 +713,10 @@ def unknown_templates(text):
             continue
         if n.split("::")[-1] not in known_templates():
             out.append(n)
+        elif _top_args(text, m.end() - 1) > _TEMPLATE_ARITY.get(n.split("::")[-1], 99):
+            # the dev instantiation has more arguments than the hand template takes (eastl::rbtree_iterator<V, Ptr, Ref> vs the
+            # retail-layout rbtree_iterator<V> of eastl/map.h: C2977 in Spui/cSPUILayoutManager.h find_world)
+            out.append(n + " (%d arguments, the hand header takes %d)" % (_top_args(text, m.end() - 1), _TEMPLATE_ARITY[n.split("::")[-1]]))
     return out
 
 
@@ -725,7 +764,9 @@ def class_refs(desc):
         out.add(name)
         if "<" in name:
             for tok in re.findall(r"[A-Za-z_][\w:]*", name[name.index("<"):]):
-                if "::" in tok and (not KNOWN_STRUCTS or tok in KNOWN_STRUCTS):
+                # global-namespace PDB classes too (`eastl::map<string, cSPUILayout *>`: Spui/cSPUILayoutCheat.h named
+                # cSPUILayout with no declaration, C2065)
+                if ("::" in tok or tok in KNOWN_STRUCTS) and (not KNOWN_STRUCTS or tok in KNOWN_STRUCTS):
                     out.add(tok)
     return out
 
@@ -1241,6 +1282,10 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
             # the type in the comment, so the class compiles and stays laid out; a function that touches the member needs
             # the hand template first (SSL/SSLManager.h mNameToSessionMap, SP/cJobProfZone.h mName)
             ut = unknown_templates(decl)
+            if "`" in decl:
+                # a file-local type (`anonymous namespace'::cVarBlock, nSPSkinner/cPaintParticle.h mpInheritance: C2018 on the
+                # backtick) cannot be named outside its object: opaque, like an undefined template
+                ut = ut or ["a file-local type"]
             if ut and m["type"].startswith("ptr:"):
                 decl = "void* %s /* %s */" % (m["name"], decl.replace("*/", "* /"))
             elif ut and m["size"]:
@@ -1495,18 +1540,37 @@ def main():
             # module's run wrote it last (SP::cPropertyList written as SPPropertyHelpers' closure lost the retail
             # addresses its owner SPPropertyList gives it: `cPropertyList(char const *) // dev only` vs `// 0x006a1b90`,
             # and rewrite.py maps methods by those addresses)
-            if cls in classes:
-                own = classes[cls]
-            else:
-                if not hasattr(data, "_fns_by_class"):
-                    data._fns_by_class = collections.defaultdict(list)
-                    for va2, e2 in data.modmap["functions"].items():
-                        if e2.get("name"):
-                            c2 = data.class_of_name(e2["name"])
-                            if c2:
-                                data._fns_by_class[c2].append((int(va2, 16), e2))
-                own = sorted(data._fns_by_class.get(cls, []), key=lambda x: x[0])
-            lines = emit_class(data, module if cls in classes else module + " (closure)", cls, own, report, a.out)
+            # The same holds for a class with named functions in SEVERAL modules (SP::cJob: SPJobManager and
+            # SPGraphicsTextureManager): every module's run gets all of the class's functions, and the "Module:" line names
+            # the module holding most of them (fix pass 2: cJob.h flipped between the two runs, losing 0x68f9f0/0x690120)
+            if not hasattr(data, "_fns_by_class"):
+                data._fns_by_class = collections.defaultdict(list)
+                for va2, e2 in data.modmap["functions"].items():
+                    if e2.get("name"):
+                        c2 = data.class_of_name(e2["name"])
+                        if c2:
+                            data._fns_by_class[c2].append((int(va2, 16), e2))
+            # other modules contribute their functions of the class too (the one retail copy of an inline member,
+            # ~cPropertyList 0x686320 in SPStarManager.obj), except functions modmap_overrides moved to an object the dev build
+            # does not have (the sibling family DatabasePackedFile_v2.obj: ReadFileSpan 0x6bca90 is not
+            # EA::ResourceMan::DatabasePackedFile's); a move between dev objects keeps the name (cViewer::UpdateTransforms 0x6e3000)
+            if not hasattr(data, "_dev_objs"):
+                data._dev_objs = {"/".join((f.get("module") or "").replace("\\", "/").lower().split("/")[-2:])
+                                  for f in data.dev_fn.values()}
+            glob = [(v, e2) for v, e2 in data._fns_by_class.get(cls, [])
+                    if "override" not in (e2.get("how") or "") or (e2.get("module") or "").lower() in data._dev_objs]
+            own = sorted(dict(glob + list(classes.get(cls, []))).items(), key=lambda x: x[0])
+            # the "Module:" comment of a header that exists is kept (it names the run that first wrote it; rewriting it
+            # from whichever run comes last only churned 20+ headers per regeneration)
+            label = module if cls in classes else module + " (closure)"
+            try:
+                old1 = open(header_path(a.out, cls), encoding="utf-8").read().split("\n")[1]
+                mo = re.match(r"^// Module: (.*?)\.  Do not hand-edit", old1)
+                if mo:
+                    label = mo.group(1)
+            except (OSError, IndexError, TypeError):
+                pass
+            lines = emit_class(data, label, cls, own, report, a.out)
             path = header_path(a.out, cls)
             os.makedirs(os.path.dirname(path), exist_ok=True)
             with open(path, "w") as f:

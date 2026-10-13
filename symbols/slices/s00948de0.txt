@@ -1,11 +1,11 @@
-00948de0 ?DoFreeNodes@HT@@QAEXPAPAUNode@@I@Z  # HT::DoFreeNodes migrated from s00948de0 (verbatim, slice spelling)
-00948e80 ?erase@HT@@QAE?AUIter@@UConstIter@@@Z  # HT::erase migrated from s00948de0 (verbatim, slice spelling)
-00948f00 EA::Internet::INetFileCache::ClearCacheMap  # card (real PDB name), byte-exact
-00948f80 EA::Internet::INetFileCache::IniFileCallbackFunction  # PDB candidate; "url,file,mime,size,timeout,created,lastUsed,timeTimeout" parser
-009492e0 EA::Internet::INetFileCache::DoPeriodicCacheMaintenance  # card
-00949530 EA::Internet::INetFileCache::RemoveCachedData  # card
-00949620 EA::Internet::INetFileCache::CommitNewCachedDataStream  # card
-009498c0 EA::Internet::INetFileCache::GetCachedDataStream  # card
-00949b00 EA::Internet::INetFileCache::ReadCacheIniFile  # card
-00949b80 EA::Internet::INetFileCache::INetFileCache  # card
-00949c10 EA::Internet::INetFileCache::~INetFileCache  # PDB candidate (dtor)
+00948de0 ?DoFreeNodes@HT@@QAEXPAPAUNode_s0094_8de0@@I@Z  # HT::DoFreeNodes migrated from s00948de0 (verbatim, slice spelling)
+00948e80 ?erase@HT@@QAE?AUIter_s0094_8de0@@UConstIter@@@Z  # HT::erase migrated from s00948de0 (verbatim, slice spelling)
+00948f00 ?ClearCacheMap@INetFileCache_s0094_8de0@Internet@EA@@QAEXXZ  # INetFileCache_s0094_8de0::ClearCacheMap migrated from s00948de0 (verbatim, slice spelling)
+00948f80 ?IniFileCallbackFunction@@YA_NPB_W0PAX@Z  # IniFileCallbackFunction migrated from s00948de0 (verbatim, slice spelling)
+009492e0 ?DoPeriodicCacheMaintenance@INetFileCache_s0094_8de0@Internet@EA@@QAEXXZ  # INetFileCache_s0094_8de0::DoPeriodicCacheMaintenance migrated from s00948de0 (verbatim, slice spelling)
+00949530 ?RemoveCachedData@INetFileCache_s0094_8de0@Internet@EA@@QAE_NPBD@Z  # INetFileCache_s0094_8de0::RemoveCachedData migrated from s00948de0 (verbatim, slice spelling)
+00949620 ?CommitNewCachedDataStream@INetFileCache_s0094_8de0@Internet@EA@@QAE_NPAUIStream@@PBDI_N1I@Z  # INetFileCache_s0094_8de0::CommitNewCachedDataStream migrated from s00948de0 (verbatim, slice spelling)
+009498c0 ?GetCachedDataStream@INetFileCache_s0094_8de0@Internet@EA@@QAE_NPBDPAPAUIStream@@PAPBD@Z  # INetFileCache_s0094_8de0::GetCachedDataStream migrated from s00948de0 (verbatim, slice spelling)
+00949b00 ?ReadCacheIniFile@INetFileCache@Internet@EA@@QAE_NXZ  # EA::Internet::INetFileCache::ReadCacheIniFile migrated from s00948de0
+00949b80 ??0INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  # INetFileCache_s0094_8de0::INetFileCache migrated from s00948de0 (verbatim, slice spelling)
+00949c10 ??1INetFileCache_s0094_8de0@Internet@EA@@QAE@XZ  # INetFileCache_s0094_8de0::~INetFileCache migrated from s00948de0 (verbatim, slice spelling)

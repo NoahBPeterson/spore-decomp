@@ -33,10 +33,10 @@ class cExpression {
   int EvalRelExpression(char const *&);                                  // 0x0083ee30
   void EvalChar(char const *&, char);                                    // 0x0083f480
   bool ParseBool(char const *);                                          // 0x0083f510
+  void RegisterFunction(char const *, EA::ArgScript::cExprFunction *);   // 0x00842ac0
   bool EvalOptionalChar(char const *&, char);                            // dev only
   int EvalIntParentheses(char const *&);                                 // dev only
   float EvalSignedRealNumber(char const *&);                             // dev only
-  void RegisterFunction(char const *, EA::ArgScript::cExprFunction *);   // dev only
   void ClearFunctions();                                                 // dev only
   float EvalRealFactor(char const *&);                                   // dev only
   cExpression();                                                         // dev only

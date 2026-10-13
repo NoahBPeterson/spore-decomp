@@ -1,12 +1,12 @@
 007ada40 ?mapblock@@YAXPBIPAEIIH@Z  # mapblock migrated from s007ada40 (verbatim, slice spelling)
-007adcf0 adxtMapBlock  # inferred
+007adcf0 ?FUN_007adcf0@@YAXPBIPAEII@Z  # FUN_007adcf0 migrated from s007ada40 (verbatim, slice spelling)
 007ade70 ?rtrymapblock@@YAIPBIII@Z  # rtrymapblock migrated from s007ada40 (verbatim, slice spelling)
 007ae0b0 ?rbtrymapblock@@YAIPBIII@Z  # rbtrymapblock migrated from s007ada40 (verbatim, slice spelling)
 007ae2a0 ?RefineMinMaxColors@@YAIPBIPAI@Z  # RefineMinMaxColors migrated from s007ada40 (verbatim, slice spelling)
 007ae5b0 ?FUN_007ae5b0@@YAXPBEPAEH@Z  # FUN_007ae5b0 migrated from s007ada40 (verbatim, slice spelling)
-007ae660 InterpolatedAlphaBlock  # card name
+007ae660 ?InterpolatedAlphaBlock@@YAXHHPBEPAE@Z  # InterpolatedAlphaBlock migrated from s007ada40 (verbatim, slice spelling)
 007ae840 ?FUN_007ae840@@YAXPBEHPAT__m64@@PAI@Z  # FUN_007ae840 migrated from s007ada40 (verbatim, slice spelling)
 007ae920 ?Init@Span@@QAEXHHHHH@Z  # Span::Init migrated from s007ada40 (verbatim, slice spelling)
 007ae960 ?IsSet@FlagHolder@@QAEEXZ  # FlagHolder::IsSet migrated from s007ada40 (verbatim, slice spelling)
-007ae980 SP::cDXTBlock::~cDXTBlock  # inferred
-007ae9f0 SP::cDXTBlock::cDXTBlock  # inferred: 2-vptr base + interlocked refcount ctor
+007ae980 ??1DxtSurface@@UAE@XZ  # DestroyDxtSurface migrated from s007ada40 (verbatim, slice spelling)
+007ae9f0 ??0DxtSurface@@QAE@XZ  # DxtSurface::DxtSurface migrated from s007ada40 (verbatim, slice spelling)

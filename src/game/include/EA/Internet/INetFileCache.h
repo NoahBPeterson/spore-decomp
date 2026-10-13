@@ -14,19 +14,12 @@ namespace EA { namespace IO { class IStream; class MemoryStream; } }
 namespace EA {
 namespace Internet {
 
-// dev size 0x64 -> retail size 0x64 (4 members exact-backed, 9 conflicts, 0 retail-only, 8 unverified)
-// evidence: view s00948de0 is the evidence: 4 of 12 shared members agree with the re-laid offsets, 5 byte-exact users, shifts [0, 12], declared size 0x70
+// dev size 0x64 -> retail size 0x70 (override)
+// evidence: view s00948de0 is the evidence: 12 of 12 shared members agree with the re-laid offsets, 5 byte-exact users, shifts [0], declared size 0x70
 // evidence: view s00947d50 agrees (6 shared)
 // evidence: view s00949cc0 agrees (3 shared)
-// evidence: conflict: mDataMap re-laid 0x28, view has 0x34
-// evidence: conflict: mbKeepExpired re-laid 0x48, view has 0x54
-// evidence: conflict: mnEnabledLocations re-laid 0x4c, view has 0x58
-// evidence: conflict: mnMaxRAMCacheSize re-laid 0x50, view has 0x5c
-// evidence: conflict: mnMaxFileCacheSize re-laid 0x54, view has 0x60
-// evidence: conflict: mnDefaultExpirationTimeSeconds re-laid 0x58, view has 0x64
-// evidence: conflict: mnCacheAccessCount re-laid 0x5c, view has 0x68
-// evidence: conflict: mnCacheAccessCountSinceLastMaintenance re-laid 0x60, view has 0x6c
 // evidence: conflict: view member mStreamList at 0x28 overlaps a re-laid member
+// evidence: override applied: retail INetFileCache is 0x70 (dev 0x64): the byte-exact constructor 0x949b80 (s00948de0) links a list anchor to itself at +0x28 (`lea ecx,[eax+0x28]; mov [ecx],ecx; mov [ecx+4],ecx`), then initialises the hash table at +0x34 (mpBucketArray +0x38 = the empty bucket 0x154df28, mnBucketCount +0x3c = 1, mnElementCount +0x40, rehash policy floats +0x44/+0x48, mnNextResize +0x4c), mbKeepExpired +0x54 (byte 0), mnEnabledLocations +0x58 = 3, mnMaxRAMCacheSize +0x5c = 1000000, mnMaxFileCacheSize +0x60 = 3000000, mnDefaultExpirationTimeSeconds +0x64 = 18000, the two access counters +0x68/+0x6c; the dev PDB has mDataMap at +0x28: a 0xc-byte list (anchor + allocator word) of open cache streams sits in front of it (slice views s00948de0 `ListAnchor mStreamList +0x28`, `mPad30`; s00947d50 links its FileStreamObj nodes there) (fix pass 2, 2026-10-13)
 #pragma pack(push, 4)
 class INetFileCache {
  public:
@@ -111,17 +104,18 @@ class INetFileCache {
   int mRefCount;                                               // 0x004 exact:s00948de0
   eastl::basic_string<wchar_t,eastl::allocator> msCacheDirectory; // 0x008 exact:s00948de0
   eastl::basic_string<wchar_t,eastl::allocator> msIniFileName; // 0x018 exact:s00948de0
-  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,EA::Internet::INetFileCache::Info,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mDataMap; // 0x028 relaid!view:s00948de0 has 0x34
-  bool mbKeepExpired;                                          // 0x048 relaid!view:s00948de0 has 0x54
-  unsigned int mnEnabledLocations;                             // 0x04c relaid!view:s00948de0 has 0x58
-  unsigned int mnMaxRAMCacheSize;                              // 0x050 relaid!view:s00948de0 has 0x5c
-  unsigned int mnMaxFileCacheSize;                             // 0x054 relaid!view:s00948de0 has 0x60
-  unsigned int mnDefaultExpirationTimeSeconds;                 // 0x058 relaid!view:s00948de0 has 0x64
-  unsigned int mnCacheAccessCount;                             // 0x05c relaid!view:s00948de0 has 0x68
-  unsigned int mnCacheAccessCountSinceLastMaintenance;         // 0x060 relaid!view:s00948de0 has 0x6c
+  unsigned char mOpenStreamList[12];                           // 0x028 relaid
+  eastl::hash_map<eastl::basic_string<char,eastl::allocator>,EA::Internet::INetFileCache::Info,eastl::hash<eastl::basic_string<char,eastl::allocator> >,eastl::equal_to<eastl::basic_string<char,eastl::allocator> >,eastl::allocator,0> mDataMap; // 0x034 exact:s00948de0
+  bool mbKeepExpired;                                          // 0x054 exact:s00948de0
+  unsigned int mnEnabledLocations;                             // 0x058 exact:s00948de0
+  unsigned int mnMaxRAMCacheSize;                              // 0x05c exact:s00948de0
+  unsigned int mnMaxFileCacheSize;                             // 0x060 exact:s00948de0
+  unsigned int mnDefaultExpirationTimeSeconds;                 // 0x064 exact:s00948de0
+  unsigned int mnCacheAccessCount;                             // 0x068 exact:s00948de0
+  unsigned int mnCacheAccessCountSinceLastMaintenance;         // 0x06c exact:s00948de0
 };
 #pragma pack(pop)
-// sizeof(INetFileCache) expected 0x64 (unverified)
+// sizeof(INetFileCache) expected 0x70 (unverified)
 
 }  // namespace Internet
 }  // namespace EA

@@ -6,7 +6,7 @@
 0083cdd0 ArgScript::AppProps::AppProps  # PDB
 0083ce90 ?DiscardWhiteSpace@@YAXPAPBD@Z  # DiscardWhiteSpace migrated from s0083c900 (verbatim, slice spelling)
 0083ced0 ?ReleaseRefCount@@YAXPAPAH@Z  # ReleaseRefCount migrated from s0083c900 (verbatim, slice spelling)
-0083cef0 ?CtorA@PairCtorStub@@QAEXPBUstring8@eastl@@PAPAH@Z  # PairCtorStub::CtorA migrated from s0083c900 (verbatim, slice spelling)
+0083cef0 ?CtorA@PairCtorStub@@QAEXPBUstring8_s0083_c900@eastl@@PAPAH@Z  # PairCtorStub::CtorA migrated from s0083c900 (verbatim, slice spelling)
 0083d020 ?CtorB@PairCtorStub@@QAEXPBX@Z  # PairCtorStub::CtorB migrated from s0083c900 (verbatim, slice spelling)
 0083d080 ?PairStringExprDtor@@YAXPAX@Z  # PairStringExprDtor migrated from s0083c900 (verbatim, slice spelling)
 0083d240 ?EvalExpectCharThrow@@YAXPAPBDD@Z  # EvalExpectCharThrow migrated from s0083c900 (verbatim, slice spelling)

@@ -1,5 +1,22 @@
 0093ba70 ?GetData@MemoryStream@IO@EA@@QBEPAXXZ  # EA::IO::MemoryStream::GetData (callee of s00947d50, named from the dev publics; slice address comment)
 0093bb40 ?SetOption@MemoryStream@IO@EA@@QAEXW4Options@123@M@Z  # EA::IO::MemoryStream::SetOption (callee of s00947d50, named from the dev publics; slice address comment)
+00947d50 ?CreateMemoryStream@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPAPAUMemoryStream@@@Z  # INetFileCache_s0094_7d50::CreateMemoryStream migrated from s00947d50 (verbatim, slice spelling)
 00947de0 ?RemoveCachedFile@INetFileCache@Internet@EA@@QAE_NABV?$basic_string@_WVallocator@eastl@@@eastl@@@Z  # EA::Internet::INetFileCache::RemoveCachedFile migrated from s00947d50
 00947e30 ?WriteDataToFile@INetFileCache@Internet@EA@@QAE_NPB_WPAEI@Z  # EA::Internet::INetFileCache::WriteDataToFile migrated from s00947d50
 00947ec0 ?ReadDataFromFile@INetFileCache@Internet@EA@@QAE_NPB_WPAEI@Z  # EA::Internet::INetFileCache::ReadDataFromFile migrated from s00947d50
+00948020 ??1Pair@Internet@EA@@QAE@XZ  # Pair::~Pair migrated from s00947d50 (verbatim, slice spelling)
+00948080 ?UpdateCacheIniFile@INetFileCache_s0094_7d50@Internet@EA@@QAE_NXZ  # INetFileCache_s0094_7d50::UpdateCacheIniFile migrated from s00947d50 (verbatim, slice spelling)
+009481b0 ?FindOldest@INetFileCache_s0094_7d50@Internet@EA@@QAEPAUIter@23@PAU423@I@Z  # INetFileCache_s0094_7d50::FindOldest migrated from s00947d50 (verbatim, slice spelling)
+00948230 ??0Info_s0094_7d50@Internet@EA@@QAE@ABU012@@Z  # Info_s0094_7d50::Info migrated from s00947d50 (verbatim, slice spelling)
+00948300 ?FindAs@HashTable@Internet@EA@@QAE?AUIter@23@ABQBDUTag1@123@UTag2@123@@Z  # HashTable::FindAs migrated from s00947d50 (verbatim, slice spelling)
+009483a0 ??0Pair@Internet@EA@@QAE@ABUstr8@@ABUInfo_s0094_7d50@12@@Z  # Pair::Pair migrated from s00947d50 (verbatim, slice spelling)
+00948400 ?SetCacheDirectory@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPB_W@Z  # INetFileCache_s0094_7d50::SetCacheDirectory migrated from s00947d50 (verbatim, slice spelling)
+00948460 ?SetIniFileName@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPB_W@Z  # INetFileCache_s0094_7d50::SetIniFileName migrated from s00947d50 (verbatim, slice spelling)
+009484e0 ?CreateNewCachedDataStream@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPAPAUIStreamV@IO@3@@Z  # INetFileCache_s0094_7d50::CreateNewCachedDataStream migrated from s00947d50 (verbatim, slice spelling)
+009485f0 ?GetNewCacheFileName@INetFileCache_s0094_7d50@Internet@EA@@QAE_NHHPAUwstr16@@@Z  # INetFileCache_s0094_7d50::GetNewCacheFileName migrated from s00947d50 (verbatim, slice spelling)
+00948780 ?PairConstructByValue@Internet@EA@@YA?AUPair@12@Ustr8@@UInfo_s0094_7d50@12@@Z  # PairConstructByValue migrated from s00947d50 (verbatim, slice spelling)
+00948800 ??0Pair@Internet@EA@@QAE@ABU012@@Z  # Pair::Pair migrated from s00947d50 (verbatim, slice spelling)
+00948860 ?IsEntryValid@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPBD@Z  # INetFileCache_s0094_7d50::IsEntryValid migrated from s00947d50 (verbatim, slice spelling)
+00948940 ?MoveEntryToLocation@INetFileCache_s0094_7d50@Internet@EA@@QAE_NPAUInfo_s0094_7d50@23@I@Z  # INetFileCache_s0094_7d50::MoveEntryToLocation migrated from s00947d50 (verbatim, slice spelling)
+00948aa0 ?ForceAllDataToLocation@INetFileCache_s0094_7d50@Internet@EA@@QAE_NI@Z  # INetFileCache_s0094_7d50::ForceAllDataToLocation migrated from s00947d50 (verbatim, slice spelling)
+00948cb0 ?DoInsert@HashTable@Internet@EA@@QAEPAUInsertResult@23@PAU423@PBUPair@23@@Z  # HashTable::DoInsert migrated from s00947d50 (verbatim, slice spelling)

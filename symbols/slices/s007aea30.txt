@@ -1,4 +1,4 @@
-007aeab0 findendpoints  # card name
+007aeab0 ?findendpoints@EndpointColors@@QAEIPBIPAI1HH@Z  # EndpointColors::findendpoints migrated from s007aea30 (verbatim, slice spelling)
 007af490 eadxt  # card name
 007af5d0 ?FUN_007af5d0@@YAXPAUEndpoint@@00@Z  # FUN_007af5d0 migrated from s007aea30 (verbatim, slice spelling)
 007af620 ?FUN_007af620@@YAXPAUEndpoint@@0PBU1@@Z  # FUN_007af620 migrated from s007aea30 (verbatim, slice spelling)
