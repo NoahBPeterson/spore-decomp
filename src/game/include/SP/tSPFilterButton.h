@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/UTFWin/IWindow.h"
 
 namespace EA { namespace UTFWin { class IWindow; } }
 

@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "SP/cMeshData.h"
 #include "SP/tMDPrimElementType.h"
 
 namespace SP { struct cMeshData; }

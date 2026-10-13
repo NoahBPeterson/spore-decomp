@@ -7,10 +7,8 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/RefCountTemplate.h"
-#include "SP/cCommandParameterSet.h"
 #include "SP/cICommandDispatcher.h"
 #include "SP/cMessageCommandDispatcherMessage.h"
-#include "SP/cStringCommandGenerator.h"
 
 namespace SP { class cCommandParameterSet; class cICommandParameterSet; class cStringCommandGenerator; }
 

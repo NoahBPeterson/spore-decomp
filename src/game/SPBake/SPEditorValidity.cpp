@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorValidity.cpp -- migrated from slice(s) s004f6630, s004f3de0, s00f3b0c0, s004f56f0, s004f3c50, s004f2d40, s004f1ff0, s004f1350, s004f01f0, s004ef880, s004ee9b0, s004eda30, s004ebe20, s004eb270, s004ea310, s004e95e0 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorValidity.cpp -- migrated from slice(s) s00f3b0c0, s004f6630, s004f56f0, s004f3de0, s004f3c50, s004f2d40, s004f1ff0, s004f1350, s004f01f0, s004ef880, s004ee9b0, s004eda30, s004ebe20, s004eb270, s004ea310, s004e95e0 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorValidity.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,6 +6,7 @@
 #include "EA/ResourceMan/Key.h"
 #include "EA/IO/FileStream.h"
 #include "EA/ResourceMan/Manager.h"
+#include "SP/cSPPalette.h"
 #include "EA/Variant.h"
 #include "EA/ArgScript/cIParser.h"
 #include "EA/Swarm/cIVisualEffect.h"
@@ -81,6 +82,7 @@ struct FlagWord {
     unsigned int d : 6;
     unsigned int e : 2;
 };
+void operator delete[](void* p);
 template<int N> inline void ScratchSlots() { uint32_t s[N]; }
 struct Alloc { Alloc() {} };
 struct ResourceKey {
@@ -846,6 +848,150 @@ inline bool AnyBit(const Bits128& x)
 }
 // ---- items of slice s004f3c50 end
 
+// ---- items of slice s004f3de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template<int N> struct bitset {
+    uint32_t mWord[(N + 31) / 32];
+
+    bitset() { reset(); }
+    __forceinline void reset() {
+        for (uint32_t i = 0; i < (N + 31) / 32; i++)
+            mWord[i] = 0;
+    }
+    uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
+    uint32_t DoGetWord(uint32_t i) const { return mWord[i >> 5]; }
+    __forceinline bool test(uint32_t i) const {
+        if (i < N)
+            return (DoGetWord(i) & (1u << (i % 32))) != 0;
+        return false;
+    }
+    __forceinline bitset& set(uint32_t i, bool value) {
+        if (i < N) {
+            if (value)
+                DoGetWord(i) |= (1u << (i % 32));
+            else
+                DoGetWord(i) &= ~(1u << (i % 32));
+        }
+        return *this;
+    }
+};
+typedef bitset<128> ValidityBits_s004f_3de0;
+namespace EA {
+namespace ResourceMan {
+struct Key_s004f_3de0 {
+    uint32_t instanceID;   // +0
+    uint32_t typeID;       // +4
+    uint32_t groupID;      // +8
+    Key_s004f_3de0() : instanceID(0), typeID(0), groupID(0) {}
+};
+}
+}
+template<class T> struct AutoRefCount_s004f_3de0 {
+    T* mpObject;
+    AutoRefCount_s004f_3de0() : mpObject(0) {}
+    AutoRefCount_s004f_3de0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s004f_3de0() { if (mpObject) mpObject->Release(); }
+    T* get() const { return mpObject; }
+    // Releases the held object, then hands out the slot for an out-parameter.
+    T** AsPPointer() {
+        if (mpObject) {
+            T* const pTemp = mpObject;
+            mpObject = 0;
+            pTemp->Release();
+        }
+        return &mpObject;
+    }
+};
+namespace SP {
+struct cPropertyList_s004f_3de0 : RefCounted {
+    bool HasProperty(uint32_t propID);                       // @ 0x6a25a0
+};
+}
+namespace SP {
+struct cPropertyManager_s004f_3de0 {
+    virtual void _v00(); virtual void _v01(); virtual void _v02(); virtual void _v03();
+    virtual void _v04(); virtual void _v05(); virtual void _v06(); virtual void _v07();
+    virtual void _v08(); virtual void _v09(); virtual void _v10();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList_s004f_3de0** ppOut);  // +0x2c
+};
+}
+namespace SP {
+bool GetPropertyAsKey(const cPropertyList_s004f_3de0* pList, uint32_t propID, EA::ResourceMan::Key_s004f_3de0* pKey);  // @ 0x6a1250
+}
+namespace SP {
+struct cEditorModel_s004f_3de0 {
+    uint32_t pad0[2];
+    EA::ResourceMan::Key_s004f_3de0 mKey;                               // +0x08
+    uint32_t pad1;
+    uint32_t mModelType;                                     // +0x18
+    uint32_t GetModelType() const { return mModelType; }
+};
+}
+struct cEditorResource {
+    uint32_t pad[0x78 / 4];
+    void* mName;                                             // +0x78
+    void* GetName();                                         // @ 0x414e10 (returns mName)
+};
+extern SP::cPropertyList_s004f_3de0* sAppProperties_s004f_3de0;                    // 0x15fd918
+extern uint32_t kMinBlockCount;                              // 0x15da6e0
+namespace SP {
+struct cSPEditorModelValidity_s004f_3de0 {
+    enum eValidityTests {
+        kValidityTooComplex = 0,
+        kValidityOverBudget = 1,
+        kValidityIncomplete = 2,
+        kValidityUnloadableTextures = 3,
+        kValidityInvalidName = 4,
+        kValidityInvalidParts = 5,
+        kValidityInvalidParents = 6,
+        kValidityInvalidScales = 7,
+        kValidityOutOfBounds = 8,
+        kValidityTooSmall = 9,
+        kValidityNoMouth = 10,
+        kValidityNotPainted = 11,
+        kValidityStatsOutOfRange = 12,
+        kValidityHasFloatingParts = 13,
+        kValidityUnloadableBlocks = 14,
+        kValidityInvalidSymmetry = 15,
+        kValidityMissingPacks = 16,
+        kValidityHasZeroBlocks = 17,
+        kValidityInvalidPaint = 18,
+        kValidityIntersectingEndEffectors = 19,
+        kValidityBlankName = 20,
+        kValidityBadCharacters = 21,
+        kValidityTooSmallX = 22,
+        kValidityTooSmallY = 23,
+        kValidityTooSmallZ = 24,
+        kValidityTooSmallAbsoluteZ = 25,
+        kValidityFailedLoad = 26,
+        kValidityInvalidLimb = 27,
+        kValidityNoReason = 28
+    };
+
+    static ValidityBits_s004f_3de0 CalculateValidity(cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0 tests, bool bStopOnFirstFailure);
+};  // namespace SP
+}
+void TestMissingPacks(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);         // @ 0x4edeb0
+void TestUnloadableBlocks(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);     // @ 0x4ee3b0
+void TestUnloadableTextures(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);   // @ 0x4ecec0
+void TestSymmetry(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);             // @ 0x4ed7f0
+void TestParents(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);              // @ 0x4ed320
+void TestLimbs(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);                // @ 0x4ee9b0
+void TestScales(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4ee560
+void TestParts(SP::cEditorModel_s004f_3de0* model, uint32_t partsListID, ValidityBits_s004f_3de0& validity);  // @ 0x4ef880
+void TestPaint(SP::cEditorModel_s004f_3de0* model, uint32_t paintListID, ValidityBits_s004f_3de0& validity);  // @ 0x4efb20
+bool HasEnoughBlocks(SP::cEditorModel_s004f_3de0* model, uint32_t minBlocks, int flags);   // @ 0x4eda30
+void TestComplexity(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);           // @ 0x4f1350
+void TestName(void* name, ValidityBits_s004f_3de0& validity);                              // @ 0x4edf40
+void TestBounds(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4ef190
+void TestSize(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);                 // @ 0x4f01f0
+void TestVehicleStatsInRange(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);  // @ 0x4f2610
+void TestBudget(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4f2210
+void TestFloatingParts(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);        // @ 0x4f3650
+void TestEndEffectors(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);         // @ 0x4f31c0
+inline SP::cPropertyList_s004f_3de0* AppProperties() { return sAppProperties_s004f_3de0; }
+using SP::cSPEditorModelValidity_s004f_3de0;
+// ---- items of slice s004f3de0 end
+
 // ---- items of slice s004f56f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct wstring {
     wchar_t* mpBegin;
@@ -1008,154 +1154,6 @@ inline Key* FindIfPred(Key* first, Key* last, KeyPred pred)
     return first;
 }
 // ---- items of slice s004f56f0 end
-
-
-
-
-
-// ---- items of slice s004f3de0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-template<int N> struct bitset {
-    uint32_t mWord[(N + 31) / 32];
-
-    bitset() { reset(); }
-    __forceinline void reset() {
-        for (uint32_t i = 0; i < (N + 31) / 32; i++)
-            mWord[i] = 0;
-    }
-    uint32_t& DoGetWord(uint32_t i) { return mWord[i >> 5]; }
-    uint32_t DoGetWord(uint32_t i) const { return mWord[i >> 5]; }
-    __forceinline bool test(uint32_t i) const {
-        if (i < N)
-            return (DoGetWord(i) & (1u << (i % 32))) != 0;
-        return false;
-    }
-    __forceinline bitset& set(uint32_t i, bool value) {
-        if (i < N) {
-            if (value)
-                DoGetWord(i) |= (1u << (i % 32));
-            else
-                DoGetWord(i) &= ~(1u << (i % 32));
-        }
-        return *this;
-    }
-};
-typedef bitset<128> ValidityBits_s004f_3de0;
-namespace EA {
-namespace ResourceMan {
-struct Key_s004f_3de0 {
-    uint32_t instanceID;   // +0
-    uint32_t typeID;       // +4
-    uint32_t groupID;      // +8
-    Key_s004f_3de0() : instanceID(0), typeID(0), groupID(0) {}
-};
-}
-}
-template<class T> struct AutoRefCount_s004f_3de0 {
-    T* mpObject;
-    AutoRefCount_s004f_3de0() : mpObject(0) {}
-    AutoRefCount_s004f_3de0(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
-    ~AutoRefCount_s004f_3de0() { if (mpObject) mpObject->Release(); }
-    T* get() const { return mpObject; }
-    // Releases the held object, then hands out the slot for an out-parameter.
-    T** AsPPointer() {
-        if (mpObject) {
-            T* const pTemp = mpObject;
-            mpObject = 0;
-            pTemp->Release();
-        }
-        return &mpObject;
-    }
-};
-namespace SP {
-struct cPropertyList_s004f_3de0 : RefCounted {
-    bool HasProperty(uint32_t propID);                       // @ 0x6a25a0
-};
-}
-namespace SP {
-struct cPropertyManager_s004f_3de0 {
-    virtual void _v00(); virtual void _v01(); virtual void _v02(); virtual void _v03();
-    virtual void _v04(); virtual void _v05(); virtual void _v06(); virtual void _v07();
-    virtual void _v08(); virtual void _v09(); virtual void _v10();
-    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, cPropertyList_s004f_3de0** ppOut);  // +0x2c
-};
-}
-namespace SP {
-bool GetPropertyAsKey(const cPropertyList_s004f_3de0* pList, uint32_t propID, EA::ResourceMan::Key_s004f_3de0* pKey);  // @ 0x6a1250
-}
-namespace SP {
-struct cEditorModel_s004f_3de0 {
-    uint32_t pad0[2];
-    EA::ResourceMan::Key_s004f_3de0 mKey;                               // +0x08
-    uint32_t pad1;
-    uint32_t mModelType;                                     // +0x18
-    uint32_t GetModelType() const { return mModelType; }
-};
-}
-struct cEditorResource {
-    uint32_t pad[0x78 / 4];
-    void* mName;                                             // +0x78
-    void* GetName();                                         // @ 0x414e10 (returns mName)
-};
-extern SP::cPropertyList_s004f_3de0* sAppProperties_s004f_3de0;                    // 0x15fd918
-extern uint32_t kMinBlockCount;                              // 0x15da6e0
-namespace SP {
-struct cSPEditorModelValidity_s004f_3de0 {
-    enum eValidityTests {
-        kValidityTooComplex = 0,
-        kValidityOverBudget = 1,
-        kValidityIncomplete = 2,
-        kValidityUnloadableTextures = 3,
-        kValidityInvalidName = 4,
-        kValidityInvalidParts = 5,
-        kValidityInvalidParents = 6,
-        kValidityInvalidScales = 7,
-        kValidityOutOfBounds = 8,
-        kValidityTooSmall = 9,
-        kValidityNoMouth = 10,
-        kValidityNotPainted = 11,
-        kValidityStatsOutOfRange = 12,
-        kValidityHasFloatingParts = 13,
-        kValidityUnloadableBlocks = 14,
-        kValidityInvalidSymmetry = 15,
-        kValidityMissingPacks = 16,
-        kValidityHasZeroBlocks = 17,
-        kValidityInvalidPaint = 18,
-        kValidityIntersectingEndEffectors = 19,
-        kValidityBlankName = 20,
-        kValidityBadCharacters = 21,
-        kValidityTooSmallX = 22,
-        kValidityTooSmallY = 23,
-        kValidityTooSmallZ = 24,
-        kValidityTooSmallAbsoluteZ = 25,
-        kValidityFailedLoad = 26,
-        kValidityInvalidLimb = 27,
-        kValidityNoReason = 28
-    };
-
-    static ValidityBits_s004f_3de0 CalculateValidity(cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0 tests, bool bStopOnFirstFailure);
-};  // namespace SP
-}
-void TestMissingPacks(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);         // @ 0x4edeb0
-void TestUnloadableBlocks(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);     // @ 0x4ee3b0
-void TestUnloadableTextures(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);   // @ 0x4ecec0
-void TestSymmetry(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);             // @ 0x4ed7f0
-void TestParents(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);              // @ 0x4ed320
-void TestLimbs(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);                // @ 0x4ee9b0
-void TestScales(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4ee560
-void TestParts(SP::cEditorModel_s004f_3de0* model, uint32_t partsListID, ValidityBits_s004f_3de0& validity);  // @ 0x4ef880
-void TestPaint(SP::cEditorModel_s004f_3de0* model, uint32_t paintListID, ValidityBits_s004f_3de0& validity);  // @ 0x4efb20
-bool HasEnoughBlocks(SP::cEditorModel_s004f_3de0* model, uint32_t minBlocks, int flags);   // @ 0x4eda30
-void TestComplexity(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);           // @ 0x4f1350
-void TestName(void* name, ValidityBits_s004f_3de0& validity);                              // @ 0x4edf40
-void TestBounds(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4ef190
-void TestSize(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);                 // @ 0x4f01f0
-void TestVehicleStatsInRange(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);  // @ 0x4f2610
-void TestBudget(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);               // @ 0x4f2210
-void TestFloatingParts(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);        // @ 0x4f3650
-void TestEndEffectors(SP::cEditorModel_s004f_3de0* model, ValidityBits_s004f_3de0& validity);         // @ 0x4f31c0
-inline SP::cPropertyList_s004f_3de0* AppProperties() { return sAppProperties_s004f_3de0; }
-using SP::cSPEditorModelValidity_s004f_3de0;
-// ---- items of slice s004f3de0 end
 
 // ---- items of slice s004f6630 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* __cdecl EASTL_Allocate(void* alloc, size_t n, size_t align, size_t offset);  // 0x0042DEE0
@@ -1350,17 +1348,6 @@ void Collect9950(DeclareParam param, Vec* out)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004e9b40
 void AddPaintKeys(DeclareParam param, Vec* out)
 {
@@ -1411,17 +1398,6 @@ void AddPaintKeys(DeclareParam param, Vec* out)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004e9c40
 void UpgradeParts(DeclareParam param, Vec* out)
 {
@@ -1437,17 +1413,6 @@ void UpgradeParts(DeclareParam param, Vec* out)
             out->push_back(param);
     }
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1510,17 +1475,6 @@ void FUN_004e9fc0(int modelType, Vec* out, int kind)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ea190
 void FUN_004ea190(int id, Vec* out, int flag)
 {
@@ -1563,17 +1517,6 @@ void FUN_004ea190(int id, Vec* out, int flag)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004ea720
 FlagWord FUN_004ea720(int p1, int p2)
 {
@@ -1583,17 +1526,6 @@ FlagWord FUN_004ea720(int p1, int p2)
     f.b = p2;
     return f;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1646,17 +1578,6 @@ void FUN_004ea780(int id, int tag, VSet* out, int param4)
     if (v14)
         ((Iface_s004e_a310*)v14)->Release();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1749,17 +1670,6 @@ void FUN_004ea920(int modelType, int instance, int param3)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004eb930
 bool FUN_004eb930(const DeclareParam& a, const DeclareParam& b)
 {
@@ -1770,16 +1680,6 @@ bool FUN_004eb930(const DeclareParam& a, const DeclareParam& b)
         r = 0;
     return *(bool*)&r;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1805,16 +1705,6 @@ void FUN_004eb980(void)
     FUN_004ea920(0x9ea3031a, 1, 0x5bf8f774);
     FUN_004ea920(0x9ea3031a, 1, 0xe46c381e);
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2015,16 +1905,6 @@ void InitializeValidityData()
 
 
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004eda30
 bool FUN_004eda30(char* res, int need, Flags128* flags)
 {
@@ -2079,15 +1959,6 @@ bool FUN_004eda30(char* res, int need, Flags128* flags)
 
 
 
-
-
-
-
-
-
-
-
-
 // @ 0x004edeb0
 bool FUN_004edeb0(int unused, Flags128* flags)
 {
@@ -2096,15 +1967,6 @@ bool FUN_004edeb0(int unused, Flags128* flags)
         flags->set(16, false);
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2157,15 +2019,6 @@ bool FUN_004edf40(const wchar_t* name, Flags128* flags)
 
 
 
-
-
-
-
-
-
-
-
-
 // @ 0x004ee3b0
 bool FUN_004ee3b0(char* res, Flags128* flags)
 {
@@ -2184,15 +2037,6 @@ bool FUN_004ee3b0(char* res, Flags128* flags)
     if (flags) flags->set(14, false);
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2255,15 +2099,6 @@ bool FUN_004ee560(char* res, Flags128* flags)
 
 
 
-
-
-
-
-
-
-
-
-
 // @ 0x004ee930
 int FUN_004ee930(unsigned int index, int res)
 {
@@ -2276,15 +2111,6 @@ int FUN_004ee930(unsigned int index, int res)
     v18 = *(int*)p15 + (int)index * 0x1d8;
     return (int)((Manager*)n35)->Find(*(int*)(v18 + 4), *(int*)p12);
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2394,15 +2220,6 @@ bool TestLimbs(Model* model, ValidityBits_s004e_e9b0* flags)
 
 
 
-
-
-
-
-
-
-
-
-
 // @ 0x004ef190
 bool TestBounds(Model* model, ValidityBits_s004e_e9b0* flags)
 {
@@ -2465,15 +2282,6 @@ bool TestBounds(Model* model, ValidityBits_s004e_e9b0* flags)
     if (flags) flags->set(8, false);
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2551,15 +2359,6 @@ bool CheckRequiredParts(cEditorModel* model, uint32_t key, ValidityBits_s004e_f8
         validity->set(0x12, !p13);
     return p13;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2673,15 +2472,6 @@ bool TestSize(cEditorModel_s004f_01f0* model, ValidityBits_s004f_01f0* validity)
     }
     return true;
 }
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2819,14 +2609,6 @@ bool TestComplexity(cEditorModel_s004f_1350* model, ValidityBits_s004f_1350* val
 
 
 
-
-
-
-
-
-
-
-
 // @ 0x004f21e0
 bool FUN_004f21e0(int a, int b)
 {
@@ -2835,13 +2617,6 @@ bool FUN_004f21e0(int a, int b)
         return true;
     return false;
 }
-
-
-
-
-
-
-
 
 
 
@@ -2883,23 +2658,11 @@ int FUN_004f3b40(Bits128 a, Bits128 b)
 
 
 
-
-
-
-
-
-
 // @ 0x004f3c40
 int FUN_004f3c40(int i)
 {
     return g_150c920[i].a;
 }
-
-
-
-
-
-
 
 
 
@@ -2913,10 +2676,6 @@ bool FUN_004f3d60(Bits128 a, Bits128 b)
         a.w[i] &= b.w[i];
     return !AnyBit(a);
 }
-
-
-
-
 
 
 
@@ -3067,10 +2826,6 @@ ValidityBits_s004f_3de0 SP::cSPEditorModelValidity_s004f_3de0::CalculateValidity
 
 
 
-
-
-
-
 // @ 0x004f56f0
 bool FUN_004f56f0(wchar_t c)
 {
@@ -3078,7 +2833,6 @@ bool FUN_004f56f0(wchar_t c)
         return false;
     return true;
 }
-
 
 
 
@@ -3152,7 +2906,6 @@ bool FUN_004f5720(Model_s004f_56f0* model, UIntVec* out)
         return false;
     }
 }
-
 
 
 
@@ -3251,13 +3004,11 @@ bool GetListOfUnknownPartsAndPaints(const Key* modelKey, KeyVec* parts, KeyVec* 
 
 
 
-
 // @ 0x004f64d0
 bool Obj::Compare(const Key* k)
 {
     return k->c == f0 && k->a == f1;
 }
-
 
 
 
@@ -3276,7 +3027,6 @@ void wstring::push_back(wchar_t c)
 
 
 
-
 // @ 0x004f65d0
 Bits* Bits::Flip()
 {
@@ -3285,8 +3035,6 @@ Bits* Bits::Flip()
         w[i] = ~w[i];
     return this;
 }
-
-
 
 
 // @ 0x004f6720
@@ -3298,6 +3046,7 @@ Elem16Vector& UIntMap::operator[](const uint32_t& key)
     }
     return (*itLower).second;
 }
+
 
 // @ 0x004f68f0
 template <class T>

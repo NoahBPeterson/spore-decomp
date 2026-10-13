@@ -17,7 +17,7 @@ class JobWaitNode : public eastl::intrusive_list_node /* +0x0 */ {
   ~JobWaitNode();                                                        // dev only
   void Wait();                                                           // dev only
   void SignalAndRemove();                                                // dev only
-  // UNDECLARABLE (names eastl::intrusive_list, which no header defines): void PushOntoList(eastl::intrusive_list<SP::JobWaitNode> &); // dev only
+  void PushOntoList(eastl::intrusive_list<SP::JobWaitNode> &);           // dev only
 
  public:  // data (retail offsets)
   EA::Thread::Semaphore mSemaphore;                            // 0x008 relaid

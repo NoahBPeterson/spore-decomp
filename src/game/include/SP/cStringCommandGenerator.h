@@ -7,7 +7,6 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/RefCountTemplate.h"
-#include "SP/cCommandParameterSet.h"
 #include "SP/cICommandGenerator.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"

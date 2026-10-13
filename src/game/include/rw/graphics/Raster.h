@@ -140,6 +140,13 @@ class Raster {
   };
   // sizeof(Locked) expected 0x1c (unverified)
 
+  void D3D9AddToUnmanagedList();                                         // 0x011ef710
+  static unsigned char FormatGetDepth(rw::graphics::Raster::Format);     // 0x011ef910
+  unsigned int D3D9GetStreamedMipLevelPitch(unsigned char) const;        // 0x011efe30, private
+  static rw::graphics::Raster * Initialize(rw::Resource const &, unsigned short, unsigned short, unsigned char, unsigned int, rw::graphics::Raster::Format); // 0x011efeb0
+  unsigned int Fill(void const *, unsigned char);                        // 0x011f0000
+  unsigned int D3D9GetStreamedMipLevelSize(unsigned char) const;         // 0x011f0270
+  static void RegisterArenaReadCallbacks();                              // 0x011f0820
   unsigned short GetWidth() const;                                       // dev only
   rw::graphics::Raster::Format GetFormat() const;                        // dev only
   unsigned int GetLinearBufferSize(unsigned char) const;                 // dev only
@@ -153,31 +160,24 @@ class Raster {
   unsigned int D3D9IsCompressed() const;                                 // dev only
   unsigned int D3D9SetLOD(unsigned int);                                 // dev only
   static unsigned int D3D9IsCompressed(rw::graphics::Raster::Format);    // dev only
-  void D3D9AddToUnmanagedList();                                         // dev only
   rw::graphics::Raster * Lock(unsigned int, unsigned char, rw::graphics::Raster::Locked &); // dev only
   rw::graphics::Raster * Unlock(rw::graphics::Raster::Locked &);         // dev only
-  static unsigned char FormatGetDepth(rw::graphics::Raster::Format);     // dev only
   static unsigned int FormatSupportsAlpha(rw::graphics::Raster::Format); // dev only
   static void D3D9ReleaseResources();                                    // dev only
   void D3D9RemoveFromUnmanagedList() const;                              // dev only, private
   rw::graphics::Raster * D3D9CreateSurface();                            // dev only, private
-  unsigned int D3D9GetStreamedMipLevelPitch(unsigned char) const;        // dev only, private
   static unsigned int D3D9GetStreamedMipLevelPitch(unsigned short, unsigned char, rw::graphics::Raster::Format); // dev only, private
-  static rw::graphics::Raster * Initialize(rw::Resource const &, unsigned short, unsigned short, unsigned char, unsigned int, rw::graphics::Raster::Format); // dev only
   static rw::graphics::Raster * Initialize(void *, unsigned int, unsigned short, unsigned short, unsigned char, unsigned int, rw::graphics::Raster::Format); // dev only
   void Release();                                                        // dev only
   static void Refix(void *, void *, rw::core::arena::ArenaIterator *);   // dev only
   static void Destruct(rw::graphics::Raster *);                          // dev only
-  unsigned int D3D9GetStreamedMipLevelSize(unsigned char) const;         // dev only
   static unsigned int D3D9GetStreamedMipLevelSize(unsigned short, unsigned short, unsigned char, rw::graphics::Raster::Format); // dev only
   static void D3D9RestoreResources();                                    // dev only
   unsigned int D3D9GetStreamedPixelDataSize();                           // dev only, private
   static rw::ResourceDescriptor GetResourceDescriptor(unsigned short, unsigned short, unsigned char, unsigned int, rw::graphics::Raster::Format); // dev only
-  unsigned int Fill(void const *, unsigned char);                        // dev only
   unsigned int Extract(void *, unsigned int, unsigned char);             // dev only
   static rw::core::arena::SizeAndAlignment * Unfix(void *, rw::core::arena::SizeAndAlignment *); // dev only
   static unsigned int Fixup(void *, rw::core::arena::ArenaIterator *);   // dev only
-  static void RegisterArenaReadCallbacks();                              // dev only
   static void RegisterArenaWriteCallbacks();                             // dev only
   void D3D9SetTexture(IDirect3DBaseTexture9 *);                          // dev only
   IDirect3DSwapChain9 * D3D9GetSwapChain() const;                        // dev only

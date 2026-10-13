@@ -42,7 +42,7 @@ class Aggregate {
   // UNDECLARABLE (names AABBoxTemplate, which no header defines): AABBoxTemplate<rw::math::vpu::Matrix44Affine, rw::math::vpu::Vector3, rw::collision::AABBoxMemoryDumpPolicy> const & GetBBox() const; // dev only
 
  public:  // data (retail offsets)
-  unsigned char m_AABB[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x000 relaid
+  __declspec(align(16)) unsigned char m_AABB[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x000 relaid
   rw::collision::Aggregate::VTable* m_vTable;                  // 0x020 relaid
   unsigned int m_numTagBits;                                   // 0x024 relaid
   unsigned int m_numVolumes;                                   // 0x028 relaid

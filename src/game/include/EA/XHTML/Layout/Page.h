@@ -8,9 +8,7 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/IUnknown32.h"
 #include "EA/RectT.h"
-#include "EA/XHTML/DOM/Document.h"
 #include "EA/XHTML/DOM/LinkState.h"
-#include "EA/XHTML/Style/Stylesheet.h"
 #include "eastl/fixed_vector.h"
 
 namespace EA { namespace COM { class IUnknown32; } }

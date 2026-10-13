@@ -98,7 +98,7 @@ class Document : public EA::RefCounted<EA::COM::IUnknown32,EA::Thread::AtomicInt
   wchar_t* mpBaseURI;                                          // 0x04c relaid
   eastl::fixed_vector<EA::AutoRefCount<EA::XHTML::Style::Stylesheet>,16,1> mStylesheets; // 0x050 relaid
   eastl::fixed_vector<EA::AutoRefCount<EA::XHTML::Style::Stylesheet>,16,1> mUserStylesheets; // 0x0a8 (dev 0x0a4) relaid
-  unsigned char mPendingRequests[0x8] /* eastl::intrusive_list<EA::XHTML::DOM::Document::LoadRequest>: no hand template for eastl::intrusive_list */; // 0x100 (dev 0x0f8) relaid
+  eastl::intrusive_list<EA::XHTML::DOM::Document::LoadRequest> mPendingRequests; // 0x100 (dev 0x0f8) relaid
   eastl::fixed_vector<EA::AutoRefCount<EA::COM::IUnknown32>,127,1> mResourceTable; // 0x108 (dev 0x100) relaid
 };
 #pragma pack(pop)

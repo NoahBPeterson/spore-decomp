@@ -1,4 +1,14 @@
 # va  diff-bytes  reason
+00538e90 41 cSPSkinPaintParticledelayCommand::Execute complete; /Od local slot order differs (this/pDesc/count placement)
+00538fe0 41 cSPSkinPaintParticlelifeCommand::Execute complete; /Od local slot order differs
+00539130 20 cSPSkinPaintParticlecurveCommand::Execute complete; slot order + original has a dead `xor edx,edx;jne` block after the random-flag if
+005391c0 357 cSPSkinPaintParticlealignCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+005394e0 270 cSPSkinPaintParticleinitDirCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539720 316 cSPSkinPaintParticleattractCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539980 318 cSPSkinPaintParticlerestrictCommand::Execute complete; /Od slot order cascade (10+ locals) not reproduced
+00539bf0 13 cSPSkinPaintParticlediffuseColorCommand::Execute complete; only `this` vs pDesc slot swap (this forced below all named locals)
+00539c70 13 cSPSkinPaintParticlespecularColorCommand::Execute complete; only `this` vs pDesc slot swap
+00539cf0 13 cSPSkinPaintParticlebumpColorCommand::Execute complete; only `this` vs pDesc slot swap
 00539d70 237 cSPSkinPaintParticleinheritCommand::Execute complete; per-arg _stricmp loop + inherit-bit table; /Od slot order differs; equiv: UNSUPPORTED (0/1200 valid: original throws via _CxxThrowException on soup args)
 00539ed0 126 SWARM_SPSkinPaintParticleAddCommands complete; registration (alloc block/command, vtable stores); codegen of explicit vtable stores not reproduced
 00539f90 132 cSPSkinPaintParticleEffectBlockCommand::ctor complete; object/AppProps base init + 3 vtable stores differ; equiv: UNSUPPORTED (vtable stores need mapping)

@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "SP/cTextureInstance.h"
 
 namespace SP { class cTextureInstance; }
 

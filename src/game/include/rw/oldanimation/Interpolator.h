@@ -19,6 +19,9 @@ namespace oldanimation {
 #pragma pack(push, 8)
 class Interpolator : public rw::oldanimation::Controller /* +0x0 */ {
  public:
+  static rw::ResourceDescriptor GetResourceDescriptor(unsigned int, rw::oldanimation::ControllerFormat, unsigned int); // 0x011fe550
+  static unsigned int Fixup(void *, rw::core::arena::ArenaIterator *);   // 0x011fe680, private
+  static void RegisterArenaReadCallbacks();                              // 0x011fe710
   rw::oldanimation::KeyframeAnimation * GetCurrentAnim();                // dev only
   unsigned int SetOutputNamesThis(rw::oldanimation::HashedNameList *);   // dev only, protected
   Interpolator();                                                        // dev only, protected
@@ -37,15 +40,12 @@ class Interpolator : public rw::oldanimation::Controller /* +0x0 */ {
   void UpdateThis();                                                     // dev only, protected
   float GetNaturalMeterThis();                                           // dev only, protected
   void SetMeterThis(float);                                              // dev only, protected
-  static rw::ResourceDescriptor GetResourceDescriptor(unsigned int, rw::oldanimation::ControllerFormat, unsigned int); // dev only
   static unsigned int GetSize(unsigned int, rw::oldanimation::ControllerFormat, unsigned int); // dev only
   unsigned int SetCurrentTime(float);                                    // dev only
   unsigned int SubAnimTime(float);                                       // dev only
   unsigned int GetMySizeThis();                                          // dev only, protected
   static rw::core::arena::SizeAndAlignment * Unfix(void *, rw::core::arena::SizeAndAlignment *); // dev only, private
   static void Refix(void *, void *, rw::core::arena::ArenaIterator *);   // dev only, private
-  static unsigned int Fixup(void *, rw::core::arena::ArenaIterator *);   // dev only, private
-  static void RegisterArenaReadCallbacks();                              // dev only
   static void RegisterArenaWriteCallbacks();                             // dev only
 
  public:  // data (retail offsets)

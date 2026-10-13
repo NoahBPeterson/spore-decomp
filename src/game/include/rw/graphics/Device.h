@@ -76,6 +76,11 @@ class Device {
   };
   // sizeof(Parameters) expected 0x3c (unverified)
 
+  static unsigned int Reset(rw::graphics::Device::Parameters const &);   // 0x011f7fd0
+  static void D3D9WindowResize(void *, unsigned short, unsigned short);  // 0x011f8070
+  static _D3DDISPLAYMODE D3D9GetDesktopDisplayMode();                    // 0x011f8270
+  static unsigned int D3D9GetMaxSamplerStage(unsigned int);              // 0x011f8400
+  static unsigned int StartInternal(rw::graphics::Device::Parameters const &); // 0x011f8680
   static rw::graphics::Raster * GetBackBuffer();                         // dev only
   static rw::graphics::Raster * GetZBuffer();                            // dev only
   static rw::graphics::Device::Parameters GetParameters();               // dev only
@@ -84,8 +89,6 @@ class Device {
   static unsigned int SetVideoMode(rw::graphics::Device::Parameters const &); // dev only
   static void Stop();                                                    // dev only
   static void Release();                                                 // dev only
-  static unsigned int Reset(rw::graphics::Device::Parameters const &);   // dev only
-  static void D3D9WindowResize(void *, unsigned short, unsigned short);  // dev only
   static void D3D9WindowHandleSet(HWND__*);                              // dev only
   void D3D9SetSoftwareVertexProcessingMode(unsigned int);                // dev only
   static void ShowRaster(rw::graphics::Raster *);                        // dev only
@@ -100,10 +103,7 @@ class Device {
   static unsigned int D3D9LoadDeviceCapsFromFile(char const *);          // dev only
   static unsigned int D3D9CheckTextureFormatSupported(_D3DFORMAT, unsigned int, _D3DFORMAT); // dev only
   static unsigned int D3D9CheckCubeTextureFormatSupported(_D3DFORMAT, unsigned int, _D3DFORMAT); // dev only
-  static _D3DDISPLAYMODE D3D9GetDesktopDisplayMode();                    // dev only
-  static unsigned int D3D9GetMaxSamplerStage(unsigned int);              // dev only
   static unsigned int Initialize();                                      // dev only
-  static unsigned int StartInternal(rw::graphics::Device::Parameters const &); // dev only
 
  public:  // data (retail offsets)
 };

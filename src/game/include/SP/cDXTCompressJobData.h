@@ -7,10 +7,8 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/IUnknown32.h"
 #include "EA/COM/InterfaceId.h"
-#include "EA/Messaging/IMessageRC.h"
 #include "EA/RefCountTemplate.h"
 #include "EA/Thread/AtomicInt.h"
-#include "SP/cImageDataRaw.h"
 
 namespace EA { namespace Messaging { class IMessageRC; } }
 namespace SP { class cJob; struct cImageDataRaw; }

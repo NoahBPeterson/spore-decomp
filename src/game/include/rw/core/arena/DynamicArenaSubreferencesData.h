@@ -4,6 +4,9 @@
 #define GAME_RW_CORE_ARENA_DYNAMICARENASUBREFERENCESDATA_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/SimpleVector.h"
+#include "rw/core/arena/ArenaDictEntry.h"
+#include "rw/core/arena/ArenaSectionSubreferencesRecord.h"
 
 namespace rw { class IResourceAllocator; }
 namespace rw { namespace core { namespace arena { struct ArenaDictEntry; struct ArenaSectionSubreferencesRecord; } } }
@@ -25,8 +28,8 @@ class DynamicArenaSubreferencesData {
   void Clear();                                                          // dev only
 
  public:  // data (retail offsets)
-  unsigned char m_records[0x20] /* rw::SimpleVector<rw::core::arena::ArenaSectionSubreferencesRecord>: no hand template for rw::SimpleVector */; // 0x000 relaid
-  unsigned char m_dict[0x20] /* rw::SimpleVector<rw::core::arena::ArenaDictEntry>: no hand template for rw::SimpleVector */; // 0x020 relaid
+  rw::SimpleVector<rw::core::arena::ArenaSectionSubreferencesRecord> m_records; // 0x000 relaid
+  rw::SimpleVector<rw::core::arena::ArenaDictEntry> m_dict;    // 0x020 relaid
 };
 #pragma pack(pop)
 // sizeof(DynamicArenaSubreferencesData) expected 0x40 (unverified)

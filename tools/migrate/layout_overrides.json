@@ -400,5 +400,25 @@
    }
   ],
   "evidence": "retail INetFileCache is 0x70 (dev 0x64): the byte-exact constructor 0x949b80 (s00948de0) links a list anchor to itself at +0x28 (`lea ecx,[eax+0x28]; mov [ecx],ecx; mov [ecx+4],ecx`), then initialises the hash table at +0x34 (mpBucketArray +0x38 = the empty bucket 0x154df28, mnBucketCount +0x3c = 1, mnElementCount +0x40, rehash policy floats +0x44/+0x48, mnNextResize +0x4c), mbKeepExpired +0x54 (byte 0), mnEnabledLocations +0x58 = 3, mnMaxRAMCacheSize +0x5c = 1000000, mnMaxFileCacheSize +0x60 = 3000000, mnDefaultExpirationTimeSeconds +0x64 = 18000, the two access counters +0x68/+0x6c; the dev PDB has mDataMap at +0x28: a 0xc-byte list (anchor + allocator word) of open cache streams sits in front of it (slice views s00948de0 `ListAnchor mStreamList +0x28`, `mPad30`; s00947d50 links its FileStreamObj nodes there) (fix pass 2, 2026-10-13)"
+ },
+ "EA::Thread::Mutex": {
+  "decl_overrides": [
+   {
+    "decl": "Mutex(EA::Thread::MutexParameters const *, bool)",
+    "replace": "Mutex(EA::Thread::MutexParameters const * = 0, bool = true)",
+    "evidence": "fix pass 3: EAThread declares Mutex(const MutexParameters* = NULL, bool bDefaultParameters = true); retail SharedLibraryRegistry ctor 0x9368f0 constructs its mutex member at +0x20 with `push 1 / push 0 / call 0x9222a0` (no arguments in the slice body: s00936090 Mutex::Construct(0, 1)), as does InternalDatabaseList's ctor 0x8de8e0 (s008de020). Without the defaults a member Mutex has no default constructor (C2512)."
+   }
+  ]
+ },
+ "cSPUILayout": {
+  "insert": [
+   {
+    "after": null,
+    "name": "mResourceKey",
+    "type": "EA::ResourceMan::Key",
+    "size": 12
+   }
+  ],
+  "evidence": "fix pass 3: retail cSPUILayout is 0x18 (dev 0xc): Init 0x8120d0 (pdb_names cSPUILayout::Init) copies its 12-byte key argument to +0x8/+0xc/+0x10 (`mov eax,[ebp]; mov [esi+8],eax; ... mov [esi+0x10],eax`) and keeps the object collection at +0x14 (`mov ebx,[esi+0x14]` ... `mov [esi+0x14],edi` with AddRef/Release through slots 1/2); IsVisible 0x810070 reads `[ecx+0x14]`, SetReloadCallback 0x810090 and operator= 0x810050 likewise, ~cSPUILayout 0x811fe0 releases `[esi+0x14]`. The dev PDB has mpObjectCollection at +0x8: a Key (0xc) sits in front of it in retail (slice views s0080f7c0 / s008117f0 f8/fc/f10)."
  }
 }

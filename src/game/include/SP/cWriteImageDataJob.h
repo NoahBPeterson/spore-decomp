@@ -6,7 +6,6 @@
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
-#include "EA/ResourceMan/Database.h"
 #include "EA/ResourceMan/Key.h"
 #include "SP/cImageDataVectorRC.h"
 

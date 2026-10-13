@@ -318,6 +318,18 @@ def item_names(kind, text):
         if mp:                                  # a function-pointer variable: `bool (*g_pParse)(int) = &Parse;`
             return [mp.group(1)]
         head = m.split("{")[0]
+        if "(" not in head and "{" not in m and "," in head:
+            # a declarator list (`extern char vtbl_UI_BehaviorMessage, vtbl_013eb844, ..., DAT_013f6b3c;`, s008107d0/s0080f7c0/
+            # s008117f0): every declarator is a name of the item, not only the last (fix pass 3: 12 SPUILayout verbatim bodies
+            # were dropped with C2065 on vtbl_X / DAT_X)
+            out = []
+            for part in head.strip().rstrip(";").split(","):
+                part = re.sub(r"\[[^\]]*\]", " ", part.split("=")[0])
+                ids = [x for x in IDENT.findall(part) if x not in KEYWORDS]
+                if ids:
+                    out.append(ids[-1])
+            if len(out) > 1:
+                return out
         head = re.sub(r"\([^()]*\)\s*$", "", head.strip().rstrip(";"))      # trailing parameter list
         head = re.split(r"=", head)[0]
         head = re.sub(r"\[[^\]]*\]", " ", head)
@@ -400,9 +412,12 @@ def needed_items(items, fn_texts, skip=()):
                 # a kept item's own new/delete-expressions need the slice's operator new/delete declarations (s007e4260: the
                 # inline helper NewBehaviorMessage uses the 6-argument placement new; only function texts were scanned: C2660)
                 mk = mask(text)
-                if re.search(r"\bnew\b", mk) and not re.search(r"\boperator\s*new\b", mk):
+                # (an item that is not itself an operator new/delete declaration uses them with any `new`, also an explicit
+                # `operator new[](n)` call: s0053acc0's BlobResize<Stride> template, whose 1-arg array new was dropped and
+                # had to be declared by hand in the module TU, round 3)
+                if re.search(r"\bnew\b", mk) and "operator new" not in names:
                     used.add("operator new")
-                if re.search(r"\bdelete\b", mk) and not re.search(r"\boperator\s*delete\b", mk):
+                if re.search(r"\bdelete\b", mk) and "operator delete" not in names:
                     used.add("operator delete")
                 optexts.append(mk)
                 for mm in re.finditer(r"[A-Za-z_]\w*(?:\s*::\s*~?[A-Za-z_]\w*)+", mask(text)):

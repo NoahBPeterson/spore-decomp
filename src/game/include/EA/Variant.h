@@ -121,10 +121,12 @@ struct Variant {
 
  public:  // data (retail offsets)
   union {
-    EA::Variant::Generic mGeneric;                               // 0x000 exact:s00542980
-    EA::Variant::Pointer mPointer;                               // 0x000 exact:s00542980
-    int mInt32;                                                  // 0x000 exact:s00542980
-    float mFloat;                                                // 0x000 exact:s00542980
+    struct {
+      EA::Variant::Generic mGeneric;                               // 0x000 exact:s00542980
+    };
+    struct {
+      EA::Variant::Pointer mPointer;                               // 0x000 exact:s00542980
+    };
     bool mBool;                                                  // 0x000 relaid
     char mChar8;                                                 // 0x000 relaid
     wchar_t mChar16;                                             // 0x000 relaid
@@ -132,9 +134,11 @@ struct Variant {
     unsigned char mUint8;                                        // 0x000 relaid
     short mInt16;                                                // 0x000 relaid
     unsigned short mUint16;                                      // 0x000 relaid
+    int mInt32;                                                  // 0x000 exact:s00542980
     unsigned int mUint32;                                        // 0x000 relaid
     __int64 mInt64;                                              // 0x000 relaid
     unsigned __int64 mUint64;                                    // 0x000 relaid
+    float mFloat;                                                // 0x000 exact:s00542980
     double mDouble;                                              // 0x000 relaid
   };
   unsigned short mFlags;                                       // 0x010 exact:s00542980

@@ -4,6 +4,7 @@
 #define GAME_RW_CORE_ARENA_ARENADICTENTRY_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/BaseResourceTemplates.h"
 
 namespace rw {
 namespace core {
@@ -13,7 +14,7 @@ namespace arena {
 #pragma pack(push, 8)
 struct ArenaDictEntry {
  public:
-  // UNDECLARABLE (names rw::BaseResourceDescriptorType, which no header defines): rw::BaseResourceDescriptorType<0> GetDescriptor() const; // dev only
+  rw::BaseResourceDescriptorType<0> GetDescriptor() const;               // dev only
 
  public:  // data (retail offsets)
   void* ptr;                                                   // 0x000 relaid

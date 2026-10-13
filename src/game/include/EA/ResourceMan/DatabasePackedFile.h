@@ -7,7 +7,6 @@
 #include "EA/COM/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/IO/FileStream.h"
-#include "EA/IO/IStream.h"
 #include "EA/ResourceMan/Database.h"
 #include "EA/ResourceMan/Key.h"
 #include "EA/ResourceMan/PFDatabaseHeader.h"

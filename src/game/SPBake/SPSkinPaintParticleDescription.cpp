@@ -1,34 +1,187 @@
-// src/game/SPBake/SPSkinPaintParticleDescription.cpp -- migrated from slice(s) s0053b930, s0053acc0, s00539d70 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinPaintParticleDescription.cpp -- migrated from slice(s) s0053b930, s0053acc0, s00539d70, s00538e90 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinPaintParticleDescription.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "EA/ArgScript/cIParser.h"
-#include "EA/ArgScript/cIBlockCommand.h"
 #include "EA/ArgScript/cArguments.h"
 #include "EA/ArgScript/cCommandBase.h"
+#include "EA/ArgScript/cIParser.h"
+#include "EA/ArgScript/cIBlockCommand.h"
 #include "EA/ArgScript/cState.h"
 
-// hand-added (rewrite.py drops slice s0053acc0's 1-arg operator new[]; the 6-arg overload in the
-// s00539d70 items block below would otherwise hide it, C2660 in BlobResize<Stride>):
-void* operator new[](size_t);
-void operator delete[](void*);
-
 // unnamed retail callees and globals (address in the comment)
+extern "C" double __cdecl sqrt(double);
+extern const char* kAlphaNames[];      // 0x13f2ed0
+#pragma intrinsic(sqrt)
+
+// ---- items of slice s00538e90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPVector3_s0053_8e90 {
+    float x, y, z;
+    cSPVector3_s0053_8e90() {}
+    cSPVector3_s0053_8e90(float X, float Y, float Z) : x(X), y(Y), z(Z) {}
+    float& operator[](int i) const { return ((float*)this)[i]; }
+};
+inline float Sqrt(float x) { volatile float r = (float)sqrt(x); return r; }
+void Vector3Divide(cSPVector3_s0053_8e90* out, const cSPVector3_s0053_8e90* in, const float* scalar); // @ 0x453880
+namespace EA {
+namespace ArgScript {
+#define PV(n) virtual void pv##n();
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cIParser_s0053_8e90 {
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
+    PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37)
+    virtual float GetFloat(const char* text);          // +0x98
+    PV(39) PV(40) PV(41)
+    virtual cSPVector3_s0053_8e90 GetVector(const char* text);    // +0xa8
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cArguments_s0053_8e90 {
+    const char** MainArguments(size_t* pCount, int minCount, int maxCount);  // 0x838020
+    const char** OptionArguments(const char* name, int count);               // 0x838330
+    bool HasFlag(const char* flag);                                          // 0x8380b0
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cICommand_s0053_8e90 {
+    virtual void AddRef();
+    virtual void Release();
+    virtual void Cast();
+};
+}
+}
+namespace EA {
+namespace ArgScript {
+struct cCommandBase_s0053_8e90 : cICommand_s0053_8e90 {
+    cIParser_s0053_8e90* mParser;      // +0x4
+    int mRefCount;          // +0x8
+};
+}
+}
+namespace EA {
+namespace Swarm {
+uint8_t ParseEnum(const char* value, const char** nameTable);
+}
+}
+namespace EA {
+namespace Swarm {
+float ParseRangedFloat(EA::ArgScript::cIParser_s0053_8e90* parser, const char* text, float lo, float hi);
+}
+}
+struct BrushDesc {
+    char pad0[0x1c];
+    uint32_t mFlags;                    // +0x1c
+    cSPVector3_s0053_8e90 mUserColorHSV;           // +0x20
+    char mUserColorIndex;               // +0x2c
+    uint8_t mAlignment;                 // +0x2d
+    uint8_t mInitialDirection;          // +0x2e
+    uint8_t mAttraction;                // +0x2f
+    cSPVector3_s0053_8e90 mAlignTarget;            // +0x30
+    cSPVector3_s0053_8e90 mInitialDirTarget;       // +0x3c
+    cSPVector3_s0053_8e90 mAttractTarget;          // +0x48
+    float mAttractStrength;             // +0x54
+    float mDelayMin;                    // +0x58
+    float mDelayMax;                    // +0x5c
+    float mLifeMin;                     // +0x60
+    float mLifeMax;                     // +0x64
+    uint32_t mInheritMask;              // +0x68
+    char pad1[0xa8 - 0x6c];
+    uint8_t mBlend0;                    // +0xa8
+    uint8_t mBlend1;                    // +0xa9
+    uint8_t mBlend2;                    // +0xaa
+};
+struct DescriptionBase {
+    virtual void d0();
+    virtual void d1();
+    int mnRefCount;
+};
+struct cSPSkinPaintParticleDescription_s0053_8e90 : DescriptionBase {
+    BrushDesc mBrush;                   // +0x8
+};
+template <class T>
+struct AutoRefCount {
+    T* mpObject;
+    operator T*() const { return mpObject; }
+};
+struct cSPSkinPaintParticleEffectBlockCommand {
+    char pad0[0x48];
+    AutoRefCount<cSPSkinPaintParticleDescription_s0053_8e90> mpDesc;  // +0x48
+};
+#define BRUSH() \
+    cSPSkinPaintParticleDescription_s0053_8e90* A; \
+    cSPSkinPaintParticleDescription_s0053_8e90* pDesc; \
+    BrushDesc* p; \
+    pDesc = A; \
+    pDesc = mState->mpDesc; \
+    p = pDesc ? &pDesc->mBrush : 0;
+namespace {
+using EA::ArgScript::cArguments_s0053_8e90;
+
+struct cSPSkinPaintParticledelayCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;   // +0xc
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlelifeCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlecurveCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlealignCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticleinitDirCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticleattractCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlerestrictCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlediffuseColorCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlespecularColorCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+struct cSPSkinPaintParticlebumpColorCommand : EA::ArgScript::cCommandBase_s0053_8e90 {
+    cSPSkinPaintParticleEffectBlockCommand* mState;
+    void Execute(cArguments_s0053_8e90& args);
+};
+}  // namespace
+// ---- items of slice s00538e90 end
+
+
+
+// ---- items of slice s00539d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
 extern char gEmptyString[];                                       // @ 0x1667bac
 extern const char* kInheritNames[];                               // 0x13f2e78 (19)
 extern const char* kParticleKeyword;                              // 0x13f2ec8
-
-// ---- items of slice s00539d70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* operator new[](size_t, const char*, int, unsigned, const char*, int);
 inline void* operator new(size_t n, const char* name, int f, unsigned d, const char* file, int line) {
     return operator new[](n, name, f, d, file, line);
 }
 inline void* operator new(size_t, void* p) { return p; }
 extern "C" size_t __cdecl strlen(const char*);
-extern "C" __declspec(dllimport) int __cdecl _stricmp(const char*, const char*);
-extern char gEmptyString[];                                       // @ 0x1667bac
 struct Vector16 { void* a; void* b; void* c; void* d; };
 void __cdecl EASTL_allocator_deallocate(void* p);                 // 0x00f47380
 namespace eastl {
@@ -137,7 +290,6 @@ void EvalResizeB(void* vec, int n);                               // 0x53b8a0
 void EvalResizeC(void* vec, int n);                               // 0x4afc80
 void EvalCopyA_(void* dst, const void* src);                      // 0x53b210
 void EvalCopyB_(void* dst, const void* src);                      // 0x53b5a0
-struct cSPSkinPaintParticleDescription_s0053_9d70;
 struct EvalList {
     char m0[0x14];                                                // +0x00
     char m1[0x14];                                                // +0x14
@@ -145,7 +297,7 @@ struct EvalList {
     char pad[4];
     EvalList& operator=(const EvalList& o);                       // 0x53a420
 };
-struct BrushDesc {
+struct BrushDesc_s0053_9d70 {
     char pad0[4];
     Vector16 mHashes;             // +0x04
     char pad1[4];
@@ -172,26 +324,25 @@ struct BrushDesc {
     int mRuntimeComponentId;      // +0xac
 
     void Init();                                                  // @ 0x53a530
-    BrushDesc& operator=(const BrushDesc& o);                     // 0x53a2b0
+    BrushDesc_s0053_9d70& operator=(const BrushDesc_s0053_9d70& o);                     // 0x53a2b0
     struct cSPSkinPaintParticleDescription_s0053_9d70* GetRuntimeDesc();     // 0x53a4a0
 };
-struct DescriptionBase { virtual void d0(); virtual void d1(); int mnRefCount; };
-struct cSPSkinPaintParticleDescription_s0053_9d70 : DescriptionBase { BrushDesc mBrush; };
-template <class T> struct AutoRefCount {
+struct cSPSkinPaintParticleDescription_s0053_9d70 : DescriptionBase { BrushDesc_s0053_9d70 mBrush; };
+template <class T> struct AutoRefCount_s0053_9d70 {
     T* mpObject;
-    AutoRefCount& operator=(T* p) { mpObject = p; return *this; } // @ 0x53b160
+    AutoRefCount_s0053_9d70& operator=(T* p) { mpObject = p; return *this; } // @ 0x53b160
     operator T*() const { return mpObject; }
 };
-class cSPSkinPaintParticleEffectBlockCommand
+class cSPSkinPaintParticleEffectBlockCommand_s0053_9d70
     : public EA::ArgScript::cBlockCommandT<EA::Swarm::cEffectsParser>, public EA::ArgScript::cState_s0053_9d70 {
 public:
     eastl::basic_string_s0053_9d70 mName;                                    // +0x38
-    AutoRefCount<cSPSkinPaintParticleDescription_s0053_9d70> mpDesc;         // +0x48
+    AutoRefCount_s0053_9d70<cSPSkinPaintParticleDescription_s0053_9d70> mpDesc;         // +0x48
     int mCurrentModifier;                                         // +0x4c
     EvalList* mpEvalList;                                         // +0x50
 
-    cSPSkinPaintParticleEffectBlockCommand();                     // 0x539f90
-    ~cSPSkinPaintParticleEffectBlockCommand();                    // 0x53a220
+    cSPSkinPaintParticleEffectBlockCommand_s0053_9d70();                     // 0x539f90
+    ~cSPSkinPaintParticleEffectBlockCommand_s0053_9d70();                    // 0x53a220
     void Parse(EA::ArgScript::cArguments_s0053_9d70& args);                  // @ 0x53a030
     void SetChild(int b);                                         // @ 0x53a1a0
 };
@@ -204,8 +355,6 @@ struct IRegB {
     virtual void v5();
     virtual void AddCommand(const char* name, void* cmd);         // +0x18
 };
-extern const char* kInheritNames[];                               // 0x13f2e78 (19)
-extern const char* kParticleKeyword;                              // 0x13f2ec8
 struct cSPSkinPaintParticleinheritCommand {
     char pad[0xc];
     void* mpState;
@@ -219,10 +368,10 @@ struct cSPSkinPaintParticleAddDescCommand {
     void WriteUInt8(...); // 0x0093a9a0
 // ---- items of slice s00539d70 end
 
-// unnamed retail callees and globals that name local stubs (address in the comment)
-extern "C" size_t __cdecl strlen(const char*);
-
 // ---- items of slice s0053acc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new[](size_t);
+void operator delete[](void*);  // 0x00f47380
+void operator delete[](void*, size_t);
 extern "C" void* __cdecl memcpy(void*, const void*, size_t);
 namespace EA {
 namespace IO {
@@ -332,16 +481,251 @@ void* PaintCompatCtor(void*);                                         // 0x53b1f
 void* PaintVarModifierCtor(void*);                                    // 0x83?
 // ---- items of slice s0053b930 end
 
+// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)
+cSPVector3_s0053_8e90* normalized(cSPVector3_s0053_8e90* out, const cSPVector3_s0053_8e90& in);   // defined at 0x00539440, called earlier in the TU
+
+// @ 0x00538e90
+void cSPSkinPaintParticledelayCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 2);
+    if (count == 2) {
+        p->mDelayMin = mParser->GetFloat(argv[0]);
+        p->mDelayMax = mParser->GetFloat(argv[1]);
+    } else {
+        float value = mParser->GetFloat(argv[0]);
+        float vary = 0.0f;
+        const char** opt = args.OptionArguments("vary", 1);
+        if (opt != 0)
+            vary = mParser->GetFloat(opt[0]);
+        p->mDelayMin = (1.0f - vary) * value;
+        p->mDelayMax = (1.0f + vary) * value;
+    }
+}
+
+// @ 0x00538fe0
+void cSPSkinPaintParticlelifeCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 2);
+    if (count == 2) {
+        p->mLifeMin = mParser->GetFloat(argv[0]);
+        p->mLifeMax = mParser->GetFloat(argv[1]);
+    } else {
+        float value = mParser->GetFloat(argv[0]);
+        float vary = 0.0f;
+        const char** opt = args.OptionArguments("vary", 1);
+        if (opt != 0)
+            vary = mParser->GetFloat(opt[0]);
+        p->mLifeMin = (1.0f - vary) * value;
+        p->mLifeMax = (1.0f + vary) * value;
+    }
+}
+
+// @ 0x00539130
+void cSPSkinPaintParticlecurveCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 0, 500);
+    (void)argv;
+    if (args.HasFlag("random"))
+        p->mFlags |= 4;
+}
+
+// @ 0x005391c0
+void cSPSkinPaintParticlealignCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 1);
+    if (_stricmp(argv[0], "inherit") == 0) {
+        p->mAlignment = 0;
+    } else if (_stricmp(argv[0], "move") == 0) {
+        p->mAlignment = 1;
+    } else if (_stricmp(argv[0], "dir") == 0) {
+        p->mAlignment = 1;
+    } else if (_stricmp(argv[0], "attract") == 0) {
+        p->mAlignment = 2;
+    } else if (_stricmp(argv[0], "aroundbone") == 0) {
+        p->mAlignment = 5;
+    } else if (_stricmp(argv[0], "alongbone") == 0) {
+        p->mAlignTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAlignment = 4;
+    } else if (_stricmp(argv[0], "aroundspine") == 0) {
+        p->mAlignment = 7;
+    } else if (_stricmp(argv[0], "alongspine") == 0) {
+        p->mAlignTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAlignment = 6;
+    } else {
+        cSPVector3_s0053_8e90 v = mParser->GetVector(argv[0]);
+        cSPVector3_s0053_8e90 n;
+        normalized(&n, v);
+        p->mAlignTarget = n;
+        if (args.HasFlag("bone"))
+            p->mAlignment = 4;
+        else
+            p->mAlignment = 3;
+    }
+    if (args.HasFlag("reverse"))
+        p->mFlags |= 0x40;
+}
+
+// @ 0x00539440
+cSPVector3_s0053_8e90* normalized(cSPVector3_s0053_8e90* out, const cSPVector3_s0053_8e90& in)
+{
+    float len = in[0] * in[0] + in[1] * in[1] + in[2] * in[2];
+    float d = Sqrt(len);
+    Vector3Divide(out, &in, &d);
+    return out;
+}
+
+// @ 0x005394e0
+void cSPSkinPaintParticleinitDirCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 1);
+    if (_stricmp(argv[0], "inherit") == 0) {
+        p->mInitialDirection = 0;
+    } else if (_stricmp(argv[0], "attract") == 0) {
+        p->mInitialDirection = 2;
+    } else if (_stricmp(argv[0], "aroundbone") == 0) {
+        p->mInitialDirection = 5;
+    } else if (_stricmp(argv[0], "alongbone") == 0) {
+        p->mInitialDirTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mInitialDirection = 4;
+    } else if (_stricmp(argv[0], "aroundspine") == 0) {
+        p->mInitialDirection = 7;
+    } else if (_stricmp(argv[0], "alongspine") == 0) {
+        p->mInitialDirTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mInitialDirection = 6;
+    } else {
+        cSPVector3_s0053_8e90 v = mParser->GetVector(argv[0]);
+        cSPVector3_s0053_8e90 n;
+        normalized(&n, v);
+        p->mInitialDirTarget = n;
+        if (args.HasFlag("bone"))
+            p->mInitialDirection = 4;
+        else
+            p->mInitialDirection = 3;
+    }
+    if (args.HasFlag("reverse"))
+        p->mFlags |= 0x20;
+}
+
+// @ 0x00539720
+void cSPSkinPaintParticleattractCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 2);
+    if (_stricmp(argv[0], "inherit") == 0) {
+        p->mAttraction = 0;
+    } else if (_stricmp(argv[0], "aroundbone") == 0) {
+        p->mAttraction = 5;
+    } else if (_stricmp(argv[0], "alongbone") == 0) {
+        p->mAttractTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAttraction = 4;
+    } else if (_stricmp(argv[0], "aroundspine") == 0) {
+        p->mAttraction = 7;
+    } else if (_stricmp(argv[0], "alongspine") == 0) {
+        p->mAttractTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAttraction = 6;
+    } else {
+        cSPVector3_s0053_8e90 v = mParser->GetVector(argv[0]);
+        cSPVector3_s0053_8e90 n;
+        normalized(&n, v);
+        p->mAttractTarget = n;
+        if (args.HasFlag("bone"))
+            p->mAttraction = 4;
+        else
+            p->mAttraction = 3;
+    }
+    if (count == 1)
+        p->mAttractStrength = 1.0f;
+    else
+        p->mAttractStrength = EA::Swarm::ParseRangedFloat(mParser, argv[1], 0.0f, 1.0f);
+    if (args.HasFlag("reverse"))
+        p->mFlags |= 0x10;
+}
+
+// @ 0x00539980
+void cSPSkinPaintParticlerestrictCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 2);
+    p->mFlags |= 8;
+    if (_stricmp(argv[0], "inherit") == 0) {
+        p->mAttraction = 0;
+    } else if (_stricmp(argv[0], "aroundbone") == 0) {
+        p->mAttraction = 5;
+    } else if (_stricmp(argv[0], "alongbone") == 0) {
+        p->mAttractTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAttraction = 4;
+    } else if (_stricmp(argv[0], "aroundspine") == 0) {
+        p->mAttraction = 7;
+    } else if (_stricmp(argv[0], "alongspine") == 0) {
+        p->mAttractTarget = cSPVector3_s0053_8e90(0.0f, 1.0f, 0.0f);
+        p->mAttraction = 6;
+    } else {
+        cSPVector3_s0053_8e90 v = mParser->GetVector(argv[0]);
+        cSPVector3_s0053_8e90 n;
+        normalized(&n, v);
+        p->mAttractTarget = n;
+        if (args.HasFlag("bone"))
+            p->mAttraction = 4;
+        else
+            p->mAttraction = 3;
+    }
+    if (count == 1)
+        p->mAttractStrength = 1.0f;
+    else
+        p->mAttractStrength = EA::Swarm::ParseRangedFloat(mParser, argv[1], 0.0f, 1.0f);
+    if (args.HasFlag("reverse"))
+        p->mFlags |= 0x10;
+}
+
+// @ 0x00539bf0
+void cSPSkinPaintParticlediffuseColorCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 1);
+    p->mBlend0 = EA::Swarm::ParseEnum(argv[0], kAlphaNames);
+}
+
+// @ 0x00539c70
+void cSPSkinPaintParticlespecularColorCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 1);
+    p->mBlend1 = EA::Swarm::ParseEnum(argv[0], kAlphaNames);
+}
+
+// @ 0x00539cf0
+void cSPSkinPaintParticlebumpColorCommand::Execute(cArguments_s0053_8e90& args)
+{
+    BRUSH();
+    size_t count = 0;
+    const char** argv = args.MainArguments(&count, 1, 1);
+    p->mBlend2 = EA::Swarm::ParseEnum(argv[0], kAlphaNames);
+}
+
 // @ 0x00539d70
 void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments_s0053_9d70& args)
 {
-    cSPSkinPaintParticleEffectBlockCommand* state =
-        (cSPSkinPaintParticleEffectBlockCommand*)mpState;
+    cSPSkinPaintParticleEffectBlockCommand_s0053_9d70* state =
+        (cSPSkinPaintParticleEffectBlockCommand_s0053_9d70*)mpState;
     cSPSkinPaintParticleDescription_s0053_9d70* A;
     cSPSkinPaintParticleDescription_s0053_9d70* pDesc;
     pDesc = A;
     pDesc = state->mpDesc;
-    BrushDesc* p = pDesc ? &pDesc->mBrush : 0;
+    BrushDesc_s0053_9d70* p = pDesc ? &pDesc->mBrush : 0;
     size_t count = 0;
     const char** argv = args.MainArguments(&count, 1, 0x32);
     for (size_t i = 0; i < count; ++i) {
@@ -362,11 +746,13 @@ void cSPSkinPaintParticleinheritCommand::Execute(EA::ArgScript::cArguments_s0053
 
 
 
+
+
 // @ 0x00539ed0
 void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
 {
     void* p = EASTL_allocator_allocate(0x54, "ArgScript/SPSkinPaintParticleEffectBlock", 0, 0, 0, 0);
-    void* block = p ? (void*)new (p) cSPSkinPaintParticleEffectBlockCommand() : 0;
+    void* block = p ? (void*)new (p) cSPSkinPaintParticleEffectBlockCommand_s0053_9d70() : 0;
     b->AddBlock(kParticleKeyword, block);
 
     void* q = EASTL_allocator_allocate(0x10, "ArgScript/SPSkinPaintParticleEffect", 0, 0, 0, 0);
@@ -381,8 +767,10 @@ void SWARM_SPSkinPaintParticleAddCommands(IRegB* a, IRegA* b)
 
 
 
+
+
 // @ 0x00539f90
-cSPSkinPaintParticleEffectBlockCommand::cSPSkinPaintParticleEffectBlockCommand()
+cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
 : mCurrentModifier(0), mpEvalList(0) {
     mStateID = 0x2c96c27;
     mName.mpBegin = gEmptyString;
@@ -393,8 +781,10 @@ cSPSkinPaintParticleEffectBlockCommand::cSPSkinPaintParticleEffectBlockCommand()
 
 
 
+
+
 // @ 0x0053a030
-void cSPSkinPaintParticleEffectBlockCommand::Parse(EA::ArgScript::cArguments_s0053_9d70& args)
+void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::Parse(EA::ArgScript::cArguments_s0053_9d70& args)
 {
     size_t count = 0;
     const char** argv = args.MainArguments(&count, 1, 3);
@@ -423,8 +813,10 @@ void cSPSkinPaintParticleEffectBlockCommand::Parse(EA::ArgScript::cArguments_s00
 
 
 
+
+
 // @ 0x0053a1a0
-void cSPSkinPaintParticleEffectBlockCommand::SetChild(int b)
+void cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::SetChild(int b)
 {
     if (b == 0)
         FUN_00a6f9c0(mState, 0x26, mpDesc.mpObject);
@@ -433,8 +825,10 @@ void cSPSkinPaintParticleEffectBlockCommand::SetChild(int b)
 
 
 
+
+
 // @ 0x0053a220
-cSPSkinPaintParticleEffectBlockCommand::~cSPSkinPaintParticleEffectBlockCommand()
+cSPSkinPaintParticleEffectBlockCommand_s0053_9d70::~cSPSkinPaintParticleEffectBlockCommand_s0053_9d70()
 {
     if (mpDesc.mpObject) {
         void** vt = *(void***)mpDesc.mpObject;
@@ -444,8 +838,10 @@ cSPSkinPaintParticleEffectBlockCommand::~cSPSkinPaintParticleEffectBlockCommand(
 
 
 
+
+
 // @ 0x0053a2b0
-BrushDesc& BrushDesc::operator=(const BrushDesc& o)
+BrushDesc_s0053_9d70& BrushDesc_s0053_9d70::operator=(const BrushDesc_s0053_9d70& o)
 {
     mHashes = o.mHashes;
     mChainId = o.mChainId;
@@ -473,6 +869,8 @@ BrushDesc& BrushDesc::operator=(const BrushDesc& o)
 
 
 
+
+
 // @ 0x0053a420
 __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
 {
@@ -481,6 +879,8 @@ __declspec(noinline) EvalList& EvalList::operator=(const EvalList& o)
     m2 = o.m2;
     return *this;
 }
+
+
 
 
 
@@ -494,10 +894,12 @@ void cSPSkinPaintParticleAddDescCommand::AddDesc(EA::ArgScript::cArguments_s0053
 
 
 
+
+
 // @ 0x0053a4a0
-cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc::GetRuntimeDesc()
+cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc_s0053_9d70::GetRuntimeDesc()
 {
-    BrushDesc* b = this;
+    BrushDesc_s0053_9d70* b = this;
     void** mgr = (void**)SP_EffectsManager();
     if (!mgr || b->mChainId < 0 || b->mRuntimeComponentId < 0)
         return 0;
@@ -509,8 +911,10 @@ cSPSkinPaintParticleDescription_s0053_9d70* BrushDesc::GetRuntimeDesc()
 
 
 
+
+
 // @ 0x0053a530
-void BrushDesc::Init()
+void BrushDesc_s0053_9d70::Init()
 {
     mFlags = 0;
     mChainId = -1;
@@ -532,6 +936,8 @@ void BrushDesc::Init()
     mBlend1 = 0;
     mBlend2 = 0;
 }
+
+
 
 
 
@@ -576,6 +982,8 @@ EA::IO::IStream_s0053_9d70* ReadEvalList(EA::IO::IStream_s0053_9d70* stream, Eva
 
 
 
+
+
 // @ 0x0053a930
 EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, EvalList* e)
 {
@@ -615,6 +1023,8 @@ EA::IO::IStream_s0053_9d70* WriteEvalList(EA::IO::IStream_s0053_9d70* stream, Ev
 }
 
 
+
+
 // @ 0x0053acc0
 void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
 {
@@ -640,6 +1050,8 @@ void ReadParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
     ReadUInt8(s, (uint8_t*)(d + 0xb1), 1);
     ReadUInt8(s, (uint8_t*)(d + 0xb2), 1);
 }
+
+
 
 
 // @ 0x0053aea0
@@ -670,6 +1082,8 @@ void WriteParticleDescription(EA::IO::IStream_s0053_acc0* s, char* d)
 }
 
 
+
+
 // @ 0x0053b160
 AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
 {
@@ -685,6 +1099,8 @@ AutoRefSlot* AutoRefSlot::AutoRefCountAssign(void* p)
 }
 
 
+
+
 // @ 0x0053b1c0
 PaintCompatA* PaintCompatA::Ctor1b0()
 {
@@ -692,6 +1108,8 @@ PaintCompatA* PaintCompatA::Ctor1b0()
     *(void**)this = (void*)0x13f4b30;
     return this;
 }
+
+
 
 
 // @ 0x0053b1f0
@@ -702,11 +1120,15 @@ PaintCompatB* PaintCompatB::Ctor1f0()
 }
 
 
+
+
 // @ 0x0053b210
 BlobVec* BlobVec::Vector16Assign(const BlobVec* o)
 {
     return BlobAssign<0x10>(this, o);
 }
+
+
 
 
 // @ 0x0053b520
@@ -716,11 +1138,15 @@ void BlobVec::Vector16Resize(unsigned n)
 }
 
 
+
+
 // @ 0x0053b5a0
 BlobVec* BlobVec::Vector20Assign(const BlobVec* o)
 {
     return BlobAssign<0x14>(this, o);
 }
+
+
 
 // @ 0x0053b930
 void RegisterPaintEvalCommands(EA::ArgScript::cCommandBase_s0053_b930* cmds)

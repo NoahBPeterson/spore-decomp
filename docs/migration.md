@@ -156,7 +156,7 @@ stub only — those are kept as `*_slice.h` with a TODO).
 
 #### headers: what was built (2026-10-12)
 
-`tools/migrate/headers.py --module SUBSTR` writes `work/migrate/headers/<module>/<Ns>/<Class>.h`
+`tools/migrate/headers.py --module OBJSTEM` (exact; `--module-substr SUBSTR` for several objects) writes `work/migrate/headers/<module>/<Ns>/<Class>.h`
 for every class that has a method in the module (template instantiations and `eastl::`/`std::`
 classes are skipped: they belong to shared headers). Inputs: `work/devbuild/types.json`
 (layouts), `symbols.json` publics demangled with `llvm-undname` (full method signatures),

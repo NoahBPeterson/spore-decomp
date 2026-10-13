@@ -4,6 +4,7 @@
 #define GAME_CSPMATRIX4_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/math/fpu/VectorTemplates.h"
 
 struct cSPVector4;
 
@@ -14,9 +15,9 @@ struct cSPMatrix4 : public rw::math::fpu::Matrix44Template<float,0> /* +0x0 */ {
  public:
   cSPMatrix4(cSPMatrix4 const &);                                        // dev only
   cSPMatrix4();                                                          // dev only
-  // UNDECLARABLE (names rw::math::fpu::Matrix44Template, which no header defines): cSPMatrix4(rw::math::fpu::Matrix44Template<float, 0> const &); // dev only
+  cSPMatrix4(rw::math::fpu::Matrix44Template<float, 0> const &);         // dev only
   cSPVector4 & operator[](int);                                          // dev only
-  // UNDECLARABLE (names rw::math::fpu::Matrix44Template, which no header defines): cSPMatrix4 & operator=(rw::math::fpu::Matrix44Template<float, 0> const &); // dev only
+  cSPMatrix4 & operator=(rw::math::fpu::Matrix44Template<float, 0> const &); // dev only
   cSPVector4 const & operator[](int) const;                              // dev only
   cSPMatrix4(float, float, float, float, float, float, float, float, float, float, float, float, float, float, float, float); // dev only
 

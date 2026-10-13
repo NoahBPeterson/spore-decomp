@@ -13,6 +13,7 @@
 #include "SP/cTextureInstanceInternal.h"
 #include "eastl/allocator.h"
 #include "eastl/hash_map.h"
+#include "eastl/list.h"
 #include "eastl/string.h"
 #include "eastl/vector.h"
 
@@ -46,19 +47,19 @@ class cTextureManager : public SP::cITextureManager /* +0x0 */, public EA::RefCo
   virtual bool Init();                                                   // slot 3, 0x007a9f30
   virtual bool Shutdown();                                               // slot 4, 0x007ab460
   virtual void Update();                                                 // slot 5, 0x007abc90
-  virtual SP::cTextureInstance * GetTexture(unsigned int, unsigned int, int /* SP::cITextureManager::tUseFlags */); // slot 7, 0x007acbb0
-  virtual SP::cTextureInstance * GetTexture(EA::ResourceMan::Key, int /* SP::cITextureManager::tUseFlags */); // slot 6, 0x007a93b0
+  virtual SP::cTextureInstance * GetTexture(unsigned int, unsigned int, SP::cITextureManager::tUseFlags); // slot 7, 0x007acbb0
+  virtual SP::cTextureInstance * GetTexture(EA::ResourceMan::Key, SP::cITextureManager::tUseFlags); // slot 6, 0x007a93b0
   virtual bool HasTexture(unsigned int, unsigned int);                   // slot 9, 0x007ab5f0
   virtual bool HasTexture(EA::ResourceMan::Key);                         // slot 8, 0x007a93c0
   virtual EA::ResourceMan::Key GetKeyFromTexture(SP::cTextureInstance const *); // slot 10, 0x007a93f0
   virtual SP::cResourceBase * GetResourceForTexture(SP::cTextureInstance const *); // slot 11, 0x007a9420
   virtual bool StallUntilLoaded(SP::cTextureInstance const *);           // slot 12, 0x007a9450
   virtual bool AddTextureLoadDependency(SP::cTextureInstance *, SP::cJob *); // slot 13, 0x007acd90
-  virtual SP::cTextureInstance * CreateTexture(int, int, int, unsigned int, unsigned int, int /* SP::cITextureManager::tUseFlags */); // slot 15, 0x007a94f0
-  virtual SP::cTextureInstance * CreateTexture(unsigned int, unsigned int, int, int, int, unsigned int, unsigned int, int /* SP::cITextureManager::tUseFlags */); // slot 14, 0x007aa0d0
+  virtual SP::cTextureInstance * CreateTexture(int, int, int, unsigned int, unsigned int, SP::cITextureManager::tUseFlags); // slot 15, 0x007a94f0
+  virtual SP::cTextureInstance * CreateTexture(unsigned int, unsigned int, int, int, int, unsigned int, unsigned int, SP::cITextureManager::tUseFlags); // slot 14, 0x007aa0d0
   virtual bool WriteTexture(SP::cTextureInstance *, EA::ResourceMan::Database *, bool); // slot 16, 0x007a9470
-  virtual SP::cTextureInstance * RegisterGameTexture(rw::graphics::Raster *, int /* SP::cITextureManager::tUseFlags */); // slot 17, 0x007a9730
-  virtual SP::cTextureInstance * RegisterBuiltInGameTexture(unsigned int, unsigned int, rw::graphics::Raster *, int /* SP::cITextureManager::tUseFlags */); // slot 18, 0x007a9540
+  virtual SP::cTextureInstance * RegisterGameTexture(rw::graphics::Raster *, SP::cITextureManager::tUseFlags); // slot 17, 0x007a9730
+  virtual SP::cTextureInstance * RegisterBuiltInGameTexture(unsigned int, unsigned int, rw::graphics::Raster *, SP::cITextureManager::tUseFlags); // slot 18, 0x007a9540
   virtual void SetTextureModified(SP::cTextureInstance *, bool);         // slot 19, 0x007acae0
   virtual bool ExtractTexture(SP::cTextureInstance *, SP::cImageDataRaw **, bool, unsigned int); // slot 21, 0x007a95b0
   virtual bool ExtractTexture(rw::graphics::Raster *, SP::cImageDataRaw **, bool); // slot 20, 0x007aca00
@@ -77,8 +78,8 @@ class cTextureManager : public SP::cITextureManager /* +0x0 */, public EA::RefCo
 
   void StallFinishBackgroundLoad(SP::cTextureAsyncInfo &);               // 0x007aafc0, protected
   cTextureManager();                                                     // 0x007ac1e0
-  SP::cTextureInstance * GetTextureSync(EA::ResourceMan::Key, int /* SP::cITextureManager::tUseFlags */); // 0x007ac750, protected
-  SP::cTextureInstance * GetTextureAsync(EA::ResourceMan::Key, int /* SP::cITextureManager::tUseFlags */); // 0x007ac850, protected
+  SP::cTextureInstance * GetTextureSync(EA::ResourceMan::Key, SP::cITextureManager::tUseFlags); // 0x007ac750, protected
+  SP::cTextureInstance * GetTextureAsync(EA::ResourceMan::Key, SP::cITextureManager::tUseFlags); // 0x007ac850, protected
   bool StallUntilLoadedUnderLock(SP::cTextureInstanceInternal *);        // 0x007ac8d0, protected
   bool ResourceManagerHasTexture(EA::ResourceMan::Key &);                // dev only, protected
   static bool IsLoaded(SP::cTextureInstance *);                          // dev only, protected
@@ -87,14 +88,14 @@ class cTextureManager : public SP::cITextureManager /* +0x0 */, public EA::RefCo
   void FinishBackgroundLoad(SP::cTextureAsyncInfo &);                    // dev only, protected
   void GetTextures(eastl::vector<SP::cTextureItem, eastl::sp_vector_allocator> *); // dev only
   void GetAllTextures(eastl::vector<SP::cTextureItem, eastl::sp_vector_allocator> *); // dev only
-  SP::cTextureInstance * CreateInstance(EA::ResourceMan::Key const &, EA::ResourceMan::Resource *, rw::graphics::Raster *, int /* SP::cITextureManager::tUseFlags */, unsigned int); // dev only, protected
+  SP::cTextureInstance * CreateInstance(EA::ResourceMan::Key const &, EA::ResourceMan::Resource *, rw::graphics::Raster *, SP::cITextureManager::tUseFlags, unsigned int); // dev only, protected
 
  public:  // data (retail offsets)
   bool mIsInitialized;                                         // 0x00c exact:s007aabb0
   rw::graphics::Raster* mInvalidRaster;                        // 0x010 exact:s007aabb0
   rw::graphics::Raster* mLoadingRaster;                        // 0x014 exact:s007aabb0
   EA::Thread::Mutex mMutex;                                    // 0x018 relaid!view:s007aabb0 has 0x20
-  unsigned char mTextureInstances[0x8] /* eastl::intrusive_list<SP::cTextureInstanceInternal>: no hand template for eastl::intrusive_list */; // 0x048 relaid!view:s007aabb0 has 0x50
+  eastl::intrusive_list<SP::cTextureInstanceInternal> mTextureInstances; // 0x048 relaid!view:s007aabb0 has 0x50
   eastl::hash_map<EA::ResourceMan::Key,SP::cTextureInstanceInternal *,EA::ResourceMan::KeyHash,eastl::equal_to<EA::ResourceMan::Key>,eastl::allocator,0> mTextureInstanceMap; // 0x050 relaid!view:s007aabb0 has 0x58
   eastl::hash_set<SP::cArenaResource *,eastl::hash<SP::cArenaResource *>,eastl::equal_to<SP::cArenaResource *>,eastl::allocator,0> mTextureArenas; // 0x070 relaid!view:s007aabb0 has 0x78
   EA::Thread::Mutex mTextureArenaMutex;                        // 0x090 relaid!view:s007aabb0 has mArenaMutex at 0x98

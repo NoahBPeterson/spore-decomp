@@ -6,9 +6,13 @@
 #include "game/typedefs.h"
 #include "EA/Thread/Mutex.h"
 #include "SP/JobCondition.h"
+#include "SP/JobDependencyNode.h"
+#include "SP/JobThreadNode.h"
+#include "SP/JobWaitNode.h"
 #include "SP/cIJobManager.h"
 #include "SP/cJobData.h"
 #include "SP/tJobStatus.h"
+#include "eastl/list.h"
 
 namespace EA { class LimitStopwatch; }
 namespace EA { namespace IO { class IStream; } }
@@ -43,7 +47,7 @@ class cJobManager : public SP::cIJobManager /* +0x0 */ {
 
   SP::cJobData * GetRunnableJob(SP::cJobThread *, int);                  // 0x0068f670, protected
   bool ContinueJob(SP::cJobData &, bool (__cdecl *)(SP::cJob &, void *), void *); // 0x0068f970, protected
-  // UNDECLARABLE (names eastl::intrusive_list, which no header defines): void InsertJobByPriority(eastl::intrusive_list<SP::cJobData> &, SP::cJobData &); // 0x0068fff0, protected
+  void InsertJobByPriority(eastl::intrusive_list<SP::cJobData> &, SP::cJobData &); // 0x0068fff0, protected
   SP::tJobStatus GetJobStatus(SP::cJobData const &);                     // 0x006900b0, protected
   cJobManager();                                                         // 0x00690210
   void ScheduleJob(SP::cJobData &);                                      // 0x00690540, protected
@@ -79,16 +83,16 @@ class cJobManager : public SP::cIJobManager /* +0x0 */ {
   int mnLockCount;                                             // 0x038 relaid
   SP::JobCondition mJobReadyCondition;                         // 0x03c exact:s0068f670
   SP::JobCondition mJobReadyOrSyncCondition;                   // 0x044 exact:s0068f670
-  unsigned char mJobs[0x48] /* eastl::intrusive_list<SP::cJobData>[9]: no hand template for eastl::intrusive_list */; // 0x04c exact:s0068f670
-  unsigned char mReadyList[0x100] /* eastl::intrusive_list<SP::cJobData>[32]: no hand template for eastl::intrusive_list */; // 0x094 exact:s0068f670
+  eastl::intrusive_list<SP::cJobData> mJobs[9];                // 0x04c exact:s0068f670
+  eastl::intrusive_list<SP::cJobData> mReadyList[32];          // 0x094 exact:s0068f670
   unsigned int mValidAffinities;                               // 0x194 exact:s0068f670
-  unsigned char mThreads[0x8] /* eastl::intrusive_list<SP::JobThreadNode>: no hand template for eastl::intrusive_list */; // 0x198 exact:s0068f670
+  eastl::intrusive_list<SP::JobThreadNode> mThreads;           // 0x198 exact:s0068f670
   int mnActiveJobCount;                                        // 0x1a0 relaid
   unsigned char mWaitingThreads[20];                           // 0x1a4 relaid
   unsigned char mWaitingPriorities[20];                        // 0x1b8 relaid
   SP::cJobThread* mpSyncThread;                                // 0x1cc exact:s0068f670
-  unsigned char mFreeLinks[0x8] /* eastl::intrusive_list<SP::JobDependencyNode>: no hand template for eastl::intrusive_list */; // 0x1d0 exact:s0068f670
-  unsigned char mFreeWaitNodes[0x8] /* eastl::intrusive_list<SP::JobWaitNode>: no hand template for eastl::intrusive_list */; // 0x1d8 exact:s0068f670
+  eastl::intrusive_list<SP::JobDependencyNode> mFreeLinks;     // 0x1d0 exact:s0068f670
+  eastl::intrusive_list<SP::JobWaitNode> mFreeWaitNodes;       // 0x1d8 exact:s0068f670
   void (*mInitThreadFunc)();                                   // 0x1e0 exact:s0068f670
 };
 #pragma pack(pop)

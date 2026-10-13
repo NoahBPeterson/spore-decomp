@@ -8,7 +8,6 @@
 #include "EA/RefCountTemplate.h"
 #include "EA/Stopwatch.h"
 #include "EA/Thread/Mutex.h"
-#include "SP/cILayer.h"
 #include "SP/cIRenderer.h"
 #include "SP/cLayerInfoExtra.h"
 #include "SP/cRenderJobInfo.h"

@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/IO/IStream.h"
 
 namespace EA { namespace IO { class IStream; } }
 

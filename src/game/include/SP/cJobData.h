@@ -5,6 +5,8 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/Thread/AtomicInt.h"
+#include "SP/JobDependencyNode.h"
+#include "SP/JobDependentNode.h"
 #include "SP/cJob.h"
 #include "eastl/list.h"
 
@@ -24,8 +26,8 @@ class cJobData : public eastl::intrusive_list_node /* +0x0 */, public SP::cJob /
  public:  // data (retail offsets)
   SP::cJobManager* mpManager;                                  // 0x030 exact:s0068f670
   bool mbSynchronousWait;                                      // 0x034 exact:s0068f670
-  unsigned char mDependencies[0x8] /* eastl::intrusive_list<SP::JobDependencyNode>: no hand template for eastl::intrusive_list */; // 0x038 exact:s0068f670
-  unsigned char mDependents[0x8] /* eastl::intrusive_list<SP::JobDependentNode>: no hand template for eastl::intrusive_list */; // 0x040 exact:s0068f670
+  eastl::intrusive_list<SP::JobDependencyNode> mDependencies;  // 0x038 exact:s0068f670
+  eastl::intrusive_list<SP::JobDependentNode> mDependents;     // 0x040 exact:s0068f670
   int mRealPriority;                                           // 0x048 exact:s0068f670
   EA::Thread::AtomicInt<int> mRefCount;                        // 0x04c exact:s0068f670
 };

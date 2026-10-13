@@ -31,13 +31,22 @@ class KDTree {
 
    public:  // data (retail offsets)
     rw::collision::KDTree* m_kdtree;                             // 0x000 relaid
-    unsigned char m_bbox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
+    __declspec(align(16)) unsigned char m_bbox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
     unsigned int m_stack[32];                                    // 0x030 relaid
     unsigned int m_top;                                          // 0x0b0 relaid
     unsigned int m_resultCount;                                  // 0x0b4 relaid
     unsigned int m_nextEntry;                                    // 0x0b8 relaid
   };
   // sizeof(BBoxQuery) expected 0xc0 (unverified)
+
+  // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
+  struct NodeRef {
+   public:
+   public:  // data (retail offsets)
+    unsigned int m_content;                                      // 0x000 relaid
+    unsigned int m_index;                                        // 0x004 relaid
+  };
+  // sizeof(NodeRef) expected 0x8 (unverified)
 
   // dev size 0x20 -> retail size 0x20 (re-laid from the PDB, unverified in retail)
   struct BranchNode {
@@ -79,15 +88,6 @@ class KDTree {
   };
   // sizeof(LineQuery) expected 0x260 (unverified)
 
-  // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
-  struct NodeRef {
-   public:
-   public:  // data (retail offsets)
-    unsigned int m_content;                                      // 0x000 relaid
-    unsigned int m_index;                                        // 0x004 relaid
-  };
-  // sizeof(NodeRef) expected 0x8 (unverified)
-
   unsigned int GetNumEntries() const;                                    // dev only
   unsigned int GetNumBranchNodes() const;                                // dev only
   void Release();                                                        // dev only
@@ -102,7 +102,7 @@ class KDTree {
   rw::collision::KDTree::BranchNode* m_branchNodes;            // 0x000 relaid
   unsigned int m_numBranchNodes;                               // 0x004 relaid
   unsigned int m_numEntries;                                   // 0x008 relaid
-  unsigned char m_bbox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
+  __declspec(align(16)) unsigned char m_bbox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
 };
 #pragma pack(pop)
 // sizeof(KDTree) expected 0x30 (unverified)

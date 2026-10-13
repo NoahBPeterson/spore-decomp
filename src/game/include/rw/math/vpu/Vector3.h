@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "__m128.h"
+#include "rw/math/vpu/VecFloatRef.h"
 
 namespace rw { namespace math { namespace vpu { class VecFloat; class VecFloatRefIndex; } } }
 
@@ -26,29 +27,29 @@ class Vector3 {
   void SetX(rw::math::vpu::VecFloat const &);                            // dev only
   void SetY(rw::math::vpu::VecFloat const &);                            // dev only
   void SetZ(rw::math::vpu::VecFloat const &);                            // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> const GetX() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> const GetY() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> const GetZ() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> const X() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> const Y() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> const Z() const; // dev only
+  rw::math::vpu::VecFloatRef<0> const GetX() const;                      // dev only
+  rw::math::vpu::VecFloatRef<1> const GetY() const;                      // dev only
+  rw::math::vpu::VecFloatRef<2> const GetZ() const;                      // dev only
+  rw::math::vpu::VecFloatRef<0> const X() const;                         // dev only
+  rw::math::vpu::VecFloatRef<1> const Y() const;                         // dev only
+  rw::math::vpu::VecFloatRef<2> const Z() const;                         // dev only
   Vector3(float, float, float);                                          // dev only
   Vector3(rw::math::vpu::Vector3 const &);                               // dev only
   rw::math::vpu::VecFloatRefIndex GetComponent(int);                     // dev only
   rw::math::vpu::VecFloatRefIndex const GetComponent(int) const;         // dev only
   rw::math::vpu::VecFloatRefIndex operator[](int);                       // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> X(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> Y(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> Z(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> GetX(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> GetY(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> GetZ(); // dev only
+  rw::math::vpu::VecFloatRef<0> X();                                     // dev only
+  rw::math::vpu::VecFloatRef<1> Y();                                     // dev only
+  rw::math::vpu::VecFloatRef<2> Z();                                     // dev only
+  rw::math::vpu::VecFloatRef<0> GetX();                                  // dev only
+  rw::math::vpu::VecFloatRef<1> GetY();                                  // dev only
+  rw::math::vpu::VecFloatRef<2> GetZ();                                  // dev only
   void SetComponent(int, float);                                         // dev only
   void SetX(float);                                                      // dev only
   void SetY(float);                                                      // dev only
   void SetZ(float);                                                      // dev only
   rw::math::vpu::Vector3 & operator=(__m128 const &);                    // dev only
-  __m128 const & operator struct __m128 const &() const;                 // dev only
+  operator __m128 const &() const;                                       // dev only
   Vector3(rw::math::vpu::VecFloat const &, rw::math::vpu::VecFloat const &, rw::math::vpu::VecFloat const &); // dev only
   __m128 & GetVector();                                                  // dev only
   void SetZero();                                                        // dev only

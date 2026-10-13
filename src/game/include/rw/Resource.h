@@ -4,6 +4,7 @@
 #define GAME_RW_RESOURCE_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/BaseResourceTemplates.h"
 
 namespace rw {
 

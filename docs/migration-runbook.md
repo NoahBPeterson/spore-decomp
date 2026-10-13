@@ -35,7 +35,7 @@ was built to; §7 is the tool as built and what the first slices taught, and win
 | `work/migrate/sliceviews.json` | every struct view in every slice with computed member offsets and byte-exact users | `python3 tools/migrate/sliceviews.py` (16 s) |
 | `work/migrate/retail_leaf_sizes.json` | retail sizes of library leaf types with evidence | `python3 tools/migrate/leafsizes.py` |
 | `tools/migrate/layout_overrides.json` | hand-confirmed structural deltas dev → retail (in git) | edit by hand, with evidence |
-| `src/game/include/**` | generated class headers + hand-written template headers | `python3 tools/migrate/headers.py --module DatabasePackedFile` and `--module SPProperty` (2 s each) |
+| `src/game/include/**` | generated class headers + hand-written template headers | `python3 tools/migrate/headers.py --module-substr DatabasePackedFile` and `--module-substr SPProperty` (2 s each); one object: `--module <ObjStem>` (exact since fix pass 3) |
 | `tools/migrate/sizeprobe_pilot.cpp` | compile-time probe of sizes/offsets under VC9 | see §2 |
 
 Verified under VC9 (2026-10-12): `EA::ResourceMan::DatabasePackedFile` is 0x388 with `mpStream`
@@ -606,3 +606,37 @@ instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_s
   `append(p, e)`, `assign(p)`, `sprintf`; `eastl/map.h` has `unary_function`/`binary_function`. A class's header lists the
   retail functions of every module (not only the writing run's), except functions moved to a synthetic object (`_v2`).
 - Round 4 objects whose headers compile standalone: `work/claude/round4_ready.json` (8); not ready: `work/claude/round4_not_ready.json`.
+
+### 8e. Fix pass 3 (2026-10-13, after the round-3 landings): what changed
+
+- **`headers.py --module` is exact** (fix pass 3): `--module Manager` is `UTFSpore_Win32/Manager.obj` only (stem, `stem.obj` or
+  `dir/stem`, case-insensitive). `--module-substr X` is the old substring behaviour (the pilot sets: `--module-substr
+  DatabasePackedFile`, `--module-substr SPProperty`). `rewrite.py --module` is unchanged (still a substring).
+- **`opencode_drain.py --max-nudges N`** (default 3): a range that would get a further nudge is logged `ABANDONED r<k> <sid> ...
+  unsettled: <slice>:<va> ...` and counted as done; a restart re-reads nudge counts and abandoned ranges from the drain log.
+- Hand templates (all "Hand-maintained", layout from the dev PDB, sizes VC9-probed, unverified in retail):
+  `rw/math/fpu/VectorTemplates.h` (+`Matrix44Template` 0x40, `QuaternionTemplate` 0x10), `rw/BaseResourceTemplates.h`
+  (`BaseResourceDescriptors<4>` 0x20, `BaseResources<4>` 0x10, `BaseResourceDescriptorType<T>`), `rw/math/vpu/VecFloatRef.h` (4),
+  `__m128.h` (= `<xmmintrin.h>`), `rw/HashContainer.h` (0xc), `rw/SimpleVector.h` (0x20), `SP/cEltArrayRefT.h` (0x10),
+  `eastl/list.h` `intrusive_list_base` / `intrusive_list<T>` (8), `EA/Messaging/MessageBasicRC.h` (`MessageRC` 8,
+  `EA::Messaging::MessageBasicRC<5>` 0x38, `SP::MessageBasicRC<5>` 0x40 with `mRCFlags` at 0x38). `game/typedefs.h` declares
+  `nSPCreatureAnim::anim_handle_t`.
+- Generator rules: anonymous unions are split into their alternatives (anonymous structs; a class-typed alternative is wrapped,
+  which is how VC9 accepts checkerlib's `vector_3 rows[3]` in a union: C2621 otherwise); union membership is by byte overlap;
+  the PDB's merged `__unnamed` records and file-local (`` `anonymous-namespace' ``) classes get no header (members opaque, own
+  PDB size); a class-nested enum member pulls its owner's header (`SP/cBufferDraw.h`); enums inside template arguments and
+  global-namespace enums get their headers; base-class enums keep their type in overrides (C2555); smart-pointer members
+  (`AutoRefCount<T>`, `COM::AutoRefCount<T>`, `IntrusivePtr<T>`) forward-declare T instead of including it (include cycles:
+  cBuilding -> cCity -> cBuildingCityHall); nested classes are emitted in by-value dependency order; an opaque member that holds
+  an `__m128` keeps `__declspec(align(16))`; conversion operators with elaborated types; retail-only slice members with slice
+  typedefs (`u8`) or slice-local types become C types / opaque bytes; an `insert` override with no `after` goes behind the bases.
+- Overrides: `EA::Thread::Mutex` constructor default arguments (`= 0, = true`, retail 0x9368f0/0x8de8e0 `push 1; push 0; call
+  0x9222a0`); `cSPUILayout` key at +8, collection at +0x14, size 0x18 (Init 0x8120d0, IsVisible 0x810070, ~cSPUILayout 0x811fe0).
+- rewrite.py / rewrite_stubs.py rules: a declarator list `extern char a, b, c;` names every declarator (SPUILayout's vtbl_/DAT_
+  globals); a `} }` closing a namespace opened before the first marker and namespace blocks of declarations are hoisted to the
+  preamble (s00538e90); a slice without manifest.txt lands (s00ed74f0); `operator()(...)` and `` `anonymous namespace' `` in
+  demangled arity; a function at the header's `dtor body` address is the destructor, one at a virtual destructor's slot-0
+  address (the scalar deleting destructor) stays verbatim instead of being shape-guessed; converted bodies include the headers of
+  every canonical class they name; a kept item's explicit `operator new[](n)` keeps the operator new declarations; a free function
+  defined later in VA order than a caller gets a forward prototype (`forward_protos`); `--batch` also takes a VA the batch lists
+  for the module under a slice whose bookkeeping has no row for it, when this slice has one (mig3 0x4f6510, 0x4f6720).

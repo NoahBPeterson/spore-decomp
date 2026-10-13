@@ -11,7 +11,9 @@ namespace EA { namespace Thread { struct MutexParameters; } }
 namespace EA {
 namespace Thread {
 
-// dev size 0x30 -> retail size 0x30 (re-laid from the PDB, unverified in retail)
+// dev size 0x30 -> retail size 0x30 (override)
+// evidence: override applied: (no evidence string)
+// evidence: declaration Mutex(EA::Thread::MutexParameters const *, bool) -> Mutex(EA::Thread::MutexParameters const * = 0, bool = true): fix pass 3: EAThread declares Mutex(const MutexParameters* = NULL, bool bDefaultParameters = true); retail SharedLibraryRegistry ctor 0x9368f0 constructs its mutex member at +0x20 with `push 1 / push 0 / call 0x9222a0` (no arguments in the slice body: s00936090 Mutex::Construct(0, 1)), as does InternalDatabaseList's ctor 0x8de8e0 (s008de020). Without the defaults a member Mutex has no default constructor (C2512).
 #pragma pack(push, 8)
 class Mutex {
  public:
@@ -23,7 +25,7 @@ class Mutex {
   bool Init(EA::Thread::MutexParameters const *);                        // 0x00922150
   int Lock(unsigned int const &);                                        // 0x009221b0
   int Unlock();                                                          // 0x00922270
-  Mutex(EA::Thread::MutexParameters const *, bool);                      // 0x009222a0
+  Mutex(EA::Thread::MutexParameters const * = 0, bool = true);           // 0x009222a0
   int GetLockCount() const;                                              // dev only
   bool HasLock() const;                                                  // dev only
 

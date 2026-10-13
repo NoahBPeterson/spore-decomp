@@ -8,7 +8,6 @@
 #include "EA/RefCountTemplate.h"
 #include "EA/Thread/AtomicInt.h"
 #include "EA/Thread/Mutex.h"
-#include "SP/cJob.h"
 
 namespace SP { class cJob; }
 

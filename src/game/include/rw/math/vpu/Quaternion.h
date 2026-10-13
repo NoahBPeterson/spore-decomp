@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "__m128.h"
+#include "rw/math/vpu/VecFloatRef.h"
 
 namespace rw { namespace math { namespace vpu { class VecFloat; } } }
 
@@ -22,18 +23,18 @@ class Quaternion {
   Quaternion();                                                          // dev only
   rw::math::vpu::Quaternion & operator=(rw::math::vpu::Quaternion const &); // dev only
   Quaternion(rw::math::vpu::VecFloat const &, rw::math::vpu::VecFloat const &, rw::math::vpu::VecFloat const &, rw::math::vpu::VecFloat const &); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> const X() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> const Y() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> const Z() const; // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<3> const W() const; // dev only
+  rw::math::vpu::VecFloatRef<0> const X() const;                         // dev only
+  rw::math::vpu::VecFloatRef<1> const Y() const;                         // dev only
+  rw::math::vpu::VecFloatRef<2> const Z() const;                         // dev only
+  rw::math::vpu::VecFloatRef<3> const W() const;                         // dev only
   Quaternion(__m128 const &);                                            // dev only
   Quaternion(rw::math::vpu::Quaternion const &);                         // dev only
   void Set(float, float, float, float);                                  // dev only
   __m128 & GetVector();                                                  // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<0> GetX(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<1> GetY(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<2> GetZ(); // dev only
-  // UNDECLARABLE (names rw::math::vpu::VecFloatRef, which no header defines): rw::math::vpu::VecFloatRef<3> GetW(); // dev only
+  rw::math::vpu::VecFloatRef<0> GetX();                                  // dev only
+  rw::math::vpu::VecFloatRef<1> GetY();                                  // dev only
+  rw::math::vpu::VecFloatRef<2> GetZ();                                  // dev only
+  rw::math::vpu::VecFloatRef<3> GetW();                                  // dev only
 
  public:  // data (retail offsets)
   __m128 mV;                                                   // 0x000 relaid

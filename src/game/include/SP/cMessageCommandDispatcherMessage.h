@@ -8,7 +8,6 @@
 #include "EA/COM/InterfaceId.h"
 #include "EA/Messaging/MessageBasic.h"
 #include "SP/cICommandDispatcherObject.h"
-#include "SP/cICommandParameterSet.h"
 
 namespace SP { class cICommandParameterSet; }
 

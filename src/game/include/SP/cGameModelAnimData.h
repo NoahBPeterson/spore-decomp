@@ -5,8 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "SP/cArenaResource.h"
-#include "SP/cBakedDeforms.h"
 #include "cSPTransform.h"
 
 namespace SP { class cArenaResource; class cBakedDeforms; }

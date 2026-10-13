@@ -4,6 +4,7 @@
 #define GAME_RW_CORE_ARENA_ARENAGROUP_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/HashContainer.h"
 
 namespace rw { namespace core { namespace arena { class Arena; class ArenaIdMapHashTraits; } } }
 
@@ -16,8 +17,8 @@ namespace arena {
 class ArenaGroup {
  public:
   ArenaGroup();                                                          // dev only
-  // UNDECLARABLE (names rw::HashContainer, which no header defines): rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>, rw::core::arena::ArenaIdMapHashTraits> *& GetArenaIdMap(); // dev only
-  // UNDECLARABLE (names rw::HashContainer, which no header defines): ArenaGroup(rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>, rw::core::arena::ArenaIdMapHashTraits> *); // dev only
+  rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>, rw::core::arena::ArenaIdMapHashTraits> *& GetArenaIdMap(); // dev only
+  ArenaGroup(rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>, rw::core::arena::ArenaIdMapHashTraits> *); // dev only
   ~ArenaGroup();                                                         // dev only
   rw::core::arena::Arena * FindArena(unsigned int) const;                // dev only
   void DoAddArena(rw::core::arena::Arena *);                             // dev only, private
@@ -28,7 +29,7 @@ class ArenaGroup {
   void RemoveArena(rw::core::arena::Arena *);                            // dev only
 
  public:  // data (retail offsets)
-  void* m_ArenaIdMap /* rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>,rw::core::arena::ArenaIdMapHashTraits>* m_ArenaIdMap */; // 0x000 relaid
+  rw::HashContainer<rw::PreallocatedBufferPolicy<rw::core::arena::ArenaIdMapHashTraits>,rw::core::arena::ArenaIdMapHashTraits>* m_ArenaIdMap; // 0x000 relaid
 };
 #pragma pack(pop)
 // sizeof(ArenaGroup) expected 0x4 (unverified)

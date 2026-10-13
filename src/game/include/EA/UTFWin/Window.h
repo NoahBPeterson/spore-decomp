@@ -9,10 +9,7 @@
 #include "EA/COM/InterfaceId.h"
 #include "EA/RectT.h"
 #include "EA/Thread/AtomicInt.h"
-#include "EA/UTFWin/IDrawable.h"
-#include "EA/UTFWin/IRenderer.h"
 #include "EA/UTFWin/ISerializable.h"
-#include "EA/UTFWin/IShader.h"
 #include "EA/UTFWin/IWinProc.h"
 #include "EA/UTFWin/IWindow.h"
 #include "EA/UTFWin/MultiHeapObject.h"
@@ -181,7 +178,7 @@ class Window : public EA::UTFWin::ISerializable /* +0x0 */, public EA::UTFWin::I
   EA::AutoRefCount<EA::UTFWin::IShader> mpShader;              // 0x1b8 relaid
   EA::AutoRefCount<EA::UTFWin::IRenderer> mpRenderer;          // 0x1bc relaid
   int mInvalidationSpinCount;                                  // 0x1c0 relaid
-  unsigned char mChildList[0x8] /* eastl::intrusive_list<eastl::intrusive_list_node>: no hand template for eastl::intrusive_list */; // 0x1c4 relaid
+  eastl::intrusive_list<eastl::intrusive_list_node> mChildList; // 0x1c4 relaid
   eastl::list<eastl::pair<EA::UTFWin::IWinProc *,unsigned int>,eastl::allocator> mWinProcList; // 0x1cc relaid
   eastl::hash_map<unsigned int,EA::AutoRefCount<EA::COM::IUnknown32>,eastl::hash<unsigned int>,eastl::equal_to<unsigned int>,eastl::allocator,0> mUserData; // 0x1d8 relaid
 };

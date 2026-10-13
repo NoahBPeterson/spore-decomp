@@ -26,3 +26,4 @@
 0065ea00 604 DoMessage - complete message dispatch, many branches/scheduling not byte-exact
 0065f390 211 AddAsset - complete, hashset find/insert path not byte-exact
 0065f4d0 57 InitLayout - complete, key-store scheduling and tail-call differ
+00ed7a10 1207 scenario-editor toolbar handler: complete; register homes (zero const/sim/panel) and the shared hint-text call tail differ

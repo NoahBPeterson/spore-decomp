@@ -6,14 +6,12 @@
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
 #include "EA/ResourceMan/Key.h"
-#include "EA/ResourceMan/Resource.h"
 #include "SP/cITextureManager.h"
-#include "SP/cJob.h"
 #include "SP/cTextureInstance.h"
 #include "eastl/list.h"
 
 namespace EA { namespace ResourceMan { class Resource; } }
-namespace SP { class cJob; }
+namespace SP { class cITextureManager; class cJob; }
 
 namespace SP {
 

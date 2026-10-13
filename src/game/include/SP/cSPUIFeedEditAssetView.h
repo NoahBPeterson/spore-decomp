@@ -9,8 +9,6 @@
 #include "EA/COM/InterfaceId.h"
 #include "EA/RefCountVTemplate.h"
 #include "EA/UTFWin/IWinProc.h"
-#include "EA/UTFWin/Image.h"
-#include "cSPUILayout.h"
 
 class cSPUILayout;
 namespace EA { namespace ResourceMan { class Key; } }

@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/Swarm/cIVisualEffect.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"
 

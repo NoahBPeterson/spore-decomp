@@ -3,9 +3,12 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "SP/cSPUIFeedEdit.h"
+#include "SP/cSPUIFeedEditAssetView.h"
 #include <intrin.h>
 #include "cSPUILayout.h"
 #include "SP/cSPUIFeedFilter.h"
+#include "SP/cSPEditorVerbIconTray.h"
 #include "EA/Messaging/IHandler.h"
 
 // ---- items of slice s0065ea00 begin (TODO(rewrite): local stubs, replace by canonical classes)

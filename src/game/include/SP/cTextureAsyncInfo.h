@@ -5,9 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/ResourceMan/IAsyncRequest.h"
-#include "EA/ResourceMan/Resource.h"
-#include "SP/cTextureInstanceInternal.h"
 
 namespace EA { namespace ResourceMan { class IAsyncRequest; class Resource; } }
 namespace SP { class cJob; struct cTextureAsyncQueueEntry; struct cTextureInstanceInternal; }

@@ -28,6 +28,8 @@ class TriangleKDTreeProcedural : public rw::collision::Procedural /* +0x0 */ {
   };
   // sizeof(Triangle) expected 0x10 (unverified)
 
+  TriangleKDTreeProcedural(unsigned int, unsigned int, void /* rw::collision::Aggregate::VTable */ *, unsigned int); // 0x01204680, protected
+  // UNDECLARABLE (names AABBoxTemplate, which no header defines): static rw::collision::TriangleKDTreeProcedural * Initialize(rw::Resource const &, unsigned int, unsigned int, unsigned int, AABBoxTemplate<rw::math::vpu::Matrix44Affine, rw::math::vpu::Vector3, rw::collision::AABBoxMemoryDumpPolicy> &, void /* rw::collision::Aggregate::VTable */ *, unsigned int); // 0x012046f0
   rw::collision::TriangleKDTreeProcedural::Triangle * GetTriangles();    // dev only
   rw::collision::KDTree * GetKDTree();                                   // dev only
   rw::math::vpu::Vector3 * GetVertices();                                // dev only
@@ -38,8 +40,6 @@ class TriangleKDTreeProcedural : public rw::collision::Procedural /* +0x0 */ {
   static void Release(rw::collision::TriangleKDTreeProcedural *);        // dev only
   void UpdateThis();                                                     // dev only
   unsigned int TriangleIsOutside(unsigned int, unsigned int, rw::math::vpu::Vector3 const &) const; // dev only, private
-  TriangleKDTreeProcedural(unsigned int, unsigned int, void /* rw::collision::Aggregate::VTable */ *, unsigned int); // dev only, protected
-  // UNDECLARABLE (names AABBoxTemplate, which no header defines): static rw::collision::TriangleKDTreeProcedural * Initialize(rw::Resource const &, unsigned int, unsigned int, unsigned int, AABBoxTemplate<rw::math::vpu::Matrix44Affine, rw::math::vpu::Vector3, rw::collision::AABBoxMemoryDumpPolicy> &, void /* rw::collision::Aggregate::VTable */ *, unsigned int); // dev only
   float GetTriangleNormal(unsigned int, rw::math::vpu::Vector3 &) const; // dev only
   void MateTriangles(unsigned int, unsigned int, float, float, rw::math::vpu::Vector3 const &); // dev only, private
   void AutoSetFlags(float);                                              // dev only

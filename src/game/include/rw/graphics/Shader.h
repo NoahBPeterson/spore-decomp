@@ -197,6 +197,8 @@ class Shader {
   };
   // sizeof(ShaderDataInformation) expected 0x20 (unverified)
 
+  static void RegisterArenaReadCallbacks();                              // 0x011f4250
+  unsigned int D3D9CheckShaderVersionSupport();                          // 0x011f44f0
   unsigned int GetID() const;                                            // dev only
   void AddRef();                                                         // dev only
   int QueryRef() const;                                                  // dev only
@@ -268,7 +270,6 @@ class Shader {
   static rw::core::arena::SizeAndAlignment * Unfix(void *, rw::core::arena::SizeAndAlignment *); // dev only
   static void Refix(void *, void *, rw::core::arena::ArenaIterator *);   // dev only
   static unsigned int Fixup(void *, rw::core::arena::ArenaIterator *);   // dev only
-  static void RegisterArenaReadCallbacks();                              // dev only
   static void RegisterArenaWriteCallbacks();                             // dev only
   unsigned int D3D9GetMaxVertexShaderConstants() const;                  // dev only
   static unsigned int D3D9GetMaxSkinBones(unsigned int);                 // dev only
@@ -282,7 +283,6 @@ class Shader {
   unsigned int D3D9GetMinVertexShaderVersion() const;                    // dev only
   unsigned int D3D9GetMinPixelShaderVersion() const;                     // dev only
   static rw::graphics::Shader * D3D9Initialize(rw::graphics::Shader *, unsigned int, rw::graphics::Shader::GeometryType, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int, unsigned int); // dev only
-  unsigned int D3D9CheckShaderVersionSupport();                          // dev only
   static void D3D9Stop();                                                // dev only
   static void RegisterExternalReference(char const *, void const *, rw::graphics::Shader::DataType, unsigned char, unsigned char); // dev only
   static void RegisterCustomUploadCallback(char const *, void (__cdecl *)(rw::graphics::ShaderDataWriter const &), rw::graphics::Shader::DataType, unsigned char, unsigned char); // dev only

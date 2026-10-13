@@ -38,7 +38,6 @@ int EA::SharedLibrary::Release()
     return n;
 }
 
-
 // @ 0x00936330
 bool EA::SharedLibrary::CanUnload() const
 {

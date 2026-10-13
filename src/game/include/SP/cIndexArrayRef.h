@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "SP/cEltArrayRef.h"
+#include "SP/cEltArrayRefT.h"
 
 namespace EA { namespace COM { class IRefCount; } }
 
@@ -23,12 +24,12 @@ struct cIndexArrayRef : public SP::cEltArrayRef /* +0x0 */ {
   SP::cIndexArrayRef & operator=(SP::cIndexArrayRef const &);            // dev only
   bool Is16Bit() const;                                                  // dev only
   bool Is32Bit() const;                                                  // dev only
-  // UNDECLARABLE (names SP::cEltArrayRefT, which no header defines): SP::cEltArrayRefT<unsigned short> & As16BitRef(); // dev only
-  // UNDECLARABLE (names SP::cEltArrayRefT, which no header defines): SP::cEltArrayRefT<unsigned int> & As32BitRef(); // dev only
+  SP::cEltArrayRefT<unsigned short> & As16BitRef();                      // dev only
+  SP::cEltArrayRefT<unsigned int> & As32BitRef();                        // dev only
   void Set(int, unsigned int);                                           // dev only
   cIndexArrayRef(int, void const *, int, EA::COM::IRefCount *, bool);    // dev only
   cIndexArrayRef(int, short const *, EA::COM::IRefCount *, bool);        // dev only
-  // UNDECLARABLE (names SP::cEltArrayRefT, which no header defines): SP::cEltArrayRefT<unsigned char> & As8BitRef(); // dev only
+  SP::cEltArrayRefT<unsigned char> & As8BitRef();                        // dev only
 
  public:  // data (retail offsets)
 };

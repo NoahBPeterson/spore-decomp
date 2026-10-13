@@ -10,6 +10,8 @@
 008de690 85 HashBase::DoRehash3; memset/allocation sequence codegen differs
 008de840 64 AutoRefCount range-assign helper; register allocation differs
 008de890 63 AutoRefCount range-copy helper; register allocation differs
+008de8e0 133 InternalDatabaseList constructor; allocator-ctor codegen differs
+008de940 120 InternalDatabaseList::Add; lock/xchg list-insert codegen differs
 008debf0 95 Manager::DoDatabaseChanged tree walk; codegen differs (equiv WEAK)
 008decb0 53 AutoRefCount vector destructor; register allocation differs (equiv PASS)
 008ded00 196 hash-map insert; rehash-policy template codegen differs

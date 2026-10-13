@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/ResourceMan/Resource.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"
 
@@ -19,15 +18,18 @@ namespace SP {
 #pragma pack(push, 4)
 class cString {
  public:
-  static void SetColorLocalized(bool);                                   // dev only
-  cString();                                                             // dev only
-  ~cString();                                                            // dev only
+  enum {
+    kInstanceIdInvalid = -1,
+  };
+  ~cString();                                                            // 0x00637f80
+  static void SetColorLocalized(bool);                                   // 0x006b5030
+  cString();                                                             // 0x006b5060
+  wchar_t const * c_str() const;                                         // 0x006b5240
+  bool Load(unsigned int, unsigned int, wchar_t const *);                // 0x006b54b0
+  cString(unsigned int, unsigned int, wchar_t const *);                  // 0x006b5770
   void set_source_string(wchar_t const *, bool);                         // dev only, protected
   SP::cString & operator=(SP::cString const &);                          // dev only
-  bool Load(unsigned int, unsigned int, wchar_t const *);                // dev only
-  wchar_t const * c_str() const;                                         // dev only
   cString(SP::cString const &);                                          // dev only
-  cString(unsigned int, unsigned int, wchar_t const *);                  // dev only
 
  public:  // data (retail offsets)
   EA::AutoRefCount<EA::ResourceMan::Resource> mpTableResource; // 0x000 exact:s006b47a0

@@ -8,4 +8,6 @@ namespace EA { namespace IO {
 typedef int OffsetType;       // 32-bit in this build: IStream::SetPosition(int, PositionType) in the byte-exact slices
 typedef unsigned int SizeType;
 }}
+// Opaque handle types the dev PDB names only through pointers (no type record; fix pass 3).
+namespace nSPCreatureAnim { struct anim_handle_t; }   // SP::cSPPlayModeAnimation::StartNewAnimation(.., anim_handle_t **)
 #endif

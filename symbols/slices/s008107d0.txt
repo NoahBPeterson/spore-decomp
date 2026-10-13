@@ -1,8 +1,8 @@
 008107d0 cSPUILayoutResourceFactory::CreateResource  # builds cPropertyList then calls this->v24
 008108a0 cSPUILayoutResourceFactory::Function8a0  # resource load: binary stream / token IO context
 00810a50 ?dtor@PtrVec@@QAEXXZ  # PtrVec::dtor migrated from s008107d0 (verbatim, slice spelling)
-00810af0 eastl::rbtree<...>::DoInsertValue  # allocates 0x24-byte node, RBTreeInsert
-00810d30 UI message handler (0xf62ade)  # builds BehaviorMessage, broadcasts 0x65ff54a
+00810af0 ?insertNode@RBTree@@QAEXPAPAXPAURBNode@@PAI_N@Z  # RBTree::insertNode migrated from s008107d0 (verbatim, slice spelling)
+00810d30 ?FUN_00810d30@@YGHIPAE@Z  # FUN_00810d30 migrated from s008107d0 (verbatim, slice spelling)
 00810e30 eastl::vector<...>::insert  # vector<bool,...>::DoInsertValue call at 0x11e0744
 00810fd0 cSPUILayoutManager::CreateLayoutObjects  # operator_new 0x9c "UI/LayoutObjects", ctor 0x8100d0
 00811110 cSPUILayoutManager::FindWorldById  # rbtree find + CreateWindow

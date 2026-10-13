@@ -6,7 +6,6 @@
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
 #include "EA/RefCountVTemplate.h"
-#include "cSPUILayoutObjectCollection.h"
 #include "eastl/allocator.h"
 #include "eastl/vector.h"
 
@@ -16,7 +15,8 @@ namespace EA { namespace ResourceMan { class Key; } }
 namespace EA { namespace UTFWin { class IWindow; } }
 
 
-// dev size 0xc -> retail size 0xc (re-laid from the PDB, unverified in retail)
+// dev size 0xc -> retail size 0x18 (override)
+// evidence: override applied: fix pass 3: retail cSPUILayout is 0x18 (dev 0xc): Init 0x8120d0 (pdb_names cSPUILayout::Init) copies its 12-byte key argument to +0x8/+0xc/+0x10 (`mov eax,[ebp]; mov [esi+8],eax; ... mov [esi+0x10],eax`) and keeps the object collection at +0x14 (`mov ebx,[esi+0x14]` ... `mov [esi+0x14],edi` with AddRef/Release through slots 1/2); IsVisible 0x810070 reads `[ecx+0x14]`, SetReloadCallback 0x810090 and operator= 0x810050 likewise, ~cSPUILayout 0x811fe0 releases `[esi+0x14]`. The dev PDB has mpObjectCollection at +0x8: a Key (0xc) sits in front of it in retail (slice views s0080f7c0 / s008117f0 f8/fc/f10).
 #pragma pack(push, 4)
 class cSPUILayout : public EA::RefCountVTemplate<int> /* +0x0 */ {
  public:
@@ -45,10 +45,11 @@ class cSPUILayout : public EA::RefCountVTemplate<int> /* +0x0 */ {
   static void RegisterCheats();                                          // dev only
 
  public:  // data (retail offsets)
-  EA::AutoRefCount<cSPUILayoutObjectCollection> mpObjectCollection; // 0x008 relaid
+  unsigned char mResourceKey[12];                              // 0x008 relaid
+  EA::AutoRefCount<cSPUILayoutObjectCollection> mpObjectCollection; // 0x014 relaid
 };
 #pragma pack(pop)
-// sizeof(cSPUILayout) expected 0xc (unverified)
+// sizeof(cSPUILayout) expected 0x18 (unverified)
 
 
 #endif  // GAME_CSPUILAYOUT_H

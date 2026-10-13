@@ -30,7 +30,7 @@ class VolumeBBoxQuery {
   rw::math::vpu::Matrix44Affine** m_inputMats;                 // 0x004 relaid
   unsigned int m_numInputs;                                    // 0x008 relaid
   unsigned int m_currInput;                                    // 0x00c relaid
-  unsigned char m_aabb[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
+  __declspec(align(16)) unsigned char m_aabb[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x010 relaid
   rw::collision::VolRef* m_stackVRefBuffer;                    // 0x030 relaid
   rw::collision::VolRef m_currVRef;                            // 0x040 relaid
   unsigned int m_stackNext;                                    // 0x0c0 relaid

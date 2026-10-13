@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/ArgScript/cArguments.h"
-#include "EA/ArgScript/cIFileParser.h"
 #include "EA/ArgScript/cState.h"
 #include "EA/AutoRefCount.h"
 #include "EA/Messaging/IHandlerRC.h"

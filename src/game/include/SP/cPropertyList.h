@@ -15,6 +15,7 @@
 
 namespace EA { struct Variant; }
 namespace EA { namespace IO { class IStream; } }
+namespace SP { class cPropertyList; }
 
 namespace SP {
 

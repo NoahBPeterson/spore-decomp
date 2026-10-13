@@ -6,7 +6,6 @@
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
 #include "EA/RefCountVTemplate.h"
-#include "EA/UTFWin/IWindow.h"
 #include "EA/UTFWinTools/SerCollection.h"
 
 class cSPUILayout;

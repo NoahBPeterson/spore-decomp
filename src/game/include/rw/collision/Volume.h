@@ -63,11 +63,21 @@ class Volume {
   rw::math::vpu::Matrix44Affine transform;                     // 0x000 relaid
   rw::collision::Volume::VTable* vTable;                       // 0x040 relaid
   union {
-    rw::collision::AggregateSpecificData aggregateData;          // 0x044 relaid
-    rw::collision::SphereSpecificData sphereData;                // 0x044 relaid
-    rw::collision::CapsuleSpecificData capsuleData;              // 0x044 relaid
-    rw::collision::TriangleSpecificData triangleData;            // 0x044 relaid
-    rw::collision::BoxSpecificData boxData;                      // 0x044 relaid
+    struct {
+      rw::collision::AggregateSpecificData aggregateData;          // 0x044 relaid
+    };
+    struct {
+      rw::collision::SphereSpecificData sphereData;                // 0x044 relaid
+    };
+    struct {
+      rw::collision::CapsuleSpecificData capsuleData;              // 0x044 relaid
+    };
+    struct {
+      rw::collision::TriangleSpecificData triangleData;            // 0x044 relaid
+    };
+    struct {
+      rw::collision::BoxSpecificData boxData;                      // 0x044 relaid
+    };
     unsigned int sizeOfTargetPointer[2];                         // 0x044 relaid
   };
   float radius;                                                // 0x050 relaid

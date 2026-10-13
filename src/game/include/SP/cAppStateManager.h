@@ -4,14 +4,12 @@
 #define GAME_SP_CAPPSTATEMANAGER_H
 #include "game/types.h"
 #include "game/typedefs.h"
-#include "EA/ArgScript/cIBlockCommand.h"
-#include "EA/ArgScript/cIFileParser.h"
-#include "EA/ArgScript/cIParser.h"
 #include "EA/ArgScript/cState.h"
 #include "EA/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/Messaging/AutoHandler.h"
 #include "EA/Messaging/IHandlerRC.h"
+#include "EA/Messaging/MessageBasicRC.h"
 #include "EA/RefCountTemplate.h"
 #include "EA/Swarm/cIVisualEffect.h"
 #include "SP/cIAppStateManager.h"
@@ -49,33 +47,16 @@ class cAppStateManager : public SP::cIAppStateManager /* +0x0 */, public EA::Mes
   // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
   struct cActionMessage {
    public:
-    // UNDECLARABLE (names SP::MessageBasicRC, which no header defines): cActionMessage(SP::MessageBasicRC<5> *, unsigned int); // dev only
+    cActionMessage(SP::MessageBasicRC<5> *, unsigned int);                 // dev only
     ~cActionMessage();                                                     // dev only
     cActionMessage(SP::cAppStateManager::cActionMessage const &);          // dev only
     SP::cAppStateManager::cActionMessage & operator=(SP::cAppStateManager::cActionMessage const &); // dev only
 
    public:  // data (retail offsets)
-    unsigned char mMessage[0x4] /* EA::AutoRefCount<SP::MessageBasicRC<5> >: no hand template for SP::MessageBasicRC */; // 0x000 relaid
+    EA::AutoRefCount<SP::MessageBasicRC<5> > mMessage;           // 0x000 relaid
     unsigned int mFlags;                                         // 0x004 relaid
   };
   // sizeof(cActionMessage) expected 0x8 (unverified)
-
-  // dev size 0x44 -> retail size 0x50 (re-laid from the PDB, unverified in retail)
-  struct cActions {
-   public:
-    cActions();                                                            // dev only
-    ~cActions();                                                           // dev only
-    SP::cAppStateManager::cActions & operator=(SP::cAppStateManager::cActions const &); // dev only
-    cActions(SP::cAppStateManager::cActions const &);                      // dev only
-
-   public:  // data (retail offsets)
-    eastl::vector<SP::cAppStateManager::cActionMessage,eastl::sp_vector_allocator> mEntryMessages; // 0x000 relaid
-    eastl::vector<SP::cAppStateManager::cActionMessage,eastl::sp_vector_allocator> mExitMessages; // 0x014 (dev 0x010) relaid
-    eastl::vector<SP::cAppStateManager::cAppFlagSetting,eastl::sp_vector_allocator> mEffectAppFlags; // 0x028 (dev 0x020) relaid
-    eastl::basic_string<char,eastl::allocator> mDescription;     // 0x03c (dev 0x030) relaid
-    unsigned int mNextState;                                     // 0x04c (dev 0x040) relaid
-  };
-  // sizeof(cActions) expected 0x50 (unverified)
 
   // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
   struct cAppFlagSetting {
@@ -94,6 +75,23 @@ class cAppStateManager : public SP::cIAppStateManager /* +0x0 */, public EA::Mes
    public:  // data (retail offsets)
   };
   // sizeof(cTransitionHash) expected 0x1 (unverified)
+
+  // dev size 0x44 -> retail size 0x50 (re-laid from the PDB, unverified in retail)
+  struct cActions {
+   public:
+    cActions();                                                            // dev only
+    ~cActions();                                                           // dev only
+    SP::cAppStateManager::cActions & operator=(SP::cAppStateManager::cActions const &); // dev only
+    cActions(SP::cAppStateManager::cActions const &);                      // dev only
+
+   public:  // data (retail offsets)
+    eastl::vector<SP::cAppStateManager::cActionMessage,eastl::sp_vector_allocator> mEntryMessages; // 0x000 relaid
+    eastl::vector<SP::cAppStateManager::cActionMessage,eastl::sp_vector_allocator> mExitMessages; // 0x014 (dev 0x010) relaid
+    eastl::vector<SP::cAppStateManager::cAppFlagSetting,eastl::sp_vector_allocator> mEffectAppFlags; // 0x028 (dev 0x020) relaid
+    eastl::basic_string<char,eastl::allocator> mDescription;     // 0x03c (dev 0x030) relaid
+    unsigned int mNextState;                                     // 0x04c (dev 0x040) relaid
+  };
+  // sizeof(cActions) expected 0x50 (unverified)
 
   // vtable 0x01413628 ({for `SP::cIAppStateManager'}): 17 retail slots, 16 dev slots
   virtual int AddRef();                                                  // slot 0, 0x00671f50
@@ -124,7 +122,7 @@ class cAppStateManager : public SP::cIAppStateManager /* +0x0 */, public EA::Mes
   // virtual ~cAppStateManager();                                         // slot 0, (no retail slot) (declared above)
 
   void LeaveState(unsigned int);                                         // 0x007e2810, protected
-  // UNDECLARABLE (names SP::MessageBasicRC, which no header defines): void AddAction(EA::ArgScript::cArguments *, SP::MessageBasicRC<5> *); // 0x007e40d0
+  void AddAction(EA::ArgScript::cArguments *, SP::MessageBasicRC<5> *);  // 0x007e40d0
   cAppStateManager();                                                    // 0x007e5220
   void DispatchMessage(unsigned int, EA::Messaging::IMessageRC *, int, EA::Messaging::IHandlerRC *); // dev only, protected
   void AddStateCommand(char const *, EA::ArgScript::cICommand *);        // dev only
@@ -132,7 +130,7 @@ class cAppStateManager : public SP::cIAppStateManager /* +0x0 */, public EA::Mes
   void PerformActions(int);                                              // dev only, protected
   void EnterState(unsigned int);                                         // dev only, protected
   void DoStateTransition(unsigned int, unsigned int);                    // dev only, protected
-  // UNDECLARABLE (names SP::MessageBasicRC, which no header defines): void AddMessage(EA::ArgScript::cArguments *, SP::MessageBasicRC<5> *, bool); // dev only
+  void AddMessage(EA::ArgScript::cArguments *, SP::MessageBasicRC<5> *, bool); // dev only
   void GetStateNamesAndIDs(eastl::vector<eastl::basic_string<char, eastl::allocator>, eastl::sp_vector_allocator> *, eastl::vector<unsigned int, eastl::sp_vector_allocator> *); // dev only, protected
 
  public:  // data (retail offsets)

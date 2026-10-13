@@ -10,10 +10,14 @@
 // unnamed retail callees and globals (address in the comment)
 extern "C" void RBTreeInsert_impl(void*, void*, void*, int); // 0x009216a0
 extern "C" void* Fn921440(void*, void*, void*, int);          // 0x00921440
+extern "C" void* EA_Allocator_GetDefaultAllocator();         // 0x00925cb0
 extern "C" long __cdecl _InterlockedIncrement(volatile long*);
 extern "C" long __cdecl _InterlockedDecrement(volatile long*);
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
 extern "C" long __cdecl _InterlockedExchangeAdd(volatile long*, long);
+extern "C" void FixedAllocatorCtor(void* pThis, int a, int b, int c, int d, int e,
+                                   void* f, void* g, int h); // 0x00926720
+extern "C" int FixedAllocatorAddCore(void* pThis, int a, int b); // 0x00926650
 #include <new>
 #include <string.h>
 #include "EA/Allocator/ZoneObject.h"
@@ -27,6 +31,7 @@ typedef unsigned int uint32;
 extern "C" char (*g_154c464)(void*, void*, void*, void*, void*, int);                            // 0x0154c464
 extern "C" void RBTreeInsert_impl(void*, void*, void*, int); // 0x009216a0
 extern "C" void* Fn921440(void*, void*, void*, int);          // 0x00921440
+extern "C" void* EA_Allocator_GetDefaultAllocator();         // 0x00925cb0
 extern "C" long __cdecl _InterlockedIncrement(volatile long*);
 extern "C" long __cdecl _InterlockedDecrement(volatile long*);
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
@@ -106,6 +111,28 @@ struct IAllocatorV {
 };
 }
 }
+namespace EA {
+namespace ResourceMan {
+struct InternalDatabaseList_s008d_e020 {
+    struct Node {
+        Node* mpNext;       // +0x00
+        void* mpValue;      // +0x04
+        int mnPriority;     // +0x08
+    };
+
+    Node mAnchor;                              // +0x00
+    Thread::Mutex mWriteMutex;                 // +0x10
+    void** mpBegin;                            // +0x40
+    void** mpEnd;                              // +0x44
+    void** mpCapacity;                         // +0x48
+    IAllocatorV* mpCoreAllocator;              // +0x4c
+    const char* mpName;                        // +0x50
+
+    InternalDatabaseList_s008d_e020(int a);
+    void Add(void* pDatabase, int a);  // 0x008de940 (EA::ResourceMan::InternalDatabaseList::Add)
+};
+}
+}
 namespace eastl_shim {
 struct RbNode {
     RbNode* mpNodeRight;    // +0x00
@@ -155,6 +182,9 @@ struct AutoRefObj {
 
     AutoRefObj& operator=(const AutoRefObj& src);   // 0x008dee30
 };
+extern "C" void FixedAllocatorCtor(void* pThis, int a, int b, int c, int d, int e,
+                                   void* f, void* g, int h); // 0x00926720
+extern "C" int FixedAllocatorAddCore(void* pThis, int a, int b); // 0x00926650
 struct Vec8 {
     AutoRefObj* mpBegin;    // +0x00
     AutoRefObj* mpEnd;      // +0x04
@@ -628,6 +658,65 @@ AutoRefObj* Fn8de890(AutoRefObj* first, AutoRefObj* last, AutoRefObj* dest)
         ++dest;
     } while (first != last);
     return dest;
+}
+
+
+// @ 0x008de8e0
+EA::ResourceMan::InternalDatabaseList_s008d_e020::InternalDatabaseList_s008d_e020(int a)
+{
+    mAnchor.mpNext = 0;
+    mAnchor.mpValue = 0;
+    mAnchor.mnPriority = 0;
+    mAnchor.mpNext = 0;
+    mAnchor.mpValue = 0;
+    mAnchor.mnPriority = 0;
+    new (&mWriteMutex) Thread::Mutex(0, 1);
+    IAllocatorV* alloc = (IAllocatorV*)EA_Allocator_GetDefaultAllocator();
+    mpBegin = 0;
+    mpEnd = 0;
+    mpCapacity = 0;
+    mpCoreAllocator = alloc;
+    mpName = 0;
+    FixedAllocatorCtor((char*)this + 0x54, 0xc, 0, 0xc8, 0, 0,
+                       (void*)0x8de1c0, (void*)0x89ed40, a);
+}
+
+
+// @ 0x008de940
+void EA::ResourceMan::InternalDatabaseList_s008d_e020::Add(void* pDatabase, int a)
+{
+    void** vt = *(void***)((char*)pDatabase + 4);
+    {
+        typedef void (__thiscall *Fn)(void*);
+        ((Fn)vt[0])((char*)pDatabase + 4);
+    }
+    Node* pNode;
+    char* alloc = (char*)this + 0x54;
+    for (;;) {
+        Node* head = *(Node**)(alloc + 0x10);
+        if (head) {
+            *(void**)(alloc + 0x10) = head->mpNext;
+            _InterlockedExchange((volatile long*)&head->mpNext, 0);
+            head->mpValue = 0;
+            head->mnPriority = 0;
+            pNode = head;
+            break;
+        }
+        if (!FixedAllocatorAddCore(alloc, 0, 0)) { pNode = 0; break; }
+    }
+    pNode->mpValue = pDatabase;
+    pNode->mnPriority = a;
+    mWriteMutex.Lock(*(const unsigned int*)0x1436ab8);
+    Node* p = mAnchor.mpNext;
+    Node* prev = &mAnchor;
+    while (p) {
+        if (p->mnPriority < a) break;
+        prev = p;
+        p = p->mpNext;
+    }
+    _InterlockedExchange((volatile long*)&pNode->mpNext, (long)p);
+    _InterlockedExchange((volatile long*)&prev->mpNext, (long)pNode);
+    mWriteMutex.Unlock();
 }
 
 

@@ -12,24 +12,24 @@
 0080ff50 ?Init@cSPUILayoutResourceFactory@@UAE_NXZ  # cSPUILayoutResourceFactory::Init migrated from s0080f7c0
 0080ffa0 ?GetSupportedTypes@cSPUILayoutResourceFactory@@UAEIPAII@Z  # cSPUILayoutResourceFactory::GetSupportedTypes migrated from s0080f7c0
 0080ffd0 ?CanConvert@cSPUILayoutResourceFactory@@UBE_NII@Z  # cSPUILayoutResourceFactory::CanConvert migrated from s0080f7c0
-00810000 cConnectionDialog::cConnectionDialog  # stores vtbl_UI::cConnectionDialog
-00810020 cConnectionDialog::ctor2  # same vtbl, takes an interface arg (dead null path)
+00810000 ?ctor@cConnectionDialog@@QAEPAXXZ  # cConnectionDialog::ctor migrated from s0080f7c0 (verbatim, slice spelling)
+00810020 ?ctor2@cConnectionDialog@@QAEPAXPAX@Z  # cConnectionDialog::ctor2 migrated from s0080f7c0 (verbatim, slice spelling)
 00810050 ?assign@cSPUILayout_s0080_f7c0@@QAEPAU1@PAU1@@Z  # cSPUILayout_s0080_f7c0::assign migrated from s0080f7c0 (verbatim, slice spelling)
-00810070 ?IsVisible@cSPUILayout_s0080_f7c0@@QAE_NXZ  # cSPUILayout_s0080_f7c0::IsVisible migrated from s0080f7c0 (verbatim, slice spelling)
-00810090 ?SetReloadCallback@cSPUILayout_s0080_f7c0@@QAEXPAX0@Z  # cSPUILayout_s0080_f7c0::SetReloadCallback migrated from s0080f7c0 (verbatim, slice spelling)
-008100d0 cSPUILayoutObjectCollection::cSPUILayoutObjectCollection  # PDB candidate
+00810070 ?IsVisible@cSPUILayout@@QBE_NXZ  # cSPUILayout::IsVisible migrated from s0080f7c0
+00810090 ?SetReloadCallback@cSPUILayout@@QAEXP6AXPAXPAV1@_N@Z0@Z  # cSPUILayout::SetReloadCallback migrated from s0080f7c0
+008100d0 ?ctor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXXZ  # cSPUILayoutObjectCollection_s0080_f7c0::ctor migrated from s0080f7c0 (verbatim, slice spelling)
 00810140 ?detach_parent@cSPUILayoutObjectCollection@@QAEXXZ  # cSPUILayoutObjectCollection::detach_parent migrated from s0080f7c0
 008101a0 cSPUILayoutObjectCollection::Shutdown  # PDB candidate (SerCollection view)
 00810200 ?FindWindowByID@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXHD@Z  # cSPUILayoutObjectCollection_s0080_f7c0::FindWindowByID migrated from s0080f7c0 (verbatim, slice spelling)
 00810270 cSPUILayoutObjectCollection::OnUnload  # gap-align
 00810310 ?SetVisibility@cSPUILayoutObjectCollection@@QAE_N_N@Z  # cSPUILayoutObjectCollection::SetVisibility migrated from s0080f7c0
 008103a0 ?set_world_visibility@cSPUILayoutManager@@QAEXPAUcWorld@1@_N@Z  # cSPUILayoutManager::set_world_visibility migrated from s0080f7c0
-00810400 Editor::cEditorResource::~cEditorResource  # sets vtbl_Editor::cEditorResource
+00810400 ?cEditorResource_dtor@@YIXPAX@Z  # cEditorResource_dtor migrated from s0080f7c0 (verbatim, slice spelling)
 00810460 cSPUILayoutResourceFactory::WriteResource  # gap-align
-00810520 eastl node allocator helper  # operator_new(0x1c), copies AutoRefCount at +0x10
-00810590 ?SetVisibility@cSPUILayout_s0080_f7c0@@QAE_N_N@Z  # cSPUILayout_s0080_f7c0::SetVisibility migrated from s0080f7c0 (verbatim, slice spelling)
-008105b0 ?FindWindowByID@cSPUILayout_s0080_f7c0@@QAEPAXHD@Z  # cSPUILayout_s0080_f7c0::FindWindowByID migrated from s0080f7c0 (verbatim, slice spelling)
-008105d0 cSPUILayoutObjectCollection::`scalar deleting destructor'  # gap-align
+00810520 ?alloc@EastlNodeBuilder@@QAEPAXPAX@Z  # EastlNodeBuilder::alloc migrated from s0080f7c0 (verbatim, slice spelling)
+00810590 ?SetVisibility@cSPUILayout@@QAE_N_N@Z  # cSPUILayout::SetVisibility migrated from s0080f7c0
+008105b0 ?FindWindowByID@cSPUILayout@@QBEPAVIWindow@UTFWin@EA@@I_N@Z  # cSPUILayout::FindWindowByID migrated from s0080f7c0
+008105d0 ?VectorDtor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXE@Z  # cSPUILayoutObjectCollection_s0080_f7c0::VectorDtor migrated from s0080f7c0 (verbatim, slice spelling)
 00810620 cSPUILayoutManager::GetWorldMainWindow  # rbtree find, returns node+0x1c
 00810660 cSPUILayoutManager::Method10660  # rbtree find then SetNodeVisibility
 008106a0 cSPUILayoutManager::SetAllWorldsVisibility  # gap-align

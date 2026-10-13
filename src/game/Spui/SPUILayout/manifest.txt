@@ -4,14 +4,19 @@
 ../src/game/Spui/SPUILayout.cpp  ?Init@cSPUILayoutResourceFactory@@UAE_NXZ  0080ff50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?GetSupportedTypes@cSPUILayoutResourceFactory@@UAEIPAII@Z  0080ffa0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?CanConvert@cSPUILayoutResourceFactory@@UBE_NII@Z  0080ffd0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?ctor@cConnectionDialog@@QAEPAXXZ  00810000  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?assign@cSPUILayout_s0080_f7c0@@QAEPAU1@PAU1@@Z  00810050  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUILayout.cpp  ?IsVisible@cSPUILayout_s0080_f7c0@@QAE_NXZ  00810070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUILayout.cpp  ?SetVisibility@cSPUILayout_s0080_f7c0@@QAE_N_N@Z  00810590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUILayout.cpp  ?FindWindowByID@cSPUILayout_s0080_f7c0@@QAEPAXHD@Z  008105b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?IsVisible@cSPUILayout@@QBE_NXZ  00810070  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?alloc@EastlNodeBuilder@@QAEPAXPAX@Z  00810520  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?SetVisibility@cSPUILayout@@QAE_N_N@Z  00810590  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?FindWindowByID@cSPUILayout@@QBEPAVIWindow@UTFWin@EA@@I_N@Z  008105b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?VectorDtor@cSPUILayoutObjectCollection_s0080_f7c0@@QAEPAXE@Z  008105d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?AnyWorldHidden@cSPUILayoutManager_s0080_f7c0@@QAE_NXZ  00810730  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?dtor@PtrVec@@QAEXXZ  00810a50  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?Shutdown@cSPUILayout_s0081_17f0@@QAEXI@Z  00811ad0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?dtor@cSPUILayout_s0081_17f0@@QAEXXZ  00811fe0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?SetParentWin@cSPUILayoutObjectCollection@@QAE_NPAVIWindow@UTFWin@EA@@_NI@Z  00812010  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?scalarDtor@cSPUILayout_s0081_17f0@@QAEPAXE@Z  00812090  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?InitA@cSPUILayout_s0081_17f0@@QAEEPAXIII@Z  00812160  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
-../src/game/Spui/SPUILayout.cpp  ?SetParentWin@cSPUILayout_s0081_17f0@@QAEEPAXDI@Z  008121b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUILayout.cpp  ?SetParentWin@cSPUILayout@@QAE_NPAVIWindow@UTFWin@EA@@_NI@Z  008121b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/Spui/SPUILayout.cpp  ?f@S9a9600@@QAEXPAX@Z  009a9600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -7,23 +7,15 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/IUnknown32.h"
 #include "EA/COM/InterfaceId.h"
-#include "EA/IO/IStream.h"
 #include "EA/RefCountTemplate.h"
 #include "EA/ResourceMan/Factory.h"
-#include "EA/ResourceMan/IAsyncRequest.h"
 #include "EA/ResourceMan/Key.h"
-#include "EA/ResourceMan/Record.h"
-#include "EA/ResourceMan/Resource.h"
 #include "EA/Thread/AtomicInt.h"
-#include "SP/cArenaResource.h"
-#include "SP/cAsyncResourceRequest.h"
-#include "SP/cIRwResource.h"
-#include "SP/cJobLock.h"
 #include "eastl/fixed_vector.h"
 
 namespace EA { namespace IO { class IStream; } }
 namespace EA { namespace ResourceMan { class Database; class IAsyncRequest; class Record; class Resource; } }
-namespace SP { class cArenaResource; class cAsyncResourceRequest; class cIRwResource; class cJob; class cJobLock; struct cUnionTypeVoid; }
+namespace SP { class cArenaResource; class cAsyncResourceRequest; class cGraphicsResourceFactory; class cIRwResource; class cJob; class cJobLock; struct cUnionTypeVoid; }
 namespace rw { class Resource; }
 
 namespace SP {
@@ -61,6 +53,55 @@ class cGraphicsResourceFactory : public EA::ResourceMan::Factory /* +0x0 */ {
     unsigned int mVersion;                                       // 0x000 relaid
   };
   // sizeof(cGameModelLoadState) expected 0x4 (unverified)
+
+  // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
+  class cRasterFromArenaLoadState {
+   public:
+    cRasterFromArenaLoadState();                                           // dev only
+    ~cRasterFromArenaLoadState();                                          // dev only
+
+   public:  // data (retail offsets)
+    EA::AutoRefCount<EA::ResourceMan::IAsyncRequest> mReq;       // 0x000 relaid
+    EA::AutoRefCount<EA::ResourceMan::Resource> mRsrc;           // 0x004 relaid
+  };
+  // sizeof(cRasterFromArenaLoadState) expected 0x8 (unverified)
+
+  // dev size 0x1c -> retail size 0x1c (re-laid from the PDB, unverified in retail)
+  class cRasterFromGimexLoadState {
+   public:
+    cRasterFromGimexLoadState();                                           // dev only
+    ~cRasterFromGimexLoadState();                                          // dev only
+
+   public:  // data (retail offsets)
+    unsigned int mFormat;                                        // 0x000 relaid
+    unsigned int mWidth;                                         // 0x004 relaid
+    unsigned int mHeight;                                        // 0x008 relaid
+    unsigned int mBpp;                                           // 0x00c relaid
+    unsigned int mPitch;                                         // 0x010 relaid
+    unsigned int mSize;                                          // 0x014 relaid
+    unsigned char* mData;                                        // 0x018 relaid
+  };
+  // sizeof(cRasterFromGimexLoadState) expected 0x1c (unverified)
+
+  // dev size 0xc8 -> retail size 0xd0 (re-laid from the PDB, unverified in retail)
+  class cRasterLoadState {
+   public:
+    ~cRasterLoadState();                                                   // dev only
+    cRasterLoadState();                                                    // dev only
+
+   public:  // data (retail offsets)
+    unsigned int m_version;                                      // 0x000 relaid
+    unsigned int m_w;                                            // 0x004 relaid
+    unsigned int m_h;                                            // 0x008 relaid
+    unsigned int m_nml;                                          // 0x00c relaid
+    unsigned int m_tp;                                           // 0x010 relaid
+    unsigned int m_fm;                                           // 0x014 relaid
+    bool m_isCubeMap;                                            // 0x018 relaid
+    unsigned int m_numFaces;                                     // 0x01c relaid
+    eastl::fixed_vector<unsigned int,16,1> m_levelsizes;         // 0x020 relaid
+    eastl::fixed_vector<unsigned char *,16,1> m_pixeldatas;      // 0x078 (dev 0x074) relaid
+  };
+  // sizeof(cRasterLoadState) expected 0xd0 (unverified)
 
   // dev size 0x328 -> retail size 0x330 (re-laid from the PDB, unverified in retail)
   class cGraphicsResourceAsyncRequest : public EA::COM::IUnknown32 /* +0x0 */, public EA::RefCountTemplate<EA::Thread::AtomicInt<int> > /* +0x4 */ {
@@ -117,55 +158,6 @@ class cGraphicsResourceFactory : public EA::ResourceMan::Factory /* +0x0 */ {
     bool mResult;                                                // 0x32c (dev 0x324) relaid
   };
   // sizeof(cGraphicsResourceAsyncRequest) expected 0x330 (unverified)
-
-  // dev size 0x8 -> retail size 0x8 (re-laid from the PDB, unverified in retail)
-  class cRasterFromArenaLoadState {
-   public:
-    cRasterFromArenaLoadState();                                           // dev only
-    ~cRasterFromArenaLoadState();                                          // dev only
-
-   public:  // data (retail offsets)
-    EA::AutoRefCount<EA::ResourceMan::IAsyncRequest> mReq;       // 0x000 relaid
-    EA::AutoRefCount<EA::ResourceMan::Resource> mRsrc;           // 0x004 relaid
-  };
-  // sizeof(cRasterFromArenaLoadState) expected 0x8 (unverified)
-
-  // dev size 0x1c -> retail size 0x1c (re-laid from the PDB, unverified in retail)
-  class cRasterFromGimexLoadState {
-   public:
-    cRasterFromGimexLoadState();                                           // dev only
-    ~cRasterFromGimexLoadState();                                          // dev only
-
-   public:  // data (retail offsets)
-    unsigned int mFormat;                                        // 0x000 relaid
-    unsigned int mWidth;                                         // 0x004 relaid
-    unsigned int mHeight;                                        // 0x008 relaid
-    unsigned int mBpp;                                           // 0x00c relaid
-    unsigned int mPitch;                                         // 0x010 relaid
-    unsigned int mSize;                                          // 0x014 relaid
-    unsigned char* mData;                                        // 0x018 relaid
-  };
-  // sizeof(cRasterFromGimexLoadState) expected 0x1c (unverified)
-
-  // dev size 0xc8 -> retail size 0xd0 (re-laid from the PDB, unverified in retail)
-  class cRasterLoadState {
-   public:
-    ~cRasterLoadState();                                                   // dev only
-    cRasterLoadState();                                                    // dev only
-
-   public:  // data (retail offsets)
-    unsigned int m_version;                                      // 0x000 relaid
-    unsigned int m_w;                                            // 0x004 relaid
-    unsigned int m_h;                                            // 0x008 relaid
-    unsigned int m_nml;                                          // 0x00c relaid
-    unsigned int m_tp;                                           // 0x010 relaid
-    unsigned int m_fm;                                           // 0x014 relaid
-    bool m_isCubeMap;                                            // 0x018 relaid
-    unsigned int m_numFaces;                                     // 0x01c relaid
-    eastl::fixed_vector<unsigned int,16,1> m_levelsizes;         // 0x020 relaid
-    eastl::fixed_vector<unsigned char *,16,1> m_pixeldatas;      // 0x078 (dev 0x074) relaid
-  };
-  // sizeof(cRasterLoadState) expected 0xd0 (unverified)
 
   // vtable 0x0140e09c (primary): 13 retail slots, 13 dev slots
   virtual ~cGraphicsResourceFactory();                                   // slot 0, 0x00765ef0, dtor body 0x00765580

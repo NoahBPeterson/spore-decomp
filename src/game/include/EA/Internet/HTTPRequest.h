@@ -6,7 +6,6 @@
 #include "game/typedefs.h"
 #include "EA/COM/AutoRefCount.h"
 #include "EA/COM/RefCountTemplate.h"
-#include "EA/IO/IStream.h"
 #include "EA/Internet/HTTPHeaders.h"
 #include "EA/Internet/HTTPMethod.h"
 #include "EA/Internet/URL.h"

@@ -20,6 +20,7 @@ namespace sink {
 #pragma pack(push, 8)
 class SkeletonSink : public rw::platform::sink::Sink /* +0x0 */ {
  public:
+  static void RegisterArenaReadCallbacks();                              // 0x01200f60
   rw::oldanimation::Skeleton const * GetSkeleton();                      // dev only
   ~SkeletonSink();                                                       // dev only, protected
   static unsigned int DoWork(rw::platform::sink::TransformLocation *, rw::platform::sink::Sink *); // dev only, protected
@@ -33,7 +34,6 @@ class SkeletonSink : public rw::platform::sink::Sink /* +0x0 */ {
   static rw::core::arena::SizeAndAlignment * Unfix(void *, rw::core::arena::SizeAndAlignment *); // dev only, private
   static void Refix(void *, void *, rw::core::arena::ArenaIterator *);   // dev only, private
   static unsigned int Fixup(void *, rw::core::arena::ArenaIterator *);   // dev only, private
-  static void RegisterArenaReadCallbacks();                              // dev only
   static void RegisterArenaWriteCallbacks();                             // dev only
 
  public:  // data (retail offsets)

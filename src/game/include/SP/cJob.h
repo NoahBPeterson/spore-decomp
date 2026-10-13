@@ -5,7 +5,6 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
-#include "EA/COM/IUnknown32.h"
 #include "SP/tJobStatus.h"
 
 namespace EA { namespace COM { class IUnknown32; } }

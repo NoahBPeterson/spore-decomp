@@ -4,6 +4,8 @@
 #define GAME_RW_GRAPHICS_EMBEDDEDSTATE_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "_D3DRENDERSTATETYPE.h"
+#include "_D3DSAMPLERSTATETYPE.h"
 #include "rw/graphics/AlphaTestFunction.h"
 #include "rw/graphics/AlphaTestReference.h"
 #include "rw/graphics/BlendMode.h"

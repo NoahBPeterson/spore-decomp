@@ -2,16 +2,20 @@
 """Watch a brokered opencode wave to completion: re-prompt idle-but-unfinished sessions and
 interrupt sessions whose current model call has hung.
 
-usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=900] [--once]
+usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=900] [--max-nudges N=3] [--once]
 
 Each pass:
   * a range is DONE when its manifest+nonmatching+partial count >= its function count;
   * a range that is idle, unfinished, has no pending permission request, and whose last assistant
     message is older than --cooldown is re-prompted (nudge) on its per-session alias model;
   * a range that is active but whose open model call has run longer than --hang is interrupted and
-    re-prompted.
-Exits 0 ("DRAIN_COMPLETE") once every range is done. Safe to kill and restart: it holds no state on
-disk beyond appending to work/opencode/drain_<group>.log.
+    re-prompted;
+  * a range that would get a nudge after --max-nudges nudges is logged "ABANDONED r<k> <unsettled VAs>"
+    and counted as done (round 3: the Manager session sat idle with 0x8de8e0/0x8de940 neither landed
+    nor in leave_in_slice and was nudged for four hours; those VAs go to the fix pass instead).
+Exits 0 ("DRAIN_COMPLETE") once every range is done or abandoned. Safe to kill and restart: its only
+state is work/opencode/drain_<group>.log, from which a restart re-reads the nudge counts and the
+abandoned ranges.
 """
 import argparse, base64, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
@@ -51,6 +55,7 @@ ap.add_argument("group")
 ap.add_argument("--interval", type=int, default=60)
 ap.add_argument("--cooldown", type=int, default=300, help="min seconds idle before re-nudging a range")
 ap.add_argument("--hang", type=int, default=900, help="seconds an open model call may run before interrupt")
+ap.add_argument("--max-nudges", type=int, default=3, help="nudges per range before it is ABANDONED and counted as done")
 ap.add_argument("--once", action="store_true")
 a = ap.parse_args()
 
@@ -74,7 +79,9 @@ def model_of(k):
     return {"providerID": G["provider"], "id": mid}
 
 
-def progress(k):
+def progress(k, unsettled=None):
+    """(functions, settled) of range k; `unsettled` (a list) gets the migration VAs not yet settled, or
+    '<slice>:<n> unrecorded' for a slice entry."""
     lo, hi = G["ranges"][k]
     tot = done = 0
     for i in range(lo, hi + 1):
@@ -94,6 +101,7 @@ def progress(k):
                 left = {v.lower() for k in ("leave_in_slice", "exclude") for v in man.get(k, {})} & want
                 done += len(left)
                 want -= left
+            seen = set()
             for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
                 p = W("src/game", BATCH[i]["module"], f)
                 if not os.path.exists(p):
@@ -101,14 +109,22 @@ def progress(k):
                 for l in open(p):
                     parts = l.split("#", 1)[0].split()
                     va = (parts[2] if f == "manifest.txt" and len(parts) > 2 else parts[0] if parts else "").lower()
-                    done += va in want
+                    va = va[2:] if va.startswith("0x") else va
+                    if va in want:
+                        seen.add(va)
+            done += len(seen)
+            if unsettled is not None:
+                unsettled += ["%s:%s" % (sid, v) for v in sorted(want - seen)]
             continue
+        n0 = done
         for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
             p = W("match/slices", sid, f)
             if not os.path.exists(p):
                 continue
             done += sum(1 for l in open(p) if re.match(r"\s*(?:0x)?[0-9a-fA-F]{6,8}\b", l)) if f != "manifest.txt" \
                 else sum(1 for l in open(p) if l.strip() and not l.lstrip().startswith("#"))
+        if unsettled is not None and done - n0 < len(BATCH[i]["vas"]):
+            unsettled.append("%s:%d unrecorded" % (sid, len(BATCH[i]["vas"]) - (done - n0)))
     return tot, done
 
 
@@ -128,6 +144,15 @@ def last_assistant(sid):
 
 
 nudged_at = {}   # sid -> (monotonic time, done-count when nudged)
+nudges = {}      # range -> nudges sent (re-read from the log on restart)
+abandoned = set()
+if os.path.exists(LOG):
+    for l in open(LOG):
+        m = re.search(r" (nudge|ABANDONED) r(\d+) ", l)
+        if m and m.group(1) == "nudge":
+            nudges[int(m.group(2))] = nudges.get(int(m.group(2)), 0) + 1
+        elif m:
+            abandoned.add(int(m.group(2)))
 loops = 0
 while True:
     loops += 1
@@ -139,6 +164,9 @@ while True:
     for k in range(len(G["ranges"])):
         sid = SESS.get(str(k))
         if not sid:
+            continue
+        if k in abandoned:
+            finished += 1
             continue
         tot, done = progress(k)
         if done >= tot:
@@ -170,7 +198,15 @@ while True:
             continue
         if since < a.cooldown:
             continue
-        log("nudge r%d %s (done %d/%d, idle %.0fs)" % (k, sid, done, tot, since))
+        if nudges.get(k, 0) >= a.max_nudges:
+            uns = []
+            progress(k, uns)
+            log("ABANDONED r%d %s (done %d/%d after %d nudges) unsettled: %s" % (k, sid, done, tot, nudges[k], " ".join(uns)))
+            abandoned.add(k)
+            finished += 1
+            continue
+        nudges[k] = nudges.get(k, 0) + 1
+        log("nudge r%d %s (done %d/%d, idle %.0fs, nudge %d of %d)" % (k, sid, done, tot, since, nudges[k], a.max_nudges))
         api("POST", "/api/session/%s/model" % sid, {"model": model_of(k)})
         r = api("POST", "/api/session/%s/prompt" % sid, {"text": "Continue your task: check the files already "
             "written in your slices and finish the remaining slices, then give the final one-line-per-slice summary.",
@@ -178,7 +214,7 @@ while True:
         if "error" in r:
             log("  nudge failed r%d: %s" % (k, r))
         nudged_at[sid] = (now, done)
-    log("pass %d: %d/%d ranges done, %d busy/working" % (loops, finished, len(G["ranges"]), busy))
+    log("pass %d: %d/%d ranges done (%d abandoned), %d busy/working" % (loops, finished, len(G["ranges"]), len(abandoned), busy))
     if finished == len(G["ranges"]):
         log("DRAIN_COMPLETE")
         sys.exit(0)

@@ -4,6 +4,8 @@
 #define GAME_SP_JOBCONDITION_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "SP/JobWaitNode.h"
+#include "eastl/list.h"
 
 namespace SP { class JobWaitNode; }
 
@@ -20,7 +22,7 @@ class JobCondition {
   JobCondition();                                                        // dev only
 
  public:  // data (retail offsets)
-  unsigned char mWaitList[0x8] /* eastl::intrusive_list<SP::JobWaitNode>: no hand template for eastl::intrusive_list */; // 0x000 relaid
+  eastl::intrusive_list<SP::JobWaitNode> mWaitList;            // 0x000 relaid
 };
 #pragma pack(pop)
 // sizeof(JobCondition) expected 0x8 (unverified)

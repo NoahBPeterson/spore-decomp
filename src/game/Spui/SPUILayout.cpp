@@ -6,12 +6,22 @@
 #include "cSPUILayoutObjectCollection.h"
 #include "cSPUIResourcesKeyFilter.h"
 #include "cSPUILayoutResourceFactory.h"
-#include "cSPUILayoutManager.h"
 #include "cSPUILayout.h"
+#include "cSPUILayoutManager.h"
+#include "cSPUILayeredObject.h"
 #include "EA/UTFWinTools/SerCollection.h"
+#include "EA/UTFWin/IWindow.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern void  __cdecl FlushCache(int);
+extern void  __cdecl FUN_00903120(void*);         // 0x903120
+extern void  __cdecl operator_delete__(void*);    // 0xf47380
+extern char FUN_0080e6b0_sym, FUN_0080ee90_sym, FUN_0080f380_sym, FUN_0080d6d0_sym,
+            FUN_0080d770_sym, SerShutdown_sym, SerDtor_sym, ResetWinCache_sym,
+            vtbl_cConnectionDialog, vtbl_014181d8, vtbl_014181c0, vtbl_SimSummarizer,
+            vtbl_AddRef_014181e8, vtbl_EditorResource, DAT_013f6b3c,
+            CountedPtr_sym, FUN_00998f60_sym, FUN_00998f80_sym, FUN_0080f7c0_sym,
+            SerCtor_sym;
 
 // ---- items of slice s0080f7c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char  u8;
@@ -22,6 +32,17 @@ typedef void  (__thiscall *VF0v)(void*);
 typedef void  (__thiscall *VF1v)(void*, void*);
 typedef void* (__thiscall *VF2)(void*, void*, void*);
 static inline void** VT(void* o) { return *(void***)o; }
+extern void  __cdecl FlushCache(int);
+extern void  __cdecl FUN_00903120(void*);         // 0x903120
+extern void  __cdecl operator_delete__(void*);    // 0xf47380
+extern void* __cdecl operator_new(u32, void*, int, int, const char*, int); // 0xf473a0
+extern u32   __cdecl eastl_RBTreeIncrement(void*);// 0x921580
+extern char FUN_0080e6b0_sym, FUN_0080ee90_sym, FUN_0080f380_sym, FUN_0080d6d0_sym,
+            FUN_0080d770_sym, SerShutdown_sym, SerDtor_sym, ResetWinCache_sym,
+            vtbl_cConnectionDialog, vtbl_014181d8, vtbl_014181c0, vtbl_SimSummarizer,
+            vtbl_AddRef_014181e8, vtbl_EditorResource, DAT_013f6b3c,
+            CountedPtr_sym, FUN_00998f60_sym, FUN_00998f80_sym, FUN_0080f7c0_sym,
+            SerCtor_sym;
 struct WorldTree {
     void __thiscall find(void* sret, const u32* key);
 };
@@ -75,17 +96,37 @@ struct cSPUILayoutManager_s0080_f7c0 {
     bool  __thiscall IsWorldVisible(u32 id);           // 0x810760
     void  __thiscall SetNodeVisibility(void* node, char delta); // 0x8103a0
 };
+struct cConnectionDialog {
+    u32 f0, f4, f8, fc, f10, f14;
+    void* __thiscall ctor();
+    void* __thiscall ctor2(void* arg);
+};
+struct EastlNodeBuilder {
+    void* __thiscall alloc(void* param);
+};
+struct SerStub {
+    void __thiscall ctor();
+    void __thiscall Shutdown();
+    void __thiscall dtor();
+    void __thiscall Set(void* a, int b);   // 0x998f60
+    int  __thiscall Get(void* key);        // 0x998f80
+};
 // ---- items of slice s0080f7c0 end
-
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern void* __cdecl EapdDebug_8de1a0();          // 0x8de1a0
+extern void* __cdecl operator_new(u32, void*, int, int, const char*, int); // 0xf473a0
 extern u32   __cdecl eastl_RBTreeIncrement(void*);// 0x921580
 extern void __cdecl SPUIHelpers_UpdateMouseFocus_(int);
 
 // ---- items of slice s008107d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void  __cdecl operator_delete__(void*);                       // 0xf47380
+extern void* __cdecl EA_Messaging_GetServer();                       // 0x883860
 extern void  __cdecl FUN_005c1dc0(void*, void*, void*);              // 0x5c1dc0
+extern void  __cdecl RBTreeInsert(void*, void*, void*, int);         // 0x9216a0
+extern char vtbl_UI_BehaviorMessage, vtbl_013eb844, vtbl_Editor_cPropertyList,
+            vtbl_AddRef_014181e8, vtbl_UI_cSPUILayoutResource, DAT_013f6b3c,
+            FUN_009030b0_sym, BgLoading_sym, MemoryStream_sym,
+            FUN_008100d0_sym, FUN_0080fd60_sym, FUN_00811110_sym;
 extern void* __cdecl FUN_00810f80(u32, void*, void*);                // 0x810f80
 struct PtrVec {
     void** mBegin;   // +0
@@ -97,6 +138,13 @@ struct PtrVec {
     PtrVec* __thiscall operator=(const PtrVec& rhs);          // 0x811260
     void __thiscall insert(void** pos, void** val);           // 0x810e30
 };
+struct RBNode { RBNode* left; RBNode* right; RBNode* parent; void* key; };
+struct RBTree {
+    RBNode  anchor;          // +0
+    i32     count;           // +0x10
+    void __thiscall insertNode(void** out, RBNode* hint, u32* key, bool right); // 0x810af0
+};
+extern int __stdcall FUN_00810d30(u32 msg, u8* p);
 // ---- items of slice s008107d0 end
 
 // ---- items of slice s008117f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -104,6 +152,10 @@ extern void  __cdecl ResetChildWindowCache_();                     // 0x962be0
 extern int   __cdecl eastl_Compare_(void*, void*, int);            // 0x5f7870
 extern void* __cdecl eastl_RBTreeIncrement_(void*);                // 0x921580
 extern void  __cdecl eastl_RBTreeErase(void*, void*);              // 0x921880
+extern char vtbl_014182a4, vtbl_014182a0, vtbl_SimCreatureAbility, vtbl_SkinnerPaintSystem,
+            vtbl_UI_cConnectionDialog, vtbl_SimContentValidationSummarizer,
+            FUN_008117f0_sym, FUN_00810fd0_sym, FUN_00811330_sym, FUN_00811c20_sym,
+            FUN_00810620_sym, FUN_810a90_sym;
 extern void* g_spLayoutManager;                                    // 0x164cf5c
 extern void  __cdecl SPKeyFromName(void*, u32, u32, u32);          // 0x68d840
 struct cSPUILayoutObjectCollection_s0081_17f0;
@@ -171,6 +223,11 @@ struct RBTree1 {
     void __thiscall eraseSys(void** out, void* node);  // 0x812310
     void __thiscall Method12370(void** out, VecView* key);  // 0x812370
 };
+struct RBTree2 {
+    RBNode1 anchor;         // +0
+    i32     count;          // +0x10
+    void __thiscall DoNukeSubtree(void* node);   // 0x9a9600
+};
 // ---- items of slice s008117f0 end
 
 // ---- items of slice s009a9600 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -237,6 +294,35 @@ bool cSPUILayoutResourceFactory::CanConvert(unsigned int from, unsigned int to) 
 
 
 
+// @ 0x00810000
+void* __thiscall cConnectionDialog::ctor()
+{
+    u32* s = (u32*)this;
+    s[1] = 0;
+    *(void**)s = &vtbl_cConnectionDialog;
+    s[2] = 0; s[3] = 0; s[4] = 0; s[5] = 0;
+    return this;
+}
+
+
+
+
+// @ 0x00810020
+void* __thiscall cConnectionDialog::ctor2(void* arg)
+{
+    u32* s = (u32*)this;
+    s[1] = 0;
+    *(void**)s = &vtbl_cConnectionDialog;
+    s[2] = 0; s[3] = 0; s[4] = 0; s[5] = 0;
+    void* c = 0;
+    if (c) { s[5] = 0; ((VF0v)VT(c)[2])(c); }
+    (void)arg;
+    return this;
+}
+
+
+
+
 // @ 0x00810050
 cSPUILayout_s0080_f7c0* __thiscall cSPUILayout_s0080_f7c0::assign(cSPUILayout_s0080_f7c0* rhs)
 {
@@ -253,9 +339,9 @@ cSPUILayout_s0080_f7c0* __thiscall cSPUILayout_s0080_f7c0::assign(cSPUILayout_s0
 
 
 // @ 0x00810070
-bool __thiscall cSPUILayout_s0080_f7c0::IsVisible()
+bool cSPUILayout::IsVisible() const
 {
-    cSPUILayoutObjectCollection_s0080_f7c0* c = mpCollection;
+    cSPUILayoutObjectCollection* c = mpObjectCollection.mpObject;
     if (c) return *(bool*)((u8*)c + 0x8c);
     return false;
 }
@@ -264,13 +350,34 @@ bool __thiscall cSPUILayout_s0080_f7c0::IsVisible()
 
 
 // @ 0x00810090
-void __thiscall cSPUILayout_s0080_f7c0::SetReloadCallback(void* cb, void* ctx)
+void cSPUILayout::SetReloadCallback(void (__cdecl *cb)(void *, cSPUILayout *, bool), void * ctx)
 {
-    if (mpCollection) {
-        *(void**)((u8*)mpCollection + 0x90) = this;
-        *(void**)((u8*)mpCollection + 0x94) = cb;
-        *(void**)((u8*)mpCollection + 0x98) = ctx;
+    if (mpObjectCollection.mpObject) {
+        *(void**)((u8*)mpObjectCollection.mpObject + 0x90) = this;
+        *(void**)((u8*)mpObjectCollection.mpObject + 0x94) = cb;
+        *(void**)((u8*)mpObjectCollection.mpObject + 0x98) = ctx;
     }
+}
+
+
+
+
+// @ 0x008100d0
+void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::ctor()
+{
+    u8* s = (u8*)this;
+    *(void* volatile*)s = &vtbl_SimSummarizer;
+    *(u32*)(s + 4) = 0;
+    ((SerStub*)(s + 8))->ctor();
+    *(void* volatile*)s = &vtbl_014181d8;
+    *(void* volatile*)(s + 8) = &vtbl_014181c0;
+    *(u32*)(s + 0x88) = 0;
+    s[0x8d] = 0;
+    *(u32*)(s + 0x90) = 0;
+    *(u32*)(s + 0x94) = 0;
+    *(u32*)(s + 0x98) = 0;
+    s[0x8c] = 1;
+    return s;
 }
 
 
@@ -362,10 +469,49 @@ void cSPUILayoutManager::set_world_visibility(cSPUILayoutManager::cWorld * node,
 
 
 
-// @ 0x00810590
-bool __thiscall cSPUILayout_s0080_f7c0::SetVisibility(bool vis)
+// @ 0x00810400
+void __fastcall cEditorResource_dtor(void* thisp)
 {
-    if (mpCollection) return mpCollection->SetVisibility(vis);
+    u32* s = (u32*)thisp;
+    s[0] = (u32)&vtbl_AddRef_014181e8;
+    void* p = (void*)s[6];
+    if (p) { s[6] = 0; ((VF0v)VT(p)[2])(p); }
+    void* q = (void*)s[8];
+    s[7] = 0;
+    if (q) { FUN_00903120(q); operator_delete__(q); s[8] = 0; }
+    p = (void*)s[6];
+    if (p) ((VF0v)VT(p)[2])(p);
+    s[0] = (u32)&vtbl_EditorResource;
+}
+
+
+
+
+// @ 0x00810520
+void* __thiscall EastlNodeBuilder::alloc(void* param)
+{
+    u8* self = (u8*)param;
+    void* base = operator_new(0x1c, &DAT_013f6b3c, 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    u8* s = (u8*)base + 0x10;
+    if (s) {
+        void* p = *(void**)self;
+        *(void**)s = p;
+        if (p) ((VF0v)VT(p)[1])(p);
+        *(void**)(s + 4) = *(void**)(self + 4);
+        *(void**)(s + 8) = *(void**)(self + 8);
+    }
+    return base;
+}
+
+
+
+
+// @ 0x00810590
+bool cSPUILayout::SetVisibility(bool vis)
+{
+    if (mpObjectCollection.mpObject) return mpObjectCollection.mpObject->SetVisibility(vis);
     return false;
 }
 
@@ -373,10 +519,28 @@ bool __thiscall cSPUILayout_s0080_f7c0::SetVisibility(bool vis)
 
 
 // @ 0x008105b0
-void* __thiscall cSPUILayout_s0080_f7c0::FindWindowByID(i32 id, char r)
+EA::UTFWin::IWindow * cSPUILayout::FindWindowByID(unsigned int id, bool r) const
 {
-    if (mpCollection) return mpCollection->FindWindowByID(id, r);
+    if (mpObjectCollection.mpObject) return mpObjectCollection.mpObject->FindWindowByID(id, r);
     return 0;
+}
+
+
+
+
+// @ 0x008105d0
+void* __thiscall cSPUILayoutObjectCollection_s0080_f7c0::VectorDtor(u8 flag)
+{
+    u8* s = (u8*)this;
+    u8* ser = s + 8;
+    *(void**)s = &vtbl_014181d8;
+    *(void**)ser = &vtbl_014181c0;
+    void* c = m88;
+    if (c) ((VF0v)VT(c)[1])(c);
+    ((SerStub*)(s + 8))->dtor();
+    *(void**)s = &vtbl_SimSummarizer;
+    if (flag & 1) operator_delete__(s);
+    return s;
 }
 
 
@@ -398,7 +562,6 @@ bool __thiscall cSPUILayoutManager_s0080_f7c0::AnyWorldHidden()
 
 
 
-
 // @ 0x00810a50
 void __thiscall PtrVec::dtor()
 {
@@ -411,6 +574,61 @@ void __thiscall PtrVec::dtor()
     }
     void* a = (void*)mBegin;
     if (a && a != mInline) operator_delete__(a);
+}
+
+
+
+// @ 0x00810af0
+void __thiscall RBTree::insertNode(void** out, RBNode* hint, u32* key, bool right)
+{
+    int created;
+    if (!right && hint != (RBNode*)((u8*)this + 4) && *(u32*)((u8*)hint + 0x10) <= *key)
+        created = 1;
+    else
+        created = 0;
+    u8* n = (u8*)operator_new(0x24, &DAT_013f6b3c, 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h",
+        0xd1);
+    if (n + 0x10) {
+        *(u32*)(n + 0x10) = key[0];
+        *(u32*)(n + 0x14) = key[1];
+        *(u32*)(n + 0x18) = key[2];
+        *(u32*)(n + 0x1c) = key[3];
+        *(u32*)(n + 0x20) = key[4];
+    }
+    RBTreeInsert(n, hint, (u8*)this + 4, created);
+    count++;
+    if (out) *out = n;
+}
+
+
+
+// @ 0x00810d30
+int __stdcall FUN_00810d30(u32 msg, u8* p)
+{
+    if (msg != 0xf62ade) return 1;
+    u32 t = *(u32*)(p + 8);
+    if (t == 0x050f4731 || t == 0x250fe9a2 || t == 0xefbda3ff) {
+        FlushCache(6);
+        u8* m = (u8*)operator_new(0x40, "UI/tSPMessage", 0, 0, 0, 0);
+        u8* node = 0;
+        if (m) {
+            *(u32*)(m + 0x30) = 0;
+            *(void**)m = &vtbl_UI_BehaviorMessage;
+            *(u32*)(m + 4) = 0;
+            *(u32*)(m + 0x38) = 0;
+            *(void**)m = &vtbl_013eb844;
+            ((void(__thiscall*)(void*))VT(m)[1])(m);
+            node = m;
+        }
+        for (int i = 0; i < 0xc; ++i) *(u32*)(node + 8 + i * 4) = *(u32*)(p + 8 + i * 4);
+        *(u32*)(node + 4) = *(u32*)(p + 4);
+        *(u32*)(node + 0x38) = *(u32*)(p + 0x38);
+        u8* sv = (u8*)EA_Messaging_GetServer();
+        ((void(__thiscall*)(void*, u32, void*, int, int))VT(sv)[0x18 / 4])(sv, 0x065ff54a, node, 0, 0);
+        ((void(__thiscall*)(void*))VT(node)[2])(node);
+    }
+    return 1;
 }
 
 
@@ -439,7 +657,6 @@ PtrVec* __thiscall PtrVec::operator=(const PtrVec& rhs)
     mEnd = mBegin + n;
     return this;
 }
-
 
 
 // @ 0x00811ad0
@@ -479,6 +696,68 @@ void cSPUILayoutObjectCollection::attach_parent()
 }
 
 
+// @ 0x00811f20
+void* __thiscall cSPUILayoutManager_s0081_17f0::ctor()
+{
+    u32* s = (u32*)this;
+    s[1] = (u32)&vtbl_SimCreatureAbility;
+    s[2] = 0;
+    s[0] = (u32)&vtbl_014182a4;
+    s[1] = (u32)&vtbl_014182a0;
+    s[5] = 0;
+    s[6] = 0;
+    s[7] = 0;
+    u32* c = s + 4;
+    *c = (u32)c;
+    s[5] = (u32)c;
+    s[6] = 0;
+    *((u8*)s + 0x1c) = 0;
+    s[8] = 0;
+    c = s + 0xb;
+    s[0xc] = 0;
+    s[0xd] = 0;
+    s[0xe] = 0;
+    *c = (u32)c;
+    s[0xc] = (u32)c;
+    s[0xd] = 0;
+    *((u8*)s + 0x38) = 0;
+    s[0xf] = 0;
+    g_spLayoutManager = s;
+    return s;
+}
+
+
+// @ 0x00811f80
+void* __thiscall cSPUILayoutManager_s0081_17f0::scalarDtor(u8 flag)
+{
+    u8* s = (u8*)this;
+    RBTree1* t1 = (RBTree1*)(s + 0x28);
+    RBTree2* t2 = (RBTree2*)(s + 0xc);
+    *(u32*)s = (u32)&vtbl_014182a4;
+    *(u32*)(s + 4) = (u32)&vtbl_014182a0;
+    g_spLayoutManager = 0;
+    t1->DoNukeSubtree(*(void**)(s + 0x28 + 0xc));
+    t2->DoNukeSubtree(*(void**)(s + 0x18));
+    *(u32*)(s + 4) = (u32)&vtbl_SimCreatureAbility;
+    *(u32*)s = (u32)&vtbl_SkinnerPaintSystem;
+    if (flag & 1) operator_delete__(s);
+    return s;
+}
+
+
+// @ 0x00811fe0
+void __thiscall cSPUILayout_s0081_17f0::dtor()
+{
+    cSPUILayout_s0081_17f0* p = this;
+    void* c = p->mpCollection;
+    *(void**)p = &vtbl_UI_cConnectionDialog;
+    if (c) p->Shutdown(1);
+    c = p->mpCollection;
+    if (c) ((VF0v)VT(c)[2])(c);
+    *(void**)p = &vtbl_SimContentValidationSummarizer;
+}
+
+
 // @ 0x00812010
 bool cSPUILayoutObjectCollection::SetParentWin(EA::UTFWin::IWindow * p, bool b, unsigned int c)
 {
@@ -497,6 +776,21 @@ bool cSPUILayoutObjectCollection::SetParentWin(EA::UTFWin::IWindow * p, bool b, 
     }
     if (*(u32*)(s + 0x88)) attach_parent();
     return 1;
+}
+
+
+// @ 0x00812090
+void* __thiscall cSPUILayout_s0081_17f0::scalarDtor(u8 flag)
+{
+    cSPUILayout_s0081_17f0* p = this;
+    void* c = p->mpCollection;
+    *(void**)p = &vtbl_UI_cConnectionDialog;
+    if (c) p->Shutdown(1);
+    c = p->mpCollection;
+    if (c) ((VF0v)VT(c)[2])(c);
+    *(void**)p = &vtbl_SimContentValidationSummarizer;
+    if (flag & 1) operator_delete__(p);
+    return p;
 }
 
 
@@ -530,10 +824,10 @@ u8 __thiscall cSPUILayout_s0081_17f0::InitA(void* name, u32 b, u32 c, u32 d)
 
 
 // @ 0x008121b0
-u8 __thiscall cSPUILayout_s0081_17f0::SetParentWin(void* p, char b, u32 c)
+bool cSPUILayout::SetParentWin(EA::UTFWin::IWindow * p, bool b, unsigned int c)
 {
-    if (mpCollection)
-        return ((cSPUILayoutObjectCollection_s0081_17f0*)mpCollection)->SetParentWin(p, b, c);
+    if (mpObjectCollection.mpObject)
+        return ((cSPUILayoutObjectCollection*)mpObjectCollection.mpObject)->SetParentWin(p, b, c);
 
     return 0;
 }
@@ -568,7 +862,6 @@ void __thiscall RBTree1::eraseSys(void** out, void* node)
     operator_delete__(node);
     *out = next;
 }
-
 
 // @ 0x009a9600
 void S9a9600::f(void* node_)

@@ -23,7 +23,7 @@ struct VolRef {
   rw::collision::Volume* volume;                               // 0x000 relaid
   rw::math::vpu::Matrix44Affine* tm;                           // 0x004 relaid
   rw::math::vpu::Matrix44Affine tmContents;                    // 0x010 relaid
-  unsigned char bBox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x050 relaid
+  __declspec(align(16)) unsigned char bBox[0x20] /* AABBoxTemplate<rw::math::vpu::Matrix44Affine,rw::math::vpu::Vector3,rw::collision::AABBoxMemoryDumpPolicy>: no hand template for AABBoxTemplate */; // 0x050 relaid
   unsigned int tag;                                            // 0x070 relaid
   unsigned char numTagBits;                                    // 0x074 relaid
 };

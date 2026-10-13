@@ -1,3 +1,14 @@
+00538e90 ?Execute@cSPSkinPaintParticledelayCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00538fe0 ?Execute@cSPSkinPaintParticlelifeCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539130 ?Execute@cSPSkinPaintParticlecurveCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+005391c0 ?Execute@cSPSkinPaintParticlealignCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539440 ?normalized@@YAPAUcSPVector3_s0053_8e90@@PAU1@ABU1@@Z  # normalized migrated from s00538e90 (verbatim, slice spelling)
+005394e0 ?Execute@cSPSkinPaintParticleinitDirCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539720 ?Execute@cSPSkinPaintParticleattractCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539980 ?Execute@cSPSkinPaintParticlerestrictCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539bf0 ?Execute@cSPSkinPaintParticlediffuseColorCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539c70 ?Execute@cSPSkinPaintParticlespecularColorCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
+00539cf0 ?Execute@cSPSkinPaintParticlebumpColorCommand@?A0x2d530293@@QAEXAAUcArguments_s0053_8e90@ArgScript@EA@@@Z  # Execute migrated from s00538e90 (verbatim, slice spelling)
 0x00538e90 `anonymous namespace'::cSPSkinPaintParticledelayCommand::Execute  # writes mDelayMin/Max +0x58/+0x5c, "vary" option
 0x00538fe0 `anonymous namespace'::cSPSkinPaintParticlelifeCommand::Execute  # writes mLifeMin/Max +0x60/+0x64
 0x00539130 `anonymous namespace'::cSPSkinPaintParticlecurveCommand::Execute  # MainArguments(0,500); "random" -> mFlags |= 4

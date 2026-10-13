@@ -45,7 +45,7 @@ class Transform {
   void PostMultiply(EA::UTFWin::Transform const &);                      // dev only
 
  public:  // data (retail offsets)
-  unsigned char mTransform[0x40] /* rw::math::fpu::Matrix44Template<float,0>: no hand template for rw::math::fpu::Matrix44Template */; // 0x000 relaid
+  rw::math::fpu::Matrix44Template<float,0> mTransform;         // 0x000 relaid
   EA::UTFWin::Transform::Type mType;                           // 0x040 relaid
 };
 #pragma pack(pop)

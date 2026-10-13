@@ -24,11 +24,11 @@ struct cTriToRegionMap {
   };
   // sizeof(cTriToRegionMapEntry) expected 0xc (unverified)
 
+  void AddRegion(int, int, int);                                         // 0x0072b560
   ~cTriToRegionMap();                                                    // dev only
   cTriToRegionMap();                                                     // dev only
   int LookupRegion(int);                                                 // dev only
   void Reset();                                                          // dev only
-  void AddRegion(int, int, int);                                         // dev only
 
  public:  // data (retail offsets)
   eastl::vector<SP::cTriToRegionMap::cTriToRegionMapEntry,eastl::sp_vector_allocator> mRegions; // 0x000 relaid

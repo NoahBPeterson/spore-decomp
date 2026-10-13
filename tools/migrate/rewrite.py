@@ -372,7 +372,17 @@ def hoist_decls(text):
             hoisted += lines[i:j + 1]
             i = j + 1
             continue
+        ms = mask(lines[i]).strip()
+        if re.match(r"^\}[\s}]*;?$", ms):
+            # the closer of a namespace the slice opened before the marker (s00538e90: `namespace EA { namespace Swarm {` +
+            # `// @ 0x840bb0` + prototype + `// @ 0x840d50` + prototype + `} }`): it goes to the preamble with its opener,
+            # which parse_slice left there; counted into a statement it drove the depth to -2 and hoisted 59 bogus lines
+            hoisted.append(lines[i])
+            i += 1
+            continue
         j, depth, seen, end = i, 0, False, None
+        is_ns = bool(re.match(r"^(?:inline\s+)?namespace\b[^;(]*\{", ms)) or ms in ("namespace", "namespace {") or \
+            bool(re.match(r"^namespace\s*(\w+\s*)?$", ms))
         while j < n:
             mj = mask(lines[j])
             depth += mj.count("{") - mj.count("}") + mj.count("(") - mj.count(")")
@@ -381,7 +391,15 @@ def hoist_decls(text):
                 end = j
                 break
             if depth == 0 and seen and mj.rstrip().endswith("}"):
-                break                         # a function definition (or a namespace / linkage block): not hoisted
+                if is_ns:
+                    # a namespace block of declarations (s00538e90's `namespace { struct cXxxCommand {..}; ... }`) is hoisted
+                    # when a function follows it, or when it defines no function itself (a namespace that wraps the marker's
+                    # own function, s00947d50, stays)
+                    blk = mask("\n".join(lines[i:j + 1]))
+                    rest = mask("\n".join(lines[j + 1:]))
+                    if "{" in rest or not re.search(r"\)\s*(?:const\s*)?(?:throw\s*\([^)]*\)\s*)?\{", blk):
+                        end = j
+                break                         # a function definition (or a linkage block): not hoisted
             j += 1
         if end is None:
             break
@@ -1534,6 +1552,22 @@ class Rewrite:
     def choose_decl(self, name, sparams, va, cls, claimed, sret=None):
         """canonical declaration for a slice method of a mapped class; -> (decl, how) or (None, why)."""
         short = cls.split("::")[-1]
+        if va:
+            # the header's destructor line `virtual ~X(); // slot 0, 0x<A>, dtor body 0x<B>`: A is the scalar deleting
+            # destructor (??_G, compiler-generated: no source spelling, so the slice body stays verbatim), B the destructor
+            # itself whatever the slice calls it (s0094fb80 0x94fe70 was shape-guessed as SetMode, s00936090 0x936920 as
+            # IsValidLibrary, s008117f0 0x811f80 as Shutdown; fix pass 3)
+            for d in canon_methods(cls):
+                if not d.dtor:
+                    continue
+                mb = re.search(r"dtor body 0x([0-9a-fA-F]{6,8})", d.cmt or "")
+                if mb and int(mb.group(1), 16) == va:
+                    return d, "destructor by retail address (the header's dtor body 0x%08x)" % va
+                if d.va == va and not (d.virtual and d.slot is not None):
+                    return d, "destructor by retail address 0x%08x (non-virtual)" % va
+                if d.va == va:
+                    return None, "scalar deleting destructor of %s (the header's slot-0 address 0x%08x): compiler-generated, " \
+                        "kept verbatim" % (cls, va)
         if name == short or name == "~" + short:        # constructor / destructor of the class
             ctors = [d for d in canon_methods(cls) if (d.ctor if name == short else d.dtor) and d.name == name]
             if name != short:
@@ -2702,6 +2736,18 @@ class Rewrite:
             if canon not in seen and Canon.get(canon).exists:
                 seen.add(canon)
                 incs.append(H.include_path(canon))
+        # canonical classes a converted body names (a local `cSPUILayout* lay = ...; lay->Shutdown(1);` in
+        # SP::cSPUIFeedEdit::Shutdown, s0065bf20): complete types.  The headers forward-declare the pointees of smart-pointer
+        # members since fix pass 3 (include cycles), so the TU can no longer count on getting them transitively.
+        for c in getattr(self, "fns", []):
+            if getattr(c, "verbatim", False) or not getattr(c, "out_body", None):
+                continue
+            for q in sorted(set(re.findall(r"(?<![\w:])([A-Za-z_]\w*(?:::[A-Za-z_]\w*)*)", RS.mask(c.out_body)))):
+                if q in seen or ("::" not in q and q not in H.KNOWN_STRUCTS) or q.split("::")[0] in ("eastl", "std"):
+                    continue
+                if Canon.get(q).exists:
+                    seen.add(q)
+                    incs.append(H.include_path(q))
         return incs
 
     def build(self, module_filter):
@@ -3192,9 +3238,45 @@ class Rewrite:
                         blocks.setdefault(va, b if b.endswith("\n") else b + "\n")
                     pre = self.merge_preamble(old_pre, pre)
             body = "\n".join(blocks[v] for v in sorted(blocks))
+            pre = self.forward_protos(pre, blocks)
             open(tu, "w").write(pre + "\n" + body)
             results[module] = (tu, sorted(c.va for c in fns))
         return results
+
+    def forward_protos(self, pre, blocks):
+        """Prototypes for free functions of the TU that a function earlier in VA order calls: the slice defined its helper
+        first (s00538e90 `cSPVector3* normalized(..)` at the top, 0x539440), the module TU puts it in VA order after its
+        callers (0x5391c0 Execute: C3861, fix pass 3).  Only plain global free functions (no class/namespace qualifier, not
+        inside a namespace block, not a template) are declared."""
+        defs = {}
+        for va in sorted(blocks):
+            b = blocks[va]
+            if re.search(r"(?m)^\s*(namespace\b|template\s*<)", b):
+                continue
+            mb = mask(b)
+            k = mb.find("{")
+            if k < 0:
+                continue
+            head_lines = [l for l in b[:k].split("\n") if l.strip() and not l.lstrip().startswith(("//", "#"))]
+            head = " ".join(l.strip() for l in head_lines)
+            m = re.match(r"^((?:static\s+|inline\s+)?[\w\s\*&<>,]*?[\w\*&>]\s*\**)\s*\b([A-Za-z_]\w*)\s*\(([^{}]*)\)\s*$", head)
+            if not m or "::" in head.split("(")[0] or m.group(2) in ("if", "while", "for", "switch", "return"):
+                continue
+            defs.setdefault(m.group(2), (va, head))
+        if not defs:
+            return pre
+        protos = []
+        mp = mask(pre)
+        for name, (va, head) in sorted(defs.items(), key=lambda x: x[1][0]):
+            if re.search(r"\b%s\s*\(" % re.escape(name), mp):
+                continue                  # the preamble declares (or defines) it already
+            if any(v < va and re.search(r"(?<![\w:.>])%s\s*\(" % re.escape(name), mask(blocks[v])) for v in blocks):
+                protos.append(head + ";   // defined at 0x%08x, called earlier in the TU" % va)
+        if not protos:
+            return pre
+        self.notes.append(("forward-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
+        return pre.rstrip("\n") + "\n\n// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)\n" + \
+            "\n".join(protos) + "\n"
 
     def merge_preamble(self, old, new):
         """Preamble of the module TU as it is (`old`) plus what this slice adds (`new`): new includes after the last old
@@ -3369,14 +3451,17 @@ class Rewrite:
         src_col = "../src/game/%s/%s.cpp" % (d, stem)
         # manifest rows come from the slice manifest; the symbol becomes the decorated name of the new object
         rows = []
-        for line in open(os.path.join(sdir, "manifest.txt")):
+        # a slice may have no manifest.txt at all (s00ed74f0 ships only nonmatching.txt: the apply crashed with
+        # FileNotFoundError, round 3): no byte-exact rows, flags from nonmatching measurement
+        mlines = open(os.path.join(sdir, "manifest.txt")).read().split("\n") if os.path.exists(os.path.join(sdir, "manifest.txt")) else []
+        for line in mlines:
             p = line.split("#", 1)[0].split()
             if len(p) >= 3 and row_va(p[2]) in vas:
                 rows.append((row_va(p[2]), p[3:]))
         mf = []
         # the flags the slice's functions were verified with (rows of one slice share them); nonmatching rows have no
         # flags column of their own, so they are measured and promoted with these
-        allrows = [p[3:] for p in (l.split("#", 1)[0].split() for l in open(os.path.join(sdir, "manifest.txt"))) if len(p) >= 4]
+        allrows = [p[3:] for p in (l.split("#", 1)[0].split() for l in mlines) if len(p) >= 4]
         for fl0 in allrows:
             if fl0:
                 self.slice_flags = [f for f in fl0 if not f.startswith("/I")]
@@ -3626,8 +3711,13 @@ class Rewrite:
         """Number of parameters in a demangled signature (None when it cannot be told)."""
         if not dm or "(" not in dm:
             return None
-        m = mask(dm)
-        b = m.index("(")
+        # `anonymous namespace'::X: the backtick-quote pair is not a character literal (mask blanked the rest of the
+        # signature: ValueError on s00538e90's file-local command classes, fix pass 3)
+        m = mask(re.sub(r"`[^`']*'", lambda mm: "_" * len(mm.group(0)), dm))
+        # the call operator's own `()` is part of the name (`Manager::ChangeNotificationInfoCompare::operator()(..)`, s008de020
+        # 0x8de1e0: arity 0, the row lost its symbol)
+        oc = m.find("operator()")
+        b = m.index("(", oc + len("operator()")) if oc >= 0 and "(" in m[oc + len("operator()"):] else m.index("(")
         e = match_close(m, b)
         inner = dm[b + 1:e].strip()
         if inner in ("", "void"):
@@ -4065,6 +4155,18 @@ def main():
         ents = json.load(open(W("work", "batches", a.batch + ".json")))
         listed = {va.lower() for e in ents if e["id"] == a.slice and (not a.module or a.module.lower() in e["module"].lower())
                   for va in e["vas"]}
+        # a VA the batch lists for this module under another slice that does not define it (mig3: 0x4f6510 under s005ec030 but
+        # defined in s004f56f0, 0x4f6720 under s004ef880 but defined in s004f6630; round 3 landed them by hand) is this
+        # slice's when this slice defines it
+        def _defines(sid, va):          # the slice's bookkeeping has a row for it (a declaration-only marker does not count)
+            vas, _syms = RS.slice_rows(sid)
+            return int(va, 16) in vas
+        for e in ents:
+            if e["id"] == a.slice or (a.module and a.module.lower() not in e["module"].lower()):
+                continue
+            for va in e["vas"]:
+                if va.lower() not in listed and not _defines(e["id"], va.lower()) and _defines(a.slice, va.lower()):
+                    listed.add(va.lower())
         rw.batch_vas = (a.batch, listed)
     rw.assign_chunks(a.module)
     rw.map_structs()

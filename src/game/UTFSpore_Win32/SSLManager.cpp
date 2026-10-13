@@ -54,6 +54,7 @@ extern "C" char  g_szUTFUp[];                      // 0x0143fee0 "UTF/SSL"
 extern "C" char  g_szEmpty[];                      // 0x013ec47c
 #include <intrin.h>
 #include "EA/Thread/Mutex.h"
+#include "EA/Sockets/Socket.h"
 #pragma intrinsic(_InterlockedIncrement, _InterlockedExchangeAdd, _InterlockedExchange)
 #pragma intrinsic(strcmp)
 
@@ -802,6 +803,24 @@ int __cdecl THREAD_setup()
     CRYPTO_set_dynlock_lock_callback((void*)0x0094EB50);
     CRYPTO_set_dynlock_destroy_callback((void*)0x0094F850);
     return 1;
+}
+
+// @ 0x0094fe70
+void* SSLManager_s0094_fb80::DeletingDtor(char flags)
+{
+    void* self = this;
+    PTR(self, 0) = (void*)0x0143FF28;
+    SSLManager_Shutdown(self);
+    void* p = PTR(self, 0x154);
+    if (p != 0 && p != PTR(self, 0x164))
+        operator_delete__(p);
+    Ext* map = (Ext*)(B(self) + 0x48);
+    void* node = PTR(self, 0x54);
+    map->nuke(node);
+    Mutex_dtor(B(self) + 0x18);
+    if (flags & 1)
+        operator_delete__(self);
+    return self;
 }
 
 // @ 0x0094fed0

@@ -8,13 +8,9 @@
 #include "EA/COM/IUnknown32RefCount.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/COM/RefCountTemplate.h"
-#include "EA/IO/IStream.h"
 #include "EA/Internet/HTTPProtocol.h"
-#include "EA/Internet/HTTPRequest.h"
-#include "EA/Internet/HTTPResponse.h"
 #include "EA/Internet/IRequestResponseFilter.h"
 #include "EA/Sockets/IPAddress.h"
-#include "EA/Sockets/IStreamSocket.h"
 #include "EA/Sockets/NameLookup.h"
 #include "EA/Thread/AtomicInt.h"
 #include "EA/Thread/Mutex.h"
@@ -25,7 +21,7 @@
 #include "eastl/vector.h"
 
 namespace EA { namespace IO { class IStream; } }
-namespace EA { namespace Internet { class HTTPRequest; class HTTPResponse; class IRequestResponseFilter; class URL; } }
+namespace EA { namespace Internet { class HTTPClient; class HTTPRequest; class HTTPResponse; class IRequestResponseFilter; class URL; } }
 namespace EA { namespace Sockets { class IStreamSocket; } }
 
 namespace EA {

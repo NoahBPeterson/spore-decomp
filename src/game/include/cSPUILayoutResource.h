@@ -6,7 +6,6 @@
 #include "game/typedefs.h"
 #include "EA/AutoRefCount.h"
 #include "EA/COM/InterfaceId.h"
-#include "EA/IO/MemoryStream.h"
 #include "SP/cResourceBase.h"
 
 namespace EA { namespace IO { class MemoryStream; } }

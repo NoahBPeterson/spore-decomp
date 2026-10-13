@@ -1,10 +1,11 @@
-// src/game/SPEditors/SPUIFeedEdit.cpp -- migrated from slice(s) s0065ea00, s0065df30, s0065d050, s0065bf20 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPUIFeedEdit.cpp -- migrated from slice(s) s00ed74f0, s0065ea00, s0065df30, s0065d050, s0065bf20 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPUIFeedEdit.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
 #include "SP/cSPUIFeedEditAssetView.h"
 #include "SP/cSPUIFeedEdit.h"
+#include "cSPUILayout.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern int g_15fa6e4;
@@ -173,12 +174,12 @@ struct cSPUIFeedEdit_s0065_d050 {
   int GetAssetIndex(int a, int b);  // 0065ccd0 (slice s0065bf20) 0x0065ccd0
   void FUN_0065cf30(int a, int b, int c, int* asset);  // slice s0065bf20
 
-  void UpdateGrid();         // 0065d260 0x0065d260
-  void FUN_0065d490();       // 0065d490 0x0065d490
+  void UpdateGrid();         // 0065d260
+  void FUN_0065d490();       // 0065d490
   bool SetPage(unsigned int page);  // 0065d4e0 0x0065d4e0
   void ShowAsset(int a, int b);     // 0065d570 0x0065d570
   bool TranslateToken(const wchar_t* token, void* out);  // 0065dc60 0x0065dc60
-  void SetActive(bool b);    // 0065d9f0 0x0065d9f0
+  void SetActive(bool b);    // 0065d9f0
   bool FUN_0065dd30(unsigned int id);  // 0065dd30 wrapper
 };
 struct HashtableU64 {
@@ -200,6 +201,7 @@ extern "C" char  FUN_009979f0(void* win, uint32_t id);
 extern const wchar_t* g_kFrameName;  // 0x1526954
 extern void* g_vt_13fff58;
 extern void* g_vt_13fff48;
+extern "C" void* HashFind64(uint64_t* out, uint64_t* key);      // 0x553510
 extern "C" void  HashEraseR(uint64_t* a, uint64_t* key, int f);  // 0x553750
 struct AssetInfo_s0065_df30 { uint64_t mnAssetID; uint32_t mnType; void* mpImage; };
 struct AssetVec {
@@ -220,6 +222,7 @@ struct cXHTMLFrameSet_s0065_df30 {
     bool  FUN_009979f0(void* win, uint32_t id);
     void  FUN_00997140();
 };
+struct TextSlot { void Assign(void* p); };
 struct IWindow_s0065_df30 {
     virtual void m00(); virtual void m01(); virtual void m02(); virtual void m03();
     virtual void m04(); virtual void m05(); virtual void m06(); virtual void m07();
@@ -244,7 +247,7 @@ struct VecPtr {
     void* begin; void* end; void* cap;
     void* erase(void* first, void* last);
 };
-struct HashSet_s0065_df30 {
+struct HashSet {
     char pad[0xc];
     int  count;
     void DoFreeNodes(void* a, void* b);
@@ -294,9 +297,9 @@ struct cSPUIFeedEdit_s0065_df30 {
     char  padbc[8];                    // 0xbc
     AssetVec mAssetList;               // 0xc4
     char  padcc[8];                    // 0xcc
-    HashSet_s0065_df30 mNewAssets;                // 0xd8
-    HashSet_s0065_df30 mDeleteAssets;             // 0xf8
-    HashSet_s0065_df30 mExistingAssets;           // 0x118
+    HashSet mNewAssets;                // 0xd8
+    HashSet mDeleteAssets;             // 0xf8
+    HashSet mExistingAssets;           // 0x118
     char  pad138[0x11];                // 0x138..0x148
     char  mbTransactionActive;         // 0x149
     char  mbNameSet;                   // 0x14a
@@ -315,12 +318,10 @@ struct cSPUIFeedEdit_s0065_df30 {
 };
 // ---- items of slice s0065df30 end
 
-
 // ---- items of slice s0065ea00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  FUN_00809db0(void* a, void* b);
 extern "C" void  FUN_00996280(void* self, int a, int b, int c, int d);  // thiscall via struct
 extern "C" void  FUN_0065d490();
-extern "C" void* HashFind64(uint64_t* out, uint64_t* key);       // 0x553510
 extern "C" void  HashDoInsert(uint64_t* a, uint64_t* b, int c);  // 0x553750
 struct AssetInfo_s0065_ea00 { uint64_t mnAssetID; uint32_t mnType; void* mpImage; };
 struct AssetVec_s0065_ea00 {
@@ -329,14 +330,13 @@ struct AssetVec_s0065_ea00 {
     AssetInfo_s0065_ea00* erase(AssetInfo_s0065_ea00* first, AssetInfo_s0065_ea00* last);
     void push_back();  // 0x0065e6d0 (AssetVec::push_back)
 };
-struct HashSet { char pad[0xc]; int count; void DoFreeNodes(void*, void*); };
+struct HashSet_s0065_ea00 { char pad[0xc]; int count; void DoFreeNodes(void*, void*); };
 struct cSPUILayout_s0065_ea00 {
     void* FindWindowByID(uint32_t id, int recursive);  // 0x008105b0 (cSPUILayout::FindWindowByID)
     void* Init(const void* key, int a, int id);  // 0x008120d0 (cSPUILayout::Init)
     void  SetParentWin(void* parent, int a, int id);  // 0x008121b0 (cSPUILayout::SetParentWin)
     void  SetReloadCallback(void* fn, void* self);  // 0x00810090 (cSPUILayout::SetReloadCallback)
 };
-struct TextSlot { void Assign(void* p); };
 struct LayoutCtor { void* Create(); };
 struct ComObj {
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
@@ -399,18 +399,18 @@ struct cSPUIFeedEdit_s0065_ea00 {
     char  padbc[8];                    // 0xbc
     AssetVec_s0065_ea00 mAssetList;               // 0xc4
     char  padcc[8];                    // 0xcc
-    HashSet mNewAssets;                // 0xd8
-    HashSet mDeleteAssets;             // 0xf8
-    HashSet mExistingAssets;           // 0x118
+    HashSet_s0065_ea00 mNewAssets;                // 0xd8
+    HashSet_s0065_ea00 mDeleteAssets;             // 0xf8
+    HashSet_s0065_ea00 mExistingAssets;           // 0x118
     char  pad138[0x11];                // 0x138..0x148
     char  mbTransactionActive;         // 0x149
     char  mbNameSet;                   // 0x14a
 
     void DoMessage(int msg, void* data);  // 0x0065ea00 (cSPUIFeedEdit::DoMessage)
-    void UnloadLayout();
-    bool Populate();
-    bool RemoveAsset(int a, int b);
-    void ResetPanel();
+    void UnloadLayout();  // 0x0065e0a0 (cSPUIFeedEdit::UnloadLayout)
+    bool Populate();  // 0x0065e110 (cSPUIFeedEdit::Populate)
+    bool RemoveAsset(int a, int b);  // 0x0065e570 (cSPUIFeedEdit::RemoveAsset)
+    void ResetPanel();  // 0x0065e720 (cSPUIFeedEdit::ResetPanel)
     void LoadLayout();  // 0x0065e8d0 (cSPUIFeedEdit::LoadLayout)
     void Init(void* parent);  // 0x0065f700 (cSPUIFeedEdit::Init)
     void InitLayout();
@@ -452,6 +452,129 @@ struct CallbackObj {
 };
 extern "C" void* SP_MessageServer();
 // ---- items of slice s0065ea00 end
+
+// ---- items of slice s00ed74f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char     g_16065f8;           // 0x016065f8: UI enabled flag
+extern const wchar_t g_13ec468[];    // L"" 0x013ec468
+struct Key12 {                       // resource key: instance/type/group
+    uint32_t a, b, c;
+};
+extern Key12    g_15ac220;   // 0x015ac220
+extern Key12    g_15ac22c;   // 0x015ac22c
+extern Key12    g_15ac238;   // 0x015ac238
+extern Key12    g_15ac250;   // 0x015ac250
+extern Key12    g_15ac25c;   // 0x015ac25c
+extern Key12    g_15ac268;   // 0x015ac268
+struct IWindow_s00ed_74f0 {
+    virtual void w0(); virtual void w1(); virtual void w2(); virtual void w3();
+    virtual void w4(); virtual void w5(); virtual void w6();
+    virtual uint32_t GetControlID();                 // +0x1c
+};
+struct Message {
+    IWindow_s00ed_74f0* source;                                 // +0
+    uint32_t pad4;
+    uint32_t type;                                   // +8
+};
+struct cMessageServer {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void Post(uint32_t id, int a, int b);    // +0x14
+};
+struct cAudioSystem {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual int  GetState();                         // +0x20
+};
+struct cUIGate {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12(); virtual void v13();
+    virtual bool IsBlocked();                        // +0x38
+};
+extern cUIGate* g_15ad298;                           // 0x015ad298
+struct cNotifyTarget {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10(); virtual void v11();
+    virtual void v12();
+    virtual void SetText(const wchar_t* text, int flags);   // +0x34
+};
+struct cNotifyHost {                                 // 0x0067de40 singleton
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual cNotifyTarget* GetTarget();              // +0x20
+};
+struct cText { const wchar_t* GetText(); };          // 0x006b55c0
+struct cUIHint {
+    char pad[0x78];
+    cText mText;                                     // +0x78
+};
+struct cUIHints {
+    cUIHint* FindByID(uint32_t id);                  // 0x0067aee0
+    void     ShowHint(uint32_t id);                  // 0x0067c830
+};
+struct cNode;
+struct cSim {                                        // *(g + 0x74)
+    bool   Classify(int* out);                       // 0x00f41270
+    bool   f3b920();                                 // 0x00f3b920
+    bool   f3b950();                                 // 0x00f3b950
+    cNode* ff3f00();                                 // 0x00ff3f00
+    bool   f41420(cNode* n, int a, int b, int c);    // 0x00f41420
+    void   f45970();                                 // 0x00f45970
+    int    f3bf60();                                 // 0x00f3bf60
+    void   f3bcc0(int n);                            // 0x00f3bcc0
+    void   f45a80();                                 // 0x00f45a80
+    void   f427c0();                                 // 0x00f427c0
+};
+struct cTutorials {
+    void MarkDirty();                                // 0x00ef72c0
+    void f8860();                                    // 0x00ef8860
+};
+struct cHintPanel { void f69a0(int a); };            // *(g + 0xd8); 0x00f069a0
+struct cOwned {                                      // *(this + 0x3c)
+    void e02e80();                                   // 0x00e02e80
+    void e018c0(int a);                              // 0x00e018c0
+};
+struct cGlobals {
+    char        pad0[0x74];
+    cSim*       sim;                                 // +0x74
+    char        pad1[0xd4 - 0x78];
+    cTutorials* tutorials;                           // +0xd4
+    cHintPanel* hints;                               // +0xd8
+};
+extern cGlobals* g_16c7aa4;                          // 0x016c7aa4
+struct cSporeGuide { void FUN_00ed4930(); };         // thiscall on a global object (ignores ecx)
+extern cSporeGuide g_16c7680;                       // 0x016c7680
+cUIHints*       __cdecl UIHints();                   // 0x0067cac0
+cNotifyHost*    __cdecl NotifyHost();                // 0x0067de40
+cAudioSystem*   __cdecl GetSystemAT();               // 0x00a206f0
+int             __cdecl GetRecorderState();          // 0x00435e90
+void            __cdecl PlayUISound(uint32_t id, int state);   // 0x00435ed0
+int             __cdecl GetCurrentGameMode();        // 0x00b5b800
+void            __cdecl ShowSettingsWindow(int mode);          // 0x006035d0
+void            __cdecl ShowContextSensitiveSporeGuide();      // 0x00e02200
+void            __cdecl CalloutMessageBox(void* where, const Key12* key);   // 0x00809db0
+int             __stdcall HintForState(int state);   // 0x00f3b2c0 ($E366)
+struct Panel {                                       // primary object; the handler is its base at +8
+    char pad0[0xc];
+    char mCallout[0x48];                             // +0x0c
+    int  mCalloutKey;                                // +0x54
+    int  mMode;                                      // +0x58
+    void FUN_00ed5910();                             // 0x00ed5910
+    void FUN_00ed5640();                             // 0x00ed5640
+    void FUN_00ed6720(int i);                        // 0x00ed6720
+    void FUN_00ed76e0(int i);                        // 0x00ed76e0
+};
+struct PanelHandler {                                // sub-object at Panel+8
+    virtual void h0();
+    virtual bool DoMessage(IWindow_s00ed_74f0* w, const Message* msg);
+    Panel* panel() { return (Panel*)((char*)this - 8); }
+    char   pad4[0x14 - 4];
+    int    mActiveSet;                               // +0x14
+    char   pad18[0x3c - 0x18];
+    cOwned* mOwned;                                  // +0x3c
+};
+// ---- items of slice s00ed74f0 end
 
 // @ 0x0065c490
 void cSPUIFeedEditAssetView::GetThumbnailBackdrop(uint32_t* out, unsigned int id) const
@@ -495,17 +618,11 @@ void cSPUIFeedEditAssetView::GetThumbnailBackdrop(uint32_t* out, unsigned int id
 
 
 
-
-
-
 // @ 0x0065c6f0
 unsigned int SP::cSPUIFeedEditAssetView::GetEventMask() const
 {
   return (uint32_t)(*(int*)((char*)this + 0x44)) | 0xfffffffd;
 }
-
-
-
 
 
 
@@ -523,9 +640,6 @@ void CtorObj::FUN_0065c790(void* a, void* b, void* c)
   m18 = c;
   m1c = 0;
 }
-
-
-
 
 
 
@@ -569,9 +683,6 @@ void SP::cSPUIFeedEditAssetView::SetMode(SP::cSPUIFeedEditAssetView::Mode mode)
 
 
 
-
-
-
 // @ 0x0065c9a0
 bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
 {
@@ -588,9 +699,6 @@ bool SP::cSPUIFeedEditAssetView::OnTick(EA::UTFWin::IWindow * win)
   }
   return false;
 }
-
-
-
 
 
 
@@ -624,9 +732,6 @@ void SP::cSPUIFeedEdit::Shutdown()
 
 
 
-
-
-
 // @ 0x0065cae0
 void cSPUIFeedEdit::FUN_0065cae0()
 {
@@ -652,9 +757,6 @@ void cSPUIFeedEdit::FUN_0065cae0()
 
 
 
-
-
-
 // @ 0x0065cc50
 void cSPUIFeedEdit::FUN_0065cc50()
 {
@@ -674,9 +776,6 @@ void cSPUIFeedEdit::FUN_0065cc50()
 
 
 
-
-
-
 // @ 0x0065ccd0
 int cSPUIFeedEdit::GetAssetIndex(int a, int b)
 {
@@ -689,9 +788,6 @@ int cSPUIFeedEdit::GetAssetIndex(int a, int b)
   }
   return -1;
 }
-
-
-
 
 
 
@@ -718,9 +814,6 @@ AssetInfo& AssetInfo::operator=(const AssetInfo& other)
 
 
 
-
-
-
 // @ 0x0065cdc0
 __declspec(noinline) AssetInfo* FUN_0065cdc0(AssetInfo* first, AssetInfo* last, AssetInfo* out)
 {
@@ -742,9 +835,6 @@ __declspec(noinline) AssetInfo* FUN_0065cdc0(AssetInfo* first, AssetInfo* last, 
 
 
 
-
-
-
 // @ 0x0065ce10
 __declspec(noinline) AssetInfo* FUN_0065ce10(AssetInfo* first, AssetInfo* last, AssetInfo* out)
 {
@@ -755,9 +845,6 @@ __declspec(noinline) AssetInfo* FUN_0065ce10(AssetInfo* first, AssetInfo* last, 
   }
   return out;
 }
-
-
-
 
 
 
@@ -782,9 +869,6 @@ int cSPUIFeedEditAssetView::FUN_0065cec0(void* msg, void* data)
     ++g_15fa6e4;
   return 0;
 }
-
-
-
 
 
 
@@ -827,9 +911,6 @@ void cSPUIFeedEditAssetView::FUN_0065cf30(int, int, int, int* asset)
 
 
 
-
-
-
 // @ 0x0065d050
 void SP::cSPUIFeedEditAssetView::ClearAsset()
 {
@@ -857,8 +938,6 @@ void SP::cSPUIFeedEditAssetView::ClearAsset()
   (*(FnP)Vslot(*(void**)(p + 0x14), 0x90))(*(void**)(p + 0x14));
   *(int*)(p + 0x30) = 0;
 }
-
-
 
 
 
@@ -914,8 +993,6 @@ void ReloadCallback(cSPUIFeedEditAssetView_s0065_d050* self, void* layout, bool 
 
 
 
-
-
 // @ 0x0065d260
 void cSPUIFeedEdit_s0065_d050::UpdateGrid()
 {
@@ -963,8 +1040,6 @@ void cSPUIFeedEdit_s0065_d050::UpdateGrid()
 
 
 
-
-
 // @ 0x0065d410
 void AssetRequestCallBack(int* param)
 {
@@ -989,8 +1064,6 @@ void AssetRequestCallBack(int* param)
 
 
 
-
-
 // @ 0x0065d490
 void cSPUIFeedEdit_s0065_d050::FUN_0065d490()
 {
@@ -1003,8 +1076,6 @@ void cSPUIFeedEdit_s0065_d050::FUN_0065d490()
     *(unsigned int*)(p + 0xa8) = np + 1;
   FUN_0065cc50();
 }
-
-
 
 
 
@@ -1032,8 +1103,6 @@ bool cSPUIFeedEdit_s0065_d050::SetPage(unsigned int page)
   }
   return false;
 }
-
-
 
 
 
@@ -1080,8 +1149,6 @@ void cSPUIFeedEdit_s0065_d050::ShowAsset(int a, int b)
 
 
 
-
-
 // @ 0x0065d6a0
 int* HashtableU64::erase(int* out, int* node, int* bucket)
 {
@@ -1110,8 +1177,6 @@ int* HashtableU64::erase(int* out, int* node, int* bucket)
   count = count - 1;
   return out;
 }
-
-
 
 
 
@@ -1153,8 +1218,6 @@ bool cSPUIFeedEditAssetView_s0065_d050::Init(void* parent, unsigned int index)
 
 
 
-
-
 // @ 0x0065d810
 void SP::cSPUIFeedEditAssetView::Shutdown()
 {
@@ -1181,8 +1244,6 @@ void SP::cSPUIFeedEditAssetView::Shutdown()
 
 
 
-
-
 // @ 0x0065d9f0
 void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
 {
@@ -1202,8 +1263,6 @@ void cSPUIFeedEdit_s0065_d050::SetActive(bool b)
     }
   }
 }
-
-
 
 
 
@@ -1237,8 +1296,6 @@ bool cSPUIFeedEdit_s0065_d050::TranslateToken(const wchar_t* token, void* out)
 
 
 
-
-
 // @ 0x0065ded0
 UFOCollisionEffectInfo* VecUFO::erase(UFOCollisionEffectInfo* first, UFOCollisionEffectInfo* last)
 {
@@ -1258,8 +1315,6 @@ UFOCollisionEffectInfo* VecUFO::erase(UFOCollisionEffectInfo* first, UFOCollisio
   mpEnd = (UFOCollisionEffectInfo*)((char*)mpEnd + (((char*)last - (char*)first) >> 4) * -0x10);
   return first;
 }
-
-
 
 
 
@@ -1302,6 +1357,8 @@ __declspec(noinline) AssetInfo_s0065_df30* AssetVec::DoInsertValue(AssetInfo_s00
     return position;
 }
 
+
+
 // @ 0x0065e0a0
 void SP::cSPUIFeedEdit::UnloadLayout()
 {
@@ -1315,6 +1372,8 @@ void SP::cSPUIFeedEdit::UnloadLayout()
     ((cXHTMLFrameSet_s0065_df30*)(p + 0x18))->FUN_00997140();
     *(char*)(p + 0x90) = 0;
 }
+
+
 
 // @ 0x0065e110
 bool cSPUIFeedEdit_s0065_df30::Populate()
@@ -1388,6 +1447,8 @@ bool cSPUIFeedEdit_s0065_df30::Populate()
     return true;
 }
 
+
+
 // @ 0x0065e570
 bool cSPUIFeedEdit_s0065_df30::RemoveAsset(int a, int b)
 {
@@ -1422,6 +1483,8 @@ bool cSPUIFeedEdit_s0065_df30::RemoveAsset(int a, int b)
     return true;
 }
 
+
+
 // @ 0x0065e6d0
 void AssetVec::push_back()
 {
@@ -1437,6 +1500,8 @@ void AssetVec::push_back()
     void* x = *(void* volatile*)&tmp.mpImage;
     if (x) (*(FnP)Vslot(x, 4))(x);
 }
+
+
 
 // @ 0x0065e720
 void cSPUIFeedEdit_s0065_df30::ResetPanel()
@@ -1485,6 +1550,8 @@ void cSPUIFeedEdit_s0065_df30::ResetPanel()
     UpdateEnabledState();
 }
 
+
+
 // @ 0x0065e8d0
 void cSPUIFeedEdit_s0065_df30::LoadLayout()
 {
@@ -1525,6 +1592,7 @@ void cSPUIFeedEdit_s0065_df30::LoadLayout()
         *(char*)(p + 0x90) = 1;
     }
 }
+
 
 // @ 0x0065ea00
 void cSPUIFeedEdit_s0065_ea00::DoMessage(int msg, void* data)
@@ -1695,4 +1763,189 @@ void SP::cSPUIFeedEdit::Init(EA::UTFWin::IWindow * parent)
     (*(void(__thiscall*)(void*, void*, int))Vslot(ms, 0x20))(ms, handler, 0x1dd7bda9);
     (*(void(__thiscall*)(void*, void*, int))Vslot(ms, 0x20))(ms, handler, 0x3cdd5f9);
     (*(void(__thiscall*)(void*, void*, int))Vslot(ms, 0x20))(ms, handler, 0x49a3777);
+}
+
+// @ 0x00ed7a10
+bool PanelHandler::DoMessage(IWindow_s00ed_74f0* w, const Message* msg)
+{
+    (void)w;
+    if (!g_16065f8 || g_15ad298->IsBlocked())
+        return false;
+    if (msg->type != 0x287259f6)
+        return false;
+
+    switch (msg->source->GetControlID())
+    {
+    case 0x10f366e:
+        mOwned->e02e80();
+        ((cMessageServer*)MessageServer())->Post(0x101, 0, 0);
+        g_16c7aa4->tutorials->f8860();
+        return false;
+
+    case 0x10f366d: {
+        Panel* p = panel();
+        cSim* sim = g_16c7aa4->sim;
+        if (sim == 0) return false;
+        p->mMode = 7;
+        int* out = (int*)&msg;           // the original reuses the dead message-pointer slot
+        Key12 key;
+        if (sim->Classify(out)) {
+            if (sim->f3b950()) key = g_15ac268;
+            else               key = g_15ac250;
+        } else {
+            key.a = 0; key.b = 0; key.c = 0;
+            int hint = HintForState(*out);
+            key = g_15ac25c;
+            if (!sim->f3b920()) { p->FUN_00ed5910(); return false; }
+            if (key.a == 0) return false;
+            cUIHint* h = UIHints()->FindByID(hint);
+            cNotifyTarget* t = NotifyHost()->GetTarget();
+            if (h == 0) t->SetText(g_13ec468, 0);
+            else        t->SetText(h->mText.GetText(), 0);
+        }
+        CalloutMessageBox(p->mCallout, &key);
+        p->mCalloutKey = key.a;
+        return false;
+    }
+
+    case 0x2268ba4: {
+        Panel* p = panel();
+        cSim* sim = g_16c7aa4->sim;
+        if (sim == 0) return false;
+        p->mMode = 6;
+        int* out = (int*)&msg;
+        Key12 key;
+        if (sim->Classify(out)) {
+            if (sim->f3b950()) key = g_15ac268;
+            else               key = g_15ac250;
+        } else {
+            key.a = 0; key.b = 0; key.c = 0;
+            int hint = HintForState(*out);
+            key = g_15ac25c;
+            if (!sim->f3b920()) { p->FUN_00ed5910(); return false; }
+            if (key.a == 0) return false;
+            cUIHint* h = UIHints()->FindByID(hint);
+            cNotifyTarget* t = NotifyHost()->GetTarget();
+            if (h == 0) t->SetText(g_13ec468, 0);
+            else        t->SetText(h->mText.GetText(), 0);
+        }
+        CalloutMessageBox(p->mCallout, &key);
+        p->mCalloutKey = key.a;
+        return false;
+    }
+
+    case 0x4766ff0: {
+        PlayUISound(0xe76c9b4f, GetRecorderState());
+        cSim* sim = g_16c7aa4->sim;
+        Panel* p = panel();
+        if (sim == 0) return false;
+        p->mMode = 5;
+        int* out = (int*)&msg;
+        Key12 key;
+        if (sim->Classify(out)) {
+            if (sim->f3b950()) key = g_15ac238;
+            else               key = g_15ac220;
+        } else {
+            key.a = 0; key.b = 0; key.c = 0;
+            int hint = HintForState(*out);
+            key = g_15ac22c;
+            if (!sim->f3b920()) { p->FUN_00ed5910(); return false; }
+            if (key.a == 0) return false;
+            cUIHint* h = UIHints()->FindByID(hint);
+            cNotifyTarget* t = NotifyHost()->GetTarget();
+            if (h == 0) t->SetText(g_13ec468, 0);
+            else        t->SetText(h->mText.GetText(), 0);
+        }
+        CalloutMessageBox(p->mCallout, &key);
+        p->mCalloutKey = key.a;
+        return false;
+    }
+
+    case 0x43b72d0:
+        ShowSettingsWindow(GetCurrentGameMode());
+        return false;
+
+    case 0x447060a:
+        ShowContextSensitiveSporeGuide();
+        g_16c7aa4->tutorials->MarkDirty();
+        return false;
+
+    case 0x44ea79e:
+        ((cMessageServer*)MessageServer())->Post(0x44eaa93, 0, 0);
+        mOwned->e018c0(0);
+        return true;
+
+    case 0x62025f9:
+        ((cMessageServer*)MessageServer())->Post(0x620222b, 0, 0);
+        mOwned->e018c0(0);
+        return true;
+
+    case 0x6fcb630:
+        g_16c7680.FUN_00ed4930();
+        return false;
+
+    case 0x6fcb638: {
+        cAudioSystem* at = GetSystemAT();
+        int state = at ? at->GetState() : 0;
+        PlayUISound(0xcc089e57, state);
+        ((cMessageServer*)MessageServer())->Post(0x101, 0, 0);
+        return false;
+    }
+
+    case 0x7104130:
+        if (mActiveSet == 0) return false;
+        panel()->FUN_00ed6720(0);
+        return false;
+
+    case 0x7104131: {
+        if (mActiveSet == 1) return false;
+        cSim* sim = g_16c7aa4->sim;
+        cNode* node = sim->ff3f00();
+        if (node && sim->f41420(node, 0, 0, 0)) {
+            panel()->FUN_00ed6720(1);
+            return false;
+        }
+        UIHints()->ShowHint(0xb192f625);
+        return false;
+    }
+
+    case 0x7104132:
+        if (mActiveSet == 2) return false;
+        panel()->FUN_00ed6720(2);
+        return false;
+
+    case 0x774b060: {
+        g_16c7aa4->sim->f45970();
+        cSim* sim = g_16c7aa4->sim;
+        sim->f3bcc0(sim->f3bf60() + 1);
+        g_16c7aa4->sim->f45a80();
+        PlayUISound(0xcec93ef5, GetRecorderState());
+        panel()->FUN_00ed5640();
+        g_16c7aa4->sim->f427c0();
+        return false;
+    }
+
+    case 0x78d57d8:
+        g_16c7aa4->hints->f69a0(0);
+        return false;
+
+    case 0x90439d7c:
+        PlayUISound(0xe76c9b4f, GetRecorderState());
+        panel()->FUN_00ed76e0(1);
+        return false;
+
+    case 0xbbbb1001:
+        PlayUISound(0xe76c9b4f, GetRecorderState());
+        panel()->FUN_00ed76e0(3);
+        return false;
+
+    case 0xb006ef6e:
+        ((cMessageServer*)MessageServer())->Post(0xc9d86390, 0, 0);
+        return false;
+
+    case 0xf006efa5:
+        ((cMessageServer*)MessageServer())->Post(0xc9d86391, 0, 0);
+        return false;
+    }
+    return false;
 }

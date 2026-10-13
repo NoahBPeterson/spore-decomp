@@ -4,6 +4,7 @@
 #define GAME_RW_RESOURCEDESCRIPTOR_H
 #include "game/types.h"
 #include "game/typedefs.h"
+#include "rw/BaseResourceTemplates.h"
 
 namespace rw {
 
@@ -13,11 +14,11 @@ class ResourceDescriptor : public rw::BaseResourceDescriptors<4> /* +0x0 */ {
  public:
   ~ResourceDescriptor();                                                 // dev only
   ResourceDescriptor(unsigned int, unsigned int);                        // dev only
-  // UNDECLARABLE (names rw::BaseResourceDescriptorType, which no header defines): rw::BaseResourceDescriptorType<0> const & GetMemoryResourceDescriptor() const; // dev only
+  rw::BaseResourceDescriptorType<0> const & GetMemoryResourceDescriptor() const; // dev only
   unsigned int GetSize() const;                                          // dev only
   unsigned int GetAlignment() const;                                     // dev only
-  // UNDECLARABLE (names rw::BaseResourceDescriptorType, which no header defines): ResourceDescriptor(rw::BaseResourceDescriptorType<0> const &); // dev only
-  // UNDECLARABLE (names rw::BaseResourceDescriptorType, which no header defines): rw::BaseResourceDescriptorType<0> & GetMemoryResourceDescriptor(); // dev only
+  ResourceDescriptor(rw::BaseResourceDescriptorType<0> const &);         // dev only
+  rw::BaseResourceDescriptorType<0> & GetMemoryResourceDescriptor();     // dev only
 
  public:  // data (retail offsets)
 };

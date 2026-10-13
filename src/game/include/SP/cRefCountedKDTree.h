@@ -7,7 +7,6 @@
 #include "EA/AutoRefCount.h"
 #include "EA/COM/IRefCount.h"
 #include "EA/RefCountTemplate.h"
-#include "SP/cArenaResource.h"
 #include "rw/core/arena/ArenaExportedObject.h"
 
 namespace SP { class cArenaResource; }
