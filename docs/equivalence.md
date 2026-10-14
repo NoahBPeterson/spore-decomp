@@ -115,12 +115,18 @@ Only `/O2`-vs-`/Od` and `/fp:` change behavior in practice.
    Code, `.rdata`, import stubs, the return sentinel and the GDT are not writable: an emulated
    store faults, and an import handler (memcpy, memset, ...) writing there raises a
    write-protection fault instead of patching code.
-5. **Observables compared**: return value per the declared type (al for bool, ax for short,
-   eax, edx:eax for 64-bit; never for void), ebx/esi/edi/ebp, esp after return, x87 stack depth,
+5. **Observables compared**: the declared return value (al for bool, ax for short, eax,
+   edx:eax for 64-bit) **and eax even for a `void` declaration when the original writes eax before
+   every `ret`** — a hidden return pointer handed back, `return this`, a popped node
+   (`void_hides_eax`/`orig_returns_eax`; a caller may consume it, especially under `/LTCG`),
+   ebx/esi/edi/ebp, esp after return (so a `ret N` vs `ret` argument-cleanup mismatch fails),
+   x87 stack depth,
    st0 (80-bit, bit-exact), x87 control word, MXCSR control bits, every byte of image
    `.data`/`.bss`/`.tls`, every touched input page, every written heap page, the caller's stack
    above the arguments, every written MISC page (TEB/TLS), and any write by ours to its own static
-   data. Plus the ordered **import
+   data. A register the original provably never writes and leaves untouched on the run must be
+   untouched by ours too (`orig_untouched_regs`; an LTCG caller may keep a live value in a
+   register it knows its callee never clobbers). Plus the ordered **import
    trace** at any depth (name + arguments) and the **depth-1 call trace** of the function itself
    (callee, `this`/edx when the callee uses them, stack arguments up to the callee's `ret N`, or
    our declaration's arity for cdecl callees; by-value struct arguments are not compared).

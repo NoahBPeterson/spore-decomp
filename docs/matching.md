@@ -1,5 +1,12 @@
 # Byte-exact matching (stage 2)
 
+> **See also [`codegen.md`](codegen.md)** — the mechanism guide ("why does the
+> compiler emit this shape?"), organised by mechanism and partitioned across the
+> three toolchains this binary was built with (VS2008 cl 15.00, VC .NET 2003
+> cl 13.10, and RW4 core with `/GL`+`/LTCG`). This file is the procedure and
+> accumulated rules; `codegen.md` is the companion reference to read when a
+> function will not match.
+
 ## Toolchain
 - `tools/matching/cl.sh` runs **cl 15.00.30729.01 (VS2008 SP1, x86)** under wine, taken from
   Microsoft's `VCForPython27.msi` (SHA-1 `7800d037ba962f288f9b952001106d35ef57befe`, verified)
@@ -121,6 +128,11 @@ Tools (from repo root):
   Class names differ from the PDB's (ModAPI `Simulator::cCreatureBase` = PDB `SP::cSPCreatureBase`), but
   member names, virtual method order and enums are a good reference. Its addresses are for the 2017 build, NOT ours.
 - `.venv/bin/python tools/matching/od_names.py fit K`: local-variable slot order for /Od functions (below).
+- **Before writing source:** run an ordered call-target / vtable-slot / constant diff against the original (map the
+  object's COFF relocations onto the original's call targets) as a cheap completeness check, and read the
+  neighbouring slice of the same class/subsystem first — it usually already has the real layouts, vtable slots and
+  inline helpers. The raw dev PDB (`work/devbuild/SporeBin/SporeApp.pdb`) `S_BPREL32`/`S_REGREL32` records give real
+  /Od local/param names. See "Re-mined levers" below.
 
 Writing matchable source:
 - Default flags `/O2 /MD /Gy /EHsc /TP`; include `types.h` from match/include for fixed-width types.
@@ -179,7 +191,17 @@ right before every `ret` (a hidden return pointer handed back, `return this`, th
 end pointer), the function returns that value and LTCG callers use it, whatever the dev PDB or the pseudocode
 says. Seven hybrid defects were `void` declarations of such functions (2026-10-12). The harness now compares
 eax in that case (`void_hides_eax` in the result, "declared void but the original writes eax" in the notes):
-return the value.
+return the value. The static rule (`returns_eax` in `tools/difftest/regfacts.py`, shared with
+`tools/hybrid/build.py`) also flags a **call-free** function whose *first* eax write is a load
+(`mov eax, dword ptr [ … ]`) or `mov eax, ecx`, with nothing rewriting eax before the ret — a pop-front, a
+`lower_bound`, a copy's end pointer, an init returning `this` (`ArenaSelf::initRange` 0x011e29c0,
+`LowerBoundPair` 0x007c8160, `rbtree::find` 0x00e5c780, rw pop-front 0x01141200). If a walk back from `ret`
+hits a `call` first, there is no return value. Mechanism and the full instance table: `codegen.md` §11.3.
+
+**`ret N` is the argument cleanup, not a detail.** A `ret 4` original declared `ret` (or the reverse)
+shifts every caller's `esp` by 4. `equiv.py` records the original's `callee_pop`/`pop_variants`; the `esp`
+observable fails. (A merged extent with two ret forms, e.g. `ret 12`/`ret 20`, is a split, not one ABI.)
+The register-footprint rule is the paragraph below.
 
 **Virtual and callback arguments in the original's push order.** The arguments of a call through a vtable
 or a function pointer are now compared (`fake call #k arg i` / `fake call #k this`). Read the pushes at the
@@ -308,3 +330,77 @@ unless their header comment says the real `??__E` form was reproduced.
 - Parameter types: a float forwarded by `push reg` is an int param. `cvttss2si` vs fistp-qword tells int from unsigned. `(x>>n)&1` (shr; test r,1) is an inline helper, while bitfields give `test byte [m],mask`.
 
 **Tool notes:** anonymous-namespace classes mangle as `?A0x<hash-of-path>`, so give manifests the prefix up to the class name, and quote `?`-symbols in zsh. In cmpdis, relocated zero immediates (`push 0` vs `<addr>`) aren't real diffs.
+
+### Re-mined levers from the subagent lesson corpus (2026-10-13)
+From 931 structured `lessons` in the ~2,000 subagent transcripts (see `work/lessons_clusters.txt`) plus 226
+`work/match/scratch_*_papercut.md`. Codegen only — harness/tool bugs are in `docs/Papercuts.md` "Open" and ticket
+P3. The corpus is a lagging log: several tool bugs it reports are already fixed, so verify before acting on one.
+
+**Inlining & scheduling:**
+- Inlining is decided **per call site** and `inline` has a budget: when cl declined a plain `inline` helper,
+  `__forceinline` restores it. Model the mix by declaring the out-of-line sites as a declared-only extern and
+  adding a separately-named inline copy for the inlined sites. [recurring]
+- A `volatile` access anywhere in an /O2 function disables stack-slot sharing for the **whole** function (one
+  frame grew 0x48→0x9c). Keep the non-volatile spelling except where the original's shape demands it.
+- cl unrolls a counted loop 4× only when the trip count is a local int read once (`const unsigned n = v.size()`);
+  reading a member each pass blocks it — don't hand-unroll.
+- `_ReadWriteBarrier()` pins a vptr/field store ahead of a later load; swapping two member stores or two `if` arms
+  flips /O2 scheduling and can un-tail-merge two virtual calls.
+
+**x87 / floating point:**
+- The x87 compare shape follows the source branch **and its NaN polarity**: `if (!(sumR >= dist))` gives
+  `fcompi st(1); jb`; `test ah,5; jp` is `(a<b)` and `test ah,0x41; je` is `(a>b)`. `if (!(x >= -r))` avoids a
+  canonicalised operand swap.
+- Match the literal's **type**, not its value: `1.0 - x` (double) → `fld1; fsubrp`, `1.0f - x` → `fld1; fsub`.
+- To get an inline `fsqrt`/`fpatan` without changing slice flags, scope `#pragma float_control(precise, off)` to
+  the one function and call `(float)sqrt((double)x)` / `atan2((double)y,(double)x)`.
+- `(float)(uint32_t)x` lowers to `fild` + a conditional `fadd 2^32` — the Ghidra `if (x<0) f += 4.29e9` lines are
+  unsigned casts, not hand-written source.
+- `_mm_cvtsd_si32(_mm_set_sd(x))` reproduces x87 `fistp dword`, including the 0x80000000 overflow clamp; the
+  single-precision intrinsic does not.
+
+**Layouts & padding:**
+- Retail layouts drift from the 2008 dev PDB — read sizes off stack-slot spacing: `SP::cString` 0x14 (not 0x1c),
+  `eastl::vector` with `sp_vector_allocator` 0x14, `fixed_vector` buffer at +0x18, `cMDSection` 0x8c. cSPUI's PDB
+  class is uniformly +0x10 off; don't trust it.
+- A class with `uint64` members gets padding after the vfptr unless `#pragma pack(4)` (which shifts every field by
+  4); an empty member struct occupies 1 byte. Diff the set of non-stack `[reg+N]` offsets original-vs-ours.
+- A vtable class with 16-byte-aligned members gives the vfptr its own 16-byte block — declare `uint32_t pad[4]` as
+  the header. `char raw[N]`/`char pad[N]` stub members force a /GS cookie; use `uint32_t raw[N/4]`.
+- A method whose `this` is a secondary base (`lea esi,[ebp-4]` / `add esi,-N` before owner calls) should be an
+  ordinary member of the full class via **real multiple inheritance** — cl then reproduces the subobject `this`
+  and the shifted offsets itself.
+
+**/Od:**
+- At /Od, `T v = a + b;` with the same type elides the copy; a `movss` copy through a parameter slot means a
+  converting ctor from the operator's return type, and a by-reference `SetOffset(const Vector3P&)` argument copies
+  with integer moves.
+- /Od switch layout follows source order and merges case labels that share the default body (`case 0: case 1:
+  default:` emits `sub 2` and a smaller table); write `case 0: ; case 1: ; default:` to keep the table based at 0.
+
+**Durable codegen gotchas (a tool fix cannot clear these):**
+- An explicit `void* vftable` member doubles the implicit vptr (a duplicate store at +0x0).
+- `*(T*)(p+off)` with `p == 0` folds to an absolute `mov X,[off]` **even through `volatile`** — no null check
+  survives.
+- Adding a member with a destructor turns a byte-exact ctor into a full EH frame (217→277 B); keep nontrivial
+  members out of a matched ctor.
+- Signed `A<char>` vs `A<uint8_t>` flips `movzx`/`movsx` at every element access — template tag signedness must
+  match.
+- A constant-size `_alloca(8)` forces a drift-immune frame when matching a callee-pop `esp` mismatch.
+- A register-ABI LTCG callee can be transcribed under a unique name with **no** `// 0x` marker and still
+  link/match.
+
+**Techniques worth reusing:**
+- Fastest completeness check: an ordered call-target / vtable-slot / float-constant diff mapping the object's COFF
+  relocations onto the original's call targets — run it before any byte work. Normalise cmpdis's relocated
+  operands first.
+- Rank candidate spellings by instruction-level diff **ignoring jumps/calls/relocated immediates**, not raw byte
+  counts; keep many renamed copies in one namespace-wrapped file and score them in a single compile.
+- The dev PDB's `S_BPREL32`/`S_REGREL32` records give real local/param names — fixes /Od hash-ordered frames
+  directly.
+- Vendored source exists for some subsystems (`work/ext/EAWebKitSupportPackages` for EAText): writing it verbatim
+  with `#define mX RF(T,off)` matched byte-exact. Shim leaf differences with inline defs placed **before** the
+  dependent include.
+- Check the neighbouring slice before reconstructing anything — across the corpus it repeatedly carried the real
+  layouts, vtable slots and inline helpers, converting hours of work into a first-compile match. Highest-leverage
+  habit found.
