@@ -17,6 +17,11 @@ Only log things that cost real time or that the next agent will hit too. Check w
 existing entry already covers it; if so, don't duplicate it (you may append "+1 [<id>]" under it instead).
 
 ## Open
+- [spcg1 2026-10-14] tooling — `chk.py`'s per-VA **symbol association** is unreliable once a compiled size
+  diverges from the original: it can bind a VA to a nearby symbol and report a misleading diff/`MATCH`.
+  Agents fell back to `cmpobj.py` with the exact mangled symbol for trustworthy byte counts. Fix idea:
+  bind by the original VA extent from the symbol table (not by similarity) and print the bound symbol +
+  extent next to the score. Time lost: ~15 min/agent (5 of 6 agents hit it).
 - [orchestrator, subagent-corpus review 2026-10-13] tooling — re-mining the ~2,000 subagent transcripts (931
   structured `lessons`) and 226 `work/match/scratch_*_papercut.md` produced the codegen levers in
   docs/matching.md "Re-mined levers", plus these tooling items. Two widely-reported ones are **already fixed** —

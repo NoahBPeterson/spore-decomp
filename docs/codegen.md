@@ -7,10 +7,7 @@ Spore analogue of banteg's *MSVC 6 code generation* guide for Crimsonland
 choice → native shape → where it was demonstrated — but for **three toolchains
 at once**, because this binary was not built by one compiler.
 
-Use this the way you use that guide: when a function will not match, find the
-section for the kind of difference you see (loop shape, register choice, frame
-offsets, x87 order, block layout, ABI), check the entries **for the toolchain
-that built that address**, then retest against native evidence. A rule here
+Use this the way you use that guide: read it before you start iterating, and open it the first time a diff appears — find the section for the kind of difference you see (loop shape, register choice, frame offsets, x87 order, block layout, ABI), check the entries **for the toolchain that built that address**, then retest against native evidence. A rule here
 explains a mechanism; it does not promise the same spelling works at another
 site. This document summarises and organises evidence that lives in
 [`matching.md`](matching.md), [`floating_point.md`](floating_point.md),
@@ -134,6 +131,13 @@ for (int i = 0; i < nB; i++) ...  // not with m_dimB directly
 from MSVC 6, where trip-count exposure and late IV elimination follow the
 "early constant trip count specializes later loops" rule in banteg §Loops.
 
+**Straight-line repeats must be written out, not looped.** When the original
+emits a repeated release/handle or pointer-vector-drain block fully unrolled and
+you write it as a loop, cl lowers it to one shared loop and the body roughly
+**halves**; expand it by hand (macros are fine). The unrolling is the source
+shape, not an optimizer pass you can trigger (spcg1 `00e65ad0`
+`cPartGfx::Clear`: ten handle blocks + three vector drains).
+
 ### 3.3 cl 13.10 merges same-valued induction variables sooner **[13]**
 
 A 13³ table filler kept an outer counter and a running `(i+j)` sum as separate
@@ -176,6 +180,10 @@ and cl 15.00 share with VC6 in outline. The Spore-specific shape of each rule:
 - **First assignment matters, declaration order usually does not.** cl 15 at
   `/Od` is the exception: there, slot order is a name hash (§6.4). At `/O2`,
   permuting declarations is normally byte-identical.
+- **Write a local's initializer where it is first used, not at the top of the
+  scope.** A `void* h = 0;` declared early and passed as `&h` to a later call can
+  force a `push ebp` frame and shift the prologue; moving the declaration down to
+  the call site matched (spcg1 `00e72ac0`, 31→0 bytes).
 - **Chained assignment stores the rightmost target first**, and for floats keeps
   the value on the x87 stack (`fld st(0); fstp`). `a = b = v` is not the same as
   two statements; float chains are order-sensitive. (Same across all three.)
@@ -737,6 +745,9 @@ source. Flag matrices almost never explain a residual in game code.
 - Havok was built with **cl 13.10.3077**; we match with **13.10.3052** (Visual
   C++ Toolkit 2003).
 - VC7.1 has no `/fp:` switch.
+- **`SPGonzago/SPCellGame.obj` is a `/GS-` TU.** `00e66280` carries a
+  ~0x800-byte escaping stack buffer and **no `__security_cookie`** prologue, so
+  reconstructions there need `/GS-` in their manifest flags (spcg1, 2026-10-14).
 
 ### 13.2 The `[DDK]` / provider toolchains
 

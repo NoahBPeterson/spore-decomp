@@ -4,8 +4,9 @@
 > compiler emit this shape?"), organised by mechanism and partitioned across the
 > three toolchains this binary was built with (VS2008 cl 15.00, VC .NET 2003
 > cl 13.10, and RW4 core with `/GL`+`/LTCG`). This file is the procedure and
-> accumulated rules; `codegen.md` is the companion reference to read when a
-> function will not match.
+> accumulated rules; `codegen.md` is the mechanism reference to read **before** you
+> iterate — skim it in setup, then open it the moment the first diff appears, not
+> after a few failed rounds.
 
 ## Toolchain
 - `tools/matching/cl.sh` runs **cl 15.00.30729.01 (VS2008 SP1, x86)** under wine, taken from
@@ -97,6 +98,13 @@ Evidence and rules of thumb are below.
 **Papercuts:** before finishing, append any real friction you hit (tooling bugs, unclear docs, tricks you had
 to rediscover) to `docs/Papercuts.md`, following the instructions at the top of that file. Read its Open
 section first. It may already have the answer to something you're stuck on.
+
+**Codegen reference:** read `docs/codegen.md` during setup (skim it) and return to it the **first** time a
+slice shows a diff — not after N failed rounds. It is organised by the *kind* of difference (loop shape,
+register choice, frame offsets, x87 order, block layout, ABI) and tagged by the toolchain that built each
+address — `[15]` VS2008 cl 15.00, `[13]` VC .NET 2003 cl 13.10, `[LTCG]`, `[DDK]`. Classify the diff, apply
+the matching lever, and only then decide a function is unmatchable. It is the companion to this file and the
+successor to the "Batch-2 lessons" list below.
 
 Each slice `sXXXXXXXX` is a contiguous run of functions. All output goes in:
 - `match/slices/<id>/<id>.cpp` (plus optional `<id>.h`): source for **every** function in the slice.
