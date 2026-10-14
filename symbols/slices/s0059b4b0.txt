@@ -3,8 +3,8 @@
 0059c030 ?WrapAngleToPi@@YAMM@Z  # WrapAngleToPi migrated from s0059b4b0 (verbatim, slice spelling)
 0059c060 ?Init@cSPEditorAnimatedCreatureManager_s0059_b4b0@SP@@QAEXPAVcIModelWorld_s0059_b4b0@2@_N@Z  # cSPEditorAnimatedCreatureManager_s0059_b4b0::Init migrated from s0059b4b0 (verbatim, slice spelling)
 0059c190 ?Matrix3FromQuaternion@@YAAAUMatrix33T@@AAU1@ABUQuaternion@@@Z  # Matrix3FromQuaternion migrated from s0059b4b0 (verbatim, slice spelling)
-0059c2f0 eastl::rbtree<unsigned int,EA::AutoRefCount<SP::cSPEditorAnimatedCreatureData> >::DoInsertValueImpl  # node alloc + RBTreeInsert
-0059c410 SP::cSPEditorAnimatedEventInfo ref-range release (__stdcall)  # lock xadd atomic release
-0059c460 eastl::rbtree<unsigned int,EA::AutoRefCount<SP::cSPEditorAnimatedCreatureData> >::erase  # RBTreeIncrement/RBTreeErase/DoFreeNode
+0059c2f0 ?DoInsertValueImpl@?$rbtree_s0059_b4b0@IV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedCreatureData_s0059_b4b0@SP@@@EA@@@eastl@@QAE?AU?$rbtree_iterator_s0059_b4b0@IV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedCreatureData_s0059_b4b0@SP@@@EA@@@2@PAUrbtree_node_base_s0059_b4b0@2@ABU?$pair_s0059_b4b0@IV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedCreatureData_s0059_b4b0@SP@@@EA@@@2@_N@Z  # DoInsertValueImpl migrated from s0059b4b0 (verbatim, slice spelling)
+0059c410 ?ReleaseAutoRefRange@@YGXPAV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedEventInfo_s0059_b4b0@SP@@@EA@@0@Z  # ReleaseAutoRefRange migrated from s0059b4b0 (verbatim, slice spelling)
+0059c460 ?erase@?$rbtree_s0059_b4b0@IV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedCreatureData_s0059_b4b0@SP@@@EA@@@eastl@@QAE?AU?$rbtree_iterator_s0059_b4b0@IV?$AutoRefCount_s0059_b4b0@VcSPEditorAnimatedCreatureData_s0059_b4b0@SP@@@EA@@@2@U32@@Z  # erase migrated from s0059b4b0 (verbatim, slice spelling)
 0059db40 ?Init@cSPEditorAnimationManager@SP@@QAEXXZ  # SP::cSPEditorAnimationManager::Init (callee of s0059b4b0, named from the dev publics; slice address comment)
 00a02c30 ?AddRef@cAnimatingCreature@SP@@QAEHXZ  # SP::cAnimatingCreature::AddRef (callee of s0059b4b0, named from the dev publics; slice address comment)

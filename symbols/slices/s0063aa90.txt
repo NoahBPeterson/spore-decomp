@@ -4,7 +4,7 @@
 0063b5a0 SP::cSPPlayModeSubModeDance::cSPPlayModeSubModeDance  # stores vtbl, zeroes 4 fields
 0063b5c0 SP::cConnectingDialog::Init  # CardLayout init with key 834b03af/510a95b/40464100 then AddWinProc
 0063b640 ?SetDialogText@cConnectingDialog@?A0x879eca64@@QAEXH@Z  # SetDialogText migrated from s0063aa90 (verbatim, slice spelling)
-0063b730 ?OnKeyDown@cSPPlayModeSubModeMovie@@QAE_NHH@Z  # cSPPlayModeSubModeMovie::OnKeyDown migrated from s0063aa90 (verbatim, slice spelling)
+0063b730 ?OnKeyDown@cSPPlayModeSubModeMovie@SP@@UAE_NII@Z  # SP::cSPPlayModeSubModeMovie::OnKeyDown migrated from s0063aa90
 0063b760 ?FUN_0063b760@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::FUN_0063b760 migrated from s0063aa90 (verbatim, slice spelling)
 0063b7b0 ?SetState2@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState2 migrated from s0063aa90 (verbatim, slice spelling)
 0063b7f0 ?SetState4@cSPPlayModeSubModeMovie@@QAEXXZ  # cSPPlayModeSubModeMovie::SetState4 migrated from s0063aa90 (verbatim, slice spelling)

@@ -7,7 +7,6 @@
 #include "EA/Allocator/FixedAllocator.h"
 #include "EA/Allocator/ZoneObject.h"
 #include "EA/COM/AutoRefCount.h"
-#include "EA/Compression.h"
 #include "EA/ResourceMan/Cache.h"
 #include "EA/ResourceMan/CompressionPolicy.h"
 #include "EA/ResourceMan/Database.h"
@@ -24,6 +23,7 @@
 #include "eastl/string.h"
 #include "eastl/vector.h"
 
+namespace EA { class Compression; }
 namespace EA { namespace Allocator { class ICoreAllocator; } }
 namespace EA { namespace ResourceMan { class Cache; class Database; class Factory; class IAsyncRequest; class Key; class KeyFilter; class Resource; struct KeyHash; } }
 

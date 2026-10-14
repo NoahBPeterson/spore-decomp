@@ -17,8 +17,13 @@ namespace SP { class cIMovieSystem; class cSPPlayModeUI; struct SubModeParams_t;
 
 namespace SP {
 
-// dev size 0x2e4 -> retail size 0x2e4 (re-laid from the PDB, unverified in retail)
-// evidence: view s0063d9e0 (size 0x0, 7 shared members) rejected: shifts [0, 8320]
+// dev size 0x2e4 -> retail size 0x2360 (override)
+// evidence: view s0063d9e0 is the evidence: 7 of 7 shared members agree with the re-laid offsets, 1 byte-exact users, shifts [0], declared size 0x0
+// evidence: conflict: view member mWidth at 0x1c overlaps a re-laid member
+// evidence: conflict: view member mHeight at 0x20 overlaps a re-laid member
+// evidence: conflict: view member mTime at 0x28 overlaps a re-laid member
+// evidence: conflict: view member mExcludeUI at 0x31 overlaps a re-laid member
+// evidence: override applied: retail has two 260-element eastl::string16 arrays (0x1040 each) between mCurrPathname and mRecording, so every later member is +0x2080 (dev mRecording 0x240 -> retail 0x22c0): ~cSPPlayModeSubModeMovie 0x63c3f0 destroys 0x103+1 wchar strings backwards from [esi+0x22c0] and again from [esi+0x1280] (`and ecx,0xfffffffe; cmp ecx,2`), then mYTPassword at 0x234c ... mYTAuthToken 0x22ec; OnKeyDown 0x63b730 (byte-exact, s0063aa90) `cmp [ecx+0x22e4],3` = mDialogInProgress; HandleButton 0x63e100 (byte-exact, s0063d9e0) mRecording 0x22c0 / mIndicatorTimer 0x22c4. The constructor 0x63c200 writes two more bytes after mbYTPrompt (0x235c): `mov [eax+0x235d],bl; mov [eax+0x235e],bl` (names invented; retail size 0x2360). Names of the two tables invented (the slice calls them mTableA/mTableB). Retail has no word between mYTErrorMessage (0x233c) and mYTPassword (0x234c: the dtor's first string, [esi+0x234c]/[esi+0x2354]): the dev-only bool mForceEnableVideoUpload (dev 0x2cc) is removed; mbYTPrompt is at 0x235c (`mov byte [eax+0x235c],1` in the constructor).
 #pragma pack(push, 4)
 class cSPPlayModeSubModeMovie : public SP::cSPPlayModeSubModeBase /* +0x0 */, public EA::Messaging::IHandler /* +0x14 */ {
  public:
@@ -94,41 +99,44 @@ class cSPPlayModeSubModeMovie : public SP::cSPPlayModeSubModeBase /* +0x0 */, pu
   void SendYouTubeVideoUploadPost();                                     // dev only, private
 
  public:  // data (retail offsets)
-  SP::cIMovieSystem* mMovieSystem;                             // 0x018 relaid
+  SP::cIMovieSystem* mMovieSystem;                             // 0x018 exact:s0063d9e0
   SP::cMovieRecordInfo mRecordInfo;                            // 0x01c relaid
-  SP::cSPPlayModeUI* mUI;                                      // 0x034 relaid
-  char mCurrFilename[260];                                     // 0x038 relaid
-  char mCurrPathname[260];                                     // 0x13c relaid
-  bool mRecording;                                             // 0x240 relaid
-  bool mRecordingIndicator;                                    // 0x241 relaid
-  unsigned int mIndicatorTimer;                                // 0x244 relaid
-  unsigned int mDefaultWidth;                                  // 0x248 relaid
-  unsigned int mDefaultHeight;                                 // 0x24c relaid
-  EA::Messaging::AutoHandler mAutoMessages;                    // 0x250 relaid
-  SP::cSPPlayModeSubModeMovie::eMovieDialogType mDialogInProgress; // 0x264 relaid
-  EA::AutoRefCount<cSPUIMessageBox> pmb;                       // 0x268 relaid
-  eastl::basic_string<char,eastl::allocator> mYTAuthToken;     // 0x26c relaid
-  eastl::basic_string<char,eastl::allocator> mYTUsername;      // 0x27c relaid
-  eastl::basic_string<wchar_t,eastl::allocator> mYTVideoURL;   // 0x28c relaid
-  bool mRegisterSuccess;                                       // 0x29c relaid
-  bool mRegisterCheckComplete;                                 // 0x29d relaid
-  bool mDoRegisterCheck;                                       // 0x29e relaid
-  bool mLoginSuccess;                                          // 0x29f relaid
-  bool mLoginCheckComplete;                                    // 0x2a0 relaid
-  bool mDoLoginCheck;                                          // 0x2a1 relaid
-  bool mVideoUploadSuccess;                                    // 0x2a2 relaid
-  bool mDoVideoUpload;                                         // 0x2a3 relaid
-  bool mVideoUploadComplete;                                   // 0x2a4 relaid
-  bool mEnableYouTubeVideoUpload;                              // 0x2a5 relaid
-  unsigned int mYTStatusCode;                                  // 0x2a8 relaid
-  eastl::basic_string<char,eastl::allocator> mYTStatusMessage; // 0x2ac relaid
-  eastl::basic_string<wchar_t,eastl::allocator> mYTErrorMessage; // 0x2bc relaid
-  bool mForceEnableVideoUpload;                                // 0x2cc relaid
-  eastl::basic_string<char,eastl::allocator> mYTPassword;      // 0x2d0 relaid
-  bool mbYTPrompt;                                             // 0x2e0 relaid
+  SP::cSPPlayModeUI* mUI;                                      // 0x034 exact:s0063d9e0
+  char mCurrFilename[260];                                     // 0x038 exact:s0063d9e0
+  char mCurrPathname[260];                                     // 0x13c exact:s0063d9e0
+  eastl::basic_string<wchar_t,eastl::allocator> mStringTableA[260]; // 0x240 relaid
+  eastl::basic_string<wchar_t,eastl::allocator> mStringTableB[260]; // 0x1280 relaid
+  bool mRecording;                                             // 0x22c0 exact:s0063d9e0
+  bool mRecordingIndicator;                                    // 0x22c1 exact-renamed:s0063d9e0 (slice: mIndicator)
+  unsigned int mIndicatorTimer;                                // 0x22c4 exact:s0063d9e0
+  unsigned int mDefaultWidth;                                  // 0x22c8 relaid
+  unsigned int mDefaultHeight;                                 // 0x22cc relaid
+  EA::Messaging::AutoHandler mAutoMessages;                    // 0x22d0 relaid
+  SP::cSPPlayModeSubModeMovie::eMovieDialogType mDialogInProgress; // 0x22e4 exact:s0063d9e0
+  EA::AutoRefCount<cSPUIMessageBox> pmb;                       // 0x22e8 relaid
+  eastl::basic_string<char,eastl::allocator> mYTAuthToken;     // 0x22ec relaid
+  eastl::basic_string<char,eastl::allocator> mYTUsername;      // 0x22fc relaid
+  eastl::basic_string<wchar_t,eastl::allocator> mYTVideoURL;   // 0x230c relaid
+  bool mRegisterSuccess;                                       // 0x231c relaid
+  bool mRegisterCheckComplete;                                 // 0x231d relaid
+  bool mDoRegisterCheck;                                       // 0x231e relaid
+  bool mLoginSuccess;                                          // 0x231f relaid
+  bool mLoginCheckComplete;                                    // 0x2320 relaid
+  bool mDoLoginCheck;                                          // 0x2321 relaid
+  bool mVideoUploadSuccess;                                    // 0x2322 relaid
+  bool mDoVideoUpload;                                         // 0x2323 relaid
+  bool mVideoUploadComplete;                                   // 0x2324 relaid
+  bool mEnableYouTubeVideoUpload;                              // 0x2325 relaid
+  unsigned int mYTStatusCode;                                  // 0x2328 relaid
+  eastl::basic_string<char,eastl::allocator> mYTStatusMessage; // 0x232c relaid
+  eastl::basic_string<wchar_t,eastl::allocator> mYTErrorMessage; // 0x233c relaid
+  eastl::basic_string<char,eastl::allocator> mYTPassword;      // 0x234c relaid
+  bool mbYTPrompt;                                             // 0x235c relaid
+  bool mbRetail235d;                                           // 0x235d relaid
+  bool mbRetail235e;                                           // 0x235e relaid
 };
 #pragma pack(pop)
-// sizeof(cSPPlayModeSubModeMovie) expected 0x2e4 (unverified)
+// sizeof(cSPPlayModeSubModeMovie) expected 0x2360 (unverified)
 
 }  // namespace SP
 

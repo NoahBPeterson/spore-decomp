@@ -1,1 +1,1 @@
-009b6450 RayCastParts  # ray cast against oriented boxes of a part vector (stride 700)
+009b6450 ?RayCastParts@@YA_NPBM0PAUOwner@RC@@PAIPAM33@Z  # RayCastParts migrated from s009b5ce0 (verbatim, slice spelling)

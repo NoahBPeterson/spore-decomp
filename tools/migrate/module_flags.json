@@ -1,0 +1,8 @@
+{
+  "UTFSpore_Win32/EASharedLibrary.obj": {
+    "drop": [
+      "/EHsc"
+    ],
+    "evidence": "fix pass 4: retail ~SharedLibraryRegistry 0x936740 destroys two non-trivial members (mMutex, then the vector by `jmp 0x5c7f10`) with no EH state frame, which VC9 emits only without /EHsc; with /EHsc the empty canonical destructor gets `push -1; push 0; mov eax,fs:[0]` (DIFF 59 bytes). All five manifest rows (0x9363b0, 0x9365d0, 0x936710, 0x936740, 0x936e10) are byte-exact without /EHsc."
+  }
+}

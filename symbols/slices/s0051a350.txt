@@ -1,7 +1,7 @@
-0051a350 ?Render@cPaintSplatAlphaJob@nSPSkinner@@UAE_NXZ  # PDB candidate
+0051a350 ?Render@cPaintSplatAlphaJob_s0051_a350@nSPSkinner@@UAE_NXZ  # cPaintSplatAlphaJob_s0051_a350::Render migrated from s0051a350 (verbatim, slice spelling)
 0051a6a0 FUN_0051a6a0  # no PDB name
 0051a8a0 ?FUN_0051a8a0@SkinJob@@QAEPAXXZ  # SkinJob::FUN_0051a8a0 migrated from s0051a350 (verbatim, slice spelling)
 0051a930 ?FUN_0051a930@SkinJob@@QAEXXZ  # SkinJob::FUN_0051a930 migrated from s0051a350 (verbatim, slice spelling)
-0051a9a0 FUN_0051a9a0  # 10-arg ctor
+0051a9a0 ?FUN_0051a9a0@SkinJob@@QAEXHDDHHHHDDD@Z  # SkinJob::FUN_0051a9a0 migrated from s0051a350 (verbatim, slice spelling)
 0051aaa0 ?FUN_0051aaa0@SkinJob@@QAEXXZ  # SkinJob::FUN_0051aaa0 migrated from s0051a350 (verbatim, slice spelling)
-0051ab50 ?PreloadTextures@cPaintRenderer@nSPSkinner@@QAEX_N@Z  # PDB candidate
+0051ab50 ?FUN_0051ab50@SkinJob@@QAEXD@Z  # SkinJob::FUN_0051ab50 migrated from s0051a350 (verbatim, slice spelling)

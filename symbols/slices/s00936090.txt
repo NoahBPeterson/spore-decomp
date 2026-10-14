@@ -18,7 +18,7 @@
 009365e0 ?Load@SharedLibrary@EA@@UAE_NXZ  # EA::SharedLibrary::Load migrated from s00936090
 009366d0 EA::SharedLibrary::Unregister  # pdb vtable-slot
 00936710 ?ExecuteCommand@SharedLibrary@EA@@UBE_NPBDPAX111@Z  # EA::SharedLibrary::ExecuteCommand migrated from s00936090
-00936740 EA::SharedLibraryRegistry::~SharedLibraryRegistry  # pdb gap-align
+00936740 ??1SharedLibraryRegistry@EA@@UAE@XZ  # EA::SharedLibraryRegistry::~SharedLibraryRegistry migrated from s00936090
 00936760 EA::SharedLibraryRegistry::RemoveLibrary  # pdb gap-align
 00936820 EA::SharedLibraryRegistry::GetLibraries  # pdb gap-align
 009368f0 EA::SharedLibraryRegistry::SharedLibraryRegistry  # dc: vtable + Mutex(0,1)
@@ -29,6 +29,6 @@
 00936c80 EA::SharedLibrary::SharedLibrary  # pdb gap-align
 00936ce0 EA::SharedLibrary::~SharedLibrary  # pdb candidate caller-single
 00936d50 EA::SharedLibraryRegistry::Init  # pdb gap-align
-00936e10 EA::SharedLibraryRegistry::Shutdown  # pdb gap-align
+00936e10 ?Shutdown@SharedLibraryRegistry@EA@@UAE_NXZ  # EA::SharedLibraryRegistry::Shutdown migrated from s00936090
 00936e50 EA::SharedLibraryRegistry::LoadPath/AddLibrary  # pdb gap-align
 00937010 EA::SharedLibraryRegistry::AddLibrary  # pdb gap-align

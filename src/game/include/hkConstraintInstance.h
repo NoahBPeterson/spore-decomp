@@ -5,10 +5,9 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "hkBool.h"
-#include "hkEntity.h"
 #include "hkReferencedObject.h"
 
-class hkConstraintData; class hkConstraintOwner; class hkRigidBody; class hkStatisticsCollector; struct hkConstraintInternal;
+class hkConstraintData; class hkConstraintOwner; class hkEntity; class hkRigidBody; class hkStatisticsCollector; struct hkConstraintInternal;
 
 
 // dev size 0x28 -> retail size 0x28 (re-laid from the PDB, unverified in retail)

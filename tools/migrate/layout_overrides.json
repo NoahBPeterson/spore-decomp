@@ -1,424 +1,456 @@
 {
- "EA::Variant": {
-  "extra_methods": [
-   {
-    "decl": "cSPVector2 * GetVector2() const",
-    "va": "006a0f70",
-    "evidence": "typed value accessor for type id 0x30 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "cSPVector3 * GetVector3() const",
-    "va": "00cce910",
-    "evidence": "typed value accessor for type id 0x31 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "cSPVector4 * GetVector4() const",
-    "va": "006a0fa0",
-    "evidence": "typed value accessor for type id 0x33 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "cSPColorRGB * GetColorRGB() const",
-    "va": "006a0fd0",
-    "evidence": "typed value accessor for type id 0x32 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "cSPColorRGBA * GetColorRGBA() const",
-    "va": "006a1000",
-    "evidence": "typed value accessor for type id 0x34 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "EA::ResourceMan::Key * GetKey() const",
-    "va": "006a1030",
-    "evidence": "typed value accessor for type id 0x20 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "SP::cString * GetText() const",
-    "va": "006a1090",
-    "evidence": "typed value accessor for type id 0x22 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "eastl::basic_string<char,eastl::allocator> * GetString8() const",
-    "va": "0060ebf0",
-    "evidence": "typed value accessor for type id 0x12 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "eastl::basic_string<wchar_t,eastl::allocator> * GetString16() const",
-    "va": "0068a4f0",
-    "evidence": "typed value accessor for type id 0x13 (called by the byte-exact SP::GetPropertyAs* getters)"
-   },
-   {
-    "decl": "Variant(EA::Variant const & x) : mFlags(0), mTypeId(0) { *this = x; }",
-    "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
-   }
-  ],
-  "evidence": "extra_methods only: the typed value accessors are retail-only (the dev PDB has no function: template instances the dev linker inlined). Each is `cmp word [this+0x12],id / cmp ..,0x10 / test byte [this+0x10],0x30 -> return [this] else this-if-type-nonzero`, falling back to a shared default-value getter; names chosen from the type, constness of the returned pointer unverified (no code difference). Layout is the PDB layout (0x14, flags +0x10, type id +0x12 confirmed by s00542980)",
-  "decl_overrides": [
-   {
-    "decl": "Variant()",
-    "replace": "Variant() : mFlags(0), mTypeId(0) {}",
-    "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
-   },
-   {
-    "decl": "~Variant()",
-    "replace": "~Variant() { if (mFlags & 4) Destruct(0); }",
-    "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
-   }
-  ]
- },
- "SP::cString": {
-  "remove": [
-   "mTableId",
-   "mInstanceId"
-  ],
-  "evidence": "retail SP::cString is 0x14 (dev PDB 0x1c): ctor 0x006b5770 writes +0..+0x11 only, and frames of 0x00ee16f0/0x00ee4390/0x00b76f10 are exact only with 0x14 (docs/Papercuts.md s00ee16f0, s00b76f10); the slice view s006b47a0 has mbHasTokens at 0x10 and a byte at 0x11 (mField11), then ends at 0x14"
- },
- "EA::ResourceMan::DatabasePackedFile": {
-  "insert": [
-   {
-    "after": "mnUserVersionMinor",
-    "name": "mbEnableCompression",
-    "type": "bool",
-    "size": 4
-   }
-  ],
-  "evidence": "retail has one extra word between mnUserVersionMinor (+0x2dc) and mfMinRatioToUseCompression (+0x2e4); byte-exact slice s008d81d0 reads a bool at +0x2e0 (tools/migrate/leafsizes.py structural_deltas_not_leaf, 2026-10-12)",
-  "decl_overrides": [
-   {
-    "decl": "bool ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int)",
-    "replace": "int ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int)",
-    "evidence": "the byte-exact-neighbour 0x8d8570 (s008d81d0 ShouldCompress, equivalent row) returns a full int: `mov eax,1` / `xor eax,eax` where a bool return gives `mov al,1` / `xor al,al` (retail signature is int; the dev PDB says bool)"
-   }
-  ],
-  "retail_vtable": [
-   {
-    "for": "EA::COM::IUnknown32",
-    "va": "0143679c",
-    "evidence": "the constructor 0x8d93e0/0x8d9f80 stores 0x14367b0 at [this] and 0x143679c at [this+4]; the 4 words at 0x143679c are AddRef 0x8dd1b0, Release 0x69d3c0, the scalar-deleting-destructor adjustor 0x8d9490 (sub ecx,4 / jmp 0x8d9990, the primary's slot 0) and AsInterface 0x8d81a0 (compares the id with 0x226a25b and 0xee3f516e, returns this-4 / the null-masked this). pdb_names.json puts AsInterface at 0x6bbe20, which is another class's (vtable 0x140a124, id 0x6492c5f, a 28-slot sibling with the FileStream at +0x30 of size 0x434)"
-   }
-  ],
-  "mutable": [
-   {
-    "name": "mMutex",
-    "evidence": "GetOpenCount(Key const &) const (0x8d9560, byte-exact in s008d91e0) locks and unlocks the mutex at +0x270 (EA::Thread::Mutex::Lock 0x9221b0 / Unlock 0x922270 on this+0x270) although the dev PDB declares it const: the member is mutable (or const_cast) in the source"
-   }
-  ]
- },
- "EA::ResourceMan::PFDatabaseHeader": {
-  "retype": [
-   {
-    "name": "mnCreationTime",
-    "type": "prim:longlong",
-    "size": 8
-   },
-   {
-    "name": "mnUpdatedTime",
-    "type": "prim:longlong",
-    "size": 8
-   }
-  ],
-  "evidence": "retail header block is 0x28: the byte-exact ReadHeaderRecord/WriteHeaderRecord (s008d81d0) store the created/modified times as a low word followed by a zero word (f[2]=created, f[3]=0, f[4]=modified, f[5]=0), i.e. 64-bit times; index type/position/count/size follow at +0x18..+0x24"
- },
- "EA::ResourceMan::PFIndexModifiable": {
-  "insert": [
-   {
-    "after": "mpAllocator",
-    "name": "mPoolAllocator",
-    "size": 32
-   }
-  ],
-  "evidence": "retail embeds a 0x20-byte pool allocator at +0x8 before the hash_map (mItemsMap at +0x28; FUN_008db730 calls FUN_00925f30(this+8, 0x80, 0x20) and sets mAllocator.mpCoreAllocator = &this->mPoolAllocator); byte-exact CreateIndex allocates 0x4c (leafsizes.py)",
-  "retail_vtable": {
-   "va": "0140a200",
-   "extend": [
-    "0140a210"
-   ],
-   "evidence": "the constructor 0x6bf370 stores 0x140a200 at [this]; tables.json cut the vtable at 0x140a210 (4 + 14 contiguous words, 18 slots up to 0x140a244, then string data): slot 0 0x6bf4c0 scalar deleting destructor, 5 0x6beb00, 6 0x6bea90, 7 GetKeyList 0x6bfa00, 14 WriteToMemory 0x6beb60 pair with dev slots 0, 5, 6, 7, 14"
+  "EA::Variant": {
+    "extra_methods": [
+      {
+        "decl": "cSPVector2 * GetVector2() const",
+        "va": "006a0f70",
+        "evidence": "typed value accessor for type id 0x30 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "cSPVector3 * GetVector3() const",
+        "va": "00cce910",
+        "evidence": "typed value accessor for type id 0x31 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "cSPVector4 * GetVector4() const",
+        "va": "006a0fa0",
+        "evidence": "typed value accessor for type id 0x33 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "cSPColorRGB * GetColorRGB() const",
+        "va": "006a0fd0",
+        "evidence": "typed value accessor for type id 0x32 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "cSPColorRGBA * GetColorRGBA() const",
+        "va": "006a1000",
+        "evidence": "typed value accessor for type id 0x34 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "EA::ResourceMan::Key * GetKey() const",
+        "va": "006a1030",
+        "evidence": "typed value accessor for type id 0x20 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "SP::cString * GetText() const",
+        "va": "006a1090",
+        "evidence": "typed value accessor for type id 0x22 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "eastl::basic_string<char,eastl::allocator> * GetString8() const",
+        "va": "0060ebf0",
+        "evidence": "typed value accessor for type id 0x12 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "eastl::basic_string<wchar_t,eastl::allocator> * GetString16() const",
+        "va": "0068a4f0",
+        "evidence": "typed value accessor for type id 0x13 (called by the byte-exact SP::GetPropertyAs* getters)"
+      },
+      {
+        "decl": "Variant(EA::Variant const & x) : mFlags(0), mTypeId(0) { *this = x; }",
+        "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
+      }
+    ],
+    "evidence": "extra_methods only: the typed value accessors are retail-only (the dev PDB has no function: template instances the dev linker inlined). Each is `cmp word [this+0x12],id / cmp ..,0x10 / test byte [this+0x10],0x30 -> return [this] else this-if-type-nonzero`, falling back to a shared default-value getter; names chosen from the type, constness of the returned pointer unverified (no code difference). Layout is the PDB layout (0x14, flags +0x10, type id +0x12 confirmed by s00542980)",
+    "decl_overrides": [
+      {
+        "decl": "Variant()",
+        "replace": "Variant() : mFlags(0), mTypeId(0) {}",
+        "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
+      },
+      {
+        "decl": "~Variant()",
+        "replace": "~Variant() { if (mFlags & 4) Destruct(0); }",
+        "evidence": "s00612270 (byte-exact 0x612d50 UninitializedCopy, 0x612a90 DestructRange) and s006a11b0 (cDirectPropertyList constructor 0x6a1ca0, byte-exact: `mov word [this+0x50],0 / mov word [this+0x52],0` for the embedded Variant, EH frame for its destructor) inline the Variant constructors and destructor: no retail function, the copy constructor stores flags and type id zero then calls operator= (0x542b80), the destructor calls Destruct(0) (0x93db80) when flag bit 4 is set"
+      }
+    ]
   },
-  "vtable_insert": [
-   {
-    "before_dev_slot": 15,
-    "count": 1,
-    "evidence": "retail slot 15 (0x6bed90, 80 bytes) is a virtual the dev PDB has no slot for; Validate (0x6bede0) and ValidateFreeSpace (0x6beeb0) follow at 16 and 17 where the dev vtable has them at 15 and 16 (retail vtable 0x140a200 read from .rdata)"
-   }
-  ],
-  "decl_overrides": [
-   {
-    "decl": "virtual unsigned int GetAllocatedBytes() const",
-    "replace": "virtual unsigned __int64 GetAllocatedBytes() const",
-    "evidence": "retail 0x6beb00 (vtable slot 5) walks the record nodes summing [node+0x18] into edx:eax (add eax,ebx / adc edx,0) and returns the 64-bit sum; the dev PDB declares unsigned int"
-   },
-   {
-    "decl": "virtual unsigned int GetFarthestFileExtent() const",
-    "replace": "virtual unsigned __int64 GetFarthestFileExtent() const",
-    "evidence": "retail 0x6bea90 (vtable slot 6) keeps the 64-bit maximum of ([node+0x10]:[node+0x14]) + [node+0x18] in edx:eax (add/adc/cmp/ja/jb) and returns it; the dev PDB declares unsigned int"
-   },
-   {
-    "decl": "virtual void slot_15()",
-    "replace": "virtual void SetIsSaved()",
-    "evidence": "retail-only virtual 0x6bed90: walks every record node of the hash map and stores 1 at [node+0x22]; the name is the slice's (s006bde30), semantics unverified"
-   }
-  ]
- },
- "EA::ResourceMan::PFIndex": {
-  "evidence": "vtable and declaration overrides only; layout is the PDB layout",
-  "vtable_insert": [
-   {
-    "before_dev_slot": 15,
-    "count": 1,
-    "evidence": "same as PFIndexModifiable: its retail vtable has an extra virtual at slot 15 (0x6bed90); PFIndex is the interface the slot numbers belong to (DatabasePackedFile calls slot 16 with (0, size) = Validate, 17 = ValidateFreeSpace)"
-   }
-  ],
-  "vtable_insert_unlocated": true,
-  "decl_overrides": [
-   {
-    "decl": "virtual unsigned int GetAllocatedBytes() const",
-    "replace": "virtual unsigned __int64 GetAllocatedBytes() const",
-    "evidence": "see PFIndexModifiable: the retail implementation returns edx:eax"
-   },
-   {
-    "decl": "virtual unsigned int GetFarthestFileExtent() const",
-    "replace": "virtual unsigned __int64 GetFarthestFileExtent() const",
-    "evidence": "see PFIndexModifiable: the retail implementation returns edx:eax"
-   },
-   {
-    "decl": "virtual void slot_15()",
-    "replace": "virtual void SetIsSaved()",
-    "evidence": "see PFIndexModifiable"
-   }
-  ]
- },
- "SP::cPropertyList": {
-  "remove": [
-   "mDescriptions"
-  ],
-  "evidence": "retail cPropertyList is 0x38: the dev-only mDescriptions hash_map is gone (leafsizes.py structural_deltas_not_leaf; cPropertyList ctors byte-exact in s006a11b0 put mParent at +0x30, mModificationCount at +0x34)"
- },
- "EA::ResourceMan::PFRecordRead": {
-  "append": [
-   {
-    "name": "mUnknown68",
-    "size": 8
-   }
-  ],
-  "evidence": "retail PFRecordRead is 0x70 (dev 0x68); the +8 is unexplained (leafsizes.py); placed at the end pending a byte-exact user"
- },
- "EA::IO::FileStream": {
-  "append": [
-   {
-    "name": "mnSize",
-    "type": "int",
-    "size": 4
-   }
-  ],
-  "evidence": "retail FileStream is 0x22c: a cached size word at +0x228 (-1 unknown, -2 lazy); DatabasePackedFile::mpStream at 0x260 and mMutex at 0x270 follow from it (tools/migrate/leafsizes.py validation, byte-exact s008d81d0)"
- },
- "EA::ResourceMan::Manager": {
-  "vtable_insert": [
-   {
-    "before_dev_slot": 13,
-    "count": 3,
-    "evidence": "retail Manager vtable 0x1436ae8 has three slots (0x8e0950, 0x8e0a30, 0x8e0c10) in front of dev slot 13 RegisterChangeNotification: symbols/pdb_names.json puts RegisterChangeNotification/RegisterFactory/FindFactory at retail slots 16/17/18 (their ret sizes 0x14/0xc/8 match the dev signatures), and the byte-nearby DatabasePackedFile::Attach (s008d81d0, 0x8d85a0) calls slot 0x50/4=20 with (bool, this, int) = dev slot 17 RegisterDatabase (retail 0x8e0d30 ret 0xc). Slots after dev 21 are shifted too (retail has 38 slots, dev 41): the tail of the pairing is unverified."
-   }
-  ],
-  "evidence": "vtable only: dev slots 13.. are +3 in retail (see vtable_insert); data layout is the dev layout re-laid, unverified"
- },
- "EA::Compression": {
-  "evidence": "declaration overrides only; layout is the PDB layout (vptr)",
-  "decl_overrides": [
-   {
-    "decl": "Compression()",
-    "replace": "Compression() {}",
-    "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
-   },
-   {
-    "decl": "virtual ~Compression()",
-    "replace": "virtual ~Compression() {}",
-    "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
-   }
-  ]
- },
- "EA::CompressionRefpack": {
-  "evidence": "declaration overrides only; layout is the PDB layout (vptr)",
-  "decl_overrides": [
-   {
-    "decl": "CompressionRefpack()",
-    "replace": "CompressionRefpack() {}",
-    "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
-   },
-   {
-    "decl": "virtual ~CompressionRefpack()",
-    "replace": "virtual ~CompressionRefpack() {}",
-    "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
-   }
-  ]
- },
- "EA::ResourceMan::PFRecordInfo": {
-  "evidence": "declaration overrides only; layout is the PDB layout",
-  "decl_overrides": [
-   {
-    "decl": "PFRecordInfo(unsigned int, unsigned int, unsigned int, unsigned short, bool)",
-    "replace": "PFRecordInfo(unsigned int a, unsigned int b, unsigned int c, unsigned short d, bool e) : mnPosition(a), mnSize(b), mnSizeDecompressed(c), mnCompressionType(d), mbCommitted(e) {}",
-    "evidence": "no retail function for this constructor; the byte-exact DeleteRecord (0x8d8b70, s008d81d0) builds a local record by storing five zeros in member order (pos, size, usize, flags, compressed), i.e. the constructor is inline"
-   }
-  ]
- },
- "EA::Allocator::EASTLCoreAllocator": {
-  "remove": [
-   "mpName"
-  ],
-  "evidence": "retail EASTLCoreAllocator is 8 bytes (dev 0xc): the name pointer only exists with EASTL_NAME_ENABLED (work/migrate/retail_leaf_sizes.json: s008884b0 byte-exact VectorBase<Node*,EASTLCoreAllocator>(n, alloc) copies two words; s008d81d0 RecMap {cmp, anchor, mnSize, mpAlloc, mnFlags} = 0x20). The generator ignores leaf-table sizes for types the PDB has, so the hand-written eastl/allocator.h (8 bytes, what VC9 compiles) and the re-layout disagreed by 4 for every container on this allocator: the generated offset comments of DatabasePackedFile after mOpenRecordMultiMap were a word high (mHeader 0x30c vs VC9's 0x308)"
- },
- "EA::ResourceMan::Key": {
-  "decl_overrides": [
-   {
-    "decl": "Key()",
-    "replace": "Key() : mInstance(0), mType(0), mGroup(0) {}",
-    "evidence": "the Resource key is zero-filled by three stores in the byte-exact inlined Resource constructor of cPropertyList (0x6a1b90, s006a11b0: [this+8], [this+0xc], [this+0x10] in member order); EA's ResourceKey default constructor zeroes instance, type and group; the retail image has no Key::Key function"
-   }
-  ],
-  "evidence": "declaration overrides only; layout is the PDB layout"
- },
- "EA::ResourceMan::Resource": {
-  "decl_overrides": [
-   {
-    "decl": "Resource()",
-    "replace": "Resource() : mRefCount(0) {}",
-    "evidence": "the SP::cPropertyList / cDirectPropertyList constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, byte-exact in s006a11b0) contain the whole base chain inline: vptr, `xchg [this+4]` (AtomicInt::SetValue), three zero words at +8/+0xc/+0x10 (the Resource key) and a zero word at +0x14 (cResourceBase::mReleaseCallback); no retail function exists for these constructors (the dev PDB lists them as functions)"
-   }
-  ],
-  "evidence": "declaration overrides only; layout is the PDB layout"
- },
- "SP::cResourceBase": {
-  "decl_overrides": [
-   {
-    "decl": "cResourceBase()",
-    "replace": "cResourceBase() : mReleaseCallback(0) {}",
-    "evidence": "the SP::cPropertyList / cDirectPropertyList constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, byte-exact in s006a11b0) contain the whole base chain inline: vptr, `xchg [this+4]` (AtomicInt::SetValue), three zero words at +8/+0xc/+0x10 (the Resource key) and a zero word at +0x14 (cResourceBase::mReleaseCallback); no retail function exists for these constructors (the dev PDB lists them as functions)"
-   }
-  ],
-  "evidence": "declaration overrides only; layout is the PDB layout"
- },
- "EA::COM::IUnknown32": {
-  "decl_overrides": [
-   {
-    "decl": "IUnknown32()",
-    "replace": "IUnknown32() {}",
-    "evidence": "the base chain of SP::cPropertyList is constructed inline in its byte-exact constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, s006a11b0): the IRefCount/IUnknown32 constructors contribute nothing but their vptr store (merged into the final one) and no retail function exists for them"
-   }
-  ],
-  "evidence": "declaration overrides only; layout is the PDB layout"
- },
- "EA::COM::IRefCount": {
-  "decl_overrides": [
-   {
-    "decl": "IRefCount()",
-    "replace": "IRefCount() {}",
-    "evidence": "the base chain of SP::cPropertyList is constructed inline in its byte-exact constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, s006a11b0): the IRefCount/IUnknown32 constructors contribute nothing but their vptr store (merged into the final one) and no retail function exists for them"
-   }
-  ],
-  "evidence": "declaration overrides only; layout is the PDB layout"
- },
- "SP::cPropertyManager": {
-  "insert": [
-   {
-    "after": "mInitialized",
-    "name": "mbUseFileParser",
-    "type": "bool",
-    "size": 1
-   },
-   {
-    "after": "mResourceManager",
-    "name": "mParsingAndTree",
-    "size": 32
-   },
-   {
-    "after": "mFileParser",
-    "name": "mParser",
-    "size": 4
-   }
-  ],
-  "evidence": "retail SP::cPropertyManager has the Factory subobject at +4 and its data from +0x14 (slice s006a9470, Init 0x6a9b60 and WriteResource 0x6aa130, written with retail offsets, docs/Papercuts.md s005e3280): mInitialized 0x14, a second bool at 0x15, mResourceManager 0x18, a bool at 0x1c (mParsing) and, from 0x20, an rbtree<unsigned, pair<const unsigned, Variant>> (compare word 0x20, anchor 0x24.., size 0x34, allocator 0x38; the s006aa3f0 partials ~rbtree/insert are its instantiations) filling 0x20..0x3c, then the embedded SP::cPropertyList at 0x3c; the exact-backed maps of s006aa3f0 (mPropertyNameToIDMap 0x94 ... mLCName 0x168) and the slice's AutoRef<IFileParser> at 0x178 are the re-laid offsets +0x20, and AutoRef<IParser> sits at 0x17c; with those four insertions (1 + 1 + 0x1c + 4 bytes, the bools padded to words) mInAppProperties lands at 0x1e8, where the byte-exact cAppPropsCommand::Execute (0x6a3ce0, s006a32a0) stores 1 through [mManager+0x1e8]; the bool and the tree are one 32-byte blob (mParsingAndTree) because a blob is a byte array (alignment 1) and the tree must start on the word at 0x20"
- },
- "EA::XML::XmlTextWriter": {
-  "evidence": "retail signatures of three XmlTextWriter virtuals differ from the dev PDB (landing report work/migrate/report_s009013e0.md, slice s009013e0)",
-  "decl_overrides": [
-   {
-    "decl": "virtual bool AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
-    "replace": "virtual bool __cdecl AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
-    "evidence": "dev symbol ?AppendAttributeF@XmlTextWriter@XML@EA@@UAA_NPB_W0ZZ is 'virtual bool __cdecl' (UAA); retail 0x9017d0 reads this from the first stack argument (sub esp,0x200 / push esi / mov esi,[esp+0x208]) and returns with a plain ret (slice s009013e0 FUN_009017d0, byte-exact). VC9 makes a variadic member __cdecl anyway; the explicit keyword records the dev signature"
-   },
-   {
-    "decl": "virtual bool WriteCharData(wchar_t const *)",
-    "replace": "virtual int WriteCharData(wchar_t const *)",
-    "evidence": "retail 0x9018a0 returns a full int: 0x9018bc mov eax,1 / 0x9018c5 xor eax,eax where a bool return gives mov al,1 / xor al,al; the slice s009013e0 int declaration is byte-exact, the bool body DIFFs 13 bytes"
-   }
-  ]
- },
- "EA::Internet::HTTPClient": {
-  "remove": [
-   "msUserName",
-   "msUserPassword"
-  ],
-  "evidence": "retail HTTPClient has no user-name/password strings (dev PDB +0x2c/+0x3c, 0x10 each): AddNewJob 0x946680 does `inc dword ptr [esi+0x2c]` (mnLastJobId, dev +0x4c) right after mpNotificationTargetContext +0x28, locks the mutex at [esi+0x60] (dev 0x80) and inserts into the job list at [esi+0x94] (dev 0xb4); byte-exact AllocBuffer 0x941f20 (s009413d0) reads mnReadBufferSize +0x144 and stores mpReadBuffer +0x140 (dev 0x164/0x160); ReadResponseData 0x942690 tests mnLoggingEnabled [esi+0x30], reads mpReadLogStream [esi+0x54], adds to mnBytesReceived [esi+0x138]; slice view s00942290 puts all ten shared members 0x20 below the dev layout (fix pass 2, 2026-10-13)"
- },
- "SP::cJobManager": {
-  "insert": [
-   {
-    "after": "mMutex",
-    "name": "mnLockCount",
-    "type": "int",
-    "size": 4
-   },
-   {
-    "after": "mThreads",
-    "name": "mnActiveJobCount",
-    "type": "int",
-    "size": 4
-   },
-   {
-    "after": "mnActiveJobCount",
-    "name": "mWaitingThreads",
-    "type": "eastl::vector<int>",
-    "size": 20
-   },
-   {
-    "after": "mWaitingThreads",
-    "name": "mWaitingPriorities",
-    "type": "eastl::vector<int>",
-    "size": 20
-   }
-  ],
-  "evidence": "retail cJobManager is 0x1e4 (dev 0x1b8): 0x68f540 locks mMutex [esi+8] then `inc dword ptr [esi+0x38]` (a lock-depth int the dev PDB lacks; the s00691680 view calls it mLockCount, 'recursive lock depth, saved across waits'), so mJobReadyCondition is 0x3c and mReadyList 0x94 (GetRunnableJob 0x68f6cb `lea ecx,[ebx+ecx*8+0x94]`); Init 0x690330 uses mValidAffinities [+0x194], mThreads [+0x198], mpSyncThread [+0x1cc] and mInitThreadFunc [+0x1e0], GetFreeLink 0x690050 mFreeLinks [+0x1d0]: 0x2c retail-only bytes after mThreads, which the views s006907e0/s00691680 spell int mActiveJobCount +0x1a0, a 0x14-byte eastl vector mWaitingThreads +0x1a4 and mWaitingPriorities +0x1b8 (element types not established: opaque blobs) (fix pass 2, 2026-10-13)"
- },
- "EA::Internet::INetFileCache": {
-  "insert": [
-   {
-    "after": "msIniFileName",
-    "name": "mOpenStreamList",
-    "type": "eastl::list<EA::IO::IStream*>",
-    "size": 12
-   }
-  ],
-  "evidence": "retail INetFileCache is 0x70 (dev 0x64): the byte-exact constructor 0x949b80 (s00948de0) links a list anchor to itself at +0x28 (`lea ecx,[eax+0x28]; mov [ecx],ecx; mov [ecx+4],ecx`), then initialises the hash table at +0x34 (mpBucketArray +0x38 = the empty bucket 0x154df28, mnBucketCount +0x3c = 1, mnElementCount +0x40, rehash policy floats +0x44/+0x48, mnNextResize +0x4c), mbKeepExpired +0x54 (byte 0), mnEnabledLocations +0x58 = 3, mnMaxRAMCacheSize +0x5c = 1000000, mnMaxFileCacheSize +0x60 = 3000000, mnDefaultExpirationTimeSeconds +0x64 = 18000, the two access counters +0x68/+0x6c; the dev PDB has mDataMap at +0x28: a 0xc-byte list (anchor + allocator word) of open cache streams sits in front of it (slice views s00948de0 `ListAnchor mStreamList +0x28`, `mPad30`; s00947d50 links its FileStreamObj nodes there) (fix pass 2, 2026-10-13)"
- },
- "EA::Thread::Mutex": {
-  "decl_overrides": [
-   {
-    "decl": "Mutex(EA::Thread::MutexParameters const *, bool)",
-    "replace": "Mutex(EA::Thread::MutexParameters const * = 0, bool = true)",
-    "evidence": "fix pass 3: EAThread declares Mutex(const MutexParameters* = NULL, bool bDefaultParameters = true); retail SharedLibraryRegistry ctor 0x9368f0 constructs its mutex member at +0x20 with `push 1 / push 0 / call 0x9222a0` (no arguments in the slice body: s00936090 Mutex::Construct(0, 1)), as does InternalDatabaseList's ctor 0x8de8e0 (s008de020). Without the defaults a member Mutex has no default constructor (C2512)."
-   }
-  ]
- },
- "cSPUILayout": {
-  "insert": [
-   {
-    "after": null,
-    "name": "mResourceKey",
-    "type": "EA::ResourceMan::Key",
-    "size": 12
-   }
-  ],
-  "evidence": "fix pass 3: retail cSPUILayout is 0x18 (dev 0xc): Init 0x8120d0 (pdb_names cSPUILayout::Init) copies its 12-byte key argument to +0x8/+0xc/+0x10 (`mov eax,[ebp]; mov [esi+8],eax; ... mov [esi+0x10],eax`) and keeps the object collection at +0x14 (`mov ebx,[esi+0x14]` ... `mov [esi+0x14],edi` with AddRef/Release through slots 1/2); IsVisible 0x810070 reads `[ecx+0x14]`, SetReloadCallback 0x810090 and operator= 0x810050 likewise, ~cSPUILayout 0x811fe0 releases `[esi+0x14]`. The dev PDB has mpObjectCollection at +0x8: a Key (0xc) sits in front of it in retail (slice views s0080f7c0 / s008117f0 f8/fc/f10)."
- }
+  "SP::cString": {
+    "remove": [
+      "mTableId",
+      "mInstanceId"
+    ],
+    "evidence": "retail SP::cString is 0x14 (dev PDB 0x1c): ctor 0x006b5770 writes +0..+0x11 only, and frames of 0x00ee16f0/0x00ee4390/0x00b76f10 are exact only with 0x14 (docs/Papercuts.md s00ee16f0, s00b76f10); the slice view s006b47a0 has mbHasTokens at 0x10 and a byte at 0x11 (mField11), then ends at 0x14"
+  },
+  "EA::ResourceMan::DatabasePackedFile": {
+    "insert": [
+      {
+        "after": "mnUserVersionMinor",
+        "name": "mbEnableCompression",
+        "type": "bool",
+        "size": 4
+      }
+    ],
+    "evidence": "retail has one extra word between mnUserVersionMinor (+0x2dc) and mfMinRatioToUseCompression (+0x2e4); byte-exact slice s008d81d0 reads a bool at +0x2e0 (tools/migrate/leafsizes.py structural_deltas_not_leaf, 2026-10-12)",
+    "decl_overrides": [
+      {
+        "decl": "bool ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int)",
+        "replace": "int ShouldRecordBeCompressed(EA::ResourceMan::Key const &, unsigned int)",
+        "evidence": "the byte-exact-neighbour 0x8d8570 (s008d81d0 ShouldCompress, equivalent row) returns a full int: `mov eax,1` / `xor eax,eax` where a bool return gives `mov al,1` / `xor al,al` (retail signature is int; the dev PDB says bool)"
+      }
+    ],
+    "retail_vtable": [
+      {
+        "for": "EA::COM::IUnknown32",
+        "va": "0143679c",
+        "evidence": "the constructor 0x8d93e0/0x8d9f80 stores 0x14367b0 at [this] and 0x143679c at [this+4]; the 4 words at 0x143679c are AddRef 0x8dd1b0, Release 0x69d3c0, the scalar-deleting-destructor adjustor 0x8d9490 (sub ecx,4 / jmp 0x8d9990, the primary's slot 0) and AsInterface 0x8d81a0 (compares the id with 0x226a25b and 0xee3f516e, returns this-4 / the null-masked this). pdb_names.json puts AsInterface at 0x6bbe20, which is another class's (vtable 0x140a124, id 0x6492c5f, a 28-slot sibling with the FileStream at +0x30 of size 0x434)"
+      }
+    ],
+    "mutable": [
+      {
+        "name": "mMutex",
+        "evidence": "GetOpenCount(Key const &) const (0x8d9560, byte-exact in s008d91e0) locks and unlocks the mutex at +0x270 (EA::Thread::Mutex::Lock 0x9221b0 / Unlock 0x922270 on this+0x270) although the dev PDB declares it const: the member is mutable (or const_cast) in the source"
+      }
+    ]
+  },
+  "EA::ResourceMan::PFDatabaseHeader": {
+    "retype": [
+      {
+        "name": "mnCreationTime",
+        "type": "prim:longlong",
+        "size": 8
+      },
+      {
+        "name": "mnUpdatedTime",
+        "type": "prim:longlong",
+        "size": 8
+      }
+    ],
+    "evidence": "retail header block is 0x28: the byte-exact ReadHeaderRecord/WriteHeaderRecord (s008d81d0) store the created/modified times as a low word followed by a zero word (f[2]=created, f[3]=0, f[4]=modified, f[5]=0), i.e. 64-bit times; index type/position/count/size follow at +0x18..+0x24"
+  },
+  "EA::ResourceMan::PFIndexModifiable": {
+    "insert": [
+      {
+        "after": "mpAllocator",
+        "name": "mPoolAllocator",
+        "size": 32
+      }
+    ],
+    "evidence": "retail embeds a 0x20-byte pool allocator at +0x8 before the hash_map (mItemsMap at +0x28; FUN_008db730 calls FUN_00925f30(this+8, 0x80, 0x20) and sets mAllocator.mpCoreAllocator = &this->mPoolAllocator); byte-exact CreateIndex allocates 0x4c (leafsizes.py)",
+    "retail_vtable": {
+      "va": "0140a200",
+      "extend": [
+        "0140a210"
+      ],
+      "evidence": "the constructor 0x6bf370 stores 0x140a200 at [this]; tables.json cut the vtable at 0x140a210 (4 + 14 contiguous words, 18 slots up to 0x140a244, then string data): slot 0 0x6bf4c0 scalar deleting destructor, 5 0x6beb00, 6 0x6bea90, 7 GetKeyList 0x6bfa00, 14 WriteToMemory 0x6beb60 pair with dev slots 0, 5, 6, 7, 14"
+    },
+    "vtable_insert": [
+      {
+        "before_dev_slot": 15,
+        "count": 1,
+        "evidence": "retail slot 15 (0x6bed90, 80 bytes) is a virtual the dev PDB has no slot for; Validate (0x6bede0) and ValidateFreeSpace (0x6beeb0) follow at 16 and 17 where the dev vtable has them at 15 and 16 (retail vtable 0x140a200 read from .rdata)"
+      }
+    ],
+    "decl_overrides": [
+      {
+        "decl": "virtual unsigned int GetAllocatedBytes() const",
+        "replace": "virtual unsigned __int64 GetAllocatedBytes() const",
+        "evidence": "retail 0x6beb00 (vtable slot 5) walks the record nodes summing [node+0x18] into edx:eax (add eax,ebx / adc edx,0) and returns the 64-bit sum; the dev PDB declares unsigned int"
+      },
+      {
+        "decl": "virtual unsigned int GetFarthestFileExtent() const",
+        "replace": "virtual unsigned __int64 GetFarthestFileExtent() const",
+        "evidence": "retail 0x6bea90 (vtable slot 6) keeps the 64-bit maximum of ([node+0x10]:[node+0x14]) + [node+0x18] in edx:eax (add/adc/cmp/ja/jb) and returns it; the dev PDB declares unsigned int"
+      },
+      {
+        "decl": "virtual void slot_15()",
+        "replace": "virtual void SetIsSaved()",
+        "evidence": "retail-only virtual 0x6bed90: walks every record node of the hash map and stores 1 at [node+0x22]; the name is the slice's (s006bde30), semantics unverified"
+      }
+    ]
+  },
+  "EA::ResourceMan::PFIndex": {
+    "evidence": "vtable and declaration overrides only; layout is the PDB layout",
+    "vtable_insert": [
+      {
+        "before_dev_slot": 15,
+        "count": 1,
+        "evidence": "same as PFIndexModifiable: its retail vtable has an extra virtual at slot 15 (0x6bed90); PFIndex is the interface the slot numbers belong to (DatabasePackedFile calls slot 16 with (0, size) = Validate, 17 = ValidateFreeSpace)"
+      }
+    ],
+    "vtable_insert_unlocated": true,
+    "decl_overrides": [
+      {
+        "decl": "virtual unsigned int GetAllocatedBytes() const",
+        "replace": "virtual unsigned __int64 GetAllocatedBytes() const",
+        "evidence": "see PFIndexModifiable: the retail implementation returns edx:eax"
+      },
+      {
+        "decl": "virtual unsigned int GetFarthestFileExtent() const",
+        "replace": "virtual unsigned __int64 GetFarthestFileExtent() const",
+        "evidence": "see PFIndexModifiable: the retail implementation returns edx:eax"
+      },
+      {
+        "decl": "virtual void slot_15()",
+        "replace": "virtual void SetIsSaved()",
+        "evidence": "see PFIndexModifiable"
+      }
+    ]
+  },
+  "SP::cPropertyList": {
+    "remove": [
+      "mDescriptions"
+    ],
+    "evidence": "retail cPropertyList is 0x38: the dev-only mDescriptions hash_map is gone (leafsizes.py structural_deltas_not_leaf; cPropertyList ctors byte-exact in s006a11b0 put mParent at +0x30, mModificationCount at +0x34)"
+  },
+  "EA::ResourceMan::PFRecordRead": {
+    "append": [
+      {
+        "name": "mUnknown68",
+        "size": 8
+      }
+    ],
+    "evidence": "retail PFRecordRead is 0x70 (dev 0x68); the +8 is unexplained (leafsizes.py); placed at the end pending a byte-exact user"
+  },
+  "EA::IO::FileStream": {
+    "append": [
+      {
+        "name": "mnSize",
+        "type": "int",
+        "size": 4
+      }
+    ],
+    "evidence": "retail FileStream is 0x22c: a cached size word at +0x228 (-1 unknown, -2 lazy); DatabasePackedFile::mpStream at 0x260 and mMutex at 0x270 follow from it (tools/migrate/leafsizes.py validation, byte-exact s008d81d0)"
+  },
+  "EA::ResourceMan::Manager": {
+    "vtable_insert": [
+      {
+        "before_dev_slot": 13,
+        "count": 3,
+        "evidence": "retail Manager vtable 0x1436ae8 has three slots (0x8e0950, 0x8e0a30, 0x8e0c10) in front of dev slot 13 RegisterChangeNotification: symbols/pdb_names.json puts RegisterChangeNotification/RegisterFactory/FindFactory at retail slots 16/17/18 (their ret sizes 0x14/0xc/8 match the dev signatures), and the byte-nearby DatabasePackedFile::Attach (s008d81d0, 0x8d85a0) calls slot 0x50/4=20 with (bool, this, int) = dev slot 17 RegisterDatabase (retail 0x8e0d30 ret 0xc). Slots after dev 21 are shifted too (retail has 38 slots, dev 41): the tail of the pairing is unverified."
+      }
+    ],
+    "evidence": "vtable only: dev slots 13.. are +3 in retail (see vtable_insert); data layout is the dev layout re-laid, unverified"
+  },
+  "EA::Compression": {
+    "evidence": "declaration overrides only; layout is the PDB layout (vptr)",
+    "decl_overrides": [
+      {
+        "decl": "Compression()",
+        "replace": "Compression() {}",
+        "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
+      },
+      {
+        "decl": "virtual ~Compression()",
+        "replace": "virtual ~Compression() {}",
+        "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
+      }
+    ]
+  },
+  "EA::CompressionRefpack": {
+    "evidence": "declaration overrides only; layout is the PDB layout (vptr)",
+    "decl_overrides": [
+      {
+        "decl": "CompressionRefpack()",
+        "replace": "CompressionRefpack() {}",
+        "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
+      },
+      {
+        "decl": "virtual ~CompressionRefpack()",
+        "replace": "virtual ~CompressionRefpack() {}",
+        "evidence": "Decompress (0x8d8820, byte-exact in s008d81d0) declares a local compressor, stores its vptr and calls ValidateCompressedData/DecompressData directly, with no constructor or destructor call: both are inline and empty in retail (the dev PDB lists them as functions, the retail image has none)"
+      }
+    ]
+  },
+  "EA::ResourceMan::PFRecordInfo": {
+    "evidence": "declaration overrides only; layout is the PDB layout",
+    "decl_overrides": [
+      {
+        "decl": "PFRecordInfo(unsigned int, unsigned int, unsigned int, unsigned short, bool)",
+        "replace": "PFRecordInfo(unsigned int a, unsigned int b, unsigned int c, unsigned short d, bool e) : mnPosition(a), mnSize(b), mnSizeDecompressed(c), mnCompressionType(d), mbCommitted(e) {}",
+        "evidence": "no retail function for this constructor; the byte-exact DeleteRecord (0x8d8b70, s008d81d0) builds a local record by storing five zeros in member order (pos, size, usize, flags, compressed), i.e. the constructor is inline"
+      }
+    ]
+  },
+  "EA::Allocator::EASTLCoreAllocator": {
+    "remove": [
+      "mpName"
+    ],
+    "evidence": "retail EASTLCoreAllocator is 8 bytes (dev 0xc): the name pointer only exists with EASTL_NAME_ENABLED (work/migrate/retail_leaf_sizes.json: s008884b0 byte-exact VectorBase<Node*,EASTLCoreAllocator>(n, alloc) copies two words; s008d81d0 RecMap {cmp, anchor, mnSize, mpAlloc, mnFlags} = 0x20). The generator ignores leaf-table sizes for types the PDB has, so the hand-written eastl/allocator.h (8 bytes, what VC9 compiles) and the re-layout disagreed by 4 for every container on this allocator: the generated offset comments of DatabasePackedFile after mOpenRecordMultiMap were a word high (mHeader 0x30c vs VC9's 0x308)"
+  },
+  "EA::ResourceMan::Key": {
+    "decl_overrides": [
+      {
+        "decl": "Key()",
+        "replace": "Key() : mInstance(0), mType(0), mGroup(0) {}",
+        "evidence": "the Resource key is zero-filled by three stores in the byte-exact inlined Resource constructor of cPropertyList (0x6a1b90, s006a11b0: [this+8], [this+0xc], [this+0x10] in member order); EA's ResourceKey default constructor zeroes instance, type and group; the retail image has no Key::Key function"
+      }
+    ],
+    "evidence": "declaration overrides only; layout is the PDB layout"
+  },
+  "EA::ResourceMan::Resource": {
+    "decl_overrides": [
+      {
+        "decl": "Resource()",
+        "replace": "Resource() : mRefCount(0) {}",
+        "evidence": "the SP::cPropertyList / cDirectPropertyList constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, byte-exact in s006a11b0) contain the whole base chain inline: vptr, `xchg [this+4]` (AtomicInt::SetValue), three zero words at +8/+0xc/+0x10 (the Resource key) and a zero word at +0x14 (cResourceBase::mReleaseCallback); no retail function exists for these constructors (the dev PDB lists them as functions)"
+      }
+    ],
+    "evidence": "declaration overrides only; layout is the PDB layout"
+  },
+  "SP::cResourceBase": {
+    "decl_overrides": [
+      {
+        "decl": "cResourceBase()",
+        "replace": "cResourceBase() : mReleaseCallback(0) {}",
+        "evidence": "the SP::cPropertyList / cDirectPropertyList constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, byte-exact in s006a11b0) contain the whole base chain inline: vptr, `xchg [this+4]` (AtomicInt::SetValue), three zero words at +8/+0xc/+0x10 (the Resource key) and a zero word at +0x14 (cResourceBase::mReleaseCallback); no retail function exists for these constructors (the dev PDB lists them as functions)"
+      }
+    ],
+    "evidence": "declaration overrides only; layout is the PDB layout"
+  },
+  "EA::COM::IUnknown32": {
+    "decl_overrides": [
+      {
+        "decl": "IUnknown32()",
+        "replace": "IUnknown32() {}",
+        "evidence": "the base chain of SP::cPropertyList is constructed inline in its byte-exact constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, s006a11b0): the IRefCount/IUnknown32 constructors contribute nothing but their vptr store (merged into the final one) and no retail function exists for them"
+      }
+    ],
+    "evidence": "declaration overrides only; layout is the PDB layout"
+  },
+  "EA::COM::IRefCount": {
+    "decl_overrides": [
+      {
+        "decl": "IRefCount()",
+        "replace": "IRefCount() {}",
+        "evidence": "the base chain of SP::cPropertyList is constructed inline in its byte-exact constructors (0x6a1b90, 0x6a1c40, 0x6a1ca0, s006a11b0): the IRefCount/IUnknown32 constructors contribute nothing but their vptr store (merged into the final one) and no retail function exists for them"
+      }
+    ],
+    "evidence": "declaration overrides only; layout is the PDB layout"
+  },
+  "SP::cPropertyManager": {
+    "insert": [
+      {
+        "after": "mInitialized",
+        "name": "mbUseFileParser",
+        "type": "bool",
+        "size": 1
+      },
+      {
+        "after": "mResourceManager",
+        "name": "mParsingAndTree",
+        "size": 32
+      },
+      {
+        "after": "mFileParser",
+        "name": "mParser",
+        "size": 4
+      }
+    ],
+    "evidence": "retail SP::cPropertyManager has the Factory subobject at +4 and its data from +0x14 (slice s006a9470, Init 0x6a9b60 and WriteResource 0x6aa130, written with retail offsets, docs/Papercuts.md s005e3280): mInitialized 0x14, a second bool at 0x15, mResourceManager 0x18, a bool at 0x1c (mParsing) and, from 0x20, an rbtree<unsigned, pair<const unsigned, Variant>> (compare word 0x20, anchor 0x24.., size 0x34, allocator 0x38; the s006aa3f0 partials ~rbtree/insert are its instantiations) filling 0x20..0x3c, then the embedded SP::cPropertyList at 0x3c; the exact-backed maps of s006aa3f0 (mPropertyNameToIDMap 0x94 ... mLCName 0x168) and the slice's AutoRef<IFileParser> at 0x178 are the re-laid offsets +0x20, and AutoRef<IParser> sits at 0x17c; with those four insertions (1 + 1 + 0x1c + 4 bytes, the bools padded to words) mInAppProperties lands at 0x1e8, where the byte-exact cAppPropsCommand::Execute (0x6a3ce0, s006a32a0) stores 1 through [mManager+0x1e8]; the bool and the tree are one 32-byte blob (mParsingAndTree) because a blob is a byte array (alignment 1) and the tree must start on the word at 0x20"
+  },
+  "EA::XML::XmlTextWriter": {
+    "evidence": "retail signatures of three XmlTextWriter virtuals differ from the dev PDB (landing report work/migrate/report_s009013e0.md, slice s009013e0)",
+    "decl_overrides": [
+      {
+        "decl": "virtual bool AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
+        "replace": "virtual bool __cdecl AppendAttributeF(wchar_t const *, wchar_t const *, ...)",
+        "evidence": "dev symbol ?AppendAttributeF@XmlTextWriter@XML@EA@@UAA_NPB_W0ZZ is 'virtual bool __cdecl' (UAA); retail 0x9017d0 reads this from the first stack argument (sub esp,0x200 / push esi / mov esi,[esp+0x208]) and returns with a plain ret (slice s009013e0 FUN_009017d0, byte-exact). VC9 makes a variadic member __cdecl anyway; the explicit keyword records the dev signature"
+      },
+      {
+        "decl": "virtual bool WriteCharData(wchar_t const *)",
+        "replace": "virtual int WriteCharData(wchar_t const *)",
+        "evidence": "retail 0x9018a0 returns a full int: 0x9018bc mov eax,1 / 0x9018c5 xor eax,eax where a bool return gives mov al,1 / xor al,al; the slice s009013e0 int declaration is byte-exact, the bool body DIFFs 13 bytes"
+      }
+    ]
+  },
+  "EA::Internet::HTTPClient": {
+    "remove": [
+      "msUserName",
+      "msUserPassword"
+    ],
+    "evidence": "retail HTTPClient has no user-name/password strings (dev PDB +0x2c/+0x3c, 0x10 each): AddNewJob 0x946680 does `inc dword ptr [esi+0x2c]` (mnLastJobId, dev +0x4c) right after mpNotificationTargetContext +0x28, locks the mutex at [esi+0x60] (dev 0x80) and inserts into the job list at [esi+0x94] (dev 0xb4); byte-exact AllocBuffer 0x941f20 (s009413d0) reads mnReadBufferSize +0x144 and stores mpReadBuffer +0x140 (dev 0x164/0x160); ReadResponseData 0x942690 tests mnLoggingEnabled [esi+0x30], reads mpReadLogStream [esi+0x54], adds to mnBytesReceived [esi+0x138]; slice view s00942290 puts all ten shared members 0x20 below the dev layout (fix pass 2, 2026-10-13)"
+  },
+  "SP::cJobManager": {
+    "insert": [
+      {
+        "after": "mMutex",
+        "name": "mnLockCount",
+        "type": "int",
+        "size": 4
+      },
+      {
+        "after": "mThreads",
+        "name": "mnActiveJobCount",
+        "type": "int",
+        "size": 4
+      },
+      {
+        "after": "mnActiveJobCount",
+        "name": "mWaitingThreads",
+        "type": "eastl::vector<int>",
+        "size": 20
+      },
+      {
+        "after": "mWaitingThreads",
+        "name": "mWaitingPriorities",
+        "type": "eastl::vector<int>",
+        "size": 20
+      }
+    ],
+    "evidence": "retail cJobManager is 0x1e4 (dev 0x1b8): 0x68f540 locks mMutex [esi+8] then `inc dword ptr [esi+0x38]` (a lock-depth int the dev PDB lacks; the s00691680 view calls it mLockCount, 'recursive lock depth, saved across waits'), so mJobReadyCondition is 0x3c and mReadyList 0x94 (GetRunnableJob 0x68f6cb `lea ecx,[ebx+ecx*8+0x94]`); Init 0x690330 uses mValidAffinities [+0x194], mThreads [+0x198], mpSyncThread [+0x1cc] and mInitThreadFunc [+0x1e0], GetFreeLink 0x690050 mFreeLinks [+0x1d0]: 0x2c retail-only bytes after mThreads, which the views s006907e0/s00691680 spell int mActiveJobCount +0x1a0, a 0x14-byte eastl vector mWaitingThreads +0x1a4 and mWaitingPriorities +0x1b8 (element types not established: opaque blobs) (fix pass 2, 2026-10-13)"
+  },
+  "EA::Internet::INetFileCache": {
+    "insert": [
+      {
+        "after": "msIniFileName",
+        "name": "mOpenStreamList",
+        "type": "eastl::list<EA::IO::IStream*>",
+        "size": 12
+      }
+    ],
+    "evidence": "retail INetFileCache is 0x70 (dev 0x64): the byte-exact constructor 0x949b80 (s00948de0) links a list anchor to itself at +0x28 (`lea ecx,[eax+0x28]; mov [ecx],ecx; mov [ecx+4],ecx`), then initialises the hash table at +0x34 (mpBucketArray +0x38 = the empty bucket 0x154df28, mnBucketCount +0x3c = 1, mnElementCount +0x40, rehash policy floats +0x44/+0x48, mnNextResize +0x4c), mbKeepExpired +0x54 (byte 0), mnEnabledLocations +0x58 = 3, mnMaxRAMCacheSize +0x5c = 1000000, mnMaxFileCacheSize +0x60 = 3000000, mnDefaultExpirationTimeSeconds +0x64 = 18000, the two access counters +0x68/+0x6c; the dev PDB has mDataMap at +0x28: a 0xc-byte list (anchor + allocator word) of open cache streams sits in front of it (slice views s00948de0 `ListAnchor mStreamList +0x28`, `mPad30`; s00947d50 links its FileStreamObj nodes there) (fix pass 2, 2026-10-13)"
+  },
+  "EA::Thread::Mutex": {
+    "decl_overrides": [
+      {
+        "decl": "Mutex(EA::Thread::MutexParameters const *, bool)",
+        "replace": "Mutex(EA::Thread::MutexParameters const * = 0, bool = true)",
+        "evidence": "fix pass 3: EAThread declares Mutex(const MutexParameters* = NULL, bool bDefaultParameters = true); retail SharedLibraryRegistry ctor 0x9368f0 constructs its mutex member at +0x20 with `push 1 / push 0 / call 0x9222a0` (no arguments in the slice body: s00936090 Mutex::Construct(0, 1)), as does InternalDatabaseList's ctor 0x8de8e0 (s008de020). Without the defaults a member Mutex has no default constructor (C2512)."
+      }
+    ]
+  },
+  "cSPUILayout": {
+    "insert": [
+      {
+        "after": null,
+        "name": "mResourceKey",
+        "type": "EA::ResourceMan::Key",
+        "size": 12
+      }
+    ],
+    "evidence": "fix pass 3: retail cSPUILayout is 0x18 (dev 0xc): Init 0x8120d0 (pdb_names cSPUILayout::Init) copies its 12-byte key argument to +0x8/+0xc/+0x10 (`mov eax,[ebp]; mov [esi+8],eax; ... mov [esi+0x10],eax`) and keeps the object collection at +0x14 (`mov ebx,[esi+0x14]` ... `mov [esi+0x14],edi` with AddRef/Release through slots 1/2); IsVisible 0x810070 reads `[ecx+0x14]`, SetReloadCallback 0x810090 and operator= 0x810050 likewise, ~cSPUILayout 0x811fe0 releases `[esi+0x14]`. The dev PDB has mpObjectCollection at +0x8: a Key (0xc) sits in front of it in retail (slice views s0080f7c0 / s008117f0 f8/fc/f10)."
+  },
+  "SP::cSPPlayModeSubModeMovie": {
+    "insert": [
+      {
+        "after": "mCurrPathname",
+        "name": "mStringTableA",
+        "desc": "arr:260:16:struct:eastl::basic_string<wchar_t,eastl::allocator>",
+        "size": 4160
+      },
+      {
+        "after": "mStringTableA",
+        "name": "mStringTableB",
+        "desc": "arr:260:16:struct:eastl::basic_string<wchar_t,eastl::allocator>",
+        "size": 4160
+      }
+    ],
+    "append": [
+      {
+        "name": "mbRetail235d",
+        "desc": "prim:bool",
+        "size": 1
+      },
+      {
+        "name": "mbRetail235e",
+        "desc": "prim:bool",
+        "size": 1
+      }
+    ],
+    "evidence": "retail has two 260-element eastl::string16 arrays (0x1040 each) between mCurrPathname and mRecording, so every later member is +0x2080 (dev mRecording 0x240 -> retail 0x22c0): ~cSPPlayModeSubModeMovie 0x63c3f0 destroys 0x103+1 wchar strings backwards from [esi+0x22c0] and again from [esi+0x1280] (`and ecx,0xfffffffe; cmp ecx,2`), then mYTPassword at 0x234c ... mYTAuthToken 0x22ec; OnKeyDown 0x63b730 (byte-exact, s0063aa90) `cmp [ecx+0x22e4],3` = mDialogInProgress; HandleButton 0x63e100 (byte-exact, s0063d9e0) mRecording 0x22c0 / mIndicatorTimer 0x22c4. The constructor 0x63c200 writes two more bytes after mbYTPrompt (0x235c): `mov [eax+0x235d],bl; mov [eax+0x235e],bl` (names invented; retail size 0x2360). Names of the two tables invented (the slice calls them mTableA/mTableB). Retail has no word between mYTErrorMessage (0x233c) and mYTPassword (0x234c: the dtor's first string, [esi+0x234c]/[esi+0x2354]): the dev-only bool mForceEnableVideoUpload (dev 0x2cc) is removed; mbYTPrompt is at 0x235c (`mov byte [eax+0x235c],1` in the constructor).",
+    "remove": [
+      "mForceEnableVideoUpload"
+    ]
+  }
 }

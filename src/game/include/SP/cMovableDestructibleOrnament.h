@@ -10,7 +10,6 @@
 #include "SP/cGameData.h"
 #include "SP/cInteractionAgent.h"
 #include "SP/cLocomotiveObject.h"
-#include "bool.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"
 #include "eastl/vector.h"
@@ -32,7 +31,7 @@ class cMovableDestructibleOrnament : public SP::cGameData /* +0x0 */, public SP:
   virtual SP::cGameData * AsGameData();                                  // slot 3, (no retail slot)
   virtual unsigned int GetOwner();                                       // slot 4, (no retail slot)
   virtual SP::cSPSpaceToolData * GetActiveWeapon();                      // slot 5, (no retail slot), inherited from SP::cCombatant
-  virtual void TakeHit(float, unsigned int, int /* SP::cCombatant::eDamageType */, cSPVector3 const &, SP::cCombatant *); // slot 6, 0x00bfcdd0, inherited from SP::cCombatant
+  virtual void TakeHit(float, unsigned int, SP::cCombatant::eDamageType, cSPVector3 const &, SP::cCombatant *); // slot 6, 0x00bfcdd0, inherited from SP::cCombatant
   virtual void NotifyAttack(SP::cCombatant *);                           // slot 7, 0x010829f0, inherited from SP::cCombatant
   virtual cSPVector3 GetRandomStrikeOffset();                            // slot 8, (no retail slot), inherited from SP::cCombatant
   virtual void Repair(bool);                                             // slot 9, (no retail slot), inherited from SP::cCombatant

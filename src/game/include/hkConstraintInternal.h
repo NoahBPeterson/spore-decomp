@@ -4,9 +4,8 @@
 #define GAME_HKCONSTRAINTINTERNAL_H
 #include "game/types.h"
 #include "game/typedefs.h"
-#include "hkEntity.h"
 
-class hkConstraintData; class hkConstraintInstance;
+class hkConstraintData; class hkConstraintInstance; class hkEntity;
 
 
 // dev size 0x1c -> retail size 0x1c (re-laid from the PDB, unverified in retail)

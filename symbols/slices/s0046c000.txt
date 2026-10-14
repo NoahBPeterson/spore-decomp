@@ -1,1 +1,1 @@
-0046c000 SP::EditorUtils::GetTranslationOffset  # volume-weighted box center / lowest z, mode mask from property 0x51ce36a; PDB name
+0046c000 ?GetTranslationOffset@@YA?AUVector3Copyable@@PAUBoxVec@@PAUEditorModel_s0046_c000@@PAUCreature_s0046_c000@@@Z  # GetTranslationOffset migrated from s0046c000 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-009c1f60 nSPCreatureAnim::creature_static_data::creature_static_data  # ctor: zeros the 3 skin_colors, Bodies/mUnk398/mWiggles/mUnk3cc/inv_bone_rest_xforms vectors, aabb origin/extent, RefCount=0, then Clear(1)
+009c1f60 ??0creature_static_data_s009c_1f60@nSPCreatureAnim@@QAE@XZ  # creature_static_data_s009c_1f60::creature_static_data migrated from s009c1f60 (verbatim, slice spelling)
 009c2050 ??1creature_static_data_s009c_1f60@nSPCreatureAnim@@QAE@XZ  # creature_static_data_s009c_1f60::~creature_static_data migrated from s009c1f60 (verbatim, slice spelling)
 009c20e0 ?BuildBodyList@creature_instance_data_s009c_1f60@nSPCreatureAnim@@QAEXXZ  # creature_instance_data_s009c_1f60::BuildBodyList migrated from s009c1f60 (verbatim, slice spelling)
 009c2300 nSPCreatureAnim::creature_static_data::FilterAndAddWiggle  # thiscall(wiggle*, keep, sym), ret 0xc: scan mWiggles for same cap_a/cap_b, channel/caps compare, mark, overwrite best slot else AddWiggle

@@ -1,1 +1,1 @@
-00519640 ?Render@cPaintSplatJob@nSPSkinner@@UAE_NXZ  # PDB name
+00519640 ?Render@cPaintSplatJob_s0051_9640@nSPSkinner@@UAE_NXZ  # cPaintSplatJob_s0051_9640::Render migrated from s00519640 (verbatim, slice spelling)

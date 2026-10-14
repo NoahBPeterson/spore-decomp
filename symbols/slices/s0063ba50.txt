@@ -1,20 +1,23 @@
 006360e0 ?ShowYouTubeLoginDialog@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::ShowYouTubeLoginDialog (callee of s0063ba50, named from the dev publics; slice address comment)
-0063ba50 cConnectingDialog::Show  # PDB candidate + FindWindowByID/BeginModal calls
-0063bab0 cConnectingDialog::SetWindow  # stores AutoRef window + start time
-0063baf0 cConnectingDialog::HandleResults  # EndModal + RemoveWinProc + layout shutdown
+0063ba50 ?Show@cConnectingDialog_s0063_ba50@@QAEXH@Z  # cConnectingDialog_s0063_ba50::Show migrated from s0063ba50 (verbatim, slice spelling)
+0063bab0 ?SetWindow@cConnectingDialog_s0063_ba50@@QAE_NPAUIWindow_s0063_ba50@@@Z  # cConnectingDialog_s0063_ba50::SetWindow migrated from s0063ba50 (verbatim, slice spelling)
+0063baf0 ?HandleResults@cConnectingDialog_s0063_ba50@@QAEX_N@Z  # cConnectingDialog_s0063_ba50::HandleResults migrated from s0063ba50 (verbatim, slice spelling)
 0063bb90 ?Shutdown@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::Shutdown migrated from s0063ba50 (verbatim, slice spelling)
 0063bc10 ?SetUpYouTubeErrorMessage@cSPPlayModeSubModeMovie_s0063_ba50@@SAXH@Z  # cSPPlayModeSubModeMovie_s0063_ba50::SetUpYouTubeErrorMessage migrated from s0063ba50 (verbatim, slice spelling)
-0063bc70 CreateConnectingDialog  # new "UI/cConnectionDialog"
-0063bf20 cConnectingDialog::End  # same body as HandleResults when arg false
-0063bf80 cConnectingDialog::Update  # timeout / rotation animation
-0063c060 DestroyConnectingDialog  # End + release global
+0063bc70 ?CreateConnectingDialog@@YAXXZ  # CreateConnectingDialog migrated from s0063ba50 (verbatim, slice spelling)
+0063bd50 ?ShowLoginToYouTubeDialog@cSPPlayModeSubModeMovie_s0063_ba50@@SAXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::ShowLoginToYouTubeDialog migrated from s0063ba50 (verbatim, slice spelling)
+0063be00 ?ShowYouTubeUploadVideoDialog@cSPPlayModeSubModeMovie_s0063_ba50@@SAXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeUploadVideoDialog migrated from s0063ba50 (verbatim, slice spelling)
+0063bec0 ?ShowYouTubeLoginDialog@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::ShowYouTubeLoginDialog migrated from s0063ba50 (verbatim, slice spelling)
+0063bf20 ?End@cConnectingDialog_s0063_ba50@@QAEX_N@Z  # cConnectingDialog_s0063_ba50::End migrated from s0063ba50 (verbatim, slice spelling)
+0063bf80 ?Update@cConnectingDialog_s0063_ba50@@QAE_NPAX@Z  # cConnectingDialog_s0063_ba50::Update migrated from s0063ba50 (verbatim, slice spelling)
+0063c060 ?DestroyConnectingDialog@@YAX_N@Z  # DestroyConnectingDialog migrated from s0063ba50 (verbatim, slice spelling)
 0063c0a0 ?IsLocaleEnglish@cSPPlayModeSubModeMovie@SP@@QAE_NXZ  # SP::cSPPlayModeSubModeMovie::IsLocaleEnglish migrated from s0063ba50
-0063c190 cConnectingDialog::HandleUIMessage  # msg type switch
+0063c190 ?HandleUIMessage@cConnectingDialog_s0063_ba50@@QAE_NPAX0@Z  # cConnectingDialog_s0063_ba50::HandleUIMessage migrated from s0063ba50 (verbatim, slice spelling)
 0063c200 ??0cSPPlayModeSubModeMovie_s0063_ba50@@QAE@XZ  # cSPPlayModeSubModeMovie_s0063_ba50::cSPPlayModeSubModeMovie migrated from s0063ba50 (verbatim, slice spelling)
 0063c3f0 ??1cSPPlayModeSubModeMovie_s0063_ba50@@UAE@XZ  # cSPPlayModeSubModeMovie_s0063_ba50::~cSPPlayModeSubModeMovie migrated from s0063ba50 (verbatim, slice spelling)
-0063c590 SP::cSPPlayModeSubModeMovie::SetStatusText  # sprintf + SetCaption
+0063c590 ?SetStatusText@cSPPlayModeSubModeMovie_s0063_ba50@@QAEX_NH@Z  # cSPPlayModeSubModeMovie_s0063_ba50::SetStatusText migrated from s0063ba50 (verbatim, slice spelling)
 0063c640 ?ShowMovieSavedDialog@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::ShowMovieSavedDialog migrated from s0063ba50 (verbatim, slice spelling)
 0063c700 ??1cEditorYouTubeAuthenticationMessage@@QAE@XZ  # cEditorYouTubeAuthenticationMessage::~cEditorYouTubeAuthenticationMessage migrated from s0063ba50 (verbatim, slice spelling)
 0063c750 ??1cEditorYouTubeVideoUploadMessage@@QAE@XZ  # cEditorYouTubeVideoUploadMessage::~cEditorYouTubeVideoUploadMessage migrated from s0063ba50 (verbatim, slice spelling)
-0063c7f0 SP::cSPPlayModeSubModeMovie::LoadYouTubeCredentials  # property list + Decrypt
-0063c8f0 SP::cSPPlayModeSubModeMovie::OnMovieRecorded  # builds file name/path, toggles UI groups
+0063c7f0 ?LoadYouTubeCredentials@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::LoadYouTubeCredentials migrated from s0063ba50 (verbatim, slice spelling)
+0063c8f0 ?OnMovieRecorded@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_ba50::OnMovieRecorded migrated from s0063ba50 (verbatim, slice spelling)

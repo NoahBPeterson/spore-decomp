@@ -1,6 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SetDialogText@cConnectingDialog@?A0x879eca64@@QAEXH@Z  0063b640  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPSubModeMovie.cpp  ?OnKeyDown@cSPPlayModeSubModeMovie@@QAE_NHH@Z  0063b730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?OnKeyDown@cSPPlayModeSubModeMovie@SP@@UAE_NII@Z  0063b730  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063b760@cSPPlayModeSubModeMovie@@QAEXXZ  0063b760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SetState2@cSPPlayModeSubModeMovie@@QAEXXZ  0063b7b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SetState4@cSPPlayModeSubModeMovie@@QAEXXZ  0063b7f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
@@ -12,10 +12,28 @@
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063b950@@YAXXZ  0063b950  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063b9a0@@YAXXZ  0063b9a0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063b9f0@cSPPlayModeSubModeMovie@@QAEX_N@Z  0063b9f0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?Show@cConnectingDialog_s0063_ba50@@QAEXH@Z  0063ba50  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?SetWindow@cConnectingDialog_s0063_ba50@@QAE_NPAUIWindow_s0063_ba50@@@Z  0063bab0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?HandleResults@cConnectingDialog_s0063_ba50@@QAEX_N@Z  0063baf0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?Shutdown@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063bb90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?SetUpYouTubeErrorMessage@cSPPlayModeSubModeMovie_s0063_ba50@@SAXH@Z  0063bc10  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?CreateConnectingDialog@@YAXXZ  0063bc70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowLoginToYouTubeDialog@cSPPlayModeSubModeMovie_s0063_ba50@@SAXXZ  0063bd50  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowYouTubeUploadVideoDialog@cSPPlayModeSubModeMovie_s0063_ba50@@SAXXZ  0063be00  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowYouTubeLoginDialog@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063bec0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?End@cConnectingDialog_s0063_ba50@@QAEX_N@Z  0063bf20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?DestroyConnectingDialog@@YAX_N@Z  0063c060  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?IsLocaleEnglish@cSPPlayModeSubModeMovie@SP@@QAE_NXZ  0063c0a0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?HandleUIMessage@cConnectingDialog_s0063_ba50@@QAE_NPAX0@Z  0063c190  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ??1cSPPlayModeSubModeMovie_s0063_ba50@@UAE@XZ  0063c3f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?SetStatusText@cSPPlayModeSubModeMovie_s0063_ba50@@QAEX_NH@Z  0063c590  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ?ShowMovieSavedDialog@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063c640  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ??1cEditorYouTubeAuthenticationMessage@@QAE@XZ  0063c700  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
 ../src/game/SPEditors/SPSubModeMovie.cpp  ??1cEditorYouTubeVideoUploadMessage@@QAE@XZ  0063c750  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?LoadYouTubeCredentials@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063c7f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?OnMovieRecorded@cSPPlayModeSubModeMovie_s0063_ba50@@QAEXXZ  0063c8f0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?CheckYouTubeRegistration@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063ced0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  0063cf90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAV?$basic_string_s0063_caf0@DU?$allocator_s0063_caf0@D@eastl@@@eastl@@@Z  0063d050  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXD@Z  0063d910  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPSubModeMovie.cpp  ?HandleButton@cSPPlayModeSubModeMovie_s0063_d9e0@@QAE_NH@Z  0063e100  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

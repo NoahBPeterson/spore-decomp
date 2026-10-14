@@ -26,6 +26,12 @@ class vector : public VectorBase<T, A> {
   typedef T value_type;
   typedef T* iterator;
   typedef const T* const_iterator;
+  // Out of line in retail (fix pass 4): the destructor of a vector of AutoRefCount<T> is one folded function, 0x5c7f10
+  // (`~SharedLibraryRegistry` 0x936740 ends `lea ecx,[esi+8]; jmp 0x5c7f10`), and erase(first, last) of the same element
+  // kind is 0x5c2170 (`SharedLibraryRegistry::Shutdown` 0x936e10: `push [esi+0xc]; push [esi+8]; lea ecx,[esi+8]; call
+  // 0x5c2170`).  Declared, not defined: every user calls them.
+  ~vector();
+  iterator erase(iterator first, iterator last);
   iterator begin() { return this->mpBegin; }
   iterator end() { return this->mpEnd; }
   uint32_t size() const { return (uint32_t)(this->mpEnd - this->mpBegin); }

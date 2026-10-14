@@ -3,6 +3,11 @@
 005182f0 133 cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
 00518b00 92 cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
 00518f10 944 /Od aligned frame (and esp,-16) + inline SSE clamp/round helpers differ; complete Render() reconstruction
+00519640 2446 /Od frame + inline Vector3 copies/property vcalls; complete Render() reconstruction
+0051a350 564 /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
 0051a8a0 51 /Od member-address temp locals differ; complete ctor reconstruction
 0051a930 89 /Od member-address temps + thiscall helpers; complete dtor reconstruction
+0051a9a0 214 /Od arg stores; complete 10-arg ctor reconstruction
 0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction
+0051ab50 705 /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
+0051c470 330 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor

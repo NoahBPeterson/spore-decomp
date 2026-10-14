@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051c470, s0051afd0, s0051a350, s00518f10, s005182f0, s005169d0, s00425a80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051c470, s0051afd0, s0051a350, s00519640, s00518f10, s005182f0, s005169d0, s00425a80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinnerPaintRender.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -6,11 +6,12 @@
 #include <string.h>
 #include <new>
 #include <intrin.h>
-#include "EA/IO/FileStream.h"
+#include "EA/Audio/FactoryBinarySampleData.h"
 #include "SP/cDynamicDrawBase.h"
 #include "SP/cDynamicDrawBaseRC.h"
 #include "SP/cIDynamicDraw.h"
 #include "SP/cMaterial.h"
+#include "SP/cMaterialManager.h"
 #include "nSPSkinner/cMeshAORender.h"
 #include "SP/cStaticBuffer.h"
 #include "nSPSkinner/cPaintCopyIdentityJob.h"
@@ -18,6 +19,7 @@
 #include "nSPSkinner/cPaintDilateJob.h"
 #include "nSPSkinner/cPaintRenderJob.h"
 #include "nSPSkinner/cRTTBuffer.h"
+#include "nSPSkinner/cPaintSplatJob.h"
 #include "cSkinpaintTextureExtractor.h"
 
 // ---- items of slice s00425a80 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -211,15 +213,15 @@ namespace SP {
 struct cMaterial_s0051_69d0 { uint32_t pad; uint32_t mID; };
 }
 namespace SP {
-class cMaterialManager {
+class cMaterialManager_s0051_69d0 {
 public:
     virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c(); virtual void v10();
     virtual void v14(); virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
-    virtual cMaterial_s0051_69d0* GetMaterial(uint32_t id);   // +0x28
+    virtual cMaterial_s0051_69d0* GetMaterial(uint32_t id);   // +0x28 0x00712c20
 };
 }
 namespace SP {
-cMaterialManager* MaterialManager();               // 0x0067dd70
+cMaterialManager_s0051_69d0* MaterialManager();               // 0x0067dd70
 }
 namespace SP {
 class cIDynamicDraw_s0051_69d0 {
@@ -465,13 +467,77 @@ struct PropIterator {
 inline int RoundToInt(float f) { return (int)(f + 0.5f); }
 // ---- items of slice s00518f10 end
 
+// ---- items of slice s00519640 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* _sAppProperties;                             // 0x015df0f0 vicinity
+int   GetPaintSystem_s0051_9640();                                   // 0x00401080
+void  RTTBuffer_Draw(void* self, void* a, void* b, uint32_t color); // 0x005296b0
+void  Vector3_CopyCtor(void* dst, const void* src);       // 0x004098a0
+void* FUN_00446ff0();                                     // 0x00446ff0
+void* FUN_006bb640();                                     // 0x006bb640
+void* FUN_0067dd60();                                     // 0x0067dd60
+struct DirectPropertyList {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9();
+    virtual float GetFloatProperty(unsigned key);          // +0x28
+};
+struct SplatObj {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual bool Has(int key);                             // +0x1c
+    virtual void v8(); virtual void v9();
+    virtual void* GetByKey(int key);                       // +0x28
+};
+struct TexFactory {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6();
+    virtual void* Create(const void* p, int a, int b, int type);  // +0x1c
+    virtual void v8();
+    virtual bool Valid(const void* p, int a, int b);        // +0x24
+    virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void Release(void* p);                          // +0x34
+};
+namespace nSPSkinner {
+struct cRTTBuffer_s0051_9640 {                 // size 0x64
+    uint32_t mCamera;               // +0x00
+    uint32_t material;              // +0x04
+    uint32_t writemask;             // +0x08
+    float    params[12];            // +0x0c  (cSPVector4 params[3])
+    void*    textures[2];           // +0x3c
+    int      maxparam;              // +0x44
+    int      maxtexture;            // +0x48
+    uint32_t vtxcount;              // +0x4c
+    uint32_t pad50;                 // +0x50
+    uint32_t mWidth;                // +0x58
+    uint32_t mHeight;               // +0x5c
+    void*    mTexture;              // +0x60
+};
+}
+namespace nSPSkinner {
+struct cPaintSplatJob_s0051_9640 {             // size 0x18
+    uint32_t pad00[3];
+    bool     mComplete;             // +0x0c
+    uint8_t  pad0d[3];
+    int      mStage;                // +0x10
+    int      mBlock;                // +0x14
+    virtual bool Render();  // 0x00519640 (nSPSkinner::cPaintSplatJob::Render)
+};
+}
+// ---- items of slice s00519640 end
+
 // ---- items of slice s0051a350 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_splatVtblDerived;
 extern void* g_splatVtblBase;
+int   GetPaintSystem_s0051_a350();                                              // 0x00401080
+void  FUN_00552750();                                                // 0x00552750
+void  FUN_0051d1e0(void* p);                                         // 0x0051d1e0
+void  FUN_0051d140();                                                // 0x0051d140
+void  FUN_00402420();                                                // 0x00402420
 struct SubObj { void FUN_0051d0d0(); };
 void  FUN_0051d180(void* p);                                         // 0x0051d180
 void  FUN_004259e0(void* a, void* b);                                // 0x004259e0
 void  SP_cJob_GetStatus(void* job);                                  // 0x00690120
+char  SP_GetPropertyAsKey(void* prop, int key, void* out);
 struct Factory {
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
     virtual void v4(); virtual void v5(); virtual void v6();
@@ -486,6 +552,27 @@ struct Factory {
     virtual void v21();
     virtual int   Make(void* a, int b, int c);                     // +0x58
 };
+namespace nSPSkinner {
+struct cRTTBuffer_s0051_a350 {                 // size 0x64
+    uint32_t mCamera; uint32_t material; uint32_t writemask;
+    float    params[12];
+    void*    textures[2];
+    int      maxparam;
+    int      maxtexture;
+    uint32_t vtxcount; uint32_t pad50;
+    uint32_t mWidth; uint32_t mHeight; void* mTexture;
+};
+}
+namespace nSPSkinner {
+struct cPaintSplatAlphaJob_s0051_a350 {        // size 0x18
+    uint32_t pad00[3];
+    bool     mComplete;
+    uint8_t  pad0d[3];
+    int      mStage;                // +0x10
+    int      mBlock;                // +0x14
+    virtual bool Render();
+};
+}
 struct SkinJob {
     void* FUN_0051a8a0();
     void  FUN_0051a930();
@@ -706,13 +793,27 @@ namespace Skinner {
 // ---- items of slice s0051afd0 end
 
 // ---- items of slice s0051c470 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern void* g_vtblSkinnerPaintSystem;   // 0x013eb394
+extern void* g_vtblLocaleChange;         // 0x013eb918
 extern void* g_vtblSimCreatureAbility;   // 0x013ef094
 extern void* g_vtblEditorResource;       // 0x013eb938
+extern void* g_vtblPaintA;               // 0x013f1b80
+extern void* g_vtblPaintB;               // 0x013f1b74
+extern void* g_vtblPaintC;               // 0x013f1b5c
+extern void* g_vtblPaintD;               // 0x013f1b58
+int   GetPaintSystem_s0051_c470();                                   // 0x00401080
+void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
+void* BakeSprites_ctor(void* p);                          // 0x007b00f0
 void  EASTL_allocator_deallocate(void* p);                // 0x00f47380
 struct RefCounted {
     uint32_t mvtbl; uint32_t pad04; uint32_t pad08;
     volatile long mnRefCount;              // +0x0c
     int AddRef();
+};
+struct BaseEditor { void dtor(); };
+struct PaintSystem {
+    PaintSystem(int kind, void* a, void* b, char c, void* d, char e, char f);
+    void dtor();
 };
 struct EditorResource { void* deleting_dtor(unsigned flags); };
 // ---- items of slice s0051c470 end
@@ -742,8 +843,6 @@ void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
 
 
 
@@ -820,8 +919,6 @@ void FastMemCopy(void* dst, const void* src, unsigned int n)
 
 
 
-
-
 // @ 0x00516ba0
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::cMeshAORender_s0051_69d0()
@@ -834,15 +931,11 @@ cMeshAORender_s0051_69d0::cMeshAORender_s0051_69d0()
 
 
 
-
-
 // @ 0x00516c30
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::~cMeshAORender_s0051_69d0()
 {}
 }  // namespace nSPSkinner
-
-
 
 
 
@@ -866,8 +959,6 @@ void cMeshAORender_s0051_69d0::Load(uint32_t instance, uint32_t group)
 
 
 
-
-
 // @ 0x00516d30
 namespace nSPSkinner {
 void cMeshAORender_s0051_69d0::Unload()
@@ -876,8 +967,6 @@ void cMeshAORender_s0051_69d0::Unload()
     mResource = 0;
 }
 }  // namespace nSPSkinner
-
-
 
 
 
@@ -904,8 +993,6 @@ void cMeshAORender_s0051_69d0::Dispatch(uint32_t a, uint32_t b, void* pContext)
 
 
 
-
-
 // @ 0x00516e10
 namespace nSPSkinner {
 bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
@@ -916,8 +1003,6 @@ bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
     return false;
 }
 }  // namespace nSPSkinner
-
-
 
 
 
@@ -989,8 +1074,6 @@ void cMeshAORender_s0051_69d0::Rebuild()
 
 
 
-
-
 // @ 0x00517160
 void cJobBase::Run(int, int, int, int)
 {
@@ -1015,8 +1098,6 @@ void cJobBase::Run(int, int, int, int)
 
 
 
-
-
 // @ 0x005172c0
 void cJobBase::Schedule()
 {
@@ -1033,13 +1114,9 @@ void cJobBase::Schedule()
 
 
 
-
-
 // @ 0x005173a0
 cJobBase::cJobBase()
 : mbDone(false) {}
-
-
 
 
 
@@ -1076,7 +1153,6 @@ bool cPaintRenderJob_s0051_82f0::Render()
 
 
 
-
 // @ 0x00518b00
 namespace nSPSkinner {
 void cFieldSwap::SwapWith(cFieldSwap* o)
@@ -1088,7 +1164,6 @@ void cFieldSwap::SwapWith(cFieldSwap* o)
     swapv(*(uint32_t*)this, *(uint32_t*)o);
 }
 }  // namespace nSPSkinner
-
 
 
 
@@ -1184,6 +1259,216 @@ bool nSPSkinner::cPaintAmbOccJob_s0051_8f10::Render()
 
 
 
+// @ 0x00519640
+bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
+{
+    int ps1 = GetPaintSystem_s0051_9640();
+    int mat = *(int*)(ps1 + 0xc);
+    cRTTBuffer_s0051_9640* buf0 = *(cRTTBuffer_s0051_9640**)(mat + 0x10);
+    cRTTBuffer_s0051_9640* buf1 = *(cRTTBuffer_s0051_9640**)(mat + 0x14);
+    int ps2 = GetPaintSystem_s0051_9640();
+    int skin = *(int*)(ps2 + 0x20);
+    int blocks = *(int*)(*(int*)(skin + 8) + 0x98);
+    int nBlocks = (*(int*)(*(int*)(skin + 8) + 0x9c) - *(int*)(*(int*)(skin + 8) + 0x98)) / 0x8c;
+
+    if (mStage == 1)
+        mStage = 2;
+    if (mStage < 4) {
+        if (mStage < 2)
+            RTTBuffer_Begin(buf0);
+        else
+            RTTBuffer_Begin(buf1);
+
+        float c4c, c48, c44, c40, c3c, c38, c34, c30, c2c, c28, c24, c20;
+        c40 = 0.0f; c30 = 0.0f; c20 = 0.0f;
+        Vector3_CopyCtor(&c4c, (char*)0x15df0f0 + 0);
+        Vector3_CopyCtor(&c3c, (char*)0x15df0f0 + 0xc);
+        Vector3_CopyCtor(&c2c, (char*)0x15df0f0 + 0x18);
+
+        float fGloss = ((DirectPropertyList*)_sAppProperties)->GetFloatProperty(0x1c76d9b5);
+        if (fGloss == 0.0f)
+            fGloss = 1.0f;
+
+        int drawn = 0;
+        while (mBlock < nBlocks && drawn < 10) {
+            if ((*(uint16_t*)(blocks + 8 + mBlock * 0x8c) & 1) == 0) {
+                drawn++;
+                uint32_t* rect = (uint32_t*)(mBlock * 0x10 + *(int*)(skin + 0x90));
+                float uv0[2]; uv0[0] = (float)rect[0]; uv0[1] = (float)rect[1];
+                float uv1[2]; uv1[0] = (float)rect[2]; uv1[1] = (float)rect[3];
+
+                SplatObj* prop = *(SplatObj**)(*(int*)(skin + 0xc) + mBlock * 4);
+                int* texA = 0;
+                int* texB = 0;
+                int* texC = 0;
+                bool haveA = false, haveB = false, haveC = false;
+
+                {
+                    if (mStage == 0 && (haveA = prop->Has(0x2424655))) {
+                        void* o = prop->GetByKey(0x2424655);
+                        void* v;
+                        if (*(int16_t*)((char*)o + 0x12) == 0x20 || *(int16_t*)((char*)o + 0x12) == 0x10)
+                            v = FUN_00446ff0();
+                        else
+                            v = FUN_006bb640();
+                        TexFactory* f = (TexFactory*)FUN_0067dd60();
+                        if (f->Valid(v, ((int*)v)[1], ((int*)v)[2])) {
+                            f = (TexFactory*)FUN_0067dd60();
+                            texA = (int*)f->Create(v, ((int*)v)[1], ((int*)v)[2], 6);
+                        }
+                    }
+                    if ((mStage == 0 || mStage == 1) && (haveB = prop->Has(0x2424657))) {
+                        void* o = prop->GetByKey(0x2424657);
+                        void* v;
+                        if (*(int16_t*)((char*)o + 0x12) == 0x20 || *(int16_t*)((char*)o + 0x12) == 0x10)
+                            v = FUN_00446ff0();
+                        else
+                            v = FUN_006bb640();
+                        TexFactory* f = (TexFactory*)FUN_0067dd60();
+                        if (f->Valid(v, ((int*)v)[1], ((int*)v)[2])) {
+                            f = (TexFactory*)FUN_0067dd60();
+                            texB = (int*)f->Create(v, ((int*)v)[1], ((int*)v)[2], 6);
+                        }
+                    }
+                    if ((mStage == 2 || mStage == 3) && (haveC = prop->Has(0x2424656))) {
+                        void* o = prop->GetByKey(0x2424656);
+                        void* v;
+                        if (*(int16_t*)((char*)o + 0x12) == 0x20 || *(int16_t*)((char*)o + 0x12) == 0x10)
+                            v = FUN_00446ff0();
+                        else
+                            v = FUN_006bb640();
+                        TexFactory* f = (TexFactory*)FUN_0067dd60();
+                        if (f->Valid(v, ((int*)v)[1], ((int*)v)[2])) {
+                            f = (TexFactory*)FUN_0067dd60();
+                            texC = (int*)f->Create(v, ((int*)v)[1], ((int*)v)[2], 6);
+                        }
+                    }
+                }
+                (void)haveA; (void)haveB; (void)haveC;
+
+                if (mStage == 0 && texA != 0 && texB != 0) {
+                    RTTBuffer_SetParams(buf0, 1, 1, 1, 0);
+                    buf0->material = 0xd9ec39bc;
+                    if (buf0->maxparam < 1) buf0->maxparam = 1;
+                    buf0->params[0] = c4c; buf0->params[1] = c48; buf0->params[2] = c44; buf0->params[3] = c40;
+                    if (buf0->maxparam < 2) buf0->maxparam = 2;
+                    buf0->params[4] = c3c; buf0->params[5] = c38; buf0->params[6] = c34; buf0->params[7] = c30;
+                    if (buf0->maxparam < 3) buf0->maxparam = 3;
+                    buf0->params[8] = c2c; buf0->params[9] = c28; buf0->params[10] = c24; buf0->params[11] = c20;
+                    if ((texA[1] & 1) == 0)
+                        ((TexFactory*)FUN_0067dd60())->Release(texA);
+                    void* raster = (void*)*texA;
+                    if (raster != 0 && buf0->maxtexture < 1) buf0->maxtexture = 1;
+                    buf0->textures[0] = raster;
+                    if ((texB[1] & 1) == 0)
+                        ((TexFactory*)FUN_0067dd60())->Release(texB);
+                    raster = (void*)*texB;
+                    if (raster != 0 && buf0->maxtexture < 2) buf0->maxtexture = 2;
+                    buf0->textures[1] = raster;
+                    RTTBuffer_Draw(buf0, uv0, uv1, 0xffffffff);
+                }
+                if (mStage == 1 && texB != 0) {
+                    RTTBuffer_SetParams(buf0, 0, 0, 0, 1);
+                    buf0->material = 0xa91b6551;
+                    if (buf0->maxparam < 1) buf0->maxparam = 1;
+                    buf0->params[0] = 1.0f; buf0->params[1] = 1.0f; buf0->params[2] = 1.0f; buf0->params[3] = 1.0f;
+                    if ((texB[1] & 1) == 0)
+                        ((TexFactory*)FUN_0067dd60())->Release(texB);
+                    void* raster = (void*)*texB;
+                    if (raster != 0 && buf0->maxtexture < 1) buf0->maxtexture = 1;
+                    buf0->textures[0] = raster;
+                    buf0->textures[1] = 0;
+                    RTTBuffer_Draw(buf0, uv0, uv1, 0xffffffff);
+                }
+                if (mStage == 2 && texC != 0) {
+                    float f = *(float*)(mat + 0x30);
+                    RTTBuffer_SetParams(buf1, 1, 0, 0, 0);
+                    buf1->material = 0x3815422;
+                    if (buf1->maxparam < 1) buf1->maxparam = 1;
+                    buf1->params[0] = f; buf1->params[1] = f; buf1->params[2] = f; buf1->params[3] = 1.0f;
+                    if ((texC[1] & 1) == 0)
+                        ((TexFactory*)FUN_0067dd60())->Release(texC);
+                    void* raster = (void*)*texC;
+                    if (raster != 0 && buf1->maxtexture < 1) buf1->maxtexture = 1;
+                    buf1->textures[0] = raster;
+                    RTTBuffer_Draw(buf1, uv0, uv1, 0xffffffff);
+                }
+                if (mStage == 3 && texC != 0) {
+                    float f = *(float*)(mat + 0x2c) * fGloss;
+                    RTTBuffer_SetParams(buf1, 0, 0, 1, 0);
+                    buf1->material = 0x968e3fff;
+                    if (buf1->maxparam < 1) buf1->maxparam = 1;
+                    buf1->params[0] = f; buf1->params[1] = f; buf1->params[2] = f; buf1->params[3] = 1.0f;
+                    if ((texC[1] & 1) == 0)
+                        ((TexFactory*)FUN_0067dd60())->Release(texC);
+                    void* raster = (void*)*texC;
+                    if (raster != 0 && buf1->maxtexture < 1) buf1->maxtexture = 1;
+                    buf1->textures[0] = raster;
+                    RTTBuffer_Draw(buf1, uv0, uv1, 0xffffffff);
+                }
+            }
+            mBlock = mBlock + 1;
+        }
+        if (mStage < 2)
+            RTTBuffer_BeginDraw(buf0);
+        else
+            RTTBuffer_BeginDraw(buf1);
+        if (nBlocks <= mBlock) {
+            mBlock = 0;
+            mStage = mStage + 1;
+        }
+    }
+    return mStage == 4;
+}
+
+
+
+// @ 0x0051a350
+bool nSPSkinner::cPaintSplatAlphaJob_s0051_a350::Render()
+{
+    nSPSkinner::cRTTBuffer_s0051_a350* buf;
+    {
+        int ps = GetPaintSystem_s0051_a350();
+        int mat = *(int*)(ps + 0xc);
+        buf = *(nSPSkinner::cRTTBuffer_s0051_a350**)(mat + 0x10);
+    }
+    int ps2 = GetPaintSystem_s0051_a350();
+    int skin = *(int*)(ps2 + 0x20);
+    int blocks = *(int*)(*(int*)(skin + 8) + 0x98);
+    int nBlocks = (*(int*)(*(int*)(skin + 8) + 0x9c) - *(int*)(*(int*)(skin + 8) + 0x98)) / 0x8c;
+    RTTBuffer_Begin(buf);
+    int drawn = 0;
+    while (mBlock < nBlocks && drawn < 10) {
+        if ((*(uint16_t*)(blocks + 8 + mBlock * 0x8c) & 1) == 0) {
+            int prop[3]; prop[0] = 0; prop[1] = 0; prop[2] = 0;
+            if (SP_GetPropertyAsKey(*(void**)(*(int*)(skin + 0xc) + mBlock * 4), 0x2424657, prop)) {
+                int* tex = (int*)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 6);
+                if (tex != 0) {
+                    uint32_t* rect = (uint32_t*)(mBlock * 0x10 + *(int*)(skin + 0x90));
+                    float uv0[2]; uv0[0] = (float)rect[0]; uv0[1] = (float)rect[1];
+                    float uv1[2]; uv1[0] = (float)rect[2]; uv1[1] = (float)rect[3];
+                    RTTBuffer_SetParams(buf, 0, 0, 0, 1);
+                    buf->material = 0xa91b6551;
+                    if (buf->maxparam < 1) buf->maxparam = 1;
+                    buf->params[0] = 1.0f; buf->params[1] = 1.0f; buf->params[2] = 1.0f; buf->params[3] = 1.0f;
+                    if ((tex[1] & 1) == 0)
+                        ((Factory*)FUN_0067dd60())->Release(tex);
+                    void* raster = (void*)*tex;
+                    if (raster != 0 && buf->maxtexture < 1) buf->maxtexture = 1;
+                    buf->textures[0] = raster;
+                    buf->textures[1] = 0;
+                    RTTBuffer_Draw(buf, uv0, uv1, 0xffffffff);
+                    drawn++;
+                }
+            }
+        }
+        mBlock = mBlock + 1;
+    }
+    RTTBuffer_BeginDraw(buf);
+    return nBlocks <= mBlock;
+}
+
+
 
 // @ 0x0051a8a0
 void* SkinJob::FUN_0051a8a0()
@@ -1196,7 +1481,6 @@ void* SkinJob::FUN_0051a8a0()
     *(int*)((char*)this + 0x334) = 0;
     return this;
 }
-
 
 
 
@@ -1215,6 +1499,31 @@ void SkinJob::FUN_0051a930()
 
 
 
+// @ 0x0051a9a0
+void SkinJob::FUN_0051a9a0(int a2, char a3, char a4, int a5, int a6, int a7, int a8, char a9, char a10, char a11)
+{
+    void* self = this;
+    *(int*)((char*)self + 0x33c) = 0;
+    FUN_004259e0(*(void**)((char*)self + 8), *(void**)((char*)self + 0xc));
+    *(int*)((char*)self + 0x340) = 0;
+    *(int*)((char*)self + 0x344) = 0;
+    *(int*)((char*)self + 0x338) = a2;
+    *(char*)((char*)self + 0x348) = a3;
+    *(char*)((char*)self + 0x349) = a4;
+    int ps = GetPaintSystem_s0051_a350();
+    *(char*)((char*)self + 0x34a) = *(char*)(ps + 0x7e);
+    *(int*)((char*)self + 0x320) = a5;
+    *(int*)((char*)self + 0x324) = a6;
+    *(int*)((char*)self + 0x328) = a7;
+    *(int*)((char*)self + 0x32c) = a8;
+    *(char*)((char*)self + 0x34b) = a9;
+    *(char*)((char*)self + 0x34c) = a10;
+    *(char*)((char*)self + 0x34d) = a11;
+    *(char*)((char*)self + 0x34e) = 0;
+    ((SkinJob*)self)->FUN_0051ab50(a3);
+}
+
+
 
 // @ 0x0051aaa0
 void SkinJob::FUN_0051aaa0()
@@ -1231,6 +1540,73 @@ void SkinJob::FUN_0051aaa0()
     *(int*)((char*)self + 0x33c) = -1;
 }
 
+
+
+// @ 0x0051ab50
+void SkinJob::FUN_0051ab50(char deep)
+{
+    int ps = GetPaintSystem_s0051_a350();
+    int mat = *(int*)(ps + 0xc);
+    int ps2 = GetPaintSystem_s0051_a350();
+    int skin = *(int*)(ps2 + 0x20);
+    if (mat != 0 && skin != 0) {
+        int blocks = *(int*)(*(int*)(skin + 8) + 0x98);
+        int base = mat + 0x3c;
+        int c = 0;
+        int* it = 0;
+        int* p = *(int**)(mat + 0x40);
+        int v = *p;
+        if (v == 0)
+            FUN_00552750();
+        for (;;) {
+            it = p;
+            c = v;
+            int* end = (int*)(*(int*)(base + 4) + *(int*)(base + 8) * 4);
+            if (c == *end)
+                break;
+            for (int i = 0; i < 3; i++) {
+                if (*(int*)(c + 4 + i * 4) != 0)
+                    FUN_0051d1e0((void*)(c + 4 + i * 4));
+            }
+            FUN_0051d140();
+            v = c;
+            p = it;
+        }
+        int tex = ((Factory*)FUN_0067dd60())->Make((void*)0xbd77bb98, 0, 0);
+        if (tex != 0)
+            *(int*)(tex + 8) = *(int*)(tex + 8) + 1;
+        FUN_0051d1e0(&tex);
+        if (tex != 0)
+            FUN_00402420();
+        if (deep != 0) {
+            int nBlocks = (*(int*)(*(int*)(skin + 8) + 0x9c) - *(int*)(*(int*)(skin + 8) + 0x98)) / 0x8c;
+            for (int j = 0; j < nBlocks; j++) {
+                if ((*(uint16_t*)(blocks + 8 + j * 0x8c) & 1) == 0) {
+                    int propKey = *(int*)(*(int*)(skin + 0xc) + j * 4);
+                    int prop[3]; prop[0] = 0; prop[1] = 0; prop[2] = 0;
+                    if (SP_GetPropertyAsKey((void*)propKey, 0x2424655, prop)) {
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
+                        FUN_0051d1e0(&t);
+                        if (t != 0) FUN_00402420();
+                    }
+                    if (SP_GetPropertyAsKey((void*)propKey, 0x2424657, prop)) {
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
+                        FUN_0051d1e0(&t);
+                        if (t != 0) FUN_00402420();
+                    }
+                    if (SP_GetPropertyAsKey((void*)propKey, 0x2424656, prop)) {
+                        int t = (int)((Factory*)FUN_0067dd60())->Create(prop, prop[1], prop[2], 4);
+                        if (t != 0) *(int*)(t + 8) = *(int*)(t + 8) + 1;
+                        FUN_0051d1e0(&t);
+                        if (t != 0) FUN_00402420();
+                    }
+                }
+            }
+        }
+    }
+}
 
 
 // @ 0x0051afd0
@@ -1305,6 +1681,49 @@ void cSkinPainterPipeline::ExecutePipeline()
 }
 }  // namespace Skinner
 
+// @ 0x0051c470
+PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, char f)
+{
+    *(void**)this = &g_vtblSkinnerPaintSystem;
+    *(void**)((char*)this + 4) = &g_vtblLocaleChange;
+    ((BaseEditor*)((char*)this + 8))->dtor();   // inlined base ctor
+    *(void**)this = &g_vtblPaintA;
+    *(void**)((char*)this + 4) = &g_vtblPaintB;
+    *(void**)((char*)this + 8) = &g_vtblPaintC;
+    *(void**)((char*)this + 0xc) = &g_vtblPaintD;
+    *(void**)((char*)this + 0x18) = a;
+    *(void**)((char*)this + 0x1c) = b;
+    *(int*)((char*)this + 0x20) = 0;
+    *(void**)((char*)this + 0x24) = d;
+    *(char*)((char*)this + 0x28) = e;
+    *(char*)((char*)this + 0x29) = f;
+    *(char*)((char*)this + 0x2a) = c;
+    *(int*)((char*)this + 0x2c) = 0;
+    *(int*)((char*)this + 0x30) = 0;
+    *(int*)((char*)this + 0x34) = 0;
+    *(int*)((char*)this + 0x38) = 0;
+    *(int*)((char*)this + 0x3c) = 0;
+    *(int*)((char*)this + 0x40) = 0;
+    *(int*)((char*)this + 0x44) = 0;
+    *(int*)((char*)this + 0x48) = 0;
+    int ps = GetPaintSystem_s0051_c470();
+    int mat = *(int*)(ps + 0xc);
+    void* mem = EA_alloc(0x20, "Skinner", 0, 0, 0, 0);
+    void* bs = 0;
+    if (mem != 0)
+        bs = BakeSprites_ctor(mem);
+    void** slot = (void**)((char*)this + 0x30);
+    if (bs != *slot) {
+        void* old = *slot;
+        if (bs != 0)
+            (*(void(__thiscall**)(void*))(((void**)*(void**)bs)[0]))(bs);
+        *slot = bs;
+        if (old != 0)
+            (*(void(__thiscall**)(void*))((*(void***)old)[1]))(old);
+    }
+    if (mat != 0 && *(int*)(mat + 0x10 + kind * 4) != 0)
+        *(void**)((char*)this + 0x20) = *(void**)(*(int*)(mat + 0x10 + kind * 4) + 0x60);
+}
 
 // @ 0x0051c620
 int RefCounted::AddRef()

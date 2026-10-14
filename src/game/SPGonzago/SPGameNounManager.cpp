@@ -1,17 +1,15 @@
 // src/game/SPGonzago/SPGameNounManager.cpp -- migrated from slice(s) s00b24740, s00b21e60, s00b1fd50, s00b1d870 by tools/migrate/rewrite.py
 // Object file: SPGonzago/SPGameNounManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
-// The slices' `typedef char va_list` (s00b1fd50, used by FormatAppend / VA_START) must win over <vadefs.h>:
-// a later slice's `#include <new>` pulls <vadefs.h> in, which would redefine `va_list` as `char*` (C2040).
-// Claim the guard first so <vadefs.h> leaves the slices' spelling alone.  HAND EDIT (see report_s00b21e60.md);
-// rewrite.py preserves it because it keeps the other slices' blocks verbatim.
-#define _VA_LIST_DEFINED
 
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 #include "game/types.h"
 #include "SP/cGameNounManager.h"
-#include "EA/COM/IUnknown32.h"
+#include "EA/Audio/IPrimitive.h"
 #include "SP/cArtilleryProjectile.h"
 #include "SP/cGameData.h"
+#include "SP/cVarListSerializer.h"
+#include "EA/UTFWin/ISerializer.h"
 #include "EA/UTFWin/Window.h"
 #include "SP/cVehicleGroupOrder.h"
 #include <new>
@@ -35,6 +33,7 @@ struct Window { bool Initialize(); };
 // ---- items of slice s00b1d870 end
 
 // ---- items of slice s00b1fd50 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 extern "C" void* __cdecl memset(void*, int, unsigned);
 extern "C" void* __cdecl memmove(void*, const void*, unsigned);
 extern "C" void* __cdecl memcpy(void*, const void*, unsigned);
@@ -777,13 +776,9 @@ int GetPlayerEmpireOrMinus1()
 
 
 
-
-
 // @ 0x00b1fbf0
 bool UTFWin::Window::Initialize()
 { return true; }
-
-
 
 
 
@@ -804,8 +799,6 @@ void* New_cMissionHappinessEvent()
 
 
 
-
-
 // @ 0x00b1fd50
 void __thiscall NounMgr::SetAvatar(cGameData* p)
 {
@@ -814,7 +807,6 @@ void __thiscall NounMgr::SetAvatar(cGameData* p)
     if (p) p->mFlags |= 0x200;
     mAvatar = p;
 }
-
 
 
 
@@ -832,7 +824,6 @@ int __cdecl ClassifyA(IRefObject* p)
 
 
 
-
 // @ 0x00b1feb0
 int __stdcall ClassifyB(IRefObject* p)
 {
@@ -844,7 +835,6 @@ int __stdcall ClassifyB(IRefObject* p)
     if (a || b) return 1;
     return 0;
 }
-
 
 
 
@@ -865,7 +855,6 @@ void __thiscall ByteString::allocate(unsigned n)
 
 
 
-
 // @ 0x00b20120
 void __thiscall ArtilleryBase::Dtor()
 {
@@ -876,7 +865,6 @@ void __thiscall ArtilleryBase::Dtor()
     ((SerObj*)((char*)this + 0x34))->Set2();
     ((GameDataDtor*)this)->DtorBody();
 }
-
 
 
 
@@ -903,7 +891,6 @@ void __thiscall GameDataBig::MarkFeedback(cGameData* p)
 
 
 
-
 // @ 0x00b20230
 bool __cdecl IterateList(void* arg, ListNode2* anchor)
 {
@@ -915,7 +902,6 @@ bool __cdecl IterateList(void* arg, ListNode2* anchor)
     }
     return true;
 }
-
 
 
 
@@ -947,7 +933,6 @@ void __thiscall GameDataBig::RemoveVecItem(cGameData* p)
 
 
 
-
 // @ 0x00b20470
 int __thiscall GameDataBig::CountList(cGameData* p)
 {
@@ -962,7 +947,6 @@ int __thiscall GameDataBig::CountList(cGameData* p)
     }
     return n;
 }
-
 
 
 
@@ -982,7 +966,6 @@ cGameData* __thiscall GameDataBig::FindList(unsigned key)
 
 
 
-
 // @ 0x00b205a0
 SmallObj* __stdcall AllocSmallObj(SmallObj* src)
 {
@@ -995,7 +978,6 @@ SmallObj* __stdcall AllocSmallObj(SmallObj* src)
     p->m18 = 0;
     return p;
 }
-
 
 
 
@@ -1016,7 +998,6 @@ void __thiscall ByteString::resize(unsigned n)
 
 
 
-
 // @ 0x00b20660
 cArtilleryProjectile* __cdecl cArtilleryProjectile::Create()
 {
@@ -1033,7 +1014,6 @@ cArtilleryProjectile* __cdecl cArtilleryProjectile::Create()
     }
     return 0;
 }
-
 
 
 
@@ -1062,7 +1042,6 @@ void __thiscall FlushMgr::Flush()
 
 
 
-
 // @ 0x00b20750
 void* __thiscall FeedbackMgr::GetFeedback(unsigned id)
 {
@@ -1071,7 +1050,6 @@ void* __thiscall FeedbackMgr::GetFeedback(unsigned id)
     if (node != (RBNode*)&mTree.mAnchor) return *(void**)((char*)node + 0x14);
     return 0;
 }
-
 
 
 
@@ -1087,7 +1065,6 @@ int __thiscall FeedbackMgr::ClassifyById(unsigned id)
     unsigned r = (unsigned)((StarMgrObj*)StarManager())->GetEmpireByID(id);
     return r ? 5 : 0;
 }
-
 
 
 
@@ -1124,7 +1101,6 @@ void __thiscall MapStrFind::Find(void** out, void* key)
 
 
 
-
 // @ 0x00b209f0
 void* __thiscall String4::ctor(void* a, void* b)
 {
@@ -1147,7 +1123,6 @@ void* __thiscall String4::ctor(void* a, void* b)
 
 
 
-
 // @ 0x00b20a50
 void __stdcall FreeBucketNodes(void** buckets, uint n)
 {
@@ -1164,7 +1139,6 @@ void __stdcall FreeBucketNodes(void** buckets, uint n)
         buckets[i] = 0;
     }
 }
-
 
 
 
@@ -1202,7 +1176,6 @@ void* __cdecl FormatAppend(void* self, const char* fmt, ...)
 
 
 
-
 // @ 0x00b20b90
 void* __thiscall StringC::ctor(void* a)
 {
@@ -1225,7 +1198,6 @@ void* __thiscall StringC::ctor(void* a)
 
 
 
-
 // @ 0x00b20c00
 void* __thiscall StringAlloc::ctor(void* a)
 {
@@ -1245,7 +1217,6 @@ void* __thiscall StringAlloc::ctor(void* a)
     *end = 0;
     return self;
 }
-
 
 
 // @ 0x00b225b0

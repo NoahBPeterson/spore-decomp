@@ -5,9 +5,8 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "rw/graphics/PrimitiveType.h"
-#include "rw/graphics/VertexBuffer.h"
 
-namespace rw { namespace graphics { class IndexBuffer; } }
+namespace rw { namespace graphics { class IndexBuffer; class VertexBuffer; } }
 
 namespace rw {
 namespace graphics {

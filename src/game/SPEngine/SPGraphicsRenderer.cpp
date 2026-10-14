@@ -16,6 +16,11 @@ extern "C" void __cdecl D3D9AdapterInfo_GetAdapterString(int);   // @ 0x011f8310
 extern int GetDeviceReady();   // @ 0x011f8160
 extern int* g_d3d9DeviceC;   // @ 0x016f89d0
 extern "C" float CIpow_stub(float, float);   // @ 0x011e08f0
+extern "C" int FUN_006a17e0(int, int);           // @ 0x006a17e0
+extern "C" int FUN_011fd770();                   // @ 0x011fd770
+extern int* g_d3d9State;   // @ 0x016f89c8
+extern int* g_devCaps;     // @ 0x016fa39c
+extern int g_devCapsDword; // @ 0x016f9448
 
 // ---- items of slice s0075cf20 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void* SP_MessageServer();   // @ 0x0067dcc0
@@ -55,11 +60,19 @@ struct DevLatch {
 };
 extern int* g_d3d9DeviceC;   // @ 0x016f89d0
 extern "C" float CIpow_stub(float, float);   // @ 0x011e08f0
+struct D3DCAPS9;
+extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
+extern "C" int FUN_006a17e0(int, int);           // @ 0x006a17e0
+extern "C" int FUN_011fd770();                   // @ 0x011fd770
+extern int* g_d3d9State;   // @ 0x016f89c8
+extern int* g_devCaps;     // @ 0x016fa39c
+extern int g_devCapsDword; // @ 0x016f9448
 // ---- items of slice s0075cf20 end
 
 // unnamed retail callees and globals that name local stubs (address in the comment)
 extern "C" __declspec(dllimport) int __stdcall GetMonitorInfoA(void*, MONITORINFO*);  // @ user32
 extern void ReleaseDevice();   // @ 0x011f81d0
+extern D3DCAPS9* DevCapsManager_GetD3DCAPS9();   // @ 0x011f8af0
 
 // ---- items of slice s0075de80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int* g_sAppProperties;   // @ 0x015fd918
@@ -140,7 +153,6 @@ void DeviceRelease()
 
 
 
-
 // @ 0x0075d990
 void PaintSystemInit()
 {
@@ -152,7 +164,6 @@ void PaintSystemInit()
     int* p = (int*)SP_MessageServer();
     ((void (__thiscall*)(void*, int, int, int))*(void**)(*p + 0x14))(p, 0x44edd9c, 0, 0);
 }
-
 
 
 
@@ -180,13 +191,11 @@ float ScreenAspectRatio(float param_1)
 
 
 
-
 // @ 0x0075da90
 void __stdcall GetDisplayName(int param_1)
 {
     D3D9AdapterInfo_GetAdapterString(param_1);
 }
-
 
 
 
@@ -197,7 +206,6 @@ void cRenderer::SetViewer(int idx, void* viewer)
     mViewers[idx] = viewer;
     mMutex.Unlock();
 }
-
 
 
 
@@ -212,7 +220,6 @@ void* cRenderer::GetRenderStats(int idx)
 
 
 
-
 // @ 0x0075dbb0
 void cRenderer::LayerAtIndex(int v)
 {
@@ -221,7 +228,6 @@ void cRenderer::LayerAtIndex(int v)
     self->mRenderJobBudget = v;
     self->mMutex.Unlock();
 }
-
 
 
 
@@ -240,7 +246,6 @@ bool DevLatch::CheckDeviceReady()
 
 
 
-
 // @ 0x0075dc10
 void SP::cRenderer::slot_35()
 {
@@ -248,7 +253,6 @@ void SP::cRenderer::slot_35()
     if (*(char*)(param_1 + 0x1b) == 0)
         ReleaseDevice();
 }
-
 
 
 
@@ -268,6 +272,31 @@ void BuildPaletteTable(float param_1)
     ((void (__thiscall*)(void*, int, int, void*))*(void**)(vt + 0x54))((void*)vt, 0, 0, table);
 }
 
+
+
+// @ 0x0075dca0
+bool cRenderer_InitShaders()
+{
+    int caps = (int)DevCapsManager_GetD3DCAPS9();
+    int local = 0;
+    if (*(unsigned int*)(caps + 0xc4) < 0xfffe0300u) {
+        int dev = (int)g_d3d9State;
+        int vt = *(int*)dev;
+        int r = ((int (__thiscall*)(void*, int, int, int, int, int, int))*(void**)(vt + 0x28))
+                    ((void*)vt, 0, 1, 0x16, 0, 1, 0x54534e49);
+        if (r == 0) {
+            g_devCaps = (int*)((int)g_devCaps | 0x80000);
+            g_devCapsDword = 0x54534e49;
+            local = 1;
+        }
+    } else {
+        local = 1;
+    }
+    if ((*(unsigned char*)(caps + 0xd4) & 1) == 0)
+        local = 0;
+    FUN_006a17e0(0x668d4fa1, local);
+    return FUN_011fd770() != 0;
+}
 
 
 // @ 0x0075de80

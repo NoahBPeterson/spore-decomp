@@ -7,9 +7,10 @@
 00765f80 16 deleting dtor: EH prolog + vptr-store schedule not reproduced
 00765fe0 7 ResB ctor: only zeroing-store order differs (0x18/0x20/0x24/0x28/0x2c)
 00766100 20 MoveOut: one reused zero register instead of four independent xors
-007662d0  428  vector<0xa0>::insert: helper call schedule/register allocation differs
+007662d0 334 vector<0xa0>::insert: helper call schedule/register allocation differs
 00766950 399 vector<uint32_t>::insert: fill-then-move schedule differs
-00766ed0 109 Factory::CreateResource: refcount bookkeeping/register schedule differs
+00766ed0 115 Factory::CreateResource: refcount bookkeeping/register schedule differs
+00767170 72 stack-container setup: local layout and helper call shapes differ | equiv FAIL (ours faults reading unmapped at 765ad7; callee model not matching)
 00767290 109 vector<0xa0>::resize: grow path helper shapes differ
 007682a0 124 vector<0x7c>::resize: temp ctor/helper call schedule differs
 00769cf0 96 stream header check + two-phase read: vcall/helper scheduling differs

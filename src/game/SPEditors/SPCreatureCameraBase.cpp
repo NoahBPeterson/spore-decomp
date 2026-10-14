@@ -20,8 +20,9 @@
 #include <math.h>
 #include "EA/Variant.h"
 #include "SP/cDirectPropertyList.h"
+#include "EA/Swarm/cTransform.h"
 #include "cSPTransform.h"
-#include "EA/IO/FileStream.h"
+#include "EA/Audio/FactoryBinarySampleData.h"
 #include "SP/cSPPlayModeAnimation.h"
 #include "SP/cSPPlayModeSubModeAction.h"
 #include "SP/cSPEditorAnimatedCreatureManager.h"
@@ -55,6 +56,9 @@ AssetBrowserT* __cdecl AssetBrowser();
 // ---- items of slice s00623f90 end
 
 // ---- items of slice s00624fb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kHalfLifeTime;              // 0x1521884
+extern const float kVelocityRate;              // 0x1521880
+extern const float kVelocityAccel;             // 0x152187c
 #define PVCAT2(a, b) a##b
 #define PVCAT(a, b) PVCAT2(a, b)
 #define PV virtual void PVCAT(pv_, __COUNTER__)();
@@ -94,8 +98,10 @@ struct cSPBoundingBox_s0062_4fb0 {
     cSPVector3_s0062_4fb0 mMin;
     cSPVector3_s0062_4fb0 mMax;
 };
-extern const cSPVector3_s0062_4fb0 kAvatarCameraOffset_s0062_4fb0;   // 0x15f6774
-extern const cSPVector3_s0062_4fb0 kAvatarUp_s0062_4fb0;             // 0x15f66f8
+extern const cSPVector3_s0062_4fb0 kZeroVector;           // 0x15f65fc
+extern const cSPQuaternion_s0062_4fb0 kIdentityQuat;      // 0x1521a70
+extern const cSPVector3_s0062_4fb0 kAvatarCameraOffset;   // 0x15f6774
+extern const cSPVector3_s0062_4fb0 kAvatarUp;             // 0x15f66f8
 namespace SP {
 struct tAvatarData_s0062_4fb0 {
     cSPVector3_s0062_4fb0 mPosition;       // +0x00
@@ -135,11 +141,91 @@ struct IMessageServer {
 namespace SP {
 IMessageServer* __cdecl MessageServer();
 }
-extern const cSPVector3 kZeroVector;           // 0x15f65fc
-extern const cSPQuaternion kIdentityQuat;      // 0x1521a70
-extern const float kHalfLifeTime;              // 0x1521884
-extern const float kVelocityRate;              // 0x1521880
-extern const float kVelocityAccel;             // 0x152187c
+namespace SP {
+class cICameraController_s0062_4fb0 { public: virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); };
+}
+namespace SP {
+class IRef2 { public: virtual void r0(); virtual void r1(); };
+}
+namespace SP {
+struct tCameraData_s0062_4fb0 {
+    float dt;                                   // +0x00
+    cSPVector3_s0062_4fb0 platformPosition;                // +0x04
+    cSPVector3_s0062_4fb0 platformVelocity;                // +0x10
+    cSPQuaternion_s0062_4fb0 platformOrientation;          // +0x1c
+    cSPVector3_s0062_4fb0 avatarPosition;                  // +0x2c
+    float currentPlayerTheta;                   // +0x38
+    float currentPlayerPitch;                   // +0x3c
+    float currentPlayerDistance;                // +0x40
+    cSPVector3_s0062_4fb0 desiredPosition;                 // +0x44
+    cSPVector3_s0062_4fb0 desiredLookAt;                   // +0x50
+    float mDesiredLookAtXOffset;                // +0x5c
+    float mDesiredLookAtYOffset;                // +0x60
+    cSPVector3_s0062_4fb0 newPlatformPosition;             // +0x64
+    cSPVector3_s0062_4fb0 newPlatformVelocity;             // +0x70
+    cSPQuaternion_s0062_4fb0 newPlatformOrientation;       // +0x7c
+    float desiredPlayerTheta;                   // +0x8c
+    float desiredPlayerPitch;                   // +0x90
+    float desiredPlayerDistance;                // +0x94
+    float nonPenetratingPhi;                    // +0x98
+    bool bPenetrating;                          // +0x9c
+    cSPVector3_s0062_4fb0 currentPreTranslate;             // +0xa0
+    cSPVector3_s0062_4fb0 desiredPreTranslate;             // +0xac
+    bool bTransitioning;                        // +0xb8
+};
+}
+namespace SP {
+class cCreatureCameraBase_s0062_4fb0 : public cICameraController_s0062_4fb0, public IRef2 {
+public:
+    enum eCameraInputState { kCameraInputStateNormal_ = 0, kCameraInputStateSwingLeft_ = 1, kCameraInputStateSwingRight_ = 2, kCameraInputStateReset_ = 3, kCameraInputStateZoomIn_ = 4, kCameraInputStateZoomOut_ = 5, kCameraInputStateSwingUp_ = 6, kCameraInputStateSwingDown_ = 7 };
+    int padA[2];
+    cCreatureCameraDepends_s0062_4fb0 mDepends;            // +0x10
+    eCameraInputState mCameraInputState;        // +0x88
+    int mCameraState;                           // +0x8c
+    int mCameraMode;                            // +0x90
+    int mDesiredCameraMode;                     // +0x94
+    tCameraData_s0062_4fb0 mCameraData;                    // +0x98
+    float mMouseSensitivityX;                   // +0x154
+    float mMouseSensitivityY;                   // +0x158
+    float mMouseSensitivityZ;                   // +0x15c
+    float mMinCameraPhi;                        // +0x160
+    float mMaxCameraPhi;                        // +0x164
+    float mMinCameraDistance;                   // +0x168
+    float mMaxCameraDistance;                   // +0x16c
+    char padC[0x1cc - 0x170];
+    bool mTransformNeedsUpdating;               // +0x1cc
+    char padD[0x1e4 - 0x1d0];
+    float mMouseX;                              // +0x1e4
+    float mMouseY;                              // +0x1e8
+    bool mMouseLeftButton;                      // +0x1ec
+    bool mMouseMiddleButton;                    // +0x1ed
+    bool mMouseRightButton;                     // +0x1ee
+    bool mbActive;                              // +0x1ef
+    bool mbEnabled;                             // +0x1f0
+    char padE[3];
+    float (__cdecl* mpHeightFn)(void* pUser, cSPVector3_s0062_4fb0* pPos);   // +0x1f4
+    void* mpHeightUser;                         // +0x1f8
+    float mCachedHeight;                        // +0x1fc
+
+    bool OnMouseUp(int button, float x, float y, int state);  // 0x00624fb0 (SP::cCreatureCameraBase::OnMouseUp)
+    bool OnMouseMove(float x, float y, int state);  // 0x00625010 (SP::cCreatureCameraBase::OnMouseMove)
+    bool OnMouseWheel(int delta, float x, float y, int state);  // 0x006251f0 (SP::cCreatureCameraBase::OnMouseWheel)
+    bool OnMouseDown(int button, float x, float y, int state);  // 0x006254f0 (SP::cCreatureCameraBase::OnMouseDown)
+    void AddDistanceScale(float f);
+    void AddTheta(float f);
+    void NormalizeTheta();
+    void SetHeightCallback(void* fn, void* pUser);
+    bool HandleMessage(unsigned messageID, void* pMsg);  // 0x00625380 (SP::cCreatureCameraBase::HandleMessage)
+    float QueryHeight(const cSPVector3_s0062_4fb0* pPos);
+    void SetCurrentCamera(float theta, float phi, float dist);
+    void InitCameraData();  // 0x00625830 (SP::cCreatureCameraBase::InitCameraData)
+    void UpdateAvatarLookAt();
+    void UpdateVelocity();
+};
+}
+namespace SP {
+template <class T> const T& max_(const T& a, const T& b) { return (a < b) ? b : a; }
+}
 extern const float kHalfTurn;                  // 0x15f6770
 // ---- items of slice s00624fb0 end
 
@@ -148,6 +234,10 @@ extern uint32_t gCameraTuningGroup;           // 0x01521b5c
 extern const float kDegToRad;                 // 0x013fdec8 (0.017453292)
 extern float gTune_1521888, gTune_152188c, gTune_1521890, gTune_152187c, gTune_1521880,
     gTune_1521884, gTune_1521894, gTune_1521898, gTune_152189c;
+extern float gT0;     // 0x15f65fc
+extern float gT1;     // 0x15f6600
+extern float gT2;     // 0x15f6604
+extern char  gMat3;   // 0x15f672c
 struct Property {
   char pad00[0x12];
   unsigned short mType;   // +0x12 (9 = int32, 13 = float)
@@ -243,9 +333,9 @@ struct tCameraData {
   bool  bTransitioning;              // +0xb8
 };
 class cICameraController { public: virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); };
-class IRef2 { public: virtual void r0(); virtual void r1(); };
+class IRef2_s0062_5e70 { public: virtual void r0(); virtual void r1(); };
 struct Depends { char pad[0x78]; cVec3 mActualCameraPositionOffset; };  // +0x78 within depends
-class cCreatureCameraBase : public cICameraController, public IRef2 {
+class cCreatureCameraBase : public cICameraController, public IRef2_s0062_5e70 {
 public:
   int padA[2];                 // +0x08
   char mDependsRaw[0x78];      // +0x10 (cCreatureCameraDepends)
@@ -281,13 +371,10 @@ public:
   void SetInitialCameraValues(uint32_t a, uint32_t b, uint32_t c, const float* v);  // 00626b50
 };
 void* __cdecl QuaternionFromFacingAndUp(void* out, const float* facing, const float* up);  // 0x69b600
+float __cdecl FUN_00625560(uint32_t a, uint32_t b, uint32_t c);                  // 0x625560
 extern float gUpX;    // 0x15f66f8
 extern float gUpY;    // 0x15f66fc
 extern float gUpZ;    // 0x15f6700
-extern float gT0;     // 0x15f65fc
-extern float gT1;     // 0x15f6600
-extern float gT2;     // 0x15f6604
-extern char  gMat3;   // 0x15f672c
 // ---- items of slice s00625e70 end
 
 // ---- items of slice s00626db0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -470,9 +557,6 @@ namespace SP {
 class cICameraController_s0062_7d50 { public: virtual void c0(); virtual void c1(); virtual void c2(); virtual void c3(); };
 }
 namespace SP {
-class IRef2_s0062_7d50 { public: virtual void r0(); virtual void r1(); };
-}
-namespace SP {
 struct tCameraData_s0062_7d50 {
     float dt;                                   // +0x00
     cSPVector3_s0062_7d50 platformPosition;                // +0x04
@@ -509,7 +593,7 @@ struct ICameraHelper {   // object passed to Update (field-of-view / projection 
 };
 }
 namespace SP {
-class cCreatureCameraBase_s0062_7d50 : public cICameraController_s0062_7d50, public IRef2_s0062_7d50 {
+class cCreatureCameraBase_s0062_7d50 : public cICameraController_s0062_7d50, public IRef2 {
 public:
     int padA[2];
     cCreatureCameraDepends_s0062_7d50 mDepends;            // +0x10
@@ -553,9 +637,6 @@ bool SP::cCreatureCameraBase::Shutdown()
 
 
 
-
-
-
 // @ 0x00624ec0
 void SP::cCreatureCameraBase::Deactivate()
 {
@@ -577,9 +658,6 @@ void SP::cCreatureCameraBase::Deactivate()
 
 
 
-
-
-
 // @ 0x00624f20
 bool SP::cCreatureCameraBase::OnKeyDown(unsigned int a, unsigned int b)
 {
@@ -591,9 +669,6 @@ bool SP::cCreatureCameraBase::OnKeyDown(unsigned int a, unsigned int b)
     }
     return false;
 }
-
-
-
 
 
 
@@ -611,18 +686,12 @@ bool SP::cCreatureCameraBase::OnKeyUp(unsigned int a, unsigned int b)
 
 
 
-
-
-
 // @ 0x00624f90
 void SP::cCreatureCameraBase::OnFocusChange(bool v)
 {
     if (!v)
         mCameraInputState = (SP::cCreatureCameraBase::eCameraInputState)(0);
 }
-
-
-
 
 
 
@@ -746,6 +815,19 @@ void SP::cCreatureCameraBase::NormalizeTheta()
 
 
 
+// @ 0x00625350
+namespace SP {
+void cCreatureCameraBase_s0062_4fb0::SetHeightCallback(void* fn, void* pUser)
+{
+    *(void**)&mpHeightFn = fn;
+    mpHeightUser = pUser;
+    mCachedHeight = 0.0f;
+}
+}  // namespace SP
+
+
+
+
 // @ 0x006254f0
 bool SP::cCreatureCameraBase::OnMouseDown(unsigned int button, float x, float y, unsigned int state)
 {
@@ -772,6 +854,39 @@ bool SP::cCreatureCameraBase::OnMouseDown(unsigned int button, float x, float y,
 
 
 
+// @ 0x00625560
+void SP::cCreatureCameraBase::SetCurrentPolarCoords(float theta, float phi, float dist)
+{
+    mCameraData.currentPlayerTheta = theta;
+    mCameraData.currentPlayerPitch = Clamp(phi, mMinCameraPhi, mMaxCameraPhi);
+    float d = max_(0.1f, dist);
+    mTransformNeedsUpdating = true;
+    mCameraData.currentPlayerDistance = d;
+}
+
+
+
+
+// @ 0x00625600
+namespace SP {
+float cCreatureCameraBase_s0062_4fb0::QueryHeight(const cSPVector3_s0062_4fb0* pPos)
+{
+    float r = 0.0f;
+    if (mpHeightFn && mpHeightUser) {
+        Vector3Copy tmp = *(const Vector3Copy*)pPos;
+        float h = mpHeightFn(mpHeightUser, (cSPVector3_s0062_4fb0*)&tmp);
+        r = h;
+        if (h >= 0.4f)
+            r = mCachedHeight;
+    }
+    mCachedHeight = r;
+    return r;
+}
+}  // namespace SP
+
+
+
+
 // @ 0x006256a0
 namespace SP {
 void cCreatureCameraDepends_s0062_4fb0::InitAvatarData()
@@ -779,10 +894,10 @@ void cCreatureCameraDepends_s0062_4fb0::InitAvatarData()
     mAvatar.mPosition.x = 0.0f;
     mAvatar.mPosition.y = 0.0f;
     mAvatar.mPosition.z = 0.0f;
-    Vector3Copy facing = NegateVecC(*(const Vector3Copy*)&kAvatarCameraOffset_s0062_4fb0);
+    Vector3Copy facing = NegateVecC(*(const Vector3Copy*)&kAvatarCameraOffset);
     cSPQuaternion_s0062_4fb0 q;
     extern cSPQuaternion_s0062_4fb0* __cdecl QuaternionFromFacingAndUp(cSPQuaternion_s0062_4fb0* out, const Vector3Copy* facing, const cSPVector3_s0062_4fb0* up);
-    mAvatar.mOrientaion = *QuaternionFromFacingAndUp(&q, &facing, &kAvatarUp_s0062_4fb0);
+    mAvatar.mOrientaion = *QuaternionFromFacingAndUp(&q, &facing, &kAvatarUp);
     mAvatar.mDestination = Vector3Copy(0.0f, 0.0f, 0.0f);
 }
 }  // namespace SP
@@ -790,36 +905,55 @@ void cCreatureCameraDepends_s0062_4fb0::InitAvatarData()
 
 
 
+// @ 0x00625750
+namespace SP {
+void cCreatureCameraDepends_s0062_4fb0::UpdateOffsets(float dt)
+{
+    if (mAnimCreature) {
+        FUN_006280d0(mAnimCreature->mPos, 0);
+    }
+    float t = Clamp(dt, 0.01f, 0.15f);
+    mActualCameraPositionOffset.x = mActualCameraPositionOffset.x + (mTargetCameraPositionOffset.x - mActualCameraPositionOffset.x) * t * 10.0f;
+    mActualCameraPositionOffset.y = (mTargetCameraPositionOffset.y - mActualCameraPositionOffset.y) * t * 10.0f + mActualCameraPositionOffset.y;
+    mActualCameraPositionOffset.z = (mTargetCameraPositionOffset.z - mActualCameraPositionOffset.z) * t * 10.0f + mActualCameraPositionOffset.z;
+}
+}  // namespace SP
+
+
+
+
 // @ 0x00625830
-void SP::cCreatureCameraBase::InitCameraData()
+namespace SP {
+void cCreatureCameraBase_s0062_4fb0::InitCameraData()
 {
     mCameraData.newPlatformPosition = kZeroVector;
     mCameraData.newPlatformVelocity = kZeroVector;
     mCameraData.newPlatformOrientation = kIdentityQuat;
     mCameraData.currentPreTranslate = kZeroVector;
     mCameraData.desiredPreTranslate = kZeroVector;
-    SP::cCreatureCameraDepends* pDep = &mDepends;
+    cCreatureCameraDepends_s0062_4fb0* pDep = &mDepends;
     pDep->InitAvatarData();
     if (!pDep->mAnimCreature) {
         pDep->mActualCameraPositionOffset = kZeroVector;
         pDep->mTargetCameraPositionOffset = kZeroVector;
     }
-    mCameraData.platformPosition.x = pDep->mAvatar.mPosition.x - kAvatarCameraOffset_s0062_4fb0.x;
-    mCameraData.platformPosition.y = pDep->mAvatar.mPosition.y - kAvatarCameraOffset_s0062_4fb0.y;
-    mCameraData.platformPosition.z = pDep->mAvatar.mPosition.z - kAvatarCameraOffset_s0062_4fb0.z;
+    mCameraData.platformPosition.x = pDep->mAvatar.mPosition.x - kAvatarCameraOffset.x;
+    mCameraData.platformPosition.y = pDep->mAvatar.mPosition.y - kAvatarCameraOffset.y;
+    mCameraData.platformPosition.z = pDep->mAvatar.mPosition.z - kAvatarCameraOffset.z;
     mCameraData.platformOrientation = pDep->mAvatar.mOrientaion;
     mCameraData.platformVelocity = kZeroVector;
     float h = pDep->mAvatar.mLocalExtents.mMax.z;
-    mCameraData.avatarPosition.x = pDep->mAvatar.mPosition.x + h * kAvatarUp_s0062_4fb0.x;
-    mCameraData.avatarPosition.y = pDep->mAvatar.mPosition.y + h * kAvatarUp_s0062_4fb0.y;
-    mCameraData.avatarPosition.z = pDep->mAvatar.mPosition.z + h * kAvatarUp_s0062_4fb0.z;
+    mCameraData.avatarPosition.x = pDep->mAvatar.mPosition.x + h * kAvatarUp.x;
+    mCameraData.avatarPosition.y = pDep->mAvatar.mPosition.y + h * kAvatarUp.y;
+    mCameraData.avatarPosition.z = pDep->mAvatar.mPosition.z + h * kAvatarUp.z;
     mCameraData.desiredLookAt = mCameraData.avatarPosition;
     mCameraData.mDesiredLookAtYOffset = 0.0f;
     mCameraData.mDesiredLookAtXOffset = 0.0f;
-    mCameraData.desiredPosition.x = mCameraData.avatarPosition.x - kAvatarCameraOffset_s0062_4fb0.x;
-    mCameraData.desiredPosition.y = mCameraData.avatarPosition.y - kAvatarCameraOffset_s0062_4fb0.y;
-    mCameraData.desiredPosition.z = mCameraData.avatarPosition.z - kAvatarCameraOffset_s0062_4fb0.z;
+    mCameraData.desiredPosition.x = mCameraData.avatarPosition.x - kAvatarCameraOffset.x;
+    mCameraData.desiredPosition.y = mCameraData.avatarPosition.y - kAvatarCameraOffset.y;
+    mCameraData.desiredPosition.z = mCameraData.avatarPosition.z - kAvatarCameraOffset.z;
 }
+}  // namespace SP
 
 
 
@@ -829,14 +963,14 @@ void SP::cCreatureCameraBase::UpdateDesiredLookAt()
 {
     float d = mDepends.mAvatar.mLocalExtents.mMax.z * 0.5f;
     float e = d * 0.25f + d;
-    float ax = kAvatarUp_s0062_4fb0.x * e + mDepends.mAvatar.mPosition.x;
-    float ay = mDepends.mAvatar.mPosition.y + kAvatarUp_s0062_4fb0.y * e;
-    float az = mDepends.mAvatar.mPosition.z + kAvatarUp_s0062_4fb0.z * e;
+    float ax = kAvatarUp.x * e + mDepends.mAvatar.mPosition.x;
+    float ay = mDepends.mAvatar.mPosition.y + kAvatarUp.y * e;
+    float az = mDepends.mAvatar.mPosition.z + kAvatarUp.z * e;
     float t = (mCameraData.currentPlayerDistance - mMinCameraDistance) / (mMaxCameraDistance - mMinCameraDistance);
     t = Clamp(t, 0.0f, 1.0f);
-    mCameraData.avatarPosition.x = ((mDepends.mAvatar.mPosition.x + kAvatarUp_s0062_4fb0.x * d) - ax) * t + ax;
-    mCameraData.avatarPosition.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp_s0062_4fb0.y * d) - ay) * t + ay;
-    mCameraData.avatarPosition.z = ((mDepends.mAvatar.mPosition.z + kAvatarUp_s0062_4fb0.z * d) - az) * t + az;
+    mCameraData.avatarPosition.x = ((mDepends.mAvatar.mPosition.x + kAvatarUp.x * d) - ax) * t + ax;
+    mCameraData.avatarPosition.y = ((mDepends.mAvatar.mPosition.y + kAvatarUp.y * d) - ay) * t + ay;
+    mCameraData.avatarPosition.z = ((mDepends.mAvatar.mPosition.z + kAvatarUp.z * d) - az) * t + az;
 }
 
 
@@ -844,7 +978,8 @@ void SP::cCreatureCameraBase::UpdateDesiredLookAt()
 
 // @ 0x00625bf0
 #include <math.h>
-void SP::cCreatureCameraBase::EndPositionUpdate()
+namespace SP {
+void cCreatureCameraBase_s0062_4fb0::UpdateVelocity()
 {
     float f = (float)exp((double)(mCameraData.dt / kHalfLifeTime) * (double)-0.30103f);
     mCameraData.newPlatformVelocity.x = mCameraData.platformVelocity.x * f;
@@ -880,6 +1015,7 @@ void SP::cCreatureCameraBase::EndPositionUpdate()
     mCameraData.newPlatformPosition.y = mCameraData.platformPosition.y + mCameraData.newPlatformVelocity.y * dt;
     mCameraData.newPlatformPosition.z = mCameraData.platformPosition.z + mCameraData.newPlatformVelocity.z * dt;
 }
+}  // namespace SP
 
 
 
@@ -952,7 +1088,7 @@ void cCreatureCameraBase::ReloadTuning()
 
 
 // @ 0x006268a0
-void SP::cCreatureCameraBase::CalculateCameraToWorldMatrix()
+void cCreatureCameraBase::CalculateCameraToWorldMatrix()
 {
   cTransform t;
   t.mTranslation.x = gT0;
@@ -992,8 +1128,52 @@ void SP::cCreatureCameraBase::CalculateCameraToWorldMatrix()
   t.mModificationCount += 2;
   t.mTranslation.z = ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.z
                      + (t.mTranslation.z + az);
-  *(cTransform*)((char *)&mCameraToWorld) = t;
+  *(cTransform*)mCameraToWorld = t;
   *(uint8_t*)((char*)this + 0x1cc) = 0;
+}
+
+
+
+// @ 0x00626b50
+void cCreatureCameraBase::SetInitialCameraValues(uint32_t a, uint32_t b, uint32_t c, const float* v)
+{
+  FUN_00625560(a ^ 0x80000000u, b, c);
+  cTransform t;
+  t.mTranslation.x = gT0;
+  t.mTranslation.y = gT1;
+  t.mModificationCount = 0;
+  t.mTranslation.z = gT2;
+  t.mFlags = 0;
+  t.mScale = 1.0f;
+  t.mRotation.Assign(&gMat3);
+  ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.x = gT0;
+  ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.y = gT1;
+  ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.z = gT2;
+  mCameraData.currentPreTranslate.x = v[0];
+  mCameraData.currentPreTranslate.y = v[1];
+  mCameraData.currentPreTranslate.z = v[2];
+  mCameraData.desiredPreTranslate.x = 0.0f;
+  mCameraData.desiredPreTranslate.y = -mCameraData.desiredPlayerDistance;
+  mCameraData.desiredPreTranslate.z = mCameraData.desiredLookAt.z;
+  t.RotateY(mCameraData.currentPlayerTheta);
+  t.PreRotateX(-mCameraData.currentPlayerPitch);
+  float fz = v[2] * t.mScale;
+  float fy = v[1] * t.mScale;
+  float fx = v[0] * t.mScale;
+  t.mTranslation.x = ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.x
+      + (t.mTranslation.x + ((t.mRotation.zAxis.x * fz + t.mRotation.xAxis.x * fx)
+                             + t.mRotation.yAxis.x * fy));
+  t.mTranslation.y = ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.y
+      + (t.mTranslation.y + ((t.mRotation.zAxis.y * fz + t.mRotation.xAxis.y * fx)
+                             + t.mRotation.yAxis.y * fy));
+  t.mModificationCount += 2;
+  t.mFlags |= 4;
+  t.mTranslation.z = ((Depends*)((char*)this + 0x10))->mActualCameraPositionOffset.z
+      + (t.mTranslation.z + ((t.mRotation.zAxis.z * fz + t.mRotation.yAxis.z * fy)
+                             + t.mRotation.xAxis.z * fx));
+  *(cTransform*)mCameraToWorld = t;
+  *(uint8_t*)((char*)this + 0x1cc) = 0;
+  mCameraData.bTransitioning = true;
 }
 
 

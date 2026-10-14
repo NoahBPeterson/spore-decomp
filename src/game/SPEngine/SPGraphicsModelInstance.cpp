@@ -1,15 +1,49 @@
-// src/game/SPEngine/SPGraphicsModelInstance.cpp -- migrated from slice(s) s00741210, s007403c0, s0073f320, s0073e410, s0073cdf0, s0073afb0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsModelInstance.cpp -- migrated from slice(s) s00741b10, s00741210, s007403c0, s0073f320, s0073e410, s0073d6b0, s0073cdf0, s0073afb0, s0073a110 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsModelInstance.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include "SP/cMaterial.h"
 #include "SP/cModelInstance.h"
 #include <intrin.h>
+#include "SP/cMaterial.h"
+#include "SP/cMDBoneTransform.h"
+#include <xmmintrin.h>
 #include "SP/cBoneRange.h"
 #include "cSPTransform.h"
-#include <xmmintrin.h>
 #include "cSPBoundingBox.h"
+#include "rw/core/arena/Arena.h"
+#include <new>
+
+// ---- items of slice s0073a110 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+struct cAnimGroupInfo_s0073_a110 {
+    char  mBindingIdx;      // +0
+    char  mBoneCount;       // +1
+    short mBoneOffset;      // +2
+    char  mAnimCount;       // +4
+    char  mAnimFirstDeform; // +5
+    short mAnimOffset;      // +6
+};
+}
+namespace SP {
+class cModelInstance_s0073_a110 {
+public:
+    char pad0[0xc];                 // +0x00
+    int  mFieldC;                   // +0x0c
+    int  mField10;                  // +0x10
+    cAnimGroupInfo_s0073_a110* mAnimGroupBegin;// +0x14
+    cAnimGroupInfo_s0073_a110* mAnimGroupEnd;  // +0x18
+    char pad1c[0x78 - 0x1c];
+    int* mControllers;              // +0x78
+    char pad7c[0x154 - 0x7c];
+public:
+    // @ 0x0073ABB0
+    int GetAnimationMoveToTimes(int animID, int* dst, char bEnd);  // 0x0073abb0 (SP::cModelInstance::GetAnimationMoveToTimes)
+    // @ 0x0073AC20
+    void SetActive(int index, int value);  // 0x0073ac20 (SP::cModelInstance::SetActive)
+};
+}
+// ---- items of slice s0073a110 end
 
 // ---- items of slice s0073afb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -94,6 +128,110 @@ struct cModelInstance_GetArenaResource {
 };
 // ---- items of slice s0073cdf0 end
 
+// ---- items of slice s0073d6b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct __declspec(align(16)) Mat4 {
+    __m128 r[4];        // rows; rows 0-2 are the 3x3 part, row 3 the translation
+    Mat4() {}
+    Mat4(const Mat4& o) { r[0] = o.r[0]; r[1] = o.r[1]; r[2] = o.r[2]; r[3] = o.r[3]; }
+    Mat4& operator=(const Mat4& o) { r[0] = o.r[0]; r[1] = o.r[1]; r[2] = o.r[2]; r[3] = o.r[3]; return *this; }
+};
+static __forceinline bool AffineInverse(Mat4& o, const float* m)
+{
+    const __m128 Z = _mm_set1_ps(0.0f);
+    const __m128 O = _mm_set1_ps(1.0f);
+#define E(k) _mm_set1_ps(m[k])
+#define MUL _mm_mul_ps
+#define SUB _mm_sub_ps
+#define ADD _mm_add_ps
+    __m128 det = ADD(ADD(MUL(SUB(MUL(E(5), E(10)), MUL(E(6), E(9))), E(0)),
+                         MUL(SUB(MUL(E(6), E(8)), MUL(E(10), E(4))), E(1))),
+                     MUL(SUB(MUL(E(9), E(4)), MUL(E(5), E(8))), E(2)));
+    if (_mm_movemask_ps(_mm_cmpeq_ps(det, Z)) == 0xf)
+        return false;
+
+    __m128 i32 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(5), E(2)), MUL(E(6), E(1))), E(12)),
+                                    MUL(SUB(MUL(E(6), E(0)), MUL(E(4), E(2))), E(13))),
+                                MUL(SUB(MUL(E(4), E(1)), MUL(E(5), E(0))), E(14))), det);
+    __m128 i31 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(13), E(2)), MUL(E(14), E(1))), E(8)),
+                                    MUL(SUB(MUL(E(14), E(0)), MUL(E(12), E(2))), E(9))),
+                                MUL(SUB(MUL(E(12), E(1)), MUL(E(13), E(0))), E(10))), det);
+    __m128 i30 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(13), E(10)), MUL(E(9), E(14))), E(4)),
+                                    MUL(SUB(MUL(E(14), E(8)), MUL(E(10), E(12))), E(5))),
+                                MUL(SUB(MUL(E(9), E(12)), MUL(E(13), E(8))), E(6))), det);
+    __m128 i22 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(1), Z), MUL(E(5), Z)), E(12)),
+                                    MUL(SUB(MUL(E(5), E(0)), MUL(E(4), E(1))), O)),
+                                MUL(SUB(MUL(E(4), Z), MUL(E(0), Z)), E(13))), det);
+    __m128 i21 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(1), O), MUL(E(13), Z)), E(8)),
+                                    MUL(SUB(MUL(E(13), E(0)), MUL(E(12), E(1))), Z)),
+                                MUL(SUB(MUL(E(12), Z), MUL(E(0), O)), E(9))), det);
+    __m128 i20 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(13), E(8)), MUL(E(9), E(12))), Z),
+                                    MUL(SUB(MUL(E(9), O), MUL(E(13), Z)), E(4))),
+                                MUL(SUB(MUL(E(12), Z), MUL(E(8), O)), E(5))), det);
+    __m128 i12 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(4), E(2)), MUL(E(6), E(0))), O),
+                                    MUL(SUB(MUL(E(0), Z), MUL(E(4), Z)), E(14))),
+                                MUL(SUB(MUL(E(6), Z), MUL(E(2), Z)), E(12))), det);
+    __m128 i11 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(12), E(2)), MUL(E(14), E(0))), Z),
+                                    MUL(SUB(MUL(E(0), O), MUL(E(12), Z)), E(10))),
+                                MUL(SUB(MUL(E(14), Z), MUL(E(2), O)), E(8))), det);
+    __m128 i10 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(10), E(12)), MUL(E(14), E(8))), Z),
+                                    MUL(SUB(MUL(E(8), O), MUL(E(12), Z)), E(6))),
+                                MUL(SUB(MUL(E(14), Z), MUL(E(10), O)), E(4))), det);
+    __m128 i02 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(2), Z), MUL(E(6), Z)), E(13)),
+                                    MUL(SUB(MUL(E(5), Z), MUL(E(1), Z)), E(14))),
+                                MUL(SUB(MUL(E(6), E(1)), MUL(E(5), E(2))), O)), det);
+    __m128 i01 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(2), O), MUL(E(14), Z)), E(9)),
+                                    MUL(SUB(MUL(E(13), Z), MUL(E(1), O)), E(10))),
+                                MUL(SUB(MUL(E(14), E(1)), MUL(E(13), E(2))), Z)), det);
+    __m128 i00 = _mm_div_ps(ADD(ADD(MUL(SUB(MUL(E(10), O), MUL(E(14), Z)), E(5)),
+                                    MUL(SUB(MUL(E(13), Z), MUL(E(9), O)), E(6))),
+                                MUL(SUB(MUL(E(9), E(14)), MUL(E(13), E(10))), Z)), det);
+#undef E
+#undef MUL
+#undef SUB
+#undef ADD
+    o.r[0] = _mm_unpacklo_ps(_mm_unpacklo_ps(i00, i02), _mm_unpacklo_ps(i01, i00));
+    o.r[1] = _mm_unpacklo_ps(_mm_unpacklo_ps(i10, i12), _mm_unpacklo_ps(i11, i10));
+    o.r[2] = _mm_unpacklo_ps(_mm_unpacklo_ps(i20, i22), _mm_unpacklo_ps(i21, i20));
+    o.r[3] = _mm_unpacklo_ps(_mm_unpacklo_ps(i30, i32), _mm_unpacklo_ps(i31, i30));
+    return true;
+}
+struct cSPTransformP {
+    uint16_t mFlags;
+    uint16_t mModificationCount;
+    float    mTranslation[3];
+    float    mScale;
+    float    mRotation[9];
+};
+static __forceinline float Lane(__m128 v, int k) { return ((const float*)&v)[k]; }
+struct BoneRow {
+    float x, y, z, w;
+};
+struct cMDBoneTransform {
+    BoneRow m[3];
+};
+struct cSkinPalette {
+    Mat4*        mpMatrices;  // +0x0  per-bone 4x4 (bind) matrices
+    unsigned int mnBones;     // +0x4
+};
+struct cPoseOwner {
+    uint32_t      pad0[4];
+    cSkinPalette* mpSkin;     // +0x10
+};
+struct cModelInstance_Pose {
+    uint32_t pad0[10];
+    cPoseOwner** mpMaterialsBegin;  // +0x28 cModelResourceInfo::mMaterials.mpBegin
+    cPoseOwner** mpMaterialsEnd;    // +0x2c
+    uint32_t pad30[(0x154 - 0x30) / 4];
+
+    // @ 0x0073d6b0  SP::cModelInstance::GetPoseTransforms
+    int GetPoseTransforms(cMDBoneTransform* dst, bool original);
+
+    // @ 0x0073e080  SP::cModelInstance::PickLineWithHit (PDB candidate)
+    int PickLineWithHit(uint32_t* pLine, uint32_t* pDir, cSPTransformP* pTransform,
+                        float* pOut);
+};
+// ---- items of slice s0073d6b0 end
+
 // ---- items of slice s0073e410 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  FUN_01200940();          // 0x1200940
 extern "C" void  FUN_00730210(int, int);  // 0x730210
@@ -113,6 +251,8 @@ extern int   g_primType;        // 0x16f85a8
 extern const void* g_vertDesc;  // 0x16f65a0
 extern unsigned g_softState;    // 0x16f9110
 extern "C" void  __cdecl FUN_007c5490b();                      // rw_AllocSerialized @0x7c5490
+extern unsigned g_dirty;           // 0x16f9528
+extern int      g_xfType;          // 0x16f96a0
 extern "C" int   __cdecl FUN_01201660b(void* buf, int a, int b);          // @0x1201660
 extern "C" void  __cdecl FUN_006c1c80b(void* buf, int v);                 // @0x6c1c80
 extern "C" void  __stdcall ehvec_dtor(void* p, unsigned size, int cnt, void (__thiscall* d)(void*));  // 0x11e0b22
@@ -262,6 +402,17 @@ struct cModelInstance {
     void SetDrawTransform(const void* src, void* out);         // @0x73eca0
 };
 struct ElemRelease { void FUN_01200940(); };                    // @0x1200940 (thiscall)
+struct __declspec(align(16)) M44Raw { float m[16]; };
+struct OutM : M44Raw { int type; };
+extern M44Raw*  g_xfPtr;           // 0x16fa380
+extern M44Raw   g_xfLocal;         // 0x16fa4f0
+struct DrawXfSrc {                 // layout of the source (a cSPTransform-like block)
+    unsigned short flags; unsigned short pad2;
+    V3 t;
+    float s;
+    float r[9];
+};
+struct DynDrawSink { void FUN_73bab0(void* m); };               // @0x73bab0 (thiscall, ret 4)
 struct HitRec {                        // stride 0xd0
     char pad0[0x10];
     V3 pos;                            // +0x10
@@ -294,6 +445,9 @@ static const float kFltMax = 3.4028234663852886e+38f;
 // ---- items of slice s0073e410 end
 
 // ---- items of slice s0073f320 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kRay0;                          // 0x153782c
+extern const float kRay1;                          // 0x1537830
+extern const float kRay2;                          // 0x1537834
 void __cdecl EASTL_allocator_deallocate(void* p);   // 0xf47380
 void __cdecl operator_delete__(void* p) throw();    // 0xf47380 (same function, nothrow view)
 struct RC_s0073_f320 {
@@ -335,6 +489,26 @@ struct cSkinBinding {
     int b8, bc, c0;
     cSkinBinding& operator=(const cSkinBinding& o);
 };
+struct cSPTransform_s0073_f320 {                              // 0x38 bytes
+    uint16_t mFlags;                               // bit 1/2: has rotation/translation
+    uint16_t mModificationCount;
+    float mTranslation[3];
+    float mScale;                                  // +0x10
+    float mRotation[9];                            // +0x14 (3 rows of 3)
+    cSPTransform_s0073_f320& operator=(const cSPTransform_s0073_f320& o);   // 0x537dc0 (out of line)
+    void BackTransformPoint(float* p) const;       // 0x4ff6d0
+};
+struct Mesh8 { signed char mat; char pad[7]; };
+struct Material { char pad0[0x48]; cSPTransform_s0073_f320 src; cSPTransform_s0073_f320 dst; char pad_[0xc4 - 0xb8]; };
+cSPTransform_s0073_f320& translateTransform(cSPTransform_s0073_f320& out, const cSPTransform_s0073_f320& in, const cSPTransform_s0073_f320& delta); // 0x6271a0
+struct ModelInstanceAnim {
+    char pad0[0x14];
+    Mesh8* mMeshesBegin;   // +0x14
+    Mesh8* mMeshesEnd;     // +0x18
+    char pad1c[0x28 - 0x1c];
+    Material* mMaterials;  // +0x28
+    void SetAnimationGroupTransform(int idx, const cSPTransform_s0073_f320& t);
+};
 struct __declspec(align(16)) DispatchCtx { int d[0x11]; int arg3; int p48, p4c; int result; };
 struct Listener { virtual void v0(); virtual void v1(); virtual void v2(); virtual void OnDispatch(void* inst, DispatchCtx* c, int a2); };
 struct Processor { void Process(DispatchCtx* c); };   // 0x73bb40
@@ -353,6 +527,59 @@ struct ModelInstanceDispatch {
     void DispatchMesh(Mesh* m, int i, int a2, DispatchCtx* c);   // 0x73ede0
     int  Dispatch(int a2, int a3);
 };
+inline void RcReleaseChecked(RC_s0073_f320* p) {
+    long r = _InterlockedDecrement((volatile long*)&p->mnRefCount);
+    if (r == 0) { _InterlockedExchange((volatile long*)&p->mnRefCount, 1); if (p) p->v0(1); }
+}
+struct MeshPtr { RC_s0073_f320* p; };
+struct MeshVec {
+    MeshPtr* b; MeshPtr* e; MeshPtr* c; int alloc[2];
+    MeshVec() { b = 0; e = 0; c = 0; }
+    void DestroyRange(MeshPtr* first, MeshPtr* last);   // 0x4243e0
+    ~MeshVec() {
+        DestroyRange(b, e);
+        if (b && ((int*)b)[-1] != 0) operator_delete__(b);
+    }
+};
+struct ModelInstanceMeshes { void GetMeshes(MeshVec& out); };   // 0x73eb90
+struct BindQuery {
+    RC_s0073_f320* p; int a, b, count, c, d;
+    BindQuery() : p(0), a(-1), b(-1), count(0), c(-1), d(0) {}
+    ~BindQuery() { if (p) RcReleaseChecked(p); }
+    bool Check(void* item, int n, int i, int x, int y);      // 0x73c290
+};
+bool __cdecl BuildQuery(BindQuery* q, MeshVec* meshes, int arg);        // 0x732220
+bool __cdecl CheckEntry(BindQuery* q, int i, void* a, void* b);         // 0x73c4b0
+inline void BindFreeBuf(int* b) { if (b && b[-1] != 0) operator_delete__(b); }
+struct BindPodVec {
+    int* b; int* e; int* c; int alloc[2];
+    BindPodVec() { b = 0; e = 0; c = 0; }
+    ~BindPodVec() { BindFreeBuf(b); }
+};
+struct BindRcObj { virtual void v0(); virtual void Release(); };
+struct BindSmartPtr { BindRcObj* p; BindSmartPtr() { p = 0; } ~BindSmartPtr() { if (p) p->Release(); } };
+struct BindRefVec {
+    int* b; int* e; int* c; int alloc[2];
+    BindRefVec() { b = 0; e = 0; c = 0; }
+    void DestroyRange(int* first, int* last);              // 0x73f2e0
+    ~BindRefVec() { DestroyRange(b, e); BindFreeBuf(b); }
+};
+struct BindingBase { virtual void v0(); int f4; BindingBase() { f4 = 0; } virtual ~BindingBase() {} };
+struct BindingSet : BindingBase {
+    uint32_t mFlags; int f0c, f10;     // +8
+    BindPodVec pv14;
+    BindRefVec rv28;
+    BindPodVec pv3c;
+    BindPodVec pv50;
+    BindPodVec elems;                      // +0x64
+    BindPodVec pv78;
+    int pad8c;
+    int f90, f94;
+    BindSmartPtr p98;
+    BindingSet();
+    ~BindingSet();
+    virtual void v0();
+};
 struct IdPtrVec { int d[5]; ~IdPtrVec(); };       // 0x421190
 struct RefVector { int d[5]; ~RefVector(); };     // 0x41eb80
 struct ContPodVec {
@@ -364,6 +591,98 @@ struct BindingContainer {
     RefVector refs;    // +0x3c
     IdPtrVec ids;      // +0x50
     ~BindingContainer();
+};
+struct V4 { float x, y, z, w; };
+struct M4 { V4 r0, r1, r2, t; };                   // 3 basis rows + translation row
+struct cSPBoundingBox_s0073_f320 { float mMin[3]; float mMax[3];
+    void Transform(const void* m);                 // 0x409dd0
+};
+struct PartTransform64 {                           // 0x40-byte matrix helper
+    char d[0x40];
+    void Construct(const cSPTransform_s0073_f320& t);         // 0x40ce80 (the constructor; thiscall, ret 4)
+    void Invert();                                 // 0x40efa0
+};
+struct QueryItem {                                 // 0x60 bytes
+    char pad0[0x44];
+    uint32_t mFlags;                               // +0x44, bit 0 = visited
+    char pad48[0x60 - 0x48];
+    int Test(int a, int b, const void* arg);       // 0x12022b0 (ret 0xc)
+};
+struct BoxPair {                                   // (min, max) as 4-lane vectors
+    V4 mMin, mMax;
+    int Overlaps(const void* arg);                 // 0x73f110 (ret 4)
+};
+struct __declspec(align(16)) QueryState {          // 0xf4 bytes, global singleton
+    void**     mppScratch;                         // +0x00
+    int        f04, f08, f0c;
+    V4         mMin;                               // +0x10
+    V4         mMax;                               // +0x20
+    char       pad30[0x10];
+    int        f40;                                // +0x40
+    char       pad44[0xc0 - 0x44];
+    int        fc0;
+    char       pad_c4[8];
+    int        fcc;
+    char       pad_d0[4];
+    QueryItem* mItems;                             // +0xd4
+    uint32_t   mItemCount;                         // +0xd8
+    char       pad_dc[4];
+    int        fe0;
+    char       pad_e4[4];
+    int        fe8;
+    int        fec;
+    char       ff0;
+};
+struct QueryAlloc;
+struct QueryAllocVT { char pad[0x18]; int (__thiscall *Query)(QueryAlloc* self, QueryState* q, const void* basis); };
+struct QueryAlloc { char pad[0x20]; QueryAllocVT* vt; };
+struct ExternalTable { QueryAlloc* GetAllocator(); };      // 0x7f54d0
+void* __cdecl QueryStage1(void* buf, int a, int b);                       // 0x1204110
+void  __cdecl QueryStage2(void* dst, void* src);                          // 0x6c1c80
+QueryState* __cdecl QueryStage3(void* tmp, int a, int b);                 // 0x1204180
+void  __stdcall EhVecDtor(void* p, unsigned size, int count, void* dtor);  // 0x11e0b22 (__ehvec_dtor)
+extern char Elem8Dtor_s0073_f320;                                                    // 0xc2e4e0
+extern QueryState* gPickQuery;                                            // 0x162eaf4
+extern QueryState* gSphereQuery;                                          // 0x162eaf8
+static int RunQuery(ExternalTable* table, QueryState* q, const void* basis)
+{
+    QueryAlloc* a = table->GetAllocator();
+    return a->vt->Query(a, q, basis);
+}
+static QueryState* GetQuery(QueryState*& slot)
+{
+    if (slot == 0) {
+        char scratch[32];
+        char tmp[0x10];
+        void* t = QueryStage1(scratch, 8, 8);
+        QueryStage2(tmp, t);
+        EhVecDtor(scratch, 8, 4, &Elem8Dtor_s0073_f320);
+        slot = QueryStage3(tmp, 8, 8);
+    }
+    return slot;
+}
+static void InitQuery(QueryState* q, void** scratchSlot, const V4& mn, const V4& mx)
+{
+    q->mppScratch = scratchSlot;
+    q->f04 = 0;
+    q->f08 = 1;
+    q->f0c = 0;
+    q->fc0 = 0;
+    q->fcc = 0;
+    q->f40 = 0;
+    q->fe0 = 0;
+    q->fe8 = 0;
+    q->mItemCount = 0;
+    q->mMin = mn;
+    q->mMax = mx;
+    q->fec = 0;
+    q->ff0 = 0;
+}
+struct cModelInstanceQ {
+    char pad0[0xcc];
+    ExternalTable* mExternalBoneTable;             // +0xcc
+    bool PickLine(const float* origin, float len, const cSPTransform_s0073_f320* xf, bool firstHitOnly);
+    bool IntersectsSphere(const cSPBoundingBox_s0073_f320* box, const cSPTransform_s0073_f320* xf, bool firstHitOnly);
 };
 // ---- items of slice s0073f320 end
 
@@ -411,6 +730,43 @@ struct Vec8 {
     void DoInsertValue(RefPair8* pos, const RefPair8* v);   // 0x7418f0
 };
 // ---- items of slice s00741210 end
+
+
+// @ 0x0073abb0
+namespace SP {
+int cModelInstance_s0073_a110::GetAnimationMoveToTimes(int animID, int* dst, char bEnd)
+{
+    if (animID < 0)
+        return 0;
+    const int nGroups = (int)((char*)mAnimGroupEnd - (char*)mAnimGroupBegin) >> 3;
+    if (animID >= nGroups)
+        return 0;
+    cAnimGroupInfo_s0073_a110* e = &mAnimGroupBegin[animID];
+    int start = e->mAnimOffset;
+    int n = e->mAnimCount;
+    if (bEnd) {
+        start += e->mAnimFirstDeform;
+        n -= e->mAnimFirstDeform;
+    }
+    if (dst != 0 && n > 0) {
+        const char* p = (const char*)mControllers + start * 8;
+        int i = 0;
+        do {
+            dst[i] = *(const int*)p;
+            ++i;
+            p += 8;
+        } while (i < n);
+    }
+    return n;
+}
+}  // namespace SP
+
+
+
+
+
+
+
 
 // @ 0x0073b7e0
 namespace SP {
@@ -552,6 +908,42 @@ int cModelInstance_GetArenaResource::GetArenaResource()
 
 
 
+// @ 0x0073d6b0
+int cModelInstance_Pose::GetPoseTransforms(cMDBoneTransform* dst, bool original)
+{
+    if (mpMaterialsBegin == mpMaterialsEnd)
+        return 0;
+    cPoseOwner** materials = mpMaterialsBegin;
+    if (!materials[2] || !materials[2]->mpSkin || !materials[2]->mpSkin->mpMatrices)
+        return 0;
+
+    for (unsigned int i = 0; i < materials[2]->mpSkin->mnBones; ++i)
+    {
+        Mat4 m = materials[2]->mpSkin->mpMatrices[i];
+        if (!original)
+        {
+            Mat4 inv;   // left untouched (uninitialized) when the matrix is singular
+            AffineInverse(inv, (const float*)&m);
+            m = inv;
+        }
+        // Transposed 3x4 store.
+        for (int c = 0; c < 3; ++c)
+        {
+            BoneRow row;
+            row.x = Lane(m.r[0], c);
+            row.y = Lane(m.r[1], c);
+            row.z = Lane(m.r[2], c);
+            row.w = Lane(m.r[3], c);
+            dst[i].m[c] = row;
+        }
+    }
+    return materials[2]->mpSkin->mnBones;
+}
+
+
+
+
+
 // @ 0x0073e410
 bool cModelInstance::RayCast(const V3* p0, const V3* p1, cSPTransform_s0073_e410* xf, float* outT, V3* outPos, V3* outNormal, int* outA, int* outB)
 {
@@ -665,7 +1057,6 @@ bool cModelInstance::RayCast(const V3* p0, const V3* p1, cSPTransform_s0073_e410
 
 
 
-
 // @ 0x0073eb90
 bool cModelInstance::GetMeshes(void* a)
 {
@@ -706,6 +1097,38 @@ bool cModelInstance::GetMeshes(void* a)
     return false;
 }
 
+
+
+
+
+// @ 0x0073eca0
+void cModelInstance::SetDrawTransform(const void* srcv, void* outv)
+{
+    const DrawXfSrc* p = (const DrawXfSrc*)srcv;
+    OutM* out = (OutM*)outv;
+    float s = p->s;
+    out->m[0] = p->r[0] * s;
+    out->m[1] = p->r[1] * s;
+    out->m[2] = p->r[2] * s;
+    out->m[4] = p->r[3] * s;
+    out->m[5] = p->r[4] * s;
+    out->m[6] = p->r[5] * s;
+    out->m[8] = s * p->r[6];
+    out->m[9] = p->r[7] * s;
+    out->m[10] = p->r[8] * s;
+    *(V3*)&out->m[12] = p->t;
+    if (p->s == 1.0f && (p->flags & 6) == 0)
+        out->type = 4;
+    else if (p->s == 1.0f)
+        out->type = 3;
+    else
+        out->type = 2;
+    g_dirty |= 1;
+    g_xfType = out->type;
+    g_xfPtr = &g_xfLocal;
+    g_xfLocal = *out;
+    ((DynDrawSink*)mpDynDraw)->FUN_73bab0(out);
+}
 
 
 
@@ -777,7 +1200,6 @@ void cModelInstance::DispatchMesh(MeshDrawObj* obj, unsigned idx, int, MeshCtx* 
 
 
 
-
 // @ 0x0073f000
 PartTransform::PartTransform(int a1, RCObj* obj, const cSPTransform_s0073_e410* t1, const cSPTransform_s0073_e410* t2)
 : PTBase(a1, obj), mXf(*t1), mXf2(*t2), mInverse(*t2)
@@ -788,7 +1210,6 @@ PartTransform::PartTransform(int a1, RCObj* obj, const cSPTransform_s0073_e410* 
     mInverse = mXf;
     mInverse.Invert();
 }
-
 
 
 
@@ -811,7 +1232,6 @@ bool BBoxTest::Test(const AABB* other)
 
 
 
-
 // @ 0x0073f1c0
 PartTransform::PartTransform(const PartTransform& o)
 : PTBase(o), mXf(o.mXf), mXf2(o.mXf2), mInverse(o.mInverse)
@@ -820,7 +1240,6 @@ PartTransform::PartTransform(const PartTransform& o)
     mTail1 = o.mTail1;
     mTail2 = o.mTail2;
 }
-
 
 
 
@@ -841,7 +1260,6 @@ void __stdcall ReleaseRange(RCItem* first, RCItem* last)
         }
     }
 }
-
 
 
 
@@ -899,6 +1317,141 @@ RefPair* __cdecl copy_backward_ref(RefPair* first, RefPair* last, RefPair* resul
 
 
 
+// @ 0x0073f4b0
+void ModelInstanceAnim::SetAnimationGroupTransform(int idx, const cSPTransform_s0073_f320& t)
+{
+    if (idx >= 0 && idx < (int)(mMeshesEnd - mMeshesBegin)) {
+        signed char m = mMeshesBegin[idx].mat;
+        if (m >= 0) {
+            Material& mat = mMaterials[m];
+            cSPTransform_s0073_f320& src = mat.src;
+            if (src.mScale == 1.0f && (src.mFlags & 6) == 0) {
+                mat.dst = t;
+            } else {
+                cSPTransform_s0073_f320 tmp;
+                mat.dst = translateTransform(tmp, src, t);
+            }
+        }
+    }
+}
+
+
+
+
+// @ 0x0073f540
+bool cModelInstanceQ::PickLine(const float* origin, float len, const cSPTransform_s0073_f320* xf, bool firstHitOnly)
+{
+    if (!mExternalBoneTable)
+        return false;
+    float p[3] = { origin[0], origin[1], origin[2] };
+    M4 basis;
+    if (xf->mScale == 1.0f) {
+        const float s = xf->mScale;
+        basis.r0.x = xf->mRotation[0] * s; basis.r0.y = xf->mRotation[1] * s; basis.r0.z = xf->mRotation[2] * s;
+        basis.r1.x = xf->mRotation[3] * s; basis.r1.y = xf->mRotation[4] * s; basis.r1.z = xf->mRotation[5] * s;
+        basis.r2.x = s * xf->mRotation[6]; basis.r2.y = xf->mRotation[7] * s; basis.r2.z = xf->mRotation[8] * s;
+        basis.t.x = xf->mTranslation[0]; basis.t.y = xf->mTranslation[1]; basis.t.z = xf->mTranslation[2];
+    } else {
+        xf->BackTransformPoint(p);
+        len = len / xf->mScale;
+        basis.r0.x = 1.0f; basis.r0.y = 0.0f; basis.r0.z = 0.0f; basis.r0.w = 0.0f;
+        basis.r1.x = 0.0f; basis.r1.y = 1.0f; basis.r1.z = 0.0f; basis.r1.w = 0.0f;
+        basis.r2.x = 0.0f; basis.r2.y = 0.0f; basis.r2.z = 1.0f; basis.r2.w = 0.0f;
+        basis.t.x = 0.0f; basis.t.y = 0.0f; basis.t.z = 0.0f; basis.t.w = 0.0f;
+    }
+    V4 mx, mn;
+    mx.x = kRay0 * len + p[0];
+    mx.y = p[1] + kRay1 * len;
+    mx.z = p[2] + kRay2 * len;
+    mx.w = mx.x;
+    mn.x = p[0] - kRay0 * len;
+    mn.y = p[1] - kRay1 * len;
+    mn.z = p[2] - kRay2 * len;
+    mn.w = mn.x;
+    char stackBuf[100];
+    void* stackBufPtr = stackBuf;
+    QueryState* q = GetQuery(gPickQuery);
+    InitQuery(q, &stackBufPtr, mn, mx);
+    BoxPair box; box.mMin = mn; box.mMax = mx;
+    ExternalTable* table = mExternalBoneTable;
+    for (int r = RunQuery(table, q, &basis); r == 0; r = RunQuery(mExternalBoneTable, gPickQuery, &basis)) {
+        if (firstHitOnly)
+            return true;
+        uint32_t i = 0;
+        if (gPickQuery->mItemCount != 0) {
+            int off = 0;
+            do {
+                QueryItem* it = (QueryItem*)((char*)gPickQuery->mItems + off);
+                it->mFlags &= ~1u;
+                if (it->Test(0, 0, &mx) && box.Overlaps(&mx))
+                    return true;
+                ++i;
+                off += 0x60;
+            } while (i < gPickQuery->mItemCount);
+        }
+    }
+    return false;
+}
+
+
+
+
+// @ 0x0073f910
+bool cModelInstanceQ::IntersectsSphere(const cSPBoundingBox_s0073_f320* box, const cSPTransform_s0073_f320* xf, bool firstHitOnly)
+{
+    if (!mExternalBoneTable)
+        return false;
+    M4 basis;
+    PartTransform64 inv;   // only built when the scale is not 1; the item tests below read it either way
+    V4 mn, mx;
+    if (xf->mScale == 1.0f) {
+        mx.x = box->mMax[0]; mx.y = box->mMax[1]; mx.z = box->mMax[2]; mx.w = box->mMax[0];
+        mn.x = box->mMin[0]; mn.y = box->mMin[1]; mn.z = box->mMin[2]; mn.w = box->mMin[0];
+        const float s = xf->mScale;
+        basis.t.x = xf->mTranslation[0]; basis.t.y = xf->mTranslation[1]; basis.t.z = xf->mTranslation[2];
+        basis.r0.x = s * xf->mRotation[0]; basis.r0.y = xf->mRotation[1] * s; basis.r0.z = xf->mRotation[2] * s;
+        basis.r1.x = xf->mRotation[3] * s; basis.r1.y = xf->mRotation[4] * s; basis.r1.z = xf->mRotation[5] * s;
+        basis.r2.x = s * xf->mRotation[6]; basis.r2.y = xf->mRotation[7] * s; basis.r2.z = xf->mRotation[8] * s;
+    } else {
+        inv.Construct(*xf);
+        inv.Invert();
+        cSPBoundingBox_s0073_f320 bb = *box;
+        bb.Transform(&inv);
+        mn.x = bb.mMin[0]; mn.y = bb.mMin[1]; mn.z = bb.mMin[2]; mn.w = bb.mMin[0];
+        mx.x = bb.mMax[0]; mx.y = bb.mMax[1]; mx.z = bb.mMax[2]; mx.w = bb.mMax[0];
+        basis.r0.x = 1.0f; basis.r0.y = 0.0f; basis.r0.z = 0.0f; basis.r0.w = 0.0f;
+        basis.r1.x = 0.0f; basis.r1.y = 1.0f; basis.r1.z = 0.0f; basis.r1.w = 0.0f;
+        basis.r2.x = 0.0f; basis.r2.y = 0.0f; basis.r2.z = 1.0f; basis.r2.w = 0.0f;
+        basis.t.x = 0.0f; basis.t.y = 0.0f; basis.t.z = 0.0f; basis.t.w = 0.0f;
+    }
+    char stackBuf[100];
+    void* stackBufPtr = stackBuf;
+    QueryState* q = GetQuery(gSphereQuery);
+    InitQuery(q, &stackBufPtr, mn, mx);
+    BoxPair bp; bp.mMin = mn; bp.mMax = mx;
+    ExternalTable* table = mExternalBoneTable;
+    for (int r = RunQuery(table, q, &basis); r == 0; r = RunQuery(mExternalBoneTable, gSphereQuery, &basis)) {
+        if (firstHitOnly)
+            return true;
+        uint32_t i = 0;
+        if (gSphereQuery->mItemCount != 0) {
+            int off = 0;
+            do {
+                QueryItem* it = (QueryItem*)((char*)gSphereQuery->mItems + off);
+                it->mFlags &= ~1u;
+                if (it->Test(0, 0, &inv) && bp.Overlaps(&inv))
+                    return true;
+                ++i;
+                off += 0x60;
+            } while (i < gSphereQuery->mItemCount);
+        }
+    }
+    return false;
+}
+
+
+
+
 // @ 0x0073fd20
 int ModelInstanceDispatch::Dispatch(int a2, int a3)
 {
@@ -922,6 +1475,57 @@ int ModelInstanceDispatch::Dispatch(int a2, int a3)
         l->OnDispatch(this, &c, a2);
     return c.result;
 }
+
+
+
+
+// @ 0x0073fe80
+bool __fastcall ValidateA(char* self)
+{
+    bool ok = false;
+    MeshVec meshes;
+    (*(ModelInstanceMeshes**)(self + 0xc))->GetMeshes(meshes);
+    BindQuery q;
+    if (BuildQuery(&q, &meshes, *(int*)(self + 0x10)) && q.count == 3) {
+        ok = true;
+        self += 0x14;
+        for (int i = 0; i < 3; ++i) {
+            if (ok && q.Check(self, 3, i, 1, -1)) ok = true;
+            else ok = false;
+            self += 0xc;
+        }
+    }
+    return ok;
+}
+
+
+
+
+// @ 0x0073ffb0
+bool __fastcall ValidateB(char* self)
+{
+    bool ok = false;
+    MeshVec meshes;
+    (*(ModelInstanceMeshes**)(self + 0xc))->GetMeshes(meshes);
+    BindQuery q;
+    if (BuildQuery(&q, &meshes, *(int*)(self + 0x10)) && q.count == 3) {
+        ok = true;
+        self += 0x30;
+        for (int i = 0; i < 3; ++i) {
+            if (ok && q.Check(self - 0x1c, 3, i, 1, -1) && CheckEntry(&q, i, self - 0x10, self)) ok = true;
+            else ok = false;
+            self += 0x2c;
+        }
+    }
+    return ok;
+}
+
+
+
+
+// @ 0x007400f0
+BindingSet::BindingSet()
+: mFlags(0), f0c(0), f10(0), f90(0), f94(0) {}
 
 
 
@@ -983,6 +1587,7 @@ bool cMI_Construct::ConstructFromArenaResource(ResBase* p)
     return true;
 }
 
+
 // @ 0x00741aa0
 RefPair8* Vec8::insert(RefPair8* pos, const RefPair8* v)
 {
@@ -1003,3 +1608,4 @@ RefPair8* Vec8::insert(RefPair8* pos, const RefPair8* v)
     }
     return mpBegin + idx;
 }
+

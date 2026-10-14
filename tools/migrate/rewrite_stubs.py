@@ -130,7 +130,7 @@ def slice_lines(sid, text):
 # ---------------------------------------------------------------------------------------------
 # top-level scan
 # ---------------------------------------------------------------------------------------------
-NONFUNC_HEAD = re.compile(r'^(?:template\s*<[^>]*>\s*)?(?:struct|class|union|enum|namespace)\b|^extern\s*"C"\s*$|^typedef\b|=')
+NONFUNC_HEAD = re.compile(r'^(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union|enum|namespace)\b|^extern\s*"C"\s*$|^typedef\b|=')
 
 
 def toplevel_defs(text):
@@ -150,10 +150,16 @@ def toplevel_defs(text):
             i = n if j < 0 else j + 1
             stmt = i
             continue
-        if c == ";":
+        if c == ";" or c == "}":
             stmt = i + 1
         elif c == "{":
             head = re.sub(r"\s+", " ", m[stmt:i]).strip()
+            if re.match(r"^(?:inline\s+)?namespace(?:\s+\w+)?$", head):
+                # a namespace block: its definitions are top level too (fix pass 4, s0073a110: `namespace SP { .. int
+                # cModelInstance::GetAnimationMoveToTimes(..) {..} }` under an in-class `// @ 0x0073ABB0` got no marker)
+                i += 1
+                stmt = i
+                continue
             j = i
             d = 0
             while j < n:
@@ -186,7 +192,8 @@ def _qualified_name(head):
     return m.group(1) if m else None
 
 
-BANNER_VA = re.compile(r"^\s*//\s*(?:0x)?([0-9a-fA-F]{6,8})\b")
+# (an indented `    // @ 0x0073ABB0` over the in-class declaration counts too: s0073a110 GetAnimationMoveToTimes, fix pass 4)
+BANNER_VA = re.compile(r"^(?://\s*|\s+//\s*(?:@\s*)?)(?:0x)?([0-9a-fA-F]{6,8})\b")
 
 
 def insert_missing_markers(lines, sid, known_vas=()):
@@ -237,12 +244,46 @@ def insert_missing_markers(lines, sid, known_vas=()):
             # the comment block between the previous definition and this one
             for q in range(ln - 1, max(prev_end_line, ln - 40), -1):
                 bm = BANNER_VA.match(lines[q])
+                # a banner that names another function (s00625e70's file legend `//   00626b50  SetInitialCameraValues` above the
+                # helper `static inline void** Vt(void*)`: KeyError in build, fix pass 4) is not this function's
+                bt = re.match(r"^\s*//\s*(?:@\s*)?(?:0x)?[0-9a-fA-F]{6,8}\b\s+(.*)$", lines[q])
+                bname = None
+                if bt:
+                    txt = bt.group(1)
+                    mp = re.search(r"([A-Za-z_~][\w~]*)\s*\(", txt)        # `bool cPropertyManager::CreateResource(int* ..)`
+                    mf = re.match(r"([A-Za-z_~][\w:~]*)", txt)
+                    bname = (mp.group(1) if mp else (mf.group(1).split("::")[-1] if mf else None))
+                short = (name or "").split("::")[-1]
+                if bm and bname and short and not bname.startswith("FUN_") and bname != short:
+                    continue
+                if bm and lines[q][:1] in (" ", "\t"):
+                    # an indented annotation over an in-class declaration: only for the declaration of this very function
+                    nxt = next((l for l in lines[q + 1:q + 4] if l.strip() and not l.lstrip().startswith("//")), "")
+                    md = re.search(r"(~?\w+)\s*\(", nxt)
+                    if not md or md.group(1) != short or "{" in nxt:
+                        continue
                 if bm and int(bm.group(1), 16) in rows:
                     va, how = int(bm.group(1), 16), "banner comment line %d" % (q + 1)
                     break
         if va is not None and va in rows:
             inserts.append((ln, va, name or head[:30], how))
         prev_end_line = bisect.bisect_right(starts, e - 1) - 1
+    if not inserts and len(rows) == 1 and not any(marker.match(l) for l in lines):
+        # a slice with one bookkeeping row and no marker at all (s00741b10: `// Slice s00741b10 (0x00741b10-0x00742b30):
+        # SP::cModelInstance::AddAnimationsFromArena.` and no symbol in nonmatching.txt; IndexError in parse_slice, fix pass 4):
+        # the definition whose name the slice's leading comment names is the row's function
+        lead = []
+        for l in lines:
+            if l.strip() and not l.lstrip().startswith("//"):
+                break
+            lead.append(l)
+        lead_t = "\n".join(lead)
+        # (definitions inside the slice's `namespace SP {` too: a column-0 `Ret Cls::Name(` line)
+        for ln0, l in enumerate(lines):
+            mm = re.match(r"^[A-Za-z_][\w:<>\*&\s]*?\b(\w+)\s*::\s*(~?\w+)\s*\(", l)
+            if mm and re.search(r"\b%s::%s\b" % (re.escape(mm.group(1)), re.escape(mm.group(2))), lead_t) and not l.rstrip().endswith(";"):
+                inserts.append((ln0, next(iter(rows)), mm.group(2), "the slice's only row, named by its leading comment"))
+                break
     out = list(lines)
     for ln, va, name, how in sorted(inserts, reverse=True):
         out.insert(ln, "// @ 0x%08x" % va)
@@ -281,20 +322,27 @@ def unwrap_namespaces(text):
 def item_names(kind, text):
     """Names an item (parse_preamble kind, text) declares."""
     m = mask(text)
+    _ns0, inner0 = unwrap_namespaces(text)
+    mi0 = mask(inner0).strip()
+    if re.match(r"^(?:typedef\s+)?enum\s*\{", mi0):
+        # an anonymous enum declares its enumerators (s009c32c0 `enum { kCapNameRoot = .., kCapNameSpine = .. }` was never
+        # emitted: C2065 kCapNameSpine, fix pass 4)
+        body = mi0[mi0.find("{") + 1:mi0.rfind("}")]
+        return [x.split("=")[0].strip() for x in body.split(",") if re.match(r"^\s*[A-Za-z_]\w*\s*(=|$)", x)]
     if m.lstrip().startswith("namespace"):        # `namespace EA { namespace ArgScript { class cIMetaCommand {..}; }}`
         _ns, inner = unwrap_namespaces(text)
         if inner != text:                       # one wrapped declaration: classes, templates, function declarations
             mi = mask(inner).lstrip()
             # a function template (`template <class T> inline T* uninitialized_copy_ptr(..) {..}`, s004e01d0) is not a class
             is_cls = mi.startswith(("struct", "class", "union", "enum")) or \
-                bool(re.match(r"template\s*<[^>]*>\s*(?:struct|class|union)\b", mi))
+                bool(re.match(r"template\s*<(?:[^<>]|<[^<>]*>)*>\s*(?:struct|class|union)\b", mi))
             return item_names("struct" if is_cls else "other", inner)
-        return re.findall(r"\b(?:struct|class|union|enum)\s+(\w+)\s*(?::[^{;]*)?\{", m)
+        return re.findall(r"\b(?:struct|class|union|enum)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)\s*(?::[^{;]*)?\{", m)
     if kind == "define":
         mm = re.match(r"\s*#\s*define\s+(\w+)", m)
         return [mm.group(1)] if mm else []
     if kind == "struct":
-        mm = re.match(r"\s*(?:template\s*<[^>]*>\s*)?(?:struct|class|union)\s+(\w+)", m)
+        mm = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)", m)
         return [mm.group(1)] if mm else []
     if kind == "typedef":
         # function-pointer typedef: `(*Name)(` or `(__thiscall *Name)(` (the calling convention comes first)
@@ -304,7 +352,7 @@ def item_names(kind, text):
         mm = re.search(r"(\w+)\s*(?:\[[^\]]*\])?\s*;\s*$", m.strip())
         return [mm.group(1)] if mm else []
     if kind in ("extern", "other"):
-        mc = re.match(r"\s*(?:template\s*<[^>]*>\s*)?(?:struct|class|union)\s+(\w+)[^;{()]*\{", m)
+        mc = re.match(r"\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+(?:__declspec\s*\((?:[^()]|\([^()]*\))*\)\s*)?(\w+)[^;{()]*\{", m)
         if mc:                                  # a class definition the struct parser did not take (several bases, template)
             return [mc.group(1)]
         mo = re.search(r"\boperator\s*(new|delete)\b(\s*\[\s*\])?\s*\(", m.split("{")[0])
@@ -436,6 +484,10 @@ def rename_word(text, old, new, ns=()):
     m = mask(text)
     q = "".join(re.escape(n) + r"\s*::\s*" for n in ns)
     pat = re.compile(r"(?<![\w.>:])(?:%s)?%s\b" % (q, re.escape(old))) if q else re.compile(r"(?<![\w.>:])%s\b" % re.escape(old))
+    if not ns:
+        # a global-scope qualifier `::old` (s004680c0: `struct Vec_s0046_80c0 : ::Vec<uint32_t, 0>`) is renamed too when the stub is
+        # global (fix pass 4: the base kept another slice's one-parameter Vec, C2977); `X::old` (a member of X) is not
+        pat = re.compile(r"(?:(?<![\w.>:])|(?<![\w>)\]\s:])(?<=::)|(?<=[\s,(<]::))%s\b" % re.escape(old))
     out, last = [], 0
     for mm in pat.finditer(m):
         # `->old` / `.old`: member access keeps its name

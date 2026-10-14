@@ -1,1 +1,1 @@
-004629e0 SP::EditorUtils::ExportToXMFAndBlocks  # dev-PDB anchor (symbols/pdb_names.json)
+004629e0 ?ExportToXMFAndBlocks@EditorUtils@SP@@YA_NPAUEditorModel@@PAUEditorCreatureData@@PB_W@Z  # ExportToXMFAndBlocks migrated from s004629e0 (verbatim, slice spelling)

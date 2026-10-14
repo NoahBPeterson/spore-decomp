@@ -1,5 +1,14 @@
-0063ced0 SP::cSPPlayModeSubModeMovie::CheckYouTubeRegistration  # PDB name
-0063cf90 SP::cSPPlayModeSubModeMovie::CheckYouTubeRegistration (variant)  # near-identical to 0063ced0
-0063d050 SP::cSPPlayModeSubModeMovie::ConstructYouTubeVideoUploadXMLRequest  # PDB name
+00635520 ?ResetSendEmailWindow@cSPPlayModeUI@SP@@AAEXXZ  # SP::cSPPlayModeUI::ResetSendEmailWindow (callee of s0063caf0, named from the dev publics; slice address comment)
+00636260 ?HideYouTubeLoginDialog@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::HideYouTubeLoginDialog (callee of s0063caf0, named from the dev publics; slice address comment)
+00636320 ?EnablePhotoViewerButton@cSPPlayModeUI@SP@@QAEX_N@Z  # SP::cSPPlayModeUI::EnablePhotoViewerButton (callee of s0063caf0, named from the dev publics; slice address comment)
+006364a0 ?HideMovieSavedDialogCustom@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::HideMovieSavedDialogCustom (callee of s0063caf0, named from the dev publics; slice address comment)
+006374b0 ?SetYTUsername@cSPPlayModeUI@SP@@QAEXABV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::SetYTUsername (callee of s0063caf0, named from the dev publics; slice address comment)
+00637510 ?SetYTPassword@cSPPlayModeUI@SP@@QAEXABV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::SetYTPassword (callee of s0063caf0, named from the dev publics; slice address comment)
+00637800 ?GetYTUsername@cSPPlayModeUI@SP@@QAEXAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::GetYTUsername (callee of s0063caf0, named from the dev publics; slice address comment)
+00637830 ?GetYTPassword@cSPPlayModeUI@SP@@QAEXAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::GetYTPassword (callee of s0063caf0, named from the dev publics; slice address comment)
+00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show (callee of s0063caf0, named from the dev publics; slice address comment)
+0063ced0 ?CheckYouTubeRegistration@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::CheckYouTubeRegistration migrated from s0063caf0 (verbatim, slice spelling)
+0063cf90 ?FUN_0063cf90@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXXZ  # cSPPlayModeSubModeMovie_s0063_caf0::FUN_0063cf90 migrated from s0063caf0 (verbatim, slice spelling)
+0063d050 ?ConstructYouTubeVideoUploadXMLRequest@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXPAV?$basic_string_s0063_caf0@DU?$allocator_s0063_caf0@D@eastl@@@eastl@@@Z  # cSPPlayModeSubModeMovie_s0063_caf0::ConstructYouTubeVideoUploadXMLRequest migrated from s0063caf0 (verbatim, slice spelling)
 0063d170 SP::cSPPlayModeSubModeMovie::ConstructVideoURL  # PDB name
-0063d910 SP::cSPPlayModeSubModeMovie::ToggleRecordingIndicator  # PDB name
+0063d910 ?ToggleRecordingIndicator@cSPPlayModeSubModeMovie_s0063_caf0@@QAEXD@Z  # cSPPlayModeSubModeMovie_s0063_caf0::ToggleRecordingIndicator migrated from s0063caf0 (verbatim, slice spelling)

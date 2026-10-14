@@ -14,4 +14,4 @@
 0075dbe0 ?CheckDeviceReady@DevLatch@@QAE_NXZ  # DevLatch::CheckDeviceReady migrated from s0075cf20 (verbatim, slice spelling)
 0075dc10 ?slot_35@cRenderer@SP@@UAEXXZ  # SP::cRenderer::slot_35 migrated from s0075cf20
 0075dc20 ?BuildPaletteTable@@YAXM@Z  # BuildPaletteTable migrated from s0075cf20 (verbatim, slice spelling)
-0075dca0 SP::cRenderer::InitShaders  # PDB (card)
+0075dca0 ?cRenderer_InitShaders@@YA_NXZ  # cRenderer_InitShaders migrated from s0075cf20 (verbatim, slice spelling)

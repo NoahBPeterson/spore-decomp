@@ -1,5 +1,5 @@
 00766fa0 ReadPaintStuff  # paint-model chunk parser; EA::IO ReadInt32/ReadValue/WriteValue chain
-00767170 FUN_00767170  # reads two chunks into a stack temp, copies a triplet out
+00767170 ?FUN_00767170@PaintHolder@@QAE_NPAX00@Z  # PaintHolder::FUN_00767170 migrated from s00766fa0 (verbatim, slice spelling)
 00767270 F67270::Method  # forwards this+0x2c to ReadPaintStuff with members +0x28/+0x14
 00767290 ?Resize@VBig2@@QAEXHI@Z  # VBig2::Resize migrated from s00766fa0 (verbatim, slice spelling)
 00767350 V7c::Insert  # eastl vector (stride 0x7c) insert(pos,n,value)

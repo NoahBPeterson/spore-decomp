@@ -33,7 +33,7 @@ templates (eastl containers, EA::AutoRefCount, AtomicInt) are hand-written there
 measured retail layouts; the generator includes them by family (FAMILY_HEADERS).  By default the
 closure of a module's classes (bases, by-value members, pointees one hop) is emitted too.
 """
-import argparse, collections, json, os, re, subprocess, sys
+import argparse, collections, glob, json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 W = lambda *p: os.path.join(ROOT, *p)
@@ -73,6 +73,11 @@ def cpp_type(d, name=None):
         inner = d[4:]
         if inner == "func":
             t = "void (*)()"
+        elif inner.startswith("arr:"):
+            # a pointer to an array (hkCollisionDispatcher::m_debugAgent2Table, DebugEntry (*)[32][32]; fix pass 4: C3409)
+            at = cpp_type(inner, None)
+            mm = re.match(r"^(.*?)((\[\d+\])+)$", at)
+            return "%s (*%s)%s" % (mm.group(1), name or "", mm.group(2)) if mm else at + "*"
         else:
             t = cpp_type(inner, None) + "*"
     elif d.startswith("struct:"):
@@ -309,12 +314,14 @@ class Types:
             # at dev offset 0 the re-layout counted the base bytes as a gap and pushed the next member 8 bytes too far)
             doff = (mem[k - 1][1] + (mem[k - 1][5] or 4)) if k else \
                 max([b[1] + (b[2] or 0) for b in s["bases"]] + [4 if s.get("vfptr") else 0, 0])
-            mem.insert(k, [ins["name"], doff, "blob:%d:%s" % (ins["size"], ins.get("type", "")), None, None, ins["size"]])
+            # "desc": a typed member (a typedesc as in types.json, e.g. "arr:260:16:struct:eastl::basic_string<wchar_t,eastl::allocator>")
+            # instead of opaque bytes, so implicit constructors/destructors build and destroy it (fix pass 4, cSPPlayModeSubModeMovie)
+            mem.insert(k, [ins["name"], doff, ins.get("desc") or "blob:%d:%s" % (ins["size"], ins.get("type", "")), None, None, ins["size"]])
             for m in mem[k + 1:]:
                 m[1] += ins["size"]    # keep the dev gaps after the insertion point intact
         for ap in o.get("append", []):
             last = mem[-1] if mem else [None, 0, "", None, None, 0]
-            mem.append([ap["name"], last[1] + (last[5] or 4), "blob:%d:%s" % (ap["size"], ap.get("type", "")),
+            mem.append([ap["name"], last[1] + (last[5] or 4), ap.get("desc") or "blob:%d:%s" % (ap["size"], ap.get("type", "")),
                         None, None, ap["size"]])
         s2 = dict(s, members=mem)
         if o.get("append") or o.get("insert") or o.get("remove") or o.get("retype"):
@@ -776,7 +783,30 @@ def sig_refs(text):
             # global-namespace PDB enums (_D3DRENDERSTATETYPE in rw/graphics/EmbeddedState.h, hkPhantomType in hkPhantom.h:
             # C2061 before fix pass 3) get their generated enum header like the scoped ones
             out.add(m.group(1))
+        elif re.match(r"^(?:hk|c[A-Z]|I[A-Z]|C[A-Z])\w*$", m.group(1)) and m.group(1) not in declared_names():
+            # a class-like global name the PDB has no type for and no header declares (hkConstraintQueryOut in
+            # hkConstraintData::buildJacobian, C2061, fix pass 4): marked, the declaration becomes UNDECLARABLE
+            out.add("?" + m.group(1))
     return out
+
+
+_DECLARED = None
+
+
+def declared_names():
+    """Global names the include tree declares itself (hand templates, typedefs.h, generated headers): class/struct/union/
+    enum/typedef names, scanned once."""
+    global _DECLARED
+    if _DECLARED is None:
+        _DECLARED = set()
+        for p in glob.glob(os.path.join(ROOT, "src", "game", "include", "**", "*.h"), recursive=True):
+            try:
+                t = open(p, encoding="utf-8", errors="replace").read()
+            except OSError:
+                continue
+            _DECLARED.update(re.findall(r"\b(?:class|struct|union|enum)\s+([A-Za-z_]\w*)", t))
+            _DECLARED.update(re.findall(r"\btypedef\b[^;{}]*?\b([A-Za-z_]\w*)\s*(?:\[[^\]]*\])?\s*;", t))
+    return _DECLARED
 
 
 KNOWN_STRUCTS = set()   # filled by Types(): template argument tokens are kept only if they name a PDB class
@@ -1012,8 +1042,12 @@ def undeclarable(line):
     why = None
     if "`" in code:
         why = "names a file-local type"
-    elif re.search(r"\bvoid /\*[^*]*\*/\s*&", code):
+    elif re.search(r"\bvoid /\*[^*]*\*/\s*(?:const\s*)?&", code):
+        # (`void /* X */ const &` too: cEffectsRenderer::CreateTextureParticleSet, C2182, fix pass 4)
         why = "reference to a nested type of a class outside this header"
+    elif re.search(r"\bvoid /\*[^*]*\*/\s*(?:const\s+)?(?:,|\)|[A-Za-z_]\w*\s*[,)(=])", code) and \
+            not re.search(r"\(\s*void /\*[^*]*\*/\s*\)", code):
+        why = "a by-value parameter or return of a type no header declares"
     else:
         ut = unknown_templates(re.sub(r"\boperator\s*(<<=?|<=?)", "operator", code))
         if ut:
@@ -1252,9 +1286,13 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
     enums = set()
     for m in L["members"]:
         d = m["type"] or ""
-        if d.startswith("enum:"):
-            enums.add(d[5:])
-        by_value = not d.startswith("ptr:")
+        de = d
+        while de.startswith("arr:"):          # an array of an enum names the enum too (SP::CellSaveGame::mUnlockedParts, fix pass 4)
+            de = de.split(":", 3)[3]
+        if de.startswith("enum:"):
+            enums.add(de[5:])
+        # an array of pointers holds no class by value (hkCollisionDispatcher::m_contactMgrFactory[8][8], fix pass 4: C2143)
+        by_value = not d.startswith("ptr:") and not de.startswith("ptr:")
         for r in class_refs(d):
             if by_value and (r == (d[7:] if d.startswith("struct:") else None) or
                              (d.startswith("arr:") and r in class_refs(d.split(":", 3)[3]))):
@@ -1265,6 +1303,10 @@ def class_def(data, cls, retail_fns, report, out_dir, ctx, indent=""):
     decl_lines, _virtuals = build_declarations(data, cls, short, retail_fns, sig_names)
     subst = {}      # nested types of classes outside this header: declared as int/void in signatures
     for r in sig_names:
+        if r.startswith("?"):
+            subst[r[1:]] = "void /* %s (no type) */" % r[1:]
+            data.unknown_names[r[1:]] += 1
+            continue
         if r.endswith("<"):
             h = family_header(r + "x>")
             if h:

@@ -8,9 +8,9 @@
 #include "EA/COM/ClassId.h"
 #include "EA/COM/InterfaceId.h"
 #include "EA/ResourceMan/Key.h"
+#include "SP/cCombatant.h"
 #include "SP/cMovableDestructibleOrnament.h"
 #include "SP/eInventoryItemType.h"
-#include "bool.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"
 #include "eastl/vector.h"
@@ -59,7 +59,7 @@ class cSPPlanetaryArtifact : public SP::cMovableDestructibleOrnament /* +0x0 */ 
   virtual SP::cGameData * AsGameData();                                  // slot 3, (no retail slot), inherited from SP::cMovableDestructibleOrnament
   virtual unsigned int GetOwner();                                       // slot 4, (no retail slot), inherited from SP::cMovableDestructibleOrnament
   virtual SP::cSPSpaceToolData * GetActiveWeapon();                      // slot 5, (no retail slot), inherited from SP::cCombatant
-  virtual void TakeHit(float, unsigned int, int /* SP::cCombatant::eDamageType */, cSPVector3 const &, SP::cCombatant *); // slot 6, 0x00c74c20
+  virtual void TakeHit(float, unsigned int, SP::cCombatant::eDamageType, cSPVector3 const &, SP::cCombatant *); // slot 6, 0x00c74c20
   virtual void NotifyAttack(SP::cCombatant *);                           // slot 7, 0x010829f0, inherited from SP::cCombatant
   virtual cSPVector3 GetRandomStrikeOffset();                            // slot 8, (no retail slot), inherited from SP::cCombatant
   virtual void Repair(bool);                                             // slot 9, (no retail slot), inherited from SP::cCombatant

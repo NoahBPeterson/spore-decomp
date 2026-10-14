@@ -1,10 +1,12 @@
 0073f320 ??4cSkinBinding@@QAEAAU0@ABU0@@Z  # cSkinBinding::operator= migrated from s0073f320 (verbatim, slice spelling)
 0073f440 ?copy_backward_ref@@YAPAURefPair@@PAU1@00@Z  # copy_backward_ref migrated from s0073f320 (verbatim, slice spelling)
-0073f4b0 SP::cModelInstance::SetAnimationGroupTransform  # PDB name (symbols/pdb_names.json)
-0073f540 SP::cModelInstance::PickLine  # PDB name (symbols/pdb_names.json)
-0073f910 SP::cModelInstance::IntersectsSphere  # PDB name (symbols/pdb_names.json)
+0073f4b0 ?SetAnimationGroupTransform@ModelInstanceAnim@@QAEXHABUcSPTransform_s0073_f320@@@Z  # ModelInstanceAnim::SetAnimationGroupTransform migrated from s0073f320 (verbatim, slice spelling)
+0073f540 ?PickLine@cModelInstanceQ@@QAE_NPBMMPBUcSPTransform_s0073_f320@@_N@Z  # cModelInstanceQ::PickLine migrated from s0073f320 (verbatim, slice spelling)
+0073f910 ?IntersectsSphere@cModelInstanceQ@@QAE_NPBUcSPBoundingBox_s0073_f320@@PBUcSPTransform_s0073_f320@@_N@Z  # cModelInstanceQ::IntersectsSphere migrated from s0073f320 (verbatim, slice spelling)
 0073fd20 ?Dispatch@ModelInstanceDispatch@@QAEHHH@Z  # ModelInstanceDispatch::Dispatch migrated from s0073f320 (verbatim, slice spelling)
-0073fe80 eastl::vector<SP::cModelInstance::cMorphBinding,eastl::sp_vector_allocator>::DoInsertValue  # PDB name
+0073fe80 ?ValidateA@@YI_NPAD@Z  # ValidateA migrated from s0073f320 (verbatim, slice spelling)
+0073ffb0 ?ValidateB@@YI_NPAD@Z  # ValidateB migrated from s0073f320 (verbatim, slice spelling)
+007400f0 ??0BindingSet@@QAE@XZ  # BindingSet::BindingSet migrated from s0073f320 (verbatim, slice spelling)
 00740160 eastl::vector<SP::cBoneRange,eastl::sp_vector_allocator>::DoInsertFromIterator<SP::cBoneRange *>  # PDB name
 007402e0 ??1BindingContainer@@QAE@XZ  # BindingContainer::~BindingContainer migrated from s0073f320 (verbatim, slice spelling)
 00740370 ?SetArray@ArrayHolder@@QAEXPAUDynArray@@@Z  # ArrayHolder::SetArray migrated from s0073f320 (verbatim, slice spelling)

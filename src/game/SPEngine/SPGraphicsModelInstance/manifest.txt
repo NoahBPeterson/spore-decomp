@@ -4,6 +4,7 @@
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??0PartTransform@@QAE@ABU0@@Z  0073f1c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?ReleaseRange@@YGXPAURCItem@@0@Z  0073f2e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?Dispatch@ModelInstanceDispatch@@QAEHHH@Z  0073fd20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??0BindingSet@@QAE@XZ  007400f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ??1BindingContainer@@QAE@XZ  007402e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?SetArray@ArrayHolder@@QAEXPAUDynArray@@@Z  00740370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelInstance.cpp  ?push_back@Vec12Vector@@QAEXABUVec12@@@Z  007411b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

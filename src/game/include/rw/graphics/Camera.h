@@ -5,13 +5,13 @@
 #include "game/types.h"
 #include "game/typedefs.h"
 #include "_D3DVIEWPORT9.h"
-#include "rw/graphics/Raster.h"
 #include "rw/math/fpu/VectorTemplates.h"
 #include "rw/math/vpu/Matrix44Affine.h"
 
 struct HWND__; struct RwRGBARealTag; struct _D3DMATRIX;
 namespace rw { class Resource; class ResourceDescriptor; }
 namespace rw { namespace core { namespace arena { class ArenaIterator; struct SizeAndAlignment; } } }
+namespace rw { namespace graphics { class Raster; } }
 
 namespace rw {
 namespace graphics {

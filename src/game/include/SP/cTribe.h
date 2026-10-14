@@ -19,7 +19,6 @@
 #include "SP/cSPCreatureCitizen.h"
 #include "SP/cSPIdentity.h"
 #include "SP/cSpatialObject.h"
-#include "SP/cSpeciesProfile.h"
 #include "SP/cTribeChatArea.h"
 #include "SP/cTribeTool.h"
 #include "SP/eAttitudeTypes.h"
@@ -35,7 +34,7 @@
 class cSPUIRolloverTribe; struct cSPBoundingBox; struct cSPQuaternion;
 namespace EA { namespace COM { class IUnknown32; } }
 namespace EA { namespace ResourceMan { class Key; } }
-namespace SP { class cCityWalls; class cGameBundle; class cGameData; class cHerd; class cHitSphere; class cIModelWorld; class cIObjectDatabaseIStream; class cIObjectDatabaseOStream; class cInteraction; class cLocation; class cOrnament; class cPlayer; class cPropertyList; class cSPCreatureBase; class cSPCreatureCitizen; class cSPTribeArchetypeData; class cTotemPole; class cTribeData; class cTribeHut; class cTribePlanner; class cTribeTool; class cUfoReactionHelper; struct cCubeMapIndex; struct cEmptyBubble; struct cField; struct cMWModel; struct cNounConstructionData; struct cNounDefinition; struct cTribeChatArea; }
+namespace SP { class cCityWalls; class cGameBundle; class cGameData; class cHerd; class cHitSphere; class cIModelWorld; class cIObjectDatabaseIStream; class cIObjectDatabaseOStream; class cInteraction; class cLocation; class cOrnament; class cPlayer; class cPropertyList; class cSPCreatureBase; class cSPCreatureCitizen; class cSPTribeArchetypeData; class cTotemPole; class cTribeData; class cTribeHut; class cTribePlanner; class cTribeTool; class cUfoReactionHelper; struct cCubeMapIndex; struct cEmptyBubble; struct cField; struct cMWModel; struct cNounConstructionData; struct cNounDefinition; struct cSpeciesProfile; struct cTribeChatArea; }
 
 namespace SP {
 

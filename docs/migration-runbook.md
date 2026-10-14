@@ -640,3 +640,42 @@ instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_s
   every canonical class they name; a kept item's explicit `operator new[](n)` keeps the operator new declarations; a free function
   defined later in VA order than a caller gets a forward prototype (`forward_protos`); `--batch` also takes a VA the batch lists
   for the module under a slice whose bookkeeping has no row for it, when this slice has one (mig3 0x4f6510, 0x4f6720).
+
+### 8f. Fix pass 4 (2026-10-14, after the round-4 landings): what changed
+
+All 12 mig4 objects were re-landed from scratch in batch order with the rules below (`--batch mig4`), and EASharedLibrary
+with `--batch mig3`: 387 of the 408 mig4 functions are in the TUs (round 4: 297), 213 byte-exact rows (round 4: 161; the
+slices: 214, the missing one is 0x628340, whose modmap anchor is wrong), 21 held back (16 equiv regressions with a
+`leave_in_slice` why, 4 SkinnerPaintRender bodies that need `nSPSkinner::cRTTBuffer::Setup/Set/Tri`, 1 `exclude`).
+Every manifest under src/game is green (514 of 514 rows). Equiv was re-measured on every changed nonmatching row: no
+verdict regression (0x741b10 FAIL -> UNSUPPORTED was put back in its slice).
+
+- rewrite.py / rewrite_stubs.py rules (each names its test slice in the code): stubs a slice defines inside `namespace N`
+  are qualified `N::` in global-scope items and verbatim functions that follow the slice's `using namespace N;` (s0059c4c0,
+  s009ba4c0, s009b5ce0); the return type of a verbatim method defined at global scope is qualified (s0059c4c0); an explicit
+  instantiation under its own marker is a chunk (`InstChunk`, s0059b4b0); a function this slice declares in a namespace that
+  hides another slice's global overload is renamed (C2664 repair, s0059c4c0 RBTreeIncrement); a prototype the TU already
+  declares with another non-canonical return type is renamed for the verbatim functions (s0063ba50 GetConfigManager,
+  s0051a350 GetPaintSystem); an `extern "C"` prototype of a function the TU defines with C++ linkage is dropped (s00767ee0
+  UnionDestroy); externs naming class templates / forward-declared stubs go after the stubs, and stub renames reach the
+  externs (s0063ba50, s0063d9e0); `template <.., class A = allocator<T> >` item names (s0063caf0); `struct
+  __declspec(align(4)) X` item names (s0046f2a0); anonymous enums declare their enumerators (s009c32c0); operator new/delete
+  are never renamed, and one the TU (or `<new>`) already has is not emitted (s004680c0, s005c4500); a global `::Name` is
+  renamed with its stub (s004680c0); empty `F_<va>() {}` placeholders over a `??0/??4/??1` row become implicit-member
+  forcing functions (s00469bb0); a namespace opened right after the marker wraps the function (s0046e450, s004629e0);
+  a helper template right after the marker and `extern "C" { .. }` blocks are preamble (s00624fb0, s00764df0); banner
+  markers (a VA marked twice) are not boundaries, the manifest's function name decides which copy (s0073f320, s00741210);
+  banner VAs must name the function they are used for; indented `// @ 0xVA` over an in-class declaration count;
+  toplevel_defs descends into namespaces (s0073a110); a markerless one-row slice marks the function its leading comment names
+  (s00741b10); free functions the slice defines elsewhere get prototypes (`held_callee_protos`, s00766fa0); C2373 renames; a
+  slice `typedef char va_list` gets `#define _VA_LIST_DEFINED` before every include (round 4 had hand-written it,
+  s00b1fd50); out-of-class template members bind their row by `>::name(` (s0059c4c0 0x59c740).
+- `tools/migrate/module_flags.json` {obj: {drop, add, evidence}}: per-object compile flags (EASharedLibrary drops /EHsc).
+- Headers: `eastl/vector.h` declares an out-of-line `~vector()` and `erase(first, last)` (retail 0x5c7f10 / 0x5c2170);
+  `layout_overrides.json` `SP::cPlayModeSubModeMovie` (two string16[260] tables, -mForceEnableVideoUpload, two bools,
+  0x2360); `insert`/`append` accept a typed `desc`; headers.py: unknown class names and nested-type references/by-value
+  uses make a declaration UNDECLARABLE, enum arrays pull the enum, pointer arrays are not by-value, pointer-to-array
+  declarators.
+- Round 6 objects whose headers compile standalone: `work/claude/round6_ready.json` (16); not ready:
+  `work/claude/round6_not_ready.json` (template bases with no hand template: `SAP<2>`, `EA::SingletonBase`,
+  `rw::core::thread::AtomicInt`; `encoding.h`; `eastl::vector_set`).

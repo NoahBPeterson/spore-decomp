@@ -8,7 +8,7 @@
 #include "SP/cResourceBase.h"
 #include <string.h>
 #include "rw/core/arena/Arena.h"
-#include "EA/UTFWin/CustomWindow.h"
+#include "EA/Audio/IPrimitive.h"
 #include <malloc.h>
 #include <new>
 #include "rw/graphics/IndexBuffer.h"
@@ -105,6 +105,9 @@ extern char  kRasterRecordTypes[];                          // 0x0140e000
 // ---- items of slice s00763cb0 end
 
 // ---- items of slice s00764df0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* __cdecl EA_New(uint32_t size, const char* f, int a, int b, const char* g, int line); // 0x0f473a0
+extern "C" void  __cdecl DoFreeNodes(void* b, void* e, void* n);                                      // 0x04554f0
+extern const char g_allocFile[];   // 0x13ebb38
 struct Ctx764df0 { char CreateRaster(void* a, void* b, void* c); };   // 0x764df0 thiscall, 3 args
 struct Ctx764a50 { char ReadArena(void* a, void* b, void* c); };      // 0x764a50 thiscall, 3 args
 struct Loader29 {
@@ -119,6 +122,8 @@ struct Loader29 {
     void WrapDf0(int);
     void WrapA50(int);
 };
+struct Node8 { int x, y; };
+struct HVec { Node8* b; Node8* e; Node8* cap; void grow(unsigned n); };
 struct Vec { void** b; void** e; void** cap; int alloc; void** inlinebuf; };
 struct D765ac0 {
     char pad[0x20];
@@ -140,11 +145,8 @@ struct D765f10 : cResourceBase_s0076_4df0 {
 // ---- items of slice s00764df0 end
 
 // ---- items of slice s00765f80 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" extern char g_allocFile[];
-extern "C" void* __cdecl Ctor765f10(void* p);
-extern "C" void* __cdecl Ctor763100(void* p);
-extern "C" void* __cdecl Ctor7004d0(void* p);
 extern "C" void* __cdecl EA_Alloc6(uint32_t size, const char* name, int a, int b, const char* file, int line);
+extern "C" void* __cdecl EA_Alloc8(uint32_t size, int align, int a, const char* name, int b, int c, const char* file, int line);
 extern "C" void  __cdecl EA_Dealloc(void* p);
 extern "C" void* __cdecl memcpy_t(void* dst, const void* src, uint32_t n);
 extern "C" void  __cdecl sub_6c20b0(void* p);
@@ -152,6 +154,10 @@ extern "C" void  __cdecl sub_6c2060(void* p, int a, int b);
 extern "C" void  __cdecl sub_6c20e0(void* p);
 extern "C" void  __cdecl sub_11eff60(void* p);
 extern "C" void  __cdecl cLocalLightInfo_dtor(void* alloc, void* obj);
+extern "C" char* __cdecl BigMoveBack(char* dst, char* first, char* last, char* src);   // 0x764720
+extern "C" char* __cdecl BigMove(char* dst, char* first, char* last);                  // 0x763f10
+extern "C" char* __cdecl BigUninitFill(char* dst, uint32_t n, char* value);            // 0x765200
+extern "C" extern char g_allocFile_s0076_5f80[];
 static inline void* VP(void* p) { return *(void**)p; }
 struct IRef {
     virtual void AddRef();   // +0
@@ -215,56 +221,18 @@ struct ResE : BaseE {
     ResE();
     ~ResE();
 };
-void* InitResE(void* p) { return new (p) ResE(); }
 ResE::~ResE() {
     if (a18) {
         sub_11eff60((void*)a18);
         cLocalLightInfo_dtor(*(void**)0x016c8b44, (void*)a18);
     }
 }
-void* InitResE(void* p);
-bool __stdcall CreateByType(void** out, uint32_t type, int sub) {
-    void* obj = 0;
-    if (type < 0x2cb4f30) {
-        if (type == 0x2f4e681b) {
-            void* p = EA_Alloc6(0x3fe4, "RenderAsset", 0, 0, 0, 0);
-            if (p) {
-                // cPropertyList base ctor + derived vtable
-                *(void**)p = (void*)0x13ebcdc;
-                _InterlockedExchange((volatile long*)((char*)p + 4), 0);
-                *(int*)((char*)p + 8) = 0;
-                *(int*)((char*)p + 0xc) = 0;
-                *(int*)((char*)p + 0x10) = 0;
-                *(int*)((char*)p + 0x14) = 0;
-                // (large body stubbed)
-                obj = p;
-            }
-        } else if (type == 0x2cb4f2f) {
-            void* p = EA_Alloc6(0x140, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor7004d0(p);
-        } else if (type == 0x1c135da) {
-            void* p = EA_Alloc6(0x2c, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor763100(p);
-        }
-    } else if (type == 0x2f4e681b) {
-        // unreachable by ordering
-    } else if (type == 0x2f4e681c) {
-        if (sub == 0x2f4e681b) {
-            void* p = EA_Alloc6(0x20, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = Ctor765f10(p);
-        } else {
-            void* p = EA_Alloc6(0x1c, "RenderAsset", 0, 0, 0, 0);
-            if (p) obj = InitResE(p);
-        }
-    }
-    if (obj) {
-        *out = obj;
-        ((void(__thiscall**)(void*))VP(obj))[0](obj);   // AddRef
-        ((void(__thiscall**)(void*))VP(obj))[1](obj);   // Release
-        return true;
-    }
-    return false;
-}
+struct VBig {
+    char* mpBegin;            // +0
+    char* mpEnd;              // +4
+    char* mpCap;              // +8
+    void _insert(char* position, uint32_t n, char* value);
+};
 struct CUnionTarget { void m(); };
 struct VPtr {
     uint32_t* mpBegin;   // +0
@@ -294,17 +262,47 @@ struct Factory {
 };
 // ---- items of slice s00765f80 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+bool __stdcall CreateByType(void** out, uint32_t type, int sub);  // 0x007666a0 (stays in the slice: not this object's)
+
 // ---- items of slice s00766fa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void  __cdecl FUN_00763f50(void* a, void* b, void* c);
+extern "C" void* __cdecl FUN_00764320(void* a, void* b, void* c);
+extern "C" void  __cdecl FUN_00765ac0(void* p);
 extern "C" void  __cdecl VBigInsert(void* vec, void* pos, uint32_t n, void* value);    // 0x7662d0
+struct PaintObj {
+    uint32_t mVersion;        // +0
+    uint32_t mA;              // +4
+    uint32_t mB;              // +8
+    uint32_t mC;              // +0xc
+    uint32_t mFlags;          // +0x10
+    uint32_t mD;              // +0x14
+    unsigned char mByte18;    // +0x18
+    uint32_t mCount;          // +0x1c
+    char mVec0[0x58];         // +0x20
+    char mVec1[0x24];         // +0x78
+};
+struct PaintHolder {
+    char pad[0x20];
+    bool FUN_00767170(void* a, void* b, void* c);
+};
 struct VBig2 { char* b; char* e; char* c; void Resize(int, uint32_t n); };
 // ---- items of slice s00766fa0 end
 
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+bool __stdcall ReadPaintStuff(PaintObj* obj, void* stream, void* p3);  // 0x00766fa0 (stays in the slice: not this object's)
+
 // ---- items of slice s00767ee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void  __fastcall FUN_007642c0(void* self);                                // 0x7642c0 (thiscall)
 extern "C" void  __cdecl FUN_00764760(void* self, int v);                              // 0x764760 (thiscall)
 extern "C" void  __cdecl FUN_0041f2d0(void* p);                                        // 0x41f2d0
 extern "C" void  __cdecl FUN_00700670(void* a, void* b);                               // 0x700670
 extern "C" void  __cdecl FUN_00767350(void* self, void* pos, uint32_t n, void* value); // 0x767350
+struct C68200 {
+    char pad[0xd0];
+    int mD0;                  // +0xd0
+    void Release();
+};
 struct V7cB {
     char* b; char* e; char* c;
     void Resize(uint32_t n);
@@ -442,23 +440,9 @@ int RefCounted::AddRef()
 
 
 
-
-
-
-
-
-
-
 // @ 0x00763100
 CEditorRes::CEditorRes()
 {}
-
-
-
-
-
-
-
 
 
 
@@ -474,13 +458,6 @@ bool SP::cGraphicsResourceFactory::Shutdown()
     RemoveRegistrationCallback(0x2f4e681b, (void*)0x7632f0);
     return true;
 }
-
-
-
-
-
-
-
 
 
 
@@ -512,13 +489,6 @@ unsigned int SP::cGraphicsResourceFactory::GetSupportedTypes(unsigned int * type
 
 
 
-
-
-
-
-
-
-
 // @ 0x00763580
 bool __stdcall IsRegType(unsigned a, int b)
 {
@@ -537,23 +507,9 @@ bool __stdcall IsRegType(unsigned a, int b)
 
 
 
-
-
-
-
-
-
-
 // @ 0x007635b0
 EhHolder::~EhHolder()
 {}
-
-
-
-
-
-
-
 
 
 
@@ -576,13 +532,6 @@ bool __stdcall CreateRasterFromState(cRasterFromGimexLoadState_s0076_2d70* s, in
     }
     return false;
 }
-
-
-
-
-
-
-
 
 
 
@@ -618,13 +567,6 @@ bool __stdcall ReadTriplets(void* stream, int, int, int)
 
 
 
-
-
-
-
-
-
-
 // @ 0x007641c0
 bool SP::cGraphicsResourceFactory::Init()
 {
@@ -645,23 +587,9 @@ bool SP::cGraphicsResourceFactory::Init()
 
 
 
-
-
-
-
-
-
-
 // @ 0x007642c0
 D7642c0::~D7642c0()
 {}
-
-
-
-
-
-
-
 
 
 
@@ -686,25 +614,11 @@ void Loader::Wrap670(int)
 
 
 
-
-
-
-
-
-
-
 // @ 0x007646a0
 void Loader::Wrap6a0(int)
 {
     ((Ctx63620*)pC)->Load(p2c, p28, p14);
 }
-
-
-
-
-
-
-
 
 
 
@@ -724,10 +638,6 @@ void Loader29::WrapA50(int)
 
 
 
-
-
-
-
 // @ 0x00765150
 void Loader29::WrapDf0(int)
 {
@@ -740,6 +650,24 @@ void Loader29::WrapDf0(int)
 
 
 
+
+
+
+// @ 0x00765980
+void HVec::grow(unsigned n)
+{
+    if (n > (unsigned)(cap - b)) {
+        Node8* newp = n ? (Node8*)EA_New(n * 8, "Graphics", 0, 0, g_allocFile, 0xd1) : 0;
+        DoFreeNodes(b, e, newp);
+        if (b && *(int*)((char*)b - 4) != 0)
+            EA_Delete(b);
+        Node8* oldb = b;
+        size_t count = e - oldb;
+        b = newp;
+        e = newp + count;
+        cap = newp + n;
+    }
+}
 
 
 
@@ -767,10 +695,6 @@ D765ac0::~D765ac0()
 
 
 
-
-
-
-
 // @ 0x00765f10
 D765f10::D765f10(void* arg)
 {
@@ -786,10 +710,6 @@ D765f10::D765f10(void* arg)
 
 
 
-
-
-
-
 // @ 0x00765f80
 IResEd::~IResEd()
 { if (m1c) m1c->Release(); }
@@ -799,17 +719,9 @@ IResEd::~IResEd()
 
 
 
-
-
-
-
 // @ 0x00765fe0
 ResB::ResB()
 : a20(0), a24(0), a28(0), a2c(0) {}
-
-
-
-
 
 
 
@@ -834,10 +746,6 @@ void* __fastcall AsInterfaceFC(void* self, int, int type)
 
 
 
-
-
-
-
 // @ 0x00766070
 void ResB::Method66070(int a, int b)
 {
@@ -855,19 +763,11 @@ void ResB::Method66070(int a, int b)
 
 
 
-
-
-
-
 // @ 0x007660b0
 void ResB::Method660b0()
 {
     sub_6c20e0((char*)this + 4);
 }
-
-
-
-
 
 
 
@@ -894,10 +794,6 @@ void ResB::MoveOut(void* out)
 
 
 
-
-
-
-
 // @ 0x00766220
 ResE::ResE()
 : a18(0) {}
@@ -907,25 +803,44 @@ ResE::ResE()
 
 
 
-
-
-
-
 // @ 0x007662d0
-extern "C"
+void VBig::_insert(char* position, uint32_t n, char* value)
 {
-// container helpers used by VBig::insert (relocation-masked)
-char* __cdecl BigMoveBack(char* dst, char* first, char* last, char* src);   // 0x764720
-char* __cdecl BigCopyBack(char* dst, char* first, char* last);              // 0x763f90
-char* __cdecl BigMove(char* dst, char* first, char* last);                  // 0x763f10
-char* __cdecl BigUninitFill(char* dst, uint32_t n, char* value);            // 0x765200
-char* __cdecl BigUninitCopy(char* dst, char* first, char* last);            // 0x7651d0
-void  __cdecl BigDestroyRange(void* p, int n);                              // 0x763e50
+    uint32_t size = (uint32_t)((mpEnd - mpBegin) / 0xa0);
+    if (size < n) {
+        uint32_t cap = size * 2;
+        if (size == 0)
+            cap = 1;
+        uint32_t need = size + n;
+        if (need < cap)
+            need = cap;
+        char* nb = need ? (char*)EA_Alloc8(need * 0xa0, 0x10, 0, "Graphics", 0, 0, g_allocFile_s0076_5f80, 0xe5) : 0;
+        char* p = BigMove(nb, mpBegin, position);
+        BigUninitFill(p, n, value);
+        char* ne = BigMove(position, mpEnd, p + n * 0xa0);
+        if (mpBegin && mpBegin != *(char**)((char*)this + 0x10))
+            EA_Dealloc(mpBegin);
+        mpBegin = nb;
+        mpEnd = ne;
+        mpCap = nb + need * 0xa0;
+    } else if (n) {
+        char* end = mpEnd;
+        uint32_t right = (uint32_t)((end - position) / 0xa0);
+        if (n < right) {
+            char* edge = end - n * 0xa0;
+            BigMoveBack(edge, end, position, end);
+            mpEnd = end + n * 0xa0;
+            BigMoveBack(position + n * 0xa0, edge, end, position);
+            BigUninitFill(position, n, value);
+        } else {
+            BigUninitFill(end, n - right, value);
+            mpEnd = end + (n - right) * 0xa0;
+            BigMove(position, end, mpEnd);
+            mpEnd += right * 0xa0;
+            BigUninitFill(position, right, value);
+        }
+    }
 }
-
-
-
-
 
 
 
@@ -958,10 +873,6 @@ void __cdecl UnionDestroy(void* p, int type)
 
 
 
-
-
-
-
 // @ 0x00766910
 void VPtr::push_back(const uint32_t& v)
 {
@@ -980,10 +891,6 @@ void VPtr::push_back(const uint32_t& v)
 
 
 
-
-
-
-
 // @ 0x00766950
 void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
 {
@@ -995,7 +902,7 @@ void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
         uint32_t need = size + n;
         if (need < cap)
             need = cap;
-        uint32_t* nb = need ? (uint32_t*)EA_Alloc6(need * 4, "Graphics", 0, 0, g_allocFile, 0xd1) : 0;
+        uint32_t* nb = need ? (uint32_t*)EA_Alloc6(need * 4, "Graphics", 0, 0, g_allocFile_s0076_5f80, 0xd1) : 0;
         uint32_t* p = (uint32_t*)memcpy_t(nb, mpBegin, (uint32_t)((char*)position - (char*)mpBegin));
         p = (uint32_t*)((char*)p + ((char*)position - (char*)mpBegin));
         for (uint32_t i = 0; i < n; i++)
@@ -1035,10 +942,6 @@ void V4::insert(uint32_t* position, uint32_t n, const uint32_t& value)
 
 
 
-
-
-
-
 // @ 0x00766ed0
 bool Factory::CreateResource(int* src, void** out, int a, int b)
 {
@@ -1062,6 +965,27 @@ bool Factory::CreateResource(int* src, void** out, int a, int b)
 
 
 
+// @ 0x00767170
+bool PaintHolder::FUN_00767170(void* a, void* b, void* c)
+{
+    char* stackObj = (char*)this;
+    char tmp[0xd0];
+    (void)tmp;
+    if (ReadPaintStuff((PaintObj*)stackObj, a, b)) {
+        if (FUN_00764320(stackObj, a, b)) {
+            uint32_t* s = (uint32_t*)c;
+            char* d = (char*)b;
+            *(uint32_t*)(d + 8) = s[0];
+            *(uint32_t*)(d + 0xc) = s[1];
+            *(uint32_t*)(d + 0x10) = s[2];
+            FUN_00765ac0(stackObj);
+            return true;
+        }
+    }
+    FUN_00765ac0(stackObj);
+    return false;
+}
+
 
 
 
@@ -1081,6 +1005,20 @@ void VBig2::Resize(int, uint32_t n)
 
 
 
+
+// @ 0x00768200
+void C68200::Release()
+{
+    int v = mD0;
+    if (v) {
+        if (v == 5) {
+            FUN_007642c0(this);
+        } else {
+            UnionDestroy(this, v);
+        }
+        mD0 = 0;
+    }
+}
 
 
 

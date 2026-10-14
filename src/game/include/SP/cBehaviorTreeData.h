@@ -12,14 +12,13 @@
 #include "eastl/vector.h"
 #include "nSPBehaviorTree/behavior_stimuli.h"
 #include "nSPBehaviorTree/behavior_tree_memory.h"
-#include "nSPBehaviorTree/decider.h"
 #include "nSPBehaviorTree/decider_timer.h"
 
 struct cSPVector3;
 namespace EA { namespace COM { class IUnknown32; } }
 namespace EA { namespace ResourceMan { class Key; } }
 namespace SP { class cIObjectDatabaseIStream; class cIObjectDatabaseOStream; struct cAgentOrder; struct cGroupData; }
-namespace nSPBehaviorTree { struct decider_timer; }
+namespace nSPBehaviorTree { struct decider; struct decider_timer; }
 
 namespace SP {
 

@@ -341,6 +341,34 @@ class Chunk:
                 self.params = split_top(p) if p and p != "void" else []
 
 
+class InstChunk(Chunk):
+    """An explicit instantiation statement that is a function's whole definition (`template R C::f(params);`): kept verbatim,
+    rendered as the statement; its row binds by the member name (the stub class may be renamed)."""
+    def __init__(self, va, text):
+        self.va, self.text = va, text
+        st = " ".join(re.sub(r"//[^\n]*", "", text).split()).rstrip(";").strip()
+        self.sig_text = st
+        self.lead = []
+        self.body = ";"
+        self.after = ""
+        self.inst = True
+        self.ok = False
+        self.free = False
+        self.cc = None
+        self.canon = None
+        self.module = None
+        self.cls = None
+        self.const = st.endswith(" const")
+        mm = re.match(r"^template\s+.*?::\s*(?P<name>operator\s*(?:\(\s*\)|\[\s*\]|[^\s\w(]+)|~?\w+)\s*\((?P<params>.*)\)\s*(?:const)?$", st)
+        self.name = mm.group("name") if mm else None
+        self.ret = None
+        p = mm.group("params").strip() if mm else ""
+        self.params = split_top(p) if p and p != "void" else []
+
+
+VA_GUARD = "#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)"
+
+
 MARKER = re.compile(r"^//\s*@\s*0x([0-9a-fA-F]+)\b(.*)$")
 
 
@@ -397,8 +425,22 @@ def hoist_decls(text):
                     # own function, s00947d50, stays)
                     blk = mask("\n".join(lines[i:j + 1]))
                     rest = mask("\n".join(lines[j + 1:]))
-                    if "{" in rest or not re.search(r"\)\s*(?:const\s*)?(?:throw\s*\([^)]*\)\s*)?\{", blk):
+                    # (fix pass 4: a namespace that wraps a top-level function definition is the marker's function, whatever
+                    # follows it: s0046e450 0x46e450 / s004629e0 0x4629e0 were hoisted because structs follow the block, and
+                    # the next marker's chunk began with the preamble text)
+                    if not namespace_defines_function("\n".join(lines[i:j + 1])) and \
+                            ("{" in rest or not re.search(r"\)\s*(?:const\s*)?(?:throw\s*\([^)]*\)\s*)?\{", blk)):
                         end = j
+                elif re.match(r'^extern\s*"C(?:\+\+)?"\s*\{', lines[i].strip()) and \
+                        not namespace_defines_function("\n".join(lines[i:j + 1])):
+                    # a linkage block of declarations after the marker (s00764df0 0x765980: `extern "C" { void* EA_New(..); .. }`
+                    # then HVec and HVec::grow): preamble, not the function (fix pass 4: a declarations-only chunk took the VA)
+                    end = j
+                elif re.match(r"^template\s*<", ms) and next_is_plain_function(lines, j + 1):
+                    # a helper function template in front of the marker's function (s00624fb0 0x625560: `template <class T>
+                    # const T& max_(..) {..}` + SetCurrentCamera): the helper goes to the preamble (fix pass 4: the chunk was
+                    # bound to max_, SetCurrentCamera became a stub and 13 functions were dropped, C3861)
+                    end = j
                 break                         # a function definition (or a linkage block): not hoisted
             j += 1
         if end is None:
@@ -406,6 +448,52 @@ def hoist_decls(text):
         hoisted += lines[i:end + 1]
         i = end + 1
     return hoisted, "\n".join(lines[i:])
+
+
+def next_is_plain_function(lines, k):
+    """The next statement from line k (blank and comment lines skipped) is a non-template function definition."""
+    n = len(lines)
+    while k < n and (not lines[k].strip() or lines[k].lstrip().startswith("//")):
+        k += 1
+    if k >= n:
+        return False
+    head = mask(lines[k]).strip()
+    if head.startswith(("template", "}", "struct", "class", "union", "enum", "namespace", "typedef", "#", "extern", "using")):
+        return False
+    rest = mask("\n".join(lines[k:]))
+    a, b = rest.find("{"), rest.find(";")
+    return a >= 0 and (b < 0 or a < b) and bool(re.search(r"\)\s*(?:const\s*)?$", rest[:a].rstrip()))
+
+
+def namespace_defines_function(text):
+    """Does a `namespace X { ... }` block hold a function definition at its own top level (not an inline method of a class)?"""
+    m = mask(text)
+    a = m.find("{")
+    if a < 0:
+        return False
+    depth, start = 0, a + 1
+    k = a + 1
+    while k < len(m):
+        ch = m[k]
+        if ch == "{":
+            head = m[start:k].strip()
+            if depth == 0:
+                if re.match(r"^(?:inline\s+)?namespace\b", head):
+                    return namespace_defines_function(m[start:])
+                if re.search(r"\)\s*(?:const\s*)?(?:throw\s*\([^)]*\)\s*)?$", head) and \
+                        not re.match(r"^(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union|enum)\b", head):
+                    return True
+            depth += 1
+        elif ch == "}":
+            depth -= 1
+            if depth < 0:
+                return False
+            if depth == 0:
+                start = k + 1
+        elif ch == ";" and depth == 0:
+            start = k + 1
+        k += 1
+    return False
 
 
 PARAM_KW = set("const volatile unsigned signed int char short long float double void bool wchar_t __int64 struct class enum union".split())
@@ -472,6 +560,37 @@ def parse_slice(sid):
     # others name functions defined later (each under its own marker or found by insert_missing_markers).  Every line made
     # a boundary paired the last legend VA with operator[]'s body and gave two chunks one VA (KeyError in make_verbatim)
     marks = [i for k, i in enumerate(marks) if k == 0 or marks[k - 1] != i - 1]
+    # banners (fix pass 4, s0073f320): a VA marked twice (`// @ 0x0073fe80 / 0x0073ffb0  bone-binding validators` over helpers,
+    # then `// @ 0x0073fe80` over ValidateA) whose later marker is followed by a function definition was announced by the
+    # earlier line (`// @ 0x0073f4b0  SP::cModelInstance::SetAnimationGroupTransform` .. declarations .. `// @ 0x0073f4b0`):
+    # neither is a boundary.  Before, the helper under the banner took the VA (KeyError in build, 13 functions held)
+    def _va(i):
+        return int(MARKER.match(lines[i]).group(1), 16)
+    def _defines(i, nxt):
+        _h, b = hoist_decls("\n".join(lines[i + 1:nxt]))
+        return "{" in mask(b)
+    def _fname(i, nxt):
+        _h, b = hoist_decls("\n".join(lines[i + 1:nxt]))
+        mb = mask(b)
+        k0 = mb.find("(")
+        mm = re.search(r"(~?\w+)\s*$", mb[:k0]) if k0 > 0 else None
+        return mm.group(1) if mm else None
+    syms = RS.slice_rows(sid)[1]
+    banner = set()
+    for k, i in enumerate(marks):
+        later = [i2 for i2 in marks[k + 1:] if _va(i2) == _va(i)]
+        if later and i not in banner:
+            k2 = marks.index(later[0])
+            nxt = marks[k2 + 1] if k2 + 1 < len(marks) else len(lines)
+            nxt1 = marks[k + 1] if k + 1 < len(marks) else len(lines)
+            sm = re.match(r"^\?(\w+)@", syms.get(_va(i), "") or "")
+            if sm and _fname(i, nxt1) == sm.group(1) and _fname(later[0], nxt) != sm.group(1):
+                # the earlier marker's function is the manifest's (s00741210 0x741aa0 `?insert@Vec8@@`; the later marker is a
+                # placeholder `cMI_Geo::Sub1aa0() {}`): the later line is the banner
+                banner.add(later[0])
+            elif _defines(later[0], nxt):
+                banner.add(i)
+    marks = [i for i in marks if i not in banner]
     pre = lines[:marks[0]]
     chunks = []
     ns_at = enclosing_namespaces(lines)
@@ -487,11 +606,47 @@ def parse_slice(sid):
         if inst and tgt is not None:
             hoisted = [l for l in hoisted if l not in inst]
             tgt.body = tgt.body.rstrip() + "\n" + "\n".join(l.strip() for l in inst) + "\n"
+        if tgt is None and "{" not in mask(body):
+            # an explicit instantiation under its own marker whose template members are defined in the preamble's stub class
+            # (fix pass 4, s0059b4b0 0x59c2f0 `template CreatureMap::iterator CreatureMap::DoInsertValueImpl(..);` over two
+            # lines, 0x59c460 `template CreatureMap::iterator CreatureMap::erase(..);`, both byte-exact): the statement is the
+            # function's whole definition; it was hoisted to the preamble and the VA silently never landed
+            stmt = [];
+            k0 = None
+            for k1, l in enumerate(hoisted):
+                if k0 is None and re.match(r"^\s*template\s+(?!<)", mask(l)):
+                    k0 = k1
+                if k0 is not None and mask(l).rstrip().endswith(";"):
+                    stmt = hoisted[k0:k1 + 1]
+                    break
+            if stmt:
+                hoisted = [l for l in hoisted if l not in stmt]
+                ic = InstChunk(va, "\n".join(l.strip() for l in stmt))
+                if ic.name:
+                    ic.enc_ns = ns_at[i]
+                    pre += hoisted
+                    chunks.append(ic)
+                    continue
+                hoisted += stmt
         pre += hoisted
         if "{" not in mask(body):          # a marker over declarations only (the function follows under a second marker)
             continue
+        # a namespace opened right after the marker around the function (s0046e450 `// @ 0x0046e450` + `namespace SP { namespace
+        # EditorUtils {` + the definition + `} }`): the function is defined inside it (fix pass 4)
+        own_ns = []
+        while True:
+            mo = re.match(r"^(\s*(?://[^\n]*\n\s*)*)namespace\s+(\w+)\s*\{", body)
+            if not mo or not namespace_defines_function(body[len(mo.group(1)):]):
+                break
+            own_ns.append(mo.group(2))
+            body = body[mo.end():]
         ch = Chunk(va, body.rstrip() + "\n")
-        ch.enc_ns = ns_at[i]
+        if own_ns:
+            aft = ch.after
+            for _n in own_ns:
+                aft = re.sub(r"^\s*\}[ \t]*(?://[^\n]*)?", "", aft, count=1)
+            ch.after = aft
+        ch.enc_ns = ns_at[i] + own_ns
         # what follows a function's closing brace (structs, typedefs, statics, helper functions the next function needs)
         # belongs to the preamble: the module TU is written in VA order, the slice in its own order
         pre += ch.after.split("\n")
@@ -2809,10 +2964,22 @@ class Rewrite:
         block, which a re-run regenerates): `#pragma auto_inline(off)` + a function that copies / assigns / destroys an S (the
         s007ada40 DestroyDxtSurface idiom that keeps ??1DxtSurface out of line, byte-exact).  The row binds to the member's
         own decorated name (cls/name/params of the chunk), not to the forcing function."""
-        have = {c.va for c in self.chunks}
         syms = RS.slice_rows(self.sid)[1]
         mm = self.data.modmap["functions"]
-        for line in self.src_text.split("\n"):
+        lines = self.src_text.split("\n")
+        # an empty placeholder under the marker (`void F_0046a7c0() {}`) whose manifest row is a special member of a slice struct
+        # (`??0M18real@@`, s00469bb0: the slice made the compiler emit it with its own forcing helper) is that member too
+        # (fix pass 4: the placeholder was landed, DIFF 2 bytes, and the byte-exact row stayed behind)
+        kinds = {"??0": "copy constructor", "??4": "copy assignment", "??1": "destructor"}
+        for c in list(self.chunks):
+            sym = syms.get(c.va, "")
+            mk = re.match(r"^(\?\?[014])(\w+)@@", sym)
+            if mk and mk.group(2) in self.structs and re.match(r"^F_[0-9a-fA-F]{6,8}$", str(c.name)) and \
+                    re.sub(r"\s+", "", mask(c.body)) == "{}":
+                self.chunks.remove(c)
+                lines.append("// @ 0x%08x %s %s (implicit)" % (c.va, mk.group(2), kinds[mk.group(1)]))
+        have = {c.va for c in self.chunks}
+        for line in lines:
             m = re.match(r"^//\s*@\s*0x([0-9a-fA-F]+)\s+(\w+)\s+(copy constructor|copy assignment|destructor)\s*\(implicit", line.strip())
             if not m:
                 continue
@@ -2860,6 +3027,30 @@ class Rewrite:
         base = re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}$", "", c.cls or "")
         c.cls_ns = list(getattr(self.structs.get(base), "ns", []) or [])
 
+    def qualify_function_after_using(self, c):
+        """A verbatim function the slice defines after its global `using namespace N;` names N's stubs unqualified (s009b5ce0
+        RayCastParts uses RC::Owner as `Owner`, fix pass 4): the directive is not emitted, so they get `N::`."""
+        if getattr(c, "_qualified_using", False) or not getattr(c, "verbatim", False):
+            return
+        c._qualified_using = True
+        for kind, text in self.items:
+            mm = re.match(r"^\s*using\s+namespace\s+([\w:\s]+?)\s*;", RS.mask(text))
+            if not mm or RS.unwrap_namespaces(text)[0]:
+                continue
+            n = re.sub(r"\s+", "", mm.group(1))
+            ens = list(getattr(c, "enc_ns", []) or [])
+            if ens and ens[0] == n.split("::")[0]:
+                continue
+            c.out_body = self.qualify_names(c.out_body, n)
+            # the definition line: only the part before the qualified name (the return type); the class qualifier is
+            # render_function's (a `SP::` here made `SP::X::X()` collide with it: C2084 / C2523 on s0059c4c0's ctor/dtor)
+            dl = c.defline
+            mq = re.search(r"(?<![\w:])([A-Za-z_]\w*)\s*::\s*~?\s*\w+\s*\(", dl)
+            if mq:
+                c.defline = self.qualify_names(dl[:mq.start()], n) + dl[mq.start():]
+            else:
+                c.defline = self.qualify_names(dl, n)
+
     def render_function(self, c):
         # manual "pragmas" {va: {"lead": [lines], "after": [lines], "why"}}: preprocessor lines around one function (s0083e1c0
         # 0x83e9d0: in the module TU the earlier-defined DiscardWhiteSpace 0x83ce90 is inlined into EvalSignedIntNumber, retail
@@ -2869,6 +3060,7 @@ class Rewrite:
             c._pragmas_done = True
             c.lead = list(getattr(c, "lead", [])) + list(pm.get("lead", []))
             c.after = (c.after + "\n" if c.after else "") + "\n".join(pm.get("after", []))
+        self.qualify_function_after_using(c)
         defline = c.defline
         wrap = []
         if getattr(c, "verbatim", False):
@@ -2881,6 +3073,13 @@ class Rewrite:
                 base = re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}$", "", c.cls)
                 defline = re.sub(r"(?<![\w:])(%s(?:_s[0-9a-f]{4}_[0-9a-f]{4})?)\s*::" % re.escape(base),
                                  lambda mm: "::".join(cns + [mm.group(1)]) + "::", defline, count=1)
+                # the return type in front of the qualified name is looked up at global scope: the namespace's stubs it names
+                # get the qualifier too (fix pass 4, s0059c4c0 `cAnimatingCreature* cSPEditorAnimatedCreatureManager::GetCreature`
+                # after `using namespace SP;`: C2143, and the 14 verbatim callers of GetCreature/GetCreatureStructure dropped)
+                q = "::".join(cns) + "::"
+                k = defline.find(q)
+                if k > 0:
+                    defline = self.qualify_names(defline[:k], "::".join(cns)) + defline[k:]
         out = ["// @ 0x%08x" % c.va] + list(getattr(c, "lead", [])) + [defline, c.out_body.rstrip()]
         if wrap:
             out.insert(1 + len(getattr(c, "lead", [])), " ".join("namespace %s {" % n for n in wrap))
@@ -2908,6 +3107,10 @@ class Rewrite:
         lines = ["// %s -- migrated from slice(s) %s by tools/migrate/rewrite.py" % (self.tu_rel, self.sid),
                  "// Object file: %s.  Function bodies keep the slice's code; types, members and virtual calls use the" % self.module,
                  "// canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.", ""]
+        if any(re.match(r"^\s*typedef\s+[\w\s\*]+\bva_list\s*;", RS.mask(t)) for _k, t in self.items):
+            # the slice's own `typedef char va_list;` (s00b1fd50 FormatAppend / VA_START) must win over <vadefs.h>, which any
+            # system include (<new>) pulls in (C2040); round 4 hand-wrote this guard into SPGameNounManager.cpp (fix pass 4)
+            lines.append(VA_GUARD)
         for inc in self.collect_includes():
             lines.append('#include "%s"' % inc)
         # classes a namespace function's signature names that have no generated header (only pointers/references to
@@ -2937,8 +3140,13 @@ class Rewrite:
                         any(k2 == "include" and "intrin.h" in t2 for k2, t2 in self.items) or
                         (os.path.exists(W(*self.tu_rel.split("/"))) and "<intrin.h>" in open(W(*self.tu_rel.split("/"))).read())):
                     continue          # an intrinsic <intrin.h> declares (render_local_items)
-                ext.append(e["decl"])
-                ext_name[e["decl"]] = e["call"].split("::")[-1]
+                dtext = e["decl"]
+                for ns_r, old_n, new_n in getattr(self, "renamed", []):
+                    # the stub renames of this run reach the extern too (fix pass 4, s0063ba50: `extern
+                    # AutoRef<cConnectingDialog> gConnectingDialog;` kept the old stub name next to the renamed item)
+                    dtext = RS.rename_word(dtext, old_n, new_n, ns_r)
+                ext.append(dtext)
+                ext_name[dtext] = e["call"].split("::")[-1]
         # local stub types first: the extern declarations may name them (`extern const Vector3 kDefaultVector3;`, or a
         # slice typedef: `BOOL __stdcall VerQueryValueA(const void*, LPCSTR, ...)` before `typedef int BOOL;` failed in
         # s0091e650); only an extern that the stubs' inline bodies use and that names no local struct, typedef or macro
@@ -2946,6 +3154,11 @@ class Rewrite:
         local_names = set()
         for kind, t in self.items:
             if kind in ("struct", "typedef", "define"):
+                local_names |= set(RS.item_names(kind, t))
+            elif kind == "other" and re.match(r"^\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+\w+(?:[^;]*\{|\s*;)", RS.mask(RS.unwrap_namespaces(t)[1])):
+                # a class template the parser files as "other" (s0063ba50 `template <class T> struct AutoRef {..}`), or a forward
+                # declaration (s0063d9e0 `struct IPropList;` before `extern IPropList* gAppProperties;`): an extern
+                # that names it goes after the stubs (C2143 before '<', 14 functions dropped, fix pass 4)
                 local_names |= set(RS.item_names(kind, t))
         local_names.add("va_list")
         stub_ids = set(RS.IDENT.findall(RS.mask(stub_text)))
@@ -3091,6 +3304,7 @@ class Rewrite:
                     any(re.search(r"\b_Interlocked\w+\s*\(", c.out_body) for c in fns):
                 out.append("#include <intrin.h>")
         items = RS.needed_items(self.items, texts, skip)
+        items = self.qualify_after_using(items)
         # a kept function declaration that only converted (non-verbatim) functions call is spelled with the canonical class
         # names (`VariantPair*` -> `eastl::pair<unsigned int, EA::Variant>*`): the slice stub type it mentions is not what the
         # converted bodies pass.  Declarations that verbatim functions use keep the slice's spelling and stub types.
@@ -3128,6 +3342,59 @@ class Rewrite:
                 out.append(text)
             out.append("// ---- items of slice %s end" % self.sid)
         return out
+
+    def qualify_after_using(self, items):
+        """A global-scope item that follows the slice's `using namespace N;` (the directive is not emitted, see render) names
+        N's stubs without the qualifier: they get `N::` (fix pass 4, s0059c4c0: `template class eastl::map<uint32_t,
+        EA::AutoRefCount<cSPEditorAnimatedCreatureData> >;` after `using namespace SP;` was emitted at global scope, C2065 on
+        the renamed SP stub, and the whole slice (22 byte-exact functions) stayed behind)."""
+        usings = []
+        for k, (kind, text) in enumerate(self.items):
+            mm = re.match(r"^\s*using\s+namespace\s+([\w:\s]+?)\s*;", RS.mask(text))
+            if mm and not RS.unwrap_namespaces(text)[0]:
+                usings.append((k, re.sub(r"\s+", "", mm.group(1))))
+        if not usings:
+            return items
+        idx = {id(t): k for k, (_kd, t) in enumerate(self.items)}
+        out = []
+        for kind, text in items:
+            k = idx.get(id(text))
+            ins = RS.unwrap_namespaces(text)[0]
+            if k is None:
+                out.append((kind, text))
+                continue
+            own = set() if re.match(r"^\s*template\s+(?:class|struct)\b", RS.mask(text)) else set(RS.item_names(kind, text))
+            for uk, n in usings:
+                # (an item of ANOTHER namespace after the directive too: s009ba4c0's `namespace nSPCreatureAnim { struct
+                # goal_pos_rot { vector_3 pos; ..} }` after `using namespace checkerlib;`, C2146, fix pass 4)
+                if uk <= k and (not ins or ins[0] != n.split("::")[0]):
+                    text = self.qualify_names(text, n, own)
+            out.append((kind, text))
+        return out
+
+    def qualify_names(self, text, n, own=()):
+        """Prefix `n::` to the bare uses in `text` of the stubs the slice defines in namespace n (and not at global scope)."""
+        defined, glob = collections.defaultdict(set), set()
+        for kind, t in self.items:
+            if re.match(r"^\s*(?:template\s+(?:class|struct)\b|using\b)", RS.mask(t)):
+                continue                 # an explicit instantiation / using-directive declares nothing
+            ns, _inner = RS.unwrap_namespaces(t)
+            (defined["::".join(ns)] if ns else glob).update(RS.item_names(kind, t))
+        for v in sorted(defined.get(n, ()), key=len, reverse=True):
+            if v in glob or v in own:
+                continue
+            m = RS.mask(text)
+            pat = re.compile(r"(?<![\w.>:~])%s\b" % re.escape(v))
+            pieces, last = [], 0
+            for mm in pat.finditer(m):
+                if re.search(r"\b(?:namespace|struct|class|union|enum)\s+$", m[max(0, mm.start() - 12):mm.start()]):
+                    continue
+                pieces.append(text[last:mm.start()] + n + "::" + v)
+                last = mm.end()
+            if pieces:
+                text = "".join(pieces) + text[last:]
+                self.stats["qualified_after_using"] += 1
+        return text
 
     def annotate_renamed(self, kind, text):
         """A stub renamed `Name_sNNNN_NNNN` declares methods whose decorated names no longer say which retail function they
@@ -3239,6 +3506,7 @@ class Rewrite:
                     pre = self.merge_preamble(old_pre, pre)
             body = "\n".join(blocks[v] for v in sorted(blocks))
             pre = self.forward_protos(pre, blocks)
+            pre = self.held_callee_protos(pre, body, fns)
             open(tu, "w").write(pre + "\n" + body)
             results[module] = (tu, sorted(c.va for c in fns))
         return results
@@ -3277,6 +3545,54 @@ class Rewrite:
         self.notes.append(("forward-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
         return pre.rstrip("\n") + "\n\n// forward declarations: helpers defined later in VA order (rewrite.py forward_protos)\n" + \
             "\n".join(protos) + "\n"
+
+    def held_callee_protos(self, pre, body, fns):
+        """A free function this slice defines but does not emit (another object's, or held back) that an emitted function of the
+        slice calls gets a prototype with its retail address (fix pass 4, s00766fa0: PaintHolder::FUN_00767170 calls
+        ReadPaintStuff 0x766fa0, module None: C3861 and the byte-exact caller was dropped)."""
+        emitted = {c.va for c in fns}
+        texts = mask("\n".join(c.defline + "\n" + c.out_body for c in fns))
+        mp, mb = mask(pre), mask(body)
+        protos = []
+        for c in self.chunks:
+            if c.va in emitted or c.cls or not c.name or getattr(c, "inst", False) or getattr(c, "implicit", None):
+                continue
+            name = str(c.name)
+            if not re.search(r"(?<![\w:.>])%s\s*\(" % re.escape(name), texts):
+                continue
+            if re.search(r"\b%s\s*\(" % re.escape(name), mp) or re.search(r"(?m)^(?![\s{}])(?!if\b|while\b|for\b|return\b)[^\n;]*\b%s\s*\([^;{]*\)\s*\{" % re.escape(name), mb):
+                continue            # declared or defined in the TU already
+            sig = re.sub(r"^\s*//.*$", "", c.sig_text, flags=re.M)
+            sig = sig.rsplit(";", 1)[-1] if ";" in mask(sig) else sig
+            sig = " ".join(sig.split())
+            if not sig or "::" in sig.split("(")[0] or re.match(r"^template\b", sig):
+                continue
+            for ns_r, old_n, new_n in getattr(self, "renamed", []):
+                sig = RS.rename_word(sig, old_n, new_n, ns_r)
+            ens = list(getattr(c, "enc_ns", []) or [])
+            line = "%s;  // 0x%08x (stays in the slice: not this object's)" % (sig, c.va)
+            protos.append((" ".join("namespace %s {" % n for n in ens) + " " + line + " " + "}" * len(ens)) if ens else line)
+        if not protos:
+            return pre
+        self.notes.append(("held-callee-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
+        return pre.rstrip("\n") + "\n\n// callees this slice defines outside this object (rewrite.py held_callee_protos)\n" + "\n".join(protos) + "\n"
+
+    def _tu_defines_cpp(self, name):
+        """The module TU (as it is on disk) defines a free function `name` (after the first marker) without C linkage."""
+        tu = W(*getattr(self, "tu_rel", "x/y").split("/"))
+        if not os.path.exists(tu):
+            return False
+        t = open(tu).read()
+        k = t.find("\n// @ 0x")
+        if k < 0:
+            return False
+        body = mask(t[k:])
+        for mm in re.finditer(r"(?m)^([^\n;{}]*?)\b%s\s*\([^;{}]*\)\s*\{" % re.escape(name), body):
+            if "::" in mm.group(1).split("(")[0][-2:] or re.search(r"extern\s*\"C\"", t[k + mm.start():k + mm.end()]):
+                continue
+            if not re.search(r"(\w+)::\s*$", mm.group(1)):
+                return True
+        return False
 
     def merge_preamble(self, old, new):
         """Preamble of the module TU as it is (`old`) plus what this slice adds (`new`): new includes after the last old
@@ -3318,6 +3634,12 @@ class Rewrite:
                     if same_function(pk, o) and not dll(o[5]) and o[5] in "\n".join(lines):
                         lines = "\n".join(lines).replace(o[5], text).split("\n")
                         self.notes.append(("dedup-proto", "%s: the TU's declaration respelled with this slice's dllimport" % pk[0]))
+            if pk and pk[1] and self._tu_defines_cpp(pk[0].split("::")[-1]):
+                # an `extern "C"` prototype of a function another slice DEFINES in this TU with C++ linkage (s00767ee0's
+                # `extern "C" void __cdecl UnionDestroy(void*, int)` vs s00765f80's definition, 0x7668c0): emitted first, it gave
+                # the definition C linkage and the byte-exact row lost its symbol (fix pass 4)
+                self.notes.append(("dedup-proto", "%s: defined in the module TU with C++ linkage; this slice's extern \"C\" dropped" % pk[0]))
+                continue
             if pk and any(same_function(pk, o) for o in old_protos.get(pk[0], [])):
                 # the TU already declares this function with another spelling: linkage (`extern "C"` vs C++: C2732,
                 # s00689ee0 RBTreeIncrement vs s00688dd0's), `__declspec(dllimport)` (s0083a9f0 _stricmp, s0083b810 isalpha),
@@ -3331,6 +3653,9 @@ class Rewrite:
                 incs.append(text)
             else:
                 rest.append(text)
+        if VA_GUARD in new and VA_GUARD not in lines:
+            first_inc = next((i for i, l in enumerate(lines) if l.startswith("#include")), len(lines))
+            lines = lines[:first_inc] + [VA_GUARD] + lines[first_inc:]
         last_inc = max([i for i, l in enumerate(lines) if l.startswith("#include")] or [len(lines) - 1])
         out = lines[:last_inc + 1] + incs + lines[last_inc + 1:]
         if rest:
@@ -3358,11 +3683,71 @@ class Rewrite:
         old = re.sub(r"(?s)\n?// ---- items of slice %s begin.*?// ---- items of slice %s end\n?" % (self.sid, self.sid), "\n", parts[0])
         _s, old_items = parse_preamble(old.split("\n"))
         have = {}
+        old_protos = {}
         for kind, text in old_items:
             for n in RS.item_names(kind, text):
                 have[n] = RS.norm(text)
+            pk = proto_key(text) if kind in ("extern", "other") else None
+            if pk:
+                old_protos.setdefault(pk[0], []).append(pk)
+        # a prototype the module TU declares with the same parameters but another return type that names a different local stub
+        # (s0063aa90 `cConfigMgr* GetConfigManager();` vs s0063ba50 `IConfigManager* GetConfigManager();`, both 0x67dd30):
+        # merge_preamble kept the TU's spelling and this slice's verbatim calls of IConfigManager::GetBool did not compile
+        # (C2039, fix pass 4): this slice's function is renamed; calls bind by the address comment.  When the TU's spelling
+        # returns a canonical (qualified) class, that declaration keeps serving (s005c53c0's manual edits rely on it)
+        local_types = set()
+        for kind, text in self.items:
+            if kind in ("struct", "typedef") or (kind == "other" and re.match(
+                    r"^\s*(?:template\s*<(?:[^<>]|<[^<>]*>)*>\s*)?(?:struct|class|union)\s+\w+[^;]*\{", RS.mask(RS.unwrap_namespaces(text)[1]))):
+                local_types |= set(RS.item_names(kind, text))
+        ret_clash = set()
+        for kind, text in self.items:
+            pk = proto_key(text) if kind in ("extern", "other") else None
+            if not pk:
+                continue
+            for o in old_protos.get(pk[0], []):
+                if same_function(pk, o) and re.sub(r"\s+", "", pk[3]) != re.sub(r"\s+", "", o[3]) and \
+                        not pk[0].split("::")[-1].startswith("operator") and "::" not in o[3] and \
+                        (set(RS.IDENT.findall(pk[3])) & local_types or re.sub(r"\s+", "", pk[3]) in ("int", "void*", "unsigned", "unsignedint", "bool", "char*", "constchar*")):
+                    # (also a scalar/void* return: s0051a350 `int GetPaintSystem();` vs another slice's `void* GetPaintSystem();`,
+                    # 0x401080: the verbatim `int ps = GetPaintSystem();` failed C2440)
+                    ns, _i = RS.unwrap_namespaces(text)
+                    ret_clash.add((tuple(ns), pk[0].split("::")[-1]))
+        for ns, n in sorted(ret_clash):
+            self.rename_stub(fns, ns, n, "the module TU declares %s with another return type" % n, verbatim_only=True)
         skip = {k for k, (kind, text) in enumerate(self.items) if kind == "extern" and any(
             n in self.externs for n in RS.item_names(kind, text))}
+        # operator overloads are not renamed (below); one this TU already has with the same parameter types (another slice's
+        # identical placement new, or <new>'s `operator new(size_t, void*)` once any slice includes <new>) is not emitted again
+        # (C2084, s005c4500, fix pass 4)
+        def _op_params(t):
+            mt = RS.mask(RS.unwrap_namespaces(t)[1])
+            # only an item that IS an operator new/delete (a call `operator delete(p)` inside a stub's body is not:
+            # s0063d9e0's allocator stub was dropped as a duplicate)
+            mo = re.match(r"^\s*(?:inline\s+|static\s+|extern\s+)*void\s*\*?\s*(?:__\w+\s+)?operator\s*(new|delete)\s*(\[\s*\])?\s*\(([^()]*)\)", mt)
+            if not mo:
+                return None
+            ps = []
+            for x in mo.group(3).split(","):
+                toks = re.findall(r"[A-Za-z_]\w*|\*|&", x.replace("size_t", "unsigned int"))
+                if len(toks) >= 2 and re.match(r"^[A-Za-z_]\w*$", toks[-1]) and toks[-1] not in PARAM_KW:
+                    toks = toks[:-1]
+                if toks:
+                    ps.append("".join(toks).replace("unsignedint", "U"))
+            return (mo.group(1), bool(mo.group(2)), tuple(ps), "{" in mt)
+        have_ops = {_op_params(t) for _k, t in old_items if _op_params(t)}
+        tu_inc_new = any(k == "include" and re.search(r"<new>", t) for k, t in old_items) or \
+            any(k == "include" and re.search(r"<new>", t) for k, t in self.items)
+        drop = []
+        for k, (kind, text) in enumerate(self.items):
+            op = _op_params(text)
+            if not op:
+                continue
+            if op in have_ops or (tu_inc_new and op[3] and op[0] == "new" and not op[1] and op[2] == ("U", "void*")):
+                drop.append(k)
+        if drop:
+            self.items = [it for k, it in enumerate(self.items) if k not in drop]
+            self.notes.append(("dedup-operator", "%d operator new/delete item(s) the TU already has" % len(drop)))
         done = set()
         for _round in range(8):
             texts = [c.defline + "\n" + c.out_body for c in fns]
@@ -3374,6 +3759,11 @@ class Rewrite:
                         and not mi0.startswith(("typedef", "extern \"C\" long")) and "=" not in mi0:
                     continue      # a function prototype that differs from the TU's is an overload (or a redeclaration), not a stub clash
                 for n in RS.item_names(kind, text):
+                    if n.startswith("operator"):
+                        # operators overload (s004680c0's inline placement `operator new(unsigned, void*)` next to s00466320's
+                        # 6-argument one): a different parameter list is not a clash, and an operator cannot be renamed
+                        # (fix pass 4: the placement new was dropped, C2661 in Vec::push_back)
+                        continue
                     if n in have and have[n] != RS.norm(self.item_view(kind, text, fns)) and (tuple(ns), n) not in done:
                         clash.append((tuple(ns), n))
             if not clash:
@@ -3443,6 +3833,23 @@ class Rewrite:
                 c.cls = new_n
         self.notes.append(("renamed-stub", "%s%s -> %s (%s)" % ("::".join(ns) + "::" if ns else "", old_n, new_n, why)))
 
+    @staticmethod
+    def module_flags(module, flags):
+        """tools/migrate/module_flags.json {"dir/Obj.obj": {"drop": [flag..], "add": [flag..], "evidence"}}: the object's own
+        compile flags where its slices disagree with retail (fix pass 4: EASharedLibrary.obj has no EH frames, so /EHsc from
+        the slice rows is dropped)."""
+        try:
+            o = json.load(open(W("tools", "migrate", "module_flags.json"))).get(module)
+        except (OSError, ValueError):
+            o = None
+        if not o:
+            return list(flags)
+        out = [f for f in flags if f not in o.get("drop", [])]
+        for f in o.get("add", []):
+            if f not in out:
+                out.append(f)
+        return out
+
     def write_bookkeeping(self, module, d, stem, fns):
         sdir = os.path.join(SLICES, self.sid)
         outdir = W("src", "game", d, stem)
@@ -3464,7 +3871,7 @@ class Rewrite:
         allrows = [p[3:] for p in (l.split("#", 1)[0].split() for l in mlines) if len(p) >= 4]
         for fl0 in allrows:
             if fl0:
-                self.slice_flags = [f for f in fl0 if not f.startswith("/I")]
+                self.slice_flags = self.module_flags(module, [f for f in fl0 if not f.startswith("/I")])
                 break
         # a function this run moves that the slice's own bookkeeping has no row for (s006907e0 lands cJob::AddRef 0x68f950,
         # whose byte-exact row is in s0068f670's manifest: the batch gave the VA to the later slice): the row of the slice
@@ -3494,7 +3901,7 @@ class Rewrite:
                 self.notes.append(("manifest", "no decorated symbol for 0x%08x" % va))
                 continue
             # a manifest row without flags is compiled by run_all with ITS defaults: say so explicitly in the new row
-            fl = [f for f in (flags or RUN_ALL_DEFAULT_FLAGS) if not f.startswith("/I")] + ["/Isrc/game/include"]
+            fl = self.module_flags(module, [f for f in (flags or RUN_ALL_DEFAULT_FLAGS) if not f.startswith("/I")]) + ["/Isrc/game/include"]
             mf.append("%s  %s  %08x  %s" % (src_col, sym, va, " ".join(fl)))
         self.merge_rows(os.path.join(outdir, "manifest.txt"), "# source  symbol  va  flags", mf, key=lambda l: int(l.split()[2], 16))
         for fname in ("nonmatching.txt", "partial.txt"):
@@ -3659,7 +4066,20 @@ class Rewrite:
                         continue
                     # the class may have been renamed for this TU (`INetFileCache_s0094_7d50`) and the function may sit in the
                     # slice's namespace (`EA::Internet::`): match the class with an optional rename suffix
-                    if c.cls:
+                    tm = re.search(r">\s*::\s*(operator\s*(?:\[\s*\]|\(\s*\)|[^\s\w(]+)|~?\w+)\s*\(", mask(c.sig_text or ""))
+                    if getattr(c, "inst", False):
+                        # an explicit instantiation: the member of a template class (`eastl::rbtree_s0059_b4b0<..>::erase(`)
+                        pat = re.compile(r">::%s\(" % re.escape(str(c.name)))
+                    elif not c.cls and tm:
+                        # a template member defined out of class (s0059c4c0 0x59c740 `T& eastl::map<Key, T>::operator[](..)`):
+                        # the instantiation's demangled name (fix pass 4: the row had no symbol, equiv bound another function)
+                        pat = re.compile(r">::%s\(" % re.escape(re.sub(r"\s+", "", tm.group(1))))
+                        ms = mask(c.sig_text)
+                        b0 = ms.find("(", tm.end() - 1)
+                        e0 = match_close(ms, b0)
+                        inner = c.sig_text[b0 + 1:e0].strip()
+                        c.params = split_params(inner) if inner and inner != "void" else []
+                    elif c.cls:
                         base = re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}$", "", c.cls)
                         nbase = re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}$", "", str(c.name))
                         npat = re.escape(nbase) + ("(?:_s[0-9a-f]{4}_[0-9a-f]{4})?" if nbase.lstrip("~") == base else "")
@@ -4015,7 +4435,7 @@ class Rewrite:
                 va = block_of[ln - 1] if 0 < ln <= len(block_of) else None
                 if va in mine:
                     hit.setdefault(va, msg)
-                elif va is None and re.match(r"C(2371|2011|2084|2086|2365|2374|2953)\b", msg):
+                elif va is None and re.match(r"C(2371|2373|2011|2084|2086|2365|2374|2953)\b", msg):
                     # a local stub of this slice redefines a name an included canonical header (or another slice) declares:
                     # rename the stub in this slice, keep the functions
                     qn = re.search(r"'([\w:]+)'", msg)
@@ -4025,6 +4445,21 @@ class Rewrite:
                         if key not in renamed_now and not any(r[0] == key[0] and r[1] == key[1] for r in getattr(self, "renamed", [])):
                             renamed_now.add(key)
                             self.rename_stub([c for c in self.fns], key[0], key[1], "redefinition: %s" % msg[:80], verbatim_only=bool(key[0]))
+                            n += 1
+                elif va is None and re.match(r"C2664\b", msg) and ("_s%s_%s" % (self.sid[1:5], self.sid[5:])) in \
+                        (re.search(r" to '([^']*)'", msg) or re.search(r"()", "")).group(1) and \
+                        re.search(r"from '[^']*_s[0-9a-f]{4}_[0-9a-f]{4}", msg):
+                    # an earlier slice's item calls its own function F (global), and this slice declares F in a namespace with
+                    # its own stub types: inside that namespace this F hides the global one (fix pass 4: s0059b4b0's iterator
+                    # calls ::RBTreeIncrement(rbtree_node_base_s0059_b4b0*), s0059c4c0 declares eastl::RBTreeIncrement(
+                    # rbtree_node_base_s0059_c4c0*), C2664 and the whole slice stayed behind): rename this slice's F
+                    qn = re.search(r"'([\w:]+)'", msg)
+                    if qn:
+                        parts = qn.group(1).split("::")
+                        key = (tuple(parts[:-1]), parts[-1])
+                        if key not in renamed_now and not any(r[0] == key[0] and r[1] == key[1] for r in getattr(self, "renamed", [])):
+                            renamed_now.add(key)
+                            self.rename_stub([c for c in self.fns], key[0], key[1], "hides another slice's overload: %s" % msg[:80])
                             n += 1
                 elif va is None:
                     # preamble: a local stub of this slice (or an include) is wrong; the functions using the offending

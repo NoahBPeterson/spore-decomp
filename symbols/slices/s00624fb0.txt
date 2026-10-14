@@ -4,8 +4,12 @@
 00625270 ?Zoom@cCreatureCameraBase@SP@@QAEXM@Z  # SP::cCreatureCameraBase::Zoom migrated from s00624fb0
 006252a0 ?RotateLeftRight@cCreatureCameraBase@SP@@QAEXM@Z  # SP::cCreatureCameraBase::RotateLeftRight migrated from s00624fb0
 006252c0 ?NormalizeTheta@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::NormalizeTheta migrated from s00624fb0
+00625350 ?SetHeightCallback@cCreatureCameraBase_s0062_4fb0@SP@@QAEXPAX0@Z  # cCreatureCameraBase_s0062_4fb0::SetHeightCallback migrated from s00624fb0 (verbatim, slice spelling)
 006254f0 ?OnMouseDown@cCreatureCameraBase@SP@@UAE_NIMMI@Z  # SP::cCreatureCameraBase::OnMouseDown migrated from s00624fb0
+00625560 ?SetCurrentPolarCoords@cCreatureCameraBase@SP@@QAEXMMM@Z  # SP::cCreatureCameraBase::SetCurrentPolarCoords migrated from s00624fb0
+00625600 ?QueryHeight@cCreatureCameraBase_s0062_4fb0@SP@@QAEMPBUcSPVector3_s0062_4fb0@@@Z  # cCreatureCameraBase_s0062_4fb0::QueryHeight migrated from s00624fb0 (verbatim, slice spelling)
 006256a0 ?InitAvatarData@cCreatureCameraDepends_s0062_4fb0@SP@@QAEXXZ  # cCreatureCameraDepends_s0062_4fb0::InitAvatarData migrated from s00624fb0 (verbatim, slice spelling)
-00625830 ?InitCameraData@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::InitCameraData migrated from s00624fb0
+00625750 ?UpdateOffsets@cCreatureCameraDepends_s0062_4fb0@SP@@QAEXM@Z  # cCreatureCameraDepends_s0062_4fb0::UpdateOffsets migrated from s00624fb0 (verbatim, slice spelling)
+00625830 ?InitCameraData@cCreatureCameraBase_s0062_4fb0@SP@@QAEXXZ  # cCreatureCameraBase_s0062_4fb0::InitCameraData migrated from s00624fb0 (verbatim, slice spelling)
 00625a90 ?UpdateDesiredLookAt@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::UpdateDesiredLookAt migrated from s00624fb0
-00625bf0 ?EndPositionUpdate@cCreatureCameraBase@SP@@QAEXXZ  # SP::cCreatureCameraBase::EndPositionUpdate migrated from s00624fb0
+00625bf0 ?UpdateVelocity@cCreatureCameraBase_s0062_4fb0@SP@@QAEXXZ  # cCreatureCameraBase_s0062_4fb0::UpdateVelocity migrated from s00624fb0 (verbatim, slice spelling)

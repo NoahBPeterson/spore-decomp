@@ -4,6 +4,7 @@
 
 #include "game/types.h"
 #include "SP/cTextureManager.h"
+#include "rw/graphics/ActiveState.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void* g_D3D9Device;                 // 0x016f89d0

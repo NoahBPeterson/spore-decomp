@@ -12,9 +12,9 @@
 #include "cSPVector3.h"
 #include "eastl/allocator.h"
 #include "eastl/vector.h"
-#include "rw/graphics/Raster.h"
 
 namespace SP { class cIEffectsRenderer; class cILayer; class cILightingWorld; class cIModelWorld; struct cRenderConvolutionShadow; }
+namespace rw { namespace graphics { class Raster; } }
 
 namespace SP {
 

@@ -1,4 +1,4 @@
-0051c470 ??0PaintSystem@Skinner@@...  # PDB candidate Skinner::PaintSystem ctor (vtbl 0x13eb394)
+0051c470 ??0PaintSystem@@QAE@HPAX0D0DD@Z  # PaintSystem::PaintSystem migrated from s0051c470 (verbatim, slice spelling)
 0051c620 ?AddRef@RefCounted@@QAEHXZ  # RefCounted::AddRef migrated from s0051c470 (verbatim, slice spelling)
 0051c640 ?HandleMessage@cSkinpaintTextureExtractor@@...  # PDB name
 0051d010 ??1PaintSystem@Skinner@@...  # ctor/dtor vtable restore pair

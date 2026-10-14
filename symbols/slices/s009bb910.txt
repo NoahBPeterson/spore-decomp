@@ -1,1 +1,1 @@
-009bb910 nSPCreatureAnim::FinalizeCreatureGoals  # Claude-coined: normalises the four creature goal_pos_rot accumulators and applies the requested motion to walk_goal_delta
+009bb910 ?FinalizeCreatureGoals@nSPCreatureAnim@@YAXPAUcreature_instance_data_s009b_b910@1@@Z  # FinalizeCreatureGoals migrated from s009bb910 (verbatim, slice spelling)

@@ -6,7 +6,7 @@
 00766100 ?MoveOut@ResB@@QAEXPAX@Z  # ResB::MoveOut migrated from s00765f80 (verbatim, slice spelling)
 00766220 ??0ResE@@QAE@XZ  # ResE::ResE migrated from s00765f80 (verbatim, slice spelling)
 00766250 ResE::~ResE  # dtor: releases +0x18 (cLocalLightInfo) via 0x11eff60/0x9276c0
-007662d0 VBig::_insert  # vector (stride 0xa0) insert(pos,n,value)
+007662d0 ?_insert@VBig@@QAEXPADI0@Z  # VBig::_insert migrated from s00765f80 (verbatim, slice spelling)
 007668c0 ?UnionDestroy@@YAXPAXH@Z  # UnionDestroy migrated from s00765f80 (verbatim, slice spelling)
 00766910 ?push_back@VPtr@@QAEXABI@Z  # VPtr::push_back migrated from s00765f80 (verbatim, slice spelling)
 00766950 ?insert@V4@@QAEXPAIIABI@Z  # V4::insert migrated from s00765f80 (verbatim, slice spelling)

@@ -1,9 +1,4 @@
-// Slice s005c4500 (this module) defines its own 2-argument placement `operator new`; <new> defines the same
-// overload, so suppress the standard one (the slice's definition, emitted in the items section below, is used
-// instead).  See report_s005c4500.md REQUESTS: rewrite.py should drop a slice's placement-new definition when
-// the TU includes <new>.
-#define __PLACEMENT_NEW_INLINE 1
-// src/game/SPEditors/SPEditorPaletteCategoryUI.cpp -- migrated from slice(s) s005c2d30, s005c1d70 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPEditorPaletteCategoryUI.cpp -- migrated from slice(s) s005c53c0, s005c4500, s005c2d30, s005c1d70 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPEditorPaletteCategoryUI.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -30,11 +25,9 @@ extern "C" void* EASTL_memmove(void* dst, const void* src, unsigned int n);  // 
 #include "SP/cSPPaletteItem.h"
 #include "cSPUILayout.h"
 #include "SP/tSPEditorPaint.h"
-// EA::Messaging::Server: retail MessageServer() (0x0067dcc0) returns it; the slice stubs (IMessageServer)
-// are partial views.  See report_s005c53c0.md.
 #include "EA/Messaging/AutoHandler.h"
 #include "EA/Messaging/Server.h"
-#include "EA/IO/FileStream.h"
+#include "EA/Audio/FactoryBinarySampleData.h"
 #include "EA/ResourceMan/Key.h"
 #include "SP/cTribePlanner.h"
 #include "SP/cSPEditorPaintLikeThis.h"
@@ -760,7 +753,7 @@ class MessageBasicRC5 : public BehaviorMessage {
 }
 namespace EA {
 namespace Messaging {
-class IMessageServer_s005c_2d30 {
+class IMessageServer {
  public:
   PV(0) PV(1) PV(2) PV(3) PV(4)
   virtual bool MessageSend(uint32_t id, IMessageRC_s005c_2d30* msg, void* handler);  // +0x14
@@ -768,7 +761,7 @@ class IMessageServer_s005c_2d30 {
 }
 }
 namespace SP {
-EA::Messaging::Server* MessageServer();
+EA::Messaging::IMessageServer* MessageServer();
 }
 namespace SP {
 struct PageUIEntry_s005c_2d30 {
@@ -891,7 +884,6 @@ static inline void ResetRef(void** field, int off) {
 }
 void* operator new(unsigned int, const char*, int, int, int, int);   // 0x00f473a0
 void operator delete(void* p);   // 0x00f47380
-inline void* operator new(unsigned int, void* p) { return p; }
 struct Rect4 {
   float x1, y1, x2, y2;
 };
@@ -1306,7 +1298,7 @@ struct IWindow {
 };
 }
 namespace SP {
-struct IMessageServer {
+struct IMessageServer_s005c_53c0 {
   virtual void s0();
   virtual void s1();
   virtual void s2();
@@ -1451,7 +1443,7 @@ struct PLTVec {
 }
 namespace SP {
 struct AutoHandler {
-  IMessageServer* mServer;  // +0xb4
+  IMessageServer_s005c_53c0* mServer;  // +0xb4
   void* mHandler;           // +0xb8
   const uint32_t* mIds;     // +0xbc
   int mCount;               // +0xc0
@@ -1541,7 +1533,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetVisibleChunk(int chunkIndex)
 
 
 
-
 // @ 0x005c2660
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::SetButtonPositions()
@@ -1590,7 +1581,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetButtonPositions()
 
 
 
-
 // @ 0x005c28b0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::Update(int deltaTime)
@@ -1614,7 +1604,6 @@ void cSPPaletteCategoryUI_s005c_1d70::Update(int deltaTime)
 
 
 
-
 // @ 0x005c2940
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsVisible()
@@ -1625,7 +1614,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsVisible()
   return false;
 }
 }  // namespace SP
-
 
 
 
@@ -1649,7 +1637,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetVisibility(bool visible)
 
 
 
-
 // @ 0x005c29a0
 namespace SP {
 void cSPPaletteCategoryUI_s005c_1d70::SetPageVisible(int index, bool visible)
@@ -1661,7 +1648,6 @@ void cSPPaletteCategoryUI_s005c_1d70::SetPageVisible(int index, bool visible)
 
 
 
-
 // @ 0x005c29c0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsPageVisible(int index)
@@ -1669,7 +1655,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsPageVisible(int index)
   return mPageUIs[index].mVisible;
 }
 }  // namespace SP
-
 
 
 
@@ -1686,7 +1671,6 @@ int cSPPaletteCategoryUI_s005c_1d70::GetPageIndexForPackID(uint32_t packID)
   return -1;
 }
 }  // namespace SP
-
 
 
 
@@ -1708,7 +1692,6 @@ int cSPPaletteCategoryUI_s005c_1d70::GetChunkIndexForPackID(uint32_t packID)
   return -1;
 }
 }  // namespace SP
-
 
 
 
@@ -1735,7 +1718,6 @@ int SP::cSPPaletteCategoryUI::GetNumPages()
 
 
 
-
 // @ 0x005c2bc0
 namespace SP {
 bool cSPPaletteCategoryUI_s005c_1d70::IsPackUnique(int index)
@@ -1758,7 +1740,6 @@ bool cSPPaletteCategoryUI_s005c_1d70::IsPackUnique(int index)
 
 
 
-
 // @ 0x005c2cd0
 bool SP::cSPPaletteCategoryUI::IsPaintByNumber()
 {
@@ -1766,7 +1747,6 @@ bool SP::cSPPaletteCategoryUI::IsPaintByNumber()
     return mData.mpObject->mPaintByNumber;
   return false;
 }
-
 
 
 
@@ -1784,7 +1764,6 @@ uint32_t cSPPaletteCategoryUI_s005c_1d70::GetRegionFilterID()
   return 0;
 }
 }  // namespace SP
-
 
 
 
@@ -2555,8 +2534,8 @@ void cSPPaletteCategoryUI_s005c_53c0::Init(cSPPaletteCategory_s005c_53c0* data, 
       }
     }
 
-    EA::Messaging::Server* server = MessageServer();
-    mAutoMsgHandler.mServer = (IMessageServer*)server;
+    EA::Messaging::Server* server = (EA::Messaging::Server*)(void*)MessageServer();
+    mAutoMsgHandler.mServer = (IMessageServer_s005c_53c0*)server;
     mAutoMsgHandler.mHandler = this;
     mAutoMsgHandler.mIds = gPaletteMsgIds;
     mAutoMsgHandler.mCount = 2;

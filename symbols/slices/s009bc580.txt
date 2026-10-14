@@ -1,0 +1,1 @@
+009bcc70 ?UpdateBodyTransforms@nSPCreatureAnim@@YAXPAUcreature_instance_data_s009b_c580@1@M@Z  # UpdateBodyTransforms migrated from s009bc580 (verbatim, slice spelling)

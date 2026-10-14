@@ -14,7 +14,6 @@
 #include "SP/cSPCreatureBase.h"
 #include "SP/cSPCreatureCitizen.h"
 #include "SP/cVignette.h"
-#include "bool.h"
 #include "cSPVector3.h"
 #include "eastl/allocator.h"
 #include "eastl/string.h"

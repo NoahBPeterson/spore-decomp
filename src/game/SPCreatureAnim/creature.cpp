@@ -1,9 +1,11 @@
-// src/game/SPCreatureAnim/creature.cpp -- migrated from slice(s) s009c4a30, s009c1f60, s009b77a0, s009b6b10, s009b3180 by tools/migrate/rewrite.py
+// src/game/SPCreatureAnim/creature.cpp -- migrated from slice(s) s009c4a30, s009c32c0, s009c1f60, s009bfc20, s009bd340, s009bc580, s009bb910, s009ba4c0, s009b77a0, s009b6b10, s009b5ce0, s009b3180 by tools/migrate/rewrite.py
 // Object file: SPCreatureAnim/creature.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include <float.h>
 #include "nSPCreatureAnim/creature_instance_data.h"
+#include <math.h>
 #include "nSPCreatureAnim/creature_static_data.h"
 #include "nSPCreatureAnim/creature_body_instance_data.h"
 #include "nSPCreatureAnim/creature_body_static_data.h"
@@ -37,6 +39,40 @@ struct CopyBlock {
 };
 }
 // ---- items of slice s009b3180 end
+
+// ---- items of slice s009b5ce0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace RC {
+struct BoxShape {
+  char pad[0x138];
+  float mHalfExtent[3];   // +0x138
+};
+}
+namespace RC {
+struct Part {
+  BoxShape* mpShape;      // +0x00
+  char pad04[0xc];
+  float mCenter[3];       // +0x10
+  float mQuat[4];         // +0x1c: x y z w
+  char pad2c[700 - 0x2c];
+};
+}
+namespace RC {
+struct Owner {
+  char pad00[0x18];
+  float mPos[3];          // +0x18
+  char pad24[0x3c - 0x24];
+  float mQuat[4];         // +0x3c: x y z w
+  char pad4c[0x70 - 0x4c];
+  float mScale;           // +0x70
+  char pad74[0x2e4 - 0x74];
+  Part* mpPartsBegin;     // +0x2e4
+  Part* mpPartsEnd;       // +0x2e8
+};
+}
+bool BoxRayTest(const float* org, const float* dir, const float* center, const float* rot3x3,
+                float ex, float ey, float ez, float* tOut, float* normalOut);  // 0x00a02530
+float* QuaternionVectorTransform(float* out, const float* quat, const float* v);  // 0x0099c1a0
+// ---- items of slice s009b5ce0 end
 
 // ---- items of slice s009b6b10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma pack(push, 8)
@@ -130,6 +166,626 @@ int  FUN_009d0c80(void);
 int  FUN_009dfc40(void);
 int  FUN_009d1050(void);
 // ---- items of slice s009b77a0 end
+
+// ---- items of slice s009ba4c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace checkerlib {
+struct vector_3_s009b_a4c0 {
+    float x, y, z;
+    vector_3_s009b_a4c0& operator=(const vector_3_s009b_a4c0& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+}
+namespace checkerlib {
+struct vector_4_s009b_a4c0 { float x, y, z, w; };
+}
+namespace checkerlib {
+vector_3_s009b_a4c0* QuaternionVectorTransform(vector_3_s009b_a4c0* out, const vector_4_s009b_a4c0* q, const vector_3_s009b_a4c0* v);  // 0x0099c1a0
+}
+namespace checkerlib {
+__forceinline vector_4_s009b_a4c0 QuaternionProduct(const vector_4_s009b_a4c0& a, const vector_4_s009b_a4c0& b)
+{
+    vector_4_s009b_a4c0 r;
+    r.x = ((a.w * b.x + b.w * a.x) - a.z * b.y) + a.y * b.z;
+    r.y = ((a.w * b.y + a.z * b.x) + a.y * b.w) - b.z * a.x;
+    r.z = ((a.z * b.w - a.y * b.x) + a.w * b.z) + b.y * a.x;
+    r.w = ((a.w * b.w - b.x * a.x) - a.y * b.y) - a.z * b.z;
+    return r;
+}
+}
+namespace checkerlib {
+__forceinline vector_3_s009b_a4c0 QuaternionVectorTransformInverse(const vector_4_s009b_a4c0& q, const vector_3_s009b_a4c0& v)
+{
+    float nxw = -(q.x * q.w);
+    float nzw = -(q.z * q.w);
+    float nxx = -(q.x * q.x);
+    float nyw = -(q.y * q.w);
+    float zx = q.z * q.x;
+    float yx = q.y * q.x;
+    float nyy = -(q.y * q.y);
+    float zy = q.z * q.y;
+    float nzz = -(q.z * q.z);
+    vector_3_s009b_a4c0 r;
+    r.x = (((yx - nzw) * v.y + (zx + nyw) * v.z) + (nzz + nyy) * v.x) * 2.0f + v.x;
+    r.y = (((nzz + nxx) * v.y + (zy - nxw) * v.z) + (yx + nzw) * v.x) * 2.0f + v.y;
+    r.z = (((nyy + nxx) * v.z + (zy + nxw) * v.y) + (zx - nyw) * v.x) * 2.0f + v.z;
+    return r;
+}
+}
+namespace nSPCreatureAnim {
+struct goal_pos_rot_s009b_a4c0 {                    // size 0x24
+    checkerlib::vector_3_s009b_a4c0 pos;          // +0x00
+    float    pos_weight;   // +0x0c
+    checkerlib::vector_4_s009b_a4c0 rot;          // +0x10
+    float    rot_weight;   // +0x20
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009b_a4c0 {
+    uint32_t pad_000[0x10c / 4];
+    checkerlib::vector_3_s009b_a4c0 rest_center__SCALABLE;      // +0x10c
+    checkerlib::vector_4_s009b_a4c0 rest_orientation_q;         // +0x118
+    uint32_t pad_128[(0x1f8 - 0x128) / 4];
+    unsigned long bidx;                  // +0x1f8 (body index in the creature)
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_a4c0;
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_a4c0 {     // size 0x2bc
+    creature_body_static_data_s009b_a4c0* static_data;  // +0x000
+    creature_instance_data_s009b_a4c0*    creature;     // +0x004
+    uint32_t pad_008[2];
+    checkerlib::vector_3_s009b_a4c0 pos;                            // +0x010
+    checkerlib::vector_4_s009b_a4c0 orientation;                    // +0x01c
+    uint32_t pad_02c[(0x48 - 0x2c) / 4];
+    float    goal_time;                      // +0x048
+    uint32_t pad_04c;
+    float    goal_blend;                     // +0x050
+    uint32_t pad_054;
+    goal_pos_rot_s009b_a4c0 goal;                       // +0x058
+    uint32_t pad_07c[(0x2bc - 0x7c) / 4];
+};
+}
+namespace nSPCreatureAnim {
+struct body_vector {                     // eastl::vector<creature_body_instance_data>
+    creature_body_instance_data_s009b_a4c0* mpBegin;
+    creature_body_instance_data_s009b_a4c0* mpEnd;
+    creature_body_instance_data_s009b_a4c0* mpCapacity;
+    uint32_t mAllocator;
+    unsigned long size() const { return (unsigned long)(mpEnd - mpBegin); }
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_a4c0 {
+    uint32_t pad_000[0x18 / 4];
+    checkerlib::vector_3_s009b_a4c0 position;                   // +0x018
+    uint32_t pad_024[(0x3c - 0x24) / 4];
+    checkerlib::vector_4_s009b_a4c0 orientation;                // +0x03c
+    uint32_t pad_04c[(0x70 - 0x4c) / 4];
+    float    requested_scale;            // +0x070
+    uint32_t pad_074[(0x1b8 - 0x74) / 4];
+    uint8_t  body_goal_bits[1];          // +0x1b8 (two bits per body)
+    uint8_t  pad_1b9[0x2e4 - 0x1b9];
+    body_vector Bodies;                  // +0x2e4
+
+    void UpdateGoalSpring(struct goal_state* st, int nSteps, float dt, float t, float rate);
+};
+}
+namespace nSPCreatureAnim {
+struct goal_def {
+    unsigned long bidx;                  // +0x00
+    int      parent_bidx;                // +0x04 (-1: root goal)
+    uint32_t pad_08[2];
+    float    max_dist;                   // +0x10 (in units of the creature scale)
+    uint32_t pad_14[2];
+    checkerlib::vector_3_s009b_a4c0 offset;                     // +0x1c (in the parent body's frame)
+    checkerlib::vector_4_s009b_a4c0 rot;                        // +0x28 (relative to the parent body)
+};
+}
+namespace nSPCreatureAnim {
+struct goal_state {
+    goal_def* def;                       // +0x00
+    bool      initialized;               // +0x04
+    bool      reset;                     // +0x05
+    uint8_t   pad_06[2];
+    checkerlib::vector_3_s009b_a4c0  vel;                       // +0x08
+    checkerlib::vector_3_s009b_a4c0  pos;                       // +0x14
+    checkerlib::vector_3_s009b_a4c0  prev;                      // +0x20
+};
+}
+namespace nSPCreatureAnim {
+bool GoalStateIsActive(creature_instance_data_s009b_a4c0* c, goal_state* st, float t);  // 0x009ba8d0 (cdecl)
+}
+namespace nSPCreatureAnim {
+void GoalStateInit(creature_instance_data_s009b_a4c0* c, goal_state* st, int flag);       // 0x009ba7d0 (cdecl)
+}
+namespace nSPCreatureAnim {
+extern float g_GoalSpringMaxDist;        // 0x01550ab8 (1.0)
+}
+namespace nSPCreatureAnim {
+extern float g_GoalSpringK;              // 0x01550abc (100.0)
+}
+namespace nSPCreatureAnim {
+extern float g_GoalSpringDamp;           // 0x01550ac0 (8.0)
+}
+namespace nSPCreatureAnim {
+extern float g_GoalGravity;              // 0x0166c010
+}
+namespace nSPCreatureAnim {
+extern int   g_GoalClampAboveGround;     // 0x0166c014
+}
+namespace nSPCreatureAnim {
+extern const float kGoalMaxDistScale;    // 0x013ec434 (0.4)
+}
+namespace nSPCreatureAnim {
+extern const float kOne;                 // 0x01485720
+}
+namespace nSPCreatureAnim {
+extern const float kZero;                // 0x01485378
+}
+namespace nSPCreatureAnim {
+extern const float kMinSpeed2;           // 0x013ebca0 (1e-4)
+}
+namespace nSPCreatureAnim {
+static __forceinline void MarkBodyGoal(creature_body_instance_data_s009b_a4c0* body)
+{
+    unsigned long bit = body->static_data->bidx * 2;
+    body->creature->body_goal_bits[bit >> 3] |= (uint8_t)(1 << (bit & 7));
+}
+}
+// ---- items of slice s009ba4c0 end
+
+// ---- items of slice s009bb910 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace checkerlib {
+struct vector_3_s009b_b910 {
+    float x, y, z;
+    vector_3_s009b_b910& operator=(const vector_3_s009b_b910& o) { x = o.x; y = o.y; z = o.z; return *this; }
+    vector_3_s009b_b910& operator*=(float s) { x *= s; y *= s; z *= s; return *this; }
+    vector_3_s009b_b910& operator+=(const vector_3_s009b_b910& o) { x += o.x; y += o.y; z += o.z; return *this; }
+};
+}
+namespace checkerlib {
+struct vector_4_s009b_b910 {
+    float x, y, z, w;
+    vector_4_s009b_b910& operator=(const vector_4_s009b_b910& o) { x = o.x; y = o.y; z = o.z; w = o.w; return *this; }
+    vector_4_s009b_b910& operator+=(const vector_4_s009b_b910& o) { x += o.x; y += o.y; z += o.z; w += o.w; return *this; }
+    vector_4_s009b_b910& operator-=(const vector_4_s009b_b910& o) { x -= o.x; y -= o.y; z -= o.z; w -= o.w; return *this; }
+};
+}
+namespace checkerlib {
+vector_4_s009b_b910 Normalize(const vector_4_s009b_b910& q, float* pLength);    // 0x0099cae0 (out of line here)
+}
+namespace checkerlib {
+inline vector_3_s009b_b910 make_v3(float x, float y, float z)
+{
+    vector_3_s009b_b910 r;
+    r.x = x; r.y = y; r.z = z;
+    return r;
+}
+}
+namespace checkerlib {
+inline vector_3_s009b_b910 operator-(const vector_3_s009b_b910& a, const vector_3_s009b_b910& b) { return make_v3(a.x - b.x, a.y - b.y, a.z - b.z); }
+}
+namespace checkerlib {
+inline vector_3_s009b_b910 operator*(const vector_3_s009b_b910& a, float s) { return make_v3(a.x * s, a.y * s, a.z * s); }
+}
+namespace checkerlib {
+inline vector_3_s009b_b910 operator*(float s, const vector_3_s009b_b910& a) { return make_v3(s * a.x, s * a.y, s * a.z); }
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 make_v4(float x, float y, float z, float w)
+{
+    vector_4_s009b_b910 r;
+    r.x = x; r.y = y; r.z = z; r.w = w;
+    return r;
+}
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 operator*(const vector_4_s009b_b910& a, float s) { return make_v4(a.x * s, a.y * s, a.z * s, a.w * s); }
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 operator+(const vector_4_s009b_b910& a, const vector_4_s009b_b910& b) { return make_v4(a.x + b.x, a.y + b.y, a.z + b.z, a.w + b.w); }
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 operator-(const vector_4_s009b_b910& a, const vector_4_s009b_b910& b) { return make_v4(a.x - b.x, a.y - b.y, a.z - b.z, a.w - b.w); }
+}
+namespace checkerlib {
+inline float DotProduct(const vector_4_s009b_b910& a, const vector_4_s009b_b910& b) { return a.x * b.x + a.y * b.y + a.z * b.z + a.w * b.w; }
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 QuaternionProductConjugate(const vector_4_s009b_b910& a, const vector_4_s009b_b910& b)
+{
+    vector_4_s009b_b910 r;
+    r.x = ((a.x * b.w - b.x * a.w) + a.z * b.y) - a.y * b.z;
+    r.y = ((a.y * b.w - a.z * b.x) - b.y * a.w) + b.z * a.x;
+    r.z = ((a.y * b.x + a.z * b.w) - b.y * a.x) - b.z * a.w;
+    r.w = ((b.z * a.z + a.y * b.y) + b.x * a.x) + a.w * b.w;
+    return r;
+}
+}
+namespace checkerlib {
+inline vector_4_s009b_b910 QuaternionProduct_s009b_b910(const vector_4_s009b_b910& a, const vector_4_s009b_b910& b)
+{
+    vector_4_s009b_b910 r;
+    r.x = ((a.w * b.x + b.w * a.x) - a.z * b.y) + a.y * b.z;
+    r.y = ((a.w * b.y + a.z * b.x) + a.y * b.w) - b.z * a.x;
+    r.z = ((a.z * b.w - a.y * b.x) + a.w * b.z) + b.y * a.x;
+    r.w = ((a.w * b.w - b.x * a.x) - a.y * b.y) - a.z * b.z;
+    return r;
+}
+}
+namespace nSPCreatureAnim {
+struct goal_pos_rot_s009b_b910 {                    // size 0x24
+    checkerlib::vector_3_s009b_b910 pos;          // +0x00
+    float    pos_weight;   // +0x0c
+    checkerlib::vector_4_s009b_b910 rot;          // +0x10
+    float    rot_weight;   // +0x20
+
+    // Divides an over-weighted accumulated position by its weight.
+    __forceinline void NormalizePos()
+    {
+        float w = pos_weight;
+        if (w > 0.0f && w > 1.0f)
+        {
+            pos = (1.0f / w) * pos;
+        }
+    }
+
+    // Renormalises the accumulated rotation; a weight below 1 is filled up with the identity.
+    __forceinline void NormalizeWeightedRot()
+    {
+        float w = rot.w, z = rot.z, y = rot.y, x = rot.x;
+        float len = (float)sqrt((double)x * x + (double)y * y + (double)z * z + (double)w * w);
+        if (len != 0.0f)
+        {
+            float inv = 1.0f / len;
+            rot.x = x * inv;
+            rot.y = y * inv;
+            rot.z = z * inv;
+            rot.w = w * inv;
+        }
+        if (1.0f > rot_weight)
+        {
+            float t = 1.0f - rot_weight;
+            checkerlib::vector_4_s009b_b910 a = rot * rot_weight;
+            checkerlib::vector_4_s009b_b910 b = checkerlib::make_v4(0.0f, 0.0f, 0.0f, 1.0f) * t;
+            if (0.0f > checkerlib::DotProduct(a, b))
+                a = a - b;
+            else
+                a = a + b;
+            rot = checkerlib::Normalize(a, 0);
+        }
+    }
+
+    __forceinline void SetRotIdentity()
+    {
+        rot.x = 0.0f;
+        rot.y = 0.0f;
+        rot.z = 0.0f;
+        rot.w = 1.0f;
+    }
+
+    __forceinline void NormalizeRot()
+    {
+        if (rot_weight > 0.0f)
+            NormalizeWeightedRot();
+        else
+            SetRotIdentity();
+    }
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_b910 {
+    uint32_t     pad_000[0x18 / 4];
+    checkerlib::vector_3_s009b_b910     requested_pos;           // +0x018
+    uint32_t     pad_024[(0x30 - 0x24) / 4];
+    checkerlib::vector_3_s009b_b910     previous_requested_pos;  // +0x030
+    checkerlib::vector_4_s009b_b910     requested_rot;           // +0x03c
+    uint32_t     pad_04c[(0x5c - 0x4c) / 4];
+    checkerlib::vector_4_s009b_b910     previous_requested_rot;  // +0x05c
+    uint32_t     pad_06c[(0x118 - 0x6c) / 4];
+    goal_pos_rot_s009b_b910 goal_0x118;              // +0x118
+    goal_pos_rot_s009b_b910 goal_0x13c;              // +0x13c
+    goal_pos_rot_s009b_b910 goal_0x160;              // +0x160
+    goal_pos_rot_s009b_b910 walk_goal_delta;         // +0x184
+};
+}
+// ---- items of slice s009bb910 end
+
+// ---- items of slice s009bc580 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace checkerlib {
+struct vector_3_s009b_c580 {
+    float x, y, z;
+    vector_3_s009b_c580& operator=(const vector_3_s009b_c580& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+}
+namespace checkerlib {
+struct vector_4_s009b_c580 {
+    float x, y, z, w;
+    vector_4_s009b_c580& operator=(const vector_4_s009b_c580& o) { x = o.x; y = o.y; z = o.z; w = o.w; return *this; }
+};
+}
+namespace checkerlib {
+inline vector_3_s009b_c580 operator+(const vector_3_s009b_c580& a, const vector_3_s009b_c580& b) { vector_3_s009b_c580 r; r.x = a.x + b.x; r.y = a.y + b.y; r.z = a.z + b.z; return r; }
+}
+namespace checkerlib {
+inline vector_3_s009b_c580 operator-(const vector_3_s009b_c580& a, const vector_3_s009b_c580& b) { vector_3_s009b_c580 r; r.x = a.x - b.x; r.y = a.y - b.y; r.z = a.z - b.z; return r; }
+}
+namespace checkerlib {
+inline vector_3_s009b_c580 operator*(const vector_3_s009b_c580& a, float s) { vector_3_s009b_c580 r; r.x = a.x * s; r.y = a.y * s; r.z = a.z * s; return r; }
+}
+namespace checkerlib {
+inline vector_4_s009b_c580 QuaternionProduct_s009b_c580(const vector_4_s009b_c580& a, const vector_4_s009b_c580& b)
+{
+    vector_4_s009b_c580 r;
+    r.x = ((a.x * b.w + b.x * a.w) - a.z * b.y) + a.y * b.z;
+    r.y = ((a.y * b.w + a.z * b.x) + b.y * a.w) - b.z * a.x;
+    r.z = ((a.z * b.w - a.y * b.x) + b.z * a.w) + b.y * a.x;
+    r.w = ((b.w * a.w - a.x * b.x) - a.y * b.y) - b.z * a.z;
+    return r;
+}
+}
+namespace checkerlib {
+__forceinline vector_3_s009b_c580 QuaternionVectorTransform_s009b_c580(const vector_4_s009b_c580& q, const vector_3_s009b_c580& v)
+{
+    vector_3_s009b_c580 r;
+    r.x = (((-(q.z * q.z) + -(q.y * q.y)) * v.x + (q.z * q.x + q.y * q.w) * v.z) + (q.y * q.x - q.z * q.w) * v.y) * 2.0f + v.x;
+    r.y = (((q.y * q.x + q.z * q.w) * v.x + (q.z * q.y - q.x * q.w) * v.z) + (-(q.z * q.z) + -(q.x * q.x)) * v.y) * 2.0f + v.y;
+    r.z = (((q.z * q.x - q.y * q.w) * v.x + (-(q.y * q.y) + -(q.x * q.x)) * v.z) + (q.z * q.y + q.x * q.w) * v.y) * 2.0f + v.z;
+    return r;
+}
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009b_c580 {
+    uint32_t pad_000[0x10c / 4];
+    checkerlib::vector_3_s009b_c580 center;                      // +0x10c
+    checkerlib::vector_4_s009b_c580 orientation;                 // +0x118
+    checkerlib::vector_4_s009b_c580 joint_rotation;              // +0x128 (rotation relative to the parent body)
+    uint32_t pad_138[(0x344 - 0x138) / 4];
+    checkerlib::vector_3_s009b_c580 local_r;                     // +0x344
+    checkerlib::vector_3_s009b_c580 parent_r;                    // +0x350
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_c580 {      // size 0x2bc (retail)
+    creature_body_static_data_s009b_c580*   static_data;   // +0x000
+    void*                        creature;      // +0x004
+    creature_body_instance_data_s009b_c580* parent;        // +0x008
+    uint32_t                     pad_00c;
+    checkerlib::vector_3_s009b_c580                     center;        // +0x010
+    checkerlib::vector_4_s009b_c580                     orientation;   // +0x01c
+    checkerlib::vector_3_s009b_c580                     velocity;      // +0x02c
+    bool                         blend_active;  // +0x038
+    uint8_t                      pad_039[3];
+    uint32_t                     pad_03c[(0x280 - 0x3c) / 4];
+    checkerlib::vector_3_s009b_c580                     blend_pos;     // +0x280
+    checkerlib::vector_4_s009b_c580                     blend_rot;     // +0x28c
+    uint32_t                     pad_29c[(0x2bc - 0x29c) / 4];
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_c580 {
+    uint32_t pad_000[0x70 / 4];
+    float    requested_scale;             // +0x070
+    uint32_t pad_074[(0x2e4 - 0x74) / 4];
+    creature_body_instance_data_s009b_c580* mpBegin; // +0x2e4  (Bodies vector)
+    creature_body_instance_data_s009b_c580* mpEnd;   // +0x2e8
+};
+}
+// ---- items of slice s009bc580 end
+
+// ---- items of slice s009bd340 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_IKFloorWeightRate;   // 0x01550d88 (20.0)
+namespace checkerlib {
+struct vector_3_s009b_d340 {
+    float x, y, z;
+    vector_3_s009b_d340& operator=(const vector_3_s009b_d340& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+}
+namespace checkerlib {
+struct vector_4_s009b_d340 {
+    float x, y, z, w;
+    vector_4_s009b_d340& operator=(const vector_4_s009b_d340& o);   // 0x00572600 (EA::RectT<float>::operator= by COMDAT folding)
+};
+}
+namespace checkerlib {
+vector_3_s009b_d340* QuaternionVectorTransform(vector_3_s009b_d340* out, const vector_4_s009b_d340* q, const vector_3_s009b_d340* v);         // 0x0099c1a0
+}
+namespace checkerlib {
+vector_3_s009b_d340* QuaternionVectorTransformInverse(vector_3_s009b_d340* out, const vector_4_s009b_d340* q, const vector_3_s009b_d340* v);  // 0x0099c310
+}
+namespace checkerlib {
+vector_4_s009b_d340* QuaternionProduct(vector_4_s009b_d340* out, const vector_4_s009b_d340* a, const vector_4_s009b_d340* b);                // 0x0099c0b0
+}
+namespace checkerlib {
+vector_4_s009b_d340 Normalize(const vector_4_s009b_d340& q, float* pLength);                                            // 0x0099cae0
+}
+checkerlib::vector_4_s009b_d340* QuaternionFromTwoVectors(checkerlib::vector_4_s009b_d340* out, const checkerlib::vector_3_s009b_d340* a, const checkerlib::vector_3_s009b_d340* b, int flag);  // 0x009ac7a0
+namespace eastl {
+template <typename T>
+inline const T& min(const T& a, const T& b) { return (b < a) ? b : a; }
+}
+namespace eastl {
+struct sp_vector_allocator_s009b_d340 { int mFlags; };
+}
+namespace eastl {
+template <typename T, typename Allocator = sp_vector_allocator_s009b_d340>
+class vector_s009b_d340 {
+public:
+    typedef unsigned int size_type;
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    Allocator mAllocator;
+    size_type size() const { return (size_type)(mpEnd - mpBegin); }
+    T& operator[](size_type n) { return *(mpBegin + n); }
+};
+}
+namespace nSPCreatureAnim {
+struct creature_static_data_s009b_d340 {
+    uint32_t pad_000[0x3f4 / 4];
+    bool     floor_check_caps;                  // +0x3f4
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009b_d340 {
+    uint32_t      pad_000[0x114 / 4];
+    float         floor_height;                 // +0x114
+    uint32_t      pad_118[(0x150 - 0x118) / 4];
+    unsigned long caps_flags;                   // +0x150
+
+    bool HasCap(unsigned int bit) const { return ((caps_flags >> bit) & 1) != 0; }
+    uint32_t      pad_154[(0x344 - 0x154) / 4];
+    checkerlib::vector_3_s009b_d340      ik_joint_r__SCALABLE;         // +0x344 (name guessed)
+    checkerlib::vector_3_s009b_d340      parent_local_joint_r__SCALABLE;  // +0x350 (name guessed)
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_d340 {            // size 0x2bc (retail)
+    creature_body_static_data_s009b_d340*   static_data;   // +0x000
+    void*                        creature;      // +0x004
+    creature_body_instance_data_s009b_d340* parent;        // +0x008
+    creature_body_instance_data_s009b_d340* first_child;   // +0x00c
+    checkerlib::vector_3_s009b_d340                     center;        // +0x010
+    checkerlib::vector_4_s009b_d340                     orientation;   // +0x01c
+    uint32_t                     pad_02c[(0x38 - 0x2c) / 4];
+    bool                         floored;       // +0x038
+    uint8_t                      pad_039[3];
+    uint32_t                     pad_03c[(0x29c - 0x3c) / 4];
+    float                        floored_weight;     // +0x29c
+    bool                         known_ground_pos;   // +0x2a0
+    uint8_t                      pad_2a1[3];
+    checkerlib::vector_3_s009b_d340                     ground_pos;         // +0x2a4
+    checkerlib::vector_3_s009b_d340                     ground_normal;      // +0x2b0
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_d340 {
+    creature_static_data_s009b_d340* static_data;          // +0x000
+    uint32_t pad_004[(0x18 - 0x4) / 4];
+    checkerlib::vector_3_s009b_d340 position;                          // +0x018
+    uint32_t pad_024[(0x3c - 0x24) / 4];
+    checkerlib::vector_4_s009b_d340 orientation;                       // +0x03c
+    uint32_t pad_04c[(0x70 - 0x4c) / 4];
+    float    requested_scale;                   // +0x070
+    uint32_t pad_074[(0xe8 - 0x74) / 4];
+    checkerlib::vector_3_s009b_d340 ground_pos;                        // +0x0e8
+    checkerlib::vector_3_s009b_d340 ground_normal;                     // +0x0f4
+    uint32_t pad_100[(0x2e4 - 0x100) / 4];
+    eastl::vector_s009b_d340<creature_body_instance_data_s009b_d340, eastl::sp_vector_allocator_s009b_d340> Bodies;  // +0x2e4
+    uint32_t pad_2f4[(0x168c - 0x2f4) / 4];
+    uint8_t  pad_168c;
+    bool     floor_enabled;                     // +0x168d
+};
+}
+// ---- items of slice s009bd340 end
+
+// ---- items of slice s009bfc20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace checkerlib {
+struct vector_3_s009b_fc20 {
+    float x, y, z;
+    vector_3_s009b_fc20() {}
+    vector_3_s009b_fc20(const vector_3_s009b_fc20& o) : x(o.x), y(o.y), z(o.z) {}
+    vector_3_s009b_fc20& operator=(const vector_3_s009b_fc20& o) { x = o.x; y = o.y; z = o.z; return *this; }
+};
+}
+namespace checkerlib {
+struct vector_4_s009b_fc20 { float x, y, z, w; };
+}
+namespace checkerlib {
+vector_3_s009b_fc20* QuaternionVectorTransform(vector_3_s009b_fc20* out, const vector_4_s009b_fc20* q, const vector_3_s009b_fc20* v);         // 0x0099c1a0
+}
+namespace checkerlib {
+vector_3_s009b_fc20* QuaternionVectorTransformInverse(vector_3_s009b_fc20* out, const vector_4_s009b_fc20* q, const vector_3_s009b_fc20* v);  // 0x0099c310
+}
+namespace checkerlib {
+vector_4_s009b_fc20* Normalize(vector_4_s009b_fc20* out, const vector_4_s009b_fc20* q, float* pLength);                            // 0x0099cae0
+}
+checkerlib::vector_4_s009b_fc20* QuaternionFromTwoVectors(checkerlib::vector_4_s009b_fc20* out, const checkerlib::vector_3_s009b_fc20* a, const checkerlib::vector_3_s009b_fc20* b, int flag);  // 0x009ac7a0
+float __cdecl SmoothStep(float lo, float hi, float x);                                             // 0x009b01e0
+static __forceinline checkerlib::vector_4_s009b_fc20 QuatMul(const checkerlib::vector_4_s009b_fc20& a, const checkerlib::vector_4_s009b_fc20& b)
+{
+    checkerlib::vector_4_s009b_fc20 r;
+    r.x = ((b.w * a.x + b.x * a.w) - b.y * a.z) + b.z * a.y;
+    r.y = ((b.w * a.y + b.y * a.w) + b.x * a.z) - b.z * a.x;
+    r.z = ((b.w * a.z - b.x * a.y) + b.y * a.x) + b.z * a.w;
+    r.w = ((b.w * a.w - b.x * a.x) - b.y * a.y) - b.z * a.z;
+    return r;
+}
+static __forceinline checkerlib::vector_4_s009b_fc20 QuatConjMul(const checkerlib::vector_4_s009b_fc20& a, const checkerlib::vector_4_s009b_fc20& b)
+{
+    checkerlib::vector_4_s009b_fc20 r;
+    r.x = ((a.w * b.x - a.x * b.w) + a.z * b.y) - a.y * b.z;
+    r.y = ((a.w * b.y - a.y * b.w) - a.z * b.x) + a.x * b.z;
+    r.z = ((a.y * b.x - a.z * b.w) - a.x * b.y) + a.w * b.z;
+    r.w = ((a.x * b.x + a.y * b.y) + a.z * b.z) + a.w * b.w;
+    return r;
+}
+static __forceinline checkerlib::vector_3_s009b_fc20 InvRotate(const checkerlib::vector_4_s009b_fc20& q, const checkerlib::vector_3_s009b_fc20& v)
+{
+    float nxw = -(q.x * q.w);
+    float nzw = -(q.z * q.w);
+    float nxx = -(q.x * q.x);
+    float nyw = -(q.y * q.w);
+    float zx = q.z * q.x;
+    float yx = q.y * q.x;
+    float nyy = -(q.y * q.y);
+    float zy = q.z * q.y;
+    float nzz = -(q.z * q.z);
+    checkerlib::vector_3_s009b_fc20 r;
+    r.x = (((yx - nzw) * v.y + (zx + nyw) * v.z) + (nzz + nyy) * v.x) * 2.0f + v.x;
+    r.y = (((nzz + nxx) * v.y + (zy - nxw) * v.z) + (yx + nzw) * v.x) * 2.0f + v.y;
+    r.z = (((nyy + nxx) * v.z + (zy + nxw) * v.y) + (zx - nyw) * v.x) * 2.0f + v.z;
+    return r;
+}
+namespace nSPCreatureAnim {
+struct goal_pos_rot_s009b_fc20 {                    // size 0x24
+    checkerlib::vector_3_s009b_fc20 pos;          // +0x00
+    float    pos_weight;   // +0x0c
+    checkerlib::vector_4_s009b_fc20 rot;          // +0x10
+    float    rot_weight;   // +0x20
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009b_fc20 {
+    uint32_t pad_000[0x10c / 4];
+    checkerlib::vector_3_s009b_fc20 rest_center__SCALABLE;      // +0x10c
+    checkerlib::vector_4_s009b_fc20 rest_orientation_q;         // +0x118
+    uint32_t pad_128[(0x138 - 0x128) / 4];
+    checkerlib::vector_3_s009b_fc20 extent;                     // +0x138 (half size, unscaled)
+};
+}
+namespace nSPCreatureAnim {
+struct creature_instance_data_s009b_fc20 {
+    uint32_t pad_000[0x18 / 4];
+    checkerlib::vector_3_s009b_fc20 position;                   // +0x018
+    uint32_t pad_024[(0x3c - 0x24) / 4];
+    checkerlib::vector_4_s009b_fc20 orientation;                // +0x03c
+    uint32_t pad_04c[(0x70 - 0x4c) / 4];
+    float    requested_scale;            // +0x070
+    uint32_t pad_074[(0x100 - 0x74) / 4];
+    checkerlib::vector_3_s009b_fc20 ground_up;                  // +0x100
+
+    float GetGroundHeight(const checkerlib::vector_3_s009b_fc20* pos, checkerlib::vector_3_s009b_fc20* normal);   // 0x009b6220
+    checkerlib::vector_3_s009b_fc20* GetGroundUp(checkerlib::vector_3_s009b_fc20* out, const checkerlib::vector_3_s009b_fc20* pos);      // 0x009b62c0
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_instance_data_s009b_fc20 {
+    creature_body_static_data_s009b_fc20* static_data;  // +0x000
+    uint32_t pad_004[(0x7c - 0x4) / 4];
+    goal_pos_rot_s009b_fc20 goal_b;                     // +0x07c
+    uint32_t pad_0a0[(0x2a0 - 0xa0) / 4];
+    bool     known_ground_pos;               // +0x2a0
+    uint8_t  pad_2a1[3];
+    checkerlib::vector_3_s009b_fc20 ground_pos;                     // +0x2a4
+    checkerlib::vector_3_s009b_fc20 ground_normal;                  // +0x2b0
+
+    void GroundGoal(checkerlib::vector_3_s009b_fc20* outPos, checkerlib::vector_4_s009b_fc20* outRot, creature_instance_data_s009b_fc20* c,
+                    float baseHeight, float rate, bool storeGround);
+};
+}
+// ---- items of slice s009bfc20 end
 
 // ---- items of slice s009c1f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
 typedef unsigned char uint8;
@@ -320,6 +976,284 @@ void* FUN_00a09f50();                                                   // 0x00a
 }
 // ---- items of slice s009c1f60 end
 
+// ---- items of slice s009c32c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* memcpy(void* dst, const void* src, unsigned int n);   // 0x011e0744 thunk
+#pragma intrinsic(sqrt)
+typedef unsigned int   uint32_s009c_32c0;
+namespace checkerlib {
+struct vector_3_s009c_32c0 { float x, y, z; };
+}
+namespace checkerlib {
+struct vector_4_s009c_32c0 { float x, y, z, w; };
+}
+namespace checkerlib {
+struct matrix_3x3_s009c_32c0 { float m[3][3]; };
+}
+using checkerlib::vector_3_s009c_32c0;
+using checkerlib::vector_4_s009c_32c0;
+using checkerlib::matrix_3x3_s009c_32c0;
+namespace eastl {
+template <typename T> inline const T& max(const T& a, const T& b) { return (a < b) ? b : a; }
+}
+namespace eastl {
+template <typename T> inline void swap(T& a, T& b) { T temp(a); a = b; b = temp; }
+}
+namespace eastl {
+struct sp_vector_allocator_s009c_32c0 {
+    sp_vector_allocator_s009c_32c0() {}
+    void deallocate(void* p) { if (((int*)p)[-1] != 0) operator delete[](p); }
+};
+}
+namespace eastl {
+template <typename T, int nodeCount>
+struct fixed_vector_s009c_32c0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_s009c_32c0 mOverflowAllocator;
+    T* mpPoolBegin;
+    uint32_s009c_32c0 mPad;
+    T mBuffer[nodeCount];
+
+    fixed_vector_s009c_32c0() : mpBegin(mBuffer), mpEnd(mBuffer), mpCapacity(mBuffer + nodeCount)
+    {
+        mpPoolBegin = mBuffer;
+    }
+    fixed_vector_s009c_32c0(unsigned n, const T& value);                    // 0x009c3210
+    ~fixed_vector_s009c_32c0()
+    {
+        if (mpBegin && mpBegin != mpPoolBegin)
+            operator delete[](mpBegin);
+    }
+
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    bool empty() const { return mpBegin == mpEnd; }
+    T& operator[](unsigned i) { return mpBegin[i]; }
+
+    void DoInsertValue(T* position, const T& value);             // 0x00899480
+    void DoInsertValues(T* position, unsigned n, const T& value);  // 0x0089a8e0
+
+    void push_back(const T& value)                               // out of line: 0x00886db0
+    {
+        if (mpEnd < mpCapacity) {
+            T* p = mpEnd++;
+            if (p)
+                *p = value;
+        } else
+            DoInsertValue(mpEnd, value);
+    }
+    T* erase(T* first, T* last)
+    {
+        memcpy(first, last, (unsigned)((char*)mpEnd - (char*)last));
+        mpEnd -= (last - first);
+        return first;
+    }
+    void resize(unsigned n)                                      // out of line: 0x0089cb60
+    {
+        T value = T();
+        unsigned s = size();
+        if (n > s)
+            DoInsertValues(mpEnd, n - s, value);
+        else
+            erase(mpBegin + n, mpEnd);
+    }
+};
+}
+namespace nSPCreatureAnim {
+enum {
+    kCapNameRoot    = 0x746f6f72,   // "root"
+    kCapNameFoot    = 0x746f6f66,   // "foot"
+    kCapNameMouth   = 0x74756f6d,   // "mout"
+    kCapNameLimb    = 0x626d696c,   // "limb"
+    kCapNameSpine   = 0x6e697073,   // "spin"
+    kCapNameGrasper = 0x70737267,   // "grsp"
+    kCapNamePsft    = 0x74667370,   // "psft"
+    kCapNameNstr    = 0x7274736e,   // "nstr"
+};
+}
+namespace nSPCreatureAnim {
+enum {
+    kCapRoot    = 0x01,
+    kCapLimb    = 0x02,
+    kCapFoot    = 0x04,
+    kCapSpine   = 0x08,
+    kCapPsft    = 0x10,
+    kCapMouth   = 0x20,
+    kCapGrasper = 0x40,
+    kCapNstr    = 0x80,
+};
+}
+namespace nSPCreatureAnim {
+struct creature_body_static_data_s009c_32c0 {                // retail size 0x468
+    char name[260];                                // 0x000
+    uint32_s009c_32c0 instance_id;                            // 0x104
+    uint32_s009c_32c0 group_id;                               // 0x108
+    vector_3_s009c_32c0 rest_center;                          // 0x10c
+    vector_4_s009c_32c0 rest_orientation_q;                   // 0x118
+    vector_4_s009c_32c0 rest_parent_rel_orientation_q;        // 0x128
+    uint32_s009c_32c0 pad138[3];
+    vector_3_s009c_32c0 rest_joint_offset;                    // 0x144
+    uint32_s009c_32c0 cap_flags;                              // 0x150  every cap present
+    uint32_s009c_32c0 owned_cap_flags;                        // 0x154  caps with a non-zero value
+    uint32_s009c_32c0 NameFOURCCs[32];                        // 0x158
+    uint8 Values[32];                              // 0x1d8
+    uint32_s009c_32c0 bidx;                                   // 0x1f8
+    int parent_bidx;                               // 0x1fc
+    int symmetric_bidx;                            // 0x200  -2 = not computed yet
+    int first_child_bidx;                          // 0x204
+    uint32_s009c_32c0 num_children;                           // 0x208
+    uint32_s009c_32c0 pad20c[2];
+    creature_body_static_data_s009c_32c0* parent;             // 0x214
+    creature_body_static_data_s009c_32c0* first_child;        // 0x218
+    uint32_s009c_32c0 bone_idx;                               // 0x21c
+    uint32_s009c_32c0 pad220[73];
+    vector_3_s009c_32c0 local_joint_r;                        // 0x344
+    vector_3_s009c_32c0 parent_local_joint_r;                 // 0x350
+    vector_3_s009c_32c0 joint_r;                              // 0x35c
+    float joint_r_len;                             // 0x368
+    float workspace_radius;                        // 0x36c
+    uint32_s009c_32c0 pad370[61];
+    bool in_leg_chain;                             // 0x464
+    uint8 pad465[3];
+
+    void CopyFrom(const creature_body_static_data_s009c_32c0& other);   // 0x009b3490
+};
+}
+namespace nSPCreatureAnim {
+struct body_vector_s009c_32c0 {                               // eastl::vector<creature_body_static_data, sp_vector_allocator>
+    creature_body_static_data_s009c_32c0* mpBegin;
+    creature_body_static_data_s009c_32c0* mpEnd;
+    creature_body_static_data_s009c_32c0* mpCapacity;
+    eastl::sp_vector_allocator_s009c_32c0 mAllocator;
+
+    body_vector_s009c_32c0(unsigned n, const eastl::sp_vector_allocator_s009c_32c0& allocator);   // 0x009c0bb0
+    ~body_vector_s009c_32c0()
+    {
+        if (mpBegin)
+            mAllocator.deallocate(mpBegin);
+    }
+    unsigned size() const { return (unsigned)(mpEnd - mpBegin); }
+    creature_body_static_data_s009c_32c0& operator[](unsigned i) { return mpBegin[i]; }
+    void swap(body_vector_s009c_32c0& other);                 // 0x009c0ed0
+};
+}
+namespace nSPCreatureAnim {
+struct bone_xform_s009c_32c0 {                                // eastl::pair<matrix_3x3, vector_3>
+    matrix_3x3_s009c_32c0 first;
+    vector_3_s009c_32c0 second;
+};
+}
+namespace nSPCreatureAnim {
+struct bone_xform_vector {
+    bone_xform_s009c_32c0* mpBegin;
+    bone_xform_s009c_32c0* mpEnd;
+    bone_xform_s009c_32c0* mpCapacity;
+    uint32_s009c_32c0 mAllocator;
+    void resize(unsigned n);                       // 0x009c2520
+};
+}
+namespace nSPCreatureAnim {
+struct creature_static_data_s009c_32c0 {
+    uint8 pad0[0x37c];
+    uint32_s009c_32c0 num_bones;                              // 0x37c
+    uint32_s009c_32c0 pad380;
+    body_vector_s009c_32c0 Bodies;                            // 0x384
+    uint32_s009c_32c0 pad394[6];
+    uint32_s009c_32c0 spine_start_bidx;                       // 0x3ac
+    uint32_s009c_32c0 spine_end_bidx;                         // 0x3b0
+    uint32_s009c_32c0 pad3b4[16];
+    bool mIsLegless;                               // 0x3f4
+    uint8 pad3f5[3];
+    bone_xform_vector inv_bone_rest_xforms;        // 0x3f8
+};
+}
+namespace nSPCreatureAnim {
+typedef eastl::fixed_vector_s009c_32c0<uint32_s009c_32c0, 255> index_vector;
+}
+namespace nSPCreatureAnim {
+extern int g_bRootAtClosestSpine;      // 0x0166c004
+}
+namespace nSPCreatureAnim {
+extern int g_bRootAtMidSpine;          // 0x01550a84
+}
+namespace nSPCreatureAnim {
+extern float g_WorkspaceRadiusPad;     // 0x01550a10
+}
+namespace nSPCreatureAnim {
+extern float g_WorkspaceRadiusScale;   // 0x01550a78
+}
+namespace nSPCreatureAnim {
+void AddExtraBonesAsNecessary(creature_static_data_s009c_32c0* c, uint32_s009c_32c0 bidx);   // 0x009b5f90 (bidx in eax)
+}
+namespace nSPCreatureAnim {
+void ComputeBodyStatics(creature_static_data_s009c_32c0* c);                      // 0x009b5c50
+}
+namespace nSPCreatureAnim {
+void BuildHierarchyOrder(creature_static_data_s009c_32c0* c, index_vector* order,
+                         index_vector* children, uint32_s009c_32c0 root);          // 0x009c3150
+}
+namespace nSPCreatureAnim {
+inline uint32_s009c_32c0 CapFlagFromName(uint32_s009c_32c0 name)
+{
+    switch (name) {
+    case kCapNameSpine:   return kCapSpine;
+    case kCapNameLimb:    return kCapLimb;
+    case kCapNameGrasper: return kCapGrasper;
+    case kCapNameNstr:    return kCapNstr;
+    case kCapNamePsft:    return kCapPsft;
+    case kCapNameFoot:    return kCapFoot;
+    case kCapNameRoot:    return kCapRoot;
+    case kCapNameMouth:   return kCapMouth;
+    default:              return 0;
+    }
+}
+}
+namespace nSPCreatureAnim {
+__forceinline void ComputeInverseRestXform(const creature_body_static_data_s009c_32c0& b, bone_xform_s009c_32c0& out)
+{
+    const vector_4_s009c_32c0& q = b.rest_orientation_q;
+    const vector_3_s009c_32c0& p = b.rest_center;
+
+    float nxw = -(q.x * q.w);
+    float nzw = -(q.z * q.w);
+    float zx = q.z * q.x;
+    float nxx = -(q.x * q.x);
+    float yx = q.y * q.x;
+    float zy = q.z * q.y;
+    float nyw = -(q.y * q.w);
+    float nyy = -(q.y * q.y);
+    float nzz = -(q.z * q.z);
+    vector_3_s009c_32c0 t;
+    t.x = -((((nzz + nyy) * p.x + (zx + nyw) * p.z) + (yx - nzw) * p.y) * 2.0f + p.x);
+    t.y = -((((yx + nzw) * p.x + (zy - nxw) * p.z) + (nzz + nxx) * p.y) * 2.0f + p.y);
+    t.z = -((((zx - nyw) * p.x + (nyy + nxx) * p.z) + (zy + nxw) * p.y) * 2.0f + p.z);
+
+    float cx = -q.x, cy = -q.y, cz = -q.z, w = q.w;
+    float xx = cx * cx, xy = cx * cy, yy = cy * cy, xz = cx * cz, yz = cy * cz;
+    float xw = cx * w, zz = cz * cz, wy = w * cy, wz = w * cz;
+    matrix_3x3_s009c_32c0 r;
+    r.m[0][0] = 1.0f - (zz + yy) * 2.0f;
+    r.m[0][1] = (xy - wz) * 2.0f;
+    r.m[0][2] = (wy + xz) * 2.0f;
+    r.m[1][0] = (wz + xy) * 2.0f;
+    r.m[1][1] = 1.0f - (zz + xx) * 2.0f;
+    r.m[1][2] = (yz - xw) * 2.0f;
+    r.m[2][0] = (xz - wy) * 2.0f;
+    r.m[2][1] = (xw + yz) * 2.0f;
+    r.m[2][2] = 1.0f - (yy + xx) * 2.0f;
+
+    matrix_3x3_s009c_32c0 rot;
+    for (int i = 0; i < 3; ++i) {
+        rot.m[0][i] = r.m[0][i];
+        rot.m[1][i] = r.m[1][i];
+        rot.m[2][i] = r.m[2][i];
+    }
+    out.first = rot;
+    out.second = t;
+}
+}
+// ---- items of slice s009c32c0 end
+
 // ---- items of slice s009c4a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace nSPCreatureAnim {
 struct creature_instance_data_s009c_4a30;
@@ -381,6 +1315,11 @@ int __cdecl FUN_009b3460(int obj)
 
 
 
+
+
+
+
+
 // @ 0x009b3920
 namespace nSPCreatureAnim {
 void TargetFrame::Set(const float* a, const float* b)
@@ -394,6 +1333,11 @@ void TargetFrame::Set(const float* a, const float* b)
   posB[3] = b[3];
 }
 }  // namespace nSPCreatureAnim
+
+
+
+
+
 
 
 
@@ -430,6 +1374,11 @@ CopyBlock& CopyBlock::operator=(const CopyBlock& src)
 
 
 
+
+
+
+
+
 // @ 0x009b3bc0
 namespace nSPCreatureAnim {
 void __cdecl FUN_009b3bc0(int obj)
@@ -439,6 +1388,11 @@ void __cdecl FUN_009b3bc0(int obj)
     p[i] = 0.0f;
 }
 }  // namespace nSPCreatureAnim
+
+
+
+
+
 
 
 
@@ -465,6 +1419,110 @@ Transform30& Transform30::operator=(const Transform30& src)
   return *this;
 }
 }  // namespace nSPCreatureAnim
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x009b6450
+bool RayCastParts(const float* org, const float* dir, RC::Owner* obj, unsigned* pIndex, float* pT, float* pHit, float* pNormal)
+{
+  float bestT = FLT_MAX;
+  float bestN[3] = {0.0f, 0.0f, 0.0f};
+  float dx = org[0] - obj->mPos[0];
+  float qd = obj->mQuat[3];
+  float qc = obj->mQuat[2];
+  float qb = obj->mQuat[1];
+  float dy = org[1] - obj->mPos[1];
+  float dz = org[2] - obj->mPos[2];
+  float qa = obj->mQuat[0];
+  float lo[3];
+  float ld[3];
+  unsigned bestIdx = 0xffffffff;
+
+  lo[0] = (((qc * qa + -(qb * qd)) * dz + (qb * qa - -(qc * qd)) * dy) + (-(qc * qc) + -(qb * qb)) * dx) * 2.0f + dx;
+  lo[1] = (((qc * qb - -(qa * qd)) * dz + (-(qc * qc) + -(qa * qa)) * dy) + (qb * qa + -(qc * qd)) * dx) * 2.0f + dy;
+  lo[2] = (((-(qb * qb) + -(qa * qa)) * dz + (qc * qb + -(qa * qd)) * dy) + (qc * qa - -(qb * qd)) * dx) * 2.0f + dz;
+
+  float e0 = dir[0], e1 = dir[1], e2 = dir[2];
+  qb = obj->mQuat[1];
+  qd = obj->mQuat[3];
+  qa = obj->mQuat[0];
+  qc = obj->mQuat[2];
+  ld[0] = (((-(qc * qc) + -(qb * qb)) * e0 + (qc * qa + -(qb * qd)) * e2) + (qb * qa - -(qc * qd)) * e1) * 2.0f + e0;
+  ld[1] = (((-(qc * qc) + -(qa * qa)) * e1 + (qb * qa + -(qc * qd)) * e0) + (qc * qb - -(qa * qd)) * e2) * 2.0f + e1;
+  ld[2] = (((qc * qa - -(qb * qd)) * e0 + (-(qb * qb) + -(qa * qa)) * e2) + (qc * qb + -(qa * qd)) * e1) * 2.0f + e2;
+
+  unsigned i = 0;
+  if ((obj->mpPartsEnd - obj->mpPartsBegin) != 0) {
+    do {
+      RC::Part* part = &obj->mpPartsBegin[i];
+      float t = FLT_MAX;
+      float n[3] = {0.0f, 0.0f, 0.0f};
+      RC::BoxShape* shape = part->mpShape;
+      float qz = part->mQuat[2];
+      float qy = part->mQuat[1];
+      float qx = part->mQuat[0];
+      float s2 = obj->mScale * 2.0f;
+      float ex = s2 * shape->mHalfExtent[0];
+      float ey = shape->mHalfExtent[1] * s2;
+      float qyz = qz * qy;
+      float ez = shape->mHalfExtent[2] * s2;
+      float qw = part->mQuat[3];
+      float qwy = qw * qy;
+      float m[9];
+      m[0] = 1.0f - (qz * qz + qy * qy) * 2.0f;
+      m[1] = (qy * qx - qw * qz) * 2.0f;
+      m[2] = (qwy + qz * qx) * 2.0f;
+      m[3] = (qw * qz + qy * qx) * 2.0f;
+      m[4] = 1.0f - (qz * qz + qx * qx) * 2.0f;
+      m[5] = (qyz - qw * qx) * 2.0f;
+      m[6] = (qz * qx - qwy) * 2.0f;
+      m[7] = (qw * qx + qyz) * 2.0f;
+      m[8] = 1.0f - (qy * qy + qx * qx) * 2.0f;
+      if (BoxRayTest(lo, ld, part->mCenter, m, ex, ey, ez, &t, n) && t < bestT && 0.0f <= t) {
+        bestT = t;
+        bestIdx = i;
+        float tmp[3];
+        float* r = QuaternionVectorTransform(tmp, obj->mQuat, n);
+        bestN[0] = r[0];
+        bestN[1] = r[1];
+        bestN[2] = r[2];
+      }
+      ++i;
+    } while (i < (unsigned)(obj->mpPartsEnd - obj->mpPartsBegin));
+    if (bestIdx != 0xffffffff) {
+      if (pT) *pT = bestT;
+      if (pNormal) {
+        pNormal[0] = bestN[0];
+        pNormal[1] = bestN[1];
+        pNormal[2] = bestN[2];
+      }
+      if (pHit) {
+        float h1 = dir[1];
+        float h2 = dir[2];
+        float o1 = org[1];
+        float o2 = org[2];
+        pHit[0] = dir[0] * bestT + org[0];
+        pHit[1] = h1 * bestT + o1;
+        pHit[2] = h2 * bestT + o2;
+      }
+      if (pIndex) *pIndex = bestIdx;
+      return true;
+    }
+  }
+  return false;
+}
+
+
+
+
 
 
 
@@ -504,6 +1562,10 @@ void FUN_009b6b10(Vector3* pMin, Vector3* pMax, const cPartOwner* pOwner)
 
 
 
+
+
+
+
 // @ 0x009b77a0
 void FUN_009b77a0(float* param_1, int param_2, int param_3, float* param_4, char* param_5)
 {
@@ -529,6 +1591,11 @@ void FUN_009b77a0(float* param_1, int param_2, int param_3, float* param_4, char
     param_1[1] = param_4[1];
     param_1[2] = param_4[2];
 }
+
+
+
+
+
 
 
 
@@ -599,6 +1666,11 @@ LAB_009b79ca:
 
 
 
+
+
+
+
+
 // @ 0x009b7b10
 char __fastcall FUN_009b7b10(int param_1, int dummy, int param_2, int param_3)
 {
@@ -615,6 +1687,11 @@ char __fastcall FUN_009b7b10(int param_1, int dummy, int param_2, int param_3)
     }
     return uVar3;
 }
+
+
+
+
+
 
 
 
@@ -650,6 +1727,11 @@ void nSPCreatureAnim::creature_instance_data::SetStyleWeightForAllGroups(char co
         } while (iVar4 < *(int*)((char*)this + 0x2f8));
     }
 }
+
+
+
+
+
 
 
 
@@ -747,6 +1829,11 @@ void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
 
 
 
+
+
+
+
+
 // @ 0x009b8250
 void __fastcall FUN_009b8250(int param_1, int dummy, float param_2)
 {
@@ -759,6 +1846,11 @@ void __fastcall FUN_009b8250(int param_1, int dummy, float param_2)
         if (fVar1 < param_2) *(float*)(eax + 0x4c) = param_2 - fVar1;
     }
 }
+
+
+
+
+
 
 
 
@@ -842,6 +1934,11 @@ void __fastcall FUN_009b83b0(int param_1, int dummy, float param_2)
 
 
 
+
+
+
+
+
 // @ 0x009b8650
 void __fastcall FUN_009b8650(int param_1, int dummy, float param_2)
 {
@@ -871,6 +1968,594 @@ void __fastcall FUN_009b8650(int param_1, int dummy, float param_2)
         }
     }
 }
+
+
+
+
+
+
+
+
+// @ 0x009ba990
+namespace nSPCreatureAnim {
+void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSteps, float dt, float t, float rate)
+{
+    goal_def* def = st->def;
+    if (def->bidx >= Bodies.size())
+        return;
+    creature_body_instance_data_s009b_a4c0* bodies = Bodies.mpBegin;
+    creature_body_instance_data_s009b_a4c0* body = &bodies[def->bidx];
+    if (!GoalStateIsActive(this, st, t)) {
+        st->initialized = false;
+        return;
+    }
+
+    checkerlib::vector_3_s009b_a4c0 lpos;
+    checkerlib::vector_4_s009b_a4c0 lrot;
+    if (body->goal.pos_weight > 0.0f && body->goal.rot_weight > 0.0f) {
+        float inv = kOne / body->goal.pos_weight;
+        float px = body->goal.pos.x * inv;
+        float py = body->goal.pos.y * inv;
+        float pz = body->goal.pos.z * inv;
+        inv = kOne / body->goal.rot_weight;
+        float rx = body->goal.rot.x * inv;
+        float ry = body->goal.rot.y * inv;
+        float rz = body->goal.rot.z * inv;
+        float rw = body->goal.rot.w * inv;
+        lpos.x = px; lpos.y = py; lpos.z = pz;
+        lrot.x = rx; lrot.y = ry; lrot.z = rz; lrot.w = rw;
+    } else if (def->parent_bidx == -1) {
+        creature_body_static_data_s009b_a4c0* sd = body->static_data;
+        float s = requested_scale;
+        float px = sd->rest_center__SCALABLE.x * s;
+        float py = sd->rest_center__SCALABLE.y * s;
+        float pz = sd->rest_center__SCALABLE.z * s;
+        lrot = sd->rest_orientation_q;
+        lpos.x = px; lpos.y = py; lpos.z = pz;
+    } else {
+        creature_body_instance_data_s009b_a4c0* parent = &bodies[def->parent_bidx];
+        checkerlib::vector_3_s009b_a4c0 tmp;
+        checkerlib::vector_3_s009b_a4c0* r = checkerlib::QuaternionVectorTransform(&tmp, &parent->orientation, &def->offset);
+        float s = requested_scale;
+        lpos.x = parent->pos.x + r->x * s;
+        lpos.y = parent->pos.y + r->y * s;
+        lpos.z = parent->pos.z + r->z * s;
+        lrot = checkerlib::QuaternionProduct(parent->orientation, def->rot);
+    }
+
+    checkerlib::vector_3_s009b_a4c0 target;
+    {
+        checkerlib::vector_3_s009b_a4c0 tmp;
+        checkerlib::vector_3_s009b_a4c0* r = checkerlib::QuaternionVectorTransform(&tmp, &orientation, &lpos);
+        target.x = position.x + r->x;
+        target.y = position.y + r->y;
+        target.z = position.z + r->z;
+    }
+
+    if (!st->initialized) {
+        GoalStateInit(this, st, 1);
+        st->initialized = true;
+    }
+
+    float maxDist;
+    if (st->def->parent_bidx == -1)
+        maxDist = g_GoalSpringMaxDist;
+    else
+        maxDist = (st->def->max_dist * requested_scale) * kGoalMaxDistScale;
+
+    checkerlib::vector_3_s009b_a4c0 p;
+    p.x = st->pos.x;
+    p.y = st->pos.y;
+    p.z = st->pos.z;
+    if (nSteps > 0) {
+        float maxDist2 = maxDist * maxDist;
+        do {
+            float ax = (target.x - st->pos.x) * g_GoalSpringK - st->vel.x * g_GoalSpringDamp;
+            float az = ((target.z - st->pos.z) * g_GoalSpringK - st->vel.z * g_GoalSpringDamp) + g_GoalGravity;
+            float ay = (target.y - st->pos.y) * g_GoalSpringK - st->vel.y * g_GoalSpringDamp;
+            float vx = st->vel.x + ax * dt;
+            float vz = st->vel.z + az * dt;
+            st->vel.y = ay * dt + st->vel.y;
+            st->vel.z = vz;
+            st->vel.x = vx;
+            p.x = st->vel.x * dt + st->pos.x;
+            p.y = st->pos.y + st->vel.y * dt;
+            p.z = st->pos.z + st->vel.z * dt;
+            float dx = p.x - target.x;
+            float dy = p.y - target.y;
+            float dz = p.z - target.z;
+            float l2 = (dx * dx + dy * dy) + dz * dz;
+            if (l2 > maxDist2) {
+                float inv = 1.0f / sqrtf(l2);
+                float nz = dz * inv;
+                float ny = dy * inv;
+                float nx = inv * dx;
+                p.z = nz * maxDist + target.z;
+                p.x = nx * maxDist + target.x;
+                p.y = ny * maxDist + target.y;
+                float v2 = (st->vel.x * st->vel.x + st->vel.y * st->vel.y) + st->vel.z * st->vel.z;
+                float dot = (st->vel.z * nz + st->vel.y * ny) + st->vel.x * nx;
+                if (v2 > kMinSpeed2 && dot > kZero) {
+                    float f = dot / sqrtf(v2);
+                    float fx = f * st->vel.x;
+                    float fy = st->vel.y * f;
+                    float fz = st->vel.z * f;
+                    st->vel.y = st->vel.y - fy;
+                    st->vel.x = st->vel.x - fx;
+                    st->vel.z = st->vel.z - fz;
+                }
+            }
+            st->prev = st->pos;
+            st->pos.x = p.x;
+            st->pos.y = p.y;
+            st->pos.z = p.z;
+        } while (--nSteps);
+    }
+
+    checkerlib::vector_3_s009b_a4c0 d;
+    d.x = p.x - position.x;
+    d.y = p.y - position.y;
+    d.z = p.z - position.z;
+    checkerlib::vector_3_s009b_a4c0 g = checkerlib::QuaternionVectorTransformInverse(orientation, d);
+    if (g_GoalClampAboveGround != 0 && 0.0f > g.z)
+        g.z = 0.0f;
+
+    if (!(t > body->goal_time) && !st->reset)
+        return;
+    if (st->reset) {
+        body->goal_blend = t * rate;
+        body->goal_time = 0.0f;
+        if (body->goal_blend > 0.0f) {
+            float w = body->goal_blend;
+            body->goal.pos.x = w * g.x;
+            body->goal.pos.y = w * g.y;
+            body->goal.pos.z = w * g.z;
+            body->goal.pos_weight = body->goal_blend;
+            w = body->goal_blend;
+            body->goal.rot.x = w * lrot.x;
+            body->goal.rot.y = w * lrot.y;
+            body->goal.rot.z = w * lrot.z;
+            body->goal.rot.w = w * lrot.w;
+            body->goal.rot_weight = body->goal_blend;
+            MarkBodyGoal(body);
+        }
+        return;
+    }
+    float w = (t - body->goal_time) * rate + body->goal_blend;
+    body->goal_blend = w;
+    if (w > 0.0f) {
+        if (t > body->goal.pos_weight) {
+            body->goal.pos.x = w * g.x + body->goal.pos.x;
+            body->goal.pos.z = w * g.z + body->goal.pos.z;
+            body->goal.pos.y = body->goal.pos.y + w * g.y;
+            body->goal.pos_weight = body->goal.pos_weight + body->goal_blend;
+            MarkBodyGoal(body);
+        }
+        if (t > body->goal.rot_weight) {
+            float b = body->goal_blend;
+            body->goal.rot.x = body->goal.rot.x + b * lrot.x;
+            body->goal.rot.y = b * lrot.y + body->goal.rot.y;
+            body->goal.rot.z = b * lrot.z + body->goal.rot.z;
+            body->goal.rot.w = b * lrot.w + body->goal.rot.w;
+            body->goal.rot_weight = body->goal.rot_weight + body->goal_blend;
+            MarkBodyGoal(body);
+        }
+    }
+}
+}  // namespace nSPCreatureAnim
+
+
+
+
+
+
+
+// @ 0x009bb910
+namespace nSPCreatureAnim {
+void __cdecl FinalizeCreatureGoals(creature_instance_data_s009b_b910* c)
+{
+    goal_pos_rot_s009b_b910& g160 = c->goal_0x160;
+    if (g160.pos_weight > 0.0f)
+    {
+        g160.NormalizePos();
+        g160.pos_weight = 1.0f;
+    }
+
+    goal_pos_rot_s009b_b910& d = c->walk_goal_delta;
+    d.NormalizePos();
+    d.pos += c->requested_pos - c->previous_requested_pos;
+    d.pos_weight = 1.0f;
+
+    goal_pos_rot_s009b_b910& g13c = c->goal_0x13c;
+    g13c.NormalizePos();
+    g13c.pos_weight = 1.0f;
+
+    if (g160.rot_weight > 0.0f)
+    {
+        g160.NormalizeWeightedRot();
+        g160.rot_weight = 1.0f;
+    }
+    else
+    {
+        g160.SetRotIdentity();
+    }
+
+    d.NormalizeRot();
+    d.rot = checkerlib::QuaternionProduct_s009b_b910(checkerlib::QuaternionProductConjugate(c->requested_rot, c->previous_requested_rot), d.rot);
+    d.rot_weight = 1.0f;
+
+    g13c.NormalizeRot();
+    g13c.rot_weight = 1.0f;
+
+    goal_pos_rot_s009b_b910& g118 = c->goal_0x118;
+    g118.NormalizePos();
+    g118.pos_weight = 1.0f;
+    g118.NormalizeRot();
+    g118.rot_weight = 1.0f;
+}
+}  // namespace nSPCreatureAnim
+
+
+
+
+
+
+// @ 0x009bcc70
+namespace nSPCreatureAnim {
+void __cdecl UpdateBodyTransforms(creature_instance_data_s009b_c580* c, float dt)
+{
+    int n = (int)(c->mpEnd - c->mpBegin);
+    for (int i = 0; i != n; ++i) {
+        creature_body_instance_data_s009b_c580* b = &c->mpBegin[i];
+        if (b->blend_active) {
+            checkerlib::vector_3_s009b_c580 moved, zero;
+            const checkerlib::vector_3_s009b_c580* v;
+            if (dt > 1e-06f) {
+                moved = (b->blend_pos - b->center) * (1.0f / dt);
+                v = &moved;
+            } else {
+                zero.x = 0.0f; zero.y = 0.0f; zero.z = 0.0f;
+                v = &zero;
+            }
+            b->velocity = *v;
+            b->center = b->blend_pos;
+            b->orientation = b->blend_rot;
+        } else {
+            b->velocity.x = 0.0f; b->velocity.y = 0.0f; b->velocity.z = 0.0f;
+            creature_body_instance_data_s009b_c580* p = b->parent;
+            if (!p) {
+                b->orientation = b->static_data->orientation;
+                b->center = b->static_data->center * c->requested_scale;
+            } else {
+                creature_body_static_data_s009b_c580* sd = b->static_data;
+                b->orientation = checkerlib::QuaternionProduct_s009b_c580(p->orientation, sd->joint_rotation);
+                checkerlib::vector_3_s009b_c580 a = sd->local_r * c->requested_scale;
+                checkerlib::vector_3_s009b_c580 pr = sd->parent_r * c->requested_scale;
+                checkerlib::vector_3_s009b_c580 ra = checkerlib::QuaternionVectorTransform_s009b_c580(b->orientation, a);
+                checkerlib::vector_3_s009b_c580 rp = checkerlib::QuaternionVectorTransform_s009b_c580(b->parent->orientation, pr);
+                b->center = (b->parent->center + rp) - ra;
+            }
+        }
+    }
+}
+}  // namespace nSPCreatureAnim
+
+
+
+
+
+// @ 0x009bd6f0
+namespace nSPCreatureAnim {
+void FloorBodies(creature_instance_data_s009b_d340* c)
+{
+    if (!c->floor_enabled)
+        return;
+
+    // creature ground plane in creature space
+    checkerlib::vector_3_s009b_d340 normal;
+    checkerlib::QuaternionVectorTransformInverse(&normal, &c->orientation, &c->ground_normal);
+    checkerlib::vector_3_s009b_d340 rel;
+    rel.x = c->ground_pos.x - c->position.x;
+    rel.y = c->ground_pos.y - c->position.y;
+    rel.z = c->ground_pos.z - c->position.z;
+    checkerlib::vector_3_s009b_d340 lground;
+    checkerlib::QuaternionVectorTransformInverse(&lground, &c->orientation, &rel);
+
+    const float scale = c->requested_scale;
+    const unsigned int count = c->Bodies.size();
+    const float planeDist = (lground.z * normal.z + normal.y * lground.y) + normal.x * lground.x;
+
+    for (unsigned int i = 0; i < count; ++i) {
+        creature_body_instance_data_s009b_d340& b = c->Bodies[i];
+        creature_body_static_data_s009b_d340* sd = b.static_data;
+        b.floored_weight = 0.0f;
+        if (sd->floor_height < 0.0f)
+            continue;
+
+        const bool raised = sd->HasCap(2);
+        if (c->static_data->floor_check_caps) {
+            if (sd->HasCap(4))
+                continue;
+            if (sd->HasCap(3))
+                continue;
+        }
+
+        checkerlib::vector_3_s009b_d340 dir;
+        float plane;
+        if (b.known_ground_pos) {
+            dir = b.ground_normal;
+            plane = (b.ground_pos.z * dir.z + b.ground_pos.y * dir.y) + b.ground_pos.x * dir.x;
+        } else {
+            dir = normal;
+            plane = planeDist;
+            if (raised)
+                plane = sd->floor_height * scale + planeDist;
+        }
+
+        float depth = (b.center.z * dir.z + b.center.y * dir.y) + b.center.x * dir.x;
+        if (!(plane > depth))
+            continue;
+
+        float one = 1.0f;
+        float w = (plane - depth) * g_IKFloorWeightRate;
+        const float weight = eastl::min(w, one);
+        b.floored_weight = weight;
+
+        creature_body_instance_data_s009b_d340* parent = b.parent;
+        if (parent != 0 && b.first_child == 0 && !raised && !sd->HasCap(5)) {
+            // keep the joint on the parent's joint, put the center on the plane
+            checkerlib::vector_3_s009b_d340 v, r;
+            v.x = sd->parent_local_joint_r__SCALABLE.x * scale;
+            v.y = sd->parent_local_joint_r__SCALABLE.y * scale;
+            v.z = sd->parent_local_joint_r__SCALABLE.z * scale;
+            const checkerlib::vector_3_s009b_d340* pr = checkerlib::QuaternionVectorTransform(&r, &parent->orientation, &v);
+            checkerlib::vector_3_s009b_d340 joint;
+            joint.x = pr->x + parent->center.x;
+            joint.y = pr->y + parent->center.y;
+            joint.z = pr->z + parent->center.z;
+
+            if (parent->floored_weight > 0.0f) {
+                checkerlib::vector_3_s009b_d340 v2, r2;
+                v2.x = sd->ik_joint_r__SCALABLE.x * scale;
+                v2.y = sd->ik_joint_r__SCALABLE.y * scale;
+                v2.z = sd->ik_joint_r__SCALABLE.z * scale;
+                const checkerlib::vector_3_s009b_d340* pr2 = checkerlib::QuaternionVectorTransform(&r2, &b.orientation, &v2);
+                const float inv = 1.0f - weight;
+                joint.x = (b.center.x + pr2->x) * inv + joint.x * weight;
+                joint.y = (b.center.y + pr2->y) * inv + joint.y * weight;
+                joint.z = (b.center.z + pr2->z) * inv + joint.z * weight;
+            }
+
+            checkerlib::vector_3_s009b_d340 v3, r3;
+            v3.x = sd->ik_joint_r__SCALABLE.x * scale;
+            v3.y = sd->ik_joint_r__SCALABLE.y * scale;
+            v3.z = sd->ik_joint_r__SCALABLE.z * scale;
+            const checkerlib::vector_3_s009b_d340* pr3 = checkerlib::QuaternionVectorTransform(&r3, &b.orientation, &v3);
+            checkerlib::vector_3_s009b_d340 arm;   // joint -> center
+            arm.x = -pr3->x;
+            arm.y = -pr3->y;
+            arm.z = -pr3->z;
+            const float armLen2 = (arm.y * arm.y + arm.z * arm.z) + arm.x * arm.x;
+            if (armLen2 > 0.0f) {
+                const float k = ((arm.z + joint.z) * dir.z + (arm.y + joint.y) * dir.y) + (arm.x + joint.x) * dir.x;
+                checkerlib::vector_3_s009b_d340 proj;
+                proj.x = dir.x * k;
+                proj.y = dir.y * k;
+                proj.z = dir.z * k;
+                checkerlib::vector_3_s009b_d340 a;
+                a.x = (dir.x * plane + arm.x) - proj.x;
+                float ay = dir.y * plane + arm.y;
+                a.y = ay - proj.y;
+                a.z = (dir.z * plane + arm.z) - proj.z;
+                const float m = (arm.z * dir.z + arm.y * dir.y) + arm.x * dir.x;
+                checkerlib::vector_3_s009b_d340 bv;
+                bv.x = arm.x - dir.x * m;
+                bv.y = arm.y - dir.y * m;
+                bv.z = arm.z - dir.z * m;
+                const float bb = (bv.x * bv.x + bv.y * bv.y) + bv.z * bv.z;
+                const float ab = (bv.z * a.z + bv.y * a.y) + bv.x * a.x;
+                const float aa = (a.y * a.y + a.z * a.z) + a.x * a.x;
+                const float disc = ab * ab - (aa - armLen2) * bb;
+                float root;
+                if (disc > 0.0f)
+                    root = sqrtf(disc);
+                else
+                    root = 0.0f;
+                const float t = (float)(((double)root - ab) / (bb + 1e-08));
+                checkerlib::vector_3_s009b_d340 newArm;
+                newArm.x = bv.x * t + a.x;
+                newArm.y = bv.y * t + a.y;
+                newArm.z = bv.z * t + a.z;
+                b.center.x = newArm.x + joint.x;
+                b.center.y = newArm.y + joint.y;
+                b.center.z = newArm.z + joint.z;
+                checkerlib::vector_4_s009b_d340 q, qr;
+                b.orientation = *checkerlib::QuaternionProduct(&qr, QuaternionFromTwoVectors(&q, &arm, &newArm, 0),
+                                                   &b.orientation);
+            }
+        } else {
+            // tilt the body's up axis towards the plane normal, then put it on the plane
+            const checkerlib::vector_4_s009b_d340& o = b.orientation;
+            checkerlib::vector_3_s009b_d340 up;
+            up.x = (o.x * o.z + o.y * o.w) * 2.0f;
+            up.y = (o.z * o.y - o.x * o.w) * 2.0f;
+            up.z = 1.0f - (o.x * o.x + o.y * o.y) * 2.0f;
+            if ((up.x * dir.x + up.z * dir.z) + up.y * dir.y < 0.0f) {
+                up.x = -up.x;
+                up.y = -up.y;
+                up.z = -up.z;
+            }
+            checkerlib::vector_4_s009b_d340 arc;
+            const checkerlib::vector_4_s009b_d340* pa = QuaternionFromTwoVectors(&arc, &up, &dir, 0);
+            checkerlib::vector_4_s009b_d340 s;
+            s.x = pa->x * weight;
+            s.y = pa->y * weight;
+            s.z = pa->z * weight;
+            const float sw = pa->w * weight;
+            s.w = (sw < 0.0f ? weight - 1.0f : 1.0f - weight) + sw;
+            const checkerlib::vector_4_s009b_d340 r = checkerlib::Normalize(s, 0);
+
+            const float qx = b.orientation.x, qy = b.orientation.y;
+            const float qz = b.orientation.z, qw = b.orientation.w;
+            const float nx = ((qx * r.w + r.x * qw) - qy * r.z) + qz * r.y;
+            const float ny = ((r.z * qx + qy * r.w) + r.y * qw) - qz * r.x;
+            const float nz = ((r.z * qw - r.y * qx) + qz * r.w) + qy * r.x;
+            const float nw = ((r.w * qw - qx * r.x) - r.y * qy) - qz * r.z;
+            b.orientation.w = nw;
+            b.orientation.x = nx;
+            b.orientation.y = ny;
+            b.orientation.z = nz;
+
+            const float d = depth - plane;
+            b.center.x = b.center.x - dir.x * d;
+            b.center.y = b.center.y - dir.y * d;
+            b.center.z = b.center.z - dir.z * d;
+        }
+        b.floored = true;
+    }
+}
+}  // namespace nSPCreatureAnim
+
+
+
+
+// @ 0x009bfc20
+namespace nSPCreatureAnim {
+void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s009b_fc20* outPos, checkerlib::vector_4_s009b_fc20* outRot, creature_instance_data_s009b_fc20* c, float baseHeight, float rate, bool storeGround)
+{
+    // goal position in creature space
+    checkerlib::vector_3_s009b_fc20 lpos;
+    float s;
+    if (goal_b.pos_weight > 0.0f) {
+        s = 1.0f / goal_b.pos_weight;
+        lpos.x = goal_b.pos.x * s;
+        lpos.y = goal_b.pos.y * s;
+        lpos.z = goal_b.pos.z * s;
+    } else {
+        const checkerlib::vector_3_s009b_fc20& rc = static_data->rest_center__SCALABLE;
+        s = c->requested_scale;
+        lpos.x = rc.x * s;
+        lpos.y = rc.y * s;
+        lpos.z = rc.z * s;
+    }
+    checkerlib::vector_3_s009b_fc20 local;
+    local = lpos;
+
+    // world position
+    checkerlib::vector_3_s009b_fc20 wpos;
+    {
+        checkerlib::vector_3_s009b_fc20 tmp;
+        checkerlib::vector_3_s009b_fc20* r = checkerlib::QuaternionVectorTransform(&tmp, &c->orientation, &local);
+        wpos.x = c->position.x + r->x;
+        wpos.y = r->y + c->position.y;
+        wpos.z = r->z + c->position.z;
+    }
+
+    // world rotation
+    checkerlib::vector_4_s009b_fc20 tmpA, tmpB;
+    const checkerlib::vector_4_s009b_fc20* nrot;
+    if (goal_b.rot_weight > 0.0f)
+        nrot = checkerlib::Normalize(&tmpA, &goal_b.rot, 0);
+    else
+        nrot = checkerlib::Normalize(&tmpB, &static_data->rest_orientation_q, 0);
+    checkerlib::vector_4_s009b_fc20 wrot = QuatMul(c->orientation, *nrot);
+
+    checkerlib::vector_3_s009b_fc20 normal;
+    normal.x = 0.0f;
+    normal.y = 0.0f;
+    normal.z = 0.0f;
+    float height = c->GetGroundHeight(&wpos, &normal);
+    float d = (height - baseHeight) * rate;
+
+    checkerlib::vector_3_s009b_fc20 gpos;
+    gpos.x = c->ground_up.x * d + wpos.x;
+    gpos.y = c->ground_up.y * d + wpos.y;
+    gpos.z = c->ground_up.z * d + wpos.z;
+
+    const checkerlib::vector_3_s009b_fc20& ext = static_data->extent;
+    float ex = ext.x * c->requested_scale;
+    float ey = ext.y * c->requested_scale;
+    float ez = ext.z * c->requested_scale;
+    float size = sqrtf(ex * ex + ey * ey + ez * ez) * 1.3f;
+
+    checkerlib::vector_4_s009b_fc20 grot;
+    if (size > local.z) {
+        float f = 1.0f - SmoothStep(0.0f, size, local.z);
+        checkerlib::vector_4_s009b_fc20 tilt;
+        QuaternionFromTwoVectors(&tilt, &c->ground_up, &normal, 0);
+        if (f < 1.0f) {
+            tilt.x *= f;
+            tilt.y *= f;
+            tilt.z *= f;
+            tilt.w *= f;
+            float g = 1.0f - f;
+            if (tilt.w > 0.0f)
+                tilt.w = g + tilt.w;
+            else
+                tilt.w = tilt.w - g;
+            checkerlib::vector_4_s009b_fc20 tmp;
+            grot = QuatMul(*checkerlib::Normalize(&tmp, &tilt, 0), wrot);
+        } else {
+            grot = QuatMul(tilt, wrot);
+        }
+    } else {
+        grot = wrot;
+    }
+
+    if (storeGround) {
+        checkerlib::vector_3_s009b_fc20 up;
+        c->GetGroundUp(&up, &wpos);
+        float dot = (up.x * wpos.x + up.z * wpos.z) + up.y * wpos.y;
+        float r = static_data->rest_center__SCALABLE.z * c->requested_scale;
+        checkerlib::vector_3_s009b_fc20 gp;
+        gp.x = (((wpos.x - up.x * dot) + up.x * height) + normal.x * r) - c->position.x;
+        gp.y = (((wpos.y - up.y * dot) + up.y * height) + normal.y * r) - c->position.y;
+        gp.z = (((wpos.z - up.z * dot) + up.z * height) + normal.z * r) - c->position.z;
+        checkerlib::vector_3_s009b_fc20 tmp;
+        ground_pos = *checkerlib::QuaternionVectorTransformInverse(&tmp, &c->orientation, &gp);
+        ground_normal = *checkerlib::QuaternionVectorTransformInverse(&tmp, &c->orientation, &normal);
+        known_ground_pos = true;
+    }
+
+    checkerlib::vector_3_s009b_fc20 delta;
+    delta.x = gpos.x - c->position.x;
+    delta.y = gpos.y - c->position.y;
+    delta.z = gpos.z - c->position.z;
+    *outPos = InvRotate(c->orientation, delta);
+    *outRot = QuatConjMul(c->orientation, grot);
+}
+}  // namespace nSPCreatureAnim
+
+
+
+// @ 0x009c1f60
+namespace nSPCreatureAnim {
+creature_static_data_s009c_1f60::creature_static_data_s009c_1f60()
+{
+    Bodies.mpBegin = 0;
+    Bodies.mpEnd = 0;
+    Bodies.mpCapacity = 0;
+    mUnk398.mpBegin = 0;
+    mUnk398.mpEnd = 0;
+    mUnk398.mpCapacity = 0;
+    skin_colors[0].x = skin_colors[0].y = skin_colors[0].z = 0.0f;
+    skin_colors[1].x = skin_colors[1].y = skin_colors[1].z = 0.0f;
+    skin_colors[2].x = skin_colors[2].y = skin_colors[2].z = 0.0f;
+    mWiggles.mpBegin = 0;
+    mWiggles.mpEnd = 0;
+    mWiggles.mpCapacity = 0;
+    local_aabb_origin.x = local_aabb_origin.y = local_aabb_origin.z = 0.0f;
+    mUnk3cc.mpBegin = 0;
+    mUnk3cc.mpEnd = 0;
+    mUnk3cc.mpCapacity = 0;
+    local_aabb_extent.x = local_aabb_extent.y = local_aabb_extent.z = 0.0f;
+    inv_bone_rest_xforms.mpBegin = 0;
+    inv_bone_rest_xforms.mpEnd = 0;
+    inv_bone_rest_xforms.mpCapacity = 0;
+    RefCount = 0;
+    Clear(1);
+}
+}  // namespace nSPCreatureAnim
 
 
 
@@ -971,6 +2656,388 @@ int creature_static_data_s009c_1f60::Release()
 }
 }  // namespace nSPCreatureAnim
 
+
+// @ 0x009c32c0
+namespace nSPCreatureAnim {
+bool ComputeHierarchy(creature_static_data_s009c_32c0* c, uint32_s009c_32c0 target)
+{
+    if (c->Bodies.mpBegin == c->Bodies.mpEnd)
+        return false;
+    if (target >= c->Bodies.size())
+        return false;
+    if (!(c->Bodies[target].owned_cap_flags & kCapSpine))
+        return false;
+    if (c->Bodies[target].parent_bidx != -1)
+        return false;
+
+    // Trailing bodies without a bone don't count as bones.
+    c->num_bones = c->Bodies.size();
+    while (c->num_bones != 0 && c->Bodies[c->num_bones - 1].bone_idx == (uint32_s009c_32c0)-1)
+        c->num_bones--;
+
+    // Spines carrying the most feet (counted at the nearest spine ancestor of each foot).
+    index_vector bestSpines;
+    uint32_s009c_32c0 zero = 0;
+    index_vector footCounts(c->Bodies.size(), zero);
+    int rootCapBody = -1;
+    {
+        uint32_s009c_32c0 maxFeet = 0;
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            if (b.cap_flags & kCapRoot) {
+                rootCapBody = i;
+                break;
+            }
+            if (b.owned_cap_flags & kCapFoot) {
+                uint32_s009c_32c0 spine = b.parent_bidx;
+                while (spine != (uint32_s009c_32c0)-1 && !(c->Bodies[spine].owned_cap_flags & kCapSpine))
+                    spine = c->Bodies[spine].parent_bidx;
+                footCounts[spine]++;
+                uint32_s009c_32c0 feet = footCounts[spine];
+                if (feet > maxFeet) {
+                    bestSpines.resize(0);
+                    maxFeet = feet;
+                    bestSpines.push_back(spine);
+                } else if (feet == maxFeet) {
+                    bestSpines.push_back(spine);
+                }
+            }
+        }
+    }
+
+    // Inverse bone rest transforms, last spine index and symmetry links.
+    c->spine_end_bidx = 0;
+    c->spine_start_bidx = 0;
+    c->inv_bone_rest_xforms.resize(c->num_bones);
+    {
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            uint32_s009c_32c0 bone = b.bone_idx;
+            if (bone < c->num_bones)
+                ComputeInverseRestXform(b, c->inv_bone_rest_xforms.mpBegin[bone]);
+
+            if (b.owned_cap_flags & kCapSpine)
+                c->spine_end_bidx = eastl::max(c->spine_end_bidx, (uint32_s009c_32c0)i);
+
+            if (b.symmetric_bidx == -2) {
+                vector_3_s009c_32c0 mirrored;
+                mirrored.x = -b.rest_center.x;
+                mirrored.y = b.rest_center.y;
+                mirrored.z = b.rest_center.z;
+                unsigned j;
+                for (j = 0; j < n; ++j) {
+                    if (i == j)
+                        continue;
+                    creature_body_static_data_s009c_32c0& o = c->Bodies[j];
+                    double dx = (double)o.rest_center.x - mirrored.x;
+                    double dy = (double)o.rest_center.y - mirrored.y;
+                    double dz = (double)o.rest_center.z - mirrored.z;
+                    if (!((dz * dz + dy * dy) + dx * dx < 1e-05))
+                        continue;
+                    unsigned k;
+                    for (k = 0; k < 32; ++k) {
+                        if (b.NameFOURCCs[k] == 0)
+                            break;
+                        if (b.NameFOURCCs[k] != o.NameFOURCCs[k])
+                            break;
+                    }
+                    if (k < 32 && b.NameFOURCCs[k] != 0)
+                        continue;   // caps differ
+                    b.symmetric_bidx = j;
+                    break;
+                }
+                if (j == n)
+                    b.symmetric_bidx = -1;
+            }
+        }
+    }
+
+    // Choose the root.
+    int root = -1;
+    if (g_bRootAtClosestSpine) {
+        float best = 3.402823466e+38f;
+        int n = (int)c->Bodies.size();
+        for (int i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            if (b.owned_cap_flags & kCapSpine) {
+                const vector_3_s009c_32c0& p = b.rest_center;
+                float d = (p.x * p.x + p.y * p.y) + p.z * p.z;
+                if (d < best) {
+                    best = d;
+                    root = i;
+                }
+            }
+        }
+    }
+    if (root == -1)
+        root = rootCapBody;
+
+    bool legless = bestSpines.empty();
+    c->mIsLegless = legless;
+    if (root == -1) {
+        if (!legless) {
+            // The highest spine among those carrying the most feet.
+            float bestY = -3.402823466e+38f;
+            unsigned count = bestSpines.size();
+            for (unsigned k = 0; k < count; ++k) {
+                uint32_s009c_32c0 idx = bestSpines[k];
+                float y = c->Bodies[idx].rest_center.y;
+                if (y > bestY) {
+                    bestY = y;
+                    root = idx;
+                }
+            }
+        } else {
+            root = 0;
+            if (g_bRootAtMidSpine) {
+                index_vector spines;
+                unsigned n = c->Bodies.size();
+                for (uint32_s009c_32c0 i = 0; i < n; ++i)
+                    if (c->Bodies[i].owned_cap_flags & kCapSpine)
+                        spines.push_back(i);
+                unsigned numSpines = spines.size();
+                if (numSpines > 2) {
+                    // Child-spine counts; walk up half the spine count from a spine end.
+                    index_vector childSpines;
+                    childSpines.resize(n);
+                    for (unsigned i = 0; i < n; ++i) {
+                        creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+                        int p = b.parent_bidx;
+                        if (p != -1 && (b.owned_cap_flags & kCapSpine))
+                            childSpines[p]++;
+                    }
+                    for (unsigned k = 0; k < numSpines; ++k) {
+                        uint32_s009c_32c0 idx = spines[k];
+                        if (childSpines[idx] == 0) {
+                            if (idx != (uint32_s009c_32c0)-1) {
+                                for (unsigned steps = 0; steps < (numSpines >> 1); ++steps) {
+                                    idx = c->Bodies[idx].parent_bidx;
+                                    if (idx == (uint32_s009c_32c0)-1)
+                                        break;
+                                }
+                                if (idx != (uint32_s009c_32c0)-1)
+                                    root = idx;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    creature_body_static_data_s009c_32c0& rb = c->Bodies[root];
+    if (!(rb.owned_cap_flags & kCapSpine))
+        return false;
+
+    // Give the root a "root" cap and recompute its cap flags.
+    for (unsigned k = 0; k < 32; ++k) {
+        if (rb.NameFOURCCs[k] == kCapNameRoot) {
+            rb.Values[k] = 1;
+            break;
+        }
+        if (rb.NameFOURCCs[k] == 0) {
+            rb.NameFOURCCs[k] = kCapNameRoot;
+            rb.Values[k] = 1;
+            break;
+        }
+    }
+    rb.owned_cap_flags = 0;
+    rb.cap_flags = 0;
+    for (unsigned k = 0; k < 32; ++k) {
+        uint32_s009c_32c0 capName = rb.NameFOURCCs[k];
+        if (capName == 0)
+            break;
+        uint32_s009c_32c0 flag = CapFlagFromName(capName);
+        rb.cap_flags |= flag;
+        if (rb.Values[k])
+            rb.owned_cap_flags |= flag;
+    }
+
+    // Re-root: reverse the parent chain from the new root, moving the joint vectors along.
+    if ((uint32_s009c_32c0)root != target) {
+        vector_3_s009c_32c0 carriedLocal = rb.parent_local_joint_r;
+        vector_3_s009c_32c0 carriedParent = rb.local_joint_r;
+        int prev = -1;
+        for (int idx = root; idx != -1;) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[idx];
+            int next = b.parent_bidx;
+            b.parent_bidx = prev;
+            vector_3_s009c_32c0 oldLocal = b.local_joint_r;
+            vector_3_s009c_32c0 oldParent = b.parent_local_joint_r;
+            b.local_joint_r = carriedLocal;
+            b.parent_local_joint_r = carriedParent;
+            if (b.cap_flags & kCapSpine) {
+                b.joint_r.x = b.local_joint_r.x - b.rest_joint_offset.x;
+                b.joint_r.y = b.local_joint_r.y - b.rest_joint_offset.y;
+                b.joint_r.z = b.local_joint_r.z - b.rest_joint_offset.z;
+            } else {
+                b.joint_r = b.local_joint_r;
+            }
+            b.joint_r_len = (float)sqrt(((double)b.joint_r.x * b.joint_r.x +
+                                         (double)b.joint_r.y * b.joint_r.y) +
+                                        (double)b.joint_r.z * b.joint_r.z);
+            carriedLocal = oldParent;
+            carriedParent = oldLocal;
+            prev = idx;
+            idx = next;
+        }
+        c->Bodies[target].num_children--;
+        rb.num_children++;
+        target = root;
+    }
+    rb.parent_local_joint_r.x = 0.0f;
+    rb.parent_local_joint_r.y = 0.0f;
+    rb.parent_local_joint_r.z = 0.0f;
+    rb.local_joint_r.x = 0.0f;
+    rb.local_joint_r.y = 0.0f;
+    rb.local_joint_r.z = 0.0f;
+    rb.joint_r.x = 0.0f;
+    rb.joint_r.y = 0.0f;
+    rb.joint_r.z = 0.0f;
+    rb.joint_r_len = 0.0f;
+
+    // Hierarchy order: order[0] = root; footCounts is reused as the child-slot table.
+    index_vector order;
+    order.resize(c->Bodies.size());
+    order.resize(1);
+    order[0] = target;
+    index_vector& children = footCounts;
+    children.resize(c->Bodies.size());
+
+    {
+        unsigned n = c->Bodies.size();
+        int nextSlot = 1;
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            b.first_child_bidx = nextSlot;
+            nextSlot += b.num_children;
+            b.num_children = 0;
+        }
+    }
+    {
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            int p = c->Bodies[i].parent_bidx;
+            if (p == -1)
+                continue;
+            creature_body_static_data_s009c_32c0& parent = c->Bodies[p];
+            uint32_s009c_32c0 slot = parent.num_children + parent.first_child_bidx;
+            children[slot] = i;
+            uint32_s009c_32c0 numChildren = parent.num_children;
+            if (numChildren && (c->Bodies[i].cap_flags & kCapSpine)) {
+                // Keep a spine child first (for the root, second if a spine is already first).
+                if (parent.parent_bidx == -1) {
+                    uint32_s009c_32c0& first = children[parent.first_child_bidx];
+                    if (!(c->Bodies[first].cap_flags & kCapSpine))
+                        eastl::swap(children[slot], first);
+                    else if (numChildren > 1)
+                        eastl::swap((&first)[1], children[slot]);
+                } else {
+                    eastl::swap(children[slot], children[parent.first_child_bidx]);
+                }
+            }
+            parent.num_children++;
+        }
+    }
+
+    BuildHierarchyOrder(c, &order, &children, target);
+
+    // Copy the bodies into hierarchy order, remapping indices and rebuilding relative rotations.
+    body_vector_s009c_32c0 sorted(c->Bodies.size(), eastl::sp_vector_allocator_s009c_32c0());
+    {
+        unsigned n = c->Bodies.size();
+        bool startRemapped = false;
+        bool endRemapped = false;
+        for (unsigned k = 0; k < n; ++k) {
+            uint32_s009c_32c0 src = order[k];
+            creature_body_static_data_s009c_32c0& old = c->Bodies[src];
+            creature_body_static_data_s009c_32c0& nb = sorted[k];
+            nb.CopyFrom(old);
+            nb.bidx = k;
+            old.parent_bidx = k;   // old index -> new index, used for the remaps below
+            if (nb.parent_bidx != -1) {
+                nb.parent_bidx = c->Bodies[nb.parent_bidx].parent_bidx;
+                const vector_4_s009c_32c0& pq = sorted[nb.parent_bidx].rest_orientation_q;
+                const vector_4_s009c_32c0& q = nb.rest_orientation_q;
+                vector_4_s009c_32c0& r = nb.rest_parent_rel_orientation_q;
+                r.x = ((q.x * pq.w - q.w * pq.x) + q.y * pq.z) - q.z * pq.y;
+                r.y = ((q.y * pq.w - q.w * pq.y) - q.x * pq.z) + q.z * pq.x;
+                r.z = ((q.x * pq.y - q.w * pq.z) - q.y * pq.x) + q.z * pq.w;
+                r.w = ((q.y * pq.y + q.x * pq.x) + q.w * pq.w) + q.z * pq.z;
+            }
+            if (!startRemapped && c->spine_start_bidx == src) {
+                c->spine_start_bidx = k;
+                startRemapped = true;
+            }
+            if (!endRemapped && c->spine_end_bidx == src) {
+                c->spine_end_bidx = k;
+                endRemapped = true;
+            }
+        }
+    }
+    {
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& nb = sorted[i];
+            if ((uint32_s009c_32c0)nb.symmetric_bidx < n)
+                nb.symmetric_bidx = c->Bodies[nb.symmetric_bidx].parent_bidx;
+        }
+    }
+    c->Bodies.swap(sorted);
+
+    if (!c->mIsLegless) {
+        AddExtraBonesAsNecessary(c, c->spine_start_bidx);
+        AddExtraBonesAsNecessary(c, c->spine_end_bidx);
+    }
+
+    // Parent / first-child pointers.
+    {
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            b.parent = i ? &c->Bodies[b.parent_bidx] : 0;
+            b.first_child = b.num_children ? &c->Bodies[b.first_child_bidx] : 0;
+            b.in_leg_chain = false;
+        }
+    }
+    // Workspace radius: parent's radius plus the padded distance to the parent.
+    {
+        unsigned n = c->Bodies.size();
+        for (unsigned i = 0; i < n; ++i) {
+            creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+            if (i == 0) {
+                b.workspace_radius = 3.0f;
+                continue;
+            }
+            float base = (b.parent_bidx == 0) ? 0.0f : b.parent->workspace_radius;
+            const vector_3_s009c_32c0& pc = b.parent->rest_center;
+            double dx = (double)pc.x - b.rest_center.x;
+            float dy = pc.y - b.rest_center.y;
+            float dz = pc.z - b.rest_center.z;
+            double len = sqrt(((double)dy * dy + (double)dz * dz) + dx * dx);
+            b.workspace_radius =
+                (float)(((g_WorkspaceRadiusPad + 1.0) * len) * g_WorkspaceRadiusScale + base);
+        }
+    }
+    // Leg chains: a body with a foot below it (or a foot itself) marks its parent.
+    for (int i = (int)c->Bodies.size() - 1; i >= 0; --i) {
+        creature_body_static_data_s009c_32c0& b = c->Bodies[i];
+        if (b.in_leg_chain || (b.cap_flags & kCapFoot)) {
+            b.in_leg_chain = true;
+            if (b.parent)
+                b.parent->in_leg_chain = true;
+        } else {
+            b.in_leg_chain = false;
+        }
+    }
+
+    ComputeBodyStatics(c);
+    return true;
+}
+}  // namespace nSPCreatureAnim
 
 // @ 0x009c4b90
 namespace nSPCreatureAnim {

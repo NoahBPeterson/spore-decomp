@@ -16,7 +16,6 @@
 #include "SP/cSPPlayModeAnimation.h"
 #include "SP/cSPPlayModeBGMgr.h"
 #include "SP/cSPPlayModeSubModeAction.h"
-#include "SP/cSPPlayModeSubModeBase.h"
 #include "SP/cSPPlayModeSubModeDance.h"
 #include "SP/cSPPlayModeSubModeMovie.h"
 #include "SP/cSPPlayModeSubModePhoto.h"
@@ -29,14 +28,14 @@
 
 class hkRigidBody;
 namespace EA { namespace Swarm { class cIVisualEffect; } }
-namespace SP { class cAppModeEditorBase; class cCreatureCameraBase; class cIModelWorld; class cPropertyList; class cSPCasual_Path; class cSPPlayModeUI; class cSPPlayMode_Creature; struct cAnimatingCreature; struct cMWModel; struct cTexturePreload; }
+namespace SP { class cAppModeEditorBase; class cCreatureCameraBase; class cIModelWorld; class cPropertyList; class cSPCasual_Path; class cSPPlayModeSubModeBase; class cSPPlayModeUI; class cSPPlayMode_Creature; struct cAnimatingCreature; struct cMWModel; struct cTexturePreload; }
 
 namespace SP {
 
-// dev size 0x14a0 -> retail size 0x1660 (3 members exact-backed, 3 conflicts, 0 retail-only, 57 unverified)
-// evidence: view s00627d50 (size 0x36e4, 3 shared members) rejected: shifts [-3, 8, 8372]
+// dev size 0x14a0 -> retail size 0x36d8 (3 members exact-backed, 3 conflicts, 0 retail-only, 57 unverified)
 // evidence: view s00637f80 is the evidence: 2 of 3 shared members agree with the re-laid offsets, 2 byte-exact users, shifts [-4, 0], declared size 0x54
 // evidence: view s00628d50 agrees (3 shared)
+// evidence: view s00627d50 agrees (3 shared); disagrees on mBabyPhotoMode 0x4e
 // evidence: conflict: mBabyCelebratingChangeTime re-laid 0x44, view has 0x40
 // evidence: conflict: view member mSleepB1e at 0x1e overlaps a re-laid member
 // evidence: conflict: view member mSleepB1f at 0x1f overlaps a re-laid member
@@ -187,31 +186,31 @@ class cSPPlayMode : public EA::RefCountVTemplate<int> /* +0x0 */, public EA::Mes
   SP::cSPPlayModeSubModePhoto mPhotoMode;                      // 0x1d0 (dev 0x1c0) relaid
   SP::cSPPlayModeSubModeDance mDanceMode;                      // 0x1180 (dev 0xfd8) relaid
   SP::cSPPlayModeSubModeMovie mMovieMode;                      // 0x11f0 (dev 0x1048) relaid
-  SP::cSPPlayModeAnimation mAnimation;                         // 0x14d4 (dev 0x132c) relaid
-  SP::cAppModeEditorBase* mEditorBaseMode;                     // 0x1560 (dev 0x13b4) relaid
-  SP::cSPPlayModeBGMgr mBackGroundMgr;                         // 0x1564 (dev 0x13b8) relaid
-  EA::AutoRefCount<SP::cMWModel> mCollisionEnvironment;        // 0x15ac (dev 0x13fc) relaid
-  unsigned int mCollisionBG_GUID;                              // 0x15b0 (dev 0x1400) relaid
-  float mTransitionScale;                                      // 0x15b4 (dev 0x1404) relaid
-  eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator> mFlowerList; // 0x15b8 (dev 0x1408) relaid
-  eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator> mStickList; // 0x15cc (dev 0x1418) relaid
-  eastl::vector<hkRigidBody *,eastl::sp_vector_allocator> mHavokRigidBodyList; // 0x15e0 (dev 0x1428) relaid
-  eastl::vector<hkRigidBody *,eastl::sp_vector_allocator> mHavokRigidBodyList_Creatures; // 0x15f4 (dev 0x1438) relaid
-  SP::cIModelWorld* mModelWorld;                               // 0x1608 (dev 0x1448) relaid
-  unsigned int mBeachBGEffectID;                               // 0x160c (dev 0x144c) relaid
-  unsigned int mPlayModeEntryEffectID;                         // 0x1610 (dev 0x1450) relaid
-  unsigned int mPlayModeDefaultEffectID;                       // 0x1614 (dev 0x1454) relaid
-  unsigned int mCrossFadeEffectID;                             // 0x1618 (dev 0x1458) relaid
-  unsigned char mCurrentNumberOfBabies;                        // 0x161c (dev 0x145c) relaid
-  unsigned int mLastEnvReactAnimID;                            // 0x1620 (dev 0x1460) relaid
-  unsigned int mBabyIDs[3];                                    // 0x1624 (dev 0x1464) relaid
-  unsigned int mBabyTurnWinIDs[3];                             // 0x1630 (dev 0x1470) relaid
-  EA::Stopwatch mAnimationTrayTimer;                           // 0x1640 (dev 0x1480) relaid
-  bool mbWaitToOpenAnimationTray;                              // 0x1658 (dev 0x1498) relaid
-  bool mbCapturingGIF;                                         // 0x1659 (dev 0x1499) relaid
+  SP::cSPPlayModeAnimation mAnimation;                         // 0x3550 (dev 0x132c) relaid
+  SP::cAppModeEditorBase* mEditorBaseMode;                     // 0x35dc (dev 0x13b4) relaid
+  SP::cSPPlayModeBGMgr mBackGroundMgr;                         // 0x35e0 (dev 0x13b8) relaid
+  EA::AutoRefCount<SP::cMWModel> mCollisionEnvironment;        // 0x3628 (dev 0x13fc) relaid
+  unsigned int mCollisionBG_GUID;                              // 0x362c (dev 0x1400) relaid
+  float mTransitionScale;                                      // 0x3630 (dev 0x1404) relaid
+  eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator> mFlowerList; // 0x3634 (dev 0x1408) relaid
+  eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator> mStickList; // 0x3648 (dev 0x1418) relaid
+  eastl::vector<hkRigidBody *,eastl::sp_vector_allocator> mHavokRigidBodyList; // 0x365c (dev 0x1428) relaid
+  eastl::vector<hkRigidBody *,eastl::sp_vector_allocator> mHavokRigidBodyList_Creatures; // 0x3670 (dev 0x1438) relaid
+  SP::cIModelWorld* mModelWorld;                               // 0x3684 (dev 0x1448) relaid
+  unsigned int mBeachBGEffectID;                               // 0x3688 (dev 0x144c) relaid
+  unsigned int mPlayModeEntryEffectID;                         // 0x368c (dev 0x1450) relaid
+  unsigned int mPlayModeDefaultEffectID;                       // 0x3690 (dev 0x1454) relaid
+  unsigned int mCrossFadeEffectID;                             // 0x3694 (dev 0x1458) relaid
+  unsigned char mCurrentNumberOfBabies;                        // 0x3698 (dev 0x145c) relaid
+  unsigned int mLastEnvReactAnimID;                            // 0x369c (dev 0x1460) relaid
+  unsigned int mBabyIDs[3];                                    // 0x36a0 (dev 0x1464) relaid
+  unsigned int mBabyTurnWinIDs[3];                             // 0x36ac (dev 0x1470) relaid
+  EA::Stopwatch mAnimationTrayTimer;                           // 0x36b8 (dev 0x1480) relaid
+  bool mbWaitToOpenAnimationTray;                              // 0x36d0 (dev 0x1498) relaid
+  bool mbCapturingGIF;                                         // 0x36d1 (dev 0x1499) relaid
 };
 #pragma pack(pop)
-// sizeof(cSPPlayMode) expected 0x1660 (unverified)
+// sizeof(cSPPlayMode) expected 0x36d8 (unverified)
 
 }  // namespace SP
 

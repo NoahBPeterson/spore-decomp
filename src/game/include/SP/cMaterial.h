@@ -4,7 +4,8 @@
 #define GAME_SP_CMATERIAL_H
 #include "game/types.h"
 #include "game/typedefs.h"
-#include "rw/graphics/CompiledState.h"
+
+namespace rw { namespace graphics { class CompiledState; } }
 
 namespace SP {
 
