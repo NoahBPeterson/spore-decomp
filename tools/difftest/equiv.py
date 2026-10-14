@@ -1144,7 +1144,8 @@ class Runner:
         o["fpu_depth"] = (8 - top) % 8
         o["st0"] = uc.reg_read(UC_X86_REG_FP0 + top) if o["fpu_depth"] else None
         # fpcw is only *observed* here; the control word is *set* in machine.py's session-init stub
-        # (see the 0x027F note there, and docs/tickets.md P3).
+        # (default 0x007F, --fpcw). The mask drops the reserved bits 6-7 and 13-15 only; precision (bits
+        # 8-9) and rounding (bits 10-11) are compared.
         o["fpcw"] = uc.reg_read(UC_X86_REG_FPCW) & 0x1F3F
         o["mxcsr"] = uc.reg_read(UC_X86_REG_MXCSR) & 0xFFC0
         o["xmm0"] = uc.reg_read(UC_X86_REG_XMM0)
@@ -1849,6 +1850,9 @@ def parse_args(argv=None):
     ap.add_argument("--ignore-abi", action="store_true", help="run even if the original reads an undeclared register argument")
     ap.add_argument("--repairs", type=int, default=24, help="fault repairs per input (0 = off)")
     ap.add_argument("--nan", action="store_true", help="also generate NaN/Inf float bit patterns")
+    ap.add_argument("--fpcw", default="%04X" % M.FPCW,
+                    help="x87 control word both sides run under (hex; default %04X = 24-bit D3D device-thread state, "
+                         "027F = CRT 53-bit state of worker threads)" % M.FPCW)
     ap.add_argument("--alias", type=float, default=0.0, help="probability that a generated pointer aliases an argument object")
     ap.add_argument("--mutate", type=float, default=0.6, help="share of inputs mutated from the coverage corpus")
     ap.add_argument("-v", "--verbose", action="store_true")
@@ -1858,6 +1862,7 @@ def parse_args(argv=None):
 
 def main(argv=None):
     opts = parse_args(argv)
+    context()["m"].set_fpcw(int(opts.fpcw, 16))
     sid = opts.slice
     if opts.vas:
         vas = [int(v, 16) for v in opts.vas]

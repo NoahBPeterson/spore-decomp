@@ -72,9 +72,13 @@ def _page(n):
     return (n + 0xFFF) & ~0xFFF
 
 
+FPCW = 0x007F   # x87 control word both sides run under; see _setup_cpu
+
+
 class Machine:
-    def __init__(self, image):
+    def __init__(self, image, fpcw=FPCW):
         self.img = image
+        self.fpcw = fpcw
         uc = self.uc = Uc(UC_ARCH_X86, UC_MODE_32)
         base = image.base
         uc.mem_map(base, image.size, UC_PROT_ALL)
@@ -238,14 +242,14 @@ class Machine:
         uc.mem_write(TLS_ARRAY, arr)
         for i in range(64):
             uc.mem_write(TLS_BLOCKS + 0x1000 * i, tmpl[:0x1000])
-        cw = INIT_CODE + 0x40
-        # NOTE: this loads FPCW = 0x027F (53-bit *double*, the CRT's _PC_53 value). docs/floating_point.md
-        # "FPU precision at runtime" says the emulator must run at 0x007F (24-bit *single*, the D3D
-        # device-thread state) -- the code and the doc disagree. Both sides share this value, so the
-        # `fpcw` observable still matches and precision-sensitive float code can be judged wrongly.
-        # Intended fix (NOT applied here): 0x027F -> 0x007F, or uc.reg_write(UC_X86_REG_FPCW, 0x007F)
-        # after emu_start in reset_cpu(). See docs/tickets.md P3.
-        uc.mem_write(cw, struct.pack("<HI", 0x027F, 0x1F80))
+        cw = self.cw_addr = INIT_CODE + 0x40
+        # x87 control word for both sides, loaded by the session-init stub before every run. The default
+        # FPCW (0x007F: 24-bit single precision, round-to-nearest, exceptions masked) is the state of the
+        # thread that created the D3D device, where the game's simulation and rendering code runs
+        # (docs/floating_point.md "FPU precision at runtime"); the CRT value 0x027F (53-bit) is what worker
+        # threads keep. Until 2026-10-14 this was 0x027F (docs/tickets.md P3): both sides agreed with each
+        # other while rounding differently from the game. Override per run with equiv.py --fpcw.
+        uc.mem_write(cw, struct.pack("<HI", self.fpcw, 0x1F80))
         code = b"\xdb\xe3" + b"\xd9\x2d" + struct.pack("<I", cw) + b"\x0f\xae\x15" + struct.pack("<I", cw + 2)
         uc.mem_write(INIT_CODE, code)
         for n, a in BUILTIN_ADDR.items():
@@ -266,6 +270,11 @@ class Machine:
         for k, v in enumerate(xmm):
             uc.reg_write(UC_X86_REG_XMM0 + k, v)
         uc.reg_write(UC_X86_REG_EFLAGS, 0x202)
+
+    def set_fpcw(self, fpcw):
+        """Change the control word the init stub loads before every run (equiv.py --fpcw)."""
+        self.fpcw = fpcw & 0xFFFF
+        self.uc.mem_write(self.cw_addr, struct.pack("<H", self.fpcw))
 
     # ------------------------------------------------------------------ imports
     def _install_stubs(self):

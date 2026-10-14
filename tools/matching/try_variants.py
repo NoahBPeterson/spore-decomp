@@ -25,11 +25,14 @@ pe = pefile.PE(os.path.join(ROOT, "work/SporeApp.analysis.bin"), fast_load=True)
 res = []
 for name, (si, off) in syms.items():
     sec = secs[si]
-    # NOTE: `mine` runs from this symbol to the END OF THE SECTION, so the diff below also covers
-    # padding and the following functions; `d`/`n` are inflated and a MATCH (d == 0) is unreachable
-    # except for the last symbol in a section. The correct window ends at the next symbol's offset
-    # (the function extent, as cmpobj.py does). Left as-is deliberately -- see docs/tickets.md P3.
-    mine = sec["data"][off:]
+    # The window is this function's extent: up to the next symbol in the same section (one function per
+    # section under /Gy, which /O1 /O2 /Ox imply; /Od without /Gy packs the TU into one .text), minus the
+    # int3 alignment padding cl puts before the next function. Scoring to end-of-section let the following
+    # functions' bytes pollute the ranking (docs/tickets.md P3).
+    nxt = min([o for s, o in syms.values() if s == si and o > off] + [len(sec["data"])])
+    mine = sec["data"][off:nxt]
+    if nxt < len(sec["data"]):
+        mine = mine.rstrip(b"\xcc") or mine
     mask = {v + k - off for v, _, t in sec["relocs"] for k in range(4)}
     orig = pe.get_data(va - pe.OPTIONAL_HEADER.ImageBase, len(mine))
     d = sum(1 for i in range(len(mine)) if i not in mask and mine[i] != orig[i])

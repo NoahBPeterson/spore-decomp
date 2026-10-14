@@ -30,6 +30,7 @@ Neither tool writes anything under `match/`; objects go to `work/difftest/obj/`,
 | `--ulp U` | 0 | tolerate float32 dwords (and an x87 result) within U ulps; reported |
 | `--strict-calls` | off | do not tolerate call-trace differences explained by inlining |
 | `--nan` | off | also generate NaN/Inf float bit patterns |
+| `--fpcw HEX` | 007F | x87 control word both sides run under: 007F is the 24-bit state of the D3D device thread (game simulation/rendering, `floating_point.md`), 027F the CRT 53-bit state of worker threads |
 | `--alias P` | 0 | probability that a generated pointer aliases an argument object |
 | `--repairs N` | 24 | fault repairs per input (0 = off) |
 | `--no-fake-calls` | | discard inputs that call through a generated function pointer |

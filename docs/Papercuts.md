@@ -27,9 +27,11 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   docs/matching.md "Re-mined levers", plus these tooling items. Two widely-reported ones are **already fixed** —
   don't re-report them: the `card.py` malformed-`symbols/slices` crash (`int(p[0],16)`; commit `5038a12f` now
   guards it, and the offending `006ac0a0/-d0` line is gone) and the `run_all.py` lock collision (`954a89d7` now
-  blocks and waits). Still open, confirmed in the current tree:
-  - `try_variants.py` scores `sec["data"][off:]` to **end-of-section** (line 28), so the following function's bytes
-    pollute the ranking. Fix idea: bound `mine`/`orig` by the function extent (next symbol) before diffing.
+  blocks and waits). Both items below were FIXED 2026-10-14 (ticket P3): `try_variants.py` now scores the function
+  extent (next symbol minus int3 padding; the overshoot only bit /Od compiles without /Gy, since /O1 /O2 /Ox imply
+  /Gy), and `machine.py` loads `0x007F` with `equiv.py --fpcw` to override. Kept for the record:
+  - `try_variants.py` scored `sec["data"][off:]` to **end-of-section**, so the following function's bytes
+    polluted the ranking.
   - x87 precision mismatch (verified): `tools/difftest/machine.py` session init loads the control word with
     `fldcw` from `0x027F` (= 53-bit *double*, the CRT's `_PC_53` value), but `docs/floating_point.md` "FPU
     precision at runtime" says the emulator must run the original at `0x007F` (24-bit *single*, the D3D
