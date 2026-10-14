@@ -25,9 +25,14 @@ existing entry already covers it; if so, don't duplicate it (you may append "+1 
   blocks and waits). Still open, confirmed in the current tree:
   - `try_variants.py` scores `sec["data"][off:]` to **end-of-section** (line 28), so the following function's bytes
     pollute the ranking. Fix idea: bound `mine`/`orig` by the function extent (next symbol) before diffing.
-  - `equiv.py` never *sets* the x87 control word (line 1146 only reads/compares `fpcw`), so both sides run at
-    Unicorn's default precision, not the 24-bit state `docs/floating_point.md` assumes — precision-sensitive
-    slices can pass/fail for the wrong reason. See ticket P3.
+  - x87 precision mismatch (verified): `tools/difftest/machine.py` session init loads the control word with
+    `fldcw` from `0x027F` (= 53-bit *double*, the CRT's `_PC_53` value), but `docs/floating_point.md` "FPU
+    precision at runtime" says the emulator must run the original at `0x007F` (24-bit *single*, the D3D
+    device-thread state). So the whole comparison runs at double precision: both sides agree with each other
+    (`fpcw` is read at `equiv.py:1146` and still matches), but computed values can differ from the game's,
+    giving false PASS/FAIL on precision-sensitive float code. Fix: `0x027F`→`0x007F`, or
+    `uc.reg_write(UC_X86_REG_FPCW, 0x007F)` after session init in `reset_cpu()`, then re-baseline float slices.
+    See ticket P3.
   Reported, not re-verified: `equiv.py` default `--seed 1` trips `UC_ERR_WRITE_PROT` in fault-repair runs (use
   `--seed 3`); WEAK-by-coverage verdicts stay WEAK until ~1–2k `--inputs`. Time lost: large (cross-agent); the two
   fixed bugs alone were each reported by 44/226 and 20/226 papercuts.
