@@ -25,6 +25,10 @@ pe = pefile.PE(os.path.join(ROOT, "work/SporeApp.analysis.bin"), fast_load=True)
 res = []
 for name, (si, off) in syms.items():
     sec = secs[si]
+    # NOTE: `mine` runs from this symbol to the END OF THE SECTION, so the diff below also covers
+    # padding and the following functions; `d`/`n` are inflated and a MATCH (d == 0) is unreachable
+    # except for the last symbol in a section. The correct window ends at the next symbol's offset
+    # (the function extent, as cmpobj.py does). Left as-is deliberately -- see docs/tickets.md P3.
     mine = sec["data"][off:]
     mask = {v + k - off for v, _, t in sec["relocs"] for k in range(4)}
     orig = pe.get_data(va - pe.OPTIONAL_HEADER.ImageBase, len(mine))

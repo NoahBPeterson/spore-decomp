@@ -239,6 +239,12 @@ class Machine:
         for i in range(64):
             uc.mem_write(TLS_BLOCKS + 0x1000 * i, tmpl[:0x1000])
         cw = INIT_CODE + 0x40
+        # NOTE: this loads FPCW = 0x027F (53-bit *double*, the CRT's _PC_53 value). docs/floating_point.md
+        # "FPU precision at runtime" says the emulator must run at 0x007F (24-bit *single*, the D3D
+        # device-thread state) -- the code and the doc disagree. Both sides share this value, so the
+        # `fpcw` observable still matches and precision-sensitive float code can be judged wrongly.
+        # Intended fix (NOT applied here): 0x027F -> 0x007F, or uc.reg_write(UC_X86_REG_FPCW, 0x007F)
+        # after emu_start in reset_cpu(). See docs/tickets.md P3.
         uc.mem_write(cw, struct.pack("<HI", 0x027F, 0x1F80))
         code = b"\xdb\xe3" + b"\xd9\x2d" + struct.pack("<I", cw) + b"\x0f\xae\x15" + struct.pack("<I", cw + 2)
         uc.mem_write(INIT_CODE, code)

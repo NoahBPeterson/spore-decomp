@@ -1143,6 +1143,8 @@ class Runner:
         top = (fpsw >> 11) & 7
         o["fpu_depth"] = (8 - top) % 8
         o["st0"] = uc.reg_read(UC_X86_REG_FP0 + top) if o["fpu_depth"] else None
+        # fpcw is only *observed* here; the control word is *set* in machine.py's session-init stub
+        # (see the 0x027F note there, and docs/tickets.md P3).
         o["fpcw"] = uc.reg_read(UC_X86_REG_FPCW) & 0x1F3F
         o["mxcsr"] = uc.reg_read(UC_X86_REG_MXCSR) & 0xFFC0
         o["xmm0"] = uc.reg_read(UC_X86_REG_XMM0)
