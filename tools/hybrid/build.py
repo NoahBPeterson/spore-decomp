@@ -176,6 +176,8 @@ class Splicer:
         self.pending_d = []         # (x_offset_of_reloc, d_offset, kind) fixups once .hybd's address is known
         self.log = log
         self.skipped = {}
+        self.deps = None            # callerdeps.Deps when --caller-deps: waive register rules no caller depends on
+        self.waived = {}            # why -> ["sid:va", ...] hooks kept because callerdeps said SAFE
         self.cov = None             # Coverage, when building a coverage image
         self.last_place = {}
         import capstone
@@ -193,6 +195,16 @@ class Splicer:
 
     def skip(self, why, sid, va):
         self.skipped.setdefault(why, []).append("%s:%s" % (sid, va))
+
+    def callers_safe(self, why, t, regs, result=False):
+        """With --caller-deps: True (and the hook is recorded in self.waived) if tools/difftest/callerdeps.py
+        finds that no caller of the original reads `regs` after the call (SAFE). DEPENDS/UNKNOWN keep the rule."""
+        if self.deps is None:
+            return False
+        if self.deps.check(t.va, set(regs), result=result)["verdict"] != "SAFE":
+            return False
+        self.waived.setdefault(why, []).append("%s:%08x" % (t.sid, t.va))
+        return True
 
     def orig_returns_eax(self, lo, hi):
         """True if the original returns a value in eax (regfacts.returns_eax; shared with equiv.py)."""
@@ -265,7 +277,7 @@ class Splicer:
         # resampler's caller lost a live value: severe crackling, no crash (2026-10-12).
         extra = self.regs_written(fsec.data[f_lo:f_hi], 0x10000000) - self.regs_written(
             self.img.read(t.orig_lo, t.orig_hi - t.orig_lo), t.orig_lo)
-        if extra:
+        if extra and not self.callers_safe("register footprint", t, extra):
             return self.skip("register footprint: writes %s the original does not" % ",".join(sorted(extra)),
                              t.sid, "%08x" % t.va)
         # A function declared void whose original writes eax right before every ret returns a value
@@ -274,14 +286,16 @@ class Splicer:
         # crashes came from this (uninitialized_copy 0x99efa0, rbtree::find 0xe5c780).
         sig = getattr(t, "sig", None)
         if sig is not None and sig.ret == "void" and not fsym.name.startswith("??0"):
-            if self.orig_returns_eax(t.orig_lo, t.orig_hi):
+            if self.orig_returns_eax(t.orig_lo, t.orig_hi) and \
+                    not self.callers_safe("void hides eax", t, {"eax"}, result=True):
                 return self.skip("declared void but the original returns a value in eax", t.sid, "%08x" % t.va)
             # A void wrapper whose original keeps its last callee's eax untouched to the ret returns
             # that result (an allocation callback, Pool_AllocGlobal 0x928ad0); ours must not write
             # eax after its last call then.
             orig_code = self.img.read(t.orig_lo, t.orig_hi - t.orig_lo)
             if self.has_call(orig_code) and not self.writes_eax_after_last_call(orig_code, t.orig_lo) \
-                    and self.writes_eax_after_last_call(fsec.data[f_lo:f_hi], 0x10000000):
+                    and self.writes_eax_after_last_call(fsec.data[f_lo:f_hi], 0x10000000) \
+                    and not self.callers_safe("void clobbers last callee eax", t, {"eax"}, result=True):
                 return self.skip("declared void but ours clobbers the last callee's eax that the original returns",
                                  t.sid, "%08x" % t.va)
         secs = sorted(res.local_sections)
@@ -439,6 +453,8 @@ def splice(pe, sp, targets, verbose, limit=None):
     print("hooked %d functions" % n)
     for why, lst in sorted(sp.skipped.items(), key=lambda kv: -len(kv[1])):
         print("  skipped %4d  %s%s" % (len(lst), why, ("  e.g. " + " ".join(lst[:3])) if verbose else ""))
+    for why, lst in sorted(sp.waived.items(), key=lambda kv: -len(kv[1])):
+        print("  waived  %4d  %s (callerdeps: no caller reads it)%s" % (len(lst), why, ("  e.g. " + " ".join(lst[:3])) if verbose else ""))
     return sp
 
 
@@ -665,6 +681,10 @@ def main():
     ap.add_argument("--coverage", action="store_true",
                     help="one-shot int3 at every function entry; the game writes spore_cov.bin to its cwd")
     ap.add_argument("--cov-period", type=int, default=2000, help="coverage flush interval, ms")
+    ap.add_argument("--caller-deps", action="store_true",
+                    help="keep a hook refused only for its register footprint or a dropped eax result when "
+                         "tools/difftest/callerdeps.py finds no caller of the original that reads the register (SAFE); "
+                         "kept hooks are listed under 'waived' in the .hooks.json sidecar")
     ap.add_argument("-v", action="store_true")
     a = ap.parse_args()
     if a.verify_exact:
@@ -674,6 +694,9 @@ def main():
     pe.__data__ = bytearray(pe.__data__)
     make_runnable(pe, patches=not a.no_patches)
     sp = new_splicer(pe) if (a.hook != "none" or a.hook_manifest or a.coverage) else None
+    if sp is not None and a.caller_deps:
+        from callerdeps import Deps
+        sp.deps = Deps(sp.img)
     if a.hook != "none" or a.hook_manifest:
         targets = [] if a.hook == "none" else pass_targets() if a.hook == "pass" else file_targets(a.hook)
         if a.hook_manifest:
@@ -705,7 +728,7 @@ def main():
     if sp is not None:
         json.dump({"hooks": [{"va": "%08x" % va, "entry": "%08x" % e, "slice": s, "orig_size": n, "our_size": m}
                              for va, e, s, n, m in sp.hooks],
-                   "skipped": sp.skipped}, open(a.out + ".hooks.json", "w"), indent=1)
+                   "skipped": sp.skipped, "waived": sp.waived}, open(a.out + ".hooks.json", "w"), indent=1)
         if sp.cov:
             sp.cov.sidecar(a.out + ".cov.json")
     print("wrote", a.out)

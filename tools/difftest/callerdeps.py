@@ -210,6 +210,9 @@ class Deps:
         if regs & CALLEE_SAVED:
             return {"verdict": "DEPENDS", "evidence": ["callee-saved %s (ABI)" % ",".join(sorted(regs & CALLEE_SAVED))],
                     "sites": None}
+        if regs - SCRATCH - CALLEE_SAVED:   # 'st' (x87 stack), segment registers, ...: not tracked by the walk
+            return {"verdict": "UNKNOWN", "evidence": ["untracked register(s) %s" % ",".join(sorted(regs - SCRATCH - CALLEE_SAVED))],
+                    "sites": None}
         _seen = _seen if _seen is not None else set()
         _seen.add(va)
         sites = self.sites(va)

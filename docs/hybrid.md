@@ -190,6 +190,10 @@ History of the campaign:
   original does not (callee-saved pops excluded); it holds back 169 of the 1,730 hooks (50 ecx, 43
   edx, 38 xmm, 15 x87, ...). Those need codegen the C source cannot force; they stay original until
   module migration, or get a per-function asm shim.
+  2026-10-16: `build.py --caller-deps` (opt-in) keeps such a hook, and one refused for a dropped eax
+  result, when `tools/difftest/callerdeps.py` finds that no caller of the original reads the register after
+  the call (SAFE; DEPENDS and UNKNOWN keep the rule; x87 `st` is always UNKNOWN). Kept hooks are listed
+  under `waived` in the `.hooks.json` sidecar, so a bisect can drop them as a group.
 - Open (2026-10-12 evening, interactive sessions, not pursued; the plan is harness fixes then module migration, with the hybrid as a per-module gate): with h25, clicking into the game crashed at 320 s in `cModelWorld::Release` 0x750580 (original code) with `this` = its own vtable + 0x10 (0x140d7a0, a vptr-as-object bug upstream, same class as SharedRelease); a second session (cov2 = h25 + coverage) crashed at 175 s at 0x9fbeff. Found statically meanwhile and fixed: 0x753fc0 (s00753270) called vtable slot 0 without `this` (the row had called the ecx difference "register allocation"). Coverage of the interactive session: 46,743 functions, 573 hooks executed (`work/hybrid/cov2.json`).
 - Black screen bisected to one hook: the rw::audio list pop-front leaf 0x1141200 (s01140b70)
   returned nothing where the original returns the popped node in eax; voice allocation got the

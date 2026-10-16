@@ -30,3 +30,7 @@ def test_callee_saved_is_always_depends(d):
 
 def test_caller_overwrites_ecx_first(d):   # 0x9d39c1 mov ecx, [esp+0xc] right after the call
     assert d.check(0x9d3840, {"ecx"})["verdict"] == "SAFE"
+
+
+def test_untracked_register_is_never_safe(d):   # build.py reports x87 stack use as 'st'
+    assert d.check(0x9d3840, {"st"})["verdict"] == "UNKNOWN"
