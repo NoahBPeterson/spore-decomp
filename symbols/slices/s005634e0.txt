@@ -1,2 +1,3 @@
 005634e0 SP::cSPObjectTemplateDB::BanAsset  # PDB caller-scored candidate; deletes save records, posts ban message
+00563df0 ?Query@cQueryHost@SP@@QAEIII@Z  # cQueryHost::Query migrated from s005634e0 (verbatim, slice spelling)
 005640d0 Editor::OTDB::OTDB  # PDB name on card; byte-exact

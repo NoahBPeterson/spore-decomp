@@ -1,0 +1,5 @@
+00708710 ?DestroyLightingInfo@cLightingWorld_s0070_8100@@QAEXPAX@Z  # cLightingWorld_s0070_8100::DestroyLightingInfo migrated from s00708100 (verbatim, slice spelling)
+007087a0 ?clear@ClearVec@@QAEXXZ  # ClearVec::clear migrated from s00708100 (verbatim, slice spelling)
+00708810 ?AddLocalSample@cLightingWorld_s0070_8100@@QAEXIHPAUSampleVec@@@Z  # cLightingWorld_s0070_8100::AddLocalSample migrated from s00708100 (verbatim, slice spelling)
+00708d90 ?resize@Vec8b@@QAEXI@Z  # Vec8b::resize migrated from s00708100 (verbatim, slice spelling)
+00708e60 ?resize@Vec16@@QAEXI@Z  # Vec16::resize migrated from s00708100 (verbatim, slice spelling)

@@ -1,1 +1,2 @@
-00490a70  SP::EditorUtils::GetAlignmentPosition  # dev-PDB name from card.py
+00490a70 ?GetAlignmentPosition@@YAMPAUcSPEditorBlock_s0049_0a70@@PAUMgr@@UVec3@@UMatrix3@@PAURwVec3@@PAU4@PA_NE3@Z  # GetAlignmentPosition migrated from s00490a70 (verbatim, slice spelling)
+00491350 ?CountPileWeight@@YAHPAUcSPEditorBlock_s0049_0a70@@H@Z  # CountPileWeight migrated from s00490a70 (verbatim, slice spelling)

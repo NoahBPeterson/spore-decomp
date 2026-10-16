@@ -1,1 +1,5 @@
-007c1170 SP::cThumbnailManager::HandleMessage  # PDB caller-single candidate in card
+007c0780 ?CaptureAmbientOcclusion@cThumbnailManagerAO_s007c_0780@AO@@QAE_NIIABUBoundingBox@2@HIH@Z  # cThumbnailManagerAO_s007c_0780::CaptureAmbientOcclusion migrated from s007c0780 (verbatim, slice spelling)
+007c1170 ?HandleMessage@IHandlerRC@@UAE_NIPAX@Z  # IHandlerRC::HandleMessage migrated from s007c0780 (verbatim, slice spelling)
+007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s007c0780, named from the dev publics; slice address comment)
+007c3ce0 ?SetRenderType@cViewer@SP@@QAEXHH@Z  # SP::cViewer::SetRenderType (callee of s007c0780, named from the dev publics; slice address comment)
+007c5440 ?SetViewWindow@cViewer@SP@@QAEXMM@Z  # SP::cViewer::SetViewWindow (callee of s007c0780, named from the dev publics; slice address comment)

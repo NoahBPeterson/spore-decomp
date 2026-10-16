@@ -8,6 +8,6 @@
 00782d40 associated-Legendre normalisation factor (SQRT part)
 00782db0 associated Legendre P_l^m(x)
 00783130 associated Legendre P(l,m) with cos/sin (complex-argument form)
-007831d0 degree-7 spherical-harmonic polynomial
+007831d0 ?FUN_007831d0@@YAXMPAM@Z  # FUN_007831d0 migrated from s00782860 (verbatim, slice spelling)
 00783380 SH normalisation constants (7 floats) + copy-out
 00783410 Vector4 list rotation  # PDB names it eastl::vector<rw::math::vpu::Vector4,...>::erase

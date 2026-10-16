@@ -1,3 +1,8 @@
-00402ac0 Preloader_IsFinished  # dc: null handle or handle state 7/8 -> true
-00402b30 Preloader_Reset  # dc: cancels+releases handle, zeroes key, clears 3 vectors, releases 6 ptrs
-00402a90 Preloader_GetHandle  # dc: returns field +0xC
+00402470 ?Gather@Preloader@@QAEXPAUPreloadSource@@_N@Z  # Preloader::Gather migrated from s00402470 (verbatim, slice spelling)
+004029f0 ?Start@Preloader@@QAEXABUResourceKey_s0040_2470@@_N@Z  # Preloader::Start migrated from s00402470 (verbatim, slice spelling)
+00402a90 ?GetHandle@Preloader@@QAEPAULoadHandle@@XZ  # Preloader::GetHandle migrated from s00402470 (verbatim, slice spelling)
+00402ab0 ?Self@Preloader@@QAEPAU1@XZ  # Preloader::Self migrated from s00402470 (verbatim, slice spelling)
+00402ac0 ?IsFinished@Preloader@@QAE_NXZ  # Preloader::IsFinished migrated from s00402470 (verbatim, slice spelling)
+00402b30 ?Reset@Preloader@@QAEXXZ  # Preloader::Reset migrated from s00402470 (verbatim, slice spelling)
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s00402470, named from the dev publics; slice address comment)
+00692400 ?Cancel@cJob@SP@@QAE_N_N@Z  # SP::cJob::Cancel (callee of s00402470, named from the dev publics; slice address comment)

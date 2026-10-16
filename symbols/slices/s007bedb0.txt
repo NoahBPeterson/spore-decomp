@@ -1,2 +1,3 @@
 007bedb0 SP::cThumbnailManager::CaptureCSAPhotos  # card annotation (PDB name)
-007bf610 SP::cThumbnailManager::ThumbnailDone  # PDB caller-single candidate in card
+007bf610 ?ThumbnailDone@cThumbnailManager_s007b_edb0@@QAEXPAUDoneMsg@@@Z  # cThumbnailManager_s007b_edb0::ThumbnailDone migrated from s007bedb0 (verbatim, slice spelling)
+007bf9c0 ?Set@SetterBlock@@QAEXPAXHHHPAUPair@@1HD@Z  # SetterBlock::Set migrated from s007bedb0 (verbatim, slice spelling)

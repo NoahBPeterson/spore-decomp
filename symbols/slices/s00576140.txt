@@ -1,4 +1,14 @@
-00576c50 SP::cAppModeEditorBase::Shutdown  # PDB caller-scored candidate; removes editor cheats, releases worlds/models/viewers, saves editor settings
-00576970 eastl::basic_string<wchar_t>::compare  # static range compare (wchar_t: sar 1), byte-exact
 00576750 eastl::basic_string<char>::basic_string(const allocator&)  # empty-string ctor, byte-exact
 00576770 eastl::basic_string<wchar_t>::basic_string(const allocator&)  # empty-string ctor (+2 capacity), byte-exact
+005767f0 ?WriteBoolVector@@YAXPAVcSerializer@@ABUBoolVector@@@Z  # WriteBoolVector migrated from s00576140 (verbatim, slice spelling)
+00576880 ?ReadIntArray6@@YA_NPAVcSerializer@@PAH@Z  # ReadIntArray6 migrated from s00576140 (verbatim, slice spelling)
+00576900 ??4cEditorSnapshot@@QAEAAU0@ABU0@@Z  # cEditorSnapshot::operator= migrated from s00576140 (verbatim, slice spelling)
+00576970 ?compare@?$basic_string_s0057_6140@_WUallocator_s0057_6140@eastl@@@eastl@@SAHPB_W000@Z  # compare migrated from s00576140 (verbatim, slice spelling)
+005769d0 ?uninitialized_fill_n_ref@@YAXPAU?$AutoRefCount_s0057_6140@VIRefCounted@@@EA@@IABU12@@Z  # uninitialized_fill_n_ref migrated from s00576140 (verbatim, slice spelling)
+00576a10 ?uninitialized_copy_snapshot@@YAPAUcEditorSnapshot@@PBU1@0PAU1@@Z  # uninitialized_copy_snapshot migrated from s00576140 (verbatim, slice spelling)
+00576ab0 ?ColorToVector3@@YAPAUVector3_s0057_6140@@PAU1@I@Z  # ColorToVector3 migrated from s00576140 (verbatim, slice spelling)
+00576b00 ?RotationMatrix@@YA?AUMatrix3@@ABUVector3_s0057_6140@@M@Z  # RotationMatrix migrated from s00576140 (verbatim, slice spelling)
+00576b40 ??0BoundingBox_s0057_6140@@QAE@XZ  # BoundingBox_s0057_6140::BoundingBox migrated from s00576140 (verbatim, slice spelling); class renamed to avoid the s00573520 BoundingBox stub, so the decorated name carries the suffix
+00576bb0 ?ParseLine@cEditorBudgetCheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  # ParseLine migrated from s00576140 (verbatim, slice spelling)
+00576c10 ?Execute@cEditorAddDNACheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  # Execute migrated from s00576140 (verbatim, slice spelling)
+00576c50 ?Shutdown@cAppModeEditorBase_s0057_6140@SP@@QAE_NXZ  # cAppModeEditorBase_s0057_6140::Shutdown migrated from s00576140 (verbatim, slice spelling)

@@ -1,8 +1,24 @@
 00c0bd70 Simulator::cGameData::WriteAsText  # PDB-resolved
-00c0c250 Simulator::cCreatureBase::funcD4h  # PDB candidate
-00c0c2d0 Simulator::cCreatureBase::IsDefaultSpecies
-00c0c630 SP::cCreatureLocomotion::Execute  # PDB-resolved
-00c0c0e0 cCreatureBase flag 0x388 accessor
-00c0c100 cCreatureBase flag 0x389 accessor
-00c0c310 cCreatureBase flag bit 15 accessor
+00c0be70 ?FUN_00c0be70@@YA_NH@Z  # FUN_00c0be70 migrated from s00c0bd70 (verbatim, slice spelling)
 00c0be70/00c0bea0 cached-handle id predicates
+00c0bee0 ?C0bee0@C@@QAEXHH@Z  # C::C0bee0 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c010 ?GetA@C@@QAEMXZ  # C::GetA migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c040 ?GetB@C@@QAEMXZ  # C::GetB migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c080 ?FindIndex@C@@QAEHH@Z  # C::FindIndex migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c0d0 ?Get574@C@@QAEMXZ  # C::Get574 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c0e0 ?Flag388@C@@QAE_NXZ  # C::Flag388 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c100 ?Flag389@C@@QAE_NXZ  # C::Flag389 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c140 ?CallFind13@C@@QAEXXZ  # C::CallFind13 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c160 ?CallFind27@C@@QAEXXZ  # C::CallFind27 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c180 ?SetE84@C@@QAEXPAX@Z  # C::SetE84 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c1c0 ?Speed1@C@@QAEMD@Z  # C::Speed1 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c200 ?C200@C@@QAEHM@Z  # C::C200 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c250 Simulator::cCreatureBase::funcD4h  # PDB candidate
+00c0c2d0 ?IsDefaultSpecies_@C@@QAEXXZ  # C::IsDefaultSpecies_ migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c310 ?FlagF@C@@QAEIXZ  # C::FlagF migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c3e0 ?CopyRec@C@@QAEXPAX@Z  # C::CopyRec migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c440 ?FUN_00c0c440@@YAPAXPAI00@Z  # FUN_00c0c440 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c4b0 ?QuatHalf@C@@QAEXM@Z  # C::QuatHalf migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c5b0 ?C5b0@C@@QAE_NHHPAH@Z  # C::C5b0 migrated from s00c0bd70 (verbatim, slice spelling)
+00c0c630 SP::cCreatureLocomotion::Execute  # PDB-resolved
+00c0ce30 ?RelationIndex@C@@QAEHHD@Z  # C::RelationIndex migrated from s00c0bd70 (verbatim, slice spelling)

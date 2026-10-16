@@ -9,18 +9,18 @@
 0095f620 EA::UTFWin::Transform::Invert  # pdb callee-scored
 0095f860 rw::math::fpu::Matrix43::Multiply  # dc: 17-dword concat
 0095f8c0 EA::UTFWin::ModulateARGB32  # pdb callee-scored
-0095f960 EA::UTFWin::Window::AsInterface  # pdb vtable-slot
-0095f9a0 EA::UTFWin::Window::Release  # pdb vtable-slot
-0095f9d0 EA::UTFWin::Window::GetSlot34  # dc: +0x34 accessor
-0095fa60 EA::UTFWin::Window::SetFlag1D8  # dc: field +0x1d8
-0095fad0 EA::UTFWin::Window::IsAncestorOf  # dc: IWindow ancestor walk
-0095fb20 EA::UTFWin::Window::TestSlot48  # dc: m30 vtable +0x48
-0095fb60 EA::UTFWin::Window::TestSlot54  # dc: m30 vtable +0x54
-0095fbb0 EA::UTFWin::Window::AllDescendants  # dc: child walk
-0095fc00 EA::UTFWin::Window::AllDescendantsAll  # dc: child walk
+0095f960 ?AsInterface@Window@UTFWin@EA@@UAEPAXW4InterfaceId@COM@3@@Z  # EA::UTFWin::Window::AsInterface migrated from s0095eeb0
+0095f9a0 ?Release@Window@@QAEHXZ  # Window::Release migrated from s0095eeb0 (verbatim, slice spelling)
+0095f9d0 ?GetAt34@Window@@QAEHXZ  # Window::GetAt34 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fa60 ?Set1D8@Window@@QAEXH@Z  # Window::Set1D8 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fad0 ?IsChild@Window@UTFWin@EA@@UAE_NPAVIWindow@23@@Z  # EA::UTFWin::Window::IsChild migrated from s0095eeb0
+0095fb20 ?Test30Slot48@Window@@QAE_NH@Z  # Window::Test30Slot48 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fb60 ?Test30Slot54@Window@@QAE_NH@Z  # Window::Test30Slot54 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fbb0 ?AllDescendants@Window@@QAE_ND@Z  # Window::AllDescendants migrated from s0095eeb0 (verbatim, slice spelling)
+0095fc00 ?AllDescendantsAll@Window@@QAE_ND@Z  # Window::AllDescendantsAll migrated from s0095eeb0 (verbatim, slice spelling)
 0095fc50 EA::UTFWin::Window::FindChild  # dc: child list search
 0095fcc0 EA::UTFWin::Window::WalkChildren  # dc: recursive child walk
-0095fd60 EA::UTFWin::Window::SetA8  # dc: field +0xa8 event
-0095fdc0 EA::UTFWin::Window::Set1D4  # dc: field +0x1d4
-0095fe40 EA::UTFWin::Window::SetArea  # pdb callee-single
-0095fec0 EA::UTFWin::Window::ResizeBy  # dc: vtable +0x60 call
+0095fd60 ?SetA8@Window@@QAEXH@Z  # Window::SetA8 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fdc0 ?Set1D4@Window@@QAEXH@Z  # Window::Set1D4 migrated from s0095eeb0 (verbatim, slice spelling)
+0095fe40 ?SetArea@Window@@QAEXPAM@Z  # Window::SetArea migrated from s0095eeb0 (verbatim, slice spelling)
+0095fec0 ?ResizeBy@Window@@QAEXMM@Z  # Window::ResizeBy migrated from s0095eeb0 (verbatim, slice spelling)

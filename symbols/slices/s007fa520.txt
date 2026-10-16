@@ -1,9 +1,34 @@
-# va Name  # evidence
-007fa780 EA::UTFWin::SerMarshaller<cISPUIBehaviorPredicate>::Read  # dev-PDB name (00feb420)
-007faad0 cSPUIBehaviorTimeFunction::Evaluate  # method on the class at +0x3a dirty/+0x39 negated/+0xc duration/+0x3c mTime, vcall 0x58
+007fa520 ?f_7fa520@@YA_NPAPAPAUPred@@HPAH@Z  # f_7fa520 migrated from s007fa520 (verbatim, slice spelling)
+007fa690 ?GetAt@C_7fa690@@QAEPAURCObj@@H@Z  # C_7fa690::GetAt migrated from s007fa520 (verbatim, slice spelling)
+007fa6d0 ?SetAt@C_7fa690@@QAE_NHPAURCObj@@@Z  # C_7fa690::SetAt migrated from s007fa520 (verbatim, slice spelling)
+007fa780 ?f_7fa780@@YA_NPAUC53@@PAUP2@@PAUP3@@@Z  # f_7fa780 migrated from s007fa520 (verbatim, slice spelling)
+007fa840 ?f_7fa840@@YA_NPAPAXPAUC53@@PAUY@@PAUIAlloc@@@Z  # f_7fa840 migrated from s007fa520 (verbatim, slice spelling)
+007fa8e0 ?f_7fa8e0@@YA_NPAPAXPAUC53@@PAUY@@@Z  # f_7fa8e0 migrated from s007fa520 (verbatim, slice spelling)
+007fa950 ?f_7fa950@@YAXPAUVC22@@@Z  # f_7fa950 migrated from s007fa520 (verbatim, slice spelling)
+007fa9b0 ?f_7fa9b0@@YAXPAUVC22@@@Z  # f_7fa9b0 migrated from s007fa520 (verbatim, slice spelling)
+007faa10 ?f_7faa10@@YAXPAUVC22@@@Z  # f_7faa10 migrated from s007fa520 (verbatim, slice spelling)
+007faa30 ?f@C_7faa30@@QAEXPAUSerItem@@@Z  # C_7faa30::f migrated from s007fa520 (verbatim, slice spelling)
+007faa70 ?Dtor@C_7faa70@@QAEXXZ  # C_7faa70::Dtor migrated from s007fa520 (verbatim, slice spelling)
+007faad0 ?Evaluate@C_TF@@QAEMM@Z  # C_TF::Evaluate migrated from s007fa520 (verbatim, slice spelling)
+007fab20 ?f20@C_TF@@QAEMXZ  # C_TF::f20 migrated from s007fa520 (verbatim, slice spelling)
+007fab40 ?f40@C_TF@@QAEMXZ  # C_TF::f40 migrated from s007fa520 (verbatim, slice spelling)
+007fab60 ?f60@C_TF@@QAEMXZ  # C_TF::f60 migrated from s007fa520 (verbatim, slice spelling)
+007fab80 ?SetNegated@C_TF@@QAEXE@Z  # C_TF::SetNegated migrated from s007fa520 (verbatim, slice spelling)
+007facf0 ?IsValid@C_TF@@QAE_NXZ  # C_TF::IsValid migrated from s007fa520 (verbatim, slice spelling)
+007fad40 ?IsValid2@C_TF@@QAE_NXZ  # C_TF::IsValid2 migrated from s007fa520 (verbatim, slice spelling)
+007fad90 ?GetMember@C_TF@@QAEPAXH@Z  # C_TF::GetMember migrated from s007fa520 (verbatim, slice spelling)
+007fae90 ?Ease@C_TF@@QAEMM@Z  # C_TF::Ease migrated from s007fa520 (verbatim, slice spelling)
 007faeb0 cSPUIBehaviorTimeFunction::GetEaseValue  # +0x18 easeIn/+0x1c easeOut; writes param back; called by ctor
-007fae90 cSPUIBehaviorTimeFunction::Ease  # same members, returns eased f
-007fb000 cSPUIBehaviorValueInterpolator::~cSPUIBehaviorValueInterpolator  # dev-PDB name (00fec060), 3-vptr dtor
-007fb110 cSPUIWinProc::~cSPUIWinProc  # 4 subobject vtables + AutoRefCount<IWindow> at +0x14, matches cSPUIWinProc layout
-007fb3b0 cSPUIBehaviorActionBase::SetEnabled  # uses mPredicates[4] at +0x14, mLastEvaluatedPredicateCount +0x34, vcall 0x3c
-007fb480 cSPUIBehaviorEventBase::SetActive  # MI sub-object (this=eventBase+0x18): predicates at +0x1c, actions at +0x3c
+007fb000 ?Dtor@C_7fb000@@QAEXXZ  # C_7fb000::Dtor migrated from s007fa520 (verbatim, slice spelling)
+007fb040 ?f_7fb040@@YAXPAPAXPAX@Z  # f_7fb040 migrated from s007fa520 (verbatim, slice spelling)
+007fb0b0 ?f_7fb0b0@@YAXPAUVC22@@@Z  # f_7fb0b0 migrated from s007fa520 (verbatim, slice spelling)
+007fb110 ?Dtor@C_7fb110@@QAEXXZ  # C_7fb110::Dtor migrated from s007fa520 (verbatim, slice spelling)
+007fb1a0 ?f_7fb1a0@@YAXPAPAXPAX@Z  # f_7fb1a0 migrated from s007fa520 (verbatim, slice spelling)
+007fb250 ?f@C_7fb250@@QAEXPAUSerItem@@@Z  # C_7fb250::f migrated from s007fa520 (verbatim, slice spelling)
+007fb290 ?Dtor@C_7fb290@@QAEXXZ  # C_7fb290::Dtor migrated from s007fa520 (verbatim, slice spelling)
+007fb2e0 ?f@C_7fb2e0@@QAEXPAUSerItem@@@Z  # C_7fb2e0::f migrated from s007fa520 (verbatim, slice spelling)
+007fb320 ?Dtor@C_7fb320@@QAEXXZ  # C_7fb320::Dtor migrated from s007fa520 (verbatim, slice spelling)
+007fb3b0 ?f@C_7fb3b0@@QAE_NE@Z  # C_7fb3b0::f migrated from s007fa520 (verbatim, slice spelling)
+007fb440 ?f@C_7fb440@@QAEXPAUSerItem@@@Z  # C_7fb440::f migrated from s007fa520 (verbatim, slice spelling)
+007fb480 ?f_7fb480@Sub7fb480@@QAE_NE@Z  # Sub7fb480::f_7fb480 migrated from s007fa520 (verbatim, slice spelling)
+007fb6a0 ?Clear@C_7fb6a0@@QAEXXZ  # C_7fb6a0::Clear migrated from s007fa520 (verbatim, slice spelling)

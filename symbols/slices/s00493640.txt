@@ -1,0 +1,2 @@
+00493640 ?ClassifyAgainstSymmetryPlane@@YAHPAUV3@@MMMPAUBasis@@@Z  # ClassifyAgainstSymmetryPlane migrated from s00493640 (verbatim, slice spelling)
+00494270 ?FUN_00494270@@YAPAXPAX0@Z  # FUN_00494270 migrated from s00493640 (verbatim, slice spelling)

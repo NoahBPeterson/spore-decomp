@@ -1,2 +1,11 @@
-007b8cb0 SP::cThumbnailManager::cCSAThumbnailJob::RenderLargeTiledImage  # PDB candidate (caller-scored)
-007b96d0 SP::cThumbnailManager::cFilterChainJob::Shutdown  # PDB name
+007b87f0 ?ComputeBoundingSphere@@YGXPAXPAM1@Z  # ComputeBoundingSphere migrated from s007b87f0 (verbatim, slice spelling)
+007b8b30 ?Ctor@cFilterRes@@QAEPAU1@XZ  # cFilterRes::Ctor migrated from s007b87f0 (verbatim, slice spelling)
+007b8be0 ?Dtor@cFilterRes@@QAEXXZ  # cFilterRes::Dtor migrated from s007b87f0 (verbatim, slice spelling)
+007b8cb0 ?RenderLargeTiledImage@cCSAThumbnailJob@@QAEXHHPAHH@Z  # cCSAThumbnailJob::RenderLargeTiledImage migrated from s007b87f0 (verbatim, slice spelling)
+007b91f0 ?Setup@cPlanetCapture@@QAEXPAUCaptureCam@@@Z  # cPlanetCapture::Setup migrated from s007b87f0 (verbatim, slice spelling)
+007b9420 ?Init@cJobPostFilter@@QAEX_N@Z  # cJobPostFilter::Init migrated from s007b87f0 (verbatim, slice spelling)
+007b9510 ?Init@cJobPostFilter@@QAEXHPBH0_N@Z  # cJobPostFilter::Init migrated from s007b87f0 (verbatim, slice spelling)
+007b9620 ?Shutdown@cJobPostFilter@@QAEXXZ  # cJobPostFilter::Shutdown migrated from s007b87f0 (verbatim, slice spelling)
+007b9690 ?Push@VecPair@@QAEXPAUPair2@@@Z  # VecPair::Push migrated from s007b87f0 (verbatim, slice spelling)
+007b96d0 ?Shutdown@cFilterChainJob@@QAEXXZ  # cFilterChainJob::Shutdown migrated from s007b87f0 (verbatim, slice spelling)
+007b9750 ?AddFilter@cFilterChainJob@@QAEHPAUIRel@@@Z  # cFilterChainJob::AddFilter migrated from s007b87f0 (verbatim, slice spelling)

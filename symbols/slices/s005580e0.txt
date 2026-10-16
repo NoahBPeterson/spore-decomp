@@ -1,5 +1,9 @@
-005582a0 SP::cContentValidationSummarizer::ExtractParameters  # PDB caller-scored candidate; byte-exact
-005587f0 SP::FunctionalMatch::Constraint::Constraint  # sets kTerminal, matches PDB eType
-00558830 SP::FunctionalMatch::Constraint::Constraint  # (Sentinel) overload
-00558b70 SP::FunctionalMatch::DeclareParam::DeclareParam  # default ctor, kTerminal
-00558d50 SP::WritePillRecord  # PDB caller-scored candidate; writes pill record to save area
+00558b70 ??0DeclareParam@FunctionalMatch@SP@@QAE@XZ  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0
+00558b90 ??0DeclareParam@FunctionalMatch@SP@@QAE@IM@Z  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0
+00558bc0 ??0DeclareParam@FunctionalMatch@SP@@QAE@IH@Z  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0
+00558bf0 ?IsPillRecordStale@SP@@YA_NIH@Z  # IsPillRecordStale migrated from s005580e0 (verbatim, slice spelling)
+00558d50 ?WritePillRecord@SP@@YAXII@Z  # WritePillRecord migrated from s005580e0 (verbatim, slice spelling)
+00558e40 ?AsInterface@cParameterResource@SP@@QAEPAXI@Z  # cParameterResource::AsInterface migrated from s005580e0 (verbatim, slice spelling)
+00558e70 ?GetSupportedTypes@cParameterResourceFactory@SP@@QAEIPAII@Z  # cParameterResourceFactory::GetSupportedTypes migrated from s005580e0 (verbatim, slice spelling)
+00558eb0 ?IsValid@cParameterResourceFactory@SP@@QAE_NII@Z  # cParameterResourceFactory::IsValid migrated from s005580e0 (verbatim, slice spelling)
+00558ef0 ?CreateResource@cParameterResourceFactory@SP@@QAE_NPAUIPFRecord@@AAPAUResourceObject@2@HI@Z  # cParameterResourceFactory::CreateResource migrated from s005580e0 (verbatim, slice spelling)

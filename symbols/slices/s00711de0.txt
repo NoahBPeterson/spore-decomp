@@ -1,15 +1,15 @@
 00711de0 SP::cMaterialManager::ReadRegisteredMaterials  # 1.1 KB serialization entry (mMutex guarded)
 00712280 eastl::vector<EA::AutoRefCount<SP::cMaterialInternal> >::resize  # resize(n) -> resize(n,T())
-00712320 eastl::hashtable<...>::DoFreeNodes  # node +0x24 begin / +0x28 end / +0x34 buffer / +0x4c next
+00712320 ?DoFreeNodes24@@YGXPAPAUFreeNode24@@I@Z  # DoFreeNodes24 migrated from s00711de0 (verbatim, slice spelling)
 007123a0 SP::cMaterialManager::Shutdown  # PDB name
 00712450 SP::cMaterialManager::helper  # 538-byte member
 00712670 SP::cMaterialManager::Update  # reads two int properties, checks packages
-00712760 eastl::fixed_vector<...>::fixed_vector(const fixed_vector&)  # inline buffer copy ctor
-007127d0 SP::cMaterialScriptState copy  # 9 dwords + fixed-vector ctor
-00712850 SP::cMaterialScriptState copy (two sources)  # a[0] + b[1..8] + fixed-vector ctor
+00712760 ??0TailVec@@QAE@ABU0@@Z  # TailVec::TailVec migrated from s00711de0 (verbatim, slice spelling)
+007127d0 ?CopyFrom@State27D0@@QAEPAU1@ABU1@@Z  # State27D0::CopyFrom migrated from s00711de0 (verbatim, slice spelling)
+00712850 ?CopyFrom2@State2850@@QAEPAU1@ABU1@0@Z  # State2850::CopyFrom2 migrated from s00711de0 (verbatim, slice spelling)
 007129e0 eastl::hash_map<unsigned int,SP::cMaterialInternal,...>::operator[]  # PDB name
-00712b20 eastl::hashtable<eastl::basic_string<char>,...>::DoFreeNodes  # embedded string hashtable at node+4
-00712ba0 SP::cMaterialManager::HasMaterial  # PDB name
-00712c20 SP::cMaterialManager::GetMaterial  # PDB name
-00712cb0 SP::cMaterialManager::GetMaterials  # PDB name
-00712d60 SP::cMaterialManager::GetMaterialInstance  # PDB name
+00712b20 ?DoFreeNodesStr2@@YGXPAPAUFreeNodeStr@@I@Z  # DoFreeNodesStr2 migrated from s00711de0 (verbatim, slice spelling)
+00712ba0 ?HasMaterial@MaterialManager3@@QAE_NI@Z  # MaterialManager3::HasMaterial migrated from s00711de0 (verbatim, slice spelling)
+00712c20 ?GetMaterial@MaterialManager3@@QAEPAEI@Z  # MaterialManager3::GetMaterial migrated from s00711de0 (verbatim, slice spelling)
+00712cb0 ?GetMaterials@MaterialManager3@@QAEXHPBIPAPAX@Z  # MaterialManager3::GetMaterials migrated from s00711de0 (verbatim, slice spelling)
+00712d60 ?GetMaterialInstance@MaterialManager3@@QAEPAEIPAX@Z  # MaterialManager3::GetMaterialInstance migrated from s00711de0 (verbatim, slice spelling)

@@ -1,7 +1,3 @@
-# Slice s007046e0 recovered names of interest
-00705120 SP::cShaderDataLightingInfo::operator=  # PDB name
-007051b0 SP::cLightingManager::SetExtendedFogging  # PDB vtable-slot
-00705250 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::Text::Typesetter::RunInfo_ *,EA::Text::Typesetter::RunInfo_ *>  # PDB
 00704b30 Editor::cPropertyList-derived ctor (vtable 0x13ebca4 / secondary 0x13ebcb8, format id -1)  # invented; base vtable 0x13ebcdc
 00704b80 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id 0, size 0x30)  # invented
 00704bd0 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id 1)  # invented
@@ -10,5 +6,13 @@
 00704cc0 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id -1, size 0x30)  # invented
 00704d30 Editor::cPropertyList-derived ctor (vtable 0x140fef4, format id -1)  # invented
 00704d80 Resource-derived ctor (vtable 0x140c60c, base vtbl_Resource::PFRecordRead 0x13effa8)  # invented
-007052e0 CubemapFaceIndex32  # invented; direction -> packed 5-bit cube-face texel
-00705470 CubemapFaceIndex16  # invented; direction -> packed 4-bit cube-face texel, |v|>=sqrt(10)
+00705050 ?FUN_00705050@@YAHHPAUE5@@@Z  # FUN_00705050 migrated from s007046e0 (verbatim, slice spelling)
+007050e0 ?set_7050e0@Big@@QAEXHPAH@Z  # Big::set_7050e0 migrated from s007046e0 (verbatim, slice spelling)
+00705120 ??4cShaderDataLightingInfo@@QAEAAU0@ABU0@@Z  # cShaderDataLightingInfo::operator= migrated from s007046e0 (verbatim, slice spelling)
+00705190 ?get_705190@Big50@@QAEXPAH@Z  # Big50::get_705190 migrated from s007046e0 (verbatim, slice spelling)
+007051b0 ?set_7051b0@BigF8@@QAEXPBUFog98@@@Z  # BigF8::set_7051b0 migrated from s007046e0 (verbatim, slice spelling)
+007051e0 ?copy_7051e0@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_7051e0 migrated from s007046e0 (verbatim, slice spelling)
+00705220 ?copy_backward_705220@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_backward_705220 migrated from s007046e0 (verbatim, slice spelling)
+00705250 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::Text::Typesetter::RunInfo_ *,EA::Text::Typesetter::RunInfo_ *>  # PDB
+007052e0 ?FUN_007052e0@@YAHPAMM@Z  # FUN_007052e0 migrated from s007046e0 (verbatim, slice spelling)
+00705470 ?FUN_00705470@@YAHPAMM@Z  # FUN_00705470 migrated from s007046e0 (verbatim, slice spelling)

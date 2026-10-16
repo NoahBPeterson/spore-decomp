@@ -1,2 +1,12 @@
-007bced0 SP::cThumbnailManager::DilateWithoutAOStart  # handles message 0x31e09b4 (s007c0780 dispatcher); posts BehaviorMessage 0x21d752f = DilateWithoutAODone; descriptive name
-007bd750 SP::cThumbnailManager::cCSAThumbnailJob::DrawLayer  # cILayer vtable slot 3 (0x140fe28); renders the CSA job's model worlds, optionally tiled 2x2; descriptive name
+007bced0 ?DilateWithoutAOStart@cThumbnailManager_s007b_ced0@@QAEXPAUDilateReq_s007b_ced0@@@Z  # cThumbnailManager_s007b_ced0::DilateWithoutAOStart migrated from s007bced0 (verbatim, slice spelling)
+007bd4c0 ?DilateWithoutAODone@cThumbnailManager_s007b_ced0@@QAEXPAUDilateMsg@@@Z  # cThumbnailManager_s007b_ced0::DilateWithoutAODone migrated from s007bced0 (verbatim, slice spelling)
+007bd500 ?PaletteJobInfo_Shutdown@@YGXPAUcPaletteJobInfo@@@Z  # PaletteJobInfo_Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bd540 ?Shutdown@cPaletteThumbnailJob@@QAEXXZ  # cPaletteThumbnailJob::Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bd5d0 ?Shutdown@cEditorJobInfo@@QAEXXZ  # cEditorJobInfo::Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bd640 ?Shutdown@cEditorThumbnailJob@@QAEXXZ  # cEditorThumbnailJob::Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bd6b0 ?Shutdown@cCSAThumbnailJob_s007b_ced0@@QAEXXZ  # cCSAThumbnailJob_s007b_ced0::Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bd750 ?RoundToInt@@YAHM@Z  # RoundToInt migrated from s007bced0 (verbatim, slice spelling)
+007bdd70 ?Shutdown@cGameThumbnailJob@@QAEXXZ  # cGameThumbnailJob::Shutdown migrated from s007bced0 (verbatim, slice spelling)
+007bdde0 ?FUN_007bdde0@@YIXPAX@Z  # FUN_007bdde0 migrated from s007bced0 (verbatim, slice spelling)
+007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s007bced0, named from the dev publics; slice address comment)
+007c5310 ?SetViewport@cViewer@SP@@QAEXGGGG@Z  # SP::cViewer::SetViewport (callee of s007bced0, named from the dev publics; slice address comment)

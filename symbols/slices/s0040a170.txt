@@ -1,0 +1,1 @@
+0040a590 ?HandleKey@EditorList@@QAE_NPBUResourceKey_s0040_a170@@PBUKeyFlags@@@Z  # EditorList::HandleKey migrated from s0040a170 (verbatim, slice spelling)

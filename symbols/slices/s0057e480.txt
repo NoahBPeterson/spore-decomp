@@ -1,18 +1,19 @@
-0057e480 SP::cAppModeEditorBase::UpdateIdleAnimations  # PDB candidate
-0057e790 SP::cAppModeEditorBase::SetSelectedBlock  # PDB candidate (caller-single)
-0057e8a0 FUN_0057e8a0  # no PDB name; copies launch data into a launch state object
-0057ea30 SP::cAppModeEditorBase::SaveMetadata  # PDB candidate (caller-scored)
-0057ebf0 SP::cEditorBaker::Init  # PDB candidate (caller-scored)
-0057ed80 (object init helper)  # no PDB name
-0057eda0 eastl::basic_string<wchar_t>::trim  # real template instance
-0057edf0 (vector erase helper)  # no PDB name
-0057ee20 ?4?$vector  # = ??4?$vector@URec18@@@eastl@@QAEAAU01@ABU01@@Z, eastl::vector<Rec18>::operator= (difftest name lookup only matches the base_ident form); no PDB name
-0057efa0 SP::cTerrainUI::PopulateScriptList  # PDB candidate (caller-scored)
-0057f0f0 eastl::vector<Rec30>::DoInsertValue  # vector insert helper; no PDB name
-0057f220 eastl::vector<RefElem>::DoInsertValues  # vector fill-insert (resize) helper; no PDB name
-0057ed00 cAppModeEditorBase::SetModelName  # no PDB name
-005729b0 ??$copy_ool@URec18@@@eastl@@YAPAURec18@@PBU1@0PAU1@@Z  # difftest alias: this slice's mangled name for copy<Rec18> (called by 0057ee20)
 004b2400 ??$uninitialized_copy_impl@PBURec18@@PAU1@@eastl@@YA?AU?$generic_iterator@PAURec18@@@0@U?$generic_iterator@PBURec18@@@0@0U10@Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<Rec18> (called by 0057ee20)
-01022c60 ??$uninitialized_copy_impl@PAURefElem@@PAU1@@eastl@@YA?AU?$generic_iterator@PAURefElem@@@0@U10@00Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<RefElem> (called by 0057f220)
+005729b0 ??$copy_ool@URec18@@@eastl@@YAPAURec18@@PBU1@0PAU1@@Z  # difftest alias: this slice's mangled name for copy<Rec18> (called by 0057ee20)
+0057e480 ?UpdateIdleAnimations@cEditorBase@@QAEXMMI@Z  # cEditorBase::UpdateIdleAnimations migrated from s0057e480 (verbatim, slice spelling)
+0057e790 ?SetSelectedBlock@cEditorBase@@QAEXPAUBlock@@I@Z  # cEditorBase::SetSelectedBlock migrated from s0057e480 (verbatim, slice spelling)
+0057e8a0 ?UpdateBaker@cEditorBase@@QAEXXZ  # cEditorBase::UpdateBaker migrated from s0057e480 (verbatim, slice spelling)
+0057ea30 ?SaveMetadata@cEditorBase@@QAEXXZ  # cEditorBase::SaveMetadata migrated from s0057e480 (verbatim, slice spelling)
+0057ebf0 ?BakerInit@cEditorBase@@QAEXXZ  # cEditorBase::BakerInit migrated from s0057e480 (verbatim, slice spelling)
+0057ed00 ?SetName@cAppModeEditorBase@SP@@UAEXPB_W@Z  # SP::cAppModeEditorBase::SetName migrated from s0057e480
+0057ed80 ?Init@cUnkEd80@@QAEPAXPAX0@Z  # cUnkEd80::Init migrated from s0057e480 (verbatim, slice spelling)
+0057eda0 ?trim@?$basic_string_s0057_e480@_WUallocator_s0057_e480@eastl@@@eastl@@QAEXXZ  # eastl::basic_string_s0057_e480<wchar_t,allocator_s0057_e480>::trim migrated from s0057e480 (the slice's "real template instance" 0x0057eda0; the module spells the slice's eastl::basic_string as basic_string_s0057_e480)
+0057edf0 ?EraseAfter@cVec16@@QAEPAXPAX@Z  # cVec16::EraseAfter migrated from s0057e480 (verbatim, slice spelling)
+0057ee20 ??4?$vector_s0057_e480@URec18@@@eastl@@QAEAAU01@ABU01@@Z  # eastl::vector_s0057_e480<Rec18>::operator= migrated from s0057e480 (verbatim; the module TU spells vector<Rec18> as vector_s0057_e480<Rec18>, and the tool's first symbol guess picked a colliding AutoRefCount_s0057_6140 instantiation instead)
+0057efa0 ?PopulateScriptList@@YA_NPAUListUI@@PBDPAUCharVec@@@Z  # PopulateScriptList migrated from s0057e480 (verbatim, slice spelling)
+0057f0f0 ?DoInsertValue@?$vector_s0057_e480@URec30@@@eastl@@QAEXPAURec30@@ABU3@@Z  # DoInsertValue migrated from s0057e480 (verbatim, slice spelling)
+0057f220 ?DoInsertValues@?$vector_s0057_e480@URefElem@@@eastl@@QAEXPAURefElem@@IABU3@@Z  # DoInsertValues migrated from s0057e480 (verbatim, slice spelling)
 005c1dc0 ??$copy_backward_ool@URefElem@@@eastl@@YAXPAURefElem@@00@Z  # difftest alias: copy_backward<RefElem> (called by 0057f220)
+005de690 ?EnableUIButton@cSPEditorUI@SP@@QAEXI_N@Z  # SP::cSPEditorUI::EnableUIButton (callee of s0057e480, named from the dev publics; slice address comment)
 00657f20 ??$fill_ool@URefElem@@@eastl@@YAXPAURefElem@@0ABU1@@Z  # difftest alias: fill<RefElem> (called by 0057f220)
+01022c60 ??$uninitialized_copy_impl@PAURefElem@@PAU1@@eastl@@YA?AU?$generic_iterator@PAURefElem@@@0@U10@00Ufalse_type@0@@Z  # difftest alias: uninitialized_copy<RefElem> (called by 0057f220)

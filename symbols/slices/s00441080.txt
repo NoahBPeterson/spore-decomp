@@ -1,0 +1,1 @@
+00441080 ?F41080@cSPEditorBlock_s0044_1080@SP@@QAEXXZ  # cSPEditorBlock_s0044_1080::F41080 migrated from s00441080 (verbatim, slice spelling)

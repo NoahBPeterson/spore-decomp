@@ -1,7 +1,14 @@
-00450f70  SP::cSPEditorBlock::Rebuild                 # PDB BuildBlock wrapper
-004511f0  SP::cSPEditorBlock::GetA
-00451210  SP::cSPEditorBlock::GetB
-00451280  SP::cSPEditorBlock::SetRef
-004512e0  SP::cSPEditorBlock::GetVec14
-00451330  SP::cSPEditorBlock::SetVec194
-00451400  SP::cSPEditorBlock::Shutdown2
+00450f70 ?Rebuild@Block2@@QAEEHHMDE@Z  # Block2::Rebuild migrated from s00450f70 (verbatim, slice spelling)
+004511f0 ?GetA@Block2@@QAEHXZ  # Block2::GetA migrated from s00450f70 (verbatim, slice spelling)
+00451210 ?GetB@Block2@@QAEHXZ  # Block2::GetB migrated from s00450f70 (verbatim, slice spelling)
+00451240 ?SetF@Block2@@QAEXPAXE@Z  # Block2::SetF migrated from s00450f70 (verbatim, slice spelling)
+00451280 ?SetRef@Block2@@QAEXPAURCObj@@@Z  # Block2::SetRef migrated from s00450f70 (verbatim, slice spelling)
+004512e0 ?GetVec14@Block2@@QAEPAUVec3_s0045_0f70@@PAU2@@Z  # Block2::GetVec14 migrated from s00450f70 (verbatim, slice spelling)
+00451330 ?SetVec194@Block2@@QAEXHHH@Z  # Block2::SetVec194 migrated from s00450f70 (verbatim, slice spelling)
+00451360 ?ResetVec194@Block2@@QAEXXZ  # Block2::ResetVec194 migrated from s00450f70 (verbatim, slice spelling)
+004513a0 ?GetVec194@Block2@@QAEPAUVec3_s0045_0f70@@PAU2@@Z  # Block2::GetVec194 migrated from s00450f70 (verbatim, slice spelling)
+00451400 ?Shutdown2@cSPEditorBlock_s0045_0f70@SP@@QAEXXZ  # cSPEditorBlock_s0045_0f70::Shutdown2 migrated from s00450f70 (verbatim, slice spelling)
+00451e20 ?SetPtr188@Block2@@QAEXPAX@Z  # Block2::SetPtr188 migrated from s00450f70 (verbatim, slice spelling)
+00451e50 ?SetSub38@Block2@@QAEXPAX@Z  # Block2::SetSub38 migrated from s00450f70 (verbatim, slice spelling)
+00451e90 ?GetSub38@Block2@@QAEPAXXZ  # Block2::GetSub38 migrated from s00450f70 (verbatim, slice spelling)
+00451ed0 ?Reset188@Block2@@QAEXXZ  # Block2::Reset188 migrated from s00450f70 (verbatim, slice spelling)

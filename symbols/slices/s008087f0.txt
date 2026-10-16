@@ -1,4 +1,5 @@
+008087f0 ?FUN_008087f0@@YAXPAMPAUIWin@@D@Z  # FUN_008087f0 migrated from s008087f0 (verbatim, slice spelling)
 00808ad0 SPUIHelpers::SetWindowSPMaterial  # PDB name
 00808d20 SPUIHelpers::GetBoundingScreenRect  # PDB name
-00808d40 SPUIHelpers::UpdateRolloverFrame  # PDB name
+00808d40 ?SPUIHelpers_UpdateRolloverFrame@@YA_NPAUIWin@@MMMM_NM@Z  # SPUIHelpers_UpdateRolloverFrame migrated from s008087f0 (verbatim, slice spelling)
 008093b0 SPUIHelpers::CreateRolloverFrame  # PDB name

@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+00402cc0  439  BlockLoader::Update (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 4 extra dead temp slots (2 before each `mSlots[i] = 0` intrusive_ptr assign), shifting [ebp-N] offsets past 0x4c
+00403240  611  EditorBlockData::EditorBlockData (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 12 dead temp slots (3 after base locals, 8 after the Slot2C array, 1 in the Container20[6] loop)
+00403af0  86  cBaker::Initialize (/Od /Ob1 /MD /Gy /TP, no /EH): instruction stream identical after normalization, every named local at the right slot; only stack temps differ: the PropertyID arg temp sits in the statement-temp region (orig -0x17c in the inline-expansion region), and orig has unreferenced temp gaps (-0x134..-0x174, -0x18c..-0x1c0, -0x1c8..-0x1d0) that are absent here
+00405000  64  BakerCommand scalar deleting dtor: instruction-identical, only frame size differs (sub esp 0x98 vs 0x58: slots reserved by the failed inline of ~OptionParser)
+004051e0  38  Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
+004055b0  43  Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)
+0040a590 622 EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 760B vs 1072B orig)
+0040a9c0 317 KeyCopier::Copy: /Od frame layout and virtual-call operand order (ecx-first) not reproduced; structure otherwise equivalent
+0040e5b0 47 Obj::OnA: same size (592); stack-slot order of inlined Query() params/id const and the 0x60-byte local gap differ
+0040eab0 11 Obj::OnReset: same size (185); slot order of inlined clear() temp vs prov/prop locals differs
+004124b0 689 /Od /Ob1 module; frame layout differs (orig sub esp,0xe8 with 0x18-slot mgr below keys, extra inline temps for operator[]/Out()); ~972 vs 1098 bytes
+00414e30 24 BoundsLibrary::Query: code identical, only frame size/slot offsets differ (original frame 0x110 has ~88 bytes of dead inline-hashtable locals)
+00415660 10 PropertyListCache::Get: identical except the map-slot local offset (dead locals reproduce frame size 0x90)
+004165a0 26 EditorPanel::Activate: byte layout matches (1006 B) but /Od stack-slot assignment differs (msg/new temps vs inline temps order)
+00417010 253 CollectAll: instruction stream matches but /Od frame layout differs (orig frame 0x84 vs 0x74; extra 3 temp slots unexplained)
+00417150 142 GetSlotValue: inline hash-iterator End() temporaries (orig frame 0x6c) not reproduced
+00417600 1473 Panel::Apply (/Od /Ob1 /MD /Gy /TP): instruction stream identical modulo register choice (eax/ecx/edx rotation after the first Contains call), frame slot layout (sub esp 0x120 vs 0xe8: dead temps / slot ordering not controllable by declaration order) and one extra vptr store in the inlined ~Query
+00417d60 57 ToolState::ToolState: instruction stream identical except frame size (orig 0x50, ours 0x4c: one unexplained unused /Od slot) and shifted local slots
+00417fe0 36 ToolState::~ToolState: instruction stream identical; orig frame 0x68 vs ours 0x18 (~20 unused /Od temp slots from inlined member dtors not reproducible), slot offsets differ
+00418120 3 SubState::SubState: identical stream; orig frame 0x4c has ~15 unused temp slots (PhantomTemps hack gets 2-3 bytes but local order still differs)
+00418240 371 SubState::~SubState: identical stream; orig frame 0x9c vs 0x40, unused temp slots and loop-local slot order differ (jump offsets shift with frame-size encodings)
+00418440 21 CheckMatchingProps: identical stream; only /Od local slot order differs (name-hash search got to 12 bytes)
+00418500 60 Loader::LoadAll: identical stream/size (435 bytes); orig frame 0x50 vs 0x40 with 4 unused temp slots, slot order differs
+00418ae0 656 EditorResource::Setup: instruction stream identical modulo stack-slot layout; pl/pProp locals land in the named-slot pool instead of the late inline-frame pool, and local-name slot order unresolved
+00419000 1137 /Od /Ob1 /arch:SSE module; large loader with deep inlining and unknown stack-slot order; behavior-equivalent only
+00419690 165 /Od /Ob1 /arch:SSE; frame has 0xb0 unused local space and slot order of inlined temps not reproduced

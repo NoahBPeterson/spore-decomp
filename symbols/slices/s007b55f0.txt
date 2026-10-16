@@ -1,0 +1,8 @@
+007b55f0 ?FitViewerToBounds@@YGXPBMPAUFitViewer@@HM@Z  # FitViewerToBounds migrated from s007b55f0 (verbatim, slice spelling)
+007b5ad0 ?PostRenderJob@@YGXPAUIRefObj@@HHHH@Z  # PostRenderJob migrated from s007b55f0 (verbatim, slice spelling)
+007b5c80 ?MeshBoundingSphere@@YGXPAUMeshVec@@PAUVector3_s007b_55f0@@PAM@Z  # MeshBoundingSphere migrated from s007b55f0 (verbatim, slice spelling)
+007b5e20 ?Fit@FrameJob@@QAEXXZ  # FrameJob::Fit migrated from s007b55f0 (verbatim, slice spelling)
+007b6010 ?Run@RtJobA@@QAEXXZ  # RtJobA::Run migrated from s007b55f0 (verbatim, slice spelling)
+007b6160 ?FitAspect@FrameJob@@QAEXXZ  # FrameJob::FitAspect migrated from s007b55f0 (verbatim, slice spelling)
+007b63b0 ?Run@RtJobB@@QAEXXZ  # RtJobB::Run migrated from s007b55f0 (verbatim, slice spelling)
+007b64f0 ?RefHolder_Reset@@YIXPAURefHolder@@@Z  # RefHolder_Reset migrated from s007b55f0 (verbatim, slice spelling)

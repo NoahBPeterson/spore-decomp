@@ -1,0 +1,2 @@
+0070a1f0 ?ClearImpl@ClearDeque@@QAEXH@Z  # ClearDeque::ClearImpl migrated from s00709cf0 (verbatim, slice spelling)
+0070a560 ?SetLightingState@cLightingWorld_s0070_9cf0@@QAEXPAX@Z  # cLightingWorld_s0070_9cf0::SetLightingState migrated from s00709cf0 (verbatim, slice spelling)

@@ -1,1 +1,4 @@
-0043a870 SP::cSPEditorBlock::GetSkinIdentifierForPicking  # PDB anchor
+0043a870 ?GetSkinIdentifierForPicking@cSPEditorBlock_s0043_a460@SP@@QAEHXZ  # cSPEditorBlock_s0043_a460::GetSkinIdentifierForPicking migrated from s0043a460 (verbatim, slice spelling)
+0043a9a0 ?F9a0@cSPEditorBlock_s0043_a460@SP@@QAEXEE@Z  # cSPEditorBlock_s0043_a460::F9a0 migrated from s0043a460 (verbatim, slice spelling)
+0043a9e0 ?F9e0@cSPEditorBlock_s0043_a460@SP@@QAE_NEE@Z  # cSPEditorBlock_s0043_a460::F9e0 migrated from s0043a460 (verbatim, slice spelling)
+0043ab90 ?Fb90@cSPEditorBlock_s0043_a460@SP@@QAE_NE@Z  # cSPEditorBlock_s0043_a460::Fb90 migrated from s0043a460 (verbatim, slice spelling)

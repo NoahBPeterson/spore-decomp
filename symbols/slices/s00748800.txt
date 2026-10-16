@@ -1,2 +1,2 @@
-# <va> <Name>  # evidence
-00748800 `anonymous namespace'::FilterModelSphere  # dev-PDB gap-align
+00748800 ?FilterModelSphere2@@YAHPAUCullModel_s0074_8800@@PAMPAUSphereArg@@@Z  # FilterModelSphere2 migrated from s00748800 (verbatim, slice spelling)
+00748c30 ?FindClosest@cModelWorld_s0074_8800@@QAEPAXHHPAMPAUQueryArg@@@Z  # cModelWorld_s0074_8800::FindClosest migrated from s00748800 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+0070c410 ?CreateLocalLightSample@cLightingWorld_s0070_c040@@QAEXH@Z  # cLightingWorld_s0070_c040::CreateLocalLightSample migrated from s0070c040 (verbatim, slice spelling)
+0070c7c0 ??0cLocalLightInfo@@QAE@ABU0@@Z  # cLocalLightInfo::cLocalLightInfo migrated from s0070c040 (verbatim, slice spelling)

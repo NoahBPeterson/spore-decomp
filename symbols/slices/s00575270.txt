@@ -1,11 +1,12 @@
-00575790 cAppModeEditorBase::DoSomePaletteThing  # if mPartsPalette(+0xd4) -> Reset(0,1) (0x43cfc0)
-005757b0 cAppModeEditorBase::StopSomething  # parts palette reset + FX fade 0x1002, clears +0x4d4
-00575e20 cAppModeEditorBase::GetSomething1  # +0x1d0==+0x1d4 and +0x1c0 gate; tail-calls vtable slot0 of +0x8c
-00575e50 cAppModeEditorBase::GetSomething2  # same gate; returns +0x40 or vtable slot1 of +0x8c
+00575270 cAppModeEditorBase::SetEconomyValue  # reads properties 9187aee3/47c1d1b/4dbc51f/66f72ae/684a675 (name inferred)
+005754c0 SP::cAppModeEditorBase::ResetEconomy  # PDB name; forwards to 00575270
+00575520 SP::cAppModeEditorBase::UpdateSpineVertebra  # PDB name
+00575790 ?DoSomePaletteThing@cAppModeEditorBase_s0057_5270@SP@@QAEXXZ  # cAppModeEditorBase_s0057_5270::DoSomePaletteThing migrated from s00575270 (verbatim, slice spelling)
+005757b0 ?StopSomething@cAppModeEditorBase_s0057_5270@SP@@QAEXXZ  # cAppModeEditorBase_s0057_5270::StopSomething migrated from s00575270 (verbatim, slice spelling)
+00575810 SP::cAppModeEditorBase::TestCondition  # PDB name
+00575e20 ?GetSomething1@cAppModeEditorBase_s0057_5270@SP@@QAEXH@Z  # cAppModeEditorBase_s0057_5270::GetSomething1 migrated from s00575270 (verbatim, slice spelling)
+00575e50 ?GetSomething2@cAppModeEditorBase_s0057_5270@SP@@QAEHXZ  # cAppModeEditorBase_s0057_5270::GetSomething2 migrated from s00575270 (verbatim, slice spelling)
 00575eb0 cAppModeEditorBase::SomeBool  # editor-availability predicate (AssetBrowser/MovieSystem/AppSystem/mode)
 00575f20 cAppModeEditorBase::SetupCameraUI  # WindowManager + palette inner UI show/hide
-005754c0 SP::cAppModeEditorBase::ResetEconomy  # PDB name; forwards to 00575270
-00575270 cAppModeEditorBase::SetEconomyValue  # reads properties 9187aee3/47c1d1b/4dbc51f/66f72ae/684a675 (name inferred)
-00575520 SP::cAppModeEditorBase::UpdateSpineVertebra  # PDB name
-00575810 SP::cAppModeEditorBase::TestCondition  # PDB name
 00575f70 cAppModeEditorBase::ToggleCameraMode  # camera-mode toggle (name inferred)
+005ca920 ?IsCategoryPaintByNumber@cSPPaletteUI@SP@@QAE_NXZ  # SP::cSPPaletteUI::IsCategoryPaintByNumber (callee of s00575270, named from the dev publics; slice address comment)

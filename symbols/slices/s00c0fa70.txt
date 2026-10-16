@@ -1,18 +1,18 @@
-00c0fa70 find animation entry by mask bit (0x24-stride table at +0xe40)
+00c0fa70 ?fa70@CAN@@QAEPAXIPAI@Z  # CAN::fa70 migrated from s00c0fa70 (verbatim, slice spelling)
 00c0fae0 clear animation binding and release (0x24-byte object)
 00c0fb40 release animation binding handle (+0x1c)
-00c0fb80 notify animated creature (state 1)
-00c0fba0 serialize vector of animation bindings via IO stream
-00c0fc10 dispatch element callback to object at +0x20
-00c0fc40 uniquify pointer array (release duplicates)
-00c0fcf0 read animation bit array (0x58 bits) from IO stream
-00c0fda0 write animation bit array (0x58 bits) to IO stream
-00c0fe30 copy animation binding (addref/release +0x20)
-00c0fea0 swap two animation bindings
-00c0ffc0 reverse-copy array of 0x24-byte bindings
-00c10050 play animation by id/name predicate
-00c10210 play-resolved wrapper (flag 1)
-00c10230 play-resolved wrapper (flag 0)
-00c10250 resolve + apply animation remap ids
-00c10330 pack byte array -> remap id and apply
-00c103f0 build cAnimationRemapping singleton
+00c0fb80 ?fb80@CAN@@QAEXHH@Z  # CAN::fb80 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fba0 ?FUN_00c0fba0@@YAXPAH0@Z  # FUN_00c0fba0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fc10 ?FUN_00c0fc10@@YADHPAH@Z  # FUN_00c0fc10 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fc40 ?FUN_00c0fc40@@YAPAHPAH0@Z  # FUN_00c0fc40 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fcf0 ?FUN_00c0fcf0@@YAPAHPAHH@Z  # FUN_00c0fcf0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fda0 ?FUN_00c0fda0@@YAPAHPAHH@Z  # FUN_00c0fda0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fe30 ?fe30@CAN@@QAEPAXPAX@Z  # CAN::fe30 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0fea0 ?FUN_00c0fea0@@YAXPAH0@Z  # FUN_00c0fea0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c0ffc0 ?FUN_00c0ffc0@@YAPAXHHPAH@Z  # FUN_00c0ffc0 migrated from s00c0fa70 (verbatim, slice spelling)
+00c10050 ?FUN_00c10050@@YAXIHHHD@Z  # FUN_00c10050 migrated from s00c0fa70 (verbatim, slice spelling)
+00c10210 ?FUN_00c10210@@YAXHHHH@Z  # FUN_00c10210 migrated from s00c0fa70 (verbatim, slice spelling)
+00c10230 ?FUN_00c10230@@YAXHHHH@Z  # FUN_00c10230 migrated from s00c0fa70 (verbatim, slice spelling)
+00c10250 ?FUN_00c10250@@YAXHHIH@Z  # FUN_00c10250 migrated from s00c0fa70 (verbatim, slice spelling)
+00c10330 ?FUN_00c10330@@YAXHHHIHI@Z  # FUN_00c10330 migrated from s00c0fa70 (verbatim, slice spelling)
+00c103f0 ?FUN_00c103f0@@YAXXZ  # FUN_00c103f0 migrated from s00c0fa70 (verbatim, slice spelling)

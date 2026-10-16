@@ -1,1 +1,4 @@
-004942b0 SP::EditorUtils::GetRotationAndPositionBasedOnBehavior  # dev PDB: only EditorUtils fn with signature (cSPEditorBlock*, cSPVector3&, cSPMatrix3&, cSPVector3, bool, bool) -> bool; callers push 0x20 bytes
+0044e7e0 ?GetSnapType@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetSnapType (callee of s004942b0, named from the dev publics; slice address comment)
+0044f220 ?GetSymmetrySign@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetSymmetrySign (callee of s004942b0, named from the dev publics; slice address comment)
+00466320 ?GetCorners@cSPBoundingBox@@QBEXQAUcSPVector3@@@Z  # cSPBoundingBox::GetCorners (callee of s004942b0, named from the dev publics; slice address comment)
+004942b0 ?GetRotationAndPositionBasedOnBehavior@EditorUtils@SP@@YA_NPAVcSPEditorBlock_s0049_42b0@2@AAUcSPVector3_s0049_42b0@@AAUcSPMatrix3_s0049_42b0@@U4@_N4@Z  # GetRotationAndPositionBasedOnBehavior migrated from s004942b0 (verbatim, slice spelling)

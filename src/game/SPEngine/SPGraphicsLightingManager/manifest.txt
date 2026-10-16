@@ -1,0 +1,28 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?FUN_00705050@@YAHHPAUE5@@@Z  00705050  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?set_7050e0@Big@@QAEXHPAH@Z  007050e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??4cShaderDataLightingInfo@@QAEAAU0@ABU0@@Z  00705120  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?get_705190@Big50@@QAEXPAH@Z  00705190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?set_7051b0@BigF8@@QAEXPBUFog98@@@Z  007051b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copy_7051e0@@YAPAUV32@@PBU1@0PAU1@@Z  007051e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copy_backward_705220@@YAPAUV32@@PBU1@0PAU1@@Z  00705220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?get@W5920@@QAEPAHXZ  00705920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??4S11@@QAEAAU0@ABU0@@Z  00705bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??4S7@@QAEAAU0@ABU0@@Z  00705c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?fill_705e90@@YAXPAT__m128@@0PBT1@@Z  00705e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?dtor@W5ef0@@QAEXXZ  00705ef0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??1W67f0@@QAE@XZ  007067f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?GetLightingWorld@W6840@@QAEHH@Z  00706840  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?get@W6870@@QAEHI@Z  00706870  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?get@W6890@@QAEHI@Z  00706890  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copyFrom@W68c0@@QAEPAU1@PBU1@@Z  007068c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CreateEnvLightSample@cLightingWorld@@QAEXPAUEnvEntry@@PBUcSPVector3_s0070_70d0@@I@Z  007074e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?DestroyAll@SlotDeque@@QAEXH@Z  007075e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CopyVec4@@YAPAUVector4@@PAU1@00@Z  00707660  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?DoNukeSubtree@Rbtree@@QAEXPAUNukeNode@@0@Z  00707690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?CopyBackVec4@@YAPAUVector4@@PAU1@00@Z  007076f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Free@Buf28@@QAEXXZ  00707720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?GetLocalShaderData@cLightingWorld@@QAEXPAX@Z  00707740  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?ReleaseLocalCache@cLightingWorld@@QAEXPAX@Z  00707790  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Update@cLightingManager@SP@@UAEXI@Z  0070ae40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?Release@cLocalLightInfo_s0092_72c0@@QAEXH@Z  009276c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1,4 +1,3 @@
-# VA  Name  # evidence
 007503a0  SP::cModelWorld::~cModelWorld  # PDB name
 007505a0  SP::cModelWorld::PreloadModels  # PDB name
-00750780  SP::cModelWorld::AddOccluder  # PDB name
+00750780 ?AddOccluder@MW6@@QAEXPAHM@Z  # MW6::AddOccluder migrated from s00750180 (verbatim, slice spelling)

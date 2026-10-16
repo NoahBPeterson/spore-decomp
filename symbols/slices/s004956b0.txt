@@ -1,1 +1,6 @@
-004956b0 SettleBlock  # editor block drop/stacking: linearCast down from +0.2, getPenetrations per hit, recursion over hit blocks; byte-exact
+004956b0 ?SettleBlock@@YAXPAUcSPEditorBlock_s0049_56b0@@PAUBlockVec_s0049_56b0@@@Z  # SettleBlock migrated from s004956b0 (verbatim, slice spelling)
+00495f90 ?Del@D95@@QAEPAXI@Z  # D95::Del migrated from s004956b0 (verbatim, slice spelling)
+00496090 ?Del@D960@@QAEPAXI@Z  # D960::Del migrated from s004956b0 (verbatim, slice spelling)
+004960d0 ?Dtor@D960@@QAEXXZ  # D960::Dtor migrated from s004956b0 (verbatim, slice spelling)
+00496140 ?Find@D961@@QAEPAHPAHH@Z  # D961::Find migrated from s004956b0 (verbatim, slice spelling)
+004961d0 ?FUN_004961d0@@YAXPADPAUVec_s0049_56b0@@@Z  # FUN_004961d0 migrated from s004956b0 (verbatim, slice spelling)

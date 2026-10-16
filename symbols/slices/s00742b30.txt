@@ -1,4 +1,10 @@
 00742db0 SP::cModelInstance::ConstructFromGameModelResource  # PDB name (symbols/pdb_names.json)
 00743030 SP::cModelInstance::GetBoneParents  # PDB name (symbols/pdb_names.json)
-00743950 SP::cModelWorld::SetTimeScale  # PDB name (symbols/pdb_names.json)
-00743b00 SP::cModelWorld::ResetHighlightCurve  # PDB name (symbols/pdb_names.json)
+00743940 ?Adjustor@cModelWorld56@@QAEHH@Z  # cModelWorld56::Adjustor migrated from s00742b30 (verbatim, slice spelling)
+00743950 ?SetTimeScale@@YGXHM@Z  # SetTimeScale migrated from s00742b30 (verbatim, slice spelling)
+007439b0 ?OffsetOrE4@@YGHH@Z  # OffsetOrE4 migrated from s00742b30 (verbatim, slice spelling)
+007439d0 ?SetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  # cModelWorld56::SetCurveSegment migrated from s00742b30 (verbatim, slice spelling)
+00743a20 ?GetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  # cModelWorld56::GetCurveSegment migrated from s00742b30 (verbatim, slice spelling)
+00743a60 ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  # cModelWorld56::SetCurveRange migrated from s00742b30 (verbatim, slice spelling)
+00743a80 ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  # cModelWorld56::GetCurveRange migrated from s00742b30 (verbatim, slice spelling)
+00743b00 ?ResetHighlightCurve@cModelWorld@SP@@UAEXXZ  # SP::cModelWorld::ResetHighlightCurve migrated from s00742b30

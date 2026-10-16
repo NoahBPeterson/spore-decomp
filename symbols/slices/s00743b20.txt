@@ -1,8 +1,13 @@
 00743bb0 SP::cModelWorld::cLoadQueueEntry::~cLoadQueueEntry  # dev PDB 0158c860 (range destroy helper)
+00743c50 ?SortDescUnguarded@@YAXPAUPair8@@0@Z  # SortDescUnguarded migrated from s00743b20 (verbatim, slice spelling)
+00743d20 ?SortAscUnguarded@@YAXPAUPair8@@0@Z  # SortAscUnguarded migrated from s00743b20 (verbatim, slice spelling)
+00743d90 ?UninitCopy@@YAPAUElem28@@PBU1@0PAU1@@Z  # UninitCopy migrated from s00743b20 (verbatim, slice spelling)
 00743e50 eastl::promote_heap<cOccluder*,int,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # dev PDB 0158b060
+00744050 ?TransformTwo@@YAXPBUcSPVector3_s0074_3b20@@0PBUcSPTransform_s0074_3b20@@HH@Z  # TransformTwo migrated from s00743b20 (verbatim, slice spelling)
 007445b0 SP::cModelWorld::CallOnLoad  # dev PDB 0158bb10 vtable slot 0x14
 007446a0 SP::cModelWorld::StallGetBoundingBox  # dev PDB 0158bc10 vtable slot 0x5c
 007446c0 SP::cModelWorld::GetNumAnimationGroups  # dev PDB 0158bd00 vtable slot 0x60
+007446e0 ?GetModelResourceIDs@cModelWorld@@QAEXPAUModel@@PAI1@Z  # cModelWorld::GetModelResourceIDs migrated from s00743b20 (verbatim, slice spelling)
 00744760 SP::cModelWorld::StallUntilLoaded  # dev PDB 0159d9c0 vtable slot 0x58
 00744790 SP::cModelWorld::GetNumAnimations  # dev PDB 0158bd30 vtable slot 0x64
 007447c0 SP::cModelWorld::GetAnimationIDs  # dev PDB 0158bd70 vtable slot 0x68

@@ -1,3 +1,3 @@
-00562b80 SP::CandidateDBStub::AssignCandidates  # copies a range into mCandidates and queries keys
-00562ca0 SP::CandidateDBStub::TryFilterCandidates  # filter then summary validation
+00562b80 ?AssignCandidates@CandidateDBStub@SP@@QAEXPAX0@Z  # CandidateDBStub::AssignCandidates migrated from s005628d0 (verbatim, slice spelling)
+00562ca0 ?TryFilterCandidates@CandidateDBStub@SP@@QAE_NPAX00@Z  # CandidateDBStub::TryFilterCandidates migrated from s005628d0 (verbatim, slice spelling)
 005631e0 SP::cSPObjectTemplateDB::FindAssetIndex  # linear scan of mAssetList by key

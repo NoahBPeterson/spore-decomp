@@ -1,0 +1,1 @@
+005ba060 ??0cSPEditorManipulation56@SP@@QAE@XZ  # cSPEditorManipulation56::cSPEditorManipulation56 migrated from s005b94b0 (verbatim, slice spelling)

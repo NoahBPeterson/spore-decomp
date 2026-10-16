@@ -1,21 +1,22 @@
-# va Name  # evidence
+006a17e0 ?SetBoolProperty@cDirectPropertyList@SP@@QAEXI_N@Z  # SP::cDirectPropertyList::SetBoolProperty (callee of s007c8940, named from the dev publics; slice address comment)
+007c7ac0 ?SetOptionDefault@cConfigScriptState@SP@@QAE_NII@Z  # SP::cConfigScriptState::SetOptionDefault (callee of s007c8940, named from the dev publics; slice address comment)
 007c8940 SP::cConfigManager::ApplyOption  # PDB name
 007c8af0 AutoRefCount vector insert helper  # calls 0x7c7a40 + 0x7c7d70
-007c8b70 eastl string range assign  # stride 0x10, calls basic_string::assign
-007c8bb0 GetPropID  # PDB name; isdigit/strtoul + PropertyManager lookup
-007c8c30 cBoolPropertyCommand::Execute  # PDB name
-007c8c80 cIntPropertyCommand::Execute  # PDB name
-007c8cd0 cFloatPropertyCommand::Execute  # PDB name
+007c8b70 ?CopyStrings@@YAPAXPAX00@Z  # CopyStrings migrated from s007c8940 (verbatim, slice spelling)
+007c8bb0 ?GetPropID@@YAHPBD@Z  # GetPropID migrated from s007c8940 (verbatim, slice spelling)
+007c8c30 ?Execute@cBoolPropertyCommand@@QAEXPAUcArguments@@@Z  # cBoolPropertyCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
+007c8c80 ?Execute@cIntPropertyCommand@@QAEXPAUcArguments@@@Z  # cIntPropertyCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
+007c8cd0 ?Execute@cFloatPropertyCommand@@QAEXPAUcArguments@@@Z  # cFloatPropertyCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
 007c8d20 cResourceKeyPropertyCommand::Execute  # SPKeyFromName + Variant assign
-007c8de0 cSetOptionCommand::Execute  # PDB name
-007c8e50 cAlertCommand::Execute  # PDB name
-007c8f70 CardName command Execute  # sets isCardFound/cardName cheats
-007c9040 CardVendor command Execute  # sets cardVendor cheat
+007c8de0 ?Execute@cSetOptionCommand@@QAEXPAUcArguments@@@Z  # cSetOptionCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
+007c8e50 ?Execute@cAlertCommand@@QAEXPAUcArguments@@@Z  # cAlertCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
+007c8f70 ?Execute@cCardCommand@@QAEXPAUcArguments@@@Z  # cCardCommand::Execute migrated from s007c8940 (verbatim, slice spelling)
+007c9040 ?Execute@cUnknownCmd@@QAEXPAUcArguments@@@Z  # cUnknownCmd::Execute migrated from s007c8940 (verbatim, slice spelling)
 007c9120 cOptionCheat::Execute  # PDB name
 007c9320 SP::cConfigManager::Initialize  # CreateFileParser/CreateParser wiring
 007c94f0 SP::cConfigManager::SetOption  # PDB name
 007c95d0 SP::cConfigManager::ResetToDefaults  # PDB name
 007c9680 SP::cConfigManager::ApplyAllOptions  # PDB name
-007c9760 SP::cConfigManager::GetConfigString  # PDB name
+007c9760 ?GetConfigString@cConfigManager_s007c_8940@@QAE_NIPAUStr16@@@Z  # cConfigManager_s007c_8940::GetConfigString migrated from s007c8940 (verbatim, slice spelling)
 007c97a0 AutoRefCount vector uninitialized_copy  # stride 0x18
-007c9830 AutoRefCount vector fill  # stride 0x18
+007c9830 ?FillAutoRef@@YAXPADI0@Z  # FillAutoRef migrated from s007c8940 (verbatim, slice spelling)

@@ -1,1 +1,4 @@
-00404430 Skinner::PaintSystem::scalar_deleting_dtor  # slot 0 of vtbl_Skinner::PaintSystem (0x013EB394); sets vtable, deletes if flag&1
+00403af0 ?Initialize@cBaker@@UAE_NXZ  # cBaker::Initialize migrated from s00403af0 (verbatim, slice spelling)
+004043f0 ?AddListeners@@YAXPAUIMessageManager@@PAUIMessageListener@@PBII@Z  # AddListeners migrated from s00403af0 (verbatim, slice spelling)
+00404430 ??_GPaintSystem@Skinner@@UAEPAXI@Z  # sort migrated from s00403af0 (verbatim, slice spelling)
+00404460 ?IsEqual@IdPaintSystem@Skinner@@UBE_NABVPaintSystem@2@@Z  # IdPaintSystem::IsEqual migrated from s00403af0 (verbatim, slice spelling)

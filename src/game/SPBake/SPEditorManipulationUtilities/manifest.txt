@@ -1,0 +1,24 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?RecordEvent4@@YAXIIMI@Z  00435f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00490420@@YA_NPAUcSPEditorBlock@@0H@Z  00490420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004909d0@@YAPAUVector3@@PAU1@PBU1@1@Z  004909d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetAlignmentPosition@@YAMPAUcSPEditorBlock_s0049_0a70@@PAUMgr@@UVec3@@UMatrix3@@PAURwVec3@@PAU4@PA_NE3@Z  00490a70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?CountPileWeight@@YAHPAUcSPEditorBlock_s0049_0a70@@H@Z  00491350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Sub@S935@@QBE?AUVector3_s0049_28d0@@XZ  004935f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?ClassifyAgainstSymmetryPlane@@YAHPAUV3@@MMMPAUBasis@@@Z  00493640  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00494270@@YAPAXPAX0@Z  00494270  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?SettleBlock@@YAXPAUcSPEditorBlock_s0049_56b0@@PAUBlockVec_s0049_56b0@@@Z  004956b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004983d0@@YAXPAUX982@@E@Z  004983d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00499f10@@YAPAUVector3_s0049_9410@@PAU1@U1@11@Z  00499f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_0049b340@@YA_NPAUBitOwner@@@Z  0049b340  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Set@Y9c0@@QAEXD@Z  0049c0f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?SameKey@@YA_NPAUResKeySource@@0@Z  004a7c30  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?EntHasFlag@@YA_NPAUcSPEditorBlock_s004a_7c30@@@Z  004a7dd0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?BlockBlocked@@YA_NPAUcSPEditorBlock_s004a_7c30@@@Z  004a7e60  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?AdjacentDir@@YA_NHHE@Z  004a7ea0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?SetSymmetricBlocksUIState@@YAXPAUcSPEditorBlock_s004a_7c30@@IE@Z  004a7f30  /Od /Ob1 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?ReleaseRefs@@YAXPAURefObj_s004a_7c30@@PAUUIntVector@@@Z  004a8860  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?KillSeti@@YAXH@Z  004a88d0  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?NegateX@@YAPAUV3_s004a_89e0@@PAU1@0@Z  004a8f40  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?QuaternionToMatrix@SP@@YAAAUMatrix33T_s004a_9920@@AAU2@ABUQuaternion@1@@Z  004a9b40  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?GetCreatorType@@YA_NPBUResourceKey@@@Z  00641900  /O2 /MD /Gy /TP /Isrc/game/include

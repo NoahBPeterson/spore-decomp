@@ -1,0 +1,2 @@
+0043ce00 ?GetSlot@cSPEditorBlock_s0043_cad0@SP@@QAEPAUBlk@2@H@Z  # cSPEditorBlock_s0043_cad0::GetSlot migrated from s0043cad0 (verbatim, slice spelling)
+0043ce40 ?F3ce40@cSPEditorBlock_s0043_cad0@SP@@QAEXXZ  # cSPEditorBlock_s0043_cad0::F3ce40 migrated from s0043cad0 (verbatim, slice spelling)

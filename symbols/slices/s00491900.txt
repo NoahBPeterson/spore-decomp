@@ -1,0 +1,1 @@
+00491900 ?FUN_00491900@@YAHPAUVec@@0@Z  # FUN_00491900 migrated from s00491900 (verbatim, slice spelling)

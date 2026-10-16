@@ -1,0 +1,34 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Info_AddOffset@@YAHPAX@Z  00692ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ClearBuffer@@YAXPAPAC@Z  00692fb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseInt64@@YAXPAPBDPA_J@Z  00692fd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseLong@@YAXPAPBDPAJ@Z  00692ff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseShort@@YAXPAPBDPAF@Z  00693010  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseUShort@@YAXPAPBDPAG@Z  00693030  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseChar@@YAXPAPBDPAC@Z  00693050  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseUChar@@YAXPAPBDPAE@Z  00693070  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseULong@@YAXPAPBDPAK@Z  00693090  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector2@@YAXPAPBDPAM@Z  006930d0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector3@@YAXPAPBDPAM@Z  006930f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseVector4@@YAXPAPBDPAM@Z  00693120  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseColorRGB@@YAXPAPBDPAI@Z  00693150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693320  00693320  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693b90  00693b90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c10  00693c10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00693c70  00693c70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694270  00694270  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694bf0  00694bf0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694e00  00694e00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694ec0  00694ec0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694ee0  00694ee0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694f00  00694f00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694f20  00694f20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694f40  00694f40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694f60  00694f60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694f80  00694f80  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694fa0  00694fa0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694fc0  00694fc0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00694fe0  00694fe0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695010  00695010  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695040  00695040  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  _FUN_00695080  00695080  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

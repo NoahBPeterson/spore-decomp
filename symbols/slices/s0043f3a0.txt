@@ -1,1 +1,8 @@
+0043f3a0 ?F3a0@cSPEditorBlock_s0043_f3a0@SP@@QAEMXZ  # cSPEditorBlock_s0043_f3a0::F3a0 migrated from s0043f3a0 (verbatim, slice spelling)
+0043f3f0 ?F3f0@cSPEditorBlock_s0043_f3a0@SP@@QAEMXZ  # cSPEditorBlock_s0043_f3a0::F3f0 migrated from s0043f3a0 (verbatim, slice spelling)
+0043f4d0 ?F4d0@cSPEditorBlock_s0043_f3a0@SP@@QAEMXZ  # cSPEditorBlock_s0043_f3a0::F4d0 migrated from s0043f3a0 (verbatim, slice spelling)
+0043f5b0 ?F5b0@cSPEditorBlock_s0043_f3a0@SP@@QAEXPAUVec3@2@MMMH@Z  # cSPEditorBlock_s0043_f3a0::F5b0 migrated from s0043f3a0 (verbatim, slice spelling)
 0043f6b0 SP::cSPEditorBlock::SetValid  # PDB anchor
+0043ffa0 ?FFa0@cSPEditorBlock_s0043_f3a0@SP@@QAEXUMatrix3_s0043_f3a0@2@@Z  # cSPEditorBlock_s0043_f3a0::FFa0 migrated from s0043f3a0 (verbatim, slice spelling)
+00440020 ?F4020@cSPEditorBlock_s0043_f3a0@SP@@QAEXME@Z  # cSPEditorBlock_s0043_f3a0::F4020 migrated from s0043f3a0 (verbatim, slice spelling)
+00440090 ?F4090@cSPEditorBlock_s0043_f3a0@SP@@QAEXME@Z  # cSPEditorBlock_s0043_f3a0::F4090 migrated from s0043f3a0 (verbatim, slice spelling)

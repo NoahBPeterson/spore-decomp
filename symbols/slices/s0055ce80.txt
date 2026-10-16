@@ -1,2 +1,4 @@
 0055ce80 SP::FUN_0055ce80  # unnamed; reads eastl::vector<WeightedID> + float at +0x18 from a stream
 0055cff0 SP::cKeyFilterEditorResourceTypes::IsKeyIncluded  # PDB caller-scored candidate
+0055d9e0 ?FUN_0055d9e0@cSPObjectTemplateDB_s0055_ce80@SP@@QAEDPAXH0D@Z  # cSPObjectTemplateDB_s0055_ce80::FUN_0055d9e0 migrated from s0055ce80 (verbatim, slice spelling)
+0055db30 ?FUN_0055db30@cSPObjectTemplateDB_s0055_ce80@SP@@QAEDPAX@Z  # cSPObjectTemplateDB_s0055_ce80::FUN_0055db30 migrated from s0055ce80 (verbatim, slice spelling)

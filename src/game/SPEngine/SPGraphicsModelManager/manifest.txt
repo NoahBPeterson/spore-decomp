@@ -1,0 +1,27 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Adjustor@cModelWorld56@@QAEHH@Z  00743940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  007439d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetCurveSegment@cModelWorld56@@QAEXPAH0H@Z  00743a20  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?SetCurveRange@cModelWorld56@@QAEXHHH@Z  00743a60  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetCurveRange@cModelWorld56@@QAEXHPAH0@Z  00743a80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?ResetHighlightCurve@cModelWorld@SP@@UAEXXZ  00743b00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?UninitCopy24@@YAPAUVec6@@PAU1@00@Z  00745ca0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetHullBoundingBox@CModelWorldStub@@QAEXPAXPAUcSPBoundingBox_s0074_5ac0@@@Z  00746560  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?UpdateOccluder@CModelWorld@@QAEXHPAUVec3@@M@Z  00746b40  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??0Rec48@@QAE@XZ  00746de0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?ReleaseTransformedHull@cModelWorld_s0074_a290@SP@@QAEXPAPAX@Z  0074a650  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetBakedMeshes@cModelWorld_s0074_a290@SP@@QAE_NPAX0@Z  0074a690  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetBakedMeshesUnscaled@cModelWorld_s0074_a290@SP@@QAE_NPAX0@Z  0074a700  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetMeshes@cModelWorld_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290@@@Z  0074a850  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FreeTransformedBuffer@cModelWorld_s0074_a290@SP@@QAEXXZ  0074b150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1cLoadQueue@SP@@QAE@XZ  0074b2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?push_back@Vec18@@QAEXPBUE18@@@Z  0074cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInShape@cModelWorld_s0074_e2b0@@QAE_NPBXMPAUModelVec@@PAX@Z  0074eb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInSphere@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  0074ed00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInBox@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  0074ee80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1EditorResource@@UAE@XZ  0074f010  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Shutdown@EditorResource@@QAE_NXZ  0074f0c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?quick_sort@@YAXPAUcOccluder_s0074_f200@@0P6A_NABU1@1@Z@Z  0074f3a0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?Allocate@SlotAllocator@@QAEHII@Z  0074fe10  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?create@SlotVectorOccluder@@QAEIABUcOccluderInfo@@@Z  00750030  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ?ForEach@TreeWalker_00753540@@QAEXMM@Z  00753540  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /Isrc/game/include

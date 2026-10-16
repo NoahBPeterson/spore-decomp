@@ -1,8 +1,11 @@
-0055beb0 SP::cFunctionalTestCheat::Description  # byte-exact
-0055bee0 SP::cFunctionalTestCheat::IsEnabled  # byte-exact (return true)
-0055bfb0 SP::cSPObjectTemplateDB::Shutdown  # PDB name
+0055beb0 ?Description@cFunctionalTestCheat@SP@@UBEPBDW4tHelpType@ArgScript@EA@@@Z  # SP::cFunctionalTestCheat::Description migrated from s0055beb0
+0055bee0 ?IsEnabled@cFunctionalTestCheat_s0055_beb0@SP@@QAE_NXZ  # cFunctionalTestCheat_s0055_beb0::IsEnabled migrated from s0055beb0 (verbatim, slice spelling)
+0055bf10 ??0cResFinal@@QAE@XZ  # cResFinal::cResFinal migrated from s0055beb0 (verbatim, slice spelling)
+0055bf50 ??0cSummarizerFinal@@QAE@XZ  # cSummarizerFinal::cSummarizerFinal migrated from s0055beb0 (verbatim, slice spelling)
+0055bfb0 ?Shutdown@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NXZ  # cSPObjectTemplateDB_s0055_beb0::Shutdown migrated from s0055beb0 (verbatim, slice spelling)
+0055c2e0 ?RandomizeFirstN@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NPAU?$ParamVec@UKey3@@@@H@Z  # cSPObjectTemplateDB_s0055_beb0::RandomizeFirstN migrated from s0055beb0 (verbatim, slice spelling)
 0055c3c0 SP::cSPObjectTemplateDB::HandleMessage  # PDB name
-0055c640 SP::CreateObjectTemplateDB (new Editor::ObjectTemplateDB)  # byte-exact
+0055c640 ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB@Editor@@XZ  # CreateObjectTemplateDB migrated from s0055beb0 (verbatim, slice spelling)
 0055c690 SP::cSPObjectTemplateDB::AsInterface  # complete, 13-byte near-miss (case-body layout)
 0055c6f0 SP::cSPObjectTemplateDB::SaveAssetParameters  # PDB candidate (caller-scored), byte-exact
 0055cb50 SP::cSPObjectTemplateDB::LoadAssetParameters  # PDB candidate (caller-scored), byte-exact

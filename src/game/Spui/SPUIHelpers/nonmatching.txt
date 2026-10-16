@@ -1,0 +1,51 @@
+# va  diff-bytes  reason
+00804f80 17 Help2 (4-arg window helper); x87 float-arg materialisation order differs; equiv PASS: 1199 valid inputs, 100.0% coverage (all insns)
+00804fc0 70 SetWindowAlpha; float rounding uses fnstcw/fldcw/fistp qword helper (not reproduced without asm); equiv UNSUPPORTED: 2 unresolved reference(s): ?H5c@IWnd@@QAEXH@Z, ?H90@IWnd@@QAEXXZ
+00805040 29 GetAlpha; unsigned int->float uses x87 fild (module without /arch:SSE) + float multiply; equiv WEAK: 1199 valid inputs (need 200), 93.8% coverage (need 100%% (all insns))
+00805080 19 GetElapsedSeconds; tail-call to 0x00813070 not reproduced (frame/arg setup); equiv FAIL: 5/5 valid inputs mismatched
+008050b0 58 WalkAll linked-interface walk; register/loop shape differs; equiv FAIL: 5/13 valid inputs mismatched
+008050f0 44 WalkFind; same linked-interface walk shape differs; equiv FAIL: 5/75 valid inputs mismatched
+00805150 24 Contains; vtable access via VSlot address form vs direct slot load; equiv PASS: 771 valid inputs, 100.0% coverage (all insns)
+008051b0 50 FindByKey; original passes the receiver in EDI (static-helper register convention); equiv UNSUPPORTED: only 0/1200 inputs valid (discards: fault(read)=1200)
+00805200 20 AttrF14 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 318 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805230 20 AttrF18 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 319 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805260 19 AttrP1c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 275 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805290 20 AttrF0c getter; wrong calling convention of the FindByKey helper; equiv WEAK: 292 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+008052c0 20 AttrF10 getter; wrong calling convention of the FindByKey helper; equiv WEAK: 293 valid inputs (need 200), 46.7% coverage (need 100%% (all insns))
+00805310 167 CreditsTabInit; layout ctor/init call reconstruction, register scheduling; equiv UNSUPPORTED: 5 unresolved reference(s): ?LayoutCtor@@YAXPAD@Z, ?LayoutInit@@YA_NPADHHH@Z, ?LayoutDtor@@
+00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
+008054b0 31 FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
+008054f0 10 InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina
+00805ea0  2   complete; only the -4 pointer adjust is sub eax,4 vs original add eax,-4
+00805ef0  93  complete; loop layout + merged epilogue (do-while not reproduced exactly)
+008060d0  144 complete; register allocation/argument scheduling differs
+00806370  244 complete; rect-temp scheduling and frame differs
+008064c0  135 complete; rect-temp scheduling and frame differs
+00806610  294 complete; many vcall argument/order scheduling differences
+008068d0  264 complete; drawable assignment switch, register/scheduling differences
+00806aa0  58  complete; callee-saved register choice (ebx vs esi) differs
+00806b20  196 complete; index/wrap expression and scheduling differ
+00806bf0  77  complete; SSE scheduling differs
+00806c60  14  complete; only parameter register assignment (esi/edi) swapped
+00806ca0  64  complete; SSE scheduling differs
+00806de0  84  complete; loop/register differences
+00806ee0  96  complete; register/scheduling differences
+00807430  84  complete; float clamp scheduling differs
+008074a0  188 complete; control-flow/register differences
+00807590  65  complete; loop/register differences
+00807600  107 complete; ctor/control-flow differences
+00807690  50  complete; register differences
+008076f0  91  complete; register differences
+00807760  78  complete; allocator ctor arg/register differences
+00807a50  244 complete; button-drawable selection/register schedule differs
+00807dc0  107 complete; shader refcount/loop scheduling differs
+00807f50  185 complete; rotation switch/register differences
+00808050  166 complete; transform update SSE schedule differs
+00808190  24  complete; only vtable-load scheduling differs
+00808230  96  complete; float compare schedule differs
+008082f0  23  complete; only vtable-load scheduling differs
+008085d0  59  complete; ctor field-store/register differences
+00808660  209 complete; property/stream loop register differences
+008087f0  302  bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ; equiv: UNSUPPORTED (0/1200 valid inputs; fake-arity/faults) after marker fix
+00808d40  300  complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ
+0082a450 127 complete translation; AutoRef release sequence codegen differs

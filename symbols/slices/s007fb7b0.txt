@@ -1,14 +1,14 @@
-# va Name  # evidence
-007fb880 cSPUIBehaviorTimeFunction::cSPUIBehaviorTimeFunction  # sets mParamDuration/mParamFrequency=1, rest 0, mbDirty=1; offsets match dev-PDB layout
-007fba00 cSPUIBehaviorValueInterpolator::cSPUIBehaviorValueInterpolator  # value-interpolator vtables over an ISerializable/RefCount base
-007fba80 cSPUIBehaviorEventBase sub-object initialiser  # calls cSPUIWinProc base ctor then sets 4 sub-object vtables
-007fbb20 cSPUIBehaviorPredicateBase-like initialiser  # vtables + mCombineMode=1 at +0xc
-007fbbc0 cSPUIBehaviorPredicateBase/ActionBase initialiser  # predicate arrays + mLastEvaluatedPredicateCount=-1 at +0x34, 4-slot clear loop
-007fbce0 SP::MessageBasicRC<5>::~MessageBasicRC<5>  # Ghidra name; refcounted 4-slot array at +8, base dtor at the end
+007fb880 ?Ctor@C_7fb880@@QAEPAXXZ  # C_7fb880::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fba00 ?Ctor@C_7fba00@@QAEPAXXZ  # C_7fba00::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fba80 ?Ctor@C_7fba80@@QAEPAXXZ  # C_7fba80::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fbb20 ?Ctor@C_7fbb20@@QAEPAXXZ  # C_7fbb20::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fbbc0 ?Ctor@C_7fbbc0@@QAEPAXXZ  # C_7fbbc0::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fbce0 ?Dtor@C_7fbce0@@QAEXXZ  # C_7fc200::Dtor migrated from s007fb7b0 (verbatim, slice spelling)
+007fbe70 ?GetClassId@C_7fbe70@@QAEHXZ  # C_7fbe70::GetClassId migrated from s007fb7b0 (verbatim, slice spelling)
+007fbed0 EA::UTFWin::SerMarshaller<cSPUIPluginProc>::SetSource  # SerItem bind with base=this-4
 007fbf40 UTFWin::cSPUIBehaviorEventBase::cSPUIBehaviorEventBase  # dev-PDB name; full event-base ctor
 007fc200 UTFWin::cSPUIBehaviorEventBase::~cSPUIBehaviorEventBase  # dev-PDB candidate; RemoveAllPredicates/Actions, mStateString at +0x68
-007fc2a0 UI::BehaviorMessage::BehaviorMessage  # Ghidra name; 3 vtable writes + fields at +0x38/+0x40
-007fc690 cSPUIBehaviorEventBase::SetStateString  # dev-PDB name (00fed120)
-007fc790 cSPUIBehaviorEventBase::SetStateInt  # dev-PDB name (00fed250)
-007fbe70 `anonymous namespace'::cSPUIPluginProc::GetClassId  # dev-PDB name (00fecaa0), returns 0x24b899e
-007fbed0 EA::UTFWin::SerMarshaller<cSPUIPluginProc>::SetSource  # SerItem bind with base=this-4
+007fc2a0 ?Ctor@C_7fc2a0@@QAEPAXXZ  # C_7fc2a0::Ctor migrated from s007fb7b0 (verbatim, slice spelling)
+007fc600 ?f_7fc600@Obj7fc600@@QAEIHH@Z  # Obj7fc600::f_7fc600 migrated from s007fb7b0 (verbatim, slice spelling)
+007fc690 ?f_7fc690@@YAHPAX0@Z  # f_7fc690 migrated from s007fb7b0 (verbatim, slice spelling)
+007fc790 ?f_7fc790@@YAHPAX0@Z  # f_7fc790 migrated from s007fb7b0 (verbatim, slice spelling)

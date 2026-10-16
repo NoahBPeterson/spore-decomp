@@ -1,8 +1,8 @@
-00416990 EditorPanel::ActivateById  # posts "Editor" message 0x695e243 for pending entries with id
-00416c60 EditorPanel::ActivateByKey  # same, matched by ResourceKey
-00416e30 EditorPanel::AdjustPressCount  # counter at +0xc4, flag +0xc0
-00416eb0 EditorPanel::CountPending  # entries.size + active flag
-00416f00 EditorPanel::CountWithId  # counts entries with id
-00416fb0 EditorPanel::GetActiveKey  # copies key at +0x228
-00417010 EditorPanel::CollectAll  # pushes active + all entries into sink
-00417150 EditorPanel::GetSlotValue  # hash lookup in slots[tag-0x61] (stride 0x20 at +0x1184)
+00416990 ?ActivateById@EditorPanel_s0041_6990@@QAE_NH@Z  # EditorPanel_s0041_6990::ActivateById migrated from s00416990 (verbatim, slice spelling)
+00416c60 ?ActivateByKey@EditorPanel_s0041_6990@@QAE_NPAUResourceKey_s0041_6990@@@Z  # EditorPanel_s0041_6990::ActivateByKey migrated from s00416990 (verbatim, slice spelling)
+00416e30 ?AdjustPressCount@EditorPanel_s0041_6990@@QAEX_N@Z  # EditorPanel_s0041_6990::AdjustPressCount migrated from s00416990 (verbatim, slice spelling)
+00416eb0 ?CountPending@EditorPanel_s0041_6990@@QAEHXZ  # EditorPanel_s0041_6990::CountPending migrated from s00416990 (verbatim, slice spelling)
+00416f00 ?CountWithId@EditorPanel_s0041_6990@@QAEHH@Z  # EditorPanel_s0041_6990::CountWithId migrated from s00416990 (verbatim, slice spelling)
+00416fb0 ?GetActiveKey@EditorPanel_s0041_6990@@QAE_NPAUResourceKey_s0041_6990@@@Z  # EditorPanel_s0041_6990::GetActiveKey migrated from s00416990 (verbatim, slice spelling)
+00417010 ?CollectAll@EditorPanel_s0041_6990@@QAEXPAUEntrySink@@@Z  # EditorPanel_s0041_6990::CollectAll migrated from s00416990 (verbatim, slice spelling)
+00417150 ?GetSlotValue@EditorPanel_s0041_6990@@QAEMPAUKeyedEvent@@@Z  # EditorPanel_s0041_6990::GetSlotValue migrated from s00416990 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+00419000 ?Run@LoadTask@@QAEDPAUFinisher@@@Z  # LoadTask::Run migrated from s00419000 (verbatim, slice spelling)
+00419690 ?Prepare@Task@@QAEXPAURequest@@@Z  # Task::Prepare migrated from s00419000 (verbatim, slice spelling)

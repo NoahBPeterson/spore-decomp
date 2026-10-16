@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00559500 4 element increment: flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast; complete; only the compiler spill slot of `this` (-8) vs the named local (-0xc) is swapped; equiv PASS
+0055d9e0  287  complete classifier-registration loop; intrusive-ptr temp schedule differs
+0055db30  373  complete summarizer-registration path; /Od register schedule differs
+0055eae0 52 complete vector constructor; vtable/frame schedule differs; equiv FAIL (ours faults where original returns)
+0055f9e0 37 complete conditional object release; /Od local layout differs; equiv FAIL (ecx receiver fixed)
+0055fa20 213 complete asset activate/deactivate path; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fb30 93 complete asset-membership query; /Od frame differs; equiv FAIL (ecx receiver fixed)
+0055fbb0 64 complete asset timestamp setter; /Od frame differs; equiv FAIL (ecx receiver fixed)
+00562b80 98 complete candidate-list assignment; /Od frame differs; equiv: FAIL (ours faults in memcpy import; testable after ecx fix)
+00562ca0 122 complete candidate filter path; /Od frame differs; equiv: FAIL (ours faults at 004769bd; testable after ecx fix)

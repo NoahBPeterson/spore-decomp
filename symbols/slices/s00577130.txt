@@ -1,11 +1,11 @@
-00577130 SP::cAppModeEditorBase::SetSoundBlockAdded  # PDB name; 3 PlayEditorSound calls gated by +0x20e
-005771f0 SP::cAppModeEditorBase::SetSoundBlockRemoved  # PDB name; as above with hash 0xbb98bc04
-005772b0 SP::cAppModeEditorBase::RemoveTorsoFromEffectsMask  # PDB name; manual vtable slot 0x16c/0x170
+00577130 ?SetSoundBlockAdded@cAppModeEditorBase@SP@@QAEXPAVcSPEditorBlock@2@@Z  # SP::cAppModeEditorBase::SetSoundBlockAdded migrated from s00577130
+005771f0 ?SetSoundBlockRemoved@cAppModeEditorBase@SP@@QAEXPAVcSPEditorBlock@2@@Z  # SP::cAppModeEditorBase::SetSoundBlockRemoved migrated from s00577130
+005772b0 ?RemoveTorsoFromEffectsMask@cAppModeEditorBase@SP@@QAEXXZ  # SP::cAppModeEditorBase::RemoveTorsoFromEffectsMask migrated from s00577130
 00577310 SP::cAppModeEditorBase::PreloadResources  # PDB name
-005774f0 cAppModeEditorBase::SetSomeBlock  # member at +0xf8 + call 0x573c00 (name inferred)
-00577520 cAppModeEditorBase::UpdateBlockState  # +0xcc/+0xe4 gates, SetRolloverHandle (name inferred)
-00577580 cAppModeEditorBase::SetTorsoBlock  # AutoRefCount-style +0xdc/+0xd4/+0xd8 updates (name inferred)
-00577620 cAppModeEditorBase::HasSkin  # +0x360 && +0x150->GetSkin(1) (name inferred)
+005774f0 ?SetSomeBlock@cAppModeEditorBase_s0057_7130@SP@@QAEXH@Z  # cAppModeEditorBase_s0057_7130::SetSomeBlock migrated from s00577130 (verbatim, slice spelling)
+00577520 ?UpdateBlockState@cAppModeEditorBase_s0057_7130@SP@@QAEXXZ  # cAppModeEditorBase_s0057_7130::UpdateBlockState migrated from s00577130 (verbatim, slice spelling)
+00577580 ?SetTorsoBlock@cAppModeEditorBase_s0057_7130@SP@@QAEXPAXD@Z  # cAppModeEditorBase_s0057_7130::SetTorsoBlock migrated from s00577130 (verbatim, slice spelling)
+00577620 ?HasSkin@cAppModeEditorBase_s0057_7130@SP@@QAE_NXZ  # cAppModeEditorBase_s0057_7130::HasSkin migrated from s00577130 (verbatim, slice spelling)
 00577650 cAppModeEditorBase::SaveSomething  # GetManager/GetSaveArea/model save (name inferred)
 00577b20 cAppModeEditorBase::HasAnyResource  # ResourceMan lookup + record scan (name inferred)
 00577c40 cAppModeEditorBase::LoadSomething  # property key lookup + load (name inferred)

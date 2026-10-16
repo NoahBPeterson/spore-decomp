@@ -1,0 +1,4 @@
+0040e5b0 ?OnA@Obj@@QAE_NH@Z  # Obj::OnA migrated from s0040e5b0 (verbatim, slice spelling)
+0040e800 ?Handle@Dispatcher@@QAE_NIH@Z  # Dispatcher::Handle migrated from s0040e5b0 (verbatim, slice spelling)
+0040e9c0 ?OnClear@Obj@@QAE_NH@Z  # Obj::OnClear migrated from s0040e5b0 (verbatim, slice spelling)
+0040eab0 ?OnReset@Obj@@QAE_NH@Z  # Obj::OnReset migrated from s0040e5b0 (verbatim, slice spelling)

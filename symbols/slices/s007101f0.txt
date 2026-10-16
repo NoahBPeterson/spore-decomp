@@ -1,10 +1,10 @@
-007101f0 ?AMapA  # hashtable find + insert, refcount dtor at end
-007102b0 ?AMapB  # identical shape, different dtor callee
-007103e0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::fixed_vector_allocator<4,4,4,0,1> >::DoInsertValue  # PDB name confirmed by byte-exact match
+007101f0 ??AMapA@@QAEAAUTex4@@ABI@Z  # MapA::operator[] migrated from s007101f0 (verbatim, slice spelling)
+007102b0 ??AMapB@@QAEAAUMat4@@ABI@Z  # MapB::operator[] migrated from s007101f0 (verbatim, slice spelling)
+007103e0 ?DoInsertValue@VecFixed@@QAEXPAUAutoRef14_s0071_01f0@@ABU2@@Z  # VecFixed::DoInsertValue migrated from s007101f0 (verbatim, slice spelling)
 00710510 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::DoInsertValues  # position,n,value shuffle with realloc
-007106d0 eastl::vector<EA::AutoRefCount<SP::cTextureInstance> >::assign  # range assign/DoRealloc
+007106d0 ?assign@VecAsn@@QAEXPBX0@Z  # VecAsn::assign migrated from s007101f0 (verbatim, slice spelling)
 00710790 SP::cMaterialManager::GetExternalReferences  # PDB name
 00710a50 SP::cTextureManager::GetAllTextures  # PDB candidate (caller-scored)
-00711070 eastl::vector<SP::cTextureInstance*>::resize  # resize(n) -> resize(n,T())
-007110f0 eastl::vector<SP::cMaterialInternal*>::resize  # second resize instantiation
-00711170 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::sp_vector_allocator>::DoInsertValue  # PDB name; no-arg append with atomic release
+00711070 ?resize@VecResizeA@@QAEXI@Z  # VecResizeA::resize migrated from s007101f0 (verbatim, slice spelling)
+007110f0 ?resize@VecResizeB@@QAEXI@Z  # VecResizeB::resize migrated from s007101f0 (verbatim, slice spelling)
+00711170 ?push_back@VecSp@@QAEXXZ  # VecSp::push_back migrated from s007101f0 (verbatim, slice spelling)

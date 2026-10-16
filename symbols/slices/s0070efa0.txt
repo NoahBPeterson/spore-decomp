@@ -1,0 +1,12 @@
+0070efa0 ?ReadShaders@cMaterialManager@SP@@UAE_NPAVDatabase@ResourceMan@EA@@@Z  # SP::cMaterialManager::ReadShaders migrated from s0070efa0
+0070f320 ??1VecA@@QAE@XZ  # VecA::~VecA migrated from s0070efa0 (verbatim, slice spelling)
+0070f390 ??1VecB@@QAE@XZ  # VecB::~VecB migrated from s0070efa0 (verbatim, slice spelling)
+0070f520 ?DestroyRange@VecBase@@QAEXPAPAX0@Z  # VecBase::DestroyRange migrated from s0070efa0 (verbatim, slice spelling)
+0070f570 ?FillWeak14N@@YAXPAPAXI0@Z  # FillWeak14N migrated from s0070efa0 (verbatim, slice spelling)
+0070f890 ?Teardown@FVecB@@QAEXXZ  # FVecB::Teardown migrated from s0070efa0 (verbatim, slice spelling)
+0070f8c0 ?cMaterialManager_HasMaterial@@YA_NPAXHI@Z  # cMaterialManager_HasMaterial migrated from s0070efa0 (verbatim, slice spelling)
+0070fa30 ?Teardown@FVecC@@QAEXXZ  # FVecC::Teardown migrated from s0070efa0 (verbatim, slice spelling)
+0070fa60 ?Shrink@VecA@@QAEXPAPAX0@Z  # VecA::Shrink migrated from s0070efa0 (verbatim, slice spelling)
+0070fab0 ?Shrink@VecB@@QAEXPAPAX0@Z  # VecB::Shrink migrated from s0070efa0 (verbatim, slice spelling)
+0070fd00 ?HashChainDtorA@@YGXPAPAXI@Z  # HashChainDtorA migrated from s0070efa0 (verbatim, slice spelling)
+0070ff50 ?HashChainDtorB@@YGXPAPAXI@Z  # HashChainDtorB migrated from s0070efa0 (verbatim, slice spelling)

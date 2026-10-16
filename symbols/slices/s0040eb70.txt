@@ -1,6 +1,6 @@
-0040eb70 EditorPartList::ProcessBatch  # loops mKeys in batches, "Editor" allocation, posts message 0x67B65F1/F2
-0040efa0 PartTransform::Invert  # 1/scale, inverse rotation, -pos*scale then * rotation
-0040f070 PartHolder::PartHolder  # copy-ctor style, vtbl_Simulator::cCreatureAbility base
-0040f110 EditorPartList::Rescan  # collects enabled keys, caches source lookup
+0040eb70 ?ProcessBatch@EditorPartList@@QAE_NXZ  # EditorPartList::ProcessBatch migrated from s0040eb70 (verbatim, slice spelling)
+0040efa0 ?Invert@PartTransform@@QAEXXZ  # PartTransform::Invert migrated from s0040eb70 (verbatim, slice spelling)
+0040f070 ??0PartHolder@@QAE@PBU0@@Z  # PartHolder::PartHolder migrated from s0040eb70 (verbatim, slice spelling)
+0040f110 ?Rescan@EditorPartList@@QAE_NXZ  # EditorPartList::Rescan migrated from s0040eb70 (verbatim, slice spelling)
 0040f360 Counted::Release  # refcount at +0x40, owner vcall slot 92 at zero
 0040f3f0 SelectCommand::Execute  # settings key 0x1a91189c chooses service vcall

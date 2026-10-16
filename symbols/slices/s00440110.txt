@@ -1,1 +1,10 @@
-00440520 SP::cSPEditorBlock::SetUniformScale  # clamps mUniformScale (+0x1d8) to [+0x1e0,+0x1e4], drives vertebra anim/model scale; byte-exact
+00440390 ?F40390@cSPEditorBlock_s0044_0110@SP@@QAEXM@Z  # cSPEditorBlock_s0044_0110::F40390 migrated from s00440110 (verbatim, slice spelling)
+00440420 ?F40420@cSPEditorBlock_s0044_0110@SP@@QAEXMD@Z  # cSPEditorBlock_s0044_0110::F40420 migrated from s00440110 (verbatim, slice spelling)
+004404f0 ?F404f0@cSPEditorBlock_s0044_0110@SP@@QAEXUMatrix3_s0044_0110@2@@Z  # cSPEditorBlock_s0044_0110::F404f0 migrated from s00440110 (verbatim, slice spelling)
+00440520 ?SetUniformScale@cSPEditorBlock_s0044_0110@SP@@QAEXM_N0@Z  # cSPEditorBlock_s0044_0110::SetUniformScale migrated from s00440110 (verbatim, slice spelling)
+00440b90 ?F40b90@cSPEditorBlock_s0044_0110@SP@@QAEPAUVec3@2@PAU32@@Z  # cSPEditorBlock_s0044_0110::F40b90 migrated from s00440110 (verbatim, slice spelling)
+00440bc0 ?F40bc0@cSPEditorBlock_s0044_0110@SP@@QAEXPBUVec3@2@@Z  # cSPEditorBlock_s0044_0110::F40bc0 migrated from s00440110 (verbatim, slice spelling)
+00440c00 ?F40c00@cSPEditorBlock_s0044_0110@SP@@QAEXM@Z  # cSPEditorBlock_s0044_0110::F40c00 migrated from s00440110 (verbatim, slice spelling)
+00440e00 ?F40e00@cSPEditorBlock_s0044_0110@SP@@QAEXPAU12@@Z  # cSPEditorBlock_s0044_0110::F40e00 migrated from s00440110 (verbatim, slice spelling)
+00440f60 ??0Trans@SP@@QAE@XZ  # Trans::Trans migrated from s00440110 (verbatim, slice spelling)
+00440ff0 ??0Trans@SP@@QAE@ABU01@@Z  # Trans::Trans migrated from s00440110 (verbatim, slice spelling)

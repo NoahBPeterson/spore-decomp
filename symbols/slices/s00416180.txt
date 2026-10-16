@@ -1,4 +1,4 @@
-00416180 EditorPanel_HasHandler  # looks up (ResourceKey,id) in active slot and handler list
-00416320 EditorPanel_HasId  # same lookup by id only
-004163f0 EditorPanel_HasHandlerNormalized  # clears flag bits for three known types before the lookup
-004165a0 EditorPanel_Activate  # matches, posts "Editor" message 0x695e243, erases entry
+00416180 ?HasHandler@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@H@Z  # EditorPanel::HasHandler migrated from s00416180 (verbatim, slice spelling)
+00416320 ?HasId@EditorPanel@@QAE_NH@Z  # EditorPanel::HasId migrated from s00416180 (verbatim, slice spelling)
+004163f0 ?HasHandlerNormalized@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@@Z  # EditorPanel::HasHandlerNormalized migrated from s00416180 (verbatim, slice spelling)
+004165a0 ?Activate@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@H@Z  # EditorPanel::Activate migrated from s00416180 (verbatim, slice spelling)

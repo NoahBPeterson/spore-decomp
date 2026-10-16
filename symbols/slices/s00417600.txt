@@ -1,2 +1,3 @@
-00417d10 CreateEditorBlockData  # allocates 0x1248 bytes from "Editor" pool then calls EditorBlockData::EditorBlockData (0x403240)
-00417cf0 EditorBlockData::GetSlotArea  # returns this+0x1100
+00417600 ?Apply@Panel@@QAEXPAUResourceKey_s0041_7600@@_NPAX@Z  # Panel::Apply migrated from s00417600 (verbatim, slice spelling)
+00417cf0 ?GetSlotArea@EditorBlockData_s0041_7600@@QAEPADXZ  # EditorBlockData_s0041_7600::GetSlotArea migrated from s00417600 (verbatim, slice spelling)
+00417d10 ?CreateEditorBlockData@@YAPAUEditorBlockData_s0041_7600@@XZ  # CreateEditorBlockData migrated from s00417600 (verbatim, slice spelling)

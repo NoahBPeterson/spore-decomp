@@ -1,1 +1,2 @@
+004a9b40 ?QuaternionToMatrix@SP@@YAAAUMatrix33T_s004a_9920@@AAU2@ABUQuaternion@1@@Z  # QuaternionToMatrix migrated from s004a9920 (verbatim, slice spelling)
 004aa3c0 evector<WeightedPoint>::DoInsertValue

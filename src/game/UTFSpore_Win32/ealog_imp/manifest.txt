@@ -1,0 +1,26 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?ShouldLog@Server_s0069_6c80@Trace@EA@@QAEHI@Z  00697b80  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?Set@C233e0@@QAEXG@Z  009233e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?FUN_00923440@@YIHPAX@Z  00923440  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?FUN_009234a0@@YIHPAX@Z  009234a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?GetServer@Trace@EA@@YAPAXXZ  009234c0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?UpdateLogFilters@Trace@EA@@YAXXZ  009234e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?GetLevelName@Server@Trace@EA@@QBEPBDH@Z  00923630  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?AsInterface@Server@Trace@EA@@UAEPAXW4InterfaceId@COM@3@@Z  00923680  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?EnumerateLogReporters@Server_s0092_34f0@Trace@EA@@QAEIPAPAXI@Z  00923840  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?IsFiltered@ServerTracer@Trace@EA@@QAE_NPAX@Z  00923930  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?ShowAlert@LogReporter_s0092_34f0@Trace@EA@@QAEXPAX@Z  00923a60  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?DebugPrint@LogReporter_s0092_34f0@Trace@EA@@QAEHPAX@Z  00923aa0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?DoNukeSubtree@RBTreeMap@Trace@EA@@QAEXPAURBNode@23@@Z  00923b40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?erase@RBTreeMap@Trace@EA@@QAEPAPAURBNode@23@PAPAU423@PAU423@@Z  00923b80  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ??1LogReporter_s0092_34f0@Trace@EA@@UAE@XZ  00923cf0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?FUN_00923dc0@@YAPAXPAXPBDZZ  00923dc0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ??1LogFormatterSimple_s0092_34f0@Trace@EA@@UAE@XZ  00923e70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ??1LogFormatterFancy_s0092_34f0@Trace@EA@@UAE@XZ  00923ed0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SetName@LogFilterGroupLevels_s0092_34f0@Trace@EA@@QAEXPBD@Z  00923fe0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SetName@LogFormatterSimple_s0092_34f0@Trace@EA@@QAEXPBD@Z  00924450  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?Clone@LogFormatterSimple_s0092_34f0@Trace@EA@@QAEPAXXZ  00924490  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SetName@LogFormatterFancy_s0092_34f0@Trace@EA@@QAEXPBD@Z  00924570  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?Init@Server_s0092_45b0@Trace@EA@@QAEXXZ  00924790  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?RemoveAllLogReporters@Server@Trace@EA@@UAEXXZ  00924a50  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/ealog_imp.cpp  ?SetOutputLevel@Server_s0092_45b0@Trace@EA@@QAE_NPBD0H@Z  00924a80  /O2 /MD /Gy /TP /GS- /Isrc/game/include

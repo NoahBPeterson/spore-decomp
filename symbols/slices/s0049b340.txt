@@ -1,0 +1,2 @@
+0049b340 ?FUN_0049b340@@YA_NPAUBitOwner@@@Z  # FUN_0049b340 migrated from s0049b340 (verbatim, slice spelling)
+0049c0f0 ?Set@Y9c0@@QAEXD@Z  # Y9c0::Set migrated from s0049b340 (verbatim, slice spelling)

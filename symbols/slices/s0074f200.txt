@@ -1,8 +1,13 @@
-# VA  Name  # evidence
-0074f3a0  `anonymous namespace'::AppendGeometryToCreature  # PDB name
-0074f420  -  # unknown
-0074fea0  -  # unknown
-00750030  spstl::slot_vector_base<SP::cModelWorld::cOccluderInfo,eastl::vector<spstl::slot_vector_entry<SP::cModelWorld::cOccluderInfo>,eastl::allocator>_>::create  # PDB name
-0140d720  ??_7cFeedbackMgr@@6BFeedbackBaseA@@@  # vtable stored at this+0 by the ctor 0x0074fd90
-0140d71c  ??_7cFeedbackMgr@@6BFeedbackBaseB@@@  # vtable stored at this+4 by the ctor 0x0074fd90
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s0074f200, named from the dev publics; slice address comment)
+0074f200 ?Subscript@CompactMapUU@@QAEAAPAUcFeedbackEvent@@ABI@Z  # CompactMapUU::Subscript migrated from s0074f200 (verbatim, slice spelling)
+0074f3a0 ?quick_sort@@YAXPAUcOccluder_s0074_f200@@0P6A_NABU1@1@Z@Z  # quick_sort migrated from s0074f200 (verbatim, slice spelling)
+0074f420 ?DoInsertValue@VecElem1C@@QAEXPAUElem1C@@ABU2@@Z  # VecElem1C::DoInsertValue migrated from s0074f200 (verbatim, slice spelling)
+0074f5d0 ?DoInsertValues@VecModelInfo@@QAEXPAUModelInfo@@IABU2@@Z  # VecModelInfo::DoInsertValues migrated from s0074f200 (verbatim, slice spelling)
+0074f800 ?DrawLayer@cModelWorld_s0074_f200@@QAEX_NPAUDrawList@@IPAXPAUCamera@@@Z  # cModelWorld_s0074_f200::DrawLayer migrated from s0074f200 (verbatim, slice spelling)
+0074fd90 ??0cFeedbackMgr@@QAE@XZ  # cFeedbackMgr::cFeedbackMgr migrated from s0074f200 (verbatim, slice spelling)
+0074fe10 ?Allocate@SlotAllocator@@QAEHII@Z  # SlotAllocator::Allocate migrated from s0074f200 (verbatim, slice spelling)
+0074fea0 ?Start@cFeedbackJobs@@QAE_NPAPAX@Z  # cFeedbackJobs::Start migrated from s0074f200 (verbatim, slice spelling)
+00750030 ?create@SlotVectorOccluder@@QAEIABUcOccluderInfo@@@Z  # SlotVectorOccluder::create migrated from s0074f200 (verbatim, slice spelling)
 013ef094  ??_7FeedbackBaseB@@6B@  # base vtable stored first at this+4 by the ctor 0x0074fd90 (shared/folded vtable)
+0140d71c  ??_7cFeedbackMgr@@6BFeedbackBaseB@@@  # vtable stored at this+4 by the ctor 0x0074fd90
+0140d720  ??_7cFeedbackMgr@@6BFeedbackBaseA@@@  # vtable stored at this+0 by the ctor 0x0074fd90

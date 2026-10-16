@@ -1,0 +1,2 @@
+004388b0 ?Attach@cContentValidationSummarizer@SP@@QAEXPAU12@@Z  # cContentValidationSummarizer::Attach migrated from s00438440 (verbatim, slice spelling)
+00438b10 ?Detach@cContentValidationSummarizer@SP@@QAEXPAU12@@Z  # cContentValidationSummarizer::Detach migrated from s00438440 (verbatim, slice spelling)

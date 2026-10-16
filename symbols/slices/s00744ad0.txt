@@ -5,8 +5,24 @@
 00744be0 SP::cModelWorld::SetDynamicDraw  # dev PDB vtable slot 0xac
 00744c30 SP::cModelWorld::GetNumLODs  # dev PDB vtable slot 0xb0
 00744c70 SP::cModelWorld::SetLOD  # PDB candidate (caller-scored)
+00744cf0 ?SetSomeFloat@cModelWorld_s0074_4ad0@@QAEXPAUModel_s0074_4ad0@@M@Z  # cModelWorld_s0074_4ad0::SetSomeFloat migrated from s00744ad0 (verbatim, slice spelling)
+00744d80 ?SetEffectEnabled@cModelWorld_s0074_4ad0@@QAEXPAUModel_s0074_4ad0@@DDH@Z  # cModelWorld_s0074_4ad0::SetEffectEnabled migrated from s00744ad0 (verbatim, slice spelling)
+00744e10 ?ForEachEffectA@cModelWorld_s0074_4ad0@@QAEDPAUModel_s0074_4ad0@@HHHH@Z  # cModelWorld_s0074_4ad0::ForEachEffectA migrated from s00744ad0 (verbatim, slice spelling)
+00744e90 ?ForEachEffectB@cModelWorld_s0074_4ad0@@QAEDPAUModel_s0074_4ad0@@HHHH@Z  # cModelWorld_s0074_4ad0::ForEachEffectB migrated from s00744ad0 (verbatim, slice spelling)
+00744f10 ?ForEachEffectC@cModelWorld_s0074_4ad0@@QAEDPAUModel_s0074_4ad0@@HHH@Z  # cModelWorld_s0074_4ad0::ForEachEffectC migrated from s00744ad0 (verbatim, slice spelling)
 00744f80 SP::cModelWorld::GetDeformationHandles  # PDB candidate (caller-single)
 00744fc0 SP::cModelWorld::GetRuntimeMeshes  # dev PDB
+00745010 ?CheckFlag@cModelWorld_s0074_4ad0@@QAE_NPAUModel_s0074_4ad0@@H@Z  # cModelWorld_s0074_4ad0::CheckFlag migrated from s00744ad0 (verbatim, slice spelling)
+00745050 ?SelectMesh@cModelWorld_s0074_4ad0@@QAE_NPAUModel_s0074_4ad0@@HHD@Z  # cModelWorld_s0074_4ad0::SelectMesh migrated from s00744ad0 (verbatim, slice spelling)
 00745110 SP::cModelWorld::HACK_GetArenaResource  # dev PDB vtable slot 0xbc
-00745520 SlotVec::next  # was dev PDB spstl::slot_vector_base<...>::next; our object defines SlotVec::next
+00745140 ?FillColor@cModelWorld_s0074_4ad0@@QAEXPAH@Z  # cModelWorld_s0074_4ad0::FillColor migrated from s00744ad0 (verbatim, slice spelling)
+007454f0 ?Release@AutoRef@@QAEPAU1@XZ  # AutoRef::Release migrated from s00744ad0 (verbatim, slice spelling)
+00745520 ?next@SlotVec@@QAEHH@Z  # SlotVec::next migrated from s00744ad0 (verbatim, slice spelling)
+00745560 ?ChunkFind@@YAXPAIPAH11PAPAHH@Z  # ChunkFind migrated from s00744ad0 (verbatim, slice spelling)
+007455e0 ?DestroyChunk@@YIXH@Z  # DestroyChunk migrated from s00744ad0 (verbatim, slice spelling)
 00745630 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::DoPopFront  # dev PDB
+00745660 ?SlotCount@@YAHPAI0@Z  # SlotCount migrated from s00744ad0 (verbatim, slice spelling)
+007456a0 ?Assign@SlotCell@@QAEXPAH@Z  # SlotCell::Assign migrated from s00744ad0 (verbatim, slice spelling)
+00745710 ?Advance@DequeIter@@QAEPAHH@Z  # DequeIter::Advance migrated from s00744ad0 (verbatim, slice spelling)
+007458d0 ?DequeInit@@YAXPAHI@Z  # DequeInit migrated from s00744ad0 (verbatim, slice spelling)
+007459c0 ?Sort18@@YAXPAI0P6A_NPBX1@Z@Z  # Sort18 migrated from s00744ad0 (verbatim, slice spelling)

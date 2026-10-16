@@ -1,7 +1,10 @@
-# VA  Name  # evidence
+006926b0 ?Wait@cJob@SP@@QAEXXZ  # SP::cJob::Wait (callee of s0074c260, named from the dev publics; slice address comment)
 0074c370  eastl::quick_sort_impl<SP::cModelWorld::cDrawModelInfo*,int,`anonymous namespace'::cAlphaSortLessComparator>  # PDB name
 0074c580  eastl::get_partition<cOccluder*,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
 0074c670  SP::cModelWorld::ModelIsResidentInMemory  # PDB name
 0074c910  SP::cModelWorld::ScheduleForLoad  # PDB name
+0074ca70 ?remove_first@VecInt@@QAE_NH@Z  # VecInt::remove_first migrated from s0074c260 (verbatim, slice spelling)
+0074cad0 ?Step@LoadJob@@QAE_NPAUcJobW@@@Z  # LoadJob::Step migrated from s0074c260 (verbatim, slice spelling)
+0074cdd0 ?push_back@Vec18@@QAEXPBUE18@@@Z  # Vec18::push_back migrated from s0074c260 (verbatim, slice spelling)
 0074d190  eastl::quick_sort_impl<cOccluder*,int,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # PDB name
-0074d2c0  SP::cModelWorld::HandleMessage  # PDB name
+0074d2c0 ?HandleMessage@cModelWorldMsg@@QAE_NIPAUMsgHeader@@@Z  # cModelWorldMsg::HandleMessage migrated from s0074c260 (verbatim, slice spelling)

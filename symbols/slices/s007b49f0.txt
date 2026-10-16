@@ -1,3 +1,4 @@
-007b4c10 Bounds6::Expand  # bounds-expansion helper (Vector3 min/max); byte-exact
+007b49f0 ?Fn@ItemList@@QAEXHHHH@Z  # ItemList::Fn migrated from s007b49f0 (verbatim, slice spelling)
+007b4c10 ?Expand@Bounds6@@QAEXPBUVector3@@HH@Z  # Bounds6::Expand migrated from s007b49f0 (verbatim, slice spelling)
 007b5090 SP::cThumbnailManager::~cThumbnailManager  # PDB name
 007b5320 SP::cThumbnailManager::FrameBoundingBoxPalette  # PDB name

@@ -1,7 +1,12 @@
-# Slice s00705660 recovered names of interest
-00705920 SP::cLightingWorld::GetLightingStateConfig  # PDB vtable-slot
-00705a20 SP::cLightingManager::SetAtmosphereModel  # PDB vtable-slot
+00705660 ?FUN_00705660@@YAHPAM0M@Z  # FUN_00705660 migrated from s00705660 (verbatim, slice spelling)
+00705920 ?get@W5920@@QAEPAHXZ  # W5920::get migrated from s00705660 (verbatim, slice spelling)
+00705970 ?f@W5970@@QAEMHM@Z  # W5970::f migrated from s00705660 (verbatim, slice spelling)
+00705a20 ?setAtm@W5a20@@QAEXPAMH0@Z  # W5a20::setAtm migrated from s00705660 (verbatim, slice spelling)
+00705af0 ?find@W5af0@@QAEPAXH@Z  # W5af0::find migrated from s00705660 (verbatim, slice spelling)
 00705b50 cShaderDataLightingInfo copy-ctor (fields + coefficient vector via FUN_00406540)  # invented; cf. window 0x00705120 operator=
-00705e90 eastl fill/uninitialized fill of 16-byte elements  # invented
-00705ec0 eastl fill_n of 16-byte elements (nullable dest)  # invented
-00705ef0 destructor: intrusive_list + two owned buffers  # invented
+00705bb0 ??4S11@@QAEAAU0@ABU0@@Z  # S11::operator= migrated from s00705660 (verbatim, slice spelling)
+00705c00 ??4S7@@QAEAAU0@ABU0@@Z  # S7::operator= migrated from s00705660 (verbatim, slice spelling)
+00705c40 ?copy_705c40@@YAXPAPAUV32@@PAU1@11@Z  # copy_705c40 migrated from s00705660 (verbatim, slice spelling)
+00705e90 ?fill_705e90@@YAXPAT__m128@@0PBT1@@Z  # fill_705e90 migrated from s00705660 (verbatim, slice spelling)
+00705ec0 ?fill_705ec0@@YAXPAT__m128@@IPBT1@@Z  # fill_705ec0 migrated from s00705660 (verbatim, slice spelling)
+00705ef0 ?dtor@W5ef0@@QAEXXZ  # W5ef0::dtor migrated from s00705660 (verbatim, slice spelling)

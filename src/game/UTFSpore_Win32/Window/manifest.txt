@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Window.cpp  ?FUN_00925e60@HashHolder@Trace@EA@@QAEXXZ  00925e60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?GetAt34@Window@@QAEHXZ  0095f9d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?AllDescendants@Window@@QAE_ND@Z  0095fbb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?AllocPair@@YGPAXPAX@Z  00960550  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?GetIdAddr@Win@@QAEXPAPAX@Z  00961270  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?NotifyTree@Win@@QAEXXZ  00961450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?DestroyProcAndRecompute@Iface4@@QAEXH@Z  00961a30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?SerUpdateTrue@Win@@QAE_NH@Z  00961b30  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?FUN_00961d50@@YA_NPAUWin@@@Z  00961d50  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?FUN_00961e20@@YA_NPAX0@Z  00961e20  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Window.cpp  ?f@S962530@@QAEXHH@Z  00962530  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

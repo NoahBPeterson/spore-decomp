@@ -1,3 +1,6 @@
-# VA  Name  # evidence
-0074ed00  SP::cModelWorld::FindModelsInSphere  # PDB name
-0074ee80  SP::cModelWorld::FindModelsInBox  # PDB name
+0074eb70 ?FindModelsInShape@cModelWorld_s0074_e2b0@@QAE_NPBXMPAUModelVec@@PAX@Z  # cModelWorld_s0074_e2b0::FindModelsInShape migrated from s0074e2b0 (verbatim, slice spelling)
+0074ed00 ?FindModelsInSphere@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  # cModelWorld_s0074_e2b0::FindModelsInSphere migrated from s0074e2b0 (verbatim, slice spelling)
+0074ee80 ?FindModelsInBox@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  # cModelWorld_s0074_e2b0::FindModelsInBox migrated from s0074e2b0 (verbatim, slice spelling)
+0074f010 ??1EditorResource@@UAE@XZ  # EditorResource::~EditorResource migrated from s0074e2b0 (verbatim, slice spelling)
+0074f0c0 ?Shutdown@EditorResource@@QAE_NXZ  # EditorResource::Shutdown migrated from s0074e2b0 (verbatim, slice spelling)
+0074f1a0 ?add_unique@VecIntAdd@@QAE_NH@Z  # VecIntAdd::add_unique migrated from s0074e2b0 (verbatim, slice spelling)

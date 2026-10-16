@@ -1,0 +1,2 @@
+00496d30 ?FUN_00496d30@@YAXPAUEditorBlockRay@@UV3_s0049_6d30@@1PAU2@2@Z  # FUN_00496d30 migrated from s00496d30 (verbatim, slice spelling)
+004973f0 ?FUN_004973f0@@YADPAUX973@@PAXMD@Z  # FUN_004973f0 migrated from s00496d30 (verbatim, slice spelling)

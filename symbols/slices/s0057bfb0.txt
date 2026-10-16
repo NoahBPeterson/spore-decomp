@@ -1,2 +1,8 @@
+004c49e0 ?GetSkinPart@cSPEditorSkinManager@SP@@QAEPAVcSPEditorSkinPart@2@W4eSkinIdentifier@12@@Z  # SP::cSPEditorSkinManager::GetSkinPart (callee of s0057bfb0, named from the dev publics; slice address comment)
+004c5980 ?GetTextures@cSPEditorSkinManager@SP@@QAEXPAPAVcTextureInstance@2@0@Z  # SP::cSPEditorSkinManager::GetTextures (callee of s0057bfb0, named from the dev publics; slice address comment)
+00576140 ?GetCurrentConfig@cAppModeEditorBase@SP@@QAE?AW4eEditorConfig@Editor@2@XZ  # SP::cAppModeEditorBase::GetCurrentConfig (callee of s0057bfb0, named from the dev publics; slice address comment)
+0057bfb0 ?RefreshBlockTray@cAppModeEditorBase_s0057_bfb0@SP@@QAEXXZ  # cAppModeEditorBase_s0057_bfb0::RefreshBlockTray migrated from s0057bfb0 (verbatim, slice spelling)
+0057c4b0 ??1cPaletteCategory@SP@@QAE@XZ  # cPaletteCategory::~cPaletteCategory migrated from s0057bfb0 (verbatim, slice spelling)
 0057c770 WriteTypedValue@_K::WriteTypedValue  # SP::WriteTypedValue<unsigned __int64> explicit instantiation (qualifier selects ??$WriteTypedValue@_K)
 0057c940 WriteTypedValue@M::WriteTypedValue  # SP::WriteTypedValue<float> explicit instantiation (qualifier selects ??$WriteTypedValue@M)
+005dd4a0 ?Show@cSPEditorUI@SP@@QAEXXZ  # SP::cSPEditorUI::Show (callee of s0057bfb0, named from the dev publics; slice address comment)

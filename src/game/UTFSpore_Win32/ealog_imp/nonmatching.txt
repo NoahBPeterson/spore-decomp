@@ -1,0 +1,29 @@
+# va  diff-bytes  reason
+009233f0  12   ILogFilter::IsFiltered tail-call thunk: complete; register order differs
+009234f0 252 ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
+009236d0 32 Server::Release: complete; interlocked schedule + dec/sub differ
+00923700 21 LogReporter::FilterEnabled: complete; `this` in eax vs ecx
+00923740 21 LogReporter::FilterEnabled2: complete; `this` in eax vs ecx
+009237c0 95 Server::GetLogReporter: complete; vector walk/return schedule differs
+00923990 126 ITracer::Trace (needs /GS-): complete; counter/sender load order and lea-vs-inc schedule differ; difftest PASS after annotating g_timeoutP (0x143dc78) and fixing the symbol lookup (declaration comments no longer look like @ markers)
+00923ac0 91 rbtree::find: complete; template traversal schedule differs (_stricmp not hoisted into ebp, anchor not spilled); difftest WEAK after fixing argument order (the out-iterator is the first argument and is returned in eax; ours had (key, out) and returned *out)
+00923bc0 212 LogFilterGroupLevels::RemoveGroupLevel: complete; whole-tree clear schedule differs
+00923c90 13 LogFilterGroupLevels::IsFiltered: complete; level compare operand order / tail block order differ; difftest PASS after fixing return type (bool: the original writes only al) and find's argument order
+00923d40 32 Server::Server: complete; MI vtable/new/mutex schedule differs; difftest PASS after mapping the vtables (IServer/ITracer slots annotated with the original targets of 0x143dd20/0x143dd04) and fixing the init (the original leaves +0x28 unwritten)
+00923de0 115 rbtree::DoInsertValueImpl: complete; allocator vcall schedule differs
+00923f30 30 LogFilterGroupLevels::LogFilterGroupLevels: complete; mName/anchor init store schedule differs; difftest PASS after fixing the string init call (thiscall RangeInitialize on mName, was a free call with cfg) and the anchor color store (the original zeroes the whole color dword +0x2c)
+00923f90 11 LogFilterGroupLevels::~LogFilterGroupLevels: complete; DoNukeSubtree arg register differs
+00924060 39 rbtree::DoInsertValue: complete; traversal/insert schedule differs
+009241f0 59 Server::RemoveLogReporter: complete; copy/erase schedule differs
+00924270 29 LogReporter::SkipFilter1: complete; register allocation differs
+009242b0 34 LogReporter::SkipFilter2: complete; register allocation differs
+00924350 40 LogReporter::SkipFilter3: complete; register allocation differs
+00924390 43 LogReporter::SkipFilter4: complete; register allocation differs
+009243d0 42 LogFormatterSimple::LogFormatterSimple: complete; fixed-string init schedule differs
+009245b0 4 LogFormatterFancy::Clone: complete; only the cx/dx register choice for the flags copy differs
+00924600 137 LogFilterGroupLevels::AddGroupLevel: complete; this/group register swap, DoInsertValue's 3rd arg is a stack-slot-reuse bool in the original
+009246c0 101 LogFilterGroupLevels::Clone: complete; inline rbtree ctor store order/zero-register differs, extra push ecx slot
+009248f0 301 Server::AddLogReporter: complete; ebp mutex-pointer spill/reload pattern differs
+00924c60 48 FString::push_back: complete; eastl::max temp/register layout differs
+00924d10 96 LogFormatterSimple::FormatRecord: complete; register allocation (ebx/ebp) and size() load order
+00924d90 442 LogFormatterFancy::FormatRecord: complete; strlen+end-pointer fold (dec eax vs sub/lea) and register allocation differ

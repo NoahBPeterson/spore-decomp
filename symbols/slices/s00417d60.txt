@@ -1,5 +1,6 @@
-00417d60 ToolState::ToolState  # large state object ctor, embedded sub-state at +0xfc calls 0x418120
-00417fe0 ToolState::~ToolState  # mirror of ctor; calls sub-state dtor 0x418240 first
-00418120 SubState::SubState  # sub-state ctor (+0xfc of ToolState), sets float fields to kZero and +0xcc8=-1
-00418240 SubState::~SubState  # inlined vector dtor loops over members
-00418500 Loader::LoadAll  # manager vtable load then 4 property-key lookups pushing ref-counted objects
+00417d60 ??0ToolState@@QAE@XZ  # ToolState::ToolState migrated from s00417d60 (verbatim, slice spelling)
+00417fe0 ??1ToolState@@QAE@XZ  # ToolState::~ToolState migrated from s00417d60 (verbatim, slice spelling)
+00418120 ??0SubState@@QAE@XZ  # SubState::SubState migrated from s00417d60 (verbatim, slice spelling)
+00418240 ??1SubState@@QAE@XZ  # SubState::~SubState migrated from s00417d60 (verbatim, slice spelling)
+00418440 ?CheckMatchingProps@@YA_NPAUPropList_s0041_7d60@@@Z  # CheckMatchingProps migrated from s00417d60 (verbatim, slice spelling)
+00418500 ?LoadAll@Loader@@QAEXHH@Z  # Loader::LoadAll migrated from s00417d60 (verbatim, slice spelling)

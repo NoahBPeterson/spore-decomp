@@ -6,3 +6,4 @@
 0056a270 eastl::DequeIterator<T>::operator+=  # 16777216/32 subarray index trick
 0056a440 eastl::copy_chooser<DequeIterator>  # generic copy loop over deque iterators
 0056a4d0 eastl::copy_backward_chooser<DequeIterator>  # generic copy_backward loop
+0056a5f0 ?GetPartVolumePercentages@@YAXPBUCreature@@PAUFloatVector@@@Z  # GetPartVolumePercentages migrated from s00569690 (verbatim, slice spelling)

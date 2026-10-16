@@ -1,0 +1,8 @@
+006a17e0 ?SetBoolProperty@cDirectPropertyList@SP@@QAEXI_N@Z  # SP::cDirectPropertyList::SetBoolProperty (callee of s007b7ac0, named from the dev publics; slice address comment)
+007b7ac0 ?Render@cThumbnailManager@@QAEXHHPBURenderInfo@@H@Z  # cThumbnailManager::Render migrated from s007b7ac0 (verbatim, slice spelling)
+007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s007b7ac0, named from the dev publics; slice address comment)
+007c3c50 ?Clear@cViewer@SP@@QBEXI@Z  # SP::cViewer::Clear (callee of s007b7ac0, named from the dev publics; slice address comment)
+007c4ba0 ?SetNearClip@cViewer@SP@@QAEXM@Z  # SP::cViewer::SetNearClip (callee of s007b7ac0, named from the dev publics; slice address comment)
+007c4bc0 ?SetFarClip@cViewer@SP@@QAEXM@Z  # SP::cViewer::SetFarClip (callee of s007b7ac0, named from the dev publics; slice address comment)
+007c4be0 ?SetRenderTarget@cViewer@SP@@QAEXABUcRenderTargetRectID@2@_N@Z  # SP::cViewer::SetRenderTarget (callee of s007b7ac0, named from the dev publics; slice address comment)
+007c4d00 ?GetTransform@cViewer@SP@@QBEXPAUcSPTransform@@@Z  # SP::cViewer::GetTransform (callee of s007b7ac0, named from the dev publics; slice address comment)

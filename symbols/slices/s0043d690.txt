@@ -1,1 +1,1 @@
-0043d690 SP::cSPEditorBlock::SetMorphHandleWeight  # sets a deform handle's weight, MoveToTime on its anim, csnap/socket updates; name from s00441440 BuildBlock call site
+0043d690 ?SetMorphHandleWeight@cSPEditorBlock_s0043_d690@SP@@QAE_NHMH_N0@Z  # cSPEditorBlock_s0043_d690::SetMorphHandleWeight migrated from s0043d690 (verbatim, slice spelling)

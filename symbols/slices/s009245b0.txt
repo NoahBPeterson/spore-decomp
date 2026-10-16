@@ -1,2 +1,11 @@
-013eb938  ??_7IServer@Trace@EA@@6B@
+009245b0 ?Clone@LogFormatterFancy@Trace@EA@@UAEPAVILogFormatter@23@XZ  # EA::Trace::LogFormatterFancy::Clone migrated from s009245b0
+00924600 ?AddGroupLevel@LogFilterGroupLevels_s0092_45b0@Trace@EA@@QAEXPBDH@Z  # LogFilterGroupLevels_s0092_45b0::AddGroupLevel migrated from s009245b0 (verbatim, slice spelling)
+009246c0 ?Clone@LogFilterGroupLevels_s0092_45b0@Trace@EA@@UAEPAUILogFilter_s0092_45b0@23@XZ  # LogFilterGroupLevels_s0092_45b0::Clone migrated from s009245b0 (verbatim, slice spelling)
+00924790 ?Init@Server_s0092_45b0@Trace@EA@@QAEXXZ  # Server_s0092_45b0::Init migrated from s009245b0 (verbatim, slice spelling)
+009248f0 ?AddLogReporter@Server_s0092_45b0@Trace@EA@@UAE_NPAUILogReporter_s0092_45b0@23@@Z  # Server_s0092_45b0::AddLogReporter migrated from s009245b0 (verbatim, slice spelling)
+00924a50 ?RemoveAllLogReporters@Server@Trace@EA@@UAEXXZ  # EA::Trace::Server::RemoveAllLogReporters migrated from s009245b0
+00924a80 ?SetOutputLevel@Server_s0092_45b0@Trace@EA@@QAE_NPBD0H@Z  # Server_s0092_45b0::SetOutputLevel migrated from s009245b0 (verbatim, slice spelling)
+00924c60 ?push_back@FString@Trace@EA@@QAEXD@Z  # FString::push_back migrated from s009245b0 (verbatim, slice spelling)
+00924d10 ?FormatRecord@LogFormatterSimple_s0092_45b0@Trace@EA@@QAEPBDPAUILogRecord@23@@Z  # LogFormatterSimple_s0092_45b0::FormatRecord migrated from s009245b0 (verbatim, slice spelling)
+00924d90 ?FormatRecord@LogFormatterFancy_s0092_45b0@Trace@EA@@QAEPBDPAUILogRecord@23@@Z  # LogFormatterFancy_s0092_45b0::FormatRecord migrated from s009245b0 (verbatim, slice spelling)
 013eb938  ??_7ITracerBase@Trace@EA@@6B@

@@ -1,0 +1,43 @@
+# va  diff-bytes  reason
+00453250 294 complete; original has a plain "push ebp; and esp,-16" frame with esp-relative locals, our cl emits the ebx-based aligned frame (all stores otherwise the same)
+00481f00  28   IsNAN: comparison/short-circuit shape matches, but /Od local slot order (float params vs result) differs [equiv PASS (400 valid, 97.8% cov), was WEAK]
+0048fde0  222  recursive child-walk; complete but frame slots / inlined callee shapes differ
+004902c0  108  AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
+00490330  212  AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
+004904a0  261  complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
+004905d0  227  complete; best-effort reconstruction of the intrusive_ptr addref/insert/release tail
+00491900  180  complete vector-insert-with-refcount routine; logic and all calls present, but the /Od frame (0x7c vs 0x30) and the intermediate pointer locals differ
+00492de0  76  complete: tracker offset check; only /Od local-slot assignment differs (frame 0x34 vs 0x30) and the bb.mx[2] offset
+00492e70  1284  complete: all 22 calls in original order (size 0.967x); /Od local-slot layout and a few spill temps differ (frame 0x194 vs 0x1ec); flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Oi
+004942b0  -  SP::EditorUtils::GetRotationAndPositionBasedOnBehavior: complete (same 71 direct calls in order, all field offsets match); /Od Vector3 copy flavours (movss/int/fld) and local slot layout differ, 4219 vs 5113 bytes; flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast
+00495f90  8  complete scalar-deleting-dtor; only the /Od slot of the cached hkMemory instance vs the `this` spill is swapped (frame otherwise identical)
+00496090  8  complete deleting-dtor (calls the array dtor then deallocates); only the `this` spill slot differs
+004960d0  60  complete hkArray-like destructor; vtable stores and the hkThreadMemory deallocateChunk call match in shape but the class layout/slots differ
+00496140  120  complete fixed-stride find(); matches the loop but the /Od frame (0x14 vs 0x10) and member slots differ
+004961d0  150  complete transform-save routine (copy 0x48->0x54 and three 9-float matrices for the object and each vector element); not byte-exact
+00496b60  20  complete cSPEditorLimbStructure helper; call sequence identical, only the /Od frame/struct-base slot differs (0x60 vs 0x68)
+00496bb0  150  complete bone/handle lookup; logic present, intermediate locals and vtable-call shape differ
+00496d30  1465  complete: two opposed ray casts + hit-point/length evals; /Od slot order and out-of-line W-copy arg temps differ
+004973f0  150  complete transform/flag routine; logic present, but the by-value Matrix3 argument and /Od frame differ
+004974e0  2269  complete (all paths and calls); /Od slot order, inline-vs-out-of-line Vector3 copy flavours and the inlined parent accessor differ
+00497f20  560  complete (direction search loops); /Od slot order and vector/string local init order differ
+00498230  4   complete recursive flag propagation; only the /Od slots of the two inner locals (slot pointer vs child) are swapped
+004982b0  244  complete (Matrix3/Vector3 by-value args via real copy ctors); /Od frame holes (0x10c vs 0x74) differ
+00498470 284 complete; /Od slot order (is15/b1 high bytes, outPos) not fitted; difftest PASS after fixing the build flags (recorded as a // Flags: comment; the checker had compiled /Od /EHsc without /Ob1 /arch:SSE /fp:fast) and the e parameter type (bool passed straight to FUN_0049ec40, not uint8_t normalised with != 0)
+004986d0 38 complete; Bitset::test temp slot order (word/result swapped) and nesting of returns not fitted
+00498850 1582 complete; /Od slot order and picker->-after-args evaluation order not fitted; difftest WEAK after fixing the build flags (recorded as a // Flags: comment; the checker had compiled /Od /EHsc without /Ob1 /arch:SSE /fp:fast): no mismatch at seeds 2/3 but only ~10% coverage; seed 1 crashes the checker (unicorn fetch error in reset_cpu)
+00498f10 510 complete; /Od slot order not fitted (name hill-climb stalled at ~510)
+00499410 816 editor pick-block routine (ray vs block pick / skin pick / ground-plane fallback): complete; /Od inner-scope slot layout, Vector3 copy flavours (inline movss vs fld/fstp vs 0x4098a0 call) and by-value temp order differ; difftest PASS (fixed: the skin-pick retry passes the plane hit as Vec3C, copied with the out-of-line copy ctor 0x4098a0, as the original)
+00499b40 409 barycentric weights of a point in a triangle: complete; /Od slot order (needs all locals in one scope with hash-picked names) and copy flavours differ
+0049a030 64 complete ray/plane intersection helper (plane through two globals, origin + t*dir); only the /Od frame/temp slots and branch layout differ
+0049a0c0 349 block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently; difftest PASS
+0049fbd0 485 COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ; difftest PASS (mapped ctor annotations; touched vector now uses the AutoRefCount vector dtor 0x453eb0 that releases elements)
+004a1e10 468 unsnap-replace block: complete; same /Od inline-hole frame layout difference; difftest WEAK (16.9% coverage: generated blocks rarely have flag 0x2a set) after fixing the stray "@ 0x4a1e10" marker on the forward declaration that made the checker test FUN_4a1d60 in its place
+004a2350 3 DoSnapReplace: complete; only the /Od slot of 'changed' (-9 vs -0x15) and 'd' (-0x18 vs -0x14) differ
+004a4840 875 complete; /Od frame slot layout (locals/temps hash order) not matched
+004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
+004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
+004a88f0 259 complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ; equiv: UNSUPPORTED (0/1200 inputs valid: fake-arity/read faults on EffectsManager vtable calls)
+004a8d70 125 complete 9-float matrix constructor; original spills `this` at ebp-0xc and uses operator[] pointer temps
+004a96d0 327 complete flag/children walk; /Od inlined-flag + element temp slots differ
+004a9840 105 complete SP::EditorUtils::GetFirstFootBlock; /Od element/ref temp slot ordering differs

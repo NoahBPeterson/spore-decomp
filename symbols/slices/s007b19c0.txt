@@ -2,5 +2,11 @@
 007b1de0 SP::cTexturePreload::PreloadTextureList  # PDB name
 007b1e70 ?f@W1e70@@QAEXPAX0@Z  # W1e70::f migrated from s007b19c0 (verbatim, slice spelling)
 007b1e90 SP::cTexturePreload::PreloadTextureList  # PDB name (retail copy)
-007b2680 SP::cThumbnailManager::GetThumbRectID  # PDB name
+007b2680 ?GetThumbRectID@cThumbnailManager@SP@@UAEXAAUcRenderTargetRectID@2@@Z  # SP::cThumbnailManager::GetThumbRectID migrated from s007b19c0
 007b26a0 SP::cThumbnailManager::SetupThumbnailRTTs  # PDB name
+007b27a0 ?f@W27a0@@QAEXHHHH@Z  # W27a0::f migrated from s007b19c0 (verbatim, slice spelling)
+007b27e0 ?f@W27e0@@QAEXHHHHH@Z  # W27e0::f migrated from s007b19c0 (verbatim, slice spelling)
+007b2820 ?set@W2820@@QAEXPAUPair@@000M@Z  # W2820::set migrated from s007b19c0 (verbatim, slice spelling)
+007b2890 ??1D2890@@UAE@XZ  # D2890::~D2890 migrated from s007b19c0 (verbatim, slice spelling)
+007b2900 ??1D2900@@UAE@XZ  # D2900::~D2900 migrated from s007b19c0 (verbatim, slice spelling)
+007b2970 ?FUN_007b2970@@YGXPAUP2970@@@Z  # FUN_007b2970 migrated from s007b19c0 (verbatim, slice spelling)

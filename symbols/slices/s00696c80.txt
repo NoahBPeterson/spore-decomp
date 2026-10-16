@@ -11,5 +11,5 @@
 00697b40 SP::cLocalInputState::OnMouseWheel  # mScrollDelta += delta (mMouseWheelDelta at +0x44 per PDB)
 00697b50 SP::MutexLock::MutexLock  # stores mutex then EA::Thread::Mutex::Lock
 00697b70 SP::MutexLock::~MutexLock  # tail-calls EA::Thread::Mutex::Unlock
-00697b80 EA::Trace::Server::ShouldLog  # if(mEnabled && !IsFiltered) return 0; return 1
+00697b80 ?ShouldLog@Server_s0069_6c80@Trace@EA@@QAEHI@Z  # Server_s0069_6c80::ShouldLog migrated from s00696c80 (verbatim, slice spelling)
 00697bb0 EA::Trace::Server assert-control  # lock +0x38 mutex, noAsserts switch, vtable +0x18

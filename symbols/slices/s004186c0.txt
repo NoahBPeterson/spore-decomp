@@ -1,8 +1,8 @@
-004186c0 CreateEditorResource  # allocs "Editor" 0x2d4 object, vtbl_Editor::cEditorResource
-00418870 EditorResource::EditorResource  # ctor storing cEditorResource vtbls
+004186c0 ?CreateEditorResource@@YAPAUEditorResource@@PAUEditorSource@@PAIPAPAULoadHandle_s0041_86c0@@@Z  # CreateEditorResource migrated from s004186c0 (verbatim, slice spelling)
+00418870 ??0EditorResource@@QAE@XZ  # EditorResource::EditorResource migrated from s004186c0 (verbatim, slice spelling)
 00418960 EditorResource::scalar_deleting_dtor  # calls dtor then EASTL_allocator_deallocate on flag&1
 00418990 EditorResource::~EditorResource  # resets vtbls to cEditorResource
-00418a10 EditorResourceSub::~EditorResourceSub  # destroys three vectors + members
-00418ae0 EditorResource::Setup  # allocs "Editor" 0xbc/0x1d0/0xf8 subobjects, opens load handles
-00418f90 EditorResource::NotifyA  # forwards to threaded object then parent handle
-00418fd0 EditorResource::NotifyB  # calls threaded object method, returns true
+00418a10 ??1SubObject@@QAE@XZ  # SubObject::~SubObject migrated from s004186c0 (verbatim, slice spelling)
+00418ae0 ?Setup@EditorResource@@QAE_NPAULoadHandle_s0041_86c0@@@Z  # EditorResource::Setup migrated from s004186c0 (verbatim, slice spelling)
+00418f90 ?NotifyA@EditorResource@@QAEXPAULoadHandle_s0041_86c0@@@Z  # EditorResource::NotifyA migrated from s004186c0 (verbatim, slice spelling)
+00418fd0 ?NotifyB@EditorResource@@QAE_NPAULoadHandle_s0041_86c0@@@Z  # EditorResource::NotifyB migrated from s004186c0 (verbatim, slice spelling)

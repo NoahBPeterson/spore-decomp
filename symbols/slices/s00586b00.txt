@@ -1,2 +1,4 @@
-00586b00 SP::cAppModeEditorBase::PrepareAppForNewModel  # PDB name; arg cSPEditorModel*, ret 4
-00587270 SP::cAppModeEditorBase::SetMode  # PDB name; (int mode, char), ret 8, bool
+00586b00 ?PrepareAppForNewModel@cAppModeEditorBase_s0058_6b00@SP@@QAEXPAUSPModel@@@Z  # cAppModeEditorBase_s0058_6b00::PrepareAppForNewModel migrated from s00586b00 (verbatim, slice spelling)
+00587270 ?SetMode@cAppModeEditorBase_s0058_6b00@SP@@QAE_NHD@Z  # cAppModeEditorBase_s0058_6b00::SetMode migrated from s00586b00 (verbatim, slice spelling)
+0059cea0 ?SetCreatureTargetAngle@cSPEditorAnimatedCreatureManager@SP@@QAEXIM_N@Z  # SP::cSPEditorAnimatedCreatureManager::SetCreatureTargetAngle (callee of s00586b00, named from the dev publics; slice address comment)
+0059cf60 ?SetCreaturePreserveHeight@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  # SP::cSPEditorAnimatedCreatureManager::SetCreaturePreserveHeight (callee of s00586b00, named from the dev publics; slice address comment)

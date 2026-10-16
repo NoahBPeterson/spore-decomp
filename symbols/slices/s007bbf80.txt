@@ -1,1 +1,1 @@
-007bbf80 SP::cThumbnailManager::DilateStart  # card annotation (PDB name)
+007bbf80 ?DilateStart@cThumbnailManager_s007b_bf80@@QAEXPAUDilateReq@@@Z  # cThumbnailManager_s007b_bf80::DilateStart migrated from s007bbf80 (verbatim, slice spelling)

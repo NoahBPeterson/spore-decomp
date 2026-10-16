@@ -1,25 +1,25 @@
-008068d0 SPUIHelpers::SetDrawableImage  # unlabeled; drawable assign switch (vtable+0xa8/0xc/0x10/0x14)
-00806a60 SPUIHelpers::SetImageFromLayout  # wrapper over GetImageFromLayout + SetDrawableImage
-00806aa0 SPUIHelpers::SetImageIcon  # unlabeled; cSPUIStdDrawable icon index helper
-00806b20 SPUIHelpers::SetImageIconFrom  # unlabeled; copy 8 icon indices
-00806bf0 SPUIHelpers::SetWindowAreaToParent  # PDB dev 00fb7b30
-00806c60 SPUIHelpers::GetWindowPos  # unlabeled; top-left of window area
-00806ca0 SPUIHelpers::CenterWindow  # unlabeled; set position centering window
+008068d0 ?FUN_008068d0@@YADPAUW_s0080_68d0@@HH@Z  # FUN_008068d0 migrated from s008068d0 (verbatim, slice spelling)
+00806a60 ?FUN_00806a60@@YADPAUW_s0080_68d0@@PAXHH@Z  # FUN_00806a60 migrated from s008068d0 (verbatim, slice spelling)
+00806aa0 ?FUN_00806aa0@@YADPAUW_s0080_68d0@@H@Z  # FUN_00806aa0 migrated from s008068d0 (verbatim, slice spelling)
+00806b20 ?FUN_00806b20@@YADPAUW_s0080_68d0@@HH@Z  # FUN_00806b20 migrated from s008068d0 (verbatim, slice spelling)
+00806bf0 ?SetWindowAreaToParent@@YAXPAUW_s0080_68d0@@@Z  # SetWindowAreaToParent migrated from s008068d0 (verbatim, slice spelling)
+00806c60 ?FUN_00806c60@@YAPAMPAMPAX@Z  # FUN_00806c60 migrated from s008068d0 (verbatim, slice spelling)
+00806ca0 ?FUN_00806ca0@@YAXPAUW_s0080_68d0@@MM@Z  # FUN_00806ca0 migrated from s008068d0 (verbatim, slice spelling)
 00806d10 SP::Pollinator  # PDB dev 00de8b10
-00806db0 SPUIHelpers::ApplyStyle  # unlabeled; vtable+0x8c then refresh
-00806de0 SPUIHelpers::SetTooltipText  # PDB dev 00fb7e30
+00806db0 ?FUN_00806db0@@YAEPAUW_s0080_68d0@@PAX@Z  # FUN_00806db0 migrated from s008068d0 (verbatim, slice spelling)
+00806de0 ?SetTooltipText@@YAXPAUW_s0080_68d0@@PAX@Z  # SetTooltipText migrated from s008068d0 (verbatim, slice spelling)
 00806e40 SPUIHelpers::AutoSizeWindowForText  # PDB dev 00fb7e80
-00806ee0 SPUIHelpers::SetImageIconColors  # unlabeled; loop over 8 icons
-00806f50 SPUIHelpers::IsDefaultSequence  # unlabeled; fastcall identity check
-00806fc0 SPUIHelpers::ResetScrollFrame  # unlabeled; sets scale 1,1
-00807040 SPUIHelpers::ResetScrollFrameColor  # unlabeled; sets color globals
+00806ee0 ?FUN_00806ee0@@YAXPAUW_s0080_68d0@@@Z  # FUN_00806ee0 migrated from s008068d0 (verbatim, slice spelling)
+00806f50 ?FUN_00806f50@@YIHPAX@Z  # FUN_00806f50 migrated from s008068d0 (verbatim, slice spelling)
+00806fc0 ?FUN_00806fc0@@YAXPAUW_s0080_68d0@@@Z  # FUN_00806fc0 migrated from s008068d0 (verbatim, slice spelling)
+00807040 ?FUN_00807040@@YAXPAUW_s0080_68d0@@@Z  # FUN_00807040 migrated from s008068d0 (verbatim, slice spelling)
 008070d0 SPUIHelpers::AnchorWindowToScreen  # PDB dev 00fb7fd0
 00807340 SPUIHelpers::AnchorWindowToWindow  # PDB dev 00fb8200
-00807430 SPUIHelpers::SetScalarPercent  # unlabeled; clamp 0..100
-008074a0 SPUIHelpers::DestroyRolloverFrame  # PDB dev 00fb8470
-00807590 SPUIHelpers::RemoveWindowCallback  # PDB dev 00fb8550
-00807600 SPUIHelpers::CreateScrollFrameVertical  # unlabeled; UI/ScrollFrameVertical
-00807690 SPUIHelpers::UpdateScrollFrameVerticalWrap  # unlabeled
-008076f0 SPUIHelpers::DestroyScrollFrameVertical  # unlabeled
-00807760 SPUIHelpers::FixedAllocatorSetup  # unlabeled; UI/FixedAllocationBin array
-008077f0 eastl::list<EA::UTFWin::IWindow*, eastl::fixed_node_pool<12,128,4,0,1>>::DoErase  # PDB
+00807430 ?FUN_00807430@@YAXPAUW_s0080_68d0@@M@Z  # FUN_00807430 migrated from s008068d0 (verbatim, slice spelling)
+008074a0 ?DestroyRolloverFrame@@YADPAUW_s0080_68d0@@@Z  # DestroyRolloverFrame migrated from s008068d0 (verbatim, slice spelling)
+00807590 ?RemoveWindowCallback@@YAXPAUW_s0080_68d0@@H@Z  # RemoveWindowCallback migrated from s008068d0 (verbatim, slice spelling)
+00807600 ?FUN_00807600@@YAPAXPAX00@Z  # FUN_00807600 migrated from s008068d0 (verbatim, slice spelling)
+00807690 ?FUN_00807690@@YADPAUW_s0080_68d0@@@Z  # FUN_00807690 migrated from s008068d0 (verbatim, slice spelling)
+008076f0 ?FUN_008076f0@@YADPAUW_s0080_68d0@@@Z  # FUN_008076f0 migrated from s008068d0 (verbatim, slice spelling)
+00807760 ?FUN_00807760@@YIPAXPAX@Z  # FUN_00807760 migrated from s008068d0 (verbatim, slice spelling)
+008077f0 ?DoErase@@YIXPAX@Z  # DoErase migrated from s008068d0 (verbatim, slice spelling)

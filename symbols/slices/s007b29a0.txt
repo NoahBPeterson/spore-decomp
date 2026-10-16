@@ -1,0 +1,2 @@
+007b39d0 ?f@W39d0@@QAEXXZ  # W39d0::f migrated from s007b29a0 (verbatim, slice spelling)
+007b3a30 ?set@W3a30@@QAEXHPAM@Z  # W3a30::set migrated from s007b29a0 (verbatim, slice spelling)

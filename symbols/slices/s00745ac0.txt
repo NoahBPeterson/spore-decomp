@@ -1,7 +1,14 @@
-# <va> <Name>  # evidence
-00745cf0 eastl::adjust_heap<cOccluder*,int,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # dev-PDB gap-align
-007460b0 `anonymous namespace'::FilterModelFrustum  # dev-PDB gap-align; string/symbol
-00746250 SP::cModelWorld::SetMaterialInfo  # dev-PDB vtable-slot
+00745ac0 ?Sort24@@YAXPAUP6@@0P6A_NABU1@1@Z@Z  # Sort24 migrated from s00745ac0 (verbatim, slice spelling)
+00745bb0 ?Copy20@@YAPAUE20@@PAU1@00@Z  # Copy20 migrated from s00745ac0 (verbatim, slice spelling)
+00745c20 ?CreateNode18@@YAPAUNode18@@PBI@Z  # CreateNode18 migrated from s00745ac0 (verbatim, slice spelling)
+00745ca0 ?UninitCopy24@@YAPAUVec6@@PAU1@00@Z  # UninitCopy24 migrated from s00745ac0 (verbatim, slice spelling)
+00745cf0 ?PromoteOccluder@@YAXPAUcOccluder_s0074_5ac0@@HHU1@P6A_NABU1@2@Z@Z  # PromoteOccluder migrated from s00745ac0 (verbatim, slice spelling)
+00745e00 ?PromotePairGt@@YAXPAUFloatKeyPair@@HHU1@UFloatKeyGreater@@@Z  # PromotePairGt migrated from s00745ac0 (verbatim, slice spelling)
+00745e80 ?PromotePairLt@@YAXPAUFloatKeyPair@@HHU1@UFloatKeyLess@@@Z  # PromotePairLt migrated from s00745ac0 (verbatim, slice spelling)
+00745f90 ?DrawRecord_Ctor@@YAPAUDrawRecord@@PAU1@PAX@Z  # DrawRecord_Ctor migrated from s00745ac0 (verbatim, slice spelling)
+007460b0 ?FilterModelFrustum@@YAHPAUCullModel@@PAXPAUFrustumFilterArg@@@Z  # FilterModelFrustum migrated from s00745ac0 (verbatim, slice spelling)
+00746250 ?cModelWorld_SetMaterialInfo@@YAXPAX00H@Z  # cModelWorld_SetMaterialInfo migrated from s00745ac0 (verbatim, slice spelling)
 00746360 SP::cModelWorld::GetHull  # dev-PDB vtable-slot
-00746560 SP::cModelWorld::GetHullBoundingBox  # dev-PDB vtable-slot
+00746560 ?GetHullBoundingBox@CModelWorldStub@@QAEXPAXPAUcSPBoundingBox_s0074_5ac0@@@Z  # CModelWorldStub::GetHullBoundingBox migrated from s00745ac0 (verbatim, slice spelling)
 00746610 SP::cModelWorld::GetRuntimeModel  # dev-PDB vtable-slot
+00746910 ?AssignGroup@GroupWorld@@QAEXPAXH_N@Z  # GroupWorld::AssignGroup migrated from s00745ac0 (verbatim, slice spelling)

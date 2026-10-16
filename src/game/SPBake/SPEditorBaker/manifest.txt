@@ -1,0 +1,58 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorBaker.cpp  ??0ResourceCollector@@QAE@XZ  00401ff0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AddResource@ResourceCollector@@QAEXUResourceKey@@@Z  004021a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AddCreated@ResourceCollector@@QAEXIIPBX@Z  00402390  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Release@AtomicRefCounted@@QAEHXZ  00402420  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Gather@Preloader@@QAEXPAUPreloadSource@@_N@Z  00402470  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Start@Preloader@@QAEXABUResourceKey_s0040_2470@@_N@Z  004029f0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetHandle@Preloader@@QAEPAULoadHandle@@XZ  00402a90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Self@Preloader@@QAEPAU1@XZ  00402ab0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?IsFinished@Preloader@@QAE_NXZ  00402ac0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Reset@Preloader@@QAEXXZ  00402b30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0RangeSettings@@QAE@XZ  004035d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0KeyedRecord@@QAE@XZ  004036e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Flush@PendingBatch@@QAE_NXZ  004039f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1SlotArray8@@QAE@XZ  00403aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AddListeners@@YAXPAUIMessageManager@@PAUIMessageListener@@PBII@Z  004043f0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??_GPaintSystem@Skinner@@UAEPAXI@Z  00404430  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?IsEqual@IdPaintSystem@Skinner@@UBE_NABVPaintSystem@2@@Z  00404460  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Allocate@LinearAllocator@@QAEPAXI_N@Z  00404480  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0BakerCommand_s0040_4480@@QAE@PAX@Z  00404500  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Description@BakerCommand_s0040_4480@@QAEXPAX@Z  00404630  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?IsValid@ResourceKeyFilter@@UAE_NABUResourceKey_s0040_4660@@@Z  00404f10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?TestAny@IPredicateTarget@@QAE_NPAX@Z  00406e90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Apply@KeyRemapper@@QAEXAAU?$vector_s0040_6ac0@UKeyPair@@@@UResourceKey@@@Z  004071e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?MulMatrixAssign@@YAAAUVector3@@AAU1@ABUMatrix3@@@Z  004098e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Scale@Transform@@QAEXM@Z  00409b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Handle@Dispatcher@@QAE_NIH@Z  0040e800  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?OnClear@Obj@@QAE_NH@Z  0040e9c0  /Od /Ob1 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?ProcessBatch@EditorPartList@@QAE_NXZ  0040eb70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Invert@PartTransform@@QAEXXZ  0040efa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0PartHolder@@QAE@PBU0@@Z  0040f070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Rescan@EditorPartList@@QAE_NXZ  0040f110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?SetItem@PaletteEditor@@QAE_NPAUItemBase@@@Z  004145c0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetField78@EditorObject@@QAEHXZ  00414e10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?FindModelKey@ConfigManager_s0041_4e30@@QAE_NIIPAUResourceKey_s0041_4e30@@@Z  00415730  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?HasHandler@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@H@Z  00416180  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?HasId@EditorPanel@@QAE_NH@Z  00416320  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?HasHandlerNormalized@EditorPanel@@QAE_NPAUResourceKey_s0041_6180@@@Z  004163f0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?ActivateById@EditorPanel_s0041_6990@@QAE_NH@Z  00416990  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?ActivateByKey@EditorPanel_s0041_6990@@QAE_NPAUResourceKey_s0041_6990@@@Z  00416c60  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AdjustPressCount@EditorPanel_s0041_6990@@QAEX_N@Z  00416e30  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CountPending@EditorPanel_s0041_6990@@QAEHXZ  00416eb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CountWithId@EditorPanel_s0041_6990@@QAEHH@Z  00416f00  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetActiveKey@EditorPanel_s0041_6990@@QAE_NPAUResourceKey_s0041_6990@@@Z  00416fb0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?GetSlotArea@EditorBlockData_s0041_7600@@QAEPADXZ  00417cf0  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CreateEditorBlockData@@YAPAUEditorBlockData_s0041_7600@@XZ  00417d10  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CreateEditorResource@@YAPAUEditorResource@@PAUEditorSource@@PAIPAPAULoadHandle_s0041_86c0@@@Z  004186c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??0EditorResource@@QAE@XZ  00418870  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??_GEditorResource@@UAEPAXI@Z  00418960  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1EditorResource@@UAE@XZ  00418990  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1SubObject@@QAE@XZ  00418a10  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?NotifyA@EditorResource@@QAEXPAULoadHandle_s0041_86c0@@@Z  00418f90  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?NotifyB@EditorResource@@QAE_NPAULoadHandle_s0041_86c0@@@Z  00418fd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?CollectAndDestroy@@YA_NII@Z  0041aa40  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??_EDelObj@@W3AEPAXI@Z  0042fbe0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??_EEditorResourceD@@W3AEPAXI@Z  0042fc20  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?BakeSpritesCreateThunk@@YAXPAURefVector@@III0PAUVector8@@PAUElem24Vec@@PAUTransformVec@@@Z  0042ff00  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?f@CEditorResourceThunk@SP@@UAEHPAX@Z  00561150  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

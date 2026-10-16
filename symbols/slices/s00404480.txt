@@ -1,2 +1,4 @@
-00404500 BakerCommand::BakerCommand  # registers "-bake^" options, "Baker system management." help string
-00404630 BakerCommand::Description  # passes "baker" command name to option parser usage
+00404480 ?Allocate@LinearAllocator@@QAEPAXI_N@Z  # LinearAllocator::Allocate migrated from s00404480 (verbatim, slice spelling)
+00404500 ??0BakerCommand_s0040_4480@@QAE@PAX@Z  # BakerCommand_s0040_4480::BakerCommand migrated from s00404480 (verbatim, slice spelling)
+00404630 ?Description@BakerCommand_s0040_4480@@QAEXPAX@Z  # BakerCommand_s0040_4480::Description migrated from s00404480 (verbatim, slice spelling)
+0083a2f0 ?Parse@cArgumentSpec@ArgScript@EA@@QAEXPAVcArguments@23@PAVcIParser@23@@Z  # EA::ArgScript::cArgumentSpec::Parse (callee of s00404480, named from the dev publics; slice address comment)

@@ -1,5 +1,11 @@
-00961e80 EA::UTFWin::Window::Shutdown  # PDB pdb_names.json (dev 0104a940), vtable slot
+00961db0 ?f@S961db0@@QAEXPAPAXI@Z  # S961db0::f migrated from s00961db0 (verbatim, slice spelling)
+00961e20 ?FUN_00961e20@@YA_NPAX0@Z  # FUN_00961e20 migrated from s00961db0 (verbatim, slice spelling)
+00961e80 ?Shutdown@Window@UTFWin@EA@@UAE_NXZ  # EA::UTFWin::Window::Shutdown migrated from s00961db0
 00962100 eastl::hash_map<unsigned int,EA::AutoRefCount<EA::Swarm::cEffectsWorld> >::operator[]  # PDB pdb_names.json (dev 0149ef80)
+00962180 ?f@S962180@@QAEPAXPAX00@Z  # S962180::f migrated from s00961db0 (verbatim, slice spelling)
+00962530 ?f@S962530@@QAEXHH@Z  # S962530::f migrated from s00961db0 (verbatim, slice spelling)
+00962580 ?f@S962580@@QAEXHH@Z  # S962580::f migrated from s00961db0 (verbatim, slice spelling)
+009625b0 ?f@S9625b0@@QAEHHHH@Z  # S9625b0::f migrated from s00961db0 (verbatim, slice spelling)
 009625f0 EA::UTFWin::cGetChildWindowCache::Remove  # PDB pdb_names.json (dev 0104b380)
 00962740 EA::UTFWin::Window::~Window  # Ghidra PDB candidate (caller-scored)
 00962840 EA::UTFWin::Window::ChildAdd  # PDB candidate (caller-single)

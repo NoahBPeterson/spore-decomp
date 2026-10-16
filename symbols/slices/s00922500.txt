@@ -4,7 +4,9 @@
 00922690 EA::Thread::Semaphore::Wait  # 2008 dev PDB name (WaitForSingleObject)
 00922740 EA::Thread::Semaphore::Post  # 2008 dev PDB name (ReleaseSemaphore)
 00922b30 EA::Thread::Thread::SetName  # 2008 dev PDB name (RaiseException 0x406d1388)
-009233f0 EA::Trace::LogFilterGroupLevels::IsFiltered  # 2008 dev PDB name (vtable+0x14 thunk)
-00923440 EA::Trace::LogFilterGroupLevels::Release  # 2008 dev PDB name
-009234c0 EA::Trace::GetServer  # 2008 dev PDB name
-009234e0 EA::Trace::Server::UpdateLogFilters  # 2008 dev PDB name (vtable+0x14 thunk)
+009233e0 ?Set@C233e0@@QAEXG@Z  # C233e0::Set migrated from s00922500 (verbatim, slice spelling)
+009233f0 ?Call@C233f0@@QAEXPAX@Z  # C233f0::Call migrated from s00922500 (verbatim, slice spelling)
+00923440 ?FUN_00923440@@YIHPAX@Z  # FUN_00923440 migrated from s00922500 (verbatim, slice spelling)
+009234a0 ?FUN_009234a0@@YIHPAX@Z  # FUN_009234a0 migrated from s00922500 (verbatim, slice spelling)
+009234c0 ?GetServer@Trace@EA@@YAPAXXZ  # GetServer migrated from s00922500 (verbatim, slice spelling)
+009234e0 ?UpdateLogFilters@Trace@EA@@YAXXZ  # UpdateLogFilters migrated from s00922500 (verbatim, slice spelling)

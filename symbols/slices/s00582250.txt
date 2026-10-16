@@ -1,3 +1,6 @@
-00582250 SP::cAppModeEditorBase::OnBlockWheel  # descriptive name: thiscall(block, handle, wheelDelta); scales block+parents, twist/state/handle, plays editor sounds
+0047e6c0 ?GetEditorBlock@cSPEditorHandle@SP@@QAEPAVcSPEditorBlock@2@XZ  # SP::cSPEditorHandle::GetEditorBlock (callee of s00582250, named from the dev publics; slice address comment)
+004891a0 ?BuildLimb@cSPEditorLimbStructure@SP@@AAEPAVcSPEditorLimbJoint@2@PAVcSPEditorBlock@2@PAV32@_N@Z  # SP::cSPEditorLimbStructure::BuildLimb (callee of s00582250, named from the dev publics; slice address comment)
+005740e0 ?IsManipulatorEnabled@cAppModeEditorBase@SP@@IAE_NW4InterfaceId@COM@EA@@@Z  # SP::cAppModeEditorBase::IsManipulatorEnabled (callee of s00582250, named from the dev publics; slice address comment)
+00582250 ?OnBlockWheel@cAppModeEditorBase_s0058_2250@SP@@QAE_NPAUcSPEditorBlock_s0058_2250@2@PAUcSPEditorHandle_s0058_2250@2@H@Z  # cAppModeEditorBase_s0058_2250::OnBlockWheel migrated from s00582250 (verbatim, slice spelling)
 00582d00 FUN_00582d00  # no PDB name
 00582d70 FUN_00582d70  # no PDB name

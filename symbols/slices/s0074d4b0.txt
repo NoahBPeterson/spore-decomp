@@ -1,2 +1,3 @@
-# VA  Name  # evidence
-0074d4b0  SP::cModelWorld::CreateModel  # PDB caller-single
+004fde40 ?Malloc@FixedAllocatorBase@Allocator@EA@@QAEPAXXZ  # EA::Allocator::FixedAllocatorBase::Malloc (callee of s0074d4b0, named from the dev publics; slice address comment)
+0074d4b0 ?CreateModel@cModelWorld_s0074_d4b0@@QAEPAXIII@Z  # cModelWorld_s0074_d4b0::CreateModel migrated from s0074d4b0 (verbatim, slice spelling)
+0074d870 ?CollectModels@cModelWorld_s0074_d4b0@@QAE_NPAUPtrVec@@PBUcModelFilter@@@Z  # cModelWorld_s0074_d4b0::CollectModels migrated from s0074d4b0 (verbatim, slice spelling)

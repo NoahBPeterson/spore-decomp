@@ -1,0 +1,49 @@
+# va  diff-bytes  reason (compiled with /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE)
+006e5bd0  87  ShaderState::Reset complete; erase loop is strength-reduced in mine, original keeps separate src/dst increments
+0070e3e0  19    eastl::copy_backward<AutoRefCount>; register assignment differs
+0070e430  19    eastl::copy_backward<AutoRefCount>; register assignment differs
+0070e4e0  198   graphics resource rebuild; vector/call shape differs; equiv WEAK (712 valid, 18.2% cov)
+0070e5e0  91    graphics resource release; fine register/order differences
+0070e6b0  120   hash-node constructor; EH frame missing
+0070e8c0  129   uninitialized_copy<AutoRefCount>; EH frame/order differs
+0070e9a0  115   uninitialized_fill_n<AutoRefCount>; EH frame/order differs
+0070ea70  57    uninitialized_copy with atomic refcount; spill/order differs
+0070eac0  89    fill with atomic refcount; deferred-release shape differs
+0070eb30  45    fill_n with atomic refcount; register allocation differs
+0070eb70  41    uninitialized_copy weak-refcount; parameter spills differ
+0070ebf0  30    assign weak-refcount; dst kept in memory not register
+0070ec30  33    copy_backward weak-refcount; register assignment differs
+0070eea0  200   SP::cMaterialManager::WriteMaterials; stream/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
+0070efa0  250   SP::cMaterialManager::ReadShaders; io/vtable shape differs; equiv UNSUPPORTED (0/1200 valid inputs, fault(read))
+0070f320  90    vector<AutoRefCount> teardown; EH frame missing
+0070f390  90    vector<AutoRefCount> teardown; EH frame missing
+0070f520  64    atomic weak-release range; deferred-release sequence differs
+0070f570  8     fill_n weak-refcount; one instruction scheduled earlier
+0070f8c0  218   SP::cMaterialManager::HasMaterial; map/mutex register shape differs
+0070fa60  69    vector::erase (RC3c); register assignment differs
+0070fab0  69    vector::erase (RC3b); register assignment differs
+0070fd00  4     hash bucket-chain destructor; swap of two movs only
+0070ff50  4     hash bucket-chain destructor; swap of two movs only
+007101f0 130 hash_map<uint32_t,T>::operator[]; equiv FAIL (5/5 inputs mismatched: ours faults at a bad address, guessed helper roles); EH frame/locals and insert-return shape not reproduced
+007102b0 130 hash_map<uint32_t,T>::operator[] second instantiation; equiv FAIL (5/5 inputs mismatched: ours faults, guessed helper roles); same shape mismatch
+007106d0 126 vector::assign(first,last); helper roles (ReallocRef/copy/move) guessed, slot order off
+00711070 100 vector::resize(uint32_t); inlined resize(n,value) / DoInsertValues call shape not reproduced
+007110f0 100 vector::resize(uint32_t) second instantiation; same shape mismatch
+00711170 151 vector::push_back() no-argument; grow path's temp + atomic release not reproduced
+00711220 167 vector::resize(uint32_t); inlined resize(n,value_type()) call shape and slot order not reproduced
+007112c0 28 hashtable::DoFreeNodes; only inner-loop register assignment differs (node copy in edi vs esi)
+00711400 120 cMaterialManager::GetTexturesFromMaterial; atomic AutoRefCount assignment dance not reproduced
+00712320 88 hashtable::DoFreeNodes variant (node +0x24/+0x28/+0x34/+0x4c); register allocation differs
+00712760 39 fixed_vector copy ctor (inline buffer at +0x14/+0x18); buffer/pool stores and assign call shape off
+007127d0 150 state object copy (9 dwords + fixed-vector ctor); field-copy schedule not reproduced
+00712850 140 state object copy (a[0] + b[1..8] + fixed-vector ctor); field-copy schedule not reproduced
+00712b20 41 hashtable<string>::DoFreeNodes wrapper (embedded hashtable at +4); register allocation differs
+00712ba0 8 cMaterialManager::HasMaterial; only the esi/edi register rotation differs
+00712cb0 122 cMaterialManager::GetMaterials; extra frame locals and loop register assignment differ
+00712e10 213 GetIDFromCompiledState: complete (find, id probe loop, insert); inlined hash lookup/EH shape differs; difftest WEAK after fixing the mutex-param argument (pass &gMutexParams, not its value), the fixed-vector layout (+8 bytes: allocator word and pad, mutex at +0x258), the find() iterator (two words; a one-word local let find overwrite the saved mutex pointer) and the not-found test (end() is mpBuckets[mnBuckets], not [mnNextResize])
+00712f50 228 RegisterMaterial: complete; eastl::copy and AutoRef push shape not byte-exact
+00713070 862 ReadExternalReferences: complete; EH/vec-ctor and inline AutoRef shapes differ; difftest WEAK after fixing the mutex-param argument (&gMutexParams) and the member layout (mutex at +0x258)
+00713560 361 cMaterialScriptState dtor: complete; member table frees in order, inlined helper shapes differ
+00713780 199 cMaterialManager dtor: complete; member teardown order reproduced, EH frame differs
+007138f0 235 cMaterialScriptState ctor: complete; store order/scheduling differs
+00713a80 258 cMaterialManager ctor: complete; store order differs; difftest PASS (fixed wrong Mutex::Mutex and Stopwatch::Stopwatch address annotations: 0x9222a0, 0x93a560)

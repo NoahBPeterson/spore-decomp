@@ -1,7 +1,7 @@
-00711220 eastl::vector<EA::AutoRefCount<SP::cTextureInstance>,eastl::sp_vector_allocator>::resize  # resize(n) -> resize(n, T())
-007112c0 eastl::hashtable<unsigned int,eastl::pair<unsigned int const,SP::cMaterialInternal>,...>::DoFreeNodes  # walks node chain via +0x20, frees child buffer then node
+00711220 ?resize@VecResize@@QAEXI@Z  # VecResize::resize migrated from s00711220 (verbatim, slice spelling)
+007112c0 ?DoFreeNodes@@YGXPAPAUFreeNode@@I@Z  # DoFreeNodes migrated from s00711220 (verbatim, slice spelling)
 00711380 SP::cMaterialManager::UnregisterMaterial  # clears fixed pointer array + tail vector
-00711400 SP::cMaterialManager::GetTexturesFromMaterial  # PDB name
+00711400 ?GetTexturesFromMaterial@@YGXPAXPAUTextureVec@@P6A_N0@Z@Z  # GetTexturesFromMaterial migrated from s00711220 (verbatim, slice spelling)
 00711490 SP::cMaterialManager::WriteExternalReferences  # PDB candidate (caller-single)
 00711630 SP::cMaterialManager::GetExternalReferenceKeys  # PDB candidate (caller-scored)
 00711780 SP::cMaterialManager::ReadMaterials  # PDB candidate (caller-scored)

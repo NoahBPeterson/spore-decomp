@@ -1,0 +1,2 @@
+004145c0 ?SetItem@PaletteEditor@@QAE_NPAUItemBase@@@Z  # PaletteEditor::SetItem migrated from s004145c0 (verbatim, slice spelling)
+00414e10 ?GetField78@EditorObject@@QAEHXZ  # EditorObject::GetField78 migrated from s004145c0 (verbatim, slice spelling)

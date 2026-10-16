@@ -1,0 +1,7 @@
+00572070 ?SetSoundSymbol@@YAXIIPBD@Z  # SetSoundSymbol migrated from s005718f0 (verbatim, slice spelling)
+005720f0 ?SetCullBackfaces@@YAXH@Z  # SetCullBackfaces migrated from s005718f0 (verbatim, slice spelling)
+00572110 ?LookupByHash@@YAII@Z  # LookupByHash migrated from s005718f0 (verbatim, slice spelling)
+00572160 ?GetDefaultColor@ColorSource@@QBE?AUVec4@@XZ  # ColorSource::GetDefaultColor migrated from s005718f0 (verbatim, slice spelling)
+00572190 ?GetColor@ColorSource@@QBE?AUVec4@@XZ  # ColorSource::GetColor migrated from s005718f0 (verbatim, slice spelling)
+005721b0 ?HandleRects@@YGXURect16@@0@Z  # HandleRects migrated from s005718f0 (verbatim, slice spelling)
+00572220 ?UpdateAllItems@@YGXPAUcItemList@@@Z  # UpdateAllItems migrated from s005718f0 (verbatim, slice spelling)

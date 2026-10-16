@@ -1,2 +1,7 @@
-004a6f10 SP::EditorUtils::DeleteInvalidBlocks  # PDB name (card); deletes flag-1 blocks, sends 0x7f18f481 per block and 0xf058b0f2 summary
+00437b00 ?PlaceHandlesBaseOnPinning@cSPEditorBlock@SP@@QAEXH_N@Z  # SP::cSPEditorBlock::PlaceHandlesBaseOnPinning (callee of s004a6f10, named from the dev publics; slice address comment)
+0044f220 ?GetSymmetrySign@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetSymmetrySign (callee of s004a6f10, named from the dev publics; slice address comment)
+004a6f10 ?DeleteInvalidBlocks@EditorUtils@SP@@YAXPAUcSPEditorBlock_s004a_6f10@@@Z  # DeleteInvalidBlocks migrated from s004a6f10 (verbatim, slice spelling)
 004acab0 SP::cSPEditorModel::RemoveBlock  # (block, false) after the per-block delete message
+004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s004a6f10, named from the dev publics; slice address comment)
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004a6f10, named from the dev publics; slice address comment)
+004adc40 ?UsingSymmetry@cSPEditorModel@SP@@QBE_NXZ  # SP::cSPEditorModel::UsingSymmetry (callee of s004a6f10, named from the dev publics; slice address comment)

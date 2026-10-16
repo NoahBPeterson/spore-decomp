@@ -1,1 +1,1 @@
-0041aa40 CollectAndDestroy  # local vector of 24-byte elems, Collect + dtor
+0041aa40 ?CollectAndDestroy@@YA_NII@Z  # CollectAndDestroy migrated from s0041aa40 (verbatim, slice spelling)

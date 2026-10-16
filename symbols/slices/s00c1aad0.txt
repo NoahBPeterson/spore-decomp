@@ -1,1 +1,1 @@
-00c1b020 SP::cSPCreatureBase::LeapAtTarget  # tentative: looks up the target (+0xe7c, interface 0xce9f6639), and when it is in front (cos > 0.7) computes a ballistic launch velocity (FUN_00c446d0), switches animation (InterruptAnimation) and submits a locomotion request; falls back to FUN_00c18b40
+00c1b020 ?FUN_00c1b020@cSPCreatureBase@@QAEXH@Z  # cSPCreatureBase::FUN_00c1b020 migrated from s00c1aad0 (verbatim, slice spelling)

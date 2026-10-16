@@ -1,3 +1,5 @@
-0049fbd0 SP::EditorUtils::RepinBlockToTorso  # PDB/card name
+0049fbd0 ?RepinBlockToTorso@@YAXPAUcSPEditorBlock_s0049_fbd0@@UcSPVector3_s0049_fbd0@@UcSPMatrix3_s0049_fbd0@@_N@Z  # RepinBlockToTorso migrated from s0049fbd0 (verbatim, slice spelling)
 004a0020 SP::EditorUtils::GetAllLimbs  # PDB/card name
 004a0ac0 FUN_4a0ac0  # scans model blocks, tests mFlags bit 0x2d
+004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s0049fbd0, named from the dev publics; slice address comment)
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s0049fbd0, named from the dev publics; slice address comment)

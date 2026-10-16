@@ -1,0 +1,4 @@
+00491b40 ?FUN_00491b40@@YAMPAUcSPEditorBlock_s0049_1b40@@ABUBlockList@@UVector3T@@UMatrix3_s0049_1b40@@PAURwVec3_s0049_1b40@@PA_N_NM@Z  # FUN_00491b40 migrated from s00491b40 (verbatim, slice spelling)
+004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s00491b40, named from the dev publics; slice address comment)
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s00491b40, named from the dev publics; slice address comment)
+004ad450 ?GetPhysicsWorld@cSPEditorModel@SP@@QAEPAVcSPEditorPhysicsWorld@2@XZ  # SP::cSPEditorModel::GetPhysicsWorld (callee of s00491b40, named from the dev publics; slice address comment)

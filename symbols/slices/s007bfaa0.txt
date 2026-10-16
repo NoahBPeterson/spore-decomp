@@ -1,1 +1,5 @@
 007bfaa0 SP::cTestScript::HandleMessage  # PDB caller-scored candidate in card
+007bfee0 ?CaptureAmbientOcclusionB@cThumbnailManagerAO@AO@@QAE_NPAURectID@@PAUIModelWorld_s007b_faa0@2@PAUMeshVector@2@HI_N@Z  # cThumbnailManagerAO::CaptureAmbientOcclusionB migrated from s007bfaa0 (verbatim, slice spelling)
+007c3c20 ?SetClearColor@cViewer@SP@@QAEXABUcSPColorRGBA@@@Z  # SP::cViewer::SetClearColor (callee of s007bfaa0, named from the dev publics; slice address comment)
+007c3ce0 ?SetRenderType@cViewer@SP@@QAEXHH@Z  # SP::cViewer::SetRenderType (callee of s007bfaa0, named from the dev publics; slice address comment)
+007c5440 ?SetViewWindow@cViewer@SP@@QAEXMM@Z  # SP::cViewer::SetViewWindow (callee of s007bfaa0, named from the dev publics; slice address comment)

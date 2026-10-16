@@ -1,1 +1,1 @@
-007b3a70 SP::cShowTexturesLayer::DrawLayer  # PDB candidate (caller-scored); __thiscall ret 0x10, this=m_viewer at +0x38
+007b3a70 ?DrawLayer@cShowTexturesLayer@@QAEXHHPAHH@Z  # cShowTexturesLayer::DrawLayer migrated from s007b3a70 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-00481f00  SP::IsNAN  # returns true if any component bits (masked 0x7fffffff) > 0x7f800000
+00481f00 ?IsNAN@@YA_NPBM@Z  # IsNAN migrated from s00481f00 (verbatim, slice spelling)
 00481fa0  RotHandle::GetHandlePos  # interpolates mP0..mP1 by t (=-1 -> mRadius) then transforms
 00482040  RotHandle::GetDir  # normalised (mP0-mP1), optionally multiplied by parent basis
 00482130  RotHandle::GetPoint9c  # returns mP1, optionally transformed

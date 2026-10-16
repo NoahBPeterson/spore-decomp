@@ -1,2 +1,12 @@
-0044ae00 SP::cSPEditorBlock::GetBBox  # PDB name
-0044b5c0 SP::cSPEditorBlock::GetDefaultScale  # PDB name
+00437b00 ?PlaceHandlesBaseOnPinning@cSPEditorBlock@SP@@QAEXH_N@Z  # SP::cSPEditorBlock::PlaceHandlesBaseOnPinning (callee of s0044ae00, named from the dev publics; slice address comment)
+0044ad00 ?Scale@cSPBoundingBox@@QAEXM@Z  # cSPBoundingBox::Scale (callee of s0044ae00, named from the dev publics; slice address comment)
+0044ae00 ?GetBBox@Blk_s0044_ae00@@QAE?AUBBox_s0044_ae00@@H_N0@Z  # Blk_s0044_ae00::GetBBox migrated from s0044ae00 (verbatim, slice spelling)
+0044b550 ?B550@Blk_s0044_ae00@@QAEPAUV3_s0044_ae00@@PAU2@@Z  # Blk_s0044_ae00::B550 migrated from s0044ae00 (verbatim, slice spelling)
+0044b590 ?B590@Blk_s0044_ae00@@QAEPAUM3_s0044_ae00@@PAU2@@Z  # Blk_s0044_ae00::B590 migrated from s0044ae00 (verbatim, slice spelling)
+0044b5c0 ?GetDefaultScale@Blk_s0044_ae00@@QAEMXZ  # Blk_s0044_ae00::GetDefaultScale migrated from s0044ae00 (verbatim, slice spelling)
+0044b640 ?B640@Blk_s0044_ae00@@QAEXH@Z  # Blk_s0044_ae00::B640 migrated from s0044ae00 (verbatim, slice spelling)
+0044b6b0 ?B6b0@Blk_s0044_ae00@@QAEXXZ  # Blk_s0044_ae00::B6b0 migrated from s0044ae00 (verbatim, slice spelling)
+0044b780 ?B780@Blk_s0044_ae00@@QAE_NXZ  # Blk_s0044_ae00::B780 migrated from s0044ae00 (verbatim, slice spelling)
+0044b7b0 ?B7b0@Blk_s0044_ae00@@QAEXI@Z  # Blk_s0044_ae00::B7b0 migrated from s0044ae00 (verbatim, slice spelling)
+0044ba20 ?Ba20@Blk_s0044_ae00@@QAEX_N0@Z  # Blk_s0044_ae00::Ba20 migrated from s0044ae00 (verbatim, slice spelling)
+00452040 ?RebuildPhysicsShape@cSPEditorBlock@SP@@QAEXXZ  # SP::cSPEditorBlock::RebuildPhysicsShape (callee of s0044ae00, named from the dev publics; slice address comment)

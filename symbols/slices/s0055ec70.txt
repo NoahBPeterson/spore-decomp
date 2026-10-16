@@ -1,7 +1,9 @@
+0055ec70 SP::cSPObjectTemplateDB::RebuildIndex  # name descriptive; GroupsChanged/time-limited IndexAsset loop/job hand-off, offsets +0x44 job, +0x48 pending set, +0x228 group set
 0055f7a0 SP::cSPObjectTemplateDB::RestoreGroupRecords  # checks mClassifierTable/groups
 0055f8e0 SP::cSPObjectTemplateDB::RemoveGroupRecord  # erases one classifier record
-0055f9e0 SP::cSPObjectTemplateDB::FlushPendingObject  # conditional release at +0x44
-0055fa20 SP::cSPObjectTemplateDB::SetAssetActive  # activates/deactivates an asset
-0055fb30 SP::cSPObjectTemplateDB::IsAssetActive  # whether asset index is in the active set
-0055fbb0 SP::cSPObjectTemplateDB::TouchAsset  # writes current time into asset record
-0055ec70 SP::cSPObjectTemplateDB::RebuildIndex  # name descriptive; GroupsChanged/time-limited IndexAsset loop/job hand-off, offsets +0x44 job, +0x48 pending set, +0x228 group set
+0055f9e0 ?FUN_0055f9e0@EcxStub70@SP@@QAEXXZ  # EcxStub70::FUN_0055f9e0 migrated from s0055ec70 (verbatim, slice spelling)
+0055fa20 ?FUN_0055fa20@EcxStub70@SP@@QAEEPAXD@Z  # EcxStub70::FUN_0055fa20 migrated from s0055ec70 (verbatim, slice spelling)
+0055fb30 ?GetAssetType@cSPObjectTemplateDB@SP@@UAE_NABVKey@ResourceMan@EA@@AAI@Z  # SP::cSPObjectTemplateDB::GetAssetType migrated from s0055ec70
+0055fbb0 ?FUN_0055fbb0@EcxStub70@SP@@QAEEPAX@Z  # EcxStub70::FUN_0055fbb0 migrated from s0055ec70 (verbatim, slice spelling)
+00564f70 ?SetUnknown@cJob@SP@@QAEXPAVIUnknown32@COM@EA@@@Z  # SP::cJob::SetUnknown (callee of s0055ec70, named from the dev publics; slice address comment)
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s0055ec70, named from the dev publics; slice address comment)

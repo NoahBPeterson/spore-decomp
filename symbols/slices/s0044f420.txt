@@ -1,1 +1,2 @@
-0044f420  SP::cSPEditorBlock::Split   # 925-byte clone/rebuild driver calling BuildBlock
+00435a10 ?SetFlag@cSPEditorBlock@SP@@QAEXW4eBlockFlags@12@_N@Z  # SP::cSPEditorBlock::SetFlag (callee of s0044f420, named from the dev publics; slice address comment)
+0044f420 ?Split@cSPEditorBlock_s0044_f420@@QAEPAU1@H@Z  # cSPEditorBlock_s0044_f420::Split migrated from s0044f420 (verbatim, slice spelling)

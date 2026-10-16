@@ -1,0 +1,4 @@
+00498470 ?FUN_00498470@@YA_NPAUBlock@@PAUP3@@PAUMatrix3_s0049_8470@@2_NMED@Z  # FUN_00498470 migrated from s00498470 (verbatim, slice spelling)
+004986d0 ?FUN_004986d0@@YA_NPAUBlock@@@Z  # FUN_004986d0 migrated from s00498470 (verbatim, slice spelling)
+00498850 ?FUN_00498850@@YA_NPAUHandle@@U?$AutoRef@UIPicker@@@@@Z  # FUN_00498850 migrated from s00498470 (verbatim, slice spelling)
+00498f10 ?FUN_00498f10@@YAPAUBlock@@PAU1@UVec3_s0049_8470@@1U?$AutoRef@UIPicker@@@@PAUP3@@3HHH@Z  # FUN_00498f10 migrated from s00498470 (verbatim, slice spelling)

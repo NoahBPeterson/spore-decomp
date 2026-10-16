@@ -1,5 +1,5 @@
-005598b0 SP::cSPObjectTemplateDB::Init  # PDB name
-0056df80 SP::cSPObjectTemplateDB asset table Rebuild  # thiscall on this+0x1d4 in Init before reading the asset list (name guessed)
-0055d9e0 SP::cSPObjectTemplateDB::LoadAssetParameters  # (asset, count, data, stale) per asset property list in Init (name guessed)
-00562680 SP::cSPObjectTemplateDB::AddPriorityConstraint  # (const Constraint&, int) copies into the +0x258 list (name guessed)
+005598b0 ?Init@cSPObjectTemplateDB_s0055_98b0@SP@@QAE_NXZ  # cSPObjectTemplateDB_s0055_98b0::Init migrated from s005598b0 (verbatim, slice spelling)
+0055d9e0 ?LoadAssetParameters@cSPObjectTemplateDB@SP@@IAE_NABVKey@ResourceMan@EA@@AAV345@AAV?$vector@UDeclareParam@FunctionalMatch@SP@@Usp_vector_allocator@eastl@@@eastl@@AAVcFeatureVector@Traits@2@@Z  # SP::cSPObjectTemplateDB::LoadAssetParameters (callee of s005598b0, named from the dev publics; slice address comment)
 0055ff10 SP::cSPObjectTemplateDB::LoadDatabase  # last call of Init, its bool is Init's result (name guessed)
+00562680 ?PushPriorityConstraint@cSPObjectTemplateDB@SP@@QAEXABUConstraint@FunctionalMatch@2@I@Z  # SP::cSPObjectTemplateDB::PushPriorityConstraint (callee of s005598b0, named from the dev publics; slice address comment)
+0056df80 SP::cSPObjectTemplateDB asset table Rebuild  # thiscall on this+0x1d4 in Init before reading the asset list (name guessed)

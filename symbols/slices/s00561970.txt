@@ -1,2 +1,10 @@
 00561970 SP::cSPObjectTemplateDB::DecreasePopulation  # PDB caller-scored candidate; byte-exact, decrements mPopulationCount/mTypePopulation
-00561bd0 SP::cSPObjectTemplateDB::CheckForMinPopulations  # PDB name on card
+00561bd0 ?CheckForMinPopulations@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  # cSPObjectTemplateDB_s0056_1970::CheckForMinPopulations migrated from s00561970 (verbatim, slice spelling)
+00561d80 ?GetFloatParameterValues@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@MUallocator_s0056_1970@eastl@@@eastl@@@Z  # cSPObjectTemplateDB_s0056_1970::GetFloatParameterValues migrated from s00561970 (verbatim, slice spelling)
+00561ea0 ?GetIntParameterValues@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@HUallocator_s0056_1970@eastl@@@eastl@@@Z  # cSPObjectTemplateDB_s0056_1970::GetIntParameterValues migrated from s00561970 (verbatim, slice spelling)
+00561fc0 ?GetFloatParameterTable@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@MUallocator_s0056_1970@eastl@@@eastl@@AAV?$vector_s0056_1970@UResourceKey_s0056_1970@@Uallocator_s0056_1970@eastl@@@4@@Z  # cSPObjectTemplateDB_s0056_1970::GetFloatParameterTable migrated from s00561970 (verbatim, slice spelling)
+00562120 ?GetIntParameterTable@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@HUallocator_s0056_1970@eastl@@@eastl@@AAV?$vector_s0056_1970@UResourceKey_s0056_1970@@Uallocator_s0056_1970@eastl@@@4@@Z  # cSPObjectTemplateDB_s0056_1970::GetIntParameterTable migrated from s00561970 (verbatim, slice spelling)
+00562680 ?AddPriorityConstraint@cSPObjectTemplateDB_s0056_1970@SP@@QAEXABUConstraint_s0056_1970@FunctionalMatch@2@I@Z  # cSPObjectTemplateDB_s0056_1970::AddPriorityConstraint migrated from s00561970 (verbatim, slice spelling)
+00562710 ?RemovePriorityConstraint@cSPObjectTemplateDB_s0056_1970@SP@@QAEXI@Z  # cSPObjectTemplateDB_s0056_1970::RemovePriorityConstraint migrated from s00561970 (verbatim, slice spelling)
+00562790 ?SetExcludedParameter@cSPObjectTemplateDB_s0056_1970@SP@@QAEXH@Z  # cSPObjectTemplateDB_s0056_1970::SetExcludedParameter migrated from s00561970 (verbatim, slice spelling)
+005628b0 ?ClearExcludedParameter@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  # cSPObjectTemplateDB_s0056_1970::ClearExcludedParameter migrated from s00561970 (verbatim, slice spelling)

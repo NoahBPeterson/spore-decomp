@@ -1,0 +1,32 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Self@UintArray@@QAEPAU1@XZ  00572590  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?GetThumbRectID@cThumbnailManager@SP@@UAEXAAUcRenderTargetRectID@2@@Z  007b2680  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?f@W27a0@@QAEXHHHH@Z  007b27a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?f@W27e0@@QAEXHHHHH@Z  007b27e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?set@W2820@@QAEXPAUPair@@000M@Z  007b2820  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?FUN_007b2970@@YGXPAUP2970@@@Z  007b2970  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?f@W39d0@@QAEXXZ  007b39d0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?set@W3a30@@QAEXHPAM@Z  007b3a30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Fn@ItemList@@QAEXHHHH@Z  007b49f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Expand@Bounds6@@QAEXPBUVector3@@HH@Z  007b4c10  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Run6730@ThumbB@@QAEXHHHH@Z  007b6730  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Run68f0@ThumbC@@QAEXHHHHH@Z  007b68f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Run6980@ThumbD@@QAEXHHHH@Z  007b6980  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ??1RefVec@@QAE@XZ  007b6b60  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ??1AbilityA@@UAE@XZ  007b6bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Init@cJobPostFilter@@QAEX_N@Z  007b9420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Init@cJobPostFilter@@QAEXHPBH0_N@Z  007b9510  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cJobPostFilter@@QAEXXZ  007b9620  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Push@VecPair@@QAEXPAUPair2@@@Z  007b9690  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cFilterChainJob@@QAEXXZ  007b96d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?AddFilter@cFilterChainJob@@QAEHPAUIRel@@@Z  007b9750  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Teardown@TerrainMgr@@QAEXXZ  007b9e80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?DilateWithoutAODone@cThumbnailManager_s007b_ced0@@QAEXPAUDilateMsg@@@Z  007bd4c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?PaletteJobInfo_Shutdown@@YGXPAUcPaletteJobInfo@@@Z  007bd500  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cPaletteThumbnailJob@@QAEXXZ  007bd540  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cEditorJobInfo@@QAEXXZ  007bd5d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cEditorThumbnailJob@@QAEXXZ  007bd640  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cCSAThumbnailJob_s007b_ced0@@QAEXXZ  007bd6b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?Shutdown@cGameThumbnailJob@@QAEXXZ  007bdd70  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?FUN_007bdde0@@YIXPAX@Z  007bdde0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPGraphicsThumbnailManager.cpp  ?HandleMessage@IHandlerRC@@UAE_NIPAX@Z  007c1170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

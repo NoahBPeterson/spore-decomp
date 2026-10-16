@@ -1,1 +1,1 @@
-0070aed0 SP::cLightingManager::FillLightingStateFromConfig  # card/PDB name
+0070aed0 ?FillLightingStateFromConfig@cLightingManager_s0070_aed0@SP@@QAEXPAVcPropertyList_s0070_aed0@2@PAVcLightingConfig_s0070_aed0@2@@Z  # cLightingManager_s0070_aed0::FillLightingStateFromConfig migrated from s0070aed0 (verbatim, slice spelling)

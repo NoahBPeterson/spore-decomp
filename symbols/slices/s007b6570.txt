@@ -1,3 +1,14 @@
+007b6570 ?Run6570@ThumbA@@QAEXHHPAHH@Z  # ThumbA::Run6570 migrated from s007b6570 (verbatim, slice spelling)
+007b6730 ?Run6730@ThumbB@@QAEXHHHH@Z  # ThumbB::Run6730 migrated from s007b6570 (verbatim, slice spelling)
+007b68f0 ?Run68f0@ThumbC@@QAEXHHHHH@Z  # ThumbC::Run68f0 migrated from s007b6570 (verbatim, slice spelling)
+007b6980 ?Run6980@ThumbD@@QAEXHHHH@Z  # ThumbD::Run6980 migrated from s007b6570 (verbatim, slice spelling)
+007b6a90 ?Fn@ItemList2@@QAEXHHHH@Z  # ItemList2::Fn migrated from s007b6570 (verbatim, slice spelling)
+007b6b60 ??1RefVec@@QAE@XZ  # RefVec::~RefVec migrated from s007b6570 (verbatim, slice spelling)
+007b6bd0 ??1AbilityA@@UAE@XZ  # AbilityA::~AbilityA migrated from s007b6570 (verbatim, slice spelling)
+007b6c70 ??1AbilityB@@UAE@XZ  # AbilityB::~AbilityB migrated from s007b6570 (verbatim, slice spelling)
+007b6d50 ?Fit6d50@FitJob@@QAEDPAUSphereVec@@PAUcViewer_s007b_6570@@PBM2PAM@Z  # FitJob::Fit6d50 migrated from s007b6570 (verbatim, slice spelling)
+007b7270 ?Run7270@FitJob@@QAEXPAUSphereVec@@PAUcViewer_s007b_6570@@HPBMMM@Z  # FitJob::Run7270 migrated from s007b6570 (verbatim, slice spelling)
+007c53d0 ?SetFieldOfView@cViewer@SP@@QAEXM@Z  # SP::cViewer::SetFieldOfView (callee of s007b6570, named from the dev publics; slice address comment)
 013ef094  ??_7Base0@@6B@  # base refcount vtable (GmeRefCount), restored by the Ability dtors
 0140ffb0  ??_7AbilityA@@6B@
 0140ffbc  ??_7AbilityB@@6B@

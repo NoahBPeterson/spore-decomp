@@ -1,9 +1,12 @@
-# <va> <Name>  # evidence
 007469b0 SP::cModelWorld::SetWorldBounds  # dev-PDB vtable-slot
-00746b40 SP::cModelWorld::UpdateOccluder  # dev-PDB vtable-slot
-00746b90 SP::cModelWorld::ShutdownModel  # dev-PDB callee-single
+00746b40 ?UpdateOccluder@CModelWorld@@QAEXHPAUVec3@@M@Z  # CModelWorld::UpdateOccluder migrated from s007469b0 (verbatim, slice spelling)
+00746b90 ?cModelWorld_ShutdownModel@@YAXPAUCModelWorld@@H@Z  # cModelWorld_ShutdownModel migrated from s007469b0 (verbatim, slice spelling)
+00746de0 ??0Rec48@@QAE@XZ  # Rec48::Rec48 migrated from s007469b0 (verbatim, slice spelling)
+00746fc0 ?FUN_00746fc0@@YAXPAX@Z  # FUN_00746fc0 migrated from s007469b0 (verbatim, slice spelling)
+007470c0 ?F@Stub007470c0@@QAEXXZ  # Stub007470c0::F migrated from s007469b0 (verbatim, slice spelling)
+00747190 ?F@Stub00747190@@QAEPAXPAH@Z  # Stub00747190::F migrated from s007469b0 (verbatim, slice spelling)
 007471f0 SP::cModelWorld::cLoadingModel::cLoadingModel  # dev-PDB gap-align
-00747270 SP::cModelWorld::cLoadingModel::~cLoadingModel  # dev-PDB gap-align
-00747720 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::~deque  # dev-PDB callee-single
-007477d0 eastl::deque<SP::cModelWorld::cLoadQueueEntry,eastl::allocator,8>::clear  # dev-PDB gap-align
-007478b0 eastl::vector<SP::cModelWorld::cLoadQueueEntry,eastl::fixed_vector_allocator<32,32,4,0,1> >::~vector  # dev-PDB gap-align
+00747270 ?F@Stub00747270@@QAEXXZ  # Stub00747270::F migrated from s007469b0 (verbatim, slice spelling)
+00747720 ?FUN_00747720@@YAXPAH@Z  # FUN_00747720 migrated from s007469b0 (verbatim, slice spelling)
+007477d0 ?FUN_007477d0@@YAXH@Z  # FUN_007477d0 migrated from s007469b0 (verbatim, slice spelling)
+007478b0 ?FUN_007478b0@@YAXPAI@Z  # FUN_007478b0 migrated from s007469b0 (verbatim, slice spelling)

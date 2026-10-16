@@ -1,0 +1,2 @@
+00695450 ?run@Sorter@@QAEPAXPAD@Z  # Sorter::run migrated from s00695140 (verbatim, slice spelling)
+00695490 ?reserve@Vec60@@QAEXI@Z  # Vec60::reserve migrated from s00695140 (verbatim, slice spelling)

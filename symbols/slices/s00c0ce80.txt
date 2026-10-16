@@ -1,14 +1,15 @@
 00c0ce80 Simulator::cCreatureBase::GetAnimWeight / anim weight selector
-00c0cf50 init animation weight table
-00c0cfa0 get animation weight by index
-00c0cff0 set animation id + weight
-00c0d050 pick animation index by threshold
-00c0d0c0 set/clear animation flag bits
-00c0d1e0 forward event to animated creature (param,1)
-00c0d200 forward event to other creature
-00c0d240 SP::cSPCreatureBase::IsAnimationQueuedOrCurrent
+00c0ce80 ?ce80@CCB@@QAEMHH@Z  # CCB::ce80 callee (0x00c0ce80, left in the slice); bound so the migrated cf50/cfa0/d050/d0c0 resolve it in the module TU instead of UNSUPPORTED (harness binds the original callee)
+00c0cf50 ?cf50@CCB@@QAEXXZ  # CCB::cf50 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0cfa0 ?cfa0@CCB@@QAEMHD@Z  # CCB::cfa0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0cff0 ?cff0@CCB@@QAEXH@Z  # CCB::cff0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d050 ?d050@CCB@@QAEHM@Z  # CCB::d050 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d0c0 ?d0c0@CCB@@QAEXID@Z  # CCB::d0c0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d1e0 ?d1e0@CCB@@QAEXH@Z  # CCB::d1e0 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d200 ?d200@CCB@@QAEXHH@Z  # CCB::d200 migrated from s00c0ce80 (verbatim, slice spelling)
+00c0d240 ?d240@CCB@@QAEXXZ  # CCB::d240 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0d310 copy orientation vector
-00c0d340 apply transform and replace list entry
+00c0d340 ?d340@CCB@@QAEXH@Z  # CCB::d340 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0d3a0 time-scaled terrain callback
 00c0d440 Simulator::cCreatureBase::UpdateHunger
 00c0d560 proximity check (distance vs threshold)
@@ -22,5 +23,5 @@
 00c0db60 get active portal/creature id
 00c0db80 scale from terrain properties
 00c0dcb0 size from terrain property
-00c0dd40 Simulator::cCommunity::func54h wrapper + set bubble center
+00c0dd40 ?dd40@CCB@@QAEXPAM@Z  # CCB::dd40 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0dd70 set creature heading + pitch

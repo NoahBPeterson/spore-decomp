@@ -1,0 +1,1 @@
+0070e280 ?Init@cLightingManager@SP@@UAE_NXZ  # SP::cLightingManager::Init migrated from s0070de90

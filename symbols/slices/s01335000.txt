@@ -1,1 +1,1 @@
-01335000 $E259  # PDB anchor: CRT dynamic initializer of the Simulator::cCreatureBase serializer attribute table (35 records at 0x01571798)
+01335000 ?InitCreatureBaseAttributes@Simulator@@YAXXZ  # InitCreatureBaseAttributes migrated from s01335000 (verbatim, slice spelling)

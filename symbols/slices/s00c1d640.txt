@@ -1,0 +1,1 @@
+00c1de20 ?ChooseAbility@Creature@@QAEIPAUAbilityMask@@PAU1@M_N@Z  # Creature::ChooseAbility migrated from s00c1d640 (verbatim, slice spelling)

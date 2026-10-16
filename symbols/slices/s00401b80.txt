@@ -2,5 +2,8 @@
 00401ca0 FieldSetEqualTo::operator()  # compares field count, then type/length/memcmp of each field; paired with the hash above
 00401ea0 ResourceKeyAbility::`scalar deleting destructor'  # calls dtor 0x00401ED0, then operator delete if (flags & 1)
 00401ed0 ResourceKeyAbility::~ResourceKeyAbility  # restores vtable 0x013EB2D8 and then base vtable 0x013EF094
-00402420 AtomicRefCounted::Release  # lock xadd on the refcount at +8; called from the RefPtr dtor in 0x00402390
+00401ff0 ??0ResourceCollector@@QAE@XZ  # ResourceCollector::ResourceCollector migrated from s00401b80 (verbatim, slice spelling)
+004021a0 ?AddResource@ResourceCollector@@QAEXUResourceKey@@@Z  # ResourceCollector::AddResource migrated from s00401b80 (verbatim, slice spelling)
+00402390 ?AddCreated@ResourceCollector@@QAEXIIPBX@Z  # ResourceCollector::AddCreated migrated from s00401b80 (verbatim, slice spelling)
+00402420 ?Release@AtomicRefCounted@@QAEHXZ  # AtomicRefCounted::Release migrated from s00401b80 (verbatim, slice spelling)
 00932e50 FNV1Hash  # (data, length, hash) called with the 0x811C9DC5 basis from 0x00401BF0

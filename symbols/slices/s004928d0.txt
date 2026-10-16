@@ -1,1 +1,3 @@
-00492e70  FUN_00492e70  # snap block p against its parent block: best snap distance (-1 none), snapped pos/rot, snap index
+00492de0 ?FUN_00492de0@@YA_NPAUcSPEditorBlock_s0049_28d0@@@Z  # FUN_00492de0 migrated from s004928d0 (verbatim, slice spelling)
+00492e70 ?FUN_00492e70@@YAMPAUcSPEditorBlock2@@PAUVec3W@@PAUMatrix3_s0049_28d0@@PAHMD@Z  # FUN_00492e70 migrated from s004928d0 (verbatim, slice spelling)
+004935f0 ?Sub@S935@@QBE?AUVector3_s0049_28d0@@XZ  # S935::Sub migrated from s004928d0 (verbatim, slice spelling)

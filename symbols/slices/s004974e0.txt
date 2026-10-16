@@ -1,0 +1,5 @@
+004974e0 ?FUN_004974e0@@YA_NPAUX982@@UVec3O_s0049_74e0@@PAU2@PA_NMD@Z  # FUN_004974e0 migrated from s004974e0 (verbatim, slice spelling)
+00497f20 ?FUN_00497f20@@YA_NUVector3_s0049_74e0@@PAUVec3O_s0049_74e0@@M@Z  # FUN_00497f20 migrated from s004974e0 (verbatim, slice spelling)
+00498230 ?FUN_00498230@@YAXHD@Z  # FUN_00498230 migrated from s004974e0 (verbatim, slice spelling)
+004982b0 ?FUN_004982b0@@YA_NPAUX982@@DMD@Z  # FUN_004982b0 migrated from s004974e0 (verbatim, slice spelling)
+004983d0 ?FUN_004983d0@@YAXPAUX982@@E@Z  # FUN_004983d0 migrated from s004974e0 (verbatim, slice spelling)
