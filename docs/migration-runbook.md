@@ -614,6 +614,9 @@ instantiation `eastl::operator==<char>` 0x555020 stays in s00554c30, `leave_in_s
   DatabasePackedFile`, `--module-substr SPProperty`). `rewrite.py --module` is unchanged (still a substring).
 - **`opencode_drain.py --max-nudges N`** (default 3): a range that would get a further nudge is logged `ABANDONED r<k> <sid> ...
   unsettled: <slice>:<va> ...` and counted as done; a restart re-reads nudge counts and abandoned ranges from the drain log.
+- **`opencode_drain.py --stall S`** (default 7200, added 2026-10-16): an unfinished range whose settled-function count has
+  not moved for S seconds is interrupted, logged `STALLED` + `ABANDONED`, and counted as done, so one slow session cannot
+  hold the drain (and whatever is queued behind it) open all night. Round 5's ealog_imp session did exactly that.
 - Hand templates (all "Hand-maintained", layout from the dev PDB, sizes VC9-probed, unverified in retail):
   `rw/math/fpu/VectorTemplates.h` (+`Matrix44Template` 0x40, `QuaternionTemplate` 0x10), `rw/BaseResourceTemplates.h`
   (`BaseResourceDescriptors<4>` 0x20, `BaseResources<4>` 0x10, `BaseResourceDescriptorType<T>`), `rw/math/vpu/VecFloatRef.h` (4),

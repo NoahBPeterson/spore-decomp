@@ -2,7 +2,8 @@
 """Watch a brokered opencode wave to completion: re-prompt idle-but-unfinished sessions and
 interrupt sessions whose current model call has hung.
 
-usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=900] [--max-nudges N=3] [--once]
+usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=900] [--max-nudges N=3]
+                         [--stall S=7200] [--once]
 
 Each pass:
   * a range is DONE when its manifest+nonmatching+partial count >= its function count;
@@ -13,6 +14,11 @@ Each pass:
   * a range that would get a nudge after --max-nudges nudges is logged "ABANDONED r<k> <unsettled VAs>"
     and counted as done (round 3: the Manager session sat idle with 0x8de8e0/0x8de940 neither landed
     nor in leave_in_slice and was nudged for four hours; those VAs go to the fix pass instead).
+  * a range whose settled-function count has not moved for --stall seconds while unfinished is interrupted and
+    logged "STALLED r<k> ..." + ABANDONED (round 5, 2026-10-16: the ealog_imp session kept making model calls on
+    one 40-function slice for 7.5 h, so neither the nudge cap nor the per-call hang check fired, the drain never
+    completed, and the verify/commit steps queued behind it never ran). 0 disables. The clock starts when the
+    drain first sees the range, so a restart grants a fresh window.
 Exits 0 ("DRAIN_COMPLETE") once every range is done or abandoned. Safe to kill and restart: its only
 state is work/opencode/drain_<group>.log, from which a restart re-reads the nudge counts and the
 abandoned ranges.
@@ -56,6 +62,8 @@ ap.add_argument("--interval", type=int, default=60)
 ap.add_argument("--cooldown", type=int, default=300, help="min seconds idle before re-nudging a range")
 ap.add_argument("--hang", type=int, default=900, help="seconds an open model call may run before interrupt")
 ap.add_argument("--max-nudges", type=int, default=3, help="nudges per range before it is ABANDONED and counted as done")
+ap.add_argument("--stall", type=int, default=7200,
+                help="seconds an unfinished range may go without settling another function before it is ABANDONED (0 = off)")
 ap.add_argument("--once", action="store_true")
 a = ap.parse_args()
 
@@ -144,6 +152,7 @@ def last_assistant(sid):
 
 
 nudged_at = {}   # sid -> (monotonic time, done-count when nudged)
+moved = {}       # range -> (time the settled count last changed, that count)
 nudges = {}      # range -> nudges sent (re-read from the log on restart)
 abandoned = set()
 if os.path.exists(LOG):
@@ -170,6 +179,17 @@ while True:
             continue
         tot, done = progress(k)
         if done >= tot:
+            finished += 1
+            continue
+        if moved.get(k, (0, -1))[1] != done:
+            moved[k] = (now, done)
+        if a.stall and now - moved[k][0] > a.stall:
+            uns = []
+            progress(k, uns)
+            api("POST", "/api/session/%s/interrupt" % sid, {})
+            log("STALLED r%d %s (done %d/%d unchanged for %.0fs), interrupted" % (k, sid, done, tot, now - moved[k][0]))
+            log("ABANDONED r%d %s (done %d/%d after stall) unsettled: %s" % (k, sid, done, tot, " ".join(uns)))
+            abandoned.add(k)
             finished += 1
             continue
         if pending(sid):
