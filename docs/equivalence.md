@@ -39,6 +39,8 @@ Neither tool writes anything under `match/`; objects go to `work/difftest/obj/`,
 | `--replay file.pkl` | | re-run one saved failing input and print both sides' registers, calls and imports |
 | `--json out.json` | | write the per-function results |
 
+**Is a register FAIL consequential?** A FAIL on `first: <reg> (untouched by the original)` or on a hidden eax result is a real difference, but it breaks the game only if a caller reads that register after the call. `.venv/bin/python tools/difftest/callerdeps.py <va> <reg> [--result]` answers that statically from the original image: DEPENDS (with the reading instruction), SAFE (every caller path overwrites it first, or only pointer callers under the standard ABI) or UNKNOWN. `--results DIR` classifies a directory of equiv JSONs. Tests: `tools/difftest/test_callerdeps.py` (InterpRamp xmm3, uninitialized_copy and rbtree::find eax, Pool_AllocGlobal). Added 2026-10-16.
+
 Flags come from, first match wins (`flags_from` in the JSON names the source):
 
 1. `--flags` (`override`);
