@@ -194,6 +194,18 @@ History of the campaign:
   result, when `tools/difftest/callerdeps.py` finds that no caller of the original reads the register after
   the call (SAFE; DEPENDS and UNKNOWN keep the rule; x87 `st` is always UNKNOWN). Kept hooks are listed
   under `waived` in the `.hooks.json` sidecar, so a bisect can drop them as a group.
+- 2026-10-17 re-check: every old PASS/WEAK/UNSUPPORTED verdict (4,335 rows) re-ran under the
+  2026-10-12 harness at FPCW 0x007F (`rebaseline.py`; verdicts in
+  `work/difftest/recheck_shard_20261016.json`, which `build.py` reads last). 418 now FAIL: 210
+  register-only and SAFE by `callerdeps.py`, 119 DEPENDS, 37 UNKNOWN, 52 wrong value; the real ones
+  are the DeepSeek fix batch `rck1` (`work/claude/rck1_plan.md`). The strict PASS set went from
+  2,046 to 1,491. A first build crashed at 5 s in `DoInsertValue` 0x4e3e10: `rebaseline.py` had
+  omitted `--require-all`, so a 74%-coverage PASS let in `PFIndexModifiable::GetFiles` 0x8dbcf0,
+  which calls the vector method `__cdecl` without `this` on the vector-full branch the harness never
+  ran (same bug in 0x8dbdb0; both in `rck1`). With the strict rule restored: `--hook pass` hooks
+  1,321 and boots ALIVE 120 s (scene 9.0); with `--caller-deps`, 1,373 (52 waived), ALIVE 110 s
+  (scene 21.4). Rule: a re-run of verdicts that feed `--hook pass` must use the flags of the run it
+  replaces.
 - Open (2026-10-12 evening, interactive sessions, not pursued; the plan is harness fixes then module migration, with the hybrid as a per-module gate): with h25, clicking into the game crashed at 320 s in `cModelWorld::Release` 0x750580 (original code) with `this` = its own vtable + 0x10 (0x140d7a0, a vptr-as-object bug upstream, same class as SharedRelease); a second session (cov2 = h25 + coverage) crashed at 175 s at 0x9fbeff. Found statically meanwhile and fixed: 0x753fc0 (s00753270) called vtable slot 0 without `this` (the row had called the ecx difference "register allocation"). Coverage of the interactive session: 46,743 functions, 573 hooks executed (`work/hybrid/cov2.json`).
 - Black screen bisected to one hook: the rw::audio list pop-front leaf 0x1141200 (s01140b70)
   returned nothing where the original returns the popped node in eax; voice allocation got the

@@ -9,6 +9,9 @@ process; rows whose output file exists are skipped, so the run is restartable. -
 comparison. Baseline verdict for a row: the newest work/difftest/backlog_shard*.json entry for the same
 (slice, va), else the row's "recorded" key, else '-'.
 
+Rows always run with --require-all, like the strict baseline runs (fixed 2026-10-17: the 10-14 and
+10-16 runs omitted it, so their PASS verdicts must be re-derived from coverage["all"]).
+
 Written 2026-10-14 for the x87 control-word re-baseline (docs/tickets.md P3): the harness moved from
 0x027F to 0x007F, and the rows whose original code does x87 arithmetic are re-run at the new value.
 """
@@ -33,7 +36,9 @@ def run_one(row, out_dir, fpcw, nice):
     out = os.path.join(out_dir, "%s_%s.json" % (row["slice"], row["va"]))
     if os.path.exists(out):
         return row, "skip"
-    cmd = [PY, W("tools/difftest/equiv.py"), row["slice"], row["va"], "--json", out]
+    # --require-all: the baseline shards are strict runs (a PASS needs every original instruction executed);
+    # without it a 60%-coverage run reads as PASS and looks like an improvement over the baseline's WEAK.
+    cmd = [PY, W("tools/difftest/equiv.py"), row["slice"], row["va"], "--json", out, "--require-all"]
     if fpcw:
         cmd += ["--fpcw", fpcw]
     t = time.time()
