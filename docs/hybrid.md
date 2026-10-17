@@ -190,7 +190,7 @@ History of the campaign:
   original does not (callee-saved pops excluded); it holds back 169 of the 1,730 hooks (50 ecx, 43
   edx, 38 xmm, 15 x87, ...). Those need codegen the C source cannot force; they stay original until
   module migration, or get a per-function asm shim.
-  2026-10-16: `build.py --caller-deps` (opt-in) keeps such a hook, and one refused for a dropped eax
+  2026-10-16: `build.py --caller-deps` (default on since 10-17; `--no-caller-deps` restores the plain rule) keeps such a hook, and one refused for a dropped eax
   result, when `tools/difftest/callerdeps.py` finds that no caller of the original reads the register after
   the call (SAFE; DEPENDS and UNKNOWN keep the rule; x87 `st` is always UNKNOWN). Kept hooks are listed
   under `waived` in the `.hooks.json` sidecar, so a bisect can drop them as a group.

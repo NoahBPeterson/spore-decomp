@@ -681,8 +681,8 @@ def main():
     ap.add_argument("--coverage", action="store_true",
                     help="one-shot int3 at every function entry; the game writes spore_cov.bin to its cwd")
     ap.add_argument("--cov-period", type=int, default=2000, help="coverage flush interval, ms")
-    ap.add_argument("--caller-deps", action="store_true",
-                    help="keep a hook refused only for its register footprint or a dropped eax result when "
+    ap.add_argument("--caller-deps", action=argparse.BooleanOptionalAction, default=True,
+                    help="(default on since 2026-10-17; --no-caller-deps turns it off) keep a hook refused only for its register footprint or a dropped eax result when "
                          "tools/difftest/callerdeps.py finds no caller of the original that reads the register (SAFE); "
                          "kept hooks are listed under 'waived' in the .hooks.json sidecar")
     ap.add_argument("-v", action="store_true")
