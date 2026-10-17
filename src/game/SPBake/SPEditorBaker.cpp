@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s00413cc0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorBaker.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -639,10 +639,71 @@ struct PendingBatch {
     bool Flush();
     ~PendingBatch() { if (mpTarget) Flush(); }
 };
-struct Slot2C_s0040_35d0 { uint32_t d[11]; ~Slot2C_s0040_35d0(); };                                   // 0x004200b0
+struct IVirtualRefCounted { virtual int AddRef(); virtual int Release(); };
+template <class T> struct intrusive_ptr_s0040_35d0 {
+    T* mpObject;
+    ~intrusive_ptr_s0040_35d0() { if (mpObject) mpObject->Release(); }
+};
+namespace Resource_s0040_35d0 {
+ struct ThreadedObject { int Release(); }; 
+}
+struct RefObject690 { int Release(); };   // released via 0x00690120
+struct DefaultRefCounted {
+    virtual ~DefaultRefCounted() {}
+    int mnRefCount;
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();
+};
+struct Member10Base { uint32_t d[8]; ~Member10Base(); };                        // 0x0041fac0
+struct Member10 : Member10Base { ~Member10() { uint32_t unused0, unused1; } };
+struct Member30Base { uint32_t d[8]; ~Member30Base(); };                        // 0x004e0f20
+struct Member30 : Member30Base { ~Member30() { uint32_t unused0, unused1; } };
+struct Member50Base { uint32_t d[9]; ~Member50Base(); };                        // 0x00928dc0
+struct Member50 : Member50Base { ~Member50() { uint32_t unused0, unused1; } };
+struct Member90Base { uint32_t d[5]; ~Member90Base(); };                        // 0x00540520
+struct Member90 : Member90Base { ~Member90() { uint32_t unused; } };
+struct MemberA4Base { uint32_t d[6]; ~MemberA4Base(); };                        // 0x004e1bf0
+struct MemberA4 : MemberA4Base { ~MemberA4() { uint32_t unused; } };
+struct Slot2C_s0040_35d0 {  // 0x004200b0
+    uint32_t d[11];
+    ~Slot2C_s0040_35d0();
+};
 struct SlotArray8 {
     Slot2C_s0040_35d0 mSlots[8];
     ~SlotArray8();
+};
+struct Member228Base { uint32_t d[13]; ~Member228Base(); };                     // 0x00401f20
+struct Member228 : Member228Base { ~Member228() { uint32_t unused0, unused1; } };
+struct Member68 { uint32_t d[26]; ~Member68(); };                               // 0x004020e0
+struct Member330 { uint32_t d[(0x1168 - 0x330) / 4]; ~Member330(); };          // 0x00417fe0
+struct Entry20 { uint32_t d[8]; ~Entry20(); };                                  // 0x005534b0
+struct SystemInterface : IVirtualRefCounted {};
+struct SystemListener { virtual ~SystemListener() {} };
+struct GameSystem : SystemInterface, SystemListener, DefaultRefCounted {
+    Member10 m10;
+    Member30 m30;
+    Member50 m50;
+    intrusive_ptr_s0040_35d0<IVirtualRefCounted> m74, m78, m7C;
+    intrusive_ptr_s0040_35d0<RefObject690> m80;
+    intrusive_ptr_s0040_35d0<Resource_s0040_35d0::ThreadedObject> m84;
+    intrusive_ptr_s0040_35d0<DefaultRefCounted> m88, m8C;
+    Member90 m90;
+    MemberA4 mA4;
+    intrusive_ptr_s0040_35d0<DefaultRefCounted> mBC;
+    uint32_t mC0, mC4;
+    SlotArray8 mC8;
+    Member228 m228;
+    Member68 m25C;
+    uint32_t m2C4;
+    Member68 m2C8;
+    Member330 m330;
+    PendingBatch mPending;
+    intrusive_ptr_s0040_35d0<IVirtualRefCounted> m117C;
+    uint32_t m1180;
+    Entry20 mEntries[6];
+
+    virtual int AddRef();
+    ~GameSystem();
 };
 // ---- items of slice s004035d0 end
 
@@ -759,17 +820,17 @@ struct IWindowManager {
     virtual IWindowGroup* FindWindowByID(unsigned int id, int a, int b);
 };
 IWindowManager* WindowManager();  // 0x0067DD80
-struct DefaultRefCounted {
+struct DefaultRefCounted_s0040_3af0 {
     void* vtable;
     int mnRefCount;
     int AddRef() { return mnRefCount++ + 1; }
     int Release();
 };
-struct cBlockData : DefaultRefCounted {
+struct cBlockData : DefaultRefCounted_s0040_3af0 {
     unsigned int pad[10];
     cBlockData();
 };
-struct cBakeQueue : DefaultRefCounted {
+struct cBakeQueue : DefaultRefCounted_s0040_3af0 {
     unsigned int pad[36];
     cBakeQueue(float scale);
 };
@@ -860,6 +921,7 @@ struct IResourceManager_s0040_3af0 {
     virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
     virtual void FindRecords(vector_s0040_3af0<ResourceKey_s0040_3af0>* keys, const Skinner::PaintSystem& filter, vector_s0040_3af0<IDatabase*>* dbs);
 };
+IResourceManager_s0040_3af0* ResourceManager_s0040_3af0();  // 0x0067DCD0
 struct BufferPool { void* Alloc(int size, int flags); };
 struct BufferMap { void*& operator[](const unsigned __int64& key); };
 struct PropertyID {
@@ -978,6 +1040,7 @@ public:
 // ---- items of slice s00404480 end
 
 // ---- items of slice s00404660 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern wchar_t gEmptyString16[];
 struct ResourceKey_s0040_4660 {
     uint32_t instanceID;
     uint32_t typeID;
@@ -991,6 +1054,15 @@ struct ResourceKey_s0040_4660 {
         return instanceID == b.instanceID && typeID == b.typeID && groupID == b.groupID;
     }
 };
+union GroupIDBits {
+    uint32_t value;
+    struct {
+        uint32_t low : 16;
+        uint32_t category : 8;
+        uint32_t high : 8;
+    } bits;
+    GroupIDBits(uint32_t v) : value(v) {}
+};
 struct IResourceFilter {
     virtual ~IResourceFilter() {}
     virtual bool IsValid(const ResourceKey_s0040_4660& key) = 0;
@@ -1002,6 +1074,236 @@ struct ResourceKeyFilter : IResourceFilter {
     uint32_t mGroupMask;   // +0x10
     ResourceKeyFilter() : mInstanceID(0xffffffff), mGroupID(0xffffffff), mTypeID(0xffffffff), mGroupMask(0xffffffff) {}
     virtual bool IsValid(const ResourceKey_s0040_4660& key);
+};
+struct TypeIDFilter : IResourceFilter {
+    uint32_t mTypeID;
+    TypeIDFilter(uint32_t typeID) : mTypeID(typeID) {}
+    virtual bool IsValid(const ResourceKey_s0040_4660& key);
+};
+struct array_allocator {
+    void deallocate(void* p, unsigned int)
+    {
+        if (((int*)p)[-1])
+            delete[] (char*)p;
+    }
+    unsigned int mFlags;
+    unsigned int mFlags2;
+};
+struct false_type {};
+template <class T> struct has_trivial_destructor : false_type {};
+template <class T> inline void destruct_impl(T* first, T* last, false_type)
+{
+    for (; first < last; ++first)
+        first->~T();
+}
+template <typename T> inline void destruct_s0040_4660(T* first, T* last)
+{
+    destruct_impl(first, last, has_trivial_destructor<T>());
+}
+template <typename T> struct VectorBase_s0040_4660 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    array_allocator mAllocator;
+    VectorBase_s0040_4660(const KeyAllocator& a);  // 0x00540470
+    ~VectorBase_s0040_4660()
+    {
+        if (mpBegin)
+            mAllocator.deallocate(mpBegin, (mpCapacity - mpBegin) * sizeof(T));
+    }
+};
+template <typename T> struct vector_s0040_4660 : VectorBase_s0040_4660<T> {
+    vector_s0040_4660(const KeyAllocator& a = KeyAllocator()) : VectorBase_s0040_4660<T>(a) {}
+    ~vector_s0040_4660() { destruct_s0040_4660(this->mpBegin, this->mpEnd); }
+    bool empty() const;
+    void push_back(const T& value);
+    T& front() { return *this->mpBegin; }
+    int size() const { return (int)(this->mpEnd - this->mpBegin); }
+};
+typedef vector_s0040_4660<ResourceKey_s0040_4660> KeyVector;
+struct StringAllocator { StringAllocator() {} };
+struct allocator {
+    void deallocate(void* p, unsigned int) { delete[] (char*)p; }
+    unsigned int mFlags;
+};
+struct string16 {
+    wchar_t* mpBegin;
+    wchar_t* mpEnd;
+    wchar_t* mpCapacity;
+    allocator mAllocator;
+    string16(const StringAllocator& a = StringAllocator()) : mpBegin(0), mpEnd(0), mpCapacity(0)
+    {
+        mpBegin = gEmptyString16;
+        mpEnd = mpBegin;
+        mpCapacity = mpBegin + 1;
+    }
+    ~string16() { DeallocateSelf(); }
+    void DeallocateSelf()
+    {
+        if ((mpCapacity - mpBegin) > 1)
+            DoFree(mpBegin, (unsigned int)(mpCapacity - mpBegin));
+    }
+    void DoFree(wchar_t* p, unsigned int n)
+    {
+        if (p)
+            mAllocator.deallocate(p, n * sizeof(wchar_t));
+    }
+    const wchar_t* c_str() const { return mpBegin; }
+};
+template <class T> struct intrusive_ptr_s0040_4660 {
+    T* mpObject;
+    intrusive_ptr_s0040_4660() : mpObject(0) {}
+    intrusive_ptr_s0040_4660(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~intrusive_ptr_s0040_4660() { if (mpObject) mpObject->Release(); }
+    T* operator->() const { return mpObject; }
+    T* get() const { return mpObject; }
+};
+class IResourceManager_s0040_4660 {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34();
+    virtual int GetResourceKeyList(KeyVector* pKeys, IResourceFilter* pFilter, int flags); // 0x38
+    virtual void f3c(); virtual void f40(); virtual void f44(); virtual void f48(); virtual void f4c();
+    virtual void f50(); virtual void f54(); virtual void f58(); virtual void f5c();
+    virtual void f60(); virtual void f64(); virtual void f68(); virtual void f6c();
+    virtual int ReleaseResources(int flags, IResourceFilter* pFilter);  // 0x70
+    virtual void f74(); virtual void f78();
+    virtual bool GetFileName(const ResourceKey_s0040_4660& key, string16& name);  // 0x7c
+};
+class cEditorModel {
+public:
+    uint32_t pad[3];
+    ResourceKey_s0040_4660 mKey;  // +0x0c
+};
+class cEditor {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual cEditorModel* GetEditorModel();  // 0x40
+};
+class IGameModeManager {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24();
+    virtual bool SetActiveMode(uint32_t modeID);  // 0x28
+    virtual cEditor* GetActiveMode();             // 0x2c
+    virtual void f30(); virtual void f34();
+    virtual uint32_t GetActiveModeID();           // 0x38
+};
+class IMessageManager_s0040_4660 {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14();
+    virtual void PostMSG(uint32_t messageID, void* pMessage, void* p2, void* p3);  // 0x18
+};
+class IRenderManager {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void f20(); virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40();
+    virtual void DumpRTTs();  // 0x44
+};
+struct BakeRequest {
+    uint32_t mID;
+    uint16_t mFlags;
+    uint16_t mPriority;
+};
+class IBaker {
+public:
+    virtual void f00(); virtual void f04(); virtual void f08(); virtual void f0c();
+    virtual void f10(); virtual void f14(); virtual void f18(); virtual void f1c();
+    virtual void SetProcessQueue(bool enable);  // 0x20
+    virtual void f24(); virtual void f28(); virtual void f2c();
+    virtual void f30(); virtual void f34(); virtual void f38(); virtual void f3c();
+    virtual void f40(); virtual void f44(); virtual void f48();
+    virtual void QueueBake(const ResourceKey_s0040_4660& key, const BakeRequest& request);  // 0x4c
+};
+struct MessageArg {
+    uint32_t mValue;
+    uint32_t mType;
+};
+namespace Resource_s0040_4660 {
+class ThreadedObject_s0040_4660 {
+public:
+    ThreadedObject_s0040_4660(int refCount);
+    virtual ~ThreadedObject_s0040_4660();
+    virtual int AddRef();
+    virtual int Release();
+    volatile long mnRefCount;
+};
+}
+struct MessageArgs {
+    MessageArg mData[6];
+    void SetValue(int index, uint32_t value) { mData[index].mValue = value; }
+};
+class ViewModelMessage : public Resource_s0040_4660::ThreadedObject_s0040_4660 {
+public:
+    ViewModelMessage() : ThreadedObject_s0040_4660(0), mField38(0) {}
+    MessageArgs mArgs;    // +0x08
+    uint32_t mField38;
+    uint32_t mField3C;
+};
+void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);
+inline uint32_t MakeGroupSubtype(uint32_t groupID, uint32_t subtype) { return (groupID & 0xffff00ff) | ((subtype & 0xff) << 8); }
+inline uint32_t SetGroupSubtype(uint32_t groupID, uint32_t subtype) { groupID = MakeGroupSubtype(groupID, subtype); return groupID; }
+IResourceManager_s0040_4660* ResourceManager_s0040_4660();     // 0x0067dcd0
+IGameModeManager* GameModeManager();     // 0x0067dd10
+IMessageManager_s0040_4660* MessageManager_s0040_4660();       // 0x0067dcc0
+IRenderManager* RenderManager();         // 0x0067dda0
+IBaker* Baker();                         // 0x00401010
+void ResourceKeyFromString(ResourceKey_s0040_4660* pKey, const char* str, uint32_t defaultType, uint32_t defaultGroup);  // 0x0068d5a0
+uint32_t GetTypeForCategory(uint32_t category, int);  // 0x004bbd20
+bool IsBakeableType(uint32_t typeID, int);           // 0x004bbe20
+void GetDisplayName(const ResourceKey_s0040_4660& key, string16& name, int);  // 0x00b1e4d0
+void DescribeBlocks(int group, int instance);  // 0x0041c1d0
+namespace ArgScript {
+    class Line {
+    public:
+        const char* GetArgumentAt(int index);  // 0x00837f20
+        int GetArgumentsCount();               // 0x00837f30
+    };
+}
+namespace ArgScript {
+    void PrintF(void* pOutput, const char* fmt, ...);  // 0x00841000
+}
+namespace ArgScript {
+    class ICommand_s0040_4660 {
+    public:
+        virtual void ParseLine(Line& line);
+        void* mpOutput;
+        unsigned int mField8;
+        unsigned int mFieldC;
+    };
+}
+namespace ArgScript {
+    class OptionParser_s0040_4660 {
+    public:
+        const char* GetUsage(const char* name, int verbose);  // 0x0083a2f0
+        void Parse(Line& line, void* pOutput);                 // 0x0083b9d0
+        bool IsSet(int option) const { return (mFlags & (1 << option)) != 0; }
+        unsigned int mData[28];
+        unsigned int mFlags;  // +0x70
+        unsigned int mData2[21];
+    };
+}
+class BakerCommand_s0040_4660 : public ArgScript::ICommand_s0040_4660 {
+public:
+    virtual void ParseLine(ArgScript::Line& line);
+
+    IBaker* mpBaker;                    // +0x10
+    ArgScript::OptionParser_s0040_4660 mOptions;   // +0x14
+    const char* mKeyFilter;             // +0xdc
+    int mLimit;                         // +0xe0
+    bool mProcessQueue;                 // +0xe4
+    int mFilterGroup;                   // +0xe8
+    int mFilterInstance;                // +0xec
 };
 // ---- items of slice s00404660 end
 
@@ -1035,7 +1337,7 @@ namespace eastl {
     typedef basic_string_s0040_5000<char> string;
 }
 namespace eastl {
-    struct array_allocator {
+    struct array_allocator_s0040_5000 {
         inline void deallocate(void* p, unsigned int) {
             if (((int*)p)[-1])
                 delete[] (char*)p;
@@ -1057,7 +1359,7 @@ namespace eastl {
         T* mpBegin;
         T* mpEnd;
         T* mpCapacity;
-        array_allocator mAllocator;
+        array_allocator_s0040_5000 mAllocator;
 
         inline ~VectorBase_s0040_5000() {
             if (mpBegin)
@@ -1131,7 +1433,7 @@ class BakerCommand_s0040_5000 : public ArgScript::ICommand_s0040_5000 {
 public:
     BakerCommand_s0040_5000(void* pBaker);
     virtual ~BakerCommand_s0040_5000() {}
-    virtual void ParseLine(void* line);
+    virtual void ParseLine(void* line);  // 0x00404660 (BakerCommand::ParseLine)
     void Description(void* stream);  // 0x00404630 (BakerCommand::Description)
 
     void* mpBaker;                      // +0x10
@@ -1193,7 +1495,7 @@ public:
     int Release();                      // 0x00690120
     void Cancel(int reason);            // 0x00692400
 };
-class IVirtualRefCounted {
+class IVirtualRefCounted_s0040_5000 {
 public:
     virtual int AddRef() = 0;
     virtual int Release() = 0;
@@ -1216,8 +1518,8 @@ struct BakeEntry {
     intrusive_ptr_s0040_5000<DefaultRefCounted_s0040_5000> mpModel;                         // +0x14
     intrusive_ptr_s0040_5000<DefaultRefCounted_s0040_5000> mpRig;                         // +0x18
     intrusive_ptr_s0040_5000<BakeJob> mpJob;                  // +0x1c
-    intrusive_ptr_s0040_5000<IVirtualRefCounted> mpTarget;    // +0x20
-    intrusive_ptr_s0040_5000<IVirtualRefCounted> mpOutputs[3]; // +0x24
+    intrusive_ptr_s0040_5000<IVirtualRefCounted_s0040_5000> mpTarget;    // +0x20
+    intrusive_ptr_s0040_5000<IVirtualRefCounted_s0040_5000> mpOutputs[3]; // +0x24
 };
 class ICheatManager {
 public:
@@ -1325,7 +1627,7 @@ struct BakeMap {
     void clear();                                  // 0x00420440
     unsigned int mData[0x58];
 };
-class Baker {
+class Baker_s0040_5000 {
 public:
     void CancelAll();
     void Shutdown();
@@ -1335,8 +1637,8 @@ public:
     unsigned int mPad40[4];
     LinearAllocator_s0040_5000 mArena;                        // +0x50
     unsigned int mPad64[4];
-    intrusive_ptr_s0040_5000<IVirtualRefCounted> mpWindow;    // +0x74
-    intrusive_ptr_s0040_5000<IVirtualRefCounted> mpLayout;    // +0x78
+    intrusive_ptr_s0040_5000<IVirtualRefCounted_s0040_5000> mpWindow;    // +0x74
+    intrusive_ptr_s0040_5000<IVirtualRefCounted_s0040_5000> mpLayout;    // +0x78
     unsigned int mPad7c[3];
     intrusive_ptr_s0040_5000<DefaultRefCounted_s0040_5000> mpModelRes;   // +0x88
     intrusive_ptr_s0040_5000<DefaultRefCounted_s0040_5000> mpRigRes;     // +0x8c
@@ -1356,6 +1658,97 @@ public:
 // ---- items of slice s00405000 end
 
 // ---- items of slice s00406ac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+template <class T> class intrusive_ptr_s0040_6ac0 {
+public:
+    intrusive_ptr_s0040_6ac0() : mpObject(0) {}
+    ~intrusive_ptr_s0040_6ac0() { if (mpObject) mpObject->Release(); }
+
+    T* get() const { return mpObject; }
+
+    // Drops the current reference and hands out the raw slot, for APIs that
+    // fill an intrusive_ptr through a T** out-parameter.
+    T** AsOutParam()
+    {
+        if (mpObject) { T* pOld = mpObject; mpObject = 0; pOld->Release(); }
+        return &mpObject;
+    }
+
+    intrusive_ptr_s0040_6ac0& operator=(const intrusive_ptr_s0040_6ac0& ip) { return operator=(ip.mpObject); }
+    intrusive_ptr_s0040_6ac0& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+
+    T* mpObject;
+};
+union GroupID {
+    uint32_t value;
+    struct {
+        uint32_t low : 16;
+        uint32_t kind : 8;      // bits 16..23
+        uint32_t variant : 5;   // bits 24..28
+        uint32_t high : 3;
+    };
+};
+inline GroupID MakeGroup(uint32_t v) { GroupID g; g.value = v; return g; }
+inline uint32_t WithVariant(uint32_t groupID, uint32_t variant)
+{
+    GroupID g;
+    g.value = groupID;
+    g.variant = variant;
+    return g.value;
+}
+class Property_s0040_6ac0 {
+public:
+    bool* GetValueBool();            // 0x0041e920
+    uint16_t pad[9];
+    uint16_t mnType;                 // +0x12  (1 = bool)
+};
+class PropertyList_s0040_6ac0 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v2(); virtual void v3(); virtual void v4(); virtual void v5();
+    virtual void v6(); virtual void v7(); virtual void v8();
+    virtual bool GetProperty(uint32_t propertyID, Property_s0040_6ac0*& result);  // +0x24
+};
+class PropertyManager {
+public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual void v8(); virtual void v9(); virtual void v10();
+    virtual bool GetPropertyList(uint32_t instanceID, uint32_t groupID, PropertyList_s0040_6ac0** ppDst); // +0x2c
+};
+PropertyManager* PropertyManager_Get();   // 0x0067de30
+inline bool GetBoolPropertyInline(PropertyList_s0040_6ac0* list, uint32_t propertyID, bool& result)
+{
+    Property_s0040_6ac0* pProp;
+    bool* pValue;
+    if (list && list->GetProperty(propertyID, pProp) && pProp->mnType == 1) {
+        result = *pProp->GetValueBool();
+        return true;
+    }
+    return false;
+}
+bool GetBoolProperty(PropertyList_s0040_6ac0* list, uint32_t propertyID, bool& result);  // 0x00407190 (defined below; used by a stub's inline body)
+inline void GetBoolPropertyOutOfLine(const intrusive_ptr_s0040_6ac0<PropertyList_s0040_6ac0>& list, uint32_t propertyID, bool& result)
+{
+    uint32_t reserved0, reserved1, reserved2;
+    GetBoolProperty(list.get(), propertyID, result);
+}
+const uint32_t kPropEnabled          = 0x3704e55;
+const uint32_t kPropEnabledSecondary = 0x3704e56;
+struct ResourceFlagQuery {
+    bool IsFlagged(const ResourceKey& key, bool requireSecondary);
+};
 class IPredicateTarget {
 public:
     virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
@@ -1978,11 +2371,11 @@ struct IResourceManager_s0041_24b0 {
     virtual void v08() {} virtual void v09() {} virtual void v0a() {}
     virtual bool GetResource(uint32_t key, uint32_t group, IRefCounted_s0041_24b0** out);       // +0x2c
     virtual void v0c() {} virtual void v0d() {} virtual void v0e() {} virtual void v0f() {}
-    virtual void v10() {} virtual void v11() {}     virtual void GetKeys(uint32_t group, struct KeyVector* out);                      // +0x48
+    virtual void v10() {} virtual void v11() {}     virtual void GetKeys(uint32_t group, struct KeyVector_s0041_24b0* out);                      // +0x48
 };
-struct KeyVector {
+struct KeyVector_s0041_24b0 {
     uint32_t* begin; uint32_t* end; uint32_t* cap; uint32_t alloc;
-    KeyVector(const Tag&);
+    KeyVector_s0041_24b0(const Tag&);
     uint32_t& operator[](int i) { return begin[i]; }
     int size() { return end - begin; }
     void Destroy();
@@ -2014,16 +2407,153 @@ bool GetArrayPropB(IRefCounted_s0041_24b0* o, uint32_t id, int* count, int** dat
 bool GetArrayPropC(IRefCounted_s0041_24b0* o, uint32_t id, int* count, void** data);
 // ---- items of slice s004124b0 end
 
-// ---- items of slice s004145c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- items of slice s00413cc0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(_InterlockedIncrement)
-struct ThreadedObject {
+struct Vector3_s0041_3cc0 {
+    float x, y, z;
+    Vector3_s0041_3cc0() {}
+    Vector3_s0041_3cc0(const Vector3_s0041_3cc0& o) : x(o.x), y(o.y), z(o.z) {}
+    Vector3_s0041_3cc0& operator=(const Vector3_s0041_3cc0& o) { x = o.x; y = o.y; z = o.z; return *this; }
+    float& operator[](int i) { return (&x)[i]; }
+};
+namespace Resource_s0041_3cc0 {
+struct ThreadedObject_s0041_3cc0 {
+    void* vtable;
+    long mnRefCount;
+    int AddRef() { uint32_t unused0, unused1, unused2; return _InterlockedIncrement(&mnRefCount); }
+    int Release();                                  // 0x00404f90
+};
+}
+struct LoadHandle_s0041_3cc0 {
+    int AddRef();                                   // 0x0068f950
+    int Release();                                  // 0x00690120
+    void Cancel();                                  // 0x006926b0
+    void Attach(void* owner);                       // 0x004227d0
+    uint32_t pad[6];
+    uint32_t mFlags;                                // +0x18
+    void SetFlags(uint32_t f) { mFlags = f; }
+};
+template <class T> struct intrusive_ptr_s0041_3cc0 {
+    T* mpObject;
+    intrusive_ptr_s0041_3cc0() : mpObject(0) {}
+    ~intrusive_ptr_s0041_3cc0() { if (mpObject) mpObject->Release(); }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+    T* get() const { return mpObject; }
+    T* detach() { T* p = mpObject; mpObject = 0; return p; }
+    intrusive_ptr_s0041_3cc0& operator=(const intrusive_ptr_s0041_3cc0& ip) { return operator=(ip.mpObject); }
+    T** operator&() {
+        if (mpObject) {
+            T* p = mpObject;
+            mpObject = 0;
+            p->Release();
+        }
+        return &mpObject;
+    }
+    intrusive_ptr_s0041_3cc0& operator=(T* pObject) {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+};
+struct PointArray {
+    Vector3_s0041_3cc0 v[3];
+    Vector3_s0041_3cc0& operator[](int i) { return v[i]; }
+};
+struct ClipEntry {                                  // 0x8c
+    int16_t mId;                                    // +0x00
+    int16_t mParent;                                // +0x02
+    int16_t mLink;                                  // +0x04
+    uint16_t pad06;
+    uint16_t mFlags;                                // +0x08
+    uint8_t padA;
+    uint8_t mType;                                  // +0x0b
+    uint32_t pad0C[(0x2c - 0x0c) / 4];
+    float mTime;                                    // +0x2c
+    PointArray mPos;                                // +0x30
+    Vector3_s0041_3cc0 mDir;                                   // +0x54
+    uint32_t pad60[(0x8c - 0x60) / 4];
+};
+struct ClipEntryList {                              // begin/end of 0x8c-byte entries
+    ClipEntry* mpBegin;
+    ClipEntry* mpEnd;
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+struct ClipModel {
+    uint32_t pad[0x98 / 4];
+    ClipEntryList mEntries;                         // +0x98
+};
+struct ClipNode {
+    bool Test(float t);                             // 0x004f96a0
+    void Finish(int flag);                          // 0x004fc320
+};
+struct ClipSkin {
+    void Reset();                                   // 0x00508400
+};
+struct Clip : Resource_s0041_3cc0::ThreadedObject_s0041_3cc0 {
+    intrusive_ptr_s0041_3cc0<ClipModel> mpModel;               // +0x08
+    uint32_t pad0C[(0x34 - 0x0c) / 4];
+    intrusive_ptr_s0041_3cc0<ClipSkin> mpSkin;                 // +0x34
+    intrusive_ptr_s0041_3cc0<ClipNode> mpNode;                 // +0x38
+    float mTime;                                    // +0x3c
+};
+struct Mixer {
+    void Reset();                                   // 0x004fd520
+    int AddKey(Vector3_s0041_3cc0* pos, float a, float b, int id);                  // 0x004fcc20
+    void Link(int from, int to, float w, uint32_t flags);                // 0x004fcca0
+    void SetRoot(ClipNode* node);                   // 0x004fd380
+};
+struct Solver {
+    uint32_t pad[0x1c / 4];
+    uint32_t mField1C;                              // +0x1c
+    bool Run(ClipNode* a, ClipSkin* b, float t);          // 0x005400a0
+    bool Apply(bool flag);                          // 0x0053eda0
+    void Finish();                                  // 0x00540210
+};
+class ClipPlayer {
+public:
+    bool BuildBlend(Clip* src);               // 0x00413de0
+    bool Advance(Clip* t, float time, bool flag);   // 0x004142e0
+    void Rewind(int unused);                        // 0x004143e0
+    bool Step(Clip* t, float time);           // 0x00414420
+    bool Start(Clip* clip, float time, LoadHandle_s0041_3cc0** out);   // 0x00414470
+    int  BuildChain(ClipEntry* e, int count, int i, int prev, int id, int link, int h);   // 0x00412900
+
+    uint32_t pad00[0x80 / 4];
+    intrusive_ptr_s0041_3cc0<LoadHandle_s0041_3cc0> mpHandle;             // +0x80
+    intrusive_ptr_s0041_3cc0<Clip> mpCurrent; // +0x84
+    intrusive_ptr_s0041_3cc0<Mixer> mpMixer;                   // +0x88
+    intrusive_ptr_s0041_3cc0<Solver> mpSolver;                 // +0x8c
+};
+// ---- items of slice s00413cc0 end
+
+// ---- items of slice s004145c0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct DefaultRefCounted_s0041_45c0 {
+    void* vtable;
+    int mnRefCount;
+    int AddRef() { return mnRefCount++ + 1; }
+    int Release();
+};
+struct ThreadedObject_s0041_45c0 {
     void* vtable;
     volatile long mnRefCount;
     void AddRef() { _InterlockedIncrement(&mnRefCount); }
     void Release();
 };
-struct IRefCounted_s0041_45c0 { virtual int AddRef() = 0; virtual int Release() = 0; };
-struct ResourceKey_s0041_45c0 { unsigned int instanceID, typeID, groupID; ResourceKey_s0041_45c0(); };
+struct IRefCounted_s0041_45c0 {
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+struct ResourceKey_s0041_45c0 {
+    unsigned int instanceID, typeID, groupID;
+    ResourceKey_s0041_45c0();
+};
 struct ExtraInfo { int a; unsigned short flags; unsigned short pad; };   // 8 bytes; low flag bits tested below
 template <class T> struct ip {
     T* p;
@@ -2043,7 +2573,7 @@ template <class T> struct tip {
     T* p;
     tip& operator=(T* o) { if (o != p) { T* const pTemp = p; if (o) o->AddRef(); p = o; if (pTemp) pTemp->Release(); } return *this; }
 };
-struct ItemBase : DefaultRefCounted { unsigned pad[(0x6b-8)/4]; char p1[3]; bool f6b; bool f6c; };
+struct ItemBase : DefaultRefCounted_s0041_45c0 { unsigned pad[(0x6b-8)/4]; char p1[3]; bool f6b; bool f6c; };
 typedef ItemBase Item_s0041_45c0;
 struct V3 { int x, y, z; };
 struct DefTail {              // Def + 0x18
@@ -2058,12 +2588,12 @@ struct Def {
     int x14;
     DefTail tail;          // 0x18
 };
-struct DefRef : ThreadedObject {
+struct DefRef : ThreadedObject_s0041_45c0 {
     Def* pDef;             // 8
     Def* GetDef() const { return pDef; }
 };
-struct Entry_s0041_45c0 : DefaultRefCounted {   // 0x84 bytes
-    tip<ThreadedObject> owner;   // 8
+struct Entry_s0041_45c0 : DefaultRefCounted_s0041_45c0 {   // 0x84 bytes
+    tip<ThreadedObject_s0041_45c0> owner;   // 8
     ResourceKey_s0041_45c0 key;            // 0xc
     int ids[4];                 // 0x18
     int ids2[3];                // 0x28
@@ -2932,6 +3462,7 @@ struct LoadManager_s0041_86c0 {
     virtual void Lock();  // +0x20
     virtual void Unlock();  // +0x24
 };
+LoadManager_s0041_86c0* GetLoadManager_s0041_86c0();  // 0x0068F4D0
 struct ConfigRoot {
     void Begin(ThreadedObject_s0041_86c0* pThreaded, float scale, LoadHandle_s0041_86c0** pOut);  // 0x00414470
 };
@@ -3098,7 +3629,10 @@ struct TimeBudget {
     void __thiscall Init(int ms, int flag);   // 0x0093A560
     void __thiscall Arm(int a, int b);        // 0x0093A480
 };
-struct Transform_s0041_9000 { uint32_t pad[0x17]; void __thiscall Construct(); };   // 0x5C bytes with 4-byte header
+struct Transform_s0041_9000 {  // 0x5C bytes with 4-byte header
+    uint32_t pad[0x17];
+    void __thiscall Construct();
+};
 struct SceneObj { uint32_t pad0; uint32_t state; uint16_t flags; uint16_t refCount; uint32_t f0c[3]; uint32_t f18; uint32_t f1c[9]; int refs; };
 struct Engine {
     virtual void v0(); virtual void v1(); virtual void v2();
@@ -3200,8 +3734,6 @@ ResourceCollector::ResourceCollector()
 
 
 
-
-
 // @ 0x004021a0
 void ResourceCollector::AddResource(ResourceKey key)
 {
@@ -3235,8 +3767,6 @@ void ResourceCollector::AddResource(ResourceKey key)
     else
         mMissingKeys.push_back(key);
 }
-
-
 
 
 
@@ -3302,8 +3832,6 @@ void ResourceCollector::AddCreated(uint32_t a, uint32_t b, const void* params)
 
 
 
-
-
 // @ 0x00402420
 int AtomicRefCounted::Release()
 {
@@ -3314,8 +3842,6 @@ int AtomicRefCounted::Release()
     }
     return _InterlockedExchangeAdd(&mnRefCount, 0);
 }
-
-
 
 
 
@@ -3423,8 +3949,6 @@ void Preloader::Gather(PreloadSource* pSource, bool bSkipKeys)
 
 
 
-
-
 // @ 0x004029f0
 void Preloader::Start(const ResourceKey_s0040_2470& key, bool flag)
 {
@@ -3436,8 +3960,6 @@ void Preloader::Start(const ResourceKey_s0040_2470& key, bool flag)
     mbActive = true;
     mbFlag = flag;
 }
-
-
 
 
 
@@ -3495,15 +4017,11 @@ LoadHandle* Preloader::GetHandle()
 
 
 
-
-
 // @ 0x00402ab0
 Preloader* Preloader::Self()
 {
     return this;
 }
-
-
 
 
 
@@ -3561,8 +4079,6 @@ bool Preloader::IsFinished()
 
 
 
-
-
 // @ 0x00402b30
 void Preloader::Reset()
 {
@@ -3579,8 +4095,6 @@ void Preloader::Reset()
     for (int i = 0; i < 6; ++i)
         mpObjects[i] = 0;
 }
-
-
 
 
 
@@ -3686,8 +4200,6 @@ void BlockLoader::Update()
 
 
 
-
-
 // @ 0x00403240
 EditorBlockData::EditorBlockData()
 : mCache(0, -1, BlockAlloc, BlockFree, "Editor/BlockData"),
@@ -3695,8 +4207,6 @@ EditorBlockData::EditorBlockData()
       mObj1138(5, 0), mObj1150(5, 0), mFlag1180(false)
 {
 }
-
-
 
 
 
@@ -3751,6 +4261,31 @@ RangeSettings::RangeSettings()
 
 
 
+// @ 0x004036a0
+int GameSystem::AddRef()
+{ return DefaultRefCounted::AddRef(); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // @ 0x004036e0
@@ -3758,6 +4293,31 @@ KeyedRecord::KeyedRecord()
 : mpOwner(0), mpData(0), mpExtra(0) {}
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x004037b0
+GameSystem::~GameSystem()
+{ uint32_t unused0, unused1, unused2; }
 
 
 
@@ -3817,13 +4377,9 @@ bool PendingBatch::Flush()
 
 
 
-
-
 // @ 0x00403aa0
 SlotArray8::~SlotArray8()
 {}
-
-
 
 
 
@@ -3872,7 +4428,7 @@ bool cBaker::Initialize()
     vector_s0040_3af0<ResourceKey_s0040_3af0> keys((KeyAllocator()));
     vector_s0040_3af0<IDatabase*> dbList((KeyAllocator()));
     keys.reserve(0x800);
-    ((IResourceManager_s0040_3af0 *)ResourceManager())->FindRecords(&keys, Skinner::IdPaintSystem(0x5caa5e28), &dbList);
+    ((IResourceManager_s0040_3af0 *)ResourceManager_s0040_3af0())->FindRecords(&keys, Skinner::IdPaintSystem(0x5caa5e28), &dbList);
 
     for (int i = 0, n = (int)keys.size(); i < n; i++) {
         ResourceKey_s0040_3af0 key = keys[i];
@@ -3936,7 +4492,6 @@ bool cBaker::Initialize()
 
 
 
-
 // @ 0x004043f0
 void AddListeners(IMessageManager* pManager, IMessageListener* pListener, const unsigned int* pIDs, unsigned int count)
 {
@@ -3965,11 +4520,9 @@ void AddListeners(IMessageManager* pManager, IMessageListener* pListener, const 
 
 
 
-
 // @ 0x00404430
 inline void sort(SortEntry* first, SortEntry* last, SortLess compare)
 { SortEntries(first, last, compare); }
-
 
 
 
@@ -4021,7 +4574,6 @@ bool IdPaintSystem::IsEqual(const PaintSystem& other) const
 
 
 
-
 // @ 0x00404480
 void* LinearAllocator::Allocate(unsigned int size, bool allowGrow)
 {
@@ -4035,7 +4587,6 @@ void* LinearAllocator::Allocate(unsigned int size, bool allowGrow)
     mpLast = mpCurrent;
     return result;
 }
-
 
 
 
@@ -4102,7 +4653,6 @@ BakerCommand_s0040_4480::BakerCommand_s0040_4480(void* pBaker)
 
 
 
-
 // @ 0x00404630
 void BakerCommand_s0040_4480::Description(void* stream)
 {
@@ -4110,6 +4660,124 @@ void BakerCommand_s0040_4480::Description(void* stream)
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00404660
+void BakerCommand_s0040_4660::ParseLine(ArgScript::Line& line)
+{
+    mKeyFilter = 0;
+    mLimit = 0;
+    if (line.GetArgumentsCount() == 1) {
+        ArgScript::PrintF(mpOutput, mOptions.GetUsage(line.GetArgumentAt(0), 1));
+        return;
+    } else {
+        mOptions.Parse(line, mpOutput);
+    }
+
+    IResourceManager_s0040_4660* resourceManager = ResourceManager_s0040_4660();
+    ResourceKeyFilter keyFilter;
+    KeyVector resourceKeys;
+
+    if (mKeyFilter) {
+        ResourceKey_s0040_4660 key;
+        ResourceKeyFromString(&key, mKeyFilter, 0xffffffff, 0xffffffff);
+        keyFilter.mInstanceID = key.instanceID;
+        keyFilter.mGroupID = key.groupID;
+        keyFilter.mTypeID = key.typeID;
+        resourceManager->GetResourceKeyList(&resourceKeys, &keyFilter, 0);
+        if (resourceKeys.empty())
+            resourceKeys.push_back(key);
+    } else if (GameModeManager()->GetActiveModeID() == 0xdbdba1) {
+        cEditor* activeMode = GameModeManager()->GetActiveMode();
+        cEditorModel* pEditorModel = 0;
+        cEditor* pEditor = activeMode;
+        pEditorModel = pEditor->GetEditorModel();
+        if (pEditorModel) {
+            ResourceKey_s0040_4660 modelKey = pEditorModel->mKey;
+            if (modelKey == ResourceKey_s0040_4660(0, 0, 0)) {
+                ArgScript::PrintF(mpOutput, "No key -- you need to save the model first.\n");
+                return;
+            }
+            resourceKeys.push_back(pEditorModel->mKey);
+        }
+    }
+
+    if (mOptions.IsSet(0) && !resourceKeys.empty()) {
+        string16 displayName;
+        intrusive_ptr_s0040_4660<IObject> pRes;  // never assigned in the original either
+        int j = 0;
+        int numKeys = resourceKeys.size();
+        int numBakes = 0;
+        for (; j < numKeys && (mLimit == 0 || numBakes < mLimit); j++) {
+            ResourceKey_s0040_4660 key = resourceKeys.mpBegin[j];
+            if (key.typeID == 0x1a99b06b || key.typeID == 0xffffffff)
+                key.typeID = GetTypeForCategory(GroupIDBits(key.groupID).bits.category, 0);
+            if (!IsBakeableType(key.typeID, 0))
+                continue;
+            numBakes++;
+            resourceManager->GetFileName(key, displayName);
+            GetDisplayName(key, displayName, 0);
+            ArgScript::PrintF(mpOutput, "queuing %ls for bake\n", displayName.c_str());
+            BakeRequest request;
+            request.mID = 0x2ea8fb98;
+            request.mFlags = 0;
+            request.mPriority = 4;
+            if (mOptions.IsSet(6))
+                request.mFlags |= 0x40;
+            if (mOptions.IsSet(8))
+                request.mFlags |= 0x20;
+            if (mOptions.IsSet(0xe))
+                request.mFlags |= 0x100;
+            if (GroupIDBits(key.groupID).bits.category == 0x6b)
+                request.mFlags |= 0x10;
+            mpBaker->QueueBake(key, request);
+        }
+        if (mOptions.IsSet(0xb)) {
+            GameModeManager()->SetActiveMode(0xb44a3f);
+            intrusive_ptr_s0040_4660<ViewModelMessage> pMsg = new("Editor", 0, 0, 0, 0) ViewModelMessage;
+            pMsg->mArgs.SetValue(0, resourceKeys.front().instanceID);
+            pMsg->mArgs.SetValue(1, SetGroupSubtype(resourceKeys.front().groupID, 0x62));
+            MessageManager_s0040_4660()->PostMSG(0x4051e54, pMsg.get(), 0, 0);
+        }
+    }
+
+    if (mOptions.IsSet(2))
+        RenderManager()->DumpRTTs();
+
+    if (mOptions.IsSet(1)) {
+        TypeIDFilter filterA(0x1c135da);
+        resourceManager->ReleaseResources(0, &filterA);
+        TypeIDFilter filterB(0xe6bce5);
+        resourceManager->ReleaseResources(0, &filterB);
+    }
+
+    if (mOptions.IsSet(3)) {
+        if (mOptions.IsSet(4))
+            DescribeBlocks(mFilterGroup, mFilterInstance);
+        else
+            DescribeBlocks(0, 0);
+    }
+
+    if (mOptions.IsSet(5))
+        Baker()->SetProcessQueue(mProcessQueue);
+}
 
 
 
@@ -4137,6 +4805,38 @@ bool ResourceKeyFilter::IsValid(const ResourceKey_s0040_4660& key)
         && (mGroupID == 0xffffffff || (mGroupID & mGroupMask) == (key.groupID & mGroupMask))
         && (mInstanceID == 0xffffffff || mInstanceID == key.instanceID);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00404f90
+namespace Resource_s0040_4660 {
+int ThreadedObject_s0040_4660::Release()
+{
+    long refCount = _InterlockedDecrement(&mnRefCount);
+    if (refCount != 0)
+        return refCount;
+    _InterlockedExchange(&mnRefCount, 1);  // keep the count stable while destroying
+    delete this;
+    return 0;
+}
+}  // namespace Resource_s0040_4660
 
 
 
@@ -4201,7 +4901,7 @@ BakerCommand_s0040_5000::BakerCommand_s0040_5000(void* pBaker)
 
 
 // @ 0x004051e0
-void Baker::CancelAll()
+void Baker_s0040_5000::CancelAll()
 {
     mPending.Clear();
     mDeferred.Clear();
@@ -4243,7 +4943,7 @@ void Baker::CancelAll()
 
 
 // @ 0x004055b0
-void Baker::Shutdown()
+void Baker_s0040_5000::Shutdown()
 {
     ICheatManager::Get()->RemoveCheat("baker");
     mpWindow = 0;
@@ -4279,6 +4979,50 @@ void Baker::Shutdown()
 bool IPredicateTarget::TestAny(void* arg)
 {
     return TestA(arg, 0) || TestB(arg);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00406ef0
+bool ResourceFlagQuery::IsFlagged(const ResourceKey& key, bool requireSecondary)
+{
+    if (MakeGroup(key.groupID).kind == 0x62) {
+        uint32_t primaryGroup = WithVariant(key.groupID, 0);
+        uint32_t otherGroup = WithVariant(key.groupID, 1);
+        bool baseFlag = false;
+        bool flag1 = false;
+        intrusive_ptr_s0040_6ac0<PropertyList_s0040_6ac0> pPropList;
+        if (PropertyManager_Get()->GetPropertyList(key.instanceID, primaryGroup, pPropList.AsOutParam()))
+            GetBoolPropertyOutOfLine(pPropList, kPropEnabled, baseFlag);
+        if (PropertyManager_Get()->GetPropertyList(key.instanceID, otherGroup, pPropList.AsOutParam()))
+            GetBoolPropertyOutOfLine(pPropList, kPropEnabled, flag1);
+        return baseFlag && flag1;
+    }
+    bool flag = false;
+    intrusive_ptr_s0040_6ac0<PropertyList_s0040_6ac0> pPropList;
+    if (PropertyManager_Get()->GetPropertyList(key.instanceID, key.groupID, pPropList.AsOutParam())) {
+        GetBoolPropertyInline(pPropList.get(), kPropEnabled, flag);
+        if (flag && requireSecondary) {
+            flag = false;
+            GetBoolPropertyInline(pPropList.get(), kPropEnabledSecondary, flag);
+        }
+    }
+    return flag;
 }
 
 
@@ -4787,7 +5531,7 @@ void Owner::Rebuild()
     offsets.clear();
 
     IResourceManager_s0041_24b0* mgr = GetResourceManager_s0041_24b0();
-    KeyVector keys((Tag()));
+    KeyVector_s0041_24b0 keys((Tag()));
     mgr->GetKeys(g_ResourceGroup, &keys);
 
     for (int i = 0, n = keys.size(); i < n; i++) {
@@ -4836,6 +5580,27 @@ void Owner::Rebuild()
 
 
 
+// @ 0x00414420
+bool ClipPlayer::Step(Clip* t, float time)
+{
+    bool ok = BuildBlend(t);
+    if (!ok) {
+        t->mpSkin->Reset();
+        return true;
+    }
+    return Advance(t, time, false);
+}
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x004145c0
 bool PaletteEditor::SetItem(Item_s0041_45c0* n)
 {
@@ -4868,11 +5633,9 @@ bool PaletteEditor::SetItem(Item_s0041_45c0* n)
 
 
 
-
 // @ 0x00414e10
 int EditorObject::GetField78()
 { return Field78(); }
-
 
 
 
@@ -4912,7 +5675,6 @@ bool BoundsLibrary::Query(unsigned int idLo, unsigned int idHi, float* weights, 
 
 
 
-
 // @ 0x00415660
 PropertyList_s0041_4e30* PropertyListCache::Get(unsigned int instanceID, unsigned int groupID)
 {
@@ -4925,7 +5687,6 @@ PropertyList_s0041_4e30* PropertyListCache::Get(unsigned int instanceID, unsigne
     }
     return slot->get();
 }
-
 
 
 
@@ -4948,7 +5709,6 @@ bool ConfigManager_s0041_4e30::FindModelKey(unsigned int instanceID, unsigned in
     }
     return false;
 }
-
 
 
 
@@ -4988,7 +5748,6 @@ bool EditorPanel::HasHandler(ResourceKey_s0041_6180* k, int id)
 
 
 
-
 // @ 0x00416320
 bool EditorPanel::HasId(int id)
 {
@@ -5003,7 +5762,6 @@ bool EditorPanel::HasId(int id)
     }
     return false;
 }
-
 
 
 
@@ -5035,7 +5793,6 @@ bool EditorPanel::HasHandlerNormalized(ResourceKey_s0041_6180* k)
     }
     return false;
 }
-
 
 
 
@@ -5091,7 +5848,6 @@ bool EditorPanel::Activate(ResourceKey_s0041_6180* k, int id)
 
 
 
-
 // @ 0x00416990
 bool EditorPanel_s0041_6990::ActivateById(int id)
 {
@@ -5119,7 +5875,6 @@ bool EditorPanel_s0041_6990::ActivateById(int id)
     }
     return found;
 }
-
 
 
 
@@ -5156,7 +5911,6 @@ bool EditorPanel_s0041_6990::ActivateByKey(ResourceKey_s0041_6990* k)
 
 
 
-
 // @ 0x00416e30
 void EditorPanel_s0041_6990::AdjustPressCount(bool release)
 {
@@ -5176,13 +5930,11 @@ void EditorPanel_s0041_6990::AdjustPressCount(bool release)
 
 
 
-
 // @ 0x00416eb0
 int EditorPanel_s0041_6990::CountPending()
 {
     return entries.Size() + ((flagA || flagB) ? 1 : 0);
 }
-
 
 
 
@@ -5210,7 +5962,6 @@ int EditorPanel_s0041_6990::CountWithId(int id)
 
 
 
-
 // @ 0x00416fb0
 bool EditorPanel_s0041_6990::GetActiveKey(ResourceKey_s0041_6990* out)
 {
@@ -5222,7 +5973,6 @@ bool EditorPanel_s0041_6990::GetActiveKey(ResourceKey_s0041_6990* out)
     }
     return false;
 }
-
 
 
 
@@ -5249,7 +5999,6 @@ void EditorPanel_s0041_6990::CollectAll(EntrySink* out)
 
 
 
-
 // @ 0x00417150
 float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
 {
@@ -5263,7 +6012,6 @@ float EditorPanel_s0041_6990::GetSlotValue(KeyedEvent* ev)
     }
     return 0.0f;
 }
-
 
 
 
@@ -5343,13 +6091,11 @@ void Panel::Apply(ResourceKey_s0041_7600* key, bool flag, void* extra)
 
 
 
-
 // @ 0x00417cf0
 char* EditorBlockData_s0041_7600::GetSlotArea()
 {
     return (char*)this + 0x1100;
 }
-
 
 
 
@@ -5367,7 +6113,6 @@ EditorBlockData_s0041_7600* CreateEditorBlockData()
 
 
 
-
 // @ 0x00417d60
 ToolState::ToolState()
 : mCountA(0), mCapacity(0x10), mFlagA(0), mFlagB(0), mMode(0)
@@ -5378,12 +6123,10 @@ ToolState::ToolState()
 
 
 
-
 // @ 0x00417fe0
 ToolState::~ToolState()
 {
 }
-
 
 
 
@@ -5400,12 +6143,10 @@ SubState::SubState()
 
 
 
-
 // @ 0x00418240
 SubState::~SubState()
 {
 }
-
 
 
 
@@ -5433,7 +6174,6 @@ bool CheckMatchingProps(PropList_s0041_7d60* list)
         return false;
     return true;
 }
-
 
 
 
@@ -5470,12 +6210,11 @@ void Loader::LoadAll(int a, int b)
 
 
 
-
 // @ 0x004186c0
 EditorResource* CreateEditorResource(EditorSource* pSource, uint32_t* pKey, LoadHandle_s0041_86c0** pOutHandle)
 {
     HandlePtr hLoad;
-    if (!((LoadManager_s0041_86c0*)GetLoadManager())->OpenHandle(hLoad.Out()))
+    if (!((LoadManager_s0041_86c0*)GetLoadManager_s0041_86c0())->OpenHandle(hLoad.Out()))
         return 0;
     DeadPad5();
     ResPtr pRes(new ("Editor", 0, 0, 0, 0) EditorResource);
@@ -5496,6 +6235,30 @@ EditorResource* CreateEditorResource(EditorSource* pSource, uint32_t* pKey, Load
 // @ 0x00418870
 EditorResource::EditorResource()
 {}
+
+
+
+
+// @ 0x00418960
+// EditorResource scalar deleting destructor (implicit): the forcing function below makes the compiler emit it out of line
+#pragma auto_inline(off)
+void rwForceEmit_EditorResource_sdtor(EditorResource* p)
+{
+    delete p;
+}
+#pragma auto_inline(on)
+
+
+
+
+// @ 0x00418990
+// EditorResource destructor (implicit): the forcing function below makes the compiler emit it out of line
+#pragma auto_inline(off)
+void rwForceEmit_EditorResource_dtor(EditorResource* p)
+{
+    p->~EditorResource();
+}
+#pragma auto_inline(on)
 
 
 
@@ -5527,17 +6290,17 @@ bool EditorResource::Setup(LoadHandle_s0041_86c0* pParent)
         }
     }
     ConfigRoot* pCfg = GetConfigRoot();
-    LoadManager_s0041_86c0* pMgr = (LoadManager_s0041_86c0*)GetLoadManager();
+    LoadManager_s0041_86c0* pMgr = (LoadManager_s0041_86c0*)GetLoadManager_s0041_86c0();
     pMgr->Lock();
     HandlePtr h1;
     pCfg->Begin(mpThreaded.get(), scale, h1.Out());
     HandlePtr h2;
-    ((LoadManager_s0041_86c0*)GetLoadManager())->OpenHandle(h2.Out());
+    ((LoadManager_s0041_86c0*)GetLoadManager_s0041_86c0())->OpenHandle(h2.Out());
     h2->SetState(0x80000000);
     h2->OnBegin(this);
     h2->Add(h1.get());
     HandlePtr h3;
-    ((LoadManager_s0041_86c0*)GetLoadManager())->OpenHandle(h3.AsPointer());
+    ((LoadManager_s0041_86c0*)GetLoadManager_s0041_86c0())->OpenHandle(h3.AsPointer());
     h3->SetState(1);
     h3->OnEnd(this);
     pParent->Add(h2.mpObject);
@@ -5683,13 +6446,9 @@ DelObj::DelObj()
 
 
 
-
-
 // @ 0x0042fc20
 EditorResourceD::EditorResourceD()
 {}
-
-
 
 
 

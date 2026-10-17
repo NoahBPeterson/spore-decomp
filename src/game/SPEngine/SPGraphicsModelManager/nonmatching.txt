@@ -1,38 +1,38 @@
 # va  diff-bytes  reason
-00743950  13  complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
-007439b0  9   complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
-00743c50  47  eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs; difftest WEAK (198 valid, 16.2% cov)
-00743d20  78  eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs; difftest WEAK (168 valid, 15.8% cov)
-00743d90  173 eastl uninitialized_copy<Elem28>: missing compiler EH frame around constructed elements; difftest UNSUPPORTED (0/762 valid inputs)
-00744050  546 cSPTransform two-point transform: instruction schedule/register allocation differs; difftest PASS (689 valid, 100% cov)
-007446e0  101 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp); difftest UNSUPPORTED (unresolved ref ResHolder::Get)
-00744cf0  113 SetSomeFloat: property-find/vtable path and float staging differ [equiv: FAIL (5/16 mismatch)]
-00744d80  122 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
-00744e10  94  ForEachEffectA: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
-00744e90  94  ForEachEffectB: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
-00744f10  99  ForEachEffectC: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
-00745010  19  CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
-00745050  29  SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]
-00745140  -   FillColor: switch jump-table/block layout differs [equiv: WEAK (92.6% cov)]
-007454f0  13  AutoRef::Release: store of ref=1 scheduled after vtable load [equiv: PASS equiv]
-00745520  55  slot_vector::next: bit-extraction lowering (test mem vs shr/test) differs [equiv: PASS equiv]
-00745560  -   load-queue chunk find: cursor/segment register schedule differs [equiv: FAIL (memory pool)]
-007455e0  55  DestroyChunk: vtable release + chunk-pointer reload schedule differs [equiv: PASS equiv]
-00745660  44  slot_vector count: bit-extraction lowering differs [equiv: WEAK (34.8% cov)]
-007456a0  122 slot assign: value-copy/flag branch layout differs [equiv: PASS equiv]
-00745710  125 deque advance: segment index math/register schedule differs [equiv: FAIL (memory pool)]
-007458d0  190 deque init: chunk allocation loop register schedule differs [equiv: UNSUPPORTED (unresolved EA_New)]
-007459c0  243 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
+00743950 11 complete SetTimeScale; null path writes the global through a zeroed base (xor eax,eax; [eax+0x11c]) which cl folds to an absolute address
+007439b0 7 complete; null path carries a dead xor eax,eax before mov eax,0xe4 that cl drops
+00743c50 47 eastl Internal::insertion_sort_simple (desc, comparator): cl loop-rotation differs; difftest WEAK (198 valid, 16.2% cov)
+00743d20 81 eastl Internal::insertion_sort_simple (asc, comparator): cl loop-rotation differs; difftest WEAK (168 valid, 15.8% cov)
+00743d90 92 eastl uninitialized_copy<Elem28>: missing compiler EH frame around constructed elements; difftest UNSUPPORTED (0/762 valid inputs)
+00744050 528 cSPTransform two-point transform: instruction schedule/register allocation differs; difftest PASS (689 valid, 100% cov)
+007446e0 95 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp); difftest UNSUPPORTED (unresolved ref ResHolder::Get)
+00744cf0 109 SetSomeFloat: property-find/vtable path and float staging differ [equiv: FAIL (5/16 mismatch)]
+00744d80 111 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
+00744e10 98 ForEachEffectA: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
+00744e90 98 ForEachEffectB: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
+00744f10 93 ForEachEffectC: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]
+00745010 26 CheckFlag: field loaded via cmp instead of mov+test [equiv: UNSUPPORTED (0/1200 valid inputs)]
+00745050 29 SelectMesh: branch block ordering of the 0x9c/0xac selection differs [equiv: UNSUPPORTED (0/1200 valid inputs)]
+00745140 210 FillColor: switch jump-table/block layout differs [equiv: WEAK (92.6% cov)]
+007454f0 13 AutoRef::Release: store of ref=1 scheduled after vtable load [equiv: PASS equiv]
+00745520 45 slot_vector::next: bit-extraction lowering (test mem vs shr/test) differs [equiv: PASS equiv]
+00745560 65 load-queue chunk find: cursor/segment register schedule differs [equiv: FAIL (memory pool)]
+007455e0 49 DestroyChunk: vtable release + chunk-pointer reload schedule differs [equiv: PASS equiv]
+00745660 63 slot_vector count: bit-extraction lowering differs [equiv: WEAK (34.8% cov)]
+007456a0 73 slot assign: value-copy/flag branch layout differs [equiv: PASS equiv]
+00745710 98 deque advance: segment index math/register schedule differs [equiv: FAIL (memory pool)]
+007458d0 163 deque init: chunk allocation loop register schedule differs [equiv: UNSUPPORTED (unresolved EA_New)]
+007459c0 175 sort of 24-byte records: temp/compare schedule differs [equiv: UNSUPPORTED (0/220 valid inputs)]
 00745ac0 199 insertion-merge sort shape differs (register/scheduling)
-00745bb0  63 copy-20 shape differs (dead address guard)
-00745c20  38 rbtree-node allocation/EH frame shape differs
-00745cf0  62 adjust_heap<cOccluder*,...> value-pass copy flavour differs
-00745e00  59 adjust_heap pair (greater) value-copy/schedule differs
-00745e80  59 adjust_heap pair (less) value-copy/schedule differs
+00745bb0 63 copy-20 shape differs (dead address guard)
+00745c20 38 rbtree-node allocation/EH frame shape differs
+00745cf0 143 adjust_heap<cOccluder*,...> value-pass copy flavour differs
+00745e00 66 adjust_heap pair (greater) value-copy/schedule differs
+00745e80 68 adjust_heap pair (less) value-copy/schedule differs
 00745f90 181 0x94-byte render/cull record ctor shape differs
 007460b0 352 FilterModelFrustum register allocation differs
-00746250  69 cModelWorld::SetMaterialInfo register/arg shape differs
-00746910 120 model-group assignment shape differs; now a GroupWorld member (ECX this); difftest FAIL (5/5 valid mismatched, 68.5% cov)
+00746250 69 cModelWorld::SetMaterialInfo register/arg shape differs
+00746910 106 model-group assignment shape differs; now a GroupWorld member (ECX this); difftest FAIL (5/5 valid mismatched, 68.5% cov)
 00746b90 233 cModelWorld::ShutdownModel shape/order differs
 00746fc0 140 load-entry destructor shape differs
 007470c0 142 member release sequence shape differs; equiv: WEAK 81.8% cov
@@ -62,8 +62,11 @@
 0074a070 530 model sphere/box filter complete but register/schedule differs
 0074b690 125 complete SetInWorld intrusive-list move; list anchor/register layout differs
 0074b760 34 complete UpdateFromPropList; frame/regalloc differs (original keeps 0x20000 flag const in edi, pl reloaded from stack; flags merged to 0x30000 here)
+0074c670 532 complete ModelIsResidentInMemory; scratch vector/EH frame layout and register allocation differ  ; difftest WEAK (OpDeleteArr annotated 0xf47380; 27% coverage, random inputs rarely pass the GetDescription/GetPropertyAsKey gates)
+0074c910 272 complete ScheduleForLoad; EH state and LoadReq temp layout differ  ; difftest WEAK (LoadQueue::Push/Remove, Load74a920 annotated; 47 valid inputs, callee read faults)
 0074ca70 68 complete vector<int>::erase-first-value; register allocation (this/begin cached in different callee-saved regs) differs
 0074cad0 500 complete load-job Step state machine; scratch vector/EH layout differ  ; difftest WEAK after fix: GetStatus now called on the old job (was null this), 0x73bd60 list fill is thiscall on the resource (was cdecl 0x7141e0), 0x6913c0 and Continuation are thiscall on cj with fn 0x74d080 (was cdecl with fn 0), returns bool
+0074ce20 270 complete vector<E14>::DoInsertValue; nNew kept in register not stack slot, sign-test shape differs  ; difftest UNSUPPORTED: only 7/400 inputs valid (pool-limit from huge random vector sizes); marker fixed
 0074d2c0 396 complete HandleMessage; list-walk register allocation and EH state differ  ; difftest WEAK (ShutdownModel/ScheduleForLoad annotated; 13.9% coverage, random msgId rarely hits the two handled ids)
 0074d4b0 867 SP::cModelWorld::CreateModel: complete (needs /GS-); EH state stores and node-alloc loop layout differ.
 0074d870 245 SP::cModelWorld collect-by-filter: complete; regalloc (ebp/ebx for out/filter, spilled list end) differs.

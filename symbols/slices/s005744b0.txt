@@ -10,6 +10,7 @@
 00574a20 ?FlushFactory@cAppModeEditorBase_s0057_44b0@SP@@QAEHPAVcSPEditorResourceFactory_s0057_44b0@2@@Z  # cAppModeEditorBase_s0057_44b0::FlushFactory migrated from s005744b0 (verbatim, slice spelling)
 00574a60 ?SwitchToPlayModeCamera@cAppModeEditorBase_s0057_44b0@SP@@QAEXXZ  # cAppModeEditorBase_s0057_44b0::SwitchToPlayModeCamera migrated from s005744b0 (verbatim, slice spelling)
 00574b40 ?ScoreCreatureForZCorp@cAppModeEditorBase_s0057_44b0@SP@@QAEHXZ  # cAppModeEditorBase_s0057_44b0::ScoreCreatureForZCorp migrated from s005744b0 (verbatim, slice spelling)
+00574d60 ?CanPublish@cAppModeEditorBase_s0057_44b0@SP@@QAEHXZ  # cAppModeEditorBase_s0057_44b0::CanPublish migrated from s005744b0 (verbatim, slice spelling)
 00574da0 ?SetupThumbnailModelWorld@cAppModeEditorBase_s0057_44b0@SP@@QAEXPAVcIModelWorld_s0057_44b0@2@_N@Z  # cAppModeEditorBase_s0057_44b0::SetupThumbnailModelWorld migrated from s005744b0 (verbatim, slice spelling)
 00574f30 ?UpdateModelSounds@cAppModeEditorBase_s0057_44b0@SP@@QAEXM@Z  # cAppModeEditorBase_s0057_44b0::UpdateModelSounds migrated from s005744b0 (verbatim, slice spelling)
 00575120 ?ExitEditorUI@cAppModeEditorBase_s0057_44b0@SP@@QAEXXZ  # cAppModeEditorBase_s0057_44b0::ExitEditorUI migrated from s005744b0 (verbatim, slice spelling)

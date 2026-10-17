@@ -1,3 +1,9 @@
 005634e0 SP::cSPObjectTemplateDB::BanAsset  # PDB caller-scored candidate; deletes save records, posts ban message
+00563910 ?GetFeatureVector@cSPObjectTemplateDB_s0056_34e0@SP@@UAE_NIAAVcFeatureVector_s0056_34e0@Traits@2@@Z  # cSPObjectTemplateDB_s0056_34e0::GetFeatureVector migrated from s005634e0 (verbatim, slice spelling)
+005639a0 ?FindSummaryByID@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXABI@Z  # cSPObjectTemplateDB_s0056_34e0::FindSummaryByID migrated from s005634e0 (verbatim, slice spelling)
+00563a30 ?FindSummary@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXI@Z  # cSPObjectTemplateDB_s0056_34e0::FindSummary migrated from s005634e0 (verbatim, slice spelling)
+00563ac0 ?ValidateResource@cSPObjectTemplateDB_s0056_34e0@SP@@UAE_NABUResourceKey_s0056_34e0@@H@Z  # cSPObjectTemplateDB_s0056_34e0::ValidateResource migrated from s005634e0 (verbatim, slice spelling)
+00563c80 ?SetClassifierWeights@cSPObjectTemplateDB_s0056_34e0@SP@@UAEXABV?$vector_map_s0056_34e0@IMU?$less_s0056_34e0@I@eastl@@Usp_vector_allocator_s0056_34e0@2@@eastl@@@Z  # cSPObjectTemplateDB_s0056_34e0::SetClassifierWeights migrated from s005634e0 (verbatim, slice spelling)
+00563d60 ?GetDefaultClassifierWeights@cSPObjectTemplateDB_s0056_34e0@SP@@UAEXAAV?$vector_map_s0056_34e0@IMU?$less_s0056_34e0@I@eastl@@Usp_vector_allocator_s0056_34e0@2@@eastl@@@Z  # cSPObjectTemplateDB_s0056_34e0::GetDefaultClassifierWeights migrated from s005634e0 (verbatim, slice spelling)
 00563df0 ?Query@cQueryHost@SP@@QAEIII@Z  # cQueryHost::Query migrated from s005634e0 (verbatim, slice spelling)
 005640d0 Editor::OTDB::OTDB  # PDB name on card; byte-exact

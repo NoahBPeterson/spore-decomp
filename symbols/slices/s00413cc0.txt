@@ -1,1 +1,3 @@
 00413d60 Vector3_MinComponent  # min(min(v[0],v[1]),v[2]) returned as float
+00414420 ?Step@ClipPlayer@@QAE_NPAUClip@@M@Z  # ClipPlayer::Step migrated from s00413cc0 (verbatim, slice spelling)
+0068f950 ?AddRef@cJob@SP@@QAEHXZ  # SP::cJob::AddRef (callee of s00413cc0, named from the dev publics; slice address comment)

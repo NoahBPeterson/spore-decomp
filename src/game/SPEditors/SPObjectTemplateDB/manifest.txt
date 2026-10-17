@@ -1,4 +1,10 @@
 # source  symbol  va  flags
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4RangeConstraint_s0055_80e0@12@MM@Z  005588f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4EqualConstraint_s0055_80e0@12@H@Z  00558960  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4RangeConstraint_s0055_80e0@12@HH@Z  005589c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4NotEqualConstraint@12@H@Z  00558a20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@W4AnyConstraint@12@V?$vector_s0055_80e0@UConstraint_s0055_80e0@FunctionalMatch@SP@@Usp_vector_allocator_s0055_80e0@eastl@@@eastl@@@Z  00558ae0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?IsCompound@Constraint_s0055_80e0@FunctionalMatch@SP@@QBE_NXZ  00558b20  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0DeclareParam@FunctionalMatch@SP@@QAE@XZ  00558b70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0DeclareParam@FunctionalMatch@SP@@QAE@IM@Z  00558b90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0DeclareParam@FunctionalMatch@SP@@QAE@IH@Z  00558bc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
@@ -8,24 +14,31 @@
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetSupportedTypes@cParameterResourceFactory@SP@@QAEIPAII@Z  00558e70  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?IsValid@cParameterResourceFactory@SP@@QAE_NII@Z  00558eb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CreateResource@cParameterResourceFactory@SP@@QAE_NPAUIPFRecord@@AAPAUResourceObject@2@HI@Z  00558ef0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?Init@cSPObjectTemplateDB_s0055_98b0@SP@@QAE_NXZ  005598b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetParamId@cCityMusicSummarizer@Audio@SP@@QAEII@Z  0055a550  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetParamType@cCityMusicSummarizer@Audio@SP@@QAEII@Z  0055a9d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?Description@cFunctionalTestCheat@SP@@UBEPBDW4tHelpType@ArgScript@EA@@@Z  0055beb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?IsEnabled@cFunctionalTestCheat_s0055_beb0@SP@@QAE_NXZ  0055bee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0cResFinal@@QAE@XZ  0055bf10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
-../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0cSummarizerFinal@@QAE@XZ  0055bf50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0cResFinal_s0055_beb0@@QAE@XZ  0055bf10  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ??0cSummarizerFinal_s0055_beb0@@QAE@XZ  0055bf50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?Shutdown@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NXZ  0055bfb0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?RandomizeFirstN@cSPObjectTemplateDB_s0055_beb0@SP@@QAE_NPAU?$ParamVec@UKey3@@@@H@Z  0055c2e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CreateObjectTemplateDB@SP@@YAPAVObjectTemplateDB@Editor@@XZ  0055c640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?AsInterface@cSPObjectTemplateDB_s0055_beb0@SP@@QAEPAXI@Z  0055c690  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?CheckForMinPopulations@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  00561bd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetFloatParameterValues@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@MUallocator_s0056_1970@eastl@@@eastl@@@Z  00561d80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetIntParameterValues@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@HUallocator_s0056_1970@eastl@@@eastl@@@Z  00561ea0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetFloatParameterTable@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@MUallocator_s0056_1970@eastl@@@eastl@@AAV?$vector_s0056_1970@UResourceKey_s0056_1970@@Uallocator_s0056_1970@eastl@@@4@@Z  00561fc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetIntParameterTable@cSPObjectTemplateDB_s0056_1970@SP@@QAE_NIAAV?$vector_s0056_1970@HUallocator_s0056_1970@eastl@@@eastl@@AAV?$vector_s0056_1970@UResourceKey_s0056_1970@@Uallocator_s0056_1970@eastl@@@4@@Z  00562120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FindMatching@cSPObjectTemplateDB_s0056_1970@SP@@QAEXPAV?$vector_set_s0056_1970@IU?$less_s0056_1970@I@eastl@@Usp_vector_allocator_s0056_1970@2@@eastl@@ABUConstraint_s0056_1970@FunctionalMatch@2@@Z  00562280  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?AddPriorityConstraint@cSPObjectTemplateDB_s0056_1970@SP@@QAEXABUConstraint_s0056_1970@FunctionalMatch@2@I@Z  00562680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?RemovePriorityConstraint@cSPObjectTemplateDB_s0056_1970@SP@@QAEXI@Z  00562710  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?SetExcludedParameter@cSPObjectTemplateDB_s0056_1970@SP@@QAEXH@Z  00562790  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?ClearExcludedParameter@cSPObjectTemplateDB_s0056_1970@SP@@QAEXXZ  005628b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetFeatureVector@cSPObjectTemplateDB_s0056_34e0@SP@@UAE_NIAAVcFeatureVector_s0056_34e0@Traits@2@@Z  00563910  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FindSummaryByID@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXABI@Z  005639a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?FindSummary@cSPObjectTemplateDB_s0056_34e0@SP@@UAEPAXI@Z  00563a30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPObjectTemplateDB.cpp  ?ValidateResource@cSPObjectTemplateDB_s0056_34e0@SP@@UAE_NABUResourceKey_s0056_34e0@@H@Z  00563ac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?SetClassifierWeights@cSPObjectTemplateDB_s0056_34e0@SP@@UAEXABV?$vector_map_s0056_34e0@IMU?$less_s0056_34e0@I@eastl@@Usp_vector_allocator_s0056_34e0@2@@eastl@@@Z  00563c80  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?GetDefaultClassifierWeights@cSPObjectTemplateDB_s0056_34e0@SP@@UAEXAAV?$vector_map_s0056_34e0@IMU?$less_s0056_34e0@I@eastl@@Usp_vector_allocator_s0056_34e0@2@@eastl@@@Z  00563d60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEditors/SPObjectTemplateDB.cpp  ?Query@cQueryHost@SP@@QAEIII@Z  00563df0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

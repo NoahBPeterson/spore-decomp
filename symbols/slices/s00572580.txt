@@ -1,3 +1,4 @@
+00572590 ?Self@UintArray@@QAEPAU1@XZ  # UintArray::Self migrated from s00572580 (verbatim, slice spelling)
 00572680 ?4RefCountedPtr  # RefCountedPtr::operator=(RefCounted*)
 00572840 ?WriteUint32Value@@YA_NPAUISerializer@@PBI@Z  # WriteUint32Value migrated from s00572580 (verbatim, slice spelling)
 00572880 ?WriteUint32Array6@@YA_NPAUISerializer@@PBI@Z  # WriteUint32Array6 migrated from s00572580 (verbatim, slice spelling)

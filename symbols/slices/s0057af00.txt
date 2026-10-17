@@ -1,7 +1,10 @@
-0057af00 SP::cAppModeEditorBase::Pick  # PDB symbol name; complete source (nonmatching)
-007c4510 cViewer::GetCameraRay  # Claude-coined: thiscall (x, y, Vector3* start, Vector3* end) on App()->vfunc58() result
+0047e680 ?GetModel@cSPEditorHandle@SP@@QAEPAUcMWModel@2@XZ  # SP::cSPEditorHandle::GetModel (callee of s0057af00, named from the dev publics; slice address comment)
+0047e6c0 ?GetEditorBlock@cSPEditorHandle@SP@@QAEPAVcSPEditorBlock@2@XZ  # SP::cSPEditorHandle::GetEditorBlock (callee of s0057af00, named from the dev publics; slice address comment)
+0047ec20 ?GetState@cSPEditorHandle@SP@@QAE?AW4eEditorHandleState@12@XZ  # SP::cSPEditorHandle::GetState (callee of s0057af00, named from the dev publics; slice address comment)
 00496bb0 SP::EditorUtils::GetBlockForBallConnector  # Claude-coined: cdecl (cMWModel*, Vector3) -> cSPEditorBlock*, used for handle type 0x50e8e23
 004a6120 SP::EditorUtils::IsBlockLocked  # Claude-coined: cdecl bool(cSPEditorBlock*), clears the pick result when true
+004c49e0 ?GetSkinPart@cSPEditorSkinManager@SP@@QAEPAVcSPEditorSkinPart@2@W4eSkinIdentifier@12@@Z  # SP::cSPEditorSkinManager::GetSkinPart (callee of s0057af00, named from the dev publics; slice address comment)
 004c4a30 cSPEditorSkinManager::PickSkin  # Claude-coined: thiscall (lod, start, dir, pos*, normal*, dist*, bool), ret 0x2c
-004c4d30 cSPEditorSkinManager::GetBlockAtSkinPoint  # Claude-coined: thiscall (lod, Vector3) -> cSPEditorBlock*
-0047ec20 cSPEditorHandle::GetHandleState  # Claude-coined: returns field +0x1c; pick ignores handles in state 1
+004c4d30 ?GetBlockOnSkin@cSPEditorSkinManager@SP@@QAEPAVcSPEditorBlock@2@W4eSkinIdentifier@12@UcSPVector3@@@Z  # SP::cSPEditorSkinManager::GetBlockOnSkin (callee of s0057af00, named from the dev publics; slice address comment)
+0057af00 ?Pick@cAppModeEditorBase_s0057_af00@SP@@QAE?AUEditorPickResult@@MM_N@Z  # cAppModeEditorBase_s0057_af00::Pick migrated from s0057af00 (verbatim, slice spelling)
+007c4510 ?GetWorldRayFromScreenCoords@cViewer@SP@@QBE_NMMPAUcSPVector3@@0@Z  # SP::cViewer::GetWorldRayFromScreenCoords (callee of s0057af00, named from the dev publics; slice address comment)

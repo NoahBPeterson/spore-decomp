@@ -1,1 +1,11 @@
-00587a20 SP::cAppModeEditorBase::Deactivate  # PDB candidate (caller-scored); mirror of Activate 0x0058e6d0; byte-exact
+0047e6c0 ?GetEditorBlock@cSPEditorHandle@SP@@QAEPAVcSPEditorBlock@2@XZ  # SP::cSPEditorHandle::GetEditorBlock (callee of s00587a20, named from the dev publics; slice address comment)
+004b27c0 ?Release@cSPEditorPaintTheme@SP@@UAEHXZ  # SP::cSPEditorPaintTheme::Release (callee of s00587a20, named from the dev publics; slice address comment)
+00587a20 ?Deactivate@cAppModeEditorBase_s0058_7a20@SP@@QAEXXZ  # cAppModeEditorBase_s0058_7a20::Deactivate migrated from s00587a20 (verbatim, slice spelling)
+0059c640 ?Shutdown@cSPEditorAnimatedCreatureManager@SP@@QAEXXZ  # SP::cSPEditorAnimatedCreatureManager::Shutdown (callee of s00587a20, named from the dev publics; slice address comment)
+005c5c20 ?Shutdown@cSPPalette@SP@@QAEXXZ  # SP::cSPPalette::Shutdown (callee of s00587a20, named from the dev publics; slice address comment)
+005dbb50 ?HideUI@cAppModeEditorBase@SP@@IAEXXZ  # SP::cAppModeEditorBase::HideUI (callee of s00587a20, named from the dev publics; slice address comment)
+0062c910 ?Shutdown@cSPPlayMode@SP@@QAEXXZ  # SP::cSPPlayMode::Shutdown (callee of s00587a20, named from the dev publics; slice address comment)
+006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s00587a20, named from the dev publics; slice address comment)
+007c53d0 ?SetFieldOfView@cViewer@SP@@QAEXM@Z  # SP::cViewer::SetFieldOfView (callee of s00587a20, named from the dev publics; slice address comment)
+00801920 ?AddRef@cSPGameDataUFO@SP@@UAEHXZ  # SP::cSPGameDataUFO::AddRef (callee of s00587a20, named from the dev publics; slice address comment)
+00ed0660 ?Shutdown@cSPEditorComplexityMeter@SP@@QAEXXZ  # SP::cSPEditorComplexityMeter::Shutdown (callee of s00587a20, named from the dev publics; slice address comment)

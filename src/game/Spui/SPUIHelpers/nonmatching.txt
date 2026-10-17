@@ -16,36 +16,36 @@
 00805400 4 FreeCoreBlock; originally push/call/pop ecx, compiler emitted add esp,4; equiv PASS: 659 valid inputs, 100.0% coverage (all insns)
 008054b0 31 FixedFree; chunk-head list update scheduling; equiv FAIL: 5/5 valid inputs mismatched
 008054f0 10 InitAlloc; global store/arg order; equiv UNSUPPORTED: our code stores the address of its own copy of an object/vtable/constant where the origina
-00805ea0  2   complete; only the -4 pointer adjust is sub eax,4 vs original add eax,-4
-00805ef0  93  complete; loop layout + merged epilogue (do-while not reproduced exactly)
-008060d0  144 complete; register allocation/argument scheduling differs
-00806370  244 complete; rect-temp scheduling and frame differs
-008064c0  135 complete; rect-temp scheduling and frame differs
-00806610  294 complete; many vcall argument/order scheduling differences
-008068d0  264 complete; drawable assignment switch, register/scheduling differences
-00806aa0  58  complete; callee-saved register choice (ebx vs esi) differs
-00806b20  196 complete; index/wrap expression and scheduling differ
-00806bf0  77  complete; SSE scheduling differs
-00806c60  14  complete; only parameter register assignment (esi/edi) swapped
-00806ca0  64  complete; SSE scheduling differs
-00806de0  84  complete; loop/register differences
-00806ee0  96  complete; register/scheduling differences
-00807430  84  complete; float clamp scheduling differs
-008074a0  188 complete; control-flow/register differences
-00807590  65  complete; loop/register differences
-00807600  107 complete; ctor/control-flow differences
-00807690  50  complete; register differences
-008076f0  91  complete; register differences
-00807760  78  complete; allocator ctor arg/register differences
-00807a50  244 complete; button-drawable selection/register schedule differs
-00807dc0  107 complete; shader refcount/loop scheduling differs
-00807f50  185 complete; rotation switch/register differences
-00808050  166 complete; transform update SSE schedule differs
-00808190  24  complete; only vtable-load scheduling differs
-00808230  96  complete; float compare schedule differs
-008082f0  23  complete; only vtable-load scheduling differs
-008085d0  59  complete; ctor field-store/register differences
-00808660  209 complete; property/stream loop register differences
-008087f0  302  bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ; equiv: UNSUPPORTED (0/1200 valid inputs; fake-arity/faults) after marker fix
-00808d40  300  complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ
-0082a450 127 complete translation; AutoRef release sequence codegen differs
+00805ea0 2 complete; only the -4 pointer adjust is sub eax,4 vs original add eax,-4
+00805ef0 84 complete; loop layout + merged epilogue (do-while not reproduced exactly)
+008060d0 126 complete; register allocation/argument scheduling differs
+00806370 256 complete; rect-temp scheduling and frame differs
+008064c0 127 complete; rect-temp scheduling and frame differs
+00806610 211 complete; many vcall argument/order scheduling differences
+008068d0 262 complete; drawable assignment switch, register/scheduling differences
+00806aa0 54 complete; callee-saved register choice (ebx vs esi) differs
+00806b20 149 complete; index/wrap expression and scheduling differ
+00806bf0 71 complete; SSE scheduling differs
+00806c60 14 complete; only parameter register assignment (esi/edi) swapped
+00806ca0 56 complete; SSE scheduling differs
+00806de0 72 complete; loop/register differences
+00806ee0 24 complete; register/scheduling differences
+00807430 89 complete; float clamp scheduling differs
+008074a0 184 complete; control-flow/register differences
+00807590 63 complete; loop/register differences
+00807600 106 complete; ctor/control-flow differences
+00807690 46 complete; register differences
+008076f0 102 complete; register differences
+00807760 74 complete; allocator ctor arg/register differences
+00807a50 215 complete; button-drawable selection/register schedule differs
+00807dc0 109 complete; shader refcount/loop scheduling differs
+00807f50 185 complete; rotation switch/register differences
+00808050 158 complete; transform update SSE schedule differs
+00808190 24 complete; only vtable-load scheduling differs
+00808230 92 complete; float compare schedule differs
+008082f0 23 complete; only vtable-load scheduling differs
+008085d0 52 complete; ctor field-store/register differences
+00808660 172 complete; property/stream loop register differences
+008087f0 292 bounding-screen-rect core: complete equivalent but vtable-call float staging / local layout differ; equiv: UNSUPPORTED (0/1200 valid inputs; fake-arity/faults) after marker fix
+00808d40 1274 complete UpdateRolloverFrame, 43 calls/43 in the same order (flags /O2 /MD /Gy /TP /arch:SSE2 /fp:fast, no EH): frame size matches; xmm register assignment for rect staging and ebp table-pointer base differ
+0082a450 128 complete translation; AutoRef release sequence codegen differs

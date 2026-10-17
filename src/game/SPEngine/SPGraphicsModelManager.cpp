@@ -10,10 +10,7 @@
 #include "cOccluder.h"
 #include "cSPBoundingBox.h"
 #include "cSPTransform.h"
-// <new> defines inline placement `operator new`/`operator delete`; a slice that also carries the
-// placement pair (s0074f200) then redefines the delete (C2084).  Tell <new> to skip its copies and
-// provide the placement pair once, here, so the tool dedups slice-local copies against it.
-#define __PLACEMENT_NEW_INLINE
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
 #include <new>
 #include <string.h>
 #include <math.h>
@@ -25,9 +22,7 @@
 #include "SP/cMWGroupInternal.h"
 #include "SP/cMWGroup.h"
 #include "SP/cMWObject.h"
-
-inline void* operator new(unsigned int, void* p) { return p; }   // placement new (see __PLACEMENT_NEW_INLINE)
-inline void operator delete(void*, void*) {}                     // placement delete
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s00742b30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cModelWorld56 {
@@ -189,7 +184,7 @@ Elem28::Elem28(const Elem28& o) {
     m18 = o.m18;
 }
 struct Pair8 { uint32_t val; float key; };
-// placement `operator new` is provided by <new> (slice s00745ac0 includes it); a local copy here redefines it (C2084)
+inline void* operator new(unsigned int, void* p) { return p; }
 struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
 struct ResHolder { ResInfo* Get(); };
 // ---- items of slice s00743b20 end
@@ -799,7 +794,7 @@ struct cModelWorld_s0074_a290 {
     char pad[0x800];
 
     void ReleaseTransformedHull(void** pp);              // 0074a650 0x0074a650
-    void FreeTransformedBuffer();                        // 0074b150 0x0074b150
+    void FreeTransformedBuffer();                        // 0074b150
     void RemoveOccluder(int idx);                        // 0074a8c0 0x0074a8c0
     bool GetBakedMeshes(void* model, void* arg2);        // 0074a690
     bool GetBakedMeshesUnscaled(void* model, void* arg2); // 0074a700 0x0074a700
@@ -834,12 +829,15 @@ struct cModelWorld_s0074_b170 {
     ListNode_s0074_b170  mListB;      // +0x1a4 anchor area
     void AddAttachments(ListNode_s0074_b170* n);  // 0x0074ac80 (SP::cModelWorld::AddAttachments)
     void ShutdownModel(ListNode_s0074_b170* n);  // 0x00746b90 (SP::cModelWorld::ShutdownModel)
-    void SetInWorld(ListNode_s0074_b170* n, bool b);  // 0x0074b690 (SP::cModelWorld::SetInWorld)
+    void SetInWorld(ListNode_s0074_b170* n, bool b);
     void UpdateFromPropList(IPropList* pl, void* mdl, uint32_t flags, int unused);  // 0x0074b760 (SP::cModelWorld::UpdateFromPropList)
 };
 }
 namespace SP {
-struct cLoadingModel_s0074_b170 { uint32_t pad[0x14]; ~cLoadingModel_s0074_b170(); };   // 0x50 bytes
+struct cLoadingModel_s0074_b170 {  // 0x50 bytes
+    uint32_t pad[0x14];
+    ~cLoadingModel_s0074_b170();
+};
 }
 namespace SP {
 struct LoadDeque { ~LoadDeque(); };
@@ -1075,6 +1073,7 @@ extern "C" void* __cdecl memmove_(void* dst, const void* src, unsigned size);
 extern "C" void __cdecl OpDeleteArr(void* p);   // 0xf47380
 extern char g_fn743910[];
 extern char g_fn74d080[];   // 0x74d080
+extern "C" void __cdecl operator_delete_arr(void* p);
 struct VecInt {
     char pad0[0x4c];
     int* begin;   // +0x4c
@@ -1094,7 +1093,70 @@ struct Vec18 {
     E18* cap;     // +0x08
     void push_back(const E18* v);
 };
+namespace eastl {
+template <typename T> struct iterator_traits;
+}
+namespace eastl {
+template <typename T> struct iterator_traits<T*> { typedef T value_type; };
+}
+namespace eastl {
+template <typename It, typename Compare>
+void partial_sort(It first, It middle, It last, Compare compare);   // out of line elsewhere
+}
+namespace eastl {
+template <typename It, typename Compare>
+inline It median(It a, It b, It c, Compare compare)
+{
+    if (compare(*a, *b)) {
+        if (compare(*b, *c)) return b;
+        else if (compare(*a, *c)) return c;
+        else return a;
+    } else if (compare(*a, *c)) return a;
+    else if (compare(*b, *c)) return c;
+    return b;
+}
+}
+namespace eastl {
+template <typename It, typename T, typename Compare>
+It get_partition(It first, It last, T pivotValue, Compare compare)
+{
+    for (;; ++first) {
+        while (compare(*first, pivotValue)) ++first;
+        --last;
+        while (compare(pivotValue, *last)) --last;
+        if (first >= last) return first;
+        T temp(*first);
+        *first = *last;
+        *last = temp;
+    }
+}
+}
+namespace eastl {
+template <typename It, typename Size, typename Compare>
+void quick_sort_impl(It first, It last, Size kRecursionCount, Compare compare)
+{
+    typedef typename iterator_traits<It>::value_type value_type;
+    while ((last - first) > 28 && (kRecursionCount > 0)) {
+        const It position_partition(eastl::get_partition(first, last, *eastl::median(first, first + (last - first) / 2, last - 1, compare), compare));
+        eastl::quick_sort_impl(position_partition, last, --kRecursionCount, compare);
+        last = position_partition;
+    }
+    if (kRecursionCount == 0)
+        eastl::partial_sort(first, last, last, compare);
+}
+}
+struct cDrawModelInfo { void* p; float key; };
+struct DrawGreater { int pad; bool operator()(const cDrawModelInfo& a, const cDrawModelInfo& b) const { return a.key > b.key; } };
+struct cAlphaSortLessComparator { int pad; bool operator()(const cDrawModelInfo& a, const cDrawModelInfo& b) const { return a.key < b.key; } };
+struct cOccluder_s0074_c260 {
+    float f[6];
+    cOccluder_s0074_c260() {}
+    cOccluder_s0074_c260(const cOccluder_s0074_c260& o) { f[0] = o.f[0]; f[1] = o.f[1]; f[2] = o.f[2]; f[3] = o.f[3]; f[4] = o.f[4]; f[5] = o.f[5]; }
+};
+typedef bool (__cdecl *OccCmp)(const cOccluder_s0074_c260&, const cOccluder_s0074_c260&);
 struct ModelKey { uint32_t inst, type, group; };
+struct PropListW { bool GetDescription(uint32_t hash); };
+extern PropListW* g_appProps_s0074_c260;   // 0x15fd918
 bool __cdecl GetPropertyAsKey(void* props, uint32_t id, ModelKey* out);   // 0x6a1250
 #define V(n) virtual void v##n();
 struct ResMgrW {
@@ -1114,6 +1176,7 @@ struct TmpVec {
     TmpVec() : b(buf), e(buf), owner(0), prefix(0) {}
 };
 struct RefHolder { RefCounted* p; RefHolder() : p(0) {} ~RefHolder() { if (p) p->Release(); } };
+void __cdecl FillResourceList(RefCounted* res, TmpVec* out, void* fn);   // 0x7141e0
 void __fastcall DestructRange(TmpVec* v, int, uint32_t* b, uint32_t* e); // 0x70f520
 struct LoadReq {
     uint32_t key; RefCounted* model; uint32_t a4, a5, idx, z0, z1;
@@ -1161,6 +1224,26 @@ struct LoadJob {
     RefCounted* refs[6];   // +0x34
     uint32_t count;        // +0x4c (overlaps refs end; see original)
     bool Step(cJobW* cj);
+};
+struct E14V { float x, y, z, w; };
+struct E14 {
+    int a; E14V v;
+    E14(const E14& o) {
+        a = o.a;
+        unsigned sign = (unsigned)o.a >> 31;
+        if ((sign & 1) == 0) {
+            E14V* d = &v;
+            if (d) { d->x = o.v.x; d->y = o.v.y; d->z = o.v.z; d->w = o.v.w; }
+        }
+    }
+    E14& operator=(const E14& o);   // 0x7456a0
+};
+E14* __cdecl copy_backward14(E14* first, E14* last, E14* dest);          // 0x745f40
+E14* __cdecl uninit_copy14(E14* first, E14* last, E14* dest);            // 0x745bb0
+void* __cdecl operator_new_dbg(unsigned size, const char* name, int a, int b, const char* file, int line);
+struct VecE14 {
+    E14* mBegin; E14* mEnd; E14* mCap;
+    void DoInsertValue(E14* pos, const E14& value);
 };
 struct ListNode_s0074_c260 { ListNode_s0074_c260* next; };
 struct ModelNode {   // list node for models, 0x134/+0x98 fields used below
@@ -1666,7 +1749,7 @@ struct ShaderRefPtr {
         }
     }
 };
-struct cDrawModelInfo {
+struct cDrawModelInfo_s0074_f200 {
     char pad0[0xc];
     uint32_t mFlags;                  // +0xc
     char pad10[0x54 - 0x10];
@@ -1682,9 +1765,9 @@ struct cDrawModelInfo {
     char pad129[0x134 - 0x129];
     void** mpExtra;                   // +0x134
 };
-static inline uint8_t VariantByte(const cDrawModelInfo* i) { return *((const uint8_t*)i + 0x64); }
+static inline uint8_t VariantByte(const cDrawModelInfo_s0074_f200* i) { return *((const uint8_t*)i + 0x64); }
 struct DrawEntry {
-    cDrawModelInfo* pInfo;
+    cDrawModelInfo_s0074_f200* pInfo;
     float fDistance;
 };
 struct DrawList {
@@ -1970,9 +2053,7 @@ struct DrawModelVector {                                // eastl::vector<cDrawMo
     }
 };
 }
-namespace SP {
 extern "C" void* FUN_011e0744(void* dst, const void* src, unsigned n);       // memcpy thunk
-}
 namespace SP {
 struct ModelPtrVector {                                 // eastl::vector<cMWModelInternal*>
     cMWModelInternal_s0075_07e0** mpBegin;
@@ -2260,10 +2341,6 @@ int cModelWorld56::Adjustor(int unused)
 
 
 
-
-
-
-
 // @ 0x00743950
 void __stdcall SetTimeScale(int param_1, float scale)
 {
@@ -2291,10 +2368,6 @@ void __stdcall SetTimeScale(int param_1, float scale)
 
 
 
-
-
-
-
 // @ 0x007439b0
 int __stdcall OffsetOrE4(int param_1)
 {
@@ -2302,10 +2375,6 @@ int __stdcall OffsetOrE4(int param_1)
         return param_1 + 0xdc;
     return 0xe4;
 }
-
-
-
-
 
 
 
@@ -2353,10 +2422,6 @@ void cModelWorld56::SetCurveSegment(int* a, int* b, int index)
 
 
 
-
-
-
-
 // @ 0x00743a20
 void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
 {
@@ -2384,10 +2449,6 @@ void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
 
 
 
-
-
-
-
 // @ 0x00743a60
 void cModelWorld56::SetCurveRange(int index, int begin, int end)
 {
@@ -2395,10 +2456,6 @@ void cModelWorld56::SetCurveRange(int index, int begin, int end)
     *(int*)(p + 0x1b4) = begin;
     *(int*)(p + 0x1b8) = end;
 }
-
-
-
-
 
 
 
@@ -2443,10 +2500,6 @@ void cModelWorld56::GetCurveRange(int index, int* begin, int* end)
 
 
 
-
-
-
-
 // @ 0x00743b00
 void SP::cModelWorld::ResetHighlightCurve()
 {
@@ -2454,10 +2507,6 @@ void SP::cModelWorld::ResetHighlightCurve()
     *(float*)((char*)this + 0x87c) = v;
     *(float*)((char*)this + 0x860) = 0.0f;
 }
-
-
-
-
 
 
 
@@ -2507,10 +2556,6 @@ void SortDescUnguarded(Pair8* first, Pair8* last)
 
 
 
-
-
-
-
 // @ 0x00743d20
 void SortAscUnguarded(Pair8* first, Pair8* last)
 {
@@ -2543,10 +2588,6 @@ void SortAscUnguarded(Pair8* first, Pair8* last)
 
 
 
-
-
-
-
 // @ 0x00743d90
 Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
 {
@@ -2554,10 +2595,6 @@ Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
         new (dst) Elem28(*first);
     return dst;
 }
-
-
-
-
 
 
 
@@ -2636,10 +2673,6 @@ void TransformTwo(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* 
 
 
 
-
-
-
-
 // @ 0x007446e0
 void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_t* pGroup)
 {
@@ -2685,10 +2718,6 @@ void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_
 
 
 
-
-
-
-
 // @ 0x00744cf0
 void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
 {
@@ -2708,10 +2737,6 @@ void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
         }
     }
 }
-
-
-
-
 
 
 
@@ -2765,10 +2790,6 @@ void cModelWorld_s0074_4ad0::SetEffectEnabled(Model_s0074_4ad0* model, char a, c
 
 
 
-
-
-
-
 // @ 0x00744e10
 char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int b, int c, int id)
 {
@@ -2788,10 +2809,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int 
     }
     return result;
 }
-
-
-
-
 
 
 
@@ -2843,10 +2860,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectB(Model_s0074_4ad0* model, int a, int 
 
 
 
-
-
-
-
 // @ 0x00744f10
 char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int b, int id)
 {
@@ -2866,10 +2879,6 @@ char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int 
     }
     return result;
 }
-
-
-
-
 
 
 
@@ -2914,10 +2923,6 @@ bool cModelWorld_s0074_4ad0::CheckFlag(Model_s0074_4ad0* model, int a)
 
 
 
-
-
-
-
 // @ 0x00745050
 bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, char c)
 {
@@ -2929,10 +2934,6 @@ bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, c
         return inst->SelectMesh(a, b);
     return false;
 }
-
-
-
-
 
 
 
@@ -2999,10 +3000,6 @@ void cModelWorld_s0074_4ad0::FillColor(int* out)
 
 
 
-
-
-
-
 // @ 0x007454f0
 AutoRef* AutoRef::Release()
 {
@@ -3033,10 +3030,6 @@ AutoRef* AutoRef::Release()
 
 
 
-
-
-
-
 // @ 0x00745520
 int SlotVec::next(int idx)
 {
@@ -3051,10 +3044,6 @@ int SlotVec::next(int idx)
     } while ((int)v < 0);
     return idx;
 }
-
-
-
-
 
 
 
@@ -3104,10 +3093,6 @@ void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key
 
 
 
-
-
-
-
 // @ 0x007455e0
 void __fastcall DestroyChunk(int param_1)
 {
@@ -3123,10 +3108,6 @@ void __fastcall DestroyChunk(int param_1)
     *(int*)(param_1 + 0x10) = v + 0xe0;
     *(int*)(param_1 + 8) = *(int*)(param_1 + 0xc);
 }
-
-
-
-
 
 
 
@@ -3164,10 +3145,6 @@ int SlotCount(uint32_t* first, uint32_t* last)
         ++n;
     } while (true);
 }
-
-
-
-
 
 
 
@@ -3223,10 +3200,6 @@ void SlotCell::Assign(int* src)
 
 
 
-
-
-
-
 // @ 0x00745710
 int* DequeIter::Advance(int n)
 {
@@ -3245,10 +3218,6 @@ int* DequeIter::Advance(int n)
     self[0] = self[1] + (d - i * 8) * 0x1c;
     return self;
 }
-
-
-
-
 
 
 
@@ -3306,10 +3275,6 @@ void DequeInit(int* self, unsigned count)
 
 
 
-
-
-
-
 // @ 0x007459c0
 void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const void*))
 {
@@ -3348,10 +3313,6 @@ void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const 
 
 
 
-
-
-
-
 // @ 0x00745ac0
 void Sort24(P6* first, P6* last, Compare24 compare)
 {
@@ -3365,10 +3326,6 @@ void Sort24(P6* first, P6* last, Compare24 compare)
         *j = temp;
     }
 }
-
-
-
-
 
 
 
@@ -3415,10 +3372,6 @@ E20* Copy20(E20* first, E20* last, E20* dest)
 
 
 
-
-
-
-
 // @ 0x00745c20
 Node18* CreateNode18(const uint32_t* value)
 {
@@ -3447,10 +3400,6 @@ Node18* CreateNode18(const uint32_t* value)
 
 
 
-
-
-
-
 // @ 0x00745ca0
 Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
 {
@@ -3459,10 +3408,6 @@ Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
     }
     return dest;
 }
-
-
-
-
 
 
 
@@ -3504,10 +3449,6 @@ void PromoteOccluder(cOccluder_s0074_5ac0* first, int topPosition, int position,
 
 
 
-
-
-
-
 // @ 0x00745e00
 void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyGreater compare)
 {
@@ -3534,10 +3475,6 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
 
 
 
-
-
-
-
 // @ 0x00745e80
 void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyLess compare)
 {
@@ -3549,10 +3486,6 @@ void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
     }
     first[position] = value;
 }
-
-
-
-
 
 
 
@@ -3603,10 +3536,6 @@ DrawRecord* DrawRecord_Ctor(DrawRecord* self, void* owner)
     self->mLast = 0;
     return self;
 }
-
-
-
-
 
 
 
@@ -3688,10 +3617,6 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
 
 
 
-
-
-
-
 // @ 0x00746250
 void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int idx)
 {
@@ -3706,10 +3631,6 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
         p->mSlots[i]->F(idx, handle);
     }
 }
-
-
-
-
 
 
 
@@ -3741,10 +3662,6 @@ void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox_s0074_5ac0
         out->mMin = p->mMin;
     }
 }
-
-
-
-
 
 
 
@@ -3798,20 +3715,12 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
 
 
 
-
-
-
-
 // @ 0x00746b40
 void CModelWorld::UpdateOccluder(int idx, Vec3* pos, float radius)
 {
     mOccluders[idx].mPosition = *pos;
     mOccluders[idx].mRadius = radius;
 }
-
-
-
-
 
 
 
@@ -3887,10 +3796,6 @@ void cModelWorld_ShutdownModel(CModelWorld* self, int model)
 
 
 
-
-
-
-
 // @ 0x00746de0
 Rec48::Rec48()
 {
@@ -3906,10 +3811,6 @@ Rec48::Rec48()
     rot.Assign(&g_f162ec38);
     f = 1;
 }
-
-
-
-
 
 
 
@@ -3963,10 +3864,6 @@ void FUN_00746fc0(void* self)
 
 
 
-
-
-
-
 // @ 0x007470c0
 void Stub007470c0::F()
 {
@@ -3988,10 +3885,6 @@ void Stub007470c0::F()
         if (--r->mRefCount == 0) { r->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)r))(r, 1); }
     }
 }
-
-
-
-
 
 
 
@@ -4039,10 +3932,6 @@ void* Stub00747190::F(int* src)
 
 
 
-
-
-
-
 // @ 0x00747270
 void Stub00747270::F()
 {
@@ -4056,10 +3945,6 @@ void Stub00747270::F()
     RCObj* q = (RCObj*)*(void**)(b + 0x10);
     if (q && --q->mRefCount == 0) { q->mRefCount = 1; (*(void(__thiscall**)(RCObj*, int))(*(void**)q))(q, 1); }
 }
-
-
-
-
 
 
 
@@ -4093,10 +3978,6 @@ void FUN_00747720(int* d)
         operator_delete_((void*)*d);
     }
 }
-
-
-
-
 
 
 
@@ -4165,10 +4046,6 @@ void FUN_007477d0(int self)
 
 
 
-
-
-
-
 // @ 0x007478b0
 void FUN_007478b0(uint32_t* v)
 {
@@ -4180,10 +4057,6 @@ void FUN_007478b0(uint32_t* v)
     if (*v != 0 && *v != v[4])
         operator_delete_((void*)*v);
 }
-
-
-
-
 
 
 
@@ -4234,10 +4107,6 @@ void Stub00747920::F()
 
 
 
-
-
-
-
 // @ 0x00747ac0
 Rec38* Rec38Stub::F(Rec38* src)
 {
@@ -4252,10 +4121,6 @@ Rec38* Rec38Stub::F(Rec38* src)
     new (&dst->rot) Mat3_s0074_7920(src->rot);
     return dst;
 }
-
-
-
-
 
 
 
@@ -4313,10 +4178,6 @@ void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
 
 
 
-
-
-
-
 // @ 0x00747c90
 void FUN_00747c90(E3C* dst, int n, E3C* value)
 {
@@ -4339,10 +4200,6 @@ void FUN_00747c90(E3C* dst, int n, E3C* value)
         dst->m = value->m;
     }
 }
-
-
-
-
 
 
 
@@ -4382,10 +4239,6 @@ void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
 
 
 
-
-
-
-
 // @ 0x00747f30
 void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
@@ -4395,10 +4248,6 @@ void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
     if (n > 0)
         AdjustHeapOccluder((Occluder*)first, 0, n, 0, *(Occluder*)&temp, compare);
 }
-
-
-
-
 
 
 
@@ -4438,10 +4287,6 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
 
 
 
-
-
-
-
 // @ 0x00748060
 void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
 {
@@ -4451,10 +4296,6 @@ void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
         FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
-
-
-
-
 
 
 
@@ -4494,10 +4335,6 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
 
 
 
-
-
-
-
 // @ 0x00748110
 void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
 {
@@ -4507,10 +4344,6 @@ void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
         FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
-
-
-
-
 
 
 
@@ -4561,10 +4394,6 @@ void FUN_00748170(int* first, int* last, int* dst)
 
 
 
-
-
-
-
 // @ 0x00748280
 void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* mapLast)
 {
@@ -4585,10 +4414,6 @@ void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* m
     }
     out[1] = (int)dst;
 }
-
-
-
-
 
 
 
@@ -4635,10 +4460,6 @@ void FUN_00748380(int* out, int* last)
 
 
 
-
-
-
-
 // @ 0x00748470
 int* FUN_00748470(int first, int last, int* dst)
 {
@@ -4667,10 +4488,6 @@ int* FUN_00748470(int first, int last, int* dst)
     } while (last != first);
     return result;
 }
-
-
-
-
 
 
 
@@ -4760,10 +4577,6 @@ int FilterModelSphere2(CullModel_s0074_8800* model, float* pos, SphereArg* arg)
 
 
 
-
-
-
-
 // @ 0x00748c30
 void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg* q)
 {
@@ -4792,10 +4605,6 @@ void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg
     if (outDist) *outDist = best;
     return (char*)bestM + 8;
 }
-
-
-
-
 
 
 
@@ -4870,9 +4679,6 @@ int FindModelsInFrustum(const void* frustumA, const void* frustumB, CMWModel* mo
 
 
 
-
-
-
 // @ 0x00749e50
 int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
 {
@@ -4917,9 +4723,6 @@ int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
     }
     return 1;
 }
-
-
-
 
 
 
@@ -4994,9 +4797,6 @@ int FUN_0074a070(float* pos, CMWModel* model, FilterArg* arg)
 
 
 
-
-
-
 // @ 0x0074a650
 void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
 {
@@ -5019,8 +4819,6 @@ void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
 
 
 
-
-
 // @ 0x0074a690
 bool SP::cModelWorld_s0074_a290::GetBakedMeshes(void* model, void* arg2)
 {
@@ -5033,8 +4831,6 @@ bool SP::cModelWorld_s0074_a290::GetBakedMeshes(void* model, void* arg2)
     }
     return false;
 }
-
-
 
 
 
@@ -5069,8 +4865,6 @@ bool SP::cModelWorld_s0074_a290::GetBakedMeshesUnscaled(void* model, void* arg2)
 
 
 
-
-
 // @ 0x0074a850
 bool SP::cModelWorld_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290* out)
 {
@@ -5083,8 +4877,6 @@ bool SP::cModelWorld_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform
     }
     return false;
 }
-
-
 
 
 
@@ -5111,12 +4903,9 @@ void SP::cModelWorld_s0074_a290::FreeTransformedBuffer()
 
 
 
-
-
 // @ 0x0074b2b0
 SP::cLoadQueue::~cLoadQueue()
 {}
-
 
 
 
@@ -5167,7 +4956,6 @@ void SP::cModelWorld_s0074_b170::SetInWorld(ListNode_s0074_b170* n, bool b)
 
 
 
-
 // @ 0x0074b760
 __forceinline const float* ValFloat(Property* p)
 {
@@ -5175,6 +4963,144 @@ __forceinline const float* ValFloat(Property* p)
     return &kDefaultFloat;
 }
 
+
+
+
+
+
+
+
+// @ 0x0074c260
+template void eastl::quick_sort_impl<cDrawModelInfo*, int, DrawGreater>(cDrawModelInfo*, cDrawModelInfo*, int, DrawGreater)
+;
+
+
+
+
+
+
+
+
+// @ 0x0074c370
+template void eastl::quick_sort_impl<cDrawModelInfo*, int, cAlphaSortLessComparator>(cDrawModelInfo*, cDrawModelInfo*, int, cAlphaSortLessComparator)
+;
+
+
+
+
+
+
+
+
+// @ 0x0074c580
+template cOccluder_s0074_c260* eastl::get_partition<cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp)
+;
+
+
+
+
+
+
+
+
+// @ 0x0074c670
+bool SP::cModelWorld::ModelIsResidentInMemory(SP::cPropertyList * model)
+{
+    if (!g_appProps_s0074_c260->GetDescription(0x69089a6))
+        return false;
+    if (model == 0)
+        return false;
+    ResMgrW* mgr = GetResMgrW();
+    int i = 0;
+    do {
+        ModelKey k = { 0, 0, 0 };
+        if (!GetPropertyAsKey(model, 0xf9efbb + i, &k)) {
+            if (i == 0)
+                return false;
+            break;
+        }
+        RefHolder res;
+        k.type = 0xe6bce5;
+        if (!mgr->Find14(&k, &res.p) && mgr->Error58(&k) != 0)
+            return false;
+        if (res.p == 0) {
+            k.type = 0x2f4e681b;
+            if (!mgr->Find14(&k, 0) && mgr->Error58(&k) != 0)
+                return false;
+        } else {
+            TmpVec v;
+            FillResourceList(res.p, &v, g_fn743910);
+            if (v.b != v.e) {
+                DestructRange(&v, 0, v.b, v.e);
+                if (v.b != 0 && v.b[-1] != 0)
+                    OpDeleteArr(v.b);
+                return false;
+            }
+            DestructRange(&v, 0, v.b, v.e);
+            if (v.b != 0 && v.b[-1] != 0)
+                OpDeleteArr(v.b);
+        }
+        ++i;
+    } while (i < 4);
+
+    ModelKey k2 = { 0, 0, 0 };
+    if (GetPropertyAsKey(model, 0xf9efc0, &k2)) {
+        k2.type = 0xe6bce5;
+        if (!mgr->Find14(&k2, 0) && mgr->Error58(&k2) != 0)
+            return false;
+        k2.type = 0x2f4e681b;
+        if (!mgr->Find14(&k2, 0)) {
+            if (mgr->Error58(&k2) != 0)
+                return false;
+        }
+    }
+    return true;
+}
+
+
+
+
+
+
+
+
+// @ 0x0074c910
+void cModelWorld_s0074_c260::ScheduleForLoad(ModelEntry* entry, RefCounted* model, uint32_t a4, uint32_t a5)
+{
+    entry->flags0 &= 0xffffbfff;
+    if (entry->idx >= 0)
+        UpdateFromPropList(model, entry, entry->idx, 0);
+    uint32_t* key = &entry->key;
+    bool found;
+    {
+        uint32_t i = 0;
+        uint32_t* p = &active[0][0];
+        for (;;) {
+            if ((uint32_t*)*p == key) { found = true; break; }
+            ++i;
+            p += 0x14;
+            if (i >= 8) { found = false; break; }
+        }
+    }
+    bool propOn = g_appProps_s0074_c260->GetDescription(0x3dd1848d);
+    bool resident = ModelIsResidentInMemory(model);
+    if (!propOn || (!found && resident)) {
+        uint32_t* kk = key;
+        queue.Remove(kk ? (uint32_t*)&kk : 0);
+        Load74a920(model, entry, entry->idx);
+    } else {
+        LoadReq r;
+        r.key = (uint32_t)key;
+        r.model = model;
+        if (model) model->AddRef();
+        r.a4 = a4;
+        r.a5 = a5;
+        r.idx = entry->idx;
+        r.z0 = 0;
+        r.z1 = 0;
+        queue.Push(&r);
+    }
+}
 
 
 
@@ -5205,7 +5131,6 @@ bool VecInt::remove_first(int v)
     }
     return false;
 }
-
 
 
 
@@ -5310,7 +5235,6 @@ bool LoadJob::Step(cJobW* cj)
 
 
 
-
 // @ 0x0074cdd0
 void Vec18::push_back(const E18* v)
 {
@@ -5324,6 +5248,52 @@ void Vec18::push_back(const E18* v)
     }
 }
 
+
+
+
+
+
+
+
+// @ 0x0074ce20
+void VecE14::DoInsertValue(E14* pos, const E14& value)
+{
+    if (mEnd != mCap) {
+        const E14* pv = &value;
+        if (pv >= pos && pv < mEnd)
+            ++pv;
+        ::new (mEnd) E14(*(mEnd - 1));
+        copy_backward14(pos, mEnd - 1, mEnd);
+        *pos = *pv;
+        ++mEnd;
+        return;
+    }
+    int nPrev = (int)(mEnd - mBegin);
+    int nNew;
+    if (nPrev) nNew = nPrev * 2; else nNew = 1;
+    const int* pNew = &nNew; (void)pNew;
+    E14* newBegin = nNew ? (E14*)operator_new_dbg(nNew * sizeof(E14), "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1) : 0;
+    E14* newPos = uninit_copy14(mBegin, pos, newBegin);
+    ::new (newPos) E14(value);
+    E14* newEnd = uninit_copy14(pos, mEnd, newPos + 1);
+    if (mBegin)
+        operator_delete_arr(mBegin);
+    mBegin = newBegin;
+    mEnd = newEnd;
+    mCap = newBegin + nNew;
+}
+
+
+
+
+
+
+
+
+// @ 0x0074d190
+template void eastl::quick_sort_impl<cOccluder_s0074_c260*, int, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, int, OccCmp)
+;
 
 
 
@@ -5380,7 +5350,6 @@ bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)
     }
     return true;
 }
-
 
 
 
@@ -5819,7 +5788,7 @@ void cModelWorld_s0074_f200::DrawLayer(bool bAlpha, DrawList* pList, uint32_t fl
 
     const int nCount = (int)(pList->mpEnd - pList->mpBegin);
     for (int i = 0; i < nCount; ++i) {
-        cDrawModelInfo* pInfo = pList->mpBegin[i].pInfo;
+        cDrawModelInfo_s0074_f200* pInfo = pList->mpBegin[i].pInfo;
         const float fDistance = pList->mpBegin[i].fDistance;
 
         ShaderRef* pShader;

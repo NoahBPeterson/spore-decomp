@@ -11,11 +11,12 @@
 ../src/game/Spui/SPUIBehavior.cpp  ?RemoveB@Cont@@QAE_NPAX@Z  007f9c90  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?RemovePredicate@cSPUIBehaviorEventBase@@UAE_NPAVcISPUIBehaviorPredicate@@@Z  007f9ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?RemoveAction@cSPUIBehaviorEventBase@@UAE_NPAVcISPUIBehaviorAction@@@Z  007f9f60  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  ?False@Ev@@QAE_NXZ  007fa120  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?Call93a0@Ev@@QAEXXZ  007fa130  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?SetGlobal@Ev@@QAEPAU1@XZ  007fa350  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?ClearGlobal@Ev@@QAEXXZ  007fa370  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIBehavior.cpp  ?FUN_007fa4c0@@YAPAHPAHH@Z  007fa4c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
-../src/game/Spui/SPUIBehavior.cpp  ?FUN_007fa4f0@@YAXHHH@Z  007fa4f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  _FUN_007fa4c0  007fa4c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIBehavior.cpp  _FUN_007fa4f0  007fa4f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?f_7fa520@@YA_NPAPAPAUPred@@HPAH@Z  007fa520  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?GetAt@C_7fa690@@QAEPAURCObj@@H@Z  007fa690  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/Spui/SPUIBehavior.cpp  ?SetAt@C_7fa690@@QAE_NHPAURCObj@@@Z  007fa6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

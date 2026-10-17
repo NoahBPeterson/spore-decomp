@@ -1,3 +1,9 @@
+005588f0 ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4RangeConstraint_s0055_80e0@12@MM@Z  # Constraint_s0055_80e0::Constraint migrated from s005580e0 (verbatim, slice spelling)
+00558960 ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4EqualConstraint_s0055_80e0@12@H@Z  # Constraint_s0055_80e0::Constraint migrated from s005580e0 (verbatim, slice spelling)
+005589c0 ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4RangeConstraint_s0055_80e0@12@HH@Z  # Constraint_s0055_80e0::Constraint migrated from s005580e0 (verbatim, slice spelling)
+00558a20 ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@IW4NotEqualConstraint@12@H@Z  # Constraint_s0055_80e0::Constraint migrated from s005580e0 (verbatim, slice spelling)
+00558ae0 ??0Constraint_s0055_80e0@FunctionalMatch@SP@@QAE@W4AnyConstraint@12@V?$vector_s0055_80e0@UConstraint_s0055_80e0@FunctionalMatch@SP@@Usp_vector_allocator_s0055_80e0@eastl@@@eastl@@@Z  # Constraint_s0055_80e0::Constraint migrated from s005580e0 (verbatim, slice spelling)
+00558b20 ?IsCompound@Constraint_s0055_80e0@FunctionalMatch@SP@@QBE_NXZ  # Constraint_s0055_80e0::IsCompound migrated from s005580e0 (verbatim, slice spelling)
 00558b70 ??0DeclareParam@FunctionalMatch@SP@@QAE@XZ  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0
 00558b90 ??0DeclareParam@FunctionalMatch@SP@@QAE@IM@Z  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0
 00558bc0 ??0DeclareParam@FunctionalMatch@SP@@QAE@IH@Z  # SP::FunctionalMatch::DeclareParam::DeclareParam migrated from s005580e0

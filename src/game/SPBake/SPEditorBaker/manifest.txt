@@ -10,7 +10,9 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ?IsFinished@Preloader@@QAE_NXZ  00402ac0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Reset@Preloader@@QAEXXZ  00402b30  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0RangeSettings@@QAE@XZ  004035d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?AddRef@GameSystem@@UAEHXZ  004036a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0KeyedRecord@@QAE@XZ  004036e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ??1GameSystem@@UAE@XZ  004037b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Flush@PendingBatch@@QAE_NXZ  004039f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??1SlotArray8@@QAE@XZ  00403aa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?AddListeners@@YAXPAUIMessageManager@@PAUIMessageListener@@PBII@Z  004043f0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
@@ -20,7 +22,9 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ??0BakerCommand_s0040_4480@@QAE@PAX@Z  00404500  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Description@BakerCommand_s0040_4480@@QAEXPAX@Z  00404630  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?IsValid@ResourceKeyFilter@@UAE_NABUResourceKey_s0040_4660@@@Z  00404f10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Release@ThreadedObject_s0040_4660@Resource_s0040_4660@@UAEHXZ  00404f90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?TestAny@IPredicateTarget@@QAE_NPAX@Z  00406e90  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?IsFlagged@ResourceFlagQuery@@QAE_NABUResourceKey@@_N@Z  00406ef0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Apply@KeyRemapper@@QAEXAAU?$vector_s0040_6ac0@UKeyPair@@@@UResourceKey@@@Z  004071e0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?MulMatrixAssign@@YAAAUVector3@@AAU1@ABUMatrix3@@@Z  004098e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Scale@Transform@@QAEXM@Z  00409b30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oi /Isrc/game/include
@@ -30,6 +34,7 @@
 ../src/game/SPBake/SPEditorBaker.cpp  ?Invert@PartTransform@@QAEXXZ  0040efa0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ??0PartHolder@@QAE@PBU0@@Z  0040f070  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?Rescan@EditorPartList@@QAE_NXZ  0040f110  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorBaker.cpp  ?Step@ClipPlayer@@QAE_NPAUClip@@M@Z  00414420  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?SetItem@PaletteEditor@@QAE_NPAUItemBase@@@Z  004145c0  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?GetField78@EditorObject@@QAEHXZ  00414e10  /Od /Ob1 /MD /Gy /TP /Isrc/game/include
 ../src/game/SPBake/SPEditorBaker.cpp  ?FindModelKey@ConfigManager_s0041_4e30@@QAE_NIIPAUResourceKey_s0041_4e30@@@Z  00415730  /Od /Ob1 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,4 +1,6 @@
 004035d0 ??0RangeSettings@@QAE@XZ  # RangeSettings::RangeSettings migrated from s004035d0 (verbatim, slice spelling)
+004036a0 ?AddRef@GameSystem@@UAEHXZ  # GameSystem::AddRef migrated from s004035d0 (verbatim, slice spelling)
 004036e0 ??0KeyedRecord@@QAE@XZ  # KeyedRecord::KeyedRecord migrated from s004035d0 (verbatim, slice spelling)
+004037b0 ??1GameSystem@@UAE@XZ  # GameSystem::~GameSystem migrated from s004035d0 (verbatim, slice spelling)
 004039f0 ?Flush@PendingBatch@@QAE_NXZ  # PendingBatch::Flush migrated from s004035d0 (verbatim, slice spelling)
 00403aa0 ??1SlotArray8@@QAE@XZ  # SlotArray8::~SlotArray8 migrated from s004035d0 (verbatim, slice spelling)

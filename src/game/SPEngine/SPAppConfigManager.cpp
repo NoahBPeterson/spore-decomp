@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s007ce500, s007cc5f0, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPAppConfigManager.cpp -- migrated from slice(s) s007ce500, s007cc5f0, s007cb590, s007ca950, s007c9910, s007c8940, s007c77e0, s005409d0 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPAppConfigManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,8 +11,8 @@ extern unsigned short gCfgTime24[];     // @ 0x13f39dc
 #include <ctype.h>
 #include <stdio.h>
 #include <wchar.h>
-#include "SP/cConfigManager.h"
 #include "EA/ArgScript/cIFileParser.h"
+#include "SP/cConfigManager.h"
 #include "SP/cConfigScriptState.h"
 #include "SP/cOption.h"
 #include "SP/cDirectPropertyList.h"
@@ -22,6 +22,7 @@ extern unsigned short gCfgTime24[];     // @ 0x13f39dc
 #include "EA/ResourceMan/Key.h"
 #include "SP/cPropertyList.h"
 #include <string.h>
+#include "rw/graphics/Device.h"
 #include "EA/ArgScript/cIParser.h"
 
 // ---- items of slice s005409d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -35,6 +36,8 @@ extern unsigned short gCfgTime24[];     // @ 0x13f39dc
 // ---- items of slice s005409d0 end
 
 // ---- items of slice s007c77e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char  g_saveAreaName[];  // 0x011ac192
+extern void* g_sAppPreferences;             // 0x015fd91c
 extern void* g_CmdKey_setting;              // 0x0153d204
 extern void* g_CmdKey_boolProp;             // 0x0153d208
 extern void* g_CmdKey_intProp;              // 0x0153d20c
@@ -56,6 +59,8 @@ void*    __cdecl EA_New(unsigned size, const char* name, int, int, const char*, 
 void     __cdecl EA_Free(void* p);                                               // 0x00f47380
 void*    __cdecl CreateParser();                                                 // 0x008408d0
 void*    __cdecl CheatManager();                                                 // 0x0067de20
+void*    __cdecl GetSaveArea(const char* name);                                  // 0x006b1f90
+bool     __cdecl SaveResource(void* res, void* area, int flags);                 // 0x006b1d50
 void*    __cdecl FormatString(int idx, const char* fmt, const char* arg);        // 0x00840810
 void     __cdecl FormatDouble(double v, char* out, int len, int prec, int flags);// 0x0092d730
 int      __cdecl TryGetUIntProperty(void* prop, unsigned key, uint32_t* out);    // 0x00410370
@@ -255,7 +260,6 @@ void cInitCommand::Execute(cArguments*)
     Init();
 }
 // ---- items of slice s007c8940 end
-
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void* __cdecl InsertAutoRef(void* out, void* src);  // 0x007c8af0 (stays in the slice: not this object's)
@@ -485,19 +489,6 @@ template <int B, typename Tag> struct copy_impl {
 };
 }
 namespace eastl {
-template <int B, typename Tag> struct copy_backward_impl {
-    template <typename In, typename Out>
-    static Out do_copy(In first, In last, Out result) {
-        while (last != first) {
-            --last;
-            --result;
-            *result = *last;
-        }
-        return result;
-    }
-};
-}
-namespace eastl {
 template <int B, typename Tag> struct uninitialized_move_impl {
     template <typename F, typename D>
     static D do_move_start(F first, F last, D dest) {
@@ -644,6 +635,41 @@ T& vector_map_s007c_a950<Key_s007c_a950, T, C, A, RA>::operator[](const key_type
     return it->second;
 }
 }
+namespace eastl {
+template <int N, int Align> struct aligned_buffer { char mBuffer[N]; };
+}
+namespace eastl {
+template <typename T, int N, bool B>
+struct fixed_vector_s007c_a950 : vector_s007c_a950<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > {
+    typedef vector_s007c_a950<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > base_type;
+    typedef typename base_type::size_type size_type;
+    aligned_buffer<sizeof(T) * N, 4> mBuffer;
+
+    T* buffer() { return (T*)mBuffer.mBuffer; }
+    fixed_vector_s007c_a950() {
+        T* p = buffer();
+        this->mAllocator.mpPoolBegin = p;
+        this->mpBegin = p;
+        this->mpEnd = p;
+        this->mpCapacity = p + N;
+    }
+    fixed_vector_s007c_a950(const fixed_vector_s007c_a950& x) : base_type() {
+        T* p = buffer();
+        this->mAllocator.mpPoolBegin = p;
+        this->mpBegin = p;
+        this->mpEnd = p;
+        this->mpCapacity = p + N;
+        this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
+    }
+    fixed_vector_s007c_a950& operator=(const fixed_vector_s007c_a950& x) {
+        if (&x != this) {
+            this->erase(this->mpBegin, this->mpEnd);
+            this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
+        }
+        return *this;
+    }
+};
+}
 namespace EA {
 template <typename T> struct AutoRefCount_s007c_a950 {
     T* mpObject;   // +0
@@ -715,13 +741,7 @@ public:
 };
 }
 namespace SP {
-IPropertyManager* PropertyManager();   // 0x0067de30
-}
-namespace Editor {
-class cPropertyList_s007c_a950 : public SP::cPropertyList_s007c_a950 {
-public:
-    cPropertyList_s007c_a950();
-};  // namespace Editor
+IPropertyManager* PropertyManager_s007c_a950();   // 0x0067de30
 }
 namespace EA {
 namespace ArgScript {
@@ -808,17 +828,14 @@ void vector_s007c_a950<T, A>::DoAssignFromIterator(It first, It last, std::rando
     }
 }
 }
-template PropMap* eastl::copy_backward_impl<0, std::random_access_iterator_tag>::do_copy<PropMap*, PropMap*>(PropMap*, PropMap*, PropMap*);
-template PropMap* eastl::copy_impl<0, std::random_access_iterator_tag>::do_copy<const PropMap*, PropMap*>(const PropMap*, const PropMap*, PropMap*);
-template void eastl::fill<PropMap*, PropMap>(PropMap*, PropMap*, const PropMap&);
 template PropVec& PropVec::operator=(const PropVec&);
 namespace SP {
 struct cOption_s007c_a950 {
     unsigned int mID;              // +0x00
     unsigned int mDefaultSetting;  // +0x04
     unsigned int mCurrentSetting;  // +0x08
-    eastl::fixed_vector<EA::AutoRefCount_s007c_a950<cPropertyList_s007c_a950>, 4, 1> mPropertySettings;  // +0x0c
-    eastl::fixed_vector<PropMap, 4, 1>                         mExternalSettings;  // +0x34
+    eastl::fixed_vector_s007c_a950<EA::AutoRefCount_s007c_a950<cPropertyList_s007c_a950>, 4, 1> mPropertySettings;  // +0x0c
+    eastl::fixed_vector_s007c_a950<PropMap, 4, 1>                         mExternalSettings;  // +0x34
     ~cOption_s007c_a950();
 };
 }
@@ -908,8 +925,535 @@ public:
 }  // anonymous namespace
 // ---- items of slice s007ca950 end
 
+// ---- items of slice s007cb590 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern char gEmptyChar;   // 0x01667bac
+extern "C" __declspec(dllimport) int __stdcall IsDebuggerPresent(void);
+namespace eastl {
+struct allocator_s007c_b590 {              // retail: 8 bytes, trivially copyable
+    int mPad0;                  // +0
+    void* mpPoolBegin;          // +4
+    void deallocate(void* p, unsigned int) { if (p && p != mpPoolBegin) EASTL_allocator_deallocate(p); }
+};
+}
+namespace eastl {
+template <typename T> struct less_s007c_b590 {
+    bool operator()(const T& a, const T& b) const { return a < b; }
+};
+}
+namespace eastl {
+template <typename T1, typename T2> struct pair_s007c_b590 {
+    T1 first;
+    T2 second;
+    pair_s007c_b590() {}
+    pair_s007c_b590(const T1& a, const T2& b) : first(a), second(b) {}
+};
+}
+namespace eastl {
+template <int B, typename Tag> struct copy_backward_impl {
+    template <typename In, typename Out>
+    static Out do_copy(In first, In last, Out result) {
+        while (last != first) {
+            --last;
+            --result;
+            *result = *last;
+        }
+        return result;
+    }
+};
+}
+namespace eastl {
+template <typename T, typename A>
+struct VectorBase_s007c_b590 {
+    T* mpBegin;      // +0
+    T* mpEnd;        // +4
+    T* mpCapacity;   // +8
+    A  mAllocator;   // +12
+};
+}
+namespace eastl {
+template <typename T, typename A>
+struct vector_s007c_b590 : VectorBase_s007c_b590<T, A> {
+    typedef VectorBase_s007c_b590<T, A> base_type;
+    typedef unsigned int size_type;
+    typedef T value_type;
+    typedef T* iterator;
+
+    vector_s007c_b590() { this->mpBegin = 0; this->mpEnd = 0; this->mpCapacity = 0; }
+    ~vector_s007c_b590();
+
+    size_type size() const { return (size_type)(this->mpEnd - this->mpBegin); }
+    size_type capacity() const { return (size_type)(this->mpCapacity - this->mpBegin); }
+
+    void DoDestroyValues(T* first, T* last) {
+        for (; first < last; ++first) first->~T();
+    }
+    T* DoAllocate(size_type n) {
+        if (n == 0) return 0;
+        return (T*)EASTL_allocator_allocate((unsigned int)(n * sizeof(T)), "App", 0, 0,
+                                            EASTL_ALLOCATOR_FILE, 0xd1);
+    }
+    void DoFree(T* p, size_type) { if (p) EASTL_allocator_deallocate(p); }
+    T* DoRealloc(size_type n, const T* first, const T* last) {
+        T* p = DoAllocate(n);
+        uninitialized_copy_ptr(first, last, p);
+        return p;
+    }
+
+    void DoInsertValue(T* position, const T& value);            // out of line
+    void push_back();                                           // out of line
+    T* insert(T* position, const T& value);                     // out of line
+    void insert(T* position, size_type n, const T& value);      // out of line
+    T* erase(T* first, T* last);                                // out of line
+    void resize(size_type n);                                   // out of line
+
+    template <typename It> void DoAssignFromIterator(It first, It last, std::random_access_iterator_tag);
+    vector_s007c_b590& operator=(const vector_s007c_b590& x);
+};
+}
+namespace eastl {
+template <typename Key_s007c_b590, typename Value, typename Compare>
+struct map_value_compare_s007c_b590 {
+    Compare c;
+    bool operator()(const Value& a, const Value& b) const { return c(a.first, b.first); }
+    bool operator()(const Key_s007c_b590& a, const Value& b) const { return c(a, b.first); }
+};
+}
+namespace eastl {
+template <typename Key_s007c_b590, typename T, typename Compare, typename Allocator, typename RA>
+struct vector_map_s007c_b590 : RA {
+    typedef RA base_type;
+    typedef typename RA::value_type value_type;
+    typedef typename RA::iterator iterator;
+    typedef Key_s007c_b590 key_type;
+    typedef map_value_compare_s007c_b590<Key_s007c_b590, value_type, Compare> value_compare;
+
+    value_compare mValueCompare;
+
+    pair_s007c_b590<iterator, bool> insert(const value_type& value);
+    iterator insert(iterator position, const value_type& value);
+    T& operator[](const key_type& key);
+};
+}
+namespace eastl {
+template <typename It, typename Key_s007c_b590, typename Cmp>
+It lower_bound(It first, It last, const Key_s007c_b590& key, Cmp compare);
+}
+namespace eastl {
+template <typename Key_s007c_b590, typename T, typename C, typename A, typename RA>
+pair_s007c_b590<typename vector_map_s007c_b590<Key_s007c_b590, T, C, A, RA>::iterator, bool>
+vector_map_s007c_b590<Key_s007c_b590, T, C, A, RA>::insert(const value_type& value) {
+    iterator itEnd = this->mpEnd;
+    iterator itLB = eastl::lower_bound(this->mpBegin, itEnd, value.first, mValueCompare);
+    if ((itLB != itEnd) && !mValueCompare(value, *itLB))
+        return pair_s007c_b590<iterator, bool>(itLB, false);
+    return pair_s007c_b590<iterator, bool>(base_type::insert(itLB, value), true);
+}
+}
+namespace eastl {
+template <typename Key_s007c_b590, typename T, typename C, typename A, typename RA>
+typename vector_map_s007c_b590<Key_s007c_b590, T, C, A, RA>::iterator
+vector_map_s007c_b590<Key_s007c_b590, T, C, A, RA>::insert(iterator position, const value_type& value) {
+    iterator itEnd = this->mpEnd;
+    iterator itLB;
+    if ((position != itEnd) && mValueCompare(value, *position))
+        itLB = eastl::lower_bound(this->mpBegin, position, value.first, mValueCompare);
+    else
+        itLB = eastl::lower_bound(position, itEnd, value.first, mValueCompare);
+    if ((itLB == itEnd) || mValueCompare(value, *itLB))
+        itLB = base_type::insert(itLB, value);
+    return itLB;
+}
+}
+namespace eastl {
+template <typename Key_s007c_b590, typename T, typename C, typename A, typename RA>
+T& vector_map_s007c_b590<Key_s007c_b590, T, C, A, RA>::operator[](const key_type& key) {
+    iterator itBegin = this->mpBegin;
+    iterator itEnd = this->mpEnd;
+    iterator it = eastl::lower_bound(itBegin, itEnd, key, mValueCompare);
+    if ((it == itEnd) || mValueCompare(key, *it))
+        it = base_type::insert(it, value_type(key, T()));
+    return it->second;
+}
+}
+namespace eastl {
+template <typename T, int N, bool B>
+struct fixed_vector_s007c_b590 : vector_s007c_b590<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > {
+    typedef vector_s007c_b590<T, fixed_vector_allocator<sizeof(T), N, 4, 0, B> > base_type;
+    typedef typename base_type::size_type size_type;
+    aligned_buffer<sizeof(T) * N, 4> mBuffer;
+
+    T* buffer() { return (T*)mBuffer.mBuffer; }
+    fixed_vector_s007c_b590() {
+        T* p = buffer();
+        this->mAllocator.mpPoolBegin = p;
+        this->mpBegin = p;
+        this->mpEnd = p;
+        this->mpCapacity = p + N;
+    }
+    fixed_vector_s007c_b590(const fixed_vector_s007c_b590& x) : base_type() {
+        T* p = buffer();
+        this->mAllocator.mpPoolBegin = p;
+        this->mpBegin = p;
+        this->mpEnd = p;
+        this->mpCapacity = p + N;
+        this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
+    }
+    fixed_vector_s007c_b590& operator=(const fixed_vector_s007c_b590& x) {
+        if (&x != this) {
+            this->erase(this->mpBegin, this->mpEnd);
+            this->DoAssignFromIterator(x.mpBegin, x.mpEnd, std::random_access_iterator_tag());
+        }
+        return *this;
+    }
+};
+}
+namespace EA {
+template <typename T> struct AutoRefCount_s007c_b590 {
+    T* mpObject;   // +0
+    AutoRefCount_s007c_b590(T* p = 0) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    AutoRefCount_s007c_b590(const AutoRefCount_s007c_b590& x) : mpObject(x.mpObject) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s007c_b590() { if (mpObject) mpObject->Release(); }
+    AutoRefCount_s007c_b590& operator=(const AutoRefCount_s007c_b590& x) {
+        if (x.mpObject != mpObject) {
+            T* pOld = mpObject;
+            if (x.mpObject) x.mpObject->AddRef();
+            mpObject = x.mpObject;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+    AutoRefCount_s007c_b590& operator=(T* p) {
+        if (p != mpObject) {
+            T* pOld = mpObject;
+            if (p) p->AddRef();
+            mpObject = p;
+            if (pOld) pOld->Release();
+        }
+        return *this;
+    }
+};
+}
+namespace EA {
+struct Variant_s007c_b590 {
+    unsigned int mData[4];   // +0
+    unsigned short mFlags;   // +0x10
+    unsigned short mTypeId;  // +0x12
+    Variant_s007c_b590() : mFlags(0), mTypeId(0) {}
+    ~Variant_s007c_b590() { if (mFlags & 4) Destruct(false); }
+    Variant_s007c_b590& operator=(const Variant_s007c_b590& x);
+    template <typename T> Variant_s007c_b590& operator=(const T& x);
+    void Destruct(bool bReconstruct);  // 0x0093db80 (EA::Variant::Destruct)
+};
+}
+namespace EA {
+namespace ResourceMan {
+struct Key_s007c_b590 { unsigned int mInstance; unsigned int mType; unsigned int mGroup; unsigned int mPad; };
+}
+}
+namespace SP {
+class cPropertyList_s007c_b590 {
+public:
+    virtual void AddRef();                                       // +0x00
+    virtual void Release();                                      // +0x04
+    virtual void v02(); virtual void v03(); virtual void v04();
+    virtual void SetProperty(int id, const EA::Variant_s007c_b590& value);  // +0x14 0x006a2e20
+    virtual void v18(); virtual void v1C(); virtual void v20();
+    virtual void v24(); virtual void v28(); virtual void v2C();
+    virtual void v30(cPropertyList_s007c_b590* p);                          // +0x30
+    char pad[0x54 - 0x34];
+};
+}
+namespace Editor {
+class cPropertyList_s007c_b590 : public SP::cPropertyList_s007c_b590 {
+public:
+    cPropertyList_s007c_b590();
+};  // namespace Editor
+}
+namespace EA {
+namespace ArgScript {
+struct cArguments_s007c_b590 {
+    void** MainArguments(int n);  // 0x00838320 (EA::ArgScript::cArguments::MainArguments)
+    void** OptionArguments(const char* pName, int n);  // 0x00838330 (EA::ArgScript::cArguments::OptionArguments)
+};
+}
+}
+struct sp_vector_allocator {
+    unsigned int mData[2];
+    void deallocate(void* p, unsigned int) {
+        if (p && ((unsigned int*)p)[-1])
+            EASTL_allocator_deallocate(p);
+    }
+};
+struct string8 {
+    char* mpBegin;        // +0
+    char* mpEnd;          // +4
+    char* mpCapacity;     // +8
+    unsigned int mAllocator;  // +0xc
+    string8() : mpBegin(&gEmptyChar), mpEnd(&gEmptyChar), mpCapacity(&gEmptyChar + 1), mAllocator(0) {}
+    ~string8() {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+    string8& assign(const char* first, const char* last);
+    string8& operator=(const string8& x) {
+        if (&x != this)
+            assign(x.mpBegin, x.mpEnd);
+        return *this;
+    }
+};
+typedef eastl::pair_s007c_b590<uint64, EA::AutoRefCount_s007c_b590<SP::cPropertyList_s007c_b590> > PropPair_s007c_b590;
+typedef eastl::vector_s007c_b590<PropPair_s007c_b590, eastl::allocator_s007c_b590>                PropVec_s007c_b590;
+typedef eastl::vector_map_s007c_b590<uint64, EA::AutoRefCount_s007c_b590<SP::cPropertyList_s007c_b590>,
+                          eastl::less_s007c_b590<uint64>, eastl::allocator_s007c_b590, PropVec_s007c_b590> PropMap_s007c_b590;
+typedef eastl::vector_s007c_b590<PropMap_s007c_b590, eastl::fixed_vector_allocator<sizeof(PropMap_s007c_b590), 4, 4, 0, 1> > MapFixVec;
+namespace eastl {
+template <typename T>
+T* uninitialized_fill_n_ptr(T* first, unsigned int n, const T& value) {
+    T* d = first;
+    for (unsigned int i = 0; i < n; ++i, ++d)
+        ::new ((void*)d) T(value);
+    return d;
+}  // namespace eastl
+}
+namespace eastl {
+template <typename T, typename A>
+T* vector_s007c_b590<T, A>::erase(T* first, T* last) {
+    T* const pFirst = first;
+    T* const pLast = last;
+    T* const position = copy_impl<0, std::random_access_iterator_tag>::do_copy(pLast, this->mpEnd, pFirst);
+    DoDestroyValues(position, this->mpEnd);
+    this->mpEnd -= (pLast - pFirst);
+    return pFirst;
+}
+}
+namespace eastl {
+template <typename T, typename A>
+void vector_s007c_b590<T, A>::resize(size_type n) {
+    if (n > (size_type)(this->mpEnd - this->mpBegin)) {
+        T value;
+        insert(this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
+    } else {
+        erase(this->mpBegin + n, this->mpEnd);
+    }
+}
+}
+namespace eastl {
+template <typename T, typename A>
+void vector_s007c_b590<T, A>::insert(T* position, size_type n, const T& value) {
+    if (n <= (size_type)(this->mpCapacity - this->mpEnd)) {
+        if (n > 0) {
+            const T temp = value;
+            const size_type nExtra = (size_type)(this->mpEnd - position);
+            if (n < nExtra) {
+                uninitialized_copy_ptr(this->mpEnd - n, this->mpEnd, this->mpEnd);
+                copy_backward_impl<0, std::random_access_iterator_tag>::do_copy(position, this->mpEnd - n, this->mpEnd);
+                fill(position, position + n, temp);
+            } else {
+                uninitialized_fill_n_ptr(this->mpEnd, n - nExtra, temp);
+                uninitialized_copy_ptr(position, this->mpEnd, this->mpEnd + n - nExtra);
+                fill(position, this->mpEnd, temp);
+            }
+            this->mpEnd += n;
+        }
+    } else {
+        const size_type nPrevSize = size();
+        const size_type nGrowSize = (nPrevSize > 0) ? (2 * nPrevSize) : 1;
+        const size_type nNewSize = (nGrowSize > (nPrevSize + n)) ? nGrowSize : (nPrevSize + n);
+        T* const pNewData = DoAllocate(nNewSize);
+        T* pNewEnd = uninitialized_copy_ptr(this->mpBegin, position, pNewData);
+        pNewEnd = uninitialized_fill_n_ptr(pNewEnd, n, value);
+        pNewEnd = uninitialized_copy_ptr(position, this->mpEnd, pNewEnd + n);
+        DoDestroyValues(this->mpBegin, this->mpEnd);
+        DoFree(this->mpBegin, capacity());
+        this->mpBegin = pNewData;
+        this->mpEnd = pNewEnd;
+        this->mpCapacity = pNewData + nNewSize;
+    }
+}
+}
+namespace eastl {
+template <typename T, typename A>
+template <typename It>
+void vector_s007c_b590<T, A>::DoAssignFromIterator(It first, It last, std::random_access_iterator_tag) {
+    const size_type n = (size_type)(last - first);
+    if (n > capacity()) {
+        T* const pNewData = DoRealloc(n, first, last);
+        DoDestroyValues(this->mpBegin, this->mpEnd);
+        DoFree(this->mpBegin, capacity());
+        this->mpBegin = pNewData;
+        this->mpEnd = this->mpBegin + n;
+        this->mpCapacity = this->mpEnd;
+    } else if (n <= size()) {
+        T* const pNewEnd = copy_impl<0, std::random_access_iterator_tag>::do_copy(first, last, this->mpBegin);
+        DoDestroyValues(pNewEnd, this->mpEnd);
+        this->mpEnd = pNewEnd;
+    } else {
+        It position = first + size();
+        copy_impl<0, std::random_access_iterator_tag>::do_copy(first, position, this->mpBegin);
+        this->mpEnd = uninitialized_copy_ptr(position, last, this->mpEnd);
+    }
+}
+}
+template eastl::fixed_vector_s007c_b590<PropMap_s007c_b590, 4, 1>::fixed_vector_s007c_b590(const eastl::fixed_vector_s007c_b590<PropMap_s007c_b590, 4, 1>&);
+struct string16 {
+    wchar_t* mpBegin; wchar_t* mpEnd; wchar_t* mpCapacity; unsigned int mAllocator;
+    ~string16() {
+        if ((mpCapacity - mpBegin) > 1 && mpBegin)
+            EASTL_allocator_deallocate(mpBegin);
+    }
+};
+namespace EA {
+string16 ConvertToString16(const string8& s);                 // 0x0093c6d0
+}
+namespace EA {
+string8  ConvertToString8(const wchar_t* p, int n = -1);      // 0x0093c440
+}
+void string8_sprintf(string8* s, const char* fmt, ...);        // 0x00472fe0 (cdecl, string is arg 0)
+struct SpStringVecView
+{
+    string8* mpBegin; string8* mpEnd; string8* mpCapacity; unsigned int pad[2];
+    void resize(int n);   // 0x00553be0
+};
+struct SpFloatVecView
+{
+    float* mpBegin; float* mpEnd; float* mpCapacity; unsigned int pad[2];
+    void resize(int n);   // 0x004afc80
+};
+struct StrRaw { char* b; char* e; char* cap; unsigned int al; };
+struct CBig
+{
+    StrRaw s[9];            // +0x00
+    float  f90;             // +0x90
+    int    i94;             // +0x94
+    unsigned char b98, b99, b9a, b9b, b9c, pad9d[3];  // +0x98
+    float  fa0, fa4, fa8, fac;                        // +0xa0
+    CBig();      // 0x006b8460
+    ~CBig();     // 0x005f8910
+};
+void GetSystemInfo(CBig* out);                         // 0x006b8680 (cdecl)
+struct PathObj
+{
+    unsigned int d[0x100];
+    PathObj(const wchar_t* s);   // 0x00930f60 (ret 4)
+    const wchar_t* GetFirst();   // 0x00930bf0
+    const wchar_t* GetSecond();  // 0x00572590
+};
+struct DevCaps {
+    unsigned int d00[0x98 / 4];
+    unsigned int maxSimultaneousTextures;              // +0x98
+    unsigned int d9c[(0xc4 - 0x9c) / 4];
+    unsigned char vsMinor, vsMajor; unsigned short padc6;      // +0xc4 VertexShaderVersion
+    unsigned int maxVertexShaderConst;                 // +0xc8
+    unsigned char psMinor, psMajor; unsigned short padce;      // +0xcc PixelShaderVersion
+    unsigned int dd0[(0xf0 - 0xd0) / 4];
+    unsigned int numSimultaneousRTs;                   // +0xf0
+    unsigned int df4[(0x110 - 0xf4) / 4];
+    unsigned int ps20NumTemps;                         // +0x110
+    unsigned int d114;
+    unsigned int ps20NumInstructionSlots;              // +0x118
+    unsigned int d11c[(0x128 - 0x11c) / 4];
+    unsigned int maxVS30Slots;                         // +0x128
+    unsigned int maxPS30Slots;                         // +0x12c
+    unsigned int d130;
+    unsigned int deviceId;                             // +0x134
+    unsigned int vendorId;                             // +0x138
+    unsigned int d13c;
+    unsigned int driverLow, driverHigh;                // +0x140
+    unsigned int d148[(0x1fc - 0x148) / 4];
+    char         description[0x200];                   // +0x1fc
+    unsigned int dispW, dispH;                         // +0x3fc
+};
+bool FUN_006b8250();                                   // 0x006b8250
+unsigned int FUN_006b8410();                           // 0x006b8410
+bool IsVistaKB940105Required();                        // 0x007c5f50
+struct AppProps
+{
+    unsigned char GetDescription(unsigned int id);   // 0x006a25a0 (thiscall, ret 4)
+};
+extern AppProps* g_sAppProperties_s007c_b590;                                    // 0x015fd918
+struct IDev9 {
+    struct VT { void* f0; void* f1; void* f2; void* f3;
+                unsigned int (__stdcall *GetAvailableTextureMem)(IDev9*); } *vt;   // slot 4 (+0x10)
+};
+extern IDev9* g_pD3D9Device;                                          // 0x016f89d0
+struct DispMode { unsigned int width, height, refresh, format; };
+DispMode D3D9GetDesktopDisplayMode();                                 // 0x011f8270 (sret)
+DevCaps* GetD3DCAPS9();                                               // 0x011f8af0
+namespace SP {
+struct cOption_s007c_b590 {
+    unsigned int mID;              // +0x00
+    unsigned int mDefaultSetting;  // +0x04
+    unsigned int mCurrentSetting;  // +0x08
+    eastl::fixed_vector_s007c_b590<EA::AutoRefCount_s007c_b590<cPropertyList_s007c_b590>, 4, 1> mPropertySettings;  // +0x0c
+    eastl::fixed_vector_s007c_b590<PropMap_s007c_b590, 4, 1>                         mExternalSettings;  // +0x34
+    ~cOption_s007c_b590();
+};
+}
+namespace SP {
+struct cConfigScriptState_s007c_b590 {
+    void* mpVtable;                       // +0x00
+    unsigned int mVendorID;               // +0x04
+    unsigned int mCardID;                 // +0x08
+    bool mOverrideCardIDs;                // +0x0c
+    bool mFoundCard;                      // +0x0d
+    char pad0e[2];
+    string8 mCurrentCardVendor;           // +0x10
+    string8 mCardVendor;                  // +0x20
+    string8 mCardName;                    // +0x30
+    bool mFirstRun;                       // +0x40
+    bool mAbortApp;                       // +0x41
+    bool mPad42;                          // +0x42
+    bool mPad43;                          // +0x43
+    eastl::vector_s007c_b590<cOption_s007c_b590, sp_vector_allocator> mOptions;     // +0x44
+    int mCurrentOptionID;                 // +0x58
+    unsigned int mCurrentOptionSetting;   // +0x5c
+    eastl::vector_s007c_b590<string8, sp_vector_allocator> mConfigStrings;  // +0x60
+    eastl::vector_s007c_b590<float, sp_vector_allocator>   mConfigNumbers;  // +0x74
+
+    cConfigScriptState_s007c_b590();
+    ~cConfigScriptState_s007c_b590();
+    void GatherInformation();  // 0x007cb590 (SP::cConfigScriptState::GatherInformation)
+};
+}
+namespace SP {
+namespace {
+struct SettingSource {
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v0A(); virtual void v0B();
+    virtual void v0C(); virtual void v0D(); virtual void v0E(); virtual void v0F();
+    virtual void v10(); virtual void v11(); virtual void v12(); virtual void v13();
+    virtual void v14(); virtual void v15(); virtual void v16(); virtual void v17();
+    virtual void v18(); virtual void v19(); virtual void v1A(); virtual void v1B();
+    virtual void v1C(); virtual void v1D(); virtual void v1E(); virtual void v1F();
+    virtual void v20(); virtual void v21(); virtual void v22(); virtual void v23();
+    virtual void v24(); virtual void v25(); virtual void v26(); virtual void v27();
+    virtual unsigned int GetSetting(void* p);   // +0xa0
+};
+
+struct OptionTable2 {
+    char pad00[0x44];
+    char* mBase;    // +0x44
+    char pad48[0x10];
+    int   mCount;   // +0x58
+    int   mIndex;   // +0x5c
+};
+
+struct SettingCommand {
+    void* mp0;               // +0x0
+    SettingSource* mpSource; // +0x4
+    void* mp8;               // +0x8
+    OptionTable2* mpTable;   // +0xc
+    void Execute(EA::ArgScript::cArguments_s007c_b590* pArgs);
+};
+}  // anonymous namespace
+}
+// ---- items of slice s007cb590 end
+
+// callees this slice defines outside this object (rewrite.py held_callee_protos)
+inline void AssignRaw(string8& dst, const StrRaw& src);  // 0x007cc580 (stays in the slice: not this object's)
+
 // ---- items of slice s007cc5f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern char gEmptyChar;
 namespace std {
 template <typename T> struct iterator_traits_s007c_c5f0;
 }
@@ -994,10 +1538,10 @@ struct vector_s007c_c5f0 : VectorBase_s007c_c5f0<T, A> {
 
     void DoInsertValue(T* position, const T& value);            // out of line
     void push_back();                                           // out of line
-    T* insert_s007c_c5f0(T* position, const T& value);                     // out of line
-    void insert_s007c_c5f0(T* position, size_type n, const T& value);      // out of line
+    T* insert(T* position, const T& value);                     // out of line
+    void insert(T* position, size_type n, const T& value);      // out of line
     T* erase(T* first, T* last);                                // out of line
-    void resize_s007c_c5f0(size_type n);                                   // out of line
+    void resize(size_type n);                                   // out of line
 
     template <typename It> void DoAssignFromIterator(It first, It last, std::random_access_iterator_tag);
     vector_s007c_c5f0& operator=(const vector_s007c_c5f0& x);
@@ -1022,14 +1566,40 @@ struct vector_map_s007c_c5f0 : RA {
 
     value_compare mValueCompare;
 
-    pair_s007c_c5f0<iterator, bool> insert_s007c_c5f0(const value_type& value);
-    iterator insert_s007c_c5f0(iterator position, const value_type& value);
+    pair_s007c_c5f0<iterator, bool> insert(const value_type& value);
+    iterator insert(iterator position, const value_type& value);
     T& operator[](const key_type& key);
 };
 }
 namespace eastl {
 template <typename It, typename Key_s007c_c5f0, typename Cmp>
 It lower_bound(It first, It last, const Key_s007c_c5f0& key, Cmp compare);
+}
+namespace eastl {
+template <typename Key_s007c_c5f0, typename T, typename C, typename A, typename RA>
+pair_s007c_c5f0<typename vector_map_s007c_c5f0<Key_s007c_c5f0, T, C, A, RA>::iterator, bool>
+vector_map_s007c_c5f0<Key_s007c_c5f0, T, C, A, RA>::insert(const value_type& value) {
+    iterator itEnd = this->mpEnd;
+    iterator itLB = eastl::lower_bound(this->mpBegin, itEnd, value.first, mValueCompare);
+    if ((itLB != itEnd) && !mValueCompare(value, *itLB))
+        return pair_s007c_c5f0<iterator, bool>(itLB, false);
+    return pair_s007c_c5f0<iterator, bool>(base_type::insert(itLB, value), true);
+}
+}
+namespace eastl {
+template <typename Key_s007c_c5f0, typename T, typename C, typename A, typename RA>
+typename vector_map_s007c_c5f0<Key_s007c_c5f0, T, C, A, RA>::iterator
+vector_map_s007c_c5f0<Key_s007c_c5f0, T, C, A, RA>::insert(iterator position, const value_type& value) {
+    iterator itEnd = this->mpEnd;
+    iterator itLB;
+    if ((position != itEnd) && mValueCompare(value, *position))
+        itLB = eastl::lower_bound(this->mpBegin, position, value.first, mValueCompare);
+    else
+        itLB = eastl::lower_bound(position, itEnd, value.first, mValueCompare);
+    if ((itLB == itEnd) || mValueCompare(value, *itLB))
+        itLB = base_type::insert(itLB, value);
+    return itLB;
+}
 }
 namespace eastl {
 template <typename Key_s007c_c5f0, typename T, typename C, typename A, typename RA>
@@ -1041,9 +1611,6 @@ T& vector_map_s007c_c5f0<Key_s007c_c5f0, T, C, A, RA>::operator[](const key_type
         it = base_type::insert(it, value_type(key, T()));
     return it->second;
 }
-}
-namespace eastl {
-template <int N, int Align> struct aligned_buffer { char mBuffer[N]; };
 }
 namespace eastl {
 template <typename T, int N, bool B>
@@ -1133,23 +1700,10 @@ public:
     char pad[0x54 - 0x34];
 };
 }
-namespace Editor {
-class cPropertyList_s007c_c5f0 : public SP::cPropertyList_s007c_c5f0 {
-public:
-    cPropertyList_s007c_c5f0();
-};  // namespace Editor
-}
-struct sp_vector_allocator {
-    unsigned int mData[2];
-    void deallocate(void* p, unsigned int) {
-        if (p && ((unsigned int*)p)[-1])
-            EASTL_allocator_deallocate(p);
-    }
-};
-struct string8 {
+struct string8_s007c_c5f0 {
     char* mpBegin; char* mpEnd; char* mpCapacity; unsigned int mAllocator;
-    string8() : mpBegin(&gEmptyChar), mpEnd(&gEmptyChar), mpCapacity(&gEmptyChar + 1), mAllocator(0) {}
-    ~string8() { if ((mpCapacity - mpBegin) > 1 && mpBegin) EASTL_allocator_deallocate(mpBegin); }
+    string8_s007c_c5f0() : mpBegin(&gEmptyChar), mpEnd(&gEmptyChar), mpCapacity(&gEmptyChar + 1), mAllocator(0) {}
+    ~string8_s007c_c5f0() { if ((mpCapacity - mpBegin) > 1 && mpBegin) EASTL_allocator_deallocate(mpBegin); }
     void clear() {
         if (mpBegin != mpEnd) { *mpBegin = 0; mpEnd = mpBegin; }
     }
@@ -1218,6 +1772,17 @@ T* vector_s007c_c5f0<T, A>::erase(T* first, T* last) {
     DoDestroyValues(position, this->mpEnd);
     this->mpEnd -= (last - first);
     return first;
+}
+}
+namespace eastl {
+template <typename T, typename A>
+void vector_s007c_c5f0<T, A>::resize(size_type n) {
+    if (n > (size_type)(this->mpEnd - this->mpBegin)) {
+        T value;
+        insert(this->mpEnd, n - (size_type)(this->mpEnd - this->mpBegin), value);
+    } else {
+        erase(this->mpBegin + n, this->mpEnd);
+    }
 }
 }
 struct cConfigScriptState_s007c_c5f0 { void Reset(); };
@@ -1305,6 +1870,19 @@ char SP_ConfigManager_Init(void* param_1, int* param_2)
 }
 
 
+
+
+
+
+
+// @ 0x007c7a10
+bool cConfigManager::SavePreferences()
+{
+    void* prefs = g_sAppPreferences;
+    if (prefs != 0)
+        return SaveResource(prefs, GetSaveArea(g_saveAreaName), 0);
+    return false;
+}
 
 
 
@@ -1510,6 +2088,33 @@ AutoRefCount** CopyConstructAutoRef(AutoRefCount** out, AutoRefCount* first, Aut
 
 
 
+// @ 0x007c7e10
+AutoRefCount* CopyAutoRef(AutoRefCount* first, AutoRefCount* last, AutoRefCount* dest)
+{
+    while (first != last) {
+        dest->m0 = first->m0;
+        dest->m4 = first->m4;
+        RC* s = first->mRC;
+        RC* d = dest->mRC;
+        if (s != d) {
+            if (s != 0)
+                ((VFn0)VSLOT(s, 0))(s);
+            dest->mRC = s;
+            if (d != 0)
+                ((VFn0)VSLOT(d, 4))(d);
+        }
+        first++;
+        dest++;
+    }
+    return dest;
+}
+
+
+
+
+
+
+
 // @ 0x007c7e70
 void cOptionBlockCommand::OnEndBlock(int)
 {
@@ -1697,6 +2302,7 @@ void* __cdecl CopyStrings(void* first, void* last, void* dest)
 
 
 
+
 // @ 0x007c8bb0
 int __cdecl GetPropID(const char* name)
 {
@@ -1708,6 +2314,7 @@ int __cdecl GetPropID(const char* name)
         throw cError("no such property: %s", name);
     return id;
 }
+
 
 
 
@@ -1726,6 +2333,7 @@ void cBoolPropertyCommand::Execute(cArguments* args)
 
 
 
+
 // @ 0x007c8c80
 void cIntPropertyCommand::Execute(cArguments* args)
 {
@@ -1734,6 +2342,7 @@ void cIntPropertyCommand::Execute(cArguments* args)
     pl->SetIntProperty(GetPropID((const char*)a[0]),
         ((VFnI1)VSLOT_s007c_8940(mParser, 0x9c))(mParser, (void*)a[1]));
 }
+
 
 
 
@@ -1752,6 +2361,7 @@ void cFloatPropertyCommand::Execute(cArguments* args)
 
 
 
+
 // @ 0x007c8de0
 void cSetOptionCommand::Execute(cArguments* args)
 {
@@ -1761,6 +2371,7 @@ void cSetOptionCommand::Execute(cArguments* args)
     if (!((cConfigScriptState_s007c_8940*)mState)->SetOptionDefault(id, (unsigned)v))
         throw cError("Unknown option: '%x'", id);
 }
+
 
 
 
@@ -1807,6 +2418,7 @@ doalert:
 
 
 
+
 // @ 0x007c8f70
 void cCardCommand::Execute(cArguments* args)
 {
@@ -1825,6 +2437,7 @@ void cCardCommand::Execute(cArguments* args)
     void* flag = st->flagD ? (void*)0x13fc77c : (void*)0x13fc778;
     ((VFn2P)VSLOT_s007c_8940(mParser, 0x6c))(mParser, g_Cheat_isCardFound, flag);
 }
+
 
 
 
@@ -1858,6 +2471,7 @@ void cUnknownCmd::Execute(cArguments* args)
 
 
 
+
 // @ 0x007c9760
 bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
 {
@@ -1874,6 +2488,27 @@ bool cConfigManager_s007c_8940::GetConfigString(unsigned i, Str16* out)
 
 
 
+
+// @ 0x007c97a0
+void* __cdecl UninitCopyAutoRef2(void* out, char* first, char* last, char* dest)
+{
+    *(char**)out = dest;
+    for (; first != last; first += 0x18) {
+        char* d = *(char**)out;
+        if (d) {
+            InsertAutoRef(d, first);
+            d[0x14] = first[0x14];
+        }
+        *(char**)out += 0x18;
+    }
+    return out;
+}
+
+
+
+
+
+
 // @ 0x007c9830
 void __cdecl FillAutoRef(char* first, unsigned n, char* src)
 {
@@ -1885,6 +2520,7 @@ void __cdecl FillAutoRef(char* first, unsigned n, char* src)
         first += 0x18;
     }
 }
+
 
 
 
@@ -1906,6 +2542,38 @@ void* __cdecl CopyAutoRefRange(void* first, void* last, void* dest)
 
 
 
+
+// @ 0x007ca060
+PairVec& PairVec::operator=(const PairVec& x)
+{
+    if (&x != this) {
+        int n = (int)(x.mpEnd - x.mpBegin);
+        if (n > (int)(mpCap - mpBegin)) {
+            Pair16* nb = (Pair16*)VecReserve(n, x.mpBegin, x.mpEnd);
+            VecDestroyRange(mpBegin, mpEnd);
+            if (mpBegin) EA_Free(mpBegin);
+            mpBegin = nb;
+            mpEnd = nb + n;
+            mpCap = nb + n;
+            return *this;
+        }
+        if (n <= (int)(mpEnd - mpBegin)) {
+            Pair16* e = (Pair16*)VecCopyRange(x.mpBegin, x.mpEnd, mpBegin);
+            VecDestroyRange(e, mpEnd);
+            mpEnd = mpBegin + n;
+            return *this;
+        }
+        VecCopyRange(x.mpBegin, x.mpBegin + (mpEnd - mpBegin), mpBegin);
+        VecUninitCopy(0, x.mpBegin + (mpEnd - mpBegin), x.mpEnd, mpEnd, 0);
+        mpEnd = mpBegin + n;
+    }
+    return *this;
+}
+
+
+
+
+
 // @ 0x007ca150
 void cConfigManager_s007c_9910::GetOptionIDs(UIntVec* out)
 {
@@ -1916,6 +2584,7 @@ void cConfigManager_s007c_9910::GetOptionIDs(UIntVec* out)
         p++;
     }
 }
+
 
 
 
@@ -2039,9 +2708,11 @@ void cConfigManager_s007c_9910::Initialize(const char* path)
 
 
 
+
 // @ 0x007ca950
 template PropPair* PropVec::insert(PropPair*, const PropPair&)
 ;
+
 
 
 
@@ -2051,9 +2722,11 @@ template PropMap::iterator PropMap::insert(PropMap::iterator, const PropMap::val
 
 
 
+
 // @ 0x007cab40
 template void PropFixVec::resize(PropFixVec::size_type)
 ;
+
 
 
 
@@ -2063,9 +2736,11 @@ template eastl::pair_s007c_a950<PropMap::iterator, bool> PropMap::insert(const P
 
 
 
+
 // @ 0x007cac20
 template EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950>& PropMap::operator[](const PropMap::key_type&)
 ;
+
 
 
 
@@ -2085,6 +2760,7 @@ void cOptionBoolPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* p
 
 
 
+
 // @ 0x007caf40
 void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2101,6 +2777,7 @@ void cOptionIntPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pA
 
 
 
+
 // @ 0x007cb050
 void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2114,6 +2791,7 @@ void cOptionFloatPropertyCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
         pList->SetProperty(GetPropID((const char*)main[0]), v);
     }
 }
+
 
 
 
@@ -2135,6 +2813,7 @@ void cOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pAr
 
 
 
+
 // @ 0x007cb270
 void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* pArgs)
 {
@@ -2144,7 +2823,7 @@ void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
     EA::ResourceMan::Key_s007c_a950 key;
     key.mInstance = 0; key.mType = 0; key.mGroup = 0; key.mPad = 0;
     SPKeyFromName(&key, (const wchar_t*)main[0], 0, 0);
-    SP::IPropertyManager* pm = SP::PropertyManager();
+    SP::IPropertyManager* pm = SP::PropertyManager_s007c_a950();
     EA::AutoRefCount_s007c_a950<SP::cPropertyList_s007c_a950> result;
     if (pm->GetPropertyList(key.mInstance, key.mGroup, result) && pList)
         pList->v30(result.mpObject);
@@ -2152,9 +2831,159 @@ void SomeOptionPropertiesCommand::Execute(EA::ArgScript::cArguments_s007c_a950* 
 
 
 
+
 // @ 0x007cb390
-SP::cOption_s007c_a950::~cOption_s007c_a950()
+namespace SP {
+cOption_s007c_a950::~cOption_s007c_a950()
 {}
+}  // namespace SP
+
+
+
+
+// @ 0x007cb450
+template void eastl::fill<PropMap*, PropMap>(PropMap*, PropMap*, const PropMap&)
+;
+
+
+
+// @ 0x007cb590
+namespace SP {
+void cConfigScriptState_s007c_b590::GatherInformation()
+{
+    SpStringVecView* sv = reinterpret_cast<SpStringVecView*>(&mConfigStrings);
+    SpFloatVecView*  nv = reinterpret_cast<SpFloatVecView*>(&mConfigNumbers);
+    sv->resize(0xe);
+    nv->resize(0x21);
+    DevCaps* caps = GetD3DCAPS9();
+    CBig big;
+    GetSystemInfo(&big);
+
+#define str sv->mpBegin
+#define num nv->mpBegin
+
+    str[2].assign("Spore", "Spore" + 5);
+    str[4].assign("1.0.0", "1.0.0" + 5);
+    str[13].assign("Unknown", "Unknown" + 7);
+    str[13].assign("Release", "Release" + 7);
+    AssignRaw(str[1], big.s[0]);
+    AssignRaw(str[0], big.s[1]);
+    AssignRaw(str[7], big.s[2]);
+    AssignRaw(str[5], big.s[3]);
+    AssignRaw(str[6], big.s[4]);
+    AssignRaw(str[8], big.s[5]);
+    AssignRaw(str[9], big.s[6]);
+    AssignRaw(str[4], big.s[7]);
+
+    PathObj path(EA::ConvertToString16(*(string8*)&big.s[8]).mpBegin);
+    str[2] = EA::ConvertToString8(path.GetFirst(), -1);
+    str[3] = EA::ConvertToString8(path.GetSecond(), -1);
+
+    num[0] = big.f90;
+    num[1] = (float)big.i94;
+    num[2] = (big.b9b && big.b9a) ? 1.0f : 0.0f;
+    num[3] = big.b9b ? 1.0f : 0.0f;
+    num[6] = big.fa8;
+    num[7] = big.fac;
+    num[8] = big.fa0;
+    num[9] = big.fa4;
+    num[0x1f] = !FUN_006b8250() ? 1.0f : 0.0f;
+    { float* p = &num[0x20]; *p = (float)FUN_006b8410(); }
+    ((unsigned short*)&caps->deviceId)[1] = 0;
+    if (!mOverrideCardIDs) {
+        mVendorID = caps->vendorId;
+        mCardID = caps->deviceId;
+    }
+    DispMode dm = D3D9GetDesktopDisplayMode();
+    num[10] = (float)dm.width;
+    num[11] = (float)dm.height;
+    num[13] = (float)dm.refresh;
+    { float* p = &num[14]; *p = (float)g_sAppProperties_s007c_b590->GetDescription(0x38d0a09); }
+    num[15] = 0.0f;
+    num[16] = (float)caps->dispW / (float)caps->dispH;
+    { float* p = &num[17]; *p = (float)(g_pD3D9Device->vt->GetAvailableTextureMem(g_pD3D9Device) >> 20); }
+    num[18] = (float)caps->maxSimultaneousTextures;
+    string8_sprintf(&str[10], "0x%08x%08x", caps->driverHigh, caps->driverLow);
+    {
+        const char* d = caps->description;
+        const char* e = d;
+        while (*e++) {}
+        str[11].assign(d, d + (e - (d + 1)));
+    }
+    string8_sprintf(&str[12], "vendor:0x%04x, card:0x%04x", caps->vendorId, caps->deviceId);
+    unsigned int vsVer = (caps->vsMajor << 8) | caps->vsMinor;
+    unsigned int psVer = (caps->psMajor << 8) | caps->psMinor;
+    num[0x13] = (float)vsVer;
+    num[0x14] = (float)psVer;
+    num[0x15] = (float)caps->numSimultaneousRTs;
+    num[0x16] = (float)caps->maxVertexShaderConst;
+    num[0x17] = 8.0f;
+    num[0x18] = 256.0f;
+    num[0x19] = 96.0f;
+    num[0x1b] = 12.0f;
+    if (psVer >= 0x300) {
+        num[0x17] = 224.0f;
+        num[0x18] = (float)caps->maxVS30Slots;
+        num[0x19] = (float)caps->maxPS30Slots;
+        num[0x1b] = 32.0f;
+    } else if (psVer >= 0x200) {
+        num[0x17] = 32.0f;
+        num[0x19] = (float)(int)caps->ps20NumInstructionSlots;
+        num[0x1b] = (float)(int)caps->ps20NumTemps;
+    }
+    num[0x1c] = g_sAppProperties_s007c_b590->GetDescription(0x668d4fa1) ? 1.0f : 0.0f;
+    num[0x1d] = big.b9c ? 1.0f : 0.0f;
+    num[0x1e] = IsVistaKB940105Required() ? 1.0f : 0.0f;
+    unsigned int drv = caps->driverLow;
+    num[4] = (float)((drv >> 16) * 10000 + (drv & 0xffff));
+    num[5] = IsDebuggerPresent() ? 1.0f : 0.0f;
+#undef str
+#undef num
+}
+}  // namespace SP
+
+
+
+// @ 0x007cbd60
+template PropMap_s007c_b590* MapFixVec::erase(PropMap_s007c_b590*, PropMap_s007c_b590*)
+;
+
+
+
+// @ 0x007cbdc0
+template void MapFixVec::insert(PropMap_s007c_b590*, MapFixVec::size_type, const PropMap_s007c_b590&)
+;
+
+
+
+// @ 0x007cc3c0
+template void MapFixVec::resize(MapFixVec::size_type)
+;
+
+
+
+// @ 0x007cc480
+namespace SP {
+void SettingCommand::Execute(EA::ArgScript::cArguments_s007c_b590* pArgs)
+{
+    void** main = pArgs->MainArguments(1);
+    unsigned int setting = mpSource->GetSetting(main[0]);
+    OptionTable2* t = mpTable;
+    t->mIndex = setting;
+    char* p = t->mBase + t->mCount * 0xac;
+    SP::cOption_s007c_b590* pOption = (SP::cOption_s007c_b590*)p;
+    unsigned int size = (unsigned int)(pOption->mPropertySettings.mpEnd - pOption->mPropertySettings.mpBegin);
+    if (size <= (unsigned int)t->mIndex) {
+        pOption->mPropertySettings.resize((size_t)t->mIndex + 1);
+        pOption->mExternalSettings.resize((size_t)t->mIndex + 1);
+    }
+    EA::AutoRefCount_s007c_b590<SP::cPropertyList_s007c_b590>* pSlot = pOption->mPropertySettings.mpBegin + t->mIndex;
+    if (pSlot->mpObject == 0) {
+        SP::cPropertyList_s007c_b590* pList = new ("App", 0, 0, 0, 0) Editor::cPropertyList_s007c_b590();
+        *pSlot = pList;
+    }
+}
+}  // namespace SP
 
 
 // @ 0x007cc6f0
@@ -2182,9 +3011,9 @@ void cConfigScriptState_s007c_c5f0::Reset()
     SP::cOptionVec* pOptions = (SP::cOptionVec*)(p + 0x44);
     pOptions->erase(pOptions->mpBegin, pOptions->mpEnd);
     *(char*)(p + 0xd) = 0;
-    string8* pS0 = (string8*)(p + 0x10); pS0->clear();
-    string8* pS1 = (string8*)(p + 0x20); pS1->clear();
-    string8* pS2 = (string8*)(p + 0x30); pS2->clear();
+    string8_s007c_c5f0* pS0 = (string8_s007c_c5f0*)(p + 0x10); pS0->clear();
+    string8_s007c_c5f0* pS1 = (string8_s007c_c5f0*)(p + 0x20); pS1->clear();
+    string8_s007c_c5f0* pS2 = (string8_s007c_c5f0*)(p + 0x30); pS2->clear();
 }
 template SP::cOption_s007c_c5f0* SP::cOptionVec::erase(SP::cOption_s007c_c5f0*, SP::cOption_s007c_c5f0*);
 

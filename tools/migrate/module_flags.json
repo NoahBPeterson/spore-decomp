@@ -4,5 +4,11 @@
       "/EHsc"
     ],
     "evidence": "fix pass 4: retail ~SharedLibraryRegistry 0x936740 destroys two non-trivial members (mMutex, then the vector by `jmp 0x5c7f10`) with no EH state frame, which VC9 emits only without /EHsc; with /EHsc the empty canonical destructor gets `push -1; push 0; mov eax,fs:[0]` (DIFF 59 bytes). All five manifest rows (0x9363b0, 0x9365d0, 0x936710, 0x936740, 0x936e10) are byte-exact without /EHsc."
+  },
+  "SPEditors/SPAppModeEditorBase.obj": {
+    "drop": [
+      "/EHsc"
+    ],
+    "evidence": "fix pass 5: with the round-5 slices landed, every manifest row (82 at the time) is byte-exact without /EHsc (the slices' rows mixed /EHsc and no /EHsc: the flag only matters to functions with a destructible local or a new-expression with a matching placement delete). With /EHsc, UpdateHint 0x573970 gets an EH state frame (`push -1; push 0; mov eax,fs:[0]`, DIFF 173 bytes) once a later slice (s0057bfb0) declares the matching placement `operator delete(void*, const char*, int, unsigned, const char*, int)`: retail has no frame."
   }
 }

@@ -1304,7 +1304,12 @@ struct cJobPostFilter {
 typedef unsigned int uint;
 #define VSLOT(obj, idx) ((*(void***)(obj))[idx])
 void operator delete(void*, const char*, int, int, int, int);
-struct RefVec_s007b_87f0 { void* b; void* e; void* c; void Destroy(); };   // 0041eb80 = ~RefVector
+struct RefVec_s007b_87f0 {  // 0041eb80 = ~RefVector
+    void* b;
+    void* e;
+    void* c;
+    void Destroy();
+};
 struct IRel { virtual void v0(); virtual void Release(); };
 struct cFilterRes {
     void** vtbl0;                       // +0
@@ -2228,6 +2233,7 @@ void cCSAThumbnailJob_s007b_ced0::DrawLayer(int a0, int layer, DrawCtx* ctx, int
 // ---- items of slice s007bced0 end
 
 // ---- items of slice s007bde20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void* operator new(size_t size, const char* name, int a, int b, int c, int d);
 struct Vec3_s007b_de20 { float x, y, z; Vec3_s007b_de20(const float& a, const float& b, const float& c) { x = a; y = b; z = c; } Vec3_s007b_de20() {} };
 struct cRenderTargetRectID { int mPageID; int mAllocID; };
 struct cViewer_s007b_de20
@@ -2854,7 +2860,7 @@ struct IPropManager {
 };
 }
 namespace AO {
-IPropManager* PropertyManager();                                // 0x0067DE30
+IPropManager* PropertyManager_s007b_faa0();                                // 0x0067DE30
 }
 namespace AO {
 void* AllocGraphics(size_t size, const char* name, int a, int b, int c, int d);   // 0x00F473A0 operator new
@@ -2998,13 +3004,13 @@ struct cThumbnailManagerAO {
 // ---- items of slice s007bfaa0 end
 
 // ---- items of slice s007c0780 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct DoneMsg_s007c_0780;
+struct DoneMsg;
 struct cThumbnailManagerBase { virtual void v0(); };
 struct IHandlerRC {
     virtual bool HandleMessage(unsigned int msgId, void* arg);
 };
 struct cThumbnailManager_s007c_0780 : cThumbnailManagerBase, IHandlerRC {
-    void ThumbnailDone(DoneMsg_s007c_0780* msg);  // 0x007bf610 (cThumbnailManager::ThumbnailDone)
+    void ThumbnailDone(DoneMsg* msg);  // 0x007bf610 (cThumbnailManager::ThumbnailDone)
     void FUN_007bf720(void* arg);
     void FUN_007bbde0(void* arg);
     void DilateStart(void* arg);  // 0x007bbf80 (cThumbnailManager::DilateStart)
@@ -3445,14 +3451,12 @@ UintArray* UintArray::Self()
 
 
 
-
 // @ 0x007b2680
 void SP::cThumbnailManager::GetThumbRectID(SP::cRenderTargetRectID & out)
 {
     out.mPageID = mThumbRectID.mPageID;
     out.mAllocID = mThumbRectID.mAllocID;
 }
-
 
 
 
@@ -3492,13 +3496,11 @@ void W27a0::f(int a, int b, int c, int d)
 
 
 
-
 // @ 0x007b27e0
 void W27e0::f(int a, int b, int c, int d, int e)
 {
     m84 = a; m88 = b; m8c = c; m83 = 1; m90 = d; m94 = e;
 }
-
 
 
 
@@ -3542,11 +3544,9 @@ void W2820::set(Pair* pa, Pair* pb, Pair* pc, Pair* pd, float v)
 
 
 
-
 // @ 0x007b2890
 D2890::~D2890()
 { if (mObj) ((IObj2*)mObj)->Release(); }
-
 
 
 
@@ -3584,7 +3584,6 @@ D2900::~D2900()
 
 
 
-
 // @ 0x007b2970
 void __stdcall FUN_007b2970(P2970* p)
 {
@@ -3595,7 +3594,6 @@ void __stdcall FUN_007b2970(P2970* p)
     if (node->mFlag)
         node->mFlag = 0;
 }
-
 
 
 
@@ -3643,7 +3641,6 @@ void W39d0::f()
 
 
 
-
 // @ 0x007b3a30
 void W3a30::set(int idx, float* v)
 {
@@ -3655,7 +3652,6 @@ void W3a30::set(int idx, float* v)
     p[o + 2] = v[2];
     p[o + 3] = v[3];
 }
-
 
 
 
@@ -3949,7 +3945,6 @@ restore:
 
 
 
-
 // @ 0x007b49f0
 void ItemList::Fn(int a, int b, int c, int d)
 {
@@ -3960,7 +3955,6 @@ void ItemList::Fn(int a, int b, int c, int d)
         out->Run(a, b, c, d);
     }
 }
-
 
 
 
@@ -3994,7 +3988,6 @@ void Bounds6::Expand(const Vector3* p, int n, int stride)
         } while (n >= 0);
     }
 }
-
 
 
 
@@ -4104,7 +4097,6 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
 
 
 
-
 // @ 0x007b5ad0
 void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int arg10)
 {
@@ -4156,7 +4148,6 @@ void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int
 
 
 
-
 // @ 0x007b5c80
 void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, float* outRadius)
 {
@@ -4178,7 +4169,6 @@ void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, flo
     *outCenter = Vector3_s007b_55f0((b.mx.x + b.mn.x) * 0.5f, (b.mx.y + b.mn.y) * 0.5f, (b.mx.z + b.mn.z) * 0.5f);
     *outRadius = sqrtf(dx * dx + dy * dy + dz * dz) * 0.5f + 1.0f;
 }
-
 
 
 
@@ -4246,7 +4236,6 @@ void FrameJob::Fit()
 
 
 
-
 // @ 0x007b6010
 void RtJobA::Run()
 {
@@ -4257,7 +4246,6 @@ void RtJobA::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetA(obj);
 }
-
 
 
 
@@ -4331,7 +4319,6 @@ void FrameJob::FitAspect()
 
 
 
-
 // @ 0x007b63b0
 void RtJobB::Run()
 {
@@ -4342,7 +4329,6 @@ void RtJobB::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetB(obj);
 }
-
 
 
 
@@ -4379,7 +4365,6 @@ void __fastcall RefHolder_Reset(RefHolder* h)
 
 
 
-
 // @ 0x007b6570
 void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
 {
@@ -4402,7 +4387,6 @@ void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
     Gfx_67ddb0()->f22(a, b, a4, 1.0f);
     Fn35a0();
 }
-
 
 
 
@@ -4463,7 +4447,6 @@ void ThumbB::Run6730(int a1, int a2, int a3, int a4)
 
 
 
-
 // @ 0x007b68f0
 void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
 {
@@ -4473,7 +4456,6 @@ void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
     ViewerRef ctx = { (int)viewer, 0, 0, 0 };
     next->Fn49f0(a2, a3, &ctx, a5);
 }
-
 
 
 
@@ -4526,7 +4508,6 @@ void ThumbD::Run6980(int a, int b, int c, int d)
 
 
 
-
 // @ 0x007b6a90
 void ItemList2::Fn(int a, int b, int c, int d)
 {
@@ -4540,7 +4521,6 @@ void ItemList2::Fn(int a, int b, int c, int d)
     }
     Other();
 }
-
 
 
 
@@ -4570,11 +4550,9 @@ RefVec::~RefVec()
 
 
 
-
 // @ 0x007b6bd0
 AbilityA::~AbilityA()
 {}
-
 
 
 
@@ -4593,7 +4571,6 @@ AbilityB::~AbilityB()
     if (mCap - mBegin > 1 && mBegin)
         operator_delete__(mBegin);
 }
-
 
 
 
@@ -4678,7 +4655,6 @@ char FitJob::Fit6d50(SphereVec* v, cViewer_s007b_6570* vw, const float* c, const
 
 
 
-
 // @ 0x007b7270
 void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const float* c, float k, float yaw)
 {
@@ -4743,7 +4719,6 @@ void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const flo
     } while ((float)i < g_140f7ac);
     vw->SetViewAngleY(fov);
 }
-
 
 
 
@@ -4894,7 +4869,6 @@ void cThumbnailManager::Render(int p1, int p2, const RenderInfo* ri, int p4)
     }
     SetShaderData(0x223, savedShaderData, 1);
 }
-
 
 
 
@@ -6272,7 +6246,7 @@ bool cThumbnailManagerAO::CaptureAmbientOcclusionB(RectID* shadowRect, IModelWor
     int flipPeriod = 4;
     int passCount = 0x40;
 
-    IPropManager* propManager = PropertyManager();
+    IPropManager* propManager = PropertyManager_s007b_faa0();
     propList = 0;
     if (propManager->GetPropertyList(propListID, 0x40200100, propList)) {
         if (propList->HasProperty(0x4ee8a87)) propList->GetProperty(0x4ee8a87);
@@ -6544,7 +6518,7 @@ bool cThumbnailManagerAO_s007c_0780::CaptureAmbientOcclusion(uint32_t instanceID
 bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
 {
     switch (msgId) {
-    case 0x1c913db: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->ThumbnailDone((DoneMsg_s007c_0780*)arg); return true;
+    case 0x1c913db: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->ThumbnailDone((DoneMsg*)arg); return true;
     case 0x1c91270: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->FUN_007bf720(arg); return true;
     case 0x212c1ee: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->FUN_007bbde0(arg); return true;
     case 0x21d7528: ((cThumbnailManager_s007c_0780*)((char*)this - 4))->DilateStart(arg); return true;

@@ -1,21 +1,24 @@
 # va  diff-bytes  reason
-00541680  496  complete; /Od wide-string date/time parse schedule differs
-007c7ac0  109 loop/count register allocation and compare shape (indexed-for vs pointer loop)
-007c7b30  127 64-byte-aligned stack buffer / float-format call scheduling differs
-007c7cd0  77  CSE of mResBegin across the bounds check changes register allocation
-007c7d70  123 missing compiler EH frame around the AddRef'd uninitialized copy
-007c80c0  97  missing compiler EH frame around the element Release loop
-007c8160  64  binary-search register allocation differs; equiv: PASS (now returns the position in eax as the original does; void left garbage: hybrid crash 2026-10-12)
-007c8270  368 command registration new-expression/EH scheduling differs
-007c84a0  114 command registration new-expression/EH scheduling differs
-007c8530  547 command registration new-expression/EH scheduling differs
-007c8880  147 parser init vcall/register allocation differs
-007c8e50  201  cAlertCommand::Execute: EH/cError throw layout and HasFlag scheduling differ
-007c8f70  157  card command Execute: mState vector/string access schedule differs
-007c9040  181  card-vendor command Execute: strlen/string assign scheduling differs
-007c9760  46   GetConfigString: CSE of mStrings across the bounds check changes registers
-007c9830  84   AutoRef fill loop: missing EH frame, register allocation differs
+00541680 429 complete; /Od wide-string date/time parse schedule differs
+007c7ac0 77 loop/count register allocation and compare shape (indexed-for vs pointer loop)
+007c7b30 132 64-byte-aligned stack buffer / float-format call scheduling differs
+007c7cd0 76 CSE of mResBegin across the bounds check changes register allocation
+007c7d70 74 missing compiler EH frame around the AddRef'd uninitialized copy
+007c7e10 11 dest->mRC load hoisted above the two field stores
+007c80c0 52 missing compiler EH frame around the element Release loop
+007c8160 49 binary-search register allocation differs; equiv: PASS (now returns the position in eax as the original does; void left garbage: hybrid crash 2026-10-12)
+007c8270 242 command registration new-expression/EH scheduling differs
+007c84a0 59 command registration new-expression/EH scheduling differs
+007c8530 383 command registration new-expression/EH scheduling differs
+007c8880 140 parser init vcall/register allocation differs
+007c8e50 190 cAlertCommand::Execute: EH/cError throw layout and HasFlag scheduling differ
+007c8f70 127 card command Execute: mState vector/string access schedule differs
+007c9040 164 card-vendor command Execute: strlen/string assign scheduling differs
+007c9760 44 GetConfigString: CSE of mStrings across the bounds check changes registers
+007c97a0 62 AutoRef element copy-construct loop: missing EH frame, slot order differs
+007c9830 43 AutoRef fill loop: missing EH frame, register allocation differs
 007c9910 54 AutoRef uninitialized_copy: missing compiler EH frame / state slots
+007ca060 257 eastl vector<pair> operator=: relocate/uninit-copy call schedule differs [equiv: FAIL, 5/5 valid inputs mismatched (fake-arity: ours failed where original succeeded); symbol lookup fixed via ?4PairVec]
 007ca150 82 GetOptionIDs: prologue register allocation (this/out) and push_back load order differ
 007ca1c0 1448 cConfigManager::Initialize complete (parser setup, Options.txt, per-option property lists); block layout, register allocation and frame slots differ
 007ca950 93 eastl::vector<pair<u64,AutoRefCount<cPropertyList>>>::insert(iterator,const value_type&): complete; retail wraps the placement-new fast path in a /EHsc frame (cl only emits EH for object construction here with extra state stores), so all offsets and the merged epilogue differ.
@@ -25,7 +28,12 @@
 007cb050 47 `anonymous namespace'::cOptionFloatPropertyCommand::Execute: complete; same as the bool command (variant temp / table indexing schedule).
 007cb160 47 `anonymous namespace'::cOptionPropertiesCommand::Execute: complete; ResourceKey variant path, same as the scalar commands (temp layout differs).
 007cb270 69 `anonymous namespace' property-list command Execute (unnamed, PDB candidate cOptionPropertiesCommand::Execute): complete; PropertyManager GetPropertyList + pList slot 0x30 call with different register scheduling.
+007cb590 1257 SP::cConfigScriptState::GatherInformation: complete (all 40 calls, string/number stores, D3D caps reads); `this` is kept in a register instead of spilled (frame 4 bytes smaller, register assignment shifted); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
+007cbd60 19 eastl::vector<vector_map,fixed_vector_allocator<24,4,4,0,1>>::erase(first,last): complete; only cl's register assignment of first/last differs (begin/end swap).
+007cbdc0 95 eastl::vector<vector_map,...>::insert(position,n,value): complete in-place path; the growth path uses uninitialized_copy instead of retail's uninitialized_move start/commit pair, so the function is ~50 bytes shorter and the EH/zero-fill scheduling differs. [equiv: UNSUPPORTED, unresolved refs to vector<pair> dtor and operator=; symbol lookup now fixed]
+007cc3c0 115 eastl::vector<vector_map,...>::resize(n): complete; begin/end register assignment and the &value temp push position differ. [equiv: UNSUPPORTED, unresolved refs to vector<pair> dtor and operator=; symbol lookup now fixed]
+007cc480 4 `anonymous namespace'::cOptionSettingCommand::Execute: complete; source vtable getter, resize of the two cOption vectors, and the `new ("App",...) Editor::cPropertyList` AutoRefCount store with different register scheduling.
 007cc7f0 244 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::DoInsertValue: complete; retail uses uninitialized_move start/commit + in-place cOption copy ctor, mine differs in the growth path size and scheduling.
-007cc9a0 110 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back(): complete; in-place default ctor vs retail's temp/value handling differs.
+007cc9a0 36 eastl::vector<SP::cOption,eastl::sp_vector_allocator>::push_back(): complete; in-place default ctor vs retail's temp/value handling differs.
 007ccc30 71 cConfigScriptState option reset (PDB candidate vector<cOption,sp_vector_allocator>::erase): complete; reset ids, vector erase + 3 string clears; cl schedules the erase result differently.; equiv: PASS (923 valid, 100% coverage; now cConfigScriptState::Reset member)
 007cef60 48 VVec dtor 58 bytes vs 102; original carries an EH frame the source does not reproduce; equiv: WEAK (779 valid, 76.3% coverage)

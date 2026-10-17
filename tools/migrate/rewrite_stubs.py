@@ -329,6 +329,13 @@ def item_names(kind, text):
         # emitted: C2065 kCapNameSpine, fix pass 4)
         body = mi0[mi0.find("{") + 1:mi0.rfind("}")]
         return [x.split("=")[0].strip() for x in body.split(",") if re.match(r"^\s*[A-Za-z_]\w*\s*(=|$)", x)]
+    me = re.match(r"^(?:typedef\s+)?enum\s+([A-Za-z_]\w*)\s*\{", mi0)
+    if me:
+        # a named enum declares its name and its enumerators (fix pass 5, s005580e0: `namespace SP { namespace
+        # FunctionalMatch { enum ToleranceConstraint { kWithin = 0 }; } }` gave no name, was never emitted, C2061 in the
+        # Constraint stub; IsCompound 0x558b20 uses the enumerator kNotEqual alone: C2065)
+        body = mi0[mi0.find("{") + 1:mi0.rfind("}")]
+        return [me.group(1)] + [x.split("=")[0].strip() for x in body.split(",") if re.match(r"^\s*[A-Za-z_]\w*\s*(=|$)", x)]
     if m.lstrip().startswith("namespace"):        # `namespace EA { namespace ArgScript { class cIMetaCommand {..}; }}`
         _ns, inner = unwrap_namespaces(text)
         if inner != text:                       # one wrapped declaration: classes, templates, function declarations
@@ -426,7 +433,11 @@ def needed_items(items, fn_texts, skip=()):
     for k, kind, text, names in decl:
         ns, _inner = unwrap_namespaces(text)
         if ns:
-            qual[k] = ["::".join(ns + [n]) for n in names]
+            # also the spellings qualified by a suffix of the namespace path (`Editor::cEditorLaunchData` for
+            # SP::Editor::cEditorLaunchData, `cSPUISpace::KillSetiEffects` for SP::cSPUISpace::KillSetiEffects): code
+            # inside `namespace SP` names them so (fix pass 5, s0057bfb0 0x57c1e0 / s00573520 0x573d70: the item was
+            # pruned, C2027 use of undefined type / C3861)
+            qual[k] = ["::".join(ns[j:] + [n]) for n in names for j in range(len(ns))]
 
     def qused(k):
         return any(ch == q or ch.startswith(q + "::") for q in qual.get(k, []) for ch in chains)
@@ -478,12 +489,20 @@ def norm(text):
     return re.sub(r"\s+", " ", mask(text)).strip()
 
 
-def rename_word(text, old, new, ns=()):
+def rename_word(text, old, new, ns=(), qualified_only=False):
     """Replace identifier `old` by `new` outside strings/comments, not after '.', '->' or '::'.  With `ns` (the namespaces
     the renamed item lives in) the qualified spelling `ns::old` is renamed too."""
     m = mask(text)
-    q = "".join(re.escape(n) + r"\s*::\s*" for n in ns)
+    # nested optional qualifiers: `SP::Editor::X`, `Editor::X` (a suffix of the namespace path, as code inside `namespace SP`
+    # spells it: fix pass 5, s0057bfb0's `EA::AutoRefCountX<Editor::cEditorLaunchData>` kept the old name, C2027) and `X`
+    q = ""
+    for n in ns:
+        q = "(?:%s)?%s\\s*::\\s*" % (q, re.escape(n)) if q else re.escape(n) + r"\s*::\s*"
     pat = re.compile(r"(?<![\w.>:])(?:%s)?%s\b" % (q, re.escape(old))) if q else re.compile(r"(?<![\w.>:])%s\b" % re.escape(old))
+    if qualified_only and ns:
+        # only the fully qualified spelling (an item of ANOTHER namespace that defines its own class of this name: s007cb590's
+        # `namespace Editor { class cPropertyList : public SP::cPropertyList }` lost its name when SP::cPropertyList was renamed)
+        pat = re.compile(r"(?<![\w.>:])%s%s\b" % ("".join(re.escape(n) + r"\s*::\s*" for n in ns), re.escape(old)))
     if not ns:
         # a global-scope qualifier `::old` (s004680c0: `struct Vec_s0046_80c0 : ::Vec<uint32_t, 0>`) is renamed too when the stub is
         # global (fix pass 4: the base kept another slice's one-parameter Vec, C2977); `X::old` (a member of X) is not
@@ -502,3 +521,13 @@ def rename_word(text, old, new, ns=()):
         last = mm.end()
     out.append(text[last:])
     return "".join(out)
+
+
+def is_template_member_def(text):
+    """`template <..> R Cls<T, A>::member(..) {..}`: an out-of-class member definition of a class template."""
+    _ns, inner = unwrap_namespaces(text)
+    m = mask(inner)
+    if not re.match(r"\s*template\s*<", m) or "{" not in m:
+        return False
+    head = m.split("{")[0]
+    return bool(re.search(r"[A-Za-z_]\w*\s*<(?:[^<>]|<[^<>]*>)*>\s*::\s*~?[A-Za-z_]\w*\s*\(", head))

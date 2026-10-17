@@ -7,6 +7,7 @@
 00573a10 ?GetSelectableBlock@cAppModeEditorBase_s0057_3520@SP@@QAEPAUcEditorBlock@2@XZ  # cAppModeEditorBase_s0057_3520::GetSelectableBlock migrated from s00573520 (verbatim, slice spelling)
 00573a60 ?IsMousedOverModel@cAppModeEditorBase_s0057_3520@SP@@QAE_NMM@Z  # cAppModeEditorBase_s0057_3520::IsMousedOverModel migrated from s00573520 (verbatim, slice spelling)
 00573c00 ?SetActiveBlock@cAppModeEditorBase_s0057_3520@SP@@QAEXPAUcEditorBlock@2@H@Z  # cAppModeEditorBase_s0057_3520::SetActiveBlock migrated from s00573520 (verbatim, slice spelling)
+00573d70 ?SetRolloverHandle@cAppModeEditorBase_s0057_3520@SP@@QAEXPAUcSPEditorHandle_s0057_3520@2@H@Z  # cAppModeEditorBase_s0057_3520::SetRolloverHandle migrated from s00573520 (verbatim, slice spelling)
 00573f20 ?SetAsset@cAppModeEditorBase_s0057_3520@SP@@QAEXI@Z  # cAppModeEditorBase_s0057_3520::SetAsset migrated from s00573520 (verbatim, slice spelling)
 00573f70 ?SetPaletteVisible@cAppModeEditorBase_s0057_3520@SP@@QAEX_N@Z  # cAppModeEditorBase_s0057_3520::SetPaletteVisible migrated from s00573520 (verbatim, slice spelling)
 00573fb0 ?OnEnter@cAppModeEditorBase_s0057_3520@SP@@QAEXXZ  # cAppModeEditorBase_s0057_3520::OnEnter migrated from s00573520 (verbatim, slice spelling)

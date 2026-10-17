@@ -1,1 +1,1 @@
-0057ae10 SP::cAppModeEditorBase::UpdateAnimatedCreature  # PDB candidate (caller-single)
+0057ae10 ?UpdateAnimatedCreature@cAppModeEditorBase@@QAEXXZ  # cAppModeEditorBase::UpdateAnimatedCreature migrated from s0057ae10 (verbatim, slice spelling)

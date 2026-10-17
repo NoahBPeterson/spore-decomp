@@ -3,7 +3,7 @@
 00575520 SP::cAppModeEditorBase::UpdateSpineVertebra  # PDB name
 00575790 ?DoSomePaletteThing@cAppModeEditorBase_s0057_5270@SP@@QAEXXZ  # cAppModeEditorBase_s0057_5270::DoSomePaletteThing migrated from s00575270 (verbatim, slice spelling)
 005757b0 ?StopSomething@cAppModeEditorBase_s0057_5270@SP@@QAEXXZ  # cAppModeEditorBase_s0057_5270::StopSomething migrated from s00575270 (verbatim, slice spelling)
-00575810 SP::cAppModeEditorBase::TestCondition  # PDB name
+00575810 ?TestCondition@cAppModeEditorBase_s0057_5270@SP@@QAE_NI@Z  # cAppModeEditorBase_s0057_5270::TestCondition migrated from s00575270 (verbatim, slice spelling)
 00575e20 ?GetSomething1@cAppModeEditorBase_s0057_5270@SP@@QAEXH@Z  # cAppModeEditorBase_s0057_5270::GetSomething1 migrated from s00575270 (verbatim, slice spelling)
 00575e50 ?GetSomething2@cAppModeEditorBase_s0057_5270@SP@@QAEHXZ  # cAppModeEditorBase_s0057_5270::GetSomething2 migrated from s00575270 (verbatim, slice spelling)
 00575eb0 cAppModeEditorBase::SomeBool  # editor-availability predicate (AssetBrowser/MovieSystem/AppSystem/mode)

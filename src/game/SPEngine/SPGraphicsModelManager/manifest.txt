@@ -15,7 +15,11 @@
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?GetMeshes@cModelWorld_s0074_a290@SP@@QAE_NPAX0PAUcSPTransform_s0074_a290@@@Z  0074a850  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FreeTransformedBuffer@cModelWorld_s0074_a290@SP@@QAEXXZ  0074b150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ??1cLoadQueue@SP@@QAE@XZ  0074b2b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??$quick_sort_impl@PAUcDrawModelInfo@@HUDrawGreater@@@eastl@@YAXPAUcDrawModelInfo@@0HUDrawGreater@@@Z  0074c260  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??$quick_sort_impl@PAUcDrawModelInfo@@HUcAlphaSortLessComparator@@@eastl@@YAXPAUcDrawModelInfo@@0HUcAlphaSortLessComparator@@@Z  0074c370  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??$get_partition@PAUcOccluder_s0074_c260@@U1@P6A_NABU1@0@Z@eastl@@YAPAUcOccluder_s0074_c260@@PAU1@0U1@P6A_NABU1@2@Z@Z  0074c580  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?push_back@Vec18@@QAEXPBUE18@@@Z  0074cdd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsModelManager.cpp  ??$quick_sort_impl@PAUcOccluder_s0074_c260@@HP6A_NABU1@0@Z@eastl@@YAXPAUcOccluder_s0074_c260@@0HP6A_NABU1@1@Z@Z  0074d190  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInShape@cModelWorld_s0074_e2b0@@QAE_NPBXMPAUModelVec@@PAX@Z  0074eb70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInSphere@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  0074ed00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsModelManager.cpp  ?FindModelsInBox@cModelWorld_s0074_e2b0@@QAE_NPBXPAUModelVec@@PAX@Z  0074ee80  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

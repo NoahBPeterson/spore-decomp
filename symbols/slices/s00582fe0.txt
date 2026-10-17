@@ -1,2 +1,10 @@
-00582fe0 SP::cAppModeEditorBase::RunSkinPaintOnEditorModel  # pdb_candidates (caller-single); this+0x150/0x154/0x360 offsets match s0057f6c0 class layout
+004c49e0 ?GetSkinPart@cSPEditorSkinManager@SP@@QAEPAVcSPEditorSkinPart@2@W4eSkinIdentifier@12@@Z  # SP::cSPEditorSkinManager::GetSkinPart (callee of s00582fe0, named from the dev publics; slice address comment)
+004ca6e0 ?BuildSkeleton@cSkinObject@SP@@QAE_NXZ  # SP::cSkinObject::BuildSkeleton (callee of s00582fe0, named from the dev publics; slice address comment)
+00582fe0 ?RunSkinPaintOnEditorModel@cAppModeEditorBase_s0058_2fe0@SP@@QAE_NHPAX@Z  # cAppModeEditorBase_s0058_2fe0::RunSkinPaintOnEditorModel migrated from s00582fe0 (verbatim, slice spelling)
 00583900 FUN_00583900  # no PDB name
+0059c830 ?CreateCreature@cSPEditorAnimatedCreatureManager@SP@@QAEIPAVcSPEditorModel@2@PAVcSPEditorSkinPart@2@_N2@Z  # SP::cSPEditorAnimatedCreatureManager::CreateCreature (callee of s00582fe0, named from the dev publics; slice address comment)
+0059c9c0 ?HandleAnimatedEvent@cSPEditorAnimatedCreatureManager@SP@@QAE_NPBVcSPEditorAnimatedEventInfo@2@@Z  # SP::cSPEditorAnimatedCreatureManager::HandleAnimatedEvent (callee of s00582fe0, named from the dev publics; slice address comment)
+0059cea0 ?SetCreatureTargetAngle@cSPEditorAnimatedCreatureManager@SP@@QAEXIM_N@Z  # SP::cSPEditorAnimatedCreatureManager::SetCreatureTargetAngle (callee of s00582fe0, named from the dev publics; slice address comment)
+0059cf00 ?SetCreatureTargetPosition@cSPEditorAnimatedCreatureManager@SP@@QAEXIUcSPVector3@@_N1@Z  # SP::cSPEditorAnimatedCreatureManager::SetCreatureTargetPosition (callee of s00582fe0, named from the dev publics; slice address comment)
+0059cf60 ?SetCreaturePreserveHeight@cSPEditorAnimatedCreatureManager@SP@@QAEXI_N@Z  # SP::cSPEditorAnimatedCreatureManager::SetCreaturePreserveHeight (callee of s00582fe0, named from the dev publics; slice address comment)
+0059d110 ?GetCreaturePosition@cSPEditorAnimatedCreatureManager@SP@@QAE_NIPAUcSPVector3@@@Z  # SP::cSPEditorAnimatedCreatureManager::GetCreaturePosition (callee of s00582fe0, named from the dev publics; slice address comment)

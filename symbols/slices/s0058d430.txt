@@ -1,1 +1,1 @@
-0058d430 `anonymous namespace'::cEditorCheat::Execute  # PDB candidate caller-single; editor cheat (load/timing/zcorp/rename/save/savebinary/dumpPalettes/validate/dumpGeomInfo strings)
+0058d430 ?Execute@cEditorAddDNACheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  # Execute migrated from s0058d430 (verbatim, slice spelling)

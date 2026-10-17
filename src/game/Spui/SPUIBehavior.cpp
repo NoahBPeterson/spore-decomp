@@ -3,15 +3,12 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
-#include <string.h>
-#include <new>
 #include "cSPUIBehaviorEventBase.h"
-#include "cISPUIBehaviorEvent.h"
 #include "cSPUIBehaviorValueInterpolator.h"
 #include <cstddef>
 #include <math.h>
 
-// ---- items of slice s007f8540 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- items of slice s007f8540_od begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct AnimMgr {
     char  pad0[0x3a];   // +0x00
     bool  b3a;          // +0x3a
@@ -32,9 +29,11 @@ struct AnimMgr {
         ((void(__thiscall*)(void*))(*(void**)((char*)*(void**)this + 0x60)))(this);
     }
 };
-// ---- items of slice s007f8540 end
+// ---- items of slice s007f8540_od end
 
 // ---- items of slice s007f9550 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" int* __cdecl FUN_007fa4c0(int* p, int v);
+extern "C" void __cdecl FUN_007fa4f0(int p, int a2, int p3);
 extern "C" void* __cdecl EA_Messaging_GetServer();
 extern "C" void __cdecl FUN_00e4a9c0(void*);
 struct Ev {
@@ -216,8 +215,6 @@ void* f_7f93d0(void* base, int i);
 void* f_7fa750(void* p);
 void* f_65c480(int n);
 struct Sub7fb480 { bool f_7fb480(unsigned char b); };
-void f_7fb040(void** p, void* a);
-void f_7fb1a0(void** p, void* a);
 // ---- items of slice s007fa520 end
 
 // ---- items of slice s007fb7b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -415,6 +412,9 @@ int cSPUIBehaviorEventBase::Release()
 
 
 
+
+
+
 // @ 0x007f97a0
 void * cSPUIBehaviorEventBase::AsInterface(EA::COM::InterfaceId id)
 {
@@ -425,6 +425,9 @@ void * cSPUIBehaviorEventBase::AsInterface(EA::COM::InterfaceId id)
     if (v == (int)0x0243a853) return this;
     return 0;
 }
+
+
+
 
 
 
@@ -446,11 +449,17 @@ void* Ev::AsB(int id)
 
 
 
+
+
+
 // @ 0x007f9860
 void* Ev::Sub10()
 {
     return this ? (void*)((char*)this + 0x10) : 0;
 }
+
+
+
 
 
 
@@ -472,12 +481,18 @@ void* Ev::AsC(int id)
 
 
 
+
+
+
 // @ 0x007f99c0
 bool cSPUIBehaviorEventBase::SetStateInt(int value)
 {
     *(int*)((char*)this + 0x2c) = value;
     return true;
 }
+
+
+
 
 
 
@@ -493,6 +508,9 @@ void* Ev::AsD(int id)
     if (id == (int)0x024b5c98) return this;
     return 0;
 }
+
+
+
 
 
 
@@ -519,6 +537,9 @@ void Cont::Refresh()
 
 
 
+
+
+
 // @ 0x007f9ae0
 bool Cont::SetValue(int v)
 {
@@ -537,11 +558,17 @@ bool Cont::SetValue(int v)
 
 
 
+
+
+
 // @ 0x007f9b90
 bool Ev::Test1()
 {
     return (*(uint32_t*)((char*)this + 0x10) & 1) != 0;
 }
+
+
+
 
 
 
@@ -557,6 +584,9 @@ void* Ev::AsE(int id)
     if (id == (int)0x02439c2f) return this;
     return 0;
 }
+
+
+
 
 
 
@@ -583,6 +613,9 @@ bool Cont::AddB(void* obj)
 
 
 
+
+
+
 // @ 0x007f9c90
 bool Cont::RemoveB(void* obj)
 {
@@ -603,6 +636,9 @@ bool Cont::RemoveB(void* obj)
 
 
 
+
+
+
 // @ 0x007f9d00
 bool Cont::RemoveAllB()
 {
@@ -615,6 +651,9 @@ bool Cont::RemoveAllB()
     }
     return true;
 }
+
+
+
 
 
 
@@ -641,6 +680,9 @@ bool cSPUIBehaviorEventBase::RemovePredicate(cISPUIBehaviorPredicate * pred)
 
 
 
+
+
+
 // @ 0x007f9f60
 bool cSPUIBehaviorEventBase::RemoveAction(cISPUIBehaviorAction * act)
 {
@@ -655,6 +697,9 @@ bool cSPUIBehaviorEventBase::RemoveAction(cISPUIBehaviorAction * act)
     }
     return false;
 }
+
+
+
 
 
 
@@ -680,6 +725,9 @@ bool cSPUIBehaviorEventBase::RemoveAllPredicates()
 
 
 
+
+
+
 // @ 0x007fa060
 bool cSPUIBehaviorEventBase::RemoveAllActions()
 {
@@ -699,11 +747,31 @@ bool cSPUIBehaviorEventBase::RemoveAllActions()
 
 
 
+
+
+
+// @ 0x007fa120
+bool Ev::False()
+{
+    return false;
+}
+
+
+
+
+
+
+
+
+
 // @ 0x007fa130
 void Ev::Call93a0()
 {
     ((EvSub*)this)->M();
 }
+
+
+
 
 
 
@@ -717,6 +785,9 @@ uint32_t Ev::Flags()
     uint32_t part = -(uint32_t)(c != 0) & 2u;
     return (((EvSub*)this)->ExtFlags() & 0xfffffffd) | part;
 }
+
+
+
 
 
 
@@ -740,6 +811,9 @@ void* Ev::AsInterface(int id)
 
 
 
+
+
+
 // @ 0x007fa350
 Ev* Ev::SetGlobal()
 {
@@ -752,11 +826,17 @@ Ev* Ev::SetGlobal()
 
 
 
+
+
+
 // @ 0x007fa370
 void Ev::ClearGlobal()
 {
     g_evGlobal = 0;
 }
+
+
+
 
 
 
@@ -792,6 +872,9 @@ int __cdecl FUN_007fa390(uint32_t msg, void* data, char flag)
 
 
 
+
+
+
 // @ 0x007fa4c0
 int* FUN_007fa4c0(int* p, int v)
 {
@@ -806,6 +889,9 @@ int* FUN_007fa4c0(int* p, int v)
 
 
 
+
+
+
 // @ 0x007fa4f0
 void FUN_007fa4f0(int p, int a2, int p3)
 {
@@ -813,6 +899,9 @@ void FUN_007fa4f0(int p, int a2, int p3)
     *(int*)((char*)p + 0x18) = p3;
     FUN_007fa4c0((int*)p, *(int*)((char*)p3 + 8));
 }
+
+
+
 
 
 
@@ -1279,6 +1368,7 @@ void C_7fb6a0::Clear()
 
 
 
+
 // @ 0x007fb880
 void* C_7fb880::Ctor()
 {
@@ -1495,12 +1585,14 @@ int f_7fc790(void* self, void* param)
 }
 
 
+
 // @ 0x007fcc40
 void Factory(BehaviorMessage** out, int arg)
 {
     *out = new ("UI/BehaviorMessage", 0, 0, 0, 0) BehaviorMessage();
     f_7fa4c0(*out, arg);
 }
+
 
 // @ 0x012f6e50
 void init_154279c()

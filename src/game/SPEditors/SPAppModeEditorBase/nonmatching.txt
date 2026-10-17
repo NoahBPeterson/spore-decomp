@@ -1,21 +1,21 @@
 # va  diff-bytes  reason
-00572110  21  switch on 5 hashes: same compares, default block laid out after last case (tried switch/if orders)
-00572cf0  164  EditorGroundSampler: normalize done fully in x87 (orig x87 sqrt + SSE scale), creature-path layout differs
-00573070  9  CanUseModel: mpModel lands in eax instead of reusing ebp (this); one extra jmp in group-pair test
-00573520  16  ShowBlockAbilities: one bbox-center add has swapped operands (max.x+min.x)
-00573a10  11  GetSelectableBlock: rollover-handle null path laid out inverted
-00573a60  212  IsMousedOverModel: xmm register assignment in dir normalize and shared return-true block differ (frame/stack layout matches)
-00573c00  7  SetActiveBlock: activate goto block layout inverted; eax/ecx swap on IsSameAssembly arg
-00574110  8  CreateEffects: begin-pointer load for mbActive store scheduled after (orig before) the size store
-00574460  50  HasEffect: begin pointer kept in esi from size computation (orig reloads in loop prolog)
-00574b40  207  ScoreCreatureForZCorp: frame 0x30 vs 0x2c (inlined property-float helper locals not packed like original); bbox max-extent scheduling differs
-00574da0  24  SetupThumbnailModelWorld: vptr cached in edi for both lighting-world vcalls in original; ours reloads it
-00574f30  30  UpdateModelSounds: original loads vptr before pushing args for GetPropertyList/GetProperty vcalls (scheduling only)
-00575e50  3  complete; only a vtable-call register swap (original edx=vtable/eax=fn, ours eax/edx)
-005767f0  104  WriteBoolVector: original packs count/bool locals into the dead param slot and tail-calls EndBlock; ours allocates a frame slot
-00576880  71  ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
-00576a10  120  uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
-00576c50  912  Shutdown: register allocation differs (ours keeps constant 1 in ebp; original spills ebx around owner-free calls); same calls/order
+00572110 55 switch on 5 hashes: same compares, default block laid out after last case (tried switch/if orders)
+00572cf0 416 EditorGroundSampler: normalize done fully in x87 (orig x87 sqrt + SSE scale), creature-path layout differs
+00573070 9 CanUseModel: mpModel lands in eax instead of reusing ebp (this); one extra jmp in group-pair test
+00573520 16 ShowBlockAbilities: one bbox-center add has swapped operands (max.x+min.x)
+00573a10 11 GetSelectableBlock: rollover-handle null path laid out inverted
+00573a60 212 IsMousedOverModel: xmm register assignment in dir normalize and shared return-true block differ (frame/stack layout matches)
+00573c00 7 SetActiveBlock: activate goto block layout inverted; eax/ecx swap on IsSameAssembly arg
+00574110 8 CreateEffects: begin-pointer load for mbActive store scheduled after (orig before) the size store
+00574460 50 HasEffect: begin pointer kept in esi from size computation (orig reloads in loop prolog)
+00574b40 202 ScoreCreatureForZCorp: frame 0x30 vs 0x2c (inlined property-float helper locals not packed like original); bbox max-extent scheduling differs
+00574da0 24 SetupThumbnailModelWorld: vptr cached in edi for both lighting-world vcalls in original; ours reloads it
+00574f30 30 UpdateModelSounds: original loads vptr before pushing args for GetPropertyList/GetProperty vcalls (scheduling only)
+00575e50 3 complete; only a vtable-call register swap (original edx=vtable/eax=fn, ours eax/edx)
+005767f0 104 WriteBoolVector: original packs count/bool locals into the dead param slot and tail-calls EndBlock; ours allocates a frame slot
+00576880 71 ReadIntArray6: original packs the count local into the dead param slot; ours allocates a frame slot
+00576a10 120 uninitialized_copy (snapshot): original strength-reduces with a +0x14 base pointer; element copy-ctor form not recovered
+00576c50 905 Shutdown: register allocation differs (ours keeps constant 1 in ebp; original spills ebx around owner-free calls); same calls/order
 00577130 124 complete: 3 sound events; original loads param to ecx before test, cl folds ours to cmp mem (shifts all branch offsets)
 005771f0 122 complete: same as 00577130, without counter increment
 005772b0 20 complete: manual double-deref vtable slots 0x16c/0x170; register/const-folding differs
@@ -24,26 +24,34 @@
 00579a20 55 complete mask compare; cl schedules the 4 loads/stores differently (no esi temp)
 00579a90 63 complete eastl wstring RangeInitialize; s/this live in different saved registers (ebp vs esi)
 00579e20 1769 complete member release cascade; macro-expanded helpers differ in reg alloc/ordering from original  ; difftest WEAK (--repairs 64: 904 valid of 2000, no mismatch, coverage 55.8%; mapped the cEditorResource/PaintSystem/cContentValidationSummarizer vtables)
+0057a610 26 complete AddTorsoToEffectsMask(Vector3 by value as x,y,z floats, int); original loads all three floats before storing  ; difftest PASS (fix: the copied vec3 is the by-value argument, not an uninitialized local)
 0057a6d0 3 complete ctor; only mov ecx,<addr> scheduling differs  ; difftest PASS (marker moved onto the ctor; RefObj base vtable mapped via novtable + explicit store)
+0057a710 367 complete SendBehaviorMessage; this/msg register roles swapped vs original  ; difftest PASS at --inputs 1000 (fixes: 0x5942e0 callee was mis-annotated as 0xae6970; vtable+0xc call double-dereferenced; AddRef is a virtual call after new, not in the ctor)
 0057a960 73 complete GetMask (returns Bits128 by value); original builds in a stack temp (sub esp,0x10)  ; difftest PASS (mapped g_mf* globals: split decls so each // 0x annotation applies)
 0057a9e0 102 complete GetDefaultMask (returns Bits128 by value); original keeps the zero stores  ; difftest PASS (mapped g_d4*/g_mf* globals)
 0057ac00 365 complete BuildPartMask (masks | defaults + ability/property bits); schedule differs
+0057af00 3825 complete; same calls/vslots/constants in the same order, size 0.98x; stack-slot layout, register allocation and block order differ
 0057c4b0 34 atomic ops reuse one pointer register (original copies eax per op); extra epilogue
+0057c590 231 skin->mpMesh is reloaded instead of kept in eax; model pointer lands in ecx instead of edi
 0057e480 591 complete UpdateIdleAnimations; register/ordering differences (queued kept in edi, event ref in memory), no-EHsc /arch:SSE
-0057e8a0 86 complete UpdateBaker; only one register differs (esi vs edi for the last baker pointer); difftest PASS with /arch:SSE (an /arch:SSE2 build writes xmm0, a register the original never writes)
+0057e8a0 86 complete UpdateBaker; only one register differs (esi vs edi for the last baker pointer)
 0057ea30 386 complete SaveMetadata; else-arm of the meta ternary laid out inline instead of after the ret
 0057ed00 152 complete SetModelName; message struct stores use eax/ecx swapped
 0057ee20 40 complete vector<Rec18>::operator=; register allocation (x in ebp vs ebx) and tail layout; difftest WEAK (156 valid, 44.3% coverage; no difference; the copy/uninitialized_copy<Rec18> callees mapped via symbols aliases)
 0057efa0 346 complete PopulateScriptList; callee-saved register assignment differs (zero const in ebp vs edi)
 0057f0f0 10 complete vector<Rec30>::DoInsertValue; eax/edx register choice only (flags /O2 /MD /Gy /TP /GS- no arch); difftest WEAK (107 valid, 59.8% coverage; no difference)
 0057f220 334 complete vector<RefElem>::DoInsertValues; position spilled in original, tag arg/regs differ (flags /O2 /MD /Gy /TP /GS-); difftest WEAK (942/2000 valid, 12.4% coverage: random n rarely reaches the insert paths; no difference)
+0057f6c0 2217 complete SaveModel; same 112 calls/vcall slots/constants in order, size 3120 vs 3119; ebx/ebp const-register swap, refcount dec spelled sub, minor scheduling, frame 0x294 vs 0x29c
 005810a0 26 complete but not byte-exact (zero count passed via register instead of immediate)
 00582250 2048 complete; /O2 register allocation and frame size (0xa0 vs 0xc0) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00582fe0 1665 complete; /O2 register allocation (holder/skin swapped), frame 0xbc vs 0xa0, x87 fild/fidiv angle arithmetic and merged tail differ
 00584160 52 complete but not byte-exact (register/size mismatch in resize helper)
 00586b00 1546 complete; frame 0x2c vs 0x30 and register allocation differ
 00587270 1584 complete; branch layout / register allocation differ; difftest WEAK (335 valid, no mismatch, 4.3% coverage: guard this+0x38c in {0,6} rarely holds on random objects; fix: per-method callee annotations)
 00589ce0 836 complete; large function, frame/register allocation differs
 0058a350 2 complete; GetSkin result tested with test eax,eax instead of cmp eax,ebx
 0058a5a0 465 complete; extra spill of undo entry (frame 0x50 vs 0x4c), ebx/edi allocation; difftest WEAK (5% coverage: random editor state rarely gets past FUN_00576140 and the undo-list callees)
+0058be50 121 HandleSimulationUpdate: complete; same size 4238 B and 1194 insns, identical ordered call sequence (139 direct, 36 vcalls); /O2 stack-slot packing (0xa84 vs 0xa9c frame) and a few register choices differ. Flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+0058d430 46 complete (all 9 subcommands); not exact: frame 0x94 vs 0xc4, self-Release tail merging, timing Output tail duplication
 00591fa0 4918 complete (all 35 message cases); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; frame 0x37c vs 0x360 shifts every stack offset, float op order in bbox/plane math
 005ba060 52 ctor: all same zero-stores present; base-ctor call inlining/vtable schedule and register (esi vs ecx) differ

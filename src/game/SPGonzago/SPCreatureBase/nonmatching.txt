@@ -1,44 +1,44 @@
 # va  diff-bytes  reason
-00c0be70   9   cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
-00c0c200   43  game-mode water render callback: complete; call/arg setup differs
-00c0c2d0   21  cCreatureBase::IsDefaultSpecies: complete; return materialisation
-00c0c3e0   65  copy 0x24 record + AddRef: complete; register/schedule
-00c0c440   8   copy range of 0x24 records: complete; float field copied via fld/fstp in original
-00c0c4b0   225 quaternion half-angle swap: complete; x87/SSE mixing and expression order
-00c0c5b0   96  water reflection helper: complete; branch/arg shape differs
-00c0ce30   56  relation index: complete; call/global load order
-00c0cf50   59  PASS         init animation weight table +0xfac..; complete
-00c0cfa0   62  PASS         get animation weight by index; complete
-00c0d050   83  PASS         pick animation index by threshold; complete
-00c0d0c0  211  FAIL         set/clear fa4 bits + adjust +0xfa0; complete; equiv mismatch at vtable/table callee (harness)
-00c0d240  164  FAIL         IsAnimationQueuedOrCurrent; complete; 1-ulp float differ at pool slot
-00c0d340   74  UNSUPPORTED  transform + list replace; complete; only 0 valid inputs (fake-arity)
-00c0ddb0  105  PASS         Community::func58h wrapper + set bubble extents; complete
-00c0e040   34  FAIL         GetCurrentAnimationGUID; complete; equiv execution fault (vtable callee)
-00c0e070   49  FAIL         animation guid valid-motion query; complete; equiv eax&0xffff mismatch
-00c0e0c0   74  FAIL         current animation guid compare; complete; equiv call-depth fault (vtable callee)
-00c0e120    8  UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
-00c0e370   34  FAIL         GetCurrentAnimationGUID (alt); complete; equiv execution fault (vtable callee)
-00c0e3a0   22  FAIL         get current time/float slot via vtable; complete; equiv execution fault
-00c0e3d0   50  FAIL         animation flag via guid; complete; equiv execution fault
-00c0e420   43  FAIL         animation-check via guid; complete; equiv execution fault
-00c0e480   71  UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
-00c0e4f0   27  WEAK         creature radius/scale lookup; complete
-00c0e660   10  PASS         vector size (+0x6d4); complete
-00c0fa70   93  FAIL         find animation entry by mask bit; complete; equiv eax mismatch
-00c0fba0   89  UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fc10   42  FAIL         dispatch element callback to +0x20 object; complete; equiv eax&0xffff mismatch
-00c0fc40  128  UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault)
-00c0fcf0  151  UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fda0  126  UNSUPPORTED  write bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
-00c0fe30   78  FAIL         copy animation binding (addref/release +0x20); complete; equiv execution fault
-00c0fea0   96  WEAK         swap two animation bindings; complete
-00c0ffc0  129  WEAK         reverse-copy array of 0x24-byte bindings; complete
-00c10050   -   FAIL         play animation by id/name predicate; complete; equiv execution fault (vtable callee)
-00c10250  129  PASS         resolve + apply animation remap ids; complete
-00c10330  172  PASS         pack byte array -> remap id and apply; complete
-00c103f0  141  UNSUPPORTED  build cAnimationRemapping singleton; complete; 0 valid inputs (write fault)
-00c104d0  2294  (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete planet-surface aim helper: tangent-plane rejections, 3 eps-normalized cross axes, 4 wrapped signed angles (fmod/_CIfmod + pi wrap), PlanetModel()->0xb7e3b0 normal, 60-degree cone pull with smoothstep blend, |dp|<1 smoothstep blend, axis-angle rotate, exp(-3.0103 t) lerp into out; same 10 calls in order and identical ordered float-constant sequence; size 0.908x; not exact: /fp:fast operand order, xmm allocation and frame (0x9c vs 0xac)
+00c0be70 6 cached-handle predicate: complete; bool return materialisation (setne/xor eax vs xor al)
+00c0c200 43 game-mode water render callback: complete; call/arg setup differs
+00c0c2d0 2 cCreatureBase::IsDefaultSpecies: complete; return materialisation
+00c0c3e0 74 copy 0x24 record + AddRef: complete; register/schedule
+00c0c440 8 copy range of 0x24 records: complete; float field copied via fld/fstp in original
+00c0c4b0 218 quaternion half-angle swap: complete; x87/SSE mixing and expression order
+00c0c5b0 32 water reflection helper: complete; branch/arg shape differs
+00c0ce30 61 relation index: complete; call/global load order
+00c0cf50 58 PASS         init animation weight table +0xfac..; complete
+00c0cfa0 20 PASS         get animation weight by index; complete
+00c0d050 77 PASS         pick animation index by threshold; complete
+00c0d0c0 201 FAIL         set/clear fa4 bits + adjust +0xfa0; complete; equiv mismatch at vtable/table callee (harness)
+00c0d240 148 FAIL         IsAnimationQueuedOrCurrent; complete; 1-ulp float differ at pool slot
+00c0d340 84 UNSUPPORTED  transform + list replace; complete; only 0 valid inputs (fake-arity)
+00c0ddb0 60 PASS         Community::func58h wrapper + set bubble extents; complete
+00c0e040 40 FAIL         GetCurrentAnimationGUID; complete; equiv execution fault (vtable callee)
+00c0e070 41 FAIL         animation guid valid-motion query; complete; equiv eax&0xffff mismatch
+00c0e0c0 72 FAIL         current animation guid compare; complete; equiv call-depth fault (vtable callee)
+00c0e120 8 UNSUPPORTED  slot array membership at +0xf4c; complete; 0 valid inputs (read fault)
+00c0e370 39 FAIL         GetCurrentAnimationGUID (alt); complete; equiv execution fault (vtable callee)
+00c0e3a0 20 FAIL         get current time/float slot via vtable; complete; equiv execution fault
+00c0e3d0 48 FAIL         animation flag via guid; complete; equiv execution fault
+00c0e420 42 FAIL         animation-check via guid; complete; equiv execution fault
+00c0e480 52 UNSUPPORTED  cSPCreatureBase::GetTime; complete; 0 valid inputs (import decode_pointer)
+00c0e4f0 27 WEAK         creature radius/scale lookup; complete
+00c0e660 4 PASS         vector size (+0x6d4); complete
+00c0fa70 102 FAIL         find animation entry by mask bit; complete; equiv eax mismatch
+00c0fba0 87 UNSUPPORTED  serialize vector via IO stream; complete; 0 valid inputs (read fault/fake-arity)
+00c0fc10 41 FAIL         dispatch element callback to +0x20 object; complete; equiv eax&0xffff mismatch
+00c0fc40 124 UNSUPPORTED  uniquify pointer array (release dups); complete; 0 valid inputs (read fault)
+00c0fcf0 172 UNSUPPORTED  read bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
+00c0fda0 123 UNSUPPORTED  write bit array via IO stream; complete; 0 valid inputs (read fault/fake-arity)
+00c0fe30 74 FAIL         copy animation binding (addref/release +0x20); complete; equiv execution fault
+00c0fea0 94 WEAK         swap two animation bindings; complete
+00c0ffc0 134 WEAK         reverse-copy array of 0x24-byte bindings; complete
+00c10050 475 FAIL         play animation by id/name predicate; complete; equiv execution fault (vtable callee)
+00c10250 121 PASS         resolve + apply animation remap ids; complete
+00c10330 174 PASS         pack byte array -> remap id and apply; complete
+00c103f0 127 UNSUPPORTED  build cAnimationRemapping singleton; complete; 0 valid inputs (write fault)
+00c104d0 2043 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete planet-surface aim helper: tangent-plane rejections, 3 eps-normalized cross axes, 4 wrapped signed angles (fmod/_CIfmod + pi wrap), PlanetModel()->0xb7e3b0 normal, 60-degree cone pull with smoothstep blend, |dp|<1 smoothstep blend, axis-angle rotate, exp(-3.0103 t) lerp into out; same 10 calls in order and identical ordered float-constant sequence; size 0.908x; not exact: /fp:fast operand order, xmm allocation and frame (0x9c vs 0xac)
 00c1a3c0 1405 cCreatureBase cCombatant::TakeDamage override: complete (size 1793 = 1793, 55 calls both, identical ordered call/vslot/const sequence); the two death-effect Post blocks (types 0/1) are laid out in a different order, ObjRef temp register caching and frame (0x14 vs 0x18) differ; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-
 00c1b020 1429 creature leap-at-target step; complete (call/vcall sequence identical), register allocation and stack frame (0x11c vs 0x100) differ
 00c1de20 1155 complete; scheduling/regalloc near-miss (K*score const load, i/bestAbility register choice, shared 1.0 constant); flags /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast

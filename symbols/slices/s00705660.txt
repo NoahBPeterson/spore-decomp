@@ -3,7 +3,7 @@
 00705970 ?f@W5970@@QAEMHM@Z  # W5970::f migrated from s00705660 (verbatim, slice spelling)
 00705a20 ?setAtm@W5a20@@QAEXPAMH0@Z  # W5a20::setAtm migrated from s00705660 (verbatim, slice spelling)
 00705af0 ?find@W5af0@@QAEPAXH@Z  # W5af0::find migrated from s00705660 (verbatim, slice spelling)
-00705b50 cShaderDataLightingInfo copy-ctor (fields + coefficient vector via FUN_00406540)  # invented; cf. window 0x00705120 operator=
+00705b50 ?copy@Big5b50@@QAEPAU1@PBU1@@Z  # Big5b50::copy migrated from s00705660 (verbatim, slice spelling)
 00705bb0 ??4S11@@QAEAAU0@ABU0@@Z  # S11::operator= migrated from s00705660 (verbatim, slice spelling)
 00705c00 ??4S7@@QAEAAU0@ABU0@@Z  # S7::operator= migrated from s00705660 (verbatim, slice spelling)
 00705c40 ?copy_705c40@@YAXPAPAUV32@@PAU1@11@Z  # copy_705c40 migrated from s00705660 (verbatim, slice spelling)

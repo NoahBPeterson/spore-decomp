@@ -10,6 +10,7 @@
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?SettleBlock@@YAXPAUcSPEditorBlock_s0049_56b0@@PAUBlockVec_s0049_56b0@@@Z  004956b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_004983d0@@YAXPAUX982@@E@Z  004983d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_00499f10@@YAPAUVector3_s0049_9410@@PAU1@U1@11@Z  00499f10  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?MoveBlockOrientToSurfaces@EditorUtils@SP@@YA_NPAUcSPEditorBlock_s0049_a2a0@2@AAUBlockVector_s0049_a2a0@2@UcSPVector3_s0049_a2a0@@2U?$AutoRefCount_s0049_a2a0@UcSPEditorSkinManager_s0049_a2a0@SP@@@2@AAU5@PAU5@_N6@Z  0049a2a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?FUN_0049b340@@YA_NPAUBitOwner@@@Z  0049b340  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?Set@Y9c0@@QAEXD@Z  0049c0f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
 ../src/game/SPBake/SPEditorManipulationUtilities.cpp  ?SameKey@@YA_NPAUResKeySource@@0@Z  004a7c30  /Od /Ob1 /MD /Gy /EHsc /TP /Isrc/game/include

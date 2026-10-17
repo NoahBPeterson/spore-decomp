@@ -8,7 +8,7 @@
 00576a10 ?uninitialized_copy_snapshot@@YAPAUcEditorSnapshot@@PBU1@0PAU1@@Z  # uninitialized_copy_snapshot migrated from s00576140 (verbatim, slice spelling)
 00576ab0 ?ColorToVector3@@YAPAUVector3_s0057_6140@@PAU1@I@Z  # ColorToVector3 migrated from s00576140 (verbatim, slice spelling)
 00576b00 ?RotationMatrix@@YA?AUMatrix3@@ABUVector3_s0057_6140@@M@Z  # RotationMatrix migrated from s00576140 (verbatim, slice spelling)
-00576b40 ??0BoundingBox_s0057_6140@@QAE@XZ  # BoundingBox_s0057_6140::BoundingBox migrated from s00576140 (verbatim, slice spelling); class renamed to avoid the s00573520 BoundingBox stub, so the decorated name carries the suffix
+00576b40 ??0BoundingBox_s0057_6140@@QAE@XZ  # BoundingBox_s0057_6140::BoundingBox migrated from s00576140 (verbatim, slice spelling)
 00576bb0 ?ParseLine@cEditorBudgetCheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  # ParseLine migrated from s00576140 (verbatim, slice spelling)
 00576c10 ?Execute@cEditorAddDNACheat@?A0xf460b2ad@@QAEXABVcArguments_s0057_6140@ArgScript@EA@@@Z  # Execute migrated from s00576140 (verbatim, slice spelling)
 00576c50 ?Shutdown@cAppModeEditorBase_s0057_6140@SP@@QAE_NXZ  # cAppModeEditorBase_s0057_6140::Shutdown migrated from s00576140 (verbatim, slice spelling)

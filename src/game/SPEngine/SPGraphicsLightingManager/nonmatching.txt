@@ -1,20 +1,20 @@
 # va  diff-bytes  reason
-007052e0  265  complete cubemap packer; x87 fabs/max inline helpers differ
-00705470  323  complete cubemap packer; x87 fabs/max inline helpers differ
-00705660  213  complete lighting-grid packer; (int)(x*16) lowered via x87 not cvtss2si
-00705970  103  complete distance-range blend factor; x87/SSE mix and min/max helpers differ
-00705a20  276  complete SetAtmosphereModel; x87 sqrt normalize and phase copy differ
-00705af0   66  complete 0x144-stride linear search; register allocation differs
-00705c40   53  complete forward copy with destination end-report; first spilled to param slot
-00705ec0   16  complete fill-n with null check; only loop back-edge (dec/test/ja) differs
-00706170 1342 complete EnvLW::UpdateEnvLightSample (SSE/x87 mix, 10 calls, same call/vtable sequence); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- ; register allocation, frame size (0x7c4 vs 0x794) and clamp/dir-pointer scheduling differ
-00706920   74  complete slot-vector next scan (stride 0xc4); register/evaluation order differs
-00706980   74  complete slot-vector next scan (stride 0x1f0); register/evaluation order differs [equiv: PASS 681 valid, 100% cov]
-007069e0   74  complete slot-vector next scan (stride 0x1e0); register/evaluation order differs [equiv: PASS 752 valid, 100% cov]
+007052e0 255 complete cubemap packer; x87 fabs/max inline helpers differ
+00705470 323 complete cubemap packer; x87 fabs/max inline helpers differ
+00705660 213 complete lighting-grid packer; (int)(x*16) lowered via x87 not cvtss2si
+00705970 103 complete distance-range blend factor; x87/SSE mix and min/max helpers differ
+00705a20 276 complete SetAtmosphereModel; x87 sqrt normalize and phase copy differ
+00705af0 66 complete 0x144-stride linear search; register allocation differs
+00705c40 53 complete forward copy with destination end-report; first spilled to param slot
+00705ec0 16 complete fill-n with null check; only loop back-edge (dec/test/ja) differs
+00706170 1310 complete EnvLW::UpdateEnvLightSample (SSE/x87 mix, 10 calls, same call/vtable sequence); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- ; register allocation, frame size (0x7c4 vs 0x794) and clamp/dir-pointer scheduling differ
+00706920 74 complete slot-vector next scan (stride 0xc4); register/evaluation order differs
+00706980 74 complete slot-vector next scan (stride 0x1f0); register/evaluation order differs [equiv: PASS 681 valid, 100% cov]
+007069e0 74 complete slot-vector next scan (stride 0x1e0); register/evaluation order differs [equiv: PASS 752 valid, 100% cov]
 00706ab0 24 complete forward copy of 16-byte elements; offset folded away by cl; equiv: PASS (now returns the destination end in eax; void left garbage: hybrid crash 2026-10-12)
-00706af0   64  complete vector-of-0x20 allocator; parameter register allocation differs
-00706c80   90  complete forward copy of 9-dword elements; register allocation differs
-00706d00   64  complete vector-of-0x10 allocator; parameter register allocation differs
+00706af0 64 complete vector-of-0x20 allocator; parameter register allocation differs
+00706c80 90 complete forward copy of 9-dword elements; register allocation differs
+00706d00 64 complete vector-of-0x10 allocator; parameter register allocation differs
 007070d0 209 cLightingWorld::UpdateLightPosition: complete reconstruction; vector RMW lane writes collapse to integer stores, register/frame schedule diverges
 00707270 258 cLightingWorld::RemoveLightFromList: complete reconstruction; list-array element moves and index bookkeeping differ in schedule
 00707370 437 cLightingWorld::UpdateLocalLightSample: complete reconstruction; copy loop and shader-data cache addressing diverge
@@ -31,13 +31,13 @@
 00708810 192 cLightingWorld::AddLocalSample: complete; 8-float entry copy and id-vector push diverge
 00708d90 52 Vec8b::resize: complete; short-circuit branch and local-zero slot linger differently
 00708e60 34 Vec16::resize: complete; frame and copy_impl argument / mpEnd arithmetic schedule diverge
-007094c0 1439 cLightingWorld::ApplyConfig: complete (config ambient/dir-light/sun packing, light-list copy, effect ref, env/local sample refresh, message); call sequence identical (18 calls), regalloc/spill schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-00709c40 111 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl
+007094c0 1363 cLightingWorld::ApplyConfig: complete (config ambient/dir-light/sun packing, light-list copy, effect ref, env/local sample refresh, message); call sequence identical (18 calls), regalloc/spill schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+00709c40 63 cLightingManager init: complete field/vtable initialisation; store order and vptr sequence reordered by cl
 0070a1f0 1 spstl::simple_deque<...>::ClearImpl: complete; element tag test compiles to `sar` where original emits `shr`
-0070a560 37 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ
-0070a5b0 1661 cLightingWorld::Update complete (SH lighting update; same call order and size 2189); Vec3 scale/loop register allocation and min() slot order differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-0070ae70 82 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
-0070aed0  2437  complete FillLightingStateFromConfig (all 85 calls, vtable slots and property keys in order; size 0.985x); /O2 /arch:SSE /fp:fast /GS- register allocation/scheduling differs (light-flag shift strength-reduced, normalize/hemisphere SSE scheduling)
+0070a560 33 cLightingWorld::SetLightingState: complete; zero-register materialisation and store ordering differ
+0070a5b0 1647 cLightingWorld::Update complete (SH lighting update; same call order and size 2189); Vec3 scale/loop register allocation and min() slot order differ. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0070ae70 71 cLightingManager::RemoveLightingWorld: complete eastl rbtree erase(key); iterator kept in eax instead of esi and spill/restore schedule differs. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-
+0070aed0 2370 complete FillLightingStateFromConfig (all 85 calls, vtable slots and property keys in order; size 0.985x); /O2 /arch:SSE /fp:fast /GS- register allocation/scheduling differs (light-flag shift strength-reduced, normalize/hemisphere SSE scheduling)
 0070c410 110 cLightingWorld::CreateLocalLightSample: complete; zeroed local cell init and slot create call schedule differ
 0070c7c0 80 cLocalLightInfo copy ctor: complete; origin copies every float via x87 fld/fstp, cl uses integer/SSE moves
 0070ced0 324 eastl::vector<SP::cLightingConfig>::DoInsertValue; compare/order correct, cl EH state machine differs

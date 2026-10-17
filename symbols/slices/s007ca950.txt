@@ -11,8 +11,8 @@
 007cb050 ?Execute@cIntPropertyCommand@@QAEXPAUcArguments@@@Z  # Execute migrated from s007ca950 (verbatim, slice spelling)
 007cb160 ?Execute@cFloatPropertyCommand@@QAEXPAUcArguments@@@Z  # Execute migrated from s007ca950 (verbatim, slice spelling)
 007cb270 ?Execute@cSetOptionCommand@@QAEXPAUcArguments@@@Z  # Execute migrated from s007ca950 (verbatim, slice spelling)
-007cb390 SP::cOption::~cOption  # dev-PDB name; destroys mExternalSettings (+0x34) then mPropertySettings (+0xc)
+007cb390 ??1cOption_s007c_a950@SP@@QAE@XZ  # cOption_s007c_a950::~cOption migrated from s007ca950 (verbatim, slice spelling)
 007cb3e0 eastl::fixed_vector<EA::AutoRefCount<SP::cPropertyList>,4,1>::fixed_vector  # dev-PDB name (copy ctor): inits inline buffer then DoAssignFromIterator
-007cb450 eastl::fill<vector_map*,vector_map>  # dev-PDB name
+007cb450 ??$fill@PAU?$vector_map_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@U?$less_s007c_a950@_K@eastl@@Uallocator_s007c_a950@4@U?$vector_s007c_a950@U?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@eastl@@Uallocator_s007c_a950@2@@4@@eastl@@U12@@eastl@@YAXPAU?$vector_map_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@U?$less_s007c_a950@_K@eastl@@Uallocator_s007c_a950@4@U?$vector_s007c_a950@U?$pair_s007c_a950@_KU?$AutoRefCount_s007c_a950@VcPropertyList_s007c_a950@SP@@@EA@@@eastl@@Uallocator_s007c_a950@2@@4@@0@0ABU10@@Z  # fill migrated from s007ca950 (verbatim, slice spelling)
 007cb480 eastl::uninitialized_move_impl<0,std::random_access_iterator_tag>::do_move_commit<SP::cOption*,SP::cOption*>  # destroys each cOption (stride 0xac), advances and returns dest
 007cb510 eastl::vector<SP::cOption,eastl::fixed_vector_allocator<172,4,4,0,1> >::DoDestroyValues  # destroys cOption elements (stride 0xac)

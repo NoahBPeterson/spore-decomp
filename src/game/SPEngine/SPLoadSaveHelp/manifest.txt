@@ -1,5 +1,6 @@
 # source  symbol  va  flags
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Info_AddOffset@@YAHPAX@Z  00692ca0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPLoadSaveHelp.cpp  ?Construct@cRegNode@@QAEPAU1@PAX@Z  00692f60  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ClearBuffer@@YAXPAPAC@Z  00692fb0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseInt64@@YAXPAPBDPA_J@Z  00692fd0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
 ../src/game/SPEngine/SPLoadSaveHelp.cpp  ?ParseLong@@YAXPAPBDPAJ@Z  00692ff0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

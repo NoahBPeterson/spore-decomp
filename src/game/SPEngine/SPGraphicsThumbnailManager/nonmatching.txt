@@ -1,33 +1,33 @@
 # va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
-007b2890   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
-007b2900   61  destructor: original has an EH frame (vptr-restore protection); our body compiles without it
-007b3a70  3966  complete behavioural reconstruction (every call/path/output slot) of the 3966-byte FP layer draw; exact register allocation and FP evaluation order of the four make-quad blocks not reproduced
-007b55f0  830  FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ; difftest PASS after fixes: viewProj copied as a 64-byte struct (rep movsd) instead of a float loop (fld/fstp quiets SNaNs), length sum order x,y,z restored, and r computed before the centre so the frame is 0x1bc like the original (a callee with an aligned frame copies an unwritten Inverse result, so the frame size mod 16 showed up as a FAIL)
-007b5ad0  101  PostRenderJob: complete (job + message objects, EH smart ptrs); vtable-load order and a null-check differ
-007b5c80  184  MeshBoundingSphere: complete; float scheduling and Vector3 temp copies differ
-007b5e20  393  FrameJob::Fit: complete (opaque-pixel box fit); member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
-007b6010  11   RtJobA::Run: complete; only lock-xadd register choice differs
-007b6160  221  FrameJob::FitAspect: complete; member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
-007b63b0  13   RtJobB::Run: complete; only lock-xadd register choice differs
-007b64f0  58   RefHolder_Reset: complete; lock-xadd Release register shape and double member load differ
-007b6570  19  complete; base-message ctor store order/AddRef register (edx/eax) differ
-007b6a90  33  complete dispatch loop + trailing call; register scheduling/push order differs (cmp uses memory vs loaded end)
-007b6c70  48  complete; only lock-xadd Release register shape (ecx/edx copies) differs; difftest PASS (vtables mapped via symbols/slices/s007b6570.txt)
-007b6d50  988  complete (frustum fit step); float global copies use x87/rep movs instead of movss, block layout differs; difftest PASS (fixed: pos update was a fused x87 mul+add, now rounded per op via Vector3 ops; frame size matched so callee stack junk lines up)
-007b7270  553  complete (camera pull-back driver); XForm/Vector3 float scheduling and frame layout differ; difftest WEAK (189 valid, 27% coverage: SP::App() singleton reads fault on random inputs)
-007b7ac0  1994  (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) complete thumbnail render (mode 0 single capture; mode 1 n*n orbit tiles: property save/override/restore, double render, viewport per tile, spherical camera step, RwMatrix basis); not byte-exact: stack slot layout, x87/SSE scheduling, fp:fast reassociates the deg->rad product (1/180 kept as extern 0x0140ffcc)
-007b87f0  714  complete bounding-sphere over scene elements (fixed vector, bbox union); scheduling/regalloc differs
-007b8b30  132  complete ctor of two-vtable resource (raw vtable stores; original has EH frame from base ctor inlining)
-007b8be0  99  complete dtor (vtable restore + ~RefVector + 2 releases); no EH frame in mine
-007b8cb0  1108  complete RenderLargeTiledImage (tile loop, stitch, save png); not exact
-007b91f0  366  complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox; difftest PASS after fixes: atan2 inlined as fpatan via float_control(precise, off) (was an unresolved __CIatan2 call), capture call args were swapped (viewer before hash key), bbox built from Vector3 temps so the frame depth matches (a callee reads a stale stack slot)
+007b2890 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
+007b2900 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
+007b3a70 2695 complete behavioural reconstruction (every call/path/output slot) of the 3966-byte FP layer draw; exact register allocation and FP evaluation order of the four make-quad blocks not reproduced
+007b55f0 744 FitViewerToBounds: complete (camera pull-back loop vs frustum, 5000 iterations); scheduling/frame layout differ; difftest PASS after fixes: viewProj copied as a 64-byte struct (rep movsd) instead of a float loop (fld/fstp quiets SNaNs), length sum order x,y,z restored, and r computed before the centre so the frame is 0x1bc like the original (a callee with an aligned frame copies an unwritten Inverse result, so the frame size mod 16 showed up as a FAIL)
+007b5ad0 344 PostRenderJob: complete (job + message objects, EH smart ptrs); vtable-load order and a null-check differ
+007b5c80 183 MeshBoundingSphere: complete; float scheduling and Vector3 temp copies differ
+007b5e20 384 FrameJob::Fit: complete (opaque-pixel box fit); member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
+007b6010 263 RtJobA::Run: complete; only lock-xadd register choice differs
+007b6160 202 FrameJob::FitAspect: complete; member reload/lea shape differs; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; difftest PASS after fixing the build flags (the slice was scored with /arch:SSE /fp:fast but the flags were not recorded, so the checker compiled x87 code with different rounding/overflow)
+007b63b0 254 RtJobB::Run: complete; only lock-xadd register choice differs
+007b64f0 50 RefHolder_Reset: complete; lock-xadd Release register shape and double member load differ
+007b6570 19 complete; base-message ctor store order/AddRef register (edx/eax) differ
+007b6a90 33 complete dispatch loop + trailing call; register scheduling/push order differs (cmp uses memory vs loaded end)
+007b6c70 46 complete; only lock-xadd Release register shape (ecx/edx copies) differs; difftest PASS (vtables mapped via symbols/slices/s007b6570.txt)
+007b6d50 865 complete (frustum fit step); float global copies use x87/rep movs instead of movss, block layout differs; difftest PASS (fixed: pos update was a fused x87 mul+add, now rounded per op via Vector3 ops; frame size matched so callee stack junk lines up)
+007b7270 508 complete (camera pull-back driver); XForm/Vector3 float scheduling and frame layout differ; difftest WEAK (189 valid, 27% coverage: SP::App() singleton reads fault on random inputs)
+007b7ac0 1893 (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-) complete thumbnail render (mode 0 single capture; mode 1 n*n orbit tiles: property save/override/restore, double render, viewport per tile, spherical camera step, RwMatrix basis); not byte-exact: stack slot layout, x87/SSE scheduling, fp:fast reassociates the deg->rad product (1/180 kept as extern 0x0140ffcc)
+007b87f0 712 complete bounding-sphere over scene elements (fixed vector, bbox union); scheduling/regalloc differs
+007b8b30 61 complete ctor of two-vtable resource (raw vtable stores; original has EH frame from base ctor inlining)
+007b8be0 43 complete dtor (vtable restore + ~RefVector + 2 releases); no EH frame in mine
+007b8cb0 1074 complete RenderLargeTiledImage (tile loop, stitch, save png); not exact
+007b91f0 319 complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox; difftest PASS after fixes: atan2 inlined as fpatan via float_control(precise, off) (was an unresolved __CIatan2 call), capture call args were swapped (viewer before hash key), bbox built from Vector3 temps so the frame depth matches (a callee reads a stale stack slot)
 007bb670  354  complete 7-filter dilate chain setup (same size 1895 B, 66 calls, identical vcall sequence); /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; local slot layout of the rect temps differs
-007bbf80  3177  DilateStart: complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); stack slot order, local reuse and inline-expansion diffs remain
-007bced0  722  complete (DilateWithoutAOStart: six chained dilate filters + posted BehaviorMessage 0x21d752f); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (52 calls, 0.99x size); register allocation differs (chain in edi vs ebp, filter 5 in ebp vs edi) and the request locals sit at different frame slots
-007bd750  972  complete (cCSAThumbnailJob::DrawLayer: single pass, or 2x2 tiled pass with a per-tile post filter); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (43 calls, 0.98x size); x87 temps and strength reduction of j*tileH differ, the dead erase-copy loop of cJobPostFilter::Shutdown is folded away
-007bea00  694  complete image variant; Vec3 by-value arg temp built with x87 fld/fstp in original (z,x,y order), EH temp slot differs
-007bf610  170  complete reconstruction of ThumbnailDone: switch over the job type + 7 rect releases; cl chooses immediate `-1` compares (not a hoisted ebx) and a different load schedule, so every rect block differs
-007bf9c0  27  complete reconstruction of the setter block; two instruction reorderings (m_c0 store vs m_a8 load, and the RefVector operator= argument setup) differ
+007bbf80 3430 DilateStart: complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); stack slot order, local reuse and inline-expansion diffs remain
+007bced0 1203 complete (DilateWithoutAOStart: six chained dilate filters + posted BehaviorMessage 0x21d752f); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (52 calls, 0.99x size); register allocation differs (chain in edi vs ebp, filter 5 in ebp vs edi) and the request locals sit at different frame slots
+007bd750 3 complete (cCSAThumbnailJob::DrawLayer: single pass, or 2x2 tiled pass with a per-tile post filter); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (43 calls, 0.98x size); x87 temps and strength reduction of j*tileH differ, the dead erase-copy loop of cJobPostFilter::Shutdown is folded away
+007bea00 747 complete image variant; Vec3 by-value arg temp built with x87 fld/fstp in original (z,x,y order), EH temp slot differs
+007bf610 166 complete reconstruction of ThumbnailDone: switch over the job type + 7 rect releases; cl chooses immediate `-1` compares (not a hoisted ebx) and a different load schedule, so every rect block differs
+007bf9c0 115 complete reconstruction of the setter block; two instruction reorderings (m_c0 store vs m_a8 load, and the RefVector operator= argument setup) differ
 007bfee0 1690 complete AO capture (sibling of 0x007c0780: caller-supplied shadow rect, world/meshes, far plane radius*5; 51/51 calls, same vtable slots, size 0.92x); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; diffs: frame 0x108 vs 0x138 (the original keeps ~12 more float spill slots), x87/SSE split in the ortho/side vector math ; equiv: WEAK 302 valid inputs, 4.6% coverage, 0 mismatches
 007c0780 2035 AO capture setup (cThumbnailManager, 0x40200100 prop list, per-direction shadow viewers + AO jobs) complete; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; frame 0x20 smaller, x87/SSE split of the vector math and stack slots differ; local mesh vector dtor reloads begin/end (original constant-folded them to 0 via same-TU Init)
 007c1c10 1514 SetupSplat: complete (size 2181 = 2181, 55 direct calls / 31 vtable calls in the same order, frame 0x98 identical); only the instruction scheduling of the three 9-argument Init calls (arg loads hoisted vs just-in-time) and the 4-line chain ctor/store order differ. Flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

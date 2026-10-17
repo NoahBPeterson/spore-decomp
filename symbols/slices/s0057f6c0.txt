@@ -1,1 +1,6 @@
-0057f6c0 SP::cAppModeEditorBase::SaveModel  # card/dev-PDB name; (const ResourceKey&, int saveMode), ret 8
+0047e6c0 ?GetEditorBlock@cSPEditorHandle@SP@@QAEPAVcSPEditorBlock@2@XZ  # SP::cSPEditorHandle::GetEditorBlock (callee of s0057f6c0, named from the dev publics; slice address comment)
+004ae3b0 ?LoadResource@cSPEditorModel@SP@@QAE_NPBVResource@ResourceMan@EA@@@Z  # SP::cSPEditorModel::LoadResource (callee of s0057f6c0, named from the dev publics; slice address comment)
+004c49e0 ?GetSkinPart@cSPEditorSkinManager@SP@@QAEPAVcSPEditorSkinPart@2@W4eSkinIdentifier@12@@Z  # SP::cSPEditorSkinManager::GetSkinPart (callee of s0057f6c0, named from the dev publics; slice address comment)
+004c5980 ?GetTextures@cSPEditorSkinManager@SP@@QAEXPAPAVcTextureInstance@2@0@Z  # SP::cSPEditorSkinManager::GetTextures (callee of s0057f6c0, named from the dev publics; slice address comment)
+004ca6e0 ?BuildSkeleton@cSkinObject@SP@@QAE_NXZ  # SP::cSkinObject::BuildSkeleton (callee of s0057f6c0, named from the dev publics; slice address comment)
+0057f6c0 ?SaveModel@cAppModeEditorBase_s0057_f6c0@SP@@QAEXABUResourceKey_s0057_f6c0@@H@Z  # cAppModeEditorBase_s0057_f6c0::SaveModel migrated from s0057f6c0 (verbatim, slice spelling)

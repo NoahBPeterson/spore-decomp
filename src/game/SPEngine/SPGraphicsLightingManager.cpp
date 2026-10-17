@@ -57,6 +57,7 @@ struct cShaderDataLightingInfo {
 // ---- items of slice s007046e0 end
 
 // ---- items of slice s00705660 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void __stdcall sub_406540(void*, void*, int, int, void*); // EASTL fill/uninitialized helper
 void __fastcall sub_620230(void*);                // intrusive_list_base dtor
 void  sub_f47380(void*);                          // operator delete
 struct W5920 {
@@ -99,6 +100,18 @@ struct W5af0 {
     int*     begin;         // 0x18
     int*     end;           // 0x1c
     void* find(int key);
+};
+void fn705030() {}
+struct V4b { float x, y, z, w; };
+struct Big5b50 {
+    uint8_t  f0;            // 0x00
+    uint8_t  f1;            // 0x01
+    uint16_t f2;            // 0x02
+    float    f4, f8, fc, f10; // 0x04
+    char     pad14[0xc];    // 0x14
+    __m128   m20;           // 0x20
+    V4b      coeffs[25];    // 0x30
+    Big5b50* copy(const Big5b50* s);
 };
 // ---- items of slice s00705660 end
 
@@ -349,7 +362,6 @@ struct Vec32 {
 };
     void EastlFree(...); // 0x00f47380
 // ---- items of slice s007070d0 end
-
 
 // ---- items of slice s00708100 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void PushPtr(void* pos, void* val);                   // 0x006C1570
@@ -1190,8 +1202,6 @@ int FUN_00705050(int n, E5* p)
 
 
 
-
-
 // @ 0x007050e0
 void Big::set_7050e0(int a, int* p)
 {
@@ -1205,8 +1215,6 @@ void Big::set_7050e0(int a, int* p)
         f24 = p[2];
     }
 }
-
-
 
 
 
@@ -1250,8 +1258,6 @@ cShaderDataLightingInfo& cShaderDataLightingInfo::operator=(const cShaderDataLig
 
 
 
-
-
 // @ 0x00705190
 void Big50::get_705190(int* out)
 {
@@ -1273,13 +1279,9 @@ void Big50::get_705190(int* out)
 
 
 
-
-
 // @ 0x007051b0
 void BigF8::set_7051b0(const Fog98* src)
 { fog = *src; }
-
-
 
 
 
@@ -1319,8 +1321,6 @@ V32* copy_7051e0(const V32* first, const V32* last, V32* out)
 
 
 
-
-
 // @ 0x00705220
 V32* copy_backward_705220(const V32* first, const V32* last, V32* out)
 {
@@ -1332,8 +1332,6 @@ V32* copy_backward_705220(const V32* first, const V32* last, V32* out)
     }
     return out;
 }
-
-
 
 
 
@@ -1378,8 +1376,6 @@ int FUN_007052e0(float* v, float param)
     int B = (int)(r7 * 32.0f);
     return ((face * 32 - (A >> 5)) + A) * 32 - (B >> 5) + B;
 }
-
-
 
 
 
@@ -1439,8 +1435,6 @@ int FUN_00705470(float* v, float param)
 
 
 
-
-
 // @ 0x00705660
 int FUN_00705660(float* a, float* b, float param)
 {
@@ -1466,14 +1460,12 @@ int FUN_00705660(float* a, float* b, float param)
 
 
 
-
 // @ 0x00705920
 int* W5920::get()
 {
     int** p = m10;
     return p ? *p : 0;
 }
-
 
 
 
@@ -1521,7 +1513,6 @@ float W5970::f(int a2, float p3)
 
 
 
-
 // @ 0x00705a20
 void W5a20::setAtm(float* v, int n, float* ph)
 {
@@ -1539,7 +1530,6 @@ void W5a20::setAtm(float* v, int n, float* ph)
         ph += 4;
     }
 }
-
 
 
 
@@ -1577,6 +1567,32 @@ void* W5af0::find(int key)
 
 
 
+// @ 0x00705b50
+Big5b50* Big5b50::copy(const Big5b50* s)
+{
+    f0 = s->f0;
+    f1 = s->f1;
+    f2 = s->f2;
+    f4 = s->f4;
+    f8 = s->f8;
+    fc = s->fc;
+    f10 = s->f10;
+    m20 = s->m20;
+    sub_406540(&coeffs[0], (void*)&s->coeffs[0], 0x10, 0x19, (void*)fn705030);
+    return this;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 // @ 0x00705bb0
 S11& S11::operator=(const S11& s)
@@ -1599,7 +1615,6 @@ S11& S11::operator=(const S11& s)
 
 
 
-
 // @ 0x00705c00
 S7& S7::operator=(const S7& s)
 {
@@ -1607,7 +1622,6 @@ S7& S7::operator=(const S7& s)
     f[4] = s.f[4]; f[5] = s.f[5]; f[6] = s.f[6];
     return *this;
 }
-
 
 
 
@@ -1650,14 +1664,12 @@ void copy_705c40(V32** out, V32* first, V32* last, V32* dst)
 
 
 
-
 // @ 0x00705e90
 void fill_705e90(__m128* first, __m128* last, const __m128* value)
 {
     for (; first != last; ++first)
         *first = *value;
 }
-
 
 
 
@@ -1693,7 +1705,6 @@ void fill_705ec0(__m128* first, unsigned n, const __m128* value)
 
 
 
-
 // @ 0x00705ef0
 void W5ef0::dtor()
 {
@@ -1705,7 +1716,6 @@ void W5ef0::dtor()
     if (q != 0 && *(int*)((char*)q - 4) != 0)
         sub_f47380(q);
 }
-
 
 
 
@@ -1822,7 +1832,6 @@ void EnvLW::UpdateEnvLightSample(EnvSample* out)
 
 
 
-
 // @ 0x007067f0
 W67f0::~W67f0()
 {
@@ -1836,7 +1845,6 @@ W67f0::~W67f0()
     if (q != 0)
         ((IVoid*)q)->v1();
 }
-
 
 
 
@@ -1870,13 +1878,11 @@ int W6840::GetLightingWorld(int key)
 
 
 
-
 // @ 0x00706870
 int W6870::get(unsigned idx)
 {
     return m0[idx >> 7] + 0x10 + (idx & 0x7f) * 0x1f0;
 }
-
 
 
 
@@ -1906,7 +1912,6 @@ int W6890::get(unsigned idx)
 
 
 
-
 // @ 0x007068c0
 W68c0* W68c0::copyFrom(const W68c0* s)
 {
@@ -1918,7 +1923,6 @@ W68c0* W68c0::copyFrom(const W68c0* s)
     f1d0 = s->f1d0;
     return this;
 }
-
 
 
 
@@ -1955,7 +1959,6 @@ unsigned W6920::next(unsigned idx)
 
 
 
-
 // @ 0x00706980
 unsigned W6980::next(unsigned idx)
 {
@@ -1968,7 +1971,6 @@ unsigned W6980::next(unsigned idx)
     } while ((int)v < 0);
     return idx;
 }
-
 
 
 
@@ -2005,7 +2007,6 @@ unsigned W69e0::next(unsigned idx)
 
 
 
-
 // @ 0x00706ab0
 Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
 {
@@ -2014,6 +2015,11 @@ Vector4* UninitCopyVec4(Vector4* first, Vector4* last, Vector4* result)
         *(__m128*)p = *(const __m128*)first;
     return p;
 }
+
+
+
+
+
 
 
 
@@ -2035,7 +2041,6 @@ Vec20* Vec20::init(int n, int unused)
     }
     return this;
 }
-
 
 
 
@@ -2083,7 +2088,6 @@ void FUN_00706c80(E9** out, E9* first, E9* last, E9* dst)
 
 
 
-
 // @ 0x00706d00
 Vec10* Vec10::init(int n, int unused)
 {
@@ -2099,7 +2103,6 @@ Vec10* Vec10::init(int n, int unused)
     }
     return this;
 }
-
 
 
 
@@ -2152,6 +2155,11 @@ void SP::cLightingWorld::UpdateLightPosition(unsigned int id, cSPVector3 const &
 
 
 
+
+
+
+
+
 // @ 0x00707270
 void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
 {
@@ -2180,6 +2188,11 @@ void cLightingWorld::RemoveLightFromList(uint32_t id, int index, int* list)
     *(int*)(*(int*)(entry + 0x28) + index * 8) = -1;
     *(int*)(*(int*)(entry + 0x28) + index * 8 + 4) = -1;
 }
+
+
+
+
+
 
 
 
@@ -2238,6 +2251,11 @@ void cLightingWorld::UpdateLocalLightSample(int* info)
 
 
 
+
+
+
+
+
 // @ 0x007074e0
 void cLightingWorld::CreateEnvLightSample(EnvEntry* pEntry, const cSPVector3_s0070_70d0* pPos, uint32_t celStrength)
 {
@@ -2247,6 +2265,11 @@ void cLightingWorld::CreateEnvLightSample(EnvEntry* pEntry, const cSPVector3_s00
     pEntry->mCelStrength = celStrength;
     UpdateEnvLightSample(pEntry);
 }
+
+
+
+
+
 
 
 
@@ -2268,6 +2291,11 @@ void SlotVec28::Release(uint32_t idx)
 
 
 
+
+
+
+
+
 // @ 0x00707590
 void SlotVec28::ReleaseDestroy(uint32_t idx)
 {
@@ -2277,6 +2305,11 @@ void SlotVec28::ReleaseDestroy(uint32_t idx)
     if (mField18 == idx)
         mField18 = DestroyNext(idx);
 }
+
+
+
+
+
 
 
 
@@ -2302,6 +2335,11 @@ void SlotDeque::DestroyAll(int)
 
 
 
+
+
+
+
+
 // @ 0x00707660
 Vector4* CopyVec4(Vector4* first, Vector4* last, Vector4* result)
 {
@@ -2309,6 +2347,11 @@ Vector4* CopyVec4(Vector4* first, Vector4* last, Vector4* result)
         *(__m128*)result = *(const __m128*)first;
     return result;
 }
+
+
+
+
+
 
 
 
@@ -2333,6 +2376,11 @@ void Rbtree::DoNukeSubtree(NukeNode* first, NukeNode* last)
 
 
 
+
+
+
+
+
 // @ 0x007076f0
 Vector4* CopyBackVec4(Vector4* first, Vector4* last, Vector4* resultEnd)
 {
@@ -2340,6 +2388,11 @@ Vector4* CopyBackVec4(Vector4* first, Vector4* last, Vector4* resultEnd)
         *(__m128*)--resultEnd = *(const __m128*)--last;
     return resultEnd;
 }
+
+
+
+
+
 
 
 
@@ -2359,6 +2412,11 @@ void Buf28::Free()
 
 
 
+
+
+
+
+
 // @ 0x00707740
 void cLightingWorld::GetLocalShaderData(void* e)
 {
@@ -2371,6 +2429,11 @@ void cLightingWorld::GetLocalShaderData(void* e)
     ((SlotVec28*)((char*)this + 0x608))->ReleaseDestroy(*(uint32_t*)((char*)e + 0x24));
     *(int*)((char*)e + 0x24) = -1;
 }
+
+
+
+
+
 
 
 
@@ -2399,6 +2462,11 @@ void cLightingWorld::ReleaseLocalCache(void* e)
 
 
 
+
+
+
+
+
 // @ 0x00707a00
 void Vec4::DoInsertValues(Vector4* position, Vector4* source)
 {
@@ -2407,6 +2475,11 @@ void Vec4::DoInsertValues(Vector4* position, Vector4* source)
         *(__m128*)position = *(const __m128*)source;
     mpEnd += position - source;
 }
+
+
+
+
+
 
 
 
@@ -2450,6 +2523,11 @@ void Vec32::DoInsertValue(V32_s0070_70d0* position, const V32_s0070_70d0* value)
 
 
 
+
+
+
+
+
 // @ 0x00707b70
 void Vec4::InsertValuesAt(Vector4* position, uint32_t n, const Vector4* value)
 {
@@ -2487,6 +2565,11 @@ void Vec4::InsertValuesAt(Vector4* position, uint32_t n, const Vector4* value)
         mpCapacity = pNewData + nNewSize;
     }
 }
+
+
+
+
+
 
 
 
@@ -2538,6 +2621,11 @@ void Vec8::DoInsertValues(char* position, uint32_t n, const void* value)
 
 
 
+
+
+
+
+
 // @ 0x00707ed0
 void SlotVecC4::DestroyEntry(uint32_t idx)
 {
@@ -2550,6 +2638,11 @@ void SlotVecC4::DestroyEntry(uint32_t idx)
     if (mField18 == idx)
         mField18 = Next(idx);
 }
+
+
+
+
+
 
 
 
@@ -2575,6 +2668,10 @@ void Deque38::PopDestroy()
     }
     --mIndex14;
 }
+
+
+
+
 
 
 
@@ -2621,7 +2718,6 @@ void cLightingWorld_s0070_8100::DestroyLightingInfo(void* e)
 
 
 
-
 // @ 0x007087a0
 void ClearVec::clear()
 {
@@ -2635,7 +2731,6 @@ void ClearVec::clear()
         mpExtra = 0;
     }
 }
-
 
 
 
@@ -2690,7 +2785,6 @@ void cLightingWorld_s0070_8100::AddLocalSample(uint32_t id, int index, SampleVec
 
 
 
-
 // @ 0x00708d90
 void Vec8b::resize(uint32_t n)
 {
@@ -2702,7 +2796,6 @@ void Vec8b::resize(uint32_t n)
         Erase(mpBegin + n, mpEnd);
     }
 }
-
 
 
 
@@ -2726,7 +2819,6 @@ void Vec16::resize(uint32_t n)
     Copy16(mpEnd, mpEnd, mid);
     mpEnd = (char*)(mpEnd - (mpEnd - mid));
 }
-
 
 
 
@@ -2876,7 +2968,6 @@ void cLightingWorld_s0070_8f40::ApplyConfig()
 
 
 
-
 // @ 0x00709c40
 void LightingManager::Init()
 {
@@ -2915,7 +3006,6 @@ void LightingManager::Init()
 
 
 
-
 // @ 0x0070a1f0
 void ClearDeque::ClearImpl(int)
 {
@@ -2943,7 +3033,6 @@ void ClearDeque::ClearImpl(int)
 
 
 
-
 // @ 0x0070a560
 void cLightingWorld_s0070_9cf0::SetLightingState(void* state)
 {
@@ -2961,7 +3050,6 @@ void cLightingWorld_s0070_9cf0::SetLightingState(void* state)
         }
     }
 }
-
 
 
 
@@ -3171,7 +3259,6 @@ localPass:
 
 
 
-
 // @ 0x0070ae40
 void SP::cLightingManager::Update(unsigned int param)
 {
@@ -3180,7 +3267,6 @@ void SP::cLightingManager::Update(unsigned int param)
         (*(SP::cLightingWorld**)(it + 0x14))->Update(param);
     }
 }
-
 
 
 
@@ -3204,7 +3290,6 @@ void SP::cLightingManager::RemoveLightingWorld(unsigned int key)
         EastlFree(it);
     }
 }
-
 
 
 

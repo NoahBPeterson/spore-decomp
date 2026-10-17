@@ -1,25 +1,25 @@
 # va  diff-bytes  reason
-00692880  90   complete; Init serializer-record layout near-miss
-00692c50  56   complete; Unload near-miss
-00692cb0  86   complete; record insertion sort near-miss
-00692e00  2    complete; WriteBlob32 one-register near-miss
-00692e50  2    complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value)
-00692ee0  14   complete; registry resolve walk near-miss
-00692f20  28   complete; registry release walk near-miss; equiv WEAK (25% cov)
-00692f60  25   complete; registry node constructor near-miss; equiv WEAK (92.3% cov; now cRegNode::Construct member)
-00692f90  15   complete; cVarListSerializer constructor near-miss
-006930b0  14   complete; ParseFloat stack-slot reuse near-miss
+00692880 88 complete; Init serializer-record layout near-miss
+00692c50 55 complete; Unload near-miss
+00692cb0 95 complete; record insertion sort near-miss
+00692e00 2 complete; WriteBlob32 one-register near-miss
+00692e50 2 complete; WriteBlob16 one-register near-miss; equiv FAIL (eax&0xffff return value)
+00692ee0 24 complete; registry resolve walk near-miss
+00692f20 28 complete; registry release walk near-miss; equiv WEAK (25% cov)
+00692f90 18 complete; cVarListSerializer constructor near-miss
+006930b0 16 complete; ParseFloat stack-slot reuse near-miss
 00693900  158  binder destructor: vtable store, +0x18/+0x14 probe, two smart-ref releases present; cl EH frame/state layout differs
-006939b0  219  binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
-00693aa0  221  binder bind B: virtual +0x24/+0x28 probe/release paths present; EH frame and this-arg reordering differ
-00693cd0  83  binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
-00693d60  83  binder ctor B: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
-006940d0  202  Obj copy ctor: header copy + two eastl-string range-init/copy sequence reproduced; no EH region and register scheduling differ; equiv UNSUPPORTED (unresolved refs: Str16::RangeInitialize, Str_DoInsertValue)
+006939b0 165 binder bind A: virtual +0x18 probe, +0x1c release, AutoRef assignment all present; EH frame and this-arg reordering differ
+00693aa0 167 binder bind B: virtual +0x24/+0x28 probe/release paths present; EH frame and this-arg reordering differ
+00693cd0 34 binder ctor A: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
+00693d60 34 binder ctor B: vtable + zeroed refs + bind call present; missing compiler EH prolog, so frame/scheduling differ
+006940d0 121 Obj copy ctor: header copy + two eastl-string range-init/copy sequence reproduced; no EH region and register scheduling differ; equiv UNSUPPORTED (unresolved refs: Str16::RangeInitialize, Str_DoInsertValue)
 00694210  66  Hoare partition: full algorithm present; cl rotates the two scan loops differently
 006943b0  66  move_backward over 0x60-byte objects with two string assigns; addressing/register base differs
+00694440 1333 EA::Variant::Read(stream, variant, endian): complete scalar (switch over 19 type ids) and counted-array paths, EH frame for the Variant temporary; the 1956-byte span also holds the tiny 0x694bd0 "**unsupported type**" assign (FUN_00694bd0 here). Mine 1920 B + tail vs 1956; 39/39 calls (38 + tail) in identical order; differs in tail-duplicated epilogues (original keeps the result in bl: mov bl,1 / mov al,bl, mine folds mov al,1) and the case block layout
 00694c10  200  EA::ConvertToString8 wrapper: temp-string build, self-check and assign reproduced; target span also covers the adjacent 16-bit wrapper (0x694c80), so sizes differ
 00694d00  186  introsort: size/depth cutoff, median-of-three pivot and recursive partition all present; register/loop scheduling differ
-00694e60  53  fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
-006950b0  86  introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs
-00695450  22  short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
-00695490  111  vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ
+00694e60 51 fixed-size table init: all 24 field stores present; this/arg register assignment and store order differ
+006950b0 74 introsort entry: depth computation and 0x1c split reproduced; bit-count loop register allocation differs
+00695450 14 short-circuit range scan + sort entry; only the bool-literal argument materialisation differs
+00695490 111 vector reserve: allocate/copy/destroy/pointer fix-up all present; allocator-arg and ratio scheduling differ

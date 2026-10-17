@@ -4,7 +4,7 @@
 007c78e0 SP::cRandom::GetLen  # returns pos/0/size-pos/-1 switch
 007c7910 SP::cRandom::ReadBytes  # LFSR byte stream from table
 007c7980 SP::cRandom::Reset  # same bit-length init without seed
-007c7a10 SP::cConfigManager::SavePreferences  # PDB name; reads _sAppPreferences
+007c7a10 ?SavePreferences@cConfigManager@@QAE_NXZ  # cConfigManager::SavePreferences migrated from s007c77e0 (verbatim, slice spelling)
 007c7aa0 ?Description@cOptionCheat@@QAEPBDH@Z  # cOptionCheat::Description migrated from s007c77e0 (verbatim, slice spelling)
 007c7ac0 ?SetOptionDefault@cConfigScriptState@@QAE_NII@Z  # cConfigScriptState::SetOptionDefault migrated from s007c77e0 (verbatim, slice spelling)
 007c7b30 ?DumpAll@cConfigScriptState@@QAEXPAX@Z  # cConfigScriptState::DumpAll migrated from s007c77e0 (verbatim, slice spelling)
@@ -14,6 +14,7 @@
 007c7ca0 ?GetNumScreenResolutions@cConfigManager@@QAEHXZ  # cConfigManager::GetNumScreenResolutions migrated from s007c77e0 (verbatim, slice spelling)
 007c7cd0 ?GetScreenResolutionInfo@cConfigManager@@QAE_NHPAI00@Z  # cConfigManager::GetScreenResolutionInfo migrated from s007c77e0 (verbatim, slice spelling)
 007c7d70 ?CopyConstructAutoRef@@YAPAPAUAutoRefCount@@PAPAU1@PAU1@11@Z  # CopyConstructAutoRef migrated from s007c77e0 (verbatim, slice spelling)
+007c7e10 ?CopyAutoRef@@YAPAUAutoRefCount@@PAU1@00@Z  # CopyAutoRef migrated from s007c77e0 (verbatim, slice spelling)
 007c7e70 ?OnEndBlock@cOptionBlockCommand@@QAEXH@Z  # cOptionBlockCommand::OnEndBlock migrated from s007c77e0 (verbatim, slice spelling)
 007c7eb0 ?Do@cCmdArgs@@QAEXH@Z  # cCmdArgs::Do migrated from s007c77e0 (verbatim, slice spelling)
 007c7ec0 cSetResolutionCommand::Execute  # PDB name

@@ -1,3 +1,4 @@
 00406e90 ?TestAny@IPredicateTarget@@QAE_NPAX@Z  # IPredicateTarget::TestAny migrated from s00406ac0 (verbatim, slice spelling)
+00406ef0 ?IsFlagged@ResourceFlagQuery@@QAE_NABUResourceKey@@_N@Z  # ResourceFlagQuery::IsFlagged migrated from s00406ac0 (verbatim, slice spelling)
 00407190 GetBoolProperty  # PropertyList vcall +0x24 (GetProperty), checks Property type==1 (bool), copies *GetValueBool() to out param, returns true/false
 004071e0 ?Apply@KeyRemapper@@QAEXAAU?$vector_s0040_6ac0@UKeyPair@@@@UResourceKey@@@Z  # KeyRemapper::Apply migrated from s00406ac0 (verbatim, slice spelling)

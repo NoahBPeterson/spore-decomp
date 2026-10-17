@@ -5,3 +5,4 @@
 00572190 ?GetColor@ColorSource@@QBE?AUVec4@@XZ  # ColorSource::GetColor migrated from s005718f0 (verbatim, slice spelling)
 005721b0 ?HandleRects@@YGXURect16@@0@Z  # HandleRects migrated from s005718f0 (verbatim, slice spelling)
 00572220 ?UpdateAllItems@@YGXPAUcItemList@@@Z  # UpdateAllItems migrated from s005718f0 (verbatim, slice spelling)
+005722f0 ?InitBrain@cAppModeEditorBase_s0057_18f0@SP@@QAEXI@Z  # cAppModeEditorBase_s0057_18f0::InitBrain migrated from s005718f0 (verbatim, slice spelling)

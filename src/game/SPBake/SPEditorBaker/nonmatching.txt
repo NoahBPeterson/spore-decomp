@@ -1,10 +1,11 @@
 # va  diff-bytes  reason
-00402cc0  439  BlockLoader::Update (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 4 extra dead temp slots (2 before each `mSlots[i] = 0` intrusive_ptr assign), shifting [ebp-N] offsets past 0x4c
-00403240  611  EditorBlockData::EditorBlockData (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 12 dead temp slots (3 after base locals, 8 after the Slot2C array, 1 in the Container20[6] loop)
-00403af0  86  cBaker::Initialize (/Od /Ob1 /MD /Gy /TP, no /EH): instruction stream identical after normalization, every named local at the right slot; only stack temps differ: the PropertyID arg temp sits in the statement-temp region (orig -0x17c in the inline-expansion region), and orig has unreferenced temp gaps (-0x134..-0x174, -0x18c..-0x1c0, -0x1c8..-0x1d0) that are absent here
-00405000  64  BakerCommand scalar deleting dtor: instruction-identical, only frame size differs (sub esp 0x98 vs 0x58: slots reserved by the failed inline of ~OptionParser)
-004051e0  38  Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
-004055b0  43  Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)
+00402cc0 439 BlockLoader::Update (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 4 extra dead temp slots (2 before each `mSlots[i] = 0` intrusive_ptr assign), shifting [ebp-N] offsets past 0x4c
+00403240 576 EditorBlockData::EditorBlockData (/Od /Ob1 /MD /Gy /TP): instruction stream identical; original frame has 12 dead temp slots (3 after base locals, 8 after the Slot2C array, 1 in the Container20[6] loop)
+00403af0 86 cBaker::Initialize (/Od /Ob1 /MD /Gy /TP, no /EH): instruction stream identical after normalization, every named local at the right slot; only stack temps differ: the PropertyID arg temp sits in the statement-temp region (orig -0x17c in the inline-expansion region), and orig has unreferenced temp gaps (-0x134..-0x174, -0x18c..-0x1c0, -0x1c8..-0x1d0) that are absent here
+00404660 58 BakerCommand::ParseLine: instruction stream identical (571 insns, same length); only ebp offsets of dead-slot-adjacent temps differ (destruct loop ptrs at -0xc4/-0xf8, `this` -0x108 and the tv temps). Original reserves 2/2 dead slots around the early-return vector destruct but 3/3 around the final one (inliner gave up differently per site); not reproducible from one header model
+00405000 148 BakerCommand scalar deleting dtor: instruction-identical, only frame size differs (sub esp 0x98 vs 0x58: slots reserved by the failed inline of ~OptionParser)
+004051e0 38 Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
+004055b0 43 Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)
 0040a590 622 EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 760B vs 1072B orig)
 0040a9c0 317 KeyCopier::Copy: /Od frame layout and virtual-call operand order (ecx-first) not reproduced; structure otherwise equivalent
 0040e5b0 47 Obj::OnA: same size (592); stack-slot order of inlined Query() params/id const and the 0x60-byte local gap differ

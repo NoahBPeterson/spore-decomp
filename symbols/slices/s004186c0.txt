@@ -1,7 +1,7 @@
 004186c0 ?CreateEditorResource@@YAPAUEditorResource@@PAUEditorSource@@PAIPAPAULoadHandle_s0041_86c0@@@Z  # CreateEditorResource migrated from s004186c0 (verbatim, slice spelling)
 00418870 ??0EditorResource@@QAE@XZ  # EditorResource::EditorResource migrated from s004186c0 (verbatim, slice spelling)
-00418960 EditorResource::scalar_deleting_dtor  # calls dtor then EASTL_allocator_deallocate on flag&1
-00418990 EditorResource::~EditorResource  # resets vtbls to cEditorResource
+00418960 ??_GEditorResource@@UAEPAXI@Z  # EditorResource::~EditorResource migrated from s004186c0 (verbatim, slice spelling)
+00418990 ??1EditorResource@@UAE@XZ  # EditorResource::~EditorResource migrated from s004186c0 (verbatim, slice spelling)
 00418a10 ??1SubObject@@QAE@XZ  # SubObject::~SubObject migrated from s004186c0 (verbatim, slice spelling)
 00418ae0 ?Setup@EditorResource@@QAE_NPAULoadHandle_s0041_86c0@@@Z  # EditorResource::Setup migrated from s004186c0 (verbatim, slice spelling)
 00418f90 ?NotifyA@EditorResource@@QAEXPAULoadHandle_s0041_86c0@@@Z  # EditorResource::NotifyA migrated from s004186c0 (verbatim, slice spelling)

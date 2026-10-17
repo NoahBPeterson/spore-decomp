@@ -1,5 +1,8 @@
+0044b590 ?GetOrientation@cSPEditorBlock@SP@@QBEABUcSPMatrix3@@XZ  # SP::cSPEditorBlock::GetOrientation (callee of s0057d710, named from the dev publics; slice address comment)
+0044e980 ?SetSymmetrySign@cSPEditorBlock@SP@@QAEXH@Z  # SP::cSPEditorBlock::SetSymmetrySign (callee of s0057d710, named from the dev publics; slice address comment)
+0044f220 ?GetSymmetrySign@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetSymmetrySign (callee of s0057d710, named from the dev publics; slice address comment)
 0057d710 FUN_0057d710  # no PDB name
-0057e160 SP::cAppModeEditorBase::SetTorsoIsSelected  # PDB candidate (caller-single)
+0057e160 ?SetTorsoIsSelected@cAppModeEditorBase_s0057_d710@@QAEX_N@Z  # cAppModeEditorBase_s0057_d710::SetTorsoIsSelected migrated from s0057d710 (verbatim, slice spelling)
 0057e1d0 (scalar deleting destructor)  # vtables 0x13eb938 / 0x13ef094, frees vector at +0xc
 0057e220 FUN_0057e220  # no PDB name; activates the animated-creature torso
 0057e340 FUN_0057e340  # no PDB name; updates effects-mask visibility

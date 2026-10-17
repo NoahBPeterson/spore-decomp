@@ -128,8 +128,14 @@ struct RC3c {
 
 // ---- items of slice s0070efa0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void  __cdecl EFree(void* p);                                                                    // 0x00f47380
-struct RC3c_s0070_efa0 { void AddRef(); void Release(); };  // refcount at +0x3c
-struct RC3b_s0070_efa0 { void AddRef(); void Release(); };  // refcount at +0x3c (second family)
+struct RC3c_s0070_efa0 {  // refcount at +0x3c
+    void AddRef();
+    void Release();
+};
+struct RC3b_s0070_efa0 {  // refcount at +0x3c (second family)
+    void AddRef();
+    void Release();
+};
 void** AssignCopyA(void** first, void** last, void** dst); // 0x0070e340
 void** AssignCopyB(void** first, void** last, void** dst); // 0x0070e390
 struct VecBase {

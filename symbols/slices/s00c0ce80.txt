@@ -1,4 +1,3 @@
-00c0ce80 Simulator::cCreatureBase::GetAnimWeight / anim weight selector
 00c0ce80 ?ce80@CCB@@QAEMHH@Z  # CCB::ce80 callee (0x00c0ce80, left in the slice); bound so the migrated cf50/cfa0/d050/d0c0 resolve it in the module TU instead of UNSUPPORTED (harness binds the original callee)
 00c0cf50 ?cf50@CCB@@QAEXXZ  # CCB::cf50 migrated from s00c0ce80 (verbatim, slice spelling)
 00c0cfa0 ?cfa0@CCB@@QAEMHD@Z  # CCB::cfa0 migrated from s00c0ce80 (verbatim, slice spelling)

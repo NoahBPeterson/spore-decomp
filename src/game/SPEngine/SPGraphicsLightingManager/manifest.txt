@@ -7,6 +7,7 @@
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copy_7051e0@@YAPAUV32@@PBU1@0PAU1@@Z  007051e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copy_backward_705220@@YAPAUV32@@PBU1@0PAU1@@Z  00705220  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?get@W5920@@QAEPAHXZ  00705920  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?copy@Big5b50@@QAEPAU1@PBU1@@Z  00705b50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??4S11@@QAEAAU0@ABU0@@Z  00705bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ??4S7@@QAEAAU0@ABU0@@Z  00705c00  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsLightingManager.cpp  ?fill_705e90@@YAXPAT__m128@@0PBT1@@Z  00705e90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include

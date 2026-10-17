@@ -1,4 +1,4 @@
-00499410 ?FUN_00499410@@YAPAUBlock_s0049_9410@@PAUEntity@@UVector3_s0049_9410@@1UAutoRefCountSkinMgr@@PAU3@3I@Z  # FUN_00499410 migrated from s00499410 (verbatim, slice spelling)
+00499410 ?FUN_00499410@@YAPAUBlock@@PAUEntity@@UVector3_s0049_9410@@1UAutoRefCountSkinMgr@@PAU3@3I@Z  # FUN_00499410 migrated from s00499410 (verbatim, slice spelling)
 00499b40 ?FUN_00499b40@@YA?AUVector3_s0049_9410@@U1@000@Z  # FUN_00499b40 migrated from s00499410 (verbatim, slice spelling)
 00499f10 ?FUN_00499f10@@YAPAUVector3_s0049_9410@@PAU1@U1@11@Z  # FUN_00499f10 migrated from s00499410 (verbatim, slice spelling)
 0049a030 ?FUN_0049a030@@YA_NUVector3_s0049_9410@@0PAU1@@Z  # FUN_0049a030 migrated from s00499410 (verbatim, slice spelling)

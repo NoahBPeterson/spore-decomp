@@ -176,9 +176,11 @@ struct W2 {
     S(7c) S(80) S(84) S(88) S(8c) S(90) S(94) S(98) S(9c) S(a0) S(a4)
     S(a8)
 };
-struct WMgr_s0080_5940 { virtual void s0(); virtual void* s1(); };
+struct WMgr_s0080_5940 {
+    virtual void s0();
+    virtual void* s1();
+};
 // ---- items of slice s00805940 end
-
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 char CreateImageFromResource2(void* key, void** out, char flag, int a, int b);  // 0x00806230 (stays in the slice: not this object's)
@@ -409,10 +411,6 @@ static __forceinline void AnchorTo(IWin* parent, IWin* child, int f)
 }
 // ---- items of slice s008087f0 end
 
-
-// callees this slice defines outside this object (rewrite.py held_callee_protos)
-void FUN_008087f0(float* out, IWin* w, char useChildren);  // 0x008087f0 (stays in the slice: not this object's)
-
 // ---- items of slice s00809700 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern uint8_t g_894, g_895, g_896;  // 0x0164c894/5/6
 extern uint32_t g_898, g_89c, g_8a0;// 0x0164c898/9c/a0
@@ -513,8 +511,6 @@ void Help2(void* a, float f, float g, void* b)
 
 
 
-
-
 // @ 0x00804fc0
 namespace SPUIHelpers {
 void SetWindowAlpha(EA::UTFWin::IWindow * w, float a)
@@ -537,8 +533,6 @@ void SetWindowAlpha(EA::UTFWin::IWindow * w, float a)
 
 
 
-
-
 // @ 0x00805040
 float GetAlpha(int* p)
 {
@@ -546,8 +540,6 @@ float GetAlpha(int* p)
     unsigned v = (*(unsigned(__thiscall**)(void*))VSlot(p, 0x30))(p);
     return (float)(v >> 0x18) * 0.0039215689f;
 }
-
-
 
 
 
@@ -575,8 +567,6 @@ float GetElapsedSeconds()
 
 
 
-
-
 // @ 0x008050b0
 int WalkAll(int* p)
 {
@@ -590,8 +580,6 @@ int WalkAll(int* p)
     }
     return 0;
 }
-
-
 
 
 
@@ -620,8 +608,6 @@ int* WalkFind(int* p)
 
 
 
-
-
 // @ 0x00805150
 bool Contains(int* a, int* b)
 {
@@ -632,8 +618,6 @@ bool Contains(int* a, int* b)
     }
     return false;
 }
-
-
 
 
 
@@ -658,8 +642,6 @@ int* FindByKey(int* self, int key)
 
 
 
-
-
 // @ 0x00805200
 float AttrF14(int* p)
 {
@@ -669,8 +651,6 @@ float AttrF14(int* p)
     }
     return 1.0f;
 }
-
-
 
 
 
@@ -694,8 +674,6 @@ float AttrF18(int* p)
 
 
 
-
-
 // @ 0x00805260
 void* AttrP1c(int* p)
 {
@@ -705,8 +683,6 @@ void* AttrP1c(int* p)
     }
     return (void*)0x1544384;
 }
-
-
 
 
 
@@ -730,8 +706,6 @@ float AttrF0c(int* p)
 
 
 
-
-
 // @ 0x008052c0
 float AttrF10(int* p)
 {
@@ -741,8 +715,6 @@ float AttrF10(int* p)
     }
     return 0.0f;
 }
-
-
 
 
 
@@ -785,13 +757,9 @@ bool CreditsTabInit(int param1, int param2, void** out)
 
 
 
-
-
 // @ 0x00805400
 void FreeCoreBlock(void* p)
 { DeallocEAL(p); _ReadWriteBarrier(); }
-
-
 
 
 
@@ -804,8 +772,6 @@ void VThunk8::CallVt8(int a, int b, int c, int d, int e)
 {
     (*(void(__thiscall**)(void*, int, int, int))VSlot(this, 8))(this, a, b, c);
 }
-
-
 
 
 
@@ -833,8 +799,6 @@ void FixedFree(int* self, void* p)
 
 
 
-
-
 // @ 0x008054f0
 void InitAlloc()
 {
@@ -842,8 +806,6 @@ void InitAlloc()
     *(void**)0x164c4b8 = g_alloc;
     FUN_009512b0(&g_alloc);
 }
-
-
 
 
 
@@ -864,7 +826,6 @@ Vec4* SPUIHelpers_GetMainWindowArea(Vec4* out)
     out->w = a->w;
     return out;
 }
-
 
 
 
@@ -901,7 +862,6 @@ Vec4* FUN_00805ef0(Vec4* out, W* w)
 
 
 
-
 // @ 0x008060d0
 void* GetImageFromTexture(int arg1, int arg2, int arg3, int arg4)
 {
@@ -932,7 +892,6 @@ void* GetImageFromTexture(int arg1, int arg2, int arg3, int arg4)
 
 
 
-
 // @ 0x008061c0
 void* GetImageFromLayout(void* layout, int id)
 {
@@ -953,7 +912,6 @@ void* GetImageFromLayout(void* layout, int id)
 
 
 
-
 // @ 0x00806320
 void CreateImageFromResourceA(int a, int b, int c, int d, int e, int f, int g)
 {
@@ -961,7 +919,6 @@ void CreateImageFromResourceA(int a, int b, int c, int d, int e, int f, int g)
     SPKeyFromName(&key, c, a, b);
     CreateImageFromResource2(&key, (void**)d, (char)e, f, g);
 }
-
 
 
 
@@ -1001,7 +958,6 @@ void* FUN_00806370(W* parent)
     esi->v90();
     return esi;
 }
-
 
 
 
@@ -1048,7 +1004,6 @@ void* FUN_008064c0(W* parent)
 
 
 
-
 // @ 0x00806610
 void FUN_00806610(DWin* win, int a, int b, Vec4* rc, W* obj)
 {
@@ -1073,7 +1028,6 @@ void FUN_00806610(DWin* win, int a, int b, Vec4* rc, W* obj)
 
 
 
-
 // @ 0x00806780
 void* FUN_00806780(int a, int b, int c, int d, int e, int f)
 {
@@ -1090,7 +1044,6 @@ void* FUN_00806780(int a, int b, int c, int d, int e, int f)
     (void)e;
     return esi;
 }
-
 
 
 
@@ -1120,7 +1073,6 @@ void* FUN_008067f0(W2* w, int index)
 
 
 
-
 // @ 0x00806880
 void* FUN_00806880(W2* w, int index)
 {
@@ -1132,7 +1084,6 @@ void* FUN_00806880(W2* w, int index)
     if (index < 0 || index >= 8) index = 0;
     return ((DrawHelper*)r)->FUN_00830cf0(index);
 }
-
 
 
 
@@ -1204,7 +1155,6 @@ do_assign:
 
 
 
-
 // @ 0x00806a60
 char FUN_00806a60(W_s0080_68d0* w, void* layout, int id, int param4)
 {
@@ -1213,7 +1163,6 @@ char FUN_00806a60(W_s0080_68d0* w, void* layout, int id, int param4)
     if (param4 == -1) param4 = 0;
     return FUN_008068d0(w, (int)img, param4);
 }
-
 
 
 
@@ -1235,7 +1184,6 @@ char FUN_00806aa0(W_s0080_68d0* w, int idx)
     }
     return 1;
 }
-
 
 
 
@@ -1272,7 +1220,6 @@ char FUN_00806b20(W_s0080_68d0* w, int param2, int param3)
 
 
 
-
 // @ 0x00806bf0
 void SetWindowAreaToParent(W_s0080_68d0* w)
 {
@@ -1286,7 +1233,6 @@ void SetWindowAreaToParent(W_s0080_68d0* w)
     r[0] = 0; r[1] = 0; r[2] = wd; r[3] = hd;
     w->m6c(r);
 }
-
 
 
 
@@ -1309,7 +1255,6 @@ float* FUN_00806c60(float* out, void* wp)
 
 
 
-
 // @ 0x00806ca0
 void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
 {
@@ -1322,7 +1267,6 @@ void FUN_00806ca0(W_s0080_68d0* w, float x, float y)
 
 
 
-
 // @ 0x00806db0
 unsigned char FUN_00806db0(W_s0080_68d0* w, void* p)
 {
@@ -1330,7 +1274,6 @@ unsigned char FUN_00806db0(W_s0080_68d0* w, void* p)
     w->v90();
     return *(unsigned char*)((char*)p + 4);
 }
-
 
 
 
@@ -1349,7 +1292,6 @@ void SetTooltipText(W_s0080_68d0* w, void* text)
         if (it == 0) return;
     }
 }
-
 
 
 
@@ -1375,7 +1317,6 @@ void FUN_00806ee0(W_s0080_68d0* w)
 
 
 
-
 // @ 0x00806f50
 int __fastcall FUN_00806f50(void* s)
 {
@@ -1385,7 +1326,6 @@ int __fastcall FUN_00806f50(void* s)
     }
     return 0;
 }
-
 
 
 
@@ -1406,7 +1346,6 @@ void FUN_00806fc0(W_s0080_68d0* w)
     w->v98();
     w->v90();
 }
-
 
 
 
@@ -1434,7 +1373,6 @@ void FUN_00807040(W_s0080_68d0* w)
 
 
 
-
 // @ 0x00807430
 void FUN_00807430(W_s0080_68d0* w, float v)
 {
@@ -1446,7 +1384,6 @@ void FUN_00807430(W_s0080_68d0* w, float v)
     if (x >= 100.0f) x = 100.0f;
     (*(void(__thiscall**)(void*, float))VSlot(o, 4))(o, x);
 }
-
 
 
 
@@ -1483,7 +1420,6 @@ char DestroyRolloverFrame(W_s0080_68d0* w)
 
 
 
-
 // @ 0x00807590
 void RemoveWindowCallback(W_s0080_68d0* w, int cb)
 {
@@ -1498,7 +1434,6 @@ void RemoveWindowCallback(W_s0080_68d0* w, int cb)
     }
     w->m108(it);
 }
-
 
 
 
@@ -1533,7 +1468,6 @@ void* FUN_00807600(void* p1, void* p2, void* p3)
 
 
 
-
 // @ 0x00807690
 char FUN_00807690(W_s0080_68d0* w)
 {
@@ -1546,7 +1480,6 @@ char FUN_00807690(W_s0080_68d0* w)
     b->v04();
     return 1;
 }
-
 
 
 
@@ -1566,7 +1499,6 @@ char FUN_008076f0(W_s0080_68d0* w)
     b->v04();
     return 1;
 }
-
 
 
 
@@ -1599,7 +1531,6 @@ void* __fastcall FUN_00807760(void* p)
 
 
 
-
 // @ 0x008077f0
 void __fastcall DoErase(void* p)
 {
@@ -1622,7 +1553,6 @@ void __fastcall DoErase(void* p)
 
 
 
-
 // @ 0x00807840
 void FUN_00807840(int a, int b, int c, int d, int e, int f, int g)
 {
@@ -1630,7 +1560,6 @@ void FUN_00807840(int a, int b, int c, int d, int e, int f, int g)
     key[0] = c; key[1] = a; key[2] = b;
     CreateImageFromResource(&key, (void**)d, (char)e, f, g);
 }
-
 
 
 
@@ -1687,7 +1616,6 @@ int* FUN_00807a50(void* p1, int type, void* p3)
 
 
 
-
 // @ 0x00807dc0
 void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
 {
@@ -1715,7 +1643,6 @@ void* SetWindowSPShader(W_s0080_7840* w, unsigned char flag, void* shader)
 
 
 
-
 // @ 0x00807e50
 void* __fastcall WindowTransform_ctor(Xform* t)
 {
@@ -1738,7 +1665,6 @@ void* __fastcall WindowTransform_ctor(Xform* t)
 
 
 
-
 // @ 0x00807ed0
 char __stdcall FUN_00807ed0(W_s0080_7840* w)
 {
@@ -1746,7 +1672,6 @@ char __stdcall FUN_00807ed0(W_s0080_7840* w)
     w->v90();
     return 0;
 }
-
 
 
 
@@ -1778,7 +1703,6 @@ void __fastcall FUN_00807f50(int p)
 
 
 
-
 // @ 0x00808050
 void XAlign::Update(void* a, void* b)
 {
@@ -1803,7 +1727,6 @@ void XAlign::Update(void* a, void* b)
 
 
 
-
 // @ 0x00808190
 void FUN_00808190(W_s0080_7840* w, float a, float b)
 {
@@ -1823,13 +1746,11 @@ void FUN_00808190(W_s0080_7840* w, float a, float b)
 
 
 
-
 // @ 0x00808210
 void SetWindowScale(W_s0080_7840* w, float s)
 {
     FUN_00808190(w, s, s);
 }
-
 
 
 
@@ -1854,7 +1775,6 @@ void FUN_00808230(W_s0080_7840* w, float* v)
 
 
 
-
 // @ 0x008082f0
 void FUN_008082f0(W_s0080_7840* w, float a, float b)
 {
@@ -1874,14 +1794,12 @@ void FUN_008082f0(W_s0080_7840* w, float a, float b)
 
 
 
-
 // @ 0x00808590
 char CbProc::Invoke(void* a, void* b)
 {
     if (mpFn != 0) return (char)mpFn(a, b, mpCtx);
     return 0;
 }
-
 
 
 
@@ -1909,7 +1827,6 @@ void FUN_008085d0(W_s0080_7840* w, void* fn, void* ctx, void* a, void* b)
     p->fC = fn;
     w->m104(p);
 }
-
 
 
 
@@ -1949,14 +1866,12 @@ int OpenRecordAsStream(void* key, int* rec, void* stream)
 
 
 
-
 // @ 0x00808780
 void FUN_00808780()
 {
     DoErase(&DAT_0164c598);
     DAT_0164c4b8 = 0;
 }
-
 
 
 

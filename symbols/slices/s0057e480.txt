@@ -9,7 +9,7 @@
 0057ed80 ?Init@cUnkEd80@@QAEPAXPAX0@Z  # cUnkEd80::Init migrated from s0057e480 (verbatim, slice spelling)
 0057eda0 ?trim@?$basic_string_s0057_e480@_WUallocator_s0057_e480@eastl@@@eastl@@QAEXXZ  # eastl::basic_string_s0057_e480<wchar_t,allocator_s0057_e480>::trim migrated from s0057e480 (the slice's "real template instance" 0x0057eda0; the module spells the slice's eastl::basic_string as basic_string_s0057_e480)
 0057edf0 ?EraseAfter@cVec16@@QAEPAXPAX@Z  # cVec16::EraseAfter migrated from s0057e480 (verbatim, slice spelling)
-0057ee20 ??4?$vector_s0057_e480@URec18@@@eastl@@QAEAAU01@ABU01@@Z  # eastl::vector_s0057_e480<Rec18>::operator= migrated from s0057e480 (verbatim; the module TU spells vector<Rec18> as vector_s0057_e480<Rec18>, and the tool's first symbol guess picked a colliding AutoRefCount_s0057_6140 instantiation instead)
+0057ee20 ??4?$AutoRefCount_s0057_6140@VIRefCounted@@@EA@@QAEAAU01@PAVIRefCounted@@@Z  # None migrated from s0057e480 (verbatim, slice spelling)
 0057efa0 ?PopulateScriptList@@YA_NPAUListUI@@PBDPAUCharVec@@@Z  # PopulateScriptList migrated from s0057e480 (verbatim, slice spelling)
 0057f0f0 ?DoInsertValue@?$vector_s0057_e480@URec30@@@eastl@@QAEXPAURec30@@ABU3@@Z  # DoInsertValue migrated from s0057e480 (verbatim, slice spelling)
 0057f220 ?DoInsertValues@?$vector_s0057_e480@URefElem@@@eastl@@QAEXPAURefElem@@IABU3@@Z  # DoInsertValues migrated from s0057e480 (verbatim, slice spelling)

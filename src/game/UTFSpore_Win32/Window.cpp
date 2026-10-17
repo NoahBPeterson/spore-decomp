@@ -249,7 +249,6 @@ void FUN_00925e60_hash(HashHolder* h)
 
 
 
-
 // @ 0x0095f960
 void * EA::UTFWin::Window::AsInterface(EA::COM::InterfaceId iid)
 {
@@ -264,7 +263,6 @@ common:
         return 0;
     return (Window*)((char*)this + 4);
 }
-
 
 
 
@@ -284,7 +282,6 @@ int Window::Release()
 
 
 
-
 // @ 0x0095f9d0
 int Window::GetAt34()
 {
@@ -292,7 +289,6 @@ int Window::GetAt34()
         return m34 + 4;
     return 0;
 }
-
 
 
 
@@ -317,7 +313,6 @@ void Window::Set1D8(int v)
 
 
 
-
 // @ 0x0095fad0
 bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
 {
@@ -331,7 +326,6 @@ bool EA::UTFWin::Window::IsChild(EA::UTFWin::IWindow * other)
     }
     return false;
 }
-
 
 
 
@@ -350,7 +344,6 @@ bool Window::Test30Slot48(int v)
 
 
 
-
 // @ 0x0095fb60
 bool Window::Test30Slot54(int v)
 {
@@ -361,7 +354,6 @@ bool Window::Test30Slot54(int v)
     }
     return false;
 }
-
 
 
 
@@ -383,7 +375,6 @@ bool Window::AllDescendants(char param)
 
 
 
-
 // @ 0x0095fc00
 bool Window::AllDescendantsAll(char param)
 {
@@ -397,7 +388,6 @@ bool Window::AllDescendantsAll(char param)
     }
     return false;
 }
-
 
 
 
@@ -421,7 +411,6 @@ void Window::SetA8(int v)
 
 
 
-
 // @ 0x0095fdc0
 void Window::Set1D4(int v)
 {
@@ -433,7 +422,6 @@ void Window::Set1D4(int v)
         }
     }
 }
-
 
 
 
@@ -457,7 +445,6 @@ void Window::SetArea(float* area)
 
 
 
-
 // @ 0x0095fec0
 void Window::ResizeBy(float dx, float dy)
 {
@@ -468,7 +455,6 @@ void Window::ResizeBy(float dx, float dy)
     area[3] = (*(float*)((char*)this + 0xa0) - *(float*)((char*)this + 0x98)) + dy;
     (*(void(__thiscall**)(Window*, float*))((char*)*(void**)this + 0x60))(this, area);
 }
-
 
 
 
@@ -485,7 +471,6 @@ void Window_s0095_ff20::MoveBy(float dx, float dy)
 
 
 
-
 // @ 0x0095ff70
 void Window_s0095_ff20::GrowBy(float dw, float dh)
 {
@@ -496,7 +481,6 @@ void Window_s0095_ff20::GrowBy(float dw, float dh)
     a[3] = (m90 - m88) + dh;
     (*(void(__thiscall**)(Window_s0095_ff20*, float*))((char*)*(void**)this + 0x6c))(this, a);
 }
-
 
 
 
@@ -513,7 +497,6 @@ void Window_s0095_ff20::MoveBy2(float dx, float dy)
 
 
 
-
 // @ 0x00960020
 void EA::UTFWin::Window::SetCursor(unsigned int v)
 {
@@ -524,7 +507,6 @@ void EA::UTFWin::Window::SetCursor(unsigned int v)
         }
     }
 }
-
 
 
 
@@ -546,7 +528,6 @@ void Window_s0095_ff20::Set1E4(void* p)
 
 
 
-
 // @ 0x009600a0
 void Window_s0095_ff20::OnPaint2()
 {
@@ -560,14 +541,12 @@ void Window_s0095_ff20::OnPaint2()
 
 
 
-
 // @ 0x009600d0
 void EA::UTFWin::Window::InvalidateTransform()
 {
     if (mpWinMgr != 0)
         FUN_009588C0(this);
 }
-
 
 
 
@@ -588,7 +567,6 @@ void Window_s0095_ff20::ClearChildren()
 
 
 
-
 // @ 0x009602c0
 int Window_s0095_ff20::Dispatch14(void* p)
 {
@@ -600,7 +578,6 @@ int Window_s0095_ff20::Dispatch14(void* p)
 
 
 
-
 // @ 0x009602f0
 int Window_s0095_ff20::Dispatch(void* p)
 {
@@ -608,7 +585,6 @@ int Window_s0095_ff20::Dispatch(void* p)
         return FUN_0095A0B0((char*)this - 4, (int)p);
     return 0;
 }
-
 
 
 
@@ -629,7 +605,6 @@ void* __stdcall AllocPair(void* p)
     r[2] = 0;
     return r;
 }
-
 
 
 // @ 0x00960be0
@@ -710,7 +685,6 @@ bool GeomObj::Geom(float* out)
 }
 
 
-
 // @ 0x00960f20
 void Win::SetUserData(IUnk* p)
 {
@@ -735,7 +709,6 @@ void Win::SetUserData(IUnk* p)
         }
     }
 }
-
 
 
 // @ 0x00960fe0
@@ -777,7 +750,6 @@ bool Win::TestHit(float x, float y)
 }
 
 
-
 // @ 0x00961150
 bool Win::ScreenToWindow(float x, float y, float* out)
 {
@@ -814,7 +786,6 @@ bool Win::ScreenToWindow(float x, float y, float* out)
 }
 
 
-
 // @ 0x00961260
 void Win::GetId(void** out)
 {
@@ -822,13 +793,11 @@ void Win::GetId(void** out)
 }
 
 
-
 // @ 0x00961270
 void Win::GetIdAddr(void** out)
 {
     *out = (void*)&m38;
 }
-
 
 
 // @ 0x00961280
@@ -861,7 +830,6 @@ void Win::ListRemove(void* iface)
             FUN_00958110(mpMgr30);
     }
 }
-
 
 
 // @ 0x00961300
@@ -901,7 +869,6 @@ void Win::ListInsert(void* iface)
 }
 
 
-
 // @ 0x009613a0
 void* Win::Find60(void* key)
 {
@@ -918,7 +885,6 @@ void* Win::Find60(void* key)
     }
     return p->field8;
 }
-
 
 
 // @ 0x009613e0
@@ -949,7 +915,6 @@ void Win::RecomputeFlags()
 }
 
 
-
 // @ 0x00961450
 void Win::NotifyTree()
 {
@@ -962,7 +927,6 @@ void Win::NotifyTree()
             ((Win*)q)->NotifyTree();
     }
 }
-
 
 
 // @ 0x009614a0
@@ -1008,7 +972,6 @@ lab:
 }
 
 
-
 // @ 0x00961680
 void* Win::CloneNode(int unused)
 {
@@ -1033,7 +996,6 @@ void* Win::CloneNode(int unused)
 }
 
 
-
 // @ 0x009616f0
 bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4)
 {
@@ -1056,7 +1018,6 @@ bool FUN_009616f0(unsigned* param_1, void* param_2, char* param_3, void* param_4
     }
     return true;
 }
-
 
 
 // @ 0x00961760
@@ -1108,7 +1069,6 @@ lab:
 }
 
 
-
 // @ 0x00961860
 void Win::Show()
 {
@@ -1131,7 +1091,6 @@ void Win::Show()
 }
 
 
-
 // @ 0x009618e0
 void Win::Hide()
 {
@@ -1151,7 +1110,6 @@ void Win::Hide()
             mpMgr30, self, self, local, 0);
     }
 }
-
 
 
 // @ 0x00961990
@@ -1184,7 +1142,6 @@ void Win::DestroyProc(void* proc)
 }
 
 
-
 // @ 0x00961a30
 void Iface4::DestroyProcAndRecompute(int proc)
 {
@@ -1192,7 +1149,6 @@ void Iface4::DestroyProcAndRecompute(int proc)
     w->DestroyProc((void*)proc);
     w->RecomputeFlags();
 }
-
 
 
 // @ 0x00961a50
@@ -1225,7 +1181,6 @@ void Win::ClearProcs()
 }
 
 
-
 // @ 0x00961ae0
 void EA::UTFWin::Window::RemoveAllProcs()
 {
@@ -1247,7 +1202,6 @@ void EA::UTFWin::Window::RemoveAllProcs()
 }
 
 
-
 // @ 0x00961b30
 bool Win::SerUpdateTrue(int unused)
 {
@@ -1255,7 +1209,6 @@ bool Win::SerUpdateTrue(int unused)
     SerUpdate();
     return true;
 }
-
 
 
 // @ 0x00961b40
@@ -1312,14 +1265,12 @@ unsigned* ListCopy::Copy(unsigned* src)
 }
 
 
-
 // @ 0x00961d50
 bool FUN_00961d50(Win* p)
 {
     p->SerUpdate();
     return true;
 }
-
 
 // @ 0x00961db0
 void S961db0::f(void** pbuckets, unsigned count)

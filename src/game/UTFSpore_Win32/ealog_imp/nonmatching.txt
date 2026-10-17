@@ -1,5 +1,5 @@
 # va  diff-bytes  reason
-009233f0  12   ILogFilter::IsFiltered tail-call thunk: complete; register order differs
+009233f0 12 ILogFilter::IsFiltered tail-call thunk: complete; register order differs
 009234f0 252 ITracer::TraceVaList (needs /GS-): complete; original keeps constant 0 in ebx, ours uses immediates
 009236d0 32 Server::Release: complete; interlocked schedule + dec/sub differ
 00923700 21 LogReporter::FilterEnabled: complete; `this` in eax vs ecx
@@ -20,6 +20,7 @@
 00924350 40 LogReporter::SkipFilter3: complete; register allocation differs
 00924390 43 LogReporter::SkipFilter4: complete; register allocation differs
 009243d0 42 LogFormatterSimple::LogFormatterSimple: complete; fixed-string init schedule differs
+009244d0 43 LogFormatterFancy::LogFormatterFancy: complete; fixed-string init schedule differs; difftest PASS after fixing the Stopwatch constructor call (thiscall with 2 args; was a free function taking the timer as first arg)
 009245b0 4 LogFormatterFancy::Clone: complete; only the cx/dx register choice for the flags copy differs
 00924600 137 LogFilterGroupLevels::AddGroupLevel: complete; this/group register swap, DoInsertValue's 3rd arg is a stack-slot-reuse bool in the original
 009246c0 101 LogFilterGroupLevels::Clone: complete; inline rbtree ctor store order/zero-register differs, extra push ecx slot

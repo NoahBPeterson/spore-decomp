@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorBlock.cpp -- migrated from slice(s) s00451ef0, s00450f70, s0044f7c0, s0044f420, s0044e460, s0044d4f0, s0044bcf0, s0044ae00, s00449ed0, s00448380, s00446ff0, s00441080, s00440110, s0043f3a0, s0043e3f0, s0043d690, s0043cad0, s0043bbc0, s0043ac40, s0043a460, s00438440 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorBlock.cpp -- migrated from slice(s) s00439110, s00451ef0, s00450f70, s0044f7c0, s0044f420, s0044e460, s0044d4f0, s0044bcf0, s0044ae00, s00449ed0, s00448380, s00446ff0, s00441440, s00441080, s00440110, s0043f3a0, s0043e3f0, s0043d690, s0043cad0, s0043bbc0, s0043ac40, s0043a460, s00438440 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorBlock.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -16,6 +16,13 @@
 #include <math.h>
 #include <xmmintrin.h>   // also switches /arch:SSE scalar float codegen to SSE at /Od
 #include "EA/ArgScript/cIParser.h"
+#include "SP/cEffectsRenderer.h"
+#include "EA/Variant.h"
+#include "SP/cDirectPropertyList.h"
+#include "EA/Audio/Sound.h"
+#include "SP/cSPEditorHandleBallConnector.h"
+#include "SP/cSPEditorHandleRotationBall.h"
+#include <stddef.h>
 #include <float.h>
 #include "SP/cSPEditorSnapVector.h"
 #include "EA/Swarm/cIComponent.h"
@@ -512,7 +519,11 @@ struct Blk {
 };
 }
 namespace SP {
-struct Node_s0043_cad0 { bool Check(); float F3adb80(); float F3adbc0(); };
+struct Node_s0043_cad0 {
+    bool Check();
+    float F3adb80();
+    float F3adbc0();
+};
 }
 namespace SP {
 struct cSPEditorBlock_s0043_cad0 {
@@ -1261,6 +1272,658 @@ struct cSPEditorBlock_s0044_1080 {
 }
 // ---- items of slice s00441080 end
 
+// ---- items of slice s00441440 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const bool kDefaultBoolValue;    // 0x015d115d
+extern const float kDefaultFloatValue;  // 0x015d1168
+extern const uint32_t kEditorModelGroupID;  // 0x015d22e8
+#pragma intrinsic(fabs)
+void* operator new(unsigned int size, const char* pName, int flags, unsigned debugFlags,
+                   const char* file, int line);
+struct Vector3_s0044_1440 {
+    float x, y, z;
+    Vector3_s0044_1440() {}
+    Vector3_s0044_1440(float a, float b, float c) : x(a), y(b), z(c) {}
+    float& operator[](int i) { return (&x)[i]; }
+};
+struct Matrix33 {
+    float m[9];
+};
+struct Matrix3_s0044_1440 {
+    Vector3_s0044_1440 m[3];
+    Matrix3_s0044_1440() {}
+    Matrix3_s0044_1440(const Matrix33& other);  // 0x0041cb40
+};
+struct BoundingBox {
+    Vector3_s0044_1440 mMin;
+    Vector3_s0044_1440 mMax;
+    BoundingBox();  // 0x00409c00
+};
+Vector3_s0044_1440 operator*(const Vector3_s0044_1440& v, const float& s);           // 0x0041dca0
+Vector3_s0044_1440 operator*(const float& s, const Vector3_s0044_1440& v);           // 0x0041de40
+Vector3_s0044_1440 operator-(const Vector3_s0044_1440& a, const Vector3_s0044_1440& b);         // 0x0041db10
+Vector3_s0044_1440 operator+(const Vector3_s0044_1440& a, const Vector3_s0044_1440& b);         // 0x0041dc10
+float VectorLength(const Vector3_s0044_1440& v);                          // 0x0040ae50
+Matrix33 Matrix33FromEulerXYZ(const Vector3_s0044_1440& eulerRadians);    // 0x00453920
+extern const Vector3_s0044_1440 kVector3Zero;      // 0x015d255c
+extern const Matrix3_s0044_1440 kMatrix3Identity;  // 0x015d2428
+inline float Abs(float x) { return (float)fabs(x); }
+inline float Clamp_s0044_1440(float x, float lo, float hi)
+{
+    float t = x;
+    t = (t > lo) ? t : lo;
+    t = (t < hi) ? t : hi;
+    return t;
+}
+struct Transform_s0044_1440 {
+    uint16_t mFlags;        // +0x00
+    uint16_t mChangeCount;  // +0x02
+    Vector3_s0044_1440 mOffset;        // +0x04
+    float mScale;           // +0x10
+    Matrix3_s0044_1440 mRotation;      // +0x14
+
+    Transform_s0044_1440();                                  // 0x00409930
+    Transform_s0044_1440& operator=(const Transform_s0044_1440& other); // 0x00537dc0
+    void Accumulate(const Transform_s0044_1440& other);      // 0x0040ccb0
+    void AccumulateScaled(const Transform_s0044_1440& other);// 0x0040cd80
+
+    void SetOffset(const Vector3_s0044_1440& offset)
+    {
+        mOffset = offset;
+        mFlags |= 4;
+        mChangeCount++;
+    }
+    void SetRotation(const Matrix3_s0044_1440& rotation)
+    {
+        mRotation = rotation;
+        mFlags |= 2;
+        mChangeCount++;
+    }
+};
+struct BoneTransform_s0044_1440 {
+    float m[12];
+};
+void BoneTransformToTransform(const BoneTransform_s0044_1440* src, Transform_s0044_1440* dst);  // 0x00732270
+struct ResourceKey {
+    uint32_t instanceID;
+    uint32_t typeID;
+    uint32_t groupID;
+};
+template <int N>
+struct bitset_s0044_1440 {
+    uint32_t mWord[(N + 31) / 32];
+
+    __forceinline bool test(uint32_t n) const
+    {
+        if (n < N)
+            return (mWord[n >> 5] & (1u << (n % 32))) != 0;
+        return false;
+    }
+    __forceinline void set(uint32_t n, bool value)
+    {
+        if (n < N) {
+            if (value)
+                mWord[n >> 5] |= 1u << (n % 32);
+            else
+                mWord[n >> 5] &= ~(1u << (n % 32));
+        }
+    }
+};
+template <class T, int N>
+struct fixed_vector_s0044_1440 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[3];
+    uint32_t mBuffer[(N * sizeof(T)) / 4];
+
+    fixed_vector_s0044_1440() {}
+    explicit fixed_vector_s0044_1440(unsigned int n);  // out of line (0x0041d0c0 / 0x0041d510)
+    ~fixed_vector_s0044_1440()
+    {
+        for (T* p = mpBegin; p < mpEnd; ++p)
+            p->~T();
+        DoFree();
+    }
+    void DoFree();  // out of line (0x004c0b80 / 0x00428130)
+
+    int size() const { return (int)(mpEnd - mpBegin); }
+    bool empty() const;               // out of line (0x00526430, ICF-shared)
+    T& operator[](int i) { return mpBegin[i]; }
+    T* erase(T* first, T* last);      // out of line
+    void resize(unsigned int n);      // out of line
+    void push_back(const T& value);   // out of line
+    void clear() { erase(mpBegin, mpEnd); }
+};
+template <class T>
+struct AutoRefCount_s0044_1440 {
+    T* mpObject;
+
+    AutoRefCount_s0044_1440& operator=(T* pObject)
+    {
+        if (pObject != mpObject) {
+            T* const pTemp = mpObject;
+            if (pObject)
+                pObject->AddRef();
+            mpObject = pObject;
+            if (pTemp)
+                pTemp->Release();
+        }
+        return *this;
+    }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+struct FixedString32 {
+    uint32_t mData[13];
+    FixedString32& operator=(const char* p);  // 0x00453690
+};
+struct Property {
+    void* mpData;        // +0x00 (array data, or the inline value itself)
+    uint32_t pad04;
+    int mnItemCount;     // +0x08
+    uint32_t pad0c;
+    uint16_t mnFlags;    // +0x10 (0x30 = array)
+    uint16_t mnType;     // +0x12
+
+    void* GetValuePtr();     // 0x00446ff0
+    int* GetValueInt32();    // 0x0041e990
+
+    int GetItemCount()
+    {
+        if (mnFlags & 0x30)
+            return mnItemCount;
+        else if (mnType != 0)
+            return 1;
+        return 0;
+    }
+    void* GetItems()
+    {
+        if (mnFlags & 0x30)
+            return mpData;
+        else if (mnType != 0)
+            return this;
+        return 0;
+    }
+};
+const ResourceKey* GetDefaultKeyValue();   // 0x006bb640
+const Vector3_s0044_1440* GetDefaultVector3Value();   // 0x006bb5e0
+__forceinline const bool* GetValueBool(Property* p)
+{
+    return (p->mnType == 1 || p->mnType == 0x10) ? (const bool*)p->GetValuePtr() : &kDefaultBoolValue;
+}
+__forceinline const float* GetValueFloat(Property* p)
+{
+    return (p->mnType == 0xd || p->mnType == 0x10) ? (const float*)p->GetValuePtr() : &kDefaultFloatValue;
+}
+__forceinline const ResourceKey* GetValueKey(Property* p)
+{
+    return (p->mnType == 0x20 || p->mnType == 0x10) ? (const ResourceKey*)p->GetValuePtr() : GetDefaultKeyValue();
+}
+__forceinline const Vector3_s0044_1440* GetValueVector3(Property* p)
+{
+    return (p->mnType == 0x31 || p->mnType == 0x10) ? (const Vector3_s0044_1440*)p->GetValuePtr() : GetDefaultVector3Value();
+}
+class cPropertyList_s0044_1440 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08();
+    virtual void v0c();
+    virtual void v10();
+    virtual void SetProperty(uint32_t id, const Property* p);  // 0x006a2e20 (cPropertyList::SetProperty)
+    virtual int RemoveProperty(uint32_t id);  // 0x006a2ef0 (cPropertyList::RemoveProperty)
+    virtual bool HasProperty(uint32_t id);                       // 0x1c 0x006a2470
+    virtual bool GetPropertyAlt(uint32_t id, Property*& result); // 0x20
+    virtual bool GetProperty(uint32_t id, Property*& result);    // 0x24
+    virtual Property* GetPropertyObject(uint32_t id);            // 0x28
+};
+bool GetBoolProperty(cPropertyList_s0044_1440* list, uint32_t id, bool& value);              // 0x00407190
+bool GetFloatProperty(cPropertyList_s0044_1440* list, uint32_t id, float& value);            // 0x0040cf10
+bool TryGetUIntProperty(cPropertyList_s0044_1440* list, uint32_t id, uint32_t& value);       // 0x00410370
+bool GetPropertyAsKey(cPropertyList_s0044_1440* list, uint32_t id, ResourceKey& value);      // 0x006a1250
+bool GetPropertyAsKeyInstance(cPropertyList_s0044_1440* list, uint32_t id, uint32_t& value); // 0x006a12a0
+bool GetPropertyAsVector3(cPropertyList_s0044_1440* list, uint32_t id, Vector3_s0044_1440& value);      // 0x006a1110
+bool GetPropertyAsChar8Ptr(cPropertyList_s0044_1440* list, uint32_t id, const char*& value); // 0x006a1450
+inline bool GetIntProperty(cPropertyList_s0044_1440* list, uint32_t id, int& value)
+{
+    Property* prop;
+    if (list && list->GetProperty(id, prop) && prop->mnType == 9) {
+        value = *prop->GetValueInt32();
+        return true;
+    }
+    return false;
+}
+template <int N>
+inline void CopyKeys(fixed_vector_s0044_1440<ResourceKey, N>& dst, int count, const ResourceKey* keys)
+{
+    dst.resize(count);
+    for (int i = 0; i < count; i++)
+        dst[i] = keys[i];
+}
+class IUnknown32 {
+public:
+    virtual int AddRef();
+    virtual int Release();
+};
+class IModelWorld_s0044_1440;
+struct cMWModel_s0044_1440 {
+    IModelWorld_s0044_1440* mpWorld;                 // +0x00
+    bitset_s0044_1440<32> mFlags;                    // +0x04
+    Transform_s0044_1440 mTransform;                 // +0x08
+    int mnRefCount;                       // +0x40
+    bitset_s0044_1440<64> mGroupFlags;               // +0x44
+    float mColor[4];                      // +0x4c
+    bool field_5C;                        // +0x5c
+    uint8_t mCollisionMode;               // +0x5d
+    uint8_t pad5e[2];
+    int field_60;                         // +0x60
+    AutoRefCount_s0044_1440<IUnknown32> mpOwner;     // +0x64
+    uint32_t pad68[2];
+    BoundingBox mDefaultBBox;             // +0x70
+    uint32_t pad88[2];
+    cPropertyList_s0044_1440* mpPropList;            // +0x90
+
+    int AddRef() { return ++mnRefCount; }
+    int Release();                        // 0x0040f360
+    void SetVisible(bool visible);        // 0x00437f70
+};
+class IModelWorld_s0044_1440 {
+public:
+    virtual int AddRef();                                                     // 0x00
+    virtual int Release();                                                    // 0x04
+    virtual void v08();
+    virtual cMWModel_s0044_1440* CreateModel(uint32_t instanceID, uint32_t groupID, int flags);  // 0x0c
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1c();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2c();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3c();
+    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4c();
+    virtual void v50(); virtual void v54();
+    virtual void StallUntilLoaded(cMWModel_s0044_1440* model);                           // 0x58
+    virtual void v5c(); virtual void v60(); virtual void v64();
+    virtual int GetNumAnimations(cMWModel_s0044_1440* model, int animationGroup);        // 0x68
+    virtual int GetAnimationIDs(cMWModel_s0044_1440* model, uint32_t* dst, int animationGroup);  // 0x6c
+    virtual void AnimAction(cMWModel_s0044_1440* model, uint32_t animID, int arg3, float arg4, int animationGroup);  // 0x70
+    virtual void v74(); virtual void v78(); virtual void v7c(); virtual void v80();
+    virtual int GetNumBones(cMWModel_s0044_1440* model);                                 // 0x84
+    virtual int GetPoseTransforms(cMWModel_s0044_1440* model, BoneTransform_s0044_1440* dst, bool original);  // 0x88
+    virtual int GetBoneTransforms(cMWModel_s0044_1440* model, BoneTransform_s0044_1440* dst);       // 0x8c
+    virtual int GetBoneIDs(cMWModel_s0044_1440* model, uint32_t* dst);                   // 0x90
+    virtual void v94(); virtual void v98(); virtual void v9c(); virtual void va0();
+    virtual void va4(); virtual void va8(); virtual void vac(); virtual void vb0();
+    virtual void vb4(); virtual void vb8(); virtual void vbc(); virtual void vc0();
+    virtual void vc4(); virtual void vc8(); virtual void vcc(); virtual void vd0();
+    virtual void SetExternalEffectsTransform(cMWModel_s0044_1440* model, const Transform_s0044_1440* t, uint32_t instanceID);  // 0xd4
+    virtual void vd8(); virtual void vdc();
+    virtual void ReleaseTransformedHull(int* hull);                           // 0xe0
+    virtual void ve4();
+    virtual int GetDeformationHandles(cMWModel_s0044_1440* model, void* dst, int count); // 0xe8
+    virtual void vec(); virtual void vf0(); virtual void vf4(); virtual void vf8();
+    virtual void vfc(); virtual void v100(); virtual void v104();
+    virtual Transform_s0044_1440* GetMeshTransform(cMWModel_s0044_1440* model);                     // 0x108
+    virtual void v10c(); virtual void v110(); virtual void v114(); virtual void v118();
+    virtual void v11c(); virtual void v120(); virtual void v124(); virtual void v128();
+    virtual void v12c(); virtual void v130(); virtual void v134(); virtual void v138();
+    virtual void v13c(); virtual void v140(); virtual void v144(); virtual void v148();
+    virtual void v14c(); virtual void v150(); virtual void v154(); virtual void v158();
+    virtual void v15c(); virtual void v160(); virtual void v164(); virtual void v168();
+    virtual bool SetInWorld(cMWModel_s0044_1440* model, bool inWorld);                   // 0x16c
+};
+class IModelManager {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual int GetGroupFlag(uint32_t groupID, int arg);  // 0x28
+};
+namespace SP {
+ IModelManager* ModelManager();   // 0x0067dd80
+}
+class IBlockPropertySource {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18(); virtual void v1c(); virtual void v20(); virtual void v24();
+    virtual void v28(); virtual void v2c(); virtual void v30(); virtual void v34();
+    virtual void v38(); virtual void v3c(); virtual void v40(); virtual void v44();
+    virtual void v48(); virtual void v4c(); virtual void v50(); virtual void v54();
+    virtual cPropertyList_s0044_1440* GetPropertyList(uint32_t instanceID, uint32_t groupID);  // 0x58
+    virtual void v5c(); virtual void v60(); virtual void v64(); virtual void v68();
+    virtual float GetPropertyListFloat(cPropertyList_s0044_1440* list);                      // 0x6c
+};
+IBlockPropertySource* BlockPropertySource();  // 0x00401010
+namespace SP {
+class cSPEditorBlock_s0044_1440;
+}
+namespace SP {
+class cSPEditorHandle_s0044_1440 {
+public:
+    virtual int AddRef();          // 0x00
+    virtual int Release();         // 0x04 0x0051e380
+    virtual void v08(); virtual void v0c(); virtual void v10(); virtual void v14();
+    virtual void v18();
+    virtual void Dispose();        // 0x1c
+    virtual void SetScale(float scale);  // 0x20
+};
+}
+namespace SP {
+class cSPEditorHandleBallConnector_s0044_1440 : public cSPEditorHandle_s0044_1440 {
+public:
+    uint32_t mData[(0x50 - 4) / 4];
+    cSPEditorHandleBallConnector_s0044_1440();   // 0x0047f4b0
+    void Init(cSPEditorBlock_s0044_1440* block); // 0x0047f720
+};
+}
+namespace SP {
+class cSPEditorHandleRotationBall_s0044_1440 : public cSPEditorHandle_s0044_1440 {
+public:
+    uint32_t pad04[(0x5d - 4) / 4];
+    uint8_t pad58[5];
+    bool mIsHidden;                   // +0x5d
+    uint8_t pad5e[6];
+    cSPEditorHandleRotationBall_s0044_1440();    // 0x00482f90
+    void Init(IModelManager* modelMgr, cSPEditorBlock_s0044_1440* block, Vector3_s0044_1440 offset, bool fullInit);  // 0x00483350
+};
+}
+namespace SP {
+struct MorphHandleInfo {
+    uint32_t mAnimID;
+    Transform_s0044_1440 mTransform;
+    uint32_t mData[8];
+};
+}
+namespace SP {
+class cSPEditorHandleDeform_s0044_1440 : public cSPEditorHandle_s0044_1440 {
+public:
+    uint32_t pad04[(0x180 - 4) / 4];
+    float mDefaultWeight;             // +0x180
+    uint32_t pad184[(0x1d8 - 0x184) / 4];
+    cSPEditorHandleDeform_s0044_1440();          // 0x0047fa30
+    void Init(IModelManager* modelMgr, cSPEditorBlock_s0044_1440* block, MorphHandleInfo* info, bool fullInit);  // 0x00480030
+};
+}
+namespace SP {
+class cSPEditorBlockHelper378 {
+public:
+    uint32_t mField0;
+    IUnknown32* mpObject;
+    uint32_t mData[(0x4c - 8) / 4];
+
+    cSPEditorBlockHelper378();  // 0x004e8f70
+    ~cSPEditorBlockHelper378()
+    {
+        if (mpObject)
+            mpObject->Release();
+    }
+    void Shutdown();            // 0x004ae250
+};
+}
+namespace SP {
+struct cSPEditorBlockOwnerLink {
+    uint32_t mData[0x38 / 4];
+    void SetOwner(cSPEditorBlock_s0044_1440* block);  // 0x00433a80
+};
+}
+namespace SP {
+struct CapabilityLevel {
+    bool mIsVariableLevel;
+    int mMinLevel;
+    int mMaxLevel;
+    int mDefaultLevel;
+};
+}
+namespace SP {
+struct Capability {
+    uint32_t mPropertyID;
+    CapabilityLevel mLevel;
+    Capability() : mPropertyID(0), mLevel() {}
+};
+}
+namespace SP {
+struct CapabilityPropertyDesc {
+    uint32_t mPropertyID;
+    uint32_t mUnk4;
+    bool mIsVariableLevel;
+};
+}
+namespace SP {
+extern const CapabilityPropertyDesc kCapabilityProperties[0x5b];
+}
+namespace SP {
+class RefCountVTemplate {
+public:
+    virtual int AddRef();
+    virtual int Release();
+    int mnRefCount;
+};
+}
+namespace SP {
+enum {
+    kAttrOrientToSurfaces = 0x00,
+    kAttrOrientWhenSnapped = 0x04,
+    kAttrUseDummyBlocks = 0x05,
+    kAttrIsVertebra = 0x07,
+    kAttrIsPlantRoot = 0x08,
+    kAttr09 = 0x09,
+    kAttrUseSkin = 0x0a,
+    kAttrHasBallAndSocket = 0x0b,
+    kAttr0C = 0x0c,
+    kAttrHasLeftFile = 0x0d,
+    kAttrOnSymmetryPlane = 0x0f,
+    kAttrRemainUpright = 0x11,
+    kAttrMoveBottomEdgeToSurface = 0x12,
+    kAttrPointForward = 0x13,
+    kAttrIsNullBlock = 0x14,
+    kAttrUseHullForBBox = 0x15,
+    kAttrStayAboveGround = 0x16,
+    kAttrHasSnapDownTo = 0x17,
+    kAttrHideDeformHandles = 0x18,
+    kAttrHideRotationHandles = 0x19,
+    kAttrHasAlignLateralWith = 0x1a,
+    kAttrHasAlignHeightWith = 0x1b,
+    kAttrSnapToParentCenter = 0x1c,
+    kAttrSnapToParentSnapVectors = 0x1d,
+    kAttrSnapToCenterOfEditor = 0x1e,
+    kAttrHasBallConnector = 0x1f,
+    kAttrHasSocketConnector = 0x20,
+    kAttrCellAllowOnTopOfBody = 0x21,
+    kAttrPreferToBeOnPlaneOfSymmetry = 0x22,
+    kAttrCanBeParentless = 0x23,
+    kAttrBoundsCheckOnlyForDelete = 0x24,
+    kAttrHasRotationBallHandle = 0x26,
+    kAttrHasEffectBone = 0x27,
+    kAttrActLikeFinOnPlaneOfSymmetry = 0x28,
+    kAttrWarpCursorToPinPoint = 0x29,
+    kAttrActsLikeGrasper = 0x2c,
+    kAttrActsLikeFoot = 0x2d,
+    kAttrUseHullForPicking = 0x2e,
+    kAttrForcePinningAgainstType = 0x2f,
+    kAttrAllowAsymmetricalRotationOnPlaneOfSymmetry = 0x30,
+    kAttrCircularTopAlignment = 0x31,
+    kAttrRemainUprightOnTop = 0x32,
+    kAttrIsAllowedOutOfBounds = 0x33,
+    kAttrDoNotFlipOnPlaneOfSymmetry = 0x34,
+    kAttrHasAlignXYWith = 0x35,
+    kAttrHasCSnapBone = 0x36,
+    kAttrAllowTopBehaviors = 0x37,
+    kAttrCellApplyBehaviorToUserRotation = 0x38,
+    kAttrStartAsymmetric = 0x3b
+};
+}
+namespace SP {
+class cSPEditorBlock_s0044_1440 : public RefCountVTemplate, public IUnknown32 {
+public:
+    AutoRefCount_s0044_1440<cPropertyList_s0044_1440> mpPropList;          // +0x0c
+    AutoRefCount_s0044_1440<cMWModel_s0044_1440> mpModel;                  // +0x10
+    AutoRefCount_s0044_1440<cMWModel_s0044_1440> mpEffectsMaskModel;       // +0x14
+    AutoRefCount_s0044_1440<IModelWorld_s0044_1440> mpModelWorld;          // +0x18
+    uint32_t mInstanceID;                            // +0x1c
+    uint32_t mGroupID;                               // +0x20
+    int mBlockPack;                                  // +0x24
+    void* mpEditorModel;                             // +0x28
+    bool mIsFullInit;                                // +0x2c
+    uint8_t pad2d[3];
+    float field_30;                                  // +0x30
+    bool mIsVisible;                                 // +0x34
+    uint8_t pad35[3];
+    uint32_t mUIState[4];                            // +0x38
+    Vector3_s0044_1440 mPosition;                               // +0x48
+    Vector3_s0044_1440 mHistoryPosition;                        // +0x54
+    Matrix3_s0044_1440 mTotalOrientation;                       // +0x60
+    Matrix3_s0044_1440 mOtherOrientations[5];                   // +0x84
+    Vector3_s0044_1440 mSurfaceNormal;                          // +0x138
+    Vector3_s0044_1440 mReplacePartDisplacement;                // +0x144
+    int mSnapType;                                   // +0x150
+    AutoRefCount_s0044_1440<cSPEditorHandle_s0044_1440> mAxisHandles[3];   // +0x154
+    AutoRefCount_s0044_1440<cSPEditorHandleRotationBall_s0044_1440> mpRotationBallHandle;  // +0x160
+    uint32_t mRotationRingHandleAnimID;              // +0x164
+    uint32_t mVertebraAnimID;                        // +0x168
+    float mRotationRingHandleCurrentUnscaledRadius;  // +0x16c
+    uint32_t mTimer[6];                              // +0x170
+    cSPEditorBlock_s0044_1440* mpClonedFrom;                    // +0x188
+    uint32_t pad18c[6];
+    int mTransformedHull;                            // +0x1a4
+    bool field_1A8;                                  // +0x1a8
+    bool field_1A9;                                  // +0x1a9
+    uint8_t pad1aa[2];
+    int field_1AC;                                   // +0x1ac
+    uint32_t pad1b0[4];
+    int mSymmetryType;                               // +0x1c0 (PDB setter: SetBaseJointScale)
+    int field_1C4;                                   // +0x1c4
+    int field_1C8;                                   // +0x1c8
+    int mLimbType;                                   // +0x1cc
+    float mMuscleScale;                              // +0x1d0
+    float mBaseMuscleScale;                          // +0x1d4
+    float mSize;                                     // +0x1d8
+    float mSize2;                                    // +0x1dc
+    float mModelMinScale;                            // +0x1e0
+    float mModelMaxScale;                            // +0x1e4
+    Vector3_s0044_1440 mModelDefaultMouseOffset;                // +0x1e8
+    Matrix3_s0044_1440 mModelEditorInitialRotation;             // +0x1f4
+    float mModelMinBallConnectorScale;               // +0x218
+    float mModelMaxBallConnectorScale;               // +0x21c
+    float mModelSymmetrySnapDelta;                   // +0x220
+    float field_224;                                 // +0x224
+    float mModelReplaceSnapDelta;                    // +0x228
+    float mModelSymmetryRotationSnapAngle;           // +0x22c
+    bool field_230;                                  // +0x230
+    uint8_t pad231[3];
+    uint32_t field_234[5];                           // +0x234
+    int mModelNumberOfSnapAxes;                      // +0x248
+    Transform_s0044_1440 mEffectsBoneTransform1;                // +0x24c
+    Transform_s0044_1440 mEffectsBoneTransform2;                // +0x284
+    int mEffectsBoneIndex;                           // +0x2bc
+    Transform_s0044_1440 mCSnapBoneTransform1;                  // +0x2c0
+    Transform_s0044_1440 mCSnapBoneTransform2;                  // +0x2f8
+    int mCSnapBoneIndex;                             // +0x330
+    uint32_t pad334[2];
+    AutoRefCount_s0044_1440<cSPEditorBlock_s0044_1440> mpParent;           // +0x33c
+    uint32_t mChildren[0x38 / 4];                    // +0x340
+    cSPEditorBlockHelper378* mpHelper378;            // +0x378
+    uint32_t pad37c[9];
+    Vector3_s0044_1440 mTriangleDirection;                      // +0x3a0
+    Vector3_s0044_1440 mTrianglePickOrigin;                     // +0x3ac
+    int mPickingType;                                // +0x3b8
+    int mModelForcePinningType;                      // +0x3bc
+    uint32_t mModelPinningTypeGroup;                 // +0x3c0
+    int field_3C4;                                   // +0x3c4
+    bool mModelPinningAntiAliased;                   // +0x3c8
+    uint8_t pad3c9[3];
+    Vector3_s0044_1440 field_3CC;                               // +0x3cc
+    uint32_t pad3d8[4];
+    uint8_t pad3e8[4];
+    AutoRefCount_s0044_1440<cSPEditorHandleBallConnector_s0044_1440> mpBallConnectorHandle;  // +0x3ec
+    AutoRefCount_s0044_1440<cMWModel_s0044_1440> mpSocketConnectorModel;   // +0x3f0
+    Vector3_s0044_1440 mModelMinSocketConnectorOffset;          // +0x3f4
+    Vector3_s0044_1440 mModelMaxSocketConnectorOffset;          // +0x400
+    Vector3_s0044_1440 mSocketConnectorOffset;                  // +0x40c
+    Vector3_s0044_1440 mModelRotationBallHandleOffset;          // +0x418
+    Vector3_s0044_1440 mModelPaletteRotation;                   // +0x424
+    int mDeformAnimIndex;                            // +0x430
+    uint32_t mDeformAnimID;                          // +0x434
+    uint32_t pad438[6];
+    float mModelBottomEdgeDistanceAdjustment;        // +0x450
+    float mModelScale;                               // +0x454
+    uint32_t mModelMinMuscleFile;                    // +0x458
+    uint32_t mModelMaxMuscleFile;                    // +0x45c
+    FixedString32 mModelSoundScale;                  // +0x460
+    FixedString32 mModelSoundRotation;               // +0x494
+    uint32_t mPaints[(0x5e4 - 0x4c8) / 4];           // +0x4c8
+    uint32_t mModelPrice;                            // +0x5e4
+    uint32_t mModelComplexityScore;                  // +0x5e8
+    uint32_t mModelRunTimeBoneCount;                 // +0x5ec
+    uint32_t mModelBakeLevel;                        // +0x5f0
+    float field_5F4;                                 // +0x5f4
+    ResourceKey mModelRigBlockType;                  // +0x5f8
+    uint32_t mModelShowoffAnimation;                 // +0x604
+    uint32_t mModelShowoffEffect;                    // +0x608
+    uint32_t pad60c[(0x6cc - 0x60c) / 4];
+    fixed_vector_s0044_1440<AutoRefCount_s0044_1440<cSPEditorHandleDeform_s0044_1440>, 8> mMorphHandles;  // +0x6cc
+    fixed_vector_s0044_1440<float, 8> mMorphHandleWeights;      // +0x704
+    fixed_vector_s0044_1440<uint32_t, 8> mMorphHandleChannels;  // +0x73c
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelSnapDownTo;   // +0x774
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelSnapToParentTypes;  // +0x7ec
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelStayAbove;    // +0x864
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelAlignLateralWith;   // +0x8dc
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelAlignHeightWith;    // +0x954
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelAlignXYWith;  // +0x9cc
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelTypesToInteractWith;  // +0xa44
+    fixed_vector_s0044_1440<ResourceKey, 8> mModelTypesToSnapReplace;   // +0xabc
+    fixed_vector_s0044_1440<ResourceKey, 16> mModelTypesNotToInteractWith;  // +0xb34
+    fixed_vector_s0044_1440<Capability, 20> mCapabilities;      // +0xc0c
+    uint32_t mFootType;                              // +0xdb4
+    uint32_t mMouthType;                             // +0xdb8
+    uint32_t mWeaponType;                            // +0xdbc
+    uint32_t padDC0[2];
+    bitset_s0044_1440<60> mBooleanAttributes;                   // +0xdc8
+    cSPEditorBlockOwnerLink mOwnerLink;              // +0xdd0
+
+    bool GetBooleanAttribute(int index) { return mBooleanAttributes.test(index); }
+
+    bool BuildBlock(uint32_t instanceID, uint32_t groupID, IModelWorld_s0044_1440* pWorld,
+                    cSPEditorBlock_s0044_1440* pParent, float field30, bool bInteractive,
+                    bool bCreateModel, bool bModelFlag);
+
+    // out-of-line callees (thiscall)
+    void SetBooleanAttribute(int index, bool value);     // 0x00435a10
+    void SetBaseJointScale(int value);                   // 0x0044e980 (writes +0x1c0)
+    int GetBlockType(uint32_t instanceID);               // 0x0044e830
+    bool Sub_44c5a0(int symmetryType);                   // 0x0044c5a0
+    void SetScaleType(int limbType);                     // 0x0044f130 (writes +0x1cc)
+    float GetDefaultScale();                             // 0x0044b5c0
+    void ReleasePhysics();                               // 0x00451fe0
+    void RebuildPhysics();                               // 0x00452040
+    Vector3_s0044_1440 Sub_4364a0();                                // 0x004364a0
+    void SetPosition(Vector3_s0044_1440 position, bool absolute);   // 0x004380a0
+    void Sub_43ac40(int a, int b, int c);                // 0x0043ac40
+    BoundingBox GetBBox(int mode, bool a, bool b);       // 0x0044ae00
+    void CreateRotationRingHandle(int axis, uint32_t name, uint32_t allowHiddenProp,
+                                  uint32_t axisProp, uint32_t rotationProp,
+                                  uint32_t offsetProp, uint32_t scaleProp,
+                                  uint32_t actLikeBallProp, uint32_t isHiddenProp,
+                                  uint32_t unk);         // 0x004410d0
+    void Sub_451e20(cSPEditorBlock_s0044_1440* parent);             // 0x00451e20
+    void SetMorphHandleWeight(int index, float weight, int a, int b, int c);  // 0x0043d690
+    void Sub_43e2b0();                                   // 0x0043e2b0
+    void InitializeHandleData(cPropertyList_s0044_1440* propList);  // 0x00447150
+    void Sub_43e0f0(int* animIndex);                     // 0x0043e0f0
+    void Sub_448b80(int a);                              // 0x00448b80
+    void Sub_449d40(BoundingBox* bbox);                  // 0x00449d40
+    void CalculateSnapAxes();                            // 0x0044c690
+    void Sub_4484f0();                                   // 0x004484f0
+    void Sub_44b640(BoundingBox* bbox);                  // 0x0044b640
+    void Sub_44b6b0();                                   // 0x0044b6b0
+    void Sub_4485d0();                                   // 0x004485d0
+    void Sub_44e7c0(int index);                          // 0x0044e7c0
+};
+}
+bool Sub_492de0(SP::cSPEditorBlock_s0044_1440* block);  // 0x00492de0
+float Sub_492e70(SP::cSPEditorBlock_s0044_1440* block, Vector3_s0044_1440* a, Vector3_s0044_1440* b, int* index, float scale,
+                 bool flag);                  // 0x00492e70
+    void operator delete(void*); // 0x00f47380
+// ---- items of slice s00441440 end
+
 // ---- items of slice s00446ff0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSPTransform_s0044_6ff0 {
     unsigned short mFlags;
@@ -1743,7 +2406,10 @@ bool FUN_004a7e60(Blk_s0044_ae00* b);
 // ---- items of slice s0044bcf0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern const float g_eps;   // 0.001f
 struct Vec1 { float x, y, z; float& operator[](int i) { return (&x)[i]; } };
-struct M3_s0044_bcf0 { float m[9]; M3_s0044_bcf0& operator=(const M3_s0044_bcf0&); };
+struct M3_s0044_bcf0 {
+    float m[9];
+    M3_s0044_bcf0& operator=(const M3_s0044_bcf0&);
+};
 struct Blk_s0044_bcf0 {
     char pad0[0x48];
     Vec1 mVec;          // +0x48
@@ -1787,7 +2453,7 @@ Vec3_s0044_d4f0 operator+(const Vec3_s0044_d4f0& a, const Vec3_s0044_d4f0& b);  
 Vec3_s0044_d4f0 operator*(const Vec3_s0044_d4f0& v, const float& s);  // 0x0041dca0
 Mat3 Transposed(const Mat3& m);                 // 0x0041ded0
 Vec3_s0044_d4f0& operator*=(Vec3_s0044_d4f0& v, const float& s);      // 0x0041dba0
-inline float Abs(float f) { return fabsf(f); }
+inline float Abs_s0044_d4f0(float f) { return fabsf(f); }
 struct Holder {
     void* a;    // +0
     void* b;    // +4
@@ -1979,11 +2645,6 @@ struct Matrix3_s0044_f7c0 {
     float m[9];
     Matrix3_s0044_f7c0() {}
     Matrix3_s0044_f7c0(const Matrix3_s0044_f7c0& other);              // 0x0041cb40 (out of line)
-};
-struct ResourceKey {
-    uint32_t instanceID;
-    uint32_t typeID;
-    uint32_t groupID;
 };
 Matrix3_s0044_f7c0 MirrorMatrix(const Matrix3_s0044_f7c0& m, int flags);   // 0x004a8e10
 Vector3_s0044_f7c0 MirrorVector(const Vector3_s0044_f7c0& v);              // 0x004a8f40
@@ -2252,7 +2913,7 @@ struct Block2 {
     unsigned char BuildBlock(int inst, int grp, int a, int b, float c, char d, unsigned char e, int one); // 0x00441040
 };
 namespace SP {
-class IUnknown32 {
+class IUnknown32_s0045_0f70 {
 public:
     virtual int AddRef();
     virtual int Release();
@@ -2317,7 +2978,7 @@ struct cMWModel_s0045_0f70 {
     uint32_t pad04[(0x40 - 4) / 4];
     int mnRefCount;                       // +0x40
     uint32_t pad44[(0x64 - 0x44) / 4];
-    AutoRefCount_s0045_0f70<IUnknown32> mpOwner;     // +0x64
+    AutoRefCount_s0045_0f70<IUnknown32_s0045_0f70> mpOwner;     // +0x64
 
     int AddRef() { mnRefCount = mnRefCount + 1; return mnRefCount; }
     int Release();                        // 0x0040f360
@@ -2375,17 +3036,17 @@ public:
 };
 }
 namespace SP {
-class cSPEditorBlockHelper378 {
+class cSPEditorBlockHelper378_s0045_0f70 {
 public:
     uint32_t mField0;
-    AutoRefCount_s0045_0f70<IUnknown32> mpObject;
+    AutoRefCount_s0045_0f70<IUnknown32_s0045_0f70> mpObject;
     uint32_t mData[(0x4c - 8) / 4];
 
     void Shutdown();               // 0x004ae250
 };
 }
 namespace SP {
-struct cSPEditorBlockOwnerLink {
+struct cSPEditorBlockOwnerLink_s0045_0f70 {
     uint32_t mData[0x38 / 4];
     bool IsPlaying();              // 0x00434100
     void Stop();                   // 0x004341c0
@@ -2411,15 +3072,7 @@ struct ref_vector {
 };
 }
 namespace SP {
-class RefCountVTemplate {
-public:
-    virtual int AddRef();
-    virtual int Release();
-    int mnRefCount;
-};
-}
-namespace SP {
-class cSPEditorBlock_s0045_0f70 : public RefCountVTemplate, public IUnknown32 {
+class cSPEditorBlock_s0045_0f70 : public RefCountVTemplate, public IUnknown32_s0045_0f70 {
 public:
     AutoRefCount_s0045_0f70<cPropertyList_s0045_0f70> mpPropList;          // +0x0c
     AutoRefCount_s0045_0f70<cMWModel_s0045_0f70> mpModel;                  // +0x10
@@ -2437,7 +3090,7 @@ public:
     uint32_t pad1a8[(0x33c - 0x1a8) / 4];
     AutoRefCount_s0045_0f70<cSPEditorBlock_s0045_0f70> mpParent;           // +0x33c
     ref_vector<AutoRefCount_s0045_0f70<cSPEditorBlock_s0045_0f70> > mChildren;  // +0x340
-    cSPEditorBlockHelper378* mpHelper378;            // +0x378
+    cSPEditorBlockHelper378_s0045_0f70* mpHelper378;            // +0x378
     uint32_t pad37c[(0x3e4 - 0x37c) / 4];
     AutoRefCount_s0045_0f70<cSPEditorBlock_s0045_0f70> mpSymmetricBlock;   // +0x3e4
     bool mIsSymmetric;                               // +0x3e8
@@ -2448,7 +3101,7 @@ public:
     ref_vector<AutoRefCount_s0045_0f70<cSPEditorHandle_s0045_0f70> > mMorphHandles;  // +0x6cc
     uint32_t pad704[(0xdc8 - 0x704) / 4];
     bitset_s0045_0f70<60> mBooleanAttributes;                   // +0xdc8
-    cSPEditorBlockOwnerLink mOwnerLink;              // +0xdd0
+    cSPEditorBlockOwnerLink_s0045_0f70 mOwnerLink;              // +0xdd0
 
     bool HasParent() const { return mpParent != 0; }
     void Shutdown2();
@@ -2464,7 +3117,6 @@ public:
 
 // ---- items of slice s00451ef0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Vec3_s0045_1ef0 { float x, y, z; };
-struct Matrix33 { float m[9]; };
 struct HkWorldObject {
     void removeReference();
 };
@@ -2495,6 +3147,315 @@ struct cSPEditorBlock_s0045_1ef0 {
 };
 // ---- items of slice s00451ef0 end
 
+// ---- items of slice s00439110 begin (TODO(rewrite): local stubs, replace by canonical classes)
+inline void* operator new(size_t, void* p) { return p; }
+namespace SP {
+struct cSPEditorBlock_s0043_9110;
+}
+namespace SP {
+struct Vector3_s0043_9110 {
+    float x, y, z;
+    Vector3_s0043_9110() {}
+    Vector3_s0043_9110(const Vector3_s0043_9110& v) : x(v.x), y(v.y), z(v.z) {}
+    float& operator[](int i) { return (&x)[i]; }
+};
+}
+namespace SP {
+struct Matrix3_s0043_9110 {
+    float m[9];
+    Matrix3_s0043_9110() {}
+    Matrix3_s0043_9110(const Matrix3_s0043_9110& other) { Assign(other); }
+    void Assign(const Matrix3_s0043_9110& other);             // 0041CB40
+};
+}
+namespace SP {
+struct ResourceKey_s0043_9110 {
+    uint32_t instanceID, typeID, groupID;
+    ResourceKey_s0043_9110() : instanceID(0), typeID(0), groupID(0) {}
+};
+}
+namespace SP {
+struct Transform_s0043_9110 {
+    uint16_t mFlags;        // +0x00
+    uint16_t mChangeCount;  // +0x02
+    Vector3_s0043_9110  mOffset;       // +0x04
+    float    mScale;        // +0x10
+    Matrix3_s0043_9110  mRotation;     // +0x14
+
+    Transform_s0043_9110();                                   // 00409930
+    Transform_s0043_9110(const Transform_s0043_9110& other);             // 0040CE80
+
+    void SetOffset(const Vector3_s0043_9110& v) {
+        mOffset = v;
+        mFlags |= 4;
+        mChangeCount++;
+    }
+    void SetRotation(const Matrix3_s0043_9110& m) {
+        mRotation = m;
+        mFlags |= 2;
+        mChangeCount++;
+    }
+};
+}
+namespace SP {
+struct cPropertyList_s0043_9110 {
+    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0c();
+    virtual void v10(); virtual void v14(); virtual void v18();
+    virtual bool HasProperty(uint32_t propertyID) const;   // +0x1C 0x006a2470
+};
+}
+namespace SP {
+struct cMorphHandle {
+    uint32_t pad0[0x8c / 4];
+    uint32_t mChannel;                 // +0x8C
+    uint32_t pad90[(0x180 - 0x90) / 4];
+    float    mWeight;                  // +0x180
+};
+}
+namespace SP {
+struct cSPEditorModel_s0043_9110 {
+    bool F4adc40();                    // 004ADC40 (returns byte +0x4f)
+};
+}
+namespace SP {
+struct sp_vector_allocator {
+    sp_vector_allocator() {}
+    sp_vector_allocator(const sp_vector_allocator& x);   // 00429360 (out of line)
+};
+}
+namespace SP {
+template <class T> struct SimpleVector {   // vector<T> with out-of-line helpers
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator mAllocator;
+
+    T* erase(T* first, T* last);           // 004769B0
+    void DoInsertValue(T* position, const T& value);   // 00455660
+    void push_back(const T& value) {       // 004547F0 / 00454860 (declined inline)
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+    void clear() { erase(mpBegin, mpEnd); }
+};
+}
+namespace SP {
+template <class T> struct FixedVectorRef {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[2];
+    bool empty() const;                    // 00526430
+    int size() const { return (int)(mpEnd - mpBegin); }
+    T& operator[](int i) { return mpBegin[i]; }
+};
+}
+namespace SP {
+template <int N> inline void ScratchSlots_s0043_9110() { uint32_t s[N]; }
+}
+namespace SP {
+template <int N> struct bitset_s0043_9110 {
+    uint32_t mWord[(N + 31) / 32];
+    uint32_t DoGetWord(uint32_t i) const { return mWord[i / 32]; }
+    bool test(uint32_t i) const {
+        if (i < N)
+            return (DoGetWord(i) & (1u << (i % 32))) != 0;
+        return false;
+    }
+};
+}
+namespace SP {
+struct HandleState {
+    uint32_t data[15];
+};
+}
+namespace SP {
+struct alloc_tag { alloc_tag() {} };
+}
+namespace SP {
+struct state_allocator {
+    const char* mpName;
+    uint32_t mFlags;
+    state_allocator(const alloc_tag& tag);       // 00429360 (out of line)
+};
+}
+namespace SP {
+struct HandleStateVectorBase {
+    HandleState* mpBegin;
+    HandleState* mpEnd;
+    HandleState* mpCapacity;
+    state_allocator mAllocator;
+
+    HandleStateVectorBase(const alloc_tag& a)
+        : mpBegin(0), mpEnd(0), mpCapacity(0), mAllocator(a) {}
+    ~HandleStateVectorBase();              // 00455BA0 (frees the buffer)
+};
+}
+namespace SP {
+struct HandleStateVector : HandleStateVectorBase {
+    HandleStateVector(const alloc_tag& a = alloc_tag())
+        : HandleStateVectorBase(a) {}
+    __forceinline ~HandleStateVector() {
+        for (HandleState* p = mpBegin; p < mpEnd; ++p)
+            p->~HandleState();
+    }
+};
+}
+namespace SP {
+struct empty_allocator {
+    const char* mpName;
+    uint32_t mFlags;
+    empty_allocator() {}
+    void deallocate(void* p, size_t n) {
+        if (((int*)p)[-1] != 0)
+            delete[] (char*)p;
+    }
+};
+}
+namespace SP {
+struct IRefCounted {
+    virtual void v00();
+    virtual int AddRef();
+    virtual int Release();                  // +0x08
+};
+}
+namespace SP {
+struct BlockRef {
+    cSPEditorBlock_s0043_9110* mpObject;
+    ~BlockRef() {
+        if (mpObject)
+            ((IRefCounted*)mpObject)->Release();
+    }
+    operator cSPEditorBlock_s0043_9110*() const { return mpObject; }
+};
+}
+namespace SP {
+template <class T> inline void destruct(T* first, T* last) {
+    for (; first < last; ++first)
+        first->~T();
+}
+}
+namespace SP {
+struct BlockVectorBase {
+    BlockRef* mpBegin;
+    BlockRef* mpEnd;
+    BlockRef* mpCapacity;
+    empty_allocator mAllocator;
+    BlockVectorBase() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~BlockVectorBase() {                    // 00425990 (declined inline)
+        if (mpBegin)
+            DoFree(mpBegin, mpCapacity - mpBegin);
+    }
+    void DoFree(BlockRef* p, size_t n) { mAllocator.deallocate(p, n * sizeof(BlockRef)); }
+};
+}
+namespace SP {
+struct BlockVector : BlockVectorBase {
+    ~BlockVector() { destruct(mpBegin, mpEnd); }   // 00453EB0 (declined inline)
+    int size() const { return (int)(mpEnd - mpBegin); }
+    BlockRef& operator[](int i) { return mpBegin[i]; }
+};
+}
+namespace SP {
+struct cSPEditorBlock_s0043_9110 {
+    uint32_t pad0[3];
+    AutoRefCount<cPropertyList_s0043_9110> mpPropList;        // +0x00C
+    uint32_t pad10[3];
+    uint32_t mInstanceID;                          // +0x01C
+    uint32_t pad20[2];
+    cSPEditorModel_s0043_9110* mpEditorModel;                 // +0x028
+    uint32_t pad2c;
+    float    field_30;                             // +0x030
+    uint32_t pad34;
+    uint32_t mUIState;                             // +0x038
+    int      mUIStateValue;                        // +0x03C
+    uint32_t pad40[2];
+    Vector3_s0043_9110  mPosition;                            // +0x048
+    uint32_t pad54[3];
+    Matrix3_s0043_9110  mTotalOrientation;                    // +0x060
+    Matrix3_s0043_9110  mHistoryTotalOrientation;             // +0x084
+    Matrix3_s0043_9110  mOrientation;                         // +0x0A8
+    Matrix3_s0043_9110  mHistoryBaseOrientation;              // +0x0CC
+    Matrix3_s0043_9110  mUserOrientation;                     // +0x0F0
+    uint32_t pad114[(0x1c0 - 0x114) / 4];
+    int      mSymmetrySign;                        // +0x1C0
+    int      mModelSignModifier;                   // +0x1C4
+    uint32_t pad1c8[4];
+    float    mScale;                               // +0x1D8
+    uint32_t pad1dc[(0x340 - 0x1dc) / 4];
+    FixedVectorRef<cSPEditorBlock_s0043_9110*> mChildren;     // +0x340
+    uint32_t pad354[(0x3a0 - 0x354) / 4];
+    Vector3_s0043_9110  mTriangleDirection;                   // +0x3A0
+    uint32_t pad3ac[(0x3e0 - 0x3ac) / 4];
+    AutoRefCount<cSPEditorBlock_s0043_9110> mpSymmetricRigblock;   // +0x3E0
+    uint32_t pad3e4[2];
+    AutoRefCount<cSPEditorBlock_s0043_9110> mpBallConnectorHandle; // +0x3EC
+    uint32_t pad3f0[(0x6cc - 0x3f0) / 4];
+    FixedVectorRef<AutoRefCount<cMorphHandle> > mMorphHandles;   // +0x6CC
+    uint32_t pad6e0[(0x704 - 0x6e0) / 4];
+    SimpleVector<float> mMorphHandleWeights;       // +0x704
+    uint32_t pad714[(0x73c - 0x714) / 4];
+    SimpleVector<uint32_t> mMorphHandleChannels;   // +0x73C
+    uint32_t pad74c[(0xdc8 - 0x74c) / 4];
+    bitset_s0043_9110<60> mBooleanAttributes;                 // +0xDC8
+
+    bool IsFrozen();                                                    // 00435C80
+    void SetBooleanAttribute(int index, bool value);                    // 00435A10
+    ResourceKey_s0043_9110 GetModelKey(int sign, int flags);                       // 00438F20
+    void BuildBlock(uint32_t instanceID, uint32_t groupID, int a, int b,
+                    float f, bool c, bool d, bool e);                   // 00441440
+    void SetUIState(int state, bool a, bool b, bool c);                 // 0043A5E0
+    void ApplyScale(float scale, int flags);                            // 00440090
+    void CopyStateFrom(cSPEditorBlock_s0043_9110* other);                          // 00440E00
+    void UpdateEffects();                                               // 00449ED0
+    void Select(int a, int b);                                          // 0044BCF0
+    void Deselect(int a, int b);                                        // 0044BA20
+    bool IsSelected();                                                  // 0044C030
+    void Invalidate(bool all);                                          // 00447030
+    void RebuildPhysics();                                              // 00452040
+    void SetUserOrientation(Matrix3_s0043_9110 m);                                 // 0043FFA0
+    void SetOrientation(const Matrix3_s0043_9110* m, int flags);                   // 00449420
+    void GetOffsetA(Vector3_s0043_9110* out, int flags);                           // 00438120
+    void GetOffsetB(Vector3_s0043_9110* out, int flags);                           // 004381E0
+    void Place(Vector3_s0043_9110 a, Vector3_s0043_9110 b);                                   // 00437B00
+    int  GetBlockType(uint32_t instanceID);                             // 0044E830
+    bool CanUseSymmetrySign(int sign);                                  // 0044C5A0
+    int  CalculateSymmetrySign();                                       // 0044F240 0x0044f240
+    void SetSymmetryFlip(int dir);                                      // 0044C480
+    uint32_t GetInstanceID() const { return mInstanceID; }
+    cSPEditorBlock_s0043_9110* GetSymmetricBlock() const { return mpSymmetricRigblock; }
+    int GetUIStateValue() const { return mUIStateValue; }
+    bool GetBooleanAttribute(uint32_t i) const { return mBooleanAttributes.test(i); }
+
+    void SetModelBasedOnSymmetrySign(int sign, bool mirrorOrientation, bool recurse,
+                                     bool skipPinned, int depth);
+};
+}
+namespace SP {
+bool __cdecl SignsDiffer(int oldSign, int newSign, int flags);                  // 004A7EA0
+}
+namespace SP {
+void __cdecl SaveHandleState(cSPEditorBlock_s0043_9110* block, HandleStateVector* out, bool all); // 0049C8F0
+}
+namespace SP {
+void __cdecl RestoreHandleState(HandleStateVector* state);                     // 0049CB90
+}
+namespace SP {
+Matrix3_s0043_9110 __cdecl MirrorMatrix(const Matrix3_s0043_9110& m, int axis);                      // 004A8E10
+}
+namespace SP {
+void __cdecl BuildPileList(cSPEditorBlock_s0043_9110* block, BlockVector* out, int flags); // 0048C790
+}
+namespace SP {
+void __cdecl MirrorChildTransformA(cSPEditorBlock_s0043_9110* child, Transform_s0043_9110 oldT, Transform_s0043_9110 newT, bool flag); // 0049D390
+}
+namespace SP {
+void __cdecl MirrorChildTransformB(cSPEditorBlock_s0043_9110* child, Transform_s0043_9110 oldT, Transform_s0043_9110 newT, bool flag); // 0049D550
+}
+// ---- items of slice s00439110 end
+
 // @ 0x004388b0
 namespace SP {
 void cContentValidationSummarizer::Attach(cContentValidationSummarizer* e)
@@ -2516,6 +3477,8 @@ void cContentValidationSummarizer::Attach(cContentValidationSummarizer* e)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -2586,6 +3549,201 @@ void cContentValidationSummarizer::Detach(cContentValidationSummarizer* e)
 
 
 
+
+
+// @ 0x00439110
+namespace SP {
+void cSPEditorBlock_s0043_9110::SetModelBasedOnSymmetrySign(int symmetrySign, bool flipThisBlockOrientation, bool flipChildren, bool ignoreBallJoints, int depth)
+{
+    ScratchSlots_s0043_9110<1>();
+    if (IsFrozen())
+        return;
+
+    HandleStateVector oldHandles;
+    HandleStateVector deformState;
+    if (depth == 0) {
+        SaveHandleState(this, &oldHandles, true);
+        SaveHandleState(mpSymmetricRigblock, &deformState, true);
+    }
+
+    int desiredModelSign = mModelSignModifier * symmetrySign;
+    int oldSymmetrySign = mSymmetrySign;
+    if (mpPropList == 0)
+        return;
+    ScratchSlots_s0043_9110<1>();
+
+    ResourceKey_s0043_9110 key;
+    bool needNewModel = false;
+    key = GetModelKey(desiredModelSign, 0);
+    if (key.instanceID != mInstanceID)
+        needNewModel = true;
+
+    Transform_s0043_9110 originalTransform;
+    originalTransform.SetOffset(mPosition);
+    originalTransform.SetRotation(mTotalOrientation);
+
+    cSPEditorBlock_s0043_9110* symmetricBlock = GetSymmetricBlock();
+    bool needFlip = SignsDiffer(mSymmetrySign, symmetrySign, 0);
+    mSymmetrySign = symmetrySign;
+
+    if (needNewModel) {
+        if (!mMorphHandles.empty()) {
+            mMorphHandleWeights.clear();
+            mMorphHandleChannels.clear();
+            for (int i = 0, listSize = mMorphHandles.size(); i < listSize; ++i) {
+                mMorphHandleWeights.push_back(mMorphHandles[i]->mWeight);
+                mMorphHandleChannels.push_back(mMorphHandles[i]->mChannel);
+            }
+        }
+        bool isCurrentVisible = IsSelected();
+        int uiState = mUIStateValue;
+        bool wasFlag23 = GetBooleanAttribute(0x23);
+        bool oldFlag33 = GetBooleanAttribute(0x33);
+        BuildBlock(key.instanceID, key.groupID, 0, 0, field_30, true, true, true);
+        SetBooleanAttribute(0x23, wasFlag23);
+        SetBooleanAttribute(0x33, oldFlag33);
+        SetUIState(uiState, true, true, true);
+        float uniformScale = mScale;
+        mScale = 1.0f;
+        ApplyScale(uniformScale, 0);
+        SetUIState(uiState, true, false, true);
+        CopyStateFrom(this);
+        UpdateEffects();
+        if (isCurrentVisible)
+            Select(0, 0);
+        else
+            Deselect(0, 0);
+    }
+
+    bool didFlipMainModel = false;
+    if (needFlip && flipThisBlockOrientation) {
+        mOrientation = MirrorMatrix(mOrientation, 0);
+        mUserOrientation = MirrorMatrix(mUserOrientation, 0);
+        didFlipMainModel = true;
+    }
+    if (needFlip)
+        mTriangleDirection[0] *= -1.0f;
+
+    if (mpEditorModel->F4adc40() && symmetricBlock != 0) {
+        int symModelSign = -desiredModelSign;
+        if (symModelSign == 0) {
+            if (!mpPropList->HasProperty(0x3a3b9d21))
+                symModelSign = 1;
+        }
+        key = GetModelKey(symModelSign, 0);
+        needNewModel = false;
+        symmetricBlock->mSymmetrySign = mSymmetrySign * -1;
+        if (key.instanceID != symmetricBlock->mInstanceID)
+            needNewModel = true;
+        if (needFlip)
+            mpSymmetricRigblock->mTriangleDirection[0] *= -1.0f;
+        if (needNewModel) {
+            bool isCurrentVisible = mpSymmetricRigblock ? mpSymmetricRigblock->IsSelected() : false;
+            if (!symmetricBlock->mMorphHandles.empty()) {
+                symmetricBlock->mMorphHandleWeights.clear();
+                symmetricBlock->mMorphHandleChannels.clear();
+                for (int i = 0, listSize = symmetricBlock->mMorphHandles.size(); i < listSize; ++i) {
+                    symmetricBlock->mMorphHandleWeights.push_back(symmetricBlock->mMorphHandles[i]->mWeight);
+                    symmetricBlock->mMorphHandleChannels.push_back(symmetricBlock->mMorphHandles[i]->mChannel);
+                }
+            }
+            int uiState = symmetricBlock->mUIStateValue;
+            bool wasFlag23 = symmetricBlock->GetBooleanAttribute(0x23);
+            bool oldFlag33 = symmetricBlock->GetBooleanAttribute(0x33);
+            symmetricBlock->BuildBlock(key.instanceID, key.groupID, 0, 0, field_30, true, true, true);
+            symmetricBlock->SetBooleanAttribute(0x23, wasFlag23);
+            symmetricBlock->SetBooleanAttribute(0x33, oldFlag33);
+            symmetricBlock->SetUIState(symmetricBlock->GetUIStateValue(), true, false, true);
+            float uniformScale = symmetricBlock->mScale;
+            symmetricBlock->mScale = 1.0f;
+            symmetricBlock->ApplyScale(uniformScale, 0);
+            symmetricBlock->SetUIState(uiState, true, true, true);
+            symmetricBlock->CopyStateFrom(this);
+            symmetricBlock->UpdateEffects();
+            if (isCurrentVisible)
+                symmetricBlock->Select(0, 0);
+            else
+                symmetricBlock->Deselect(0, 0);
+        }
+    }
+
+    if (needNewModel || oldSymmetrySign != symmetrySign) {
+        Invalidate(true);
+        RebuildPhysics();
+    }
+
+    if (mpSymmetricRigblock != 0) {
+        int oldSymSign = mpSymmetricRigblock->mSymmetrySign;
+        mpSymmetricRigblock->mSymmetrySign = -symmetrySign;
+        if (needNewModel || oldSymSign != -symmetrySign) {
+            mpSymmetricRigblock->Invalidate(true);
+            mpSymmetricRigblock->RebuildPhysics();
+        }
+    }
+
+    SetUserOrientation(mUserOrientation);
+    ScratchSlots_s0043_9110<2>();
+    SetOrientation(&mOrientation, 0);
+
+    Transform_s0043_9110 currentTransform;
+    currentTransform.SetOffset(mPosition);
+    currentTransform.SetRotation(mTotalOrientation);
+
+    if (!mChildren.empty() && flipChildren) {
+        bool keepSymmetric = GetBooleanAttribute(0x13);
+        BlockVector pileList;
+        BuildPileList(this, &pileList, 0);
+        for (int i = 0, pileSize = pileList.size(); i < pileSize; ++i) {
+            cSPEditorBlock_s0043_9110* child = pileList[i];
+            if (child->IsFrozen()) {
+                if (didFlipMainModel || needNewModel || needFlip) {
+                    Vector3_s0043_9110 offsetA, offsetB;
+                    child->GetOffsetA(&offsetA, 1);
+                    child->GetOffsetB(&offsetB, 1);
+                    child->Place(offsetA, offsetB);
+                }
+            } else if (!ignoreBallJoints || !child->GetBooleanAttribute(0x1f)) {
+                int childType = child->GetBlockType(child->GetInstanceID());
+                ScratchSlots_s0043_9110<12>();
+                int signToUse = childType;
+                if (needFlip) {
+                    MirrorChildTransformA(child, originalTransform, currentTransform, keepSymmetric);
+                    MirrorChildTransformB(child, originalTransform, currentTransform, keepSymmetric);
+                    signToUse = childType * -1;
+                }
+                if (!child->CanUseSymmetrySign(signToUse))
+                    signToUse = mSymmetrySign;
+                int calculatedSign = child->CalculateSymmetrySign();
+                if (calculatedSign != 0 && signToUse != 0) {
+                    if (calculatedSign != signToUse)
+                        child->SetSymmetryFlip(-1);
+                    else
+                        child->SetSymmetryFlip(1);
+                }
+                child->SetModelBasedOnSymmetrySign(calculatedSign, false, false, false, depth + 1);
+                if (didFlipMainModel || needNewModel || needFlip) {
+                    Vector3_s0043_9110 offsetA, offsetB;
+                    child->GetOffsetA(&offsetA, 1);
+                    child->GetOffsetB(&offsetB, 1);
+                    child->Place(offsetA, offsetB);
+                    if (child->mpSymmetricRigblock != 0) {
+                        Vector3_s0043_9110 offsetA, offsetB;
+                        child->mpSymmetricRigblock->GetOffsetA(&offsetA, 1);
+                        child->mpSymmetricRigblock->GetOffsetB(&offsetB, 1);
+                        child->mpSymmetricRigblock->Place(offsetA, offsetB);
+                    }
+                }
+            }
+        }
+    }
+
+    if (mpSymmetricRigblock != 0 && needFlip && depth == 0 && mpBallConnectorHandle == 0) {
+        RestoreHandleState(&oldHandles);
+        RestoreHandleState(&deformState);
+    }
+}
+}  // namespace SP
+
 // @ 0x0043a870
 namespace SP {
 int cSPEditorBlock_s0043_a460::GetSkinIdentifierForPicking()
@@ -2633,6 +3791,8 @@ int cSPEditorBlock_s0043_a460::GetSkinIdentifierForPicking()
 
 
 
+
+
 // @ 0x0043a9a0
 namespace SP {
 void cSPEditorBlock_s0043_a460::F9a0(uint8_t a, uint8_t b)
@@ -2642,6 +3802,8 @@ void cSPEditorBlock_s0043_a460::F9a0(uint8_t a, uint8_t b)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -2706,6 +3868,8 @@ bool cSPEditorBlock_s0043_a460::F9e0(uint8_t a, uint8_t b)
 
 
 
+
+
 // @ 0x0043ab90
 namespace SP {
 bool cSPEditorBlock_s0043_a460::Fb90(uint8_t p)
@@ -2724,6 +3888,8 @@ bool cSPEditorBlock_s0043_a460::Fb90(uint8_t p)
     return true;
 }
 }  // namespace SP
+
+
 
 
 
@@ -2818,6 +3984,8 @@ bool cSPEditorBlock_s0043_ac40::F3AC40(int type, uint8_t a, uint8_t b)
 
 
 
+
+
 // @ 0x0043bbc0
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bbc0(int)
 { return mField3c9 || mFlags.test(8); }
@@ -2839,9 +4007,13 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bbc0(int)
 
 
 
+
+
 // @ 0x0043bc40
 void SP::cSPEditorBlock_s0043_bbc0::F_43bc40(float v)
 { F_43bc70(mPosition[0], v); }
+
+
 
 
 
@@ -2892,6 +4064,8 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bc70(float a, float b)
 
 
 
+
+
 // @ 0x0043bcf0
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bcf0(float a, float b)
 { float t = fabsf(a); return mTolB * mScale * b > t; }
@@ -2913,9 +4087,13 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bcf0(float a, float b)
 
 
 
+
+
 // @ 0x0043bd50
 void SP::cSPEditorBlock_s0043_bbc0::F_43bd50(cSPVector3_s0043_bbc0 v, float s)
 { F_43bc70(v[0], s); }
+
+
 
 
 
@@ -2968,6 +4146,8 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bd80(cSPMatrix3_s0043_bbc0 m, float s)
 
 
 
+
+
 // @ 0x0043bf20
 bool SP::cSPEditorBlock_s0043_bbc0::F_43bf20(uint32_t out)
 {
@@ -2975,6 +4155,8 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43bf20(uint32_t out)
         return SP::GetPropertyAsKey(mPropList, 0xf9efbb, out);
     return false;
 }
+
+
 
 
 
@@ -3016,12 +4198,16 @@ void SP::cSPEditorBlock_s0043_bbc0::F_43bf90(uint32_t bit, bool on)
 
 
 
+
+
 // @ 0x0043c040
 int SP::cSPEditorBlock_s0043_bbc0::F_43c040()
 {
     if (mModel) return mDeformationHandles.size();
     return mSavedHandleDeltas.size();
 }
+
+
 
 
 
@@ -3065,6 +4251,8 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c0a0()
 
 
 
+
+
 // @ 0x0043c120
 int SP::cSPEditorBlock_s0043_bbc0::F_43c120(uint32_t id)
 {
@@ -3072,6 +4260,8 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c120(uint32_t id)
         if (mDeformationHandles[i]->mAnimationID == id) return i;
     return -1;
 }
+
+
 
 
 
@@ -3111,9 +4301,13 @@ SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c1a0()
 
 
 
+
+
 // @ 0x0043c1e0
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c1e0()
 { if (mHandleIndex[1] == -1) return 0; else return F_43c270(mHandleIndex[1]); }
+
+
 
 
 
@@ -3153,6 +4347,8 @@ SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c210()
 
 
 
+
+
 // @ 0x0043c240
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c240()
 { if (mHandleIndex[3] == -1) return 0; else return F_43c270(mHandleIndex[3]); }
@@ -3174,9 +4370,13 @@ SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c240()
 
 
 
+
+
 // @ 0x0043c270
 SP::cSPEditorHandleDeform_s0043_bbc0* SP::cSPEditorBlock_s0043_bbc0::F_43c270(int i)
 { if (i < mDeformationHandles.size() && i >= 0) return mDeformationHandles[i].get(); else return 0; }
+
+
 
 
 
@@ -3222,6 +4422,8 @@ float SP::cSPEditorBlock_s0043_bbc0::F_43c2d0(uint32_t i)
 
 
 
+
+
 // @ 0x0043c340
 uint32_t SP::cSPEditorBlock_s0043_bbc0::F_43c340(uint32_t i)
 {
@@ -3231,6 +4433,8 @@ uint32_t SP::cSPEditorBlock_s0043_bbc0::F_43c340(uint32_t i)
     }
     return 0;
 }
+
+
 
 
 
@@ -3259,6 +4463,8 @@ int SP::cSPEditorBlock_s0043_bbc0::F_43c3d0(cSPEditorHandleDeform_s0043_bbc0* c)
     }
     return -1;
 }
+
+
 
 
 
@@ -3309,6 +4515,8 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43c450(cSPEditorHandleDeform_s0043_bbc0* c
 
 
 
+
+
 // @ 0x0043c510
 bool SP::cSPEditorBlock_s0043_bbc0::F_43c510()
 {
@@ -3320,6 +4528,8 @@ bool SP::cSPEditorBlock_s0043_bbc0::F_43c510()
         } else return mFlags.test(0);
     } else return mFlags.test(0);
 }
+
+
 
 
 
@@ -3385,9 +4595,13 @@ void SP::cSPEditorBlock_s0043_bbc0::F_43c710()
 
 
 
+
+
 // @ 0x0043ca10
 bool SP::cSPEditorBlock_s0043_bbc0::F_43ca10()
 { return !mFlags.test(7) && !mFlags.test(20); }
+
+
 
 
 
@@ -3433,6 +4647,8 @@ Blk* cSPEditorBlock_s0043_cad0::GetSlot(int i)
 
 
 
+
+
 // @ 0x0043ce40
 namespace SP {
 void cSPEditorBlock_s0043_cad0::F3ce40()
@@ -3450,6 +4666,8 @@ void cSPEditorBlock_s0043_cad0::F3ce40()
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -3553,6 +4771,8 @@ bool cSPEditorBlock_s0043_d690::SetMorphHandleWeight(int index, float weight, in
 
 
 
+
+
 // @ 0x0043e3f0
 void SP::cSPEditorBlock_s0043_e3f0::F_43e3f0(float dt, uint32_t index)
 {
@@ -3596,6 +4816,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e3f0(float dt, uint32_t index)
 
 
 
+
+
 // @ 0x0043e760
 void SP::cSPEditorBlock_s0043_e3f0::F_43e760(uint32_t index)
 {
@@ -3606,6 +4828,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e760(uint32_t index)
         mField448 = 0.0f;
     }
 }
+
+
 
 
 
@@ -3648,6 +4872,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e7e0(uint32_t index, bool b)
 
 
 
+
+
 // @ 0x0043e8d0
 bool SP::cSPEditorBlock_s0043_e3f0::F_43e8d0(int id)
 { return mFadeId == id && mFader.IsActive(); }
@@ -3666,9 +4892,13 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43e8d0(int id)
 
 
 
+
+
 // @ 0x0043e920
 bool SP::cSPEditorBlock_s0043_e3f0::F_43e920()
 { return mFader.IsActive(); }
+
+
 
 
 
@@ -3710,6 +4940,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e940(uint32_t a, uint32_t b, int id)
 
 
 
+
+
 // @ 0x0043e9c0
 void SP::cSPEditorBlock_s0043_e3f0::F_43e9c0()
 {
@@ -3732,9 +4964,13 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43e9c0()
 
 
 
+
+
 // @ 0x0043ea20
 void SP::cSPEditorBlock_s0043_e3f0::F_43ea20()
 { mFader.Stop(); }
+
+
 
 
 
@@ -3772,11 +5008,15 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43ea40(int id)
 
 
 
+
+
 // @ 0x0043eaa0
 void SP::cSPEditorBlock_s0043_e3f0::F_43eaa0(int id)
 {
     if (mField604) F_43e940(mField604, mField608, id);
 }
+
+
 
 
 
@@ -3814,6 +5054,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43eae0(float v)
 
 
 
+
+
 // @ 0x0043eb50
 void SP::cSPEditorBlock_s0043_e3f0::F_43eb50(float v)
 {
@@ -3821,6 +5063,8 @@ void SP::cSPEditorBlock_s0043_e3f0::F_43eb50(float v)
     if (mEditorModel && mEditorModel->Func4adc40() && mSymmetricBlock)
         mSymmetricBlock->F_440110(v);
 }
+
+
 
 
 
@@ -3852,6 +5096,8 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ebc0()
     }
     return result;
 }
+
+
 
 
 
@@ -3910,6 +5156,8 @@ bool SP::cSPEditorBlock_s0043_e3f0::F_43ecb0()
 
 
 
+
+
 // @ 0x0043eef0
 cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
 {
@@ -3921,6 +5169,8 @@ cSPBoundingBox_s0043_e3f0 SP::cSPEditorBlock_s0043_e3f0::F_43eef0()
         box.Add(GetBBox(true, false, false));
     return box;
 }
+
+
 
 
 
@@ -3966,12 +5216,16 @@ void cSPBoundingBox_s0043_e3f0::Add(const cSPBoundingBox_s0043_e3f0& o)
 
 
 
+
+
 // @ 0x0043f250
 float SP::cSPEditorBlock_s0043_e3f0::F_43f250()
 {
     cSPBoundingBox_s0043_e3f0 box = F_43eef0();
     return Length(box.GetCorner(0)) / 2.0f;
 }
+
+
 
 
 
@@ -4010,6 +5264,8 @@ cSPVector3_s0043_e3f0 cSPBoundingBox_s0043_e3f0::GetCorner(uint32_t mask) const
 
 
 
+
+
 // @ 0x0043f3a0
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F3a0()
@@ -4021,6 +5277,8 @@ float cSPEditorBlock_s0043_f3a0::F3a0()
     return 0.0f;
 }
 }  // namespace SP
+
+
 
 
 
@@ -4061,6 +5319,8 @@ float cSPEditorBlock_s0043_f3a0::F3f0()
 
 
 
+
+
 // @ 0x0043f4d0
 namespace SP {
 float cSPEditorBlock_s0043_f3a0::F4d0()
@@ -4073,6 +5333,8 @@ float cSPEditorBlock_s0043_f3a0::F4d0()
     return 1.0f;
 }
 }  // namespace SP
+
+
 
 
 
@@ -4125,6 +5387,8 @@ void cSPEditorBlock_s0043_f3a0::F5b0(Vec3* out, float a, float b, float c, int f
 
 
 
+
+
 // @ 0x0043ffa0
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
@@ -4139,6 +5403,8 @@ void cSPEditorBlock_s0043_f3a0::FFa0(Matrix3_s0043_f3a0 m)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -4179,6 +5445,8 @@ void cSPEditorBlock_s0043_f3a0::F4020(float v, uint8_t b)
 
 
 
+
+
 // @ 0x00440090
 namespace SP {
 void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
@@ -4191,6 +5459,8 @@ void cSPEditorBlock_s0043_f3a0::F4090(float v, uint8_t b)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -4218,6 +5488,8 @@ void cSPEditorBlock_s0044_0110::F40390(float f)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -4260,6 +5532,8 @@ void cSPEditorBlock_s0044_0110::F40420(float f, char b)
 
 
 
+
+
 // @ 0x004404f0
 namespace SP {
 void cSPEditorBlock_s0044_0110::F404f0(Matrix3_s0044_0110 m)
@@ -4270,6 +5544,8 @@ void cSPEditorBlock_s0044_0110::F404f0(Matrix3_s0044_0110 m)
     for (int i = 0; i < 9; i++) dst[i] = src[i];
 }
 }  // namespace SP
+
+
 
 
 
@@ -4345,6 +5621,8 @@ void cSPEditorBlock_s0044_0110::SetUniformScale(float scale, bool b, bool force)
 
 
 
+
+
 // @ 0x00440b90
 namespace SP {
 Vec3* cSPEditorBlock_s0044_0110::F40b90(Vec3* out)
@@ -4353,6 +5631,8 @@ Vec3* cSPEditorBlock_s0044_0110::F40b90(Vec3* out)
     return out;
 }
 }  // namespace SP
+
+
 
 
 
@@ -4389,6 +5669,8 @@ void cSPEditorBlock_s0044_0110::F40bc0(const Vec3* v)
 
 
 
+
+
 // @ 0x00440c00
 namespace SP {
 void cSPEditorBlock_s0044_0110::F40c00(float f)
@@ -4399,6 +5681,8 @@ void cSPEditorBlock_s0044_0110::F40c00(float f)
     }
 }
 }  // namespace SP
+
+
 
 
 
@@ -4436,6 +5720,8 @@ void cSPEditorBlock_s0044_0110::F40e00(cSPEditorBlock_s0044_0110* o)
 
 
 
+
+
 // @ 0x00440f60
 namespace SP {
 Trans::Trans()
@@ -4445,6 +5731,8 @@ Trans::Trans()
     b = g_v3_241c;
 }
 }  // namespace SP
+
+
 
 
 
@@ -4479,6 +5767,8 @@ Trans::Trans(const Trans& o)
 
 
 
+
+
 // @ 0x00441080
 namespace SP {
 void cSPEditorBlock_s0044_1080::F41080()
@@ -4501,6 +5791,758 @@ void cSPEditorBlock_s0044_1080::F41080()
 
 
 
+
+
+// @ 0x00441440
+bool SP::cSPEditorBlock_s0044_1440::BuildBlock(uint32_t instanceID, uint32_t groupID, IModelWorld_s0044_1440* pWorld, cSPEditorBlock_s0044_1440* pParent, float field30, bool bInteractive, bool bCreateModel, bool bModelFlag)
+{
+    bool result = true;
+    IModelManager* modelMgr = ModelManager();
+
+    field_30 = field30;
+    mIsFullInit = (bInteractive && bCreateModel) ? true : false;
+    field_230 = true;
+    mInstanceID = instanceID;
+    mGroupID = groupID;
+    mIsVisible = true;
+
+    if (mpHelper378) {
+        mpHelper378->Shutdown();
+        delete mpHelper378;
+        mpHelper378 = 0;
+    }
+    if (bCreateModel)
+        mpHelper378 = new ("Editor", 0, 0, 0, 0) cSPEditorBlockHelper378();
+
+    if (pWorld) {
+        mpModelWorld = pWorld;
+    } else {
+        if (mpModel) {
+            mpModelWorld->SetExternalEffectsTransform(mpModel, 0, 0);
+            mpModel->mpWorld->SetInWorld(mpModel, false);
+        }
+        if (mpEffectsMaskModel)
+            mpEffectsMaskModel->mpWorld->SetInWorld(mpEffectsMaskModel, false);
+    }
+
+    if (!pParent) {
+        if (mpClonedFrom)
+            pParent = mpClonedFrom;
+        else
+            mIsFullInit = false;
+    }
+
+    if (mTransformedHull) {
+        mpModelWorld->ReleaseTransformedHull(&mTransformedHull);
+        mTransformedHull = 0;
+    }
+
+    ReleasePhysics();
+    if (mpPropList)
+        mpPropList = 0;
+
+    if (!bCreateModel) {
+        mpPropList = BlockPropertySource()->GetPropertyList(instanceID, groupID);
+    } else {
+        int flags = bModelFlag ? 0 : 4;
+        mpModel = mpModelWorld->CreateModel(instanceID, groupID, flags | 2);
+        if (mpModel) {
+            mpModelWorld->StallUntilLoaded(mpModel);
+            mpPropList = mpModel->mpPropList;
+        }
+    }
+
+    if (!mpPropList)
+        result = false;
+    cPropertyList_s0044_1440* propList = mpPropList;
+
+    if (propList->HasProperty(0x9069c7c8))  // modelUseSkin
+        SetBooleanAttribute(kAttrUseSkin, *GetValueBool(propList->GetPropertyObject(0x9069c7c8)));
+    if (propList->HasProperty(0xafff3a14))  // modelIsVertebra
+        SetBooleanAttribute(kAttrIsVertebra, *GetValueBool(propList->GetPropertyObject(0xafff3a14)));
+
+    if (mSymmetryType == -2)
+        SetBaseJointScale(-2);
+
+    int unused = 0;
+    int blockType = GetBlockType(mInstanceID);
+    if (blockType == -2)
+        blockType = mSymmetryType;
+    if (blockType != mSymmetryType && blockType != 0 && mSymmetryType != 0) {
+        if (mSymmetryType == 1 && !mpPropList->HasProperty(0x0f48eb09))  // modelLeftFile
+            blockType = mSymmetryType;
+        else if (mSymmetryType == -1 && !mpPropList->HasProperty(0x18c1dbe0))  // modelRightFile
+            blockType = mSymmetryType;
+    }
+    if (blockType != 0 && mSymmetryType != 0 && blockType != mSymmetryType &&
+        Sub_44c5a0(mSymmetryType)) {
+        field_1C4 = -1;
+        field_1C8 = -1;
+    } else {
+        field_1C4 = 1;
+        field_1C8 = 1;
+    }
+    SetBooleanAttribute(kAttr09, true);
+    if (mSymmetryType == 0 || Abs(mPosition[0]) < 0.001f)
+        SetBooleanAttribute(kAttrOnSymmetryPlane, true);
+
+    if (propList->HasProperty(0x8ffc9e66))  // modelSymmetrySnapDelta
+        mModelSymmetrySnapDelta = *GetValueFloat(propList->GetPropertyObject(0x8ffc9e66));
+    mModelReplaceSnapDelta = 0.4f;
+    if (propList->HasProperty(0x049218c6))  // modelReplaceSnapDelta
+        mModelReplaceSnapDelta = *GetValueFloat(propList->GetPropertyObject(0x049218c6));
+    mModelSymmetryRotationSnapAngle = 0.5f;
+    GetFloatProperty(propList, 0x046b02c5, mModelSymmetryRotationSnapAngle);  // modelSymmetryRotationSnapAngle
+
+    if (propList->HasProperty(0x0f48eb09))  // modelLeftFile
+        SetBooleanAttribute(kAttrHasLeftFile, true);
+    if (!TryGetUIntProperty(propList, 0xe305aafb, (uint32_t&)mBlockPack))  // blockPack
+        mBlockPack = 0;
+
+    if (propList->HasProperty(0x105f54ff))  // modelMinMuscleFile
+        mModelMinMuscleFile = GetValueKey(propList->GetPropertyObject(0x105f54ff))->instanceID;
+    if (propList->HasProperty(0xf061e767))  // modelMaxMuscleFile
+        mModelMaxMuscleFile = GetValueKey(propList->GetPropertyObject(0xf061e767))->instanceID;
+
+    const char* soundScale = "creature_size";
+    GetPropertyAsChar8Ptr(propList, 0x02784061, soundScale);  // modelSoundScale
+    mModelSoundScale = soundScale;
+    const char* soundRotation = "creature_rotate";
+    GetPropertyAsChar8Ptr(propList, 0x027c3d61, soundRotation);  // modelSoundRotation
+    mModelSoundRotation = soundRotation;
+
+    bool modelHasBallConnector = false;
+    GetBoolProperty(propList, 0x4ff31eec, modelHasBallConnector);
+    SetBooleanAttribute(kAttrHasBallConnector, modelHasBallConnector);
+    bool modelHasSocketConnector = false;
+    GetBoolProperty(propList, 0x6ff31f12, modelHasSocketConnector);
+    SetBooleanAttribute(kAttrHasSocketConnector, modelHasSocketConnector);
+    if (modelHasSocketConnector && modelHasBallConnector)
+        SetBooleanAttribute(kAttrHasBallAndSocket, true);
+
+    bool modelOrientToSurfaces = false;
+    GetBoolProperty(propList, 0x2ff325cd, modelOrientToSurfaces);
+    SetBooleanAttribute(kAttrOrientToSurfaces, modelOrientToSurfaces);
+    bool modelStayAboveGround = false;
+    GetBoolProperty(propList, 0xec611fc7, modelStayAboveGround);
+    SetBooleanAttribute(kAttrStayAboveGround, modelStayAboveGround);
+    bool modelRemainUpright = false;
+    GetBoolProperty(propList, 0x0201636b, modelRemainUpright);
+    SetBooleanAttribute(kAttrRemainUpright, modelRemainUpright);
+    bool modelMoveBottomEdgeToSurface = false;
+    GetBoolProperty(propList, 0x657a035c, modelMoveBottomEdgeToSurface);
+    SetBooleanAttribute(kAttrMoveBottomEdgeToSurface, modelMoveBottomEdgeToSurface);
+    bool modelPointForward = false;
+    GetBoolProperty(propList, 0x31b7b15b, modelPointForward);
+    SetBooleanAttribute(kAttrPointForward, modelPointForward);
+    bool modelOrientWhenSnapped = false;
+    GetBoolProperty(propList, 0xb0032aed, modelOrientWhenSnapped);
+    SetBooleanAttribute(kAttrOrientWhenSnapped, modelOrientWhenSnapped);
+    bool modelIsNullBlock = false;
+    GetBoolProperty(propList, 0x02437197, modelIsNullBlock);
+    SetBooleanAttribute(kAttrIsNullBlock, modelIsNullBlock);
+    bool modelUseHullForBBox = false;
+    GetBoolProperty(propList, 0x51365d07, modelUseHullForBBox);
+    SetBooleanAttribute(kAttrUseHullForBBox, modelUseHullForBBox);
+    bool modelUseDummyBlocks = false;
+    GetBoolProperty(propList, 0x023fa66c, modelUseDummyBlocks);
+    SetBooleanAttribute(kAttrUseDummyBlocks, modelUseDummyBlocks);
+    bool modelHasRotationBallHandle = false;
+    GetBoolProperty(propList, 0xb07b21bd, modelHasRotationBallHandle);
+    SetBooleanAttribute(kAttrHasRotationBallHandle, modelHasRotationBallHandle);
+    bool modelIsPlantRoot = false;
+    GetBoolProperty(propList, 0x0d8800eb, modelIsPlantRoot);
+    SetBooleanAttribute(kAttrIsPlantRoot, modelIsPlantRoot);
+    bool modelHideDeformHandles = false;
+    GetBoolProperty(propList, 0x9416cea1, modelHideDeformHandles);
+    SetBooleanAttribute(kAttrHideDeformHandles, modelHideDeformHandles);
+    bool modelHideRotationHandles = false;
+    GetBoolProperty(propList, 0x0493691f, modelHideRotationHandles);
+    SetBooleanAttribute(kAttrHideRotationHandles, modelHideRotationHandles);
+    bool modelCellApplyBehaviorToUserRotation = false;
+    GetBoolProperty(propList, 0x0655296a, modelCellApplyBehaviorToUserRotation);
+    SetBooleanAttribute(kAttrCellApplyBehaviorToUserRotation, modelCellApplyBehaviorToUserRotation);
+
+    // modelPinningType: instance = pinning mode, group = pinning type group.
+    ResourceKey pinningType;
+    pinningType.instanceID = 0;
+    pinningType.typeID = 0;
+    pinningType.groupID = 0;
+    if (propList->HasProperty(0x2e853adb)) {  // modelPinningType
+        GetPropertyAsKey(propList, 0x2e853adb, pinningType);
+    } else {
+        pinningType.groupID = 0xb6f87eb0;     // PinningGeometry
+        pinningType.instanceID = 0x5ef161f1;  // PinningNormal
+    }
+    if (pinningType.groupID == 0x9183dc9b &&  // PinningPhysics
+        !propList->HasProperty(0x00f9efc0))   // modelMeshHull
+        pinningType.groupID = 0xb6f87eb0;     // PinningGeometry
+    mModelPinningTypeGroup = pinningType.groupID;
+    mModelPinningAntiAliased = pinningType.instanceID == 0x17cfd48f;  // PinningAntiAliased
+
+    uint32_t pinningAgainstType = 0;
+    if (propList->HasProperty(0x04e2bf28)) {  // modelForcePinningAgainstType
+        GetPropertyAsKeyInstance(propList, 0x04e2bf28, pinningAgainstType);
+        if (pinningAgainstType != 0x2ca33bdb) {  // None
+            SetBooleanAttribute(kAttrForcePinningAgainstType, true);
+            switch (pinningAgainstType) {
+            case 0x9183dc9b:  // PinningPhysics
+                mModelForcePinningType = 2;
+                break;
+            case 0xb6f87eb0:  // PinningGeometry
+                mModelForcePinningType = 4;
+                break;
+            default:
+                SetBooleanAttribute(kAttrForcePinningAgainstType, false);
+                break;
+            }
+        }
+    }
+
+    mModelScale = 1.0f;
+    GetFloatProperty(propList, 0x00fba611, mModelScale);  // modelScale
+    mModelShowoffAnimation = 0;
+    GetPropertyAsKeyInstance(propList, 0x4f2f2a48, mModelShowoffAnimation);  // modelShowoffAnimation
+    mModelShowoffEffect = 0;
+    GetPropertyAsKeyInstance(propList, 0x06514c0b, mModelShowoffEffect);  // modelShowoffEffect
+    mOwnerLink.SetOwner(this);
+
+    mModelRigBlockType.instanceID = 0;
+    mModelRigBlockType.groupID = 0;
+    mModelRigBlockType.typeID = 0;
+    if (propList->HasProperty(0x0186609d)) {  // modelRigBlockType
+        GetPropertyAsKey(propList, 0x0186609d, mModelRigBlockType);
+        if (mModelRigBlockType.groupID == 0xffffffff || mModelRigBlockType.groupID == 0x2ca33bdb)
+            mModelRigBlockType.groupID = 0;
+        if (mModelRigBlockType.instanceID == 0xffffffff || mModelRigBlockType.instanceID == 0x2ca33bdb)
+            mModelRigBlockType.instanceID = 0;
+        if (mModelRigBlockType.typeID == 0xffffffff || mModelRigBlockType.typeID == 0x2ca33bdb)
+            mModelRigBlockType.typeID = 0;
+    }
+
+    bool modelSnapToParentCenter = false;
+    GetBoolProperty(propList, 0x0213a120, modelSnapToParentCenter);
+    SetBooleanAttribute(kAttrSnapToParentCenter, modelSnapToParentCenter);
+    bool modelSnapToParentSnapVectors = false;
+    GetBoolProperty(propList, 0xf87abea3, modelSnapToParentSnapVectors);
+    SetBooleanAttribute(kAttrSnapToParentSnapVectors, modelSnapToParentSnapVectors);
+    bool modelSnapToCenterOfEditor = false;
+    GetBoolProperty(propList, 0xdafbe434, modelSnapToCenterOfEditor);
+    SetBooleanAttribute(kAttrSnapToCenterOfEditor, modelSnapToCenterOfEditor);
+    bool modelCellAllowOnTopOfBody = false;
+    GetBoolProperty(propList, 0xd11cbf2e, modelCellAllowOnTopOfBody);
+    SetBooleanAttribute(kAttrCellAllowOnTopOfBody, modelCellAllowOnTopOfBody);
+    bool modelPreferToBeOnPlaneOfSymmetry = false;
+    GetBoolProperty(propList, 0x5c5e51ec, modelPreferToBeOnPlaneOfSymmetry);
+    SetBooleanAttribute(kAttrPreferToBeOnPlaneOfSymmetry, modelPreferToBeOnPlaneOfSymmetry);
+    bool modelActLikeFinOnPlaneOfSymmetry = false;
+    GetBoolProperty(propList, 0xfb23b7d1, modelActLikeFinOnPlaneOfSymmetry);
+    SetBooleanAttribute(kAttrActLikeFinOnPlaneOfSymmetry, modelActLikeFinOnPlaneOfSymmetry);
+    bool modelStartAsymmetric = false;
+    GetBoolProperty(propList, 0x0750dcd1, modelStartAsymmetric);
+    SetBooleanAttribute(kAttrStartAsymmetric, modelStartAsymmetric);
+    bool modelCanBeParentless = false;
+    GetBoolProperty(propList, 0x8e31d974, modelCanBeParentless);
+    SetBooleanAttribute(kAttrCanBeParentless, modelCanBeParentless);
+    bool modelWarpCursorToPinPoint = false;
+    GetBoolProperty(propList, 0x0489164a, modelWarpCursorToPinPoint);
+    SetBooleanAttribute(kAttrWarpCursorToPinPoint, modelWarpCursorToPinPoint);
+    bool modelActsLikeFoot = false;
+    GetBoolProperty(propList, 0x04a33896, modelActsLikeFoot);
+    SetBooleanAttribute(kAttrActsLikeFoot, modelActsLikeFoot);
+    bool modelAllowAsymmetricalRotationOnPlaneOfSymmetry = false;
+    GetBoolProperty(propList, 0x04eb8e7a, modelAllowAsymmetricalRotationOnPlaneOfSymmetry);
+    SetBooleanAttribute(kAttrAllowAsymmetricalRotationOnPlaneOfSymmetry,
+                        modelAllowAsymmetricalRotationOnPlaneOfSymmetry);
+    bool modelDoNotFlipBasedOnSurfaceNormalOnPlaneOfSymmetry = false;
+    GetBoolProperty(propList, 0x05c08c60, modelDoNotFlipBasedOnSurfaceNormalOnPlaneOfSymmetry);
+    SetBooleanAttribute(kAttrDoNotFlipOnPlaneOfSymmetry,
+                        modelDoNotFlipBasedOnSurfaceNormalOnPlaneOfSymmetry);
+
+    mModelNumberOfSnapAxes = -1;
+    TryGetUIntProperty(propList, 0x04ece315, (uint32_t&)mModelNumberOfSnapAxes);  // modelNumberOfSnapAxes
+
+    bool modelRemainUprightOnTop = false;
+    GetBoolProperty(propList, 0x04ed8506, modelRemainUprightOnTop);
+    SetBooleanAttribute(kAttrRemainUprightOnTop, modelRemainUprightOnTop);
+    bool modelAllowTopBehaviors = false;
+    GetBoolProperty(propList, 0x05f98a72, modelAllowTopBehaviors);
+    SetBooleanAttribute(kAttrAllowTopBehaviors, modelAllowTopBehaviors);
+    bool modelIsAllowedOutOfBounds = false;
+    GetBoolProperty(propList, 0x0538a895, modelIsAllowedOutOfBounds);
+    SetBooleanAttribute(kAttrIsAllowedOutOfBounds, modelIsAllowedOutOfBounds);
+    bool modelCircularTopAlignment = false;
+    GetBoolProperty(propList, 0x04ed4c40, modelCircularTopAlignment);
+    SetBooleanAttribute(kAttrCircularTopAlignment, modelCircularTopAlignment);
+    bool modelActsLikeGrasper = false;
+    GetBoolProperty(propList, 0x04a3386d, modelActsLikeGrasper);
+    SetBooleanAttribute(kAttrActsLikeGrasper, modelActsLikeGrasper);
+
+    mModelDefaultMouseOffset = kVector3Zero;
+    GetPropertyAsVector3(propList, 0x0520f199, mModelDefaultMouseOffset);  // modelDefaultMouseOffset
+    mModelEditorInitialRotation = kMatrix3Identity;
+    if (propList->HasProperty(0x05aee941)) {  // modelEditorInitialRotation
+        Vector3_s0044_1440 initialRotation;
+        GetPropertyAsVector3(propList, 0x05aee941, initialRotation);
+        float degToRad = 0.017453292f;
+        initialRotation = initialRotation * degToRad;
+        Matrix3_s0044_1440 rotation(Matrix33FromEulerXYZ(initialRotation));
+        mModelEditorInitialRotation = rotation;
+    }
+
+    mModelBottomEdgeDistanceAdjustment = 0.0f;
+    if (propList->HasProperty(0x165f0e1e))  // modelBottomEdgeDistanceAdjustment
+        GetFloatProperty(propList, 0x165f0e1e, mModelBottomEdgeDistanceAdjustment);
+
+    bool modelBoundsCheckOnlyForDelete = false;
+    GetBoolProperty(propList, 0x3701d675, modelBoundsCheckOnlyForDelete);
+    SetBooleanAttribute(kAttrBoundsCheckOnlyForDelete, modelBoundsCheckOnlyForDelete);
+
+    mModelMinScale = 0.2f;
+    GetFloatProperty(propList, 0xf023ed73, mModelMinScale);  // modelMinScale
+    mModelMaxScale = 3.0f;
+    GetFloatProperty(propList, 0xf023ed79, mModelMaxScale);  // modelMaxScale
+    float defaultScale = GetDefaultScale();
+    mModelMinBallConnectorScale = 0.5f;
+    GetFloatProperty(propList, 0xfe0926f6, mModelMinBallConnectorScale);  // modelMinBallConnectorScale
+    mModelMaxBallConnectorScale = 2.0f;
+    GetFloatProperty(propList, 0x21d55d8c, mModelMaxBallConnectorScale);  // modelMaxBallConnectorScale
+
+    if (propList->HasProperty(0x0224fea2)) {  // modelPaletteRotation
+        Vector3_s0044_1440 paletteRotation = *GetValueVector3(propList->GetPropertyObject(0x0224fea2));
+        mModelPaletteRotation = paletteRotation;
+    }
+
+    uint32_t modelPrice = 0;
+    TryGetUIntProperty(propList, 0x02166464, modelPrice);  // modelPrice
+    mModelPrice = modelPrice;
+    mModelComplexityScore = 0;
+    mModelRunTimeBoneCount = 0;
+    mModelBakeLevel = 0;
+    TryGetUIntProperty(propList, 0x3c652302, mModelComplexityScore);   // modelComplexityScore
+    TryGetUIntProperty(propList, 0x51fa9dfa, mModelRunTimeBoneCount);  // modelRunTimeBoneCount
+    TryGetUIntProperty(propList, 0x04460b63, mModelBakeLevel);         // modelBakeLevel
+    field_5F4 = BlockPropertySource()->GetPropertyListFloat(propList);
+
+    GetPropertyAsKeyInstance(propList, 0xdd94fb65, mFootType);    // foottype
+    GetPropertyAsKeyInstance(propList, 0x0e40c402, mMouthType);   // mouthtype
+    GetPropertyAsKeyInstance(propList, 0x2dc2a89d, mWeaponType);  // weapontype
+
+    // ResourceKey lists
+    mModelSnapDownTo.clear();
+    {
+        Property* prop = propList->GetPropertyObject(0x86e4091f);  // modelSnapDownTo
+        int count = prop->GetItemCount();
+        if (count > 0)
+            SetBooleanAttribute(kAttrHasSnapDownTo, true);
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelSnapDownTo, count, keys);
+    }
+    mModelSnapToParentTypes.clear();
+    if (propList->HasProperty(0xe3803d2a)) {  // modelSnapToParentTypes
+        Property* prop = propList->GetPropertyObject(0xe3803d2a);
+        int count = prop->GetItemCount();
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelSnapToParentTypes, count, keys);
+    }
+    mModelTypesToInteractWith.clear();
+    if (propList->HasProperty(0x6ffded92)) {  // modelTypesToInteractWith
+        Property* prop = propList->GetPropertyObject(0x6ffded92);
+        int count = prop->GetItemCount();
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelTypesToInteractWith, count, keys);
+    }
+    mModelTypesNotToInteractWith.clear();
+    if (propList->HasProperty(0x044dcd0a)) {  // modelTypesNotToInteractWith
+        Property* prop = propList->GetPropertyObject(0x044dcd0a);
+        int count = prop->GetItemCount();
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelTypesNotToInteractWith, count, keys);
+    }
+    mModelTypesToSnapReplace.clear();
+    if (propList->HasProperty(0x048e2a2e)) {  // modelTypesToSnapReplace
+        Property* prop = propList->GetPropertyObject(0x048e2a2e);
+        int count = prop->GetItemCount();
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelTypesToSnapReplace, count, keys);
+    }
+    mModelAlignHeightWith.clear();
+    if (propList->HasProperty(0xa3db17be)) {  // modelAlignHeightWith
+        Property* prop = propList->GetPropertyObject(0xa3db17be);
+        int count = prop->GetItemCount();
+        if (count > 0)
+            SetBooleanAttribute(kAttrHasAlignHeightWith, true);
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelAlignHeightWith, count, keys);
+    }
+    mModelAlignXYWith.clear();
+    if (propList->HasProperty(0x05f57a28)) {  // modelAlignXYWith
+        Property* prop = propList->GetPropertyObject(0x05f57a28);
+        int count = prop->GetItemCount();
+        if (count > 0)
+            SetBooleanAttribute(kAttrHasAlignXYWith, true);
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelAlignXYWith, count, keys);
+    }
+    mModelAlignLateralWith.clear();
+    if (propList->HasProperty(0x467ef4e0)) {  // modelAlignLateralWith
+        Property* prop = propList->GetPropertyObject(0x467ef4e0);
+        int count = prop->GetItemCount();
+        if (count > 0)
+            SetBooleanAttribute(kAttrHasAlignLateralWith, true);
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelAlignLateralWith, count, keys);
+    }
+    mModelStayAbove.clear();
+    if (propList->HasProperty(0xee0fa2ce)) {  // modelStayAbove
+        Property* prop = propList->GetPropertyObject(0xee0fa2ce);
+        int count = prop->GetItemCount();
+        if (count > 0)
+            SetBooleanAttribute(kAttrStayAboveGround, true);
+        const ResourceKey* keys = (const ResourceKey*)prop->GetItems();
+        CopyKeys(mModelStayAbove, count, keys);
+    }
+
+    // Capabilities
+    mCapabilities.clear();
+    for (unsigned int i = 0; i < 0x5b; i++) {
+        const CapabilityPropertyDesc* desc = &kCapabilityProperties[i];
+        if (!propList->HasProperty(kCapabilityProperties[i].mPropertyID))
+            continue;
+        if (!desc->mIsVariableLevel) {
+            Capability capability;
+            capability.mPropertyID = kCapabilityProperties[i].mPropertyID;
+            int level;  // left uninitialised when the property is missing or not an int
+            GetIntProperty(propList, desc->mPropertyID, level);
+            CapabilityLevel fixedLevel;
+            fixedLevel.mIsVariableLevel = false;
+            fixedLevel.mMinLevel = level;
+            fixedLevel.mMaxLevel = level;
+            fixedLevel.mDefaultLevel = -1;
+            capability.mLevel = fixedLevel;
+            mCapabilities.push_back(capability);
+        } else {
+            Capability capability;
+            capability.mPropertyID = kCapabilityProperties[i].mPropertyID;
+            Vector3_s0044_1440 range;
+            GetPropertyAsVector3(propList, desc->mPropertyID, range);
+            CapabilityLevel variableLevel;
+            variableLevel.mIsVariableLevel = true;
+            variableLevel.mDefaultLevel = (int)range.x;
+            variableLevel.mMinLevel = (int)range.y;
+            variableLevel.mMaxLevel = (int)range.z;
+            capability.mLevel = variableLevel;
+            mCapabilities.push_back(capability);
+        }
+    }
+
+    Vector3_s0044_1440 rotationBallOffset(0.0f, -0.5f, 0.0f);
+    if (propList->HasProperty(0xb07b21be)) {  // modelRotationBallHandleOffset
+        Vector3_s0044_1440 offset = *GetValueVector3(propList->GetPropertyObject(0xb07b21be));
+        rotationBallOffset = offset;
+    }
+    mModelRotationBallHandleOffset = rotationBallOffset;
+
+    Vector3_s0044_1440 minSocketOffset(0.0f, 0.0f, 0.0f);
+    Vector3_s0044_1440 maxSocketOffset(0.0f, 0.0f, 0.0f);
+    mBooleanAttributes.test(kAttrHasSocketConnector);  // result unused
+    if (propList->HasProperty(0x3061e2b3)) {  // modelMinSocketConnectorOffset
+        Vector3_s0044_1440 offset = *GetValueVector3(propList->GetPropertyObject(0x3061e2b3));
+        minSocketOffset = offset;
+    }
+    if (propList->HasProperty(0x3061e2b8)) {  // modelMaxSocketConnectorOffset
+        Vector3_s0044_1440 offset = *GetValueVector3(propList->GetPropertyObject(0x3061e2b8));
+        maxSocketOffset = offset;
+    } else {
+        maxSocketOffset = minSocketOffset;
+    }
+    mModelMinSocketConnectorOffset = minSocketOffset;
+    mModelMaxSocketConnectorOffset = maxSocketOffset;
+
+    if (mLimbType == 3)
+        SetScaleType(0);
+
+    // Ball connector
+    if (GetBooleanAttribute(kAttrHasBallConnector)) {
+        if (mpBallConnectorHandle) {
+            mpBallConnectorHandle->Dispose();
+            mpBallConnectorHandle = 0;
+        }
+        if (bInteractive) {
+            mpBallConnectorHandle = new ("Editor", 0, 0, 0, 0) cSPEditorHandleBallConnector_s0044_1440();
+            mpBallConnectorHandle->Init(this);
+        }
+        if (mpBallConnectorHandle)
+            mpBallConnectorHandle->SetScale(mBaseMuscleScale);
+    } else {
+        mBooleanAttributes.set(kAttr0C, false);
+    }
+
+    // Socket connector
+    if (GetBooleanAttribute(kAttrHasSocketConnector)) {
+        if (mpSocketConnectorModel) {
+            mpSocketConnectorModel->mpWorld->SetInWorld(mpSocketConnectorModel, false);
+            mpSocketConnectorModel = 0;
+        }
+        mSocketConnectorOffset = mModelMinSocketConnectorOffset * mModelScale;
+        mModelMinSocketConnectorOffset = mModelMinSocketConnectorOffset * mModelScale;
+        mModelMaxSocketConnectorOffset = mModelMaxSocketConnectorOffset * mModelScale;
+        if (bInteractive)
+            mpSocketConnectorModel = mpModelWorld->CreateModel(0xcd09fa6a, kEditorModelGroupID, 0);  // ce_basic_socket
+        if (mpSocketConnectorModel) {
+            mpSocketConnectorModel->mpOwner = static_cast<IUnknown32*>(this);
+            mpSocketConnectorModel->mGroupFlags.set(modelMgr->GetGroupFlag(0x4ff4af74, 0), true);
+            mpSocketConnectorModel->SetVisible(false);
+        }
+    }
+
+    if (GetBooleanAttribute(kAttrStayAboveGround) && mModelStayAbove.empty()) {
+        mModelStayAbove.resize(1);
+        mModelStayAbove[0].instanceID = 0x96b84350;  // ground
+    }
+    if (GetBooleanAttribute(kAttrUseDummyBlocks) && mpSocketConnectorModel)
+        mpSocketConnectorModel->SetVisible(false);
+    if (GetBooleanAttribute(kAttrHasBallAndSocket) && GetBooleanAttribute(kAttrUseSkin) && mpModel)
+        mpModel->SetVisible(false);
+
+    if (bInteractive && mpParent && !GetBooleanAttribute(kAttrIsVertebra) &&
+        !GetBooleanAttribute(kAttrHasBallConnector)) {
+        if (0.5f > VectorLength(mTriangleDirection))
+            mTriangleDirection = Sub_4364a0();
+    } else {
+        mTriangleDirection = mTotalOrientation.m[1];
+    }
+
+    SetPosition(mPosition, false);
+    field_3CC = mTotalOrientation.m[1];
+    mEffectsBoneIndex = -1;
+    mCSnapBoneIndex = -1;
+
+    if (mpModel) {
+        mpModel->mpOwner = static_cast<IUnknown32*>(this);
+        mpModel->mTransform.SetOffset(mPosition);
+        mpModel->mTransform.SetRotation(mTotalOrientation);
+        mpModel->mGroupFlags.set(modelMgr->GetGroupFlag(0x9138fd8d, 0), true);
+        mpModel->mFlags.set(1, false);
+
+        bool modelOverrideBounds = false;
+        GetBoolProperty(mpPropList, 0xd2435f2d, modelOverrideBounds);
+        mpModel->mFlags.set(9, modelOverrideBounds);
+
+        bool modelUseHullForPicking = false;
+        GetBoolProperty(mpPropList, 0x350f8605, modelUseHullForPicking);
+        if (modelUseHullForPicking) {
+            SetBooleanAttribute(kAttrUseHullForPicking, true);
+            mpModel->mFlags.set(8, true);
+            mpModel->mCollisionMode = 2;
+            mPickingType = 2;
+        } else {
+            mPickingType = 4;
+        }
+
+        if (GetBooleanAttribute(kAttrIsVertebra)) {
+            mpModelWorld->StallUntilLoaded(mpModel);
+            if (mpModelWorld && mpModelWorld->GetNumAnimations(mpModel, 0) == 1) {
+                mpModelWorld->GetAnimationIDs(mpModel, &mVertebraAnimID, 0);
+                if (mVertebraAnimID)
+                    mpModelWorld->AnimAction(mpModel, mVertebraAnimID, 3, 0.0f, 0);
+            }
+            mpModel->mGroupFlags.set(modelMgr->GetGroupFlag(0x022fff11, 0), true);
+            mpModel->mGroupFlags.set(modelMgr->GetGroupFlag(0x513cdfc1, 0), true);
+            mpModel->mFlags.set(1, true);
+            mpModel->mColor[3] = 0.0f;
+        } else if (GetBooleanAttribute(kAttrHasBallAndSocket) && GetBooleanAttribute(kAttrUseSkin)) {
+            mpModel->mFlags.set(1, true);
+            mpModel->mColor[3] = 0.0f;
+        }
+        Sub_43ac40(0, 1, 1);
+    }
+
+    if (!mpPropList->HasProperty(0x8ffc9e66)) {  // modelSymmetrySnapDelta
+        BoundingBox bbox = GetBBox(2, false, false);
+        float delta = Clamp_s0044_1440((bbox.mMax[0] - bbox.mMin[0]) * 0.3f, 0.01f, 0.13f);
+        mModelSymmetrySnapDelta = delta;
+    }
+    BoundingBox bbox = GetBBox(2, false, false);
+    float replaceDelta = Clamp_s0044_1440((bbox.mMax[0] - bbox.mMin[0]) * mModelReplaceSnapDelta, 0.01f, 0.3f);
+    field_224 = replaceDelta;
+
+    // Rotation handles
+    for (int i = 0; i < 3; i++) {
+        if (mAxisHandles[i]) {
+            mAxisHandles[i]->Dispose();
+            mAxisHandles[i] = 0;
+        }
+    }
+    bool createRotationHandles =
+        (!GetBooleanAttribute(kAttrHideRotationHandles) && bInteractive) ? true : false;
+    if (createRotationHandles) {
+        CreateRotationRingHandle(0, 0x067489dc,  // xaxis
+                                 0x04617bf6, 0x98d0ea44, 0x98d0ea45, 0x040cbd94, 0x041295c9,
+                                 0x0420dc18, 0x04604b00, 0x04617d3d);
+        CreateRotationRingHandle(1, 0x3bc16bcd,  // yaxis
+                                 0x04617bf7, 0x98d0ea46, 0x98d0ea47, 0x040cbd95, 0x041295ca,
+                                 0x0420dc19, 0x04604b01, 0x04617d3e);
+        CreateRotationRingHandle(2, 0x01d369ee,  // zaxis
+                                 0x04617bf8, 0x98d0ea48, 0x98d0ea49, 0x040cbd96, 0x041295cb,
+                                 0x0420dc1a, 0x04604b02, 0x04617d3f);
+    }
+    if (createRotationHandles && GetBooleanAttribute(kAttrHasRotationBallHandle)) {
+        if (mpRotationBallHandle) {
+            mpRotationBallHandle->Dispose();
+            mpRotationBallHandle = 0;
+        }
+        mpRotationBallHandle = new ("Editor", 0, 0, 0, 0) cSPEditorHandleRotationBall_s0044_1440();
+        mpRotationBallHandle->Init(modelMgr, this, mModelRotationBallHandleOffset, bInteractive);
+        bool modelRotationBallHandleIsHidden = false;
+        GetBoolProperty(mpPropList, 0x04604b03, modelRotationBallHandleIsHidden);
+        mpRotationBallHandle->mIsHidden = modelRotationBallHandleIsHidden;
+    }
+
+    if (pParent)
+        Sub_451e20(pParent);
+
+    // Deform handles
+    bool showDeformHandles = !GetBooleanAttribute(kAttrHideDeformHandles);
+    MorphHandleInfo morphHandles[0x20];
+    int numWeights = mMorphHandleWeights.size();
+    int numMorphHandles = 0;
+    if (mpModel)
+        numMorphHandles = mpModelWorld->GetDeformationHandles(mpModel, morphHandles, 0x20);
+
+    if (numWeights >= 1 && GetBooleanAttribute(kAttrHasBallAndSocket)) {
+        int boneLengthIndex = 0;
+        int numChannels = mMorphHandleChannels.size();
+        for (int i = 0; i < numChannels; i++) {
+            if (mMorphHandleChannels[i] == 0x9310d4c0) {  // DeformBoneLength
+                boneLengthIndex = i;
+                break;
+            }
+        }
+        float& weight = mMorphHandleWeights[boneLengthIndex];
+        mSocketConnectorOffset = mModelMinSocketConnectorOffset +
+            weight * (mModelMaxSocketConnectorOffset - mModelMinSocketConnectorOffset);
+    }
+
+    int i = 0;
+    int numHandles = mMorphHandles.size();
+    for (; i < numHandles; i++) {
+        if (mMorphHandles[i])
+            mMorphHandles[i]->Dispose();
+    }
+    mMorphHandles.clear();
+    mMorphHandles.resize(numMorphHandles);
+    for (int h = 0; h < numMorphHandles; h++) {
+        mMorphHandles[h] = new ("Editor", 0, 0, 0, 0) cSPEditorHandleDeform_s0044_1440();
+        cSPEditorHandleDeform_s0044_1440* handle = mMorphHandles[h];
+        handle->Init(modelMgr, this, &morphHandles[h], bInteractive);
+        cSPEditorHandleDeform_s0044_1440* created = mMorphHandles[h];
+        SetMorphHandleWeight(h, created->mDefaultWeight, 0, 0, 1);
+    }
+    if (mMorphHandleWeights.empty())
+        Sub_43e2b0();
+
+    if (numMorphHandles > 0) {
+        InitializeHandleData(propList);
+        if (mpModelWorld && mpModel) {
+            Sub_43e0f0(&mDeformAnimIndex);
+            if (mDeformAnimIndex != -1) {
+                uint32_t animIDs[0x20];
+                mpModelWorld->GetAnimationIDs(mpModel, animIDs, 0);
+                mDeformAnimID = animIDs[mDeformAnimIndex];
+            }
+        }
+    }
+
+    if (bInteractive) {
+        Sub_448b80(0);
+        BoundingBox modelBBox;
+        Sub_449d40(&modelBBox);
+        if (mpModel && mpModelWorld && mModelNumberOfSnapAxes > 0) {
+            mpPropList->HasProperty(0x00f9efc0);  // modelMeshHull (result unused)
+            RebuildPhysics();
+            CalculateSnapAxes();
+        }
+        Sub_4484f0();
+    }
+
+    for (int w = 0; w < numMorphHandles; w++) {
+        if (w < numWeights)
+            SetMorphHandleWeight(w, mMorphHandleWeights[w], 0, 0, 1);
+    }
+
+    if (bInteractive && mpModel && mpModelWorld) {
+        BoundingBox modelBBox2;
+        Sub_449d40(&modelBBox2);
+        RebuildPhysics();
+        Sub_44b640(&mpModel->mDefaultBBox);
+        Sub_44b6b0();
+        Sub_4485d0();
+    }
+
+    field_1A9 = true;
+    field_1AC = 0;
+
+    int snapIndex = -2;
+    if (bInteractive) {
+        Vector3_s0044_1440 snapA;
+        Vector3_s0044_1440 snapB;
+        bool flag = Sub_492de0(this);
+        float score = Sub_492e70(this, &snapA, &snapB, &snapIndex, 1.0f, flag);
+        if (score > -1.0f)
+            Sub_44e7c0(snapIndex);
+    }
+
+    // "effect" and "csnap" bones
+    if (mpModel) {
+        int numBones = mpModelWorld->GetNumBones(mpModel);
+        fixed_vector_s0044_1440<uint32_t, 64> boneIDs(numBones);
+        fixed_vector_s0044_1440<BoneTransform_s0044_1440, 64> boneTransforms(numBones);
+        const uint32_t kEffectBone = 0x80d91e9e;  // effect
+        const uint32_t kCSnapBone = 0x2002c980;   // csnap
+        mpModelWorld->GetBoneIDs(mpModel, boneIDs.mpBegin);
+        for (int bone = 0; bone < numBones; bone++) {
+            if (boneIDs[bone] == 0x80d91e9e || boneIDs[bone] == 0x2002c980) {
+                Transform_s0044_1440 worldTransform;
+                Transform_s0044_1440 poseTransform;
+                fixed_vector_s0044_1440<BoneTransform_s0044_1440, 64> transforms(numBones);
+                mpModelWorld->GetBoneTransforms(mpModel, transforms.mpBegin);
+                BoneTransformToTransform(&transforms[bone], &worldTransform);
+                mpModelWorld->GetPoseTransforms(mpModel, transforms.mpBegin, false);
+                BoneTransformToTransform(&transforms[bone], &poseTransform);
+                worldTransform.Accumulate(poseTransform);
+                worldTransform.AccumulateScaled(*mpModelWorld->GetMeshTransform(mpModel));
+                worldTransform.mScale = 1.0f;
+                worldTransform.mChangeCount++;
+                if (boneIDs[bone] == 0x80d91e9e) {
+                    SetBooleanAttribute(kAttrHasEffectBone, true);
+                    mEffectsBoneTransform1 = poseTransform;
+                    mEffectsBoneTransform2 = worldTransform;
+                    mEffectsBoneIndex = bone;
+                } else if (boneIDs[bone] == 0x2002c980) {
+                    SetBooleanAttribute(kAttrHasCSnapBone, true);
+                    mCSnapBoneTransform1 = poseTransform;
+                    mCSnapBoneTransform2 = worldTransform;
+                    mCSnapBoneIndex = bone;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00446ff0
 int* __fastcall Sub_446ff0(int* p)
 {
@@ -4512,6 +6554,7 @@ int* __fastcall Sub_446ff0(int* p)
     }
     return 0;
 }
+
 
 
 
@@ -4549,6 +6592,7 @@ void Binder::Method(unsigned char param2)
 
 
 
+
 // @ 0x004485d0
 void Blk_s0044_8380::A85d0()
 {
@@ -4557,6 +6601,7 @@ void Blk_s0044_8380::A85d0()
             mItems[i]->Method();
     }
 }
+
 
 
 
@@ -4595,6 +6640,7 @@ void Blk_s0044_9ed0::A49ed0()
 
 
 
+
 // @ 0x0044a070
 void Blk_s0044_9ed0::A4a070()
 {
@@ -4608,6 +6654,7 @@ void Blk_s0044_9ed0::A4a070()
         Sub44b6b0();
     }
 }
+
 
 
 
@@ -4687,6 +6734,7 @@ BBox_s0044_ae00 Blk_s0044_ae00::GetBBox(int type, bool a, bool b)
 
 
 
+
 // @ 0x0044b550
 V3_s0044_ae00* Blk_s0044_ae00::B550(V3_s0044_ae00* out)
 {
@@ -4701,12 +6749,14 @@ V3_s0044_ae00* Blk_s0044_ae00::B550(V3_s0044_ae00* out)
 
 
 
+
 // @ 0x0044b590
 M3_s0044_ae00* Blk_s0044_ae00::B590(M3_s0044_ae00* out)
 {
     *out = mMat;
     return out;
 }
+
 
 
 
@@ -4738,6 +6788,7 @@ float Blk_s0044_ae00::GetDefaultScale()
 
 
 
+
 // @ 0x0044b640
 void Blk_s0044_ae00::B640(int)
 {
@@ -4748,6 +6799,7 @@ void Blk_s0044_ae00::B640(int)
         }
     }
 }
+
 
 
 
@@ -4779,6 +6831,7 @@ void Blk_s0044_ae00::B6b0()
 
 
 
+
 // @ 0x0044b780
 bool Blk_s0044_ae00::B780()
 {
@@ -4788,6 +6841,7 @@ bool Blk_s0044_ae00::B780()
         return true;
     return false;
 }
+
 
 
 
@@ -4837,6 +6891,7 @@ void Blk_s0044_ae00::B7b0(unsigned ms)
 
 
 
+
 // @ 0x0044ba20
 void Blk_s0044_ae00::Ba20(bool a, bool b)
 {
@@ -4874,6 +6929,7 @@ void Blk_s0044_ae00::Ba20(bool a, bool b)
 
 
 
+
 // @ 0x0044c050
 int Blk_s0044_bcf0::C050()
 {
@@ -4894,6 +6950,7 @@ int Blk_s0044_bcf0::C050()
 
 
 
+
 // @ 0x0044c480
 void Blk_s0044_bcf0::C480(int v)
 {
@@ -4901,6 +6958,7 @@ void Blk_s0044_bcf0::C480(int v)
     if (Child() != 0)
         Child()->m1c4 = v;
 }
+
 
 
 
@@ -4927,9 +6985,9 @@ void Blk_s0044_d4f0::D570()
                 u = (t8 - GetXf()->pos) * Transposed(GetXf()->rot);
                 v10[2] = 0.0f;
                 if (mVec.mBeg[i].m1c) {
-                    if (Abs(v10[0]) > 0.5f)
+                    if (Abs_s0044_d4f0(v10[0]) > 0.5f)
                         v10[1] = u[1];
-                    else if (Abs(v10[1]) > 0.5f)
+                    else if (Abs_s0044_d4f0(v10[1]) > 0.5f)
                         v10[0] = u[0];
                 }
                 *(Raw3*)&mVec.mBeg[i].mx = *(Raw3*)&v10;
@@ -4937,6 +6995,7 @@ void Blk_s0044_d4f0::D570()
         }
     }
 }
+
 
 
 
@@ -4956,6 +7015,7 @@ void cSPEditorBlock::SetScaleType(int type)
         mScaleType = 3;
     }
 }
+
 
 
 
@@ -4994,6 +7054,7 @@ int cSPEditorBlock::CalculateSymmetrySign()
     }
     return result;
 }
+
 
 
 
@@ -5057,6 +7118,7 @@ cSPEditorBlock_s0044_f420* cSPEditorBlock_s0044_f420::Split(int type)
     VecDtor(&vA);
     return nb;
 }
+
 
 
 
@@ -5245,6 +7307,7 @@ cSPEditorBlock_s0044_f7c0* cSPEditorBlock_s0044_f7c0::CloneBlock(int type, cSPEd
 }
 
 
+
 // @ 0x00450f70
 unsigned char Block2::Rebuild(int a, int b, float c, char d, unsigned char e)
 {
@@ -5265,12 +7328,14 @@ unsigned char Block2::Rebuild(int a, int b, float c, char d, unsigned char e)
 }
 
 
+
 // @ 0x004511f0
 int Block2::GetA()
 {
     int result = (int)mTracker->field4;
     return result;
 }
+
 
 
 // @ 0x00451210
@@ -5284,12 +7349,14 @@ int Block2::GetB()
 }
 
 
+
 // @ 0x00451240
 void Block2::SetF(void* a, unsigned char b)
 {
     void* tmp = mPtr33c;
     mTracker->Call(tmp, (int)a, b);
 }
+
 
 
 // @ 0x00451280
@@ -5306,6 +7373,7 @@ void Block2::SetRef(RCObj* p)
 }
 
 
+
 // @ 0x004512e0
 Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
 {
@@ -5315,6 +7383,7 @@ Vec3_s0045_0f70* Block2::GetVec14(Vec3_s0045_0f70* out)
     out->z = p->z;
     return out;
 }
+
 
 
 // @ 0x00451330
@@ -5327,12 +7396,14 @@ void Block2::SetVec194(int x, int y, int z)
 }
 
 
+
 // @ 0x00451360
 void Block2::ResetVec194()
 {
     mVec194 = mVec48;
     mFlag1a0 = false;
 }
+
 
 
 // @ 0x004513a0
@@ -5344,6 +7415,7 @@ Vec3_s0045_0f70* Block2::GetVec194(Vec3_s0045_0f70* out)
     out->z = p->z;
     return out;
 }
+
 
 
 // @ 0x00451400
@@ -5428,12 +7500,14 @@ void cSPEditorBlock_s0045_0f70::Shutdown2()
 }  // namespace SP
 
 
+
 // @ 0x00451e20
 void Block2::SetPtr188(void* p)
 {
     mPtr188 = p;
     FUN_00452040();
 }
+
 
 
 // @ 0x00451e50
@@ -5444,6 +7518,7 @@ void Block2::SetSub38(void* p)
         q->field = p;
     }
 }
+
 
 
 // @ 0x00451e90
@@ -5459,12 +7534,14 @@ void* Block2::GetSub38()
 }
 
 
+
 // @ 0x00451ed0
 void Block2::Reset188()
 {
     FUN_00451fe0();
     mPtr188 = 0;
 }
+
 
 // @ 0x00451ef0
 void cSPEditorBlock_s0045_1ef0::FUN_00451ef0(void* obj)
@@ -5487,6 +7564,7 @@ void cSPEditorBlock_s0045_1ef0::FUN_00451ef0(void* obj)
     }
 }
 
+
 // @ 0x00451fe0
 void cSPEditorBlock_s0045_1ef0::FUN_00451fe0()
 {
@@ -5498,6 +7576,7 @@ void cSPEditorBlock_s0045_1ef0::FUN_00451fe0()
     }
     mPhysObj = 0;
 }
+
 
 // @ 0x00452040
 void cSPEditorBlock_s0045_1ef0::FUN_00452040()

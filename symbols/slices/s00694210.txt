@@ -1,5 +1,5 @@
 00694270 _FUN_00694270  # FUN_00694270 migrated from s00694210 (verbatim, slice spelling)
-00694440 EA::Variant::Read  # Claude-coined: reads type id + flags then a scalar/array of the Variant from a stream (card label "cUnknownTypedValueToString::Write" is wrong)
+00694440 ?FUN_00694440@@YA_NPAUVStream@@PAUVariant@@H@Z  # FUN_00694440 migrated from s00694210 (verbatim, slice spelling)
 00694bf0 _FUN_00694bf0  # FUN_00694bf0 migrated from s00694210 (verbatim, slice spelling)
 00694e00 _FUN_00694e00  # FUN_00694e00 migrated from s00694210 (verbatim, slice spelling)
 00694e60 ?init@Big2@@QAEXPAX@Z  # Big2::init migrated from s00694210 (verbatim, slice spelling)
