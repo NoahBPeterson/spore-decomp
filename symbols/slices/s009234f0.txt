@@ -41,3 +41,4 @@
 00924490 ?Clone@LogFormatterSimple_s0092_34f0@Trace@EA@@QAEPAXXZ  # LogFormatterSimple_s0092_34f0::Clone migrated from s009234f0 (verbatim, slice spelling)
 009244d0 ??0LogFormatterFancy_s0092_34f0@Trace@EA@@QAE@PBD@Z  # LogFormatterFancy_s0092_34f0::LogFormatterFancy migrated from s009234f0 (verbatim, slice spelling)
 00924570 ?SetName@LogFormatterFancy_s0092_34f0@Trace@EA@@QAEXPBD@Z  # LogFormatterFancy_s0092_34f0::SetName migrated from s009234f0 (verbatim, slice spelling)
+0143dd7c ??_7LogFormatterFancy_s0092_34f0@Trace@EA@@6B@  # vtable of the renamed LogFormatterFancy (0x143dd7c, the store 0x9244d0 makes; fix pass 5, so module-side equiv maps it)

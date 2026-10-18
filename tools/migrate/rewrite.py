@@ -4427,6 +4427,17 @@ class Rewrite:
                         pat = re.compile(r"(?:^|[\s:*&])%s(?:_s[0-9a-f]{4}_[0-9a-f]{4})?::%s\(" % (re.escape(base), npat))
                     else:
                         pat = re.compile(r"(?:^|[\s:*&])%s\(" % re.escape(want))
+                        # an out-of-class member definition with no c.cls (`void cEditorCheat::Execute(..)`): the qualifier
+                        # of the definition is required, else the bare name binds another class's method (fix pass 5:
+                        # s0058d430 0x58d430 bound cEditorAddDNACheat::Execute, s007ca950 0x7cae30..0x7cb270 bound the
+                        # Execute of the neighbouring command class; /O2 had dropped the unreferenced anonymous-namespace
+                        # definition from the binding object)
+                        qm = re.search(r"(\w+)\s*(?:<[^()]*>)?\s*::\s*%s\s*\(" % re.escape(want), mask(c.sig_text or ""))
+                        # (only a qualifier that is a slice struct: a typedef qualifier, `PropFixV::resize`, demangles to
+                        # the template it names and keeps the bare-name match)
+                        q = re.sub(r"_s[0-9a-f]{4}_[0-9a-f]{4}$", "", qm.group(1)) if qm else None
+                        if q and (q in self.structs or qm.group(1) in self.structs):
+                            pat = re.compile(r"(?:^|[\s:*&])%s(?:_s[0-9a-f]{4}_[0-9a-f]{4})?::%s\(" % (re.escape(q), re.escape(want)))
                     cands = [(si, off, n) for si, off, n in funcs
                              if n not in used and pat.search((und.get(n) or "").replace("class ", "").replace("struct ", ""))
                              and (getattr(c, "inst", False) or self.demangled_arity(und.get(n)) in (None, len(c.params)))]
