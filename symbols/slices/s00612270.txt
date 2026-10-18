@@ -1,3 +1,4 @@
+00612980 ?HandleMessage@FloodHandler@@QAE_NIPAX@Z  # FloodHandler::HandleMessage migrated from s00612270 (verbatim, slice spelling)
 00612a20 SP::cPropertyListFactory::GetSupportedTypes  # writes type id 0xfd60f0c1 (property list)
 00612a70 eastl::pair<unsigned int,EA::Variant>::~pair  # Variant dtor at +4
 00612d10 ??1Elem16VectorD@@QAE@XZ  # DestroyElem16VectorD migrated from s00612270 (verbatim, slice spelling)

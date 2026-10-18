@@ -1,7 +1,24 @@
 0060c780 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormData  # 5-arg overload (name, stream, content type, file name, transfer encoding), vtable +0x50
 0060c9c0 EA::Internet::HTTPMultipartRelatedPostBodyStream::AddFormDataVideo  # vtable +0x5c
 0060cb90 EA::Internet::HTTPMultipartRelatedPostBodyStream::CommitTextSegment  # vtable +0x68; wraps the buffered text as a sub-stream and queues it
-0060ccf0 SP::GetTypeFromName  # FNV hash of a lowercase type name, accepted only if it is one of 28 known type hashes
-0060cec0 SP::cPollinator::SetEnabledState  # switch on 0x4c4d2c3/cd/df; posts 0x3743e04 when enabling
-0060d7a0 Pollinator::cJobResultMessage::cJobResultMessage  # (jobID, result, ref-counted data)
-0060d800 Pollinator::NotificationFunction  # msg 0x700af301 -> posts a cJobResultMessage
+0060ccc0 ??0UploadEntry@SP@@QAE@ABUResourceKey@1@_N1@Z  # UploadEntry::UploadEntry migrated from s0060c780 (verbatim, slice spelling)
+0060ccf0 ?GetTypeFromName@SP@@YA_NPBDPAI@Z  # GetTypeFromName migrated from s0060c780 (verbatim, slice spelling)
+0060ce10 ?ClassifyCommand@SP@@YAHFPAUcAchievementSource@1@@Z  # ClassifyCommand migrated from s0060c780 (verbatim, slice spelling)
+0060cec0 ?SetEnabledState@cPollinator_s0060_c780@SP@@QAEXH@Z  # cPollinator_s0060_c780::SetEnabledState migrated from s0060c780 (verbatim, slice spelling)
+0060cf30 ?OnGameEvent@SP@@YGXPAUcGameEventMessage@1@@Z  # OnGameEvent migrated from s0060c780 (verbatim, slice spelling)
+0060cfa0 ??4VariantHelper@@QAEAAU0@AB_K@Z  # VariantHelper::operator= migrated from s0060c780 (verbatim, slice spelling)
+0060d000 ?FindAndNotify@@YA?AU?$DequeIterator@PAUIListener@@@@U1@0UListenerQuery@@@Z  # FindAndNotify migrated from s0060c780 (verbatim, slice spelling)
+0060d0a0 ?FindReadyAndNotify@@YA?AU?$DequeIterator@PAUIListener@@@@U1@0PAX@Z  # FindReadyAndNotify migrated from s0060c780 (verbatim, slice spelling)
+0060d140 ?uninitialized_copy_entries@SP@@YAPAUUploadEntry@1@PBU21@0PAU21@@Z  # uninitialized_copy_entries migrated from s0060c780 (verbatim, slice spelling)
+0060d1b0 ?DeletingDtor@cPollinatorCheat_s0060_c780@SP@@QAEPAV12@E@Z  # cPollinatorCheat_s0060_c780::DeletingDtor migrated from s0060c780 (verbatim, slice spelling)
+0060d1e0 ?SendNotificationMessage@SP@@YGXPAX@Z  # SendNotificationMessage migrated from s0060c780 (verbatim, slice spelling)
+0060d210 ??1AtomicRef@SP@@QAE@XZ  # AtomicRef::~AtomicRef migrated from s0060c780 (verbatim, slice spelling)
+0060d240 ?reset@AtomicRef@SP@@QAEAAU12@XZ  # AtomicRef::reset migrated from s0060c780 (verbatim, slice spelling)
+0060d2e0 ?clear@DequeBase@StreamDeque@@QAEXXZ  # DequeBase::clear migrated from s0060c780 (verbatim, slice spelling)
+0060d3c0 ?DoReallocPtrArray@DequeBase@StreamDeque@@QAEXIW4Side@2@@Z  # DequeBase::DoReallocPtrArray migrated from s0060c780 (verbatim, slice spelling)
+0060d5d0 ?distance@SP@@YAHUHashIterator@1@0@Z  # distance migrated from s0060c780 (verbatim, slice spelling)
+0060d610 ?copy@StreamDeque@@YA?AUIterator@1@U21@00@Z  # copy migrated from s0060c780 (verbatim, slice spelling)
+0060d6e0 ?copy_backward@StreamDeque@@YA?AUIterator@1@U21@00@Z  # copy_backward migrated from s0060c780 (verbatim, slice spelling)
+0060d7a0 ??0cJobResultMessage@Pollinator@@QAE@IIPAVAtomicRefCounted@SP@@@Z  # cJobResultMessage::cJobResultMessage migrated from s0060c780 (verbatim, slice spelling)
+0060d800 ?NotificationFunction@@YAXPAX0IPAI@Z  # NotificationFunction migrated from s0060c780 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0060c780, named from the dev publics; slice address comment)

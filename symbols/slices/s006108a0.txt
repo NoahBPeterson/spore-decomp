@@ -1,14 +1,14 @@
-006108a0  cPollinator feed helper  # 881 B
+006108a0 ?FUN_006108a0@@YAXPAX00@Z  # FUN_006108a0 migrated from s006108a0 (verbatim, slice spelling)
 00610c20  SP::cPollinator::GetAssetFeedEx candidate  # poster pattern
-00610cb0  SP::cPollinator poster candidate  # 139 B
-00610d40  SP::cPollinator poster candidate  # 133 B
-00610df0  SP::cPollinator::CancelTransactionsForID candidate  # 157 B
-00610e90  SP::cPollinator poster candidate  # 150 B
-00610f30  SP::cPollinator helper  # 565 B
-00611170  SP::cPollinator::CancelTransactions  # rbtree walk, PDB name
-006111c0  SP::cPollinator::HandleTransactionResult  # PDB name
-00611480  SP::cPollinator helper  # 189 B
-00611540  SP::cPollinator::CancelAllTransactions thunk  # push 0x3c88992
-00611550  Feed::FeedDescription vector erase  # 48 B
-00611580  SP::cPollinator helper  # 314 B
-006116c0  SP::cPollinator::~cPollinator  # PDB name
+00610cb0 ?FUN_00610cb0@@YAXPAX00@Z  # FUN_00610cb0 migrated from s006108a0 (verbatim, slice spelling)
+00610d40 ?FUN_00610d40@@YAXPAX00@Z  # FUN_00610d40 migrated from s006108a0 (verbatim, slice spelling)
+00610df0 ?FUN_00610df0@@YAXPAXH@Z  # FUN_00610df0 migrated from s006108a0 (verbatim, slice spelling)
+00610e90 ?FUN_00610e90@@YAXPAX0@Z  # FUN_00610e90 migrated from s006108a0 (verbatim, slice spelling)
+00610f30 ?FUN_00610f30@@YAXPAX00@Z  # FUN_00610f30 migrated from s006108a0 (verbatim, slice spelling)
+00611170 ?CancelTransactions@cPollinator_s0061_08a0@SP@@QAEXH@Z  # cPollinator_s0061_08a0::CancelTransactions migrated from s006108a0 (verbatim, slice spelling)
+006111c0 ?FUN_006111c0@@YAXPAX0@Z  # FUN_006111c0 migrated from s006108a0 (verbatim, slice spelling)
+00611480 ?FUN_00611480@@YAXPAX0@Z  # FUN_00611480 migrated from s006108a0 (verbatim, slice spelling)
+00611540 ?CancelAllTransactions@cPollinator_s0061_08a0@SP@@QAEXXZ  # cPollinator_s0061_08a0::CancelAllTransactions migrated from s006108a0 (verbatim, slice spelling)
+00611550 ?FUN_00611550@@YAPAXPAX0@Z  # FUN_00611550 migrated from s006108a0 (verbatim, slice spelling)
+00611580 ?FUN_00611580@@YAXPAX0@Z  # FUN_00611580 migrated from s006108a0 (verbatim, slice spelling)
+006116c0 ?FUN_006116c0@@YAXPAX@Z  # FUN_006116c0 migrated from s006108a0 (verbatim, slice spelling)

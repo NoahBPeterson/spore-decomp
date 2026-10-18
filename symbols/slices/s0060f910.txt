@@ -1,0 +1,9 @@
+0060f910 ?cPollinatorInit@@YAXPAX@Z  # cPollinatorInit migrated from s0060f910 (verbatim, slice spelling)
+00610070 ?FeedHelper00610070@@YAXPAX0@Z  # FeedHelper00610070 migrated from s0060f910 (verbatim, slice spelling)
+00610140 ?ProcessTransactionQueue@cPollinator@SP@@QAEXXZ  # SP::cPollinator::ProcessTransactionQueue migrated from s0060f910
+00610460 ?PostEatFeed@cPollinator_s0060_f910@SP@@QAEXPAX@Z  # cPollinator_s0060_f910::PostEatFeed migrated from s0060f910 (verbatim, slice spelling)
+006104f0 ?CreateMyFeed@cPollinator_s0060_f910@SP@@QAEXPAX0H@Z  # cPollinator_s0060_f910::CreateMyFeed migrated from s0060f910 (verbatim, slice spelling)
+006105d0 ?UpdateMyFeed@cPollinator_s0060_f910@SP@@QAEXPAX0H@Z  # cPollinator_s0060_f910::UpdateMyFeed migrated from s0060f910 (verbatim, slice spelling)
+006106f0 ?DeleteMyFeed@cPollinator_s0060_f910@SP@@QAEXPAX@Z  # cPollinator_s0060_f910::DeleteMyFeed migrated from s0060f910 (verbatim, slice spelling)
+00610780 ?SubscribeToFeed@cPollinator_s0060_f910@SP@@QAEXPAX@Z  # cPollinator_s0060_f910::SubscribeToFeed migrated from s0060f910 (verbatim, slice spelling)
+00610810 ?UnsubscribeToFeed@cPollinator_s0060_f910@SP@@QAEXPAX@Z  # cPollinator_s0060_f910::UnsubscribeToFeed migrated from s0060f910 (verbatim, slice spelling)

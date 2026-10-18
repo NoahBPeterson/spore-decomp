@@ -1,0 +1,12 @@
+# va  diff-bytes  reason
+0060d210 32 AtomicRef::~AtomicRef: complete; original does dec esi after the lock xadd, cl emits sub edx,1 with different registers
+0060d240 31 AtomicRef::reset: complete; same dec/register difference and the original keeps the inner delete-this null check
+0060d3c0 39 deque DoReallocPtrArray: complete; only register assignment of mpPtrArray/mItBegin node differs
+0060d7a0 8 Pollinator::cJobResultMessage ctor: complete; mov edx,1 is scheduled after the add ecx,4
+00610460 85 SP::cPollinator::EatFeed candidate (132 B): behaviorally complete; see above.
+006104f0 78 SP::cPollinator::CreateMyFeed (222 B): behaviorally complete (sprintf args and deque push omitted in the outline).
+006105d0 78 SP::cPollinator::UpdateMyFeed (273 B): behaviorally complete outline.
+006106f0 103 SP::cPollinator::DeleteMyFeed (129 B): behaviorally complete; near miss.
+00610780 89 SP::cPollinator::SubscribeToFeed (136 B): behaviorally complete outline.
+00610810 83 SP::cPollinator::UnsubscribeToFeed (129 B): behaviorally complete outline.
+00612980 50 vptr/this-cast scheduling (pCheat computed after MessageServer call)
