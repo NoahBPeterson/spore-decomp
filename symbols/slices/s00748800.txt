@@ -1,2 +1,3 @@
 00748800 ?FilterModelSphere2@@YAHPAUCullModel_s0074_8800@@PAMPAUSphereArg@@@Z  # FilterModelSphere2 migrated from s00748800 (verbatim, slice spelling)
+00748ad0 ?FUN_00748ad0@@YAHPAMHPAGHHHHHM@Z  # FUN_00748ad0 migrated from s00748800 (verbatim, slice spelling)
 00748c30 ?FindClosest@cModelWorld_s0074_8800@@QAEPAXHHPAMPAUQueryArg@@@Z  # cModelWorld_s0074_8800::FindClosest migrated from s00748800 (verbatim, slice spelling)

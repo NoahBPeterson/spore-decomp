@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsModelManager.cpp -- migrated from slice(s) s00753270, s00751560, s007507e0, s00750180, s0074f200, s0074e2b0, s0074d4b0, s0074c260, s0074b170, s0074a290, s00749370, s00748800, s00747920, s007469b0, s00745ac0, s00744ad0, s00743b20, s00742b30 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsModelManager.cpp -- migrated from slice(s) s007523a0, s00753270, s00751560, s007507e0, s00750180, s0074f200, s0074e2b0, s0074d4b0, s0074c260, s0074b170, s0074a290, s00749370, s00748800, s00747920, s007469b0, s00745ac0, s00744ad0, s00743b20, s00742b30 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsModelManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -23,6 +23,8 @@
 #include "SP/cMWGroup.h"
 #include "SP/cMWObject.h"
 inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
+inline void* operator new(unsigned int, void* p) { return p; }   // placement new (moved out of the s00743b20 block by hand: rewrite.py drops it as a <new> duplicate)
+struct Vec3 { float x, y, z; };   // hand-placed before all slice blocks: rewrite.py emitted it after the s00745ac0 DrawRecord that uses it (C2146)
 
 // ---- items of slice s00742b30 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cModelWorld56 {
@@ -68,6 +70,26 @@ struct cModelWorld56 {
 // ---- items of slice s00742b30 end
 
 // ---- items of slice s00743b20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct RefCounted { virtual void AddRef(); virtual void Release(); };
+struct Elem28 {
+    uint32_t    m0;
+    RefCounted* mRef;
+    uint32_t    m8, mC, m10, m14, m18;
+    Elem28(const Elem28& o);
+};
+Elem28::Elem28(const Elem28& o) {
+    m0 = o.m0;
+    mRef = o.mRef;
+    if (mRef)
+        mRef->AddRef();
+    m8 = o.m8;
+    mC = o.mC;
+    m10 = o.m10;
+    m14 = o.m14;
+    m18 = o.m18;
+}
+struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
+struct ResHolder { ResInfo* Get(); };
 struct intrusive_node { intrusive_node* mpNext; intrusive_node* mpPrev; };
 struct Model {
     void*    mpWorld;                 // +0x00
@@ -114,6 +136,7 @@ struct cMWModelInternal : intrusive_node, Model {
     char    pad_cc[0x138 - 0xcc];
     uint32_t mFlags138;               // +0x138
 };
+struct cLoadQueue_s0074_3b20 { void StallUntilLoaded(uint32_t); };
 struct cModelWorld;
 struct IModelWorld {
     virtual int   AddRef();                              // +0x00
@@ -165,36 +188,51 @@ struct cModelWorld : IModelWorld {
     void* VecClear();
     bool  CallOnLoad(Model*, void*, void*);
 };
-struct RefCounted { virtual void AddRef(); virtual void Release(); };
-struct Elem28 {
-    uint32_t    m0;
-    RefCounted* mRef;
-    uint32_t    m8, mC, m10, m14, m18;
-    Elem28(const Elem28& o);
-};
-Elem28::Elem28(const Elem28& o) {
-    m0 = o.m0;
-    mRef = o.mRef;
-    if (mRef)
-        mRef->AddRef();
-    m8 = o.m8;
-    mC = o.mC;
-    m10 = o.m10;
-    m14 = o.m14;
-    m18 = o.m18;
-}
 struct Pair8 { uint32_t val; float key; };
-inline void* operator new(unsigned int, void* p) { return p; }
-struct ResInfo { char pad[8]; uint32_t field8; uint32_t fieldC; uint32_t field10; };
-struct ResHolder { ResInfo* Get(); };
+struct cOccluder6 { uint32_t d[6]; };
 // ---- items of slice s00743b20 end
 
 // ---- items of slice s00744ad0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+bool  __stdcall Check434b0(void*);   // 0x007434b0
+struct EffectInner;
+struct EffectEntry {
+    uint32_t     mID;         // +0x00
+    uint32_t     mPad4;       // +0x04
+    EffectInner* mpInner;     // +0x08
+    char         pad0C[0x44 - 0x0C];
+    uint8_t      mEnabled;    // +0x44
+    char         pad45[3];
+};  // 0x48
+struct EffectInner {
+    virtual void v00(); virtual void v04(); virtual void v08(int); virtual void v0C(int);
+    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
+    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
+    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3C();
+    virtual void v40(); virtual bool v44(int, int, int); virtual bool v48(int, int, int);
+    virtual bool v4C(int, int);
+};
+struct Prop {
+    char pad[0x12];
+    uint16_t mType;                 // +0x12
+    float* GetFloat();
+};
+struct PropHolder {
+    virtual bool Find(int id, void** out);   // slot 9 (0x24)
+};
+struct SlotVec { int* mp; int next(int idx); };
+struct SlotCell { int v[5]; void Assign(int* src); };
+struct ChunkObj { virtual int AddRef(); virtual int Release(); };
+struct DequeIter { int v[4]; int* Advance(int n); };
+struct RefObj { virtual void v0(int); int mRef; };
+struct AutoRef { RefObj* mp; AutoRef* Release(); };
 struct Model_s0074_4ad0;
 struct cModelInstance_s0074_4ad0;
 void* __cdecl EA_New(unsigned, const char*, int, int, const char*, int);
 void  __cdecl EA_Free(void*);       // 0x00f47380
-bool  __stdcall Check434b0(void*);   // 0x007434b0
+void  __cdecl MemMove(void*, const void*, unsigned); // 0x13cc480 msvcr90!memmove
+int   __cdecl VecDoInsertValue();   // 0x011e0744
+void  __cdecl PropertyGetFloatArray(void*, const char*, void*, void*); // 0x006a08b0
+bool  __cdecl RuntimeModelBuilder_GetRuntimeMeshes(cModelInstance_s0074_4ad0*, int, int, int, int); // 0x007763b0
 struct Model_s0074_4ad0 {
     void*    mpWorld;                 // +0x00
     uint32_t mFlags;                  // +0x04
@@ -264,23 +302,6 @@ struct IModelWorld_s0074_4ad0 {
     virtual void  GetRegionList(Model_s0074_4ad0*, void*);
     virtual void  StallUntilLoaded(Model_s0074_4ad0*);
 };
-struct EffectInner;
-struct EffectEntry {
-    uint32_t     mID;         // +0x00
-    uint32_t     mPad4;       // +0x04
-    EffectInner* mpInner;     // +0x08
-    char         pad0C[0x44 - 0x0C];
-    uint8_t      mEnabled;    // +0x44
-    char         pad45[3];
-};  // 0x48
-struct EffectInner {
-    virtual void v00(); virtual void v04(); virtual void v08(int); virtual void v0C(int);
-    virtual void v10(); virtual void v14(); virtual void v18(); virtual void v1C();
-    virtual void v20(); virtual void v24(); virtual void v28(); virtual void v2C();
-    virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3C();
-    virtual void v40(); virtual bool v44(int, int, int); virtual bool v48(int, int, int);
-    virtual bool v4C(int, int);
-};
 void DequeInsert(int* self, unsigned count, int flag);  // 0x007457a0 (defined below; used by a stub's inline body)
 struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     int   Getb20(Model_s0074_4ad0*);
@@ -291,7 +312,7 @@ struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     float StallGetBoundingBox(Model_s0074_4ad0*);  // 0x007446a0 (cModelWorld::StallGetBoundingBox)
     void* GetNumAnimationGroups(Model_s0074_4ad0*);  // 0x007446c0 (cModelWorld::GetNumAnimationGroups)
     void  GetModelResourceIDs(Model_s0074_4ad0*, uint32_t*, uint32_t*);  // 0x007446e0 (cModelWorld::GetModelResourceIDs)
-    void  StallUntilLoaded2(Model_s0074_4ad0*, uint32_t);
+    void  StallUntilLoaded2(Model_s0074_4ad0*, uint32_t);  // 0x00744760 (cModelWorld::StallUntilLoaded2)
     void  AnimAction(Model_s0074_4ad0*, int, int, float, int);  // 0x00744870 (cModelWorld::AnimAction)
     void  MoveToTime(Model_s0074_4ad0*, int, float, int);  // 0x00744900 (cModelWorld::MoveToTime)
     void  SetWeight(Model_s0074_4ad0*, int, float, int);  // 0x00744950 (cModelWorld::SetWeight)
@@ -302,7 +323,7 @@ struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     int   GetBoneIDs(Model_s0074_4ad0*, void*);  // 0x00744a70 (cModelWorld::GetBoneIDs)
     int   GetBoneParents(Model_s0074_4ad0*, void*);  // 0x00744aa0 (cModelWorld::GetBoneParents)
     bool  IsVecEmpty(int);
-    void* VecClear();
+    void* VecClear();  // 0x00743b50 (cModelWorld::VecClear)
     bool  CallOnLoad(Model_s0074_4ad0*, void*, void*);  // 0x007445b0 (cModelWorld::CallOnLoad)
 
     void  SetBoneTable(Model_s0074_4ad0*, int, int);  // 0x00744ad0 (cModelWorld::SetBoneTable)
@@ -312,47 +333,41 @@ struct cModelWorld_s0074_4ad0 : IModelWorld_s0074_4ad0 {
     void  SetDynamicDraw(Model_s0074_4ad0*, int, int);  // 0x00744be0 (cModelWorld::SetDynamicDraw)
     int   GetNumLODs(Model_s0074_4ad0*);  // 0x00744c30 (cModelWorld::GetNumLODs)
     void  SetLOD(Model_s0074_4ad0*, int);
-    void  SetSomeFloat(Model_s0074_4ad0*, float);
-    void  SetEffectEnabled(Model_s0074_4ad0*, char, char, int);
-    char  ForEachEffectA(Model_s0074_4ad0*, int, int, int, int);
-    char  ForEachEffectB(Model_s0074_4ad0*, int, int, int, int);
-    char  ForEachEffectC(Model_s0074_4ad0*, int, int, int);
+    void  SetSomeFloat(Model_s0074_4ad0*, float);  // 0x00744cf0 (cModelWorld::SetSomeFloat)
+    void  SetEffectEnabled(Model_s0074_4ad0*, char, char, int);  // 0x00744d80 (cModelWorld::SetEffectEnabled)
+    char  ForEachEffectA(Model_s0074_4ad0*, int, int, int, int);  // 0x00744e10 (cModelWorld::ForEachEffectA)
+    char  ForEachEffectB(Model_s0074_4ad0*, int, int, int, int);  // 0x00744e90 (cModelWorld::ForEachEffectB)
+    char  ForEachEffectC(Model_s0074_4ad0*, int, int, int);  // 0x00744f10 (cModelWorld::ForEachEffectC)
     int   GetDeformationHandles(Model_s0074_4ad0*, void*, void*);
     bool  GetRuntimeMeshes(Model_s0074_4ad0*, int, int, int, int);  // 0x00744fc0 (cModelWorld::GetRuntimeMeshes)
-    bool  CheckFlag(Model_s0074_4ad0*, int);
-    bool  SelectMesh(Model_s0074_4ad0*, int, int, char);
+    bool  CheckFlag(Model_s0074_4ad0*, int);  // 0x00745010 (cModelWorld::CheckFlag)
+    bool  SelectMesh(Model_s0074_4ad0*, int, int, char);  // 0x00745050 (cModelWorld::SelectMesh)
     uint32_t GetSlot(int);
     int   HACK_GetArenaResource(Model_s0074_4ad0*);  // 0x00745110 (cModelWorld::HACK_GetArenaResource)
-    void  FillColor(int*);
+    void  FillColor(int*);  // 0x00745140 (cModelWorld::FillColor)
     void* ReleaseRef();
     void  ReleaseRefs();
     void* DequeInsert(int, int);
 };
 void* cModelWorld_s0074_4ad0::VecClear() { *(uint32_t*)this = 0; return this; }
-struct Prop {
-    char pad[0x12];
-    uint16_t mType;                 // +0x12
-    float* GetFloat();
+struct RangeDtor { void Destroy(void**, void**); };
+struct RCObj_s0074_4ad0 {
+    virtual int AddRef();
+    virtual int Release();
 };
-struct PropHolder {
-    virtual bool Find(int id, void** out);   // slot 9 (0x24)
-};
-struct SlotVec { int* mp; int next(int idx); };
-struct SlotCell { int v[5]; void Assign(int* src); };
-struct ChunkObj { virtual int AddRef(); virtual int Release(); };
-struct DequeIter { int v[4]; int* Advance(int n); };
-struct RefObj { virtual void v0(int); int mRef; };
-struct AutoRef { RefObj* mp; AutoRef* Release(); };
+void* __fastcall GetThing(void*);   // 0x00bddd00
+struct Small7 { uint32_t d[7]; uint8_t b; void* Init(); };
 // ---- items of slice s00744ad0 end
 
-// ---- items of slice s00745ac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+
+
+// ---- hand-kept items of s00745ac0 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
     extern float g_f1485720; // 0x01485720
     extern float g_f140d674; // 0x0140d674
     extern float g_f162eb0c; // 0x0162eb0c
     extern float g_f162eb10; // 0x0162eb10
     extern float g_f162eb14; // 0x0162eb14
     extern float g_f162ec38; // 0x0162ec38
-struct Vec3 { float x, y, z; };
 struct cSPTransform_s0074_5ac0;
 struct cSPBoundingBox_s0074_5ac0 {
     Vec3 mMin;   // +0x00
@@ -509,9 +524,9 @@ struct SlotObj {
     void F();   // 0x00743150 (equiv t3)
 };
 }
-// ---- items of slice s00745ac0 end
+// ---- hand-kept items of s00745ac0 end
 
-// ---- items of slice s007469b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s007469b0 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 #pragma inline_depth(0)
 #pragma inline_depth()
 void cHierGrid_Remove(void* grid, int id);                                     // 0x00704100
@@ -556,9 +571,9 @@ struct Rec48 {
 struct Stub007470c0 { void F(); };
 struct Stub00747190 { void* F(int* src); };
 struct Stub00747270 { void F(); };
-// ---- items of slice s007469b0 end
+// ---- hand-kept items of s007469b0 end
 
-// ---- items of slice s00747920 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s00747920 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 void  FUN_00745e00(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
 void  FUN_00745e80(void* first, int top, int size, int pos, float vx, float vy, void* cmp);
 static inline void RelObj(RCObj* o)
@@ -584,9 +599,9 @@ struct Occluder4 { float a, b, c, d, e, f; };
 struct FKP { float x, y; FKP() {} FKP(const FKP& v) { x = v.x; y = v.y; } };
 struct CmpGt { bool operator()(const FKP& a, const FKP& b) const { return a.y > b.y; } };
 struct CmpLt { bool operator()(const FKP& a, const FKP& b) const { return a.y < b.y; } };
-// ---- items of slice s00747920 end
+// ---- hand-kept items of s00747920 end
 
-// ---- items of slice s00748800 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s00748800 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 extern int g_appProps;     // 0x015fd918
 extern float g_f162ec4c[9];   // 0x0162ec4c
 #pragma pack(push, 4)
@@ -732,7 +747,7 @@ struct cModelWorld_s0074_8800 {
 
     void* FindClosest(int a, int b, float* outDist, QueryArg* q);
 };
-// ---- items of slice s00748800 end
+// ---- hand-kept items of s00748800 end
 
 // ---- items of slice s00749370 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct cSPTransform_s0074_9370 {
@@ -771,7 +786,7 @@ struct FilterArg {
 };
 // ---- items of slice s00749370 end
 
-// ---- items of slice s0074a290 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s0074a290 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 extern "C" void __cdecl eastl_dealloc(void* p);
 static inline void** VT(void* p) { return *(void***)p; }
 struct cSPTransform_s0074_a290 {
@@ -812,9 +827,9 @@ struct TransformedHull {
     char pad1[4];
     HullVtbl* p18;  // +0x18
 };
-// ---- items of slice s0074a290 end
+// ---- hand-kept items of s0074a290 end
 
-// ---- items of slice s0074b170 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s0074b170 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 extern const float kDefaultFloat;   // 0x015d1168
 extern const bool kDefaultBool;     // 0x015d115d
 struct IPropList;
@@ -1066,7 +1081,7 @@ void SP::cModelWorld_s0074_b170::UpdateFromPropList(IPropList* pl, void* mdl, ui
     AddAttachments((ListNode_s0074_b170*)m);
     m->mUpdateCount++;
 }
-// ---- items of slice s0074b170 end
+// ---- hand-kept items of s0074b170 end
 
 // ---- items of slice s0074c260 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl memmove_(void* dst, const void* src, unsigned size);
@@ -1937,7 +1952,7 @@ struct SlotVectorOccluder {
 };
 // ---- items of slice s0074f200 end
 
-// ---- items of slice s00750180 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s00750180 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 struct cOccluderInfo_s0075_0180 { int f0; int x, y, z; float r; };
 struct SlotVector {
     cOccluderInfo_s0075_0180* mBegin;   // +0x00
@@ -1949,7 +1964,7 @@ struct MW6 {
     SlotVector vec;          // +0x2bc
     void AddOccluder(int* src, float f);
 };
-// ---- items of slice s00750180 end
+// ---- hand-kept items of s00750180 end
 
 // ---- items of slice s007507e0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SP {
@@ -2243,7 +2258,7 @@ public:
 }
 // ---- items of slice s007507e0 end
 
-// ---- items of slice s00751560 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s00751560 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 namespace SP {
 struct cSPVector3 {
   float x, y, z;
@@ -2298,9 +2313,9 @@ class cMWGroupInternal_s0075_1560 {
 namespace SP {
 struct MWGroupDtorStub { void F(); };
 }
-// ---- items of slice s00751560 end
+// ---- hand-kept items of s00751560 end
 
-// ---- items of slice s00753270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+// ---- hand-kept items of s00753270 begin (functions of this slice that mig7 skips stay in the TU and need them; rewrite.py drops items only they use)
 void* RBTreeIncrement(void*);
 struct TreeNode_00753540 {
   char pad_0[0x14];
@@ -2315,7 +2330,109 @@ struct TreeWalker_00753540 {
 struct NodeRunThunk {
   void Run(float a, float b);
 };
-// ---- items of slice s00753270 end
+// ---- hand-kept items of s00753270 end
+
+// ---- items of slice s00745ac0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void FUN_007760a0(int a, int b, int c, int d, int e, void* f);        // 0x007760a0
+int  SP_CreateModelInstance(unsigned a, int b, void* c);              // 0x00754ba0
+int  FUN_007454f0(int x);                                            // 0x007454f0
+int  FUN_007434b0(int x);                                            // 0x007434b0
+void FUN_0073b980(void* a, void* b, void* c, void* d, void* e, void* f, void* g); // 0x0073b980
+struct SlotObj_s0074_5ac0 { void F(int idx, void* handle); };
+struct ObjD8_s0074_5ac0 { void G(void* info); };
+struct MWInternal_s0074_5ac0 {
+    unsigned char pad0[0x9c];
+    SlotObj_s0074_5ac0* mSlots[4];      // +0x9c
+    unsigned char padAC[0xd8 - 0xac];
+    ObjD8_s0074_5ac0* mD8;              // +0xd8
+};
+struct VecField {
+    void* mBegin;    // +0x00
+    void* mEnd;      // +0x04
+    unsigned char pad8[0x0c - 0x08];
+    void* mCapacity; // +0x0c
+    void* mStore;    // +0x10
+    unsigned char pad14[0x18 - 0x14];
+    void* mExtra;    // +0x18
+    unsigned char pad1c[0x24 - 0x1c];
+    void* mOther;    // +0x24
+};
+struct HullQuery {
+    uint32_t mKey;    // +0x00
+    uint32_t mType;   // +0x04
+    void*    m0;      // +0x08
+    void*    m1;      // +0x0c
+    void*    m2;      // +0x10
+    void*    m3;      // +0x14
+    void*    mInst;   // +0x18
+};
+struct VariantKey { uint32_t a, b; int c; };
+struct IVirtual { virtual int v0(int); virtual int v1(int); };
+namespace __equiv_ann1 {
+struct ObjD8_s0074_5ac0 {
+    void G();   // 0x0041d8b0 (equiv t3)
+};
+}
+namespace __equiv_ann1 {
+struct SlotObj_s0074_5ac0 {
+    void F();   // 0x00743150 (equiv t3)
+};
+}
+// ---- items of slice s00745ac0 end
+
+// ---- items of slice s007469b0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void cHierGrid_Shutdown(void* grid);                                            // 0x00704060
+void cHierGrid_Init(void* grid, void* bounds, float size, int a, int b);        // 0x00704260
+void FUN_00745560(void* out, int a, int b, int c, int d, int e, int f, int g, int h, int i); // 0x00745560
+int  FUN_007c4510(int a, float b, void* c, void* d);                           // 0x007c4510
+void FUN_007453d0(void* p);                                                    // 0x007453d0
+int  FUN_007454f0(int a, int b);                                               // 0x007454f0
+int  SP_GetPropertyAsIntArray(void* props, uint32_t key, int* count, int* data); // 0x0051e5e0
+void DrawRecord_CtorProto(void* owner);
+// ---- items of slice s007469b0 end
+
+// ---- items of slice s00747920 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cSPTransform_s0074_7920 {
+    unsigned short mFlags; unsigned short mModificationCount;
+    Vec3 mTranslation; float mScale; float mRotation[9];
+};
+void* operator_new(uint32_t n, const char* name, int a, int b, const char* file, int line);
+void  FUN_007457a0(int a, int b);
+void* FUN_00743fb0(void* p, float f, void* box);
+struct CullModel_s0074_7920 {
+    unsigned char pad0[0x0c];
+    uint32_t mFlags;         // +0x0c
+    unsigned char pad10[0x4c - 0x10];
+    uint32_t mMaskA;         // +0x4c
+    uint32_t mMaskB;         // +0x50
+    unsigned char pad54[0x65 - 0x54];
+    unsigned char mC0;       // +0x65
+    unsigned char pad66[0x74 - 0x66];
+    float mRadius;           // +0x74
+    float mBoxMinX;          // +0x78
+    unsigned char pad7c[0x84 - 0x7c];
+    float mBoxMaxX;          // +0x84
+    unsigned char pad88[0x9c - 0x88];
+    void* mInst1;            // +0x9c
+    unsigned char pada0[0xac - 0xa0];
+    void* mInst2;            // +0xac
+    unsigned char padb0[0xe4 - 0xb0];
+    unsigned char mTransform[0x38]; // +0xe4
+};
+// ---- items of slice s00747920 end
+
+// ---- items of slice s00748800 begin (TODO(rewrite): local stubs, replace by canonical classes)
+int   ComposeTransforms(void* xf);
+int   FUN_0073e080(float* a, int b, void* c, int d);
+int   FUN_006ba870(int a);
+struct PickSrc { unsigned short f0, f1; float a, b, c; int d; float rot[9]; };
+// ---- items of slice s00748800 end
+
+// ---- items of slice s0074a290 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_162eb0c, g_162eb10, g_162eb14, g_1485720;
+extern char g_162ec4c[];
+struct Matrix3_s0074_a290 { void Assign(const void* src); };
+// ---- items of slice s0074a290 end
 
 // @ 0x00743940
 int cModelWorld56::Adjustor(int unused)
@@ -2323,6 +2440,18 @@ int cModelWorld56::Adjustor(int unused)
     (void)unused;
     return (int)((char*)this - 0xc);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2368,6 +2497,18 @@ void __stdcall SetTimeScale(int param_1, float scale)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007439b0
 int __stdcall OffsetOrE4(int param_1)
 {
@@ -2375,6 +2516,18 @@ int __stdcall OffsetOrE4(int param_1)
         return param_1 + 0xdc;
     return 0xe4;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2422,6 +2575,18 @@ void cModelWorld56::SetCurveSegment(int* a, int* b, int index)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00743a20
 void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
 {
@@ -2449,6 +2614,18 @@ void cModelWorld56::GetCurveSegment(int* a, int* b, int index)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00743a60
 void cModelWorld56::SetCurveRange(int index, int begin, int end)
 {
@@ -2456,6 +2633,18 @@ void cModelWorld56::SetCurveRange(int index, int begin, int end)
     *(int*)(p + 0x1b4) = begin;
     *(int*)(p + 0x1b8) = end;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2500,6 +2689,18 @@ void cModelWorld56::GetCurveRange(int index, int* begin, int* end)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00743b00
 void SP::cModelWorld::ResetHighlightCurve()
 {
@@ -2512,6 +2713,109 @@ void SP::cModelWorld::ResetHighlightCurve()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743b20
+uint32_t Getb20(Model* model)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    return ~(m->mFlags138 >> 4) & 1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743b50
+void* cModelWorld::VecClear()
+{
+    *(uint32_t*)this = 0;
+    return this;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743bb0
+void __stdcall DestroyPtrRange(void** first, void** last)
+{
+    for (; first < last; ++first) {
+        if (*first)
+            EA_Free(*first);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743be0
+void SortDescGuarded(Pair8* first, Pair8* last)
+{
+    if (first == last)
+        return;
+    Pair8* iSorted = first + 1;
+    if (iSorted == last)
+        return;
+    do {
+        Pair8 temp = *iSorted;
+        Pair8* iNext = iSorted;
+        if (iSorted != first) {
+            do {
+                if (!(temp.key > (iNext - 1)->key))
+                    break;
+                *iNext = *(iNext - 1);
+                --iNext;
+            } while (iNext != first);
+        }
+        *iNext = temp;
+        ++iSorted;
+    } while (iSorted != last);
+}
 
 
 
@@ -2556,6 +2860,53 @@ void SortDescUnguarded(Pair8* first, Pair8* last)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743cb0
+void SortAscGuarded(Pair8* first, Pair8* last)
+{
+    if (first == last)
+        return;
+    Pair8* iSorted = first + 1;
+    if (iSorted == last)
+        return;
+    do {
+        Pair8 temp = *iSorted;
+        Pair8* iNext = iSorted;
+        if (iSorted != first) {
+            do {
+                if (!(temp.key < (iNext - 1)->key))
+                    break;
+                *iNext = *(iNext - 1);
+                --iNext;
+            } while (iNext != first);
+        }
+        *iNext = temp;
+        ++iSorted;
+    } while (iSorted != last);
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00743d20
 void SortAscUnguarded(Pair8* first, Pair8* last)
 {
@@ -2588,6 +2939,18 @@ void SortAscUnguarded(Pair8* first, Pair8* last)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00743d90
 Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
 {
@@ -2600,6 +2963,115 @@ Elem28* UninitCopy(const Elem28* first, const Elem28* last, Elem28* dst)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743e50
+void PromoteCocc(cOccluder6* first, int top, int pos, cOccluder6 value, bool (*compare)(const cOccluder6&, const cOccluder6&))
+{
+    int parent = (pos - 1) >> 1;
+    while (pos > top && compare(first[parent], value)) {
+        first[pos] = first[parent];
+        pos = parent;
+        parent = (pos - 1) >> 1;
+    }
+    first[pos] = value;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743f00
+void PromoteF00(Pair8* first, int top, int pos, Pair8 value)
+{
+    for (int parent = (pos - 1) >> 1;
+         (pos > top) && (first[parent].key > value.key);
+         parent = (pos - 1) >> 1) {
+        first[pos] = first[parent];
+        pos = parent;
+    }
+    first[pos] = value;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743f60
+void PromoteF60(Pair8* first, int top, int pos, Pair8 value)
+{
+    for (int parent = (pos - 1) >> 1;
+         (pos > top) && (value.key > first[parent].key);
+         parent = (pos - 1) >> 1) {
+        first[pos] = first[parent];
+        pos = parent;
+    }
+    first[pos] = value;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00743fb0
+uint32_t BoxDistSq(const float* p, float radius, const float* box)
+{
+    float d2 = 0.0f;
+    for (int i = 0; i < 3; ++i) {
+        float v = p[i];
+        if (v < box[i]) {
+            float d = v - box[i];
+            d2 += d * d;
+        } else if (v > box[i + 3]) {
+            float d = v - box[i + 3];
+            d2 += d * d;
+        }
+    }
+    return d2 <= radius * radius;
+}
 
 
 
@@ -2673,6 +3145,189 @@ void TransformTwo(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007442c0
+void TransformTwoOffset(const cSPVector3_s0074_3b20* p1, const cSPVector3_s0074_3b20* p2, const cSPTransform_s0074_3b20* t, cSPVector3_s0074_3b20 a, float pad, cSPVector3_s0074_3b20 b)
+{
+    cSPVector3_s0074_3b20 r1, r2;
+    {
+        const cSPVector3_s0074_3b20* p = p1;
+        cSPVector3_s0074_3b20 v;
+        v.x = p->x - t->mTranslation.x;
+        v.y = p->y - t->mTranslation.y;
+        v.z = p->z - t->mTranslation.z;
+        float s = t->mScale;
+        if (s != 1.0f) {
+            float inv = 1.0f / s;
+            v.x *= inv; v.y *= inv; v.z *= inv;
+        }
+        if (t->mFlags & 2) {
+            r1.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
+            r1.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
+            r1.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+        } else {
+            r1 = v;
+        }
+    }
+    {
+        const cSPVector3_s0074_3b20* p = p2;
+        cSPVector3_s0074_3b20 v;
+        v.x = p->x - t->mTranslation.x;
+        v.y = p->y - t->mTranslation.y;
+        v.z = p->z - t->mTranslation.z;
+        float s = t->mScale;
+        if (s != 1.0f) {
+            float inv = 1.0f / s;
+            v.x *= inv; v.y *= inv; v.z *= inv;
+        }
+        if (t->mFlags & 2) {
+            r2.x = t->mRotation.m[0]*v.x + t->mRotation.m[1]*v.y + t->mRotation.m[2]*v.z;
+            r2.y = t->mRotation.m[3]*v.x + t->mRotation.m[4]*v.y + t->mRotation.m[5]*v.z;
+            r2.z = t->mRotation.m[6]*v.x + t->mRotation.m[7]*v.y + t->mRotation.m[8]*v.z;
+        } else {
+            r2 = v;
+        }
+    }
+    if (pad != 0.0f) {
+        float off = pad / t->mScale;
+        a.x -= off; a.y -= off; a.z -= off;
+        b.x += off; b.y += off; b.z += off;
+    }
+    LineClip(&r1, &r2, *(int*)&a, 0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007445b0
+bool cModelWorld::CallOnLoad(Model* model, void* cb, void* data)
+{
+    if (((model->mFlags >> 14) & 1) != 0) {
+        ((void (__cdecl*)(Model*, void*))cb)(model, data);
+        return true;
+    }
+    for (int i = 0; i < 8; ++i) {
+        char* e = (char*)this + 0x318 + i * 0x50;
+        if (*(Model**)e == model) {
+            for (int j = 0; j < 8; ++j) {
+                char* f = (char*)this + 0x318 + j * 0x50;
+                if (*(Model**)f == model) {
+                    *(void**)(f + 0x14) = cb;
+                    *(void**)(f + 0x18) = data;
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    char* begin = *(char**)((char*)this + 0x5a0);
+    char* segEnd = *(char**)((char*)this + 0x5a8);
+    char** segTable = *(char***)((char*)this + 0x5ac);
+    char* end = *(char**)((char*)this + 0x5b0);
+    while (begin != end) {
+        if (*(Model**)begin == model) {
+            *(void**)(begin + 0x14) = cb;
+            *(void**)(begin + 0x18) = data;
+            return true;
+        }
+        begin += 0x1c;
+        if (begin == segEnd) {
+            begin = *(char**)((char*)segTable + 4);
+            segTable = (char**)((char*)segTable + 4);
+            segEnd = *(char**)(begin + 0xe0);
+        }
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744680
+bool SP::cModelWorld::ModelsHavePreloaded(int i) const
+{
+    struct Entry { void* p0; void* p1; void* p2; uint32_t a; uint32_t b; };
+    Entry* v = (Entry*)((char*)this + 0x5d0 + i * 0x14);
+    return v->p0 == v->p1;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007446a0
+float cModelWorld::StallGetBoundingBox(Model* model)
+{
+    bool b = (model->mFlags >> 17) & 1;
+    if (!b)
+        this->StallUntilLoaded(model);
+    return model->mDefaultBoundingRadius;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007446c0
+void* cModelWorld::GetNumAnimationGroups(Model* model)
+{
+    if (((model->mFlags >> 16) & 1) == 0)
+        this->StallUntilLoaded(model);
+    return (char*)model + 0x70;
+}
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007446e0
 void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_t* pGroup)
 {
@@ -2718,6 +3373,515 @@ void cModelWorld::GetModelResourceIDs(Model* model, uint32_t* pInstance, uint32_
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744760
+void cModelWorld::StallUntilLoaded2(Model* model, uint32_t a)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cLoadQueue_s0074_3b20* q = (cLoadQueue_s0074_3b20*)m->mpField9c;
+    if (q)
+        q->StallUntilLoaded(a);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744790
+int cModelWorld::GetNumAnimations(Model* model)
+{
+    if (model) {
+        cMWModelInternal* m = static_cast<cMWModelInternal*>(model);
+        if (m) {
+            cModelInstance* inst = m->mAnim[0];
+            if (inst)
+                return inst->GetAnimationIDs();
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007447c0
+int cModelWorld::GetAnimationIDs(Model* model, uint32_t* dst)
+{
+    if (model) {
+        cMWModelInternal* m = static_cast<cMWModelInternal*>(model);
+        if (m) {
+            cModelInstance* inst = m->mAnim[0];
+            if (inst)
+                return inst->GetAnimIDs(dst, 0, 0);
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007447f0
+int cModelWorld::GetAnimationMoveToTimes(Model* model, int a, int b)
+{
+    if (model) {
+        cMWModelInternal* m = static_cast<cMWModelInternal*>(model);
+        if (m) {
+            cModelInstance* inst = m->mAnim[0];
+            if (inst)
+                return inst->GetAnimMoveToTimes(b, a, 0);
+        }
+    }
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744830
+int cModelWorld::GetDeformationAnimationIDs(Model* model, int a, int b)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetAnimMoveToTimes(b, a, 0) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744870
+void cModelWorld::AnimAction(Model* model, int arga, int argb, float argc, int argd)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance** p = m->mAnim;
+    if (*p) {
+        bool b = (argb == 2);
+        if (argb == 2 || argb == 0)
+            argb = 1;
+        else
+            argb = 0;
+        int i = 0;
+        do {
+            cModelInstance* inst = *p;
+            if (!inst)
+                break;
+            inst->SetActive(arga, argd, argb, argc, b);
+            ++i;
+            ++p;
+        } while (i < 6);
+        m->mFlags138 |= 0x40000000u;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744900
+void cModelWorld::MoveToTime(Model* model, int a, float b, int c)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    int i = 0;
+    cModelInstance** p = m->mAnim;
+    do {
+        cModelInstance* inst = *p;
+        if (!inst)
+            return;
+        inst->MoveToTime(a, c, b);
+        ++i;
+        ++p;
+    } while (i < 6);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744950
+void cModelWorld::SetWeight(Model* model, int a, float b, int c)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    int i = 0;
+    cModelInstance** p = m->mAnim;
+    do {
+        cModelInstance* inst = *p;
+        if (!inst)
+            return;
+        inst->SetWeight(a, c, b);
+        ++i;
+        ++p;
+    } while (i < 4);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007449a0
+bool cModelWorld::GetAnimationRange(Model* model, int a, int b, float& c, float& d)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    if (inst)
+        return inst->GetAnimationRange(a, d, b, c);
+    return false;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007449e0
+int cModelWorld::GetNumBones(Model* model)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetNumBones() : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744a10
+int cModelWorld::GetPoseTransforms(Model* model, void* dst, int original)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetPoseTransforms(dst, original) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744a40
+int cModelWorld::GetBoneTransforms(Model* model, void* dst)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetBoneTransforms(dst) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744a70
+int cModelWorld::GetBoneIDs(Model* model, void* dst)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetBoneIDs(dst) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744aa0
+int cModelWorld::GetBoneParents(Model* model, void* dst)
+{
+    cMWModelInternal* m = model ? static_cast<cMWModelInternal*>(model) : 0;
+    cModelInstance* inst = m->mAnim[0];
+    return inst ? inst->GetBoneParents(dst) : 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744ad0
+void cModelWorld_s0074_4ad0::SetBoneTable(Model_s0074_4ad0* model, int a, int b)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    int i = 0;
+    cModelInstance_s0074_4ad0** p = m->mAnim;
+    do {
+        cModelInstance_s0074_4ad0* inst = *p;
+        if (!inst)
+            return;
+        inst->SetBoneTable(a, b);
+        ++i;
+        ++p;
+    } while (i < 4);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744b10
+void cModelWorld_s0074_4ad0::SetBoneCallback(Model_s0074_4ad0* model, int a, int b, int c, int d)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    int i = 0;
+    cModelInstance_s0074_4ad0** p = m->mAnim;
+    do {
+        cModelInstance_s0074_4ad0* inst = *p;
+        if (!inst)
+            return;
+        inst->SetBoneCallback(c, d, a, b);
+        ++i;
+        ++p;
+    } while (i < 4);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744b60
+void cModelWorld_s0074_4ad0::SetAnimationGroupTransform(Model_s0074_4ad0* model, int a, int b)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    int i = 0;
+    cModelInstance_s0074_4ad0** p = m->mAnim;
+    do {
+        cModelInstance_s0074_4ad0* inst = *p;
+        if (!inst)
+            return;
+        inst->SetAnimationGroupTransform(a, b);
+        ++i;
+        ++p;
+    } while (i < 4);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744ba0
+int cModelWorld_s0074_4ad0::GetMaterialInfo(Model_s0074_4ad0* model, int region)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    if (region < 0)
+        return *(int*)((char*)m + 0xd8);
+    cModelInstance_s0074_4ad0* inst = *(cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
+    return inst->GetRegionMaterialInfo(region);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744be0
+void cModelWorld_s0074_4ad0::SetDynamicDraw(Model_s0074_4ad0* model, int a, int b)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    cModelInstance_s0074_4ad0** p = (cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
+    int n = 4;
+    do {
+        if (*p)
+            (*p)->SetDynamicDraw(a, b);
+        ++p;
+    } while (--n);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744c30
+int cModelWorld_s0074_4ad0::GetNumLODs(Model_s0074_4ad0* model)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    int count = 0, i = 0;
+    int* p = (int*)((char*)m + 0x9c);
+    do {
+        if (*p == 0)
+            return count;
+        ++i;
+        ++count;
+        ++p;
+    } while (i < 4);
+    return count;
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744c70
+void cModelWorld_s0074_4ad0::SetLOD(Model_s0074_4ad0* model, int lod)
+{
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    if (lod < 0) {
+        m->mFlags138 &= 0xefffffff;
+        if (m->mFieldD4 == 0) {
+            uint32_t tmp = 0;
+            PropertyGetFloatArray(*(void**)((char*)m + 0x98), (const char*)0x2e33a81,
+                                  &tmp, &m->mFieldD4);
+            m->mField129 = (uint8_t)tmp;
+            return;
+        }
+    } else {
+        m->mFlags138 |= 0x10000000;
+        m->mField128 = (uint8_t)lod;
+        m->mFieldD4 = 0;
+        m->mField129 = 0;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00744cf0
 void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
 {
@@ -2737,6 +3901,18 @@ void cModelWorld_s0074_4ad0::SetSomeFloat(Model_s0074_4ad0* model, float v)
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2790,6 +3966,18 @@ void cModelWorld_s0074_4ad0::SetEffectEnabled(Model_s0074_4ad0* model, char a, c
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00744e10
 char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int b, int c, int id)
 {
@@ -2809,6 +3997,18 @@ char cModelWorld_s0074_4ad0::ForEachEffectA(Model_s0074_4ad0* model, int a, int 
     }
     return result;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -2860,6 +4060,18 @@ char cModelWorld_s0074_4ad0::ForEachEffectB(Model_s0074_4ad0* model, int a, int 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00744f10
 char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int b, int id)
 {
@@ -2884,6 +4096,60 @@ char cModelWorld_s0074_4ad0::ForEachEffectC(Model_s0074_4ad0* model, int a, int 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744f80
+int cModelWorld_s0074_4ad0::GetDeformationHandles(Model_s0074_4ad0* model, void* a, void* b)
+{
+    this->StallUntilLoaded(model);
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    cModelInstance_s0074_4ad0* inst = *(cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
+    if (inst)
+        return inst->GetDeformationHandles(a, b);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00744fc0
+bool cModelWorld_s0074_4ad0::GetRuntimeMeshes(Model_s0074_4ad0* model, int a, int b, int c, int d)
+{
+    this->StallUntilLoaded(model);
+    cMWModelInternal_s0074_4ad0* m = model ? static_cast<cMWModelInternal_s0074_4ad0*>(model) : 0;
+    cModelInstance_s0074_4ad0* inst = *(cModelInstance_s0074_4ad0**)((char*)m + 0x9c);
+    if (inst)
+        return RuntimeModelBuilder_GetRuntimeMeshes(inst, a, b, c, d);
+    return false;
+}
 
 
 
@@ -2923,6 +4189,18 @@ bool cModelWorld_s0074_4ad0::CheckFlag(Model_s0074_4ad0* model, int a)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745050
 bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, char c)
 {
@@ -2939,6 +4217,54 @@ bool cModelWorld_s0074_4ad0::SelectMesh(Model_s0074_4ad0* model, int a, int b, c
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007450a0
+uint32_t cModelWorld_s0074_4ad0::GetSlot(int i)
+{
+    return *(uint32_t*)((char*)this + 0x1cc + i * 0x20);
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00745110
+SP::cArenaResource * SP::cModelWorld::HACK_GetArenaResource(SP::cMWModel * model)
+{
+    SP::cMWModelInternal* m = model ? static_cast<SP::cMWModelInternal*>(model) : 0;
+    SP::cModelInstance* inst = *(SP::cModelInstance**)((char*)m + 0x9c);
+    if (inst)
+        return inst->GetArenaResource();
+    return 0;
+}
 
 
 
@@ -3000,6 +4326,91 @@ void cModelWorld_s0074_4ad0::FillColor(int* out)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00745340
+void cModelWorld_s0074_4ad0::ReleaseRefs()
+{
+    RCObj_s0074_4ad0* a = *(RCObj_s0074_4ad0**)((char*)this + 0x90);
+    if (a)
+        a->Release();
+    RCObj_s0074_4ad0* b = *(RCObj_s0074_4ad0**)((char*)this + 0x64);
+    if (b)
+        b->Release();
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007453a0
+void* Small7::Init()
+{
+    d[0] = 0xffffffff;
+    d[1] = 0; d[2] = 0; d[3] = 0; d[4] = 0; d[5] = 0; d[6] = 0;
+    b = 1;
+    return this;
+}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007453d0
+bool __cdecl FactoryNew(void** out, void* arg2, unsigned flags)
+{
+    cModelInstance_s0074_4ad0* inst = (cModelInstance_s0074_4ad0*)EA_New(0xa0, "Graphics/ModelManager/Animations", 0, 0, 0, 0);
+    if (inst)
+        inst = inst->Init();
+    if (inst)
+        *(int*)((char*)inst + 4) += 1;
+    inst->SetFlags(flags & 1, (flags >> 1) & 1);
+    void* r1 = 0;
+    void* h = GetThing(arg2);
+    if (h) r1 = (void*)((int (__thiscall*)(void*, int))((*(void***)h)[3]))(h, 0x2f4e681b);
+    void* r2 = 0;
+    void* h2 = GetThing(arg2);
+    if (h2) r2 = (void*)((int (__thiscall*)(void*, int))((*(void***)h2)[3]))(h2, 0xe6bce5);
+    if (r1)
+        inst->Method742cf0(r1);
+    else if (r2)
+        inst->ConstructFromGameModelResource(r2);
+    *out = inst;
+    return true;
+}
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007454f0
 AutoRef* AutoRef::Release()
 {
@@ -3030,6 +4441,18 @@ AutoRef* AutoRef::Release()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745520
 int SlotVec::next(int idx)
 {
@@ -3044,6 +4467,18 @@ int SlotVec::next(int idx)
     } while ((int)v < 0);
     return idx;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3093,6 +4528,18 @@ void ChunkFind(uint32_t* out, int* cur, int* start, int* end, int** seg, int key
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007455e0
 void __fastcall DestroyChunk(int param_1)
 {
@@ -3113,6 +4560,38 @@ void __fastcall DestroyChunk(int param_1)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00745630
+void __fastcall DequeDoPopFront(int* self)
+{
+    if (*self) {
+        ((RangeDtor*)self)->Destroy((void**)self[5], (void**)(self[9] + 4));
+        if (*self)
+            EA_Free((void*)*self);
+    }
+}
 
 
 
@@ -3145,6 +4624,18 @@ int SlotCount(uint32_t* first, uint32_t* last)
         ++n;
     } while (true);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3200,6 +4691,18 @@ void SlotCell::Assign(int* src)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745710
 int* DequeIter::Advance(int n)
 {
@@ -3223,6 +4726,64 @@ int* DequeIter::Advance(int n)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007457a0
+void DequeInsert(int* self, unsigned count, int flag)
+{
+    int* begin = (int*)self[5];
+    int n = (self[9] - (int)begin) >> 2;
+    int i6 = n + 1;
+    unsigned total = i6 + count;
+    unsigned cap = self[1];
+    if (total * 2 < cap) {
+        int* dst = (int*)(self[0] + ((cap - total >> 1) + (flag ? count : 0)) * 4);
+        if (dst < begin)
+            VecDoInsertValue();
+        else
+            MemMove(dst + (i6 - (((int)(n * 4 + 4)) >> 2)), begin, n * 4 + 4);
+    } else {
+        int newcap = i6 + 2 + cap;
+        int* p = (int*)EA_New(newcap * 4, "Graphics", 0, 0,
+                              "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+        int* dst = (int*)((char*)p + (((int)begin - self[0]) / 4 + (flag ? count : 0)) * 4);
+        if (self[0])
+            VecDoInsertValue();
+        if (self[0])
+            EA_Free((void*)self[0]);
+        self[0] = (int)p;
+        self[1] = newcap;
+        self[5] = (int)dst;
+        int v = *dst;
+        self[3] = v;
+        self[4] = v + 0xe0;
+        self[9] = (int)(dst + n);
+        v = dst[n];
+        self[7] = v;
+        self[8] = v + 0xe0;
+    }
+}
 
 
 
@@ -3259,6 +4820,18 @@ void DequeInit(int* self, unsigned count)
     self[8] = v + 0xe0;
     self[6] = self[7] + (count & 7) * 0x1c;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3313,6 +4886,18 @@ void Sort18(uint32_t* first, uint32_t* last, bool (*compare)(const void*, const 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745ac0
 void Sort24(P6* first, P6* last, Compare24 compare)
 {
@@ -3326,6 +4911,18 @@ void Sort24(P6* first, P6* last, Compare24 compare)
         *j = temp;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3372,6 +4969,18 @@ E20* Copy20(E20* first, E20* last, E20* dest)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745c20
 Node18* CreateNode18(const uint32_t* value)
 {
@@ -3400,6 +5009,18 @@ Node18* CreateNode18(const uint32_t* value)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745ca0
 Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
 {
@@ -3408,6 +5029,18 @@ Vec6* UninitCopy24(Vec6* first, Vec6* last, Vec6* dest)
     }
     return dest;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3449,6 +5082,18 @@ void PromoteOccluder(cOccluder_s0074_5ac0* first, int topPosition, int position,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745e00
 void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyGreater compare)
 {
@@ -3475,6 +5120,18 @@ void PromotePairGt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00745e80
 void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyPair value, FloatKeyLess compare)
 {
@@ -3486,6 +5143,18 @@ void PromotePairLt(FloatKeyPair* first, int topPosition, int position, FloatKeyP
     }
     first[position] = value;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3536,6 +5205,18 @@ DrawRecord* DrawRecord_Ctor(DrawRecord* self, void* owner)
     self->mLast = 0;
     return self;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3617,6 +5298,18 @@ int FilterModelFrustum(CullModel* model, void* culler, FrustumFilterArg* arg)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00746250
 void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int idx)
 {
@@ -3636,6 +5329,97 @@ void cModelWorld_SetMaterialInfo(void* /*this*/, void* handle, void* info, int i
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007462b0
+void FUN_007462b0(void* /*this*/, void* handle, VecField* v)
+{
+    MWInternal_s0074_5ac0* p = handle ? (MWInternal_s0074_5ac0*)((char*)handle - 8) : 0;
+    void* src = 0;
+    if (p->mSlots[0] == 0 && p->mSlots[1] == 0 && p->mSlots[2] == 0 && p->mSlots[3] == 0) {
+        // no slots: still run the commit below
+    } else {
+        // find a live slot and detach its refcounted object at +0x18
+        void* q = (void*)v->mExtra;
+        if (q) {
+            v->mExtra = 0;
+            (*(void(__thiscall**)(void*))(*(void**)q))(q);
+        }
+        FUN_0073b980(&v->mStore, &v->mBegin, &v->mExtra, &v->mEnd, &v->mOther, &v->mCapacity, &v->mExtra);
+    }
+    if (v->mEnd != v->mExtra) {
+        v->mEnd = v->mExtra;
+        EASTL_allocator_deallocate(v->mStore);
+        uint32_t n = (uint32_t)v->mEnd;
+        v->mStore = EASTL_allocator_allocate(n * 0xc, "Graphics", 0, 0, 0, 0);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+// @ 0x00746360
+void cModelWorld_GetHull(void* self, HullQuery* out)
+{
+    (*(void(__thiscall**)(void*, HullQuery*))((char*)(*(void**)self) + 0x58))(self, out);
+    unsigned char* p = (unsigned char*)out - 8;
+    out->mKey = 0;
+    out->mType = 0;
+    out->m0 = 0;
+    out->m1 = 0;
+    out->m2 = 0;
+    out->m3 = 0;
+    if (out->mInst) {
+        void* q = out->mInst;
+        out->mInst = 0;
+        (*(void(__thiscall**)(void*, int))((char*)(*(void**)q) + 4))(q, 1);
+    }
+    if (*(void**)(p + 0xac) == 0 && *(void**)(p + 0x98) != 0) {
+        VariantKey variant;
+        memset(&variant, 0, sizeof(variant));
+        int ok = (*(int(__thiscall**)(void*, uint32_t, void*))
+                  ((char*)(**(void***)(p + 0x98)) + 0x24))(*(void**)(p + 0x98), 0xf9efc0, &variant);
+        if (ok) {
+            // resolved resource key
+            SP_CreateModelInstance(variant.a, variant.c == -1 ? 0 : variant.c, (void*)FUN_007454f0(0));
+        }
+    }
+    if (*(void**)(p + 0xac) != 0 || *(void**)(p + 0x9c) != 0) {
+        FUN_007434b0(0);
+        if (out->mInst) {
+            void* q = out->mInst;
+            out->mInst = 0;
+            (*(void(__thiscall**)(void*, int))((char*)(*(void**)q) + 4))(q, 1);
+        }
+        FUN_0073b980(&out->mKey, &out->mType, &out->m0, &out->m1, &out->m2, &out->m3, &out->mInst);
+    }
+}
 
 
 
@@ -3667,6 +5451,114 @@ void CModelWorldStub::GetHullBoundingBox(void* handle, cSPBoundingBox_s0074_5ac0
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00746610
+int cModelWorld_GetRuntimeModel(void* self, void* handle, int* params)
+{
+    (*(void(__thiscall**)(void*, void*))((char*)(*(void**)self) + 0x58))(self, handle);
+    ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
+    unsigned char* q = (unsigned char*)p;
+    if (*(void**)(q + 0x9c) != 0) {
+        float rot[9];
+        Matrix3_Assign(rot, &g_f162ec38);
+        FUN_007760a0(*(int*)(q + 0x9c), (int)handle, params[0], params[1], params[2], rot);
+        return 0;
+    }
+    return 3;
+}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007466e0
+int FUN_007466e0(void* self, void* handle)
+{
+    (*(void(__thiscall**)(void*, void*))((char*)(*(void**)self) + 0x58))(self, handle);
+    ModelInternal* p = handle ? (ModelInternal*)((char*)handle - 8) : 0;
+    if (*(void**)((char*)p + 0x9c) == 0)
+        return 0;
+    if (!FUN_007434b0((int)handle))
+        return 0;
+    if (!((*(uint32_t*)((char*)p + 0xc) >> 9) & 1)) {
+        HullModel* h = (HullModel*)*(void**)((char*)p + 0xac);
+        (void)h;
+        Vec3 mn = *(Vec3*)((char*)p + 0xa8);
+        (void)mn;
+        // Copy bounding box out of the model instance (offsets as in retail).
+        Vec3 srcMax = *(Vec3*)((char*)p + 0xc0);
+        (void)srcMax;
+        float scale = p->mTransform.mScale;
+        if (scale != g_f1485720 || (*(unsigned char*)&p->mTransform & 6)) {
+            // recompute bounding radius
+            float a = *(float*)((char*)p + 0xe8);
+            float b = *(float*)((char*)p + 0xec);
+            float c = *(float*)((char*)p + 0xf0);
+            float r = sqrtf(a * a + b * b + c * c);
+            (void)r;
+        }
+    }
+    return 1;
+}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007467f0
+int FUN_007467f0(void* self, void* a, void* b, Vec3* out1, Vec3* out2, Vec3* out3)
+{
+    char buf[36];
+    char* p = buf;
+    memset(buf, 0, sizeof(buf));
+    void* local = 0;
+    if (!(*(int(__thiscall**)(void*, int, void*, void*, void*))((char*)(*(void**)self) + 0x114))(self, 0, &local, a, b))
+        return 0;
+    {
+        IVirtual* lv = (IVirtual*)local;
+        if (lv) { lv->v1(0); }
+    }
+    if (!(*(int(__thiscall**)(void*, char*))((char*)(*(void**)local) + 8))(local, buf)) {
+        if (local) (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
+        return 0;
+    }
+    out1->x = *(float*)(buf + 0);  out1->y = *(float*)(buf + 4);  out1->z = *(float*)(buf + 8);
+    out2->x = *(float*)(buf + 12); out2->y = *(float*)(buf + 16); out2->z = *(float*)(buf + 20);
+    out3->x = *(float*)(buf + 24); out3->y = *(float*)(buf + 28); out3->z = *(float*)(buf + 32);
+    if (local) (*(void(__thiscall**)(void*))((char*)(*(void**)local) + 4))(local);
+    return 1;
+}
 
 
 
@@ -3715,12 +5607,73 @@ void GroupWorld::AssignGroup(void* newObj, int idx, bool flag)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007469b0
+void CModelWorld::SetWorldBounds(Vec3 bounds[2], float param_3, float param_4)
+{
+    float d0 = bounds[0].x - bounds[0].y;  // placeholder (real shape below)
+    (void)d0;
+    unsigned char* b = (unsigned char*)this;
+    float sx = bounds[1].x - bounds[0].x;
+    float sy = bounds[1].y - bounds[0].y;
+    float sz = bounds[1].z - bounds[0].z;
+    float dim = sx;
+    if (sy > dim) dim = sy;
+    if (sz > dim) dim = sz;
+    if (*(void**)(b + 0x140) != *(void**)(b + 0x13c))
+        cHierGrid_Shutdown(b + 0x118);
+    for (unsigned char* n = *(unsigned char**)(b + 0x19c); n != b + 0x19c; n = *(unsigned char**)n)
+        *(int*)(n + 0x120) = -1;
+    if (bounds[0].x <= bounds[1].x) {
+        float f0 = dim * 2.0f;
+        float q0 = f0 / (param_3 + 1e-08f);
+        float q1 = f0 / (param_4 + 1e-08f);
+        int i0 = (int)(q0 + 0.5f);
+        int i1 = (int)(q1 + 0.5f);
+        int lvl = i0 < 0 ? 0 : i0;
+        int lv2 = i1 < 7 ? i1 : 7;
+        if (lv2 < lvl) lv2 = lvl;
+        cHierGrid_Init(b + 0x118, bounds, dim, lvl, lv2);
+    }
+}
+
+
+
+
+
+
+
+
+
 // @ 0x00746b40
 void CModelWorld::UpdateOccluder(int idx, Vec3* pos, float radius)
 {
     mOccluders[idx].mPosition = *pos;
     mOccluders[idx].mRadius = radius;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3796,6 +5749,74 @@ void cModelWorld_ShutdownModel(CModelWorld* self, int model)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00746cc0
+int FUN_00746cc0(int self, int key)
+{
+    int it;
+    // find(key) yields node or anchor; return value at +0x14 when found.
+    (void)key;
+    it = 0;
+    if (it != self + 0x10)
+        return *(int*)(it + 0x14);
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+// @ 0x00746cf0
+int FUN_00746cf0(int self, int a, float b)
+{
+    int hit = 0;
+    float best = 0.0f;
+    int vec24[3], vec30[3];
+    memset(vec24, 0, 12);
+    memset(vec30, 0, 12);
+    FUN_007c4510(a, b, vec30, vec24);
+    int n = *(int*)(self + 0x14);
+    if (n != self + 0x10) {
+        do {
+            void* obj = *(void**)(n + 0x14);
+            if (*((char*)obj + 0x24) != 0) {
+                int r = (*(int(__thiscall**)(void*, void*, void*, float*, void*))
+                         (((char*)(*(void**)obj) + 0x28)))(obj, vec30, vec24, &b, 0);
+                if (r && best < b) { best = b; hit = r; }
+            }
+            n = 0;
+        } while (0);
+        if (hit) {
+            if (!(*(uint32_t*)(hit + 4) & 0x40)) *(uint32_t*)(hit + 4) |= 0x40;
+            else *(uint32_t*)(hit + 4) &= ~0x40;
+        }
+    }
+    return hit != 0;
+}
+
+
+
+
+
+
+
+
+
 // @ 0x00746de0
 Rec48::Rec48()
 {
@@ -3816,6 +5837,60 @@ Rec48::Rec48()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00746e50
+void FUN_00746e50(void* self, void* owner)
+{
+    unsigned char* b = (unsigned char*)self;
+    memset(b, 0, 8);
+    DrawRecord_CtorProto(owner);
+    // vector constructors at +0x9c and +0xb4 (6 RCObj refs each)
+    for (int i = 0; i < 6; ++i) { *(int*)(b + 0x9c + i * 4) = 0; *(int*)(b + 0xb4 + i * 4) = 0; }
+    *(void**)(b + 0xd4) = 0;
+    *(void**)(b + 0xd8) = 0;
+    *(void**)(b + 0xdc) = 0;
+    *(void**)(b + 0xe0) = 0;
+    *(short*)(b + 0xe6) = 0;
+    *(short*)(b + 0xe4) = 0;
+    *(float*)(b + 0xe8) = g_f162eb0c;
+    *(float*)(b + 0xec) = g_f162eb10;
+    *(float*)(b + 0xf0) = g_f162eb14;
+    *(float*)(b + 0xf4) = g_f1485720;
+    Matrix3_Assign(b + 0xf8, &g_f162ec38);
+    *(float*)(b + 0x11c) = g_f1485720;
+    *(int*)(b + 0x120) = -1;
+    *(unsigned char*)(b + 0x128) = 0;
+    *(unsigned char*)(b + 0x129) = 0;
+    *(short*)(b + 0x12a) = 0;
+    *(int*)(b + 0x124) = 0;
+    *(int*)(b + 0x12c) = 0;
+    *(int*)(b + 0x130) = 0;
+    *(int*)(b + 0x134) = 0;
+    *(int*)(b + 0x138) = 0;
+    *(int*)(b + 0x138) |= 0x80000;
+    *(int*)(b + 0xcc) = -1;
+    *(short*)(b + 0xd0) = (short)0xffff;
+}
 
 
 
@@ -3850,6 +5925,18 @@ void FUN_00746fc0(void* self)
     }
     FUN_00745340();
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3899,6 +5986,18 @@ void Stub007470c0::F()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00747190
 void* Stub00747190::F(int* src)
 {
@@ -3923,6 +6022,40 @@ void* Stub00747190::F(int* src)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007471f0
+void FUN_007471f0(void* self)
+{
+    unsigned char* b = (unsigned char*)self;
+    memset(b, 0, 0x18);
+    // mModelInstance array at +0x9c constructed empty (6 refs)
+    for (int i = 0; i < 6; ++i)
+        *(int*)(b + 0x9c + i * 4) = 0;
+    *(int*)(b + 0x38) = 0;
+    *(int*)(b + 0x3c) = 0;
+    *(int*)(b + 0x40) = 6;
+    *(int*)(b + 0x30) = 0;
+}
 
 
 
@@ -3959,6 +6092,90 @@ void Stub00747270::F()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00747340
+void FUN_00747340(int param_1)
+{
+    unsigned char* b = (unsigned char*)param_1;
+    int count = 0, data = 0;
+    if (SP_GetPropertyAsIntArray(*(void**)(b + 0x98), 0x60cbbef, &count, &data)) {
+        int local[6] = {0, 0, 0, 0, 0, 0};
+        int i = 0;
+        while (true) {
+            if (*(int*)(b + 0x9c + i * 4) != 0 && i < count) {
+                uint32_t idx = *(uint32_t*)(data + i * 4);
+                if (idx < 6) {
+                    int src = *(int*)(b + 0x9c + idx * 4);
+                    if (src == 0) break;
+                    if (local[idx] == 0) {
+                        int v = FUN_007454f0(src, *(int*)(b + 0x138));
+                        FUN_007453d0((void*)v);
+                    }
+                }
+            }
+            ++i;
+            if (i > 5) {
+                char map[8];
+                int k = 0;
+                for (int j = 0; j < 6; ++j) {
+                    if (local[j] == 0) map[j] = -1;
+                    else { map[j] = (char)k; ++k; }
+                }
+                for (int j = 0; j < 6; ++j) {
+                    if (*(int*)(b + 0x9c + j * 4) != 0)
+                        *(char*)(b + 0xcc + j) = map[j];
+                }
+                return;
+            }
+        }
+    }
+    for (int i = 0; i < 6; ++i) {
+        if (*(int*)(b + 0x9c + i * 4) != 0) {
+            *(char*)(b + 0xcc + i) = 0;
+            int v[6] = {0, 0, 0, 0, 0, 0};
+            FUN_007453d0((void*)v);
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+// @ 0x00747640
+int FUN_00747640(int self, int* key)
+{
+    int local[4];
+    int b = (int)self;
+    FUN_00745560(local, *(int*)(b + 0x28c), *(int*)(b + 0x290), *(int*)(b + 0x294),
+                 *(int*)(b + 0x298), *(int*)(b + 0x29c), *(int*)(b + 0x2a0),
+                 *(int*)(b + 0x2a4), *(int*)(b + 0x2a8), *key);
+    return local[0] != *(int*)(b + 0x29c);
+}
+
+
+
+
+
+
+
+
+
 // @ 0x00747720
 void FUN_00747720(int* d)
 {
@@ -3978,6 +6195,18 @@ void FUN_00747720(int* d)
         operator_delete_((void*)*d);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4046,6 +6275,18 @@ void FUN_007477d0(int self)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007478b0
 void FUN_007478b0(uint32_t* v)
 {
@@ -4057,6 +6298,18 @@ void FUN_007478b0(uint32_t* v)
     if (*v != 0 && *v != v[4])
         operator_delete_((void*)*v);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4107,6 +6360,56 @@ void Stub00747920::F()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00747980
+void FUN_00747980(int* d, int* entry)
+{
+    RCObj* o = (RCObj*)entry[1];
+    if (o) (*(void(__thiscall**)(RCObj*))(*(void**)o))(o);
+    if (d[1] <= (int)((unsigned)(d[9] - *d) >> 2) + 1)
+        FUN_007457a0(1, 1);
+    void* blk = operator_new(0xe0, "Graphics", 0, 0,
+        "c:\\BuildAgent\\max-spore001-spore\\CMBuild\\SporeEP1_RL\\Core\\UTFKernel\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+    *(void**)(d[9] + 4) = blk;
+    int* slot = (int*)d[6];
+    if (slot) {
+        RCObj* o2 = (RCObj*)entry[1];
+        slot[0] = entry[0];
+        slot[1] = (int)o2;
+        if (o2) (*(void(__thiscall**)(RCObj*))(*(void**)o2))(o2);
+        slot[2] = entry[2];
+        slot[3] = entry[3];
+        slot[4] = entry[4];
+        slot[5] = entry[5];
+        slot[6] = entry[6];
+    }
+    int m = d[9];
+    d[9] = m + 4;
+    int nb = *(int*)(m + 4);
+    d[7] = nb;
+    d[8] = nb + 0xe0;
+    d[6] = d[7];
+    RelObj(o);
+}
+
+
+
+
+
+
+
+
 // @ 0x00747ac0
 Rec38* Rec38Stub::F(Rec38* src)
 {
@@ -4121,6 +6424,18 @@ Rec38* Rec38Stub::F(Rec38* src)
     new (&dst->rot) Mat3_s0074_7920(src->rot);
     return dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4178,6 +6493,18 @@ void FUN_00747b70(E3CResult* res, E3C* first, E3C* last, E3C* dst)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00747c90
 void FUN_00747c90(E3C* dst, int n, E3C* value)
 {
@@ -4200,6 +6527,18 @@ void FUN_00747c90(E3C* dst, int n, E3C* value)
         dst->m = value->m;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4239,6 +6578,18 @@ void MakeHeapOccluder(Occluder* first, Occluder* last, OccluderCmp compare)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00747f30
 void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
 {
@@ -4248,6 +6599,18 @@ void PopHeapOccluder(Occluder4* first, Occluder4* last, OccluderCmp compare)
     if (n > 0)
         AdjustHeapOccluder((Occluder*)first, 0, n, 0, *(Occluder*)&temp, compare);
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4287,6 +6650,18 @@ void MakeHeapGt(FKP* first, FKP* last, CmpGt compare)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00748060
 void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
 {
@@ -4296,6 +6671,18 @@ void SortHeapGt(FKP* first, FKP* last, CmpGt compare)
         FUN_00745e00(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4335,6 +6722,18 @@ void MakeHeapLt(FKP* first, FKP* last, CmpLt compare)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00748110
 void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
 {
@@ -4344,6 +6743,18 @@ void SortHeapLt(FKP* first, FKP* last, CmpLt compare)
         FUN_00745e80(first, 0, (int)(last - first) - 1, 0, temp.x, temp.y, &compare);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4394,6 +6805,18 @@ void FUN_00748170(int* first, int* last, int* dst)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00748280
 void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* mapLast)
 {
@@ -4414,6 +6837,18 @@ void FUN_00748280(int* out, int* first, int* a, int* last, int* mapFirst, int* m
     }
     out[1] = (int)dst;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4460,6 +6895,18 @@ void FUN_00748380(int* out, int* last)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00748470
 int* FUN_00748470(int first, int last, int* dst)
 {
@@ -4492,6 +6939,60 @@ int* FUN_00748470(int first, int last, int* dst)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00748530
+int FilterModelSphere(CullModel_s0074_7920* model, float* pos, SphereArg* arg)
+{
+    if (!(model->mFlags & 1)) return 1;
+    if (!((arg->a == 0 && arg->b == 0) ||
+          (model->mMaskB & arg->b) != 0 || (model->mMaskA & arg->a) != 0))
+        return 1;
+    if ((model->mMaskB & arg->d) != 0 || (model->mMaskA & arg->c) != 0)
+        return 1;
+    if (arg->cb != 0 && !arg->cb((char*)model + 8))
+        return 1;
+    unsigned char b = ((arg->f & 1) && ((model->mFlags >> 8) & 1)) ? model->mC0 : arg->e;
+    cSPTransform_s0074_7920 local;
+    memset(&local, 0, sizeof(local));
+    local.mTranslation.x = g_f162eb0c;
+    local.mTranslation.y = g_f162eb10;
+    local.mTranslation.z = g_f162eb14;
+    local.mScale = g_f1485720;
+    Matrix3_Assign(local.mRotation, &g_f162ec38);
+    cSPTransform_Assign(&local, model->mTransform);
+    if (((model->mFlags >> 7) & 1) || (arg->f & 2)) {
+        local.mModificationCount++;
+        local.mScale = g_f1485720;
+    }
+    float dx = pos[0] - local.mTranslation.x;
+    float dy = pos[1] - local.mTranslation.y;
+    float dz = pos[2] - local.mTranslation.z;
+    float reach = model->mRadius * local.mScale;
+    if (dx * dx + dy * dy + dz * dz < reach * reach) {
+        if (b != 0 && model->mBoxMinX <= model->mBoxMaxX)
+            return FUN_00743fb0(pos, 0.0f, &model->mBoxMinX) == 0;
+    }
+    return 1;
+}
 
 
 
@@ -4577,6 +7078,51 @@ int FilterModelSphere2(CullModel_s0074_8800* model, float* pos, SphereArg* arg)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00748ad0
+int FUN_00748ad0(float* a, int b, unsigned short* src, int param_4, int param_5, int model, int idx, int param_8, float radius)
+{
+    PickSrc local;
+    local.f0 = src[0];
+    local.f1 = src[1];
+    local.a = *(float*)(src + 2);
+    local.b = *(float*)(src + 4);
+    local.c = *(float*)(src + 6);
+    local.d = *(int*)(src + 8);
+    memcpy(local.rot, src + 10, sizeof(local.rot));
+    ComposeTransforms((void*)(model + 0xe4));
+    if (radius <= 0.0f) {
+        if (FUN_0073e080(a, b, &local, param_8)) return 1;
+    } else {
+        local.f0 |= 4;
+        local.f1++;
+        local.a += -a[0];
+        local.b += -a[1];
+        local.c += -a[2];
+        FUN_006ba870(param_5);
+        void* inst = *(void**)(model + 0x9c + idx * 4);
+        if (cModelInstance_IntersectsSphere(inst, (float*)param_4, &local, false)) return 1;
+    }
+    return 0;
+}
+
+
+
+
+
+
+
 // @ 0x00748c30
 void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg* q)
 {
@@ -4605,6 +7151,18 @@ void* cModelWorld_s0074_8800::FindClosest(int a, int b, float* outDist, QueryArg
     if (outDist) *outDist = best;
     return (char*)bestM + 8;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4679,6 +7237,18 @@ int FindModelsInFrustum(const void* frustumA, const void* frustumB, CMWModel* mo
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00749e50
 int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
 {
@@ -4723,6 +7293,18 @@ int PickAgainstModel(float* pos, float radius, CMWModel* model, FilterArg* arg)
     }
     return 1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4797,6 +7379,40 @@ int FUN_0074a070(float* pos, CMWModel* model, FilterArg* arg)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074a290
+void SP::cModelWorld_s0074_a290::SetExternalEffectsTransform(void* a, void* b, void* c)
+{
+    (void)a; (void)b; (void)c;
+}
+
+
+
+
+
+
+// @ 0x0074a490
+void SP::cModelWorld::GetHullBoundingBox(SP::cMWModel * a, cSPBoundingBox * b)
+{
+    (void)a; (void)b;
+}
+
+
+
+
+
+
 // @ 0x0074a650
 void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
 {
@@ -4819,6 +7435,18 @@ void SP::cModelWorld_s0074_a290::ReleaseTransformedHull(void** pp)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074a690
 bool SP::cModelWorld_s0074_a290::GetBakedMeshes(void* model, void* arg2)
 {
@@ -4831,6 +7459,18 @@ bool SP::cModelWorld_s0074_a290::GetBakedMeshes(void* model, void* arg2)
     }
     return false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4865,6 +7505,44 @@ bool SP::cModelWorld_s0074_a290::GetBakedMeshesUnscaled(void* model, void* arg2)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074a780
+bool SP::cModelWorld_s0074_a290::GetBakedMeshes2(void* model, void* arg2, cSPTransform_s0074_a290* out)
+{
+    ((void(__thiscall*)(void*, void*))VT(this)[0x58 / 4])(this, model);
+    char* base = model ? (char*)model - 8 : 0;
+    if (*(int*)(base + 0x9c) != 0) {
+        *out = translateTransform(base + 0xe4, base + 0x10);
+        cSPTransform_s0074_a290 r;
+        r.f0 = 0;
+        r.f2 = 0;
+        r.f4 = g_162eb0c;
+        r.f8 = g_162eb10;
+        r.fc = g_162eb14;
+        r.f10 = g_1485720;
+        ((Matrix3_s0074_a290*)((char*)&r + 0x14))->Assign((const void*)g_162ec4c);
+        cModelInstance_s0074_a290* inst = *(cModelInstance_s0074_a290**)(base + 0x9c);
+        return inst->BuildBaked(&r, arg2);
+    }
+    return false;
+}
+
+
+
+
+
+
 // @ 0x0074a850
 bool SP::cModelWorld_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform_s0074_a290* out)
 {
@@ -4887,6 +7565,29 @@ bool SP::cModelWorld_s0074_a290::GetMeshes(void* model, void* arg2, cSPTransform
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074a920
+void SP::cModelWorld_s0074_a290::SubA920(void* a, void* b)
+{
+    (void)a; (void)b;
+}
+
+
+
+
+
+
 // @ 0x0074b150
 void SP::cModelWorld_s0074_a290::FreeTransformedBuffer()
 {
@@ -4903,6 +7604,28 @@ void SP::cModelWorld_s0074_a290::FreeTransformedBuffer()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074b170
+void cloadqueue_b170(void* self)
+{
+    (void)self;
+}
+
+
+
+
+
 // @ 0x0074b2b0
 SP::cLoadQueue::~cLoadQueue()
 {}
@@ -4910,6 +7633,28 @@ SP::cLoadQueue::~cLoadQueue()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074b390
+void partial_sort_b390(void* a, void* b, void* c, void* cmp)
+{
+    (void)a; (void)b; (void)c; (void)cmp;
+}
 
 
 
@@ -4956,6 +7701,18 @@ void SP::cModelWorld_s0074_b170::SetInWorld(ListNode_s0074_b170* n, bool b)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074b760
 __forceinline const float* ValFloat(Property* p)
 {
@@ -4970,9 +7727,73 @@ __forceinline const float* ValFloat(Property* p)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0074bda0
+void list_find_bda0(void* self, void* key)
+{
+    (void)self; (void)key;
+}
+
+
+
+
+
+// @ 0x0074be40
+void list_erase_be40(void* self, int* key)
+{
+    (void)self; (void)key;
+}
+
+
+
+
+
+// @ 0x0074bf10
+void vec_insert_bf10(void* self, void* pos, void* val)
+{
+    (void)self; (void)pos; (void)val;
+}
+
+
+
+
+
+// @ 0x0074c020
+void vec_insert_c020(void* self, void* pos, void* val)
+{
+    (void)self; (void)pos; (void)val;
+}
+
+
+
+
+
 // @ 0x0074c260
 template void eastl::quick_sort_impl<cDrawModelInfo*, int, DrawGreater>(cDrawModelInfo*, cDrawModelInfo*, int, DrawGreater)
 ;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4992,9 +7813,33 @@ template void eastl::quick_sort_impl<cDrawModelInfo*, int, cAlphaSortLessCompara
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074c580
 template cOccluder_s0074_c260* eastl::get_partition<cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, cOccluder_s0074_c260, OccCmp)
 ;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5064,6 +7909,18 @@ bool SP::cModelWorld::ModelIsResidentInMemory(SP::cPropertyList * model)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074c910
 void cModelWorld_s0074_c260::ScheduleForLoad(ModelEntry* entry, RefCounted* model, uint32_t a4, uint32_t a5)
 {
@@ -5109,6 +7966,18 @@ void cModelWorld_s0074_c260::ScheduleForLoad(ModelEntry* entry, RefCounted* mode
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074ca70
 bool VecInt::remove_first(int v)
 {
@@ -5131,6 +8000,18 @@ bool VecInt::remove_first(int v)
     }
     return false;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5235,6 +8116,18 @@ bool LoadJob::Step(cJobW* cj)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074cdd0
 void Vec18::push_back(const E18* v)
 {
@@ -5247,6 +8140,18 @@ void Vec18::push_back(const E18* v)
         ((E18Vt*)this)->DoInsert(e, v);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5291,9 +8196,33 @@ void VecE14::DoInsertValue(E14* pos, const E14& value)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074d190
 template void eastl::quick_sort_impl<cOccluder_s0074_c260*, int, OccCmp>(cOccluder_s0074_c260*, cOccluder_s0074_c260*, int, OccCmp)
 ;
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5350,6 +8279,18 @@ bool cModelWorldMsg::HandleMessage(uint32_t msgId, MsgHeader* msg)
     }
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5449,6 +8390,18 @@ void* cModelWorld_s0074_d4b0::CreateModel(uint32_t a, uint32_t b, uint32_t flags
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074d870
 bool cModelWorld_s0074_d4b0::CollectModels(PtrVec* out, const cModelFilter* f)
 {
@@ -5472,6 +8425,18 @@ bool cModelWorld_s0074_d4b0::CollectModels(PtrVec* out, const cModelFilter* f)
   }
   return out->mpBegin != out->mpEnd;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5513,6 +8478,18 @@ bool cModelWorld_s0074_e2b0::FindModelsInShape(const void* p, float f, ModelVec*
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074ed00
 bool cModelWorld_s0074_e2b0::FindModelsInSphere(const void* sphere, ModelVec* out, void* ctx)
 {
@@ -5542,6 +8519,18 @@ bool cModelWorld_s0074_e2b0::FindModelsInSphere(const void* sphere, ModelVec* ou
     }
     return out->mpBegin != out->mpEnd;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5583,9 +8572,33 @@ bool cModelWorld_s0074_e2b0::FindModelsInBox(const void* frustum, ModelVec* out,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074f010
 EditorResource::~EditorResource()
 {}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5607,6 +8620,18 @@ bool EditorResource::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074f1a0
 bool VecIntAdd::add_unique(int x)
 {
@@ -5618,6 +8643,18 @@ bool VecIntAdd::add_unique(int x)
     vec.push_back(x);
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5647,6 +8684,18 @@ cFeedbackEvent*& CompactMapUU::Subscript(const uint32_t& key)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074f3a0
 void quick_sort(cOccluder_s0074_f200* first, cOccluder_s0074_f200* last, OccluderCompare compare)
 {
@@ -5660,6 +8709,18 @@ void quick_sort(cOccluder_s0074_f200* first, cOccluder_s0074_f200* last, Occlude
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5693,6 +8754,18 @@ void VecElem1C::DoInsertValue(Elem1C* position, const Elem1C& value)
         mpCapacity = pNewData + nNewSize;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5740,6 +8813,18 @@ void VecModelInfo::DoInsertValues(ModelInfo* position, uint32_t n, const ModelIn
         mpCapacity = pNewData + nNewSize;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5872,6 +8957,18 @@ void cModelWorld_s0074_f200::DrawLayer(bool bAlpha, DrawList* pList, uint32_t fl
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0074fd90
 cFeedbackMgr::cFeedbackMgr()
 {
@@ -5881,6 +8978,18 @@ cFeedbackMgr::cFeedbackMgr()
     mn50 = 0;
     mn54 = 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5901,6 +9010,18 @@ int SlotAllocator::Allocate(uint32_t key, uint32_t unused)
     }
     return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5937,6 +9058,18 @@ bool cFeedbackJobs::Start(void** pSource)
     mJobA.mp->Start();
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5987,6 +9120,46 @@ uint32_t SlotVectorOccluder::create(const cOccluderInfo& item)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00750180
+void helper_50180(void* self)
+{ (void)self; }
+
+
+
+
+// @ 0x00750310
+void dtor_50310(void* self)
+{ (void)self; }
+
+
+
+
+// @ 0x007503a0
+void dtor_503a0(void* self)
+{ (void)self; }
+
+
+
+
+// @ 0x007505a0
+void preload_505a0(void* self)
+{ (void)self; }
+
+
+
+
 // @ 0x00750780
 void MW6::AddOccluder(int* src, float f)
 {
@@ -5999,6 +9172,18 @@ void MW6::AddOccluder(int* src, float f)
     *(int*)(base + off + 0xc) = src[2];
     *(float*)((char*)vec.mBegin + off + 0x10) = f;
 }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6228,6 +9413,36 @@ void cModelWorld_s0075_07e0::UpdateVisibility(uint32_t flags, cCamera* camera, i
 }  // namespace SP
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00751560
+namespace SP {
+void cModelWorld_FinishBackgroundLoad(void* self)
+{
+  (void)self;
+}
+}  // namespace SP
+
+
+
+// @ 0x00751b30
+namespace SP {
+void cModelWorld_UpdateHighlightProps(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
+
 // @ 0x00751d00
 namespace SP {
 void MWGroupDtorStub::F()
@@ -6251,6 +9466,57 @@ void MWGroupDtorStub::F()
 }
 }  // namespace SP
 
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x00751de0
+namespace SP {
+void FUN_00751de0(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
+
+// @ 0x00751ed0
+namespace SP {
+void FUN_00751ed0(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
+
+// @ 0x00751ff0
+namespace SP {
+void cModelWorld_Init(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
+
+// @ 0x007520e0
+namespace SP {
+void cModelWorld_Shutdown(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
+
+// @ 0x007523a0
+namespace SP {
+void cEffectsRenderer_RenderMainEffectsLayer(void* self)
+{ (void)self; }
+}  // namespace SP
+
+
 // @ 0x00753540
 void TreeWalker_00753540::ForEach(float a, float b)
 {
@@ -6261,3 +9527,31 @@ void TreeWalker_00753540::ForEach(float a, float b)
     n = RBTreeIncrement(n);
   }
 }
+
+// @ 0x00753630
+void FUN_00753630(void* self, int* p)
+{ (void)self; (void)p; }
+
+// @ 0x00753770
+void* FUN_00753770(void* self, void* a, void* b)
+{ (void)a; (void)b; return self; }
+
+// @ 0x00753810
+void* FUN_00753810(void* self, void* a, int n, void* src)
+{ (void)a; (void)n; (void)src; return self; }
+
+// @ 0x00753880
+void cLoadQueue_ctor_00753880(void* self)
+{ (void)self; }
+
+// @ 0x00753bb0
+void* FUN_00753bb0(void* self, void* a, void* b)
+{ (void)a; (void)b; return 0; }
+
+// @ 0x00753c50
+void cModelWorld_FinalRelease_00753c50(void* self)
+{ (void)self; }
+
+// @ 0x00753d10
+void* FUN_00753d10(void* self, void* a, void* b, void* c)
+{ (void)a; (void)b; (void)c; return 0; }

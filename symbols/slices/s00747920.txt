@@ -1,4 +1,5 @@
 00747920 ?F@Stub00747920@@QAEXXZ  # Stub00747920::F migrated from s00747920 (verbatim, slice spelling)
+00747980 ?FUN_00747980@@YAXPAH0@Z  # FUN_00747980 migrated from s00747920 (verbatim, slice spelling)
 00747ac0 ?F@Rec38Stub@@QAEPAURec38@@PAU2@@Z  # Rec38Stub::F migrated from s00747920 (verbatim, slice spelling)
 00747b70 ?FUN_00747b70@@YAXPAUE3CResult@@PAUE3C@@11@Z  # FUN_00747b70 migrated from s00747920 (verbatim, slice spelling)
 00747c90 ?FUN_00747c90@@YAXPAUE3C@@H0@Z  # FUN_00747c90 migrated from s00747920 (verbatim, slice spelling)
@@ -12,3 +13,4 @@
 00748280 ?FUN_00748280@@YAXPAH00000@Z  # FUN_00748280 migrated from s00747920 (verbatim, slice spelling)
 00748380 ?FUN_00748380@@YAXPAH0@Z  # FUN_00748380 migrated from s00747920 (verbatim, slice spelling)
 00748470 ?FUN_00748470@@YAPAHHHPAH@Z  # FUN_00748470 migrated from s00747920 (verbatim, slice spelling)
+00748530 ?FilterModelSphere@@YAHPAUCullModel_s0074_7920@@PAMPAUSphereArg@@@Z  # FilterModelSphere migrated from s00747920 (verbatim, slice spelling)

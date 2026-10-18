@@ -1,3 +1,5 @@
-007503a0  SP::cModelWorld::~cModelWorld  # PDB name
-007505a0  SP::cModelWorld::PreloadModels  # PDB name
+00750180 ?helper_50180@@YAXPAX@Z  # helper_50180 migrated from s00750180 (verbatim, slice spelling)
+00750310 ?dtor_50310@@YAXPAX@Z  # dtor_50310 migrated from s00750180 (verbatim, slice spelling)
+007503a0 ?dtor_503a0@@YAXPAX@Z  # dtor_503a0 migrated from s00750180 (verbatim, slice spelling)
+007505a0 ?preload_505a0@@YAXPAX@Z  # preload_505a0 migrated from s00750180 (verbatim, slice spelling)
 00750780 ?AddOccluder@MW6@@QAEXPAHM@Z  # MW6::AddOccluder migrated from s00750180 (verbatim, slice spelling)

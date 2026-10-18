@@ -1,1 +1,49 @@
 # va  diff-bytes  reason
+007442c0  625 cSPTransform two-point transform with per-point offset: extra output adjustment approximated
+007445b0  140 cModelWorld::CallOnLoad: segmented load-queue vector traversal approximated
+00745340  -   cModelWorld release-refs destructor: EH frame omitted, approximated
+007453d0  249 model-instance factory: allocation/ctor/property lookup paths approximated via stubs
+007457a0  -   deque insert/grow: DoInsertValue dispatch + reallocation path approximated
+007462b0 118 material-info commit helper approximated (paths not fully reconstructed)
+00746360 220 cModelWorld::GetHull approximated (Variant/asset-key path stubbed)
+00746610  77 cModelWorld::GetRuntimeModel approximated (matrix/arg passing)
+007466e0  52 hull-bounds refresh helper approximated (bounding-sphere math)
+007467f0 290 query helper approximated (virtual-slot protocol guessed)
+007469b0 232 cModelWorld::SetWorldBounds approximated (hiergrid math/rounding)
+00746cc0  18 rbtree::find passthrough stubbed
+00746cf0 154 cModelManager::DebugPick approximated (pick protocol guessed)
+00746e50 222 load-entry constructor incomplete
+007471f0  70 cLoadingModel::cLoadingModel incomplete (member offsets)
+00747340 373 load-queue slot refresh approximated
+00747640  88 deque entry lookup approximated (helper arg list guessed)
+00747980 175 deque push_back approximated (block allocator details)
+00748530 327 FilterModelSphere approximated (transform/pick protocol guessed)
+00748ad0 241 model pick/distance helper approximated
+0074a290  -  partial: SetExternalEffectsTransform slot/transform walk stubbed (signature + call shape only).
+0074a490  -  partial: SubA490 EASTL vector build path stubbed (signature + call shape only).
+0074a780  -  partial: GetBakedMeshes2 identity-transform construction approximate (extra temp, frame 0x70 vs 0x38).
+0074a920  -  partial: SubA920 refcount/list walk stubbed (signature + call shape only).
+0074b170  -  partial: cLoadQueue reset/clear (307B, refcount/list walk) stubbed.
+0074b390  -  partial: eastl::partial_sort<cOccluder*> (254B template) stubbed.
+0074bda0  -  partial: slot-list find helper (152B) stubbed.
+0074be40  -  partial: slot-list erase-by-key (202B EH) stubbed.
+0074bf10  -  partial: vector::insert element 8B (262B) stubbed.
+0074c020  -  partial: vector::insert element 0x18B (334B) stubbed.
+00750180  -  partial: helper (386B) stubbed.
+00750310  -  partial: destructor helper (131B EH) stubbed.
+007503a0  -  partial: SP::cModelWorld::~cModelWorld (415B) stubbed.
+007505a0  -  partial: SP::cModelWorld::PreloadModels (479B) stubbed.
+00751560  1475  heavily inlined /O2 job/refcount/EH code; skeleton only
+00751b30   461  inlined vector<bool>/AutoRefCount highlight-property code; skeleton only
+00751de0   240  intrusive job-queue update loop; skeleton only
+00751ed0   252  fixed_vector grow/relocate with inlined cSPTransform ctor; skeleton only
+00751ff0   240  EH init (MessageServer handler registration + draw-set reset); skeleton only
+007520e0   703  EH shutdown (large object teardown); skeleton only
+007523a0  623  render-dispatch built from masked renderer/global-state calls and per-viewer draw lists; not yet byte-exact. Compiling skeleton.
+00753630  316  job queue lookup; skeleton only
+00753770  126  element constructor with inlined cSPTransform ctor; skeleton only
+00753810  108  vector-of-model-info constructor; skeleton only
+00753880  127  cLoadQueue constructor (EH); skeleton only
+00753bb0  155  fixed-allocator + intrusive node insert; skeleton only
+00753c50  187  cModelWorld::FinalRelease; skeleton only
+00753d10  174  operator new + ctor + assign (EH); skeleton only

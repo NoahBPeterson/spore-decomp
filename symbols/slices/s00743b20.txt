@@ -1,24 +1,33 @@
-00743bb0 SP::cModelWorld::cLoadQueueEntry::~cLoadQueueEntry  # dev PDB 0158c860 (range destroy helper)
+00743b20 ?Getb20@@YAIPAUModel@@@Z  # Getb20 migrated from s00743b20 (verbatim, slice spelling)
+00743b50 ?VecClear@cModelWorld@@QAEPAXXZ  # cModelWorld::VecClear migrated from s00743b20 (verbatim, slice spelling)
+00743bb0 ?DestroyPtrRange@@YGXPAPAX0@Z  # DestroyPtrRange migrated from s00743b20 (verbatim, slice spelling)
+00743be0 ?SortDescGuarded@@YAXPAUPair8@@0@Z  # SortDescGuarded migrated from s00743b20 (verbatim, slice spelling)
 00743c50 ?SortDescUnguarded@@YAXPAUPair8@@0@Z  # SortDescUnguarded migrated from s00743b20 (verbatim, slice spelling)
+00743cb0 ?SortAscGuarded@@YAXPAUPair8@@0@Z  # SortAscGuarded migrated from s00743b20 (verbatim, slice spelling)
 00743d20 ?SortAscUnguarded@@YAXPAUPair8@@0@Z  # SortAscUnguarded migrated from s00743b20 (verbatim, slice spelling)
 00743d90 ?UninitCopy@@YAPAUElem28@@PBU1@0PAU1@@Z  # UninitCopy migrated from s00743b20 (verbatim, slice spelling)
-00743e50 eastl::promote_heap<cOccluder*,int,cOccluder,bool(__cdecl*)(cOccluder const&,cOccluder const&)>  # dev PDB 0158b060
+00743e50 ?PromoteCocc@@YAXPAUcOccluder6@@HHU1@P6A_NABU1@2@Z@Z  # PromoteCocc migrated from s00743b20 (verbatim, slice spelling)
+00743f00 ?PromoteF00@@YAXPAUPair8@@HHU1@@Z  # PromoteF00 migrated from s00743b20 (verbatim, slice spelling)
+00743f60 ?PromoteF60@@YAXPAUPair8@@HHU1@@Z  # PromoteF60 migrated from s00743b20 (verbatim, slice spelling)
+00743fb0 ?BoxDistSq@@YAIPBMM0@Z  # BoxDistSq migrated from s00743b20 (verbatim, slice spelling)
 00744050 ?TransformTwo@@YAXPBUcSPVector3_s0074_3b20@@0PBUcSPTransform_s0074_3b20@@HH@Z  # TransformTwo migrated from s00743b20 (verbatim, slice spelling)
-007445b0 SP::cModelWorld::CallOnLoad  # dev PDB 0158bb10 vtable slot 0x14
-007446a0 SP::cModelWorld::StallGetBoundingBox  # dev PDB 0158bc10 vtable slot 0x5c
-007446c0 SP::cModelWorld::GetNumAnimationGroups  # dev PDB 0158bd00 vtable slot 0x60
+007442c0 ?TransformTwoOffset@@YAXPBUcSPVector3_s0074_3b20@@0PBUcSPTransform_s0074_3b20@@U1@M2@Z  # TransformTwoOffset migrated from s00743b20 (verbatim, slice spelling)
+007445b0 ?CallOnLoad@cModelWorld@@UAE_NPAUModel@@PAX1@Z  # cModelWorld::CallOnLoad migrated from s00743b20 (verbatim, slice spelling)
+00744680 ?ModelsHavePreloaded@cModelWorld@SP@@UBE_NH@Z  # SP::cModelWorld::ModelsHavePreloaded migrated from s00743b20
+007446a0 ?StallGetBoundingBox@cModelWorld@@QAEMPAUModel@@@Z  # cModelWorld::StallGetBoundingBox migrated from s00743b20 (verbatim, slice spelling)
+007446c0 ?GetNumAnimationGroups@cModelWorld@@QAEPAXPAUModel@@@Z  # cModelWorld::GetNumAnimationGroups migrated from s00743b20 (verbatim, slice spelling)
 007446e0 ?GetModelResourceIDs@cModelWorld@@QAEXPAUModel@@PAI1@Z  # cModelWorld::GetModelResourceIDs migrated from s00743b20 (verbatim, slice spelling)
-00744760 SP::cModelWorld::StallUntilLoaded  # dev PDB 0159d9c0 vtable slot 0x58
-00744790 SP::cModelWorld::GetNumAnimations  # dev PDB 0158bd30 vtable slot 0x64
-007447c0 SP::cModelWorld::GetAnimationIDs  # dev PDB 0158bd70 vtable slot 0x68
-007447f0 SP::cModelWorld::GetAnimationMoveToTimes  # dev PDB 0158bcc0 vtable slot 0x6c
-00744830 SP::cModelWorld::GetDeformationAnimationIDs  # dev PDB 0158bdb0
-00744870 SP::cModelWorld::AnimAction  # dev PDB 0158be50 vtable slot 0x70
-00744900 SP::cModelWorld::MoveToTime  # dev PDB 0158bf30 vtable slot 0x74
-00744950 SP::cModelWorld::SetWeight  # dev PDB 0158bfe0 vtable slot 0x78
-007449a0 SP::cModelWorld::GetAnimationRange  # dev PDB 0158c070 vtable slot 0x80
-007449e0 SP::cModelWorld::GetNumBones  # dev PDB 0158c110 vtable slot 0x84
-00744a10 SP::cModelWorld::GetPoseTransforms  # dev PDB 0158c140 vtable slot 0x88
-00744a40 SP::cModelWorld::GetBoneTransforms  # dev PDB 0158c170 vtable slot 0x8c
-00744a70 SP::cModelWorld::GetBoneIDs  # dev PDB 0158c1a0 vtable slot 0x90
-00744aa0 SP::cModelWorld::GetBoneParents  # dev PDB 0158c1d0 vtable slot 0x94
+00744760 ?StallUntilLoaded2@cModelWorld@@QAEXPAUModel@@I@Z  # cModelWorld::StallUntilLoaded2 migrated from s00743b20 (verbatim, slice spelling)
+00744790 ?GetNumAnimations@cModelWorld@@QAEHPAUModel@@@Z  # cModelWorld::GetNumAnimations migrated from s00743b20 (verbatim, slice spelling)
+007447c0 ?GetAnimationIDs@cModelWorld@@QAEHPAUModel@@PAI@Z  # cModelWorld::GetAnimationIDs migrated from s00743b20 (verbatim, slice spelling)
+007447f0 ?GetAnimationMoveToTimes@cModelWorld@@QAEHPAUModel@@HH@Z  # cModelWorld::GetAnimationMoveToTimes migrated from s00743b20 (verbatim, slice spelling)
+00744830 ?GetDeformationAnimationIDs@cModelWorld@@QAEHPAUModel@@HH@Z  # cModelWorld::GetDeformationAnimationIDs migrated from s00743b20 (verbatim, slice spelling)
+00744870 ?AnimAction@cModelWorld@@QAEXPAUModel@@HHMH@Z  # cModelWorld::AnimAction migrated from s00743b20 (verbatim, slice spelling)
+00744900 ?MoveToTime@cModelWorld@@QAEXPAUModel@@HMH@Z  # cModelWorld::MoveToTime migrated from s00743b20 (verbatim, slice spelling)
+00744950 ?SetWeight@cModelWorld@@QAEXPAUModel@@HMH@Z  # cModelWorld::SetWeight migrated from s00743b20 (verbatim, slice spelling)
+007449a0 ?GetAnimationRange@cModelWorld@@QAE_NPAUModel@@HHAAM1@Z  # cModelWorld::GetAnimationRange migrated from s00743b20 (verbatim, slice spelling)
+007449e0 ?GetNumBones@cModelWorld@@QAEHPAUModel@@@Z  # cModelWorld::GetNumBones migrated from s00743b20 (verbatim, slice spelling)
+00744a10 ?GetPoseTransforms@cModelWorld@@QAEHPAUModel@@PAXH@Z  # cModelWorld::GetPoseTransforms migrated from s00743b20 (verbatim, slice spelling)
+00744a40 ?GetBoneTransforms@cModelWorld@@QAEHPAUModel@@PAX@Z  # cModelWorld::GetBoneTransforms migrated from s00743b20 (verbatim, slice spelling)
+00744a70 ?GetBoneIDs@cModelWorld@@QAEHPAUModel@@PAX@Z  # cModelWorld::GetBoneIDs migrated from s00743b20 (verbatim, slice spelling)
+00744aa0 ?GetBoneParents@cModelWorld@@QAEHPAUModel@@PAX@Z  # cModelWorld::GetBoneParents migrated from s00743b20 (verbatim, slice spelling)

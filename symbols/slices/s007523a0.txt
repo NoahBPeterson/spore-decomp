@@ -1,0 +1,1 @@
+007523a0 ?cEffectsRenderer_RenderMainEffectsLayer@SP@@YAXPAX@Z  # cEffectsRenderer_RenderMainEffectsLayer migrated from s007523a0 (verbatim, slice spelling)

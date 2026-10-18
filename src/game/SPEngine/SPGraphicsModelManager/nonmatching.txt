@@ -6,6 +6,8 @@
 00743d90 92 eastl uninitialized_copy<Elem28>: missing compiler EH frame around constructed elements; difftest UNSUPPORTED (0/762 valid inputs)
 00744050 528 cSPTransform two-point transform: instruction schedule/register allocation differs; difftest PASS (689 valid, 100% cov)
 007446e0 95 GetModelResourceIDs: control-flow/register schedule differs (dead field_c temp); difftest UNSUPPORTED (unresolved ref ResHolder::Get)
+00744870 49 AnimAction: stack-slot layout and bool handling differ
+00744be0 4 SetDynamicDraw: arg register-role assignment (ebx/ebp) swapped
 00744cf0 109 SetSomeFloat: property-find/vtable path and float staging differ [equiv: FAIL (5/16 mismatch)]
 00744d80 111 SetEffectEnabled: effect-list traversal and vtable slot selection differ [equiv: WEAK (81% cov)]
 00744e10 98 ForEachEffectA: effect-list look-ahead iteration/register schedule differs [equiv: FAIL (eax&0xffff)]

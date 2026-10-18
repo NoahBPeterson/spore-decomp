@@ -8,7 +8,10 @@
 00745f90 ?DrawRecord_Ctor@@YAPAUDrawRecord@@PAU1@PAX@Z  # DrawRecord_Ctor migrated from s00745ac0 (verbatim, slice spelling)
 007460b0 ?FilterModelFrustum@@YAHPAUCullModel@@PAXPAUFrustumFilterArg@@@Z  # FilterModelFrustum migrated from s00745ac0 (verbatim, slice spelling)
 00746250 ?cModelWorld_SetMaterialInfo@@YAXPAX00H@Z  # cModelWorld_SetMaterialInfo migrated from s00745ac0 (verbatim, slice spelling)
-00746360 SP::cModelWorld::GetHull  # dev-PDB vtable-slot
+007462b0 ?FUN_007462b0@@YAXPAX0PAUVecField@@@Z  # FUN_007462b0 migrated from s00745ac0 (verbatim, slice spelling)
+00746360 ?cModelWorld_GetHull@@YAXPAXPAUHullQuery@@@Z  # cModelWorld_GetHull migrated from s00745ac0 (verbatim, slice spelling)
 00746560 ?GetHullBoundingBox@CModelWorldStub@@QAEXPAXPAUcSPBoundingBox_s0074_5ac0@@@Z  # CModelWorldStub::GetHullBoundingBox migrated from s00745ac0 (verbatim, slice spelling)
-00746610 SP::cModelWorld::GetRuntimeModel  # dev-PDB vtable-slot
+00746610 ?cModelWorld_GetRuntimeModel@@YAHPAX0PAH@Z  # cModelWorld_GetRuntimeModel migrated from s00745ac0 (verbatim, slice spelling)
+007466e0 ?FUN_007466e0@@YAHPAX0@Z  # FUN_007466e0 migrated from s00745ac0 (verbatim, slice spelling)
+007467f0 ?FUN_007467f0@@YAHPAX00PAUVec3@@11@Z  # FUN_007467f0 migrated from s00745ac0 (verbatim, slice spelling)
 00746910 ?AssignGroup@GroupWorld@@QAEXPAXH_N@Z  # GroupWorld::AssignGroup migrated from s00745ac0 (verbatim, slice spelling)

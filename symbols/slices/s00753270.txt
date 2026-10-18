@@ -1,1 +1,8 @@
 00753540 ?ForEach@TreeWalker_00753540@@QAEXMM@Z  # TreeWalker_00753540::ForEach migrated from s00753270 (verbatim, slice spelling)
+00753630 ?FUN_00753630@@YAXPAXPAH@Z  # FUN_00753630 migrated from s00753270 (verbatim, slice spelling)
+00753770 ?FUN_00753770@@YAPAXPAX00@Z  # FUN_00753770 migrated from s00753270 (verbatim, slice spelling)
+00753810 ?FUN_00753810@@YAPAXPAX0H0@Z  # FUN_00753810 migrated from s00753270 (verbatim, slice spelling)
+00753880 ?cLoadQueue_ctor_00753880@@YAXPAX@Z  # cLoadQueue_ctor_00753880 migrated from s00753270 (verbatim, slice spelling)
+00753bb0 ?FUN_00753bb0@@YAPAXPAX00@Z  # FUN_00753bb0 migrated from s00753270 (verbatim, slice spelling)
+00753c50 ?cModelWorld_FinalRelease_00753c50@@YAXPAX@Z  # cModelWorld_FinalRelease_00753c50 migrated from s00753270 (verbatim, slice spelling)
+00753d10 ?FUN_00753d10@@YAPAXPAX000@Z  # FUN_00753d10 migrated from s00753270 (verbatim, slice spelling)
