@@ -16,7 +16,7 @@ Group file: work/opencode/groups/<group>.json = {"batch", "provider", "model", "
             "sessions": {}, "cache_ns": N (optional, per-session prompt-cache namespace count)}
 The broker for the group reads work/opencode/sessions_<group>.txt (kept in sync here).
 """
-import base64, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
+import base64, glob, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = lambda *p: os.path.join(ROOT, *p)
@@ -76,6 +76,20 @@ def prompt_for(k):
             .replace("{MODULE}", module).replace("{OBJ}", module.rsplit("/", 1)[-1]))
 
 
+def fixlog_vas():
+    """VA -> verdict over every work/match/scratch_*fixlog*.txt: sessions do not always name the log after the slice
+    (rck1 2026-10-18: scratch_65_fixlog.txt, scratch_rck1_40_fixlog.txt), and a fix batch's VAs are unique."""
+    out = {}
+    for fp in glob.glob(W("work/match", "scratch_*fixlog*.txt")):
+        for l in open(fp, errors="replace"):
+            parts = l.split()
+            if parts:
+                va = parts[0].lower()
+                va = va[2:] if va.startswith("0x") else va
+                out[va] = parts[1].upper() if len(parts) > 1 else ""
+    return out
+
+
 def progress(k):
     a, b = G["ranges"][k]
     tot = done = ok = 0
@@ -97,6 +111,14 @@ def progress(k):
                     if va in want:
                         done += 1
                         ok += isok
+            continue
+        if BATCH[i].get("causes"):
+            # fix entry: settled targets are the ones logged in a work/match fix log (see opencode_drain.py)
+            fl = fixlog_vas()
+            for v in BATCH[i]["vas"]:
+                if v.lower() in fl:
+                    done += 1
+                    ok += fl[v.lower()] == "PASS"
             continue
         for f, isok in (("manifest.txt", 1), ("nonmatching.txt", 0), ("partial.txt", 0)):
             p = W("match/slices", sid, f)

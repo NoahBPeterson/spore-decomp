@@ -6,7 +6,8 @@ usage: opencode_drain.py <group> [--interval S=60] [--cooldown S=300] [--hang S=
                          [--stall S=7200] [--once]
 
 Each pass:
-  * a range is DONE when its manifest+nonmatching+partial count >= its function count;
+  * a range is DONE when its manifest+nonmatching+partial count >= its function count (fix batches, whose
+    entries carry "causes": when every target VA is logged in work/match/scratch_<id>_fixlog.txt);
   * a range that is idle, unfinished, has no pending permission request, and whose last assistant
     message is older than --cooldown is re-prompted (nudge) on its per-session alias model;
   * a range that is active but whose open model call has run longer than --hang is interrupted and
@@ -23,7 +24,7 @@ Exits 0 ("DRAIN_COMPLETE") once every range is done or abandoned. Safe to kill a
 state is work/opencode/drain_<group>.log, from which a restart re-reads the nudge counts and the
 abandoned ranges.
 """
-import argparse, base64, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
+import argparse, base64, glob, json, os, re, subprocess, sys, time, urllib.error, urllib.parse, urllib.request
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 W = lambda *p: os.path.join(ROOT, *p)
@@ -124,6 +125,15 @@ def progress(k, unsettled=None):
             if unsettled is not None:
                 unsettled += ["%s:%s" % (sid, v) for v in sorted(want - seen)]
             continue
+        if BATCH[i].get("causes"):
+            # fix entry (batch rck1 on): its target VAs are already in the slice's bookkeeping, so a target
+            # counts as settled once a session logs "<va> <verdict> <note>" in a work/match fix log
+            want = {v.lower() for v in BATCH[i]["vas"]}
+            seen = want & set(fixlog_vas())
+            done += len(seen)
+            if unsettled is not None:
+                unsettled += ["%s:%s" % (sid, v) for v in sorted(want - seen)]
+            continue
         n0 = done
         for f in ("manifest.txt", "nonmatching.txt", "partial.txt"):
             p = W("match/slices", sid, f)
@@ -134,6 +144,20 @@ def progress(k, unsettled=None):
         if unsettled is not None and done - n0 < len(BATCH[i]["vas"]):
             unsettled.append("%s:%d unrecorded" % (sid, len(BATCH[i]["vas"]) - (done - n0)))
     return tot, done
+
+
+def fixlog_vas():
+    """VA -> verdict over every work/match/scratch_*fixlog*.txt: sessions do not always name the log after the slice
+    (rck1 2026-10-18: scratch_65_fixlog.txt, scratch_rck1_40_fixlog.txt), and a fix batch's VAs are unique."""
+    out = {}
+    for fp in glob.glob(W("work/match", "scratch_*fixlog*.txt")):
+        for l in open(fp, errors="replace"):
+            parts = l.split()
+            if parts:
+                va = parts[0].lower()
+                va = va[2:] if va.startswith("0x") else va
+                out[va] = parts[1].upper() if len(parts) > 1 else ""
+    return out
 
 
 def pending(sid):
