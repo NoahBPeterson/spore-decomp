@@ -1,10 +1,18 @@
 006ab7e0 eastl::basic_string<wchar_t>::assign(const wchar_t*, size_type)  # tail-calls 0x00423650
 006abdf0 refcount release-by-2 (interlocked)  # lock xadd -2
 006abe00 refcount release+acquire pair (interlocked)  # lock xadd -1 at +0, +1 at +8
-006abee0 one-shot enable flag setter  # byte +8
 006abe50 EA::Allocator::FixedAllocatorBase::AllocateChunk  # PDB callee 0x926650
 006abeb0 wrapper -> 0x009289f0 via global 0x016c8b44
-006ac040 SP::SetCachingType  # PDB name
-006ac0a0 cache-type setter/getter via vtable+0xc (id 0x355d6f5)
-006ac440 8-byte element copy loop (uninitialized_copy style)
-006ac470 small-vector free  # EASTL_allocator_deallocate
+006abee0 ?FUN_006abee0@@YI_NPAD@Z  # FUN_006abee0 migrated from s006ab3d0 (verbatim, slice spelling)
+006abf20 ?FUN_006abf20@@YAXPAX@Z  # FUN_006abf20 migrated from s006ab3d0 (verbatim, slice spelling)
+006abfa0 ?FUN_006abfa0@@YAXPAX@Z  # FUN_006abfa0 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac040 ?SetCachingType@@YA_NHPAX@Z  # SetCachingType migrated from s006ab3d0 (verbatim, slice spelling)
+006ac0a0 ?FUN_006ac0a0@@YAIIPAUCacheHolder@@@Z  # FUN_006ac0a0 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac0d0 ?FUN_006ac0d0@@YAHPAUCacheHolder@@@Z  # FUN_006ac0d0 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac140 ?FUN_006ac140@@YAXPAX@Z  # FUN_006ac140 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac260 ?FUN_006ac260@@YAPAXPAX0@Z  # FUN_006ac260 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac2f0 ?FUN_006ac2f0@@YAXPAX00@Z  # FUN_006ac2f0 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac3c0 ?FUN_006ac3c0@@YAXPAX@Z  # FUN_006ac3c0 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac440 ?FUN_006ac440@@YAXPAIIPBI@Z  # FUN_006ac440 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac470 ?FUN_006ac470@@YIXH@Z  # FUN_006ac470 migrated from s006ab3d0 (verbatim, slice spelling)
+006ac5d0 ?FUN_006ac5d0@@YAXPAX0I@Z  # FUN_006ac5d0 migrated from s006ab3d0 (verbatim, slice spelling)

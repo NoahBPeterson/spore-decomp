@@ -1,11 +1,22 @@
-006ad7c0 SP::FlushCache  # PDB
-006ad910 cLRUCache::~cLRUCache  # PDB (implemented as Destroy)
-006adfe0 SP::AddRegistrationCallback  # PDB
+006ad5c0 ?FUN_006ad5c0@@YAXXZ  # FUN_006ad5c0 migrated from s006ad5c0 (verbatim, slice spelling)
+006ad7c0 ?FlushCache@SP@@YAXH@Z  # FlushCache migrated from s006ad5c0 (verbatim, slice spelling)
+006ad800 ?FUN_006ad800@@YAXH@Z  # FUN_006ad800 migrated from s006ad5c0 (verbatim, slice spelling)
+006ad850 ?FUN_006ad850@@YAXPAX@Z  # FUN_006ad850 migrated from s006ad5c0 (verbatim, slice spelling)
+006ad890 ?FUN_006ad890@@YIXPAX0@Z  # FUN_006ad890 migrated from s006ad5c0 (verbatim, slice spelling)
+006ad910 ?Destroy@cLRUCache@@QAEXPAPAXI@Z  # cLRUCache::Destroy migrated from s006ad5c0 (verbatim, slice spelling)
+006ada20 ?FUN_006ada20@@YAXXZ  # FUN_006ada20 migrated from s006ad5c0 (verbatim, slice spelling)
+006adb40 ?FUN_006adb40@@YAXXZ  # FUN_006adb40 migrated from s006ad5c0 (verbatim, slice spelling)
+006adbf0 ?FUN_006adbf0@@YIXPAXE@Z  # FUN_006adbf0 migrated from s006ad5c0 (verbatim, slice spelling)
+006adc60 ?FUN_006adc60@@YAXHH@Z  # FUN_006adc60 migrated from s006ad5c0 (verbatim, slice spelling)
+006adc90 ?FUN_006adc90@@YIXPAX0@Z  # FUN_006adc90 migrated from s006ad5c0 (verbatim, slice spelling)
+006add30 ?FUN_006add30@@YIXPAX0@Z  # FUN_006add30 migrated from s006ad5c0 (verbatim, slice spelling)
+006adda0 ?FUN_006adda0@@YIPAXPAX@Z  # FUN_006adda0 migrated from s006ad5c0 (verbatim, slice spelling)
+006adee0 ?FUN_006adee0@@YAXXZ  # FUN_006adee0 migrated from s006ad5c0 (verbatim, slice spelling)
+006adfe0 ?AddRegistrationCallback@SP@@YAXIPAX@Z  # AddRegistrationCallback migrated from s006ad5c0 (verbatim, slice spelling)
 006ae060 SP::cAsyncResourceRequest::AsInterface  # PDB
-006ae3f0 SP::cAsyncResourceManager::GetRequest  # PDB
-006ae880 SP::cAsyncResourceManager::RequestComplete  # PDB
-006ae600 eastl::rbtree<...>::DoNukeSubtree  # PDB
-006ae590 eastl::rbtree<...>::erase  # PDB
 006ae210 eastl::rbtree_node<...>::~rbtree_node  # PDB
-006adee0 eastl::hash_map<...>::operator[]  # PDB
+006ae3f0 SP::cAsyncResourceManager::GetRequest  # PDB
 006ae510 Resource::Async::Async  # PDB
+006ae590 eastl::rbtree<...>::erase  # PDB
+006ae600 eastl::rbtree<...>::DoNukeSubtree  # PDB
+006ae880 SP::cAsyncResourceManager::RequestComplete  # PDB

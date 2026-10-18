@@ -1,0 +1,15 @@
+# incomplete / approximate (stubbed blocks or omitted paths)
+006abf20  114  spin-wait retire queue stubbed
+006abfa0  148  atomic refcount retire helper stubbed
+006ac140  112  FixedAllocatorBase::Init + vtable setup stubbed
+006ac260  140  fixed-allocator node alloc + value copy stubbed
+006ac2f0  193  fixed-allocator node init loop stubbed
+006ac3c0  117  fixed-allocator core teardown stubbed
+006ac5d0  88   free bucket-array nodes stubbed
+006ad5c0   -  large /Od EH routine: only a skeleton (EASTL vector build + callback filter + GC)
+006ada20   -  /Od EH cache resize/GC: skeleton only
+006adb40   -  KRMap singleton ctor: skeleton only
+006adc90   -  KRMap init: skeleton only
+006add30   -  sub-list ctor: approximate (FUN_006ad970 call only)
+006adda0   -  pool node alloc: approximate (alloc + shallow copy)
+006adee0   -  hash_map::operator[] find+insert: skeleton only

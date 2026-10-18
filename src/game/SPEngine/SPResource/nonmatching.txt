@@ -1,0 +1,19 @@
+# complete behaviourally-equivalent source, not byte-exact (yet)
+006ac040 4 SetCachingType: complete; final `return type==0` emitted as sete instead of branch to shared false epilogue
+006ac0a0 35 cache-type setter via vtable+0xc: complete; vtable call shape differs
+006ac0d0 34 cache-type getter: complete; division/compare schedule differs
+006ac440 17 8-byte element copy loop: complete; cl used sub/jne signed form instead of dec/test/ja (loop var/reg order)
+006ac630 90 OnRegister: refcount add/release arm and callback-loop scheduling differ
+006ac7d0 83 Registry::ClearAll: complete; hashtable iterator loop peeling differs
+006ac840 102 Registry::Lookup: complete; EH state/guard layout differs; difftest WEAK after fixing the spin-lock this pointer (AcquireShared/Exclusive are methods of the lock at Registry+0x48, not of Registry)
+006ac8d0 238 Registry::Enumerate: complete; list-node smartptr assign shape differs
+006aca20 81 RegTable::erase: complete; register allocation differs
+006acaa0 314 vector<8B>::insert n copies: complete; register allocation differs; difftest WEAK (38% coverage, grow path rarely reached by random inputs) after mapping AllocBytes/operator delete and passing eastl::copy's by-value tag argument (an uninitialised dword) like the original
+006acc60 423 Registry::Register: complete; EH unwind states/inlined smartptr differ
+006ace70 296 Registry::Unregister: complete; EH unwind states differ
+006acfe0 10 registry register wrapper: complete; first/second arg register roles swapped (a=eax/b=edx vs a=edx/b=eax)
+006ad070 54 RemoveRegistrationCallback: complete; reg alloc differs
+006ad410 280 RegList::Add: complete; loop/register shape differs; difftest WEAK after fixing the RegList layout (Mutex at +0x120, not +0x11c)
+006ad800 10 loop prologue: cl tests the parameter directly in edi instead of eax/shrink-wrapped prologue; equiv: WEAK (17% cov)
+006ad890 41 ctor: EH prologue + /arch:SSE movss constant-pool loads not reproduced; equiv: FAIL (esp)
+006adbf0 27 scalar deleting dtor: old-style EH prolog not reproduced; equiv: FAIL (execution)
