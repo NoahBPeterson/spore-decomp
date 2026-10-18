@@ -1,8 +1,9 @@
-0061a650 SP::Pollen::cGetAssetFeedTransaction-like asset GET (cServerResponse path)  # builds URL from service hash 0x68cb17d + asset id, CreateHTTPGetRequest
-0061a810 SP::Pollen::cGetAssetFeedTransaction::cGetAssetFeedTransaction  # base(3,0x13ec47c,0) + sprintf "%I64u"
-0061a8b0 SP::Pollen::cGetAssetFeedTransactionEx::cGetAssetFeedTransactionEx  # +0xf0 id, +0xf8 string
-0061a970 SP::Pollen::cEditFeedTransaction::cEditFeedTransaction  # vtable 0x13fc754, two hash_sets (bucket array 0x154df28, load 1.0/grow 2.0)
-0061aa00 SP::Pollen::cUserMatchTransaction::ConstructRequest  # PDB candidate; GET with assetId/rating
-0061abf0 SP::Pollen::cUserMatchTransaction-ish GET request  # service hash 0x5efa12b + "%llu"
-0061ad70 SP::Pollen::cHandshakeTransaction::ConstructRequest  # PDB candidate; HandshakeParser, Spore-User/Password/ProductCode headers
-0061b0e0 SP::Pollen::cTelemetryUploadTransaction::ConstructRequest  # PDB anchor; 0xd98-byte HTTPRequest POST
+0061a650 ?AssetFeedGetRequest@Pollen@SP@@YA_NPAPAX@Z  # AssetFeedGetRequest migrated from s0061a650 (verbatim, slice spelling)
+0061a810 ??0cGetAssetFeedTransaction_s0061_a650@Pollen@SP@@QAE@II@Z  # cGetAssetFeedTransaction_s0061_a650::cGetAssetFeedTransaction migrated from s0061a650 (verbatim, slice spelling)
+0061a8b0 ??0cGetAssetFeedTransactionEx_s0061_a650@Pollen@SP@@QAE@II@Z  # cGetAssetFeedTransactionEx_s0061_a650::cGetAssetFeedTransactionEx migrated from s0061a650 (verbatim, slice spelling)
+0061a970 ??0cEditFeedTransaction_s0061_a650@Pollen@SP@@QAE@H@Z  # cEditFeedTransaction_s0061_a650::cEditFeedTransaction migrated from s0061a650 (verbatim, slice spelling)
+0061aa00 ?ConstructRequest@cUserMatchTransaction_s0061_a650@Pollen@SP@@QAE_NPAPAX@Z  # cUserMatchTransaction_s0061_a650::ConstructRequest migrated from s0061a650 (verbatim, slice spelling)
+0061abf0 ?UserMatchGetRequest@Pollen@SP@@YA_NPAPAX@Z  # UserMatchGetRequest migrated from s0061a650 (verbatim, slice spelling)
+0061ad70 ?ConstructRequest@cHandshakeTransaction_s0061_a650@Pollen@SP@@QAE_NPAPAX@Z  # cHandshakeTransaction_s0061_a650::ConstructRequest migrated from s0061a650 (verbatim, slice spelling)
+0061b0e0 ?ConstructRequest@cTelemetryUploadTransaction@Pollen@SP@@UAE_NPAPAVHTTPRequest@Internet@EA@@@Z  # SP::Pollen::cTelemetryUploadTransaction::ConstructRequest migrated from s0061a650
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061a650, named from the dev publics; slice address comment)

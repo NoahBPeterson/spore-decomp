@@ -1,6 +1,7 @@
-0061d380 SP::Pollen::cGetAssetFeedTransaction::ConstructRequest  # PDB anchor
-0061d960 SP::Pollen::cEditFeedTransaction::ConstructRequest  # PDB anchor
-0061de00 SP::Pollen::cHandshakeTransaction::HandleResult  # PDB candidate (caller-scored)
+0061d240 ?AssetHelper288@Pollen@SP@@YAPAXPAX0@Z  # AssetHelper288 migrated from s0061d240 (verbatim, slice spelling)
+0061d380 ?GetAssetFeedConstructRequest@Pollen@SP@@YA_NPAX0@Z  # GetAssetFeedConstructRequest migrated from s0061d240 (verbatim, slice spelling)
+0061d960 ?EditFeedConstructRequest@Pollen@SP@@YA_NPAX0@Z  # EditFeedConstructRequest migrated from s0061d240 (verbatim, slice spelling)
+0061de00 ?HandleResult@cHandshakeTransaction_s0061_d240@Pollen@SP@@QAE_NHPAX0@Z  # cHandshakeTransaction_s0061_d240::HandleResult migrated from s0061d240 (verbatim, slice spelling)
 0061dea0 wrapper over 0x0093abd0  # calls (a,b,-1,0), returns a
 0061df40 eastl intrusive ref wrapper ctor  # stores ptr, AddRef via vtable slot 1
 0061df60 eastl::find_first_not_of  # forward scan
@@ -8,3 +9,4 @@
 0061dfe0 PollenNotifyHelper  # MessageServer + release two members
 0061e180 guarded bool getter  # EnterCriticalSection/LeaveCriticalSection around flag at +0x68
 0061e200 eastl::basic_string<char>::erase(position,n)  # memmove tail +1
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061d240, named from the dev publics; slice address comment)

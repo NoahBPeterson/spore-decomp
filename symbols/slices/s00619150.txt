@@ -1,11 +1,11 @@
-00619150 SP::Pollen::cDeleteMyFeedTransaction::cDeleteMyFeedTransaction  # ctor with one const char* (0x57cc10 RangeInit)
+00619150 ??0cDeleteMyFeedTransaction_s0061_9150@Pollen@SP@@QAE@PBD@Z  # cDeleteMyFeedTransaction_s0061_9150::cDeleteMyFeedTransaction migrated from s00619150 (verbatim, slice spelling)
 00619180 SP::Pollen::cDeleteMyFeedTransaction::`scalar deleting destructor'  # frees mURI, free-list delete
-006191d0 SP::Pollen::cFeedUnsubscribeTransaction::cFeedUnsubscribeTransaction  # ctor with one const char*
+006191d0 ??0cFeedUnsubscribeTransaction_s0061_9150@Pollen@SP@@QAE@PBD@Z  # cFeedUnsubscribeTransaction_s0061_9150::cFeedUnsubscribeTransaction migrated from s00619150 (verbatim, slice spelling)
 00619200 SP::Pollen::cFeedUnsubscribeTransaction::`scalar deleting destructor'
-00619250 SP::Pollen::cSnapshotUploadTransaction::cSnapshotUploadTransaction  # Key + 4 strings
-00619300 SP::Pollen::cYouTubeAuthenticationTransaction::cYouTubeAuthenticationTransaction  # 3 strings + bool
-00619390 SP::Pollen::cYouTubeVideoUploadTransaction::cYouTubeVideoUploadTransaction  # 5 strings + Key + string
-00619470 SP::Pollen::cYouTubeVideoURLTransaction::cYouTubeVideoURLTransaction  # 4 strings
-00619530 eastl::partial_sort<unsigned*, TimeGreater>  # make_heap/adjust_heap/sort_heap over asset indices (0x118-byte records, time at +0x30)
-006195d0 eastl::uninitialized_copy_backward  # constructs 0x70-byte FeedDescription records into a destination cursor
-00619650 eastl::copy_backward  # assigns 0x70-byte FeedDescription records
+00619250 ??0cSnapshotUploadTransaction_s0061_9150@Pollen@SP@@QAE@ABUKey@12@PBD111@Z  # cSnapshotUploadTransaction_s0061_9150::cSnapshotUploadTransaction migrated from s00619150 (verbatim, slice spelling)
+00619300 ??0cYouTubeAuthenticationTransaction_s0061_9150@Pollen@SP@@QAE@PBD00_N@Z  # cYouTubeAuthenticationTransaction_s0061_9150::cYouTubeAuthenticationTransaction migrated from s00619150 (verbatim, slice spelling)
+00619390 ??0cYouTubeVideoUploadTransaction_s0061_9150@Pollen@SP@@QAE@PBD0000UKey@12@0@Z  # cYouTubeVideoUploadTransaction_s0061_9150::cYouTubeVideoUploadTransaction migrated from s00619150 (verbatim, slice spelling)
+00619470 ??0cYouTubeVideoURLTransaction_s0061_9150@Pollen@SP@@QAE@PBD000@Z  # cYouTubeVideoURLTransaction_s0061_9150::cYouTubeVideoURLTransaction migrated from s00619150 (verbatim, slice spelling)
+00619530 ?partial_sort@@YAXPAI00UTimeGreater@@@Z  # partial_sort migrated from s00619150 (verbatim, slice spelling)
+006195d0 ?uninitialized_copy_rev@@YAPAPAUFeedDescription@@PAPAU1@PAU1@11@Z  # uninitialized_copy_rev migrated from s00619150 (verbatim, slice spelling)
+00619650 ?copy_rev@@YAPAUFeedDescription@@PAU1@00@Z  # copy_rev migrated from s00619150 (verbatim, slice spelling)

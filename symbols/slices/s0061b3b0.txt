@@ -1,7 +1,10 @@
-0061b3b0 SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult  # PDB anchor
-0061b620 SP::Pollen::cYouTubeVideoUploadTransaction::ConstructRequest  # PDB anchor
-0061bbc0 eastl::quick_sort_impl<unsigned*, TimeGreater>  # kQuickSortLimit 28; median/get_partition/partial_sort over 0x118-byte timestamped records
-0061bcf0 SP::Pollen::WritePropertyListAndPNG  # PDB candidate (caller-scored)
+0061b3b0 ?HandleResult@cYouTubeAuthenticationTransaction@Pollen@SP@@UAE_NIPAVHTTPResponse@Internet@EA@@AAVcTransactionQueue@23@@Z  # SP::Pollen::cYouTubeAuthenticationTransaction::HandleResult migrated from s0061b3b0
+0061b620 ?ConstructRequest@cYouTubeVideoUploadTransaction@Pollen@SP@@UAE_NPAPAVHTTPRequest@Internet@EA@@@Z  # SP::Pollen::cYouTubeVideoUploadTransaction::ConstructRequest migrated from s0061b3b0
+0061b9a0 ?PollenRequestHelper@Pollen@SP@@YA_NPAX0@Z  # PollenRequestHelper migrated from s0061b3b0 (verbatim, slice spelling)
+0061bbc0 ?quick_sort_impl@Pollen@SP@@YAXPAI0HUTimeGreater_s0061_b3b0@12@@Z  # quick_sort_impl migrated from s0061b3b0 (verbatim, slice spelling)
+0061bcf0 ?WritePropertyListAndPNG@Pollen@SP@@YAXPAX000@Z  # WritePropertyListAndPNG migrated from s0061b3b0 (verbatim, slice spelling)
+0061c1c0 ?AllocateAndCopy70@Pollen@SP@@YAPAXIPAX0@Z  # AllocateAndCopy70 migrated from s0061b3b0 (verbatim, slice spelling)
 0061c880 SP::Pollen::RequestAssetsFromFeed  # PDB anchor
 0061cf60 SP::Pollen::cGetAssetFeedTransaction::HandleResult  # PDB anchor
 0061d1c0 SP::Pollen::cEditFeedTransaction::HandleResult  # PDB candidate (caller-scored)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s0061b3b0, named from the dev publics; slice address comment)

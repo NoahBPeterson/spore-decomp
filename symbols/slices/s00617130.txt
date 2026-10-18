@@ -1,10 +1,13 @@
 00617130 SP::Pollen::cFeedAssetTx::HandleResult  # (3-arg transaction result handler, ret 0xc) fetches the asset, opens it in the save area and posts 0x1a7f758; the PDB candidate NotificationFunction is a caller-scored guess
-00617450 SP::Pollen::cTelemetryUploadTransaction::scalar_deleting_dtor  # pooled free list at 0x15f52c4
+00617450 ?Destroy@cTelemetryUploadTransaction@@QAEPAXI@Z  # cTelemetryUploadTransaction::Destroy migrated from s00617130 (verbatim, slice spelling)
+00617490 ?Destroy@cPollenTxTwoRefs@@QAEPAXI@Z  # cPollenTxTwoRefs::Destroy migrated from s00617130 (verbatim, slice spelling)
 006174e0 eastl::basic_string<char>::resize  # (n) = erase(begin+n,end) / append(n-len,0)
-00617530 eastl::adjust_heap<unsigned*,int,unsigned,cTimeGreater>  # sibling of 0x616a00 promote_heap
-006175c0 SP::Pollen::RemoveFeedFromAll  # cdecl(set, const string8& uri): walks a hash set of server ids and unsubscribes the feed uri from each asset
-006177b0 SP::Pollen::RemoveFeedByName  # cdecl(const string8& name): queries ObjectTemplateDB with two FunctionalMatch::Constraints and unsubscribes the feed uri from every hit
-00617a40 SP::Pollen::cGetAssetFeedTransaction::~cGetAssetFeedTransaction  # (Ghidra name)
-00617e00 SP::Pollen::cFeedUnsubscribeTransaction::HandleResult  # PDB candidate (caller-scored)
-00617e80 SP::Pollen::cSnapshotUploadTransaction::~cSnapshotUploadTransaction  # (Ghidra name)
-00617f10 SP::Pollen::cSnapshotUploadTransaction::ConstructRequest  # multipart POST: locale/myEmail/destEmail/msgTxt fields plus imagedata
+00617530 ?adjust_heap@@YAXPAIHHHIUcTimeGreaterInl@@@Z  # adjust_heap migrated from s00617130 (verbatim, slice spelling)
+006175c0 ?RemoveFeedFromAll@@YAXPAUcPendingAssetSet@@PBUstring8_s0061_7130@@@Z  # RemoveFeedFromAll migrated from s00617130 (verbatim, slice spelling)
+006177b0 ?RemoveFeedByName@@YAXPBUstring8_s0061_7130@@@Z  # RemoveFeedByName migrated from s00617130 (verbatim, slice spelling)
+00617a40 ?Dtor@cGetAssetFeedTransaction@@QAEXXZ  # cGetAssetFeedTransaction::Dtor migrated from s00617130 (verbatim, slice spelling)
+00617b10 ?ConstructRequestA@cFeedGetTx@@QAE_NPAPAUHTTPRequest@@@Z  # cFeedGetTx::ConstructRequestA migrated from s00617130 (verbatim, slice spelling)
+00617c90 ?ConstructRequestB@cFeedGetTx@@QAE_NPAPAUHTTPRequest@@@Z  # cFeedGetTx::ConstructRequestB migrated from s00617130 (verbatim, slice spelling)
+00617e00 ?HandleResult@cFeedUnsubscribeTransaction@@QAE_NHPAUcHttpResult_s0061_7130@@PAX@Z  # cFeedUnsubscribeTransaction::HandleResult migrated from s00617130 (verbatim, slice spelling)
+00617e80 ?Dtor@cSnapshotUploadTransaction@@QAEXXZ  # cSnapshotUploadTransaction::Dtor migrated from s00617130 (verbatim, slice spelling)
+00617f10 ?ConstructRequest@cSnapshotUploadTransaction@@QAE_NPAPAUHTTPRequest@@@Z  # cSnapshotUploadTransaction::ConstructRequest migrated from s00617130 (verbatim, slice spelling)

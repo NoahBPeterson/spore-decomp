@@ -1,1 +1,12 @@
-006196c0 SP::Pollen::cModelUploadTransaction::ConstructRequest  # PDB anchor; builds EA::Internet multipart body and posts it
+00414e10 ?GetName@cAssetMetadata@Pollen@SP@@QBEPB_WXZ  # SP::Pollen::cAssetMetadata::GetName (callee of s006196c0, named from the dev publics; slice address comment)
+005507a0 ?GetAssetID@cAssetMetadata@Pollen@SP@@QBEAB_KXZ  # SP::Pollen::cAssetMetadata::GetAssetID (callee of s006196c0, named from the dev publics; slice address comment)
+00550800 ?GetAssetID@cAssetMetadata@Pollen@SP@@QBEAB_KXZ  # SP::Pollen::cAssetMetadata::GetAssetID (callee of s006196c0, named from the dev publics; slice address comment)
+00550820 ?GetAssetID@cAssetMetadata@Pollen@SP@@QBEAB_KXZ  # SP::Pollen::cAssetMetadata::GetAssetID (callee of s006196c0, named from the dev publics; slice address comment)
+005508c0 ?GetSummary@cAssetMetadata@Pollen@SP@@QBEPB_WXZ  # SP::Pollen::cAssetMetadata::GetSummary (callee of s006196c0, named from the dev publics; slice address comment)
+005509b0 ?GetTagCount@cAssetMetadata@Pollen@SP@@QBEIXZ  # SP::Pollen::cAssetMetadata::GetTagCount (callee of s006196c0, named from the dev publics; slice address comment)
+005509e0 ?GetTag@cAssetMetadata@Pollen@SP@@QBEPB_WI@Z  # SP::Pollen::cAssetMetadata::GetTag (callee of s006196c0, named from the dev publics; slice address comment)
+00551b60 ?SetID@cAssetMetadata@Pollen@SP@@QAEX_K@Z  # SP::Pollen::cAssetMetadata::SetID (callee of s006196c0, named from the dev publics; slice address comment)
+00551b80 ?SetID@cAssetMetadata@Pollen@SP@@QAEX_K@Z  # SP::Pollen::cAssetMetadata::SetID (callee of s006196c0, named from the dev publics; slice address comment)
+00615450 ?Open@cServerResponse@Pollen@SP@@QAE_NXZ  # SP::Pollen::cServerResponse::Open (callee of s006196c0, named from the dev publics; slice address comment)
+006196c0 ?ConstructRequest@cModelUploadTransaction_s0061_96c0@Pollen@SP@@QAE_NPAPAVHTTPRequest_s0061_96c0@Internet@EA@@@Z  # cModelUploadTransaction_s0061_96c0::ConstructRequest migrated from s006196c0 (verbatim, slice spelling)
+00944a10 ?AddRequestParameter@HTTPRequest@Internet@EA@@QAE_NABV?$basic_string@DVallocator@eastl@@@eastl@@0@Z  # EA::Internet::HTTPRequest::AddRequestParameter (callee of s006196c0, named from the dev publics; slice address comment)

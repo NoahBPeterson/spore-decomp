@@ -1,0 +1,33 @@
+# va  diff-bytes  reason
+00615ed0 19 cModelUploadTransaction::HandleResult: complete; only register choice for the AddMapping arguments and key copy differs
+00616b80 334 cTxUpload::HandleResult: complete; result flag kept in memory differently (cmp vs mov al/test) and mov/or of -1 differ
+00616d60 247 CreateDownloadJob: complete; job field store order (fn/mp4) and old-job load register differ
+00616ed0 44 cTxDownload::HandleResult: complete; register reuse (esi for metadata) differs
+00617010 235 cTxThumbnail::ConstructRequest: complete; begin pointer is cached across the bounds check instead of reloaded
+006175c0 345 RemoveFeedFromAll (cdecl, hash-set walk): complete; iterator/begin() register choice and key zero-init scheduling differ
+006177b0 547 RemoveFeedByName (ObjectTemplateDB query by name): complete; msg/results local layout and register allocation differ
+00617b10 186 cFeedGetTx::ConstructRequestA: complete; this in edi vs ebx and delete-this null check after the atomic release not reproduced
+00617c90 185 cFeedGetTx::ConstructRequestB: same as 00617b10 with map id 0x539f705
+00617f10 256 cSnapshotUploadTransaction::ConstructRequest: complete; register allocation (this in ebx vs edi) and vtable-load scheduling differ
+006181c0 104 YouTubeAuthentication ConstructRequest: complete; vptr reload/register assignment around the AddField vcalls (shared Release tail)
+006184c0 112 YouTubeVideoURL ConstructRequest: same shape as 006181c0 (multipart body)
+00618670 118 upload ConstructRequest (retail layout): complete; AddRef/Release xadd scheduling and one null-check on the failure Release
+006188f0 186 eastl string append_sprintf_va_list: arg loads hoisted before the empty-string branch; equiv WEAK (60.8% cov)
+006189e0 135 EASTL unguarded partition on index array (descending by int64 key at entry+0x30): swap temp reloaded instead of CSE'd
+00618a60 38 EASTL make_heap: comparator reloaded from stack in loop instead of kept in ebp
+00618aa0 53 EASTL sort_heap (pop_heap loop): value load/store order
+00618b90 19 cMsgString8 scalar deleting dtor: base vptr stores in reverse order ([+0] then [+4] vs original [+4] then [+0])
+00618c70 25 FillFeedInfo: copy of feed record, register assignment
+00618d40 29 cFeedTransactionBase ctor (4 args): vptr/zero stores scheduled after the arg stores
+00618da0 78 cFeedTransactionBase ctor (string arg): same scheduling issue
+00618f60 358 feed-entry asset ConstructRequest: complete; register allocation (this in edi, doc in ebp originally)
+00619530 149 eastl::partial_sort<unsigned*, TimeGreater>: complete; comparator register allocation (compare spilled to stack instead of kept in ebp)
+006195d0 47 uninitialized_copy_backward for 0x70-byte records: complete; register allocation (dest should occupy the sole callee-saved reg, first reloaded in eax)
+00619650 51 copy_backward/reverse copy for 0x70-byte records: complete; same register-allocation difference
+006196c0 2815 COMPLETE: all fields/files/paths and calls reproduced (3050 vs 3984 bytes: original duplicates the failure cleanup tails inline; RAII locals share them)
+0061a810 91 cGetAssetFeedTransaction ctor: complete; base + CtorSprintf schedule (extra callee-saved frame, manual strlen)
+0061a8b0 132 cGetAssetFeedTransactionEx ctor: complete; ctor scheduling / 64-bit id assembly differs
+0061a970 60 cEditFeedTransaction ctor: complete; vptr/mOpType store order and the second hash-set bucket-array store order
+0061bbc0 80 eastl::quick_sort_impl<unsigned*, TimeGreater>: complete; register allocation around median/get_partition (compare kept in esi vs ecx)
+0061c350 363 complete: asset-feed HandleResult (local key lookup, pooled FeedEvent push, sorted key insert); inlined pool/lower_bound scheduling differs; difftest WEAK (no difference; 21% coverage, feed-key match rarely hit by random inputs; fix: pool AddCore was declared cdecl with the pool as an arg, it is thiscall 0x926650 on 0x15f5254)
+0061c880 1434 complete: RequestAssetsFromFeed full port (sort, local/remote branches, variant map, notifications); register/scheduling not exact; difftest WEAK (no difference; 13% coverage)

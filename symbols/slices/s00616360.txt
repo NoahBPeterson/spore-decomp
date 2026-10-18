@@ -1,4 +1,23 @@
-00616960 eastl::basic_string<char>::append(size_type, char)  # reserve growth and memset fill; byte-exact
-00616aa0 eastl::basic_string<char>::AllocateSelf  # allocates n bytes or points at the shared empty buffer; byte-exact
-006167a0 eastl::insertion_sort<unsigned*, TimeGreater>  # sorts asset indices by 64-bit timestamp; byte-exact
-00616a00 eastl::promote_heap<unsigned*, int, unsigned, TimeGreater>  # byte-exact with EASTL source
+00616360 ?Dtor@cTxC@@QAEXXZ  # cTxC::Dtor migrated from s00616360 (verbatim, slice spelling)
+006163e0 ?Init@cTxD@@QAEPAU1@UResourceKey_s0061_6360@@PAUIAddRef@@PAURCObj@@I_N@Z  # cTxD::Init migrated from s00616360 (verbatim, slice spelling)
+00616460 ?Dtor@cTxD@@QAEXXZ  # cTxD::Dtor migrated from s00616360 (verbatim, slice spelling)
+00616500 ?Dtor@cTxE@@QAEXXZ  # cTxE::Dtor migrated from s00616360 (verbatim, slice spelling)
+00616580 ?HandleResult@cTxF@@QAE_NHPAX0@Z  # cTxF::HandleResult migrated from s00616360 (verbatim, slice spelling)
+00616610 ?HandleResult@cTxG@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  # cTxG::HandleResult migrated from s00616360 (verbatim, slice spelling)
+006166b0 ?HandleResult@cTxI@@QAE_NHPAUcHttpResult_s0061_6360@@PAX@Z  # cTxI::HandleResult migrated from s00616360 (verbatim, slice spelling)
+006166e0 ?Init@cTxJ@@QAEPAU1@PAUIAddRef1@@0@Z  # cTxJ::Init migrated from s00616360 (verbatim, slice spelling)
+00616730 ?HandleResult@cTxK@@QAE_NHPAUcHttpResult2@@PAX@Z  # cTxK::HandleResult migrated from s00616360 (verbatim, slice spelling)
+006167a0 ?insertion_sort@@YAXPAI0UcTimeGreaterInl@@@Z  # insertion_sort migrated from s00616360 (verbatim, slice spelling)
+00616820 ?insertion_sort_unguarded@@YAXPAI0UcTimeGreaterInl@@@Z  # insertion_sort_unguarded migrated from s00616360 (verbatim, slice spelling)
+00616960 ?append@string8@@QAEAAU1@ID@Z  # string8::append migrated from s00616360 (verbatim, slice spelling)
+00616a00 ?promote_heap@@YAXPAIHHIUcTimeGreaterInl@@@Z  # promote_heap migrated from s00616360 (verbatim, slice spelling)
+00616aa0 ?AllocateSelf@string8@@QAEXI@Z  # string8::AllocateSelf migrated from s00616360 (verbatim, slice spelling)
+00616b00 ?Destroy@cPoolTxA@@QAEPAXI@Z  # cPoolTxA::Destroy migrated from s00616360 (verbatim, slice spelling)
+00616b20 ?Destroy@cPoolTxB@@QAEPAXI@Z  # cPoolTxB::Destroy migrated from s00616360 (verbatim, slice spelling)
+00616b40 ?Destroy@cTxUp1@@QAEPAXI@Z  # cTxUp1::Destroy migrated from s00616360 (verbatim, slice spelling)
+00616b80 ?HandleResult@cTxUpload@@QAE_NHPAUcHttpResult_s0061_6360@@PAUcTransactionQueue@@@Z  # cTxUpload::HandleResult migrated from s00616360 (verbatim, slice spelling)
+00616d20 ?Destroy@cTxUp2@@QAEPAXI@Z  # cTxUp2::Destroy migrated from s00616360 (verbatim, slice spelling)
+00616d60 ?CreateDownloadJob@@YAXPAUIAddRef@@PAUSubOwner_s0061_6360@@PBUResourceKey_s0061_6360@@@Z  # CreateDownloadJob migrated from s00616360 (verbatim, slice spelling)
+00616ed0 ?HandleResult@cTxDownload@@QAE_NHPAX0@Z  # cTxDownload::HandleResult migrated from s00616360 (verbatim, slice spelling)
+00617010 ?ConstructRequest@cTxThumbnail@@QAE_NPAPAD@Z  # cTxThumbnail::ConstructRequest migrated from s00616360 (verbatim, slice spelling)
+006909b0 ?GetStatus@cJob@SP@@QBE?AW4tJobStatus@2@XZ  # SP::cJob::GetStatus (callee of s00616360, named from the dev publics; slice address comment)

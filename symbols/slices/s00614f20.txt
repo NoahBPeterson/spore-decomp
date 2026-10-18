@@ -7,3 +7,8 @@
 00615520 SP::Pollen::cServerResponse::IDListElement  # PDB name; push_back(trimmed text) into mAssetList
 006155f0 SP::Pollen::cServerResponse::SetupDict  # PDB name; fills the static start/end handler vector_maps
 00615790 SP::Pollen::cServerResponse::cServerResponse  # PDB name
+00615ed0 ?HandleResult@cModelUploadTransaction_s0061_4f20@@UAE_NHPAUcHttpResult@@PAUcTransactionQueue_s0061_4f20@@@Z  # cModelUploadTransaction_s0061_4f20::HandleResult migrated from s00614f20 (verbatim, slice spelling)
+00616160 ?Init@cTripleObj@@QAEPAU1@XZ  # cTripleObj::Init migrated from s00614f20 (verbatim, slice spelling)
+00616220 ??RcTimeGreater@@QBE_NII@Z  # cTimeGreater::operator() migrated from s00614f20 (verbatim, slice spelling)
+006162a0 ?HandleResult@cHandlerStub@@QAE_NHPAUcHttpResult@@PAX@Z  # cHandlerStub::HandleResult migrated from s00614f20 (verbatim, slice spelling)
+00616300 ?Init@cSmallC@@QAEPAU1@PBUsTriple@@PAHH@Z  # cSmallC::Init migrated from s00614f20 (verbatim, slice spelling)
