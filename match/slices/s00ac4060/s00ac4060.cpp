@@ -198,14 +198,12 @@ struct SpVec3c {
 // @ 0x00ac4570
 T3c* SpVec3c::erase(T3c* first, T3c* last)
 {
-    T3c* d = first;
-    T3c* s = last;
-    while (s != mpEnd) {
-        *d = *s;
-        ++d;
-        ++s;
-    }
-    mpEnd -= (last - first);
+    T3c* p = first;
+    T3c* q = last;
+    T3c* end = mpEnd;
+    for (; q != end; ++q, ++p)
+        *p = *q;
+    mpEnd = mpEnd - (last - first);
     return first;
 }
 

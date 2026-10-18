@@ -19,9 +19,9 @@ struct cRuntimeModelBuilder {
     // @ 0x00776470
     char setFlagB(int key, int unused);
     // @ 0x007764c0
-    void setBoneA(int unused, const float* v, float w, int unused2);
+    int setBoneA(int unused, const float* v, float w, int unused2);
     // @ 0x00776520
-    void setBoneB(int unused, const float* v, float w, int unused2);
+    int setBoneB(int unused, const float* v, float w, int unused2);
 };
 
 char cRuntimeModelBuilder::setFlagA(int key, int unused) {
@@ -48,22 +48,24 @@ char cRuntimeModelBuilder::setFlagB(int key, int unused) {
     return 0;
 }
 
-void cRuntimeModelBuilder::setBoneA(int unused, const float* v, float w, int unused2) {
+int cRuntimeModelBuilder::setBoneA(int unused, const float* v, float w, int unused2) {
     (void)unused;
     (void)unused2;
     *(float*)((char*)this + 0x120) = v[0];
     *(float*)((char*)this + 0x124) = v[1];
     *(float*)((char*)this + 0x128) = v[2];
     *(float*)((char*)this + 0x12c) = w;
+    return *(const int*)(v + 2);   // original leaves v[2] in eax (copied via a stack temp)
 }
 
-void cRuntimeModelBuilder::setBoneB(int unused, const float* v, float w, int unused2) {
+int cRuntimeModelBuilder::setBoneB(int unused, const float* v, float w, int unused2) {
     (void)unused;
     (void)unused2;
     *(float*)((char*)this + 0x12c) = v[0];
     *(float*)((char*)this + 0x130) = v[1];
     *(float*)((char*)this + 0x134) = v[2];
     *(float*)((char*)this + 0x138) = w;
+    return *(const int*)(v + 2);   // original leaves v[2] in eax (copied via a stack temp)
 }
 
 // ---------------------------------------------------------------------------

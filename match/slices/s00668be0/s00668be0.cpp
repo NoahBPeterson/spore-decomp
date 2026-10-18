@@ -24,10 +24,19 @@ extern int gVt14002a8;          // 0x014002a8
 
 struct Vec { void* begin; void* end; void* cap; };
 
+// Declared-only twin of FUN_00668d90, annotated with the original address. The original
+// QueryNumItems was compiled in a different TU than GetAssetList, so cl could not reuse a
+// zero register across the call and zeroes the vector / tests the guard with immediates
+// (never touching edx). A same-TU call lets cl keep edx==0 across the call; calling the
+// declared-only twin restores the original codegen. The definition of FUN_00668d90 below
+// is unchanged.
+struct AssetListSource { void GetAssetList(Vec* out); };  // 0x00668d90
+
 struct FeedItem {
     bool FUN_00668be0(wchar_t* dst);
     void FUN_00668c80(void* a1, void* c);
     void FUN_00668d90(Vec* out);
+    int  FUN_006693c0();
     void FUN_00669410();
 };
 
@@ -157,12 +166,12 @@ Obj9360* Obj9360::init(int p2, Vec* p3) {
 // -----------------------------------------------------------------------------
 // @ 0x006693c0  count assets returned by GetAssetList
 // -----------------------------------------------------------------------------
-__declspec(noinline) int __fastcall FUN_006693c0(void* self) {
+__declspec(noinline) int FeedItem::FUN_006693c0() {
     Vec v;
     v.begin = 0;
     v.end = 0;
     v.cap = 0;
-    ((FeedItem*)self)->FUN_00668d90(&v);
+    ((AssetListSource*)this)->GetAssetList(&v);
     int n = (int)((char*)v.end - (char*)v.begin);
     if (v.begin && *(int*)((char*)v.begin - 4) != 0)
         EASTL_allocator_deallocate(v.begin);
@@ -173,7 +182,7 @@ __declspec(noinline) int __fastcall FUN_006693c0(void* self) {
 // @ 0x00669410  refresh the cached item count
 // -----------------------------------------------------------------------------
 void __fastcall FUN_00669410(void* self) {
-    int n = FUN_006693c0(self);
+    int n = ((FeedItem*)self)->FUN_006693c0();
     *(int*)((char*)self + 0x60) = n;
     if (n != *(int*)((char*)self + 0x64))
         *(uint8_t*)((char*)self + 0x86) = 1;

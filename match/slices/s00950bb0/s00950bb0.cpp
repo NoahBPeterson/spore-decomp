@@ -1,6 +1,7 @@
 // Slice s00950bb0: EA::UTFWin UI window-proc dispatch + small value/pool helpers (MSVC 2008 SP1,
 // /O2 /MD /Gy /EHsc /TP /arch:SSE). PDB names used where known.
 #include "types.h"
+#include <intrin.h>
 
 extern "C" void  FUN_960410(void*, void*);                          // UTFWin::Window::DoMessage
 extern "C" void* FUN_009289f0(unsigned, int, int, int, int, int);   // cSPMemPool::LockedAlloc
@@ -176,6 +177,10 @@ void Bounds::SetBounds(char valid, const float* r) {
 
 // @ 0x00952160
 // The original loads arg1 into eax at entry and leaves it there on every path (a hidden return).
+// The merge below must reload mMinX/mMinY/mMaxX/mMaxY: without the barrier cl 15.00 keeps all
+// four bounds live across the early-out test in xmm1-xmm4, where the original uses only
+// xmm0-xmm2 (it folds the early-out reads into comiss memory operands). _ReadWriteBarrier()
+// is a compiler fence (no code emitted) that stops that hoist.
 const float* Bounds::UnionBounds(const float* r) {
     if (mValid == 0) {
         mValid = 1;
@@ -186,6 +191,7 @@ const float* Bounds::UnionBounds(const float* r) {
         mMinX = 0; mMinY = 0; mMaxX = 0; mMaxY = 0;
         return r;
     }
+    _ReadWriteBarrier();
     if (r[0] > mMinX) mMinX = r[0];
     if (r[1] > mMinY) mMinY = r[1];
     if (r[2] < mMaxX) mMaxX = r[2];

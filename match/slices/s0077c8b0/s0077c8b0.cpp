@@ -2,6 +2,7 @@
 // Flags: /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 #include "types.h"
 #include <math.h>
+#include <intrin.h>
 
 // ---- D3D9 device -------------------------------------------------------------------------
 extern void* g_pDevice;   // 0x16f89d0
@@ -130,15 +131,17 @@ float* __fastcall FUN_0077d170(float* p) {
 extern void* g_vtbl_13ef094;  // 0x13ef094
 extern void* g_vtbl_140e878;  // 0x140e878
 
-// @ 0x0077d1d0  constructor: install vftable, clear refcount (atomic), install final vftable
-struct CtorObj { void* vtbl; int field1; int field2; int field3; int field4; };
-void __fastcall FUN_0077d1d0(CtorObj* p) {
+// @ 0x0077d1d0  constructor: install vftable, clear refcount (atomic), install final vftable;
+// returns 'this' (the original leaves ecx copied to eax for the caller at 0x40bc5e).
+struct CtorObj { void* vtbl; volatile long refcount; int field2; int field3; int field4; };
+CtorObj* __fastcall FUN_0077d1d0(CtorObj* p) {
     p->vtbl = &g_vtbl_13ef094;
-    p->field1 = 0;
+    _InterlockedExchange(&p->refcount, 0);
     p->vtbl = &g_vtbl_140e878;
     p->field2 = 0;
     p->field3 = 0;
     p->field4 = 0;
+    return p;
 }
 
 // @ 0x0077cb40  (partial) dirt/distance shader constant; SSE/x87 body not reproduced

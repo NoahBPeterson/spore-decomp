@@ -60,7 +60,7 @@ int*  FUN_00acc2d0(int* p, int* end, int* out);
 int*  FUN_00acc330(int end, int begin, int* out);
 void* FUN_00accec0(uchar* p, uchar* end, uchar* out);
 void* FUN_00accf20(int end, int begin, int out);
-char  FUN_00acca00(int* vec, int* val);
+bool  FUN_00acca00(int* vec, int* val);
 
 // @ 0x00acc2d0
 int* FUN_00acc2d0(int* p, int* end, int* out) {
@@ -134,7 +134,7 @@ void* FUN_00accf20(int end, int begin, int out) {
 }
 
 // @ 0x00acca00
-char FUN_00acca00(int* vec, int* val) {
+bool FUN_00acca00(int* vec, int* val) {
     int* p = (int*)*vec;
     int* end = (int*)vec[1];
     if (p != end) {

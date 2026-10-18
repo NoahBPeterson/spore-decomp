@@ -155,6 +155,12 @@ void VecInt::resize(unsigned n)
 // ===========================================================================
 void VecInt::DoInsertValues(int* position, unsigned n, const int* value)
 {
+    // A function-scope `volatile` local gives this function the extra 4-byte frame
+    // slot the original has: cl 15.00 emits `push ecx`/`pop ecx`, so the entry
+    // `this` in ecx survives (the original never leaves ecx clobbered; the caller
+    // at 0072f326 is `or ecx,-1`, i.e. it does not read it, but the harness compares
+    // every register the original leaves untouched).
+    volatile unsigned nNewSize;
     if (n <= (unsigned)(mpCapacity - mpEnd)) {
         if (n > 0) {
             const int temp = *value;
@@ -176,7 +182,7 @@ void VecInt::DoInsertValues(int* position, unsigned n, const int* value)
     } else {
         const unsigned nPrevSize = (unsigned)(mpEnd - mpBegin);
         const unsigned nGrowSize = nPrevSize ? 2 * nPrevSize : 1;
-        const unsigned nNewSize = nGrowSize > nPrevSize + n ? nGrowSize : nPrevSize + n;
+        nNewSize = nGrowSize > nPrevSize + n ? nGrowSize : nPrevSize + n;
         int* const pNewData = nNewSize ? (int*)NEW_ARRAY_BYTES(nNewSize * sizeof(int)) : 0;
         int* pNewEnd = pNewData;
         for (int* p = mpBegin; p != position; ++p) {

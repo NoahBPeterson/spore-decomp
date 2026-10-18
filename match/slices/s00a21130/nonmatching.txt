@@ -1,7 +1,7 @@
 # va  diff-bytes  reason
 00a21170  74  complete; EA::Audio voice-registry insert; thiscall reconstruction, cl register allocation differs; equiv PASS; now a thiscall stub-class member
 00a21260  10  complete; AutoRefCount::Release; cl emits `sub eax,1` (orig `add eax,-1`) and hoists the vptr load above the refcount store; equiv PASS
-00a21290  19  complete; intrusive-list head reset to prev(-0x10)/null; cl keeps receiver in ecx while orig moves it to eax; equiv PASS
+00a21290  9   complete; intrusive-list head reset to prev(-0x10)/null; returns the incoming prev node in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a212b0  76  complete; eastl list splice (relink nodes); register/clone-layout differences; equiv FAIL
 00a21310  96  complete; eastl list erase; register/layout differences; equiv FAIL
 00a21390  76  complete; EA::Audio::Submix::DisconnectFromSubmix (thiscall + EH frame); equiv FAIL; now a thiscall stub-class member
@@ -14,8 +14,8 @@
 00a21b20  86  complete; voice command forwarder (calls connect); equiv FAIL
 00a21b90  45  complete; 4-arg voice command forwarder (calls connect4); equiv FAIL
 00a21c00  77  complete; eastl vector<T>::~vector; equiv WEAK (76.3% coverage); now a thiscall stub-class member
-00a21c70  11  complete; list-node -> payload; cl assigns value->eax where orig uses value->ecx; equiv PASS
-00a21c90  20  complete; list-node -> payload; cl does not hoist the out-pointer load above the this test; equiv PASS
+00a21c70  11  complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
+00a21c90  11  complete; list-node -> payload; returns the out pointer in eax (caller-visible ABI; return type void -> void**); equiv PASS (400 valid, 100% coverage)
 00a21cb0  63  complete; eastl list insert helper; register/layout differences; equiv FAIL
 00a21dc0  87  complete; eastl rbtree find; equiv FAIL; now a thiscall stub-class member
 00a21eb0  131 complete; voice hash-bucket rehash (node next at +0x10); equiv FAIL; now a thiscall stub-class member

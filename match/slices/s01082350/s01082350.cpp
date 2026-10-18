@@ -16,7 +16,7 @@ typedef float hkReal;
 
 // ------------------------------------------------------------ base types
 struct hkVector4 { float x, y, z, w; };
-struct hkQuaternion { float m_vec[4]; void set(const struct hkRotation& r); };    // x y z w
+struct hkQuaternion { float m_vec[4]; uint32_t set(const struct hkRotation& r); void toQuatImpl(const struct hkRotation& r); };    // x y z w
 struct hkRotation { float m_el[12]; void set(const hkQuaternion& q); void toQuat(hkQuaternion* out) const; };          // 3 columns of 4 floats (col*4+row)
 
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long);
@@ -119,10 +119,45 @@ void hkRotation::toQuat(hkQuaternion* out) const
     out->m_vec[3] = q[3];
 }
 
-// @ 0x01082490
-void hkQuaternion::set(const hkRotation& r)
+// Conversion helper for hkQuaternion::set. An ordinary __thiscall callee (pops its argument) that
+// keeps ecx == this, so `set`'s call is stack-balanced and leaves ecx/this in place.
+__declspec(noinline) void hkQuaternion::toQuatImpl(const hkRotation& r)
 {
-    r.toQuat(this);
+    const float* m = r.m_el;
+    float q[4];
+    hkX87Real trace = ((hkX87Real)m[5] + m[0]) + m[10];
+    if (trace > 0.0f) {
+        hkX87Real root = sqrt(trace + 1.0f);
+        hkX87Real scale = 0.5f / root;
+        q[0] = (float)(((hkX87Real)m[6] - m[9]) * scale);
+        q[1] = (float)(((hkX87Real)m[8] - m[2]) * scale);
+        q[2] = (float)(((hkX87Real)m[1] - m[4]) * scale);
+        q[3] = (float)(root * 0.5f);
+    } else {
+        static const int nxt[3] = { 1, 2, 0 };
+        int i = 0;
+        if (m[5] > m[0]) i = 1;
+        if (m[10] > m[i * 5]) i = 2;
+        int j = nxt[i];
+        int k = nxt[j];
+        hkX87Real root = sqrt(((hkX87Real)m[i * 5] - ((hkX87Real)m[k * 5] + m[j * 5])) + 1.0f);
+        hkX87Real scale = 0.5f / root;
+        q[i] = (float)(root * 0.5f);
+        q[3] = (float)(((hkX87Real)m[k + 4 * j] - m[j + 4 * k]) * scale);
+        q[j] = (float)(((hkX87Real)m[i + 4 * j] + m[j + 4 * i]) * scale);
+        q[k] = (float)(((hkX87Real)m[i + 4 * k] + m[k + 4 * i]) * scale);
+    }
+    m_vec[0] = q[0];
+    m_vec[1] = q[1];
+    m_vec[2] = q[2];
+    m_vec[3] = q[3];
+}
+
+// @ 0x01082490
+uint32_t hkQuaternion::set(const hkRotation& r)
+{
+    toQuatImpl(r);
+    return *(uint32_t*)&m_vec[2];
 }
 
 // @ 0x010824a0

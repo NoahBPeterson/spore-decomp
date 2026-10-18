@@ -101,24 +101,37 @@ cModelInstanceSet::~cModelInstanceSet() {
     if (mTBegin && ((int*)mTBegin)[-1]) EASTL_allocator_deallocate(mTBegin);
 }
 
+// Update's per-instance bounds/radius accumulators. These are deliberately `noinline`: their
+// addresses escape every iteration, so cl keeps the six bounds and the radius in memory and only
+// scatters xmm0/xmm1 (as the original does); inlined, cl promotes the live floats to xmm2-xmm7,
+// which the equivalence checker rejects (registers the original never writes).
+static __declspec(noinline) void UpdateBounds(float* b, const float* p) {
+    if (b[0] > p[1]) b[0] = p[1];
+    if (b[3] < p[1]) b[3] = p[1];
+    if (b[1] > p[2]) b[1] = p[2];
+    if (b[4] < p[2]) b[4] = p[2];
+    if (b[2] > p[3]) b[2] = p[3];
+    if (b[5] < p[3]) b[5] = p[3];
+}
+static __declspec(noinline) void UpdateRadius(float* r, const float* p) {
+    if (*r < p[4]) *r = p[4];
+}
+
 // @ 0x006f3b70
 void cModelInstanceSet::Update() {
     if (mSetID < 0) return;
-    float minx = g_153415c, miny = g_153415c, minz = g_153415c;
-    float maxx = -g_153415c, maxy = -g_153415c, maxz = -g_153415c;
+    float b[6];
+    b[0] = g_153415c; b[1] = g_153415c; b[2] = g_153415c;
+    b[3] = -g_153415c; b[4] = -g_153415c; b[5] = -g_153415c;
     float radius = 0.0f;
+    float* p = (float*)mTBegin;
     int n = (int)(((char*)mTEnd - (char*)mTBegin) / 0x38);
-    for (int i = 0; i < n; i++) {
-        float* p = (float*)((char*)mTBegin + i * 0x38);
-        if (minx > p[1]) minx = p[1];
-        if (maxx < p[1]) maxx = p[1];
-        if (miny > p[2]) miny = p[2];
-        if (maxy < p[2]) maxy = p[2];
-        if (minz > p[3]) minz = p[3];
-        if (maxz < p[3]) maxz = p[3];
-        if (radius < p[4]) radius = p[4];
+    while (n-- > 0) {
+        UpdateBounds(b, p);
+        UpdateRadius(&radius, p);
+        p += 0x38 / 4;
     }
-    (*(void (__thiscall**)(void*, int, float*, float))(Vt(mRenderer) + 13))(mRenderer, mSetID, &minx, radius);
+    (*(void (__thiscall**)(void*, int, float*, float))(Vt(mRenderer) + 13))(mRenderer, mSetID, b, radius);
 }
 
 // @ 0x006f3df0

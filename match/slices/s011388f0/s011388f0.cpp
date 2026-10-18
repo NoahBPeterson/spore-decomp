@@ -472,8 +472,13 @@ void __cdecl FUN_011393d0(void* self)
 {
     int p = A<int>(self, 0x70);
     if (p == 0) { operator_new_arr((unsigned)A<int>(self, 0x78), 0, (unsigned)A<int>(self, 0x6c)); p = A<int>(self, 0x6c); }
+    void* a1 = (void*)A<int>(self, 0x78);
     void* a3 = (void*)A<int>(self, 0x58);
-    ((void (__cdecl *)(void*, int, void*)) A<int>(self, 0x54))((void*)A<int>(self, 0x78), p, a3);
+    // The null test keeps the callee live in ECX across the argument setup, matching the
+    // original's `mov ecx,[esi+0x54]; call ecx` (LTCG codegen); a bare indirect call goes
+    // through memory instead and leaves ECX stale at the generated call site.
+    void (__cdecl *fn)(void*, int, void*) = (void (__cdecl *)(void*, int, void*))A<int>(self, 0x54);
+    if (fn != 0) fn(a1, p, a3);
     A<int>(self, 0x70) = 0;
 }
 

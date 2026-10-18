@@ -161,7 +161,7 @@ int atom_getint(Atom* a)
 }
 
 // @ 0xa46790
-void atom_getsymbol(Sym2* out, Atom* in)
+Sym2* atom_getsymbol(Sym2* out, Atom* in)
 {
     if (in->type == 2) {
         out->a = in->v[0];
@@ -170,6 +170,7 @@ void atom_getsymbol(Sym2* out, Atom* in)
         out->a = gEmptyA.a;
         out->b = gEmptyA.b;
     }
+    return out;
 }
 
 extern "C" int __cdecl hk_snprintf(char* buf, unsigned int n, const char* fmt, ...);   // 0x0107f390 (equiv t2)
@@ -241,20 +242,21 @@ int atom_getint_at(int i, int n, Atom* arr)
 }
 
 // @ 0xa46950
-void atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
+Sym2* atom_getsymbol_at(Sym2* out, int i, int n, Atom* arr)
 {
     if (n <= i) {
         out->a = gEmptyB.a;
         out->b = gEmptyB.b;
-        return;
+        return out;
     }
     if (arr[i].type == 2) {
         out->a = arr[i].v[0];
         out->b = arr[i].v[1];
-        return;
+        return out;
     }
     out->a = gEmptyB.a;
     out->b = gEmptyB.b;
+    return out;
 }
 
 // ---- remaining functions (not reconstructed) -------------------------------

@@ -52,11 +52,11 @@ struct KTable {
     uint32_t mnElements;    // +0xc
     RehashPolicy mPolicy;   // +0x10
     void DoRehash(uint32_t n);                                   // 0x00998870
-    void Insert(InsertRes* out, const Key4* k, int tag);         // 0x00a26e10
+    InsertRes* Insert(InsertRes* out, const Key4* k, int tag);   // 0x00a26e10
 };
 
 // @ 0x00a26e10
-void KTable::Insert(InsertRes* out, const Key4* k, int)
+InsertRes* KTable::Insert(InsertRes* out, const Key4* k, int)
 {
     uint32_t h = k->a ^ k->c;
     uint32_t idx = h % mnBuckets;
@@ -66,7 +66,7 @@ void KTable::Insert(InsertRes* out, const Key4* k, int)
             out->node = n;
             out->inserted = false;
             out->bucket = bucket;
-            return;
+            return out;
         }
     }
     RehashRes r;
@@ -86,6 +86,7 @@ void KTable::Insert(InsertRes* out, const Key4* k, int)
     out->node = nn;
     out->inserted = true;
     out->bucket = &mpBuckets[idx];
+    return out;
 }
 
 // ---------------------------------------------------------------------------

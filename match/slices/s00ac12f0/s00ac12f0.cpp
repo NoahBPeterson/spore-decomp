@@ -158,6 +158,12 @@ void __fastcall FUN_00ac14e0(char* self) {
 void FUN_00ac1500() { g_flag_1565b14 = 1; }
 
 // @ 0x00ac1510   unit direction on a cube face for cell (x, y): writes 3 floats
+// The original keeps seven SSE values live at once (xmm0-3,5,6,7) and never touches
+// xmm4; /O2 lets the allocator colour one of our live values to xmm4, which the LTCG
+// untouched-register contract forbids. Building this one function at /Od keeps the
+// SSE live set off xmm4 (and off x87), and the trailing volatile read materialises the
+// byte the original's `movzx eax, [g_FaceAxes+face*2]` leaves in the hidden eax.
+#pragma optimize("", off)
 void __cdecl FUN_00ac1510(uint32_t face, int x, int y, float* out) {
   float fx = ((float)x + 0.5f) * g_CubeTexel - 1.0f;
   float fy = ((float)y + 0.5f) * g_CubeTexel - 1.0f;
@@ -175,7 +181,10 @@ void __cdecl FUN_00ac1510(uint32_t face, int x, int y, float* out) {
   _mm_store_ss(&out[g_FaceAxes[face * 2 + 2]], sr);
   _mm_store_ss(&out[a1], _mm_mul_ss(_mm_set_ss(fy), r));
   _mm_store_ss(&out[a0], _mm_mul_ss(_mm_set_ss(fx), sr));
+  volatile int sink = g_FaceAxes[face * 2];
+  (void)sink;
 }
+#pragma optimize("", on)
 
 // @ 0x00ac15e0
 int __fastcall FUN_00ac15e0(char* self) { return (*(int*)(self + 0x48))++; }

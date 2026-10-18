@@ -7,4 +7,4 @@
 00e61630 117  ctor wrapper: temp Handle slot and case schedule differ; equiv UNSUPPORTED: 0/1200 valid inputs (_mktime64 import, write faults)
 00e61a50 11   factory new-expression: vtable/field store order differs; equiv FAIL: vtable pointer stored differs from original (orig 01485598 vs ours)
 00e61aa0 7    base-ctor + lea scheduling differs; equiv UNSUPPORTED: unresolved references Obj9c::Init, CStrObj::Init (stubs)
-00e61b00 82   dtor: refcount/EH sequence approximate; equiv WEAK: 726 valid inputs, 93% coverage
+00e61b00 87   dtor: refcount release now calls the vtable slot (*(void***)rc)[0] with this=rc, matching the original's mov edx,[ecx]; mov eax,[edx]; call eax (was calling rc directly). register/EH schedule still differs. equiv PASS: 236 valid, 93.0% coverage, flags /O2 /MD /Gy /EHsc /TP /arch:SSE (--require-all WEAK)

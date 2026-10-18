@@ -138,11 +138,13 @@ void __fastcall release_00a21260(void* self) {
 // 0x00A21290  intrusive-list head reset to prev(-0x10) or null
 // ---------------------------------------------------------------------------------------
 // @ 0x00A21290
-void __fastcall resetHead_00a21290(void** self) {
+// The original keeps its receiver (ECX) in EAX and returns it; caller 0x00A2E650 reads EAX.
+void** __fastcall resetHead_00a21290(void** self) {
     char* v = (char*)*self;
     v = *(char**)(v + 0x10);
-    if (v != 0) { *self = v - 0x10; return; }
+    if (v != 0) { *self = v - 0x10; return self; }
     *self = 0;
+    return self;
 }
 
 // ---------------------------------------------------------------------------------------
@@ -496,16 +498,20 @@ void VoiceVec_00a21c00::Destroy() {
 // 0x00A21C70  list node -> payload (out) then optional
 // -------------------------------------------------------------------------------------
 // @ 0x00A21C70
-void __fastcall nodeToPayload_00a21c70(void* self, void* dummy, void** out) {
+// The original loads the out-pointer into EAX and returns it; caller 0x00A2E650 reads EAX.
+void** __fastcall nodeToPayload_00a21c70(void* self, void* dummy, void** out) {
     void* v = *(void**)self;
     if (v != 0) *out = (char*)v - 0x10;
     else *out = 0;
+    return out;
 }
 
 // @ 0x00A21C90
-void __fastcall nodeToPayload_00a21c90(void* self, void* dummy, void** out) {
+// The original loads the out-pointer into EAX and returns it; caller 0x00A2E650 reads EAX.
+void** __fastcall nodeToPayload_00a21c90(void* self, void* dummy, void** out) {
     if (self != 0) *out = (char*)self - 0x10;
     else *out = 0;
+    return out;
 }
 
 // ---------------------------------------------------------------------------------------

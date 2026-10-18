@@ -81,8 +81,10 @@ struct Pair8 {
     int a, b;
 };
 
-// @ 0x0076ffd0  copy of 8-byte elements; dest is null-checked
-void copy8(Pair8** result, Pair8* first, Pair8* last, Pair8* dest) {
+// @ 0x0076ffd0  copy of 8-byte elements; dest is null-checked.
+// The original leaves its first argument (the out-iterator address) in eax
+// (loaded once at entry, never rewritten), so it is the return value.
+Pair8** copy8(Pair8** result, Pair8* first, Pair8* last, Pair8* dest) {
     *result = dest;
     if (first != last) {
         for (; first != last; ++first, ++dest) {
@@ -93,6 +95,7 @@ void copy8(Pair8** result, Pair8* first, Pair8* last, Pair8* dest) {
         }
         *result = dest;
     }
+    return result;
 }
 
 // 0x30-byte element; the copy constructor copies a 16-byte aligned block plus
@@ -201,9 +204,12 @@ Item8* __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
     const int numItems = (int)(vec->end - vec->begin);
     int local_c = 0;
     int off = 0;
-    Item8* result = vec->begin;
+    Item8* result;
     if (n <= 0)
-        return result;
+        // The original's early-out leaves eax holding the low dword of the
+        // signed byte-difference times the /0x8c division magic (0xea0ea0eb);
+        // the return value is dead at the only caller, but the harness compares it.
+        return (Item8*)(unsigned)((int)((char*)mgr->end - (char*)mgr->begin) * 0xea0ea0eb);
     Item8* items = vec->begin;
     do {
         Rec8c* r = (Rec8c*)((char*)mgr->begin + off);

@@ -346,8 +346,13 @@ void Sound::UpdatePropertiesFromPrimitives(bool all)
     while (it.mpNode != end) {
         u32 key = it.mpNode->key;
         IPrim* prim = it.mpNode->prim;
-        if (all || prim->v20(0))
-            SetPropValue(key, prim->GetValue(1));
+        if (all || prim->v20(0)) {
+            // The retail body dispatches through this object's vtable slot 0x98 but hands the
+            // node's key as the receiver and the iteration end as the first argument.
+            typedef void (__thiscall* SetPropFn)(void* self, void* arg, float v);
+            SetPropFn fn = *(SetPropFn*)((char*)*(void**)this + 0x98);
+            fn((void*)key, (void*)end, prim->GetValue(1));
+        }
         it.inc();
     }
 }

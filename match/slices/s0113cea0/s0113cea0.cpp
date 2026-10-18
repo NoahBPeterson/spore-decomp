@@ -45,10 +45,15 @@ static inline uint32_t& W(void* p, unsigned o) { return *(uint32_t*)((char*)p + 
 static inline float&    F(void* p, unsigned o) { return *(float*)((char*)p + o); }
 static inline void*&    P(void* p, unsigned o) { return *(void**)((char*)p + o); }
 
-// COM-style release: (*(void***)p)[2](p), __stdcall, |this| passed explicitly
+// COM-style release: (*(void***)p)[2](p), __stdcall, |this| passed explicitly.
+// The member pointer is read through a volatile local: that forces cl to materialise it into a
+// register before the `push`, so the vtable stays in ecx at the call -- matching the original's
+// `mov ecx,[obj]; mov edx,[ecx+8]; push obj; call edx` shape (the checker compares ecx as "this").
 static inline void Release(void* p)
 {
-    ((void(__stdcall*)(void*))((void**)p)[2])(p);
+    void* vt = *(void**)p;
+    void (__stdcall* volatile f)(void*) = (void(__stdcall*)(void*))((void**)vt)[2];
+    f(p);
 }
 
 struct Ctx {

@@ -1,5 +1,5 @@
-0076fdc0 177 register-allocation/scheduling differences in the index-build loop (compiler choices)
-0076ffd0 51 copy loop: original spills `first` to its parameter home and uses only esi (no edi)
+0076fdc0 271 WEAK (no mismatch): complete buildIndex; the loop body still shows register-allocation/scheduling differences (compiler choices). The original's early-out (n<=0) leaves eax = low dword of byteDiff*0xea0ea0eb (the /0x8c division magic residue), reproduced explicitly with a cast/computed return so the untouched-eax comparison passes; the only caller 007754d0 ignores it (the intervening call at 0077556c overwrites eax, so callerdeps' eax DEPENDS is a false positive). 35.3% coverage (30/85 insns) at default 400 inputs.
+0076ffd0 48 PASS (100% coverage): copy8; the original leaves its first argument (the out-iterator address) in eax at every ret, so the function returns Pair8** and `return result;` reproduces it. Remaining 48 diff bytes are copy-loop scheduling/regalloc (original spills `first` to its parameter home and uses only esi, no edi). 314 valid inputs, 100.0% coverage (22/22 insns), no mismatch.
 00770010 78 uninitialized_copy: original keeps a second induction pointer at +0x1c; frame/regs differ
 00770080 76 fill: same movaps+8-mov body but different induction register assignment
 007700e0 70 uninitialized_fill_n: same body but different induction register assignment

@@ -4,7 +4,7 @@
 00acc700  101  complete; vector<0x14> push with squared floats, schedule differs
 00acc770  34   complete; release/compact loop, register allocation differs
 00acc9b0  58   complete; vector resize dispatch, schedule differs
-00acca00  59   complete; remove_1st, shift-loop shape differs
+00acca00  59   complete; spstl::remove_1st returns bool (orig writes al only: mov al,1 / xor al,al) so it is declared bool, not char (char made the checker compare ax); shift-loop shape differs. equiv PASS: 267 valid, 85.7% coverage, flags /O2 /MD /Gy /EHsc /TP (--require-all WEAK)
 00accd70  264  complete; 0x68-node freelist teardown, register schedule differs
 00accec0  72   complete; 0x20-range copy, element-ctor call schedule differs
 00accf20  76   complete; reverse 0x20-range copy, register schedule differs

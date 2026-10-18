@@ -582,7 +582,7 @@ BigMode::~BigMode()
             *(int*)(rc + 4) = n;
             if (n == 0) {
                 *(int*)(rc + 4) = 1;
-                (*(void(__thiscall**)(char*, int))rc)(rc, 1);
+                (*(void(__thiscall**)(char*, int))(*(void***)rc))(rc, 1);
             }
         }
     }

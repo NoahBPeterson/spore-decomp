@@ -13,7 +13,7 @@
 01139260  58 complete init; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (130 valid, 100%)
 011392c0  103 complete command ring; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (306 valid, 100%)
 01139390  41 complete stop handler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100%)
-011393d0  21 complete timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (312 valid, 100%)
+011393d0  32 complete timer callback; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (356 valid, 100% coverage). Original loads the callee into ECX (`mov ecx,[esi+0x54]; call ecx`, LTCG codegen), so the generated call site sees ECX=[esi+0x54]; a bare indirect call goes through memory and leaves ECX stale (fake-call `this` mismatch, which also perturbs the fake return in EAX). Guarding with `if (fn != 0)` keeps the callee live in ECX and reproduces it.
 01139450  69 complete ctor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (400 valid, 100% coverage)
 011394b0  56 complete dtor; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (334 valid, 100%)
 01139500  295 complete SampleCapture::StartHandler; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (streams fault on the random object graph; 1 unresolved reference _ceil)

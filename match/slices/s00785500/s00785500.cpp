@@ -40,13 +40,15 @@ extern float k1e0;  // 0x016341e0
 static inline double S(double v) { return sqrt(v); }
 
 // @ 0x00785500
-void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
+// Returns the output cursor (out + number of floats written for the bands processed):
+// the original leaves it in eax at every ret and an LTCG caller may consume it.
+float* SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
 {
     out[0] += in[0];
     out[1] += in[1];
     out[2] += in[2];
     out[3] += in[3];
-    if (order < 2) return;
+    if (order < 2) return out;
 
     const float b = P[1];
     const float c = P[2];
@@ -62,7 +64,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             out[4 + i * 4 + 3] += w[i] * in[7];
         }
     }
-    if (order < 3) return;
+    if (order < 3) return out + 4;
 
     // band 2
     float t[5];
@@ -81,7 +83,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] += v * in[11];
         }
     }
-    if (order < 4) return;
+    if (order < 4) return out + 16;
 
     // band 3
     float s[7];
@@ -102,7 +104,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] = v * in[15];
         }
     }
-    if (order < 5) return;
+    if (order < 5) return out + 36;
 
     // band 4
     float q[9];
@@ -125,7 +127,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] = v * in[19];
         }
     }
-    if (order < 6) return;
+    if (order < 6) return out + 64;
 
     // band 5
     float r[11];
@@ -150,7 +152,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] = v * in[23];
         }
     }
-    if (order < 7) return;
+    if (order < 7) return out + 100;
 
     // band 6
     float u[13];
@@ -177,7 +179,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] = v * in[27];
         }
     }
-    if (order < 8) return;
+    if (order < 8) return out + 144;
 
     // band 7
     float w[15];
@@ -206,6 +208,7 @@ void SP_RotateZHToSHAdd(float* P, int order, float* in, float* out)
             o[3] = v * in[31];
         }
     }
+    return out + 256;
 }
 // --- equivalence checker address annotations
     extern float k078; // 0x01634078
