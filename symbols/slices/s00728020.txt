@@ -1,4 +1,8 @@
-00728020  SP::cMeshSimplifier::Simplify  # PDB candidate (caller-single) from card.py
-007285a0  SP::cMeshClusterer::CreateClusterInfo  # PDB name from card.py
-00728af0  SP::cMeshClusterer::Cluster  # PDB name from card.py
-007281d0  `anonymous namespace'::cUVGenJobInfo::~cUVGenJobInfo  # PDB name from card.py
+00728020 ?FUN_00728020@@YAXPAUMeshCtx@@MHPAX@Z  # FUN_00728020 migrated from s00728020 (verbatim, slice spelling)
+007280b0 ?FUN_007280b0@@YAXPAX0HHH@Z  # FUN_007280b0 migrated from s00728020 (verbatim, slice spelling)
+007281d0 ?FUN_007281d0@@YAXPAX@Z  # FUN_007281d0 migrated from s00728020 (verbatim, slice spelling)
+00728330 ?FUN_00728330@@YAXPAXI@Z  # FUN_00728330 migrated from s00728020 (verbatim, slice spelling)
+00728400 ?FUN_00728400@@YAXPAXII@Z  # FUN_00728400 migrated from s00728020 (verbatim, slice spelling)
+007285a0 ?FUN_007285a0@@YAXPAX@Z  # FUN_007285a0 migrated from s00728020 (verbatim, slice spelling)
+007289a0 ?FUN_007289a0@@YAXPAX@Z  # FUN_007289a0 migrated from s00728020 (verbatim, slice spelling)
+00728af0 ?FUN_00728af0@@YAXPAX0H@Z  # FUN_00728af0 migrated from s00728020 (verbatim, slice spelling)

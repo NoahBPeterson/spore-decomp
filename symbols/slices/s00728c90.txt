@@ -1,1 +1,3 @@
-00728c90  SP::CreateUVsAndCharts  # PDB name from card.py
+00725e40 ?AssignCharts@cMeshClusterer@SP@@QAEXH_N0@Z  # SP::cMeshClusterer::AssignCharts (callee of s00728c90, named from the dev publics; slice address comment)
+00728c90 ?FUN_00728c90@@YAXPAUPtrVec@UV@@MPBMPBUMeshXform@2@@Z  # FUN_00728c90 migrated from s00728c90 (verbatim, slice spelling)
+00729290 ?FUN_00729290@@YAHPAX@Z  # FUN_00729290 migrated from s00728c90 (verbatim, slice spelling)

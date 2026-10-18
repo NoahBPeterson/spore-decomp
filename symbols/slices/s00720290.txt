@@ -1,3 +1,15 @@
-# va  Name  # evidence
-00720620  SP::cHeap::HeapifyDown  # retail PDB name (pdb_names.json)
-00720f40  SP::cMeshClusterer::MergeEdgeLists  # retail PDB name (pdb_names.json)
+00720290 ?AddTri@MeshAdj@@QAEXHHHPAHPAUPair16@@H@Z  # MeshAdj::AddTri migrated from s00720290 (verbatim, slice spelling)
+00720590 ?HashVec@@YAIPBM@Z  # HashVec migrated from s00720290 (verbatim, slice spelling)
+00720620 ?HeapifyDown@cHeap@SP@@QAEXH@Z  # SP::cHeap::HeapifyDown migrated from s00720290
+007206b0 ?HeapifyUp@cHeap@SP@@QAEXH@Z  # SP::cHeap::HeapifyUp migrated from s00720290
+00720700 ?CalcError@cMeshClusterer@@QAEXPAUcFaceCluster@@0PAM@Z  # cMeshClusterer::CalcError migrated from s00720290 (verbatim, slice spelling)
+00720920 ?MinMaxIndices@@YAXPBQBMPAH1@Z  # MinMaxIndices migrated from s00720290 (verbatim, slice spelling)
+00720b10 ?Dtor@Element68@@QAEXXZ  # Element68::Dtor migrated from s00720290 (verbatim, slice spelling)
+00720b60 ?Grow@HashTable@@QAEXI@Z  # HashTable::Grow migrated from s00720290 (verbatim, slice spelling)
+00720c20 ?DestroyRange68@@YAPAUElement68@@PAU1@00@Z  # DestroyRange68 migrated from s00720290 (verbatim, slice spelling)
+00720c90 ?UninitCopyFace28@@YAXPAPAUcFaceCluster@@PBU1@1PAU1@@Z  # UninitCopyFace28 migrated from s00720290 (verbatim, slice spelling)
+00720d10 ?FillFace28@@YAXPAUcFaceCluster@@IPBU1@@Z  # FillFace28 migrated from s00720290 (verbatim, slice spelling)
+00720d70 ?UninitCopyDual18@@YAXPAPAUcDualEdge@@PBU1@1PAU1@@Z  # UninitCopyDual18 migrated from s00720290 (verbatim, slice spelling)
+00720dd0 ?MoveCopy34@@YAPAXPAX00@Z  # MoveCopy34 migrated from s00720290 (verbatim, slice spelling)
+00720ea0 ?CopyFace28@@YAPAXPAX00@Z  # CopyFace28 migrated from s00720290 (verbatim, slice spelling)
+00720f40 ?MergeEdgeLists@cMeshClusterer@@QAEXHH@Z  # cMeshClusterer::MergeEdgeLists migrated from s00720290 (verbatim, slice spelling)

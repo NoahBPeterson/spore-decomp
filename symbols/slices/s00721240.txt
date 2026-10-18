@@ -1,2 +1,15 @@
-# va  Name  # evidence
-00721910  SP::cTextureChart::~cTextureChart  # retail PDB name (pdb_names.json), range-destroy helper
+00721240 ?SortFloatsByDist@@YAXPAX@Z  # SortFloatsByDist migrated from s00721240 (verbatim, slice spelling)
+00721340 ?ChartSolve@@YAXHHPAH0PAM@Z  # ChartSolve migrated from s00721240 (verbatim, slice spelling)
+007217c0 ?MakeChartRef@ChartVec@@QAEPAUChartRef@@PAU2@@Z  # ChartVec::MakeChartRef migrated from s00721240 (verbatim, slice spelling)
+00721850 ?GrowF@ChartHash@@QAEXI@Z  # ChartHash::GrowF migrated from s00721240 (verbatim, slice spelling)
+00721910 ?DestroyChartRange@@YGXPAUChart68@@0@Z  # DestroyChartRange migrated from s00721240 (verbatim, slice spelling)
+00721980 ?DeleteTwoVtbl@@YAPAXPAUTwoVtbl@@I@Z  # DeleteTwoVtbl migrated from s00721240 (verbatim, slice spelling)
+007219f0 ?FindF@ChartHash@@QAEXPAHPAM@Z  # ChartHash::FindF migrated from s00721240 (verbatim, slice spelling)
+00721a80 ?InsertF@ChartHash@@QAEXPAHPAM@Z  # ChartHash::InsertF migrated from s00721240 (verbatim, slice spelling)
+00721bb0 ?FindI@ChartHash@@QAEXPAH0@Z  # ChartHash::FindI migrated from s00721240 (verbatim, slice spelling)
+00721c30 ?InsertI@ChartHash@@QAEXPAH0@Z  # ChartHash::InsertI migrated from s00721240 (verbatim, slice spelling)
+00721d80 ?CopyChart68@@YAPAXPAX0@Z  # CopyChart68 migrated from s00721240 (verbatim, slice spelling)
+00722010 ?InitChartHash@@YAXPAUChartHash@@@Z  # InitChartHash migrated from s00721240 (verbatim, slice spelling)
+007220c0 ?FreeChartThing@@YAXPAUChartHash@@@Z  # FreeChartThing migrated from s00721240 (verbatim, slice spelling)
+007221c0 ?CollapseEdges@CMeshClusterer2@@QAEXXZ  # CMeshClusterer2::CollapseEdges migrated from s00721240 (verbatim, slice spelling)
+007222f0 ?Insert34Vec@@YAPAXPAX00@Z  # Insert34Vec migrated from s00721240 (verbatim, slice spelling)

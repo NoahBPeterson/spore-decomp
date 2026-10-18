@@ -1,0 +1,34 @@
+# va  diff-bytes  reason
+00720290 393 MeshAdj::AddTri: logic complete; huge /O2 scheduling/register diff vs a differently-sized symbol (likely inlined-helper driven)
+00720590 107 HashVec: complete; FNV hash loop and constant handling differ (addss register reuse)
+00720620 94 cHeap::HeapifyDown: complete; pointer-count subtraction and comiss branch direction differ
+007206b0 40 cHeap::HeapifyUp: complete; float branch ordering differs
+00720700 399 cMeshClusterer::CalcError: complete; original uses inline x87 Sqrt/Dot helpers, ours uses scalar SSE sqrtf
+00720920 492 MinMaxIndices: complete; original is 4x unrolled with min+max fused, ours is a simple loop
+00720b60 97 HashTable::Grow: complete; allocation/placement-new sequence and loop shape differ
+00720c20 89 DestroyRange68: complete; loop register allocation differs
+00720c90 89 UninitCopyFace28: complete; original skips mArea in the copy, register allocation differs
+00720d10 69 FillFace28: complete; register allocation differs
+00720d70 64 UninitCopyDual18: complete; aggregate copy uses edi temp vs original edx
+00720dd0 98 MoveCopy34: complete; mixed fld/int copy register allocation differs
+00720ea0 82 CopyFace28: complete; loop register allocation differs
+00720f40 587 cMeshClusterer::MergeEdgeLists: complete; offset/loop-shape and inlined-callee differences
+00721240 214 SortFloatsByDist: complete; min-scan unroll and qsort call schedule differ
+007217c0 54 MakeChartRef: complete; source shape differs (compiler inlined/removed; no same-size symbol); equiv: UNSUPPORTED (only 0/1200 valid inputs, fake-arity discards) after ecx member fix
+00721850 141 ChartHash::GrowF: complete; allocation/placement-new and loop shape differ
+007219f0 110 ChartHash::FindF: complete; float-key compare sequence differs
+00721a80 173 ChartHash::InsertF: complete; grow/alloc sequence differs
+00721bb0 73 ChartHash::FindI: complete; register allocation differs
+00721c30 181 ChartHash::InsertI: complete; grow/alloc sequence differs
+007221c0 246 cMeshClusterer::CollapseEdges: complete; heap/offset schedule differs
+00722c60 2 VecAny::Push8: complete; only the temp register for the out-of-line append call differs (edx vs ecx)
+00723140 1094 complete MeshBuild::Build vertex-remap loop; register/scheduling and EH differences; difftest WEAK (7.9% coverage: FindElement on random meshes rarely finds the element; after mapping kEastlAllocFile 0x13ebb38 and operator_delete__ 0xf47380)
+00723680 102 complete IntVecObj(n) ctor; base-class ctor chain / EH state not reproduced; difftest PASS
+00723930 212 complete ChartRec copy ctor; EH prolog/state stores missing
+00723af0 16 complete vector<cSPTransform>::DoAssign; cap/end store order and tag arg load order
+00723d60 683 complete submesh remap export; EH and loop scheduling differ; difftest WEAK (22.5% coverage; after mapping kEastlAllocFile 0x13ebb38 and operator_delete__ 0xf47380)
+00724100 1285 cMeshClusterer::Setup (per-triangle face clusters + dual-edge heap): complete; x87/SSE scheduling and register allocation differ
+007249f0 1317 Large /O2 EH chart-connectivity builder; full transcription of all paths/calls, not byte-exact.
+00725130 2602 (flags /O2 /MD /Gy /EHsc /TP /GS-) CreateEdges complete: all 5 FindElementArray fallbacks, corner list (4/2-byte/no index), degenerate-triangle compaction for 4- and 2-byte position indices, edge-ring merging, index write-back, primitive remap, ring collapse into the adjacency stream, EH-scoped AutoRefCount/vector temporaries; call sequence identical (41 calls), size 0.977x; frame 0xb8 vs 0xd4, slot layout and register allocation differ
+00725e40 2240 /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-; SP::cMeshClusterer::AssignCharts complete (all 16 calls in order, EH, both bool paths); register allocation/scheduling and frame 0xe8 vs 0xdc differ
+00728c90 985 Complete CreateUVsAndCharts (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS-); stack-slot order of vecB/rect temp, dead erase-copy loops and mesh-info induction pointer differ

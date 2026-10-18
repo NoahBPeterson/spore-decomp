@@ -1,0 +1,12 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  007201b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  007201d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Dtor@Element68@@QAEXXZ  00720b10  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?DestroyChartRange@@YGXPAUChart68@@0@Z  00721910  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Assign@VecAny@@QAEXHHH@Z  00722520  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ??0IntVecObj@@QAE@HPBH@Z  00723720  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?resize@Vec24@@QAEXI@Z  007237a0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?resize@Vec24@@QAEXIPBUVertex3D@@@Z  007238b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ??4ChartRec@@QAEAAU0@ABU0@@Z  00723a70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Reset@PairVec@@QAEXIIHHE@Z  00723cf0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?FUN_00728020@@YAXPAUMeshCtx@@MHPAX@Z  00728020  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,0 +1,34 @@
+# va  diff-bytes  reason
+00720070  n/a  helper called by the Obj15 copy/ctor helpers: skeleton only
+007200f0  n/a  helper: skeleton only
+00721340  0  ChartSolve (UV/normal solve): skeleton only, 1152-byte jump-table body omitted
+00721980  50  TwoVtbl deleting dtor: vtable store values omitted
+00721d80  169  CopyChart68: only flat 0x50 prefix copied, inner vectors omitted
+00722010  143  InitChartHash: only first 3 fields initialised
+007220c0  224  FreeChartThing: only one member freed, EH unwinding omitted
+007222f0  258  Insert34Vec: stub (no insert path)
+00722410  0  vector<cTextureChart>::append range: stub
+00722580  0  insert n elements of 0x18: stub
+00722770  0  insert n elements of 0x28: stub
+00722990  0  AllocConstruct38: allocation only, element construct call omitted
+007229f0  0  CopyChartRecord: flat prefix copy only, inner vector omit
+00722b20  0  FindOrInsertF: stub
+00722ba0  0  SwapVecIfOwned: simplified (no copy-on-alloc path)
+00722ca0  0  ConstructIntVec: EH frame + deferred assign omitted
+00722d00  0  BuildTextureChart: stub (1078-byte body omitted)
+00724700  0  eastl::vector<cTextureChart>::reserve: stub
+007247c0  0  chart helper: stub (548-byte body omitted)
+007269b0  621   PARTIAL: vector<cClusterInfo>::DoInsertValues reconstruction; approve-only, not byte-exact and not verified behaviourally.
+007280b0  267   PARTIAL: cUVGenJobInfo ctor skeleton.
+007281d0  118   PARTIAL: cUVGenJobInfo dtor skeleton (EH/vtable-sensitive).
+00728330  193   PARTIAL: vector<cClusterInfo>::resize skeleton (EH + default cClusterInfo temp).
+00728400  410   PARTIAL: vector insert skeleton (EH).
+007285a0  1010  PARTIAL: cMeshClusterer::CreateClusterInfo skeleton.
+007289a0  329   PARTIAL: clusterification scheduling skeleton (EH).
+00728af0  404   PARTIAL: cMeshClusterer::Cluster skeleton (EH/refcount).
+00729290  111   PARTIAL: calls FUN_00722d00/SP::CreateUVsAndCharts; skeleton only.
+00735470  1252  PARTIAL: ~1.2 KB container routine; skeleton.
+00735960   297  PARTIAL: refcounted element-list builder with EH; skeleton.
+007366e0   440  PARTIAL: rebuild per-cluster index arrays (0x8c records, refcounted); skeleton.
+007368a0   605  PARTIAL: rebuild reverse index streams with refcounted EltArrays; skeleton.
+0073a4b0  556  QuadricVectorResize: eastl::vector<cQuadric>::resize, skeleton only

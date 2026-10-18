@@ -1,3 +1,3 @@
-# va  Name  # evidence
-00724100  SP::ConvertMeshToTriangleLists  # retail PDB name (card header)
-00724700  eastl::vector<SP::cTextureChart,eastl::sp_vector_allocator>::reserve  # retail PDB name (card header)
+00724100 ?Setup@cMeshClusterer_s0072_4100@@QAEXXZ  # cMeshClusterer_s0072_4100::Setup migrated from s00724100 (verbatim, slice spelling)
+00724700 ?FUN_00724700@@YAXPAX@Z  # FUN_00724700 migrated from s00724100 (verbatim, slice spelling)
+007247c0 ?FUN_007247c0@@YAXXZ  # FUN_007247c0 migrated from s00724100 (verbatim, slice spelling)

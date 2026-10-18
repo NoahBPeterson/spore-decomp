@@ -1,4 +1,6 @@
+00720070 ?Obj15_20070@@YAXPAX@Z  # Obj15_20070 migrated from s0071f410 (verbatim, slice spelling)
+007200f0 ?Obj15_200f0@@YAXPAX00@Z  # Obj15_200f0 migrated from s0071f410 (verbatim, slice spelling)
 00720190  Obj15 ctor(a,b,out)  # byte-exact; out->0=a; out->8=b; Obj15_Init 0x720070
-007201b0  Obj15 copy(src,dst)  # byte-exact; dst->0=src->0; dst->8=src->8; Obj15_Init 0x720070
-007201d0  Obj15 copy+assign  # byte-exact; as copy then Obj15_Assign 0x71fce0(src,dst,0)
+007201b0 ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  # Obj15_copy migrated from s0071f410 (verbatim, slice spelling)
+007201d0 ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  # Obj15_copyAssign migrated from s0071f410 (verbatim, slice spelling)
 00720250  eastl::copy_impl<0,...>::do_copy<EA::Text::Vertex3D*,EA::Text::Vertex3D*>  # 6-dword struct copy loop

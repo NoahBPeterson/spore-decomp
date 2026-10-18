@@ -1,3 +1,10 @@
-# va  Name  # evidence
-00722410  eastl::vector<SP::cTextureChart,eastl::sp_vector_allocator>::insert  # retail PDB (range append helper)
-00722520  vector<int,sp_vector_allocator>::assign  # inferred from decompile
+00722410 ?VectorAppend8Impl@@YAXPAX0@Z  # VectorAppend8Impl migrated from s00722410 (verbatim, slice spelling)
+00722520 ?Assign@VecAny@@QAEXHHH@Z  # VecAny::Assign migrated from s00722410 (verbatim, slice spelling)
+00722580 ?VecInsert18@@YAXPAHPAXI1@Z  # VecInsert18 migrated from s00722410 (verbatim, slice spelling)
+00722770 ?VecInsert28@@YAXPAHPAXI1@Z  # VecInsert28 migrated from s00722410 (verbatim, slice spelling)
+007229f0 ?CopyChartRecord@@YAPAXPAX0@Z  # CopyChartRecord migrated from s00722410 (verbatim, slice spelling)
+00722b20 ?FindOrInsertF@@YAHPAXPAM@Z  # FindOrInsertF migrated from s00722410 (verbatim, slice spelling)
+00722ba0 ?SwapVecIfOwned@@YAXPAH0@Z  # SwapVecIfOwned migrated from s00722410 (verbatim, slice spelling)
+00722c60 ?Push8@VecAny@@QAEXPAUVec8@@@Z  # VecAny::Push8 migrated from s00722410 (verbatim, slice spelling)
+00722ca0 ?ConstructIntVec@@YAPAHPAHHH@Z  # ConstructIntVec migrated from s00722410 (verbatim, slice spelling)
+00722d00 ?BuildTextureChart@@YAXH@Z  # BuildTextureChart migrated from s00722410 (verbatim, slice spelling)
