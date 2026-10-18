@@ -206,6 +206,13 @@ History of the campaign:
   1,321 and boots ALIVE 120 s (scene 9.0); with `--caller-deps`, 1,373 (52 waived), ALIVE 110 s
   (scene 21.4). Rule: a re-run of verdicts that feed `--hook pass` must use the flags of the run it
   replaces.
+- 2026-10-18 fix waves: DeepSeek batches `rck1` (184 functions, commit 07fc313d) and `rck2` (its 28
+  remaining FAILs, 51573aa1) left the strict re-check failures at 121 PASS, 57 WEAK, 3 FAIL. Their
+  verdicts are `work/difftest/recheck_shard_20261018_rck1.json` and `_rck2.json` (read after the
+  10-16 shard). `--hook pass` now has 1,611 candidates; rck1 alone hooked 1,465 and booted ALIVE
+  120 s (scene 9.0), rck1+rck2 hooks 1,480 and boots ALIVE 120 s (scene 23.0). A boot that exits
+  cleanly at 5 s with `SteamAPI_Init() failed` or `CreateFn failed for SteamUser011` in the log means
+  bottle Steam is not running or not logged in, not a hook problem.
 - Open (2026-10-12 evening, interactive sessions, not pursued; the plan is harness fixes then module migration, with the hybrid as a per-module gate): with h25, clicking into the game crashed at 320 s in `cModelWorld::Release` 0x750580 (original code) with `this` = its own vtable + 0x10 (0x140d7a0, a vptr-as-object bug upstream, same class as SharedRelease); a second session (cov2 = h25 + coverage) crashed at 175 s at 0x9fbeff. Found statically meanwhile and fixed: 0x753fc0 (s00753270) called vtable slot 0 without `this` (the row had called the ecx difference "register allocation"). Coverage of the interactive session: 46,743 functions, 573 hooks executed (`work/hybrid/cov2.json`).
 - Black screen bisected to one hook: the rw::audio list pop-front leaf 0x1141200 (s01140b70)
   returned nothing where the original returns the popped node in eax; voice allocation got the
