@@ -1,15 +1,15 @@
-007d19c0  cGameModelAlphaCommand::Execute  # stores parser ParseFloat result into cGameModelState::mDesc.mAlpha (state+0x24)
-007d19f0  cGameModelVisibleCommand::Execute  # sets/clears mDesc.mFlags bit 3 from a parser bool
-007d1a30  cGameModelFlagsCommand::Execute  # ParseEnum("visible" table 0x153d728) ORed into mDesc.mFlagsToSet (state+0x84)
-007d1ac0  SP::cTransform::RotateZ  # rotates matrix rows 0/1 with sin/cos, bumps mFlags bit1 and mModificationCount
-007d1cc0  cGameModelNameCommand::Execute  # name/key + "message"/"overrideSet"/"noAttachments" -> mInstanceID/mGroupID/field88
-007d1e40  cGameModelWorldCommand::Execute  # SPKeyFromName of the first arg -> mDesc.mWorldID
+007d19c0 ?Execute@cGameModelAlphaCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelAlphaCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
+007d19f0 ?Execute@cGameModelVisibleCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelVisibleCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
+007d1a30 ?Execute@cGameModelFlagsCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelFlagsCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
+007d1ac0 ?RotateZ@cTransform@SP@@QAEXM@Z  # cTransform::RotateZ migrated from s007d19c0 (verbatim, slice spelling)
+007d1cc0 ?Execute@cGameModelNameCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelNameCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
+007d1e40 ?Execute@cGameModelWorldCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelWorldCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d1f20  cGameModelEffectCommand::OnRegister  # registers the 12 GameModel sub-commands via AddCommand (slot 0x18)
 007d2330  cGameModelDeformCommand::Execute  # ParseEnum/ParseInt per arg, appended to mDesc.mGroups
-007d23d0  cGameModelSplitterCommand::Execute  # FindModelKernel + two ParseEnum -> cSplitController appended
-007d2490  cGameModelEffectCommand::~cGameModelEffectCommand  # destroys mDescName (0xc8) + mGameModelDescription (0x38) + base
-007d2580  cSplitController vector copy helper  # element stride 0x68
+007d23d0 ?Execute@cGameModelSplitterCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelSplitterCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
+007d2490 ??1cGameModelEffectCommand@@QAE@XZ  # cGameModelEffectCommand::~cGameModelEffectCommand migrated from s007d19c0 (verbatim, slice spelling)
+007d2580 ?CopySplitControllerVector@@YAPAXPAX0@Z  # CopySplitControllerVector migrated from s007d19c0 (verbatim, slice spelling)
 007d2670  SWARM_GameModelAddCommands  # creates cGameModelEffectCommand + cGroupGameModelCommand and registers them
-007d2740  cAnimationCurve vector copy helper  # element stride 0x2c
-007d27d0  ReadIntVector  # reads int count then that many int32s into the vector, returns the stream
-007d2830  cGameModelState copy ctor  # memberwise copy incl. four eastl vectors
+007d2740 ?CopyAnimationCurveVector@@YAPAXPAX0@Z  # CopyAnimationCurveVector migrated from s007d19c0 (verbatim, slice spelling)
+007d27d0 ?ReadIntVector@@YAPAXPAX0@Z  # ReadIntVector migrated from s007d19c0 (verbatim, slice spelling)
+007d2830 ?CopyGameModelState@@YAPAXPAX0@Z  # CopyGameModelState migrated from s007d19c0 (verbatim, slice spelling)

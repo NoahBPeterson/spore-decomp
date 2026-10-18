@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyRange12C0@@YAPAUS2C@@PAU1@00@Z  007d12c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyRange1320@@YAPADPAD00@Z  007d1320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?AssignRange1380@@YAXPAUS2C@@00@Z  007d1380  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyBack1450@@YAPAUS2C@@PAU1@00@Z  007d1450  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?AssignRange14B0@@YAXPAD00@Z  007d14b0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyBack1510@@YAPADPAD00@Z  007d1510  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Execute@cGameModelAlphaCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  007d19c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Execute@cGameModelVisibleCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  007d19f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?Execute@cGameModelFlagsCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  007d1a30  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?ReadIntVector@@YAPAXPAX0@Z  007d27d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

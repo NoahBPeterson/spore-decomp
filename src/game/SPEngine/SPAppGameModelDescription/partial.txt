@@ -1,0 +1,18 @@
+# <va>  <diff-bytes>  <reason>
+007d1570  -   FUN_007d1570 (841 bytes): skeleton only
+007d1910  -   cGameModelSizeCommand::Execute: skeleton only
+007d23d0  134  cGameModelSplitterCommand::Execute: parsing + mModelSplitters append present; the "unknown split model kernel" failure path calls an error helper instead of the original throw cError(...)
+007d2490  -    cGameModelEffectCommand::~: base and mDescName string are destroyed by compiler-generated members, but the inlined ~cGameModelDescription for mGameModelState is not reproduced
+007d2580  -    split-controller vector copy helper: calls VecInit/VecAssignRange; those vector helper bodies are not reproduced
+007d2740  -    animation-curve vector copy helper: calls VecInit/VecAssignRange; those vector helper bodies are not reproduced
+007d2830  -    cGameModelState copy ctor: skeleton, copies nothing
+007d2a30  -  eastl::vector<cAnimationCurve> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
+007d2c70  -  eastl::vector<cSplitController> reserve/DoInsertValue(n,value): allocation/capacity-growth and the uninitialised_copy/move schedule are approximated
+007d3210  -  eastl::vector<cAnimationCurve> insert(position,value): fast/slow paths present but the grow branch uses simplified element copies
+007d33e0  -  eastl::vector<cSplitController> insert(position,value): fast/slow paths present but the grow branch uses simplified element copies
+007d3770  -  eastl::vector<cAnimationCurve> resize(n): grow path approximated, shrink path (destroy range) omitted
+007d3860  -  eastl::vector<cSplitController> resize(n): grow path approximated, shrink path (destroy range) omitted
+007d3930  -  cGameModelAnimateCommand::Execute: option/key parsing present, but the per-argument ParseFloat -> animation-curve float-vector append is not reproduced
+007d3b60  -  cGameModelSplitCommand::Execute (1423 bytes): skeleton only
+007d41f0  -  cGameModelEffectCommand::Execute: skeleton (argument/description setup not reproduced)
+007d4300  -  SP::ReadDescription: skeleton (field-by-field stream decode not reproduced)

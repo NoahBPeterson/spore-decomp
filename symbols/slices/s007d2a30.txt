@@ -1,10 +1,10 @@
-007d2a30  eastl::vector<cAnimationCurve>::DoInsertValue  # reserve/emplace n copies at a position
-007d2c70  eastl::vector<cSplitController>::DoInsertValue
-007d2ee0  cGameModelEffectCommand::OnEndBlock  # clones the game-model state and pushes it through AddDescription
-007d2f90  eastl::vector<cAnimationCurve>::operator=
-007d30d0  eastl::vector<cSplitController>::operator=
-007d3210  eastl::vector<cAnimationCurve>::insert  # single value at a position
-007d33e0  eastl::vector<cSplitController>::insert
-007d35b0  SP::cGameModelDescription::operator=  # copies scalar fields + the four eastl vectors
-007d3770  eastl::vector<cAnimationCurve>::resize
-007d3860  eastl::vector<cSplitController>::resize
+007d2a30 ?AnimDoInsertValue@@YAXPAU?$Vec@UcAnimationCurve@@@@PAUcAnimationCurve@@I1@Z  # AnimDoInsertValue migrated from s007d2a30 (verbatim, slice spelling)
+007d2c70 ?SplitDoInsertValue@@YAXPAU?$Vec@UcSplitController@@@@PAUcSplitController@@I1@Z  # SplitDoInsertValue migrated from s007d2a30 (verbatim, slice spelling)
+007d2ee0 ?OnEndBlock@cGameModelEffectCommand_s007d_2a30@@QAEXD@Z  # cGameModelEffectCommand_s007d_2a30::OnEndBlock migrated from s007d2a30 (verbatim, slice spelling)
+007d2f90 ?AnimVecAssign@@YAPAU?$Vec@UcAnimationCurve@@@@PAU1@0@Z  # AnimVecAssign migrated from s007d2a30 (verbatim, slice spelling)
+007d30d0 ?SplitVecAssign@@YAPAU?$Vec@UcSplitController@@@@PAU1@0@Z  # SplitVecAssign migrated from s007d2a30 (verbatim, slice spelling)
+007d3210 ?AnimVecInsert@@YAXPAU?$Vec@UcAnimationCurve@@@@PAUcAnimationCurve@@1@Z  # AnimVecInsert migrated from s007d2a30 (verbatim, slice spelling)
+007d33e0 ?SplitVecInsert@@YAXPAU?$Vec@UcSplitController@@@@PAUcSplitController@@1@Z  # SplitVecInsert migrated from s007d2a30 (verbatim, slice spelling)
+007d35b0 ?Assign@cGameModelDescription_s007d_2a30@@QAEPAU1@PAU1@@Z  # cGameModelDescription_s007d_2a30::Assign migrated from s007d2a30 (verbatim, slice spelling)
+007d3770 ?AnimVecResize@@YAXPAU?$Vec@UcAnimationCurve@@@@I@Z  # AnimVecResize migrated from s007d2a30 (verbatim, slice spelling)
+007d3860 ?SplitVecResize@@YAXPAU?$Vec@UcSplitController@@@@I@Z  # SplitVecResize migrated from s007d2a30 (verbatim, slice spelling)

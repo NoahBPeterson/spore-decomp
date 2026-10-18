@@ -1,0 +1,12 @@
+# <va>  <diff-bytes>  <reason>
+007d1010 4 cGameModelDescription ctor; only the 1.0f load is hoisted above `mov eax,ecx`
+007d1140 56 S1140 copy ctor; vector copy uses operator= rather than reserve+DoInsertValue [equiv: UNSUPPORTED (SVec::operator= callee unresolved; original calls 0x4aa350 reserve)]
+007d18c0 22 GameModelEffect ctor; placement-new null check and vtable/f34 store order differ
+007d1970 47 command Execute; vtable slot 44 sret call shape differs [equiv: UNSUPPORTED (0 valid inputs: _CxxThrowException discards)]
+007d1ac0 195 Transform::RotateZ: all six products/rotations and the flags update are present; the /O2 register/stack schedule of the six products differs (no source regrouping tried reproduces the original's spill pattern)
+007d1cc0 267 cGameModelNameCommand::Execute: ConvertToString16/SPKeyFromName/OptionArguments/HasFlag paths all present; EH frame, string-dtor inlining and register allocation differ
+007d1e40 87 cGameModelWorldCommand::Execute: same string/key path (ConvertToString16 + SPKeyFromName -> mWorldID); the original also zero-inits a key local and uses edi for `this`
+007d2ee0 87 cGameModelEffectCommand::OnEndBlock: new+CopyState+AddDescription and the string clear are present; /O2 register allocation and the string-clear form differ
+007d2f90 238 eastl::vector<cAnimationCurve>::operator=: full three-branch EASTL operator= present; range-helper register allocation and the allocate path differ
+007d30d0 250 eastl::vector<cSplitController>::operator=: full three-branch EASTL operator= present; range-helper register allocation and the allocate path differ
+007d35b0 140 SP::cGameModelDescription::operator=: all fields + four vector assignments present; nested-vector assignment inlining differs [equiv: UNSUPPORTED (0 valid inputs: write faults/memcpy import)]
