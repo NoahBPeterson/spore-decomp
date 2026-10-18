@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+005f3810  -  cSwatch3DView::RenderFrame: buffer/time render path only; camera vtable calls (vt+0x38/0x3c/0x30/0xc) omitted
+005f3cf0  -  cSPSwatch::FrameModel: bounding-box/render body omitted (calls into cModelWorld/renderer not reconstructed)
+005f5080  -  unnamed 1375-byte cSPSwatch update routine: skeleton only
+005f55e0  -  cSPSwatch::RotateModel: skeleton only (775-byte rotation/animation body omitted)
+005f5930  -  vector<cSPTransform_> clear/shrink: skeleton only
+005f5b40  -  cSPSwatch::LoadModel: skeleton only (687-byte load/bake body omitted)
+005f6090  -  cSPSwatch::InitAdditionalModels: skeleton only (451 bytes)
+005f6500  -  cSPSwatch::SetEditorCameraController: skeleton only (708 bytes)
+005f69a0  -  cSPSwatch::OnModelLoad: skeleton only (311 bytes)
+005f6bd0  -  cSPSwatch::cSPSwatch: skeleton only (502 bytes)

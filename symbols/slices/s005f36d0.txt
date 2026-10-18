@@ -1,8 +1,13 @@
-005f36d0 SP::GetThumbnailCameraID  # PDB name on card; switch on hashed model type
-005f3810 SP::cSwatch3DView::RenderFrame  # cSwatch3DView method (esi=cSPSwatch+0x10): buffer + camera render
+005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f36d0, named from the dev publics; slice address comment)
+005f36d0 ?GetThumbnailCameraID@SP@@YAIII@Z  # GetThumbnailCameraID migrated from s005f36d0 (verbatim, slice spelling)
+005f3810 ?RenderFrame@cSwatch3DView_s005f_36d0@SP@@QAEXH@Z  # cSwatch3DView_s005f_36d0::RenderFrame migrated from s005f36d0 (verbatim, slice spelling)
 005f3930 SP::cSwatch3DView::AddCreature  # PDB name on card
 005f3b20 SP::cSPSwatch::InitInternal  # decompiler PDB candidate; ret 0x20, 8 args
-005f3cf0 SP::cSPSwatch::FrameModel  # PDB name on card
-005f4080 SP::cSPSwatch::SetModelKey  # PDB name on card; byte-exact
+005f3cf0 ?FrameModel@cSPSwatch_s005f_36d0@SP@@QAEXXZ  # cSPSwatch_s005f_36d0::FrameModel migrated from s005f36d0 (verbatim, slice spelling)
+005f4080 ?SetModelKey@cSPSwatch_s005f_36d0@SP@@QAEXPAUKey_s005f_36d0@ResourceMan@EA@@@Z  # cSPSwatch_s005f_36d0::SetModelKey migrated from s005f36d0 (verbatim, slice spelling)
 005f40b0 SP::cSPSwatch::UpdateBakingTransform  # cSPSwatch method, mUseEditorCameraController-gated
-005f42d0 SP::cSPSwatch::OnBakingIsDone  # PDB name on card; byte-exact
+005f42d0 ?OnBakingIsDone@cSPSwatch_s005f_36d0@SP@@QAEXXZ  # cSPSwatch_s005f_36d0::OnBakingIsDone migrated from s005f36d0 (verbatim, slice spelling)
+006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s005f36d0, named from the dev publics; slice address comment)
+0080d7c0 ?SetViewerDirty@cSPUILayeredObject@@QAEX_N@Z  # cSPUILayeredObject::SetViewerDirty (callee of s005f36d0, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f36d0, named from the dev publics; slice address comment)
+00a02c30 ?AddRef@cAnimatingCreature@SP@@QAEHXZ  # SP::cAnimatingCreature::AddRef (callee of s005f36d0, named from the dev publics; slice address comment)

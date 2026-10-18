@@ -1,0 +1,27 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?Check@cSPSwatchPlanner@SP@@QAEHXZ  005f2180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?SetModel@cSPSwatchPlannerReal@SW@@QAEXAAPAVcPropertyList@2@@Z  005f21d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?AsInterface@cSPOLDPaletteItemUIDragAndBuy@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  005f22a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?CheckType@cSPSwatchPlanner@SP@@QAEHXZ  005f22d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?GetDouble94@cSPSwatchPlanner@SP@@QAEMXZ  005f2310  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?Contains@cSPSwatchPlanner@SP@@QAEHPBM@Z  005f2350  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?GetBuffer@cSPSwatchPlanner@SP@@QAEHXZ  005f2740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?HandleMessage@cSPSwatch_s005f_2780@SP@@UAE_NIPAX@Z  005f2780  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?UpdateSwatchPosition@cSPSwatch_s005f_2780@SP@@QAEXI@Z  005f2bf0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?Show3DModel@cSPSwatch_s005f_2780@SP@@QAEXXZ  005f2e00  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?Hide3DModel@cSPSwatch_s005f_2780@SP@@QAEXXZ  005f2eb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?StartModelEffects@cSPSwatch_s005f_2780@SP@@QAEXXZ  005f2ee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?IsAnimating@cSPSwatch_s005f_2780@SP@@QAE_NXZ  005f2f50  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?TakeCapture@cSPSwatch_s005f_2780@SP@@QAE_NXZ  005f2fd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?EndInteraction@cSPSwatch_s005f_2780@SP@@QAEXXZ  005f3040  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?HasCapture@cSPSwatch_s005f_2780@SP@@QAE_NXZ  005f3060  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?OnRolloverEnd@cSPPaletteSwatch_s005f_2780@SP@@QAEXXZ  005f30b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?IsBusy@cSPSwatch_s005f_2780@SP@@QAEHXZ  005f3150  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?UpdateViewport@cSPSwatch_s005f_2780@SP@@QAEXI@Z  005f31a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?IsMouseOutside@cSPPaletteSwatch_s005f_2780@SP@@QAE_NXZ  005f3320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?IsItemAvailable@cSPPaletteSwatch_s005f_2780@SP@@QAE_NXZ  005f33c0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?UpdateCursor@cSPPaletteSwatch_s005f_2780@SP@@QAEXXZ  005f3600  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?DoDestroyValues@?$vector_s005f_2780@V?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@@eastl@@QAEXPAV?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@0@Z  005f3680  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?SetModelKey@cSPSwatch_s005f_36d0@SP@@QAEXPAUKey_s005f_36d0@ResourceMan@EA@@@Z  005f4080  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?OnBakingIsDone@cSPSwatch_s005f_36d0@SP@@QAEXXZ  005f42d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPSwatchStrategies.cpp  ?AddModelKey@cSPSwatch_s005f_5080@SP@@QAEXABUKey_s005f_5080@ResourceMan@EA@@@Z  005f58f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

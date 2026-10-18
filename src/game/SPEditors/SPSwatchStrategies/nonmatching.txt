@@ -1,0 +1,8 @@
+# va  diff-bytes  reason
+005f2390 201 complete; x87-free SSE loads of the window rect and compare/register order differ
+005f24e0 304 complete; register allocation (ebp/ebx swap, spilled factory result) differs
+005f27c0 8 DoMessage: complete (both switches, jump tables match); one pop edi scheduled after instead of before the captured-button store
+005f2d00 204 SetImage: retail zeroes eax up front (overlay loaded into al) and keeps imageID in edx; mine swaps registers, shifting all offsets by 1 byte
+005f3400 4 UpdateCostDisplay: default case loads both material globals before storing (mine interleaves load/store)
+005f36d0 241 GetThumbnailCameraID: complete (model-type switch + Editor::GetConfigFromModelType + manager property lookup); tail AutoRefCount/out-param schedule and property-id select differ
+005f5970 43 vector<AutoRefCount<cMWModel>>::clear (erase path): complete (do_copy + DoDestroyValues + end adjustment); compiler emits sub instead of neg/add schedule

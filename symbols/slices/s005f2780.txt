@@ -1,7 +1,22 @@
-005f2780 SP::cSPSwatch::HandleMessage  # IHandler thunk at +0xc, message 0x695e243 compares mModelKey
-005f27c0 SP::cSPSwatch::DoMessage  # IWinProc override; camera-controller forwarding + mouse enter/leave/click
-005f2eb0 SP::cSPSwatch::Hide3DModel  # PDB name on card
-005f2e00 SP::cSPSwatch::Show3DModel  # PDB name on card
-005f3040 SP::cSPSwatch::EndInteraction  # PDB name on card
-005f2bf0 SP::cSPSwatch::UpdateSwatchPosition  # PDB name on card
-005f3680 eastl::vector<EA::AutoRefCount<SP::cMWModel>,eastl::sp_vector_allocator>::DoDestroyValues  # PDB name on card
+005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f2780, named from the dev publics; slice address comment)
+005f2780 ?HandleMessage@cSPSwatch_s005f_2780@SP@@UAE_NIPAX@Z  # cSPSwatch_s005f_2780::HandleMessage migrated from s005f2780 (verbatim, slice spelling)
+005f27c0 ?DoMessage@cSPSwatch_s005f_2780@SP@@UAE_NPAVIWindow_s005f_2780@UTFWin@EA@@ABUMessage_s005f_2780@45@@Z  # cSPSwatch_s005f_2780::DoMessage migrated from s005f2780 (verbatim, slice spelling)
+005f2bf0 ?UpdateSwatchPosition@cSPSwatch_s005f_2780@SP@@QAEXI@Z  # cSPSwatch_s005f_2780::UpdateSwatchPosition migrated from s005f2780 (verbatim, slice spelling)
+005f2d00 ?SetImage@cSPSwatch_s005f_2780@SP@@QAEII_N@Z  # cSPSwatch_s005f_2780::SetImage migrated from s005f2780 (verbatim, slice spelling)
+005f2e00 ?Show3DModel@cSPSwatch_s005f_2780@SP@@QAEXXZ  # cSPSwatch_s005f_2780::Show3DModel migrated from s005f2780 (verbatim, slice spelling)
+005f2eb0 ?Hide3DModel@cSPSwatch_s005f_2780@SP@@QAEXXZ  # cSPSwatch_s005f_2780::Hide3DModel migrated from s005f2780 (verbatim, slice spelling)
+005f2ee0 ?StartModelEffects@cSPSwatch_s005f_2780@SP@@QAEXXZ  # cSPSwatch_s005f_2780::StartModelEffects migrated from s005f2780 (verbatim, slice spelling)
+005f2f50 ?IsAnimating@cSPSwatch_s005f_2780@SP@@QAE_NXZ  # cSPSwatch_s005f_2780::IsAnimating migrated from s005f2780 (verbatim, slice spelling)
+005f2fd0 ?TakeCapture@cSPSwatch_s005f_2780@SP@@QAE_NXZ  # cSPSwatch_s005f_2780::TakeCapture migrated from s005f2780 (verbatim, slice spelling)
+005f3040 ?EndInteraction@cSPSwatch_s005f_2780@SP@@QAEXXZ  # cSPSwatch_s005f_2780::EndInteraction migrated from s005f2780 (verbatim, slice spelling)
+005f3060 ?HasCapture@cSPSwatch_s005f_2780@SP@@QAE_NXZ  # cSPSwatch_s005f_2780::HasCapture migrated from s005f2780 (verbatim, slice spelling)
+005f30b0 ?OnRolloverEnd@cSPPaletteSwatch_s005f_2780@SP@@QAEXXZ  # cSPPaletteSwatch_s005f_2780::OnRolloverEnd migrated from s005f2780 (verbatim, slice spelling)
+005f3150 ?IsBusy@cSPSwatch_s005f_2780@SP@@QAEHXZ  # cSPSwatch_s005f_2780::IsBusy migrated from s005f2780 (verbatim, slice spelling)
+005f31a0 ?UpdateViewport@cSPSwatch_s005f_2780@SP@@QAEXI@Z  # cSPSwatch_s005f_2780::UpdateViewport migrated from s005f2780 (verbatim, slice spelling)
+005f3320 ?IsMouseOutside@cSPPaletteSwatch_s005f_2780@SP@@QAE_NXZ  # cSPPaletteSwatch_s005f_2780::IsMouseOutside migrated from s005f2780 (verbatim, slice spelling)
+005f33c0 ?IsItemAvailable@cSPPaletteSwatch_s005f_2780@SP@@QAE_NXZ  # cSPPaletteSwatch_s005f_2780::IsItemAvailable migrated from s005f2780 (verbatim, slice spelling)
+005f3400 ?UpdateCostDisplay@cSPPaletteSwatch_s005f_2780@SP@@QAEXXZ  # cSPPaletteSwatch_s005f_2780::UpdateCostDisplay migrated from s005f2780 (verbatim, slice spelling)
+005f3600 ?UpdateCursor@cSPPaletteSwatch_s005f_2780@SP@@QAEXXZ  # cSPPaletteSwatch_s005f_2780::UpdateCursor migrated from s005f2780 (verbatim, slice spelling)
+005f3680 ?DoDestroyValues@?$vector_s005f_2780@V?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@@eastl@@QAEXPAV?$AutoRefCount_s005f_2780@VcMWModel_s005f_2780@SP@@@EA@@0@Z  # DoDestroyValues migrated from s005f2780 (verbatim, slice spelling)
+006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s005f2780, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f2780, named from the dev publics; slice address comment)

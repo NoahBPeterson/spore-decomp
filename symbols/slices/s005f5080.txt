@@ -1,9 +1,14 @@
-005f5080 SP::cSPSwatch::Update  # unnamed 1375-byte update routine (no PDB candidate)
-005f55e0 SP::cSPSwatch::RotateModel  # PDB name on card
-005f58f0 SP::cSPSwatch::AddModelKey  # byte-exact; appends Key to vector at +0x148
-005f5930 vector<cSPTransform_> shrink  # copy_impl + end adjustment
-005f5970 vector<AutoRefCount<cMWModel>>::clear  # erase(begin,end) pattern
+005ed6c0 ?Hide@cSPPaletteItemRollover@SP@@QAEXXZ  # SP::cSPPaletteItemRollover::Hide (callee of s005f5080, named from the dev publics; slice address comment)
+005f46c0 ?EndInteraction@cSPOLDPaletteItemUIDragAndBuy@SP@@MAEXXZ  # SP::cSPOLDPaletteItemUIDragAndBuy::EndInteraction (callee of s005f5080, named from the dev publics; slice address comment)
+005f5080 ?FUN_005f5080@SP@@YAXXZ  # FUN_005f5080 migrated from s005f5080 (verbatim, slice spelling)
+005f55e0 ?RotateModel@cSPSwatch_s005f_5080@SP@@QAEXI@Z  # cSPSwatch_s005f_5080::RotateModel migrated from s005f5080 (verbatim, slice spelling)
+005f58f0 ?AddModelKey@cSPSwatch_s005f_5080@SP@@QAEXABUKey_s005f_5080@ResourceMan@EA@@@Z  # cSPSwatch_s005f_5080::AddModelKey migrated from s005f5080 (verbatim, slice spelling)
+005f5930 ?ShrinkTransformVector@SP@@YAXXZ  # ShrinkTransformVector migrated from s005f5080 (verbatim, slice spelling)
+005f5970 ?clear@RefVec@SP@@QAEXXZ  # RefVec::clear migrated from s005f5080 (verbatim, slice spelling)
 005f59b0 SP::cSwatch3DView::AddModel  # PDB caller-single candidate
 005f5aa0 SP::cSwatch3DView::RemoveAllModels  # PDB name on card
-005f5b40 SP::cSPSwatch::LoadModel  # PDB name on card
+005f5b40 ?LoadModel@cSPSwatch@SP@@QAEXAAVKey@ResourceMan@EA@@@Z  # SP::cSPSwatch::LoadModel migrated from s005f5080
 005f5df0 SP::cSPSwatch::ShutDownModel  # PDB name on card
+006c10e0 ?StartTime@Sound@Audio@EA@@UAENXZ  # EA::Audio::Sound::StartTime (callee of s005f5080, named from the dev publics; slice address comment)
+0080d7c0 ?SetViewerDirty@cSPUILayeredObject@@QAEX_N@Z  # cSPUILayeredObject::SetViewerDirty (callee of s005f5080, named from the dev publics; slice address comment)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005f5080, named from the dev publics; slice address comment)
