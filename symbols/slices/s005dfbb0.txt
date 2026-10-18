@@ -1,7 +1,6 @@
-# va  Name  # evidence
-005dfbb0  SPEditorUI_Helper_005dfbb0  # card
-005dfd00  SP::cSPEditorUI::DoCommand  # card
-005e0000  SPEditorUI_Helper_005e0000  # card
+005dfbb0 ?FUN_005dfbb0@@YAXPAX@Z  # FUN_005dfbb0 migrated from s005dfbb0 (verbatim, slice spelling)
+005dfd00 ?FUN_005dfd00@@YAXPAXH@Z  # FUN_005dfd00 migrated from s005dfbb0 (verbatim, slice spelling)
+005e0000 ?FUN_005e0000@@YAXPAX@Z  # FUN_005e0000 migrated from s005dfbb0 (verbatim, slice spelling)
 005e0370  Simulator::cCreatureAbility ctor  # card vtable
 005e0440  Simulator::cCreatureAbility dtor  # card vtable
 005e04d0  SPEditorUI_Helper_005e04d0  # card

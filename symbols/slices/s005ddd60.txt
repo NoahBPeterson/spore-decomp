@@ -1,7 +1,8 @@
-# va  Name  # evidence
-005ddd60  SP::cSPEditorUI::Init  # card (PDB candidate)
-005de450  SP::cSPEditorUI::Update  # card (PDB candidate)
-005de690  SP::cSPEditorUI::EnableBasicEditorButtons  # card (PDB candidate)
-005de870  SP::cSPEditorUI::Shutdown  # card
-005de9e0  cSPEditorUI_ModeHelper  # card
-005dea60  cSPEditorUI_Helper_005dea60  # card
+005ddd60 ?Init@EditorUI@@QAE_NPAUAppMode@@HIH@Z  # EditorUI::Init migrated from s005ddd60 (verbatim, slice spelling)
+005de450 ?Update@EditorUI@@QAEXH@Z  # EditorUI::Update migrated from s005ddd60 (verbatim, slice spelling)
+005de690 ?EnableBasicEditorButtons@EditorUI@@QAEXHD@Z  # EditorUI::EnableBasicEditorButtons migrated from s005ddd60 (verbatim, slice spelling)
+005de870 ?Shutdown@EditorUI@@QAE_NXZ  # EditorUI::Shutdown migrated from s005ddd60 (verbatim, slice spelling)
+005de9e0 ?FUN_005de9e0@EditorUI@@QAEXXZ  # EditorUI::FUN_005de9e0 migrated from s005ddd60 (verbatim, slice spelling)
+005dea60 ?Construct@EditorUI@@QAEPAU1@XZ  # EditorUI::Construct migrated from s005ddd60 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s005ddd60, named from the dev publics; slice address comment)
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s005ddd60, named from the dev publics; slice address comment)

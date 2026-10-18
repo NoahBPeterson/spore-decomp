@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+004bd850 140 SP::cSPEditorUI::ShowDialogWithValidityReason: complete; only the 0x6fd7d545 arm differs (original builds a packed 0x40606000 via bitfield read-modify-writes, cl folded our constant); equiv: WEAK 97.6% cov
+005dd250 31 ShowSaveDialog: register allocation (eax/edx swap) around GetCreatorType arg and dialog id loads
+005dd860 209 GetWarning: bitset<128> masking scheduled differently; GetPartFlags result goes through a temp in the original
+005ddd60 1225 complete Init (all layouts/windows/procs/grid/cursor); schedule and register allocation differ; difftest WEAK (190 valid, 5.6% coverage, no mismatch; fixed: ref Release is the virtual slot-1 call, call annotations added)
+005de450 381 complete Update (fade timer, color, 4 terrain brush polls); float/x87 mix and scheduling differ
+005de690 389 complete EnableBasicEditorButtons; cl spills the id-table pointer where original keeps ebp pointer and spills this
+005de870 234 complete Shutdown; ref-release inline schedule differs (fixed: WinCtl::Release declared as the virtual slot-1 call the original makes)
+005de9e0 98 cSPEditorUI helper: complete; cl keeps `this` in edi / window in esi whereas the original reuses esi for both and edi only for the child widget
+005dea60 308 complete ctor-style field init; original keeps dead vtable stores in order, cl folds them
+005dec10 416 SP::cSPEditorUI::DoFinalCommand: complete; original is LTCG-style (callee ecx kept live), cl reloads/reorders; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+005dee70 168 cSPEditorUI IHandler message handler: complete; original passes ecx=this-8 into callee without re-lea (LTCG register reuse)
+005df470 746 cSPEditorUI::StartCommand: complete; cl output differs in switch/tail layout; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+005df8f0 447 SP::cAppModeEditorBase::HandleFileDrop: complete; register allocation / tail layout differs
+005dfb40 3 SP::cSPEditorUI::DoSaveAndExit: complete; original emits `and al,1` before popping esi, cl emits `test al,1` after; difftest WEAK (no mismatch; low coverage from random inputs; unresolved callees annotated)
+00de8ad0 1407 complete (flags /O2 /MD /Gy /TP): message dispatch with the original compare tree, both jump tables (dialog state 1..7, error text 0..4), all 37 message IDs. 83 vs 84 calls: cl cross-jumps the two identical `mpDialog->Close(); return true;` tails that the original keeps apart (same target, same behaviour); 2724 vs 2756 B. Not exact: frame 0x30 vs 0x24 (original packs the loop offset, the insert temp and the allocator temp into the dead parameter homes), that tail merge

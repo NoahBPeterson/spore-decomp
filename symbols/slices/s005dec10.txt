@@ -1,9 +1,8 @@
-# va  Name  # evidence
-005dec10  cSPEditorUI_Helper_005dec10  # card
-005dee70  cSPEditorUI_MessageHandler_005dee70  # card
+005dec10 ?FUN_005dec10@EUI@@QAEXI@Z  # EUI::FUN_005dec10 migrated from s005dec10 (verbatim, slice spelling)
+005dee70 ?HandleMessage@HandlerSub@@QAE_NIH@Z  # HandlerSub::HandleMessage migrated from s005dec10 (verbatim, slice spelling)
 005def30  SP::cSPEditorUI::DoDialogEnd  # card
-005df470  cSPEditorUI_Helper_005df470  # card
-005df8d0  EditorFrame_SetMode103  # card
-005df8f0  SP::cAppModeEditorBase::HandleFileDrop  # card
-005dfb30  SP::cSPEditorUIDialogResultCallback::OnModalWindowEnd  # card (PDB candidate)
-005dfb40  SP::cSPEditorUI::DoSaveAndExit  # card
+005df470 ?FUN_005df470@EUI@@QAEXIH@Z  # EUI::FUN_005df470 migrated from s005dec10 (verbatim, slice spelling)
+005df8d0 ?FUN_005df8d0@EditorFrame@@QAEXXZ  # EditorFrame::FUN_005df8d0 migrated from s005dec10 (verbatim, slice spelling)
+005df8f0 ?FUN_005df8f0@EUI@@QAE_NUKey12@@@Z  # EUI::FUN_005df8f0 migrated from s005dec10 (verbatim, slice spelling)
+005dfb30 ?FUN_005dfb30@EditorFrame2@@QAEXHH@Z  # EditorFrame2::FUN_005dfb30 migrated from s005dec10 (verbatim, slice spelling)
+005dfb40 ?DoSaveAndExit@EditorUI2@@QAEXXZ  # EditorUI2::DoSaveAndExit migrated from s005dec10 (verbatim, slice spelling)

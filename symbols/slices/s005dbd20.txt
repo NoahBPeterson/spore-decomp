@@ -1,5 +1,17 @@
-005dc310 SP::cSPEditorUI::FindWindowByID  # card name; searches mLayout (+0x14) then the second layout (+0x2c)
-005dc380 SP::cSPEditorUI::StartListeningToMessages  # card name; AutoHandler at +0x118 registers 7 message IDs
-005dc6c0 SP::cSPEditorUI::~cSPEditorUI  # 4 base vtables, AutoHandler unregister, 3 cSPUILayout dtors
-005dc800 SP::cSPEditorUI::UpdateSaveButtons  # Claude-named: toggles windows 0x612efea/0x612efeb from saveability
+005723f0 ?GetPlayMode@cAppModeEditorBase@SP@@QAEPAVcSPPlayMode@2@XZ  # SP::cAppModeEditorBase::GetPlayMode (callee of s005dbd20, named from the dev publics; slice address comment)
+00585830 ?OnKeyDown@cAppModeEditorBase@SP@@UAE_NII@Z  # SP::cAppModeEditorBase::OnKeyDown (callee of s005dbd20, named from the dev publics; slice address comment)
+00585860 ?OnKeyUp@cAppModeEditorBase@SP@@UAE_NII@Z  # SP::cAppModeEditorBase::OnKeyUp (callee of s005dbd20, named from the dev publics; slice address comment)
+0058a350 ?ExitEditor@cAppModeEditorBase@SP@@QAEXW4eEditorExitType@12@W4eEditorActionAfterSave@12@_N@Z  # SP::cAppModeEditorBase::ExitEditor (callee of s005dbd20, named from the dev publics; slice address comment)
 005dbf80 SP::cSPEditorInputWinProc::HandleUIMessage  # Claude-named class; IWinProc slot, forwards mouse events to listener at +0xc
+005dc190 ?OnPaletteDrop@cSPEditorUI_s005d_bd20@SP@@QAE_NUcRect16@2@0UKey_s005d_bd20@ResourceMan@EA@@@Z  # cSPEditorUI_s005d_bd20::OnPaletteDrop migrated from s005dbd20 (verbatim, slice spelling)
+005dc250 ?IsLoadDialog@cSPEditorUI_s005d_bd20@SP@@QAE_NI@Z  # cSPEditorUI_s005d_bd20::IsLoadDialog migrated from s005dbd20 (verbatim, slice spelling)
+005dc280 ?SetLoadDialogOptions@cSPEditorUI_s005d_bd20@SP@@QAEX_NH0@Z  # cSPEditorUI_s005d_bd20::SetLoadDialogOptions migrated from s005dbd20 (verbatim, slice spelling)
+005dc310 SP::cSPEditorUI::FindWindowByID  # card name; searches mLayout (+0x14) then the second layout (+0x2c)
+005dc340 ?SetWindowVisibility@cSPEditorUI_s005d_bd20@SP@@QAEXI_N@Z  # cSPEditorUI_s005d_bd20::SetWindowVisibility migrated from s005dbd20 (verbatim, slice spelling)
+005dc380 SP::cSPEditorUI::StartListeningToMessages  # card name; AutoHandler at +0x118 registers 7 message IDs
+005dc4d0 ?HandleRequestedPostSaveAction@cSPEditorUI_s005d_bd20@SP@@QAEXI@Z  # cSPEditorUI_s005d_bd20::HandleRequestedPostSaveAction migrated from s005dbd20 (verbatim, slice spelling)
+005dc560 ?SelectKeyA@cSPEditorUI_s005d_bd20@SP@@QAEXXZ  # cSPEditorUI_s005d_bd20::SelectKeyA migrated from s005dbd20 (verbatim, slice spelling)
+005dc580 ?SelectKeyB@cSPEditorUI_s005d_bd20@SP@@QAEXXZ  # cSPEditorUI_s005d_bd20::SelectKeyB migrated from s005dbd20 (verbatim, slice spelling)
+005dc6c0 ??1cSPEditorUI_s005d_bd20@SP@@UAE@XZ  # cSPEditorUI_s005d_bd20::~cSPEditorUI migrated from s005dbd20 (verbatim, slice spelling)
+005dc800 SP::cSPEditorUI::UpdateSaveButtons  # Claude-named: toggles windows 0x612efea/0x612efeb from saveability
+005dca00 ?OnPaletteClick@cSPEditorUI_s005d_bd20@SP@@QAEXUcRect16@2@@Z  # cSPEditorUI_s005d_bd20::OnPaletteClick migrated from s005dbd20 (verbatim, slice spelling)

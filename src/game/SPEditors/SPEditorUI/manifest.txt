@@ -1,0 +1,28 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorUI.cpp  ?OnPaletteDrop@cSPEditorUI_s005d_bd20@SP@@QAE_NUcRect16@2@0UKey_s005d_bd20@ResourceMan@EA@@@Z  005dc190  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?IsLoadDialog@cSPEditorUI_s005d_bd20@SP@@QAE_NI@Z  005dc250  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetLoadDialogOptions@cSPEditorUI_s005d_bd20@SP@@QAEX_NH0@Z  005dc280  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetWindowVisibility@cSPEditorUI_s005d_bd20@SP@@QAEXI_N@Z  005dc340  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?HandleRequestedPostSaveAction@cSPEditorUI_s005d_bd20@SP@@QAEXI@Z  005dc4d0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SelectKeyA@cSPEditorUI_s005d_bd20@SP@@QAEXXZ  005dc560  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SelectKeyB@cSPEditorUI_s005d_bd20@SP@@QAEXXZ  005dc580  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ??1cSPEditorUI_s005d_bd20@SP@@UAE@XZ  005dc6c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?OnPaletteClick@cSPEditorUI_s005d_bd20@SP@@QAEXUcRect16@2@@Z  005dca00  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetUIDisabled@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dcd80  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?EnableRedoButton@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dce40  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?EnableUndoButton@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dceb0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetSelected@cSPEditorUI_s005d_cd80@SP@@QAEXI_N0@Z  005dcf20  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?EnablePlayModeButton@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dcf90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?Hide@cSPEditorUI@SP@@QAEXXZ  005dd050  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?Show@cSPEditorUI@SP@@QAEXXZ  005dd070  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetInputBlocked@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dd090  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SelectCurrentTypeInGrid@cSPEditorUI_s005d_cd80@SP@@QAEXXZ  005dd1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?OnSaveRequested@cSPEditorUI_s005d_cd80@SP@@QAEXXZ  005dd300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?OnLoginResult@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dd360  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?CloseModalLayout@cSPEditorUI_s005d_cd80@SP@@QAEXXZ  005dd390  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?OpenModalLayout@cSPEditorUI_s005d_cd80@SP@@QAEXXZ  005dd4a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetPaintMode@cSPEditorUI_s005d_cd80@SP@@QAEX_N@Z  005dd610  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?UpdateUIBasedOnModelSaveability@cSPEditorUI_s005d_cd80@SP@@QAEXXZ  005dd7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?SetMode@cSPEditorUI_s005d_cd80@SP@@QAEXH@Z  005dda30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?FUN_005df8d0@EditorFrame@@QAEXXZ  005df8d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPEditorUI.cpp  ?FUN_005dfb30@EditorFrame2@@QAEXHH@Z  005dfb30  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

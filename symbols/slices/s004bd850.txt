@@ -1,4 +1,4 @@
-004bd850 SP::cSPEditorUI::ShowDialogWithValidityReason  # card name; hash -> dialog string id
+004bd850 ?FUN_004bd850@@YAII@Z  # FUN_004bd850 migrated from s004bd850 (verbatim, slice spelling)
 004bd9c0 FUN_004bd9c0  # 0x5e49ce2c -> 0xd05c53a3 remap
 004bd9f0 SP::cEditorModelParser::Initialize  # expat parser create + callback registration
 004bdae0 SP::cEditorModelParser::Reset  # XML_ParserFree + FixedBufferAllocator re-create
