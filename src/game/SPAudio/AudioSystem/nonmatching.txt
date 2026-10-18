@@ -1,0 +1,51 @@
+# va  diff-bytes  reason
+00a207d0 207 System::Shutdown: complete; guard mutex kept in separate reg (ebx) in original, loop shapes differ, needs /GS-
+00a20a40 93 SetSlot: complete, vcall/property-commit schedule differs
+00a20be0 170 worker drain (Flush): complete; scoped-lock register/ordering differs; difftest WEAK (32% coverage: early return on global g_166d9fc == 0 in the image)
+00a20eb0 248 emitter ordering predicate Less2: complete; tail-block placement and flag-bool materialization differ
+00a22220 124 HTable28::Rehash: complete; original re-reads this->buckets each iteration, mine hoists
+00a22370 123 HTable20::Rehash: complete; same bucket-array reload difference
+00a22410 51 SList::merge (intrusive_list<Sound>): complete; this spilled to stack and iterator temps built in place in original
+00a227a0 13 DrvBA22 ctor (RefBaseA22 + [0x80]=arg): complete; store scheduling differs (arg store before vtable store); difftest PASS (ctor made out-of-line thiscall, vtables mapped in symbols/slices/s00a22220.txt)
+00a228d0 65 worker thread loop: complete; esi/edi register swap and one vtable load hoist differ
+00a22b90 64 LoadShared: complete; inline Release uses dec vs add -1 and register order
+00a23830 19 ?DoInsertKey@EHTable@@QAEPAUEInsertRes@@PAU2@PBHI@Z: difftest UNSUPPORTED (unresolved RehashRequired + operator new); table-slot insert structurally reproduced
+00a23920 50 ?Destroy@RefVec@@QAEXXZ-style resource release: difftest PASS (264 valid inputs, 77.5% coverage); frame/temp slots differ
+00a23db0 122 RDD::FindById: difftest UNSUPPORTED (0/400 valid, read faults on random inputs); complete implementation
+00a24530 175 RDD pool clone node: difftest UNSUPPORTED (unresolved operator new ??2@YAPAXIPBDHH0H@Z); complete implementation
+00a24750 81 PHTable::EraseNode variant: difftest UNSUPPORTED (0/400 valid, write faults); complete implementation
+00a247f0 25 EA::Audio::ResourceDeviceDriver::ResourceDeviceDriver: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact codegen
+00a24850 32 ParseResman: difftest UNSUPPORTED (0/400 valid, read faults); complete implementation
+00a248a0 35 ProfileTimer::ProfileTimer(void*): difftest PASS (400 valid inputs, 85.2% coverage); equivalent, non-exact
+00a24900 19 ProfileTimer::Accumulate: difftest PASS (400 valid inputs, 100.0% coverage); equivalent, non-exact
+00a25090 6 complete; only xchg register choice (ecx/edx) differs
+00a25190 194 complete; tmp AutoRefCount now in its own slot like the original (switch on id), but the original caches tmp.p in esi through the release while ours reloads it, and the shared operator new pushes are spelled with a zero register; difftest PASS after fixing the tmp slot (ours reused the dead param slot for tmp, so AutoRefCount::operator= got a this pointer outside our frame)
+00a252b0 1368 complete (EA::Audio::System::Init); frame 4 bytes short, loop rotation/alignment and null test on handler differ
+00a25980 4 complete; eax/edx choice for string begin vs &out; difftest PASS (after annotating operator_delete__ and g_pfnString)
+00a25aa0 4 complete; ebx/ebp swap for args a and c
+00a25bd0 8 complete; two iterator temps do not share one slot
+00a2a020 209 EA::Audio::System::ConnectSubmixTree (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction of the SEH signature; equiv now UNSUPPORTED (only 0/1200 inputs valid, read faults)
+00a2a150 79 eastl::hashtable find-or-insert helper (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural reconstruction; equiv now FAIL (5/5 valid inputs mismatched)
+00a2ae90 88 eastl::hashtable erase-range (FindInsertPos 0x00a22730, element Release, count fixup) (/O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast): structural; equiv now FAIL (5/5 valid inputs mismatched)
+00a2c6c0 3526 complete; frame/spill layout differs (original reuses the cmd arg slot as an out-param local), switch tree and vcall arg ordering differ
+00a2d790 195 complete; virtual-call schedule + hashtable find not byte-identical
+00a2d880 96 complete; EH ctor of feedback-event node, register schedule differs
+00a2de20 183 complete; two-pass submix teardown, iterator/register schedule differs
+00a2dfe0 45 complete; vector push_back node copy, inlined schedule differs
+00a2e0e0 89 complete; hashtable erase, bucket-walk schedule differs
+00a2e1b0 109 complete; rbtree erase, node relink schedule differs
+00a2e260 66 complete; vector push_back of 0x14 node, schedule differs
+00a2e420 57 complete; pool node alloc, EH/pool order differs
+00a2e650 1433 complete effect-creation routine; frame/register allocation and EH state layout differ (structure aligned)
+00a2eed0 9 complete hashtable remove wrapper; iterator temp slot reuse (frame 8 vs 0x10)
+00a2ef60 388 complete stopwatch-timed table rebuild; locals/regs and EH layout differ; difftest WEAK (19% coverage: ObjectError() returns global 0x1667aa0, null in the image, so the body is unreachable)
+00a2f1a0 13 eastl::map operator[] assignment/store scheduling differs; difftest PASS (mapped MapUU::operator[] to 0x00a2e060, removed stray "@" markers in class decl)
+00a310b0 37 FixedVec11b::ctor (fixed_vector<uint32,250> ctor): equivalent; difftest WEAK (168 valid inputs, 100.0% coverage); MSVC emits an SEH frame in the original that we do not reproduce
+00a31170 700 SP::Audio::cSystem::InitAT: complete (factory registration, rw System create, fs/stream-pool setup, plugin params, mute, id pool seed, polyphony table load); call and vtable-slot sequences identical to the original (58 calls, same vslots), size 1680; register allocation (this in esi vs edi), stack offsets and EH state numbering differ (flags /O2 /MD /Gy /GS- /EHsc /TP /arch:SSE /fp:fast)
+00a31f20 632 DoCommandMainThread: complete; stack slot of the two stack messages not shared, mask-or order folded; difftest WEAK (2000 valid, 27% cov: GetServer() is null in emulation, so the message paths are unreached); ListB::Push annotated
+00a32220 134 fixed_hash_map<uint,Subscription,100,101,1,...> ctor: complete; no EH frame, local allocator-struct layout differs
+00a32320 105 swap of two hash containers via 1 KB temp: complete; callee conventions guessed, no EH
+00a323e0 202 hash_map<uint,fixed_hash_map<uint,float,20,...>>::operator[]: complete; node temp layout and EH differ; difftest PASS after fix (found/end test was inverted; mapped_type() temporary and its bucket release were missing)
+00a32550 2221 System dtor body (~40 EASTL fixed containers): complete via templated pool/free helpers; not byte-exact
+00a32ea0 121 System::SetOutputProperty: complete; register allocation and param-slot reuse differ; difftest PASS
+00a33600 1468 complete: all 34 member ctor calls, field stores and EH states reproduced; layout recovered from the ctor, member sub-objects are opaque stubs, EH state numbers and store scheduling differ flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
