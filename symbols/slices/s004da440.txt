@@ -1,1 +1,1 @@
-004da440 SP::cSpeciesArchetype::cSpeciesArchetype  # called as cSpeciesArchetype() by hash_map<uint,cSpeciesArchetype>::operator[] (s004e01d0); member defaults match the dev PDB field list
+004da440 ??0cSpeciesArchetype_s004d_a440@SP@@QAE@XZ  # cSpeciesArchetype_s004d_a440::cSpeciesArchetype migrated from s004da440 (verbatim, slice spelling)

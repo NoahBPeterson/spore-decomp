@@ -1,9 +1,9 @@
-004dc660 SP::cSpeciesCheat::GetFullPath  # PDB
-004dc730 SP::cPlantSummarizer::GetStaticType  # getter for global type id
-004dc740 SP::cPlantSummarizer::GetResType  # PDB
-004dc760 SP::cPlantSummarizer::ExtractParameters  # PDB
-004dc920 SP::cSpeciesSummarizer::GetStaticType  # getter for global type id
-004dc930 SP::cSpeciesSummarizer::GetResType  # analog of cPlantSummarizer
-004dc950 SP::cSpeciesSummarizer::ExtractParameters  # PDB candidate (caller-single)
-004dcaa0 SP::cSPEditorSpeciesManager::Teardown  # map teardown
-004dcee0 SP::cSPEditorSpeciesManager::HandleMessage  # PDB candidate (caller-scored)
+004dc660 ?GetFullPath@cSpeciesCheat@SP@@QAEXABVKey@ResourceMan@EA@@AAV?$basic_string@_WVallocator@eastl@@@eastl@@@Z  # SP::cSpeciesCheat::GetFullPath migrated from s004dc660
+004dc730 ?GetVersion@cPlantSummarizer@SP@@UBEIXZ  # SP::cPlantSummarizer::GetVersion migrated from s004dc660
+004dc740 ?GetResType@cPlantSummarizer@SP@@UBEII@Z  # SP::cPlantSummarizer::GetResType migrated from s004dc660
+004dc760 ?ExtractParameters@cPlantSummarizer@SP@@UBE_NABVKey@ResourceMan@EA@@AAV?$vector@UDeclareParam@FunctionalMatch@SP@@Vsp_vector_allocator@eastl@@@eastl@@@Z  # SP::cPlantSummarizer::ExtractParameters migrated from s004dc660
+004dc920 ?GetVersion@cSpeciesSummarizer@SP@@UBEIXZ  # SP::cSpeciesSummarizer::GetVersion migrated from s004dc660
+004dc930 ?GetResType@cSpeciesSummarizer@SP@@UBEII@Z  # SP::cSpeciesSummarizer::GetResType migrated from s004dc660
+004dc950 ?ExtractParameters@cSpeciesSummarizer@SP@@UBE_NABVKey@ResourceMan@EA@@AAV?$vector@UDeclareParam@FunctionalMatch@SP@@Vsp_vector_allocator@eastl@@@eastl@@@Z  # SP::cSpeciesSummarizer::ExtractParameters migrated from s004dc660
+004dcaa0 ?Teardown@cSPEditorSpeciesManager_s004d_c660@SP@@QAEXXZ  # cSPEditorSpeciesManager_s004d_c660::Teardown migrated from s004dc660 (verbatim, slice spelling)
+004dcee0 ?HandleMessage@cSPEditorSpeciesManager_s004d_c660@SP@@QAE_NHPAX@Z  # cSPEditorSpeciesManager_s004d_c660::HandleMessage migrated from s004dc660 (verbatim, slice spelling)

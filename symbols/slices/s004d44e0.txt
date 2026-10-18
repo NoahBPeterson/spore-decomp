@@ -1,3 +1,7 @@
-004d46b0  SpeciesDB::GetScale
-004d46d0  SpeciesDB::FindField8
-004d4750  SpeciesDB::FindField10
+004d44e0 ?SpeciesDB_Op1@@YAXPAX@Z  # SpeciesDB_Op1 migrated from s004d44e0 (verbatim, slice spelling)
+004d46b0 ?GetScale@SpeciesDB@@QAEMXZ  # SpeciesDB::GetScale migrated from s004d44e0 (verbatim, slice spelling)
+004d46d0 ?FindField8@SpeciesDB@@QAEIH@Z  # SpeciesDB::FindField8 migrated from s004d44e0 (verbatim, slice spelling)
+004d4750 ?FindField10@SpeciesDB@@QAEIH@Z  # SpeciesDB::FindField10 migrated from s004d44e0 (verbatim, slice spelling)
+004d47d0 ?SpeciesDB_Op2@@YAXPAX@Z  # SpeciesDB_Op2 migrated from s004d44e0 (verbatim, slice spelling)
+004d4ad0 ?SpeciesDB_Op3@@YAXPAX@Z  # SpeciesDB_Op3 migrated from s004d44e0 (verbatim, slice spelling)
+004d4f10 ?SpeciesDB_Op4@@YAXPAX@Z  # SpeciesDB_Op4 migrated from s004d44e0 (verbatim, slice spelling)

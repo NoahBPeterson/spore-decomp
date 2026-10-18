@@ -1,1 +1,1 @@
-004d15c0 SP::BuildParameters  # dev-PDB name (SPEditorSpeciesManager.obj); (summary*, sp_vector<DeclareParam>&, bool archetypes); byte-exact
+004d15c0 ?BuildParameters@SP@@YAXPAUcCreatureSummary@@AAU?$sp_vector@UDeclareParam_s004d_15c0@FunctionalMatch@SP@@@eastl@@_N@Z  # BuildParameters migrated from s004d15c0 (verbatim, slice spelling)

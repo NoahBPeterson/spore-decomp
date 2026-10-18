@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+004d3dd0 1185 complete cSpeciesProfile ctor; frame slots/register rotation differ (original zero-inits a bool tag via xor/al and has an arg temp for the key-group check that I could not reproduce); difftest PASS (395 valid, 100% cov; added symbols entry, mapped CapsMap/ObjAB/ProfObjA ctors, gEmptyWStr, BadModelKey)
+004d46d0 11 complete; residual is /Od slot permutation (i/vec/elem roles vs fixed slots)
+004d4750 11 complete; residual is /Od slot permutation (identical to FindField8 with +0x10)
+004d8f10 18 complete; residual is /Od slot layout (deref temps + return-copy local)
+004d8f90 18 complete; identical to GetVariantB with different sub-object offsets
+004da3d0 20 complete; residual is /Od slot layout + out-pointer reload schedule
+004db3e0 15 complete; residual is /Od frame size (inlined-callee reserved frame) + vtable immediate form
+004db6e0 3120 complete source (flags /Od /Ob1 /MD /Gy /TP /arch:SSE) (all paths/calls, EASTL stubs); /Od frame slot order and inline stub codegen not reconstructed; difftest WEAK (130 valid, 6.7% coverage: inputs fault in real callees; fix: operator delete[] annotated 0x00f47380, OptionArguments mangled name mapped to 0x00838330)
+005bf500 116 GetBoolParams: AutoRefCount out-param reset and push_back scheduling differ

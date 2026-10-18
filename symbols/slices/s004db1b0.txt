@@ -1,3 +1,6 @@
-004db3e0  Skinner::PaintSystem::~PaintSystem (destructor body)
-004db620  Connector::Init
-004db6b0  SP::cSpeciesCheat::Description
+004db1b0 ?SpeciesCheat_Op1@@YAXPAX@Z  # SpeciesCheat_Op1 migrated from s004db1b0 (verbatim, slice spelling)
+004db2c0 ?SpeciesCheat_Op2@@YAXPAX@Z  # SpeciesCheat_Op2 migrated from s004db1b0 (verbatim, slice spelling)
+004db3e0 ?Destroy@PaintSystem@@QAEXXZ  # PaintSystem::Destroy migrated from s004db1b0 (verbatim, slice spelling)
+004db470 ?SpeciesCheat_Op3@@YAXPAX@Z  # SpeciesCheat_Op3 migrated from s004db1b0 (verbatim, slice spelling)
+004db620 ?Init@Connector@@QAEXPAXHHI@Z  # Connector::Init migrated from s004db1b0 (verbatim, slice spelling)
+004db6b0 ?Description@cSpeciesCheat@SP@@UBEPBDW4tHelpType@ArgScript@EA@@@Z  # SP::cSpeciesCheat::Description migrated from s004db1b0

@@ -1,0 +1,40 @@
+# source  symbol  va  flags
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetPaintUV@@YA_NPAUcSkinPaintTable@@IPAM1@Z  004d1470  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?BuildParameters@SP@@YAXPAUcCreatureSummary@@AAU?$sp_vector@UDeclareParam_s004d_15c0@FunctionalMatch@SP@@@eastl@@_N@Z  004d15c0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?LoadSpeciesTuning@SP@@YAX_N@Z  004d2450  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?InitStatics@@YAXXZ  004d34f0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?Blend@@YAMMMMMMMM@Z  004d3500  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?MapGetFieldC@@YAIPAUSpeciesMap@@I@Z  004d3570  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?MapGetClamped@@YAIPAUSpeciesMap@@I@Z  004d35d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?MapGetField4@@YAIPAUSpeciesMap@@I@Z  004d3640  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?MapGetPtr@@YAPAXPAUSpeciesMap@@I@Z  004d36a0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ??0CreatureAbility@@QAE@XZ  004d3760  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ??1CreatureAbility@@UAE@XZ  004d3b80  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetAt@TuningObj@@QAEII@Z  004d3cd0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetActive@TuningObj@@QAEHXZ  004d3d40  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetBound@TuningObj@@QAEM_N@Z  004d3d70  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?SetBounds@TuningObj@@QAEXMM@Z  004d3da0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetScale@SpeciesDB@@QAEMXZ  004d46b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVariantA@SpeciesProfile@@QAEHPAX@Z  004d8ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z  004d92b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetUiName@cSpeciesProfile_s004d_a330@@QAEXPAUWString@@@Z  004da330  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ??0cSpeciesArchetype_s004d_a440@SP@@QAE@XZ  004da440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?Init@Connector@@QAEXPAXHHI@Z  004db620  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?Description@cSpeciesCheat@SP@@UBEPBDW4tHelpType@ArgScript@EA@@@Z  004db6b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVersion@cPlantSummarizer@SP@@UBEIXZ  004dc730  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetResType@cPlantSummarizer@SP@@UBEII@Z  004dc740  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetVersion@cSpeciesSummarizer@SP@@UBEIXZ  004dc920  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetResType@cSpeciesSummarizer@SP@@UBEII@Z  004dc930  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?RandomInRange@SP@@YAMABUVector2_s004d_f2d0@@@Z  004df2d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?SetAvatarSpecies@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEXABUKey_s004d_f2d0@ResourceMan@EA@@@Z  004df310  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?SetAvatarProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEXPAVcSpeciesProfile_s004d_f2d0@2@@Z  004df3e0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetAvatarProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEPAVcSpeciesProfile_s004d_f2d0@2@XZ  004df420  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetPlantProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEPAVcSpeciesProfile_s004d_f2d0@2@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  004df440  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEPAVcSpeciesProfile_s004d_f2d0@2@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  004df550  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?FindProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEPAVcSpeciesProfile_s004d_f2d0@2@AAVSpeciesMap_s004d_f2d0@eastl@@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  004df6d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetDefaultReplacementKey@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NABUKey_s004d_f2d0@ResourceMan@EA@@AAU345@@Z  004df790  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetReplacementKey@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NABUKey_s004d_f2d0@ResourceMan@EA@@IAAU345@@Z  004df7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?UpdateProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NPAVcSpeciesProfile_s004d_f2d0@2@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  004dfb50  /Od /Ob1 /MD /Gy /TP /arch:SSE /GS- /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?HasEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@@Z  005bf0a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?GetEditorPropertyList@@YAHABVKey_s005b_eaf0@ResourceMan@EA@@AAPAVPropertyList_s005b_eaf0@App@@@Z  005bf0e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPBake/SPEditorSpeciesManager.cpp  ?LoadCollectableItems@@YA_NPAVPropertyList_s005b_eaf0@App@@PAPAVcCollectableItems@Simulator@@@Z  005bf1e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

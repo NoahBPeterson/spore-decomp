@@ -1,7 +1,13 @@
-004d34f0  SP::`anonymous namespace'::InitStatics
-004d3500  (anonymous) float blend helper
-004d3cd0  TuningObj::GetAt
-004d3d40  TuningObj::GetActive
-004d3d70  TuningObj::GetBound
-004d3da0  TuningObj::SetBounds
-004d3dd0  cSpeciesProfile::cSpeciesProfile
+004d34f0 ?InitStatics@@YAXXZ  # InitStatics migrated from s004d34f0 (verbatim, slice spelling)
+004d3500 ?Blend@@YAMMMMMMMM@Z  # Blend migrated from s004d34f0 (verbatim, slice spelling)
+004d3570 ?MapGetFieldC@@YAIPAUSpeciesMap@@I@Z  # MapGetFieldC migrated from s004d34f0 (verbatim, slice spelling)
+004d35d0 ?MapGetClamped@@YAIPAUSpeciesMap@@I@Z  # MapGetClamped migrated from s004d34f0 (verbatim, slice spelling)
+004d3640 ?MapGetField4@@YAIPAUSpeciesMap@@I@Z  # MapGetField4 migrated from s004d34f0 (verbatim, slice spelling)
+004d36a0 ?MapGetPtr@@YAPAXPAUSpeciesMap@@I@Z  # MapGetPtr migrated from s004d34f0 (verbatim, slice spelling)
+004d3760 ??0CreatureAbility@@QAE@XZ  # CreatureAbility::CreatureAbility migrated from s004d34f0 (verbatim, slice spelling)
+004d3b80 ??1CreatureAbility@@UAE@XZ  # CreatureAbility::~CreatureAbility migrated from s004d34f0 (verbatim, slice spelling)
+004d3cd0 ?GetAt@TuningObj@@QAEII@Z  # TuningObj::GetAt migrated from s004d34f0 (verbatim, slice spelling)
+004d3d40 ?GetActive@TuningObj@@QAEHXZ  # TuningObj::GetActive migrated from s004d34f0 (verbatim, slice spelling)
+004d3d70 ?GetBound@TuningObj@@QAEM_N@Z  # TuningObj::GetBound migrated from s004d34f0 (verbatim, slice spelling)
+004d3da0 ?SetBounds@TuningObj@@QAEXMM@Z  # TuningObj::SetBounds migrated from s004d34f0 (verbatim, slice spelling)
+004d3dd0 ??0cSpeciesProfile@@QAE@ABUResKey@@_N@Z  # cSpeciesProfile::cSpeciesProfile migrated from s004d34f0 (verbatim, slice spelling)

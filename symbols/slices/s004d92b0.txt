@@ -1,1 +1,1 @@
-004d92b0 SP::ReadAbilityData  # dev PDB name via symbols/pdb_names.json (dev 00beb7f0); bool (cCreatureAbility*, cPropertyList*)
+004d92b0 ?ReadAbilityData@SP@@YA_NPAUcCreatureAbility_s004d_92b0@@PAUPropertyList_s004d_92b0@@@Z  # ReadAbilityData migrated from s004d92b0 (verbatim, slice spelling)
