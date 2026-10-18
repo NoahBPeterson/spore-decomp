@@ -102,16 +102,14 @@ uint8_t* StrIStr(uint8_t* s, uint8_t* sub)
     if (*s == 0) return 0;
     int delta = (int)s - (int)sub;
     do {
-        uint8_t c = *s;
+        int ci = *s;
         uint8_t* q = sub;
-        while (c != 0) {
-            c = *q;
-            if (c == 0) return s;
-            int a = tolower((unsigned char)q[delta]);
-            int b = tolower(c);
-            if (a != b) break;
+        while (ci != 0) {
+            ci = *q;
+            if (ci == 0) return s;
+            if (tolower((unsigned char)q[delta]) != tolower(ci)) break;
             ++q;
-            c = q[delta];
+            ci = q[delta];
         }
         if (*q == 0) return s;
         ++s;

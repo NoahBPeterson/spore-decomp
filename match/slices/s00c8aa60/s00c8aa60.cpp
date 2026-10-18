@@ -190,13 +190,23 @@ void cSpatialObjectView::DestroyAllEffects(int param) {
 // @ 0x00c8b2e0
 void cSpatialObjectView::sub_b2e0() {
     char* self = (char*)this;
-    void* a = *(void**)(self + 0x9c);
-    if (a) ((void(__thiscall*)(void*, int))(*(void***)a)[0x16c / 4])(a, 0);
-    void* b = *(void**)(self + 0x9c);
-    if (b) {
+    // [self+0x9c] holds a pointer to a handle whose first field is the real object;
+    // the original loads ecx = *(void**)(self+0x9c) then edx = *ecx (the vtable) and
+    // passes the handle, not the object, as the first stack argument.
+    void* h1 = *(void**)(self + 0x9c);
+    if (h1) {
+        void* o1 = *(void**)h1;
+        ((void(__thiscall*)(void*, void*, int))(*(void***)o1)[0x16c / 4])(o1, h1, 0);
+    }
+    void* h2 = *(void**)(self + 0x9c);
+    if (h2) {
         *(void**)(self + 0x9c) = 0;
-        if (*(int*)((char*)b + 0x40) > 1) --*(int*)((char*)b + 0x40);
-        else ((void(__thiscall*)(void*, u32))(*(void***)b)[0x170 / 4])(b, (*(u32*)((char*)b + 4)) >> 31);
+        if (*(int*)((char*)h2 + 0x40) > 1) --*(int*)((char*)h2 + 0x40);
+        else {
+            void* o2 = *(void**)h2;
+            ((void(__thiscall*)(void*, void*, u32))(*(void***)o2)[0x170 / 4])(
+                o2, h2, (*(u32*)((char*)h2 + 4)) >> 31);
+        }
     }
     void* c = *(void**)(self + 0xa0);
     if (c) {

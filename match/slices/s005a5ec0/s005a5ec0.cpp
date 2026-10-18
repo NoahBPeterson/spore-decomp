@@ -584,9 +584,14 @@ void cSPEditorColorPicker::Update(int deltaTime) {
     }
 }
 
-// @ 0x005a6e00
+// @ 0x005a6e00  Clamp01(float): original clamps with SSE maxss/minss and never writes xmm1;
+// an x87 evaluation keeps every SSE register untouched while returning the same value in st(0).
+// The comparison order reproduces maxss/minss edge cases (-0.0 stays -0.0, NaN -> 1.0).
 float FUN_005a6e00(float x) {
-    return Minf(Maxf(0.0f, x), 1.0f);
+    double d = x;
+    if (d > 1.0 || !(d <= 1.0)) d = 1.0;
+    else if (d < 0.0) d = 0.0;
+    return (float)d;
 }
 // --- equivalence checker address annotations
 

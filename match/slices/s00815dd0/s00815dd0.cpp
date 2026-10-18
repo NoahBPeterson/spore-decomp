@@ -142,7 +142,7 @@ struct MatEffect {
     float f88;                  // +0x88
 
     void  sub8167d0(IObj* p, float f);
-    void  ctor816860();
+    MatEffect* ctor816860();
     void  dtor816910();
 };
 
@@ -162,7 +162,7 @@ void MatEffect::sub8167d0(IObj* p, float f) {
 }
 
 // @ 0x00816860
-void MatEffect::ctor816860() {
+MatEffect* MatEffect::ctor816860() {
     ((void(__thiscall*)(void*))0x963db0)(this);   // FadeEffect base ctor
     *(void**)((char*)this + 0x00) = (void*)0x1418d00;
     *(void**)((char*)this + 0x04) = (void*)0x1418ce4;
@@ -174,6 +174,7 @@ void MatEffect::ctor816860() {
     p80 = 0;
     b84 = 0;
     f88 = 0.5f;
+    return this;
 }
 
 // @ 0x00816910

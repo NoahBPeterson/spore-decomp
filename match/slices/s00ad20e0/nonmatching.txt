@@ -5,5 +5,5 @@
 00ad23c0  350  complete; per-tick dispatch -- push camera landmark then branch on game mode; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (195 valid, 66.7% cov)
 00ad2880  103  complete; cActionTarget trigger callback variant 1; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (198 valid, 68.1% cov)
 00ad2910  73  complete; cActionTarget trigger callback variant 2; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest WEAK (186 valid, 56.5% cov)
-00ad29d0  105  complete; tNavigationGoal::InitAt (register/index-to-pointer tie-break); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
-00ad2a50  111  complete; tNavigationGoal::InitToward (register/index-to-pointer tie-break); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
+00ad29d0  105  complete; tNavigationGoal::InitAt (return-value/this hidden by void); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)
+00ad2a50  111  complete; tNavigationGoal::InitToward (return-value/this hidden by void); flags /O2 /MD /Gy /TP /arch:SSE /fp:fast; difftest PASS (400 valid, 100% cov)

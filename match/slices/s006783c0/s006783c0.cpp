@@ -13,7 +13,7 @@ void __fastcall FUN_00678f70(char* p);
 void __fastcall FUN_00679120(char* p);
 
 struct Thunk1 { void One(int a); };                       // 0x006781d0
-struct Thunk4 { void Init(int a, int b, int c, int d); }; // 0x00679080
+struct Thunk4 { Thunk4* Init(int a, int b, int c, int d); }; // 0x00679080
 struct Thunk7 { void Seven(int,int,int,int,int,int,int); }; // 0x00929e70
 
 // ---- 0x00678ed0 : (a == b) ------------------------------------------
@@ -40,7 +40,7 @@ void __fastcall FUN_00678f70(char* p) {
 
 // ---- 0x00679080 : init the sub-object -------------------------------
 // @ 0x00679080
-void Thunk4::Init(int a, int b, int c, int d) {
+Thunk4* Thunk4::Init(int a, int b, int c, int d) {
     char* t = (char*)this;
     *(int*)(t + 4) = a;
     *(int*)(t + 8) = b;
@@ -65,6 +65,7 @@ void Thunk4::Init(int a, int b, int c, int d) {
     *(unsigned short**)(t + 0xdc) = inl;
     *(unsigned short**)(t + 0xd8) = inl;
     *inl = 0;
+    return this;
 }
 
 // ---- 0x00679120 : destroy all sub-objects (complete, non-matching) ---

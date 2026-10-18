@@ -14,8 +14,7 @@
                difftest UNSUPPORTED (now member fn; 0/1200 valid inputs, read faults)
 01021180   64  median-of-three comparator: complete; the comparison call order
                and register reselection differ. flags /O2 /MD /Gy /TP /arch:SSE
-01021370   27  GetPlayerHomePlanet: complete; the repeated GetPlayerEmpire calls
-               and tail-jump schedule differ. flags /O2 /MD /Gy /TP /arch:SSE
+01021370   24  GetPlayerHomePlanet: complete; FUN_01021260 is now __declspec(noinline) so the original real GetActivePlanet call (and its edx clobber) is reproduced (equiv PASS 238 valid, 100% coverage); flags /O2 /MD /Gy /TP /arch:SSE
 01021960   66  set-universe-context hook: complete; the cached-context compare
                and the FUN_00c8b360 tail differ. flags /O2 /MD /Gy /TP /arch:SSE
 01021d40   40  background-sim singleton ctor: complete; operator_new zero/sentinel

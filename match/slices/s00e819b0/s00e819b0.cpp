@@ -200,7 +200,7 @@ void FUN_00e82280()
             int* q = (int*)p[4];
             if (q != 0) {
                 p[4] = 0;
-                (*(void(**)(void))(*q + 4))();
+                (*(void(__thiscall*)(void*))(*(void**)((char*)*q + 4)))(q);
             }
             p = (int*)*p;
         } while (p != gListSentinel);
@@ -215,7 +215,7 @@ void LoadResource(int* param_1)
     int* piVar1 = param_1 + 2;
     if (piVar2 != 0) {
         *piVar1 = 0;
-        (*(void(**)(void))(*piVar2 + 4))();
+        (*(void(__thiscall*)(void*))(*(void**)((char*)*piVar2 + 4)))(piVar2);
     }
     char c = FUN_00e821d0((unsigned)*param_1, param_1[1], piVar1) ? 1 : 0;
     if (c == 0) {
@@ -224,7 +224,7 @@ void LoadResource(int* param_1)
         int* piVar2b = (int*)*piVar1;
         if (piVar2b != 0) {
             *piVar1 = 0;
-            (*(void(**)(void))(*piVar2b + 4))();
+            (*(void(__thiscall*)(void*))(*(void**)((char*)*piVar2b + 4)))(piVar2b);
         }
         SP_sCellResourceLoadFailure(param_1[1], piVar1);
     }

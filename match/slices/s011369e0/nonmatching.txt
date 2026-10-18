@@ -17,7 +17,7 @@
 011376a0 16 complete FUN_011376a0: return (format!=4 && format!=0); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.
 011376d0 282 complete DecoderThunk::FUN_011376d0: thiscall FUN_00a10ef0 bit reads on a 2-dword state, sample tables; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 257/400 98.9% cov.
 011377f0 163 complete DecoderThunk::FUN_011377f0: thiscall FUN_0114c880 mix parse, spread into the mix state; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 264/400 100% cov.
-011378a0 23 complete DecoderThunk::FUN_011378a0: remaining bytes for channel (subtract head or +0x1c); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 316/400 100% cov.
+011378a0 23 complete DecoderThunk::FUN_011378a0: remaining bytes for channel (subtract head or +0x1c); original preserves ecx (`this`) - single accumulator + if/else so the compiler keeps esi as the subtrahend and does not use ecx as a scratch; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 316/400 100% cov.
 01137910 42 complete FUN_01137910: ((channels*4+0x1d7)&~7) + round(*ptr)*0x30; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov (cvtss2si).
 01137950 143 complete FUN_01137950: retire 20 slot entries (drop finished decoders, advance buffer, free); flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv WEAK 217/400 valid 33.3% cov.
 011379f0 44 complete DecoderThunk::FUN_011379f0: take a free slot from the 20-entry ring, advance +0x1cd; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; equiv PASS 400/400 100% cov.

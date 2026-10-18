@@ -161,7 +161,8 @@ template <class T, class A> struct vector : public VectorBase<T, A> {
     vector();
     ~vector() {}
     vector(const vector& x) : base_type(x.size(), x.mAllocator) {
-        this->mpEnd = uninitialized_copy_ptr(x.mpBegin, x.mpEnd, this->mpBegin);
+        T* pEnd = uninitialized_copy_ptr(x.mpBegin, x.mpEnd, this->mpBegin);
+        this->mpEnd = pEnd;
     }
     uint32_t size() const { return (uint32_t)(this->mpEnd - this->mpBegin); }
     T& back() { return *(this->mpEnd - 1); }

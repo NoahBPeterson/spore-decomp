@@ -72,7 +72,13 @@ void __stdcall BuildQuadPlane(QuadOwner* owner, cSPTransform* xf, const cSPTrans
   float nz = v.y * u.x - u.y * v.x;
   float ny = u.z * v.x - v.z * u.x;
   float nx = v.z * u.y - v.y * u.z;
-  float inv = (float)(1.0 / sqrt(nz * nz + ny * ny + nx * nx + 1e-8f));
+  // Accumulate the length-squared in double (x87 here, /arch:SSE has no SSE2) so the
+  // squares are summed in the original's nz, ny, nx order; /fp:fast otherwise reassociates
+  // the plain float expression into nx, ny, nz and lands 1 ulp off.
+  double sum = (double)nz * nz;
+  sum = sum + (double)ny * ny;
+  sum = sum + (double)nx * nx;
+  float inv = (float)(1.0 / sqrt(sum + 1e-8f));
   out->normal = Vector3(inv * nx, ny * inv, nz * inv);
   out->transform = *src;
   TransformPoint(xf, out->pt[0]);

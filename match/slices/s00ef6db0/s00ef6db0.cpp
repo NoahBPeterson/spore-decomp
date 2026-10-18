@@ -637,7 +637,10 @@ struct CScenarioTutorialsChecklistUI {
 };
 
 // @ 0x00ef7900
-void __fastcall FUN_00ef7900(char* p)
+// Constructor-shaped: the original keeps `this` in eax and uses ecx for the 0/-1 fill values,
+// returning `this` in eax (MSVC's constructor convention).  Declare the return type so cl keeps
+// the pointer live in eax instead of ending with the -1 fill value there.
+unsigned __fastcall FUN_00ef7900(char* p)
 {
     int z = 0;
     *(void**)(p + 4) = &gVtbl_D;
@@ -655,6 +658,7 @@ void __fastcall FUN_00ef7900(char* p)
     *(uint8_t*)(p + 0x25) = 1;
     *(int*)(p + 0x28) = m;
     *(int*)(p + 0x34) = m;
+    return (unsigned)(size_t)p;
 }
 
 // @ 0x00ef7950

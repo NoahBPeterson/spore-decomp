@@ -417,7 +417,7 @@ void __cdecl f_ee1510(int key, float param_2)
     v.begin = 0; v.end = 0; v.cap = 0;
     g_16c7aa4->f74->FUN_00f40d00(key, &v);
     static const float kMin = 1.5258789e-05f;
-    if (kMin > param_2)
+    if (param_2 < kMin)
         param_2 = kMin;
     for (IObj** it = (IObj**)v.begin; it != (IObj**)v.end; ++it) {
         IObj* obj = (*it == 0) ? 0 : (IObj*)(*it)->Query(0x1186577);

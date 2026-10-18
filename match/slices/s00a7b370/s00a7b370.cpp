@@ -584,7 +584,7 @@ struct Halton2 {
     float mX;       // +0  base 2
     float mY;       // +4  base 3
     int   mIndex;   // +8
-    int   mDigits3; // +0xc
+    volatile int mDigits3; // +0xc
     int   Next();            // 0x00a7c350
     Halton2(int index);      // 0x00a7c3d0
 };
@@ -634,8 +634,8 @@ struct Halton3 {
     float mY;       // +4  base 3
     float mZ;       // +8  base 5
     int   mIndex;   // +0xc
-    int   mDigits3; // +0x10
-    int   mDigits5; // +0x14
+    volatile int mDigits3; // +0x10
+    volatile int mDigits5; // +0x14
     int   Next();            // 0x00a7c450
     Halton3(int index);      // 0x00a7c540
 };

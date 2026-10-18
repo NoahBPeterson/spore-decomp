@@ -538,7 +538,7 @@ union U32F32 { u32 u; f32 f; };
 PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
 {
     if (pos < end) {
-        const f32 kFracBias = -128.0f;              // 0xC3000000
+        static volatile const f32 kFracBias = -128.0f;  // 0xC3000000
         s32 limit = (s32)(end - (u32)step);         // end - step
         if ((s32)pos < limit) {
             do {
@@ -546,7 +546,7 @@ PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
                 const f32 s0 = src[whole];
                 const f32 s1 = src[whole + 1];
                 U32F32 cv; cv.u = (pos & 0xFFFFu) | 0x43000000u;
-                const f32 frac = cv.f + kFracBias;
+                const f32 frac = kFracBias + cv.f;
                 *dst++ = s0 + (s1 - s0) * frac;
                 pos += (u32)step;
             } while ((s32)pos < limit);
@@ -561,7 +561,7 @@ PosDst InterpRamp(u32 pos, s32 step, u32 end, const f32* src, f32* dst)
         if (pos & 0xFFFFu) {
             const f32 s1 = src[whole + 1];
             U32F32 cv; cv.u = (pos & 0xFFFFu) | 0x43000000u;
-            s0 = s0 + (s1 - s0) * (cv.f + kFracBias);
+            s0 = s0 + (s1 - s0) * (kFracBias + cv.f);
         }
         *dst++ = s0;
         pos += (u32)step;

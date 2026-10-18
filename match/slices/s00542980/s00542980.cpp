@@ -191,12 +191,18 @@ struct Variant {
         if (mFlags & kFlagAllocated)
             Destruct(false);
     }
-    Variant& operator=(const Variant& x);
+    Variant& operator=(const Variant& x);                          // 0x00542b80
     template <typename T> Variant& operator=(const T& x);        // 0x00422eb0 <int>, 0x00428060 <float>
     void Destruct(bool bReconstruct);                              // 0x0093db80
     void Construct(const Variant& x, unsigned short flags);
     void Construct(unsigned short typeId, unsigned short flags, const void* pData, unsigned int nSize,
                    unsigned int nCount);                           // 0x0093dd80
+};
+// Distinct-named alias for this translation unit's out-of-line Variant copy-assignment.
+// A plain EA::Variant::operator= call is resolved by its mangled name to another TU's
+// copy-assignment (0x478300), so this symbol carries the local address instead.
+struct VariantCopyAssign {
+    Variant& Assign(const Variant& x);                              // 0x00542b80
 };
 }  // namespace EA
 
@@ -350,7 +356,7 @@ extern const wchar_t* kOriginalAuthorIdAttr;    // L"originalAuthorId"
 // @ 0x00542980
 void AtomParser::EndLink() {
     if (mpCurLink) {
-        mpCurLink->mValue = EA::Variant();
+        ((EA::VariantCopyAssign*)&mpCurLink->mValue)->Assign(EA::Variant());
         if (wcscmp(mpCurLink->mType.c_str(), L"int") == 0) {
             int value;
             if (swscanf(mCharacterData.c_str(), L"%d", &value) == 1)

@@ -196,7 +196,7 @@ void ImageInfo2::CopyFrom(const ImageInfo2 *src)
 }
 
 // ---------------------------------------------------------------- color/point setters
-static void *MakeInfoAt(Drawable *self, unsigned index, void *slot)
+static __forceinline void *MakeInfoAt(Drawable *self, unsigned index, void *slot)
 {
     void *fr = (void *)FUN_00920090(0x540037e, slot, 0, 0);
     int *p = ((FactoryRegistry *)fr)->CreateInstance((int **)slot, 0x540037e, (int)slot, 0);

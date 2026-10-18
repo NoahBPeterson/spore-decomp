@@ -1,4 +1,4 @@
-008038d0  527  complete state-machine dispatcher (DragDropCaptureWin::Sub8038d0); register/scheduling diffs
+008038d0  168  complete state-machine dispatcher (DragDropCaptureWin::Sub8038d0); b10 dispatch written as switch so the per-site inlined SendEvent(A) keeps the original's ecx/edx rotation; remaining diffs are scheduling only; equiv: WEAK no mismatch (78% cov: ev==0x7be2445 is computed, not an immediate, so never generated)
 00803b70  6    Cb::operator=; one callee-saved push (edi) scheduled after the first store instead of before; equiv: PASS
 00803bd0  545  complete Dispose(bool); window teardown + callback reset reconstructed, scheduling diffs
 008040e0  483  complete Sub8040e0 (window creation/init); scheduling + helper inline diffs

@@ -107,7 +107,7 @@ struct ActsBarUI {
 // class B: cScenarioEditModeScriptActsBarUI (size 0x50)
 struct cScenarioEditModeScriptActsBarUI {
     char pad[0x50];
-    void ctor();
+    cScenarioEditModeScriptActsBarUI* ctor();
     void dtor();
     void FUN_00edbdd0(int a);
     int  FUN_00edbac0(void* parent);
@@ -552,7 +552,7 @@ void cScenarioEditModeScriptActsBarUI::FUN_00edbdd0(int a)
 // 0x00edbe00  cScenarioEditModeScriptActsBarUI ctor
 // ---------------------------------------------------------------------------
 // @ 0x00edbe00
-void cScenarioEditModeScriptActsBarUI::ctor()
+cScenarioEditModeScriptActsBarUI* cScenarioEditModeScriptActsBarUI::ctor()
 {
     char* s = (char*)this;
     *(int*)(s + 4) = 0;
@@ -569,6 +569,7 @@ void cScenarioEditModeScriptActsBarUI::ctor()
     *(int*)(s + 0x28) = 0;
     ((cSPUIAnimator*)(s + 0x2c))->ctor();
     *(int*)(s + 0x4c) = 0;
+    return (cScenarioEditModeScriptActsBarUI*)s;
 }
 
 // ---------------------------------------------------------------------------

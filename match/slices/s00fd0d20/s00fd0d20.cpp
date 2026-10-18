@@ -147,7 +147,9 @@ static __forceinline void RowPass(__m64* p)
 }
 
 // @ 0x00fd0f10
-void __cdecl Idct8x8(const short* in, const short* quant, short* out)
+// The original is hand-written MMX: it loads `in` into eax at entry and never overwrites it, so
+// eax holds `in` at the ret.  Declare the result so cl keeps the pointer live and returns it.
+const short* __cdecl Idct8x8(const short* in, const short* quant, short* out)
 {
     // cache touch of the output block (no other effect)
     volatile int touch;
@@ -168,4 +170,5 @@ void __cdecl Idct8x8(const short* in, const short* quant, short* out)
         ColumnPass(dst + 8 * half);
     for (int col = 0; col < 2; col++)
         RowPass((__m64*)((char*)dst + 8 * col));
+    return in;
 }

@@ -270,7 +270,7 @@ uint32_t cSPUIEventLog::PostFeedbackEvent(uint32_t instanceID, uint32_t groupID,
                                           bool bAlways, int unused, void* userData)
 {
     ListRef list;
-    PropertyManager()->GetPropertyList(groupID, instanceID, list.Reset());
+    PropertyManager()->GetPropertyList(instanceID, groupID, list.Reset());
     if (!list.mpObject)
         return 0;
 

@@ -1,5 +1,5 @@
 # va  diff-bytes  reason   (complete behaviourally-equivalent, not byte-exact)
-0095df60  223  Mat3 x vec3 transform: original builds Vec4 row temporaries on stack (spill/reload schedule)
+0095df60  223  Mat3 x vec3 transform: original builds Vec4 row temporaries on stack (spill/reload schedule); now returns the destination pointer (arg0) that the original leaves in eax; equiv PASS (400 valid, 100% cov); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast
 0095e040  86   Mat3 determinant: original is x87 with float temp spills; compiled with SSE
 0095e0b0  1519 Mat4 inverse: cofactor temp spill schedule differs (Ghidra expression order used)
 0095e810  87   Mat4::SetScaleTranslate: original copies Vec3 via movss, mine uses fld/fstp

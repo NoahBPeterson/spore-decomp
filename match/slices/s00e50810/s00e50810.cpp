@@ -3,6 +3,7 @@
 // selection, save/load glue). Optimised: /O2 /MD /Gy /TP /arch:SSE /fp:fast.
 #include "types.h"
 #include <string.h>
+#include <xmmintrin.h>
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
@@ -206,10 +207,10 @@ float FUN_00e50ed0(float a) {
 }
 
 // @ 0x00e50f30
-bool FUN_00e50f30() {
+char FUN_00e50f30() {
   char* r = (char*)FUN_00b3d4d0();
   int v = *(int*)(r + 0x2c);
-  if (v == 1 || v == 2) return true;
+  if (v == 1 || v == 2) return 1;
   return *(char*)((char*)gState_16b3c0c + 0x936) != 0;
 }
 
@@ -247,10 +248,10 @@ void FUN_00e51060(float n) {
   float lo, hi;
   FUN_00e836f0(0x71cb8a60, &n, &lo);
   (void)hi;
-  float t = *(float*)(s + 0xf8);
-  if (t <= n) t = n;
-  if (lo <= t) t = lo;
-  *(float*)(s + 0xf8) = t;
+  __m128 r = _mm_load_ss((float*)(s + 0xf8));
+  r = _mm_max_ss(r, _mm_load_ss(&n));
+  r = _mm_min_ss(r, _mm_load_ss(&lo));
+  _mm_store_ss((float*)(s + 0xf8), r);
   *(uint32_t*)(s + 0x88) = 0;
 }
 
@@ -434,9 +435,8 @@ float FUN_00e51720(int idx) {
 }
 
 // @ 0x00e517d0
-void __fastcall FUN_00e517d0(char* p) {
-  int n = *(int*)(p + 4) + 1;
-  *(int*)(p + 4) = n;
+int __fastcall FUN_00e517d0(char* p) {
+  return (*(int*)(p + 4))++;
 }
 
 // @ 0x00e517e0

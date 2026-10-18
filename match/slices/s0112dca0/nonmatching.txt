@@ -5,7 +5,6 @@
 0112e210  57  StreamPool::ReleaseHandler: complete; RemoveTimer/scheduler via thiscall and Free(self, mpAllocator); /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (282 valid, 78.7% cov)
 0112e290  344  StreamPool::Create: complete; Alloc + PlugIn::Initialize (thiscall) + descriptor loop; /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (217 valid, 67.8% cov)
 0112e440  4  Voice::GetDecayProgress: complete; x87 load scheduling (System load before fld); flags /vc71 /O2 /MD /Gy /TP; equiv PASS (396 valid, 100% cov)
-0112e450  17  Voice::StartDecay: complete; `cmp byte [m],0` vs cached byte, and fld/fstp float copy; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov)
 0112e470  235  System::AddActiveVoice: complete; memcpy-forced vector grow + sorted insert (memmove); /LTCG scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (232 valid, 100% cov)
 0112e5a0  65  Voice::RemoveFromActive: complete; /LTCG register/scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (395 valid, 44.4% cov)
 0112e600  116  Voice::Release: complete; virt-interface-call + register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv PASS (299 valid, 96.5% cov)

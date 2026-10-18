@@ -369,16 +369,21 @@ void Mp3Player_tick(Mp3Player* self)
 
 // @ 0x011312f0
 // Link the player into the global shutdown list and install its on-free callback.
-void Mp3Player_link(Mp3Player* self)
+// Returns the list node (self+0xf4) in eax: the original's `add eax, 0xf4` result is the
+// function's return value, read by LTCG callers. The mListNode1 store is written before the
+// head load so cl keeps self in eax (returning node) and the head in ecx, as the original does;
+// cl otherwise picks edx for the head, clobbering a register the original leaves alone.
+void* Mp3Player_link(Mp3Player* self)
 {
     self->mpOnFree = &Mp3Player_tick;
     self->mpSelf = self;
+    self->mListNode1 = 0;
     int* node = &self->mListNode0;
     *node = g_016e6268;
-    self->mListNode1 = 0;
     if (g_016e6268 != 0)
         *(int*)(g_016e6268 + 4) = (int)node;
     g_016e6268 = (int)node;
+    return node;
 }
 
 // @ 0x011313b0

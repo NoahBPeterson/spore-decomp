@@ -40,7 +40,7 @@ struct S7 {
     char m_unk[0x240];
     void m6eb8c0(void* src);
     S7*  m6ebb80(void* src);
-    void mebf50();
+    S7*  mebf50();
     void mec000();
     void mec090();
 };
@@ -232,7 +232,7 @@ void fbea0(uint* p1, uint* p2, uint* p3, int p4)
 
 // ---------------------------------------------------------------------------
 // @ 0x006ebf50
-void S7::mebf50()
+S7* S7::mebf50()
 {
     char* p = (char*)this;
     float C = g1533c74;
@@ -252,6 +252,7 @@ void S7::mebf50()
     *(void**)(p + 0x74) = q2;
     *(void**)(p + 0x70) = q2;
     *(void**)(p + 0x78) = p + 0x98;
+    return this;
 }
 
 // ---------------------------------------------------------------------------

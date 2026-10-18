@@ -7,7 +7,7 @@
 00ef7780  36   register allocation of `this` vs the space-game/inventory chain
 00ef77d0  6    shrink-wrap: `return 0` epilogue merged into a jmp instead of a trailing xor/ret
 00ef7810  96   inventory scan: GetAllocator chain and loop register allocation
-00ef7900  34   ctor: base/derived vtable store order (manual stores differ from compiler ctor)
+00ef7900  34   ctor: base/derived vtable store order (manual stores differ from compiler ctor); difftest PASS (400 valid, 100% cov): declared a non-void return so cl keeps `this` live in eax (the ctor return-value register) instead of ending with the -1 fill value in eax
 00ef7950  5    dtor: first member load hoisted above the two vptr stores
 00ef7a00  32   tooltip toggle: cString ctor call is caller-clean (add esp,0x20) in the original
 00ef7a80  32   tooltip toggle: cString ctor call is caller-clean (add esp,0x20) in the original

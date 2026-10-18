@@ -100,7 +100,7 @@ struct UI_LayerManager {
     u8     pad40[0x94 - 0x40];
     u8     b94;       // +0x94
 
-    void __thiscall ctor();          // 0x80edb0
+    UI_LayerManager* __thiscall ctor();  // 0x80edb0
     void* __thiscall VectorDtor(u8); // 0x80ee10
 };
 
@@ -308,7 +308,7 @@ void* __cdecl FUN_0080ed50()
 }
 
 // @ 0x0080edb0
-void __thiscall UI_LayerManager::ctor()
+UI_LayerManager* __thiscall UI_LayerManager::ctor()
 {
     u8* self = (u8*)this;
     *(void**)(self + 4) = (void*)0x13ec458;
@@ -330,6 +330,7 @@ void __thiscall UI_LayerManager::ctor()
     *(void**)(self + 0x40) = inl;
     *(void**)(self + 0x48) = (u8*)inl + 0x3c;
     *(u8*)(self + 0x94) = 0;
+    return this;
 }
 
 // @ 0x0080ee10

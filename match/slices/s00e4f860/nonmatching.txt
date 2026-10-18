@@ -11,7 +11,7 @@
 00e501f0   26  quit helper: complete; best-symbol size mismatch
 00e503a0   49  level float getter: complete (2->+0x104, 4->+0x108, else 10.0f); dtor/epilogue ordering differs
 00e50450   47  config lookup + release: complete; stack temp layout differs
-00e504b0  125  alpha apply: complete (0.0 / 0xffffff paths); float arg register + call schedule differ
+00e504b0  118  alpha apply: complete (0.0 / 0xffffff paths); rounding conversion via cvtss2si from memory, call schedule differs. difftest PASS (375 valid inputs, 100% coverage). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
 00e50540   15  egg-kid predicate: complete; FNV call scheduling differs
 00e50590   31  remove list1 entries absent from list2: complete; register allocation differs
 00e50620   73  remove first matching 0xc entry: complete (shift last down); register-convention (EAX/ESI/EDI) differs

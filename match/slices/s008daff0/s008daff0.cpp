@@ -60,7 +60,6 @@ extern "C" void  __cdecl FUN_008dbba0(void* a, void* b, void* c);               
 extern "C" void  __cdecl FUN_008daeb0(int* a, int* b, int c);                           // 0x8daeb0
 extern "C" void  __cdecl FUN_008daef0(int* a, int* b, int c);                           // 0x8daef0
 extern "C" void  __cdecl FUN_008dadd0(int* arr, int a, int b, int c, int d, int e);     // 0x8dadd0
-extern "C" void* __cdecl Vector_DoInsertValue(void* pos, const void* val);              // 0x4e3e10
 extern const int kTimeoutNone[];
 
 // ---------------------------------------------------------------------------
@@ -77,6 +76,15 @@ struct HTNode {                 // 0x20-byte hashtable node for mItemsMap
 };
 
 struct HTIterator { void* mpNode; const void* mpKey; };   // 8-byte hashtable iterator
+
+// eastl::vector<Key, sp_vector_allocator> as seen at the call site: begin/end/cap at +0/+4/+8.
+// DoInsertValue is a __thiscall member (ecx = the vector), ret 8.
+struct KeyVec {
+    void* mpBegin;      // +0x00
+    void* mpEnd;        // +0x04
+    void* mpCap;        // +0x08
+    void  DoInsertValue(void* pos, const void* val);   // 0x4e3e10
+};
 
 struct HT {                     // the hashtable object (embedded at PFIndexModifiable+0x28)
     char       d00[4];
@@ -690,7 +698,7 @@ int PFIndexModifiable::GetFiles(void* vec, void* filter)
                         *(unsigned*)(w + 8) = *(unsigned*)((char*)p + 0x08);
                     }
                 } else {
-                    Vector_DoInsertValue(w, p);
+                    ((KeyVec*)vec)->DoInsertValue(w, p);
                 }
             }
             ++n;
@@ -738,7 +746,7 @@ unsigned PFIndexModifiable::GetAllFiles(int a2, unsigned a3, int a4, void* vec)
                 *(unsigned*)(w + 8) = *(unsigned*)((char*)v + 0x08);
             }
         } else {
-            Vector_DoInsertValue(w, v);
+            ((KeyVec*)vec)->DoInsertValue(w, v);
         }
     }
     ((void (__thiscall*)(void*, void*, unsigned))(((void**)(*(void**)mpAllocator))[0xc / 4]))(

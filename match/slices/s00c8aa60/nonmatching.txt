@@ -4,7 +4,7 @@
 00c8b220  158  full vector erase path; register allocation differs
 00c8ad30  131  full vector erase path; register allocation differs
 00c8b0a0  150  full vector erase path; register allocation differs
-00c8b2e0  101  release helper inlining / register allocation differs
+00c8b2e0  52   release handles: original does two derefs (this = *(void**)(self+0x9c), vtable = *this, method = vtable[0x16c], handle pushed as arg); fixed. equiv WEAK 229 valid no mismatch, 73.3% cov (refcount>1 / +0xa0 branches uncovered)
 00c8b450  16   cl folded the range test to add/cmp/setle
 00c8b520  12   cl reordered the predicate returns
 00c8b640  10   cl reordered the independent pointer stores in the ctor

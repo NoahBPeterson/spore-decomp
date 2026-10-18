@@ -39,6 +39,16 @@ inline Vec3 operator-(const Vec3& a, const Vec3& b)
     Vec3 r(a.x - b.x, a.y - b.y, a.z - b.z);
     return r;
 }
+// The original evaluates anchor-minus-campos and the squares on the x87 stack (fsqrt of an
+// unrounded extended-precision sum).  noinline keeps the caller from folding these double
+// differences back into the float Vec3 it computes for the cross product.
+__declspec(noinline) static float VecDistance(const Vec3& a, const Vec3& b)
+{
+    double dx = (double)a.x - (double)b.x;
+    double dy = (double)a.y - (double)b.y;
+    double dz = (double)a.z - (double)b.z;
+    return (float)sqrt((dx * dx + dz * dz) + dy * dy);
+}
 struct Quat { float x, y, z, w; };
 
 void  __cdecl operator_delete__(void* p) throw();                   // 0x00f47380
@@ -222,11 +232,14 @@ void cCreatureCamera::ApplyPlayerDeltas(bool flag)
     }
     if (fabs(mF0) > kEpsilon) {
         float p = mF0 + mFC;
+        // The original keeps the anchor-minus-campos differences and their squares on the
+        // x87 stack (fsub/fmul/faddp, no float rounding), squared in the order
+        // (dx*dx + dz*dz) + dy*dy before fsqrt.
+        float len = VecDistance(mAnchor, mCamPos);
         Vec3 d;
         d.x = mAnchor.x - mCamPos.x;
         d.y = mAnchor.y - mCamPos.y;
         d.z = mAnchor.z - mCamPos.z;
-        float len = (float)sqrt((double)(d.z * d.z + (d.y * d.y + d.x * d.x)));
         if (fabs(p - GetPitch(p, len)) < kEpsilon) {
             Vec3 c;
             c.x = d.y * mCamPos.z - d.z * mCamPos.y;

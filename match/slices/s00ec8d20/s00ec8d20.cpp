@@ -15,7 +15,12 @@ extern int* g_16c759c;        // vector begin
 extern int* g_16c7aa4;        // scene object
 
 // ------------------------------------------------------------------ callees
-void __cdecl FUN_00b534c0(void* at, void* val);        // vector push pair
+void __cdecl FUN_00b534c0(void* at, void* val);        // vector push pair (cdecl view used by 00ec8d20)
+// The real callee is __thiscall: `mov ecx, <owner>; push val; push at; call`.
+// 00ec8d80 passes its owner (param_1) in ECX, so call it as a thiscall member.
+struct VecInsert {
+    void __thiscall insert(int* pos, void* val);                     // 0x00b534c0
+};
 void __cdecl FUN_00ec8780(int p);
 void __cdecl FUN_00ec8370(int p);
 void __cdecl FUN_00ec81b0(int p);
@@ -62,34 +67,38 @@ void FUN_00ec8d20(int param_1)
 
 // ------------------------------------------------------------------ 0x00ec8d80
 // @ 0x00ec8d80
+struct KV { int k; int v; };
 void FUN_00ec8d80(int param_1)
 {
     int arr[8];
     arr[0] = 0x19; arr[1] = 0x32; arr[2] = 0x4b; arr[3] = 100;
     arr[4] = 0x4b; arr[5] = 0x32; arr[6] = 0x19;
-    int local_2c = 5;
+    // k/v live in one adjacent pair: the insert callee reads the value from the address
+    // we pass (its 2nd arg is a pointer to this pair), not from a single int.
+    KV kv;
+    kv.k = 5;
     unsigned u = 0;
     do {
         int* p = *(int**)(param_1 + 4);
-        int local_28 = arr[u];
+        kv.v = arr[u];
         if (p < *(int**)(param_1 + 8)) {
             *(int**)(param_1 + 4) = p + 2;
-            if (p) { p[0] = local_2c; p[1] = local_28; }
+            if (p) { p[0] = kv.k; p[1] = kv.v; }
         } else {
-            FUN_00b534c0(p, &local_2c);
+            ((VecInsert*)param_1)->insert(p, &kv);
         }
         ++u;
     } while (u < 3);
-    local_2c = 6;
+    kv.k = 6;
     u = 0;
     do {
         int* p = *(int**)(param_1 + 4);
-        int local_28 = arr[u + 3];
+        kv.v = arr[u + 3];
         if (p < *(int**)(param_1 + 8)) {
             *(int**)(param_1 + 4) = p + 2;
-            if (p) { p[0] = local_2c; p[1] = local_28; }
+            if (p) { p[0] = kv.k; p[1] = kv.v; }
         } else {
-            FUN_00b534c0(p, &local_2c);
+            ((VecInsert*)param_1)->insert(p, &kv);
         }
         ++u;
     } while (u < 4);

@@ -447,6 +447,9 @@ double __fastcall Voice_GetDecayProgress(int p)
 }
 
 // @ 0x0112e450 -- Voice::StartDecay: enter state 1 and latch the decay countdown.
+// Byte-exact with cl 15 (/O2 /MD /Gy /TP, no /vc71): cl 13.10 keeps the byte in al/eax
+// (`mov al; test` / `mov eax; mov`), clobbering eax, while the original uses `cmp byte [ecx+0x47],0`
+// + `fld`/`fstp` and leaves every GPR untouched. See manifest.txt.
 void __fastcall Voice_StartDecay(int p)
 {
     if (*(char*)(p + 0x47) == 0)

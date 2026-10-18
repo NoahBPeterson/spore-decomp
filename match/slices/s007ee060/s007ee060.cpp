@@ -246,8 +246,9 @@ extern "C" void* VolumeRead(int* reader) {
 // @ 0x007EE6D0  copy six floats (user element-copy callback)
 struct SixFloats {
   float v[6];
-  void Assign(const SixFloats* src) {
+  SixFloats* Assign(const SixFloats* src) {
     for (int i = 0; i < 6; ++i) v[i] = src->v[i];
+    return this;
   }
 };
 extern "C" void CopySix(void* dst, void* src) {

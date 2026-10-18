@@ -70,7 +70,7 @@ struct WE {
     void  FUN_00bc74d0(uint n);
     int   FUN_00bc7680(int index);
     void  FUN_00bc77e0(int index);
-    void  FUN_00bc7a70(void** out, Rec* at);
+    void** FUN_00bc7a70(void** out, Rec* at);
     void  FUN_00bc7b70(uint n);
     int   FUN_00bc7c40(int first, int last);
     void  FUN_00bc7ca0(Rec* at, int* val);
@@ -305,7 +305,7 @@ Rec* __cdecl FUN_00bc79a0(Rec* param_1, Rec* param_2, Rec* param_3)
 // ===========================================================================
 // @ 0x00bc7a70 — release the record at `at` and return the next free slot.
 // ===========================================================================
-void WE::FUN_00bc7a70(void** param_2, Rec* param_3)
+void** WE::FUN_00bc7a70(void** param_2, Rec* param_3)
 {
     FUN_00bc77e0(((char*)param_3 - (char*)begin) / 0x3c);
     unsigned* puVar1;
@@ -315,6 +315,7 @@ void WE::FUN_00bc7a70(void** param_2, Rec* param_3)
         param_3 = (Rec*)puVar1;
     } while ((int)*puVar1 < 0);
     *param_2 = puVar1;
+    return param_2;
 }
 
 // ===========================================================================

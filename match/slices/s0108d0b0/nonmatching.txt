@@ -9,7 +9,7 @@
 0108dbb0 112 havok-equivalent
 0108dc50 227 havok-equivalent
 0108dd40 78 havok-equivalent
-0108dd90 66 havok-equivalent
+0108dd90 66 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (400 valid, 100% cov): original leaves the out pointer in EAX (void_hides_eax), so calcAabb now returns hkAabb& and returns the out reference
 0108dde0 65 havok-equivalent
 0108de30 57 havok-equivalent
 0108de70 104 havok-equivalent

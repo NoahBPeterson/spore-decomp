@@ -7,6 +7,11 @@ struct Vector3 { float x, y, z; Vector3() {} Vector3(float a,float b,float c):x(
 struct Matrix3 { float m[9]; };
 void* operator_new_(unsigned n);
 
+// Minimal polymorphic owner: the original performs virtual `this`-calls through
+// refcounted objects (vtable slot +0 = release/destroy, +4 = other). Modelling the object as a
+// real class makes the compiler emit the same `mov ecx,obj` / `call [vtable+slot]`.
+struct IRefObj { virtual void slot0(); virtual void slot4(); };
+
 extern "C" {
 extern char DAT_016c7330;       // int* gCurPath
 extern char DAT_016c7334;       // int* gCurNode
@@ -88,10 +93,12 @@ void __fastcall FUN_00ebbb10(int p)
 {
     *(int*)(p + 4) -= 0x50;
     int iVar1 = *(int*)(p + 4);
-    if (*(int**)(iVar1 + 0x4c) != 0)
-        (*(void(**)(void))(** (int**)(iVar1 + 0x4c) + 4))();
-    if (*(int**)(iVar1 + 0x48) != 0)
-        (*(void(**)(void))(** (int**)(iVar1 + 0x48) + 4))();
+    IRefObj* o = *(IRefObj**)(iVar1 + 0x4c);
+    if (o)
+        o->slot4();
+    o = *(IRefObj**)(iVar1 + 0x48);
+    if (o)
+        o->slot4();
     cGonzagoTimer_dtor((void*)(iVar1 + 0x28));
 }
 
@@ -131,10 +138,10 @@ int* WpStub::asg(int* p1x)
     p1[0x11]=p2[0x11];
     int* a = (int*)p2[0x12];
     int* b = (int*)p1[0x12];
-    if (a != b) { if (a) (*(void(**)(void))*a)(); p1[0x12]=(int)a; if (b) (*(void(**)(void))(*b+4))(); }
+    if (a != b) { if (a) ((IRefObj*)a)->slot0(); p1[0x12]=(int)a; if (b) ((IRefObj*)b)->slot4(); }
     a = (int*)p2[0x13];
     b = (int*)p1[0x13];
-    if (a != b) { if (a) (*(void(**)(void))*a)(); p1[0x13]=(int)a; if (b) (*(void(**)(void))(*b+4))(); }
+    if (a != b) { if (a) ((IRefObj*)a)->slot0(); p1[0x13]=(int)a; if (b) ((IRefObj*)b)->slot4(); }
     return p1;
 }
 
@@ -152,15 +159,15 @@ int* WpStub::cpy(int* p2)
     p1[10]=0x1464450;
     int* a = (int*)p2[0x12];
     p1[0x12]=(int)a;
-    if (a) (*(void(**)(void))*a)();
+    if (a) ((IRefObj*)a)->slot0();
     a = (int*)p2[0x13];
     p1[0x13]=(int)a;
-    if (a) (*(void(**)(void))*a)();
+    if (a) ((IRefObj*)a)->slot0();
     return p1;
 }
 
 // @ 0x00ebc120
-void __fastcall FUN_00ebc120(int* p)
+int* __fastcall FUN_00ebc120(int* p)
 {
     p[1]=0;
     p[0]=0x148889c;
@@ -180,6 +187,7 @@ void __fastcall FUN_00ebc120(int* p)
     p[0x16]=0;
     *(char*)(p+0x17)=0;
     p[0x18]=0;
+    return p;
 }
 
 // @ 0x00ebbd70

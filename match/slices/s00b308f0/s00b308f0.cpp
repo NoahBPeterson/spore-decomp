@@ -327,7 +327,7 @@ void cGameTerrainCursor::func9Ch_(bool b, void* obj)
             }
         }
     } else {
-        ((VT7C*)this)->f7C(true, 0);
+        ((VT7C*)this)->f7C(false, 1);
     }
 }
 

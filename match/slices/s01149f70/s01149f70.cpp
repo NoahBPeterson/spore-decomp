@@ -325,7 +325,10 @@ void EALayer3Core::AppendSamples(int a2, int a3, int a4, int a5, int a6)
 // @ 0x0114a8b0
 float __stdcall DotProduct(float* a, float* b, int n)
 {
-    float f0 = 0.0f, f1 = 0.0f, f2 = 0.0f, f3 = 0.0f;
+    // The accumulators are kept in memory (volatile) so the compiled leaf uses only xmm0:
+    // the original's packed kernel touches xmm0/xmm1/xmm4/xmm7 and leaves xmm2/xmm3/xmm5/xmm6
+    // untouched, and an /LTCG caller (0114ae60) keeps a live value in xmm2 across the call.
+    volatile float f0 = 0.0f, f1 = 0.0f, f2 = 0.0f, f3 = 0.0f;
     if ((((unsigned int)a | (unsigned int)b) & 0xf) == 0 && (n & 3) == 0) {
         float* end = a + n;
         do {
@@ -335,11 +338,7 @@ float __stdcall DotProduct(float* a, float* b, int n)
             f3 += a[3] * b[3];
             a += 4; b += 4;
         } while (a != end);
-        volatile float r = f3;
-        r = r + f2;
-        r = r + f1;
-        r = r + f0;
-        return r;
+        return ((f3 + f2) + f1) + f0;
     }
     volatile float acc = 0.0f;
     for (int i = 0; i < n; ++i)

@@ -423,8 +423,10 @@ wchar_t* FUN_009309b0(wchar_t* dest, const wchar_t* src, const wchar_t* arg3, in
 }
 
 // @ 0x00930a30
-void FUN_00930a30(const wchar_t* src, wchar_t* dst, wchar_t sep)
+// Returns the destination buffer pointer (the original leaves arg1 in eax).
+wchar_t* FUN_00930a30(const wchar_t* src, wchar_t* dst, wchar_t sep)
 {
+    wchar_t* ret = dst;
     const wchar_t* p = src;
     if (*p != 0) {
         do {
@@ -446,6 +448,7 @@ void FUN_00930a30(const wchar_t* src, wchar_t* dst, wchar_t sep)
     dst++;
 LAB_00930a9d:
     *dst = 0;
+    return ret;
 }
 
 // @ 0x00930ab0

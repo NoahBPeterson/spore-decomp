@@ -112,7 +112,7 @@ struct Clipboard {
     char pad14d[3];
     void Clear(unsigned type);                    // 0x92a940 (other slice)
     bool SetClipboardData(IData* pData, bool b);  // @ 0092abb0
-    void DestroyPlatform();                       // @ 0092ad10
+    bool DestroyPlatform();                       // @ 0092ad10
     bool Clipboard_EnablePlatform();              // @ 0092b0b0
     void FUN_0092b0f0(int v);                     // @ 0092b0f0
     bool FUN_0092b140();                          // @ 0092b140
@@ -165,7 +165,7 @@ void* FUN_0092ac90(void* v) {
 }
 
 // @ 0x0092ad10
-void Clipboard::DestroyPlatform() {
+bool Clipboard::DestroyPlatform() {
     char* o = (char*)this;
     char* p = *(char**)(o + 8);
     if (p != 0) {
@@ -176,6 +176,7 @@ void Clipboard::DestroyPlatform() {
         operator_delete__(p);
         *(void**)(o + 8) = 0;
     }
+    return true;
 }
 
 // @ 0x0092ad50

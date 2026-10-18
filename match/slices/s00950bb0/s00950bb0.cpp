@@ -154,7 +154,7 @@ struct Bounds {
 
     char GetBounds(float* out);
     void SetBounds(char valid, const float* r);
-    void UnionBounds(const float* r);
+    const float* UnionBounds(const float* r);
 };
 
 // @ 0x00952100
@@ -175,20 +175,22 @@ void Bounds::SetBounds(char valid, const float* r) {
 }
 
 // @ 0x00952160
-void Bounds::UnionBounds(const float* r) {
+// The original loads arg1 into eax at entry and leaves it there on every path (a hidden return).
+const float* Bounds::UnionBounds(const float* r) {
     if (mValid == 0) {
         mValid = 1;
         mMinX = r[0]; mMinY = r[1]; mMaxX = r[2]; mMaxY = r[3];
-        return;
+        return r;
     }
     if (mMaxX <= r[0] || r[2] <= mMinX || mMaxY <= r[1] || r[3] <= mMinY) {
         mMinX = 0; mMinY = 0; mMaxX = 0; mMaxY = 0;
-        return;
+        return r;
     }
     if (r[0] > mMinX) mMinX = r[0];
     if (r[1] > mMinY) mMinY = r[1];
     if (r[2] < mMaxX) mMaxX = r[2];
     if (r[3] < mMaxY) mMaxY = r[3];
+    return r;
 }
 
 // ---------------------------------------------------------------------------------------------

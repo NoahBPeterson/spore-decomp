@@ -94,7 +94,7 @@ struct CamInfo {                       // 0x30 bytes: pos(3f) + quat(4f) + 4f + 
     float    getSpan();                // 0x00ad7af0
     float    getV1();                  // 0x00ad7b10
     float    getV0();                  // 0x00ad7b30
-    void     forwardC();               // 0x00ad7b50
+    void*    forwardC();               // 0x00ad7b50
     void*    getPtr();                 // 0x00ad7b70
     void*    getLocation(void*);       // 0x00ad7b90
     CamInfo* assign(CamInfo*);         // 0x00ad7f00
@@ -252,10 +252,12 @@ float CamInfo::getV0()
 
 // ================================================================================================
 // @ 0x00ad7b50
-void CamInfo::forwardC()
+void* CamInfo::forwardC()
 {
-    if (this->p2c)
-        VFN(this->p2c, 0x2c, TC_v0)(this->p2c);
+    void* p = this->p2c;
+    if (p)
+        return VFN(p, 0x2c, TC_p0)(p);
+    return this;
 }
 
 // ================================================================================================

@@ -238,7 +238,9 @@ extern "C" void  SPUIHelpers_UpdateMouseFocus(int);    // 0x00804f50
 extern "C" void  FUN_00671c50(void*);                  // 0x00671c50
 
 // @ 0x006536e0  filter over a 0x10-byte record range (remove_if-like)
-int* Filter16(int* p, int* end, int* keysBegin, int* keysEnd, char* attr) {
+// The original reads its key range and dealloc-guard pointer from stack slots 3, 4, 7
+// (slots 5 and 6 are unused padding), so mirror that arity here.
+int* Filter16(int* p, int* end, int* keysBegin, int* keysEnd, int* unused5, int* unused6, char* attr) {
     for (; p != end; p += 4) {
         if (SetAssetData((void*)p[1], 0)) {
             int* lo = keysBegin;

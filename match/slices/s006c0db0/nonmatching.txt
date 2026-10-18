@@ -1,6 +1,5 @@
 006c0db0  220  PFRecordWrite ctor from blob; EH prolog/frame not reproduced
 006c0ed0  129  PFRecordWrite dtor; EH frame + member dtor order differ
-006c0fa0  22   Pair8 ctor (a=0,b=1); adjacent CRT array ctor thunk is merged into this VA range
 006c1180  252  arena pointer fixup; memmove/order scheduling differs
 006c12a0  35   BlendShape::RegisterArenaReadCallbacks; register/schedule differs
 006c12e0  52   vector<0x38> destructor-iterator helper; CRT helper call shape differs

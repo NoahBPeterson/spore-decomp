@@ -2,7 +2,7 @@
 00a102e0  33  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a103c0  160  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a10670  89  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
-00a107a0  44  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
+00a107a0  44  Ability::ctor: complete; the original is `void ctor()` but hands `this` back in eax (the LTCG caller in 00a2e650 re-reads eax at 00a2e741 after the call at 00a2e737), so it is declared `void* ctor()` with `return this;` (same hidden-eax pattern as ctor2 at 00a10860); equiv PASS 400 valid inputs, 100% coverage (18/18 insns)
 00a10800  68  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a10860  105  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)
 00a10960  49  complete; behaviourally equivalent reconstruction (cl schedule/register-allocation or EH-frame delta vs original)

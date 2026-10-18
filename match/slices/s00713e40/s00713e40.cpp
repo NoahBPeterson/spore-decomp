@@ -118,16 +118,17 @@ void PairTable::Set(uint32_t key, uint32_t value)
 struct MatrixTable {
     char pad0[0x10c];
     void* mpData;                           // +0x10c
-    void Set(uint32_t index, const uint32_t* mat);
+    uint32_t* Set(uint32_t index, const uint32_t* mat);
 };
 
 // @ 0x007145B0
-void MatrixTable::Set(uint32_t index, const uint32_t* mat)
+uint32_t* MatrixTable::Set(uint32_t index, const uint32_t* mat)
 {
     uint32_t* dst = (uint32_t*)((char*)mpData + index * 0x30);
     dst[0] = mat[0]; dst[1] = mat[4]; dst[2] = mat[8];  dst[3] = mat[12];
     dst[4] = mat[1]; dst[5] = mat[5]; dst[6] = mat[9];  dst[7] = mat[13];
     dst[8] = mat[2]; dst[9] = mat[6]; dst[10] = mat[10]; dst[11] = mat[14];
+    return dst + 8;
 }
 
 // ---------------------------------------------------------------------------------------------

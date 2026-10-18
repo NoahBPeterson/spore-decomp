@@ -237,7 +237,9 @@ void UpdateStream(CitizenStream* s, float dt)
         double dy = (double)tgt.y - cur.y;
         double dz = (double)tgt.z - cur.z;
         cSPVector3 d((float)dx, (float)dy, (float)dz);
-        float dist = (float)sqrt(dx * dx + dy * dy + dz * dz);
+        // The original squares the (unrounded, x87) differences in the order
+        // (dx*dx + dz*dz) + dy*dy before fsqrt; the association matters for the last ulp.
+        float dist = (float)sqrt((dx * dx + dz * dz) + dy * dy);
         if (dist > 0.0f) {
             float maxMove = ((float)i * 0.1f) * (dt * 2.0f);
             if (maxMove >= dist) {

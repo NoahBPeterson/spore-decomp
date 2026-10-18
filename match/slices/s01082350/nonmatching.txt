@@ -1,5 +1,5 @@
 01082350 229 havok-equivalent; equiv FAIL: only esp after return differs (original caller-cleans, ours ret 4; custom ABI), ECX receiver fixed
-01082490 6 havok-equivalent
+01082490 4 havok-equivalent; equiv FAIL: trivial wrapper calls hkRotation::toQuat (0x01082350), a custom-ABI callee (ecx=rotation, out pushed, plain ret = caller-pop). Our thiscall caller assumes callee-pop, so the pushed arg is never removed and `ret 4` returns into the pushed `this` (execution fault); declaring the callee __fastcall (dummy 2nd arg, out on stack) reproduces the register/stack shape but keeps the same cleanup mismatch. Inlining the callee removes the crash but then set's own instructions clobber eax/edx, which the original leaves untouched. Not expressible with cl 15.00 (/vc71).
 010824a0 181 havok-equivalent
 010825a0 83 havok-equivalent
 01082600 60 havok-equivalent

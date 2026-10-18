@@ -126,11 +126,13 @@ cRTTBuffer::cRTTBuffer(uint32_t w, uint32_t h)
 }
 
 // @ 0x00528e20  (real shape: device->vtbl[5](mRTTRect fields), free(mCamera))
+typedef void (__thiscall *RwDeviceVtbl5)(void* self, int pageID, int allocID);
 void cRTTBuffer::Destroy()
 {
     cRTTBuffer* self = this;
-    int* d = (int*)GetDevice();
-    (*(void(__thiscall*)(int*, int, int))(*(int*)d + 0x14))(d, self->mRTTRect.mPageID, self->mRTTRect.mAllocID);
+    RwDevice* d = GetDevice();
+    RwDeviceVtbl5 fn = *(RwDeviceVtbl5*)(*(int*)d + 0x14);
+    fn(d, self->mRTTRect.mPageID, self->mRTTRect.mAllocID);
     FreeObj(self->mCamera);
 }
 

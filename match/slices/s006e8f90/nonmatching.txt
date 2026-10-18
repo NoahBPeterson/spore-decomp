@@ -3,7 +3,7 @@
 006e94a0  2  complete; only `add eax,-1` vs `sub eax,1` on the refcount decrement
 006e9530  80  complete; Vector3 splat via MakeV3 gives direct movss instead of the stack temp copy [equiv: PASS 1200 inputs, 100% coverage]
 006e95a0  749  complete; big matrix/bounds transform, SSE schedule + call layout differ
-006e9b00  124  complete; field-init order/schedule differ (EH prolog source unknown)
-006e9bf0  123  complete; field-init order/schedule differ
+006e9b00  121  ctor-style field init (0x00..0x6c); declared to return this (S5*) so eax matches the original's `mov eax,ecx`; equiv: PASS 400/400, 100% coverage (original's C++ EH prolog not reproduced)
+006e9bf0  123  ctor-style field init (other layout, 0x00..0x68); declared to return this (S5*) so eax matches the original; equiv: PASS 400/400, 100% coverage
 006e9cc0  91  complete; field-init order/schedule differ
 006e9d50  692  complete; projection math schedule differs

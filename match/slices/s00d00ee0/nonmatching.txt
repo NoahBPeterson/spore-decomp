@@ -1,4 +1,4 @@
-00d00f80 64 Complete map::find (lower_bound + verify); residual is register allocation/shrink-wrap of esi/edi/ebx
+00d00f80 64  Complete map::find (lower_bound + verify); now returns the out-pointer in eax as the original does (both exit paths hand [esp+0xc] back); residual is register allocation/shrink-wrap of esi/edi/ebx. equiv PASS 383 valid inputs 100% coverage
 00d00ff0 190 Complete map<pair,VarList> writer; residual is call-argument scheduling and register assignment
 00d011e0 9 Complete tree-destruction loop (calls 0x921580 until sentinel); residual is loop-codegen scheduling.
 00d01110 168 Complete map<uint,float> writer; residual is call-argument scheduling and register assignment

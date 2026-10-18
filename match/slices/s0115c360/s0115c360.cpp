@@ -107,7 +107,7 @@ void HELPER_CMpegLayer3B::HuffmanDecode(int gr, int ch, float* xr, int extraBits
 
     const float gain = mGainTable[0xff - g->gainIdx];
     const float ngain = -gain;
-    const float zero = 0.0f;
+    static volatile const float zero = 0.0f;   // volatile -> memory operand; keeps cl from holding 0 in xmm3
     int16_t idx[32];
     __declspec(align(16)) float tmp[32];
     int16_t vals[32];

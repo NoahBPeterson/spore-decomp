@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 00ec8d20   44  complete pair-emit loop; data/loop scheduling differs; equiv: FAIL (ours faults in unresolved callee FUN_00b534c0)
-00ec8d80  187  complete pair-emit loops; array materialization differs; equiv: FAIL (ours faults in unresolved callee FUN_00b534c0)
+00ec8d80  119  complete pair-emit loops; callee FUN_00b534c0 is __thiscall (owner in ECX) and reads the value pair from the pointer it is given, so the source now calls a VecInsert member with an adjacent k/v pair. equiv: WEAK (137 valid, 0 mismatch, 100% coverage; min_valid 200 unreachable because most random owner pointers fault). flags /O2 /MD /Gy /EHsc /TP
 00ec8ed0   69  complete vector resize; copy_impl truncation inlined differently; equiv: FAIL (equiv, now member Vec32::Resize)
 00ec90c0   65  complete intrusive-list initializer; store order differs; equiv: FAIL (equiv: pool init value differs)
 00ec9140   61  complete rbtree insert; node/arg scheduling differs; equiv: FAIL (equiv, now member RbTree::Insert)

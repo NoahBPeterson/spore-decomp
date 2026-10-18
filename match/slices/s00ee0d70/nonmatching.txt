@@ -4,5 +4,5 @@
 00ee1140  127  complete; vector walk; frame size (extra 8 bytes) and loop-cache registers differ
 00ee1200  142  complete; vector walk; frame size and loop-cache registers differ
 00ee12c0  578  complete; large teardown; inlined vcalls and frame layout differ
-00ee1510  188  complete; vector walk with float accumulation; frame size and x87 scheduling differ
+00ee1510  188  complete; vector walk with float accumulation; frame size and x87 scheduling differ; difftest WEAK (307 valid, 41.3% cov, no mismatch): clamp written `param_2 < kMin` so cl emits a single-xmm0 `comiss` instead of a double `comisd` that clobbered xmm1
 00ee1630  49   complete; vector walk; extra 8-byte frame slot and second-loop cache register differ

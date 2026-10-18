@@ -51,10 +51,11 @@ bool CrossSideCcw(float* p1, float* p2, float* p3) {
   return false;
 }
 
-// @ 0x005D5120
-void CopyE20Range(E20Iter first, E20Iter last, E20Iter dest) {
+// @ 0x005D5120  eastl::uninitialized_copy_ptr<PathIntersection>: returns the final dest pointer.
+E20* CopyE20Range(E20Iter first, E20Iter last, E20Iter dest) {
   for (; first != last; ++first, ++dest)
     if (&*dest) new ((void*)&*dest) E20(*first);
+  return dest.mpNode;
 }
 
 // @ 0x005D51E0

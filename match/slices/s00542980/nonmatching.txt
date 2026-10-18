@@ -1,1 +1,1 @@
-00542980  399  EndLink: complete; only the frame differs (0x38 bytes reserved by the attempted inline of vector<Link>::erase, 0x00546880, not reproduced) so all stack offsets shift
+00542980  379  EndLink: complete; equiv WEAK (273 valid, 53% coverage: wcscmp int/float branches unreachable from random soup); frame 0x38 larger from the vector<Link>::erase inline not reproduced; flags /Od /Ob1 /MD /Gy /TP

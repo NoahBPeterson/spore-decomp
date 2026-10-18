@@ -1,3 +1,4 @@
 # source (relative to match/)   symbol   original VA   [cl flags override]
 slices/s0067b4c0/s0067b4c0.cpp  ?Insert@WStr@@QAEHHH@Z  0067bbf0  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
 slices/s0067b4c0/s0067b4c0.cpp  ?UpdateHints@cUIHints@@QAEXDD@Z  0067c350  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-
+slices/s0067b4c0/s0067b4c0.cpp  ?SetFlag@cUIHints@@QAEHDH@Z  0067c420  /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-

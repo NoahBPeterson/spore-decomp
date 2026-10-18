@@ -34,12 +34,13 @@ float __stdcall WaveSum(const float* v)
 }
 
 // @ 0x00a77cc0
-void __stdcall InvLengthSqScale(float* out, const float* v)
+float* __stdcall InvLengthSqScale(float* out, const float* v)
 {
     float s = 1.0f / (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
     out[0] = v[0] * s;
     out[1] = v[1] * s;
     out[2] = v[2] * s;
+    return out;
 }
 
 // @ 0x00a77d30

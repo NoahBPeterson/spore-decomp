@@ -53,7 +53,7 @@ bool HasAltSeparator(wchar_t* first, wchar_t* last) {
 }
 
 // @ 0x00920f00
-void NormalizeSeparators(Range* r) {
+Range* NormalizeSeparators(Range* r) {
     wchar_t* p = r->begin;
     if (p != r->end) {
         do {
@@ -62,6 +62,7 @@ void NormalizeSeparators(Range* r) {
             ++p;
         } while (p != r->end);
     }
+    return r;
 }
 
 wchar_t* FindExtension(wchar_t* first, wchar_t* last);

@@ -230,7 +230,7 @@ int FUN_01021240() {
 // 0x01021260 SP::cSPLivingUniverse::GetActivePlanet
 // ===========================================================================
 // @ 0x01021260
-void* FUN_01021260() {
+__declspec(noinline) void* FUN_01021260() {
     void* s = DAT_016dda8c;
     void* p = *(void**)((char*)s + 4);
     return p;

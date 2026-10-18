@@ -76,7 +76,7 @@ struct Ctx {
     int  DispatchLookup(uint32_t key, uint32_t* out, int count);   // 0x00a691c0
     void ForEachRegA(uint32_t arg);                                // 0x00a69310
     void ForEachRegB(uint32_t arg);                                // 0x00a69380
-    void Serialize(void* stream);                                  // 0x00a69630
+    bool Serialize(void* stream);                                  // 0x00a69630
 };
 
 // ===========================================================================
@@ -243,7 +243,7 @@ void WriteUint32(void* stream, void* p, unsigned n, int endian);   // 0x0093aa70
 void WriteUint64(void* stream, void* p, unsigned n, int endian);   // 0x0093ab10
 void SerializeRecord(void* stream, void* rec);                     // 0x00a84720
 
-void Ctx::Serialize(void* stream)
+bool Ctx::Serialize(void* stream)
 {
     char* self = (char*)this;
     uint32_t tmp;
@@ -406,6 +406,7 @@ void Ctx::Serialize(void* stream)
             ++i;
         } while (i < cnt);
     }
+    return true;
 }
 
 // ===========================================================================
@@ -707,6 +708,8 @@ void __stdcall DestroySlotRange2(RefVecSlot* first, RefVecSlot* last)
 // @ 0x00a6a120
 void RefVec::insert(RefObject** position, unsigned n, RefObject** value)
 {
+    if (n == 0)
+        return;
     unsigned freeSlots = (unsigned)(mpCapacity - mpEnd);
     if (n > freeSlots) {
         unsigned oldSize = (unsigned)(mpEnd - mpBegin);
@@ -734,8 +737,6 @@ void RefVec::insert(RefObject** position, unsigned n, RefObject** value)
         mpCapacity = buf + newCap;
         return;
     }
-    if (n == 0)
-        return;
     {
         RefObject* tmp = *value;
         if (tmp)

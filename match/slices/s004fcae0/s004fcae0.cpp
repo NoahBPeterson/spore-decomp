@@ -128,10 +128,12 @@ void Vec16::push_back(const void* val)
     }
 }
 
-struct Pod24 { void Copy(const void* src); };
+struct Pod24 { Pod24* Copy(const void* src); };
 
 // @ 0x004fd670
-void Pod24::Copy(const void* src)
+// The original returns `this` in eax (the hidden void return); declare it so the checker's eax
+// observable matches instead of leaving the last `src` load behind.
+Pod24* Pod24::Copy(const void* src)
 {
     void* dst = this;
     *(float*)((char*)dst + 0x00) = *(const float*)((char*)src + 0x00);
@@ -140,6 +142,7 @@ void Pod24::Copy(const void* src)
     *(float*)((char*)dst + 0x0c) = *(const float*)((char*)src + 0x0c);
     *(float*)((char*)dst + 0x10) = *(const float*)((char*)src + 0x10);
     *(int*)((char*)dst + 0x14) = *(const int*)((char*)src + 0x14);
+    return this;
 }
 
 // ---------------------------------------------------------------------------

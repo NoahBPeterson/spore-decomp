@@ -343,11 +343,11 @@ struct cSplitManager {
     int             mRefCount;              // +0x04
     cSPTransform    mComponentTransform;    // +0x08
     ListVector      mSplitClientList;       // +0x40
-    void AddSplitInstance(cSplitInstanceRef* out, int index, int a, int b); // @ 0x007d7640
+    cSplitInstanceRef* AddSplitInstance(cSplitInstanceRef* out, int index, int a, int b); // @ 0x007d7640
 };
 
 // @ 0x007d7640
-void cSplitManager::AddSplitInstance(cSplitInstanceRef* out, int index, int a, int b) {
+cSplitInstanceRef* cSplitManager::AddSplitInstance(cSplitInstanceRef* out, int index, int a, int b) {
     ListVector& list = mSplitClientList;
     if ((int)(list.mpEnd - list.mpBegin) <= index)
         list.resize((size_type)index + 1);
@@ -355,6 +355,7 @@ void cSplitManager::AddSplitInstance(cSplitInstanceRef* out, int index, int a, i
     int key = pList->insert(cSplitInstance(a, mComponentTransform, b));
     out->mSplitID = index;
     out->mKey = key;
+    return out;
 }
 
 // ---------------------------------------------------------------------------

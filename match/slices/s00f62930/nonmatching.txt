@@ -1,6 +1,7 @@
 # va  diff-bytes  reason  (complete behaviorally-equivalent source, not yet byte-exact)
-00f62b70   59  cTerrainDistributeInfo ctor: complete; the SSE constant preload order  [equiv: PASS]
-               (0.1f / kFXMaxFloat / 1.0f) differs from cl's original schedule
+00f62b70   59  cTerrainDistributeInfo ctor: complete; the SSE constant preload order  [equiv: PASS (400 valid, 100% cov)]
+               (0.1f / kFXMaxFloat / 1.0f) differs from cl's original schedule; declared a non-void
+               return so cl keeps `this` live in eax (ctor return register) instead of 0
 00f62bc0  333  description serializer: complete; the WriteUint32 call schedule and the  [equiv: UNSUPPORTED (unresolved EA_IO_WriteUint32)]
                element-loop byte reads use a different stack temp layout
 00f62d80  166  effect-command ctor: complete; the vtable stores and the 8x0x40 element  [equiv: FAIL (memory pool mismatch)]

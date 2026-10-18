@@ -4,6 +4,11 @@
 // 0x743b50; ...; call 0xe82130` is a small scope guard (modelled by cGuard16).
 // 0xe4cc40 (thunk_FUN_00e823a0) looks an object up from a handle.
 #include "types.h"
+#include <xmmintrin.h>
+
+// float -> int using the current SSE rounding mode (cvtss2si), matching the
+// original's argument computation for the alpha byte.
+static __forceinline int FloatToInt(float v) { return _mm_cvt_ss2si(_mm_set_ss(v)); }
 
 struct cGuard16 { void* p; cGuard16(); ~cGuard16(); };
 
@@ -437,7 +442,8 @@ void FUN_00e504b0(int* p, float a) {
   } else {
     if (!p) return;
     (*(void(__thiscall**)(int*, int, int))((char*)Vt(p) + 0x7c))(p, 1, 1);
-    int v = (int)(a * 255.0f);
+    float x = a * 255.0f;
+    int v = _mm_cvt_ss2si(*(__m128*)&x);
     (*(void(__thiscall**)(int*, int))((char*)Vt(p) + 0x5c))(p, (v << 24) | 0xffffff);
   }
 }

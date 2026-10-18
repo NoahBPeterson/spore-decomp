@@ -1,4 +1,3 @@
-005a88a0  10  cCopy9::Assign: complete 36-byte struct copy; cl schedules the count/this register move differently
 005a8900  6  GetEditorTuningValue: complete; load/store interleave of the 3 dwords differs
 005a7d00  1471  CalculateValues complete; frame 0x5c vs 0x48 (extra temps), x87/SSE scheduling and vtable reload after GetMode differ
 005a83d0  47  CalculateBadness complete; only the normalized-axis dot product x87 stack order differs (inv*zero term)

@@ -80,10 +80,9 @@ struct DragDropCaptureWin {
     void* ScalarDeletingDtor(char flags);      // 0x008044a0
     bool Sub8045a0(void* o, int v);            // 0x008045a0
 
-    void SendEvent(Cb* cb, u32 type) {
+    __forceinline void SendEvent(Cb* cb, u32 type) {
         Event e;
-        e.type = type; e.x = x; e.y = y; e.id = id;
-        e.cb = cb; e.z0 = 0; e.z1 = 0; e.p = p;
+        e.type = type; e.x = x; e.y = y; e.cb = cb; e.z0 = 0; e.z1 = 0; e.p = p; e.id = id;
         if (cb->b11) { cb->fn(cb->ctx, &e); cb->b11 = false; }
     }
 };
@@ -113,6 +112,11 @@ Cb& Cb::operator=(const Cb& o) {
 }
 
 // 0x008038d0 : transition dispatcher
+// The original inlines SendEvent(A) at several sites with a *different* scratch
+// rotation per site (ecx/edx swapped). Writing the b10 dispatch as an else-style
+// switch on `ev` (instead of a flat if-chain) keeps the shared blocks split, so
+// each inlined copy lands on the original's registers (equivalence no longer
+// reports "fake call this").
 void DragDropCaptureWin::Sub8038d0(int ev) {
     Cb* A = &a;
     Cb* B = &b;
@@ -123,14 +127,16 @@ void DragDropCaptureWin::Sub8038d0(int ev) {
             SendEvent(A, 0x7be2446);
             return;
         }
-        if (b.b10 == 0) {
-            if (ev == 0x7be2445) { Transition(ev, A); return; }
-            if (ev == 0x7be2444 || ev == 0x7be2446) { Transition(ev, A); Transition(ev, B); }
-            return;
+        if (b.b10 != 0) {
+            switch (ev) {
+            case 0x7be2444: Transition(ev, B); SendEvent(A, 0x7be2446); return;
+            case 0x7be2445: Transition(ev, B); SendEvent(A, 0x7be2446); return;
+            case 0x7be2446: Transition(ev, B); Transition(0x7be2444, A); return;
+            default: return;
+            }
         }
-        if (ev == 0x7be2444) { Transition(ev, B); SendEvent(A, 0x7be2446); return; }
-        if (ev == 0x7be2445) { Transition(ev, B); SendEvent(A, 0x7be2446); return; }
-        if (ev == 0x7be2446) { Transition(ev, B); Transition(0x7be2444, A); return; }
+        if (ev == 0x7be2445) { Transition(ev, A); return; }
+        if (ev == 0x7be2444 || ev == 0x7be2446) { Transition(ev, A); Transition(ev, B); }
         return;
     }
     Transition(ev, A);

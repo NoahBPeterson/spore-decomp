@@ -17,7 +17,6 @@
 011e2560  n/a  UnfixContext::FindNewSubObject: complete; 12-byte near miss
 011e25d0  n/a  UnfixContext::FindExistingSubObject: complete
 011e2630  n/a  rw_free_block_30: complete
-011e2670  n/a  copyBlob: complete; rep-movsd block size diff
 011e2690  n/a  rw_cleanup_2690: complete
 011e26f0  n/a  UpdateSubreferencesData: complete
 011e29c0  n/a  initRange: complete; unrolled store diff; equiv: PASS (now returns this in eax as the original does; void clobbered eax: hybrid div-by-zero 2026-10-12)

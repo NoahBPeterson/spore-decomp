@@ -11,7 +11,7 @@
 00830d60  20  DSub::GetPair40: x87 pair copy schedule differs; equiv FAIL: 5/5 valid inputs mismatched; first: execution
 008310a0  191 ImageInfo2::CopyFrom: refcount + rep movsd block schedule differs; equiv PASS: 1120 valid inputs, 100.0% coverage (all insns)
 00831170  122 SetImageColor: factory/create + CopyFrom inlining schedule differs
-008311f0  122 SetField18At: same clone-of-template schedule differs
+008311f0  122 SetField18At: factory/create path now force-inlined (as in original), removing the edx clobber the original never writes (callerdeps depth-8 SAFE); equiv WEAK: 348 valid inputs, 73.3% coverage (need 100% all insns); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 00831270  122 SetField20At: same clone-of-template schedule differs
 008312f0  130 SetPair38At: same clone-of-template schedule differs
 00831380  130 SetPair40At: same clone-of-template schedule differs

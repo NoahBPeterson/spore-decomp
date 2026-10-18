@@ -14,8 +14,8 @@
 008db8f0 120 complete: FUN_008db8f0 quicksort helper; body shape differs
 008db9b0 266 complete: PFIndexModifiable::Read (index-record parser); stream/alloc flow reconstructed; buffer handling differs
 008dbb10 73 complete: HT::GetFileInfoRef; hash lookup + insert-on-miss; InsertUnique val construction differs
-008dbcf0 159 complete: PFIndexModifiable::GetFiles (enumerate into vector); iteration/alloc differs
-008dbdb0 213 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); register allocation/iteration differs
+008dbcf0 157 complete: PFIndexModifiable::GetFiles (enumerate into vector); DoInsertValue 0x4e3e10 now a __thiscall member of KeyVec (mov ecx,vec), iteration/alloc differs; difftest WEAK (238 valid, 74% cov default; 94.5% at 2500 inputs, no mismatch)
+008dbdb0 212 complete: PFIndexModifiable::GetAllFiles (recursive enumeration); DoInsertValue now __thiscall on the vector; register allocation/iteration differs; difftest UNSUPPORTED (original faults on every generated input)
 008dbeb0 23 complete: PFIndexModifiable::PutFileInfo; field load/register assignment differs
 008dbef0 24 complete: FUN_008dbef0 thunk -> FUN_008dbc20; bool flag materialisation differs (push 0 vs stack byte temp)
 008dbf20 152 complete: HoleSet::AllocAt (rbtree insert + split); register allocation/insert path differs

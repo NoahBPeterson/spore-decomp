@@ -1,5 +1,4 @@
 # va diff reason
-007ec550 19 eastl uninitialized_copy<Vector3> - register assignment differs (ecx/eax swap)
 007ec580 80 write vector<Vector3> - virtual writer call + temp slots differ
 007ec5e0 92 Swarm effect ctor - field/vtable store schedule differs
 007ec660 72 Swarm effect dtor - inlined vector dtor differs
@@ -7,5 +6,5 @@
 007ec7f0 460 eastl::vector<Vector3>::DoInsertValues - codegen differs (no similar-size symbol); equiv: FAIL (member this-in-ecx, operator new[] 0xf473a0 annotated)
 007ecb50 87 cScreenFilterTextureCommand::Execute - float-conv vcall convention differs
 007ecbb0 79 cScreenLengthCommand::Execute - float-conv vcall convention differs
-007ecc30 105 vector<Vector3> scale - loop + float codegen differs
+007ecc30 133 vector<Vector3> scale - loop/frame codegen differs; scalar multiply forced to SSE (mulss) so no x87 subnormal divergence; equiv: WEAK (191/200 valid, 100% coverage, no mismatch)
 007ed090 132 EA::Swarm::cSphereSurface::ParseExtraOptions - string/sprintf args differ

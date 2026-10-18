@@ -155,7 +155,7 @@ bool cGameCinematicsAppMode::Shutdown()
     q = *(int**)((char*)this + 0x1c);
     if (q != 0) {
         *(int*)((char*)this + 0x1c) = 0;
-        (*(void(**)(void))(*q + 4))();
+        ((IVtbl6*)q)->v1();
     }
     return true;
 }

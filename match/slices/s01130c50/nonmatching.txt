@@ -5,7 +5,7 @@
 01131040 190 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (306/400, 74.2% coverage)
 01131110 84 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (324/400, 86.4% coverage)
 011311b0 326 complete; LTCG; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (314/400, 100% coverage)
-011312f0 22 complete; cl register choice (eax vs ecx for the list node); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 92.3% coverage)
+011312f0 19 complete; returns the list node (self+0xf4) in eax (void hid it -- read by LTCG callers); moved the mListNode1 store before the head load so cl keeps self in eax and the reloaded head in ecx (no edx scratch); (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (400/400 valid, 92.3% coverage, no mismatch)
 011313b0 35 complete; LTCG register scheduling around FUN_0113fdd0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (381/400, 100% coverage)
 01131420 39 complete; LTCG register scheduling around FUN_0113fba0; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest PASS (400/400, 100% coverage)
 01131460 81 complete; LTCG + intrusive-list unlink; (flags /vc71 /O2 /MD /Gy /TP /arch:SSE); difftest WEAK (178 valid, 97.0% coverage, no mismatch)

@@ -42,10 +42,10 @@ extern int FUN_0079a630(int, int);
 extern void __fastcall FUN_0079ac70(int *);
 
 struct StubCtor { void *c(void *); };
-struct VCtor16 { void c0(int *); };
+struct VCtor16 { VCtor16 *c0(int *); };
 
 // @ 0x00799cc0
-void VCtor16::c0(int *param_2)
+VCtor16 *VCtor16::c0(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -56,7 +56,7 @@ void VCtor16::c0(int *param_2)
     *(float *)(param_1 + 5) = *(float *)(param_2 + 2);
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
     param_1[0] = (int)&V_140f580;
-    return;
+    return this;
 }
 
 // @ 0x00799e00

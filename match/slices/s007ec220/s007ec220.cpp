@@ -2,6 +2,7 @@
 // command handlers (screen filter/length, terrain script) and text-font commands.
 // Flags: /O2 /MD /Gy /EHsc /TP (x87 float copies: no /arch:SSE).
 #include "types.h"
+#include <xmmintrin.h>
 
 void* operator new[](size_t size, const char* pName, int flags, unsigned debugFlags,
                      const char* file, int line); // 0x00f473a0
@@ -190,7 +191,7 @@ extern "C" int TelemetryRead(SP::cTelemetryReader* self, void* iface) {
 struct Vec3 {
   float x, y, z;
 };
-void CopyVec3Range(Vec3* first, Vec3* last, Vec3* result) {
+Vec3* CopyVec3Range(Vec3* first, Vec3* last, Vec3* result) {
   for (; first != last; first = (Vec3*)((char*)first + 0xc)) {
     if (result) {
       result->x = first->x;
@@ -199,6 +200,7 @@ void CopyVec3Range(Vec3* first, Vec3* last, Vec3* result) {
     }
     result = (Vec3*)((char*)result + 0xc);
   }
+  return result;
 }
 
 // @ 0x007EC580  write vector<Vector3> (element count then raw bytes)
@@ -362,14 +364,15 @@ extern "C" void ScreenLengthExecute(int* self, EA::ArgScript::cArguments* args) 
 // @ 0x007ECC30  scale a vector<Vector3> by a factor
 void ScaleVec3Vec(float s, Vec3Vec* v) {
   int32_t count = (int32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc;
-  if (count > 0) {
+  if (count != 0) {
     uint32_t i = 0;
     uint32_t off = 0;
+    __m128 sv = _mm_load_ss(&s);
     do {
       Vec3* e = (Vec3*)((char*)v->mpBegin + off);
-      e->x *= s;
-      e->y *= s;
-      e->z *= s;
+      _mm_store_ss(&e->x, _mm_mul_ss(_mm_load_ss(&e->x), sv));
+      _mm_store_ss(&e->y, _mm_mul_ss(_mm_load_ss(&e->y), sv));
+      _mm_store_ss(&e->z, _mm_mul_ss(_mm_load_ss(&e->z), sv));
       ++i;
       off += 0xc;
     } while (i < (uint32_t)((char*)v->mpEnd - (char*)v->mpBegin) / 0xc);

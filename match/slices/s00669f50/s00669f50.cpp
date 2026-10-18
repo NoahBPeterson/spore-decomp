@@ -30,12 +30,13 @@ int FindIndex0066a5c0(int x) {
 struct FillBuf {
   int a0, a1, a2, a3, a4, a5, m18;
   bool m1c;
-  void Set(unsigned char b, int p);
+  FillBuf* Set(unsigned char b, int p);
 };
-void FillBuf::Set(unsigned char b, int p) {
+FillBuf* FillBuf::Set(unsigned char b, int p) {
   memset(this, b, 0x18);
   m18 = p;
   m1c = false;
+  return this;
 }
 
 // ------------------------------------------------------------------

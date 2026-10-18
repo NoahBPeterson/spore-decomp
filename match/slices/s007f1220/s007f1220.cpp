@@ -29,7 +29,7 @@ struct E16 {
 };
 
 // @ 0x007F1890
-void UninitCopy16(E16** result, E16* first, E16* last, E16* dst) {
+E16** UninitCopy16(E16** result, E16* first, E16* last, E16* dst) {
   *result = dst;
   if (first != last) {
     do {
@@ -39,6 +39,7 @@ void UninitCopy16(E16** result, E16* first, E16* last, E16* dst) {
     } while (first != last);
     *result = dst;
   }
+  return result;
 }
 
 // ---------------------------------------------------------------------------

@@ -472,7 +472,8 @@ void __cdecl FUN_011393d0(void* self)
 {
     int p = A<int>(self, 0x70);
     if (p == 0) { operator_new_arr((unsigned)A<int>(self, 0x78), 0, (unsigned)A<int>(self, 0x6c)); p = A<int>(self, 0x6c); }
-    ((void(__cdecl*)(void*, int, void*))A<int>(self, 0x54))((void*)A<int>(self, 0x78), p, (void*)A<int>(self, 0x58));
+    void* a3 = (void*)A<int>(self, 0x58);
+    ((void (__cdecl *)(void*, int, void*)) A<int>(self, 0x54))((void*)A<int>(self, 0x78), p, a3);
     A<int>(self, 0x70) = 0;
 }
 

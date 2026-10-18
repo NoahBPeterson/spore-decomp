@@ -192,8 +192,8 @@ struct tNavigationGoal {
     int    i5c;                // +0x5c
     float  f60, f64, f68, f6c; // +0x60
     int    i70;                // +0x70
-    void   InitAt(float* p, float a, float b);           // 0x00ad29d0
-    void   InitToward(float* p, float* q, float a, float b); // 0x00ad2a50
+    tNavigationGoal* InitAt(float* p, float a, float b);           // 0x00ad29d0
+    tNavigationGoal* InitToward(float* p, float* q, float a, float b); // 0x00ad2a50
 };
 
 // ================================================================================================
@@ -477,7 +477,7 @@ int __cdecl FUN_00ad2910(void* param)
 // ================================================================================================
 // 0x00ad29d0 -- cNavigationGoal::InitAt.
 // @ 0x00ad29d0
-void tNavigationGoal::InitAt(float* p, float a, float b)
+tNavigationGoal* tNavigationGoal::InitAt(float* p, float a, float b)
 {
     pathBegin = 0;
     pathEnd = 0;
@@ -497,12 +497,13 @@ void tNavigationGoal::InitAt(float* p, float a, float b)
     f68 = kf_145a5c8;
     f6c = 0.0f;
     i70 = 0;
+    return this;
 }
 
 // ================================================================================================
 // 0x00ad2a50 -- cNavigationGoal::InitToward.
 // @ 0x00ad2a50
-void tNavigationGoal::InitToward(float* p, float* q, float a, float b)
+tNavigationGoal* tNavigationGoal::InitToward(float* p, float* q, float a, float b)
 {
     pathBegin = 0;
     pathEnd = 0;
@@ -522,4 +523,5 @@ void tNavigationGoal::InitToward(float* p, float* q, float a, float b)
     i5c = 3;
     f6c = 0.0f;
     i70 = 0;
+    return this;
 }

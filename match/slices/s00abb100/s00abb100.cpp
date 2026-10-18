@@ -380,10 +380,10 @@ struct ConfigObj {
   Triple tbc;
   uint32_t padc8[2];
   Triple td0;
-  void __fastcall Ctor();
+  ConfigObj* __fastcall Ctor();
 };
 extern void* vtbl_014597f8[];
-void __fastcall ConfigObj::Ctor() {
+ConfigObj* __fastcall ConfigObj::Ctor() {
   f04 = 0;
   vtbl = vtbl_014597f8;
   f08 = 0;
@@ -402,6 +402,7 @@ void __fastcall ConfigObj::Ctor() {
   ta8.a = 0; ta8.b = 0; ta8.c = 0;
   tbc.a = 0; tbc.b = 0; tbc.c = 0;
   td0.a = 0; td0.b = 0; td0.c = 0;
+  return this;
 }
 
 // ---------------------------------------------------------------------------

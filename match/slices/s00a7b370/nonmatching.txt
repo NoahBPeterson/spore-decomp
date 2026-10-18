@@ -5,6 +5,6 @@
 00a7c100 13 complete hash_map<Key,RefT1>::operator[]; stack slot sharing of find/insert results differs; difftest PASS after renaming operator[] to HashMap1::Subscript (checker cannot find operator symbols)
 00a7c180 13 complete hash_map<Key,RefT2>::operator[]; stack slot sharing of find/insert results differs; difftest PASS after renaming operator[] to HashMap2::Subscript (checker cannot find operator symbols)
 00a7c350 111 complete Halton2::Next; original keeps members in memory (reloads after stores), cl caches them here
-00a7c3d0 94 complete Halton2 ctor; original keeps members in memory in the digit loop
+00a7c3d0 56 complete Halton2 ctor; mDigits3 declared volatile so cl keeps the int member in memory and reloads mY in the digit loop (matches original `or [esi+0xc],edi` / `addss xmm2,[esi+4]`); difftest PASS (400 valid, 100% cov)
 00a7c450 217 complete Halton3::Next; same member-in-memory behaviour as Halton2
-00a7c540 185 complete Halton3 ctor; same member-in-memory behaviour as Halton2
+00a7c540 163 complete Halton3 ctor; mDigits3/mDigits5 volatile -> same member-in-memory shape as the original; difftest PASS (400 valid, 100% cov)

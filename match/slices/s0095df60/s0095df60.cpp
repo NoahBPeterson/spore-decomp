@@ -18,12 +18,14 @@ struct Mat4 {
 };
 
 // @ 0x95df60
-void FUN_0095df60(float* out, const float* v, const float* m)
+// The original leaves the destination pointer (arg0) in eax (hidden return).
+float* FUN_0095df60(float* out, const float* v, const float* m)
 {
     float x = v[0], y = v[1], z = v[2];
     out[0] = z * m[8] + (y * m[4] + x * m[0]);
     out[1] = m[9] * z + (m[1] * x + m[5] * y);
     out[2] = m[10] * z + (m[2] * x + m[6] * y);
+    return out;
 }
 
 // @ 0x95e040

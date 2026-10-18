@@ -1,4 +1,4 @@
-00613240  16  tail register allocation of spilled pNewEnd/pNewData/nNewSize
+00613240  16  tail register allocation of spilled pNewEnd/pNewData/nNewSize; recheck FAIL was symbol misresolution: EA::Variant copy-assign resolved to 0x00478300 (symbols(mangled) collision) instead of the original call target 0x00542b80, so renamed the member to Assign (annotation // 0x00542b80 wins); equiv now no mismatch, verdict UNSUPPORTED (18/400 valid inputs, original faults on soup) flags /O2 /MD /Gy /TP /GS-
 006133b0  11  load of this->p scheduled before a/b stores (intrusive_ptr assign)
 006135d0  121  find() result merge is threaded by cl (original keeps cmp it,end after merge)
 00613660  121  same as GetFloat

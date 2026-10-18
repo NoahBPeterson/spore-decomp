@@ -177,7 +177,7 @@ struct VPlanet {
     void  FUN_00c713c0(int a);
     void  FUN_00c713f0();
     bool  FUN_00c71400(int i);
-    void  FUN_00c71430(int i, char on);
+    VPlanet* FUN_00c71430(int i, char on);
     int   FUN_00c71470();
     void  FUN_00c71560(uint32_t mask);
     void  FUN_00c71680();
@@ -524,13 +524,14 @@ bool VPlanet::FUN_00c71400(int i)
 }
 
 // @ 0x00c71430
-void VPlanet::FUN_00c71430(int i, char on)
+VPlanet* VPlanet::FUN_00c71430(int i, char on)
 {
     if ((unsigned)i < 5) {
         uint32_t bit = 1u << (i & 0x1f);
         if (on) mField1BC |= bit;
         else    mField1BC &= ~bit;
     }
+    return this;
 }
 
 // @ 0x00c71470

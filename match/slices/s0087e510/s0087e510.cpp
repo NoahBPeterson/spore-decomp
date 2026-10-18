@@ -51,7 +51,7 @@ extern wchar_t* g_0154914c;
 extern wchar_t* g_01549150;
 
 // @ 0x0087e510
-void __fastcall FUN_0087e510(LangPrefixObj* self) {
+LangPrefixObj* __fastcall FUN_0087e510(LangPrefixObj* self) {
     wchar_t* b;
 #define INIT16(m) do { b = (m).buf; (m).f10 = b; (m).f04 = b; (m).f00 = b; (m).f08 = b + 16; b[0] = 0; } while (0)
 #define INIT512(m) do { b = (m).buf; (m).f10 = b; (m).f04 = b; (m).f00 = b; (m).f08 = b + 512; b[0] = 0; } while (0)
@@ -64,6 +64,7 @@ void __fastcall FUN_0087e510(LangPrefixObj* self) {
     INIT512(self->m24); INIT512(self->m25); INIT512(self->m26);
 #undef INIT16
 #undef INIT512
+    return self;
 }
 
 // @ 0x0087e8f0
@@ -82,7 +83,7 @@ void __fastcall FUN_0087e8f0(LangPrefixObj* self) {
 }
 
 // @ 0x0087f100
-void __fastcall FUN_0087f100(LocaleFormatObj* self) {
+LocaleFormatObj* __fastcall FUN_0087f100(LocaleFormatObj* self) {
     wchar_t* b;
 #define INIT16(m)  do { b = (m).buf; (m).f10 = b; (m).f04 = b; (m).f00 = b; (m).f08 = b + 16;  b[0] = 0; } while (0)
 #define INIT512(m) do { b = (m).buf; (m).f10 = b; (m).f04 = b; (m).f00 = b; (m).f08 = b + 512; b[0] = 0; } while (0)
@@ -95,6 +96,7 @@ void __fastcall FUN_0087f100(LocaleFormatObj* self) {
     INIT16(self->small[3]);
 #undef INIT16
 #undef INIT512
+    return self;
 }
 
 // @ 0x0087ed70

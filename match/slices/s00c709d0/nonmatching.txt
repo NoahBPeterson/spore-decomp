@@ -15,7 +15,6 @@
 00c711e0 281  cPlanet::RemoveCity: complete (EraseCity, singleton create, tech-level update). Large register/frame differences. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest WEAK 343/21%.
 00c71370 48  cPlanet::RemoveEntity: complete (scan + b8dfe0). difftest WEAK 358/40%.
 00c71400 23  cPlanet::IsFlagSet(i<5): complete. Original emits `mov edx,1; shl edx,cl; test [mem],edx; setne al`; ours folds. flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest PASS 400/100%.
-00c71430 6  cPlanet::SetFlag(i<5): complete. Original hardcodes 0x1f mask; ours uses (i&0x1f) which folds differently. difftest PASS 400/100%.
 00c71470 94  cPlanet::GetSomething: complete (naC vcall chains). Register/spill differences. difftest FAIL (eax).
 00c71570 48  Simulator::cVisiblePlanet::cVisiblePlanet: complete (cSpatialObject/cGameData ctors + 3 vptr stores + 2 field zeroes). flags /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast. difftest FAIL (execution; vtable/ctor).
 00c71750 333  cVisiblePlanet::SetPlanet: complete (refcount swap, comm-context, mode switch, property read). Complex vcalls; difftest UNSUPPORTED (no valid inputs).

@@ -147,10 +147,10 @@ byte CSys::FUN_00acd6c0(int msg, int* p)
 {
     if (msg == 0x1a0219e) {
         if (p[2] == 3) {
-            int v = (*(int (__thiscall*)(void*))((char*)*(void**)p[4] + 0x20))((void*)p[4]);
+            int v = (*(int (__thiscall*)(void*))*(void**)((char*)*(void**)p[4] + 0x20))((void*)p[4]);
             if (v == (int)0x18c43e8 || v == (int)0x18c6d19) DAT_01565cfc = 1;
         } else if (p[2] == 4 && p[4]) {
-            int v = (*(int (__thiscall*)(void*, uint32))((char*)*(void**)p[4] + 0xc))((void*)p[4], 0x4f396a66);
+            int v = (*(int (__thiscall*)(void*, uint32))*(void**)((char*)*(void**)p[4] + 0xc))((void*)p[4], 0x4f396a66);
             if (v) {
                 byte* b = (byte*)((char*)this + 0x8c);
                 if (*(void**)((char*)this + 0x8c) != *(void**)((char*)this + 0x90)) {

@@ -204,7 +204,7 @@ void cSPEditorHandle::LoadProps()
         this->mPropList = 0;
         ((void(__thiscall*)(cPropertyList*))temp->vptr[1])(temp);
     }
-    ((void(__thiscall*)(void*, uint32_t, uint32_t, cPropertyList**))((void**)pm)[11])(pm, key[0], key[2], &this->mPropList);
+    ((void(__thiscall*)(void*, uint32_t, uint32_t, cPropertyList**))((void**)(*(void**)pm))[11])(pm, key[0], key[2], &this->mPropList);
 
     if (this->mPropList) {
         GetFloatProperty(this->mPropList, 0x050fc37a, &this->mAnimateInTime);
@@ -213,7 +213,7 @@ void cSPEditorHandle::LoadProps()
         GetFloatProperty(this->mPropList, 0x050fc37d, &this->mFadeOutTime);
         if (this->mPropList) {
             void* local = 0;
-            bool ok = ((bool(__thiscall*)(cPropertyList*, uint32_t, void**))((void**)this->mPropList)[9])(this->mPropList, 0x050fc24d, &local);
+            bool ok = ((bool(__thiscall*)(cPropertyList*, uint32_t, void**))((void**)(*(void**)this->mPropList))[9])(this->mPropList, 0x050fc24d, &local);
             if (ok && *(uint16_t*)((char*)local + 0x12) == 0xd) {
                 float* f = Property_GetFloat(local);
                 this->mDefaultScale = *f;
@@ -223,7 +223,7 @@ void cSPEditorHandle::LoadProps()
         GetPropertyAsKey(this->mPropList, 0x050fc327, &this->mDefaultOverdrawKey);
         if (this->mPropList) {
             void* local = 0;
-            bool ok = ((bool(__thiscall*)(cPropertyList*, uint32_t, void**))((void**)this->mPropList)[9])(this->mPropList, 0x050fc33e, &local);
+            bool ok = ((bool(__thiscall*)(cPropertyList*, uint32_t, void**))((void**)(*(void**)this->mPropList))[9])(this->mPropList, 0x050fc33e, &local);
             if (ok && *(uint16_t*)((char*)local + 0x12) == 1) {
                 uint8_t* b = Property_GetKeyArray(local);
                 this->mHasOverdraw = *b;

@@ -323,7 +323,7 @@ void __stdcall AudioFree(void* p, int)
 struct AudioBlock { void* mPtr; int a, b, c; };
 
 // @ 0xa0f810
-void __stdcall AudioBlockAlloc(AudioBlock* out, const int* in, const char* name)
+AudioBlock* __stdcall AudioBlockAlloc(AudioBlock* out, const int* in, const char* name)
 {
     void* p = AudioAligned(in[0], in[1], 0, 0, (int)g_audioAllocatorFile, 0x53, name);
     out->mPtr = 0;
@@ -331,6 +331,7 @@ void __stdcall AudioBlockAlloc(AudioBlock* out, const int* in, const char* name)
     out->b = 0;
     out->c = 0;
     out->mPtr = p;
+    return out;
 }
 
 // @ 0xa0f860

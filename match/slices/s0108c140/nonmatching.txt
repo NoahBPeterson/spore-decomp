@@ -1,6 +1,6 @@
 # va  diff-bytes  reason
 0108c140 0 havok-equivalent
-0108c430 0 havok-equivalent
+0108c430 0 havok-equivalent flags /vc71 /O2 /MD /Gy /TP; equiv PASS (272 valid, 95.9% cov): agent2 m_getClosestPointFunc is __thiscall with this=bodyB (original sets ECX=other), now called through a member-function pointer on other instead of a cdecl call
 0108c4c0 0 havok-equivalent
 0108c590 0 havok-equivalent
 0108c620 0 havok-equivalent

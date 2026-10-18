@@ -10,7 +10,7 @@
 011035f0 22 havok-equivalent
 01103610 78 havok-equivalent
 01103670 271 havok-equivalent
-011037e0 66 havok-equivalent
+011037e0 49 havok-equivalent, returns this in eax (hidden return read by caller); equiv PASS flags /vc71 /O2 /MD /Gy /TP
 01103830 27 havok-equivalent
 01103850 171 havok-equivalent
 01103930 180 havok-equivalent

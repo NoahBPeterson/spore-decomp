@@ -184,7 +184,7 @@ struct Ability {
     IChild* childA;  // 0x0c
     IChild* childB;  // 0x10
 
-    void  ctor();                         // 0xa107a0
+    void* ctor();                         // 0xa107a0
     void  dtor();                         // 0xa10800
     Ability* ctor2(IChild*, IChild*);     // 0xa10860
     bool  q08(int);                       // 0xa10960
@@ -207,13 +207,14 @@ void f_00a10780(void** node) {
 void* g_166d868;
 
 // @ 0x00A107A0
-void Ability::ctor() {
+void* Ability::ctor() {
     vtbl1 = (void*)0x13ef094;
     ref = 0;
     vtbl0 = (void*)0x14492a0;
     vtbl1 = (void*)0x1449298;
     childA = 0;
     childB = 0;
+    return this;
 }
 
 // @ 0x00A10800

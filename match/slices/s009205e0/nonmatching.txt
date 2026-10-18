@@ -6,7 +6,6 @@
 00920d00  99   SkipComponentBack: backward component loop schedule differs
 00920da0  32   ComponentAt: index loop shape / register allocation differs
 00920e30  149  FindExtension: dot/extension scan schedule differs
-00920f00  10   NormalizeSeparators: register allocation (p/c) differs
 00921150  -    FUN_00921150: size/shape differs (no comparable symbol)
 009212c0  -    UpperBound: 50 bytes vs 63 (loop/register form differs)
 00921300  -    LowerBound: 50 bytes vs 63 (loop/register form differs)

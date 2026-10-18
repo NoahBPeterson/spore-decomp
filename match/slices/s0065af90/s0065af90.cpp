@@ -392,7 +392,7 @@ bool cSPUIAssetWebBrowser::Shutdown() {
     }
   }
   if (mpParentWin) {
-    ((ILayoutObj*)mpParentWin)->a66(mpParentWin);
+    ((ILayoutObj*)mpParentWin)->a66(this);
     void* old = mpParentWin;
     if (old) {
       mpParentWin = 0;

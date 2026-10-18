@@ -5,7 +5,7 @@
 00b906f0    38  FUN_00b906f0: complete; WrapCubeFace normalization loop; register/flag shape differs
 00b90750    75  FUN_00b90750: complete; cell->pointer (stride 0xc); address arithmetic register choice differs; equiv: PASS (394 valid, 100% cov)
 00b907a0    74  FUN_00b907a0: complete; cell->flags dword; address arithmetic register choice differs; equiv: PASS (477 valid, 100% cov)
-00b907f0   150  FUN_00b907f0: complete; cell visibility classify; SSE/x87 compare + bitfield RMW scheduling differs; equiv: PASS (603 valid, 100% cov)
+00b907f0    68  FUN_00b907f0: complete; cell visibility classify; threshold compare written `fVar4 > T` so comiss uses xmm0,mem and no longer clobbers xmm1; SSE/bitfield RMW scheduling differs; equiv: WEAK (186 valid <200, 100% cov, no mismatch)
 00b908c0     8  FUN_00b908c0: complete; clear cell bits; count computed in eax vs ecx (loop-scaffold allocation)
 00b90960    47  FUN_00b90960: complete; find-by-hash-slot; vtable probe result handling differs
 00b909a0    64  FUN_00b909a0: complete; copy_if by hash-slot; vtable probe + store scheduling differs

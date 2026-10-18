@@ -18,7 +18,7 @@ struct RunInfo { uint32_t mScript; int mnBidiLevel; uint32_t mnCharBegin; uint32
 struct RunVec {
     RunInfo* mpBegin; RunInfo* mpEnd; RunInfo* mpCapacity; uint32_t pad0;
     RunInfo* mpPoolBegin; uint32_t pad1; RunInfo mBuffer[4];
-    void Init() { mpPoolBegin = mBuffer; mpEnd = mBuffer; mpBegin = mBuffer; mpCapacity = mBuffer + 4; }
+    void Init() { RunInfo* b = mBuffer; mpPoolBegin = b; mpEnd = b; mpBegin = b; mpCapacity = b + 4; }
     RunVec& operator=(const RunVec& o);                        // 0x0089d2b0
     void DoInsertValue(RunInfo* pos, const RunInfo& v);        // 0x008996d0
     void resize(uint32_t n);                                   // 0x0089be20

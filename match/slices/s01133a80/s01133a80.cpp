@@ -594,22 +594,24 @@ void __cdecl FUN_01134260(float* dst, float* src, float scale, uint32_t count)
 
 // ---------------------------------------------------------------------------
 // @ 0x011342c0  dst[i] += src[i] * scale
+// The original writes eax on every path (the aligned path returns the base dst,
+// the scalar path returns the walked pointer), so the real return type is float*.
 // ---------------------------------------------------------------------------
-void __cdecl FUN_011342c0(float* dst, float* src, float scale, uint32_t count)
+float* __cdecl FUN_011342c0(float* dst, float* src, float scale, uint32_t count)
 {
+	float* end = dst + count;
 	if (((((uint32_t)dst | (uint32_t)src) & 0xf) == 0) && ((count & 0xf) == 0))
 	{
-		float* end = dst + count;
+		float* p = dst;
 		do
 		{
 			for (int k = 0; k < 16; k++)
-				dst[k] = src[k] * scale + dst[k];
+				p[k] = src[k] * scale + p[k];
 			src += 16;
-			dst += 16;
-		} while (dst != end);
-		return;
+			p += 16;
+		} while (p != end);
+		return dst;
 	}
-	float* end = dst + count;
 	if (dst < end)
 	{
 		int diff = (int)src - (int)dst;
@@ -619,6 +621,7 @@ void __cdecl FUN_011342c0(float* dst, float* src, float scale, uint32_t count)
 			dst = dst + 1;
 		} while (dst < end);
 	}
+	return dst;
 }
 
 // ---------------------------------------------------------------------------
@@ -813,11 +816,19 @@ unsigned BitReader::FUN_01134a60(int n)
 
 // ---------------------------------------------------------------------------
 // @ 0x01134ae0
+// The original is a virtual call: ecx = the argument (this), [this] = vtable,
+// [vtable+4] = slot 1, which pops its int argument (ret 4). A free __stdcall
+// function pointer leaves ecx unset, so the fake-call `this` mismatches.
 // ---------------------------------------------------------------------------
+struct FUN_01134ae0_Vt
+{
+	virtual void v0(void) = 0;
+	virtual void v1(int) = 0;
+};
+
 void __cdecl FUN_01134ae0(int* p)
 {
-	void (__stdcall* f)(int) = *(void (__stdcall**)(int))(*p + 4);
-	f(0);
+	((FUN_01134ae0_Vt*)p)->v1(0);
 	volatile int barrier = 0;
 	(void)barrier;
 }

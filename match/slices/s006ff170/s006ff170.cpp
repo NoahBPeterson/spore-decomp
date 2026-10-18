@@ -111,7 +111,7 @@ void __cdecl FUN_006ffc60(float* p) {
 }
 
 // @ 0x006ffdc0
-void __cdecl FUN_006ffdc0(float* dst, const float* src) {
+float* __cdecl FUN_006ffdc0(float* dst, const float* src) {
     float* d = dst;
     const float* s = src;
     int n = 4;
@@ -123,4 +123,5 @@ void __cdecl FUN_006ffdc0(float* dst, const float* src) {
         ++s;
         d += 4;
     } while (--n);
+    return dst;
 }

@@ -1,4 +1,4 @@
-0050bc80   61  toggle-flag + coordinate pair swap: complete behaviour; /Od schedule/register order differs
+0050bc80   67  ToggleSwap: complete; returns &f58 in eax (caller-visible void_hides_eax); /Od schedule differs; equiv PASS (400 valid, 100% coverage); flags /Od /Ob1 /MD /Gy /TP /arch:SSE
 0050bd10   78  advance value + clamp against peer extent: complete behaviour; /Od float temp/order differs
 0050c230   80  bbox query: complete behaviour; /Od schedule differs
 0050c3b0  163  normals-init: complete behaviour (copy first vertex, rebuild rest); /Od schedule differs

@@ -1,6 +1,6 @@
 0092cb30  87  narrow string append (EASTL); inlined DoInsertValue scheduling differs
 0092cb90  91  wide string append (EASTL); inlined DoInsertValue scheduling differs
-0092cc00  112  case-insensitive strstr (char); register/loop shape differs
+0092cc00  118  case-insensitive strstr (char); complete; register/loop shape differs (original caches tolower in ebp and spills the first result via a push-ecx frame). callerdeps preserve DEPENDS ecx (read at 0x006b8956 after the call at 0x006b8932 in 006b8680); now satisfied by holding the scanned char in an `int` so cl keeps it in a callee-saved register instead of zero-extending into ecx for the second tolower argument. difftest PASS (/O2 /MD /Gy /EHsc /TP /GS-, --require-all, 400 valid, 100% coverage)
 0092cc90  126  case-insensitive wstrstr; register/loop shape differs
 0092ce80  85  _ecvt result widened to UTF-16; local buffer layout differs
 0092cef0  85  _fcvt result widened to UTF-16; local buffer layout differs

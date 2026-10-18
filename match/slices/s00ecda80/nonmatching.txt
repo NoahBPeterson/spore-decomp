@@ -2,7 +2,6 @@
 00ecda80  132  complete; audio/message dispatch call schedule differs; equiv UNSUPPORTED (1 unresolved reference(s): ?GetSystemAT@@YAPAHXZ)
 00ecdb30   23  complete; vtable slot-0x30 call with zeroed triple differs; equiv UNSUPPORTED (only 0/1200 inputs valid (discards: fake-arity=1197, fault=2, fault(read)=1))
 00ecdb50   29  complete; thiscall convention/tail-call scheduling differs; equiv FAIL (5/5 valid inputs mismatched; first: execution)
-00ecdb90   10  complete; fastcall this + condition scheduling differs; equiv PASS (1197 valid inputs, 100.0% coverage (all insns))
 00ecdbb0   15  complete; constant compare + tail differs; equiv PASS (1200 valid inputs, 100.0% coverage (all insns))
 00ecdc20   22  complete; copy fields then vcall scheduling differs; equiv UNSUPPORTED (only 0/1200 inputs valid (discards: fake-arity=1195, fault(read)=4, fault(write)=1))
 00ecdc70   46  complete; stopwatch/float compare scheduling differs; equiv UNSUPPORTED (only 0/1200 inputs valid (discards: import:_decode_pointer=1200))

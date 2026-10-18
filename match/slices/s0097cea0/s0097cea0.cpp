@@ -231,7 +231,7 @@ void Cr::ImageDrawable::CreateRenderables(Cr::RenderContext* ctx, const float* r
                     float a = (sh.mSaturation / R) * (1.0f - ((i - cx) * (i - cx) + (j - cy) * (j - cy)) / norm) + sh.mSmoothness;
                     if (0.0f > a) a = 0.0f;
                     else if (a > 1.0f) a = 1.0f;
-                    unsigned int ai = (unsigned int)(a * 255.0f);
+                    unsigned int ai = (unsigned int)(a * 255.0f + 0.5f);
                     t->SetColor((ai << 24) + rgb);
                     DrawTiling(this, t, d, ex);
                 }

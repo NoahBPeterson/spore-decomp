@@ -15,5 +15,8 @@
 011f3900   57  Release-All stream sources (ECX): complete; difftest WEAK (400, 43.9%).
 011f3ab0  139  VertexDescriptor element transform (dst EAX, src ECX): complete; difftest UNSUPPORTED
                (the /LTCG custom register ABI passes both operands in registers).
-011f3c40  144  VertexDescriptor init to defaults: complete; difftest PASS (100% cov).
+011f3c40  182  VertexDescriptor init to defaults: complete; flags /vc71 /O2 /MD /Gy /EHsc /TP /arch:SSE
+               (retail uses SSE here: xorps/movss/movaps + aligned frame). Float fields are now
+               written as float, so cl materialises 1.0f/10.0f in xmm and leaves edx untouched
+               (callerdeps DEPENDS edx satisfied). difftest PASS (100% cov).
 011f3d40  283  Predicated SetViewport/Clear (ECX): complete; difftest PASS (80.8%).

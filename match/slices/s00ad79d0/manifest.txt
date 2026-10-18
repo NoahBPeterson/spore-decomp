@@ -2,6 +2,7 @@
 slices/s00ad79d0/s00ad79d0.cpp  ?getSpan@CamInfo@@QAEMXZ             00ad7af0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?getV1@CamInfo@@QAEMXZ               00ad7b10  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?getV0@CamInfo@@QAEMXZ               00ad7b30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s00ad79d0/s00ad79d0.cpp  ?forwardC@CamInfo@@QAEPAXXZ          00ad7b50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?getPtr@CamInfo@@QAEPAXXZ            00ad7b70  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?ctor@EditorRes@@QAEPAU1@XZ          00ad7c30  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s00ad79d0/s00ad79d0.cpp  ?release16c@Sim@@QAEXXZ              00ad7d40  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -450,6 +450,9 @@ int __cdecl Voice_CreateInstance(int code)
 
 // ---------------------------------------------------------------------------
 // @ 0x011330e0
+// Byte-exact under cl 15 (/O2 /MD /Gy /TP, no /vc71): the original folds the global
+// into `cmp byte [0x16e7c1c],1`, which the VC2003 toolkit cl loads into cl first
+// (clobbering ecx, untouched by the original). See manifest.txt.
 // ---------------------------------------------------------------------------
 bool __cdecl FUN_011330e0(void)
 {
@@ -876,9 +879,12 @@ int __cdecl FUN_01133a20(int id, int16_t v)
 // ---------------------------------------------------------------------------
 // @ 0x01133a60
 // ---------------------------------------------------------------------------
-void __stdcall FUN_01133a60(int*& p)
+// Returns the old *p value in eax: the original loads it into eax (and keeps the parameter in
+// ecx), and LTCG callers may read it, so a void return leaves the wrong eax behind.
+int* __stdcall FUN_01133a60(int*& p)
 {
 	int* v = p;
 	p = 0;
 	*(int*)((char*)v + 8) = 0;
+	return v;
 }

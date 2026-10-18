@@ -129,8 +129,9 @@ bool __fastcall FUN_00ecdb80(int p)
 // @ 0x00ecdb90
 void __fastcall FUN_00ecdb90(int* p)
 {
+    // real vtable call: slot = *(*(int**)p + 0x1c), this = p
     if (p[4] != -1)
-        C1(p, 0x1c, -1);
+        ((void(__thiscall*)(void*, int))(((void**)(*(void**)p))[0x1c / 4]))(p, -1);
 }
 
 // ============================================================ 0x00ecdbb0

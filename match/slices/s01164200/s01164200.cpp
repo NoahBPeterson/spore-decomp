@@ -1,4 +1,4 @@
-// @ 0x01164200   TerrainBrushWeightMapFill  (5653 bytes)
+// 0x01164200   TerrainBrushWeightMapFill  (5653 bytes)
 //
 // __thiscall, ret 8.  Fills the per-cell material-weight map for one terrain brush tile
 // (tileIndex selects the 0x18-byte tile descriptor at this+0x58) and folds it into the

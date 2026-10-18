@@ -2,3 +2,4 @@
 slices/s009205e0/s009205e0.cpp  FUN_00921210    00921210  /O2 /MD /Gy /EHsc /TP
 slices/s009205e0/s009205e0.cpp  DebugPrint      00921250  /O2 /MD /Gy /EHsc /TP
 slices/s009205e0/s009205e0.cpp  init@FixedPool  00921260  /O2 /MD /Gy /EHsc /TP
+slices/s009205e0/s009205e0.cpp  ?NormalizeSeparators@@YAPAURange@@PAU1@@Z  00920f00  /O2 /MD /Gy /EHsc /TP

@@ -128,12 +128,12 @@ int RWTexFactory::Release()
 // ---------------------------------------------------------------- 00997f50 HitMaskResource ctor
 struct Obj34 {
     char pad[0x40];
-    void ctor();           // 0x997f50
+    void* ctor();          // 0x997f50
     void* ScalarDtor(unsigned flags);  // 0x998000
 };
 
 // @ 0x00997f50
-void Obj34::ctor()
+void* Obj34::ctor()
 {
     char* a = (char*)this;
     *(void**)(a + 4) = (void*)0x13ef094;
@@ -151,6 +151,7 @@ void Obj34::ctor()
     *(void**)(a + 0) = (void*)0x14468e0;
     *(void**)(a + 4) = (void*)0x14468dc;
     *(void**)(a + 0x28) = (void*)0x14468c8;
+    return a;
 }
 
 // @ 0x00998000
@@ -197,7 +198,7 @@ bool HMFactory::CreateResource(int param2, void** out, void* p4, void* p5)
 
 // ---------------------------------------------------------------- 009986e0 ctor
 // @ 0x009986e0
-void __fastcall FUN_009986e0(void* self)
+void* __fastcall FUN_009986e0(void* self)
 {
     char* a = (char*)self;
     *(void**)(a + 0) = (void*)0x141aa84;
@@ -210,6 +211,7 @@ void __fastcall FUN_009986e0(void* self)
     *(void**)(a + 8) = (void*)0x14469dc;
     *(unsigned*)(a + 0x1c) = 0;
     *(unsigned*)(a + 4) = 0;
+    return a;
 }
 
 // ---------------------------------------------------------------- 00998770 RWTextureFactory::CreateResource
@@ -237,13 +239,14 @@ bool RWTexFactory::CreateResource(int param2, void** out, void* p4, void* p5)
 
 // ---------------------------------------------------------------- 00998820 ctor
 // @ 0x00998820
-void __fastcall FUN_00998820(void* self)
+void* __fastcall FUN_00998820(void* self)
 {
     char* a = (char*)self;
     *(void**)(a + 0) = (void*)0x13effa8;
     _InterlockedExchange((volatile long*)(a + 4), 0);
     *(void**)(a + 0) = (void*)0x1446a3c;
     *(unsigned char*)(a + 8) = 1;
+    return a;
 }
 
 // ---------------------------------------------------------------- 00998f80

@@ -39,7 +39,7 @@ struct Mat3 { void Assign(void *); };
 struct Elem { int *p; int *v; };
 struct AllocThing { int *alloc(int n, int extra); };
 struct Mgr { void Notify(int param); };
-struct VCtor { void c0(int *); void c1(int *); void c2(int *); void c3(int *); void c4(int *); };
+struct VCtor { VCtor *c0(int *); VCtor *c1(int *); VCtor *c2(int *); VCtor *c3(int *); VCtor *c4(int *); };
 struct CSplitCtor { int *copy(int *src); };
 
 // @ 0x00798d30
@@ -448,7 +448,7 @@ void FUN_00799640(int param_1, float param_2, float *param_3, float *param_4, fl
 }
 
 // @ 0x007997f0
-void VCtor::c0(int *param_2)
+VCtor *VCtor::c0(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -460,7 +460,7 @@ void VCtor::c0(int *param_2)
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
     param_1[0] = (int)&V_140f558;
     param_1[7] = 1;
-    return;
+    return this;
 }
 
 // @ 0x00799840
@@ -496,7 +496,7 @@ long double __fastcall FUN_007998a0(float *param_1, float *param_2, float *param
 }
 
 // @ 0x00799940
-void VCtor::c1(int *param_2)
+VCtor *VCtor::c1(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -511,7 +511,7 @@ void VCtor::c1(int *param_2)
     *(float *)(param_1 + 9) = *(float *)(param_2 + 6);
     param_1[0] = (int)&V_140f560;
     param_1[10] = 1;
-    return;
+    return this;
 }
 
 // @ 0x007999a0
@@ -539,7 +539,7 @@ long double __fastcall FUN_007999a0(float *param_1, float *param_2, float *param
 }
 
 // @ 0x00799b00
-void VCtor::c2(int *param_2)
+VCtor *VCtor::c2(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -551,7 +551,7 @@ void VCtor::c2(int *param_2)
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
     param_1[0] = (int)&V_140f568;
     param_1[7] = 1;
-    return;
+    return this;
 }
 
 // @ 0x00799b50
@@ -572,7 +572,7 @@ long double __fastcall FUN_00799b50(float *param_1, float *param_2, float *param
 }
 
 // @ 0x00799c30
-void VCtor::c3(int *param_2)
+VCtor *VCtor::c3(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -583,11 +583,11 @@ void VCtor::c3(int *param_2)
     *(float *)(param_1 + 5) = *(float *)(param_2 + 2);
     *(float *)(param_1 + 6) = *(float *)(param_2 + 3);
     param_1[0] = (int)&V_140f570;
-    return;
+    return this;
 }
 
 // @ 0x00799c70
-void VCtor::c4(int *param_2)
+VCtor *VCtor::c4(int *param_2)
 {
     int *param_1 = (int *)this;
     param_1[0] = (int)&V_13ebc60;
@@ -601,7 +601,7 @@ void VCtor::c4(int *param_2)
     *(float *)(param_1 + 8) = *(float *)(param_2 + 5);
     *(float *)(param_1 + 9) = *(float *)(param_2 + 6);
     param_1[0] = (int)&V_140f578;
-    return;
+    return this;
 }
 // --- equivalence checker address annotations
 

@@ -1,2 +1,2 @@
 00505170  1034  Moeller-Trumbore ray/triangle: complete behavioral port; /Od SSE branch+register schedule not reproduced (flags /arch:SSE /fp:fast)
-005056d0   345  point-to-AABB squared distance: complete; /Od comiss operand order, branch layout and slot order differ (flags /arch:SSE /fp:fast)
+005056d0   345  point-to-AABB squared distance: complete; comiss operand order, branch layout and slot order differ (flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast); equiv PASS (400 valid, 100% cov) with the /Od flags - the old "(flags /arch:SSE /fp:fast)" note merged onto the /O2 defaults and the /O2 build's extra xmm1 scratch clobber read as a FAIL

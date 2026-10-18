@@ -257,7 +257,7 @@ static __forceinline void RotateEyeAroundLookAt(float angle, const Vector3* look
     ax.x = lookAt->y * eye->z - lookAt->z * eye->y;
     ax.y = lookAt->z * eye->x - lookAt->x * eye->z;
     ax.z = eye->y * lookAt->x - lookAt->y * eye->x;
-    float axInv = 1.0f / sqrtf(ax.z * ax.z + ax.y * ax.y + ax.x * ax.x);
+    float axInv = 1.0f / sqrtf(ax.y * ax.y + (ax.z * ax.z + ax.x * ax.x));
     float half = angle * 0.5f;
     Vector3 an;
     an.x = axInv * ax.x;
@@ -274,7 +274,7 @@ static __forceinline void RotateEyeAroundLookAt(float angle, const Vector3* look
     toEye.x = eye->x - lookAt->x;
     toEye.y = eye->y - lookAt->y;
     toEye.z = eye->z - lookAt->z;
-    volatile float qInvMem = 1.0f / sqrtf(c * c + q.x * q.x + q.z * q.z + q.y * q.y);
+    volatile float qInvMem = 1.0f / sqrtf(q.y * q.y + (q.z * q.z + (q.x * q.x + c * c)));
     float qInv = qInvMem;
     Quaternion qn;
     qn.x = qInv * q.x;
@@ -298,12 +298,12 @@ void SP::cSPSpacePlanetCameraController::UpdateCameraPitchRotation(float seconds
     {
         // Pitch tracks the angle between the eye and the horizon; clamp the stored pitch to it.
         Vector3 d = *eye - *lookAt;
-        float dInv = 1.0f / sqrtf(d.y * d.y + d.z * d.z + d.x * d.x);
+        float dInv = 1.0f / sqrtf(d.x * d.x + (d.z * d.z + d.y * d.y));
         Vector3 dn;
         dn.x = dInv * d.x;
         dn.y = d.y * dInv;
         dn.z = d.z * dInv;
-        float lInv = 1.0f / sqrtf(lookAt->z * lookAt->z + lookAt->y * lookAt->y + lookAt->x * lookAt->x);
+        float lInv = 1.0f / sqrtf(lookAt->x * lookAt->x + (lookAt->y * lookAt->y + lookAt->z * lookAt->z));
         Vector3 ln;
         ln.x = lookAt->x * lInv;
         ln.y = lookAt->y * lInv;

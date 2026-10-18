@@ -40,7 +40,7 @@ struct S8 {
     void m260();                                            // placeholder
     void m4a0();                                            // 0x6ec4a0 (declared via VecC helper)
     void m660(void* src);                                   // 0x6ec660
-    void m730();                                            // 0x6ec730
+    S8*  m730();                                            // 0x6ec730
     void m840(int a, int b);                                // 0x6ec840
     void m8a0();                                            // 0x6ec8a0
     void maa0();                                            // 0x6ecaa0
@@ -183,7 +183,7 @@ int __cdecl f6d0(int p1, int p2, int p3)
 
 // ---------------------------------------------------------------------------
 // @ 0x006ec730
-void S8::m730()
+S8* S8::m730()
 {
     char* p = (char*)this;
     *(uchar*)p = 0;
@@ -204,6 +204,7 @@ void S8::m730()
     *(float*)(p + 0xb4) = one;
     *(float*)(p + 0xb8) = one;
     *(float*)(p + 0xbc) = one;
+    return this;
 }
 
 // ---------------------------------------------------------------------------

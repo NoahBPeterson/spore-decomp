@@ -215,7 +215,7 @@ hkReferencedObjectWithPtr* hkReferencedObjectWithPtr::destroy(unsigned flags)
 // ---------------------------------------------------------------------------------------------------
 struct hkMoppSettingsPartA {                          // 20 bytes, at settings+4
     float m_f0; int32_t m_i1; int32_t m_i2; int32_t m_i3; int32_t m_i4;
-    void init(int preset);                              // 0x011037e0
+    hkMoppSettingsPartA* init(int preset);              // 0x011037e0 (returns this in eax)
 };
 struct hkMoppSettingsPartB {                          // 24 bytes, at settings+0x18
     float m_f[5]; float m_f5;
@@ -263,7 +263,7 @@ void hkMoppSettings::setC(const uint32_t* c)
 }
 
 // @ 0x011037e0
-void hkMoppSettingsPartA::init(int preset)
+hkMoppSettingsPartA* hkMoppSettingsPartA::init(int preset)
 {
     m_i4 = 5;
     m_i3 = 5;
@@ -276,6 +276,7 @@ void hkMoppSettingsPartA::init(int preset)
         ((uint32_t&)m_f0) = 0x3d4ccccd;  // 0.05f
         m_i2 = 0x1e;
     }
+    return this;
 }
 // @ 0x01103830
 void hkMoppSettingsPartB::init()

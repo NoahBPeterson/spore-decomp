@@ -4,4 +4,5 @@ slices/s006f3410/s006f3410.cpp  ?CopyTo174@cRenderInstanceSet@@QAE_NPAX@Z  006f3
 slices/s006f3410/s006f3410.cpp  ?Setup180@cRenderInstanceSet@@QAEPAUcViewer@@PAX@Z  006f3fb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006f3410/s006f3410.cpp  ?SetElement@cRenderInstanceSet@@QAEXHM@Z  006f40b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006f3410/s006f3410.cpp  ?ClearElements@cRenderInstanceSet@@QAEXXZ  006f40d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
+slices/s006f3410/s006f3410.cpp  ?SetColor@cRenderInstanceSet@@UAEXHPBMMH@Z  006f4100  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast
 slices/s006f3410/s006f3410.cpp  ?IsRangeEmpty@cRenderInstanceSet@@QBE_NXZ  006f4170  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast

@@ -65,7 +65,9 @@ void __fastcall FUN_00f62930(int self, int dummy, int a, int b) {
 // 0x00f62b70 -- cTerrainDistributeInfo default constructor
 // ===========================================================================
 // @ 0x00f62b70
-void __fastcall FUN_00f62b70(int* p) {
+// Constructor-shaped: original returns `this` in eax; declare a non-void return and return the
+// pointer so cl keeps it live in eax instead of leaving the 0 fill value there.
+unsigned __fastcall FUN_00f62b70(int* p) {
     ((float*)p)[1] = 0.1f;
     ((float*)p)[2] = kFXMaxFloat;
     p[0] = 0;
@@ -73,6 +75,7 @@ void __fastcall FUN_00f62b70(int* p) {
     p[0xe] = 0;
     p[4] = 0; p[5] = 0; p[6] = 0; p[7] = 0; p[8] = 0; p[9] = 0;
     p[10] = 0; p[0xb] = 0; p[0xc] = 0; p[0xd] = 0;
+    return (unsigned)(size_t)p;
 }
 
 // ===========================================================================

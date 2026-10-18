@@ -361,7 +361,7 @@ void C101::M_d730()
     ms = SP_MessageServer();
     ((V20*)ms)->f20(self, 0x031018b9u);
     ms = SP_MessageServer();
-    ((V20*)ms)->f20(self, 0x000f62deu);
+    ((V20*)ms)->f20(self, 0x00f62defu);
     FUN_00b50ff0();
 }
 

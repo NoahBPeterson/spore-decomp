@@ -742,7 +742,9 @@ void hkConstraintSolverSetup_resetSolverBuffers(hkConstraintSolverResources& res
 }
 
 // @ 0x010a4a70   (name inferred; cdecl; the third argument is unused)
-__declspec(noinline) void hkConstraintSolverSetup_layoutBuffer(const hkSolverInfo* info, uintptr_t base, void* /*unused*/, hkSolverBufferLayout* out)
+// The original leaves out->m_end in EAX and 0 in EDX (void_hides_eax; callers read both);
+// return a 64-bit value so cl puts m_end in EAX and zero-extends into EDX.
+__declspec(noinline) uint64_t hkConstraintSolverSetup_layoutBuffer(const hkSolverInfo* info, uintptr_t base, void* /*unused*/, hkSolverBufferLayout* out)
 {
 	out->m_buffer = base;
 	out->m_accumulators = base;
@@ -756,6 +758,7 @@ __declspec(noinline) void hkConstraintSolverSetup_layoutBuffer(const hkSolverInf
 		hkVelocityAccumulator_setFixed(acc);
 		acc[(info->m_numAccumulators + 1) * 0x80] = 2;
 	}
+	return out->m_end;
 }
 
 // @ 0x010a4b30   (name inferred) size query: layout with a null buffer

@@ -17,7 +17,7 @@ struct cLocalInputState {
     bool OnKeyDown(int key, int x);         // 0x00697a50
     bool OnKeyUp(int key, int x);           // 0x00697a80
     bool OnMouseUp(int a, float x, float y, int b);   // 0x00697af0
-    unsigned int OnMouseWheel(int a, int b, float x, float y);  // 0x00697b40
+    unsigned int OnMouseWheel(int a, float b, float x, int y);  // 0x00697b40
 };
 
 struct Cam {
@@ -52,7 +52,7 @@ struct Cam {
     void ComputeView(float* a, float* b, float* c, float* out);      // 0x005a2260
     void UpdatePitch();                                              // 0x005a22d0
     void ClearVtables();                                             // 0x005a2300
-    void OnMouseWheel(int a, int b, float x, float y);               // 0x005a2580
+    bool OnMouseWheel(int a, float b, float x, int y);               // 0x005a2580
 };
 
 extern float kOne_1485720;
@@ -167,7 +167,7 @@ void Cam::ClearVtables()
 
 // ===========================================================================
 // @ 0x005a2580
-void Cam::OnMouseWheel(int a, int b, float x, float y)
+bool Cam::OnMouseWheel(int a, float b, float x, int y)
 {
     mInput.OnMouseWheel(a, b, x, y);
     float f = (((float)a * m14) * kMul_13f6a24 + kOne_1485720) * m38;
@@ -181,6 +181,7 @@ void Cam::OnMouseWheel(int a, int b, float x, float y)
             m38 = t;
     }
     m9c = 1;
+    return false;
 }
 
 // ===========================================================================

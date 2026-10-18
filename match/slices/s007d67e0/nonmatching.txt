@@ -7,4 +7,3 @@
 007d7080  258  eastl::vector<cElement,sp_vector_allocator>::operator=; complete grow/copy/assign paths, inlining and EH differ; equiv: FAIL (5/33 valid inputs mismatched)
 007d72e0  593  eastl::vector<cSplitInstanceList>::DoInsertValues; complete grow + in-place insert paths, call/inlining schedule differs
 007d7560  n/a  eastl::vector<cSplitInstanceList>::resize; complete (erase on shrink, DoInsertValues default value on grow), EH prologue/register allocation differ
-007d7640  20   SP::cSplitManager::AddSplitInstance; complete, only the final out-pointer register assignment differs (eax vs ecx)

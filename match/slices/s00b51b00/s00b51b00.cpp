@@ -96,7 +96,7 @@ struct Body {
 };
 
 void __cdecl FUN_00f47380(void*);
-void __cdecl FUN_00b51e30(int*, unsigned);
+int* __cdecl FUN_00b51e30(int*, unsigned);
 void __cdecl FUN_00b51e80(unsigned, float);
 void __cdecl FUN_00b51040(void*, float);
 void __cdecl FUN_00b520a0();
@@ -115,7 +115,7 @@ void __cdecl FUN_00b54000(void*, void*);
 // ---------------------------------------------------------------------------
 struct Big {
     int   M_b51b00(unsigned a0, int a1, int a2, int a3, int a4, int a5, int* a6);
-    void  M_b51bb0(void** out, int* key);
+    void** M_b51bb0(void** out, int* key);
     int   M_b51c20(int* key);
     int** M_b51cc0(int** out, int* node, int** slot);
     void  M_b51d50(float dt);
@@ -165,7 +165,7 @@ int Big::M_b51b00(unsigned a0, int a1, int a2, int a3, int a4, int a5, int* a6)
 // ---------------------------------------------------------------------------
 // @ 0x00B51BB0
 // ---------------------------------------------------------------------------
-void Big::M_b51bb0(void** out, int* key)
+void** Big::M_b51bb0(void** out, int* key)
 {
     char* self = (char*)this;
     int** buckets = *(int***)(self + 4);
@@ -184,6 +184,7 @@ void Big::M_b51bb0(void** out, int* key)
     }
     out[0] = node;
     out[1] = slot;
+    return out;
 }
 
 // ---------------------------------------------------------------------------
@@ -327,7 +328,7 @@ void Big::M_b51df0(unsigned a, unsigned b)
 // ---------------------------------------------------------------------------
 // @ 0x00B51E30
 // ---------------------------------------------------------------------------
-void __cdecl FUN_00b51e30(int* out, unsigned a)
+int* __cdecl FUN_00b51e30(int* out, unsigned a)
 {
     int local[4];
     int* p = ((Ext*)0x1569c98)->FUN_00b51780(local, a);
@@ -339,6 +340,7 @@ void __cdecl FUN_00b51e30(int* out, unsigned a)
     out[5] = 0;
     out[4] = out[0];
     out[5] = out[1];
+    return out;
 }
 
 // ---------------------------------------------------------------------------

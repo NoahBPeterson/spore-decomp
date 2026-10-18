@@ -560,7 +560,7 @@ struct HRec {                       // collected handler record (5 ints)
 
 void Server::MessageSend(uint id, uint arg, int* rc) {
     if (rc != 0) {
-        (*(void(**)(uint, uint))(*(unsigned int*)rc + 4))(id, arg);
+        ((HObj*)rc)->v1(id, arg);
         return;
     }
 

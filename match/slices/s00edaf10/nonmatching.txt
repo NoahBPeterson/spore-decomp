@@ -7,6 +7,6 @@
 00edbac0  398  UI init; approximated. flags /O2 /MD /Gy /TP; equiv: FAIL (ours faults where original returns)
 00edbcb0  110  class-B teardown; tail-jmp not reproduced. flags /O2 /MD /Gy /TP; difftest FAIL
 00edbd30  131  register/unregister message handler; abridged. flags /O2 /MD /Gy /TP; equiv: FAIL (fake-arity in ours)
-00edbe00  44  cScenarioEditModeScriptActsBarUI ctor; vtable store order differs. flags /O2 /MD /Gy /TP; difftest PASS
+00edbe00  44  cScenarioEditModeScriptActsBarUI ctor; vtable store order differs. flags /O2 /MD /Gy /TP; equiv: PASS (400 valid, 100% coverage). The ctor returns `this` in EAX (the caller reads it), so the declaration now returns the class pointer.
 00edbe60  93  cScenarioEditModeScriptActsBarUI dtor; written as a free helper, not thiscall. flags /O2 /MD /Gy /TP; equiv: FAIL (ours faults where original returns)
 00edbef0  141  message handler; approximated. flags /O2 /MD /Gy /TP; difftest FAIL

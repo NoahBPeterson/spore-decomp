@@ -51,10 +51,10 @@ struct XmlParser {
 // 0x008e53a0  eastl::lower_bound (8-byte StaticDefinition entries)
 // ---------------------------------------------------------------------------
 // @ 0x008e53a0
-void Fn8e53a0(char* begin, char* end, const void* key)
+char* Fn8e53a0(char* begin, char* end, const void* key)
 {
     int count = (int)(end - begin) >> 3;
-    if (count <= 0) return;
+    if (count <= 0) return begin;
     const wchar16* k = *(const wchar16**)key;
     do {
         int mid = count >> 1;
@@ -72,16 +72,17 @@ void Fn8e53a0(char* begin, char* end, const void* key)
         }
         count = mid;
     } while (count > 0);
+    return begin;
 }
 
 // ---------------------------------------------------------------------------
 // 0x008e5410  eastl::upper_bound (8-byte StaticDefinition entries)
 // ---------------------------------------------------------------------------
 // @ 0x008e5410
-void Fn8e5410(char* begin, char* end, const void* key)
+char* Fn8e5410(char* begin, char* end, const void* key)
 {
     int count = (int)(end - begin) >> 3;
-    if (count <= 0) return;
+    if (count <= 0) return begin;
     const wchar16* k = *(const wchar16**)key;
     do {
         int mid = count >> 1;
@@ -99,6 +100,7 @@ void Fn8e5410(char* begin, char* end, const void* key)
         }
         count = mid;
     } while (count > 0);
+    return begin;
 }
 
 // ---------------------------------------------------------------------------

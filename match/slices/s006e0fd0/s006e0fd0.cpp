@@ -229,9 +229,9 @@ void MomentPass(int param_1, int param_2, int param_3, int param_4, int param_5)
 // @ 0x006e1480  box moment sum
 // ---------------------------------------------------------------------------
 int BoxMoments(int* box, int array) {
+    int iVar2 = box[5];
     int iVar1 = box[4];
     int iVar3 = (box[3] + box[1] * 0x41) * 0x41;
-    int iVar2 = box[5];
     int iVar4 = (box[1] * 0x41 + box[2]) * 0x41;
     int iVar5 = (*box * 0x41 + box[3]) * 0x41;
     int iVar6 = (*box * 0x41 + box[2]) * 0x41;
@@ -321,7 +321,7 @@ double MaximizeVariance(int ctx, int box, int axis, int lo, int hi, int* cut,
     int bc = PlaneMoments((int*)box, (char)axis, *(int*)(ctx + 0xc));
     int b10 = PlaneMoments((int*)box, (char)axis, *(int*)(ctx + 0x10));
     int b4 = PlaneMoments((int*)box, (char)axis, *(int*)(ctx + 4));
-    float best = 0.0f;
+    volatile float best = 0.0f;
     *cut = -1;
     for (; lo < hi; lo = lo + 1) {
         int a8 = PlaneMoments2((int*)box, (char)axis, lo, *(int*)(ctx + 8));
@@ -330,15 +330,14 @@ double MaximizeVariance(int ctx, int box, int axis, int lo, int hi, int* cut,
         int a4 = PlaneMoments2((int*)box, (char)axis, lo, *(int*)(ctx + 4));
         a4 = a4 + b4;
         if (a4 != 0) {
-            float f12 = (float)(ac + bc);
-            float f11 = (float)(a8 + b8);
-            float f9 = (float)(a10 + b10);
             if (w4 - a4 != 0) {
-                float f14 = (float)(wc - (ac + bc));
-                float f13 = (float)(w10 - (a10 + b10));
-                float f10 = (float)(w8 - (a8 + b8));
-                float var = ((f10 * f10 + f14 * f14) + f13 * f13) / (float)(w4 - a4)
-                          + ((f11 * f11 + f12 * f12) + f9 * f9) / (float)a4;
+                float var = ((float)(a8 + b8) * (float)(a8 + b8)
+                           + (float)(ac + bc) * (float)(ac + bc)
+                           + (float)(a10 + b10) * (float)(a10 + b10)) / (float)a4
+                          + ((float)(w8 - (a8 + b8)) * (float)(w8 - (a8 + b8))
+                           + (float)(wc - (ac + bc)) * (float)(wc - (ac + bc))
+                           + (float)(w10 - (a10 + b10)) * (float)(w10 - (a10 + b10)))
+                          / (float)(w4 - a4);
                 if (best < var) {
                     *cut = lo;
                     best = var;

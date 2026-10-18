@@ -618,12 +618,12 @@ struct TblA {
     RehashPolicy policy;                                        // 0x10
     NodeA* DoFindNode(NodeA* head, const void* key, u32 code);  // 0xb4fae0
     void DoRehash(u32 n);                                       // 0xb4fa20
-    void equal_range(RangeOut* out, const u32* key);            // 0xb51780
+    RangeOut* equal_range(RangeOut* out, const u32* key);       // 0xb51780
     void* DoInsertValue(void* out, const void* v, int tag);     // 0xb51840
 };
 
 // @ 0x00b51780
-void TblA::equal_range(RangeOut* out, const u32* key)
+RangeOut* TblA::equal_range(RangeOut* out, const u32* key)
 {
     u32 c3 = key[2];
     u32 code = key[0] ^ c3;
@@ -646,7 +646,7 @@ void TblA::equal_range(RangeOut* out, const u32* key)
         out->firstBucket = b;
         out->last = e;
         out->lastBucket = pb;
-        return;
+        return out;
     }
     NodeA* endn = buckets[bucketCount];
     NodeA** endb = &buckets[bucketCount];
@@ -654,6 +654,7 @@ void TblA::equal_range(RangeOut* out, const u32* key)
     out->firstBucket = endb;
     out->last = endn;
     out->lastBucket = endb;
+    return out;
 }
 
 struct IterA { NodeA* node; NodeA** bucket; };

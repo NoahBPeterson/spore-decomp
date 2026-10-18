@@ -774,8 +774,10 @@ int DecoderThunk::FUN_011378a0(uint8_t param_2)
 	if (iVar1 == 0)
 		return 0;
 	if (param_2 == *(uint8_t*)(param_1 + 0x31))
-		return iVar1 - *(int*)(param_1 + 0x1c);
-	return iVar1 - *(int*)(iVar2 + 8);
+		iVar1 -= *(int*)(param_1 + 0x1c);
+	else
+		iVar1 -= *(int*)(iVar2 + 8);
+	return iVar1;
 }
 
 // ---------------------------------------------------------------------------

@@ -289,7 +289,10 @@ int MultiDelay::Process(MultiDelay* fx, MixCtx* ctx)
     }
 
     if (maxDelay > 0.0f) {
-        double tail = log(0.01f) / log(maxFeedback) * maxDelay * ctx->cfg->rate * ctx->tempo;
+        double ratio = log(0.01f) / log(maxFeedback);
+        double tail = ratio * maxDelay;
+        tail = tail * ctx->cfg->rate;
+        tail = tail * ctx->tempo;
         fx->mpOwner->mTailTime = (float)((tail - fx->mTail) + fx->mpOwner->mTailTime);
         fx->mTail = (float)tail;
 

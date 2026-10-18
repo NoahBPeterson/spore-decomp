@@ -119,7 +119,7 @@ void __cdecl DoNukeSubtreeStub(void* p);
 // -----------------------------------------------------------------------------
 // @ 0x0066bd40  zero-initialising constructor
 // -----------------------------------------------------------------------------
-void __fastcall FUN_0066bd40(void* self) {
+void* __fastcall FUN_0066bd40(void* self) {
     float v0 = gF13eb960;
     ((uint32_t*)self)[1] = 0;
     *(void**)self = &gVt140075c;
@@ -129,6 +129,7 @@ void __fastcall FUN_0066bd40(void* self) {
     ((uint32_t*)self)[5] = 0;
     *(float*)((char*)self + 0x18) = v0;
     *(float*)((char*)self + 0x1c) = gF13ef580;
+    return self;
 }
 
 // -----------------------------------------------------------------------------

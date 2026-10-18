@@ -1,10 +1,10 @@
 00b51b00  171  FUN_00b51b00 hashtable/resource-pool ctor; complete behavior (fixed_pool init, empty-table sentinel at 0x154df28, arena alloc via 0x921360/0xc763d0); equiv=PASS 211/211
-00b51bb0  104  FUN_00b51bb0 find(key); complete behavior (bucket walk, end-bucket fallback); equiv=PASS 251/251
+00b51bb0  90  FUN_00b51bb0 find(key); complete behavior (bucket walk, end-bucket fallback); returns out in eax (caller 00b57840 reads eax); equiv=PASS 251/251 100% /O2 /MD /Gy /EHsc /TP --require-all
 00b51c20  159  FUN_00b51c20 erase-all-by-key; complete behavior (matched loop + sentinel/pool free-list recycling); equiv=PASS 205/205 (93.8% cov)
 00b51cc0  137  FUN_00b51cc0 erase-one->iterator; complete behavior (bucket/prev-chain unlink + recycle); equiv=UNSUPPORTED (0/400 synthetic inputs valid: this-object deref faults for both)
 00b51d50  150  FUN_00b51d50 tick/expire over embedded table at +0x1858; complete behavior (dt decrement + erase<=0); equiv=PASS 241/241
 00b51df0  51  FUN_00b51df0 erase-range (lo/hi swap then erase key pair); complete behavior; equiv=WEAK 187 valid, 100% cov (input budget)
-00b51e30  76  FUN_00b51e30 iterator build (lookup + copy 6 dwords); complete behavior; equiv=PASS 400/400
+00b51e30  66  FUN_00b51e30 iterator build (lookup + copy 6 dwords); returns out in eax; equiv=PASS 400/400 100% /O2 /MD /Gy /EHsc /TP --require-all
 00b51e80  85  FUN_00b51e80 registry set-float (lookup then setter, both cdecl here); complete behavior; equiv=PASS 400/400
 00b51ee0  313  FUN_00b51ee0 intrusive-ptr release; complete behavior (refcount==1 gate, recursive +0x70 release, conditional map unlink via 0xb51e30/0xb4f8a0); equiv=WEAK 353 valid, 50.4% cov
 00b52020  120  FUN_00b52020 map erase-by-key; complete behavior (find, release value, erase); equiv=PASS 400/400 (68.6% cov)

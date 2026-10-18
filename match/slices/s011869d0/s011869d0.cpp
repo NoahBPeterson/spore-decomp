@@ -82,11 +82,10 @@ int lib_cblock_BN_mod_mul_wrap3(int param_1, int param_2, int* param_3, int para
 {
     if (*param_3 != 0 && param_3[1] != 0) {
         int v = param_3[1];
-        int m = param_3[3];
         if (param_2 != 0) {
             v = param_2;
         }
-        v = BN_mod_mul(param_1, param_1, v, m, param_4);
+        v = BN_mod_mul(param_1, param_1, v, param_3[3], param_4);
         if (v >= 0) {
             if (lib_cblock_BN_mod_mul_wrap2(param_3, param_4) == 0) {
                 return 0;

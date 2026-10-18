@@ -450,12 +450,12 @@ struct cSPUILaunchScreenWinProc {
     u32    fC;     // +0xc
     i32    f10;    // +0x10
 
-    void __thiscall ctor();                                  // 0x80cf00
+    cSPUILaunchScreenWinProc* __thiscall ctor();             // 0x80cf00
     u8   __thiscall DoMessage(IWin* window, WinMsg* msg);    // 0x80cf80
 };
 
 // @ 0x0080cf00
-void __thiscall cSPUILaunchScreenWinProc::ctor()
+cSPUILaunchScreenWinProc* __thiscall cSPUILaunchScreenWinProc::ctor()
 {
     vtbl2 = (void**)0x13ec458;
     f8 = 0;
@@ -463,6 +463,7 @@ void __thiscall cSPUILaunchScreenWinProc::ctor()
     vtbl2 = (void**)0x1417d04;
     fC = 3;
     f10 = -1;
+    return this;
 }
 
 // @ 0x0080cf80

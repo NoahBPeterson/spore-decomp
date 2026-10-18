@@ -272,7 +272,7 @@ struct cUIHints {
     void SetVisibility(int show, cHint* h);           // 0x0067bc30
     __declspec(noinline) void UpdateHints(char b, char c); // 0x0067c350
     void Next(int a, char b);                          // 0x0067c3b0
-    void SetFlag(char a, int b);                       // 0x0067c420
+    int SetFlag(char a, int b);                       // 0x0067c420
 };
 
 // ---- 0x0067b4c0 : cUIHints::ParseHints ---------------------------------------
@@ -579,15 +579,19 @@ void cUIHints::Next(int a, char b) {
 }
 
 // ---- 0x0067c420 : cUIHints::SetFlag ----------------------------------
+// The original tail-jumps to UpdateHints (0x0067c350) on the a==0 path, so its
+// return value in eax propagates to the caller; reproduce it with an int-returning view.
+struct UhRet { int UpdateHints(char b, char c); };   // 0x0067c350
 // @ 0x0067c420
-void cUIHints::SetFlag(char a, int b) {
-    if (*(unsigned*)((char*)this + 0x48) > 2) return;
+int cUIHints::SetFlag(char a, int b) {
+    unsigned old = *(unsigned*)((char*)this + 0x48);
+    if (old > 2) return (int)old;
     if (a != 0) {
         *(int*)((char*)this + 0x48) = 0;
-    } else {
-        *(int*)((char*)this + 0x48) = 2;
-        UpdateHints(0, (char)b);
+        return (int)old;
     }
+    *(int*)((char*)this + 0x48) = 2;
+    return ((UhRet*)this)->UpdateHints(0, (char)b);
 }
 // --- equivalence checker address annotations
 

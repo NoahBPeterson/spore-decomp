@@ -1,5 +1,5 @@
 006c2cd0  346  complete source; original is SSE-scalar (prebuilt/different toolset), cl15 emits x87
-006c2ea0  446  complete source; original is SSE-scalar basis projection, cl15 emits x87
+006c2ea0  727  complete source; original is SSE-scalar basis projection, cl15 emits x87; denormal multiplies via SSE MulSS to round once; equiv: PASS
 006c3080  547  complete source; SSE-scalar / EASTL allocator prebuilt codegen
 006c32f0   59  complete source; differs only in stack-slot scheduling of the outgoing vcall args
 006c3330  103  complete source; EASTL allocator/rbtree wrapper, prebuilt codegen

@@ -6,6 +6,6 @@
 00fd7750  116  cMovieLetterbox::Init refcount assignment + layout Init
 00fd7800  441  Shutdown: 5 message posts + layout release
 00fd79e0  124  StopMovie
-00fd7ab0  31  cContentValidationSummarizer vtable/field init
+00fd7ab0  5  cContentValidationSummarizer Init returns this in eax (caller feeds AutoRefCount::operator=); base vtable store + zero-store scheduling differ
 00fd7b30  297  cMovieSystem constructor
 00fd7cd0  128  cMovieSystem destructor

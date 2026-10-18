@@ -3,6 +3,10 @@
 // Flags: /vc71 /O2 /MD /Gy /TP
 #include "types.h"
 
+// _ReadWriteBarrier: MSVC intrinsic (compiler barrier, emits no code). VC .NET 2003's <intrin.h>
+// does not declare it, so declare it here.
+extern "C" void _ReadWriteBarrier(void);
+
 // ---------------------------------------------------------------------------
 // Globals (addresses from the retail image)
 // ---------------------------------------------------------------------------
@@ -669,10 +673,15 @@ extern "C" void SNDI_patchtohdr(int arg0, const char* hdr, void* p4, void* p100,
 // ===========================================================================
 //  FUN_01141690   (register callback)
 // ===========================================================================
-// @ 0x01141690
+// @ 0x01141690  -- index-then-increment. The _ReadWriteBarrier keeps cl from caching the
+// count byte in a register across the array store; the /GL original re-reads it as inc [mem]
+// and leaves edx untouched (a live edx in an LTCG caller).
 extern "C" void FUN_01141690(int32_t p)
 {
-    g_callbacks[g_cbCount++] = p;
+    int idx = g_cbCount;
+    g_callbacks[idx] = p;
+    _ReadWriteBarrier();
+    g_cbCount = g_cbCount + 1;
 }
 
 // ===========================================================================

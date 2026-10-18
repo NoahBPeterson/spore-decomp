@@ -520,19 +520,27 @@ extern "C" void FUN_00572020(int, int);
 // @ 0x00edda20
 void C::f00edda20()
 {
+    // The original threads a saved copy of `this` through a frame slot whose low byte is
+    // overwritten by the per-block boolean and then read back as a 32-bit value (both as the
+    // second argument of the VC2 call and, via pop ecx, as the function's final ecx).  cl 15.00
+    // only reproduces that slot aliasing when the saved value is forced to memory and updated
+    // through its low byte, so model it explicitly.
+    unsigned saved = (unsigned)(size_t)this;
     if (p30 != 0) {
         SetGlobalProperty(0x8dff6314, 0.0f);
         FUN_00572020(p30, 0);
         p30 = 0;
     }
     if (p20 != 0) {
-        void* a = VCP2((void*)p20, 0xf0, 0x447c040, 1);
-        if (a != 0) VC2(a, 0x7c, 1, v2c != 0);
-        void* b = VCP2((void*)p20, 0xf0, 0x5ca82b7, 1);
-        if (b != 0) VC2(b, 0x7c, 1, v2c == 0);
-        void* c = VCP2((void*)p20, 0xf0, 0x7ccbd48, 1);
-        if (c != 0) VC2(c, 0x7c, 1, v2c != 0);
+        void* p = (void*)p20;
+        void* a = VCP2(p, 0xf0, 0x447c040, 1);
+        if (a != 0) { *(volatile unsigned char*)&saved = (v2c != 0); VC2(a, 0x7c, 1, (int)saved); }
+        void* b = VCP2(p, 0xf0, 0x5ca82b7, 1);
+        if (b != 0) { *(volatile unsigned char*)&saved = (v2c == 0); VC2(b, 0x7c, 1, (int)saved); }
+        void* c = VCP2(p, 0xf0, 0x7ccbd48, 1);
+        if (c != 0) { *(volatile unsigned char*)&saved = (v2c != 0); VC2(c, 0x7c, 1, (int)saved); }
     }
+    (void)saved;
 }
 
 // ============================================================ 0x00eddb00

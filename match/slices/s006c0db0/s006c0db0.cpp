@@ -137,8 +137,8 @@ u32 BlendShape::m1160(int n)
 // ---------------------------------------------------------------------------
 // @ 0x006c0fa0  ctor of an 8-byte element {int,int}
 // ---------------------------------------------------------------------------
-struct Pair8 { int a, b; void Init(); };
-void Pair8::Init() { a = 0; b = 1; }
+struct Pair8 { int a, b; Pair8(); };
+Pair8::Pair8() { a = 0; b = 1; }
 
 // ---------------------------------------------------------------------------
 // @ 0x006c0db0  PFRecordWrite constructor from an in-memory blob

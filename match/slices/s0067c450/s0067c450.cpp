@@ -75,10 +75,10 @@ class cUIHints {
   void UpdateVisibleHint(cHint* pHint, float dt);  // @ 0x0067ad00
 
   void UpdateHintTimers(float dt);   // @ 0x0067c450
-  void ActivateHint(unsigned int id);// @ 0x0067c830
-  void SetHintState(unsigned int id, bool active); // @ 0x0067c8c0
+  void ActivateHint(unsigned int id);// 0x0067c830
+  void SetHintState(unsigned int id, bool active); // 0x0067c8c0
   void Update();                     // @ 0x0067c960
-  void Refresh();                    // @ 0x0067c9b0
+  void Refresh();                    // 0x0067c9b0
   void AddCondition(void* pCondition);// @ 0x0067ca50
 
   unsigned int mBase[3];             // +0x00

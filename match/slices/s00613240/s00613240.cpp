@@ -20,10 +20,11 @@ struct Variant {
     char mData[16];
     uint16_t mFlags;
     uint16_t mTypeId;
-    Variant& operator=(const Variant& x);  // 0x00542b80
+    Variant& Assign(const Variant& x);  // 0x00542b80 (copy-assign; named Assign to avoid the
+                                        // 0x00478300 symbol collision on the same mangled name)
     void Destruct(int);                    // 0x0093db80
     Variant() : mFlags(0), mTypeId(0) {}
-    Variant(const Variant& x) : mFlags(0), mTypeId(0) { *this = x; }
+    Variant(const Variant& x) : mFlags(0), mTypeId(0) { Assign(x); }
     ~Variant() {
         if (mFlags & 4) Destruct(0);
     }
@@ -48,7 +49,7 @@ struct pair {
     pair(const pair& x) : first(x.first), second(x.second) {}
     pair& operator=(const pair& x) {
         first = x.first;
-        second = x.second;
+        second.Assign(x.second);
         return *this;
     }
 };
@@ -632,7 +633,7 @@ bool cPropertyReader::Read(EA::IO::IStream* pStream, cPropertyBag* pBag) {
         if (r.mbOk) r.Accumulate(EA::IO::ReadInt32(r.mpStream, (int32_t*)&key, 1, r.mEndian));
         r.ReadVariant(&v);
         if (!r.mbOk) goto fail;
-        pBag->mMap[key] = v;
+        pBag->mMap[key].Assign(v);
     }
     if (r.mbOk) return true;
 fail:

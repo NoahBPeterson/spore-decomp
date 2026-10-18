@@ -1,6 +1,6 @@
 00a0f350 557 AnimMgr::Init: complete; register assignment (this in ebp), new-expression cleanup and vector push_back shapes differ
 00a0f610 5 AnimHandler::HandleMessage: complete; msg ptr register (edx vs eax) differs; difftest WEAK (400 valid, 26.7% coverage: random ids never hit the message-id switch cases)
-00a0f810 32 AudioBlockAlloc: complete; zero-init stores of the block differ (dead store of [0] dropped); difftest WEAK (74/400 valid, 100% coverage: rest fault inside the real cSPMemPool)
+00a0f810 24 AudioBlockAlloc: complete; the original is `void` but hands `out` back in eax (it reloads out into eax after the call and keeps it there through the four zero-init stores and the final mPtr store), so this wrapper is declared to return the block pointer with `return out;` (same pattern as the slice-65 constructors that return `this`); that also avoids the extra `in[0]` load into edx; equiv WEAK 74/400 valid (22/22 insns covered, 0 mismatches; the remaining inputs fault inside the real cSPMemPool)
 00a0f9a0 59 CmdQueue::ReadNext: complete; compiler caches mReadIndex/mNumCmds instead of reloading
 00a0f9f0 79 CmdQueue::BeginRead: complete; original keeps Command* in eax via lea
 00a0fe20 97 FVec::Swap: complete; EH frame has 8 extra bytes of locals in original

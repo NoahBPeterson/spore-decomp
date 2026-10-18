@@ -6,6 +6,16 @@
 //   * octahedral-ish basis projection used to build per-vertex 2-float attributes.
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
+
+// Single-precision multiply with exactly one float32 rounding. cl15 emits x87
+// for scalar float (even with /arch:SSE), and the harness runs x87 at 24-bit
+// precision: multiplying a normal by a denormal then storing to float32 then
+// double-rounds and lands one ulp off. The original here is SSE-scalar
+// (mulss), so route the denormal-sensitive multiplies through SSE to round once.
+static __forceinline float MulSS(float a, float b) {
+  return _mm_cvtss_f32(_mm_mul_ss(_mm_set_ss(a), _mm_set_ss(b)));
+}
 
 // ---------------------------------------------------------------------------
 // Small shared value types.
@@ -190,12 +200,22 @@ float* FUN_006c2ea0(float* out, const float* axis, const float* n, const float* 
   float t = -(g4 * g1 * sign1);
   float u = sign0 * (g5 * g2);
 
-  out[0] = (axis[1] * u + axis[0] * (g3 * g0) + axis[0] * t) * scale[0];
-  out[1] = -((axis[2] * (sign0 * u) + axis[1] * ((g3 * g0) * sign2) + axis[2] * (-sign1 * t)) * scale[1]);
+  // The original is SSE-scalar: every add/mul rounds to float32. cl15 emits
+  // x87, whose 24-bit precision double-rounds denormal results, so the
+  // multiplies that can produce a denormal go through MulSS (single rounding).
+  volatile float r0 = axis[1] * u;
+  r0 = r0 + axis[0] * (g3 * g0);
+  r0 = r0 + axis[0] * t;
+  volatile float p0 = MulSS(r0, scale[0]);
+
+  volatile float r1 = axis[2] * (sign0 * u);
+  r1 = r1 + axis[1] * ((g3 * g0) * sign2);
+  r1 = r1 + axis[2] * (-sign1 * t);
+  volatile float p1 = -MulSS(r1, scale[1]);
 
   float k = *(const float*)((const char*)obj + 0x10);
-  out[0] *= k;
-  out[1] *= k;
+  out[0] = MulSS(p0, k);
+  out[1] = MulSS(p1, k);
   return out;
 }
 

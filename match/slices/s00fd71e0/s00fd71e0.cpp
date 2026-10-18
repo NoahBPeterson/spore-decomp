@@ -1,6 +1,7 @@
 // Decompiled source for the Spore sim-movie module (bfs3 slice 40).
 // SP::cMovieSystem methods; offsets are from the retail disassembly.
 #include "types.h"
+#include <intrin.h>
 
 struct IMessageServer {
     virtual void v00() = 0; virtual void v04() = 0; virtual void v08() = 0;
@@ -203,7 +204,7 @@ public:
 };
 
 struct cMovieLetterbox { void Init(); };             // 0x00fd7750
-struct cContentValidationSummarizer { void Init(); };// 0x00fd7ab0
+struct cContentValidationSummarizer { cContentValidationSummarizer* Init(); };// 0x00fd7ab0
 
 // callees
 IMessageServer* SP_MessageServer();                  // 0x0067dcc0
@@ -461,14 +462,18 @@ void* cMovieSystem::GetSomething()
 }
 
 // @ 0x00fd7ab0
-void cContentValidationSummarizer::Init()
+// Original returns `this` in eax (constructor-style); the caller pushes it into
+// AutoRefCount<IWinText>::operator=(ptr).
+cContentValidationSummarizer* cContentValidationSummarizer::Init()
 {
     char* p = (char*)this;
     *(void**)(p + 4) = (void*)0x13ec458;
+    _ReadWriteBarrier();
     *(void**)(p + 8) = 0;
     *(void**)p = (void*)0x14939f4;
     *(void**)(p + 4) = (void*)0x14939e4;
     *(void**)(p + 0xc) = 0;
+    return this;
 }
 
 // @ 0x00fd7b30

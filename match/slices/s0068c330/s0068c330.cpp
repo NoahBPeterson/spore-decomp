@@ -64,10 +64,12 @@ void SetKeyKind(ResKey* key, uint8 hi, uint8 lo)
 // ===========================================================================
 // @ 0x0068C700  InvalidEditorModelKey
 // ===========================================================================
-void InvalidEditorModelKey(ResKey* key, uint32 v)
+ResKey* InvalidEditorModelKey(ResKey* key, uint32 v)
 {
-    uint32 bits = ((v << 0x18) ^ key->mGroup) & 0x1f000000u;
-    key->mGroup ^= bits;
+    uint32 bits = (v << 0x18) ^ key->mGroup;
+    bits &= 0x1f000000u;
+    *(volatile uint32*)&key->mGroup ^= bits;
+    return key;
 }
 
 // ===========================================================================

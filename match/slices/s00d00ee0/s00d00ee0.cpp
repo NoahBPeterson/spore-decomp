@@ -158,7 +158,7 @@ struct InsRes {
 struct TrueTag {};
 struct RelTree {
     uint32_t alloc; RBNode anchor; uint32_t size;
-    __declspec(noinline) void find(RBNode** out, const uint32_t* key);                                       // 0x00d00f80
+    __declspec(noinline) RBNode** find(RBNode** out, const uint32_t* key);                                   // 0x00d00f80
     __declspec(noinline) Iter InsertImpl(RBNode* parent, const RelValue* value, bool forceLeft);             // 0x00d012a0
     __declspec(noinline) InsRes Insert(const RelValue* value, TrueTag tag);                                  // 0x00d01340
     __declspec(noinline) Iter InsertHint(Iter hint, const RelValue* value, TrueTag tag);                     // 0x00d01920
@@ -314,7 +314,9 @@ float RelCalc::A0ee0(Noun* a, Noun* b)
 
 // ---------------------------------------------------------------------------
 // @ 0x00d00f80  lower_bound then verify (map::find over pair<uint,uint> keys)
-void RelTree::find(RBNode** out, const uint32_t* key)
+// The original hands the out-pointer back in eax (both exit paths load [esp+0xc] and
+// store through it without rewriting eax), so the function returns that pointer.
+RBNode** RelTree::find(RBNode** out, const uint32_t* key)
 {
     RBNode* end = &anchor;
     RBNode* best = end;
@@ -332,6 +334,7 @@ void RelTree::find(RBNode** out, const uint32_t* key)
         *out = best;
     else
         *out = end;
+    return out;
 }
 
 __declspec(noinline) void __cdecl WriteVarMap(ISerializer* ser, RelTree* t);

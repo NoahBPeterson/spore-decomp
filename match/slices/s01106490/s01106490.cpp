@@ -1,4 +1,4 @@
-// hkCollideCapsuleUtilManifoldCapsVsCaps, 0x01106490   (Havok 3.1.0, x87, /O2 /fp:fast)
+// hkCollideCapsuleUtilManifoldCapsVsCaps, 0x01106490   (Havok 3.1.0, x87, /O2 /fp:strict)
 //
 //   extern "C" void hkCollideCapsuleUtilManifoldCapsVsCaps(const hkVector4* capsA, hkReal capsARadius,
 //                                                          const hkVector4* capsB, hkReal capsBRadius,
@@ -11,16 +11,17 @@
 // parallel, tries the two end-point pairs as extra contacts pointsOut[1] / pointsOut[2].
 // Each pointsOut[i].m_separatingNormal.w is read as that point's collision tolerance on entry.
 //
-// Float semantics: the original is x87 code from an older cl that keeps intermediates at 80 bits
-// on the FPU stack and rounds a value to 32 bits only where it spills it to memory. /fp:fast gives
-// the inline fsqrt (no __CIsqrt) and the 80-bit intermediates; `Rounded()` marks every place where
-// the original stores a value as a float and reloads it (a hkVector4 member, a spilled local), so
-// the results stay bit-identical. Values not wrapped in Rounded() are used unrounded there too.
-// The sums are written in the original's association (dot3 (x*x' + z*z') + y*y', normalize3
-// length (x*x + y*y) + z*z, manifold-point distance (z*z + y*y) + x*x); /fp:fast may regroup
-// them, which only moves 64-bit rounding. tools/difftest/equiv.py: PASS, bit-identical on
-// 3 x 400 random inputs plus 400 with NaN/Inf, 99.9% coverage (tested through a C++-linkage copy
-// so the harness knows the return type is void).
+// Float semantics: the original is cl 15 x87 code. The equivalence harness runs the FPU at control
+// word 0x007F, whose precision-control field is 24 bits -- i.e. every x87 arithmetic result is
+// rounded to a single-precision float, exactly like `float` C++. The original keeps intermediates on
+// the x87 stack and only forces a 32-bit store where it spills to memory; `Rounded()` marks those
+// stores, so the values stay bit-identical. The sums are written in the original's association
+// (dot3 (x*x' + z*z') + y*y', normalize3 length (x*x + y*y) + z*z, manifold-point distance
+// (z*z + y*y) + x*x). /fp:fast regroups these additive chains, which moves `closestLineSegLineSeg`'s
+// projA by 1 ulp and (through the subtraction closestA.x = dA.x*t + segA[0].x) n0.x by ~78 ulp on
+// some inputs; /fp:strict keeps the source association and matches. tools/difftest/equiv.py with
+// /fp:strict: WEAK (no mismatch; 400/400 valid, 99.9% coverage, 771/772 insns); strict leaves the
+// inlined helpers out of line, so the ours object is larger than the 2798-byte original.
 
 #include <math.h>
 

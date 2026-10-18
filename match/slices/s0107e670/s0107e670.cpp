@@ -3,6 +3,7 @@
 #include "hk31_base.h"
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 // ---- externals defined in other slices ----------------------------------------------------------------
 struct hkSingletonStreambufFactory { static void replaceInstance(hkStreambufFactory* f); };   // 0x0107E5F0
@@ -586,16 +587,11 @@ int hkString::strLen(const char* s)
 }
 
 // @ 0x0107f440
+// The original is the cl inline expansion of memcpy (rep movsd + rep movsb); it
+// leaves n in eax, which a caller observes.
 void hkString::memCpy(void* dst, const void* src, int n)
 {
-	hkUint32* d = (hkUint32*)dst;
-	const hkUint32* s = (const hkUint32*)src;
-	for (hkUint32 w = (hkUint32)n >> 2; w != 0; --w)
-		*d++ = *s++;
-	unsigned char* db = (unsigned char*)d;
-	const unsigned char* sb = (const unsigned char*)s;
-	for (hkUint32 r = (hkUint32)n & 3; r != 0; --r)
-		*db++ = *sb++;
+	memcpy(dst, src, (size_t)n);
 }
 
 // @ 0x0107f470

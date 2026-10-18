@@ -130,16 +130,16 @@ struct cSPEditorBlock {
 };
 
 // ---- helpers ----
-void FUN_4942b0(cSPEditorBlock* block, float* out, uint32_t scale, cSPVector3 pos, int a, int b);  // @ 0x4942b0
-cSPMatrix3 FUN_49e880(cSPEditorBlock* block, cSPMatrix3 m);                                       // @ 0x49e880
-void FUN_49de30(cSPEditorBlock* block, float newScale, float oldScale, BlockVector* blocks, bool flag);  // @ 0x49de30
-float ClampAndSetScale(cSPEditorBlock* block, float value, bool clamp);                           // @ 0x49dca0
-bool FUN_49dd20(cSPEditorBlock* block, BlockVector* out, int flags);                              // @ 0x49dd20
-void BuildPileList(cSPEditorBlock* block, BlockVector* out, int flags);                           // @ 0x48c790
-void RepinBlockToTorso(cSPEditorBlock* block, cSPVector3 pos, cSPMatrix3 orient, int a);           // @ 0x49fbd0
-bool FUN_4a6120(cSPEditorBlock* block);                                                           // @ 0x4a6120
-cSPEditorBlock* GetLimbRoot(cSPEditorBlock* block);                                               // @ 0x4a5e10
-cSPVector3 FUN_4a06c0(cSPEditorBlock* block);                                                     // @ 0x4a06c0
+void FUN_4942b0(cSPEditorBlock* block, float* out, uint32_t scale, cSPVector3 pos, int a, int b);  // 0x4942b0
+cSPMatrix3 FUN_49e880(cSPEditorBlock* block, cSPMatrix3 m);                                       // 0x49e880
+void FUN_49de30(cSPEditorBlock* block, float newScale, float oldScale, BlockVector* blocks, bool flag);  // 0x49de30
+float ClampAndSetScale(cSPEditorBlock* block, float value, bool clamp);                           // 0x49dca0
+bool FUN_49dd20(cSPEditorBlock* block, BlockVector* out, int flags);                              // 0x49dd20
+void BuildPileList(cSPEditorBlock* block, BlockVector* out, int flags);                           // 0x48c790
+void RepinBlockToTorso(cSPEditorBlock* block, cSPVector3 pos, cSPMatrix3 orient, int a);           // 0x49fbd0
+bool FUN_4a6120(cSPEditorBlock* block);                                                           // 0x4a6120
+cSPEditorBlock* GetLimbRoot(cSPEditorBlock* block);                                               // 0x4a5e10
+cSPVector3 FUN_4a06c0(cSPEditorBlock* block);                                                     // 0x4a06c0
 cSPVector3 operator-(const Vec3& a, const Vec3& b);                                   // 0x41db10
 cSPVector3 operator+(const Vec3& a, const Vec3& b);                                   // 0x41dc10
 cSPVector3 operator*(const Vec3& a, const float& s);                                        // 0x41dca0

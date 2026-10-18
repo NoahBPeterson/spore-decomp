@@ -6,7 +6,8 @@
 
 extern "C" long _InterlockedExchangeAdd(volatile long*, long);
 extern "C" long _InterlockedExchange(volatile long*, long);
-#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+extern "C" long _InterlockedDecrement(volatile long*);
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 extern "C" unsigned long __cdecl strtoul(const char*, char**, int);
 inline void* operator new(unsigned int, void* p) { return p; }
 
@@ -27,7 +28,7 @@ using ResourceMan::Key;
 struct AtomicInt {
     volatile long mValue;
     long Increment() { return _InterlockedExchangeAdd(&mValue, 1) + 1; }
-    long Decrement() { return _InterlockedExchangeAdd(&mValue, -1) - 1; }
+    long Decrement() { return _InterlockedDecrement(&mValue); }
     void SetValue(long v) { _InterlockedExchange(&mValue, v); }
 };
 struct RefCounted {
@@ -35,7 +36,8 @@ struct RefCounted {
     AtomicInt mRefCount;
     void AddRef() { mRefCount.Increment(); }
     void Release() {
-        if (mRefCount.Decrement() == 0) {
+        long c = mRefCount.Decrement();
+        if (c == 0) {
             mRefCount.SetValue(1);
             delete this;
         }

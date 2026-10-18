@@ -73,8 +73,8 @@ void FUN_00aca0c0(void* arr, int n, int param3, int start, void* cb, int a4, int
     (void)arr; (void)n; (void)param3; (void)start; (void)cb; (void)a4; (void)a5; (void)a6;
 }
 
-// @ 0x00aca1f0
-void FUN_00aca1f0(int* begin, int* end, int* key) {
+// @ 0x00aca1f0  lower_bound over 0x20-byte elements; returns the resulting iterator
+int* FUN_00aca1f0(int* begin, int* end, int* key) {
     int n = (int)((char*)end - (char*)begin) >> 5;
     if (n > 0) {
         do {
@@ -86,6 +86,7 @@ void FUN_00aca1f0(int* begin, int* end, int* key) {
             n = h;
         } while (n > 0);
     }
+    return begin;
 }
 
 // @ 0x00aca2f0

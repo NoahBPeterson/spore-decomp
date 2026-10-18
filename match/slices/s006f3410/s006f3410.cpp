@@ -144,7 +144,7 @@ void cModelInstanceSet::AddToRenderer(void* pRenderer) {
         if (old) (*(void (__thiscall**)(void*))(Vt(old) + 1))(old);
     }
     if (mRenderer) {
-        if ((*(char (__thiscall**)(void*, void*, int*, int*))(Vt(mRenderer) + 11))(mRenderer, &m38, &mSetID, 0)) {
+        if ((*(char (__thiscall**)(void*, void*, int*, int*))(Vt(mRenderer) + 11))(mRenderer, this, &m38, &mSetID)) {
             (*(void (__thiscall**)(void*, int, int*))(Vt(mRenderer) + 4))(mRenderer, 9, &m5c);
             (*(void (__thiscall**)(void*, int, int))(Vt(mRenderer) + 14))(mRenderer, mSetID, 1);
             Update();
@@ -328,9 +328,11 @@ void cRenderInstanceSet::ClearElements() {
 // @ 0x006f4100
 void cRenderInstanceSet::SetColor(int a, const float* rgb, float alpha, int b) {
     (void)a; (void)b;
-    mColorR = rgb[0] * 255.0f;
-    mColorG = rgb[1] * 255.0f;
-    mColorB = rgb[2] * 255.0f;
+    struct Color { float r, g, b; } c;
+    c.r = rgb[0] * 255.0f;
+    c.g = rgb[1] * 255.0f;
+    c.b = rgb[2] * 255.0f;
+    *(Color*)((char*)this + 0x110) = c;
     mColorA = alpha * 255.0f;
 }
 

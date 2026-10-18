@@ -206,28 +206,28 @@ void HELPER_CEALayer3::DecodeHuffman(int a, int b, float* out, int endBit)
                 mShiftReg <<= 1;
                 mShiftRegBits += -1;
             } else {
-                out[idx] = 0.0f;
+                *(int*)&out[idx] = 0;
             }
             if (e[0] & 4) {
                 out[idx + 1] = mShiftReg < 0 ? negGain : gain;
                 mShiftReg <<= 1;
                 mShiftRegBits += -1;
             } else {
-                out[idx + 1] = 0.0f;
+                *(int*)&out[idx + 1] = 0;
             }
             if (e[0] & 2) {
                 out[idx + 2] = mShiftReg < 0 ? negGain : gain;
                 mShiftReg <<= 1;
                 mShiftRegBits += -1;
             } else {
-                out[idx + 2] = 0.0f;
+                *(int*)&out[idx + 2] = 0;
             }
             if (e[0] & 1) {
                 out[idx + 3] = mShiftReg < 0 ? negGain : gain;
                 mShiftReg <<= 1;
                 mShiftRegBits += -1;
             } else {
-                out[idx + 3] = 0.0f;
+                *(int*)&out[idx + 3] = 0;
             }
             idx += 4;
             pos = (int)(mBufPtr - mBufPtrBase) * 8 - mShiftRegBits;

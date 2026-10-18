@@ -366,7 +366,7 @@ struct ArenaSelf {
     void* idToObject(uint32_t id);                 // 0x011e2300
     void grow(int n);                              // 0x011e2470
     void alignTo(uint32_t a);                      // 0x011e24b0
-    void copyBlob(Blob32* out);                    // 0x011e2670
+    Blob32* copyBlob(Blob32* out);                 // 0x011e2670 (returns out in eax)
     ArenaSelf* initRange(int* data, int n);        // 0x011e29c0 (returns this; see definition)
     void writeDictionary(void* p2);                // 0x011e2760 PARTIAL
     int getExportedObjectByIndex(unsigned index, void* out); // 0x011e28e0 PARTIAL
@@ -431,9 +431,10 @@ void ArenaSelf::alignTo(uint32_t a)
 }
 
 // @ 0x011e2670
-void ArenaSelf::copyBlob(Blob32* out)
+Blob32* ArenaSelf::copyBlob(Blob32* out)
 {
     *out = *(Blob32*)((char*)this + 0x40);
+    return out;
 }
 
 // @ 0x011e29c0

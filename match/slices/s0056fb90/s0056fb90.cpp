@@ -14,9 +14,6 @@ void* EASTL_Allocate(void* allocator, size_t size, int align, int flags);
 struct UnkClass_0056fb90 { void Method(void* a, void* b); };          // @ 0x0056fb90
 void UnkClass_0056fb90::Method(void*, void*) { /* partial */ }
 
-struct UnkClass_0056fe60 { void Method(void* a); };                   // @ 0x0056fe60
-void UnkClass_0056fe60::Method(void*) { /* partial */ }
-
 struct UnkClass_0056fee0 { void Method(void* a); };                   // @ 0x0056fee0
 void UnkClass_0056fee0::Method(void*) { /* partial */ }
 

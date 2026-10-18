@@ -28,12 +28,14 @@ struct S36 { int v[9]; };
 
 class cCopy9 {
 public:
-    void Assign(const S36& s);
+    S36 m;
+    cCopy9* Assign(const S36& s);
 };
 
 // @ 0x005a88a0
-void cCopy9::Assign(const S36& s) {
-    __movsd((unsigned long*)this, (unsigned long*)&s, 9);
+cCopy9* cCopy9::Assign(const S36& s) {
+    m = s;
+    return this;
 }
 
 // ---- EditorTuning accessor --------------------------------------------------

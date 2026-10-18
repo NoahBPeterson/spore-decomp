@@ -9,8 +9,8 @@ struct SwapObj {
     uint32_t f58, f5c, f60, f64, f68;
 };
 
-// @ 0x0050bc80  (toggle a flag and swap two coordinate pairs)
-void __fastcall ToggleSwap(SwapObj* s)
+// @ 0x0050bc80  (toggle a flag and swap two coordinate pairs; returns &f58)
+void* __fastcall ToggleSwap(SwapObj* s)
 {
     s->f68 = s->f68 ^ 1;
     uint32_t t = s->f5c;
@@ -19,6 +19,7 @@ void __fastcall ToggleSwap(SwapObj* s)
     t = s->f58;
     s->f58 = s->f60;
     s->f60 = t;
+    return &s->f58;
 }
 
 // @ 0x0050bd10  (advance a value, clamp against a sibling's extent)

@@ -757,7 +757,7 @@ struct hkAabbPhantom : hkPhantom {
 
     hkAabbPhantom(const hkAabb& aabb, uint32_t collisionFilterInfo);
     hkAabbPhantom(int finishLoaded);
-    virtual void calcAabb(hkAabb& out);
+    virtual hkAabb& calcAabb(hkAabb& out);
     void setAabb(const hkAabb& aabb);
     virtual bool isOverlappingCollidableAdded(const void* c);
     virtual void removeOverlappingCollidable(void* c);
@@ -766,7 +766,8 @@ struct hkAabbPhantom : hkPhantom {
 };
 
 // @ 0x0108dd90
-void hkAabbPhantom::calcAabb(hkAabb& out) { out = m_aabb; }
+// The original leaves the out pointer in EAX (void_hides_eax); returning the reference matches it.
+hkAabb& hkAabbPhantom::calcAabb(hkAabb& out) { out = m_aabb; return out; }
 
 // @ 0x0108dde0
 void hkAabbPhantom::setAabb(const hkAabb& aabb)

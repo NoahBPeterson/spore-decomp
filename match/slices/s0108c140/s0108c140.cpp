@@ -4,6 +4,7 @@
 // (0x0108C140..0x0108D0A0). Equivalent portable source. Offsets are the 32-bit ones; layouts come from the dev PDB
 // (tools/pdb_type.py) where available and are confirmed against the disassembly.
 #include "../s010eb310/hk31_math.h"
+#include <string.h>
 
 #ifdef _WIN32
 extern "C" __declspec(dllimport) void __stdcall LeaveCriticalSection(void* cs);
@@ -223,6 +224,12 @@ void hkSimpleShapePhantom::setPositionAndLinearCast(const hkVector4& position, c
 	}
 }
 
+// The agent2 dispatch entries are __thiscall functions whose `this` is bodyB: the original sets
+// ECX = other right before the call (and still pushes bodyB as a stack argument). A member-function
+// pointer on the body reproduces that (MSVC passes `this` in ECX, the 4 arguments on the stack).
+typedef void (hkCdBody::*hkAgent2GetClosestPointsMfn)(const hkCdBody&, const hkCdBody&,
+                                                      const hkCollisionInput&, hkCdPointCollector&) const;
+
 // @ 0x0108c430
 void hkSimpleShapePhantom::getClosestPoints(hkCdPointCollector& collector)
 {
@@ -234,7 +241,9 @@ void hkSimpleShapePhantom::getClosestPoints(hkCdPointCollector& collector)
 		int typeOther = other->m_shape->getType();
 		int typeThis = m_collidable.m_shape->getType();
 		uint8_t agentType = dispatcher->m_agent2TypesDiscrete[typeThis][typeOther];
-		dispatcher->m_agent2Func[agentType].m_getClosestPointFunc(m_collidable, *other, *input, collector);
+		hkAgent2GetClosestPointsMfn closestFn;
+		memcpy(&closestFn, &dispatcher->m_agent2Func[agentType].m_getClosestPointFunc, sizeof(closestFn));
+		(other->*closestFn)(m_collidable, *other, *input, collector);
 	}
 }
 

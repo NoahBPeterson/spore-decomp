@@ -618,17 +618,22 @@ void FUN_011f3ab0(float* dst, float* src)
 void FUN_011f3c40(u32* param_1)
 {
   u32* p = (u32*)*param_1;
+  float* pf = (float*)p;
 
-  p[0x1d] = 0x41200000;
-  p[0x17] = 0x3f800000;
-  p[0x18] = 0x3f800000;
-  p[0x19] = 0x3f800000;
-  p[0x1a] = 0x3f800000;
-  p[0x15] = 0;
-  p[0x16] = 0;
-  p[0x22] = 0;
-  p[0x23] = 0x3f800000;
-  p[0x1c] = 0x3f800000;
+  // The float fields must be written as float (not the integer bit pattern): the retail build
+  // used /arch:SSE, so cl materialises 1.0f/10.0f in xmm registers (movss).  Writing the raw
+  // 0x3f800000 integer makes cl load it into edx, which the /LTCG caller keeps live across this
+  // call (callerdeps DEPENDS edx) -> register clobber.
+  pf[0x1d] = 10.0f;
+  pf[0x17] = 1.0f;
+  pf[0x18] = 1.0f;
+  pf[0x19] = 1.0f;
+  pf[0x1a] = 1.0f;
+  pf[0x15] = 0.0f;
+  pf[0x16] = 0.0f;
+  pf[0x22] = 0.0f;
+  pf[0x23] = 1.0f;
+  pf[0x1c] = 1.0f;
   p[0x1e] = 0;
   p[0x1f] = 0;
   p[0x20] = 0;
@@ -639,22 +644,22 @@ void FUN_011f3c40(u32* param_1)
   p[0x13] = 0;
   p[0x14] = 0;
   p[0x1b] = 1;
-  p[0]  = 0x3f800000;
-  p[1]  = 0;
-  p[2]  = 0;
-  p[3]  = 0;
-  p[4]  = 0;
-  p[5]  = 0x3f800000;
-  p[6]  = 0;
-  p[7]  = 0;
-  p[8]  = 0;
-  p[9]  = 0;
-  p[10] = 0x3f800000;
-  p[0xb] = 0;
-  p[0xc] = 0;
-  p[0xd] = 0;
-  p[0xe] = 0;
-  p[0xf] = 0;
+  pf[0]  = 1.0f;
+  pf[1]  = 0.0f;
+  pf[2]  = 0.0f;
+  pf[3]  = 0.0f;
+  pf[4]  = 0.0f;
+  pf[5]  = 1.0f;
+  pf[6]  = 0.0f;
+  pf[7]  = 0.0f;
+  pf[8]  = 0.0f;
+  pf[9]  = 0.0f;
+  pf[10] = 1.0f;
+  pf[0xb] = 0.0f;
+  pf[0xc] = 0.0f;
+  pf[0xd] = 0.0f;
+  pf[0xe] = 0.0f;
+  pf[0xf] = 0.0f;
   p[0x24] = 0;
   p[0x25] = 0;
 }

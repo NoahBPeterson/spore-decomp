@@ -196,13 +196,14 @@ struct Mgr8c {
 
 extern unsigned int g_maskTable[];  // 0x0140e5b4
 
-void __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
+Item8* __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
     const int n = (int)(mgr->end - mgr->begin);
     const int numItems = (int)(vec->end - vec->begin);
     int local_c = 0;
     int off = 0;
+    Item8* result = vec->begin;
     if (n <= 0)
-        return;
+        return result;
     Item8* items = vec->begin;
     do {
         Rec8c* r = (Rec8c*)((char*)mgr->begin + off);
@@ -217,6 +218,7 @@ void __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
                     }
                     ++i;
                 } while (i < cnt);
+                result = (Item8*)(void*)i;
             }
         } else {
             const int cnt = r->count;
@@ -225,6 +227,7 @@ void __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
                 do {
                     int val = *(int*)((char*)r->data + r->stride * j);
                     val &= (int)g_maskTable[r->field8];
+                    result = &items[val];
                     if (val < numItems && items[val].a == -1) {
                         items[val].a = local_c;
                         items[val].b = j;
@@ -236,4 +239,5 @@ void __cdecl buildIndex(Mgr8c* mgr, Vec8* vec) {
         off += 0x8c;
         ++local_c;
     } while (local_c < n);
+    return result;
 }

@@ -1,5 +1,4 @@
 0092acb0  79   SetClipboardText: alloc/ctor vtable call schedule differs
-0092ad10  37   platform-clipboard teardown: now a thiscall method; difftest WEAK (783 valid, 70.8% coverage)
 0092ad50  57   GetClipboard: operator_new path / returned old pointer schedule differs
 0092afb0  181  Win32Clipboard ctor: WNDCLASS layout + RegisterClass/CreateWindow schedule differs
 0092b0b0  49   Clipboard platform-enable: alloc/ctor schedule differs; difftest WEAK (1198 valid, 44.0% coverage)

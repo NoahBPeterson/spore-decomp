@@ -2,6 +2,7 @@
 // /O2. IMEComposition / cSPUIAnimatedIconWin / cSPUIAnimator and the SPUI
 // animation time-function factories.
 #include "types.h"
+#include <intrin.h>
 
 #define VTOBJ(p) (*(void***)(p))
 
@@ -649,12 +650,17 @@ bool AnimatorS::RemoveAnimation(void* obj, int type)
 }
 
 // @ 0x007F62C0
+// The original re-reads mBegin/mEnd each iteration (keeps `this` in ecx, a live
+// value its LTCG caller relies on). Without the barrier cl hoists the bound into
+// ecx and clobbers it, so keep the loop bound non-hoistable.
 bool AnimatorS::HasAnimation(void* obj, int type)
 {
     if (obj == 0)
         return false;
-    uint32_t n = (uint32_t)((mEnd - mBegin) / 0x88);
-    for (uint32_t i = 0; i < n; ++i) {
+    for (uint32_t i = 0; ; ++i) {
+        _ReadWriteBarrier();
+        if (i >= (uint32_t)((mEnd - mBegin) / 0x88))
+            break;
         char* e = mBegin + i * 0x88;
         if (*(void**)e == obj && (*(int*)(e + 4) == type || type == -1))
             return true;

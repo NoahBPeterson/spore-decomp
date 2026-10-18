@@ -80,7 +80,7 @@ Vec4* Vec4::Normalize(float* out) {
 // ===========================================================================
 // @ 0x0099c0b0  quaternion multiply  out = a * b
 // ===========================================================================
-void FUN_0099c0b0(float* out, const float* a, const float* b) {
+float* FUN_0099c0b0(float* out, const float* a, const float* b) {
   float b0 = b[0];
   float b3 = b[3];
   float a3 = a[3];
@@ -95,6 +95,8 @@ void FUN_0099c0b0(float* out, const float* a, const float* b) {
   float c2 = a[2];
   out[2] = ((a[2] * b3 - a1 * b0) + b2 * a3) + b[1] * a0;
   out[3] = ((a3 * b3 - b0 * a0) - a1 * c1) - b2 * c2;
+  // The original leaves `out` in eax (the caller at 0x9a59e0 reads it back).
+  return out;
 }
 
 // ===========================================================================
@@ -443,7 +445,14 @@ IntrusivePtr* IntrusivePtr::assign(void* p) {
 void FUN_0099cae0(float* out, const float* src, float* lenOut) {
   float v[4];
   v[0] = src[0]; v[1] = src[1]; v[2] = src[2]; v[3] = src[3];
-  float len = (float)sqrt(v[3] * v[3] + v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+  // The original accumulates w^2+x^2+y^2+z^2 in x87 (each op rounds to the
+  // module's 24-bit precision). Naming each partial sum keeps the exact
+  // evaluation order (a flat `a+b+c+d` is reassociated to stack order).
+  double t0 = (double)v[3] * v[3];
+  double t1 = t0 + (double)v[0] * v[0];
+  double t2 = t1 + (double)v[1] * v[1];
+  double t3 = t2 + (double)v[2] * v[2];
+  float len = (float)sqrt(t3);
   if (lenOut != 0) *lenOut = len;
   if (len != 0.0f) {
     float inv = 1.0f / len;

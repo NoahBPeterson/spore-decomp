@@ -1,2 +1,2 @@
-00eb5480 1701 complete cGameCinematicsCameraController::UpdateInterpolation; SSE scheduling/register allocation differ; difftest PASS (337 valid, 100% cov)
-00eb5c00 1526 complete sCalculateOrientation; fp op scheduling differs; difftest PASS (400 valid, 93.5% cov)
+00eb5480 1701 complete cGameCinematicsCameraController::UpdateInterpolation; SSE scheduling/register allocation differ; difftest PASS (337 valid, 100% cov). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00eb5c00 1471 complete sCalculateOrientation; x87-vs-SSE rounding matched (round 1/sqrt to float then multiply in SSE; force the (z^2+y^2)+x^2 x87 length order). difftest WEAK (400 valid, 0 mismatch; 93.5% cov - uncovered is the gSnapToSurface/GetActiveTerrainSphere snapshot path plus a degenerate-cross subpath of the pole fallback). flags /O2 /MD /Gy /TP /arch:SSE /fp:fast

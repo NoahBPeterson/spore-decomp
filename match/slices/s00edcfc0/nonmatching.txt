@@ -8,7 +8,7 @@
 00edd6b0  129  MI base-vtable store order (behavior complete)
 00edd810  158  virtual-call expansion differs (behavior complete)
 00edd8f0  227  vcall/argument scheduling (behavior complete); equiv: FAIL (ours faults reading unmapped 0x30000027 where original returns)
-00edda20  164  virtual-call expansion differs (behavior complete)
+00edda20  164  complete; virtual-call expansion differs; difftest PASS (279 valid, 100% cov): saved-this frame slot modelled (low byte = per-block bool, read back as the VC2 second arg and the final ecx) so cl reproduces the original slot aliasing
 00eddb00  118  x87/SSE float-constant and call layout (behavior complete)
 00edde30  27   arg-materialisation order in loop (behavior complete)
 00eddf30  82   bool result folding + mgr load order (behavior complete)

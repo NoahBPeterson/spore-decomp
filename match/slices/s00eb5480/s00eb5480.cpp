@@ -5,6 +5,7 @@
 // Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (same module family as s00f502b0).
 #include "types.h"
 #include <math.h>
+#include <xmmintrin.h>
 
 struct cSPVector3
 {
@@ -201,11 +202,24 @@ static inline cSPQuaternion Mul(const cSPQuaternion& r, const cSPQuaternion& q)
 cSPQuaternion sCalculateOrientation(const cSPVector3& from, const cSPVector3& to, const cSPQuaternion& current,
                                     const cSPVector3& pole)
 {
-	cSPVector3 n1 = Normalize(from);
-	cSPVector3 n2 = Normalize(to);
+	// The original evaluates the sum-of-squares, sqrt and reciprocal on the x87 stack (80-bit);
+	// long double keeps cl from demoting the intermediates to SSE floats/doubles.
+	long double s1 = (long double)from.x * from.x + (long double)from.y * from.y + (long double)from.z * from.z;
+	// The original rounds 1/sqrt to float, then scales in SSE (mulss); volatile stops cl from
+	// folding the rounding away and multiplying by the unrounded x87 reciprocal instead.
+	volatile float inv1 = (float)(1.0L / sqrtl(s1));
+	cSPVector3 n1(from.x * inv1, from.y * inv1, from.z * inv1);
+	long double s2 = (long double)to.x * to.x + (long double)to.y * to.y + (long double)to.z * to.z;
+	volatile float inv2 = (float)(1.0L / sqrtl(s2));
+	cSPVector3 n2(to.x * inv2, to.y * inv2, to.z * inv2);
 	cSPVector3 sum(n2.x + n1.x, n2.y + n1.y, n2.z + n1.z);
-	float len = (float)sqrt((double)sum.z * sum.z + (double)sum.y * sum.y + (double)sum.x * sum.x);
-	if (len < 1.5258789e-05f)
+	// Original order is (z^2 + y^2) + x^2 on the x87; a volatile accumulator forces cl not to
+	// reassociate it (with /fp:fast it otherwise emits (x^2 + y^2) + z^2 and rounds differently).
+	volatile long double sq = (long double)sum.z * sum.z;
+	sq = (long double)sq + (long double)sum.y * sum.y;
+	sq = (long double)sq + (long double)sum.x * sum.x;
+	long double lenL = sqrtl((long double)sq);
+	if (lenL < (long double)1.5258789e-05f)
 	{
 		// opposite directions: pick a perpendicular axis
 		cSPVector3 d(from.x - pole.x, from.y - pole.y, from.z - pole.z);
@@ -221,7 +235,10 @@ cSPQuaternion sCalculateOrientation(const cSPVector3& from, const cSPVector3& to
 		cSPVector3 axis = Normalize(v);
 		return Mul(cSPQuaternion(axis.x, axis.y, axis.z, 0.0f), current);
 	}
-	float invLen = 1.0f / len;
+	// The original stores the rounded length to memory and divides in SSE (divss). An x87
+	// fdivrp would double-round (80-bit then float) and land one ulp low, so force divss.
+	float lenf = (float)lenL;
+	float invLen = _mm_cvtss_f32(_mm_div_ss(_mm_set_ss(1.0f), _mm_set_ss(lenf)));
 	cSPVector3 h(sum.x * invLen, sum.y * invLen, sum.z * invLen);
 	cSPVector3 axis = Cross(n1, h);
 	cSPQuaternion r(axis.x, axis.y, axis.z, (h.x * n1.x + h.z * n1.z) + h.y * n1.y);

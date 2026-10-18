@@ -348,6 +348,13 @@ void QueuedBlender::UpdateGoals(float dt, char param_3) {
 static inline const float& clampMax(const float& a, const float& b) { return a < b ? b : a; }
 static inline const float& clampMin(const float& a, const float& b) { return a < b ? a : b; }
 
+// The original keeps no live value in edx: it reloads `src` into eax at each of the three
+// use sites, after the clamp pointer (also eax) has been consumed.  The /O2 scheduler instead
+// CSEs the `src` load and parks it in edx for the whole function, which the LTCG caller at
+// 0x00a01810 relies on being preserved (it re-reads [edx+0xc0] after the call at 0x00a018d6).
+// Turning off global optimizations for this one function reproduces the original's
+// reload-per-use allocation (no edx write at all); the resulting code is otherwise equivalent.
+#pragma optimize("gt", off)
 // @ 0x009FF880
 void __cdecl UpdateGoalWeight(int src, AnimGoal* g) {
     int state = g->field_c0;
@@ -378,6 +385,7 @@ void __cdecl UpdateGoalWeight(int src, AnimGoal* g) {
     else
         g->field_c0 = 0;
 }
+#pragma optimize("", on)
 
 // Ring-buffer index wrap that stays non-negative for negative inputs.
 static inline int WrapIndex(int x) {

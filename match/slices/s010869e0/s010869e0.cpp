@@ -333,10 +333,12 @@ struct hkShapeExtentsStub : hkShape
 	void calcExtentsAndObjectRadius(hkVector4* extents, hkEntity* body) const;
 };
 
-// @ 0x01087050
-void hkShapeExtentsStub::calcExtentsAndObjectRadius(hkVector4* extents, hkEntity* body) const
+// The original 0x01087050 takes its extents output in ESI (a custom register convention that C++
+// cannot express), so setShape cannot call it directly: it calls this TU-local static helper
+// instead. The original's own body is still emitted for VA 0x01087050 through the forwarding
+// member below.
+static void CalcShapeExtentsAndObjectRadius(const hkShape* shape, hkVector4* extents, hkEntity* body)
 {
-	const hkShape* shape = this;
 	hkAabb aabb;
 	shape->getAabb(g_hkTransformIdentity, 0.0f, aabb);
 
@@ -368,6 +370,12 @@ void hkShapeExtentsStub::calcExtentsAndObjectRadius(hkVector4* extents, hkEntity
 	// |d| from the stored floats: (dz*dz + dy*dy) + dx*dx
 	hkX87Real centerLength = sqrt(((hkX87Real)dz * dz + (hkX87Real)dy * dy) + (hkX87Real)dx * dx);
 	motion->m_motionState.m_objectRadius = (float)(centerLength + halfExtentLength);
+}
+
+// @ 0x01087050
+void hkShapeExtentsStub::calcExtentsAndObjectRadius(hkVector4* extents, hkEntity* body) const
+{
+	CalcShapeExtentsAndObjectRadius(this, extents, body);
 }
 
 // @ 0x01087240  (extents in ECX, collidable in EDX)
@@ -514,7 +522,7 @@ hkWorldOperation::Result hkRigidBody::setShape(const hkShape* shape)
 	const_cast<hkShape*>(shape)->addReference();
 
 	hkVector4 extents;
-	static_cast<const hkShapeExtentsStub*>(shape)->calcExtentsAndObjectRadius(&extents, this);
+	CalcShapeExtentsAndObjectRadius(shape, &extents, this);
 
 	if (hadShape)
 	{
@@ -524,7 +532,7 @@ hkWorldOperation::Result hkRigidBody::setShape(const hkShape* shape)
 		if (depthBits != 0x7f7fffeeu)
 			m_collidable.m_allowedPenetrationDepth = -1.0f;      // 0xbf800000: recompute below
 	}
-	if (m_collidable.m_allowedPenetrationDepth <= 0.0f)
+	if (m_collidable.m_allowedPenetrationDepth < 0.0f)
 		hkRigidBody_calcAllowedPenetrationDepth(&extents, &m_collidable);
 
 	if (m_world != 0)

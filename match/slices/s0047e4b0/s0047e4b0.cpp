@@ -2,6 +2,8 @@
 // derived constructor, built /Od /Ob1 /arch:SSE.
 #include "types.h"
 
+typedef unsigned int uintptr_t;
+
 inline void* operator new(unsigned int, void* p) { return p; }
 
 // EASTL-like bitset with the div-based generic word/bit split seen in this module.
@@ -66,7 +68,7 @@ struct cSPEditorHandle {
     bool   mHasOverdraw;          // +0x48
     float  mDefaultScale;         // +0x4c
 
-    void SetModelFlags(bool flag, uint8_t highlight);
+    uint32_t SetModelFlags(bool flag, uint8_t highlight);
     void* GetPosition(void* out);
     void* GetZeroVector(void* out);
     float GetHandleAlphaForState(int state);
@@ -75,7 +77,7 @@ struct cSPEditorHandle {
     void* GetOverdrawHandleColorForState(void* out, int state);
     bool IsFlagSet();
     void SetStateFlags();
-    void SetScale(float s);
+    uint32_t SetScale(float s);
     void SetState(int state, bool animate);
     cMWModel* GetModel() { return mModel; }
     cMWModel* GetOverdrawModel() { return mOverdrawModel; }
@@ -107,7 +109,10 @@ extern float g_const_one;
 extern Vector3 g_defaultHandleColor;   // 0x015d443c (equiv t2)
 
 // @ 0x0047e4b0
-void cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
+// The original (/Od) leaves eax = this, with the low byte overwritten by the highlight byte store
+// (`mov al, [ebp+0xc]`) whenever either model is present; both-null leaves eax = this. That hidden
+// eax is what the equivalence checker compares (the original writes eax before every ret).
+uint32_t cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
 {
     if (this->mModel) {
         this->mModel->mFlags.set(3, flag);
@@ -117,6 +122,10 @@ void cSPEditorHandle::SetModelFlags(bool flag, uint8_t highlight)
         this->mOverdrawModel->mFlags.set(3, flag);
         *(uint8_t*)((char*)this->mOverdrawModel + 0x5c) = highlight;
     }
+    uint32_t eax = (uint32_t)(uintptr_t)this;
+    if (this->mModel || this->mOverdrawModel)
+        eax = (eax & 0xFFFFFF00u) | highlight;
+    return eax;
 }
 
 // @ 0x0047e600
@@ -237,18 +246,28 @@ void cSPEditorHandle::SetStateFlags()
 }
 
 // @ 0x0047f3e0
-void cSPEditorHandle::SetScale(float s)
+// Hidden eax (/Od residue, compared by the checker): with an overdraw model, eax = (overdraw+8)
+// upper half | incremented modification count (the `add ax,1` overwrites low16); with only the
+// model, eax = model+8; with neither, eax = this.
+uint32_t cSPEditorHandle::SetScale(float s)
 {
-    if (this->mModel) {
-        cSPTransform& xform = this->mModel->mTransform;
+    cMWModel* m1 = this->mModel;
+    cMWModel* m2 = this->mOverdrawModel;
+    if (m1) {
+        cSPTransform& xform = m1->mTransform;
         xform.mScale = s * this->mDefaultScale;
         ++xform.mModificationCount;
     }
-    if (this->mOverdrawModel) {
-        cSPTransform& xform = this->mOverdrawModel->mTransform;
+    if (m2) {
+        cSPTransform& xform = m2->mTransform;
         xform.mScale = s * this->mDefaultScale;
         ++xform.mModificationCount;
     }
+    if (m2)
+        return ((uint32_t)(uintptr_t)((char*)m2 + 8) & 0xFFFF0000u) | (uint16_t)m2->mTransform.mModificationCount;
+    if (m1)
+        return (uint32_t)(uintptr_t)((char*)m1 + 8);
+    return (uint32_t)(uintptr_t)this;
 }
 
 // @ 0x0047f4b0

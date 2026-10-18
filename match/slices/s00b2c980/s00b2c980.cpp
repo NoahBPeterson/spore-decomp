@@ -73,7 +73,7 @@ static void CopyBytes(void* dst, const void* src, unsigned n) {
 struct S {
   void  FUN_00b2c980(void* obj, char flag);
   void  FUN_00b2ca30(unsigned n);
-  void  FUN_00b2ca80(void** out, void* first, void* last);
+  void** FUN_00b2ca80(void** out, void* first, void* last);
   void  FUN_00b2cc40();
   void  FUN_00b2cd90();
   void  FUN_00b2d0f0();
@@ -127,7 +127,7 @@ void S::FUN_00b2ca30(unsigned n) {
 // ---------------------------------------------------------------------------
 // @ 0x00b2ca80 — rbtree::erase(first,last), iterator stored in *out
 // ---------------------------------------------------------------------------
-void S::FUN_00b2ca80(void** out, void* first, void* last) {
+void** S::FUN_00b2ca80(void** out, void* first, void* last) {
   char* base = (char*)this;
   RBNode* anchor = (RBNode*)(base + 4);
   if (first == (void*)anchor->pxLeft && last == (void*)anchor) {
@@ -138,7 +138,7 @@ void S::FUN_00b2ca80(void** out, void* first, void* last) {
     anchor->pxLeft = anchor;
     anchor->pxRight = anchor;
     *out = anchor;
-    return;
+    return out;
   }
   void* cur = first;
   if (first != last) {
@@ -153,6 +153,7 @@ void S::FUN_00b2ca80(void** out, void* first, void* last) {
     } while (cur != last);
   }
   *out = cur;
+  return out;
 }
 
 // ---------------------------------------------------------------------------

@@ -250,7 +250,7 @@ void CalcAtmosphereZH(int param_1, int *param_2, int param_3, int param_4)
 }
 
 // @ 0x007965c0
-void __fastcall FUN_007965c0(int *param_1)
+int *__fastcall FUN_007965c0(int *param_1)
 {
     float *p = (float *)param_1;
     int i;
@@ -269,6 +269,7 @@ void __fastcall FUN_007965c0(int *param_1)
     param_1[0x23] = 0;
     param_1[0x24] = 0;
     *(char *)(param_1 + 0x25) = 0;
+    return param_1;
 }
 
 // @ 0x00796650

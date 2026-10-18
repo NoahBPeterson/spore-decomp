@@ -9,8 +9,8 @@
 010a4850 0 havok-equivalent
 010a48f0 0 havok-equivalent
 010a49e0 0 havok-equivalent
-010a4a70 0 havok-equivalent
-010a4b30 0 havok-equivalent; difftest PASS (1200 inputs; layoutBuffer made noinline so ours is not empty)
+010a4a70 0 havok-equivalent flags /O2 /MD /Gy /EHsc /TP; equiv PASS (213 valid, 100% cov): void_hides_eax — the original leaves out->m_end in EAX and 0 in EDX; layoutBuffer now returns uint64_t so cl leaves m_end in EAX and zero-extends into EDX
+010a4b30 0 havok-equivalent; difftest PASS (1200 inputs; layoutBuffer made noinline so ours is not empty); equiv PASS (400 valid, 100% cov) flags /O2 /MD /Gy /EHsc /TP: callerdeps preserve DEPENDS edx satisfied via layoutBuffer's 64-bit return (EDX=0); eax propagates m_end (inline-calls tolerated)
 010a4b50 0 havok-equivalent
 010a4bb0 0 havok-equivalent
 010a4c60 0 havok-equivalent

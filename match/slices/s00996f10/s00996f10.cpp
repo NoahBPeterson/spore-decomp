@@ -570,7 +570,7 @@ void VecPB::push_back(unsigned* v)
 // ---------------------------------------------------------------- 00997b60 ctor
 struct Obj33 {
     char pad[0x18];
-    void ctor();                                   // 0x997b60
+    Obj33* ctor();                                 // 0x997b60
     void clear();                                  // 0x997ba0
     void* ScalarDtor(unsigned flags);              // 0x997cc0
     int  GetSupportedTypes(unsigned* out, unsigned n); // 0x997d40
@@ -580,7 +580,8 @@ struct Obj33 {
 };
 
 // @ 0x00997b60
-void Obj33::ctor()
+// The original loads ecx (this) into eax at entry and leaves it there (ctor returning this).
+Obj33* Obj33::ctor()
 {
     *(void**)((char*)this + 4) = (void*)0x13ef094;
     *(unsigned*)((char*)this + 8) = 0;
@@ -589,6 +590,7 @@ void Obj33::ctor()
     *(unsigned*)((char*)this + 0xc) = 0;
     *(unsigned*)((char*)this + 0x10) = 0;
     *(unsigned*)((char*)this + 0x14) = 0;
+    return this;
 }
 
 // ---------------------------------------------------------------- 00997ba0 clear
