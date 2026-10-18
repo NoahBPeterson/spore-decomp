@@ -1,3 +1,6 @@
 005182f0 ?Render@cPaintRenderJob_s0051_82f0@nSPSkinner@@QAE_NXZ  # cPaintRenderJob_s0051_82f0::Render migrated from s005182f0 (verbatim, slice spelling)
+005183c0 ?Render@cPaintDilateJob_s0051_82f0@nSPSkinner@@QAE_NXZ  # cPaintDilateJob_s0051_82f0::Render migrated from s005182f0 (verbatim, slice spelling)
 00518b00 ?SwapWith@cFieldSwap@nSPSkinner@@QAEXPAV12@@Z  # cFieldSwap::SwapWith migrated from s005182f0 (verbatim, slice spelling)
+00518bf0 ?Render@cPaintCopyIdentityJob_s0051_82f0@nSPSkinner@@QAE_NXZ  # cPaintCopyIdentityJob_s0051_82f0::Render migrated from s005182f0 (verbatim, slice spelling)
+00518cf0 ?Render@cPaintDifferentiateJob_s0051_82f0@nSPSkinner@@QAE_NXZ  # cPaintDifferentiateJob_s0051_82f0::Render migrated from s005182f0 (verbatim, slice spelling)
 00529520 ?Shader@cRTTBuffer@nSPSkinner@@QAEXI@Z  # nSPSkinner::cRTTBuffer::Shader (callee of s005182f0, named from the dev publics; slice address comment)

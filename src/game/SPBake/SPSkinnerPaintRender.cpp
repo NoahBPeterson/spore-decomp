@@ -1,4 +1,4 @@
-// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051c470, s0051afd0, s0051a350, s00519640, s00518f10, s005182f0, s005169d0, s00425a80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPSkinnerPaintRender.cpp -- migrated from slice(s) s0051c470, s0051afd0, s0051a350, s00519640, s00518f10, s005182f0, s00517430, s005169d0, s00425a80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPSkinnerPaintRender.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -14,11 +14,12 @@
 #include "SP/cMaterialManager.h"
 #include "nSPSkinner/cMeshAORender.h"
 #include "SP/cStaticBuffer.h"
+#include "nSPSkinner/cPaintList.h"
+#include "nSPSkinner/cPaintRenderJob.h"
+#include "nSPSkinner/cRTTBuffer.h"
 #include "nSPSkinner/cPaintCopyIdentityJob.h"
 #include "nSPSkinner/cPaintDifferentiateJob.h"
 #include "nSPSkinner/cPaintDilateJob.h"
-#include "nSPSkinner/cPaintRenderJob.h"
-#include "nSPSkinner/cRTTBuffer.h"
 #include "nSPSkinner/cPaintSplatJob.h"
 #include "cSkinpaintTextureExtractor.h"
 
@@ -363,8 +364,177 @@ public:
 };
 // ---- items of slice s005169d0 end
 
+// ---- items of slice s00517430 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern unsigned g_softStateUpdated;                     // 016f9110
+#pragma intrinsic(_InterlockedExchangeAdd)
+struct Raster;
+struct cTextureInstance {
+    Raster* mRaster;
+    unsigned char mFlags;
+    unsigned char pad5[3];
+    volatile long mRefCount;
+};
+struct ResMgr {
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+    virtual void v4(); virtual void v5(); virtual void v6(); virtual void v7();
+    virtual cTextureInstance* Get(unsigned key, int a, int b);      // +0x20
+    virtual void v9(); virtual void v10(); virtual void v11(); virtual void v12();
+    virtual void Load(cTextureInstance* t);                          // +0x34
+};
+ResMgr* GetResMgr();                                // 0067dd60
+void __fastcall AtomicRefCounted_Release(cTextureInstance* t);      // 00402420 (thiscall)
+struct VertexDescriptor {};
+struct VBDesc { char pad[0xf]; unsigned char stride; };    // [vb->+0]->+0xf = vertex stride
+struct VertexBuffer {
+    VBDesc* desc;                                   // +0
+    void* d3dvb;                                    // +4
+    unsigned count;                                 // +8 (vertices already consumed / offset)
+    unsigned capacity;                              // +0xc
+    void* Lock(int flags, int offsetBytes, int sizeBytes);     // 011f3620
+    void Unlock();                                  // 011f36a0
+};
+struct IDevice;
+struct IDeviceVtbl {
+    void* pad0[81];
+    long (__stdcall* DrawPrimitive)(IDevice*, int type, unsigned start, unsigned primCount);   // +0x144
+    void* pad1[18];
+    long (__stdcall* SetStreamSource)(IDevice*, unsigned stream, void* vb, unsigned off, unsigned stride); // +0x190
+};
+struct IDevice { const IDeviceVtbl* vtbl; };
+struct StreamSlot { void* vb; unsigned off; unsigned stride; };
+struct ShaderObj { char pad[0x14]; void (__cdecl* fn14)(int); };
+extern const VertexDescriptor* g_vertexDescriptor;      // 016f65a0
+extern IDevice* g_d3d9Device;                           // 016f89d0
+extern StreamSlot g_streams[];                          // 016f9138
+extern ShaderObj* g_shader;                             // 016f6568
+int  __cdecl VertexDescriptor_AreEqual(const VertexDescriptor* a, const VertexDescriptor* b);   // 011f2e70
+void __fastcall ApplyVertexDescriptor(const VertexDescriptor* vd);                              // 011f2bc0 (thiscall)
+void __cdecl D3D9Sync();                                // 011f21a0
+struct CompiledState { void Dispatch(); };              // 011ee580
+struct Vec4 {
+    float x, y, z, w;
+    Vec4(float a, float b, float c, float d) { x = a; y = b; z = c; w = d; }
+};
+struct cRTTBuffer_s0051_7430 {
+    void* mCamera;                                  // +0
+    unsigned material;                              // +4
+    unsigned writemask;                             // +8
+    Vec4 params[3];                                 // +0xc
+    Raster* textures[2];                            // +0x3c
+    int maxparam;                                   // +0x44
+    int maxtexture;                                 // +0x48
+    unsigned vtxcount;                              // +0x4c
+    char pad50[0x14];
+    void Begin();                                   // 00528e90
+    void SetWriteMask(int a, int b, int c, int d);  // 00529280 (StateBits::Set)
+    CompiledState* PrepareState();                  // 005293a0 0x005293a0
+    void BeginDraw();                               // 00529bf0 0x00529bf0
+    void SetParam(int i, const Vec4& v)
+    {
+        if (maxparam <= i)
+            maxparam = i + 1;
+        params[i] = v;
+    }
+    void SetTexture(int i, Raster* r)
+    {
+        if (r != 0 && maxtexture <= i)
+            maxtexture = i + 1;
+        textures[i] = r;
+    }
+};
+struct RenderState {
+    char pad0[0x10];
+    cRTTBuffer_s0051_7430* rttA;                               // +0x10
+    cRTTBuffer_s0051_7430* rttB;                               // +0x14
+    char pad18[0x1c];
+    const VertexDescriptor* vdesc;                  // +0x34
+    VertexBuffer* vb;                               // +0x38
+};
+struct RenderMgr {                                  // FUN_00401080 result
+    char pad0[0xc];
+    RenderState* state;                             // +0xc
+};
+RenderMgr* GetRenderMgr();                          // 00401080
+namespace nSPSkinner {
+struct cPaintBatch {                                // cPaintList::Batch, size 0x18
+    int mFirstVertex;                               // +0
+    int mVertices;                                  // +4
+    unsigned char mBlendModes[3];                   // +8
+    unsigned char mIdentityPass;                    // +0xb
+    cTextureInstance* mBrush[3];                    // +0xc
+};
+}
+namespace nSPSkinner {
+struct BatchVec {                                   // eastl::vector<Batch> payload at list+0x14
+    cPaintBatch* mpBegin;
+    cPaintBatch* mpEnd;
+    cPaintBatch* begin() { return mpBegin; }
+    int size() const { return (int)(mpEnd - mpBegin); }
+};
+}
+namespace nSPSkinner {
+struct cPaintList_s0051_7430 {
+    char* mVerticesBegin;                           // +0 (28-byte vertices)
+    char pad4[0x10];
+    BatchVec mBatches;                              // +0x14
+};
+}
+namespace nSPSkinner {
+static inline Raster* ResolveRaster(cTextureInstance* t)
+{
+    if (!(t->mFlags & 1))
+        GetResMgr()->Load(t);
+    return t->mRaster;
+}
+}
+namespace nSPSkinner {
+class cPaintRenderJob_s0051_7430 {
+public:
+    char padBase[0x10];
+    cPaintList_s0051_7430* mPaintList;                         // +0x10
+    int mStage;                                     // +0x14
+    int mVBStart;                                   // +0x18
+    int mVBCount;                                   // +0x1c
+    int mVBBatches;                                 // +0x20
+    int mBatchIdx;                                  // +0x24
+    int mLockFailCount;                             // +0x28
+    bool mSkipIdentity;                             // +0x2c
+    bool RenderInternal();                          // 0x00517430
+};
+}
+// ---- items of slice s00517430 end
+
 // ---- items of slice s005182f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const float kOne;                               // 0x01485720
+extern const float kZero;                              // 0x01485378
+extern const float kConst6110;                         // 0x01486110
+extern const float kConstB95C;                         // 0x013eb95c
 void* SP_AppSystem();                                  // 0x0067dd00
+void* GetSingleton();                                  // 0x00401080
+float GetFloatProperty(uint32_t prop);                 // 0x006a2710
+class cRTTBuffer_s0051_82f0 {
+public:
+    uint32_t pad0;           // 0x00
+    uint32_t material;       // 0x04
+    uint32_t pad1;           // 0x08
+    float params[12];        // 0x0c: three 16-byte parameter vectors
+    uint32_t textures[2];    // 0x3c
+    int maxparam;            // 0x44
+    int maxtexture;          // 0x48
+    uint8_t pad2[0x58 - 0x4c];
+    int width;               // 0x58
+    int height;              // 0x5c
+    uint32_t texture;        // 0x60
+
+    void Setup();                                          // 0x00528e90
+    void Set(int a, int b, int c, int d);                  // 0x00529280
+    int Reserve(int n);                                    // 0x00529520
+    void Tri(float* a, float* b, float* c, uint32_t col);  // 0x005295b0
+    void Flush();                                          // 0x00529690
+    void vertex(float* a, float* b, int flags);            // 0x005296b0
+    void BeginDraw();                                      // 0x00529bf0
+    void SwapWith(cRTTBuffer_s0051_82f0* o);                          // 0x00518b00
+};
 namespace nSPSkinner {
 class cPaintRenderJob_s0051_82f0 {
 public:
@@ -387,6 +557,60 @@ public:
 }
 namespace nSPSkinner {
 template <class T> inline void swapv(T& a, T& b) { T t = a; a = b; b = t; }
+}
+namespace nSPSkinner {
+class cPaintCopyIdentityJob_s0051_82f0 {
+public:
+    bool Render();   // 0x00518bf0
+};
+}
+namespace nSPSkinner {
+class cPaintDifferentiateJob_s0051_82f0 {
+public:
+    bool Render();   // 0x00518cf0
+};
+}
+namespace nSPSkinner {
+struct cDilateMesh {
+    uint8_t pad0[0x30];
+    float* verts;             // 0x30 (8 bytes per vertex)
+    uint8_t pad1[0x58 - 0x34];
+    uint32_t* idxBegin;       // 0x58
+    uint32_t* idxEnd;         // 0x5c
+    uint8_t pad2[0x80 - 0x60];
+    uint32_t* indices;        // 0x80
+};
+}
+namespace nSPSkinner {
+struct cDilateVec { char* begin; char* end; };
+}
+namespace nSPSkinner {
+struct cDilateModel { uint8_t pad[0x98]; cDilateVec parts; };   // 0x98
+}
+namespace nSPSkinner {
+struct cDilateObj { uint8_t pad[8]; cDilateModel* model; };
+}
+namespace nSPSkinner {
+struct cDilateSingleton {
+    uint8_t pad0[0xc];
+    char* table;              // 0xc
+    cDilateMesh* mesh;        // 0x10
+    uint8_t pad1[0x20 - 0x14];
+    cDilateObj* obj;          // 0x20
+};
+}
+namespace nSPSkinner {
+inline const int& MinRef(const int& a, const int& b) { return (a < b) ? a : b; }
+}
+namespace nSPSkinner {
+class cPaintDilateJob_s0051_82f0 {
+public:
+    uint8_t pad0[0x10];
+    int mComponent;   // 0x10
+    int mPasses;      // 0x14
+    int mStage;       // 0x18
+    bool Render();   // 0x005183c0
+};
 }
 // ---- items of slice s005182f0 end
 
@@ -593,7 +817,7 @@ struct cPaintSystem {
 };
 }
 namespace Skinner {
-cPaintSystem* GetPaintSystem();           // 0x00401080
+cPaintSystem* GetPaintSystem_s0051_afd0();           // 0x00401080
 }
 namespace Skinner {
 struct Texture {
@@ -850,6 +1074,7 @@ void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
 
 
 
+
 // @ 0x00516ac0
 void FastMemCopy(void* dst, const void* src, unsigned int n)
 {
@@ -919,6 +1144,7 @@ void FastMemCopy(void* dst, const void* src, unsigned int n)
 
 
 
+
 // @ 0x00516ba0
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::cMeshAORender_s0051_69d0()
@@ -931,11 +1157,13 @@ cMeshAORender_s0051_69d0::cMeshAORender_s0051_69d0()
 
 
 
+
 // @ 0x00516c30
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::~cMeshAORender_s0051_69d0()
 {}
 }  // namespace nSPSkinner
+
 
 
 
@@ -959,6 +1187,7 @@ void cMeshAORender_s0051_69d0::Load(uint32_t instance, uint32_t group)
 
 
 
+
 // @ 0x00516d30
 namespace nSPSkinner {
 void cMeshAORender_s0051_69d0::Unload()
@@ -967,6 +1196,7 @@ void cMeshAORender_s0051_69d0::Unload()
     mResource = 0;
 }
 }  // namespace nSPSkinner
+
 
 
 
@@ -993,6 +1223,7 @@ void cMeshAORender_s0051_69d0::Dispatch(uint32_t a, uint32_t b, void* pContext)
 
 
 
+
 // @ 0x00516e10
 namespace nSPSkinner {
 bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
@@ -1003,6 +1234,7 @@ bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
     return false;
 }
 }  // namespace nSPSkinner
+
 
 
 
@@ -1074,6 +1306,7 @@ void cMeshAORender_s0051_69d0::Rebuild()
 
 
 
+
 // @ 0x00517160
 void cJobBase::Run(int, int, int, int)
 {
@@ -1098,6 +1331,7 @@ void cJobBase::Run(int, int, int, int)
 
 
 
+
 // @ 0x005172c0
 void cJobBase::Schedule()
 {
@@ -1114,9 +1348,257 @@ void cJobBase::Schedule()
 
 
 
+
 // @ 0x005173a0
 cJobBase::cJobBase()
 : mbDone(false) {}
+
+
+
+
+
+
+
+// @ 0x00517430
+namespace nSPSkinner {
+bool cPaintRenderJob_s0051_7430::RenderInternal()
+{
+    cPaintList_s0051_7430* list;
+    RenderState* rs;
+    rs = GetRenderMgr()->state;
+    list = mPaintList;
+    if (!((unsigned)mBatchIdx < (unsigned)list->mBatches.size()))
+        return true;
+
+    if (mStage == 0) {
+        int total = 0;
+        cPaintBatch* p = list->mBatches.begin() + mBatchIdx;
+        int n = list->mBatches.size() - mBatchIdx;
+        while (n > 0) {
+            int nv = p->mVertices;
+            if (total + nv > 0x8ca0)
+                break;
+            total += nv;
+            n--;
+            p++;
+        }
+        mVBBatches = (int)(p - (list->mBatches.begin() + mBatchIdx));
+        int first = list->mBatches.begin()[mBatchIdx].mFirstVertex;
+        mVBStart = first & ~1;
+        mVBCount = (first & 1) + total;
+
+        VertexBuffer* vb = rs->vb;
+        int count = mVBCount;
+        if (count == 0)
+            count = vb->capacity;
+        unsigned char stride = vb->desc->stride;
+        void* dst = vb->Lock(6, vb->count * stride, stride * count);
+        VertexBuffer* locked = 0;
+        if (dst)
+            locked = vb;
+        if (locked) {
+            mLockFailCount = 0;
+            FastMemCopy(dst, list->mVerticesBegin + mVBStart * 0x1c, mVBCount * 0x1c);
+            rs->vb->Unlock();
+        } else {
+            mLockFailCount = mLockFailCount + 1;
+            if (mLockFailCount > 5)
+                return true;
+            return false;
+        }
+    } else {
+        const VertexDescriptor* vd = rs->vdesc;
+        if (!g_vertexDescriptor || !VertexDescriptor_AreEqual(g_vertexDescriptor, vd))
+            g_softStateUpdated |= 0x100000;
+        g_vertexDescriptor = vd;
+        ApplyVertexDescriptor(g_vertexDescriptor);
+
+        IDevice* dev = g_d3d9Device;
+        StreamSlot* slots = g_streams;
+        void* vbp = rs->vb->d3dvb;
+        unsigned vcount = rs->vb->count;
+        dev->vtbl->SetStreamSource(dev, 0, vbp, vcount * 0x1c, 0x1c);
+        slots[0].vb = vbp;
+        slots[0].off = rs->vb->count * 0x1c;
+        slots[0].stride = 0x1c;
+        for (int s = 1; s < 4; s++) {
+            if (slots[s].vb != 0) {
+                dev->vtbl->SetStreamSource(dev, s, 0, 0, 0);
+                slots[s].vb = 0;
+                slots[s].off = 0;
+                slots[s].stride = 0;
+            }
+        }
+
+        int st = mStage - 1;
+        cRTTBuffer_s0051_7430* buf;
+        if (st == 0)
+            buf = rs->rttA;
+        else
+            buf = rs->rttB;
+        buf->Begin();
+        if (st == 0)
+            buf->SetWriteMask(1, 1, 1, 0);
+        else if (st == 1)
+            buf->SetWriteMask(1, 0, 0, 0);
+        else if (st == 2)
+            buf->SetWriteMask(0, 0, 1, 0);
+        else
+            buf->SetWriteMask(0, 1, 0, 0);
+
+        cTextureInstance* defTex = GetResMgr()->Get(0xbd77bb98, 0, 0);
+        if (defTex)
+            _InterlockedExchangeAdd(&defTex->mRefCount, 1);
+
+        cPaintBatch* cur = list->mBatches.begin() + mBatchIdx;
+        cPaintBatch* end = cur + mVBBatches;
+        for (; cur < end; cur++) {
+            cTextureInstance* dt = defTex;
+            if (!(dt->mFlags & 1))
+                GetResMgr()->Load(dt);
+            Raster* tex0 = dt->mRaster;
+            Raster* tex1 = 0;
+
+            if (st == 0 && cur->mIdentityPass != 1) {
+                if (cur->mBrush[0])
+                    tex0 = ResolveRaster(cur->mBrush[0]);
+                if (tex0) {
+                    switch (cur->mBlendModes[0]) {
+                    case 2: buf->material = 0x262bf86f; break;
+                    case 3: buf->material = 0x28fedd44; break;
+                    case 4: buf->material = 0x7d02141c; break;
+                    case 5: buf->material = 0xd1663766; break;
+                    default: buf->material = 0xae08f862;
+                    }
+                }
+            } else if (st == 1) {
+                if (cur->mBrush[1])
+                    tex0 = ResolveRaster(cur->mBrush[1]);
+                if (cur->mBrush[2])
+                    tex1 = ResolveRaster(cur->mBrush[2]);
+                if (tex1 == 0) {
+                    if (tex0) {
+                        switch (cur->mBlendModes[1]) {
+                        case 2: buf->material = 0xb9ac2ae2; break;
+                        case 3: buf->material = 0xc6ced15d; break;
+                        case 4: buf->material = 0x4db46b47; break;
+                        case 5: buf->material = 0x1b675065; break;
+                        default: buf->material = 0x5ce94d87;
+                        }
+                    }
+                } else {
+                    switch (cur->mBlendModes[1]) {
+                    case 2: buf->material = 0x9a88e7b3; break;
+                    case 3: buf->material = 0x9d5bcc90; break;
+                    case 4: buf->material = 0xf605e298; break;
+                    case 5: buf->material = 0x059c333a; break;
+                    default: buf->material = 0x408e6ca6;
+                    }
+                    buf->SetParam(0, Vec4(1.0f, 0.0f, 0.0f, 0.0f));
+                }
+            } else if (st == 2) {
+                if (cur->mBrush[1])
+                    tex0 = ResolveRaster(cur->mBrush[1]);
+                if (cur->mBrush[2])
+                    tex1 = ResolveRaster(cur->mBrush[2]);
+                if (tex1 == 0) {
+                    if (tex0) {
+                        switch (cur->mBlendModes[2]) {
+                        case 2: buf->material = 0x9ecf875f; break;
+                        case 3: buf->material = 0x81f1ebb4; break;
+                        case 4: buf->material = 0x162c01ec; break;
+                        case 5: buf->material = 0xb6fb2576; break;
+                        default: buf->material = 0x1b481432;
+                        }
+                    }
+                } else {
+                    switch (cur->mBlendModes[2]) {
+                    case 2: buf->material = 0x9a88e7b3; break;
+                    case 3: buf->material = 0x9d5bcc90; break;
+                    case 4: buf->material = 0xf605e298; break;
+                    case 5: buf->material = 0x059c333a; break;
+                    default: buf->material = 0x408e6ca6;
+                    }
+                    buf->SetParam(0, Vec4(0.0f, 0.0f, 1.0f, 0.0f));
+                }
+            } else if (st == 3 && cur->mIdentityPass != 0) {
+                if (cur->mBrush[0])
+                    tex0 = ResolveRaster(cur->mBrush[0]);
+                if (tex0) {
+                    if (cur->mIdentityPass == 1) {
+                        switch (cur->mBlendModes[0]) {
+                        case 2: buf->material = 0x262bf86f; break;
+                        case 3: buf->material = 0x28fedd44; break;
+                        case 4: buf->material = 0x7d02141c; break;
+                        case 5: buf->material = 0xd1663766; break;
+                        default: buf->material = 0xae08f862;
+                        }
+                    } else {
+                        buf->material = 0x82d83269;
+                    }
+                }
+            } else {
+                tex0 = 0;
+            }
+
+            if (tex0) {
+                int firstVert = cur->mFirstVertex - mVBStart;
+                unsigned verts = cur->mVertices;
+                cPaintBatch* nx = cur;
+                for (;;) {
+                    cPaintBatch* nn = nx + 1;
+                    if (!(nn < end))
+                        break;
+                    if (nx->mBrush[0] != nn->mBrush[0] || nx->mBrush[1] != nn->mBrush[1] ||
+                        nx->mBrush[2] != nn->mBrush[2])
+                        break;
+                    if (nx->mBlendModes[st] != nn->mBlendModes[st])
+                        break;
+                    if (st == 0 && nn->mIdentityPass == 1)
+                        break;
+                    if (st == 3 && nn->mIdentityPass == 0)
+                        break;
+                    verts += nn->mVertices;
+                    nx = nn;
+                }
+                cur = nx;
+                buf->SetTexture(0, tex0);
+                buf->SetTexture(1, tex1);
+                CompiledState* cs = buf->PrepareState();
+                cs->Dispatch();
+                D3D9Sync();
+                if (g_vertexDescriptor != rs->vdesc) {
+                    const VertexDescriptor* vd2 = rs->vdesc;
+                    if (!g_vertexDescriptor || !VertexDescriptor_AreEqual(g_vertexDescriptor, vd2))
+                        g_softStateUpdated |= 0x100000;
+                    g_vertexDescriptor = vd2;
+                    ApplyVertexDescriptor(g_vertexDescriptor);
+                }
+                void (__cdecl* fn)(int) = g_shader->fn14;
+                fn(0);
+                g_softStateUpdated = 0;
+                if (verts != 0 && verts <= rs->vb->capacity)
+                    dev->vtbl->DrawPrimitive(dev, 4, firstVert, verts / 3);
+            }
+        }
+        buf->SetWriteMask(1, 1, 1, 1);
+        buf->BeginDraw();
+        if (defTex)
+            AtomicRefCounted_Release(defTex);
+    }
+
+    mStage = mStage + 1;
+    if (mStage == 4 && mSkipIdentity)
+        mStage = mStage + 1;
+    if (mStage > 4) {
+        mStage = 0;
+        mBatchIdx = mBatchIdx + mVBBatches;
+        if (mBatchIdx == list->mBatches.size())
+            return true;
+    }
+    return false;
+}
+}  // namespace nSPSkinner
 
 
 
@@ -1153,6 +1635,113 @@ bool cPaintRenderJob_s0051_82f0::Render()
 
 
 
+// @ 0x005183c0
+namespace nSPSkinner {
+bool cPaintDilateJob_s0051_82f0::Render()
+{
+    float f4 = kZero, f8 = kZero;
+    float d4 = kZero, d8 = kZero, dc = kZero;
+    uint8_t c0[4] = { 0, 0, 0, 0xff };
+    uint32_t col0 = *(uint32_t*)c0;
+    uint8_t c1[4] = { 0, 0, 0, 0 };
+    uint32_t col1 = *(uint32_t*)c1;
+
+    cDilateSingleton* sing = (cDilateSingleton*)GetSingleton();
+    cRTTBuffer_s0051_82f0* buf = *(cRTTBuffer_s0051_82f0**)(sing->table + 0x10 + mComponent * 4);
+
+    if (mStage == 0) {
+        buf->Setup();
+        buf->Set(0, 0, 0, 1);
+        buf->material = 0xf8b396;
+        buf->Reserve(2);
+        float p0[2] = { kZero, kZero };
+        buf->Tri(p0, &f4, &d4, col1);
+        float p1[2] = { kOne, kZero };
+        buf->Tri(p1, &f4, &d4, col1);
+        float p2[2] = { kOne, kOne };
+        buf->Tri(p2, &f4, &d4, col1);
+        float p3[2] = { kOne, kOne };
+        buf->Tri(p3, &f4, &d4, col1);
+        float p4[2] = { kZero, kOne };
+        buf->Tri(p4, &f4, &d4, col1);
+        float p5[2] = { kZero, kZero };
+        buf->Tri(p5, &f4, &d4, col1);
+        buf->Flush();
+
+        cDilateMesh* mesh = ((cDilateSingleton*)GetSingleton())->mesh;
+        cDilateObj* obj = ((cDilateSingleton*)GetSingleton())->obj;
+        char* partsBegin = obj->model->parts.begin;
+        int nParts = (obj->model->parts.end - obj->model->parts.begin) / 0x8c;
+        (void)partsBegin; (void)nParts;
+        uint32_t i = 0;
+        uint32_t remaining = (uint32_t)(mesh->idxEnd - mesh->idxBegin) / 3;
+        while (remaining != 0) {
+            int got = buf->Reserve(remaining);
+            uint32_t end = got * 3 + i;
+            for (; i < end; ++i)
+                buf->Tri((float*)((char*)mesh->verts + mesh->indices[i] * 8),
+                         (float*)((char*)mesh->verts + mesh->indices[i] * 8), &d4, col0);
+            remaining -= got;
+            buf->Flush();
+        }
+        buf->Set(1, 1, 1, 1);
+        buf->BeginDraw();
+        mStage = 1;
+        return false;
+    }
+
+    int* app = (int*)SP_AppSystem();
+    char ok = ((char(__thiscall*)(void*))(*(void**)(*app + 0x44)))(app);
+    int cap = (ok != 0) ? 8 : 2;
+    int rem = mPasses - mStage + 1;
+    int n = MinRef(rem, cap);
+    cRTTBuffer_s0051_82f0* cur = buf;
+    cDilateSingleton* sing2 = (cDilateSingleton*)GetSingleton();
+    cRTTBuffer_s0051_82f0* dst = *(cRTTBuffer_s0051_82f0**)(sing2->table + 0x18);
+
+    for (int i = 0; i < n; ++i) {
+        dst->Setup();
+        dst->material = 0xfa2f3df4;
+        float invW = 1.0f / (float)buf->width;
+        float invH = 1.0f / (float)buf->height;
+        float q0 = invW, q1 = invH, q2 = kZero, q3 = kZero;
+        if (dst->maxparam <= 0)
+            dst->maxparam = 1;
+        dst->params[0] = q0; dst->params[1] = q1;
+        dst->params[2] = q2; dst->params[3] = q3;
+        uint32_t raster = buf->texture;
+        if ((raster != 0) && (dst->maxtexture < 1))
+            dst->maxtexture = 1;
+        dst->textures[0] = raster;
+        float r0 = kOne, r1 = kOne;
+        float s0 = kZero, s1 = kZero;
+        dst->vertex(&s0, &r0, -1);
+        dst->BeginDraw();
+        dst->SwapWith(buf);
+    }
+    if (buf != cur) {
+        dst->Setup();
+        dst->material = 0xa0468560;
+        uint32_t raster = buf->texture;
+        if ((raster != 0) && (dst->maxtexture < 1))
+            dst->maxtexture = 1;
+        dst->textures[0] = raster;
+        float r0 = kOne, r1 = kOne;
+        float s0 = kZero, s1 = kZero;
+        dst->vertex(&s0, &r0, -1);
+        dst->BeginDraw();
+        dst->SwapWith(buf);
+    }
+    mStage = mStage + n;
+    return mStage > mPasses;
+}
+}  // namespace nSPSkinner
+
+
+
+
+
+
 // @ 0x00518b00
 namespace nSPSkinner {
 void cFieldSwap::SwapWith(cFieldSwap* o)
@@ -1162,6 +1751,93 @@ void cFieldSwap::SwapWith(cFieldSwap* o)
     swapv(*(uint32_t*)((char*)this + 0x58), *(uint32_t*)((char*)o + 0x58));
     swapv(*(uint32_t*)((char*)this + 0x5c), *(uint32_t*)((char*)o + 0x5c));
     swapv(*(uint32_t*)this, *(uint32_t*)o);
+}
+}  // namespace nSPSkinner
+
+
+
+
+
+
+// @ 0x00518bf0
+namespace nSPSkinner {
+bool cPaintCopyIdentityJob_s0051_82f0::Render()
+{
+    int iVar1 = (int)GetSingleton();
+    cRTTBuffer_s0051_82f0* buf = *(cRTTBuffer_s0051_82f0**)(*(int*)(iVar1 + 0xc) + 0x10);
+    int iVar2 = (int)GetSingleton();
+    int p = *(int*)(*(int*)(iVar2 + 0xc) + 0x14);
+
+    buf->Setup();
+    buf->Set(0, 0, 0, 1);
+    buf->material = 0x58653eac;
+
+    uint32_t raster = *(uint32_t*)(p + 0x60);
+    if ((raster != 0) && ((int)buf->maxtexture < 1))
+        buf->maxtexture = 1;
+    buf->textures[0] = raster;
+
+    float a0 = kOne, a1 = kOne;
+    float b0 = kZero, b1 = kZero;
+    buf->vertex(&b0, &a0, -1);
+    buf->Set(1, 1, 1, 1);
+    buf->BeginDraw();
+    return true;
+}
+}  // namespace nSPSkinner
+
+
+
+
+
+
+// @ 0x00518cf0
+namespace nSPSkinner {
+bool cPaintDifferentiateJob_s0051_82f0::Render()
+{
+    uint32_t prop = 0x0c19db33;
+    float val = GetFloatProperty(prop);
+    if (val == kZero)
+        val = kConst6110;
+
+    float f4 = kZero, f8 = kZero;
+    float d4 = kZero, d8 = kZero, dc = kZero;
+
+    uint8_t c0[4] = { 0, 0, 0, 0xff };
+    uint32_t col0 = *(uint32_t*)c0;
+    uint8_t c1[4] = { 0, 0, 0, 0 };
+    uint32_t col1 = *(uint32_t*)c1;
+
+    int s = (int)GetSingleton();
+    cRTTBuffer_s0051_82f0* buf = *(cRTTBuffer_s0051_82f0**)(*(int*)(s + 0xc) + 0x18);
+    int ctx = *(int*)(*(int*)(s + 0xc) + 0x14);
+
+    buf->Setup();
+    buf->material = 0x9e74d163;
+
+    uint32_t raster = *(uint32_t*)(ctx + 0x60);
+    if ((raster != 0) && ((int)buf->maxtexture < 1))
+        buf->maxtexture = 1;
+    buf->textures[0] = raster;
+
+    float invW = 1.0f / (float)*(int*)(ctx + 0x58);
+    float invH = 1.0f / (float)*(int*)(ctx + 0x5c);
+
+    float q0 = invW;
+    float q1 = invH;
+    float q2 = val / kConstB95C;
+    float q3 = kZero;
+
+    if ((int)buf->maxtexture <= 0)
+        buf->maxtexture = 1;
+    float* dst = (float*)((char*)buf + 0xc + 0);
+    dst[0] = q0; dst[1] = q1; dst[2] = q2; dst[3] = q3;
+
+    float r0 = kOne, r1 = kOne;
+    float s0 = kZero, s1 = kZero;
+    buf->vertex(&s0, &r0, -1);
+    buf->BeginDraw();
+    return true;
 }
 }  // namespace nSPSkinner
 
@@ -1613,7 +2289,7 @@ void SkinJob::FUN_0051ab50(char deep)
 namespace Skinner {
 void cSkinPainterPipeline::ExecutePipeline()
 {
-    cPaintSystem* pPaintSystem = GetPaintSystem();
+    cPaintSystem* pPaintSystem = GetPaintSystem_s0051_afd0();
     field_344++;
 
     switch (mCurrentStage) {

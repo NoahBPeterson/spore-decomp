@@ -682,3 +682,74 @@ verdict regression (0x741b10 FAIL -> UNSUPPORTED was put back in its slice).
 - Round 6 objects whose headers compile standalone: `work/claude/round6_ready.json` (16); not ready:
   `work/claude/round6_not_ready.json` (template bases with no hand template: `SAP<2>`, `EA::SingletonBase`,
   `rw::core::thread::AtomicInt`; `encoding.h`; `eastl::vector_set`).
+
+### 8g. Fix pass 5 (2026-10-16 .. 10-18, after the round-5 landings, batch mig5): what changed
+
+All 16 mig5 objects were re-landed from scratch in batch order with the rules below (`--batch mig5`, flag-variant TUs
+with `--variant _od/_o2`). Of the 1,268 mig5 functions, 1,219 are in the TUs and 49 are held back (round 5 before the
+fix pass: 116 held). 578 rows are byte-exact in the module TUs (round 5: 534; the slices themselves have 580), 641 are
+nonmatching/partial rows with an equiv verdict, and 1,162 rows are verbatim slice text. Every manifest under src/game is
+green. Equiv was run on both sides (slice source and module TU, `scratch_fixpass5/eqcmp.py`) for every changed
+nonmatching row: no real regression is left. Three ACM rows (0x7cbd60, 0x7cbdc0, 0x7cc3c0) are slice FAIL and module
+UNSUPPORTED (unresolved template members); they stay in the TU because the slice verdict is already a mismatch.
+
+Modules still below their slice-exact count: SPAppModeEditorBase 82/83 (0x57eda0, an inline member of the slice's
+basic_string stub template), SPAppConfigManager 20/24 (0x7caac0/0x7cab00 bind another slice's do_copy; the 0x7cb480/
+0x7cb510 explicit instantiations break the TU), SPUIBehavior 56/58 (0x7fb0e0/0x7fb220, DIFF 25/26 bytes, not only
+inlining), ealog_imp 25/26 (0x9242f0 ??_G LogReporter: the canonical destructor is out of line).
+
+Why held (49): compile errors in the module TU (stub/prototype clash, arity) 15; the layout guard (the slice's view of
+the class disagrees with the canonical header) 9; equiv regressions 9; tool limits (marker binding, instantiations) 6;
+byte-exact in the slice but DIFF in the module TU 5; the rest single cases. Every held VA has a `leave_in_slice` why.
+Why verbatim (1,162 of 1,219 landed): no canonical class 398, a free function without a dev function 280, the converted
+body did not compile 214, no unique canonical method 188, other 82. Tables: `scratch_fixpass5/causes2.py`.
+
+- rewrite.py / rewrite_stubs.py rules (each comment names its test slice):
+  - Stubs and names: a global stub is renamed when a canonical `NS::Name` exists and the slice's code lives in NS
+    (s00575270); items are found through suffix-qualified spellings (`Editor::X`, s0057bfb0) and renamed that way
+    (`qualified_only`, s007cb590); a slice class X where the TU has `namespace X` is renamed, and a slice
+    `namespace X` against a global class X goes through `rename_namespace` (s00591fa0); forward declarations are
+    never clash-renamed (s005598b0); a clash rename keeps the canonical spelling when the stub is class-mapped
+    (s007ca950).
+  - Preamble: operator new/delete dedup drops only definitions (s0057bfb0); merge_preamble keeps prototypes whose TU copy
+    comes later and re-emits items that exist only after this slice's section (s007ca950); `forward_protos` covers
+    functions inside `namespace X {` (s0057bfb0); hoist_decls moves an empty unqualified placeholder before the marker's
+    function to the preamble, never a `X::X() {}` (s00705660); extern "C" prototypes in a namespace are hoisted to global
+    only when they carry an address comment (s0058be50; an unrestricted version broke s004057b0);
+    `placement_new_guard` (`#define __PLACEMENT_NEW_INLINE` + placement delete) when a slice defines placement new.
+  - Return-type clashes (`ret_clash`): renamed stubs, qualified non-canonical returns, namespaced vs global prototypes,
+    local-stub vs canonical returns; skipped when a converted function of the slice calls the function (s00584300).
+  - Chunks: template-aware parameter split (s005580e0); InstChunks with explicit template arguments and an owner, bound
+    with the `_sNNNN_NNNN` suffix (s0074c260, s007ca950); out-of-class template member definitions are skipped in the
+    clash loop (s007cb590); pruning in apply touches only this slice's batch VAs (s007ca950).
+  - Layouts: `refuse_foreign_layouts` lands a slice-exact function verbatim with the renamed stub instead of skipping it,
+    and the checked apply verifies it (s0057ae10, s00585330, s00585d40, s005718f0, s0057d710).
+  - Rows and symbols: implicit-member markers with the comment on the next line and scalar deleting destructors
+    (s004186c0); a stale slice symbol is not used once the class is renamed (s00576140); **a verbatim out-of-class member
+    with no class binding must bind a symbol of its own qualifier** (the bare name had bound another class's method:
+    0x58d430 got cEditorAddDNACheat::Execute, 0x7cae30..0x7cb270 the neighbouring command class; the binding compile
+    at /O2 drops unreferenced anonymous-namespace definitions). The six wrong lines were removed from
+    symbols/slices; equiv binds those rows by name.
+  - Compile repair: C2040 renames the stub, C2733 renames this slice's prototype (s00694210); `unsigned` normalises like
+    `unsigned int` (s0074c260); named enums declare their name and enumerators (s005580e0).
+  - CLI: `--variant _od` runs a flag-variant TU with its own block id and rename suffix; `parse_slice` falls back to the
+    single `<sid>_*.cpp` (s007f9550); one-line stub structs are expanded so their methods get annotations (s0075de80).
+- `tools/migrate/module_flags.json`: SPEditors/SPAppModeEditorBase.obj drops /EHsc (82/82 rows byte-exact without it).
+- Equiv resolver data: a renamed class's vtable can be mapped in symbols/slices (`0143dd7c
+  ??_7LogFormatterFancy_s0092_34f0@Trace@EA@@6B@`); that turned 0x9244d0 from UNSUPPORTED into PASS. When a module
+  row reports "our code stores the address of its own copy of an object/vtable", look for this first.
+- Carry-overs: s0075de80 (SPGraphicsRenderer, `--batch mig4`) lands 0x75e090..0x75e3b0, all PASS in the module TU;
+  SkinnerPaintRender 0x517430/0x5183c0/0x518bf0/0x518cf0 land (WEAK/WEAK/UNSUPPORTED/UNSUPPORTED, the same as the
+  slice); ealog 0x924170/0x924bd0 were re-measured and still regress (unresolved inline interface ctor/dtor
+  references), so they stay held; 0x628340 keeps its exclude. 0x936420 IsLoaded (int-width body, bool caller) is still held, but the spelling is now known: `bool IsLoaded() { return mHandle != 0 || mHandlerBegin != mHandlerEnd; }` compiles at /O2 to `xor eax,eax; ret` / `mov eax,1; ret` (the `if (..) return false; return true;` form gives `xor al,al`). Landing it needs the slice body changed to that bool spelling (and its manifest symbol to `_N`), which is slice work.
+- Headers (round 7): `headers.py` writes arrays of function pointers as `void (*name[N])()` (encoding.h);
+  `eastl::vector_set` maps to the hand `eastl/vector_map.h`; new hand templates `rw/core/thread/AtomicInt.h` and
+  `EA/SingletonBase.h` (dev evidence in each header, unverified in retail). AudioSystem, SPPollinatorTransactions and
+  SPGraphicsEffectsRenderer now compile, and so do 22 more objects: `work/claude/round7_ready.json` lists 25 new
+  objects (1,520 landable functions) plus 4 follow-up landings into existing TUs (`existing_tu: true`, leave_in_slice
+  VAs removed). Not ready (`work/claude/round7_not_ready.json`): SPCellGame (`SAP<2>`, and most of its slices are
+  in-progress work) and SPPlanetModel (needs a hand `SP::cTerrainMap<T>`). The candidates come from
+  `scratch_fixpass5/r7_cands.py`: slice rows with a modmap module, not yet migrated, slice not in a running wave.
+- Follow-up: per-object compile flags. Each slice's flags come from its own matching, but one set fits whole objects
+  (OTDB 42/42 with `/Od /Ob1 ... /fp:fast`, AMEB without /EHsc, EMU 21/23 with one /Od set). Normalising each module to
+  one flag set through module_flags.json is open.

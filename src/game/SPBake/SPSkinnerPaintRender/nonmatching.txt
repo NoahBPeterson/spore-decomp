@@ -1,7 +1,11 @@
 # <va>  <diff-bytes>  <reason>
 00425a80 629 RefPtrVec::DoInsertValue (vector<intrusive_ptr<AtomicRefCounted>>): logic, inline layers, lock xadd and tag bytes right, but original keeps (last-first)>>2 in ESI across the memcpy call (push esi, frame 0x84) while every spelling tried evaluates it after the call; dead stack slots before the copy_backward args and tag-byte order also unresolved, so all frame offsets shift
+00517430 3088 nSPSkinner::cPaintRenderJob::RenderInternal: complete (all stages, batches, switches, draw); /Od frame layout and inline vector helper slots differ
 005182f0 133 cPaintRenderJob::Render: complete (stage dispatch + spin loop); this/app slot order differs
+005183c0 1307 nSPSkinner::cPaintDilateJob::Render: complete (stage 0 quad+mesh triangles, stage>0 multipass ping-pong); /Od frame/inline-temp slots differ
 00518b00 92 cFieldSwap::SwapWith: complete 5-field swap via inlined swap(); pointer/temp slot order differs
+00518bf0 146 cPaintCopyIdentityJob::Render: complete (buffer setup, material, vertex, BeginDraw); slots differ
+00518cf0 360 cPaintDifferentiateJob::Render: complete (property read, reciprocal scale, vertex, BeginDraw); slots differ
 00518f10 944 /Od aligned frame (and esp,-16) + inline SSE clamp/round helpers differ; complete Render() reconstruction
 00519640 2446 /Od frame + inline Vector3 copies/property vcalls; complete Render() reconstruction
 0051a350 564 /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render

@@ -34,7 +34,11 @@ extern "C" __declspec(dllimport) int __stdcall DeleteDC(void*);
 extern int* g_d3d9DeviceB;   // @ 0x016f89c8
 namespace EA {
 namespace Thread {
- struct Mutex_s0075_cf20 { void Lock(const void*); void Unlock(); char pad[0x28]; }; 
+ struct Mutex_s0075_cf20 {
+     void Lock(const void*);  // 0x009221b0 (EA::Thread::Mutex::Lock)
+     void Unlock();  // 0x00922270 (EA::Thread::Mutex::Unlock)
+     char pad[0x28];
+ };
 }
 }
 struct cRenderer {
@@ -81,7 +85,11 @@ extern bool  Property_GetBool();     // @ 0x0041e920
 extern float ScreenAspectRatio(int); // @ 0x0075d9e0
 namespace EA {
 namespace Thread {
-struct Mutex_s0075_de80 { void Lock(const void*); void Unlock(); char pad[0x28]; };
+struct Mutex_s0075_de80 {
+    void Lock(const void*);  // 0x009221b0 (EA::Thread::Mutex::Lock)
+    void Unlock();  // 0x00922270 (EA::Thread::Mutex::Unlock)
+    char pad[0x28];
+};
 }
 }
 struct cRenderer_s0075_de80 {
@@ -381,11 +389,125 @@ void cRenderer_s0075_de80::SubRender(int a, int lo, int hi, void* extra, char fl
 }
 
 
+// @ 0x0075e090
+void* cRenderer_s0075_de80::Layer(unsigned id)
+{
+    mMutex.Lock((const void*)0x140dca0);
+    char* p = LayerBegin(this);
+    char* e = LayerEnd(this);
+    if (p != e) {
+        while (*(unsigned*)(p + 4) < id) {
+            p += 0x14;
+            if (p == e)
+                break;
+        }
+        if (p != e && *(unsigned*)(p + 4) == id) {
+            void* r = *(void**)p;
+            mMutex.Unlock();
+            return r;
+        }
+    }
+    mMutex.Unlock();
+    return 0;
+}
+
+
+// @ 0x0075e130
+unsigned cRenderer_s0075_de80::SetInfoFlags(unsigned id, unsigned f)
+{
+    mMutex.Lock((const void*)0x140dca0);
+    char* p = LayerBegin(this);
+    char* e = LayerEnd(this);
+    if (p != e) {
+        while (*(unsigned*)(p + 4) < id) {
+            p += 0x14;
+            if (p == e)
+                break;
+        }
+        if (p != e && *(unsigned*)(p + 4) == id) {
+            unsigned old = *(unsigned*)(p + 0xc);
+            *(unsigned*)(p + 0xc) = old | f;
+            mMutex.Unlock();
+            return old;
+        }
+    }
+    mMutex.Unlock();
+    return 0;
+}
+
+
+// @ 0x0075e1e0
+unsigned cRenderer_s0075_de80::ClearInfoFlags(unsigned id, unsigned f)
+{
+    mMutex.Lock((const void*)0x140dca0);
+    char* p = LayerBegin(this);
+    char* e = LayerEnd(this);
+    if (p != e) {
+        while (*(unsigned*)(p + 4) < id) {
+            p += 0x14;
+            if (p == e)
+                break;
+        }
+        if (p != e && *(unsigned*)(p + 4) == id) {
+            unsigned old = *(unsigned*)(p + 0xc);
+            *(unsigned*)(p + 0xc) = old & ~f;
+            mMutex.Unlock();
+            return old;
+        }
+    }
+    mMutex.Unlock();
+    return 0;
+}
+
+
+// @ 0x0075e290
+unsigned cRenderer_s0075_de80::GetInfoFlags(unsigned id)
+{
+    mMutex.Lock((const void*)0x140dca0);
+    char* p = LayerBegin(this);
+    char* e = LayerEnd(this);
+    if (p != e) {
+        while (*(unsigned*)(p + 4) < id) {
+            p += 0x14;
+            if (p == e)
+                break;
+        }
+        if (p != e && *(unsigned*)(p + 4) == id) {
+            unsigned f = *(unsigned*)(p + 0xc);
+            mMutex.Unlock();
+            return f;
+        }
+    }
+    mMutex.Unlock();
+    return 0;
+}
+
+
+// @ 0x0075e330
+int cRenderer_s0075_de80::NumLayers()
+{
+    mMutex.Lock((const void*)0x140dca0);
+    int n = (int)((LayerEnd(this) - LayerBegin(this)) / 0x14);
+    mMutex.Unlock();
+    return n;
+}
+
+
 // @ 0x0075e370
 void* cRenderer_s0075_de80::LayerInfoAt(int idx)
 {
     mMutex.Lock((const void*)0x140dca0);
     void* r = *(void**)(LayerBegin(this) + idx * 0x14);
+    mMutex.Unlock();
+    return r;
+}
+
+
+// @ 0x0075e3b0
+void* cRenderer_s0075_de80::LayerInfoAtIndex(int idx)
+{
+    mMutex.Lock((const void*)0x140dca0);
+    void* r = LayerBegin(this) + idx * 0x14;
     mMutex.Unlock();
     return r;
 }

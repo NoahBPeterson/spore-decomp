@@ -60,6 +60,10 @@ def cpp_type(d, name=None):
         if base.endswith("]"):          # nested arrays: int[3][4]
             m = re.match(r"^(.*?)((\[\d+\])+)$", base)
             base, suffix = m.group(1), suffix + m.group(2)
+        if base.endswith("(*)()"):
+            # an array of function pointers: the name and the bounds go inside the declarator (`void (*scanners[4])()`;
+            # fix pass 5, encoding.h C2059 for SPPollinatorTransactions)
+            return base[:-len("(*)()")] + "(*" + (name or "") + suffix + ")()"
         return (base + " " + name + suffix) if name else base + suffix
     if d.startswith("blob:"):
         _b, n, txt = d.split(":", 2)
@@ -667,7 +671,7 @@ FAMILY_HEADERS = [
     (r"^eastl::(vector|VectorBase)<", "eastl/vector.h"), (r"^eastl::fixed_vector<", "eastl/fixed_vector.h"),
     (r"^eastl::basic_string<", "eastl/string.h"), (r"^eastl::(map|multimap|rbtree|rb_base)<", "eastl/map.h"),
     (r"^eastl::(set|multiset)<", "eastl/set.h"), (r"^eastl::(hash_map|hash_multimap|hash_set|hashtable)<", "eastl/hash_map.h"),
-    (r"^eastl::list<", "eastl/list.h"), (r"^eastl::vector_map<", "eastl/vector_map.h"),
+    (r"^eastl::list<", "eastl/list.h"), (r"^eastl::vector_(map|set)<", "eastl/vector_map.h"),
     (r"^eastl::(allocator|sp_vector_allocator)$", "eastl/allocator.h"),
     (r"^EA::Allocator::EASTLCoreAllocator$", "eastl/allocator.h"),
     (r"^EA::AutoRefCount<", "EA/AutoRefCount.h"), (r"^EA::COM::AutoRefCount<", "EA/COM/AutoRefCount.h"),
@@ -691,6 +695,8 @@ FAMILY_HEADERS = [
     (r"^(EA::Messaging|SP)::MessageBasicRC<", "EA/Messaging/MessageBasicRC.h"), (r"^EA::Messaging::MessageRC$", "EA/Messaging/MessageBasicRC.h"),
     # empty functor bases (SP/cCollectableItems.h derives a comparator from eastl::binary_function: C2039), next to eastl::less
     (r"^eastl::(binary|unary)_function<", "eastl/map.h"),
+    # hand templates for round 7 (fix pass 5; dev types from work/devbuild, unverified in retail)
+    (r"^rw::core::thread::AtomicInt<", "rw/core/thread/AtomicInt.h"), (r"^EA::SingletonBase<", "EA/SingletonBase.h"),
 ]
 
 
