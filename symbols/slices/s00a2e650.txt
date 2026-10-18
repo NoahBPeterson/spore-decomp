@@ -1,5 +1,9 @@
-00a2f180 EA::Audio::System::SetTypePriority  # PDB name
-00a2f1a0 cTypeMapHolder::InitDefaultPriorities  # eastl map operator[] initialiser
+00a2e650 ?Create@MgrBase@@QAE_NIIPAXPAMPAPAX@Z  # MgrBase::Create migrated from s00a2e650 (verbatim, slice spelling)
+00a2ee40 ?PostEvent@MgrBase@@QAEXIIIIPAX@Z  # MgrBase::PostEvent migrated from s00a2e650 (verbatim, slice spelling)
+00a2eed0 ?RemoveEntry@MgrBase@@QAE_NPAX@Z  # MgrBase::RemoveEntry migrated from s00a2e650 (verbatim, slice spelling)
+00a2ef60 ?Rebuild@MgrBase@@QAEXXZ  # MgrBase::Rebuild migrated from s00a2e650 (verbatim, slice spelling)
+00a2f180 ?SetTypePriority@cTypeMapHolder@@QAEXII@Z  # cTypeMapHolder::SetTypePriority migrated from s00a2e650 (verbatim, slice spelling)
+00a2f1a0 ?InitDefaultPriorities@cTypeMapHolder@@QAEXXZ  # cTypeMapHolder::InitDefaultPriorities migrated from s00a2e650 (verbatim, slice spelling)
 00a2f210 FHT1::FHT1  # fixed_hash_map ctor
 00a2f310 FHT2::FHT2  # fixed_hash_map ctor
 00a2f410 FHT3::FHT3  # fixed_hash_map ctor

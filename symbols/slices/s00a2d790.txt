@@ -1,5 +1,16 @@
-00a2d790 EA::Audio::System::RegisterPrimitive                    # Ghidra symbol
-00a2dc40 EA::Audio::System::SetupPropertyAggregationRules       # Ghidra symbol
-00a2de20 EA::Audio::System::DestroySubmixes                     # PDB candidate (caller-single)
-00a2e060 eastl::map<unsigned long,unsigned long,eastl::less<unsigned long>,eastl::allocator>::operator[]  # Ghidra name
-00a2da30 `anonymous namespace'::PickRandomKey                   # PDB candidate (caller-scored)
+00a2d790 ?RegisterPrimitive@System@Audio@EA@@UAE_NPAVIPrimitive@23@@Z  # EA::Audio::System::RegisterPrimitive migrated from s00a2d790
+00a2d880 ?FUN_00a2d880@AudioSystem@@QAEPAXIPAX@Z  # AudioSystem::FUN_00a2d880 migrated from s00a2d790 (verbatim, slice spelling)
+00a2d940 ?FUN_00a2d940@AudioSystem@@QAEPAXPAX@Z  # AudioSystem::FUN_00a2d940 migrated from s00a2d790 (verbatim, slice spelling)
+00a2d990 ?FUN_00a2d990@AudioSystem@@QAEHPAX@Z  # AudioSystem::FUN_00a2d990 migrated from s00a2d790 (verbatim, slice spelling)
+00a2d9d0 ?FUN_00a2d9d0@AudioSystem@@QAEPAXE@Z  # AudioSystem::FUN_00a2d9d0 migrated from s00a2d790 (verbatim, slice spelling)
+00a2da30 ?FUN_00a2da30@AudioSystem@@QAEXXZ  # AudioSystem::FUN_00a2da30 migrated from s00a2d790 (verbatim, slice spelling)
+00a2dc40 ?SetupPropertyAggregationRules@System@Audio@EA@@UAEXXZ  # EA::Audio::System::SetupPropertyAggregationRules migrated from s00a2d790
+00a2de20 ?DestroySubmixes@System@Audio@EA@@UAE_NXZ  # EA::Audio::System::DestroySubmixes migrated from s00a2d790
+00a2dfe0 ?FUN_00a2dfe0@AudioSystem@@QAEXPAX@Z  # AudioSystem::FUN_00a2dfe0 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e060 ?FUN_00a2e060@AudioSystem@@QAEAAIABI@Z  # AudioSystem::FUN_00a2e060 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e0e0 ?FUN_00a2e0e0@AudioSystem@@QAEHPAI@Z  # AudioSystem::FUN_00a2e0e0 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e1b0 ?FUN_00a2e1b0@AudioSystem@@QAEPAXPAX00@Z  # AudioSystem::FUN_00a2e1b0 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e260 ?FUN_00a2e260@AudioSystem@@QAEXPAX@Z  # AudioSystem::FUN_00a2e260 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e2f0 ?FUN_00a2e2f0@AudioSystem@@QAEPAU1@PAX@Z  # AudioSystem::FUN_00a2e2f0 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e420 ?FUN_00a2e420@AudioSystem@@QAEPAXPAX@Z  # AudioSystem::FUN_00a2e420 migrated from s00a2d790 (verbatim, slice spelling)
+00a2e4c0 ?FUN_00a2e4c0@AudioSystem@@QAEPAXPAX@Z  # AudioSystem::FUN_00a2e4c0 migrated from s00a2d790 (verbatim, slice spelling)

@@ -1,1 +1,9 @@
-00a252b0 EA::Audio::System::Init  # PDB name via card
+00a25090 ?MakeProps@Factory@@QAE_NPBDPAPAUObj_s00a2_4e10@@HH@Z  # Factory::MakeProps migrated from s00a24e10 (verbatim, slice spelling)
+00a25190 ?MakeAudio@Factory@@QAE_NPBDPAUARC@@HH@Z  # Factory::MakeAudio migrated from s00a24e10 (verbatim, slice spelling)
+00a252b0 ?Init@System_s00a2_4e10@@QAE_NXZ  # System_s00a2_4e10::Init migrated from s00a24e10 (verbatim, slice spelling)
+00a25980 ?Convert@Namer@@QAEXPBDHHN@Z  # Namer::Convert migrated from s00a24e10 (verbatim, slice spelling)
+00a25a40 ?CallPrim@AudioSys@@QAE_NIHMH@Z  # AudioSys::CallPrim migrated from s00a24e10 (verbatim, slice spelling)
+00a25aa0 ?CallAll@AudioSys@@QAEXHMH@Z  # AudioSys::CallAll migrated from s00a24e10 (verbatim, slice spelling)
+00a25b20 ?HasPrim@AudioSys@@QAE_NI@Z  # AudioSys::HasPrim migrated from s00a24e10 (verbatim, slice spelling)
+00a25b60 ?UpdateOutput@AudioSys@@QAEXXZ  # AudioSys::UpdateOutput migrated from s00a24e10 (verbatim, slice spelling)
+00a25bd0 ?GetFloat@AudioSys@@QAE_NIIPAM@Z  # AudioSys::GetFloat migrated from s00a24e10 (verbatim, slice spelling)

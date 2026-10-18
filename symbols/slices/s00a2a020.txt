@@ -1,3 +1,5 @@
+00a2a020 ?ConnectSubmixTree@SysLike@@QAE_NXZ  # SysLike::ConnectSubmixTree migrated from s00a2a020 (verbatim, slice spelling)
+00a2a150 ?GetOrInsert@SmallStubs@@QAEHPAH@Z  # SmallStubs::GetOrInsert migrated from s00a2a020 (verbatim, slice spelling)
 00a2a210 FixedMap::a210
 00a2a310 FixedMap::a310
 00a2a410 FixedMap::a410
@@ -5,3 +7,5 @@
 00a2a670 FixedMap::a670
 00a2a770 FixedMap::a770
 00a2a870 FixedMap::a870
+00a2aa70 ?Dtor@SmallStubs@@QAEXXZ  # SmallStubs::Dtor migrated from s00a2a020 (verbatim, slice spelling)
+00a2ae90 ?EraseRange@SmallStubs@@QAEHHH@Z  # SmallStubs::EraseRange migrated from s00a2a020 (verbatim, slice spelling)

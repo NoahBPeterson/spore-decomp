@@ -1,1 +1,1 @@
-00a2c6c0 EA::Audio::System::DoCommand  # PDB name via card
+00a2c6c0 ?DoCommand@System_s00a2_c6c0@Audio@EA@@QAE_NPAUCommand_s00a2_c6c0@23@@Z  # System_s00a2_c6c0::DoCommand migrated from s00a2c6c0 (verbatim, slice spelling)

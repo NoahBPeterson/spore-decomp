@@ -1,1 +1,1 @@
-00a31170 SP::Audio::cSystem::InitAT  # Ghidra real name
+00a31170 ?InitAT@cSystem@@QAE_NXZ  # cSystem::InitAT migrated from s00a31170 (verbatim, slice spelling)

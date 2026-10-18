@@ -1,0 +1,7 @@
+00a30460 ?SetProperty@System@Audio@EA@@UAEXIM@Z  # EA::Audio::System::SetProperty migrated from s00a30460
+00a30790 ?FUN_00a30790@@YAHXZ  # FUN_00a30790 migrated from s00a30460 (verbatim, slice spelling)
+00a30940 ?PreloadConfigurations@System@Audio@EA@@QAEXXZ  # EA::Audio::System::PreloadConfigurations migrated from s00a30460
+00a30e10 ?ctor@FixedMap30e10@@QAEHPAX0@Z  # FixedMap30e10::ctor migrated from s00a30460 (verbatim, slice spelling)
+00a30f10 ?eraseKey@NodeMap@@QAEHPAI@Z  # NodeMap::eraseKey migrated from s00a30460 (verbatim, slice spelling)
+00a31040 ?ctor@FixedVec11@@QAEPAU1@H@Z  # FixedVec11::ctor migrated from s00a30460 (verbatim, slice spelling)
+00a310b0 ?ctor@FixedVec11b@@QAEPAU1@PAI@Z  # FixedVec11b::ctor migrated from s00a30460 (verbatim, slice spelling)

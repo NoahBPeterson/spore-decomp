@@ -1,2 +1,6 @@
-00a31f20 EA::Audio::System::DoCommandMainThread  # card PDB candidate; switch on Command::Type with three message-building cases
-00a32ea0 EA::Audio::System::SetOutputProperty  # card PDB candidate (caller-single)
+00a31f20 ?DoCommandMainThread@System_s00a3_1f20@@QAE_NPAUCommand_s00a3_1f20@Audio@EA@@@Z  # System_s00a3_1f20::DoCommandMainThread migrated from s00a31f20 (verbatim, slice spelling)
+00a32220 ??0FixedHashMap@@QAE@II@Z  # FixedHashMap::FixedHashMap migrated from s00a31f20 (verbatim, slice spelling)
+00a32320 ?FUN_00a32320@@YAXPAI0@Z  # FUN_00a32320 migrated from s00a31f20 (verbatim, slice spelling)
+00a323e0 ?operator_index@OuterMap@@QAEPAIPAI@Z  # OuterMap::operator_index migrated from s00a31f20 (verbatim, slice spelling)
+00a32550 ?Destroy@SystemDtor@@QAEXXZ  # SystemDtor::Destroy migrated from s00a31f20 (verbatim, slice spelling)
+00a32ea0 ?SetOutputProperty@SystemProps@@QAEXIIM@Z  # SystemProps::SetOutputProperty migrated from s00a31f20 (verbatim, slice spelling)
