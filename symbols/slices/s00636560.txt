@@ -1,1 +1,2 @@
-00636560 SP::cSPPlayModeUI::DoMessageInternal  # PDB name (anchor)
+0062c7e0 ?RunSkinPaintOnEditorModel@cAppModeEditorBase@SP@@IAEX_NPAVcSPEditorModel@2@@Z  # SP::cAppModeEditorBase::RunSkinPaintOnEditorModel (callee of s00636560, named from the dev publics; slice address comment)
+00636560 ?DoMessageInternal@cSPPlayModeUI_s0063_6560@@QAE_NIPAUUIMessage@@@Z  # cSPPlayModeUI_s0063_6560::DoMessageInternal migrated from s00636560 (verbatim, slice spelling)

@@ -1,0 +1,23 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetUpSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  006354c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ResetSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  00635520  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEnableNewCreatureButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635580  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEnableTakePictureButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635600  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEnableRecordMovieButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635680  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetUIGroupVisible@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  00635760  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetEditorUIGroupVisible@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  00635790  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ToggleUIGroup@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  006357c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetCheckButtonSelected@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  00635810  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?IsCheckButtonSelected@cSPPlayModeUI_s0063_54c0@SP@@QAE_NI@Z  00635850  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?IsUIGroupEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAE_NI@Z  00635890  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetTabIndentOff@cSPPlayModeUI_s0063_54c0@SP@@QAEXI@Z  00635dc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetTabIndentOn@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  00635e80  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetAnimButtonsEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635f00  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?SetExpansionAnimButtonsEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  00635ff0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?ShowYouTubeLoginDialog@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  006360e0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?HideYouTubeLoginDialog@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  00636260  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?EnablePhotoViewerButton@cSPPlayModeUI@@QAEX_N@Z  00636320  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?HideMovieSavedDialogCustom@cSPPlayModeUI@@QAEXXZ  006364a0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?GetEditorText@cSPPlayModeUI_s0063_73e0@@QAEXIPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  006377d0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?GetYTUsername@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  00637800  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayModeUI.cpp  ?GetYTPassword@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  00637830  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

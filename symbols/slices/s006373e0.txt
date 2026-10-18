@@ -1,9 +1,9 @@
-006373e0 SP::cSPPlayModeUI::Shutdown  # PDB name (caller-scored)
-006374b0 SP::cSPPlayModeUI::SetYTUsername  # PDB name (caller-scored)
-00637510 SP::cSPPlayModeUI::SetYTPassword  # PDB name (caller-scored)
-006375e0 `anonymous namespace'::FindParentDir2  # PDB name (caller-single)
-006377d0 SP::cSPPlayModeUI::GetEditorText  # PDB name
-00637800 SP::cSPPlayModeUI::GetYTUsername  # PDB name (caller-scored)
-00637830 SP::cSPPlayModeUI::GetYTPassword  # PDB name (caller-scored)
-00637860 SP::cSPPlayModeUI::ShowSendEmailDialog  # PDB-adjacent name
-00637c90 SP::cSPPlayModeUI::SendVideoURLInfoToServer  # PDB name (anchor)
+006373e0 ?Shutdown@cSPPlayModeUI_s0063_73e0@@QAE_NXZ  # cSPPlayModeUI_s0063_73e0::Shutdown migrated from s006373e0 (verbatim, slice spelling)
+006374b0 ?SetYTUsername@cSPPlayModeUI_s0063_73e0@@QAEXABV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  # cSPPlayModeUI_s0063_73e0::SetYTUsername migrated from s006373e0 (verbatim, slice spelling)
+00637510 ?SetYTPassword@cSPPlayModeUI_s0063_73e0@@QAEXABV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  # cSPPlayModeUI_s0063_73e0::SetYTPassword migrated from s006373e0 (verbatim, slice spelling)
+006375e0 ?FindParentDir2@@YADHHH@Z  # FindParentDir2 migrated from s006373e0 (verbatim, slice spelling)
+006377d0 ?GetEditorText@cSPPlayModeUI_s0063_73e0@@QAEXIPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  # cSPPlayModeUI_s0063_73e0::GetEditorText migrated from s006373e0 (verbatim, slice spelling)
+00637800 ?GetYTUsername@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  # cSPPlayModeUI_s0063_73e0::GetYTUsername migrated from s006373e0 (verbatim, slice spelling)
+00637830 ?GetYTPassword@cSPPlayModeUI_s0063_73e0@@QAEXPAV?$basic_string_s0063_73e0@DU?$allocator_s0063_73e0@D@eastl@@@eastl@@@Z  # cSPPlayModeUI_s0063_73e0::GetYTPassword migrated from s006373e0 (verbatim, slice spelling)
+00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show migrated from s006373e0
+00637c90 ?SendVideoURLInfoToServer@cSPPlayModeUI_s0063_73e0@@QAEXXZ  # cSPPlayModeUI_s0063_73e0::SendVideoURLInfoToServer migrated from s006373e0 (verbatim, slice spelling)

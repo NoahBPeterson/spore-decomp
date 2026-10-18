@@ -1,4 +1,20 @@
-00635520 SP::cSPPlayModeUI::ResetSendEmailWindow  # PDB candidate caller-scored; mirror of SetUpSendEmailWindow
+006354c0 ?SetUpSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  # cSPPlayModeUI_s0063_54c0::SetUpSendEmailWindow migrated from s006354c0 (verbatim, slice spelling)
+00635520 ?ResetSendEmailWindow@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  # cSPPlayModeUI_s0063_54c0::ResetSendEmailWindow migrated from s006354c0 (verbatim, slice spelling)
+00635580 ?SetEnableNewCreatureButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  # cSPPlayModeUI_s0063_54c0::SetEnableNewCreatureButton migrated from s006354c0 (verbatim, slice spelling)
+00635600 ?SetEnableTakePictureButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  # cSPPlayModeUI_s0063_54c0::SetEnableTakePictureButton migrated from s006354c0 (verbatim, slice spelling)
+00635680 ?SetEnableRecordMovieButton@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  # cSPPlayModeUI_s0063_54c0::SetEnableRecordMovieButton migrated from s006354c0 (verbatim, slice spelling)
 00635700 SP::cSPPlayModeUI::scalar_deleting_destructor  # releases members +0x68/+0x64, destroys layouts, vptr reset, delete
-006360e0 SP::cSPPlayModeUI::ShowYouTubeLoginDialog  # PDB candidate caller-scored; BeginModal on 0x5650568
-00636260 SP::cSPPlayModeUI::HideYouTubeLoginDialog  # PDB candidate caller-scored; EndModal
+00635760 ?SetUIGroupVisible@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  # cSPPlayModeUI_s0063_54c0::SetUIGroupVisible migrated from s006354c0 (verbatim, slice spelling)
+00635790 ?SetEditorUIGroupVisible@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  # cSPPlayModeUI_s0063_54c0::SetEditorUIGroupVisible migrated from s006354c0 (verbatim, slice spelling)
+006357c0 ?ToggleUIGroup@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  # cSPPlayModeUI_s0063_54c0::ToggleUIGroup migrated from s006354c0 (verbatim, slice spelling)
+00635810 ?SetCheckButtonSelected@cSPPlayModeUI_s0063_54c0@SP@@QAEXI_N@Z  # cSPPlayModeUI_s0063_54c0::SetCheckButtonSelected migrated from s006354c0 (verbatim, slice spelling)
+00635850 ?IsCheckButtonSelected@cSPPlayModeUI_s0063_54c0@SP@@QAE_NI@Z  # cSPPlayModeUI_s0063_54c0::IsCheckButtonSelected migrated from s006354c0 (verbatim, slice spelling)
+00635890 ?IsUIGroupEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAE_NI@Z  # cSPPlayModeUI_s0063_54c0::IsUIGroupEnabled migrated from s006354c0 (verbatim, slice spelling)
+006358c0 ?Init@cSPPlayModeUI_s0063_54c0@SP@@QAE_NPAVcAppModeEditorBase_s0063_54c0@2@PAVcSPPlayMode_s0063_54c0@2@@Z  # cSPPlayModeUI_s0063_54c0::Init migrated from s006354c0 (verbatim, slice spelling)
+00635dc0 ?SetTabIndentOff@cSPPlayModeUI_s0063_54c0@SP@@QAEXI@Z  # cSPPlayModeUI_s0063_54c0::SetTabIndentOff migrated from s006354c0 (verbatim, slice spelling)
+00635e80 ?SetTabIndentOn@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  # cSPPlayModeUI_s0063_54c0::SetTabIndentOn migrated from s006354c0 (verbatim, slice spelling)
+00635f00 ?SetAnimButtonsEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  # cSPPlayModeUI_s0063_54c0::SetAnimButtonsEnabled migrated from s006354c0 (verbatim, slice spelling)
+00635ff0 ?SetExpansionAnimButtonsEnabled@cSPPlayModeUI_s0063_54c0@SP@@QAEX_N@Z  # cSPPlayModeUI_s0063_54c0::SetExpansionAnimButtonsEnabled migrated from s006354c0 (verbatim, slice spelling)
+006360e0 ?ShowYouTubeLoginDialog@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  # cSPPlayModeUI_s0063_54c0::ShowYouTubeLoginDialog migrated from s006354c0 (verbatim, slice spelling)
+00636260 ?HideYouTubeLoginDialog@cSPPlayModeUI_s0063_54c0@SP@@QAEXXZ  # cSPPlayModeUI_s0063_54c0::HideYouTubeLoginDialog migrated from s006354c0 (verbatim, slice spelling)
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s006354c0, named from the dev publics; slice address comment)

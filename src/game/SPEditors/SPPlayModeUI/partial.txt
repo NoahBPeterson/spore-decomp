@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+006375e0  -  FindParentDir2 (anonymous namespace): PARTIAL skeleton; algorithm has many string/memmove branches
+00637860  -  ShowSendEmailDialog: PARTIAL skeleton; 1072-byte dialog builder with many cString loads
+00637c90  -  SendVideoURLInfoToServer: PARTIAL skeleton; 740-byte validation/submit path
+00638430  305  FUN_00634b60 result field (extra width) approximate
