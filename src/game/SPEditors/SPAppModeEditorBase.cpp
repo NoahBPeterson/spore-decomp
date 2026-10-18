@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPAppModeEditorBase.cpp -- migrated from slice(s) s005b94b0, s00591fa0, s0058d430, s0058be50, s00589ce0, s00587a20, s00586b00, s00585d40, s00585330, s00583c50, s00582fe0, s00582250, s005802f0, s0057f6c0, s0057e480, s0057d710, s0057bfb0, s0057af00, s0057ae10, s00579e20, s005794b0, s00577130, s00576140, s00575270, s005744b0, s00573520, s00572580, s005718f0 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPAppModeEditorBase.cpp -- migrated from slice(s) s0058cee0, s0058ba60, s0058ac10, s005816f0, s005810d0, s0057f420, s005b94b0, s00591fa0, s0058d430, s0058be50, s00589ce0, s00587a20, s00586b00, s00585d40, s00585330, s00583c50, s00582fe0, s00582250, s005802f0, s0057f6c0, s0057e480, s0057d710, s0057bfb0, s0057af00, s0057ae10, s00579e20, s005794b0, s00577130, s00576140, s00575270, s005744b0, s00573520, s00572580, s005718f0 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPAppModeEditorBase.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1305,76 +1305,6 @@ extern ResourceKey kLayerKeyA;   // 0x0150d090
 extern ResourceKey kLayerKeyB;   // 0x0150d09c
 // ---- items of slice s005744b0 end
 
-// ---- items of slice s00575270 begin (TODO(rewrite): local stubs, replace by canonical classes)
-struct VObj {                       // object at cAppModeEditorBase+0x8c
-    virtual void slot0(int);
-    virtual int  slot1();
-};
-void*           __cdecl FXManager();
-struct IConfigManager {             // ConfigManager() 0x67dd30
-    PV8 PV4
-    virtual int Query(uint32_t id);               // +0x30
-};
-IConfigManager* __cdecl ConfigManager();
-struct cEffectsWorld {              // object at cAppModeEditorBase+0x90
-    char pad0[0x58];
-    int  mMode;                                   // +0x58 (current tool/mode id)
-};
-struct cSPPlayModeUI_s0057_5270 {              // object at *[self+0x74]+0xc
-    bool IsUIGroupEnabled(uint32_t group);        // 0x635890
-};
-struct cSPPlayMode_s0057_5270 {                // object at cAppModeEditorBase+0x74
-    char pad0[0xc];
-    cSPPlayModeUI_s0057_5270* mpUI;                          // +0x0c
-};
-struct cSPPaletteUI_s0057_5270 {               // object at cAppModeEditorBase+0x3bc
-    bool IsPaintByNumber();                       // 0x5ca920
-};
-struct cDevFlags {                  // object at cAppModeEditorBase+0x4d0: one bool per debug/editor option
-    bool f[0x22];
-};
-struct IEditorEntries {             // object at cAppModeEditorBase+0x42c
-    PV
-    virtual int Query(int);                       // +0x04
-};
-struct cPartsPalette_s0057_5270 {
-    void Reset(int, int);                         // 0x43cfc0
-    void SomeA();                                 // 0x43cad0
-    void SomeB();                                 // 0x43c710
-};
-namespace SP {
-class cAppModeEditorBase_s0057_5270 {
-public:
-    char pad[0x458];
-    // --- observed offsets ---
-    void  SetEconomyValue(int, int);              // 0x575270 (renamed)
-    void  ResetEconomy();                         // 0x5754c0
-    void  DoSomePaletteThing();                   // 0x575790
-    void  StopSomething();                        // 0x5757b0
-    bool  TestCondition(uint32_t);                // 0x575810
-    void  GetSomething1(int);                     // 0x575e20
-    int   GetSomething2();                        // 0x575e50
-    bool  SomeBool(char);                         // 0x575eb0
-    void  SetupCameraUI();                        // 0x575f20
-    void  ToggleCameraMode();                     // 0x575f70
-    void  UpdateSpineVertebra(float);             // 0x575520
-};
-}
-using SP::cAppModeEditorBase_s0057_5270;
-template <typename T> static inline T* Field(void* self, uint32_t off) {
-    return *(T**)((char*)self + off);
-}
-template <typename T> static inline T Value(void* self, uint32_t off) {
-    return *(T*)((char*)self + off);
-}
-static inline char& ByteRef(void* self, uint32_t off) {
-    return *(char*)((char*)self + off);
-}
-void cAppModeEditorBase_s0057_5270::SetEconomyValue(int, int) {}
-void cAppModeEditorBase_s0057_5270::ResetEconomy() {}
-void cAppModeEditorBase_s0057_5270::ToggleCameraMode() {}
-void cAppModeEditorBase_s0057_5270::UpdateSpineVertebra(float) {}
-// ---- items of slice s00575270 end
 
 // ---- items of slice s00576140 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedIncrement, _InterlockedDecrement)
@@ -3771,6 +3701,38 @@ public:
 // ---- items of slice s0057f6c0 end
 
 // ---- items of slice s005802f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+void WStr_Format(void* out, const wchar_t* fmt, int value);   // 0x0041e050
+void GetPropertyAsText(void* list, uint32_t id, void* out);  // 0x006a1360
+void* FUN_00607a60();                              // AuthManager
+void  EA_IO_MakeFileNameValid(const wchar_t* src, wchar_t* dst, int flags);  // 0x00931250
+void  eastl_deallocate(void* p);                   // 0x00f47380
+extern "C" wchar_t* wcsncpy(wchar_t* dst, const wchar_t* src, size_t n);
+namespace eastl {
+struct allocator_s0058_02f0 {};
+}
+namespace eastl {
+template <typename T, typename A = allocator_s0058_02f0>
+struct basic_string_s0058_02f0 {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    A mAlloc;
+};
+}
+typedef eastl::basic_string_s0058_02f0<wchar_t> string16_s0058_02f0;
+struct cString {
+    char mData[20];
+    void Init();                 // 0x006b5060
+    const wchar_t* c_str();      // 0x006b5240
+    int GetValue();              // 0x006b55c0
+};
+struct cAppModeEditorBase_s0058_02f0 {
+    char pad0[0x24];
+    void* mPropList;             // +0x24
+
+    bool GetEditorName(string16_s0058_02f0* out);  // 0x005805e0 (cAppModeEditorBase::GetEditorName)
+    bool GetDefaultModelName(string16_s0058_02f0* out);  // 0x00580670 (cAppModeEditorBase::GetDefaultModelName)
+};
 struct cBoolVec {
     void* mpBegin;
     void* mpEnd;
@@ -4206,6 +4168,9 @@ public:
 }
 // ---- items of slice s00582fe0 end
 
+
+
+
 // ---- items of slice s00583c50 begin (TODO(rewrite): local stubs, replace by canonical classes)
 void __stdcall VecGrow(int* at, uint32_t count, const int* value);   // 0x0057f220
 void __stdcall VecErase(int* first, int* last);                      // 0x005c2170
@@ -4396,6 +4361,7 @@ public:
 };
 }
 // ---- items of slice s00585d40 end
+
 
 // ---- items of slice s00586b00 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void* __cdecl FUN_011e0744(void* dst, const void* src, unsigned n);   // memcpy/memmove thunk
@@ -7252,6 +7218,94 @@ struct MsgKeyReplace { ResourceKey_s0059_1fa0 mKey; bool mbReplace; uint8_t padd
 }
 // ---- items of slice s00591fa0 end
 
+// ---- items of slice s00575270 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct VObj {                       // object at cAppModeEditorBase+0x8c
+    virtual void slot0(int);
+    virtual int  slot1();
+};
+void*           __cdecl FXManager();
+struct IConfigManager {             // ConfigManager() 0x67dd30
+    PV8 PV4
+    virtual int Query(uint32_t id);               // +0x30
+};
+IConfigManager* __cdecl ConfigManager();
+struct cEffectsWorld {              // object at cAppModeEditorBase+0x90
+    char pad0[0x58];
+    int  mMode;                                   // +0x58 (current tool/mode id)
+};
+struct cSPPlayModeUI_s0057_5270 {              // object at *[self+0x74]+0xc
+    bool IsUIGroupEnabled(uint32_t group);        // 0x635890
+};
+struct cSPPlayMode_s0057_5270 {                // object at cAppModeEditorBase+0x74
+    char pad0[0xc];
+    cSPPlayModeUI_s0057_5270* mpUI;                          // +0x0c
+};
+struct cSPPaletteUI_s0057_5270 {               // object at cAppModeEditorBase+0x3bc
+    bool IsPaintByNumber();                       // 0x5ca920
+};
+struct cDevFlags {                  // object at cAppModeEditorBase+0x4d0: one bool per debug/editor option
+    bool f[0x22];
+};
+struct IEditorEntries {             // object at cAppModeEditorBase+0x42c
+    PV
+    virtual int Query(int);                       // +0x04
+};
+struct cPartsPalette_s0057_5270 {
+    void Reset(int, int);                         // 0x43cfc0
+    void SomeA();                                 // 0x43cad0
+    void SomeB();                                 // 0x43c710
+};
+namespace SP {
+class cAppModeEditorBase_s0057_5270 {
+public:
+    char pad[0x458];
+    // --- observed offsets ---
+    void  SetEconomyValue(int, int);              // 0x575270 (renamed)
+    void  ResetEconomy();                         // 0x5754c0
+    void  DoSomePaletteThing();                   // 0x575790
+    void  StopSomething();                        // 0x5757b0
+    bool  TestCondition(uint32_t);                // 0x575810
+    void  GetSomething1(int);                     // 0x575e20
+    int   GetSomething2();                        // 0x575e50
+    bool  SomeBool(char);                         // 0x575eb0
+    void  SetupCameraUI();                        // 0x575f20
+    void  ToggleCameraMode();                     // 0x575f70
+    void  UpdateSpineVertebra(float);             // 0x575520
+};
+}
+using SP::cAppModeEditorBase_s0057_5270;
+template <typename T> static inline T* Field(void* self, uint32_t off) {
+    return *(T**)((char*)self + off);
+}
+template <typename T> static inline T Value(void* self, uint32_t off) {
+    return *(T*)((char*)self + off);
+}
+static inline char& ByteRef(void* self, uint32_t off) {
+    return *(char*)((char*)self + off);
+}
+void cAppModeEditorBase_s0057_5270::SetEconomyValue(int, int) {}
+void cAppModeEditorBase_s0057_5270::ResetEconomy() {}
+void cAppModeEditorBase_s0057_5270::ToggleCameraMode() {}
+void cAppModeEditorBase_s0057_5270::UpdateSpineVertebra(float) {}
+// ---- items of slice s00575270 end
+
+// ---- items of slice s0057f420 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct cUnkF420 {
+    void FUN_0057f420(void* args);
+};
+// ---- items of slice s0057f420 end
+
+// ---- items of slice s0058cee0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace SP {
+class cAppModeEditorBase_s0058_cee0 {
+public:
+    char pad0[0x600];
+    int LoadModel(int a, int b, int c, int d, int e, int f);   // 0x0058cee0
+    void NewModel(char a);                                     // 0x0058d1c0
+};
+}
+// ---- items of slice s0058cee0 end
+
 // @ 0x00572070
 void __cdecl SetSoundSymbol(uint32_t objectId, uint32_t symbolId, const char* value)
 {
@@ -7303,12 +7357,34 @@ void __cdecl SetSoundSymbol(uint32_t objectId, uint32_t symbolId, const char* va
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005720f0
 void __cdecl SetCullBackfaces(int enable)
 {
     g_renderStateDirty |= 0x10000;
     g_cullMode = enable ? 4 : 8;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7399,11 +7475,33 @@ uint32_t __cdecl LookupByHash(uint32_t hash)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572160
 Vec4 ColorSource::GetDefaultColor() const
 {
     return g_defaultColor;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7487,6 +7585,17 @@ Vec4 ColorSource::GetColor() const
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005721b0
 void __stdcall HandleRects(Rect16 a, Rect16 b)
 {
@@ -7494,6 +7603,17 @@ void __stdcall HandleRects(Rect16 a, Rect16 b)
     if (r != 0x1c)
         UIManager()->Show(RectResultToId(r));
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7582,6 +7702,17 @@ void __stdcall UpdateAllItems(cItemList* list)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005722f0
 namespace SP {
 void cAppModeEditorBase_s0057_18f0::InitBrain(uint32_t region)
@@ -7629,12 +7760,34 @@ void cAppModeEditorBase_s0057_18f0::InitBrain(uint32_t region)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572840
 bool __cdecl WriteUint32Value(ISerializer* s, const uint32_t* v)
 {
     WriteUint32(s->GetHolder()->GetStream(), *v);
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7722,6 +7875,17 @@ bool __cdecl WriteUint32Array6(ISerializer* s, const uint32_t* v)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005728f0
 const wchar_t* __cdecl FindLastOf(const wchar_t* pEnd, const wchar_t* pBegin, const wchar_t* p2Begin, const wchar_t* p2End)
 {
@@ -7733,6 +7897,17 @@ const wchar_t* __cdecl FindLastOf(const wchar_t* pEnd, const wchar_t* pBegin, co
     }
     return pBegin;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7820,6 +7995,17 @@ int __cdecl CompareI16(const wchar_t* a, const wchar_t* b, uint32_t n)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005729b0
 VecPair* __cdecl CopyVecPairs(VecPair* first, VecPair* last, VecPair* dest)
 {
@@ -7827,6 +8013,17 @@ VecPair* __cdecl CopyVecPairs(VecPair* first, VecPair* last, VecPair* dest)
         *dest = *first;
     return dest;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -7908,11 +8105,33 @@ float __cdecl RandomRange(float a, float b)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572a60
 float __cdecl RandomSigned(float x)
 {
     return RandomRangeInline(-x, x);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8000,6 +8219,17 @@ void HandlerRegistration::Unregister()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572ae0
 namespace Simulator {
 cThemeMusicManager::cThemeMusicManager()
@@ -8046,11 +8276,33 @@ cThemeMusicManager::cThemeMusicManager()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572b10
 int ComplexityBlock::GetEntryCount()
 {
     return mEntries.mpEnd - mEntries.mpBegin;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8142,11 +8394,33 @@ float __cdecl GetComplexityFraction(const BlockPtrVector& blocks)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572c50
 uint32_t __cdecl IDFromName16(const wchar_t* name)
 {
     return EA::Hash::FNV1_String16(name, 0x811c9dc5, 1);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8228,11 +8502,33 @@ int BlockPtrVector::GetSize()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572cd0
 const char* cEditorLimitsCheat::GetDescription(int mode) const
 {
     return mode ? 0 : "[on | off], toggles, disables (on) or re-enables (off) editor complexity limits. Creations that break the limits will not be pollinated!";
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8347,6 +8643,17 @@ float __cdecl EditorGroundSampler(cEditorGround* editor, uint32_t unused, const 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00572f00
 float __cdecl EditorGroundHeight(cEditorGround* editor, const Vector2& pos)
 {
@@ -8409,6 +8716,17 @@ float __cdecl EditorGroundHeight(cEditorGround* editor, const Vector2& pos)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573050
 bool cEditor::IsLimitAllowed()
 {
@@ -8416,6 +8734,17 @@ bool cEditor::IsLimitAllowed()
         return mpLimits->mbAllow;
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8559,6 +8888,17 @@ bool cEditor::CanUseModel(const ResourceKeyRec* rec)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005732f0
 void cEditor::ReleaseRefs()
 {
@@ -8573,6 +8913,17 @@ void cEditor::ReleaseRefs()
         p->Release();
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8659,6 +9010,17 @@ void cEditor::HideCreature()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573390
 void cEditor::ShowCreature()
 {
@@ -8669,6 +9031,17 @@ void cEditor::ShowCreature()
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8768,6 +9141,17 @@ void cEditor::UpdateCursor()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573480
 void cEditor::SetSymmetryMode(int mode)
 {
@@ -8790,6 +9174,17 @@ void cEditor::SetSymmetryMode(int mode)
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -8898,6 +9293,17 @@ void cAppModeEditorBase_s0057_3520::ShowBlockAbilities(cEditorBlock* block)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573780
 namespace SP {
 void cAppModeEditorBase_s0057_3520::SetModelLocked(bool locked)
@@ -8913,6 +9319,17 @@ void cAppModeEditorBase_s0057_3520::SetModelLocked(bool locked)
     }
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9026,6 +9443,17 @@ bool cAppModeEditorBase_s0057_3520::OnMouseMove(float x, float y, uint32_t state
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573950
 namespace SP {
 bool cAppModeEditorBase_s0057_3520::IsOverLimit()
@@ -9035,6 +9463,17 @@ bool cAppModeEditorBase_s0057_3520::IsOverLimit()
     return false;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9124,6 +9563,17 @@ void cAppModeEditorBase_s0057_3520::UpdateHint()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573a10
 namespace SP {
 cEditorBlock* cAppModeEditorBase_s0057_3520::GetSelectableBlock()
@@ -9140,6 +9590,17 @@ cEditorBlock* cAppModeEditorBase_s0057_3520::GetSelectableBlock()
     return b->mFlags.Get(7) ? 0 : b;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9240,6 +9701,17 @@ bool cAppModeEditorBase_s0057_3520::IsMousedOverModel(float x, float y)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573c00
 namespace SP {
 void cAppModeEditorBase_s0057_3520::SetActiveBlock(cEditorBlock* block, int handle)
@@ -9286,6 +9758,17 @@ void cAppModeEditorBase_s0057_3520::SetActiveBlock(cEditorBlock* block, int hand
     mbHasActiveBlock = mActiveBlock.mpObject != 0;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9417,6 +9900,17 @@ void cAppModeEditorBase_s0057_3520::SetRolloverHandle(cSPEditorHandle_s0057_3520
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573f20
 namespace SP {
 void cAppModeEditorBase_s0057_3520::SetAsset(uint32_t key)
@@ -9433,6 +9927,17 @@ void cAppModeEditorBase_s0057_3520::SetAsset(uint32_t key)
     mbHasAsset = 0;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9518,6 +10023,17 @@ void cAppModeEditorBase_s0057_3520::SetPaletteVisible(bool visible)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00573fb0
 namespace SP {
 void cAppModeEditorBase_s0057_3520::OnEnter()
@@ -9530,6 +10046,17 @@ void cAppModeEditorBase_s0057_3520::OnEnter()
     mStopwatch.Restart();
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9617,11 +10144,33 @@ void cAppModeEditorBase_s0057_3520::GetState(cEditorState* state)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005740e0
 namespace SP {
 bool cAppModeEditorBase_s0057_3520::HasId(uint32_t id)
 { uint32_t* end = mIdsEnd; return find_u(mIdsBegin, end, id) != end; }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9762,6 +10311,17 @@ void cAppModeEditorBase_s0057_3520::CreateEffects(uint32_t type, int param, floa
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574460
 namespace SP {
 bool cAppModeEditorBase_s0057_3520::HasEffect(uint32_t id)
@@ -9774,6 +10334,17 @@ bool cAppModeEditorBase_s0057_3520::HasEffect(uint32_t id)
     return false;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9864,6 +10435,17 @@ void SP::cAppModeEditorBase_s0057_44b0::ShowBudgetWindows(int keepClosed)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574570
 int SP::cAppModeEditorBase_s0057_44b0::GetLaunchSelectedIndex()
 {
@@ -9871,6 +10453,17 @@ int SP::cAppModeEditorBase_s0057_44b0::GetLaunchSelectedIndex()
         return mLaunchData->mSelectedIndex;
     return -1;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -9915,6 +10508,17 @@ void* SP::cAppModeEditorBase_s0057_44b0::GetCurrentCameraContext()
         return cams->GetCamera(0x29da727);
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10033,6 +10637,17 @@ float SP::cAppModeEditorBase_s0057_44b0::GetBudgetFraction()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574850
 void SP::cAppModeEditorBase_s0057_44b0::PurchaseBlock(cSPEditorBlock_s0057_44b0* block)
 {
@@ -10052,6 +10667,17 @@ void SP::cAppModeEditorBase_s0057_44b0::PurchaseBlock(cSPEditorBlock_s0057_44b0*
     }
     mBudget->PurchaseBlock(block, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10136,6 +10762,17 @@ ResourceKey SP::cAppModeEditorBase_s0057_44b0::GetRandomBackground()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574990
 ResourceKey SP::cAppModeEditorBase_s0057_44b0::GetNextBackground()
 {
@@ -10148,6 +10785,17 @@ ResourceKey SP::cAppModeEditorBase_s0057_44b0::GetNextBackground()
     }
     return ResourceKey();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10229,6 +10877,17 @@ int SP::cAppModeEditorBase_s0057_44b0::FlushFactory(cSPEditorResourceFactory_s00
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574a60
 void SP::cAppModeEditorBase_s0057_44b0::SwitchToPlayModeCamera()
 {
@@ -10245,6 +10904,17 @@ void SP::cAppModeEditorBase_s0057_44b0::SwitchToPlayModeCamera()
         cam->SetCallback(SP::PlayModeCameraCallback, this);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10352,6 +11022,17 @@ int SP::cAppModeEditorBase_s0057_44b0::ScoreCreatureForZCorp()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00574d60
 int SP::cAppModeEditorBase_s0057_44b0::CanPublish()
 {
@@ -10359,6 +11040,17 @@ int SP::cAppModeEditorBase_s0057_44b0::CanPublish()
         return 1;
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10418,6 +11110,17 @@ void SP::cAppModeEditorBase_s0057_44b0::SetupThumbnailModelWorld(cIModelWorld_s0
     void* lighting = world->CreateLightingWorld(0, 4, 1);
     world->SetLightingWorld(lighting);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10537,6 +11240,17 @@ void SP::cAppModeEditorBase_s0057_44b0::UpdateModelSounds(float deltaTime)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00575120
 void SP::cAppModeEditorBase_s0057_44b0::ExitEditorUI()
 {
@@ -10552,6 +11266,17 @@ void SP::cAppModeEditorBase_s0057_44b0::ExitEditorUI()
     }
     SP::GameViewA()->SetFlags(1, 1);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -10630,6 +11355,17 @@ void SP::cAppModeEditorBase_s0057_44b0::SetupGameViewLayers()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00575790
 void SP::cAppModeEditorBase_s0057_5270::DoSomePaletteThing()
 {
@@ -10637,30 +11373,6 @@ void SP::cAppModeEditorBase_s0057_5270::DoSomePaletteThing()
     if (p)
         p->Reset(0, 1);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -10690,30 +11402,6 @@ void SP::cAppModeEditorBase_s0057_5270::StopSomething()
         ByteRef(this, 0x4d4) = 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -10854,30 +11542,6 @@ bool SP::cAppModeEditorBase_s0057_5270::TestCondition(uint32_t id)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x00575e20
 void SP::cAppModeEditorBase_s0057_5270::GetSomething1(int arg)
 {
@@ -10888,30 +11552,6 @@ void SP::cAppModeEditorBase_s0057_5270::GetSomething1(int arg)
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -10947,29 +11587,6 @@ int SP::cAppModeEditorBase_s0057_5270::GetSomething2()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x005767f0
 void WriteBoolVector(cSerializer* s, const BoolVector& v)
 {
@@ -10981,6 +11598,17 @@ void WriteBoolVector(cSerializer* s, const BoolVector& v)
     }
     s->EndBlock();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11059,12 +11687,34 @@ bool ReadIntArray6(cSerializer* s, int32_t* values)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00576900
 cEditorSnapshot& cEditorSnapshot::operator=(const cEditorSnapshot& x)
 {
     Copy(x);
     return *this;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11141,6 +11791,17 @@ template <> int eastl::basic_string_s0057_6140<wchar_t>::compare(const wchar_t* 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005769d0
 void uninitialized_fill_n_ref(EA::AutoRefCount_s0057_6140<IRefCounted>* dest, size_t n, const EA::AutoRefCount_s0057_6140<IRefCounted>& value)
 {
@@ -11182,6 +11843,17 @@ void uninitialized_fill_n_ref(EA::AutoRefCount_s0057_6140<IRefCounted>* dest, si
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00576a10
 cEditorSnapshot* uninitialized_copy_snapshot(const cEditorSnapshot* first, const cEditorSnapshot* last, cEditorSnapshot* dest)
 {
@@ -11189,6 +11861,17 @@ cEditorSnapshot* uninitialized_copy_snapshot(const cEditorSnapshot* first, const
         ::new(dest) cEditorSnapshot(*first);
     return dest;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11265,6 +11948,17 @@ Vector3_s0057_6140* ColorToVector3(Vector3_s0057_6140* out, uint32_t color)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00576b00
 Matrix3 RotationMatrix(const Vector3_s0057_6140& axis, float angle)
 {
@@ -11305,12 +11999,34 @@ Matrix3 RotationMatrix(const Vector3_s0057_6140& axis, float angle)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00576b40
 BoundingBox_s0057_6140::BoundingBox_s0057_6140()
 {
     lower = Vector3_s0057_6140(3.402823466e+38f, 3.402823466e+38f, 3.402823466e+38f);
     upper = Vector3_s0057_6140(-3.402823466e+38f, -3.402823466e+38f, -3.402823466e+38f);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11391,6 +12107,17 @@ void cEditorBudgetCheat::ParseLine(const EA::ArgScript::Line& line)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00576c10
 void cEditorAddDNACheat::Execute(const EA::ArgScript::Line& line)
 {
@@ -11401,6 +12128,17 @@ void cEditorAddDNACheat::Execute(const EA::ArgScript::Line& line)
     mpEditor->AddDNA();
     Release();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11566,6 +12304,17 @@ bool SP::cAppModeEditorBase_s0057_6140::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00577130
 void SP::cAppModeEditorBase::SetSoundBlockAdded(SP::cSPEditorBlock * param)
 {
@@ -11622,6 +12371,17 @@ void SP::cAppModeEditorBase::SetSoundBlockAdded(SP::cSPEditorBlock * param)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005771f0
 void SP::cAppModeEditorBase::SetSoundBlockRemoved(SP::cSPEditorBlock * param)
 {
@@ -11643,6 +12403,17 @@ void SP::cAppModeEditorBase::SetSoundBlockRemoved(SP::cSPEditorBlock * param)
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11731,6 +12502,17 @@ void SP::cAppModeEditorBase::RemoveTorsoFromEffectsMask()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x005774f0
 void SP::cAppModeEditorBase_s0057_7130::SetSomeBlock(int param)
 {
@@ -11738,6 +12520,17 @@ void SP::cAppModeEditorBase_s0057_7130::SetSomeBlock(int param)
     if (param == 0)
         DoSomeOther(0, -1);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11789,6 +12582,17 @@ void SP::cAppModeEditorBase_s0057_7130::UpdateBlockState()
             SetRolloverHandle(0, 1);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11885,6 +12689,17 @@ void SP::cAppModeEditorBase_s0057_7130::SetTorsoBlock(void* block, char param)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00577620
 bool SP::cAppModeEditorBase_s0057_7130::HasSkin()
 {
@@ -11894,6 +12709,17 @@ bool SP::cAppModeEditorBase_s0057_7130::HasSkin()
     }
     return false;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -11975,6 +12801,17 @@ bool SP::cAppModeEditorBase_s0057_94b0::HasSameMask()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00579a90
 void cWString::RangeInitialize(const wchar_t* s)
 {
@@ -12020,6 +12857,17 @@ void cWString::RangeInitialize(const wchar_t* s)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00579c60
 cString8& cString8::operator=(const cString8& other)
 {
@@ -12027,6 +12875,17 @@ cString8& cString8::operator=(const cString8& other)
         assign(other.mpBegin, other.mpEnd);
     return *this;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12184,6 +13043,17 @@ SP::cAppModeEditorBase::~cAppModeEditorBase()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057a610
 void SP::cAppModeEditorBase_s0057_9e20::AddTorsoToEffectsMask(float x, float y, float z, int)
 {
@@ -12234,6 +13104,17 @@ void SP::cAppModeEditorBase_s0057_9e20::AddTorsoToEffectsMask(float x, float y, 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057a6d0
 CheatObject2::CheatObject2()
 : b()
@@ -12244,6 +13125,17 @@ CheatObject2::CheatObject2()
     s10 = g_01667bac;
     s14 = g_01667bae;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12346,6 +13238,17 @@ void SP::cAppModeEditorBase_s0057_9e20::SendBehaviorMessage(BMsg* msg)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057a960
 Bits128 SP::cAppModeEditorBase_s0057_9e20::GetMask()
 {
@@ -12364,6 +13267,17 @@ Bits128 SP::cAppModeEditorBase_s0057_9e20::GetMask()
     }
     return out;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12433,6 +13347,17 @@ Bits128 SP::cAppModeEditorBase_s0057_9e20::GetDefaultMask()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057aaa0
 int SP::cAppModeEditorBase_s0057_9e20::GetEditorSaveability()
 {
@@ -12452,6 +13377,17 @@ int SP::cAppModeEditorBase_s0057_9e20::GetEditorSaveability()
     }
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12554,6 +13490,17 @@ void SP::cAppModeEditorBase_s0057_9e20::BuildPartMask(Bits128* out, void* p3, vo
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057ae10
 void cAppModeEditorBase::UpdateAnimatedCreature()
 {
@@ -12594,6 +13541,17 @@ void cAppModeEditorBase::UpdateAnimatedCreature()
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12897,6 +13855,17 @@ EditorPickResult cAppModeEditorBase_s0057_af00::Pick(float x, float y, bool bBlo
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057bfb0
 namespace SP {
 void cAppModeEditorBase_s0057_bfb0::RefreshBlockTray()
@@ -12921,6 +13890,17 @@ void cAppModeEditorBase_s0057_bfb0::RefreshBlockTray()
         mpBlockTray->SetCount(0, maxCount);
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -12984,6 +13964,17 @@ void cAppModeEditorBase_s0057_bfb0::ProcessPendingLaunch()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057c1e0
 namespace SP {
 void cAppModeEditorBase_s0057_bfb0::CreateLaunchState()
@@ -12999,6 +13990,17 @@ void cAppModeEditorBase_s0057_bfb0::CreateLaunchState()
     }
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13078,6 +14080,17 @@ void cAppModeEditorBase_s0057_bfb0::SetLocalState(cSPEditorLocalState* state)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057c440
 namespace SP {
 __forceinline void SendEditorStateChanged()
@@ -13086,6 +14099,17 @@ __forceinline void SendEditorStateChanged()
     MessageServer_s0057_bfb0()->MessageSend(msg.mId, &msg, 0);
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13136,6 +14160,17 @@ cPaletteCategory::~cPaletteCategory()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057c530
 namespace SP {
 void cAppModeEditorBase_s0057_bfb0::SetTrayState(int index, bool value)
@@ -13149,6 +14184,17 @@ void cAppModeEditorBase_s0057_bfb0::SetTrayState(int index, bool value)
     }
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13239,6 +14285,17 @@ bool cAppModeEditorBase_s0057_bfb0::ExportPaintTheme(bool showDialog)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057e160
 void cAppModeEditorBase_s0057_d710::SetTorsoIsSelected(bool selected)
 {
@@ -13250,6 +14307,17 @@ void cAppModeEditorBase_s0057_d710::SetTorsoIsSelected(bool selected)
         RemoveTorsoFromEffectsMask();
     mTorsoSelected = selected;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13369,6 +14437,17 @@ void cEditorBase::UpdateIdleAnimations(float x, float y, uint32_t dt)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057e790
 void cEditorBase::SetSelectedBlock(Block* b, uint32_t p)
 {
@@ -13415,6 +14494,17 @@ void cEditorBase::SetSelectedBlock(Block* b, uint32_t p)
     if (old)
         old->F43cad0();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13496,6 +14586,17 @@ void cEditorBase::UpdateBaker()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057ea30
 void cEditorBase::SaveMetadata()
 {
@@ -13537,6 +14638,17 @@ void cEditorBase::SaveMetadata()
     }
     GetHints(1, 1)->F67c420();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13613,6 +14725,17 @@ void cEditorBase::BakerInit()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057ed00
 void SP::cAppModeEditorBase::SetName(wchar_t const * name)
 {
@@ -13624,6 +14747,17 @@ void SP::cAppModeEditorBase::SetName(wchar_t const * name)
     SetNameMsg m(((char*)static_cast<SP::cISPEditorNameProvider *>(this) - 0xc) ? (void*)static_cast<SP::cISPEditorNameProvider *>(this) : 0, At<WStr16>(static_cast<SP::cISPEditorNameProvider *>(this), 0xa4).mpBegin);
     GetMessageServer()->PostMessage(0x73127e6, &m, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13673,6 +14807,17 @@ void* cUnkEd80::Init(void* p, void* unused)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057edf0
 void* cVec16::EraseAfter(void* pos)
 {
@@ -13682,6 +14827,17 @@ void* cVec16::EraseAfter(void* pos)
     mpEnd = (char*)mpEnd - 4;
     return pos;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13747,6 +14903,17 @@ template <> vector_s0057_e480<Rec18>& vector_s0057_e480<Rec18>::operator=(const 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057efa0
 bool __cdecl PopulateScriptList(ListUI* ui, const char* name, CharVec* v)
 {
@@ -13761,6 +14928,17 @@ bool __cdecl PopulateScriptList(ListUI* ui, const char* name, CharVec* v)
     ui->EndList(s.mpBegin == s.mpEnd ? L"list" : s.mpBegin);
     return ok;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -13827,6 +15005,17 @@ template <> void vector_s0057_e480<Rec30>::DoInsertValue(Rec30* position, const 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0057f220
 namespace eastl {
 template <> void vector_s0057_e480<RefElem>::DoInsertValues(RefElem* position, uint32_t n, const RefElem& value)
@@ -13873,6 +15062,31 @@ template <> void vector_s0057_e480<RefElem>::DoInsertValues(RefElem* position, u
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0057f420
+void cUnkF420::FUN_0057f420(void* args)
+{
+}
 
 
 
@@ -14094,6 +15308,167 @@ void cAppModeEditorBase_s0057_f6c0::SaveModel(const ResourceKey_s0057_f6c0& key,
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x005802f0
+void FUN_005802f0()
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x005805e0
+bool cAppModeEditorBase_s0058_02f0::GetEditorName(string16_s0058_02f0* out)
+{
+    if (mPropList) {
+        typedef bool (__thiscall *HasFn)(void*, uint32_t);
+        HasFn has = *(HasFn*)(*(char**)mPropList + 0x1c);
+        if (has(mPropList, 0x703e542f)) {
+            cString s;
+            s.Init();
+            GetPropertyAsText(mPropList, 0x703e542f, &s);
+            WStr_Format(out, L"", s.GetValue());
+            s.c_str();
+            return true;
+        }
+    }
+    if (out->mpBegin != out->mpEnd) {
+        *out->mpBegin = 0;
+        out->mpEnd = out->mpBegin;
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+
+// @ 0x00580670
+bool cAppModeEditorBase_s0058_02f0::GetDefaultModelName(string16_s0058_02f0* out)
+{
+    if (mPropList) {
+        typedef bool (__thiscall *HasFn)(void*, uint32_t);
+        HasFn has = *(HasFn*)(*(char**)mPropList + 0x1c);
+        if (has(mPropList, 0x4d92f82)) {
+            cString s;
+            s.Init();
+            GetPropertyAsText(mPropList, 0x4d92f82, &s);
+            WStr_Format(out, L"", s.GetValue());
+            void TrimString(string16_s0058_02f0*);   // not used; placeholder
+            out->mpBegin; // keep layout
+            s.c_str();
+            return true;
+        }
+    }
+    if (out->mpBegin != out->mpEnd) {
+        *out->mpBegin = 0;
+        out->mpEnd = out->mpBegin;
+    }
+    return false;
+}
+
+
+
+
+
+
+
+
+
+// @ 0x00580700
+void FUN_00580700()
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x005809a0
+void FUN_005809a0()
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x00580c10
+void FUN_00580c10(wchar_t* out)
+{
+    void* auth = FUN_00607a60();
+    typedef bool (__thiscall *IsOfflineFn)(void*);
+    IsOfflineFn isOffline = *(IsOfflineFn*)(*(char**)auth + 0x24);
+    if (isOffline(auth)) {
+        wcsncpy(out, L"EditorOfflineUser", 0x100);
+        return;
+    }
+    string16_s0058_02f0 name;
+    name.mpBegin = (wchar_t*)0x01667bac; name.mpEnd = (wchar_t*)0x01667bac; name.mpCapacity = (wchar_t*)0x01667bae;
+    typedef void* (__thiscall *GetNameFn)(void*);
+    GetNameFn getName = *(GetNameFn*)(*(char**)auth + 0x30);
+    WStr_Format(&name, L"EditorUser_%hs", *(int*)getName(auth));
+    EA_IO_MakeFileNameValid(name.mpBegin, out, 4);
+    if (((name.mpCapacity - name.mpBegin) & ~1) > 2 && name.mpBegin)
+        eastl_deallocate(name.mpBegin);
+}
+
+
+
+
+
+
+
+
+
+// @ 0x00580cb0
+void FUN_00580cb0()
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x00580df0
+void FUN_00580df0()
+{}
+
+
+
+
+
+
+
+
+
 // @ 0x005810a0
 void cBoolVec::EraseAll()
 {
@@ -14111,7 +15486,31 @@ void cBoolVec::EraseAll()
 
 
 
+// @ 0x005810d0
+void FUN_005810d0()
+{}
 
+
+
+
+
+
+
+
+// @ 0x005812b0
+void FUN_005812b0()
+{}
+
+
+
+
+
+
+
+
+// @ 0x005820a0
+void FUN_005820a0()
+{}
 
 
 
@@ -14295,10 +15694,18 @@ bool cAppModeEditorBase_s0058_2250::OnBlockWheel(cSPEditorBlock_s0058_2250* bloc
 
 
 
+// @ 0x00582d00
+void FUN_00582d00()
+{}
 
 
 
 
+
+
+// @ 0x00582d70
+void FUN_00582d70()
+{}
 
 
 
@@ -14453,11 +15860,9 @@ bool cAppModeEditorBase_s0058_2fe0::RunSkinPaintOnEditorModel(int kind, void* pE
 
 
 
-
-
-
-
-
+// @ 0x00583900
+void FUN_00583900()
+{}
 
 
 
@@ -14476,6 +15881,17 @@ void cIntVec::Resize(uint32_t n)
     }
     VecErase(begin + n, end);
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -14509,12 +15925,34 @@ void cAppModeEditorBase_s0058_5330::FUN_00585830(int a, int b)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00585860
 void cAppModeEditorBase_s0058_5330::FUN_00585860(int a, int b)
 {
     Input()->OnKeyUp(a, b);
     SetModeModifiers();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -14541,13 +15979,6 @@ void SP::cAppModeEditorBase_s0058_5d40::InitializeUndoList()
     *(bool*)((char*)this + 0x4b4) = 0;
     mDevUI->UpdateUIBasedOnModelSaveability();
 }
-
-
-
-
-
-
-
 
 
 
@@ -14767,6 +16198,17 @@ void SP::cAppModeEditorBase_s0058_6b00::PrepareAppForNewModel(SPModel* model)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00587270
 bool SP::cAppModeEditorBase_s0058_6b00::SetMode(int mode, char force)
 {
@@ -14951,6 +16393,17 @@ render_step:
     if (M(uint8_t, 0x20e)) PlayEditorSound(0x1d6253c0, 0xbd5385c8, (float)*pMode, 0);
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -15210,6 +16663,17 @@ void cAppModeEditorBase_s0058_7a20::Deactivate()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x00589ce0
 void SP::cAppModeEditorBase_s0058_9ce0::FUN_00589ce0(const wchar_t* path)
 {
@@ -15309,6 +16773,17 @@ void SP::cAppModeEditorBase_s0058_9ce0::FUN_00589ce0(const wchar_t* path)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x0058a350
 void SP::cAppModeEditorBase_s0058_9ce0::LoadModel(int mode, int a, int b)
 {
@@ -15386,6 +16861,17 @@ void SP::cAppModeEditorBase_s0058_9ce0::LoadModel(int mode, int a, int b)
     }
     FUN_0057c0e0();
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -15479,6 +16965,34 @@ void SP::cAppModeEditorBase_s0058_9ce0::Undo(char postMsg, char isRedoFlag)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0058ac10
+bool SP::cAppModeEditorBase::OnKeyDown(unsigned int a, unsigned int b)
+{ (void)a; (void)b; return 0; }
+
+
+
+// @ 0x0058b650
+bool SP::cAppModeEditorBase::OnMouseUp(unsigned int x, float y, float button, unsigned int flags)
+{ (void)x; (void)y; (void)button; (void)flags; return 0; }
+
+
+
+// @ 0x0058ba60
+bool SP::cAppModeEditorBase::OnMouseMoveUpdate(float x, float y, unsigned int a, unsigned int b)
+{ (void)x; (void)y; (void)a; (void)b; return 0; }
 
 
 // @ 0x0058be50
@@ -15840,6 +17354,25 @@ void cAppModeEditorBase_s0058_be50::HandleSimulationUpdate(float delta1, float d
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x0058cee0
+int SP::cAppModeEditorBase_s0058_cee0::LoadModel(int a, int b, int c, int d, int e, int f)
+{ (void)a; (void)b; (void)c; (void)d; (void)e; (void)f; return 0; }
+
+// @ 0x0058d1c0
+void SP::cAppModeEditorBase::NewModel(bool a)
+{ (void)a; }
+
 // @ 0x0058d430
 void cEditorCheat::Execute(EA::ArgScript::cArguments_s0058_d430* args)
 {
@@ -16024,6 +17557,17 @@ void cEditorCheat::Execute(EA::ArgScript::cArguments_s0058_d430* args)
         EA::ArgScript::Output(mParser, GetDescription(1));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -16508,6 +18052,17 @@ bool cAppModeEditorBase_s0059_1fa0::HandleMessage(uint32_t messageID, void* pMes
     return false;
 }
 }  // namespace SP
+
+
+
+
+
+
+
+
+
+
+
 
 
 // @ 0x005ba060

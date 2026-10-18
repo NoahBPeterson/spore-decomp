@@ -1,1 +1,1 @@
-0057f420 (ArgScript cheat handler)  # no PDB name; "export creature" style command
+0057f420 ?FUN_0057f420@cUnkF420@@QAEXPAX@Z  # cUnkF420::FUN_0057f420 migrated from s0057f420 (verbatim, slice spelling)

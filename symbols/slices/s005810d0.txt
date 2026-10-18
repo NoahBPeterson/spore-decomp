@@ -1,2 +1,2 @@
-005810d0 FUN_005810d0  # no PDB name
-005812b0 FUN_005812b0  # no PDB name
+005810d0 ?FUN_005810d0@@YAXXZ  # FUN_005810d0 migrated from s005810d0 (verbatim, slice spelling)
+005812b0 ?FUN_005812b0@@YAXXZ  # FUN_005812b0 migrated from s005810d0 (verbatim, slice spelling)

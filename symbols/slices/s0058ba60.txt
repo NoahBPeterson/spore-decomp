@@ -1,1 +1,1 @@
-0058ba60 SP::cAppModeEditorBase::OnMouseMoveUpdate  # PDB name; (float,float,int,int), ret 0x10
+0058ba60 ?OnMouseMoveUpdate@cAppModeEditorBase@SP@@QAE_NMMII@Z  # SP::cAppModeEditorBase::OnMouseMoveUpdate migrated from s0058ba60

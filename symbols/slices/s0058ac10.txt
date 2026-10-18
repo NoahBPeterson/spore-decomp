@@ -1,2 +1,2 @@
-0058ac10 SP::cAppModeEditorBase::OnKeyDown  # PDB candidate caller-scored; 2 args
-0058b650 SP::cAppModeEditorBase::OnMouseUp  # PDB candidate caller-scored; ret 0x10
+0058ac10 ?OnKeyDown@cAppModeEditorBase@SP@@UAE_NII@Z  # SP::cAppModeEditorBase::OnKeyDown migrated from s0058ac10
+0058b650 ?OnMouseUp@cAppModeEditorBase@SP@@UAE_NIMMI@Z  # SP::cAppModeEditorBase::OnMouseUp migrated from s0058ac10

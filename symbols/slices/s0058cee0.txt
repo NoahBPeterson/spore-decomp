@@ -1,2 +1,2 @@
-0058cee0 SP::cAppModeEditorBase::LoadModel  # PDB candidate caller-scored; 6 args, ret 0x18
-0058d1c0 SP::cAppModeEditorBase::NewModel  # PDB candidate caller-scored; (char)
+0058cee0 ?LoadModel@cAppModeEditorBase_s0058_cee0@SP@@QAEHHHHHHH@Z  # cAppModeEditorBase_s0058_cee0::LoadModel migrated from s0058cee0 (verbatim, slice spelling)
+0058d1c0 ?NewModel@cAppModeEditorBase@SP@@QAEX_N@Z  # SP::cAppModeEditorBase::NewModel migrated from s0058cee0
