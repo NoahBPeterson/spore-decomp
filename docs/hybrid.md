@@ -213,6 +213,16 @@ History of the campaign:
   120 s (scene 9.0), rck1+rck2 hooks 1,480 and boots ALIVE 120 s (scene 23.0). A boot that exits
   cleanly at 5 s with `SteamAPI_Init() failed` or `CreateFn failed for SteamUser011` in the log means
   bottle Steam is not running or not logged in, not a hook problem.
+- 2026-10-18 mig7 gate: 29 migrated modules (commits 60a260fb..46e5d89a), built with `--hook pass
+  --hook-manifest` on their 29 nonmatching.txt files: 651 manifest rows, 93 with a PASS verdict hooked
+  from the module TU instead of the slice, 1,480 hooks in total (same set as rck2). The hook bytes match
+  the rck2 build except relocated call displacements and 0x48dbb0, which rck2 had spliced with its
+  neighbour 0x48db10's body (one vtable store) and the module TU builds correctly (two stores, 73 bytes).
+  First boot: CRASH at 45 s, read fault at 0x927034 in the memory-pool function 0x926fd0 (original
+  code, address 0x0fd47f5c). Second boot of the same exe: ALIVE 120 s, scene 9.0 because the
+  "Register your game" dialog covers the measured strip (`mig7b.win.png`). Read as an intermittent
+  pool fault, not a mig7 change; if it recurs, boot rck2 again before bisecting. The per-window
+  capture is `<tag>.win.png`; `<tag>.png` is the whole screen.
 - Open (2026-10-12 evening, interactive sessions, not pursued; the plan is harness fixes then module migration, with the hybrid as a per-module gate): with h25, clicking into the game crashed at 320 s in `cModelWorld::Release` 0x750580 (original code) with `this` = its own vtable + 0x10 (0x140d7a0, a vptr-as-object bug upstream, same class as SharedRelease); a second session (cov2 = h25 + coverage) crashed at 175 s at 0x9fbeff. Found statically meanwhile and fixed: 0x753fc0 (s00753270) called vtable slot 0 without `this` (the row had called the ecx difference "register allocation"). Coverage of the interactive session: 46,743 functions, 573 hooks executed (`work/hybrid/cov2.json`).
 - Black screen bisected to one hook: the rw::audio list pop-front leaf 0x1141200 (s01140b70)
   returned nothing where the original returns the popped node in eax; voice allocation got the
