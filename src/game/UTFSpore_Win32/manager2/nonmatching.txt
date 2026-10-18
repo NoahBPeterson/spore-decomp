@@ -1,0 +1,22 @@
+# va  diff-bytes  reason
+00957d40 4 WindowMgr::PostAPC: complete (APC record {tag 0x74d2e9, a, b}, call slot 0x18); fixed 2026-10-12: tag at +8 of the record (was +0x10; the "off by 8" was the bug, hybrid crash 0x959bd7); difftest PASS
+00957dd0 116 Fn00957dd0: complete (window proc: walk window tree, resolve target, dispatch); regalloc/jump layout differ; difftest PASS (394 valid, 100.0% coverage)
+00957e90 50 Fn00957e90: complete (set/clear slot idx if stored==arg-4, notify slot 0x58); regalloc differ; difftest PASS (322 valid, 72.2% coverage)
+00958070 62 Fn00958070: complete (mark node flags from point); regalloc/order differ; difftest WEAK (272 valid, 21.1% coverage)
+009580e0 12 Fn009580e0: complete (insert node into intrusive list at this+0x18); 12 bytes differ (base computed via lea vs add); difftest PASS (400 valid, 100.0% coverage)
+00958640 98 DumpDisplayList: complete (splice pending nodes, reset display list, recycle nodes); regalloc/order differ; difftest WEAK (309 valid, 20.0% coverage)
+00958780 30 WindowMgr::DebugDumpDisplayList: complete (lock +0x28, pending-flag guard, lock +0x70, DumpDisplayList); bool test idiom + tail-call differ; difftest WEAK (238 valid, 50.0% coverage)
+009587d0 27 Fn009587d0: complete (unlink node, fix intrusive list at this+0x20 else this+0x18); regalloc differ; difftest WEAK (303 valid, 58.1% coverage)
+00958860 1 Fn00958860: complete (guard flags&0x40, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
+009588c0 1 Fn009588c0: complete (guard flags&0x20, insert node, mark successors 0x80); 1 byte differs (js vs jl on sign test); difftest PASS (394 valid, 100.0% coverage)
+00958cf0 521 WindowMgr ctor complete; member-init list order/hoisting (lea before GetAlloc call) differs; difftest PASS (fix: Mutex/Typesetter ctor annotations moved onto the ctor declarations)
+00958fa0 124 SendModifiedMsg complete; this spilled to stack in original (unknown RAII/inline helper), regs differ
+009594b0 152 PopFocus complete; original reloads cur member (no CSE) and different branch layout
+00959cf0 126 cf0: complete (slot-change notify via vtable slot 0x4c + GameViewManager event 0xb); regalloc/branch layout differ; difftest PASS (217 valid inputs, 64.2% coverage)
+0095a580 359 BuildDisplayList complete; original inlines the DLEntry fill at both bit0x10 sites (~260B, no FillDLEntry helper) and uses a 0x3c38 chkstk frame; call/reg layout differs
+0095aa80 728 ProcessMessages complete; large register/scheduling differences across the merge, per-context and tickable loops
+0095afd0 85 Swap complete; mismatch path uses a tag local reusing the arg1 home slot and the push-ecx InsertRange idiom; regs differ
+0095b080 494 SetMainWindow complete; large register/flow differences (vtable call scheduling, separate old/old2 paths); difftest WEAK
+0095b290 87 FlushMessageQueue complete; register allocation (this / &mxC / &q1) differs from the original's edi/ebx/esi choice
+0095b310 1254 WM::UpdateVisuals complete (all list splices written via helpers); inlined intrusive-list code and register allocation differ
+0095ba90 63 Chunk::Swap complete; cl emits cmova for the unsigned max, original uses a branch

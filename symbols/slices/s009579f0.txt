@@ -7,29 +7,29 @@
 00957c20 Fn00957c20  # wrapper: GetGlobalImageTable()->Add(a, (uchar)b)
 00957c40 Fn00957c40  # ImageTable reset/clear (INCOMPLETE stub: lock, drop vector, unlock)
 00957d30 EA::UTFWin::ProcessPendingTextures  # wrapper: Fn00957c40(GetGlobalImageTable())
-00957d40 WindowMgr::PostAPC  # build APC record {tag 0x74d2e9, a, b-interface}, call slot 0x18
-00957d90 Fn00957d90  # post APC with no trigger flag
-00957db0 Fn00957db0  # slot accessor: *(this+0x694+idx*0x28)+4 or 0
-00957dd0 Fn00957dd0  # window proc entry: walk window tree, resolve target, dispatch
-00957e70 Fn00957e70  # slot accessor: *(this+0x694+idx*0x28)+4 or 0
-00957e90 Fn00957e90  # set/clear slot idx if stored == arg-4, notify slot 0x58
-00957ed0 Fn00957ed0  # set/clear mask bits in flags at this+0xd0
-00957f50 WindowMgr::GetMainWindow  # ret *(this+0x6c4)
-00957fa0 Fn00957fa0  # notify/refresh hook (window list)
-00957ff0 Fn00957ff0  # window-tree walk: for each child call v00 / recycle
-00958070 Fn00958070  # mark node flags from point (calls ComputeClip-ish)
-009580b0 Fn009580b0  # find node by target in list at this+0x6b4, call Fn00957fa0
-009580e0 Fn009580e0  # insert node into intrusive list at this+0x18
-00958110 Fn00958110  # teardown texture list at this+0x18 (unlink + clear, 1-shot flag +0x25)
-00958150 WM::ComputeClip  # compute screen-space AABB of a window node (3/4-pt transform paths)
-00958500 Fn00958500  # remove/mark node in list (returns status)
-00958570 Fn00958570  # merge/splice two intrusive list ranges (list sort/merge)
-00958640 DumpDisplayList  # splice pending nodes, reset display list, decouple/recycle nodes
-009586f0 WindowMgr::Plot  # build render command list for a window (large local builder)
-00958780 WindowMgr::DebugDumpDisplayList  # if pending flag: lock +0x70, DumpDisplayList
-009587d0 Fn009587d0  # unlink node; fix intrusive list at this+0x20 (or fallback this+0x18)
-00958820 Fn00958820  # if !(flags&0x14): set 0x10, insert node into list at this+0x8 or call Fn00958110
-00958860 Fn00958860  # if !(flags&0x40): insert node into list / mark successors 0x80
-009588c0 Fn009588c0  # if !(flags&0x20): insert node into list / mark successors 0x80
-00958920 Fn00958920  # window event dispatch / hit-test across child list (complex)
-009589f0 WindowMgr::DispatchMsgToWindow  # dispatch msg to window by id, fallback to main window
+00957d40 ?PostAPC@W@@QAEXHPAX@Z  # W::PostAPC migrated from s009579f0 (verbatim, slice spelling)
+00957d90 ?d90@W@@QAEXPAX@Z  # W::d90 migrated from s009579f0 (verbatim, slice spelling)
+00957db0 ?db0@W@@QAEPADH@Z  # W::db0 migrated from s009579f0 (verbatim, slice spelling)
+00957dd0 ?dd0@W@@QAEIPAX@Z  # W::dd0 migrated from s009579f0 (verbatim, slice spelling)
+00957e70 ?e70@W@@QAEPADH@Z  # W::e70 migrated from s009579f0 (verbatim, slice spelling)
+00957e90 ?e90@W@@QAEXHPAX@Z  # W::e90 migrated from s009579f0 (verbatim, slice spelling)
+00957ed0 ?SetDebugFlag@WindowMgr@UTFWin@EA@@UAEXI_N@Z  # EA::UTFWin::WindowMgr::SetDebugFlag migrated from s009579f0
+00957f50 ?Fn00957f50@@YIPAXPAX@Z  # Fn00957f50 migrated from s009579f0 (verbatim, slice spelling)
+00957fa0 ?Fn00957fa0@@YIXPAX@Z  # Fn00957fa0 migrated from s009579f0 (verbatim, slice spelling)
+00957ff0 ?SetCanvasCallback@WindowMgr@UTFWin@EA@@UAEXPAVICanvasCallback@23@@Z  # EA::UTFWin::WindowMgr::SetCanvasCallback migrated from s009579f0
+00958070 ?x070@W@@QAEXPAM@Z  # W::x070 migrated from s009579f0 (verbatim, slice spelling)
+009580b0 ?x0b0@W@@QAEXPAX@Z  # W::x0b0 migrated from s009579f0 (verbatim, slice spelling)
+009580e0 ?x0e0@W@@QAEXPAD@Z  # W::x0e0 migrated from s009579f0 (verbatim, slice spelling)
+00958110 ?Fn00958110@@YIXPAX@Z  # Fn00958110 migrated from s009579f0 (verbatim, slice spelling)
+00958150 ?ComputeClip@W@@QAEXPAMPAX@Z  # W::ComputeClip migrated from s009579f0 (verbatim, slice spelling)
+00958500 ?x500@W@@QAEDPAXH@Z  # W::x500 migrated from s009579f0 (verbatim, slice spelling)
+00958570 ?Fn00958570@@YAXPAXPAH1@Z  # Fn00958570 migrated from s009579f0 (verbatim, slice spelling)
+00958640 ?DumpDisplayList@@YIXPAX@Z  # DumpDisplayList migrated from s009579f0 (verbatim, slice spelling)
+009586f0 ?Plot@W@@QAEXH@Z  # W::Plot migrated from s009579f0 (verbatim, slice spelling)
+00958780 ?DebugDumpDisplayList@@YIXPAX@Z  # DebugDumpDisplayList migrated from s009579f0 (verbatim, slice spelling)
+009587d0 ?m7d0@W@@QAEXPAD@Z  # W::m7d0 migrated from s009579f0 (verbatim, slice spelling)
+00958820 ?m820@W@@QAEXPAD@Z  # W::m820 migrated from s009579f0 (verbatim, slice spelling)
+00958860 ?m860@W@@QAEXPAD@Z  # W::m860 migrated from s009579f0 (verbatim, slice spelling)
+009588c0 ?m8c0@W@@QAEXPAD@Z  # W::m8c0 migrated from s009579f0 (verbatim, slice spelling)
+00958920 ?Fn00958920@@YADPAHPAXPADDI@Z  # Fn00958920 migrated from s009579f0 (verbatim, slice spelling)
+009589f0 ?DispatchMsgToWindow@W@@QAEXHPADH@Z  # W::DispatchMsgToWindow migrated from s009579f0 (verbatim, slice spelling)

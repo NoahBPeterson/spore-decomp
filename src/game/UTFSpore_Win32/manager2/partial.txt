@@ -1,0 +1,11 @@
+# va  diff-bytes  reason
+00958150  938  WM::ComputeClip: incomplete - best-effort AABB translation (ours 1163 bytes vs original 938); no symbol of similar size, not equivalence-tested
+00958570  35  Fn00958570 (intrusive list merge/splice): complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(write)/fault(read)/pool-limit)
+009586f0  116  WindowMgr::Plot: complete logic but difftest UNSUPPORTED - imports WaitForSingleObject / _decode_pointer; 400/400 inputs discarded
+00958920  197  Fn00958920 (window event dispatch/hit-test): complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(read)/fake-arity)
+009589f0  91  WindowMgr::DispatchMsgToWindow: complete logic but difftest UNSUPPORTED - all 400 inputs fault (fault(read))
+00959b70  290  b70: complete logic but difftest FAIL (5/6 valid inputs mismatched; first eax 0x801 vs 0x1, upper-bits/regalloc); regalloc differ
+00959e00  402  DetachWindow: complete logic but difftest UNSUPPORTED (0/400 valid; fault(read) 398 -> dereferences ctx-owned pointers); regalloc/order differ
+00959fe0  162  fe0: complete logic but difftest UNSUPPORTED (0/400 valid; fake-arity 211, fault(read) 182 -> vtable calls through win+4); ebx-vs-edx argv reg + folded null test differ
+0095a140  852  UpdateRenderState: complete logic but difftest UNSUPPORTED (0/400 valid; fault(read) 356, fake-arity 39); flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 (ours 1200B vs orig 973B)
+0095a510  5  RenderWindow: complete logic; 5 bytes differ (lea reg choice for &ev and win+4); difftest UNSUPPORTED (0/400 valid; fake-arity 210, fault(read) 179)

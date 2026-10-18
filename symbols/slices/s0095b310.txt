@@ -1,6 +1,9 @@
-# WM (EA::UTFWin::WindowMgr) methods declared in match/slices/s00958a70/s00958a70.h, called by WM::UpdateVisuals
-0095a140 ?UpdateRenderState@WM@@QAEXPAUWin@@HH@Z  # WindowMgr::UpdateRenderState
-0095a580 ?BuildDisplayList@WM@@QAEXPAUNode@@PAUWin@@PAX@Z  # WindowMgr display-list builder
-0095a510 ?RenderWindow@WM@@QAEXPAUWin@@PAX@Z  # WindowMgr per-window render
 00958150 ?ComputeClip@WM@@QAEXPAXPAUWin@@@Z  # WindowMgr clip rect
 00958bb0 ?DestroyDisplayList@WM@@QAEXPAUNode@@@Z  # WindowMgr::DestroyDisplayList
+0095a140 ?UpdateRenderState@WM@@QAEXPAUWin@@HH@Z  # WindowMgr::UpdateRenderState
+0095a510 ?RenderWindow@WM@@QAEXPAUWin@@PAX@Z  # WindowMgr per-window render
+0095a580 ?BuildDisplayList@WM@@QAEXPAUNode@@PAUWin@@PAX@Z  # WindowMgr display-list builder
+0095b310 ?UpdateVisuals@WM@@QAEXXZ  # WM::UpdateVisuals migrated from s0095b310 (verbatim, slice spelling)
+0095b860 ?Shutdown@WM@@QAEXXZ  # WM::Shutdown migrated from s0095b310 (verbatim, slice spelling)
+0095ba70 ?GetTableEntry@@YAII@Z  # GetTableEntry migrated from s0095b310 (verbatim, slice spelling)
+0095ba90 ?Swap@Chunk@@QAEXPAU1@@Z  # Chunk::Swap migrated from s0095b310 (verbatim, slice spelling)
