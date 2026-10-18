@@ -8,7 +8,7 @@
 00700640  Vec4_PushBack  # 4-byte push_back with grow at FUN_006ec4a0
 007006d0  FUN_007006d0  # cell vector release/reset
 00700a30  FUN_00700a30  # spatial cell pack
-00700b70  `anonymous namespace'::GetParentChildInfo  # PDB name
-00700bb0  `anonymous namespace'::ChildCellIDs  # PDB name
-00700c00  FUN_00700c00  # 6x5-bit interleaved cell-id pack via 0x15352a8
-00700c80  FUN_00700c80  # float cell query (SSE)
+00700b70 ?GetParentChildInfo@@YAXIPAI0@Z  # GetParentChildInfo migrated from s006ffe00 (verbatim, slice spelling)
+00700bb0 ?ChildCellIDs@@YAXIPAH@Z  # ChildCellIDs migrated from s006ffe00 (verbatim, slice spelling)
+00700c00 ?FUN_00700c00@@YAII@Z  # FUN_00700c00 migrated from s006ffe00 (verbatim, slice spelling)
+00700c80 ?FUN_00700c80@@YAMPAM00M@Z  # FUN_00700c80 migrated from s006ffe00 (verbatim, slice spelling)

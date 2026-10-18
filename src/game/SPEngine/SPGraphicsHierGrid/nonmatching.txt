@@ -1,0 +1,37 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /arch:SSE)
+00700c00 50 interleaved cell-id pack (6 x 5-bit fields through the 0x15352a8 table): complete; cl re-associates the shift/or chain (one `*2` is folded into the `<<13`).
+00700da0 261 complete cell-id-from-position helper; SSE schedule and floor-idiom spill slots differ, return blocks use short jumps where the original uses long
+00700ff0 71 slot_vector_base::destroy, complete; register allocation (blocks in edx vs the original's esi) and loop-entry load order differ
+00701050 4 list node insert-before, complete; only the final two operand loads are swapped (out vs position)
+007010b0 60 list::insert(pos, first, last, tag) range copy, complete; callee-saved register use differs (original keeps pos in edi and value temp in esi)
+00701110 37 eastl hashtable bucket-nonempty / find, complete; the original materialises a two-word iterator local that is not reproduced
+00701170 18 object-list copy constructor, complete; EH frame and call-argument register setup differ
+007011d0 651 SP::cHierGrid::CullCellList, complete recursive reconstruction; register scheduling throughout differs
+007014c0 1124 SP::cHierGrid::QueryCells, complete cell-range/mask query reconstruction; inlined hashtable lookup and morton build differ
+00701a00 812 complete SP::cHierGrid range-query over two world-space endpoints; reconstruction is much smaller than the original because the original inlines more of the per-cell scan
+00701e40 1720 complete cHierGrid::Query3 (z/y/x slab traversal of the segment p0->p1 per level, third arg unused as in the original); 0 calls, size 1853 vs 1724; the original keeps deltas in SSE and only fabs in x87 with an 8-aligned frame, mine computes the deltas in x87
+00702500 78 dtor with an /EHsc frame and a freed raw pointer; the local EH object shape (state word, unwind funclet) is not reproduced
+00702550 126 eastl vector<_Ty>::insert; the DoInsertValue/reallocation schedule is not reproduced
+00702660 95 bucket-array clear; structurally complete, register allocation (index kept in eax/stack vs esi) differs
+007026d0 27 FrustumQuery wrapper; only the copy-out loop's register allocation differs (ebx+register step vs ecx+immediate)
+00702760 53 sphere-query wrapper; copy-out loop register allocation differs
+007027e0 54 segment-query wrapper; copy-out loop register allocation differs
+00702860 51 3-argument query wrapper; copy-out loop register allocation differs
+007028e0 88 eastl hashtable erase; structurally complete, register allocation differs
+00702980 45 CellMap::CloneEntry (allocate + copy one hash node); full reconstruction, schedule differs
+00702a10 226 CellMap copy constructor; complete, allocation/copy schedule differs
+00702da0 50 SP::cHierGrid::Remove; complete behaviour, register allocation differs
+00702f60 65 CellMap::operator= (copy-and-swap); complete, temp/inline schedule differs
+007030a0 91 uninitialized_copy of cGrid range; complete, destination-pointer iteration differs
+00703160 89 fill_n of cGrid; complete, loop/register shape differs
+007032e0 87 destroy range of cGrid; complete, register allocation differs
+00703470 228 slot_vector_base::create; complete, register allocation differs
+007035a0 33 destroy range of cGrid by pointer delta; complete, prefix scheduling and pop order differ
+00703690 159 assign-copy cGrid range backwards; complete, register allocation differs
+00703b60 164 SP::cHierGrid::Update; complete behaviour, inlined-threshold scheduling differs
+00703c80 78 assign-copy a cGrid range from one source; complete, mCells assignment inlining differs
+00703ce0 83 SP::cHierGrid constructor; complete, register selection (edx vs ecx for the zero/-1 fills) differs
+00703d50 57 create-entry + Add; complete, call argument scheduling differs
+00704060 148 SP::cHierGrid::Shutdown; complete, vector erase/clear inlining differs
+00704140 147 vector<cGrid>::resize; complete, EH frame and grow path differ
+00704260 214 SP::cHierGrid::Init; complete, loop schedule and register allocation differ

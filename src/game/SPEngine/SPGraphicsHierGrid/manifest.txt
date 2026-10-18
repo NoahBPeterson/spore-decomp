@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?GetParentChildInfo@@YAXIPAI0@Z  00700b70  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?ChildCellIDs@@YAXIPAH@Z  00700bb0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?free_holder@@YIXPAPAX@Z  00700ed0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_free_anchor0@@YIXPAUObjListNode@@@Z  00700f90  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?list_free_anchor4@@YIXPAX@Z  00700fc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?Destroy@cGrid_s0070_2980@@QAEXXZ  00702ff0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?CopyConstruct@cGrid_s0070_2980@@QAEPAU1@ABU1@@Z  00703050  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?grid_copy_forward@@YAPAUcGrid_s0070_2980@@PAU1@00@Z  00703620  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsHierGrid.cpp  ?erase@GridVec@@QAEPAUcGrid_s0070_3700@@PAU2@0@Z  00703da0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

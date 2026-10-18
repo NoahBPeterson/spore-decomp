@@ -1,0 +1,6 @@
+# va  reason
+00700c80  0  float cell query: stub only (SSE distance computation).
+00702af0  SP::cHierGrid::Clear: skeleton only (slot free-list unlink / mask propagation / level trim not reconstructed)
+00703360  eastl::hash_map<unsigned,SP::cCellInfo>::operator[]: skeleton only (find-or-insert via the hashtable not reconstructed)
+00703700  SP::cHierGrid::Add: only the level selection and out-of-grid fallback are reconstructed; the in-cell insertion path is omitted
+00703df0  vector<cGrid>::insert: the grow/in-place shift is approximate (grid_uninit_copy/grid_fill_n call ordering not verified)
