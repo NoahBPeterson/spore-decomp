@@ -1,0 +1,21 @@
+# va  diff-bytes  reason
+00629c50  308  FUN_00629c50: skeleton; the creature-structure / FUN_00629bd0 / FUN_009b3c10 tail-distance pass is omitted
+00629de0  948  FUN_00629de0: skeleton; the per-baby animated-creature setup loop is omitted
+0062a1a0  139  StopWalk: skeleton; SetIdleAnimation + per-mode animation switch omitted
+0062a230  291  SetBabyPath: partial; the path-target construction (FUN_0062cb20/AddPathTarget) is only sketched
+0062a3d0  376  cSPPlayMode::Init: skeleton; token translators, sub-mode array and editor-base setup omitted
+0062a550  527  FUN_0062a550: skeleton; the skin-paint/camera-switch body is omitted
+0062a760  139  WakeupCreature: partial; the sleep-effect trigger (mode 3) is omitted
+0062a860  303  SetupFromConfigFile: skeleton; property/key-instance preload setup omitted
+0062a990  253  BabyStartSocialCallEffect: partial; only the GetMouthPartIdx guard is reproduced
+0062aa90  227  SetBabySitState: partial; the handler release (FUN_009cab60/FUN_009cb460) is not reproduced
+0062abd0  -  SP::cSPPlayMode::MakeCreaturesFaceCamera: skeleton (large SSE camera/creature math not transcribed)
+0062ad70  -  cSPPlayMode helper (ret 0x1c): skeleton
+0062b1c0  -  SP::cSPPlayMode::cSPPlayMode: skeleton (retail layout differs greatly from 2008 PDB)
+0062b3a0  -  SP::cSPPlayMode::~cSPPlayMode: skeleton
+0062b5c0  -  SP::cSPPlayMode::HandleMessage: skeleton (large string/EH dispatch switch)
+0062ba10  -  SP::cAppModeEditorBase::IsEventForBaby: skeleton
+0062bb40  -  FUN_0062bb40: skeleton (623-byte creature add/remove helper not transcribed)
+0062bf10  -  FUN_0062bf10: skeleton (1064-byte message-driven update not transcribed)
+0062c340  -  SP::cSPPlayMode::Stop: skeleton (524-byte teardown not transcribed)
+0062c550  -  SP::cSPPlayMode::Update: skeleton (647-byte per-frame update not transcribed)

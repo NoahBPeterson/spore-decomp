@@ -1,8 +1,19 @@
-00628d50 SP::cSPPlayMode::HandleButton  # PDB candidate; sub-mode dispatch + env reaction anims
-006291d0 SP::cSPPlayMode::GetBabyIDByIndex  # returns baby id at index (clamped)
-006292b0 SP::cSPPlayMode::SetAllOtherBabiesToIdle  # PDB candidate (caller-scored)
-006293d0 SP::cSPPlayMode::SetBabySocialCallState  # PDB candidate (caller-single)
-006294e0 SP::cSPPlayMode::SetBabyCelebrationAnim  # PDB name
-00629590 SP::cSPPlayMode::SwitchToCrouchAnim  # PDB candidate
-006298b0 SP::cSPPlayMode::SetBabyIdleAnim  # PDB candidate
-00629960 SP::cSPPlayMode::UpdateBabyButtonEventState  # PDB candidate
+0059d110 ?GetCreaturePosition@cSPEditorAnimatedCreatureManager@SP@@QAE_NIPAUcSPVector3@@@Z  # SP::cSPEditorAnimatedCreatureManager::GetCreaturePosition (callee of s00628d50, named from the dev publics; slice address comment)
+00628d50 ?HandleButton@cSPPlayMode@@QAE_NH@Z  # cSPPlayMode::HandleButton migrated from s00628d50 (verbatim, slice spelling)
+00628f10 ?SetMomToFaceBaby@cSPPlayMode@@QAEXI@Z  # cSPPlayMode::SetMomToFaceBaby migrated from s00628d50 (verbatim, slice spelling)
+00629110 ?GetLatestBabyID@cSPPlayMode@@QAEIXZ  # cSPPlayMode::GetLatestBabyID migrated from s00628d50 (verbatim, slice spelling)
+00629150 ?GetLatestBabyIndex@cSPPlayMode@@QAEHXZ  # cSPPlayMode::GetLatestBabyIndex migrated from s00628d50 (verbatim, slice spelling)
+00629180 ?GetAnimatedBabyIndex@cSPPlayMode@@QAEII@Z  # cSPPlayMode::GetAnimatedBabyIndex migrated from s00628d50 (verbatim, slice spelling)
+006291d0 ?FUN_006291d0@cSPPlayMode@@QAEII@Z  # cSPPlayMode::FUN_006291d0 migrated from s00628d50 (verbatim, slice spelling)
+00629220 ?SetAllBabySitUp@cSPPlayMode@@QAEXXZ  # cSPPlayMode::SetAllBabySitUp migrated from s00628d50 (verbatim, slice spelling)
+006292b0 ?SetAllOtherBabiesToIdle@cSPPlayMode@@QAEXIIM@Z  # cSPPlayMode::SetAllOtherBabiesToIdle migrated from s00628d50 (verbatim, slice spelling)
+00629380 ?SetBabySpawned@cSPPlayMode@@QAEXIE@Z  # cSPPlayMode::SetBabySpawned migrated from s00628d50 (verbatim, slice spelling)
+006293d0 ?SetBabySocialCallState@cSPPlayMode@@QAEXIIM@Z  # cSPPlayMode::SetBabySocialCallState migrated from s00628d50 (verbatim, slice spelling)
+006294e0 ?SetBabyCelebrationAnim@cSPPlayMode@@QAEMXZ  # cSPPlayMode::SetBabyCelebrationAnim migrated from s00628d50 (verbatim, slice spelling)
+00629590 ?FUN_00629590@cSPPlayMode@@QAE_NXZ  # cSPPlayMode::FUN_00629590 migrated from s00628d50 (verbatim, slice spelling)
+006296e0 ?ForceBabiesToIdle@cSPPlayMode@@QAEXH@Z  # cSPPlayMode::ForceBabiesToIdle migrated from s00628d50 (verbatim, slice spelling)
+006298b0 ?FUN_006298b0@cSPPlayMode@@QAEXI@Z  # cSPPlayMode::FUN_006298b0 migrated from s00628d50 (verbatim, slice spelling)
+00629960 ?FUN_00629960@cSPPlayMode@@QAEXH@Z  # cSPPlayMode::FUN_00629960 migrated from s00628d50 (verbatim, slice spelling)
+00629a90 ?BabiesReachedTargetAngle@cSPPlayMode@@QAE_NXZ  # cSPPlayMode::BabiesReachedTargetAngle migrated from s00628d50 (verbatim, slice spelling)
+00629b30 ?SetAllBabyRotateSpeeds@cSPPlayMode@@QAEXM@Z  # cSPPlayMode::SetAllBabyRotateSpeeds migrated from s00628d50 (verbatim, slice spelling)
+00629bd0 ?FUN_00629bd0@cSPPlayMode@@QAEMPAUCreatureStruct@@@Z  # cSPPlayMode::FUN_00629bd0 migrated from s00628d50 (verbatim, slice spelling)

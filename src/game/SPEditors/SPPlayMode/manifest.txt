@@ -1,0 +1,25 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPPlayMode.cpp  ?IsWalkTypeAnim@cSPPlayMode_s0062_7d50@SP@@SG_NI@Z  00628610  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?GetRandomEnvironmentReactionAnim@cSPPlayMode_s0062_7d50@SP@@QAEIXZ  006286a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FindBabyAnimSlot@cSPPlayMode_s0062_7d50@SP@@QAEHH@Z  00628720  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?GetBabyPhotoMode@cSPPlayMode_s0062_7d50@SP@@QAEEH@Z  00628750  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?Reset@cResetable@SP@@QAEXXZ  00628810  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?SetBabyCrouchAnimation@cSPPlayMode_s0062_7d50@SP@@QAEMI@Z  00628860  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?W6288d0@cSPPlayMode_s0062_7d50@SP@@QAEX_N@Z  006288d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?ResetExpansionAnimWindow@cSPPlayMode_s0062_7d50@SP@@QAEXXZ  006288f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?W628910@SP@@YAXXZ  00628910  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?W628940@cSPPlayMode_s0062_7d50@SP@@QAE_NXZ  00628940  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ??0Quat4@SP@@QAE@MMMM@Z  00628970  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?EnsurePreload@cPreloadOwner@SP@@QAEXXZ  006289a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?HandleButton@cSPPlayMode@@QAE_NH@Z  00628d50  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?GetLatestBabyID@cSPPlayMode@@QAEIXZ  00629110  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?GetLatestBabyIndex@cSPPlayMode@@QAEHXZ  00629150  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?GetAnimatedBabyIndex@cSPPlayMode@@QAEII@Z  00629180  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FUN_006291d0@cSPPlayMode@@QAEII@Z  006291d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?SetBabySpawned@cSPPlayMode@@QAEXIE@Z  00629380  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?SetBabySocialCallState@cSPPlayMode@@QAEXIIM@Z  006293d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FUN_006298b0@cSPPlayMode@@QAEXI@Z  006298b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FUN_00629bd0@cSPPlayMode@@QAEMPAUCreatureStruct@@@Z  00629bd0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ?FUN_00629d90@@YGXHH@Z  00629d90  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ??0cSPPlayModeAnimation@@QAE@XZ  0062b0f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPPlayMode.cpp  ??1cSPPlayModeAnimation@@QAE@XZ  0062b160  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

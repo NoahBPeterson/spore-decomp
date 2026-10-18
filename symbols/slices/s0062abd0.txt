@@ -1,10 +1,11 @@
-0062abd0 SP::cSPPlayMode::MakeCreaturesFaceCamera  # PDB name; this ptr from cSPPlayMode methods
-0062ace0 cSPPlayMode helper (box half-extent)  # reads p+0x180, +0x3c
-0062b000 cSPPlayMode::ClearCreaturesAndBodies  # clears vectors at +0x366c and +0x3694
-0062b0f0 SP::cSPPlayModeAnimation::cSPPlayModeAnimation  # vtable 0x13fe0ec (Ghidra)
-0062b160 SP::cSPPlayModeAnimation::~cSPPlayModeAnimation  # vtable 0x13fe0ec
-0062b1c0 SP::cSPPlayMode::cSPPlayMode  # vtable 0x13fe104/0x13fe0fc
-0062b3a0 SP::cSPPlayMode::~cSPPlayMode  # vtable 0x13fe104/0x13fe0fc
-0062b5c0 SP::cSPPlayMode::HandleMessage  # PDB name; returns bool, ret 8
-0062b980 cSPPlayMode shared-library list remove-by-id  # erases from vector at +0x7c matching +0x1c
-0062ba10 SP::cAppModeEditorBase::IsEventForBaby  # PDB name; reads +0x36d0
+0062abd0 ?cSPPlayMode_MakeCreaturesFaceCamera@@YIXPAX@Z  # cSPPlayMode_MakeCreaturesFaceCamera migrated from s0062abd0 (verbatim, slice spelling)
+0062ace0 ?FUN_0062ace0@@YGMPAXD@Z  # FUN_0062ace0 migrated from s0062abd0 (verbatim, slice spelling)
+0062ad70 ?cSPPlayMode_ad70@@YIXPAX0HHMMMM@Z  # cSPPlayMode_ad70 migrated from s0062abd0 (verbatim, slice spelling)
+0062b000 ?FUN_0062b000@@YIXPAX@Z  # FUN_0062b000 migrated from s0062abd0 (verbatim, slice spelling)
+0062b0f0 ??0cSPPlayModeAnimation@@QAE@XZ  # cSPPlayModeAnimation::cSPPlayModeAnimation migrated from s0062abd0 (verbatim, slice spelling)
+0062b160 ??1cSPPlayModeAnimation@@QAE@XZ  # cSPPlayModeAnimation::~cSPPlayModeAnimation migrated from s0062abd0 (verbatim, slice spelling)
+0062b1c0 ?cSPPlayMode_ctor@@YIXPAX@Z  # cSPPlayMode_ctor migrated from s0062abd0 (verbatim, slice spelling)
+0062b3a0 ?cSPPlayMode_dtor@@YIXPAX@Z  # cSPPlayMode_dtor migrated from s0062abd0 (verbatim, slice spelling)
+0062b5c0 ?cSPPlayMode_HandleMessage@@YIIPAXIH@Z  # cSPPlayMode_HandleMessage migrated from s0062abd0 (verbatim, slice spelling)
+0062b980 ?FUN_0062b980@@YIXPAXH@Z  # FUN_0062b980 migrated from s0062abd0 (verbatim, slice spelling)
+0062ba10 ?cSPPlayMode_IsEventForBaby@@YIXPAXH@Z  # cSPPlayMode_IsEventForBaby migrated from s0062abd0 (verbatim, slice spelling)

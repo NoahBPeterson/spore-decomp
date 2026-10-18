@@ -5,7 +5,7 @@
 0062ec90 SP::cSPPlayModeAnimation::LoadAnimInfo  # PDB name
 0062efb0 SP::cSPPlayModeAnimation::LoadPanelInfo  # PDB name
 0062f1e0 SP::cSPPlayModeAnimation::LoadAllAnimInfoFromGroup  # PDB candidate
-0062f2a0 SP::cSPPlayModeAnimation::Init  # PDB candidate
+0062f2a0 ?Init@cSPPlayModeAnimation@SP@@UAEXPAVcAppModeEditorBase@2@PAVcSPPlayModeUI@2@@Z  # SP::cSPPlayModeAnimation::Init migrated from s0062e7e0
 0062f340 SP::cSPPlayModeBGMgr::SetBGHilite  # PDB name
 0062f480 SP::cSPPlayModeBGMgr::UpdateBGHilite  # PDB name
 0062f540 SP::cSPPlayModeBGMgr::UpdateBGCountText  # PDB name
