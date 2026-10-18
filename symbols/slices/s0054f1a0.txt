@@ -1,1 +1,1 @@
-0054f1a0  SP::Pollen::cAssetDirectory::Save  # dc: mutex-guarded save of 4 hash containers to save area 0x11ac19d
+0054f1a0 ?Save@AssetDir@@QAE_NXZ  # AssetDir::Save migrated from s0054f1a0 (verbatim, slice spelling)

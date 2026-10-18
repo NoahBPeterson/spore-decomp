@@ -4,4 +4,4 @@
 0054b510  eastl::uninitialized_copy (result out-param)  # dc: ret, *out=end
 0054b5b0  eastl::copy<pair<unsigned int,basic_string<char>>>  # dc: stride 0x14 forward
 0054b630  eastl::copy_backward<pair<unsigned int,basic_string<char>>>  # dc: stride 0x14 backward
-0054b6f0  ?cAssetMetadataFactory_Create@IHost@@QAE_NPAUIObj10@@PAPAUIMeta@@HH@Z  # SP::Pollen::cAssetMetadataResourceFactory::CreateMetadata; dc: operator new(0xd8,"Pollinator/cAssetMetadata"), vtable[9] Make
+0054b6f0 ?cAssetMetadataFactory_Create@IHost@@QAE_NPAUIObj10@@PAPAUIMeta@@HH@Z  # IHost::cAssetMetadataFactory_Create migrated from s0054afe0 (verbatim, slice spelling)

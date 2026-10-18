@@ -1,7 +1,7 @@
-00550bd0  cAssetMetadata tag string splitter (comma-separated -> vector at +0xac)  # dc
-00550cf0  cAssetMetadata::GetTagsString (join vector at +0xac)  # dc: WStr::Append
-00550da0  SP::GetCreatureName (copy fields from metadata source)  # pdb candidate
-00551240  cAssetMetadata::SetLocalMetadata  # dc: fields + GetParentServerID
-00551620  SP::Pollen::cAssetMetadata::SetMetadata  # pdb anchor
-005519d0  cAssetMetadata set name/description (clamp 0x100/0x1000) + tags  # dc
-00551af0  cAssetMetadata set parent id + AuthManager timestamp/ID  # dc: FUN_00607a60
+00550bd0 ?FUN_00550bd0@Meta_s0055_0bd0@@QAEDPAG@Z  # Meta_s0055_0bd0::FUN_00550bd0 migrated from s00550bd0 (verbatim, slice spelling)
+00550cf0 ?FUN_00550cf0@Meta_s0055_0bd0@@QAEXPAUWStr@@@Z  # Meta_s0055_0bd0::FUN_00550cf0 migrated from s00550bd0 (verbatim, slice spelling)
+00550da0 ?FUN_00550da0@Meta_s0055_0bd0@@QAEDPAH00@Z  # Meta_s0055_0bd0::FUN_00550da0 migrated from s00550bd0 (verbatim, slice spelling)
+00551240 ?FUN_00551240@Meta_s0055_0bd0@@QAEDPAHPAG1H0D@Z  # Meta_s0055_0bd0::FUN_00551240 migrated from s00550bd0 (verbatim, slice spelling)
+00551620 ?SetMetadata@Meta_s0055_0bd0@@QAEDPAIHHHPAXPAG1222H1D@Z  # Meta_s0055_0bd0::SetMetadata migrated from s00550bd0 (verbatim, slice spelling)
+005519d0 ?FUN_005519d0@Meta_s0055_0bd0@@QAEXPAG0H@Z  # Meta_s0055_0bd0::FUN_005519d0 migrated from s00550bd0 (verbatim, slice spelling)
+00551af0 ?FUN_00551af0@Meta_s0055_0bd0@@QAEXHH@Z  # Meta_s0055_0bd0::FUN_00551af0 migrated from s00550bd0 (verbatim, slice spelling)

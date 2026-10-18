@@ -1,0 +1,24 @@
+# va  diff-bytes  reason
+0054b6f0 134 complete; /Od factory vtable/new schedule differs; equiv FAIL pool mismatch at 40030000 (now thiscall member of IHost)
+0054b7b0 1994 complete; /Od serialization chain reordered into loops/guards (same write sequence); equiv WEAK (1% coverage, member-this fix)
+0054def0 24 ~cAssetDirectory: original omits the derived vptr store at destructor entry (only IHandler vptr restored at end)
+0054e8c0 3 SetAuthorA: frame 0x7c vs 0x74 (hole left by declined inline hash_map::operator[] is 2 dwords too big)
+0054e970 3 SetAuthorB: same frame-size difference as SetAuthorA
+0054eb10 242 complete; /Od mutex-guarded map/set lookup dispatch schedule differs
+0054ed50 243 complete; /Od mutex-guarded lookup+erase schedule differs
+0054efb0 170 complete; /Od three-container clear schedule differs
+0054f0f0 86 complete; /Od job-scheduler setup schedule differs
+0054f1a0 1285 complete; /Od frame slot order differs (local name hash), loop C has one fewer iterator copy layer than original
+00550450 454 complete; /Od cAssetMetadata ctor field-init schedule differs
+005506c0 87 complete; /Od dtor vtable/store schedule differs
+00550740 54 complete; /Od Object::Cast compare tree schedule differs
+00550910 9 complete; /Od vector<ptr> getter else-branch/jmp shape differs
+00550aa0 69 complete; /Od map contains() schedule differs
+00550b00 29 complete; /Od map find out-param frame differs
+00550b30 25 complete; /Od map find frame 0x38 vs ours differs
+00550b60 83 complete; /Od 64-bit key/store schedule differs
+00550bd0 207 complete; /Od CSV tag-splitter schedule differs
+00550cf0 118 complete; /Od string-vector join schedule differs
+005519d0 202 complete; /Od name/description assign+clamp schedule differs
+00551af0 64 complete; /Od parent-id+timestamp setter frame/slot schedule differs
+005687d0 33 complete hashtable DoFreeNodes; /Od frame differs; equiv: FAIL (ours faults at 00927111)

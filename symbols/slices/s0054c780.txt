@@ -1,3 +1,3 @@
-0054c780  SP::Pollen::cAssetMetadataResourceFactory::ReadResource  # pdb anchor; param_4==0x30bdee3
-00554140  object_cast<SP::Pollen::cAssetMetadata>  # p ? p->Cast(0x30bdee3) : 0
+0054c780 ?ReadResource@cAssetMetadataResourceFactory_s0054_c780@Pollen@SP@@QAE_NPAVIRecord@@PAVResourceObject@@PAXI@Z  # cAssetMetadataResourceFactory_s0054_c780::ReadResource migrated from s0054c780 (verbatim, slice spelling)
 00554020  eastl::vector_set<uint32_t>::insert  # cAssetMetadata::mConsequenceTraits (+0xc0), lower_bound + insert, sret pair
+00554140  object_cast<SP::Pollen::cAssetMetadata>  # p ? p->Cast(0x30bdee3) : 0

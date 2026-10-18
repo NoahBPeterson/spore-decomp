@@ -1,7 +1,21 @@
-0054ddf0 SP::Pollen::cAssetDirectory::cAssetDirectory  # ctor: IHandler vtbl, Mutex, 6 hash containers, LimitStopwatch(5,2); byte-exact
-0054def0 SP::Pollen::cAssetDirectory::~cAssetDirectory  # reverse member destruction of the same layout
-0054df60 SP::Pollen::cAssetDirectory::Init  # PDB candidate (caller-single); registers metadata factory, RestoreMappings, AddHandler x3
-0054e0b0 SP::Pollen::cAssetDirectory::HandleMessage  # IHandler override; message 0x1EE100A flush timer
-0054e250 SP::Pollen::cAssetDirectory::AddMapping  # inserts into both id->key and key->id maps
-0054e460 SP::Pollen::cAssetDirectory::GetLocalKey  # server id -> ResourceKey lookup under mutex
-0054e530 SP::Pollen::cAssetDirectory::GetServerId  # key -> server id; falls back to loading cAssetMetadata (type 0x030BDEE3)
+0054dd30 ?CreateMetadataFactory@Pollen@SP@@YAPAVcAssetMetadataResourceFactory_s0054_dd30@12@PAVcAssetDirectory_s0054_dd30@12@@Z  # CreateMetadataFactory migrated from s0054dd30 (verbatim, slice spelling)
+0054ddc0 ?GetSupportedTypes@cAssetMetadataResourceFactory@Pollen@SP@@UAEIPAII@Z  # SP::Pollen::cAssetMetadataResourceFactory::GetSupportedTypes migrated from s0054dd30
+0054ddf0 ??0cAssetDirectory_s0054_dd30@Pollen@SP@@QAE@XZ  # cAssetDirectory_s0054_dd30::cAssetDirectory migrated from s0054dd30 (verbatim, slice spelling)
+0054def0 ??1cAssetDirectory@Pollen@SP@@UAE@XZ  # SP::Pollen::cAssetDirectory::~cAssetDirectory migrated from s0054dd30
+0054df60 ?Init@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NXZ  # cAssetDirectory_s0054_dd30::Init migrated from s0054dd30 (verbatim, slice spelling)
+0054e020 ?Shutdown@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NXZ  # cAssetDirectory_s0054_dd30::Shutdown migrated from s0054dd30 (verbatim, slice spelling)
+0054e0b0 ?HandleMessage@cAssetDirectory_s0054_dd30@Pollen@SP@@UAE_NIPAX@Z  # cAssetDirectory_s0054_dd30::HandleMessage migrated from s0054dd30 (verbatim, slice spelling)
+0054e250 ?AddMapping@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_N_KABUKey_s0054_dd30@ResourceMan@EA@@@Z  # cAssetDirectory_s0054_dd30::AddMapping migrated from s0054dd30 (verbatim, slice spelling)
+0054e460 ?GetLocalKey@cAssetDirectory_s0054_dd30@Pollen@SP@@QBE_N_KPAUKey_s0054_dd30@ResourceMan@EA@@@Z  # cAssetDirectory_s0054_dd30::GetLocalKey migrated from s0054dd30 (verbatim, slice spelling)
+0054e530 ?GetServerId@cAssetDirectory_s0054_dd30@Pollen@SP@@QBE_NABUKey_s0054_dd30@ResourceMan@EA@@PA_K_N@Z  # cAssetDirectory_s0054_dd30::GetServerId migrated from s0054dd30 (verbatim, slice spelling)
+0054e740 ?IsPending@cAssetDirectory_s0054_dd30@Pollen@SP@@QBE_N_K@Z  # cAssetDirectory_s0054_dd30::IsPending migrated from s0054dd30 (verbatim, slice spelling)
+0054e7b0 ?SetPending@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEX_K_N@Z  # cAssetDirectory_s0054_dd30::SetPending migrated from s0054dd30 (verbatim, slice spelling)
+0054e800 ?IsPending2@cAssetDirectory_s0054_dd30@Pollen@SP@@QBE_N_K@Z  # cAssetDirectory_s0054_dd30::IsPending2 migrated from s0054dd30 (verbatim, slice spelling)
+0054e870 ?AddPending2@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEX_K@Z  # cAssetDirectory_s0054_dd30::AddPending2 migrated from s0054dd30 (verbatim, slice spelling)
+0054e8c0 ?SetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  # cAssetDirectory_s0054_dd30::SetAuthorA migrated from s0054dd30 (verbatim, slice spelling)
+0054e8f0 ?GetAuthorA@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_KI@Z  # cAssetDirectory_s0054_dd30::GetAuthorA migrated from s0054dd30 (verbatim, slice spelling)
+0054e970 ?SetAuthorB@cAssetDirectory_s0054_dd30@Pollen@SP@@QAEXI_K@Z  # cAssetDirectory_s0054_dd30::SetAuthorB migrated from s0054dd30 (verbatim, slice spelling)
+0054e9a0 ?GetAuthorB@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_KI@Z  # cAssetDirectory_s0054_dd30::GetAuthorB migrated from s0054dd30 (verbatim, slice spelling)
+0054ea20 ?SetAuthorFlag@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NI_N@Z  # cAssetDirectory_s0054_dd30::SetAuthorFlag migrated from s0054dd30 (verbatim, slice spelling)
+0054eac0 ?GetAuthorFlag@cAssetDirectory_s0054_dd30@Pollen@SP@@QAE_NI@Z  # cAssetDirectory_s0054_dd30::GetAuthorFlag migrated from s0054dd30 (verbatim, slice spelling)
+005507a0 ?GetAuthorServerID@cAssetMetadata@Pollen@SP@@QBE_KXZ  # SP::Pollen::cAssetMetadata::GetAuthorServerID (callee of s0054dd30, named from the dev publics; slice address comment)

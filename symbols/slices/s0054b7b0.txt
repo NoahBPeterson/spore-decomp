@@ -1,1 +1,1 @@
-0054b7b0  SP::Pollen::cAssetMetadataResourceFactory::WriteResource  # pdb candidate; param_4==0x30bdee3, EA::IO::WriteUint32 fields
+0054b7b0 ?FUN_0054b7b0@Stub0054b7b0@@QAE_NHPAUIObj@@PAHH@Z  # Stub0054b7b0::FUN_0054b7b0 migrated from s0054b7b0 (verbatim, slice spelling)
