@@ -47,6 +47,8 @@ ROOT = os.path.dirname(os.path.dirname(HERE))
 sys.path.insert(0, HERE)
 import headers as H  # noqa: E402
 import rewrite_stubs as RS  # noqa: E402
+sys.path.insert(0, os.path.join(os.path.dirname(HERE), "matching"))
+import asm_audit  # noqa: E402
 
 W = lambda *p: os.path.join(ROOT, *p)
 
@@ -2976,6 +2978,13 @@ class Rewrite:
                 # (a wrong xmatch anchor name); it stays in the slice
                 self.notes.append(("skipped", "0x%08x %s::%s stays in the slice: manual exclude: %s" % (
                     c.va, c.cls, c.name, self.manual["exclude"]["%08x" % c.va])))
+                continue
+            asm = asm_audit.why(c.text)
+            if asm:
+                # docs/matching.md "No assembly transcription" (2026-10-18: round 7 landed 37 naked functions of
+                # s007a41c0/s007a51d0 into SPGraphicsSystem.cpp): a transcribed body is not decompiled C++ and stays
+                # in the slice as a partial row
+                self.notes.append(("skipped", "0x%08x %s stays in the slice: asm transcription (%s)" % (c.va, c.name, asm)))
                 continue
             if str(c.how).startswith("address contradiction"):
                 self.notes.append(("skipped", "0x%08x %s::%s stays in the slice: %s" % (c.va, c.cls, c.name, c.how)))
