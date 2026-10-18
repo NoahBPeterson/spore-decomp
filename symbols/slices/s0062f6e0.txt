@@ -1,5 +1,21 @@
 0062f7f0 SP::cSPPlayModeBGMgr::HandleButton  # card: PDB candidate (caller-single); switch over the 4 thumbnail buttons + prev/next page ids
+0062f8c0 SharedLibList::SharedLibList  # vtable + empty eastl::vector ctor; dtor at 0062f8e0 calls ~vector
 0062fbc0 SP::cSPPlayModeBGMgr::LoadAllBGInfoFromGroup  # card: PDB candidate (caller-single); enumerates resource keys then calls LoadBackground
 0062fd60 SP::cSPPlayModePhotoBrowser::IsSendPhotoWinVisible  # card: PDB candidate (caller-single); tests visibility of editor window 0x3f67620
-0062fe40 SP::cSPPlayModePhotoBrowser::EnterDeleteMode  # card: PDB candidate; identical to EnterMoveMode except mode value 2
-0062f8c0 SharedLibList::SharedLibList  # vtable + empty eastl::vector ctor; dtor at 0062f8e0 calls ~vector
+0062fda0 ?EnterMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterMoveMode migrated from s0062f6e0
+0062fe40 ?EnterDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::EnterDeleteMode migrated from s0062f6e0
+0062fee0 ?GetHeaderInfo@@YGHPAXH@Z  # GetHeaderInfo migrated from s0062f6e0 (verbatim, slice spelling)
+00630090 ?SelectAll@cSPPlayModePhotoBrowser@@QAEX_N@Z  # cSPPlayModePhotoBrowser::SelectAll migrated from s0062f6e0 (verbatim, slice spelling)
+006300d0 ?GetImageFromRaster@cSPPlayModePhotoBrowser@@SGPAUUIImageView@@PAX@Z  # cSPPlayModePhotoBrowser::GetImageFromRaster migrated from s0062f6e0 (verbatim, slice spelling)
+006301a0 ?ExitDeleteMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitDeleteMode migrated from s0062f6e0
+00630280 ?ExitMoveMode@cSPPlayModePhotoBrowser@SP@@QAEXXZ  # SP::cSPPlayModePhotoBrowser::ExitMoveMode migrated from s0062f6e0
+00630360 ?FindPhotoByGuid@cSPPlayModePhotoBrowser@@QAEPAUcPlayModePhoto@@I@Z  # cSPPlayModePhotoBrowser::FindPhotoByGuid migrated from s0062f6e0 (verbatim, slice spelling)
+006303a0 ?ReleaseAsyncHandle@cSPPlayModePhotoBrowser@@QAEXXZ  # cSPPlayModePhotoBrowser::ReleaseAsyncHandle migrated from s0062f6e0 (verbatim, slice spelling)
+00630410 ?CancelAllPendingLoadJobs@cSPPlayModePhotoBrowser@@QAEPAUcJob@@XZ  # cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs migrated from s0062f6e0 (verbatim, slice spelling)
+00630470 ?IsPhotosWriting@cSPPlayModePhotoBrowser@@QAEHXZ  # cSPPlayModePhotoBrowser::IsPhotosWriting migrated from s0062f6e0 (verbatim, slice spelling)
+006304e0 ?AnyWriteJobActive@cSPPlayModePhotoBrowser@@QAE_NXZ  # cSPPlayModePhotoBrowser::AnyWriteJobActive migrated from s0062f6e0 (verbatim, slice spelling)
+00630540 ??4JobRef@@QAEAAU0@ABU0@@Z  # JobRef::operator= migrated from s0062f6e0 (verbatim, slice spelling)
+00630580 ?Update@cSPPlayModePhotoBrowser@SP@@QAEXI@Z  # SP::cSPPlayModePhotoBrowser::Update migrated from s0062f6e0
+00630630 ?find_first_of@wstring16@@QBEIPB_WI@Z  # wstring16::find_first_of migrated from s0062f6e0 (verbatim, slice spelling)
+00630690 ?compare@wstring16@@QBEHIIPB_W@Z  # wstring16::compare migrated from s0062f6e0 (verbatim, slice spelling)
+006306f0 ??1LocaleMsg@@UAE@XZ  # LocaleMsg::~LocaleMsg migrated from s0062f6e0 (verbatim, slice spelling)

@@ -1,3 +1,19 @@
-00632780 SP::cSPPlayModePhotoBrowser::CheckGuidAndType  # card: PDB candidate (caller-single); opens the file stream, reads the header, validates guid/type
-00632e90 ?APhotoTypeMap  # PhotoTypeMap::operator[] (??A, base-identifier form): lower_bound + insert on the browser's photo-type map
-00633230 SP::cSPPlayModePhotoBrowser::MarkPhotoTypeForGuid  # existing PDB name from card
+00632780 ?CheckGuidAndType@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NUwstring16_s0063_2780@@IH0@Z  # cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType migrated from s00632780 (verbatim, slice spelling)
+00632900 ?AddPhoto@cSPPlayModePhotoBrowser_s0063_2780@@QAEXIH@Z  # cSPPlayModePhotoBrowser_s0063_2780::AddPhoto migrated from s00632780 (verbatim, slice spelling)
+006329b0 ?CopyPixelsToRaster@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NHII@Z  # cSPPlayModePhotoBrowser_s0063_2780::CopyPixelsToRaster migrated from s00632780 (verbatim, slice spelling)
+00632ab0 ?PushLoaded@cSPPlayModePhotoBrowser_s0063_2780@@QAEXI@Z  # cSPPlayModePhotoBrowser_s0063_2780::PushLoaded migrated from s00632780 (verbatim, slice spelling)
+00632b00 ?ClearLoadedPhotos@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::ClearLoadedPhotos migrated from s00632780 (verbatim, slice spelling)
+00632ba0 ?DeleteAll@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::DeleteAll migrated from s00632780 (verbatim, slice spelling)
+00632c00 ?MoveAll@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::MoveAll migrated from s00632780 (verbatim, slice spelling)
+00632c60 ?DeleteOne@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::DeleteOne migrated from s00632780 (verbatim, slice spelling)
+00632ce0 ?MoveOne@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::MoveOne migrated from s00632780 (verbatim, slice spelling)
+00632d60 ?SaveThumbnail@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NPAX@Z  # cSPPlayModePhotoBrowser_s0063_2780::SaveThumbnail migrated from s00632780 (verbatim, slice spelling)
+00632e40 ?ResetPhotoMap@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NXZ  # cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap migrated from s00632780 (verbatim, slice spelling)
+00632e90 ??APhotoTypeMap@@QAEAAUPhotoTypeInfo@@ABI@Z  # PhotoTypeMap::operator[] migrated from s00632780 (verbatim, slice spelling)
+00632f30 ?Shutdown@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::Shutdown migrated from s00632780 (verbatim, slice spelling)
+00632fe0 ?Deactivate@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::Deactivate migrated from s00632780 (verbatim, slice spelling)
+00633080 ?SetToLastPage@cSPPlayModePhotoBrowser_s0063_2780@@QAEXXZ  # cSPPlayModePhotoBrowser_s0063_2780::SetToLastPage migrated from s00632780 (verbatim, slice spelling)
+006330b0 ?LoadPhotoThumb@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NI@Z  # cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb migrated from s00632780 (verbatim, slice spelling)
+00633230 ?MarkPhotoTypeForGuid@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NIHUResourceKey@@@Z  # cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid migrated from s00632780 (verbatim, slice spelling)
+006332c0 ?LoadPhotoByKey@cSPPlayModePhotoBrowser_s0063_2780@@QAE_NPBUResourceKey@@@Z  # cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoByKey migrated from s00632780 (verbatim, slice spelling)
+00633440 ?CapturePixels@cSPPlayModePhotoBrowser_s0063_2780@@QAEXHPAXI@Z  # cSPPlayModePhotoBrowser_s0063_2780::CapturePixels migrated from s00632780 (verbatim, slice spelling)

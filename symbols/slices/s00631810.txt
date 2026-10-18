@@ -1,10 +1,10 @@
-00631810 SP::cSPPlayModePhotoBrowser helper  # 504 bytes
-00631a10 SP::cSPPlayModePhotoBrowser helper  # 273 bytes
-00631b30 SP::cSPPlayModePhotoBrowser::PhotoCountChanged  # PDB name
-00631dc0 vector<cPlayModePhoto*> clear  # memmove + mpEnd reset
-00631df0 vector<cPlayModePhoto*> push_back  # AutoRefCount add/release
-00631e50 SP::cSPPlayModePhotoBrowser helper  # 635 bytes
+00631810 ?FUN_00631810@@YIXPAX@Z  # FUN_00631810 migrated from s00631810 (verbatim, slice spelling)
+00631a10 ?FUN_00631a10@@YIXPAX@Z  # FUN_00631a10 migrated from s00631810 (verbatim, slice spelling)
+00631b30 ?FUN_00631b30@@YIXPAX@Z  # FUN_00631b30 migrated from s00631810 (verbatim, slice spelling)
+00631dc0 ?FUN_00631dc0@@YIXPAX@Z  # FUN_00631dc0 migrated from s00631810 (verbatim, slice spelling)
+00631df0 ?FUN_00631df0@@YIXPAX0@Z  # FUN_00631df0 migrated from s00631810 (verbatim, slice spelling)
+00631e50 ?FUN_00631e50@@YIXPAX@Z  # FUN_00631e50 migrated from s00631810 (verbatim, slice spelling)
 006320d0 SP::cSPPlayModePhotoBrowser::DeletePhoto  # called by DeleteSelected
-00632320 SP::cSPPlayModePhotoBrowser::MovePhoto  # PDB name
+00632320 ?FUN_00632320@@YIXPAXH@Z  # FUN_00632320 migrated from s00631810 (verbatim, slice spelling)
 00632660 SP::cSPPlayModePhotoBrowser::DeleteSelected  # PDB candidate (caller-single)
 006326f0 SP::cSPPlayModePhotoBrowser::MoveSelected  # PDB candidate (caller-single)
