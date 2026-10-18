@@ -1,0 +1,14 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIAnimation.cpp  ?F65F0@@YA_NPAXHMH@Z  007f65f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?F66F0@@YA_NPAXHMH@Z  007f66f0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?F6C30@@YA_NPAXHMH@Z  007f6c30  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShadeAlpha@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  007f7530  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShade@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  007f75d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateObjectAnimation@@YAPAUAnimRaw@@PAU1@PAXPAUEA_Variant@@IHPAUcAnimationTimer@@22H@Z  007f7740  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ??4AnimInfo88B@@QAEPAU0@PAU0@@Z  007f7920  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ??4AInfo8c@@QAEPAU0@PAU0@@Z  007f7970  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetScale@@YAPAUAnimRaw@@PAU1@PAXMMMH@Z  007f81d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetSize@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f8230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShadeAlphaW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f8290  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ?SPUICreateWindowAnimationTargetShadeW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  007f82f0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/Spui/SPUIAnimation.cpp  ??0MissionCardAnimator@@QAE@XZ  007f83e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

@@ -1,21 +1,21 @@
-007f64d0 callback for SPUICreateWindowAnimationTargetPosition (phase 0/1/2)
-007f65f0 callback for the second position factory (x/y via accessor floats)
-007f66f0 callback for SPUICreateWindowAnimationTargetScale
-007f67f0 callback for SPUICreateWindowAnimationTargetSize
-007f6910 callback for the 4-float rect factory
-007f6a60 cSPUIWindowAnimationTargetShade::Update
-007f6b50 cSPUIWindowAnimationTargetFill::Update
-007f6c30 callback using target function pointers +0x50/+0x54/+0x58 and short +0x3a
-007f6d20 small phase-2 forwarder to function pointer +0x28
-007f6d90 copy constructor for the target element (stride 0x88)
-007f6df0 copy constructor for the window-animation target (0x8c bytes)
-007f6ee0 forward range copy of target elements
-007f6f80 range destroy of target elements
-007f6ff0 assignment operator for the target element
-007f7050 SPUICreateWindowAnimationTargetPosition
-007f7100 second position factory (different callback)
-007f71b0 callback for SPUICreateWindowAnimationRotation
-007f7290 SPUICreateWindowAnimationRotation
-007f7340 SPUICreateWindowAnimationTargetScale
-007f73e0 SPUICreateWindowAnimationTargetSize
-007f7480 4-float rect animation target factory
+007f64d0 ?F64D0@@YA_NPAXHMH@Z  # F64D0 migrated from s007f64d0 (verbatim, slice spelling)
+007f65f0 ?F65F0@@YA_NPAXHMH@Z  # F65F0 migrated from s007f64d0 (verbatim, slice spelling)
+007f66f0 ?F66F0@@YA_NPAXHMH@Z  # F66F0 migrated from s007f64d0 (verbatim, slice spelling)
+007f67f0 ?F67F0@@YA_NPAXHMH@Z  # F67F0 migrated from s007f64d0 (verbatim, slice spelling)
+007f6910 ?F6910@@YA_NPAXHMH@Z  # F6910 migrated from s007f64d0 (verbatim, slice spelling)
+007f6a60 ?F6A60@@YA_NPAXHMH@Z  # F6A60 migrated from s007f64d0 (verbatim, slice spelling)
+007f6b50 ?F6B50@@YA_NPAXHMH@Z  # F6B50 migrated from s007f64d0 (verbatim, slice spelling)
+007f6c30 ?F6C30@@YA_NPAXHMH@Z  # F6C30 migrated from s007f64d0 (verbatim, slice spelling)
+007f6d20 ?F6D20@@YA_NPAXHHH@Z  # F6D20 migrated from s007f64d0 (verbatim, slice spelling)
+007f6d90 ?CopyFrom@TargetElem@@QAEPAXPAX@Z  # TargetElem::CopyFrom migrated from s007f64d0 (verbatim, slice spelling)
+007f6df0 ?CopyFrom@WindowAnimTarget@@QAEPAXPAX@Z  # WindowAnimTarget::CopyFrom migrated from s007f64d0 (verbatim, slice spelling)
+007f6ee0 ?F6EE0@@YAXPAX00@Z  # F6EE0 migrated from s007f64d0 (verbatim, slice spelling)
+007f6f80 ?F6F80@@YAPAXPAX0PAD@Z  # F6F80 migrated from s007f64d0 (verbatim, slice spelling)
+007f6ff0 ?Assign@TargetAssign@@QAEPAXPAX@Z  # TargetAssign::Assign migrated from s007f64d0 (verbatim, slice spelling)
+007f7050 ?SPUICreateWindowAnimationTargetPosition@@YAPAXPAX0MM0@Z  # SPUICreateWindowAnimationTargetPosition migrated from s007f64d0 (verbatim, slice spelling)
+007f7100 ?F7100@@YAPAXPAX0MM0@Z  # F7100 migrated from s007f64d0 (verbatim, slice spelling)
+007f71b0 ?F71B0@@YA_NPAXHMH@Z  # F71B0 migrated from s007f64d0 (verbatim, slice spelling)
+007f7290 ?SPUICreateWindowAnimationRotation@@YAPAXPAX0HHHH0@Z  # SPUICreateWindowAnimationRotation migrated from s007f64d0 (verbatim, slice spelling)
+007f7340 ?SPUICreateWindowAnimationTargetScale@@YAPAXPAX0M0@Z  # SPUICreateWindowAnimationTargetScale migrated from s007f64d0 (verbatim, slice spelling)
+007f73e0 ?SPUICreateWindowAnimationTargetSize@@YAPAXPAX0PAM0@Z  # SPUICreateWindowAnimationTargetSize migrated from s007f64d0 (verbatim, slice spelling)
+007f7480 ?F7480@@YAPAXPAX0PAM0@Z  # F7480 migrated from s007f64d0 (verbatim, slice spelling)

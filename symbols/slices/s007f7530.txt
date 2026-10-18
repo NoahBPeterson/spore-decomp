@@ -1,17 +1,23 @@
-007f7530 SPUICreateWindowAnimationTargetShadeAlpha  # PDB symbol name
-007f75d0 SPUICreateWindowAnimationTargetShade  # PDB symbol name
-007f7670 SPUICreateWindowAnimationTargetOscillatingFill  # PDB symbol name
-007f7740 SPUICreateObjectAnimation  # PDB symbol name
-007f7920 cSPUIAnimator::cAnimationInfo::operator=  # refcount + animation copy of 0x88 element
-007f7970 cSPUIAnimationSequence::cAnimInfo::operator=  # animation copy + refcount/mType of 0x8c element
-007f7a60 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<cSPUIAnimationSequence::cAnimInfo *,cSPUIAnimationSequence::cAnimInfo *>  # PDB symbol name
-007f7eb0 SPUICreateAnimationTimerInterpolation  # PDB symbol name
+007f7530 ?SPUICreateWindowAnimationTargetShadeAlpha@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  # SPUICreateWindowAnimationTargetShadeAlpha migrated from s007f7530 (verbatim, slice spelling)
+007f75d0 ?SPUICreateWindowAnimationTargetShade@@YAPAUAnimRaw@@PAU1@PAXIPAUcAnimationTimer@@@Z  # SPUICreateWindowAnimationTargetShade migrated from s007f7530 (verbatim, slice spelling)
+007f7670 ?SPUICreateWindowAnimationTargetOscillatingFill@@YAPAUAnimRaw@@PAU1@PAXIMMM@Z  # SPUICreateWindowAnimationTargetOscillatingFill migrated from s007f7530 (verbatim, slice spelling)
+007f7740 ?SPUICreateObjectAnimation@@YAPAUAnimRaw@@PAU1@PAXPAUEA_Variant@@IHPAUcAnimationTimer@@22H@Z  # SPUICreateObjectAnimation migrated from s007f7530 (verbatim, slice spelling)
+007f7830 ?FUN_007f7830@@YAPAUAnimRaw@@PAU1@IPAXPAUEA_Variant@@@Z  # FUN_007f7830 migrated from s007f7530 (verbatim, slice spelling)
+007f78c0 ?FUN_007f78c0@@YGXPAUAInfo88@@0@Z  # FUN_007f78c0 migrated from s007f7530 (verbatim, slice spelling)
+007f7920 ??4AnimInfo88B@@QAEPAU0@PAU0@@Z  # AnimInfo88B::operator= migrated from s007f7530 (verbatim, slice spelling)
+007f7970 ??4AInfo8c@@QAEPAU0@PAU0@@Z  # AInfo8c::operator= migrated from s007f7530 (verbatim, slice spelling)
+007f7a60 ?do_copy_animinfo@@YAPAUAInfo8c@@PAU1@00@Z  # do_copy_animinfo migrated from s007f7530 (verbatim, slice spelling)
+007f7b30 ?copy_animinfo88@@YAPAUAInfo88@@PAU1@00@Z  # copy_animinfo88 migrated from s007f7530 (verbatim, slice spelling)
+007f7c00 ?copy_backward_animinfo88@@YAPAUAInfo88@@PAU1@00@Z  # copy_backward_animinfo88 migrated from s007f7530 (verbatim, slice spelling)
+007f7ce0 ?fill_copy_animinfo@@YAPAUAInfo8c@@PAU1@00@Z  # fill_copy_animinfo migrated from s007f7530 (verbatim, slice spelling)
+007f7db0 ?fill_copy_backward_animinfo@@YAPAUAInfo8c@@PAU1@00@Z  # fill_copy_backward_animinfo migrated from s007f7530 (verbatim, slice spelling)
+007f7eb0 ?SPUICreateAnimationTimerInterpolation@@YAPAUInterpResult@@PAU1@MMH@Z  # SPUICreateAnimationTimerInterpolation migrated from s007f7530 (verbatim, slice spelling)
 007f80d0 SPUICreateWindowAnimationTargetPosition  # PDB symbol name
-007f8140 SPUICreateWindowAnimationRotation  # PDB symbol name
-007f81d0 SPUICreateWindowAnimationTargetScale  # PDB symbol name
-007f8230 SPUICreateWindowAnimationTargetSize  # PDB symbol name
-007f8290 SPUICreateWindowAnimationTargetShadeAlpha  # PDB symbol name
-007f82f0 SPUICreateWindowAnimationTargetShade  # PDB symbol name
-007f8350 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::vector  # PDB symbol name
-007f83e0 UI::MissionCardAnimator::MissionCardAnimator  # PDB symbol name
-007f8400 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::operator=  # PDB symbol name
+007f8140 ?SPUICreateWindowAnimationRotation@@YAPAUAnimRaw@@PAU1@PAXMMMMMMH@Z  # SPUICreateWindowAnimationRotation migrated from s007f7530 (verbatim, slice spelling)
+007f81d0 ?SPUICreateWindowAnimationTargetScale@@YAPAUAnimRaw@@PAU1@PAXMMMH@Z  # SPUICreateWindowAnimationTargetScale migrated from s007f7530 (verbatim, slice spelling)
+007f8230 ?SPUICreateWindowAnimationTargetSize@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  # SPUICreateWindowAnimationTargetSize migrated from s007f7530 (verbatim, slice spelling)
+007f8290 ?SPUICreateWindowAnimationTargetShadeAlphaW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  # SPUICreateWindowAnimationTargetShadeAlphaW migrated from s007f7530 (verbatim, slice spelling)
+007f82f0 ?SPUICreateWindowAnimationTargetShadeW@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  # SPUICreateWindowAnimationTargetShadeW migrated from s007f7530 (verbatim, slice spelling)
+007f8350 ?ctor_copy@Vec8c@@QAEPAU1@PAU1@@Z  # ctor_copy migrated from s007f7530 (verbatim, slice spelling)
+007f83e0 ??0MissionCardAnimator@@QAE@XZ  # MissionCardAnimator::MissionCardAnimator migrated from s007f7530 (verbatim, slice spelling)
+007f8400 ?assign@Vec8c@@QAEPAU1@PAU1@@Z  # assign migrated from s007f7530 (verbatim, slice spelling)

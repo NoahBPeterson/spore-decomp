@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+007f7670 135  PARTIAL: interpolation branch and FUN_007f6170 argument types approximated; not all paths faithfully reconstructed
+007f7eb0 305  PARTIAL: timer-interpolation switch reconstructed with guessed FUN_007f60d0/007f6040 signatures; temporary-timer release path approximated
+007f85b0 305  PARTIAL: vector insert_n reconstructed from the decompile; allocation/copy paths approximated
+007f89f0 349  PARTIAL: vector insert(pos,value) reconstructed; self-referencing value and copy paths approximated
+007f8b50 166  PARTIAL: vector resize built on the approximate insert_n; default-element path approximated
