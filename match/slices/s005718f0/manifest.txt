@@ -4,7 +4,6 @@ slices/s005718f0/s005718f0.cpp  ??1KeyVector@@QAE@XZ  005719a0  /Od /Ob1 /MD /Gy
 slices/s005718f0/s005718f0.cpp  ?DoInsertValue@KeyVector@@QAEXPAUKey12@@ABU2@@Z  005719f0  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?lower_bound@@YAPAUKey12@@PAU1@0ABU1@@Z  00571c40  /Od /Ob1 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?Fabs@@YAMM@Z  00571ce0  /O2 /MD /Gy /EHsc /TP /fp:fast
-slices/s005718f0/s005718f0.cpp  ?Exp@@YAMM@Z  00571cc0  /O2 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?SPIDFromName@@YAIPBD@Z  00571cf0  /O2 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?deallocate@ArrayAllocator@@QAEXPAXI@Z  00571d10  /O2 /MD /Gy /EHsc /TP
 slices/s005718f0/s005718f0.cpp  ?SetBlock@DirtyState@@QAEXABUBlock36@@@Z  00571d20  /O2 /MD /Gy /EHsc /TP

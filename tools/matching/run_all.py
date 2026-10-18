@@ -16,6 +16,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pefile
 from cmpobj import parse_coff, REL_SIZES
 import imgcache
+import asm_audit
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 IMAGE = os.path.join(ROOT, "work", "SporeApp.analysis.bin")
@@ -168,6 +169,11 @@ def main():
                             mask.add(v + k - off)
                 diffs = [i for i in range(n) if i not in mask and theirs[i] != mine[i]]
                 status = "MATCH" if not diffs else "DIFF %d bytes" % len(diffs)
+        # docs/matching.md "No assembly transcription": a naked/_emit/mostly-__asm body is not decompiled, so it
+        # never counts as byte-exact (2026-10-18 audit: 18 such manifest rows had been counted).
+        asm = asm_audit.transcribed(os.path.join(ROOT, "match", src)).get("%08x" % va)
+        if asm:
+            status = "ASM transcription (%s), not decompiled: move the row to partial.txt" % asm
         results["%08x" % va] = {"src": src, "sym": sym, "status": status}
         if status == "MATCH":
             ok += 1

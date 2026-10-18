@@ -1,5 +1,4 @@
 # source  symbol  va  flags
-../src/game/SPBake/SPSkinnerPaintRender.cpp  ?FastMemCopy@@YAXPAXPBXI@Z  00516ac0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ??0cMeshAORender_s0051_69d0@nSPSkinner@@QAE@XZ  00516ba0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ??1cMeshAORender_s0051_69d0@nSPSkinner@@UAE@XZ  00516c30  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPBake/SPSkinnerPaintRender.cpp  ?Load@cMeshAORender_s0051_69d0@nSPSkinner@@QAEXII@Z  00516ca0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

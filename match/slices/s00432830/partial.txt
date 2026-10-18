@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00432ee0  0  asm transcription (naked), not decompiled C++; was a manifest row, moved by the 2026-10-18 asm audit
+00432ef0  0  asm transcription (naked), not decompiled C++; was a manifest row, moved by the 2026-10-18 asm audit
+00432f00  0  asm transcription (naked), not decompiled C++; was a manifest row, moved by the 2026-10-18 asm audit

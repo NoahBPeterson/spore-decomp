@@ -1,3 +1,5 @@
 006b7880 12 SP::cStringTableResourceFactory::WriteResource - EH-heavy, stubbed
 006b7d50 813 CPU topology grouping - loops omitted
 006b82a0 360 volume-identity hasher - skeleton only
+006b8080  0  asm transcription (__asm block of 12 instructions), not decompiled C++; was a nonmatching row, moved by the 2026-10-18 asm audit
+006b80e0  0  asm transcription (__asm block of 13 instructions), not decompiled C++; was a nonmatching row, moved by the 2026-10-18 asm audit

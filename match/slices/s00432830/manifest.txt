@@ -15,6 +15,3 @@ slices/s00432830/s00432830.cpp  ?Destroy@Holder@@  00432c20  /Od /Ob1 /MD /Gy /T
 slices/s00432830/s00432830.cpp  ??0CreatureAbility@@QAE@XZ  00432cf0  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s00432830/s00432830.cpp  ?Init@HandlerFunctor@@  00432dc0  /Od /Ob1 /MD /Gy /TP /arch:SSE
 slices/s00432830/s00432830.cpp  ?CallHandler@@  00432e40  /Od /Ob1 /MD /Gy /TP /arch:SSE
-slices/s00432830/s00432830.cpp  AdjustThunk_00432EE0  00432ee0  /Od /Ob1 /MD /Gy /TP /arch:SSE
-slices/s00432830/s00432830.cpp  AdjustThunk_00432EF0  00432ef0  /Od /Ob1 /MD /Gy /TP /arch:SSE
-slices/s00432830/s00432830.cpp  AdjustThunk_00432F00  00432f00  /Od /Ob1 /MD /Gy /TP /arch:SSE

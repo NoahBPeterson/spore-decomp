@@ -1,1 +1,2 @@
 # <va>  <diff-bytes>  <reason>
+00516ac0  0  asm transcription (__asm block of 52 instructions), not decompiled C++; was a manifest row, moved by the 2026-10-18 asm audit

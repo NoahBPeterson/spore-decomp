@@ -179,7 +179,10 @@ Writing matchable source:
 **No assembly transcription.** A function written as `__declspec(naked)` + `__asm`, with `_emit` bytes, or
 generated from the disassembly by a script is not decompiled and never counts as byte-exact; record it in
 partial.txt. Only a few `__asm` statements inside C++ where the original used an asm helper (fnstcw/fldcw,
-cvtss2si) are allowed. `tools/matching/asm_audit.py` lists offending manifest entries; run it before integrating.
+cvtss2si, the maxss/minss clamp) are allowed: a block of at most 8 instructions. `run_all.py` enforces this (since
+2026-10-18): a naked, `_emit` or longer-block row prints `ASM` instead of MATCH and does not count.
+`tools/matching/asm_audit.py --all-rows` lists offending manifest and nonmatching rows; `--review` adds bodies with
+many helper-sized blocks, for a human look. The 2026-10-18 audit moved 12 claimed rows (9 byte-exact) to partial.txt.
 
 **Atomics are semantics, not shape.** Where the original has `lock xadd`, `lock cmpxchg`, `lock inc/dec` or
 `xchg mem,reg`, write the `_Interlocked*` intrinsic (`_InterlockedExchangeAdd`, `_InterlockedCompareExchange`,
