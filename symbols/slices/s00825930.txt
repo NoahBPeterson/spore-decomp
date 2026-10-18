@@ -1,6 +1,7 @@
-00825930 large cPropertyUI routine (unlabeled)
-00825fc0 routine (unlabeled)
-00826290 routine (unlabeled)
-00826560 SP::cPropertyUI destructor  # decomp index
-00820bb0 ?Grow@?$SpVec@UITE@@@@QAEXPAPAUITE@@0@Z  # callee: vector<ITE*>::DoInsertValue (mTextEdit push_back)
 00630b30 ?Grow@?$SpVec@UIBtn@@@@QAEXPAPAUIBtn@@0@Z  # callee: vector<IBtn*>::DoInsertValue (mButton push_back)
+00820bb0 ?Grow@?$SpVec@UITE@@@@QAEXPAPAUITE@@0@Z  # callee: vector<ITE*>::DoInsertValue (mTextEdit push_back)
+00824c20 ?ClearAllPropertyControls@cPropertyUI@SP@@QAEXXZ  # SP::cPropertyUI::ClearAllPropertyControls (callee of s00825930, named from the dev publics; slice address comment)
+00825930 ?AddSpinnerRow@cPropertyUI_s0082_5930@@QAEIIMPAUIWinW@@@Z  # cPropertyUI_s0082_5930::AddSpinnerRow migrated from s00825930 (verbatim, slice spelling)
+00825fc0 ?AddTextEditRowA@cPropertyUI_s0082_5930@@QAEIIPBXPAUIWinW@@@Z  # cPropertyUI_s0082_5930::AddTextEditRowA migrated from s00825930 (verbatim, slice spelling)
+00826290 ?AddTextEditRowB@cPropertyUI_s0082_5930@@QAEIIPBXPAUIWinW@@@Z  # cPropertyUI_s0082_5930::AddTextEditRowB migrated from s00825930 (verbatim, slice spelling)
+00826560 ??1cPropertyUI_s0082_5930@@UAE@XZ  # cPropertyUI_s0082_5930::~cPropertyUI migrated from s00825930 (verbatim, slice spelling)

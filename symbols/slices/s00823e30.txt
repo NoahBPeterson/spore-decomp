@@ -1,1 +1,1 @@
-00823e30 large cPropertyUI routine (PopulatePropsGrid family, unlabeled)  # 3566 bytes, inline-heavy
+00823e30 ?ProcessSpinnerButtons@cPropertyUI_s0082_3e30@SP@@QAEXI@Z  # cPropertyUI_s0082_3e30::ProcessSpinnerButtons migrated from s00823e30 (verbatim, slice spelling)

@@ -1,4 +1,5 @@
-0081fd70 SP::cPropertyUI::ModifyVec4  # pdb_names.json gap-align
-00820210 SP::cPropertyUI::ModifyRGB  # pdb_names.json gap-align
-00820680 SP::cPropertyUI::ModifyRGBA  # pdb_names.json gap-align
-00820bb0 eastl::vector<T*>::DoInsertValue  # 4-byte element vector insert; COMDAT-folded pointer vectors
+0081fd70 ?ModifyVec4@cPropertyUI_s0081_fd70@SP@@QAEXPAUIWindow@@_N@Z  # cPropertyUI_s0081_fd70::ModifyVec4 migrated from s0081fd70 (verbatim, slice spelling)
+00820210 ?ModifyRGB@cPropertyUI_s0081_fd70@SP@@QAEXPAUIWindow@@_N@Z  # cPropertyUI_s0081_fd70::ModifyRGB migrated from s0081fd70 (verbatim, slice spelling)
+00820680 ?ModifyRGBA@cPropertyUI_s0081_fd70@SP@@QAEXPAUIWindow@@_N@Z  # cPropertyUI_s0081_fd70::ModifyRGBA migrated from s0081fd70 (verbatim, slice spelling)
+00820bb0 ?DoInsertValue@PtrVec@@QAEXPAPAXABQAX@Z  # PtrVec::DoInsertValue migrated from s0081fd70 (verbatim, slice spelling)
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s0081fd70, named from the dev publics; slice address comment)

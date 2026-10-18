@@ -1,1 +1,7 @@
-00826960 SP::cPropertyUI::LoadPropFile  # pdb_names.json
+00824e10 ?AddLabel@cPropertyUI@SP@@QAEXPBD@Z  # SP::cPropertyUI::AddLabel (callee of s00826960, named from the dev publics; slice address comment)
+00825110 ?AddBool@cPropertyUI@SP@@QAEII_NPAVIWindow@UTFWin@EA@@@Z  # SP::cPropertyUI::AddBool (callee of s00826960, named from the dev publics; slice address comment)
+008252b0 ?AddInt@cPropertyUI@SP@@QAEIIHPAVIWindow@UTFWin@EA@@@Z  # SP::cPropertyUI::AddInt (callee of s00826960, named from the dev publics; slice address comment)
+00825930 ?AddFloat@cPropertyUI@SP@@QAEIIMPAVIWindow@UTFWin@EA@@@Z  # SP::cPropertyUI::AddFloat (callee of s00826960, named from the dev publics; slice address comment)
+00825fc0 ?AddString@cPropertyUI@SP@@QAEIIPB_WPAVIWindow@UTFWin@EA@@@Z  # SP::cPropertyUI::AddString (callee of s00826960, named from the dev publics; slice address comment)
+00826290 ?AddKey@cPropertyUI@SP@@QAEIIPB_WPAVIWindow@UTFWin@EA@@@Z  # SP::cPropertyUI::AddKey (callee of s00826960, named from the dev publics; slice address comment)
+00826960 ?LoadPropFile@cPropertyUI_s0082_6960@SP@@QAEXII_N@Z  # cPropertyUI_s0082_6960::LoadPropFile migrated from s00826960 (verbatim, slice spelling)

@@ -1,5 +1,6 @@
-008220e0 SP::cPropertyUI::SavePropFile  # PDB name; body walks mHolderWindow rows and writes the PropertyList
-0081d780 EA::COM::interface_cast<IWinTextEdit>  # QI with IID 0xcf428691 on AutoRefCount<IWindow>
-005c2570 EA::COM::interface_cast<IWinButton>  # QI with IID 0x8ed27e7a on AutoRefCount<IWindow>
 005a74a0 EA::Variant::Variant(const string16&)  # type=0,flags=0 then Set(0x13, 9, &s, 0x10, 1)
+005c2570 EA::COM::interface_cast<IWinButton>  # QI with IID 0x8ed27e7a on AutoRefCount<IWindow>
 00671b80 ParseFloatW  # cdecl wrapper: FUN_0092ddc0(s, &end), returns float
+0081d780 EA::COM::interface_cast<IWinTextEdit>  # QI with IID 0xcf428691 on AutoRefCount<IWindow>
+008220e0 ?SavePropFile@cPropertyUI_s0082_20e0@SP@@QAEXXZ  # cPropertyUI_s0082_20e0::SavePropFile migrated from s008220e0 (verbatim, slice spelling)
+0093dd80 ?Construct@Variant@EA@@IAE_NGGPBXII@Z  # EA::Variant::Construct (callee of s008220e0, named from the dev publics; slice address comment)

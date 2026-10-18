@@ -1,0 +1,16 @@
+# va  diff-bytes  reason
+0081d7a0 68 Variant::Reset: 16-bit flag test emits movzx; constant register roles differ  [equiv UNSUPPORTED (unresolved callees Destruct/Call5)]
+0081da30 72 Variant setter (type 0x20): same flag-test / register issues  [equiv UNSUPPORTED (unresolved callees Destruct/Call5)]
+0081ddd0 9 short-field init: constant 2/0x33 register roles swapped (eax/ecx)  [equiv PASS (367 valid, 100% cov)]
+0081de30 9 short-field init: constant 2/0x34 register roles swapped (eax/ecx)  [equiv PASS (399 valid, 100% cov)]
+0081fd70 1205 complete ModifyVec4 (both bArray paths); late 'push ebp' save, textEdit/iterator register assignment differ (~9 instr)
+00820210 1099 complete ModifyRGB; same register/spill differences as ModifyVec4
+00820680 1134 complete ModifyRGBA; same register/spill differences as ModifyVec4
+00820bb0 193 complete eastl::vector<T*>::DoInsertValue (generic ptr vec); register assignment esi/edi swapped, ebp save placement
+008220e0 5633 complete (all 12 scalar + 12 dead array property branches); stack slot layout and inline/out-of-line choices of Variant ctors and AutoRefCount::operator= differ
+00823e30 3030 cPropertyUI::ProcessSpinnerButtons complete (inc/dec x 8 types x array); cl dynamically aligns the frame (and esp) once many double-vararg sprintf sites exist, the original has a plain 0x38 frame
+008252b0 1354 cPropertyUI::AddIntSpinnerRow complete; same call/vslot sequence as AddSpinnerRow (%d text instead of %f), locals held by AddRef/Release scope guards, narrow string dtor; 1662 B vs 1662 B; differs in vcall register order (eax/edx swapped) and frame/reg alloc; flags /O2 /MD /Gy /TP /arch:SSE
+00825930 1385 AddSpinnerRow complete; call/vslot sequence identical to original, differs in reg alloc (edx/eax order for vcalls), frame layout (pid in arg slot) and AddChild codegen; flags /O2 /MD /Gy /TP /arch:SSE /fp:fast
+00825fc0 585 AddTextEditRowA complete; same call sequence, reg-alloc/CSE of &mTextEdit and id caching in ebp differ; same flags
+00826290 615 AddTextEditRowB complete; same call sequence, reg-alloc differs (edi/ebx swap, size() form); same flags
+00826960 1311 (flags /O2 /MD /Gy /TP /arch:SSE /fp:fast) complete: every type branch incl. the dead 0x8000xxxx array branches, same 146 call sites in the same order, same vcall slots and pushed constants, size 4737 vs 4737; not byte-exact: /O2 stack packing (frame 0xac vs 0xb0, locals at shifted offsets), ids[i] addressing [base+index] operand order, float-branch arg scheduling, bool-array loop register choice

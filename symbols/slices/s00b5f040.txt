@@ -4,7 +4,7 @@
 00b5f620 App::cSuperPowersCommand::cSuperPowersCommand  # dev-PDB gap-align
 00b5f670 FUN_00b5f670  # no PDB name
 00b5f7b0 FUN_00b5f7b0  # no PDB name
-00b5f950 EA::AutoRefCount<EA::UTFWinControls::IWinText>::operator=  # dev-PDB
+00b5f950 ??4?$AutoRefCount_s00b5_f040@VIWinText_s00b5_f040@UTFWinControls@EA@@@EA@@QAEAAU01@PAVIWinText_s00b5_f040@UTFWinControls@1@@Z  # None migrated from s00b5f040 (verbatim, slice spelling)
 00b5fa90 FUN_00b5fa90  # no PDB name
 00b5fde0 FUN_00b5fde0  # no PDB name
 00b60070 FUN_00b60070  # no PDB name

@@ -1,7 +1,9 @@
 0081cd50 cSPUIPopupMenuScrollButton::ScrollButtonSelected  # PDB name
 0081ce60 cSPUIPopupMenuScrollButton::OnButtonClicked  # PDB candidate
-0081dce0 SP::cSPUIPropertyEditor::Shutdown  # PDB name
-0081d7a0 EA::Variant::SetValue  # flags/typeId + FUN_0093dd80 dispatch
-0081da30 EA::Variant::SetValue  # variant type 0x20
-0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
 0081d020 UTFWin::cSPUIProgressBarGradientWin::cSPUIProgressBarGradientWin  # PDB name
+0081d510 UTFWin::cSPUIProgressBarWin::cSPUIProgressBarWin  # PDB name
+0081d7a0 ?Reset@Variant@@QAEPAU1@H@Z  # Variant::Reset migrated from s0081c9c0 (verbatim, slice spelling)
+0081da30 ?Set20@Variant@@QAEPAU1@H@Z  # Variant::Set20 migrated from s0081c9c0 (verbatim, slice spelling)
+0081dce0 ?Shutdown@cSPUIPropertyEditor@SP@@QAEXXZ  # SP::cSPUIPropertyEditor::Shutdown migrated from s0081c9c0
+0081ddd0 ?Init@D3@@QAEPAU1@H@Z  # D3::Init migrated from s0081c9c0 (verbatim, slice spelling)
+0081de30 ?Init2@D3@@QAEPAU1@H@Z  # D3::Init2 migrated from s0081c9c0 (verbatim, slice spelling)
