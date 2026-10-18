@@ -1,0 +1,13 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Grid.cpp  ?SetDefaultFormatting@WinGrid@UTFWinControls@EA@@QAEXXZ  009702b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?OnMouseWheel@WinGrid_s0096_f3f0@UTFWinControls@EA@@QAEXHHHH@Z  00970540  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?CreateNodeCopy@@YGPAURBNode@@PBU1@PAU1@@Z  00972e30  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?DoCellWindowMove@WinGrid@@QAEXPAH@Z  00973330  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?SetScrollBarDrawableVertical@WinGrid@@QAE_NPAX@Z  00973390  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?SetScrollBarDrawableHorizontal@WinGrid@@QAE_NPAX@Z  00973410  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?GetCountForKey@SparseMatrix@@QAEHH@Z  009739e0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?CountCellsInRange@SparseMatrix@@QAEHHHHH@Z  00973b00  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?GetCellsInRange@SparseMatrix@@QAEHHHHHPAH@Z  00973b90  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?ListErase@@YGPAUListIter@@PAU1@U1@1@Z  00973d10  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?ListInsertRange@@YGXPAUListNode@@UListIter@@1H@Z  00973d60  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Grid.cpp  ?SetRowHeight@WinGridView@@QAE_NHHM@Z  00977e50  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include

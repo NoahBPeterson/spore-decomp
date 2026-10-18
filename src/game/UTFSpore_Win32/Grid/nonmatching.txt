@@ -1,0 +1,27 @@
+# va  diff-bytes  reason
+00972e90 543 DoArrowKey: complete (both key switches, selection clear, notify, scrollbar update); regalloc/frame differ, uninitialized msg fields left as-is; flags /arch:SSE /fp:fast (original uses movss/cvtsi2ss/comiss/cvttss2si); col/row now one CellCoordinates struct (msg.pCur points at both, as in the original)
+00973200 42 ClearSelection: complete; 64-bit compare of +0x84 reproduced, store zeroing/-1 constants scheduled differently
+00973490 238 AddScrollBar: complete (vertical+horizontal creation, drawable hookup, add to window, dirty); diverges in call/arg ordering
+00973640 91 ColIterA::operator++ (SparseMatrixColIterator<CellData*>): complete; loop layout differs; difftest PASS
+009736c0 74 ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>): complete; loop layout differs; difftest WEAK (32.6% coverage: random trees rarely reach the outer-advance loop)
+00973740 63 SparseMatrix::RowBegin (outer find + inner begin iterator): complete; arg-slot reuse for the key differs
+009737a0 61 SparseMatrix::RowEnd (outer find + inner end iterator): complete; arg-slot reuse for the key differs
+00973800 144 SparseMatrix::GetMinMaxUsedRowForCol: complete; original forms inner-tree pointers via node+0x14 and keeps a result flag in al; difftest WEAK after fixing the backward walk (original uses a reverse_iterator: two RBTreeDecrement calls per step, one on a copy for the dereference)
+00973930 38 SparseMatrix::GetMinUsedColAndRow: complete; load of node key hoisted by cl, original reads first-inner key through a pointer
+00973980 44 SparseMatrix::GetMaxUsedColAndRow: complete; same pattern as 00973930
+00973a40 72 SparseMatrix::IsCellUsed: complete; original reuses the dead arg slot as the second find's out iterator; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator address (original: its own dead row arg slot, ours: a frame local); the checker normalises frame pointers to STK but not arg-slot pointers; return value and all memory identical on replay
+00973a90 87 SparseMatrix::GetCellPtr: complete; same arg-slot reuse; difftest FAIL is a checker artifact: the only difference is the second find's out-iterator/key addresses (original: its own arg slots after copying col over row, ours: frame locals), which the checker does not normalise to STK; return value and memory identical on replay
+00973c30 98 SparseMatrix::FindByValue (iterator to first inner node with value): complete; layout differs
+00973cc0 32 SparseMatrix::FirstUsed: complete; iterator store order differs
+00977f90 527 SetCellFormat: complete (default/row/column/cell formats, new CellData+CellFormat, recalc + redraw); flags /O2 /MD /Gy /EHsc /TP /arch:SSE; regalloc and inline-ctor schedule differ; difftest FAIL is a checker artifact: only operator new's name argument differs, the address of the identical "UTFWin/Grid" literal (orig 0x1442bc4, ours in our .rdata); the call-trace compare does not apply the pooled-constant rule to call args; with the literal pointed at 0x1442bc4 in a scratch copy, 293 valid inputs show no mismatch (WEAK, 44% coverage)
+00978250 294 SetCellTextStyle: complete (existing/new cell format, changed flag, dirty+notify); flags +/arch:SSE; regalloc/arg reloads differ
+009783f0 295 SetCellColors: complete; original keeps col/row in the stack arg slots and reloads, mine enregisters them
+00978560 287 SetCellWrapping: complete; same regalloc pattern as SetCellColors
+009786c0 232 SetCellAlignment: complete; same regalloc pattern as SetCellColors
+00978830 231 SetCellBorder: complete; same regalloc pattern as SetCellColors
+009789a0 402 SetSizeCachedActualForRow: complete (reset all via FindByValue iterator, or per-row set/insert); frame is 4 bytes larger and the iterator loop differs
+00978b50 345 SetSizeCachedActualForColumn: complete (reset-all via RowBegin/RowEnd iterators, or per-column set/insert); frame 4 bytes larger, iterator regs differ
+00978d30 29 SetCellExtraData: complete; original skips Set() when operator new returns null (merged check), mine does not
+00978df0 1364 complete WinGridView::SortRowsByColumn (collect column cells, merge_sort, erase+reinsert with new rows, remap selection, invalidate); regalloc/block layout differ; difftest UNSUPPORTED (0/400 valid inputs: needs a real matrix)
+00979440 1529 complete WinGridView::SortColumnsByRow (transposed); same; difftest UNSUPPORTED (0/1500 valid)
+0097a130 3205 complete (all paths); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; frame/reg allocation differs, double->int64 ceil cast emits _ftol2_sse instead of inline fistp+fldcw

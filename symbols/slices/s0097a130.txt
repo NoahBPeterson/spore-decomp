@@ -1,0 +1,1 @@
+0097a130 ?OnRebuild@WinGrid_s0097_a130@@QAE_NPAURenderContext@@@Z  # WinGrid_s0097_a130::OnRebuild migrated from s0097a130 (verbatim, slice spelling)

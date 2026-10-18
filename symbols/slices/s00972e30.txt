@@ -1,2 +1,23 @@
-00973640 ?EColIterA  # ColIterA::operator++ (SparseMatrixColIterator<CellData*>); ??E prefix form so the checker matches the operator symbol
-009736c0 ?EColIterB  # ColIterB::operator++ (SparseMatrixColIterator<CellFormatExtra>); same
+00972e30 ?CreateNodeCopy@@YGPAURBNode@@PBU1@PAU1@@Z  # CreateNodeCopy migrated from s00972e30 (verbatim, slice spelling)
+00972e90 ?DoArrowKey@WinGrid@UTFWinControls@EA@@QAEXII@Z  # EA::UTFWinControls::WinGrid::DoArrowKey migrated from s00972e30
+00973200 ?ClearSelection@WinGrid@UTFWinControls@EA@@UAEXXZ  # EA::UTFWinControls::WinGrid::ClearSelection migrated from s00972e30
+00973330 ?DoCellWindowMove@WinGrid@@QAEXPAH@Z  # WinGrid::DoCellWindowMove migrated from s00972e30 (verbatim, slice spelling)
+00973390 ?SetScrollBarDrawableVertical@WinGrid@@QAE_NPAX@Z  # WinGrid::SetScrollBarDrawableVertical migrated from s00972e30 (verbatim, slice spelling)
+00973410 ?SetScrollBarDrawableHorizontal@WinGrid@@QAE_NPAX@Z  # WinGrid::SetScrollBarDrawableHorizontal migrated from s00972e30 (verbatim, slice spelling)
+00973490 ?AddScrollBar@WinGrid@@QAE_N_N0@Z  # WinGrid::AddScrollBar migrated from s00972e30 (verbatim, slice spelling)
+00973640 ??EColIterA@@QAEAAU0@XZ  # ColIterA::operator++ migrated from s00972e30 (verbatim, slice spelling)
+009736c0 ??EColIterB@@QAEAAU0@XZ  # ColIterB::operator++ migrated from s00972e30 (verbatim, slice spelling)
+00973740 ?RowBegin@SparseMatrix@@QAEXPAUIter@@H@Z  # SparseMatrix::RowBegin migrated from s00972e30 (verbatim, slice spelling)
+009737a0 ?RowEnd@SparseMatrix@@QAEXPAUIter@@H@Z  # SparseMatrix::RowEnd migrated from s00972e30 (verbatim, slice spelling)
+00973800 ?GetMinMaxUsedRowForCol@SparseMatrix@@QAE_NHPAH0@Z  # SparseMatrix::GetMinMaxUsedRowForCol migrated from s00972e30 (verbatim, slice spelling)
+00973930 ?GetMinUsedColAndRow@SparseMatrix@@QAEHPAH@Z  # SparseMatrix::GetMinUsedColAndRow migrated from s00972e30 (verbatim, slice spelling)
+00973980 ?GetMaxUsedColAndRow@SparseMatrix@@QAEHPAH@Z  # SparseMatrix::GetMaxUsedColAndRow migrated from s00972e30 (verbatim, slice spelling)
+009739e0 ?GetCountForKey@SparseMatrix@@QAEHH@Z  # SparseMatrix::GetCountForKey migrated from s00972e30 (verbatim, slice spelling)
+00973a40 ?IsCellUsed@SparseMatrix@@QAE_NHH@Z  # SparseMatrix::IsCellUsed migrated from s00972e30 (verbatim, slice spelling)
+00973a90 ?GetCellPtr@SparseMatrix@@QAE_NHHPAPAPAX@Z  # SparseMatrix::GetCellPtr migrated from s00972e30 (verbatim, slice spelling)
+00973b00 ?CountCellsInRange@SparseMatrix@@QAEHHHHH@Z  # SparseMatrix::CountCellsInRange migrated from s00972e30 (verbatim, slice spelling)
+00973b90 ?GetCellsInRange@SparseMatrix@@QAEHHHHHPAH@Z  # SparseMatrix::GetCellsInRange migrated from s00972e30 (verbatim, slice spelling)
+00973c30 ?FindByValue@SparseMatrix@@QAEPAUIter@@PAU2@H@Z  # SparseMatrix::FindByValue migrated from s00972e30 (verbatim, slice spelling)
+00973cc0 ?FirstUsed@SparseMatrix@@QAEPAUIter@@PAU2@@Z  # SparseMatrix::FirstUsed migrated from s00972e30 (verbatim, slice spelling)
+00973d10 ?ListErase@@YGPAUListIter@@PAU1@U1@1@Z  # ListErase migrated from s00972e30 (verbatim, slice spelling)
+00973d60 ?ListInsertRange@@YGXPAUListNode@@UListIter@@1H@Z  # ListInsertRange migrated from s00972e30 (verbatim, slice spelling)
