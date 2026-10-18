@@ -1,5 +1,16 @@
-005ff2a0 SP::cAudioTab::Shutdown  # releases the mhSound slot at +0x24 (also used by cAudioTab::DoMessageTab) then mLayout.Shutdown
-005ff4e0 SP::cOnlineTab::Shutdown  # removes IHandler (+0x24) from MessageServer for 3 ids, PDB candidate
-005ff560 SP::cOnlineTab::RestoreSettingsFromEntry  # PDB candidate (caller-scored)
-005ff8e0 SP::cSettingsTab::Init  # body inlined verbatim at the start of SP::cAudioTab::Init
-005ffee0 SP::cAudioTab::DoMessageTab  # PDB candidate (caller-single); uses cAudioPreferences setters
+005ff230 ?RestartTimer@cTimedObject@@QAEXXZ  # cTimedObject::RestartTimer migrated from s005ff230 (verbatim, slice spelling)
+005ff2a0 ?Shutdown@cAudioTab@SP@@UAEXXZ  # SP::cAudioTab::Shutdown migrated from s005ff230
+005ff2d0 ?RestoreSettingsFromEntry@cAudioTab_s005f_f230@SP@@QAEXXZ  # cAudioTab_s005f_f230::RestoreSettingsFromEntry migrated from s005ff230 (verbatim, slice spelling)
+005ff370 ?DoMessageTab@cGameTab_s005f_f230@SP@@QAE_NPAVIWindow_s005f_f230@UTFWin@EA@@PBUMessage_s005f_f230@45@@Z  # cGameTab_s005f_f230::DoMessageTab migrated from s005ff230 (verbatim, slice spelling)
+005ff460 ?RestoreSettingsFromEntry@cGameTab@SP@@UAEXXZ  # SP::cGameTab::RestoreSettingsFromEntry migrated from s005ff230
+005ff4e0 ?Shutdown@cOnlineTab_s005f_f230@SP@@QAEXXZ  # cOnlineTab_s005f_f230::Shutdown migrated from s005ff230 (verbatim, slice spelling)
+005ff560 ?RestoreSettingsFromEntry@cOnlineTab_s005f_f230@SP@@QAEXXZ  # cOnlineTab_s005f_f230::RestoreSettingsFromEntry migrated from s005ff230 (verbatim, slice spelling)
+005ff630 ?Shutdown@cGameTab@SP@@UAEXXZ  # SP::cGameTab::Shutdown migrated from s005ff230
+005ff640 ?RestoreSettingsFromEntry@cOptionTab@SP@@QAEXXZ  # cOptionTab::RestoreSettingsFromEntry migrated from s005ff230 (verbatim, slice spelling)
+005ff700 ?BeginClose@cSPUISettings_s005f_f230@SP@@QAEXXZ  # cSPUISettings_s005f_f230::BeginClose migrated from s005ff230 (verbatim, slice spelling)
+005ff850 ?SaveOnlineSettings@cSPUISettings_s005f_f230@SP@@QAEXXZ  # cSPUISettings_s005f_f230::SaveOnlineSettings migrated from s005ff230 (verbatim, slice spelling)
+005ff8e0 ?Init@cSettingsTab_s005f_f230@SP@@UAEXIPAVIWinProc_s005f_f230@UTFWin@EA@@I@Z  # cSettingsTab_s005f_f230::Init migrated from s005ff230 (verbatim, slice spelling)
+005ff940 ?Shutdown@cGraphicsTab_s005f_f230@SP@@QAEXXZ  # cGraphicsTab_s005f_f230::Shutdown migrated from s005ff230 (verbatim, slice spelling)
+005ffa30 ?Init@cAudioTab_s005f_f230@SP@@UAEXIPAVIWinProc_s005f_f230@UTFWin@EA@@I@Z  # cAudioTab_s005f_f230::Init migrated from s005ff230 (verbatim, slice spelling)
+005ffee0 ?DoMessageTab@cAudioTab_s005f_f230@SP@@QAE_NPAVIWindow_s005f_f230@UTFWin@EA@@PBUMessage_s005f_f230@45@@Z  # cAudioTab_s005f_f230::DoMessageTab migrated from s005ff230 (verbatim, slice spelling)
+00600180 ?UpdateFullscreenControls@cGraphicsTab_s005f_f230@SP@@QAEXXZ  # cGraphicsTab_s005f_f230::UpdateFullscreenControls migrated from s005ff230 (verbatim, slice spelling)

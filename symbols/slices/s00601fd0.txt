@@ -1,2 +1,3 @@
-00601fd0 SP::cGameTab::Init  # PDB anchor
-006026f0 SP::cTerrainUI::LoadScriptFromGrid / DoMessage  # PDB candidate (caller-scored)
+00601fd0 ?Init@cGameTab_s0060_1fd0@SP@@UAEXIPAVIWinProc_s0060_1fd0@UTFWin@EA@@I@Z  # cGameTab_s0060_1fd0::Init migrated from s00601fd0 (verbatim, slice spelling)
+006026f0 ?cTerrainUILoadScriptFromGrid@@YA_NXZ  # cTerrainUILoadScriptFromGrid migrated from s00601fd0 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00601fd0, named from the dev publics; slice address comment)

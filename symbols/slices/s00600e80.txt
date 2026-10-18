@@ -1,7 +1,11 @@
-00601c50 SettingsRecord::operator= (cSPUISettings tab record)  # byte-exact; intrusive_ptr +0, string16 +0xc, sub +0x3c
-00601e60 SP::cSPUISettings::Shutdown  # PDB candidate (callee-single)
+00600e80 ?FUN_00600e80@@YAXXZ  # FUN_00600e80 migrated from s00600e80 (verbatim, slice spelling)
+006012e0 ?FUN_006012e0@@YAXXZ  # FUN_006012e0 migrated from s00600e80 (verbatim, slice spelling)
+006016c0 ?FUN_006016c0@@YAXXZ  # FUN_006016c0 migrated from s00600e80 (verbatim, slice spelling)
+00601730 ?FUN_00601730@@YAXXZ  # FUN_00601730 migrated from s00600e80 (verbatim, slice spelling)
+00601790 ?FUN_00601790@@YAXXZ  # FUN_00601790 migrated from s00600e80 (verbatim, slice spelling)
+00601930 ?FUN_00601930@@YAXXZ  # FUN_00601930 migrated from s00600e80 (verbatim, slice spelling)
+00601a70 ?FUN_00601a70@@YAXXZ  # FUN_00601a70 migrated from s00600e80 (verbatim, slice spelling)
+00601c50 ??4SettingsRecord@@QAEAAU0@ABU0@@Z  # SettingsRecord::operator= migrated from s00600e80 (verbatim, slice spelling)
 00601da0 SP::cSPUISettings::RemoveTab  # PDB candidate
-00601f00 SP::cSPUISettings::CloseWindow  # PDB candidate
-00601730 SP::cOnlineTab::~cOnlineTab  # PDB names (gap-align)
-00601790 SP::cSPUISettings::cSPUISettings  # PDB names (callee-single)
-00601930 SP::cSPUISettings::~cSPUISettings  # PDB names (gap-align)
+00601e60 ?Shutdown@SPUISettingsStub@@QAE_NXZ  # SPUISettingsStub::Shutdown migrated from s00600e80 (verbatim, slice spelling)
+00601f00 ?FUN_00601f00@@YAXXZ  # FUN_00601f00 migrated from s00600e80 (verbatim, slice spelling)

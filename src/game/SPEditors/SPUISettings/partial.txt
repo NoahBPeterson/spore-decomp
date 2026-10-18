@@ -1,0 +1,26 @@
+# va  diff-bytes  reason
+006002d0  -  SP::Pollen::cRegistrationDialog::DoMessage: stub.
+006008c0  -  SP::cSPUISettings::OnModalWindowEnd: stub.
+00600ab0  -  SP::cSPUISettings::ShowWindow: stub.
+00600c00  -  helper: stub.
+00600da0  -  cGraphicsTab ctor: stub (retail MI layout not reconstructed).
+00600df0  -  cGraphicsTab destructor / scalar deleting destructor: stub (retail MI layout not reconstructed).
+00600e80  -  cSPUISettings ctor/layout helper: stub.
+006012e0  -  SP::cSPUISearchBox::DoMessage: stub.
+006016c0  -  cGraphicsTab scalar deleting destructor: stub (retail MI layout not reconstructed).
+00601730  -  SP::cOnlineTab::~cOnlineTab: stub (retail MI layout not reconstructed).
+00601790  -  SP::cSPUISettings::cSPUISettings: stub.
+00601930  -  SP::cSPUISettings::~cSPUISettings: stub.
+00601a70  -  helper: stub.
+00601f00  -  SP::cSPUISettings::CloseWindow: stub.
+006026f0  -  SP::cTerrainUI::LoadScriptFromGrid / DoMessage: skeleton (large message switch not reconstructed).
+00603820  -  cGraphicsTab helper: stub.
+00603920  -  SP::cGraphicsTab::init_lmh_control: stub.
+00603a10  -  SP::cGraphicsTab::on_data_changed: stub (large).
+00603de0  -  SP::cGraphicsTab::SaveSettings: stub.
+00604260  -  SP::cGraphicsTab::Init: stub (large).
+006044b0  -  SP::cGraphicsTab::load_list_options: stub (global option-table loop).
+00604520  -  SP::cGraphicsTab::set_profile: stub (PropertyManager path).
+006045c0  -  SP::cGraphicsTab::DoMessageTab: stub (large).
+00604890  -  cSPEditorVerbIcon::Shutdown candidate (1196 B): outline port only (layout/init, winproc add, per-slot icon loop, layout teardown)
+00604d40  -  SP::cSPUISettings::DoMessage candidate (1166 B): message-dispatch skeleton only

@@ -1,7 +1,9 @@
-00603170 SP::cOnlineTab::HandleMessage  # byte-exact; posts 0x44db12e/0x5b96086/0x5c5594a, this-0x24 -> InitUIState
-00602940 SP::cOnlineTab::InitUIState  # PDB anchor
-006031c0 SP::cSPUISettings::AddTab  # PDB candidate (callee-scored)
-00603260 SP::cSPUISettings::Init  # PDB anchor
-006035d0 SP::ShowSettingsWindow  # PDB candidate (caller-single)
+00602940 ?InitUIState@cOnlineTab_s0060_2940@@QAEXE@Z  # cOnlineTab_s0060_2940::InitUIState migrated from s00602940 (verbatim, slice spelling)
+00603170 ?HandleMessage@Handler13@@QAE_NIH@Z  # Handler13::HandleMessage migrated from s00602940 (verbatim, slice spelling)
+006031c0 ?AddTab@cSPUISettings_s0060_2940@@QAEXPAUcSettingsTab_s0060_2940@@PB_WI@Z  # cSPUISettings_s0060_2940::AddTab migrated from s00602940 (verbatim, slice spelling)
+00603260 ?Init@cSPUISettings_s0060_2940@@QAE_NH@Z  # cSPUISettings_s0060_2940::Init migrated from s00602940 (verbatim, slice spelling)
+006035d0 ?ShowSettingsWindow@@YA_NH@Z  # ShowSettingsWindow migrated from s00602940 (verbatim, slice spelling)
 00603650 SP::cGraphicsTab::init_profile_data  # PDB candidate (callee-scored)
-00603780 SP::cOnlineTab::Init  # PDB candidate (caller-scored)
+00603780 ?Init@cOnlineTab_s0060_2940@@UAEXPB_WPAXI@Z  # cOnlineTab_s0060_2940::Init migrated from s00602940 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00602940, named from the dev publics; slice address comment)
+00812160 ?Init@cSPUILayout@@QAE_NPB_WH_NI@Z  # cSPUILayout::Init (callee of s00602940, named from the dev publics; slice address comment)

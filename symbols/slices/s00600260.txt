@@ -1,6 +1,7 @@
-00600260 SP::cOnlineTab::DoMessageTab  # byte-exact; ConfigManager slots +0x2c/+0x30, window 0x5b1cc48
-006002d0 SP::Pollen::cRegistrationDialog::DoMessage  # PDB candidate (caller-scored)
-006008c0 SP::cSPUISettings::OnModalWindowEnd  # PDB candidate
-00600ab0 SP::cSPUISettings::ShowWindow  # PDB candidate
-00600da0 cGraphicsTab constructor (retail MI layout)  # PDB layout is 0x44, retail larger
-00600df0 SP::cGraphicsTab destructor / scalar deleting destructor
+00600260 ?DoMessageTab@OnlineTabStub@@QAEXXZ  # OnlineTabStub::DoMessageTab migrated from s00600260 (verbatim, slice spelling)
+006002d0 ?FUN_006002d0@@YAXXZ  # FUN_006002d0 migrated from s00600260 (verbatim, slice spelling)
+006008c0 ?FUN_006008c0@@YAXXZ  # FUN_006008c0 migrated from s00600260 (verbatim, slice spelling)
+00600ab0 ?FUN_00600ab0@@YAXXZ  # FUN_00600ab0 migrated from s00600260 (verbatim, slice spelling)
+00600c00 ?FUN_00600c00@@YAXXZ  # FUN_00600c00 migrated from s00600260 (verbatim, slice spelling)
+00600da0 ?FUN_00600da0@@YAXXZ  # FUN_00600da0 migrated from s00600260 (verbatim, slice spelling)
+00600df0 ?FUN_00600df0@@YAXXZ  # FUN_00600df0 migrated from s00600260 (verbatim, slice spelling)

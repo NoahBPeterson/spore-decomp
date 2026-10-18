@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUISettings.cpp  ?Shutdown@cAudioTab@SP@@UAEXXZ  005ff2a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?RestoreSettingsFromEntry@cAudioTab_s005f_f230@SP@@QAEXXZ  005ff2d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?DoMessageTab@cGameTab_s005f_f230@SP@@QAE_NPAVIWindow_s005f_f230@UTFWin@EA@@PBUMessage_s005f_f230@45@@Z  005ff370  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?RestoreSettingsFromEntry@cGameTab@SP@@UAEXXZ  005ff460  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Shutdown@cOnlineTab_s005f_f230@SP@@QAEXXZ  005ff4e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?RestoreSettingsFromEntry@cOnlineTab_s005f_f230@SP@@QAEXXZ  005ff560  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Shutdown@cGameTab@SP@@UAEXXZ  005ff630  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?RestoreSettingsFromEntry@cOptionTab@SP@@QAEXXZ  005ff640  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?SaveOnlineSettings@cSPUISettings_s005f_f230@SP@@QAEXXZ  005ff850  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Init@cSettingsTab_s005f_f230@SP@@UAEXIPAVIWinProc_s005f_f230@UTFWin@EA@@I@Z  005ff8e0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Shutdown@cGraphicsTab_s005f_f230@SP@@QAEXXZ  005ff940  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Init@cAudioTab_s005f_f230@SP@@UAEXIPAVIWinProc_s005f_f230@UTFWin@EA@@I@Z  005ffa30  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?DoMessageTab@cAudioTab_s005f_f230@SP@@QAE_NPAVIWindow_s005f_f230@UTFWin@EA@@PBUMessage_s005f_f230@45@@Z  005ffee0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?UpdateFullscreenControls@cGraphicsTab_s005f_f230@SP@@QAEXXZ  00600180  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?DoMessageTab@OnlineTabStub@@QAEXXZ  00600260  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ??4SettingsRecord@@QAEAAU0@ABU0@@Z  00601c50  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?HandleMessage@Handler13@@QAE_NIH@Z  00603170  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?Init@cOnlineTab_s0060_2940@@UAEXPB_WPAXI@Z  00603780  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?HandleMessage@Handler14@@QAE_NIPAX@Z  006041f0  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
+../src/game/SPEditors/SPUISettings.cpp  ?SaveAllSettings@cSPUISettings14@@QAEXXZ  00604860  /O2 /MD /Gy /TP /arch:SSE /Isrc/game/include
