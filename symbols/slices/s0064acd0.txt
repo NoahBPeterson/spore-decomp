@@ -1,4 +1,4 @@
-0064acd0 SP::cSPUIAssetBrowser::LaunchEditorEnd  # anchor PDB name (card.py)
-0064b4b0 SP::cSPUIAssetBrowser::BanItem         # PDB candidate (caller-scored) card.py
-0064b6a0 SP::cSPUIAssetBrowser::ShowSporeGuide  # PDB name (card.py)
-0064b6b0 SP::cSPUIAssetBrowser::HandleMessage   # anchor PDB name (card.py)
+0064acd0 ?LaunchEditorEnd@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  # cSPUIAssetBrowser_s0064_acd0::LaunchEditorEnd migrated from s0064acd0 (verbatim, slice spelling)
+0064b4b0 ?BanItem@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  # cSPUIAssetBrowser_s0064_acd0::BanItem migrated from s0064acd0 (verbatim, slice spelling)
+0064b6a0 ?ShowSporeGuide@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  # cSPUIAssetBrowser_s0064_acd0::ShowSporeGuide migrated from s0064acd0 (verbatim, slice spelling)
+0064b6b0 ?HandleMessage@cSPUIAssetBrowser_s0064_acd0@@QAEXPAUMsg@@@Z  # cSPUIAssetBrowser_s0064_acd0::HandleMessage migrated from s0064acd0 (verbatim, slice spelling)

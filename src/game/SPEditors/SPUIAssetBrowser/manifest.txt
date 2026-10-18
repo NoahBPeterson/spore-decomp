@@ -1,0 +1,22 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?IsA@Browser@@QAEHXZ  00644db0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?IsB@Browser@@QAEHXZ  00644dd0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?CanSporepediaShowSporeGuide@Browser@@QAEHXZ  00644df0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Fn_e20@Browser@@QAEXD@Z  00644e20  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Release2@RelPair@@QAEXXZ  00644fc0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Dtor@LocaleMsg2@@QAEXXZ  00644ff0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?AllocNode12@@YGPAUNode12@@PBU1@@Z  00645340  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Copy@Ent20x@@QAEPAU1@PBUEnt20@@@Z  00645390  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?UninitCopy@@YAPAUEnt20@@PAU1@00@Z  00645450  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?DestroyRange@@YAPAUEnt20@@PAU1@00@Z  006454c0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?SetCallToActionMessage@Browser@@QAEXPBF@Z  006455b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FUN_00645d90@cSPUIAssetBrowser@@QAEHXZ  00645d90  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FUN_00645ff0@@YGXPAUElem@@0@Z  00645ff0  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?FUN_00646260@cSPUIAssetBrowser@@QAEXXZ  00646260  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?sub_646d70@@YGXPAE0@Z  00646d70  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert118@Owner@@QAE_NII@Z  00646dc0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert0F8@Owner@@QAE_NII@Z  00646e00  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert138@Owner@@QAE_NIPAUIRef@@@Z  00646e40  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?Insert15C@Owner@@QAE_NIPAUIRef@@@Z  00646ec0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?reserve@Vec14@@QAEXI@Z  00646fc0  /O2 /MD /Gy /TP /Isrc/game/include
+../src/game/SPEditors/SPUIAssetBrowser.cpp  ?ShowSporeGuide@cSPUIAssetBrowser_s0064_acd0@@QAEXXZ  0064b6a0  /O2 /MD /Gy /TP /Isrc/game/include

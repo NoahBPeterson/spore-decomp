@@ -1,0 +1,23 @@
+# va  diff-bytes  reason
+00644c50 131 sibling of SetWebBrowserVisibility (+Navigate call): complete; same bool-arg/vcall scheduling difference
+00644d10 80 same visibility helper with the SubA toggle: complete; same bool-arg scheduling difference
+00644eb0 169 font-size fit loop (style/rect compare): complete; SSE scheduling and stack slot layout of the two rects differ
+00645010 1 cSPUIAssetBrowser::PreloadTextures: complete; function-local static key table matches, only one loop-back jump byte differs (alignment pad); equiv: UNSUPPORTED (unresolved externs ctor/PreloadTextureList; symbol now found)
+00645160 162 Browser validate loop over 20-byte entries then WindowManager/SetWin: complete; register allocation differs
+00645260 20 Browser::Fn_260 (error-dialog key select): complete; original pushes the key address in each arm (push imm; jmp), mine materializes in eax
+006452c0 43 accessor returning field of the single 20-byte entry: complete; original reloads end/begin differently (no push esi)
+00645300 43 same accessor for the other field
+006453e0 90 uninitialized_copy with out-param (Ent20): complete; register assignment (3 vs 4 callee-saved) differs
+00645510 9 uninitialized_fill_n (Ent20): complete; only the position of the n==0 early-out relative to push esi/edi differs
+006460b0 16 FUN_006460b0 (0x14-byte element assignment loop): complete; original loads the old refcount pointer at the point of use, mine hoists it to the top of the loop body
+00646140 16 FUN_00646140 (uninitialized_copy forward): complete; same old-pointref load hoist
+006461d0 20 FUN_006461d0 (uninitialized_copy backward): complete; same hoist plus loop-entry scheduling
+00646370 578 CloneModelAsset (stdcall, ResourceKey by value): complete, all 68 calls/vcalls in original order; remaining diff is stack-slot layout of the Key temporaries and register assignment; flags /O2 /MD /Gy /TP
+00646d10 75 map find instantiation: complete, comparator short-circuit codegen differs
+00646f40 50 hashtable find-or-insert: complete, frame/scheduling near-miss
+00648ce0 1 sorted-vector operator[]: complete, branch block layout differs
+0064ab20 85 cSPUIAssetBrowser::Update visibility logic: complete, bool local register vs stack differs
+0064acd0 1503 LaunchEditorEnd: complete; register allocation / frame layout diffs (largest function)
+0064b4b0 398 BanItem: complete; loop offset spill / frame 0x44 vs 0x34 diff
+0064b6b0 1185 HandleMessage: complete; register allocation / local reuse of param home slot diffs; difftest PASS (--inputs 1000: 468 valid, 64.8% coverage) after fixing TimelineSporepediaCardData to 0x78 bytes (ours allocated 0x14) and splitting FeedCategory::Expand onto its own line so its 0x664480 annotation resolves
+0064bc50 48 cSPUIAssetBrowser::Launch: complete (cdecl form + /GS-), one register-alloc + arg-load-hoist diff

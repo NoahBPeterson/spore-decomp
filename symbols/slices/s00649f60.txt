@@ -1,5 +1,6 @@
-0064a220 SP::cSPUIAssetBrowser::Shutdown        # PDB candidate (caller-single) card.py
-0064a400 SP::cSPUIAssetBrowser::SetVisibility   # PDB candidate (callee-scored) card.py
-0064a990 SP::cSPUIAssetBrowser::AdvancedLaunch  # PDB candidate (callee-scored) card.py
-0064ab20 SP::cSPUIAssetBrowser::Update          # PDB candidate; disasm = visibility/rollover update
-0064aba0 SP::cSPUIAssetBrowser::LaunchSporeGuide # PDB candidate (callee-scored) card.py
+00649f60 ?sub_649f60@@YIXPAX@Z  # sub_649f60 migrated from s00649f60 (verbatim, slice spelling)
+0064a220 ?sub_64a220@@YIXPAX@Z  # sub_64a220 migrated from s00649f60 (verbatim, slice spelling)
+0064a400 ?sub_64a400@@YIXPAX@Z  # sub_64a400 migrated from s00649f60 (verbatim, slice spelling)
+0064a990 ?sub_64a990@@YIXPAX@Z  # sub_64a990 migrated from s00649f60 (verbatim, slice spelling)
+0064ab20 ?Update@cSPUIAssetBrowser_s0064_9f60@@QAEXXZ  # cSPUIAssetBrowser_s0064_9f60::Update migrated from s00649f60 (verbatim, slice spelling)
+0064aba0 ?sub_64aba0@@YIXPAX@Z  # sub_64aba0 migrated from s00649f60 (verbatim, slice spelling)

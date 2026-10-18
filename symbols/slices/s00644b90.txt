@@ -1,4 +1,22 @@
 00644b90 SP::cSPUIAssetBrowser::SetWebBrowserVisibility  # PDB name on card, matches class layout
-00644df0 SP::cSPUIAssetBrowser::CanSporepediaShowSporeGuide  # PDB name on card, byte-exact
-00645010 SP::cSPUIAssetBrowser::PreloadTextures  # PDB candidate on card, function-local static key table + cTexturePreload
-006455b0 SP::cSPUIAssetBrowser::SetCallToActionMessage  # PDB name on card, byte-exact
+00644c50 ?Fn_c50@Browser@@QAEXDII@Z  # Browser::Fn_c50 migrated from s00644b90 (verbatim, slice spelling)
+00644d10 ?Fn_d10@Browser@@QAEXDH@Z  # Browser::Fn_d10 migrated from s00644b90 (verbatim, slice spelling)
+00644db0 ?IsA@Browser@@QAEHXZ  # Browser::IsA migrated from s00644b90 (verbatim, slice spelling)
+00644dd0 ?IsB@Browser@@QAEHXZ  # Browser::IsB migrated from s00644b90 (verbatim, slice spelling)
+00644df0 ?CanSporepediaShowSporeGuide@Browser@@QAEHXZ  # Browser::CanSporepediaShowSporeGuide migrated from s00644b90 (verbatim, slice spelling)
+00644e20 ?Fn_e20@Browser@@QAEXD@Z  # Browser::Fn_e20 migrated from s00644b90 (verbatim, slice spelling)
+00644eb0 ?Fn_eb0@Browser@@QAEXXZ  # Browser::Fn_eb0 migrated from s00644b90 (verbatim, slice spelling)
+00644fc0 ?Release2@RelPair@@QAEXXZ  # RelPair::Release2 migrated from s00644b90 (verbatim, slice spelling)
+00644ff0 ?Dtor@LocaleMsg2@@QAEXXZ  # LocaleMsg2::Dtor migrated from s00644b90 (verbatim, slice spelling)
+00645010 ?PreloadTextures@cSPUIAssetBrowser@SP@@QAEXXZ  # SP::cSPUIAssetBrowser::PreloadTextures migrated from s00644b90
+00645160 ?Fn_160@Browser@@QAEXXZ  # Browser::Fn_160 migrated from s00644b90 (verbatim, slice spelling)
+00645260 ?Fn_260@Browser@@QAEXXZ  # Browser::Fn_260 migrated from s00644b90 (verbatim, slice spelling)
+006452c0 ?Get_c@Browser@@QAEIXZ  # Browser::Get_c migrated from s00644b90 (verbatim, slice spelling)
+00645300 ?Get_10@Browser@@QAEIXZ  # Browser::Get_10 migrated from s00644b90 (verbatim, slice spelling)
+00645340 ?AllocNode12@@YGPAUNode12@@PBU1@@Z  # AllocNode12 migrated from s00644b90 (verbatim, slice spelling)
+00645390 ?Copy@Ent20x@@QAEPAU1@PBUEnt20@@@Z  # Ent20x::Copy migrated from s00644b90 (verbatim, slice spelling)
+006453e0 ?UninitCopyOut@@YAPAPAUEnt20@@PAPAU1@PAU1@11@Z  # UninitCopyOut migrated from s00644b90 (verbatim, slice spelling)
+00645450 ?UninitCopy@@YAPAUEnt20@@PAU1@00@Z  # UninitCopy migrated from s00644b90 (verbatim, slice spelling)
+006454c0 ?DestroyRange@@YAPAUEnt20@@PAU1@00@Z  # DestroyRange migrated from s00644b90 (verbatim, slice spelling)
+00645510 ?UninitFillN@@YAXPAUEnt20@@IPBU1@@Z  # UninitFillN migrated from s00644b90 (verbatim, slice spelling)
+006455b0 ?SetCallToActionMessage@Browser@@QAEXPBF@Z  # Browser::SetCallToActionMessage migrated from s00644b90 (verbatim, slice spelling)
