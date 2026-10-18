@@ -1,1 +1,44 @@
 # va  diff-bytes  reason (incomplete / approximated source)
+007b2600  0  skeleton: not reconstructed
+007b26a0  0  skeleton: cThumbnailManager::SetupThumbnailRTTs not reconstructed
+007b29a0  0  skeleton: not reconstructed
+007b2ab0  0  skeleton: not reconstructed
+007b2ca0  0  skeleton: not reconstructed
+007b2e10  0  skeleton: RTT capture/render job not reconstructed
+007b2eb0  0  skeleton: destructor (EH + multi-member release) not reconstructed
+007b2f40  0  skeleton: not reconstructed
+007b3090  0  skeleton: not reconstructed
+007b31f0  0  skeleton: not reconstructed
+007b32e0  0  skeleton: destructor (EH + member release) not reconstructed
+007b3340  0  skeleton: not reconstructed
+007b35a0  0  skeleton: RTT capture/render job not reconstructed
+007b3630  0  skeleton: property-driven animated GIF export not reconstructed
+007b3760  0  skeleton: not reconstructed
+007b3820  0  skeleton: not reconstructed
+007b4a50  185  refcounted render-target helper (uses MaterialManager singleton + AutoRefCount release); skeleton only
+007b4b10  249  cThumbnailManager terrain-filter setup (writes filter rects, calls filter vtbl slot 3); skeleton only
+007b4cd0  128  EH destructor with atomic refcount release; skeleton only
+007b4d70  128  EH destructor with atomic refcount release; skeleton only
+007b4e10  186  EH constructor (Editor::cPropertyList-style) with vector<bool> allocate; skeleton only
+007b4ee0  398  cThumbnailManager constructor (two _eh_vector_constructor_iterator calls + Stopwatch); skeleton only
+007b5090  650  ~cThumbnailManager (long refcount teardown); skeleton only
+007b5320  719  cThumbnailManager::FrameBoundingBoxPalette (x87 FP framing math); skeleton only
+007b7530  622  cThumbnailManager post-process job setup; skeleton only
+007b77a0  136  viewer/MessageServer teardown; skeleton only
+007b7830  225  cThumbnailManager job driver (vtable 0x13c + FUN_007b49f0); skeleton only
+007b7920  241  cThumbnailManager job driver; skeleton only
+007b7a20  152  cThumbnailManager job driver (viewer Copy + FUN_007b49f0); skeleton only
+007b8550  294  summarizer helper; skeleton only
+007b8680  73  scalar deleting destructor (MI, vector member); skeleton only
+007b8700  106  EH destructor (refcounted member + FUN_00a23920); skeleton only
+007b8780  100  EH destructor (FUN_00a23920 + FUN_007b6b60); skeleton only
+007b97d0  444  timeline/large-image helper; skeleton only
+007b9990  368  cJobPostFilter factory (many object ctors); skeleton only
+007b9b00  884  large-image helper; skeleton only
+007b9f30  375  cJobPostFilter factory; skeleton only
+007ba0b0  663  helper; skeleton only
+007bedb0  0  skeleton: 1360-byte SP::cThumbnailManager::CaptureCSAPhotos; photo capture pipeline omitted
+007bf300  0  skeleton: 772-byte helper; job/rect setup omitted
+007bfeb0  0  skeleton: 37-byte function that is only a C++ EH frame around an empty body; source construct that produces the bare frame not identified
+007c13f0  0  skeleton: 1881-byte capture/render routine; render-target setup and capture omitted
+007c1b70  0  skeleton: 152-byte 9-argument setter block; vector/refcount member assignments omitted

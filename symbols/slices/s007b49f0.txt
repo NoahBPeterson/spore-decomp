@@ -1,4 +1,10 @@
 007b49f0 ?Fn@ItemList@@QAEXHHHH@Z  # ItemList::Fn migrated from s007b49f0 (verbatim, slice spelling)
+007b4a50 ?partial_007b4a50@@YAXXZ  # partial_007b4a50 migrated from s007b49f0 (verbatim, slice spelling)
+007b4b10 ?partial_007b4b10@@YAXXZ  # partial_007b4b10 migrated from s007b49f0 (verbatim, slice spelling)
 007b4c10 ?Expand@Bounds6@@QAEXPBUVector3@@HH@Z  # Bounds6::Expand migrated from s007b49f0 (verbatim, slice spelling)
-007b5090 SP::cThumbnailManager::~cThumbnailManager  # PDB name
-007b5320 SP::cThumbnailManager::FrameBoundingBoxPalette  # PDB name
+007b4cd0 ?partial_007b4cd0@@YAXXZ  # partial_007b4cd0 migrated from s007b49f0 (verbatim, slice spelling)
+007b4d70 ?partial_007b4d70@@YAXXZ  # partial_007b4d70 migrated from s007b49f0 (verbatim, slice spelling)
+007b4e10 ?partial_007b4e10@@YAXXZ  # partial_007b4e10 migrated from s007b49f0 (verbatim, slice spelling)
+007b4ee0 ?partial_007b4ee0@@YAXXZ  # partial_007b4ee0 migrated from s007b49f0 (verbatim, slice spelling)
+007b5090 ?partial_007b5090@@YAXXZ  # partial_007b5090 migrated from s007b49f0 (verbatim, slice spelling)
+007b5320 ?partial_007b5320@@YAXXZ  # partial_007b5320 migrated from s007b49f0 (verbatim, slice spelling)

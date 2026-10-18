@@ -1,1 +1,2 @@
 007bb670 ?DilateSetup@cThumbnailManager_s007b_b670@n670@@QAEXH@Z  # DilateSetup migrated from s007bb670 (verbatim, slice spelling; vtable-table handler 0x140ff64: builds cFilterChainJob with 7 cJobPostFilter (InitBlur 0xe7/0xd2/0xcc), RefBaseA22 callback 0x5221305, posts via IMgr+0x78)
+007bbde0 ?HandleSomething@cThumbnailManager_s007b_b670@@QAEXPAX@Z  # cThumbnailManager_s007b_b670::HandleSomething migrated from s007bb670 (verbatim, slice spelling)

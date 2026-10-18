@@ -1,0 +1,5 @@
+007b7530 ?partial_007b7530@@YAXXZ  # partial_007b7530 migrated from s007b7530 (verbatim, slice spelling)
+007b77a0 ?partial_007b77a0@@YAXXZ  # partial_007b77a0 migrated from s007b7530 (verbatim, slice spelling)
+007b7830 ?partial_007b7830@@YAXXZ  # partial_007b7830 migrated from s007b7530 (verbatim, slice spelling)
+007b7920 ?partial_007b7920@@YAXXZ  # partial_007b7920 migrated from s007b7530 (verbatim, slice spelling)
+007b7a20 ?partial_007b7a20@@YAXXZ  # partial_007b7a20 migrated from s007b7530 (verbatim, slice spelling)

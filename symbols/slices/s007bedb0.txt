@@ -1,3 +1,4 @@
-007bedb0 SP::cThumbnailManager::CaptureCSAPhotos  # card annotation (PDB name)
-007bf610 ?ThumbnailDone@cThumbnailManager_s007b_edb0@@QAEXPAUDoneMsg@@@Z  # cThumbnailManager_s007b_edb0::ThumbnailDone migrated from s007bedb0 (verbatim, slice spelling)
+007bedb0 ?FUN_007bedb0@@YAXPAX00@Z  # FUN_007bedb0 migrated from s007bedb0 (verbatim, slice spelling)
+007bf300 ?FUN_007bf300@@YAXPAX@Z  # FUN_007bf300 migrated from s007bedb0 (verbatim, slice spelling)
+007bf610 ?ThumbnailDone@cThumbnailManager_s007b_edb0@@QAEXPAUDoneMsg_s007b_edb0@@@Z  # cThumbnailManager_s007b_edb0::ThumbnailDone migrated from s007bedb0 (verbatim, slice spelling)
 007bf9c0 ?Set@SetterBlock@@QAEXPAXHHHPAUPair@@1HD@Z  # SetterBlock::Set migrated from s007bedb0 (verbatim, slice spelling)

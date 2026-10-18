@@ -1,1 +1,6 @@
+007b97d0 ?partial_007b97d0@@YAXXZ  # partial_007b97d0 migrated from s007b97d0 (verbatim, slice spelling)
+007b9990 ?partial_007b9990@@YAXXZ  # partial_007b9990 migrated from s007b97d0 (verbatim, slice spelling)
+007b9b00 ?partial_007b9b00@@YAXXZ  # partial_007b9b00 migrated from s007b97d0 (verbatim, slice spelling)
 007b9e80 ?Teardown@TerrainMgr@@QAEXXZ  # TerrainMgr::Teardown migrated from s007b97d0 (verbatim, slice spelling)
+007b9f30 ?partial_007b9f30@@YAXXZ  # partial_007b9f30 migrated from s007b97d0 (verbatim, slice spelling)
+007ba0b0 ?partial_007ba0b0@@YAXXZ  # partial_007ba0b0 migrated from s007b97d0 (verbatim, slice spelling)

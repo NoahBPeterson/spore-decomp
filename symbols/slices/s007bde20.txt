@@ -1,3 +1,3 @@
 007bde20 SP::cThumbnailManager::Shutdown  # PDB caller-scored candidate in card
-007be430 SP::cThumbnailManager::CapturePaletteThumbnail  # card annotation (PDB name)
+007be430 ?CapturePaletteThumbnail@cThumbnailManager_s007b_de20@@QAEXPAUcCaptureCtx@@PAUcPaletteRequest@@@Z  # cThumbnailManager_s007b_de20::CapturePaletteThumbnail migrated from s007bde20 (verbatim, slice spelling)
 007bea00 ?CapturePaletteImageThumbnail@cThumbnailManager_s007b_de20@@QAEXPAUcCaptureCtx@@PAUcPaletteImageRequest@@@Z  # cThumbnailManager_s007b_de20::CapturePaletteImageThumbnail migrated from s007bde20 (verbatim, slice spelling)

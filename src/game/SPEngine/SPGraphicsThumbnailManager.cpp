@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsThumbnailManager.cpp -- migrated from slice(s) s007c1c10, s007c0780, s007bfaa0, s007bedb0, s007bde20, s007bced0, s007bbf80, s007bb670, s007b97d0, s007b87f0, s007b7ac0, s007b6570, s007b55f0, s007b49f0, s007b3a70, s007b29a0, s007b19c0, s00572580 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsThumbnailManager.cpp -- migrated from slice(s) s007c13f0, s007ba350, s007b7530, s007c1c10, s007c0780, s007bfaa0, s007bedb0, s007bde20, s007bced0, s007bbf80, s007bb670, s007b97d0, s007b87f0, s007b7ac0, s007b6570, s007b55f0, s007b49f0, s007b3a70, s007b29a0, s007b19c0, s00572580 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsThumbnailManager.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -24,6 +24,8 @@
 #include "SP/cIThumbnailManager.h"
 #include "EA/ArgScript/cIParser.h"
 #include "SP/cIRTTManager.h"
+#include "SP/cRenderer.h"
+#include "SP/cTextureManager.h"
 
 // ---- items of slice s00572580 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct UintArray {
@@ -107,6 +109,10 @@ struct W39d0 {
     void f();
 };
 // ---- items of slice s007b29a0 end
+
+
+
+
 
 // ---- items of slice s007b3a70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern int   g_renderState;      // 0x16fa38c
@@ -225,6 +231,7 @@ struct ItemList {
     void Fn(int a, int b, int c, int d);
 };
 // ---- items of slice s007b49f0 end
+
 
 // ---- items of slice s007b55f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float g_defaultPosX;   // 0x01635648
@@ -1241,6 +1248,7 @@ struct cThumbnailManager {
 };
 // ---- items of slice s007b7ac0 end
 
+
 // ---- items of slice s007b87f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern void* g_vtbl_1410024[];
 extern void* g_vtbl_1410014[];
@@ -1497,6 +1505,30 @@ struct Thumb {
     char pad3[0x18];
     unsigned char m_c4;      // +0xc4
 };
+struct BehaviorMessage_s007b_b670 {
+    virtual void v0();       // +0
+    virtual void v1();       // +4
+    virtual void v2();       // +8
+    int  mRefCount;          // +4
+    int  m8;                 // +8
+    int  mc;                 // +0xc
+    int  m10;                // +0x10
+    int  m14;
+    int  m18;                // +0x18
+    int  m1c;
+    int  m20;                // +0x20
+    int  m24;
+    int  m28;                // +0x28
+};
+struct MessageServer_t {
+    virtual void m0();
+    virtual void m1();
+    virtual void m2();
+    virtual void m3();
+    virtual void m4();
+    virtual void Send(int id, BehaviorMessage_s007b_b670* msg, int a);   // +0x14
+};
+extern "C" MessageServer_t* __cdecl SP_MessageServer_s007b_b670();
 struct cThumbnailManager_s007b_b670 {
     char pad[0x10c8];
     ModelObj*     mModel;        // +0x10c8
@@ -1507,6 +1539,8 @@ struct cThumbnailManager_s007b_b670 {
     void HandleSomething(void* msg);
 };
 // ---- items of slice s007bb670 end
+
+
 
 // ---- items of slice s007bbf80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern float gDefaultFloat;                                   // 0x15d1168
@@ -2233,6 +2267,10 @@ void cCSAThumbnailJob_s007b_ced0::DrawLayer(int a0, int layer, DrawCtx* ctx, int
 // ---- items of slice s007bced0 end
 
 // ---- items of slice s007bde20 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern float g_fFltMax;      // [0x140fd1c]
+extern float g_fNegFltMax;   // [0x13f51ac]
+extern float g_fVecX;  // 0x01635640
+    extern float g_fVecY; // 0x01635644
 void* operator new(size_t size, const char* name, int a, int b, int c, int d);
 struct Vec3_s007b_de20 { float x, y, z; Vec3_s007b_de20(const float& a, const float& b, const float& c) { x = a; y = b; z = c; } Vec3_s007b_de20() {} };
 struct cRenderTargetRectID { int mPageID; int mAllocID; };
@@ -2585,6 +2623,20 @@ struct cThumbJobMsgEvent
     void* data;   // +0x18
     int f, g, h, i;
 };
+struct cThumbJobA : cThumbRef, cThumbBase2
+{
+    virtual void j2(); virtual void j3();
+    virtual void* Queue(int zero, cThumbJobMsgEvent* ev);  // slot 4
+    bool m0c;
+    int m10;
+    int pad14;
+    int m18, m1c;
+    uint32_t pad20[3];
+    int m2c, m30;
+    cThumbJobA();
+    void Run(void* arg1, cViewer_s007b_de20* world, cThumbTarget* tgt);  // 0x7b2ab0
+};
+cThumbJobA::cThumbJobA() : m0c(false), m10(0), m18(-1), m1c(-1), m2c(0), m30(0) {}
 struct cThumbJobB : cThumbRef, cThumbBase2
 {
     virtual void j2(); virtual void j3();
@@ -2664,6 +2716,8 @@ struct cPaletteRequest
     float m4c;             // +0x4c
     float m50;             // +0x50
 };
+struct cPropertyList_s007b_de20 { bool GetDescription(unsigned id); };  // 0x6a25a0
+extern cPropertyList_s007b_de20* g_sAppProperties_s007b_de20;                       // [0x15fd918]
 struct cPaletteImageRequest
 {
     uint32_t pad00[2];
@@ -2682,6 +2736,14 @@ struct cPaletteImageRequest
 // ---- items of slice s007bde20 end
 
 // ---- items of slice s007bedb0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+struct DoneMsg {
+    char pad0[8];
+    int m8;                                                    // +0x08
+    char pad1[4];
+    int m10;                                                   // +0x10
+    char pad2[4];
+    void* mJob;                                                // +0x18
+};
 struct RectID_s007b_edb0 { int mPageID; int mAllocID; bool IsValid() const { return mAllocID != -1; } };
 struct cPaletteThumbnailJob_s007b_edb0 { void Shutdown(); };
 struct cEditorThumbnailJob_s007b_edb0  { void Shutdown(); };
@@ -2699,7 +2761,7 @@ struct RTTFree {
     virtual void Free(int page, int alloc);                   // +0x14
 };
 void* __cdecl FUN_0067dda0_s007b_edb0();
-struct DoneMsg {
+struct DoneMsg_s007b_edb0 {
     char pad0[8];
     int m8;                                                    // +0x08
     char pad1[4];
@@ -2716,7 +2778,7 @@ struct cThumbnailManager_s007b_edb0 {
     RectID_s007b_edb0 mCSALargeRectID;                                    // +0x34
     RectID_s007b_edb0 mCSASmallRectID;                                    // +0x3c
     RectID_s007b_edb0 mCSAAntiAliasRectID;                                // +0x44
-    void ThumbnailDone(DoneMsg* msg);  // 0x007bf610 (cThumbnailManager::ThumbnailDone)
+    void ThumbnailDone(DoneMsg_s007b_edb0* msg);  // 0x007bf610 (cThumbnailManager::ThumbnailDone)
 };
 struct RefLike {
     virtual int AddRef();                                      // +0x00
@@ -3183,6 +3245,10 @@ struct cThumbnailManagerAO_s007c_0780 {
 }
 // ---- items of slice s007c0780 end
 
+
+
+
+
 // ---- items of slice s007c1c10 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace SPL {
 struct RectID_s007c_1c10 { int mPageID; int mAllocID; };
@@ -3431,6 +3497,228 @@ struct cThumbnailManagerSplat {
 }
 // ---- items of slice s007c1c10 end
 
+// ---- items of slice s007ba350 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace rw {
+namespace graphics {
+struct Raster_s007b_a350 {
+    uint32_t pad0[3];
+    unsigned short m_width;   // +0xc
+    unsigned short m_height;  // +0xe
+};
+}
+}
+namespace EA {
+template <typename T>
+class AutoRefCount_s007b_a350 {
+public:
+    T* mpObject;
+    AutoRefCount_s007b_a350(T* p) : mpObject(p) { if (mpObject) mpObject->AddRef(); }
+    ~AutoRefCount_s007b_a350() { if (mpObject) mpObject->Release(); }
+    T* operator->() const { return mpObject; }
+    operator T*() const { return mpObject; }
+};
+}
+void* operator new(size_t size, const char* pName, int flags, unsigned debugFlags, const char* file, int line);  // 0x00f473a0
+namespace SP {
+struct cRenderTargetRectID_s007b_a350 {
+    int mPageID;
+    int mAllocID;
+    cRenderTargetRectID_s007b_a350() : mPageID(-1), mAllocID(-1) {}
+};
+}
+namespace SP {
+struct Vector2 {
+    float x, y;
+    Vector2() {}
+    Vector2(float ax, float ay) : x(ax), y(ay) {}
+};
+}
+namespace SP {
+inline Vector2 operator*(const Vector2& v, float s) { return Vector2(v.x * s, v.y * s); }
+}
+namespace SP {
+struct Vector4_s007b_a350 {
+    float x, y, z, w;
+    Vector4_s007b_a350() {}
+    Vector4_s007b_a350(float ax, float ay, float az, float aw) : x(ax), y(ay), z(az), w(aw) {}
+};
+}
+namespace SP {
+struct cSPColorRGBA {
+    float r, g, b, a;
+    cSPColorRGBA() {}
+    cSPColorRGBA(float ar, float ag, float ab, float aa) : r(ar), g(ag), b(ab), a(aa) {}
+    cSPColorRGBA(const cSPColorRGBA& c) : r(c.r), g(c.g), b(c.b), a(c.a) {}
+};
+}
+namespace SP {
+namespace eastl_ {
+template <typename T>
+struct sp_vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    uint32_t mAllocator[3];
+    void DoInsertValue(T* position, const T& value);  // 0x006ec390
+    void push_back(const T& value)
+    {
+        if (mpEnd < mpCapacity)
+            ::new (mpEnd++) T(value);
+        else
+            DoInsertValue(mpEnd, value);
+    }
+};
+}
+}
+namespace SP {
+class cILayer_s007b_a350 {
+public:
+    virtual int AddRef() = 0;
+    virtual int Release() = 0;
+};
+}
+namespace SP {
+class cTextureInstance_s007b_a350 {
+public:
+    rw::graphics::Raster_s007b_a350* GetRaster();  // 0x0046f260
+};
+}
+namespace SP {
+class cTextureManager_s007b_a350 {
+public:
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual cTextureInstance_s007b_a350* GetTexture(uint32_t instance, uint32_t group, int flags);  // +0x20 0x007a93c0
+};
+}
+namespace SP {
+cTextureManager_s007b_a350* TextureManager();  // 0x0067dd60
+}
+namespace SP {
+class cRenderer_s007b_a350 {
+public:
+#define PV(n) virtual void pv##n();
+    PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9)
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17) PV(18) PV(19)
+    PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27) PV(28) PV(29)
+    PV(30) PV(31) PV(32) PV(33) PV(34) PV(35) PV(36) PV(37) PV(38) PV(39)
+    PV(40) PV(41) PV(42) PV(43) PV(44) PV(45) PV(46) PV(47) PV(48) PV(49)
+    PV(50) PV(51) PV(52) PV(53) PV(54) PV(55) PV(56)
+    virtual void GetCurrentRenderTarget(cRenderTargetRectID_s007b_a350* pRect);  // +0xe4
+};
+}
+namespace SP {
+cRenderer_s007b_a350* Renderer();  // 0x0067dd40
+}
+namespace SP {
+class cIRTTManager_s007b_a350 {
+public:
+    PV(0) PV(1) PV(2) PV(3)
+    virtual cRenderTargetRectID_s007b_a350 AllocateRTT(int width, int height, int format, int a, int b, int c);  // +0x10
+    PV(5) PV(6) PV(7) PV(8)
+    virtual void GetRTTInfo(cRenderTargetRectID_s007b_a350 id, int* x, int* y, int* width, int* height);  // +0x24
+    PV(10) PV(11) PV(12) PV(13) PV(14) PV(15) PV(16) PV(17)
+    virtual void SetRTTName(cRenderTargetRectID_s007b_a350 id, const char* name);  // +0x48
+};
+}
+namespace SP {
+class cThumbnailManager_s007b_a350 {
+public:
+    class cJobPostFilter;
+    class cFilterChainJob;
+
+    uint32_t pad0[4];
+    rw::graphics::Raster_s007b_a350* mThumbRaster;           // +0x10
+    cRenderTargetRectID_s007b_a350 mThumbRectID;             // +0x14
+    cRenderTargetRectID_s007b_a350 mBlurThumbRectID1;        // +0x1c
+    cRenderTargetRectID_s007b_a350 mBlurThumbRectID2;        // +0x24
+    cRenderTargetRectID_s007b_a350 mTempThumbnailBuffer;     // +0x2c
+    uint32_t pad1[(0x10b4 - 0x34) / 4];
+    cIRTTManager_s007b_a350* mRTTMgr;                        // +0x10b4
+
+    void InitPostProcessEffect(int type, cFilterChainJob* pChain, bool enable, bool alt,
+                               Vector2 blurOffset, float blurStrength);
+};
+}
+namespace SP {
+class cThumbnailManager_s007b_a350::cJobPostFilter : public cILayer_s007b_a350 {
+public:
+    uint32_t mRefCountV[2];                       // +0x04 RefCountVTemplate
+    unsigned int mMaterialId;                     // +0x0c
+    cRenderTargetRectID_s007b_a350 mSrcRectID;               // +0x10
+    rw::graphics::Raster_s007b_a350* mSrcRaster;             // +0x18
+    cRenderTargetRectID_s007b_a350 mDestRectID;              // +0x1c
+    eastl_::sp_vector<cRenderTargetRectID_s007b_a350> mAdditionalRectIDs;  // +0x24
+    float mCustomParams[16];                      // +0x3c
+    unsigned int mCallNumber;                     // +0x7c
+    bool mInitialized;                            // +0x80
+    bool mDumpTexture;                            // +0x81
+    bool mClearBeforeDraw;                        // +0x82
+    bool mOverrideViewport;                       // +0x83
+    int mViewX, mViewY, mViewW, mViewH;           // +0x84
+    int mQuadrant;                                // +0x94
+    cSPColorRGBA mClearColor;                     // +0x98
+    uint32_t mPreSetViewport;                     // +0xa8
+    Vector2 mBlurA, mBlurB, mBlurC, mBlurD;       // +0xac
+    float mBlurStrength;                          // +0xcc
+    uint32_t pad2[(0xe4 - 0xd0) / 4];
+
+    cJobPostFilter();                             // 0x007b8550
+    virtual int AddRef();
+    virtual int Release();
+    void Initialize(int flags);                   // 0x007b9420
+    void InitBlur(int taps, const cRenderTargetRectID_s007b_a350& src, const cRenderTargetRectID_s007b_a350& dest, int flags);  // 0x007b9510
+
+    void SetCustomParams(int index, const Vector4_s007b_a350& v);  // 0x007b3a30
+
+    void SetClearColor(cSPColorRGBA color)        // 0x007b27a0
+    {
+        mClearColor = color;
+        mClearBeforeDraw = true;
+    }
+    void SetViewport(int x, int y, int w, int h, int quadrant)  // 0x007b27e0
+    {
+        mViewX = x;
+        mViewY = y;
+        mViewW = w;
+        mViewH = h;
+        mOverrideViewport = true;
+        mQuadrant = quadrant;
+    }
+    void SetBlurParams(const Vector2& a, const Vector2& b, const Vector2& c, const Vector2& d, float strength)  // 0x007b2820
+    {
+        mBlurA = a;
+        mBlurB = b;
+        mBlurC = c;
+        mBlurD = d;
+        mBlurStrength = strength;
+    }
+    void AddAdditionalRect(const cRenderTargetRectID_s007b_a350& id)  // 0x007b9690
+    {
+        mAdditionalRectIDs.push_back(id);
+    }
+};
+}
+namespace SP {
+void cThumbnailManager_s007b_a350::cJobPostFilter::SetCustomParams(int index, const Vector4_s007b_a350& v)
+{
+    mCustomParams[index * 4 + 0] = v.x;
+    mCustomParams[index * 4 + 1] = v.y;
+    mCustomParams[index * 4 + 2] = v.z;
+    mCustomParams[index * 4 + 3] = v.w;
+}
+}
+namespace SP {
+class cThumbnailManager_s007b_a350::cFilterChainJob {
+public:
+    void AddFilter(cJobPostFilter* pFilter);      // 0x007b9750
+};
+}
+namespace SP {
+typedef EA::AutoRefCount_s007b_a350<cThumbnailManager_s007b_a350::cJobPostFilter> FilterPtr_s007b_a350;
+}
+// ---- items of slice s007ba350 end
+
 // @ 0x00572590
 UintArray* UintArray::Self()
 { return this; }
@@ -3438,6 +3726,36 @@ UintArray* UintArray::Self()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2600
+void FUN_007b2600(void*)
+{}
 
 
 
@@ -3470,6 +3788,18 @@ void SP::cThumbnailManager::GetThumbRectID(SP::cRenderTargetRectID & out)
 
 
 
+// @ 0x007b26a0
+void FUN_007b26a0(void*)
+{}
+
+
+
+
+
+
+
+
+
 
 
 
@@ -3492,19 +3822,11 @@ void W27a0::f(int a, int b, int c, int d)
 
 
 
-
-
-
-
 // @ 0x007b27e0
 void W27e0::f(int a, int b, int c, int d, int e)
 {
     m84 = a; m88 = b; m8c = c; m83 = 1; m90 = d; m94 = e;
 }
-
-
-
-
 
 
 
@@ -3540,17 +3862,9 @@ void W2820::set(Pair* pa, Pair* pb, Pair* pc, Pair* pd, float v)
 
 
 
-
-
-
-
 // @ 0x007b2890
 D2890::~D2890()
 { if (mObj) ((IObj2*)mObj)->Release(); }
-
-
-
-
 
 
 
@@ -3580,10 +3894,6 @@ D2900::~D2900()
 
 
 
-
-
-
-
 // @ 0x007b2970
 void __stdcall FUN_007b2970(P2970* p)
 {
@@ -3598,6 +3908,213 @@ void __stdcall FUN_007b2970(P2970* p)
 
 
 
+
+
+
+
+
+
+
+
+
+// @ 0x007b29a0
+void FUN_007b29a0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2ab0
+void FUN_007b2ab0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2ca0
+void FUN_007b2ca0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2e10
+void FUN_007b2e10(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2eb0
+void FUN_007b2eb0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b2f40
+void FUN_007b2f40(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b3090
+void FUN_007b3090(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b31f0
+void FUN_007b31f0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b32e0
+void FUN_007b32e0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b3340
+void FUN_007b3340(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b35a0
+void FUN_007b35a0(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b3630
+void FUN_007b3630(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b3760
+void FUN_007b3760(void*)
+{}
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b3820
+void FUN_007b3820(void*)
+{}
 
 
 
@@ -3637,10 +4154,6 @@ void W39d0::f()
 
 
 
-
-
-
-
 // @ 0x007b3a30
 void W3a30::set(int idx, float* v)
 {
@@ -3652,9 +4165,6 @@ void W3a30::set(int idx, float* v)
     p[o + 2] = v[2];
     p[o + 3] = v[3];
 }
-
-
-
 
 
 
@@ -3945,6 +4455,20 @@ restore:
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b49f0
 void ItemList::Fn(int a, int b, int c, int d)
 {
@@ -3958,6 +4482,31 @@ void ItemList::Fn(int a, int b, int c, int d)
 
 
 
+
+
+
+
+
+
+
+
+// @ 0x007b4a50
+void partial_007b4a50(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b4b10
+void partial_007b4b10(void)
+{}
 
 
 
@@ -3990,6 +4539,88 @@ void Bounds6::Expand(const Vector3* p, int n, int stride)
 }
 
 
+
+
+
+
+
+
+
+
+
+// @ 0x007b4cd0
+void partial_007b4cd0(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b4d70
+void partial_007b4d70(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b4e10
+void partial_007b4e10(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b4ee0
+void partial_007b4ee0(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b5090
+void partial_007b5090(void)
+{}
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b5320
+void partial_007b5320(void)
+{}
 
 
 
@@ -4097,6 +4728,20 @@ void __stdcall FitViewerToBounds(const float* b, FitViewer* v, int target, float
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b5ad0
 void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int arg10)
 {
@@ -4148,6 +4793,20 @@ void __stdcall PostRenderJob(IRefObj* owner, int arg14, int arg18, int tagv, int
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b5c80
 void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, float* outRadius)
 {
@@ -4169,6 +4828,20 @@ void __stdcall MeshBoundingSphere(MeshVec* v, Vector3_s007b_55f0* outCenter, flo
     *outCenter = Vector3_s007b_55f0((b.mx.x + b.mn.x) * 0.5f, (b.mx.y + b.mn.y) * 0.5f, (b.mx.z + b.mn.z) * 0.5f);
     *outRadius = sqrtf(dx * dx + dy * dy + dz * dz) * 0.5f + 1.0f;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4236,6 +4909,20 @@ void FrameJob::Fit()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b6010
 void RtJobA::Run()
 {
@@ -4246,6 +4933,20 @@ void RtJobA::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetA(obj);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4319,6 +5020,20 @@ void FrameJob::FitAspect()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b63b0
 void RtJobB::Run()
 {
@@ -4329,6 +5044,20 @@ void RtJobB::Run()
         GetTargetFactory()->Register(obj);
     UploadTargetB(obj);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4365,6 +5094,20 @@ void __fastcall RefHolder_Reset(RefHolder* h)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b6570
 void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
 {
@@ -4387,6 +5130,20 @@ void ThumbA::Run6570(int a1, int a2, int* a3, int a4)
     Gfx_67ddb0()->f22(a, b, a4, 1.0f);
     Fn35a0();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4447,6 +5204,20 @@ void ThumbB::Run6730(int a1, int a2, int a3, int a4)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b68f0
 void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
 {
@@ -4456,6 +5227,20 @@ void ThumbC::Run68f0(int flag, int a2, int a3, int a4, int a5)
     ViewerRef ctx = { (int)viewer, 0, 0, 0 };
     next->Fn49f0(a2, a3, &ctx, a5);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4508,6 +5293,20 @@ void ThumbD::Run6980(int a, int b, int c, int d)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b6a90
 void ItemList2::Fn(int a, int b, int c, int d)
 {
@@ -4521,6 +5320,20 @@ void ItemList2::Fn(int a, int b, int c, int d)
     }
     Other();
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4550,9 +5363,37 @@ RefVec::~RefVec()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b6bd0
 AbilityA::~AbilityA()
 {}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4571,6 +5412,20 @@ AbilityB::~AbilityB()
     if (mCap - mBegin > 1 && mBegin)
         operator_delete__(mBegin);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -4655,6 +5510,20 @@ char FitJob::Fit6d50(SphereVec* v, cViewer_s007b_6570* vw, const float* c, const
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b7270
 void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const float* c, float k, float yaw)
 {
@@ -4720,6 +5589,85 @@ void FitJob::Run7270(SphereVec* v, cViewer_s007b_6570* vw, int target, const flo
     vw->SetViewAngleY(fov);
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b7530
+void partial_007b7530(void)
+{}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b77a0
+void partial_007b77a0(void)
+{}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b7830
+void partial_007b7830(void)
+{}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b7920
+void partial_007b7920(void)
+{}
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b7a20
+void partial_007b7a20(void)
+{}
 
 
 
@@ -4878,6 +5826,53 @@ void cThumbnailManager::Render(int p1, int p2, const RenderInfo* ri, int p4)
 
 
 
+// @ 0x007b8550
+void partial_007b8550(void)
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x007b8680
+void partial_007b8680(void)
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x007b8700
+void partial_007b8700(void)
+{}
+
+
+
+
+
+
+
+
+
+// @ 0x007b8780
+void partial_007b8780(void)
+{}
+
+
+
+
+
+
+
+
 
 // @ 0x007b87f0
 void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadius)
@@ -4939,6 +5934,20 @@ void __stdcall ComputeBoundingSphere(void* obj, float* outCenter, float* outRadi
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b8b30
 cFilterRes* cFilterRes::Ctor()
 {
@@ -4967,6 +5976,20 @@ cFilterRes* cFilterRes::Ctor()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b8be0
 void cFilterRes::Dtor()
 {
@@ -4978,6 +6001,20 @@ void cFilterRes::Dtor()
     vtbl0 = g_vtbl_13eb938;
     vtbl1 = g_vtbl_13ec458;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5103,6 +6140,20 @@ void cCSAThumbnailJob::RenderLargeTiledImage(int a0, int a1, int* a2, int a3)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b91f0
 #pragma float_control(precise, off, push)
 void cPlanetCapture::Setup(CaptureCam* cam)
@@ -5153,6 +6204,20 @@ void cPlanetCapture::Setup(CaptureCam* cam)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b9420
 void cJobPostFilter::Init(bool b)
 {
@@ -5169,6 +6234,20 @@ void cJobPostFilter::Init(bool b)
     for (int i = 0; i < 16; i++) z[i] = 0;
     m_flag = true;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5211,6 +6290,20 @@ void cJobPostFilter::Init(int a, const int* p, const int* q, bool b)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b9620
 void cJobPostFilter::Shutdown()
 {
@@ -5241,11 +6334,39 @@ void cJobPostFilter::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b9690
 void VecPair::Push(Pair2* p)
 {
     v.push_back(p);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5281,6 +6402,20 @@ void cFilterChainJob::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007b9750
 int cFilterChainJob::AddFilter(IRel* p)
 {
@@ -5291,6 +6426,53 @@ int cFilterChainJob::AddFilter(IRel* p)
     return (int)mFilters.size() - 1;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007b97d0
+void partial_007b97d0(void)
+{}
+
+
+
+
+
+
+
+
+// @ 0x007b9990
+void partial_007b9990(void)
+{}
+
+
+
+
+
+
+
+
+// @ 0x007b9b00
+void partial_007b9b00(void)
+{}
 
 
 
@@ -5332,6 +6514,261 @@ void TerrainMgr::Teardown()
     m_terrainFilterInitialized = false;
 }
 
+
+
+
+
+
+
+
+// @ 0x007b9f30
+void partial_007b9f30(void)
+{}
+
+
+
+
+
+
+
+
+// @ 0x007ba0b0
+void partial_007ba0b0(void)
+{}
+
+
+
+
+
+
+
+
+// @ 0x007ba350
+namespace SP {
+void cThumbnailManager_s007b_a350::InitPostProcessEffect(int type, cFilterChainJob* pChain, bool enable, bool alt, Vector2 blurOffset, float blurStrength)
+{
+    cRenderTargetRectID_s007b_a350 srcRect;
+
+    if (type == 6 || type == 7 || type == 8 || type == 9) {
+        if (!enable)
+            return;
+        Renderer()->GetCurrentRenderTarget(&srcRect);
+
+        FilterPtr_s007b_a350 filter = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        filter->Initialize(0);
+        if (alt) {
+            filter->mMaterialId = 0x88549f64;
+            filter->mSrcRectID = srcRect;
+            filter->mDestRectID = (type == 7) ? mThumbRectID : mBlurThumbRectID1;
+            filter->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            filter->mCustomParams[0] = 1.2f;
+            filter->mCustomParams[1] = 1.0f;
+            filter->mCustomParams[2] = 0.0f;
+            filter->mCustomParams[3] = 1.0f;
+            filter->mCustomParams[4] = 0.0f;
+            filter->mCustomParams[5] = 1.0f;
+            filter->mCustomParams[6] = 1.0f;
+            filter->mCustomParams[7] = 0.0f;
+        } else {
+            filter->mMaterialId = 0x0fa800f3;
+            filter->mSrcRectID = srcRect;
+            filter->mDestRectID = (type == 7) ? mThumbRectID : mBlurThumbRectID1;
+            filter->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            filter->mCustomParams[0] = 1.0f;
+            filter->mCustomParams[1] = 1.0f;
+            filter->mCustomParams[2] = 1.0f;
+            filter->mCustomParams[3] = 1.0f;
+            filter->mCustomParams[4] = 0.0f;
+            filter->mCustomParams[5] = 1.2f;
+            filter->mCustomParams[6] = 1.2f;
+            filter->mCustomParams[7] = 0.0f;
+        }
+        filter->mCustomParams[15] = 0.0f;
+        filter->mCustomParams[14] = 0.0f;
+        filter->mCustomParams[13] = 0.0f;
+        filter->mCustomParams[12] = 0.0f;
+        pChain->AddFilter(filter);
+
+        if (type == 6) {
+            FilterPtr_s007b_a350 blurH = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+            FilterPtr_s007b_a350 blurV = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+            FilterPtr_s007b_a350 combine = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+
+            blurH->InitBlur(100, mBlurThumbRectID1, mThumbRectID, 0);
+            blurH->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            blurV->InitBlur(100, mThumbRectID, mBlurThumbRectID2, 0);
+            blurV->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            blurH->mCustomParams[0] = 1.0f;
+            blurH->mCustomParams[1] = -1.0f;
+            blurH->mCustomParams[2] = -1.0f;
+            blurH->mCustomParams[3] = 0.0f;
+            blurV->mCustomParams[0] = 1.0f;
+            blurV->mCustomParams[1] = -1.0f;
+            blurV->mCustomParams[2] = 1.0f;
+            blurV->mCustomParams[3] = 0.0f;
+
+            combine->Initialize(0);
+            combine->mMaterialId = 0xad3dd399;
+            combine->mSrcRectID = mBlurThumbRectID1;
+            combine->AddAdditionalRect(mBlurThumbRectID2);
+            combine->mCustomParams[0] = 1.0f / (float)mThumbRaster->m_width;
+            combine->mCustomParams[1] = 1.0f / (float)mThumbRaster->m_height;
+            combine->mCustomParams[2] = 0.0f;
+            combine->mCustomParams[3] = 0.0f;
+            combine->mDestRectID = mThumbRectID;
+            combine->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+
+            pChain->AddFilter(blurH);
+            pChain->AddFilter(blurV);
+            pChain->AddFilter(combine);
+        } else if (type == 8) {
+            FilterPtr_s007b_a350 blur = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+            FilterPtr_s007b_a350 combine = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+
+            blur->Initialize(0);
+            blur->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            blur->mMaterialId = 0x2a4a174c;
+            blur->mSrcRectID = mBlurThumbRectID1;
+            blur->mCustomParams[0] = 1.0f / (float)mThumbRaster->m_width;
+            blur->mCustomParams[1] = 1.0f / (float)mThumbRaster->m_height;
+            blur->mCustomParams[2] = 0.0f;
+            blur->mCustomParams[3] = 0.0f;
+            blur->mDestRectID = mBlurThumbRectID2;
+            Vector2 offset = blurOffset * -0.2f;
+            blur->SetBlurParams(offset, offset, blurOffset, blurOffset, blurStrength);
+
+            combine->Initialize(0);
+            combine->mMaterialId = 0xda76c2bf;
+            combine->mSrcRectID = mBlurThumbRectID1;
+            combine->mDestRectID = mThumbRectID;
+            combine->AddAdditionalRect(mBlurThumbRectID2);
+            combine->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+
+            pChain->AddFilter(blur);
+            pChain->AddFilter(combine);
+        }
+    } else if (type == 1) {
+        FilterPtr_s007b_a350 filter = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        cTextureInstance_s007b_a350* pTexture = TextureManager()->GetTexture(0x918c362c, 0x40607300, 0);
+        if (pTexture) {
+            rw::graphics::Raster_s007b_a350* pRaster = pTexture->GetRaster();
+            filter->Initialize(0);
+            filter->mMaterialId = 0xf515ba42;
+            filter->mSrcRaster = pRaster;
+            filter->mDestRectID = mThumbRectID;
+            filter->SetCustomParams(0, Vector4_s007b_a350(6.0f, 6.0f, 5.0f, 5.0f));
+            filter->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+            pChain->AddFilter(filter);
+        }
+    } else if (type == 2) {
+        FilterPtr_s007b_a350 filter = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        filter->Initialize(0);
+        filter->mMaterialId = 0x46;
+        filter->mSrcRectID = mThumbRectID;
+        filter->mDestRectID = mThumbRectID;
+        filter->SetCustomParams(0, Vector4_s007b_a350(0.8f, 0.5f, 0.3f, 1.0f));
+        filter->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+        pChain->AddFilter(filter);
+    } else if (type == 5) {
+        int x, y, width, height;
+        mRTTMgr->GetRTTInfo(mThumbRectID, &x, &y, &width, &height);
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+
+        cRenderTargetRectID_s007b_a350 id = mRTTMgr->AllocateRTT(halfWidth, halfHeight, 0x15, 0, -1, 0);
+        mBlurThumbRectID1 = id;
+        mRTTMgr->SetRTTName(id, "ThumbnailThresholdRTT1");
+        id = mRTTMgr->AllocateRTT(halfWidth, halfHeight, 0x15, 0, -1, 0);
+        mBlurThumbRectID2 = id;
+        mRTTMgr->SetRTTName(id, "ThumbnailThresholdRTT2");
+        id = mRTTMgr->AllocateRTT(width, height, 0x15, 0, -1, 0);
+        mTempThumbnailBuffer = id;
+        mRTTMgr->SetRTTName(id, "ThumbnailFullsizeTemp");
+
+        FilterPtr_s007b_a350 threshold1 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        threshold1->Initialize(0);
+        threshold1->mMaterialId = 0x5b6fc7d2;
+        threshold1->mSrcRectID = mThumbRectID;
+        threshold1->mDestRectID = mBlurThumbRectID1;
+        threshold1->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+
+        FilterPtr_s007b_a350 threshold2 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        threshold2->Initialize(0);
+        threshold2->mMaterialId = 0x5b6fc7d1;
+        threshold2->mSrcRectID = mThumbRectID;
+        threshold2->mDestRectID = mBlurThumbRectID2;
+        threshold2->SetClearColor(cSPColorRGBA(0.0f, 0.0f, 0.0f, 0.0f));
+
+        FilterPtr_s007b_a350 quad1 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        FilterPtr_s007b_a350 quad2 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        FilterPtr_s007b_a350 quad3 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        FilterPtr_s007b_a350 quad4 = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+        FilterPtr_s007b_a350 copyBack = new ("Graphics", 0, 0, 0, 0) cJobPostFilter();
+
+        quad1->Initialize(0);
+        quad1->mMaterialId = 0x050c0e26;
+        quad1->AddAdditionalRect(mBlurThumbRectID1);
+        quad1->AddAdditionalRect(mBlurThumbRectID2);
+        quad1->mSrcRectID = mThumbRectID;
+        quad1->mDestRectID = mTempThumbnailBuffer;
+        quad1->SetViewport(0, 0, halfWidth, halfHeight, 1);
+        quad1->SetCustomParams(0, Vector4_s007b_a350(0.9453125f, 0.76171875f, 0.30078125f, 0.0f));
+        quad1->SetCustomParams(1, Vector4_s007b_a350(0.5234375f, 0.7109375f, 0.7265625f, 0.0f));
+        quad1->SetCustomParams(3, Vector4_s007b_a350(0.9296875f, 0.83203125f, 0.8046875f, 0.0f));
+        quad1->SetClearColor(cSPColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+
+        quad2->Initialize(0);
+        quad2->mMaterialId = 0x050c0e26;
+        quad2->AddAdditionalRect(mBlurThumbRectID1);
+        quad2->AddAdditionalRect(mBlurThumbRectID2);
+        quad2->mSrcRectID = mThumbRectID;
+        quad2->mDestRectID = mTempThumbnailBuffer;
+        quad2->SetViewport(halfWidth, 0, width, halfHeight, 2);
+        quad2->SetCustomParams(0, Vector4_s007b_a350(0.671875f, 0.3984375f, 0.37109375f, 0.0f));
+        quad2->SetCustomParams(1, Vector4_s007b_a350(0.77734375f, 0.640625f, 0.3828125f, 0.0f));
+        quad2->SetCustomParams(3, Vector4_s007b_a350(0.88671875f, 0.4765625f, 0.59765625f, 0.0f));
+
+        quad3->Initialize(0);
+        quad3->mMaterialId = 0x050c0e26;
+        quad3->AddAdditionalRect(mBlurThumbRectID1);
+        quad3->AddAdditionalRect(mBlurThumbRectID2);
+        quad3->mSrcRectID = mThumbRectID;
+        quad3->mDestRectID = mTempThumbnailBuffer;
+        quad3->SetViewport(0, halfHeight, halfWidth, height, 3);
+        quad3->SetCustomParams(0, Vector4_s007b_a350(0.62109375f, 0.265625f, 0.24609375f, 0.0f));
+        quad3->SetCustomParams(1, Vector4_s007b_a350(0.30078125f, 0.4296875f, 0.34765625f, 0.0f));
+        quad3->SetCustomParams(3, Vector4_s007b_a350(0.54296875f, 0.63671875f, 0.38671875f, 0.0f));
+
+        quad4->Initialize(0);
+        quad4->mMaterialId = 0x050c0e26;
+        quad4->AddAdditionalRect(mBlurThumbRectID1);
+        quad4->AddAdditionalRect(mBlurThumbRectID2);
+        quad4->mSrcRectID = mThumbRectID;
+        quad4->mDestRectID = mTempThumbnailBuffer;
+        quad4->SetViewport(halfWidth, halfHeight, width, height, 4);
+        quad4->SetCustomParams(0, Vector4_s007b_a350(0.92578125f, 0.63671875f, 0.41015625f, 0.0f));
+        quad4->SetCustomParams(1, Vector4_s007b_a350(0.9296875f, 0.8046875f, 0.84765625f, 0.0f));
+        quad4->SetCustomParams(3, Vector4_s007b_a350(0.44140625f, 0.68359375f, 0.80078125f, 0.0f));
+
+        copyBack->Initialize(0);
+        copyBack->mMaterialId = 0x28;
+        copyBack->mSrcRectID = mTempThumbnailBuffer;
+        copyBack->mDestRectID = mThumbRectID;
+        copyBack->SetCustomParams(0, Vector4_s007b_a350(1.0f, 1.0f, 1.0f, 1.0f));
+        copyBack->SetCustomParams(1, Vector4_s007b_a350(0.0f, 1.0f, 1.0f, 0.0f));
+        copyBack->SetCustomParams(3, Vector4_s007b_a350(0.0f, 0.0f, 0.0f, 0.0f));
+        copyBack->SetClearColor(cSPColorRGBA(1.0f, 1.0f, 1.0f, 1.0f));
+
+        pChain->AddFilter(threshold1);
+        pChain->AddFilter(threshold2);
+        pChain->AddFilter(quad1);
+        pChain->AddFilter(quad2);
+        pChain->AddFilter(quad3);
+        pChain->AddFilter(quad4);
+        pChain->AddFilter(copyBack);
+    }
+}
+}  // namespace SP
 
 
 
@@ -5628,6 +7065,61 @@ void __thiscall cThumbnailManager_s007b_b670::DilateSetup(int arg)
 
 
 
+// @ 0x007bbde0
+void cThumbnailManager_s007b_b670::HandleSomething(void* msg)
+{
+    int f8  = *(int*)((char*)msg + 8);
+    int f10 = *(int*)((char*)msg + 0x10);
+    int f18 = *(int*)((char*)msg + 0x18);
+    int f20 = *(int*)((char*)msg + 0x20);
+    int f28 = *(int*)((char*)msg + 0x28);
+    int f30 = *(int*)((char*)msg + 0x30);
+
+    if (f8 == f18 - 1) {
+        if (f18 != 0) {
+            Thumb** p = mThumbs;
+            int n = f18;
+            do {
+                Thumb* t = *p;
+                if (t->m_c4) {
+                    ModelObj* o = t->m_a8;
+                    if (o) { t->m_a8 = 0; o->v1(); }
+                    t->m0c = 0;
+                    t->m10 = 0;
+                    t->m_c4 = 0;
+                }
+                ++p;
+                --n;
+            } while (n);
+        }
+        mFilterChain->Shutdown();
+        ModelObj* m = mModel;
+        if (m) {
+            m->v0();                     // placeholder for vtable+0x16c call
+            m = mModel;
+            if (m) {
+                mModel = 0;
+                if (m->m40 <= 1)
+                    m->v1();             // placeholder for vtable+0x170 call
+                else
+                    --m->m40;
+            }
+        }
+        BehaviorMessage_s007b_b670* bm = new ("Graphics",0,0,0,0) BehaviorMessage_s007b_b670();
+        if (bm) bm->v1();
+        bm->m8  = f10;
+        bm->m10 = f20;
+        bm->m18 = f28;
+        bm->m20 = f30;
+        SP_MessageServer_s007b_b670()->Send(0x21d7528, bm, 0);
+        if (bm) bm->v2();
+    }
+}
+
+
+
+
+
 
 // @ 0x007bbf80
 void cThumbnailManager_s007b_bf80::DilateStart(DilateReq* req)
@@ -5817,6 +7309,20 @@ void cThumbnailManager_s007b_bf80::DilateStart(DilateReq* req)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007bced0
 void cThumbnailManager_s007b_ced0::DilateWithoutAOStart(DilateReq_s007b_ced0* req)
 {
@@ -5885,6 +7391,20 @@ void cThumbnailManager_s007b_ced0::DilateWithoutAOStart(DilateReq_s007b_ced0* re
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007bd4c0
 void cThumbnailManager_s007b_ced0::DilateWithoutAODone(DilateMsg* msg)
 {
@@ -5893,6 +7413,20 @@ void cThumbnailManager_s007b_ced0::DilateWithoutAODone(DilateMsg* msg)
     mCurrentlyCapturingAO = false;
     SP_MessageServer_s007b_ced0()->Send(u, 0, 0, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5908,6 +7442,20 @@ void __stdcall PaletteJobInfo_Shutdown(cPaletteJobInfo* pInfo)
     pcVar1->Release();
     SP_MessageServer_s007b_ced0()->Send(uVar2, 0, 0, 0);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5948,6 +7496,20 @@ void cPaletteThumbnailJob::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007bd5d0
 void cEditorJobInfo::Shutdown()
 {
@@ -5959,6 +7521,20 @@ void cEditorJobInfo::Shutdown()
         mThumbnailTex = 0;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -5989,6 +7565,20 @@ void cEditorThumbnailJob::Shutdown()
         mInitialized = false;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6034,9 +7624,37 @@ void cCSAThumbnailJob_s007b_ced0::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007bd750
 __forceinline int RoundToInt(float f)
 { __asm cvtss2si eax, f }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -6073,6 +7691,20 @@ void cGameThumbnailJob::Shutdown()
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // @ 0x007bdde0
 void __fastcall FUN_007bdde0(void* p)
 {
@@ -6086,6 +7718,118 @@ void __fastcall FUN_007bdde0(void* p)
         }
         *(char*)((char*)p + 0x78) = 0;
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// @ 0x007be430
+void cThumbnailManager_s007b_de20::CapturePaletteThumbnail(cCaptureCtx* ctx, cPaletteRequest* req)
+{
+    bool hasDesc = g_sAppProperties_s007b_de20->GetDescription(0x5cb6033);
+    SetupThumbnailRTTs(req->m08, 1);
+
+    RefPtrL<cThumbEffect> effect(new ("Graphics", 0, 0, 0, 0) cThumbEffect);
+    if (!effect->mFlag)
+    {
+        effect->mFlag = true;
+        effect->m28 = 0;
+    }
+    InitPostProcessEffect(req->m40, effect, 1, !hasDesc, Vec3_s007b_de20(g_fVecX, g_fVecY, 0.0f));
+
+    RefPtrL<cThumbJobA> job(new ("Graphics", 0, 0, 0, 0) cThumbJobA);
+    cThumbTarget* tgtRaw = new ("Graphics", 0, 0, 0, 0) cThumbTarget;
+    RefPtrL<cThumbTarget> tgt(tgtRaw);
+
+    cMessageHandle h = { -1, -1 };
+    GetManager1()->GetHandle(&h.a);
+    tgt->mHandleA = h.a;
+    tgt->mHandleB = h.b;
+    if (tgt->mEffect != effect.p)
+    {
+        effect->AddRef();
+        cThumbEffect* old = tgt->mEffect;
+        tgt->mEffect = effect.p;
+        if (old)
+            old->Release();
+    }
+    tgt->m14 = req->m0c;
+    tgt->m20 = req->m18;
+    tgt->m24 = req->m14;
+    tgt->m18 = req->m08;
+    tgt->m1c = req->m08;
+    tgt->m28 = hasDesc;
+    tgt->m2c = req->m40;
+
+    cViewer_s007b_de20* world = new ("Graphics", 0, 0, 0, 0) cViewer_s007b_de20;
+    world->Init(0);
+
+    if (req->mMode == 1)
+    {
+        effect->CaptureRect(&req->mBoxBegin, world, req->m0c, &req->m1c, req->m28, 0.0f);
+    }
+    else if (req->mMode == 0)
+    {
+        BBox3 box;
+        box.mn.x = box.mn.y = box.mn.z = g_fFltMax;
+        box.mx.x = box.mx.y = box.mx.z = g_fNegFltMax;
+        unsigned i = 0;
+        const BBox3* src = req->mBoxBegin;
+        for (; i < (unsigned)(req->mBoxEnd - req->mBoxBegin); i++, src++)
+        {
+            if (box.mn.x > box.mx.x)
+            {
+                box = *src;
+            }
+            else
+            {
+                if (src->mn.x < box.mn.x) box.mn.x = src->mn.x;
+                if (src->mx.x > box.mx.x) box.mx.x = src->mx.x;
+                if (src->mn.y < box.mn.y) box.mn.y = src->mn.y;
+                if (src->mx.y > box.mx.y) box.mx.y = src->mx.y;
+                if (src->mn.z < box.mn.z) box.mn.z = src->mn.z;
+                if (src->mx.z > box.mx.z) box.mx.z = src->mx.z;
+            }
+        }
+        effect->CaptureBox(&box.mn, world, req->m0c, req->m48, (int)req->m40, 1.0f);
+    }
+
+    job->Run(ctx, world, tgt);
+    world->Shutdown();
+    if (world)
+        delete world;
+
+    RefPtrL<cThumbDoneMsg> msg(new ("Graphics", 0, 0, 0, 0) cThumbDoneMsg);
+    msg->m08 = req->m10;
+    msg->m10 = 0;
+    msg->mJob = job.p;
+
+    cThumbJobMsgEvent ev;
+    ev.a = 1;
+    ev.b = 4;
+    ev.c = false;
+    ev.d = 0;
+    ev.e = 0;
+    ev.id = 0x1c913db;
+    ev.data = msg.p;
+    ev.f = ev.g = ev.h = ev.i = 0;
+    void* handle = job->Queue(0, &ev);
+    GetManager2()->Dispatch(handle);
 }
 
 
@@ -6158,8 +7902,23 @@ void cThumbnailManager_s007b_de20::CapturePaletteImageThumbnail(cCaptureCtx* ctx
 
 
 
+
+// @ 0x007bedb0
+void FUN_007bedb0(void* a, void* b, void* c)
+{ (void)a; (void)b; (void)c; }
+
+
+
+
+// @ 0x007bf300
+void FUN_007bf300(void* a)
+{ (void)a; }
+
+
+
+
 // @ 0x007bf610
-void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg* msg)
+void cThumbnailManager_s007b_edb0::ThumbnailDone(DoneMsg_s007b_edb0* msg)
 {
     int u = msg->m8;
     switch (msg->m10) {
@@ -6211,6 +7970,13 @@ void SetterBlock::Set(void* a1, int a2, int a3, int a4, Pair* a5, Pair* a6, int 
         m_d8 = (unsigned char)a8;
     }
 }
+
+
+
+
+// @ 0x007bfeb0
+void __stdcall FUN_007bfeb0(int a, int b, int c, int d, int e)
+{ (void)a; (void)b; (void)c; (void)d; (void)e; }
 
 
 
@@ -6357,6 +8123,7 @@ bool cThumbnailManagerAO::CaptureAmbientOcclusionB(RectID* shadowRect, IModelWor
     return true;
 }
 }  // namespace AO
+
 
 
 // @ 0x007c0780
@@ -6532,6 +8299,15 @@ bool IHandlerRC::HandleMessage(unsigned int msgId, void* arg)
     }
     return false;
 }
+
+
+// @ 0x007c13f0
+void FUN_007c13f0(void* a)
+{ (void)a; }
+
+// @ 0x007c1b70
+void FUN_007c1b70(void* a)
+{ (void)a; }
 
 // @ 0x007c1c10
 namespace SPL {

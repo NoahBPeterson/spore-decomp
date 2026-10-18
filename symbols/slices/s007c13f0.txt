@@ -1,0 +1,2 @@
+007c13f0 ?FUN_007c13f0@@YAXPAX@Z  # FUN_007c13f0 migrated from s007c13f0 (verbatim, slice spelling)
+007c1b70 ?FUN_007c1b70@@YAXPAX@Z  # FUN_007c1b70 migrated from s007c13f0 (verbatim, slice spelling)

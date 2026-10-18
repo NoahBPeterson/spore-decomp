@@ -1,4 +1,4 @@
-# va  diff-bytes  reason (complete behaviourally-equivalent source, not byte-exact)
+# va  diff-bytes  reason
 007b2890 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
 007b2900 16 destructor: original has an EH frame (vptr-restore protection); our body compiles without it
 007b3a70 2695 complete behavioural reconstruction (every call/path/output slot) of the 3966-byte FP layer draw; exact register allocation and FP evaluation order of the four make-quad blocks not reproduced
@@ -21,10 +21,13 @@
 007b8be0 43 complete dtor (vtable restore + ~RefVector + 2 releases); no EH frame in mine
 007b8cb0 1074 complete RenderLargeTiledImage (tile loop, stitch, save png); not exact
 007b91f0 319 complete planet-capture setup; original uses a Vector3 class w/ SSE copies for the bbox; difftest PASS after fixes: atan2 inlined as fpatan via float_control(precise, off) (was an unresolved __CIatan2 call), capture call args were swapped (viewer before hash key), bbox built from Vector3 temps so the frame depth matches (a callee reads a stale stack slot)
+007ba350 3903 complete (all 7 effect types, every filter/AddRef/Release, RTT alloc+naming, viewport/param/clear-colour stores); /O2 /arch:SSE /GS- frame 0x4c vs 0x50 (temp slot sharing), tail-merge of the per-case final Release differs
 007bb670  354  complete 7-filter dilate chain setup (same size 1895 B, 66 calls, identical vcall sequence); /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; local slot layout of the rect temps differs
+007bbde0 261 complete control-flow reconstruction of the cThumbnailManager message handler; the inlined refcounted-message constructor and the +0x16c/+0x170 refcount release vtable calls are modelled with stubs, so register/size differ
 007bbf80 3430 DilateStart: complete (flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-); stack slot order, local reuse and inline-expansion diffs remain
 007bced0 1203 complete (DilateWithoutAOStart: six chained dilate filters + posted BehaviorMessage 0x21d752f); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (52 calls, 0.99x size); register allocation differs (chain in edi vs ebp, filter 5 in ebp vs edi) and the request locals sit at different frame slots
 007bd750 3 complete (cCSAThumbnailJob::DrawLayer: single pass, or 2x2 tiled pass with a per-tile post filter); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /GS-; call sequence identical (43 calls, 0.98x size); x87 temps and strength reduction of j*tileH differ, the dead erase-copy loop of cJobPostFilter::Shutdown is folded away
+007be430 1126 complete CapturePaletteThumbnail; helper-object ctors (MI vptr stores), frame layout and EH slot order differ
 007bea00 747 complete image variant; Vec3 by-value arg temp built with x87 fld/fstp in original (z,x,y order), EH temp slot differs
 007bf610 166 complete reconstruction of ThumbnailDone: switch over the job type + 7 rect releases; cl chooses immediate `-1` compares (not a hoisted ebx) and a different load schedule, so every rect block differs
 007bf9c0 115 complete reconstruction of the setter block; two instruction reorderings (m_c0 store vs m_a8 load, and the RefVector operator= argument setup) differ
