@@ -2,6 +2,7 @@
 007a82a0 SP::cTextRenderer::SetStyle  # calls EA::Text::GetStyleManager(1)/GetStyle
 007a82d0 SP::cTextRenderer::SetStyleScale  # writes style +0x227/+0x224
 007a8310 SP::cTextRenderer::EnsureBuffers  # allocates 0x14000/0x2000 Graphics buffers
+007a8360 _FUN_007a8360  # FUN_007a8360 migrated from s007a7d50 (verbatim, slice spelling)
 007a8390 SP::cTextRenderer::cTextRenderer  # pdb_candidates caller-scored
 007a84d0 SP::cTextRenderer::Init  # lazy render init (material/texture/layout)
 007a8530 SP::cTextRenderer::Release  # clears cached texture pointers
