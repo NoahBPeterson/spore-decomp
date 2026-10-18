@@ -1,4 +1,4 @@
-005ec030  ChainMap::FUN_005ec030  # eastl::map operator[] (chain table)
-005ec130  cSPNameGenerator::FUN_005ec130  # n-gram count + chain table build
-005ec370  cSPNameGenerator::FUN_005ec370  # markov name generation
-005ec7c0  cSPNameGenerator::Init  # property loading and chain setup
+005ec030 ?FUN_005ec030@ChainMap@@QAEPAUChainRow@@PBUKey2@@@Z  # ChainMap::FUN_005ec030 migrated from s005ec030 (verbatim, slice spelling)
+005ec130 ?FUN_005ec130@cSPNameGenerator_s005e_c030@@QAEXPAUStrVec@@PAUNameGenData@@@Z  # cSPNameGenerator_s005e_c030::FUN_005ec130 migrated from s005ec030 (verbatim, slice spelling)
+005ec370 ?FUN_005ec370@cSPNameGenerator_s005e_c030@@QAEPAUWStr_s005e_c030@@PAU2@PAUNameGenData@@PAUStrSet@@PAUStrVec@@3_N@Z  # cSPNameGenerator_s005e_c030::FUN_005ec370 migrated from s005ec030 (verbatim, slice spelling)
+005ec7c0 ?Init@cSPNameGenerator_s005e_c030@@QAEXXZ  # cSPNameGenerator_s005e_c030::Init migrated from s005ec030 (verbatim, slice spelling)

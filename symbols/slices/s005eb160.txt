@@ -1,2 +1,9 @@
-005eb540 SP::cSPNameGenerator::CreateRandomCompoundName  # PDB candidate (caller-scored) + asm
-005ebb00 SP::cSPNameGenerator::CreateRandomName  # PDB candidate (caller-scored) + asm
+005eb160 ?LoadStringList@cSPNameGenerator@@QAEXPBUResKey@@PAUWStrVec@@_N@Z  # cSPNameGenerator::LoadStringList migrated from s005eb160 (verbatim, slice spelling)
+005eb440 ?LoadAll@cSPNameGenerator@@QAEXPAX0HHH0H@Z  # cSPNameGenerator::LoadAll migrated from s005eb160 (verbatim, slice spelling)
+005eb540 ?CreateRandomCompoundName@cSPNameGenerator@@QAEPAUWStr@@PAU2@PAXPAUNameList@@PAUStrTree@@PAUWStrVec@@H_N@Z  # cSPNameGenerator::CreateRandomCompoundName migrated from s005eb160 (verbatim, slice spelling)
+005eba70 ?LoadPropertyKey@cSPNameGenerator@@QAEXPAXIPAUWStrVec@@@Z  # cSPNameGenerator::LoadPropertyKey migrated from s005eb160 (verbatim, slice spelling)
+005ebb00 ?CreateRandomName@cSPNameGenerator@@QAEPAUWStr@@PAU2@PAUWStrVec@@_N@Z  # cSPNameGenerator::CreateRandomName migrated from s005eb160 (verbatim, slice spelling)
+005ebd10 ?DoInsertValueImpl@U16Map@@QAEPAPAUMapNode@@PAPAU2@PAU2@PBUMapValueType@@_N@Z  # U16Map::DoInsertValueImpl migrated from s005eb160 (verbatim, slice spelling)
+005ebdb0 ?DoInsertValue@U16Map@@QAEPAUInsertResult@@PAU2@PBUMapValueType@@UUniqueKeysTag@@@Z  # U16Map::DoInsertValue migrated from s005eb160 (verbatim, slice spelling)
+005ebe90 ?LoadProperty@cSPNameGenerator@@QAE_NPAXIPAUWStrVec@@_N@Z  # cSPNameGenerator::LoadProperty migrated from s005eb160 (verbatim, slice spelling)
+005ebf10 ?insert@U16Map@@QAEPAPAUMapNode@@PAPAU2@UMapIter@@PBUMapValueType@@UUniqueKeysTag@@@Z  # U16Map::insert migrated from s005eb160 (verbatim, slice spelling)
