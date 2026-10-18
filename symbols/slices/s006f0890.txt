@@ -1,6 +1,7 @@
-006f0890 RenderHelper890  # SP::cEffectsRenderer helper
-006f0b90 RenderHelperB90  # SP::cEffectsRenderer helper; called with this = cEffectsRenderer-0x18
-006f0fb0 CreateTextureParticleSet  # SP::cEffectsRenderer::CreateTextureParticleSet
+006f0890 ?Shutdown@Effects890@@QAE_NXZ  # Effects890::Shutdown migrated from s006f0890 (verbatim, slice spelling)
+006f0b90 ?Render@Effects0B90@@QAEXIPAPAURegion@@H@Z  # Effects0B90::Render migrated from s006f0890 (verbatim, slice spelling)
+006f0fb0 ?AddParticleSet@Effects0FB0@@QAE_NHPBUSetDesc@@PAH@Z  # Effects0FB0::AddParticleSet migrated from s006f0890 (verbatim, slice spelling)
 006f13a0 RenderMainEffectsLayer  # SP::cEffectsRenderer::RenderMainEffectsLayer (PDB candidate); switch on layer type
 006f1510 Insert  # eastl::vector<T,sp_vector_allocator>::insert, element stride 0xc0
 006f16c0 PushBack  # eastl::vector<T,sp_vector_allocator>::push_back, element stride 0xc0
+007c4ba0 ?SetAspectRatio@cViewer@SP@@QAEXM@Z  # SP::cViewer::SetAspectRatio (callee of s006f0890, named from the dev publics; slice address comment)

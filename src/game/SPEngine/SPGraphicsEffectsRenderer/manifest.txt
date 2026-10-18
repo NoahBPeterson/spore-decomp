@@ -1,0 +1,18 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?FindKnownValue@@YGHPAH@Z  006e68e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallF1@ShaderHost@@QAEXM@Z  006e6930  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallF3@ShaderHost@@QAEXHMH@Z  006e6970  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallF2@ShaderHost@@QAEXHM@Z  006e69a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?CallIface@ShaderHost@@QAEXH@Z  006e6c20  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7880@Host3@@QAEXH@Z  006e7880  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7c60@Host3@@QAEDXZ  006e7c60  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7c80@Host3@@QAEDHHHHHH@Z  006e7c80  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7cc0@Host3@@QAEXHHHH@Z  006e7cc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method7d00@Host3@@QAEXM@Z  006e7d00  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Method8090@Host3@@QAEXHHM@Z  006e8090  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m82b0@CCreature@@QAEXHHMM@Z  006e82b0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8360@CCreature@@QAEXH@Z  006e8360  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?m8420@CCreature@@QAEXHPAX@Z  006e8420  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?mabc0@R70@@QAEPAU1@ABU1@@Z  006eabc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Release@@YAXPAUcEffectsModelR@@@Z  006ef990  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include
+../src/game/SPEngine/SPGraphicsEffectsRenderer.cpp  ?Init@cEffectsRendererSystem@@QAE_NXZ  006ef9e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /Isrc/game/include

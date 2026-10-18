@@ -1,0 +1,4 @@
+006ea920 ?m920@S6@@QAEXXZ  # S6::m920 migrated from s006ea030 (verbatim, slice spelling)
+006ea9e0 ?m9e0@S6@@QAEXHPAMM@Z  # S6::m9e0 migrated from s006ea030 (verbatim, slice spelling)
+006eabc0 ?mabc0@R70@@QAEPAU1@ABU1@@Z  # R70::mabc0 migrated from s006ea030 (verbatim, slice spelling)
+006ead40 ?mad40@S6@@QAEXHPAX@Z  # S6::mad40 migrated from s006ea030 (verbatim, slice spelling)
