@@ -1,11 +1,24 @@
 00606c40 SP::Pollen::`anonymous namespace'::cConnectingDialog::Init  # mLayout at +0x2c (cConnectingDialog layout), root window gets AddWinProc(this)
 00606cd0 SP::Pollen::`anonymous namespace'::cOfflineConfirmationDialog::Show  # BeginModal on 0x50f92d8, the root id used by cOfflineConfirmationDialog::Init
-00606d70 SP::Pollen::cAuthManager::GetUserServerID  # returns uint64 at full+0x50 (written as -2 by SetOfflineUserID) via the +0x1c base
-00606de0 SP::Pollen::cAuthManager::SetLoginDialogVisible  # PDB candidate; layout ptr at full+0x60 via the +0x1c base
-00606e60 eastl::basic_string<wchar_t>::make_upper  # toupper for chars <= 0xff
-00606ea0 eastl::CompareI  # tolower compare, returns -1/0/1
-00607190 SP::Pollen::cAuthManager::Shutdown  # PDB candidate
-00607310 SP::Pollen::cAuthManager::ShowLoginDialog  # creates UI/cRegistrationDialog (0x6c bytes) into +0x6c
-006073a0 SP::Pollen::cAuthManager::InitialLogin  # PDB candidate
-006074b0 SP::Pollen::cAuthManager::OnModalWindowEnd  # PDB candidate
-00607580 eastl::basic_string<char>::find  # find(char, pos)
+00606d00 ?AsInterface@cAuthManager@Pollen@SP@@UAEPAXW4InterfaceId@COM@EA@@@Z  # SP::Pollen::cAuthManager::AsInterface migrated from s006068c0
+00606d70 ?GetUserServerID@cAuthManager_s0060_68c0@Pollen@SP@@UAE_KXZ  # cAuthManager_s0060_68c0::GetUserServerID migrated from s006068c0 (verbatim, slice spelling)
+00606d80 ?EndLoginDialog@cAuthManager_s0060_68c0@Pollen@SP@@QAEXXZ  # cAuthManager_s0060_68c0::EndLoginDialog migrated from s006068c0 (verbatim, slice spelling)
+00606de0 ?SetLoginDialogVisible@cAuthManager_s0060_68c0@Pollen@SP@@UAEX_N@Z  # cAuthManager_s0060_68c0::SetLoginDialogVisible migrated from s006068c0 (verbatim, slice spelling)
+00606e60 ?make_upper@?$basic_string_s0060_68c0@_W@eastl@@QAEXXZ  # make_upper migrated from s006068c0 (verbatim, slice spelling)
+00606ea0 ?CompareI@eastl@@YAHPBD0I@Z  # CompareI migrated from s006068c0 (verbatim, slice spelling)
+00606f60 ?IsReturnKey@cLoginHelpDialog@?A0x2dae62f7@Pollen@SP@@QAE_NPAX0H0@Z  # IsReturnKey migrated from s006068c0 (verbatim, slice spelling)
+00606f80 ?end_dialog@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAEX_N@Z  # end_dialog migrated from s006068c0 (verbatim, slice spelling)
+00607050 ?Init@cOfflineConfirmationDialog@?A0x2dae62f7@Pollen@SP@@QAE_NXZ  # Init migrated from s006068c0 (verbatim, slice spelling)
+00607190 ?Shutdown@cAuthManager_s0060_68c0@Pollen@SP@@UAE_NXZ  # cAuthManager_s0060_68c0::Shutdown migrated from s006068c0 (verbatim, slice spelling)
+00607290 ?SetPlayOffline@cAuthManager_s0060_68c0@Pollen@SP@@UAEX_N@Z  # cAuthManager_s0060_68c0::SetPlayOffline migrated from s006068c0 (verbatim, slice spelling)
+006072d0 ?SetOfflineUserID@cAuthManager_s0060_68c0@Pollen@SP@@QAEXXZ  # cAuthManager_s0060_68c0::SetOfflineUserID migrated from s006068c0 (verbatim, slice spelling)
+00607310 ?ShowLoginDialog@cAuthManager_s0060_68c0@Pollen@SP@@QAEX_N@Z  # cAuthManager_s0060_68c0::ShowLoginDialog migrated from s006068c0 (verbatim, slice spelling)
+006073a0 ?InitialLogin@cAuthManager_s0060_68c0@Pollen@SP@@QAEXXZ  # cAuthManager_s0060_68c0::InitialLogin migrated from s006068c0 (verbatim, slice spelling)
+00607450 ??0cOfflineConfirmationDialog@?A0x2dae62f7@Pollen@SP@@QAE@XZ  # cOfflineConfirmationDialog migrated from s006068c0 (verbatim, slice spelling)
+00607480 ??0cLoginHelpDialog@?A0x2dae62f7@Pollen@SP@@QAE@XZ  # cLoginHelpDialog migrated from s006068c0 (verbatim, slice spelling)
+006074b0 ?OnModalWindowEnd@cAuthManager_s0060_68c0@Pollen@SP@@UAEXPAVIWindow_s0060_68c0@UTFWin@EA@@I@Z  # cAuthManager_s0060_68c0::OnModalWindowEnd migrated from s006068c0 (verbatim, slice spelling)
+00607530 ?SetAuthManager@Pollen@SP@@YAXPAVIUnknownCast@12@@Z  # SetAuthManager migrated from s006068c0 (verbatim, slice spelling)
+00607580 ?find@?$basic_string_s0060_68c0@D@eastl@@QBEIDI@Z  # None migrated from s006068c0 (verbatim, slice spelling)
+006075c0 ?HandleResults@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAEX_N@Z  # HandleResults migrated from s006068c0 (verbatim, slice spelling)
+00607630 ?OnTick@cConnectingDialog@?A0x2dae62f7@Pollen@SP@@QAE_NH@Z  # OnTick migrated from s006068c0 (verbatim, slice spelling)
+006077f0 ?ShowLogin@cAuthManager_s0060_68c0@Pollen@SP@@UAEXXZ  # cAuthManager_s0060_68c0::ShowLogin migrated from s006068c0 (verbatim, slice spelling)

@@ -3,12 +3,13 @@
 00607b70 SP::Pollen::cOfflinePromptDialog::HandleUIMessage  # dialog DoMessage calling ProcessLoginResults(6) (class name guessed)
 00607be0 SP::Pollen::cLoginPromptDialog::HandleUIMessage  # dialog DoMessage, layout at +0xc (class name guessed)
 00608090 SP::Pollen::cAuthManager::~cAuthManager  # frees mUser/mPassword/mScreenName, releases pReg; byte-exact
-006082a0 eastl::basic_string<char>::substr  # EASTL substr shape
-00608310 eastl::basic_string<char>::left  # substr(0,n) or copy; byte-exact
-006083b0 GetEmptyString8  # function-local static string8; byte-exact
-006083f0 SP::Pollen::OnAuthMessage  # reads registry path, strips quotes, calls cPollinator::Login; byte-exact
-00608550 SP::Pollen::cAuthManager::SetUserPassword  # IAuthManager vtable slot 6 (vtbl 0x13faea0); byte-exact
-00608590 SP::Pollen::cAuthManager::GetUserPassword  # IAuthManager vtable slot 7; byte-exact
-006085d0 SP::Pollen::cAuthManager::AddAuthentication  # IAuthenticationService slot 1; sets Spore-User/Spore-Password headers; byte-exact
-006086b0 SP::Pollen::cAuthManager::TranslateToken  # cStringTokenTranslator slot 4; byte-exact
-00608710 SP::Pollen::cConnectingDialog::Show  # PDB-candidate name, layout at +0x2c; byte-exact
+006082a0 ?substr@?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@QBE?AU12@II@Z  # None migrated from s00607800 (verbatim, slice spelling)
+00608310 ?left@?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@QBE?AU12@I@Z  # None migrated from s00607800 (verbatim, slice spelling)
+006083b0 ?GetEmptyString8@@YAAAU?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@XZ  # GetEmptyString8 migrated from s00607800 (verbatim, slice spelling)
+006083f0 ?OnAuthMessage@Pollen@SP@@YGXII@Z  # OnAuthMessage migrated from s00607800 (verbatim, slice spelling)
+00608550 ?SetUserPassword@cAuthManager_s0060_7800@Pollen@SP@@UAEXABU?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@0@Z  # cAuthManager_s0060_7800::SetUserPassword migrated from s00607800 (verbatim, slice spelling)
+00608590 ?GetUserPassword@cAuthManager_s0060_7800@Pollen@SP@@UAEXAAU?$basic_string_s0060_7800@DUallocator_s0060_7800@eastl@@@eastl@@0@Z  # cAuthManager_s0060_7800::GetUserPassword migrated from s00607800 (verbatim, slice spelling)
+006085d0 ?AddAuthentication@cAuthManager_s0060_7800@Pollen@SP@@UAE_NPAXPAURequest@Resource@XHTML@EA@@@Z  # cAuthManager_s0060_7800::AddAuthentication migrated from s00607800 (verbatim, slice spelling)
+006086b0 ?TranslateToken@cAuthManager_s0060_7800@Pollen@SP@@UAE_NPB_WAAU?$basic_string_s0060_7800@_WUallocator_s0060_7800@eastl@@@eastl@@@Z  # cAuthManager_s0060_7800::TranslateToken migrated from s00607800 (verbatim, slice spelling)
+00608710 ?Show@cConnectingDialog_s0060_7800@?A0x2dae62f7@Pollen@SP@@QAEXPB_W@Z  # Show migrated from s00607800 (verbatim, slice spelling)
+008120d0 ?Init@cSPUILayout@@QAE_NABVKey@ResourceMan@EA@@_NI@Z  # cSPUILayout::Init (callee of s00607800, named from the dev publics; slice address comment)
