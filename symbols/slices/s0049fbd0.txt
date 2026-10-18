@@ -1,5 +1,9 @@
 0049fbd0 ?RepinBlockToTorso@@YAXPAUcSPEditorBlock_s0049_fbd0@@UcSPVector3_s0049_fbd0@@UcSPMatrix3_s0049_fbd0@@_N@Z  # RepinBlockToTorso migrated from s0049fbd0 (verbatim, slice spelling)
-004a0020 SP::EditorUtils::GetAllLimbs  # PDB/card name
-004a0ac0 FUN_4a0ac0  # scans model blocks, tests mFlags bit 0x2d
+0049fee0 ?FUN_49fee0@@YAXPAUcSPEditorBlock_s0049_fbd0@@_N@Z  # FUN_49fee0 migrated from s0049fbd0 (verbatim, slice spelling)
+004a0020 ?GetAllLimbs@@YAXPAUcSPEditorBlock_s0049_fbd0@@PAU?$LimbVec@PAUcSPEditorBlock_s0049_fbd0@@@@_N@Z  # GetAllLimbs migrated from s0049fbd0 (verbatim, slice spelling)
+004a02b0 ?FUN_4a02b0@@YAXPAUcSPEditorBlock_s0049_fbd0@@UcSPVector3_s0049_fbd0@@1@Z  # FUN_4a02b0 migrated from s0049fbd0 (verbatim, slice spelling)
+004a06c0 ?FUN_4a06c0@@YAPAUVector3T_s0049_fbd0@@PAU1@PAUcSPEditorBlock_s0049_fbd0@@@Z  # FUN_4a06c0 migrated from s0049fbd0 (verbatim, slice spelling)
+004a0900 ?FUN_4a0900@@YA_NPAUcSPEditorBlock_s0049_fbd0@@PAXUcSPVector3_s0049_fbd0@@2PAUVector3T_s0049_fbd0@@@Z  # FUN_4a0900 migrated from s0049fbd0 (verbatim, slice spelling)
+004a0ac0 ?FUN_4a0ac0@@YA_NPAUcSPEditorModel_s0049_fbd0@@@Z  # FUN_4a0ac0 migrated from s0049fbd0 (verbatim, slice spelling)
 004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s0049fbd0, named from the dev publics; slice address comment)
 004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s0049fbd0, named from the dev publics; slice address comment)

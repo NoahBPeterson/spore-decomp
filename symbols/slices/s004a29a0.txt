@@ -1,1 +1,4 @@
-004a29a0 SnapBlockToSocket  # PDB caller-scored candidate SP::EditorUtils::SnapBlockToSocket; snaps block to target socket, repins, symmetry, limb rebuild
+00438700 ?ShouldPinToBlock@cSPEditorBlock@SP@@QAE_NPAV12@@Z  # SP::cSPEditorBlock::ShouldPinToBlock (callee of s004a29a0, named from the dev publics; slice address comment)
+0044f220 ?GetSymmetrySign@cSPEditorBlock@SP@@QAEHXZ  # SP::cSPEditorBlock::GetSymmetrySign (callee of s004a29a0, named from the dev publics; slice address comment)
+004a29a0 ?SnapBlockToSocket@@YAXPAUcSPEditorBlock_s004a_29a0@@H0@Z  # SnapBlockToSocket migrated from s004a29a0 (verbatim, slice spelling)
+004adc40 ?UsingSymmetry@cSPEditorModel@SP@@QBE_NXZ  # SP::cSPEditorModel::UsingSymmetry (callee of s004a29a0, named from the dev publics; slice address comment)

@@ -1,2 +1,3 @@
-0048dcd0 SP::EditorUtils::GetMissStackingPosition  # lowers the block along `direction` with hkWorld::linearCast (neutral orientation from 0x4494b0), blends toward the cast target by the hit fraction; complete
-0048e510 F_48e510  # out[0..2]=src[0..2], out[3]=0
+0048db60 ?getHit@hkClosestCdPointCollector@@QBEABUhkRootCdPoint@@XZ  # hkClosestCdPointCollector::getHit (callee of s0048dcd0, named from the dev publics; slice address comment)
+0048dcd0 ?GetMissStackingPosition@EditorUtils@SP@@YA_NPAUcSPEditorBlock_s0048_dcd0@@AAUBlockList@@UVector3Val@@2UMatrix3_s0048_dcd0@@PAUcSPVector3_s0048_dcd0@@@Z  # GetMissStackingPosition migrated from s0048dcd0 (verbatim, slice spelling)
+0048e510 ?F_48e510@@YAPAMPAMAAUVec4T@@@Z  # F_48e510 migrated from s0048dcd0 (verbatim, slice spelling)

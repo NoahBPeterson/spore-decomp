@@ -1,1 +1,6 @@
-0049c570 FindClosestSymmetry  # SP::EditorUtils; iterates FindSymmetricSpine, uses GetSkinTip
+0049c210 ?FUN_49c210@EditorUtils@SP@@YAPAUcSPMatrix3_s0049_c210@@PAU3@PAUcSPEditorBlock_s0049_c210@@MMM@Z  # FUN_49c210 migrated from s0049c210 (verbatim, slice spelling)
+0049c570 ?FindClosestSymmetry@EditorUtils@SP@@YAPAUcSPEditorBlock_s0049_c210@@UcSPVector3_s0049_c210@@PAU3@@Z  # FindClosestSymmetry migrated from s0049c210 (verbatim, slice spelling)
+0049c630 ?FUN_49c630@EditorUtils@SP@@YAPAUcSPVector3_s0049_c210@@PAU3@MMMPAUcSPEditorModel@12@@Z  # FUN_49c630 migrated from s0049c210 (verbatim, slice spelling)
+0049c8f0 ?BuildBlockTransforms@EditorUtils@SP@@YAXPAUcSPEditorBlock_s0049_c210@@PAU?$vector@UTrackerRecord@@@@_N@Z  # BuildBlockTransforms migrated from s0049c210 (verbatim, slice spelling)
+0049cb90 ?FUN_49cb90@EditorUtils@SP@@YAXPAU?$vector@UTrackerRecord@@@@@Z  # FUN_49cb90 migrated from s0049c210 (verbatim, slice spelling)
+0049ce40 ?RepinBlocks@EditorUtils@SP@@YAXPAU?$vector@UTrackerRecord@@@@@Z  # RepinBlocks migrated from s0049c210 (verbatim, slice spelling)

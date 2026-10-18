@@ -1,6 +1,6 @@
-0048d010 SP::cSPEditorManipulationStacking::MoveBlockLowAngleStacking  # dev-PDB name; linear-casts the block 100 units along a direction, returns the body it lands flat on
-0048db10 SP::HkObj::deleting_ctor1  # sets vtable 0x13ef534, conditionally frees via hkMemory
-0048db60 SP::HkObj::init  # +0x30=0, +0x2c/+4 = 0x7f7fffee
-0048dbb0 SP::HkObj::deleting_ctor2  # sets vtable 0x13ef52c then 0x13ef534, conditionally frees
+0048d010 ?MoveBlockLowAngleStacking@@YAPAUhkRigidBody_s0048_d010@@PAUcSPEditorBlock_s0048_d010@@AAUBlockList@@UcSPVector3_s0048_d010@@2AAU4@UMatrix3_s0048_d010@@_N@Z  # MoveBlockLowAngleStacking migrated from s0048d010 (verbatim, slice spelling)
+0048db10 ?F_48db10@HkObj@@QAEPAXI@Z  # HkObj::F_48db10 migrated from s0048d010 (verbatim, slice spelling)
+0048db60 ?F_48db60@HkObj@@QAEXXZ  # HkObj::F_48db60 migrated from s0048d010 (verbatim, slice spelling)
+0048dbb0 ?F_48dbb0@HkObj@@QAEPAXI@Z  # HkObj::F_48dbb0 migrated from s0048d010 (verbatim, slice spelling)
 0048dc00 hkRootCdPoint::hkRootCdPoint  # implicit copy ctor (hkContactPoint copy + 4 dwords), byte-exact
-0048dc50 SP::HkObj::copyCtor  # copies 8 floats (two 16-byte vectors)
+0048dc50 ?F_48dc50@HkObj@@QAEPAXPAU1@@Z  # HkObj::F_48dc50 migrated from s0048d010 (verbatim, slice spelling)

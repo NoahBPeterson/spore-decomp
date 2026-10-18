@@ -1,2 +1,4 @@
+00496300 ?FUN_00496300@@YAXPAX00@Z  # FUN_00496300 migrated from s00496300 (verbatim, slice spelling)
+00496760 ?FUN_00496760@@YAXPAX0@Z  # FUN_00496760 migrated from s00496300 (verbatim, slice spelling)
 00496b60 ?FUN_00496b60@@YAXPAUHolderA@@M@Z  # FUN_00496b60 migrated from s00496300 (verbatim, slice spelling)
 00496bb0 ?FUN_00496bb0@@YAHPADM@Z  # FUN_00496bb0 migrated from s00496300 (verbatim, slice spelling)

@@ -1,6 +1,14 @@
 # va  diff-bytes  reason
 00453250 294 complete; original has a plain "push ebp; and esp,-16" frame with esp-relative locals, our cl emits the ebx-based aligned frame (all stores otherwise the same)
 00481f00 90 IsNAN: comparison/short-circuit shape matches, but /Od local slot order (float params vs result) differs [equiv WEAK (97.8% cov) after marker fix]
+0048d010 693 /Od /Oy; complete. MoveBlockLowAngleStacking: same 22 calls/vslots/constants in order, frame 0x390 equal; diffs: inlined setInterpolate4 lacks the this/t slots, fabs return-slot copy, ToSPVector3 temp slots, uninit shape-ptr copies emulated
+0048db10 7 /Od; complete. Havok deleting-ctor: vtable set + hkMemory::Free; this-spill/mem temp slots swapped
+0048db60 29 /Od; complete. init +0x30/+0x2c/+4; constant-indexed array store not reproduced
+0048dbb0 8 /Od; complete. two vtable stores + hkMemory::Free; temp slot order swapped
+0048dcd0 1455 flags /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Oy ; complete. Havok linear-cast lowering, same 29 callees in the same order; frame 0x270 vs 0x260 and slot layout differ, setInterpolate4 this/t slots absent
+0048e590 1925 /Od frame layout (local slot order, inline-return temps) and x87-vs-SSE fabs compare differ; complete and equivalent in structure
+0048ef30 1378 complete (all paths and calls); /Od frame layout and temp slots differ (original frame 0x370)
+0048f790 482 complete (all paths and calls); /Od temp slot layout differs (original frame 0x140, second AllocTag temp at -0xd1)
 0048fde0 166 recursive child-walk; complete but frame slots / inlined callee shapes differ
 004902c0 62 AABB overlap wrapper; complete, but original reserves a much larger (0xb4) frame and stores the 1.1f margin in a local
 00490330 130 AABB 6-axis overlap test; complete, but the original indexes through an inlined Vector3::operator[] and the LHS ends up in xmm0 (my plain member-access form folds to direct offsets)
@@ -31,10 +39,28 @@
 00499b40 409 barycentric weights of a point in a triangle: complete; /Od slot order (needs all locals in one scope with hash-picked names) and copy flavours differ
 0049a030 64 complete ray/plane intersection helper (plane through two globals, origin + t*dir); only the /Od frame/temp slots and branch layout differ
 0049a0c0 349 block-direction picker (GetDir of owner+0x28, -1 sentinel test, normalized -dir or dir-delta): complete; /Od frame has extra reserved slots and by-value temps ordered differently; difftest PASS
+0049cb90 509 complete; /Od frame/slot layout and tracker call shapes differ
+0049ce40 243 complete; /Od frame 0x100 vs 0xa8, temp/slot layout differs
 0049fbd0 485 COMPLETE RepinBlockToTorso; /Od frame slot layout and by-value arg temps differ; difftest PASS (mapped ctor annotations; touched vector now uses the AutoRefCount vector dtor 0x453eb0 that releases elements)
+0049fee0 247 COMPLETE limb-structure FixAllJoints loop; /Od slot order differs; difftest WEAK (38.6% coverage; LimbVec/LimbStructure annotations fixed)
+004a0020 456 COMPLETE GetAllLimbs; /Od slot order (vector locals, inline operator[] temps) differs; difftest WEAK (44.3% coverage; LimbVec annotations fixed)
+004a02b0 756 COMPLETE limb scale/repin; /Od slots and by-value vec/mat temps differ; difftest WEAK (35.4% coverage; by-value matrix now built with the 0x449cc0 ctor directly)
+004a06c0 184 COMPLETE block offset getter; extra per-test bool slots missing
+004a0900 285 COMPLETE socket snap helper; /Od slots differ; difftest PASS
+004a0bf0 507 complete; /Od stack-slot order (name hash) and operator-> temp layout differ
+004a1070 1685 complete; /Od slot layout and accessor temporaries differ (size 1945 vs 2112); difftest WEAK (35% coverage at 2000 inputs; fixed: FUN_4adc40 is a cSPEditorModel thiscall getter (byte +0x4f), was called as a free cdecl with garbage ecx)
+004a18b0 6 complete; inline Dot param slots -0x28/-0x2c evaluation order swapped
+004a1a70 596 symmetry pin-block update: complete; /Od frame holes from inlined ARC/operator[] helpers not reproduced (frame 0x6c vs 0xb4)
 004a1e10 468 unsnap-replace block: complete; same /Od inline-hole frame layout difference; difftest WEAK (16.9% coverage: generated blocks rarely have flag 0x2a set) after fixing the stray "@ 0x4a1e10" marker on the forward declaration that made the checker test FUN_4a1d60 in its place
+004a2180 371 snap offset vec3 from merged bboxes: complete; /Od frame slot layout differs; difftest PASS after fixing the axis index (FUN_44c0e0's 2nd out value, not the 1st)
 004a2350 3 DoSnapReplace: complete; only the /Od slot of 'changed' (-9 vs -0x15) and 'd' (-0x18 vs -0x14) differ
+004a25f0 728 orientation builder: complete; fabs is a CRT call (orig inline fld/fabs asm helper), dot-product sum order and frame layout differ; statics now built in place by Normalize and cross/negate results copy-constructed like the original; difftest FAIL is a checker artifact: our three function-local statics and their guard are not mapped to the image's (0x015d60c0/cc/d8, guard 0x015d60e4; alignment cannot pair them), so the original's .data writes are compared with nothing; the same source with those statics spelled as the image globals (work/match/scratch_s004a1a70_globals.cpp) gives PASS 400/400
+004a29a0 1874 SnapBlockToSocket: complete (56/56 calls same order and targets, vcall slots 0x14/0x24/0x30, msg ids); /Od frame slot layout (name hash, 0x2f8 vs 0x380) differs
+004a3dc0 2236 complete; /Od frame slot layout and temp slots not matched
 004a4840 875 complete; /Od frame slot layout (locals/temps hash order) not matched
+004a5fe0 4 /Od; complete. operator[]/operator-> return slots allocated in swapped order
+004a63c0 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
+004a6520 13 /Od; complete. skin virtual call: conversion slot vs this-temp order differs
 004a6f10 1696 SP::EditorUtils::DeleteInvalidBlocks: complete; same 53 ordered calls, frame 0x278 vs 0x30c (/Od name-hash slot order and declined-inline holes), Place() this-pointer evaluated before the by-value copies, message-param array indexing form
 004a7c90 169 complete behavior; best /Od frame differs (original 0x44 frame vs mine 0x20; inlined eastl push_back temps and local hash order)
 004a88f0 259 complete behavior (XformMsg post to EffectsManager); /GS cookie and vector-copy shape differ; equiv: UNSUPPORTED (0/1200 inputs valid: fake-arity/read faults on EffectsManager vtable calls)

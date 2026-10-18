@@ -1,1 +1,32 @@
 # va  diff-bytes  reason
+0048fee0  982  approximate: control flow and most calls reproduced but the inner snap-offset loop (FUN_0041db10/VectorLength/FUN_004a9e40 + container method/dtor) is not a faithful translation
+004906e0  613  approximate: axis/basis construction reproduced but the acos/Transform branch (Transform header tweaks, FUN_006baba0 arg order) is reconstructed only approximately
+004928d0  1293  partial: skeleton of the large block-alignment routine
+004934d0  276  partial: only the entry guard is present; the registry lookup + per-block translation loop is stubbed
+00495fe0  161  partial: hkArray/hkInplaceArray-style ctor skeleton (vtable stores + inplace buffer header); exact buffer init loop not reproduced
+00496300  1111  partial: large routine skeleton only
+00496760  1009  partial: large routine skeleton only
+0049b460  1089  partial: large routine skeleton only
+0049b8b0  1034  partial: large routine skeleton only
+0049bcc0  1068  partial: large routine skeleton only
+0049c140  205  partial: matrix/repin helper skeleton only
+0049c210  -  skeleton: matrix-from-direction builder, logic not reconstructed
+0049c630  -  skeleton: spine-ancestor surface snap, container logic not reconstructed
+0049c8f0  -  approximate: recursive transform accumulation, several paths guessed
+0049cfd0  -  skeleton: flag propagation over symmetry chain
+0049d1f0  -  skeleton: recursive symmetry update (bitset 0x1f, block transform build)
+0049d390  -  skeleton: limb/again recursion
+0049d550  -  skeleton: by-value matrix transform combine
+0049d6b0  -  skeleton: large recursive limb rebuild
+0049dd20  -  skeleton: recursive child traversal (eastl::vector temp)
+0049ecf0  -  skeleton: bone/limb rebuild helper
+004a3760  -  skeleton: screen-space position helper
+004a37f0  -  skeleton: block search helper
+004a3920  -  skeleton: block search helper
+004a3c70  -  skeleton: nearest-block search
+004a6d20  -  skeleton: block-validity helper
+004a89e0  900  incomplete: large matrix routine (x87/SSE); only entry paths sketched
+004a8e10  250  incomplete: Matrix3FromFacingAndUp wrapper; sign-flip/xorps scheduling not fully reconstructed
+004a8fc0  760  incomplete: 764-byte 16-byte-aligned SSE matrix routine (and esp,-16); not reconstructed
+004a92c0  838  incomplete: 838-byte 16-byte-aligned (and esp,-16) routine; not reconstructed
+004a9610  166  incomplete: matrix conversion; call/loop shape approximated

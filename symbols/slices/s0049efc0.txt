@@ -1,0 +1,1 @@
+0049efc0 ?MoveBlocks@@YAXPAUcSPEditorBlock_s0049_efc0@@UVector3T_s0049_efc0@@1UMatrix33T_s0049_efc0@@2PAUBlockVec_s0049_efc0@@@Z  # MoveBlocks migrated from s0049efc0 (verbatim, slice spelling)

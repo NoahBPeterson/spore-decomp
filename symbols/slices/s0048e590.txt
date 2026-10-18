@@ -1,1 +1,1 @@
-0048e590 SP::EditorUtils::GetLowAngleOffset  # complete: frame transform, candidate snapping scores, low-angle Z offset
+0048e590 ?F_48e590@@YAMPAUBlock_s0048_e590@@PAUBlockList_s0048_e590@@PAUVector3_s0048_e590@@M@Z  # F_48e590 migrated from s0048e590 (verbatim, slice spelling)

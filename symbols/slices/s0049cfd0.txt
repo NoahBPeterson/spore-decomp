@@ -1,2 +1,8 @@
-0049d640 cSPTransform::TransformVector  # applies mRotation (flag 2) then mScale
-0049dca0 ClampAndSetScale  # clamps to mMin/mMaxUniformScale then SetUniformScale
+0049cfd0 ?FUN_49cfd0@@YAXPAUcSPEditorBlock_s0049_cfd0@@@Z  # FUN_49cfd0 migrated from s0049cfd0 (verbatim, slice spelling)
+0049d1f0 ?FUN_49d1f0@@YAXPAUcSPEditorBlock_s0049_cfd0@@M_N1@Z  # FUN_49d1f0 migrated from s0049cfd0 (verbatim, slice spelling)
+0049d390 ?FUN_49d390@@YAXPAUcSPEditorBlock_s0049_cfd0@@@Z  # FUN_49d390 migrated from s0049cfd0 (verbatim, slice spelling)
+0049d550 ?FUN_49d550@@YAXPAUcSPEditorBlock_s0049_cfd0@@@Z  # FUN_49d550 migrated from s0049cfd0 (verbatim, slice spelling)
+0049d640 ?TransformVector@cSPTransform_s0049_cfd0@@QAEXPAUcSPVector3_s0049_cfd0@@@Z  # cSPTransform_s0049_cfd0::TransformVector migrated from s0049cfd0 (verbatim, slice spelling)
+0049d6b0 ?FUN_49d6b0@@YAXPAUcSPEditorBlock_s0049_cfd0@@@Z  # FUN_49d6b0 migrated from s0049cfd0 (verbatim, slice spelling)
+0049dca0 ?ClampAndSetScale@@YAMPAUcSPEditorBlock_s0049_cfd0@@M_N@Z  # ClampAndSetScale migrated from s0049cfd0 (verbatim, slice spelling)
+0049dd20 ?FUN_49dd20@@YA_NPAUcSPEditorBlock_s0049_cfd0@@PAX_N@Z  # FUN_49dd20 migrated from s0049cfd0 (verbatim, slice spelling)

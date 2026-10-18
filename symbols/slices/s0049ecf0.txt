@@ -1,1 +1,2 @@
-0049ef80 AddThreeVectors  # calls a thiscall per-element over a 3-vector array
+0049ecf0 ?FUN_49ecf0@@YAXPAUcSPEditorBlock_s0049_ecf0@@@Z  # FUN_49ecf0 migrated from s0049ecf0 (verbatim, slice spelling)
+0049ef80 ?FUN_49ef80@@YAXPAUcSomeTracker@@PAUcSPVector3_s0049_ecf0@@@Z  # FUN_49ef80 migrated from s0049ecf0 (verbatim, slice spelling)

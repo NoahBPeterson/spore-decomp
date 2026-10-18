@@ -1,6 +1,11 @@
-004a1d60 cSPEditorBlock::FUN_4a1d60  # mirrors a vector into +0x144 and (negated) into mPinTarget
+00451280 ?SetParent@cSPEditorBlock@SP@@AAEXPAV12@@Z  # SP::cSPEditorBlock::SetParent (callee of s004a1a70, named from the dev publics; slice address comment)
+004a1a70 ?FUN_4a1a70@@YAXPAXPAUcSPEditorBlock_s004a_1a70@@@Z  # FUN_4a1a70 migrated from s004a1a70 (verbatim, slice spelling)
+004a1d60 ?FUN_4a1d60@cSPEditorBlock_s004a_1a70@@QAEXPBUcSPVector3_s004a_1a70@@@Z  # cSPEditorBlock_s004a_1a70::FUN_4a1d60 migrated from s004a1a70 (verbatim, slice spelling)
 004a1e10 ?FUN_4a1e10@@YA_NPAUcSPEditorBlock_s004a_1a70@@@Z  # FUN_4a1e10 migrated from s004a1a70 (verbatim, slice spelling)
+004a2060 ?FUN_4a2060@@YA_NPAUcSPEditorBlock_s004a_1a70@@@Z  # FUN_4a2060 migrated from s004a1a70 (verbatim, slice spelling)
+004a2180 ?FUN_4a2180@@YAPAUrwVec3@@PAU1@PAUcSPEditorBlock_s004a_1a70@@1@Z  # FUN_4a2180 migrated from s004a1a70 (verbatim, slice spelling)
 004a2350 ?FUN_4a2350@@YA_NPAUcSPEditorBlock_s004a_1a70@@0PAUrwVec3@@PAM@Z  # FUN_4a2350 migrated from s004a1a70 (verbatim, slice spelling)
-004a2560 FUN_4a2560  # OR over block predicates
+004a2560 ?FUN_4a2560@@YA_NPAUcSPEditorModel_s004a_1a70@@@Z  # FUN_4a2560 migrated from s004a1a70 (verbatim, slice spelling)
+004a25f0 ?FUN_4a25f0@@YA?AUrwMat3@@U1@H@Z  # FUN_4a25f0 migrated from s004a1a70 (verbatim, slice spelling)
 004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s004a1a70, named from the dev publics; slice address comment)
 004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004a1a70, named from the dev publics; slice address comment)
