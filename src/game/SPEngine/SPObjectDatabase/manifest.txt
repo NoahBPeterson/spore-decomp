@@ -1,0 +1,21 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPObjectDatabase.cpp  ?f@C2a@@QAE_NHH@Z  0069d1d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?g@C2b@@QAE_NHH@Z  0069d280  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  _FUN_0069d2c0@4  0069d2c0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?setProgress@C5@@QAEXM@Z  0069d2f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?asInterface@C6@@QAEPAXH@Z  0069d360  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?GetRefCount@Database@ResourceMan@EA@@UAEHXZ  0069d3f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?reset@Holder@@QAE_NXZ  0069d480  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?valid@Holder@@QAE_NXZ  0069d4d0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?f@C830@@QAEXHH@Z  0069d830  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?reset@Holder8@@QAE_NXZ  0069d8e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?valid@Holder8@@QAE_NXZ  0069d930  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?emit@C950@@QAEXPAX@Z  0069d950  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?get@Cddc0@@QAEHXZ  0069ddc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?get@Cdea0@@QAEDXZ  0069dea0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?flush@Cded0@@QAEDXZ  0069ded0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?bind@Cdfc0@@QAE_NPAXH@Z  0069dfc0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?ctor@C_e040@@QAEPAU1@XZ  0069e040  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?ctor@C_e210@@QAEPAU1@XZ  0069e210  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?WriteSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAUISerializable@@@Z  006a05f0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
+../src/game/SPEngine/SPObjectDatabase.cpp  ?ReadSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAPAUISerializable@@D@Z  006a06a0  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /GS- /Isrc/game/include

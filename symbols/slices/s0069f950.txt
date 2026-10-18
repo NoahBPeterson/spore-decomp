@@ -1,10 +1,10 @@
-0069f950 eastl::map<unsigned int,SP::cCOMSerializer::cClassInfo,...>::operator[]  # PDB name
-0069fa60 SP::cObjectDatabase::cObjectDatabase  # PDB name
-0069fb90 SP::cCOMSerializer::SaveClassObjects  # PDB candidate (caller-scored)
-006a0110 SP::cCOMSerializer::onSetSPSerializable  # PDB candidate (caller-single)
-006a0360 SP::cCOMSerializer::loadSingleObject  # PDB candidate (caller-scored)
-006a05f0 SP::cCOMSerializer::WriteSerializableObject  # PDB candidate (caller-single)
-006a06a0 SP::cCOMSerializer::ReadSerializableObject  # PDB candidate (caller-single)
+0069f950 ?Subscript@ClassMap@@QAEAAUClassInfo@@ABI@Z  # ClassMap::Subscript migrated from s0069f950 (verbatim, slice spelling)
+0069fa60 ??0cObjectDatabase_s0069_f950@@QAE@PAUDatabase@@@Z  # cObjectDatabase_s0069_f950::cObjectDatabase migrated from s0069f950 (verbatim, slice spelling)
+0069fb90 ?SaveClassObjects@cICOMSerializer@@QAE_NXZ  # cICOMSerializer::SaveClassObjects migrated from s0069f950 (verbatim, slice spelling)
+006a0110 ?onSetSPSerializable@cCOMSerializer@@QAE_NPAUISerializable@@II@Z  # cCOMSerializer::onSetSPSerializable migrated from s0069f950 (verbatim, slice spelling)
+006a0360 ?loadSingleObject@cCOMSerializer@@QAE_NPAUISerializable@@II@Z  # cCOMSerializer::loadSingleObject migrated from s0069f950 (verbatim, slice spelling)
+006a05f0 ?WriteSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAUISerializable@@@Z  # cICOMSerializer::WriteSerializableObject migrated from s0069f950 (verbatim, slice spelling)
+006a06a0 ?ReadSerializableObject@cICOMSerializer@@QAEHPAUSerStream@@PAPAUISerializable@@D@Z  # cICOMSerializer::ReadSerializableObject migrated from s0069f950 (verbatim, slice spelling)
 006a0920 ?GetPropertyAsVector2Array@SP@@YA_NPBVcPropertyList@1@IPAHPAPAUcSPVector2@@@Z  # SP::GetPropertyAsVector2Array migrated from s0069f950
 006a10c0 ?GetPropertyAsVector2@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector2@@@Z  # SP::GetPropertyAsVector2 migrated from s0069f950
 006a1110 ?GetPropertyAsVector3@SP@@YA_NPBVcPropertyList@1@IPAUcSPVector3@@@Z  # SP::GetPropertyAsVector3 migrated from s0069f950

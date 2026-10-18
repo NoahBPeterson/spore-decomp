@@ -1,4 +1,25 @@
-0069d2c0 SP::cObjectDatabase::CloseIStream  # PDB name; forwards to arg->vtbl[0x14]
-0069d3f0 EA::ResourceMan::Database::GetRefCount  # PDB name; atomic read at +8
+0069d1d0 ?f@C2a@@QAE_NHH@Z  # C2a::f migrated from s0069d090 (verbatim, slice spelling)
+0069d210 ?read@C3@@QAE_NH@Z  # C3::read migrated from s0069d090 (verbatim, slice spelling)
+0069d280 ?g@C2b@@QAE_NHH@Z  # C2b::g migrated from s0069d090 (verbatim, slice spelling)
+0069d2c0 _FUN_0069d2c0@4  # FUN_0069d2c0 migrated from s0069d090 (verbatim, slice spelling)
+0069d2f0 ?setProgress@C5@@QAEXM@Z  # C5::setProgress migrated from s0069d090 (verbatim, slice spelling)
+0069d360 ?asInterface@C6@@QAEPAXH@Z  # C6::asInterface migrated from s0069d090 (verbatim, slice spelling)
+0069d3c0 ?Release@C7@@QAEHXZ  # C7::Release migrated from s0069d090 (verbatim, slice spelling)
+0069d3f0 ?GetRefCount@Database@ResourceMan@EA@@UAEHXZ  # EA::ResourceMan::Database::GetRefCount migrated from s0069d090
+0069d480 ?reset@Holder@@QAE_NXZ  # Holder::reset migrated from s0069d090 (verbatim, slice spelling)
+0069d4d0 ?valid@Holder@@QAE_NXZ  # Holder::valid migrated from s0069d090 (verbatim, slice spelling)
+0069d4f0 ?conditional@Holder@@QAEXHH@Z  # Holder::conditional migrated from s0069d090 (verbatim, slice spelling)
+0069d830 ?f@C830@@QAEXHH@Z  # C830::f migrated from s0069d090 (verbatim, slice spelling)
+0069d8e0 ?reset@Holder8@@QAE_NXZ  # Holder8::reset migrated from s0069d090 (verbatim, slice spelling)
+0069d930 ?valid@Holder8@@QAE_NXZ  # Holder8::valid migrated from s0069d090 (verbatim, slice spelling)
+0069d950 ?emit@C950@@QAEXPAX@Z  # C950::emit migrated from s0069d090 (verbatim, slice spelling)
 0069d9d0 SP::cObjectDatabaseOStream::WriteVariant  # PDB candidate (caller-scored)
-0069dca0 ?dtor@cObjectDatabase@@QAEXXZ  # SP::cObjectDatabase::~cObjectDatabase (PDB name); our reconstruction is named cObjectDatabase::dtor; 4 vptr stores + 3 member releases
+0069dca0 ?dtor@cObjectDatabase@@QAEXXZ  # cObjectDatabase::dtor migrated from s0069d090 (verbatim, slice spelling)
+0069ddc0 ?get@Cddc0@@QAEHXZ  # Cddc0::get migrated from s0069d090 (verbatim, slice spelling)
+0069dea0 ?get@Cdea0@@QAEDXZ  # Cdea0::get migrated from s0069d090 (verbatim, slice spelling)
+0069ded0 ?flush@Cded0@@QAEDXZ  # Cded0::flush migrated from s0069d090 (verbatim, slice spelling)
+0069df20 ?begin@Cdf20@@QAE_ND@Z  # Cdf20::begin migrated from s0069d090 (verbatim, slice spelling)
+0069df90 ?ok@Cdf90@@QAE_NXZ  # Cdf90::ok migrated from s0069d090 (verbatim, slice spelling)
+0069dfc0 ?bind@Cdfc0@@QAE_NPAXH@Z  # S_e260::bind migrated from s0069d090 (verbatim, slice spelling)
+0069e040 ?ctor@C_e040@@QAEPAU1@XZ  # C_e040::ctor migrated from s0069d090 (verbatim, slice spelling)
+0069e210 ?ctor@C_e210@@QAEPAU1@XZ  # C_e210::ctor migrated from s0069d090 (verbatim, slice spelling)
