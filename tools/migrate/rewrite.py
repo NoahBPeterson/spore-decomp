@@ -4313,6 +4313,21 @@ class Rewrite:
             n = text.strip() if kind == "include" else RS.norm(text)
             if n in have and not (kind != "include" and ins_at is not None and _only_later(text)):
                 continue
+            if n in have and kind != "include":
+                # emitted here because every copy is behind this section: the later copy is taken out, or a definition
+                # (template, inline function, struct) is defined twice (mig17 TraitClassifier: s0056a7b0 re-applied with
+                # `ScratchSlots` only in s0056b680's block below: C2995, five functions held).  The item moves up, where the
+                # later block still sees it
+                joined = "\n".join(lines)
+                start = len("\n".join(lines[:ins_at])) if ins_at else 0
+                for _k, t_old in old_items:
+                    if _k != "comment" and RS.norm(t_old) == n:
+                        at = joined.find(t_old, start)
+                        if at >= 0:
+                            joined = joined[:at] + joined[at + len(t_old):]
+                            self.notes.append(("moved-item", "%s: moved up from a later slice's block" % " ".join(t_old.split())[:80]))
+                        break
+                lines = joined.split("\n")
             pk = proto_key(text) if kind in ("extern", "other") else None
             dll = lambda t: bool(re.search(r"__declspec\s*\(\s*dllimport\s*\)", RS.mask(t)))
             if pk and dll(text):
