@@ -12,7 +12,7 @@
 00637830 ?GetYTPassword@cSPPlayModeUI@SP@@QAEXAAV?$basic_string@DVallocator@eastl@@@eastl@@@Z  # SP::cSPPlayModeUI::GetYTPassword (callee of s006404f0, named from the dev publics; slice address comment)
 00637860 ?Show@cSPPlayModeUI@SP@@QAEXXZ  # SP::cSPPlayModeUI::Show (callee of s006404f0, named from the dev publics; slice address comment)
 0063fd20 ?SendPhoto@cSPPlayModeSubModePhoto@SP@@QAEXXZ  # SP::cSPPlayModeSubModePhoto::SendPhoto (callee of s006404f0, named from the dev publics; slice address comment)
-006404f0 SP::cSPPlayModeSubModePhoto::HandleButton  # PDB name (anchor)
+006404f0 ?HandleButton@cSPPlayModeSubModePhoto_s0064_04f0@SP@@QAE_NH@Z  # cSPPlayModeSubModePhoto_s0064_04f0::HandleButton migrated from s006404f0 (verbatim, slice spelling)
 00640ee0 ?FUN_00640ee0@cXX@@QAEXXZ  # cXX::FUN_00640ee0 migrated from s006404f0 (verbatim, slice spelling)
 00640fa0 ?FUN_00640fa0@cXX@@QAEXXZ  # cXX::FUN_00640fa0 migrated from s006404f0 (verbatim, slice spelling)
 006411b0 ?CaptureImageDone@cSPPlayModeSubModePhoto@SP@@QAEXXZ  # SP::cSPPlayModeSubModePhoto::CaptureImageDone migrated from s006404f0
