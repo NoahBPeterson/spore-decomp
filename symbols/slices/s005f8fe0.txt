@@ -1,13 +1,13 @@
-005f8fe0 unknown_5f8fe0  # unnamed 151-byte helper
-005f9080 eastl string helper (0x5f8690 wrapper)  # temp-string ctor + dtor
-005f90c0 eastl string helper (0x5f8700 wrapper)  # temp-string ctor + dtor
-005f9100 hashtable_insert_wchar  # FNV-1a wchar hash + bucket insert
-005f9230 unknown_5f9230  # unnamed 224-byte helper
-005f9310 ?SetupExportFolderPath@cImportExport@Thumbnail@SP@@QAEXXZ  # cImportExport::SetupExportFolderPath migrated from s005f8fe0 (verbatim, slice spelling)
-005f9450 ?append_sprintf@?$basic_string_s005f_8fe0@D@eastl@@QAAPAV12@PBDZZ  # append_sprintf migrated from s005f8fe0 (verbatim, slice spelling)
-005f9470 ?FUN_005f9470@@YAXXZ  # FUN_005f9470 migrated from s005f8fe0 (verbatim, slice spelling)
-005f95a0 ?FUN_005f95a0@@YAXXZ  # FUN_005f95a0 migrated from s005f8fe0 (verbatim, slice spelling)
-005f9680 ?FUN_005f9680@@YAXXZ  # FUN_005f9680 migrated from s005f8fe0 (verbatim, slice spelling)
-005f96c0 ?FUN_005f96c0@@YAXXZ  # FUN_005f96c0 migrated from s005f8fe0 (verbatim, slice spelling)
-005f9760 ?FUN_005f9760@@YAXXZ  # FUN_005f9760 migrated from s005f8fe0 (verbatim, slice spelling)
-005f97c0 ?FUN_005f97c0@@YAXXZ  # FUN_005f97c0 migrated from s005f8fe0 (verbatim, slice spelling)
+005f8fe0 ?find@MapWK@@QAE?AUIterWK@@ABUWStr@eastl@@@Z  # eastl hashtable MapWK::find (FNV-1 wchar hash + bucket)
+005f9080 ?FUN_005f9080@@YAPAXPAU?$pair@UWStr@eastl@@UKey@2@@eastl@@PBUWStr@2@PBUKey@2@@Z  # LTCG caller-frame stack shim (pair<WStr,Key> ctor)
+005f90c0 ?FUN_005f90c0@@YAPAXPAU?$pair@UKey@eastl@@UWStr@2@@eastl@@PBUKey@2@PBUWStr@2@@Z  # LTCG caller-frame stack shim (pair<Key,WStr> ctor)
+005f9100 ?DoInsertValue@SetWStr@@QAE?AU?$pair@UIterW@@_N@eastl@@ABUWStr@3@Utrue_type@3@@Z  # hashtable_insert_wchar (FNV-1a wchar hash + bucket insert)
+005f9230 ?Prop@StringProps@eastl@@QAE_NIAAUWStr@2@@Z  # StringProps::Prop (switch on 32-bit field id)
+005f9310 ?SetupExportFolderPath@cImportExport@Thumbnail@SP@@QAE_NIPAXI@Z  # SP::Thumbnail::cImportExport::SetupExportFolderPath
+005f9450 ?append_sprintf@?$basic_string@D@eastl@@QAAPAV12@PBDZZ  # eastl::basic_string<char>::append_sprintf
+005f9470 ?DoInsertValue@MapWK@@QAE?AU?$pair@UIterWK@@_N@eastl@@ABU?$pair@UWStr@eastl@@UKey@2@@3@Utrue_type@3@@Z  # MapWK::DoInsertValue (unique insert)
+005f95a0 ?DoInsertValue@MapKW@@QAE?AU?$pair@UIterKW@@_N@eastl@@ABU?$pair@UKey@eastl@@UWStr@2@@3@Ufalse_type@3@@Z  # MapKW::DoInsertValue (multimap insert)
+005f9680 ??0?$DequeBase@UDequeItem@eastl@@Ucore_allocator_adapter@2@$03@eastl@@QAE@ABUcore_allocator_adapter@1@@Z  # eastl::DequeBase<DequeItem,core_allocator_adapter,4>::DequeBase
+005f96c0 ??1?$DequeBase@UDequeItem@eastl@@Ucore_allocator_adapter@2@$03@eastl@@QAE@XZ  # eastl::DequeBase<DequeItem,core_allocator_adapter,4>::~DequeBase
+005f9760 ?FUN_005f9760@@YAXXZ  # FUN_005f9760 (out of slice range; skeleton only)
+005f97c0 ?FUN_005f97c0@@YAXXZ  # FUN_005f97c0 (out of slice range; skeleton only)

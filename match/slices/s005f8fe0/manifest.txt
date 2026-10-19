@@ -1,1 +1,3 @@
+slices/s005f8fe0/s005f8fe0.cpp  ?find@MapWK@@QAE?AUIterWK@@ABUWStr@eastl@@@Z  005f8fe0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005f8fe0/s005f8fe0.cpp  ?append_sprintf@?$basic_string@D@eastl@@QAAPAV12@PBDZZ  005f9450  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005f8fe0/s005f8fe0.cpp  ??0?$DequeBase@UDequeItem@eastl@@Ucore_allocator_adapter@2@$03@eastl@@QAE@ABUcore_allocator_adapter@1@@Z  005f9680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
