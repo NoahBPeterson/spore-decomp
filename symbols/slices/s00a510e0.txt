@@ -1,8 +1,14 @@
-00a514d0 EA::Audio::Eapd::text_eraseborder  # PDB candidate; deletes tag R rect and io
-00a51510 EA::Audio::Eapd::text_setto  # PDB candidate; rename special case for pd
-00a51bd0 EA::Audio::Eapd::text_displace  # PDB candidate
-00a51cf0 EA::Audio::Eapd::text_vis  # PDB candidate
-00a51ae0 EA::Audio::Eapd::gatom_getwherelabel  # PDB candidate
+00a510e0 ?glist_drawiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@HPBDHHHH@Z  # glist_drawiofor migrated from s00a510e0 (verbatim, slice spelling)
+00a51240 ?text_drawborder@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@PBDHHH@Z  # text_drawborder migrated from s00a510e0 (verbatim, slice spelling)
+00a51450 ?glist_eraseiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@PBD@Z  # glist_eraseiofor migrated from s00a510e0 (verbatim, slice spelling)
+00a514d0 ?text_eraseborder@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@PBD@Z  # text_eraseborder migrated from s00a510e0 (verbatim, slice spelling)
+00a51510 ?text_setto@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@PBDH@Z  # text_setto migrated from s00a510e0 (verbatim, slice spelling)
+00a51ae0 ?gatom_getwherelabel@Eapd@Audio@EA@@YAXPAUt_gatom_s00a5_10e0@123@PAUt_glist@123@PAH2@Z  # gatom_getwherelabel migrated from s00a510e0 (verbatim, slice spelling)
+00a51bd0 ?text_displace@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@HH@Z  # text_displace migrated from s00a510e0 (verbatim, slice spelling)
+00a51c60 ?text_select@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@H@Z  # text_select migrated from s00a510e0 (verbatim, slice spelling)
+00a51cf0 ?text_vis@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@H@Z  # text_vis migrated from s00a510e0 (verbatim, slice spelling)
+00a51e20 ?gatom_displace@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@HH@Z  # gatom_displace migrated from s00a510e0 (verbatim, slice spelling)
+00a51e60 ?gatom_vis@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@H@Z  # gatom_vis migrated from s00a510e0 (verbatim, slice spelling)
 00a51f40 EA::Audio::Eapd::graphics_objects_init  # PDB candidate
 00a51f90 EA::Audio::Eapd::control_objects_init  # PDB candidate
 00a52000 EA::Audio::Eapd::audio_objects_init  # PDB candidate

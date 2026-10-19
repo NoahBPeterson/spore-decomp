@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/SPAudio/eapdtext.cpp  ?gatom_bang@Eapd@Audio@EA@@YAXPAUt_gatom@123@@Z  00a4fdb0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?glist_drawiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@HPBDHHHH@Z  00a510e0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?glist_eraseiofor@Eapd@Audio@EA@@YAXPAUt_glist@123@PAUt_text@123@PBD@Z  00a51450  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?text_eraseborder@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@PBD@Z  00a514d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?text_displace@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@HH@Z  00a51bd0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?text_select@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@H@Z  00a51c60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?text_vis@Eapd@Audio@EA@@YAXPAUt_text@123@PAUt_glist@123@H@Z  00a51cf0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?gatom_displace@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@HH@Z  00a51e20  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPAudio/eapdtext.cpp  ?gatom_vis@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@H@Z  00a51e60  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include

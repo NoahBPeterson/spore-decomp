@@ -1,1 +1,1 @@
-00a4fdb0 EA::Audio::Eapd::gatom_bang  # /O2 byte-exact; outlet fanout loop with reentrancy guard 1000 on global 0x0167545c; float/symbol atom send
+00a4fdb0 ?gatom_bang@Eapd@Audio@EA@@YAXPAUt_gatom@123@@Z  # gatom_bang migrated from s00a4f1e0 (verbatim, slice spelling)
