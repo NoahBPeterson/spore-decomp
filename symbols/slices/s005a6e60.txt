@@ -7,7 +7,7 @@
 005a74a0 UI element ctor  # shorts at 0x10/0x12, calls 0x0093dd80
 005a74d0 ?FUN_005a7840@@YAXXZ  # FUN_005a7840 migrated from s005a6e60 (verbatim, slice spelling)
 005a7810 dual-cString data ctor  # two cString members at 0/0x14
-005a7840 SP::cSPEditorEconomy::SendChangedMessage  # PDB callee-scored; posts id 0x3150c27
+005a7840 ?SendChangedMessage@cSPEditorEconomy@SP@@QAEXXZ  # SP::cSPEditorEconomy::SendChangedMessage migrated from s005a6e60
 005a7900 SP::cSPEditorGeneralBadnessCalculator::cSPEditorGeneralBadnessCalculator  # ctor
 005a7920 ??1cSPEditorGeneralBadnessCalculator@SP@@UAE@XZ  # cSPEditorGeneralBadnessCalculator::~cSPEditorGeneralBadnessCalculator migrated from s005a6e60 (verbatim, slice spelling)
 005a7930 ?FUN_005a7930@@YAXXZ  # FUN_005a7930 migrated from s005a6e60 (verbatim, slice spelling)

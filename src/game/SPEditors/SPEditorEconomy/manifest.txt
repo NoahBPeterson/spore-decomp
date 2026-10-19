@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorEconomy.cpp  ?SendChangedMessage@cSPEditorEconomy@SP@@QAEXXZ  005a7840  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
