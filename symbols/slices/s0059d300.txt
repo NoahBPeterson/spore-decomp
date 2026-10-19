@@ -1,8 +1,8 @@
 0059d300 SP::cSPEditorAnimatedCreatureManager::HandleAnimatedEvent  # PDB caller-single
 0059d610 SP::cSPEditorAnimatedCreatureManager::Update  # PDB caller-single
-0059d840 SP::cSPEditorAnimatedEventInfo::MessagePost  # PDB name, disasm matches slots
-0059d8b0 SP::cSPEditorAnimatedEventInfo::MessageSend  # PDB name
-0059d930 EA::RefCountVTemplate<EA::Thread::AtomicInt<int> >::GetRefCount  # PDB name
+0059d840 ?MessagePost@cSPEditorAnimatedEventInfo@SP@@QAEXW4eAnimatedEvent@12@PAVcSPEditorBlock@2@PAVcSPEditorModel@2@I_NM3IM@Z  # SP::cSPEditorAnimatedEventInfo::MessagePost migrated from s0059d300
+0059d8b0 ?MessageSend@cSPEditorAnimatedEventInfo_s0059_d300@SP@@QAEXW4eAnimatedEvent@2@PAUcSPEditorBlock_s0059_d300@2@PAUcSPEditorModel_s0059_d300@2@I_NM3IM@Z  # cSPEditorAnimatedEventInfo_s0059_d300::MessageSend migrated from s0059d300 (verbatim, slice spelling)
+0059d930 ?GetRefCount@AtomicCounter@@QAEHXZ  # AtomicCounter::GetRefCount migrated from s0059d300 (verbatim, slice spelling)
 0059d960 SP::cSPEditorAnimatedEventInfo::cSPEditorAnimatedEventInfo  # ctor; PDB name "ColorRGBToU32" is misassigned
 0059da20 pair/field equality helper  # two int field compares
 0059da80 ?RandomRange@@YANM@Z  # RandomRange migrated from s0059d300 (verbatim, slice spelling)

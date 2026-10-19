@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorAnimationEvent.cpp  ?FUN_0059aea0@cAnimatedData@Simulator@@QAEXD@Z  0059aea0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPEditorAnimationEvent.cpp  ?GetRefCount@AtomicCounter@@QAEHXZ  0059d930  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
