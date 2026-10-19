@@ -4151,7 +4151,16 @@ class Rewrite:
         ReadPaintStuff 0x766fa0, module None: C3861 and the byte-exact caller was dropped)."""
         emitted = {c.va for c in fns}
         texts = mask("\n".join(c.defline + "\n" + c.out_body for c in fns))
-        mp, mb = mask(pre), mask(body)
+        direct = texts
+        # a callee used only inside a slice macro the emitted code expands (`STR_CASE_FIX(h, f)` -> `FixSlashes(out)`, mig13
+        # s00634490 0x6346e0: C3861) is used too: the bodies of the macros the code names count as its text (two levels)
+        macros = {m.group(1): m.group(2) for m in re.finditer(r"(?m)^[ \t]*#[ \t]*define[ \t]+(\w+)((?:[^\n]*\\\n)*[^\n]*)",
+                                                             getattr(self, "src_text", "") or "")}
+        for _ in range(2):
+            used = [n for n in macros if re.search(r"\b%s\b" % re.escape(n), texts)]
+            texts += "\n" + mask("\n".join(macros.pop(n) for n in used))
+        # a macro body in the preamble that calls the callee (`FixSlashes(out);`) is not its declaration
+        mp, mb = re.sub(r"(?m)^[ \t]*#[ \t]*define\b(?:[^\n]*\\\n)*[^\n]*", "", mask(pre)), mask(body)
         protos = []
         for c in self.chunks:
             if c.va in emitted or c.cls or not c.name or getattr(c, "inst", False) or getattr(c, "implicit", None):
@@ -4172,6 +4181,10 @@ class Rewrite:
             ens = list(getattr(c, "enc_ns", []) or [])
             # a static/inline helper of the slice declared here without its body is C2129 (mig10 SPCookie TrimWhitespace)
             sig = re.sub(r"^(?:\s*(?:static|inline|__inline|__forceinline)\b)+\s*", "", sig)
+            if not re.search(r"(?<![\w:.>])%s\s*\(" % re.escape(name), direct) and not self._sig_types_known(sig, name, mp + "\n" + mb):
+                # found only through an address use or a macro: a prototype naming a type the TU lacks breaks the whole
+                # compile (mig13 s00634490: `void FixSlashes(wstring16*)`, C2065 -> COMPILE FAILED), so it is left out
+                continue
             cmt = "  // 0x%08x (stays in the slice: not this object's)" % c.va
             # the closing braces go before the comment (they were after it and commented out: C1075, mig10 eapdeditor 0xa4c470)
             protos.append((" ".join("namespace %s {" % n for n in ens) + " " + sig + "; " + "}" * len(ens) + cmt) if ens else sig + ";" + cmt)
@@ -4179,6 +4192,21 @@ class Rewrite:
             return pre
         self.notes.append(("held-callee-proto", ", ".join(p.split("(")[0].split()[-1] for p in protos)))
         return pre.rstrip("\n") + "\n\n// callees this slice defines outside this object (rewrite.py held_callee_protos)\n" + "\n".join(protos) + "\n"
+
+    _BUILTIN = set("void char short int long float double bool signed unsigned const volatile struct class union enum "
+                   "__cdecl __stdcall __fastcall __thiscall wchar_t size_t uint8_t uint16_t uint32_t uint64_t int8_t int16_t "
+                   "int32_t int64_t __int64 __int8 __int16 __int32 uintptr_t intptr_t".split())
+
+    def _sig_types_known(self, sig, name, known):
+        """Every type name in prototype `sig` (not the function name, not parameter names, not builtins) occurs in `known`."""
+        m = re.match(r"^(.*?)\b%s\s*\((.*)\)\s*$" % re.escape(name), sig.rstrip(";").strip(), re.S)
+        if not m:
+            return False
+        ids = re.findall(r"[A-Za-z_]\w*", m.group(1))
+        for prm in split_params(m.group(2)) if m.group(2).strip() else []:
+            toks = re.findall(r"[A-Za-z_]\w*", prm.split("=")[0])
+            ids += toks[:-1] if len(toks) > 1 else toks
+        return all(t in self._BUILTIN or re.search(r"\b%s\b" % re.escape(t), known) for t in ids)
 
     def _tu_defines_cpp(self, name):
         """The module TU (as it is on disk) defines a free function `name` (after the first marker) without C linkage."""
