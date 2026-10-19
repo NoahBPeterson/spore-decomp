@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/plugins/sndplayer1.cpp.cpp  ?Initialize_SndPlayer1@PlugIn_s0112_ce20@core@audio@rw@@QAEPAV1234@XZ  0112dbb0  /vc71 /O2 /MD /Gy /TP /Isrc/game/include

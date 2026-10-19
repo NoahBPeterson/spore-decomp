@@ -1,6 +1,6 @@
 0112dca0 rw::audio::core::System built-in decoder registration  # registers ~40 descriptor getters into a registry (0x0112cd60)
-0112df80 ?GetInstance@StreamPool@core@audio@rw@@SAPAU123@I@Z  # PDB-adjacent; walks g_pStreamPoolList (0x016e61ac)
-0112dfa0 ?AcquireStream@StreamPool@core@audio@rw@@...  # rwaudio StreamPool acquire (reuse/free/evict)
+0112df80 ?StreamPool_GetInstance@core@audio@rw@@YAPAUStreamPool_s0112_dca0@123@I@Z  # StreamPool_GetInstance migrated from s0112dca0 (verbatim, slice spelling)
+0112dfa0 ?AcquireStream@StreamPool_s0112_dca0@core@audio@rw@@QAEPAUStreamDesc_s0112_dca0@234@MPAXH@Z  # StreamPool_s0112_dca0::AcquireStream migrated from s0112dca0 (verbatim, slice spelling)
 0112e1e0 ?ReleaseStream@StreamPool@core@audio@rw@@...  # 16-bit refcount release
 0112e210 StreamPool::ReleaseHandler  # clears streams and frees the pool
 0112e290 StreamPool::Create  # allocates pool + stream descriptors

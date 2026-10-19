@@ -1,14 +1,17 @@
-# va        Name  # evidence
+0112c600 ?Lock@System@core@audio@rw@@QAEXXZ  # rw::audio::core::System::Lock (callee of s01137aa0, named from the dev publics; slice address comment)
+0112c620 ?Unlock@System@core@audio@rw@@QAEXXZ  # rw::audio::core::System::Unlock (callee of s01137aa0, named from the dev publics; slice address comment)
+0112dc80 ?GetDecoderRegistry@System@core@audio@rw@@QAEPAVDecoderRegistry@234@XZ  # rw::audio::core::System::GetDecoderRegistry (callee of s01137aa0, named from the dev publics; slice address comment)
+0112e1e0 ?ReleaseStream@StreamPool@core@audio@rw@@QAEXPAX@Z  # rw::audio::core::StreamPool::ReleaseStream (callee of s01137aa0, named from the dev publics; slice address comment)
 01137aa0  rw::audio::core::SndPlayer1::FreeRequest  # frees decoder + feed slots + stream for one request
-01137bc0  rw::audio::core::SndPlayer1::FreeFinishedRequests  # advances mNextRequestToFree over state==4 requests
-01137c30  rw::audio::core::FreeAllRequests  # cdecl helper, called by Shutdown
-01137c90  rw::audio::core::SndPlayer1::Shutdown  # frees requests, removes timer, frees request handle array
+01137bc0 ?FreeFinishedRequests@SndPlayer1@core@audio@rw@@QAEXXZ  # SndPlayer1::FreeFinishedRequests migrated from s01137aa0 (verbatim, slice spelling)
+01137c30 ?FreeAllRequests@core@audio@rw@@YAXPAUSndPlayer1@123@@Z  # FreeAllRequests migrated from s01137aa0 (verbatim, slice spelling)
+01137c90 ?Shutdown@SndPlayer1@core@audio@rw@@QAEXXZ  # SndPlayer1::Shutdown migrated from s01137aa0 (verbatim, slice spelling)
 01137cd0  rw::audio::core::SndPlayer1::ResetCommand  # ring callback (record+4 = this); returns 8
 01137d60  rw::audio::core::SndPlayer1_ChunkHeaderCallback  # QueueFile callback: BE length + optional byte swap
-01137de0  rw::audio::core::SndPlayer1::PlayHandler  # PDB name; ring callback, record+4 = this
-01138050  rw::audio::core::SndPlayer1::FeedChunk  # stores chunk into feed slot, calls decoder
-01138130  rw::audio::core::SndPlayer1::SendCommand  # command ring dispatcher (cmd 0..5)
-011384b0  rw::audio::core::SndPlayer1::StreamNextChunk  # PDB name
-01138570  rw::audio::core::SndPlayer1::HandleLoopStart  # PDB candidate (caller-single)
-01138640  rw::audio::core::SndPlayer1::HandleSampleEnd  # PDB name
-011387b0  rw::audio::core::SndPlayer1::StartRequest  # PDB name
+01137de0 ?FUN_01137de0@core@audio@rw@@YAIPAX@Z  # FUN_01137de0 migrated from s01137aa0 (verbatim, slice spelling)
+01138050 ?FeedChunk@SndPlayer1@core@audio@rw@@QAEPADPADHDD@Z  # SndPlayer1::FeedChunk migrated from s01137aa0 (verbatim, slice spelling)
+01138130 ?SendCommand@SndPlayer1@core@audio@rw@@QAEXHPAX@Z  # SndPlayer1::SendCommand migrated from s01137aa0 (verbatim, slice spelling)
+011384b0 ?StreamNextChunk@SndPlayer1@core@audio@rw@@QAE_NHHH@Z  # SndPlayer1::StreamNextChunk migrated from s01137aa0 (verbatim, slice spelling)
+01138570 ?HandleLoopStart@SndPlayer1@core@audio@rw@@QAE_NH@Z  # SndPlayer1::HandleLoopStart migrated from s01137aa0 (verbatim, slice spelling)
+01138640 ?HandleSampleEnd@SndPlayer1@core@audio@rw@@QAE_NHPAE@Z  # SndPlayer1::HandleSampleEnd migrated from s01137aa0 (verbatim, slice spelling)
+011387b0 ?StartRequest@SndPlayer1@core@audio@rw@@QAE_NH@Z  # SndPlayer1::StartRequest migrated from s01137aa0 (verbatim, slice spelling)

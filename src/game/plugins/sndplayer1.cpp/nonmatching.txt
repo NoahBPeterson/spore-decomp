@@ -1,0 +1,14 @@
+# va  diff-bytes  reason
+0112df80 29 StreamPool::GetInstance: complete; /LTCG registry-walk register scheduling; flags /vc71 /O2 /MD /Gy /TP; equiv WEAK (400 valid, 41.7% cov)
+0112dfa0 620 StreamPool::AcquireStream: complete; /LTCG-heavy unrolled eviction scan (identical behaviour, register/schedule only); flags /vc71 /O2 /MD /Gy /TP; equiv PASS at --inputs 1500 (1460 valid, 63.7% cov); default 400 -> WEAK (390 valid, 42.3% cov)
+01137bc0 98 complete FreeFinishedRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (400 valid, 37.9% coverage, no mismatch)
+01137c30 67 complete FreeAllRequests; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (293 valid, 100% coverage)
+01137c90 39 complete Shutdown; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (302 valid, 80% coverage)
+01137de0 506 complete PlayHandler (ring callback); LTCG inlining across StreamPool/Stream calls (not byte-exact); x87 conversion of the float*double sample count fixed: the original uses `fistp dword` (round-nearest per FPCW 0x027F, 0x80000000 on overflow) but cl emits `__ftol2` (truncate + low 32 bits of an int64), so use `_mm_cvtsd_si32`; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (no mismatch, seeds 2-7 @2000-2500 inputs); seed1/2000 WEAK at 55.0% coverage (no mismatch; coverage is original-side input coverage)
+01138050 187 complete FeedChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (168 valid, 100% coverage, no mismatch)
+01138130 830 complete SendCommand dispatcher; LTCG ring writes + command bodies; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest PASS (374 valid, 83.0% coverage)
+011384b0 177 complete StreamNextChunk; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (150 valid, 84.9% coverage, no mismatch)
+01138570 191 complete HandleLoopStart; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest WEAK (98 valid, 88.6% coverage, no mismatch)
+01138640 277 complete HandleSampleEnd; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (5/13 valid) on a single aliased pool dword (this+0x104): with a degenerate random mRequestInternalOffset (0) the per-request samplesFed field aliases FeedDesc[10].chunkSamplesPlayed, and the two sides diverge there; not proven to be uninitialised-frame noise
+011387b0 255 complete StartRequest; LTCG; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest UNSUPPORTED (0/400 valid: every input faults in the random Stream/Decoder object graph)
+011388f0 478 complete SndPlayer1 timer client; flags /vc71 /O2 /MD /Gy /TP /arch:SSE; difftest FAIL (request-state pump diverges)

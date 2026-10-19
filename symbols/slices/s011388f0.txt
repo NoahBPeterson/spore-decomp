@@ -1,4 +1,4 @@
-# va        Name  # evidence
+011388f0 ?FUN_011388f0@core@audio@rw@@YAXPAUSndPlayer1_s0113_88f0@123@@Z  # FUN_011388f0 migrated from s011388f0 (verbatim, slice spelling)
 01138af0  rw::audio::core::SndPlayer1::CreateInstance  # PDB anchor
 01138d00  rw::audio::core::Snd9Service::ReleaseEvent  # PDB candidate
 01138d40  rw::audio::core::Snd9Service::UpdateSnd9SampleRate  # PDB candidate

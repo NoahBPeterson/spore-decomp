@@ -21,6 +21,6 @@
 0112da60 TimerManager::Release  # rwaudio; 2x Collection Clear+Release
 0112da90 TimerManager::TimerManager (ctor)  # rwaudio; zeroes 2 Collections, mfCallbackTime=-1
 0112dae0 PlugInDescFixup  # rwaudio; wires PlugInDescRunTime parameter/event tool-side pointers
-0112dbb0 ?Initialize@?$PlugIn@VSndPlayer1@@core@audio@rw@@...  # PDB: PlugIn::Initialize<SndPlayer1>
+0112dbb0 ?Initialize_SndPlayer1@PlugIn_s0112_ce20@core@audio@rw@@QAEPAV1234@XZ  # PlugIn_s0112_ce20::Initialize_SndPlayer1 migrated from s0112ce20 (verbatim, slice spelling)
 0112dbd0 PlugInRegistry::RegisterBuiltInPlugIns  # rwaudio; registers 13 built-in descriptors (byte-exact)
 0112dc80 System::GetDecoderRegistry  # rwaudio; lazy System+0x2c DecoderRegistry
