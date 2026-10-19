@@ -164,8 +164,8 @@ class cSPUILayout {
 
 class cSPUITooltipWinProc : public IWinProc {
  public:
-  cSPUITooltipWinProc(const wchar_t* name, uint32_t id, const wchar_t* text, int a, const void* b, int c);  // UI::Tooltip::Tooltip
-  void SetText(const wchar_t* text);
+  cSPUITooltipWinProc(const wchar_t* name, uint32_t id, const wchar_t* text, float* pos, uint32_t a, const wchar_t* b, uint32_t c);  // 0x00835e30
+  void SetText(const wchar_t* text, void* arg, char flag);  // 0x00835ed0 (ret 0xc)
 };
 void* TooltipAlloc(unsigned int size, unsigned int align, const char* name, void* allocator);  // FUN_009512d0
 void* GetUIAllocator();                                                                        // FUN_009512c0
@@ -210,9 +210,8 @@ class cString {
   cString();
   ~cString();  // SP::cString::c_str (0x006b5240) is the out-of-line destructor
   void Load(uint32_t tableID, uint32_t stringID, int flags);
-  const wchar_t* GetText(int a, int b);  // 0x006b55c0
-  const wchar_t* GetText(void* tmp, int a, const void* b, int c);
-  char pad[0xc];
+  const wchar_t* GetText();  // 0x006b55c0
+  uint32_t pad[5];
 };
 
 class cSPPaletteItem {
@@ -578,6 +577,8 @@ class wstring {
 };
 }
 
+static inline void* CastIface(IWindow* w, uint32_t id) { return w ? w->Cast(id) : 0; }
+
 // @ 0x005C1570
 void cSPEditorPaintLikeThis::SetModel(const EA::ResourceMan::Key& key) {
   if (mModelChosen && key.mInstance == 0)
@@ -605,12 +606,13 @@ void cSPEditorPaintLikeThis::SetModel(const EA::ResourceMan::Key& key) {
       EA::AutoRefCount<cPropertyList> resource;
       EA::ResourceMan::IResourceManager* rm = EA::ResourceMan::GetManager();
       if (rm->GetResource(resKey, &resource.AsOutParam(), 0, 0, 0, 0)) {
-        cSPModelResource* model = resource ? (cSPModelResource*)((EA::UTFWin::IWindow*)resource.mpObject)->Cast(0x30bdee3) : 0;
-        g_EditorStrings->SetModelName(model->GetName());
+        cSPModelResource* model = (cSPModelResource*)CastIface((IWindow*)resource.mpObject, 0x30bdee3);
+        cSPEditorStrings* strings = g_EditorStrings;
+        strings->SetModelName(model->GetName());
       }
       text.Load(0xc0152a6d, 0x5af4a05, 0);
-      cSPUITooltipWinProc* tip = mTooltip ? (cSPUITooltipWinProc*)((IWindow*)mTooltip.mpObject)->Cast(0x3796ce5) : 0;
-      tip->SetText(text.GetText(-1, 1));
+      cSPUITooltipWinProc* tip = (cSPUITooltipWinProc*)CastIface((IWindow*)mTooltip.mpObject, 0x3796ce5);
+      tip->SetText(text.GetText(), (void*)-1, 1);
       g_EditorStrings->SetModelName(oldName.mpBegin);
     }
   } else {
@@ -628,8 +630,8 @@ void cSPEditorPaintLikeThis::SetModel(const EA::ResourceMan::Key& key) {
     if (mTooltip) {
       cString text;
       text.Load(0xc0152a6d, 0x5af4a04, 0);
-      cSPUITooltipWinProc* tip = mTooltip ? (cSPUITooltipWinProc*)((IWindow*)mTooltip.mpObject)->Cast(0x3796ce5) : 0;
-      tip->SetText(text.GetText(-1, 1));
+      cSPUITooltipWinProc* tip = (cSPUITooltipWinProc*)CastIface((IWindow*)mTooltip.mpObject, 0x3796ce5);
+      tip->SetText(text.GetText(), (void*)-1, 1);
     }
     SetIsSelected(false);
   }
@@ -668,13 +670,21 @@ bool cSPEditorPaintLikeThis::HandleMessage(uint32_t messageID, void* message) {
 
 static const uint32_t sPaintLikeThisMessages[2] = {0x57a4bc9, 0x604efa1};
 
+struct LayoutKey : EA::ResourceMan::Key {
+  LayoutKey(unsigned int i, unsigned int t, unsigned int g) {
+    mType = t;
+    mGroup = g;
+    mInstance = i;
+  }
+};
+
 // @ 0x005C1960
 void cSPEditorPaintLikeThis::Init(cSPPaletteInfo* info, IWindow* parent, int a, void* palette) {
   if (parent) {
     if (palette)
       mModelType = ((uint32_t*)palette)[0x2c / 4];
     mLayout = new ("Editor", 0, 0, 0, 0) cSPUILayout();
-    mLayout->Init(EA::ResourceMan::Key(0x6d7fbf32, 0x510a95b, 0x40464100), true, 0x5b598fa);
+    mLayout->Init(LayoutKey(0x6d7fbf32, 0x510a95b, 0x40464100), true, 0x5b598fa);
     mLayout->SetParentWin(parent, true, 0x5b598fa);
     mBtnLoadMain = mLayout->FindWindowByID(0x4a1cb70, true);
     mWinRolloverCatcher = mLayout->FindWindowByID(0x4a1cb6d, true);
@@ -686,13 +696,13 @@ void cSPEditorPaintLikeThis::Init(cSPPaletteInfo* info, IWindow* parent, int a, 
     mAutoHandler.AddHandlers(MessageServer(), this, sPaintLikeThisMessages, 2, 0);
     const EA::ResourceMan::Key& infoKey = info->mKey;
     PropertyManager()->GetPropertyList(infoKey.mInstance, infoKey.mGroup, mPropList.AsOutParam());
-    SetModel(EA::ResourceMan::Key(0, 0, 0));
+    EA::ResourceMan::Key emptyKey(0, 0, 0);
+    SetModel(emptyKey);
     cString text;
     text.Load(0xc0152a6d, 0x5af4a04, 0);
     void* mem = TooltipAlloc(0x68, 4, "UI/Tooltip", GetUIAllocator());
-    char tmp[4];
-    mTooltip = mem ? new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, text.GetText(tmp, 0, (const void*)0x13f7c8c, 0), 0,
-                                                  0, 0)
+    mTooltip = mem ? new (mem) cSPUITooltipWinProc(L"Tooltips", 0x3754e6c, text.GetText(), (float*)&emptyKey, 0,
+                                                  (const wchar_t*)0x13f7c8c, 0)
                    : 0;
     mBtnLoadMain->AddWinProc(mTooltip);
     mBtnLoadTray->AddWinProc(mTooltip);

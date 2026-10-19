@@ -14,3 +14,5 @@
 00692f60  25   complete; registry node constructor near-miss; equiv WEAK (92.3% cov; now cRegNode::Construct member)
 00692f90  15   complete; cVarListSerializer constructor near-miss
 006930b0  14   complete; ParseFloat stack-slot reuse near-miss
+00692900  371  complete; Serialize: tmp/ok stack-slot assignment and store scheduling differ (bool flag wants the dead param slot); equiv: UNSUPPORTED (0/400 valid inputs)
+00692d20  64  complete; unguarded insertion sort: induction-variable choice (src derived from dst + constant offset) differs; equiv: WEAK (19% cov)

@@ -4,3 +4,4 @@
 005c1870  108  cSPEditorPaintLikeThis::HandleMessage (IHandlerRC): branch layout differs
 005c1d10  39  page count loop: begin/end load order and register roles differ
 005c1d40  12  HasItem: find()!=end() materialised directly instead of via setne cl
+005c1570  270  SetModel complete; oldName.mpBegin reloaded instead of kept in esi, Cast vtable-load registers (eax/edx) swapped; equiv: WEAK (47% cov, 181 valid inputs)

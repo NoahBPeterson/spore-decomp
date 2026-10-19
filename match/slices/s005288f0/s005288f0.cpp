@@ -1,20 +1,27 @@
 // nSPSkinner RTT-paint buffer + RenderWare effects dispatch (unoptimized module: /Od /Ob1 /MD /Gy /TP /arch:SSE).
 #include "types.h"
+#include <xmmintrin.h>
 
 template <int N> inline void ScratchSlots() { uint32_t slots[N]; }
 template <> inline void ScratchSlots<0>() {}
 inline void* operator new(unsigned int, void* p) { return p; }
 
 // ---------------------------------------------------------------- RenderWare graphics device
+struct cRenderTargetRectID {
+    int mPageID;      // +0x0
+    int mAllocID;     // +0x4
+    cRenderTargetRectID() : mPageID(-1), mAllocID(-1) {}
+};
+extern int g_140e35c;                  // 0x0140e35c  render-target format (0x15)
 struct RwDevice {
     virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
-    virtual void* v04(int* out, uint32_t w, uint32_t h, int fmt, short flags, uint32_t z, int n);  // +0x10
+    virtual cRenderTargetRectID v04(uint32_t w, uint32_t h, int fmt, short flags, uint32_t z, int n);  // +0x10 (hidden sret)
     virtual void v05();                                                                            // +0x14
-    virtual int  v06(uint32_t a, uint32_t b);                                                      // +0x18
+    virtual int  v06(cRenderTargetRectID id);                                                      // +0x18
     virtual void v07(); virtual void v08(); virtual void v09(); virtual void v10();
     virtual void v11(); virtual void v12(); virtual void v13(); virtual void v14();
     virtual void v15(); virtual void v16(); virtual void v17();
-    virtual void v18(uint32_t a, uint32_t b, const char* name);                                    // +0x48
+    virtual void v18(cRenderTargetRectID id, const char* name);                                    // +0x48
 };
 RwDevice* GetDevice();                 // 0x0067dda0
 int  GetVertexBufferHandle();          // 0x00761380
@@ -38,18 +45,78 @@ void cEffectsModelHelper();                            // 0x00528e20
 
 extern uint32_t g_15dea68;
 
+struct StateBits {
+    char pad[8];
+    uint32_t mFlags;
+    void Set(unsigned char a, unsigned char b, unsigned char c, unsigned char d);   // 0x00529280
+};
+
+
 // ---------------------------------------------------------------- cSPVector4
-struct cSPVector4 { float x, y, z, w; };
+struct cSPVector4 {
+    float x, y, z, w;
+    cSPVector4() {}
+    float& operator[](int i) { return (&x)[i]; }
+};
+struct EmbeddedState {                 // rw::graphics::EmbeddedState
+    char pad[0x10];
+    uint32_t m_hardStateDirty;         // +0x10
+    void SetRaster(int index, void* raster);   // 0x011ee6b0
+};
+struct MaterialObj { uint32_t pad0; EmbeddedState* mState; };   // state at +4
+struct IMaterialManager {
+    virtual void m0(); virtual void m1(); virtual void m2(); virtual void m3(); virtual void m4();
+    virtual void m5(); virtual void m6(); virtual void m7(); virtual void m8(); virtual void m9();
+    virtual MaterialObj* GetMaterial(uint32_t id);     // +0x28
+};
+IMaterialManager* GetMaterialManager();                // 0x0067dd70
+struct RwShaderConsts { void SetShConst(unsigned short index, float x, float y, float z, float w); };  // 0x0077ca20
+extern RwShaderConsts g_15ded98;
+extern uint32_t g_15dea6c;
+
+
+struct SseVec4 {
+    __m128 v;
+    SseVec4() {}
+    SseVec4(float x, float y, float z, float w) { v = _mm_set_ps(w, z, y, x); }
+};
+extern float g_Half, g_One, g_Zero, g_MinusOne, g_MinusTwo, g_Three;
+
+struct cDirectPropertyList {
+    char pad[0x3c];
+    int* mpValues;           // +0x3c
+    bool GetBool(int idx) const { return mpValues[idx] != 0; }
+};
+extern cDirectPropertyList* g_15fd918;   // sAppProperties 0x015fd918
+
+struct RwCamera {                        // object returned by FUN_00761380
+    SseVec4 mMatrix[4];                  // +0x00
+    char pad40[0x1c];
+    float mWinCenterX, mWinCenterY;      // +0x5c, +0x60
+    float mWinScaleX, mWinScaleY;        // +0x64, +0x68
+    int mProjType;                       // +0x6c
+    float mNear, mFar;                   // +0x70, +0x74
+    uint32_t mVpX, mVpY, mVpW, mVpH;     // +0x78..+0x84
+    float mDepthMin, mDepthMax;          // +0x88, +0x8c
+};
+RwCamera* GetCamera();                   // 0x00761380
+inline void SetMatrix(RwCamera* c, const SseVec4& a, const SseVec4& b, const SseVec4& d, const SseVec4& e) {
+    c->mMatrix[0] = a; c->mMatrix[1] = b; c->mMatrix[2] = d; c->mMatrix[3] = e;
+}
+inline void SetViewport(uint16_t h, uint16_t w, uint16_t y, uint16_t x, float f, float n, RwCamera* c) {
+    c->mVpX = x; c->mVpY = y; c->mVpW = w; c->mVpH = h; c->mDepthMin = n; c->mDepthMax = f;
+}
+inline void SetProjType(RwCamera* c, int t) { c->mProjType = t; }
+inline void SetNear(RwCamera* c, float n) { c->mNear = n; }
+inline void SetFar(RwCamera* c, float f) { c->mFar = f; }
+inline void SetWindow(RwCamera* c, float cx, float cy, float sx, float sy) {
+    c->mWinCenterX = cx; c->mWinCenterY = cy; c->mWinScaleX = sx; c->mWinScaleY = sy;
+}
 
 namespace nSPSkinner {
 
-struct cRenderTargetRectID {
-    int mPageID;      // +0x0
-    int mAllocID;     // +0x4
-};
-
 struct cRTTBuffer {                     // size 0x64
-    RwDevice* mCamera;                  // +0x00
+    RwCamera* mCamera;                  // +0x00
     uint32_t material;                  // +0x04
     uint32_t writemask;                 // +0x08
     cSPVector4 params[3];               // +0x0c
@@ -63,66 +130,41 @@ struct cRTTBuffer {                     // size 0x64
     void* mTexture;                     // +0x60
 
     cRTTBuffer(uint32_t w, uint32_t h);         // 0x005288f0
-    void* PrepareState();                        // 0x005293a0
+    EmbeddedState* PrepareState();               // 0x005293a0
     void Destroy();                              // 0x00528e20
     uint32_t ClampAndStream(uint32_t requested); // 0x00529520
 };
 
 // @ 0x005288f0
-cRTTBuffer::cRTTBuffer(uint32_t w, uint32_t h)
+cRTTBuffer::cRTTBuffer(uint32_t w, uint32_t h) : mCamera(0)
 {
-    mCamera = 0;
-    for (int i = 2; i >= 0; --i) { }
-    mRTTRect.mPageID = -1;
-    mRTTRect.mAllocID = -1;
     mWidth = w;
     mHeight = h;
     mTexture = 0;
-    cRTTBuffer* self = this;
-    short local_24 = 0;
-    int local_30[2];
-    int* dev = (int*)GetDevice();
-    void* p = ((RwDevice*)dev)->v04(local_30, w, h, 0x15, local_24, 0xffffffffu, 0);
-    (void)p;
-    uint32_t a = *(uint32_t*)((char*)local_30 + 0x50);
-    uint32_t b = *(uint32_t*)((char*)local_30 + 0x54);
-    ((RwDevice*)GetDevice())->v18(a, b, "SkinPaint");
-    int tex = ((RwDevice*)GetDevice())->v06(a, b);
-    *(int*)((char*)self + 0x60) = tex;
-    int vb = GetVertexBufferHandle();
-    *(int*)self = vb;
-    uint16_t hgt = *(uint16_t*)((char*)self + 0x2c);
-    uint16_t wid = *(uint16_t*)((char*)self + 0x2e);
-    int vb2 = *(int*)self;
-    *(uint32_t*)(vb2 + 0x78) = 0;
-    *(uint32_t*)(vb2 + 0x7c) = 0;
-    *(uint32_t*)(vb2 + 0x80) = wid;
-    *(uint32_t*)(vb2 + 0x84) = hgt;
-    *(uint32_t*)(vb2 + 0x88) = 0;
-    *(uint32_t*)(vb2 + 0x8c) = 0x3f800000;
-    *(uint32_t*)(*(int*)self + 0x6c) = 2;
-    *(uint32_t*)(*(int*)self + 0x70) = 0x3f800000;
-    *(uint32_t*)(*(int*)self + 0x74) = 0x40400000;
-    int vb3 = *(int*)self;
-    *(uint32_t*)(vb3 + 0x5c) = 0x3f000000;
-    *(uint32_t*)(vb3 + 0x60) = 0x3f000000;
-    *(uint32_t*)(vb3 + 100) = 0x40000000;
-    *(uint32_t*)(vb3 + 0x68) = 0x40000000;
-    float fx, fy;
-    if (*(int*)(*(int*)(g_15dea68 + 0x3c) + 0x110) == 0) {
-        fx = 0.5f; fy = 0.5f;
+    short flags = 0;
+    RwDevice* dev = GetDevice();
+    mRTTRect = dev->v04(w, h, g_140e35c, flags, 0xffffffffu, 0);
+    GetDevice()->v18(mRTTRect, "SkinPaint");
+    mTexture = (void*)GetDevice()->v06(mRTTRect);
+    mCamera = GetCamera();
+    SetViewport((uint16_t)mHeight, (uint16_t)mWidth, 0, 0, 1.0f, 0.0f, mCamera);
+    SetProjType(mCamera, 2);
+    SetNear(mCamera, 1.0f);
+    SetFar(mCamera, 3.0f);
+    SetWindow(mCamera, 0.5f, 0.5f, 1.0f / 0.5f, 1.0f / 0.5f);
+    SseVec4 r0 = SseVec4(-1.0f, 0.0f, 0.0f, -1.0f);
+    SseVec4 r1 = SseVec4(0.0f, -1.0f, 0.0f, 0.0f);
+    SseVec4 r2 = SseVec4(0.0f, 0.0f, 1.0f, 0.0f);
+    SseVec4 r3;
+    if (g_15fd918->GetBool(0x44)) {
+        float fx = 0.5f / (float)mWidth + 0.5f;
+        float fy = 0.5f / (float)mHeight + 0.5f;
+        r3 = SseVec4(fx, fy, -2.0f, fx);
     } else {
-        fy = 0.5f / (float)(uint32_t)*(uint16_t*)((char*)self + 0x2c) + 0.5f;
-        fx = 0.5f / (float)(uint32_t)*(uint16_t*)((char*)self + 0x2e) + 0.5f;
+        r3 = SseVec4(0.5f, 0.5f, -2.0f, 0.5f);
     }
-    float* m = (float*)*(int*)self;
-    m[0] = -1.0f; m[1] = 0; m[2] = 0;
-    m[3] = -1.0f; m[4] = 0;
-    m[5] = -1.0f; m[6] = 0; m[7] = 0; m[8] = 0; m[9] = 0;
-    m[10] = 1.0f; m[11] = 0;
-    m[12] = fy; m[13] = fx;
-    m[14] = -2.0f; m[15] = fy;
-    SetSomeState(1, 1, 1, 1);
+    SetMatrix(mCamera, r0, r1, r2, r3);
+    ((StateBits*)this)->Set(1, 1, 1, 1);
 }
 
 // @ 0x00528e20  (real shape: device->vtbl[5](mRTTRect fields), free(mCamera))
@@ -143,11 +185,6 @@ using nSPSkinner::cRTTBuffer;
 struct Matrix44f { float m[16]; };
 
 // @ 0x00529280
-struct StateBits {
-    char pad[8];
-    uint32_t mFlags;
-    void Set(unsigned char a, unsigned char b, unsigned char c, unsigned char d);   // 0x00529280
-};
 void StateBits::Set(unsigned char a, unsigned char b, unsigned char c, unsigned char d)
 {
     mFlags = (a ? 1 : 0) | (b ? 2 : 0) | (c ? 4 : 0) | (d ? 8 : 0);
@@ -175,6 +212,23 @@ void DrawCtx::Draw(float* v, float w)
     local[2] = v[2];
     local[3] = w;
     DrawVertices4(local, 1);
+}
+
+// @ 0x005293a0
+EmbeddedState* cRTTBuffer::PrepareState()
+{
+    SetRenderState(0xa8, writemask & g_15dea68);
+    if (material == 0)
+        material = (maxtexture != 0 ? 0x9f4dd1ca : 0) + 0xf8b396;
+    EmbeddedState* shaderState = GetMaterialManager()->GetMaterial(material)->mState;
+    for (int i = 0; i < maxtexture; ++i) {
+        if ((((1 << i) & shaderState->m_hardStateDirty) != 0) ? 1 : 0)
+            shaderState->SetRaster(i, textures[i]);
+    }
+    for (int j = 0; j < maxparam; ++j)
+        g_15ded98.SetShConst((unsigned short)j, params[j][0], params[j][1], params[j][2], params[j][3]);
+    RwSetMode(0x201, &g_15dea6c, 0);
+    return shaderState;
 }
 
 // @ 0x00529520

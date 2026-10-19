@@ -87,16 +87,29 @@ struct cDataSerializerGeneric {
     int mId;                    // +0x04
     char mPad08[0x10];
     void* mpBinderContext;      // +0x18
-    char mPad1c[8];
+    char mPad1c[4];
+    void* mpAccessFunc;         // +0x20 (cdecl: ser -> value)
     void* mpWriteFunc;          // +0x24
     void* mpReadFunc;           // +0x28
     char mPad2c[0x10];
 };
 
+bool EA_IO_WriteUint32(void*, const void*, int, int);
+class cStreamPos { public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8();
+    virtual int Tell(int); virtual void Seek(int, int); };
+class cStreamWriter { public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual cStreamPos* GetStream(); };
+class cOutStream { public:
+    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+    virtual void v5(); virtual void v6(); virtual bool IsOk(); virtual cStreamWriter* GetWriter(); };
+
+static inline void WriteU32(cOutStream* s, unsigned int v) { unsigned int t = v; cStreamPos* st = s->GetWriter()->GetStream(); EA_IO_WriteUint32(st, &t, 1, 0); }
 class cVarListSerializer {
 public:
-    char mPad00[0x10];
-    cDataSerializationInfo mDataSerializationInfos[128]; // +0x10 (0x14 each)
+    cDataSerializationInfo mDataSerializationInfos[128]; // +0x00 (0x14 each)
     int mSerializableVarCount;  // +0xa00
     int mSerializedVarCount;    // +0xa04
     unsigned int mSignature;    // +0xa08
@@ -104,7 +117,7 @@ public:
     cDataSerializerGeneric* mpSerializerList; // +0xa10
 
     void Init(void* obj, cDataSerializerGeneric* list, unsigned int sig);
-    bool Serialize(void* stream);
+    bool Serialize(cOutStream* stream);
     void Unload();
     cVarListSerializer(void* obj, cDataSerializerGeneric* list, unsigned int sig);
 };
@@ -274,9 +287,46 @@ void cVarListSerializer::Init(void* obj, cDataSerializerGeneric* list, unsigned 
 // ===========================================================================
 // @ 0x00692900  SP::cVarListSerializer::Serialize
 // ===========================================================================
-bool cVarListSerializer::Serialize(void* stream) {
-    (void)stream;
-    return true;
+bool cVarListSerializer::Serialize(cOutStream* stream) {
+    int ok = 1;
+    cStreamPos* pos = stream->GetWriter()->GetStream();
+    WriteU32(stream, mSignature);
+    WriteU32(stream, 0);
+    int startPos = pos->Tell(0);
+    WriteU32(stream, 0);
+    for (int i = 0; i < mSerializableVarCount; ++i) {
+        WriteU32(stream, 0);
+        WriteU32(stream, 0);
+    }
+    for (mSerializedVarCount = 0; mSerializedVarCount < mSerializableVarCount; ++mSerializedVarCount) {
+        int idx = mSerializedVarCount;
+        cDataSerializationInfo* info = &mDataSerializationInfos[idx];
+        cDataSerializerGeneric* ser = (cDataSerializerGeneric*)info->mpSerializer;
+        int before = pos->Tell(0);
+        if (ser->mpBinderContext == 0) ser->mpBinderContext = mpObject;
+        void* value = ((void*(__cdecl*)(cDataSerializerGeneric*))ser->mpAccessFunc)(ser);
+        bool r = ((bool(__cdecl*)(cOutStream*, void*))ser->mpReadFunc)(stream, value);
+        info->mbSerialized = (r && stream->IsOk()) ? true : false;
+        ser->mpBinderContext = info->mpBinderContext;
+        if (!info->mbSerialized) {
+            __debugbreak();
+            info->mDataSize = 0;
+            pos->Seek(before, 0);
+            ok = 0;
+            break;
+        }
+        info->mDataSize = pos->Tell(0) - before;
+    }
+    int endPos = pos->Tell(0);
+    pos->Seek(startPos - 4, 0);
+    WriteU32(stream, endPos - startPos);
+    WriteU32(stream, mSerializedVarCount);
+    for (int i = 0; i < mSerializedVarCount; ++i) {
+        WriteU32(stream, mDataSerializationInfos[i].mId);
+        WriteU32(stream, mDataSerializationInfos[i].mDataSize);
+    }
+    pos->Seek(endPos, 0);
+    return ok && stream->IsOk();
 }
 
 // ===========================================================================
@@ -305,8 +355,9 @@ int Info_AddOffset(void* p) {
 }
 
 // ===========================================================================
-// @ 0x00692cb0 / 0x00692d20 / 0x00692d90  insertion sorts (0x3c-byte records)
+// 0x00692cb0  insertion sort (0x3c-byte records)
 // ===========================================================================
+// @ 0x00692cb0
 void SortRecords_A(void* first, void* last) {
     char tmp[0x3c];
     for (char* i = (char*)first; i != last; i += 0x3c) {
@@ -319,8 +370,31 @@ void SortRecords_A(void* first, void* last) {
         __movsb((unsigned char*)j, (unsigned char*)tmp, 0x3c);
     }
 }
-void SortRecords_B(void* first, void* last) { (void)first; (void)last; }
-void SortRecords_C(void* base, int lo, int hi, void* value, unsigned int pri) { (void)base; (void)lo; (void)hi; (void)value; (void)pri; }
+struct SortRec { unsigned int f[15]; };
+// @ 0x00692d20
+void SortRecords_B(SortRec* first, SortRec* last) {
+    for (SortRec* i = first; i != last; ++i) {
+        SortRec val = *i;
+        SortRec* next = i;
+        unsigned int* key = &next[-1].f[1];
+        while (val.f[1] < *key) {
+            *next = next[-1];
+            key -= 15;
+            --next;
+        }
+        *next = val;
+    }
+}
+// @ 0x00692d90
+void SortRecords_C(SortRec* base, int top, int hole, SortRec value) {
+    int parent = (hole - 1) >> 1;
+    while (hole > top && base[parent].f[1] < value.f[1]) {
+        base[hole] = base[parent];
+        hole = parent;
+        parent = (hole - 1) >> 1;
+    }
+    base[hole] = value;
+}
 
 // ===========================================================================
 // @ 0x00692e00 / 0x00692e50  vector blob writers

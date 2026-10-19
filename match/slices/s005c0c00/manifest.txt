@@ -13,3 +13,4 @@ slices/s005c0c00/s005c0c00.cpp  ??_GcPaletteItemMessage@  005c12f0  /O2 /MD /Gy 
 slices/s005c0c00/s005c0c00.cpp  ?OnAssetBrowserSelection@cSPEditorPaintLikeThis@  005c1340  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c0c00/s005c0c00.cpp  ?SendPaletteItemMessage@cSPEditorPaintLikeThis@  005c13b0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s005c0c00/s005c0c00.cpp  ??$find@PAPAVcSPPaletteItem@  005c1cc0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s005c0c00/s005c0c00.cpp  ?Init@cSPEditorPaintLikeThis@  005c1960  /O2 /MD /Gy /TP /arch:SSE /fp:fast

@@ -1,2 +1,2 @@
-008219a0 SP::cPropertyUI::ModifyString (unlabeled, string path vs ModifyResourceKey)  # shape match to ModifyString16
+008219a0 SP::cPropertyUI::ModifyString8  # caller-scored PDB candidate; 8-bit string path (type 0x12) of ModifyString16
 00821d70 SP::cPropertyUI::ModifyString16  # pdb_names.json gap-align
