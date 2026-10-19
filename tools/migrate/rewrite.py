@@ -3583,7 +3583,9 @@ class Rewrite:
         for c in fns:
             if c.free:
                 for t in [c.decl.ret] + c.decl.params:
-                    for q in re.findall(r"[A-Za-z_]\w*(?:::\w+)+(?![\w<])", t):
+                    # (?![\w<:]): `EA::COM::AutoRefCount<..>` backtracked to `EA::COM` and forward-declared the namespace as a
+                    # class (C2365, then the stub rename broke every COM:: use; mig10 SPCookie s00609790, 7 functions)
+                    for q in re.findall(r"[A-Za-z_]\w*(?:::\w+)+(?![\w<:])", t):
                         if not Canon.get(q).exists and q not in self.data.types.enums:
                             fwd.add(q)
         if fwd:
