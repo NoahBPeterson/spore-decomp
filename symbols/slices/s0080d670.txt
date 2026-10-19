@@ -1,4 +1,4 @@
-0080d710 SPUIHelpers::Renderer  # card name; wraps VisitWindowTreeDepthFirst
+0080d710 ?FUN_0080d710@@YGXPAX0E@Z  # FUN_0080d710 migrated from s0080d670 (verbatim, slice spelling)
 0080d7e0 ?FUN_0080d7e0@@YAHPAM0@Z  # FUN_0080d7e0 migrated from s0080d670 (verbatim, slice spelling)
 0080d810 ?Method810@Layered@@QAEPAEXZ  # Layered::Method810 migrated from s0080d670 (verbatim, slice spelling)
 0080da50 ?MethodDA50@Layered@@QAEXPAX@Z  # Layered::MethodDA50 migrated from s0080d670 (verbatim, slice spelling)
