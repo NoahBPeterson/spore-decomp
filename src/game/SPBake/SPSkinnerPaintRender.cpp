@@ -22,6 +22,7 @@
 #include "nSPSkinner/cPaintDilateJob.h"
 #include "nSPSkinner/cPaintSplatJob.h"
 #include "cSkinpaintTextureExtractor.h"
+#include "rw/graphics/Raster.h"
 
 // ---- items of slice s00425a80 begin (TODO(rewrite): local stubs, replace by canonical classes)
 struct Allocator { const char* mpName; };
@@ -753,6 +754,7 @@ struct cPaintSplatJob_s0051_9640 {             // size 0x18
 extern void* g_splatVtblDerived;
 extern void* g_splatVtblBase;
 int   GetPaintSystem_s0051_a350();                                              // 0x00401080
+void  FUN_004c6ae0(void* dst, char* a, int n, char* b);              // 0x004c6ae0
 void  FUN_00552750();                                                // 0x00552750
 void  FUN_0051d1e0(void* p);                                         // 0x0051d1e0
 void  FUN_0051d140();                                                // 0x0051d140
@@ -763,16 +765,27 @@ void  FUN_004259e0(void* a, void* b);                                // 0x004259
 void  SP_cJob_GetStatus(void* job);                                  // 0x00690120
 char  SP_GetPropertyAsKey(void* prop, int key, void* out);
 struct Factory {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
-    virtual void v4(); virtual void v5(); virtual void v6();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
     virtual void* Create(void* p, int a, int b, int type);         // +0x1c
     virtual void* v8(int key, int a, int b);                       // +0x20
     virtual bool  Valid(void* p, int a, int b);                    // +0x24
-    virtual void v10(); virtual void v11(); virtual void v12();
+virtual void v10();
+virtual void v11();
+virtual void v12();
     virtual void  Release(void* p);                                // +0x34
-    virtual void v14(); virtual void v15();
+virtual void v14();
+virtual void v15();
     virtual void* CreateBuf(int a, int b, int c, int d, int e, int f); // +0x40
-    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
     virtual void v21();
     virtual int   Make(void* a, int b, int c);                     // +0x58
 };
@@ -794,7 +807,7 @@ struct cPaintSplatAlphaJob_s0051_a350 {        // size 0x18
     uint8_t  pad0d[3];
     int      mStage;                // +0x10
     int      mBlock;                // +0x14
-    virtual bool Render();
+    virtual bool Render();  // 0x0051a350 (nSPSkinner::cPaintSplatAlphaJob::Render)
 };
 }
 struct SkinJob {
@@ -805,6 +818,82 @@ struct SkinJob {
     void  FUN_0051aaa0();
     void  FUN_0051ab50(char deep);
 };
+struct ImgObj {                          // refcounted image (vtable slot 1 = Release)
+    virtual void v0();
+    virtual void Release();
+    char pad04[0x1c - 4];
+    int  mW;                             // +0x1c
+    int  mH;                             // +0x20
+    char pad24[4];
+    char* mpPixels;                      // +0x28 (4 bytes per pixel, channel at +1)
+};
+template<class T> struct ARCRef {        // AutoRefCount with virtual Release in slot 1
+    T* p;
+    ARCRef() : p(0) {}
+    ~ARCRef() { if (p) p->Release(); }
+    void** AsPPVoidParam();              // 0x0041d870
+};
+struct RasterObj {
+    void SetMipLevelData(void* data, int level);   // 0x011f0270
+};
+struct TexObj {                          // atomic refcounted texture: Raster* at +0, flags +4, count +8
+    RasterObj* mpRaster;
+    uint32_t mFlags;
+    volatile long mnRefCount;
+    int Release();                       // 0x00402420 (AtomicRefCounted::Release)
+};
+struct TexRefAuto {
+    TexObj* p;
+    TexRefAuto() : p(0) {}
+    ~TexRefAuto() { if (p) p->Release(); }
+};
+struct ByteBuf {                         // 3-pointer byte vector
+    char* mpBegin; char* mpEnd; char* mpCap;
+    ByteBuf(int n, char* tag);           // 0x00423be0
+    ~ByteBuf();                          // 0x0041e5d0
+};
+struct Svc40 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual void* Make(void** pp, int a, int b); };               // +0x58 on the 0x0067dd40 object
+struct Svc60 { virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual void ReleaseTex(TexObj* t);                            // +0x34
+virtual void v14();
+virtual void v15();
+    virtual TexObj* CreateBuf(int w, int h, int a, int b, int c, int d);   // +0x40
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+virtual void v21();
+    virtual void Make(void* r); };                                 // +0x58 on the 0x0067dd60 object
+Svc40* FUN_0067dd40_t();                 // 0x0067dd40
+Svc60* FUN_0067dd60_t();                 // 0x0067dd60
 // ---- items of slice s0051a350 end
 
 // ---- items of slice s0051afd0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -1025,6 +1114,7 @@ extern void* g_vtblPaintA;               // 0x013f1b80
 extern void* g_vtblPaintB;               // 0x013f1b74
 extern void* g_vtblPaintC;               // 0x013f1b5c
 extern void* g_vtblPaintD;               // 0x013f1b58
+extern "C" void* SP_MessageServer();                              // 0x0067dcc0
 int   GetPaintSystem_s0051_c470();                                   // 0x00401080
 void* EA_alloc(unsigned size, const char* name, int a, int b, int c, int d); // 0x00f473a0
 void* BakeSprites_ctor(void* p);                          // 0x007b00f0
@@ -1040,6 +1130,42 @@ struct PaintSystem {
     void dtor();
 };
 struct EditorResource { void* deleting_dtor(unsigned flags); };
+struct ServiceObj {                    // FUN_0067dd60 result
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+    virtual void v20();
+    virtual void SetTexture(void* tex, int a);                       // +0x54
+    virtual void SetInstance(int inst, int a, int b, int c);         // +0x58
+};
+struct Connector { void Init(void* server, void* owner, void* id, int n); };   // 0x004db620
+ServiceObj* FUN_0067dd60_s0051_c470();                                       // 0x0067dd60
+struct SkinTexExtractorB {
+    char pad00[0xc];
+    char mFlag;                        // +0x0c
+    char pad0d[0x18 - 0x0d];
+    int  mInstance;                    // +0x18
+    char pad1c[0x2c - 0x1c];
+    Connector mConn;                   // +0x2c
+    void Init();
+};
 // ---- items of slice s0051c470 end
 
 // @ 0x00425a80
@@ -1067,13 +1193,6 @@ void RefPtrVec::DoInsertValue(RefPtr* position, const RefPtr& value)
         mpCapacity = pNewData + nNewSize;
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x00516ac0
 void FastMemCopy(void* dst, const void* src, unsigned int n)
@@ -1138,38 +1257,17 @@ void FastMemCopy(void* dst, const void* src, unsigned int n)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x00516ba0
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::cMeshAORender_s0051_69d0()
 {}
 }  // namespace nSPSkinner
 
-
-
-
-
-
-
-
 // @ 0x00516c30
 namespace nSPSkinner {
 cMeshAORender_s0051_69d0::~cMeshAORender_s0051_69d0()
 {}
 }  // namespace nSPSkinner
-
-
-
-
-
-
-
 
 // @ 0x00516ca0
 namespace nSPSkinner {
@@ -1181,13 +1279,6 @@ void cMeshAORender_s0051_69d0::Load(uint32_t instance, uint32_t group)
 }
 }  // namespace nSPSkinner
 
-
-
-
-
-
-
-
 // @ 0x00516d30
 namespace nSPSkinner {
 void cMeshAORender_s0051_69d0::Unload()
@@ -1196,13 +1287,6 @@ void cMeshAORender_s0051_69d0::Unload()
     mResource = 0;
 }
 }  // namespace nSPSkinner
-
-
-
-
-
-
-
 
 // @ 0x00516da0
 namespace nSPSkinner {
@@ -1217,13 +1301,6 @@ void cMeshAORender_s0051_69d0::Dispatch(uint32_t a, uint32_t b, void* pContext)
 }
 }  // namespace nSPSkinner
 
-
-
-
-
-
-
-
 // @ 0x00516e10
 namespace nSPSkinner {
 bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
@@ -1234,13 +1311,6 @@ bool cMeshAORender_s0051_69d0::GetBoundingBox(BoundingBox& box, float& radius)
     return false;
 }
 }  // namespace nSPSkinner
-
-
-
-
-
-
-
 
 // @ 0x00516eb0
 namespace nSPSkinner {
@@ -1300,13 +1370,6 @@ void cMeshAORender_s0051_69d0::Rebuild()
 }
 }  // namespace nSPSkinner
 
-
-
-
-
-
-
-
 // @ 0x00517160
 void cJobBase::Run(int, int, int, int)
 {
@@ -1325,13 +1388,6 @@ void cJobBase::Run(int, int, int, int)
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x005172c0
 void cJobBase::Schedule()
 {
@@ -1342,22 +1398,9 @@ void cJobBase::Schedule()
     }
 }
 
-
-
-
-
-
-
-
 // @ 0x005173a0
 cJobBase::cJobBase()
 : mbDone(false) {}
-
-
-
-
-
-
 
 // @ 0x00517430
 namespace nSPSkinner {
@@ -1600,11 +1643,6 @@ bool cPaintRenderJob_s0051_7430::RenderInternal()
 }
 }  // namespace nSPSkinner
 
-
-
-
-
-
 // @ 0x005182f0
 namespace nSPSkinner {
 bool cPaintRenderJob_s0051_82f0::Render()
@@ -1629,11 +1667,6 @@ bool cPaintRenderJob_s0051_82f0::Render()
     return true;
 }
 }  // namespace nSPSkinner
-
-
-
-
-
 
 // @ 0x005183c0
 namespace nSPSkinner {
@@ -1737,11 +1770,6 @@ bool cPaintDilateJob_s0051_82f0::Render()
 }
 }  // namespace nSPSkinner
 
-
-
-
-
-
 // @ 0x00518b00
 namespace nSPSkinner {
 void cFieldSwap::SwapWith(cFieldSwap* o)
@@ -1753,11 +1781,6 @@ void cFieldSwap::SwapWith(cFieldSwap* o)
     swapv(*(uint32_t*)this, *(uint32_t*)o);
 }
 }  // namespace nSPSkinner
-
-
-
-
-
 
 // @ 0x00518bf0
 namespace nSPSkinner {
@@ -1785,11 +1808,6 @@ bool cPaintCopyIdentityJob_s0051_82f0::Render()
     return true;
 }
 }  // namespace nSPSkinner
-
-
-
-
-
 
 // @ 0x00518cf0
 namespace nSPSkinner {
@@ -1840,10 +1858,6 @@ bool cPaintDifferentiateJob_s0051_82f0::Render()
     return true;
 }
 }  // namespace nSPSkinner
-
-
-
-
 
 // @ 0x00518f10
 bool nSPSkinner::cPaintAmbOccJob_s0051_8f10::Render()
@@ -1931,9 +1945,6 @@ bool nSPSkinner::cPaintAmbOccJob_s0051_8f10::Render()
         ((PropIterator*)pIter)->Release();
     return true;
 }
-
-
-
 
 // @ 0x00519640
 bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
@@ -2097,8 +2108,6 @@ bool nSPSkinner::cPaintSplatJob_s0051_9640::Render()
     return mStage == 4;
 }
 
-
-
 // @ 0x0051a350
 bool nSPSkinner::cPaintSplatAlphaJob_s0051_a350::Render()
 {
@@ -2144,7 +2153,36 @@ bool nSPSkinner::cPaintSplatAlphaJob_s0051_a350::Render()
     return nBlocks <= mBlock;
 }
 
-
+// @ 0x0051a6a0
+void FUN_0051a6a0(TexObj** out)
+{
+    ARCRef<ImgObj> img;
+    Svc40* s1 = FUN_0067dd40_t();
+    Svc60* s2 = FUN_0067dd60_t();
+    void** pp = img.AsPPVoidParam();
+    s2->Make(s1->Make(pp, 0, 0));
+    int n = img.p->mW * img.p->mH;
+    char tag;
+    ByteBuf buf(n, &tag);
+    char zero = 0;
+    char* iter;
+    FUN_004c6ae0(&iter, buf.mpBegin, n, &zero);
+    buf.mpEnd = buf.mpBegin + n;
+    int count = img.p->mW * img.p->mH;
+    for (int i = 0; i < count; i++)
+        buf.mpBegin[i] = img.p->mpPixels[i * 4 + 1];
+    TexRefAuto tex;
+    tex.p = FUN_0067dd60_t()->CreateBuf(img.p->mW, img.p->mH, 1, 8, 0x32, 4);
+    if (tex.p != 0)
+        _InterlockedExchangeAdd(&tex.p->mnRefCount, 1);
+    char* data = buf.mpBegin;
+    if ((tex.p->mFlags & 1) == 0)
+        FUN_0067dd60_t()->ReleaseTex(tex.p);
+    tex.p->mpRaster->SetMipLevelData(data, 0);
+    TexObj* moved = tex.p;
+    tex.p = 0;
+    *out = moved;
+}
 
 // @ 0x0051a8a0
 void* SkinJob::FUN_0051a8a0()
@@ -2158,8 +2196,6 @@ void* SkinJob::FUN_0051a8a0()
     return this;
 }
 
-
-
 // @ 0x0051a930
 void SkinJob::FUN_0051a930()
 {
@@ -2172,8 +2208,6 @@ void SkinJob::FUN_0051a930()
     FUN_0051d180((char*)self + 8);
     *(void**)self = &g_splatVtblBase;
 }
-
-
 
 // @ 0x0051a9a0
 void SkinJob::FUN_0051a9a0(int a2, char a3, char a4, int a5, int a6, int a7, int a8, char a9, char a10, char a11)
@@ -2199,8 +2233,6 @@ void SkinJob::FUN_0051a9a0(int a2, char a3, char a4, int a5, int a6, int a7, int
     ((SkinJob*)self)->FUN_0051ab50(a3);
 }
 
-
-
 // @ 0x0051aaa0
 void SkinJob::FUN_0051aaa0()
 {
@@ -2215,8 +2247,6 @@ void SkinJob::FUN_0051aaa0()
     FUN_004259e0(*(void**)((char*)self + 8), *(void**)((char*)self + 0xc));
     *(int*)((char*)self + 0x33c) = -1;
 }
-
-
 
 // @ 0x0051ab50
 void SkinJob::FUN_0051ab50(char deep)
@@ -2283,7 +2313,6 @@ void SkinJob::FUN_0051ab50(char deep)
         }
     }
 }
-
 
 // @ 0x0051afd0
 namespace Skinner {
@@ -2405,6 +2434,19 @@ PaintSystem::PaintSystem(int kind, void* a, void* b, char c, void* d, char e, ch
 int RefCounted::AddRef()
 {
     return (int)_InterlockedIncrement(&mnRefCount);
+}
+
+// @ 0x0051c640
+void SkinTexExtractorB::Init()
+{
+    int hole;
+    mConn.Init(SP_MessageServer(), (char*)this - 8, (void*)0x150cad8, 3);
+    if (mInstance != 0) {
+        ServiceObj* svc = FUN_0067dd60_s0051_c470();
+        svc->SetInstance(mInstance, 0, 1, 0);
+    } else {
+        mFlag = 1;
+    }
 }
 
 // @ 0x0051d090

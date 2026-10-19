@@ -1,8 +1,8 @@
 0051c470 ??0PaintSystem@@QAE@HPAX0D0DD@Z  # PaintSystem::PaintSystem migrated from s0051c470 (verbatim, slice spelling)
 0051c620 ?AddRef@RefCounted@@QAEHXZ  # RefCounted::AddRef migrated from s0051c470 (verbatim, slice spelling)
-0051c640 ?HandleMessage@cSkinpaintTextureExtractor@@...  # PDB name
+0051c640 ?Init@SkinTexExtractorB@@QAEXXZ  # SkinTexExtractorB::Init migrated from s0051c470 (verbatim, slice spelling)
+0051c6a0 cSkinpaintTextureExtractor::HandleMessage  # ret 8 body that follows the 96-byte head at 0x51c640; 4-case message dispatch (0x522264d, 0x52cf019, 0x52cf020)
 0051d010 ??1PaintSystem@Skinner@@...  # ctor/dtor vtable restore pair
 0051d090 ?deleting_dtor@EditorResource@@QAEPAXI@Z  # EditorResource::deleting_dtor migrated from s0051c470 (verbatim, slice spelling)
 0051d140 FUN_0051d140  # intrusive-list advance
 0051d270 ?erase@...  # vector<AutoRefCount>::erase
-0051c6a0 cSkinpaintTextureExtractor::HandleMessage  # ret 8 body that follows the 96-byte head at 0x51c640; 4-case message dispatch (0x522264d, 0x52cf019, 0x52cf020)

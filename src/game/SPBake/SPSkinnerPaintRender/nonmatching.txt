@@ -9,9 +9,11 @@
 00518f10 944 /Od aligned frame (and esp,-16) + inline SSE clamp/round helpers differ; complete Render() reconstruction
 00519640 2446 /Od frame + inline Vector3 copies/property vcalls; complete Render() reconstruction
 0051a350 564 /Od address-temp + vcall/refcount differences; complete cPaintSplatAlphaJob::Render
+0051a6a0 381 FUN_0051a6a0 (texture-from-image helper): complete (all calls, atomic AddRef, SetMipLevelData); /Od inline-accessor temps and frame layout differ (407 vs 512 bytes) [equiv: UNSUPPORTED, 0/400 valid: reads of service globals fault]
 0051a8a0 51 /Od member-address temp locals differ; complete ctor reconstruction
 0051a930 89 /Od member-address temps + thiscall helpers; complete dtor reconstruction
 0051a9a0 214 /Od arg stores; complete 10-arg ctor reconstruction
 0051aaa0 101 /Od refcount release pattern differs; complete Release reconstruction
 0051ab50 705 /Od int-iterator loop shape differs; complete PreloadTextures reconstruction
 0051c470 330 /Od MI vtable stores + EASTL member-init schedule differ; complete PaintSystem ctor
+0051c640 9 cSkinpaintTextureExtractor secondary-base init (96-byte head of the 2462-byte extent): complete; this/svc /Od slot order swapped [equiv: PASS 391 valid, 100% coverage]
