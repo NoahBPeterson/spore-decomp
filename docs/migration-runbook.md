@@ -832,3 +832,11 @@ Round 7 (29 objects, commits 60a260fb..46e5d89a) is landed, byte-exact and asm-c
 - **A namespace after a marker** is the function's own only when the function is its first item (s004b8af0).
 - **Holds on re-apply**: never add `leave_in_slice` for a function already in the TU (a hold removes it), and an equiv
   UNSUPPORTED caused by an unresolved callee or a compile error of the module TU in the harness is not a regression.
+- **A namespaced stub hoisted by `using NS::X;`** over a canonical *global* class X (`SP::cSPColorRGB` vs `cSPColorRGB.h`)
+  is renamed, and the using-declaration with it (C2874; SPEditorColorPicker).
+- **`virtual ::IDrawable*`**: a keyword before `::` is the global scope, so the global item counts as used and is kept
+  (C2039 in a kept stub; SPEditorColorPicker).
+- **An explicit instantiation of a template the slice defines** is dropped when that template is not landed in the TU
+  (C2143; SPEditorPaintLikeThis s005c0c00, 20 functions).
+- **`// Name (0xVA)` banners** give a definition its VA when the name matches (an anonymous-namespace helper was silently
+  never emitted; Parser SubstituteParameters).
