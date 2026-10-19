@@ -1,5 +1,6 @@
-00a68fb0 EA::Random::RandomLinearCongruential::RandomUint32Uniform  # PDB name
-00a68e80 EA::Audio::Eapd::System scalar deleting destructor  # PDB candidate
-00a68dd0 EA::Audio::Eapd::System::~System  # PDB candidate
 00a683b0 EA::Audio::Eapd::CallbackManager::~CallbackManager  # PDB name
+00a68410 ?RemoveEntry@Outer310@@QAEXH@Z  # Outer310::RemoveEntry migrated from s00a68140 (verbatim, slice spelling)
 00a68cb0 EAPd::CreateSingleton::CreateSingleton  # PDB name
+00a68dd0 EA::Audio::Eapd::System::~System  # PDB candidate
+00a68e80 ?ScalarDtor@EapdSystem@@QAEPAXH@Z  # EapdSystem::ScalarDtor migrated from s00a68140 (verbatim, slice spelling)
+00a68fb0 EA::Random::RandomLinearCongruential::RandomUint32Uniform  # PDB name
