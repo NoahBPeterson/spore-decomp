@@ -1,7 +1,13 @@
 007f8540 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::erase  # PDB symbol name
 007f87e0 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::erase  # PDB symbol name
+007f85b0 ?insert@Vec8c@@QAEXPAUAInfo8c@@IPBU2@@Z  # Vec8c::insert(pos,n,value) reconstructed (slice spelling)
+007f89f0 ?insert@Vec8c@@QAEPAUAInfo8c@@PAU2@PBU2@@Z  # Vec8c::insert(pos,value) reconstructed (slice spelling)
 007f8b50 eastl::vector<cSPUIAnimationSequence::cAnimInfo,eastl::sp_vector_allocator>::resize  # PDB symbol name
 007f8c20 cSPUIAnimator::~cSPUIAnimator  # PDB symbol name
+007f8f00 ?ClearAll@cSPUIAnimator@@QAEXXZ  # cSPUIAnimator::ClearAll reconstructed (slice spelling)
+007f8fd0 ?Append@AnimHolder@@QAEXHPAUIRef@@H@Z  # AnimHolder::Append(anim,obj,type) reconstructed (slice spelling)
+007f90f0 ?reserve@Vec8c@@QAEXI@Z  # Vec8c::reserve reconstructed (slice spelling)
+007f9340 ?FUN_007f9340@@YAPAXPAPAX0@Z  # FUN_007f9340 animation-sequence factory reconstructed (slice spelling)
 007f8d10 ?AddAnimation@cSPUIAnimator_s007f_8540@@QAEXPAXPAUIRef@@H@Z  # cSPUIAnimator_s007f_8540::AddAnimation migrated from s007f8540 (verbatim, slice spelling)
 007f9230 ?AnimatorAdvance@@YA_NHHHH@Z  # AnimatorAdvance migrated from s007f8540 (verbatim, slice spelling)
 007f93f0 ?Reset@AnimMgr@@QAEXXZ  # AnimMgr::Reset migrated from s007f8540 (verbatim, slice spelling)
