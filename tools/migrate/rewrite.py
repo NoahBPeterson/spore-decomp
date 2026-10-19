@@ -3941,7 +3941,8 @@ class Rewrite:
             pre = self.forward_protos(pre, blocks)
             pre = self.held_callee_protos(pre, body, fns)
             pre = self.placement_new_guard(pre)
-            open(tu, "w").write(pre + "\n" + body)
+            # fix pass 6 C19: every re-apply added blank lines (s00575270: +153); runs of blank lines collapse to one
+            open(tu, "w").write(re.sub(r"\n{3,}", "\n\n", pre + "\n" + body))
             results[module] = (tu, sorted(c.va for c in fns))
         return results
 
