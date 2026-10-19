@@ -1,4 +1,7 @@
 00945ed0 ?WorkerThreadFunction@HTTPClient_s0094_5ed0@Internet@EA@@QAEIPAUWorkerThreadInfo_s0094_5ed0@23@@Z  # HTTPClient_s0094_5ed0::WorkerThreadFunction migrated from s00945ed0 (verbatim, slice spelling)
+00946520 ?StaticWorkerThreadFunction@HTTPClient_s0094_5ed0@Internet@EA@@SAIPAUWorkerThreadInfo_s0094_5ed0@23@@Z  # HTTPClient_s0094_5ed0::StaticWorkerThreadFunction migrated from s00945ed0 (verbatim, slice spelling)
+00946540 ?CreateWorkerThreadIfNeeded@HTTPClient_s0094_5ed0@Internet@EA@@QAEXXZ  # HTTPClient_s0094_5ed0::CreateWorkerThreadIfNeeded migrated from s00945ed0 (verbatim, slice spelling)
+00946680 ?AddNewJob@HTTPClient_s0094_5ed0@Internet@EA@@QAEIPAUHTTPRequestStub@23@H_NH@Z  # HTTPClient_s0094_5ed0::AddNewJob migrated from s00945ed0 (verbatim, slice spelling)
 009467b0 ?SetSize@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NI@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::SetSize migrated from s00945ed0
 009467c0 ?Flush@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NXZ  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Flush migrated from s00945ed0
 009467d0 ?Write@HTTPFormURLEncodedPostBodyStream@Internet@EA@@UAE_NPBXI@Z  # EA::Internet::HTTPFormURLEncodedPostBodyStream::Write migrated from s00945ed0

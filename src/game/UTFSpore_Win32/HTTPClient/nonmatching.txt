@@ -20,4 +20,5 @@
 00943d70 85 CellHolder::AddCell: complete; vector pointer caching + register roles differ; difftest WEAK (174 valid inputs, 95% coverage)
 00943de0 124 HTTPRequest ctor: complete; SSO blob capacity folded from base + scheduling order differs; difftest PASS (400 valid inputs, 100% coverage)
 00943ea0 120 HTTPRequest dtor: complete; missing thiscall ecx setup before range destroy + inline free schedule differs; difftest UNSUPPORTED (unresolved _operator_delete__)
+009440e0 279 register/frame: zero kept in ebx, extra push ecx hole, filter loop order
 00945ed0 1294 WorkerThreadFunction: complete (all paths/calls); register allocation/spills differ (orig keeps this and mutex ptr on stack); difftest WEAK (callees Sprintf8 0x938470, fixed_string append 0x60a150, operator_delete__ 0xf47380 annotated; 86/400 valid, 12% coverage: thread loop waits on SleepEx/WaitForSingleObject imports)

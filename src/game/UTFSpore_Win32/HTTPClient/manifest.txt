@@ -14,3 +14,6 @@
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?CopyJob@@YAPAUJob@@PAU1@00@Z  009437a0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?CopyBackwardJob@@YAPAUJob@@PAU1@00@Z  00943830  /O2 /MD /Gy /TP /GS- /Isrc/game/include
 ../src/game/UTFSpore_Win32/HTTPClient.cpp  ?SetMethod@HTTPRequest@@QAEXH@Z  009438c0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?StaticWorkerThreadFunction@HTTPClient_s0094_5ed0@Internet@EA@@SAIPAUWorkerThreadInfo_s0094_5ed0@23@@Z  00946520  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?CreateWorkerThreadIfNeeded@HTTPClient_s0094_5ed0@Internet@EA@@QAEXXZ  00946540  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include
+../src/game/UTFSpore_Win32/HTTPClient.cpp  ?AddNewJob@HTTPClient_s0094_5ed0@Internet@EA@@QAEIPAUHTTPRequestStub@23@H_NH@Z  00946680  /O2 /MD /Gy /TP /GS- /arch:SSE2 /Isrc/game/include

@@ -1,4 +1,4 @@
-// src/game/UTFSpore_Win32/HTTPClient.cpp -- migrated from slice(s) s00945ed0, s00942ff0, s00942290, s009413d0 by tools/migrate/rewrite.py
+// src/game/UTFSpore_Win32/HTTPClient.cpp -- migrated from slice(s) s00943f60, s00945ed0, s00942ff0, s00942290, s009413d0 by tools/migrate/rewrite.py
 // Object file: UTFSpore_Win32/HTTPClient.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -11,6 +11,10 @@
 #include "EA/IO/IStream.h"
 #include "EA/Thread/Mutex.h"
 #include "EA/Thread/Thread.h"
+#include "EA/Internet/IRequestResponseFilter.h"
+#include "EA/Internet/HTTPFormURLEncodedPostBodyStream.h"
+#include "EA/Internet/HTTPMultipartFormDataPostBodyStream.h"
+#include "EA/Internet/HTTPMultipartRelatedPostBodyStream.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" __declspec(dllimport) __int64 __cdecl _time64(__int64*);
@@ -582,7 +586,15 @@ struct SockAddrIn { unsigned short family; unsigned short port; unsigned addr; }
 // ---- items of slice s00942ff0 end
 
 // ---- items of slice s00945ed0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-void* __cdecl memcpy(void*, const void*, unsigned int);
+namespace EA {
+namespace Internet {
+struct Thread {
+    Thread();
+    void Begin(void* fn, void* arg, int, int prio);   // FUN_00922f30
+    void WaitForEnd();                                // FUN_00922e10
+};
+}
+}
 void* __cdecl operator new(unsigned int, const char*, int, int, int, int);
 namespace eastl {
 struct StrStub_s0094_5ed0 {
@@ -603,400 +615,23 @@ struct StrStub_s0094_5ed0 {
 }
 namespace EA {
 namespace Internet {
-void __cdecl EncodeFormURL(const char* s, eastl::StrStub_s0094_5ed0* out);
-}
-}
-namespace EA {
-namespace Internet {
 struct IStr {
-    virtual void v0(); virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
     virtual int  GetState();                        // 5  (+0x14)
     virtual void v6();
     virtual unsigned GetSize();                     // 7  (+0x1c)
     virtual void v8();
     virtual int  GetPos(int);                       // 9  (+0x24)
     virtual bool SetPos(int, int);                  // 10 (+0x28)
-    virtual void v11(); virtual void v12(); virtual void v13();
+virtual void v11();
+virtual void v12();
+virtual void v13();
     virtual int  Write(const void*, unsigned);      // 14 (+0x38)
 };
-}
-}
-namespace EA {
-namespace Internet {
-struct IStreamBase {
-    virtual ~IStreamBase() {}
-    virtual void v1(); virtual void v2(); virtual void v3(); virtual void v4();
-    virtual void v5(); virtual void v6(); virtual void v7(); virtual void v8(); virtual void v9();
-    virtual void v10();
-    virtual int  VGetAvailable();                   // 11 (+0x2c)
-    virtual void v12(); virtual void v13(); virtual void v14(); virtual void v15(); virtual void v16();
-    virtual void v17(); virtual void v18(); virtual void v19(); virtual void v20(); virtual void v21();
-    virtual void WriteStr(const char*, IStr*);      // 22 (+0x58)
-    virtual bool Finish();                          // 23 (+0x5c)
-    virtual bool Finish2();                         // 24 (+0x60)
-};
-}
-}
-namespace EA {
-namespace Internet {
-struct RefCountBase {
-    RefCountBase() { _InterlockedExchange((volatile long*)&mnRefCount, 0); }
-    virtual ~RefCountBase() {}
-    int mnRefCount;
-};
-}
-}
-namespace EA {
-namespace Internet {
-class HTTPFormURLEncodedPostBodyStream : public IStreamBase, public RefCountBase {
-public:
-    long mnPosition;            // +0xc
-    int  mnState;               // +0x10
-    eastl::StrStub_s0094_5ed0 msData;      // +0x14
-    bool mbFinal;               // +0x24
-
-    bool Fn9467b0(int);
-    bool Fn9467c0();
-    bool Fn9467d0(int, int);
-    bool Close();
-    int  GetSize();
-    int  GetPosition(int origin);
-    bool SetPosition(int pos, int origin);
-    int  GetAvailable();
-    int  Read(void* buf, unsigned n);
-    bool GetContentTypeString(eastl::StrStub_s0094_5ed0* out);
-    bool Write(const char* name, const char* value);
-    bool Fn946cc0();
-    HTTPFormURLEncodedPostBodyStream();
-};
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Fn9467b0(int) { mnState = -1; return false; }
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Fn9467c0() { mnState = -1; return false; }
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Fn9467d0(int, int) { mnState = -1; return false; }
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Close() {
-    mnState = -2;
-    _ReadWriteBarrier();
-    if (msData.mpBegin != msData.mpEnd) {
-        *msData.mpBegin = 0;
-        msData.mpEnd = msData.mpBegin;
-    }
-    return true;
-}
-}
-}
-namespace EA {
-namespace Internet {
-int HTTPFormURLEncodedPostBodyStream::GetSize() {
-    if (!mbFinal)
-        return -1;
-    if (mnState != 0)
-        return -1;
-    return (int)(msData.mpEnd - msData.mpBegin);
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::SetPosition(int pos, int origin) {
-    unsigned p = 0;
-    if (!mbFinal)
-        mbFinal = true;
-    if (origin == 0)
-        p = pos;
-    else if (origin == 1)
-        p = mnPosition + pos;
-    else if (origin == 2)
-        p = (msData.mpEnd - msData.mpBegin) + pos;
-    else
-        mnState = -1;
-    if (p > (unsigned)(msData.mpEnd - msData.mpBegin) || (int)p < 0)
-        mnState = -1;
-    if (mnState != 0)
-        return false;
-    mnPosition = p;
-    return true;
-}
-}
-}
-namespace EA {
-namespace Internet {
-int HTTPFormURLEncodedPostBodyStream::Read(void* buf, unsigned n) {
-    int r = -1;
-    if (buf == 0)
-        mnState = r;
-    if (!mbFinal)
-        mbFinal = true;
-    if (mnState == 0) {
-        unsigned avail = (unsigned)VGetAvailable();
-        n = n > avail ? avail : n;
-        memcpy(buf, msData.mpBegin + mnPosition, n);
-        mnPosition += n;
-        return n;
-    }
-    return r;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::GetContentTypeString(eastl::StrStub_s0094_5ed0* out) {
-    static const char s[] = "application/x-www-form-urlencoded";
-    out->assign(s, s + 33);
-    return true;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Write(const char* name, const char* value) {
-    int neg = -1;
-    if (mbFinal)
-        mnState = neg;
-    if (name == 0)
-        mnState = neg;
-    if (mnState != 0)
-        return false;
-    eastl::StrStub_s0094_5ed0& d = msData;
-    if (d.mpBegin != d.mpEnd)
-        d.append("&", "&" + 1);
-    EncodeFormURL(name, &d);
-    d.append("=", "=" + 1);
-    if (value)
-        EncodeFormURL(value, &d);
-    return true;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPFormURLEncodedPostBodyStream::Fn946cc0() { mbFinal = true; return true; }
-}
-}
-namespace EA {
-namespace Internet {
-HTTPFormURLEncodedPostBodyStream::HTTPFormURLEncodedPostBodyStream() {
-    mnPosition = 0;
-    mnState = 0;
-    _ReadWriteBarrier();
-    msData.mpBegin = (char*)0x1667bac;
-    msData.mpEnd = (char*)0x1667bac;
-    msData.mpCapacity = (char*)0x1667bad;
-    mbFinal = false;
-}
-}
-}
-namespace EA {
-namespace Internet {
-struct ListNode {
-    ListNode* next;
-    ListNode* prev;
-};
-}
-}
-namespace EA {
-namespace Internet {
-struct StreamNode : ListNode {
-    IStr*     stream;
-};
-}
-}
-namespace EA {
-namespace Internet {
-class HTTPMultipartFormDataPostBodyStream : public IStreamBase, public RefCountBase {
-public:
-    ListNode mListAnchor;       // +0xc
-    int      mListSize;         // +0x14
-    eastl::StrStub_s0094_5ed0 msBoundary;  // +0x18
-    ListNode* mReadItr;         // +0x28
-    long     mnPosition;        // +0x2c
-    unsigned mnSize;            // +0x30
-    int      mnState;           // +0x34
-    bool     mbFinal;           // +0x38
-    int      mLastDataType;     // +0x3c
-    unsigned mnTextStart;       // +0x40
-    IStr*    mpMemStream;       // +0x44
-
-    int  GetSize();
-    bool Finalize();
-    bool WriteField(const char* name, const char* value);
-    bool WriteEndBoundary();
-};
-}
-}
-namespace EA {
-namespace Internet {
-class HTTPMultipartRelatedPostBodyStream : public IStreamBase, public RefCountBase {
-public:
-    ListNode mListAnchor;       // +0xc
-    int      mListSize;         // +0x14
-    eastl::StrStub_s0094_5ed0 msBoundary;  // +0x18
-    ListNode* mReadItr;         // +0x28
-    long     mnPosition;        // +0x2c
-    unsigned mnSize;            // +0x30
-    int      mnState;           // +0x34
-    bool     mbFinal;           // +0x38
-    int      mLastDataType;     // +0x3c
-    unsigned mnTextStart;       // +0x40
-    IStr*    mpMemStream;       // +0x44
-
-    bool SetSize(int);
-    bool SetPosition(int pos, int origin);
-};
-}
-}
-namespace EA {
-namespace Internet {
-int HTTPMultipartFormDataPostBodyStream::GetSize() {
-    if (!mbFinal)
-        return -1;
-    if (mnState != 0)
-        return -1;
-    return mnSize;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPMultipartRelatedPostBodyStream::SetSize(int) {
-    mnState = -1;
-    return false;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPMultipartFormDataPostBodyStream::Finalize() {
-    if (!mbFinal && mnState != -1) {
-        if (mpMemStream->GetPos(0) > 0) {
-            mbFinal = Finish();
-            mnPosition = 0;
-            return mbFinal;
-        }
-        mbFinal = true;
-        mnPosition = 0;
-    }
-    return mbFinal;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPMultipartFormDataPostBodyStream::WriteField(const char* name, const char* value) {
-    if (mbFinal)
-        mnState = -1;
-    if (name == 0)
-        mnState = -1;
-    if (mnState == 0) {
-        unsigned pos = mpMemStream->GetPos(0);
-        if (mLastDataType == 1) {
-            mnTextStart = pos;
-            mLastDataType = 0;
-        }
-        WriteStr((const char*)0x13fb644, mpMemStream);
-        mpMemStream->Write(msBoundary.data(), msBoundary.size());
-        WriteStr((const char*)0x13fb618, mpMemStream);
-        WriteStr(name, mpMemStream);
-        WriteStr((const char*)0x13fb610, mpMemStream);
-        WriteStr(value, mpMemStream);
-        if (mpMemStream->GetState() != 0)
-            mnState = -1;
-        else
-            return true;
-    }
-    return false;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPMultipartFormDataPostBodyStream::WriteEndBoundary() {
-    if (mpMemStream) {
-        unsigned pos = mpMemStream->GetPos(0);
-        if (mLastDataType == 1) {
-            mnTextStart = pos;
-            mLastDataType = 0;
-        }
-        WriteStr((const char*)0x13fb644, mpMemStream);
-        mpMemStream->Write(msBoundary.data(), msBoundary.size());
-        WriteStr((const char*)0x13fb688, mpMemStream);
-        if (mpMemStream->GetState() != 0)
-            mnState = -1;
-        else {
-            mLastDataType = 0;
-            return Finish2();
-        }
-    }
-    return false;
-}
-}
-}
-namespace EA {
-namespace Internet {
-bool HTTPMultipartRelatedPostBodyStream::SetPosition(int pos, int origin) {
-    if (mnState != 0)
-        return false;
-    if (!mbFinal)
-        mbFinal = true;
-    unsigned target;
-    if (origin == 0)
-        target = pos;
-    else if (origin == 1)
-        target = mnPosition + pos;
-    else if (origin == 2)
-        target = mnSize + pos;
-    else {
-        mnState = -1;
-        return false;
-    }
-    if (target > mnSize || (int)target < 0) {
-        mnState = -1;
-        return false;
-    }
-    ListNode* end = &mListAnchor;
-    ListNode* node = mListAnchor.next;
-    unsigned total = 0;
-    if (((StreamNode*)node)->stream->GetSize() < target) {
-        do {
-            total += ((StreamNode*)node)->stream->GetSize();
-            node = node->next;
-            if (node == end) {
-                mnState = -1;
-                return false;
-            }
-        } while (((StreamNode*)node)->stream->GetSize() + total < target);
-    }
-    if (!((StreamNode*)node)->stream->SetPos(target - total, 0)) {
-        mnState = -1;
-        return false;
-    }
-    ListNode* cur = node;
-    node = node->next;
-    while (node != end) {
-        if (!((StreamNode*)node)->stream->SetPos(0, 0)) {
-            mnState = -1;
-            return false;
-        }
-        node = node->next;
-    }
-    mReadItr = cur;
-    mnPosition = target;
-    return true;
-}
 }
 }
 namespace EA {
@@ -1009,8 +644,8 @@ struct Mutex {
 }
 namespace EA {
 namespace Internet {
-struct Thread {
-    Thread();
+struct Thread_s0094_5ed0 {
+    Thread_s0094_5ed0();
     void Begin(void* fn, void* arg, int, int prio);   // FUN_00922f30
     void WaitForEnd();                                // FUN_00922e10
 };
@@ -1082,9 +717,18 @@ struct IUnkStub {
 namespace EA {
 namespace Internet {
 struct ISockOpt {
-    virtual void s0(); virtual void s1(); virtual void s2(); virtual void s3(); virtual void s4();
-    virtual void s5(); virtual void s6(); virtual void s7(); virtual void s8(); virtual void s9();
-    virtual void s10(); virtual void s11();
+virtual void s0();
+virtual void s1();
+virtual void s2();
+virtual void s3();
+virtual void s4();
+virtual void s5();
+virtual void s6();
+virtual void s7();
+virtual void s8();
+virtual void s9();
+virtual void s10();
+virtual void s11();
     virtual void Shutdown(int how);         // slot 12 (+0x30)
 };
 }
@@ -1142,7 +786,12 @@ struct IRef3 {
 namespace EA {
 namespace Internet {
 struct IBodyStream {
-    virtual void f0(); virtual void f1(); virtual void f2(); virtual void f3(); virtual void f4(); virtual void f5();
+virtual void f0();
+virtual void f1();
+virtual void f2();
+virtual void f3();
+virtual void f4();
+virtual void f5();
     virtual void Close();                   // slot 6 (+0x18)
 };
 }
@@ -1262,7 +911,7 @@ struct WorkerThreadInfo_s0094_5ed0 {
     int  protocol;                   // +0x24
     bool bV11;                       // +0x28
     Job_s0094_5ed0* mpCurrentJob;               // +0x2c
-    Thread mThread;                  // +0x30
+    Thread_s0094_5ed0 mThread;                  // +0x30
     WorkerThreadInfo_s0094_5ed0() : mpOwner(0), mpSocket(0) {}
 };
 }
@@ -1324,92 +973,6 @@ public:
 }
 namespace EA {
 namespace Internet {
-unsigned HTTPClient_s0094_5ed0::StaticWorkerThreadFunction(WorkerThreadInfo_s0094_5ed0* info) {
-    HTTPClient_s0094_5ed0* c = info->mpOwner;
-    unsigned r = c->WorkerThreadFunction(info);
-    c->Release();
-    return r;
-}
-}
-}
-namespace EA {
-namespace Internet {
-void HTTPClient_s0094_5ed0::CreateWorkerThreadIfNeeded() {
-    mMutex.Lock(&kLockTimeout);
-    if (mpWorkerThreadInfo == 0) {
-        WorkerThreadInfo_s0094_5ed0* p = new("UTFInternet/WorkerThreadInfo", 0, 0, 0, 0) WorkerThreadInfo_s0094_5ed0;
-        mpWorkerThreadInfo = p;
-        HTTPClient_s0094_5ed0* old = p->mpOwner;
-        if (this != old) {
-            AddRef();
-            p->mpOwner = this;
-            if (old)
-                old->Release();
-        }
-        mpWorkerThreadInfo->bCreated = false;
-        mpWorkerThreadInfo->bShouldQuit = false;
-        mpWorkerThreadInfo->bCancel = false;
-        mpWorkerThreadInfo->pauseCount = 0;
-        ISock** slot = &mpWorkerThreadInfo->mpSocket;
-        ISock* sock = *slot;
-        if (sock) {
-            *slot = 0;
-            sock->Release();
-        }
-        mpWorkerThreadInfo->protocol = 0;
-        mpWorkerThreadInfo->mpCurrentJob = 0;
-        mpWorkerThreadInfo->bV11 = true;
-        mpWorkerThreadInfo->nPort = 0;
-    }
-    mpWorkerThreadInfo->bShouldQuit = false;
-    if (!mpWorkerThreadInfo->bCreated) {
-        mpWorkerThreadInfo->bCreated = true;
-        AddRef();
-        WorkerThreadInfo_s0094_5ed0* info = mpWorkerThreadInfo;
-        info->mThread.Begin((void*)StaticWorkerThreadFunction, info, 0, GetThreadPriorityDefault());
-    }
-    mMutex.Unlock();
-}
-}
-}
-namespace EA {
-namespace Internet {
-unsigned HTTPClient_s0094_5ed0::AddNewJob(HTTPRequestStub* req, int arg3, bool arg4, int arg5) {
-    if (!mbInitialized)
-        return 0;
-    if (req == 0 || !(req->mpUrlEnd - req->mpUrlBegin))
-        return 0;
-    eastl::StrStub_s0094_5ed0* host = req->urlHolder.GetString();
-    if (host->mpBegin == host->mpEnd)
-        return 0;
-    Job_s0094_5ed0 job;
-    job.state = 1;
-    job.userData = arg5;
-    job.z0 = 0;
-    job.one = 1;
-    job.z2 = 0;
-    job.z1 = 0;
-    job.mpRequest.Set(req);
-    job.bFlag = arg4;
-    job.mpResponse.Set(new("UTFInternet/WorkerThreadInfo", 0, 0, 0, 0) HTTPResponse_s0094_5ed0);
-    job.arg = arg3;
-    job.z3[0] = 0;
-    job.z3[1] = 0;
-    job.z3[2] = 0;
-    job.z3[3] = 0;
-    mMutex.Lock(&kLockTimeout);
-    ++mnLastJobId;
-    unsigned id = mnLastJobId;
-    job.id = id;
-    mJobList.Push(&job);
-    mMutex.Unlock();
-    CreateWorkerThreadIfNeeded();
-    return id;
-}
-}
-}
-namespace EA {
-namespace Internet {
 static inline const char* CharStrEnd(const char* p) {
     const char* e = p;
     while (*e++)
@@ -1419,6 +982,70 @@ static inline const char* CharStrEnd(const char* p) {
 }
 }
 // ---- items of slice s00945ed0 end
+
+// ---- items of slice s00943f60 begin (TODO(rewrite): local stubs, replace by canonical classes)
+typedef void (__thiscall *VF0)(void*);
+typedef int  (__thiscall *VFI0)(void*);
+#define VSLOT_s0094_3f60(p, byteoff) ((*(void***)(p))[(byteoff) / 4])
+#define VCALL0(p, off)    ((VF0)VSLOT_s0094_3f60(p, off))(p)
+#define VCALLI0(p, off)   ((VFI0)VSLOT_s0094_3f60(p, off))(p)
+namespace EA {
+namespace Thread {
+struct Mutex_s0094_3f60 {
+    void Lock(const void* timeout);   // 0x009221b0
+    void Unlock();                    // 0x00922270
+};
+}
+}
+namespace EA {
+namespace Internet {
+struct RefObj_s0094_3f60 {
+    virtual void Destroy(int flags);
+    int mnRefCount;
+};
+}
+}
+namespace EA {
+namespace Internet {
+struct WorkerThreadInfo_s0094_3f60 {
+    int   pad0;
+    char  bCreated;                   // +4
+    char  pad1[0x20 - 5];
+    void* mpSocket;                   // +0x20
+};
+}
+}
+namespace EA {
+namespace Internet {
+class HTTPClient_s0094_3f60 {
+public:
+    char pad0[0xc];
+    bool mbInitialized;               // +0xc
+    char pad1[0x24 - 0xd];
+    NotifyFn mpNotify;                // +0x24
+    void* mpNotifyCtx;                // +0x28
+    char pad2[0x54 - 0x2c];
+    void* mpLogB;                     // +0x54
+    void* mpLogA;                     // +0x58
+    char pad3[0x60 - 0x5c];
+    EA::Thread::Mutex_s0094_3f60 mMutex;         // +0x60
+    char pad4[0x90 - 0x61];
+    WorkerThreadInfo_s0094_3f60* mpWorkerThreadInfo;   // +0x90
+    char pad5[0x140 - 0x94];
+    char* mpReadBuffer;               // +0x140
+    char pad7[0x148 - 0x144];
+    char* mpWriteBuffer;              // +0x148 (freed when non-null)
+    char pad6[0x150 - 0x14c];
+    RefObj_s0094_3f60** mpFiltersBegin;          // +0x150
+    RefObj_s0094_3f60** mpFiltersEnd;            // +0x154
+
+    void SetTimeout(int a, int ms);   // 0x00943a30
+    void Pump(void* socket);          // 0x009421b0
+    bool Shutdown();
+};
+}
+}
+// ---- items of slice s00943f60 end
 
 // @ 0x00941f20
 bool HTTPClient::AllocBuffer()
@@ -2238,6 +1865,58 @@ HTTPRequest::~HTTPRequest()
     *(void**)this = (void*)0x13fb19c;
 }
 
+// @ 0x009440e0
+namespace EA { namespace Internet {
+bool HTTPClient_s0094_3f60::Shutdown()
+{
+    if (mbInitialized) {
+        mMutex.Lock(&kLockTimeout);
+        if (mpNotify) {
+            mpNotify(mpNotifyCtx, this, 0x700af201, 0, 0);
+            mpNotify = 0;
+        }
+        mpNotifyCtx = 0;
+        if (mpLogB) {
+            if (VCALLI0(mpLogB, 0x10)) {
+                VCALL0(mpLogB, 0x34);
+                VCALL0(mpLogB, 0x18);
+            }
+            VCALL0(mpLogB, 0x08);
+        }
+        if (mpLogA) {
+            // The original calls the B stream's 0x34/0x18 slots here (retail copy-paste).
+            if (VCALLI0(mpLogA, 0x10)) {
+                VCALL0(mpLogB, 0x34);
+                VCALL0(mpLogB, 0x18);
+            }
+            VCALL0(mpLogA, 0x08);
+        }
+        WorkerThreadInfo_s0094_3f60* info = mpWorkerThreadInfo;
+        if (info && info->bCreated) {
+            VCALL0(info->mpSocket, 0x00);
+            SetTimeout(0, 0);
+            Pump(info->mpSocket);
+            VCALL0(info->mpSocket, 0x04);
+        }
+        operator_delete__(mpReadBuffer);
+        if (mpWriteBuffer)
+            operator_delete__(mpWriteBuffer);
+        mbInitialized = false;
+        mMutex.Unlock();
+    }
+    while (mpFiltersBegin != mpFiltersEnd) {
+        RefObj_s0094_3f60* p = *--mpFiltersEnd;
+        int old = _InterlockedExchangeAdd((volatile long*)&p->mnRefCount, -1);
+        if (old - 1 == 0) {
+            _InterlockedExchange((volatile long*)&p->mnRefCount, 1);
+            if (p)
+                p->Destroy(1);
+        }
+    }
+    return true;
+}
+}}  // namespace EA::Internet
+
 // @ 0x00945ed0
 namespace EA { namespace Internet {
 unsigned HTTPClient_s0094_5ed0::WorkerThreadFunction(WorkerThreadInfo_s0094_5ed0* info)
@@ -2474,5 +2153,94 @@ unsigned HTTPClient_s0094_5ed0::WorkerThreadFunction(WorkerThreadInfo_s0094_5ed0
     operator_delete__(info);
     pMutex->Unlock();
     return 0;
+}
+}}  // namespace EA::Internet
+
+// @ 0x00946520
+namespace EA { namespace Internet {
+unsigned HTTPClient_s0094_5ed0::StaticWorkerThreadFunction(WorkerThreadInfo_s0094_5ed0* info)
+{
+    HTTPClient_s0094_5ed0* c = info->mpOwner;
+    unsigned r = c->WorkerThreadFunction(info);
+    c->Release();
+    return r;
+}
+}}  // namespace EA::Internet
+
+// @ 0x00946540
+namespace EA { namespace Internet {
+void HTTPClient_s0094_5ed0::CreateWorkerThreadIfNeeded()
+{
+    mMutex.Lock(&kLockTimeout);
+    if (mpWorkerThreadInfo == 0) {
+        WorkerThreadInfo_s0094_5ed0* p = new("UTFInternet/WorkerThreadInfo", 0, 0, 0, 0) WorkerThreadInfo_s0094_5ed0;
+        mpWorkerThreadInfo = p;
+        HTTPClient_s0094_5ed0* old = p->mpOwner;
+        if (this != old) {
+            AddRef();
+            p->mpOwner = this;
+            if (old)
+                old->Release();
+        }
+        mpWorkerThreadInfo->bCreated = false;
+        mpWorkerThreadInfo->bShouldQuit = false;
+        mpWorkerThreadInfo->bCancel = false;
+        mpWorkerThreadInfo->pauseCount = 0;
+        ISock** slot = &mpWorkerThreadInfo->mpSocket;
+        ISock* sock = *slot;
+        if (sock) {
+            *slot = 0;
+            sock->Release();
+        }
+        mpWorkerThreadInfo->protocol = 0;
+        mpWorkerThreadInfo->mpCurrentJob = 0;
+        mpWorkerThreadInfo->bV11 = true;
+        mpWorkerThreadInfo->nPort = 0;
+    }
+    mpWorkerThreadInfo->bShouldQuit = false;
+    if (!mpWorkerThreadInfo->bCreated) {
+        mpWorkerThreadInfo->bCreated = true;
+        AddRef();
+        WorkerThreadInfo_s0094_5ed0* info = mpWorkerThreadInfo;
+        info->mThread.Begin((void*)StaticWorkerThreadFunction, info, 0, GetThreadPriorityDefault());
+    }
+    mMutex.Unlock();
+}
+}}  // namespace EA::Internet
+
+// @ 0x00946680
+namespace EA { namespace Internet {
+unsigned HTTPClient_s0094_5ed0::AddNewJob(HTTPRequestStub* req, int arg3, bool arg4, int arg5)
+{
+    if (!mbInitialized)
+        return 0;
+    if (req == 0 || !(req->mpUrlEnd - req->mpUrlBegin))
+        return 0;
+    eastl::StrStub_s0094_5ed0* host = req->urlHolder.GetString();
+    if (host->mpBegin == host->mpEnd)
+        return 0;
+    Job_s0094_5ed0 job;
+    job.state = 1;
+    job.userData = arg5;
+    job.z0 = 0;
+    job.one = 1;
+    job.z2 = 0;
+    job.z1 = 0;
+    job.mpRequest.Set(req);
+    job.bFlag = arg4;
+    job.mpResponse.Set(new("UTFInternet/WorkerThreadInfo", 0, 0, 0, 0) HTTPResponse_s0094_5ed0);
+    job.arg = arg3;
+    job.z3[0] = 0;
+    job.z3[1] = 0;
+    job.z3[2] = 0;
+    job.z3[3] = 0;
+    mMutex.Lock(&kLockTimeout);
+    ++mnLastJobId;
+    unsigned id = mnLastJobId;
+    job.id = id;
+    mJobList.Push(&job);
+    mMutex.Unlock();
+    CreateWorkerThreadIfNeeded();
+    return id;
 }
 }}  // namespace EA::Internet
