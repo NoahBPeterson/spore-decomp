@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPAppSplitModelEffect.cpp  ?copy@CSplitCtor@@QAEPAHPAH@Z  00799450  /O2 /MD /Gy /EHsc /TP /fp:fast /Isrc/game/include
