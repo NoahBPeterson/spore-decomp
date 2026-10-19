@@ -44,7 +44,6 @@ extern void* gHavokStackArea;                // 0x015EED9C
 extern "C" __declspec(dllimport) void* __stdcall TlsGetValue(unsigned long dwTlsIndex);
 #pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange, _InterlockedDecrement)
 #pragma intrinsic(__debugbreak)
-#pragma inline_depth()
 void* operator new(unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line) throw();
 void* operator new[](unsigned int n, const char* pName, int flags, unsigned int debugFlags, const char* pFile, int line);
 void operator delete(void* p) throw();   // 0x00F47380
@@ -453,12 +452,12 @@ void hkBaseSystem_quit();                    // 0x0107ED00
 namespace SP {
 class cEditorSystem_s005d_61b0 : public EA::Messaging::IHandlerRC_s005d_61b0, public EA::RefCountTemplate_s005d_61b0<int> {
 public:
-    cEditorSystem_s005d_61b0();
-    ~cEditorSystem_s005d_61b0();
-    bool PreInit(int);
-    bool Shutdown();
-    bool HandleMessage(uint32_t messageID, void* pMessage);
-    void Update(int deltaTime);
+    cEditorSystem_s005d_61b0();  // 0x005d67f0 (SP::cEditorSystem::cEditorSystem_s005d_61b0)
+    ~cEditorSystem_s005d_61b0();  // 0x005d67f0 (SP::cEditorSystem::cEditorSystem_s005d_61b0)
+    bool PreInit(int);  // 0x005d6f90 (SP::cEditorSystem::PreInit)
+    bool Shutdown();  // 0x005d61b0 (SP::cEditorSystem::Shutdown)
+    bool HandleMessage(uint32_t messageID, void* pMessage);  // 0x005d6510 (SP::cEditorSystem::HandleMessage)
+    void Update(int deltaTime);  // 0x005d65d0 (SP::cEditorSystem::Update)
 
     EA::AutoRefCount_s005d_61b0<cISPCreatureAnimManager_s005d_61b0> mCreatureAnimManager;  // +0xc
     EA::AutoRefCount_s005d_61b0<cSPSwatchManager> mSwatchManager;               // +0x10
@@ -736,6 +735,22 @@ public:
     virtual void sectionBegin(int id, const char* sectionName) = 0;
     virtual void sectionEnd() = 0;
 };
+struct hkOstream_s005d_61b0 {
+    hkOstream_s005d_61b0(void* mem, int memSize, hkBool_s005d_61b0 isString);   // 0x0107EF80
+    ~hkOstream_s005d_61b0();                                         // 0x0107EFD0
+    hkOstream_s005d_61b0& operator<<(const char* s);                 // 0x0107EE30
+    hkOstream_s005d_61b0& operator<<(char c);                        // 0x0107EE10
+    hkOstream_s005d_61b0& operator<<(int i);                         // 0x0107EE80
+    uint32_t m_impl[3];
+};
+struct hkStackTracer {
+    hkStackTracer();                                      // 0x0107F250
+    ~hkStackTracer();                                     // 0x0107F050
+    int getStackTrace(unsigned long* trace, int maxtrace);   // 0x01097300
+    void dumpStackTrace(const unsigned long* trace, int numtrace, hkErrorReportFunction pfunc, void* context);   // 0x0107F0C0
+    uint32_t m_impl[2];
+};
+struct hkString { static int sprintf(char* buf, const char* fmt, ...); };   // 0x0107F3B0
 class hkDefaultError : public hkError {
 public:
     hkDefaultError(hkErrorReportFunction errorReportFunction, void* errorReportObject = 0)
@@ -759,6 +774,35 @@ public:
     virtual void message(Message msg, int id, const char* description, const char* file, int line);
     bool mbEnabled;   // +0x28
 };
+void* HavokMalloc(int size, int align);   // 0x005D60F0
+void HavokFree(void* p);                  // 0x00F47410
+extern void* (*hkSystemMalloc)(int, int); // 0x015B9A34
+extern void (*hkSystemFree)(void*);       // 0x015B9A38
+void HavokErrorReport(const char* s, void* obj);   // 0x00C2E4E0
+struct hkPoolMemory {
+    hkPoolMemory();   // 0x0107F910
+    virtual void v00(); virtual void v01(); virtual void v02(); virtual void v03();
+    virtual void v04(); virtual void v05(); virtual void v06(); virtual void v07();
+    virtual void v08(); virtual void v09(); virtual void v10(); virtual void v11();
+    virtual void v12();
+    virtual ~hkPoolMemory();
+    void removeReference() {
+        if (--m_referenceCount == 0)
+            delete this;
+    }
+    uint32_t pad04[2];
+    int m_referenceCount;   // +0xc
+    uint32_t pad10[(0x350 - 0x10) / 4];
+};
+struct hkThreadMemoryImpl {
+    hkThreadMemoryImpl(hkPoolMemory* mainMemoryManager, int maxNumElemsOnFreeList);   // 0x0107D7E0
+    virtual void setStackArea(void* buf, int nbytes);
+    void removeReference();   // 0x0107D790
+    uint32_t pad04[(0x330 - 4) / 4];
+};
+namespace hkBaseSystem {
+int init(hkPoolMemory* memoryManager, hkThreadMemoryImpl* threadMemory, hkErrorReportFunction errorReportFunction, void* errorReportObject);   // 0x0107EB20
+}
 namespace EA {
 namespace XHTML {
 namespace Resource {
@@ -771,6 +815,45 @@ struct IProtocolHandler {
 }
 }
 }
+struct sp_vector_allocator {
+    uint32_t mUnknown[2];
+    void deallocate(void* p, uint32_t) {
+        if (((int*)p)[-1] != 0)
+            delete[] (char*)p;
+    }
+};
+template <class T> struct sp_vector {
+    T* mpBegin;
+    T* mpEnd;
+    T* mpCapacity;
+    sp_vector_allocator mAllocator;
+    ~sp_vector() {
+        DoDestroyValues(mpBegin, mpEnd);
+        if (mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+    void DoDestroyValues(T* first, T* last);   // 0x0084AAD0
+};
+struct sp_vector_trivial {
+    sp_vector_trivial() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    void* mpBegin;
+    void* mpEnd;
+    void* mpCapacity;
+    sp_vector_allocator mAllocator;
+    ~sp_vector_trivial() {
+        if (mpBegin)
+            mAllocator.deallocate(mpBegin, 0);
+    }
+};
+struct cVirtualBase {
+    virtual ~cVirtualBase() {}
+};
+struct cXHTMLPathList : public cVirtualBase {
+    uint32_t mUnknown4;                       // +0x4
+    sp_vector_trivial mEntries;               // +0x8
+    eastl::basic_string_s005d_61b0<wchar_t> mPath;       // +0x1c
+    cXHTMLPathList() {}
+};
 struct cHashedResourceTable {
     char pad[0x10];
     uint16_t mCount;     // +0x10
@@ -797,7 +880,14 @@ public:
     virtual const wchar_t* GetProtocolName(int index);
     eastl::hashtable_s005d_61b0<const wchar_t*, const wchar_t*> mExtensionMap;   // +0xc
 };
+struct cXHTMLLocalizedStrings {
+    virtual ~cXHTMLLocalizedStrings();
+    sp_vector<eastl::basic_string_s005d_61b0<wchar_t> > mStrings;   // +0x4
+    eastl::basic_string_s005d_61b0<wchar_t> mName;                  // +0x18
+    eastl::basic_string_s005d_61b0<wchar_t> mValue;                 // +0x28
+};
 // ---- items of slice s005d61b0 end
+
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void InitHavokBaseSystem();  // 0x005d6de0 (stays in the slice: not this object's)
@@ -811,6 +901,7 @@ bool cEditorSystem::PreShutdown()
   return true;
 }
 }  // namespace SP
+
 
 
 // @ 0x005d61b0
@@ -920,7 +1011,6 @@ bool SP::cEditorSystem_s005d_61b0::Shutdown()
     return true;
 }
 
-
 // @ 0x005d6510
 bool SP::cEditorSystem_s005d_61b0::HandleMessage(uint32_t messageID, void* pMessage)
 {
@@ -948,7 +1038,6 @@ bool SP::cEditorSystem_s005d_61b0::HandleMessage(uint32_t messageID, void* pMess
     return false;
 }
 
-
 // @ 0x005d65d0
 void SP::cEditorSystem_s005d_61b0::Update(int deltaTime)
 {
@@ -968,24 +1057,105 @@ void SP::cEditorSystem_s005d_61b0::Update(int deltaTime)
         SP::EditorPlayModeMgr()->Update();
 }
 
-
 // @ 0x005d67f0
 SP::cEditorSystem_s005d_61b0::cEditorSystem_s005d_61b0()
 {
 }
-
 
 // @ 0x005d6850
 SP::cEditorSystem_s005d_61b0::~cEditorSystem_s005d_61b0()
 {
 }
 
+// @ 0x005d6a90
+namespace eastl {
+template <class K, class T> typename hashtable_s005d_61b0<K, T>::node_type* hashtable_s005d_61b0<K, T>::DoFindNode(node_type* pNode, const K& k, uint32_t c) const
+{
+    for (; pNode; pNode = pNode->mpNext) {
+        if (m_equal(k, pNode->mValue.first))
+            return pNode;
+    }
+    return 0;
+}
+}  // namespace eastl
 
 // @ 0x005d6ae0
 #pragma inline_depth(0)
 hkDefaultError* EmitDefaultErrorCtor(void* p, hkErrorReportFunction f, void* o)
 { return ::new (p) hkDefaultError(f, o); }
+#pragma inline_depth()
 
+// @ 0x005d6b20
+void hkDefaultError::setEnabled(int id, hkBool_s005d_61b0 enabled)
+{
+    if (enabled)
+        m_disabledAssertIds.remove(id);
+    else
+        m_disabledAssertIds.insert(id, 1);
+}
+
+// @ 0x005d6b50
+hkBool_s005d_61b0 hkDefaultError::isEnabled(int id)
+{
+    return m_disabledAssertIds.getWithDefault(id, 0) == 0;
+}
+
+// @ 0x005d6b80
+void hkDefaultError::showMessage(const char* what, int id, const char* desc, const char* file, int line, hkBool_s005d_61b0 stackTrace)
+{
+    const int MAX_MSG_SIZE = 512;
+    char msgBuf[MAX_MSG_SIZE];
+    char idAsHex[12];
+    if (id == -1 && m_sectionIds.getSize())
+        id = m_sectionIds.back();
+    hkString::sprintf(idAsHex, "0x%x", id);
+    hkOstream_s005d_61b0 msg(msgBuf, sizeof(msgBuf), true);
+    msg << file << '(' << line << "): [" << idAsHex << "] " << what << " : '" << desc << "'\n";
+    (*m_errorFunction)(msgBuf, m_errorObject);
+    if (stackTrace) {
+        hkStackTracer tracer;
+        unsigned long trace[20];
+        int ntrace = tracer.getStackTrace(trace, 20);
+        if (ntrace > 2) {
+            (*m_errorFunction)("Stack trace is:\n", m_errorObject);
+            tracer.dumpStackTrace(trace + 2, ntrace - 2, m_errorFunction, m_errorObject);
+        }
+    }
+}
+
+// @ 0x005d6ce0
+void hkDefaultError::message(Message msg, int id, const char* description, const char* file, int line)
+{
+    if (!isEnabled(id))
+        return;
+    const char* what = "";
+    hkBool_s005d_61b0 stackTrace = false;
+    switch (msg) {
+    case MESSAGE_REPORT:
+        what = "Report";
+        break;
+    case MESSAGE_WARNING:
+        what = "Warning";
+        break;
+    case MESSAGE_ASSERT:
+        what = "Assert";
+        stackTrace = true;
+        break;
+    case MESSAGE_ERROR:
+        what = "Error";
+        stackTrace = true;
+        break;
+    }
+    showMessage(what, id, description, file, line, stackTrace);
+    if (msg == MESSAGE_ASSERT || msg == MESSAGE_ERROR)
+        __debugbreak();
+}
+
+// @ 0x005d6d90
+void hkDefaultError::sectionBegin(int id, const char* sectionName)
+{
+    m_sectionIds.pushBack(id);
+}
 
 // @ 0x005d6dc0
 void cSPHavokError::message(Message msg, int id, const char* description, const char* file, int line)
@@ -993,6 +1163,25 @@ void cSPHavokError::message(Message msg, int id, const char* description, const 
     isEnabled(id);
 }
 
+// @ 0x005d6de0
+void InitHavokBaseSystem()
+{
+    gHavokStackArea = gHavokMemoryPool->Alloc(1500000, 16, 0, 0, 0, 0, 0, 0);
+    hkSystemMalloc = HavokMalloc;
+    hkSystemFree = HavokFree;
+    hkPoolMemory* memoryManager = new ("SP_Havok", 0, 0, 0, 0) hkPoolMemory();
+    hkThreadMemoryImpl* threadMemory = new ("SP_Havok", 0, 0, 0, 0) hkThreadMemoryImpl(memoryManager, 16);
+    hkBaseSystem::init(memoryManager, threadMemory, HavokErrorReport, 0);
+    threadMemory->setStackArea(gHavokStackArea, 1500000);
+    threadMemory->removeReference();
+    memoryManager->removeReference();
+    cSPHavokError* pError = new cSPHavokError(HavokErrorReport);
+    pError->mbEnabled = false;
+    hkError::replaceInstance(pError);
+    hkError::getInstance().setEnabled(0x6E8D163B, false);
+    hkError::getInstance().setEnabled(0x00129864, false);
+    hkError::getInstance().setEnabled(0x34DF5494, false);
+}
 
 // @ 0x005d6f90
 bool SP::cEditorSystem_s005d_61b0::PreInit(int)
@@ -1003,24 +1192,52 @@ bool SP::cEditorSystem_s005d_61b0::PreInit(int)
     return true;
 }
 
+// @ 0x005d6ff0
+namespace eastl {
+template <class K, class T> typename hashtable_s005d_61b0<K, T>::insert_return_type hashtable_s005d_61b0<K, T>::DoInsertValue(const value_type& value, true_type)
+{
+    const K& k = value.first;
+    const uint32_t c = m_h1(k);
+    uint32_t n = c % mnBucketCount;
+    node_type* const pNode = DoFindNode(mpBucketArray[n], k, c);
+
+    if (pNode == 0) {
+        const pair_s005d_61b0<bool, uint32_t> bRehash = mRehashPolicy.GetRehashRequired(mnBucketCount, mnElementCount, 1);
+        node_type* const pNodeNew = DoAllocateNode(value);
+        if (bRehash.first) {
+            n = c % bRehash.second;
+            DoRehash(bRehash.second);
+        }
+        pNodeNew->mpNext = mpBucketArray[n];
+        mpBucketArray[n] = pNodeNew;
+        ++mnElementCount;
+        return insert_return_type(iterator(pNodeNew, mpBucketArray + n), true);
+    }
+    return insert_return_type(iterator(pNode, mpBucketArray + n), false);
+}
+}  // namespace eastl
+
+// @ 0x005d7180
+cXHTMLPathList* EmitPathList(void* p)
+{ return ::new (p) cXHTMLPathList; }
 
 // @ 0x005d7240
 #pragma inline_depth(0)
 cHashedResourceTable* EmitHashedResourceTable(void* p, int c)
 { return ::new (p) cHashedResourceTable(c); }
-
+#pragma inline_depth()
 
 // @ 0x005d7270
 #pragma inline_depth(0)
 PathString* EmitPathString(void* p, const eastl::basic_string_s005d_61b0<wchar_t>& s)
 { return ::new (p) PathString(s); }
-
+#pragma inline_depth()
 
 // @ 0x005d72b0
 #pragma inline_depth(0)
 cSPUIXHTMLFileResourceHandler* EmitFileResourceHandler(void* p, const eastl::basic_string_s005d_61b0<wchar_t>& s)
 { return ::new (p) cSPUIXHTMLFileResourceHandler(s); }
-
+#pragma inline_depth()
 
 // @ 0x005d7330
 const wchar_t* cSPUIXHTMLFileResourceHandler::GetProtocolName(int index)
@@ -1028,12 +1245,19 @@ const wchar_t* cSPUIXHTMLFileResourceHandler::GetProtocolName(int index)
     return index == 0 ? L"file" : 0;
 }
 
+// @ 0x005d7350
+void DestroyFileResourceHandler(cSPUIXHTMLFileResourceHandler* p)
+{ p->~cSPUIXHTMLFileResourceHandler(); }
 
 // @ 0x005d73d0
 const wchar_t* cSPUIXHTMLUTFResourceHandler::GetProtocolName(int index)
 {
     return index == 0 ? L"utfres" : 0;
 }
+
+// @ 0x005d7450
+cXHTMLLocalizedStrings::~cXHTMLLocalizedStrings()
+{}
 
 // @ 0x00836bd0
 int FUN_00836bd0(int p1, int p2)
