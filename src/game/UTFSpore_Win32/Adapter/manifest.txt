@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Adapter.cpp  ?Release@CustomWinProc2@@QAEHXZ  0097da40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

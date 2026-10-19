@@ -5,7 +5,7 @@
 0097d1a0 ?ImageDrawable_GetWidth@@YAHPAX@Z  # ImageDrawable_GetWidth migrated from s0097cea0 (verbatim, slice spelling)
 0097d270 ?DrawTiling@@YAXPAUImageDrawable@Cr@@PAUTarget2D@2@PBM2@Z  # DrawTiling migrated from s0097cea0 (verbatim, slice spelling)
 0097d950 ?DestroyScalar@ImageDrawable@@QAEPAU1@E@Z  # ImageDrawable::DestroyScalar migrated from s0097cea0 (verbatim, slice spelling)
-0097da40 EA::UTFWin::CustomWinProc::Release  # pdb_names vtable-slot
+0097da40 ?Release@CustomWinProc2@@QAEHXZ  # CustomWinProc2::Release migrated from s0097cea0 (verbatim, slice spelling)
 0097da60 ?AsInterface@ImageCursorProvider@@QAEPAXI@Z  # ImageCursorProvider::AsInterface migrated from s0097cea0 (verbatim, slice spelling)
 0097dad0 ?CursorWindow_ctor@@YAXPAX@Z  # CursorWindow_ctor migrated from s0097cea0 (verbatim, slice spelling)
 0097db30 EA::UTFWinControls::ImageCursorProvider::CursorWindow::OnRebuild  # pdb_names gap-align
