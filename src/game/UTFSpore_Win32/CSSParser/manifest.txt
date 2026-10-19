@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f3530@@YAPAPAGPAD0PAX@Z  008f3530  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f3580@@YAPAPAGPAD0PAX@Z  008f3580  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
+../src/game/UTFSpore_Win32/CSSParser.cpp  ?Fn8f39e0@CharStream@@QAEDH@Z  008f39e0  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
