@@ -7,3 +7,4 @@ slices/s0091f520/s0091f520.cpp  ?CallRefCtor@@YGHPAUMgr@@@Z                     
 slices/s0091f520/s0091f520.cpp  ?Create@Mgr@@QAEHHHPAU1@@Z                      009200d0  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0091f520/s0091f520.cpp  ?Factory24@Mgr@@QAEHHHHH@Z                      00920110  /O2 /MD /Gy /EHsc /TP /GS-
 slices/s0091f520/s0091f520.cpp  ?Factory1c@Mgr@@QAEHHHHH@Z                      00920240  /O2 /MD /Gy /EHsc /TP /GS-
+slices/s0091f520/s0091f520.cpp  ?WriteCallStack@ReportWriter@@QAE_NPAH@Z  0091fca0  /O2 /MD /Gy /EHsc /TP /GS-

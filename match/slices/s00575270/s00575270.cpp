@@ -106,7 +106,7 @@ class cAppModeEditorBase {
 public:
     char pad[0x458];
     // --- observed offsets ---
-    void  SetEconomyValue(int, int);              // 0x575270 (renamed)
+    void  SetEconomyValue();                      // 0x575270 (renamed)
     void  ResetEconomy();                         // 0x5754c0
     void  DoSomePaletteThing();                   // 0x575790
     void  StopSomething();                        // 0x5757b0
@@ -116,7 +116,7 @@ public:
     bool  SomeBool(char);                         // 0x575eb0
     void  SetupCameraUI();                        // 0x575f20
     void  ToggleCameraMode();                     // 0x575f70
-    void  UpdateSpineVertebra(float);             // 0x575520
+    void  UpdateSpineVertebra(uint32_t ms);       // 0x575520
 };
 }
 
@@ -126,6 +126,9 @@ template <typename T> static inline T* Field(void* self, uint32_t off) {
     return *(T**)((char*)self + off);
 }
 template <typename T> static inline T Value(void* self, uint32_t off) {
+    return *(T*)((char*)self + off);
+}
+template <typename T> static inline T& Ref(void* self, uint32_t off) {
     return *(T*)((char*)self + off);
 }
 static inline char& ByteRef(void* self, uint32_t off) {
@@ -143,7 +146,7 @@ void cAppModeEditorBase::DoSomePaletteThing()
 // @ 0x00575e20
 void cAppModeEditorBase::GetSomething1(int arg)
 {
-    if (Value<int>(this, 0x1d0) == Value<int>(this, 0x1d4)) {
+    if (Ref<int>(this, 0x1d0) == Value<int>(this, 0x1d4)) {
         void* p = Field<void>(this, 0x1c0);
         if (p == 0 || Value<char>(p, 0x35) == 0) {
             Field<VObj>(this, 0x8c)->slot0(arg);
@@ -173,7 +176,7 @@ bool cAppModeEditorBase::SomeBool(char param)
             if (!MovieSystem()->IsSomething()) {
                 if (Value<char>(Field<void>(this, 0x7c), 0x3709) == 0) {
                     if (!AppSystem()->IsSomething()) {
-                        if (Value<int>(this, 0x31c) == 2) {
+                        if (Ref<int>(this, 0x31c) == 2) {
                             if (Field<VCheck>(this, 0x7c)->SomeCheck())
                                 return true;
                         } else {
@@ -216,12 +219,180 @@ void cAppModeEditorBase::SetupCameraUI()
 }
 
 // ---------------------------------------------------------------------------
-// Large functions: kept as compiling placeholders (see partial.txt).
+// Economy setup (0x575270 / 0x5754c0)
 // ---------------------------------------------------------------------------
-void cAppModeEditorBase::SetEconomyValue(int, int) {}
-void cAppModeEditorBase::ResetEconomy() {}
+#include <intrin.h>
+#include <xmmintrin.h>
+
+inline int RoundToInt(float f) {                  // cvtss2si, as the original's asm helper
+    int r;
+    __asm {
+        movss xmm0, f
+        cvtss2si eax, xmm0
+        mov r, eax
+    }
+    return r;
+}
+inline int FloorToInt(float f) {
+    int i = RoundToInt(f);
+    int j = i - 1;
+    return (f < (float)i) ? j : i;
+}
+
+extern int g_defaultInt;                          // 0x015d1160
+struct EProperty {                                // EA::Property entry (flags +0x10, type +0x12)
+    char* data; unsigned pad[3]; unsigned short flags; unsigned short type;
+    int* GetIntExt();                             // 0x0041e990
+    float* GetFloatExt();                         // 0x0041ea70
+    void* GetStorage() { if (flags & 0x30) { return data; } else if (type) return this; return 0; }
+    int* GetIntInline() {
+        if (type == 9 || type == 0x10) { return (int*)GetStorage(); }
+        return &g_defaultInt;
+    }
+};
+struct IEPropMap {                                // object at cAppModeEditorBase+0x24
+    PV8 PV
+    virtual bool Find(uint32_t id, EProperty** out);   // +0x24
+    virtual EProperty* Get(uint32_t id);               // +0x28
+};
+struct IEconTarget {                              // object at cAppModeEditorBase+0x434
+    PV8 PV
+    virtual void Set(int idx, int value);         // +0x24
+};
+struct cDirectPropList { bool GetDescription(uint32_t id); };   // 0x006a25a0
+extern cDirectPropList* g_sAppProperties;         // 0x015fd918
+
+// @ 0x00575270
+void cAppModeEditorBase::SetEconomyValue()
+{
+    EProperty* e;
+    g_sAppProperties->GetDescription(0x677d3ea);
+    if (Field<IEPropMap>(this, 0x24) && Field<IEPropMap>(this, 0x24)->Find(0x9187aee3, &e) && e->type == 9)
+        Ref<int>(this, 0x2dc) = *e->GetIntExt();
+    if (Field<IEPropMap>(this, 0x24) && Field<IEPropMap>(this, 0x24)->Find(0x47c1d1b, &e) && e->type == 9)
+        Ref<int>(this, 0x2e0) = *e->GetIntExt();
+    if (Field<IEPropMap>(this, 0x24) && Field<IEPropMap>(this, 0x24)->Find(0x4dbc51f, &e) && e->type == 9)
+        Ref<int>(this, 0x2e4) = *e->GetIntExt();
+    Ref<float>(this, 0x2ec) = 0.0f;
+    if (Field<IEPropMap>(this, 0x24) && Field<IEPropMap>(this, 0x24)->Find(0x66f72ae, &e) && e->type == 0xd)
+        Ref<float>(this, 0x2ec) = *e->GetFloatExt();
+    Ref<int>(this, 0x2e8) = -1;
+    if (Field<IEPropMap>(this, 0x24) && Field<IEPropMap>(this, 0x24)->Find(0x684a675, &e) && e->type == 9)
+        Ref<int>(this, 0x2e8) = *e->GetIntExt();
+    if (Ref<int>(this, 0x2dc) == 0)
+        Ref<int>(this, 0x2dc) = -1;
+    if (Ref<int>(this, 0x2e0) == 0)
+        Ref<int>(this, 0x2e0) = -1;
+    if (Ref<int>(this, 0x2e4) == 0)
+        Ref<int>(this, 0x2e4) = -1;
+    int v = Value<int>(this, 0x2dc);
+    if (v != -1) Field<IEconTarget>(this, 0x434)->Set(1, v);
+    else Field<IEconTarget>(this, 0x434)->Set(1, 0x7fffffff);
+    v = Value<int>(this, 0x2e0);
+    if (v != -1) Field<IEconTarget>(this, 0x434)->Set(2, v);
+    else Field<IEconTarget>(this, 0x434)->Set(2, 0x7fffffff);
+    v = Value<int>(this, 0x2e4);
+    if (v != -1) Field<IEconTarget>(this, 0x434)->Set(3, v);
+    else Field<IEconTarget>(this, 0x434)->Set(3, 0x7fffffff);
+    float f = Value<float>(this, 0x2ec);
+    if (f > 0.0f)
+        Field<IEconTarget>(this, 0x434)->Set(4, FloorToInt(f));
+    else
+        Field<IEconTarget>(this, 0x434)->Set(4, 0x7fffffff);
+    v = Value<int>(this, 0x2e8);
+    if (v != -1) Field<IEconTarget>(this, 0x434)->Set(5, v);
+    else Field<IEconTarget>(this, 0x434)->Set(5, 0x7fffffff);
+}
+
+// @ 0x005754c0
+void cAppModeEditorBase::ResetEconomy()
+{
+    IEconTarget* target = Field<IEconTarget>(this, 0x434);
+    EProperty* p = Field<IEPropMap>(this, 0x24)->Get(0xb1b76a19);
+    target->Set(0, *p->GetIntInline());
+    SetEconomyValue();
+}
+
+// ---------------------------------------------------------------------------
+// Spine vertebra update (0x575520)
+// ---------------------------------------------------------------------------
+struct ISkinMgr {                                 // object at cAppModeEditorBase+0x148
+    PV2 PV
+    virtual int Query(uint32_t id);               // +0x0c
+};
+struct EV4 { float x, y, z, w; };
+struct EV3 { float x, y, z; };
+struct cEditorTuning7 {                           // EditorTuning() (0x401070)
+    char pad0[0x20];
+    EV4 v20; EV4 v30; EV4 v40; EV4 v50;
+    char pad60[0xb4 - 0x60];
+    float mTimeScale;                             // +0xb4
+};
+cEditorTuning7* __cdecl GetEditorTuning7();       // 0x401070
+struct cVertebraModel { char pad0[0x58]; float mValue; };
+struct cSPEditorBlock {
+    char pad0[0x10];
+    cVertebraModel* mModel;                       // +0x10
+    void SetValue(float v);                       // 0x440c00
+    void SetVec(const EV3* v);                    // 0x440bc0
+};
+cSPEditorBlock* __cdecl NextBlock(cSPEditorBlock* b);   // 0x4a5970
+struct cSpineHelper {
+    char pad0[0xe8];
+    cSPEditorBlock* mFirstBlock;                  // +0xe8
+    void SetEnabled(int on);                      // 0x5ce210
+};
+
+// @ 0x00575520
+void cAppModeEditorBase::UpdateSpineVertebra(uint32_t ms)
+{
+    ISkinMgr* sm = Field<ISkinMgr>(this, 0x148);
+    bool a = sm && sm->Query(0x5fde642e) != 0;
+    sm = Field<ISkinMgr>(this, 0x148);
+    bool b = sm && sm->Query(0xbb46d99a) != 0;
+    int* it = Field<int>(this, 0x320);
+    int* end = Field<int>(this, 0x324);
+    while (it != end && *it != (int)0xbb46d99a)
+        ++it;
+    bool found = it != end;
+    cEditorTuning7* t = GetEditorTuning7();
+    EV4* pv = &t->v50;
+    if (ByteRef(this, 0xe9) || a || b)
+        pv = &t->v30;
+    else if (ByteRef(this, 0xe8))
+        pv = &t->v20;
+    float tw = pv->w;
+    EV3 base;
+    base.x = pv->x; base.y = pv->y; base.z = pv->z;
+    float scale;
+    if (t->mTimeScale == 0.0f)
+        scale = 1.0f;
+    else
+        scale = (float)ms * 0.001f / t->mTimeScale;
+    for (cSPEditorBlock* blk = Field<cSpineHelper>(this, 0x14c)->mFirstBlock; blk; blk = NextBlock(blk)) {
+        float target = tw;
+        EV3 v = base;
+        if (blk == Field<cSPEditorBlock>(this, 0xcc)) {
+            v.x = t->v40.x; v.y = t->v40.y; v.z = t->v40.z;
+            target = t->v40.w;
+        }
+        float cur = blk->mModel->mValue;
+        if (scale <= fabsf(target - cur)) {
+            if (target > cur)
+                target = cur + scale;
+            else
+                target = cur - scale;
+        }
+        blk->SetValue(target);
+        blk->SetVec(&v);
+    }
+    if (found && (b || ByteRef(this, 0xe9)))
+        Field<cSpineHelper>(this, 0x14c)->SetEnabled(1);
+    else
+        Field<cSpineHelper>(this, 0x14c)->SetEnabled(0);
+}
+
 void cAppModeEditorBase::ToggleCameraMode() {}
-void cAppModeEditorBase::UpdateSpineVertebra(float) {}
 
 // @ 0x00575810
 // Editor condition test: `id` is the FNV hash of a condition name.
@@ -261,11 +432,11 @@ bool cAppModeEditorBase::TestCondition(uint32_t id)
         return false;
     }
     if (id == 0xeef0ea70)
-        return Value<int>(this, 0x314) == 0;
+        return Ref<int>(this, 0x314) == 0;
     if (id == 0x724eb5a)
-        return Value<int>(this, 0x314) == 1;
+        return Ref<int>(this, 0x314) == 1;
     if (id == 0xe3e13884)
-        return Value<int>(this, 0x314) == 2;
+        return Ref<int>(this, 0x314) == 2;
     if (id == 0xb801a2e9) {
         int state = Value<int>(this, 0x314);
         return state == 0 || state == 1;

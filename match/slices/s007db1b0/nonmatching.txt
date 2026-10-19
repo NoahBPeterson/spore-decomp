@@ -3,3 +3,6 @@
 007dbe50  68   cSmoothCameraController::StopMotion; x87/SSE field-copy schedule differs
 007dbea0  92   cSmoothCameraController::SaveCameraPosition; saved-camera field mapping/schedule differs
 007dc140  98   cSmoothCameraController::SetCurrentDiscreteOrientation; loop shape differs
+007db650  458  cPackManager::Init complete (flags /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE2 /fp:fast); stack-slot order (keys/filter/key temp) and local spill layout differ [equiv: WEAK 22.9% coverage]
+007dbf20  5  RestoreCameraPosition complete (retail offsets); only vtable fn-pointer register swap (eax/edx) [equiv: PASS]
+007dbfe0  279  SetCurrentZoomLevel complete (retail offsets); size() CSE and lea residue differ [equiv: UNSUPPORTED fake-arity]

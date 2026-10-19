@@ -1,1 +1,3 @@
 00575e50  3  complete; only a vtable-call register swap (original edx=vtable/eax=fn, ours eax/edx)
+00575270  110  SetEconomyValue complete; float floor helper (cvtss2si/cmov) and branch layout of the final Set(4,..) differ [equiv: PASS 71.9% coverage]
+00575520  512  UpdateSpineVertebra complete; register allocation (edi/ebp/ebx), bool spill slots and fmul/fdiv order differ [equiv: UNSUPPORTED fault(read)]

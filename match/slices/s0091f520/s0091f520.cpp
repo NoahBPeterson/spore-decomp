@@ -1,6 +1,7 @@
 // Slice s0091f520 - EA::Debug::ReportWriter diagnostic writers + related helpers.
 // Optimized (/O2, no /GS cookies). Some functions carry SEH; those are approximated.
 #include "types.h"
+#include <string.h>
 
 // ---------------------------------------------------------------- CRT / Win32 (IAT)
 extern "C" {
@@ -42,8 +43,11 @@ struct MODULEINFO {
 struct MEMORY_BASIC_INFORMATION {
     void*  BaseAddress;      // +0
     void*  AllocationBase;   // +4
-    DWORD  AllocationProtect;
-    DWORD  RegionSize;       // +0xc  (page size read at local_b4+4 later; see wrapper)
+    DWORD  AllocationProtect;// +8
+    DWORD  RegionSize;       // +0xc
+    DWORD  State;            // +0x10
+    DWORD  Protect;          // +0x14
+    DWORD  Type;             // +0x18
 };
 
 // ---------------------------------------------------------------- interfaces
@@ -68,6 +72,8 @@ struct ReportWriter {
     bool WriteStackMemoryView(unsigned lo, int len);                                 // 0x0091fe60
     bool WriteRegisterMemoryView(int* ctx);                                          // 0x0091fbd0
     bool WriteRegisterValues(int* ctx);                                              // 0x0091fa10
+    bool WriteModuleList();                                                          // 0x0091f7c0
+    bool WriteCallStack(int* ctx);                                                   // 0x0091fca0
 };
 
 // generic object manager used by the small virtual forwarders
@@ -250,161 +256,206 @@ bool ReportWriter::WriteStackMemoryView(unsigned lo, int len)
 }
 
 // ---------------------------------------------------------------- module list
-struct SYSTEM_INFO2 {
+struct SYSTEM_INFO2 {                    // SYSTEM_INFO (0x24 bytes)
     uint32_t dwOemId, dwPageSize;
+    uint32_t pad[7];
 };
 
-// @ 0x0091f520  (hex/ASCII memory dump; SEH-free reconstruction)
+static inline unsigned CStrLen(const char* s)
+{
+    const char* e = s + 1;
+    char c;
+    do { c = *s; ++s; } while (c != 0);
+    return (unsigned)(s - e);
+}
+
+// @ 0x0091f520
 bool ReportWriter::WriteMemoryView(uint8_t* base, int len, uint8_t* mark, const char* label)
 {
-    if (g_pageSize == 0) {
-        SYSTEM_INFO2 si;
-        GetSystemInfo(&si);
-        g_pageSize = si.dwPageSize;
-    }
-    int labelLen = 0;
-    if (label) {
-        const char* p = label;
-        do { } while (*p++);
-        labelLen = (int)(p - label - 1);
-    }
-    uint8_t* line = (uint8_t*)((unsigned)base & 0xfffffff0);
-    int lineNo = 0;
-    uint32_t pageLeft = 0;
-    bool readable = true;
-    char hex[64];
-    char ascii[20];
-    while (line < base + len) {
-        sprintf(hex, "%08x |", (unsigned)line);
-        uint8_t* q = line;
-        while (q < line + 0x10) {
-            if (pageLeft == 0) {
-                MEMORY_BASIC_INFORMATION mbi;
-                if (VirtualQuery(q, &mbi, 0x1c) == 0)
-                    readable = false;
-                else if (mbi.AllocationProtect == 0x1000 && (mbi.RegionSize & 0x66) != 0)
-                    readable = true;
-                else
-                    readable = false;
-                pageLeft = g_pageSize - ((unsigned)q % g_pageSize);
-            }
-            int off = (int)(q - line);
-            char arrow;
-            if (q == mark) arrow = '<';
-            else arrow = (q != mark + 1) ? ' ' : '>';
-            if ((unsigned)q < (unsigned)base || (unsigned)q >= (unsigned)base + len) {
-                sprintf(hex + off * 3, "    ");
-                ascii[off] = ' ';
-            } else if (!readable) {
-                sprintf(hex + off * 3, "%c??", arrow);
-                ascii[off] = '?';
-            } else {
-                sprintf(hex + off * 3, "%c%02x", arrow, *q);
-                ascii[off] = isprint(*q) ? (char)*q : '.';
-            }
-            --pageLeft;
-            ++q;
+    __try {
+        if (g_pageSize == 0) {
+            SYSTEM_INFO2 si;
+            GetSystemInfo(&si);
+            g_pageSize = si.dwPageSize;
         }
-        ascii[0x10] = 0;
+        int lineNo = 0;
+        unsigned labelLen;
         if (label) {
-            if (lineNo == 0) v24(label, 0);
-            else for (int i = 0; i < labelLen; i++) v34("\r\n", 1);
+            labelLen = CStrLen(label);
+        } else {
+            labelLen = 0;
         }
-        v20(hex, 0);
-        line += 0x10;
-        ++lineNo;
+        uint8_t* line = (uint8_t*)((unsigned)base & 0xfffffff0);
+        bool readable = true;
+        int pageLeft = 0;
+        while (line < base + len) {
+            // "AAAAAAAA |" + 16 x ("<xx") + " | " + 16 ASCII + " |\r\n"
+            char buf[0x52];
+            sprintf(buf, "%08x |", (unsigned)line);
+            for (uint8_t* q = line; q < line + 0x10; ) {
+                if (pageLeft == 0) {
+                    MEMORY_BASIC_INFORMATION mbi;
+                    if (VirtualQuery(q, &mbi, 0x1c) == 0)
+                        readable = false;
+                    else if (mbi.State == 0x1000 && (mbi.Protect & 0x66) != 0)
+                        readable = true;
+                    else
+                        readable = false;
+                    pageLeft = g_pageSize - ((unsigned)q % g_pageSize);
+                }
+                if (q < base || q >= base + len) {
+                    int off = (int)(q - line);
+                    sprintf(buf + 10 + off * 3, "    ");
+                    buf[61 + off] = ' ';
+                    --pageLeft;
+                    ++q;
+                } else {
+                    char arrow;
+                    if (q == mark)
+                        arrow = '<';
+                    else
+                        arrow = ((q != mark + 1) - 1 & 0x1e) + 0x20;
+                    int off = (int)(q - line);
+                    if (readable) {
+                        sprintf(buf + 10 + off * 3, "%c%02x", (int)arrow, (unsigned)*q);
+                        if (isprint(*q))
+                            buf[61 + off] = *q;
+                        else
+                            buf[61 + off] = '.';
+                    } else {
+                        sprintf(buf + 10 + off * 3, "%c??", (int)arrow);
+                        buf[61 + off] = '?';
+                    }
+                    --pageLeft;
+                    ++q;
+                }
+            }
+            memcpy(buf + 58, " | ", 3);
+            memcpy(buf + 77, " |\r\n", 5);
+            if (label) {
+                if (lineNo == 0) {
+                    v20(label, 0);
+                } else {
+                    for (unsigned i = 0; i < labelLen; i++)
+                        v34(" ", 1);
+                }
+            }
+            v20(buf, 0);
+            line += 0x10;
+            ++lineNo;
+        }
+    } __except (1) {
+        v20("Memory view write failed due to an exception.\r\n", 0);
     }
     return true;
 }
 
-// @ 0x0091f7c0  (psapi module enumeration)
 typedef int (__stdcall *EnumProcessModules_t)(void*, void**, unsigned, unsigned*);
 typedef int (__stdcall *GetModuleFileNameExA_t)(void*, void*, char*, unsigned);
 typedef int (__stdcall *GetModuleBaseNameA_t)(void*, void*, char*, unsigned);
 typedef int (__stdcall *GetModuleInformation_t)(void*, void*, void*, unsigned);
 
-bool ReportWriter_WriteModuleList(ReportWriter* self)
+static inline void AppendQuote(char* s)
+{
+    // terminate one past the end, then put the closing quote over the old terminator
+    unsigned n1 = CStrLen(s);
+    s[n1 + 1] = 0;
+    unsigned n2 = CStrLen(s);
+    s[n2] = '"';
+}
+
+// @ 0x0091f7c0
+bool ReportWriter::WriteModuleList()
 {
     void* h = LoadLibraryA("psapi.dll");
     if (!h) {
-        self->v20("Failed to load psapi.dll.\r\n", 0);
+        v20("PSAPI is not available. Cannot dump module list.\r\n", 0);
         return false;
     }
     EnumProcessModules_t      epm = (EnumProcessModules_t)GetProcAddress(h, "EnumProcessModules");
     GetModuleFileNameExA_t    gmf = (GetModuleFileNameExA_t)GetProcAddress(h, "GetModuleFileNameExA");
     GetModuleBaseNameA_t      gmb = (GetModuleBaseNameA_t)GetProcAddress(h, "GetModuleBaseNameA");
     GetModuleInformation_t    gmi = (GetModuleInformation_t)GetProcAddress(h, "GetModuleInformation");
-    (void)gmf; (void)gmb; (void)gmi;
     void* proc = GetCurrentProcess();
+    MODULEINFO mi;
+    unsigned needed;
+    char q1[0x105];   // 0x108 in size; declared smaller so it lands below q2 as in the original
+    char q2[0x108];
+    char out[0x28c];
     void* mods[256];
-    unsigned needed = 0;
-    if (!epm(proc, mods, sizeof(mods), &needed)) {
-        self->v20("Failed to enumerate modules.\r\n", 0);
+    if (epm(proc, mods, sizeof(mods), &needed)) {
+        unsigned count = needed >> 2;
+        if (count > 0x100) {
+            v20("Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n", 0);
+            count = 0x100;
+        }
+        for (unsigned i = 0; i < count; ++i) {
+            if (!gmi(proc, mods[i], &mi, sizeof(mi))) {
+                mi.EntryPoint = 0;
+                mi.lpBaseOfDll = 0;
+                mi.SizeOfImage = 0;
+            }
+            q1[0] = '"';
+            if (!gmb(proc, mods[i], q1 + 1, 0x104))
+                strcpy(q1 + 1, "<unknown>");
+            AppendQuote(q1);
+            q2[0] = '"';
+            if (!gmf(proc, mods[i], q2 + 1, 0x104))
+                strcpy(q2 + 1, "<unknown>");
+            AppendQuote(q2);
+            sprintf(out, "base 0x%08x size 0x%08x entry 0x%08x %-48s %s",
+                    (unsigned)mi.lpBaseOfDll, mi.SizeOfImage, (unsigned)mi.EntryPoint, q1, q2);
+            v20(out, 1);
+        }
         return true;
     }
-    unsigned count = needed >> 2;
-    if (count > 0x100) {
-        self->v20("Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n", 0);
-        count = 0x100;
-    }
-    for (unsigned i = 0; i < count; ++i) {
-        char baseName[0x104];
-        char path[0x104];
-        char out[0x200];
-        MODULEINFO mi;
-        if (!gmi(proc, mods[i], &mi, sizeof(mi))) {
-            mi.lpBaseOfDll = 0; mi.SizeOfImage = 0; mi.EntryPoint = 0;
-        }
-        if (!gmb(proc, mods[i], baseName, 0x104)) {
-            baseName[0] = 0;
-        }
-        if (!gmf(proc, mods[i], path, 0x104)) {
-            path[0] = 0;
-        }
-        sprintf(out, "base 0x%08x size 0x%08x entry 0x%08x %-48s %s",
-                (unsigned)mi.lpBaseOfDll, mi.SizeOfImage, (unsigned)mi.EntryPoint, baseName, path);
-        self->v20(out, 1);
-    }
+    v20("Failed to enumerate modules.\r\n", 0);
     return true;
 }
 
-// @ 0x0091fca0  (callstack dump)
+struct AddressRepCache {                              // EA::Callstack::AddressRepCache (0x44 bytes)
+    uint32_t d[0x11];
+    void Init();                                      // 0x0091b2f0
+    void Shutdown();                                  // 0x0091b090
+    unsigned GetRep(int kind, uint32_t addr, void* a, void* b, int flag);   // 0x0091b0f0 (ret 0x14)
+};
 extern "C" unsigned __cdecl CS_GetCallstack(uint32_t*, int, void*); // 0x0091b3d0
-extern "C" void*    __cdecl CS_a1c0();                              // 0x0091a1c0
-extern "C" void     __cdecl CS_b2f0(void*);                          // 0x0091b2f0
-extern "C" unsigned __cdecl CS_b0f0(int, uint32_t, void*, void*, int); // 0x0091b0f0
-extern "C" void     __cdecl CS_b580(uint32_t, char*, int);           // 0x0091b580
-extern "C" void     __cdecl CS_dtor(void*);                          // 0x0091b090
+extern "C" AddressRepCache* __cdecl CS_a1c0();                      // 0x0091a1c0
+extern "C" void __cdecl CS_b580(uint32_t, char*, int);              // 0x0091b580
 
-bool ReportWriter_WriteCallStack(ReportWriter* self, int* ctx)
+// @ 0x0091fca0
+bool ReportWriter::WriteCallStack(int* ctx)
 {
     uint32_t frame[3];
-    frame[0] = *(uint32_t*)((char*)ctx + 0xb8);
-    frame[1] = *(uint32_t*)((char*)ctx + 0xb4);
-    frame[2] = *(uint32_t*)((char*)ctx + 0xc4);
+    uint32_t a[4];
+    uint32_t b[4];
+    AddressRepCache repc;
     uint32_t addrs[0x80];
+    char line[0x200];
+    frame[0] = *(uint32_t*)((char*)ctx + 0xb8);
+    frame[1] = *(uint32_t*)((char*)ctx + 0xc4);
+    frame[2] = *(uint32_t*)((char*)ctx + 0xb4);
     unsigned n = CS_GetCallstack(addrs, 0x80, frame);
-    if (n == 0) {
-        self->v20("Callstack not available\r\n", 0);
+    if (n != 0) {
+        AddressRepCache* cache = CS_a1c0();
+        repc.Init();
+        if (cache == 0)
+            cache = &repc;
+        for (unsigned i = 0; i < n; i++) {
+            unsigned flags = cache->GetRep(0xf, addrs[i], a, b, 1);
+            v18("Callstack entry");
+            CS_b580(addrs[i], line, 0x200);
+            v20(line, 1);
+            if (flags & 8) v20((const char*)a[3], 1);
+            if (flags & 1) v24("%s: %d\r\n", a[0], b[0]);
+            if (flags & 2) v24("%s + %d\r\n", a[1], b[1]);
+            if (flags & 4) v20((const char*)a[2], 1);
+            v1c("Callstack entry");
+        }
+        repc.Shutdown();
         return true;
     }
-    void* cache = CS_a1c0();
-    char repc[0x400];
-    CS_b2f0(repc);
-    if (cache == 0) cache = repc;
-    for (unsigned i = 0; i < n; ++i) {
-        char line[0x200];
-        uint32_t flags = CS_b0f0(0xf, addrs[i], &frame[0], &frame[1], 1);
-        self->v18("Callstack entry");
-        CS_b580(addrs[i], line, 0x200);
-        self->v20(line, 1);
-        if (flags & 8) self->v20((const char*)frame[0], 1);
-        if (flags & 1) self->v24("%s: %d\r\n", frame[0], frame[1]);
-        if (flags & 2) self->v24("%s + %d\r\n", frame[2], frame[1]);
-        if (flags & 4) self->v20((const char*)frame[1], 1);
-        self->v1c("Callstack entry");
-    }
-    CS_dtor(repc);
+    v20("Callstack not available\r\n", 0);
     return true;
 }
 

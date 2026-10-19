@@ -5,3 +5,5 @@
 00920410  111  EASTL hashtable full destructor; inlined DoFreeNodes scheduling differs
 00920490  131  EASTL hashtable insert; template instantiation not faithfully reconstructed; equiv PASS (659 valid, 100% cov) after making it HTable::Insert (thiscall) with HTable::EraseKey/HTPre::PreRehash callees as members
 00920560  111  EASTL string-keyed hashtable find; node layout/scheduling differs
+0091f520  347  WriteMemoryView complete with __try/__except(1); register allocation and SEH locals (strlen temp spilled at [ebp]) differ [equiv: UNSUPPORTED import:GetSystemInfo]
+0091f7c0  246  WriteModuleList complete (member, thiscall); inlined strlen/quote-append folds to pointer form instead of index form [equiv: UNSUPPORTED import:LoadLibraryA]
