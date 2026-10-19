@@ -1,0 +1,7 @@
+# source  symbol  va  flags
+../src/game/SPEditors/TraitClassifier.cpp  ?InitEmpty@WStrHolder@@QAEPAU1@XZ  0056afc0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?CopyInit@WStrSrc@@QAEPAU1@PAU1@@Z  0056b020  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?ExtractTraits@cEditorPartCount@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056b680  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?DescribeTraits@cEditorPartCount@@QAE_NPAUCreature@@PAPAMPAUcFeatureVector@@@Z  0056b7d0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?GetClassifier@cNullClassifierSource@Traits@SP@@QAEPAXXZ  0056f2b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/TraitClassifier.cpp  ?LowerBoundPair@@YAPAUPair8@@PAU1@0PBU1@@Z  005701b0  /Od /Ob1 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

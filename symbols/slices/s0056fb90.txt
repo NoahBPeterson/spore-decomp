@@ -1,3 +1,4 @@
 00570140 eastl stream element copy  # copies 8-byte key + float + wstring assign
+005701b0 ?LowerBoundPair@@YAPAUPair8@@PAU1@0PBU1@@Z  # LowerBoundPair migrated from s0056fb90 (verbatim, slice spelling)
 005702c0 vector<...>::DoDestroyValues range  # destroys+deallocates stride 0x1c
 00570870 Big::Init  # two sub-inits + zero 3-float vector + flag/value
