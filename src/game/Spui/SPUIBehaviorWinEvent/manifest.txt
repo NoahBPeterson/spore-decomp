@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIBehaviorWinEvent.cpp  ?IsThisType@WinEvent@@QAE_NXZ  007fe7a0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

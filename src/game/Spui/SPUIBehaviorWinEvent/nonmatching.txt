@@ -1,0 +1,7 @@
+# va diff reason
+007fe7d0 140 complete; BoolStateEvent predicate switch; vcall/local schedule differs; equiv: FAIL
+007fea90 6 complete; WinEvent deleting-dtor; vtable stores differ; equiv: FAIL (vtable stores not reproduced)
+007fead0 45 complete; IsWinState; vcall/local schedule differs; equiv: WEAK (40% coverage)
+007feb40 32 complete; SerRead secondary-base flavour; vcall base offset differs
+007fec00 27 complete; SetWinMessageType; message-manager vcall schedule differs
+007fec90 27 complete; SetMessageWinId; message-manager vcall schedule differs

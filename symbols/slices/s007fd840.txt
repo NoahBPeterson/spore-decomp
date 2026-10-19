@@ -1,7 +1,11 @@
-# va name  # evidence
 007fdab0 UTFWin::cSPUIBehaviorActionWinInterpolator::cSPUIBehaviorActionWinInterpolator  # vtable ctor 0x1415f18
 007fe070 UTFWin::cSPUIBehaviorActionWinState::cSPUIBehaviorActionWinState  # vtable ctor 0x1415fe8
-007fe8c0 cSPUIBehaviorWinBoolStateEvent::Activate  # PDB name
-007feb70 cSPUIBehaviorWinEventBase::SerUpdate  # PDB candidate
-007fec00 cSPUIBehaviorWinEventBase::SetWinMessageType  # PDB name
-007fec90 cSPUIBehaviorWinEventBase::SetMessageWinId  # PDB name
+007fe7a0 ?IsThisType@WinEvent@@QAE_NXZ  # WinEvent::IsThisType migrated from s007fd840 (verbatim, slice spelling)
+007fe7d0 ?Pred@BoolEvent@@QAE_NDD@Z  # BoolEvent::Pred migrated from s007fd840 (verbatim, slice spelling)
+007fe8c0 ?BoolActivate@@YAXPAXH@Z  # BoolActivate migrated from s007fd840 (verbatim, slice spelling)
+007fea90 ?DeletingDtor@WinEvent@@QAEPAXE@Z  # WinEvent::DeletingDtor migrated from s007fd840 (verbatim, slice spelling)
+007fead0 ?IsWinState@WinEvent@@QAE_NI@Z  # WinEvent::IsWinState migrated from s007fd840 (verbatim, slice spelling)
+007feb40 ?SerReadB@@YA_NPAUSerItem@@PAX@Z  # SerReadB migrated from s007fd840 (verbatim, slice spelling)
+007feb70 ?SerUpdateWin@@YAXPAX@Z  # SerUpdateWin migrated from s007fd840 (verbatim, slice spelling)
+007fec00 ?SetWinMessageType@WinEvent@@QAEXI@Z  # WinEvent::SetWinMessageType migrated from s007fd840 (verbatim, slice spelling)
+007fec90 ?SetMessageWinId@WinEvent@@QAEXI@Z  # WinEvent::SetMessageWinId migrated from s007fd840 (verbatim, slice spelling)

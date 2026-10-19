@@ -1,0 +1,7 @@
+# va diff reason
+007fe8c0 74 PARTIAL: BoolStateEvent::Activate; predicate/allocator paths approximated
+007feb70 120 PARTIAL: cSPUIBehaviorWinEventBase::SerUpdate; messaging paths approximated
+007fed20 900 PARTIAL: create_behavior_message_from_win_message; message-kind switch and SerItem binding approximated
+007ff0d0 440 PARTIAL: cSPUIBehaviorWinEventBase::HandleMessage; refcount/message dispatch paths approximated
+007ff290 359 PARTIAL: BoolStateEvent::HandleMessage; predicate/allocator paths approximated
+007ff400 81 PARTIAL: WinEventBase ctor; multi-base vtable stores approximated
