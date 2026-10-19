@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUILargeAssetView.cpp  ?FUN_0066bd40@@YIPAXPAX@Z  0066bd40  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUILargeAssetView.cpp  ?FUN_0066bd80@ColourCfg@@QAEXPAUcSPUILayout_s0066_afd0@@@Z  0066bd80  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUILargeAssetView.cpp  ?FUN_0066bf20@@YIXPAX@Z  0066bf20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/SPEditors/SPUILargeAssetView.cpp  ?FUN_0066cb70@Cb70@@QAEPAU1@I@Z  0066cb70  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

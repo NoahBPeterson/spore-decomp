@@ -1,1 +1,2 @@
+0066daf0 ?LoadAssetViewLarge@cSPUILargeAssetView_s0066_daf0@SP@@QAEXXZ  # cSPUILargeAssetView_s0066_daf0::LoadAssetViewLarge migrated from s0066daf0 (verbatim, slice spelling)
 0140075c ??_7cCardRollover@SP@@6B@  # SP::cCardRollover vftable (stored by the inlined ctor in LoadAssetViewLarge)

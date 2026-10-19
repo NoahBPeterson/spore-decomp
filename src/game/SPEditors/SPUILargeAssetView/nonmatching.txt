@@ -1,0 +1,4 @@
+# va  diff-bytes  reason (flags /O2 /MD /Gy /TP /arch:SSE /GS-)
+0066c370 211 shutdown: all owned-object releases, RemoveHandler and the final vtable 0x78(0x1002) call are present; cl's register/schedule differs
+0066d430 1209 KeyPanel::HandleMessage (cSPUIMinimapWin::DoMessage candidate): complete (mouse-wheel/key-up/key-down '1'-'5' axis cycling/mouse enter+leave/component-activated); /O2 /MD /Gy /TP; frame 0x14 matches, size 1628/1720, 57/57 calls; switch-arm layout, set/reset sharing and register choice differ
+0066daf0 3847 complete LoadAssetViewLarge; same call/vslot/constant sequence, size 0.997x; differs in register allocation (orig keeps 0 in ebx from the first FindWindowByID) and two cross-jumped SetFlag/Release tails; difftest WEAK (23% coverage, no mismatch; cCardRollover vftable mapped to 0x0140075c in symbols/slices/s0066daf0.txt, ResourceManager call fixed to EA::ResourceMan::GetManager 0x0067dcd0)
