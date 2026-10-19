@@ -1,6 +1,6 @@
 009c26a0 ?Release@creature_static_data@nSPCreatureAnim@@QBEJXZ  # nSPCreatureAnim::creature_static_data::Release (callee of s009c4a30, named from the dev publics; slice address comment)
 009c26f0 ?InitWiggles@creature_static_data@nSPCreatureAnim@@QAEXXZ  # nSPCreatureAnim::creature_static_data::InitWiggles (callee of s009c4a30, named from the dev publics; slice address comment)
-009c4a30 nSPCreatureAnim::FinalizeCreature  # ComputeHierarchy + FUN_009b6b10 AABB + rebuild (FUN_009c1d30/b54a0/b5580/b5930/bfa20, InitWiggles, FUN_009b5360, FUN_009b5ce0); returns body-count<0x100
+009c4a30 ?FinalizeCreature@nSPCreatureAnim@@YAIPAUcreature_static_data_s009c_4a30@1@@Z  # FinalizeCreature migrated from s009c4a30 (verbatim, slice spelling)
 009c4b90 ??1dynamics_walking_s009c_4a30@nSPCreatureAnim@@QAE@XZ  # dynamics_walking_s009c_4a30::~dynamics_walking migrated from s009c4a30 (verbatim, slice spelling)
 009c4bf0 nSPCreatureAnim::creature_instance_data::~creature_instance_data  # hashtable DoFreeNodes(0x17a0), free node block(0x17a4), delete[] mWiggles(0x1694)/Bodies(0x2e4)/[0x24c], ~dynamics_walking(0x15b8), FUN_009b59c0(0x2f8), Release [0x294], static_data->Release
 009c4cc0 ?Release@creature_instance_data@nSPCreatureAnim@@QAEJXZ  # nSPCreatureAnim::creature_instance_data::Release migrated from s009c4a30

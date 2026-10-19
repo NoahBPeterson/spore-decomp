@@ -1255,8 +1255,35 @@ __forceinline void ComputeInverseRestXform(const creature_body_static_data_s009c
 // ---- items of slice s009c32c0 end
 
 // ---- items of slice s009c4a30 begin (TODO(rewrite): local stubs, replace by canonical classes)
+float sqrtf(float);
+namespace nSPCreatureAnim {
+struct creature_static_data_s009c_4a30;
+}
 namespace nSPCreatureAnim {
 struct creature_instance_data_s009c_4a30;
+}
+namespace nSPCreatureAnim {
+struct creature_static_data_s009c_4a30 {
+    uint8 blob[0x410];
+
+    int   Release();                       // 0x009c26a0
+    void  InitWiggles();                   // 0x009c26f0
+    void  FUN_009c1d30();                  // 0x009c1d30
+    void  FUN_009b54a0();                  // 0x009b54a0
+    void  FUN_009b5580();                  // 0x009b5580
+    void  FUN_009b5930();                  // 0x009b5930
+    void  FUN_009bfa20();                  // 0x009bfa20
+    float FUN_009b5360();                  // 0x009b5360
+};
+}
+namespace nSPCreatureAnim {
+bool ComputeHierarchy(creature_static_data_s009c_4a30* c, int flag);   // 0x009c32c0
+}
+namespace nSPCreatureAnim {
+void FUN_009b6b10(float* mn, float* mx, creature_static_data_s009c_4a30* c);   // 0x009b6b10
+}
+namespace nSPCreatureAnim {
+void FUN_009b5ce0(creature_static_data_s009c_4a30* c);                 // 0x009b5ce0
 }
 namespace nSPCreatureAnim {
 struct phasegroup_vec {
@@ -1309,17 +1336,6 @@ int __cdecl FUN_009b3460(int obj)
 }
 }  // namespace nSPCreatureAnim
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x009b3920
 namespace nSPCreatureAnim {
 void TargetFrame::Set(const float* a, const float* b)
@@ -1333,17 +1349,6 @@ void TargetFrame::Set(const float* a, const float* b)
   posB[3] = b[3];
 }
 }  // namespace nSPCreatureAnim
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x009b3ab0
 namespace nSPCreatureAnim {
@@ -1368,17 +1373,6 @@ CopyBlock& CopyBlock::operator=(const CopyBlock& src)
 }
 }  // namespace nSPCreatureAnim
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x009b3bc0
 namespace nSPCreatureAnim {
 void __cdecl FUN_009b3bc0(int obj)
@@ -1388,17 +1382,6 @@ void __cdecl FUN_009b3bc0(int obj)
     p[i] = 0.0f;
 }
 }  // namespace nSPCreatureAnim
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x009b3c80
 namespace nSPCreatureAnim {
@@ -1419,16 +1402,6 @@ Transform30& Transform30::operator=(const Transform30& src)
   return *this;
 }
 }  // namespace nSPCreatureAnim
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x009b6450
 bool RayCastParts(const float* org, const float* dir, RC::Owner* obj, unsigned* pIndex, float* pT, float* pHit, float* pNormal)
@@ -1520,15 +1493,6 @@ bool RayCastParts(const float* org, const float* dir, RC::Owner* obj, unsigned* 
   return false;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x009b6b10
 void FUN_009b6b10(Vector3* pMin, Vector3* pMax, const cPartOwner* pOwner)
 {
@@ -1558,14 +1522,6 @@ void FUN_009b6b10(Vector3* pMin, Vector3* pMax, const cPartOwner* pOwner)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x009b77a0
 void FUN_009b77a0(float* param_1, int param_2, int param_3, float* param_4, char* param_5)
 {
@@ -1591,14 +1547,6 @@ void FUN_009b77a0(float* param_1, int param_2, int param_3, float* param_4, char
     param_1[1] = param_4[1];
     param_1[2] = param_4[2];
 }
-
-
-
-
-
-
-
-
 
 // @ 0x009b78c0
 char __fastcall FUN_009b78c0(int param_1, int dummy, int param_2, int param_3, int param_4)
@@ -1663,14 +1611,6 @@ LAB_009b79ca:
     return 1;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x009b7b10
 char __fastcall FUN_009b7b10(int param_1, int dummy, int param_2, int param_3)
 {
@@ -1687,14 +1627,6 @@ char __fastcall FUN_009b7b10(int param_1, int dummy, int param_2, int param_3)
     }
     return uVar3;
 }
-
-
-
-
-
-
-
-
 
 // @ 0x009b7b70
 void nSPCreatureAnim::creature_instance_data::SetStyleWeightForAllGroups(char const * param_2, int param_3, float param_4)
@@ -1727,14 +1659,6 @@ void nSPCreatureAnim::creature_instance_data::SetStyleWeightForAllGroups(char co
         } while (iVar4 < *(int*)((char*)this + 0x2f8));
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x009b7da0
 void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
@@ -1826,14 +1750,6 @@ void __fastcall FUN_009b7da0(int param_1, int dummy, float param_2)
     *(float*)(param_1 + 0x166c) = fVar6;
 }
 
-
-
-
-
-
-
-
-
 // @ 0x009b8250
 void __fastcall FUN_009b8250(int param_1, int dummy, float param_2)
 {
@@ -1846,14 +1762,6 @@ void __fastcall FUN_009b8250(int param_1, int dummy, float param_2)
         if (fVar1 < param_2) *(float*)(eax + 0x4c) = param_2 - fVar1;
     }
 }
-
-
-
-
-
-
-
-
 
 // @ 0x009b83b0
 void __fastcall FUN_009b83b0(int param_1, int dummy, float param_2)
@@ -1931,14 +1839,6 @@ void __fastcall FUN_009b83b0(int param_1, int dummy, float param_2)
     }
 }
 
-
-
-
-
-
-
-
-
 // @ 0x009b8650
 void __fastcall FUN_009b8650(int param_1, int dummy, float param_2)
 {
@@ -1968,13 +1868,6 @@ void __fastcall FUN_009b8650(int param_1, int dummy, float param_2)
         }
     }
 }
-
-
-
-
-
-
-
 
 // @ 0x009ba990
 namespace nSPCreatureAnim {
@@ -2144,12 +2037,6 @@ void creature_instance_data_s009b_a4c0::UpdateGoalSpring(goal_state* st, int nSt
 }
 }  // namespace nSPCreatureAnim
 
-
-
-
-
-
-
 // @ 0x009bb910
 namespace nSPCreatureAnim {
 void __cdecl FinalizeCreatureGoals(creature_instance_data_s009b_b910* c)
@@ -2195,11 +2082,6 @@ void __cdecl FinalizeCreatureGoals(creature_instance_data_s009b_b910* c)
 }
 }  // namespace nSPCreatureAnim
 
-
-
-
-
-
 // @ 0x009bcc70
 namespace nSPCreatureAnim {
 void __cdecl UpdateBodyTransforms(creature_instance_data_s009b_c580* c, float dt)
@@ -2239,10 +2121,6 @@ void __cdecl UpdateBodyTransforms(creature_instance_data_s009b_c580* c, float dt
     }
 }
 }  // namespace nSPCreatureAnim
-
-
-
-
 
 // @ 0x009bd6f0
 namespace nSPCreatureAnim {
@@ -2416,9 +2294,6 @@ void FloorBodies(creature_instance_data_s009b_d340* c)
 }
 }  // namespace nSPCreatureAnim
 
-
-
-
 // @ 0x009bfc20
 namespace nSPCreatureAnim {
 void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s009b_fc20* outPos, checkerlib::vector_4_s009b_fc20* outRot, creature_instance_data_s009b_fc20* c, float baseHeight, float rate, bool storeGround)
@@ -2526,8 +2401,6 @@ void creature_body_instance_data_s009b_fc20::GroundGoal(checkerlib::vector_3_s00
 }
 }  // namespace nSPCreatureAnim
 
-
-
 // @ 0x009c1f60
 namespace nSPCreatureAnim {
 creature_static_data_s009c_1f60::creature_static_data_s009c_1f60()
@@ -2557,8 +2430,6 @@ creature_static_data_s009c_1f60::creature_static_data_s009c_1f60()
 }
 }  // namespace nSPCreatureAnim
 
-
-
 // @ 0x009c2050
 namespace nSPCreatureAnim {
 creature_static_data_s009c_1f60::~creature_static_data_s009c_1f60()
@@ -2576,8 +2447,6 @@ creature_static_data_s009c_1f60::~creature_static_data_s009c_1f60()
         operator delete[](Bodies.mpBegin);
 }
 }  // namespace nSPCreatureAnim
-
-
 
 // @ 0x009c20e0
 namespace nSPCreatureAnim {
@@ -2636,8 +2505,6 @@ void creature_instance_data_s009c_1f60::BuildBodyList()
 }
 }  // namespace nSPCreatureAnim
 
-
-
 // @ 0x009c26a0
 namespace nSPCreatureAnim {
 int creature_static_data_s009c_1f60::Release()
@@ -2655,7 +2522,6 @@ int creature_static_data_s009c_1f60::Release()
     return n;
 }
 }  // namespace nSPCreatureAnim
-
 
 // @ 0x009c32c0
 namespace nSPCreatureAnim {
@@ -3036,6 +2902,44 @@ bool ComputeHierarchy(creature_static_data_s009c_32c0* c, uint32_s009c_32c0 targ
 
     ComputeBodyStatics(c);
     return true;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009c4a30
+namespace nSPCreatureAnim {
+uint32 FinalizeCreature(creature_static_data_s009c_4a30* c)
+{
+    if (!ComputeHierarchy(c, 0))
+        return 0;
+
+    float l18 = 0.0f, l14 = 0.0f, l10 = 0.0f;
+    float lc = 0.0f, l8 = 0.0f, l4 = 0.0f;
+    FUN_009b6b10(&l18, &lc, c);
+
+    *(float*)((char*)c + 0x358) = l18;
+    lc = lc - l18;
+    *(float*)((char*)c + 0x35c) = l14;
+    float f3 = l8 - l14;
+    float f4 = l4 - l10;
+    *(float*)((char*)c + 0x360) = l10;
+    *(float*)((char*)c + 0x364) = lc;
+    *(float*)((char*)c + 0x368) = f3;
+    *(float*)((char*)c + 0x36c) = f4;
+    *(float*)((char*)c + 0x370) = sqrtf(lc * lc + (f4 * f4 + f3 * f3));
+
+    c->FUN_009c1d30();
+    c->FUN_009b54a0();
+    if (*(int*)((char*)c + 0x3c8) == 0) {
+        c->FUN_009b5580();
+        c->FUN_009b5930();
+    }
+    c->FUN_009bfa20();
+    c->InitWiggles();
+    *(float*)((char*)c + 0x374) = c->FUN_009b5360();
+    FUN_009b5ce0(c);
+
+    int n = (int)((*(char**)((char*)c + 0x388) - *(char**)((char*)c + 0x384)) / 0x468);
+    return (uint32)(n < 0x100);
 }
 }  // namespace nSPCreatureAnim
 
