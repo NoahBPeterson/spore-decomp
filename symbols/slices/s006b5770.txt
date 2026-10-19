@@ -1,4 +1,4 @@
-006b5770 SP::cString::cString (variant)  # in the cStringDetokenizer region
+006b5770 ??0cString@SP@@QAE@IIPB_W@Z  # SP::cString::cString migrated from s006b5770
 006b57f0 App::cStringDetokenizer::func28h  # tail-calls this->ProcessString(*(a+8), dst)
 006b5810 App::cStringDetokenizer::HasTokens  # wcschr(p,'~') != 0
 006b5840 App::ITokenTranslator::func14h  # iterate mTranslators[1..], call translator->func14h
@@ -15,9 +15,9 @@
 006b6080 App::cStringDetokenizer::AddTranslator  # vtable slot 0x1c
 006b6160 App::ITokenTranslator::TranslateToken  # vtable slot 0x10
 006b6490 App::cStringDetokenizer::cStringDetokenizer  # vtbl 0x1400f40; vector + 4 generic tokens at +0x1c
-006b6540 SP::cStringTableResourceFactory::GetSupportedTypes  # writes 0x2fac0b6
-006b65d0 hash/stream iterator helper
-006b6620 stream byte reader helper
-006b6740 eastl::hashtable erase(key)  # frees nodes, returns count
-006b67b0 eastl::hashtable insert/operator[] helper
-006b68a0 eastl::hashtable<SP::cString*>::~hashtable scalar deleting dtor
+006b6540 ?GetSupportedTypes@cStringTableResourceFactory@SP@@UAEHPAIH@Z  # cStringTableResourceFactory::GetSupportedTypes migrated from s006b5770 (verbatim, slice spelling)
+006b65d0 ?FUN_006b65d0@@YAXXZ  # FUN_006b65d0 migrated from s006b5770 (verbatim, slice spelling)
+006b6620 ?FUN_006b6620@@YAXXZ  # FUN_006b6620 migrated from s006b5770 (verbatim, slice spelling)
+006b6740 ?FUN_006b6740@@YAXXZ  # FUN_006b6740 migrated from s006b5770 (verbatim, slice spelling)
+006b67b0 ?FUN_006b67b0@@YAXXZ  # FUN_006b67b0 migrated from s006b5770 (verbatim, slice spelling)
+006b68a0 ?FUN_006b68a0@@YAXXZ  # FUN_006b68a0 migrated from s006b5770 (verbatim, slice spelling)

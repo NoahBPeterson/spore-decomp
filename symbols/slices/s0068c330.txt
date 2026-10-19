@@ -4,5 +4,5 @@
 0068c820  `anonymous namespace'::GetExplicitIdStart  # Ghidra PDB symbol (narrow)
 0068d0d0  SPNameFromKey  # Ghidra PDB symbol (wide)
 0068d290  SPNameFromKey  # Ghidra PDB symbol (narrow)
-0068d340  eastl::hash_map<unsigned int, eastl::basic_string<wchar_t> >::operator[]  # Ghidra PDB symbol
+0068d340 ?HashMapOp@@YAPAXPAXI0@Z  # HashMapOp migrated from s0068c330 (verbatim, slice spelling)
 0068d5a0  SPKeyFromName  # Ghidra PDB symbol

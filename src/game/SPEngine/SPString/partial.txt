@@ -1,0 +1,10 @@
+# va  diff-bytes  reason
+00637f80  1009  control flow reconstructed from disasm but string/rect handling approximate
+0068d340  -    eastl::hash_map<unsigned,WStr>::operator[] (215B): stubbed
+006b50d0  62   find_placeholder: eastl hash_map<uint32_t,string16>::find; PARTIAL (definition in s006b47a0_b.cpp)
+006b5110  141  hashtable erase(key): eastl hash_map erase; PARTIAL (definition in s006b47a0_b.cpp)
+006b51a0  153  alloc_placeholder: eastl string + hash_map operator[]; PARTIAL (definition in s006b47a0_b.cpp)
+006b53a0  134  basic_string<wchar_t> concatenation helper: PARTIAL (definition in s006b47a0_b.cpp)
+006b54b0  202  SP::cString::Load: structure present but resource-manager slot call / Resource stream plumbing approximated
+006b55c0  208  SP::cString::GetText: incomplete (empty-string allocation via 0x1667bac and QualifyNameWithGroup not reconstructed)
+006b5770  122  SP::cString::cString (variant): stubbed
