@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/StylesheetDefault.cpp  ?Append@Selector@Style@XHTML@EA@@QAEXPAV1234@@Z  008f9fa0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
