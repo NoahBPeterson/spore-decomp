@@ -12,7 +12,7 @@
 007f7ce0 ?fill_copy_animinfo@@YAPAUAInfo8c@@PAU1@00@Z  # fill_copy_animinfo migrated from s007f7530 (verbatim, slice spelling)
 007f7db0 ?fill_copy_backward_animinfo@@YAPAUAInfo8c@@PAU1@00@Z  # fill_copy_backward_animinfo migrated from s007f7530 (verbatim, slice spelling)
 007f7eb0 ?SPUICreateAnimationTimerInterpolation@@YAPAUInterpResult@@PAU1@MMH@Z  # SPUICreateAnimationTimerInterpolation migrated from s007f7530 (verbatim, slice spelling)
-007f80d0 SPUICreateWindowAnimationTargetPosition  # PDB symbol name
+007f80d0 ?SPUICreateWindowAnimationTargetPosition@@YAPAUAnimRaw@@PAU1@PAXMMMMH@Z  # SPUICreateWindowAnimationTargetPosition migrated from s007f7530 (verbatim, slice spelling)
 007f8140 ?SPUICreateWindowAnimationRotation@@YAPAUAnimRaw@@PAU1@PAXMMMMMMH@Z  # SPUICreateWindowAnimationRotation migrated from s007f7530 (verbatim, slice spelling)
 007f81d0 ?SPUICreateWindowAnimationTargetScale@@YAPAUAnimRaw@@PAU1@PAXMMMH@Z  # SPUICreateWindowAnimationTargetScale migrated from s007f7530 (verbatim, slice spelling)
 007f8230 ?SPUICreateWindowAnimationTargetSize@@YAPAUAnimRaw@@PAU1@PAXIMMH@Z  # SPUICreateWindowAnimationTargetSize migrated from s007f7530 (verbatim, slice spelling)

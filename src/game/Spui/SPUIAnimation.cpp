@@ -156,6 +156,8 @@ struct AInfo8c {
     uint32_t mType;               // +0x88
     AInfo8c* operator=(AInfo8c* src);
 };
+extern "C" AnimRaw* __cdecl Concrete_TargetPosition(AnimRaw* p, void* win, Point2DT pos, cAnimationTimer* t);
+__forceinline Point2DT Pt(float x, float y) { Point2DT p; p.x = x; p.y = y; return p; }
 extern "C" AnimRaw* __cdecl Concrete_Rotation(AnimRaw* p, void* win, float vx, float vy, float vz, float vw, cAnimationTimer* t);
 extern "C" AnimRaw* __cdecl Concrete_TargetScale(AnimRaw* p, void* win, float from, cAnimationTimer* t);
 extern "C" AnimRaw* __cdecl Concrete_TargetSize(AnimRaw* p, void* win, uint32_t value, cAnimationTimer* t);
@@ -249,11 +251,6 @@ bool F64D0(void* self, int a2, float a3, int phase)
     return *(void**)((char*)self + 0x10) != 0;
 }
 
-
-
-
-
-
 // @ 0x007f65f0
 bool F65F0(void* self, int a2, float a3, int phase)
 {
@@ -291,11 +288,6 @@ bool F65F0(void* self, int a2, float a3, int phase)
     }
     return *(void**)((char*)self + 0x10) != 0;
 }
-
-
-
-
-
 
 // @ 0x007f66f0
 bool F66F0(void* self, int a2, float a3, int phase)
@@ -335,11 +327,6 @@ bool F66F0(void* self, int a2, float a3, int phase)
     return *(void**)((char*)self + 0x10) != 0;
 }
 
-
-
-
-
-
 // @ 0x007f67f0
 bool F67F0(void* self, int a2, float a3, int phase)
 {
@@ -377,11 +364,6 @@ bool F67F0(void* self, int a2, float a3, int phase)
     }
     return *(void**)((char*)self + 0x10) != 0;
 }
-
-
-
-
-
 
 // @ 0x007f6910
 bool F6910(void* self, int a2, float a3, int phase)
@@ -428,11 +410,6 @@ bool F6910(void* self, int a2, float a3, int phase)
     return *(void**)((char*)self + 0x10) != 0;
 }
 
-
-
-
-
-
 // @ 0x007f6a60
 bool F6A60(void* self, int a2, float a3, int phase)
 {
@@ -470,11 +447,6 @@ bool F6A60(void* self, int a2, float a3, int phase)
     return *(void**)((char*)self + 0x10) != 0;
 }
 
-
-
-
-
-
 // @ 0x007f6b50
 bool F6B50(void* self, int a2, float a3, int phase)
 {
@@ -508,11 +480,6 @@ bool F6B50(void* self, int a2, float a3, int phase)
     }
     return *(void**)((char*)self + 0x10) != 0;
 }
-
-
-
-
-
 
 // @ 0x007f6c30
 bool F6C30(void* self, int a2, float a3, int phase)
@@ -554,11 +521,6 @@ bool F6C30(void* self, int a2, float a3, int phase)
     return *(void**)((char*)self + 0x10) != 0;
 }
 
-
-
-
-
-
 // @ 0x007f6d20
 bool F6D20(void* self, int a2, int a3, int phase)
 {
@@ -567,11 +529,6 @@ bool F6D20(void* self, int a2, int a3, int phase)
             *(void**)((char*)self + 0x10), (char*)self + 0x14, 2);
     return true;
 }
-
-
-
-
-
 
 // @ 0x007f6d90
 void* TargetElem::CopyFrom(void* src)
@@ -594,11 +551,6 @@ void* TargetElem::CopyFrom(void* src)
     return dst;
 }
 
-
-
-
-
-
 // @ 0x007f6df0
 void* WindowAnimTarget::CopyFrom(void* src)
 {
@@ -620,11 +572,6 @@ void* WindowAnimTarget::CopyFrom(void* src)
     *(void**)((char*)dst + 0x88) = *(void**)((char*)src + 0x88);
     return dst;
 }
-
-
-
-
-
 
 // @ 0x007f6ee0
 void F6EE0(void* first, void* last, void* dst)
@@ -651,11 +598,6 @@ void F6EE0(void* first, void* last, void* dst)
     }
 }
 
-
-
-
-
-
 // @ 0x007f6f80
 void* F6F80(void* first, void* last, char* dst)
 {
@@ -676,11 +618,6 @@ void* F6F80(void* first, void* last, char* dst)
     return dst;
 }
 
-
-
-
-
-
 // @ 0x007f6ff0
 void* TargetAssign::Assign(void* src)
 {
@@ -699,11 +636,6 @@ void* TargetAssign::Assign(void* src)
         ((uint8_t*)((char*)self + 0x10))[i] = ((uint8_t*)((char*)src + 0x10))[i];
     return self;
 }
-
-
-
-
-
 
 // @ 0x007f7050
 void* __cdecl SPUICreateWindowAnimationTargetPosition(void* out, void* target, float x, float y, void* anim)
@@ -738,11 +670,6 @@ void* __cdecl SPUICreateWindowAnimationTargetPosition(void* out, void* target, f
     return out;
 }
 
-
-
-
-
-
 // @ 0x007f7100
 void* __cdecl F7100(void* out, void* target, float x, float y, void* anim)
 {
@@ -776,11 +703,6 @@ void* __cdecl F7100(void* out, void* target, float x, float y, void* anim)
     return out;
 }
 
-
-
-
-
-
 // @ 0x007f71b0
 bool F71B0(void* self, int a2, float a3, int phase)
 {
@@ -812,11 +734,6 @@ bool F71B0(void* self, int a2, float a3, int phase)
     }
     return *(void**)((char*)self + 0x10) != 0;
 }
-
-
-
-
-
 
 // @ 0x007f7290
 void* __cdecl SPUICreateWindowAnimationRotation(void* out, void* target, int a, int b, int c, int d, void* anim)
@@ -853,11 +770,6 @@ void* __cdecl SPUICreateWindowAnimationRotation(void* out, void* target, int a, 
     return out;
 }
 
-
-
-
-
-
 // @ 0x007f7340
 void* __cdecl SPUICreateWindowAnimationTargetScale(void* out, void* target, float f, void* anim)
 {
@@ -891,11 +803,6 @@ void* __cdecl SPUICreateWindowAnimationTargetScale(void* out, void* target, floa
     return out;
 }
 
-
-
-
-
-
 // @ 0x007f73e0
 void* __cdecl SPUICreateWindowAnimationTargetSize(void* out, void* target, float* size, void* anim)
 {
@@ -927,11 +834,6 @@ void* __cdecl SPUICreateWindowAnimationTargetSize(void* out, void* target, float
     *(void**)((char*)out + 4) = (void*)&F67F0;
     return out;
 }
-
-
-
-
-
 
 // @ 0x007f7480
 void* __cdecl F7480(void* out, void* target, float* v, void* anim)
@@ -965,10 +867,6 @@ void* __cdecl F7480(void* out, void* target, float* v, void* anim)
     return out;
 }
 
-
-
-
-
 // @ 0x007f7530
 AnimRaw* SPUICreateWindowAnimationTargetShadeAlpha(AnimRaw* p, void* win, uint32_t target, cAnimationTimer* t)
 {
@@ -983,10 +881,6 @@ AnimRaw* SPUICreateWindowAnimationTargetShadeAlpha(AnimRaw* p, void* win, uint32
     return p;
 }
 
-
-
-
-
 // @ 0x007f75d0
 AnimRaw* SPUICreateWindowAnimationTargetShade(AnimRaw* p, void* win, uint32_t target, cAnimationTimer* t)
 {
@@ -1000,10 +894,6 @@ AnimRaw* SPUICreateWindowAnimationTargetShade(AnimRaw* p, void* win, uint32_t ta
     p->mActionFunc = (void*)&TargetFill_Update;
     return p;
 }
-
-
-
-
 
 // @ 0x007f7670
 AnimRaw* SPUICreateWindowAnimationTargetOscillatingFill(AnimRaw* p, void* win, uint32_t target, float duration, float from, float type)
@@ -1022,10 +912,6 @@ AnimRaw* SPUICreateWindowAnimationTargetOscillatingFill(AnimRaw* p, void* win, u
     if (interp.mpTimeFunction) RcRel(interp.mpTimeFunction);
     return p;
 }
-
-
-
-
 
 // @ 0x007f7740
 AnimRaw* SPUICreateObjectAnimation(AnimRaw* p, void* obj, EA_Variant* ctx, uint32_t a, int b, cAnimationTimer* t, EA_Variant* vf, EA_Variant* vt, int e)
@@ -1046,10 +932,6 @@ AnimRaw* SPUICreateObjectAnimation(AnimRaw* p, void* obj, EA_Variant* ctx, uint3
     return p;
 }
 
-
-
-
-
 // @ 0x007f7830
 AnimRaw* FUN_007f7830(AnimRaw* p, uint32_t a2, void* obj, EA_Variant* val)
 {
@@ -1069,10 +951,6 @@ AnimRaw* FUN_007f7830(AnimRaw* p, uint32_t a2, void* obj, EA_Variant* val)
     return p;
 }
 
-
-
-
-
 // @ 0x007f78c0
 void __stdcall FUN_007f78c0(AInfo88* first, AInfo88* last)
 {
@@ -1085,10 +963,6 @@ void __stdcall FUN_007f78c0(AInfo88* first, AInfo88* last)
     }
 }
 
-
-
-
-
 // @ 0x007f7920
 AnimInfo88B* AnimInfo88B::operator=(AnimInfo88B* src)
 {
@@ -1098,10 +972,6 @@ AnimInfo88B* AnimInfo88B::operator=(AnimInfo88B* src)
     return this;
 }
 
-
-
-
-
 // @ 0x007f7970
 AInfo8c* AInfo8c::operator=(AInfo8c* src)
 {
@@ -1110,10 +980,6 @@ AInfo8c* AInfo8c::operator=(AInfo8c* src)
     mType = src->mType;
     return this;
 }
-
-
-
-
 
 // @ 0x007f7a60
 AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst)
@@ -1130,10 +996,6 @@ AInfo8c* do_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* dst)
     return dst;
 }
 
-
-
-
-
 // @ 0x007f7b30
 AInfo88* copy_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst)
 {
@@ -1148,10 +1010,6 @@ AInfo88* copy_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst)
     }
     return dst;
 }
-
-
-
-
 
 // @ 0x007f7c00
 AInfo88* copy_backward_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst)
@@ -1168,10 +1026,6 @@ AInfo88* copy_backward_animinfo88(AInfo88* first, AInfo88* last, AInfo88* dst)
     return dst;
 }
 
-
-
-
-
 // @ 0x007f7ce0
 AInfo8c* fill_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src)
 {
@@ -1186,10 +1040,6 @@ AInfo8c* fill_copy_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src)
     return first;
 }
 
-
-
-
-
 // @ 0x007f7db0
 AInfo8c* fill_copy_backward_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src)
 {
@@ -1203,10 +1053,6 @@ AInfo8c* fill_copy_backward_animinfo(AInfo8c* first, AInfo8c* last, AInfo8c* src
     }
     return last;
 }
-
-
-
-
 
 // @ 0x007f7eb0
 InterpResult* SPUICreateAnimationTimerInterpolation(InterpResult* dest, float duration, float param3, int type)
@@ -1242,17 +1088,15 @@ InterpResult* SPUICreateAnimationTimerInterpolation(InterpResult* dest, float du
     return dest;
 }
 
-
-
-
-
 // @ 0x007f80d0
-__forceinline Point2DT Pt(float x, float y)
-{ Point2DT p; p.x = x; p.y = y; return p; }
-
-
-
-
+AnimRaw* SPUICreateWindowAnimationTargetPosition(AnimRaw* p, void* win, float x, float y, float duration, float from, int type)
+{
+    cAnimationTimer timer;
+    SPUICreateAnimationTimerInterpolation((InterpResult*)&timer, duration, from, type);
+    Concrete_TargetPosition(p, win, Pt(x, y), &timer);
+    if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
+    return p;
+}
 
 // @ 0x007f8140
 AnimRaw* SPUICreateWindowAnimationRotation(AnimRaw* p, void* win, float vx, float vy, float vz, float vw, float duration, float from, int type)
@@ -1264,10 +1108,6 @@ AnimRaw* SPUICreateWindowAnimationRotation(AnimRaw* p, void* win, float vx, floa
     return p;
 }
 
-
-
-
-
 // @ 0x007f81d0
 AnimRaw* SPUICreateWindowAnimationTargetScale(AnimRaw* p, void* win, float from, float duration, float base, int type)
 {
@@ -1277,10 +1117,6 @@ AnimRaw* SPUICreateWindowAnimationTargetScale(AnimRaw* p, void* win, float from,
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
-
-
-
-
 
 // @ 0x007f8230
 AnimRaw* SPUICreateWindowAnimationTargetSize(AnimRaw* p, void* win, uint32_t value, float duration, float from, int type)
@@ -1292,10 +1128,6 @@ AnimRaw* SPUICreateWindowAnimationTargetSize(AnimRaw* p, void* win, uint32_t val
     return p;
 }
 
-
-
-
-
 // @ 0x007f8290
 AnimRaw* SPUICreateWindowAnimationTargetShadeAlphaW(AnimRaw* p, void* win, uint32_t target, float duration, float from, int type)
 {
@@ -1306,10 +1138,6 @@ AnimRaw* SPUICreateWindowAnimationTargetShadeAlphaW(AnimRaw* p, void* win, uint3
     return p;
 }
 
-
-
-
-
 // @ 0x007f82f0
 AnimRaw* SPUICreateWindowAnimationTargetShadeW(AnimRaw* p, void* win, uint32_t target, float duration, float from, int type)
 {
@@ -1319,10 +1147,6 @@ AnimRaw* SPUICreateWindowAnimationTargetShadeW(AnimRaw* p, void* win, uint32_t t
     if (timer.mpTimeFunction) RcRel(timer.mpTimeFunction);
     return p;
 }
-
-
-
-
 
 // @ 0x007f8350
 Vec8c* Vec8c::ctor_copy(Vec8c* src)
@@ -1342,17 +1166,9 @@ Vec8c* Vec8c::ctor_copy(Vec8c* src)
     return this_;
 }
 
-
-
-
-
 // @ 0x007f83e0
 MissionCardAnimator::MissionCardAnimator()
 : begin(0), end(0), cap(0), mTime(0.0f), mFlag(false) {}
-
-
-
-
 
 // @ 0x007f8400
 Vec8c* Vec8c::assign(Vec8c* src)
@@ -1383,9 +1199,6 @@ Vec8c* Vec8c::assign(Vec8c* src)
     }
     return this_;
 }
-
-
-
 
 // @ 0x007f85b0
 static void vec_insert_n(Vec8c_s007f_8540* v, AInfo8c_s007f_8540* pos, uint32_t n, const AInfo8c_s007f_8540* value)
