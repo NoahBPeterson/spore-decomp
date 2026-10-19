@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00700120  0  SP::cFrustumCull::FrustumTestSphere: stub only (SSE dot products and the plane loop not reproduced).

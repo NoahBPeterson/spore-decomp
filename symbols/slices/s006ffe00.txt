@@ -1,5 +1,5 @@
 006ffe00  FUN_006ffe00  # spatial query (EH), region 0x6ffe00
-00700120  SP::cFrustumCull::FrustumTestSphere  # PDB name
+00700120 ?FUN_00700120@@YAHPAX00@Z  # FUN_00700120 migrated from s006ffe00 (verbatim, slice spelling)
 00700290  FUN_00700290  # 0xa0-byte cell record copy
 00700360  Cell_GetChildID  # returns +0x08, writes +0x0c through out-param
 007003a0  FUN_007003a0  # cell array constructor (operator_new count*0xa0)

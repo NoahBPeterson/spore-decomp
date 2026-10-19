@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+006ffaf0 183 plane/point clip test: complete; cl assigns the local[6] lanes and the global plane index base differently.
