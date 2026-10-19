@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EACRT.cpp  ?Memset32@@YAPAIPAIIH@Z  0092cb00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACRT.cpp  ?EcvtCopy@@YAPADNHPAH0PAD@Z  0092ce00  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EACRT.cpp  ?FcvtCopy@@YAPADNHPAH0PAD@Z  0092ce40  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

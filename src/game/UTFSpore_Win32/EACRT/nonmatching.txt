@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+0092cb30 74 narrow string append (EASTL); inlined DoInsertValue scheduling differs
+0092cb90 88 wide string append (EASTL); inlined DoInsertValue scheduling differs
+0092cc00 118 case-insensitive strstr (char); complete; register/loop shape differs (original caches tolower in ebp and spills the first result via a push-ecx frame). callerdeps preserve DEPENDS ecx (read at 0x006b8956 after the call at 0x006b8932 in 006b8680); now satisfied by holding the scanned char in an `int` so cl keeps it in a callee-saved register instead of zero-extending into ecx for the second tolower argument. difftest PASS (/O2 /MD /Gy /EHsc /TP /GS-, --require-all, 400 valid, 100% coverage)
+0092cc90 117 case-insensitive wstrstr; register/loop shape differs
+0092ce80 82 _ecvt result widened to UTF-16; local buffer layout differs
+0092cef0 82 _fcvt result widened to UTF-16; local buffer layout differs
+0092cf60 128 unsigned-64 -> string; base arrives in eax (static-helper convention) not reproduced
+0092cff0 85 base-10 signed formatter wrapper; static-helper eax convention differs
+0092d040 15 base-N unsigned formatter wrapper; static-helper eax convention differs
+0092d060 135 signed formatter to UTF-16; static-helper eax convention differs
+0092d0d0 77 unsigned formatter to UTF-16; static-helper eax convention differs
+0092d3e0 661 StrtoU64Common16(nptr,endptr,base): wide strtoull with sign/base 0|2..36, 0x/0X prefix, __aulldivrm overflow bound and ERANGE saturation; original drives iswctype/towupper through the MSVCR90 IAT and uses the wide switch/loop register allocation we cannot reproduce with _alldiv/_allmul helpers. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest UNSUPPORTED (0/400 valid, discard import:iswctype=400 — the difftest machine has no iswctype handler)
+0092d730 494 FUN_0092d730(value,buffer,size,precision,sci): _fcvt-based float formatter with scientific branch (floor/log10/recursive pow); original computes everything in x87 extended and via the _fcvt import plus the local floor/pow thunks. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (826 valid, 33.8% coverage, discards import:_fcvt=374)
+0092d9b0 494 FtoaEnglish16(value,buffer,size,precision,sci): wchar_t twin of FUN_0092d730 (_fcvt/_ltow/x87); same x87/precision and import-call differences. flags /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS-; difftest WEAK (775 valid, 35.0% coverage, discards import:_fcvt=425)

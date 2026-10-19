@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+0092cd20  220  bitmask substring matcher; reconstructed as a simplified scan
+0092d120  697  strtoull-like parser; overflow/errno paths simplified
