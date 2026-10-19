@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPDataHelpers.cpp  ?Append@WFixed@@QAEPAU1@PB_W@Z  006863e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPDataHelpers.cpp  ?Init@VecBuf@@QAEPAHIPAX@Z  00686430  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/SPEngine/SPDataHelpers.cpp  _Thunk_687590  00687590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

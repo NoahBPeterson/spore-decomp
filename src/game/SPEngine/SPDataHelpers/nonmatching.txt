@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+00686380 59 complete: hash_map<unsigned,pair<Record*,int>>::operator[]; local layout/scheduling differs; equiv: FAIL (5/5 valid inputs mismatched; our fake-arity: no call site before callee)
+00686490  112  complete: SP::OpenRecordAsStream; global/vtable call shapes differ
+006866f0  1363  complete: load property-list record + Blessed/BlessID check; layout/EH-state/branch order differ, call and vtable-slot sequence identical
+006875b0  52   complete: iterate package array + RegisterPackages; loop/flag switch scheduling differs

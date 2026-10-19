@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00686520  460  record decode helper (RSA/SHA1 path): only the read preamble reconstructed; crypto body omitted
+006872f0  670  anonymous_namespace::RegisterPackages: package scan/dispatch not reconstructed
+00687610  1006 SP::SetupResources: resource setup not reconstructed
