@@ -2,15 +2,15 @@
 006b57f0 App::cStringDetokenizer::func28h  # tail-calls this->ProcessString(*(a+8), dst)
 006b5810 App::cStringDetokenizer::HasTokens  # wcschr(p,'~') != 0
 006b5840 App::ITokenTranslator::func14h  # iterate mTranslators[1..], call translator->func14h
-006b5880 App::cStringDetokenizer::FindTokenTranslation  # reverse-iterate, TranslateToken
-006b5950 App::cStringDetokenizer::func34h  # assign mGenericTokens[index] from pStr
-006b5990 App::TranslatorVector::erase  # intrusive_ptr vector erase (copy tail, Release last)
+006b5880 ?FindTokenTranslation@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  # cStringDetokenizer::FindTokenTranslation migrated from s006b5770 (verbatim, slice spelling)
+006b5950 ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  # cStringDetokenizer::func34h migrated from s006b5770 (verbatim, slice spelling)
+006b5990 ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  # TranslatorVector::erase migrated from s006b5770 (verbatim, slice spelling)
 006b59d0 App::TranslatorVector::DoInsertValue  # eastl vector grow/relocate
-006b5b80 App::cStringDetokenizer::RemoveTranslator  # find ptr in mTranslators, erase
+006b5b80 ?RemoveTranslator@cStringDetokenizer@App@@UAEXPAUITokenTranslator@2@@Z  # cStringDetokenizer::RemoveTranslator migrated from s006b5770 (verbatim, slice spelling)
 006b5bd0 App::cStringDetokenizer::ProcessString  # vtable slot 0x2c
 006b5c50 App::cStringDetokenizer::func30h  # vtable slot 0x30
 006b5d20 App::cStringDetokenizer::ProcessStringEx  # vtable slot 0x38
-006b5f80 App::TranslatorVector::push_back(intrusive_ptr)  # eastl vector emplace
+006b5f80 ?TranslatorVector_pushback_stub@@YAXXZ  # TranslatorVector_pushback_stub migrated from s006b5770 (verbatim, slice spelling)
 006b6000 App::cStringDetokenizer::func18h  # erase all + push self
 006b6080 App::cStringDetokenizer::AddTranslator  # vtable slot 0x1c
 006b6160 App::ITokenTranslator::TranslateToken  # vtable slot 0x10

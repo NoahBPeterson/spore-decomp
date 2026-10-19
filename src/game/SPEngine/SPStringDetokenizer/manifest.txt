@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/SPEngine/SPStringDetokenizer.cpp  ?FindTokenTranslation@cStringDetokenizer@App@@UAE_NPBGAAUstring16_s006b_5770@eastl@@@Z  006b5880  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPStringDetokenizer.cpp  ?func34h@cStringDetokenizer@App@@UAEXPBGI@Z  006b5950  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPEngine/SPStringDetokenizer.cpp  ?erase@TranslatorVector@App@@QAEPAUintrusive_ptr@2@PAU32@@Z  006b5990  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
