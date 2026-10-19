@@ -1,1 +1,2 @@
 00758240 ?4At6  # At6::operator=
+007582b0 ?Build@C582b0@@QAE_NPAXPAUAt6@@PAPAX@Z  # C582b0::Build migrated from s00758240 (verbatim, slice spelling)

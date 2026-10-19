@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+007582b0  289  FUN_00732220 lookup + new/ctor skeleton; property result handling approximated
+00759ff0  324  cMorphDrawImpl helper: stub
+0075a140  278  helper: stub
+0075a260  433  cMorphDrawImpl::Dispatch: stub

@@ -1,2 +1,7 @@
-00759ec0 SP::`anonymous namespace'::cMorphDrawImpl::MeshCacheEntry::Dispatch  # dev-PDB
-0075a260 SP::`anonymous namespace'::cMorphDrawImpl::Dispatch  # dev-PDB anchor
+00759e80 ?Sum@C59e80@@QAEHXZ  # C59e80::Sum migrated from s00759540 (verbatim, slice spelling)
+00759ec0 ?Dispatch@MeshCacheEntry@@QAEXPAHH@Z  # MeshCacheEntry::Dispatch migrated from s00759540 (verbatim, slice spelling)
+00759ff0 ?F59ff0@C59e80@@QAEPAXPAX0@Z  # C59e80::F59ff0 migrated from s00759540 (verbatim, slice spelling)
+0075a140 ?FUN_0075a140@@YAPAXPAX@Z  # FUN_0075a140 migrated from s00759540 (verbatim, slice spelling)
+0075a260 ?FUN_0075a260@@YIXPAUC59e80@@@Z  # FUN_0075a260 migrated from s00759540 (verbatim, slice spelling)
+0075a420 ?Bounds@C59e80@@QAE_NPAI0@Z  # C59e80::Bounds migrated from s00759540 (verbatim, slice spelling)
+0075a4e0 ?CopyTo@C59e80@@QAE_NPAURCArray@@@Z  # C59e80::CopyTo migrated from s00759540 (verbatim, slice spelling)

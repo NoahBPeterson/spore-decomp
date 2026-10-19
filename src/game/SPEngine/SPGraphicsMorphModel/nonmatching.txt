@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+00759ec0 150 MeshCacheEntry::Dispatch: per-entry lookup, shader state, vertex-descriptor compare and release chain complete; EH/frame and register schedule differ
+0075a420 98 bounds/weights: SSE clear + FUN_00759100 + per-entry FUN_00729c60 loop complete; SSE constant schedule differs; equiv: WEAK (81.7% coverage) after making it a C59e80 member
+0075a620 21 ClassX new 0x70 + ctor: allocation/null path complete; EH frame differs; equiv: UNSUPPORTED (unresolved refs _eastl_dealloc/_VecVecInt_dtor in slice) after splitting combined marker

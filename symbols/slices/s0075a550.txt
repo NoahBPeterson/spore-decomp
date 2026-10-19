@@ -1,3 +1,4 @@
+0075a620 ?New70@ClassX@@QAEPAXXZ  # ClassX::New70 migrated from s0075a550 (verbatim, slice spelling)
 0075a6e0 SP::cMultiBlender::AnyAnimating  # reads mAnimating(+0x28) x mNumAnims(+0x40)
 0075a710 ?AddWeight@cMultiBlender@@QAEHXZ  # cMultiBlender::AddWeight migrated from s0075a550 (verbatim, slice spelling)
 0075a780 ?F780@cMultiBlender@@QAEHM@Z  # cMultiBlender::F780 migrated from s0075a550 (verbatim, slice spelling)
