@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIMessageBox.cpp  ?scalarDtor@MsgBoxA@@QAEPAXE@Z  00817000  /O2 /MD /Gy /EHsc /TP /arch:SSE /Isrc/game/include
