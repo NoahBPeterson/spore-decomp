@@ -23,11 +23,11 @@
 01140780 F_01140780  # dc: apply global state to the renderer
 01140810 SNDPLATFORM_init  # PDB anchor
 01140870 SNDPLATFORM_restore  # PDB
-01140890 SNDPLATFORM_setpitch  # PDB candidate
-01140930 SNDPLATFORM_lowpass  # PDB candidate
+01140890 ?F_01140890@@YAHH@Z  # F_01140890 migrated from s0113fc50 (verbatim, slice spelling)
+01140930 ?FUN_01140930@@YAXHH@Z  # FUN_01140930 migrated from s0113fc50 (verbatim, slice spelling)
 011409b0 SNDPLATFORM_highpass  # PDB
-01140a00 F_01140a00  # dc: follow voice link
-01140a20 F_01140a20  # dc: find voice index within a 6-slot group
-01140a70 F_01140a70  # dc: set one channel gain
+01140a00 ?F_01140a00@@YAHH@Z  # F_01140a00 migrated from s0113fc50 (verbatim, slice spelling)
+01140a20 ?F_01140a20@@YAHH@Z  # F_01140a20 migrated from s0113fc50 (verbatim, slice spelling)
+01140a70 ?F_01140a70@@YAHHH@Z  # F_01140a70 migrated from s0113fc50 (verbatim, slice spelling)
 01140ab0 SNDPLATFORM_stop  # PDB
 01140b20 SNDPLATFORM_filteradd  # PDB candidate
