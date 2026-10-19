@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EARandom.cpp  ?SetSeed@RandomLinearCongruential@Random@EA@@QAEXI@Z  00936090  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EARandom.cpp  ?RandomUint32Uniform@RandomLinearCongruential@Random@EA@@QAEIXZ  009360b0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EARandom.cpp  ?RandomUint32Uniform@RandomLinearCongruential@Random@EA@@QAEII@Z  00a68fb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

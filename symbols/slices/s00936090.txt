@@ -1,6 +1,6 @@
-00936090 EA::Random::RandomLinearCongruential::SetSeed  # pdb callee-single
-009360b0 EA::Random::RandomLinearCongruential::RandomUint32Uniform  # pdb callee-scored
-009360d0 EA::Random::RandomLinearCongruential::RandomDoubleUniform  # pdb callee-scored
+00936090 ?SetSeed@RandomLinearCongruential@Random@EA@@QAEXI@Z  # EA::Random::RandomLinearCongruential::SetSeed migrated from s00936090
+009360b0 ?RandomUint32Uniform@RandomLinearCongruential@Random@EA@@QAEIXZ  # EA::Random::RandomLinearCongruential::RandomUint32Uniform migrated from s00936090
+009360d0 ?RandomDoubleUniform@RandomLinearCongruential@Random@EA@@QAENXZ  # EA::Random::RandomLinearCongruential::RandomDoubleUniform migrated from s00936090
 00936110 EA::Random::RandomMersenneTwister::Reload  # dc: MT19937 reload (227/396/1 split)
 009361f0 EA::Random::RandomMersenneTwister::InitState  # dc: seed expansion loop + Reload
 00936250 EA::Random::RandomMersenneTwister::Generate  # dc: tempering
