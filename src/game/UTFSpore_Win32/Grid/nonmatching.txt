@@ -25,3 +25,4 @@
 00978df0 1364 complete WinGridView::SortRowsByColumn (collect column cells, merge_sort, erase+reinsert with new rows, remap selection, invalidate); regalloc/block layout differ; difftest UNSUPPORTED (0/400 valid inputs: needs a real matrix)
 00979440 1529 complete WinGridView::SortColumnsByRow (transposed); same; difftest UNSUPPORTED (0/1500 valid)
 0097a130 3205 complete (all paths); flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; frame/reg allocation differs, double->int64 ceil cast emits _ftol2_sse instead of inline fistp+fldcw
+0097cea0 306 complete; WinGrid::SetCellWindow (IWinGrid subobject, ret 0x18); all paths and calls present; remaining diff: shrink-wrapped pushes and register choice (this in esi vs ebp), cl folds the 2nd 0x7fffffff compare into `cmp reg,reg`; flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast; equiv: PASS

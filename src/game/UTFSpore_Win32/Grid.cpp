@@ -11,6 +11,9 @@
 #include "EA/UTFWin/Image.h"
 #include "EA/UTFWinControls/ImageDrawable.h"
 #include "EA/UTFWin/cDropShadowDescriptor.h"
+#define __PLACEMENT_NEW_INLINE   // the slices' own placement new/delete win over <new>'s (rewrite.py)
+#include <new>
+inline void operator delete(void*, void*) {}   // placement delete (<new>'s is skipped, rewrite.py)
 
 // ---- items of slice s0096f3f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
@@ -796,8 +799,48 @@ static WString* FindHeading(HeadingMap& m, int key) {
 // ---- items of slice s0097a130 end
 
 // ---- items of slice s0097cea0 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* ea_new(unsigned, const char*, int, int, const char*, int); // 0x00f473a0
 struct WinGridBase { void RefreshImpl(); };   // 0x97bc80, thiscall
 struct WinGridRefreshThunk { void Refresh(); };
+namespace Gr {
+#define GVT(o, i) ((*(void***)(o))[i])
+}
+namespace Gr {
+struct CellData_s0097_cea0 {                        // 0x1c bytes, allocated "UTFWin/Grid"
+    int mType;                           // +0
+    int mCol, mRow;                      // +4, +8
+    void* mpWindow;                      // +0xc
+    int pad10, pad14;
+    unsigned mFlags;                     // +0x18
+};
+}
+namespace Gr {
+struct SparseMatrix_s0097_cea0 {                    // SparseMatrix<CellData*> at IWinGrid+0x114
+    int  GetMaxUsedColAndRow(int* pOut);                              // 0x973980, ret 4
+    bool GetMinMaxUsedColForRow(int row, int* pMin, int* pMax);      // 0x975350, ret 0xc
+    bool GetMinMaxUsedRowForCol(int col, int* pMin, int* pMax);      // 0x973800, ret 0xc
+    void InsertCell(int col, int row, CellData_s0097_cea0** ppCell, int flag);  // 0x976f90, ret 0x10
+};
+}
+namespace Gr {
+struct WinGridMain {                     // the full WinGrid object (IWinGrid subobject - 0x20c)
+    void SetupCell(int col, int row, int one, int flag);             // 0x97bfb0, ret 0x10
+    void InitCellWindow(int col, int row, void* w, bool b1, bool b2); // 0x975ea0, ret 0x14
+};
+}
+namespace Gr {
+struct WinGridIface {                    // IWinGrid subobject
+    void* vtbl;                          // +0
+    char  pad4[4];
+    bool  mbDirty;                       // +8
+    char  pad9[0x7c - 9];
+    int   mLastCol;                      // +0x7c
+    int   mLastRow;                      // +0x80
+    char  pad84[0x114 - 0x84];
+    SparseMatrix_s0097_cea0 mCells;                 // +0x114
+    bool SetCellWindow(int col, int row, void* w, bool b1, bool b2, int flag);
+};
+}
 // ---- items of slice s0097cea0 end
 
 // @ 0x009702b0
@@ -2057,6 +2100,70 @@ bool WinGrid_s0097_a130::OnRebuild(RenderContext* rc)
     }
     return true;
 }
+
+// @ 0x0097cea0
+namespace Gr {
+bool WinGridIface::SetCellWindow(int colIn, int rowIn, void* w, bool b1, bool b2, int flag)
+{
+    if (flag == 0) flag = 1;
+    if (((bool(__thiscall*)(void*, void*, int, int, int))GVT(this, 0x1b8 / 4))(this, w, 0, 0, 0))
+        return false;
+    int col = colIn, row = rowIn;
+    {
+    int mn, mx;
+    if (col == 0x7fffffff) {
+        bool skipToRow = false;
+        if (row == 0x7fffffff) {
+            col = mCells.GetMaxUsedColAndRow(&mx);
+            if (col == (int)0x80000000) { col = 0; skipToRow = true; }
+            else if (col != 0x7fffffff) skipToRow = true;
+        }
+        if (!skipToRow) {
+            if (!mCells.GetMinMaxUsedColForRow(row, &mn, &mx)) col = 0;
+            else col = mx + 1;
+        }
+    }
+    if (row == 0x7fffffff) {
+        if (!mCells.GetMinMaxUsedRowForCol(col, &mn, &mx)) row = 0;
+        else row = mx + 1;
+    }
+    }
+    if (!((bool(__thiscall*)(void*, int, int))GVT(this, 0xd4 / 4))(this, col, row)) {
+        ((void(__thiscall*)(void*, int, int))GVT(this, 0x164 / 4))(this, col, row);
+        return false;
+    }
+    if (w == 0) {
+        ((void(__thiscall*)(void*, int, int))GVT(this, 0x164 / 4))(this, col, row);
+        mLastRow = row;
+        mLastCol = col;
+        return true;
+    }
+    CellData_s0097_cea0* cell = 0;
+    CellData_s0097_cea0* n = (CellData_s0097_cea0*)ea_new(0x1c, "UTFWin/Grid", 0, 0, 0, 0);
+    if (n) {
+        n->pad10 = 0;
+        n->pad14 = 0;
+        n->mFlags = 0;
+        n->mType = 1;
+        n->mCol = col;
+        n->mRow = row;
+        n->mpWindow = w;
+        cell = n;
+        if (b1) n->mFlags |= 1;
+        if (b2) n->mFlags |= 2;
+        WinGridMain* wg = (WinGridMain*)((char*)this - 0x20c);
+        wg->SetupCell(col, row, 1, flag);
+        mCells.InsertCell(col, row, &cell, 0);
+        wg->InitCellWindow(col, row, w, b1, b2);
+    }
+    mbDirty = true;
+    void* sub = (char*)this - 0x208;
+    ((void(__thiscall*)(void*, int, int))GVT(sub, 0x7c / 4))(sub, 8, 1);
+    mLastRow = row;
+    mLastCol = col;
+    return true;
+}
+}  // namespace Gr
 
 // @ 0x0097d080
 void WinGridRefreshThunk::Refresh()
