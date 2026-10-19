@@ -6,5 +6,5 @@
 00631e50 ?FUN_00631e50@@YIXPAX@Z  # FUN_00631e50 migrated from s00631810 (verbatim, slice spelling)
 006320d0 SP::cSPPlayModePhotoBrowser::DeletePhoto  # called by DeleteSelected
 00632320 ?FUN_00632320@@YIXPAXH@Z  # FUN_00632320 migrated from s00631810 (verbatim, slice spelling)
-00632660 SP::cSPPlayModePhotoBrowser::DeleteSelected  # PDB candidate (caller-single)
-006326f0 SP::cSPPlayModePhotoBrowser::MoveSelected  # PDB candidate (caller-single)
+00632660 ?FUN_00632660@@YIXPAX@Z  # FUN_00632660 migrated from s00631810 (verbatim, slice spelling)
+006326f0 ?FUN_006326f0@@YIXPAX@Z  # FUN_006326f0 migrated from s00631810 (verbatim, slice spelling)

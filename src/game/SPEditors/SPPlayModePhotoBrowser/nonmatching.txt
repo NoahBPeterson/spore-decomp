@@ -11,6 +11,8 @@
 00630b30 196 vector<cSettingsTab*>::DoInsertValue: complete; reallocation path memmove/DoInsertValue shape
 00631dc0 18 FUN_00631dc0: complete; register swap (edi/ebx), materialised zero size vs memcpy thunk call order
 00631df0 82 FUN_00631df0: complete; AutoRefCount push/AddRef/Release and grow-path call shape
+00632660 49 SP::cSPPlayModePhotoBrowser::DeleteSelected: complete; re-evaluated count loops + tail ExitDeleteMode
+006326f0 49 SP::cSPPlayModePhotoBrowser::MoveSelected: complete; re-evaluated count loops + tail ExitMoveMode
 00632780 18 CheckGuidAndType: complete; original leaves 4 bytes of the GetPath arg on the stack (add esp,0x24, path at esp+0x10), not reproducible with a plain thiscall virtual
 00632900 10 AddPhoto: complete; old writeJob load is hoisted above the guid/selected stores in our build
 006329b0 165 CopyPixelsToRaster: complete; original addresses the entry as (this + idx*0x24) + 0x84 disp without folding, ours folds the 0x84 into the lea

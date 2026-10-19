@@ -167,12 +167,13 @@ struct Ent24 { int f0, f4, f8, fc, f10, f14, f18, f1c, f20; };
 // ---- items of slice s00630750 end
 
 // ---- items of slice s00631810 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern void __fastcall ExitDeleteMode(void*);
-extern void __fastcall ExitMoveMode(void*);
 extern "C" void __cdecl CALLEE_memcpy_11e0744(void* dst, const void* src, unsigned n);
 extern "C" void __cdecl FUN_005c8480(void*, void**);
+extern void __fastcall ExitDeleteMode(void*);
+extern void __fastcall ExitMoveMode(void*);
 typedef void (__thiscall *TF0)(void*);
 // ---- items of slice s00631810 end
+
 
 // ---- items of slice s00632780 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern wchar_t sEmptyWStr[];   // 0x01667bac, the shared empty string
@@ -449,6 +450,7 @@ void SP::cSPPlayModePhotoBrowser::EnterMoveMode()
 
 
 
+
 // @ 0x0062fe40
 void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
 {
@@ -463,6 +465,7 @@ void SP::cSPPlayModePhotoBrowser::EnterDeleteMode()
     mUI->SetUIGroupVisible(0x41a30c0, false);
     mUI->SetUIGroupVisible(0x410cf00, false);
 }
+
 
 
 
@@ -496,6 +499,7 @@ int __stdcall GetHeaderInfo(void* data, int kind)
 
 
 
+
 // @ 0x00630090
 void SP::cSPPlayModePhotoBrowser::SelectAll(bool v)
 {
@@ -508,6 +512,7 @@ void SP::cSPPlayModePhotoBrowser::SelectAll(bool v)
         p->bIsSelected = v;
     }
 }
+
 
 
 
@@ -543,6 +548,7 @@ UIImageView* __stdcall cSPPlayModePhotoBrowser::GetImageFromRaster(void* raster)
 
 
 
+
 // @ 0x006301a0
 void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
 {
@@ -563,6 +569,7 @@ void SP::cSPPlayModePhotoBrowser::ExitDeleteMode()
     mUI->ToggleUIGroup(0x3f6c188, false);
     mUI->ToggleUIGroup(0x3f6c1b4, false);
 }
+
 
 
 
@@ -593,6 +600,7 @@ void SP::cSPPlayModePhotoBrowser::ExitMoveMode()
 
 
 
+
 // @ 0x00630360
 cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 {
@@ -614,6 +622,7 @@ cPlayModePhoto* cSPPlayModePhotoBrowser::FindPhotoByGuid(uint32_t guid)
 
 
 
+
 // @ 0x006303a0
 void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
 {
@@ -629,6 +638,7 @@ void cSPPlayModePhotoBrowser::ReleaseAsyncHandle()
         mAsyncHandle = 0;
     }
 }
+
 
 
 
@@ -657,6 +667,7 @@ cJob* cSPPlayModePhotoBrowser::CancelAllPendingLoadJobs()
 
 
 
+
 // @ 0x00630470
 int cSPPlayModePhotoBrowser::IsPhotosWriting()
 {
@@ -676,6 +687,7 @@ int cSPPlayModePhotoBrowser::IsPhotosWriting()
     }
     return 0;
 }
+
 
 
 
@@ -709,6 +721,7 @@ bool cSPPlayModePhotoBrowser::AnyWriteJobActive()
 
 
 
+
 // @ 0x00630540
 JobRef& JobRef::operator=(const JobRef& rhs)
 {
@@ -723,6 +736,7 @@ JobRef& JobRef::operator=(const JobRef& rhs)
     }
     return *this;
 }
+
 
 
 
@@ -747,6 +761,7 @@ void cSPPlayModePhotoBrowser::UpdatePageButtons(int unused)
 
 
 
+
 // @ 0x00630630
 uint32_t wstring16::find_first_of(const wchar_t* p, uint32_t position) const
 {
@@ -765,12 +780,14 @@ uint32_t wstring16::find_first_of(const wchar_t* p, uint32_t position) const
 
 
 
+
 // @ 0x00630690
 int wstring16::compare(uint32_t pos, uint32_t n, const wchar_t* p) const
 {
     uint32_t len = (uint32_t)(mpEnd - mpBegin) - pos;
     return CompareW(mpBegin + pos, mpBegin + pos + min_alt(len, n), p, p + CharStrlen(p));
 }
+
 
 
 
@@ -793,6 +810,7 @@ LocaleMsg::~LocaleMsg()
 
 
 
+
 // @ 0x00630750
 void* __fastcall FUN_00630750(void* self, short* first, short* last, int)
 {
@@ -807,6 +825,7 @@ void* __fastcall FUN_00630750(void* self, short* first, short* last, int)
   *e = 0;
   return self;
 }
+
 
 
 
@@ -837,6 +856,7 @@ void __fastcall FUN_006307a0(void* self, int* out, int* pos, unsigned* val, char
 
 
 
+
 // @ 0x006308d0
 void* __fastcall FUN_006308d0(void* self, char flag)
 {
@@ -863,9 +883,11 @@ void* __fastcall FUN_006308d0(void* self, char flag)
 
 
 
+
 // @ 0x00630930
 void __fastcall FUN_00630930(void* self)
 { (void)self; }
+
 
 
 
@@ -886,6 +908,7 @@ void* __cdecl FUN_006309e0(void* out, const short* lhs, const WStr* rhs)
   o->Append(rhs->begin, rhs->end);
   return out;
 }
+
 
 
 
@@ -935,6 +958,7 @@ void __fastcall FUN_00630a50(void* self)
 
 
 
+
 // @ 0x00630b30
 void __fastcall FUN_00630b30(void* self, int* pos, int* val)
 {
@@ -970,9 +994,11 @@ void __fastcall FUN_00630b30(void* self, int* pos, int* val)
 
 
 
+
 // @ 0x00630d10
 void __fastcall FUN_00630d10(void* self)
 { (void)self; }
+
 
 
 
@@ -984,9 +1010,11 @@ void __fastcall FUN_00630f20(void* self)
 
 
 
+
 // @ 0x006312f0
 void __fastcall FUN_006312f0(void* self)
 { (void)self; }
+
 
 
 
@@ -995,19 +1023,13 @@ void __fastcall FUN_006312f0(void* self)
 void __fastcall FUN_00631810(void* self)
 { (void)self; }
 
-
-
 // @ 0x00631a10
 void __fastcall FUN_00631a10(void* self)
 { (void)self; }
 
-
-
 // @ 0x00631b30
 void __fastcall FUN_00631b30(void* self)
 { (void)self; }
-
-
 
 // @ 0x00631dc0
 void __fastcall FUN_00631dc0(void* self)
@@ -1018,8 +1040,6 @@ void __fastcall FUN_00631dc0(void* self)
   CALLEE_memcpy_11e0744(beg, end, 0);
   s[1] += (int)beg - (int)end;
 }
-
-
 
 // @ 0x00631df0
 void __fastcall FUN_00631df0(void* self, void* p)
@@ -1040,25 +1060,57 @@ void __fastcall FUN_00631df0(void* self, void* p)
   if (obj != 0) ((TF0)(*(void**)(*(char**)obj + 8)))(obj);
 }
 
-
-
 // @ 0x00631e50
 void __fastcall FUN_00631e50(void* self)
 { (void)self; }
-
-
 
 // @ 0x006320d0
 __declspec(noinline) void __fastcall FUN_006320d0(void*, int, int)
 {}
 
-
-
 // @ 0x00632320
 void __fastcall FUN_00632320(void* self, int)
 { (void)self; }
 
+// @ 0x00632660
+void __fastcall FUN_00632660(void* self)
+{
+  int* s = (int*)self;
+  int n = (s[2] - s[1]) >> 2;
+  for (int i = n - 1; i >= 0; --i) {
+    void* p;
+    if (i < ((s[2] - s[1]) >> 2)) p = *(void**)(s[1] + i * 4);
+    else p = 0;
+    if (*(unsigned char*)((char*)p + 0x38)) FUN_006320d0(self, i, 1);
+  }
+  for (unsigned i = 0; i < (unsigned)((s[2] - s[1]) >> 2); ++i) {
+    void* p;
+    if (i < (unsigned)((s[2] - s[1]) >> 2)) p = *(void**)(s[1] + i * 4);
+    else p = 0;
+    *(unsigned char*)((char*)p + 0x38) = 0;
+  }
+  ExitDeleteMode(self);
+}
 
+// @ 0x006326f0
+void __fastcall FUN_006326f0(void* self)
+{
+  int* s = (int*)self;
+  int n = (s[2] - s[1]) >> 2;
+  for (int i = n - 1; i >= 0; --i) {
+    void* p;
+    if (i < ((s[2] - s[1]) >> 2)) p = *(void**)(s[1] + i * 4);
+    else p = 0;
+    if (*(unsigned char*)((char*)p + 0x38)) FUN_00632320(self, i);
+  }
+  for (unsigned i = 0; i < (unsigned)((s[2] - s[1]) >> 2); ++i) {
+    void* p;
+    if (i < (unsigned)((s[2] - s[1]) >> 2)) p = *(void**)(s[1] + i * 4);
+    else p = 0;
+    *(unsigned char*)((char*)p + 0x38) = 0;
+  }
+  ExitMoveMode(self);
+}
 
 // @ 0x00632780
 bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a, uint32_t u, int kind, wstring16_s0063_2780 b)
@@ -1091,6 +1143,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CheckGuidAndType(wstring16_s0063_2780 a
 }
 
 
+
 // @ 0x00632900
 void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)
 {
@@ -1121,6 +1174,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::AddPhoto(uint32_t guid, int kind)
 }
 
 
+
 // @ 0x006329b0
 bool cSPPlayModePhotoBrowser_s0063_2780::CopyPixelsToRaster(int idx, uint32_t a, uint32_t b)
 {
@@ -1145,12 +1199,14 @@ bool cSPPlayModePhotoBrowser_s0063_2780::CopyPixelsToRaster(int idx, uint32_t a,
 }
 
 
+
 // @ 0x00632ab0
 void cSPPlayModePhotoBrowser_s0063_2780::PushLoaded(uint32_t guid)
 {
     cPlayModePhoto_s0063_2780* p = FindPhotoByGuid(guid);
     mLoaded.push_back(p);
 }
+
 
 
 // @ 0x00632b00
@@ -1172,6 +1228,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::ClearLoadedPhotos()
 }
 
 
+
 // @ 0x00632ba0
 void cSPPlayModePhotoBrowser_s0063_2780::DeleteAll()
 {
@@ -1186,6 +1243,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::DeleteAll()
 }
 
 
+
 // @ 0x00632c00
 void cSPPlayModePhotoBrowser_s0063_2780::MoveAll()
 {
@@ -1198,6 +1256,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::MoveAll()
     ExitMoveMode();
     ClearLoadedPhotos();
 }
+
 
 
 // @ 0x00632c60
@@ -1220,6 +1279,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::DeleteOne()
 }
 
 
+
 // @ 0x00632ce0
 void cSPPlayModePhotoBrowser_s0063_2780::MoveOne()
 {
@@ -1238,6 +1298,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::MoveOne()
         }
     }
 }
+
 
 
 // @ 0x00632d60
@@ -1259,6 +1320,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::SaveThumbnail(void* data)
 }
 
 
+
 // @ 0x00632e40
 bool cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap()
 {
@@ -1270,6 +1332,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::ResetPhotoMap()
     }
     return false;
 }
+
 
 
 // @ 0x00632e90
@@ -1295,6 +1358,7 @@ PhotoTypeInfo& PhotoTypeMap::operator[](const uint32_t& key)
     }
     return pLowerBound->value;
 }
+
 
 
 // @ 0x00632f30
@@ -1334,6 +1398,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::Shutdown()
 }
 
 
+
 // @ 0x00632fe0
 void cSPPlayModePhotoBrowser_s0063_2780::Deactivate()
 {
@@ -1355,6 +1420,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::Deactivate()
 }
 
 
+
 // @ 0x00633080
 void cSPPlayModePhotoBrowser_s0063_2780::SetToLastPage()
 {
@@ -1363,6 +1429,7 @@ void cSPPlayModePhotoBrowser_s0063_2780::SetToLastPage()
     if (mCurrentFirstPhotoIndex != old)
         ClearLoadedPhotos();
 }
+
 
 
 // @ 0x006330b0
@@ -1397,6 +1464,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoThumb(uint32_t idx)
 }
 
 
+
 // @ 0x00633230
 bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int kind, ResourceKey key)
 {
@@ -1427,6 +1495,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::MarkPhotoTypeForGuid(uint32_t guid, int
 }
 
 
+
 // @ 0x006332c0
 bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoByKey(const ResourceKey* key)
 {
@@ -1450,6 +1519,7 @@ bool cSPPlayModePhotoBrowser_s0063_2780::LoadPhotoByKey(const ResourceKey* key)
     }
     return ok;
 }
+
 
 
 // @ 0x00633440
@@ -1484,29 +1554,36 @@ void cSPPlayModePhotoBrowser_s0063_2780::CapturePixels(int idx, void* stream, ui
 }
 
 
+
 // @ 0x00633560
 void __fastcall FUN_00633560(void* self)
 { (void)self; }
+
 
 // @ 0x00633760
 void __fastcall FUN_00633760(void* self)
 { (void)self; }
 
+
 // @ 0x006338a0
 void __fastcall FUN_006338a0(void* self)
 { (void)self; }
+
 
 // @ 0x006339e0
 void __fastcall FUN_006339e0(void* self)
 { (void)self; }
 
+
 // @ 0x00633ac0
 void __fastcall FUN_00633ac0(void* self)
 { (void)self; }
 
+
 // @ 0x00633cc0
 void __fastcall FUN_00633cc0(void* self)
 { (void)self; }
+
 
 // @ 0x00634140
 void __fastcall FUN_00634140(void* self)
