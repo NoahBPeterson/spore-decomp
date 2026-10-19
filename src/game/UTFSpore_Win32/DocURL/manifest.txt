@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/DocURL.cpp  ?Fn8e38b0@@YAIPAG@Z  008e38b0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DocURL.cpp  ?Fn8e3900@@YAPAGPAG@Z  008e3900  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/DocURL.cpp  ?Fn8e3960@@YAPAGPAG@Z  008e3960  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

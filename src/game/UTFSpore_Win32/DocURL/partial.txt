@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+008e3a10  66   path-trim helper; original uses custom EBX register ABI; approximated
+008e3b90  24   ConvertURLToFilePath; parsing branches approximated
+008e3fa0  15   ResolveRelativeURL; URL assembly approximated

@@ -5,3 +5,10 @@
 008e3600 ?Fn8e3600@Doc@@QAEXPAX@Z  # Doc::Fn8e3600 migrated from s008e2dd0 (verbatim, slice spelling)
 008e3660 ?Fn8e3660@@YIXPAX0@Z  # Fn8e3660 migrated from s008e2dd0 (verbatim, slice spelling)
 008e3850 Fn8e3850
+008e38b0 ?Fn8e38b0@@YAIPAG@Z  # Fn8e38b0 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3900 ?Fn8e3900@@YAPAGPAG@Z  # Fn8e3900 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3960 ?Fn8e3960@@YAPAGPAG@Z  # Fn8e3960 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3a10 ?Fn8e3a10@@YADPAHH@Z  # Fn8e3a10 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3a70 ?Fn8e3a70@WStrErase@@QAEPAHII@Z  # WStrErase::Fn8e3a70 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3b90 ?Fn8e3b90@@YAIPAGPAH@Z  # Fn8e3b90 migrated from s008e2dd0 (verbatim, slice spelling)
+008e3fa0 ?Fn8e3fa0@@YAPAXPAPAXPAG1@Z  # Fn8e3fa0 migrated from s008e2dd0 (verbatim, slice spelling)

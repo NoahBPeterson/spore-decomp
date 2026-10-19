@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+008e3a70 68 basic_string<wchar_t>::erase; register allocation differs (equiv WEAK: 67% coverage; now a thiscall member)
