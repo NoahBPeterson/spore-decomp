@@ -1,1 +1,2 @@
 # source  symbol  va  flags
+../src/game/UTFSpore_Win32/tgaread.cpp  ?TGA_about@@YAPAEXZ  0084f1c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

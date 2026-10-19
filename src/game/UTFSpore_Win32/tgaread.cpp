@@ -3,6 +3,9 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#ifndef NULL
+#define NULL 0
+#endif
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void*        __stdcall galloc(unsigned int size);                       // 0x0087d4a0
@@ -11,6 +14,7 @@ extern "C" unsigned int __stdcall gread(void* h, void* buf, unsigned int n);    
 extern "C" int          __stdcall gseek(void* h, long off, int whence);            // 0x0087d540
 extern "C" unsigned long long __stdcall glen(void* h);                             // 0x0087d560
 extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
+extern "C" char* __cdecl strcpy(char* dst, const char* src);                        // 0x011e0744
 #pragma function(memset)
 
 // ---- items of slice s0084ebe0 begin (TODO(rewrite): local stubs, replace by canonical classes)
@@ -18,11 +22,14 @@ typedef unsigned char  u8;
 typedef unsigned short u16;
 typedef unsigned int   u32;
 typedef signed char    s8;
+typedef signed short   s16;
 extern "C" void*        __stdcall galloc(unsigned int size);                       // 0x0087d4a0
 extern "C" unsigned char __stdcall gfree(void* p);                                 // 0x0087d4c0
 extern "C" unsigned int __stdcall gread(void* h, void* buf, unsigned int n);       // 0x0087d4e0
 extern "C" int          __stdcall gseek(void* h, long off, int whence);            // 0x0087d540
 extern "C" unsigned long long __stdcall glen(void* h);                             // 0x0087d560
+extern "C" void* __cdecl memset(void* dst, int val, unsigned int n);
+extern "C" char* __cdecl strcpy(char* dst, const char* src);                        // 0x011e0744
 struct TgaHeader {
     u8  id_length;      // +0x00
     u8  cmap_type;      // +0x01
@@ -210,6 +217,32 @@ void TGAflipline(u8* ptr, int bpp, int count)
     }
 }
 
+// @ 0x0084f1c0
+u8* TGA_about(void)
+{
+    u8* d = (u8*)galloc(0x100);
+    if (d != NULL) {
+        memset(d, 0, 0x100);
+        *(u32*)(d + 0x00) = 0x2e544741;                 // "TGA."
+        *(u32*)(d + 0x04) = 0x100;
+        *(u32*)(d + 0x08) = 0x159;
+        *(u32*)(d + 0x14) = 0;
+        *(u32*)(d + 0x18) = 100;
+        *(u32*)(d + 0x1c) = 0x54504943;                 // "CIPT"
+        *(u32*)(d + 0x0c) = (*(u32*)(d + 0x0c) & 0xffff93d7) | 0x93d7;
+        strcpy((char*)(d + 0x3c), ".tga");
+        strcpy((char*)(d + 0x44), ".vda");
+        strcpy((char*)(d + 0x4c), ".icb");
+        strcpy((char*)(d + 0x54), ".vst");
+        strcpy((char*)(d + 0x7c), "FrANK G. Barchard");
+        strcpy((char*)(d + 0x9c), "1.38");
+        *(u32*)(d + 0xa4) = 0x414754;
+        strcpy((char*)(d + 0xac), "Targa");
+        strcpy((char*)(d + 0xbc), "Targa");
+    }
+    return d;
+}
+
 // @ 0x0084f300
 int __stdcall TGA_is(void* io)
 {
@@ -263,6 +296,164 @@ int __stdcall TGA_open(void** out, void* io, int a3, int a4)
         return 1;
     }
     return 0;
+}
+
+// @ 0x0084f440
+void* __stdcall TGA_info(void* handle, int a2)
+{
+    u8  palbuf[0x400];
+    TgaHeader h;
+    u32* d;
+    unsigned long long len;
+    u32 alpha_depth;
+    u32 seekres;
+    u32 cmap_count;
+    int x_org, y_org;
+    int i;
+
+    gseek(*(void**)((u8*)handle + 0x10), 0, 0);              // handle->io
+    len = glen(*(void**)((u8*)handle + 0x10));
+    if (gread(*(void**)((u8*)handle + 0x10), &h, 0x12) == 0)
+        return NULL;
+
+    x_org = (int)h.x_origin;
+    y_org = (int)h.y_origin;
+    if ((h.image_desc & 0x20) == 0)
+        y_org = -y_org;
+    if ((h.image_desc & 0x10) != 0)
+        x_org = -x_org;
+
+    alpha_depth = (u32)h.pixel_depth - 0x18;
+    if (h.pixel_depth == 0xf || h.pixel_depth == 0x10 ||
+        (h.pixel_depth == 8 && h.cmap_type != 0 &&
+         (h.cmap_depth == 0xf || h.cmap_depth == 0x10))) {
+        alpha_depth = ((h.image_desc & 0xf) == 1);
+    }
+    if ((int)alpha_depth < 1)
+        alpha_depth = 0;
+    else if ((int)alpha_depth > 8)
+        alpha_depth = 8;
+
+    seekres = (u32)gseek(*(void**)((u8*)handle + 0x10), h.id_length + 0x12, 0) & 0xff;
+
+    cmap_count = h.cmap_length;
+    if ((h.image_type & 7) != 1) {
+        cmap_count = 0;
+        if ((h.image_type & 7) == 3)
+            cmap_count = 0x100;
+    }
+
+    d = (u32*)galloc(0x2a70);
+    if (d != NULL) {
+        memset(d, 0, 0x2a70);
+        d[5] = h.height;
+        d[4] = h.width;
+        d[0x10e] = alpha_depth;
+        d[0x10d] = (u32)len;
+        d[0x114] = (u32)x_org;
+        d[0] = 0x2e544741;
+        d[1] = 0x2a70;
+        d[2] = 0x159;
+        d[3] = 0;
+        d[0x10a] = 0;
+        d[0x10b] = (h.image_type >> 3) & 1;
+        d[0x10c] = 100;
+        d[0x10f] = 8;
+        d[0x110] = 8;
+        d[0x111] = 8;
+        d[0x112] = 0;
+        d[0x113] = 0;
+        d[0x115] = (u32)y_org;
+        d[0x116] = 0;
+        *(u8*)((u8*)d + 0x45c) = 0;
+
+        if (h.pixel_depth < 0xf) {
+            int pd = h.pixel_depth;
+            if (pd == 0)
+                pd = 8;
+            if (cmap_count == 0)
+                cmap_count = 1u << (pd & 0x1f);
+            if ((int)cmap_count > 0x100)
+                cmap_count = 0x100;
+            d[6] = 8;
+            d[7] = pd;
+            d[9] = cmap_count;
+            d[8] = h.cmap_first;
+            if (h.cmap_type == 0) {
+                u8* p = (u8*)d + 0x2a;
+                for (i = 0; i < 0x100; i++) {
+                    p[0] = (u8)i; p[-1] = (u8)i; p[-2] = (u8)i; p[1] = 0xff; p += 4;
+                }
+            }
+            else {
+                switch (h.cmap_depth) {
+                case 0xf:
+                case 0x10: {
+                    u8* t;
+                    d[0x111] = 5; d[0x110] = 5; d[0x10f] = 5; d[0x10e] = 0;
+                    seekres = gread(*(void**)((u8*)handle + 0x10), palbuf, cmap_count * 2);
+                    t = (u8*)d + h.cmap_first * 4 + 0x28;
+                    for (i = 0; i < (int)h.cmap_length; i++) {
+                        u16 v = ((u16*)palbuf)[i];
+                        u32 g, r, b, t1, t2, t3;
+                        if (alpha_depth == 0) t[3] = 0xff;
+                        else t[3] = (u8)((s16)v >> 15);
+                        g = (v >> 10 & 0x1f) * 0xff;
+                        t1 = g / 0x1f;
+                        r = (v >> 5 & 0x1f) * 0xff;
+                        t[2] = (u8)((((g - t1) >> 1) + t1) >> 4);
+                        t2 = r / 0x1f;
+                        b = (v & 0x1f) * 0xff;
+                        t[1] = (u8)((((r - t2) >> 1) + t2) >> 4);
+                        t3 = b / 0x1f;
+                        t[0] = (u8)((((b - t3) >> 1) + t3) >> 4);
+                        t += 4;
+                    }
+                    break;
+                }
+                case 0x18: {
+                    u8* s = palbuf;
+                    u8* t;
+                    d[0x10e] = 0;
+                    seekres = gread(*(void**)((u8*)handle + 0x10), palbuf, cmap_count * 3);
+                    t = (u8*)d + h.cmap_first * 4 + 0x28;
+                    for (i = 0; i < (int)h.cmap_length; i++) {
+                        t[0] = s[0]; t[1] = s[1]; t[2] = s[2]; t[3] = 0xff;
+                        s += 3; t += 4;
+                    }
+                    break;
+                }
+                case 0x20: {
+                    u8* s = palbuf;
+                    u8* t;
+                    d[0x10e] = 8;
+                    seekres = gread(*(void**)((u8*)handle + 0x10), palbuf, cmap_count * 4);
+                    t = (u8*)d + h.cmap_first * 4 + 0x28;
+                    for (i = 0; i < (int)h.cmap_length; i++) {
+                        t[0] = s[0]; t[1] = s[1]; t[2] = s[2]; t[3] = s[3];
+                        s += 4; t += 4;
+                    }
+                    break;
+                }
+                }
+            }
+        }
+        else {
+            int pd = h.pixel_depth;
+            if (pd == 0x10)
+                pd = 0xf;
+            d[6] = 0x20;
+            d[7] = pd;
+            d[9] = 0;
+            if (pd < 0x11) { d[0x111] = 5; d[0x110] = 5; d[0x10f] = 5; }
+            if (pd < 0x20) { d[0x10e] = 0; }
+        }
+
+        if (seekres != 0)
+            return d;
+        gfree(d);
+    }
+    return NULL;
 }
 
 // @ 0x0084f900
