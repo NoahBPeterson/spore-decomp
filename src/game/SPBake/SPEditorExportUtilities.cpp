@@ -2960,6 +2960,9 @@ struct RefHolderB {
 
 // ---- items of slice s004604f0 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" long __cdecl _InterlockedExchange(volatile long*, long);
+extern void __cdecl GetFloatProperty(int owner, int key, float* out);     // 0x40cf10
+extern float g_const_1486114;       // 0x1486114
+extern int   g_3e8c[3];             // 0x15d3e8c
     extern float g_f1485720; // 0x01485720
     extern float g_f13eecd8; // 0x013eecd8
     extern float g_f13ec480; // 0x013ec480
@@ -2983,7 +2986,70 @@ struct Bone {
     Vec3_s0046_04f0  pos;         // +0x54
     char  pad3[0x8c - 0x60];
 };
+struct EmptyAlloc { EmptyAlloc() {} };
+struct Alloc {
+    int a, b;
+    Alloc() {}
+    Alloc* __thiscall Copy(const EmptyAlloc& o);   // 0x429360 (copy ctor)
+};
 void* operator new(unsigned n, const char* name, int, int, int, int);   // 0xf473a0
+struct Piece { int a, b; };
+struct PieceVec {                       // 0x14: vector<Piece>
+    Piece* b; Piece* e; Piece* c; Alloc al;
+    unsigned size() { return e - b; }
+    Piece* data() { return b; }
+};
+struct PieceVecList {                   // vector<PieceVec>
+    PieceVec* b; PieceVec* e; PieceVec* c; Alloc al;
+    PieceVecList(const EmptyAlloc& a = EmptyAlloc()) { b = 0; e = 0; c = 0; al.Copy(a); }
+    ~PieceVecList();                    // 0x432de0
+    PieceVec* at(unsigned i) { return b + i; }
+    unsigned size() { return e - b; }
+};
+struct RefObj {
+    void* vt;
+    int   mnRefCount;      // +4
+    int AddRef() { return mnRefCount++ + 1; }
+    void __thiscall Release();                               // 0x453540
+    void __thiscall GetPieces(int src, PieceVecList* out);   // 0x7a0ee0
+};
+struct AutoRef_s0046_04f0 {
+    RefObj* p;
+    AutoRef_s0046_04f0(RefObj* x) { p = x; if (p) p->AddRef(); }
+    ~AutoRef_s0046_04f0() { if (p) p->Release(); }
+};
+struct EditorPropList {
+    char pad[0x38];
+    EditorPropList();                              // 0x6a1c40
+    void __thiscall SetParent(int parent);         // 0x6a1710
+};
+struct PropMgr2 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+    virtual void SetPropList(EditorPropList* pl, int a, int b);     // +0x34
+};
+extern PropMgr2* __cdecl GetPropertyManager();                            // 0x67de30
+extern RefObj* __cdecl FUN_0079ab90(int a, int b, void* data, int n);
+struct RefVec {
+    Piece** b; Piece** e; Piece** c; Alloc al;
+    RefVec(const EmptyAlloc& a = EmptyAlloc()) { b = 0; e = 0; c = 0; al.Copy(a); }
+    ~RefVec();                                 // 0x41eb80
+    void __thiscall PushBack(Piece* p);        // 0x41ef20
+    char __thiscall IsResourceType();          // 0x526430 (SP::GetResourceTypeFromModelType)
+};
+extern void __cdecl GetModelAsGameMeshes(int a, RefVec* v, int b, int c, int d, int e, EditorPropList* pl,
+                                         int f, int g, int h, int i, int j);   // 0x7573a0
 struct MatInfo {
     char  pad[0xc];
     char  kind;       // +0xc
@@ -3196,6 +3262,39 @@ void FUN_00460bf0(Bone* bones, int count, int root, float t)
             Vector3_Add(&bones[i].pos, Vector3_Scale(&v9, &p30, &key));
             FUN_00460b50(bones, count, i, p30);
         }
+    }
+}
+
+// @ 0x00460d40
+void FUN_00460d40(int p1, int p2, int p3, int p4, int p5, int p6, int p7)
+{
+    int   t24[3];
+    float u;
+    t24[0] = g_3e8c[0];
+    t24[1] = g_3e8c[1];
+    t24[2] = g_3e8c[2];
+    u = g_const_1486114;
+    GetFloatProperty(p2, 0x67ef6b0, &u);
+    AutoRef_s0046_04f0 v33(FUN_0079ab90(1, 0, t24, 4));
+
+    PieceVecList p30;
+    v33.p->GetPieces(p3, &p30);
+
+    RefVec v28;
+    unsigned obj = p30.size();
+    for (unsigned i = 0; i < obj; i++) {
+        unsigned j = 0;
+        unsigned n = p30.at(i)->size();
+        for (; j < n; j++) {
+            v28.PushBack(p30.at(i)->data() + j);
+        }
+    }
+
+    EditorPropList* n37 = new ("Graphics", 0, 0, 0, 0) EditorPropList();
+    n37->SetParent(p2);
+    GetPropertyManager()->SetPropList(n37, p4, p5);
+    if (!v28.IsResourceType()) {
+        GetModelAsGameMeshes(p1, &v28, p4, p5, p6, 0, n37, 0, 0, 0, 0, p7);
     }
 }
 

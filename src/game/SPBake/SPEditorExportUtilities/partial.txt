@@ -1,4 +1,4 @@
-# va  reason
+# va  diff-bytes  reason
 00464300 ctor zero-initializing several container members and calling sub-ctors; layout unknown
 00464480 destructor: several inlined vector-destroy loops + member dtors; container types unknown
 00464580 ctor zero-initializing several 0x14-byte container members; layout unknown
