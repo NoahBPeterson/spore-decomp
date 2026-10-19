@@ -858,14 +858,6 @@ struct cSpeciesProfile_s004d_a330 {
 };
 // ---- items of slice s004da330 end
 
-
-
-
-
-
-
-
-
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void ResourceManager(uint32_t param);  // 0x004da3a0 (stays in the slice: not this object's)
 
@@ -1626,6 +1618,29 @@ class Key_s005b_eaf0 {
 };
 }
 }
+namespace EA {
+namespace ResourceMan {
+class IResourceManager_s005b_eaf0 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11)
+  virtual class IRecord* GetDatabaseFor(const Key_s005b_eaf0& key, int a, int b);  // +0x30 (name guessed)
+};
+}
+}
+namespace EA {
+namespace ResourceMan {
+IResourceManager_s005b_eaf0* GetManager_s005b_eaf0();
+}
+}
+namespace EA {
+namespace ResourceMan {
+class IDatabase {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7)
+  virtual uint32_t GetAccessFlags();  // +0x20 (name guessed)
+};
+}
+}
 namespace eastl {
 template <typename T>
 class sp_vector_s005b_eaf0 {
@@ -1693,6 +1708,24 @@ bool GetPropertyAsKey(App::PropertyList_s005b_eaf0* list, uint32_t id, EA::Resou
 }
 namespace SP {
 bool GetPropertyKeys(App::PropertyList_s005b_eaf0* list, uint32_t id, int* count, EA::ResourceMan::Key_s005b_eaf0** keys);  // 0x006a0ae0
+}
+namespace SP {
+EA::ResourceMan::IDatabase* GetSaveArea(uint32_t id);
+}
+namespace SP {
+bool SaveResource(App::PropertyList_s005b_eaf0* list, EA::ResourceMan::IDatabase* db, int flags);
+}
+namespace SP {
+class IObjectTemplateDB_s005b_eaf0 {
+ public:
+  PV(0) PV(1) PV(2) PV(3) PV(4) PV(5) PV(6) PV(7) PV(8) PV(9) PV(10) PV(11) PV(12) PV(13) PV(14) PV(15)
+  PV(16) PV(17) PV(18) PV(19) PV(20) PV(21) PV(22) PV(23) PV(24) PV(25) PV(26) PV(27)
+  virtual void AddTemplate(const EA::ResourceMan::Key_s005b_eaf0& key);        // +0x70
+  virtual void InvalidateTemplate(const EA::ResourceMan::Key_s005b_eaf0& key, int b);  // +0x74
+};
+}
+namespace SP {
+IObjectTemplateDB_s005b_eaf0* ObjectTemplateDB_s005b_eaf0();
 }
 namespace SP {
 namespace FunctionalMatch {
@@ -2186,21 +2219,6 @@ bool GetPaintUV(cSkinPaintTable* table, uint32_t id, float* u, float* v)
     return false;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d15c0
 namespace SP {
 void BuildParameters(cCreatureSummary* pSummary, eastl::sp_vector<DeclareParam_s004d_15c0>& params, bool bArchetypes)
@@ -2342,39 +2360,12 @@ void BuildParameters(cCreatureSummary* pSummary, eastl::sp_vector<DeclareParam_s
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d2200
 int GetMatchingCreatureKeys(uint32_t* self, uint32_t manager, int maxCount, uint32_t filter, char useAll, uint32_t* outParams)
 {
     (void)self; (void)manager; (void)maxCount; (void)filter; (void)useAll; (void)outParams;
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d2450
 namespace SP {
@@ -2473,34 +2464,11 @@ void LoadSpeciesTuning(bool force)
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d34f0
 void InitStatics()
 {
     LoadSpeciesTuning(0);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d3500
 float Blend(float, float, float a, float, float b, float c, float d)
@@ -2512,17 +2480,6 @@ float Blend(float, float, float a, float, float b, float c, float d)
     return k3;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d3570
 uint32_t MapGetFieldC(SpeciesMap* m, uint32_t key)
 {
@@ -2531,17 +2488,6 @@ uint32_t MapGetFieldC(SpeciesMap* m, uint32_t key)
     if (it != e) return it.mpNode->v[2];
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d35d0
 uint32_t MapGetClamped(SpeciesMap* m, uint32_t key)
@@ -2552,17 +2498,6 @@ uint32_t MapGetClamped(SpeciesMap* m, uint32_t key)
     return 0;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d3640
 uint32_t MapGetField4(SpeciesMap* m, uint32_t key)
 {
@@ -2571,17 +2506,6 @@ uint32_t MapGetField4(SpeciesMap* m, uint32_t key)
     if (it != e) return it.mpNode->v[0];
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d36a0
 void* MapGetPtr(SpeciesMap* m, uint32_t key)
@@ -2592,17 +2516,6 @@ void* MapGetPtr(SpeciesMap* m, uint32_t key)
     static MapDefault def;
     return &def;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d3760
 CreatureAbility::CreatureAbility()
@@ -2632,31 +2545,9 @@ CreatureAbility::CreatureAbility()
 {
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d3b80
 CreatureAbility::~CreatureAbility()
 {}
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d3cd0
 uint32_t TuningObj::GetAt(uint32_t index)
@@ -2668,17 +2559,6 @@ uint32_t TuningObj::GetAt(uint32_t index)
     return *(uint32_t*)(*(int*)((char*)this + 0x48) + index * 4);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d3d40
 int TuningObj::GetActive()
 {
@@ -2687,17 +2567,6 @@ int TuningObj::GetActive()
     else
         return m70;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d3d70
 float TuningObj::GetBound(bool which)
@@ -2708,34 +2577,12 @@ float TuningObj::GetBound(bool which)
         return mMin;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d3da0
 void TuningObj::SetBounds(float lo, float hi)
 {
     mMin = lo;
     mMax = hi;
 }
-
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d3dd0
 cSpeciesProfile::cSpeciesProfile(const ResKey& key, bool flag)
@@ -2827,46 +2674,15 @@ cSpeciesProfile::cSpeciesProfile(const ResKey& key, bool flag)
         BadModelKey(&animatedBabyKey, 1);
 }
 
-
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d44e0
 void SpeciesDB_Op1(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d46b0
 float SpeciesDB::GetScale()
 {
     return mScale * 0.025f * 100.0f;
 }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d46d0
 uint32_t SpeciesDB::FindField8(int id)
@@ -2883,16 +2699,6 @@ uint32_t SpeciesDB::FindField8(int id)
     return 0xffffffff;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d4750
 uint32_t SpeciesDB::FindField10(int id)
 {
@@ -2908,70 +2714,21 @@ uint32_t SpeciesDB::FindField10(int id)
     return 0xffffffff;
 }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d47d0
 void SpeciesDB_Op2(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d4ad0
 void SpeciesDB_Op3(void* self)
 { (void)self; }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d4f10
 void SpeciesDB_Op4(void* self)
 { (void)self; }
 
-
-
-
-
-
-
-
-
-
-
 // @ 0x004d8c10
 void SpeciesProfile_Update(void* a, int b)
 { (void)a; (void)b; }
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d8ee0
 int SpeciesProfile::GetVariantA(void* p)
@@ -2979,15 +2736,6 @@ int SpeciesProfile::GetVariantA(void* p)
     Update(p, 0);
     return (int)((char*)this + 0x810);
 }
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d8f10
 int SpeciesProfile::GetVariantB(void* p)
@@ -3004,15 +2752,6 @@ int SpeciesProfile::GetVariantB(void* p)
     return result;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004d8f90
 int SpeciesProfile::GetVariantC(void* p)
 {
@@ -3028,27 +2767,9 @@ int SpeciesProfile::GetVariantC(void* p)
     return result;
 }
 
-
-
-
-
-
-
-
-
-
 // @ 0x004d90a0
 void cSpeciesProfile_FillInProfileValues(void* self)
 { (void)self; }
-
-
-
-
-
-
-
-
-
 
 // @ 0x004d92b0
 namespace SP {
@@ -3224,14 +2945,6 @@ bool ReadAbilityData(cCreatureAbility_s004d_92b0* ability, PropertyList_s004d_92
 }
 }  // namespace SP
 
-
-
-
-
-
-
-
-
 // @ 0x004da330
 void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
 {
@@ -3241,13 +2954,6 @@ void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
     if (out->empty())
         out->sprintf(L"Species %d", mInstance);
 }
-
-
-
-
-
-
-
 
 // @ 0x004da3d0
 uint32_t* GetValidatedSpeciesKey(uint32_t* out, uint32_t instance, bool flora)
@@ -3266,13 +2972,6 @@ uint32_t* GetValidatedSpeciesKey(uint32_t* out, uint32_t instance, bool flora)
     out[2] = keyType;
     return out;
 }
-
-
-
-
-
-
-
 
 // @ 0x004da440
 namespace SP {
@@ -3355,29 +3054,13 @@ cSpeciesArchetype_s004d_a440::cSpeciesArchetype_s004d_a440()
 }
 }  // namespace SP
 
-
-
-
-
-
-
 // @ 0x004db1b0
 void SpeciesCheat_Op1(void* self)
 { (void)self; }
 
-
-
-
-
-
 // @ 0x004db2c0
 void SpeciesCheat_Op2(void* self)
 { (void)self; }
-
-
-
-
-
 
 // @ 0x004db3e0
 void PaintSystem::Destroy()
@@ -3396,19 +3079,9 @@ void PaintSystem::Destroy()
     *(void**)this = (void*)g_paintSystemVtblB;
 }
 
-
-
-
-
-
 // @ 0x004db470
 void SpeciesCheat_Op3(void* self)
 { (void)self; }
-
-
-
-
-
 
 // @ 0x004db620
 void Connector::Init(void* pObj, int b, int c, uint32_t n)
@@ -3424,11 +3097,6 @@ void Connector::Init(void* pObj, int b, int c, uint32_t n)
         }
     }
 }
-
-
-
-
-
 
 // @ 0x004db6b0
 char const * SP::cSpeciesCheat::Description(EA::ArgScript::tHelpType param) const
@@ -3446,11 +3114,6 @@ char const * SP::cSpeciesCheat::Description(EA::ArgScript::tHelpType param) cons
            "-poseCapRange <min> <max>\n-glideCapRange <min> <max>\n-stealthCapRange <min> <max>\n"
            "-sprintCapRange <min> <max>\n-senseCapRange <min> <max>\n-healthCapRange <min> <max>\n";
 }
-
-
-
-
-
 
 // @ 0x004db6e0
 namespace SP {
@@ -3668,27 +3331,17 @@ void cSpeciesCheat_s004d_b6e0::Execute(cArguments* pArguments)
 }
 }  // namespace SP
 
-
-
-
-
 // @ 0x004dc660
 void SP::cSpeciesCheat::GetFullPath(EA::ResourceMan::Key const & key, eastl::basic_string<wchar_t, eastl::allocator> & out)
 {
     (void)key; (void)out;
 }
 
-
-
-
 // @ 0x004dc730
 unsigned int SP::cPlantSummarizer::GetVersion() const
 {
     return g_plantStaticType;
 }
-
-
-
 
 // @ 0x004dc740
 unsigned int SP::cPlantSummarizer::GetResType(unsigned int p) const
@@ -3698,9 +3351,6 @@ unsigned int SP::cPlantSummarizer::GetResType(unsigned int p) const
     return -1;
 }
 
-
-
-
 // @ 0x004dc760
 bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3708,17 +3358,11 @@ bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, 
     return false;
 }
 
-
-
-
 // @ 0x004dc920
 unsigned int SP::cSpeciesSummarizer::GetVersion() const
 {
     return g_speciesStaticType;
 }
-
-
-
 
 // @ 0x004dc930
 unsigned int SP::cSpeciesSummarizer::GetResType(unsigned int p) const
@@ -3728,9 +3372,6 @@ unsigned int SP::cSpeciesSummarizer::GetResType(unsigned int p) const
     return -1;
 }
 
-
-
-
 // @ 0x004dc950
 bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3738,16 +3379,10 @@ bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc
     return false;
 }
 
-
-
-
 // @ 0x004dcaa0
 void SP::cSPEditorSpeciesManager_s004d_c660::Teardown()
 {
 }
-
-
-
 
 // @ 0x004dcee0
 bool SP::cSPEditorSpeciesManager_s004d_c660::HandleMessage(int msgId, void* payload)
@@ -3756,9 +3391,6 @@ bool SP::cSPEditorSpeciesManager_s004d_c660::HandleMessage(int msgId, void* payl
     return false;
 }
 
-
-
-
 // @ 0x004df2d0
 namespace SP {
 float RandomInRange(const Vector2_s004d_f2d0& range)
@@ -3766,8 +3398,6 @@ float RandomInRange(const Vector2_s004d_f2d0& range)
     return (float)RandomRange(&sMathRandom, range[0], range[1]);
 }
 }  // namespace SP
-
-
 
 // @ 0x004df310
 namespace SP {
@@ -3786,8 +3416,6 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarSpecies(const Key_s004d_f2d0& 
 }
 }  // namespace SP
 
-
-
 // @ 0x004df3e0
 namespace SP {
 void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_f2d0* pProfile)
@@ -3796,8 +3424,6 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_
 }
 }  // namespace SP
 
-
-
 // @ 0x004df420
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile()
@@ -3805,8 +3431,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile
     return GetProfile(mAvatarSpeciesKey);
 }
 }  // namespace SP
-
-
 
 // @ 0x004df440
 namespace SP {
@@ -3828,8 +3452,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetPlantProfile(
     return pProfile;
 }
 }  // namespace SP
-
-
 
 // @ 0x004df550
 namespace SP {
@@ -3860,8 +3482,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetProfile(const
 }
 }  // namespace SP
 
-
-
 // @ 0x004df6d0
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(eastl::SpeciesMap_s004d_f2d0& map, const Key_s004d_f2d0& key)
@@ -3881,8 +3501,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(east
 }
 }  // namespace SP
 
-
-
 // @ 0x004df790
 namespace SP {
 bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004d_f2d0& key, Key_s004d_f2d0& outKey)
@@ -3893,8 +3511,6 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004
     return false;
 }
 }  // namespace SP
-
-
 
 // @ 0x004df7d0
 namespace SP {
@@ -3908,8 +3524,6 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKey(const Key_s004d_f2d0&
     return false;
 }
 }  // namespace SP
-
-
 
 // @ 0x004dfb50
 namespace SP {
@@ -3940,8 +3554,6 @@ bool cSPEditorSpeciesManager_s004d_f2d0::UpdateProfile(cSpeciesProfile_s004d_f2d
     return false;
 }
 }  // namespace SP
-
-
 
 // @ 0x004e01d0
 namespace SP {
@@ -3987,7 +3599,6 @@ int HasEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key)
   return 0;
 }
 
-
 // @ 0x005bf0e0
 int GetEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key, App::PropertyList_s005b_eaf0*& result)
 {
@@ -3997,6 +3608,28 @@ int GetEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key, App::Prope
   return 0;
 }
 
+// @ 0x005bf120
+bool SaveEditorPropertyList(const EA::ResourceMan::Key_s005b_eaf0& key, App::PropertyList_s005b_eaf0* list, int flags, EA::ResourceMan::IDatabase* db)
+{
+  uint32_t instance = key.mInstance;
+  uint32_t group = PropListGroup(key.mGroup);
+  if (!db)
+    db = (EA::ResourceMan::IDatabase*)EA::ResourceMan::GetManager_s005b_eaf0()->GetDatabaseFor(key, 0, 0);
+  if (!db || !(db->GetAccessFlags() & 2))
+    db = SP::GetSaveArea(0x11ac19c);
+  if (db && list) {
+    ((uint32_t*)list)[2] = instance;
+    ((uint32_t*)list)[3] = 0xb1b104;
+    ((uint32_t*)list)[4] = group;
+    bool ok = SP::SaveResource(list, db, flags);
+    if (ok) {
+      SP::ObjectTemplateDB_s005b_eaf0()->InvalidateTemplate(key, 0);
+      SP::ObjectTemplateDB_s005b_eaf0()->AddTemplate(key);
+    }
+    return ok;
+  }
+  return false;
+}
 
 // @ 0x005bf1e0
 bool LoadCollectableItems(App::PropertyList_s005b_eaf0* list, Simulator::cCollectableItems** result)
@@ -4033,7 +3666,6 @@ bool LoadCollectableItems(App::PropertyList_s005b_eaf0* list, Simulator::cCollec
   }
   return ok;
 }
-
 
 // @ 0x005bf500
 bool __stdcall GetBoolParams(const EA::ResourceMan::Key_s005b_eaf0& key, eastl::sp_vector_s005b_eaf0<SP::FunctionalMatch::DeclareParam_s005b_eaf0>& params)
