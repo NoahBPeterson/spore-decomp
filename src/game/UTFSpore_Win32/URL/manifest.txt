@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/URL.cpp  ?SetURL@URL_s0094_9cc0@Internet@EA@@QAEXPBD_N@Z  0094a6a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?SetComponent@URL_s0094_9cc0@Internet@EA@@QAEXHPBD@Z  0094a6f0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?SetPort@URL@Internet@EA@@QAEXI@Z  0094a750  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/URL.cpp  ?ParseURLFILE@URL_s0094_9cc0@Internet@EA@@QAE_NPAU?$basic_string_s0094_9cc0@D@eastl@@@Z  0094aae0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

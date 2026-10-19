@@ -1,0 +1,3 @@
+# va  diff-bytes  reason (compiled /O2 /MD /Gy /EHsc /TP /GS-)
+0094a7a0 462 URL::CanonicalizePath: complete (./, /../ and trailing /.. removal); compiler picked ebp/ebx opposite to original for the two live string pointers, so every reload differs
+0094a9f0 154 URL::ParseUsernameAndPassword: complete; original reuses the arg home slot for the length and keeps component pointers in esi/ebp, ours spills `this` (extra `sub esp,8` frame)

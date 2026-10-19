@@ -8,9 +8,9 @@
 0094a4c0 EA::Internet::URL::URL  # default ctor
 0094a560 EA::Internet::URL::URL  # ctor from const char* (assigns msURL)
 0094a630 EA::Internet::URL::operator=  # copy assignment
-0094a6a0 EA::Internet::URL::SetURL  # sets/changes msURL (+mbParsed flag)
-0094a6f0 EA::Internet::URL::SetComponent  # sets msComponent[index]
-0094a750 EA::Internet::URL::SetPort  # printf "%u" into msComponent[4]
-0094a7a0 EA::Internet::URL::CanonicalizePath  # PDB name (static: plain ret)
-0094a9f0 EA::Internet::URL::ParseUsernameAndPassword  # PDB name
-0094aae0 EA::Internet::URL::ParseURLFILE  # PDB name
+0094a6a0 ?SetURL@URL_s0094_9cc0@Internet@EA@@QAEXPBD_N@Z  # URL_s0094_9cc0::SetURL migrated from s00949cc0 (verbatim, slice spelling)
+0094a6f0 ?SetComponent@URL_s0094_9cc0@Internet@EA@@QAEXHPBD@Z  # URL_s0094_9cc0::SetComponent migrated from s00949cc0 (verbatim, slice spelling)
+0094a750 ?SetPort@URL@Internet@EA@@QAEXI@Z  # EA::Internet::URL::SetPort migrated from s00949cc0
+0094a7a0 ?CanonicalizePath@URL_s0094_9cc0@Internet@EA@@SAXPBDPAU?$basic_string_s0094_9cc0@D@eastl@@@Z  # URL_s0094_9cc0::CanonicalizePath migrated from s00949cc0 (verbatim, slice spelling)
+0094a9f0 ?ParseUsernameAndPassword@URL_s0094_9cc0@Internet@EA@@QAE_NPAU?$basic_string_s0094_9cc0@D@eastl@@@Z  # URL_s0094_9cc0::ParseUsernameAndPassword migrated from s00949cc0 (verbatim, slice spelling)
+0094aae0 ?ParseURLFILE@URL_s0094_9cc0@Internet@EA@@QAE_NPAU?$basic_string_s0094_9cc0@D@eastl@@@Z  # URL_s0094_9cc0::ParseURLFILE migrated from s00949cc0 (verbatim, slice spelling)
