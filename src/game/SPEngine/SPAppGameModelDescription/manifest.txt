@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPAppGameModelDescription.cpp  ?ReadVec@@YAPAXPAXPAURdVec@@@Z  007d10d0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyRange12C0@@YAPAUS2C@@PAU1@00@Z  007d12c0  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?CopyRange1320@@YAPADPAD00@Z  007d1320  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include
 ../src/game/SPEngine/SPAppGameModelDescription.cpp  ?AssignRange1380@@YAXPAUS2C@@00@Z  007d1380  /O2 /MD /Gy /EHsc /TP /arch:SSE2 /Isrc/game/include

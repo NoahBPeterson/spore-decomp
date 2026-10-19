@@ -8,8 +8,8 @@
 007d2330  cGameModelDeformCommand::Execute  # ParseEnum/ParseInt per arg, appended to mDesc.mGroups
 007d23d0 ?Execute@cGameModelSplitterCommand@@QAEXAAVcArguments_s007d_19c0@ArgScript@EA@@@Z  # cGameModelSplitterCommand::Execute migrated from s007d19c0 (verbatim, slice spelling)
 007d2490 ??1cGameModelEffectCommand@@QAE@XZ  # cGameModelEffectCommand::~cGameModelEffectCommand migrated from s007d19c0 (verbatim, slice spelling)
-007d2580 ?CopySplitControllerVector@Vec20@SP@@QAEPAU12@PBU12@@Z  # SP::Vec20::CopySplitControllerVector (thiscall, vector copy)
-007d2670  SWARM_GameModelAddCommands  # creates cGameModelEffectCommand + cGroupGameModelCommand and registers them
-007d2740 ?CopyAnimationCurveVector@Vec20@SP@@QAEPAU12@PBU12@@Z  # SP::Vec20::CopyAnimationCurveVector (thiscall, vector copy)
+007d2580 ?CopySplitControllerVector@Vec20_s007d_19c0@SP@@QAEPAU12@PBU12@@Z  # Vec20_s007d_19c0::CopySplitControllerVector migrated from s007d19c0 (verbatim, slice spelling)
+007d2670 ?SWARM_GameModelAddCommands@@YAXPAX0PAH@Z  # SWARM_GameModelAddCommands migrated from s007d19c0 (verbatim, slice spelling)
+007d2740 ?CopyAnimationCurveVector@Vec20_s007d_19c0@SP@@QAEPAU12@PBU12@@Z  # Vec20_s007d_19c0::CopyAnimationCurveVector migrated from s007d19c0 (verbatim, slice spelling)
 007d27d0 ?ReadIntVector@@YAPAXPAX0@Z  # ReadIntVector migrated from s007d19c0 (verbatim, slice spelling)
-007d2830 ??0cGameModelDescription@SP@@QAE@PBU01@@Z  # SP::cGameModelDescription::cGameModelDescription(const cGameModelDescription*) copy ctor
+007d2830 ??0cGameModelDescription_s007d_19c0@SP@@QAE@PBU01@@Z  # cGameModelDescription_s007d_19c0::cGameModelDescription migrated from s007d19c0 (verbatim, slice spelling)
