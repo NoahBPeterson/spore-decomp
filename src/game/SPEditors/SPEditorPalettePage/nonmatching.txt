@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005c7f50 52 cSPPalettePage ctor: derived-vptr stores scheduled before float member inits instead of after

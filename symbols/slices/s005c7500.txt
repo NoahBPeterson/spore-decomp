@@ -7,7 +7,8 @@
 005c7d30  ?Current@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # resolves current page/item; out-params (row%col)
 005c7e20  ?Next@cSPPaletteCursor@SP@@QAEHPAXPAH11@Z  # Advance + Current until non-null
 005c7ed0  ?Shutdown@cSPPalettePage@SP@@QAEXXZ  # calls cSPPaletteItem::Shutdown on mItems @+0x70
-005c7f50  ??0cSPPalettePage@SP@@QAE@XZ  # cSPPalettePage ctor (mLayoutInstanceID 0xd8006607)
+005c7f50 ??0cSPPalettePage_s005c_7500@SP@@QAE@XZ  # cSPPalettePage_s005c_7500::cSPPalettePage migrated from s005c7500 (verbatim, slice spelling)
+005c7ff0 ?ProcessPagePart@cSPPalettePage@SP@@QAEXABVKey@ResourceMan@EA@@0I@Z  # SP::cSPPalettePage::ProcessPagePart migrated from s005c7500
 005c8440  ??_GcSPPalettePage@SP@@UAEPAXI@Z  # cSPPalettePage scalar deleting dtor (vector @+0x70)
 005cae30 ?GetSubCategory@cSPPaletteCategory@SP@@QAEPAV12@H@Z  # SP::cSPPaletteCategory::GetSubCategory (callee of s005c7500, named from the dev publics; slice address comment)
 00641770 ?GetPriority@cSPPaletteItem@SP@@QBEHXZ  # SP::cSPPaletteItem::GetPriority (callee of s005c7500, named from the dev publics; slice address comment)

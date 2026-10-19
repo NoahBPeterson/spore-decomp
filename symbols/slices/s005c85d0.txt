@@ -1,3 +1,5 @@
+005c85d0 ?CommonInit@cSPPalettePage@@QAE_NHH@Z  # cSPPalettePage::CommonInit migrated from s005c85d0 (verbatim, slice spelling)
+005c8ad0 ?Init@cSPPalettePage@@QAE_NHHHHM@Z  # cSPPalettePage::Init migrated from s005c85d0 (verbatim, slice spelling)
 005c8bf0 ?SetSwatchFlag@cSPPalettePageUI@@QAEXH@Z  # cSPPalettePageUI::SetSwatchFlag migrated from s005c85d0 (verbatim, slice spelling)
 005c8c10  ??4?$AutoRefCount@VcRefObj@@@EA@@QAEAAV01@PAVcRefObj@@@Z  # refcount replace; AddRef/Release via +0xc subobject
 005c8c50 ?GetAndAssign@cSPPalettePageUI@@QAEPAVcRefObj@@HPAV?$AutoRefCount_s005c_85d0@VcRefObj@@@EA@@HH@Z  # cSPPalettePageUI::GetAndAssign migrated from s005c85d0 (verbatim, slice spelling)
