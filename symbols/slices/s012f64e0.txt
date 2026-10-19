@@ -7,7 +7,7 @@
 012fc2b0 ?init_1546064@@YAXXZ  # init_1546064 migrated from s012f64e0 (verbatim, slice spelling)
 012fe000 init_15477a4  # reflection/type registry table (12 entries)
 012fe300 ?init_15476e4@@YAXXZ  # init_15476e4 migrated from s012f64e0 (verbatim, slice spelling)
-012ffaf0 init_1548764  # reflection/type registry table
+012ffaf0 ?init_1548764@@YAXXZ  # init_1548764 migrated from s012f64e0 (verbatim, slice spelling)
 012ffef0 init_16514ec  # stores default core allocator
 01300080 init_1667a58  # stores InitXInputFunctions() result
 01300110 take_16688a0  # _InterlockedExchange(&g,0)

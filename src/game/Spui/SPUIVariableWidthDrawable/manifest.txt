@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUIVariableWidthDrawable.cpp  ?init_1548764@@YAXXZ  012ffaf0  /Od /Ob1 /MD /Gy /TP /arch:SSE /Isrc/game/include
