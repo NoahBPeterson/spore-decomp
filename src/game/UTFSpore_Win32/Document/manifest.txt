@@ -1,0 +1,11 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Document.cpp  ?DestroyFormControls@Document@DOM@XHTML@EA@@QAEXXZ  008e2890  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ??0D29a@@QAE@PAX0@Z  008e2960  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ??0D29b@@QAE@PAX0@Z  008e2990  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?CheckFlag@DocX@@QAE_N_N@Z  008e29e0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?RemoveAttr@DocX@@QAEXPAUIKV@@@Z  008e2a10  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?Release2@@YIHPAUC2b0@@@Z  008e2af0  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?Free@Vec2b@@QAEXXZ  008e2b20  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ??0D2b6@@QAE@PAX0@Z  008e2b60  /O2 /MD /Gy /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?Fn8e2ed0@@YIXPAX@Z  008e2ed0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/Document.cpp  ?Fn8e3600@Doc@@QAEXPAX@Z  008e3600  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+008e2dd0  3    CSSParser constructor; vtable/StackAllocator init not reconstructed (stub)
+008e2f30  113  EASTL vector insert/erase helper; template temporaries approximated
+008e3100  3    Document::LoadResource; large resource-marshal path not reconstructed (stub)
+008e3380  9    Document::FetchResources recursion; element dispatch not reconstructed (stub)
+008e3660  1    Document::GetStylesheets; style/link traversal not reconstructed (stub)

@@ -1,5 +1,15 @@
 008e1d50 ?RegisterFactory@ManagerX@@QAE_N_NPAUIFactory@@H@Z  # ManagerX::RegisterFactory migrated from s008e1d50 (verbatim, slice spelling)
 008e1f10 ??1ManagerX@@QAE@XZ  # ManagerX::~ManagerX migrated from s008e1d50 (verbatim, slice spelling)
 008e20c0 ??0ManagerX@@QAE@PAUCAlloc@@@Z  # ManagerX::ManagerX migrated from s008e1d50 (verbatim, slice spelling)
-008e2890 EA::XHTML::DOM::Document::DestroyFormControls  # 2008 dev-PDB name
-008e2c10 EA::XHTML::DOM::Document::CreateElement  # tag-name dispatch (sys_gui/object/form/input...), AppendAttr per attribute
+008e2890 ?DestroyFormControls@Document@DOM@XHTML@EA@@QAEXXZ  # EA::XHTML::DOM::Document::DestroyFormControls migrated from s008e1d50
+008e28b0 ?SetAt@DocX@@QAEXIPAUIObj@@@Z  # DocX::SetAt migrated from s008e1d50 (verbatim, slice spelling)
+008e2930 ?RemoveAllChildren@DocX@@QAEXXZ  # DocX::RemoveAllChildren migrated from s008e1d50 (verbatim, slice spelling)
+008e2960 ??0D29a@@QAE@PAX0@Z  # D29a::D29a migrated from s008e1d50 (verbatim, slice spelling)
+008e2990 ??0D29b@@QAE@PAX0@Z  # D29b::D29b migrated from s008e1d50 (verbatim, slice spelling)
+008e29e0 ?CheckFlag@DocX@@QAE_N_N@Z  # DocX::CheckFlag migrated from s008e1d50 (verbatim, slice spelling)
+008e2a10 ?RemoveAttr@DocX@@QAEXPAUIKV@@@Z  # DocX::RemoveAttr migrated from s008e1d50 (verbatim, slice spelling)
+008e2af0 ?Release2@@YIHPAUC2b0@@@Z  # Release2 migrated from s008e1d50 (verbatim, slice spelling)
+008e2b20 ?Free@Vec2b@@QAEXXZ  # Vec2b::Free migrated from s008e1d50 (verbatim, slice spelling)
+008e2b60 ??0D2b6@@QAE@PAX0@Z  # D2b6::D2b6 migrated from s008e1d50 (verbatim, slice spelling)
+008e2b90 ?ResetAll@ManagerX@@QAEXXZ  # ManagerX::ResetAll migrated from s008e1d50 (verbatim, slice spelling)
+008e2c10 ?CreateElement@Holder@@QAEPAXPB_WPBUAttrSrc@@I_N@Z  # Holder::CreateElement migrated from s008e1d50 (verbatim, slice spelling)

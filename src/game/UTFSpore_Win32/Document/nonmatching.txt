@@ -1,0 +1,5 @@
+# va  diff-bytes  reason
+008e28b0 68 vector element refcount assignment register schedule differs
+008e2930 44 intrusive-list loop: original reloads [this+0x104] each iteration, cl hoists it
+008e2b90 38 destructor over three intrusive lists + list anchor + stack-allocator reset
+008e2c10 429 Holder::CreateElement: complete; register assignment (this in edi/ebp, element var) differs, failure epilogue not shared; difftest PASS at --inputs 1000 (441 valid, 66.7% cov; WEAK 161 valid at the default 400) after annotating SA::AllocateNewBlock 0x928ba0
