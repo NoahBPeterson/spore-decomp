@@ -5,6 +5,7 @@
 #include "game/types.h"
 #include "SP/cViewer.h"
 #include <xmmintrin.h>
+#include "rw/graphics/Raster.h"
 
 // unnamed retail callees and globals (address in the comment)
 extern "C" void   EASTL_allocator_deallocate(void* p);   // 0x00f47380
@@ -42,6 +43,7 @@ struct Holder {
 // ---- items of slice s0076cc00 end
 
 // ---- items of slice s0076db40 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern "C" void* EASTL_allocator_allocate(uint32_t n, const char* name, int a, int b, const char* f, int line); // 0x00f473a0
 struct PageRecord {
     int a[7];             // +0x00
     unsigned char b;      // +0x1c
@@ -77,7 +79,7 @@ struct cRTTManager_s0076_db40 {
     // @ 0x0076dcf0  copy mA/mB.
     bool  GetAB(int i, int* a, int* b);  // 0x0076dcf0 (cRTTManager::GetAB)
     // @ 0x0076dd60  fill the page raster and a sprite texture.
-    bool  FillSprite(int i, int a, int b);  // 0x0076dd60 (cRTTManager::FillSprite)
+    bool  FillSprite(int i, int a, int b);
     // @ 0x0076ddb0  find a page by (mA,mB,refcount == criteria); returns index.
     bool  FindPage(int a, int b, int c, int* out);
     // @ 0x0076e040  per-page rectangle scale (1/pageSize) in float.
@@ -104,6 +106,15 @@ struct BigRec {
     char padVec[0x14];   // +0x14 vector<float,sp_vector_allocator>
     char pad28[0x10];
     void* mRef;          // +0x38
+};
+struct Obj2c {
+    void* vt0;          // +0x00
+    void* vt4;          // +0x04
+    void* vt8;          // +0x08
+    int   mRefCount;    // +0x0c
+    char  mFlag;        // +0x10
+    int   mSize;        // +0x14
+    int   f18, f1c, f20;
 };
 struct BigRecOps {
     void* Construct(void* src);
@@ -165,10 +176,6 @@ int __cdecl RasterFormatSize(int width, int height, int format)
     return mult * width * height;
 }
 
-
-
-
-
 // @ 0x0076d9e0
 bool cRTTManager::ReleasePage(int index, void* arg)
 {
@@ -183,20 +190,12 @@ bool cRTTManager::ReleasePage(int index, void* arg)
     return false;
 }
 
-
-
-
-
 // @ 0x0076da50
 void __cdecl Effects_PrepareRender(int* self, int idx, void* a, int out, char flag)
 {
     (void)self; (void)idx; (void)a; (void)out; (void)flag;
     // skeleton: per-job virtual dispatch and destination rect fill (see partial.txt)
 }
-
-
-
-
 
 // @ 0x0076db00
 bool __stdcall OnCaptureMessage(int msgId, void* payload)
@@ -217,17 +216,12 @@ bool __stdcall OnCaptureMessage(int msgId, void* payload)
     return false;
 }
 
-
-
-
 // @ 0x0076db40
 void* cRTTManager_s0076_db40::GetTextureHandle(int i)
 {
     (void)i;
     return 0;
 }
-
-
 
 // @ 0x0076dbb0
 void* cRTTManager_s0076_db40::GetTexture(int i)
@@ -237,8 +231,6 @@ void* cRTTManager_s0076_db40::GetTexture(int i)
     if (mTexturePages.mBegin[i].mRefCount <= 0) return 0;
     return mTexturePages.mBegin[i].mTexture;
 }
-
-
 
 // @ 0x0076dc00
 bool cRTTManager_s0076_db40::GetRect(int i, int sub, int* out)
@@ -251,8 +243,6 @@ bool cRTTManager_s0076_db40::GetRect(int i, int sub, int* out)
     return true;
 }
 
-
-
 // @ 0x0076dc70
 bool cRTTManager_s0076_db40::GetRectSizes(int i, int sub, int* a, int* b, int* c, int* d)
 {
@@ -264,8 +254,6 @@ bool cRTTManager_s0076_db40::GetRectSizes(int i, int sub, int* a, int* b, int* c
     return true;
 }
 
-
-
 // @ 0x0076dcf0
 bool cRTTManager_s0076_db40::GetAB(int i, int* a, int* b)
 {
@@ -276,8 +264,6 @@ bool cRTTManager_s0076_db40::GetAB(int i, int* a, int* b)
     *b = mTexturePages.mBegin[i].mB;
     return true;
 }
-
-
 
 // @ 0x0076de20
 void __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageRecord* last, PageRecord* dst)
@@ -293,16 +279,12 @@ void __cdecl UninitCopyPageRecords(PageRecord** out, PageRecord* first, PageReco
     }
 }
 
-
-
 // @ 0x0076de80
 void __cdecl CopyPageRecords(PageRecord* first, PageRecord* last, PageRecord* out)
 {
     for (; first != last; ++first, ++out)
         *out = *first;
 }
-
-
 
 // @ 0x0076e040
 bool cRTTManager_s0076_db40::GetScaledRect(int i, int sub, float* a, float* b)
@@ -321,8 +303,6 @@ bool cRTTManager_s0076_db40::GetScaledRect(int i, int sub, float* a, float* b)
     return true;
 }
 
-
-
 // @ 0x0076e110
 bool cRTTManager_s0076_db40::AllocateNewPage(int pageId, int w, int h, int depth)
 {
@@ -330,16 +310,12 @@ bool cRTTManager_s0076_db40::AllocateNewPage(int pageId, int w, int h, int depth
     return false;
 }
 
-
-
 // @ 0x0076e1e0
 void SpVec::DeallocateSelf()
 {
     if ((mCap - mBegin) > 1 && mBegin)
         EASTL_allocator_deallocate(mBegin);
 }
-
-
 
 // @ 0x0076e2c0
 void Rec3c::DestroyOne()
@@ -358,8 +334,6 @@ void Rec3c::DestroyOne()
         EASTL_allocator_deallocate(p);
 }
 
-
-
 // @ 0x0076e320
 Rec3c* __cdecl DestroyRecRange(Rec3c* first, Rec3c* last, Rec3c* out)
 {
@@ -372,16 +346,12 @@ Rec3c* __cdecl DestroyRecRange(Rec3c* first, Rec3c* last, Rec3c* out)
     return out;
 }
 
-
-
 // @ 0x0076e3b0
 void __stdcall DestroyRecArray(Rec3c* first, Rec3c* last)
 {
     for (; first < last; ++first)
         first->DestroyOne();
 }
-
-
 
 // @ 0x0076e430
 void __stdcall FreeElemArray(VecElem* first, VecElem* last)
@@ -392,8 +362,6 @@ void __stdcall FreeElemArray(VecElem* first, VecElem* last)
     }
 }
 
-
-
 // @ 0x0076e5c0
 void SomeObj3::Destroy()
 {
@@ -402,7 +370,26 @@ void SomeObj3::Destroy()
         EASTL_allocator_deallocate(mBegin);
 }
 
-
+// @ 0x0076e610
+Obj2c* __cdecl CreateObj2c()
+{
+    volatile Obj2c* p = (volatile Obj2c*)EASTL_allocator_allocate(0x2c, "Graphics", 0, 0, 0, 0);
+    if (p) {
+        p->vt4 = (void*)0x13eb384;
+        p->mRefCount = 0;
+        p->vt8 = (void*)0x13ec458;
+        p->mFlag = 0;
+        p->vt0 = (void*)0x140e398;
+        p->vt4 = (void*)0x140e384;
+        p->vt8 = (void*)0x140e374;
+        p->mSize = 0x200;
+        p->f18 = 0;
+        p->f1c = 0;
+        p->f20 = 0;
+        return (Obj2c*)p;
+    }
+    return 0;
+}
 
 // @ 0x0076e670
 void* BigRecOps::Construct(void* src)
@@ -411,16 +398,12 @@ void* BigRecOps::Construct(void* src)
     return this;
 }
 
-
-
 // @ 0x0076e750
 int BigRecOps::CopyFrom(BigRecOps* src)
 {
     (void)src;
     return (int)(size_t)this;
 }
-
-
 
 // @ 0x0076e7a0
 void __stdcall DestroyBigRecArray(BigRec2* first, BigRec2* last)
@@ -444,16 +427,12 @@ void __stdcall DestroyBigRecArray(BigRec2* first, BigRec2* last)
     }
 }
 
-
-
 // @ 0x0076e840
 int __cdecl CopyBigRecRange(BigRec* first, BigRec* last, BigRec* out)
 {
     (void)first; (void)last;
     return (int)(size_t)out;
 }
-
-
 
 // @ 0x0076e900
 void* __cdecl CopyBigRecRange2(void* first, void* last, void* out)
@@ -462,8 +441,6 @@ void* __cdecl CopyBigRecRange2(void* first, void* last, void* out)
     return out;
 }
 
-
-
 // @ 0x0076e9b0
 void* __cdecl CopyBigRecRangeBack(void* first, void* last, void* out)
 {
@@ -471,22 +448,17 @@ void* __cdecl CopyBigRecRangeBack(void* first, void* last, void* out)
     return out;
 }
 
-
-
 // @ 0x0076ea60
 void* cRTTCheat::Construct()
 {
     return this;   // skeleton: cRTTCheat ctor (see partial.txt)
 }
 
-
-
 // @ 0x0076eb00
 void cRTTCheat::Execute(void* args)
 {
     (void)args;   // skeleton: cRTTCheat::Execute (see partial.txt)
 }
-
 
 // @ 0x0076ed30
 void cRTTCheat_s0076_ed30::ScalarDelete()

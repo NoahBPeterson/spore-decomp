@@ -16,7 +16,7 @@
 0076e3b0 ?DestroyRecArray@@YGXPAURec3c@@0@Z  # DestroyRecArray migrated from s0076db40 (verbatim, slice spelling)
 0076e430 ?FreeElemArray@@YGXPAUVecElem@@0@Z  # FreeElemArray migrated from s0076db40 (verbatim, slice spelling)
 0076e5c0 ?Destroy@SomeObj3@@QAEXXZ  # SomeObj3::Destroy migrated from s0076db40 (verbatim, slice spelling)
-0076e610  ?CreateObj2c@@YAPAUObj2c@@XZ  # 0x2c-byte Graphics object factory (three vtables, 0x200 size field)
+0076e610 ?CreateObj2c@@YAPAUObj2c@@XZ  # CreateObj2c migrated from s0076db40 (verbatim, slice spelling)
 0076e670 ?Construct@BigRecOps@@QAEPAXPAX@Z  # BigRecOps::Construct migrated from s0076db40 (verbatim, slice spelling)
 0076e750 ?CopyFrom@BigRecOps@@QAEHPAU1@@Z  # BigRecOps::CopyFrom migrated from s0076db40 (verbatim, slice spelling)
 0076e7a0 ?DestroyBigRecArray@@YGXPAUBigRec2@@0@Z  # DestroyBigRecArray migrated from s0076db40 (verbatim, slice spelling)
