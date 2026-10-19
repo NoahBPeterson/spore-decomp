@@ -7,7 +7,11 @@
 00a68410 ?RemoveEntry@Outer310@@QAEXH@Z  # Outer310::RemoveEntry migrated from s00a68140 (verbatim, slice spelling)
 00a685a0 ?PushTask@EapdTasks@@QAEXPAX@Z  # EapdTasks::PushTask migrated from s00a68140 (verbatim, slice spelling)
 00a685e0 ?Init@EapdAssets@@QAE_NHHH@Z  # EapdAssets::Init migrated from s00a68140 (verbatim, slice spelling)
+00a68670 ?Op1@GroupOwnerL@@QAE_NII@Z  # GroupOwnerL::Op1 migrated from s00a68140 (verbatim, slice spelling)
+00a686e0 ?Op2@GroupOwnerL@@QAE_NI@Z  # GroupOwnerL::Op2 migrated from s00a68140 (verbatim, slice spelling)
+00a68740 ?RemoveGroupEntry@GroupOwner@@QAE_NPAUGEntry@@@Z  # GroupOwner::RemoveGroupEntry migrated from s00a68140 (verbatim, slice spelling)
 00a687f0 ??1NodePool@@QAE@XZ  # NodePool::~NodePool migrated from s00a68140 (verbatim, slice spelling)
+00a68990 ?AddEntry@GroupOwner2@@QAE_NPAUGEntry@@@Z  # GroupOwner2::AddEntry migrated from s00a68140 (verbatim, slice spelling)
 00a68cb0 EAPd::CreateSingleton::CreateSingleton  # PDB name
 00a68dd0 ??1EapdSystemFull@@UAE@XZ  # ~EapdSystemFull migrated from s00a68140 (verbatim, slice spelling)
 00a68e80 ?ScalarDtor@EapdSystem@@QAEPAXH@Z  # EapdSystem::ScalarDtor migrated from s00a68140 (verbatim, slice spelling)

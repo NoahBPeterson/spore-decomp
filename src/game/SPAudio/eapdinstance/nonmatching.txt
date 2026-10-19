@@ -1,2 +1,6 @@
 # va  diff-bytes  reason
 00a64ed0 135 complete (find, end check, RemoveEntry, IsEmpty -> listener vcall slot 2 + erase, all paths; equiv PASS); register/frame allocation differs (orig keeps this in edi, r in memory)
+00a68670 80 hashtable remove; listener null-test form (cmp mem,0 + reload) and bl result [equiv: PASS]
+00a686e0 73 hashtable remove; listener null-test form (cmp mem,0 + reload) and bl result [equiv: WEAK 190 valid]
+00a68740 126 hashtable erase + callback; register allocation (node in ebx), result kept in param slot [equiv: PASS]
+00a68990 189 map insert-or-push; key/false-arg share the param slot, register allocation [equiv: WEAK 46.4% cov]
