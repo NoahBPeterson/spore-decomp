@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+0095f090 58 CM::SetAxes: complete; thiscall member form still scheduled differently; equiv: PASS (1200 inputs, 100% coverage)
+0095f0f0 61 CM::BuildMat33: complete; aligned frame and movss copy order differ
+0095f1c0 230 CM::TransformPoint4: complete; reciprocal branch and SSE schedule differ
+0095f320 270 BuildRotation: complete; sin/cos x87 interleave with SSE differs
+0095f5c0 178 CM::SetRotationAtLeast2: complete; frame/register schedule differs
