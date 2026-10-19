@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextUnicode.cpp  ?GetBidiClass@Text@EA@@YA?AW4BidiClass@12@_W@Z  0089e170  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
