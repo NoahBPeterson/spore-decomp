@@ -4344,6 +4344,11 @@ class Rewrite:
                             self.notes.append(("moved-item", "%s: moved up from a later slice's block" % " ".join(t_old.split())[:80]))
                         break
                 lines = joined.split("\n")
+                # emitted here directly: the prototype dedupe below would see the TU's (now removed) copy and drop this one
+                # too, leaving the item nowhere (s0063caf0 re-apply: WStr_Format/OpenBrowser vanished, C3861, four held)
+                have.add(n)
+                rest.append(text)
+                continue
             pk = proto_key(text) if kind in ("extern", "other") else None
             dll = lambda t: bool(re.search(r"__declspec\s*\(\s*dllimport\s*\)", RS.mask(t)))
             if pk and dll(text):
