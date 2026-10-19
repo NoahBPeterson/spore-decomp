@@ -1,4 +1,5 @@
 # source  symbol  va  flags
+../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?resize@VecFC@@QAEXI@Z  0071efa0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Obj15_copy@@YAXPBUObj15@@PAU1@@Z  007201b0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Obj15_copyAssign@@YAXPBUObj15@@PAU1@@Z  007201d0  /O2 /MD /Gy /EHsc /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/SPEngine/SPGraphicsMeshJoin.cpp  ?Dtor@Element68@@QAEXXZ  00720b10  /O2 /MD /Gy /TP /fp:fast /Isrc/game/include

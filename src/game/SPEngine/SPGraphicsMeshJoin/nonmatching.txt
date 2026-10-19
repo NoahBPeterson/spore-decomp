@@ -1,4 +1,6 @@
 # va  diff-bytes  reason
+0071f040 27 set/append {key,count} pair then notify: complete; scheduling of the key/size stores differs; difftest PASS (--inputs 700; 100% coverage) after adding the // @ marker
+0071f0f0 158 find-or-add vertex record: complete; register assignment (mesh in edi vs esi) and temp offsets differ; difftest PASS after fix: Handle had its refcounted pointer at +0 instead of +0xc (Handle_Assign 0x424f70 layout), so ~VertexKey released the wrong field; also added the // @ marker
 00720290 393 MeshAdj::AddTri: logic complete; huge /O2 scheduling/register diff vs a differently-sized symbol (likely inlined-helper driven)
 00720590 107 HashVec: complete; FNV hash loop and constant handling differ (addss register reuse)
 00720620 94 cHeap::HeapifyDown: complete; pointer-count subtraction and comiss branch direction differ

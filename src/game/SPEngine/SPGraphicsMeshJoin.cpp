@@ -1,4 +1,4 @@
-// src/game/SPEngine/SPGraphicsMeshJoin.cpp -- migrated from slice(s) s00728020, s007249f0, s0073a110, s007361e0, s00735350, s00728c90, s00726c20, s00725e40, s00725130, s00724100, s00723140, s00722410, s00721240, s00720290, s0071f410 by tools/migrate/rewrite.py
+// src/game/SPEngine/SPGraphicsMeshJoin.cpp -- migrated from slice(s) s0071e390, s00728020, s007249f0, s0073a110, s007361e0, s00735350, s00728c90, s00726c20, s00725e40, s00725130, s00724100, s00723140, s00722410, s00721240, s00720290, s0071f410 by tools/migrate/rewrite.py
 // Object file: SPEngine/SPGraphicsMeshJoin.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -1520,6 +1520,140 @@ void CreateArray(const cIndexArrayRef_s0072_6c20& src, cIndexArrayRef_s0072_6c20
 }
     void* operator new(unsigned int, char*, int, unsigned int, char*, int); // 0x00f473a0
 // ---- items of slice s00726c20 end
+
+// ---- items of slice s0071e390 begin (TODO(rewrite): local stubs, replace by canonical classes)
+#pragma intrinsic(_InterlockedExchangeAdd, _InterlockedExchange)
+struct IRef {                       // virtual AddRef/Release (+0, +4)
+    virtual int AddRef();
+    virtual int Release();
+};
+struct Handle {                     // 16-byte handle member of a vertex record
+    int mF0, mF4;                   // +0x00, +0x04
+    short mS8, mSA;                 // +0x08, +0x0a
+    IRef* mpRef;                    // +0x0c (refcounted)
+    void Assign(const Handle* src);                                          // 0x00424f70
+};
+struct Vertex20 {                   // 0x20 bytes
+    unsigned mA, mB, mC, mD;        // +0x00 .. +0x0c
+    Handle mHandle;                 // +0x10
+};
+struct KeyPair {
+    short mKey;
+    short mVal;
+};
+struct VecKeyPair {
+    KeyPair* mpBegin; KeyPair* mpEnd; KeyPair* mpCapacity;
+    void DoInsertValue(KeyPair* position, const KeyPair& v);    // 0x00476fe0
+    void push_back(const KeyPair& v)
+    {
+        if (mpEnd < mpCapacity) {
+            KeyPair* p = mpEnd++;
+            if (p)
+                *p = v;
+        } else {
+            DoInsertValue(mpEnd, v);
+        }
+    }
+};
+struct cFaceCluster_s0071_e390 {               // 0x14 bytes
+    int mKind;                      // 4 by default
+    int m1, m2, m3, m4;
+    cFaceCluster_s0071_e390() : mKind(4), m1(0), m2(0), m3(0), m4(0) {}
+};
+cFaceCluster_s0071_e390* CopyFC(cFaceCluster_s0071_e390* first, cFaceCluster_s0071_e390* last, cFaceCluster_s0071_e390* dest);       // 0x00951bf0
+struct VecFC {
+    cFaceCluster_s0071_e390* mpBegin; cFaceCluster_s0071_e390* mpEnd; cFaceCluster_s0071_e390* mpCapacity;
+    void DoInsertValues(cFaceCluster_s0071_e390* position, unsigned n, const cFaceCluster_s0071_e390* value);   // 0x0071ea40
+    void resize(unsigned n);                                                              // 0x0071efa0
+};
+struct V16 {                        // vector of 16-byte records (begin, end, ...)
+    char* mpBegin;
+    char* mpEnd;
+    void Notify(int arg);           // 0x006da2e0
+    int size() const { return (int)(mpEnd - mpBegin) >> 4; }
+};
+struct EntryFor70 {                 // 0x8c bytes
+    char pad_00[0x14];
+    VecKeyPair mPairs;              // +0x14
+    char pad_20[0x44 - 0x20];
+    V16 mRecs;                      // +0x44
+    char pad_4c[0x8c - 0x4c];
+};
+struct MeshEntries {
+    char pad_00[0x1c];
+    EntryFor70* mpEntries;          // +0x1c
+};
+int FindPairIndex(MeshEntries* m, int entry, int key);              // 0x0071e040
+struct VertexKey {                  // temporary built by FUN_00469500 (5 args)
+    unsigned mA, mB, mC, mD;
+    Handle mHandle;
+    VertexKey(unsigned a, unsigned b, unsigned c, unsigned d, unsigned e);   // 0x00469500
+    ~VertexKey() { if (mHandle.mpRef) mHandle.mpRef->Release(); }
+};
+struct VertexVec {
+    char* mpBegin;
+    char* mpEnd;
+    void push_back(const VertexKey& v);                                      // 0x0041f7d0
+};
+struct VertexMesh {
+    char pad_00[8];
+    VertexVec mVerts;               // +0x08
+};
+int FindVertexIndex(VertexMesh* m, unsigned a, unsigned b, unsigned c, int d);   // 0x0071ddc0
+inline void CopyVertex(Vertex20* dst, const VertexKey& src)
+{
+    dst->mA = src.mA;
+    dst->mB = src.mB;
+    dst->mC = src.mC;
+    dst->mD = src.mD;
+    dst->mHandle.Assign(&src.mHandle);
+}
+// ---- items of slice s0071e390 end
+
+// @ 0x0071efa0
+void VecFC::resize(unsigned n)
+{
+    if (n > (unsigned)(mpEnd - mpBegin)) {
+        cFaceCluster_s0071_e390 v;
+        DoInsertValues(mpEnd, n - (unsigned)(mpEnd - mpBegin), &v);
+    } else {
+        cFaceCluster_s0071_e390* first = mpBegin + n;
+        cFaceCluster_s0071_e390* last = mpEnd;
+        CopyFC(last, mpEnd, first);
+        mpEnd -= (last - first);
+    }
+}
+
+// @ 0x0071f040
+void SetEntryKey(MeshEntries* m, int entry, int key, int arg)
+{
+    EntryFor70* e = &m->mpEntries[entry];
+    int idx = FindPairIndex(m, entry, key);
+    V16& recs = e->mRecs;
+    if (idx >= 0) {
+        e->mPairs.mpBegin[idx].mVal = (short)recs.size();
+        recs.Notify(arg);
+        return;
+    }
+    KeyPair v;
+    v.mKey = (short)key;
+    v.mVal = (short)recs.size();
+    e->mPairs.push_back(v);
+    recs.Notify(arg);
+}
+
+// @ 0x0071f0f0
+int AddVertex(VertexMesh* mesh, unsigned a, unsigned b, unsigned c, unsigned d, unsigned e)
+{
+    int idx = FindVertexIndex(mesh, a, b, c, 0xe);
+    if (idx < 0) {
+        idx = (int)(mesh->mVerts.mpEnd - mesh->mVerts.mpBegin) >> 5;
+        mesh->mVerts.push_back(VertexKey(a, b, c, d, e));
+    } else {
+        CopyVertex((Vertex20*)(mesh->mVerts.mpBegin + idx * 0x20), VertexKey(a, b, c, d, e));
+    }
+    return idx;
+}
 
 // @ 0x00720070
 void Obj15_20070(void* a)
