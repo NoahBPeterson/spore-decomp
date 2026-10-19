@@ -6,7 +6,7 @@
 #include "types.h"
 
 void* operator new[](size_t size);
-void  operator delete[](void* p);
+void  operator delete[](void* p) throw();
 void  operator delete(void* p);
 
 struct Obj {
@@ -65,17 +65,37 @@ void* TransformInit::Init(const void* src, void* a, char flag) {
     return self;
 }
 
-// @ 0x007d4ae0
+struct IUnk32 { virtual int AddRef(); virtual int Release(); };
+struct UnkRef {
+    IUnk32* mpObject;
+    UnkRef() : mpObject(0) {}
+    ~UnkRef() throw() { if (mpObject) mpObject->Release(); }
+};
+struct cParamRec {
+    uint16_t mOffset, mCount;
+    cParamRec() : mOffset(0), mCount(0) {}
+};
+// eastl::vector<T, sp_vector_allocator>: 0x14 bytes; deallocate frees only when the size header is non-zero.
+template<class T> struct spvec {
+    T* mpBegin; T* mpEnd; T* mpCapacity;
+    uint32_t mAlloc[2];
+    spvec() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~spvec() throw() { if (mpBegin && ((int*)mpBegin)[-1] != 0) operator delete[](mpBegin); }
+};
 struct cEffectParams {
-    char data[0xd8];
+    cParamRec mFloatParams[25];     // +0x00
+    spvec<float> mFloatStorage;     // +0x64
+    cParamRec mIntParams[10];       // +0x78
+    spvec<int> mIntStorage;         // +0xa0
+    UnkRef mUnknownParams[9];       // +0xb4
     cEffectParams();
     ~cEffectParams();
     bool Handle(int kind, void* a, int b);
     char Handle2(int kind, void* a);
     void Tick(void* arg);
 };
+// @ 0x007d4ae0
 cEffectParams::~cEffectParams() {
-    // destroy mUnknownParams[9] then free the two parameter-storage vectors
 }
 
 // @ 0x007d4b60
@@ -232,6 +252,4 @@ void* CopyElem38(void* self, void* a, const void* src) {
 
 // @ 0x007d55e0
 cEffectParams::cEffectParams() {
-    char* s = (char*)this;
-    for (int i = 0; i < 0xd8; ++i) s[i] = 0;
 }

@@ -2,6 +2,7 @@
 // Swarm split-model-kernel description, kernel-storage setters and the
 // ArgScript SplitModelKernelEffect command.
 #include "types.h"
+#include <string.h>
 
 struct cSPVector3 { float x, y, z; };
 
@@ -100,6 +101,80 @@ void FUN_007e0200() { /* 126B */ }                 // 007e0200
 void FUN_007e0280() { /* 112B */ }                 // 007e0280
 void FUN_007e02f0() { /* 65B  deleting dtor */ }   // 007e02f0
 
-void cSafeDynamicKernelStorage::SetKernelType(int) { /* 224B */ }  // 007e0340
-cSafeDynamicKernelStorage& cSafeDynamicKernelStorage::operator=(
-    const cSafeDynamicKernelStorage&) { /* 193B */ return *this; }  // 007e05e0
+struct KernelData16 { uint32_t v[4]; };
+struct KernelData28 { uint32_t v[7]; };
+struct cKernelError {
+    uint32_t pad[4];
+    cKernelError(const char* fmt, ...);        // 0x0052df30 (cdecl, `this` pushed)
+    cKernelError(const cKernelError&);
+};
+
+// @ 0x007e0340
+void cSafeDynamicKernelStorage::SetKernelType(int type)
+{
+    if (mKernelData != 0) {
+        EFree2(mKernelData);
+        mKernelData = 0;
+    }
+    if (mKernelDataVariation != 0) {
+        EFree2(mKernelDataVariation);
+        mKernelDataVariation = 0;
+    }
+    switch (type) {
+    case 0:
+    case 1:
+        mKernelData = EAllocSwarm(0x10, "App", 0, 0, 0, 0);
+        mKernelDataVariation = EAllocSwarm(0x10, "App", 0, 0, 0, 0);
+        break;
+    case 2:
+        mKernelData = EAllocSwarm(0x1c, "App", 0, 0, 0, 0);
+        mKernelDataVariation = EAllocSwarm(0x1c, "App", 0, 0, 0, 0);
+        break;
+    default:
+        if (type < 0) {
+            mKernelType = type;
+            mKernelData = 0;
+            return;
+        }
+        throw cKernelError("Unknown split model kernel type.");
+    }
+    mKernelType = type;
+}
+
+// @ 0x007e05e0
+cSafeDynamicKernelStorage& cSafeDynamicKernelStorage::operator=(const cSafeDynamicKernelStorage& o)
+{
+    SetKernelType(o.mKernelType);
+    int t = o.mKernelType;
+    if (t != 0 && t != 1) {
+        if (t != 2) {
+            if (mKernelData != 0) {
+                EFree2(mKernelData);
+                mKernelData = 0;
+            }
+            if (mKernelDataVariation != 0) {
+                EFree2(mKernelDataVariation);
+                mKernelDataVariation = 0;
+            }
+            mKernelData = 0;
+            mKernelType = -1;
+            return *this;
+        }
+        memcpy(mKernelData, o.mKernelData, 0x1c);
+        memcpy(mKernelDataVariation, o.mKernelDataVariation, 0x1c);
+        return *this;
+    }
+    KernelData16* d = (KernelData16*)mKernelData;
+    KernelData16* s = (KernelData16*)o.mKernelData;
+    d->v[0] = s->v[0];
+    d->v[1] = s->v[1];
+    d->v[2] = s->v[2];
+    d->v[3] = s->v[3];
+    d = (KernelData16*)mKernelDataVariation;
+    s = (KernelData16*)o.mKernelDataVariation;
+    d->v[0] = s->v[0];
+    d->v[1] = s->v[1];
+    d->v[2] = s->v[2];
+    d->v[3] = s->v[3];
+    return *this;
+}

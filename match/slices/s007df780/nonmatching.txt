@@ -2,3 +2,5 @@
 007e0480  32   cSafeDynamicKernelStorage::SetOrigin; type-check branch layout differs
 007e04f0  32   cSafeDynamicKernelStorage::SetRadius; branch layout and frame offsets differ
 007e0570  32   cSafeDynamicKernelStorage::SetDirection; type-check branch layout differs
+007e0340  105  SetKernelType: complete (224 = 224 bytes, same free/alloc/throw sequence); original lowers the 0/1/2 dispatch as a sub-chain with the register in ebx where ours uses range compares and edi, and lays the throw block differently [equiv: WEAK - no mismatch, 136 valid inputs, 88.6% coverage]
+007e05e0  45  operator=: complete (193 = 193 bytes); original dispatches on the type with a sub-chain (sub eax,esi / je) where ours emits cmp, and the register allocation of the 4-dword copies differs; flags default (no /arch:SSE2: the 28-byte copy is rep movsd) [equiv: WEAK - no mismatch, 177 valid inputs, 70.1% coverage]

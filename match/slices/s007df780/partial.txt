@@ -11,5 +11,3 @@
 007e0200  -  cSplitModelKernelEffectCommand::OnEndBlock; skeleton only
 007e0280  -  FUN_007e0280 command factory; skeleton only
 007e02f0  -  cSplitModelKernelEffectCommand scalar deleting dtor; skeleton only
-007e0340  -  cSafeDynamicKernelStorage::SetKernelType; skeleton only
-007e05e0  -  cSafeDynamicKernelStorage::operator=; skeleton only

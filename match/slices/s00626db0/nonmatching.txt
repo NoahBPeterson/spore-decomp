@@ -5,3 +5,4 @@
 00627060  257  InitCreatureData: complete; clamp/desired-value expression order and depends offsets differ
 006271a0   47  translateTransform: complete; Matrix3::Assign/Accumulate thiscall shape differs
 00627660 1287 FUN_00627660: complete (camera ground push-out: 4 clearance queries, two tan(), acos pitch fix, CalculateCameraToWorldMatrix; 10 calls in the original order); not exact: x87/SSE operand scheduling and spill slots differ, `test byte,al` flag test not reproduced
+006271f0  233  cCreatureCameraBase ctor(IShared*): complete (947 vs 1076 bytes before; base vptr stores, Depends ctor, Matrix3::Assign, every field store, AddRef of the shared object); the vec3/quat copy register rotation and the 0x194/0x196 word-store order differ [equiv: UNSUPPORTED - only the vtable-pointer dwords differ, all other stores equal]

@@ -1,6 +1,7 @@
 // SP::cCreatureCameraBase accessors, activation and control update (SporeEP1_RL).
 // Region 0x626db0-0x627d44. Flags: /O2 /MD /Gy /TP /arch:SSE /fp:fast (no /EHsc).
 #include "types.h"
+#include <new>
 
 static inline void** Vt(void* p) { return *(void***)p; }
 
@@ -34,16 +35,46 @@ void  __cdecl Matrix3_Assign(void* dst, const void* src);   // 0x41cb40
 void  __cdecl Modifier_Accumulate(void* t, const void* src); // 0x40ccb0
 void  __cdecl Eapd_sys_gui(void* p);                 // 0xc2e4e0 UTFWin::ILayoutElement::SetSerializer
 
+// Base-class skeleton of SP::cICameraController (IUnknown32 @0, IHandlerRC @4) + RefCountVTemplate<int> @8.
+struct IUnknown32S { virtual void u0(); virtual void u1(); ~IUnknown32S() {} };
+struct IHandlerS { virtual void h0(); };
+struct IHandlerRCS : IHandlerS { virtual void h0(); ~IHandlerRCS() {} };
+struct cICameraControllerS : IUnknown32S, IHandlerRCS { ~cICameraControllerS() {} };
+struct RefCountVS { virtual void r0(); int mRefCount; RefCountVS() : mRefCount(0) {} ~RefCountVS() {} };
+struct Matrix3S { void Assign(const Matrix3S& o); };           // 0x41cb40
+struct cCreatureCameraDependsS {                                     // size 0x78
+  float avatarX;               // +0x00
+  float avatarY;               // +0x04
+  float avatarZ;               // +0x08
+  uint32_t pad0c[6];
+  float mAvatarMinZ;           // +0x24
+  uint32_t pad28[0x50 / 4];
+  cCreatureCameraDependsS();                                         // 0x6281c0
+  ~cCreatureCameraDependsS();                                        // 0xc2e4e0 (folded with SetSerializer)
+};
+struct IShared { virtual void AddRef(); virtual void Release(); };
+struct AutoRefShared {
+  IShared* mpObject;
+  ~AutoRefShared() { if (mpObject) mpObject->Release(); }
+};
+struct AutoHandlerS {
+  void* mpServer;              // +0x00
+  void* mpHandler;             // +0x04
+  void* mpIdArray;             // +0x08
+  int   mnIdArrayCount;        // +0x0c
+  int   mnPriority;            // +0x10
+  ~AutoHandlerS() {
+    if (mpServer) {
+      void* s = mpServer;
+      mpServer = 0;
+      RemoveHandler(s, mpHandler, (void**)mpIdArray, mnIdArrayCount, mnPriority);
+    }
+  }
+};
+
 // Absolute-offset view of the camera object (verified against the disassembly).
-struct cCreatureCameraBase {
-  char  pad00[0x04];
-  char  pad04[0x0c];
-  float avatarX;               // +0x10
-  float avatarY;               // +0x14
-  float avatarZ;               // +0x18
-  char  pad1c[0x18];
-  float mAvatarMinZ;           // +0x34
-  char  pad38[0x50];
+struct cCreatureCameraBase : cICameraControllerS, RefCountVS {
+  cCreatureCameraDependsS mDepends;   // +0x10
   int   mCameraInputState;     // +0x88
   char  pad8c[0x98-0x8c];
   float currentPlayerTheta;    // +0x98
@@ -58,18 +89,14 @@ struct cCreatureCameraBase {
   char  pad124[0x194-0x124];
   cTransform mCameraToWorld;   // +0x194
   char  pad1cc[0x1d0-0x1cc];
-  void* mpServer;              // +0x1d0
-  void* mpHandler;             // +0x1d4
-  void* mpIdArray;             // +0x1d8
-  int   mnIdArrayCount;        // +0x1dc
-  int   mnPriority;            // +0x1e0
+  AutoHandlerS mMessageRegistration;  // +0x1d0
   char  pad1e4[0x1ec-0x1e4];
   bool  mMouseLeft;            // +0x1ec
   bool  mMouseMiddle;          // +0x1ed
   bool  mMouseRight;           // +0x1ee
   bool  mbActive;              // +0x1ef
   char  pad1f0[0x200-0x1f0];
-  void* mpShared;              // +0x200
+  AutoRefShared mpShared;      // +0x200
 
   void GetAudioAnchorPosition(float* out);     // 0x627000
   void GetCurrentCameraPosition(float* out);   // 0x626db0
@@ -79,8 +106,7 @@ struct cCreatureCameraBase {
   void InitCameraData();                       // 0x625830
   void InitCreatureData(void* pCreature);      // 0x627060
   void FUN_00627660();                         // 0x627660
-  cCreatureCameraBase();                       // 0x6271f0
-  ~cCreatureCameraBase();                      // 0x6275d0
+  cCreatureCameraBase(IShared* pShared);       // 0x6271f0
 };
 
 // helper-access into the camera-data block (mCameraData at +0x98 in the real layout):
@@ -160,11 +186,11 @@ struct CamView {
 
 // @ 0x00627000
 void cCreatureCameraBase::GetAudioAnchorPosition(float* out) {
-  float f = mAvatarMinZ;
+  float f = mDepends.mAvatarMinZ;
   float ux = gUpX, uy = gUpY, uz = gUpZ;
-  out[0] = ux * f + avatarX;
-  out[1] = avatarY + uy * f;
-  out[2] = avatarZ + uz * f;
+  out[0] = ux * f + mDepends.avatarX;
+  out[1] = mDepends.avatarY + uy * f;
+  out[2] = mDepends.avatarZ + uz * f;
 }
 
 // @ 0x00626db0
@@ -194,9 +220,9 @@ void cCreatureCameraBase::GetCurrentCameraPosition(float* out) {
 void cCreatureCameraBase::UpdateCamera_StandardControl(float dt) {
   currentPlayerTheta = dt;                 // +0x98 (mCameraData.dt)
   FUN_00625a90_proxy(this);
-  desiredLookAtV.x = avatarX;
-  desiredLookAtV.y = avatarY;
-  desiredLookAtV.z = avatarZ;
+  desiredLookAtV.x = mDepends.avatarX;
+  desiredLookAtV.y = mDepends.avatarY;
+  desiredLookAtV.z = mDepends.avatarZ;
   desiredPositionV.x = desiredLookAtV.x - gOffX;
   desiredPositionV.y = desiredLookAtV.y - gOffY;
   desiredPositionV.z = desiredLookAtV.z - gOffZ;
@@ -255,16 +281,9 @@ void* __cdecl translateTransform(void* dst, void* src, void* outDst) {
   return dst;
 }
 
+// The original dtor is compiler-generated (no user body); this wrapper forces the out-of-line instance.
 // @ 0x006275d0
-cCreatureCameraBase::~cCreatureCameraBase() {
-  if (mpShared) ((void(__thiscall*)(void*))Vt(mpShared)[1])(mpShared);
-  if (mpServer) {
-    void* s = mpServer;
-    mpServer = 0;
-    RemoveHandler(s, mpHandler, (void**)mpIdArray, mnIdArrayCount, mnPriority);
-  }
-  Eapd_sys_gui((char*)this + 0x10);
-}
+__declspec(noinline) void DestroyCam(cCreatureCameraBase* p) { p->~cCreatureCameraBase(); }
 
 // @ 0x00627ca0
 void cCreatureCameraBase::Activate() {
@@ -273,11 +292,11 @@ void cCreatureCameraBase::Activate() {
   InitCameraData();
   void* ms = MessageServer();
   void* handler = (char*)this + 4;
-  mpServer = ms;
-  mpHandler = handler;
-  mpIdArray = (void*)gMsgIds;
-  mnIdArrayCount = 5;
-  mnPriority = 0;
+  mMessageRegistration.mpServer = ms;
+  mMessageRegistration.mpHandler = handler;
+  mMessageRegistration.mpIdArray = (void*)gMsgIds;
+  mMessageRegistration.mnIdArrayCount = 5;
+  mMessageRegistration.mnPriority = 0;
   if (ms != 0 && handler != 0) {
     for (uint32_t i = 0; i < 0x14; i += 4) {
       ((void(__thiscall*)(void*, void*, uint32_t))Vt(ms)[9])
@@ -291,8 +310,87 @@ void cCreatureCameraBase::Activate() {
   mbActive = true;
 }
 
-// @ 0x006271f0  ctor (skeleton; see partial.txt)
-cCreatureCameraBase::cCreatureCameraBase() {}
+extern float gQ0;  // 0x1521a70
+extern float gQ1;  // 0x1521a74
+extern float gQ2;  // 0x1521a78
+extern float gQ3;  // 0x1521a7c
+extern Matrix3S gIdentity3;  // 0x15f672c
+#define U(x) (*(const uint32_t*)&(x))
+#define M(T, off) (*(T*)((char*)this + (off)))
+
+// @ 0x006271f0
+cCreatureCameraBase::cCreatureCameraBase(IShared* pShared) {
+  M(float, 0x154) = 0.017453292f;
+  M(float, 0x158) = 0.004363323f;
+  M(float, 0x15c) = 0.001f;
+  M(float, 0x160) = -0.43633232f;
+  M(float, 0x164) = 0.87266463f;
+  M(float, 0x168) = 5.0f;
+  M(float, 0x174) = 10000.0f;
+  M(float, 0x16c) = 25.0f;
+  M(float, 0x178) = 0.5f;
+  M(float, 0x17c) = 0.5f;
+  M(float, 0x180) = 0.5f;
+  M(int, 0x88) = 0;
+  M(int, 0x8c) = 0;
+  M(int, 0x90) = 0;
+  M(int, 0x94) = 0;
+  M(float, 0x170) = 1.0f;
+  M(float, 0x184) = 1.0f;
+  M(float, 0x188) = 1.0f;
+  M(float, 0x18c) = 30.0f;
+  M(float, 0x190) = 30.0f;
+  M(uint16_t, 0x196) = 0;
+  M(uint16_t, 0x194) = 0;
+  M(float, 0x198) = gT0;
+  M(float, 0x19c) = gT1;
+  M(float, 0x1a0) = gT2;
+  M(float, 0x1a4) = 1.0f;
+  ((Matrix3S*)((char*)this + 0x1a8))->Assign(gIdentity3);
+  M(bool, 0x1cc) = true;
+  M(int, 0x1d0) = 0;
+  M(int, 0x1d4) = 0;
+  M(int, 0x1d8) = 0;
+  M(int, 0x1dc) = 0;
+  M(int, 0x1e0) = 0;
+  M(float, 0x1e4) = 0.0f;
+  M(float, 0x1e8) = 0.0f;
+  M(bool, 0x1ec) = false;
+  M(bool, 0x1ed) = false;
+  M(bool, 0x1ee) = false;
+  M(bool, 0x1ef) = false;
+  M(bool, 0x1f0) = true;
+  M(int, 0x1f4) = 0;
+  M(int, 0x1f8) = 0;
+  M(float, 0x1fc) = 0.0f;
+  mpShared.mpObject = pShared;
+  if (pShared) pShared->AddRef();
+  M(float, 0x98) = 0.0f;
+  float minDist = M(float, 0x168);
+  M(uint32_t, 0x9c) = U(gT0); M(uint32_t, 0xa0) = U(gT1); M(uint32_t, 0xa4) = U(gT2);
+  M(uint32_t, 0xa8) = U(gT0); M(uint32_t, 0xac) = U(gT1); M(uint32_t, 0xb0) = U(gT2);
+  M(uint32_t, 0xb4) = U(gQ0); M(uint32_t, 0xb8) = U(gQ1); M(uint32_t, 0xbc) = U(gQ2); M(uint32_t, 0xc0) = U(gQ3);
+  M(uint32_t, 0xc4) = U(gT0); M(uint32_t, 0xc8) = U(gT1);
+  uint32_t z = U(gT2);
+  M(float, 0xd8) = minDist;
+  M(uint32_t, 0xcc) = z;
+  M(float, 0xd0) = 0.0f;
+  M(float, 0xd4) = 0.0f;
+  M(uint32_t, 0xdc) = U(gT0); M(uint32_t, 0xe0) = U(gT1); M(uint32_t, 0xe4) = U(gT2);
+  M(uint32_t, 0xe8) = U(gT0); M(uint32_t, 0xec) = U(gT1); M(uint32_t, 0xf0) = U(gT2);
+  M(float, 0xf4) = 0.0f;
+  M(float, 0xf8) = 0.0f;
+  M(uint32_t, 0xfc) = U(gT0); M(uint32_t, 0x100) = U(gT1); M(uint32_t, 0x104) = U(gT2);
+  M(uint32_t, 0x108) = U(gT0); M(uint32_t, 0x10c) = U(gT1); M(uint32_t, 0x110) = U(gT2);
+  M(uint32_t, 0x114) = U(gQ0); M(uint32_t, 0x118) = U(gQ1); M(uint32_t, 0x11c) = U(gQ2);
+  uint32_t w = U(gQ3);
+  M(bool, 0x134) = false;
+  M(uint32_t, 0x120) = w;
+  M(float, 0x124) = 0.0f;
+  M(float, 0x128) = 0.0f;
+  M(float, 0x12c) = 0.0f;
+  M(float, 0x130) = 0.0f;
+}
 
 // @ 0x00627660  camera-vs-ground push-out (see CamView::FUN_00627660 above)
 void cCreatureCameraBase::FUN_00627660() {

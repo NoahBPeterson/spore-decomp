@@ -6,7 +6,7 @@
 // @ 0x007c2730  anonymous-namespace::expand_2_32
 // Expand a packed 2-bit-per-channel value into 4 ARGB dwords per iteration.
 // ---------------------------------------------------------------------------
-void expand_2_32(uint32_t* dst, int stride, uint32_t src, uint32_t* table)
+void __stdcall expand_2_32(uint32_t* dst, int stride, uint32_t src, uint32_t* table)
 {
     for (int i = 4; i != 0; --i) {
         dst[0] = table[src & 3];
@@ -53,6 +53,7 @@ cBumpMapTable::cBumpMapTable(float param)
 // Finally installs a callback object on job 0 and queues its layer.
 // ===========================================================================
 #include <intrin.h>
+#include <string.h>
 
 namespace SPL {
 
@@ -361,5 +362,104 @@ void cThumbnailManagerSplat::SetupSplat(int a1, const RectID* a2, int a3, int a4
 // remaining routines (skeletons)
 // ---------------------------------------------------------------------------
 void FUN_007c2540(void* a) { (void)a; }
-void ColorReduce(void* a) { (void)a; }
-void ConvertDXT1ToARGB8888(void* a) { (void)a; }
+
+// ---------------------------------------------------------------------------
+// ColorReduce (0x007c2790): quantise a 32bpp image to a palette (Wu), fill the
+// destination palette table and remap the pixels.
+// ---------------------------------------------------------------------------
+struct WuContext;
+WuContext* WU_open();                                                        // 0x006e1d10
+int  __stdcall WU_read(int ctx, int desc, int pixels, int stride);                     // 0x006e1d50
+void* __stdcall WU_close(int ctx, int nColors, int* outPal, int* outCount);            // 0x006e1db0
+void __stdcall CRAPI_remap(unsigned char* dst, int ctx, int dstStride, unsigned char* src, int srcStride,
+                 int wide, unsigned mode, int diffuse, unsigned count, unsigned rows); // 0x006e25f0
+extern "C" unsigned char __stdcall gfree(void* p);                           // 0x0087d4c0
+
+struct cDirectPropertyListCR { int GetIntProperty(unsigned id) const; };     // 0x006a2660
+extern cDirectPropertyListCR* g_sAppProperties_CR;                           // 0x015fd918
+
+struct ColorReduceDst { char pad[0x24]; int mCount; unsigned char mPalette[1]; };
+
+struct WuImageDesc { int pad[4]; int width; int height; int bpp; uint32_t tail[0xa95]; };
+
+template<int N> inline void ScratchSlots() { uint32_t s[N]; }
+
+// @ 0x007c2790
+void ColorReduce(unsigned char* src, unsigned char* dst, ColorReduceDst* out, int width,
+                 unsigned height, int bytesPerPixel)
+{
+    WuContext* ctx = WU_open();
+    WuImageDesc desc;
+    desc.height = height;
+    int stride = (width * 32) / 8;
+    desc.width = width;
+    desc.bpp = 32;
+    WU_read((int)ctx, (int)&desc, (int)src, stride);
+    int* pal;
+    void* colors = WU_close((int)ctx, 0xff, (int*)&pal, 0);
+    memcpy(out->mPalette, colors, out->mCount * 4);
+    gfree(colors);
+    unsigned mode = g_sAppProperties_CR->GetIntProperty(0x5d2c085);
+    CRAPI_remap(dst, (int)out, (unsigned)(width * bytesPerPixel) >> 3, src, stride, desc.bpp,
+                (unsigned)pal, mode, width, height);
+    gfree(pal);
+    
+}
+
+// ---------------------------------------------------------------------------
+// ConvertDXT1ToARGB8888 (0x007c2880): decode DXT1 4x4 blocks to ARGB8888.
+// ---------------------------------------------------------------------------
+static inline uint32_t Expand565(uint16_t c)
+{
+    uint32_t v = c;
+    uint32_t t = (v & 0xf800) * 0x20 + (v & 0x1f);
+    t = t * 8;
+    t = t + (t >> 5);
+    uint32_t g = v & 0x7e0;
+    return ((((g * 0x20) + (g >> 1)) ^ t) & 0xff00) ^ t;
+}
+
+// @ 0x007c2880
+void ConvertDXT1ToARGB8888(uint32_t* dst, int stride, uint16_t* src, int srcPitch, int width, int height)
+{
+    int bw = (width + 3) >> 2;
+    int bh = (height + 3) >> 2;
+    if (bw != 0 && bh != 0) {
+        int x = bw;
+        uint32_t* d = dst;
+        int srcAdv = srcPitch - bw * 8;
+        int dstAdv = (stride - bw * 4) * 4;
+        do {
+            do {
+                uint16_t c0 = src[0];
+                uint32_t t0 = Expand565(c0);
+                uint16_t c1 = src[1];
+                uint32_t t1 = Expand565(c1);
+                uint32_t cols[4];
+                cols[1] = t1 | 0xff000000;
+                cols[0] = t0 | 0xff000000;
+                if (c0 > c1) {
+                    uint32_t h1 = (cols[1] >> 8) & 0xff00ff;
+                    uint32_t h0 = (cols[0] >> 8) & 0xff00ff;
+                    uint32_t A = h0 * 0xab + h1 * 0x55;
+                    uint32_t B = h1 * 0xab + h0 * 0x55;
+                    uint32_t l0 = cols[0] & 0xff00ff;
+                    uint32_t l1 = cols[1] & 0xff00ff;
+                    cols[2] = ((((l0 * 0xab + 0x800080 + l1 * 0x55) >> 8) ^ (A - 0x7fff80)) & 0xff00ff) ^ (A + 0x800080);
+                    cols[3] = ((((l1 * 0xab + 0x800080 + l0 * 0x55) >> 8) ^ (B - 0x7fff80)) & 0xff00ff) ^ (B + 0x800080);
+                } else {
+                    cols[2] = (cols[1] | cols[0]) - (((cols[1] ^ cols[0]) >> 1) & 0x7f7f7f7f);
+                    cols[3] = 0;
+                }
+                expand_2_32(d, stride, *(uint32_t*)(src + 2), cols);
+                d += 4;
+                src += 4;
+                --x;
+            } while (x != 0);
+            src = (uint16_t*)((char*)src + srcAdv);
+            d = (uint32_t*)((char*)d + dstAdv);
+            --bh;
+            x = bw;
+        } while (bh != 0);
+    }
+}

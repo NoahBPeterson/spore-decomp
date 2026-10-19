@@ -80,12 +80,28 @@ struct AnimRequest;
 struct AnimResult;
 struct AnimContext;
 
-class cSPEditorAnimationManager {
+struct IUnknown32S {
+    virtual int AddRef();
+    virtual int Release();
+    ~IUnknown32S() {}
+};
+// eastl::vector<AutoRefCount<cPropertyList>, sp_vector_allocator>: three pointers used here; the
+// destructor is the out-of-line instance at 0x004b5440.
+struct AnimVecS {
+    void* mpBegin; void* mpEnd; void* mpCapacity;
+    AnimVecS() : mpBegin(0), mpEnd(0), mpCapacity(0) {}
+    ~AnimVecS();                                      // 0x004b5440
+};
+
+class cSPEditorAnimationManager : public EA::RefCountVTemplate<int>, public IUnknown32S {
 public:
     __declspec(noinline) cSPEditorAnimationManager(); // 0x0059dac0
+    // scalar deleting destructor ??_G is emitted from this inline destructor
+// @ 0x0059db00
+    virtual ~cSPEditorAnimationManager() {}
     void Init();                                      // 0x0059db40
     bool GetAnimation(AnimRequest* req, AnimResult* out, AnimContext* ctx);  // 0x0059dc70
-    char pad[0x20];
+    AnimVecS mAnimations;                             // +0xc
 };
 
 }  // namespace SP
@@ -190,8 +206,7 @@ void* g_pForceMgr;
 void ForceAnimationManagerCtor() { g_pForceMgr = new cSPEditorAnimationManager(); }
 
 // ===========================================================================
-// @ 0x0059db00
-// scalar deleting destructor -- emitted by the compiler from the vtable
+// 0x0059db00: scalar deleting destructor, see cSPEditorAnimationManager::~cSPEditorAnimationManager above
 
 // ===========================================================================
 // @ 0x0059d960
