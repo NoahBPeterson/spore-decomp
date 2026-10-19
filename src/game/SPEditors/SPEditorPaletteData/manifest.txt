@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorPaletteData.cpp  ?Init@cSPPalette_s005c_6340@SP@@QAE_NABUKey_s005c_6340@ResourceMan@EA@@IIIIHW4eModelType_s005c_6340@2@@Z  005c6340  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

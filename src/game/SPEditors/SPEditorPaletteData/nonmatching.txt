@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+005c5e90 18 cSPPalette::~cSPPalette: complete; ebx/ebp swap and vptr store order; difftest PASS (fixed: base classes given their real vtables, RefCountVTemplate dtor/AddRef/Release/GetReferenceCount and the interface base AddRef=0/Release=0/dtor, deleting dtors and thunks mapped in symbols/slices/s005c53c0.txt)
+005c5f00 96 cSPPalette::AddCategory: complete; sorted insert, shared temp slot and reg choice
