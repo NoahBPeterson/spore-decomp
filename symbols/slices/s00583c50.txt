@@ -1,5 +1,5 @@
-00583c50 FUN_00583c50  # no PDB name
-00584070 FUN_00584070  # no PDB name
+00583c50 ?FUN_00583c50@@YAXXZ  # FUN_00583c50 migrated from s00583c50 (verbatim, slice spelling)
+00584070 ?FUN_00584070@@YAXXZ  # FUN_00584070 migrated from s00583c50 (verbatim, slice spelling)
 00584160 ?Resize@cIntVec@@QAEXI@Z  # cIntVec::Resize migrated from s00583c50 (verbatim, slice spelling)
-005841b0 FUN_005841b0  # no PDB name
-00584230 FUN_00584230  # no PDB name
+005841b0 ?FUN_005841b0@@YAXXZ  # FUN_005841b0 migrated from s00583c50 (verbatim, slice spelling)
+00584230 ?FUN_00584230@@YAXXZ  # FUN_00584230 migrated from s00583c50 (verbatim, slice spelling)

@@ -1,6 +1,8 @@
 004adfe0 ?GetName@cSPEditorModel@SP@@UBEPB_WXZ  # SP::cSPEditorModel::GetName (callee of s00585d40, named from the dev publics; slice address comment)
 004c5200 ?Copy@cSPEditorModel@SP@@QAEXPAPAV12@@Z  # SP::cSPEditorModel::Copy (callee of s00585d40, named from the dev publics; slice address comment)
 00585d40 SP::cAppModeEditorBase::ContinueSaveInProgress  # PDB name (state at +0x38c)
-00586410 SP::cAppModeEditorBase::AddUndoState  # PDB candidate caller-single (OnMouseWheel); pushes cEditorResource onto undo list
+00586410 ?FUN_00586410@cAppModeEditorBase_s0058_5d40@SP@@QAEXDPAX@Z  # cAppModeEditorBase_s0058_5d40::FUN_00586410 migrated from s00585d40 (verbatim, slice spelling)
 00586690 ?InitializeUndoList@cAppModeEditorBase_s0058_5d40@SP@@QAEXXZ  # cAppModeEditorBase_s0058_5d40::InitializeUndoList migrated from s00585d40 (verbatim, slice spelling)
-00586960 SP::cAppModeEditorBase::ScaleBlock  # PDB candidate caller-scored
+00586700 ?FUN_00586700@cAppModeEditorBase_s0058_5d40@SP@@QAEXXZ  # cAppModeEditorBase_s0058_5d40::FUN_00586700 migrated from s00585d40 (verbatim, slice spelling)
+00586800 ?FUN_00586800@cAppModeEditorBase_s0058_5d40@SP@@QAEEPAX@Z  # cAppModeEditorBase_s0058_5d40::FUN_00586800 migrated from s00585d40 (verbatim, slice spelling)
+00586960 ?FUN_00586960@cAppModeEditorBase_s0058_5d40@SP@@QAEXXZ  # cAppModeEditorBase_s0058_5d40::FUN_00586960 migrated from s00585d40 (verbatim, slice spelling)

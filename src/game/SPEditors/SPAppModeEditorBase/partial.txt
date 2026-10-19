@@ -14,6 +14,20 @@
 00582d00 106 skeleton only (not reconstructed)
 00582d70 622 skeleton only (not reconstructed)
 00583900 837 skeleton only (not reconstructed)
+00583c50 1046 skeleton only (not reconstructed)
+00584070 234 skeleton only (not reconstructed)
+005841b0 122 skeleton only (not reconstructed)
+00584230 193 skeleton only (not reconstructed)
+00585330 631 skeleton only (not reconstructed)
+005855b0 517 skeleton only (not reconstructed)
+005857c0 104 skeleton only (not reconstructed)
+005858f0 797 skeleton only (not reconstructed)
+00585c10 155 skeleton only (not reconstructed)
+00585d10 38 skeleton only (not reconstructed)
+00586410 - PARTIAL: AddUndoState 625B; only vector reset modelled, EASTL/refcount traffic omitted
+00586700 244 PARTIAL: per-slot bit-vector reset; resize/memcpy insertion path omitted
+00586800 - PARTIAL: state serialization via cVarListSerializer stubbed; only vector normalisation modelled
+00586960 - PARTIAL: ScaleBlock 409B; editor limb rebuild calls omitted
 0058ac10 - PARTIAL: OnKeyDown 2620B; skeleton only
 0058b650 - PARTIAL: OnMouseUp 1029B; skeleton only
 0058ba60 - PARTIAL: OnMouseMoveUpdate 998B; skeleton only
