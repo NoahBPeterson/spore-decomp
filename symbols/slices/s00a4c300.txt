@@ -1,4 +1,10 @@
-00a4c610 EA::Audio::Eapd::x_gui_setup  # PDB candidate; calls gfxstub/openpanel/savepanel setup
+00a4c300 ?openpanel_setup@Eapd@Audio@EA@@YA_NXZ  # openpanel_setup migrated from s00a4c300 (verbatim, slice spelling)
+00a4c370 ?savepanel_new@Eapd@Audio@EA@@YAPAXXZ  # savepanel_new migrated from s00a4c300 (verbatim, slice spelling)
+00a4c3e0 ?savepanel_bang@Eapd@Audio@EA@@YAXPAUt_savepanel@123@@Z  # savepanel_bang migrated from s00a4c300 (verbatim, slice spelling)
+00a4c400 ?savepanel_setup@Eapd@Audio@EA@@YA_NXZ  # savepanel_setup migrated from s00a4c300 (verbatim, slice spelling)
+00a4c470 ?gfxstub_new@Eapd@Audio@EA@@YAXPAPAV_class@123@PAXPBD@Z  # EA::Audio::Eapd::gfxstub_new migrated from s00a4c300
+00a4c560 ?gfxstub_setup@Eapd@Audio@EA@@YA_NXZ  # gfxstub_setup migrated from s00a4c300 (verbatim, slice spelling)
+00a4c610 ?x_gui_setup@Eapd@Audio@EA@@YA_NXZ  # EA::Audio::Eapd::x_gui_setup migrated from s00a4c300
 00a4c630 ?gobj_getrect@Eapd@Audio@EA@@YAXPAUt_gobj@123@PAUt_glist@123@PAH222@Z  # gobj_getrect migrated from s00a4c300 (verbatim, slice spelling)
 00a4c6f0 ?gobj_click@Eapd@Audio@EA@@YAHPAUt_gobj@123@PAUt_glist@123@HHHHHH@Z  # gobj_click migrated from s00a4c300 (verbatim, slice spelling)
 00a4c710 ?glist_isselected@Eapd@Audio@EA@@YAHPAUt_glist@123@PAUt_gobj@123@@Z  # glist_isselected migrated from s00a4c300 (verbatim, slice spelling)

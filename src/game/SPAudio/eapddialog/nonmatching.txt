@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00a4c470 30 complete (EA gfxstub_new); same calls, strlen+0x32<=4000 guard and sym copy; only the store/sprintf-arg scheduling differs
