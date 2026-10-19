@@ -42,6 +42,8 @@
 #include "cSPUILayout.h"
 #include <new>
 #include <float.h>
+#include "EA/UTFWin/IWindow.h"
+#include "SP/cSPEditorBlock.h"
 #pragma pack(push, 4)
 #pragma pack(pop)
 
@@ -854,6 +856,14 @@ struct cSpeciesProfile_s004d_a330 {
     void GetUiName(WString* out);  // 0x004da330 (cSpeciesProfile::GetUiName)
 };
 // ---- items of slice s004da330 end
+
+
+
+
+
+
+
+
 
 // callees this slice defines outside this object (rewrite.py held_callee_protos)
 void ResourceManager(uint32_t param);  // 0x004da3a0 (stays in the slice: not this object's)
@@ -2050,7 +2060,6 @@ void InitStatics()
 
 
 
-
 // @ 0x004d3500
 float Blend(float, float, float a, float, float b, float c, float d)
 {
@@ -2060,7 +2069,6 @@ float Blend(float, float, float a, float, float b, float c, float d)
     float k3 = (b * k1 + a) + c * kr + d * k2;
     return k3;
 }
-
 
 
 
@@ -2091,7 +2099,6 @@ uint32_t MapGetFieldC(SpeciesMap* m, uint32_t key)
 
 
 
-
 // @ 0x004d35d0
 uint32_t MapGetClamped(SpeciesMap* m, uint32_t key)
 {
@@ -2100,7 +2107,6 @@ uint32_t MapGetClamped(SpeciesMap* m, uint32_t key)
     if (it != e) { if (it.mpNode->v[2] > 5) return 5; else return it.mpNode->v[2]; }
     return 0;
 }
-
 
 
 
@@ -2131,7 +2137,6 @@ uint32_t MapGetField4(SpeciesMap* m, uint32_t key)
 
 
 
-
 // @ 0x004d36a0
 void* MapGetPtr(SpeciesMap* m, uint32_t key)
 {
@@ -2141,7 +2146,6 @@ void* MapGetPtr(SpeciesMap* m, uint32_t key)
     static MapDefault def;
     return &def;
 }
-
 
 
 
@@ -2191,11 +2195,9 @@ CreatureAbility::CreatureAbility()
 
 
 
-
 // @ 0x004d3b80
 CreatureAbility::~CreatureAbility()
 {}
-
 
 
 
@@ -2227,7 +2229,6 @@ uint32_t TuningObj::GetAt(uint32_t index)
 
 
 
-
 // @ 0x004d3d40
 int TuningObj::GetActive()
 {
@@ -2236,7 +2237,6 @@ int TuningObj::GetActive()
     else
         return m70;
 }
-
 
 
 
@@ -2267,14 +2267,12 @@ float TuningObj::GetBound(bool which)
 
 
 
-
 // @ 0x004d3da0
 void TuningObj::SetBounds(float lo, float hi)
 {
     mMin = lo;
     mMax = hi;
 }
-
 
 
 
@@ -2399,13 +2397,11 @@ void SpeciesDB_Op1(void* self)
 
 
 
-
 // @ 0x004d46b0
 float SpeciesDB::GetScale()
 {
     return mScale * 0.025f * 100.0f;
 }
-
 
 
 
@@ -2440,7 +2436,6 @@ uint32_t SpeciesDB::FindField8(int id)
 
 
 
-
 // @ 0x004d4750
 uint32_t SpeciesDB::FindField10(int id)
 {
@@ -2465,7 +2460,6 @@ uint32_t SpeciesDB::FindField10(int id)
 
 
 
-
 // @ 0x004d47d0
 void SpeciesDB_Op2(void* self)
 { (void)self; }
@@ -2479,11 +2473,9 @@ void SpeciesDB_Op2(void* self)
 
 
 
-
 // @ 0x004d4ad0
 void SpeciesDB_Op3(void* self)
 { (void)self; }
-
 
 
 
@@ -2519,14 +2511,12 @@ void SpeciesProfile_Update(void* a, int b)
 
 
 
-
 // @ 0x004d8ee0
 int SpeciesProfile::GetVariantA(void* p)
 {
     Update(p, 0);
     return (int)((char*)this + 0x810);
 }
-
 
 
 
@@ -2559,7 +2549,6 @@ int SpeciesProfile::GetVariantB(void* p)
 
 
 
-
 // @ 0x004d8f90
 int SpeciesProfile::GetVariantC(void* p)
 {
@@ -2574,7 +2563,6 @@ int SpeciesProfile::GetVariantC(void* p)
         result = (int)((char*)this + 0x8e0);
     return result;
 }
-
 
 
 
@@ -2793,7 +2781,6 @@ void cSpeciesProfile_s004d_a330::GetUiName(WString* out)
 
 
 
-
 // @ 0x004da3d0
 uint32_t* GetValidatedSpeciesKey(uint32_t* out, uint32_t instance, bool flora)
 {
@@ -2912,11 +2899,9 @@ void SpeciesCheat_Op1(void* self)
 
 
 
-
 // @ 0x004db2c0
 void SpeciesCheat_Op2(void* self)
 { (void)self; }
-
 
 
 
@@ -2943,11 +2928,9 @@ void PaintSystem::Destroy()
 
 
 
-
 // @ 0x004db470
 void SpeciesCheat_Op3(void* self)
 { (void)self; }
-
 
 
 
@@ -2967,7 +2950,6 @@ void Connector::Init(void* pObj, int b, int c, uint32_t n)
         }
     }
 }
-
 
 
 
@@ -3221,13 +3203,11 @@ void SP::cSpeciesCheat::GetFullPath(EA::ResourceMan::Key const & key, eastl::bas
 
 
 
-
 // @ 0x004dc730
 unsigned int SP::cPlantSummarizer::GetVersion() const
 {
     return g_plantStaticType;
 }
-
 
 
 
@@ -3241,7 +3221,6 @@ unsigned int SP::cPlantSummarizer::GetResType(unsigned int p) const
 
 
 
-
 // @ 0x004dc760
 bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3251,13 +3230,11 @@ bool SP::cPlantSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, 
 
 
 
-
 // @ 0x004dc920
 unsigned int SP::cSpeciesSummarizer::GetVersion() const
 {
     return g_speciesStaticType;
 }
-
 
 
 
@@ -3271,7 +3248,6 @@ unsigned int SP::cSpeciesSummarizer::GetResType(unsigned int p) const
 
 
 
-
 // @ 0x004dc950
 bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc, eastl::vector<SP::FunctionalMatch::DeclareParam, eastl::sp_vector_allocator> & out) const
 {
@@ -3281,12 +3257,10 @@ bool SP::cSpeciesSummarizer::ExtractParameters(EA::ResourceMan::Key const & desc
 
 
 
-
 // @ 0x004dcaa0
 void SP::cSPEditorSpeciesManager_s004d_c660::Teardown()
 {
 }
-
 
 
 
@@ -3308,7 +3282,6 @@ float RandomInRange(const Vector2_s004d_f2d0& range)
 }  // namespace SP
 
 
-
 // @ 0x004df310
 namespace SP {
 void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarSpecies(const Key_s004d_f2d0& key)
@@ -3327,7 +3300,6 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarSpecies(const Key_s004d_f2d0& 
 }  // namespace SP
 
 
-
 // @ 0x004df3e0
 namespace SP {
 void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_f2d0* pProfile)
@@ -3337,7 +3309,6 @@ void cSPEditorSpeciesManager_s004d_f2d0::SetAvatarProfile(cSpeciesProfile_s004d_
 }  // namespace SP
 
 
-
 // @ 0x004df420
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile()
@@ -3345,7 +3316,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetAvatarProfile
     return GetProfile(mAvatarSpeciesKey);
 }
 }  // namespace SP
-
 
 
 // @ 0x004df440
@@ -3368,7 +3338,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetPlantProfile(
     return pProfile;
 }
 }  // namespace SP
-
 
 
 // @ 0x004df550
@@ -3401,7 +3370,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::GetProfile(const
 }  // namespace SP
 
 
-
 // @ 0x004df6d0
 namespace SP {
 cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(eastl::SpeciesMap_s004d_f2d0& map, const Key_s004d_f2d0& key)
@@ -3422,7 +3390,6 @@ cSpeciesProfile_s004d_f2d0* cSPEditorSpeciesManager_s004d_f2d0::FindProfile(east
 }  // namespace SP
 
 
-
 // @ 0x004df790
 namespace SP {
 bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004d_f2d0& key, Key_s004d_f2d0& outKey)
@@ -3433,7 +3400,6 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey(const Key_s004
     return false;
 }
 }  // namespace SP
-
 
 
 // @ 0x004df7d0
@@ -3448,7 +3414,6 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKey(const Key_s004d_f2d0&
     return false;
 }
 }  // namespace SP
-
 
 
 // @ 0x004dfb50
