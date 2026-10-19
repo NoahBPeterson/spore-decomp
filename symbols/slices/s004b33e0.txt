@@ -1,8 +1,8 @@
 004b33e0 ?FUN_004b33e0@@YAHPAH0H@Z  # FUN_004b33e0 migrated from s004b33e0 (verbatim, slice spelling)
 004b3660 ?FUN_004b3660@@YAHHPAHH@Z  # FUN_004b3660 migrated from s004b33e0 (verbatim, slice spelling)
-004b3730  SP::cSPEditorPaintTheme::InitClosestRegions  # PDB anchor
-004b3910  FUN_004b3910  # region lookup by key
-004b3a50  FUN_004b3a50  # region scan / apply dispatch
-004b3b20  FUN_004b3b20  # closest-region index scan
-004b3c20  FUN_004b3c20  # model bake helper
-004b3c70  SP::cSPEditorPaintTheme::SetRegionColor  # PDB callee-scored
+004b3730 ?InitClosestRegions@cSPEditorPaintTheme_s004b_33e0@SP@@QAEXHH@Z  # cSPEditorPaintTheme_s004b_33e0::InitClosestRegions migrated from s004b33e0 (verbatim, slice spelling)
+004b3910 ?FUN_004b3910@cSPEditorPaintTheme_s004b_33e0@SP@@QAEDPAHHH@Z  # cSPEditorPaintTheme_s004b_33e0::FUN_004b3910 migrated from s004b33e0 (verbatim, slice spelling)
+004b3a50 ?FUN_004b3a50@cSPEditorPaintTheme_s004b_33e0@SP@@QAEDHHH@Z  # cSPEditorPaintTheme_s004b_33e0::FUN_004b3a50 migrated from s004b33e0 (verbatim, slice spelling)
+004b3b20 ?FUN_004b3b20@cSPEditorPaintTheme_s004b_33e0@SP@@QAEDHPAH0@Z  # cSPEditorPaintTheme_s004b_33e0::FUN_004b3b20 migrated from s004b33e0 (verbatim, slice spelling)
+004b3c20 ?FUN_004b3c20@cSPEditorPaintTheme_s004b_33e0@SP@@QAEXH@Z  # cSPEditorPaintTheme_s004b_33e0::FUN_004b3c20 migrated from s004b33e0 (verbatim, slice spelling)
+004b3c70 ?SetRegionColor@cSPEditorPaintTheme_s004b_33e0@SP@@QAEXHHHH@Z  # cSPEditorPaintTheme_s004b_33e0::SetRegionColor migrated from s004b33e0 (verbatim, slice spelling)

@@ -1,2 +1,4 @@
-004b3e10  SP::cSPEditorPaintTheme::GenerateSkinPaintFromRegionPaint  # PDB caller-scored
-004b4470  SP::cSPEditorPaintTheme::ReadSkinThemeFromProp  # PDB callee-scored
+004accb0 ?GetBlock@cSPEditorModel@SP@@QAEPAVcSPEditorBlock@2@I@Z  # SP::cSPEditorModel::GetBlock (callee of s004b3e10, named from the dev publics; slice address comment)
+004accf0 ?GetBlockCount@cSPEditorModel@SP@@QBEIXZ  # SP::cSPEditorModel::GetBlockCount (callee of s004b3e10, named from the dev publics; slice address comment)
+004b3e10 ?GenerateSkinPaint@cSPEditorPaintTheme_s004b_3e10@SP@@QAEXPAUcSPEditorModel_s004b_3e10@@@Z  # cSPEditorPaintTheme_s004b_3e10::GenerateSkinPaint migrated from s004b3e10 (verbatim, slice spelling)
+004b4470 ?ReadSkinTheme@cSPEditorPaintTheme_s004b_3e10@SP@@QAEEHHH@Z  # cSPEditorPaintTheme_s004b_3e10::ReadSkinTheme migrated from s004b3e10 (verbatim, slice spelling)
