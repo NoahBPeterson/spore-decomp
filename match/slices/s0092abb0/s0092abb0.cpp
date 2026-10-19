@@ -48,15 +48,8 @@ void* EASTL_allocator_allocate(uint32_t n, const char* name, int flags, unsigned
                                const char* file, int line);   // 0x00f473a0
 void  DoInsertValue(void* dst, const void* src, unsigned n);
 void* CopyWStrings(const void* first, const void* last, void* dst);  // 0x84ab40
-void  FUN_004228e0(int a, int b);            // 0x4228e0
-void  FUN_0042e610(unsigned n);              // 0x42e610
 void* FUN_006abeb0(unsigned n);              // 0x6abeb0
-void  WString_Assign(void* s, const void* first, const void* last); // 0x423650
-void  WStr_Append(void* s, const wchar_t* first, const wchar_t* last); // 0x429580
-void  WStr_PushBack(void* s, wchar_t c);     // 0x4f6510
-void  WStr_RangeInitialize(void* s, const wchar_t* p); // 0x579a90
-void* WStr_Find(const void* s, const wchar_t* sub, int start); // 0x608340
-void  Stristr16();                           // 0x92cc90 (placeholder)
+bool  FUN_006ab760(void* p, const wchar_t* s); // 0x6ab760
 int   Stristr16_real(const wchar_t* s, const wchar_t* sub); // 0x92cc90
 void  Mutex_Lock(void* m, void* name);       // 0x9221b0
 void  Mutex_Unlock(void* m);                 // 0x922270
@@ -69,23 +62,38 @@ void* FUN_0092aa20;                          // unused
 typedef long LRESULT_DEF;
 
 // ---------------------------------------------------------------- strings
+// EA::eastl::basic_string<wchar_t> - 0x10 bytes.  All its methods are __thiscall
+// members, so they are declared (not defined) here and resolved by address.
 struct WString {
     wchar_t* mpBegin;    // +0
     wchar_t* mpEnd;      // +4
     wchar_t* mpCapacity; // +8
     void* mAlloc;        // +0xc
     WString() { mpBegin = mpEnd = (wchar_t*)0x1667bac; mpCapacity = (wchar_t*)0x1667bae; }
-    void assign(const wchar_t* first, const wchar_t* last) { WString_Assign(this, first, last); }
-    void append(const wchar_t* first, const wchar_t* last) { WStr_Append(this, first, last); }
-    void push_back(wchar_t c) { WStr_PushBack(this, c); }
-    long find(const wchar_t* s, int start) { return (long)WStr_Find(this, s, start); }
+    void assign(const wchar_t* first, const wchar_t* last);   // 0x423650
+    void append(const wchar_t* first, const wchar_t* last);   // 0x429580
+    void push_back(wchar_t c);                                // 0x4f6510
+    unsigned find(const wchar_t* s, unsigned start);          // 0x608340
+    void reserve(unsigned n);                                 // 0x42e610
+    void erase(unsigned start, unsigned end);                 // 0x4228e0
+};
+
+// Same layout as WString but with no constructor, for locals the original
+// zero-initialises by hand.
+struct WStringRaw {
+    wchar_t* mpBegin;    // +0
+    wchar_t* mpEnd;      // +4
+    wchar_t* mpCapacity; // +8
+    void* mAlloc;        // +0xc
+    void RangeInitialize(const wchar_t* p);  // 0x579a90
 };
 
 struct WStringVector {
-    int pad0;
-    WString* mpEnd;
-    WString* mpCap;
-    WString* Erase(WString* pos);
+    WString* mpBegin;    // +0
+    WString* mpEnd;      // +4
+    WString* mpCapacity; // +8
+    WString* Erase(WString* pos);                     // 0x92b700
+    WString* insert(WString* pos, const WString& v);  // 0x92b750
 };
 
 // ---------------------------------------------------------------- Clipboard
@@ -227,7 +235,6 @@ Win32Clipboard::Win32Clipboard(Clipboard* owner) {
 
 // @ 0x0092adb0
 bool Win32Clipboard::WindowProcedure(WString* text) {
-    bool result = false;
     bool got = false;
     if (text->mpBegin != text->mpEnd) {
         *text->mpBegin = 0;
@@ -242,7 +249,7 @@ bool Win32Clipboard::WindowProcedure(WString* text) {
                     wchar_t* p = (wchar_t*)GlobalLock(h);
                     if (p != 0) {
                         size_t n = GlobalSize(h) >> 1;
-                        WString_Assign(text, text->mpBegin, text->mpEnd);
+                        text->reserve((unsigned)n);
                         wchar_t* end = p + n;
                         while (p < end && *p != 0) {
                             text->push_back(*p);
@@ -257,7 +264,7 @@ bool Win32Clipboard::WindowProcedure(WString* text) {
         }
         --mnGettingText;
     }
-    return result || got;
+    return got;
 }
 
 // @ 0x0092abb0
@@ -418,7 +425,7 @@ void CommandLine::InsertArgument(const wchar_t* arg, unsigned index) {
     tmp.mpBegin = 0;
     tmp.mpEnd = 0;
     tmp.mpCapacity = 0;
-    WStr_RangeInitialize(&tmp, arg);
+    ((WStringRaw*)&tmp)->RangeInitialize(arg);
     void* at = (char*)mpBegin + (index << 4);
     void* ins = 0;
     (void)at;
@@ -578,7 +585,7 @@ unsigned CommandLine::FindSwitch(const wchar_t* sw, bool exact, WString* out, un
 
 // @ 0x0092b4d0  rebuild the command line, quoting arguments that contain spaces
 void FUN_0092b4d0(WString* cmdline, WString* args) {
-    FUN_004228e0(0, 0xffffffff);
+    cmdline->erase(0, 0xffffffff);
     unsigned count = (unsigned)((char*)args->mpEnd - (char*)args->mpBegin) >> 4;
     for (unsigned i = 0; i < count; ++i) {
         WString* cur = (WString*)((char*)args->mpBegin + (i << 4));
@@ -591,12 +598,12 @@ void FUN_0092b4d0(WString* cmdline, WString* args) {
             }
         }
         if (quote)
-            WStr_PushBack(cmdline, L'"');
-        WStr_Append(cmdline, cur->mpBegin, cur->mpEnd);
+            cmdline->push_back(L'"');
+        cmdline->append(cur->mpBegin, cur->mpEnd);
         if (quote)
-            WStr_PushBack(cmdline, L'"');
+            cmdline->push_back(L'"');
         if (i + 1 < count)
-            WStr_PushBack(cmdline, L' ');
+            cmdline->push_back(L' ');
     }
 }
 // --- equivalence checker address annotations
