@@ -1,6 +1,13 @@
-0082acb0 `anonymous namespace'::cSPUISerializeHelper::ParseValue  # symbols/pdb_names.json anchor
-0082b060 `anonymous namespace'::cSPUISerializeHelper::NewArray<Value>  # symbols/pdb_names.json
-0082b0d0 EA::Allocator::StackAllocator::AllocateNewBlock  # symbols/pdb_names.json
-0082b160 `anonymous namespace'::cSPUIDeserializeHelper::SkipProperty  # symbols/pdb_names.json anchor
-0082b310 `anonymous namespace'::cSPUIDeserializeHelper::ReadProperty  # symbols/pdb_candidates.json
-0082b7f0 `anonymous namespace'::cSPUISerializationAllocator::Allocate  # symbols/pdb_names.json
+0082acb0 ?ParseValue@SerializeHelper@@QAEXXZ  # SerializeHelper::ParseValue migrated from s0082acb0 (verbatim, slice spelling)
+0082afe0 ?LookupCode@@YAHPBG@Z  # LookupCode migrated from s0082acb0 (verbatim, slice spelling)
+0082b060 ?NewArrayValue@SerializeHelper@@QAEPAUValue20@@H@Z  # SerializeHelper::NewArrayValue migrated from s0082acb0 (verbatim, slice spelling)
+0082b0d0 ?AllocateNewBlock@StackAlloc@@QAEXPAUBookmark@@@Z  # StackAlloc::AllocateNewBlock migrated from s0082acb0 (verbatim, slice spelling)
+0082b160 ?SkipProperty@SerializeHelper@@QAEXXZ  # SerializeHelper::SkipProperty migrated from s0082acb0 (verbatim, slice spelling)
+0082b310 ?ReadProperty@SerializeHelper@@QAEXXZ  # SerializeHelper::ReadProperty migrated from s0082acb0 (verbatim, slice spelling)
+0082b7f0 ?Allocate@SerAlloc@@QAEPAXII@Z  # SerAlloc::Allocate migrated from s0082acb0 (verbatim, slice spelling)
+0082b880 ?Write8@RefSlot@@QAEXI@Z  # RefSlot::Write8 migrated from s0082acb0 (verbatim, slice spelling)
+0082b8a0 ?Write16@RefSlot@@QAEXI@Z  # RefSlot::Write16 migrated from s0082acb0 (verbatim, slice spelling)
+0082b8c0 ?Write32@RefSlot@@QAEXI@Z  # RefSlot::Write32 migrated from s0082acb0 (verbatim, slice spelling)
+0082b8e0 ?Write64@RefSlot@@QAEXII@Z  # RefSlot::Write64 migrated from s0082acb0 (verbatim, slice spelling)
+0082b920 ?NewPair@Pool16@@QAEPAUPair16@@XZ  # Pool16::NewPair migrated from s0082acb0 (verbatim, slice spelling)
+0082b970 ?NewTri@Pool12@@QAEPAUTri12@@XZ  # Pool12::NewTri migrated from s0082acb0 (verbatim, slice spelling)

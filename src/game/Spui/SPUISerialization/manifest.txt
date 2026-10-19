@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/Spui/SPUISerialization.cpp  ?Write8@RefSlot@@QAEXI@Z  0082b880  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUISerialization.cpp  ?Write16@RefSlot@@QAEXI@Z  0082b8a0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUISerialization.cpp  ?Write32@RefSlot@@QAEXI@Z  0082b8c0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include
+../src/game/Spui/SPUISerialization.cpp  ?Write64@RefSlot@@QAEXII@Z  0082b8e0  /O2 /MD /Gy /TP /fp:fast /arch:SSE2 /Isrc/game/include

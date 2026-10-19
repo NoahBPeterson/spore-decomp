@@ -1,0 +1,15 @@
+# va  diff-bytes  reason
+0082ab00 11 complete translation; parameter register allocation differs (a in ecx vs eax)
+0082ab40 123 complete translation; wide-string compare not identical to the inlined form
+0082afe0 189 complete translation; inlined wide-string compare not identical
+0082b060 58 complete translation; EASTL array zero-fill schedule differs
+0082b7f0 68 complete translation; allocator fast-path register allocation differs
+0082b920 66 complete translation; nested allocator subobject register allocation differs
+0082b970 56 complete translation; nested allocator subobject register allocation differs
+0082bfa0 42 complete translation; EASTL fixed-allocator allocate call not reproduced exactly
+0082cc60 102 complete translation; vector(n) zero-fill schedule differs
+0082ccb0 26 complete translation; push_back(NULL) grow path not identical
+0082cd30 1652 ProcessStream: complete (header, bindings, hit masks, objects, property blocks, trailer); frame layout/register allocation and exit-path merging differ
+0082d480 282 ParseProp: complete; this/token register assignment (ebx/edi swapped) and spill order differ; difftest WEAK (7.8% coverage: random tokens rarely name <prop>; fixed '// @' markers on the class declarations that made the checker pick ParseObject)
+0082d7b0 249 ParseProps: complete (fixed_vector<Prop*,64> collect + link); cleanup blocks are merged where the original duplicates them; difftest WEAK (42.6% coverage)
+0082d910 58 ParseObject: complete; obj pointer spill timing around vector push_back differs

@@ -1,2 +1,13 @@
-0082c190 UTFWin::RLEHitMask::RLEHitMask  # vtable_names.txt + PDB class UTFWin::RLEHitMask
-0082c210 `anonymous namespace'::cSPUISerializeHelper::WriteHitmaskInline  # symbols/pdb_candidates.json
+0082b9c0 ?SerializeHelperProcessTokens2@@YAXXZ  # SerializeHelperProcessTokens2 migrated from s0082b9c0 (verbatim, slice spelling)
+0082bfa0 ?Setup@U16Vec@@QAEXIPBX@Z  # U16Vec::Setup migrated from s0082b9c0 (verbatim, slice spelling)
+0082c000 ?Insert@RBTree@@QAEXPAX00H@Z  # RBTree::Insert migrated from s0082b9c0 (verbatim, slice spelling)
+0082c190 ??0RLEHitMask@@QAE@XZ  # RLEHitMask::RLEHitMask migrated from s0082b9c0 (verbatim, slice spelling)
+0082c1d0 ?RLEHitMaskDestroy@@YAXPAURLEHitMask@@@Z  # RLEHitMaskDestroy migrated from s0082b9c0 (verbatim, slice spelling)
+0082c210 ?WriteHitmaskInline@@YAXXZ  # WriteHitmaskInline migrated from s0082b9c0 (verbatim, slice spelling)
+0082c420 ?SerializeHelperWrite2@@YAXXZ  # SerializeHelperWrite2 migrated from s0082b9c0 (verbatim, slice spelling)
+0082c550 ?SerializeHelperNuke@@YAXXZ  # SerializeHelperNuke migrated from s0082b9c0 (verbatim, slice spelling)
+0082c5a0 ?SerializeHelperNuke2@@YAXXZ  # SerializeHelperNuke2 migrated from s0082b9c0 (verbatim, slice spelling)
+0082c770 ?SerializeHelperWrite3@@YAXXZ  # SerializeHelperWrite3 migrated from s0082b9c0 (verbatim, slice spelling)
+0082c810 ?SerializeHelperWrite4@@YAXXZ  # SerializeHelperWrite4 migrated from s0082b9c0 (verbatim, slice spelling)
+0082cc60 ?Init@U16Vec@@QAEXIPBX@Z  # U16Vec::Init migrated from s0082b9c0 (verbatim, slice spelling)
+0082ccb0 ?AddZero@U16Vec@@QAEXXZ  # U16Vec::AddZero migrated from s0082b9c0 (verbatim, slice spelling)
