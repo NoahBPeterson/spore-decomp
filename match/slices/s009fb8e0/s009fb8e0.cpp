@@ -171,16 +171,16 @@ void AdvanceTimer(void* self, float dt)
 // ================================================================== @ 0x009fbc50
 
 // @ 0x009fbc50
-void AudioSetListener3(float x, float y, float z, int p4)
+void AudioSetListener3(int a1, float b, float c, float d)
 {
     void* s = EA_Audio_GetSystemAT();
     if (!s)
         return;
     ((vt_v_i)VT(s, 0x38))(s, 0x3475373);
-    ((vt_v_if)VT(s, 0x40))(s, 0x3475385, x);
-    ((vt_v_if)VT(s, 0x3c))(s, 0x3475391, y);
-    ((vt_v_if)VT(s, 0x3c))(s, 0x3475395, z);
-    ((vt_v_i)VT(s, 0x3c))(s, 0x3475398);
+    ((vt_v_ii)VT(s, 0x40))(s, 0x3475385, a1);
+    ((vt_v_if)VT(s, 0x3c))(s, 0x3475391, b);
+    ((vt_v_if)VT(s, 0x3c))(s, 0x3475395, c);
+    ((vt_v_if)VT(s, 0x3c))(s, 0x3475398, d);
     ((vt_v0)VT(s, 0x58))(s);
 }
 
@@ -266,7 +266,7 @@ float AudioQueryC(int x)
 // @ 0x009fbe50
 void AudioSetListener3v(int a1, float* v)
 {
-    AudioSetListener3(v[0], v[1], v[2], a1);
+    AudioSetListener3(a1, v[0], v[1], v[2]);
 }
 
 // ================================================================== @ 0x009fbe80

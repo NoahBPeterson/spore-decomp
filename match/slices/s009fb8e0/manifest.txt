@@ -6,5 +6,7 @@ slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetEvent5@@YAXPAXH@Z  009fbd30  /O2 /MD /G
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetEvent1@@YAXPAXH@Z  009fbd50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioQueryA@@YADH@Z  009fbdd0  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?AudioQueryB@@YAXH@Z  009fbe00  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetListener3@@YAXHMMM@Z  009fbc50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
+slices/s009fb8e0/s009fb8e0.cpp  ?AudioSetListener3v@@YAXHPAM@Z  009fbe50  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemAssignFrom@@YAXPAUElem14@@00@Z  009fc680  /O2 /MD /Gy /TP /arch:SSE /fp:fast
 slices/s009fb8e0/s009fb8e0.cpp  ?ElemMove@@YAPAUElem14@@PAU1@00@Z  009fc970  /O2 /MD /Gy /TP /arch:SSE /fp:fast
