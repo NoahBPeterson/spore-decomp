@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+01213750 153 compiler-generated EH cleanup funclet (PDB names it cRuntimeModelBuilder::CreateModelMeshes, but this VA is the cleanup fragment); enclosing body outside the slice
