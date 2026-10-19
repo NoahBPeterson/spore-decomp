@@ -1,0 +1,2 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPEditorsTokenTranslator.cpp  ?TranslateToken@cEditorsTokenTranslator_s005d_53e0@SP@@UAE_NPB_WAAVstring16_s005d_53e0@eastl@@@Z  005d5ef0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /GS- /Isrc/game/include
