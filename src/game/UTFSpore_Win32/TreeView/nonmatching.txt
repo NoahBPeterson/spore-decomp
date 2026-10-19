@@ -1,0 +1,3 @@
+# va  diff-bytes  reason
+00951240 8 complete; CustomWinProc::AsInterface (second id); same branch-layout delta
+01300e90 256 init_154ff0c: complete; /Od offset arithmetic folds; equiv PASS (1200 inputs, 100% coverage) only via --src s01300280_od.cpp --flags "/Od /Ob1 /MD /Gy /TP /arch:SSE" (default run compiles s01300280.cpp only, which lacks these)

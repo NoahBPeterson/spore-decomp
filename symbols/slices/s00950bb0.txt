@@ -1,4 +1,5 @@
 00950eb0 EA::UTFWin::CustomWinProc::AsInterface  # pdb_names vtable-slot
+00951240 ?AsInterfaceA@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEPAXH@Z  # CustomWinProc_s0095_0bb0::AsInterfaceA migrated from s00950bb0 (verbatim, slice spelling)
 00951330 EA::UTFWin::MultiHeapObject::operator delete  # pdb_names callee-single
 009513d0 ?InitArray8@@YA_NPAHHH0@Z  # InitArray8 migrated from s00950bb0 (verbatim, slice spelling)
 009514a0 ?Release@CustomWinProc_s0095_0bb0@UTFWin@EA@@QAEHXZ  # CustomWinProc_s0095_0bb0::Release migrated from s00950bb0 (verbatim, slice spelling)

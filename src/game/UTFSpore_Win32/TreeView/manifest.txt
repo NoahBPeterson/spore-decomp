@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/TreeView.cpp  ?RegisterWinTextEditTypes@UTFWinControls@EA@@YAXXZ  0098f330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/TreeView.cpp  ?Init@WinTreeView@UTFWinControls@EA@@QAE_NXZ  0098f3d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include

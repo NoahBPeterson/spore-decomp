@@ -4,6 +4,7 @@
 013004a0 init_154ed8c  # registry table, function-pointer entries via FUN_00957a60/957880
 01300950 ?init_154f4dc@@YAXXZ  # init_154f4dc migrated from s01300280 (verbatim, slice spelling)
 01300c50 ?init_154fbe4@@YAXXZ  # init_154fbe4 migrated from s01300280 (verbatim, slice spelling)
+01300e90 ?init_154ff0c@@YAXXZ  # init_154ff0c migrated from s01300280 (verbatim, slice spelling)
 01307ea0 zero_1675eb8  # zero-fill 0x40 records of 0x20 bytes
 01307ed0 zero_1675a00  # zero-fill 0x20 records of 0x24 bytes
 0130fcc0 init_1679034  # {int C; int 0} global initializer
