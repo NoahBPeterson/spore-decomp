@@ -1,0 +1,6 @@
+# va  diff-bytes  reason
+008e5a70  7    expat callback; stubbed
+008e5b90  7    expat callback; stubbed
+008e5ea0  7    XmlParser constructor; vtable/allocator init not reconstructed (stub)
+008e5fb0  11   XmlParser::ReInitParser; callback re-registration not reconstructed (stub)
+008e60a0  13   XmlParser::Parse(buffer); stubbed

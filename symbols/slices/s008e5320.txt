@@ -1,2 +1,8 @@
 008e5580 Fn8e5580  # marker line is followed by __declspec(noinline), which the name parser misreads
-008e59a0 XmlParser::Fn8e59a0  # same
+008e59a0 ?Fn8e59a0@XmlParser@@QAEXD@Z  # XmlParser::Fn8e59a0 migrated from s008e5320 (verbatim, slice spelling)
+008e5a20 ?Fn8e5a20@XmlParser@@QAEHPBDHH@Z  # XmlParser::Fn8e5a20 migrated from s008e5320 (verbatim, slice spelling)
+008e5c50 ?Fn8e5c50@@YAXPAX@Z  # Fn8e5c50 migrated from s008e5320 (verbatim, slice spelling)
+008e5ca0 ?Fn8e5ca0@XmlParser@@QAEXXZ  # XmlParser::Fn8e5ca0 migrated from s008e5320 (verbatim, slice spelling)
+008e5da0 ?Fn8e5da0@XmlParser@@QAEXPAGH@Z  # XmlParser::Fn8e5da0 migrated from s008e5320 (verbatim, slice spelling)
+008e5e20 ?Fn8e5e20@@YAXPAXPAGH@Z  # Fn8e5e20 migrated from s008e5320 (verbatim, slice spelling)
+008e5fb0 ?Fn8e5fb0@XmlParser@@QAEXXZ  # XmlParser::Fn8e5fb0 migrated from s008e5320 (verbatim, slice spelling)
