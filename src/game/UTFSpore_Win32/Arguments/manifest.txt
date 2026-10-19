@@ -6,3 +6,4 @@
 ../src/game/UTFSpore_Win32/Arguments.cpp  ??0cArguments@@QAE@XZ  00837ff0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ?MainArguments@cArguments@@QAEXH@Z  00838320  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
 ../src/game/UTFSpore_Win32/Arguments.cpp  ?OptionArguments@cArguments@@QAEXPBDH@Z  00838330  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/Arguments.cpp  ??0cArgumentsEH@@QAE@H@Z  008386d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /EHsc /GS- /Isrc/game/include

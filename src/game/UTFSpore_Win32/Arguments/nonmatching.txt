@@ -1,1 +1,2 @@
 # va  diff-bytes  reason
+008383c0 519 cArguments::SplitIntoArguments (complete tokeniser); register allocation differs (original spills this/&mOptionArguments and keeps isspace in ebp), temp cOptionArgInfo forwarded through the stack [equiv: WEAK]

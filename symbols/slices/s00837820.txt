@@ -13,8 +13,8 @@
 00838320 ?MainArguments@cArguments@@QAEXH@Z  # cArguments::MainArguments migrated from s00837820 (verbatim, slice spelling)
 00838330 ?OptionArguments@cArguments@@QAEXPBDH@Z  # cArguments::OptionArguments migrated from s00837820 (verbatim, slice spelling)
 00838350 ?FUN_00838350@@YAXHPAX@Z  # FUN_00838350 migrated from s00837820 (verbatim, slice spelling)
-008383c0  cArguments::SplitIntoArguments  # tokenises a command line into arguments
-008386d0  cArguments::cArguments(text)  # ctor -> SplitIntoArguments(text)
+008383c0 ?SplitIntoArguments@cArguments@@QAEXPBD@Z  # cArguments::SplitIntoArguments migrated from s00837820 (verbatim, slice spelling)
+008386d0 ??0cArgumentsEH@@QAE@H@Z  # cArgumentsEH::cArgumentsEH migrated from s00837820 (verbatim, slice spelling)
 00838740  helper(int)  # forwards to FUN_0092dc50 with a local
 00838760 ?StrEqualI@@YA_NPBD0@Z  # StrEqualI migrated from s00837820 (verbatim, slice spelling)
 00838780 ?StrNEqualI@@YA_NPBD0I@Z  # StrNEqualI migrated from s00837820 (verbatim, slice spelling)
