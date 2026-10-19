@@ -3,14 +3,40 @@
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
 #include "game/types.h"
+#include "EA/Thread/Mutex.h"
+#include "EA/Trace/TraceHelper.h"
 #include <windows.h>
 #include <stddef.h>
 #include <string.h>
+#include <new>
+#include <intrin.h>
 
 // ---- items of slice s00925770 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
 namespace Trace {
 struct C25f30 { void F(int a2, int a3, int a4); };
+}
+}
+namespace EA {
+namespace Trace {
+struct ICoreAlloc {
+    virtual void v0();
+    virtual void* Alloc(unsigned size, int a, int b, int c, int d);
+};
+}
+}
+namespace EA {
+namespace Trace {
+struct ZoneAllocWrap {
+    int w0;
+    ICoreAlloc* mpFallback;
+    int w8, wc, w10;
+    unsigned mLimit;
+    int w18;
+    int mFallbackCount;
+    void* Inner(unsigned size, int a, int b, int c, int d);    // 0x00925dc0
+    void* Alloc(unsigned size, int a, int b);                  // 0x00925f90
+};
 }
 }
 // ---- items of slice s00925770 end
@@ -32,15 +58,13 @@ void C25f30::F(int a2, int a3, int a4)
 }
 }}  // namespace EA::Trace
 
-// @ 0x00926020
+// @ 0x00925f90
 namespace EA { namespace Trace {
-void* ZoneObject_new(int a1, int a2, int a3)
+void* ZoneAllocWrap::Alloc(unsigned size, int a, int b)
 {
-    void* alloc = GetDefaultAllocatorX();
-    int* r = (int*)((void* (__thiscall*)(void*, int, int, int, int, int))(*(void***)alloc)[1])
-        (alloc, a1 + 8, a2, a3, 4, 0);
-    if (r) { *r = (int)alloc; return r + 2; }
-    return 0;
+    if (size <= mLimit) return Inner(size, a, b, 0, 0);
+    ++mFallbackCount;
+    return mpFallback->Alloc(size, a, b, 0, 0);
 }
 }}  // namespace EA::Trace
 
@@ -52,5 +76,17 @@ void ZoneObject_delete(void* p)
         void* base = (char*)p - 8;
         ((void (__thiscall*)(void*, int))(*(void***)*(void**)base)[3])(base, 0);
     }
+}
+}}  // namespace EA::Trace
+
+// @ 0x00926020
+namespace EA { namespace Trace {
+void* ZoneObject_new(int a1, int a2, int a3)
+{
+    void* alloc = GetDefaultAllocatorX();
+    int* r = (int*)((void* (__thiscall*)(void*, int, int, int, int, int))(*(void***)alloc)[1])
+        (alloc, a1 + 8, a2, a3, 4, 0);
+    if (r) { *r = (int)alloc; return r + 2; }
+    return 0;
 }
 }}  // namespace EA::Trace
