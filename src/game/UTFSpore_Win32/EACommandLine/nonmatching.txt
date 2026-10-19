@@ -1,0 +1,4 @@
+# va  diff-bytes  reason
+0092b5f0 99 GetCurrentAppPath: cached GetModuleFileNameW call/loop schedule differs
+0092b690 35 CommandLineB ctor: vtable-last field-init order differs
+0092b700 1 vector<wstring>::erase: copy/dealloc schedule differs; difftest FAIL (5/6 mismatched: execution)

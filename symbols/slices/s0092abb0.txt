@@ -7,6 +7,8 @@
 0092afb0 ??0Win32Clipboard_s0092_abb0@@QAE@PAUClipboard_s0092_abb0@@@Z  # Win32Clipboard_s0092_abb0::Win32Clipboard migrated from s0092abb0 (verbatim, slice spelling)
 0092b0b0 ?Clipboard_EnablePlatform@Clipboard_s0092_abb0@@QAE_NXZ  # Clipboard_s0092_abb0::Clipboard_EnablePlatform migrated from s0092abb0 (verbatim, slice spelling)
 0092b300 EA::CommandLine::FindSwitch  # pdb_names callee-single
-0092b5f0 `anonymous namespace'::GetCurrentAppPath  # pdb_names anchor
-0092b700 eastl::vector<eastl::basic_string<wchar_t,eastl::allocator>,eastl::sp_vector_allocator>::erase  # pdb_names gap-align
-0092b7b0 EA::CommandLine::InsertArgument  # pdb_names gap-align
+0092b4d0 ?FUN_0092b4d0@@YAXPAUWString@@0@Z  # FUN_0092b4d0 migrated from s0092abb0 (verbatim, slice spelling)
+0092b5f0 ?GetCurrentAppPath@@YAHPAUWString@@@Z  # GetCurrentAppPath migrated from s0092abb0 (verbatim, slice spelling)
+0092b690 ??0CommandLineB@@QAE@XZ  # CommandLineB::CommandLineB migrated from s0092abb0 (verbatim, slice spelling)
+0092b700 ?Erase@WStringVector@@QAEPAUWString@@PAU2@@Z  # WStringVector::Erase migrated from s0092abb0 (verbatim, slice spelling)
+0092b7b0 ?InsertArgument@CommandLine@EA@@QAEXPB_WH@Z  # EA::CommandLine::InsertArgument migrated from s0092abb0
