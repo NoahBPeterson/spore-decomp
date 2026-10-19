@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+00687c20 1643 complete; stack-slot layout differs (frame 0x9c vs 0xac), extra holes in original
