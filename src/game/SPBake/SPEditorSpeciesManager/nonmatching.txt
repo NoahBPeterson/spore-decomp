@@ -7,5 +7,7 @@
 004da3d0 20 complete; residual is /Od slot layout + out-pointer reload schedule
 004db3e0 15 complete; residual is /Od frame size (inlined-callee reserved frame) + vtable immediate form
 004db6e0 3120 complete source (flags /Od /Ob1 /MD /Gy /TP /arch:SSE) (all paths/calls, EASTL stubs); /Od frame slot order and inline stub codegen not reconstructed; difftest WEAK (130 valid, 6.7% coverage: inputs fault in real callees; fix: operator delete[] annotated 0x00f47380, OptionArguments mangled name mapped to 0x00838330)
+004df830 308 complete; ~vector<Constraint> inline/out-of-line split (temp member dtor out-of-line, success-path dtor inline) and /Od frame holes not reproduced
+004dfd50 289 complete; temp Constraint member dtors are inlined in the original (out-of-line here) and frame holes not reproduced
 005bf120 93 SaveEditorPropertyList: esi/edi swapped (group vs db), branch layout of db fallback
 005bf500 116 GetBoolParams: AutoRefCount out-param reset and push_back scheduling differ

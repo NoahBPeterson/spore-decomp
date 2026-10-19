@@ -7,6 +7,7 @@
 004df6d0 ?FindProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEPAVcSpeciesProfile_s004d_f2d0@2@AAVSpeciesMap_s004d_f2d0@eastl@@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  # cSPEditorSpeciesManager_s004d_f2d0::FindProfile migrated from s004df2d0 (verbatim, slice spelling)
 004df790 ?GetDefaultReplacementKey@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NABUKey_s004d_f2d0@ResourceMan@EA@@AAU345@@Z  # cSPEditorSpeciesManager_s004d_f2d0::GetDefaultReplacementKey migrated from s004df2d0 (verbatim, slice spelling)
 004df7d0 ?GetReplacementKey@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NABUKey_s004d_f2d0@ResourceMan@EA@@IAAU345@@Z  # cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKey migrated from s004df2d0 (verbatim, slice spelling)
+004df830 ?GetReplacementKeyForArchetype@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NABUKey_s004d_f2d0@ResourceMan@EA@@PAVcSpeciesArchetype_s004d_f2d0@2@AAU345@@Z  # cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKeyForArchetype migrated from s004df2d0 (verbatim, slice spelling)
 004dfb50 ?UpdateProfile@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAE_NPAVcSpeciesProfile_s004d_f2d0@2@ABUKey_s004d_f2d0@ResourceMan@EA@@@Z  # cSPEditorSpeciesManager_s004d_f2d0::UpdateProfile migrated from s004df2d0 (verbatim, slice spelling)
-004dfd50 SP::cSPEditorSpeciesManager::GetMatchingPlantProfiles  # PDB name (callee-scored)
+004dfd50 ?GetMatchingPlantProfiles@cSPEditorSpeciesManager_s004d_f2d0@SP@@QAEHAAUProfileVector@2@HH@Z  # cSPEditorSpeciesManager_s004d_f2d0::GetMatchingPlantProfiles migrated from s004df2d0 (verbatim, slice spelling)
 004e0050 SP::cSPEditorSpeciesManager::GetSpeciesArchetype  # mArchetypes lookup by id, optional parent level

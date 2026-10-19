@@ -1262,13 +1262,35 @@ bool ResourceExists(const Key_s004d_f2d0* key); // 0x004DA3A0
 }
 namespace SP {
 struct IObjectTemplateDB_s004d_f2d0 {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C(); virtual void v10(); virtual void v14();
-    virtual void v18(); virtual void v1C(); virtual void v20();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
+virtual void v14();
+virtual void v18();
+virtual void v1C();
+virtual void v20();
     virtual void FindTemplates(struct KeyVector& out, int count, struct ConstraintVector& constraints);   // 0x24
-    virtual void v28(); virtual void v2C(); virtual void v30(); virtual void v34(); virtual void v38(); virtual void v3C();
-    virtual void v40(); virtual void v44(); virtual void v48(); virtual void v4C(); virtual void v50(); virtual void v54();
+virtual void v28();
+virtual void v2C();
+virtual void v30();
+virtual void v34();
+virtual void v38();
+virtual void v3C();
+virtual void v40();
+virtual void v44();
+virtual void v48();
+virtual void v4C();
+virtual void v50();
+virtual void v54();
     virtual void Prefetch(const Key_s004d_f2d0& key, bool b);                         // 0x58
-    virtual void v5C(); virtual void v60(); virtual void v64(); virtual void v68(); virtual void v6C(); virtual void v70();
+virtual void v5C();
+virtual void v60();
+virtual void v64();
+virtual void v68();
+virtual void v6C();
+virtual void v70();
     virtual void Remove(const Key_s004d_f2d0& key, int flags);                           // 0x74
 };
 }
@@ -1277,7 +1299,11 @@ IObjectTemplateDB_s004d_f2d0* ObjectTemplateDB_s004d_f2d0();   // 0x0067CB40
 }
 namespace SP {
 struct IMessageServer {
-    virtual void v00(); virtual void v04(); virtual void v08(); virtual void v0C(); virtual void v10();
+virtual void v00();
+virtual void v04();
+virtual void v08();
+virtual void v0C();
+virtual void v10();
     virtual void MessageSend(uint32_t id, void* msg, int flags);   // 0x14
 };
 }
@@ -1495,6 +1521,9 @@ struct ProfileVector : public ProfileVectorBase {   // eastl::fixed_vector<cSpec
     ProfileAllocator mAllocator;
     cSpeciesProfile_s004d_f2d0* mBuffer[5];
 };
+}
+namespace SP {
+int FindMatchingCreatures(ProfileVector& out, cSpeciesArchetype_s004d_f2d0* pArchetype, int count, int a, bool b, ConstraintVector& constraints); // 0x004D2200
 }
 namespace SP {
 class cSPEditorSpeciesManager_s004d_f2d0 {
@@ -1769,7 +1798,6 @@ uint64_t MakeItemID(uint32_t group, uint32_t instance);       // FUN_00593980
 // ---- items of slice s005beaf0 end
 
 // ---- items of slice s004e01d0 begin (TODO(rewrite): local stubs, replace by canonical classes)
-#define _VA_LIST_DEFINED   // the slices' own va_list typedef wins over <vadefs.h> (rewrite.py)
 extern "C" void* memcpy(void* dst, const void* src, unsigned int n);
 #pragma intrinsic(memcpy)
 void EASTLFree(void* p);                                                         // 0x00F47380
@@ -1829,7 +1857,7 @@ template <class T> struct vector_s004e_01d0 {
     void DoFree(T* p, uint32_t n) { if (p) deallocate(p, n * sizeof(T)); }
     static void deallocate(void* p, uint32_t) { if (*((uint32_t*)p - 1)) FreeBlock(p); }
     static void FreeBlock(void* p) { void* pBlock = p; EASTLFree(pBlock); }
-    void DoInsertValue(T* position, const T& value);
+    void DoInsertValue(T* position, const T& value);  // 0x00621fc0 (eastl::vector::DoInsertValue)
     void reserve(uint32_t n);
     void push_back(const T& value);
 };
@@ -3525,6 +3553,38 @@ bool cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKey(const Key_s004d_f2d0&
 }
 }  // namespace SP
 
+// @ 0x004df830
+namespace SP {
+bool cSPEditorSpeciesManager_s004d_f2d0::GetReplacementKeyForArchetype(const Key_s004d_f2d0& key, cSpeciesArchetype_s004d_f2d0* pArchetype, Key_s004d_f2d0& outKey)
+{
+    eastl::SpeciesMap_s004d_f2d0::iterator it = mReplacementSpecies.find(key);
+    if (it != mReplacementSpecies.end()) {
+        cSpeciesProfile_s004d_f2d0* pProfile = it.mpNode->mpProfile;
+        outKey = pProfile->mSpeciesKey;
+        return true;
+    }
+    it = mReplacementCache.find(key);
+    if (it != mReplacementCache.end()) {
+        delete it.mpNode->mpProfile;
+        mReplacementCache.erase(it);
+    }
+    ConstraintVector constraints = ConstraintVector(DefaultAllocTag());
+    constraints.reserve(2);
+    constraints.push_back(FunctionalMatch::Constraint_s004d_f2d0(0x3cc89b1, 0, 0x913b23be));
+    ProfileVector profiles;
+    int n = FindMatchingCreatures(profiles, pArchetype, 1, 0, false, constraints);
+    if (!n)
+        n = FindMatchingCreatures(profiles, pArchetype, 1, 0, true, constraints);
+    if (n) {
+        cSpeciesProfile_s004d_f2d0* pProfile = profiles[0];
+        outKey = pProfile->mSpeciesKey;
+        mReplacementSpecies[key] = pProfile;
+        return true;
+    }
+    return false;
+}
+}  // namespace SP
+
 // @ 0x004dfb50
 namespace SP {
 bool cSPEditorSpeciesManager_s004d_f2d0::UpdateProfile(cSpeciesProfile_s004d_f2d0* pNewProfile, const Key_s004d_f2d0& key)
@@ -3552,6 +3612,34 @@ bool cSPEditorSpeciesManager_s004d_f2d0::UpdateProfile(cSpeciesProfile_s004d_f2d
         return bResult;
     }
     return false;
+}
+}  // namespace SP
+
+// @ 0x004dfd50
+namespace SP {
+int cSPEditorSpeciesManager_s004d_f2d0::GetMatchingPlantProfiles(ProfileVector& results, int maxCount, int plantType)
+{
+    IObjectTemplateDB_s004d_f2d0* pDB = ObjectTemplateDB_s004d_f2d0();
+    if (pDB) {
+        ConstraintVector constraints(1, FunctionalMatch::Constraint_s004d_f2d0(0x2dd90af, 0, 0x438f6347));
+        if (plantType != -1)
+            constraints.push_back(FunctionalMatch::Constraint_s004d_f2d0(0x2dc9d1e, 0, plantType));
+        KeyVector keys;
+        pDB->FindTemplates(keys, maxCount, constraints);
+        int n = 0;
+        for (Key_s004d_f2d0 *it = keys.mpBegin, *itEnd = keys.mpEnd; n < maxCount && it != itEnd; ++it) {
+            const Key_s004d_f2d0* pKey = it;
+            if (pKey->mGroup) {
+                cSpeciesProfile_s004d_f2d0* pProfile = GetPlantProfile(*pKey);
+                if (pProfile)
+                    results[n++] = pProfile;
+                else
+                    pDB->Remove(*pKey, 0);
+            }
+        }
+        return n;
+    }
+    return 0;
 }
 }  // namespace SP
 
