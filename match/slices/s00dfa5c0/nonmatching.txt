@@ -1,4 +1,7 @@
-# va  diff-bytes  reason   [flags + difftest verdict]
+# va  diff-bytes  reason
+00dfa5c0  200  asset-browser launch: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfa930  163  editor property save/UI toggle: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
+00dfab20  250  tooltip/panel enable: complete (best-effort). flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast.
 00dfaa40  65  eastl pod-array destructor loop; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 31% cov).
 00dfaa90  n/a  eastl pod-array move-backwards; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest WEAK (no mismatch, 25% cov).
 00dfae00  54  cString slice copy assignment; complete. flags /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast. difftest FAIL (5/5: our callee reads a bad pointer; cString operator= ABI).
