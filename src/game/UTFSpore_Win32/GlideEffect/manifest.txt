@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/GlideEffect.cpp  ?Scale@GlideEffect@UTFWinControls@EA@@QAEXPAXPAUFloatSink@23@M@Z  00970010  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/GlideEffect.cpp  ?Set@GlideEffect@UTFWinControls@EA@@QAEXPAM@Z  00970060  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/GlideEffect.cpp  ?FUN_009700b0@UTFWinControls@EA@@YIPAXPAD@Z  009700b0  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/GlideEffect.cpp  ?CreateInstance@BasicFactory_GlideEffect@UTFWinControls@EA@@QAEPAXHPAX@Z  00970100  /O2 /MD /Gy /TP /GS- /arch:SSE /fp:fast /Isrc/game/include
