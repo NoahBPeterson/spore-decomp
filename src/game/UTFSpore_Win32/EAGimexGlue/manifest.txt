@@ -1,0 +1,9 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?galloc@@YGPAXH@Z  0087d4a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gfree@@YG_NPAX@Z  0087d4c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gread@@YGHPAX0H@Z  0087d4e0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gwrite@@YGIPAX0I@Z  0087d510  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gseek@@YGXPAXHH@Z  0087d540  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?glen@@YG_KPAX@Z  0087d560  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?gtell@@YG_JPAX@Z  0087d570  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EAGimexGlue.cpp  ?AddImportFormat@Gimex@EA@@YAXPAVImporter@12@@Z  0087d590  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
