@@ -8,6 +8,18 @@
 
 // ---- items of slice s009a4c70 begin (TODO(rewrite): local stubs, replace by canonical classes)
 #define AT(T, p, off) (*(T*)((char*)(p) + (off)))
+namespace EA {
+template <typename T> struct RectT_s009a_4c70 {
+    T mLeft, mTop, mRight, mBottom;
+    RectT_s009a_4c70& operator=(const RectT_s009a_4c70& o);                 // 0x00572600
+    void RotA(float c, float s);                      // 0x009a4c70 (thiscall, ret 8)
+    void RotB(float c, float s);                      // 0x009a4d60
+    void RotC(float c, float s);                      // 0x009a4e40
+};
+}
+template void EA::RectT_s009a_4c70<float>::RotA(float, float);
+template void EA::RectT_s009a_4c70<float>::RotB(float, float);
+template void EA::RectT_s009a_4c70<float>::RotC(float, float);
 namespace nSPCreatureAnim {
 struct AudioIface {
     virtual void v0();  virtual void v1();  virtual void v2();  virtual void v3();
@@ -38,6 +50,37 @@ struct RollList { int* End(); };
 namespace nSPCreatureAnim {
 uint32_t GetEventDataAs32Bits(int a0, void* a1, int a2, int a3, void* creature, uint32_t index,
                               uint32_t defaultValue, int a7);                     // 0x009a5860
+}
+namespace nSPCreatureAnim {
+uint32_t BitMatch(uint32_t a, uint32_t b)
+{
+    uint32_t acc = 0, bit = 1;
+    while (a != 0 && b != 0) {
+        uint32_t t = (a - 1) & a;
+        a = t ^ a;
+        acc |= ((a & b) != 0) ? bit : 0u;
+        b = b & ~a;
+        bit = bit * 2;
+        a = t;
+    }
+    return acc;
+}
+}
+namespace nSPCreatureAnim {
+uint32_t TableFind(uint32_t* table, uint32_t key)
+{
+    uint32_t n = *table;
+    uint32_t i = 0;
+    if (n != 0) {
+        uint32_t* p = table + 1;
+        do {
+            if (*p == key) return i;
+            ++i;
+            p += 5;
+        } while (i < n);
+    }
+    return 0xffffffffu;
+}
 }
 namespace nSPCreatureAnim {
 uint32_t EvaluateContextTargetQuery(void* p1, uint32_t p2, int p3, uint32_t* p4, int p5, char p6);
@@ -178,6 +221,39 @@ void PerpPair(float* n, float* out1, float* out2)
     out2[0] = g7;
     out2[1] = g5;
     out2[2] = g3;
+}
+
+// @ 0x009a4c70
+template <typename T> void EA::RectT_s009a_4c70<T>::RotA(float c, float s)
+{
+    T x = mLeft, y = mTop, z = mRight, w = mBottom;
+    T r0 = x * c + w * s - z * (T)0.0 + y * (T)0.0;
+    T r1 = y * c + z * s + w * (T)0.0 - x * (T)0.0;
+    T r2 = z * c - y * s + x * (T)0.0 + w * (T)0.0;
+    T r3 = w * c - x * s - y * (T)0.0 - z * (T)0.0;
+    mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+}
+
+// @ 0x009a4d60
+template <typename T> void EA::RectT_s009a_4c70<T>::RotB(float c, float s)
+{
+    T x = mLeft, y = mTop, z = mRight, w = mBottom;
+    T r0 = x * c + w * (T)0.0 - z * s + y * (T)0.0;
+    T r1 = y * c + w * s + z * (T)0.0 - x * (T)0.0;
+    T r2 = z * c - y * (T)0.0 + x * s + w * (T)0.0;
+    T r3 = w * c - x * (T)0.0 - y * s - z * (T)0.0;
+    mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
+}
+
+// @ 0x009a4e40
+template <typename T> void EA::RectT_s009a_4c70<T>::RotC(float c, float s)
+{
+    T x = mLeft, y = mTop, z = mRight, w = mBottom;
+    T r0 = x * c + w * (T)0.0 - z * (T)0.0 + y * s;
+    T r1 = y * c + z * (T)0.0 + w * (T)0.0 - x * s;
+    T r2 = z * c - y * (T)0.0 + w * s + x * (T)0.0;
+    T r3 = w * c - x * (T)0.0 - y * (T)0.0 - z * s;
+    mLeft = r0; mTop = r1; mRight = r2; mBottom = r3;
 }
 
 // @ 0x009a4f10
@@ -384,6 +460,45 @@ uint32_t ComputeEventLocationData(uint32_t flags, uint32_t* param_2, uint32_t pa
         break;
     }
     return CheckEventLocationType(flags, *outLoc) ? r : 0;
+}
+}  // namespace nSPCreatureAnim
+
+// @ 0x009a5860
+namespace nSPCreatureAnim {
+uint32_t GetEventDataAs32Bits(int a0, void* a1, int a2, int a3, void* creature, uint32_t index, uint32_t defaultValue, int a7)
+{
+    uint32_t table[2] = { 0x300, 0xc0000 };
+    int kind = (int)BitMatch(table[a2], (uint32_t)a0);
+    char* bone = 0;
+    if (creature != 0 &&
+        (uint32_t)(((int)AT(int, creature, 0x2e8) - AT(int, creature, 0x2e4)) / 700) > index)
+        bone = AT(char*, creature, 0x2e4) + index * 700;
+
+    if (kind == 1) {
+        if (a3 == 0) {
+            float f = (float)(*(int*)a1);
+            return *(uint32_t*)&f;
+        }
+        return *(uint32_t*)a1;
+    }
+    if (kind == 2) {
+        if (a3 != 1) return *(uint32_t*)a1;
+        float f = *(float*)a1;
+        return (uint32_t)(int)f;
+    }
+    if (kind == 3) {
+        if (bone != 0 || (creature != 0 && (bone = AT(char*, creature, 8)) != 0)) {
+            uint32_t* tbl = (uint32_t*)(bone + 0xa0);
+            uint32_t idx = TableFind(tbl, *(uint32_t*)a1);
+            if (idx < tbl[0]) {
+                float v = AT(float, bone, 0xac + idx * 0x14) /
+                          (AT(float, bone, 0xb4 + idx * 0x14) + 1e-08f);
+                if (a3 == 0) return *(uint32_t*)&v;
+                return (uint32_t)(int)v;
+            }
+        }
+    }
+    return *(uint32_t*)&defaultValue;
 }
 }  // namespace nSPCreatureAnim
 
