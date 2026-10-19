@@ -6,10 +6,12 @@
 00405000 148 BakerCommand scalar deleting dtor: instruction-identical, only frame size differs (sub esp 0x98 vs 0x58: slots reserved by the failed inline of ~OptionParser)
 004051e0 38 Baker::CancelAll: instruction-identical, frame/slot offsets differ (failed-inline slots of BakeEntry ctor/dtor)
 004055b0 43 Baker::Shutdown: instruction-identical, slot offsets differ (AddRef temp placement, 2 slots)
+00407280 1880 9755-byte /Od function (property-list builder); behaviorally approximate reconstruction, not byte-exact, not attempted past source stage
 0040a590 622 EditorList::HandleKey; /Od inlined key-tag helpers and message struct init not reproduced (ours 760B vs 1072B orig)
 0040a9c0 317 KeyCopier::Copy: /Od frame layout and virtual-call operand order (ecx-first) not reproduced; structure otherwise equivalent
 0040e5b0 47 Obj::OnA: same size (592); stack-slot order of inlined Query() params/id const and the 0x60-byte local gap differ
 0040eab0 11 Obj::OnReset: same size (185); slot order of inlined clear() temp vs prov/prop locals differs
+00411e50 697 wrong inlining/layout of big Tick routine; behavioral approximation only (1149 vs 1627 bytes)
 004124b0 689 /Od /Ob1 module; frame layout differs (orig sub esp,0xe8 with 0x18-slot mgr below keys, extra inline temps for operator[]/Out()); ~972 vs 1098 bytes
 00414e30 24 BoundsLibrary::Query: code identical, only frame size/slot offsets differ (original frame 0x110 has ~88 bytes of dead inline-hashtable locals)
 00415660 10 PropertyListCache::Get: identical except the map-slot local offset (dead locals reproduce frame size 0x90)

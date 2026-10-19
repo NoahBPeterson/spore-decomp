@@ -1,1 +1,2 @@
 00411b90 ?4Obj  # A::Obj::operator= (??4Obj@A@@QAEAAU01@ABU01@@Z; written as base identifier so the checker finds it)
+00411e50 ?Tick@Obj2@B@@QAEXXZ  # Obj2::Tick migrated from s00411b90 (verbatim, slice spelling)

@@ -1,4 +1,4 @@
-// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s0041c1d0, s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s00413cc0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
+// src/game/SPBake/SPEditorBaker.cpp -- migrated from slice(s) s00411b90, s00407280, s0041c1d0, s005609a0, s0041aa40, s00419000, s004186c0, s00417d60, s00417600, s00416990, s00416180, s00414e30, s004145c0, s00413cc0, s004124b0, s0040eb70, s0040e5b0, s0040a9c0, s0040a170, s004098a0, s00406ac0, s00405000, s00404660, s00404480, s00403af0, s0042f9d0, s004035d0, s00402cc0, s00402470, s00401b80 by tools/migrate/rewrite.py
 // Object file: SPBake/SPEditorBaker.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -3892,6 +3892,258 @@ bool  GetArrayProperty(IPropertyList* list, uint32_t id, int* count, ResKey3** a
 bool  CollectAndDestroy(IRecordCounted* rec, MemoryStream* ms);   // 0x0041aa40 (cdecl)
 // ---- items of slice s0041c1d0 end
 
+// ---- items of slice s00407280 begin (TODO(rewrite): local stubs, replace by canonical classes)
+extern const char g_GraphicsTag[];
+struct ResourceKey_s0040_7280 { uint32_t instance, type, group; };
+struct IRefCounted_s0040_7280 {
+    virtual void AddRef();
+    virtual void Release();
+};
+struct PropertyList_s0040_7280 : IRefCounted_s0040_7280 {
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+    virtual void SetProperty(uint32_t id, void* value);        // +0x14
+    virtual bool HasProperty(uint32_t id);                     // +0x1c (slot 7)
+    virtual bool GetProperty(uint32_t id, void* outInfo);      // +0x24
+};
+struct PropertyInfo { char pad[0x12]; short type; };
+struct ResourceManager_s0040_7280 {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+    virtual bool GetResource(uint32_t group, uint32_t instance, void* outRef);  // +0x2c
+    virtual void v12();
+    virtual void SetResource(PropertyList_s0040_7280* list, uint32_t instance, uint32_t group); // +0x34
+};
+struct ResourceFactory {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual bool Create(ResourceKey_s0040_7280* key, void* out, int, int, int, int);       // +0xc
+};
+struct Part { char pad[0x1d8]; };
+struct Model {
+    char pad0[0x18]; uint32_t kind;
+    char pad1[0x80]; Part* partsBegin; Part* partsEnd;
+};
+struct MeshEntry { uint16_t flags, count; float data[12]; };           // 0x38 bytes
+ResourceManager_s0040_7280* GetResourceManager_s0040_7280();      // FUN_0067de30
+ResourceFactory* GetResourceFactory();      // FUN_0067dcd0
+int  MakeKey(void* scratch);                // FUN_0041d870
+Model* LookupModel(void* ref);              // FUN_00421eb0
+void* AllocPropertyList(uint32_t, const char*, int, int, int, int);
+PropertyList_s0040_7280* ConstructPropertyList(void* mem);   // Editor::cPropertyList::cPropertyList
+void FlushProperty(int);                    // FUN_0093db80
+void AddPartBounds(void* acc, Part* p);
+void BuildPartEntry(MeshEntry* out, Part* p);
+static void CommitProperty(PropertyList_s0040_7280* list, uint32_t id, void* value) {
+    uint16_t info[2] = { 0, 0 };
+    list->SetProperty(id, value);
+    if (info[0] & 4) FlushProperty(0);
+}
+struct SettingsBuilder {
+    void* vtbl;
+    virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+virtual void v10();
+virtual void v11();
+virtual void v12();
+virtual void v13();
+virtual void v14();
+virtual void v15();
+virtual void v16();
+virtual void v17();
+virtual void v18();
+virtual void v19();
+virtual void v20();
+    virtual void GetBounds(uint32_t a, uint32_t b, float* outMin, float* outMax, uint32_t c); // +0x54
+
+    void BuildGraphicsProperties(ResourceKey_s0040_7280* key);
+};
+// ---- items of slice s00407280 end
+
+// ---- items of slice s00411b90 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace B {
+struct IRelease { virtual void v0(); virtual void Release(); };
+}
+namespace B {
+struct IProps {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+    virtual void SetValue(uint32_t id, void* v);
+};
+}
+namespace B {
+struct IResMgr {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+virtual void v3();
+virtual void v4();
+virtual void v5();
+virtual void v6();
+virtual void v7();
+virtual void v8();
+virtual void v9();
+    virtual void v10();
+    virtual bool Open(uint32_t inst, uint32_t key, uint32_t arg);
+};
+}
+namespace B {
+struct IIter {
+virtual void v0();
+virtual void v1();
+virtual void v2();
+    virtual bool Next(void* key, IRelease** out, int, int, int, int);
+};
+}
+namespace B {
+struct TransformHdr { uint32_t pad; float x, y, pad2, z; };
+}
+namespace B {
+struct ModelEntry { uint32_t pad; uint16_t type; uint16_t pad2; TransformHdr* hdr; };
+}
+namespace B {
+struct ModelList { uint32_t pad[2]; ModelEntry** items; bool __thiscall IsEmpty(); };
+}
+namespace B {
+struct Inner { uint32_t pad[0x2e]; ModelList* models; };
+}
+namespace B {
+struct Mid { uint32_t pad[2]; Inner* inner; };
+}
+namespace B {
+struct Cam { char pad[0x70]; float x, y, z; };
+}
+namespace B {
+struct Cell_s0041_1b90 { uint32_t pad[2]; Mid* mid; };
+}
+namespace B {
+struct Counter { uint32_t pad[5]; float scale; };
+}
+namespace B {
+struct Obj2;
+}
+namespace B {
+IResMgr* GetResMgr();
+}
+namespace B {
+int64_t __fastcall ReadCounter(Counter*);
+}
+namespace B {
+void __fastcall UpdateCounter(Counter*);
+}
+namespace B {
+IIter* GetIter();
+}
+namespace B {
+bool __cdecl GetBoolProperty(IProps*, uint32_t, bool*);
+}
+namespace B {
+uint32_t __cdecl GetNameId(uint32_t);
+}
+namespace B {
+void* __cdecl AllocBuf(uint32_t);
+}
+namespace B {
+void __cdecl BindKey(uint32_t, uint32_t, void*, int);
+}
+namespace B {
+void __cdecl PutBack(void*, int);
+}
+namespace B {
+void __cdecl ApplyProps(IProps*, uint32_t, int);
+}
+namespace B {
+struct Obj2 {
+    virtual void vf0();
+    virtual void vf1();
+    virtual void vf2();
+    virtual void vf3();
+    virtual void vf4();
+    virtual void vf5();
+    virtual void vf6();
+    virtual void vf7();
+    virtual void vf8();
+    virtual void vf9();
+    virtual void vf10();
+    virtual void vf11();
+    virtual void vf12();
+    virtual void vf13();
+    virtual void vf14();
+    virtual void vf15();
+    virtual void vf16();
+    virtual void vf17();
+    virtual void vf18();
+    virtual void vf19();
+    virtual void vf20();
+    virtual void vf21();
+    virtual void vf22();
+    virtual void vf23();
+    virtual void vf24();
+    virtual void vf25();
+    virtual void vf26();
+    virtual void vf27();
+    virtual void SetPreBaked(uint32_t* key, bool v, const wchar_t* name);
+    char pad0[0x74 - 4];
+    uint32_t f74;
+    char pad1[0x228 - 0x78];
+    uint32_t keyInst, keyType, keyGroup;   // 0x228
+    uint32_t f234;
+    uint16_t flags;                        // 0x238
+    char pad3[0x240 - 0x23a];
+    Cell_s0041_1b90* cell;                            // 0x240
+    char pad4[0x1114 - 0x244];
+    int cntA;
+    char pad5[0x1120 - 0x1118];
+    int cntB;
+    float sumA;
+    float lastA;
+    char pad6[0x1138 - 0x112c];
+    Counter c1;
+    Counter c2;
+    void ApplyBlend(uint32_t* key, float a, float b);
+    void Tick();
+};
+}
+namespace B {
+struct IKeyHolder { virtual void v0(); virtual void Release(); };
+}
+namespace B {
+bool __cdecl FindEntry(IKeyHolder*, uint32_t, uint32_t*);   // 0x6a1250
+}
+namespace B {
+struct Str16 { uint32_t pad[4]; uint16_t kind; uint16_t flags; };
+}
+namespace B {
+void __fastcall MakeStr(Str16* s, uint32_t* v);   // 0x422eb0
+}
+namespace B {
+void __cdecl FreeStr(int);                          // 0x93db80
+}
+// ---- items of slice s00411b90 end
+
 // @ 0x00401ff0
 ResourceCollector::ResourceCollector()
 : mHandle(), mField4(0), mField8(0), mbField64(false), mbField65(false)
@@ -4520,6 +4772,114 @@ void KeyRemapper::Apply(vector_s0040_6ac0<KeyPair>& pairs, ResourceKey key)
     }
 }
 
+// @ 0x00407280
+void SettingsBuilder::BuildGraphicsProperties(ResourceKey_s0040_7280* key)
+{
+    PropertyList_s0040_7280* result = 0;     // list being produced (ebp-0x1590)
+    char ref[0x100];
+    ResourceManager_s0040_7280* rm = GetResourceManager_s0040_7280();
+    rm->GetResource(key->instance, key->group, (void*)(unsigned)MakeKey(&result));
+
+    ResourceKey_s0040_7280 modelKey = *key;
+    ResourceFactory* rf = GetResourceFactory();
+    int modelRef = 0;
+    if (!rf->Create(key, (void*)(unsigned)MakeKey(ref), 0, 0, 0, 0)) {
+        if (result) result->Release();
+        return;
+    }
+    Model* model = LookupModel(&modelRef);
+    if (!model) { if (result) result->Release(); return; }
+
+    // Optional secondary key (type 0x30bdee3) resolved through the factory.
+    modelKey.type = 0x30bdee3;
+    PropertyList_s0040_7280* extra = 0;
+    if (rf->Create(&modelKey, (void*)(unsigned)MakeKey(ref), 0, 0, 0, 0)) {
+        PropertyList_s0040_7280* found = (PropertyList_s0040_7280*)LookupModel(&modelRef);
+        if (found != extra) {
+            PropertyList_s0040_7280* old = extra;
+            if (found) found->AddRef();
+            extra = found;
+            if (old) old->Release();
+        }
+    }
+
+    if (!result) {
+        void* mem = AllocPropertyList(0x38, g_GraphicsTag, 0, 0, 0, 0);
+        PropertyList_s0040_7280* fresh = mem ? ConstructPropertyList(mem) : 0;
+        if (fresh != result) {
+            PropertyList_s0040_7280* old = result;
+            if (fresh) fresh->AddRef();
+            result = fresh;
+            if (old) old->Release();
+        }
+    }
+
+    // Seed scale from an existing float property, defaulting to 1.0.
+    float scale = 1.0f;
+    PropertyInfo* info = 0;
+    if (result->GetProperty(0xfba611, &info) && info->type == 0xd)
+        scale = *(float*)LookupModel(&info);
+
+    // Per-part pass: accumulate dominant extent and per-part volumes.
+    int partCount = (int)(model->partsEnd - model->partsBegin);
+    float maxVolume = 0.0f;
+    float bestWeight = 0.0f;
+    uint32_t bestId = 0, bestScale = 0;
+    for (int i = 0; i < partCount; ++i) {
+        Part* part = &model->partsBegin[i];
+        MeshEntry entry; BuildPartEntry(&entry, part);
+        entry.flags |= 4; entry.count += 2;
+        entry.flags |= 2; entry.count += 1;
+        float lo[3], hi[3];
+        GetBounds(((uint32_t*)part)[1], ((uint32_t*)part)[0], lo, hi, ((uint32_t*)part)[0x24]);
+        if (hi[0] < lo[0]) { /* swap handled by helper */ }
+        AddPartBounds(&entry, part);
+    }
+
+    // Commit the standard properties (all via the vtable +0x14 setter).
+    CommitProperty(result, 0xf1fae962, 0);
+    CommitProperty(result, 0xf1fae963, 0);
+    CommitProperty(result, 0x4c71061, 0);
+    CommitProperty(result, 0x4c71062, 0);
+    CommitProperty(result, 0x519e304, 0);
+    CommitProperty(result, 0x5b567d1, 0);
+    CommitProperty(result, 0x4ff954a, 0);
+
+    // Model-kind dependent default (property 0x46d0560): hashed kind switch in the original.
+    switch (model->kind) {
+    case 0x8f963dcb: case 0xc15695da: case 0x2a5147a9: case 0x1f2a25b6:
+        CommitProperty(result, 0x46d0560, 0); break;
+    case 0x98e03c0d: case 0x1a4e0708: case 0x2090a11b: case 0x441cd3e6: case 0x449c040f:
+        CommitProperty(result, 0x46d0560, 0); break;
+    case 0xc0b74287: case 0x9ad7d4aa: case 0xbc1041e6: case 0xf670aa43: case 0x7d433fad:
+        CommitProperty(result, 0x46d0560, 0); break;
+    default: break;
+    }
+    if (!result->HasProperty(0x4a5b8d2)) {
+        if (model->kind == 0x47c10953 || model->kind == 0x72c49181)
+            CommitProperty(result, 0x4a5b8d2, 0);
+    }
+
+    GetResourceManager_s0040_7280()->SetResource(result, key->instance, key->group);
+
+    // Group 'b' variant: publish a second list when property 0x339ff24 is a set bool.
+    if ((key->group >> 30) == 1 && ((key->group >> 8) & 0xff) == 0x62) {
+        PropertyInfo* pi = 0; char flag = 0;
+        if (result && result->GetProperty(0x339ff24, &pi) && pi->type == 1) flag = 1;
+        if (flag) {
+            void* mem = AllocPropertyList(0x38, "Graphics", 0, 0, 0, 0);
+            PropertyList_s0040_7280* second = mem ? ConstructPropertyList(mem) : 0;
+            if (second) second->AddRef();
+            GetResourceManager_s0040_7280()->SetResource(second, key->instance,
+                                              (key->group & 0xffff00ff) | 0x7e00);
+            if (second) second->Release();
+        }
+    }
+
+    if (extra)  extra->Release();
+    if (result) result->Release();
+}
+
 // @ 0x004098e0
 Vector3& MulMatrixAssign(Vector3& dst, const Matrix3& m)
 {
@@ -4811,6 +5171,77 @@ bool EditorPartList::Rescan()
     }
     return true;
 }
+
+// @ 0x00411e50
+namespace B {
+void Obj2::Tick()
+{
+    uint32_t keyI = keyInst;
+    uint32_t keyT = keyType;
+    uint32_t keyG = keyGroup;
+    ModelList* list = cell->mid->inner->models;
+    if (list) {
+        if (!list->IsEmpty() && (*list->items)->type == 0x210) {
+            TransformHdr* h = (*list->items)->hdr;
+            h->x = ((Cam*)cell)->x;
+            h->y = ((Cam*)cell)->y;
+            h->z = ((Cam*)cell)->z;
+        }
+    }
+    IProps* props = 0;
+    IResMgr* mgr = GetResMgr();
+    if (mgr->Open(keyI, (keyG & 0xffff00ff) | 0x6200, 0)) {
+        bool flag;
+        if (GetBoolProperty(props, 0x3f32ad2, &flag) && flag) {
+            if (keyT == 0x438f6347) {
+                uint32_t nameId = GetNameId(0);
+                Str16 s;
+                s.kind = 2;
+                s.flags = 9;
+                MakeStr(&s, &nameId);
+                props->SetValue(0x4239b99, &s);
+                if (s.kind & 4) FreeStr(0);
+            }
+            ApplyProps(props, f74, 0);
+        }
+    }
+    float a = 0.0f, b = 0.0f;
+    UpdateCounter(&c2);
+    b = (float)ReadCounter(&c2) * c2.scale;
+    a = (float)ReadCounter(&c1) * c1.scale + b;
+    lastA = b;
+    sumA = sumA + b;
+    cntB = cntB + 1;
+    if (flags & 0x40)
+        SetPreBaked(&keyI, (flags & 0x80) != 0, L"PreBaked");
+    cntA = cntA + 1;
+    if (!(flags & 2)) {
+        void* buf = AllocBuf(0x11ac1ac);
+        BindKey(keyInst, keyGroup, buf, 1);
+        uint32_t g2 = (keyGroup & 0xffff00ff) | 0xe300;
+        BindKey(keyInst, g2, buf, 1);
+        if (((keyG >> 16) & 0xff) == 0x62) {
+            IKeyHolder* holder = 0;
+            IResMgr* m2 = GetResMgr();
+            if (holder) { IKeyHolder* t = holder; holder = 0; t->Release(); }
+            if (m2->Open(keyI, (keyG & 0xe0ffffff) | 0x01000000, 0)) {
+                IIter* it = GetIter();
+                for (int i = 0; i < 4; ++i) {
+                    uint32_t k[4] = { 0, 0, 0, 0 };
+                    if (FindEntry(holder, 0xf9efbb + i, k) && ((k[2] >> 24) & 0x1f) == 1) {
+                        IRelease* out = 0;
+                        if (it->Next(k, &out, 0, 0, 0, 0)) PutBack(out, 1);
+                        if (out) out->Release();
+                    }
+                }
+            }
+            if (holder) holder->Release();
+        }
+    }
+    ApplyBlend(&keyInst, a, b);
+    if (props) ((IRelease*)props)->Release();
+}
+}  // namespace B
 
 // @ 0x004124b0
 void Owner::Rebuild()
