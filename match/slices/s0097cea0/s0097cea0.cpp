@@ -275,7 +275,7 @@ ImageDrawableCtor::ImageDrawableCtor()
 }
 
 // ---------------------------------------------------------------------------------------------
-// @ 0x0097CEA0  EA::UTFWinControls::WinGrid::SetCellWindow  (465 bytes)
+// 0x0097CEA0  EA::UTFWinControls::WinGrid::SetCellWindow  (465 bytes); marker on the definition below
 //   `this` is the IWinGrid subobject at WinGrid+0x20c; ret 0x18
 // ---------------------------------------------------------------------------------------------
 namespace Gr {
@@ -314,6 +314,7 @@ struct WinGridIface {                    // IWinGrid subobject
     bool SetCellWindow(int col, int row, void* w, bool b1, bool b2, int flag);
 };
 
+// @ 0x0097cea0
 bool WinGridIface::SetCellWindow(int colIn, int rowIn, void* w, bool b1, bool b2, int flag) {
     if (flag == 0) flag = 1;
     if (((bool(__thiscall*)(void*, void*, int, int, int))GVT(this, 0x1b8 / 4))(this, w, 0, 0, 0))
