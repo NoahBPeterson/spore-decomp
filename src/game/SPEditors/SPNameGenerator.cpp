@@ -1,4 +1,4 @@
-// src/game/SPEditors/SPNameGenerator.cpp -- migrated from slice(s) s005ec030, s005eb160, s005ea3d0, s005e9440 by tools/migrate/rewrite.py
+// src/game/SPEditors/SPNameGenerator.cpp -- migrated from slice(s) s005e8470, s005ec030, s005eb160, s005ea3d0, s005e9440 by tools/migrate/rewrite.py
 // Object file: SPEditors/SPNameGenerator.obj.  Function bodies keep the slice's code; types, members and virtual calls use the
 // canonical headers under src/game/include.  Each function keeps its '// @ 0xVA' marker.
 
@@ -12,6 +12,11 @@ extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
 #include "SP/cDirectPropertyList.h"
 #include "EA/Variant.h"
 #include "SP/cSPNameGenerator.h"
+#include "eastl/allocator.h"
+#include "SP/cSPEditorVerbTrayCollection.h"
+#include "cSPUILayout.h"
+#include "SP/cSPVerbTrayCollection.h"
+#include <ctype.h>
 
 // ---- items of slice s005e9440 begin (TODO(rewrite): local stubs, replace by canonical classes)
 extern "C" void EASTL_allocator_deallocate(void* p);  // 0x00f47380
@@ -822,33 +827,238 @@ static inline bool PropBool(PropList* l, uint32_t id, bool def) {
 }
 // ---- items of slice s005ec030 end
 
+// ---- items of slice s005e8470 begin (TODO(rewrite): local stubs, replace by canonical classes)
+namespace eastl {
+struct allocator_s005e_8470 {
+  allocator_s005e_8470() {}
+  void* allocate(size_t n) {
+    return operator new[](n, "Editor", 0, 0, "c:\\EASTL\\include\\EASTL/allocator.h", 0xd1);
+  }
+};
+}
+int Compare(const wchar_t* p1, const wchar_t* p2, size_t n);  // 0x008f96a0
+namespace eastl {
+template <typename FI1, typename FI2>
+FI1 search(FI1 first1, FI1 last1, FI2 first2, FI2 last2) {
+  if (first2 != last2) {
+    FI2 temp2(first2);
+    ++temp2;
+    if (temp2 == last2) {
+      while ((first1 != last1) && !(*first1 == *first2)) ++first1;
+      return first1;
+    } else {
+      FI1 cur1(first1);
+      FI2 p2;
+      while (first1 != last1) {
+        while ((first1 != last1) && !(*first1 == *first2)) ++first1;
+        if (first1 != last1) {
+          p2 = temp2;
+          cur1 = first1;
+          if (++cur1 != last1) {
+            while (*cur1 == *p2) {
+              if (++p2 == last2) return first1;
+              if (++cur1 == last1) return last1;
+            }
+            ++first1;
+            continue;
+          }
+        }
+        return last1;
+      }
+    }
+  }
+  return first1;
+}
+}
+namespace eastl {
+template <typename II, typename T> inline II find_s005e_8470(II first, II last, const T& value) {
+  while ((first != last) && !(*first == value)) ++first;
+  return first;
+}
+}
+namespace eastl {
+struct rbtree_node_base_s005e_8470 {
+  rbtree_node_base_s005e_8470* mpNodeRight;
+  rbtree_node_base_s005e_8470* mpNodeLeft;
+  rbtree_node_base_s005e_8470* mpNodeParent;
+  char mColor;
+};
+}
+namespace eastl {
+extern uint32_t gEmptyString[1];
+}
+namespace eastl {
+template <typename T, typename A = allocator_s005e_8470>
+struct VectorBase_s005e_8470 {
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  A mAllocator;
+  T* DoAllocate(size_t n) { return n ? (T*)mAllocator.allocate(n * sizeof(T)) : 0; }
+  VectorBase_s005e_8470(size_t n, const A& allocator_s005e_8470);
+};
+}
+namespace eastl {
+template <typename T, typename A>
+VectorBase_s005e_8470<T, A>::VectorBase_s005e_8470(size_t n, const A& allocator_s005e_8470) : mAllocator(allocator_s005e_8470) {
+  mpBegin = DoAllocate(n);
+  mpEnd = mpBegin;
+  mpCapacity = mpBegin + n;
+}
+}
+namespace eastl {
+template <typename V> struct rbtree_node_s005e_8470 : public rbtree_node_base_s005e_8470 { V mValue; };
+}
+namespace eastl {
+template <typename V> struct rbtree_iterator_s005e_8470 {
+  rbtree_node_s005e_8470<V>* mpNode;
+  rbtree_iterator_s005e_8470() : mpNode(0) {}
+  explicit rbtree_iterator_s005e_8470(const rbtree_node_s005e_8470<V>* p) : mpNode((rbtree_node_s005e_8470<V>*)p) {}
+};
+}
+namespace eastl {
+template <typename T> struct less_s005e_8470 {
+  bool operator()(const T& a, const T& b) const { return a < b; }
+};
+}
+namespace eastl {
+template <typename K, typename C = eastl::less_s005e_8470<K> >
+class rbtree_s005e_8470 {
+ public:
+  typedef rbtree_node_s005e_8470<K> node_type;
+  typedef rbtree_iterator_s005e_8470<K> iterator;
+  C mCompare;
+  rbtree_node_base_s005e_8470 mAnchor;
+  size_t mnSize;
+  iterator find_s005e_8470(const K& key);
+  iterator lower_bound(const K& key);
+};
+}
+namespace eastl {
+template <typename K, typename C>
+typename rbtree_s005e_8470<K, C>::iterator rbtree_s005e_8470<K, C>::lower_bound(const K& key) {
+  node_type* pCurrent = (node_type*)mAnchor.mpNodeParent;
+  rbtree_node_base_s005e_8470* pRangeEnd = &mAnchor;
+  while (pCurrent) {
+    if (!mCompare(pCurrent->mValue, key)) {
+      pRangeEnd = pCurrent;
+      pCurrent = (node_type*)pCurrent->mpNodeLeft;
+    } else
+      pCurrent = (node_type*)pCurrent->mpNodeRight;
+  }
+  return iterator((node_type*)pRangeEnd);
+}
+}
+namespace eastl {
+ inline wchar_t CharToLower(wchar_t c);   // 0x005e8ff0 (defined below; used by a stub's inline body)
+}
+namespace eastl {
+template <typename T, typename A = allocator_s005e_8470>
+class basic_string_s005e_8470 {
+ public:
+  typedef T value_type;
+  typedef size_t size_type;
+  enum { npos = -1 };
+  T* mpBegin;
+  T* mpEnd;
+  T* mpCapacity;
+  A mAllocator;
+  ~basic_string_s005e_8470() {
+    if ((mpCapacity - mpBegin) > 1 && mpBegin) EASTL_allocator_deallocate(mpBegin);
+  }
+  const T* c_str() const { return mpBegin; }
+  void AllocateSelf() {
+    mpBegin = (T*)&gEmptyString[0];
+    mpEnd = mpBegin;
+    mpCapacity = mpBegin + 1;
+  }
+  size_type size() const { return (size_type)(mpEnd - mpBegin); }
+  T& operator[](size_type n) { return mpBegin[n]; }
+  void make_lower() {
+    for (T* p = mpBegin; p < mpEnd; ++p) *p = (T)CharToLower(*p);
+  }
+  size_type find_s005e_8470(const T* p, size_type position, size_type n) const {
+    if ((position + n) <= (size_type)(mpEnd - mpBegin)) {
+      const T* const pTemp = eastl::search(mpBegin + position, mpEnd, p, p + n);
+      if ((pTemp != mpEnd) || (n == 0)) return (size_type)(pTemp - mpBegin);
+    }
+    return (size_type)npos;
+  }
+  size_type find_s005e_8470(T c, size_type position = 0) const {
+    if (position < (size_type)(mpEnd - mpBegin)) {
+      const T* const pResult = eastl::find_s005e_8470(mpBegin + position, mpEnd, c);
+      if (pResult != mpEnd) return (size_type)(pResult - mpBegin);
+    }
+    return (size_type)npos;
+  }
+  static int compare(const T* pBegin1, const T* pEnd1, const T* pBegin2, const T* pEnd2) {
+    const ptrdiff_t n1 = pEnd1 - pBegin1;
+    const ptrdiff_t n2 = pEnd2 - pBegin2;
+    const ptrdiff_t nMin = eastl::min_alt(n1, n2);
+    const int cmp = Compare(pBegin1, pBegin2, (size_t)nMin);
+    return (cmp != 0 ? cmp : (n1 < n2 ? -1 : (n1 > n2 ? 1 : 0)));
+  }
+};
+}
+namespace eastl {
+typedef basic_string_s005e_8470<wchar_t> wstring_s005e_8470;
+}
+struct Key2_s005e_8470 { uint16_t a, b; };
+inline bool operator<(const Key2_s005e_8470& x, const Key2_s005e_8470& y) { return (x.a < y.a) || (!(y.a < x.a) && (x.b < y.b)); }
+// ---- items of slice s005e8470 end
+
+// @ 0x005e8ff0
+namespace eastl {
+inline wchar_t CharToLower(wchar_t c)
+{
+  if ((unsigned)c <= 0xff) return (wchar_t)tolower((uint8_t)c);
+  return c;
+}
+}  // namespace eastl
+
+// @ 0x005e90f0
+template bool eastl::less_s005e_8470<Key2_s005e_8470>::operator()(const Key2_s005e_8470&, const Key2_s005e_8470&) const
+;
+
+// @ 0x005e9120
+template bool eastl::less_s005e_8470<Key3>::operator()(const Key3&, const Key3&) const
+;
+
+// @ 0x005e91c0
+template eastl::rbtree_s005e_8470<Key2_s005e_8470>::iterator eastl::rbtree_s005e_8470<Key2_s005e_8470>::lower_bound(const Key2_s005e_8470&)
+;
+
+// @ 0x005e9200
+template eastl::rbtree_s005e_8470<Key3>::iterator eastl::rbtree_s005e_8470<Key3>::lower_bound(const Key3&)
+;
+
+// @ 0x005e9260
+template int eastl::wstring_s005e_8470::compare(const wchar_t*, const wchar_t*, const wchar_t*, const wchar_t*)
+;
+
+// @ 0x005e92c0
+template eastl::VectorBase_s005e_8470<uint16_t>::VectorBase_s005e_8470(size_t, const eastl::allocator_s005e_8470&)
+;
+
+// @ 0x005e93a0
+template void eastl::wstring_s005e_8470::AllocateSelf()
+;
+
 // @ 0x005e9440
 template U16Tree::iterator U16Tree::DoInsertValueImpl(node_type*, const value_type&, bool)
 ;
-
-
-
 
 // @ 0x005e94c0
 template Key3Tree::iterator Key3Tree::DoInsertValueImpl(node_type*, const value_type&, bool)
 ;
 
-
-
-
 // @ 0x005e9550
 template eastl::wstring* eastl::uninitialized_relocate_commit<eastl::wstring>(eastl::wstring*, eastl::wstring*, eastl::wstring*)
 ;
 
-
-
-
 // @ 0x005e96a0
 template eastl::basic_string_s005e_9440<char, eastl::allocator_s005e_9440>::basic_string_s005e_9440(const char*, size_t, const eastl::allocator_s005e_9440&)
 ;
-
-
-
 
 // @ 0x005e96f0
 namespace eastl {
@@ -870,85 +1080,53 @@ template <typename K, typename V, typename C, typename E> typename rbtree_s005e_
 }
 }  // namespace eastl
 
-
-
-
 // @ 0x005e9890
 template eastl::pair_s005e_9440<U16Tree::iterator, bool> U16Tree::DoInsertValue(const value_type&, eastl::true_type)
 ;
-
-
-
 
 // @ 0x005e9930
 template WStringTree::iterator WStringTree::DoInsertValueImpl(node_type*, const value_type&, bool)
 ;
 
-
-
-
 // @ 0x005e99c0
 template eastl::wstring* eastl::copy_backward<eastl::wstring*, eastl::wstring*>(eastl::wstring*, eastl::wstring*, eastl::wstring*)
 ;
-
-
-
 
 // @ 0x005e9d50
 template WStringIntTree::iterator WStringIntTree::DoInsertValueImpl(node_type*, const value_type&, bool)
 ;
 
-
-
-
 // @ 0x005e9f50
 template eastl::vector_s005e_9440<bool>::vector_s005e_9440(size_t, const eastl::sp_vector_allocator_s005e_9440&)
 ;
-
-
-
 
 // @ 0x005ea010
 template void WStringTree::clear()
 ;
 
-
-
-
 // @ 0x005ea200
 template void eastl::vector_s005e_9440<eastl::wstring>::DoInsertFromIterator(eastl::wstring*, const eastl::wstring*, const eastl::wstring*, eastl::iterator_tag)
 ;
-
-
 
 // @ 0x005ea3d0
 void FUN_005ea3d0()
 {}
 
-
-
 // @ 0x005ea8f0
 void FUN_005ea8f0()
 {}
-
-
 
 // @ 0x005ea970
 void FUN_005ea970()
 {}
 
-
-
 // @ 0x005eae50
 void FUN_005eae50()
 {}
 
-
-
 // @ 0x005eaef0
 void FUN_005eaef0()
 {}
-
 
 // @ 0x005eb160
 void cSPNameGenerator::LoadStringList(const ResKey* keyIn, WStrVec* out, bool lower)
@@ -1020,7 +1198,6 @@ void cSPNameGenerator::LoadStringList(const ResKey* keyIn, WStrVec* out, bool lo
     }
 }
 
-
 // @ 0x005eb440
 void cSPNameGenerator::LoadAll(void* obj, void* a1, int a2, int a3, int a4, void* a5, int a6)
 {
@@ -1040,7 +1217,6 @@ void cSPNameGenerator::LoadAll(void* obj, void* a1, int a2, int a3, int a4, void
         dst += 0x14;
     }
 }
-
 
 // @ 0x005eb540
 WStr* cSPNameGenerator::CreateRandomCompoundName(WStr* ret, void* data, NameList* lists, StrTree* excl, WStrVec* exclSub, int unused, bool allowDup)
@@ -1136,7 +1312,6 @@ WStr* cSPNameGenerator::CreateRandomCompoundName(WStr* ret, void* data, NameList
     return ret;
 }
 
-
 // @ 0x005eba70
 void cSPNameGenerator::LoadPropertyKey(void* props, uint id, WStrVec* out)
 {
@@ -1148,7 +1323,6 @@ void cSPNameGenerator::LoadPropertyKey(void* props, uint id, WStrVec* out)
     GetPropertyAsKey(props, id, &key);
     LoadStringList(&key, out, false);
 }
-
 
 // @ 0x005ebb00
 WStr* cSPNameGenerator::CreateRandomName(WStr* ret, WStrVec* names, bool allowDup)
@@ -1203,7 +1377,6 @@ WStr* cSPNameGenerator::CreateRandomName(WStr* ret, WStrVec* names, bool allowDu
     return ret;
 }
 
-
 // @ 0x005ebd10
 MapNode** U16Map::DoInsertValueImpl(MapNode** ret, MapNode* parent, const MapValueType* v, bool bForceToLeft)
 {
@@ -1215,7 +1388,6 @@ MapNode** U16Map::DoInsertValueImpl(MapNode** ret, MapNode* parent, const MapVal
     *ret = n;
     return ret;
 }
-
 
 // @ 0x005ebdb0
 InsertResult* U16Map::DoInsertValue(InsertResult* ret, const MapValueType* v, UniqueKeysTag)
@@ -1252,7 +1424,6 @@ InsertResult* U16Map::DoInsertValue(InsertResult* ret, const MapValueType* v, Un
     return ret;
 }
 
-
 // @ 0x005ebe90
 bool cSPNameGenerator::LoadProperty(void* props, uint id, WStrVec* out, bool lower)
 {
@@ -1284,7 +1455,6 @@ bool cSPNameGenerator::LoadProperty(void* props, uint id, WStrVec* out, bool low
     }
     return true;
 }
-
 
 // @ 0x005ebf10
 MapNode** U16Map::insert(MapNode** ret, MapIter position, const MapValueType* v, UniqueKeysTag)

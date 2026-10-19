@@ -2,8 +2,12 @@
 005e8980 ?Init@cSPEditorVerbTrayCollection_s005e_8470@SP@@QAEXUKey_s005e_8470@ResourceMan@EA@@HH@Z  # cSPEditorVerbTrayCollection_s005e_8470::Init migrated from s005e8470 (verbatim, slice spelling)
 005e8e80 eastl::basic_string<wchar_t>::make_lower  # byte-exact EASTL make_lower/CharToLower body
 005e90a0 eastl::rbtree<uint16_t>::find  # byte-exact EASTL rbtree::find
+005e90f0 ??R?$less_s005e_8470@UKey2_s005e_8470@@@eastl@@QBE_NABUKey2_s005e_8470@@0@Z  # operator() migrated from s005e8470 (verbatim, slice spelling)
+005e9120 ??R?$less_s005e_8470@UKey3@@@eastl@@QBE_NABUKey3@@0@Z  # operator() migrated from s005e8470 (verbatim, slice spelling)
 005e9170 eastl::basic_string<wchar_t>::find  # byte-exact find(const T*, pos, n) calling eastl::search
-005e9260 eastl::basic_string<wchar_t>::compare  # byte-exact static compare(b1,e1,b2,e2) with min_alt
-005e92c0 eastl::VectorBase<uint16_t>::VectorBase  # (n, allocator) ctor, byte-exact
-005e93a0 eastl::basic_string<wchar_t>::AllocateSelf  # gEmptyString begin/end, capacity=+1, no return value
+005e91c0 ?lower_bound@?$rbtree_s005e_8470@UKey2_s005e_8470@@U?$less_s005e_8470@UKey2_s005e_8470@@@eastl@@@eastl@@QAE?AU?$rbtree_iterator_s005e_8470@UKey2_s005e_8470@@@2@ABUKey2_s005e_8470@@@Z  # lower_bound migrated from s005e8470 (verbatim, slice spelling)
+005e9200 ?lower_bound@?$rbtree_s005e_8470@UKey3@@U?$less_s005e_8470@UKey3@@@eastl@@@eastl@@QAE?AU?$rbtree_iterator_s005e_8470@UKey3@@@2@ABUKey3@@@Z  # lower_bound migrated from s005e8470 (verbatim, slice spelling)
+005e9260 ?compare@?$basic_string_s005e_9440@_WUallocator_s005e_9440@eastl@@@eastl@@SAHPB_W000@Z  # compare migrated from s005e8470 (verbatim, slice spelling)
+005e92c0 ??0?$VectorBase_s005e_8470@GUallocator_s005e_8470@eastl@@@eastl@@QAE@IABUallocator_s005e_8470@1@@Z  # VectorBase migrated from s005e8470 (verbatim, slice spelling)
+005e93a0 ?AllocateSelf@?$basic_string_s005e_8470@_WUallocator_s005e_8470@eastl@@@eastl@@QAEXXZ  # AllocateSelf migrated from s005e8470 (verbatim, slice spelling)
 00605f90 ?InitTrays@cSPVerbTrayCollection@SP@@MAEXVKey@ResourceMan@EA@@PAV345@H@Z  # SP::cSPVerbTrayCollection::InitTrays (callee of s005e8470, named from the dev publics; slice address comment)
