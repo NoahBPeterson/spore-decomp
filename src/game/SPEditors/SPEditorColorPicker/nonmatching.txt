@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+005a5ec0 949 cSPEditorColorPicker::Init: complete (swatch creation, custom/default swatches, colour/HSL); frame 0x30 vs 0x1c, scheduling differs

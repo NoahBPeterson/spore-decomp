@@ -1,5 +1,5 @@
-005a5ec0 SP::cSPEditorColorPicker::Init  # PDB anchor
-005a6390 SP::cSPEditorColorPicker::Clear  # iterates mSwatches(0x30), Cleanup, erase
+005a5ec0 ?Init@cSPEditorColorPicker@@QAE_NPAUIWindow@@IHPBV?$sp_vector@UcSPColorRGB_s005a_5ec0@@@eastl@@@Z  # cSPEditorColorPicker::Init migrated from s005a5ec0 (verbatim, slice spelling)
+005a6390 ?Clear@cSPEditorColorPicker@@QAEXXZ  # cSPEditorColorPicker::Clear migrated from s005a5ec0 (verbatim, slice spelling)
 005a63d0 SP::cSPColorSwatch::Update  # PDB anchor
 005a6db0 SP::cSPEditorColorPicker::Update  # s005c2d30 caller comment
 005a6e00 Clamp01(float)  # maxss/minss clamp to [0,1]
