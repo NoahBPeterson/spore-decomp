@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?copy_705250@@YAPAUQuad16@@PBU1@0PAU1@@Z  00705250  /O2 /MD /Gy /EHsc /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?resize@FixedRunVec@Text@EA@@QAEXI@Z  0089be20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ??1Typesetter_s0089_b520@Text@EA@@QAE@XZ  0089c540  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextTypesetter.cpp  ?LayoutLine@Typesetter_s0089_d3b0@Text@EA@@QAEHPB_WIMMPBUTextStyle_s0089_d3b0@23@@Z  0089db20  /O2 /MD /Gy /TP /arch:SSE /GS- /Isrc/game/include

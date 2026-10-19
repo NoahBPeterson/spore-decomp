@@ -1,13 +1,18 @@
-0089b7e0 EA::Text::Typesetter::AdjustWhitespaceEmbedding  # PDB name
-0089b900 EA::Text::Typesetter::Justify  # PDB name
-0089bf70 EA::Text::LineLayout::LineLayout  # PDB name (copy ctor)
-0089c110 EA::Text::LineLayout::GetGlyphSelection  # PDB name
-0089c2d0 EA::Text::LineLayout::GetGlyphDecoration  # PDB candidate (caller-single)
-0089c540 EA::Text::Typesetter::~Typesetter  # PDB name
-00899c90 ?insert@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@IABU234@@Z  # difftest alias: this slice's mangled name for vector<GlyphLayoutInfo>::insert(pos,n,v), called by 0089bdb0
-00899420 ?erase@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@0@Z  # difftest alias: vector<GlyphLayoutInfo>::erase, called by 0089bdb0
 00898d70 ?DoAllocateAndCopy@?$cvec@UAnalysisInfo@Text@EA@@@Text@EA@@QAEPAUAnalysisInfo@23@IPBU423@0@Z  # difftest alias: vector<AnalysisInfo>::DoAllocateAndCopy (called by 00898fc0)
-0089a790 ?DoAllocateAndCopy@?$cvec@G@Text@EA@@QAEPAGIPBG0@Z  # difftest alias: vector<uint16>::DoAllocateAndCopy (called by 0089bc80)
 00898dc0 ?DoAllocateAndCopy@?$cvec@UGlyphInfo@Text@EA@@@Text@EA@@QAEPAUGlyphInfo@23@IPBU423@0@Z  # difftest alias: vector<GlyphInfo>::DoAllocateAndCopy (called by 00899110)
 00898e10 ?DoAllocateAndCopy@?$cvec@UGlyphLayoutInfo@Text@EA@@@Text@EA@@QAEPAUGlyphLayoutInfo@23@IPBU423@0@Z  # difftest alias: vector<GlyphLayoutInfo>::DoAllocateAndCopy (called by 008991f0)
+00899420 ?erase@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@0@Z  # difftest alias: vector<GlyphLayoutInfo>::erase, called by 0089bdb0
+00899c90 ?insert@?$ResizableVec@UGlyphLayoutInfo@Text@EA@@@@QAEXPAUGlyphLayoutInfo@Text@EA@@IABU234@@Z  # difftest alias: this slice's mangled name for vector<GlyphLayoutInfo>::insert(pos,n,v), called by 0089bdb0
 0089a660 ?DoAllocateAndCopy@?$cvec@I@Text@EA@@QAEPAIIPBI0@Z  # difftest alias: vector<uint32>::DoAllocateAndCopy (called by 0089ba90)
+0089a790 ?DoAllocateAndCopy@?$cvec@G@Text@EA@@QAEPAGIPBG0@Z  # difftest alias: vector<uint16>::DoAllocateAndCopy (called by 0089bc80)
+0089b520 ?ShapeLine@Typesetter_s0089_b520@Text@EA@@QAEXXZ  # Typesetter_s0089_b520::ShapeLine migrated from s0089b520 (verbatim, slice spelling)
+0089b7e0 ?AdjustWhitespaceEmbedding@Typesetter_s0089_b520@Text@EA@@QAEXXZ  # Typesetter_s0089_b520::AdjustWhitespaceEmbedding migrated from s0089b520 (verbatim, slice spelling)
+0089b900 ?Justify@Typesetter@Text@EA@@QAEXXZ  # EA::Text::Typesetter::Justify migrated from s0089b520
+0089ba90 ?UIntVec_assign@@YIAAU?$cvec@I@Text@EA@@PAU123@HABU123@@Z  # UIntVec_assign migrated from s0089b520 (verbatim, slice spelling)
+0089bc80 ?UShortVec_assign@@YIAAU?$cvec@G@Text@EA@@PAU123@HABU123@@Z  # UShortVec_assign migrated from s0089b520 (verbatim, slice spelling)
+0089be20 ?resize@FixedRunVec@Text@EA@@QAEXI@Z  # FixedRunVec::resize migrated from s0089b520 (verbatim, slice spelling)
+0089bea0 ?AddRectangleToRectangleSet@@YAXPAURectangle@Text@EA@@PAURectSet@23@@Z  # AddRectangleToRectangleSet migrated from s0089b520 (verbatim, slice spelling)
+0089bf70 ??0LineLayout_s0089_b520@Text@EA@@QAE@ABU012@@Z  # LineLayout_s0089_b520::LineLayout migrated from s0089b520 (verbatim, slice spelling)
+0089c110 ?GetGlyphSelection@LineLayout_s0089_b520@Text@EA@@QAEIIIPAURectSet@23@@Z  # LineLayout_s0089_b520::GetGlyphSelection migrated from s0089b520 (verbatim, slice spelling)
+0089c2d0 ?GetGlyphDecoration@LineLayout_s0089_b520@Text@EA@@QAEIHIIPAURectSet@23@@Z  # LineLayout_s0089_b520::GetGlyphDecoration migrated from s0089b520 (verbatim, slice spelling)
+0089c540 ??1Typesetter_s0089_b520@Text@EA@@QAE@XZ  # Typesetter_s0089_b520::~Typesetter migrated from s0089b520 (verbatim, slice spelling)

@@ -13,6 +13,6 @@
 007051b0 ?set_7051b0@BigF8@@QAEXPBUFog98@@@Z  # BigF8::set_7051b0 migrated from s007046e0 (verbatim, slice spelling)
 007051e0 ?copy_7051e0@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_7051e0 migrated from s007046e0 (verbatim, slice spelling)
 00705220 ?copy_backward_705220@@YAPAUV32@@PBU1@0PAU1@@Z  # copy_backward_705220 migrated from s007046e0 (verbatim, slice spelling)
-00705250 eastl::copy_impl<0,std::random_access_iterator_tag>::do_copy<EA::Text::Typesetter::RunInfo_ *,EA::Text::Typesetter::RunInfo_ *>  # PDB
+00705250 ?copy_705250@@YAPAUQuad16@@PBU1@0PAU1@@Z  # copy_705250 migrated from s007046e0 (verbatim, slice spelling)
 007052e0 ?FUN_007052e0@@YAHPAMM@Z  # FUN_007052e0 migrated from s007046e0 (verbatim, slice spelling)
 00705470 ?FUN_00705470@@YAHPAMM@Z  # FUN_00705470 migrated from s007046e0 (verbatim, slice spelling)
