@@ -1,0 +1,4 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/eathread.cpp  ?ClearThreads@ThreadGroup@Thread@EA@@QAEX_N@Z  00921b40  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eathread.cpp  ?GetCurrentThreadPriority@Thread@EA@@YAXXZ  00921d70  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/UTFSpore_Win32/eathread.cpp  ?ThreadSleep@Thread@EA@@YAXABI@Z  00921df0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
