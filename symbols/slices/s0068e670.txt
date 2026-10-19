@@ -1,19 +1,19 @@
-0068e670 FUN_0068e670  # Simulator job/event processor
-0068e8a0 vec_fill       # vector<bool>-style range fill (DoInsertValues 0x4c10e0 / memcpy 0x11e0744)
-0068e8f0 bitmap_init    # bitmap size/alloc/init
-0068e9a0 JobLock::Read  # job-lock deserialize (EA::IO reader vtable slots 0x28/0x30)
-0068eb50 JobLockWrite   # job-lock serialize/setup
-0068eca0 JobLockHelper  # job-lock helper
-0068ed70 JobLockHelper2 # job-lock helper
-0068eef0 JobLockHelper3 # job-lock helper
-0068eff0 Simulator::cCreatureAbility::cCreatureAbility  # ctor: vtbl 0x13ef094/0x14036f4 + Mutex @+8
-0068f050 Simulator::cCreatureAbility::~cCreatureAbility  # dtor
+0068e670 Coder::ReadHeader  # range-coder/serialised-stream header parse (magicA/magicB 0x14036a0/0x14036a8)
+0068e8a0 VecU8::AssignFill # eastl vector<bool>-style fill (DoInsertValues 0x4c10e0 / memcpy 0x11e0744)
+0068e8f0 Coder::InitBitmap # bitmap size/alloc/init (stride/f40/state, vector assign/erase)
+0068e9a0 Coder::ReadData   # deserialize range-coded stream (EA::IO reader slots 0x28/0x30, ReadInt32 0x93a780, CRC32 0x932da0, resize 0x4c0410, eraseAll 0x631dc0)
+0068eb50 Coder::OpenData   # open file + first entry decode (Hinter 0x87cde0 family, ReadData call)
+0068eca0 Coder::WriteData  # write raw bytes: passthrough memcpy vs EncodeBit 0x68de20 loop + CRC64 0x932df0
+0068ed70 Coder::Finalize   # finish/flush: passthrough tail write vs magic+hash+Flush 0x68df00+InitMask 0x68ddc0
+0068eef0 Coder::Begin      # start pass: external resize+magicB seed; coded clear+magic/hash seed via WriteData
+0068eff0 RefObj::RefObj    # ctor: GmeRefCount vtbl 0x13ef094, refcount @+4, RefObj vtbl 0x14036f4, ThreadMutex 0x9222a0 @+8, mJob @+0x38
+0068f050 RefObj::~RefObj   # dtor: cJob::Release 0x690120 on mJob, ThreadMutex dtor 0x922130, vtbl restore
 0068f0b0 CJobHolder::SetJob  # swap job pointer under Mutex @+8; mJob @+0x38
 0068f180 CJobHolder2::Attach # job-lock continuation wrapper
 0068f1d0 JobLock::JobLock    # job-lock ctor
 0068f2b0 JobLock::~JobLock   # job-lock dtor (refcount release + job release)
 0068f350 TryLockJobs         # try-lock two jobs, create a JobLock
-0068f450 ?GetHighestBitPowerOf2@EA@@YAII@Z  # EA::GetHighestBitPowerOf2 migrated from s0068e670
+0068f450 ?GetHighestBitPowerOf2@EA@@YAHI@Z  # EA::GetHighestBitPowerOf2 migrated from s0068e670
 0068f4a0 ?Reset@ClsF4A0@@QAEXXZ  # ClsF4A0::Reset migrated from s0068e670 (verbatim, slice spelling)
 0068f4e0 mutex_ctor_helper   # mutex/semaphore member ctor helper
 0068f540 ?Acquire@ClsF540@@QAEXXZ  # ClsF540::Acquire migrated from s0068e670 (verbatim, slice spelling)

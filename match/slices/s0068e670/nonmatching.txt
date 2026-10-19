@@ -1,3 +1,10 @@
 # va  diff-bytes  reason
-0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs
-0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ
+0068f570  3    complete: notify callback + virtual teardown call; only the vtable/function register choice (eax/edx) differs [equiv: PASS]
+0068f5a0  6    complete: indirect call through *b slot 0; vtable/base registers and stack balance differ [equiv: FAIL]
+0068e670  441  complete: range-coder/graphic-header parse; both branches + magic compare + InitMask/Read calls present; memcmp loop register/pointer allocation and frame-slot order differ [equiv: WEAK]
+0068e8f0  146  complete: bitmap alloc/reset (stride/width/height/flag, vector assign/erase); expression evaluation order + reused-arg slot for the zero fill differ [equiv: PASS]
+0068e9a0  332  complete: serialised-stream deserialize (Seek/Read header, magic/size checks, resize, CRC32 verify, eraseAll on failure); frame-slot/register allocation differs [equiv: WEAK]
+0068eb50  277  complete: open file + first entry decode (Hinter ctor/Open/GetFrame/GetEntry/Read/Free, resize, ReadData); EH frame and local slot order differ [equiv: WEAK]
+0068eca0  33   complete: write raw bytes (passthrough memcpy vs EncodeBit loop + CRC64 + f34); stale-eax passthrough return and block layout differ [equiv: PASS]
+0068ed70  309  complete: finish/flush coder (passthrough tail write vs magic+hash+Flush+InitMask+tail); dead 0x14036b0 load and local layout differ [equiv: WEAK]
+0068eef0  145  complete: start coder pass (external: resize+magicB seed; coded: clear+magic/hash seed via helper); register allocation and block order differ [equiv: WEAK]
