@@ -948,7 +948,6 @@ uint32_t FNV1_String16(const wchar_t* p, uint32_t seed, int caseMode);  // 0x009
 }
 }
 void Decrypt(const string8& in, string8& out);  // 0x0060bf00
-extern const wchar_t* kLoginPrefsName;            // 0x0151e23c (L"login")
 namespace SP {
 namespace Pollen {
 struct cAppProperties {
