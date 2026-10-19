@@ -694,6 +694,7 @@ template class eastl::hashtable_s005f_a8d0<eastl::NameKeyPair, eastl::string16_s
 template class eastl::hashtable_s005f_a8d0<eastl::KeyNamePair, Key_s005f_a8d0, EA::ResourceMan::KeyHash_s005f_a8d0, eastl::equal_to_s005f_a8d0>;
 // ---- items of slice s005fa8d0 end
 
+
 // ---- items of slice s005fb430 begin (TODO(rewrite): local stubs, replace by canonical classes)
 namespace EA {
 namespace ResourceMan {
@@ -1722,6 +1723,7 @@ void SP::Thumbnail::cImportExport::SetupExportFolderPath()
 
 
 
+
 // @ 0x005f9450
 namespace eastl {
 basic_string_s005f_8fe0<char>* basic_string_s005f_8fe0<char>::append_sprintf(const char* fmt, ...)
@@ -1730,6 +1732,7 @@ basic_string_s005f_8fe0<char>* basic_string_s005f_8fe0<char>::append_sprintf(con
   return this;
 }
 }  // namespace eastl
+
 
 
 
@@ -1745,9 +1748,11 @@ void FUN_005f9470()
 
 
 
+
 // @ 0x005f95a0
 void FUN_005f95a0()
 {}
+
 
 
 
@@ -1763,9 +1768,11 @@ void FUN_005f9680()
 
 
 
+
 // @ 0x005f96c0
 void FUN_005f96c0()
 {}
+
 
 
 
@@ -1781,9 +1788,11 @@ void FUN_005f9760()
 
 
 
+
 // @ 0x005f97c0
 void FUN_005f97c0()
 {}
+
 
 
 
@@ -1910,6 +1919,7 @@ done:
 
 
 
+
 // @ 0x005fa100
 unsigned StrTable::erase(const WStr* key)
 {
@@ -1948,6 +1958,7 @@ unsigned StrTable::erase(const WStr* key)
 
 
 
+
 // @ 0x005fa1d0
 void __stdcall ClearBucketsA(int** buckets, unsigned count)
 {
@@ -1971,6 +1982,7 @@ void __stdcall ClearBucketsA(int** buckets, unsigned count)
 
 
 
+
 // @ 0x005fa230
 void __stdcall ClearBucketsB(int** buckets, unsigned count)
 {
@@ -1989,6 +2001,7 @@ void __stdcall ClearBucketsB(int** buckets, unsigned count)
     buckets[i] = 0;
   }
 }
+
 
 
 
@@ -2108,6 +2121,7 @@ bool SP::Thumbnail::cImportExport_s005f_9920::RestoreImportTable()
 
 
 
+
 // @ 0x005fa8d0
 bool SP::Thumbnail::cImportExport_s005f_a8d0::CreateExportThumb(void* pImage, const Key_s005f_a8d0& key, void* pInfo)
 {
@@ -2115,9 +2129,6 @@ bool SP::Thumbnail::cImportExport_s005f_a8d0::CreateExportThumb(void* pImage, co
   // Reconstructed (behavioural) form; the exact inner sprite/file pipeline is not reproduced.
   return false;
 }
-
-
-
 
 // @ 0x005face0
 namespace eastl {
@@ -2137,9 +2148,6 @@ template <typename V, typename K, typename H, typename E> uint32_t hashtable_s00
 }
 }  // namespace eastl
 
-
-
-
 // @ 0x005fae40
 bool SP::Thumbnail::cImportExport_s005f_a8d0::Shutdown()
 {
@@ -2150,9 +2158,6 @@ bool SP::Thumbnail::cImportExport_s005f_a8d0::Shutdown()
   mKeyToGuidMap.clear();
   return true;
 }
-
-
-
 
 // @ 0x005faec0
 bool SP::Thumbnail::cImportExport_s005f_a8d0::RemoveExportThumb(const Key_s005f_a8d0& key)
@@ -2168,9 +2173,6 @@ bool SP::Thumbnail::cImportExport_s005f_a8d0::RemoveExportThumb(const Key_s005f_
   return true;
 }
 
-
-
-
 // @ 0x005fafb0
 bool SP::Thumbnail::cImportExport_s005f_a8d0::ImportFromFolder(const Key_s005f_a8d0& key, void* pArg)
 {
@@ -2179,9 +2181,6 @@ bool SP::Thumbnail::cImportExport_s005f_a8d0::ImportFromFolder(const Key_s005f_a
   (void)pArg;
   return false;
 }
-
-
-
 
 // @ 0x005fb350
 cImportInfo& cImportInfo::operator=(const cImportInfo& o)
@@ -2200,8 +2199,6 @@ cImportInfo& cImportInfo::operator=(const cImportInfo& o)
   return *this;
 }
 
-
-
 // @ 0x005fb430
 unsigned char cImportExportRetail::UpdateExportThumb(void* param_2)
 {
@@ -2212,9 +2209,11 @@ unsigned char cImportExportRetail::UpdateExportThumb(void* param_2)
 
 
 
+
 // @ 0x005fb900
 cImportExportRetail::~cImportExportRetail()
 {}
+
 
 
 // @ 0x005fc330
@@ -2325,6 +2324,7 @@ bool cImportExportCtor::ImportNewAsset(const wchar_t* path, Key_s005f_c330* pOut
 }
 
 
+
 // @ 0x005fc9f0
 bool cImportExportCtor::ScanFolder(const void* a, void* b, void* c)
 {
@@ -2335,9 +2335,11 @@ bool cImportExportCtor::ScanFolder(const void* a, void* b, void* c)
 }
 
 
+
 // @ 0x005fcf40
 cImportExportCtor::cImportExportCtor()
 {}
+
 
 
 // @ 0x005fd0a0
@@ -2347,15 +2349,18 @@ unsigned char cImportExportCtor::ScanForImports()
   return 0;
 }
 
+
 // @ 0x005fd260
 void FUN_005fd260()
 {
 }
 
+
 // @ 0x005fd880
 void FUN_005fd880()
 {
 }
+
 
 // @ 0x005fda40
 bool HandlerStub::Handler(uint32_t id, void* p)
