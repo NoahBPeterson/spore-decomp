@@ -1,5 +1,5 @@
-0091f520 EA::Debug::ReportWriter::WriteMemoryView  # PDB name
-0091f7c0 ?WriteModuleList@ReportWriter_s0091_f520@@QAE_NXZ  # ReportWriter_s0091_f520::WriteModuleList migrated from s0091f520 (verbatim, slice spelling)
+0091f520 ?WriteMemoryView@ReportWriter@Debug@EA@@QAE_NPBEI0PBD@Z  # EA::Debug::ReportWriter::WriteMemoryView migrated from s0091f520
+0091f7c0 ?WriteModuleList@ReportWriter@Debug@EA@@QAE_NXZ  # EA::Debug::ReportWriter::WriteModuleList migrated from s0091f520
 0091fa10 ?WriteRegisterValues@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteRegisterValues migrated from s0091f520
 0091fbd0 ?WriteRegisterMemoryView@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteRegisterMemoryView migrated from s0091f520
 0091fca0 ?WriteCallStack@ReportWriter@Debug@EA@@QAE_NPBX@Z  # EA::Debug::ReportWriter::WriteCallStack migrated from s0091f520

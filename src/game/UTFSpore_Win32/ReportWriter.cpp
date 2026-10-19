@@ -111,38 +111,24 @@ extern "C" __declspec(dllimport) BOOL __stdcall VerQueryValueA(const void*, LPCS
 // ---- items of slice s0091e650 end
 
 // ---- items of slice s0091f520 begin (TODO(rewrite): local stubs, replace by canonical classes)
-extern "C" __declspec(dllimport) void* __stdcall LoadLibraryA(const char*);
-extern "C" __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
-extern "C" __declspec(dllimport) void* __stdcall GetCurrentProcess();
-#pragma intrinsic(__readfsdword)
 unsigned long __cdecl __readfsdword(unsigned);
 struct MODULEINFO {
     void*    lpBaseOfDll;   // +0
     uint32_t SizeOfImage;   // +4
     void*    EntryPoint;    // +8
 };
-struct ReportWriter_s0091_f520 {
-    virtual void v00();                              // 0x00
-    virtual void v04();                              // 0x04
-    virtual int  v08(int, int);                      // 0x08
-    virtual int  v0c(int);                           // 0x0c
-    virtual int  v10(int, int*);                     // 0x10
-    virtual int  v14(int);                           // 0x14
-    virtual void v18(const char*);                   // 0x18
-    virtual void v1c(const char*);                   // 0x1c
-    virtual void v20(const char*, int);              // 0x20
-    virtual void v24(const char*, ...);              // 0x24 (variadic -> cdecl, this first)
-    virtual void v28(const char*, const char*);      // 0x28
-    virtual void v2c();                              // 0x2c
-    virtual int  v30();                              // 0x30
-    virtual void v34(const char*, int);              // 0x34
-
-    bool WriteMemoryView(uint8_t* base, int len, uint8_t* mark, const char* label); // 0x0091f520
-    bool WriteStackMemoryView(unsigned lo, int len);                                 // 0x0091fe60
-    bool WriteRegisterMemoryView(int* ctx);                                          // 0x0091fbd0
-    bool WriteRegisterValues(int* ctx);                                              // 0x0091fa10
-    bool WriteModuleList();                                                          // 0x0091f7c0
-    bool WriteCallStack(int* ctx);                                                   // 0x0091fca0
+struct MEMORY_BASIC_INFORMATION {
+    void*  BaseAddress;      // +0
+    void*  AllocationBase;   // +4
+    DWORD  AllocationProtect;// +8
+    DWORD  RegionSize;       // +0xc
+    DWORD  State;            // +0x10
+    DWORD  Protect;          // +0x14
+    DWORD  Type;             // +0x18
+};
+struct SYSTEM_INFO2 {                    // SYSTEM_INFO (0x24 bytes)
+    uint32_t dwOemId, dwPageSize;
+    uint32_t pad[7];
 };
 static inline unsigned CStrLen(const char* s)
 {
@@ -169,6 +155,12 @@ struct AddressRepCache {                              // EA::Callstack::AddressR
     void Shutdown();                                  // 0x0091b090
     unsigned GetRep(int kind, uint32_t addr, void* a, void* b, int flag);   // 0x0091b0f0 (ret 0x14)
 };
+extern "C" __declspec(dllimport) int   __cdecl isprint(int);
+extern "C" __declspec(dllimport) void* __stdcall LoadLibraryA(const char*);
+extern "C" __declspec(dllimport) void* __stdcall GetProcAddress(void*, const char*);
+extern "C" __declspec(dllimport) void* __stdcall GetCurrentProcess();
+extern "C" __declspec(dllimport) int   __stdcall VirtualQuery(const void*, void*, unsigned);
+extern DWORD g_pageSize;   // 0x01667b80
 extern "C" unsigned __cdecl CS_GetCallstack(uint32_t*, int, void*); // 0x0091b3d0
 extern "C" AddressRepCache* __cdecl CS_a1c0();                      // 0x0091a1c0
 extern "C" void __cdecl CS_b580(uint32_t, char*, int);              // 0x0091b580
@@ -463,12 +455,93 @@ bool ReportWriter::WriteDisassembly(void* start, unsigned n, void* eip)
     return true;
 }
 
+// @ 0x0091f520
+bool EA::Debug::ReportWriter::WriteMemoryView(unsigned char const * base, unsigned int len, unsigned char const * mark, char const * label)
+{
+    __try {
+        if (g_pageSize == 0) {
+            SYSTEM_INFO2 si;
+            GetSystemInfo((SYSTEM_INFO*)&si);
+            g_pageSize = si.dwPageSize;
+        }
+        int lineNo = 0;
+        unsigned labelLen;
+        if (label) {
+            labelLen = CStrLen(label);
+        } else {
+            labelLen = 0;
+        }
+        uint8_t* line = (uint8_t*)((unsigned)base & 0xfffffff0);
+        bool readable = true;
+        int pageLeft = 0;
+        while (line < base + len) {
+            // "AAAAAAAA |" + 16 x ("<xx") + " | " + 16 ASCII + " |\r\n"
+            char buf[0x52];
+            sprintf(buf, "%08x |", (unsigned)line);
+            for (uint8_t* q = line; q < line + 0x10; ) {
+                if (pageLeft == 0) {
+                    MEMORY_BASIC_INFORMATION mbi;
+                    if (VirtualQuery(q, &mbi, 0x1c) == 0)
+                        readable = false;
+                    else if (mbi.State == 0x1000 && (mbi.Protect & 0x66) != 0)
+                        readable = true;
+                    else
+                        readable = false;
+                    pageLeft = g_pageSize - ((unsigned)q % g_pageSize);
+                }
+                if (q < base || q >= base + len) {
+                    int off = (int)(q - line);
+                    sprintf(buf + 10 + off * 3, "    ");
+                    buf[61 + off] = ' ';
+                    --pageLeft;
+                    ++q;
+                } else {
+                    char arrow;
+                    if (q == mark)
+                        arrow = '<';
+                    else
+                        arrow = ((q != mark + 1) - 1 & 0x1e) + 0x20;
+                    int off = (int)(q - line);
+                    if (readable) {
+                        sprintf(buf + 10 + off * 3, "%c%02x", (int)arrow, (unsigned)*q);
+                        if (isprint(*q))
+                            buf[61 + off] = *q;
+                        else
+                            buf[61 + off] = '.';
+                    } else {
+                        sprintf(buf + 10 + off * 3, "%c??", (int)arrow);
+                        buf[61 + off] = '?';
+                    }
+                    --pageLeft;
+                    ++q;
+                }
+            }
+            memcpy(buf + 58, " | ", 3);
+            memcpy(buf + 77, " |\r\n", 5);
+            if (label) {
+                if (lineNo == 0) {
+                    WriteText(label, 0);
+                } else {
+                    for (unsigned i = 0; i < labelLen; i++)
+                        Write(" ", 1);
+                }
+            }
+            WriteText(buf, 0);
+            line += 0x10;
+            ++lineNo;
+        }
+    } __except (1) {
+        WriteText("Memory view write failed due to an exception.\r\n", 0);
+    }
+    return true;
+}
+
 // @ 0x0091f7c0
-bool ReportWriter_s0091_f520::WriteModuleList()
+bool EA::Debug::ReportWriter::WriteModuleList()
 {
     void* h = LoadLibraryA("psapi.dll");
     if (!h) {
-        v20("PSAPI is not available. Cannot dump module list.\r\n", 0);
+        WriteText("PSAPI is not available. Cannot dump module list.\r\n", 0);
         return false;
     }
     EnumProcessModules_t      epm = (EnumProcessModules_t)GetProcAddress(h, "EnumProcessModules");
@@ -485,7 +558,7 @@ bool ReportWriter_s0091_f520::WriteModuleList()
     if (epm(proc, mods, sizeof(mods), &needed)) {
         unsigned count = needed >> 2;
         if (count > 0x100) {
-            v20("Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n", 0);
+            WriteText("Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n", 0);
             count = 0x100;
         }
         for (unsigned i = 0; i < count; ++i) {
@@ -504,11 +577,11 @@ bool ReportWriter_s0091_f520::WriteModuleList()
             AppendQuote(q2);
             sprintf(out, "base 0x%08x size 0x%08x entry 0x%08x %-48s %s",
                     (unsigned)mi.lpBaseOfDll, mi.SizeOfImage, (unsigned)mi.EntryPoint, q1, q2);
-            v20(out, 1);
+            WriteText(out, 1);
         }
         return true;
     }
-    v20("Failed to enumerate modules.\r\n", 0);
+    WriteText("Failed to enumerate modules.\r\n", 0);
     return true;
 }
 
