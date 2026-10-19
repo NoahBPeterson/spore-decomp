@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/EATextUtil.cpp  ?ConvertBinaryDataToASCIIArray@Text@EA@@YAXPBXIPA_W@Z  0093d210  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextUtil.cpp  ?ConvertASCIIArrayToBinaryData@Text@EA@@YA_NPB_WHPAX@Z  0093d280  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextUtil.cpp  ?SplitTokenDelimited@Text@EA@@YA_NPB_WI_WPA_WIPAPB_W@Z  0093d320  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/EATextUtil.cpp  ??$MatchPattern@_W@Text@EA@@YA_NPB_W0@Z  0093d3a0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
