@@ -1,10 +1,10 @@
 0064dbd0 ?DoMessage@cSPEditorNaming_s0064_dbd0@SP@@QAE_NPAXPAH@Z  # cSPEditorNaming_s0064_dbd0::DoMessage migrated from s0064dbd0 (verbatim, slice spelling)
 0064e170 SP::cSPUIAssetComments::cSPUIAssetComments  # ctor; retail mFrameSet+0xc, mpContentWin+0x70, mpXHTMLWin+0x74
-0064e1d0 SP::cSPUIAssetComments::`scalar deleting destructor'  # vptr teardown + RefCount deallocation
-0064e230 SP::cSPUIAssetComments::Init  # pdb_names anchor
-0064e300 SP::cSPUIAssetComments::DoMessage  # pdb_candidates caller-scored
-0064e400 SP::cSPUIAssetComments::SetVisibility  # pdb_names callee-scored
-0064e460 SP::cSPUIAssetComments::LoadAssetComments  # pdb_names anchor
+0064e1d0 ?deleting_dtor@cSPUIAssetComments_s0064_dbd0@SP@@QAEPAXI@Z  # cSPUIAssetComments_s0064_dbd0::deleting_dtor migrated from s0064dbd0 (verbatim, slice spelling)
+0064e230 ?Init@cSPUIAssetComments_s0064_dbd0@SP@@QAE_NPAX@Z  # cSPUIAssetComments_s0064_dbd0::Init migrated from s0064dbd0 (verbatim, slice spelling)
+0064e300 ?DoMessage@cSPUIAssetComments_s0064_dbd0@SP@@QAE_NPAXPAH@Z  # cSPUIAssetComments_s0064_dbd0::DoMessage migrated from s0064dbd0 (verbatim, slice spelling)
+0064e400 ?SetVisibility@cSPUIAssetComments_s0064_dbd0@SP@@QAEXH@Z  # cSPUIAssetComments_s0064_dbd0::SetVisibility migrated from s0064dbd0 (verbatim, slice spelling)
+0064e460 ?LoadAssetComments@cSPUIAssetComments@SP@@QAE_N_K@Z  # SP::cSPUIAssetComments::LoadAssetComments migrated from s0064dbd0
 0064e5b0 ?Do@Outer168@@QAEXXZ  # Outer168::Do migrated from s0064dbd0 (verbatim, slice spelling)
 0064e5d0 ?Compute@CellCalc@@QAEXHPAM@Z  # CellCalc::Compute migrated from s0064dbd0 (verbatim, slice spelling)
 0064e680 ?HandleMessage@cSPUIAssetGrid_s0064_dbd0@SP@@QAE_NII@Z  # cSPUIAssetGrid_s0064_dbd0::HandleMessage migrated from s0064dbd0 (verbatim, slice spelling)

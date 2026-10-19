@@ -1,0 +1,5 @@
+# source  symbol  va  flags
+../src/game/SPEditors/SPUIAssetComments.cpp  ?deleting_dtor@cSPUIAssetComments_s0064_dbd0@SP@@QAEPAXI@Z  0064e1d0  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetComments.cpp  ?Init@cSPUIAssetComments_s0064_dbd0@SP@@QAE_NPAX@Z  0064e230  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetComments.cpp  ?DoMessage@cSPUIAssetComments_s0064_dbd0@SP@@QAE_NPAXPAH@Z  0064e300  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
+../src/game/SPEditors/SPUIAssetComments.cpp  ?SetVisibility@cSPUIAssetComments_s0064_dbd0@SP@@QAEXH@Z  0064e400  /O2 /MD /Gy /TP /arch:SSE /fp:fast /Isrc/game/include
