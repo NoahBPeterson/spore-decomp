@@ -1,0 +1,3 @@
+# source  symbol  va  flags
+../src/game/SPCreatureAnim/animation.cpp  ?f@S99ecb0@@QAEPAU1@H@Z  0099ecb0  /O2 /MD /Gy /EHsc /TP /Isrc/game/include
+../src/game/SPCreatureAnim/animation.cpp  ?f@S99f090@@QAEPAU1@XZ  0099f090  /O2 /MD /Gy /EHsc /TP /Isrc/game/include

@@ -1,1 +1,1 @@
-0099f110 CloneAnim  # builds a relocatable "ANIM" v0x19 blob (magic 0x4d494e41, "Anim/Anim" alloc, serial 0x166b260) keeping flagged groups/channels; invented name
+0099f110 ?CloneAnim@@YAPAUAnimHeader_s0099_f0b0@@PAU1@_N@Z  # CloneAnim migrated from s0099f0b0 (verbatim, slice spelling)

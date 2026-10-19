@@ -1,1 +1,1 @@
-0099f970 EvaluateTrack  # keyframe track eval; calls FindNeighbours(0x99c9f0)
+0099f970 ?EvaluateTrack@@YA_NMHPAUTrack@@PAIPAH@Z  # EvaluateTrack migrated from s0099f970 (verbatim, slice spelling)

@@ -1,0 +1,2 @@
+# va  diff-bytes  reason
+0099ed90 skeleton nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper (516 bytes)

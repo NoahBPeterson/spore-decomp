@@ -1,2 +1,7 @@
-0099ed90 nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper  # PDB pdb_names.json
-0099efd0 nSPCreatureAnim::LoadAnimationStaticData  # Ghidra PDB candidate (caller-single)
+0099ecb0 ?f@S99ecb0@@QAEPAU1@H@Z  # S99ecb0::f migrated from s0099e110 (verbatim, slice spelling)
+0099ece0 ?f@S99ece0@@QAEPAU1@XZ  # S99ece0::f migrated from s0099e110 (verbatim, slice spelling)
+0099ed90 ?ReadAnimationStaticDataFromStreamWrapper@nSPCreatureAnim@@YAPAUanimation_static_data@latest_version@1@AAVstream_wrapper@1@PBDK@Z  # nSPCreatureAnim::ReadAnimationStaticDataFromStreamWrapper migrated from s0099e110
+0099efa0 ?FUN_0099efa0@@YAPADPAD00@Z  # FUN_0099efa0 migrated from s0099e110 (verbatim, slice spelling)
+0099efd0 ?FUN_0099efd0@@YAHPADH@Z  # FUN_0099efd0 migrated from s0099e110 (verbatim, slice spelling)
+0099f050 ?f@S99f050@@QAEXXZ  # S99f050::f migrated from s0099e110 (verbatim, slice spelling)
+0099f090 ?f@S99f090@@QAEPAU1@XZ  # S99f090::f migrated from s0099e110 (verbatim, slice spelling)
