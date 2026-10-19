@@ -1,0 +1,10 @@
+# source  symbol  va  flags
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserCall1ToFloat@@YIMPAHHHH@Z  00841130  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserArg1c@@YIHPAHHPAPBDPAX@Z  00841150  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserArg20@@YIHPAHHPAPBDPAX@Z  00841190  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?cParser_Release@@YIHPAH@Z  008411c0  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserEvent38@@YI_NPAHHPAX@Z  00841220  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserEvent3c@@YI_NPAHHPAX@Z  00841290  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?ParserEvent40@@YI_NPAHHPAX@Z  00841300  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ??1MacroPair@@QAE@XZ  00844680  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include
+../src/game/UTFSpore_Win32/Parser.cpp  ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  00844700  /O2 /MD /Gy /EHsc /TP /GS- /Isrc/game/include

@@ -1,5 +1,12 @@
 00844270 EA::ArgScript::SubstituteParameters  # anonymous-namespace helper, PDB-named
-00844780 EA::ArgScript::cIfCommand::Execute  # PDB name
-00844c40 EA::ArgScript::cDefineCommand::Execute  # PDB name
-00844ec0 EA::ArgScript::cParser::ParseEnd  # PDB name
+00844680 ??1MacroPair@@QAE@XZ  # MacroPair_dtor migrated from s00844270 (verbatim, slice spelling)
+00844700 ?DoFreeNodes@StrHashtable@@QAEXPAPAUStrNode@@I@Z  # StrHashtable::DoFreeNodes migrated from s00844270 (verbatim, slice spelling)
+00844780 ?Execute@cIfCommand@?A0xade49ec9@@UAEXAAUcArguments_s0084_4270@ArgScript@EA@@@Z  # Execute migrated from s00844270 (verbatim, slice spelling)
+00844860 ??0cMacroDefinition@ArgScript@EA@@QAE@XZ  # cMacroDefinition::cMacroDefinition migrated from s00844270 (verbatim, slice spelling)
+00844a00 ?MacroPair_ctor_kv@@YIPAUMacroPair@@PAU1@HABUstring8_s0084_4270@eastl@@ABU?$AutoRefCount@UcMacroDefinition@ArgScript@EA@@@ArgScript@EA@@@Z  # MacroPair_ctor_kv migrated from s00844270 (verbatim, slice spelling)
+00844a60 ?MacroPair_ctor_copy@@YIPAUMacroPair@@PAU1@HABU1@@Z  # MacroPair_ctor_copy migrated from s00844270 (verbatim, slice spelling)
+00844c40 ?Execute@cDefineCommand@?A0xade49ec9@@UAEXAAUcArguments_s0084_4270@ArgScript@EA@@@Z  # Execute migrated from s00844270 (verbatim, slice spelling)
+00844ec0 ?ParseEnd@cParser@@QAEH_N@Z  # cParser::ParseEnd migrated from s00844270 (verbatim, slice spelling)
 00844fb0 EA::ArgScript::cParser::InstantiateMacro  # PDB name
+00845260 ?PushScope@cParser@@QAEXPBD@Z  # cParser::PushScope migrated from s00844270 (verbatim, slice spelling)
+00845320 ?PushMeta@cParser@@QAEXPAUcICommand_s0084_4270@ArgScript@EA@@H@Z  # cParser::PushMeta migrated from s00844270 (verbatim, slice spelling)

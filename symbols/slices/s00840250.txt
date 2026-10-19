@@ -17,10 +17,10 @@
 00840e10 EA::ArgScript::ParseRangedVector3  # PDB
 00840ec0 EA::ArgScript::StripCommentsAndWhiteSpace  # PDB
 00841000 EA::ArgScript::Output  # PDB
-00841130 cParser virtual adaptor (int->float, vtable slot 1)
-00841150 cParser argument fetch (member +0x1c)
-00841190 cParser argument fetch (member +0x20)
-008411c0 EA::ArgScript::cParser::Release  # PDB
-00841220 parser event dispatch (vtable slot 0x38)
-00841290 parser event dispatch (vtable slot 0x3c)
-00841300 parser event dispatch (vtable slot 0x40)
+00841130 ?ParserCall1ToFloat@@YIMPAHHHH@Z  # ParserCall1ToFloat migrated from s00840250 (verbatim, slice spelling)
+00841150 ?ParserArg1c@@YIHPAHHPAPBDPAX@Z  # ParserArg1c migrated from s00840250 (verbatim, slice spelling)
+00841190 ?ParserArg20@@YIHPAHHPAPBDPAX@Z  # ParserArg20 migrated from s00840250 (verbatim, slice spelling)
+008411c0 ?cParser_Release@@YIHPAH@Z  # cParser_Release migrated from s00840250 (verbatim, slice spelling)
+00841220 ?ParserEvent38@@YI_NPAHHPAX@Z  # ParserEvent38 migrated from s00840250 (verbatim, slice spelling)
+00841290 ?ParserEvent3c@@YI_NPAHHPAX@Z  # ParserEvent3c migrated from s00840250 (verbatim, slice spelling)
+00841300 ?ParserEvent40@@YI_NPAHHPAX@Z  # ParserEvent40 migrated from s00840250 (verbatim, slice spelling)
